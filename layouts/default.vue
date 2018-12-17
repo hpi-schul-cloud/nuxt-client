@@ -15,8 +15,14 @@
         </a>
         <nuxt-link
           class="navbar-item"
-          to="/login">Login
+          to="/login">
+          Login
         </nuxt-link>
+        <a
+          class="navbar-item"
+          @click="$store.dispatch('auth/logout')">
+          Logout
+        </a>
 
         <div class="navbar-burger">
           <span/>

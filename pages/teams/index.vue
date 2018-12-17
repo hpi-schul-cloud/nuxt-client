@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <button @click="find()">Teams laden</button>
+    <h1>Teams</h1>
     <div class="columns is-tablet">
       <div 
         v-for="(team, i) of teams" 
@@ -26,8 +26,10 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import isAuthenticated from '~/middleware/is-authenticated'
 
 export default {
+  middleware: [ isAuthenticated ],
   computed: {
     ...mapGetters('teams', {
       teams: 'list'

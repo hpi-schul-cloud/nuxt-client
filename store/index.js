@@ -25,7 +25,14 @@ if (process.client) {
     browserService('schools', { paginate: true }),
     browserService('users', { paginate: true }),
     browserAuth({
-      userService: 'users'
+      userService: 'users',
+      state: {
+        publicPages: [
+          'index',
+          'login',
+          'signup'
+        ]
+      }
     })
   ]
 }
@@ -60,22 +67,14 @@ const createStore = () => {
         service('users', { paginate: true }) (store)
         service('teams', { paginate: true }) (store)
         service('schools', { paginate: true }) (store)
-
-        auth({
-          userService: 'users'
-        })(store)
         
         return initAuth({
-          commit,
+          commit: store.commit,
           dispatch,
           req,
           moduleName: 'auth',
           cookieName: 'feathers-jwt'
         })
-          .then(response => {
-            return dispatch('auth/authenticate', { accessToken: store.state.auth.accessToken, strategy: 'jwt' })
-              .catch(_ => {})
-          })        
       }
     },
     plugins: plugins
