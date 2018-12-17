@@ -2,7 +2,6 @@
   <section class="section">
     <div class="columns is-mobile">
       <h1>Schul-Cloud :D</h1>
-      <button @click="setToken()">fsd</button>
     </div>
   </section>
 </template>

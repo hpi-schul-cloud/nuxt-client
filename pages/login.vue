@@ -79,11 +79,23 @@ export default {
     async onSubmit (username, password) {
       let payload = { strategy: 'local', username, password }
     
-      await this.authenticate({
-        strategy: 'local',
-        username,
-        password
-      })
+      try {
+        await this.authenticate({
+          strategy: 'local',
+          username,
+          password
+        })
+        this.$toast.open({
+            message: 'Login erfolgreich!',
+            type: 'is-success'
+        })        
+        this.$router.push('/')
+      } catch (e) {
+        this.$toast.open({
+            message: 'Fehler beim Login. E-Mail/Passwort falsch?',
+            type: 'is-error'
+        })
+      }
 
       // this.authenticate(payload)
       //   // Just use the returned error instead of mapping it from the store.

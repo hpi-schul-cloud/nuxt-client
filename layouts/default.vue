@@ -14,13 +14,15 @@
             height="28">
         </a>
         <nuxt-link
+          v-if="!authenticated"
           class="navbar-item"
           to="/login">
           Login
         </nuxt-link>
         <a
+          v-if="authenticated"
           class="navbar-item"
-          @click="$store.dispatch('auth/logout')">
+          @click="$store.dispatch('auth/logout'); $router.push('login')">
           Logout
         </a>
 
@@ -58,6 +60,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
@@ -68,11 +72,17 @@ export default {
         { title: 'Kurse', to: { name: 'courses' } },
         { title: 'Termine', to: { name: 'events' } },
         { title: 'Aufgaben', to: { name: 'tasks' } },
-        { title: 'Meine Dateien', to: { name: 'files' } },
+        { title: 'Dateien', to: { name: 'files' } },
         { title: 'Lernstore', to: { name: 'content' } },
         { title: 'Verwaltung', to: { name: 'administration' } },
       ]
     }
-  }
+  },
+  computed: mapState({
+    authenticated: state => { 
+      console.log(state.auth.accessToken)
+      return state.auth.accessToken
+     }
+  })
 }
 </script>
