@@ -13,6 +13,10 @@
             alt="Buefy"
             height="28">
         </a>
+        <nuxt-link
+          class="navbar-item"
+          to="/login">Login
+        </nuxt-link>
 
         <div class="navbar-burger">
           <span/>

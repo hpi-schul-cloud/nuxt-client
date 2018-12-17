@@ -36,10 +36,32 @@ module.exports = {
   plugins: [
   ],
 
+  middleware: [
+    // 'middleware/feathers.js'
+  ],
+  
+  router: {
+    middleware: ['auth']
+  },
+
   /*
   ** Nuxt.js modules
   */
   modules: [
+    // [ 'nuxt-feathers-vuex', {
+    //   url: 'http://localhost:3030',
+    //   id: 'id',
+    //   userService: 'users',
+    //   authModule: 'auth',
+    //   cookie: 'feathers-jwt',
+    //   plugin: true,
+    //   generate: true,
+    //   verbose: false,
+    //   services: [
+    //     'teams'
+    //   ]
+    // }]
+      /* other options */ 
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     // Doc: https://buefy.github.io/#/documentation
