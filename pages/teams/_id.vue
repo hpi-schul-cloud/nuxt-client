@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+div(v-if="team")
   section.section
     h1 {{ team.name }}
     h5 {{ team.description }}
@@ -24,22 +24,23 @@ div
 
 
 <script>
-import teams from './teams.js'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
-  asyncData (ctx) {
-    const team = teams.find(t => t.id == ctx.params.id)
-    return {
-      team: team || {}
-    }
+  computed: {
+    ...mapGetters('teams', {
+      team: 'current'
+    })
   },
-  props: {
-    // team: {
-    //   type: Object,
-    //   default: function () {
-    //     return {}
-    //   }
-    // }
+  created (ctx) {
+    console.log(this.$route.params)
+    this.get(this.$route.params.id);
+  },  
+  methods: {
+    get (id) {
+      this.$store.dispatch('teams/get', id)
+    },
+    ...mapActions('auth', ['logout']),
   }
 }
 </script>
