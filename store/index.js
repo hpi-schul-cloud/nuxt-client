@@ -1,42 +1,85 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { app } from './feathers-client'
-
-// Fix memory leak with ssr
-const enableEvents = typeof window !== 'undefined'
+// import { app } from './feathers-client'
+import { CookieStorage } from 'cookie-storage'
 import feathersVuex, { initAuth } from 'feathers-vuex'
-const { service, auth } = feathersVuex(app, { idField: '_id' })
+import feathersClient from './feathers-client'
+const moment = require('moment')
+
+let plugins = []
+const enableEvents = typeof window !== 'undefined'
+
+if (process.client) {
+  const browserClient = feathersClient('', new CookieStorage(
+    {
+      domain: 'localhost',
+      path: '/',
+      expires: moment().add(14, 'd').toDate(),
+      secure: false
+    }    
+  ))
+  const { service: browserService, auth: browserAuth } = feathersVuex(browserClient, { idField: '_id', enableEvents: false })
+
+  plugins = [
+    browserService('teams', { paginate: true }),
+    browserService('schools', { paginate: true }),
+    browserService('users', { paginate: true }),
+    browserAuth({
+      userService: 'users'
+    })
+  ]
+}
+
+plugins.push()
+
 const createStore = () => {
   return new Vuex.Store({
     state: {},
-    mutations: {
-      increment (state) {
-        state.counter++
-      }
-    },
     actions: {
-      nuxtServerInit ({ commit, dispatch }, { req }) {
+      nuxtServerInit ({ commit, dispatch, state }, { req, store }) {
+        let origin = req.headers.host.split(':')
+        origin = `http://${origin[0]}`
+
+        const storage = {
+          getItem (key) {
+            return store.state.auth ? store.state.auth.accessToken : ''
+          },
+          setItem (key, value) {
+            store.state.auth.accessToken = value
+          },
+          removeItem (key) {
+            store.state.auth.accessToken = null
+          }
+        }
+
+        // Create a new client for the server
+        const client = feathersClient(origin, storage)
+        const { service, auth } = feathersVuex(client, { idField: '_id', enableEvents: false })
+
+        // Register services for the server
+        service('users', { paginate: true }) (store)
+        service('teams', { paginate: true }) (store)
+        service('schools', { paginate: true }) (store)
+
+        auth({
+          userService: 'users'
+        })(store)
+        
         return initAuth({
           commit,
           dispatch,
           req,
           moduleName: 'auth',
-          cookieName: 'schulcloud-jwt'
+          cookieName: 'feathers-jwt'
         })
+          .then(response => {
+            return dispatch('auth/authenticate', { accessToken: store.state.auth.accessToken, strategy: 'jwt' })
+              .catch(_ => {})
+          })        
       }
     },
-    plugins: [
-      service('teams'),
-      service('schools'),
-      auth({
-        state: {
-          publicPages: [
-            'login',
-            'signup'
-          ]
-        }
-      })
-    ]
-  })
-}
+    plugins: plugins
+  });
+};
+
 export default createStore
