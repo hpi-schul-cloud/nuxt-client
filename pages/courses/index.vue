@@ -1,28 +1,28 @@
 <template>
   <div>
     <section class="section">
-      <h1>Teams</h1>
+      <h1>Kurse</h1>
       <button
         class="button is-info"
-        @click="$router.push({ name: 'teams-create'})"
-      >Neues Team erstellen</button>
+        @click="$router.push({ name: 'courses-create'})"
+      >Neues Kurs erstellen</button>
     </section>
     <section class="section">
       <div class="tile is-ancestor">
         <div 
-          v-for="(team, i) of teams"
+          v-for="(course, i) of courses"
           :key="i"
           class="tile is-parent is-4">
           <article
             :class="{ 'is-primary': i % 3 == 0, 'is-info': i % 3 == 1, 'is-success': i % 3 == 2 }"
             class="tile is-child notification"
           >
-            <p class="title">{{ team.name }}</p>
+            <p class="title">{{ course.name }}</p>
             <p class="subtitle">
-              {{ team.description }}
+              {{ course.description }}
             </p>
             <p>
-              <nuxt-link :to="{ name: 'teams-id', params: { id: team._id } }">Anschauen</nuxt-link>
+              <nuxt-link :to="{ name: 'courses-id', params: { id: course._id } }">Anschauen</nuxt-link>
             </p>
           </article>
         </div>
@@ -33,13 +33,11 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import isAuthenticated from '~/middleware/is-authenticated'
 
 export default {
-  middleware: [isAuthenticated],
   computed: {
-    ...mapGetters('teams', {
-      teams: 'list'
+    ...mapGetters('courses', {
+      courses: 'list'
     })
   },
   created(ctx) {

@@ -21,6 +21,7 @@ if (process.client) {
   const { service: browserService, auth: browserAuth } = feathersVuex(browserClient, { idField: '_id', enableEvents: false })
 
   plugins = [
+    browserService('courses', { paginate: true }),
     browserService('teams', { paginate: true }),
     browserService('news', { paginate: true }),
     browserService('schools', { paginate: true }),
