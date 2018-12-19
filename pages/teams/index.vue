@@ -3,7 +3,7 @@
     <section class="section">
       <h1>Teams</h1>
       <button
-        class="button is-primary"
+        class="button is-info"
         @click="$router.push({ name: 'teams-create'})"
       >Neues Team erstellen</button>
     </section>

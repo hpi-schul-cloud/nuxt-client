@@ -10,7 +10,7 @@ div(v-if="team")
           | / {{ team.name }} 
       span / Bearbeiten
     h1 Team bearbeiten
-    button.button.is-warning(@click="confirmDelete") Löschen
+    button.button.is-danger(@click="confirmDelete") Löschen
 
   section.section
     b-field(label="Name")

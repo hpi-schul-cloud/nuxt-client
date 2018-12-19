@@ -4,7 +4,7 @@ div(v-if="news")
     nuxt-link(:to="{ name: 'news-id', params: { id: news._id } }")
       h5 {{ news.title }} 
     h1 News bearbeiten
-    button.button.is-warning(@click="confirmDelete") Löschen
+    button.button.is-danger(@click="confirmDelete") Löschen
 
   section.section
     b-field(label="Name")

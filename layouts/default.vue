@@ -4,7 +4,9 @@
       class="navbar header has-shadow is-primary"
       role="navigation"
       aria-label="main navigation">
-      <div class="navbar-brand">
+      <div 
+        class="navbar-brand" 
+        style="background: rgb(176, 4, 56)">
         <a
           class="navbar-item"
           href="/">
