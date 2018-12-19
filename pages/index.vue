@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <div class="columns is-mobile">
-      <h1>Schul-Cloud :D</h1>
+      <h1>Schul-Cloud</h1>
     </div>
   </section>
 </template>

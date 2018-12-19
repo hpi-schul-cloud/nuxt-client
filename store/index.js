@@ -22,6 +22,7 @@ if (process.client) {
 
   plugins = [
     browserService('teams', { paginate: true }),
+    browserService('news', { paginate: true }),
     browserService('schools', { paginate: true }),
     browserService('users', { paginate: true }),
     browserAuth({

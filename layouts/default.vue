@@ -9,20 +9,30 @@
           class="navbar-item"
           href="/">
           <img
-            src="~assets/buefy.png"
-            alt="Buefy"
-            height="28">
+            src="~assets/cloud.svg"
+            alt="Schul-Cloud"
+            style="width: 78px"
+          >
         </a>
+
         <nuxt-link
           v-if="!authenticated"
           class="navbar-item"
           to="/login">
           Login
         </nuxt-link>
+
+        <span 
+          v-if="authenticated"
+          class="navbar-item"        
+        >
+          Hallo, {{ firstName }}
+        </span>
+
         <a
           v-if="authenticated"
           class="navbar-item"
-          @click="$store.dispatch('auth/logout'); $router.push('login')">
+          @click="logout(); $router.push('login')">
           Logout
         </a>
 
@@ -60,14 +70,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
       items: [
-        { title: 'Übersicht', to: { name: 'index' } },
-        { title: 'Neuigkeiten', to: { name: 'news' } },
+        { title: 'News', to: { name: 'news' } },
         { title: 'Teams', to: { name: 'teams' } },
         { title: 'Kurse', to: { name: 'courses' } },
         { title: 'Termine', to: { name: 'events' } },
@@ -79,10 +88,11 @@ export default {
     }
   },
   computed: mapState({
-    authenticated: state => { 
-      console.log(state.auth.accessToken)
-      return state.auth.accessToken
-     }
-  })
+    firstName: state => state.auth.user ? state.auth.user.firstName : '',
+    authenticated: state => state.auth.accessToken
+  }),
+  methods: {
+    ...mapActions('auth', ['logout'])
+  }
 }
 </script>
