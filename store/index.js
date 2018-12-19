@@ -16,11 +16,15 @@ if (process.client) {
       path: '/',
       expires: moment().add(14, 'd').toDate(),
       secure: false
-    }    
+    }
   ))
   const { service: browserService, auth: browserAuth } = feathersVuex(browserClient, { idField: '_id', enableEvents: false })
 
   plugins = [
+    browserService('/content/search', {
+      namespace: 'content_search',
+      paginate: true
+    }),
     browserService('courses', { paginate: true }),
     browserService('teams', { paginate: true }),
     browserService('news', { paginate: true }),
