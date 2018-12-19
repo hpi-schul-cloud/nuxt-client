@@ -97,7 +97,7 @@ export default {
       } catch (e) {
         this.$toast.open({
             message: 'Fehler beim Login. E-Mail/Passwort falsch?',
-            type: 'is-error'
+            type: 'is-danger'
         })
       }
 

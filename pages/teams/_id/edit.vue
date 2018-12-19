@@ -53,7 +53,7 @@ export default {
               } catch (e) {
                 this.$toast.open({
                   message: 'Fehler beim löschen',
-                  type: 'is-error'
+                  type: 'is-danger'
                 })              
               }
             }
@@ -75,7 +75,7 @@ export default {
       } catch (e) {
         this.$toast.open({
           message: 'Fehler beim Speichern',
-          type: 'is-error'
+          type: 'is-danger'
         })
       }
     }
