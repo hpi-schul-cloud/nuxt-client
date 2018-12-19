@@ -9,16 +9,12 @@ h3
   margin-bottom: 1rem
 h4
   font-size: 1.4rem
+  margin-bottom: 1rem
 h5
   font-size: 1.2rem
+  margin-bottom: 1rem
 p
   margin-bottom: 1rem
-
-
-.menu-list
-  .nuxt-link-active
-    background-color: #3273dc;
-    color: #fff;
 
 .mt-1
   margin-top: 0.25rem
@@ -30,3 +26,17 @@ p
   margin-top: 1.75rem
 .mt-5
   margin-top: 3rem
+
+
+/* Transitions using the page hook */
+.page-enter-active, .page-leave-active
+  transition: all .15s ease-in-out;
+
+.page-enter, .page-leave-active
+  opacity: 0;
+  transform-origin: 50% 50%;
+s
+.menu-list
+  .nuxt-link-active
+    background-color: #3273dc;
+    color: #fff;

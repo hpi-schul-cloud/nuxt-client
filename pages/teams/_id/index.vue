@@ -1,12 +1,12 @@
 <template lang="pug">
 div(v-if="team")
   section.section
-    h5
+    h4
       span
         nuxt-link(:to="{ name: 'teams' }")
           | Teams 
       span / {{ team.name }}
-    p {{ team.description }}
+    h5 {{ team.description }}
     hr 
     button.button.is-info(
       @click="$router.push({ name: 'teams-id-edit'})"

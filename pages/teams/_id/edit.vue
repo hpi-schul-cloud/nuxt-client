@@ -1,8 +1,14 @@
 <template lang="pug">
 div(v-if="team")
   section.section
-    nuxt-link(:to="{ name: 'teams-id', params: { id: team._id } }")
-      h4 {{ team.name }} 
+    h4
+      span
+        nuxt-link(:to="{ name: 'teams' }")
+          | Teams 
+      span
+        nuxt-link(:to="{ name: 'teams-id', params: { id: team._id } }")
+          | / {{ team.name }} 
+      span / Bearbeiten
     h1 Team bearbeiten
     button.button.is-warning(@click="confirmDelete") Löschen
 

@@ -7,7 +7,7 @@
         @click="$router.push({ name: 'teams-create'})"
       >Neues Team erstellen</button>
     </section>
-    <section>
+    <section class="section">
       <div class="columns is-tablet">
         <div 
           v-for="(team, i) of teams" 
