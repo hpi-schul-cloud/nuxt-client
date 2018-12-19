@@ -5,8 +5,7 @@
       role="navigation"
       aria-label="main navigation">
       <div 
-        class="navbar-brand" 
-        style="background: rgb(176, 4, 56)">
+        class="navbar-brand" >
         <a
           class="navbar-item"
           href="/">

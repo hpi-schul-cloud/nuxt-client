@@ -8,12 +8,31 @@
       >Neues Team erstellen</button>
     </section>
     <section class="section">
-      <div class="columns is-tablet">
+      <div class="tile is-ancestor">
+        <div 
+          v-for="(team, i) of teams"
+          :key="i"
+          class="tile is-parent is-4">
+          <article
+            :class="{ 'is-primary': i % 3 == 0, 'is-info': i % 3 == 1, 'is-success': i % 3 == 2 }"
+            class="tile is-child notification"
+          >
+            <p class="title">{{ team.name }}</p>
+            <p class="subtitle">
+              {{ team.description }}
+            </p>
+            <p>
+              <nuxt-link :to="{ name: 'teams-id', params: { id: team._id } }">Anschauen</nuxt-link>
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <!-- <div class="columns is-tablet">
         <div 
           v-for="(team, i) of teams" 
           :key="i" 
-          class="column is-one-third"
-        >
+          class="column is-one-third">
           <div class="card">
             <header class="card-header">
               <p class="card-header-title has-text-grey">{{ team.name }}</p>
@@ -28,7 +47,7 @@
             </footer>
           </div>
         </div>
-      </div>
+      </div> -->
     </section>
   </div>
 </template>
