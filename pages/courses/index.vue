@@ -10,21 +10,10 @@
     <section class="section">
       <div class="tile is-ancestor">
         <div 
-          v-for="(course, i) of courses"
-          :key="i"
+          v-for="(course, i) of courses" 
+          :key="i" 
           class="tile is-parent is-4">
-          <article
-            :class="{ 'is-primary': i % 3 == 0, 'is-info': i % 3 == 1, 'is-success': i % 3 == 2 }"
-            class="tile is-child notification"
-          >
-            <p class="title">{{ course.name }}</p>
-            <p class="subtitle">
-              {{ course.description }}
-            </p>
-            <p>
-              <nuxt-link :to="{ name: 'courses-id', params: { id: course._id } }">Anschauen</nuxt-link>
-            </p>
-          </article>
+          <CourseCard :course="course"/>
         </div>
       </div>
     </section>
@@ -33,8 +22,12 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import CourseCard from './CourseCard'
 
 export default {
+  components: {
+    CourseCard
+  },
   computed: {
     ...mapGetters('courses', {
       courses: 'list'
