@@ -1,7 +1,11 @@
 <template>
   <section class="section">
     <h1>Lernstore</h1>
-    <input v-bind:lazy="searchQuery" class="input" type="text" placeholder="Suche nach...">
+    <input 
+      :lazy="searchQuery" 
+      class="input" 
+      type="text" 
+      placeholder="Suche nach...">
     <div class="columns is-multiline">
       <div
         v-for="(content, i) of searchResults"
@@ -14,14 +18,15 @@
         :key="i"
         class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd"
       >
-        <ContentCard :data="{
-          title: 'Titel',
-          description: 'Beschreibung...',
-          tags: [
-            'schule',
-            'bildung'
-          ],
-          thumbnail: 'https://img.youtube.com/vi/muZmOiiukQE/maxresdefault.jpg'
+        <ContentCard 
+          :data="{
+            title: 'Titel',
+            description: 'Beschreibung...',
+            tags: [
+              'schule',
+              'bildung'
+            ],
+            thumbnail: 'https://img.youtube.com/vi/muZmOiiukQE/maxresdefault.jpg'
         }"/>
       </div>
     </div>
@@ -49,6 +54,13 @@ export default {
       searchResults: 'list'
     })
   },
+  watch: {
+    searchQuery(to, from) {
+      if (to != from) {
+        find(to);
+      }
+    },
+  },
   created(ctx) {
     this.find("");
   },
@@ -56,13 +68,6 @@ export default {
     find (searchString) {
       this.$store.dispatch('content_search/find')
     }
-  },
-  watch: {
-    searchQuery(to, from) {
-      if (to != from) {
-        find(to);
-      }
-    },
   },
 }
 </script>

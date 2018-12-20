@@ -5,27 +5,29 @@
   >
     <div class="card-image">
       <figure class="image is-4by3">
-        <img :src="data.thumbnail" :alt="'Thumbnail for ~' + data.title + '~'">
+        <img 
+          :src="data.thumbnail" 
+          :alt="'Thumbnail for ~' + data.title + '~'">
       </figure>
     </div>
     <div class="card-content">
       <div class="media">
         <div class="media-content">
-          <p class="title is-4">{{data.title}}</p>
+          <p class="title is-4">{{ data.title }}</p>
           <p class="subtitle is-6">
             <span 
               v-for="tag of data.tags"
               :key="tag"
               class="tag"
             >
-                {{ tag }}
+              {{ tag }}
             </span>
           </p>
         </div>
       </div>
 
       <div class="content">
-        {{data.description}}
+        {{ data.description }}
       </div>
     </div>
   </div>
@@ -34,7 +36,7 @@
 <script>
 
 export default {
-  name: 'contentCard',
+  name: 'ContentCard',
   props: {
     data: {
       type: Object,
