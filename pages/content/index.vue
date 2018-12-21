@@ -1,11 +1,10 @@
 <template>
   <section class="section">
     <h1>Lernstore</h1>
-    <input
+    <Searchbar
       v-model.lazy="searchQuery"
-      class="input"
       type="text"
-      placeholder="Suche nach...">
+      placeholder="Suche nach..." />
     <div class="columns is-multiline is-mobile">
       <div
         v-for="(content, i) of searchResults"
@@ -17,34 +16,28 @@
         />
       </div>
     </div>
-    <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
-      <ul class="pagination-list">
-        <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
-        <li><span class="pagination-ellipsis">&hellip;</span></li>
-        <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
-        <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
-        <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
-        <li><span class="pagination-ellipsis">&hellip;</span></li>
-        <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
-      </ul>
-    </nav>
+    <Pagination />
   </section>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import ContentCard from './contentCard.vue'
+import Searchbar from '~/components/searchbar.vue'
+import Pagination from '~/components/pagination.vue'
 
 export default {
   name: 'CardFooter',
   components: {
-    ContentCard
+    ContentCard,
+    Searchbar,
+    Pagination
   },
   props: {
   },
   data(){
     return {
-      searchQuery: ""
+      searchQuery: this.$route.query.q || ""
     }
   },
   computed: {
@@ -52,22 +45,19 @@ export default {
       searchResults: 'list'
     })
   },
-  watch: {
-    searchQuery(to, from) {
-      if (to != from) {
-        find(to);
-      }
-    },
-  },
   created(ctx) {
-    this.find("");
+    this.find(this.searchQuery);
   },
   methods: {
     find (searchString) {
-      console.log("search for", this.searchQuery)
+      const query = {};
+      if(searchString){
+        query["_all[$match]"] = this.searchQuery;
+      }
       this.$store.dispatch('content_search/find', {
-        "$match[_all": this.searchQuery
-      })
+        query: query
+      });
+      this.$router.push({query: {q: this.searchQuery}})
     }
   },
   watch: {

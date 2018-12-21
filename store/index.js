@@ -23,7 +23,9 @@ if (process.client) {
   plugins = [
     browserService('/content/search', {
       namespace: 'content_search',
-      paginate: true
+      paginate: true,
+      autoRemove: true,
+      replaceItems: true,
     }),
     browserService('courses', { paginate: true }),
     browserService('teams', { paginate: true }),
