@@ -1,30 +1,27 @@
 <template>
   <section class="section">
     <h1>Lernstore</h1>
-    <Searchbar
-      v-model.lazy="searchQuery"
-      type="text"
-      placeholder="Suche nach..." />
+    <Searchbar 
+      v-model.lazy="searchQuery" 
+      type="text" 
+      placeholder="Suche nach..."/>
     <div class="columns is-multiline is-mobile">
-      <div
-        v-for="(content, i) of searchResults"
-        :key="i"
-        class="column"
-      >
-        <ContentCard
-          :data="content"
-        />
+      <div 
+        v-for="(content, i) of searchResults" 
+        :key="i" 
+        class="column">
+        <ContentCard :data="content"/>
       </div>
     </div>
-    <Pagination />
+    <Pagination/>
   </section>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import ContentCard from './contentCard.vue'
-import Searchbar from '~/components/searchbar.vue'
-import Pagination from '~/components/pagination.vue'
+import Searchbar from '~/components/lib/searchbar.vue'
+import Pagination from '~/components/lib/pagination.vue'
 
 export default {
   name: 'CardFooter',
