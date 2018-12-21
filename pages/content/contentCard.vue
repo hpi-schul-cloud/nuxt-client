@@ -5,8 +5,8 @@
   >
     <div class="card-image">
       <figure class="image is-4by3">
-        <img 
-          :src="data.thumbnail" 
+        <img
+          :src="data.thumbnail"
           :alt="'Thumbnail for ~' + data.title + '~'">
       </figure>
     </div>
@@ -15,7 +15,7 @@
         <div class="media-content">
           <p class="title is-4">{{ data.title }}</p>
           <p class="subtitle is-6">
-            <span 
+            <span
               v-for="tag of data.tags"
               :key="tag"
               class="tag"
@@ -27,7 +27,20 @@
       </div>
 
       <div class="content">
-        {{ data.description }}
+        <p>
+          {{ data.description }}
+        </p>
+        <p>
+          Anbieter: {{data.providerName}} <br/>
+          Lizenz: <br/>
+          <ul>
+            <li
+              v-for="(license, index) in data.licenses"
+              :key = index
+              v-html="license"
+            ></li>
+          </ul>
+        </p>
       </div>
     </div>
   </div>
@@ -42,7 +55,13 @@ export default {
       type: Object,
       default: function() {}
     }
-  }
+  },
+  methods: {
+    open () {
+      const win = window.open(this.data.url, '_blank');
+      win.focus();
+    }
+  },
 }
 </script>
 
