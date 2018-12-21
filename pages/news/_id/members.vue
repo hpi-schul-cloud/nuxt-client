@@ -33,25 +33,25 @@ div(v-if="team")
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       selected: null,
       columns: [
-          {
-              field: '_id',
-              label: 'ID',
-              width: '40',
-              numeric: true
-          },
-          {
-              field: 'firstName',
-              label: 'First Name',
-          },
-          {
-              field: 'lastNAme',
-              label: 'Last Name',
-          }
-      ]      
+        {
+          field: '_id',
+          label: 'ID',
+          width: '40',
+          numeric: true
+        },
+        {
+          field: 'firstName',
+          label: 'First Name'
+        },
+        {
+          field: 'lastNAme',
+          label: 'Last Name'
+        }
+      ]
     }
   },
   computed: {
@@ -59,25 +59,28 @@ export default {
       team: 'current'
     })
   },
-  created (ctx) {
+  created(ctx) {
     console.log(this.$route.params)
-    this.get(this.$route.params.id);
-  },  
+    this.get(this.$route.params.id)
+  },
   methods: {
-    get (id) {
-      this.$store.dispatch('teams/get', [id, {
-        query: {
-          $populate: [
+    get(id) {
+      this.$store.dispatch('teams/get', [
+        id,
+        {
+          query: {
+            $populate: [
               {
                 path: 'userIds.userId',
                 populate: ['schoolId']
               },
               {
-                path: 'userIds.role',
+                path: 'userIds.role'
               }
-          ],
+            ]
+          }
         }
-      }])
+      ])
     }
   }
 }

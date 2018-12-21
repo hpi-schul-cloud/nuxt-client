@@ -31,14 +31,14 @@
           {{ data.description }}
         </p>
         <p>
-          Anbieter: {{data.providerName}} <br/>
-          Lizenz: <br/>
+          Anbieter: {{ data.providerName }} <br>
+          Lizenz: <br>
           <ul>
             <li
               v-for="(license, index) in data.licenses"
-              :key = index
+              :key = "index"
               v-html="license"
-            ></li>
+            />
           </ul>
         </p>
       </div>
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'ContentCard',
   props: {
@@ -57,17 +56,17 @@ export default {
     }
   },
   methods: {
-    open () {
-      const win = window.open(this.data.url, '_blank');
-      win.focus();
+    open() {
+      const win = window.open(this.data.url, '_blank')
+      win.focus()
     }
-  },
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  .tag{
-    margin-right: 4px;
-  }
+.tag {
+  margin-right: 4px;
+}
 </style>

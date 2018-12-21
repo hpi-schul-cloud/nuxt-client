@@ -33,11 +33,10 @@ export default {
     Searchbar,
     Pagination
   },
-  props: {
-  },
-  data(){
+  props: {},
+  data() {
     return {
-      searchQuery: this.$route.query.q || ""
+      searchQuery: this.$route.query.q || ''
     }
   },
   computed: {
@@ -45,33 +44,33 @@ export default {
       searchResults: 'list'
     })
   },
-  created(ctx) {
-    this.find(this.searchQuery);
-  },
-  methods: {
-    find (searchString) {
-      const query = {};
-      if(searchString){
-        query["_all[$match]"] = this.searchQuery;
-      }
-      this.$store.dispatch('content_search/find', {
-        query: query
-      });
-      this.$router.push({query: {q: this.searchQuery}})
-    }
-  },
   watch: {
     searchQuery(to, from) {
       if (to != from) {
-        this.find(to);
+        this.find(to)
       }
-    },
+    }
   },
+  created(ctx) {
+    this.find(this.searchQuery)
+  },
+  methods: {
+    find(searchString) {
+      const query = {}
+      if (searchString) {
+        query['_all[$match]'] = this.searchQuery
+      }
+      this.$store.dispatch('content_search/find', {
+        query: query
+      })
+      this.$router.push({ query: { q: this.searchQuery } })
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  input.input {
-    margin-bottom: 2rem;
-  }
+input.input {
+  margin-bottom: 2rem;
+}
 </style>

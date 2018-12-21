@@ -33,45 +33,48 @@ export default {
       team: 'current'
     })
   },
-  created (ctx) {
-    this.get(this.$route.params.id);
-  },  
+  created(ctx) {
+    this.get(this.$route.params.id)
+  },
   methods: {
     ...mapActions('teams', ['remove']),
     confirmDelete() {
-        this.$dialog.confirm({
-            title: 'Team löschen',
-            message: 'Bist du sicher, dass du das Team löschen möchtest?',
-            confirmText: 'Team löschen',
-            type: 'is-danger',
-            hasIcon: true,
-            onConfirm: async () => {
-              try {
-                await this.remove(this.team._id);
-                this.$toast.open('Team gelöscht')  
-                this.$router.push({ name: 'teams' })                            
-              } catch (e) {
-                this.$toast.open({
-                  message: 'Fehler beim löschen',
-                  type: 'is-danger'
-                })              
-              }
-            }
-        })        
-    } ,
-    get (id) {
+      this.$dialog.confirm({
+        title: 'Team löschen',
+        message: 'Bist du sicher, dass du das Team löschen möchtest?',
+        confirmText: 'Team löschen',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: async () => {
+          try {
+            await this.remove(this.team._id)
+            this.$toast.open('Team gelöscht')
+            this.$router.push({ name: 'teams' })
+          } catch (e) {
+            this.$toast.open({
+              message: 'Fehler beim löschen',
+              type: 'is-danger'
+            })
+          }
+        }
+      })
+    },
+    get(id) {
       this.$store.dispatch('teams/get', id)
     },
-    async save () {
+    async save() {
       try {
-        await this.$store.dispatch('teams/patch', [this.$route.params.id, {
-          name: this.team.name,
-          description: this.team.description
-        }])
+        await this.$store.dispatch('teams/patch', [
+          this.$route.params.id,
+          {
+            name: this.team.name,
+            description: this.team.description
+          }
+        ])
         this.$toast.open({
           message: 'Team gespeichert',
           type: 'is-success'
-        })      
+        })
       } catch (e) {
         this.$toast.open({
           message: 'Fehler beim Speichern',

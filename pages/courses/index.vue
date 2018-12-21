@@ -22,7 +22,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import CourseCard from '~/components/courses/CourseCard';
+import CourseCard from '~/components/courses/CourseCard'
 
 export default {
   components: {

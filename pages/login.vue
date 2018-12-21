@@ -68,7 +68,7 @@
 import { mapMutations, mapActions } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       email: undefined,
       password: undefined,
@@ -76,13 +76,13 @@ export default {
     }
   },
   methods: {
-    dismissError () {
+    dismissError() {
       this.error = undefined
       this.clearAuthenticateError()
     },
-    async onSubmit (username, password) {
+    async onSubmit(username, password) {
       let payload = { strategy: 'local', username, password }
-    
+
       try {
         await this.authenticate({
           strategy: 'local',
@@ -90,14 +90,14 @@ export default {
           password
         })
         this.$toast.open({
-            message: 'Login erfolgreich!',
-            type: 'is-success'
-        })        
+          message: 'Login erfolgreich!',
+          type: 'is-success'
+        })
         this.$router.push('/')
       } catch (e) {
         this.$toast.open({
-            message: 'Fehler beim Login. E-Mail/Passwort falsch?',
-            type: 'is-danger'
+          message: 'Fehler beim Login. E-Mail/Passwort falsch?',
+          type: 'is-danger'
         })
       }
 
@@ -113,7 +113,7 @@ export default {
       //     console.log(error)
       //     this.error = error
       //   })
-    },    
+    },
     ...mapMutations('auth', {
       clearAuthenticateError: 'clearAuthenticateError'
     }),

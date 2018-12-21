@@ -79,10 +79,10 @@ export default {
     })
   },
   created(ctx) {
-    this.find();
-  },  
+    this.find()
+  },
   methods: {
-    find () {
+    find() {
       this.$store.dispatch('news/find')
     }
   }

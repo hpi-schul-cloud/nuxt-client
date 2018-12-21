@@ -10,22 +10,28 @@ let plugins = []
 const enableEvents = typeof window !== 'undefined'
 
 if (process.client) {
-  const browserClient = feathersClient('', new CookieStorage(
-    {
+  const browserClient = feathersClient(
+    '',
+    new CookieStorage({
       domain: 'localhost',
       path: '/',
-      expires: moment().add(14, 'd').toDate(),
+      expires: moment()
+        .add(14, 'd')
+        .toDate(),
       secure: false
-    }
-  ))
-  const { service: browserService, auth: browserAuth } = feathersVuex(browserClient, { idField: '_id', enableEvents: false })
+    })
+  )
+  const { service: browserService, auth: browserAuth } = feathersVuex(
+    browserClient,
+    { idField: '_id', enableEvents: false }
+  )
 
   plugins = [
     browserService('/content/search', {
       namespace: 'content_search',
       paginate: true,
       autoRemove: true,
-      replaceItems: true,
+      replaceItems: true
     }),
     browserService('courses', { paginate: true }),
     browserService('teams', { paginate: true }),
@@ -35,11 +41,7 @@ if (process.client) {
     browserAuth({
       userService: 'users',
       state: {
-        publicPages: [
-          'index',
-          'login',
-          'signup'
-        ]
+        publicPages: ['index', 'login', 'signup']
       }
     })
   ]
@@ -51,31 +53,34 @@ const createStore = () => {
   return new Vuex.Store({
     state: {},
     actions: {
-      nuxtServerInit ({ commit, dispatch, state }, { req, store }) {
+      nuxtServerInit({ commit, dispatch, state }, { req, store }) {
         let origin = req.headers.host.split(':')
         origin = `http://${origin[0]}`
 
         const storage = {
-          getItem (key) {
+          getItem(key) {
             return store.state.auth ? store.state.auth.accessToken : ''
           },
-          setItem (key, value) {
+          setItem(key, value) {
             store.state.auth.accessToken = value
           },
-          removeItem (key) {
+          removeItem(key) {
             store.state.auth.accessToken = null
           }
         }
 
         // Create a new client for the server
         const client = feathersClient(origin, storage)
-        const { service, auth } = feathersVuex(client, { idField: '_id', enableEvents: false })
+        const { service, auth } = feathersVuex(client, {
+          idField: '_id',
+          enableEvents: false
+        })
 
         // Register services for the server
-        service('users', { paginate: true }) (store)
-        service('teams', { paginate: true }) (store)
-        service('schools', { paginate: true }) (store)
-        
+        service('users', { paginate: true })(store)
+        service('teams', { paginate: true })(store)
+        service('schools', { paginate: true })(store)
+
         return initAuth({
           commit: store.commit,
           dispatch,
@@ -86,7 +91,7 @@ const createStore = () => {
       }
     },
     plugins: plugins
-  });
-};
+  })
+}
 
 export default createStore

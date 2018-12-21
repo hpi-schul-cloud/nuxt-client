@@ -15,7 +15,7 @@ div(v-if="course")
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       course: {
         name: '',
@@ -27,9 +27,9 @@ export default {
     ...mapState('auth', {
       user: 'user'
     })
-  },  
+  },
   methods: {
-    async create (id) {
+    async create(id) {
       try {
         const course = await this.$store.dispatch('courses/create', {
           schoolId: this.user.schoolId,
@@ -40,15 +40,15 @@ export default {
         this.$toast.open({
           message: 'Kurs erstellt',
           type: 'is-success'
-        })      
- 
+        })
+
         this.$router.push({ name: 'courses' })
       } catch (e) {
         this.$toast.open({
           message: 'Fehler beim Erstellen des Kurses',
           type: 'is-danger'
         })
-      }      
+      }
     }
   }
 }

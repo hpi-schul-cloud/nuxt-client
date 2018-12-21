@@ -41,12 +41,12 @@ export default {
   },
   created(ctx) {
     // Query users from Feathers
-  },  
+  },
   methods: {
-    find () {
+    find() {
       this.$store.dispatch('schools/find')
     },
-    ...mapActions('auth', ['logout']),
+    ...mapActions('auth', ['logout'])
   }
 }
 </script>

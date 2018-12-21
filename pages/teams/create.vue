@@ -13,7 +13,7 @@ div(v-if="team")
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       team: {
         name: '',
@@ -25,9 +25,9 @@ export default {
     ...mapState('auth', {
       user: 'user'
     })
-  },  
+  },
   methods: {
-    async create (id) {
+    async create(id) {
       try {
         const team = await this.$store.dispatch('teams/create', {
           schoolId: this.user.schoolId,
@@ -38,17 +38,17 @@ export default {
         this.$toast.open({
           message: 'Team erstellt',
           type: 'is-success'
-        })      
- 
+        })
+
         this.$router.push({ name: 'teams-id', params: { id: team._id } })
       } catch (e) {
         this.$toast.open({
           message: 'Fehler beim Erstellen des Teams',
           type: 'is-danger'
         })
-      }      
+      }
     },
-    ...mapActions('auth', ['logout']),
+    ...mapActions('auth', ['logout'])
   }
 }
 </script>

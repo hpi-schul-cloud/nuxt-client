@@ -41,11 +41,11 @@ export default {
       team: 'current'
     })
   },
-  created (ctx) {
-    this.get(this.$route.params.id);
-  },  
+  created(ctx) {
+    this.get(this.$route.params.id)
+  },
   methods: {
-    get (id) {
+    get(id) {
       this.$store.dispatch('teams/get', id)
     }
   }

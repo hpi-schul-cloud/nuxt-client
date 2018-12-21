@@ -84,12 +84,12 @@ export default {
         { title: 'Aufgaben', to: { name: 'tasks' } },
         { title: 'Dateien', to: { name: 'files' } },
         { title: 'Lernstore', to: { name: 'content' } },
-        { title: 'Verwaltung', to: { name: 'administration' } },
+        { title: 'Verwaltung', to: { name: 'administration' } }
       ]
     }
   },
   computed: mapState({
-    firstName: state => state.auth.user ? state.auth.user.firstName : '',
+    firstName: state => (state.auth.user ? state.auth.user.firstName : ''),
     authenticated: state => state.auth.accessToken
   }),
   methods: {

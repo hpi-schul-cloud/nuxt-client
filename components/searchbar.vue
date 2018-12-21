@@ -2,23 +2,29 @@
   <div :class="{ 'live-search': true, 'active':isActive }">
     <div class="search-container">
       <span class="icon">
-        <i v-if="loading" class="fas fa-spinner fa-spin load-icon"></i>
-        <i v-else class="fas fa-search search-icon"></i>
+        <i 
+          v-if="loading" 
+          class="fas fa-spinner fa-spin load-icon"/>
+        <i 
+          v-else 
+          class="fas fa-search search-icon"/>
       </span>
       <input
+        ref="searchStringInput"
         :value="value"
         :placeholder="placeholder"
         :autocomplete="autocomplete?'on':'off'"
         :aria-label="ariaLabel"
         type="text"
         class="search"
-        ref="searchStringInput"
         @input="updateSearchString"
         @focus="isActive=true"
         @blur="isActive=false"
       >
       <transition name="fade">
-        <i v-show="isActive && value !== ''" class="fas fa-times clear-icon"></i>
+        <i 
+          v-show="isActive && value !== ''" 
+          class="fas fa-times clear-icon"/>
       </transition>
     </div>
     <!--
@@ -42,11 +48,11 @@ export default {
   props: {
     value: {
       type: String,
-      default: ""
+      default: ''
     },
     placeholder: {
       type: String,
-      default: ""
+      default: ''
     },
     autocomplete: {
       type: Boolean,
@@ -54,20 +60,20 @@ export default {
     },
     ariaLabel: {
       type: String,
-      default: ""
-    },
+      default: ''
+    }
   },
-  data(){
+  data() {
     return {
       isActive: false,
       loading: false // toggle loading animation for livesearch
     }
   },
   methods: {
-    updateSearchString(event){
-      this.$emit('input', this.$refs.searchStringInput.value);
+    updateSearchString(event) {
+      this.$emit('input', this.$refs.searchStringInput.value)
     }
-  },
+  }
 }
 </script>
 
@@ -104,7 +110,7 @@ export default {
     }
 
     .search-icon {
-      transition: transform .3s ease-in-out;
+      transition: transform 0.3s ease-in-out;
     }
 
     .load-icon {
@@ -115,13 +121,12 @@ export default {
       position: absolute;
       top: 0;
       right: 8px;
-      transition: opacity .3s ease-in-out;
+      transition: opacity 0.3s ease-in-out;
       cursor: pointer;
       padding: 16px;
     }
-
   }
-/*
+  /*
   .live-search-results {
     position: absolute;
     bottom: 0;
@@ -166,5 +171,4 @@ export default {
     }
   }
 }
-
 </style>
