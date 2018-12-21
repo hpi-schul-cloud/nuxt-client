@@ -1,7 +1,11 @@
 <template>
   <section class="section">
     <h1>Lernstore</h1>
-    <input v-model.lazy="searchQuery" class="input" type="text" placeholder="Suche nach...">
+    <input
+      v-model.lazy="searchQuery"
+      class="input"
+      type="text"
+      placeholder="Suche nach...">
     <div class="columns is-multiline is-mobile">
       <div
         v-for="(content, i) of searchResults"
@@ -47,6 +51,13 @@ export default {
     ...mapGetters('content_search', {
       searchResults: 'list'
     })
+  },
+  watch: {
+    searchQuery(to, from) {
+      if (to != from) {
+        find(to);
+      }
+    },
   },
   created(ctx) {
     this.find("");

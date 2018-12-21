@@ -9,9 +9,9 @@
     </section>
     <section class="section">
       <div class="tile is-ancestor">
-        <div 
-          v-for="(course, i) of courses" 
-          :key="i" 
+        <div
+          v-for="(course, i) of courses"
+          :key="i"
           class="tile is-parent is-4">
           <CourseCard :course="course"/>
         </div>
@@ -22,7 +22,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import CourseCard from './CourseCard'
+import CourseCard from '~/components/courses/CourseCard';
 
 export default {
   components: {
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     find() {
-      this.$store.dispatch('teams/find')
+      this.$store.dispatch('courses/find')
     }
   }
 }
