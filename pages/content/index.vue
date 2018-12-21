@@ -1,30 +1,29 @@
 <template>
   <section class="section">
     <h1>Lernstore</h1>
-    <input v-bind:lazy="searchQuery" class="input" type="text" placeholder="Suche nach...">
-    <div class="columns is-multiline">
+    <input v-model.lazy="searchQuery" class="input" type="text" placeholder="Suche nach...">
+    <div class="columns is-multiline is-mobile">
       <div
         v-for="(content, i) of searchResults"
         :key="i"
-        class="column">
-        <ContentCard :data="content"/>
-      </div>
-      <div
-        v-for="(content, i) of [0,1,2,3,4,5,6,7]"
-        :key="i"
-        class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd"
+        class="column"
       >
-        <ContentCard :data="{
-          title: 'Titel',
-          description: 'Beschreibung...',
-          tags: [
-            'schule',
-            'bildung'
-          ],
-          thumbnail: 'https://img.youtube.com/vi/muZmOiiukQE/maxresdefault.jpg'
-        }"/>
+        <ContentCard
+          :data="content"
+        />
       </div>
     </div>
+    <nav class="pagination is-rounded is-centered" role="navigation" aria-label="pagination">
+      <ul class="pagination-list">
+        <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+        <li><span class="pagination-ellipsis">&hellip;</span></li>
+        <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+        <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+        <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+        <li><span class="pagination-ellipsis">&hellip;</span></li>
+        <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+      </ul>
+    </nav>
   </section>
 </template>
 
@@ -54,13 +53,16 @@ export default {
   },
   methods: {
     find (searchString) {
-      this.$store.dispatch('content_search/find')
+      console.log("search for", this.searchQuery)
+      this.$store.dispatch('content_search/find', {
+        "$match[_all": this.searchQuery
+      })
     }
   },
   watch: {
     searchQuery(to, from) {
       if (to != from) {
-        find(to);
+        this.find(to);
       }
     },
   },
