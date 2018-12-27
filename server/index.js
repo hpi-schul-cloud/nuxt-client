@@ -18,7 +18,6 @@ const handlebarsHelper = require(path.join(
   legacyClientRoot,
   './helpers/handlebars'
 ))
-console.log(path.join(legacyClientRoot, './helpers/handlebars'))
 const wax = handlebarsWax(handlebars)
   .partials(path.join(legacyClientRoot, './views/**/*.{hbs,js}'))
   .helpers(layouts)
