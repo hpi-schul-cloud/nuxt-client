@@ -47,7 +47,7 @@
     <section class="main-content columns">
 
       <aside class="column is-2 section">
-        <p class="menu-label is-hidden-touch">General</p>
+        <p class="menu-label is-hidden-touch">Allgemein</p>
         <ul class="menu-list">
           <li
             v-for="(item, key) of items"

@@ -1,3 +1,4 @@
 [submodule "schulcloud-client"]
 	path = schulcloud-client
 	url = https://github.com/schul-cloud/schulcloud-client
+	branch = N21/main
