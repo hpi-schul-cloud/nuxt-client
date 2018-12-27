@@ -10,9 +10,6 @@
 # install dependencies
 $ yarn install
 
-# install legacy schulcloud-client
-git submodule init && git submodule update
-
 # serve with hot reload at localhost:3000
 $ yarn run dev
 
@@ -22,6 +19,12 @@ $ yarn start
 
 # generate static project
 $ yarn run generate
+
+# install legacy schulcloud-client
+git submodule init && git submodule update
+
+# start client gulp watcher
+cd schulcloud-client && gulp watch
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
