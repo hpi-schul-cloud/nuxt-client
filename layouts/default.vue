@@ -6,16 +6,15 @@
       aria-label="main navigation">
       <div 
         class="navbar-brand" >
-        <a
+        <nuxt-link 
           class="navbar-item"
-          href="/">
+          to="/">
           <img
             src="~assets/cloud.svg"
             alt="Schul-Cloud"
             style="width: 78px"
           >
-        </a>
-
+        </nuxt-link>
         <nuxt-link
           v-if="!authenticated"
           class="navbar-item"
