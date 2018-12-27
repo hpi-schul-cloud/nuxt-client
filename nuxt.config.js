@@ -1,7 +1,7 @@
 const pkg = require('./package')
 
 module.exports = {
-  mode: 'spa',
+  mode: 'universal',
 
   /*
   ** Headers of the page
@@ -48,6 +48,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    // 'nuxt-express-module',
       /* other options */ 
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',

@@ -90,7 +90,7 @@ export default {
   },
   computed: mapState({
     firstName: state => state.auth.user ? state.auth.user.firstName : '',
-    authenticated: state => state.auth.accessToken
+    authenticated: state => state.auth ? state.auth.accessToken : ''
   }),
   methods: {
     ...mapActions('auth', ['logout'])
