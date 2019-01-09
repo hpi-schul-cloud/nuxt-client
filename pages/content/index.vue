@@ -24,7 +24,7 @@ import Searchbar from '~/components/lib/searchbar.vue'
 import Pagination from '~/components/lib/pagination.vue'
 
 export default {
-  name: 'CardFooter',
+  name: 'LernStore',
   components: {
     ContentCard,
     Searchbar,
