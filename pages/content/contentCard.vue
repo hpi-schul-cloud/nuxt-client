@@ -15,8 +15,8 @@
           <p class="title is-4">{{ data.title }}</p>
           <p class="subtitle is-6">
             <span
-              v-for="tag of data.tags"
-              :key="tag"
+              v-for="(tag, index) of data.tags"
+              :key="index"
               class="tag"
             >
               {{ tag }}
