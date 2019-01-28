@@ -38,7 +38,7 @@ export default {
     return {
       searchQuery: this.$route.query.q || '',
       searchResults: {},
-      skippedItems: 0
+      skippedItems: this.$route.query.skip || 0
     }
   },
   watch: {
@@ -51,6 +51,7 @@ export default {
       }
       this.$options.debounce = setInterval(() => {
         clearInterval(this.$options.debounce)
+        this.skippedItems = 0
         this.find(to)
       }, 500)
     },
@@ -77,8 +78,11 @@ export default {
         })
         .then(result => {
           this.searchResults = result
+          this.skippedItems = result.skip
         })
-      this.$router.push({ query: { q: this.searchQuery } })
+      this.$router.push({
+        query: { q: this.searchQuery, skip: this.skippedItems }
+      })
     }
   }
 }

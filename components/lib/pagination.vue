@@ -1,25 +1,25 @@
 <template>
-  <nav 
-    class="pagination is-rounded is-centered" 
-    role="navigation" 
+  <nav
+    class="pagination is-rounded is-centered"
+    role="navigation"
     aria-label="pagination">
     <ul class="pagination-list">
-      <li>
-        <a 
-          class="pagination-link" 
-          aria-label="Goto previous page" 
+      <li v-if="currentPage > 1">
+        <a
+          class="pagination-link"
+          aria-label="Goto previous page"
           @click="previousPage">←</a>
       </li>
       <li>
-        <a 
-          class="pagination-link is-current" 
-          aria-label="Page 46" 
+        <a
+          class="pagination-link is-current"
+          aria-label="Page 46"
           aria-current="page">{{ currentPage }}</a>
       </li>
-      <li>
-        <a 
-          class="pagination-link" 
-          aria-label="Goto next page" 
+      <li v-if="currentPage < lastPage">
+        <a
+          class="pagination-link"
+          aria-label="Goto next page"
           @click="nextPage">→</a>
       </li>
     </ul>
@@ -53,7 +53,7 @@ export default {
     currentPage() {
       return this.state.skip / this.state.limit + 1
     },
-    pages() {
+    lastPage() {
       return Math.ceil(this.state.total / this.state.limit)
     }
   },
