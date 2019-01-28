@@ -1,0 +1,75 @@
+{
+	"baseUrl": ".",
+	"include": ["src/**/*", "tests/**/*"],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"target": "esnext",
+		"module": "es2015",
+		"paths": {
+			"~/*": ["./*"],
+			"~": [
+				"./index.js",
+				"./index.json",
+				"./index.vue",
+				"./index.scss",
+				"./index.css"
+			],
+			"@/*": ["./*"],
+			"@": [
+				"./index.js",
+				"./index.json",
+				"./index.vue",
+				"./index.scss",
+				"./index.css"
+			],
+			"@pages/*": ["pages/*"],
+			"@pages": [
+				"pages/index.js",
+				"pages/index.json",
+				"pages/index.vue",
+				"pages/index.scss",
+				"pages/index.css"
+			],
+			"@layouts/*": ["layouts/*"],
+			"@layouts": [
+				"layouts/index.js",
+				"layouts/index.json",
+				"layouts/index.vue",
+				"layouts/index.scss",
+				"layouts/index.css"
+			],
+			"@components/*": ["components/*"],
+			"@components": [
+				"components/index.js",
+				"components/index.json",
+				"components/index.vue",
+				"components/index.scss",
+				"components/index.css"
+			],
+			"@assets/*": ["assets/*"],
+			"@assets": [
+				"assets/index.js",
+				"assets/index.json",
+				"assets/index.vue",
+				"assets/index.scss",
+				"assets/index.css"
+			],
+			"@store/*": ["store/*"],
+			"@store": [
+				"store/index.js",
+				"store/index.json",
+				"store/index.vue",
+				"store/index.scss",
+				"store/index.css"
+			],
+			"@design/*": ["styles.app.scss/*"],
+			"@design": [
+				"styles.app.scss/index.js",
+				"styles.app.scss/index.json",
+				"styles.app.scss/index.vue",
+				"styles.app.scss/index.scss",
+				"styles.app.scss/index.css"
+			]
+		}
+	}
+}

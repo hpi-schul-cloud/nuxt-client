@@ -7,11 +7,7 @@
 					<p class="subtitle has-text-grey">Please login to proceed.</p>
 					<div class="box">
 						<div class="logo-round">
-							<img
-								src="~assets/cloud.svg"
-								alt="Schul-Cloud"
-								style="width: 78px"
-							/>
+							<img src="@assets/cloud.svg" alt="Schul-Cloud" style="width: 78px">
 						</div>
 						<form @submit.prevent="onSubmit(email, password)">
 							<div class="field">
@@ -22,7 +18,7 @@
 										type="email"
 										placeholder="Your Email"
 										autofocus
-									/>
+									>
 								</div>
 							</div>
 
@@ -33,18 +29,16 @@
 										class="input is-large"
 										type="password"
 										placeholder="Your Password"
-									/>
+									>
 								</div>
 							</div>
 							<div class="field">
 								<label class="checkbox">
-									<input type="checkbox" />
+									<input type="checkbox">
 									Remember me
 								</label>
 							</div>
-							<button class="button is-block is-info is-large is-fullwidth"
-								>Login</button
-							>
+							<button class="button is-block is-info is-large is-fullwidth">Login</button>
 						</form>
 						<div v-if="error" class="error">
 							{{ error.message }}
@@ -52,8 +46,7 @@
 								class="close"
 								href="javascript://"
 								@click.prevent="dismissError"
-								>dismiss</a
-							>
+							>dismiss</a>
 						</div>
 					</div>
 					<p class="has-text-grey">
