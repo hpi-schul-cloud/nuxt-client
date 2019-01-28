@@ -2,7 +2,7 @@
   "name": "schulcloud-nuxt",
   "version": "1.0.0",
   "description": "The next Level of Schul-Cloud",
-  "author": "Michael Schmid",
+  "author": "HPI Schul-Cloud",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
