@@ -6,23 +6,27 @@
 			type="text"
 			placeholder="Suche nach..."
 		/>
+		<Pagination v-model="skippedItems" :state="searchResults" />
 		<div class="columns is-multiline is-mobile">
-			<div v-for="(content, i) of searchResults" :key="i" class="column">
+			<div
+				v-for="content of searchResults.data"
+				:key="content._id"
+				class="column"
+			>
 				<ContentCard :data="content" />
 			</div>
 		</div>
-		<Pagination />
+		<Pagination v-model="skippedItems" :state="searchResults" />
 	</section>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import ContentCard from './contentCard.vue';
 import Searchbar from '~/components/lib/searchbar.vue';
 import Pagination from '~/components/lib/pagination.vue';
 
 export default {
-	name: 'CardFooter',
+	name: 'LernStore',
 	components: {
 		ContentCard,
 		Searchbar,
@@ -32,18 +36,29 @@ export default {
 	data() {
 		return {
 			searchQuery: this.$route.query.q || '',
+			searchResults: {},
+			skippedItems: this.$route.query.skip || 0,
 		};
-	},
-	computed: {
-		...mapGetters('content_search', {
-			searchResults: 'list',
-		}),
 	},
 	watch: {
 		searchQuery(to, from) {
-			if (to !== from) {
-				this.find(to);
+			if (this.$options.debounce) {
+				clearInterval(this.$options.debounce);
 			}
+			if (to === from) {
+				return;
+			}
+			this.$options.debounce = setInterval(() => {
+				clearInterval(this.$options.debounce);
+				this.skippedItems = 0;
+				this.find(to);
+			}, 500);
+		},
+		skippedItems(to, from) {
+			if (to === from) {
+				return;
+			}
+			this.find(this.searchQuery);
 		},
 	},
 	created(ctx) {
@@ -54,11 +69,20 @@ export default {
 			const query = {};
 			if (searchString) {
 				query['_all[$match]'] = this.searchQuery;
+				query['$skip'] = this.skippedItems;
 			}
-			this.$store.dispatch('content_search/find', {
-				query: query,
-			});
-			this.$router.push({ query: { q: this.searchQuery } });
+			this.$store
+				.dispatch('content_search/find', {
+					query: query,
+				})
+				.then((result) => {
+					this.searchResults = result;
+					this.skippedItems = result.skip;
+					this.$router.push({
+						query: { q: this.searchQuery, skip: this.skippedItems },
+					});
+					window.scrollTo(0, 0);
+				});
 		},
 	},
 };
