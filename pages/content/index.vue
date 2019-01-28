@@ -1,22 +1,15 @@
 <template>
 	<section class="section">
 		<h1>Lernstore</h1>
-		<Searchbar
-			v-model.lazy="searchQuery"
-			type="text"
-			placeholder="Suche nach..."
-		/>
-		<Pagination v-model="skippedItems" :state="searchResults" />
+		<Searchbar v-model.lazy="searchQuery" type="text" placeholder="Suche nach..."/>
+		<Pagination v-model="skippedItems" :state="searchResults"/>
 		<div class="columns is-multiline is-mobile">
-			<div
-				v-for="content of searchResults.data"
-				:key="content._id"
-				class="column"
-			>
-				<ContentCard :data="content" />
+			<div v-for="content of searchResults.data" :key="content._id" class="column">
+				<ContentCard :data="content"/>
 			</div>
+			<div v-if="!searchResults.data.length">Keine Ergebnisse gefunden :(</div>
 		</div>
-		<Pagination v-model="skippedItems" :state="searchResults" />
+		<Pagination v-model="skippedItems" :state="searchResults"/>
 	</section>
 </template>
 
@@ -36,7 +29,7 @@ export default {
 	data() {
 		return {
 			searchQuery: this.$route.query.q || '',
-			searchResults: {},
+			searchResults: { data: [] },
 			skippedItems: this.$route.query.skip || 0,
 		};
 	},
@@ -82,7 +75,7 @@ export default {
 						query: { q: this.searchQuery, skip: this.skippedItems },
 					});
 					window.scrollTo(0, 0);
-				});
+			});
 		},
 	},
 };

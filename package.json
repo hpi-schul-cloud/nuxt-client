@@ -33,7 +33,6 @@
 		"lodash": "^4.17.11",
 		"moment": "^2.23.0",
 		"nuxt": "^2.0.0",
-		"nuxt-buefy": "^0.2.1",
 		"nuxt-express-module": "0.0.11",
 		"socket.io-client": "^2.2.0"
 	},
