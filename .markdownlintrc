@@ -8,6 +8,7 @@
   "line-length": false,
   // allow hard tabs, look at the eslint config for more details
   "no-hard-tabs": false,
+  "no-trailing-punctuation": false,
   // ===
   // Prettier overrides
   // ===

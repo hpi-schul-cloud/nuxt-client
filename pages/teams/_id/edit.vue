@@ -1,27 +1,44 @@
-<template lang="pug">
-div(v-if="team")
-  section.section
-    h4
-      span
-        nuxt-link(:to="{ name: 'teams' }")
-          | Teams
-      span
-        nuxt-link(:to="{ name: 'teams-id', params: { id: team._id } }")
-          | / {{ team.name }}
-      span / Bearbeiten
-    h1 Team bearbeiten
-    button.button.is-danger(@click="confirmDelete") Löschen
-
-  section.section
-    b-field(label="Name")
-        b-input(type="text" v-model="team.name" placeholder="Dream Team" maxlength="30")
-    b-field(label="Beschreibung")
-        b-input(type="textarea" v-model="team.description" placeholder="Everything you have to know" maxlength="255")
-    button.button.is-primary(@click="save()") Speichern
-
-  section.section
-    h1 {{ team.name }}
-    h5 {{ team.description }}
+<template>
+	<div v-if="team">
+		<section class="section">
+			<h4>
+				<span>
+					<nuxt-link :to="{ name: 'teams' }">Teams</nuxt-link>
+				</span>
+				<span>
+					<nuxt-link :to="{ name: 'teams-id', params: { id: team._id } }"
+						>/ {{ team.name }}</nuxt-link
+					>
+				</span>
+				<span>/ Bearbeiten</span>
+			</h4>
+			<h1>Team bearbeiten</h1>
+			<button class="button is-danger" @click="confirmDelete">Löschen</button>
+		</section>
+		<section class="section">
+			<b-field label="Name">
+				<b-input
+					v-model="team.name"
+					type="text"
+					placeholder="Dream Team"
+					maxlength="30"
+				></b-input>
+			</b-field>
+			<b-field label="Beschreibung">
+				<b-input
+					v-model="team.description"
+					type="textarea"
+					placeholder="Everything you have to know"
+					maxlength="255"
+				></b-input>
+			</b-field>
+			<button class="button is-primary" @click="save()">Speichern</button>
+		</section>
+		<section class="section">
+			<h1>{{ team.name }}</h1>
+			<h5>{{ team.description }}</h5>
+		</section>
+	</div>
 </template>
 
 <script>

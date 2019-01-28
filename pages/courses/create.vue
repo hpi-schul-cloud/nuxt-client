@@ -1,14 +1,28 @@
-<template lang="pug">
-div(v-if="course")
-  section.section
-    h1 Kurs erstellen
-    b-field(label="Name")
-      b-input(type="text" v-model="course.name" placeholder="Dream Team" maxlength="30")
-    b-field(label="Beschreibung")
-      b-input(type="textarea" v-model="course.description" placeholder="Everything you have to know" maxlength="255")
-    button.button.is-primary(@click="create()") Speichern
-    h1 {{ course.name }}
-    p {{ course.description }}
+<template>
+	<div v-if="course">
+		<section class="section">
+			<h1>Kurs erstellen</h1>
+			<b-field label="Name">
+				<b-input
+					v-model="course.name"
+					type="text"
+					placeholder="Dream Team"
+					maxlength="30"
+				></b-input>
+			</b-field>
+			<b-field label="Beschreibung">
+				<b-input
+					v-model="course.description"
+					type="textarea"
+					placeholder="Everything you have to know"
+					maxlength="255"
+				></b-input>
+			</b-field>
+			<button class="button is-primary" @click="create()">Speichern</button>
+			<h1>{{ course.name }}</h1>
+			<p>{{ course.description }}</p>
+		</section>
+	</div>
 </template>
 
 <script>

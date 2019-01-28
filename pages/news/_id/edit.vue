@@ -1,21 +1,26 @@
-<template lang="pug">
-div(v-if="news")
-  section.section
-    nuxt-link(:to="{ name: 'news-id', params: { id: news._id } }")
-      h5 {{ news.title }}
-    h1 News bearbeiten
-    button.button.is-danger(@click="confirmDelete") Löschen
-
-  section.section
-    b-field(label="Name")
-        b-input(type="text" v-model="news.title" maxlength="30")
-    b-field(label="Beschreibung")
-        b-input(type="textarea" v-model="news.content")
-    button.button.is-primary(@click="save()") Speichern
-
-  section.section
-    h1 {{ news.title }}
-    div(v-html="news.content")
+<template>
+	<div v-if="news">
+		<section class="section">
+			<nuxt-link :to="{ name: 'news-id', params: { id: news._id } }">
+				<h5>{{ news.title }}</h5>
+			</nuxt-link>
+			<h1>News bearbeiten</h1>
+			<button class="button is-danger" @click="confirmDelete">Löschen</button>
+		</section>
+		<section class="section">
+			<b-field label="Name">
+				<b-input v-model="news.title" type="text" maxlength="30"></b-input>
+			</b-field>
+			<b-field label="Beschreibung">
+				<b-input v-model="news.content" type="textarea"></b-input>
+			</b-field>
+			<button class="button is-primary" @click="save()">Speichern</button>
+		</section>
+		<section class="section">
+			<h1>{{ news.title }}</h1>
+			<div v-html="news.content"></div>
+		</section>
+	</div>
 </template>
 
 <script>

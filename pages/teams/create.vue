@@ -1,12 +1,26 @@
-<template lang="pug">
-div(v-if="team")
-  section.section
-    h1 Team erstellen
-    b-field(label="Name")
-        b-input(type="text" v-model="team.name" placeholder="Dream Team" maxlength="30")
-    b-field(label="Beschreibung")
-        b-input(type="textarea" v-model="team.description" placeholder="Everything you have to know" maxlength="255")
-    button.button.is-primary(@click="create()") Speichern
+<template>
+	<div v-if="team">
+		<section class="section">
+			<h1>Team erstellen</h1>
+			<b-field label="Name">
+				<b-input
+					v-model="team.name"
+					type="text"
+					placeholder="Dream Team"
+					maxlength="30"
+				></b-input>
+			</b-field>
+			<b-field label="Beschreibung">
+				<b-input
+					v-model="team.description"
+					type="textarea"
+					placeholder="Everything you have to know"
+					maxlength="255"
+				></b-input>
+			</b-field>
+			<button class="button is-primary" @click="create()">Speichern</button>
+		</section>
+	</div>
 </template>
 
 <script>

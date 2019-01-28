@@ -1,16 +1,21 @@
-<template lang="pug">
-div(v-if="news")
-  section.section
-    h5
-      span
-        nuxt-link(:to="{ name: 'news' }")
-          | News
-      span / {{ news.title }}
-    div(v-html="news.content")
-    hr
-    button.button.is-info(
-      @click="$router.push({ name: 'news-id-edit'})"
-    ) Artikel bearbeiten
+<template>
+	<div v-if="news">
+		<section class="section">
+			<h5>
+				<span>
+					<nuxt-link :to="{ name: 'news' }">News</nuxt-link>
+				</span>
+				<span>/ {{ news.title }}</span>
+			</h5>
+			<div v-html="news.content"></div>
+			<hr />
+			<button
+				class="button is-info"
+				@click="$router.push({ name: 'news-id-edit' })"
+				>Artikel bearbeiten</button
+			>
+		</section>
+	</div>
 </template>
 
 <script>

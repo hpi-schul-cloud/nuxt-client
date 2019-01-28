@@ -28,3 +28,13 @@ cd schulcloud-client && gulp watch
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
+## Q&A - Warum ...?
+
+### Warum kein Pug oder ähnliches für Vue Templates?
+
+Der Support von Lintern ist sehr gering und zudem ist der Einstieg für neue Entwickler schwerer. Der Mehrwert den Pug bietet ist den Verlust an Lint Features & Developer Onboarding nicht wert.
+
+### Warum kein sass, sondern nur scss & css?
+
+Die Kompatibilität von sass zu Dev-Tools und Lintern ist im vergleich zu scss wesentlich geringer und scss ist vollkommen ausreichend, auch wenn man mit sass natürlich weniger schreiben müsste.
