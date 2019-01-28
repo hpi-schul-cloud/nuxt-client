@@ -12,8 +12,8 @@
       </li>
       <li>
         <a
+          :aria-label="`Page ${currentPage}`"
           class="pagination-link is-current"
-          aria-label="Page 46"
           aria-current="page">{{ currentPage }}</a>
       </li>
       <li v-if="currentPage < lastPage">
