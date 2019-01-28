@@ -5,6 +5,10 @@
       v-model.lazy="searchQuery"
       type="text"
       placeholder="Suche nach..."/>
+    <Pagination
+      v-model="skippedItems"
+      :state="searchResults"
+    />
     <div class="columns is-multiline is-mobile">
       <div
         v-for="content of searchResults.data"
@@ -79,10 +83,11 @@ export default {
         .then(result => {
           this.searchResults = result
           this.skippedItems = result.skip
+          this.$router.push({
+            query: { q: this.searchQuery, skip: this.skippedItems }
+          })
+          window.scrollTo(0, 0)
         })
-      this.$router.push({
-        query: { q: this.searchQuery, skip: this.skippedItems }
-      })
     }
   }
 }

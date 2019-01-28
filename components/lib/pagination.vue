@@ -75,4 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pagination {
+  margin: 1em auto;
+}
 </style>
