@@ -2,7 +2,7 @@
 div(v-if="team")
   section.section
     nuxt-link(:to="{ name: 'teams-id', params: { id: team._id } }")
-      h4 {{ team.name }} 
+      h4 {{ team.name }}
     h1 Mitglieder Übersicht
 
   section.section
@@ -25,63 +25,63 @@ div(v-if="team")
         b-table(:data="team.userIds" :columns="columns" :selected.sync="selected" focusable="")
       b-tab-item(label="Selected")
         pre.
-          \n{{ selected }}            
+          \n{{ selected }}
 
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex';
 
 export default {
-  data() {
-    return {
-      selected: null,
-      columns: [
-        {
-          field: '_id',
-          label: 'ID',
-          width: '40',
-          numeric: true
-        },
-        {
-          field: 'firstName',
-          label: 'First Name'
-        },
-        {
-          field: 'lastNAme',
-          label: 'Last Name'
-        }
-      ]
-    }
-  },
-  computed: {
-    ...mapGetters('teams', {
-      team: 'current'
-    })
-  },
-  created(ctx) {
-    console.log(this.$route.params)
-    this.get(this.$route.params.id)
-  },
-  methods: {
-    get(id) {
-      this.$store.dispatch('teams/get', [
-        id,
-        {
-          query: {
-            $populate: [
-              {
-                path: 'userIds.userId',
-                populate: ['schoolId']
-              },
-              {
-                path: 'userIds.role'
-              }
-            ]
-          }
-        }
-      ])
-    }
-  }
-}
+	data() {
+		return {
+			selected: null,
+			columns: [
+				{
+					field: '_id',
+					label: 'ID',
+					width: '40',
+					numeric: true,
+				},
+				{
+					field: 'firstName',
+					label: 'First Name',
+				},
+				{
+					field: 'lastNAme',
+					label: 'Last Name',
+				},
+			],
+		};
+	},
+	computed: {
+		...mapGetters('teams', {
+			team: 'current',
+		}),
+	},
+	created(ctx) {
+		console.log(this.$route.params);
+		this.get(this.$route.params.id);
+	},
+	methods: {
+		get(id) {
+			this.$store.dispatch('teams/get', [
+				id,
+				{
+					query: {
+						$populate: [
+							{
+								path: 'userIds.userId',
+								populate: ['schoolId'],
+							},
+							{
+								path: 'userIds.role',
+							},
+						],
+					},
+				},
+			]);
+		},
+	},
+};
 </script>

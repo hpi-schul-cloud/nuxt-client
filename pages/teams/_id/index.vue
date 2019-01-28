@@ -4,19 +4,19 @@ div(v-if="team")
     h4
       span
         nuxt-link(:to="{ name: 'teams' }")
-          | Teams 
+          | Teams
       span / {{ team.name }}
     h5 {{ team.description }}
-    hr 
+    hr
     button.button.is-info(
       @click="$router.push({ name: 'teams-id-edit'})"
     ) Team bearbeiten
-  
+
   section.section(v-if="team.userIds")
     h3 Teilnehmer
     p Es befinden sich {{ team.userIds.length }} Teilnehmer im Team
     button.button.is-info(@click="$router.push({ name: 'teams-id-members', params: { id: team._id } })") Zur Teilnehmer-Übersicht
-  
+
   section.section
     h3 News
 
@@ -33,21 +33,21 @@ div(v-if="team")
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex';
 
 export default {
-  computed: {
-    ...mapGetters('teams', {
-      team: 'current'
-    })
-  },
-  created(ctx) {
-    this.get(this.$route.params.id)
-  },
-  methods: {
-    get(id) {
-      this.$store.dispatch('teams/get', id)
-    }
-  }
-}
+	computed: {
+		...mapGetters('teams', {
+			team: 'current',
+		}),
+	},
+	created(ctx) {
+		this.get(this.$route.params.id);
+	},
+	methods: {
+		get(id) {
+			this.$store.dispatch('teams/get', id);
+		},
+	},
+};
 </script>

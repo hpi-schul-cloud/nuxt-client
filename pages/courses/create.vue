@@ -12,44 +12,44 @@ div(v-if="course")
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState } from 'vuex';
 
 export default {
-  data() {
-    return {
-      course: {
-        name: '',
-        description: ''
-      }
-    }
-  },
-  computed: {
-    ...mapState('auth', {
-      user: 'user'
-    })
-  },
-  methods: {
-    async create(id) {
-      try {
-        const course = await this.$store.dispatch('courses/create', {
-          schoolId: this.user.schoolId,
-          name: this.course.name,
-          description: this.course.description
-        })
+	data() {
+		return {
+			course: {
+				name: '',
+				description: '',
+			},
+		};
+	},
+	computed: {
+		...mapState('auth', {
+			user: 'user',
+		}),
+	},
+	methods: {
+		async create(id) {
+			try {
+				/* const course = await this.$store.dispatch('courses/create', {
+					schoolId: this.user.schoolId,
+					name: this.course.name,
+					description: this.course.description,
+				}); */
 
-        this.$toast.open({
-          message: 'Kurs erstellt',
-          type: 'is-success'
-        })
+				this.$toast.open({
+					message: 'Kurs erstellt',
+					type: 'is-success',
+				});
 
-        this.$router.push({ name: 'courses' })
-      } catch (e) {
-        this.$toast.open({
-          message: 'Fehler beim Erstellen des Kurses',
-          type: 'is-danger'
-        })
-      }
-    }
-  }
-}
+				this.$router.push({ name: 'courses' });
+			} catch (e) {
+				this.$toast.open({
+					message: 'Fehler beim Erstellen des Kurses',
+					type: 'is-danger',
+				});
+			}
+		},
+	},
+};
 </script>
