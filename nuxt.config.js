@@ -46,7 +46,7 @@ module.exports = {
 	 ** Global CSS
 	 */
 	cssSourceMap: true,
-	css: ['~/styles/app.sass'],
+	css: ['~/styles/app.scss'],
 
 	router: {
 		middleware: ['is-authenticated'],

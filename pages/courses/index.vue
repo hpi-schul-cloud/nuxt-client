@@ -5,12 +5,17 @@
 			<button
 				class="button is-info"
 				@click="$router.push({ name: 'courses-create' })"
-			>Neues Kurs erstellen</button>
+				>Neues Kurs erstellen</button
+			>
 		</section>
 		<section class="section">
 			<div class="tile is-ancestor">
-				<div v-for="(course, i) of courses" :key="i" class="tile is-parent is-4">
-					<CourseCard :course="course"/>
+				<div
+					v-for="(course, i) of courses"
+					:key="i"
+					class="tile is-parent is-4"
+				>
+					<CourseCard :course="course" />
 				</div>
 			</div>
 		</section>

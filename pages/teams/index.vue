@@ -35,7 +35,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import isAuthenticated from '~/middleware/is-authenticated';
+import isAuthenticated from '@middleware/is-authenticated';
 
 export default {
 	middleware: [isAuthenticated],

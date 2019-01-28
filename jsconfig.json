@@ -22,6 +22,14 @@
 				"./index.scss",
 				"./index.css"
 			],
+			"@middleware/*": ["middleware/*"],
+			"@middleware": [
+				"middleware/index.js",
+				"middleware/index.json",
+				"middleware/index.vue",
+				"middleware/index.scss",
+				"middleware/index.css"
+			],
 			"@pages/*": ["pages/*"],
 			"@pages": [
 				"pages/index.js",
