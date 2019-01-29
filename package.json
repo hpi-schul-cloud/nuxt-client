@@ -15,16 +15,20 @@
 		"lint:prettier": "prettier --write --loglevel warn",
 		"lint:all:eslint": "yarn lint:eslint --ext .js,.vue .",
 		"lint:all:stylelint": "yarn lint:stylelint \"src/**/*.{vue,sass,scss,css}\"",
-		"lint:all:markdownlint": "yarn lint:markdownlint \"*/*.md\" \"*.md\"",
 		"lint:all:prettier": "yarn lint:prettier \"**/*.{js,json,css,scss,vue,html,md}\"",
 		"lint": "run-s lint:all:*",
-		"precommit": "npm run lint"
+		"precommit": "npm run lint",
+		"storybook": "start-storybook -p 6006",
+		"build-storybook": "build-storybook"
 	},
 	"dependencies": {
 		"@feathersjs/authentication-client": "^1.0.8",
 		"@feathersjs/feathers": "^3.2.3",
 		"@feathersjs/socketio-client": "^1.1.5",
 		"@nuxtjs/axios": "^5.0.0",
+		"@storybook/addon-a11y": "^4.1.11",
+		"@storybook/addon-centered": "^4.1.11",
+		"@storybook/addon-viewport": "^4.1.11",
 		"cookie-storage": "^3.2.0",
 		"feathers-vuex": "^1.6.2",
 		"handlebars": "^4.0.12",
@@ -35,7 +39,8 @@
 		"nuxt": "^2.0.0",
 		"nuxt-buefy": "^0.2.1",
 		"nuxt-express-module": "0.0.11",
-		"socket.io-client": "^2.2.0"
+		"socket.io-client": "^2.2.0",
+		"storybook-addon-vue-info": "^0.7.1"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^3.3.0",
@@ -69,6 +74,12 @@
 		"stylelint-config-prettier": "^4.0.0",
 		"stylelint-config-recess-order": "^2.0.1",
 		"stylelint-config-standard": "^18.2.0",
-		"stylelint-scss": "^3.5.1"
+		"stylelint-scss": "^3.5.1",
+		"@storybook/vue": "^4.1.11",
+		"@storybook/addon-actions": "^4.1.11",
+		"@storybook/addon-links": "^4.1.11",
+		"@storybook/addons": "^4.1.11",
+		"babel-preset-vue": "^2.0.2",
+		"babel-loader": "^7.1.5"
 	}
 }

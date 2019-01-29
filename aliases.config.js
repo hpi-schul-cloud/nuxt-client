@@ -32,12 +32,12 @@ for (const alias in aliases) {
 	module.exports.jsconfig[alias] = aliasTo.includes('/index.')
 		? [aliasTo]
 		: [
-				aliasTo + '/index.js',
-				aliasTo + '/index.json',
-				aliasTo + '/index.vue',
-				aliasTo + '/index.scss',
-				aliasTo + '/index.css',
-		  ];
+			aliasTo + '/index.js',
+			aliasTo + '/index.json',
+			aliasTo + '/index.vue',
+			aliasTo + '/index.scss',
+			aliasTo + '/index.css',
+	];
 }
 
 const jsconfigTemplate = require('./jsconfig.template') || {};
