@@ -87,7 +87,7 @@ export default {
 		width: 100%;
 		padding: 0 16px;
 		color: $color-text;
-		background: $color-text-bg;
+		background: darken($color-text-bg, 10%);
 		border-radius: 50rem;
 
 		.fa,

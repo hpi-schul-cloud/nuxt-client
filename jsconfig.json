@@ -94,13 +94,13 @@
 				"styles/variables.scss/index.scss",
 				"styles/variables.scss/index.css"
 			],
-			"@styles/*": ["styles/app.scss/*"],
+			"@styles/*": ["styles/base.scss/*"],
 			"@styles": [
-				"styles/app.scss/index.js",
-				"styles/app.scss/index.json",
-				"styles/app.scss/index.vue",
-				"styles/app.scss/index.scss",
-				"styles/app.scss/index.css"
+				"styles/base.scss/index.js",
+				"styles/base.scss/index.json",
+				"styles/base.scss/index.vue",
+				"styles/base.scss/index.scss",
+				"styles/base.scss/index.css"
 			]
 		}
 	}

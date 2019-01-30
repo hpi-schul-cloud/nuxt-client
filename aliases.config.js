@@ -14,7 +14,7 @@ const aliases = {
 	"@static": "static",
 	"@store": "store",
 	"@variables": "styles/variables.scss",
-	"@styles": "styles/app.scss",
+	"@styles": "styles/base.scss",
 };
 
 module.exports = {

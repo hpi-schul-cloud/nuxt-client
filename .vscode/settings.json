@@ -68,7 +68,6 @@
 		"vue-html": "html"
 	},
 	"vetur.format.defaultFormatter.html": "none",
-
 	// ===
 	// JS(ON)
 	// ===
@@ -102,7 +101,14 @@
 	},
 
 	// ===
-	// PACKAGE MANAGER
+	// EDITOR SETTINGS
 	// ===
-	"npm.packageManager": "yarn"
+	"npm.packageManager": "yarn",
+	"vetur.format.options.useTabs": true,
+	"editor.suggest.localityBonus": true,
+
+	// ===
+	// TODO HIGHLIGHT
+	// ===
+	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"]
 }
