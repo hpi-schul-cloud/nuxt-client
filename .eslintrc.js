@@ -15,10 +15,13 @@ module.exports = {
 	],
 	rules: {
 		// Only allow debugger in development
-		"no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+		"no-debugger":
+			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
+				? "error"
+				: "off",
 		// Only allow `console.log` in development
 		"no-console":
-			process.env.NODE_ENV === "production"
+			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
 				? [
 						"error",
 						{

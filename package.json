@@ -17,8 +17,10 @@
 		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",
 		"lint:all:markdownlint": "yarn lint:markdownlint \"*/*.md\" \"*.md\"",
 		"lint:all:prettier": "yarn lint:prettier \"**/*.{js,json,css,scss,vue,html,md}\"",
-		"lint": "run-s lint:all:*",
-		"precommit": "npm run lint"
+		"lint": "run-s lint:all:*"
+	},
+	"gitHooks": {
+		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
 	},
 	"dependencies": {
 		"@feathersjs/authentication-client": "^1.0.8",
@@ -58,7 +60,8 @@
 		"eslint-loader": "^2.0.0",
 		"eslint-plugin-prettier": "2.6.2",
 		"eslint-plugin-vue": "^4.7.1",
-		"husky": "^1.2.1",
+		"imagemin-lint-staged": "^0.4.0",
+		"lint-staged": "^8.1.1",
 		"markdownlint-cli": "^0.13.0",
 		"node-sass": "^4.11.0",
 		"nodemon": "^1.11.0",
