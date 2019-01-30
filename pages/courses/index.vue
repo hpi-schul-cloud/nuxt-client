@@ -23,16 +23,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import CourseCard from '@components/CourseCard';
+import { mapGetters } from "vuex";
+import CourseCard from "@components/CourseCard";
 
 export default {
 	components: {
 		CourseCard,
 	},
 	computed: {
-		...mapGetters('courses', {
-			courses: 'list',
+		...mapGetters("courses", {
+			courses: "list",
 		}),
 	},
 	created(ctx) {
@@ -40,7 +40,7 @@ export default {
 	},
 	methods: {
 		find() {
-			this.$store.dispatch('courses/find');
+			this.$store.dispatch("courses/find");
 		},
 	},
 };

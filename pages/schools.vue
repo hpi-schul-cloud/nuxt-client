@@ -13,8 +13,8 @@
 					</div>
 					<footer class="card-footer">
 						<div class="card-footer-item">
-							<nuxt-link :to="{ name: 'schools-id', params: { id: school.id } }"
-								>Öffnen</nuxt-link
+							<BaseLink :to="{ name: 'schools-id', params: { id: school.id } }"
+								>Öffnen</BaseLink
 							>
 						</div>
 					</footer>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
 	// asyncData () {
@@ -34,8 +34,8 @@ export default {
 	//     };
 	// },
 	computed: {
-		...mapGetters('schools', {
-			schools: 'list',
+		...mapGetters("schools", {
+			schools: "list",
 		}),
 	},
 	created(ctx) {
@@ -43,9 +43,9 @@ export default {
 	},
 	methods: {
 		find() {
-			this.$store.dispatch('schools/find');
+			this.$store.dispatch("schools/find");
 		},
-		...mapActions('auth', ['logout']),
+		...mapActions("auth", ["logout"]),
 	},
 };
 </script>

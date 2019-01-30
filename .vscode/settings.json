@@ -68,7 +68,6 @@
 		"vue-html": "html"
 	},
 	"vetur.format.defaultFormatter.html": "none",
-
 	// ===
 	// JS(ON)
 	// ===
@@ -99,5 +98,17 @@
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
 		"editor.wordWrapColumn": 80
-	}
+	},
+
+	// ===
+	// EDITOR SETTINGS
+	// ===
+	"npm.packageManager": "yarn",
+	"vetur.format.options.useTabs": true,
+	"editor.suggest.localityBonus": true,
+
+	// ===
+	// TODO HIGHLIGHT
+	// ===
+	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"]
 }

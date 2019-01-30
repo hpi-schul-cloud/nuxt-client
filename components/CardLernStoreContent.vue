@@ -1,21 +1,21 @@
 <template>
-	<Card @click="open()">
+	<BaseCard @click="open()">
 		<div slot="header" class="card-image">
-			<card-header-image>
+			<CardHeaderImage>
 				<img
 					:src="data.thumbnail"
 					:alt="'Thumbnail for ~' + data.title + '~'"
 				/>
-			</card-header-image>
+			</CardHeaderImage>
 		</div>
 		<div class="card-content">
 			<div class="media">
 				<div class="media-content">
 					<p class="title is-4">{{ data.title }}</p>
 					<p class="subtitle is-6">
-						<span v-for="(tag, index) of data.tags" :key="index" class="tag">
-							{{ tag }}
-						</span>
+						<span v-for="(tag, index) of data.tags" :key="index" class="tag">{{
+							tag
+						}}</span>
 					</p>
 				</div>
 			</div>
@@ -24,39 +24,33 @@
 				<p>{{ data.description }}</p>
 			</div>
 		</div>
-		<card-footer slot="footer" class="content-card-footer">
+		<CardFooter slot="footer" class="content-card-footer">
 			<div class="footer-info">
 				<p>Anbieter: {{ data.providerName }}</p>
 				<p>
 					Lizenz:
-					<span
-						v-for="(license, index) in data.licenses"
-						:key="index"
-						v-html="license"
-					/>
+					<span v-for="(license, index) in data.licenses" :key="index">
+						{{ license }}
+					</span>
 				</p>
 			</div>
-			<card-footer-actions class="footer-actions">
+			<div class="footer-actions">
 				<button class="button">Melden</button>
 				<button class="button is-primary">Ansehen</button>
-			</card-footer-actions>
-		</card-footer>
-	</Card>
+			</div>
+		</CardFooter>
+	</BaseCard>
 </template>
 
 <script>
-import CardHeaderImage from '@components/card/card-header-image.vue';
-import CardFooter from '@components/card/card-footer.vue';
-import CardFooterActions from '@components/card/card-footer-actions.vue';
-import Card from '@components/card/card.vue';
+import CardHeaderImage from "@components/CardHeaderImage.vue";
+import CardFooter from "@components/CardFooter.vue";
 
 export default {
-	name: 'ContentCard',
+	name: "ContentCard",
 	components: {
-		Card,
 		CardHeaderImage,
 		CardFooter,
-		CardFooterActions,
 	},
 	props: {
 		data: {
@@ -66,7 +60,7 @@ export default {
 	},
 	methods: {
 		open() {
-			const win = window.open(this.data.url, '_blank');
+			const win = window.open(this.data.url, "_blank");
 			win.focus();
 		},
 	},

@@ -1,19 +1,19 @@
 <template>
-	<div class="card-border">
+	<BaseCard>
 		<CourseCardHeader :course="course" />
 		<div class="card-info">
 			<p>{{ course.description }}</p>
 		</div>
 		<CardFooter :course="course" />
-	</div>
+	</BaseCard>
 </template>
 
 <script>
-import CardFooter from './CardFooter.vue';
-import CourseCardHeader from './CourseCardHeader.vue';
+import CardFooter from "./CardFooter.vue";
+import CourseCardHeader from "./CourseCardHeader.vue";
 
 export default {
-	name: 'CourseCard',
+	name: "CourseCard",
 	components: {
 		CardFooter,
 		CourseCardHeader,
@@ -21,20 +21,20 @@ export default {
 	props: {
 		msg: {
 			type: String,
-			default: 'test message',
+			default: "test message",
 		},
 		course: {
 			type: Object,
 			default: () => ({
-				color: '#555',
-				name: 'default name',
+				color: "#555",
+				name: "default name",
 				times: [{ weekday: 1, startTime: 36000000 }],
 			}),
 		},
 	},
 	computed: {
 		background_style() {
-			return 'background: ' + this.course.color;
+			return "background: " + this.course.color;
 		},
 	},
 };
@@ -43,27 +43,26 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .card-border {
-	flex: 0 0 350px;
 	/*   flex-basis: 350px; */
 	position: relative;
+	flex: 0 0 350px;
 	height: 200px;
-	border-radius: 3px;
-	box-shadow: 2px 2px 5px gray;
 	margin: 15px 5px;
-	transition: box-shadow 0.3s ease;
 	overflow: hidden;
 	cursor: pointer;
+	border-radius: 3px;
+	box-shadow: 2px 2px 5px gray;
+	transition: box-shadow 0.3s ease;
 }
 .card-main-content {
 	width: 100%;
 }
-.card-info {
-}
+
 .card-info p {
-	font-family: 'Asul', sans-serif;
 	margin: 0;
+	font-family: "Asul", sans-serif;
 }
 .card-border:hover {
-	box-shadow: 0px 4px 14px rgb(126, 124, 124);
+	box-shadow: 0 4px 14px rgb(126, 124, 124);
 }
 </style>

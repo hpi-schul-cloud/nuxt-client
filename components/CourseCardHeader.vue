@@ -17,15 +17,15 @@ export default {
 		course: {
 			type: Object,
 			default: () => ({
-				color: '#555',
-				name: 'default name',
+				color: "#555",
+				name: "default name",
 				times: [{ weekday: 1, startTime: 36000000 }],
 			}),
 		},
 	},
 	computed: {
 		background_style() {
-			return 'background-color: ' + this.course.color;
+			return "background-color: " + this.course.color;
 		},
 		// times_computed() {
 		//   let weekdays = [
@@ -52,9 +52,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@variables";
+
 .card-main-content {
-	font-family: 'Asul', sans-serif;
-	color: aliceblue;
+	font-family: "Asul", sans-serif;
+	color: $color-heading-text;
 }
 </style>

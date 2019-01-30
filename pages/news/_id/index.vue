@@ -3,10 +3,11 @@
 		<section class="section">
 			<h5>
 				<span>
-					<nuxt-link :to="{ name: 'news' }">News</nuxt-link>
+					<BaseLink :to="{ name: 'news' }">News</BaseLink>
 				</span>
 				<span>/ {{ news.title }}</span>
 			</h5>
+			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
 			<button
@@ -19,12 +20,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('news', {
-			news: 'current',
+		...mapGetters("news", {
+			news: "current",
 		}),
 	},
 	created(ctx) {
@@ -32,7 +33,7 @@ export default {
 	},
 	methods: {
 		get(id) {
-			this.$store.dispatch('news/get', id);
+			this.$store.dispatch("news/get", id);
 		},
 	},
 };

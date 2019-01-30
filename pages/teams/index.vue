@@ -22,8 +22,8 @@
 						<p class="title">{{ team.name }}</p>
 						<p class="subtitle">{{ team.description }}</p>
 						<p>
-							<nuxt-link :to="{ name: 'teams-id', params: { id: team._id } }"
-								>Anschauen</nuxt-link
+							<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }"
+								>Anschauen</BaseLink
 							>
 						</p>
 					</article>
@@ -34,14 +34,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import isAuthenticated from '@middleware/is-authenticated';
+import { mapGetters } from "vuex";
+import isAuthenticated from "@middleware/is-authenticated";
 
 export default {
 	middleware: [isAuthenticated],
 	computed: {
-		...mapGetters('teams', {
-			teams: 'list',
+		...mapGetters("teams", {
+			teams: "list",
 		}),
 	},
 	created(ctx) {
@@ -49,7 +49,7 @@ export default {
 	},
 	methods: {
 		find() {
-			this.$store.dispatch('teams/find');
+			this.$store.dispatch("teams/find");
 		},
 	},
 };

@@ -1,69 +1,70 @@
 <template>
 	<div v-if="news">
 		<section class="section">
-			<nuxt-link :to="{ name: 'news-id', params: { id: news._id } }">
+			<BaseLink :to="{ name: 'news-id', params: { id: news._id } }">
 				<h5>{{ news.title }}</h5>
-			</nuxt-link>
+			</BaseLink>
 			<h1>News bearbeiten</h1>
 			<button class="button is-danger" @click="confirmDelete">Löschen</button>
 		</section>
 		<section class="section">
-			<b-field label="Name">
-				<b-input v-model="news.title" type="text" maxlength="30"></b-input>
-			</b-field>
-			<b-field label="Beschreibung">
-				<b-input v-model="news.content" type="textarea"></b-input>
-			</b-field>
+			<BField label="Name">
+				<BInput v-model="news.title" type="text" maxlength="30"></BInput>
+			</BField>
+			<BField label="Beschreibung">
+				<BInput v-model="news.content" type="textarea"></BInput>
+			</BField>
 			<button class="button is-primary" @click="save()">Speichern</button>
 		</section>
 		<section class="section">
 			<h1>{{ news.title }}</h1>
-			<div v-html="news.content"></div>
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<div v-html="news.content" />
 		</section>
 	</div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('news', {
-			news: 'current',
+		...mapGetters("news", {
+			news: "current",
 		}),
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);
 	},
 	methods: {
-		...mapActions('news', ['remove']),
+		...mapActions("news", ["remove"]),
 		confirmDelete() {
 			this.$dialog.confirm({
-				title: 'Artikel löschen',
-				message: 'Bist du sicher, dass du diesen Artikel löschen möchtest?',
-				confirmText: 'Artikel löschen',
-				type: 'is-danger',
+				title: "Artikel löschen",
+				message: "Bist du sicher, dass du diesen Artikel löschen möchtest?",
+				confirmText: "Artikel löschen",
+				type: "is-danger",
 				hasIcon: true,
 				onConfirm: async () => {
 					try {
 						await this.remove(this.news._id);
-						this.$toast.open('Artikel gelöscht');
-						this.$router.push({ name: 'news' });
+						this.$toast.open("Artikel gelöscht");
+						this.$router.push({ name: "news" });
 					} catch (e) {
 						this.$toast.open({
-							message: 'Fehler beim Löschen',
-							type: 'is-danger',
+							message: "Fehler beim Löschen",
+							type: "is-danger",
 						});
 					}
 				},
 			});
 		},
 		get(id) {
-			this.$store.dispatch('news/get', id);
+			this.$store.dispatch("news/get", id);
 		},
 		async save() {
 			try {
-				await this.$store.dispatch('news/patch', [
+				await this.$store.dispatch("news/patch", [
 					this.$route.params.id,
 					{
 						name: this.news.name,
@@ -71,13 +72,13 @@ export default {
 					},
 				]);
 				this.$toast.open({
-					message: 'Artikel gespeichert',
-					type: 'is-success',
+					message: "Artikel gespeichert",
+					type: "is-success",
 				});
 			} catch (e) {
 				this.$toast.open({
-					message: 'Fehler beim Speichern',
-					type: 'is-danger',
+					message: "Fehler beim Speichern",
+					type: "is-danger",
 				});
 			}
 		},

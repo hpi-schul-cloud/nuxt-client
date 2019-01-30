@@ -1,24 +1,24 @@
 <template>
-	<div class="VueToNuxtLogo">
-		<div class="Triangle Triangle--two" />
-		<div class="Triangle Triangle--one" />
-		<div class="Triangle Triangle--three" />
-		<div class="Triangle Triangle--four" />
+	<div class="vue-to-nuxt-logo">
+		<div class="triangle triangle--two" />
+		<div class="triangle triangle--one" />
+		<div class="triangle triangle--three" />
+		<div class="triangle triangle--four" />
 	</div>
 </template>
 
 <style>
-.VueToNuxtLogo {
-	display: inline-block;
-	animation: turn 2s linear forwards 1s;
-	transform: rotateX(180deg);
+.vue-to-nuxt-logo {
 	position: relative;
-	overflow: hidden;
-	height: 180px;
+	display: inline-block;
 	width: 245px;
+	height: 180px;
+	overflow: hidden;
+	transform: rotateX(180deg);
+	animation: turn 2s linear forwards 1s;
 }
 
-.Triangle {
+.triangle {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -26,37 +26,37 @@
 	height: 0;
 }
 
-.Triangle--one {
-	border-left: 105px solid transparent;
+.triangle--one {
 	border-right: 105px solid transparent;
 	border-bottom: 180px solid #41b883;
+	border-left: 105px solid transparent;
 }
 
-.Triangle--two {
+.triangle--two {
 	top: 30px;
 	left: 35px;
-	animation: goright 0.5s linear forwards 3.5s;
-	border-left: 87.5px solid transparent;
 	border-right: 87.5px solid transparent;
 	border-bottom: 150px solid #3b8070;
+	border-left: 87.5px solid transparent;
+	animation: goright 0.5s linear forwards 3.5s;
 }
 
-.Triangle--three {
+.triangle--three {
 	top: 60px;
 	left: 35px;
-	animation: goright 0.5s linear forwards 3.5s;
-	border-left: 70px solid transparent;
 	border-right: 70px solid transparent;
 	border-bottom: 120px solid #35495e;
+	border-left: 70px solid transparent;
+	animation: goright 0.5s linear forwards 3.5s;
 }
 
-.Triangle--four {
+.triangle--four {
 	top: 120px;
 	left: 70px;
-	animation: godown 0.5s linear forwards 3s;
-	border-left: 35px solid transparent;
 	border-right: 35px solid transparent;
 	border-bottom: 60px solid #fff;
+	border-left: 35px solid transparent;
+	animation: godown 0.5s linear forwards 3s;
 }
 
 @keyframes turn {

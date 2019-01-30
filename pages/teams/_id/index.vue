@@ -3,7 +3,7 @@
 		<section class="section">
 			<h4>
 				<span>
-					<nuxt-link :to="{ name: 'teams' }">Teams</nuxt-link>
+					<BaseLink :to="{ name: 'teams' }">Teams</BaseLink>
 				</span>
 				<span>/ {{ team.name }}</span>
 			</h4>
@@ -44,12 +44,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('teams', {
-			team: 'current',
+		...mapGetters("teams", {
+			team: "current",
 		}),
 	},
 	created(ctx) {
@@ -57,7 +57,7 @@ export default {
 	},
 	methods: {
 		get(id) {
-			this.$store.dispatch('teams/get', id);
+			this.$store.dispatch("teams/get", id);
 		},
 	},
 };

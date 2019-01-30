@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex';
+import { mapMutations, mapActions } from "vuex";
 
 export default {
 	data() {
@@ -88,19 +88,19 @@ export default {
 
 			try {
 				await this.authenticate({
-					strategy: 'local',
+					strategy: "local",
 					username,
 					password,
 				});
 				this.$toast.open({
-					message: 'Login erfolgreich!',
-					type: 'is-success',
+					message: "Login erfolgreich!",
+					type: "is-success",
 				});
-				this.$router.push('/');
+				this.$router.push("/");
 			} catch (e) {
 				this.$toast.open({
-					message: 'Fehler beim Login. E-Mail/Passwort falsch?',
-					type: 'is-danger',
+					message: "Fehler beim Login. E-Mail/Passwort falsch?",
+					type: "is-danger",
 				});
 			}
 
@@ -117,10 +117,10 @@ export default {
 			//     this.error = error
 			//   })
 		},
-		...mapMutations('auth', {
-			clearAuthenticateError: 'clearAuthenticateError',
+		...mapMutations("auth", {
+			clearAuthenticateError: "clearAuthenticateError",
 		}),
-		...mapActions('auth', ['authenticate']),
+		...mapActions("auth", ["authenticate"]),
 	},
 };
 </script>

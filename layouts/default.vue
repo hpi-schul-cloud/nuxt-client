@@ -6,11 +6,11 @@
 			aria-label="main navigation"
 		>
 			<div class="navbar-brand">
-				<nuxt-link class="navbar-item" to="/">
+				<BaseLink class="navbar-item" to="/">
 					<img src="@assets/cloud.svg" alt="Schul-Cloud" style="width: 78px" />
-				</nuxt-link>
-				<nuxt-link v-if="!authenticated" class="navbar-item" to="/login"
-					>Login</nuxt-link
+				</BaseLink>
+				<BaseLink v-if="!authenticated" class="navbar-item" to="/login"
+					>Login</BaseLink
 				>
 
 				<span v-if="authenticated" class="navbar-item"
@@ -40,15 +40,15 @@
 				<p class="menu-label is-hidden-touch">Allgemein</p>
 				<ul class="menu-list">
 					<li v-for="(item, key) of items" :key="key">
-						<nuxt-link :to="item.to" exact-active-class="is-active">{{
-							item.title
-						}}</nuxt-link>
+						<BaseLink :to="item.to" exact-active-class="is-active">
+							{{ item.title }}
+						</BaseLink>
 					</li>
 				</ul>
 			</aside>
 
 			<div class="container column is-10">
-				<nuxt />
+				<Nuxt />
 			</div>
 		</section>
 
@@ -97,30 +97,30 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from "vuex";
 
 export default {
 	data() {
 		return {
 			items: [
-				{ title: 'News', to: { name: 'news' } },
-				{ title: 'Teams', to: { name: 'teams' } },
-				{ title: 'Kurse', to: { name: 'courses' } },
-				{ title: 'Termine', to: { name: 'events' } },
-				{ title: 'Aufgaben', to: { name: 'tasks' } },
-				{ title: 'Dateien', to: { name: 'files' } },
-				{ title: 'Lernstore', to: { name: 'content' } },
-				{ title: 'Verwaltung', to: { name: 'administration' } },
+				{ title: "News", to: { name: "news" } },
+				{ title: "Teams", to: { name: "teams" } },
+				{ title: "Kurse", to: { name: "courses" } },
+				{ title: "Termine", to: { name: "events" } },
+				{ title: "Aufgaben", to: { name: "tasks" } },
+				{ title: "Dateien", to: { name: "files" } },
+				{ title: "Lernstore", to: { name: "content" } },
+				{ title: "Verwaltung", to: { name: "administration" } },
 			],
 		};
 	},
 	computed: mapState({
 		firstName: (state) =>
-			state.auth && state.auth.user ? state.auth.user.firstName : '',
-		authenticated: (state) => (state.auth ? state.auth.accessToken : ''),
+			state.auth && state.auth.user ? state.auth.user.firstName : "",
+		authenticated: (state) => (state.auth ? state.auth.accessToken : ""),
 	}),
 	methods: {
-		...mapActions('auth', ['logout']),
+		...mapActions("auth", ["logout"]),
 	},
 };
 </script>

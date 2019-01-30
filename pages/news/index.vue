@@ -14,7 +14,7 @@
           </div>
           <footer class="card-footer">
             <div class="card-footer-item">
-              <nuxt-link :to="{ name: 'news-id', params: { id: article._id } }">Weiterlesen</nuxt-link>
+              <BaseLink :to="{ name: 'news-id', params: { id: article._id } }">Weiterlesen</BaseLink>
             </div>
           </footer>
         </div>
@@ -29,18 +29,16 @@
 						<article class="tile is-child notification is-primary">
 							<p class="title">{{ news[1].title }}</p>
 							<p class="subtitle">
-								<nuxt-link
-									:to="{ name: 'news-id', params: { id: news[1]._id } }"
-									>Weiterlesen</nuxt-link
+								<BaseLink :to="{ name: 'news-id', params: { id: news[1]._id } }"
+									>Weiterlesen</BaseLink
 								>
 							</p>
 						</article>
 						<article class="tile is-child notification is-warning">
 							<p class="title">{{ news[2].title }}</p>
 							<p class="subtitle">
-								<nuxt-link
-									:to="{ name: 'news-id', params: { id: news[2]._id } }"
-									>Weiterlesen</nuxt-link
+								<BaseLink :to="{ name: 'news-id', params: { id: news[2]._id } }"
+									>Weiterlesen</BaseLink
 								>
 							</p>
 						</article>
@@ -49,9 +47,8 @@
 						<article class="tile is-child notification is-info">
 							<p class="title">{{ news[0].title }}</p>
 							<p class="subtitle">
-								<nuxt-link
-									:to="{ name: 'news-id', params: { id: news[0]._id } }"
-									>Weiterlesen</nuxt-link
+								<BaseLink :to="{ name: 'news-id', params: { id: news[0]._id } }"
+									>Weiterlesen</BaseLink
 								>
 							</p>
 							<figure class="image is-4by3">
@@ -74,12 +71,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('news', {
-			news: 'list',
+		...mapGetters("news", {
+			news: "list",
 		}),
 	},
 	created(ctx) {
@@ -87,7 +84,7 @@ export default {
 	},
 	methods: {
 		find() {
-			this.$store.dispatch('news/find');
+			this.$store.dispatch("news/find");
 		},
 	},
 };
