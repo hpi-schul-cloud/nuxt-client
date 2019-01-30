@@ -24,8 +24,8 @@ export default {
 	flex-direction: column;
 	flex-wrap: nowrap;
 	padding: 16px;
-	border-radius: 20px;
-	border: 1px solid grey;
 	overflow: hidden;
+	border: 1px solid grey;
+	border-radius: 20px;
 }
 </style>

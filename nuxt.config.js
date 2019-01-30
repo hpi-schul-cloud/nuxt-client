@@ -74,6 +74,7 @@ module.exports = {
 		"@nuxtjs/axios",
 		// Doc: https://buefy.github.io/#/documentation
 		"nuxt-buefy",
+		"nuxt-babel",
 	],
 	/*
 	 ** Axios module configuration

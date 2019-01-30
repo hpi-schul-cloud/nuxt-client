@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ContentCard from "./contentCard.vue";
+import ContentCard from "@components/CardLernStoreContent.vue";
 import Searchbar from "@components/searchbar.vue";
 import Pagination from "@components/pagination.vue";
 

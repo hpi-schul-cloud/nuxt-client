@@ -13,9 +13,9 @@
 				<div class="media-content">
 					<p class="title is-4">{{ data.title }}</p>
 					<p class="subtitle is-6">
-						<span v-for="(tag, index) of data.tags" :key="index" class="tag">{{
-							tag
-						}}</span>
+						<span v-for="(tag, index) of data.tags" :key="index" class="tag">
+							{{ tag }}
+						</span>
 					</p>
 				</div>
 			</div>
@@ -45,9 +45,9 @@
 </template>
 
 <script>
-import CardHeaderImage from "@components/card-header-image.vue";
-import CardFooter from "@components/card-footer.vue";
-import CardFooterActions from "@components/card-footer-actions.vue";
+import CardHeaderImage from "@components/CardHeaderImage.vue";
+import CardFooter from "@components/CardFooter.vue";
+import CardFooterActions from "@components/CardFooterActions.vue";
 import Card from "@components/card.vue";
 
 export default {

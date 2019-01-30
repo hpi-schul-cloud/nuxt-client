@@ -25,11 +25,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .card-footer-counter {
-	bottom: 0;
 	position: absolute;
-	text-align: left;
-	padding: 10px;
+	bottom: 0;
 	left: 20px;
 	float: left;
+	padding: 10px;
+	text-align: left;
 }
 </style>

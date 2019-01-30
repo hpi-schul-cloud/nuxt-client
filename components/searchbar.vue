@@ -74,20 +74,19 @@ export default {
 <style lang="scss" scoped>
 .live-search {
 	position: relative;
-	margin: 0 auto 2rem;
 	width: 100%;
 	max-width: 500px;
+	margin: 0 auto 2rem;
 
 	.search-container {
-		display: flex;
-
-		align-items: center;
-		border-radius: 50rem;
-		background: #eee;
-		padding: 0 16px;
-		width: 100%;
-		color: #333;
 		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		width: 100%;
+		padding: 0 16px;
+		color: #333;
+		background: #eee;
+		border-radius: 50rem;
 
 		.fa,
 		input {
@@ -97,10 +96,10 @@ export default {
 
 		input {
 			flex: 1;
-			outline: none;
-			border: 0;
-			background: transparent;
 			padding: 12px;
+			background: transparent;
+			border: 0;
+			outline: none;
 		}
 
 		.search-icon {
@@ -115,11 +114,12 @@ export default {
 			position: absolute;
 			top: 0;
 			right: 8px;
-			transition: opacity 0.3s ease-in-out;
-			cursor: pointer;
 			padding: 16px;
+			cursor: pointer;
+			transition: opacity 0.3s ease-in-out;
 		}
 	}
+
 	/*
   .live-search-results {
     position: absolute;
