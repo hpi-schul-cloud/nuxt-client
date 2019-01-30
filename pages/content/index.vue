@@ -1,13 +1,13 @@
 <template>
 	<section class="section">
-		<h1>Lernstore</h1>
 		<Searchbar
 			v-model.lazy="searchQuery"
+			class="searchbar"
 			type="text"
 			placeholder="Suche nach..."
 		/>
 		<Pagination v-model="skippedItems" :state="searchResults" />
-		<div class="columns is-multiline is-mobile">
+		<div class="columns">
 			<div
 				v-for="content of searchResults.data"
 				:key="content._id"
@@ -22,10 +22,15 @@
 
 <script>
 import ContentCard from "@components/CardLernStoreContent.vue";
-import Searchbar from "@components/searchbar.vue";
-import Pagination from "@components/pagination.vue";
+import Searchbar from "@components/SearchbarContent.vue";
+import Pagination from "@components/Pagination.vue";
 
 export default {
+	head() {
+		return {
+			title: "LernStore",
+		};
+	},
 	name: "LernStore",
 	components: {
 		ContentCard,
@@ -91,7 +96,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input.input {
-	margin-bottom: 2rem;
+@import "@variables";
+
+.searchbar {
+	margin: $size-margin auto;
+}
+.columns {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+.column {
+	width: 100%;
+	max-width: 400px;
+	margin: $size-margin;
 }
 </style>

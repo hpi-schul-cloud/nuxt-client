@@ -29,3 +29,23 @@
 .page-leave-active {
 	transition: all 0.15s ease-in-out;
 }
+
+html,
+body {
+	@extend %font-content;
+
+	width: 100%;
+	min-height: 100vh;
+	margin: 0;
+}
+
+input,
+select,
+textarea,
+button {
+	font-family: inherit;
+}
+
+img {
+	max-width: 100%;
+}

@@ -2,7 +2,7 @@
 	<FontAwesomeIcon
 		v-if="source === 'font-awesome'"
 		v-bind="$attrs"
-		:icon="name"
+		:icon="icon"
 	/>
 	<span
 		v-else-if="source === 'custom'"
@@ -32,7 +32,7 @@ export default {
 			type: String,
 			default: "font-awesome",
 		},
-		name: {
+		icon: {
 			type: String,
 			required: true,
 		},
@@ -41,7 +41,7 @@ export default {
 		// Gets a CSS module class, e.g. iconCustomLogo
 		customIconClass() {
 			// TODO
-			return this.$style[camelCase("icon-custom-" + this.name)];
+			return this.$style[camelCase("icon-custom-" + this.icon)];
 		},
 	},
 };

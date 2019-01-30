@@ -10,41 +10,41 @@
 			<div class="columns">
 				<div class="column">
 					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
-					<button
-						class="button is-primary"
+					<BaseButton
+						class="is-primary"
 						@click="
 							$router.push({
 								name: 'teams-id-members',
 								params: { id: team._id },
 							})
 						"
-						>Interne Teilnehmer hinzufügen</button
+						>Interne Teilnehmer hinzufügen</BaseButton
 					>
 				</div>
 				<div class="column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
-					<button
-						class="button is-primary"
+					<BaseButton
+						class="is-primary"
 						@click="
 							$router.push({
 								name: 'teams-id-members',
 								params: { id: team._id },
 							})
 						"
-						>Externe Teilnehmer hinzufügen</button
+						>Externe Teilnehmer hinzufügen</BaseButton
 					>
 				</div>
 			</div>
 		</section>
 		<section>
-			<button
+			<BaseButton
 				:disabled="!selected"
-				class="button field is-danger"
+				class="field is-danger"
 				@click="selected = null"
 			>
-				<BIcon icon="close"></BIcon>
+				<BaseIcon icon="close"></BaseIcon>
 				<span>Clear selected</span>
-			</button>
+			</BaseButton>
 			<BTabs>
 				<BTabItem label="Table">
 					<BTable

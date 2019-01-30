@@ -1,5 +1,5 @@
 <template>
 	<section class="section">
-		<h1>Dateien</h1>
+		<p>Dateien</p>
 	</section>
 </template>

@@ -13,9 +13,9 @@
 				<div class="media-content">
 					<p class="title is-4">{{ data.title }}</p>
 					<p class="subtitle is-6">
-						<span v-for="(tag, index) of data.tags" :key="index" class="tag">{{
-							tag
-						}}</span>
+						<span v-for="(tag, index) of data.tags" :key="index" class="tag">
+							{{ tag }}
+						</span>
 					</p>
 				</div>
 			</div>
@@ -29,9 +29,9 @@
 				<p>Anbieter: {{ data.providerName }}</p>
 				<p>
 					Lizenz:
-					<span v-for="(license, index) in data.licenses" :key="index">
-						{{ license }}
-					</span>
+					<span v-for="(license, index) in data.licenses" :key="index">{{
+						license
+					}}</span>
 				</p>
 			</div>
 			<div class="footer-actions">
@@ -47,7 +47,7 @@ import CardHeaderImage from "@components/CardHeaderImage.vue";
 import CardFooter from "@components/CardFooter.vue";
 
 export default {
-	name: "ContentCard",
+	name: "CardLernStoreContent",
 	components: {
 		CardHeaderImage,
 		CardFooter,

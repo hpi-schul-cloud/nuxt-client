@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<section class="section">
-			<h1>Teams</h1>
 			<button
 				class="button is-info"
 				@click="$router.push({ name: 'teams-create' })"
@@ -38,6 +37,11 @@ import { mapGetters } from "vuex";
 import isAuthenticated from "@middleware/is-authenticated";
 
 export default {
+	head() {
+		return {
+			title: "Teams",
+		};
+	},
 	middleware: [isAuthenticated],
 	computed: {
 		...mapGetters("teams", {

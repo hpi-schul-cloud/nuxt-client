@@ -13,26 +13,24 @@
 				<span>/ Bearbeiten</span>
 			</h4>
 			<h1>Team bearbeiten</h1>
-			<button class="button is-danger" @click="confirmDelete">Löschen</button>
+			<BaseButton class="is-danger" @click="confirmDelete">Löschen</BaseButton>
 		</section>
 		<section class="section">
-			<BField label="Name">
-				<BInput
-					v-model="team.name"
-					type="text"
-					placeholder="Dream Team"
-					maxlength="30"
-				></BInput>
-			</BField>
-			<BField label="Beschreibung">
-				<BInput
-					v-model="team.description"
-					type="textarea"
-					placeholder="Everything you have to know"
-					maxlength="255"
-				></BInput>
-			</BField>
-			<button class="button is-primary" @click="save()">Speichern</button>
+			<BaseInput
+				v-model="team.name"
+				label="Name"
+				type="text"
+				placeholder="Dream Team"
+				maxlength="30"
+			></BaseInput>
+			<BaseInput
+				v-model="team.description"
+				label="Beschreibung"
+				type="textarea"
+				placeholder="Everything you have to know"
+				maxlength="255"
+			></BaseInput>
+			<BaseButton class="is-primary" @click="save()">Speichern</BaseButton>
 		</section>
 		<section class="section">
 			<h1>{{ team.name }}</h1>
