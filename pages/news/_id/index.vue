@@ -3,7 +3,7 @@
 		<section class="section">
 			<h5>
 				<span>
-					<NuxtLink :to="{ name: 'news' }">News</NuxtLink>
+					<BaseLink :to="{ name: 'news' }">News</BaseLink>
 				</span>
 				<span>/ {{ news.title }}</span>
 			</h5>

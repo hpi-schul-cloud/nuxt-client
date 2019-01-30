@@ -37,7 +37,9 @@ export default {
 		return {
 			searchQuery: this.$route.query.q || "",
 			searchResults: {},
-			skippedItems: this.$route.query.skip || 0,
+			skippedItems: this.$route.query.skip
+				? parseInt(this.$route.query.skip, 10)
+				: 0,
 		};
 	},
 	watch: {
@@ -77,7 +79,7 @@ export default {
 				})
 				.then((result) => {
 					this.searchResults = result;
-					this.skippedItems = result.skip;
+					this.skippedItems = parseInt(result.skip, 10);
 					this.$router.push({
 						query: { q: this.searchQuery, skip: this.skippedItems },
 					});

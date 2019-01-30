@@ -1,9 +1,9 @@
 <template>
 	<div v-if="news">
 		<section class="section">
-			<NuxtLink :to="{ name: 'news-id', params: { id: news._id } }">
+			<BaseLink :to="{ name: 'news-id', params: { id: news._id } }">
 				<h5>{{ news.title }}</h5>
-			</NuxtLink>
+			</BaseLink>
 			<h1>News bearbeiten</h1>
 			<button class="button is-danger" @click="confirmDelete">Löschen</button>
 		</section>

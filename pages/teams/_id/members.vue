@@ -1,9 +1,9 @@
 <template>
 	<div v-if="team">
 		<section class="section">
-			<NuxtLink :to="{ name: 'teams-id', params: { id: team._id } }">
+			<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }">
 				<h4>{{ team.name }}</h4>
-			</NuxtLink>
+			</BaseLink>
 			<h1>Mitglieder Übersicht</h1>
 		</section>
 		<section class="section">

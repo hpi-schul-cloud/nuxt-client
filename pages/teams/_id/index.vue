@@ -3,7 +3,7 @@
 		<section class="section">
 			<h4>
 				<span>
-					<NuxtLink :to="{ name: 'teams' }">Teams</NuxtLink>
+					<BaseLink :to="{ name: 'teams' }">Teams</BaseLink>
 				</span>
 				<span>/ {{ team.name }}</span>
 			</h4>

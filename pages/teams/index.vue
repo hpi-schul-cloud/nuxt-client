@@ -22,8 +22,8 @@
 						<p class="title">{{ team.name }}</p>
 						<p class="subtitle">{{ team.description }}</p>
 						<p>
-							<NuxtLink :to="{ name: 'teams-id', params: { id: team._id } }"
-								>Anschauen</NuxtLink
+							<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }"
+								>Anschauen</BaseLink
 							>
 						</p>
 					</article>

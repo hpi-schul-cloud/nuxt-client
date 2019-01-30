@@ -14,7 +14,7 @@
           </div>
           <footer class="card-footer">
             <div class="card-footer-item">
-              <nuxt-link :to="{ name: 'news-id', params: { id: article._id } }">Weiterlesen</nuxt-link>
+              <BaseLink :to="{ name: 'news-id', params: { id: article._id } }">Weiterlesen</BaseLink>
             </div>
           </footer>
         </div>
@@ -29,16 +29,16 @@
 						<article class="tile is-child notification is-primary">
 							<p class="title">{{ news[1].title }}</p>
 							<p class="subtitle">
-								<NuxtLink :to="{ name: 'news-id', params: { id: news[1]._id } }"
-									>Weiterlesen</NuxtLink
+								<BaseLink :to="{ name: 'news-id', params: { id: news[1]._id } }"
+									>Weiterlesen</BaseLink
 								>
 							</p>
 						</article>
 						<article class="tile is-child notification is-warning">
 							<p class="title">{{ news[2].title }}</p>
 							<p class="subtitle">
-								<NuxtLink :to="{ name: 'news-id', params: { id: news[2]._id } }"
-									>Weiterlesen</NuxtLink
+								<BaseLink :to="{ name: 'news-id', params: { id: news[2]._id } }"
+									>Weiterlesen</BaseLink
 								>
 							</p>
 						</article>
@@ -47,8 +47,8 @@
 						<article class="tile is-child notification is-info">
 							<p class="title">{{ news[0].title }}</p>
 							<p class="subtitle">
-								<NuxtLink :to="{ name: 'news-id', params: { id: news[0]._id } }"
-									>Weiterlesen</NuxtLink
+								<BaseLink :to="{ name: 'news-id', params: { id: news[0]._id } }"
+									>Weiterlesen</BaseLink
 								>
 							</p>
 							<figure class="image is-4by3">

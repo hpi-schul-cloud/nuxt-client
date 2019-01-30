@@ -2,9 +2,9 @@
 	<a v-if="href" :href="href" v-bind="$attrs" target="_blank">
 		<slot />
 	</a>
-	<RouterLink v-else :to="routerLinkTo" v-bind="$attrs">
+	<NuxtLink v-else :to="routerLinkTo" v-bind="$attrs">
 		<slot />
-	</RouterLink>
+	</NuxtLink>
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
 			default: false,
 		},
 		to: {
-			type: Object,
+			type: [Object, String],
 			default: null,
 		},
 		name: {

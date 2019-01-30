@@ -13,8 +13,8 @@
 					</div>
 					<footer class="card-footer">
 						<div class="card-footer-item">
-							<NuxtLink :to="{ name: 'schools-id', params: { id: school.id } }"
-								>Öffnen</NuxtLink
+							<BaseLink :to="{ name: 'schools-id', params: { id: school.id } }"
+								>Öffnen</BaseLink
 							>
 						</div>
 					</footer>
