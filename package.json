@@ -46,7 +46,7 @@
 		"nuxt-buefy": "^0.2.1",
 		"nuxt-express-module": "0.0.11",
 		"socket.io-client": "^2.2.0",
-		"storybook-addon-vue-info": "^0.7.1"
+		"storybook-addon-vue-info": "^0.7.1",
 		"stylelint-declaration-use-variable": "^1.7.0"
 	},
 	"devDependencies": {
