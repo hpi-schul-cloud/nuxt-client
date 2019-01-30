@@ -5,13 +5,16 @@ const prettier = require('prettier');
 const aliases = {
 	'~': '.',
 	'@': '.',
+	'@assets': 'assets',
+	'@components': 'components',
+	'@layouts': 'layouts',
 	'@middleware': 'middleware',
 	'@pages': 'pages',
-	'@layouts': 'layouts',
-	'@components': 'components',
-	'@assets': 'assets',
+	'@plugins': 'plugins',
+	'@static': 'static',
 	'@store': 'store',
-	'@design': 'styles.app.scss',
+	'@variables': 'styles/variables.scss',
+	'@styles': 'styles/app.scss',
 };
 
 module.exports = {
@@ -32,12 +35,12 @@ for (const alias in aliases) {
 	module.exports.jsconfig[alias] = aliasTo.includes('/index.')
 		? [aliasTo]
 		: [
-				aliasTo + '/index.js',
-				aliasTo + '/index.json',
-				aliasTo + '/index.vue',
-				aliasTo + '/index.scss',
-				aliasTo + '/index.css',
-		  ];
+			aliasTo + '/index.js',
+			aliasTo + '/index.json',
+			aliasTo + '/index.vue',
+			aliasTo + '/index.scss',
+			aliasTo + '/index.css',
+	];
 }
 
 const jsconfigTemplate = require('./jsconfig.template') || {};

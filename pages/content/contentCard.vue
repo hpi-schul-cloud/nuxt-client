@@ -2,10 +2,7 @@
 	<Card @click="open()">
 		<div slot="header" class="card-image">
 			<card-header-image>
-				<img
-					:src="data.thumbnail"
-					:alt="'Thumbnail for ~' + data.title + '~'"
-				/>
+				<img :src="data.thumbnail" :alt="'Thumbnail for ~' + data.title + '~'">
 			</card-header-image>
 		</div>
 		<div class="card-content">
@@ -13,9 +10,7 @@
 				<div class="media-content">
 					<p class="title is-4">{{ data.title }}</p>
 					<p class="subtitle is-6">
-						<span v-for="(tag, index) of data.tags" :key="index" class="tag">
-							{{ tag }}
-						</span>
+						<span v-for="(tag, index) of data.tags" :key="index" class="tag">{{ tag }}</span>
 					</p>
 				</div>
 			</div>
@@ -29,11 +24,7 @@
 				<p>Anbieter: {{ data.providerName }}</p>
 				<p>
 					Lizenz:
-					<span
-						v-for="(license, index) in data.licenses"
-						:key="index"
-						v-html="license"
-					/>
+					<span v-for="(license, index) in data.licenses" :key="index" v-html="license"/>
 				</p>
 			</div>
 			<card-footer-actions class="footer-actions">
@@ -45,10 +36,10 @@
 </template>
 
 <script>
-import CardHeaderImage from '@components/card/card-header-image.vue';
-import CardFooter from '@components/card/card-footer.vue';
-import CardFooterActions from '@components/card/card-footer-actions.vue';
-import Card from '@components/card/card.vue';
+import CardHeaderImage from '@components/card-header-image.vue';
+import CardFooter from '@components/card-footer.vue';
+import CardFooterActions from '@components/card-footer-actions.vue';
+import Card from '@components/card.vue';
 
 export default {
 	name: 'ContentCard',

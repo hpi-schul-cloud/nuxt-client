@@ -6,6 +6,10 @@
 
 ## Build Setup
 
+**Please don't use npm!!!**
+
+[yarn](https://yarnpkg.com/lang/en/docs/install/) is faster and cleaner. It's also not recommended to mix npm & yarn in one repository.
+
 ```bash
 # install dependencies
 $ yarn install

@@ -60,6 +60,7 @@ module.exports = {
 			src: '~/plugins/authenticate',
 			ssr: false,
 		},
+		'@plugins/global.js',
 		// '~/plugins/feathers',
 	],
 

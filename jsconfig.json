@@ -22,6 +22,30 @@
 				"./index.scss",
 				"./index.css"
 			],
+			"@assets/*": ["assets/*"],
+			"@assets": [
+				"assets/index.js",
+				"assets/index.json",
+				"assets/index.vue",
+				"assets/index.scss",
+				"assets/index.css"
+			],
+			"@components/*": ["components/*"],
+			"@components": [
+				"components/index.js",
+				"components/index.json",
+				"components/index.vue",
+				"components/index.scss",
+				"components/index.css"
+			],
+			"@layouts/*": ["layouts/*"],
+			"@layouts": [
+				"layouts/index.js",
+				"layouts/index.json",
+				"layouts/index.vue",
+				"layouts/index.scss",
+				"layouts/index.css"
+			],
 			"@middleware/*": ["middleware/*"],
 			"@middleware": [
 				"middleware/index.js",
@@ -38,29 +62,21 @@
 				"pages/index.scss",
 				"pages/index.css"
 			],
-			"@layouts/*": ["layouts/*"],
-			"@layouts": [
-				"layouts/index.js",
-				"layouts/index.json",
-				"layouts/index.vue",
-				"layouts/index.scss",
-				"layouts/index.css"
+			"@plugins/*": ["plugins/*"],
+			"@plugins": [
+				"plugins/index.js",
+				"plugins/index.json",
+				"plugins/index.vue",
+				"plugins/index.scss",
+				"plugins/index.css"
 			],
-			"@components/*": ["components/*"],
-			"@components": [
-				"components/index.js",
-				"components/index.json",
-				"components/index.vue",
-				"components/index.scss",
-				"components/index.css"
-			],
-			"@assets/*": ["assets/*"],
-			"@assets": [
-				"assets/index.js",
-				"assets/index.json",
-				"assets/index.vue",
-				"assets/index.scss",
-				"assets/index.css"
+			"@static/*": ["static/*"],
+			"@static": [
+				"static/index.js",
+				"static/index.json",
+				"static/index.vue",
+				"static/index.scss",
+				"static/index.css"
 			],
 			"@store/*": ["store/*"],
 			"@store": [
@@ -70,13 +86,21 @@
 				"store/index.scss",
 				"store/index.css"
 			],
-			"@design/*": ["styles.app.scss/*"],
-			"@design": [
-				"styles.app.scss/index.js",
-				"styles.app.scss/index.json",
-				"styles.app.scss/index.vue",
-				"styles.app.scss/index.scss",
-				"styles.app.scss/index.css"
+			"@variables/*": ["styles/variables.scss/*"],
+			"@variables": [
+				"styles/variables.scss/index.js",
+				"styles/variables.scss/index.json",
+				"styles/variables.scss/index.vue",
+				"styles/variables.scss/index.scss",
+				"styles/variables.scss/index.css"
+			],
+			"@styles/*": ["styles/app.scss/*"],
+			"@styles": [
+				"styles/app.scss/index.js",
+				"styles/app.scss/index.json",
+				"styles/app.scss/index.vue",
+				"styles/app.scss/index.scss",
+				"styles/app.scss/index.css"
 			]
 		}
 	}

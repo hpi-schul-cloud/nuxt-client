@@ -864,6 +864,30 @@
     lodash "^4.17.10"
     radix-router "^3.0.1"
 
+"@fortawesome/fontawesome-common-types@^0.2.13":
+  version "0.2.13"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.13.tgz#17f3d30c53732f07a765199c3cf93b4834e8cfde"
+  integrity sha512-Qy1eMKylnbsCRXod8C4CfwqlNtLU7OkJiLsFJZlHY4rY9ky2VYUKNnRj0b+3lnGwA1dWNY+pI0XWbP/mrLCohw==
+
+"@fortawesome/fontawesome-svg-core@^1.2.13":
+  version "1.2.13"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.13.tgz#1d0923b9692fc10b9a4fa047d504da5d9941639e"
+  integrity sha512-1Q0grmELVTBDbk/Jo4dRCptkYMQjikPEcoPo+eZS+oLVowv1afP4177m4gvqMwdk3l+9KYoiMBJzfY2qDbs+Dg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.13"
+
+"@fortawesome/free-solid-svg-icons@^5.7.0":
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.7.0.tgz#a5cc69f1b99ed50e78a8bd75c4b6bf74c8224b6a"
+  integrity sha512-bWHNC9Mho8gJ/MFmnc+u6af0jXtdgNWdL6mxHE2lrPsSUGTBCr7AcYeTf+f0Q7JZDjIy/kW8FKpHcfuesScK5A==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.13"
+
+"@fortawesome/vue-fontawesome@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.5.tgz#ea70a4d4ad0d6d617048a5b2a2ff33e21fe47d61"
+  integrity sha512-tiNZCgh+ZkUsyFfm2MQMMdHKRrKj82M7g0XFPSNNY+s5nRB82soy0US+xj0jGRy433b0c4WpylCOhgle3294Uw==
+
 "@glimmer/interfaces@^0.30.3":
   version "0.30.5"
   resolved "https://registry.yarnpkg.com/@glimmer/interfaces/-/interfaces-0.30.5.tgz#9fd391ff4b9e4b29cf56495a2c3f5f660e45497a"
@@ -3279,18 +3303,6 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
-
-coffee-loader@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/coffee-loader/-/coffee-loader-0.9.0.tgz#6deabd336062ddc6d773da4dfd16367fc7107bd6"
-  integrity sha512-VSoQ5kWr6Yfjn4RDpVbba2XMs3XG1ZXtLakPRt8dNfUcNU9h+1pocpdUUEd7NK9rLDwrju4yonhxrL8aMr5tww==
-  dependencies:
-    loader-utils "^1.0.2"
-
-coffeescript@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/coffeescript/-/coffeescript-2.3.2.tgz#e854a7020dfe47b7cf4dd412042e32ef1e269810"
-  integrity sha512-YObiFDoukx7qPBi/K0kUKyntEZDfBQiqs/DbrR1xzASKOBjGT7auD85/DiPeRr9k++lRj7l3uA9TNMLfyfcD/Q==
 
 collapse-white-space@^1.0.2:
   version "1.0.4"
