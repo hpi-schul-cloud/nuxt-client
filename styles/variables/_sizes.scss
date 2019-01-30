@@ -1,34 +1,16 @@
 // GRID
 $size-grid-padding: 1.3rem;
 
-// CONTENT
+// LAYOUT
 $size-content-width-max: 60rem;
 $size-content-width-min: 25rem;
 
-// CARDS
-$size-card-padding-vertical: 0.75em;
-$size-card-padding-horizontal: 1em;
-$size-card-padding: $size-card-padding-vertical $size-card-padding-horizontal;
-$size-card-border: 1px;
-$size-card-border-radius: (1em + $size-card-padding-vertical * 2) / 10;
+// SPACING
+$size-padding-x: 0.5em;
+$size-padding-y: 0.25em;
+$size-padding: $size-padding-x $size-padding-y;
 
-$size-card-shadow-x: 2px;
-$size-card-shadow-y: 2px;
-$size-card-shadow-radius: 5px;
-$size-card-shadow: $size-card-shadow-x $size-card-shadow-y
-	$size-card-shadow-radius;
+$size-margin: 0.5em;
 
-// INPUTS
-$size-input-padding-vertical: 0.75em;
-$size-input-padding-horizontal: 1em;
-$size-input-padding: $size-input-padding-vertical $size-input-padding-horizontal;
-$size-input-border: 1px;
-$size-input-border-radius: (1em + $size-input-padding-vertical * 2) / 10;
-
-// BUTTONS
-$size-button-padding-vertical: $size-grid-padding / 2;
-$size-button-padding-horizontal: $size-grid-padding;
-$size-button-padding: $size-button-padding-vertical
-	$size-button-padding-horizontal;
-$size-button-border: 1px;
-$size-button-border-radius: (1rem + $size-button-padding-vertical * 2) / 10;
+$size-border-width: 1px;
+$size-border-radius: 1em;

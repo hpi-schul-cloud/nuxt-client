@@ -6,21 +6,12 @@ $color-border: #999;
 
 // CONTENT
 $color-body-bg: #eee;
-$color-text: #444;
 $color-heading-text: #b10438;
+$color-text: #444;
+$color-text-bg: #fff;
+$color-text-link: $color-primary;
+$color-text-link-active: darken($color-primary, 50%);
 
-// CARDS
-$color-card-border: lighten($color-text, 50%);
-$color-card-shadow: rgba(lighten($color-text, 50%), 0.5);
-
-// LINKS
-$color-link-text: $color-primary;
-$color-link-text-active: $color-text;
-
-// INPUTS
-$color-input-border: lighten($color-text, 50%);
-
-// BUTTONS
-$color-button-bg: $color-link-text;
-$color-button-disabled-bg: darken(desaturate($color-button-bg, 20%), 10%);
-$color-button-text: $color-text;
+$color-text-on-primary: #fff;
+$color-text-link-on-primary: #fff;
+$color-text-link-active-on-primary: #fff;

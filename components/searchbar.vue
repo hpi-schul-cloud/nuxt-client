@@ -32,7 +32,7 @@
         </a>
       </slot>
     </div>
-    -->
+		-->
 	</div>
 </template>
 
@@ -72,6 +72,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@variables";
+
 .live-search {
 	position: relative;
 	width: 100%;
@@ -84,8 +86,8 @@ export default {
 		align-items: center;
 		width: 100%;
 		padding: 0 16px;
-		color: #333;
-		background: #eee;
+		color: $color-text;
+		background: $color-text-bg;
 		border-radius: 50rem;
 
 		.fa,

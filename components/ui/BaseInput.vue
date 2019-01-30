@@ -70,9 +70,9 @@ $input-padding-left: 12px;
 	display: block;
 	margin: 1em 0 $size-grid-padding;
 	clear: both;
-	background: #fff;
-	border: $size-input-border solid $color-input-border;
-	border-radius: $size-input-border-radius;
+	background: $color-text-bg;
+	border: $size-border-width solid $color-border;
+	border-radius: $size-border-radius;
 }
 
 .label {
@@ -88,12 +88,12 @@ $input-padding-left: 12px;
 .input {
 	display: block;
 	width: 100%;
-	padding: $size-input-padding;
+	padding: $size-padding;
 	line-height: 1;
 	color: lighten($color-text, 20%);
 	background: inherit;
 	border: 0;
-	border-radius: calc(#{$size-input-border-radius} - #{$size-input-border});
+	border-radius: calc(#{$size-border-radius} - #{$size-border-width});
 	outline: none;
 	transition: color $duration-animation-base linear;
 

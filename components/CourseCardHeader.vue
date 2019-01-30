@@ -52,9 +52,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@variables";
+
 .card-main-content {
 	font-family: "Asul", sans-serif;
-	color: aliceblue;
+	color: $color-heading-text;
 }
 </style>

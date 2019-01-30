@@ -13,6 +13,7 @@ module.exports = {
 	plugins: [
 		// Bring in some extra rules for SCSS
 		"stylelint-scss",
+		"stylelint-declaration-use-variable",
 	],
 	// Rule lists:
 	// - https://stylelint.io/user-guide/rules/
@@ -29,6 +30,20 @@ module.exports = {
 		"selector-max-universal": 1,
 		// Disallow allow global element/type selectors in scoped modules
 		"selector-max-type": [0, { ignore: ["child", "descendant", "compounded"] }],
+		// enforce variable usage
+		"sh-waqar/declaration-use-variable": [
+			[
+				"/color/",
+				"font-family",
+				"padding",
+				"margin",
+				"z-index",
+				"font-size",
+				{
+					ignoreValues: ["transparent", "inherit", "0", "none", "/.+(.+)/"],
+				},
+			],
+		],
 		// ===
 		// PRETTIER
 		// ===
@@ -48,7 +63,7 @@ module.exports = {
 		"scss/dollar-variable-colon-space-after": "always",
 		"scss/dollar-variable-colon-space-before": "never",
 		"scss/dollar-variable-no-missing-interpolation": true,
-		"scss/dollar-variable-pattern": /^[a-z-]+$/,
+		"scss/dollar-variable-pattern": /^[a-z][a-z0-9-_]+$/,
 		"scss/double-slash-comment-whitespace-inside": "always",
 		"scss/operator-no-newline-before": true,
 		"scss/operator-no-unspaced": true,

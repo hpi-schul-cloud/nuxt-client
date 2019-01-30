@@ -10,17 +10,17 @@
 .button {
 	display: flex;
 	align-items: center;
-	padding: $size-button-padding;
-	color: $color-button-text;
+	padding: $size-padding;
+	color: $color-text-on-primary;
 	text-transform: uppercase;
 	cursor: pointer;
-	background-color: rgba(0, 0, 0, 0);
-	border: $size-button-border solid $color-button-text;
-	border-radius: $size-button-border-radius;
+	background-color: transparentize($color-text, 0);
+	border: $size-border-width solid $color-text-on-primary;
+	border-radius: $size-border-radius;
 	transition: background-color $duration-animation-base ease;
 	&:hover,
 	&:focus {
-		background-color: rgba(0, 0, 0, 0.1);
+		background-color: transparentize($color-text, 0.1);
 	}
 }
 </style>

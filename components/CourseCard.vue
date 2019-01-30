@@ -1,11 +1,11 @@
 <template>
-	<div class="card-border">
+	<BaseCard>
 		<CourseCardHeader :course="course" />
 		<div class="card-info">
 			<p>{{ course.description }}</p>
 		</div>
 		<CardFooter :course="course" />
-	</div>
+	</BaseCard>
 </template>
 
 <script>

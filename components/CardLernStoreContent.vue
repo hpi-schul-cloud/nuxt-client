@@ -1,5 +1,5 @@
 <template>
-	<Card @click="open()">
+	<BaseCard @click="open()">
 		<div slot="header" class="card-image">
 			<CardHeaderImage>
 				<img
@@ -13,9 +13,9 @@
 				<div class="media-content">
 					<p class="title is-4">{{ data.title }}</p>
 					<p class="subtitle is-6">
-						<span v-for="(tag, index) of data.tags" :key="index" class="tag">
-							{{ tag }}
-						</span>
+						<span v-for="(tag, index) of data.tags" :key="index" class="tag">{{
+							tag
+						}}</span>
 					</p>
 				</div>
 			</div>
@@ -29,9 +29,9 @@
 				<p>Anbieter: {{ data.providerName }}</p>
 				<p>
 					Lizenz:
-					<span v-for="(license, index) in data.licenses" :key="index">{{
-						license
-					}}</span>
+					<span v-for="(license, index) in data.licenses" :key="index">
+						{{ license }}
+					</span>
 				</p>
 			</div>
 			<div class="footer-actions">
@@ -39,18 +39,16 @@
 				<button class="button is-primary">Ansehen</button>
 			</div>
 		</CardFooter>
-	</Card>
+	</BaseCard>
 </template>
 
 <script>
 import CardHeaderImage from "@components/CardHeaderImage.vue";
 import CardFooter from "@components/CardFooter.vue";
-import Card from "@components/card.vue";
 
 export default {
 	name: "ContentCard",
 	components: {
-		Card,
 		CardHeaderImage,
 		CardFooter,
 	},
