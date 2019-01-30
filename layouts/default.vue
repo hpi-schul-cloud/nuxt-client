@@ -97,30 +97,30 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from "vuex";
 
 export default {
 	data() {
 		return {
 			items: [
-				{ title: 'News', to: { name: 'news' } },
-				{ title: 'Teams', to: { name: 'teams' } },
-				{ title: 'Kurse', to: { name: 'courses' } },
-				{ title: 'Termine', to: { name: 'events' } },
-				{ title: 'Aufgaben', to: { name: 'tasks' } },
-				{ title: 'Dateien', to: { name: 'files' } },
-				{ title: 'Lernstore', to: { name: 'content' } },
-				{ title: 'Verwaltung', to: { name: 'administration' } },
+				{ title: "News", to: { name: "news" } },
+				{ title: "Teams", to: { name: "teams" } },
+				{ title: "Kurse", to: { name: "courses" } },
+				{ title: "Termine", to: { name: "events" } },
+				{ title: "Aufgaben", to: { name: "tasks" } },
+				{ title: "Dateien", to: { name: "files" } },
+				{ title: "Lernstore", to: { name: "content" } },
+				{ title: "Verwaltung", to: { name: "administration" } },
 			],
 		};
 	},
 	computed: mapState({
 		firstName: (state) =>
-			state.auth && state.auth.user ? state.auth.user.firstName : '',
-		authenticated: (state) => (state.auth ? state.auth.accessToken : ''),
+			state.auth && state.auth.user ? state.auth.user.firstName : "",
+		authenticated: (state) => (state.auth ? state.auth.accessToken : ""),
 	}),
 	methods: {
-		...mapActions('auth', ['logout']),
+		...mapActions("auth", ["logout"]),
 	},
 };
 </script>

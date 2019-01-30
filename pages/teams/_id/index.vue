@@ -44,12 +44,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('teams', {
-			team: 'current',
+		...mapGetters("teams", {
+			team: "current",
 		}),
 	},
 	created(ctx) {
@@ -57,7 +57,7 @@ export default {
 	},
 	methods: {
 		get(id) {
-			this.$store.dispatch('teams/get', id);
+			this.$store.dispatch("teams/get", id);
 		},
 	},
 };

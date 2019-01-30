@@ -2,12 +2,12 @@
 // generated when starting the dev server or a build.
 
 module.exports = {
-	baseUrl: '.',
-	include: ['src/**/*', 'tests/**/*'],
+	baseUrl: ".",
+	include: ["src/**/*", "tests/**/*"],
 	compilerOptions: {
-		baseUrl: '.',
-		target: 'esnext',
-		module: 'es2015',
+		baseUrl: ".",
+		target: "esnext",
+		module: "es2015",
 		// ...
 		// `paths` will be automatically generated using aliases.config.js
 		// ...

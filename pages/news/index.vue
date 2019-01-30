@@ -74,12 +74,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('news', {
-			news: 'list',
+		...mapGetters("news", {
+			news: "list",
 		}),
 	},
 	created(ctx) {
@@ -87,7 +87,7 @@ export default {
 	},
 	methods: {
 		find() {
-			this.$store.dispatch('news/find');
+			this.$store.dispatch("news/find");
 		},
 	},
 };

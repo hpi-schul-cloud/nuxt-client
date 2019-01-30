@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
 	data() {
@@ -71,25 +71,25 @@ export default {
 			selected: null,
 			columns: [
 				{
-					field: '_id',
-					label: 'ID',
-					width: '40',
+					field: "_id",
+					label: "ID",
+					width: "40",
 					numeric: true,
 				},
 				{
-					field: 'firstName',
-					label: 'First Name',
+					field: "firstName",
+					label: "First Name",
 				},
 				{
-					field: 'lastNAme',
-					label: 'Last Name',
+					field: "lastNAme",
+					label: "Last Name",
 				},
 			],
 		};
 	},
 	computed: {
-		...mapGetters('teams', {
-			team: 'current',
+		...mapGetters("teams", {
+			team: "current",
 		}),
 	},
 	created(ctx) {
@@ -98,17 +98,17 @@ export default {
 	},
 	methods: {
 		get(id) {
-			this.$store.dispatch('teams/get', [
+			this.$store.dispatch("teams/get", [
 				id,
 				{
 					query: {
 						$populate: [
 							{
-								path: 'userIds.userId',
-								populate: ['schoolId'],
+								path: "userIds.userId",
+								populate: ["schoolId"],
 							},
 							{
-								path: 'userIds.role',
+								path: "userIds.role",
 							},
 						],
 					},

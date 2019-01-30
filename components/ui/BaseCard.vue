@@ -1,6 +1,6 @@
 <template>
 	<div :style="styles" class="card">
-		<slot/>
+		<slot />
 	</div>
 </template>
 
@@ -16,7 +16,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@variables';
+@import "@variables";
 
 .card {
 	padding: $size-card-padding;

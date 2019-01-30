@@ -24,46 +24,46 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('news', {
-			news: 'current',
+		...mapGetters("news", {
+			news: "current",
 		}),
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);
 	},
 	methods: {
-		...mapActions('news', ['remove']),
+		...mapActions("news", ["remove"]),
 		confirmDelete() {
 			this.$dialog.confirm({
-				title: 'Artikel löschen',
-				message: 'Bist du sicher, dass du diesen Artikel löschen möchtest?',
-				confirmText: 'Artikel löschen',
-				type: 'is-danger',
+				title: "Artikel löschen",
+				message: "Bist du sicher, dass du diesen Artikel löschen möchtest?",
+				confirmText: "Artikel löschen",
+				type: "is-danger",
 				hasIcon: true,
 				onConfirm: async () => {
 					try {
 						await this.remove(this.news._id);
-						this.$toast.open('Artikel gelöscht');
-						this.$router.push({ name: 'news' });
+						this.$toast.open("Artikel gelöscht");
+						this.$router.push({ name: "news" });
 					} catch (e) {
 						this.$toast.open({
-							message: 'Fehler beim Löschen',
-							type: 'is-danger',
+							message: "Fehler beim Löschen",
+							type: "is-danger",
 						});
 					}
 				},
 			});
 		},
 		get(id) {
-			this.$store.dispatch('news/get', id);
+			this.$store.dispatch("news/get", id);
 		},
 		async save() {
 			try {
-				await this.$store.dispatch('news/patch', [
+				await this.$store.dispatch("news/patch", [
 					this.$route.params.id,
 					{
 						name: this.news.name,
@@ -71,13 +71,13 @@ export default {
 					},
 				]);
 				this.$toast.open({
-					message: 'Artikel gespeichert',
-					type: 'is-success',
+					message: "Artikel gespeichert",
+					type: "is-success",
 				});
 			} catch (e) {
 				this.$toast.open({
-					message: 'Fehler beim Speichern',
-					type: 'is-danger',
+					message: "Fehler beim Speichern",
+					type: "is-danger",
 				});
 			}
 		},

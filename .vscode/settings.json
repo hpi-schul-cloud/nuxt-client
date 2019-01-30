@@ -99,8 +99,5 @@
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
 		"editor.wordWrapColumn": 80
-	},
-	"prettier.arrowParens": "always",
-	"prettier.requireConfig": true,
-	"prettier.useTabs": true
+	}
 }

@@ -1,7 +1,7 @@
-const pkg = require('./package');
+const pkg = require("./package");
 
 module.exports = {
-	mode: 'spa',
+	mode: "spa",
 
 	/*
 	 ** Headers of the page
@@ -10,27 +10,27 @@ module.exports = {
 		title: pkg.name,
 		meta: [
 			{
-				charset: 'utf-8',
+				charset: "utf-8",
 			},
 			{
-				name: 'viewport',
-				content: 'width=device-width, initial-scale=1',
+				name: "viewport",
+				content: "width=device-width, initial-scale=1",
 			},
 			{
-				hid: 'description',
-				name: 'description',
+				hid: "description",
+				name: "description",
 				content: pkg.description,
 			},
 		],
 		link: [
 			{
-				rel: 'icon',
-				type: 'image/x-icon',
-				href: '/favicon.ico',
+				rel: "icon",
+				type: "image/x-icon",
+				href: "/favicon.ico",
 			},
 			{
-				rel: 'stylesheet',
-				href: 'https://use.fontawesome.com/releases/v5.6.3/css/all.css',
+				rel: "stylesheet",
+				href: "https://use.fontawesome.com/releases/v5.6.3/css/all.css",
 			},
 		],
 	},
@@ -39,17 +39,17 @@ module.exports = {
 	 ** Customize the progress-bar color
 	 */
 	loading: {
-		color: '#fff',
+		color: "#fff",
 	},
 
 	/*
 	 ** Global CSS
 	 */
 	cssSourceMap: true,
-	css: ['~/styles/app.scss'],
+	css: ["~/styles/app.scss"],
 
 	router: {
-		middleware: ['is-authenticated'],
+		middleware: ["is-authenticated"],
 	},
 
 	/*
@@ -57,10 +57,10 @@ module.exports = {
 	 */
 	plugins: [
 		{
-			src: '~/plugins/authenticate',
+			src: "~/plugins/authenticate",
 			ssr: false,
 		},
-		'@plugins/global.js',
+		"@plugins/global.js",
 		// '~/plugins/feathers',
 	],
 
@@ -71,9 +71,9 @@ module.exports = {
 		/* other options */
 
 		// Doc: https://github.com/nuxt-community/axios-module#usage
-		'@nuxtjs/axios',
+		"@nuxtjs/axios",
 		// Doc: https://buefy.github.io/#/documentation
-		'nuxt-buefy',
+		"nuxt-buefy",
 	],
 	/*
 	 ** Axios module configuration
@@ -90,13 +90,13 @@ module.exports = {
 		 ** You can extend webpack config here
 		 */
 		extend(config, ctx) {
-			config.resolve.alias = require('./aliases.config').webpack;
+			config.resolve.alias = require("./aliases.config").webpack;
 			// Run ESLint on save
 			if (ctx.isDev && ctx.isClient) {
 				config.module.rules.push({
-					enforce: 'pre',
+					enforce: "pre",
 					test: /\.(js|vue)$/,
-					loader: 'eslint-loader',
+					loader: "eslint-loader",
 					exclude: /(node_modules)/,
 					options: {
 						fix: true,

@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import ContentCard from './contentCard.vue';
-import Searchbar from '@components/searchbar.vue';
-import Pagination from '@components/pagination.vue';
+import ContentCard from "./contentCard.vue";
+import Searchbar from "@components/searchbar.vue";
+import Pagination from "@components/pagination.vue";
 
 export default {
-	name: 'LernStore',
+	name: "LernStore",
 	components: {
 		ContentCard,
 		Searchbar,
@@ -35,7 +35,7 @@ export default {
 	props: {},
 	data() {
 		return {
-			searchQuery: this.$route.query.q || '',
+			searchQuery: this.$route.query.q || "",
 			searchResults: {},
 			skippedItems: this.$route.query.skip || 0,
 		};
@@ -68,11 +68,11 @@ export default {
 		find(searchString) {
 			const query = {};
 			if (searchString) {
-				query['_all[$match]'] = this.searchQuery;
-				query['$skip'] = this.skippedItems;
+				query["_all[$match]"] = this.searchQuery;
+				query["$skip"] = this.skippedItems;
 			}
 			this.$store
-				.dispatch('content_search/find', {
+				.dispatch("content_search/find", {
 					query: query,
 				})
 				.then((result) => {

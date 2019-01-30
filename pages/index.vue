@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import Logo from '@/components/Logo';
+import Logo from "@/components/Logo";
 
 export default {
-	name: 'HomePage',
+	name: "HomePage",
 	components: {
 		Logo,
 	},

@@ -1,9 +1,9 @@
 <template>
 	<a v-if="href" :href="href" v-bind="$attrs" target="_blank">
-		<slot/>
+		<slot />
 	</a>
 	<RouterLink v-else :to="routerLinkTo" v-bind="$attrs">
-		<slot/>
+		<slot />
 	</RouterLink>
 </template>
 
@@ -13,7 +13,7 @@ export default {
 	props: {
 		href: {
 			type: String,
-			default: '',
+			default: "",
 		},
 		allowInsecure: {
 			type: Boolean,
@@ -25,7 +25,7 @@ export default {
 		},
 		name: {
 			type: String,
-			default: '',
+			default: "",
 		},
 		params: {
 			type: Object,
@@ -48,7 +48,7 @@ export default {
 		// Perform more complex prop validations than is possible
 		// inside individual validator functions for each prop.
 		validateProps() {
-			if (process.env.NODE_ENV === 'production') return;
+			if (process.env.NODE_ENV === "production") return;
 
 			if (this.href) {
 				// Check for non-external URL in href.

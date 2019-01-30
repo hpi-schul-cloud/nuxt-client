@@ -42,46 +42,46 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('teams', {
-			team: 'current',
+		...mapGetters("teams", {
+			team: "current",
 		}),
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);
 	},
 	methods: {
-		...mapActions('teams', ['remove']),
+		...mapActions("teams", ["remove"]),
 		confirmDelete() {
 			this.$dialog.confirm({
-				title: 'Team löschen',
-				message: 'Bist du sicher, dass du das Team löschen möchtest?',
-				confirmText: 'Team löschen',
-				type: 'is-danger',
+				title: "Team löschen",
+				message: "Bist du sicher, dass du das Team löschen möchtest?",
+				confirmText: "Team löschen",
+				type: "is-danger",
 				hasIcon: true,
 				onConfirm: async () => {
 					try {
 						await this.remove(this.team._id);
-						this.$toast.open('Team gelöscht');
-						this.$router.push({ name: 'teams' });
+						this.$toast.open("Team gelöscht");
+						this.$router.push({ name: "teams" });
 					} catch (e) {
 						this.$toast.open({
-							message: 'Fehler beim löschen',
-							type: 'is-danger',
+							message: "Fehler beim löschen",
+							type: "is-danger",
 						});
 					}
 				},
 			});
 		},
 		get(id) {
-			this.$store.dispatch('teams/get', id);
+			this.$store.dispatch("teams/get", id);
 		},
 		async save() {
 			try {
-				await this.$store.dispatch('teams/patch', [
+				await this.$store.dispatch("teams/patch", [
 					this.$route.params.id,
 					{
 						name: this.team.name,
@@ -89,13 +89,13 @@ export default {
 					},
 				]);
 				this.$toast.open({
-					message: 'Team gespeichert',
-					type: 'is-success',
+					message: "Team gespeichert",
+					type: "is-success",
 				});
 			} catch (e) {
 				this.$toast.open({
-					message: 'Fehler beim Speichern',
-					type: 'is-danger',
+					message: "Fehler beim Speichern",
+					type: "is-danger",
 				});
 			}
 		},

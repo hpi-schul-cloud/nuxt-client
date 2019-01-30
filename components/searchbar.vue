@@ -38,15 +38,15 @@
 
 <script>
 export default {
-	name: 'Searchbar',
+	name: "Searchbar",
 	props: {
 		value: {
 			type: String,
-			default: '',
+			default: "",
 		},
 		placeholder: {
 			type: String,
-			default: '',
+			default: "",
 		},
 		autocomplete: {
 			type: Boolean,
@@ -54,7 +54,7 @@ export default {
 		},
 		ariaLabel: {
 			type: String,
-			default: '',
+			default: "",
 		},
 	},
 	data() {
@@ -65,7 +65,7 @@ export default {
 	},
 	methods: {
 		updateSearchString(event) {
-			this.$emit('input', this.$refs.searchStringInput.value);
+			this.$emit("input", this.$refs.searchStringInput.value);
 		},
 	},
 };

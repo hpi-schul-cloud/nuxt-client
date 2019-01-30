@@ -1,20 +1,20 @@
-const path = require('path');
-const fs = require('fs');
-const prettier = require('prettier');
+const path = require("path");
+const fs = require("fs");
+const prettier = require("prettier");
 
 const aliases = {
-	'~': '.',
-	'@': '.',
-	'@assets': 'assets',
-	'@components': 'components',
-	'@layouts': 'layouts',
-	'@middleware': 'middleware',
-	'@pages': 'pages',
-	'@plugins': 'plugins',
-	'@static': 'static',
-	'@store': 'store',
-	'@variables': 'styles/variables.scss',
-	'@styles': 'styles/app.scss',
+	"~": ".",
+	"@": ".",
+	"@assets": "assets",
+	"@components": "components",
+	"@layouts": "layouts",
+	"@middleware": "middleware",
+	"@pages": "pages",
+	"@plugins": "plugins",
+	"@static": "static",
+	"@store": "store",
+	"@variables": "styles/variables.scss",
+	"@styles": "styles/app.scss",
 };
 
 module.exports = {
@@ -31,20 +31,20 @@ for (const alias in aliases) {
 		? `<rootDir>/${aliasTo}`
 		: `<rootDir>/${aliasTo}/index.js`;
 	module.exports.jest[`^${alias}/(.*)$`] = `<rootDir>/${aliasTo}/$1`;
-	module.exports.jsconfig[alias + '/*'] = [aliasTo + '/*'];
-	module.exports.jsconfig[alias] = aliasTo.includes('/index.')
+	module.exports.jsconfig[alias + "/*"] = [aliasTo + "/*"];
+	module.exports.jsconfig[alias] = aliasTo.includes("/index.")
 		? [aliasTo]
 		: [
-			aliasTo + '/index.js',
-			aliasTo + '/index.json',
-			aliasTo + '/index.vue',
-			aliasTo + '/index.scss',
-			aliasTo + '/index.css',
-	];
+				aliasTo + "/index.js",
+				aliasTo + "/index.json",
+				aliasTo + "/index.vue",
+				aliasTo + "/index.scss",
+				aliasTo + "/index.css",
+		  ];
 }
 
-const jsconfigTemplate = require('./jsconfig.template') || {};
-const jsconfigPath = path.resolve(__dirname, 'jsconfig.json');
+const jsconfigTemplate = require("./jsconfig.template") || {};
+const jsconfigPath = path.resolve(__dirname, "jsconfig.json");
 
 fs.writeFile(
 	jsconfigPath,
@@ -57,14 +57,14 @@ fs.writeFile(
 			},
 		}),
 		{
-			...require('./.prettierrc'),
-			parser: 'json',
+			...require("./.prettierrc"),
+			parser: "json",
 		}
 	),
 	(error) => {
 		if (error) {
 			console.error(
-				'Error while creating jsconfig.json from aliases.config.js.'
+				"Error while creating jsconfig.json from aliases.config.js."
 			);
 			throw error;
 		}

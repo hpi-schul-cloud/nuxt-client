@@ -9,6 +9,6 @@ export default function(context) {
 		!auth.publicPages.includes(route.name) &&
 		!auth.payload
 	) {
-		return redirect('/login');
+		return redirect("/login");
 	}
 }

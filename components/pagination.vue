@@ -32,9 +32,9 @@
 
 <script>
 export default {
-	name: 'Pagination',
+	name: "Pagination",
 	model: {
-		event: 'update',
+		event: "update",
 	},
 	props: {
 		state: {
@@ -72,7 +72,7 @@ export default {
 			this.updateModel(this.value + this.state.limit);
 		},
 		updateModel(itemsSkipped) {
-			this.$emit('update', itemsSkipped);
+			this.$emit("update", itemsSkipped);
 		},
 	},
 };

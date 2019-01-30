@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import CardFooterCounter from './CardFooterCounter.vue';
+import CardFooterCounter from "./CardFooterCounter.vue";
 
 export default {
-	name: 'CardFooter',
+	name: "CardFooter",
 	components: {
 		CardFooterCounter,
 	},

@@ -2,23 +2,21 @@
 	<div>
 		<label class="input__wrapper">
 			<span :class="{ label: true, active: value && value !== 0 }">
-				{{
-				label
-				}}
+				{{ label }}
 			</span>
 			<input
 				:value="value"
 				:type="type"
 				:name="name"
-				class="input"
 				v-bind="$attrs"
+				class="input"
 				@input="$emit('update', $event.target.value)"
 				v-on="$listeners"
-			>
+			/>
 		</label>
 		<small v-if="hint || $slots.hint" class="hint">
 			<template v-if="hint">{{ hint }}</template>
-			<slot v-else name="hint"/>
+			<slot v-else name="hint" />
 		</small>
 	</div>
 </template>
@@ -26,17 +24,17 @@
 <script>
 export default {
 	// currently, this only supports text input
-	name: 'BaseInput',
+	name: "BaseInput",
 	inheritAttrs: false,
 	model: {
-		event: 'update',
+		event: "update",
 	},
 	props: {
 		type: {
 			type: String,
 			required: true,
 			validator: function(value) {
-				return ['email', 'password', 'search', 'tel', 'text', 'url'].includes(
+				return ["email", "password", "search", "tel", "text", "url"].includes(
 					value.toLowerCase()
 				);
 			},
@@ -47,24 +45,24 @@ export default {
 		},
 		label: {
 			type: String,
-			default: '',
+			default: "",
 			required: true,
 		},
 		name: {
 			type: String,
-			default: '',
+			default: "",
 			required: true,
 		},
 		hint: {
 			type: String,
-			default: '',
+			default: "",
 		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@variables';
+@import "@variables";
 $input-padding-left: 12px;
 
 .input__wrapper {

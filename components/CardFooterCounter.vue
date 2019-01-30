@@ -7,7 +7,7 @@
 
 <script>
 export default {
-	name: 'CardFooterCounter',
+	name: "CardFooterCounter",
 	props: {
 		course: {
 			type: Object,
@@ -16,7 +16,7 @@ export default {
 	},
 	computed: {
 		background_style() {
-			return 'background: ' + this.course.color;
+			return "background: " + this.course.color;
 		},
 	},
 };

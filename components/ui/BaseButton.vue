@@ -1,11 +1,11 @@
 <template>
 	<button class="button" v-on="$listeners">
-		<slot/>
+		<slot />
 	</button>
 </template>
 
 <style lang="scss" scoped>
-@import '@variables';
+@import "@variables";
 
 .button {
 	display: flex;

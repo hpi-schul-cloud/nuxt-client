@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import CardFooter from './CardFooter.vue';
-import CourseCardHeader from './CourseCardHeader.vue';
+import CardFooter from "./CardFooter.vue";
+import CourseCardHeader from "./CourseCardHeader.vue";
 
 export default {
-	name: 'CourseCard',
+	name: "CourseCard",
 	components: {
 		CardFooter,
 		CourseCardHeader,
@@ -21,20 +21,20 @@ export default {
 	props: {
 		msg: {
 			type: String,
-			default: 'test message',
+			default: "test message",
 		},
 		course: {
 			type: Object,
 			default: () => ({
-				color: '#555',
-				name: 'default name',
+				color: "#555",
+				name: "default name",
 				times: [{ weekday: 1, startTime: 36000000 }],
 			}),
 		},
 	},
 	computed: {
 		background_style() {
-			return 'background: ' + this.course.color;
+			return "background: " + this.course.color;
 		},
 	},
 };
@@ -60,7 +60,7 @@ export default {
 .card-info {
 }
 .card-info p {
-	font-family: 'Asul', sans-serif;
+	font-family: "Asul", sans-serif;
 	margin: 0;
 }
 .card-border:hover {

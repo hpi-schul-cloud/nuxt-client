@@ -6,7 +6,7 @@
 
 <script>
 export default {
-	name: 'CardFooter',
+	name: "CardFooter",
 };
 </script>
 

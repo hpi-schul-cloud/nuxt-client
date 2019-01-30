@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters('news', {
-			news: 'current',
+		...mapGetters("news", {
+			news: "current",
 		}),
 	},
 	created(ctx) {
@@ -32,7 +32,7 @@ export default {
 	},
 	methods: {
 		get(id) {
-			this.$store.dispatch('news/get', id);
+			this.$store.dispatch("news/get", id);
 		},
 	},
 };

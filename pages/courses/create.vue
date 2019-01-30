@@ -26,20 +26,20 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
 	data() {
 		return {
 			course: {
-				name: '',
-				description: '',
+				name: "",
+				description: "",
 			},
 		};
 	},
 	computed: {
-		...mapState('auth', {
-			user: 'user',
+		...mapState("auth", {
+			user: "user",
 		}),
 	},
 	methods: {
@@ -52,15 +52,15 @@ export default {
 				}); */
 
 				this.$toast.open({
-					message: 'Kurs erstellt',
-					type: 'is-success',
+					message: "Kurs erstellt",
+					type: "is-success",
 				});
 
-				this.$router.push({ name: 'courses' });
+				this.$router.push({ name: "courses" });
 			} catch (e) {
 				this.$toast.open({
-					message: 'Fehler beim Erstellen des Kurses',
-					type: 'is-danger',
+					message: "Fehler beim Erstellen des Kurses",
+					type: "is-danger",
 				});
 			}
 		},
