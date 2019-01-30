@@ -1,20 +1,99 @@
 <template>
-	<div class="customcard-footer">
-		<slot />
+	<div class="footer">
+		<div v-if="course.courseAlert == ''" class="footer-next-course">
+			<FontAwesomeIcon :icon="['far', 'clock']" size="lg" />
+			{{ course.nextCourseTime }}
+		</div>
+		<div v-else class="footer-alert">
+			<PulsatingDot></PulsatingDot>
+			<div class="alert-label"> {{ course.courseAlert }}</div>
+		</div>
 	</div>
 </template>
 
 <script>
+import PulsatingDot from "./PulsatingDot.vue";
 export default {
 	name: "CardFooter",
+	components: { PulsatingDot },
+	props: {
+		course: {
+			type: Object,
+			default: () => {},
+		},
+	},
+	computed: {},
 };
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.customcard-footer {
+.footer {
+	height: 24px;
+	padding-top: 5px;
+	margin-bottom: -5px;
+	overflow: hidden;
+}
+
+.footer-next-course {
+	font-family: PT Sans Narrow, -apple-system, BlinkMacSystemFont, "Segoe UI",
+		Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+	font-size: 16px;
+	color: #494949;
+	text-align: left;
+}
+
+.footer-alert {
 	display: flex;
-	flex-wrap: nowrap;
 	align-items: center;
-	width: 100%;
+}
+
+.alert-label {
+	flex: 1;
+	font-family: PT Sans Narrow, -apple-system, BlinkMacSystemFont, "Segoe UI",
+		Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+	font-weight: bold;
+	color: #d00;
+}
+
+.ring-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 25px;
+	height: 25px;
+}
+
+.circle {
+	position: absolute;
+	width: 9px;
+	height: 9px;
+	background-color: #d00;
+	border-radius: 50%;
+}
+
+.ringring {
+	align-self: center;
+	width: 15px;
+	height: 15px;
+	border: 1px solid #d00;
+	-webkit-border-radius: 30px;
+	opacity: 0;
+	-webkit-animation: pulsate 2s ease-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes pulsate {
+	0% {
+		opacity: 0;
+		-webkit-transform: scale(0.1, 0.1);
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: scale(1.2, 1.2);
+	}
 }
 </style>

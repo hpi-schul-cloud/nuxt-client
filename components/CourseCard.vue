@@ -1,34 +1,39 @@
 <template>
-	<BaseCard>
-		<CourseCardHeader :course="course" />
-		<div class="card-info">
-			<p>{{ course.description }}</p>
+	<div class="course-card">
+		<div class="tab">
+			<div class="tab-label">{{ course.teacherName }}</div>
+			<div v-if="course.newAssignments != 0" class="assignments-label"
+				>{{ course.newAssignments }}
+				<FontAwesomeIcon :icon="['far', 'calendar-check']" size="lg" />
+			</div>
 		</div>
-		<CardFooter :course="course" />
-	</BaseCard>
+		<div class="card-info" :style="background_style">
+			<h1 class="mt-0 mb-10"> {{ course.abbreviation }}</h1>
+			<h3 class="mt-0 mb-0"> {{ course.name }}</h3>
+		</div>
+		<CardFooter :course="course"></CardFooter>
+	</div>
 </template>
 
 <script>
 import CardFooter from "./CardFooter.vue";
-import CourseCardHeader from "./CourseCardHeader.vue";
 
 export default {
 	name: "CourseCard",
 	components: {
 		CardFooter,
-		CourseCardHeader,
 	},
 	props: {
-		msg: {
-			type: String,
-			default: "test message",
-		},
+		msg: String,
 		course: {
 			type: Object,
 			default: () => ({
-				color: "#555",
+				color: "#01B1AA",
+				abbreviation: "DEF",
+				newAssignments: 0,
 				name: "default name",
-				times: [{ weekday: 1, startTime: 36000000 }],
+				teacherName: "MusterMensch",
+				courseAlert: "Default Alert!",
 			}),
 		},
 	},
@@ -41,28 +46,85 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.card-border {
-	/*   flex-basis: 350px; */
-	position: relative;
-	flex: 0 0 350px;
-	height: 200px;
-	margin: 15px 5px;
-	overflow: hidden;
-	cursor: pointer;
-	border-radius: 3px;
-	box-shadow: 2px 2px 5px gray;
-	transition: box-shadow 0.3s ease;
+<style lang="scss" scoped>
+@import "@variables";
+.mt-0 {
+	margin-top: 0 !important;
 }
-.card-main-content {
-	width: 100%;
+
+.mb-0 {
+	margin-bottom: 0 !important;
+}
+
+.mb-10 {
+	margin-bottom: -10px !important;
+}
+
+.assignments-label {
+	float: right;
+	padding: 5px;
+	font-family: PT Sans Caption, -apple-system, BlinkMacSystemFont, "Segoe UI",
+		Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+}
+
+.course-card {
+	width: 260px;
+	padding: 10px;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+		0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-info {
+	padding: 10px;
+	margin-top: -5px;
+	color: white;
+	border-radius: 4px;
+
+	/* background-image: linear-gradient(-225deg, #E42C85 0%, #3B1E65 100%); */
 }
 
 .card-info p {
 	margin: 0;
 	font-family: "Asul", sans-serif;
 }
+
 .card-border:hover {
 	box-shadow: 0 4px 14px rgb(126, 124, 124);
+}
+
+.tab-label {
+	float: left;
+	width: 100px;
+	padding: 7.5px 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	transform: skewX(0deg);
+	transform-origin: bottom left;
+}
+
+.tab {
+	position: relative;
+	z-index: -1;
+	height: 34px;
+	overflow: hidden;
+	border-radius: 5px;
+	border-bottom-left-radius: 0;
+}
+
+.tab::before {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 125px;
+	content: "";
+	background-color: #dedede;
+	border-top-right-radius: 5px;
+	transform: skewX(25deg);
+	transform-origin: bottom left;
 }
 </style>

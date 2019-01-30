@@ -97,7 +97,8 @@
 
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
-		"editor.wordWrapColumn": 80
+		"editor.wordWrapColumn": 80,
+		"markdownlint.ignore": ["schulcloud-client/**/*.md"]
 	},
 
 	// ===

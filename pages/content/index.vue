@@ -84,7 +84,7 @@ export default {
 						query: { q: this.searchQuery, skip: this.skippedItems },
 					});
 					window.scrollTo(0, 0);
-			});
+				});
 		},
 	},
 };

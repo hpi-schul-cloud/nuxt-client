@@ -47,9 +47,16 @@
 		"nuxt-express-module": "0.0.11",
 		"socket.io-client": "^2.2.0",
 		"storybook-addon-vue-info": "^0.7.1",
-		"stylelint-declaration-use-variable": "^1.7.0"
+		"style-loader": "^0.23.1",
+		"stylelint-declaration-use-variable": "^1.7.0",
+		"vue-loader": "^15.6.2"
 	},
 	"devDependencies": {
+		"@storybook/addon-actions": "^4.1.11",
+		"@storybook/addon-links": "^4.1.11",
+		"@storybook/addon-notes": "^4.1.11",
+		"@storybook/addons": "^4.1.11",
+		"@storybook/vue": "^4.1.11",
 		"@vue/cli-plugin-babel": "^3.3.0",
 		"@vue/cli-service": "^3.3.1",
 		"@vue/eslint-config-prettier": "^4.0.1",
@@ -58,7 +65,10 @@
 		"babel-core": "^6.26.3",
 		"babel-eslint": "^8.2.1",
 		"babel-jest": "^24.0.0",
+		"babel-loader": "^8.0.5",
+		"babel-preset-vue": "^2.0.2",
 		"cross-env": "^5.2.0",
+		"css-loader": "^2.1.0",
 		"eslint": "^5.12.1",
 		"eslint-config-prettier": "^3.1.0",
 		"eslint-loader": "^2.0.0",
@@ -79,11 +89,6 @@
 		"stylelint-config-recess-order": "^2.0.1",
 		"stylelint-config-standard": "^18.2.0",
 		"stylelint-scss": "^3.5.1",
-		"@storybook/vue": "^4.1.11",
-		"@storybook/addon-actions": "^4.1.11",
-		"@storybook/addon-links": "^4.1.11",
-		"@storybook/addons": "^4.1.11",
-		"babel-preset-vue": "^2.0.2",
-		"babel-loader": "^7.1.5"
+		"vue-style-loader": "^4.1.2"
 	}
 }

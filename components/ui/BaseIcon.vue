@@ -23,6 +23,7 @@ fontAwesomeIconLibrary.add(
 );
 
 export default {
+	name: "BaseIcon",
 	components: {
 		FontAwesomeIcon,
 	},
