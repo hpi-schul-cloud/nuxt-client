@@ -1,10 +1,10 @@
 <template>
 	<div class="card-border">
-		<CourseCardHeader :course="course"/>
+		<CourseCardHeader :course="course" />
 		<div class="card-info">
 			<p>{{ course.description }}</p>
 		</div>
-		<CardFooter :course="course"/>
+		<CardFooter :course="course" />
 	</div>
 </template>
 

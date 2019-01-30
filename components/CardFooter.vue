@@ -1,6 +1,6 @@
 <template>
 	<div class="customcard-footer">
-		<slot/>
+		<slot />
 	</div>
 </template>
 
