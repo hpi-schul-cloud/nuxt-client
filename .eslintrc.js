@@ -6,8 +6,6 @@ module.exports = {
 	extends: [
 		// https://github.com/vuejs/eslint-plugin-vue#bulb-rules
 		"plugin:vue/recommended",
-		// https://github.com/standard/standard/blob/master/docs/RULES-en.md
-		"standard",
 		// https://github.com/prettier/eslint-config-prettier
 		"prettier",
 		"prettier/standard",
@@ -29,21 +27,34 @@ module.exports = {
 						},
 				  ]
 				: "off",
-		/*'vue/component-name-in-template-casing': [
-			'error',
-			'PascalCase',
+		"vue/component-name-in-template-casing": [
+			"error",
+			"PascalCase",
 			{
 				ignores: [
-					'component',
-					'template',
-					'transition',
-					'transition-group',
-					'keep-alive',
-					'slot',
+					"component",
+					"template",
+					"transition",
+					"transition-group",
+					"keep-alive",
+					"slot",
 				],
 			},
-		],*/
+		],
+		/*
+		"vue/eqeqeq": ["error", "always"],
+		"vue/key-spacing": ["error", { beforeColon: false, afterColon: false }],
+		"vue/match-component-file-name": [
+			"error",
+			{
+				shouldMatchCase: true,
+			},
+		],
+		"vue/object-curly-spacing": ["error", "always"],
+		"vue/require-direct-export": "error",
+		*/
 		"vue/script-indent": ["error", "tab"],
+		//"vue/space-infix-ops": ["error", { int32Hint: true }],
 	},
 	overrides: [
 		{

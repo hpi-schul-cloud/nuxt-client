@@ -29,18 +29,16 @@
 						<article class="tile is-child notification is-primary">
 							<p class="title">{{ news[1].title }}</p>
 							<p class="subtitle">
-								<nuxt-link
-									:to="{ name: 'news-id', params: { id: news[1]._id } }"
-									>Weiterlesen</nuxt-link
+								<NuxtLink :to="{ name: 'news-id', params: { id: news[1]._id } }"
+									>Weiterlesen</NuxtLink
 								>
 							</p>
 						</article>
 						<article class="tile is-child notification is-warning">
 							<p class="title">{{ news[2].title }}</p>
 							<p class="subtitle">
-								<nuxt-link
-									:to="{ name: 'news-id', params: { id: news[2]._id } }"
-									>Weiterlesen</nuxt-link
+								<NuxtLink :to="{ name: 'news-id', params: { id: news[2]._id } }"
+									>Weiterlesen</NuxtLink
 								>
 							</p>
 						</article>
@@ -49,9 +47,8 @@
 						<article class="tile is-child notification is-info">
 							<p class="title">{{ news[0].title }}</p>
 							<p class="subtitle">
-								<nuxt-link
-									:to="{ name: 'news-id', params: { id: news[0]._id } }"
-									>Weiterlesen</nuxt-link
+								<NuxtLink :to="{ name: 'news-id', params: { id: news[0]._id } }"
+									>Weiterlesen</NuxtLink
 								>
 							</p>
 							<figure class="image is-4by3">

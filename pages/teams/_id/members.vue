@@ -1,9 +1,9 @@
 <template>
 	<div v-if="team">
 		<section class="section">
-			<nuxt-link :to="{ name: 'teams-id', params: { id: team._id } }">
+			<NuxtLink :to="{ name: 'teams-id', params: { id: team._id } }">
 				<h4>{{ team.name }}</h4>
-			</nuxt-link>
+			</NuxtLink>
 			<h1>Mitglieder Übersicht</h1>
 		</section>
 		<section class="section">
@@ -42,22 +42,22 @@
 				class="button field is-danger"
 				@click="selected = null"
 			>
-				<b-icon icon="close"></b-icon>
+				<BIcon icon="close"></BIcon>
 				<span>Clear selected</span>
 			</button>
-			<b-tabs>
-				<b-tab-item label="Table">
-					<b-table
+			<BTabs>
+				<BTabItem label="Table">
+					<BTable
 						:data="team.userIds"
 						:columns="columns"
 						:selected.sync="selected"
 						focusable
-					></b-table>
-				</b-tab-item>
-				<b-tab-item label="Selected">
+					></BTable>
+				</BTabItem>
+				<BTabItem label="Selected">
 					<pre>\n{{ selected }}</pre>
-				</b-tab-item>
-			</b-tabs>
+				</BTabItem>
+			</BTabs>
 		</section>
 	</div>
 </template>
@@ -93,7 +93,6 @@ export default {
 		}),
 	},
 	created(ctx) {
-		console.log(this.$route.params);
 		this.get(this.$route.params.id);
 	},
 	methods: {

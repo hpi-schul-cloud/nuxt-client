@@ -2,22 +2,22 @@
 	<div v-if="course">
 		<section class="section">
 			<h1>Kurs erstellen</h1>
-			<b-field label="Name">
-				<b-input
+			<BField label="Name">
+				<BInput
 					v-model="course.name"
 					type="text"
 					placeholder="Dream Team"
 					maxlength="30"
-				></b-input>
-			</b-field>
-			<b-field label="Beschreibung">
-				<b-input
+				></BInput>
+			</BField>
+			<BField label="Beschreibung">
+				<BInput
 					v-model="course.description"
 					type="textarea"
 					placeholder="Everything you have to know"
 					maxlength="255"
-				></b-input>
-			</b-field>
+				></BInput>
+			</BField>
 			<button class="button is-primary" @click="create()">Speichern</button>
 			<h1>{{ course.name }}</h1>
 			<p>{{ course.description }}</p>

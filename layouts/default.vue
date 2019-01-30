@@ -6,11 +6,11 @@
 			aria-label="main navigation"
 		>
 			<div class="navbar-brand">
-				<nuxt-link class="navbar-item" to="/">
+				<NuxtLink class="navbar-item" to="/">
 					<img src="@assets/cloud.svg" alt="Schul-Cloud" style="width: 78px" />
-				</nuxt-link>
-				<nuxt-link v-if="!authenticated" class="navbar-item" to="/login"
-					>Login</nuxt-link
+				</NuxtLink>
+				<NuxtLink v-if="!authenticated" class="navbar-item" to="/login"
+					>Login</NuxtLink
 				>
 
 				<span v-if="authenticated" class="navbar-item"
@@ -40,15 +40,15 @@
 				<p class="menu-label is-hidden-touch">Allgemein</p>
 				<ul class="menu-list">
 					<li v-for="(item, key) of items" :key="key">
-						<nuxt-link :to="item.to" exact-active-class="is-active">{{
+						<NuxtLink :to="item.to" exact-active-class="is-active">{{
 							item.title
-						}}</nuxt-link>
+						}}</NuxtLink>
 					</li>
 				</ul>
 			</aside>
 
 			<div class="container column is-10">
-				<nuxt />
+				<Nuxt />
 			</div>
 		</section>
 

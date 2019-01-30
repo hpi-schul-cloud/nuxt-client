@@ -1,21 +1,21 @@
 <template>
 	<Card @click="open()">
 		<div slot="header" class="card-image">
-			<card-header-image>
+			<CardHeaderImage>
 				<img
 					:src="data.thumbnail"
 					:alt="'Thumbnail for ~' + data.title + '~'"
 				/>
-			</card-header-image>
+			</CardHeaderImage>
 		</div>
 		<div class="card-content">
 			<div class="media">
 				<div class="media-content">
 					<p class="title is-4">{{ data.title }}</p>
 					<p class="subtitle is-6">
-						<span v-for="(tag, index) of data.tags" :key="index" class="tag">
-							{{ tag }}
-						</span>
+						<span v-for="(tag, index) of data.tags" :key="index" class="tag">{{
+							tag
+						}}</span>
 					</p>
 				</div>
 			</div>
@@ -24,30 +24,26 @@
 				<p>{{ data.description }}</p>
 			</div>
 		</div>
-		<card-footer slot="footer" class="content-card-footer">
+		<CardFooter slot="footer" class="content-card-footer">
 			<div class="footer-info">
 				<p>Anbieter: {{ data.providerName }}</p>
 				<p>
 					Lizenz:
-					<span
-						v-for="(license, index) in data.licenses"
-						:key="index"
-						v-html="license"
-					/>
+					<span v-for="(license, index) in data.licenses" :key="index" />
+					{{ license }}
 				</p>
 			</div>
-			<card-footer-actions class="footer-actions">
+			<div class="footer-actions">
 				<button class="button">Melden</button>
 				<button class="button is-primary">Ansehen</button>
-			</card-footer-actions>
-		</card-footer>
+			</div>
+		</CardFooter>
 	</Card>
 </template>
 
 <script>
 import CardHeaderImage from "@components/CardHeaderImage.vue";
 import CardFooter from "@components/CardFooter.vue";
-import CardFooterActions from "@components/CardFooterActions.vue";
 import Card from "@components/card.vue";
 
 export default {
@@ -56,7 +52,6 @@ export default {
 		Card,
 		CardHeaderImage,
 		CardFooter,
-		CardFooterActions,
 	},
 	props: {
 		data: {

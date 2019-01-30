@@ -3,7 +3,7 @@
 		<section class="section">
 			<h4>
 				<span>
-					<nuxt-link :to="{ name: 'teams' }">Teams</nuxt-link>
+					<NuxtLink :to="{ name: 'teams' }">Teams</NuxtLink>
 				</span>
 				<span>/ {{ team.name }}</span>
 			</h4>

@@ -3,10 +3,11 @@
 		<section class="section">
 			<h5>
 				<span>
-					<nuxt-link :to="{ name: 'news' }">News</nuxt-link>
+					<NuxtLink :to="{ name: 'news' }">News</NuxtLink>
 				</span>
 				<span>/ {{ news.title }}</span>
 			</h5>
+			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
 			<button

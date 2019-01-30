@@ -4,7 +4,12 @@
 
 > The next Level of Schul-Cloud
 
-## Build Setup
+## Development
+
+Please read the following Code Styleguides before you start contributing:
+
+1.  [official vue 2 style guide](https://vuejs.org/v2/style-guide/)
+1.  [how to structure vue components](https://vueschool.io/articles/vuejs-tutorials/structuring-vue-components/)
 
 **Please don't use npm!!!**
 

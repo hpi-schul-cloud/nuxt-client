@@ -3,11 +3,11 @@
 		<section class="section">
 			<h4>
 				<span>
-					<nuxt-link :to="{ name: 'teams' }">Teams</nuxt-link>
+					<NuxtLink :to="{ name: 'teams' }">Teams</NuxtLink>
 				</span>
 				<span>
-					<nuxt-link :to="{ name: 'teams-id', params: { id: team._id } }"
-						>/ {{ team.name }}</nuxt-link
+					<NuxtLink :to="{ name: 'teams-id', params: { id: team._id } }"
+						>/ {{ team.name }}</NuxtLink
 					>
 				</span>
 				<span>/ Bearbeiten</span>
@@ -16,22 +16,22 @@
 			<button class="button is-danger" @click="confirmDelete">Löschen</button>
 		</section>
 		<section class="section">
-			<b-field label="Name">
-				<b-input
+			<BField label="Name">
+				<BInput
 					v-model="team.name"
 					type="text"
 					placeholder="Dream Team"
 					maxlength="30"
-				></b-input>
-			</b-field>
-			<b-field label="Beschreibung">
-				<b-input
+				></BInput>
+			</BField>
+			<BField label="Beschreibung">
+				<BInput
 					v-model="team.description"
 					type="textarea"
 					placeholder="Everything you have to know"
 					maxlength="255"
-				></b-input>
-			</b-field>
+				></BInput>
+			</BField>
 			<button class="button is-primary" @click="save()">Speichern</button>
 		</section>
 		<section class="section">

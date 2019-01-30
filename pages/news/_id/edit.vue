@@ -1,24 +1,25 @@
 <template>
 	<div v-if="news">
 		<section class="section">
-			<nuxt-link :to="{ name: 'news-id', params: { id: news._id } }">
+			<NuxtLink :to="{ name: 'news-id', params: { id: news._id } }">
 				<h5>{{ news.title }}</h5>
-			</nuxt-link>
+			</NuxtLink>
 			<h1>News bearbeiten</h1>
 			<button class="button is-danger" @click="confirmDelete">Löschen</button>
 		</section>
 		<section class="section">
-			<b-field label="Name">
-				<b-input v-model="news.title" type="text" maxlength="30"></b-input>
-			</b-field>
-			<b-field label="Beschreibung">
-				<b-input v-model="news.content" type="textarea"></b-input>
-			</b-field>
+			<BField label="Name">
+				<BInput v-model="news.title" type="text" maxlength="30"></BInput>
+			</BField>
+			<BField label="Beschreibung">
+				<BInput v-model="news.content" type="textarea"></BInput>
+			</BField>
 			<button class="button is-primary" @click="save()">Speichern</button>
 		</section>
 		<section class="section">
 			<h1>{{ news.title }}</h1>
-			<div v-html="news.content"></div>
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<div v-html="news.content" />
 		</section>
 	</div>
 </template>

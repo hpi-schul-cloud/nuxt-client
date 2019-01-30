@@ -17,7 +17,8 @@
 		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",
 		"lint:all:markdownlint": "yarn lint:markdownlint \"*/*.md\" \"*.md\"",
 		"lint:all:prettier": "yarn lint:prettier \"**/*.{js,json,css,scss,vue,html,md}\"",
-		"lint": "run-s lint:all:*"
+		"lint": "run-s lint:all:*",
+		"lint-staged": "cross-env PRE_COMMIT=true lint-staged"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
@@ -55,11 +56,11 @@
 		"babel-eslint": "^8.2.1",
 		"babel-jest": "^24.0.0",
 		"cross-env": "^5.2.0",
-		"eslint": "^5.0.1",
+		"eslint": "^5.12.1",
 		"eslint-config-prettier": "^3.1.0",
 		"eslint-loader": "^2.0.0",
 		"eslint-plugin-prettier": "2.6.2",
-		"eslint-plugin-vue": "^4.7.1",
+		"eslint-plugin-vue": "^5.1.0",
 		"imagemin-lint-staged": "^0.4.0",
 		"lint-staged": "^8.1.1",
 		"markdownlint-cli": "^0.13.0",
