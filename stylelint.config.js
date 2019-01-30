@@ -44,7 +44,6 @@ module.exports = {
 				},
 			],
 		],
-		"number-leading-zero": "never",
 		// ===
 		// PRETTIER
 		// ===
