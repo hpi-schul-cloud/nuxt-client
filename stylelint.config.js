@@ -21,10 +21,8 @@ module.exports = {
 	rules: {
 		// Allow newlines inside class attribute values
 		"string-no-newline": null,
-		// Enforce camelCase for classes and ids, to work better
-		// with CSS modules
-		"selector-class-pattern": /^[a-z-_0-9]*$/,
-		"selector-id-pattern": /^[a-z-_0-9]*$/,
+		"selector-class-pattern": /^[a-z][a-z0-9-_]+$/,
+		"selector-id-pattern": /^[a-z][a-z0-9-_]+$/,
 		// Limit the number of universal selectors in a selector,
 		// to avoid very slow selectors
 		"selector-max-universal": 1,
