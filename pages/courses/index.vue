@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<section class="section">
-			<h1>Kurse</h1>
 			<button
 				class="button is-info"
 				@click="$router.push({ name: 'courses-create' })"
@@ -27,6 +26,11 @@ import { mapGetters } from "vuex";
 import CourseCard from "@components/CourseCard";
 
 export default {
+	head() {
+		return {
+			title: "Kurse",
+		};
+	},
 	components: {
 		CourseCard,
 	},

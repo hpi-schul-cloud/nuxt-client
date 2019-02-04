@@ -5,16 +5,21 @@
 				<h5>{{ news.title }}</h5>
 			</BaseLink>
 			<h1>News bearbeiten</h1>
-			<button class="button is-danger" @click="confirmDelete">Löschen</button>
+			<BaseButton class="is-danger" @click="confirmDelete">Löschen</BaseButton>
 		</section>
 		<section class="section">
-			<BField label="Name">
-				<BInput v-model="news.title" type="text" maxlength="30"></BInput>
-			</BField>
-			<BField label="Beschreibung">
-				<BInput v-model="news.content" type="textarea"></BInput>
-			</BField>
-			<button class="button is-primary" @click="save()">Speichern</button>
+			<BaseInput
+				v-model="news.title"
+				label="Name"
+				type="text"
+				maxlength="30"
+			></BaseInput>
+			<BaseInput
+				v-model="news.content"
+				label="Beschreibung"
+				type="textarea"
+			></BaseInput>
+			<BaseButton class="is-primary" @click="save()">Speichern</BaseButton>
 		</section>
 		<section class="section">
 			<h1>{{ news.title }}</h1>

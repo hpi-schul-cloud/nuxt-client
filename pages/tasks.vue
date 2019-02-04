@@ -1,5 +1,5 @@
 <template>
 	<section class="section">
-		<h1>Hausaufgaben</h1>
+		<p>Hausaufgaben</p>
 	</section>
 </template>

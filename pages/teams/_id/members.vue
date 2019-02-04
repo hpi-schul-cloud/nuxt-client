@@ -42,7 +42,7 @@
 				class="button field is-danger"
 				@click="selected = null"
 			>
-				<BIcon icon="close"></BIcon>
+				<BaseIcon icon="close"></BaseIcon>
 				<span>Clear selected</span>
 			</button>
 			<BTabs>

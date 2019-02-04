@@ -1,11 +1,7 @@
 <template>
-	<nav
-		class="pagination is-rounded is-centered"
-		role="navigation"
-		aria-label="pagination"
-	>
+	<nav class="pagination" role="navigation" aria-label="pagination">
 		<ul class="pagination-list">
-			<li v-if="currentPage > 1">
+			<li v-if="currentPage > 1" class="pagination-link-wrapper">
 				<a
 					class="pagination-link"
 					aria-label="Goto previous page"
@@ -13,15 +9,15 @@
 					>←</a
 				>
 			</li>
-			<li>
+			<li class="pagination-link-wrapper">
 				<a
 					:aria-label="`Page ${currentPage}`"
-					class="pagination-link is-current"
+					class="pagination-link current"
 					aria-current="page"
 					>{{ currentPage }}</a
 				>
 			</li>
-			<li v-if="currentPage < lastPage">
+			<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
 				<a class="pagination-link" aria-label="Goto next page" @click="nextPage"
 					>→</a
 				>
@@ -79,7 +75,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@variables";
+
 .pagination {
-	margin: 1em auto;
+	margin: $size-margin auto;
+}
+
+.pagination-list {
+	display: flex;
+	justify-content: center;
+	padding: 0;
+	list-style: none;
+}
+.pagination-link-wrapper {
+	display: inline-block;
+}
+.pagination-link {
+	display: inline-block;
+	padding: $size-padding-y $size-padding-y;
+	margin: 0 0.5 * $size-margin;
+	background-color: darken($color-text-bg, 10%);
+	border-radius: $size-border-radius-round;
+	&:not(.current) {
+		cursor: pointer;
+	}
 }
 </style>

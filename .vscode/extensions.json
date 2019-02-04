@@ -8,7 +8,7 @@
 
 		// Peek and go-to-definition for .vue files
 		// https://github.com/fuzinato/vscode-vue-peek
-		//"dariofuzinato.vue-peek", // causes significatn editor slowdown
+		// "dariofuzinato.vue-peek", // causes significatn editor slowdown
 
 		// Lint-on-save with ESLint
 		// https://github.com/Microsoft/vscode-eslint

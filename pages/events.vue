@@ -1,5 +1,5 @@
 <template>
 	<section class="section">
-		<h1>Termine</h1>
+		<p>Termine</p>
 	</section>
 </template>

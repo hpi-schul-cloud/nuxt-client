@@ -1,108 +1,39 @@
 <template>
+	<!-- default template = loggedin view -->
 	<div>
-		<nav
-			class="navbar header has-shadow is-primary"
-			role="navigation"
-			aria-label="main navigation"
-		>
-			<div class="navbar-brand">
-				<BaseLink class="navbar-item" to="/">
-					<img src="@assets/cloud.svg" alt="Schul-Cloud" style="width: 78px" />
-				</BaseLink>
-				<BaseLink v-if="!authenticated" class="navbar-item" to="/login"
-					>Login</BaseLink
-				>
-
-				<span v-if="authenticated" class="navbar-item"
-					>Hallo, {{ firstName }}</span
-				>
-
-				<a
-					v-if="authenticated"
-					class="navbar-item"
-					@click="
-						logout();
-						$router.push('login');
-					"
-					>Logout</a
-				>
-
-				<div class="navbar-burger">
-					<span />
-					<span />
-					<span />
-				</div>
-			</div>
-		</nav>
-
-		<section class="main-content columns">
-			<aside class="column is-2 section">
-				<p class="menu-label is-hidden-touch">Allgemein</p>
-				<ul class="menu-list">
-					<li v-for="(item, key) of items" :key="key">
-						<BaseLink :to="item.to" exact-active-class="is-active">
-							{{ item.title }}
-						</BaseLink>
-					</li>
-				</ul>
-			</aside>
-
-			<div class="container column is-10">
+		<div class="page">
+			<TheTopBar
+				:title="pageTitle"
+				class="topbar"
+				:actions="topBarActions"
+				@action="handleTopAction"
+			/>
+			<TheSidebar class="sidebar" :routes="sidebarItems" />
+			<main class="content">
 				<Nuxt />
-			</div>
-		</section>
-
-		<footer class="footer">
-			<div class="content has-text-centered">
-				<div class="is-flex align-items-center justify-content-center">
-					<img
-						style="height: 35px"
-						src="/images/footer-logo.png"
-						alt="Anbieterlogo"
-					/>
-					<span>© 2018 Schul-Cloud</span>
-				</div>
-
-				<div class="mt-2">
-					<a href="/impressum" target="_blank">Impressum</a>
-					<span>-</span>
-					<a href="/impressum#data_security" target="_blank"
-						>Datenschutzerklärung</a
-					>
-					<span>-</span>
-					<a
-						href="mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage"
-						target="_blank"
-						>Kontakt</a
-					>
-					<span>-</span>
-					<a href="/team" target="_blank">Team</a>
-					<span>-</span>
-					<a href="/about" target="_blank">Über das Projekt</a>
-					<span>-</span>
-					<a href="/community" target="_blank">Mitmachen</a>
-					<span>-</span>
-					<a href="/partner" target="_blank">Partner</a>
-					<span>-</span>
-					<a href="https://github.com/schul-cloud/" target="_blank">GitHub</a>
-				</div>
-				<div class="mt-2">
-					<p class="made-with-love"
-						>Made with <span class="heart">❤</span> in Potsdam
-					</p>
-				</div>
-			</div>
-		</footer>
+			</main>
+			<TheFooter class="footer" />
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
+import TheTopBar from "@components/TheTopBar.vue";
+import TheSidebar from "@components/TheSidebar.vue";
+import TheFooter from "@components/TheFooter.vue";
+
+const topbarBaseActions = [];
 
 export default {
+	components: {
+		TheTopBar,
+		TheSidebar,
+		TheFooter,
+	},
 	data() {
 		return {
-			items: [
+			sidebarItems: [
 				{ title: "News", to: { name: "news" } },
 				{ title: "Teams", to: { name: "teams" } },
 				{ title: "Kurse", to: { name: "courses" } },
@@ -112,6 +43,8 @@ export default {
 				{ title: "Lernstore", to: { name: "content" } },
 				{ title: "Verwaltung", to: { name: "administration" } },
 			],
+			topBarActions: topbarBaseActions,
+			pageTitle: "Schul-Cloud",
 		};
 	},
 	computed: mapState({
@@ -119,8 +52,67 @@ export default {
 			state.auth && state.auth.user ? state.auth.user.firstName : "",
 		authenticated: (state) => (state.auth ? state.auth.accessToken : ""),
 	}),
+	watch: {
+		$route: function(to) {
+			// TODO get page title from `this.$metaInfo.title`
+			this.pageTitle = to.name;
+		},
+		authenticated: function() {
+			this.updateTopBarActions;
+		},
+	},
+	created() {
+		this.updateTopBarActions(this.authenticated);
+	},
 	methods: {
 		...mapActions("auth", ["logout"]),
+		handleTopAction(event) {
+			if (event === "logout") {
+				this.logout();
+				this.$router.push("login");
+			}
+		},
+		updateTopBarActions(isAuthenticated) {
+			if (isAuthenticated) {
+				this.topBarActions = [
+					...topbarBaseActions,
+					{
+						event: "logout",
+						title: this.firstName,
+					},
+				];
+			} else {
+				this.topBarActions = [...topbarBaseActions];
+			}
+		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@variables";
+
+.page {
+	display: grid;
+	grid-template-areas:
+		"top top"
+		"side content"
+		"footer footer";
+	grid-template-rows: auto 1fr auto;
+	grid-template-columns: auto 1fr;
+	width: 100%;
+	min-height: 100vh;
+}
+.topbar {
+	grid-area: top;
+}
+.sidebar {
+	grid-area: side;
+}
+.footer {
+	grid-area: footer;
+}
+.content {
+	grid-area: content;
+}
+</style>

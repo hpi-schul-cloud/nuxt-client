@@ -53,7 +53,6 @@ module.exports = {
 		"vue/object-curly-spacing": ["error", "always"],
 		"vue/require-direct-export": "error",
 		*/
-		"vue/script-indent": ["error", "tab"],
 		//"vue/space-infix-ops": ["error", { int32Hint: true }],
 	},
 	overrides: [

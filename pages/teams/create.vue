@@ -2,23 +2,21 @@
 	<div v-if="team">
 		<section class="section">
 			<h1>Team erstellen</h1>
-			<BField label="Name">
-				<BInput
-					v-model="team.name"
-					type="text"
-					placeholder="Dream Team"
-					maxlength="30"
-				></BInput>
-			</BField>
-			<BField label="Beschreibung">
-				<BInput
-					v-model="team.description"
-					type="textarea"
-					placeholder="Everything you have to know"
-					maxlength="255"
-				></BInput>
-			</BField>
-			<button class="button is-primary" @click="create()">Speichern</button>
+			<BaseInput
+				v-model="team.name"
+				label="Name"
+				type="text"
+				placeholder="Dream Team"
+				maxlength="30"
+			></BaseInput>
+			<BaseInput
+				v-model="team.description"
+				label="Beschreibung"
+				type="textarea"
+				placeholder="Everything you have to know"
+				maxlength="255"
+			></BaseInput>
+			<BaseButton class="is-primary" @click="create()">Speichern</BaseButton>
 		</section>
 	</div>
 </template>
