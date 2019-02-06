@@ -1,4 +1,4 @@
-import loggedout from "./loggedout";
+import loggedout from "@layouts/loggedout";
 
 describe("@layouts/loggedout", () => {
 	it("renders its content", () => {

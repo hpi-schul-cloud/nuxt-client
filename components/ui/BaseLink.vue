@@ -83,3 +83,12 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@variables";
+a {
+	color: $color-link;
+	&:active {
+		color: $color-link-active;
+	}
+}
+</style>

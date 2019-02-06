@@ -12,27 +12,29 @@
 			</div>
 
 			<div class="mt-2">
-				<a href="/impressum" target="_blank">Impressum</a>
+				<BaseLink href="/impressum" target="_blank">Impressum</BaseLink>
 				<span>-</span>
-				<a href="/impressum#data_security" target="_blank"
-					>Datenschutzerklärung</a
+				<BaseLink href="/impressum#data_security" target="_blank"
+					>Datenschutzerklärung</BaseLink
 				>
 				<span>-</span>
-				<a
+				<BaseLink
 					href="mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage"
 					target="_blank"
-					>Kontakt</a
+					>Kontakt</BaseLink
 				>
 				<span>-</span>
-				<a href="/team" target="_blank">Team</a>
+				<BaseLink href="/team" target="_blank">Team</BaseLink>
 				<span>-</span>
-				<a href="/about" target="_blank">Über das Projekt</a>
+				<BaseLink href="/about" target="_blank">Über das Projekt</BaseLink>
 				<span>-</span>
-				<a href="/community" target="_blank">Mitmachen</a>
+				<BaseLink href="/community" target="_blank">Mitmachen</BaseLink>
 				<span>-</span>
-				<a href="/partner" target="_blank">Partner</a>
+				<BaseLink href="/partner" target="_blank">Partner</BaseLink>
 				<span>-</span>
-				<a href="https://github.com/schul-cloud/" target="_blank">GitHub</a>
+				<BaseLink href="https://github.com/schul-cloud/" target="_blank"
+					>GitHub</BaseLink
+				>
 			</div>
 			<div class="mt-2">
 				<p class="made-with-love">

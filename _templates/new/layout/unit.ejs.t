@@ -1,7 +1,7 @@
 ---
-to: "layouts/<%= name %>.unit.js"
+to: "tests/unit/layouts/<%= name %>.unit.js"
 ---
-import <%= name %> from './<%= name %>'
+import <%= name %> from '@layouts/<%= name %>'
 
 describe('@layouts/<%= name %>', () => {
   it('renders its content', () => {
