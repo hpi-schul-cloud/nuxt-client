@@ -16,6 +16,5 @@ describe("@components/BaseLink", () => {
 			},
 		});
 		expect(element.innerHTML).toContain(slotContent);
-		expect(element.innerHTML).toContain("https://schul-cloud.org");
 	});
 });

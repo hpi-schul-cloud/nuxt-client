@@ -11,7 +11,7 @@ describe("@components/BaseIcon", () => {
 
 		const wrapper = mount(BaseIcon, {
 			propsData: {
-				name: iconName,
+				icon: iconName,
 			},
 		});
 		expect(wrapper.element.innerHTML).toContain(iconPath);

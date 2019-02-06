@@ -18,6 +18,10 @@
 		"lint:all:markdownlint": "yarn lint:markdownlint \"*/*.md\" \"*.md\"",
 		"lint:all:prettier": "yarn lint:prettier \"**/*.{js,json,css,scss,vue,html,md}\"",
 		"lint": "run-s lint:all:*",
+		"test:unit": "cross-env NODE_ENV=test jest",
+		"test:unit:file": "yarn test:unit --bail --findRelatedTests",
+		"test:unit:watch": "yarn test:unit --watch --notify",
+		"test": "run-s test:unit",
 		"new": "hygen new"
 	},
 	"gitHooks": {
@@ -45,14 +49,13 @@
 		"vue-ripple-directive": "^2.0.1"
 	},
 	"devDependencies": {
-		"@vue/cli-plugin-babel": "^3.3.0",
-		"@vue/cli-service": "^3.3.1",
-		"@vue/eslint-config-prettier": "^4.0.1",
-		"@vue/eslint-config-standard": "^4.0.0",
+		"@babel/core": "^7.1.2",
+		"@vue/cli-plugin-babel": "^3.4.0",
+		"@vue/cli-service": "^3.4.0",
 		"@vue/test-utils": "^1.0.0-beta.28",
-		"babel-core": "^6.26.3",
+		"babel-core": "^7.0.0-bridge.0",
 		"babel-eslint": "^10.0.1",
-		"babel-jest": "^24.0.0",
+		"babel-jest": "^24.1.0",
 		"cross-env": "^5.2.0",
 		"eslint": "^5.12.1",
 		"eslint-config-prettier": "^4.0.0",
@@ -61,6 +64,8 @@
 		"eslint-plugin-vue": "^5.1.0",
 		"hygen": "^2.1.1",
 		"imagemin-lint-staged": "^0.4.0",
+		"jest": "^23.6.0",
+		"jest-serializer-vue": "^2.0.2",
 		"lint-staged": "^8.1.1",
 		"markdownlint-cli": "^0.13.0",
 		"node-sass": "^4.11.0",
@@ -73,6 +78,8 @@
 		"stylelint-config-prettier": "^4.0.0",
 		"stylelint-config-recess-order": "^2.0.1",
 		"stylelint-config-standard": "^18.2.0",
-		"stylelint-scss": "^3.5.1"
+		"stylelint-scss": "^3.5.1",
+		"vue-jest": "^3.0.2",
+		"yorkie": "^2.0.0"
 	}
 }
