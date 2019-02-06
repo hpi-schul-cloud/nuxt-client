@@ -80,3 +80,6 @@ dist
 
 # IDE
 .idea
+
+# NPM package-lock.json because we are using yarn here
+package-lock.json

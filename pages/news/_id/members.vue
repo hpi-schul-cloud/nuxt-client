@@ -1,87 +1,119 @@
-<template lang="pug">
-div(v-if="team")
-  section.section
-    nuxt-link(:to="{ name: 'teams-id', params: { id: team._id } }")
-      h4 {{ team.name }} 
-    h1 Mitglieder Übersicht
-
-  section.section
-    .columns
-      .column
-        p Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.
-        button.button.is-primary(@click="$router.push({ name: 'teams-id-members', params: { id: team._id } })")
-          | Interne Teilnehmer hinzufügen
-      .column
-        p Lade Lehrer anderer Schulen und Experten per E-Mail ein.
-        button.button.is-primary(@click="$router.push({ name: 'teams-id-members', params: { id: team._id } })")
-          | Externe Teilnehmer hinzufügen
-
-  section
-    button.button.field.is-danger(@click="selected = null" :disabled="!selected")
-      b-icon(icon="close")
-      span Clear selected
-    b-tabs
-      b-tab-item(label="Table")
-        b-table(:data="team.userIds" :columns="columns" :selected.sync="selected" focusable="")
-      b-tab-item(label="Selected")
-        pre.
-          \n{{ selected }}            
-
+<template>
+	<div v-if="team">
+		<section class="section">
+			<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }">
+				<h4>{{ team.name }}</h4>
+			</BaseLink>
+			<h1>Mitglieder Übersicht</h1>
+		</section>
+		<section class="section">
+			<div class="columns">
+				<div class="column">
+					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
+					<BaseButton
+						class="is-primary"
+						@click="
+							$router.push({
+								name: 'teams-id-members',
+								params: { id: team._id },
+							})
+						"
+						>Interne Teilnehmer hinzufügen</BaseButton
+					>
+				</div>
+				<div class="column">
+					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
+					<BaseButton
+						class="is-primary"
+						@click="
+							$router.push({
+								name: 'teams-id-members',
+								params: { id: team._id },
+							})
+						"
+						>Externe Teilnehmer hinzufügen</BaseButton
+					>
+				</div>
+			</div>
+		</section>
+		<section>
+			<BaseButton
+				:disabled="!selected"
+				class="field is-danger"
+				@click="selected = null"
+			>
+				<BaseIcon icon="close"></BaseIcon>
+				<span>Clear selected</span>
+			</BaseButton>
+			<BTabs>
+				<BTabItem label="Table">
+					<BTable
+						:data="team.userIds"
+						:columns="columns"
+						:selected.sync="selected"
+						focusable
+					></BTable>
+				</BTabItem>
+				<BTabItem label="Selected">
+					<pre>\n{{ selected }}</pre>
+				</BTabItem>
+			</BTabs>
+		</section>
+	</div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  data() {
-    return {
-      selected: null,
-      columns: [
-        {
-          field: '_id',
-          label: 'ID',
-          width: '40',
-          numeric: true
-        },
-        {
-          field: 'firstName',
-          label: 'First Name'
-        },
-        {
-          field: 'lastNAme',
-          label: 'Last Name'
-        }
-      ]
-    }
-  },
-  computed: {
-    ...mapGetters('teams', {
-      team: 'current'
-    })
-  },
-  created(ctx) {
-    console.log(this.$route.params)
-    this.get(this.$route.params.id)
-  },
-  methods: {
-    get(id) {
-      this.$store.dispatch('teams/get', [
-        id,
-        {
-          query: {
-            $populate: [
-              {
-                path: 'userIds.userId',
-                populate: ['schoolId']
-              },
-              {
-                path: 'userIds.role'
-              }
-            ]
-          }
-        }
-      ])
-    }
-  }
-}
+	data() {
+		return {
+			selected: null,
+			columns: [
+				{
+					field: "_id",
+					label: "ID",
+					width: "40",
+					numeric: true,
+				},
+				{
+					field: "firstName",
+					label: "First Name",
+				},
+				{
+					field: "lastNAme",
+					label: "Last Name",
+				},
+			],
+		};
+	},
+	computed: {
+		...mapGetters("teams", {
+			team: "current",
+		}),
+	},
+	created(ctx) {
+		this.get(this.$route.params.id);
+	},
+	methods: {
+		get(id) {
+			this.$store.dispatch("teams/get", [
+				id,
+				{
+					query: {
+						$populate: [
+							{
+								path: "userIds.userId",
+								populate: ["schoolId"],
+							},
+							{
+								path: "userIds.role",
+							},
+						],
+					},
+				},
+			]);
+		},
+	},
+};
 </script>

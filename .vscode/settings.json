@@ -1,0 +1,117 @@
+{
+	// ===
+	// Spacing
+	// ===
+
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.indentationMode": "tab",
+	"editor.trimAutoWhitespace": true,
+	"files.trimTrailingWhitespace": true,
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"prettier.useTabs": true,
+	"vetur.format.options.useTabs": true,
+	"scssFormatter.useTabs": true,
+
+	// ===
+	// Files
+	// ===
+
+	"files.exclude": {
+		"**/*.log": true,
+		"**/*.log*": true,
+		"**/dist": true
+	},
+	"files.associations": {
+		".markdownlintrc": "jsonc"
+	},
+
+	// ===
+	// Event Triggers
+	// ===
+
+	"editor.formatOnSave": true,
+	"eslint.autoFixOnSave": true,
+	"eslint.run": "onSave",
+	"eslint.validate": [
+		{
+			"language": "javascript",
+			"autoFix": true
+		},
+		{
+			"language": "javascriptreact",
+			"autoFix": true
+		},
+		{
+			"language": "vue",
+			"autoFix": true
+		},
+		{
+			"language": "vue-html",
+			"autoFix": true
+		},
+		{
+			"language": "html",
+			"autoFix": true
+		}
+	],
+	"vetur.completion.useScaffoldSnippets": false,
+	"prettier.disableLanguages": [],
+
+	// ===
+	// HTML
+	// ===
+
+	"html.format.enable": false,
+	"vetur.validation.template": false,
+	"emmet.triggerExpansionOnTab": true,
+	"emmet.includeLanguages": {
+		"vue-html": "html"
+	},
+	"vetur.format.defaultFormatter.html": "none",
+	// ===
+	// JS(ON)
+	// ===
+
+	"jest.autoEnable": false,
+	"jest.enableCodeLens": false,
+	"javascript.format.enable": false,
+	"json.format.enable": false,
+	"vetur.validation.script": false,
+	"vetur.format.defaultFormatter.js": "none",
+
+	// ===
+	// CSS
+	// ===
+
+	"stylelint.enable": true,
+	"css.validate": false,
+	"scss.validate": false,
+	"vetur.validation.style": false,
+	"vetur.format.defaultFormatter.css": "none",
+	"vetur.format.defaultFormatter.postcss": "none",
+	"vetur.format.defaultFormatter.scss": "none",
+
+	// ===
+	// MARKDOWN
+	// ===
+
+	"[markdown]": {
+		"editor.wordWrap": "wordWrapColumn",
+		"editor.wordWrapColumn": 80,
+		"markdownlint.ignore": ["schulcloud-client/**/*.md"]
+	},
+
+	// ===
+	// EDITOR SETTINGS
+	// ===
+	"npm.packageManager": "yarn",
+	"editor.suggest.localityBonus": true,
+
+	// ===
+	// TODO HIGHLIGHT
+	// ===
+	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"]
+}

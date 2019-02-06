@@ -1,54 +1,66 @@
-<template lang="pug">
-div(v-if="team")
-  section.section
-    h1 Team erstellen
-    b-field(label="Name")
-        b-input(type="text" v-model="team.name" placeholder="Dream Team" maxlength="30")
-    b-field(label="Beschreibung")
-        b-input(type="textarea" v-model="team.description" placeholder="Everything you have to know" maxlength="255")
-    button.button.is-primary(@click="create()") Speichern
+<template>
+	<div v-if="team">
+		<section class="section">
+			<h1>Team erstellen</h1>
+			<BaseInput
+				v-model="team.name"
+				label="Name"
+				type="text"
+				placeholder="Dream Team"
+				maxlength="30"
+			></BaseInput>
+			<BaseInput
+				v-model="team.description"
+				label="Beschreibung"
+				type="textarea"
+				placeholder="Everything you have to know"
+				maxlength="255"
+			></BaseInput>
+			<BaseButton class="is-primary" @click="create()">Speichern</BaseButton>
+		</section>
+	</div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 
 export default {
-  data() {
-    return {
-      team: {
-        name: '',
-        description: ''
-      }
-    }
-  },
-  computed: {
-    ...mapState('auth', {
-      user: 'user'
-    })
-  },
-  methods: {
-    async create(id) {
-      try {
-        const team = await this.$store.dispatch('teams/create', {
-          schoolId: this.user.schoolId,
-          name: this.team.name,
-          description: this.team.description
-        })
+	data() {
+		return {
+			team: {
+				name: "",
+				description: "",
+			},
+		};
+	},
+	computed: {
+		...mapState("auth", {
+			user: "user",
+		}),
+	},
+	methods: {
+		async create(id) {
+			try {
+				const team = await this.$store.dispatch("teams/create", {
+					schoolId: this.user.schoolId,
+					name: this.team.name,
+					description: this.team.description,
+				});
 
-        this.$toast.open({
-          message: 'Team erstellt',
-          type: 'is-success'
-        })
+				this.$toast.open({
+					message: "Team erstellt",
+					type: "is-success",
+				});
 
-        this.$router.push({ name: 'teams-id', params: { id: team._id } })
-      } catch (e) {
-        this.$toast.open({
-          message: 'Fehler beim Erstellen des Teams',
-          type: 'is-danger'
-        })
-      }
-    },
-    ...mapActions('auth', ['logout'])
-  }
-}
+				this.$router.push({ name: "teams-id", params: { id: team._id } });
+			} catch (e) {
+				this.$toast.open({
+					message: "Fehler beim Erstellen des Teams",
+					type: "is-danger",
+				});
+			}
+		},
+		...mapActions("auth", ["logout"]),
+	},
+};
 </script>
