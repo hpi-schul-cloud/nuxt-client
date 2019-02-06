@@ -12,9 +12,9 @@
 			</div>
 
 			<div class="mt-2">
-				<BaseLink href="/impressum" target="_blank">Impressum</BaseLink>
+				<BaseLink to="/impressum" target="_blank">Impressum</BaseLink>
 				<span>-</span>
-				<BaseLink href="/impressum#data_security" target="_blank"
+				<BaseLink to="/impressum#data_security" target="_blank"
 					>Datenschutzerklärung</BaseLink
 				>
 				<span>-</span>
@@ -24,13 +24,13 @@
 					>Kontakt</BaseLink
 				>
 				<span>-</span>
-				<BaseLink href="/team" target="_blank">Team</BaseLink>
+				<BaseLink to="/team" target="_blank">Team</BaseLink>
 				<span>-</span>
-				<BaseLink href="/about" target="_blank">Über das Projekt</BaseLink>
+				<BaseLink to="/about" target="_blank">Über das Projekt</BaseLink>
 				<span>-</span>
-				<BaseLink href="/community" target="_blank">Mitmachen</BaseLink>
+				<BaseLink to="/community" target="_blank">Mitmachen</BaseLink>
 				<span>-</span>
-				<BaseLink href="/partner" target="_blank">Partner</BaseLink>
+				<BaseLink to="/partner" target="_blank">Partner</BaseLink>
 				<span>-</span>
 				<BaseLink href="https://github.com/schul-cloud/" target="_blank"
 					>GitHub</BaseLink

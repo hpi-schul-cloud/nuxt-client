@@ -34,11 +34,15 @@ export default {
 	},
 	computed: {
 		routerLinkTo({ name, params }) {
-			return {
-				name,
-				params,
-				...(this.to || {}),
-			};
+			if (name) {
+				return {
+					name,
+					params,
+					...(this.to || {}),
+				};
+			} else {
+				return this.to;
+			}
 		},
 	},
 	created() {
