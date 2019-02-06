@@ -22,7 +22,8 @@
 		"test:unit:file": "yarn test:unit --bail --findRelatedTests",
 		"test:unit:watch": "yarn test:unit --watch --notify",
 		"test": "run-s test:unit",
-		"new": "hygen new"
+		"new": "hygen new",
+		"ci": "yarn lint && yarn build && yarn test"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
