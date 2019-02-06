@@ -8248,10 +8248,9 @@ markdown-table@^1.1.0:
   resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-1.1.2.tgz#c78db948fa879903a41bce522e3b96f801c63786"
   integrity sha512-NcWuJFHDA8V3wkDgR/j4+gZx+YQwstPgfQDV8ndUeWWzta3dnDTBxpVzqS9lkmJAuV5YX35lmyojl6HO5JXAgw==
 
-markdownlint-cli@^0.13.0:
+"markdownlint-cli@github:igorshubovych/markdownlint-cli":
   version "0.13.0"
-  resolved "https://registry.yarnpkg.com/markdownlint-cli/-/markdownlint-cli-0.13.0.tgz#af1d29e5d8b434256c451c81b87dff1c218844cb"
-  integrity sha512-DCjhAIb4EDny6xdjOcu2Rckp1sOSktQU9PjRN2pK9p0Azby7YYBqZXO8I+vhv5XKd2Pk0IbbOhyZ/+zjfH4oww==
+  resolved "https://codeload.github.com/igorshubovych/markdownlint-cli/tar.gz/ecc342abe0083f39b7aeebb13bd4e44693d4f97e"
   dependencies:
     commander "~2.9.0"
     deep-extend "~0.5.1"
