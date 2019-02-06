@@ -1,20 +1,15 @@
 module.exports = function(api) {
 	api.cache(true);
 
-	const presets = [
-		[
-			"@babel/preset-env",
-			{
-				targets: {
-					node: "current",
-				},
-			},
-		],
-	];
-	const plugins = [];
+	if (process.env.NODE_ENV === "test") {
+		return {
+			presets: ["@babel/preset-env"],
+			plugins: [],
+		};
+	}
 
 	return {
-		presets,
-		plugins,
+		presets: ["@vue/app"],
+		plugins: [],
 	};
 };

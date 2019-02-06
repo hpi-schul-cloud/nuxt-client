@@ -19,11 +19,13 @@
 		"lint:all:prettier": "yarn lint:prettier \"**/*.{js,json,css,scss,vue,html,md}\"",
 		"lint": "run-s lint:all:*",
 		"test:unit": "cross-env NODE_ENV=test jest",
+		"test:unit:ci": "yarn test:unit --coverage --ci",
 		"test:unit:file": "yarn test:unit --bail --findRelatedTests",
 		"test:unit:watch": "yarn test:unit --watch --notify",
+		"test:ci": "run-s test:unit:ci",
 		"test": "run-s test:unit",
 		"new": "hygen new",
-		"ci": "yarn test:unit && lint-staged && yarn build"
+		"ci": "yarn test:ci && lint-staged && yarn build"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
