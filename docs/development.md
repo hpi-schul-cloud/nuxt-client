@@ -50,22 +50,7 @@ $ yarn lint
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
 
-## Generators
-
-This project includes generators to speed up common development tasks. Commands include:
-
-```bash
-# Generate a new component with adjacent unit test
-yarn new component
-
-# Generate a new page component with adjacent unit test
-yarn new page
-
-# Generate a new layout component with adjacent unit test
-yarn new layout
-```
-
-Update existing or create new generators in the `_templates` folder, with help from the [Hygen docs](http://www.hygen.io/).
+### Read more about our toolset [here](/tools.html).
 
 ## Aliases
 
