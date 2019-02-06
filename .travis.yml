@@ -2,10 +2,11 @@ language: node_js
 node_js:
   - "lts/*"
 script:
-  - npm run ci
+  - yarn ci
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 notifications:
   email: false
 cache:
   directories:
     - node_modules
+    - schulcloud-client

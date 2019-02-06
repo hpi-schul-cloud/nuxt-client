@@ -23,7 +23,7 @@
 		"test:unit:watch": "yarn test:unit --watch --notify",
 		"test": "run-s test:unit",
 		"new": "hygen new",
-		"ci": "yarn lint && yarn build && yarn test"
+		"ci": "yarn test:unit && lint-staged && yarn build"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
