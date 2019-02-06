@@ -1,4 +1,4 @@
-# Q&A - Warum ...?
+# FAQ
 
 ## Warum kein Pug oder ähnliches für Vue Templates?
 

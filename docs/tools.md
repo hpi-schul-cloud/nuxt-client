@@ -36,7 +36,7 @@ Update existing or create new generators in the `_templates` folder, with help f
 Prettier wird für die gesamte Codeformatierung verwendet. Sämtliche Linter sollten so eingestellt werden, um möglichen Konflikten vorzubeugen, dass sie sich nicht um Formatierung kümmern.
 
 - Prettier → Formatierung
-- +Linter → Syntax, Reihenfolge, ...
+- Linter → Syntax, Reihenfolge, ...
 
 ### [ESLint](https://eslint.org/docs/user-guide/configuring)
 
