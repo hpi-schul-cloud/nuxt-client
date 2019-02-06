@@ -1,6 +1,6 @@
 module.exports = {
 	setupFiles: ["<rootDir>/tests/unit/setup"],
-	setupTestFrameworkScriptFile: "<rootDir>/tests/unit/matchers",
+	setupFilesAfterEnv: ["<rootDir>/tests/unit/matchers"],
 	testMatch: ["**/(*.)unit.js"],
 	moduleFileExtensions: ["js", "json", "vue"],
 	transform: {
