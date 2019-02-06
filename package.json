@@ -24,8 +24,10 @@
 		"test:unit:watch": "yarn test:unit --watch --notify",
 		"test:ci": "run-s test:unit:ci",
 		"test": "run-s test:unit",
+		"ci": "yarn test:ci && lint-staged",
 		"new": "hygen new",
-		"ci": "yarn test:ci && lint-staged"
+		"docs": "vuepress dev docs",
+		"docs:build": "vuepress build docs"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
@@ -84,6 +86,7 @@
 		"stylelint-config-standard": "^18.2.0",
 		"stylelint-scss": "^3.5.1",
 		"vue-jest": "^3.0.2",
+		"vuepress": "^0.14.8",
 		"yorkie": "^2.0.0"
 	}
 }
