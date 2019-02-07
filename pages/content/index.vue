@@ -49,13 +49,22 @@ export default {
 	},
 	computed: {
 		...mapGetters("content_search", {
-			searchResults: 'list'
+			getContent: 'get'
 		}),
 		...mapState('content_search', {
 			pagination: state => {
 				return state.pagination.content_list
 			}
-		}),		
+		}),	
+		searchResults () {
+			const { $store, getContent, pagination } = this
+
+			if (pagination) {
+				return pagination.ids.map(id => getContent(id))
+			}
+
+			return []
+		}			
 	},
 	watch: {
 		searchQuery(to, from) {
@@ -86,6 +95,7 @@ export default {
 	},
 	methods: {
 		async find(searchString) {
+			console.log(123)
 			const query = {};
 			if (searchString) {
 				query["_all[$match]"] = this.searchQuery;
@@ -93,7 +103,7 @@ export default {
 			}
 			await this.$store
 				.dispatch("content_search/find", {
-					query: query,
+					query,
 					qid: 'content_list'
 				})
 
