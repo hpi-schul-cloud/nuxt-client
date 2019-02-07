@@ -49,7 +49,8 @@ export default {
 	},
 	computed: {
 		...mapGetters("content_search", {
-			getContent: 'get'
+			getContent: 'get',
+			fetchContent: 'find',
 		}),
 		...mapState('content_search', {
 			pagination: state => {
@@ -64,7 +65,16 @@ export default {
 			}
 
 			return []
-		}			
+		},
+		query () {
+			const query = {};
+
+			if (this.searchQuery) {
+				query["_all[$match]"] = this.searchQuery;
+				query["$skip"] = this.skippedItems;
+			}
+			return query
+		}							
 	},
 	watch: {
 		searchQuery(to, from) {
@@ -95,15 +105,9 @@ export default {
 	},
 	methods: {
 		async find(searchString) {
-			console.log(123)
-			const query = {};
-			if (searchString) {
-				query["_all[$match]"] = this.searchQuery;
-				query["$skip"] = this.skippedItems;
-			}
 			await this.$store
 				.dispatch("content_search/find", {
-					query,
+					query: this.query,
 					qid: 'content_list'
 				})
 
