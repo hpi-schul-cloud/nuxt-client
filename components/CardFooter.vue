@@ -1,7 +1,12 @@
 <template>
 	<div class="footer">
 		<div v-if="course.alert == ''" class="footer-next-course">
-			<ClockIcon /> {{ course.nextCourseTime }}
+			<div class="align-center">
+				<ClockIcon />
+			</div>
+			<div class="align-center">
+				{{ course.nextCourseTime }}
+			</div>
 		</div>
 		<div v-else class="footer-alert">
 			<PulsatingDot></PulsatingDot>
@@ -36,12 +41,20 @@ export default {
 }
 
 .footer-next-course {
+	display: flex;
+	flex-direction: row;
 	font-family: PT Sans Narrow, sans-serif;
 	font-size: 16px;
 	color: #494949;
 	text-align: left;
 
 	/* TODO align text to center */
+}
+
+.align-center{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .footer-alert {
