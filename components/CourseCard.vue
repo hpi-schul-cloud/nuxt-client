@@ -44,13 +44,21 @@ export default {
 	},
 	computed: {
 		background_style() {
-			return (
-				"background-image: linear-gradient(-225deg, " +
-				this.course.color +
-				" 0%, " +
-				this.course.colorGradient +
-				" 100%);"
-			);
+			if (this.course.colorGradient){
+				return (
+					"background-image: linear-gradient(-225deg, " +
+					this.course.color +
+					" 0%, " +
+					this.course.colorGradient +
+					" 100%);"
+				);
+			} else {
+				return (
+					"background-color: " +
+					this.course.color +
+					";"
+				);
+			}
 		},
 	},
 };
