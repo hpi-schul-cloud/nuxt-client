@@ -1,5 +1,5 @@
 ---
-to: "components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>.vue"
+to: "src/components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>.vue"
 ---
 <%
 if (blocks.indexOf('template') !== -1) {

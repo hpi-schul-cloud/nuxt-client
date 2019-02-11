@@ -1,5 +1,5 @@
 ---
-to: "pages<%= route %>/index.unit.js"
+to: "src/pages<%= route %>/index.unit.js"
 ---
 <%
   const fileName = route.replace(/^.*[\\\/]/, '');
