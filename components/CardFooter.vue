@@ -1,16 +1,18 @@
 <template>
-  <div class="footer">
-    <div v-if="course.alert == ''" class="footer-next-course">
-      <div class="align-center">
-        <ClockIcon/>
-      </div>
-      <div class="align-center">{{ course.nextCourseTime }}</div>
-    </div>
-    <div v-else class="footer-alert">
-      <PulsatingDot></PulsatingDot>
-      <div class="alert-label">{{ course.alert }}</div>
-    </div>
-  </div>
+	<div class="footer">
+		<!-- TODO remove fallback (...||{}) -->
+		<div v-if="(course || {}).alert == ''" class="footer-next-course">
+			<div class="align-center">
+				<ClockIcon />
+			</div>
+			<div class="align-center">{{ course.nextCourseTime }}</div>
+		</div>
+		<div v-else class="footer-alert">
+			<PulsatingDot></PulsatingDot>
+			<!-- TODO remove fallback -->
+			<div class="alert-label">{{ (course || {}).alert }}</div>
+		</div>
+	</div>
 </template>
 
 <script>
