@@ -94,7 +94,7 @@
 		"lint-staged": "^8.1.1",
 		"markdownlint-cli": "github:igorshubovych/markdownlint-cli",
 		"node-sass": "^4.11.0",
-		"nodemon": "^1.11.0",
+		"nodemon": "^1.18.10",
 		"npm-run-all": "^4.1.5",
 		"nuxt-babel": "^0.1.2",
 		"prettier": "github:prettier/prettier#3de36e3",
@@ -106,7 +106,7 @@
 		"stylelint-scss": "^3.5.1",
 		"vue-style-loader": "^4.1.2",
 		"vue-svg-loader": "^0.11.0",
-		"vue-jest": "^3.0.2",
+		"vue-jest": "^3.0.3",
 		"vuepress": "^0.14.8",
 		"yorkie": "^2.0.0"
 	}
