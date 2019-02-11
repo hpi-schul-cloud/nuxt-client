@@ -16,7 +16,7 @@ env:
 install:
   - git submodule init && git submodule update
   - cd schulcloud-client && npm i && cd ..
-  - yarn
+  - yarn install --production=false
 #before_script:
 #  - docker run -d -p 27017:27017 mongo:3.4
 #  - docker run -d -p 3030:3030 schulcloud/schulcloud-server

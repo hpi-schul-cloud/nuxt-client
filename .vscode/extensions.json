@@ -36,6 +36,10 @@
 
 		// Highlight Todos and list them
 		// https://github.com/wayou/vscode-todo-highlight.git
-		"wayou.vscode-todo-highlight"
+		"wayou.vscode-todo-highlight",
+
+		// Tells you the cost of an import
+		// https://github.com/wix/import-cost
+		"wix.vscode-import-cost"
 	]
 }
