@@ -1,31 +1,31 @@
 language: node_js
 node_js:
-- lts/*
-sudo: required
-dist: xenial
-services:
-- docker
+  - lts/*
+#sudo: required
+#dist: xenial
+#services:
+#  - docker
 env:
   global:
-  - GIT_SHA=$( git rev-parse HEAD )
-  - NODE_ENV=production
-  - SC_THEME=default
-  - API_HOST=http://localhost:3030
-before_install:
-- openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out /home/falko/ansible/sshpubkeys/travis_rsa -d
+#    - GIT_SHA=$( git rev-parse HEAD )
+    - NODE_ENV=production
+    - SC_THEME=default
+    - API_HOST=http://localhost:3030
+#before_install:
+#- openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out /home/falko/ansible/sshpubkeys/travis_rsa -d
 install:
-- yarn install
-- git submodule init && git submodule update
-- cd schulcloud-client && npm i && cd ..
-before_script:
-- docker run -d -p 27017:27017 mongo:3.4
-- docker run -d -p 3030:3030 schulcloud/schulcloud-server
+  - yarn install
+  - git submodule init && git submodule update
+  - cd schulcloud-client && npm i && cd ..
+#before_script:
+#  - docker run -d -p 27017:27017 mongo:3.4
+#  - docker run -d -p 3030:3030 schulcloud/schulcloud-server
 script:
-- yarn ci
-- export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - yarn ci
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 notifications:
   email: false
 cache:
   directories:
-  - node_modules
-  - schulcloud-client
+    - node_modules
+    - schulcloud-client
