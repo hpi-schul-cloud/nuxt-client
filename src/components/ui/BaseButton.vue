@@ -27,4 +27,12 @@ export default {
 		background-color: transparentize($color-text, 0.1);
 	}
 }
+
+.is-primary {
+	background-color: $color-primary;
+}
+
+.is-secondary {
+	background-color: $color-secondary;
+}
 </style>
