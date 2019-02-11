@@ -38,6 +38,14 @@
 				"src/components/index.scss",
 				"src/components/index.css"
 			],
+			"@docs/*": ["docs/*"],
+			"@docs": [
+				"docs/index.js",
+				"docs/index.json",
+				"docs/index.vue",
+				"docs/index.scss",
+				"docs/index.css"
+			],
 			"@layouts/*": ["src/layouts/*"],
 			"@layouts": [
 				"src/layouts/index.js",

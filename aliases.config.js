@@ -7,6 +7,7 @@ const aliases = {
 	"@": ".",
 	"@assets": "src/assets",
 	"@components": "src/components",
+	"@docs": "docs",
 	"@layouts": "src/layouts",
 	"@middleware": "src/middleware",
 	"@pages": "src/pages",
