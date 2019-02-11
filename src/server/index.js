@@ -12,7 +12,7 @@ const host = process.env.HOST || "localhost";
 const port = process.env.PORT || 3000;
 
 // Set this path to the legacy schulcloud-client
-const legacyClientRoot = path.join(__dirname, "../schulcloud-client");
+const legacyClientRoot = path.join(__dirname, "../../schulcloud-client");
 
 const handlebarsHelper = require(path.join(
 	legacyClientRoot,
@@ -37,7 +37,7 @@ app.use(express.static(path.join(legacyClientRoot, "./build/" + themeName)));
 app.set("port", port);
 
 // Import and Set Nuxt.js options
-let config = require("../nuxt.config.js");
+let config = require("./../../nuxt.config.js");
 config.dev = !(process.env.NODE_ENV === "production");
 
 // The legacy routings go here

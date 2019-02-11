@@ -1,7 +1,7 @@
 module.exports = {
 	setupFiles: ["<rootDir>/tests/unit/setup"],
 	setupFilesAfterEnv: ["<rootDir>/tests/unit/matchers"],
-	testMatch: ["**/(*.)unit.js"],
+	testMatch: ["src/**/(*.)unit.js"],
 	moduleFileExtensions: ["js", "json", "vue"],
 	transform: {
 		".*\\.(vue)$": "vue-jest",
@@ -16,7 +16,7 @@ module.exports = {
 	snapshotSerializers: ["jest-serializer-vue"],
 	coverageDirectory: "<rootDir>/tests/unit/coverage",
 	collectCoverageFrom: [
-		"components/**/*.{js,vue}",
-		"!components/ui/_globals.js",
+		"src/components/**/*.{js,vue}",
+		"!src/components/ui/_globals.js",
 	],
 };

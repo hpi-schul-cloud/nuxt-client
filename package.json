@@ -5,7 +5,10 @@
 	"author": "HPI Schul-Cloud",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+		"dev": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
+		"docs": "vuepress dev docs",
+		"storybook": "start-storybook -p 6006",
+		"new": "hygen new",
 		"build": "run-s build:*",
 		"build:nuxt": "nuxt build",
 		"build:docs": "vuepress build docs",
@@ -17,7 +20,7 @@
 		"lint:markdownlint": "markdownlint \"*/*.md\" -i \"schulcloud-client\"",
 		"lint:prettier": "prettier --write --loglevel warn",
 		"lint:all:eslint": "yarn lint:eslint --ext .js,.vue .",
-		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",
+		"lint:all:stylelint": "yarn lint:stylelint \"src/**/*.{vue,sass,scss,css}\"",
 		"lint:all:markdownlint": "yarn lint:markdownlint",
 		"lint:all:prettier": "yarn lint:prettier \"**/*.{js,json,css,scss,vue,html,md}\"",
 		"lint": "run-s lint:all:*",
@@ -27,10 +30,7 @@
 		"test:unit:watch": "yarn test:unit --watch --notify",
 		"test:ci": "run-s test:unit:ci",
 		"test": "run-s test:unit",
-		"ci": "yarn test:ci && lint-staged && yarn build",
-		"new": "hygen new",
-		"docs": "vuepress dev docs",
-		"storybook": "start-storybook -p 6006"
+		"ci": "yarn test:ci && lint-staged && yarn build"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"

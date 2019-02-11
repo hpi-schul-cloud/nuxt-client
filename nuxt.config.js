@@ -2,7 +2,7 @@ const pkg = require("./package");
 
 module.exports = {
 	mode: "spa",
-
+	srcDir: "src/",
 	/*
 	 ** Headers of the page
 	 */
@@ -46,7 +46,7 @@ module.exports = {
 	 ** Global CSS
 	 */
 	cssSourceMap: true,
-	css: ["~/styles/base.scss"],
+	css: ["@styles/base.scss"],
 
 	router: {
 		middleware: ["is-authenticated"],
@@ -57,7 +57,7 @@ module.exports = {
 	 */
 	plugins: [
 		{
-			src: "~/plugins/authenticate",
+			src: "@plugins/authenticate",
 			ssr: false,
 		},
 		"@plugins/global.js",

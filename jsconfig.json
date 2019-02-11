@@ -1,6 +1,6 @@
 {
 	"baseUrl": ".",
-	"include": ["**/*"],
+	"include": ["src/**/*"],
 	"compilerOptions": {
 		"baseUrl": ".",
 		"target": "esnext",
@@ -22,85 +22,85 @@
 				"./index.scss",
 				"./index.css"
 			],
-			"@assets/*": ["assets/*"],
+			"@assets/*": ["src/assets/*"],
 			"@assets": [
-				"assets/index.js",
-				"assets/index.json",
-				"assets/index.vue",
-				"assets/index.scss",
-				"assets/index.css"
+				"src/assets/index.js",
+				"src/assets/index.json",
+				"src/assets/index.vue",
+				"src/assets/index.scss",
+				"src/assets/index.css"
 			],
-			"@components/*": ["components/*"],
+			"@components/*": ["src/components/*"],
 			"@components": [
-				"components/index.js",
-				"components/index.json",
-				"components/index.vue",
-				"components/index.scss",
-				"components/index.css"
+				"src/components/index.js",
+				"src/components/index.json",
+				"src/components/index.vue",
+				"src/components/index.scss",
+				"src/components/index.css"
 			],
-			"@layouts/*": ["layouts/*"],
+			"@layouts/*": ["src/layouts/*"],
 			"@layouts": [
-				"layouts/index.js",
-				"layouts/index.json",
-				"layouts/index.vue",
-				"layouts/index.scss",
-				"layouts/index.css"
+				"src/layouts/index.js",
+				"src/layouts/index.json",
+				"src/layouts/index.vue",
+				"src/layouts/index.scss",
+				"src/layouts/index.css"
 			],
-			"@middleware/*": ["middleware/*"],
+			"@middleware/*": ["src/middleware/*"],
 			"@middleware": [
-				"middleware/index.js",
-				"middleware/index.json",
-				"middleware/index.vue",
-				"middleware/index.scss",
-				"middleware/index.css"
+				"src/middleware/index.js",
+				"src/middleware/index.json",
+				"src/middleware/index.vue",
+				"src/middleware/index.scss",
+				"src/middleware/index.css"
 			],
-			"@pages/*": ["pages/*"],
+			"@pages/*": ["src/pages/*"],
 			"@pages": [
-				"pages/index.js",
-				"pages/index.json",
-				"pages/index.vue",
-				"pages/index.scss",
-				"pages/index.css"
+				"src/pages/index.js",
+				"src/pages/index.json",
+				"src/pages/index.vue",
+				"src/pages/index.scss",
+				"src/pages/index.css"
 			],
-			"@plugins/*": ["plugins/*"],
+			"@plugins/*": ["src/plugins/*"],
 			"@plugins": [
-				"plugins/index.js",
-				"plugins/index.json",
-				"plugins/index.vue",
-				"plugins/index.scss",
-				"plugins/index.css"
+				"src/plugins/index.js",
+				"src/plugins/index.json",
+				"src/plugins/index.vue",
+				"src/plugins/index.scss",
+				"src/plugins/index.css"
 			],
-			"@static/*": ["static/*"],
+			"@static/*": ["src/static/*"],
 			"@static": [
-				"static/index.js",
-				"static/index.json",
-				"static/index.vue",
-				"static/index.scss",
-				"static/index.css"
+				"src/static/index.js",
+				"src/static/index.json",
+				"src/static/index.vue",
+				"src/static/index.scss",
+				"src/static/index.css"
 			],
-			"@store/*": ["store/*"],
+			"@store/*": ["src/store/*"],
 			"@store": [
-				"store/index.js",
-				"store/index.json",
-				"store/index.vue",
-				"store/index.scss",
-				"store/index.css"
+				"src/store/index.js",
+				"src/store/index.json",
+				"src/store/index.vue",
+				"src/store/index.scss",
+				"src/store/index.css"
 			],
-			"@variables/*": ["styles/variables.scss/*"],
-			"@variables": [
-				"styles/variables.scss/index.js",
-				"styles/variables.scss/index.json",
-				"styles/variables.scss/index.vue",
-				"styles/variables.scss/index.scss",
-				"styles/variables.scss/index.css"
-			],
-			"@styles/*": ["styles/base.scss/*"],
+			"@styles/*": ["src/styles/*"],
 			"@styles": [
-				"styles/base.scss/index.js",
-				"styles/base.scss/index.json",
-				"styles/base.scss/index.vue",
-				"styles/base.scss/index.scss",
-				"styles/base.scss/index.css"
+				"src/styles/index.js",
+				"src/styles/index.json",
+				"src/styles/index.vue",
+				"src/styles/index.scss",
+				"src/styles/index.css"
+			],
+			"@variables/*": ["src/styles/variables.scss/*"],
+			"@variables": [
+				"src/styles/variables.scss/index.js",
+				"src/styles/variables.scss/index.json",
+				"src/styles/variables.scss/index.vue",
+				"src/styles/variables.scss/index.scss",
+				"src/styles/variables.scss/index.css"
 			]
 		}
 	}

@@ -3,7 +3,7 @@
 
 module.exports = {
 	baseUrl: ".",
-	include: ["**/*"],
+	include: ["src/**/*"],
 	compilerOptions: {
 		baseUrl: ".",
 		target: "esnext",

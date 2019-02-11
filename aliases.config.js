@@ -5,16 +5,16 @@ const prettier = require("prettier");
 const aliases = {
 	"~": ".",
 	"@": ".",
-	"@assets": "assets",
-	"@components": "components",
-	"@layouts": "layouts",
-	"@middleware": "middleware",
-	"@pages": "pages",
-	"@plugins": "plugins",
-	"@static": "static",
-	"@store": "store",
-	"@variables": "styles/variables.scss",
-	"@styles": "styles/base.scss",
+	"@assets": "src/assets",
+	"@components": "src/components",
+	"@layouts": "src/layouts",
+	"@middleware": "src/middleware",
+	"@pages": "src/pages",
+	"@plugins": "src/plugins",
+	"@static": "src/static",
+	"@store": "src/store",
+	"@styles": "src/styles",
+	"@variables": "src/styles/variables.scss",
 };
 
 module.exports = {
