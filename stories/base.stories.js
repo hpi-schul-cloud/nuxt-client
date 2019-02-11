@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import { withMarkdownNotes } from "@storybook/addon-notes";
-import baseDoc from "../docs/storybook/base.md";
+import baseDoc from "../docs/components/base.md";
 
 import BaseButton from "../components/ui/BaseButton.vue";
 import BaseCard from "../components/ui/BaseCard.vue";

@@ -6,7 +6,10 @@
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
-		"build": "nuxt build",
+		"build": "run-s build:*",
+		"build:nuxt": "nuxt build",
+		"build:docs": "vuepress build docs",
+		"build:storybook": "cross-env PLACEHOLDER=false",
 		"start": "nuxt start",
 		"generate": "nuxt generate",
 		"lint:eslint": "eslint --fix",
@@ -24,10 +27,10 @@
 		"test:unit:watch": "yarn test:unit --watch --notify",
 		"test:ci": "run-s test:unit:ci",
 		"test": "run-s test:unit",
+		"ci": "yarn test:ci && lint-staged && yarn build",
 		"new": "hygen new",
-		"ci": "yarn test:ci && lint-staged",
-		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook"
+		"docs": "vuepress dev docs",
+		"storybook": "start-storybook -p 6006"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
@@ -104,6 +107,7 @@
 		"vue-style-loader": "^4.1.2",
 		"vue-svg-loader": "^0.11.0",
 		"vue-jest": "^3.0.2",
+		"vuepress": "^0.14.8",
 		"yorkie": "^2.0.0"
 	}
 }
