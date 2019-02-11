@@ -101,6 +101,10 @@ export default {
 }
 
 .dot {
+	position: absolute;
+	top: -12px;
+	right: -12px;
+	z-index: 10;
 	display: inline-block;
 	width: 25px;
 	height: 25px;
@@ -108,15 +112,11 @@ export default {
 	font-family: PTSans-CaptionBold, sans-serif;
 	font-size: 14px;
 	font-weight: bold;
+	line-height: 25px;
 	color: white;
 	text-align: center;
-	line-height: 25px;
 	background: #b1063a;
 	border-radius: 50%;
-	z-index: 10;
-	position: absolute;
-	top: -12px;
-	right: -12px;
 }
 
 .abrivation-label {
@@ -132,9 +132,9 @@ export default {
 }
 
 .assignments-label {
+	position: relative;
 	display: flex;
 	align-items: center;
-	position: relative;
 	float: right;
 	margin: auto 0;
 	font-family: "PT Sans Caption", sans-serif;
@@ -142,13 +142,13 @@ export default {
 	vertical-align: middle;
 }
 .course-card {
-	width: 260px;
+	position: relative;
+	width: 240px;
 	padding: 10px;
 	font-size: 16px;
 	cursor: pointer;
 	border-radius: 4px;
 	box-shadow: $shadow-1;
-	position: relative;
 }
 .course-card:hover {
 	box-shadow: $shadow-5;
@@ -169,9 +169,10 @@ export default {
 .tab-label {
 	float: left;
 	width: 100px;
-	padding: 7.5px 10px;
+	padding: 5.5px 10px;
 	overflow: hidden;
 	font-family: "PT Sans Narrow", sans-serif;
+	font-size: 16px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	transform: skewX(0deg);
