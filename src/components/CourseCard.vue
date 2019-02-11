@@ -27,7 +27,7 @@
 
 <script>
 import CardFooter from "./CardFooter.vue";
-import CalanderIcon from "../assets/calander.svg";
+import CalanderIcon from "@assets/calander.svg";
 
 export default {
 	name: "CourseCard",
