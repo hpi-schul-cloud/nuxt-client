@@ -1,11 +1,11 @@
 <template>
-	<button class="button" v-on="$listeners">
-		<slot />
-	</button>
+  <button class="button" v-on="$listeners">
+    <slot/>
+  </button>
 </template>
 <script>
 export default {
-	name: "Button",
+	name: "BaseButton",
 };
 </script>
 <style lang="scss" scoped>

@@ -3,7 +3,7 @@ module.exports = {
 		"yarn lint:eslint",
 		"yarn lint:prettier",
 		"git add",
-		// "yarn test:unit:file",
+		"yarn test:unit:file",
 	],
 	"{!(package)*.json,*.code-snippets,.*rc}": [
 		"yarn lint:prettier --parser json",
@@ -15,7 +15,7 @@ module.exports = {
 		"yarn lint:stylelint",
 		"yarn lint:prettier",
 		"git add",
-		// "yarn test:unit:file",
+		"yarn test:unit:file",
 	],
 	"*.scss": ["yarn lint:stylelint", "yarn lint:prettier", "git add"],
 	"*.md": ["yarn lint:markdownlint", "yarn lint:prettier", "git add"],

@@ -3,6 +3,7 @@
 	// Spacing
 	// ===
 
+	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
 	"editor.indentationMode": "tab",
 	"editor.trimAutoWhitespace": true,
@@ -10,6 +11,9 @@
 	"files.eol": "\n",
 	"files.insertFinalNewline": true,
 	"files.trimFinalNewlines": true,
+	"prettier.useTabs": true,
+	"vetur.format.options.useTabs": true,
+	"scssFormatter.useTabs": true,
 
 	// ===
 	// Files
@@ -105,7 +109,6 @@
 	// EDITOR SETTINGS
 	// ===
 	"npm.packageManager": "yarn",
-	"vetur.format.options.useTabs": true,
 	"editor.suggest.localityBonus": true,
 
 	// ===

@@ -1,6 +1,6 @@
 # schulcloud-nuxt
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) [![Greenkeeper badge](https://badges.greenkeeper.io/schul-cloud/nuxt-client.svg)](https://greenkeeper.io/)
 
 > The next Level of Schul-Cloud
 
@@ -55,6 +55,27 @@ $ yarn lint
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
+### Generators
+
+This project includes generators to speed up common development tasks.Commands include:
+
+```bash
+# Generate a new component with adjacent unit test
+yarn new component
+
+# Generate a new page component with adjacent unit test
+yarn new page
+
+# Generate a new layout component with adjacent unit test
+yarn new layout
+```
+
+Update existing or create new generators in the `_templates` folder, with help from the [Hygen docs](http://www.hygen.io/).
+
+### Aliases
+
+To simplify referencing local modules and refactoring, you can set aliases to be shared between dev and unit tests in `aliases.config.js`. As a convention, this project uses an `@` prefix to denote aliases.
 
 ### Pre-commit
 

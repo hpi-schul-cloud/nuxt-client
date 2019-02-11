@@ -35,11 +35,15 @@ export default {
 	},
 	computed: {
 		routerLinkTo({ name, params }) {
-			return {
-				name,
-				params,
-				...(this.to || {}),
-			};
+			if (name) {
+				return {
+					name,
+					params,
+					...(this.to || {}),
+				};
+			} else {
+				return this.to;
+			}
 		},
 	},
 	created() {
@@ -84,3 +88,12 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@variables";
+a {
+	color: $color-link;
+	&:active {
+		color: $color-link-active;
+	}
+}
+</style>

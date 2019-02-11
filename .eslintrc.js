@@ -57,17 +57,6 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: ["src/**/*", "tests/unit/**/*", "tests/e2e/**/*"],
-			excludedFiles: "app.config.js",
-			parserOptions: {
-				parser: "babel-eslint",
-				sourceType: "module",
-			},
-			env: {
-				browser: true,
-			},
-		},
-		{
 			files: ["**/*.unit.js"],
 			parserOptions: {
 				parser: "babel-eslint",
@@ -79,9 +68,9 @@ module.exports = {
 			globals: {
 				mount: false,
 				shallowMount: false,
-				shallowMountView: false,
+				//shallowMountView: false,
 				createComponentMocks: false,
-				createModuleStore: false,
+				//createModuleStore: false,
 			},
 		},
 	],
