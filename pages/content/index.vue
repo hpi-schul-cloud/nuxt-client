@@ -6,21 +6,22 @@
 			type="text"
 			placeholder="Suche nach..."
 		/>
-		<Pagination v-model="skippedItems" :state="searchResults" />
+		<Pagination v-model="skippedItems" :state="pagination" />
 		<div class="columns">
 			<div
-				v-for="content of searchResults.data"
+				v-for="content of searchResults"
 				:key="content._id"
 				class="column"
 			>
 				<ContentCard :data="content" />
 			</div>
 		</div>
-		<Pagination v-model="skippedItems" :state="searchResults" />
+		<Pagination v-model="skippedItems" :state="pagination" />
 	</section>
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
 import ContentCard from "@components/CardLernStoreContent.vue";
 import Searchbar from "@components/SearchbarContent.vue";
 import Pagination from "@components/Pagination.vue";
@@ -41,11 +42,39 @@ export default {
 	data() {
 		return {
 			searchQuery: this.$route.query.q || "",
-			searchResults: {},
 			skippedItems: this.$route.query.skip
 				? parseInt(this.$route.query.skip, 10)
 				: 0,
 		};
+	},
+	computed: {
+		...mapGetters("content_search", {
+			getContent: 'get',
+			fetchContent: 'find',
+		}),
+		...mapState('content_search', {
+			pagination: state => {
+				return state.pagination.content_list
+			}
+		}),	
+		searchResults () {
+			const { $store, getContent, pagination } = this
+
+			if (pagination) {
+				return pagination.ids.map(id => getContent(id))
+			}
+
+			return []
+		},
+		query () {
+			const query = {};
+
+			if (this.searchQuery) {
+				query["_all[$match]"] = this.searchQuery;
+				query["$skip"] = this.skippedItems;
+			}
+			return query
+		}							
 	},
 	watch: {
 		searchQuery(to, from) {
@@ -61,35 +90,31 @@ export default {
 				this.find(to);
 			}, 500);
 		},
-		skippedItems(to, from) {
+		searchResults () {
+			this.skippedItems = parseInt(this.pagination.skip, 10);
+		},
+		async skippedItems(to, from) {
 			if (to === from) {
 				return;
 			}
-			this.find(this.searchQuery);
+			await this.find(this.searchQuery);		
 		},
 	},
 	created(ctx) {
 		this.find(this.searchQuery);
 	},
 	methods: {
-		find(searchString) {
-			const query = {};
-			if (searchString) {
-				query["_all[$match]"] = this.searchQuery;
-				query["$skip"] = this.skippedItems;
-			}
-			this.$store
+		async find(searchString) {
+			await this.$store
 				.dispatch("content_search/find", {
-					query: query,
+					query: this.query,
+					qid: 'content_list'
 				})
-				.then((result) => {
-					this.searchResults = result;
-					this.skippedItems = parseInt(result.skip, 10);
-					this.$router.push({
-						query: { q: this.searchQuery, skip: this.skippedItems },
-					});
-					window.scrollTo(0, 0);
-				});
+
+			this.$router.push({
+				query: { q: this.searchQuery, skip: this.skippedItems },
+			});
+			window.scrollTo(0, 0);					
 		},
 	},
 };
