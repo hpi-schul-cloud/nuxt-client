@@ -2,7 +2,7 @@
 
 import { storiesOf } from "@storybook/vue";
 import { withMarkdownNotes } from "@storybook/addon-notes";
-import buttonDoc from "./docs/myButton.md";
+import buttonDoc from "../docs/storybook/myButton.md";
 import { action } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
 
