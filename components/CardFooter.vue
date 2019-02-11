@@ -47,11 +47,9 @@ export default {
 	font-size: 16px;
 	color: #494949;
 	text-align: left;
-
-	/* TODO align text to center */
 }
 
-.align-center{
+.align-center {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

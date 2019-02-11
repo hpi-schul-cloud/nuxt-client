@@ -1,17 +1,22 @@
 <template>
 	<div class="course-card">
-		<div v-if="course.notification != 0" class="dot">{{
-			course.notification
-		}}</div>
+		<div
+			v-if="course.notification != 0 || course.notification == null"
+			class="dot"
+			>{{ course.notification }}</div
+		>
 		<div class="tab">
 			<div class="tab-label">{{ course.teacherName }}</div>
-			<div v-if="course.newAssignments != 0" class="assignments-label">
-				{{ course.newAssignments }} <CalanderIcon class="svg-label" />
+			<div
+				v-if="course.newAssignments != 0 || course.notification == null"
+				class="assignments-label align-center"
+				><div class="align-center"> {{ course.newAssignments }} </div
+				><div class="align-center pl-6 "><CalanderIcon /> </div>
 			</div>
 		</div>
 		<div class="card-info" :style="background_style">
-			<div class="mt-0 mb-10 abrivation-label"> {{ course.abbreviation }}</div>
-			<div class="mt-0 mb-0 ml-4 course-name-label"> {{ course.name }}</div>
+			<div class="mt-5 mb-15 abrivation-label"> {{ course.abbreviation }}</div>
+			<div class="mt-5 mb-5 ml-4 course-name-label"> {{ course.name }}</div>
 		</div>
 		<CardFooter :course="course"></CardFooter>
 	</div>
@@ -38,26 +43,22 @@ export default {
 				name: "default name",
 				teacherName: "MusterMensch",
 				alert: "Default Alert!",
-				notification: 1,
+				notification: 0,
 			}),
 		},
 	},
 	computed: {
 		background_style() {
-			if (this.course.colorGradient){
+			if (this.course.colorGradient) {
 				return (
 					"background-image: linear-gradient(-225deg, " +
-					this.course.color +
-					" 0%, " +
 					this.course.colorGradient +
+					" 0%, " +
+					this.course.color +
 					" 100%);"
 				);
 			} else {
-				return (
-					"background-color: " +
-					this.course.color +
-					";"
-				);
+				return "background-color: " + this.course.color + ";";
 			}
 		},
 	},
@@ -74,12 +75,29 @@ export default {
 	margin-bottom: 0 !important;
 }
 
-.mb-10 {
-	margin-bottom: -10px !important;
+.mb-15 {
+	margin-bottom: -15px !important;
+}
+
+.mb-5 {
+	margin-bottom: -5px !important;
+}
+
+.mt-5 {
+	margin-top: -5px !important;
 }
 
 .ml-4 {
 	margin-left: 4px !important;
+}
+.pl-6 {
+	padding-left: 6px !important;
+}
+
+.align-center {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .dot {
@@ -102,7 +120,6 @@ export default {
 }
 
 .abrivation-label {
-	align-content: bottom;
 	font-family: "PT Sans Caption", sans-serif;
 	font-size: 60px;
 	font-weight: bold;
@@ -115,20 +132,15 @@ export default {
 }
 
 .assignments-label {
+	display: flex;
+	align-items: center;
 	position: relative;
 	float: right;
 	margin: auto 0;
 	font-family: "PT Sans Caption", sans-serif;
-	line-height: 22px;
 	font-size: 16px;
 	vertical-align: middle;
 }
-.svg-label {
-	display: inline-block;
-	margin-bottom: -2px;
-	vertical-align: baseline;
-}
-
 .course-card {
 	width: 260px;
 	padding: 10px;
@@ -147,8 +159,6 @@ export default {
 	margin-top: -5px;
 	color: white;
 	border-radius: 4px;
-
-	/* background-image: linear-gradient(-225deg, #E42C85 0%, #3B1E65 100%); */
 }
 
 .card-info p {
