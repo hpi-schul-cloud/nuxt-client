@@ -2,7 +2,7 @@
 
 import { storiesOf } from "@storybook/vue";
 import { linkTo } from "@storybook/addon-links";
-import CourseCard from "../components/CourseCard.vue";
+import CourseCard from "@components/CourseCard.vue";
 export const defaultCourse = {
 	_id: "0000dcfbfb5c7a3f00bf21abc",
 	name: "Biologie",

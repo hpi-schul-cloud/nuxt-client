@@ -17,7 +17,7 @@
 
 <script>
 import PulsatingDot from "./PulsatingDot.vue";
-import ClockIcon from "../assets/clock.svg";
+import ClockIcon from "@assets/clock.svg";
 
 export default {
 	name: "CardFooter",

@@ -11,41 +11,41 @@
 @import "@variables";
 
 @function font-size($level) {
-  @return nth($size-heading, $level);
+	@return nth($size-heading, $level);
 }
 
 @for $i from 1 through 6 {
-  h#{$i},
-  .h#{$i} {
-    margin: 0.75em 0 0.25em;
-    font-size: font-size($i);
+	h#{$i},
+	.h#{$i} {
+		margin: 0.75em 0 0.25em;
+		font-size: font-size($i);
 
-    @extend %font-heading;
-  }
+		@extend %font-heading;
+	}
 }
 
 // TODO I think this doesn't do anything
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.15s ease-in-out;
+	transition: all 0.15s ease-in-out;
 }
 
 html,
 body {
-  @extend %font-content;
+	@extend %font-content;
 
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
+	width: 100%;
+	min-height: 100vh;
+	margin: 0;
 }
 
 input,
 select,
 textarea,
 button {
-  font-family: inherit;
+	font-family: inherit;
 }
 
 img {
-  max-width: 100%;
+	max-width: 100%;
 }
