@@ -12,7 +12,7 @@
 		"build": "npm-run-all --parallel build:*",
 		"build:nuxt": "nuxt build",
 		"build:docs": "vuepress build docs",
-		"build:storybook": "cross-env PLACEHOLDER=false",
+		"build:storybook": "build-storybook",
 		"start": "nuxt start",
 		"generate": "nuxt generate",
 		"lint:eslint": "eslint --fix",
