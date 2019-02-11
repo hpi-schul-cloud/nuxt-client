@@ -14,13 +14,13 @@
 				"./index.scss",
 				"./index.css"
 			],
-			"@/*": ["./*"],
+			"@/*": ["src/*"],
 			"@": [
-				"./index.js",
-				"./index.json",
-				"./index.vue",
-				"./index.scss",
-				"./index.css"
+				"src/index.js",
+				"src/index.json",
+				"src/index.vue",
+				"src/index.scss",
+				"src/index.css"
 			],
 			"@assets/*": ["src/assets/*"],
 			"@assets": [

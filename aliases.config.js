@@ -4,7 +4,7 @@ const prettier = require("prettier");
 
 const aliases = {
 	"~": ".",
-	"@": ".",
+	"@": "src",
 	"@assets": "src/assets",
 	"@components": "src/components",
 	"@docs": "docs",
