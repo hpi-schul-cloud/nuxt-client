@@ -17,7 +17,7 @@ install:
   - yarn install
   - git submodule init && git submodule update
   - cd schulcloud-client && npm i && cd ..
-  - yarn add -D npm-run-all
+  - yarn add -D npm-run-all cross-env
 #before_script:
 #  - docker run -d -p 27017:27017 mongo:3.4
 #  - docker run -d -p 3030:3030 schulcloud/schulcloud-server

@@ -33,19 +33,30 @@ cd ..
 ## Developing
 
 ```bash
-# serve with hot reload at localhost:3000
-$ yarn run dev
+# serve application with hot reload at localhost:3000
+$ yarn dev
 
-# build for production and launch server
-$ yarn run build
+# serve documentation with hot reload
+$ yarn docs
+
+# serve storybook with hot reload for component developing
+$ yarn storybook
+
+# run the linter with autofix
+$ yarn lint
+
+# run the (unit-)tests
+$ yarn lint
+
+# build for production and launch server (nuxt)
+$ yarn build:nuxt
 $ yarn start
 
-# generate static project
+# generate static project (nuxt)
 $ yarn run generate
-
-# run the linter
-$ yarn lint
 ```
+
+You can find all commands inside the [package.json](./package.json).
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
 
