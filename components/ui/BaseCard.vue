@@ -1,21 +1,22 @@
 <template>
-	<section :style="styles" class="card">
-		<div class="customcard-header">
-			<slot name="header" />
-		</div>
-		<div class="customcard-content">
-			<slot>
-				<!-- CONTENT -->
-			</slot>
-		</div>
-		<div class="customcard-footer">
-			<slot name="footer" />
-		</div>
-	</section>
+  <section :style="styles" class="card">
+    <div class="customcard-header">
+      <slot name="header"/>
+    </div>
+    <div class="customcard-content">
+      <slot>
+        <!-- CONTENT -->
+      </slot>
+    </div>
+    <div class="customcard-footer">
+      <slot name="footer"/>
+    </div>
+  </section>
 </template>
 
 <script>
 export default {
+	name: "BaseCard",
 	props: {
 		styles: {
 			type: Object,
