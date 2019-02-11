@@ -8,11 +8,7 @@
 		/>
 		<Pagination v-model="skippedItems" :state="pagination" />
 		<div class="columns">
-			<div
-				v-for="content of searchResults"
-				:key="content._id"
-				class="column"
-			>
+			<div v-for="content of searchResults" :key="content._id" class="column">
 				<ContentCard :data="content" />
 			</div>
 		</div>
@@ -49,32 +45,32 @@ export default {
 	},
 	computed: {
 		...mapGetters("content_search", {
-			getContent: 'get',
-			fetchContent: 'find',
+			getContent: "get",
+			fetchContent: "find",
 		}),
-		...mapState('content_search', {
-			pagination: state => {
-				return state.pagination.content_list
-			}
-		}),	
-		searchResults () {
-			const { $store, getContent, pagination } = this
+		...mapState("content_search", {
+			pagination: (state) => {
+				return state.pagination.content_list;
+			},
+		}),
+		searchResults() {
+			const { $store, getContent, pagination } = this;
 
 			if (pagination) {
-				return pagination.ids.map(id => getContent(id))
+				return pagination.ids.map((id) => getContent(id));
 			}
 
-			return []
+			return [];
 		},
-		query () {
+		query() {
 			const query = {};
 
 			if (this.searchQuery) {
 				query["_all[$match]"] = this.searchQuery;
 				query["$skip"] = this.skippedItems;
 			}
-			return query
-		}							
+			return query;
+		},
 	},
 	watch: {
 		searchQuery(to, from) {
@@ -90,14 +86,14 @@ export default {
 				this.find(to);
 			}, 500);
 		},
-		searchResults () {
+		searchResults() {
 			this.skippedItems = parseInt(this.pagination.skip, 10);
 		},
 		async skippedItems(to, from) {
 			if (to === from) {
 				return;
 			}
-			await this.find(this.searchQuery);		
+			await this.find(this.searchQuery);
 		},
 	},
 	created(ctx) {
@@ -105,16 +101,15 @@ export default {
 	},
 	methods: {
 		async find(searchString) {
-			await this.$store
-				.dispatch("content_search/find", {
-					query: this.query,
-					qid: 'content_list'
-				})
+			await this.$store.dispatch("content_search/find", {
+				query: this.query,
+				qid: "content_list",
+			});
 
 			this.$router.push({
 				query: { q: this.searchQuery, skip: this.skippedItems },
 			});
-			window.scrollTo(0, 0);					
+			window.scrollTo(0, 0);
 		},
 	},
 };

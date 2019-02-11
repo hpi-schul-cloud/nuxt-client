@@ -1,20 +1,20 @@
 <template>
-  <aside class="sidebar">
-    <nav class="contents">
-      <ul class="list">
-        <li
-          v-for="route in routes"
-          :key="JSON.stringify(route.to) || route.href"
-          :class="{ 'list-item': true, active: route.active }"
-        >
-          <BaseLink class="list-content" :to="route.to" :href="route.href">
-            <BaseIcon v-if="route.icon" :icon="route.icon"/>
-            {{ route.title }}
-          </BaseLink>
-        </li>
-      </ul>
-    </nav>
-  </aside>
+	<aside class="sidebar">
+		<nav class="contents">
+			<ul class="list">
+				<li
+					v-for="route in routes"
+					:key="JSON.stringify(route.to) || route.href"
+					:class="{ 'list-item': true, active: route.active }"
+				>
+					<BaseLink class="list-content" :to="route.to" :href="route.href">
+						<BaseIcon v-if="route.icon" :icon="route.icon" />
+						{{ route.title }}
+					</BaseLink>
+				</li>
+			</ul>
+		</nav>
+	</aside>
 </template>
 
 <script>
