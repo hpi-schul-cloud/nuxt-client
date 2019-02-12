@@ -11,6 +11,12 @@ const themeName = process.env.SC_THEME || "default";
 const host = process.env.HOST || "localhost";
 const port = process.env.PORT || 3000;
 
+app.use('/theme', express.static(path.join(__dirname, "../themes/" + themeName + '/static')));
+
+/* 
+ * LECACY ROUTING
+ */
+
 // Set this path to the legacy schulcloud-client
 const legacyClientRoot = path.join(__dirname, "../../schulcloud-client");
 

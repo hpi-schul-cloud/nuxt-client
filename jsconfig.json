@@ -94,21 +94,29 @@
 				"src/store/index.scss",
 				"src/store/index.css"
 			],
-			"@styles/*": ["src/styles/*"],
-			"@styles": [
-				"src/styles/index.js",
-				"src/styles/index.json",
-				"src/styles/index.vue",
-				"src/styles/index.scss",
-				"src/styles/index.css"
+			"@theme/*": ["src/themes/n21/*"],
+			"@theme": [
+				"src/themes/n21/index.js",
+				"src/themes/n21/index.json",
+				"src/themes/n21/index.vue",
+				"src/themes/n21/index.scss",
+				"src/themes/n21/index.css"
 			],
-			"@variables/*": ["src/styles/variables.scss/*"],
+			"@styles/*": ["src/themes/n21/styles/*"],
+			"@styles": [
+				"src/themes/n21/styles/index.js",
+				"src/themes/n21/styles/index.json",
+				"src/themes/n21/styles/index.vue",
+				"src/themes/n21/styles/index.scss",
+				"src/themes/n21/styles/index.css"
+			],
+			"@variables/*": ["src/themes/n21/styles/variables.scss/*"],
 			"@variables": [
-				"src/styles/variables.scss/index.js",
-				"src/styles/variables.scss/index.json",
-				"src/styles/variables.scss/index.vue",
-				"src/styles/variables.scss/index.scss",
-				"src/styles/variables.scss/index.css"
+				"src/themes/n21/styles/variables.scss/index.js",
+				"src/themes/n21/styles/variables.scss/index.json",
+				"src/themes/n21/styles/variables.scss/index.vue",
+				"src/themes/n21/styles/variables.scss/index.scss",
+				"src/themes/n21/styles/variables.scss/index.css"
 			]
 		}
 	}
