@@ -36,6 +36,8 @@ if (process.client) {
 		browserService("teams", { paginate: true }),
 		browserService("news", { paginate: true }),
 		browserService("schools", { paginate: true }),
+		browserService("roles", { paginate: true }),
+		browserService("classes", { paginate: true }),
 		browserService("users", { paginate: true }),
 		browserAuth({
 			userService: "users",

@@ -1,37 +1,75 @@
 <template>
 	<div v-if="course">
-		<section class="section">
-			<h1>Kurs erstellen</h1>
-			<BaseInput
-				v-model="course.name"
-				label="Name"
-				type="text"
-				placeholder="Dream Team"
-				maxlength="30"
-			></BaseInput>
-			<BaseInput
-				v-model="course.description"
-				label="Beschreibung"
-				type="textarea"
-				placeholder="Everything you have to know"
-				maxlength="255"
-			></BaseInput>
-			<button class="button is-primary" @click="create()">Speichern</button>
-			<h1>{{ course.name }}</h1>
-			<p>{{ course.description }}</p>
-		</section>
+		<TemplateCourseWizard
+			:steps="stepList"
+			:current-step="0"
+			:course="course"
+			:user="user"
+			:teachers="teachers"
+			:classes="classes"
+			:students="students"
+			@course-creation-submit="create()"
+		/>
 	</div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { mapGetters } from "vuex";
+import TemplateCourseWizard from "@components/TemplateCourseWizard";
 
 export default {
+	components: { TemplateCourseWizard },
+	async asyncData({ store }) {
+		try {
+			const teacherRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "teacher",
+				},
+			})).data[0];
+
+			const studentsRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "student",
+				},
+			})).data[0];
+
+			const query = {
+				roles: [teacherRole._id],
+			};
+
+			const teachers = (await store.dispatch("users/find", { query })).data;
+
+			const query2 = {
+				roles: [studentsRole._id],
+			};
+			const students = (await store.dispatch("users/find", { query: query2 }))
+				.data;
+
+			await store.dispatch("classes/find");
+
+			return {
+				teachers,
+				students,
+			};
+		} catch (err) {}
+	},
 	data() {
 		return {
+			stepList: [
+				{ name: "Kurs anlegen" },
+				{ name: "Kurs-Mitglieder" },
+				{ name: "Abschließen" },
+			],
 			course: {
 				name: "",
 				description: "",
+				startDate: "",
+				untilDate: "",
+				teachers: [],
+				substitutions: [],
+				classes: [],
+				students: [],
 			},
 		};
 	},
@@ -39,28 +77,35 @@ export default {
 		...mapState("auth", {
 			user: "user",
 		}),
+		...mapGetters("classes", {
+			classes: "list",
+		}),
 	},
 	methods: {
 		async create(id) {
 			try {
-				/* const course = await this.$store.dispatch('courses/create', {
+				const course = await this.$store.dispatch("courses/create", {
 					schoolId: this.user.schoolId,
 					name: this.course.name,
 					description: this.course.description,
-				}); */
-
-				this.$toast.open({
-					message: "Kurs erstellt",
-					type: "is-success",
+					startDate: this.course.startDate,
+					untilDate: this.course.untilDate,
+					teacherIds: this.course.teachers.map((teacher) => {
+						return teacher["_id"];
+					}),
+					substitutionIds: this.course.substitutions.map((substitution) => {
+						return substitution["_id"];
+					}),
+					classIds: this.course.classes.map((c) => {
+						return c["_id"];
+					}),
+					userIds: this.course.students.map((student) => {
+						return student["_id"];
+					}),
 				});
 
 				this.$router.push({ name: "courses" });
-			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Erstellen des Kurses",
-					type: "is-danger",
-				});
-			}
+			} catch (e) {}
 		},
 	},
 };
