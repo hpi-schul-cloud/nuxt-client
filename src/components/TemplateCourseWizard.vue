@@ -74,7 +74,7 @@
 
 					<h6>Klasse auswählen</h6>
 					<BaseSelect
-						v-model="course.classes"
+						:value.sync = "course.classes"
 						:options="classes"
 						:multiple="true"
 						label="displayName"
@@ -83,7 +83,7 @@
 
 					<h6>Studenten auswählen</h6>
 					<BaseSelect
-						v-model="course.students"
+						:value.sync = "course.students"
 						:options="students"
 						:multiple="true"
 						label="displayName"
