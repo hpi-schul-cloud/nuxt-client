@@ -29,22 +29,24 @@
 					></BaseInput>
 
 					<h6>Unterrichtender Lehrer</h6>
-					<MultiSelect
-						v-model="course.teachers"
+					<BaseSelect
+						:value.sync="course.teachers"
 						:options="teachers"
+						:multiple="true"
 						label="lastName"
 						track-by="_id"
-						:multiple="true"
-					></MultiSelect>
+					></BaseSelect>
+					{{course.teachers}}
 
 					<h6>Vertretungs-Lehrer</h6>
-					<MultiSelect
-						v-model="course.substitutions"
+					<BaseSelect
+						:value.sync="course.substitutions"
 						:options="teachers"
 						:multiple="true"
 						label="lastName"
 						track-by="_id"
-					></MultiSelect>
+					></BaseSelect>
+					{{course.substitutions}}
 
 					<h6>Start und Enddatum</h6>
 
@@ -73,22 +75,22 @@
 					<h3>Step 2</h3>
 
 					<h6>Klasse auswählen</h6>
-					<MultiSelect
+					<BaseSelect
 						v-model="course.classes"
 						:options="classes"
 						:multiple="true"
 						label="displayName"
 						track-by="_id"
-					></MultiSelect>
+					></BaseSelect>
 
 					<h6>Studenten auswählen</h6>
-					<MultiSelect
+					<BaseSelect
 						v-model="course.students"
 						:options="students"
 						:multiple="true"
 						label="displayName"
 						track-by="_id"
-					></MultiSelect>
+					></BaseSelect>
 
 					{{
 						course.classes.map((c) => {
@@ -142,11 +144,11 @@ import "../styles/base.scss";
 import StepProgress from "./StepProgress.vue";
 import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
-import MultiSelect from "vue-multiselect";
+import BaseSelect from "./ui/BaseSelect";
 
 export default {
 	name: "TemplateCourseWizard",
-	components: { StepProgress, MultiSelect},
+	components: { StepProgress},
 	props: {
 		currentStep: {
 			type: Number,
