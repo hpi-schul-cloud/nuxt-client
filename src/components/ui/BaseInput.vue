@@ -14,7 +14,7 @@
 				@input="$emit('update', value)"
 			>
 				<input
-					:type="type"
+					type="date"
 					:name="name"
 					class="input"
 				/>
