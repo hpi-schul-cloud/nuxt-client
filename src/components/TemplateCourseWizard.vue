@@ -49,9 +49,23 @@
 					<h6>Start und Enddatum</h6>
 
 					<div class="date">
-						<FlatPickr v-model="course.startDate" :config="config" />
+						<BaseInput
+							v-model="course.startDate"
+							name="startDate"
+							label="Startdatum"
+							type="date"
+							placeholder=""
+							maxlength="30"
+						></BaseInput>
 
-						<FlatPickr v-model="course.untilDate" :config="config" />
+						<BaseInput
+							v-model="course.untilDate"
+							name="untilDate"
+							label="Enddatum"
+							type="date"
+							placeholder=""
+							maxlength="30"
+						></BaseInput>
 					</div>
 				</div>
 
@@ -130,13 +144,9 @@ import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
 import MultiSelect from "vue-multiselect";
 
-import FlatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
-import { German } from "flatpickr/dist/l10n/de.js";
-
 export default {
 	name: "TemplateCourseWizard",
-	components: { StepProgress, MultiSelect, FlatPickr },
+	components: { StepProgress, MultiSelect},
 	props: {
 		currentStep: {
 			type: Number,
@@ -170,17 +180,6 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-	},
-	data() {
-		return {
-			// Get more form https://chmln.github.io/flatpickr/options/
-			config: {
-				altFormat: "d.m.Y",
-				altInput: true,
-				dateFormat: "Y-m-d",
-				locale: German,
-			},
-		};
 	},
 	computed: {
 		firststep() {

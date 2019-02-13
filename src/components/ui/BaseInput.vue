@@ -1,17 +1,33 @@
 <template>
-	<div>
+	<div class="root">
 		<label class="input__wrapper">
 			<span :class="{ label: true, active: value && value !== 0 }">
 				{{ label }}
 			</span>
+			<FlatPickr
+				v-if="type === 'date'"
+				v-model="value"
+				:config="config"
+				:wrap="true"
+				v-on="$listeners"
+				@input="$emit('update', value)"
+			>
+				<input
+					:type="type"
+					:name="name"
+					class="input"
+					v-bind="$attrs"
+				/>
+			</FlatPickr>
 			<input
+				v-else
+				v-bind="$attrs"
 				:value="value"
 				:type="type"
 				:name="name"
-				v-bind="$attrs"
 				class="input"
-				@input="$emit('update', $event.target.value)"
 				v-on="$listeners"
+				@input="$emit('update', $event.target.value)"
 			/>
 		</label>
 		<small v-if="hint || $slots.hint" class="hint">
@@ -22,9 +38,14 @@
 </template>
 
 <script>
+import FlatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
+import { German } from "flatpickr/dist/l10n/de.js";
+
 export default {
 	// currently, this only supports text input
 	name: "BaseInput",
+	components:{FlatPickr},
 	inheritAttrs: false,
 	model: {
 		event: "update",
@@ -58,12 +79,27 @@ export default {
 			default: "",
 		},
 	},
+	data() {
+		return {
+			// Get more form https://chmln.github.io/flatpickr/options/
+			config: {
+				altFormat: "d.m.Y",
+				altInput: true,
+				dateFormat: "Y-m-d",
+				locale: German,
+			},
+		};
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@variables";
 $input-padding-left: 12px;
+
+.root{
+	width: 100%;
+}
 
 .input__wrapper {
 	position: relative;
@@ -85,7 +121,7 @@ $input-padding-left: 12px;
 	transform: translateY(-0.75em);
 }
 
-.input {
+.input, .input__wrapper /deep/ .flatpickr-input{
 	display: block;
 	width: 100%;
 	padding: $size-padding;
