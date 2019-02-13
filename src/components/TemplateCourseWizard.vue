@@ -36,7 +36,6 @@
 						label="lastName"
 						track-by="_id"
 					></BaseSelect>
-					{{course.teachers}}
 
 					<h6>Vertretungs-Lehrer</h6>
 					<BaseSelect
@@ -46,7 +45,6 @@
 						label="lastName"
 						track-by="_id"
 					></BaseSelect>
-					{{course.substitutions}}
 
 					<h6>Start und Enddatum</h6>
 

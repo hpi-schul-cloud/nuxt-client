@@ -49,12 +49,6 @@ export default {
 		return {
 				val: this.value
 		}
-	},
-	methods: {
-		stopClickPropagation: function(e){
-			console.log(e);
-			e.stopPropagation() ;
-		}
 	}
 };
 </script>
