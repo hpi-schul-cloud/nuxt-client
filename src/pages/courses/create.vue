@@ -1,5 +1,5 @@
 <template>
-	<div v-if="course">
+	<div v-if="course" class="root">
 		<TemplateCourseWizard
 			:steps="stepList"
 			:current-step="0"
@@ -14,8 +14,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import TemplateCourseWizard from "@components/TemplateCourseWizard";
 
 export default {
@@ -110,3 +109,13 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@variables";
+
+	.root{
+	  max-width: $size-content-width-max;
+		min-width: $size-content-width-min;
+		margin: 0 auto;
+	}
+</style>

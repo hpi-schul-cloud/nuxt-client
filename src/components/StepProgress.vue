@@ -9,7 +9,8 @@
 					index == currentStep ? 'active' : '',
 					index < currentStep ? 'done' : '',
 				]"
-				>{{ s.name }}</li
+				><div class="description">{{ s.name }}</div>
+			</li
 			>
 		</ul>
 	</div>
@@ -60,6 +61,10 @@ ul.progressbar {
 	position: relative;
 	float: left;
 	text-align: center;
+}
+
+.description{
+	font-size: small;
 }
 
 .progressbar li.active::after {
