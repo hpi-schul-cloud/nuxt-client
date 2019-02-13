@@ -7,6 +7,7 @@
 			<FlatPickr
 				v-if="type === 'date'"
 				v-model="value"
+				v-bind="$attrs"
 				:config="config"
 				:wrap="true"
 				v-on="$listeners"
@@ -16,7 +17,6 @@
 					:type="type"
 					:name="name"
 					class="input"
-					v-bind="$attrs"
 				/>
 			</FlatPickr>
 			<input
