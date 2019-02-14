@@ -7,6 +7,13 @@ import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
 import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
+import BaseSelect from "@components/ui/BaseSelect.vue";
+
+export const multioptions = [
+	{ _id: 1, name: "Option 1" },
+	{ _id: 2, name: "Option 2" },
+	{ _id: 3, name: "Option 3" },
+];
 
 storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
@@ -27,6 +34,19 @@ storiesOf("Base Components", module)
 	.add("Base Input", () => ({
 		components: { BaseInput },
 		template: "<BaseInput />",
+		methods: {},
+	}))
+	.add("Base Input Date", () => ({
+		components: { BaseInput },
+		template: "<BaseInput type='date' label='Datum'/>",
+		methods: {},
+	}))
+	.add("Base Select MultiSelect", () => ({
+		components: { BaseSelect },
+		template: "<BaseSelect :options='options' track-by='_id' label='name'/>",
+		data: () => ({
+			options: multioptions,
+		}),
 		methods: {},
 	}))
 	.add("Base Link", () => ({
