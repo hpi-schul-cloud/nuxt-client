@@ -8,13 +8,13 @@
 			>
 		</section>
 		<section class="section">
-			<div class="tile is-ancestor">
+			<div class="grid">
 				<div
 					v-for="(course, i) of courses"
 					:key="i"
-					class="tile is-parent is-4"
+					class="tile"
 				>
-					<CourseCard :course="course" />
+					<CourseCard :course="course"/>
 				</div>
 			</div>
 		</section>
@@ -49,3 +49,22 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import '@variables';
+
+	.grid{
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: center;
+		max-width: $size-content-width-max;
+		min-width: $size-content-width-min;
+		margin: 0 auto;
+	}
+
+	.tile{
+		display: flex;
+		margin: 10px;
+	}
+</style>
