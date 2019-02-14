@@ -37,5 +37,5 @@ deploy:
   script: bash ./deploy.sh
   on:
    all_branches: true
-   #condition: $TRAVIS_BRANCH =~ ^master$
+   condition: $TRAVIS_BRANCH =~ ^story.*|nuxt.*|master$
 

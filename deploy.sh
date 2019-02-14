@@ -17,13 +17,13 @@ docker push schulcloud/schulcloud-nuxtclient:latest
 openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
 chmod 600 travis_rsa
 
-if [[ $DOCKERTAG == story* ]] 
+if [[ $DOCKERTAG == story* ]] || [[ $DOCKERTAG == master ]]
 then
   # screw together config file for docker swarm
   eval "echo \"$( cat compose-storybook-test.dummy )\"" > docker-compose-storybook.yml
   scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-storybook.yml linux@test.schul-cloud.org:~
   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-storybook.yml test-schul-cloud
-elif [[ $DOCKERTAG == nuxt* ]]
+elif [[ $DOCKERTAG == nuxt* ]] || [[ $DOCKERTAG == master ]]
 then
   # screw together config file for docker swarm
   eval "echo \"$( cat compose-nuxt-test.dummy )\"" > docker-compose-nuxtclient.yml
