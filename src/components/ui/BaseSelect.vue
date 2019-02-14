@@ -7,6 +7,7 @@
 				:multiple="multiple"
 				:label="label"
 				:track-by="trackBy"
+				:allow-empty="allowEmpty"
 				@input="$emit('update:value', val)"
 			></MultiSelect>
 		</div>
@@ -25,9 +26,14 @@ export default {
 	},
 	props: {
 		value: {
-			type: Array,
+			type: [Array, Object],
 			default: () => [],
 			required: true,
+		},
+		selected: {
+			type: Object,
+			default: () => {},
+			required: false,
 		},
 		options: {
 			type: Array,
@@ -42,7 +48,17 @@ export default {
 		trackBy: {
 			type: String,
 			default: "",
-			required: true,
+			required: false,
+		},
+		multiple: {
+			type: Boolean,
+			default: false,
+			required: false
+		},
+		allowEmpty: {
+			type: Boolean,
+			default: true,
+			required: false
 		}
 	},
 	data: function () {

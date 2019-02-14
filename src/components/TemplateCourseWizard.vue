@@ -70,10 +70,11 @@
 						<BaseSelect
 							:value.sync = "time.weekday"
 							:options="weekdays"
+							:allow-empty="false"
 							label="name"
 						></BaseSelect>
 						<BaseInput v-model="time.room" label="Raum" name="room" type="text"/>
-						<BaseInput v-model="time.startTime" label="Start der Schulstunde" name="startTime" type="time"/>
+						<BaseInput v-model="time.startTime" label="Start" name="startTime" type="time"/>
 						<BaseInput v-model="time.duration" label="Dauer" name="duration" type="text"/>
 						<a style="cursor: pointer" @click="popTime(time)">Remove</a>
 					</div>
@@ -81,7 +82,7 @@
 						type="button"
 						class="btn btn-primary"
 						@click="addTime">
-						Hopp
+						Schulstundentermin im Stundenplan anlegen
 					</BaseButton>
 
 				</div>
@@ -143,7 +144,6 @@
 </template>
 
 <script>
-import "../styles/base.scss";
 import StepProgress from "./StepProgress.vue";
 import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
@@ -153,10 +153,6 @@ export default {
 	name: "TemplateCourseWizard",
 	components: {StepProgress},
 	props: {
-		currentStep: {
-			type: Number,
-			default: 0,
-		},
 		steps: {
 			type: Array,
 			default: () => [],
@@ -197,7 +193,8 @@ export default {
 				{ value: 4, name: "Freitag" },
 				{ value: 5, name: "Samstag" },
 				{ value: 6, name: "Sonntag" },
-			]
+			],
+			currentStep: 0
 		};
 	},
 	computed: {
@@ -244,7 +241,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .content-wrapper{
-	margin-top: 150px;
+	width: 70%;
+	margin: 150px auto 0px auto;
 }
 
 .steps {

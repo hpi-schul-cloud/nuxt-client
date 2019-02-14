@@ -2,7 +2,6 @@
 	<div v-if="course" class="root">
 		<TemplateCourseWizard
 			:steps="stepList"
-			:current-step="0"
 			:course="course"
 			:user="user"
 			:teachers="teachers"
@@ -10,7 +9,6 @@
 			:students="students"
 			@course-creation-submit="create()"
 		/>
-		Zeiten: {{course.times}}
 	</div>
 </template>
 
