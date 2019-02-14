@@ -8,7 +8,7 @@
 					src="/images/footer-logo.png"
 					alt="Anbieterlogo"
 				/>
-				<span>© {{ currentYear }} Schul-Cloud</span>
+				<span>© {{ currentYear }} {{ $theme.name }}</span>
 			</div>
 
 			<div class="mt-2">
