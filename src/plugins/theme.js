@@ -1,4 +1,4 @@
-import Vue from 'vue'
-import Theme from '@theme/config'
+import Vue from "vue";
+import Theme from "@theme/config";
 
-Vue.prototype.$theme = Theme
+Vue.prototype.$theme = Theme;

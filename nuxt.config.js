@@ -4,7 +4,7 @@ const themeName = process.env.SC_THEME || "default";
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
-	theme: 'default',
+	theme: "default",
 	/*
 	 ** Headers of the page
 	 */
@@ -44,9 +44,7 @@ module.exports = {
 		color: "#fff",
 	},
 
-	css: [
-		"@/themes/" + themeName + "/styles"
-	],
+	css: ["@/themes/" + themeName + "/styles"],
 
 	/*
 	 ** Global CSS

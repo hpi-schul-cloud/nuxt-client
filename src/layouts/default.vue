@@ -44,7 +44,7 @@ export default {
 				{ title: "Verwaltung", to: { name: "administration" } },
 			],
 			topBarActions: topbarBaseActions,
-			pageTitle: this.$theme.name,
+			pageTitle: this.$theme.short_name,
 		};
 	},
 	computed: mapState({

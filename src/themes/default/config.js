@@ -1,9 +1,10 @@
-const images = '/theme/images'
+const images = "/theme/images";
 
 export default {
-    name: 'Schul-Cloud',
-    logo: {
-        app: images + 'logo/app-icon-128.png',
-        white: images + 'logo/logo-white.svg'
-    }
-}
+	name: "HPI Schul-Cloud",
+	short_name: "Schul-Cloud",
+	logo: {
+		app: images + "logo/app-icon-128.png",
+		white: images + "logo/logo-white.svg",
+	},
+};
