@@ -86,7 +86,7 @@
 		"eslint-config-prettier": "^4.0.0",
 		"eslint-loader": "^2.0.0",
 		"eslint-plugin-prettier": "^3.0.1",
-		"eslint-plugin-vue": "^5.1.0",
+		"eslint-plugin-vue": "^5.2.1",
 		"hygen": "^2.1.1",
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^24.1.0",
