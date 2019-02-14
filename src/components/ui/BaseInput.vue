@@ -1,6 +1,6 @@
 <template>
 	<div class="root">
-		<label class="input__wrapper">
+		<div class="input__wrapper">
 			<span :class="{ label: true, active: value && value !== 0 }">
 				{{ label }}
 			</span>
@@ -29,7 +29,7 @@
 				v-on="$listeners"
 				@input="$emit('update', $event.target.value)"
 			/>
-		</label>
+		</div>
 		<small v-if="hint || $slots.hint" class="hint">
 			<template v-if="hint">{{ hint }}</template>
 			<slot v-else name="hint" />

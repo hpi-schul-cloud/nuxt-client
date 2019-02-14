@@ -1,6 +1,6 @@
 <template>
 	<div class="root">
-		<label class="input__wrapper">
+		<div class="input__wrapper">
 			<MultiSelect
 				v-model="val"
 				:options="options"
@@ -9,7 +9,7 @@
 				:track-by="trackBy"
 				@input="$emit('update:value', val)"
 			></MultiSelect>
-		</label>
+		</div>
 	</div>
 </template>
 
