@@ -6,7 +6,7 @@ RUN yarn install
 COPY . .
 RUN git submodule init && git submodule update && cd schulcloud-client && npm install && cd ..
 
-EXPOSE 3000
+EXPOSE 6006
 
-CMD bash
+CMD yarn storybook --ci
 
