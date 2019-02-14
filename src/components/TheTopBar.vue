@@ -1,5 +1,10 @@
 <template>
 	<div class="topbar">
+		<img
+			style="height: 40px; margin-right: 10px"
+			:src="$theme.logo.app"
+			alt=""
+		/>
 		<h1 class="page-title">{{ title }}</h1>
 
 		<!-- ACTIONS -->
