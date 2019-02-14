@@ -1,10 +1,8 @@
 <template>
 	<div class="root">
 		<h2>Kurs anlegen</h2>
-		<h6
-			>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen, Hausaufgaben
-			und Dateien gearbeitet.</h6
-		>
+		<h6>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen, Hausaufgaben
+			und Dateien gearbeitet.</h6>
 		<div class="steps">
 			<StepProgress :steps="steps" :current-step="currentStep" />
 
@@ -46,9 +44,7 @@
 						track-by="_id"
 					></BaseSelect>
 
-					<h6>Start und Enddatum</h6>
-
-					<div class="date_wrapper">
+					<div class="date-wrapper">
 						<BaseInput
 							v-model="course.startDate"
 							name="startDate"
@@ -69,6 +65,25 @@
 							maxlength="30"
 						></BaseInput>
 					</div>
+
+					<div v-for="(time,i) of course.times" :key="i" class="time-wrapper">
+						<BaseSelect
+							:value.sync = "time.weekday"
+							:options="weekdays"
+							label="name"
+						></BaseSelect>
+						<BaseInput v-model="time.room" label="Raum" name="room" type="text"/>
+						<BaseInput v-model="time.startTime" label="Start der Schulstunde" name="startTime" type="time"/>
+						<BaseInput v-model="time.duration" label="Dauer" name="duration" type="text"/>
+						<a style="cursor: pointer" @click="popTime(time)">Remove</a>
+					</div>
+					<BaseButton
+						type="button"
+						class="btn btn-primary"
+						@click="addTime">
+						Hopp
+					</BaseButton>
+
 				</div>
 
 				<div v-show="currentStep == 1">
@@ -91,18 +106,6 @@
 						label="displayName"
 						track-by="_id"
 					></BaseSelect>
-
-					{{
-						course.classes.map((c) => {
-							return c["_id"];
-						})
-					}}
-
-					{{
-						course.students.map((c) => {
-							return c["_id"];
-						})
-					}}
 				</div>
 
 				<div v-show="currentStep == 2">
@@ -148,7 +151,7 @@ import BaseSelect from "./ui/BaseSelect";
 
 export default {
 	name: "TemplateCourseWizard",
-	components: { StepProgress},
+	components: {StepProgress},
 	props: {
 		currentStep: {
 			type: Number,
@@ -181,7 +184,21 @@ export default {
 		students: {
 			type: Array,
 			default: () => [],
-		},
+		}
+	},
+	data() {
+		return {
+			//weekdays: ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" ]
+			weekdays: [
+				{ value: 0, name: "Montag" },
+				{ value: 1, name: "Dienstag" },
+				{ value: 2, name: "Mittwoch" },
+				{ value: 3, name: "Donnerstag" },
+				{ value: 4, name: "Freitag" },
+				{ value: 5, name: "Samstag" },
+				{ value: 6, name: "Sonntag" },
+			]
+		};
 	},
 	computed: {
 		firststep() {
@@ -192,7 +209,7 @@ export default {
 		},
 		fullname() {
 			return this.user.firstName + " " + this.user.lastName;
-		},
+		}
 	},
 	created() {
 		this.course.teachers.push(this.user);
@@ -205,6 +222,19 @@ export default {
 		lastStep() {
 			this.currentStep = this.currentStep - 1;
 		},
+		addTime() {
+			let time = {weekday: this.weekdays[0], startTime: "08:00", duration: "60", room: "H1"};
+			this.course.times.push(time);
+		},
+		popTime(t) {
+			this.course.times.pop(t);
+		},
+		guidGenerator() {
+    	let S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    	};
+    	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+		}
 	},
 };
 </script>
@@ -228,9 +258,14 @@ export default {
 	justify-content: flex-end;
 }
 
-.date_wrapper {
+.date-wrapper {
 	display: flex;
 	justify-content:space-between;
+}
+
+.time-wrapper {
+	display: flex;
+	flex-direction: row;
 }
 
 .date{

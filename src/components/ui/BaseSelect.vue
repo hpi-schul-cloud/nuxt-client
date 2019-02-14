@@ -4,7 +4,7 @@
 			<MultiSelect
 				v-model="val"
 				:options="options"
-				:multiple="true"
+				:multiple="multiple"
 				:label="label"
 				:track-by="trackBy"
 				@input="$emit('update:value', val)"

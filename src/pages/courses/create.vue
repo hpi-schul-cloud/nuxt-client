@@ -10,12 +10,16 @@
 			:students="students"
 			@course-creation-submit="create()"
 		/>
+		Zeiten: {{course.times}}
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from "vuex";
 import TemplateCourseWizard from "@components/TemplateCourseWizard";
+
+var moment = require('moment');
+
 
 export default {
 	components: { TemplateCourseWizard },
@@ -69,7 +73,9 @@ export default {
 				substitutions: [],
 				classes: [],
 				students: [],
+				times: []
 			},
+			moment: moment,
 		};
 	},
 	computed: {
@@ -89,6 +95,12 @@ export default {
 					description: this.course.description,
 					startDate: this.course.startDate,
 					untilDate: this.course.untilDate,
+					times: this.course.times.map((time) => {
+						time.startTime = moment.duration(time.startTime, "HH:mm").asMilliseconds().toString();
+						time.duration = (time.duration * 60 * 1000).toString();
+						time.weekday = time.weekday.value;
+						return time;
+					}),
 					teacherIds: this.course.teachers.map((teacher) => {
 						return teacher["_id"];
 					}),

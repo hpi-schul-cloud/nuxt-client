@@ -5,12 +5,12 @@
 				{{ label }}
 			</span>
 			<FlatPickr
-				v-model="value"
+				v-model="val"
 				v-bind="$attrs"
-				:config="config"
+				:config="configDate"
 				:wrap="true"
 				v-on="$listeners"
-				@input="$emit('update', value)"
+				@input="$emit('update', val)"
 			>
 				<input
 					type="date"
@@ -19,6 +19,27 @@
 				/>
 			</FlatPickr>
 		</div>
+
+		<div v-else-if="type === 'time'" class="input__wrapper">
+			<span :class="{ label: true, active: value && value !== 0 }">
+				{{ label }}
+			</span>
+			<FlatPickr
+				v-model="val"
+				v-bind="$attrs"
+				:config="configTime"
+				:wrap="true"
+				v-on="$listeners"
+				@input="$emit('update', val)"
+			>
+				<input
+					type="time"
+					:name="name"
+					class="input"
+				/>
+			</FlatPickr>
+		</div>
+
 		<label v-else class="input__wrapper">
 			<span :class="{ label: true, active: value && value !== 0 }">
 				{{ label }}
@@ -58,7 +79,7 @@ export default {
 			type: String,
 			required: true,
 			validator: function(value) {
-				return ["email", "password", "search", "tel", "text", "textarea", "url", "date"].includes(
+				return ["email", "password", "search", "tel", "text", "textarea", "url", "date", "time"].includes(
 					value.toLowerCase()
 				);
 			},
@@ -85,12 +106,20 @@ export default {
 	data() {
 		return {
 			// Get more form https://chmln.github.io/flatpickr/options/
-			config: {
+			configDate: {
 				altFormat: "d.m.Y",
 				altInput: true,
 				dateFormat: "Y-m-d",
 				locale: German,
 			},
+			configTime: {
+				enableTime: true,
+				noCalendar: true,
+				dateFormat: "H:i",
+				time_24hr: true,
+				locale: German,
+			},
+			val: this.value,
 		};
 	},
 };
