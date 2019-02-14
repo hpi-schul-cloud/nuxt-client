@@ -48,12 +48,13 @@
 
 					<h6>Start und Enddatum</h6>
 
-					<div class="date">
+					<div class="date_wrapper">
 						<BaseInput
 							v-model="course.startDate"
 							name="startDate"
 							label="Startdatum"
 							type="date"
+							class="date"
 							placeholder=""
 							maxlength="30"
 						></BaseInput>
@@ -63,6 +64,7 @@
 							name="untilDate"
 							label="Enddatum"
 							type="date"
+							class="date"
 							placeholder=""
 							maxlength="30"
 						></BaseInput>
@@ -226,7 +228,12 @@ export default {
 	justify-content: flex-end;
 }
 
-.date {
+.date_wrapper {
 	display: flex;
+	justify-content:space-between;
+}
+
+.date{
+	width: 49%;
 }
 </style>

@@ -124,6 +124,7 @@ $input-padding-left: 12px;
 .input, .input__wrapper /deep/ .flatpickr-input{
 	display: block;
 	width: 100%;
+	box-sizing: border-box;
 	padding: $size-padding;
 	line-height: 1;
 	color: lighten($color-text, 20%);
