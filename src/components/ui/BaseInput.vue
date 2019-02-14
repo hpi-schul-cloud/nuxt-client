@@ -1,11 +1,10 @@
 <template>
 	<div class="root">
-		<div class="input__wrapper">
+		<div v-if="type === 'date'" class="input__wrapper">
 			<span :class="{ label: true, active: value && value !== 0 }">
 				{{ label }}
 			</span>
 			<FlatPickr
-				v-if="type === 'date'"
 				v-model="value"
 				v-bind="$attrs"
 				:config="config"
@@ -19,8 +18,12 @@
 					class="input"
 				/>
 			</FlatPickr>
+		</div>
+		<label v-else class="input__wrapper">
+			<span :class="{ label: true, active: value && value !== 0 }">
+				{{ label }}
+			</span>
 			<input
-				v-else
 				v-bind="$attrs"
 				:value="value"
 				:type="type"
@@ -29,7 +32,7 @@
 				v-on="$listeners"
 				@input="$emit('update', $event.target.value)"
 			/>
-		</div>
+		</label>
 		<small v-if="hint || $slots.hint" class="hint">
 			<template v-if="hint">{{ hint }}</template>
 			<slot v-else name="hint" />
