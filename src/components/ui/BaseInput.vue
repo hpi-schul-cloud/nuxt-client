@@ -55,7 +55,7 @@ export default {
 			type: String,
 			required: true,
 			validator: function(value) {
-				return ["email", "password", "search", "tel", "text", "url"].includes(
+				return ["email", "password", "search", "tel", "text", "textarea", "url", "date"].includes(
 					value.toLowerCase()
 				);
 			},
