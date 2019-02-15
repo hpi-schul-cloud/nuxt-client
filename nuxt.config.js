@@ -1,8 +1,10 @@
 const pkg = require("./package");
+const themeName = process.env.SC_THEME || "default";
 
 module.exports = {
 	mode: "spa",
-
+	srcDir: "src/",
+	theme: "default",
 	/*
 	 ** Headers of the page
 	 */
@@ -42,11 +44,12 @@ module.exports = {
 		color: "#fff",
 	},
 
+	css: ["@/themes/" + themeName + "/styles"],
+
 	/*
 	 ** Global CSS
 	 */
 	cssSourceMap: true,
-	css: ["~/styles/base.scss"],
 
 	router: {
 		middleware: ["is-authenticated"],
@@ -57,11 +60,12 @@ module.exports = {
 	 */
 	plugins: [
 		{
-			src: "~/plugins/authenticate",
+			src: "@plugins/authenticate",
 			ssr: false,
 		},
-		"@plugins/global.js",
-		"@plugins/directives.js",
+		"@plugins/global",
+		"@plugins/directives",
+		"@plugins/theme",
 		// '~/plugins/feathers',
 	],
 

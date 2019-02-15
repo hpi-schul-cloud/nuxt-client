@@ -33,14 +33,14 @@ Vue.config.productionTip = false;
 // ===
 
 const globalComponentFiles = fs
-	.readdirSync(path.join(__dirname, "../../components/ui"))
+	.readdirSync(path.join(__dirname, "../../src/components/ui"))
 	.filter((fileName) => /^Base[A-Z][\w]+\.vue$/.test(fileName));
 
 for (const fileName of globalComponentFiles) {
 	const componentName = _.pascalCase(
 		fileName.match(/^(Base[A-Z][\w]+)\.vue$/)[1]
 	);
-	const componentConfig = require("../../components/ui/" + fileName);
+	const componentConfig = require("../../src/components/ui/" + fileName);
 	Vue.component(componentName, componentConfig.default || componentConfig);
 }
 

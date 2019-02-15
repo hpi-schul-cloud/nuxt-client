@@ -5,10 +5,14 @@
 	"author": "HPI Schul-Cloud",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
-		"build": "nuxt build",
-		"start": "nuxt start",
-		"generate": "nuxt generate",
+		"dev": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
+		"docs": "vuepress dev docs",
+		"storybook": "start-storybook -p 6006",
+		"new": "hygen new",
+		"build": "run-s build:*",
+		"build:nuxt": "cross-env NODE_ENV=production nuxt generate",
+		"build:docs": "vuepress build docs",
+		"build:storybook": "build-storybook",
 		"lint:eslint": "eslint --fix",
 		"lint:stylelint": "stylelint --fix",
 		"lint:markdownlint": "markdownlint \"*/*.md\" -i \"schulcloud-client\"",
@@ -22,12 +26,10 @@
 		"test:unit:ci": "yarn test:unit --coverage --ci",
 		"test:unit:file": "yarn test:unit --bail --findRelatedTests",
 		"test:unit:watch": "yarn test:unit --watch --notify",
-		"test:ci": "run-s test:unit:ci",
-		"test": "run-s test:unit",
-		"new": "hygen new",
-		"ci": "yarn test:ci && lint-staged",
-		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook"
+		"build-storybook": "build-storybook",
+		"test:ci": "yarn test:unit:ci",
+		"test": "yarn test:unit",
+		"ci": "yarn test:ci && yarn lint && yarn build"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
@@ -62,6 +64,8 @@
 		"vue-ripple-directive": "^2.0.1"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.2.2",
+		"@babel/preset-env": "^7.3.1",
 		"@storybook/addon-actions": "^4.1.11",
 		"@storybook/addon-links": "^4.1.11",
 		"@storybook/addon-notes": "^4.1.11",
@@ -91,7 +95,7 @@
 		"lint-staged": "^8.1.1",
 		"markdownlint-cli": "github:igorshubovych/markdownlint-cli",
 		"node-sass": "^4.11.0",
-		"nodemon": "^1.11.0",
+		"nodemon": "^1.18.10",
 		"npm-run-all": "^4.1.5",
 		"nuxt-babel": "^0.1.2",
 		"prettier": "github:prettier/prettier#3de36e3",
@@ -101,9 +105,10 @@
 		"stylelint-config-recess-order": "^2.0.1",
 		"stylelint-config-standard": "^18.2.0",
 		"stylelint-scss": "^3.5.1",
+		"vue-jest": "^3.0.3",
 		"vue-style-loader": "^4.1.2",
 		"vue-svg-loader": "^0.11.0",
-		"vue-jest": "^3.0.2",
+		"vuepress": "^0.14.8",
 		"yorkie": "^2.0.0"
 	}
 }

@@ -1,5 +1,5 @@
 ---
-to: "pages<%= route %>/index.vue"
+to: "src/pages<%= route %>/index.vue"
 ---
 <%
   const fileName = route.replace(/^.*[\\\/]/, '');

@@ -3,3 +3,4 @@
 /schulcloud-client/
 dist
 coverage
+storybook-static
