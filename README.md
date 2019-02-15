@@ -33,7 +33,7 @@ cd ..
 # continue with "developing"
 ```
 
-[start developing](./docs/developing)
+[start developing](./docs/development.md)
 
 ### docs
 
