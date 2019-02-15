@@ -5,14 +5,14 @@ COPY ./package.json ./
 RUN yarn install
 COPY . .
 RUN git submodule init && git submodule update && cd schulcloud-client && npm install && cd ..
-RUN yarn build:storybook
+RUN yarn build:nuxt
 
-#EXPOSE 6006
+EXPOSE 3000
 
-CMD yarn storybook --ci
-
+CMD yarn dev
 
 
 FROM nginx:alpine
 EXPOSE 80
-COPY --from=builder /app/storybook-static /usr/share/nginx/html/
+COPY --from=builder /app/dist /usr/share/nginx/html/
+
