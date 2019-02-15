@@ -3,10 +3,8 @@ version: \"3.7\"
 
 services:
 
-  ### Schul-Cloud Client
-  ###
   nuxtclient:
-    image: schulcloud/schulcloud-nuxtclient:$DOCKERTAG
+    image: schulcloud/schulcloud-nuxt-client:$GIT_SHA
     deploy:
       replicas: 1
       restart_policy:
@@ -41,6 +39,6 @@ services:
       - ROCKET_CHAT_URI=ROCKET_CHAT_URISTAGE
       - ROCKETCHAT_SERVICE_ENABLED=true
     ports:
-      - \"3200:3000\"
+      - \"3200:80\"
     restart: always
 
