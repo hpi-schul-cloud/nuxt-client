@@ -10,6 +10,6 @@ services:
       restart_policy:
         condition: any
     ports:
-      - \"6006:80\"
+      - \"80:6006\"
     restart: always
 
