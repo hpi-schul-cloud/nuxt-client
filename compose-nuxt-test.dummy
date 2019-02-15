@@ -4,7 +4,7 @@ version: \"3.7\"
 services:
 
   nuxtclient:
-    image: schulcloud/schulcloud-nuxt-client:$GIT_SHA
+    image: schulcloud/schulcloud-nuxt-client:latest
     deploy:
       replicas: 1
       restart_policy:
