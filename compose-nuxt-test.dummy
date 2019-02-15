@@ -5,8 +5,13 @@ services:
 
   ### Schul-Cloud Client
   ###
+<<<<<<< HEAD
   client:
     image: schulcloud/schulcloud-client:$DOCKERTAG
+=======
+  nuxtclient:
+    image: schulcloud/schulcloud-nuxtclient:$DOCKERTAG
+>>>>>>> de7d42630eacf00f09c9207e69da0b385af4e540
     deploy:
       replicas: 1
       restart_policy:
@@ -41,6 +46,10 @@ services:
       - ROCKET_CHAT_URI=ROCKET_CHAT_URISTAGE
       - ROCKETCHAT_SERVICE_ENABLED=true
     ports:
+<<<<<<< HEAD
       - \"6006:6006\"
+=======
+      - \"3200:3000\"
+>>>>>>> de7d42630eacf00f09c9207e69da0b385af4e540
     restart: always
 

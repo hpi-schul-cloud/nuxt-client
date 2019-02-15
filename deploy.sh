@@ -14,6 +14,7 @@ docker push schulcloud/schulcloud-nuxtclient:$DOCKERTAG
 docker push schulcloud/schulcloud-nuxtclient:$GIT_SHA
 docker push schulcloud/schulcloud-nuxtclient:latest
 
+<<<<<<< HEAD
 # screw together config file for docker swarm
 eval "echo \"$( cat compose-nuxt-test.dummy )\"" > docker-compose-nuxtclient.yml
 
@@ -23,6 +24,26 @@ chmod 600 travis_rsa
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxtclient.yml linux@test.schul-cloud.org:~
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxtclient.yml test-schul-cloud
 # ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker service update --force test-schul-cloud_server
+=======
+openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
+chmod 600 travis_rsa
+
+if [[ $DOCKERTAG == story* ]] || [[ $DOCKERTAG == master ]]
+then
+  # screw together config file for docker swarm
+  eval "echo \"$( cat compose-storybook-test.dummy )\"" > docker-compose-storybook.yml
+  scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-storybook.yml linux@test.schul-cloud.org:~
+  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-storybook.yml test-schul-cloud
+elif [[ $DOCKERTAG == nuxt* ]] || [[ $DOCKERTAG == master ]]
+then
+  # screw together config file for docker swarm
+  eval "echo \"$( cat compose-nuxt-test.dummy )\"" > docker-compose-nuxtclient.yml
+  scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxtclient.yml linux@test.schul-cloud.org:~
+  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxtclient.yml test-schul-cloud
+else
+  echo "Branch wird nicht deployt"
+fi
+>>>>>>> de7d42630eacf00f09c9207e69da0b385af4e540
 
 exit 0
 
