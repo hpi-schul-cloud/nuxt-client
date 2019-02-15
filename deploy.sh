@@ -2,6 +2,7 @@
 
 # replace special characters in branch name for docker tag
 export DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
+echo GITSHA $GIT_SHA
 
 # storybook doku bauen und deployen
 function storybook {
@@ -50,8 +51,10 @@ elif [[ $DOCKERTAG == nuxt* ]]
 then
   nuxtclient
 elif [[ $DOCKERTAG == doc* ]]
+then
   vuepress
 elif [[ $DOCKERTAG == master ]]
+then
   storybook
   nuxtclient
   vuepress
