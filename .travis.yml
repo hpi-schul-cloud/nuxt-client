@@ -36,5 +36,5 @@ deploy:
   script: bash ./deploy.sh
   on:
    all_branches: true
-   condition: $TRAVIS_BRANCH =~ ^sepl*|story.*|nuxt.*|doc*|master$
+   condition: $TRAVIS_BRANCH =~ ^story.*|nuxt.*|doc*|master$
 

@@ -2,6 +2,7 @@
 
 # replace special characters in branch name for docker tag
 export DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
+echo GITSHA $GIT_SHA
 
 # storybook doku bauen und deployen
 function storybook {
@@ -29,11 +30,11 @@ function nuxtclient {
 
 # vuepress doku bauen und deployen
 function vuepress {
-	docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f Dockerfile.nuxt .
+	docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f Dockerfile.vuepress .
 	docker push schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-vuepress:latest
 	
-	eval "echo \"$( cat compose-vuepress-test.dummy )\"" > docker-compose-nuxt-client.yml
+	eval "echo \"$( cat compose-vuepress-test.dummy )\"" > docker-compose-nuxt-vuepress.yml
 	
 	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-vuepress.yml linux@test.schul-cloud.org:~
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-vuepress.yml test-schul-cloud
@@ -50,8 +51,10 @@ elif [[ $DOCKERTAG == nuxt* ]]
 then
   nuxtclient
 elif [[ $DOCKERTAG == doc* ]]
+then
   vuepress
 elif [[ $DOCKERTAG == master ]]
+then
   storybook
   nuxtclient
   vuepress
