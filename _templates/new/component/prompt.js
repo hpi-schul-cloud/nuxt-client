@@ -48,4 +48,9 @@ module.exports = [
 			return true;
 		},
 	},
+	{
+		type: "Confirm",
+		name: "story",
+		message: "Story generation?",
+	},
 ];
