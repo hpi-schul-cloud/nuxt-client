@@ -108,5 +108,9 @@
 		"vue-svg-loader": "^0.11.0",
 		"vuepress": "^0.14.8",
 		"yorkie": "^2.0.0"
+	},
+	"engines": {
+		"node": ">=10.x.x",
+		"yarn": ">=1.12.0"
 	}
 }
