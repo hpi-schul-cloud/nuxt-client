@@ -1,6 +1,6 @@
 FROM node:lts as builder
 
-WORKDIR '/app' 
+WORKDIR '/app'
 COPY ./package.json ./
 RUN yarn install
 COPY . .
@@ -14,5 +14,4 @@ CMD yarn dev
 
 FROM nginx:alpine
 EXPOSE 80
-COPY --from=builder /app/docs/.vuepress/dist /usr/share/nginx/html/
-
+COPY --from=builder /app/dist/docs /usr/share/nginx/html/
