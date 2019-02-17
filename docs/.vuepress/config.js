@@ -34,7 +34,6 @@ function listFiles(dir) {
 				files.push({
 					title: extractName(filepath),
 					children: listFiles(join(dir, file)),
-					collapsable: false,
 				});
 			} else if (filepath.includes(".md") && !filepath.includes("README")) {
 				const cleanFilepath = filepath
@@ -61,6 +60,6 @@ module.exports = {
 	markdown: {
 		lineNumbers: true,
 		anchor: { permalink: true },
-		toc: { includeLevel: [2] },
+		toc: { includeLevel: [2, 3] },
 	},
 };

@@ -40,29 +40,67 @@ cd ..
 ## Developing
 
 ```bash
-# serve all included application
+# serve nuxt, docs und storybook in parallel
 $ yarn dev
-
-# OR START EACH ONE INDIVIDUALLY
-# main vue project
-$ yarn dev:nuxt
-# serve documentation
-$ yarn dev:docs
-# serve storybook for component developing
-$ yarn dev:storybook
-
-# run the linter with autofix
-$ yarn lint
-
-# run the (unit-)tests
-$ yarn test
 ```
 
 You can find all commands inside the [package.json](./package.json).
 
+### Nuxt
+
+```bash
+$ yarn dev:nuxt
+```
+
+All Nuxt source-files can be found at `src/`.
+
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
 
-### Read more about our toolset [here](/tools.html).
+### Docs
+
+```bash
+$ yarn dev:docs
+```
+
+For detailed explanation on how things work, checkout [Vuepress](https://vuepress.vuejs.org/guide/).
+
+### Storybook
+
+```bash
+$ yarn dev:storybook
+```
+
+For detailed explanation on how things work, checkout [Storybook](https://storybook.js.org/).
+
+### Test
+
+### Unit Tests
+
+```bash
+# Run all unit tests
+$ yarn test
+```
+
+For development we recommend using
+
+```bash
+# Run all unit tests and watch for changes
+$ yarn test:unit:watch
+```
+
+this runs all the tests that are covering a component as soon as you change something.
+
+### Lint
+
+```bash
+$ yarn lint
+```
+
+The linter is configured to use the --fix option by default. So in most cases you shoudn't get a lot of warnings and errors.
+
+### more Tools
+
+We have [a seperate page](/2-tools.html) for our other tools
 
 ## Aliases
 
