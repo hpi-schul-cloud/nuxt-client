@@ -16,12 +16,12 @@ Output Directory: `./dist/nuxt`
 
 ### NODE_ENV during build
 
-| node-env       | default                 | info                                                                               |
-| -------------- | ----------------------- | ---------------------------------------------------------------------------------- |
-| API_HOST       | `http://localhost:3030` | URL to [schulcloud-server](https://github.com/schul-cloud/schulcloud-server)       |
-| SC_THEME       | `default`               | theme used for [legacy fallback](https://github.com/schul-cloud/schulcloud-client) |
-| SC_TITLE       | `HPI Schul-Cloud`       |                                                                                    |
-| SC_SHORT_TITLE | `Schul-Cloud`           |                                                                                    |
+| node-env       | default                 | info                                                                                         |
+| -------------- | ----------------------- | -------------------------------------------------------------------------------------------- |
+| API_HOST       | `http://localhost:3030` | URL to [schulcloud-server](https://github.com/schul-cloud/schulcloud-server)                 |
+| SC_THEME       | `default`               | theme used, same as in [schulcloud-client](https://github.com/schul-cloud/schulcloud-client) |
+| SC_TITLE       | `HPI Schul-Cloud`       |                                                                                              |
+| SC_SHORT_TITLE | `Schul-Cloud`           |                                                                                              |
 
 ## Storybook
 
