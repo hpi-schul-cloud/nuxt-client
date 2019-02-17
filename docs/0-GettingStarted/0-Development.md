@@ -23,7 +23,7 @@ Please read the following Code Styleguides before you start contributing:
 https://yarnpkg.com/lang/en/docs/install/
 
 # install dependencies
-$ yarn install
+yarn install
 
 # install legacy schulcloud-client
 git submodule init && git submodule update
@@ -41,7 +41,7 @@ cd ..
 
 ```bash
 # serve nuxt, docs und storybook in parallel
-$ yarn dev
+yarn dev
 ```
 
 You can find all commands inside the [package.json](./package.json).
@@ -49,7 +49,7 @@ You can find all commands inside the [package.json](./package.json).
 ### Nuxt
 
 ```bash
-$ yarn dev:nuxt
+yarn dev:nuxt
 ```
 
 All Nuxt source-files can be found at `src/`.
@@ -59,7 +59,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 ### Docs
 
 ```bash
-$ yarn dev:docs
+yarn dev:docs
 ```
 
 For detailed explanation on how things work, checkout [Vuepress](https://vuepress.vuejs.org/guide/).
@@ -67,7 +67,7 @@ For detailed explanation on how things work, checkout [Vuepress](https://vuepres
 ### Storybook
 
 ```bash
-$ yarn dev:storybook
+yarn dev:storybook
 ```
 
 For detailed explanation on how things work, checkout [Storybook](https://storybook.js.org/).
@@ -78,14 +78,14 @@ For detailed explanation on how things work, checkout [Storybook](https://storyb
 
 ```bash
 # Run all unit tests
-$ yarn test
+yarn test
 ```
 
 For development we recommend using
 
 ```bash
 # Run all unit tests and watch for changes
-$ yarn test:unit:watch
+yarn test:unit:watch
 ```
 
 this runs all the tests that are covering a component as soon as you change something.
@@ -93,7 +93,7 @@ this runs all the tests that are covering a component as soon as you change some
 ### Lint
 
 ```bash
-$ yarn lint
+yarn lint
 ```
 
 The linter is configured to use the --fix option by default. So in most cases you shoudn't get a lot of warnings and errors.

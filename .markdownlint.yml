@@ -2,7 +2,7 @@ default: true
 # Rule customizations for markdownlint go here
 # https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md
 
-#Disable line length restrictions, because editor soft-wrapping is being
+# Disable line length restrictions, because editor soft-wrapping is being used
 line-length: false
 # allow hard tabs, look at the eslint config for more details
 no-hard-tabs: false

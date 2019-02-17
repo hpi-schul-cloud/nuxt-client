@@ -16,7 +16,7 @@
 		"new": "hygen new",
 		"lint:eslint": "eslint --fix",
 		"lint:stylelint": "stylelint --fix",
-		"lint:markdownlint": "markdownlint \"*/*.md\" -i \"schulcloud-client\"",
+		"lint:markdownlint": "markdownlint \"**/*.md\" -i \"@(schulcloud-client|node_modules|dist)/**/*.md\" -c \".markdownlint.yml\"",
 		"lint:prettier": "prettier --write --loglevel warn",
 		"lint:all:eslint": "yarn lint:eslint --ext .js,.vue .",
 		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",

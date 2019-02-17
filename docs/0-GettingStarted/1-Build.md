@@ -9,7 +9,7 @@ All Generated files can be fount at: `./dist/*`
 ## Nuxt Client
 
 ```bash
-$ yarn build:nuxt
+yarn build:nuxt
 ```
 
 Output Directory: `./dist/nuxt`
@@ -26,7 +26,7 @@ Output Directory: `./dist/nuxt`
 ## Storybook
 
 ```bash
-$ yarn build:storybook
+yarn build:storybook
 ```
 
 Output Directory: `./dist/storybook`
@@ -34,7 +34,7 @@ Output Directory: `./dist/storybook`
 ## Vuepress Docs
 
 ```bash
-$ yarn build:docs
+yarn build:docs
 ```
 
 Output Directory: `./dist/docs`
