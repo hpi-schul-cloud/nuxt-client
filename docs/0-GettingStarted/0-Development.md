@@ -108,4 +108,4 @@ To simplify referencing local modules and refactoring, you shpuld use aliases th
 
 ## Pre-commit
 
-Staged files are automatically linted and tested before each commit. See `lint-staged.config.js` to update.
+Staged files are automatically linted and tested before each commit using [yorkie](https://www.npmjs.com/package/yorkie) and [lint-staged](https://github.com/okonet/lint-staged). See `lint-staged.config.js` for details.

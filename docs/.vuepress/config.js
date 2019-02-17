@@ -46,10 +46,11 @@ function listFiles(dir) {
 }
 
 module.exports = {
-	title: "SC-Nuxt-Client Docs",
+	title: "Nuxt-Client Docs",
 	description: "documentation",
 	themeConfig: {
 		sidebar: listFiles(baseDir),
+		logo: "/cloud-transparent.png",
 	},
 	configureWebpack: {
 		resolve: {

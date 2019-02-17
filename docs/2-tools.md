@@ -1,8 +1,8 @@
 # Tools
 
-## [Hygen Templates](http://www.hygen.io/)
+## Hygen Templates
 
-Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels Hygen erstellt.
+Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels [Hygen](http://www.hygen.io/) erstellt.
 
 ```bash
 # Generate a new component with adjacent unit test
@@ -24,8 +24,12 @@ yarn new layout
 
 Prettier wird für die gesamte Codeformatierung verwendet. Sämtliche Linter sollten so eingestellt werden, um möglichen Konflikten vorzubeugen, dass sie sich nicht um Formatierung kümmern.
 
+::: tip Hinweis:
+
 - Prettier → Formatierung
 - Linter → Syntax, Reihenfolge, ..
+
+:::
 
 - [Prettier](https://prettier.io/docs/en/configuration.html)
   - `.prettierrc.js`
