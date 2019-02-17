@@ -40,7 +40,7 @@ Prettier wird für die gesamte Codeformatierung verwendet. Sämtliche Linter sol
   - `stylelint.config.js`
   - `.stylelintignore`
 - [Markdownlint](https://github.com/igorshubovych/markdownlint-cli)
-  - `.markdownlintrc`
+  - `.markdownlint.yml`
 
 ### [ESLint](https://eslint.org/docs/user-guide/configuring)
 

@@ -5,7 +5,6 @@
 
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
-	"editor.indentationMode": "tab",
 	"editor.trimAutoWhitespace": true,
 	"files.trimTrailingWhitespace": true,
 	"files.eol": "\n",
@@ -25,9 +24,6 @@
 		"node_modules": true,
 		"jsconfig.json": true,
 		"**/coverage": true
-	},
-	"files.associations": {
-		".markdownlintrc": "jsonc"
 	},
 
 	// ===
@@ -101,10 +97,10 @@
 	// MARKDOWN
 	// ===
 
+	"markdownlint.ignore": ["schulcloud-client/**/*.md"],
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
-		"editor.wordWrapColumn": 80,
-		"markdownlint.ignore": ["schulcloud-client/**/*.md"]
+		"editor.wordWrapColumn": 80
 	},
 
 	// ===

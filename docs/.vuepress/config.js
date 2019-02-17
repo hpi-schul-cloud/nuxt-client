@@ -56,10 +56,8 @@ module.exports = {
 			alias: require("../../aliases.config").webpack,
 		},
 	},
-	permalink: "/:year/:month/:day/:slug",
 	markdown: {
 		lineNumbers: true,
-		anchor: { permalink: true },
 		toc: { includeLevel: [2, 3] },
 	},
 };
