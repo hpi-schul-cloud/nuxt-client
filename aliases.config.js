@@ -6,6 +6,7 @@ const themeName = process.env.SC_THEME || "default";
 const aliases = {
 	"~": ".",
 	"@": "src",
+	"@assets": `src/assets`,
 	"@components": "src/components",
 	"@docs": "docs",
 	"@layouts": "src/layouts",
@@ -13,7 +14,6 @@ const aliases = {
 	"@pages": "src/pages",
 	"@plugins": "src/plugins",
 	"@store": "src/store",
-	"@assets": `src/themes/${themeName}/assets`,
 	"@static": `src/themes/${themeName}/static`,
 	"@theme": `src/themes/${themeName}`,
 	"@styles": `src/themes/${themeName}/styles`,

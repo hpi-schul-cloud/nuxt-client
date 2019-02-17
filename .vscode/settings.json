@@ -22,7 +22,8 @@
 	"files.exclude": {
 		"**/*.log": true,
 		"**/*.log*": true,
-		"**/dist": true,
+		"node_modules": true,
+		"jsconfig.json": true,
 		"**/coverage": true
 	},
 	"files.associations": {
