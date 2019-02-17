@@ -55,11 +55,11 @@ export default {
 
 	.grid{
 		display: flex;
-		flex-wrap: wrap;
 		flex-direction: row;
+		flex-wrap: wrap;
 		justify-content: center;
-		max-width: $size-content-width-max;
 		min-width: $size-content-width-min;
+		max-width: $size-content-width-max;
 		margin: 0 auto;
 	}
 
