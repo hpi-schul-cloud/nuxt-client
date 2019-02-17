@@ -1,0 +1,11 @@
+#.git
+.gitignore
+.travis.yml*
+Dockerfile
+README.md
+build
+compose-nuxt-test.dummy
+deploy.sh
+node_modules
+travis_rsa.enc
+

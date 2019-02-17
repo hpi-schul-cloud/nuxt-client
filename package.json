@@ -9,12 +9,10 @@
 		"dev:docs": "vuepress dev docs",
 		"dev:storybook": "start-storybook -p 6006",
 		"dev": "run-p dev:*",
-		"build": "run-s build:*",
-		"build:nuxt": "cross-env NODE_ENV=production nuxt build",
-		"build:docs": "vuepress build docs",
-		"build:storybook": "build-storybook",
-		"start": "nuxt start",
-		"generate": "nuxt generate",
+		"build": "run-p build:*",
+		"build:nuxt": "cross-env NODE_ENV=production nuxt generate",
+		"build:docs": "vuepress build docs -d dist/docs",
+		"build:storybook": "build-storybook -o dist/storybook",
 		"new": "hygen new",
 		"lint:eslint": "eslint --fix",
 		"lint:stylelint": "stylelint --fix",
@@ -31,7 +29,7 @@
 		"test:unit:watch": "yarn test:unit --watch --notify",
 		"test:ci": "yarn test:unit:ci",
 		"test": "yarn test:unit",
-		"ci": "yarn test:ci && yarn lint"
+		"ci": "yarn test:ci && yarn lint && yarn build"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
@@ -87,7 +85,7 @@
 		"eslint-config-prettier": "^4.0.0",
 		"eslint-loader": "^2.0.0",
 		"eslint-plugin-prettier": "^3.0.1",
-		"eslint-plugin-vue": "^5.1.0",
+		"eslint-plugin-vue": "^5.2.1",
 		"hygen": "^2.1.1",
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^24.1.0",
