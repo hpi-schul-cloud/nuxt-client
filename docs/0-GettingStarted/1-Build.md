@@ -1,8 +1,6 @@
-# Build
+# Build & Deployment
 
-## Developing
-
-### with SSR
+## with SSR
 
 ```bash
 # build for production and launch server
@@ -10,14 +8,14 @@ $ yarn run build
 $ yarn start
 ```
 
-### as SPA
+## as SPA
 
 ```bash
 # generate static project
 $ yarn run generate
 ```
 
-### NODE_ENV during build
+## NODE_ENV during build
 
 | node-env | default                                        | info                                                                               |
 | -------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- |

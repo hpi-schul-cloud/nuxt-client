@@ -1,0 +1,1 @@
+# Komponente mit Sotrybook dokumentieren

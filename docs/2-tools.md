@@ -1,8 +1,8 @@
 # Tools
 
-## Generators
+## [Hygen Templates](http://www.hygen.io/)
 
-This project includes generators to speed up common development tasks. Commands include:
+Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels Hygen erstellt.
 
 ```bash
 # Generate a new component with adjacent unit test
@@ -15,6 +15,22 @@ yarn new page
 yarn new layout
 ```
 
+- [Hygen](http://www.hygen.io/)
+  - `_templates/new/$name` (use with `yarn new $name`)
+    - `prompt.js` (ask for options)
+    - `*.ejs.t` template file(s)
+
+## Prettier
+
+Prettier wird für die gesamte Codeformatierung verwendet. Sämtliche Linter sollten so eingestellt werden, um möglichen Konflikten vorzubeugen, dass sie sich nicht um Formatierung kümmern.
+
+- Prettier → Formatierung
+- Linter → Syntax, Reihenfolge, ..
+
+- [Prettier](https://prettier.io/docs/en/configuration.html)
+  - `.prettierrc.js`
+  - `.prettierignore`
+
 ## Linter
 
 - [ESLint](https://eslint.org/docs/user-guide/configuring) and [eslint-plugin-vue](https://eslint.vuejs.org/rules/)
@@ -25,18 +41,6 @@ yarn new layout
   - `.stylelintignore`
 - [Markdownlint](https://github.com/igorshubovych/markdownlint-cli)
   - `.markdownlintrc`
-- [Prettier](https://prettier.io/docs/en/configuration.html)
-  - `.prettierrc.js`
-  - `.prettierignore`
-
-Update existing or create new generators in the `_templates` folder, with help from the [Hygen docs](http://www.hygen.io/).
-
-### [Prettier](https://prettier.io/docs/en/configuration.html)
-
-Prettier wird für die gesamte Codeformatierung verwendet. Sämtliche Linter sollten so eingestellt werden, um möglichen Konflikten vorzubeugen, dass sie sich nicht um Formatierung kümmern.
-
-- Prettier → Formatierung
-- Linter → Syntax, Reihenfolge, ...
 
 ### [ESLint](https://eslint.org/docs/user-guide/configuring)
 
@@ -49,3 +53,12 @@ Wird verwendet um sämtliches CSS zu prüfen. Welche Regeln warum aktiviert sind
 ### [Markdownlint](https://github.com/igorshubovych/markdownlint-cli)
 
 Wir verwenden einen fork von Markdownlint. Dieser hat die Möglichkeit zum ignorieren von Dateien hinzugefügt, sodass auf dem alten /schulcloud-client repo kein Markdownlint ausgeführt werden muss (verursacht einige Fehler).
+
+## Babel
+
+Für Tests benötigen wir zwingend `@babel/preset-env` mit `babel-core ^7.0.0` und `babel-jest ^24.1.0`.
+
+Für alles weitere bleiben wir bisher bei den default Einstellungen und verwenden das preset `@nuxt/babel-preset-app` ([documentation](https://nuxtjs.org/api/configuration-build/#babel))
+
+- [Babel](https://github.com/igorshubovych/markdownlint-cli)
+  - `babel.config.js`

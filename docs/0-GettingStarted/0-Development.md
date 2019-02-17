@@ -1,13 +1,20 @@
 # Development
 
+[[toc]]
+
+## Reading
+
 Please read the following Code Styleguides before you start contributing:
 
 1. [official vue 2 style guide](https://vuejs.org/v2/style-guide/)
 1. [Vue Linter Recommendations](https://eslint.vuejs.org/user-guide/) (optional, but nice to know why some rules are enabled)
 
-**Please don't use npm!!!**
+::: warning Please don't use npm!!!
 
-[yarn](https://yarnpkg.com/lang/en/docs/install/) is faster and cleaner. It's also not recommended to mix npm & yarn in one repository.
+- [yarn](https://yarnpkg.com/lang/en/docs/install/) is faster and cleaner.
+- It's also not recommended to mix npm & yarn in one repository.
+
+:::
 
 ## Setup
 
@@ -33,27 +40,22 @@ cd ..
 ## Developing
 
 ```bash
-# serve application with hot reload at localhost:3000
+# serve all included application
 $ yarn dev
 
-# serve documentation with hot reload
-$ yarn docs
-
-# serve storybook with hot reload for component developing
-$ yarn storybook
+# OR START EACH ONE INDIVIDUALLY
+# main vue project
+$ yarn dev:nuxt
+# serve documentation
+$ yarn dev:docs
+# serve storybook for component developing
+$ yarn dev:storybook
 
 # run the linter with autofix
 $ yarn lint
 
 # run the (unit-)tests
-$ yarn lint
-
-# build for production and launch server (nuxt)
-$ yarn build:nuxt
-$ yarn start
-
-# generate static project (nuxt)
-$ yarn run generate
+$ yarn test
 ```
 
 You can find all commands inside the [package.json](./package.json).
@@ -64,7 +66,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 
 ## Aliases
 
-To simplify referencing local modules and refactoring, you can set aliases to be shared between dev and unit tests in `aliases.config.js`. As a convention, this project uses an `@` prefix to denote aliases.
+To simplify referencing local modules and refactoring, you shpuld use aliases that are shared between nuxt-dev, unit tests and storybook. You can find them in `aliases.config.js`. As a convention, this project uses an `@` prefix to denote aliases.
 
 ## Pre-commit
 
