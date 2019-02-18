@@ -62,7 +62,7 @@ then
   nuxtclient
   vuepress
 else
-  echo "Branch wird nicht deployt"
+  echo "Branch will not be deployed"
 fi
 
 exit 0
