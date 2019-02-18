@@ -46,7 +46,7 @@ function listFiles(dir) {
 }
 
 module.exports = {
-	title: "Nuxt-Client Docs",
+	title: "Nuxt-Client Docs (Speedtest)",
 	description: "documentation",
 	themeConfig: {
 		sidebar: listFiles(baseDir),
