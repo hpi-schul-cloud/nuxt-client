@@ -1,3 +1,12 @@
+FROM node:lts as builder
+
+WORKDIR '/app' 
+COPY ./package.json ./
+RUN yarn install
+COPY . .
+RUN git submodule init && git submodule update && cd schulcloud-client && npm install && cd ..
+RUN yarn build:docs
+
 FROM nginx:alpine
 EXPOSE 80
-COPY ./dist/docs /usr/share/nginx/html/
+COPY --from=builder /app/dist/docs /usr/share/nginx/html/
