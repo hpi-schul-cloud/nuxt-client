@@ -4,7 +4,6 @@ WORKDIR '/app'
 COPY ./package.json ./
 RUN yarn install
 COPY . .
-RUN git submodule init && git submodule update && cd schulcloud-client && npm install && cd ..
 RUN yarn build:docs
 
 FROM nginx:alpine
