@@ -7,11 +7,6 @@ COPY . .
 RUN git submodule init && git submodule update && cd schulcloud-client && npm install && cd ..
 RUN yarn build:nuxt
 
-EXPOSE 3000
-
-CMD yarn dev
-
-
 FROM nginx:alpine
 EXPOSE 80
 COPY --from=builder /app/dist/nuxt /usr/share/nginx/html/

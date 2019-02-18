@@ -7,12 +7,6 @@ COPY . .
 RUN git submodule init && git submodule update && cd schulcloud-client && npm install && cd ..
 RUN yarn build:storybook
 
-#EXPOSE 6006
-
-CMD yarn storybook --ci
-
-
-
 FROM nginx:alpine
 EXPOSE 80
 COPY --from=builder /app/dist/storybook /usr/share/nginx/html/
