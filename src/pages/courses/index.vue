@@ -4,7 +4,7 @@
 			<button
 				class="button is-info"
 				@click="$router.push({ name: 'courses-create' })"
-				>Neues Kurs erstellen</button
+				>Neuen Kurs erstellen</button
 			>
 		</section>
 		<section class="section">

@@ -38,7 +38,6 @@ export default {
 			const query = {
 				roles: [teacherRole._id],
 			};
-
 			const teachers = (await store.dispatch("users/find", { query })).data;
 
 			const query2 = {
@@ -99,18 +98,10 @@ export default {
 						time.weekday = time.weekday.value;
 						return time;
 					}),
-					teacherIds: this.course.teachers.map((teacher) => {
-						return teacher["_id"];
-					}),
-					substitutionIds: this.course.substitutions.map((substitution) => {
-						return substitution["_id"];
-					}),
-					classIds: this.course.classes.map((c) => {
-						return c["_id"];
-					}),
-					userIds: this.course.students.map((student) => {
-						return student["_id"];
-					}),
+					teacherIds: this.course.teachers,
+					substitutionIds: this.course.substitutions,
+					classIds: this.course.classes,
+					userIds: this.course.students,
 				});
 
 				this.$router.push({ name: "courses" });

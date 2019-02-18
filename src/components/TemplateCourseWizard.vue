@@ -28,7 +28,7 @@
 
 					<h6>Unterrichtender Lehrer</h6>
 					<BaseSelect
-						:value.sync="course.teachers"
+						:value.sync="teachersSelected"
 						:options="teachers"
 						:multiple="true"
 						label="lastName"
@@ -37,7 +37,7 @@
 
 					<h6>Vertretungs-Lehrer</h6>
 					<BaseSelect
-						:value.sync="course.substitutions"
+						:value.sync="substitutionsSelected"
 						:options="teachers"
 						:multiple="true"
 						label="lastName"
@@ -66,25 +66,7 @@
 						></BaseInput>
 					</div>
 
-					<div v-for="(time,i) of course.times" :key="i" class="time-wrapper">
-						<BaseSelect
-							:value.sync = "time.weekday"
-							:options="weekdays"
-							:allow-empty="false"
-							label="name"
-						></BaseSelect>
-						<BaseInput v-model="time.room" label="Raum" name="room" type="text"/>
-						<BaseInput v-model="time.startTime" label="Start" name="startTime" type="time"/>
-						<BaseInput v-model="time.duration" label="Dauer" name="duration" type="text"/>
-						<a style="cursor: pointer" @click="popTime(time)">Remove</a>
-					</div>
-					<BaseButton
-						type="button"
-						class="btn btn-primary"
-						@click="addTime">
-						Schulstundentermin im Stundenplan anlegen
-					</BaseButton>
-
+					<TemplateCourseTimes v-model="course.times"/>
 				</div>
 
 				<div v-show="currentStep == 1">
@@ -92,7 +74,7 @@
 
 					<h6>Klasse auswählen</h6>
 					<BaseSelect
-						:value.sync = "course.classes"
+						:value.sync = "classesSelected"
 						:options="classes"
 						:multiple="true"
 						label="displayName"
@@ -101,7 +83,7 @@
 
 					<h6>Studenten auswählen</h6>
 					<BaseSelect
-						:value.sync = "course.students"
+						:value.sync = "studentsSelected"
 						:options="students"
 						:multiple="true"
 						label="displayName"
@@ -148,10 +130,11 @@ import StepProgress from "./StepProgress.vue";
 import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
 import BaseSelect from "./ui/BaseSelect";
+import TemplateCourseTimes from "./TemplateCourseTimes"
 
 export default {
 	name: "TemplateCourseWizard",
-	components: {StepProgress},
+	components: {StepProgress, TemplateCourseTimes},
 	props: {
 		steps: {
 			type: Array,
@@ -184,16 +167,10 @@ export default {
 	},
 	data() {
 		return {
-			//weekdays: ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" ]
-			weekdays: [
-				{ value: 0, name: "Montag" },
-				{ value: 1, name: "Dienstag" },
-				{ value: 2, name: "Mittwoch" },
-				{ value: 3, name: "Donnerstag" },
-				{ value: 4, name: "Freitag" },
-				{ value: 5, name: "Samstag" },
-				{ value: 6, name: "Sonntag" },
-			],
+			teachersSelected: [],
+			substitutionsSelected: [],
+			classesSelected: [],
+			studentsSelected: [],
 			currentStep: 0
 		};
 	},
@@ -208,29 +185,37 @@ export default {
 			return this.user.firstName + " " + this.user.lastName;
 		}
 	},
+	watch: {
+		teachersSelected: function(){
+			this.course.teachers = this.teachersSelected.map((teacher) => {
+				return teacher["_id"];
+			});
+		},
+		substitutionsSelected: function(){
+			this.course.substitutions = this.substitutionsSelected.map((substitution) => {
+				return substitution["_id"];
+			});
+		},
+		classesSelected: function(){
+			this.course.classes = this.classesSelected.map((c) => {
+				return c["_id"];
+			});
+		},
+		studentsSelected: function(){
+			this.course.students = this.studentsSelected.map((student) => {
+				return student["_id"];
+			});
+		}
+	},
 	created() {
-		this.course.teachers.push(this.user);
+		this.teachersSelected.push(this.user);
 	},
 	methods: {
 		nextStep() {
 			this.currentStep = this.currentStep + 1;
 		},
-
 		lastStep() {
 			this.currentStep = this.currentStep - 1;
-		},
-		addTime() {
-			let time = {weekday: this.weekdays[0], startTime: "08:00", duration: "60", room: "H1"};
-			this.course.times.push(time);
-		},
-		popTime(t) {
-			this.course.times.pop(t);
-		},
-		guidGenerator() {
-    	let S4 = function () {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    	};
-    	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 		}
 	},
 };
@@ -259,11 +244,6 @@ export default {
 .date-wrapper {
 	display: flex;
 	justify-content:space-between;
-}
-
-.time-wrapper {
-	display: flex;
-	flex-direction: row;
 }
 
 .date{
