@@ -1,14 +1,19 @@
 <template>
 	<div class="root">
 		<div class="input__wrapper">
+			<span :class="{ label: true, active: value && value !== 0 }">
+				{{ placeholder }}
+			</span>
 			<MultiSelect
 				v-model="val"
 				:options="options"
 				:multiple="multiple"
 				:label="label"
+				:placeholder="placeholder"
 				:track-by="trackBy"
 				:allow-empty="allowEmpty"
 				:show-labels="showLabels"
+				:close-on-select="closeOnSelect"
 				@input="$emit('update:value', val)"
 			></MultiSelect>
 		</div>
@@ -41,6 +46,11 @@ export default {
 			default: () => [],
 			required: true
 		},
+		placeholder: {
+			type: String,
+			default: "",
+			required: false,
+		},
 		label: {
 			type: String,
 			default: "",
@@ -65,6 +75,11 @@ export default {
 			type: Boolean,
 			default: false,
 			required: false
+		},
+		closeOnSelect: {
+			type: Boolean,
+			default: true,
+			required: false
 		}
 	},
 	data: function () {
@@ -81,6 +96,7 @@ $input-padding-left: 12px;
 
 .root{
 	width: 100%;
+	padding-top: 1px;
 }
 
 .input__wrapper {
@@ -89,7 +105,7 @@ $input-padding-left: 12px;
 	margin: 1em 0 $size-grid-padding;
 	clear: both;
 	background: $color-text-bg;
-	//border: $size-border-width solid $color-border;
+	border: $size-border-width solid $color-border;
 	border-radius: $size-border-radius;
 }
 
@@ -100,6 +116,7 @@ $input-padding-left: 12px;
 	top: 0;
 	left: $input-padding-left;
 	background-color: inherit;
-	transform: translateY(-0.75em);
+	transform: translateY(-1.5em);
+	z-index: 0;
 }
 </style>

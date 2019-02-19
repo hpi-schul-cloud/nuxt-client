@@ -26,21 +26,21 @@
 						maxlength="255"
 					></BaseInput>
 
-					<h6>Unterrichtender Lehrer</h6>
 					<BaseSelect
 						:value.sync="teachersSelected"
 						:options="teachers"
 						:multiple="true"
+						placeholder="Unterrichtender Lehrer"
 						label="lastName"
 						track-by="_id"
 					></BaseSelect>
 
-					<h6>Vertretungs-Lehrer</h6>
 					<BaseSelect
 						:value.sync="substitutionsSelected"
 						:options="teachers"
 						:multiple="true"
 						label="lastName"
+						placeholder="Vertretungs-Lehrer"
 						track-by="_id"
 					></BaseSelect>
 
@@ -70,24 +70,23 @@
 				</div>
 
 				<div v-show="currentStep == 1">
-					<h3>Step 2</h3>
-
-					<h6>Klasse auswählen</h6>
 					<BaseSelect
 						:value.sync = "classesSelected"
 						:options="classes"
 						:multiple="true"
 						label="displayName"
 						track-by="_id"
+						placeholder="Klasse auswählen"
 					></BaseSelect>
 
-					<h6>Studenten auswählen</h6>
 					<BaseSelect
 						:value.sync = "studentsSelected"
 						:options="students"
 						:multiple="true"
+						:close-on-select="false"
 						label="displayName"
 						track-by="_id"
+						placeholder="Studenten auswählen"
 					></BaseSelect>
 				</div>
 

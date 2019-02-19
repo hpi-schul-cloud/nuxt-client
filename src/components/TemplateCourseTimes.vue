@@ -6,6 +6,7 @@
 				:options="weekdays"
 				:allow-empty="false"
 				label="name"
+				input-label="Tag"
 				 @update:value="timeUpdate"
 			></BaseSelect>
 			<BaseInput v-model="time.room" label="Raum" name="room" type="text"  @update="timeUpdate"/>
