@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import "../styles/base.scss";
 import BaseButton from "./ui/BaseButton.vue";
 export default {
 	name: "LandingCTA",
