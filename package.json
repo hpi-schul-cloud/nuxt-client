@@ -58,7 +58,7 @@
 		"storybook-addon-vue-info": "^0.7.1",
 		"style-loader": "^0.23.1",
 		"stylelint-declaration-use-variable": "^1.7.0",
-		"vue-loader": "^15.6.2",
+		"vue-loader": "^15.6.4",
 		"vue-ripple-directive": "^2.0.1"
 	},
 	"devDependencies": {
