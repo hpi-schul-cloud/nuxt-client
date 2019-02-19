@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import FlatPickr from "vue-flatpickr-component";
+const FlatPickr = () => System.import('vue-flatpickr-component');
 import "flatpickr/dist/flatpickr.css";
 import { German } from "flatpickr/dist/l10n/de.js";
 
