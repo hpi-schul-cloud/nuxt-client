@@ -8,6 +8,7 @@
 				:label="label"
 				:track-by="trackBy"
 				:allow-empty="allowEmpty"
+				:show-labels="showLabels"
 				@input="$emit('update:value', val)"
 			></MultiSelect>
 		</div>
@@ -58,6 +59,11 @@ export default {
 		allowEmpty: {
 			type: Boolean,
 			default: true,
+			required: false
+		},
+		showLabels: {
+			type: Boolean,
+			default: false,
 			required: false
 		}
 	},

@@ -13,7 +13,7 @@
 		"build:nuxt": "cross-env NODE_ENV=production nuxt generate",
 		"build:docs": "vuepress build docs",
 		"build:storybook": "build-storybook",
-                "lint:eslint": "eslint --fix",
+		"lint:eslint": "eslint --fix",
 		"lint:stylelint": "stylelint --fix",
 		"lint:markdownlint": "markdownlint \"*/*.md\" -i \"schulcloud-client\"",
 		"lint:prettier": "prettier --write --loglevel warn",

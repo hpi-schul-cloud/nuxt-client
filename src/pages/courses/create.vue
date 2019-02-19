@@ -21,6 +21,27 @@ var moment = require('moment');
 
 export default {
 	components: { TemplateCourseWizard },
+	data() {
+		return {
+			stepList: [
+				{ name: "Kurs anlegen" },
+				{ name: "Kurs-Mitglieder" },
+				{ name: "Abschließen" },
+			],
+			course: {
+				name: "",
+				description: "",
+				startDate: "",
+				untilDate: "",
+				teachers: [],
+				substitutions: [],
+				classes: [],
+				students: [],
+				times: []
+			},
+			moment: moment,
+		};
+	},
 	async asyncData({ store }) {
 		try {
 			const teacherRole = (await store.dispatch("roles/find", {
@@ -53,27 +74,6 @@ export default {
 				students,
 			};
 		} catch (err) {}
-	},
-	data() {
-		return {
-			stepList: [
-				{ name: "Kurs anlegen" },
-				{ name: "Kurs-Mitglieder" },
-				{ name: "Abschließen" },
-			],
-			course: {
-				name: "",
-				description: "",
-				startDate: "",
-				untilDate: "",
-				teachers: [],
-				substitutions: [],
-				classes: [],
-				students: [],
-				times: []
-			},
-			moment: moment,
-		};
 	},
 	computed: {
 		...mapState("auth", {
