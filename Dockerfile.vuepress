@@ -1,3 +1,11 @@
+FROM node:lts as builder
+
+WORKDIR '/app'
+COPY ./package.json ./
+RUN yarn install
+COPY . .
+RUN yarn build:docs
+
 FROM nginx:alpine
 EXPOSE 80
-COPY ./dist/docs /usr/share/nginx/html/
+COPY --from=builder /app/dist/docs /usr/share/nginx/html/
