@@ -56,16 +56,15 @@ export default {
 				},
 			})).data[0];
 
-			const query = {
+			const queryTeachers = {
 				roles: [teacherRole._id],
 			};
-			const teachers = (await store.dispatch("users/find", { query })).data;
+			const teachers = (await store.dispatch("users/find", { query: queryTeachers })).data;
 
-			const query2 = {
+			const queryStudents = {
 				roles: [studentsRole._id],
 			};
-			const students = (await store.dispatch("users/find", { query: query2 }))
-				.data;
+			const students = (await store.dispatch("users/find", { query: queryStudents })).data;
 
 			await store.dispatch("classes/find");
 
