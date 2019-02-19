@@ -7,7 +7,7 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				loaders: ["style-loader", "css-loader", "sass-loader"],
-				include: path.resolve(__dirname, "../"),
+				include: path.resolve(__dirname, "../../"),
 			},
 			{
 				test: /\.css$/,
@@ -20,6 +20,6 @@ module.exports = {
 		],
 	},
 	resolve: {
-		alias: require("../aliases.config").webpack,
+		alias: require("../../aliases.config").webpack,
 	},
 };
