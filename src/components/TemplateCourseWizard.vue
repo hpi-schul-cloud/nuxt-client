@@ -78,7 +78,7 @@
 
 				<div v-show="currentStep == 1">
 					<p>
-						Fast geschafft! Jetzt noch die Kursmitglieder hinzufügen und dann kann es losgehen. 
+						Fast geschafft! Jetzt noch die Kursmitglieder hinzufügen und dann kann es losgehen.
 						Du kannst diesen Schritt auch überspringen und später Kursmitglieder hinzufügen.
 					</p>
 
@@ -102,8 +102,20 @@
 					></BaseSelect>
 				</div>
 
-				<div v-show="currentStep == 2">
-					<h3>Geschafft!</h3>
+				<div v-show="currentStep == 2" class="final-step">
+					<div class="image">
+						<img src="@assets/people.png"/>
+					</div>
+					<div>
+						<h3>Geschafft!</h3>
+						<h4>Was kann ich in einem Kurs machen?</h4>
+						<h6>Themen anlegen</h6>
+							Themen sind in der Schul-Cloud der Container für dein Unterrichtsmaterial.
+						<h6>Aufgaben stellen</h6>
+							Innerhalb eines Kurses/Themas kannst du Aufgaben an deine Teilnehmer stellen.
+						<h6>Tools hinzufügen</h6>
+							In einem Kurs kannst du außerdem Tools zum interaktiven Unterricht hinzufügen.
+					</div>
 				</div>
 			</div>
 			<div class="step-wrapper">
@@ -114,6 +126,14 @@
 					@click="lastStep"
 				>
 					Zurück
+				</BaseButton>
+				<BaseButton
+					v-if="currentStep == 1"
+					type="button"
+					class="btn btn-primary"
+					@click="nextStep"
+				>
+					Überspringen
 				</BaseButton>
 				<BaseButton
 					v-if="!laststep"
@@ -278,5 +298,14 @@ export default {
 	}
 }
 
+.final-step{
+	margin-bottom: 30px;
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	.image{
+		padding: 30px;
+	}
+}
 
 </style>
