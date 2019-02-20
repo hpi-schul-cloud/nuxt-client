@@ -2,6 +2,7 @@ import { configure, addDecorator } from "@storybook/vue";
 import centered from "@storybook/addon-centered";
 import { checkA11y } from "@storybook/addon-a11y";
 import VueInfoAddon from "storybook-addon-vue-info";
+import "@styles/index.scss";
 
 addDecorator(VueInfoAddon);
 addDecorator(checkA11y);

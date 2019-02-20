@@ -1,11 +1,13 @@
+@import url("https://fonts.googleapis.com/css?family=PT-Sans|PT+Sans+Caption|PT+Sans+Narrow");
+
 $system-default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 	Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
 	"Segoe UI Symbol";
 
-$heading-font-family: $system-default-font-family;
-$heading-font-weight: 600;
+$heading-font-family: "PT Sans Narrow", $system-default-font-family;
+$heading-font-weight: bold;
 
-$content-font-family: $system-default-font-family;
+$content-font-family: "PT Sans", $system-default-font-family;
 $content-font-weight: 400;
 
 %font-heading {
