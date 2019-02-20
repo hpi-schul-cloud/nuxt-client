@@ -1,3 +1,4 @@
+import Vue from "vue";
 import Vuex from "vuex";
 // import { app } from './feathers-client'
 import { CookieStorage } from "cookie-storage";
@@ -20,10 +21,12 @@ if (process.client) {
 			secure: false,
 		})
 	);
-	const { service: browserService, auth: browserAuth } = feathersVuex(
+	const { service: browserService, auth: browserAuth, FeathersVuex } = feathersVuex(
 		browserClient,
 		{ idField: "_id", enableEvents: enableEvents }
 	);
+
+	Vue.use(FeathersVuex)
 
 	plugins = [
 		browserService("/content/search", {
@@ -32,7 +35,20 @@ if (process.client) {
 			autoRemove: true,
 			replaceItems: true,
 		}),
-		browserService("courses", { paginate: true }),
+		browserService("courses", { 
+			instanceDefaults: {
+				name: "",
+				description: "",
+				startDate: "",
+				untilDate: "",
+				teachers: [],
+				substitutions: [],
+				classes: [],
+				students: [],
+				times: [],
+			},
+			paginate: true 
+		}),
 		browserService("teams", { paginate: true }),
 		browserService("news", { paginate: true }),
 		browserService("schools", { paginate: true }),
