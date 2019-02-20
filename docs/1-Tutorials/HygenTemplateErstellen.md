@@ -52,3 +52,5 @@ if (blocks.indexOf('template') !== -1) {
 ```
 
 Das Template basiert auf EJS. Die <% und %> können als Öffnungs- und Schliessungs-tag gesehen werden, zwischen denen JavaScript steht. Dort kann man z. B. auf die im prompt abgefragten Variablen zugreifen. Weitere Infos findet man bei [EJS](https://ejs.co/ "EJS hompage"). Alles, was außerhalb der tags steht, wird einfach in die zu erstellende Datei geschrieben.
+
+Alle weiteren detail sind bei Hygen zu finden: [Hygen](http://www.hygen.io/)
