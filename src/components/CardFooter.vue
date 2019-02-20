@@ -1,16 +1,18 @@
 <template>
 	<div class="footer">
-		<!-- TODO remove fallback (...||{}) -->
-		<div v-if="(course || {}).alert == ''" class="footer-next-course">
+		<div v-if="(course.alert || '') != ''" class="footer-alert">
+			<PulsatingDot></PulsatingDot>
+
+			<div class="alert-label">{{ course.alert }}</div>
+		</div>
+		<div
+			v-else-if="(course.nextCourseTime || '') != ''"
+			class="footer-next-course"
+		>
 			<div class="align-center">
 				<ClockIcon />
 			</div>
 			<div class="align-center">{{ course.nextCourseTime }}</div>
-		</div>
-		<div v-else class="footer-alert">
-			<PulsatingDot></PulsatingDot>
-			<!-- TODO remove fallback -->
-			<div class="alert-label">{{ (course || {}).alert }}</div>
 		</div>
 	</div>
 </template>
@@ -25,7 +27,10 @@ export default {
 	props: {
 		course: {
 			type: Object,
-			default: () => {},
+			default: () => ({
+				alert: "",
+				nextCourseTime: "",
+			}),
 		},
 	},
 	computed: {},
@@ -62,9 +67,12 @@ export default {
 
 .alert-label {
 	flex: 1;
+	overflow: hidden;
 	font-family: PT Sans Narrow, sans-serif;
 	font-weight: bold;
 	color: #d00;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .ring-container {

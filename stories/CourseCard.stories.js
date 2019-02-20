@@ -10,6 +10,7 @@ import {
 	courseWithAlert,
 	courseWithAssignment,
 	courseWithNotification,
+	courseOldDataFormat,
 } from "./mockData/CourseCard";
 
 storiesOf("CourseCard", module)
@@ -40,6 +41,13 @@ storiesOf("CourseCard", module)
 		template: '<CourseCard :course="course"/>',
 		data: () => ({
 			course: courseWithNotification,
+		}),
+	}))
+	.add("CourseCard Old Data format", () => ({
+		components: { CourseCard },
+		template: '<CourseCard :course="course" />',
+		data: () => ({
+			course: courseOldDataFormat,
 		}),
 	}))
 	.add("CourseCard Empty", () => ({
