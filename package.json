@@ -5,21 +5,22 @@
 	"author": "HPI Schul-Cloud",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
-		"docs": "vuepress dev docs",
-		"storybook": "start-storybook -c stories/.storybook -p 6006",
-		"new": "hygen new",
-		"build": "run-s build:*",
+		"dev:nuxt": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
+		"dev:docs": "vuepress dev docs",
+		"dev:storybook": "start-storybook -c stories/.storybook -p 6006",
+		"dev": "run-p dev:*",
 		"build:nuxt": "cross-env NODE_ENV=production nuxt generate",
-		"build:docs": "vuepress build docs",
-		"build:storybook": "build-storybook -c stories/.storybook",
+		"build:docs": "vuepress build docs -d dist/docs",
+		"build:storybook": "build-storybook -c stories/.storybook -o dist/storybook",
+		"build": "run-p build:*",
+		"new": "hygen new",
 		"lint:eslint": "eslint --fix",
 		"lint:stylelint": "stylelint --fix",
-		"lint:markdownlint": "markdownlint \"*/*.md\" -i \"schulcloud-client\"",
+		"lint:markdownlint": "markdownlint -c \".markdownlint.yml\"",
 		"lint:prettier": "prettier --write --loglevel warn",
 		"lint:all:eslint": "yarn lint:eslint --ext .js,.vue .",
 		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",
-		"lint:all:markdownlint": "yarn lint:markdownlint",
+		"lint:all:markdownlint": "yarn lint:markdownlint \"**/*.md\" -i \"@(schulcloud-client|node_modules|dist)/**/*.md\"",
 		"lint:all:prettier": "yarn lint:prettier \"**/*.{js,json,css,scss,vue,html,md}\"",
 		"lint": "run-s lint:all:*",
 		"test:unit": "cross-env NODE_ENV=test jest",
@@ -107,5 +108,9 @@
 		"vue-svg-loader": "^0.11.0",
 		"vuepress": "^0.14.8",
 		"yorkie": "^2.0.0"
+	},
+	"engines": {
+		"node": ">=10.x.x",
+		"yarn": ">=1.12.0"
 	}
 }
