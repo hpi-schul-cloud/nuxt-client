@@ -24,7 +24,7 @@ export default {
 	data() {
 		return {
 			stepList: [
-				{ name: "Kurs anlegen" },
+				{ name: "Kursdaten" },
 				{ name: "Kurs-Mitglieder" },
 				{ name: "Abschließen" },
 			],

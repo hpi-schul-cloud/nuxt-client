@@ -1,6 +1,7 @@
 <template>
 	<div class="root">
 		<div v-for="(time,i) of value" :key="i" class="time-wrapper">
+			<a style="cursor: pointer" @click="popTime(time)"><DeleteIcon/></a>
 			<BaseSelect
 				:value.sync = "time.weekday"
 				:options="weekdays"
@@ -12,7 +13,6 @@
 			<BaseInput v-model="time.room" label="Raum" name="room" type="text"  @update="timeUpdate"/>
 			<BaseInput v-model="time.startTime" label="Start" name="startTime" type="time"  @update="timeUpdate"/>
 			<BaseInput v-model="time.duration" label="Dauer" name="duration" type="text"  @update="timeUpdate"/>
-			<a style="cursor: pointer" @click="popTime(time)">Remove</a>
 		</div>
 		<BaseButton
 			type="button"
@@ -28,10 +28,12 @@ import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
 import BaseSelect from "./ui/BaseSelect";
 
+import DeleteIcon from "@assets/calander.svg";
+
 
 export default {
 	name: "TemplateCourseTimes",
-	components: {},
+	components: {DeleteIcon},
 	props: {
 		value: {
 			type: Array,
@@ -80,5 +82,6 @@ export default {
 	.time-wrapper {
 		display: flex;
 		flex-direction: row;
+		align-items: center;
 	}
 </style>

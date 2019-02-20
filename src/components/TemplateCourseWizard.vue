@@ -1,8 +1,10 @@
 <template>
 	<div class="root">
-		<h2>Kurs anlegen</h2>
-		<h6>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen, Hausaufgaben
-			und Dateien gearbeitet.</h6>
+		<div class="header">
+			<h3>Kurs anlegen</h3>
+			<h6>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen, Hausaufgaben
+				und Dateien gearbeitet.</h6>
+		</div>
 		<div class="steps">
 			<StepProgress :steps="steps" :current-step="currentStep" />
 
@@ -247,5 +249,9 @@ export default {
 
 .date{
 	width: 49%;
+}
+
+.header{
+	margin-bottom: 30px;
 }
 </style>
