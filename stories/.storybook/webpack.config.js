@@ -17,6 +17,15 @@ module.exports = {
 				test: /\.svg$/,
 				loader: "vue-svg-loader",
 			},
+			{
+				test: /\.(png|jpg|gif)$/,
+				use: [
+					{
+						loader: "file-loader",
+						options: {},
+					},
+				],
+			},
 		],
 	},
 	resolve: {

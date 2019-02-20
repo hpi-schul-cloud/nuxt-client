@@ -12,11 +12,7 @@
 				v-on="$listeners"
 				@input="$emit('update', val)"
 			>
-				<input
-					type="date"
-					:name="name"
-					class="input"
-				/>
+				<input type="date" :name="name" class="input" />
 			</FlatPickr>
 		</div>
 
@@ -32,11 +28,7 @@
 				v-on="$listeners"
 				@input="$emit('update', val)"
 			>
-				<input
-					type="time"
-					:name="name"
-					class="input"
-				/>
+				<input type="time" :name="name" class="input" />
 			</FlatPickr>
 		</div>
 
@@ -62,14 +54,13 @@
 </template>
 
 <script>
-const FlatPickr = () => System.import('vue-flatpickr-component');
-import "flatpickr/dist/flatpickr.css";
+const FlatPickr = () => import("vue-flatpickr-component");
 import { German } from "flatpickr/dist/l10n/de.js";
 
 export default {
 	// currently, this only supports text input
 	name: "BaseInput",
-	components:{FlatPickr},
+	components: { FlatPickr },
 	inheritAttrs: false,
 	model: {
 		event: "update",
@@ -79,9 +70,17 @@ export default {
 			type: String,
 			required: true,
 			validator: function(value) {
-				return ["email", "password", "search", "tel", "text", "textarea", "url", "date", "time"].includes(
-					value.toLowerCase()
-				);
+				return [
+					"email",
+					"password",
+					"search",
+					"tel",
+					"text",
+					"textarea",
+					"url",
+					"date",
+					"time",
+				].includes(value.toLowerCase());
 			},
 		},
 		value: {
@@ -127,9 +126,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "@variables";
+@import "~flatpickr/dist/flatpickr.css";
+
 $input-padding-left: 12px;
 
-.root{
+.root {
 	width: 100%;
 }
 
@@ -153,22 +154,22 @@ $input-padding-left: 12px;
 	transform: translateY(-0.75em);
 }
 
-.input, .input__wrapper /deep/ .flatpickr-input{
+.input,
+.input__wrapper /deep/ .flatpickr-input {
+	box-sizing: border-box;
 	display: block;
 	width: 100%;
-	box-sizing: border-box;
 	padding: $size-padding;
 	line-height: 1;
-	color: lighten($color-text, 20%);
+	color: $color-text;
 	background: inherit;
 	border: 0;
 	border-radius: calc(#{$size-border-radius} - #{$size-border-width});
-	outline: none;
 	transition: color $duration-animation-base linear;
 
 	@extend %typography-small;
-	&:focus {
-		color: $color-text;
+	&::placeholder {
+		color: lighten($color-text, 40%);
 	}
 }
 

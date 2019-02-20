@@ -34,12 +34,12 @@ storiesOf("Base Components", module)
 	.add("Base Input", () => ({
 		components: { BaseInput },
 		template:
-			'<BaseInput type="text" label="Vorname" v-model="abc" name="firstname"/>',
+			'<BaseInput type="text" label="Vorname" v-model="abc" name="firstname" placeholder="Max"/>',
 		methods: {},
 	}))
 	.add("Base Input Date", () => ({
 		components: { BaseInput },
-		template: "<BaseInput type='date' label='Datum'/>",
+		template: '<BaseInput type="date" label="Datum" placeholder="21.02.2019"/>',
 		methods: {},
 	}))
 	.add("Base Select MultiSelect", () => ({

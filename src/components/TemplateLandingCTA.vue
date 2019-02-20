@@ -19,9 +19,9 @@ export default {
 		BaseButton,
 	},
 	props: {
-		subtitle: String,
-		title: String,
-		ctaText: String,
+		subtitle: { type: String, default: "" },
+		title: { type: String, default: "" },
+		ctaText: { type: String, default: "" },
 	},
 	data() {
 		return {};

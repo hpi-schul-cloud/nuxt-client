@@ -16,8 +16,7 @@
 import { mapState, mapGetters } from "vuex";
 import TemplateCourseWizard from "@components/TemplateCourseWizard";
 
-var moment = require('moment');
-
+var moment = require("moment");
 
 export default {
 	components: { TemplateCourseWizard },
@@ -37,10 +36,18 @@ export default {
 				substitutions: [],
 				classes: [],
 				students: [],
-				times: []
+				times: [],
 			},
 			moment: moment,
 		};
+	},
+	computed: {
+		...mapState("auth", {
+			user: "user",
+		}),
+		...mapGetters("classes", {
+			classes: "list",
+		}),
 	},
 	async asyncData({ store }) {
 		try {
@@ -59,12 +66,16 @@ export default {
 			const queryTeachers = {
 				roles: [teacherRole._id],
 			};
-			const teachers = (await store.dispatch("users/find", { query: queryTeachers })).data;
+			const teachers = (await store.dispatch("users/find", {
+				query: queryTeachers,
+			})).data;
 
 			const queryStudents = {
 				roles: [studentsRole._id],
 			};
-			const students = (await store.dispatch("users/find", { query: queryStudents })).data;
+			const students = (await store.dispatch("users/find", {
+				query: queryStudents,
+			})).data;
 
 			await store.dispatch("classes/find");
 
@@ -73,14 +84,6 @@ export default {
 				students,
 			};
 		} catch (err) {}
-	},
-	computed: {
-		...mapState("auth", {
-			user: "user",
-		}),
-		...mapGetters("classes", {
-			classes: "list",
-		}),
 	},
 	methods: {
 		async create(id) {
@@ -92,7 +95,10 @@ export default {
 					startDate: this.course.startDate,
 					untilDate: this.course.untilDate,
 					times: this.course.times.map((time) => {
-						time.startTime = moment.duration(time.startTime, "HH:mm").asMilliseconds().toString();
+						time.startTime = moment
+							.duration(time.startTime, "HH:mm")
+							.asMilliseconds()
+							.toString();
 						time.duration = (time.duration * 60 * 1000).toString();
 						time.weekday = time.weekday.value;
 						return time;
@@ -113,9 +119,9 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 
-	.root{
-	  max-width: $size-content-width-max;
-		min-width: $size-content-width-min;
-		margin: 0 auto;
-	}
+.root {
+	min-width: $size-content-width-min;
+	max-width: $size-content-width-max;
+	margin: 0 auto;
+}
 </style>

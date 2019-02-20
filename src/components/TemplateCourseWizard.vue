@@ -2,12 +2,14 @@
 	<div class="root">
 		<div class="header">
 			<div class="header-icon">
-				<SpaceShuttle/>
+				<SpaceShuttle />
 			</div>
 			<div class="headlines">
 				<h3>Kurs anlegen</h3>
-				<h6>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen, Hausaufgaben
-					und Dateien gearbeitet.</h6>
+				<h6
+					>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen,
+					Hausaufgaben und Dateien gearbeitet.</h6
+				>
 			</div>
 		</div>
 		<div class="steps">
@@ -73,17 +75,18 @@
 						></BaseInput>
 					</div>
 
-					<TemplateCourseTimes v-model="course.times"/>
+					<TemplateCourseTimes v-model="course.times" />
 				</div>
 
 				<div v-show="currentStep == 1">
 					<p>
-						Fast geschafft! Jetzt noch die Kursmitglieder hinzufügen und dann kann es losgehen.
-						Du kannst diesen Schritt auch überspringen und später Kursmitglieder hinzufügen.
+						Fast geschafft! Jetzt noch die Kursmitglieder hinzufügen und dann
+						kann es losgehen. Du kannst diesen Schritt auch überspringen und
+						später Kursmitglieder hinzufügen.
 					</p>
 
 					<BaseSelect
-						:value.sync = "classesSelected"
+						:value.sync="classesSelected"
 						:options="classes"
 						:multiple="true"
 						label="displayName"
@@ -92,7 +95,7 @@
 					></BaseSelect>
 
 					<BaseSelect
-						:value.sync = "studentsSelected"
+						:value.sync="studentsSelected"
 						:options="students"
 						:multiple="true"
 						:close-on-select="false"
@@ -104,17 +107,20 @@
 
 				<div v-show="currentStep == 2" class="final-step">
 					<div class="image">
-						<img src="@assets/people.png"/>
+						<img src="@assets/people.png" />
 					</div>
 					<div>
 						<h3>Geschafft!</h3>
 						<h4>Was kann ich in einem Kurs machen?</h4>
 						<h6>Themen anlegen</h6>
-							Themen sind in der Schul-Cloud der Container für dein Unterrichtsmaterial.
+						Themen sind in der Schul-Cloud der Container für dein
+						Unterrichtsmaterial.
 						<h6>Aufgaben stellen</h6>
-							Innerhalb eines Kurses/Themas kannst du Aufgaben an deine Teilnehmer stellen.
+						Innerhalb eines Kurses/Themas kannst du Aufgaben an deine Teilnehmer
+						stellen.
 						<h6>Tools hinzufügen</h6>
-							In einem Kurs kannst du außerdem Tools zum interaktiven Unterricht hinzufügen.
+						In einem Kurs kannst du außerdem Tools zum interaktiven Unterricht
+						hinzufügen.
 					</div>
 				</div>
 			</div>
@@ -161,13 +167,12 @@ import StepProgress from "./StepProgress.vue";
 import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
 import BaseSelect from "./ui/BaseSelect";
-import TemplateCourseTimes from "./TemplateCourseTimes"
+import TemplateCourseTimes from "./TemplateCourseTimes";
 import SpaceShuttle from "@assets/shuttle.svg";
-
 
 export default {
 	name: "TemplateCourseWizard",
-	components: {StepProgress, TemplateCourseTimes, SpaceShuttle},
+	components: { StepProgress, TemplateCourseTimes, SpaceShuttle },
 	props: {
 		steps: {
 			type: Array,
@@ -196,7 +201,7 @@ export default {
 		students: {
 			type: Array,
 			default: () => [],
-		}
+		},
 	},
 	data() {
 		return {
@@ -204,7 +209,7 @@ export default {
 			substitutionsSelected: [],
 			classesSelected: [],
 			studentsSelected: [],
-			currentStep: 0
+			currentStep: 0,
 		};
 	},
 	computed: {
@@ -216,29 +221,31 @@ export default {
 		},
 		fullname() {
 			return this.user.firstName + " " + this.user.lastName;
-		}
+		},
 	},
 	watch: {
-		teachersSelected: function(){
+		teachersSelected: function() {
 			this.course.teachers = this.teachersSelected.map((teacher) => {
 				return teacher["_id"];
 			});
 		},
-		substitutionsSelected: function(){
-			this.course.substitutions = this.substitutionsSelected.map((substitution) => {
-				return substitution["_id"];
-			});
+		substitutionsSelected: function() {
+			this.course.substitutions = this.substitutionsSelected.map(
+				(substitution) => {
+					return substitution["_id"];
+				}
+			);
 		},
-		classesSelected: function(){
+		classesSelected: function() {
 			this.course.classes = this.classesSelected.map((c) => {
 				return c["_id"];
 			});
 		},
-		studentsSelected: function(){
+		studentsSelected: function() {
 			this.course.students = this.studentsSelected.map((student) => {
 				return student["_id"];
 			});
-		}
+		},
 	},
 	created() {
 		this.teachersSelected.push(this.user);
@@ -249,7 +256,7 @@ export default {
 		},
 		lastStep() {
 			this.currentStep = this.currentStep - 1;
-		}
+		},
 	},
 };
 </script>
@@ -258,9 +265,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.content-wrapper{
+.content-wrapper {
 	width: 70%;
-	margin: 150px auto 0px auto;
+	margin: 150px auto 0 auto;
 }
 
 .steps {
@@ -276,36 +283,35 @@ export default {
 
 .date-wrapper {
 	display: flex;
-	justify-content:space-between;
+	justify-content: space-between;
 }
 
-.date{
+.date {
 	width: 49%;
 }
 
-.header{
-	margin: 20px 0;
+.header {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	margin: 20px 0;
 
-	.headlines h3{
-		margin-top: 0px;
+	.headlines h3 {
+		margin-top: 0;
 	}
 
-	.header-icon{
+	.header-icon {
 		margin-right: 20px;
 	}
 }
 
-.final-step{
-	margin-bottom: 30px;
+.final-step {
 	display: flex;
-	align-items: center;
 	flex-direction: row;
-	.image{
+	align-items: center;
+	margin-bottom: 30px;
+	.image {
 		padding: 30px;
 	}
 }
-
 </style>

@@ -26,7 +26,7 @@ import MultiSelect from "vue-multiselect";
 export default {
 	// currently, this only supports text input
 	name: "BaseSelect",
-	components:{MultiSelect},
+	components: { MultiSelect },
 	model: {
 		event: "update",
 	},
@@ -44,7 +44,7 @@ export default {
 		options: {
 			type: Array,
 			default: () => [],
-			required: true
+			required: true,
 		},
 		placeholder: {
 			type: String,
@@ -64,29 +64,29 @@ export default {
 		multiple: {
 			type: Boolean,
 			default: false,
-			required: false
+			required: false,
 		},
 		allowEmpty: {
 			type: Boolean,
 			default: true,
-			required: false
+			required: false,
 		},
 		showLabels: {
 			type: Boolean,
 			default: false,
-			required: false
+			required: false,
 		},
 		closeOnSelect: {
 			type: Boolean,
 			default: true,
-			required: false
-		}
+			required: false,
+		},
 	},
-	data: function () {
+	data: function() {
 		return {
-				val: this.value
-		}
-	}
+			val: this.value,
+		};
+	},
 };
 </script>
 
@@ -94,7 +94,7 @@ export default {
 @import "@variables";
 $input-padding-left: 12px;
 
-.root{
+.root {
 	width: 100%;
 	padding-top: 1px;
 }
@@ -115,8 +115,8 @@ $input-padding-left: 12px;
 	position: absolute;
 	top: 0;
 	left: $input-padding-left;
+	z-index: 0;
 	background-color: inherit;
 	transform: translateY(-1.5em);
-	z-index: 0;
 }
 </style>

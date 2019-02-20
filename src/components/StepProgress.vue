@@ -10,8 +10,7 @@
 					index < currentStep ? 'done' : '',
 				]"
 				><div class="description">{{ s.name }}</div>
-			</li
-			>
+			</li>
 		</ul>
 	</div>
 </template>
@@ -23,11 +22,11 @@ export default {
 	props: {
 		steps: {
 			type: Array,
-			default: () => []
+			default: () => [],
 		},
 		currentStep: {
 			type: Number,
-			default: 0
+			default: 0,
 		},
 	},
 	computed: {
@@ -63,7 +62,7 @@ ul.progressbar {
 	text-align: center;
 }
 
-.description{
+.description {
 	font-size: small;
 }
 

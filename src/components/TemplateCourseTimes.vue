@@ -1,23 +1,40 @@
 <template>
 	<div class="root">
-		<div v-for="(time,i) of value" :key="i" class="time-wrapper">
-			<a style="cursor: pointer" class="icon-button" @click="popTime(time)"><BaseIcon icon="trash"/></a>
+		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
+			<a style="cursor: pointer" class="icon-button" @click="popTime(time)"
+				><BaseIcon icon="trash"
+			/></a>
 			<BaseSelect
-				:value.sync = "time.weekday"
+				:value.sync="time.weekday"
 				:options="weekdays"
 				:allow-empty="false"
 				label="name"
 				input-label="Tag"
-				 @update:value="timeUpdate"
+				@update:value="timeUpdate"
 			></BaseSelect>
-			<BaseInput v-model="time.room" label="Raum" name="room" type="text"  @update="timeUpdate"/>
-			<BaseInput v-model="time.startTime" label="Start" name="startTime" type="time"  @update="timeUpdate"/>
-			<BaseInput v-model="time.duration" label="Dauer" name="duration" type="text"  @update="timeUpdate"/>
+			<BaseInput
+				v-model="time.room"
+				label="Raum"
+				name="room"
+				type="text"
+				@update="timeUpdate"
+			/>
+			<BaseInput
+				v-model="time.startTime"
+				label="Start"
+				name="startTime"
+				type="time"
+				@update="timeUpdate"
+			/>
+			<BaseInput
+				v-model="time.duration"
+				label="Dauer"
+				name="duration"
+				type="text"
+				@update="timeUpdate"
+			/>
 		</div>
-		<BaseButton
-			type="button"
-			class="btn btn-primary"
-			@click="addTime">
+		<BaseButton type="button" class="btn btn-primary" @click="addTime">
 			Schulstundentermin im Stundenplan anlegen
 		</BaseButton>
 	</div>
@@ -31,12 +48,12 @@ import BaseIcon from "@components/ui/BaseIcon.vue";
 
 export default {
 	name: "TemplateCourseTimes",
-	components: {BaseIcon},
+	components: { BaseIcon },
 	props: {
 		value: {
 			type: Array,
 			default: () => [],
-			required: true
+			required: true,
 		},
 	},
 	data() {
@@ -49,26 +66,45 @@ export default {
 				{ value: 4, name: "Freitag" },
 				{ value: 5, name: "Samstag" },
 				{ value: 6, name: "Sonntag" },
-			]
+			],
 		};
 	},
 	methods: {
 		addTime() {
-			let time = {weekday: this.weekdays[0], startTime: "08:00", duration: "60", room: "H1"};
+			let time = {
+				weekday: this.weekdays[0],
+				startTime: "08:00",
+				duration: "60",
+				room: "H1",
+			};
 			this.value.push(time);
 		},
 		popTime(t) {
 			this.value.pop(t);
 		},
 		guidGenerator() {
-    	let S4 = function () {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    	};
-    	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+			let S4 = function() {
+				return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+			};
+			return (
+				S4() +
+				S4() +
+				"-" +
+				S4() +
+				"-" +
+				S4() +
+				"-" +
+				S4() +
+				"-" +
+				S4() +
+				S4() +
+				S4()
+			);
 		},
-		timeUpdate(){
-			console.log('update time');
-		}
+		timeUpdate() {
+			// TODO
+			//console.log("update time");
+		},
 	},
 };
 </script>
@@ -77,12 +113,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-	.time-wrapper {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-	}
-	.icon-button {
-		padding-right: 10px;
-	}
+.time-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.icon-button {
+	padding-right: 10px;
+}
 </style>
