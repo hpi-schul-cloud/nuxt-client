@@ -54,7 +54,11 @@
 </template>
 
 <script>
-const FlatPickr = () => import("vue-flatpickr-component");
+// TODO FIX make import dynamic
+// tests ! with coverage ! (yarn test:unit:ci) are failing when dynamic import is used
+//const FlatPickr = () => import("vue-flatpickr-component");
+import FlatPickr from "vue-flatpickr-component";
+
 import { German } from "flatpickr/dist/l10n/de.js";
 
 export default {
