@@ -19,7 +19,7 @@
 https://yarnpkg.com/lang/en/docs/install/
 
 # install dependencies
-$ yarn install
+yarn install
 
 # install legacy schulcloud-client
 git submodule init && git submodule update
@@ -42,7 +42,7 @@ cd ..
 https://yarnpkg.com/lang/en/docs/install/
 
 # install dependencies
-$ yarn install
+yarn install
 
 # start docs server
 yarn docs

@@ -64,12 +64,10 @@ export default {
 				return "background-color: " + this.course.color + ";";
 			}
 		},
-	courseAbbreviation() {
-		if (this.course.abbreviation == "")
-			return this.course.abbreviation;
-		else
-			return this.course.name.substring(0,3).toUpperCase();
-	}
+		courseAbbreviation() {
+			if (this.course.abbreviation == "") return this.course.abbreviation;
+			else return this.course.name.substring(0, 3).toUpperCase();
+		},
 	},
 };
 </script>

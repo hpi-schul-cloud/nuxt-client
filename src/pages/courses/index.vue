@@ -9,12 +9,8 @@
 		</section>
 		<section class="section">
 			<div class="grid">
-				<div
-					v-for="(course, i) of courses"
-					:key="i"
-					class="tile"
-				>
-					<CourseCard :course="course"/>
+				<div v-for="(course, i) of courses" :key="i" class="tile">
+					<CourseCard :course="course" />
 				</div>
 			</div>
 		</section>
@@ -51,20 +47,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@variables';
+@import "@variables";
 
-	.grid{
-		display: flex;
-		flex-wrap: wrap;
-		flex-direction: row;
-		justify-content: center;
-		max-width: $size-content-width-max;
-		min-width: $size-content-width-min;
-		margin: 0 auto;
-	}
+.grid {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	min-width: $size-content-width-min;
+	max-width: $size-content-width-max;
+	margin: 0 auto;
+}
 
-	.tile{
-		display: flex;
-		margin: 10px;
-	}
+.tile {
+	display: flex;
+	margin: 10px;
+}
 </style>
