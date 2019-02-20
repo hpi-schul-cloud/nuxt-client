@@ -10,5 +10,5 @@ services:
       restart_policy:
         condition: any
     ports:
-      - \"3400:80\"
+      - \"80:6006\"
     restart: always
