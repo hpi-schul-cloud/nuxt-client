@@ -1,7 +1,7 @@
 <template>
 	<section class="section">
 		<div class="columns is-mobile">
-			<h1>Schul-Cloud</h1>
+			<h1>{{ $theme.short_name }}</h1>
 		</div>
 	</section>
 </template>

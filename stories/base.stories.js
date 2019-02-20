@@ -22,16 +22,17 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Card", () => ({
 		components: { BaseCard },
-		template: "<Card/>",
+		template: "<BaseCard>Card</BaseCard>",
 		methods: {},
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: "<BaseIcon :name='fa-bell'/>",
+		template: '<BaseIcon :name="fa-bell"/>',
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },
-		template: "<BaseInput />",
+		template:
+			'<BaseInput type="text" label="Vorname" v-model="abc" name="firstname"/>',
 		methods: {},
 	}))
 	.add("Base Switch", () => ({

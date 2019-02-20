@@ -1,14 +1,14 @@
 <template>
 	<div class="course-card">
 		<div
-			v-if="course.notification != 0 || course.notification == null"
+			v-if="course.notification != 0 && course.notification != null"
 			class="dot"
 			>{{ course.notification }}</div
 		>
 		<div class="tab">
 			<div class="tab-label">{{ course.teacherName }}</div>
 			<div
-				v-if="course.newAssignments != 0 || course.notification == null"
+				v-if="course.newAssignments != 0 && course.notification != null"
 				class="assignments-label align-center"
 			>
 				<div class="align-center">{{ course.newAssignments }}</div>
@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="card-info" :style="background_style">
-			<div class="mt-5 mb-15 abrivation-label">{{ course.abbreviation }}</div>
+			<div class="mt-5 mb-15 abrivation-label">{{ courseAbbreviation }}</div>
 			<div class="mt-5 mb-5 ml-4 course-name-label">{{ course.name }}</div>
 		</div>
 		<CardFooter :course="course"></CardFooter>
@@ -63,6 +63,10 @@ export default {
 			} else {
 				return "background-color: " + this.course.color + ";";
 			}
+		},
+		courseAbbreviation() {
+			if (this.course.abbreviation == "") return this.course.abbreviation;
+			else return this.course.name.substring(0, 3).toUpperCase();
 		},
 	},
 };

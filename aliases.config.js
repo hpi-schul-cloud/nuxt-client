@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const prettier = require("prettier");
+const themeName = process.env.SC_THEME || "default";
 
 const aliases = {
 	"~": ".",
@@ -14,8 +15,9 @@ const aliases = {
 	"@plugins": "src/plugins",
 	"@static": "src/static",
 	"@store": "src/store",
-	"@styles": "src/styles",
-	"@variables": "src/styles/variables.scss",
+	"@theme": `src/themes/${themeName}`,
+	"@styles": `src/themes/${themeName}/styles`,
+	"@variables": `src/themes/${themeName}/styles/variables.scss`,
 };
 
 module.exports = {

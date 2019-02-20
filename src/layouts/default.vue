@@ -44,7 +44,7 @@ export default {
 				{ title: "Verwaltung", to: { name: "administration" } },
 			],
 			topBarActions: topbarBaseActions,
-			pageTitle: "Schul-Cloud",
+			pageTitle: this.$theme.short_name,
 		};
 	},
 	computed: mapState({
@@ -114,5 +114,8 @@ export default {
 }
 .content {
 	grid-area: content;
+	min-width: $size-content-width-min;
+	max-width: $size-content-width-max;
+	margin: 0 auto;
 }
 </style>
