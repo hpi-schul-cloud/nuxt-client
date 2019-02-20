@@ -9,7 +9,6 @@ env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
-    - NODE_ENV=production
     - SC_THEME=default
     - API_HOST=http://localhost:3030
 before_install:
@@ -37,4 +36,3 @@ deploy:
   on:
    all_branches: true
    condition: $TRAVIS_BRANCH =~ ^story.*|nuxt.*|doc*|master$
-
