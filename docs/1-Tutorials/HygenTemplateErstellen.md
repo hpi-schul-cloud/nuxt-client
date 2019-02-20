@@ -12,11 +12,11 @@ Der Aufruf des Templates erstellt sich aus der Ordner-Struktur. In obigen Fall
 
 ```bash
 _templates/
- └─  new/
-     └─ component/
-	    └─ prompt.js
-	    └─ doc.ejs.t
-	    └─ component.ejs.t
+└─ new/
+	└─ component/
+		└─ prompt.js
+		└─ doc.ejs.t
+		└─ component.ejs.t
 ```
 
 Nach Aufruf wird alles im Ordner component gerendert. Im Beispiel würden zwei neue Dateien erstellt werden sowie eine Abfrage durch das prompt.
