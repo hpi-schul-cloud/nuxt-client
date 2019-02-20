@@ -9,7 +9,7 @@ module.exports = function(api) {
 	}
 
 	return {
-		presets: ["@vue/app"],
+		presets: ["@nuxt/babel-preset-app"],
 		plugins: [],
 	};
 };

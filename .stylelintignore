@@ -1,6 +1,4 @@
 .vscode
 node_modules
 schulcloud-client
-coverage
 dist
-storybook-static
