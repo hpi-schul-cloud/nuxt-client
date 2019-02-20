@@ -17,7 +17,7 @@ import { library as fontAwesomeIconLibrary } from "@fortawesome/fontawesome-svg-
 import camelCase from "lodash/camelCase";
 
 // https://fontawesome.com/icons
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 fontAwesomeIconLibrary.add(faTrash);
 
 export default {
