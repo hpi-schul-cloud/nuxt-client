@@ -1,9 +1,14 @@
 <template>
 	<div class="root">
 		<div class="header">
-			<h3>Kurs anlegen</h3>
-			<h6>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen, Hausaufgaben
-				und Dateien gearbeitet.</h6>
+			<div class="header-icon">
+				<SpaceShuttle/>
+			</div>
+			<div class="headlines">
+				<h3>Kurs anlegen</h3>
+				<h6>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen, Hausaufgaben
+					und Dateien gearbeitet.</h6>
+			</div>
 		</div>
 		<div class="steps">
 			<StepProgress :steps="steps" :current-step="currentStep" />
@@ -72,6 +77,11 @@
 				</div>
 
 				<div v-show="currentStep == 1">
+					<p>
+						Fast geschafft! Jetzt noch die Kursmitglieder hinzufügen und dann kann es losgehen. 
+						Du kannst diesen Schritt auch überspringen und später Kursmitglieder hinzufügen.
+					</p>
+
 					<BaseSelect
 						:value.sync = "classesSelected"
 						:options="classes"
@@ -132,10 +142,12 @@ import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
 import BaseSelect from "./ui/BaseSelect";
 import TemplateCourseTimes from "./TemplateCourseTimes"
+import SpaceShuttle from "@assets/shuttle.svg";
+
 
 export default {
 	name: "TemplateCourseWizard",
-	components: {StepProgress, TemplateCourseTimes},
+	components: {StepProgress, TemplateCourseTimes, SpaceShuttle},
 	props: {
 		steps: {
 			type: Array,
@@ -225,7 +237,7 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 .content-wrapper{
 	width: 70%;
 	margin: 150px auto 0px auto;
@@ -252,6 +264,19 @@ export default {
 }
 
 .header{
-	margin-bottom: 30px;
+	margin: 20px 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	.headlines h3{
+		margin-top: 0px;
+	}
+
+	.header-icon{
+		margin-right: 20px;
+	}
 }
+
+
 </style>

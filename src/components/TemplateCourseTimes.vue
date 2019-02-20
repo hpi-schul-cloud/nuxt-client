@@ -1,7 +1,7 @@
 <template>
 	<div class="root">
 		<div v-for="(time,i) of value" :key="i" class="time-wrapper">
-			<a style="cursor: pointer" @click="popTime(time)"><DeleteIcon/></a>
+			<a style="cursor: pointer" class="icon-button" @click="popTime(time)"><BaseIcon icon="trash"/></a>
 			<BaseSelect
 				:value.sync = "time.weekday"
 				:options="weekdays"
@@ -27,13 +27,11 @@
 import BaseInput from "./ui/BaseInput";
 import BaseButton from "./ui/BaseButton";
 import BaseSelect from "./ui/BaseSelect";
-
-import DeleteIcon from "@assets/calander.svg";
-
+import BaseIcon from "@components/ui/BaseIcon.vue";
 
 export default {
 	name: "TemplateCourseTimes",
-	components: {DeleteIcon},
+	components: {BaseIcon},
 	props: {
 		value: {
 			type: Array,
@@ -83,5 +81,8 @@ export default {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+	}
+	.icon-button {
+		padding-right: 10px;
 	}
 </style>
