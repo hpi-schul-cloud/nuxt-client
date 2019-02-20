@@ -34,12 +34,13 @@ storiesOf("Base Components", module)
 	.add("Base Input", () => ({
 		components: { BaseInput },
 		template:
-			'<BaseInput type="text" label="Vorname" v-model="abc" name="firstname" placeholder="Max"/>',
+			'<BaseInput type="text" label="Vorname" value="" name="firstname" placeholder="Max"/>',
 		methods: {},
 	}))
 	.add("Base Input Date", () => ({
 		components: { BaseInput },
-		template: '<BaseInput type="date" label="Datum" placeholder="21.02.2019"/>',
+		template:
+			'<BaseInput value="" type="date" label="Datum" placeholder="21.02.2019" name="date"/>',
 		methods: {},
 	}))
 	.add("Base Select MultiSelect", () => ({
@@ -52,6 +53,6 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: '<BaseLink :href="https://www.google.com" :name="test"/>',
+		template: '<BaseLink href="https://www.google.com" name="test"/>',
 		methods: {},
 	}));
