@@ -19,21 +19,22 @@ storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
 	.add("Base Button", () => ({
 		components: { BaseButton },
-		template: "<Button>Hello Button</Button>",
+		template: "<BaseButton>Hello Button</BaseButton>",
 		methods: {},
 	}))
 	.add("Base Card", () => ({
 		components: { BaseCard },
-		template: "<Card/>",
+		template: "<BaseCard>Card</BaseCard>",
 		methods: {},
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: "<BaseIcon :name='fa-bell'/>",
+		template: '<BaseIcon :name="fa-bell"/>',
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },
-		template: "<BaseInput />",
+		template:
+			'<BaseInput type="text" label="Vorname" v-model="abc" name="firstname"/>',
 		methods: {},
 	}))
 	.add("Base Input Date", () => ({
@@ -51,6 +52,6 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: "<BaseLink :href='https://www.google.com' :name='test'/>",
+		template: '<BaseLink :href="https://www.google.com" :name="test"/>',
 		methods: {},
 	}));
