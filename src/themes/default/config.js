@@ -1,4 +1,4 @@
-const images = "/theme/images";
+const images = "/theme/images/";
 
 export default {
 	name: "HPI Schul-Cloud",
