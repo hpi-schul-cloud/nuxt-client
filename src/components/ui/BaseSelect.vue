@@ -103,7 +103,7 @@ $input-padding-left: 12px;
 	position: relative;
 	display: block;
 	margin: 1em 0 $size-grid-padding;
-	overflow: hidden;
+	overflow: visible;
 	clear: both;
 	background: $color-text-bg;
 	border: $size-border-width solid $color-border;

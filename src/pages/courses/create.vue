@@ -27,17 +27,7 @@ export default {
 				{ name: "Kurs-Mitglieder" },
 				{ name: "Abschließen" },
 			],
-			course: {
-				name: "",
-				description: "",
-				startDate: "",
-				untilDate: "",
-				teachers: [],
-				substitutions: [],
-				classes: [],
-				students: [],
-				times: [],
-			},
+			course: {},
 			moment: moment,
 		};
 	},
@@ -48,7 +38,7 @@ export default {
 		...mapGetters("classes", {
 			classes: "list",
 		}),
-	},
+	},	
 	async asyncData({ store }) {
 		try {
 			const teacherRole = (await store.dispatch("roles/find", {
@@ -85,32 +75,38 @@ export default {
 			};
 		} catch (err) {}
 	},
+	created () {
+		const { Course } = this.$FeathersVuex
+		this.course = new Course({
+			schoolId: this.user.schoolId
+		})
+	},
 	methods: {
 		async create(id) {
-			try {
-				const course = await this.$store.dispatch("courses/create", {
-					schoolId: this.user.schoolId,
-					name: this.course.name,
-					description: this.course.description,
-					startDate: this.course.startDate,
-					untilDate: this.course.untilDate,
-					times: this.course.times.map((time) => {
-						time.startTime = moment
-							.duration(time.startTime, "HH:mm")
-							.asMilliseconds()
-							.toString();
-						time.duration = (time.duration * 60 * 1000).toString();
-						time.weekday = time.weekday.value;
-						return time;
-					}),
-					teacherIds: this.course.teachers,
-					substitutionIds: this.course.substitutions,
-					classIds: this.course.classes,
-					userIds: this.course.students,
-				});
+			const course = this.course
+			
+			course.times = this.course.times.map((time) => {
+				time.startTime = moment
+					.duration(time.startTime, "HH:mm")
+					.asMilliseconds()
+					.toString();
+				time.duration = (time.duration * 60 * 1000).toString();
+				time.weekday = time.weekday.value;
+				return time;
+			})
 
-				this.$router.push({ name: "courses" });
-			} catch (e) {}
+			course.teacherIds = course.teachers,
+			course.substitutionIds = course.substitutions,
+			course.classIds = course.classes,
+			course.userIds = course.students
+
+			try {
+				await course.create()
+			} catch (e) {
+				console.log(e)
+			}
+
+			this.$router.push({ name: "courses" });
 		},
 	},
 };
