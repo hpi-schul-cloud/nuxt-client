@@ -63,6 +63,10 @@ module.exports = {
 			src: "@plugins/authenticate",
 			ssr: false,
 		},
+		{
+			src: "@plugins/auth",
+			ssr: false,
+		},
 		"@plugins/global",
 		"@plugins/directives",
 		"@plugins/theme",

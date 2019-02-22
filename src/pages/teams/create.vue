@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
 	data () {
 		const { Team } = this.$FeathersVuex;
@@ -35,15 +33,10 @@ export default {
 			team
 		};
 	},
-	computed: {
-		...mapState("auth", {
-			user: "user",
-		}),
-	},
 	methods: {
 		async create(id) {
 			const { Team } = this.$FeathersVuex;
-			this.team.schoolId = this.user.schoolId;
+			this.team.schoolId = this.$user.schoolId;
 
 			try {
 				const team = await this.team.create(); 
