@@ -7,6 +7,8 @@ import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
 import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
+import BaseToast from "@components/ui/BaseToast.vue";
+import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 
 storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
@@ -50,4 +52,12 @@ storiesOf("Base Components", module)
 		template:
 			"<BaseLink href='https://www.google.com'> Link content</BaseLink>",
 		methods: {},
+	}))
+	.add("Base Toast", () => ({
+		components: { BaseToast },
+		template: "<BaseToast />",
+	}))
+	.add("Base Progressbar", () => ({
+		components: { BaseProgressbar },
+		template: "<BaseProgressbar :value='2' :max='3'/>",
 	}));
