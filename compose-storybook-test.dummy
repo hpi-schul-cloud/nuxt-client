@@ -12,4 +12,3 @@ services:
     ports:
       - \"80:6006\"
     restart: always
-
