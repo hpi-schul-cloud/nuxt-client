@@ -1,3 +1,4 @@
+import Vue from "vue";
 import Vuex from "vuex";
 // import { app } from './feathers-client'
 import { CookieStorage } from "cookie-storage";
@@ -20,10 +21,12 @@ if (process.client) {
 			secure: false,
 		})
 	);
-	const { service: browserService, auth: browserAuth } = feathersVuex(
+	const { service: browserService, auth: browserAuth, FeathersVuex } = feathersVuex(
 		browserClient,
 		{ idField: "_id", enableEvents: enableEvents }
 	);
+
+	Vue.use(FeathersVuex);
 
 	plugins = [
 		browserService("/content/search", {
@@ -70,10 +73,12 @@ const createStore = () => {
 
 				// Create a new client for the server
 				const client = feathersClient(origin, storage);
-				const { service } = feathersVuex(client, {
+				const { service, FeathersVuex } = feathersVuex(client, {
 					idField: "_id",
 					enableEvents: false,
 				});
+
+				Vue.use(FeathersVuex);
 
 				// Register services for the server
 				service("users", { paginate: true })(store);

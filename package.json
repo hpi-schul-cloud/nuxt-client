@@ -52,7 +52,7 @@
 		"@storybook/addon-centered": "^4.1.11",
 		"@storybook/addon-viewport": "^4.1.11",
 		"cookie-storage": "^3.2.0",
-		"feathers-vuex": "^1.6.2",
+		"feathers-vuex": "1.7.0",
 		"handlebars": "^4.0.12",
 		"handlebars-layouts": "^3.1.4",
 		"handlebars-wax": "^6.1.0",
