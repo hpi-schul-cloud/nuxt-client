@@ -4,7 +4,7 @@ to: "<%= story ? ('stories/' + name + '.stories.js') : null %>"
 import { storiesOf } from "@storybook/vue";
 import { withMarkdownNotes } from "@storybook/addon-notes";
 import <%= name %> from "@components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>.vue";
-import <%= name %>Doc from "@docs/components/<%= name %>.md";
+import <%= name %>Doc from "@docs/storybook/<%= name %>.md";
 
 storiesOf("<%= name %>", module)
 	.addDecorator(withMarkdownNotes(<%= name %>Doc))

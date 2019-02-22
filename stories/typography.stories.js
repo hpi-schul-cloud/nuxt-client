@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import { withMarkdownNotes } from "@storybook/addon-notes";
-import typographyDoc from "@docs/stories/typography.md";
+import typographyDoc from "@docs/storybook/typography.md";
 // TODO Caption class
 storiesOf("Typography", module)
 	.addDecorator(withMarkdownNotes(typographyDoc))
