@@ -1,15 +1,20 @@
 <template>
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
-			<a style="cursor: pointer" class="icon-button" @click="popTime(time)"
-				><BaseIcon icon="trash"
-			/></a>
+			<a
+				style="cursor: pointer"
+				class="icon-button"
+				@click="popTime(time)"
+				>
+				<BaseIcon icon="trash"/>
+			</a>
 			<BaseSelect
 				:value.sync="time.weekday"
 				:options="weekdays"
 				:allow-empty="false"
 				label="name"
 				input-label="Tag"
+				class="item"
 				@update:value="timeUpdate"
 			></BaseSelect>
 			<BaseInput
@@ -17,6 +22,7 @@
 				label="Raum"
 				name="room"
 				type="text"
+				class="item"
 				@update="timeUpdate"
 			/>
 			<BaseInput
@@ -24,6 +30,7 @@
 				label="Start"
 				name="startTime"
 				type="time"
+				class="item"
 				@update="timeUpdate"
 			/>
 			<BaseInput
@@ -31,6 +38,7 @@
 				label="Dauer"
 				name="duration"
 				type="text"
+				class="item"
 				@update="timeUpdate"
 			/>
 		</div>
@@ -120,5 +128,8 @@ export default {
 }
 .icon-button {
 	padding-right: 10px;
+}
+.item {
+	padding: 0 2px;
 }
 </style>

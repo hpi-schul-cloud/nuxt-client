@@ -2,7 +2,6 @@
 
 import { storiesOf } from "@storybook/vue";
 import LandingCTA from "@components/TemplateLandingCTA";
-import TemplateCourseWizard from "@components/TemplateCourseWizard";
 import StepProgress from "@components/StepProgress";
 
 export const steps = [
