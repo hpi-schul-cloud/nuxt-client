@@ -36,7 +36,13 @@ if (process.client) {
 			replaceItems: true,
 		}),
 		browserService("courses", { paginate: true }),
-		browserService("teams", { paginate: true }),
+		browserService("teams", { 
+			instanceDefaults: {
+				name: '',
+				description: ''
+			},
+			paginate: true,
+		 }),
 		browserService("news", { paginate: true }),
 		browserService("schools", { paginate: true }),
 		browserService("users", { paginate: true }),

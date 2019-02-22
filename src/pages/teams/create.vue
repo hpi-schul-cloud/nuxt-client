@@ -6,13 +6,15 @@
 				v-model="team.name"
 				label="Name"
 				type="text"
+				name="name"
 				placeholder="Dream Team"
 				maxlength="30"
 			></BaseInput>
 			<BaseInput
 				v-model="team.description"
 				label="Beschreibung"
-				type="textarea"
+				type="text"
+				name="description"
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></BaseInput>
@@ -26,11 +28,11 @@ import { mapState, mapActions } from "vuex";
 
 export default {
 	data() {
+		const { Team } = this.$FeathersVuex;
+		const team = new Team()
+
 		return {
-			team: {
-				name: "",
-				description: "",
-			},
+			team
 		};
 	},
 	computed: {
@@ -40,24 +42,25 @@ export default {
 	},
 	methods: {
 		async create(id) {
-			try {
-				const team = await this.$store.dispatch("teams/create", {
-					schoolId: this.user.schoolId,
-					name: this.team.name,
-					description: this.team.description,
-				});
+			const { Team } = this.$FeathersVuex;
+			this.team.schoolId = this.user.schoolId;
 
-				this.$toast.open({
-					message: "Team erstellt",
-					type: "is-success",
-				});
+			try {
+				const team = await this.team.create(); 
+
+				// this.$toast.open({
+				// 	message: "Team erstellt",
+				// 	type: "is-success",
+				// });
 
 				this.$router.push({ name: "teams-id", params: { id: team._id } });
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Erstellen des Teams",
-					type: "is-danger",
-				});
+				console.log(e)
+
+				// this.$toast.open({
+				// 	message: "Fehler beim Erstellen des Teams",
+				// 	type: "is-danger",
+				// });
 			}
 		},
 		...mapActions("auth", ["logout"]),
