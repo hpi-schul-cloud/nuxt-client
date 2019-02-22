@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 
 export default {
-	data() {
+	data () {
 		const { Team } = this.$FeathersVuex;
 		const team = new Team()
 
@@ -62,8 +62,7 @@ export default {
 				// 	type: "is-danger",
 				// });
 			}
-		},
-		...mapActions("auth", ["logout"]),
+		}
 	},
 };
 </script>

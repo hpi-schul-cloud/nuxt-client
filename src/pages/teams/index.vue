@@ -9,13 +9,11 @@
 		</section>
 		<section class="section">
 			<Card v-for="(team, i) of teams" :key="i">
-				<div slot="header" class="card-image">
-					jo
-				</div>
+				<div slot="header" class="card-image"></div>
 				<div class="card-content">
 					<div class="media">
 						<div class="media-content">
-							<p class="title is-4">{{ team.title }}</p>
+							<p class="title is-4">{{ team.name }}</p>
 							<!-- <p class="subtitle is-6">
 								<span v-for="(tag, index) of data.tags" :key="index" class="tag">
 									{{ tag }}

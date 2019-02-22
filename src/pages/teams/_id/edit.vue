@@ -19,6 +19,7 @@
 			<BaseInput
 				v-model="team.name"
 				label="Name"
+				name="name"
 				type="text"
 				placeholder="Dream Team"
 				maxlength="30"
@@ -26,7 +27,8 @@
 			<BaseInput
 				v-model="team.description"
 				label="Beschreibung"
-				type="textarea"
+				name="description"
+				type="text"
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></BaseInput>
@@ -40,61 +42,64 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-
 export default {
-	computed: {
-		...mapGetters("teams", {
-			team: "current",
-		}),
+	data () {
+		return {
+			team: {}
+		};
 	},
-	created(ctx) {
-		this.get(this.$route.params.id);
+	async created () {
+		const { Team } = this.$FeathersVuex;
+		this.team = await Team.get(this.$route.params.id)
 	},
 	methods: {
-		...mapActions("teams", ["remove"]),
-		confirmDelete() {
-			this.$dialog.confirm({
-				title: "Team löschen",
-				message: "Bist du sicher, dass du das Team löschen möchtest?",
-				confirmText: "Team löschen",
-				type: "is-danger",
-				hasIcon: true,
-				onConfirm: async () => {
-					try {
-						await this.remove(this.team._id);
-						this.$toast.open("Team gelöscht");
-						this.$router.push({ name: "teams" });
-					} catch (e) {
-						this.$toast.open({
-							message: "Fehler beim löschen",
-							type: "is-danger",
-						});
-					}
-				},
-			});
-		},
-		get(id) {
-			this.$store.dispatch("teams/get", id);
+		async confirmDelete() {
+			// TODO: Dialog
+
+			// this.$dialog.confirm({
+			// 	title: "Team löschen",
+			// 	message: "Bist du sicher, dass du das Team löschen möchtest?",
+			// 	confirmText: "Team löschen",
+			// 	type: "is-danger",
+			// 	hasIcon: true,
+			// 	onConfirm: async () => {
+			// 		try {
+			// 			await this.remove(this.team._id);
+			// 			this.$toast.open("Team gelöscht");
+			// 			this.$router.push({ name: "teams" });
+			// 		} catch (e) {
+			// 			this.$toast.open({
+			// 				message: "Fehler beim löschen",
+			// 				type: "is-danger",
+			// 			});
+			// 		}
+			// 	},
+			// });
+
+			try {
+				await this.team.remove()
+	
+				this.$router.push({ name: "teams" });
+			} catch (e) {
+				console.log(e)
+			}
 		},
 		async save() {
 			try {
-				await this.$store.dispatch("teams/patch", [
-					this.$route.params.id,
-					{
-						name: this.team.name,
-						description: this.team.description,
-					},
-				]);
-				this.$toast.open({
-					message: "Team gespeichert",
-					type: "is-success",
-				});
+				await this.team.save();
+
+				// this.$toast.open({
+				// 	message: "Team gespeichert",
+				// 	type: "is-success",
+				// });
+
+				this.$router.push({ name: "teams-id", params: { id: this.team._id } });
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Speichern",
-					type: "is-danger",
-				});
+				console.log(e)
+				// this.$toast.open({
+				// 	message: "Fehler beim Speichern",
+				// 	type: "is-danger",
+				// });
 			}
 		},
 	},
