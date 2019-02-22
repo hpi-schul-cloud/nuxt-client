@@ -8,33 +8,41 @@
 			>
 		</section>
 		<section class="section">
-			<div class="tile is-ancestor">
-				<div v-for="(team, i) of teams" :key="i" class="tile is-parent is-4">
-					<article
-						:class="{
-							'is-primary': i % 3 == 0,
-							'is-info': i % 3 == 1,
-							'is-success': i % 3 == 2,
-						}"
-						class="tile is-child notification"
-					>
-						<p class="title">{{ team.name }}</p>
-						<p class="subtitle">{{ team.description }}</p>
-						<p>
-							<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }"
-								>Anschauen</BaseLink
-							>
-						</p>
-					</article>
+			<Card v-for="(team, i) of teams" :key="i">
+				<div slot="header" class="card-image">
+					jo
 				</div>
-			</div>
+				<div class="card-content">
+					<div class="media">
+						<div class="media-content">
+							<p class="title is-4">{{ team.title }}</p>
+							<!-- <p class="subtitle is-6">
+								<span v-for="(tag, index) of data.tags" :key="index" class="tag">
+									{{ tag }}
+								</span>
+							</p> -->
+						</div>
+					</div>
+
+					<div class="content">
+						<p>{{ team.description }}</p>
+					</div>
+				</div>					
+				<div slot="footer">
+					<div class="footer-actions">
+						<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }"
+							>Anschauen</BaseLink
+						>
+					</div>
+				</div>					
+			</Card>
 		</section>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import isAuthenticated from "@middleware/is-authenticated";
+import Card from "@components/ui/BaseCard";
 
 export default {
 	head() {
@@ -42,14 +50,17 @@ export default {
 			title: "Teams",
 		};
 	},
-	middleware: [isAuthenticated],
-	computed: {
-		...mapGetters("teams", {
-			teams: "list",
-		}),
+	components: {
+		Card
 	},
-	created(ctx) {
-		this.find();
+	data () {
+		return {
+			teams: []
+		}
+	},
+	middleware: [isAuthenticated],
+	async created(ctx) {
+		this.teams = (await this.$FeathersVuex.Team.find()).data;
 	},
 	methods: {
 		find() {
