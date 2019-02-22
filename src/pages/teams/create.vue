@@ -48,7 +48,7 @@ export default {
 
 				this.$router.push({ name: "teams-id", params: { id: team._id } });
 			} catch (e) {
-				console.log(e)
+				// console.log(e)
 
 				// this.$toast.open({
 				// 	message: "Fehler beim Erstellen des Teams",

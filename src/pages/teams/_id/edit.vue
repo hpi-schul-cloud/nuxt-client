@@ -81,7 +81,7 @@ export default {
 	
 				this.$router.push({ name: "teams" });
 			} catch (e) {
-				console.log(e)
+				// console.log(e)
 			}
 		},
 		async save() {
@@ -95,7 +95,7 @@ export default {
 
 				this.$router.push({ name: "teams-id", params: { id: this.team._id } });
 			} catch (e) {
-				console.log(e)
+				// console.log(e)
 				// this.$toast.open({
 				// 	message: "Fehler beim Speichern",
 				// 	type: "is-danger",
