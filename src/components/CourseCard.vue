@@ -115,7 +115,6 @@ export default {
 	display: inline-block;
 	width: 25px;
 	height: 25px;
-	// padding: 1px 9px 2px;
 	font-family: PTSans-CaptionBold, sans-serif;
 	font-size: 14px;
 	font-weight: bold;
@@ -133,9 +132,12 @@ export default {
 }
 
 .course-name-label {
+	overflow: hidden;
 	font-family: "PT Sans Narrow", sans-serif;
 	font-size: 20px;
 	font-weight: bold;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .assignments-label {

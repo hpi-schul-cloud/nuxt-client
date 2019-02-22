@@ -7,7 +7,7 @@ $color-border: #999;
 // CONTENT
 $color-body-bg: #eee;
 $color-heading-text: #000;
-$color-text: #444;
+$color-text: #000;
 $color-text-bg: #fff;
 $color-link: $color-primary;
 $color-link-active: darken($color-primary, 50%);
@@ -15,3 +15,7 @@ $color-link-active: darken($color-primary, 50%);
 $color-text-on-primary: #fff;
 $color-link-on-primary: #fff;
 $color-link-active-on-primary: #fff;
+
+// Button
+$color-button-primary: #b10438;
+$color-button-secondary: #f8a41b;

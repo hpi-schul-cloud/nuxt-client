@@ -4,11 +4,14 @@ $system-default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 	Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
 	"Segoe UI Symbol";
 
-$heading-font-family: "PT Sans Narrow", $system-default-font-family;
+$heading-font-family: PT Sans Narrow, $system-default-font-family;
 $heading-font-weight: bold;
 
-$content-font-family: "PT Sans", $system-default-font-family;
-$content-font-weight: 400;
+$content-font-family: PT Sans, $system-default-font-family;
+$content-font-weight: normal;
+
+$button-font-family: PT Sans Narrow, $system-default-font-family;
+$button-font-weight: bold;
 
 %font-heading {
 	font-family: $heading-font-family;
@@ -19,5 +22,11 @@ $content-font-weight: 400;
 %font-content {
 	font-family: $content-font-family;
 	font-weight: $content-font-weight;
+	color: $color-text;
+}
+
+%font-button {
+	font-family: $button-font-family;
+	font-weight: $button-font-weight;
 	color: $color-text;
 }

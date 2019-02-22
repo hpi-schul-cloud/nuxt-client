@@ -14,12 +14,11 @@ export default {
 .button {
 	display: flex;
 	align-items: center;
-	padding: $size-padding;
-	color: $color-text-on-primary;
+	padding: $color-text-on-primary;
+	color: $color-body-bg;
 	text-transform: uppercase;
 	cursor: pointer;
-	background-color: transparentize($color-text, 0);
-	border: $size-border-width solid $color-text-on-primary;
+	border: $size-border-width solid;
 	border-radius: $size-border-radius;
 	transition: background-color $duration-animation-base ease;
 	&:hover,
@@ -29,10 +28,25 @@ export default {
 }
 
 .is-primary {
-	background-color: $color-primary;
+	background-color: $color-button-primary;
 }
 
 .is-secondary {
-	background-color: $color-secondary;
+	background-color: $color-button-secondary;
+}
+
+.is-small {
+	font-size: 15px;
+	//TODO adjust sizes to viewport
+}
+
+.is-medium {
+	font-size: 16px;
+	//TODO adjust sizes to viewport
+}
+
+.is-large {
+	font-size: 17px;
+	// TODO adjust sizes to viewport
 }
 </style>

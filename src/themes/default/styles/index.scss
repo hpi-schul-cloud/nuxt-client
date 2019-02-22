@@ -19,7 +19,7 @@
 	.h#{$i} {
 		margin: 0.75em 0 0.25em;
 		font-size: font-size($i);
-
+		// TODO adjust sizes to viewport
 		@extend %font-heading;
 	}
 }
@@ -33,6 +33,12 @@
 html,
 body {
 	@extend %font-content;
+	.body1 {
+		font-size: 21px;
+	}
+	.body2 {
+		font-size: 14px;
+	}
 
 	width: 100%;
 	min-height: 100vh;
@@ -43,7 +49,7 @@ input,
 select,
 textarea,
 button {
-	font-family: inherit;
+	@extend %font-button;
 }
 
 img {

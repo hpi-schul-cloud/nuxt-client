@@ -12,12 +12,14 @@ storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
 	.add("Base Button Primary", () => ({
 		components: { BaseButton },
-		template: "<BaseButton class ='is-primary'>Primary</BaseButton>",
+		template:
+			"<div><BaseButton class ='is-primary is-small'>Primary</BaseButton> <br/> <BaseButton class ='is-primary is-medium'>Primary</BaseButton><br/><BaseButton class ='is-primary is-large'>Primary</BaseButton></div>",
 		methods: {},
 	}))
 	.add("Base Button Secondary", () => ({
 		components: { BaseButton },
-		template: "<BaseButton class ='is-secondary'>Secondary</BaseButton>",
+		template:
+			"<div><BaseButton class ='is-secondary is-small'>Secondary</BaseButton><br/><BaseButton class ='is-secondary is-medium'>Secondary</BaseButton><br/><BaseButton class ='is-secondary is-large'>Secondary</BaseButton><br/></div>",
 		methods: {},
 	}))
 	.add("Base Card", () => ({

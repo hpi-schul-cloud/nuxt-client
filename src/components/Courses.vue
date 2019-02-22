@@ -16,10 +16,7 @@ export default {
 		CourseCard,
 	},
 	props: {
-		courses: {
-			type: String,
-			default: "",
-		},
+		courses: String,
 	},
 	computed: {
 		courses_obj() {
