@@ -92,16 +92,12 @@ export default {
 					username,
 					password,
 				});
-				this.$toast.open({
-					message: "Login erfolgreich!",
-					type: "is-success",
-				});
+
+				this.$toasted.success('Login erfolgreich!');
+
 				this.$router.push("/");
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Login. E-Mail/Passwort falsch?",
-					type: "is-danger",
-				});
+				this.$toasted.error('Fehler beim Login. E-Mail/Passwort falsch?');
 			}
 
 			// this.authenticate(payload)

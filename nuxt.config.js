@@ -66,7 +66,7 @@ module.exports = {
 		"@plugins/global",
 		"@plugins/directives",
 		"@plugins/theme",
-		// '~/plugins/feathers',
+		"@plugins/toasted"
 	],
 
 	/*

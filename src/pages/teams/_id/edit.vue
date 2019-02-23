@@ -63,13 +63,10 @@ export default {
 				onConfirm: async () => {
 					try {
 						await this.remove(this.team._id);
-						this.$toast.open("Team gelöscht");
+						this.$toasted.error('Team gelöscht');
 						this.$router.push({ name: "teams" });
 					} catch (e) {
-						this.$toast.open({
-							message: "Fehler beim löschen",
-							type: "is-danger",
-						});
+						this.$toasted.error('Fehler beim Löschen');
 					}
 				},
 			});
@@ -86,15 +83,9 @@ export default {
 						description: this.team.description,
 					},
 				]);
-				this.$toast.open({
-					message: "Team gespeichert",
-					type: "is-success",
-				});
+				this.$toasted.success('Team gespeichert');
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Speichern",
-					type: "is-danger",
-				});
+				this.$toasted.error('Fehler beim Speichern');
 			}
 		},
 	},

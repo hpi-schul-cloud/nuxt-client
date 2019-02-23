@@ -49,17 +49,11 @@ export default {
 					description: this.course.description,
 				}); */
 
-				this.$toast.open({
-					message: "Kurs erstellt",
-					type: "is-success",
-				});
+				this.$toasted.success('Kurs erstellt');
 
 				this.$router.push({ name: "courses" });
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Erstellen des Kurses",
-					type: "is-danger",
-				});
+				this.$toasted.error('Fehler beim Erstellen');
 			}
 		},
 	},

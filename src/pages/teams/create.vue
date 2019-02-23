@@ -47,17 +47,12 @@ export default {
 					description: this.team.description,
 				});
 
-				this.$toast.open({
-					message: "Team erstellt",
-					type: "is-success",
-				});
+				this.$toasted.success('Team erstellt')
 
 				this.$router.push({ name: "teams-id", params: { id: team._id } });
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Erstellen des Teams",
-					type: "is-danger",
-				});
+				this.$toasted.error('Fehler beim Erstellen des Teams')
+
 			}
 		},
 		...mapActions("auth", ["logout"]),
