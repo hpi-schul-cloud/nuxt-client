@@ -10,6 +10,7 @@ import BaseLink from "@components/ui/BaseLink.vue";
 import BaseToast from "@components/ui/BaseToast.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseProfilePicture from "@components/ui/BaseProfilePicture.vue";
+import BaseTable from "@components/ui/BaseTable.vue";
 
 storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
@@ -66,4 +67,19 @@ storiesOf("Base Components", module)
 		components: { BaseProfilePicture },
 		template:
 			"<div><BaseProfilePicture image='https://s14-eu5.startpage.com/cgi-bin/serveimage?url=https:%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F0%2F0b%2FZebra_Closeup_%252822211089308%2529.jpg&sp=572f2d2655837540935f5ab68078ee1a' size='small'/><BaseProfilePicture size='medium'/><BaseProfilePicture size='large'/></div>",
+	}))
+	.add("Base Table", () => ({
+		components: { BaseTable },
+		template: `
+<BaseTable>
+    <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+    </tr>
+    <tr>
+        <td>Peter</td>
+        <td>Griffin</td>
+    </tr>
+</BaseTable>
+        `,
 	}));
