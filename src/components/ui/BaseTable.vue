@@ -13,7 +13,6 @@ export default {};
 @import "@variables";
 .table {
 	border: 1px solid black;
-	border-collapse: unset;
 }
 .table tr:nth-child(odd) {
 	background-color: #fff;

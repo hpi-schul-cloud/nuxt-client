@@ -11,6 +11,7 @@ import BaseToast from "@components/ui/BaseToast.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseProfilePicture from "@components/ui/BaseProfilePicture.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
+import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 
 storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
@@ -82,4 +83,9 @@ storiesOf("Base Components", module)
     </tr>
 </BaseTable>
         `,
+	}))
+	.add("Base Collapsible", () => ({
+		components: { BaseCollapsible },
+		template:
+			"<BaseCollapsible label='Test' ><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></BaseCollapsible>",
 	}));
