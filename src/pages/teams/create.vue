@@ -49,11 +49,11 @@ export default {
 					description: this.team.description,
 				});
 
-				this.$toasted.success("Team erstellt");
+				this.$toast.success("Team erstellt");
 
 				this.$router.push({ name: "teams-id", params: { id: team._id } });
 			} catch (e) {
-				this.$toasted.error("Fehler beim Erstellen des Teams");
+				this.$toast.error("Fehler beim Erstellen des Teams");
 			}
 		},
 	},
