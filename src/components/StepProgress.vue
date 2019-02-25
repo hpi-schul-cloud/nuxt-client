@@ -22,7 +22,13 @@ export default {
 	props: {
 		steps: {
 			type: Array,
-			default: () => [],
+			default: () => [
+				{ name: "One" },
+				{ name: "Two" },
+				{ name: "Three" },
+				{ name: "Four" },
+				{ name: "Five" },
+			],
 		},
 		currentStep: {
 			type: Number,
