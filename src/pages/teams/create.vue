@@ -5,6 +5,7 @@
 			<BaseInput
 				v-model="team.name"
 				label="Name"
+				name="name"
 				type="text"
 				placeholder="Dream Team"
 				maxlength="30"
@@ -12,7 +13,8 @@
 			<BaseInput
 				v-model="team.description"
 				label="Beschreibung"
-				type="textarea"
+				name="description"
+				type="text"
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></BaseInput>
@@ -54,7 +56,6 @@ export default {
 				this.$toasted.error("Fehler beim Erstellen des Teams");
 			}
 		},
-		...mapActions("auth", ["logout"]),
 	},
 };
 </script>
