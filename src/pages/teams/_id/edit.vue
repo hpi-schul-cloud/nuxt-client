@@ -63,10 +63,10 @@ export default {
 				onConfirm: async () => {
 					try {
 						await this.remove(this.team._id);
-						this.$toasted.error('Team gelöscht');
+						this.$toasted.error("Team gelöscht");
 						this.$router.push({ name: "teams" });
 					} catch (e) {
-						this.$toasted.error('Fehler beim Löschen');
+						this.$toasted.error("Fehler beim Löschen");
 					}
 				},
 			});
@@ -83,9 +83,9 @@ export default {
 						description: this.team.description,
 					},
 				]);
-				this.$toasted.success('Team gespeichert');
+				this.$toasted.success("Team gespeichert");
 			} catch (e) {
-				this.$toasted.error('Fehler beim Speichern');
+				this.$toasted.error("Fehler beim Speichern");
 			}
 		},
 	},

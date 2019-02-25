@@ -93,11 +93,11 @@ export default {
 					password,
 				});
 
-				this.$toasted.success('Login erfolgreich!');
+				this.$toasted.success("Login erfolgreich!");
 
 				this.$router.push("/");
 			} catch (e) {
-				this.$toasted.error('Fehler beim Login. E-Mail/Passwort falsch?');
+				this.$toasted.error("Fehler beim Login. E-Mail/Passwort falsch?");
 			}
 
 			// this.authenticate(payload)

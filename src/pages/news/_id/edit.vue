@@ -53,10 +53,10 @@ export default {
 				onConfirm: async () => {
 					try {
 						await this.remove(this.news._id);
-						this.$toasted.success('Artikel gelöscht');
+						this.$toasted.success("Artikel gelöscht");
 						this.$router.push({ name: "news" });
 					} catch (e) {
-						this.$toasted.error('Fehler beim Löschen');
+						this.$toasted.error("Fehler beim Löschen");
 					}
 				},
 			});
@@ -73,9 +73,9 @@ export default {
 						content: this.news.content,
 					},
 				]);
-				this.$toasted.success('Artikel gespeichert');
+				this.$toasted.success("Artikel gespeichert");
 			} catch (e) {
-				this.$toasted.error('Fehler beim Speichern');
+				this.$toasted.error("Fehler beim Speichern");
 			}
 		},
 	},

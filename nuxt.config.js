@@ -66,7 +66,6 @@ module.exports = {
 		"@plugins/global",
 		"@plugins/directives",
 		"@plugins/theme",
-		"@plugins/toasted"
 	],
 
 	/*
@@ -77,8 +76,13 @@ module.exports = {
 
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
-		"nuxt-babel",
+		"@nuxtjs/toast",
+		"nuxt-babel"
 	],
+
+	toast: {
+		duration: 3000,
+	},
 	/*
 	 ** Axios module configuration
 	 */
