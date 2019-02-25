@@ -11,6 +11,13 @@ const themeName = process.env.SC_THEME || "default";
 const host = process.env.HOST || "localhost";
 const port = process.env.PORT || 3000;
 
+if (themeName !== "default") {
+	app.use(
+		"/theme",
+		express.static(path.join(__dirname, "../themes/default/static"))
+	);
+}
+
 app.use(
 	"/theme",
 	express.static(path.join(__dirname, "../themes/" + themeName + "/static"))
