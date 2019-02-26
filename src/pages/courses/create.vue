@@ -100,10 +100,12 @@ export default {
 			course.classIds = course.classes,
 			course.userIds = course.students
 
+			this.$toast.success("Kurs erstellt");
+
 			try {
 				await course.create()
 			} catch (e) {
-				console.log(e)
+				this.$toast.error("Fehler beim Erstellen");
 			}
 
 			this.$router.push({ name: "courses" });
