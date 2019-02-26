@@ -5,6 +5,7 @@
 			<BaseInput
 				v-model="team.name"
 				label="Name"
+				name="name"
 				type="text"
 				placeholder="Dream Team"
 				maxlength="30"
@@ -12,7 +13,8 @@
 			<BaseInput
 				v-model="team.description"
 				label="Beschreibung"
-				type="textarea"
+				name="description"
+				type="text"
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></BaseInput>
@@ -47,20 +49,13 @@ export default {
 					description: this.team.description,
 				});
 
-				this.$toast.open({
-					message: "Team erstellt",
-					type: "is-success",
-				});
+				this.$toast.success("Team erstellt");
 
 				this.$router.push({ name: "teams-id", params: { id: team._id } });
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Erstellen des Teams",
-					type: "is-danger",
-				});
+				this.$toast.error("Fehler beim Erstellen des Teams");
 			}
 		},
-		...mapActions("auth", ["logout"]),
 	},
 };
 </script>
