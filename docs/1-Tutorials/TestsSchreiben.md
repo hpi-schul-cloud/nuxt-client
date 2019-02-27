@@ -55,3 +55,5 @@ describe("@components/BaseCard", () => {
 ```
 
 ## e2e-Tests
+
+Aktuell sammeln wir noch, was getestet werden soll: [Liste im Confluence anzeigen](https://docs.schul-cloud.org/pages/viewpage.action?spaceKey=Intern&title=Integrationstest+Status)

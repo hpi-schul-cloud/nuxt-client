@@ -22,7 +22,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: '<BaseIcon :name="fa-bell"/>',
+		template: '<BaseIcon icon="trash"/>',
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },
