@@ -8505,10 +8505,10 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-hygen@^2.1.1:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/hygen/-/hygen-2.1.2.tgz#c20ff7e843b7db8d973fde8d12647cfe706c60b8"
-  integrity sha512-N15CHPswkYf0z2iw3/Q1mINVbLpXop64aZw0xDA4Q1ohM9wma/mky2NOzePHOt+MXLWpvc5bSWuuXRgcbYUvew==
+hygen@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/hygen/-/hygen-3.0.0.tgz#c723d54569a310c486af39e533cb18e48096b16f"
+  integrity sha512-qZrCfGYb8RPN95ea04M/KWzguntrHwKxQDNesTiGKJ1nHHxB20M3NagO7QYwt8ztubESLR0xtamMZCeTMDvibg==
   dependencies:
     chalk "^2.4.1"
     change-case "^3.0.2"
