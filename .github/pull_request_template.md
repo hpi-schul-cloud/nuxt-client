@@ -22,5 +22,3 @@ You can open a new issue at https://ticketsystem.schul-cloud.org/
 If you have made changes to the interface, please show us your changes with a screenshot.
 
 -->
-
-Notes:
