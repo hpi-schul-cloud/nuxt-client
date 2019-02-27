@@ -52,6 +52,8 @@ You can find all commands inside the [package.json](./package.json).
 yarn dev:nuxt
 ```
 
+**URL**: [http://localhost:3000](http://localhost:3000)
+
 All Nuxt source-files can be found at `src/`.
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
@@ -62,6 +64,8 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 yarn dev:docs
 ```
 
+**URL**: [http://localhost:8080](http://localhost:8080)
+
 For detailed explanation on how things work, checkout [Vuepress](https://vuepress.vuejs.org/guide/).
 
 ### Storybook
@@ -69,6 +73,8 @@ For detailed explanation on how things work, checkout [Vuepress](https://vuepres
 ```bash
 yarn dev:storybook
 ```
+
+**URL**: [http://localhost:6006](http://localhost:6006)
 
 For detailed explanation on how things work, checkout [Storybook](https://storybook.js.org/).
 
