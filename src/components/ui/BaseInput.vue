@@ -9,8 +9,14 @@
 		<input type="hidden" />
 	</div>
 	<div v-else-if="type === 'radio'" class="radio">
-		<input id="a-opt" type="radio" class="radio-btn" name="choice" />
-		<label for="a-opt" class="label">pick me!</label>
+		<input
+			:id="id"
+			type="radio"
+			class="radio-btn"
+			:name="name"
+			:value="value"
+		/>
+		<label :for="id" class="label"><slot /></label>
 	</div>
 	<div v-else>
 		<label class="input__wrapper">
@@ -57,6 +63,10 @@ export default {
 					"hidden",
 				].includes(value.toLowerCase());
 			},
+		},
+		id: {
+			type: String,
+			default: "",
 		},
 		value: {
 			type: String,

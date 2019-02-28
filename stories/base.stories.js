@@ -48,7 +48,8 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Radio Button", () => ({
 		components: { BaseInput },
-		template: "<BaseInput type='radio' />",
+		template:
+			"<div><BaseInput type='radio' name='choise' value='me' id='radio1'>Pick me!</BaseInput> <BaseInput type='radio' name='choise' value='notMe' id='radio2'>Don't pick me.</BaseInput></div>",
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },

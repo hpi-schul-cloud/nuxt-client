@@ -50,9 +50,26 @@ export default {
 	overflow: hidden;
 	background-color: #f1f1f1;
 	display: block;
-	transition: all 0.2s ease-out;
+	animation: fadeEffect 1s;
 }
 .is-collapsed {
 	display: none;
+}
+@-webkit-keyframes fadeEffect {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeEffect {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 </style>

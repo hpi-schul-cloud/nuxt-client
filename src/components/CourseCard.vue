@@ -5,15 +5,17 @@
 			class="dot"
 			>{{ course.notification }}</div
 		>
-		<div class="tab">
-			<div class="tab-label">{{ course.teacherName }}</div>
+		<div class="header">
+			<div class="tab" :style="background_style">
+				<div class="tab-label">{{ course.teacherName }}</div>
+			</div>
 			<div
 				v-if="course.newAssignments != 0 && course.notification != null"
 				class="assignments-label align-center"
 			>
 				<div class="align-center">{{ course.newAssignments }}</div>
 				<div class="align-center pl-6">
-					<CalanderIcon />
+					<TasksIcon />
 				</div>
 			</div>
 		</div>
@@ -27,13 +29,13 @@
 
 <script>
 import CardFooter from "./CardFooter.vue";
-import CalanderIcon from "@assets/calander.svg";
+import TasksIcon from "@assets/tasks.svg";
 
 export default {
 	name: "CourseCard",
 	components: {
 		CardFooter,
-		CalanderIcon,
+		TasksIcon,
 	},
 	props: {
 		course: {
@@ -176,6 +178,7 @@ export default {
 }
 
 .tab-label {
+	display: inline-block;
 	float: left;
 	width: 100px;
 	padding: 5.5px 10px;
@@ -184,11 +187,11 @@ export default {
 	font-size: 16px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	transform: skewX(0deg);
+	transform: skewX(-25deg);
 	transform-origin: bottom left;
 }
 
-.tab {
+.header {
 	position: relative;
 	z-index: -1;
 	height: 34px;
@@ -197,14 +200,13 @@ export default {
 	border-bottom-left-radius: 0;
 }
 
-.tab::before {
+.tab {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	left: 0;
 	width: 125px;
 	content: "";
-	background-color: #dedede;
 	border-top-right-radius: 5px;
 	transform: skewX(25deg);
 	transform-origin: bottom left;
