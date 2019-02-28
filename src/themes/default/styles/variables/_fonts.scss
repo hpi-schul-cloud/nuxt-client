@@ -13,6 +13,9 @@ $content-font-weight: normal;
 $button-font-family: PT Sans Narrow, $system-default-font-family;
 $button-font-weight: bold;
 
+$caption-font-family: PT Sans Narrow, $system-default-font-family;
+$caption-font-weight: normal;
+
 %font-heading {
 	font-family: $heading-font-family;
 	font-weight: $heading-font-weight;
@@ -28,5 +31,11 @@ $button-font-weight: bold;
 %font-button {
 	font-family: $button-font-family;
 	font-weight: $button-font-weight;
+	color: $color-text;
+}
+
+%font-caption {
+	font-family: $caption-font-family;
+	font-weight: $caption-font-weight;
 	color: $color-text;
 }

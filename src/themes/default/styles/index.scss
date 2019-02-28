@@ -10,20 +10,32 @@
 
 @import "@variables";
 
-@function font-size-heading($level) {
-	@return nth($size-heading, $level);
-}
-
-@function font-size-body($level) {
-	@return nth($size-text, $level);
-}
-
 @for $i from 1 through 6 {
 	h#{$i},
 	.h#{$i} {
 		margin: 0.75em 0 0.25em;
-		font-size: font-size-heading($i);
-		// TODO adjust sizes to viewport
+		font-size: nth($size-heading-desktop, $i);
+
+		// Fluid typo according to the viewport
+		@media screen and (max-width: $size-tablet-max-width) {
+			@include typography-interpolate(
+				"font-size",
+				$size-mobile-max-width,
+				nth($size-heading-tablet, $i),
+				$size-tablet-max-width,
+				nth($size-heading-desktop, $i)
+			);
+		}
+
+		@media screen and (max-width: $size-mobile-max-width) {
+			@include typography-interpolate(
+				"font-size",
+				1px,
+				nth($size-heading-mobile, $i),
+				$size-mobile-max-width,
+				nth($size-heading-tablet, $i)
+			);
+		}
 		@extend %font-heading;
 	}
 }
@@ -39,7 +51,27 @@ body {
 	@extend %font-content;
 	@for $i from 1 through 2 {
 		.body#{$i} {
-			font-size: font-size-body($i);
+			font-size: nth($size-text-desktop, $i);
+			// Fluid typo according to the viewport
+
+			@media screen and (max-width: $size-tablet-max-width) {
+				@include typography-interpolate(
+					"font-size",
+					$size-mobile-max-width,
+					nth($size-text-tablet, $i),
+					$size-tablet-max-width,
+					nth($size-text-desktop, $i)
+				);
+			}
+			@media screen and (max-width: $size-mobile-max-width) {
+				@include typography-interpolate(
+					"font-size",
+					1px,
+					nth($size-text-mobile, $i),
+					$size-mobile-max-width,
+					nth($size-text-tablet, $i)
+				);
+			}
 		}
 	}
 
@@ -57,4 +89,7 @@ button {
 
 img {
 	max-width: 100%;
+}
+caption {
+	@extend %font-caption;
 }
