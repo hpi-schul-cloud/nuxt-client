@@ -41,7 +41,10 @@
 				Bist du sicher, dass du diesen Artikel löschen möchtest?
 			</div>
 			<div slot="footer">
-				<BaseButton class="is-danger" @click="confirmDelete">
+				<BaseButton class="is-light" @click="showModal = false">
+					Abbrechen
+				</BaseButton>
+				<BaseButton @click="confirmDelete">
 					Löschen
 				</BaseButton>
 			</div>

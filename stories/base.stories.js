@@ -7,6 +7,7 @@ import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
 import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
+import BaseModal from "@components/ui/BaseModal.vue";
 
 storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
@@ -33,5 +34,33 @@ storiesOf("Base Components", module)
 	.add("Base Link", () => ({
 		components: { BaseLink },
 		template: '<BaseLink :href="https://www.google.com" :name="test"/>',
+		methods: {},
+	}))
+	.add("Base Modal", () => ({
+		components: { BaseModal, BaseButton },
+		data: function() {
+			return {
+				showModal: false,
+			};
+		},
+		template: `
+			<div>
+				<BaseButton @click="showModal = true">
+					Open Modal
+				</BaseButton>		
+
+				<BaseModal :show-modal="showModal" @close="showModal = false">
+					<h3 slot="header">custom header</h3>
+					<div slot="body">
+						Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below.
+					</div>
+					<div slot="footer">
+						<BaseButton class="is-light" @click="showModal = false">
+							OK
+						</BaseButton>
+					</div>
+				</BaseModal>	
+			</div>
+		`,
 		methods: {},
 	}));

@@ -72,22 +72,46 @@ export default {
 
 .modal-container {
 	width: 300px;
-	padding: 20px 30px;
 	margin: 0 auto;
-	font-family: Helvetica, Arial, sans-serif;
-	background-color: #fff;
 	border-radius: 2px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 	transition: all 0.3s ease;
 }
 
+.modal-header {
+	position: relative;
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 20px;
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #dbdbdb;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+}
+
 .modal-header h3 {
-	margin-top: 0;
-	color: #42b983;
+	font-size: 1.5rem;
+	font-weight: 600;
 }
 
 .modal-body {
-	margin: 20px 0;
+	padding: 20px;
+	background-color: #fff;
+}
+
+.modal-footer {
+	position: relative;
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 20px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #dbdbdb;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
 }
 
 .modal-default-button {

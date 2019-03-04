@@ -26,5 +26,11 @@ export default {
 	&:focus {
 		background-color: transparentize($color-text, 0.1);
 	}
+	.is-light {
+		color: #363636;
+		background-color: #fff;
+		border-color: #dbdbdb;
+		border-width: 1px;
+	}
 }
 </style>
