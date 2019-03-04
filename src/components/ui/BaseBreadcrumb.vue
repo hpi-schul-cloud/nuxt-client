@@ -3,7 +3,6 @@
   <ul class="breadcrumb">
     <li v-for="input in inputs" v-bind:key="input.text">
       <BaseLink v-if="typeof input !== 'string'" v-bind="removeText(input)">{{ input.text }}</BaseLink>
-      <!-- <a v-if="input.href" :href="input.href">{{ input.text }}</a> -->
       <span v-else>{{ input }}</span>
     </li>
   </ul>
