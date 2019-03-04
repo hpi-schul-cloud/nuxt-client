@@ -2,18 +2,28 @@
 <template>
   <ul class="breadcrumb">
     <li v-for="input in inputs" v-bind:key="input.text">
-      <a v-if="input.href" :href="input.href">{{ input.text }}</a>
-      <span v-else>{{ input.text }}</span>
+      <BaseLink v-if="typeof input !== 'string'" v-bind="removeText(input)">{{ input.text }}</BaseLink>
+      <!-- <a v-if="input.href" :href="input.href">{{ input.text }}</a> -->
+      <span v-else>{{ input }}</span>
     </li>
   </ul>
 </template>
 <script>
+import BaseLink from "@components/ui/BaseLink.vue";
+
 export default {
 	name: "BaseBreadcrumb",
 	props: {
 		inputs: {
 			type: Array,
 			required: true,
+			description: "Lorem ipsum",
+		},
+	},
+	components: { BaseLink },
+	methods: {
+		removeText({ text, ...input }) {
+			return input;
 		},
 	},
 };

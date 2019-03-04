@@ -93,7 +93,10 @@ storiesOf("Base Components", module)
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
 		template:
-			`<BaseBreadcrumb :inputs="[{text: 'Home', href:'#'}, {text: 'Kurse', href:'#'}, {text: 'Mathematik', href:''}]"></BaseBreadcrumb>`,
+			`<BaseBreadcrumb :inputs="[{text: 'Home', href:'#'}, {text: 'Kurse', href:'#'}, 'Mathematik']"></BaseBreadcrumb>`,
+		propsDescription: {
+			inputs: 'Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)'
+		}
 	}));
 
 
