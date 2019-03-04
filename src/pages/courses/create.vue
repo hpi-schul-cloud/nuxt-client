@@ -38,7 +38,7 @@ export default {
 		...mapGetters("classes", {
 			classes: "list",
 		}),
-	},	
+	},
 	async asyncData({ store }) {
 		try {
 			const teacherRole = (await store.dispatch("roles/find", {
@@ -75,16 +75,16 @@ export default {
 			};
 		} catch (err) {}
 	},
-	created () {
-		const { Course } = this.$FeathersVuex
+	created() {
+		const { Course } = this.$FeathersVuex;
 		this.course = new Course({
-			schoolId: this.user.schoolId
-		})
+			schoolId: this.user.schoolId,
+		});
 	},
 	methods: {
 		async create(id) {
-			const course = this.course
-			
+			const course = this.course;
+
 			course.times = this.course.times.map((time) => {
 				time.startTime = moment
 					.duration(time.startTime, "HH:mm")
@@ -93,17 +93,17 @@ export default {
 				time.duration = (time.duration * 60 * 1000).toString();
 				time.weekday = time.weekday.value;
 				return time;
-			})
+			});
 
-			course.teacherIds = course.teachers,
-			course.substitutionIds = course.substitutions,
-			course.classIds = course.classes,
-			course.userIds = course.students
+			(course.teacherIds = course.teachers),
+				(course.substitutionIds = course.substitutions),
+				(course.classIds = course.classes),
+				(course.userIds = course.students);
 
 			this.$toast.success("Kurs erstellt");
 
 			try {
-				await course.create()
+				await course.create();
 			} catch (e) {
 				this.$toast.error("Fehler beim Erstellen");
 			}

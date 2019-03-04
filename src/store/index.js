@@ -21,12 +21,16 @@ if (process.client) {
 			secure: false,
 		})
 	);
-	const { service: browserService, auth: browserAuth, FeathersVuex } = feathersVuex(
-		browserClient,
-		{ idField: "_id", enableEvents: enableEvents }
-	);
+	const {
+		service: browserService,
+		auth: browserAuth,
+		FeathersVuex,
+	} = feathersVuex(browserClient, {
+		idField: "_id",
+		enableEvents: enableEvents,
+	});
 
-	Vue.use(FeathersVuex)
+	Vue.use(FeathersVuex);
 
 	plugins = [
 		browserService("/content/search", {
@@ -35,7 +39,7 @@ if (process.client) {
 			autoRemove: true,
 			replaceItems: true,
 		}),
-		browserService("courses", { 
+		browserService("courses", {
 			instanceDefaults: {
 				name: "",
 				description: "",
@@ -47,7 +51,7 @@ if (process.client) {
 				students: [],
 				times: [],
 			},
-			paginate: true 
+			paginate: true,
 		}),
 		browserService("teams", { paginate: true }),
 		browserService("news", { paginate: true }),
