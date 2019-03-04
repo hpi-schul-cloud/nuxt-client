@@ -86,13 +86,10 @@ export default {
 				onConfirm: async () => {
 					try {
 						await this.remove(this.news._id);
-						this.$toast.open("Artikel gelöscht");
+						this.$toast.success("Artikel gelöscht");
 						this.$router.push({ name: "news" });
 					} catch (e) {
-						this.$toast.open({
-							message: "Fehler beim Löschen",
-							type: "is-danger",
-						});
+						this.$toast.error("Fehler beim Löschen");
 					}
 				},
 			});
@@ -109,15 +106,9 @@ export default {
 						content: this.news.content,
 					},
 				]);
-				this.$toast.open({
-					message: "Artikel gespeichert",
-					type: "is-success",
-				});
+				this.$toast.success("Artikel gespeichert");
 			} catch (e) {
-				this.$toast.open({
-					message: "Fehler beim Speichern",
-					type: "is-danger",
-				});
+				this.$toast.error("Fehler beim Speichern");
 			}
 		},
 	},

@@ -1931,6 +1931,13 @@
     consola "^1.4.4"
     http-proxy-middleware "^0.19.0"
 
+"@nuxtjs/toast@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/toast/-/toast-3.0.2.tgz#6f027fb2210f0f348eb223ac5ad48d50d2369d92"
+  integrity sha512-3x7hovVQt++CRosciz9kzL9i3Xjua5XzZqxSr0pDfrCEoH77yvnTfQ6Wr0jdZOUeHZQaF90gbnD0T8fWyBcp/A==
+  dependencies:
+    vue-toasted "^1.1.26"
+
 "@nuxtjs/youch@^4.2.3":
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/@nuxtjs/youch/-/youch-4.2.3.tgz#36f8b22df5a0efaa81373109851e1d857aca6bed"
@@ -8498,10 +8505,10 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-hygen@^2.1.1:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/hygen/-/hygen-2.1.2.tgz#c20ff7e843b7db8d973fde8d12647cfe706c60b8"
-  integrity sha512-N15CHPswkYf0z2iw3/Q1mINVbLpXop64aZw0xDA4Q1ohM9wma/mky2NOzePHOt+MXLWpvc5bSWuuXRgcbYUvew==
+hygen@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/hygen/-/hygen-3.0.0.tgz#c723d54569a310c486af39e533cb18e48096b16f"
+  integrity sha512-qZrCfGYb8RPN95ea04M/KWzguntrHwKxQDNesTiGKJ1nHHxB20M3NagO7QYwt8ztubESLR0xtamMZCeTMDvibg==
   dependencies:
     chalk "^2.4.1"
     change-case "^3.0.2"
@@ -17097,6 +17104,11 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.8.2.tgz#dd73e80ba58bb65dd7a8aa2aeef6089cf6116f2a"
   integrity sha512-cliV19VHLJqFUYbz/XeWXe5CO6guzwd0yrrqqp0bmjlMP3ZZULY7fu8RTC4+3lmHwo6ESVDHFDsvjB15hcR5IA==
+
+vue-toasted@^1.1.26:
+  version "1.1.26"
+  resolved "https://registry.yarnpkg.com/vue-toasted/-/vue-toasted-1.1.26.tgz#1333d1a42157ab78389c3810023a49ba94e69c7b"
+  integrity sha512-Z4/gfPcqdzsRvif7UITrZOkh3C6jm0yQKJyr9kX31IGWXor5dNipE1Sc5SnlL5RLmY7vlLa+SqIjc9Gbpy7V0g==
 
 vue@^2.2.1, vue@^2.5.16, vue@^2.5.22:
   version "2.6.5"
