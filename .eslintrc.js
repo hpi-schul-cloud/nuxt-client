@@ -1,7 +1,6 @@
 module.exports = {
 	root: true,
 	parserOptions: {
-		parser: "babel-eslint",
 		sourceType: "module",
 	},
 	extends: [
@@ -59,6 +58,10 @@ module.exports = {
 	overrides: [
 		{
 			files: ["**/*.unit.js"],
+			parserOptions: {
+				parser: "babel-eslint",
+				sourceType: "module",
+			},
 			env: {
 				jest: true,
 			},
