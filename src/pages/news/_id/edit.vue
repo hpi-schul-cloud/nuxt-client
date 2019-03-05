@@ -6,7 +6,7 @@
 					<h5>{{ news.title }}</h5>
 				</BaseLink>
 				<h1>News bearbeiten</h1>
-				<BaseButton class="is-danger" @click="showModal = true">
+				<BaseButton class="is-danger" @click="active = true">
 					Löschen
 				</BaseButton>
 			</section>
@@ -36,19 +36,23 @@
 		</div>
 
 		<!-- use the modal component, pass in the prop -->
-		<Modal :show-modal="showModal" @close="showModal = false">
-			<div slot="body">
+		<Modal ref="modal" :active.sync="active">
+			<div class="modal-header">
+				<h3>custom header</h3>
+			</div>
+
+			<div class="modal-body">
 				Bist du sicher, dass du diesen Artikel löschen möchtest?
 			</div>
-			<div slot="footer">
-				<BaseButton class="is-light" @click="showModal = false">
+
+			<div class="modal-footer">
+				<BaseButton class="is-light" @click="$refs.modal.close()">
 					Abbrechen
 				</BaseButton>
 				<BaseButton @click="confirmDelete">
 					Löschen
 				</BaseButton>
 			</div>
-			<h3 slot="header">custom header</h3>
 		</Modal>
 	</div>
 </template>
@@ -63,7 +67,7 @@ export default {
 	},
 	data: function() {
 		return {
-			showModal: false,
+			active: false,
 		};
 	},
 	computed: {
@@ -77,22 +81,22 @@ export default {
 	methods: {
 		...mapActions("news", ["remove"]),
 		confirmDelete() {
-			this.$dialog.confirm({
-				title: "Artikel löschen",
-				message: "Bist du sicher, dass du diesen Artikel löschen möchtest?",
-				confirmText: "Artikel löschen",
-				type: "is-danger",
-				hasIcon: true,
-				onConfirm: async () => {
-					try {
-						await this.remove(this.news._id);
-						this.$toast.success("Artikel gelöscht");
-						this.$router.push({ name: "news" });
-					} catch (e) {
-						this.$toast.error("Fehler beim Löschen");
-					}
-				},
-			});
+			// this.$dialog.confirm({
+			// 	title: "Artikel löschen",
+			// 	message: "Bist du sicher, dass du diesen Artikel löschen möchtest?",
+			// 	confirmText: "Artikel löschen",
+			// 	type: "is-danger",
+			// 	hasIcon: true,
+			// 	onConfirm: async () => {
+			// 		try {
+			// 			await this.remove(this.news._id);
+			// 			this.$toast.success("Artikel gelöscht");
+			// 			this.$router.push({ name: "news" });
+			// 		} catch (e) {
+			// 			this.$toast.error("Fehler beim Löschen");
+			// 		}
+			// 	},
+			// });
 		},
 		get(id) {
 			this.$store.dispatch("news/get", id);

@@ -40,22 +40,22 @@ storiesOf("Base Components", module)
 		components: { BaseModal, BaseButton },
 		data: function() {
 			return {
-				showModal: false,
+				active: false,
 			};
 		},
 		template: `
 			<div>
-				<BaseButton @click="showModal = true">
+				<BaseButton @click="active = true">
 					Open Modal
 				</BaseButton>		
 
-				<BaseModal :show-modal="showModal" @close="showModal = false">
+				<BaseModal :show-modal="active" @close="active = false">
 					<h3 slot="header">custom header</h3>
 					<div slot="body">
 						Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below.
 					</div>
 					<div slot="footer">
-						<BaseButton class="is-light" @click="showModal = false">
+						<BaseButton class="is-light" @click="active = false">
 							OK
 						</BaseButton>
 					</div>

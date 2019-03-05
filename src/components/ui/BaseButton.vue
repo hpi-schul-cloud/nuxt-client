@@ -27,9 +27,9 @@ export default {
 		background-color: transparentize($color-text, 0.1);
 	}
 	.is-light {
-		color: #363636;
-		background-color: #fff;
-		border-color: #dbdbdb;
+		color: $color-button-light;
+		background-color: $color-button-light-bg;
+		border-color: $color-button-light-border;
 		border-width: 1px;
 	}
 }
