@@ -1,7 +1,7 @@
-import BaseBreadcrumb from './BaseBreadcrumb'
+import BaseBreadcrumb from "./BaseBreadcrumb";
 
-describe('@components/BaseBreadcrumb', () => {
-  it('exports a valid component', () => {
-    expect(BaseBreadcrumb).toBeAComponent()
-  })
-})
+describe("@components/BaseBreadcrumb", () => {
+	it("exports a valid component", () => {
+		expect(BaseBreadcrumb).toBeAComponent();
+	});
+});

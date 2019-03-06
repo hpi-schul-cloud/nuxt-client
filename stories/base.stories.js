@@ -12,7 +12,7 @@ import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseProfilePicture from "@components/ui/BaseProfilePicture.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue"
+import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 
 storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc))
@@ -93,18 +93,9 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
-		template:
-			`<BaseBreadcrumb :inputs="[{text: 'Home', href:'#'}, {text: 'Kurse', href:'#'}, 'Mathematik']"></BaseBreadcrumb>`,
+		template: `<BaseBreadcrumb :inputs="[{text: 'Home', href:'#'}, {text: 'Kurse', href:'#'}, 'Mathematik']"></BaseBreadcrumb>`,
 		propsDescription: {
-			inputs: 'Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)'
-		}
+			inputs:
+				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
+		},
 	}));
-
-
-
-
-
-
-
-
-
