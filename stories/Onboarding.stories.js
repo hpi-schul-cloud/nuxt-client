@@ -24,34 +24,18 @@ storiesOf("Onboarding", module).add("Landing CTA", () => ({
 		"<LandingCTA subtitle='Mit der HPI Schul-Cloud Unterricht digital gestalten' title='Willkommen in der Schul-Cloud, Carl Cactus' ctaText='Erstelle deinen ersten Kurs'/>",
 }));
 
-storiesOf("Wizard", module)
-	.add("StepProgress Step 1", () => ({
-		components: { StepProgress },
-		template: '<StepProgress :steps="progressSteps" :currentStep="0"/> ',
-		data: () => ({
-			progressSteps: steps,
-		}),
-	}))
-	.add("StepProgress Step 2", () => ({
-		components: { StepProgress },
-		template: '<StepProgress :steps="progressSteps" :currentStep="1"/> ',
-		data: () => ({
-			progressSteps: steps,
-		}),
-	}))
-	.add("StepProgress Step 3", () => ({
-		components: { StepProgress },
-		template: '<StepProgress :steps="progressSteps" :currentStep="2"/> ',
-		data: () => ({
-			progressSteps: steps,
-		}),
-	}))
-	.add("StepProgress 5 Steps", () => ({
-		components: { StepProgress },
-		template: '<StepProgress :steps="progressSteps" :currentStep="2"/> ',
-		data: () => ({
-			progressSteps: moreProgressSteps,
-		}),
-	}));
+storiesOf("Wizard", module).add("StepProgress", () => ({
+	components: { StepProgress },
+	template: `
+<div>
+	<StepProgress :steps="progressSteps" :currentStep="0"/>
+	<StepProgress :steps="progressSteps" :currentStep="1"/>
+	<StepProgress :steps="progressSteps" :currentStep="2"/>
+</div>
+		`,
+	data: () => ({
+		progressSteps: steps,
+	}),
+}));
 
 /* eslint-enable react/react-in-jsx-scope */
