@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: ./cloud-transparent.png
-heroText: Schul-Cloud V2 - DeployTest 2
+heroText: Schul-Cloud V2 - DeployTest 3
 tagline: The next Level of Schul-Cloud, build with Nuxt
 actionText: Get Started →
 actionLink: /0-GettingStarted/
