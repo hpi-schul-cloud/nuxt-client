@@ -5,6 +5,11 @@ module.exports = {
 	module: {
 		rules: [
 			{
+				test: /\.vue$/,
+				loader: "storybook-addon-vue-info/loader",
+				enforce: "post",
+			},
+			{
 				test: /\.scss$/,
 				loaders: ["style-loader", "css-loader", "sass-loader"],
 				include: path.resolve(__dirname, "../../"),
