@@ -49,13 +49,17 @@ storiesOf("Base Components", module)
 					Open Modal
 				</BaseButton>
 
-				<BaseModal :show-modal="active" @close="active = false">
-					<h3 slot="header">custom header</h3>
-					<div slot="body">
+				<BaseModal :active.sync="active">
+					<div class="modal-header">
+						<h3>custom header</h3>
+					</div>
+
+					<div class="modal-body">
 						Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below.
 					</div>
-					<div slot="footer">
-						<BaseButton class="is-light" @click="active = false">
+
+					<div class="modal-footer">
+						<BaseButton id="button" class="is-light" @click="$refs.modal.close()">
 							OK
 						</BaseButton>
 					</div>

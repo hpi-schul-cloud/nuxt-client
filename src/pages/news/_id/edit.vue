@@ -35,7 +35,6 @@
 			</section>
 		</div>
 
-		<!-- use the modal component, pass in the prop -->
 		<BaseModal ref="modal" :active.sync="active">
 			<div class="modal-header">
 				<h3>custom header</h3>
@@ -76,24 +75,7 @@ export default {
 	},
 	methods: {
 		...mapActions("news", ["remove"]),
-		confirmDelete() {
-			// this.$dialog.confirm({
-			// 	title: "Artikel löschen",
-			// 	message: "Bist du sicher, dass du diesen Artikel löschen möchtest?",
-			// 	confirmText: "Artikel löschen",
-			// 	type: "is-danger",
-			// 	hasIcon: true,
-			// 	onConfirm: async () => {
-			// 		try {
-			// 			await this.remove(this.news._id);
-			// 			this.$toast.success("Artikel gelöscht");
-			// 			this.$router.push({ name: "news" });
-			// 		} catch (e) {
-			// 			this.$toast.error("Fehler beim Löschen");
-			// 		}
-			// 	},
-			// });
-		},
+		confirmDelete() {},
 		get(id) {
 			this.$store.dispatch("news/get", id);
 		},
