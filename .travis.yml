@@ -33,8 +33,7 @@ cache:
 
 deploy:
   provider: script
-  script: bash ./deploy.sh
+  script: bash ./deploy/deploy.sh
   on:
    all_branches: true
    condition: $TRAVIS_BRANCH =~ ^story.*|nuxt.*|doc*|master$
-

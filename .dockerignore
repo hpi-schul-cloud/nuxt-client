@@ -4,8 +4,5 @@
 Dockerfile
 README.md
 build
-compose-nuxt-test.dummy
-deploy.sh
+deploy
 node_modules
-travis_rsa.enc
-
