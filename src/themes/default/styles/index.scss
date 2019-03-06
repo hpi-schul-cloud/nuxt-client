@@ -36,6 +36,7 @@
 				nth($size-heading-tablet, $i)
 			);
 		}
+
 		@extend %font-heading;
 	}
 }
@@ -49,6 +50,7 @@
 html,
 body {
 	@extend %font-content;
+
 	@for $i from 1 through 2 {
 		.body#{$i} {
 			font-size: nth($size-text-desktop, $i);
@@ -63,6 +65,7 @@ body {
 					nth($size-text-desktop, $i)
 				);
 			}
+
 			@media screen and (max-width: $size-mobile-max-width) {
 				@include typography-interpolate(
 					"font-size",

@@ -6,6 +6,8 @@ default: true
 line-length: false
 # allow hard tabs, look at the eslint config for more details
 no-hard-tabs: false
+# allow inline html
+no-inline-html: false
 # Prettier overrides
 no-trailing-punctuation: false
 no-multiple-blanks: false

@@ -20,14 +20,14 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 progress {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background-size: auto;
 	display: inline-block;
 	height: 18px;
 	background-color: #f3f3f3;
+	background-size: auto;
 	border-radius: 9px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 progress::-moz-progress-bar {
 	background-color: $color-primary;

@@ -1,7 +1,7 @@
-import BaseTable from './BaseTable'
+import BaseTable from "./BaseTable";
 
-describe('@components/BaseTable', () => {
-  it('exports a valid component', () => {
-    expect(BaseTable).toBeAComponent()
-  })
-})
+describe("@components/BaseTable", () => {
+	it("exports a valid component", () => {
+		expect(BaseTable).toBeAComponent();
+	});
+});

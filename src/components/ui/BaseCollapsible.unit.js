@@ -1,7 +1,7 @@
-import BaseCollapsible from './BaseCollapsible'
+import BaseCollapsible from "./BaseCollapsible";
 
-describe('@components/BaseCollapsible', () => {
-  it('exports a valid component', () => {
-    expect(BaseCollapsible).toBeAComponent()
-  })
-})
+describe("@components/BaseCollapsible", () => {
+	it("exports a valid component", () => {
+		expect(BaseCollapsible).toBeAComponent();
+	});
+});

@@ -30,15 +30,15 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 .collapsible {
-	background-color: #eee;
-	color: #444;
-	cursor: pointer;
-	padding: 18px;
 	width: 100%;
-	border: none;
-	text-align: left;
-	outline: none;
+	padding: 18px;
 	font-size: 15px;
+	color: #444;
+	text-align: left;
+	cursor: pointer;
+	background-color: #eee;
+	border: none;
+	outline: none;
 }
 .active,
 .collapsible:hover {
@@ -46,15 +46,16 @@ export default {
 }
 
 .content {
+	display: block;
 	padding: 0 18px;
 	overflow: hidden;
 	background-color: #f1f1f1;
-	display: block;
 	animation: fadeEffect 1s;
 }
 .is-collapsed {
 	display: none;
 }
+
 @-webkit-keyframes fadeEffect {
 	from {
 		opacity: 0;
