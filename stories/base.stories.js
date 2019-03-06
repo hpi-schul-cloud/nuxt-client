@@ -50,7 +50,7 @@ storiesOf("Base Components", module)
 	.add("Base Select MultiSelect", () => ({
 		components: { BaseSelect },
 		data: () => ({
-			content: "",
+			content: [],
 			options: multioptions,
 		}),
 		template:
