@@ -20,13 +20,28 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 progress {
-	background-color: #f3f3f3;
-	border: 0;
+	display: inline-block;
 	height: 18px;
+	background-color: #f3f3f3;
+	background-size: auto;
 	border-radius: 9px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 progress::-moz-progress-bar {
 	background-color: $color-primary;
+	border: 0;
 	border-radius: 6px;
+}
+progress::-webkit-progress-value {
+	background-color: $color-primary;
+	border-radius: 6px;
+}
+
+progress::-webkit-progress-bar {
+	background-color: #f3f3f3;
+	border: 0;
+	border-radius: 9px;
 }
 </style>

@@ -13,37 +13,52 @@ function extractName(filepath) {
 	} else {
 		name = filepath.replace(/^.*[\\\/]/, "");
 	}
+	name = name.replace(/[0-9]+/, "");
 	return _.startCase(name);
 }
 
 const isDirectory = (source) => lstatSync(source).isDirectory();
 function listFiles(dir) {
 	let files = [];
-	readdirSync(dir).forEach((file) => {
-		if (blacklist.includes(file)) {
-			return;
-		}
+	readdirSync(dir)
+		.sort((a, b) => {
+			return a.toUpperCase().localeCompare(b.toUpperCase());
+		})
+		.forEach((file) => {
+			if (blacklist.includes(file)) {
+				return;
+			}
 
-		const filepath = join(dir, file).replace(join(baseDir), "");
-		if (isDirectory(join(dir, file))) {
-			files.push({
-				title: extractName(filepath),
-				children: listFiles(join(dir, file)),
-			});
-		} else if (filepath.includes(".md") && !filepath.includes("README")) {
-			const cleanFilepath = filepath
-				.replace(/\\/g, "/")
-				.replace("README.md", "");
-			files.push([cleanFilepath, extractName(filepath)]);
-		}
-	});
+			const filepath = join(dir, file).replace(join(baseDir), "");
+			if (isDirectory(join(dir, file))) {
+				files.push({
+					title: extractName(filepath),
+					children: listFiles(join(dir, file)),
+				});
+			} else if (filepath.includes(".md") && !filepath.includes("README")) {
+				const cleanFilepath = filepath
+					.replace(/\\/g, "/")
+					.replace("README.md", "");
+				files.push([cleanFilepath, extractName(filepath)]);
+			}
+		});
 	return files;
 }
 
 module.exports = {
-	title: "SC-Nuxt-Client Docs",
+	title: "Nuxt-Client Docs",
 	description: "documentation",
 	themeConfig: {
 		sidebar: listFiles(baseDir),
+		logo: "/cloud-transparent.png",
+	},
+	configureWebpack: {
+		resolve: {
+			alias: require("../../aliases.config").webpack,
+		},
+	},
+	markdown: {
+		lineNumbers: true,
+		toc: { includeLevel: [2, 3] },
 	},
 };

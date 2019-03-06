@@ -36,17 +36,44 @@ export default {
 }
 
 .is-small {
-	font-size: 15px;
-	//TODO adjust sizes to viewport
+	font-size: $size-button-small-desktop;
+
+	// Tablet size
+	@media screen and (max-width: $size-tablet-max-width) {
+		font-size: $size-button-small-tablet;
+	}
+
+	// Mobile size
+	@media screen and (max-width: $size-mobile-max-width) {
+		font-size: $size-button-small-mobile;
+	}
 }
 
 .is-medium {
-	font-size: 16px;
-	//TODO adjust sizes to viewport
+	font-size: $size-button-medium-desktop;
+
+	// Tablet size
+	@media screen and (max-width: $size-tablet-max-width) {
+		font-size: $size-button-medium-tablet;
+	}
+
+	// Mobile size
+	@media screen and (max-width: $size-mobile-max-width) {
+		font-size: $size-button-medium-mobile;
+	}
 }
 
 .is-large {
-	font-size: 17px;
-	// TODO adjust sizes to viewport
+	font-size: $size-button-large-desktop;
+
+	// Tablet size
+	@media screen and (max-width: $size-tablet-max-width) {
+		font-size: $size-button-large-tablet;
+	}
+
+	// Mobile size
+	@media screen and (max-width: $size-mobile-max-width) {
+		font-size: $size-button-large-mobile;
+	}
 }
 </style>

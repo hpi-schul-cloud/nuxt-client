@@ -1,6 +1,14 @@
 <template>
-  <FontAwesomeIcon v-if="source === 'font-awesome'" v-bind="$attrs" :icon="icon"/>
-  <span v-else-if="source === 'custom'" v-bind="$attrs" :class="customIconClass"/>
+	<FontAwesomeIcon
+		v-if="source === 'font-awesome'"
+		v-bind="$attrs"
+		:icon="icon"
+	/>
+	<span
+		v-else-if="source === 'custom'"
+		v-bind="$attrs"
+		:class="customIconClass"
+	/>
 </template>
 
 <script>
@@ -9,10 +17,8 @@ import { library as fontAwesomeIconLibrary } from "@fortawesome/fontawesome-svg-
 import camelCase from "lodash/camelCase";
 
 // https://fontawesome.com/icons
-fontAwesomeIconLibrary.add(
-	require("@fortawesome/free-solid-svg-icons/faSync").definition,
-	require("@fortawesome/free-solid-svg-icons/faUser").definition
-);
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+fontAwesomeIconLibrary.add(faTrash);
 
 export default {
 	name: "BaseIcon",

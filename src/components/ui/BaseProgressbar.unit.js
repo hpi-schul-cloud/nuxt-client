@@ -1,7 +1,7 @@
-import BaseProgressbar from './BaseProgressbar'
+import BaseProgressbar from "./BaseProgressbar";
 
-describe('@components/BaseProgressbar', () => {
-  it('exports a valid component', () => {
-    expect(BaseProgressbar).toBeAComponent()
-  })
-})
+describe("@components/BaseProgressbar", () => {
+	it("exports a valid component", () => {
+		expect(BaseProgressbar).toBeAComponent();
+	});
+});

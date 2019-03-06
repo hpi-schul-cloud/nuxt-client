@@ -35,7 +35,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: '<BaseIcon :name="fa-bell"/>',
+		template: '<BaseIcon icon="trash"/>',
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },
@@ -49,7 +49,8 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Radio Button", () => ({
 		components: { BaseInput },
-		template: "<BaseInput type='radio' />",
+		template:
+			"<div><BaseInput type='radio' name='choise' value='me' id='radio1'>Pick me!</BaseInput> <BaseInput type='radio' name='choise' value='notMe' id='radio2'>Don't pick me.</BaseInput></div>",
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
@@ -68,7 +69,7 @@ storiesOf("Base Components", module)
 	.add("Base Profile Pic", () => ({
 		components: { BaseProfilePicture },
 		template:
-			"<div><BaseProfilePicture image='https://s14-eu5.startpage.com/cgi-bin/serveimage?url=https:%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F0%2F0b%2FZebra_Closeup_%252822211089308%2529.jpg&sp=572f2d2655837540935f5ab68078ee1a' size='small'/><BaseProfilePicture size='medium'/><BaseProfilePicture size='large'/></div>",
+			"<div><BaseProfilePicture image='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBun&accessoriesType=Blank&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BlondeGolden&clotheType=Hoodie&clotheColor=Heather&eyeType=Squint&eyebrowType=UpDown&mouthType=Smile&skinColor=Pale' size='small'/><BaseProfilePicture size='medium'/><BaseProfilePicture size='large'/></div>",
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },

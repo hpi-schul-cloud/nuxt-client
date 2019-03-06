@@ -1,5 +1,7 @@
 # FAQ
 
+[[toc]]
+
 ## Warum kein Pug oder ähnliches für Vue Templates?
 
 Der Support von Lintern ist sehr gering und zudem ist der Einstieg für neue Entwickler schwerer. Der Mehrwert den Pug bietet ist den Verlust an Lint Features & Developer Onboarding nicht wert.

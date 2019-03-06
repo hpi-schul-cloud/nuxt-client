@@ -1,7 +1,7 @@
-import BaseProfilePicture from './BaseProfilePicture'
+import BaseProfilePicture from "./BaseProfilePicture";
 
-describe('@components/BaseProfilePicture', () => {
-  it('exports a valid component', () => {
-    expect(BaseProfilePicture).toBeAComponent()
-  })
-})
+describe("@components/BaseProfilePicture", () => {
+	it("exports a valid component", () => {
+		expect(BaseProfilePicture).toBeAComponent();
+	});
+});
