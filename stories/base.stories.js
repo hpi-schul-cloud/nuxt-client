@@ -38,11 +38,9 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Modal", () => ({
 		components: { BaseModal, BaseButton },
-		data: function() {
-			return {
-				active: false,
-			};
-		},
+		data: () => ({
+			active: false,
+		}),
 		template: `
 			<div>
 				<BaseButton @click="active = true">
@@ -59,7 +57,7 @@ storiesOf("Base Components", module)
 					</div>
 
 					<div class="modal-footer">
-						<BaseButton id="button" class="is-light" @click="$refs.modal.close()">
+						<BaseButton id="button" class="is-light" @click="active = false">
 							OK
 						</BaseButton>
 					</div>
