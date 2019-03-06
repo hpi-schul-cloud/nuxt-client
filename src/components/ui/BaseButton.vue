@@ -25,6 +25,12 @@ export default {
 	&:focus {
 		background-color: transparentize($color-text, 0.1);
 	}
+	.is-light {
+		color: $color-button-light;
+		background-color: $color-button-light-bg;
+		border-color: $color-button-light-border;
+		border-width: 1px;
+	}
 }
 
 .is-primary {

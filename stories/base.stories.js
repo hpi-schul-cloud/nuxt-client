@@ -1,6 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { withMarkdownNotes } from "@storybook/addon-notes";
-import baseDoc from "@docs/components/base.md";
+import notes from "@docs/components/base.md";
 
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
@@ -15,17 +14,19 @@ import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 
 storiesOf("Base Components", module)
-	.addDecorator(withMarkdownNotes(baseDoc))
+	.addParameters({
+		notes,
+	})
 	.add("Base Button Primary", () => ({
 		components: { BaseButton },
 		template:
-			"<div><BaseButton class ='is-primary is-small'>Primary</BaseButton> <br/> <BaseButton class ='is-primary is-medium'>Primary</BaseButton><br/><BaseButton class ='is-primary is-large'>Primary</BaseButton></div>",
+			'<div><BaseButton class ="is-primary is-small">Primary</BaseButton> <br/> <BaseButton class ="is-primary is-medium">Primary</BaseButton><br/><BaseButton class ="is-primary is-large">Primary</BaseButton></div>',
 		methods: {},
 	}))
 	.add("Base Button Secondary", () => ({
 		components: { BaseButton },
 		template:
-			"<div><BaseButton class ='is-secondary is-small'>Secondary</BaseButton><br/><BaseButton class ='is-secondary is-medium'>Secondary</BaseButton><br/><BaseButton class ='is-secondary is-large'>Secondary</BaseButton><br/></div>",
+			'<div><BaseButton class="is-secondary is-small">Secondary</BaseButton><br/><BaseButton class ="is-secondary is-medium">Secondary</BaseButton><br/><BaseButton class ="is-secondary is-large">Secondary</BaseButton><br/></div>',
 		methods: {},
 	}))
 	.add("Base Card", () => ({
@@ -39,23 +40,22 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },
+		data: () => ({ content: "" }),
 		template:
-			'<BaseInput type="text" label="Vorname" v-model="abc" name="firstname"/>',
+			'<BaseInput type="text" label="Vorname" v-model="content" name="firstname"/>',
 		methods: {},
 	}))
 	.add("Base Switch", () => ({
 		components: { BaseInput },
-		template: "<BaseInput type='checkbox' />",
+		template: '<BaseInput type="checkbox" />',
 	}))
 	.add("Base Radio Button", () => ({
 		components: { BaseInput },
-		template:
-			"<div><BaseInput type='radio' name='choise' value='me' id='radio1'>Pick me!</BaseInput> <BaseInput type='radio' name='choise' value='notMe' id='radio2'>Don't pick me.</BaseInput></div>",
+		template: `<div><BaseInput type="radio" name="choise" value="me" id="radio1">Pick me!</BaseInput> <BaseInput type="radio" name="choise" value="notMe" id="radio2">Don't pick me.</BaseInput></div>`,
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template:
-			"<BaseLink href='https://www.google.com'> Link content</BaseLink>",
+		template: '<BaseLink href="/"> Link content</BaseLink>',
 		methods: {},
 	}))
 	.add("Base Toast", () => ({
@@ -64,12 +64,12 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
-		template: "<BaseProgressbar :value='2' :max='3'/>",
+		template: '<BaseProgressbar :value="2" :max="3"/>',
 	}))
 	.add("Base Profile Pic", () => ({
 		components: { BaseProfilePicture },
 		template:
-			"<div><BaseProfilePicture image='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBun&accessoriesType=Blank&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BlondeGolden&clotheType=Hoodie&clotheColor=Heather&eyeType=Squint&eyebrowType=UpDown&mouthType=Smile&skinColor=Pale' size='small'/><BaseProfilePicture size='medium'/><BaseProfilePicture size='large'/></div>",
+			'<div><BaseProfilePicture image="https://avataaars.io/?avatarStyle=Circle&topType=LongHairBun&accessoriesType=Blank&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BlondeGolden&clotheType=Hoodie&clotheColor=Heather&eyeType=Squint&eyebrowType=UpDown&mouthType=Smile&skinColor=Pale" size="small"/><BaseProfilePicture size="medium"/><BaseProfilePicture size="large"/></div>',
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
@@ -89,7 +89,7 @@ storiesOf("Base Components", module)
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
 		template:
-			"<BaseCollapsible label='Test' ><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></BaseCollapsible>",
+			'<BaseCollapsible label="Test" ><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></BaseCollapsible>',
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
