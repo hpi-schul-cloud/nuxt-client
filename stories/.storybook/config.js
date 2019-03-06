@@ -1,11 +1,18 @@
-import { configure, addDecorator } from "@storybook/vue";
-import centered from "@storybook/addon-centered";
+import { configure, addDecorator, addParameters } from "@storybook/vue";
 import { checkA11y } from "@storybook/addon-a11y";
-import VueInfoAddon from "storybook-addon-vue-info";
+import { withInfo, setDefaults } from "storybook-addon-vue-info";
 
-addDecorator(VueInfoAddon);
+// Vue Docs ( storybook-addon-vue-info )
+addParameters({
+	info: true,
+});
+setDefaults({
+	docsInPanel: false,
+});
+addDecorator(withInfo);
+
+// A11y
 addDecorator(checkA11y);
-// addDecorator(centered);
 
 // automatically import all files ending in *.stories.js
 const req = require.context("../", true, /.stories.js$/);

@@ -9,7 +9,7 @@ import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
 
 storiesOf("Base Components", module)
-	.addDecorator(withMarkdownNotes(baseDoc))
+	.addDecorator(withMarkdownNotes(baseDoc)) // FIX causes "# <story/>" to appear
 	.add("Base Button", () => ({
 		components: { BaseButton },
 		template: "<BaseButton>Hello Button</BaseButton>",
@@ -24,14 +24,19 @@ storiesOf("Base Components", module)
 		components: { BaseIcon },
 		template: '<BaseIcon icon="trash"/>',
 	}))
-	.add("Base Input", () => ({
-		components: { BaseInput },
-		template:
-			'<BaseInput type="text" label="Vorname" v-model="abc" name="firstname"/>',
-		methods: {},
-	}))
+	.add(
+		"Base Input",
+		() => ({
+			components: { BaseInput },
+			data: () => ({ content: "" }),
+			template:
+				'<BaseInput type="text" label="Vorname" v-model="content" name="firstname"/>',
+			methods: {},
+		}),
+		{ info: {} }
+	)
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: '<BaseLink :href="https://www.google.com" :name="test"/>',
+		template: '<BaseLink href="/" name="test">Link</BaseLink>',
 		methods: {},
 	}));
