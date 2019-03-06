@@ -1,4 +1,5 @@
 <template>
+	<!-- eslint-disable max-lines -->
 	<div class="root">
 		<div class="header">
 			<div class="header-icon">
@@ -6,10 +7,10 @@
 			</div>
 			<div class="headlines">
 				<h3>Kurs anlegen</h3>
-				<h6
-					>In einem Kurs wird gemeinsam mit den Teilnehmern an Themen,
-					Hausaufgaben und Dateien gearbeitet.</h6
-				>
+				<h6>
+					In einem Kurs wird gemeinsam mit den Teilnehmern an Themen,
+					Hausaufgaben und Dateien gearbeitet.
+				</h6>
 			</div>
 		</div>
 		<div class="steps">
@@ -24,7 +25,7 @@
 						type="text"
 						placeholder="z.B. 10a"
 						maxlength="30"
-					></BaseInput>
+					/>
 
 					<BaseInput
 						v-model="course.description"
@@ -33,7 +34,7 @@
 						type="textarea"
 						placeholder=""
 						maxlength="255"
-					></BaseInput>
+					/>
 
 					<BaseSelect
 						:value.sync="teachersSelected"
@@ -42,7 +43,7 @@
 						placeholder="Unterrichtender Lehrer"
 						label="lastName"
 						track-by="_id"
-					></BaseSelect>
+					/>
 
 					<BaseSelect
 						:value.sync="substitutionsSelected"
@@ -51,7 +52,7 @@
 						label="lastName"
 						placeholder="Vertretungs-Lehrer"
 						track-by="_id"
-					></BaseSelect>
+					/>
 
 					<div class="date-wrapper">
 						<BaseInput
@@ -62,8 +63,7 @@
 							class="date"
 							placeholder=""
 							maxlength="30"
-						></BaseInput>
-
+						/>
 						<BaseInput
 							v-model="course.untilDate"
 							name="untilDate"
@@ -72,7 +72,7 @@
 							class="date"
 							placeholder=""
 							maxlength="30"
-						></BaseInput>
+						/>
 					</div>
 
 					<TemplateCourseTimes v-model="course.times" />
@@ -130,25 +130,22 @@
 					type="button"
 					class="btn btn-primary"
 					@click="lastStep"
+					>Zurück</BaseButton
 				>
-					Zurück
-				</BaseButton>
 				<BaseButton
 					v-if="currentStep == 1"
 					type="button"
 					class="btn btn-primary"
 					@click="nextStep"
+					>Überspringen</BaseButton
 				>
-					Überspringen
-				</BaseButton>
 				<BaseButton
 					v-if="!laststep"
 					type="button"
 					class="btn btn-primary"
 					@click="nextStep"
+					>Weiter</BaseButton
 				>
-					Weiter
-				</BaseButton>
 				<BaseButton
 					v-if="laststep"
 					type="submit"
@@ -164,9 +161,6 @@
 
 <script>
 import StepProgress from "./StepProgress.vue";
-import BaseInput from "./ui/BaseInput";
-import BaseButton from "./ui/BaseButton";
-import BaseSelect from "./ui/BaseSelect";
 import TemplateCourseTimes from "./TemplateCourseTimes";
 import SpaceShuttle from "@assets/shuttle.svg";
 
@@ -263,7 +257,6 @@ export default {
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .content-wrapper {
 	width: 70%;
