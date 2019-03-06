@@ -1,61 +1,125 @@
 <template>
-	<div v-if="course">
-		<section class="section">
-			<h1>Kurs erstellen</h1>
-			<BaseInput
-				v-model="course.name"
-				label="Name"
-				type="text"
-				placeholder="Dream Team"
-				maxlength="30"
-			></BaseInput>
-			<BaseInput
-				v-model="course.description"
-				label="Beschreibung"
-				type="textarea"
-				placeholder="Everything you have to know"
-				maxlength="255"
-			></BaseInput>
-			<button class="button is-primary" @click="create()">Speichern</button>
-			<h1>{{ course.name }}</h1>
-			<p>{{ course.description }}</p>
-		</section>
+	<div v-if="course" class="root">
+		<TemplateCourseWizard
+			:steps="stepList"
+			:course="course"
+			:user="user"
+			:teachers="teachers"
+			:classes="classes"
+			:students="students"
+			@course-creation-submit="create()"
+		/>
 	</div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
+import TemplateCourseWizard from "@components/TemplateCourseWizard";
+
+var moment = require("moment");
 
 export default {
+	components: { TemplateCourseWizard },
 	data() {
 		return {
-			course: {
-				name: "",
-				description: "",
-			},
+			stepList: [
+				{ name: "Kursdaten" },
+				{ name: "Kurs-Mitglieder" },
+				{ name: "Abschließen" },
+			],
+			course: {},
+			moment: moment,
 		};
 	},
 	computed: {
 		...mapState("auth", {
 			user: "user",
 		}),
+		...mapGetters("classes", {
+			classes: "list",
+		}),
+	},
+	async asyncData({ store }) {
+		try {
+			const teacherRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "teacher",
+				},
+			})).data[0];
+
+			const studentsRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "student",
+				},
+			})).data[0];
+
+			const queryTeachers = {
+				roles: [teacherRole._id],
+			};
+			const teachers = (await store.dispatch("users/find", {
+				query: queryTeachers,
+			})).data;
+
+			const queryStudents = {
+				roles: [studentsRole._id],
+			};
+			const students = (await store.dispatch("users/find", {
+				query: queryStudents,
+			})).data;
+
+			await store.dispatch("classes/find");
+
+			return {
+				teachers,
+				students,
+			};
+		} catch (err) {}
+	},
+	created() {
+		const { Course } = this.$FeathersVuex;
+		this.course = new Course({
+			schoolId: this.user.schoolId,
+		});
 	},
 	methods: {
 		async create(id) {
+			const course = this.course;
+
+			course.times = this.course.times.map((time) => {
+				time.startTime = moment
+					.duration(time.startTime, "HH:mm")
+					.asMilliseconds()
+					.toString();
+				time.duration = (time.duration * 60 * 1000).toString();
+				time.weekday = time.weekday.value;
+				return time;
+			});
+
+			(course.teacherIds = course.teachers),
+				(course.substitutionIds = course.substitutions),
+				(course.classIds = course.classes),
+				(course.userIds = course.students);
+
+			this.$toast.success("Kurs erstellt");
+
 			try {
-				/* const course = await this.$store.dispatch('courses/create', {
-					schoolId: this.user.schoolId,
-					name: this.course.name,
-					description: this.course.description,
-				}); */
-
-				this.$toast.success("Kurs erstellt");
-
-				this.$router.push({ name: "courses" });
+				await course.create();
 			} catch (e) {
 				this.$toast.error("Fehler beim Erstellen");
 			}
+
+			this.$router.push({ name: "courses" });
 		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@variables";
+
+.root {
+	min-width: $size-content-width-min;
+	max-width: $size-content-width-max;
+	margin: 0 auto;
+}
+</style>
