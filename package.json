@@ -34,7 +34,7 @@
 		"test:unit:watch": "yarn test:unit --watch --notify",
 		"test:ci": "yarn test:unit:ci",
 		"test": "yarn test:unit",
-		"ci": "yarn test:ci && yarn lint:ci && yarn build"
+		"ci": "yarn test:ci && yarn lint:ci && yarn build:docs"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
