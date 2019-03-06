@@ -1,11 +1,7 @@
 FROM node:lts as builder
 
 WORKDIR '/app'
-COPY ./package.json ./
-RUN yarn install
-COPY . .
-RUN git submodule init && git submodule update && cd schulcloud-client && npm install && cd ..
-RUN yarn build:nuxt
+COPY ./dist/nuxt ./dist/nuxt
 
 FROM nginx:alpine
 EXPOSE 80
