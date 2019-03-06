@@ -1,8 +1,7 @@
-#.git
-.gitignore
-.travis.yml*
-Dockerfile
-README.md
-build
+.github
+.nuxt
+.vscode
+dist
 deploy
 node_modules
+.travis.yml*
