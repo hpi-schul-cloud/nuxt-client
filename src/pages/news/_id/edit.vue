@@ -1,31 +1,58 @@
 <template>
-	<div v-if="news">
-		<section class="section">
-			<BaseLink :to="{ name: 'news-id', params: { id: news._id } }">
-				<h5>{{ news.title }}</h5>
-			</BaseLink>
-			<h1>News bearbeiten</h1>
-			<BaseButton class="is-danger" @click="confirmDelete">Löschen</BaseButton>
-		</section>
-		<section class="section">
-			<BaseInput
-				v-model="news.title"
-				label="Name"
-				type="text"
-				maxlength="30"
-			></BaseInput>
-			<BaseInput
-				v-model="news.content"
-				label="Beschreibung"
-				type="textarea"
-			></BaseInput>
-			<BaseButton class="is-primary" @click="save()">Speichern</BaseButton>
-		</section>
-		<section class="section">
-			<h1>{{ news.title }}</h1>
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<div v-html="news.content" />
-		</section>
+	<div>
+		<div v-if="news">
+			<section class="section">
+				<BaseLink :to="{ name: 'news-id', params: { id: news._id } }">
+					<h5>{{ news.title }}</h5>
+				</BaseLink>
+				<h1>News bearbeiten</h1>
+				<BaseButton class="is-danger" @click="active = true">
+					Löschen
+				</BaseButton>
+			</section>
+
+			<section class="section">
+				<BaseInput
+					v-model="news.title"
+					label="Titel"
+					name="title"
+					type="text"
+					maxlength="30"
+				></BaseInput>
+				<BaseInput
+					v-model="news.content"
+					label="Inhalt"
+					name="content"
+					type="text"
+				></BaseInput>
+				<BaseButton class="is-primary" @click="save()">Speichern</BaseButton>
+			</section>
+
+			<section class="section">
+				<h1>{{ news.title }}</h1>
+				<!-- eslint-disable-next-line vue/no-v-html -->
+				<div v-html="news.content" />
+			</section>
+		</div>
+
+		<BaseModal ref="modal" :active.sync="active">
+			<div class="modal-header">
+				<h3>Löschen?</h3>
+			</div>
+
+			<div class="modal-body">
+				Bist du sicher, dass du diesen Artikel löschen möchtest?
+			</div>
+
+			<div class="modal-footer">
+				<BaseButton class="is-light" @click="$refs.modal.close()">
+					Abbrechen
+				</BaseButton>
+				<BaseButton @click="confirmDelete">
+					Löschen
+				</BaseButton>
+			</div>
+		</BaseModal>
 	</div>
 </template>
 
@@ -33,6 +60,11 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+	data: function() {
+		return {
+			active: false,
+		};
+	},
 	computed: {
 		...mapGetters("news", {
 			news: "current",
@@ -44,22 +76,7 @@ export default {
 	methods: {
 		...mapActions("news", ["remove"]),
 		confirmDelete() {
-			this.$dialog.confirm({
-				title: "Artikel löschen",
-				message: "Bist du sicher, dass du diesen Artikel löschen möchtest?",
-				confirmText: "Artikel löschen",
-				type: "is-danger",
-				hasIcon: true,
-				onConfirm: async () => {
-					try {
-						await this.remove(this.news._id);
-						this.$toast.success("Artikel gelöscht");
-						this.$router.push({ name: "news" });
-					} catch (e) {
-						this.$toast.error("Fehler beim Löschen");
-					}
-				},
-			});
+			// TODO
 		},
 		get(id) {
 			this.$store.dispatch("news/get", id);
