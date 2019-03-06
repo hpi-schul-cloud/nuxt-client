@@ -1,6 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { withMarkdownNotes } from "@storybook/addon-notes";
-import baseDoc from "@docs/components/base.md";
+import notes from "@docs/components/base.md";
 
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
@@ -10,7 +9,9 @@ import BaseLink from "@components/ui/BaseLink.vue";
 import BaseModal from "@components/ui/BaseModal.vue";
 
 storiesOf("Base Components", module)
-	.addDecorator(withMarkdownNotes(baseDoc)) // FIX causes "# <story/>" to appear
+	.addParameters({
+		notes,
+	})
 	.add("Base Button", () => ({
 		components: { BaseButton },
 		template: "<BaseButton>Hello Button</BaseButton>",
