@@ -37,7 +37,7 @@
 
 		<BaseModal ref="modal" :active.sync="active">
 			<div class="modal-header">
-				<h3>custom header</h3>
+				<h3>Löschen?</h3>
 			</div>
 
 			<div class="modal-body">
@@ -75,7 +75,9 @@ export default {
 	},
 	methods: {
 		...mapActions("news", ["remove"]),
-		confirmDelete() {},
+		confirmDelete() {
+			// TODO
+		},
 		get(id) {
 			this.$store.dispatch("news/get", id);
 		},
