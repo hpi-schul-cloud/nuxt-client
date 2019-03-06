@@ -14,7 +14,7 @@ module.exports = {
 		...require("./aliases.config").jest,
 	},
 	snapshotSerializers: ["jest-serializer-vue"],
-	coverageDirectory: "<rootDir>/tests/unit/coverage",
+	coverageDirectory: "<rootDir>/dist/coverage",
 	collectCoverageFrom: [
 		"<rootDir>/src/components/**/*.{js,vue}",
 		"!<rootDir>/src/components/ui/_globals.js",

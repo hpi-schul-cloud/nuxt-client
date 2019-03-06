@@ -9,10 +9,8 @@ import { library as fontAwesomeIconLibrary } from "@fortawesome/fontawesome-svg-
 import camelCase from "lodash/camelCase";
 
 // https://fontawesome.com/icons
-fontAwesomeIconLibrary.add(
-	require("@fortawesome/free-solid-svg-icons/faSync").definition,
-	require("@fortawesome/free-solid-svg-icons/faUser").definition
-);
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+fontAwesomeIconLibrary.add(faTrash);
 
 export default {
 	name: "BaseIcon",
