@@ -47,6 +47,11 @@
 	transition: all 0.15s ease-in-out;
 }
 
+* {
+	box-sizing: border-box;
+	tab-size: 2;
+}
+
 html,
 body {
 	@extend %font-content;

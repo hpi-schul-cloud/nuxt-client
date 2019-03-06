@@ -1,9 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope, react/no-this-in-sfc */
 
 import { storiesOf } from "@storybook/vue";
-import { withMarkdownNotes } from "@storybook/addon-notes";
 import CourseCard from "@components/CourseCard.vue";
-import courseCardDoc from "@docs/storybook/courseCard.md";
+import notes from "@docs/storybook/courseCard.md";
 
 import {
 	defaultCourse,
@@ -14,7 +13,9 @@ import {
 } from "./mockData/CourseCard";
 
 storiesOf("CourseCard", module)
-	.addDecorator(withMarkdownNotes(courseCardDoc))
+	.addParameters({
+		notes,
+	})
 	.add("CourseCard mit Content", () => ({
 		components: { CourseCard },
 		template: '<CourseCard :course="course"/>',
