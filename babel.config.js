@@ -6,7 +6,7 @@ module.exports = function(api) {
 	if (process.env.NODE_ENV === "test") {
 		return {
 			presets: ["@babel/preset-env"],
-			plugins: [],
+			plugins: ["@babel/plugin-syntax-dynamic-import"],
 		};
 	}
 
