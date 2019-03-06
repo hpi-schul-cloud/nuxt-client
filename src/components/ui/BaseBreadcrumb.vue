@@ -9,11 +9,8 @@
 	</ul>
 </template>
 <script>
-import BaseLink from "@components/ui/BaseLink.vue";
-
 export default {
 	name: "BaseBreadcrumb",
-	components: { BaseLink },
 	props: {
 		inputs: {
 			type: Array,
