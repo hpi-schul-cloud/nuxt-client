@@ -7,6 +7,7 @@ import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
 import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
+import BaseModal from "@components/ui/BaseModal.vue";
 
 storiesOf("Base Components", module)
 	.addDecorator(withMarkdownNotes(baseDoc)) // FIX causes "# <story/>" to appear
@@ -38,5 +39,35 @@ storiesOf("Base Components", module)
 	.add("Base Link", () => ({
 		components: { BaseLink },
 		template: '<BaseLink href="/" name="test">Link</BaseLink>',
+		methods: {},
+	}))
+	.add("Base Modal", () => ({
+		components: { BaseModal, BaseButton },
+		data: () => ({
+			active: false,
+		}),
+		template: `
+			<div>
+				<BaseButton @click="active = true">
+					Open Modal
+				</BaseButton>
+
+				<BaseModal :active.sync="active">
+					<div class="modal-header">
+						<h3>custom header</h3>
+					</div>
+
+					<div class="modal-body">
+						Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below.
+					</div>
+
+					<div class="modal-footer">
+						<BaseButton id="button" class="is-light" @click="active = false">
+							OK
+						</BaseButton>
+					</div>
+				</BaseModal>
+			</div>
+		`,
 		methods: {},
 	}));
