@@ -36,7 +36,7 @@
 		</div>
 
 		<!-- use the modal component, pass in the prop -->
-		<Modal ref="modal" :active.sync="active">
+		<BaseModal ref="modal" :active.sync="active">
 			<div class="modal-header">
 				<h3>custom header</h3>
 			</div>
@@ -53,18 +53,14 @@
 					Löschen
 				</BaseButton>
 			</div>
-		</Modal>
+		</BaseModal>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import Modal from "@components/ui/BaseModal";
 
 export default {
-	components: {
-		Modal,
-	},
 	data: function() {
 		return {
 			active: false,

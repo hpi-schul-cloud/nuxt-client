@@ -47,7 +47,7 @@ storiesOf("Base Components", module)
 			<div>
 				<BaseButton @click="active = true">
 					Open Modal
-				</BaseButton>		
+				</BaseButton>
 
 				<BaseModal :show-modal="active" @close="active = false">
 					<h3 slot="header">custom header</h3>
@@ -59,7 +59,7 @@ storiesOf("Base Components", module)
 							OK
 						</BaseButton>
 					</div>
-				</BaseModal>	
+				</BaseModal>
 			</div>
 		`,
 		methods: {},
