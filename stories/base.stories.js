@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/vue";
-import notes from "@docs/components/base.md";
+import outdent from "outdent";
 
+import notes from "@docs/components/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
@@ -129,10 +130,8 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Modal", () => ({
 		components: { BaseModal, BaseButton },
-		data: () => ({
-			active: false,
-		}),
-		template: `
+		data: () => ({ active: false }),
+		template: outdent`
 			<div>
 				<BaseButton @click="active = true">
 					Open Modal

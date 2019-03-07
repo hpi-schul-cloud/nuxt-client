@@ -1971,6 +1971,15 @@
     react-inspector "^2.3.0"
     uuid "^3.3.2"
 
+"@storybook/addon-centered@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-centered/-/addon-centered-5.0.0.tgz#eb7b348d005b2a0e646ce0fd48b261b143e2235c"
+  integrity sha512-on3LDXM7ddmSxiUIkDJQXYw1afuPdr2gUtebseeOAUwVUInN70u2KmaUFJ5Wp0jWR6lb+jzO24QM8rZSlWKVjA==
+  dependencies:
+    core-js "^2.6.2"
+    global "^4.3.2"
+    util-deprecate "^1.0.2"
+
 "@storybook/addon-links@^5.0.0":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-5.0.0.tgz#ee38087cdfdc79389c87f86a6d3783495b362149"
@@ -12227,6 +12236,11 @@ osenv@0, osenv@^0.1.4:
   dependencies:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
+
+outdent@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/outdent/-/outdent-0.7.0.tgz#cfd1f1956305141e0cf3e898ada6547373c1997a"
+  integrity sha512-Ue462G+UIFoyQmOzapGIKWS3d/9NHeD/018WGEDZIhN2/VaQpVXbofMcZX0socv1fw4/tmEn7Vd3McOdPZfKzQ==
 
 p-cancelable@^0.3.0:
   version "0.3.0"

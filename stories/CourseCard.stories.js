@@ -1,6 +1,6 @@
-/* eslint-disable react/react-in-jsx-scope, react/no-this-in-sfc */
-
 import { storiesOf } from "@storybook/vue";
+import outdent from "outdent";
+
 import CourseCard from "@components/CourseCard.vue";
 import notes from "@docs/storybook/courseCard.md";
 
@@ -18,28 +18,28 @@ storiesOf("CourseCard", module)
 	})
 	.add("CourseCard mit Content", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: defaultCourse,
 		}),
 	}))
 	.add("CourseCard mit Aufgabe", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithAssignment,
 		}),
 	}))
 	.add("CourseCard mit Alert", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithAlert,
 		}),
 	}))
 	.add("CourseCard mit Notification", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithNotification,
 		}),
@@ -53,7 +53,5 @@ storiesOf("CourseCard", module)
 	}))
 	.add("CourseCard Empty", () => ({
 		components: { CourseCard },
-		template: "<CourseCard/>",
+		template: outdent`<CourseCard />`,
 	}));
-
-/* eslint-enable react/react-in-jsx-scope */
