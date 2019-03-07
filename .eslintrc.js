@@ -27,6 +27,12 @@ module.exports = {
 						},
 				  ]
 				: "off",
+
+		"max-lines": [
+			"warn",
+			{ max: 250, skipBlankLines: true, skipComments: true },
+		],
+		// vue specific stuff
 		"vue/component-name-in-template-casing": [
 			"error",
 			"PascalCase",

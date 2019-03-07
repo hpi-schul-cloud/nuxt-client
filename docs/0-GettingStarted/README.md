@@ -1,5 +1,5 @@
 # Getting Started
 
 - [Development](./0-Development.html)
-- [Build](./0-Build.html)
-- [Editor Setup](./0-EditorSetup.html)
+- [Build](./1-Build.html)
+- [Editor Setup](./2-EditorSetup.html)
