@@ -9,13 +9,10 @@ import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
 import BaseToast from "@components/ui/BaseToast.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
-import BaseProfilePicture from "@components/ui/BaseProfilePicture.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
-
-import ExampleImage from "@assets/avatarExample.svg";
 
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
@@ -94,11 +91,6 @@ storiesOf("Base Components", module)
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
 		template: '<BaseProgressbar :value="2" :max="3"/>',
-	}))
-	.add("Base Profile Pic", () => ({
-		components: { BaseProfilePicture },
-		data: () => ({ imgsrc: ExampleImage }),
-		template: `<div><BaseProfilePicture :image="imgsrc" size="small"/><BaseProfilePicture size="medium"/><BaseProfilePicture size="large"/></div>`,
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },

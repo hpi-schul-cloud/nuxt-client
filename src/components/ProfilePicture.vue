@@ -11,7 +11,7 @@
 </template>
 <script>
 export default {
-	name: "BaseProfilePicture",
+	name: "ProfilePicture",
 	props: {
 		image: {
 			type: String,
