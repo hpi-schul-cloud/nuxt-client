@@ -1,6 +1,12 @@
 <template>
 	<div class="profilePicture">
-		<img :src="image" class="borderradius" :class="size" />
+		<img v-if="image" :src="image" class="borderradius" :class="size" />
+		<img
+			v-else
+			src="@assets/avatarExample.svg"
+			class="borderradius"
+			:class="size"
+		/>
 	</div>
 </template>
 <script>
@@ -9,7 +15,7 @@ export default {
 	props: {
 		image: {
 			type: String,
-			default: "@assets/avatarExample.svg",
+			default: "",
 		},
 		size: {
 			type: String,
