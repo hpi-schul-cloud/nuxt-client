@@ -1,7 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope, react/no-this-in-sfc */
 
 import { storiesOf } from "@storybook/vue";
-import { linkTo } from "@storybook/addon-links";
+import outdent from "outdent";
+
 import CourseCard from "@components/CourseCard.vue";
 export const defaultCourse = {
 	_id: "0000dcfbfb5c7a3f00bf21abc",
@@ -173,35 +174,35 @@ export const courseWithAlert = {
 storiesOf("CourseCard", module)
 	.add("CourseCard mit Content", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: defaultCourse,
 		}),
 	}))
 	.add("CourseCard mit Aufgabe", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithAssignment,
 		}),
 	}))
 	.add("CourseCard mit Alert", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithAlert,
 		}),
 	}))
 	.add("CourseCard mit Notification", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course"/>',
+		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithNotification,
 		}),
 	}))
 	.add("CourseCard Empty", () => ({
 		components: { CourseCard },
-		template: "<CourseCard/>",
+		template: outdent`<CourseCard />`,
 	}));
 
 /* eslint-enable react/react-in-jsx-scope */

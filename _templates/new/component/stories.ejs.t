@@ -2,8 +2,10 @@
 to: "<%= story ? ('stories/' + name + '.stories.js') : null %>"
 ---
 import { storiesOf } from "@storybook/vue";
-import <%= name %> from "@components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>.vue";
+import outdent from "outdent";
+
 import notes from "@docs/components/<%= name %>.md";
+import <%= name %> from "@components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>.vue";
 
 storiesOf("<%= name %>", module)
 	.addParameters({
@@ -11,6 +13,6 @@ storiesOf("<%= name %>", module)
 	})
 	.add("<%= name %>", () => ({
 		components: { <%= name %> },
-		template: "",
+		template: outdent`<<%= name %> />`,
 		methods: {},
 	}));
