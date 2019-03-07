@@ -14,6 +14,8 @@ import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
 
+import ExampleImage from "@assets/avatarExample.svg";
+
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
 	{ _id: 2, name: "Option 2" },
@@ -94,8 +96,8 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Profile Pic", () => ({
 		components: { BaseProfilePicture },
-		template:
-			'<div><BaseProfilePicture image="@assets/avatarExample.svg" size="small"/><BaseProfilePicture size="medium"/><BaseProfilePicture size="large"/></div>',
+		data: () => ({ imgsrc: ExampleImage }),
+		template: `<div><BaseProfilePicture :image="imgsrc" size="small"/><BaseProfilePicture size="medium"/><BaseProfilePicture size="large"/></div>`,
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
