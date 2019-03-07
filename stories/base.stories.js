@@ -21,7 +21,6 @@ export const multioptions = [
 ];
 import BaseModal from "@components/ui/BaseModal.vue";
 
-
 storiesOf("Base Components", module)
 	.addParameters({
 		notes,
@@ -51,7 +50,7 @@ storiesOf("Base Components", module)
 		components: { BaseInput },
 		data: () => ({ content: "" }),
 		template:
-			'<BaseInput type="text" label="Vorname" v-model="content" name="firstname"/>',
+			'<BaseInput type="text" label="Vorname" v-model="content" name="firstname" placeholder="Max"/>',
 		methods: {},
 	}))
 	.add("Base Switch", () => ({
@@ -61,7 +60,6 @@ storiesOf("Base Components", module)
 	.add("Base Radio Button", () => ({
 		components: { BaseInput },
 		template: `<div><BaseInput type="radio" name="choise" value="me" id="radio1">Pick me!</BaseInput> <BaseInput type="radio" name="choise" value="notMe" id="radio2">Don't pick me.</BaseInput></div>`,
-			'<BaseInput type="text" label="Vorname" v-model="content" name="firstname" placeholder="Max"/>',
 		methods: {},
 	}))
 	.add("Base Input Date", () => ({
@@ -97,14 +95,10 @@ storiesOf("Base Components", module)
 	.add("Base Profile Pic", () => ({
 		components: { BaseProfilePicture },
 		template:
-			'<div><BaseProfilePicture image="https://avataaars.io/?avatarStyle=Circle&topType=LongHairBun&accessoriesType=Blank&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BlondeGolden&clotheType=Hoodie&clotheColor=Heather&eyeType=Squint&eyebrowType=UpDown&mouthType=Smile&skinColor=Pale" size="small"/><BaseProfilePicture size="medium"/><BaseProfilePicture size="large"/></div>',
+			'<div><BaseProfilePicture image="@assets/avatarExample.svg" size="small"/><BaseProfilePicture size="medium"/><BaseProfilePicture size="large"/></div>',
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
-	.add("Base Modal", () => ({
-		components: { BaseModal, BaseButton },
-		data: () => ({ active: false }),
-
 		template: `
 <BaseTable>
     <tr>
@@ -130,4 +124,34 @@ storiesOf("Base Components", module)
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
 		},
+	}))
+	.add("Base Modal", () => ({
+		components: { BaseModal, BaseButton },
+		data: () => ({
+			active: false,
+		}),
+		template: `
+			<div>
+				<BaseButton @click="active = true">
+					Open Modal
+				</BaseButton>
+
+				<BaseModal :active.sync="active">
+					<div class="modal-header">
+						<h3>custom header</h3>
+					</div>
+
+					<div class="modal-body">
+						Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below.
+					</div>
+
+					<div class="modal-footer">
+						<BaseButton id="button" class="is-light" @click="active = false">
+							OK
+						</BaseButton>
+					</div>
+				</BaseModal>
+			</div>
+		`,
+		methods: {},
 	}));

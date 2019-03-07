@@ -1,79 +1,76 @@
 <template>
 	<div class="root">
-
-	<div v-if="type === 'checkbox'" class="checkbox">
-		<label class="switch">
-			<input type="checkbox" />
-			<span class="slider"></span>
-		</label>
-	</div>
-	<div v-else-if="type === 'hidden'" class="hidden">
-		<input type="hidden" />
-	</div>
-	<div v-else-if="type === 'radio'" class="radio">
-		<input
-			:id="id"
-			type="radio"
-			class="radio-btn"
-			:name="name"
-			:value="value"
-		/>
-		<label :for="id" class="label"><slot /></label>
-	</div>
-	<div v-else>
-		<label class="input__wrapper">
-
-
-		<div v-if="type === 'date'" class="input__wrapper">
-			<span :class="{ label: true, active: value && value !== 0 }">
-				{{ label }}
-			</span>
-			<FlatPickr
-				v-model="val"
-				v-bind="$attrs"
-				:config="configDate"
-				:wrap="true"
-				v-on="$listeners"
-				@input="$emit('update', val)"
-			>
-				<input type="date" :name="name" class="input" />
-			</FlatPickr>
+		<div v-if="type === 'checkbox'" class="checkbox">
+			<label class="switch">
+				<input type="checkbox" />
+				<span class="slider"></span>
+			</label>
 		</div>
-
-		<div v-else-if="type === 'time'" class="input__wrapper">
-			<span :class="{ label: true, active: value && value !== 0 }">
-				{{ label }}
-			</span>
-			<FlatPickr
-				v-model="val"
-				v-bind="$attrs"
-				:config="configTime"
-				:wrap="true"
-				v-on="$listeners"
-				@input="$emit('update', val)"
-			>
-				<input type="time" :name="name" class="input" />
-			</FlatPickr>
+		<div v-else-if="type === 'hidden'" class="hidden">
+			<input type="hidden" />
 		</div>
-
-		<label v-else class="input__wrapper">
-			<span :class="{ label: true, active: value && value !== 0 }">
-				{{ label }}
-			</span>
+		<div v-else-if="type === 'radio'" class="radio">
 			<input
-				v-bind="$attrs"
-				:value="value"
-				:type="type"
+				:id="id"
+				type="radio"
+				class="radio-btn"
 				:name="name"
-				class="input"
-				v-on="$listeners"
-				@input="$emit('update', $event.target.value)"
+				:value="value"
 			/>
-		</label>
-		<small v-if="hint || $slots.hint" class="hint">
-			<template v-if="hint">{{ hint }}</template>
-			<slot v-else name="hint" />
-		</small>
+			<label :for="id" class="label"><slot /></label>
+		</div>
+		<div v-else>
+			<div v-if="type === 'date'" class="input__wrapper">
+				<span :class="{ label: true, active: value && value !== 0 }">
+					{{ label }}
+				</span>
+				<FlatPickr
+					v-model="val"
+					v-bind="$attrs"
+					:config="configDate"
+					:wrap="true"
+					v-on="$listeners"
+					@input="$emit('update', val)"
+				>
+					<input type="date" :name="name" class="input" />
+				</FlatPickr>
+			</div>
+
+			<div v-else-if="type === 'time'" class="input__wrapper">
+				<span :class="{ label: true, active: value && value !== 0 }">
+					{{ label }}
+				</span>
+				<FlatPickr
+					v-model="val"
+					v-bind="$attrs"
+					:config="configTime"
+					:wrap="true"
+					v-on="$listeners"
+					@input="$emit('update', val)"
+				>
+					<input type="time" :name="name" class="input" />
+				</FlatPickr>
+			</div>
+
+			<label v-else class="input__wrapper">
+				<span :class="{ label: true, active: value && value !== 0 }">
+					{{ label }}
+				</span>
+				<input
+					v-bind="$attrs"
+					:value="value"
+					:type="type"
+					:name="name"
+					class="input"
+					v-on="$listeners"
+					@input="$emit('update', $event.target.value)"
+				/>
+			</label>
+			<small v-if="hint || $slots.hint" class="hint">
+				<template v-if="hint">{{ hint }}</template>
+				<slot v-else name="hint" />
+			</small>
+		</div>
 	</div>
 </template>
 
@@ -110,7 +107,6 @@ export default {
 					"url",
 					"date",
 					"time",
-
 				].includes(value.toLowerCase());
 			},
 		},
@@ -190,7 +186,6 @@ $input-padding-left: 12px;
 .input,
 .input__wrapper /deep/ .flatpickr-input {
 	box-sizing: border-box;
-
 	display: block;
 	width: 100%;
 	padding: $size-padding;

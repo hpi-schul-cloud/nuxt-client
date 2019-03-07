@@ -9,8 +9,7 @@ export default {
 	props: {
 		image: {
 			type: String,
-			default:
-				"https://avataaars.io/?avatarStyle=Circle&topType=LongHairBun&accessoriesType=Round&hairColor=BlondeGolden&facialHairType=BeardMedium&facialHairColor=BlondeGolden&clotheType=Hoodie&clotheColor=Heather&eyeType=Squint&eyebrowType=UpDown&mouthType=Smile&skinColor=Pale",
+			default: "@assets/avatarExample.svg",
 		},
 		size: {
 			type: String,
