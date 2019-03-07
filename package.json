@@ -70,6 +70,7 @@
 		"@babel/preset-env": "^7.3.1",
 		"@storybook/addon-a11y": "^5.0.0",
 		"@storybook/addon-actions": "^5.0.0",
+		"@storybook/addon-centered": "^5.0.0",
 		"@storybook/addon-links": "^5.0.0",
 		"@storybook/addon-notes": "^5.0.0",
 		"@storybook/addon-viewport": "^5.0.0",
