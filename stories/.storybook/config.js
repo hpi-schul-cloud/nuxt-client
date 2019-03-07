@@ -1,15 +1,16 @@
 import { configure, addDecorator, addParameters } from "@storybook/vue";
 import { checkA11y } from "@storybook/addon-a11y";
-import { withInfo, setDefaults } from "storybook-addon-vue-info";
+import { withInfo } from "storybook-addon-vue-info";
+import centered from "@storybook/addon-centered/vue";
 
 // Vue Docs ( storybook-addon-vue-info )
 addParameters({
 	info: true,
 });
-setDefaults({
-	docsInPanel: false,
-});
 addDecorator(withInfo);
+
+// center Component
+addDecorator(centered);
 
 // A11y
 addDecorator(checkA11y);

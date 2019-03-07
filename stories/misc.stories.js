@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/vue";
-import notes from "@docs/components/misc.md";
+import outdent from "outdent";
 
+import notes from "@docs/components/misc.md";
 import PulsatingDot from "@components/PulsatingDot.vue";
 
 storiesOf("Misc", module)
@@ -9,5 +10,5 @@ storiesOf("Misc", module)
 	})
 	.add("Pulsing Dot", () => ({
 		components: { PulsatingDot },
-		template: "<PulsatingDot/>",
+		template: outdent`<PulsatingDot />`,
 	}));
