@@ -1,4 +1,6 @@
 <template>
+	<div class="root">
+
 	<div v-if="type === 'checkbox'" class="checkbox">
 		<label class="switch">
 			<input type="checkbox" />
@@ -20,17 +22,52 @@
 	</div>
 	<div v-else>
 		<label class="input__wrapper">
+
+
+		<div v-if="type === 'date'" class="input__wrapper">
+			<span :class="{ label: true, active: value && value !== 0 }">
+				{{ label }}
+			</span>
+			<FlatPickr
+				v-model="val"
+				v-bind="$attrs"
+				:config="configDate"
+				:wrap="true"
+				v-on="$listeners"
+				@input="$emit('update', val)"
+			>
+				<input type="date" :name="name" class="input" />
+			</FlatPickr>
+		</div>
+
+		<div v-else-if="type === 'time'" class="input__wrapper">
+			<span :class="{ label: true, active: value && value !== 0 }">
+				{{ label }}
+			</span>
+			<FlatPickr
+				v-model="val"
+				v-bind="$attrs"
+				:config="configTime"
+				:wrap="true"
+				v-on="$listeners"
+				@input="$emit('update', val)"
+			>
+				<input type="time" :name="name" class="input" />
+			</FlatPickr>
+		</div>
+
+		<label v-else class="input__wrapper">
 			<span :class="{ label: true, active: value && value !== 0 }">
 				{{ label }}
 			</span>
 			<input
+				v-bind="$attrs"
 				:value="value"
 				:type="type"
 				:name="name"
-				v-bind="$attrs"
 				class="input"
-				@input="$emit('update', $event.target.value)"
 				v-on="$listeners"
+				@input="$emit('update', $event.target.value)"
 			/>
 		</label>
 		<small v-if="hint || $slots.hint" class="hint">
@@ -41,8 +78,16 @@
 </template>
 
 <script>
+// TODO FIX make import dynamic
+// tests ! with coverage ! (yarn test:unit:ci) are failing when dynamic import is used
+//const FlatPickr = () => import("vue-flatpickr-component");
+import FlatPickr from "vue-flatpickr-component";
+
+import { German } from "flatpickr/dist/l10n/de.js";
+
 export default {
 	name: "BaseInput",
+	components: { FlatPickr },
 	inheritAttrs: false,
 	model: {
 		event: "update",
@@ -61,6 +106,11 @@ export default {
 					"url",
 					"number",
 					"hidden",
+					"textarea",
+					"url",
+					"date",
+					"time",
+
 				].includes(value.toLowerCase());
 			},
 		},
@@ -87,14 +137,47 @@ export default {
 			default: "",
 		},
 	},
+	data() {
+		return {
+			// Get more form https://chmln.github.io/flatpickr/options/
+			configDate: {
+				altFormat: "d.m.Y",
+				altInput: true,
+				dateFormat: "Y-m-d",
+				locale: German,
+			},
+			configTime: {
+				enableTime: true,
+				noCalendar: true,
+				dateFormat: "H:i",
+				time_24hr: true,
+				locale: German,
+			},
+			val: this.value,
+		};
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@variables";
+@import "~flatpickr/dist/flatpickr.css";
+
 $input-padding-left: 12px;
 
-.input__wrapper + .label {
+.root {
+	width: 100%;
+}
+.input__wrapper {
+	position: relative;
+	display: block;
+	margin: 1em 0 $size-grid-padding;
+	clear: both;
+	background: $color-text-bg;
+	border: $size-border-width solid $color-border;
+	border-radius: $size-border-radius;
+}
+.label {
 	@extend %typography-small;
 
 	position: relative;
@@ -104,21 +187,23 @@ $input-padding-left: 12px;
 	transform: translateY(-0.75em);
 }
 
-.radio {
+.input,
+.input__wrapper /deep/ .flatpickr-input {
+	box-sizing: border-box;
+
 	display: block;
 	width: 100%;
 	padding: $size-padding;
 	line-height: 1;
-	color: lighten($color-text, 20%);
+	color: $color-text;
 	background: inherit;
 	border: 0;
 	border-radius: calc(#{$size-border-radius} - #{$size-border-width});
-	outline: none;
 	transition: color $duration-animation-base linear;
 
 	@extend %typography-small;
-	&:focus {
-		color: $color-text;
+	&::placeholder {
+		color: lighten($color-text, 40%);
 	}
 }
 

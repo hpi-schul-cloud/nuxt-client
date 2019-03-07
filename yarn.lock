@@ -3473,9 +3473,9 @@ aws4@^1.8.0:
   integrity sha512-ReZxvNHIOv88FlT7rxcXIIC0fPt4KZqZbOlivyWtXLt8ESx84zd3kMC6iK5jVeS2qt+g7ftS7ye4fi06X5rtRQ==
 
 axe-core@^3.1.2:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.2.0.tgz#063827424279db54c35cfbd59b6f8079821bc627"
-  integrity sha512-g7MguJCPvWgEvdJHDnWG+xDbDqiiy7t+KvryGUc8y8Pv4ElLpCnpa6CWMvqRozpojRgXR/ubCIsoVljhDEk2lA==
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.2.1.tgz#3d38addfbcb9198d6236e7ba73aed71278170900"
+  integrity sha512-XNT38eGeeBkY1y65PuEkSOyAypBo1jk07w0OGj0SJB0/z4JFWY4ep0wVitXjNVArb2M7YI4ooxp4Y/SzDZs45g==
 
 axios-retry@^3.1.2:
   version "3.1.2"
@@ -7346,7 +7346,7 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
-feathers-vuex@^1.6.2:
+feathers-vuex@1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/feathers-vuex/-/feathers-vuex-1.7.0.tgz#9c790ddba2ca79cd1f331e2b1650795492a7fded"
   integrity sha512-S6FppRNdnKJMO+5oWsxIhRjaW5+IBstcjfynDzqjCUoKGqkty33hM9Sx8dodziqcVdpM1br1oe5Y2GhMOYLKMw==
@@ -7618,6 +7618,11 @@ flat-cache@^2.0.1:
     flatted "^2.0.0"
     rimraf "2.6.3"
     write "1.0.3"
+
+flatpickr@^4.5.1:
+  version "4.5.6"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.5.6.tgz#9afdcccf5ffd30445e047a605eb175cb8e00a115"
+  integrity sha512-PYeKKH+5Zm5iGu00SsQPJmXtivolF0goXl00Ced5pEGV6//mxG0pA9Z0aas+X3X4NWqnVNMQuHE8m/fTY86iAQ==
 
 flatted@^2.0.0:
   version "2.0.0"
@@ -17222,6 +17227,13 @@ vue-eslint-parser@^5.0.0:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
+vue-flatpickr-component@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/vue-flatpickr-component/-/vue-flatpickr-component-8.1.1.tgz#f0876e62cc8a6fdbe0e0cc5068f3a314b972a96f"
+  integrity sha512-WkZVZbsv/gK3pEMlWA0/Azh21R7neLbDEGb2Yx39+IYbtTpNFRlxQltUVMif0W+TTuuLF5BQOgoe77P5my6cLA==
+  dependencies:
+    flatpickr "^4.5.1"
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
@@ -17263,6 +17275,11 @@ vue-meta@^1.5.8:
     lodash.isplainobject "^4.0.6"
     lodash.uniqueid "^4.0.1"
     object-assign "^4.1.1"
+
+vue-multiselect@^2.1.3:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/vue-multiselect/-/vue-multiselect-2.1.4.tgz#2a7b4958b75881ed34db45532974c36f9abfbc67"
+  integrity sha512-ryd2Ybl56LE81IxlwbZUo4gAWnUSG45iUGX4KgVwsteitK2R+cOLwJaJescobpIDJnVlVorRUnX5u7my1vBu2w==
 
 vue-no-ssr@^1.1.1:
   version "1.1.1"
@@ -17511,9 +17528,9 @@ webpack-chain@^4.11.0, webpack-chain@^4.6.0:
     javascript-stringify "^1.6.0"
 
 webpack-dev-middleware@^3.0.0, webpack-dev-middleware@^3.5.1:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-3.6.0.tgz#71f1b04e52ff8d442757af2be3a658237d53a3e5"
-  integrity sha512-oeXA3m+5gbYbDBGo4SvKpAHJJEGMoekUbHgo1RK7CP1sz7/WOSeu/dWJtSTk+rzDCLkPwQhGocgIq6lQqOyOwg==
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-3.6.1.tgz#91f2531218a633a99189f7de36045a331a4b9cd4"
+  integrity sha512-XQmemun8QJexMEvNFbD2BIg4eSKrmSIMrTfnl2nql2Sc6OGAYFyb8rwuYrCjl/IiEYYuyTEiimMscu7EXji/Dw==
   dependencies:
     memory-fs "^0.4.1"
     mime "^2.3.1"

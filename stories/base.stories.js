@@ -12,6 +12,15 @@ import BaseProfilePicture from "@components/ui/BaseProfilePicture.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
+import BaseSelect from "@components/ui/BaseSelect.vue";
+
+export const multioptions = [
+	{ _id: 1, name: "Option 1" },
+	{ _id: 2, name: "Option 2" },
+	{ _id: 3, name: "Option 3" },
+];
+import BaseModal from "@components/ui/BaseModal.vue";
+
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -52,6 +61,25 @@ storiesOf("Base Components", module)
 	.add("Base Radio Button", () => ({
 		components: { BaseInput },
 		template: `<div><BaseInput type="radio" name="choise" value="me" id="radio1">Pick me!</BaseInput> <BaseInput type="radio" name="choise" value="notMe" id="radio2">Don't pick me.</BaseInput></div>`,
+			'<BaseInput type="text" label="Vorname" v-model="content" name="firstname" placeholder="Max"/>',
+		methods: {},
+	}))
+	.add("Base Input Date", () => ({
+		components: { BaseInput },
+		data: () => ({ content: "" }),
+		template:
+			'<BaseInput value="" type="date" v-model="content" label="Datum" placeholder="21.02.2019" name="date"/>',
+		methods: {},
+	}))
+	.add("Base Select MultiSelect", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			content: [],
+			options: multioptions,
+		}),
+		template:
+			'<BaseSelect v-model="content" :options="options" track-by="_id" label="name"/>',
+		methods: {},
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
@@ -73,6 +101,10 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
+	.add("Base Modal", () => ({
+		components: { BaseModal, BaseButton },
+		data: () => ({ active: false }),
+
 		template: `
 <BaseTable>
     <tr>
