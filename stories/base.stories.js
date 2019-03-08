@@ -13,6 +13,7 @@ import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
+import BaseVideo from "@components/ui/BaseVideo.vue";
 
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
@@ -147,4 +148,8 @@ storiesOf("Base Components", module)
 			</div>
 		`,
 		methods: {},
+	}))
+	.add("Base Video", () => ({
+		components: { BaseVideo },
+		template: `<BaseVideo :streams="[{hd: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'}]"/>`, 
 	}));

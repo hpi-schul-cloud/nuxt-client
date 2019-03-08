@@ -59,6 +59,7 @@
 		"nuxt": "^2.4.2",
 		"nuxt-express-module": "0.0.11",
 		"socket.io-client": "^2.2.0",
+		"video-player": "https://github.com/openHPI/video-player",
 		"vue-flatpickr-component": "^8.1.1",
 		"vue-loader": "^15.6.2",
 		"vue-multiselect": "^2.1.3",
