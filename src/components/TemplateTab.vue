@@ -1,12 +1,12 @@
 <template>
-	<div v-show="isActive">
+	<div v-show="isActive" id="tab-content">
 		<slot></slot>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "Tab",
+	name: "TemplateTab",
 	props: {
 		name: {
 			type: String,
@@ -22,11 +22,15 @@ export default {
 			isActive: false,
 		};
 	},
-	mounted() {
+	created() {
 		this.isActive = this.selected;
 	},
 };
 </script>
 <style lang="scss" scoped>
 @import "@variables";
+#tab-content {
+	width: 100%;
+	overflow-wrap: normal;
+}
 </style>

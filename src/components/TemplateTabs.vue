@@ -19,14 +19,14 @@
 
 <script>
 export default {
-	name: "Tabs",
+	name: "TemplateTabs",
 
 	data() {
 		return {
 			tabs: [],
 		};
 	},
-	created() {
+	mounted() {
 		this.tabs = this.$children;
 	},
 	methods: {
@@ -46,37 +46,37 @@ ul {
 }
 ul.tabs {
 	width: 100%;
-	border-bottom: 2px solid rgb(234, 234, 234);
 	margin-bottom: 24px;
+	border-bottom: 2px solid rgb(234, 234, 234);
 	li {
-		display: inline-block;
-		padding: 8px;
-		height: 40px;
 		box-sizing: border-box;
+		display: inline-block;
+		height: 40px;
+		padding: 8px;
 		list-style: none;
 		cursor: pointer;
 		a {
 			display: block;
-			height: 100%;
 			width: 100%;
-			color: #707070;
-			font-weight: 600;
+			height: 100%;
 			font-size: 14px;
+			font-weight: 600;
+			color: #707070;
 		}
 		&.is-active {
 			position: relative;
 			a {
 				color: #000;
 			}
-			&:after {
-				content: " ";
-				height: 2px;
-				width: 100%;
+			&::after {
 				position: absolute;
 				bottom: -2px;
 				left: 0;
-				background: rgb(167, 167, 167);
 				z-index: 100;
+				width: 100%;
+				height: 2px;
+				content: " ";
+				background: rgb(167, 167, 167);
 			}
 		}
 	}
