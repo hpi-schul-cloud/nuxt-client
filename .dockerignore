@@ -8,4 +8,4 @@ compose-nuxt-test.dummy
 deploy.sh
 node_modules
 travis_rsa.enc
-
+.nuxt

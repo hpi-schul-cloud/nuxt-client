@@ -75,7 +75,7 @@ export default {
 
 	flex: 1;
 	margin: 0;
-	font-size: $size-text * 1.5;
+	font-size: 2em;
 	text-transform: capitalize;
 }
 .action {

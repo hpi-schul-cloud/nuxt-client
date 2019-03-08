@@ -1,6 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope, react/no-this-in-sfc */
 
 import { storiesOf } from "@storybook/vue";
+import outdent from "outdent";
+
 import LandingCTA from "@components/TemplateLandingCTA";
 import StepProgress from "@components/StepProgress";
 
@@ -26,13 +28,12 @@ storiesOf("Onboarding", module).add("Landing CTA", () => ({
 
 storiesOf("Wizard", module).add("StepProgress", () => ({
 	components: { StepProgress },
-	template: `
-<div>
-	<StepProgress :steps="progressSteps" :currentStep="0"/>
-	<StepProgress :steps="progressSteps" :currentStep="1"/>
-	<StepProgress :steps="progressSteps" :currentStep="2"/>
-</div>
-		`,
+	template: outdent`
+		<div>
+			<StepProgress :steps="progressSteps" :currentStep="0"/>
+			<StepProgress :steps="progressSteps" :currentStep="1"/>
+			<StepProgress :steps="progressSteps" :currentStep="2"/>
+		</div>`,
 	data: () => ({
 		progressSteps: steps,
 	}),
