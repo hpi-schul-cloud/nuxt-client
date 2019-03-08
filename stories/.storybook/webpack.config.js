@@ -14,13 +14,20 @@ module.exports = {
 				loaders: ["style-loader", "css-loader", "sass-loader"],
 				include: path.resolve(__dirname, "../../"),
 			},
-			{
-				test: /\.css$/,
-				use: ["style-loader", "css-loader"],
-			},
+			/* // we are not using it in our nuxt config, so why here.
 			{
 				test: /\.svg$/,
 				loader: "vue-svg-loader",
+			},
+			*/
+			{
+				test: /\.(png|jpg|gif)$/,
+				use: [
+					{
+						loader: "file-loader",
+						options: {},
+					},
+				],
 			},
 		],
 	},

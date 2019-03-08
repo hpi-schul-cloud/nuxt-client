@@ -1,10 +1,12 @@
 module.exports = function(api) {
-	api.cache(true);
+	if (api && api.cache) {
+		api.cache(true);
+	}
 
 	if (process.env.NODE_ENV === "test") {
 		return {
 			presets: ["@babel/preset-env"],
-			plugins: [],
+			plugins: ["@babel/plugin-syntax-dynamic-import"],
 		};
 	}
 

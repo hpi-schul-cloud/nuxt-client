@@ -59,6 +59,7 @@ export default {
 <style lang="scss" scoped>
 .footer {
 	width: 100%;
+	margin-top: 30px;
 }
 .content {
 	text-align: center;

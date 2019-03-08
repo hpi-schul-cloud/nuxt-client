@@ -1,18 +1,18 @@
 <template>
 	<div>
 		<section class="section">
-			<button
-				class="button is-info"
-				@click="$router.push({ name: 'courses-create' })"
-				>Neues Kurs erstellen</button
-			>
-		</section>
-		<section class="section">
 			<div class="grid">
 				<div v-for="(course, i) of courses" :key="i" class="tile">
 					<CourseCard :course="course" />
 				</div>
 			</div>
+		</section>
+		<section class="section">
+			<BaseButton
+				class="button is-info"
+				@click="$router.push({ name: 'courses-create' })"
+				>Neuen Kurs erstellen
+			</BaseButton>
 		</section>
 	</div>
 </template>

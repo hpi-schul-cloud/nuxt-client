@@ -2,14 +2,17 @@
 to: "<%= story ? ('stories/' + name + '.stories.js') : null %>"
 ---
 import { storiesOf } from "@storybook/vue";
-import { withMarkdownNotes } from "@storybook/addon-notes";
+import outdent from "outdent";
+
+import notes from "@docs/components/<%= name %>.md";
 import <%= name %> from "@components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>.vue";
-import <%= name %>Doc from "@docs/components/<%= name %>.md";
 
 storiesOf("<%= name %>", module)
-	.addDecorator(withMarkdownNotes(<%= name %>Doc))
+	.addParameters({
+		notes,
+	})
 	.add("<%= name %>", () => ({
 		components: { <%= name %> },
-		template: "",
+		template: outdent`<<%= name %> />`,
 		methods: {},
 	}));
