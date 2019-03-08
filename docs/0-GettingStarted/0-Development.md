@@ -106,7 +106,7 @@ The linter is configured to use the --fix option by default. So in most cases yo
 
 ### more Tools
 
-We have [a seperate page](/2-Tools.html) for our other tools
+We have [a seperate page](/2-Tools.md) for our other tools
 
 ## Aliases
 
