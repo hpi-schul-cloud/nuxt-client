@@ -1,8 +1,20 @@
 import Vue from "vue";
+
+// Toasts
+import Toasted from "vue-toasted";
+Vue.prototype.$toast = Toasted;
+Vue.use(Toasted, { duration: 3000 });
+Vue.use({
+	install: function(Vue, options) {
+		Vue.prototype.$toast = Vue.prototype.$toasted;
+	},
+});
+
+// Nuxt Components
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 
-function mock(name, template) {
+function mockComponent(name, template) {
 	const componentName = upperFirst(camelCase(name));
 	Vue.component(componentName, {
 		name: componentName,
@@ -18,5 +30,5 @@ const mockComponents = {
 };
 
 Object.keys(mockComponents).forEach((componentName) =>
-	mock(componentName, mockComponents[componentName])
+	mockComponent(componentName, mockComponents[componentName])
 );
