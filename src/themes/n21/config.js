@@ -1,4 +1,4 @@
-const images = "/theme/images/";
+const images = "/images/";
 
 export default {
 	name: "Niedersächsische Bildungscloud",
