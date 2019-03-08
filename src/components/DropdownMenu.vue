@@ -2,21 +2,26 @@
 	<div
 		class="dropdown"
 		tabindex="0"
+		:aria-expanded="open"
+		:aria-controls="`dropdown-content-${$uid}`"
 		@mouseenter="open = true"
 		@mouseleave="open = false"
 		@focus="open = true"
 		@blur="open = false"
 	>
 		<div class="button">{{ title }}</div>
-		<div class="content" :class="{ open }">
+		<div :id="`dropdown-content-${$uid}`" class="content" :class="{ open }">
 			<slot class="link" />
 		</div>
 	</div>
 </template>
 
 <script>
+import uidMixin from "@components/uidMixin";
+
 export default {
 	name: "DropdownMenu",
+	mixins: [uidMixin],
 	props: {
 		title: {
 			type: String,
