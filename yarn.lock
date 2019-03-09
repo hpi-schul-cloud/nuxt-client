@@ -11937,10 +11937,10 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nuxt-babel@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/nuxt-babel/-/nuxt-babel-0.1.2.tgz#925e64d4fe25128a52c8e4db6bf48d10129ae694"
-  integrity sha512-U34mGI0l8dSU+6qWMS/GAMuE77CpEld13OZEx2qs0FJjFzLxcXPqeAC8e0jMD26NHXAOZXBl0QdQHjdEmcoIuA==
+nuxt-babel@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/nuxt-babel/-/nuxt-babel-1.0.0.tgz#b0d5b4c805ee4417e4e67f436759801335594d9f"
+  integrity sha512-OsojlgmFDIcWRT3KUw5Ift3DkDAHeH1tV27udWYwR4JEiP5uRUwUOC7m3wKKAsqcEzdXawHFKD6tRvdi+JgQCA==
   dependencies:
     find-babel-config "^1.1.0"
 
