@@ -27,8 +27,8 @@ module.exports = {
 		link: [
 			{
 				rel: "icon",
-				type: "image/x-icon",
-				href: "/favicon.ico",
+				type: "image/png",
+				href: "/images/logo/favicon-32.png",
 			},
 			{
 				rel: "stylesheet",
@@ -99,6 +99,9 @@ module.exports = {
 		 */
 		extend(config, ctx) {
 			config.resolve.alias = require("./aliases.config").webpack;
+			/*
+			// this is breaking normal svg image loading
+			// https://www.npmjs.com/package/vue-svg-loader
 			const svgRule = config.module.rules.find((rule) =>
 				rule.test.test(".svg")
 			);
@@ -109,6 +112,7 @@ module.exports = {
 				test: /\.svg$/,
 				loader: "vue-svg-loader",
 			});
+			*/
 			// Run ESLint on save
 			if (ctx.isDev && ctx.isClient) {
 				config.module.rules.push({

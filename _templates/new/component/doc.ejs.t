@@ -1,4 +1,4 @@
 ---
-to: "docs/stories/<%= name %>.md"
+to: "<%= story ? ('docs/storybook/' + name + '.md') : null %>"
 ---
 # <%= name %>
