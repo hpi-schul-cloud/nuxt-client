@@ -8669,10 +8669,10 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-hygen@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/hygen/-/hygen-3.0.0.tgz#c723d54569a310c486af39e533cb18e48096b16f"
-  integrity sha512-qZrCfGYb8RPN95ea04M/KWzguntrHwKxQDNesTiGKJ1nHHxB20M3NagO7QYwt8ztubESLR0xtamMZCeTMDvibg==
+hygen@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/hygen/-/hygen-4.0.1.tgz#794760ff24fcc4649f4fbf4f8cf35637531610d6"
+  integrity sha512-0DbPaieA773zFe37GRYcWpX7nea1UFOm6XrJzSHY7RIBGpOhh2RBv3wr63E6maU10xiZ3x6UGpDuDq+oJUtJig==
   dependencies:
     chalk "^2.4.1"
     change-case "^3.0.2"
