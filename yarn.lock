@@ -8669,10 +8669,10 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-hygen@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/hygen/-/hygen-3.0.0.tgz#c723d54569a310c486af39e533cb18e48096b16f"
-  integrity sha512-qZrCfGYb8RPN95ea04M/KWzguntrHwKxQDNesTiGKJ1nHHxB20M3NagO7QYwt8ztubESLR0xtamMZCeTMDvibg==
+hygen@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/hygen/-/hygen-4.0.1.tgz#794760ff24fcc4649f4fbf4f8cf35637531610d6"
+  integrity sha512-0DbPaieA773zFe37GRYcWpX7nea1UFOm6XrJzSHY7RIBGpOhh2RBv3wr63E6maU10xiZ3x6UGpDuDq+oJUtJig==
   dependencies:
     chalk "^2.4.1"
     change-case "^3.0.2"
@@ -17541,10 +17541,10 @@ webpack-chain@^4.11.0, webpack-chain@^4.6.0:
     deepmerge "^1.5.2"
     javascript-stringify "^1.6.0"
 
-webpack-dev-middleware@^3.0.0, webpack-dev-middleware@^3.5.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-3.6.1.tgz#91f2531218a633a99189f7de36045a331a4b9cd4"
-  integrity sha512-XQmemun8QJexMEvNFbD2BIg4eSKrmSIMrTfnl2nql2Sc6OGAYFyb8rwuYrCjl/IiEYYuyTEiimMscu7EXji/Dw==
+webpack-dev-middleware@3.6.0, webpack-dev-middleware@^3.0.0, webpack-dev-middleware@^3.5.1:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-3.6.0.tgz#71f1b04e52ff8d442757af2be3a658237d53a3e5"
+  integrity sha512-oeXA3m+5gbYbDBGo4SvKpAHJJEGMoekUbHgo1RK7CP1sz7/WOSeu/dWJtSTk+rzDCLkPwQhGocgIq6lQqOyOwg==
   dependencies:
     memory-fs "^0.4.1"
     mime "^2.3.1"
