@@ -12,11 +12,12 @@ storiesOf("TemplateTabs", module)
 	.add("Template tabs", () => ({
 		components: { TemplateTabs, TemplateTab },
 		template: outdent`
-		<TemplateTabs>
-			<TemplateTab name="Tab 1" :selected="true">Test</TemplateTab>
-			<TemplateTab name="Tab 2">Test2</TemplateTab>
-			<TemplateTab name="Tab 3">Test 3 lorum ipsum test</TemplateTab>
-		</TemplateTabs>`,
+			<TemplateTabs>
+				<TemplateTab name="Tab 1" :selected="true">Test</TemplateTab>
+				<TemplateTab name="Tab 2">Test2</TemplateTab>
+				<TemplateTab name="Tab 3">Test 3 lorum ipsum test</TemplateTab>
+			</TemplateTabs>
+		`,
 		methods: {},
 	}))
 	.add("Template tab content", () => ({

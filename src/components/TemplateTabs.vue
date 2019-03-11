@@ -20,7 +20,6 @@
 <script>
 export default {
 	name: "TemplateTabs",
-
 	data() {
 		return {
 			tabs: [],
