@@ -43,7 +43,13 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: '<BaseIcon icon="trash"/>',
+		template: outdent`
+			<div>
+				<BaseIcon icon="trash"/>
+				<BaseIcon source="custom" icon="clock"/>
+				<BaseIcon source="custom" icon="shuttle"/>
+			</div>
+		`,
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },

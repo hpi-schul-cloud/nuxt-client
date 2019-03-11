@@ -7,7 +7,8 @@
 	<span
 		v-else-if="source === 'custom'"
 		v-bind="$attrs"
-		:class="customIconClass"
+		class="custom-icon"
+		:style="customIconStyle"
 	/>
 </template>
 
@@ -36,12 +37,40 @@ export default {
 			required: true,
 		},
 	},
+	data() {
+		return {
+			svgPath: undefined,
+		};
+	},
 	computed: {
 		// Gets a CSS module class, e.g. iconCustomLogo
-		customIconClass() {
-			// TODO
-			return this.$style[camelCase("icon-custom-" + this.icon)];
+		customIconStyle() {
+			return {
+				"background-image": `url(${this.svgPath})`,
+			};
+		},
+	},
+	created() {
+		if (this.source === "custom") {
+			this.loadIcon(this.icon);
+		}
+	},
+	methods: {
+		loadIcon(iconName) {
+			import(`@assets/icons/${iconName}.svg`).then((iconPath) => {
+				this.svgPath = iconPath.default;
+			});
 		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.custom-icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	background-position: center;
+	background-size: contain;
+}
+</style>
