@@ -14,7 +14,7 @@ Zusätzlich haben wir einige global verfügbare Matcher eingeführt.
 
 `.toBeAComponent()`, `.toBeAViewComponent()`, ... (siehe `/tests/unit/matchers.js`)
 
-Für die Häufigsten Tests gibt es ebenfalls hilfsfunktionen. Zu finden unter `/tests/unit/commonTests.js`
+Für die Häufigsten Tests gibt es ebenfalls Hilfsfunktionen. Zu finden unter [`/tests/unit/commonTests.js`](https://github.com/schul-cloud/nuxt-client/blob/aj/improve-test-coverage/tests/unit/commonTests.js)
 
 ### Development Script
 
