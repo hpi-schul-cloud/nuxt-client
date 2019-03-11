@@ -44,7 +44,7 @@ cd ..
 yarn dev
 ```
 
-You can find all commands inside the [package.json](./package.json).
+You can find all commands inside the [package.json](https://github.com/schul-cloud/nuxt-client/blob/master/package.json) under the `scripts` section.
 
 ### Nuxt
 
@@ -83,7 +83,7 @@ For detailed explanation on how things work, checkout [Storybook](https://storyb
 ### Unit Tests
 
 ```bash
-# Run all unit tests
+# Run all (unit) tests
 yarn test
 ```
 

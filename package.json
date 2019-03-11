@@ -93,7 +93,7 @@
 		"eslint-loader": "^2.0.0",
 		"eslint-plugin-prettier": "^3.0.1",
 		"eslint-plugin-vue": "^5.2.1",
-		"hygen": "^3.0.0",
+		"hygen": "^4.0.1",
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^24.1.0",
 		"jest-serializer-vue": "^2.0.2",
@@ -119,6 +119,9 @@
 		"vue-svg-loader": "^0.11.0",
 		"vuepress": "^0.14.8",
 		"yorkie": "^2.0.0"
+	},
+	"resolutions": {
+		"webpack-dev-middleware": "3.6.0"
 	},
 	"engines": {
 		"node": ">=10.x.x",
