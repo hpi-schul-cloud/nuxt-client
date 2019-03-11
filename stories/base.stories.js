@@ -1,13 +1,12 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 
-import notes from "@docs/components/base.md";
+import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
 import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
-import BaseToast from "@components/ui/BaseToast.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
@@ -55,11 +54,16 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Switch", () => ({
 		components: { BaseInput },
-		template: '<BaseInput type="checkbox" />',
+		data: () => ({ toggled: "" }),
+		template: `<BaseInput type="checkbox" v-model="toggled" />`,
 	}))
 	.add("Base Radio Button", () => ({
 		components: { BaseInput },
-		template: `<div><BaseInput type="radio" name="choise" value="me" id="radio1">Pick me!</BaseInput> <BaseInput type="radio" name="choise" value="notMe" id="radio2">Don't pick me.</BaseInput></div>`,
+		template: outdent`
+			<div>
+				<BaseInput type="radio" name="choice" value="me" id="radio1">Pick me!</BaseInput>
+				<BaseInput type="radio" name="choice" value="notMe" id="radio2">Don't pick me.</BaseInput>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Input Date", () => ({
@@ -85,8 +89,13 @@ storiesOf("Base Components", module)
 		methods: {},
 	}))
 	.add("Base Toast", () => ({
-		components: { BaseToast },
-		template: "<BaseToast />",
+		components: { BaseButton },
+		template: `
+			<div>
+				<BaseButton class="is-primary" @click="$toast.success('Success! :)')">Success</BaseButton>
+				<BaseButton class="is-secondary" @click="$toast.error('Error! :(')">Error</BaseButton>
+			</div>
+		`,
 	}))
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
@@ -114,7 +123,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
-		template: `<BaseBreadcrumb :inputs="[{text: 'Home', href:'#'}, {text: 'Kurse', href:'#'}, 'Mathematik']"></BaseBreadcrumb>`,
+		template: `<BaseBreadcrumb :inputs="[{text: 'Home', to:'/'}, {text: 'Kurse', href:'https://schul-cloud.org'}, 'Mathematik']"></BaseBreadcrumb>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",

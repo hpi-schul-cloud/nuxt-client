@@ -1,8 +1,15 @@
 <template>
-	<a v-if="href" :href="href" v-bind="$attrs" target="_blank">
+	<a
+		v-if="href"
+		class="link"
+		:href="href"
+		v-bind="$attrs"
+		target="_blank"
+		rel="noreferrer"
+	>
 		<slot />
 	</a>
-	<NuxtLink v-else :to="routerLinkTo" v-bind="$attrs">
+	<NuxtLink v-else class="link" :to="routerLinkTo" v-bind="$attrs">
 		<slot />
 	</NuxtLink>
 </template>
@@ -90,8 +97,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@variables";
-a {
+.link {
 	color: $color-link;
+	text-decoration: underline;
+	cursor: pointer;
 	&:active {
 		color: $color-link-active;
 	}
