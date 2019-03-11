@@ -1,36 +1,20 @@
 <template>
-	<FontAwesomeIcon
-		v-if="source === 'font-awesome'"
-		v-bind="$attrs"
-		:icon="icon"
-	/>
 	<span
-		v-else-if="source === 'custom'"
 		v-bind="$attrs"
-		class="custom-icon"
+		class="icon"
+		aria-hidden="true"
 		:style="customIconStyle"
 	/>
 </template>
 
 <script>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { library as fontAwesomeIconLibrary } from "@fortawesome/fontawesome-svg-core";
-import camelCase from "lodash/camelCase";
-
-// https://fontawesome.com/icons
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-fontAwesomeIconLibrary.add(faTrash);
-
 export default {
 	name: "BaseIcon",
-	components: {
-		FontAwesomeIcon,
-	},
 	inheritAttrs: false,
 	props: {
 		source: {
 			type: String,
-			default: "font-awesome",
+			default: "material",
 		},
 		icon: {
 			type: String,
@@ -39,7 +23,7 @@ export default {
 	},
 	data() {
 		return {
-			svgPath: undefined,
+			svgPath: "",
 		};
 	},
 	computed: {
@@ -51,25 +35,48 @@ export default {
 		},
 	},
 	created() {
-		if (this.source === "custom") {
-			this.loadIcon(this.icon);
-		}
+		this.loadIcon();
 	},
 	methods: {
-		loadIcon(iconName) {
-			import(`@assets/icons/${iconName}.svg`).then((iconPath) => {
-				this.svgPath = iconPath.default;
-			});
+		loadIcon() {
+			if (this.source === "custom") {
+				// @assets/icons
+				return import(`@assets/icons/${this.icon}.svg`).then((iconPath) => {
+					this.svgPath = iconPath.default;
+				});
+			}
+			if (this.source === "material") {
+				// https://material.io/tools/icons/?style=baseline
+				return import(`material-icons-svg/icons/baseline-${
+					this.icon
+				}-24px.svg`).then((iconPath) => {
+					this.svgPath = iconPath.default;
+				});
+			}
+			// Font Awesome
+			/* if (this.source === "font-awesome") {
+				// https://fontawesome.com/icons
+				const iconName = this.icon.charAt(0).toUpperCase() + this.icon.slice(1);
+				return import(`@fortawesome/free-solid-svg-icons/fa${iconName}`).then(
+					(iconData) => {
+						const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${
+							iconData.width
+						} ${iconData.height}"><path d="${iconData.svgPathData}"/></svg>`;
+						this.svgPath = `data:image/svg+xml;base64,${btoa(svgIcon)}`;
+					}
+				);
+			}*/
 		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-.custom-icon {
+.icon {
 	display: inline-block;
 	width: 1em;
 	height: 1em;
+	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
 }

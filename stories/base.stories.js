@@ -45,9 +45,9 @@ storiesOf("Base Components", module)
 		components: { BaseIcon },
 		template: outdent`
 			<div>
-				<BaseIcon icon="trash"/>
+				<BaseIcon source="material" icon="home"/>
 				<BaseIcon source="custom" icon="clock"/>
-				<BaseIcon source="custom" icon="shuttle"/>
+				<BaseIcon source="custom" icon="tasks" style="font-size: 2em" />
 			</div>
 		`,
 	}))
