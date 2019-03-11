@@ -85,7 +85,12 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: '<BaseLink href="/"> Link content</BaseLink>',
+		template: outdent`
+			<div>
+				<BaseLink href="https://schul-cloud.org">external Link to https://schul-cloud.org</BaseLink>
+				<BaseLink to="/news">Internal Link to /news</BaseLink>
+				<BaseLink name="news">Internal Link with name "news"</BaseLink>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Toast", () => ({

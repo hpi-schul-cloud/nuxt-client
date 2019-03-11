@@ -4,8 +4,25 @@ describe("@components/BaseLink", () => {
 	it(...isValidComponent(BaseLink));
 	it(
 		...rendersDefaultSlotContent(BaseLink, {
+			...createComponentMocks({ router: true }),
 			propsData: {
 				href: "https://schul-cloud.org",
+			},
+		})
+	);
+	it(
+		...rendersDefaultSlotContent(BaseLink, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				to: "/news",
+			},
+		})
+	);
+	it(
+		...rendersDefaultSlotContent(BaseLink, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				name: "news",
 			},
 		})
 	);
@@ -20,17 +37,60 @@ describe("@components/BaseLink", () => {
 		expect(element.tagName).toEqual("A");
 	});
 
-	it("renders NuxtLink-tag for external links", () => {
-		createComponentMocks("NuxtLink");
+	it("renders NuxtLink-tag for internal :to links", () => {
 		const { element } = shallowMount(BaseLink, {
-			...createComponentMocks({
-				stubs: ["NuxtLink"],
-			}),
+			...createComponentMocks({ router: true }),
 			propsData: {
 				to: "/news",
 			},
 		});
 		expect(element.getAttribute("to")).toEqual("/news");
 		expect(element.tagName).not.toEqual("A");
+	});
+
+	it("renders NuxtLink-tag for internal links by name", () => {
+		const { element } = shallowMount(BaseLink, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				name: "news",
+			},
+		});
+		expect(element.tagName).not.toEqual("A");
+	});
+
+	it("log warning for internal href links", () => {
+		let outputData = "";
+		console.warn = jest.fn((inputs) => (outputData += inputs));
+
+		const { element } = shallowMount(BaseLink, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				href: "/news",
+			},
+		});
+		expect(outputData).toContain("Invalid href");
+	});
+
+	it("log warning for insecure external urls", () => {
+		let outputData = "";
+		console.warn = jest.fn((inputs) => (outputData += inputs));
+
+		const { element } = shallowMount(BaseLink, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				href: "http://schul-cloud.org",
+			},
+		});
+		expect(outputData).toContain("Insecure href");
+	});
+
+	it("log warning for invalid props", () => {
+		let outputData = "";
+		console.warn = jest.fn((inputs) => (outputData += inputs));
+
+		const { element } = shallowMount(BaseLink, {
+			...createComponentMocks({ router: true }),
+		});
+		expect(outputData).toContain("Invalid props");
 	});
 });

@@ -2,7 +2,7 @@ import Vue from "vue";
 //import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
-//import axios from "axios";
+import commonTest from "./commonTests.js";
 
 // ===
 // Utility functions
@@ -181,7 +181,9 @@ global.createModuleStore = (vuexModule, options = {}) => {
 };
 */
 
-import commonTest from "./commonTests.js";
+// ===
+// Common tests
+// ===
 for (name in commonTest) {
 	global[name] = commonTest[name];
 }
