@@ -1,7 +1,7 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 
-import notes from "@docs/components/base.md";
+import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
