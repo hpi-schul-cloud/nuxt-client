@@ -145,8 +145,8 @@ global.createComponentMocks = ({ store, router, style, mocks, stubs }) => {
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
 	if (router) {
-		returnOptions.stubs["nuxt-link"] = true;
-		returnOptions.stubs["nuxt"] = true;
+		returnOptions.stubs["NuxtLink"] = true;
+		returnOptions.stubs["Nuxt"] = true;
 	}
 	/*
 	// If a `style` object is provided, mock some styles.
