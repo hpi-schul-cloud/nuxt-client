@@ -26,6 +26,13 @@ yarn test:unit:watch
 
 Anschließend werden die entsprechenden Tests die geändert wurden automatisch geprüft.
 
+#### Debugging von Tests
+
+Für Visual Studio Code liegen Debug Konfigurationen Bereit (`.vscode/launch.json`). Wenn die Tests mit diesen gestartet werden, können Breakpoints gesetzt werden und der Test mit allen VS-Code debug features debuggt werden.
+
+- `Test (unit) All`: Lässt alle Unit Tests nacheinander laufen und hält an entsprechenden Breakpoints an.
+- `Test (unit) Current File`: Lässt alle Tests in der aktuell fokussierten Datei laufen und stoppt an entsprechenden Breakpoints.
+
 ### Beispieltest
 
 ```js

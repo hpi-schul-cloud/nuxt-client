@@ -4,7 +4,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Jest All",
+			"name": "Test (unit) All",
 			"program": "${workspaceFolder}/node_modules/.bin/jest",
 			"args": ["--runInBand"],
 			"console": "integratedTerminal",
@@ -17,7 +17,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Jest Current File",
+			"name": "Test (unit) Current File",
 			"program": "${workspaceFolder}/node_modules/.bin/jest",
 			"args": ["${relativeFile}", "--config", "jest.config.js"],
 			"console": "integratedTerminal",
