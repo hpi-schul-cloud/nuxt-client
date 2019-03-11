@@ -5,7 +5,12 @@ import { outdent } from "~/node_modules/outdent/lib/index";
 
 const tabs = {
 	components: { TemplateTabs, TemplateTab },
-	template: outdent`<TemplateTabs> <TemplateTab name="Tab 1" :selected=true>Test</TemplateTab><TemplateTab name="Tab 2">Test2</TemplateTab><TemplateTab name="Tab 3">Test 3 lorum ipsum test</TemplateTab></TemplateTabs>`,
+	template: outdent`
+		<TemplateTabs>
+			<TemplateTab name="Tab 1" :selected=true>Test</TemplateTab>
+			<TemplateTab name="Tab 2">Test2</TemplateTab>
+			<TemplateTab name="Tab 3">Test 3 lorum ipsum test with a long line of text</TemplateTab>
+		</TemplateTabs>`,
 };
 
 describe("@components/TemplateTabs", () => {
