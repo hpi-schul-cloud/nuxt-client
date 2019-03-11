@@ -9,13 +9,12 @@ env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
-    - NODE_ENV=production
     - SC_THEME=default
     - API_HOST=http://localhost:3030
 before_install:
-- openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
+  - openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
 install:
-  - git submodule init && git submodule update
+  - yarn global add codecov
   - cd schulcloud-client && npm i && cd ..
   - yarn install --production=false
 #before_script:
@@ -23,6 +22,7 @@ install:
 #  - docker run -d -p 3030:3030 schulcloud/schulcloud-server
 script:
   - yarn ci
+  - codecov
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 notifications:
   email: false
@@ -35,6 +35,5 @@ deploy:
   provider: script
   script: bash ./deploy.sh
   on:
-   all_branches: true
-   condition: $TRAVIS_BRANCH =~ ^story.*|nuxt.*|doc*|master$
-
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^story.*|nuxt.*|doc*|master$
