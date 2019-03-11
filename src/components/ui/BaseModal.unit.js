@@ -52,4 +52,12 @@ describe("@components/BaseModal", () => {
 		wrapper.find("#button").trigger("click");
 		expect(wrapper.find("#button").exists()).toBe(false);
 	});
+
+	it("pressing outside the model content should close the modal", () => {
+		const wrapper = mount(modal);
+		wrapper.vm.active = true;
+		expect(wrapper.find("#button").exists()).toBe(true);
+		wrapper.find(".modal-wrapper").trigger("mousedown");
+		expect(wrapper.find("#button").exists()).toBe(false);
+	});
 });
