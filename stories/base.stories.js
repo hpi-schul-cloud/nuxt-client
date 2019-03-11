@@ -109,18 +109,18 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
-		template: `
-<BaseTable>
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-    </tr>
-    <tr>
-        <td>Peter</td>
-        <td>Griffin</td>
-    </tr>
-</BaseTable>
-        `,
+		template: outdent`
+			<BaseTable>
+					<tr>
+							<th>Firstname</th>
+							<th>Lastname</th>
+					</tr>
+					<tr>
+							<td>Peter</td>
+							<td>Griffin</td>
+					</tr>
+			</BaseTable>
+		`,
 	}))
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
