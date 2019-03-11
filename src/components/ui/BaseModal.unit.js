@@ -26,9 +26,14 @@ const modal = {
 };
 
 describe("@components/BaseModal", () => {
-	it("exports a valid component", () => {
-		expect(BaseModal).toBeAComponent();
-	});
+	it(...isValidComponent(BaseModal));
+	it(
+		...rendersDefaultSlotContent(BaseModal, {
+			propsData: {
+				active: true,
+			},
+		})
+	);
 
 	it("changing the active property should open and close the modal", () => {
 		const wrapper = mount(modal);

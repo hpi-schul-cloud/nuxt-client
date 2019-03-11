@@ -14,6 +14,8 @@ Zusätzlich haben wir einige global verfügbare Matcher eingeführt.
 
 `.toBeAComponent()`, `.toBeAViewComponent()`, ... (siehe `/tests/unit/matchers.js`)
 
+Für die Häufigsten Tests gibt es ebenfalls hilfsfunktionen. Zu finden unter `/tests/unit/commonTests.js`
+
 ### Development Script
 
 Zum schreiben von unit-tests ist es empfehlenswert mit folgendem Kommando zu starten:

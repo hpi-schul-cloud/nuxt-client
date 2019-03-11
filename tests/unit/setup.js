@@ -180,3 +180,8 @@ global.createModuleStore = (vuexModule, options = {}) => {
 	return store;
 };
 */
+
+import commonTest from "./commonTests.js";
+for (name in commonTest) {
+	global[name] = commonTest[name];
+}

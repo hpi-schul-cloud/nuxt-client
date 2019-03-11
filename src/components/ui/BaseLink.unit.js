@@ -1,22 +1,14 @@
 import BaseLink from "./BaseLink";
 
 describe("@components/BaseLink", () => {
-	it("exports a valid component", () => {
-		expect(BaseLink).toBeAComponent();
-	});
-
-	it("renders its content", () => {
-		const slotContent = "<p>Hello!</p>";
-		const { element } = shallowMount(BaseLink, {
+	it(...isValidComponent(BaseLink));
+	it(
+		...rendersDefaultSlotContent(BaseLink, {
 			propsData: {
 				href: "https://schul-cloud.org",
 			},
-			slots: {
-				default: slotContent,
-			},
-		});
-		expect(element.innerHTML).toContain(slotContent);
-	});
+		})
+	);
 
 	it("renders a-tag for external links", () => {
 		const { element } = shallowMount(BaseLink, {

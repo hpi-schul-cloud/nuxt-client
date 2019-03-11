@@ -1,9 +1,7 @@
 import BaseBreadcrumb from "./BaseBreadcrumb";
 
 describe("@components/BaseBreadcrumb", () => {
-	it("exports a valid component", () => {
-		expect(BaseBreadcrumb).toBeAComponent();
-	});
+	it(...isValidComponent(BaseBreadcrumb));
 
 	it("renders BaseLink for Links", () => {
 		const internalLink = { to: "/", text: "internal" };
