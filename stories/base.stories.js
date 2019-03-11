@@ -73,6 +73,13 @@ storiesOf("Base Components", module)
 			'<BaseInput value="" type="date" v-model="content" label="Datum" placeholder="21.02.2019" name="date"/>',
 		methods: {},
 	}))
+	.add("Base Input Time", () => ({
+		components: { BaseInput },
+		data: () => ({ content: "" }),
+		template:
+			'<BaseInput value="" type="time" v-model="content" label="Uhrzeit" name="someTime"/>',
+		methods: {},
+	}))
 	.add("Base Select MultiSelect", () => ({
 		components: { BaseSelect },
 		data: () => ({
@@ -80,7 +87,27 @@ storiesOf("Base Components", module)
 			options: multioptions,
 		}),
 		template:
-			'<BaseSelect v-model="content" :options="options" track-by="_id" label="name"/>',
+			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name"/>',
+		methods: {},
+	}))
+	.add("Base Select MultiSelect", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			content: [],
+			options: multioptions,
+		}),
+		template:
+			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name" placeholder="Mehrere Inhalte auswählen"/>',
+		methods: {},
+	}))
+	.add("Base Select", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			content: [],
+			options: multioptions,
+		}),
+		template:
+			'<BaseSelect :value.sync="content" :options="options" track-by="_id" label="name" placeholder="Etwas auswählen"/>',
 		methods: {},
 	}))
 	.add("Base Link", () => ({
@@ -108,18 +135,18 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
-		template: `
-<BaseTable>
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-    </tr>
-    <tr>
-        <td>Peter</td>
-        <td>Griffin</td>
-    </tr>
-</BaseTable>
-        `,
+		template: outdent`
+			<BaseTable>
+					<tr>
+							<th>Firstname</th>
+							<th>Lastname</th>
+					</tr>
+					<tr>
+							<td>Peter</td>
+							<td>Griffin</td>
+					</tr>
+			</BaseTable>
+		`,
 	}))
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
