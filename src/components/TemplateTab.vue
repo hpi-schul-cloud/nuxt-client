@@ -1,5 +1,5 @@
 <template>
-	<div v-show="isActive" id="tab-content">
+	<div v-show="isActive" class="tab-content">
 		<slot></slot>
 	</div>
 </template>
@@ -29,7 +29,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@variables";
-#tab-content {
+.tab-content {
 	width: 100%;
 	overflow-wrap: normal;
 }

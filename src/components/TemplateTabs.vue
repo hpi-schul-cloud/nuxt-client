@@ -6,9 +6,9 @@
 				:key="index"
 				:class="{ 'is-active': tab.isActive }"
 			>
-				<a @click="selectTab(tab)">
+				<button class="tab-button" @click="selectTab(tab)">
 					<span>{{ tab.name }}</span>
-				</a>
+				</button>
 			</li>
 		</ul>
 		<div class="tabs-details">
@@ -54,17 +54,19 @@ ul.tabs {
 		padding: 8px;
 		list-style: none;
 		cursor: pointer;
-		a {
+		.tab-button {
 			display: block;
 			width: 100%;
 			height: 100%;
 			font-size: 14px;
 			font-weight: 600;
 			color: #707070;
+			background: transparent;
+			border: 0;
 		}
 		&.is-active {
 			position: relative;
-			a {
+			.tab-button {
 				color: #000;
 			}
 			&::after {

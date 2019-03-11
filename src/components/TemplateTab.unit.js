@@ -16,10 +16,10 @@ describe("@components/TemplateTab", () => {
 	});
 	it("Shows when active", () => {
 		const wrapper = mount(tabContentShow);
-		expect(wrapper.find("#tab-content").isVisible()).toBe(true);
+		expect(wrapper.find(".tab-content").isVisible()).toBe(true);
 	});
 	it("Doesn't show when tab isn't active", () => {
 		const wrapper = mount(tabContentHide);
-		expect(wrapper.find("#tab-content").isVisible()).toBe(false);
+		expect(wrapper.find(".tab-content").isVisible()).toBe(false);
 	});
 });
