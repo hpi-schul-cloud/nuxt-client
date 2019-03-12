@@ -1,9 +1,7 @@
 import BaseInput from "./BaseInput";
 
 describe("@components/BaseInput", () => {
-	it("exports a valid component", () => {
-		expect(BaseInput).toBeAComponent();
-	});
+	it(...isValidComponent(BaseInput));
 
 	it("changing the element's value, updates the v-model", () => {
 		const testinput = "test-String";
