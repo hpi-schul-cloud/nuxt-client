@@ -6,98 +6,75 @@
 *     But this need to be discussed and should be avoided whenever possible,
 *     Vue Components should be standalone with a minimal amount of dependencies.
 */
+
+
 /* stylelint-disable */
 
 @import "@variables";
-
 @for $i from 1 through 6 {
-	h#{$i},
-	.h#{$i} {
-		margin: 0.75em 0 0.25em;
-		font-size: nth($size-heading-desktop, $i);
-
-		// Fluid typo according to the viewport
-		@media screen and (max-width: $size-tablet-max-width) {
-			@include typography-interpolate(
-				"font-size",
-				$size-mobile-max-width,
-				nth($size-heading-tablet, $i),
-				$size-tablet-max-width,
-				nth($size-heading-desktop, $i)
-			);
-		}
-
-		@media screen and (max-width: $size-mobile-max-width) {
-			@include typography-interpolate(
-				"font-size",
-				1px,
-				nth($size-heading-mobile, $i),
-				$size-mobile-max-width,
-				nth($size-heading-tablet, $i)
-			);
-		}
-
-		@extend %font-heading;
-	}
+    h#{$i},
+    .h#{$i} {
+        margin: 0.75em 0 0.25em;
+        font-size: nth($size-heading-desktop, $i);
+        // Fluid typo according to the viewport
+        @media screen and (max-width: $size-tablet-max-width) {
+            @include typography-interpolate( "font-size", $size-mobile-max-width, nth($size-heading-tablet, $i), $size-tablet-max-width, nth($size-heading-desktop, $i));
+        }
+        @media screen and (max-width: $size-mobile-max-width) {
+            @include typography-interpolate( "font-size", 1px, nth($size-heading-mobile, $i), $size-mobile-max-width, nth($size-heading-tablet, $i));
+        }
+        @extend %font-heading;
+    }
 }
 
 // TODO I think this doesn't do anything
 .page-enter-active,
 .page-leave-active {
-	transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out;
 }
 
 * {
-	box-sizing: border-box;
-	tab-size: 2;
+    box-sizing: border-box;
+    tab-size: 2;
 }
 
 html,
 body {
-	@extend %font-content;
-
-	@for $i from 1 through 2 {
-		.body#{$i} {
-			font-size: nth($size-text-desktop, $i);
-			// Fluid typo according to the viewport
-
-			@media screen and (max-width: $size-tablet-max-width) {
-				@include typography-interpolate(
-					"font-size",
-					$size-mobile-max-width,
-					nth($size-text-tablet, $i),
-					$size-tablet-max-width,
-					nth($size-text-desktop, $i)
-				);
-			}
-
-			@media screen and (max-width: $size-mobile-max-width) {
-				@include typography-interpolate(
-					"font-size",
-					1px,
-					nth($size-text-mobile, $i),
-					$size-mobile-max-width,
-					nth($size-text-tablet, $i)
-				);
-			}
-		}
-	}
-
-	width: 100%;
-	min-height: 100vh;
-	margin: 0;
+    @extend %font-content;
+    @for $i from 1 through 2 {
+        .body#{$i} {
+            font-size: nth($size-text-desktop, $i);
+            // Fluid typo according to the viewport
+            @media screen and (max-width: $size-tablet-max-width) {
+                @include typography-interpolate( "font-size", $size-mobile-max-width, nth($size-text-tablet, $i), $size-tablet-max-width, nth($size-text-desktop, $i));
+            }
+            @media screen and (max-width: $size-mobile-max-width) {
+                @include typography-interpolate( "font-size", 1px, nth($size-text-mobile, $i), $size-mobile-max-width, nth($size-text-tablet, $i));
+            }
+        }
+    }
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
 }
 
 input,
 select,
 textarea,
 button {
-	@extend %font-button;
+    @extend %font-button;
 }
 
 img {
-	max-width: 100%;
+    max-width: 100%;
 }
-caption {
-	@extend %font-caption;
+
+.caption {
+    @media screen and (max-width: $size-tablet-max-width) {
+        @include typography-interpolate( "font-size", $size-mobile-max-width, $size-caption-tablet, $size-tablet-max-width, $size-caption-desktop);
+    }
+    @media screen and (max-width: $size-mobile-max-width) {
+        @include typography-interpolate( "font-size", 1px, $size-caption-mobile, $size-mobile-max-width, $size-caption-tablet);
+    }
+    @extend %font-caption;
 }

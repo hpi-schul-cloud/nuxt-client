@@ -3,7 +3,7 @@
 		<div v-if="(course.alert || '') != ''" class="footer-alert">
 			<PulsatingDot></PulsatingDot>
 
-			<div class="alert-label">{{ course.alert }}</div>
+			<div class="caption alert-label">{{ course.alert }}</div>
 		</div>
 		<div
 			v-else-if="(course.nextCourseTime || '') != ''"
@@ -12,7 +12,7 @@
 			<div class="align-center">
 				<ClockIcon />
 			</div>
-			<div class="align-center">{{ course.nextCourseTime }}</div>
+			<div class="caption align-center">{{ course.nextCourseTime }}</div>
 		</div>
 	</div>
 </template>
@@ -63,13 +63,13 @@ export default {
 .footer-alert {
 	display: flex;
 	align-items: center;
+	margin: -3px;
 }
 
 .alert-label {
 	flex: 1;
 	overflow: hidden;
-	font-family: PT Sans Narrow, sans-serif;
-	font-weight: bold;
+	font-weight: 700;
 	color: #d00;
 	text-overflow: ellipsis;
 	white-space: nowrap;

@@ -1,7 +1,10 @@
-import { storiesOf } from "@storybook/vue";
+import { storiesOf, addDecorator } from "@storybook/vue";
 import notes from "@docs/storybook/typography.md";
 // TODO Caption class
 storiesOf("Typography", module)
+	.addDecorator(() => ({
+		template: '<div style="padding: 15px"><story/></div>',
+	}))
 	.addParameters({
 		notes,
 	})

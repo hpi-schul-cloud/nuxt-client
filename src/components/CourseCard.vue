@@ -2,12 +2,13 @@
 	<div class="course-card">
 		<div
 			v-if="course.notification != 0 && course.notification != null"
-			class="dot"
+			class="caption dot"
 			>{{ course.notification }}</div
 		>
 		<div class="header">
 			<div class="tab" :style="background_style">
-				<div class="tab-label">{{ course.teacherName }}</div>
+				<div class="dark-overlay"></div>
+				<div class="caption tab-label">{{ course.teacherName }}</div>
 			</div>
 			<div
 				v-if="course.newAssignments != 0 && course.notification != null"
@@ -20,8 +21,8 @@
 			</div>
 		</div>
 		<div class="card-info" :style="background_style">
-			<div class="mt-5 mb-15 abrivation-label">{{ courseAbbreviation }}</div>
-			<div class="mt-5 mb-5 ml-4 course-name-label">{{ course.name }}</div>
+			<h2 class="mt-5 mb-15 abrivation-label">{{ courseAbbreviation }}</h2>
+			<h6 class="mt-4 mb-5 ml-4 course-name-label">{{ course.name }}</h6>
 		</div>
 		<CardFooter :course="course"></CardFooter>
 	</div>
@@ -57,9 +58,9 @@ export default {
 			if (this.course.colorGradient) {
 				return (
 					"background-image: linear-gradient(-225deg, " +
-					this.course.colorGradient +
-					" 0%, " +
 					this.course.color +
+					" 0%, " +
+					this.course.colorGradient +
 					" 100%);"
 				);
 			} else {
@@ -96,6 +97,9 @@ export default {
 	margin-top: -5px !important;
 }
 
+.mt-4 {
+	margin-top: 4px !important;
+}
 .ml-4 {
 	margin-left: 4px !important;
 }
@@ -117,8 +121,6 @@ export default {
 	display: inline-block;
 	width: 25px;
 	height: 25px;
-	font-family: PTSans-CaptionBold, sans-serif;
-	font-size: 14px;
 	font-weight: bold;
 	line-height: 25px;
 	color: white;
@@ -128,18 +130,15 @@ export default {
 }
 
 .abrivation-label {
-	font-family: "PT Sans Caption", sans-serif;
-	font-size: 60px;
-	font-weight: bold;
+	font-family: PTSans-Caption, sans-serif;
+	color: white;
 }
 
 .course-name-label {
 	overflow: hidden;
-	font-family: "PT Sans Narrow", sans-serif;
-	font-size: 20px;
-	font-weight: bold;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	color: white;
 }
 
 .assignments-label {
@@ -156,7 +155,7 @@ export default {
 	position: relative;
 	width: 240px;
 	padding: 10px;
-	font-size: 16px;
+	margin: 15px;
 	cursor: pointer;
 	border-radius: 4px;
 	box-shadow: $shadow-1;
@@ -178,17 +177,18 @@ export default {
 }
 
 .tab-label {
+	position: absolute;
 	display: inline-block;
 	float: left;
 	width: 100px;
 	padding: 5.5px 10px;
 	overflow: hidden;
-	font-family: "PT Sans Narrow", sans-serif;
-	font-size: 16px;
+	color: white;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	transform: skewX(-25deg);
 	transform-origin: bottom left;
+	z-index: 1;
 }
 
 .header {
@@ -210,5 +210,17 @@ export default {
 	border-top-right-radius: 5px;
 	transform: skewX(25deg);
 	transform-origin: bottom left;
+}
+.dark-overlay {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	background-size: cover;
+	opacity: 0.5;
+	z-index: -1;
 }
 </style>
