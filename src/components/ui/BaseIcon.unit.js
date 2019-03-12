@@ -2,7 +2,6 @@ import BaseIcon from "./BaseIcon";
 import MaterialHomeIcon from "material-icons-svg/icons/baseline-home-24px.svg";
 
 describe("@components/BaseIcon", () => {
-
 	it(...isValidComponent(BaseIcon));
 
 	it("renders correct font-awesome icon", () => {
@@ -18,5 +17,4 @@ describe("@components/BaseIcon", () => {
 		});
 		expect(wrapper.element.innerHTML).toContain(iconPath);
 	});
-	*/
 });
