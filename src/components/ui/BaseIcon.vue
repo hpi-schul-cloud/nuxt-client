@@ -53,19 +53,6 @@ export default {
 					this.svgPath = iconPath.default;
 				});
 			}
-			// Font Awesome
-			/* if (this.source === "font-awesome") {
-				// https://fontawesome.com/icons
-				const iconName = this.icon.charAt(0).toUpperCase() + this.icon.slice(1);
-				return import(`@fortawesome/free-solid-svg-icons/fa${iconName}`).then(
-					(iconData) => {
-						const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${
-							iconData.width
-						} ${iconData.height}"><path d="${iconData.svgPathData}"/></svg>`;
-						this.svgPath = `data:image/svg+xml;base64,${btoa(svgIcon)}`;
-					}
-				);
-			}*/
 		},
 	},
 };
