@@ -1,12 +1,7 @@
 <template>
 	<BaseCard @click="open()">
 		<div slot="header" class="card-image">
-			<CardHeaderImage>
-				<img
-					:src="data.thumbnail"
-					:alt="'Thumbnail for ~' + data.title + '~'"
-				/>
-			</CardHeaderImage>
+			<img :src="data.thumbnail" :alt="'Thumbnail for ~' + data.title + '~'" />
 		</div>
 		<div class="card-content">
 			<div class="media">
@@ -43,13 +38,11 @@
 </template>
 
 <script>
-import CardHeaderImage from "@components/CardHeaderImage.vue";
 import CardFooter from "@components/CardFooter.vue";
 
 export default {
 	name: "CardLernStoreContent",
 	components: {
-		CardHeaderImage,
 		CardFooter,
 	},
 	props: {
