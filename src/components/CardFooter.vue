@@ -69,7 +69,7 @@ export default {
 .alert-label {
 	flex: 1;
 	overflow: hidden;
-	font-weight: 700;
+	font-weight: bold;
 	color: #d00;
 	text-overflow: ellipsis;
 	white-space: nowrap;

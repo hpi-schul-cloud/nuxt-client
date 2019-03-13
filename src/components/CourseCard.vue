@@ -21,8 +21,8 @@
 			</div>
 		</div>
 		<div class="card-info" :style="background_style">
-			<h2 class="mt-5 mb-15 abrivation-label">{{ courseAbbreviation }}</h2>
-			<h6 class="mt-4 mb-5 ml-4 course-name-label">{{ course.name }}</h6>
+			<h2 class="h2 mt-5 mb-26 abrivation-label">{{ courseAbbreviation }}</h2>
+			<h3 class="h6 mb-5 ml-4 course-name-label">{{ course.name }}</h3>
 		</div>
 		<CardFooter :course="course"></CardFooter>
 	</div>
@@ -85,8 +85,8 @@ export default {
 	margin-bottom: 0 !important;
 }
 
-.mb-15 {
-	margin-bottom: -15px !important;
+.mb-26 {
+	margin-bottom: -26px !important;
 }
 
 .mb-5 {
@@ -97,9 +97,6 @@ export default {
 	margin-top: -5px !important;
 }
 
-.mt-4 {
-	margin-top: 4px !important;
-}
 .ml-4 {
 	margin-left: 4px !important;
 }
@@ -136,9 +133,9 @@ export default {
 
 .course-name-label {
 	overflow: hidden;
+	color: white;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	color: white;
 }
 
 .assignments-label {
@@ -178,6 +175,7 @@ export default {
 
 .tab-label {
 	position: absolute;
+	z-index: 10;
 	display: inline-block;
 	float: left;
 	width: 100px;
@@ -188,7 +186,6 @@ export default {
 	white-space: nowrap;
 	transform: skewX(-25deg);
 	transform-origin: bottom left;
-	z-index: 1;
 }
 
 .header {
@@ -216,11 +213,11 @@ export default {
 	top: 0;
 	bottom: 0;
 	left: 0;
+	z-index: -1;
 	width: 100%;
 	height: 100%;
-	background: #000;
+	background: black;
 	background-size: cover;
 	opacity: 0.5;
-	z-index: -1;
 }
 </style>
