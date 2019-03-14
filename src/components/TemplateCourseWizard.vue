@@ -292,6 +292,7 @@ export default {
 
 	.header-icon {
 		margin-right: 20px;
+		font-size: 60px;
 	}
 }
 
