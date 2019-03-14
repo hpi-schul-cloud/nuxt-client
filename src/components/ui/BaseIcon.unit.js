@@ -1,10 +1,10 @@
 import BaseIcon from "./BaseIcon";
 
 describe("@components/BaseIcon", () => {
-	it("exports a valid component", () => {
-		expect(BaseIcon).toBeAComponent();
-	});
+	it(...isValidComponent(BaseIcon));
+
 	it("renders correct font-awesome icon", () => {
+		// TODO only works with faTrash
 		const iconName = "trash";
 		const iconPath = require("@fortawesome/free-solid-svg-icons/faTrash")
 			.svgPathData;

@@ -40,6 +40,10 @@
 
 		// Tells you the cost of an import
 		// https://github.com/wix/import-cost
-		"wix.vscode-import-cost"
+		"wix.vscode-import-cost",
+
+		// Highlights Trailing Spaces
+		// https://github.com/shardulm94/vscode-trailingspaces
+		"shardulm94.trailing-spaces"
 	]
 }

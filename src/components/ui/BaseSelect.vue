@@ -90,6 +90,8 @@ export default {
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <style lang="scss" scoped>
 @import "@variables";
 $input-padding-left: 12px;

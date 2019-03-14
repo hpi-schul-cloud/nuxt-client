@@ -3,7 +3,7 @@
 		<button class="collapsible" @click="collapsed = !collapsed">{{
 			label
 		}}</button>
-		<div :class="{ 'is-collapsed': collapsed }">
+		<div v-if="!collapsed">
 			<div class="content">
 				<slot />
 			</div>
@@ -16,10 +16,10 @@ export default {
 	props: {
 		label: {
 			type: String,
-			default: "Details",
+			required: true,
 		},
 	},
-	data: function() {
+	data() {
 		return {
 			collapsed: true,
 		};
@@ -51,9 +51,6 @@ export default {
 	overflow: hidden;
 	background-color: #f1f1f1;
 	animation: fadeEffect 1s;
-}
-.is-collapsed {
-	display: none;
 }
 
 @-webkit-keyframes fadeEffect {
