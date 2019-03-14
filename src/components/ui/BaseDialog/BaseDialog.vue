@@ -27,6 +27,7 @@
 <script>
 import BaseModal from "../BaseModal";
 export default {
+	name: "BaseDialog",
 	components: {
 		BaseModal,
 	},

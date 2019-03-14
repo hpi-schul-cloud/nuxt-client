@@ -27,4 +27,4 @@ const Plugin = {
 
 export default Plugin;
 
-export { DialogProgrammatic as Dialog };
+export { DialogProgrammatic as BaseDialog };
