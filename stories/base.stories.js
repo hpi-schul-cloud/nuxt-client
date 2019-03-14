@@ -156,4 +156,26 @@ storiesOf("Base Components", module)
 			</div>
 		`,
 		methods: {},
+	}))
+	.add("Base Dialog", () => ({
+		data: () => ({ active: false }),
+		template: outdent`
+			<div>
+				<BaseButton @click="confirm">
+					Delete User
+				</BaseButton>
+			</div>
+		`,
+		methods: {
+			confirm() {
+				this.$dialog.confirm({
+					title: "Deleting account",
+					message:
+						"Are you sure you want to <b>delete</b> this user? This action cannot be undone.",
+					confirmText: "Delete Account",
+					type: "is-danger",
+					onConfirm: () => this.$toast.success("Account deleted!"),
+				});
+			},
+		},
 	}));
