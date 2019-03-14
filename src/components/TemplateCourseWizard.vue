@@ -3,7 +3,7 @@
 	<div class="root">
 		<div class="header">
 			<div class="header-icon">
-				<SpaceShuttle />
+				<BaseIcon source="custom" icon="shuttle" />
 			</div>
 			<div class="headlines">
 				<h3>Kurs anlegen</h3>
@@ -162,11 +162,10 @@
 <script>
 import StepProgress from "./StepProgress.vue";
 import TemplateCourseTimes from "./TemplateCourseTimes";
-import SpaceShuttle from "@assets/shuttle.svg";
 
 export default {
 	name: "TemplateCourseWizard",
-	components: { StepProgress, TemplateCourseTimes, SpaceShuttle },
+	components: { StepProgress, TemplateCourseTimes },
 	props: {
 		steps: {
 			type: Array,
@@ -293,6 +292,7 @@ export default {
 
 	.header-icon {
 		margin-right: 20px;
+		font-size: 60px;
 	}
 }
 

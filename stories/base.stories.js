@@ -43,7 +43,13 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: '<BaseIcon icon="trash"/>',
+		template: outdent`
+			<div>
+				<BaseIcon source="material" icon="home"/>
+				<BaseIcon source="custom" icon="clock"/>
+				<BaseIcon source="custom" icon="tasks" style="font-size: 2em" />
+			</div>
+		`,
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },
@@ -112,7 +118,12 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: '<BaseLink href="/"> Link content</BaseLink>',
+		template: outdent`
+			<div>
+				<BaseLink href="https://schul-cloud.org">external Link to https://schul-cloud.org</BaseLink>
+				<BaseLink to="/news">Internal Link to /news</BaseLink>
+				<BaseLink name="news">Internal Link with name "news"</BaseLink>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Toast", () => ({

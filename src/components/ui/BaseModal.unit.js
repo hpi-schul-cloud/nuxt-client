@@ -26,9 +26,14 @@ const modal = {
 };
 
 describe("@components/BaseModal", () => {
-	it("exports a valid component", () => {
-		expect(BaseModal).toBeAComponent();
-	});
+	it(...isValidComponent(BaseModal));
+	it(
+		...rendersDefaultSlotContent(BaseModal, {
+			propsData: {
+				active: true,
+			},
+		})
+	);
 
 	it("changing the active property should open and close the modal", () => {
 		const wrapper = mount(modal);
@@ -45,6 +50,14 @@ describe("@components/BaseModal", () => {
 		wrapper.vm.active = true;
 		expect(wrapper.find("#button").exists()).toBe(true);
 		wrapper.find("#button").trigger("click");
+		expect(wrapper.find("#button").exists()).toBe(false);
+	});
+
+	it("pressing outside the model content should close the modal", () => {
+		const wrapper = mount(modal);
+		wrapper.vm.active = true;
+		expect(wrapper.find("#button").exists()).toBe(true);
+		wrapper.find(".modal-wrapper").trigger("mousedown");
 		expect(wrapper.find("#button").exists()).toBe(false);
 	});
 });
