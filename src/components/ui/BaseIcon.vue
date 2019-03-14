@@ -34,23 +34,31 @@ export default {
 			};
 		},
 	},
+	watch: {
+		icon: function(to, from) {
+			if (to !== from) {
+				this.getIconPath();
+			}
+		},
+	},
 	created() {
-		this.loadIcon();
+		this.getIconPath();
 	},
 	methods: {
-		loadIcon() {
+		getIconPath() {
+			let importPath;
 			if (this.source === "custom") {
-				// @assets/icons
-				return import(`@assets/icons/${this.icon}.svg`).then((iconPath) => {
-					this.svgPath = iconPath.default;
-				});
+				// src: @assets/icons
+				importPath = `@assets/icons/${this.icon}.svg`;
 			}
 			if (this.source === "material") {
-				// https://material.io/tools/icons/?style=baseline
-				return import(`material-icons-svg/icons/baseline-${
-					this.icon
-				}-24px.svg`).then((iconPath) => {
-					this.svgPath = iconPath.default;
+				// src: https://material.io/tools/icons/?style=baseline
+				importPath = `material-icons-svg/icons/baseline-${this.icon}-24px.svg`;
+			}
+			if (importPath) {
+				return import(importPath).then((iconPath) => {
+					this.svgPath = iconPath;
+					return iconPath;
 				});
 			}
 		},
