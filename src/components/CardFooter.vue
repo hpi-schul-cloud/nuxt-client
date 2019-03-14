@@ -10,26 +10,32 @@
 			class="footer-next-course"
 		>
 			<div class="align-center">
-				<ClockIcon />
+				<BaseIcon icon="clock" />
 			</div>
-			<div class="caption align-center">{{ course.nextCourseTime }}</div>
+			<div class="caption align-center next-course-label"
+				>{{ course.nextCourseTime }} | &nbsp;
+				<span class="next-course-room-label">{{
+					course.nextCourseRoom
+				}}</span></div
+			>
 		</div>
 	</div>
 </template>
 
 <script>
 import PulsatingDot from "./PulsatingDot.vue";
-import ClockIcon from "@assets/clock.svg";
+import BaseIcon from "@components/ui/BaseIcon.vue";
 
 export default {
 	name: "CardFooter",
-	components: { PulsatingDot, ClockIcon },
+	components: { PulsatingDot, BaseIcon },
 	props: {
 		course: {
 			type: Object,
 			default: () => ({
 				alert: "",
 				nextCourseTime: "",
+				nextCourseRoom: "",
 			}),
 		},
 	},
@@ -100,6 +106,17 @@ export default {
 	opacity: 0;
 	-webkit-animation: pulsate 2s ease-out;
 	-webkit-animation-iteration-count: infinite;
+}
+.next-course-label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.next-course-room-label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 @-webkit-keyframes pulsate {

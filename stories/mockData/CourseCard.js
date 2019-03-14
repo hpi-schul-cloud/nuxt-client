@@ -1,6 +1,6 @@
 export const defaultCourse = {
 	_id: "0000dcfbfb5c7a3f00bf21abc",
-	name: "Biologie",
+	name: "Biologie mit richtig langem namen!",
 	abbreviation: "BIO",
 	description:
 		"Dieser Kurs wurde als Beispiel für den Demo-Zugang erstellt und enthält verschiedene Themen und Inhalte aus dem Fach Biologie! Wir wollen Ihnen dadurch die Breite der Einsatzmöglichkeit der Schul-Cloud im Unterricht aufzeigen! Schauen Sie doch selbst!",
@@ -34,9 +34,11 @@ export const defaultCourse = {
 	createdAt: "2017-01-01T00:06:37.148+0000",
 	classIds: ["59a3c81ca2049554a93fec58"],
 	newAssignments: 0,
-	nextCourseTime: "Heute 10:30 | R-1.6",
+	nextCourseTime: "Heute 10:30",
+	nextCourseRoom:
+		"R-1.6 lang lang test lang test lang test lang test lang lang lang",
 	alert: "",
-	teacherName: "Mustermensch",
+	teacherName: "Mustermenschkindundkind",
 	notification: 0,
 };
 export const courseWithAssignment = {
@@ -75,7 +77,8 @@ export const courseWithAssignment = {
 	createdAt: "2017-01-01T00:06:37.148+0000",
 	classIds: ["59a3c81ca2049554a93fec58"],
 	newAssignments: 3,
-	nextCourseTime: "Heute 10:30 | R-1.6",
+	nextCourseTime: "Heute 10:30",
+	nextCourseRoom: "R-1.6",
 	alert: "",
 	teacherName: "Mustermensch",
 	notification: 0,
@@ -117,7 +120,8 @@ export const courseWithNotification = {
 	createdAt: "2017-01-01T00:06:37.148+0000",
 	classIds: ["59a3c81ca2049554a93fec58"],
 	newAssignments: 3,
-	nextCourseTime: "Heute 10:30 | R-1.6",
+	nextCourseTime: "Heute 10:30",
+	nextCourseRoom: "R-1.6",
 	alert: "",
 	teacherName: "Mustermensch",
 	notification: 5,
@@ -159,7 +163,8 @@ export const courseWithAlert = {
 	createdAt: "2017-01-01T00:06:37.148+0000",
 	classIds: ["59a3c81ca2049554a93fec58"],
 	newAssignments: 3,
-	nextCourseTime: "Heute 10:30 | R-1.6",
+	nextCourseTime: "Heute 10:30",
+	nextCourseRoom: "R-1.6",
 	alert: "Kurs fällt heute aus!",
 	teacherName: "Mustermensch",
 	notification: 0,
