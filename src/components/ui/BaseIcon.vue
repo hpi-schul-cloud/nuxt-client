@@ -46,19 +46,21 @@ export default {
 	},
 	methods: {
 		getIconPath() {
-			let importPath;
+			let importPromise;
 			if (this.source === "custom") {
 				// src: @assets/icons
-				importPath = `@assets/icons/${this.icon}.svg`;
+				importPromise = import(`@assets/icons/${this.icon}.svg`);
 			}
 			if (this.source === "material") {
 				// src: https://material.io/tools/icons/?style=baseline
-				importPath = `material-icons-svg/icons/baseline-${this.icon}-24px.svg`;
+				importPromise = import(`material-icons-svg/icons/baseline-${
+					this.icon
+				}-24px.svg`);
 			}
-			if (importPath) {
-				return import(importPath).then((iconPath) => {
-					this.svgPath = iconPath;
-					return iconPath;
+			if (importPromise) {
+				return importPromise.then((iconPath) => {
+					this.svgPath = iconPath.default;
+					return iconPath.default;
 				});
 			}
 		},
