@@ -30,13 +30,11 @@
 
 <script>
 import CardFooter from "./CardFooter.vue";
-import BaseIcon from "@components/ui/BaseIcon.vue";
 
 export default {
 	name: "CourseCard",
 	components: {
 		CardFooter,
-		BaseIcon,
 	},
 	props: {
 		course: {

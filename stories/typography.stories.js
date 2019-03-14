@@ -3,7 +3,7 @@ import notes from "@docs/storybook/typography.md";
 
 storiesOf("Typography", module)
 	.addDecorator(() => ({
-		template: '<div style="padding: 15px"><story/></div>',
+		template: '<div style="padding: 1rem"><story/></div>',
 	}))
 	.addParameters({
 		notes,
