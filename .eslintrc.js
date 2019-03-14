@@ -47,6 +47,7 @@ module.exports = {
 				],
 			},
 		],
+		"vue/require-default-prop": ["error"],
 		/*
 		"vue/eqeqeq": ["error", "always"],
 		"vue/key-spacing": ["error", { beforeColon: false, afterColon: false }],

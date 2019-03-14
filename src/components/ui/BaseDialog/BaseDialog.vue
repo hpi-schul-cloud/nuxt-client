@@ -5,6 +5,7 @@
 		</div>
 
 		<div class="modal-body">
+			<!-- eslint-disable-next-line vue/no-v-html -->
 			<p v-html="message" />
 		</div>
 
@@ -32,13 +33,22 @@ export default {
 		BaseModal,
 	},
 	props: {
-		title: String,
-		message: String,
+		title: {
+			type: String,
+			default: "",
+		},
+		message: {
+			type: String,
+			default: "",
+		},
 		type: {
 			type: String,
 			default: "primary",
 		},
-		size: String,
+		size: {
+			type: String,
+			default: "",
+		},
 		confirmText: {
 			type: String,
 			default: () => {
