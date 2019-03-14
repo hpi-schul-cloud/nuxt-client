@@ -6,12 +6,12 @@ module.exports = function(api) {
 	if (process.env.NODE_ENV === "test") {
 		return {
 			presets: ["@babel/preset-env"],
-			plugins: ["@babel/plugin-syntax-dynamic-import"],
+			plugins: ["dynamic-import-node"],
 		};
 	}
 
 	return {
 		presets: ["@nuxt/babel-preset-app"],
-		plugins: [],
+		plugins: ["dynamic-import-node"],
 	};
 };

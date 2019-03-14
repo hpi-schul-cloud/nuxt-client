@@ -16,7 +16,7 @@
 			>
 				<div class="align-center">{{ course.newAssignments }}</div>
 				<div class="align-center pl-6">
-					<BaseIcon icon="tasks" />
+					<BaseIcon source="custom" icon="tasks" />
 				</div>
 			</div>
 		</div>
