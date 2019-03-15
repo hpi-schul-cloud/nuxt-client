@@ -20,7 +20,7 @@
 		"lint:prettier": "prettier --loglevel log",
 		"lint:all:eslint": "yarn lint:eslint --ext .js,.vue .",
 		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",
-		"lint:all:markdownlint": "yarn lint:markdownlint \"@(src|docs|stories)/**/*.md\" -i \"@(node_modules|dist)/**/*.md\"",
+		"lint:all:markdownlint": "yarn lint:markdownlint \"@(src|docs|stories)/**/*.md\"",
 		"lint:all:prettier": "yarn lint:prettier -c \"**/*.{js,json,css,scss,vue,html,md}\"",
 		"lint:fix:all:eslint": "yarn lint:all:eslint --fix",
 		"lint:fix:all:stylelint": "yarn lint:all:stylelint --fix",
