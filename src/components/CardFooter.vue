@@ -11,6 +11,7 @@
 		>
 			<div class="align-center">
 				<ClockIcon />
+				<BaseIcon source="custom" icon="clock" />
 			</div>
 			<div class="align-center">{{ course.nextCourseTime }}</div>
 		</div>
@@ -19,11 +20,10 @@
 
 <script>
 import PulsatingDot from "./PulsatingDot.vue";
-import ClockIcon from "@assets/clock.svg";
 
 export default {
 	name: "CardFooter",
-	components: { PulsatingDot, ClockIcon },
+	components: { PulsatingDot },
 	props: {
 		course: {
 			type: Object,

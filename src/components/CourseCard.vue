@@ -15,7 +15,7 @@
 			>
 				<div class="align-center">{{ course.newAssignments }}</div>
 				<div class="align-center pl-6">
-					<TasksIcon />
+					<BaseIcon source="custom" icon="tasks" />
 				</div>
 			</div>
 		</div>
@@ -29,13 +29,11 @@
 
 <script>
 import CardFooter from "./CardFooter.vue";
-import TasksIcon from "@assets/tasks.svg";
 
 export default {
 	name: "CourseCard",
 	components: {
 		CardFooter,
-		TasksIcon,
 	},
 	props: {
 		course: {

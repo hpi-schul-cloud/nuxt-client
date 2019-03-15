@@ -1,11 +1,11 @@
 import { storiesOf } from "@storybook/vue";
 import notes from "@docs/storybook/typography.md";
-// TODO Caption class
+
 storiesOf("Typography", module)
 	.addParameters({
 		notes,
 	})
-	.add("with text", () => ({
+	.add("Everything in one", () => ({
 		components: {},
 		template: `
 <div>

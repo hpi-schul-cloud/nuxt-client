@@ -1,7 +1,9 @@
 module.exports = {
 	root: true,
 	parserOptions: {
+		parser: "babel-eslint",
 		sourceType: "module",
+		allowImportExportEverywhere: true,
 	},
 	extends: [
 		// https://github.com/vuejs/eslint-plugin-vue#bulb-rules
@@ -47,6 +49,7 @@ module.exports = {
 				],
 			},
 		],
+		"vue/require-default-prop": ["error"],
 		/*
 		"vue/eqeqeq": ["error", "always"],
 		"vue/key-spacing": ["error", { beforeColon: false, afterColon: false }],
