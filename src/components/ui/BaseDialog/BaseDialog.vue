@@ -1,27 +1,30 @@
 <template>
-	<BaseModal :active.sync="isActive">
-		<div class="modal-header">
-			<h3>{{ title }}</h3>
-		</div>
+	<div ref="dialog">
+		<BaseModal :active.sync="isActive">
+			<div class="modal-header">
+				<h3>{{ title }}</h3>
+			</div>
 
-		<div class="modal-body">
-			<p v-html="message" />
-		</div>
+			<div class="modal-body">
+				<p v-html="message" />
+			</div>
 
-		<div class="modal-footer">
-			<BaseButton ref="cancelButton" @click="close()">
-				{{ cancelText }}
-			</BaseButton>
-			<BaseButton
-				ref="confirmButton"
-				class="is-primary"
-				:class="type"
-				@click="confirm"
-			>
-				{{ confirmText }}
-			</BaseButton>
-		</div>
-	</BaseModal>
+			<div class="modal-footer">
+				<BaseButton ref="cancelButton" @click="close()">
+					{{ cancelText }}
+				</BaseButton>
+				<BaseButton
+					id="confirm-button"
+					ref="confirmButton"
+					class="is-primary"
+					:class="type"
+					@click="confirm"
+				>
+					{{ confirmText }}
+				</BaseButton>
+			</div>
+		</BaseModal>
+	</div>
 </template>
 
 <script>
@@ -34,6 +37,10 @@ export default {
 	props: {
 		title: String,
 		message: String,
+		customRef: {
+			type: String,
+			default: "null",
+		},
 		type: {
 			type: String,
 			default: "primary",
@@ -93,6 +100,7 @@ export default {
 	},
 	mounted() {
 		this.isActive = true;
+		// this.customRef = 'asdfdsfs'
 	},
 	methods: {
 		/**
@@ -109,14 +117,12 @@ export default {
 		close() {
 			this.isActive = false;
 			// Timeout for the animation complete before destroying
-			setTimeout(() => {
-				this.$destroy();
-				if (typeof this.$el.remove !== "undefined") {
-					this.$el.remove();
-				} else if (typeof el.parentNode !== "undefined") {
-					this.$el.parentNode.removeChild(el);
-				}
-			}, 150);
+			this.$destroy();
+			if (typeof this.$el.remove !== "undefined") {
+				this.$el.remove();
+			} else if (typeof el.parentNode !== "undefined") {
+				this.$el.parentNode.removeChild(el);
+			}
 		},
 	},
 };
