@@ -57,6 +57,5 @@ crawler.dumpLicenses(options, function(error, dependencies) {
 				`All dependency licenses seem to be compatible with ${pkg.license}.`
 			)
 		);
-		process.exit(0);
 	}
 });
