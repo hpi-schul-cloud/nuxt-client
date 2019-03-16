@@ -35,7 +35,7 @@
 		"test:ci": "yarn test:unit:ci",
 		"test": "yarn test:unit",
 		"ci": "yarn license-check && yarn test:ci && yarn lint:ci && yarn build",
-		"license-check": "node license-check.js"
+		"license-check": "license-ci-checker --production --onlyDirectDependencies"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
@@ -98,6 +98,7 @@
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^24.1.0",
 		"jest-serializer-vue": "^2.0.2",
+		"license-ci-checker": "^1.1.0",
 		"lint-staged": "^8.1.1",
 		"markdownlint-cli": "github:igorshubovych/markdownlint-cli",
 		"node-sass": "^4.11.0",

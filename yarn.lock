@@ -10782,6 +10782,14 @@ levn@^0.3.0, levn@~0.3.0:
     read-installed "~3.1.3"
     treeify "^1.0.1"
 
+license-ci-checker@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/license-ci-checker/-/license-ci-checker-1.1.0.tgz#83d7a1602ef035f435fa596caab39961de072e66"
+  integrity sha512-thdLUqQHCkclBSUZIneBSVbFDFSiLdYZW7etV8rEBEXpygEb96Wy8Fp5D0FybWn+XzbMoN9k2MhlJofuQpw3zw==
+  dependencies:
+    colors "^1.3.3"
+    npm-license-crawler "^0.2.0"
+
 linkify-it@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-2.1.0.tgz#c4caf38a6cd7ac2212ef3c7d2bde30a91561f9db"
