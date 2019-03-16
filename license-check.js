@@ -30,12 +30,14 @@ crawler.dumpLicenses(options, function(error, dependencies) {
 	const incompatibleDependencies = Object.keys(dependencies).filter(
 		(dependency) => {
 			const licenses = dependencies[dependency].licenses;
+			/*
 			if (licenses.includes("AND")) {
 				return !licenses.split(/AND/).every(isCompatible);
 			}
 			if (licenses.includes("OR")) {
 				return !licenses.split(/OR/).some(isCompatible);
 			}
+			*/
 			return !isCompatible(licenses);
 		}
 	);
