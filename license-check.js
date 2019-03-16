@@ -40,6 +40,7 @@ function isCompatible(license) {
 crawler.dumpLicenses(scanOptions, function(error, dependencies) {
 	if (error) {
 		console.error(error);
+		process.exit(1);
 		return;
 	}
 
