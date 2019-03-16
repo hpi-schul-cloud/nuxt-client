@@ -52,6 +52,7 @@ crawler.dumpLicenses(options, function(error, dependencies) {
 				)
 			);
 		});
+		process.exit(1);
 	} else {
 		console.error(
 			colors.green(
