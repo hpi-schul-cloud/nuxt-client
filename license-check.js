@@ -1,27 +1,43 @@
 /* eslint-disable no-console */
 
 const crawler = require("npm-license-crawler");
-const allowedLicenses = require("./compatible-licenses.js");
+const licenses = require("./compatible-licenses.js");
 const pkg = require("./package.json");
 const colors = require("colors");
 
-const options = {
+// SETUP
+
+const scanOptions = {
 	start: ["."],
 	production: true,
 	onlyDirectDependencies: true,
 };
 
-const allowedLicensesList = Object.values(allowedLicenses).reduce(
-	(list, licenses) => list.concat(licenses),
-	[]
-);
+// HELPER METHODS
 
-function isCompatible(license) {
-	return allowedLicensesList.includes(license.replace(/[\(\)]/, "").trim());
+function licenseCategory(license) {
+	return licenses.hierarchie.find((category) =>
+		licenses.licenses[category].includes(license)
+	);
 }
 
-console.log("Checking dependency-licenses for compatibility...");
-crawler.dumpLicenses(options, function(error, dependencies) {
+function compatibleLicenses(license) {
+	const category = licenseCategory(license);
+	categoryHierarchieIndex = licenses.hierarchie.indexOf(category);
+	return Object.keys(licenses.licenses)
+		.filter((category, index) => index <= categoryHierarchieIndex)
+		.reduce((list, category) => list.concat(licenses.licenses[category]), []);
+}
+
+function isCompatible(license) {
+	return compatibleLicenses(pkg.license).includes(
+		license.replace(/[\(\)]/, "").trim()
+	);
+}
+
+// SCAN & CHECK
+
+crawler.dumpLicenses(scanOptions, function(error, dependencies) {
 	if (error) {
 		console.error(error);
 		return;
@@ -40,21 +56,27 @@ crawler.dumpLicenses(options, function(error, dependencies) {
 		}
 	);
 
+	// LOG RESULT
+	console.log(`\nYour package-license: ${pkg.license}`);
+	console.log("Checking dependency licenses for compatibility...\n");
+
 	if (incompatibleDependencies.length !== 0) {
 		incompatibleDependencies.forEach((dependency) => {
 			console.error(
 				colors.red(
-					`The License ("${
+					`❌\tThe License ("${
 						dependencies[dependency].licenses
-					}") of ${dependency} is incompatible with ${pkg.license}`
+					}") of ${dependency} is incompatible.`
 				)
 			);
 		});
 		process.exit(1);
 	} else {
-		console.error(
+		console.log(
 			colors.green(
-				`All dependency licenses seem to be compatible with ${pkg.license}.`
+				`✅\tAll dependency licenses seem to be compatible with "${
+					pkg.license
+				}".`
 			)
 		);
 	}
