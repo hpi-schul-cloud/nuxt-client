@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import uidMixin from "@components/uidMixin";
+import uidMixin from "@mixins/uid";
 
 export default {
 	name: "DropdownMenu",

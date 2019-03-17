@@ -1,5 +1,5 @@
 <template>
-	<BaseLink class="link" v-bind="$props">
+	<BaseLink class="link" v-bind="$attrs">
 		<slot />
 	</BaseLink>
 </template>
