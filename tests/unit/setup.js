@@ -2,7 +2,7 @@ import Vue from "vue";
 //import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
-//import axios from "axios";
+import commonTest from "./commonTests.js";
 
 // ===
 // Utility functions
@@ -145,8 +145,8 @@ global.createComponentMocks = ({ store, router, style, mocks, stubs }) => {
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
 	if (router) {
-		returnOptions.stubs["nuxt-link"] = true;
-		returnOptions.stubs["nuxt"] = true;
+		returnOptions.stubs["NuxtLink"] = true;
+		returnOptions.stubs["Nuxt"] = true;
 	}
 	/*
 	// If a `style` object is provided, mock some styles.
@@ -180,3 +180,10 @@ global.createModuleStore = (vuexModule, options = {}) => {
 	return store;
 };
 */
+
+// ===
+// Common tests
+// ===
+for (name in commonTest) {
+	global[name] = commonTest[name];
+}

@@ -16,35 +16,35 @@ storiesOf("CourseCard", module)
 	.addParameters({
 		notes,
 	})
-	.add("CourseCard mit Content", () => ({
+	.add("CourseCard with content", () => ({
 		components: { CourseCard },
 		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: defaultCourse,
 		}),
 	}))
-	.add("CourseCard mit Aufgabe", () => ({
+	.add("CourseCard with assignment", () => ({
 		components: { CourseCard },
 		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithAssignment,
 		}),
 	}))
-	.add("CourseCard mit Alert", () => ({
+	.add("CourseCard with alert", () => ({
 		components: { CourseCard },
 		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithAlert,
 		}),
 	}))
-	.add("CourseCard mit Notification", () => ({
+	.add("CourseCard with notification", () => ({
 		components: { CourseCard },
 		template: outdent`<CourseCard :course="course" />`,
 		data: () => ({
 			course: courseWithNotification,
 		}),
 	}))
-	.add("CourseCard Old Data format", () => ({
+	.add("CourseCard getting old data format", () => ({
 		components: { CourseCard },
 		template: '<CourseCard :course="course" />',
 		data: () => ({
