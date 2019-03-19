@@ -12,6 +12,7 @@ import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
+import BaseAudio from "@components/ui/BaseAudio.vue";
 
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
@@ -194,4 +195,8 @@ storiesOf("Base Components", module)
 			</div>
 		`,
 		methods: {},
+	}))
+	.add("Base Audio", () => ({
+		components: { BaseAudio },
+		template: `<BaseAudio></BaseAudio>`,
 	}));
