@@ -151,5 +151,10 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Video", () => ({
 		components: { BaseVideo },
-		template: `<BaseVideo :streams="[{hd: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'}]"/>`, 
+		template: `
+		<BaseVideo 
+			:streams="[{hd: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'}]"
+			:initialState="{playState: 'PLAYING'}"
+		/>
+		`,
 	}));
