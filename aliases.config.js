@@ -22,7 +22,9 @@ const aliases = {
 
 module.exports = {
 	webpack: {},
-	jest: {},
+	jest: {
+		"video-player": "<rootDir>/src/components/ui/video-player-mock.js",
+	},
 	jsconfig: {},
 };
 
