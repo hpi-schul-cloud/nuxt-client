@@ -26,9 +26,9 @@ storiesOf("Misc", module)
 		components: { DropdownMenu, MenuLink },
 		template: outdent`
 			<DropdownMenu title="Dropdown">
-				<MenuLink href="/">Link 1</MenuLink>
-				<MenuLink href="/">Link 2</MenuLink>
-				<MenuLink href="/">Link 3</MenuLink>
+				<MenuLink to="/">Link 1</MenuLink>
+				<MenuLink to="/">Link 2</MenuLink>
+				<MenuLink to="/">Link 3</MenuLink>
 			</DropdownMenu>
 		`,
 	}))
