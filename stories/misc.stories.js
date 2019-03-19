@@ -1,12 +1,13 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 
-import notes from "@docs/components/misc.md";
+import notes from "@docs/storybook/misc.md";
 import PulsatingDot from "@components/PulsatingDot.vue";
 import ProfilePicture from "@components/ProfilePicture.vue";
 import ExampleImage from "@assets/avatarExample.svg";
 import MenuLink from "@components/MenuLink.vue";
 import DropdownMenu from "@components/DropdownMenu.vue";
+import BaseButton from "@components/ui/BaseButton.vue";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -23,11 +24,21 @@ storiesOf("Misc", module)
 	}))
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
-		template: `
-<DropdownMenu title="Dropdown">
-	<MenuLink href="/">Link 1</MenuLink>
-	<MenuLink href="/">Link 2</MenuLink>
-	<MenuLink href="/">Link 3</MenuLink>
-</DropdownMenu>
+		template: outdent`
+			<DropdownMenu title="Dropdown">
+				<MenuLink href="/">Link 1</MenuLink>
+				<MenuLink href="/">Link 2</MenuLink>
+				<MenuLink href="/">Link 3</MenuLink>
+			</DropdownMenu>
+		`,
+	}))
+	.add("Toast", () => ({
+		components: { BaseButton },
+		template: outdent`
+			<div>
+				<BaseButton @click="$toast.info('Info 🤓')">Info Toast</BaseButton>
+				<BaseButton @click="$toast.success('Success 😊')" class="is-success">Success Toast</BaseButton>
+				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
+			</div>
 		`,
 	}));

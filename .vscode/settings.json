@@ -57,6 +57,7 @@
 	],
 	"vetur.completion.useScaffoldSnippets": false,
 	"prettier.disableLanguages": [],
+	"trailing-spaces.trimOnSave": true,
 
 	// ===
 	// HTML

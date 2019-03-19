@@ -1,9 +1,11 @@
 import { configure, addDecorator, addParameters } from "@storybook/vue";
 
 import { withInfo } from "storybook-addon-vue-info";
-import centered from "@storybook/addon-centered/vue";
-import { checkA11y } from "@storybook/addon-a11y";
+//import centered from "@storybook/addon-centered/vue";
+import { withA11y } from "@storybook/addon-a11y";
 
+import "./mockComponents";
+import "@components/ui/_globals";
 import "@styles/index.scss";
 
 // Vue Docs ( storybook-addon-vue-info )
@@ -13,10 +15,10 @@ addParameters({
 addDecorator(withInfo);
 
 // center Component
-addDecorator(centered);
+//addDecorator(centered);
 
 // A11y
-addDecorator(checkA11y);
+addDecorator(withA11y);
 
 // automatically import all files ending in *.stories.js
 const req = require.context("../", true, /.stories.js$/);

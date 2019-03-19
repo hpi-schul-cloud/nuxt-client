@@ -1,8 +1,15 @@
 <template>
-	<a v-if="href" :href="href" v-bind="$attrs" target="_blank">
+	<a
+		v-if="href"
+		class="link"
+		:href="href"
+		v-bind="$attrs"
+		target="_blank"
+		rel="noreferrer"
+	>
 		<slot />
 	</a>
-	<NuxtLink v-else :to="routerLinkTo" v-bind="$attrs">
+	<NuxtLink v-else class="link" :to="routerLinkTo" v-bind="$attrs">
 		<slot />
 	</NuxtLink>
 </template>
@@ -59,7 +66,7 @@ export default {
 				// Check for non-external URL in href.
 				if (!/^\w+:/.test(this.href)) {
 					return console.warn(
-						`Invalid <BaseLink> href: ${
+						`Invalid href <BaseLink>: ${
 							this.href
 						}.\nIf you're trying to link to a local URL, provide at least a name or to`
 					);
@@ -67,7 +74,7 @@ export default {
 				// Check for insecure URL in href.
 				if (!this.allowInsecure && !/^(https|mailto|tel):/.test(this.href)) {
 					return console.warn(
-						`Insecure <BaseLink> href: ${
+						`Insecure href <BaseLink>: ${
 							this.href
 						}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <BaseLink>.`
 					);
@@ -76,7 +83,7 @@ export default {
 				// Check for insufficient props.
 				if (!this.name && !this.to) {
 					return console.warn(
-						`Invalid <BaseLink> props:\n\n${JSON.stringify(
+						`Invalid props <BaseLink>:\n\n${JSON.stringify(
 							this.$props,
 							null,
 							2
@@ -90,8 +97,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@variables";
-a {
+.link {
 	color: $color-link;
+	text-decoration: underline;
+	cursor: pointer;
 	&:active {
 		color: $color-link-active;
 	}
