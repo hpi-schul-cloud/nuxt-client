@@ -1,5 +1,6 @@
 ---
-to: "src/pages<%= route %>/index.unit.js"
+# currently disabled, because the nuxt router crashes with unit files
+to: "<%= false ? (`src/pages${route}/index.unit.js`) : null %>"
 ---
 <%
   const fileName = route.replace(/^.*[\\\/]/, '');

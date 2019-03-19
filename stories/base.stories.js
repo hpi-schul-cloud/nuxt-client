@@ -1,13 +1,12 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 
-import notes from "@docs/components/base.md";
+import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
 import BaseInput from "@components/ui/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
-import BaseToast from "@components/ui/BaseToast.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
@@ -45,7 +44,13 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: '<BaseIcon icon="trash"/>',
+		template: outdent`
+			<div>
+				<BaseIcon source="material" icon="home"/>
+				<BaseIcon source="custom" icon="clock"/>
+				<BaseIcon source="custom" icon="tasks" style="font-size: 2em" />
+			</div>
+		`,
 	}))
 	.add("Base Input", () => ({
 		components: { BaseInput },
@@ -56,11 +61,16 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Switch", () => ({
 		components: { BaseInput },
-		template: '<BaseInput type="checkbox" />',
+		data: () => ({ toggled: "" }),
+		template: `<BaseInput type="checkbox" v-model="toggled" />`,
 	}))
 	.add("Base Radio Button", () => ({
 		components: { BaseInput },
-		template: `<div><BaseInput type="radio" name="choise" value="me" id="radio1">Pick me!</BaseInput> <BaseInput type="radio" name="choise" value="notMe" id="radio2">Don't pick me.</BaseInput></div>`,
+		template: outdent`
+			<div>
+				<BaseInput type="radio" name="choice" value="me" id="radio1">Pick me!</BaseInput>
+				<BaseInput type="radio" name="choice" value="notMe" id="radio2">Don't pick me.</BaseInput>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Input Date", () => ({
@@ -70,6 +80,13 @@ storiesOf("Base Components", module)
 			'<BaseInput value="" type="date" v-model="content" label="Datum" placeholder="21.02.2019" name="date"/>',
 		methods: {},
 	}))
+	.add("Base Input Time", () => ({
+		components: { BaseInput },
+		data: () => ({ content: "" }),
+		template:
+			'<BaseInput value="" type="time" v-model="content" label="Uhrzeit" name="someTime"/>',
+		methods: {},
+	}))
 	.add("Base Select MultiSelect", () => ({
 		components: { BaseSelect },
 		data: () => ({
@@ -77,17 +94,47 @@ storiesOf("Base Components", module)
 			options: multioptions,
 		}),
 		template:
-			'<BaseSelect v-model="content" :options="options" track-by="_id" label="name"/>',
+			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name"/>',
+		methods: {},
+	}))
+	.add("Base Select MultiSelect", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			content: [],
+			options: multioptions,
+		}),
+		template:
+			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name" placeholder="Mehrere Inhalte auswählen"/>',
+		methods: {},
+	}))
+	.add("Base Select", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			content: [],
+			options: multioptions,
+		}),
+		template:
+			'<BaseSelect :value.sync="content" :options="options" track-by="_id" label="name" placeholder="Etwas auswählen"/>',
 		methods: {},
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: '<BaseLink href="/"> Link content</BaseLink>',
+		template: outdent`
+			<div>
+				<BaseLink href="https://schul-cloud.org">external Link to https://schul-cloud.org</BaseLink>
+				<BaseLink to="/news">Internal Link to /news</BaseLink>
+				<BaseLink name="news">Internal Link with name "news"</BaseLink>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Toast", () => ({
-		components: { BaseToast },
-		template: "<BaseToast />",
+		components: { BaseButton },
+		template: `
+			<div>
+				<BaseButton class="is-primary" @click="$toast.success('Success! :)')">Success</BaseButton>
+				<BaseButton class="is-secondary" @click="$toast.error('Error! :(')">Error</BaseButton>
+			</div>
+		`,
 	}))
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
@@ -95,18 +142,18 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
-		template: `
-<BaseTable>
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-    </tr>
-    <tr>
-        <td>Peter</td>
-        <td>Griffin</td>
-    </tr>
-</BaseTable>
-        `,
+		template: outdent`
+			<BaseTable>
+					<tr>
+							<th>Firstname</th>
+							<th>Lastname</th>
+					</tr>
+					<tr>
+							<td>Peter</td>
+							<td>Griffin</td>
+					</tr>
+			</BaseTable>
+		`,
 	}))
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
@@ -115,7 +162,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
-		template: `<BaseBreadcrumb :inputs="[{text: 'Home', href:'#'}, {text: 'Kurse', href:'#'}, 'Mathematik']"></BaseBreadcrumb>`,
+		template: `<BaseBreadcrumb :inputs="[{text: 'Home', to:'/'}, {text: 'Kurse', href:'https://schul-cloud.org'}, 'Mathematik']"></BaseBreadcrumb>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",

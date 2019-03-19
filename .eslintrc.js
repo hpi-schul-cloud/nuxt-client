@@ -1,7 +1,9 @@
 module.exports = {
 	root: true,
 	parserOptions: {
+		parser: "babel-eslint",
 		sourceType: "module",
+		allowImportExportEverywhere: true,
 	},
 	extends: [
 		// https://github.com/vuejs/eslint-plugin-vue#bulb-rules
