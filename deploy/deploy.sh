@@ -4,7 +4,7 @@
 export DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
 echo GITSHA $GIT_SHA
 
-export DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
+DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
 
 # storybook doku bauen und deployen
 function storybook {
