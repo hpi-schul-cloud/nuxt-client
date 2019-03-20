@@ -22,6 +22,11 @@ addDecorator(withInfo);
 
 // A11y
 addDecorator(withA11y);
+addParameters({
+	a11y: {
+		element: ".src-components-Preview-preview-30u8", // optional selector which element to inspect
+	},
+});
 
 // automatically import all files ending in *.stories.js
 const req = require.context("../", true, /.stories.js$/);
