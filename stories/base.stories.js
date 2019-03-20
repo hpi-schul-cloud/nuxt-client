@@ -198,5 +198,5 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Audio", () => ({
 		components: { BaseAudio },
-		template: `<BaseAudio></BaseAudio>`,
+		template: `<BaseAudio src="https://html5tutorial.info/media/vincent.mp3"></BaseAudio>`,
 	}));
