@@ -1,10 +1,7 @@
 FROM node:lts as builder
 
 WORKDIR '/app'
-COPY ./package.json ./
-RUN yarn install
-COPY . .
-RUN yarn build:nuxt
+COPY ./dist/nuxt ./dist/nuxt
 
 FROM nginx:alpine
 EXPOSE 80

@@ -1,10 +1,7 @@
 FROM node:lts as builder
 
 WORKDIR '/app'
-COPY ./package.json ./
-RUN yarn install
-COPY . .
-RUN yarn build:storybook
+COPY ./dist/storybook ./dist/storybook
 
 FROM nginx:alpine
 EXPOSE 80

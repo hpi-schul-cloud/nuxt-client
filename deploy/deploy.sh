@@ -4,9 +4,11 @@
 export DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
 echo GITSHA $GIT_SHA
 
+export DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
+
 # storybook doku bauen und deployen
 function storybook {
-	docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f Dockerfile.storybook ../
+	docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f $DOCKERFILE_VERSION.storybook ../
 	docker push schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-storybook:latest
 
@@ -18,7 +20,7 @@ function storybook {
 
 # client doku bauen und deployen
 function nuxtclient {
-	docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f Dockerfile.nuxt ../
+	docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f $DOCKERFILE_VERSION.nuxt ../
 	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-client:latest
 
@@ -30,7 +32,7 @@ function nuxtclient {
 
 # vuepress doku bauen und deployen
 function vuepress {
-	docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f Dockerfile.vuepress ../
+	docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f $DOCKERFILE_VERSION.vuepress ../
 	docker push schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-vuepress:latest
 
