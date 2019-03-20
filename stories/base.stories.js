@@ -127,15 +127,6 @@ storiesOf("Base Components", module)
 			</div>`,
 		methods: {},
 	}))
-	.add("Base Toast", () => ({
-		components: { BaseButton },
-		template: `
-			<div>
-				<BaseButton class="is-primary" @click="$toast.success('Success! :)')">Success</BaseButton>
-				<BaseButton class="is-secondary" @click="$toast.error('Error! :(')">Error</BaseButton>
-			</div>
-		`,
-	}))
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
 		template: '<BaseProgressbar :value="2" :max="3"/>',
@@ -198,10 +189,21 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Video", () => ({
 		components: { BaseVideo },
-		template: `
-		<BaseVideo 
-			:streams="[{hd: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'}]"
-			:initialState="{playState: 'PLAYING'}"
-		/>
-		`,
+		template: outdent`<BaseVideo
+			:configuration="{
+				streams: [{
+					hd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4',
+					sd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/sd/video.mp4',
+					poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
+					hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
+				}],
+				initialState: {playState: 'PAUSED'}
+			}"
+		/>`,
+		propsDescription: {
+			BaseVideo: {
+				configuration:
+					"https://github.com/openHPI/video-player/blob/master/docs/configuration.md",
+			},
+		},
 	}));
