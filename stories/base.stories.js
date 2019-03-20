@@ -59,12 +59,12 @@ storiesOf("Base Components", module)
 			'<BaseInput type="text" label="Vorname" v-model="content" name="firstname" placeholder="Max"/>',
 		methods: {},
 	}))
-	.add("Base Switch", () => ({
+	.add("Base Input Switch", () => ({
 		components: { BaseInput },
 		data: () => ({ toggled: "" }),
 		template: `<BaseInput type="checkbox" v-model="toggled" />`,
 	}))
-	.add("Base Radio Button", () => ({
+	.add("Base Input Radio Button", () => ({
 		components: { BaseInput },
 		template: outdent`
 			<div>
@@ -87,14 +87,14 @@ storiesOf("Base Components", module)
 			'<BaseInput value="" type="time" v-model="content" label="Uhrzeit" name="someTime"/>',
 		methods: {},
 	}))
-	.add("Base Select MultiSelect", () => ({
+	.add("Base Select", () => ({
 		components: { BaseSelect },
 		data: () => ({
 			content: [],
 			options: multioptions,
 		}),
 		template:
-			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name"/>',
+			'<BaseSelect :value.sync="content" :options="options" track-by="_id" label="name" placeholder="Etwas auswählen"/>',
 		methods: {},
 	}))
 	.add("Base Select MultiSelect", () => ({
@@ -105,16 +105,6 @@ storiesOf("Base Components", module)
 		}),
 		template:
 			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name" placeholder="Mehrere Inhalte auswählen"/>',
-		methods: {},
-	}))
-	.add("Base Select", () => ({
-		components: { BaseSelect },
-		data: () => ({
-			content: [],
-			options: multioptions,
-		}),
-		template:
-			'<BaseSelect :value.sync="content" :options="options" track-by="_id" label="name" placeholder="Etwas auswählen"/>',
 		methods: {},
 	}))
 	.add("Base Link", () => ({
