@@ -197,13 +197,8 @@ storiesOf("Base Components", module)
 					poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
 					hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
 				}],
-				initialState: {playState: 'PAUSED'}
+				initialState: {playState: 'PAUSED'},
+				videoPreload: false
 			}"
 		/>`,
-		propsDescription: {
-			BaseVideo: {
-				configuration:
-					"https://github.com/openHPI/video-player/blob/master/docs/configuration.md",
-			},
-		},
 	}));

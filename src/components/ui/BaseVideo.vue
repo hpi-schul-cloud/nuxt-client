@@ -8,6 +8,9 @@ import "video-player";
 
 export default {
 	props: {
+		/**
+		 * Documentation: https://github.com/openHPI/video-player/blob/master/docs/configuration.md
+		 */
 		configuration: {
 			type: Object,
 			required: true,
