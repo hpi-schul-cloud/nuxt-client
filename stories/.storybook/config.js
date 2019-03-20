@@ -18,7 +18,7 @@ addDecorator(withA11y);
 
 // Padding
 addDecorator(() => ({
-	template: '<div style="margin: 3rem"><story/></div>',
+	template: '<div style="margin: 2rem"><story/></div>',
 }));
 
 // automatically import all files ending in *.stories.js
