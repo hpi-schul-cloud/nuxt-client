@@ -1,6 +1,6 @@
 import { configure, addDecorator, addParameters } from "@storybook/vue";
 
-import { withInfo } from "storybook-addon-vue-info";
+import { setDefaults, withInfo } from "storybook-addon-vue-info";
 //import centered from "@storybook/addon-centered/vue";
 import { withA11y } from "@storybook/addon-a11y";
 
@@ -9,6 +9,9 @@ import "@components/ui/_globals";
 import "@styles/index.scss";
 
 // Vue Docs ( storybook-addon-vue-info )
+setDefaults({
+	docsInPanel: false,
+});
 addParameters({
 	info: true,
 });
