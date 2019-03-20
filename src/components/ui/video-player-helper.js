@@ -1,3 +1,3 @@
-import Hls from 'hls.js/dist/hls.light.min';
+import Hls from "hls.js/dist/hls.light.min";
 
-window.Hls = Hls
+window.Hls = Hls;
