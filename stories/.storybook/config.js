@@ -17,9 +17,6 @@ addParameters({
 });
 addDecorator(withInfo);
 
-// center Component
-//addDecorator(centered);
-
 // A11y
 addDecorator(withA11y);
 addParameters({
@@ -27,6 +24,11 @@ addParameters({
 		element: ".src-components-Preview-preview-30u8", // optional selector which element to inspect
 	},
 });
+
+// Padding
+addDecorator(() => ({
+	template: '<div style="margin: 2rem"><story/></div>',
+}));
 
 // automatically import all files ending in *.stories.js
 const req = require.context("../", true, /.stories.js$/);
