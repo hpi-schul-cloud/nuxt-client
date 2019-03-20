@@ -1,4 +1,4 @@
-import { storiesOf } from "@storybook/vue";
+import { storiesOf, addDecorator } from "@storybook/vue";
 import notes from "@docs/storybook/typography.md";
 
 storiesOf("Typography", module)
