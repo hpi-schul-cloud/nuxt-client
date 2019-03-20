@@ -12,6 +12,7 @@ import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
+import BaseVideo from "@components/ui/BaseVideo.vue";
 
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
@@ -116,15 +117,6 @@ storiesOf("Base Components", module)
 			</div>`,
 		methods: {},
 	}))
-	.add("Base Toast", () => ({
-		components: { BaseButton },
-		template: `
-			<div>
-				<BaseButton class="is-primary" @click="$toast.success('Success! :)')">Success</BaseButton>
-				<BaseButton class="is-secondary" @click="$toast.error('Error! :(')">Error</BaseButton>
-			</div>
-		`,
-	}))
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
 		template: '<BaseProgressbar :value="2" :max="3"/>',
@@ -184,4 +176,19 @@ storiesOf("Base Components", module)
 			</div>
 		`,
 		methods: {},
+	}))
+	.add("Base Video", () => ({
+		components: { BaseVideo },
+		template: outdent`<BaseVideo
+			:configuration="{
+				streams: [{
+					hd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4',
+					sd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/sd/video.mp4',
+					poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
+					hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
+				}],
+				initialState: {playState: 'PAUSED'},
+				videoPreload: false
+			}"
+		/>`,
 	}));
