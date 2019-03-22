@@ -52,11 +52,21 @@ You can find all commands inside the [package.json](https://github.com/schul-clo
 yarn dev:nuxt
 ```
 
-**URL**: [http://localhost:3000](http://localhost:3000)
+**URL**: [http://localhost:4000](http://localhost:4000)
 
 All Nuxt source-files can be found at `src/`.
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
+### Storybook
+
+```bash
+yarn dev:storybook
+```
+
+**URL**: [http://localhost:4001](http://localhost:4001)
+
+For detailed explanation on how things work, checkout [Storybook](https://storybook.js.org/).
 
 ### Docs
 
@@ -67,16 +77,6 @@ yarn dev:docs
 **URL**: [http://localhost:8080](http://localhost:8080)
 
 For detailed explanation on how things work, checkout [Vuepress](https://vuepress.vuejs.org/guide/).
-
-### Storybook
-
-```bash
-yarn dev:storybook
-```
-
-**URL**: [http://localhost:6006](http://localhost:6006)
-
-For detailed explanation on how things work, checkout [Storybook](https://storybook.js.org/).
 
 ### Test
 
