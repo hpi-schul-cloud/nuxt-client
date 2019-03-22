@@ -74,7 +74,7 @@ For detailed explanation on how things work, checkout [Storybook](https://storyb
 yarn dev:docs
 ```
 
-**URL**: [http://localhost:8080](http://localhost:8080)
+**URL**: [http://localhost:4002](http://localhost:4002)
 
 For detailed explanation on how things work, checkout [Vuepress](https://vuepress.vuejs.org/guide/).
 
