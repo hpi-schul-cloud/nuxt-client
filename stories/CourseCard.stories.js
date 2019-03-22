@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
-import { withKnobs, text, number, color } from "@storybook/addon-knobs";
+import { text, number, color } from "@storybook/addon-knobs";
 
 import CourseCard from "@components/CourseCard.vue";
 import notes from "@docs/storybook/courseCard.md";
@@ -22,7 +22,6 @@ function injectKnobsInCourse(course) {
 }
 
 storiesOf("CourseCard", module)
-	.addDecorator(withKnobs)
 	.addParameters({
 		notes,
 	})

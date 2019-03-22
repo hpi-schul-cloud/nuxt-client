@@ -2,6 +2,7 @@ import { configure, addDecorator, addParameters } from "@storybook/vue";
 
 import { withInfo } from "storybook-addon-vue-info";
 import { withA11y } from "@storybook/addon-a11y";
+import { withKnobs } from "@storybook/addon-knobs";
 
 import "./mockComponents";
 import "@components/ui/_globals";
@@ -15,6 +16,9 @@ addDecorator(withInfo);
 
 // A11y
 addDecorator(withA11y);
+
+// Knobs
+addDecorator(withKnobs);
 
 // Padding
 addDecorator(() => ({
