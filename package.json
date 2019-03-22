@@ -126,7 +126,7 @@
 		"yorkie": "^2.0.0"
 	},
 	"resolutions": {
-		"webpack-dev-middleware": "^3.6.0"
+		"webpack-dev-middleware": "3.6.0"
 	},
 	"engines": {
 		"node": ">=10.x.x",
