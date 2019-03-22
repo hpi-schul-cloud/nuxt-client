@@ -12276,7 +12276,7 @@ nuxt-express-module@0.0.11:
   dependencies:
     express "^4.16.3"
 
-nuxt@^2.4.2:
+nuxt@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-2.5.1.tgz#57e03386004f62e499d5cdc18fd380d129cb017f"
   integrity sha512-tmj8czAaFyyb5eDuOlNHqR5vqoru1BKadinrwmO543G1hJS22oeB5LpWXuLbVrXIWWQhMWfwjznDGok0wM1nwQ==
