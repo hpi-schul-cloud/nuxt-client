@@ -46,7 +46,7 @@ a11yproject.com/posts/how-to-hide-content
 
 ## Images
 
-`<img alt="">` muss eine Beschreibung des Bildinhaltes enthalten.
+`<img alt="">` muss eine Beschreibung des Bildinhaltes enthalten. Statt einer Beschreibung à la "Bild für Kurs" lieber das alt-Attribut leer lassen. Die Beschreibung soll den tatsächlichen Inhalt des Bildes beschreiben und nicht den Kontext, in welchem es Eingebunden ist.
 
 `<svg>` title vergeben, mit `aria-labelledby` beschreiben
 
