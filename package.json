@@ -44,8 +44,6 @@
 		"@feathersjs/authentication-client": "^1.0.8",
 		"@feathersjs/feathers": "^3.2.3",
 		"@feathersjs/socketio-client": "^1.1.5",
-		"@fortawesome/free-solid-svg-icons": "^5.7.2",
-		"@fortawesome/vue-fontawesome": "^0.1.5",
 		"@nuxtjs/axios": "^5.0.0",
 		"@nuxtjs/toast": "^3.0.2",
 		"cookie-storage": "^3.2.0",
