@@ -19,7 +19,7 @@ sind eine in HTML5 geschaffene Basis
 
 `<aside>`kennzeichnet eine weiterführende Option
 
-Screenreader strukturieren Seiten anhand von `h1-h6`. Jedes Element braucht eine Überschrift, articles, sections, etc. Es gibt nur eine `h1` --> Separation of Concerns, styling erfolgt per Klasse.
+Screenreader strukturieren Seiten anhand von `h1-h6`. Jedes Element braucht eine Überschrift, articles, sections, etc. Es gibt nur eine `h1` --> Separation of Concerns, styling erfolgt per Klasse. Wir haben dafür die Klassen `.h1, .h2, ...` global verfügbar gemacht.
 
 Dementsprechend: Für ein `<nav>`-Element wird eine Überschrift benötigt. Kann mit `aria-labelledby` mit einer Überschrift zugeordnet werden
 
