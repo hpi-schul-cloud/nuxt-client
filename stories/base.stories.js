@@ -1,5 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
+import { text } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
@@ -151,7 +152,14 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Modal", () => ({
 		components: { BaseModal, BaseButton },
-		data: () => ({ active: false }),
+		data: () => ({
+			active: false,
+			header: text("header", "custom header"),
+			body: text(
+				"body",
+				"Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below."
+			),
+		}),
 		template: outdent`
 			<div>
 				<BaseButton @click="active = true">
@@ -160,12 +168,10 @@ storiesOf("Base Components", module)
 
 				<BaseModal :active.sync="active">
 					<div class="modal-header">
-						<h3>custom header</h3>
+						<h3 v-html="header" />
 					</div>
 
-					<div class="modal-body">
-						Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below.
-					</div>
+					<div class="modal-body" v-html="body" />
 
 					<div class="modal-footer">
 						<BaseButton id="button" class="is-light" @click="active = false">
