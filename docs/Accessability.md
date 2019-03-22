@@ -1,4 +1,4 @@
-# Accessability
+# Accessibility
 
 Menschen sollen nicht ausgeschlossen werden bei der Benutzung eines Interfaces die teilweise oder permanent eingeschränkt sind.
 
@@ -6,7 +6,7 @@ Es gibt verschiedene Level von Barrierefreiheit: A - AAA. Das höchste Level ist
 
 Es geht darum den Browser anzuleiten was über die OS API an das Betriebssystem weiterzugeben ist.
 
-HTML ist per se barrierfrei bei semantisch korrekter Entwicklung.
+**HTML ist per se barrierefrei bei semantisch korrekter Entwicklung.**
 
 - Section
 - Header
@@ -19,7 +19,7 @@ sind eine in HTML5 geschaffene Basis
 
 `<aside>`kennzeichnet eine weiterführende Option
 
-Screenreader strukturieren Seiten anhand von `h1-h6`. Jedes Element braucht eine Überschrift, articles, sections, etc. Es gibt nur eine `h1` --> Separation of Concerns, styling erfolgt per Klasse. Wir haben dafür die Klassen `.h1, .h2, ...` global verfügbar gemacht.
+Screenreader strukturieren Seiten anhand von `h1-h6`. Jedes Element braucht eine Überschrift, articles, sections, etc. Es gibt nur eine `h1` --> Separation of concern, styling erfolgt per Klasse. Wir haben dafür die Klassen `.h1, .h2, ...` global verfügbar gemacht.
 
 Dementsprechend: Für ein `<nav>`-Element wird eine Überschrift benötigt. Kann mit `aria-labelledby` mit einer Überschrift zugeordnet werden
 
@@ -27,13 +27,19 @@ Dementsprechend: Für ein `<nav>`-Element wird eine Überschrift benötigt. Kann
 
 `<input>` benötigt immer ein `<label>`
 
+## Forms
+
+Forms sollten groupiert sein durch `<fieldset>`. Dort sollte auch das `<legend>`tag beschreiben was ausgefüllt wird.
+
 ## Buttons
 
-Interne Navigation auf Resourcen `<a>` --> Styling egal
+Interne Navigation auf Ressourcen `<a>` --> Styling egal
 
 `<Button>` wird verwendet für Form Action, Modal Trigger, irgendwelche Trigger
 
 ## CSS Farben
+
+Achten auf:
 
 - Kontraste
 - CSS Selektoren
@@ -56,4 +62,8 @@ Werte sollten nicht positiv sein
 
 ## Accessiblity Testing
 
-pa11y
+Pa11y soll genutzt werden. AccessLint wird ist auf Github schon aktiviert.
+
+## Weiteres lesen
+
+Volle Ausführung gibt es bei: [W3.org aria practices](https://www.w3.org/TR/wai-aria-practices-1.1/)
