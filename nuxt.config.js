@@ -30,10 +30,6 @@ module.exports = {
 				type: "image/png",
 				href: "/images/logo/favicon-32.png",
 			},
-			{
-				rel: "stylesheet",
-				href: "https://use.fontawesome.com/releases/v5.6.3/css/all.css",
-			},
 		],
 	},
 
