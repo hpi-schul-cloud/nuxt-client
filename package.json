@@ -47,6 +47,7 @@
 		"@fortawesome/vue-fontawesome": "^0.1.5",
 		"@nuxtjs/axios": "^5.0.0",
 		"@nuxtjs/toast": "^3.0.2",
+		"@storybook/addon-knobs": "^5.0.3",
 		"cookie-storage": "^3.2.0",
 		"feathers-vuex": "1.7.0",
 		"handlebars": "^4.0.12",
