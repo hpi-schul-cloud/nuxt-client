@@ -55,14 +55,16 @@
 		"lodash": "^4.17.11",
 		"material-icons-svg": "^1.0.0",
 		"moment": "^2.23.0",
-		"nuxt": "^2.4.2",
+		"nuxt": "^2.5.1",
 		"nuxt-express-module": "0.0.11",
 		"socket.io-client": "^2.2.0",
 		"video-player": "https://github.com/openHPI/video-player",
+		"vue": "^2.6.10",
 		"vue-flatpickr-component": "^8.1.1",
 		"vue-loader": "^15.6.2",
 		"vue-multiselect": "^2.1.3",
-		"vue-ripple-directive": "^2.0.1"
+		"vue-ripple-directive": "^2.0.1",
+		"vue-template-compiler": "^2.6.10"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.2.2",
