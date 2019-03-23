@@ -194,6 +194,5 @@ storiesOf("Base Components", module)
 				}],
 				initialState: {playState: 'PAUSED'},
 				videoPreload: false
-			}"
-		/>`,
+			}" />`,
 	}));
