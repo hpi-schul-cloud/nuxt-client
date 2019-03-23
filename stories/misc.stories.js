@@ -8,7 +8,6 @@ import ExampleImage from "@assets/avatarExample.svg";
 import MenuLink from "@components/MenuLink.vue";
 import DropdownMenu from "@components/DropdownMenu.vue";
 import BaseButton from "@components/ui/BaseButton.vue";
-import Quote from "@components/Quote.vue";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -41,16 +40,5 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast.success('Success 😊')" class="is-success">Success Toast</BaseButton>
 				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
 			</div>
-		`,
-	}))
-	.add("Quote", () => ({
-		components: { Quote },
-		template: outdent`
-			<Quote cite="http://www.worldwildlife.org/who/index.html">
-				For 50 years, WWF has been protecting the future of nature. The world's
-				leading conservation organization, WWF works in 100 countries and is
-				supported by 1.2 million members in the United States and close to 5 million
-				globally.
-			</Quote>
 		`,
 	}));

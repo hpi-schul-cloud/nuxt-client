@@ -13,6 +13,7 @@ import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
 import BaseVideo from "@components/ui/BaseVideo.vue";
+import BaseBlockquote from "@components/ui/BaseBlockquote.vue";
 
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
@@ -191,4 +192,15 @@ storiesOf("Base Components", module)
 				videoPreload: false
 			}"
 		/>`,
+	}))
+	.add("BaseBlockquote", () => ({
+		components: { BaseBlockquote },
+		template: outdent`
+			<BaseBlockquote cite="http://www.worldwildlife.org/who/index.html">
+				For 50 years, WWF has been protecting the future of nature. The world's
+				leading conservation organization, WWF works in 100 countries and is
+				supported by 1.2 million members in the United States and close to 5 million
+				globally.
+			</BaseBlockquote>
+		`,
 	}));
