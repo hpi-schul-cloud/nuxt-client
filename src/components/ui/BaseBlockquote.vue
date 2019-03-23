@@ -1,9 +1,9 @@
 <template>
 	<blockquote :cite="cite">
 		<slot />
-		<footer
+		<footer v-if="cite"
 			>&mdash;
-			<BaseLink :href="cite">{{ srcTxt }}</BaseLink>
+			<BaseLink :href="cite">{{ srcText }}</BaseLink>
 		</footer>
 	</blockquote>
 </template>
@@ -14,9 +14,8 @@ export default {
 	props: {
 		cite: {
 			type: String,
-			required: true,
 		},
-		srcTxt: {
+		srcText: {
 			type: String,
 			default: "Source",
 		},
