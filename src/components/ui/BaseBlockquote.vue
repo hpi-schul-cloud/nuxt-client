@@ -1,8 +1,9 @@
 <template>
 	<blockquote :cite="cite">
 		<slot />
-		<footer>
-			<a :href="cite">Source</a>
+		<footer
+			>&mdash;
+			<BaseLink :href="cite">{{ srcTxt }}</BaseLink>
 		</footer>
 	</blockquote>
 </template>
@@ -15,8 +16,9 @@ export default {
 			type: String,
 			required: true,
 		},
-		sourceText: {
+		srcTxt: {
 			type: String,
+			default: "Source",
 		},
 	},
 };
@@ -24,11 +26,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "@variables";
-
-blockquote::after {
-	display: block;
-	margin-top: 1em;
-	font-size: 0.8em;
-	content: "Von: " attr(cite);
-}
 </style>
