@@ -13,6 +13,7 @@ import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
 import BaseAudio from "@components/ui/BaseAudio.vue";
+import BaseVideo from "@components/ui/BaseVideo.vue";
 
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
@@ -59,12 +60,12 @@ storiesOf("Base Components", module)
 			'<BaseInput type="text" label="Vorname" v-model="content" name="firstname" placeholder="Max"/>',
 		methods: {},
 	}))
-	.add("Base Switch", () => ({
+	.add("Base Input Switch", () => ({
 		components: { BaseInput },
 		data: () => ({ toggled: "" }),
 		template: `<BaseInput type="checkbox" v-model="toggled" />`,
 	}))
-	.add("Base Radio Button", () => ({
+	.add("Base Input Radio Button", () => ({
 		components: { BaseInput },
 		template: outdent`
 			<div>
@@ -87,14 +88,14 @@ storiesOf("Base Components", module)
 			'<BaseInput value="" type="time" v-model="content" label="Uhrzeit" name="someTime"/>',
 		methods: {},
 	}))
-	.add("Base Select MultiSelect", () => ({
+	.add("Base Select", () => ({
 		components: { BaseSelect },
 		data: () => ({
 			content: [],
 			options: multioptions,
 		}),
 		template:
-			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name"/>',
+			'<BaseSelect :value.sync="content" :options="options" track-by="_id" label="name" placeholder="Etwas auswählen"/>',
 		methods: {},
 	}))
 	.add("Base Select MultiSelect", () => ({
@@ -107,16 +108,6 @@ storiesOf("Base Components", module)
 			'<BaseSelect :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name" placeholder="Mehrere Inhalte auswählen"/>',
 		methods: {},
 	}))
-	.add("Base Select", () => ({
-		components: { BaseSelect },
-		data: () => ({
-			content: [],
-			options: multioptions,
-		}),
-		template:
-			'<BaseSelect :value.sync="content" :options="options" track-by="_id" label="name" placeholder="Etwas auswählen"/>',
-		methods: {},
-	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
 		template: outdent`
@@ -126,15 +117,6 @@ storiesOf("Base Components", module)
 				<BaseLink name="news">Internal Link with name "news"</BaseLink>
 			</div>`,
 		methods: {},
-	}))
-	.add("Base Toast", () => ({
-		components: { BaseButton },
-		template: `
-			<div>
-				<BaseButton class="is-primary" @click="$toast.success('Success! :)')">Success</BaseButton>
-				<BaseButton class="is-secondary" @click="$toast.error('Error! :(')">Error</BaseButton>
-			</div>
-		`,
 	}))
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
@@ -199,4 +181,19 @@ storiesOf("Base Components", module)
 	.add("Base Audio", () => ({
 		components: { BaseAudio },
 		template: `<BaseAudio src="https://podcast.hpi.de/media/2019-03-05_neuland_ep05.mp3"></BaseAudio>`,
+	}))
+	.add("Base Video", () => ({
+		components: { BaseVideo },
+		template: outdent`<BaseVideo
+			:configuration="{
+				streams: [{
+					hd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4',
+					sd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/sd/video.mp4',
+					poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
+					hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
+				}],
+				initialState: {playState: 'PAUSED'},
+				videoPreload: false
+			}"
+		/>`,
 	}));

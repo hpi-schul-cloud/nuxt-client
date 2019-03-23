@@ -47,6 +47,7 @@ function listFiles(dir) {
 
 module.exports = {
 	title: "Nuxt-Client Docs",
+	port: "4002",
 	description: "documentation",
 	themeConfig: {
 		sidebar: listFiles(baseDir),
