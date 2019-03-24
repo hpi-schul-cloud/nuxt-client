@@ -25,15 +25,18 @@ export default {
 		},
 		autoplay: {
 			type: Boolean,
+			default: false,
 		},
 		loop: {
 			type: Boolean,
+			default: false,
 		},
 		/**
 		 * none / metadata / auto
 		 */
 		preload: {
 			type: String,
+			default: "auto",
 		},
 	},
 	computed: {
