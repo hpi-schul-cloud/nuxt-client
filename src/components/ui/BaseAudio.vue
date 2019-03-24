@@ -3,7 +3,7 @@
 		<source v-for="src in sources" :key="src" :src="src" :type="getType(src)" />
 		<p>
 			Your browser does not support the audio element. Here is a
-			<a :href="src">link to the audio</a> instead
+			<a :href="src">link to the audio</a> instead.
 		</p>
 	</audio>
 </template>
