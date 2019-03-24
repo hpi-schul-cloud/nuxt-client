@@ -12,6 +12,7 @@ import BaseTable from "@components/ui/BaseTable.vue";
 import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
+import BaseAudio from "@components/ui/BaseAudio.vue";
 import BaseVideo from "@components/ui/BaseVideo.vue";
 
 export const multioptions = [
@@ -177,6 +178,10 @@ storiesOf("Base Components", module)
 		`,
 		methods: {},
 	}))
+	.add("Base Audio", () => ({
+		components: { BaseAudio },
+		template: `<BaseAudio src="https://podcast.hpi.de/media/2019-03-05_neuland_ep05.mp3"></BaseAudio>`,
+	}))
 	.add("Base Video", () => ({
 		components: { BaseVideo },
 		template: outdent`<BaseVideo
@@ -189,6 +194,5 @@ storiesOf("Base Components", module)
 				}],
 				initialState: {playState: 'PAUSED'},
 				videoPreload: false
-			}"
-		/>`,
+			}" />`,
 	}));
