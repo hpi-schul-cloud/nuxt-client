@@ -26,7 +26,7 @@
 		"lint:fix:all:stylelint": "yarn lint:all:stylelint --fix",
 		"lint:fix:all:markdownlint": "yarn lint:all:markdownlint",
 		"lint:fix:all:prettier": "yarn lint:all:prettier --write",
-		"lint:ci": "run-s lint:all:*",
+		"lint:ci": "run-p lint:all:*",
 		"lint": "run-s lint:fix:all:*",
 		"test:unit": "cross-env NODE_ENV=test jest",
 		"test:unit:ci": "yarn test:unit --coverage --ci",
