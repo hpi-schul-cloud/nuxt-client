@@ -75,19 +75,18 @@ export default {
 	},
 	methods: {
 		addTime() {
-			let time = {
+			this.value.push({
 				weekday: this.weekdays[0],
 				startTime: "08:00",
 				duration: "60",
 				room: "H1",
-			};
-			this.value.push(time);
+			});
 		},
 		popTime(t) {
 			this.value.pop(t);
 		},
 		guidGenerator() {
-			let S4 = function() {
+			const S4 = function() {
 				return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 			};
 			return (
@@ -112,8 +111,6 @@ export default {
 	},
 };
 </script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-	<audio controls :loop="loop" :autoplay="autoplay" :preload="preload">
+	<audio controls v-bind="$attrs">
 		<source
 			v-for="streamsrc in sources"
 			:key="streamsrc"
@@ -13,13 +13,12 @@
 	</audio>
 </template>
 <script>
-const KNOWN_TYPES = Object.assign(Object.create(null), {
+const KNOWN_TYPES = {
 	mp3: "audio/mpeg",
 	ogg: "audio/ogg",
 	wav: "audio/wav",
-});
+};
 export default {
-	name: "BaseAudio",
 	props: {
 		/**
 		 * url
@@ -27,19 +26,7 @@ export default {
 		src: {
 			type: [String, Array],
 			required: true,
-		},
-		autoplay: {
-			type: Boolean,
-		},
-		loop: {
-			type: Boolean,
-		},
-		/**
-		 * none / metadata / auto
-		 */
-		preload: {
-			type: String,
-			default: "auto",
+			// TODO validate that type is unique
 		},
 	},
 	computed: {
@@ -49,13 +36,9 @@ export default {
 	},
 	methods: {
 		getType(src) {
-			const ext = src.slice(src.lastIndexOf(".") + 1);
+			const [ext] = src.split(".").reverse();
 			return KNOWN_TYPES[ext];
 		},
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@variables";
-</style>

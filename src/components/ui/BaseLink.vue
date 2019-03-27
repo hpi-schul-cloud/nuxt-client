@@ -9,6 +9,7 @@
 	>
 		<slot />
 	</a>
+	<!-- TODO use RouterLink if used outside nuxt -->
 	<NuxtLink v-else class="link" :to="routerLinkTo" v-bind="$attrs">
 		<slot />
 	</NuxtLink>

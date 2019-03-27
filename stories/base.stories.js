@@ -144,7 +144,14 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
-		template: `<BaseBreadcrumb :inputs="[{text: 'Home', to:'/'}, {text: 'Kurse', href:'https://schul-cloud.org'}, 'Mathematik']"></BaseBreadcrumb>`,
+		data: () => ({
+			inputs: [
+				{ text: "Home", to: "/" },
+				{ text: "Kurse", href: "https://schul-cloud.org" },
+				{ text: "Mathematik" },
+			],
+		}),
+		template: `<BaseBreadcrumb :inputs="inputs"></BaseBreadcrumb>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
