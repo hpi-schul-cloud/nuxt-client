@@ -45,4 +45,17 @@ describe("@components/BaseDialog", () => {
 			done();
 		}, 200);
 	});
+
+	it("should be possible to pass no arguments", () => {
+		const localVue = createLocalVue();
+		localVue.use(BaseDialogPlugin);
+		expect(typeof localVue.prototype.$dialog.confirm).toBe("function");
+
+		const wrapper = mount(BaseDialog, {
+			attachToDocument: true,
+			localVue,
+		});
+
+		const dialog = wrapper.vm.$dialog.confirm();
+	});
 });

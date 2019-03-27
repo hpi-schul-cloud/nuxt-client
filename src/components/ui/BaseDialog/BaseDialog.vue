@@ -7,7 +7,7 @@
 
 			<div class="modal-body">
 				<!-- eslint-disable-next-line vue/no-v-html -->
-				<p v-html="message" />
+				<div>{{ message }}</div>
 			</div>
 
 			<div class="modal-footer">
@@ -76,7 +76,6 @@ export default {
 	data() {
 		return {
 			isActive: false,
-			validationMessage: "",
 		};
 	},
 	computed: {
@@ -84,18 +83,12 @@ export default {
 		 * Icon name (MDI) based on the type.
 		 */
 		iconByType() {
-			switch (this.type) {
-				case "is-info":
-					return "information";
-				case "is-success":
-					return "check-circle";
-				case "is-warning":
-					return "alert";
-				case "is-danger":
-					return "alert-circle";
-				default:
-					return null;
-			}
+			return {
+				"is-info": "information",
+				"is-success": "check-circle",
+				"is-warning": "alert",
+				"is-danger": "alert-circle",
+			}[this.type];
 		},
 	},
 	beforeMount() {
@@ -106,7 +99,6 @@ export default {
 	},
 	mounted() {
 		this.isActive = true;
-		// this.customRef = 'asdfdsfs'
 	},
 	methods: {
 		/**

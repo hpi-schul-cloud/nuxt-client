@@ -12,9 +12,7 @@ function open(propsData) {
 
 const DialogProgrammatic = {
 	confirm(params) {
-		const defaultParam = {};
-		const propsData = Object.assign(defaultParam, params);
-		return open(propsData);
+		return open(params);
 	},
 };
 
