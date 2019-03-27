@@ -54,7 +54,7 @@ module.exports = {
 			"always",
 			{
 				arraysInObjects: true,
-				objectsInObjects: false,
+				objectsInObjects: true, //false, // FIX: we wan't to use false but: conflict with prettier
 			},
 		],
 		"vue/require-direct-export": ["error"],
