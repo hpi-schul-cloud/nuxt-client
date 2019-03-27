@@ -1,7 +1,7 @@
 <template>
 	<section class="section">
 		<div class="columns is-mobile">
-			<button @click="find()">Schulen laden</button>
+			<button @click="find">Schulen laden</button>
 
 			<div v-for="(school, i) of schools" :key="i" class="column">
 				<div class="card">

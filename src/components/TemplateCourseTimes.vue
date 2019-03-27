@@ -2,7 +2,7 @@
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
 			<a style="cursor: pointer" class="icon-button" @click="popTime(time)">
-				<BaseIcon icon="trash" />
+				<base-icon icon="trash" />
 			</a>
 			<BaseSelect
 				:value.sync="time.weekday"

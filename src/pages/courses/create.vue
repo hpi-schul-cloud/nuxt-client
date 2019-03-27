@@ -1,13 +1,13 @@
 <template>
 	<div v-if="course" class="root">
-		<TemplateCourseWizard
+		<template-course-wizard
 			:steps="stepList"
 			:course="course"
 			:user="user"
 			:teachers="teachers"
 			:classes="classes"
 			:students="students"
-			@course-creation-submit="create()"
+			@course-creation-submit="create"
 		/>
 	</div>
 </template>

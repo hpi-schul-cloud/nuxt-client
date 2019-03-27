@@ -19,7 +19,6 @@ export default {
 	props: {
 		active: {
 			type: Boolean,
-			default: false,
 		},
 	},
 	methods: {

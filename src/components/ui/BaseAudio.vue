@@ -1,9 +1,14 @@
 <template>
 	<audio controls :loop="loop" :autoplay="autoplay" :preload="preload">
-		<source v-for="src in sources" :key="src" :src="src" :type="getType(src)" />
+		<source
+			v-for="streamsrc in sources"
+			:key="streamsrc"
+			:src="streamsrc"
+			:type="getType(streamsrc)"
+		/>
 		<p>
 			Your browser does not support the audio element. Here is a
-			<a :href="src">link to the audio</a> instead.
+			<a :href="streamsrc">link to the audio</a> instead.
 		</p>
 	</audio>
 </template>
@@ -25,11 +30,9 @@ export default {
 		},
 		autoplay: {
 			type: Boolean,
-			default: false,
 		},
 		loop: {
 			type: Boolean,
-			default: false,
 		},
 		/**
 		 * none / metadata / auto

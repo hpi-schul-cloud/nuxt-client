@@ -2,17 +2,17 @@
 	<!-- default template = loggedin view -->
 	<div>
 		<div class="page">
-			<TheTopBar
+			<the-top-bar
 				:title="pageTitle"
 				class="topbar"
 				:actions="topBarActions"
 				@action="handleTopAction"
 			/>
-			<TheSidebar class="sidebar" :routes="sidebarItems" />
+			<the-sidebar class="sidebar" :routes="sidebarItems" />
 			<main class="content">
 				<Nuxt />
 			</main>
-			<TheFooter class="footer" />
+			<the-footer class="footer" />
 		</div>
 	</div>
 </template>

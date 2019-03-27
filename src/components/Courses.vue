@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<CourseCard
+		<course-card
 			v-for="course in courses_obj"
 			:key="course._id"
 			:course="course"

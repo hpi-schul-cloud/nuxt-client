@@ -38,7 +38,7 @@ module.exports = {
 		"vue/component-name-in-template-casing": ["error", "kebab-case"],
 		"vue/eqeqeq": ["error", "always"],
 		"vue/key-spacing": ["error", { beforeColon: false, afterColon: true }],
-		"vue/keyword-spacing": ["error", { before: true, after: true }],
+		"keyword-spacing": ["error", { before: true, after: true }],
 		"vue/match-component-file-name": [
 			"error",
 			{
@@ -46,10 +46,10 @@ module.exports = {
 			},
 		],
 		"vue/no-boolean-default": ["error", "no-default"],
-		"vue/no-deprecated-scope-attribute": ["error"],
-		"vue/no-empty-pattern": ["error"],
+		//"vue/no-deprecated-scope-attribute": ["error"],
+		"no-empty-pattern": ["error"],
 		"vue/no-restricted-syntax": ["error"],
-		"vue/object-curly-spacing": [
+		"object-curly-spacing": [
 			"error",
 			"always",
 			{
@@ -62,6 +62,7 @@ module.exports = {
 		"vue/space-infix-ops": ["error"],
 		"vue/space-unary-ops": ["error"],
 		"vue/v-on-function-call": ["error", "never"],
+		/*
 		"vue/v-slot-style": [
 			"error",
 			{
@@ -70,13 +71,8 @@ module.exports = {
 				named: "longform",
 			},
 		],
-		"vue/valid-v-slot": ["error"],
-
-		/*
-		"vue/object-curly-spacing": ["error", "always"],
-		"vue/require-direct-export": "error",
 		*/
-		//"vue/space-infix-ops": ["error", { int32Hint: true }],
+		//"vue/valid-v-slot": ["error"],
 	},
 	overrides: [
 		{

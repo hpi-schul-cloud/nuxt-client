@@ -50,7 +50,6 @@ export default {
 		},
 		autocomplete: {
 			type: Boolean,
-			default: false,
 		},
 		ariaLabel: {
 			type: String,

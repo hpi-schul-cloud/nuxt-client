@@ -25,7 +25,6 @@ export default {
 		},
 		allowInsecure: {
 			type: Boolean,
-			default: false,
 		},
 		to: {
 			type: [Object, String],

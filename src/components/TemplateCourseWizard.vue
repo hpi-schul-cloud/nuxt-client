@@ -14,10 +14,10 @@
 			</div>
 		</div>
 		<div class="steps">
-			<StepProgress :steps="steps" :current-step="currentStep" />
+			<step-progress :steps="steps" :current-step="currentStep" />
 
 			<div class="content-wrapper">
-				<div v-show="currentStep == 0">
+				<div v-show="currentStep === 0">
 					<BaseInput
 						v-model="course.name"
 						name="name"
@@ -75,10 +75,10 @@
 						/>
 					</div>
 
-					<TemplateCourseTimes v-model="course.times" />
+					<template-course-times v-model="course.times" />
 				</div>
 
-				<div v-show="currentStep == 1">
+				<div v-show="currentStep === 1">
 					<p>
 						Fast geschafft! Jetzt noch die Kursmitglieder hinzufügen und dann
 						kann es losgehen. Du kannst diesen Schritt auch überspringen und
@@ -98,14 +98,14 @@
 						:value.sync="studentsSelected"
 						:options="students"
 						:multiple="true"
-						:close-on-select="false"
+						:show-on-select="false"
 						label="displayName"
 						track-by="_id"
 						placeholder="Studenten auswählen"
 					></BaseSelect>
 				</div>
 
-				<div v-show="currentStep == 2" class="final-step">
+				<div v-show="currentStep === 2" class="final-step">
 					<div class="image">
 						<img src="@assets/people.png" />
 					</div>
@@ -133,7 +133,7 @@
 					>Zurück</BaseButton
 				>
 				<BaseButton
-					v-if="currentStep == 1"
+					v-if="currentStep === 1"
 					type="button"
 					class="btn btn-primary"
 					@click="nextStep"

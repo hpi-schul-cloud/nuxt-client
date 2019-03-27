@@ -25,7 +25,7 @@
 					name="content"
 					type="text"
 				></BaseInput>
-				<BaseButton class="is-primary" @click="save()">Speichern</BaseButton>
+				<BaseButton class="is-primary" @click="save">Speichern</BaseButton>
 			</section>
 
 			<section class="section">
@@ -45,7 +45,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<BaseButton class="is-light" @click="$refs.modal.close()">
+				<BaseButton class="is-light" @click="$refs.modal.close">
 					Abbrechen
 				</BaseButton>
 				<BaseButton @click="confirmDelete">

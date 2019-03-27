@@ -1,12 +1,12 @@
 <template>
 	<div class="footer">
-		<div v-if="(course.alert || '') != ''" class="footer-alert">
-			<PulsatingDot></PulsatingDot>
+		<div v-if="(course.alert || '') !== ''" class="footer-alert">
+			<pulsating-dot></pulsating-dot>
 
 			<div class="caption alert-label">{{ course.alert }}</div>
 		</div>
 		<div
-			v-else-if="(course.nextCourseTime || '') != ''"
+			v-else-if="(course.nextCourseTime || '') !== ''"
 			class="footer-next-course"
 		>
 			<div class="align-center">

@@ -3,7 +3,7 @@
 		<section class="section">
 			<div class="grid">
 				<div v-for="(course, i) of courses" :key="i" class="tile">
-					<CourseCard :course="course" />
+					<course-card :course="course" />
 				</div>
 			</div>
 		</section>

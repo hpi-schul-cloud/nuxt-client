@@ -30,7 +30,7 @@
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></BaseInput>
-			<BaseButton class="is-primary" @click="save()">Speichern</BaseButton>
+			<BaseButton class="is-primary" @click="save">Speichern</BaseButton>
 		</section>
 		<section class="section">
 			<h1>{{ team.name }}</h1>
