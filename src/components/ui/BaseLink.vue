@@ -66,7 +66,7 @@ export default {
 				// Check for non-external URL in href.
 				if (!/^\w+:/.test(this.href)) {
 					return console.warn(
-						`Invalid href <BaseLink>: ${
+						`Invalid href <base-link>: ${
 							this.href
 						}.\nIf you're trying to link to a local URL, provide at least a name or to`
 					);
@@ -74,16 +74,16 @@ export default {
 				// Check for insecure URL in href.
 				if (!this.allowInsecure && !/^(https|mailto|tel):/.test(this.href)) {
 					return console.warn(
-						`Insecure href <BaseLink>: ${
+						`Insecure href <base-link>: ${
 							this.href
-						}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <BaseLink>.`
+						}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <base-link>.`
 					);
 				}
 			} else {
 				// Check for insufficient props.
 				if (!this.name && !this.to) {
 					return console.warn(
-						`Invalid props <BaseLink>:\n\n${JSON.stringify(
+						`Invalid props <base-link>:\n\n${JSON.stringify(
 							this.$props,
 							null,
 							2

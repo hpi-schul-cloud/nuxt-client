@@ -4,7 +4,7 @@
 			<a style="cursor: pointer" class="icon-button" @click="popTime(time)">
 				<base-icon icon="trash" />
 			</a>
-			<BaseSelect
+			<base-select
 				:value.sync="time.weekday"
 				:options="weekdays"
 				:allow-empty="false"
@@ -12,8 +12,8 @@
 				input-label="Tag"
 				class="item"
 				@update:value="timeUpdate"
-			></BaseSelect>
-			<BaseInput
+			></base-select>
+			<base-input
 				v-model="time.room"
 				label="Raum"
 				name="room"
@@ -21,7 +21,7 @@
 				class="item"
 				@update="timeUpdate"
 			/>
-			<BaseInput
+			<base-input
 				v-model="time.startTime"
 				label="Start"
 				name="startTime"
@@ -29,7 +29,7 @@
 				class="item"
 				@update="timeUpdate"
 			/>
-			<BaseInput
+			<base-input
 				v-model="time.duration"
 				label="Dauer"
 				name="duration"
@@ -38,9 +38,9 @@
 				@update="timeUpdate"
 			/>
 		</div>
-		<BaseButton type="button" class="btn btn-primary" @click="addTime">
+		<base-button type="button" class="btn btn-primary" @click="addTime">
 			Schulstundentermin im Stundenplan anlegen
-		</BaseButton>
+		</base-button>
 	</div>
 </template>
 

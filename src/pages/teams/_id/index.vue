@@ -3,7 +3,7 @@
 		<section class="section">
 			<h4>
 				<span>
-					<BaseLink :to="{ name: 'teams' }">Teams</BaseLink>
+					<base-link :to="{ name: 'teams' }">Teams</base-link>
 				</span>
 				<span>/ {{ team.name }}</span>
 			</h4>

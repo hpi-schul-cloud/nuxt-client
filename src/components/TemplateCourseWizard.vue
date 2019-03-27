@@ -3,7 +3,7 @@
 	<div class="root">
 		<div class="header">
 			<div class="header-icon">
-				<BaseIcon source="custom" icon="shuttle" />
+				<base-icon source="custom" icon="shuttle" />
 			</div>
 			<div class="headlines">
 				<h3>Kurs anlegen</h3>
@@ -18,7 +18,7 @@
 
 			<div class="content-wrapper">
 				<div v-show="currentStep === 0">
-					<BaseInput
+					<base-input
 						v-model="course.name"
 						name="name"
 						label="Kursname"
@@ -27,7 +27,7 @@
 						maxlength="30"
 					/>
 
-					<BaseInput
+					<base-input
 						v-model="course.description"
 						name="description"
 						label="Kursbeschreibung"
@@ -36,7 +36,7 @@
 						maxlength="255"
 					/>
 
-					<BaseSelect
+					<base-select
 						:value.sync="teachersSelected"
 						:options="teachers"
 						:multiple="true"
@@ -45,7 +45,7 @@
 						track-by="_id"
 					/>
 
-					<BaseSelect
+					<base-select
 						:value.sync="substitutionsSelected"
 						:options="teachers"
 						:multiple="true"
@@ -55,7 +55,7 @@
 					/>
 
 					<div class="date-wrapper">
-						<BaseInput
+						<base-input
 							v-model="course.startDate"
 							name="startDate"
 							label="Startdatum"
@@ -64,7 +64,7 @@
 							placeholder=""
 							maxlength="30"
 						/>
-						<BaseInput
+						<base-input
 							v-model="course.untilDate"
 							name="untilDate"
 							label="Enddatum"
@@ -85,16 +85,16 @@
 						später Kursmitglieder hinzufügen.
 					</p>
 
-					<BaseSelect
+					<base-select
 						:value.sync="classesSelected"
 						:options="classes"
 						:multiple="true"
 						label="displayName"
 						track-by="_id"
 						placeholder="Klasse auswählen"
-					></BaseSelect>
+					></base-select>
 
-					<BaseSelect
+					<base-select
 						:value.sync="studentsSelected"
 						:options="students"
 						:multiple="true"
@@ -102,7 +102,7 @@
 						label="displayName"
 						track-by="_id"
 						placeholder="Studenten auswählen"
-					></BaseSelect>
+					></base-select>
 				</div>
 
 				<div v-show="currentStep === 2" class="final-step">
@@ -125,35 +125,35 @@
 				</div>
 			</div>
 			<div class="step-wrapper">
-				<BaseButton
+				<base-button
 					v-if="!firststep"
 					type="button"
 					class="btn btn-primary"
 					@click="lastStep"
-					>Zurück</BaseButton
+					>Zurück</base-button
 				>
-				<BaseButton
+				<base-button
 					v-if="currentStep === 1"
 					type="button"
 					class="btn btn-primary"
 					@click="nextStep"
-					>Überspringen</BaseButton
+					>Überspringen</base-button
 				>
-				<BaseButton
+				<base-button
 					v-if="!laststep"
 					type="button"
 					class="btn btn-primary"
 					@click="nextStep"
-					>Weiter</BaseButton
+					>Weiter</base-button
 				>
-				<BaseButton
+				<base-button
 					v-if="laststep"
 					type="submit"
 					class="btn btn-primary"
 					@click="$emit('course-creation-submit')"
 				>
 					Kurs anlegen und weiter
-				</BaseButton>
+				</base-button>
 			</div>
 		</div>
 	</div>

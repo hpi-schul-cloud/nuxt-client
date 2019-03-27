@@ -1,5 +1,5 @@
 <template>
-	<BaseCard @click="open">
+	<base-card @click="open">
 		<div slot="header" class="card-image">
 			<img :src="data.thumbnail" :alt="'Thumbnail for ~' + data.title + '~'" />
 		</div>
@@ -34,7 +34,7 @@
 				<button class="button is-primary">Ansehen</button>
 			</div>
 		</card-footer>
-	</BaseCard>
+	</base-card>
 </template>
 
 <script>

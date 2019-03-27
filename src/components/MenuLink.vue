@@ -5,11 +5,8 @@
 </template>
 
 <script>
-import BaseLink from "@components/ui/BaseLink.vue";
-
 export default {
 	name: "MenuLink",
-	components: { BaseLink },
 };
 </script>
 

@@ -10,13 +10,13 @@
 			class="footer-next-course"
 		>
 			<div class="align-center">
-				<BaseIcon source="custom" icon="clock" />
+				<base-icon source="custom" icon="clock" />
 			</div>
 			<div class="caption align-center next-course-label"
 				>{{ course.nextCourseTime }} | &nbsp;
-				<span class="next-course-room-label">{{
-					course.nextCourseRoom
-				}}</span></div
+				<span class="next-course-room-label">
+					{{ course.nextCourseRoom }}
+				</span></div
 			>
 		</div>
 	</div>

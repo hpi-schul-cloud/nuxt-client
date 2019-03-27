@@ -36,9 +36,9 @@ storiesOf("Misc", module)
 		components: { BaseButton },
 		template: outdent`
 			<div>
-				<BaseButton @click="$toast.info('Info 🤓')">Info Toast</BaseButton>
-				<BaseButton @click="$toast.success('Success 😊')" class="is-success">Success Toast</BaseButton>
-				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
+				<base-button @click="$toast.info('Info 🤓')">Info Toast</base-button>
+				<base-button @click="$toast.success('Success 😊')" class="is-success">Success Toast</base-button>
+				<base-button @click="$toast.error('Error 😥')" class="is-error">Error Toast</base-button>
 			</div>
 		`,
 	}));

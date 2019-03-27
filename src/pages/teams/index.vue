@@ -28,8 +28,8 @@
 				</div>
 				<div slot="footer">
 					<div class="footer-actions">
-						<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }"
-							>Anschauen</BaseLink
+						<base-link :to="{ name: 'teams-id', params: { id: team._id } }"
+							>Anschauen</base-link
 						>
 					</div>
 				</div>

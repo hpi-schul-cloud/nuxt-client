@@ -2,30 +2,30 @@
 	<div>
 		<div v-if="news">
 			<section class="section">
-				<BaseLink :to="{ name: 'news-id', params: { id: news._id } }">
+				<base-link :to="{ name: 'news-id', params: { id: news._id } }">
 					<h5>{{ news.title }}</h5>
-				</BaseLink>
+				</base-link>
 				<h1>News bearbeiten</h1>
-				<BaseButton class="is-danger" @click="active = true">
+				<base-button class="is-danger" @click="active = true">
 					Löschen
-				</BaseButton>
+				</base-button>
 			</section>
 
 			<section class="section">
-				<BaseInput
+				<base-input
 					v-model="news.title"
 					label="Titel"
 					name="title"
 					type="text"
 					maxlength="30"
-				></BaseInput>
-				<BaseInput
+				></base-input>
+				<base-input
 					v-model="news.content"
 					label="Inhalt"
 					name="content"
 					type="text"
-				></BaseInput>
-				<BaseButton class="is-primary" @click="save">Speichern</BaseButton>
+				></base-input>
+				<base-button class="is-primary" @click="save">Speichern</base-button>
 			</section>
 
 			<section class="section">
@@ -35,7 +35,7 @@
 			</section>
 		</div>
 
-		<BaseModal ref="modal" :active.sync="active">
+		<base-modal ref="modal" :active.sync="active">
 			<div class="modal-header">
 				<h3>Löschen?</h3>
 			</div>
@@ -45,14 +45,14 @@
 			</div>
 
 			<div class="modal-footer">
-				<BaseButton class="is-light" @click="$refs.modal.close">
+				<base-button class="is-light" @click="$refs.modal.close">
 					Abbrechen
-				</BaseButton>
-				<BaseButton @click="confirmDelete">
+				</base-button>
+				<base-button @click="confirmDelete">
 					Löschen
-				</BaseButton>
+				</base-button>
 			</div>
-		</BaseModal>
+		</base-modal>
 	</div>
 </template>
 

@@ -13,8 +13,8 @@
 					</div>
 					<footer class="card-footer">
 						<div class="card-footer-item">
-							<BaseLink :to="{ name: 'schools-id', params: { id: school.id } }"
-								>Öffnen</BaseLink
+							<base-link :to="{ name: 'schools-id', params: { id: school.id } }"
+								>Öffnen</base-link
 							>
 						</div>
 					</footer>

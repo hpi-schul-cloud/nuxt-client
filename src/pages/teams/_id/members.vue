@@ -1,9 +1,9 @@
 <template>
 	<div v-if="team">
 		<section class="section">
-			<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }">
+			<base-link :to="{ name: 'teams-id', params: { id: team._id } }">
 				<h4>{{ team.name }}</h4>
-			</BaseLink>
+			</base-link>
 			<h1>Mitglieder Übersicht</h1>
 		</section>
 		<section class="section">
@@ -42,7 +42,7 @@
 				class="button field is-danger"
 				@click="selected = null"
 			>
-				<BaseIcon icon="close"></BaseIcon>
+				<base-icon icon="close"></base-icon>
 				<span>Clear selected</span>
 			</button>
 			<BTabs>
