@@ -1,5 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
+import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
 import PulsatingDot from "@components/PulsatingDot.vue";
@@ -34,11 +35,22 @@ storiesOf("Misc", module)
 	}))
 	.add("Toast", () => ({
 		components: { BaseButton },
+		data: () => ({
+			type: select(
+				"type",
+				{ show: "show", info: "info", success: "success", error: "error" },
+				"show"
+			),
+			message: text("message", "Toast 🧐"),
+		}),
 		template: outdent`
 			<div>
-				<base-button @click="$toast.info('Info 🤓')">Info Toast</base-button>
-				<base-button @click="$toast.success('Success 😊')" class="is-success">Success Toast</base-button>
-				<base-button @click="$toast.error('Error 😥')" class="is-error">Error Toast</base-button>
+				<BaseButton @click="$toast[type](message)">Knobs Toast</BaseButton>
+				<br>
+				<BaseButton @click="$toast.show('Show 🧐')">Default Toast</BaseButton>
+				<BaseButton @click="$toast.info('Info 🤓')">Info Toast</BaseButton>
+				<BaseButton @click="$toast.success('Success 😊')" class="is-success">Success Toast</BaseButton>
+				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
 			</div>
 		`,
 	}));
