@@ -3,7 +3,7 @@
 		<section class="section">
 			<h5>
 				<span>
-					<BaseLink :to="{ name: 'news' }">News</BaseLink>
+					<base-link :to="{ name: 'news' }">News</base-link>
 				</span>
 				<span>/ {{ news.title }}</span>
 			</h5>

@@ -24,7 +24,7 @@
 				<span :class="{ label: true, active: value && value !== 0 }">
 					{{ label }}
 				</span>
-				<FlatPickr
+				<flat-pickr
 					v-model="val"
 					v-bind="$attrs"
 					:config="configDate"
@@ -33,14 +33,14 @@
 					@input="$emit('update', val)"
 				>
 					<input type="date" :name="name" class="input" />
-				</FlatPickr>
+				</flat-pickr>
 			</div>
 
 			<div v-else-if="type === 'time'" class="input__wrapper">
 				<span :class="{ label: true, active: value && value !== 0 }">
 					{{ label }}
 				</span>
-				<FlatPickr
+				<flat-pickr
 					v-model="val"
 					v-bind="$attrs"
 					:config="configTime"
@@ -49,7 +49,7 @@
 					@input="$emit('update', val)"
 				>
 					<input type="time" :name="name" class="input" />
-				</FlatPickr>
+				</flat-pickr>
 			</div>
 
 			<label v-else class="input__wrapper">

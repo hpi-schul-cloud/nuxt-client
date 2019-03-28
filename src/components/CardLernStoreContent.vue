@@ -1,5 +1,5 @@
 <template>
-	<BaseCard @click="open()">
+	<base-card @click="open">
 		<div slot="header" class="card-image">
 			<img :src="data.thumbnail" :alt="'Thumbnail for ~' + data.title + '~'" />
 		</div>
@@ -19,7 +19,7 @@
 				<p>{{ data.description }}</p>
 			</div>
 		</div>
-		<CardFooter slot="footer" class="content-card-footer">
+		<card-footer slot="footer" class="content-card-footer">
 			<div class="footer-info">
 				<p>Anbieter: {{ data.providerName }}</p>
 				<p>
@@ -33,8 +33,8 @@
 				<button class="button">Melden</button>
 				<button class="button is-primary">Ansehen</button>
 			</div>
-		</CardFooter>
-	</BaseCard>
+		</card-footer>
+	</base-card>
 </template>
 
 <script>

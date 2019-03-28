@@ -9,7 +9,7 @@
 
 		<!-- ACTIONS -->
 		<template v-for="action in actions">
-			<BaseLink
+			<base-link
 				v-if="action.to || action.href"
 				:key="action.to + action.icon"
 				v-ripple
@@ -17,16 +17,16 @@
 				:to="action.to"
 				:href="action.href"
 				class="action"
-				>{{ action.title }}</BaseLink
+				>{{ action.title }}</base-link
 			>
 
-			<BaseButton
+			<base-button
 				v-if="action.event"
 				:key="action.event + action.icon"
 				v-ripple
 				class="action"
 				@click="sendEvent(action.event)"
-				>{{ action.title }}</BaseButton
+				>{{ action.title }}</base-button
 			>
 		</template>
 	</div>

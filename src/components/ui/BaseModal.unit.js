@@ -4,7 +4,7 @@ import BaseModal from "./BaseModal";
 const modal = {
 	data: () => ({ active: false }),
 	template: `
-		<BaseModal id="modal" ref="modal" :active.sync="active" @close="active = false">
+		<base-modal id="modal" ref="modal" :active.sync="active" @close="active = false">
 			<div>
 				<div class="modal-header">
 					<h3>custom header</h3>
@@ -15,12 +15,12 @@ const modal = {
 				</div>
 
 				<div class="modal-footer">
-					<BaseButton id="button" class="is-light" @click="$refs.modal.close()">
+					<base-button id="button" class="is-light" @click="$refs.modal.close()">
 						OK
-					</BaseButton>
+					</base-button>
 				</div>
 			</div>
-		</BaseModal>
+		</base-modal>
 	`,
 	components: { BaseModal },
 };
