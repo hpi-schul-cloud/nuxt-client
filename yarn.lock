@@ -12906,9 +12906,9 @@ param-case@2.1.x, param-case@^2.1.0:
     no-case "^2.2.0"
 
 parent-module@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.0.tgz#df250bdc5391f4a085fb589dad761f5ad6b865b5"
-  integrity sha512-8Mf5juOMmiE4FcmzYc4IaiS9L3+9paz2KOiXzkRviCP6aDmN49Hz6EMWz0lGNp9pX80GvvAuLADtyGfW/Em3TA==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
+  integrity sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==
   dependencies:
     callsites "^3.0.0"
 
@@ -17871,9 +17871,9 @@ void-elements@^2.0.1:
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
 vue-docgen-api@^3.3.4:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-3.11.0.tgz#c6e6c8bad34478ae93cdea64a00ac438e5df026b"
-  integrity sha512-wdeeeRuCxD2IB6lMIFAeEAsMEgEtnwHnH/wYrBInrF1vYL5PBd/Vmt8aUs4cjHjV75UFC6SVyrW/3HIMEIfGhQ==
+  version "3.11.1"
+  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-3.11.1.tgz#c18a1046e93811126926c7f01ca1801ca934a174"
+  integrity sha512-gsKWzmoHEBKh9icIsh4Nqj4FI+s3SZPei4kjW+J5pF+u+jNAnkIR8+xpIGKtDI2aq6ApbAVW3WM4DaK+3jhg+Q==
   dependencies:
     "@babel/parser" "^7.2.3"
     "@babel/types" "^7.0.0"

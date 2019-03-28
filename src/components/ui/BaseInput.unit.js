@@ -8,7 +8,7 @@ describe("@components/BaseInput", () => {
 		var parent = mount({
 			data: () => ({ username: "" }),
 			template:
-				'<div> <BaseInput v-model="username" type="text" name="test-input" label="MyLabel" /></div>',
+				'<div> <base-input v-model="username" type="text" name="test-input" label="MyLabel" /></div>',
 			components: { BaseInput: BaseInput },
 		});
 		const usernameInputInnerTextField = parent.find("input");
@@ -23,7 +23,7 @@ describe("@components/BaseInput", () => {
 		var parent = mount({
 			data: () => ({ username: "" }),
 			template:
-				'<div> <BaseInput v-model="username" type="text" name="test-input" label="MyLabel" /></div>',
+				'<div> <base-input v-model="username" type="text" name="test-input" label="MyLabel" /></div>',
 			components: { BaseInput: BaseInput },
 		});
 		parent.vm.username = testinput;
@@ -50,7 +50,7 @@ describe("@components/BaseInput", () => {
 		};
 		var parent = mount({
 			data: () => ({ username: "" }),
-			template: `<div> <BaseInput
+			template: `<div> <base-input
 					v-model="username"
 					label="MyLabel"
 					${Object.keys(attributes)

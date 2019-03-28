@@ -4,7 +4,7 @@
 			<span :class="{ label: true, active: value && value !== 0 }">
 				{{ placeholder }}
 			</span>
-			<MultiSelect
+			<multi-select
 				v-model="val"
 				:options="options"
 				:multiple="multiple"
@@ -13,9 +13,9 @@
 				:track-by="trackBy"
 				:allow-empty="allowEmpty"
 				:show-labels="showLabels"
-				:close-on-select="closeOnSelect"
+				:close-on-select="!showOnSelect"
 				@input="$emit('update:value', val)"
-			></MultiSelect>
+			></multi-select>
 		</div>
 	</div>
 </template>
@@ -59,27 +59,18 @@ export default {
 		trackBy: {
 			type: String,
 			default: "",
-			required: false,
 		},
 		multiple: {
 			type: Boolean,
-			default: false,
-			required: false,
 		},
 		allowEmpty: {
 			type: Boolean,
-			default: true,
-			required: false,
 		},
 		showLabels: {
 			type: Boolean,
-			default: false,
-			required: false,
 		},
-		closeOnSelect: {
+		showOnSelect: {
 			type: Boolean,
-			default: true,
-			required: false,
 		},
 	},
 	data: function() {

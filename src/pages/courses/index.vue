@@ -3,16 +3,16 @@
 		<section class="section">
 			<div class="grid">
 				<div v-for="(course, i) of courses" :key="i" class="tile">
-					<CourseCard :course="course" />
+					<course-card :course="course" />
 				</div>
 			</div>
 		</section>
 		<section class="section">
-			<BaseButton
+			<base-button
 				class="button is-info"
 				@click="$router.push({ name: 'courses-create' })"
 				>Neuen Kurs erstellen
-			</BaseButton>
+			</base-button>
 		</section>
 	</div>
 </template>

@@ -3,7 +3,7 @@
 	<div class="root">
 		<div class="header">
 			<div class="header-icon">
-				<BaseIcon source="custom" icon="shuttle" />
+				<base-icon source="custom" icon="shuttle" />
 			</div>
 			<div class="headlines">
 				<h3>Kurs anlegen</h3>
@@ -14,11 +14,11 @@
 			</div>
 		</div>
 		<div class="steps">
-			<StepProgress :steps="steps" :current-step="currentStep" />
+			<step-progress :steps="steps" :current-step="currentStep" />
 
 			<div class="content-wrapper">
-				<div v-show="currentStep == 0">
-					<BaseInput
+				<div v-show="currentStep === 0">
+					<base-input
 						v-model="course.name"
 						name="name"
 						label="Kursname"
@@ -27,7 +27,7 @@
 						maxlength="30"
 					/>
 
-					<BaseInput
+					<base-input
 						v-model="course.description"
 						name="description"
 						label="Kursbeschreibung"
@@ -36,7 +36,7 @@
 						maxlength="255"
 					/>
 
-					<BaseSelect
+					<base-select
 						:value.sync="teachersSelected"
 						:options="teachers"
 						:multiple="true"
@@ -45,7 +45,7 @@
 						track-by="_id"
 					/>
 
-					<BaseSelect
+					<base-select
 						:value.sync="substitutionsSelected"
 						:options="teachers"
 						:multiple="true"
@@ -55,7 +55,7 @@
 					/>
 
 					<div class="date-wrapper">
-						<BaseInput
+						<base-input
 							v-model="course.startDate"
 							name="startDate"
 							label="Startdatum"
@@ -64,7 +64,7 @@
 							placeholder=""
 							maxlength="30"
 						/>
-						<BaseInput
+						<base-input
 							v-model="course.untilDate"
 							name="untilDate"
 							label="Enddatum"
@@ -75,37 +75,37 @@
 						/>
 					</div>
 
-					<TemplateCourseTimes v-model="course.times" />
+					<template-course-times v-model="course.times" />
 				</div>
 
-				<div v-show="currentStep == 1">
+				<div v-show="currentStep === 1">
 					<p>
 						Fast geschafft! Jetzt noch die Kursmitglieder hinzufügen und dann
 						kann es losgehen. Du kannst diesen Schritt auch überspringen und
 						später Kursmitglieder hinzufügen.
 					</p>
 
-					<BaseSelect
+					<base-select
 						:value.sync="classesSelected"
 						:options="classes"
 						:multiple="true"
 						label="displayName"
 						track-by="_id"
 						placeholder="Klasse auswählen"
-					></BaseSelect>
+					></base-select>
 
-					<BaseSelect
+					<base-select
 						:value.sync="studentsSelected"
 						:options="students"
 						:multiple="true"
-						:close-on-select="false"
+						:show-on-select="false"
 						label="displayName"
 						track-by="_id"
 						placeholder="Studenten auswählen"
-					></BaseSelect>
+					></base-select>
 				</div>
 
-				<div v-show="currentStep == 2" class="final-step">
+				<div v-show="currentStep === 2" class="final-step">
 					<div class="image">
 						<img src="@assets/people.png" />
 					</div>
@@ -125,35 +125,35 @@
 				</div>
 			</div>
 			<div class="step-wrapper">
-				<BaseButton
+				<base-button
 					v-if="!firststep"
 					type="button"
 					class="btn btn-primary"
 					@click="lastStep"
-					>Zurück</BaseButton
+					>Zurück</base-button
 				>
-				<BaseButton
-					v-if="currentStep == 1"
+				<base-button
+					v-if="currentStep === 1"
 					type="button"
 					class="btn btn-primary"
 					@click="nextStep"
-					>Überspringen</BaseButton
+					>Überspringen</base-button
 				>
-				<BaseButton
+				<base-button
 					v-if="!laststep"
 					type="button"
 					class="btn btn-primary"
 					@click="nextStep"
-					>Weiter</BaseButton
+					>Weiter</base-button
 				>
-				<BaseButton
+				<base-button
 					v-if="laststep"
 					type="submit"
 					class="btn btn-primary"
 					@click="$emit('course-creation-submit')"
 				>
 					Kurs anlegen und weiter
-				</BaseButton>
+				</base-button>
 			</div>
 		</div>
 	</div>
