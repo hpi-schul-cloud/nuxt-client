@@ -1,6 +1,6 @@
 <template>
 	<div ref="dialog">
-		<BaseModal :active.sync="isActive">
+		<base-modal :active.sync="isActive">
 			<div class="modal-header">
 				<h3>{{ title }}</h3>
 			</div>
@@ -11,10 +11,10 @@
 			</div>
 
 			<div class="modal-footer">
-				<BaseButton ref="cancelButton" @click="close()">
+				<base-button ref="cancelButton" @click="close">
 					{{ cancelText }}
-				</BaseButton>
-				<BaseButton
+				</base-button>
+				<base-button
 					id="confirm-button"
 					ref="confirmButton"
 					class="is-primary"
@@ -22,9 +22,9 @@
 					@click="confirm"
 				>
 					{{ confirmText }}
-				</BaseButton>
+				</base-button>
 			</div>
-		</BaseModal>
+		</base-modal>
 	</div>
 </template>
 
