@@ -1,1 +1,4 @@
 @import "@styles-default/variables/_durations.scss";
+
+// overriding the base duration changes fast, medium, ... as well
+$duration-animation-base: 0.5s;
