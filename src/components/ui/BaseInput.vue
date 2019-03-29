@@ -2,6 +2,7 @@
 	<div class="root">
 		<div v-if="type === 'checkbox'" class="checkbox">
 			<label class="switch">
+				<div class="checkbox-label">{{ label }}</div>
 				<input type="checkbox" />
 				<span class="slider"></span>
 			</label>
@@ -224,7 +225,9 @@ $input-padding-left: 12px;
 	height: 0;
 	opacity: 0;
 }
-
+.checkbox-label {
+	margin-left: 72px;
+}
 .slider {
 	position: absolute;
 	top: 0;
