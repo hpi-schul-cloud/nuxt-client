@@ -12,12 +12,7 @@
 					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
 					<base-button
 						class="button is-primary"
-						@click="
-							$router.push({
-								name: 'teams-id-members',
-								params: { id: team._id },
-							})
-						"
+						@click="addInternalModalActive = true"
 						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
@@ -25,33 +20,58 @@
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
 					<base-button
 						class="button is-primary"
-						@click="
-							$router.push({
-								name: 'teams-id-members',
-								params: { id: team._id },
-							})
-						"
+						@click="addInternalModalActive = true"
 						>Externe Teilnehmer hinzufügen</base-button
 					>
 				</div>
 			</div>
 		</section>
 		<section>
-			<base-button
-				:disabled="!selected"
-				class="button field is-danger"
-				@click="selected = null"
-			>
-				<base-icon icon="close"></base-icon>
-				<span>Clear selected</span>
-			</base-button>
-			<base-table
-				:data="team.userIds"
-				:columns="columns"
-				:selected.sync="selected"
-				focusable
-			></base-table>
+			<h3>Tabelle</h3>
+			<base-table :data="team.userIds" :columns="columns"></base-table>
 		</section>
+
+		<base-modal :active.sync="addInternalModalActive">
+			<div class="modal-header">
+				<h3>Internen Teilnehmer hinzufügen</h3>
+			</div>
+
+			<div class="modal-body">
+				<div class="d-flex">
+					<base-button
+						:class="{ 'is-primary': internalTab === 'addMember' }"
+						@click="internalTab = 'addMember'"
+					>
+						Person hinzufügen
+					</base-button>
+					<base-button
+						:class="{ 'is-primary': internalTab === 'addClass' }"
+						@click="internalTab = 'addClass'"
+					>
+						Klasse hinzufügen
+					</base-button>
+				</div>
+
+				<div>
+					<div v-if="internalTab === 'addMember'">
+						<p>Mitglied</p>
+					</div>
+					<div v-if="internalTab === 'addClass'">
+						<p>Klasse</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<base-button
+					id="button"
+					class="is-light"
+					@click="addInternalModalActive = false"
+				>
+					Hinzufügen
+				</base-button>
+			</div>
+		</base-modal>
 	</div>
 </template>
 
@@ -61,6 +81,9 @@ import { mapGetters } from "vuex";
 export default {
 	data() {
 		return {
+			addInternalModalActive: false,
+			addExternalModalActive: false,
+			internalTab: "addMember",
 			selected: null,
 			columns: [
 				{
@@ -74,7 +97,7 @@ export default {
 					label: "First Name",
 				},
 				{
-					field: "lastNAme",
+					field: "lastName",
 					label: "Last Name",
 				},
 			],

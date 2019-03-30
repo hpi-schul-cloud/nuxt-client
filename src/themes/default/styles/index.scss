@@ -109,6 +109,10 @@ button {
 	@extend %font-button;
 }
 
+.d-flex {
+	display: flex;
+}
+
 img {
 	max-width: 100%;
 }
