@@ -4,13 +4,13 @@
 			<base-link :to="{ name: 'teams-id', params: { id: team._id } }">
 				<h4>{{ team.name }}</h4>
 			</base-link>
-			<h1>Mitglieder Übersicht</h1>
+			<h2>Mitglieder Übersicht</h2>
 		</section>
 		<section class="section">
 			<div class="columns">
 				<div class="column">
 					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
-					<button
+					<base-button
 						class="button is-primary"
 						@click="
 							$router.push({
@@ -18,12 +18,12 @@
 								params: { id: team._id },
 							})
 						"
-						>Interne Teilnehmer hinzufügen</button
+						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
 				<div class="column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
-					<button
+					<base-button
 						class="button is-primary"
 						@click="
 							$router.push({
@@ -31,33 +31,26 @@
 								params: { id: team._id },
 							})
 						"
-						>Externe Teilnehmer hinzufügen</button
+						>Externe Teilnehmer hinzufügen</base-button
 					>
 				</div>
 			</div>
 		</section>
 		<section>
-			<button
+			<base-button
 				:disabled="!selected"
 				class="button field is-danger"
 				@click="selected = null"
 			>
 				<base-icon icon="close"></base-icon>
 				<span>Clear selected</span>
-			</button>
-			<BTabs>
-				<BTabItem label="Table">
-					<BTable
-						:data="team.userIds"
-						:columns="columns"
-						:selected.sync="selected"
-						focusable
-					></BTable>
-				</BTabItem>
-				<BTabItem label="Selected">
-					<pre>\n{{ selected }}</pre>
-				</BTabItem>
-			</BTabs>
+			</base-button>
+			<base-table
+				:data="team.userIds"
+				:columns="columns"
+				:selected.sync="selected"
+				focusable
+			></base-table>
 		</section>
 	</div>
 </template>

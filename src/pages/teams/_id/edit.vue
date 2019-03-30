@@ -12,8 +12,10 @@
 				</span>
 				<span>/ Bearbeiten</span>
 			</h4>
-			<h1>Team bearbeiten</h1>
-			<base-button class="is-danger" @click="confirmDelete"
+			<base-button
+				v-if="team.user && team.user.permissions.includes('DELETE_TEAM')"
+				class="is-danger"
+				@click="confirmDelete"
 				>Löschen</base-button
 			>
 		</section>
@@ -21,12 +23,14 @@
 			<base-input
 				v-model="team.name"
 				label="Name"
+				name="name"
 				type="text"
 				placeholder="Dream Team"
 				maxlength="30"
 			></base-input>
 			<base-input
 				v-model="team.description"
+				name="description"
 				label="Beschreibung"
 				type="textarea"
 				placeholder="Everything you have to know"
@@ -35,7 +39,7 @@
 			<base-button class="is-primary" @click="save">Speichern</base-button>
 		</section>
 		<section class="section">
-			<h1>{{ team.name }}</h1>
+			<h2>{{ team.name }}</h2>
 			<h5>{{ team.description }}</h5>
 		</section>
 	</div>

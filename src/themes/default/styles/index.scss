@@ -12,6 +12,21 @@
 @import "@variables";
 
 @for $i from 1 through 6 {
+	.mt-#{$i} {
+		margin-top: $i * 8px;
+	}
+	.mb-#{$i} {
+		margin-bottom: $i * 8px;
+	}
+	.ml-#{$i} {
+		margin-left: $i * 8px;
+	}
+	.mr-#{$i} {
+		margin-right: $i * 8px;
+	}
+}
+
+@for $i from 1 through 6 {
 	h#{$i},
 	.h#{$i} {
 		margin: 0.75em 0 0.25em;

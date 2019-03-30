@@ -14,37 +14,31 @@
 							/>
 						</div>
 						<form @submit.prevent="onSubmit(email, password)">
-							<div class="field">
-								<div class="control">
-									<input
-										v-model="email"
-										class="input is-large"
-										type="email"
-										placeholder="Your Email"
-										autofocus
-									/>
-								</div>
-							</div>
+							<base-input
+								v-model="email"
+								class="input"
+								type="email"
+								label="E-Mail"
+								name="email"
+								placeholder="Deine E-Mail"
+								autofocus
+							/>
 
-							<div class="field">
-								<div class="control">
-									<input
-										v-model="password"
-										class="input is-large"
-										type="password"
-										placeholder="Your Password"
-									/>
-								</div>
-							</div>
+							<base-input
+								v-model="password"
+								class="input"
+								name="password"
+								label="Passwort"
+								type="password"
+								placeholder="Dein Passwort"
+							/>
 							<div class="field">
 								<label class="checkbox">
 									<input type="checkbox" />
 									Remember me
 								</label>
 							</div>
-							<button class="button is-block is-info is-large is-fullwidth"
-								>Login</button
-							>
+							<base-button class="is-primary">Login</base-button>
 						</form>
 						<div v-if="error" class="error">
 							{{ error.message }}
@@ -73,9 +67,9 @@ import { mapMutations, mapActions } from "vuex";
 export default {
 	data() {
 		return {
-			email: undefined,
-			password: undefined,
-			error: undefined,
+			email: "",
+			password: "",
+			error: "",
 		};
 	},
 	methods: {

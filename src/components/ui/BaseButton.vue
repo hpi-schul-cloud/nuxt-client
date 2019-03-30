@@ -21,12 +21,15 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: $size-padding;
+	font-size: $size-button-medium-desktop;
 	color: $color-body-bg;
 	text-transform: uppercase;
 	cursor: pointer;
+	background-color: #999;
 	border: $size-border-width solid;
 	border-radius: $size-border-radius;
 	transition: background-color $duration-animation-base ease;
+
 	&:hover,
 	&:focus {
 		background-color: transparentize($color-text, 0.1);
@@ -36,6 +39,16 @@ export default {
 		background-color: $color-button-light-bg;
 		border-color: $color-button-light-border;
 		border-width: 1px;
+	}
+
+	// Tablet size
+	@media screen and (max-width: $size-tablet-max-width) {
+		font-size: $size-button-medium-tablet;
+	}
+
+	// Mobile size
+	@media screen and (max-width: $size-mobile-max-width) {
+		font-size: $size-button-medium-mobile;
 	}
 }
 

@@ -7,23 +7,22 @@
 				</span>
 				<span>/ {{ team.name }}</span>
 			</h4>
-			<h5>{{ team.description }}</h5>
-			<hr />
-			<button
+			<base-button
 				class="button is-info"
 				@click="$router.push({ name: 'teams-id-edit' })"
-				>Team bearbeiten</button
+				>Team bearbeiten</base-button
 			>
+			<h5>{{ team.description }}</h5>
 		</section>
 		<section v-if="team.userIds" class="section">
 			<h3>Teilnehmer</h3>
 			<p>Es befinden sich {{ team.userIds.length }} Teilnehmer im Team</p>
-			<button
+			<base-button
 				class="button is-info"
 				@click="
 					$router.push({ name: 'teams-id-members', params: { id: team._id } })
 				"
-				>Zur Teilnehmer-Übersicht</button
+				>Zur Teilnehmer-Übersicht</base-button
 			>
 		</section>
 		<section class="section">

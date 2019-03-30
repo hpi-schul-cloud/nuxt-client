@@ -61,6 +61,30 @@ if (process.client) {
 		browserService("users", { paginate: true }),
 		browserAuth({
 			userService: "users",
+			actions: {
+				hasRole: async (
+					{ dispatch, rootGetters, state, rootState },
+					roleName
+				) => {
+					if (rootState.roles.ids.length < 1) {
+						await dispatch(
+							"roles/find",
+							{ query: { $limit: 1000 } },
+							{ root: true }
+						);
+					}
+
+					const roles = rootGetters["roles/list"];
+					const userRoles = state.user.roles;
+
+					const userRolesMapped = userRoles.map((id) => {
+						id = roles.find((role) => role._id === id);
+						return id;
+					});
+
+					return userRolesMapped.find((r) => r.name === roleName) !== undefined;
+				},
+			},
 			state: {
 				publicPages: ["index", "login", "signup"],
 			},
