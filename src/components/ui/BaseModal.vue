@@ -27,15 +27,6 @@ export default {
 		},
 		close() {
 			this.$emit("update:active", false);
-
-			setTimeout(() => {
-				this.$destroy();
-				if (typeof this.$el.remove !== "undefined") {
-					this.$el.remove();
-				} else if (typeof el.parentNode !== "undefined") {
-					this.$el.parentNode.removeChild(el);
-				}
-			}, 150);
 		},
 	},
 };

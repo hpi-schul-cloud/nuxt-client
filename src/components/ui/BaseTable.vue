@@ -13,6 +13,9 @@
 					<td v-for="(column, index2) in columns" :key="index2">
 						{{ getValueByPath(row, column.field) }}
 					</td>
+					<td>
+						<slot :row="row"></slot>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -43,6 +46,7 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 .table {
+	width: 100%;
 	thead {
 		font-weight: bolder;
 		tr {
@@ -60,6 +64,9 @@ export default {
 			}
 			&:nth-child(even) {
 				background-color: #eee;
+			}
+			td {
+				padding: 8px;
 			}
 		}
 	}

@@ -28,7 +28,17 @@
 		</section>
 		<section>
 			<h3>Tabelle</h3>
-			<base-table :data="team.userIds" :columns="columns"></base-table>
+			<base-table
+				v-slot:default="slotProps"
+				:data="team.userIds"
+				:columns="columns"
+			>
+				<base-icon
+					icon="delete"
+					class="cursor-pointer"
+					@click.native="removeMember(slotProps.row.userId)"
+				/>
+			</base-table>
 		</section>
 
 		<base-modal :active.sync="addInternalModalActive">
@@ -113,9 +123,9 @@ export default {
 			team: "current",
 		}),
 	},
-	created(ctx) {
-		this.getTeam();
-		this.getMembers();
+	async created(ctx) {
+		await this.getTeam();
+		await this.getMembers();
 	},
 	methods: {
 		async getMembers() {
@@ -164,6 +174,43 @@ export default {
 			await this.getTeam();
 			this.getMembers();
 			this.addInternalModalActive = false;
+		},
+		removeMember(user) {
+			this.$dialog.confirm({
+				title: "Mitglied entfernen",
+				message:
+					"Bist du sicher, dass du " +
+					user.firstName +
+					" " +
+					user.lastName +
+					" aus dem Team entfernen möchtest?",
+				confirmText: "Mitglied entfernen",
+				type: "is-danger",
+				hasIcon: true,
+				onConfirm: async () => {
+					try {
+						let userIds = this.team.userIds.map((u) => {
+							u.role = u.role._id;
+							u.userId = u.userId._id;
+							return u;
+						});
+						userIds = userIds.filter((m) => m.userId !== user._id);
+
+						await this.$store.dispatch("teams/patch", [
+							this.team._id,
+							{
+								userIds,
+							},
+						]);
+
+						this.$toast.error("Mitglied entfernt");
+						await this.getTeam();
+						this.getMembers();
+					} catch (e) {
+						this.$toast.error("Fehler beim Entfernen");
+					}
+				},
+			});
 		},
 		getTeam() {
 			this.$store.dispatch("teams/get", [
