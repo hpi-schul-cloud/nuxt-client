@@ -54,7 +54,17 @@
 
 				<div>
 					<div v-if="internalTab === 'addMember'">
-						<p>Mitglied</p>
+						<p>
+							<span>Füge Lehrer und Schüler deiner Schule zum Team hinzu</span>
+							<base-select
+								:value.sync="membersSelected"
+								:options="members"
+								:allow-empty="false"
+								:multiple="true"
+								label="fullName"
+								input-label="Tag"
+							></base-select>
+						</p>
 					</div>
 					<div v-if="internalTab === 'addClass'">
 						<p>Klasse</p>
@@ -63,11 +73,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<base-button
-					id="button"
-					class="is-light"
-					@click="addInternalModalActive = false"
-				>
+				<base-button id="button" class="is-light" @click="addTeamMembers">
 					Hinzufügen
 				</base-button>
 			</div>
@@ -84,21 +90,20 @@ export default {
 			addInternalModalActive: false,
 			addExternalModalActive: false,
 			internalTab: "addMember",
-			selected: null,
+			membersSelected: [],
+			members: [],
 			columns: [
 				{
-					field: "_id",
-					label: "ID",
-					width: "40",
-					numeric: true,
-				},
-				{
-					field: "firstName",
+					field: "userId.firstName",
 					label: "First Name",
 				},
 				{
-					field: "lastName",
+					field: "userId.lastName",
 					label: "Last Name",
+				},
+				{
+					field: "role.name",
+					label: "Rolle",
 				},
 			],
 		};
@@ -109,12 +114,60 @@ export default {
 		}),
 	},
 	created(ctx) {
-		this.get(this.$route.params.id);
+		this.getTeam();
+		this.getMembers();
 	},
 	methods: {
-		get(id) {
+		async getMembers() {
+			let members = (await this.$store.dispatch("users/find", {
+				query: {
+					$limit: 10000,
+				},
+			})).data;
+
+			members = members.filter((member) => {
+				return !this.team.userIds.find((user) => {
+					return member._id === user.userId._id;
+				});
+			});
+
+			members = members.map((member) => {
+				member.fullName = member.firstName + " " + member.lastName;
+				return member;
+			});
+
+			this.members = members;
+		},
+		async addTeamMembers() {
+			let newMembers = this.membersSelected.map((m) => {
+				return {
+					userId: m._id,
+				};
+			});
+
+			let currentMembers = this.team.userIds.map((u) => {
+				u.role = u.role._id;
+				u.userId = u.userId._id;
+				return u;
+			});
+
+			let userIds = newMembers.concat(currentMembers);
+
+			await this.$store.dispatch("teams/patch", [
+				this.team._id,
+				{
+					userIds,
+				},
+			]);
+
+			this.membersSelected = [];
+			await this.getTeam();
+			this.getMembers();
+			this.addInternalModalActive = false;
+		},
+		getTeam() {
 			this.$store.dispatch("teams/get", [
-				id,
+				this.$route.params.id,
 				{
 					query: {
 						$populate: [

@@ -11,7 +11,7 @@
 			<tbody>
 				<tr v-for="(row, index) in data" :key="index">
 					<td v-for="(column, index2) in columns" :key="index2">
-						{{ row.userId[column.field] }}
+						{{ getValueByPath(row, column.field) }}
 					</td>
 				</tr>
 			</tbody>
@@ -19,6 +19,8 @@
 	</div>
 </template>
 <script>
+import { getValueByPath } from "@/utils/helpers";
+
 export default {
 	props: {
 		data: {
@@ -29,6 +31,11 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+	},
+	data() {
+		return {
+			getValueByPath,
+		};
 	},
 };
 </script>
