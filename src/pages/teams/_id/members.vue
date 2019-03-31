@@ -16,14 +16,15 @@
 						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
-				<div class="column">
+				<!-- TODO -->
+				<!-- <div class="column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
 					<base-button
 						class="button is-primary"
 						@click="addInternalModalActive = true"
 						>Externe Teilnehmer hinzufügen</base-button
 					>
-				</div>
+				</div> -->
 			</div>
 		</section>
 
