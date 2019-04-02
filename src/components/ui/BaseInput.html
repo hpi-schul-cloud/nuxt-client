@@ -6,12 +6,13 @@
         </label>
     </div>
     <div v-else-if="type === 'hidden'" class="hidden">
-        <input type="hidden" />
+        <input aria-label="hidden" type="hidden" />
     </div>
     <div v-else-if="type === 'radio'" class="radio">
         <input
             :id="id"
             type="radio"
+            :aria-label="name"
             class="radio-btn"
             :name="name"
             :value="value"
@@ -47,7 +48,7 @@
                 v-on="$listeners"
                 @input="$emit('update', val)"
             >
-                <input type="time" :name="name" class="input" />
+                <input aria-label="name" type="time" :name="name" class="input" />
             </flat-pickr>
         </div>
 
