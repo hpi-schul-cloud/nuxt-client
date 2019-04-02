@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { text } from "@storybook/addon-knobs";
+import { tableData, tableColumns } from "./mockData/BaseTable";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
@@ -15,13 +16,13 @@ import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
 import BaseAudio from "@components/ui/BaseAudio.vue";
 import BaseVideo from "@components/ui/BaseVideo.vue";
+import BaseModal from "@components/ui/BaseModal.vue";
 
 export const multioptions = [
 	{ _id: 1, name: "Option 1" },
 	{ _id: 2, name: "Option 2" },
 	{ _id: 3, name: "Option 3" },
 ];
-import BaseModal from "@components/ui/BaseModal.vue";
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -124,17 +125,14 @@ storiesOf("Base Components", module)
 		template: '<base-progressbar :value="2" :max="3"/>',
 	}))
 	.add("Base Table", () => ({
+		data: () => ({
+			data: tableData,
+			columns: tableColumns,
+		}),
 		components: { BaseTable },
 		template: outdent`
-			<base-table>
-					<tr>
-							<th>Firstname</th>
-							<th>Lastname</th>
-					</tr>
-					<tr>
-							<td>Peter</td>
-							<td>Griffin</td>
-					</tr>
+			<base-table v-slot:default="slotProps" :data="data" :columns="columns">
+				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>
 		`,
 	}))
