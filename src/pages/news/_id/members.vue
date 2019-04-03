@@ -1,16 +1,16 @@
 <template>
 	<div v-if="team">
 		<section class="section">
-			<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }">
+			<base-link :to="{ name: 'teams-id', params: { id: team._id } }">
 				<h4>{{ team.name }}</h4>
-			</BaseLink>
+			</base-link>
 			<h1>Mitglieder Übersicht</h1>
 		</section>
 		<section class="section">
 			<div class="columns">
 				<div class="column">
 					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
-					<BaseButton
+					<base-button
 						class="is-primary"
 						@click="
 							$router.push({
@@ -18,12 +18,12 @@
 								params: { id: team._id },
 							})
 						"
-						>Interne Teilnehmer hinzufügen</BaseButton
+						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
 				<div class="column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
-					<BaseButton
+					<base-button
 						class="is-primary"
 						@click="
 							$router.push({
@@ -31,20 +31,20 @@
 								params: { id: team._id },
 							})
 						"
-						>Externe Teilnehmer hinzufügen</BaseButton
+						>Externe Teilnehmer hinzufügen</base-button
 					>
 				</div>
 			</div>
 		</section>
 		<section>
-			<BaseButton
+			<base-button
 				:disabled="!selected"
 				class="field is-danger"
 				@click="selected = null"
 			>
-				<BaseIcon icon="close"></BaseIcon>
+				<base-icon icon="close"></base-icon>
 				<span>Clear selected</span>
-			</BaseButton>
+			</base-button>
 			<BTabs>
 				<BTabItem label="Table">
 					<BTable

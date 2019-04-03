@@ -1,30 +1,16 @@
 <template>
-	<section :style="styles" class="card">
-		<div class="customcard-header">
+	<section v-bind="$attrs" class="card">
+		<header class="customcard-header">
 			<slot name="header" />
-		</div>
+		</header>
 		<div class="customcard-content">
-			<slot>
-				<!-- CONTENT -->
-			</slot>
+			<slot />
 		</div>
-		<div class="customcard-footer">
+		<footer class="customcard-footer">
 			<slot name="footer" />
-		</div>
+		</footer>
 	</section>
 </template>
-
-<script>
-export default {
-	name: "BaseCard",
-	props: {
-		styles: {
-			type: Object,
-			default: () => ({}),
-		},
-	},
-};
-</script>
 
 <style lang="scss" scoped>
 @import "@variables";

@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<table class="table">
+			<!-- TODO replace with more advances lib -->
 			<slot />
 		</table>
 	</div>

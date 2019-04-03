@@ -6,7 +6,7 @@
 				:key="index"
 				:style="{ width: stepWidth }"
 				:class="[
-					index == currentStep ? 'active' : '',
+					index === currentStep ? 'active' : '',
 					index < currentStep ? 'done' : '',
 				]"
 				><div class="description">{{ s.name }}</div>
