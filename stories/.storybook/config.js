@@ -2,6 +2,7 @@ import { configure, addDecorator, addParameters } from "@storybook/vue";
 
 import { withInfo } from "storybook-addon-vue-info";
 import { withA11y } from "@storybook/addon-a11y";
+import { withKnobs } from "@storybook/addon-knobs";
 
 import "./mockComponents";
 import "@components/ui/_globals";
@@ -16,9 +17,12 @@ addDecorator(withInfo);
 // A11y
 addDecorator(withA11y);
 
+// Knobs
+addDecorator(withKnobs);
+
 // Padding
 addDecorator(() => ({
-	template: '<div style="margin: 2rem"><story/></div>',
+	template: '<div style="padding: 2rem"><story/></div>',
 }));
 
 // automatically import all files ending in *.stories.js

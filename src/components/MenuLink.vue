@@ -1,15 +1,12 @@
 <template>
-	<BaseLink class="link" v-bind="$attrs">
+	<base-link class="link" v-bind="$attrs">
 		<slot />
-	</BaseLink>
+	</base-link>
 </template>
 
 <script>
-import BaseLink from "@components/ui/BaseLink.vue";
-
 export default {
 	name: "MenuLink",
-	components: { BaseLink },
 };
 </script>
 

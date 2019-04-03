@@ -1,7 +1,7 @@
 <template>
 	<section class="section">
 		<div class="columns is-mobile">
-			<button @click="find()">Schulen laden</button>
+			<button @click="find">Schulen laden</button>
 
 			<div v-for="(school, i) of schools" :key="i" class="column">
 				<div class="card">
@@ -13,8 +13,8 @@
 					</div>
 					<footer class="card-footer">
 						<div class="card-footer-item">
-							<BaseLink :to="{ name: 'schools-id', params: { id: school.id } }"
-								>Öffnen</BaseLink
+							<base-link :to="{ name: 'schools-id', params: { id: school.id } }"
+								>Öffnen</base-link
 							>
 						</div>
 					</footer>
