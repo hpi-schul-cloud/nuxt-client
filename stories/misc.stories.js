@@ -22,7 +22,7 @@ storiesOf("Misc", module)
 	.add("Profile Pic", () => ({
 		components: { ProfilePicture },
 		data: () => ({ imgsrc: ExampleImage }),
-		template: `<div><ProfilePicture :image="imgsrc" size="small"/><ProfilePicture size="medium"/><ProfilePicture size="large"/></div>`,
+		template: `<div><ProfilePicture :image="imgsrc" size="small"/><ProfilePicture :image="imgsrc" size="medium"/><ProfilePicture :image="imgsrc" size="large"/></div>`,
 	}))
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
