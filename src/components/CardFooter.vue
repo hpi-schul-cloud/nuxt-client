@@ -1,22 +1,22 @@
 <template>
 	<div class="footer">
-		<div v-if="(course.alert || '') != ''" class="footer-alert">
-			<PulsatingDot></PulsatingDot>
+		<div v-if="(course.alert || '') !== ''" class="footer-alert">
+			<pulsating-dot></pulsating-dot>
 
 			<div class="caption alert-label">{{ course.alert }}</div>
 		</div>
 		<div
-			v-else-if="(course.nextCourseTime || '') != ''"
+			v-else-if="(course.nextCourseTime || '') !== ''"
 			class="footer-next-course"
 		>
 			<div class="align-center">
-				<BaseIcon source="custom" icon="clock" />
+				<base-icon source="custom" icon="clock" />
 			</div>
 			<div class="caption align-center next-course-label"
 				>{{ course.nextCourseTime }} | &nbsp;
-				<span class="next-course-room-label">{{
-					course.nextCourseRoom
-				}}</span></div
+				<span class="next-course-room-label">
+					{{ course.nextCourseRoom }}
+				</span></div
 			>
 		</div>
 	</div>
@@ -42,7 +42,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@variables";
+
 .footer {
 	height: 24px;
 	padding-top: 5px;
@@ -103,7 +105,7 @@ export default {
 	border: 1px solid #d00;
 	-webkit-border-radius: 30px;
 	opacity: 0;
-	-webkit-animation: pulsate 2s ease-out;
+	-webkit-animation: pulsate $duration-animation-slow ease-out;
 	-webkit-animation-iteration-count: infinite;
 }
 .next-course-label {

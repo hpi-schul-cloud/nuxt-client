@@ -2,9 +2,9 @@
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
 			<a style="cursor: pointer" class="icon-button" @click="popTime(time)">
-				<BaseIcon icon="trash" />
+				<base-icon icon="trash" />
 			</a>
-			<BaseSelect
+			<base-select
 				:value.sync="time.weekday"
 				:options="weekdays"
 				:allow-empty="false"
@@ -12,8 +12,8 @@
 				input-label="Tag"
 				class="item"
 				@update:value="timeUpdate"
-			></BaseSelect>
-			<BaseInput
+			></base-select>
+			<base-input
 				v-model="time.room"
 				label="Raum"
 				name="room"
@@ -21,7 +21,7 @@
 				class="item"
 				@update="timeUpdate"
 			/>
-			<BaseInput
+			<base-input
 				v-model="time.startTime"
 				label="Start"
 				name="startTime"
@@ -29,7 +29,7 @@
 				class="item"
 				@update="timeUpdate"
 			/>
-			<BaseInput
+			<base-input
 				v-model="time.duration"
 				label="Dauer"
 				name="duration"
@@ -38,9 +38,9 @@
 				@update="timeUpdate"
 			/>
 		</div>
-		<BaseButton type="button" class="btn btn-primary" @click="addTime">
+		<base-button type="button" class="btn btn-primary" @click="addTime">
 			Schulstundentermin im Stundenplan anlegen
-		</BaseButton>
+		</base-button>
 	</div>
 </template>
 
@@ -75,19 +75,18 @@ export default {
 	},
 	methods: {
 		addTime() {
-			let time = {
+			this.value.push({
 				weekday: this.weekdays[0],
 				startTime: "08:00",
 				duration: "60",
 				room: "H1",
-			};
-			this.value.push(time);
+			});
 		},
 		popTime(t) {
 			this.value.pop(t);
 		},
 		guidGenerator() {
-			let S4 = function() {
+			const S4 = function() {
 				return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 			};
 			return (
@@ -112,8 +111,6 @@ export default {
 	},
 };
 </script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

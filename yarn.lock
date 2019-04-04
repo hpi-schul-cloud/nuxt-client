@@ -4939,11 +4939,6 @@ callsite@1.0.0:
   resolved "https://registry.yarnpkg.com/callsite/-/callsite-1.0.0.tgz#280398e5d664bd74038b6f0905153e6e8af1bc20"
   integrity sha1-KAOY5dZkvXQDi28JBRU+borxvCA=
 
-callsites@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/callsites/-/callsites-1.0.1.tgz#c14c24188ce8e1d6a030b4c3c942e6ba895b6a1a"
-  integrity sha1-wUwkGIzo4dagMLTDyULmuolbaho=
-
 callsites@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-2.0.0.tgz#06eb84f00eea413da86affefacbffb36093b3c50"
@@ -5833,7 +5828,7 @@ core-js@^1.0.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
   integrity sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
 
-core-js@^2.4.0, core-js@^2.5.3, core-js@^2.5.7, core-js@^2.6.5:
+core-js@^2, core-js@^2.4.0, core-js@^2.5.3, core-js@^2.5.7, core-js@^2.6.5:
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
@@ -8486,7 +8481,7 @@ glob-parent@^2.0.0:
   dependencies:
     is-glob "^2.0.0"
 
-glob-parent@^3.0.0, glob-parent@^3.1.0:
+glob-parent@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-3.1.0.tgz#9e6af6299d8d3bd2bd40430832bd113df906c5ae"
   integrity sha1-nmr2KZ2NO9K9QEMIMr0RPfkGxa4=
@@ -8588,7 +8583,7 @@ globby@8.0.2, globby@^8.0.1:
     pify "^3.0.0"
     slash "^1.0.0"
 
-globby@^6.0.0, globby@^6.1.0:
+globby@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/globby/-/globby-6.1.0.tgz#f5a6d70e8395e21c858fb0489d64df02424d506c"
   integrity sha1-9abXDoOV4hyFj7BInWTfAkJNUGw=
@@ -8763,20 +8758,7 @@ handle-thing@^2.0.0:
   resolved "https://registry.yarnpkg.com/handle-thing/-/handle-thing-2.0.0.tgz#0e039695ff50c93fc288557d696f3c1dc6776754"
   integrity sha512-d4sze1JNC454Wdo2fkuyzCr6aHcbL6PGGuFAz0Li/NcOm1tCHGnWDRmJP85dh9IhQErTc2svWFEX5xHIOo//kQ==
 
-handlebars-layouts@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/handlebars-layouts/-/handlebars-layouts-3.1.4.tgz#26b3beb931b4b877dfbf7e6feaf4058ee6228b02"
-  integrity sha1-JrO+uTG0uHffv35v6vQFjuYiiwI=
-
-handlebars-wax@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/handlebars-wax/-/handlebars-wax-6.1.0.tgz#9d9a899e6c67b946c7742ce1b7d1bf58f2ba1722"
-  integrity sha1-nZqJnmxnuUbHdCzht9G/WPK6FyI=
-  dependencies:
-    object-assign "^4.1.1"
-    require-glob "^3.2.0"
-
-handlebars@^4.0.12, handlebars@^4.1.0:
+handlebars@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.1.1.tgz#6e4e41c18ebe7719ae4d38e5aca3d32fa3dd23d3"
   integrity sha512-3Zhi6C0euYZL5sM0Zcy7lInLXKQ+YLcF/olbN010mzGQ4XVm50JeyBnMqofHh696GrciGruC7kCcApPDJvVgwA==
@@ -11048,9 +11030,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"license-checker@git+https://github.com/mwittig/license-checker.git#d546e3f738e14c62e732346fa355162d46700893":
+"license-checker@git+https://github.com/mwittig/license-checker#d546e3f738e14c62e732346fa355162d46700893":
   version "1.0.0"
-  resolved "git+https://github.com/mwittig/license-checker.git#d546e3f738e14c62e732346fa355162d46700893"
+  resolved "git+https://github.com/mwittig/license-checker#d546e3f738e14c62e732346fa355162d46700893"
   dependencies:
     chalk "~0.5.1"
     mkdirp "^0.3.5"
@@ -12623,13 +12605,6 @@ nuxt-babel@^1.0.1:
   dependencies:
     find-babel-config "^1.1.0"
 
-nuxt-express-module@0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/nuxt-express-module/-/nuxt-express-module-0.0.11.tgz#d78375b52b8a7529bc06b110d3c81b30416f09b5"
-  integrity sha512-ugLUMqKhOFVt55lbpBTLrfVHxCeKCq6jqsyQcZ1+nh5eQnb8hm5T4xF+Ud0g2jzuMXLUgKM9dyIU1rv5VdMuKg==
-  dependencies:
-    express "^4.16.3"
-
 nuxt@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-2.5.1.tgz#57e03386004f62e499d5cdc18fd380d129cb017f"
@@ -13085,17 +13060,10 @@ param-case@2.1.x, param-case@^2.1.0:
   dependencies:
     no-case "^2.2.0"
 
-parent-module@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-0.1.0.tgz#b5292863a1e8c476ecf857e7d75c98920b24b8a6"
-  integrity sha1-tSkoY6HoxHbs+Ffn11yYkgskuKY=
-  dependencies:
-    callsites "^1.0.0"
-
 parent-module@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.0.tgz#df250bdc5391f4a085fb589dad761f5ad6b865b5"
-  integrity sha512-8Mf5juOMmiE4FcmzYc4IaiS9L3+9paz2KOiXzkRviCP6aDmN49Hz6EMWz0lGNp9pX80GvvAuLADtyGfW/Em3TA==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
+  integrity sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==
   dependencies:
     callsites "^3.0.0"
 
@@ -14952,7 +14920,7 @@ react-dev-utils@^7.0.0:
     strip-ansi "5.0.0"
     text-table "0.2.0"
 
-react-dom@^16.8.1:
+react-dom@^16.8.1, react-dom@^16.8.4:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
   integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
@@ -15115,7 +15083,7 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.6.3, react@^16.8.1:
+react@^16.6.3, react@^16.8.1, react@^16.8.4:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
   integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
@@ -15661,15 +15629,6 @@ require-from-string@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
   integrity sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==
-
-require-glob@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/require-glob/-/require-glob-3.2.0.tgz#90bfe2c8efb4b9f972eb9a3f5e580832e04f64d3"
-  integrity sha1-kL/iyO+0ufly65o/XlgIMuBPZNM=
-  dependencies:
-    glob-parent "^3.0.0"
-    globby "^6.0.0"
-    parent-module "^0.1.0"
 
 require-main-filename@^1.0.1:
   version "1.0.1"
@@ -18134,9 +18093,9 @@ void-elements@^2.0.1:
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
 vue-docgen-api@^3.3.4:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-3.11.0.tgz#c6e6c8bad34478ae93cdea64a00ac438e5df026b"
-  integrity sha512-wdeeeRuCxD2IB6lMIFAeEAsMEgEtnwHnH/wYrBInrF1vYL5PBd/Vmt8aUs4cjHjV75UFC6SVyrW/3HIMEIfGhQ==
+  version "3.11.1"
+  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-3.11.1.tgz#c18a1046e93811126926c7f01ca1801ca934a174"
+  integrity sha512-gsKWzmoHEBKh9icIsh4Nqj4FI+s3SZPei4kjW+J5pF+u+jNAnkIR8+xpIGKtDI2aq6ApbAVW3WM4DaK+3jhg+Q==
   dependencies:
     "@babel/parser" "^7.2.3"
     "@babel/types" "^7.0.0"
@@ -18361,7 +18320,7 @@ vuepress@^0.14.8:
     webpackbar "^2.6.1"
     workbox-build "^3.1.0"
 
-vuera@^0.2.3:
+vuera@^0.2.3, vuera@^0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/vuera/-/vuera-0.2.4.tgz#f574fed99cd8393067fa0b90e192e59f609f4854"
   integrity sha512-1LSHNT2M1ZvGc4bN1DtqQmtgfmgCsNQtyosiXycC8nk98CXdR0MpoQYuOOA5MojKz669jlJEWMSFXjTvTNwmow==

@@ -4,9 +4,9 @@
 		<h2 class="center medium-emphasis title">{{ title }}</h2>
 		<h3 class="center medium-emphasis subtitle">{{ subtitle }}</h3>
 		<div class="center">
-			<BaseButton class="cta-button btn-primary btn-large">
+			<base-button class="cta-button btn-primary btn-large">
 				{{ ctaText }}
-			</BaseButton>
+			</base-button>
 		</div>
 	</div>
 </template>

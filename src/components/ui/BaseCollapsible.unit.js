@@ -3,9 +3,9 @@ import BaseCollapsible from "./BaseCollapsible";
 const collapsible = {
 	data: () => ({ active: false }),
 	template: `
-		<BaseCollapsible label="Label for Toggle Button">
+		<base-collapsible label="Label for Toggle Button">
 			<p id="slot-content">Slot Content</p>
-		</BaseCollapsible>
+		</base-collapsible>
 	`,
 	components: { BaseCollapsible },
 };

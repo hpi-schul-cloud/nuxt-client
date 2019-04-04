@@ -24,7 +24,7 @@
 				<span :class="{ label: true, active: value && value !== 0 }">
 					{{ label }}
 				</span>
-				<FlatPickr
+				<flat-pickr
 					v-model="val"
 					v-bind="$attrs"
 					:config="configDate"
@@ -33,14 +33,14 @@
 					@input="$emit('update', val)"
 				>
 					<input type="date" :name="name" class="input" />
-				</FlatPickr>
+				</flat-pickr>
 			</div>
 
 			<div v-else-if="type === 'time'" class="input__wrapper">
 				<span :class="{ label: true, active: value && value !== 0 }">
 					{{ label }}
 				</span>
-				<FlatPickr
+				<flat-pickr
 					v-model="val"
 					v-bind="$attrs"
 					:config="configTime"
@@ -49,7 +49,7 @@
 					@input="$emit('update', val)"
 				>
 					<input type="time" :name="name" class="input" />
-				</FlatPickr>
+				</flat-pickr>
 			</div>
 
 			<label v-else class="input__wrapper">
@@ -233,8 +233,7 @@ $input-padding-left: 12px;
 	left: 0;
 	cursor: pointer;
 	background-color: #ccc;
-	-webkit-transition: 0.4s;
-	transition: 0.4s;
+	transition: $duration-animation-medium;
 
 	&::before {
 		position: absolute;
@@ -244,8 +243,7 @@ $input-padding-left: 12px;
 		height: 26px;
 		content: "";
 		background-color: white;
-		-webkit-transition: 0.4s;
-		transition: 0.4s;
+		transition: $duration-animation-medium;
 	}
 }
 input:checked + .slider {
@@ -270,7 +268,7 @@ input:checked + .slider::before {
 	color: $color-primary;
 	text-transform: uppercase;
 	cursor: pointer;
-	transition: all 0.25s linear;
+	transition: all $duration-animation-medium linear;
 	&::before {
 		display: inline-block;
 		width: 1.125rem;
@@ -279,7 +277,7 @@ input:checked + .slider::before {
 		content: "";
 		border: 0.5rem solid $color-primary;
 		border-radius: 50%;
-		transition: all 0.25s linear;
+		transition: all $duration-animation-medium linear;
 	}
 	&:hover {
 		color: $color-primary;
