@@ -42,7 +42,7 @@ export default {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
-	transition: opacity 0.3s ease;
+	transition: opacity $duration-animation-medium ease;
 }
 
 .modal-wrapper {
@@ -55,7 +55,7 @@ export default {
 	margin: 0 auto;
 	border-radius: 2px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-	transition: all 0.3s ease;
+	transition: all $duration-animation-medium ease;
 }
 
 .modal-header {

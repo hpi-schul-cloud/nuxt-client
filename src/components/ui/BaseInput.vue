@@ -234,8 +234,7 @@ $input-padding-left: 12px;
 	left: 0;
 	cursor: pointer;
 	background-color: #ccc;
-	-webkit-transition: 0.4s;
-	transition: 0.4s;
+	transition: $duration-animation-medium;
 
 	&::before {
 		position: absolute;
@@ -245,8 +244,7 @@ $input-padding-left: 12px;
 		height: 26px;
 		content: "";
 		background-color: white;
-		-webkit-transition: 0.4s;
-		transition: 0.4s;
+		transition: $duration-animation-medium;
 	}
 }
 input:checked + .slider {
@@ -271,7 +269,7 @@ input:checked + .slider::before {
 	color: $color-primary;
 	text-transform: uppercase;
 	cursor: pointer;
-	transition: all 0.25s linear;
+	transition: all $duration-animation-medium linear;
 	&::before {
 		display: inline-block;
 		width: 1.125rem;
@@ -280,7 +278,7 @@ input:checked + .slider::before {
 		content: "";
 		border: 0.5rem solid $color-primary;
 		border-radius: 50%;
-		transition: all 0.25s linear;
+		transition: all $duration-animation-medium linear;
 	}
 	&:hover {
 		color: $color-primary;

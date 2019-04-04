@@ -45,7 +45,7 @@
 // TODO I think this doesn't do anything
 .page-enter-active,
 .page-leave-active {
-	transition: all 0.15s ease-in-out;
+	transition: all $duration-animation-fast ease-in-out;
 }
 
 * {
