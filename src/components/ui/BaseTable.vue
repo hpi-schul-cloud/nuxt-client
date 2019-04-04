@@ -52,7 +52,6 @@ export default {
 		tr {
 			td {
 				padding: 8px;
-				padding: none;
 				border-bottom: 2px solid grey;
 			}
 		}

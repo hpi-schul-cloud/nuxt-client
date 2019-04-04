@@ -2,17 +2,31 @@
 
 <script>
 import { mapGetters } from "vuex";
+import MultiSelect from "vue-multiselect";
+
+const roleTranslations = {
+	teammember: "Teilnehmer",
+	teamexpert: "externer Experte",
+	teamleader: "Leiter",
+	teamadministrator: "Team-Admin",
+	teamowner: "Team-Admin (Eigentümer)",
+};
 
 export default {
+	components: {
+		MultiSelect,
+	},
 	data() {
 		return {
 			addInternalModalActive: false,
 			addExternalModalActive: false,
+			editMemberModalActive: false,
 			internalTab: "addMember",
 			membersSelected: [],
 			members: [],
 			classesSelected: [],
 			classes: [],
+			memberSelected: {},
 			columns: [
 				{
 					field: "userId.firstName",
@@ -43,6 +57,17 @@ export default {
 		...mapGetters("teams", {
 			team: "current",
 		}),
+		...mapGetters("roles", {
+			roles: "list",
+		}),
+		teamRoles() {
+			return this.roles
+				.filter((r) => r.name.includes("team"))
+				.map((r) => {
+					r.label = roleTranslations[r.name];
+					return r;
+				});
+		},
 		teamClasses() {
 			let classes = this.team.classIds;
 
@@ -58,6 +83,7 @@ export default {
 		},
 	},
 	async created(ctx) {
+		await this.$store.dispatch("roles/find", { query: { $limit: 1000 } });
 		await this.getTeam();
 		await this.getMembers();
 		await this.getClasses();
@@ -173,6 +199,42 @@ export default {
 				},
 			});
 		},
+		editMember(teamMember) {
+			this.editMemberModalActive = true;
+			this.memberSelected = teamMember;
+			this.memberSelected.role.label =
+				roleTranslations[this.memberSelected.role.name];
+		},
+		async saveMember() {
+			try {
+				let userIds = [...this.team.userIds];
+				userIds = userIds.map((u) => {
+					u.role = u.role._id;
+					u.userId = u.userId._id;
+
+					if (u.userId === this.memberSelected.userId._id) {
+						u.role = this.memberSelected.role._id;
+					}
+					return u;
+				});
+
+				this.memberSelected = {};
+
+				await this.$store.dispatch("teams/patch", [
+					this.team._id,
+					{
+						userIds,
+					},
+				]);
+
+				await this.getTeam();
+				await this.getMembers();
+				this.editMemberModalActive = false;
+				this.$toast.success("Änderung gespeichert");
+			} catch (e) {
+				this.$toast.error("Fehler beim Bearbeiten");
+			}
+		},
 		removeClass(schoolClass) {
 			this.$dialog.confirm({
 				title: "Klasse entfernen",
@@ -204,8 +266,8 @@ export default {
 				},
 			});
 		},
-		getTeam() {
-			this.$store.dispatch("teams/get", [
+		async getTeam() {
+			await this.$store.dispatch("teams/get", [
 				this.$route.params.id,
 				{
 					query: {

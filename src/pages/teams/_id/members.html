@@ -39,6 +39,11 @@
 				class="cursor-pointer"
 				@click.native="removeMember(slotProps.row.userId)"
 			/>
+			<base-icon
+				icon="edit"
+				class="cursor-pointer"
+				@click.native="editMember(slotProps.row)"
+			/>
 		</base-table>
 	</section>
 
@@ -111,6 +116,29 @@
 		<div class="modal-footer">
 			<base-button id="button" class="is-light" @click="addTeamMembers">
 				Hinzufügen
+			</base-button>
+		</div>
+	</base-modal>
+
+	<base-modal ref="editMemberModal" :active.sync="editMemberModalActive">
+		<div class="modal-header">
+			<h3>Teilnehmer bearbeiten</h3>
+		</div>
+
+		<div class="modal-body">
+			<p>Ändere die Rolle des Nutzers:</p>
+			<base-select
+				:value.sync="memberSelected.role"
+				:options="teamRoles"
+				trackBy="_id"
+				:allow-empty="false"
+				label="label"
+			></base-select>
+		</div>
+
+		<div class="modal-footer">
+			<base-button id="button" class="is-light" @click="saveMember">
+				Speichern
 			</base-button>
 		</div>
 	</base-modal>
