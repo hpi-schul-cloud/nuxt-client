@@ -33,7 +33,7 @@
 			<h3>Mitglieder</h3>
 			<base-table
 				v-slot:default="slotProps"
-				:data="team.userIds"
+				:data="teamMembers"
 				:columns="columns"
 			>
 				<base-icon
@@ -181,7 +181,7 @@ export default {
 					label: "Last Name",
 				},
 				{
-					field: "role.name",
+					field: "role.label",
 					label: "Rolle",
 				},
 			],
@@ -211,6 +211,17 @@ export default {
 					r.label = roleTranslations[r.name];
 					return r;
 				});
+		},
+		teamMembers() {
+			let members = this.team.userIds;
+			members = members.map((m) => {
+				if (typeof m.role === "object") {
+					m.role.label = roleTranslations[m.role.name];
+				}
+				return m;
+			});
+
+			return members;
 		},
 		teamClasses() {
 			let classes = this.team.classIds;
