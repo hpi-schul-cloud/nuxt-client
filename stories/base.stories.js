@@ -6,7 +6,7 @@ import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
-import BaseInput from "@components/ui/BaseInput.vue";
+import BaseInput from "@components/ui/BaseInput/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
@@ -59,12 +59,14 @@ storiesOf("Base Components", module)
 		data: () => ({ content: "" }),
 		template: outdent`
 			<div>
-			<base-input type="text" value="" label="Vorname" name="firstname" />
+				<base-input type="text" value="" label="Vorname" name="firstname" />
 				<base-input type="email" value="" label="Email" name="email" />
 				<base-input type="password" value="" label="Password" name="password" />
 				<base-input type="url" value="" label="URL" name="url" />
 				<base-input type="number" value="" label="Number" name="number" />
 				<base-input type="textarea" value="" label="Textarea" name="textarea" />
+				<base-input type="checkbox" value="" label="Checkbox" name="textarea" />
+				<base-input type="switch" value="" label="Switch" name="textarea" />
 			</div>
 				`,
 		methods: {},
@@ -78,7 +80,7 @@ storiesOf("Base Components", module)
 		components: { BaseInput },
 		template: outdent`
 			<fieldset>
-			<legend>Example legend</legend>
+				<legend>Example legend</legend>
 				<base-input type="radio" name="choice" value="me" id="radio1">Pick me!</base-input>
 				<base-input type="radio" name="choice" value="notMe" id="radio2">Don't pick me.</base-input>
 			</fieldset>`,

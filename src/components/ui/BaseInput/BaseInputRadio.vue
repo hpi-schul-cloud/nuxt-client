@@ -1,17 +1,21 @@
 <template>
-	<div>
-		<input :id="id" type="radio" v-bind="$attrs" class="radio-btn" />
-		<label :for="id" class="label">
-			<slot />
-		</label>
-	</div>
+	<label class="label">
+		<input
+			v-model="value"
+			type="radio"
+			v-bind="$attrs"
+			class="radio-btn"
+			@input="$emit('input', $event.target.value)"
+		/>
+		{{ $attrs.label }}
+	</label>
 </template>
 <script>
 export default {
 	props: {
-		id: {
+		value: {
 			type: String,
-			default: "",
+			required: true,
 		},
 	},
 };
@@ -20,6 +24,11 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 
+.label {
+	display: block;
+}
+
+/*
 .label {
 	display: flex;
 	align-items: center;
@@ -34,7 +43,7 @@ export default {
 		margin-right: 0.625rem;
 		content: "";
 		border: 0.25rem solid $color-primary;
-		border-radius: 50%;
+		border-radius: $size-border-radius-round;
 		transition: all 0.25s linear;
 	}
 	&:hover {
@@ -49,7 +58,7 @@ export default {
 .radio-btn {
 	position: absolute;
 	opacity: 0;
-	&:checked + .label {
+	&:checked .label {
 		color: $color-primary;
 		&::before {
 			margin-right: 2rem;
@@ -58,4 +67,5 @@ export default {
 		}
 	}
 }
+*/
 </style>
