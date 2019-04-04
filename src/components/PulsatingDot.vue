@@ -15,7 +15,9 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+@import "@variables";
+
 .ring-container {
 	display: flex;
 	align-items: center;
@@ -39,7 +41,7 @@ export default {
 	border: 1px solid #d00;
 	border-radius: 30px;
 	opacity: 0;
-	animation: pulsate 2s ease-out;
+	animation: pulsate $duration-animation-slow ease-out;
 	animation-iteration-count: infinite;
 }
 

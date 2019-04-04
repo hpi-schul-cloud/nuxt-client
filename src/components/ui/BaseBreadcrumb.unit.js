@@ -27,7 +27,7 @@ describe("@components/BaseBreadcrumb", () => {
 		const { element } = mount(BaseBreadcrumb, {
 			...createComponentMocks({ router: true }),
 			propsData: {
-				inputs: [text],
+				inputs: [{ text }],
 			},
 		});
 		expect(element.textContent).toContain(text);

@@ -3,34 +3,36 @@
 		<section class="section">
 			<h4>
 				<span>
-					<BaseLink :to="{ name: 'teams' }">Teams</BaseLink>
+					<base-link :to="{ name: 'teams' }">Teams</base-link>
 				</span>
 				<span>
-					<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }"
-						>/ {{ team.name }}</BaseLink
+					<base-link :to="{ name: 'teams-id', params: { id: team._id } }"
+						>/ {{ team.name }}</base-link
 					>
 				</span>
 				<span>/ Bearbeiten</span>
 			</h4>
 			<h1>Team bearbeiten</h1>
-			<BaseButton class="is-danger" @click="confirmDelete">Löschen</BaseButton>
+			<base-button class="is-danger" @click="confirmDelete"
+				>Löschen</base-button
+			>
 		</section>
 		<section class="section">
-			<BaseInput
+			<base-input
 				v-model="team.name"
 				label="Name"
 				type="text"
 				placeholder="Dream Team"
 				maxlength="30"
-			></BaseInput>
-			<BaseInput
+			></base-input>
+			<base-input
 				v-model="team.description"
 				label="Beschreibung"
 				type="textarea"
 				placeholder="Everything you have to know"
 				maxlength="255"
-			></BaseInput>
-			<BaseButton class="is-primary" @click="save()">Speichern</BaseButton>
+			></base-input>
+			<base-button class="is-primary" @click="save">Speichern</base-button>
 		</section>
 		<section class="section">
 			<h1>{{ team.name }}</h1>

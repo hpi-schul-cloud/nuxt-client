@@ -8,7 +8,7 @@
 			>
 		</section>
 		<section class="section">
-			<Card v-for="(team, i) of teams" :key="i">
+			<card v-for="(team, i) of teams" :key="i">
 				<div slot="header" class="card-image"></div>
 				<div class="card-content">
 					<div class="media">
@@ -28,12 +28,12 @@
 				</div>
 				<div slot="footer">
 					<div class="footer-actions">
-						<BaseLink :to="{ name: 'teams-id', params: { id: team._id } }"
-							>Anschauen</BaseLink
+						<base-link :to="{ name: 'teams-id', params: { id: team._id } }"
+							>Anschauen</base-link
 						>
 					</div>
 				</div>
-			</Card>
+			</card>
 		</section>
 	</div>
 </template>

@@ -19,7 +19,6 @@ export default {
 	props: {
 		active: {
 			type: Boolean,
-			default: false,
 		},
 	},
 	methods: {
@@ -28,6 +27,15 @@ export default {
 		},
 		close() {
 			this.$emit("update:active", false);
+
+			setTimeout(() => {
+				this.$destroy();
+				if (typeof this.$el.remove !== "undefined") {
+					this.$el.remove();
+				} else if (typeof el.parentNode !== "undefined") {
+					this.$el.parentNode.removeChild(el);
+				}
+			}, 150);
 		},
 	},
 };
@@ -43,7 +51,7 @@ export default {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
-	transition: opacity 0.3s ease;
+	transition: opacity $duration-animation-medium ease;
 }
 
 .modal-wrapper {
@@ -56,7 +64,7 @@ export default {
 	margin: 0 auto;
 	border-radius: 2px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-	transition: all 0.3s ease;
+	transition: all $duration-animation-medium ease;
 }
 
 .modal-header {
@@ -108,17 +116,13 @@ export default {
  * these styles.
  */
 
-.modal-enter {
-	opacity: 0;
-}
-
+.modal-enter,
 .modal-leave-active {
 	opacity: 0;
 }
 
 .modal-enter .modal-container,
 .modal-leave-active .modal-container {
-	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
 }
 </style>

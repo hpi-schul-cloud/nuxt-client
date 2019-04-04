@@ -1,13 +1,17 @@
 <template>
 	<div>
-		<button class="collapsible" @click="collapsed = !collapsed">{{
-			label
-		}}</button>
-		<div v-if="!collapsed">
-			<div class="content">
+		<button
+			:aria-expanded="!collapsed"
+			class="collapsible"
+			@click="collapsed = !collapsed"
+		>
+			{{ label }}
+		</button>
+		<transition name="fade">
+			<div v-if="!collapsed" class="content" :aria-hidden="collapsed">
 				<slot />
 			</div>
-		</div>
+		</transition>
 	</div>
 </template>
 <script>
@@ -50,24 +54,14 @@ export default {
 	padding: 0 18px;
 	overflow: hidden;
 	background-color: #f1f1f1;
-	animation: fadeEffect 1s;
 }
 
-@-webkit-keyframes fadeEffect {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity $duration-animation-base;
 }
-
-@keyframes fadeEffect {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>
