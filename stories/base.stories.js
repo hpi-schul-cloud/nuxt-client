@@ -54,25 +54,34 @@ storiesOf("Base Components", module)
 			</div>
 		`,
 	}))
-	.add("Base Input", () => ({
+	.add("Base Input default", () => ({
 		components: { BaseInput },
 		data: () => ({ content: "" }),
-		template:
-			'<base-input type="text" label="Vorname" v-model="content" name="firstname" placeholder="Max"/>',
+		template: outdent`
+			<div>
+			<base-input type="text" value="" label="Vorname" name="firstname" />
+				<base-input type="email" value="" label="Email" name="email" />
+				<base-input type="password" value="" label="Password" name="password" />
+				<base-input type="url" value="" label="URL" name="url" />
+				<base-input type="number" value="" label="Number" name="number" />
+				<base-input type="textarea" value="" label="Textarea" name="textarea" />
+			</div>
+				`,
 		methods: {},
 	}))
 	.add("Base Input Switch", () => ({
 		components: { BaseInput },
 		data: () => ({ toggled: "" }),
-		template: `<base-input type="checkbox" v-model="toggled" />`,
+		template: `<base-input value="" type="switch" label="Test switch" name="test"/>`,
 	}))
 	.add("Base Input Radio Button", () => ({
 		components: { BaseInput },
 		template: outdent`
-			<div>
+			<fieldset>
+			<legend>Example legend</legend>
 				<base-input type="radio" name="choice" value="me" id="radio1">Pick me!</base-input>
 				<base-input type="radio" name="choice" value="notMe" id="radio2">Don't pick me.</base-input>
-			</div>`,
+			</fieldset>`,
 		methods: {},
 	}))
 	.add("Base Input Date", () => ({
