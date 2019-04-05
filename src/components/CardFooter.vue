@@ -42,7 +42,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@variables";
+
 .footer {
 	height: 24px;
 	padding-top: 5px;
@@ -103,7 +105,7 @@ export default {
 	border: 1px solid #d00;
 	-webkit-border-radius: 30px;
 	opacity: 0;
-	-webkit-animation: pulsate 2s ease-out;
+	-webkit-animation: pulsate $duration-animation-slow ease-out;
 	-webkit-animation-iteration-count: infinite;
 }
 .next-course-label {
