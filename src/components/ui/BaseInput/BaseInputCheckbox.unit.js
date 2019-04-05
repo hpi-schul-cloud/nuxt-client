@@ -25,7 +25,7 @@ describe("@components/BaseInputCheckbox", () => {
 			.map((type) =>
 				mount({
 					data: () => ({ value: false }),
-					template: `<base-input v-model="value" label="test" type="${type}" name="checkbox"></base-input>`,
+					template: `<base-input v-model="value" label="test" type="${type}" name="checkbox" />`,
 					components: { BaseInput },
 				})
 			)

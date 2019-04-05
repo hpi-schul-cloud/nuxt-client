@@ -8,7 +8,7 @@
 			class="visually-hidden"
 			@change="updateVModel"
 		/>
-		<span :class="['icon', $attrs.type]" />
+		<span :class="['icon', type]" />
 		<span class="label">
 			{{ $attrs.label }}
 		</span>
