@@ -7,10 +7,10 @@ describe("@components/BaseInput", () => {
 	it("all types have a label", () => {
 		const testLabel = "MyTestLabel";
 		inputTypes
-			.map((type) =>
+			.map((type, index) =>
 				mount({
 					data: () => ({ value: "" }),
-					template: `<base-input v-model="value" label="${testLabel}" type="${type}" name="test" />`,
+					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
 				})
 			)

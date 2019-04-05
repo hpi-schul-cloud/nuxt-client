@@ -71,6 +71,7 @@ input,
 	display: block;
 	width: 100%;
 	padding: 4px 8px;
+	background-color: transparent;
 	border: 0;
 	border-radius: $size-border-radius - $size-border-width;
 	&::placeholder {

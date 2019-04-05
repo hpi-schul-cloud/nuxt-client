@@ -1,12 +1,13 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
-import { text } from "@storybook/addon-knobs";
+import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
 import BaseInput from "@components/ui/BaseInput/BaseInput.vue";
+import { inputTypes } from "@components/ui/BaseInput/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
@@ -54,7 +55,35 @@ storiesOf("Base Components", module)
 			</div>
 		`,
 	}))
-	.add("Base Input default", () => ({
+	.add("Base Input (Knobs)", () => {
+		const baseInputTypes = {};
+		inputTypes.forEach((type) => {
+			baseInputTypes[type] = type;
+		});
+		return {
+			components: { BaseInput },
+			data: () => ({
+				vModel: "",
+				type: select("type", baseInputTypes, inputTypes[0]),
+				label: text("label", "Label"),
+				name: text("name", "name"),
+				value: text("value", ""),
+				placeholder: text("placeholder", "Placeholder"),
+			}),
+			template: outdent`
+				<div>
+					<pre>{{ vModel }}</pre>
+					<base-input
+						v-model="vModel"
+						:label="label"
+						:type="type"
+						:name="name"
+						:placeholder="placeholder"
+					/>
+				</div>`,
+		};
+	})
+	.add("Base Input (All)", () => ({
 		components: { BaseInput },
 		data: () => ({
 			vmodels: {
@@ -64,8 +93,9 @@ storiesOf("Base Components", module)
 				url: "",
 				number: 0,
 				checkboxBoolean: true,
-				checkboxList: ["b"],
+				checkboxList: ["a"],
 				switch: true,
+				radio: ["b"],
 			},
 		}),
 		template: outdent`
@@ -82,38 +112,11 @@ storiesOf("Base Components", module)
 					<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
 				</div>
 				<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
-			</div>
-				`,
-		methods: {},
-	}))
-	.add("Base Input Switch", () => ({
-		components: { BaseInput },
-		data: () => ({ toggled: "" }),
-		template: `<base-input value="" type="switch" label="Test switch" name="test"/>`,
-	}))
-	.add("Base Input Radio Button", () => ({
-		components: { BaseInput },
-		template: outdent`
-			<fieldset>
-				<legend>Example legend</legend>
-				<base-input type="radio" name="choice" value="me" id="radio1">Pick me!</base-input>
-				<base-input type="radio" name="choice" value="notMe" id="radio2">Don't pick me.</base-input>
-			</fieldset>`,
-		methods: {},
-	}))
-	.add("Base Input Date", () => ({
-		components: { BaseInput },
-		data: () => ({ content: "" }),
-		template:
-			'<base-input value="" type="date" v-model="content" label="Datum" placeholder="21.02.2019" name="date"/>',
-		methods: {},
-	}))
-	.add("Base Input Time", () => ({
-		components: { BaseInput },
-		data: () => ({ content: "" }),
-		template:
-			'<base-input value="" type="time" v-model="content" label="Uhrzeit" name="someTime"/>',
-		methods: {},
+				<div>
+					<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
+					<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
+				</div>
+			</div>`,
 	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },

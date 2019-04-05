@@ -51,4 +51,35 @@ describe("@components/BaseInputDefault", () => {
 			expect(input.element.value.toString()).toBe(testInput.toString());
 		});
 	});
+
+	it("attributes are passed through", () => {
+		const attributes = {
+			alt: "input element",
+			autocomplete: "on",
+			autofocus: "autofocus",
+			disabled: "disabled",
+			form: "form_id",
+			maxlength: "5",
+			multiple: "multiple",
+			name: "input-name",
+			pattern: ".*",
+			placeholder: "placeholder text",
+			readonly: "readonly",
+			required: "required",
+		};
+		inputTypes.forEach((type) => {
+			const wrapper = mount(BaseInput, {
+				attrs: attributes,
+				propsData: {
+					vmodel: "",
+					label: "test",
+					type,
+				},
+			});
+			const input = wrapper.find("input");
+			Object.keys(attributes).forEach((attr) => {
+				expect(input.attributes(attr)).toBe(attributes[attr]);
+			});
+		});
+	});
 });

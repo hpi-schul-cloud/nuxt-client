@@ -26,7 +26,7 @@ const componentDictionary = {
 	time: BaseInputCalendar,
 	switch: BaseInputCheckbox,
 	checkbox: BaseInputCheckbox,
-	// radio: BaseInputRadio,
+	radio: BaseInputRadio,
 };
 
 const inputTypes = Object.keys(componentDictionary);

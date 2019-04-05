@@ -1,71 +1,69 @@
 <template>
-	<label class="label">
+	<label>
 		<input
-			v-model="value"
+			ref="hiddenInput"
+			:checked="vmodel === value"
+			:value="value"
 			type="radio"
-			v-bind="$attrs"
-			class="radio-btn"
-			@input="$emit('input', $event.target.value)"
+			class="visually-hidden"
+			@change="$emit('input', $event.target.value)"
 		/>
-		{{ $attrs.label }}
+		<span class="radio" />
+		<span class="label">
+			{{ $attrs.label }}
+		</span>
 	</label>
 </template>
 <script>
 export default {
+	model: {
+		prop: "vmodel",
+		event: "input",
+	},
 	props: {
+		vmodel: {
+			type: String,
+			required: true,
+		},
 		value: {
 			type: String,
 			required: true,
 		},
 	},
+	methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@variables";
 
-.label {
-	display: block;
+$background-color: #ccc;
+$background-color-active: $color-secondary;
+
+label {
+	position: relative;
 }
 
-/*
-.label {
-	display: flex;
-	align-items: center;
-	padding: 0.75rem 0;
-	color: $color-primary;
-	text-transform: uppercase;
-	transition: all 0.25s linear;
-	&::before {
-		display: inline-block;
-		width: 0.6rem;
-		height: 0.6rem;
-		margin-right: 0.625rem;
-		content: "";
-		border: 0.25rem solid $color-primary;
-		border-radius: $size-border-radius-round;
-		transition: all 0.25s linear;
-	}
-	&:hover {
-		color: $color-primary;
-		&::before {
-			margin-right: 2rem;
-			border: 0.25rem solid $color-primary;
-		}
+.radio {
+	position: relative;
+	display: inline-block;
+	width: 0.7em;
+	height: 0.7em;
+	margin-right: 0.25em;
+	background-color: $background-color;
+	border-radius: $size-border-radius-round;
+	transition: background-color $duration-animation-base;
+}
+
+input:checked + .radio {
+	background-color: $background-color-active;
+	&.switch::before {
+		transform: translateX(100%);
 	}
 }
 
-.radio-btn {
-	position: absolute;
-	opacity: 0;
-	&:checked .label {
-		color: $color-primary;
-		&::before {
-			margin-right: 2rem;
-			background: $color-primary;
-			border: 0.25rem solid $color-primary;
-		}
-	}
+input:focus + .radio {
+	outline: 2px solid #4d90fe;
+	outline-offset: 0.05em;
 }
-*/
 </style>
