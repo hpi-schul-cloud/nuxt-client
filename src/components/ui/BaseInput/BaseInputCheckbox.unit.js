@@ -1,27 +1,67 @@
-import BaseInputCheckbox from "./BaseInputCheckbox";
+import BaseInput from "./BaseInput";
 
 describe("@components/BaseInputCheckbox", () => {
-	it(...isValidComponent(BaseInputCheckbox));
-	// TODO
-	/*
-	it("Check if correct input and slider are rendered", () => {
-		const testLabel = "test label";
-		const wrapper = shallowMount(BaseInputCheckbox, {
-			attrs: { label: testLabel },
+	it(...isValidComponent(BaseInput));
+
+	it(`Check if input type="checkbox" is rendered`, () => {
+		["checkbox", "switch"]
+			.map((type) =>
+				mount(BaseInput, {
+					propsData: {
+						label: "Checkbox",
+						name: "checkbox",
+						type,
+						vmodel: true,
+					},
+				})
+			)
+			.forEach((wrapper) => {
+				expect(wrapper.find("input[type='checkbox']").exists()).toBeTruthy();
+			});
+	});
+
+	it(`input toggles boolean vmodel`, () => {
+		["checkbox", "switch"]
+			.map((type) =>
+				mount({
+					data: () => ({ value: false }),
+					template: `<base-input v-model="value" label="test" type="${type}" name="checkbox"></base-input>`,
+					components: { BaseInput },
+				})
+			)
+			.forEach((wrapper) => {
+				const input = wrapper.find("input");
+				expect(wrapper.vm.value).toBe(false);
+				input.setChecked(true);
+				expect(wrapper.vm.value).toBe(true);
+				input.setChecked(false);
+				expect(wrapper.vm.value).toBe(false);
+
+				["input", "label"].forEach((clickTargetSelector) => {
+					const clickTarget = wrapper.find(clickTargetSelector);
+					expect(wrapper.vm.value).toBe(false);
+					clickTarget.trigger("click");
+					expect(wrapper.vm.value).toBe(true);
+					clickTarget.trigger("click");
+					expect(wrapper.vm.value).toBe(false);
+				});
+			});
+	});
+
+	it(`use array v-model if value is specified`, () => {
+		const testValue = "test";
+		const wrapper = mount({
+			data: () => ({ value: [] }),
+			template: `<base-input v-model="value" value="${testValue}" label="test" type="checkbox" name="checkbox"></base-input>`,
+			components: { BaseInput },
 		});
-		expect(wrapper.find("input[type='checkbox']").exists()).toBe(true);
-		expect(wrapper.find("span").classes()).toContain("slider");
-		expect(wrapper.text()).toContain(testLabel);
-	});
 
-	it("Check if v model changes", () => {
-		const wrapper = shallowMount(BaseInputCheckbox);
-		const switchInput = wrapper.find("input[type='checkbox']");
-		switchInput.setChecked(false);
-		expect(wrapper.vm.toggle).toBe(false);
-		switchInput.setChecked(true);
-		expect(wrapper.vm.toggle).toBe(true);
-
+		const input = wrapper.find("input");
+		expect(wrapper.vm.value.length).toBe(0);
+		input.setChecked(true);
+		expect(wrapper.vm.value.length).toBe(1);
+		expect(wrapper.vm.value.includes(testValue)).toBeTruthy();
+		input.setChecked(false);
+		expect(wrapper.vm.value.length).toBe(0);
 	});
-	*/
 });

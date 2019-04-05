@@ -56,17 +56,30 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Input default", () => ({
 		components: { BaseInput },
-		data: () => ({ content: "" }),
+		data: () => ({
+			vmodels: {
+				text: "",
+				checkboxBoolean: true,
+				checkboxList: ["b"],
+				switch: true,
+			},
+		}),
 		template: outdent`
 			<div>
-				<base-input type="text" value="" label="Vorname" name="firstname" />
-				<base-input type="email" value="" label="Email" name="email" />
-				<base-input type="password" value="" label="Password" name="password" />
-				<base-input type="url" value="" label="URL" name="url" />
-				<base-input type="number" value="" label="Number" name="number" />
-				<base-input type="textarea" value="" label="Textarea" name="textarea" />
-				<base-input type="checkbox" value="" label="Checkbox" name="textarea" />
-				<base-input type="switch" value="" label="Switch" name="textarea" />
+				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
+				<!--
+				<base-input type="text" v-model="vmodels.text" label="Vorname" name="firstname" />
+				<base-input type="email" v-model="vmodels.email" label="Email" name="email" />
+				<base-input type="password" v-model="vmodels.password" label="Password" name="password" />
+				<base-input type="url" v-model="vmodels.url" label="URL" name="url" />
+				<base-input type="number" v-model="vmodels.number" label="Number" name="number" />
+				-->
+				<base-input type="checkbox" v-model="vmodels.checkboxBoolean" label="Checkbox" name="checkbox" />
+				<div>
+					<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
+					<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
+				</div>
+				<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
 			</div>
 				`,
 		methods: {},

@@ -1,9 +1,9 @@
 <template>
 	<component
 		:is="getComponent(type)"
-		:value="value"
+		:vmodel="vmodel"
 		v-bind="{ ...$attrs, ...$props }"
-		@input="$emit('input', $event)"
+		@input="$emit('update:vmodel', $event)"
 	/>
 </template>
 
@@ -31,6 +31,10 @@ const componentDictionary = {
 
 export default {
 	//inheritAttrs: false,
+	model: {
+		prop: "vmodel",
+		event: "update:vmodel",
+	},
 	props: {
 		type: {
 			type: String,
@@ -39,8 +43,8 @@ export default {
 				return !!componentDictionary[type];
 			},
 		},
-		value: {
-			type: [String, Number, Boolean],
+		vmodel: {
+			type: [Array, String, Number, Boolean],
 			required: true,
 		},
 		label: {

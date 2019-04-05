@@ -2,7 +2,8 @@ import BaseInput from "./BaseInput";
 
 describe("@components/BaseInput", () => {
 	it(...isValidComponent(BaseInput));
-
+	// TODO
+	/*
 	it("Check type is required and validator is correct", () => {
 		const wrapper = shallowMount(BaseInput, {
 			propsData: {
@@ -13,13 +14,10 @@ describe("@components/BaseInput", () => {
 			},
 		});
 		const type = wrapper.vm.$options.props.type;
-		// TODO
-		/*
 		expect(type.required).toBeTruthy();
 		expect(type.validator && type.validator("wrong")).toBeFalsy();
 		expect(type.validator && type.validator("text")).toBeTruthy();
 		expect(type.validator && type.validator("Date")).toBeTruthy();
-		*/
 	});
 	it("Check value required", () => {
 		const wrapper = shallowMount(BaseInput, {
@@ -106,4 +104,5 @@ describe("@components/BaseInput", () => {
 	// 		expect(inputField.getAttribute(key)).toBe(attributes[key]);
 	// 	});
 	// });
+	*/
 });

@@ -1,10 +1,12 @@
 <template>
 	<label>
 		<input
-			:checked="value"
+			ref="hiddenInput"
+			:checked="isChecked"
+			:value="value"
 			type="checkbox"
 			class="visually-hidden"
-			@input="$emit('input', $event.target.checked)"
+			@change="updateVModel"
 		/>
 		<span :class="['icon', $attrs.type]" />
 		<span class="label">
@@ -14,10 +16,46 @@
 </template>
 <script>
 export default {
+	model: {
+		prop: "vmodel",
+		event: "input",
+	},
 	props: {
-		value: {
-			type: Boolean,
+		vmodel: {
+			type: [Array, Boolean],
 			required: true,
+		},
+		value: {
+			type: String,
+			default: "",
+		},
+		type: {
+			type: String,
+			default: "",
+			validate(type) {
+				return ["checkbox", "switch"].includes(type);
+			},
+		},
+	},
+	computed: {
+		isChecked() {
+			return typeof this.vmodel === "boolean"
+				? this.vmodel
+				: this.vmodel.includes(this.value);
+		},
+	},
+	methods: {
+		updateVModel() {
+			let newModel = this.vmodel;
+			const isChecked = this.$refs.hiddenInput.checked;
+			if (typeof this.vmodel === "boolean") {
+				newModel = isChecked;
+			} else if (isChecked && !newModel.includes(this.value)) {
+				newModel.push(this.value);
+			} else if (!isChecked && newModel.includes(this.value)) {
+				newModel = newModel.filter((entry) => entry !== this.value);
+			}
+			this.$emit("input", newModel);
 		},
 	},
 };
