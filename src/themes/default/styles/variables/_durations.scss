@@ -1,1 +1,4 @@
 $duration-animation-base: 0.3s;
+$duration-animation-slow: $duration-animation-base * 3;
+$duration-animation-medium: $duration-animation-base;
+$duration-animation-fast: $duration-animation-base * 0.5;

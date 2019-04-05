@@ -104,7 +104,7 @@ export default {
 		}
 
 		.search-icon {
-			transition: transform 0.3s ease-in-out;
+			transition: transform $duration-animation-medium ease-in-out;
 		}
 
 		.load-icon {
@@ -117,7 +117,7 @@ export default {
 			right: 8px;
 			padding: 16px;
 			cursor: pointer;
-			transition: opacity 0.3s ease-in-out;
+			transition: opacity $duration-animation-medium ease-in-out;
 		}
 	}
 
