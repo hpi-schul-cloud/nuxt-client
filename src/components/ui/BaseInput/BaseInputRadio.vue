@@ -2,6 +2,7 @@
 	<label>
 		<input
 			ref="hiddenInput"
+			v-bind="$attrs"
 			:checked="vmodel === value"
 			:value="value"
 			type="radio"
@@ -10,11 +11,13 @@
 		/>
 		<span class="radio" />
 		<span class="label">
-			{{ $attrs.label }}
+			{{ label }}
 		</span>
 	</label>
 </template>
 <script>
+const supportedTypes = ["radio"];
+
 export default {
 	model: {
 		prop: "vmodel",
@@ -26,6 +29,10 @@ export default {
 			required: true,
 		},
 		value: {
+			type: String,
+			required: true,
+		},
+		label: {
 			type: String,
 			required: true,
 		},

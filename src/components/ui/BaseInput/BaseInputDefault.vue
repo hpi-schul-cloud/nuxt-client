@@ -2,17 +2,33 @@
 	<div>
 		<label :class="classList">
 			<div class="label">
-				{{ $attrs.label }}
+				{{ label }}
 			</div>
 			<slot>
-				<input v-bind="$attrs" :value="vmodel" @input="handleInput" />
+				<input
+					v-bind="$attrs"
+					:type="type"
+					:value="vmodel"
+					@input="handleInput"
+				/>
 			</slot>
 		</label>
-		<span v-if="$attrs.error" class="error">{{ $attrs.error }}</span>
-		<span v-else-if="$attrs.hint" class="hint">{{ $attrs.hint }}</span>
+		<span v-if="error" class="error">{{ error }}</span>
+		<span v-else-if="hint" class="hint">{{ hint }}</span>
 	</div>
 </template>
 <script>
+const supportedTypes = [
+	"email",
+	"password",
+	"search",
+	"tel",
+	"text",
+	"url",
+	"number",
+	"hidden",
+];
+
 export default {
 	model: {
 		prop: "vmodel",
@@ -23,18 +39,35 @@ export default {
 			type: [String, Number],
 			required: true,
 		},
+		type: {
+			type: String,
+			required: true,
+			validate(value) {
+				return supportedTypes.includes(value);
+			},
+		},
+		label: {
+			type: String,
+			required: true,
+		},
+		hint: {
+			type: String,
+			default: "",
+		},
+		error: {
+			type: String,
+			default: "",
+		},
 	},
 	computed: {
 		classList() {
-			return this.$attrs.hint || this.$attrs.error
-				? ["border", "with-hint"]
-				: ["border"];
+			return this.hint || this.error ? ["border", "with-hint"] : ["border"];
 		},
 	},
 	methods: {
 		handleInput(event) {
 			let newVal = event.target.value;
-			if (this.$attrs.type === "number") {
+			if (this.type === "number") {
 				newVal = parseInt(newVal, 10);
 			}
 			this.$emit("input", newVal);

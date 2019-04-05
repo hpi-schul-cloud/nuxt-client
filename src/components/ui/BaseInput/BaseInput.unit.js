@@ -6,55 +6,34 @@ describe("@components/BaseInput", () => {
 
 	it("all types have a label", () => {
 		const testLabel = "MyTestLabel";
-		inputTypes
-			.map((type, index) =>
-				mount({
-					data: () => ({ value: "" }),
-					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
-					components: { BaseInput },
-				})
-			)
-			.forEach((wrapper) => {
-				expect(wrapper.contains("label")).toBe(true);
-				expect(wrapper.text().includes(testLabel)).toBe(true);
+		inputTypes.forEach((type, index) => {
+			const wrapper = mount({
+				data: () => ({ value: "" }),
+				template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
+				components: { BaseInput },
 			});
+			expect(wrapper.contains("label")).toBe(true);
+			expect(wrapper.text().includes(testLabel)).toBe(true);
+		});
 	});
 
-	/*
-	it("passes through attributes", () => {
-		// list based on https://www.w3schools.com/tags/tag_input.asp
-		const attributes = {
-			alt: "input element",
-			autocomplete: "on",
-			autofocus: "autofocus",
-			disabled: "disabled",
-			form: "form_id",
-			maxlength: "5",
-			multiple: "multiple",
-			name: "input-name",
-			pattern: ".*",
-			placeholder: "placeholder text",
-			readonly: "readonly",
-			required: "required",
-			type: "text",
-		};
-		var parent = mount({
-			data: () => ({ username: "" }),
-			template: `<div> <base-input
-					v-model="username"
-					label="MyLabel"
-					${Object.keys(attributes)
-						.map((key) => {
-							return `${key}="${attributes[key]}"`;
-						})
-						.join("")}
-				/></div>`,
-			components: { BaseInput: BaseInput },
-		});
-		const inputField = parent.find("input").element;
-		Object.keys(attributes).forEach((key) => {
-			expect(inputField.getAttribute(key)).toBe(attributes[key]);
+	it("all types are passing through attributes", () => {
+		const attributes = { "data-test": "testAttrValue" };
+		inputTypes.forEach((type) => {
+			const wrapper = mount(BaseInput, {
+				attrs: attributes,
+				propsData: {
+					vmodel: "",
+					label: "test",
+					name: "test",
+					value: "test",
+					type,
+				},
+			});
+			const input = wrapper.find("input, .input");
+			Object.keys(attributes).forEach((attr) => {
+				expect(input.attributes(attr)).toBe(attributes[attr]);
+			});
 		});
 	});
-	*/
 });

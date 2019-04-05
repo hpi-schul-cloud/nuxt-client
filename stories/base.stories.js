@@ -1,3 +1,4 @@
+// eslint-disable max-lines
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";

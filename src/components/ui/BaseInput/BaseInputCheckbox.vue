@@ -2,6 +2,7 @@
 	<label>
 		<input
 			ref="hiddenInput"
+			v-bind="$attrs"
 			:checked="isChecked"
 			:value="value"
 			type="checkbox"
@@ -10,11 +11,13 @@
 		/>
 		<span :class="['icon', type]" />
 		<span class="label">
-			{{ $attrs.label }}
+			{{ label }}
 		</span>
 	</label>
 </template>
 <script>
+const supportedTypes = ["checkbox", "switch"];
+
 export default {
 	model: {
 		prop: "vmodel",
@@ -33,8 +36,12 @@ export default {
 			type: String,
 			default: "",
 			validate(type) {
-				return ["checkbox", "switch"].includes(type);
+				return supportedTypes.includes(type);
 			},
+		},
+		label: {
+			type: String,
+			required: true,
 		},
 	},
 	computed: {

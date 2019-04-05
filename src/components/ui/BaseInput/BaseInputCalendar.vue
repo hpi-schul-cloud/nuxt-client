@@ -1,10 +1,16 @@
 <template>
-	<base-input-default v-bind="$attrs" :vmodel="vmodel" class="calendar-input">
+	<base-input-default
+		v-bind="$attrs"
+		:type="type"
+		:vmodel="vmodel"
+		class="calendar-input"
+	>
 		<flat-pickr
 			:value="vmodel"
 			v-bind="$attrs"
 			:config="config"
 			:wrap="true"
+			class="input"
 			v-on="$listeners"
 			@input="$emit('input', $event)"
 		/>
@@ -14,6 +20,9 @@
 import BaseInputDefault from "./BaseInputDefault";
 import FlatPickr from "vue-flatpickr-component";
 import { German } from "flatpickr/dist/l10n/de.js";
+
+const supportedTypes = ["checkbox", "switch"];
+
 export default {
 	components: { BaseInputDefault, FlatPickr },
 	model: {
@@ -24,6 +33,13 @@ export default {
 		vmodel: {
 			type: String,
 			required: true,
+		},
+		type: {
+			type: String,
+			default: "",
+			validate(type) {
+				return supportedTypes.includes(type);
+			},
 		},
 	},
 	data() {
@@ -49,7 +65,7 @@ export default {
 			return {
 				date: this.configDate,
 				time: this.configTime,
-			}[this.$attrs.type];
+			}[this.type];
 		},
 	},
 };
