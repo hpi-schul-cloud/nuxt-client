@@ -21,7 +21,7 @@ import BaseInputDefault from "./BaseInputDefault";
 import FlatPickr from "vue-flatpickr-component";
 import { German } from "flatpickr/dist/l10n/de.js";
 
-const supportedTypes = ["checkbox", "switch"];
+export const supportedTypes = ["date", "time"];
 
 export default {
 	components: { BaseInputDefault, FlatPickr },

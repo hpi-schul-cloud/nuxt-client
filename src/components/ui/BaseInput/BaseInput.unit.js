@@ -1,5 +1,5 @@
 import BaseInput from "./BaseInput";
-import { inputTypes } from "./BaseInput";
+import { supportedTypes as inputTypes } from "./BaseInput";
 
 describe("@components/BaseInput", () => {
 	it(...isValidComponent(BaseInput));

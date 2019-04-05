@@ -16,7 +16,7 @@
 	</label>
 </template>
 <script>
-const supportedTypes = ["checkbox", "switch"];
+export const supportedTypes = ["checkbox", "switch"];
 
 export default {
 	model: {

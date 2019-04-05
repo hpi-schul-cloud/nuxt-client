@@ -1,6 +1,6 @@
 <template>
 	<component
-		:is="getComponent(type)"
+		:is="component"
 		:vmodel="vmodel"
 		v-bind="{ ...$attrs, ...$props }"
 		@input="$emit('update:vmodel', $event)"
@@ -8,37 +8,44 @@
 </template>
 
 <script>
-import BaseInputDefault from "./BaseInputDefault.vue";
-import BaseInputCalendar from "./BaseInputCalendar.vue";
-import BaseInputCheckbox from "./BaseInputCheckbox.vue";
-import BaseInputRadio from "./BaseInputRadio.vue";
+import BaseInputDefault, {
+	supportedTypes as defaultInputTypes,
+} from "./BaseInputDefault.vue";
+import BaseInputCalendar, {
+	supportedTypes as calendarInputTypes,
+} from "./BaseInputCalendar.vue";
+import BaseInputCheckbox, {
+	supportedTypes as checkboxInputTypes,
+} from "./BaseInputCheckbox.vue";
+import BaseInputRadio, {
+	supportedTypes as radioInputTypes,
+} from "./BaseInputRadio.vue";
 
-const componentDictionary = {
-	email: BaseInputDefault,
-	password: BaseInputDefault,
-	search: BaseInputDefault,
-	tel: BaseInputDefault,
-	text: BaseInputDefault,
-	url: BaseInputDefault,
-	number: BaseInputDefault,
-	hidden: BaseInputDefault,
-	date: BaseInputCalendar,
-	time: BaseInputCalendar,
-	switch: BaseInputCheckbox,
-	checkbox: BaseInputCheckbox,
-	radio: BaseInputRadio,
-};
+const componentDictionary = {};
 
-const inputTypes = Object.keys(componentDictionary);
-export { inputTypes };
+defaultInputTypes.forEach(
+	(type) => (componentDictionary[type] = BaseInputDefault)
+);
+calendarInputTypes.forEach(
+	(type) => (componentDictionary[type] = BaseInputCalendar)
+);
+checkboxInputTypes.forEach(
+	(type) => (componentDictionary[type] = BaseInputCheckbox)
+);
+radioInputTypes.forEach((type) => (componentDictionary[type] = BaseInputRadio));
+
+export const supportedTypes = Object.keys(componentDictionary);
 
 export default {
-	//inheritAttrs: false,
 	model: {
 		prop: "vmodel",
 		event: "update:vmodel",
 	},
 	props: {
+		vmodel: {
+			type: [Array, String, Number, Boolean],
+			required: true,
+		},
 		type: {
 			type: String,
 			required: true,
@@ -46,30 +53,10 @@ export default {
 				return !!componentDictionary[type];
 			},
 		},
-		vmodel: {
-			type: [Array, String, Number, Boolean],
-			required: true,
-		},
-		label: {
-			type: String,
-			required: true,
-		},
-		name: {
-			type: String,
-			required: true,
-		},
-		hint: {
-			type: String,
-			default: "",
-		},
-		error: {
-			type: String,
-			default: "",
-		},
 	},
-	methods: {
-		getComponent(type) {
-			return componentDictionary[type];
+	computed: {
+		component() {
+			return componentDictionary[this.type];
 		},
 	},
 };

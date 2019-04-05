@@ -18,7 +18,7 @@
 	</div>
 </template>
 <script>
-const supportedTypes = [
+export const supportedTypes = [
 	"email",
 	"password",
 	"search",

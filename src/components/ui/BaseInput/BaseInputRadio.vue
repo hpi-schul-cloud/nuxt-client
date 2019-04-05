@@ -16,7 +16,7 @@
 	</label>
 </template>
 <script>
-const supportedTypes = ["radio"];
+export const supportedTypes = ["radio"];
 
 export default {
 	model: {
@@ -35,6 +35,13 @@ export default {
 		label: {
 			type: String,
 			required: true,
+		},
+		type: {
+			type: String,
+			default: "",
+			validate(type) {
+				return supportedTypes.includes(type);
+			},
 		},
 	},
 	methods: {},
