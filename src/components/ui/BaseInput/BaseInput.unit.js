@@ -1,25 +1,27 @@
 import BaseInput from "./BaseInput";
-import { supportedTypes as inputTypes } from "./BaseInput";
+import { supportedTypes } from "./BaseInput";
 
 describe("@components/BaseInput", () => {
 	it(...isValidComponent(BaseInput));
 
 	it("all types have a label", () => {
 		const testLabel = "MyTestLabel";
-		inputTypes.forEach((type, index) => {
-			const wrapper = mount({
-				data: () => ({ value: "" }),
-				template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
-				components: { BaseInput },
+		supportedTypes
+			.filter((type) => type !== "hidden") // hidden inputs doesn't need a label
+			.forEach((type, index) => {
+				const wrapper = mount({
+					data: () => ({ value: "" }),
+					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
+					components: { BaseInput },
+				});
+				expect(wrapper.contains("label")).toBe(true);
+				expect(wrapper.text().includes(testLabel)).toBe(true);
 			});
-			expect(wrapper.contains("label")).toBe(true);
-			expect(wrapper.text().includes(testLabel)).toBe(true);
-		});
 	});
 
 	it("all types are passing through attributes", () => {
 		const attributes = { "data-test": "testAttrValue" };
-		inputTypes.forEach((type) => {
+		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
 				attrs: attributes,
 				propsData: {

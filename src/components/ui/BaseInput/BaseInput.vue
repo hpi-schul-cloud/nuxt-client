@@ -11,6 +11,9 @@
 import BaseInputDefault, {
 	supportedTypes as defaultInputTypes,
 } from "./BaseInputDefault.vue";
+import BaseInputHidden, {
+	supportedTypes as hiddenInputTypes,
+} from "./BaseInputHidden.vue";
 import BaseInputCalendar, {
 	supportedTypes as calendarInputTypes,
 } from "./BaseInputCalendar.vue";
@@ -25,6 +28,9 @@ const componentDictionary = {};
 
 defaultInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputDefault)
+);
+hiddenInputTypes.forEach(
+	(type) => (componentDictionary[type] = BaseInputHidden)
 );
 calendarInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputCalendar)

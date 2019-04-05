@@ -1,15 +1,5 @@
 import BaseInput from "./BaseInput";
-
-const inputTypes = [
-	"email",
-	"password",
-	"search",
-	"tel",
-	"text",
-	"url",
-	"number",
-	"hidden",
-];
+import { supportedTypes } from "./BaseInputDefault";
 
 function getMock(type) {
 	return mount({
@@ -21,7 +11,7 @@ function getMock(type) {
 
 describe("@components/BaseInputDefault", () => {
 	it("input has correct type", () => {
-		inputTypes.forEach((type) => {
+		supportedTypes.forEach((type) => {
 			const wrapper = getMock(type);
 			const textInput = wrapper.find(`input[type="${type}"]`);
 			expect(textInput.exists()).toBe(true);
@@ -29,7 +19,7 @@ describe("@components/BaseInputDefault", () => {
 	});
 
 	it("changing the element's value, updates the v-model", () => {
-		inputTypes.forEach((type) => {
+		supportedTypes.forEach((type) => {
 			const testInput = type === "number" ? 5 : "test string";
 			const wrapper = getMock(type);
 			const input = wrapper.find(`input[type="${type}"]`);
@@ -39,7 +29,7 @@ describe("@components/BaseInputDefault", () => {
 	});
 
 	it("changing the v-model, updates the element's value", () => {
-		inputTypes.forEach((type) => {
+		supportedTypes.forEach((type) => {
 			const testInput = type === "number" ? 5 : "test string";
 			const wrapper = getMock(type);
 			wrapper.setData({ content: testInput });

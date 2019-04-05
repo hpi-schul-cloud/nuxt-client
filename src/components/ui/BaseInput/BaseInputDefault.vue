@@ -26,7 +26,6 @@ export const supportedTypes = [
 	"text",
 	"url",
 	"number",
-	"hidden",
 ];
 
 export default {

@@ -1,8 +1,9 @@
 import BaseInput from "./BaseInput";
+import { supportedTypes } from "./BaseInputCheckbox";
 
 describe("@components/BaseInputCheckbox", () => {
 	it(`Check if input type="checkbox" is rendered`, () => {
-		["checkbox", "switch"].forEach((type) => {
+		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
 				propsData: {
 					label: "Checkbox",
@@ -16,7 +17,7 @@ describe("@components/BaseInputCheckbox", () => {
 	});
 
 	it(`input toggles boolean vmodel`, () => {
-		["checkbox", "switch"].forEach((type) => {
+		supportedTypes.forEach((type) => {
 			const wrapper = mount({
 				data: () => ({ value: false }),
 				template: `<base-input v-model="value" label="test" type="${type}" name="checkbox" />`,
