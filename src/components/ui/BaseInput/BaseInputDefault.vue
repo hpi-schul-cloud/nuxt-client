@@ -5,11 +5,7 @@
 				{{ $attrs.label }}
 			</div>
 			<slot>
-				<input
-					v-bind="$attrs"
-					:value="value"
-					@input="$emit('input', $event.target.value)"
-				/>
+				<input v-bind="$attrs" :value="vmodel" @input="handleInput" />
 			</slot>
 		</label>
 		<span v-if="$attrs.error" class="error">{{ $attrs.error }}</span>
@@ -18,9 +14,13 @@
 </template>
 <script>
 export default {
+	model: {
+		prop: "vmodel",
+		event: "input",
+	},
 	props: {
-		value: {
-			type: String,
+		vmodel: {
+			type: [String, Number],
 			required: true,
 		},
 	},
@@ -29,6 +29,15 @@ export default {
 			return this.$attrs.hint || this.$attrs.error
 				? ["border", "with-hint"]
 				: ["border"];
+		},
+	},
+	methods: {
+		handleInput(event) {
+			let newVal = event.target.value;
+			if (this.$attrs.type === "number") {
+				newVal = parseInt(newVal, 10);
+			}
+			this.$emit("input", newVal);
 		},
 	},
 };

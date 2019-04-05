@@ -22,12 +22,15 @@ const componentDictionary = {
 	url: BaseInputDefault,
 	number: BaseInputDefault,
 	hidden: BaseInputDefault,
-	date: BaseInputCalendar,
-	time: BaseInputCalendar,
+	// date: BaseInputCalendar,
+	// time: BaseInputCalendar,
 	switch: BaseInputCheckbox,
 	checkbox: BaseInputCheckbox,
-	radio: BaseInputRadio,
+	// radio: BaseInputRadio,
 };
+
+const inputTypes = Object.keys(componentDictionary);
+export { inputTypes };
 
 export default {
 	//inheritAttrs: false,

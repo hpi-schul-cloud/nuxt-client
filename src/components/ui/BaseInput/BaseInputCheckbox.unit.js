@@ -1,8 +1,6 @@
 import BaseInput from "./BaseInput";
 
 describe("@components/BaseInputCheckbox", () => {
-	it(...isValidComponent(BaseInput));
-
 	it(`Check if input type="checkbox" is rendered`, () => {
 		["checkbox", "switch"]
 			.map((type) =>
