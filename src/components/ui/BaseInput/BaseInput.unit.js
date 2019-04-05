@@ -20,7 +20,6 @@ describe("@components/BaseInput", () => {
 			});
 	});
 
-	//Not sure whats to be tested here
 	/*
 	it("passes through attributes", () => {
 		// list based on https://www.w3schools.com/tags/tag_input.asp

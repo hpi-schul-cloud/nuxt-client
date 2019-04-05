@@ -1,12 +1,12 @@
 <template>
-	<base-input-default v-bind="$attrs" class="calendar-input">
+	<base-input-default v-bind="$attrs" :vmodel="vmodel" class="calendar-input">
 		<flat-pickr
-			:value="value"
+			:value="vmodel"
 			v-bind="$attrs"
 			:config="config"
 			:wrap="true"
 			v-on="$listeners"
-			@input="$emit('update', $event)"
+			@input="$emit('input', $event)"
 		/>
 	</base-input-default>
 </template>
@@ -16,8 +16,12 @@ import FlatPickr from "vue-flatpickr-component";
 import { German } from "flatpickr/dist/l10n/de.js";
 export default {
 	components: { BaseInputDefault, FlatPickr },
+	model: {
+		prop: "vmodel",
+		event: "input",
+	},
 	props: {
-		value: {
+		vmodel: {
 			type: String,
 			required: true,
 		},

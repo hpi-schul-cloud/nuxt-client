@@ -59,6 +59,10 @@ storiesOf("Base Components", module)
 		data: () => ({
 			vmodels: {
 				text: "",
+				email: "",
+				password: "",
+				url: "",
+				number: 0,
 				checkboxBoolean: true,
 				checkboxList: ["b"],
 				switch: true,
@@ -67,13 +71,11 @@ storiesOf("Base Components", module)
 		template: outdent`
 			<div>
 				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
-				<!--
 				<base-input type="text" v-model="vmodels.text" label="Vorname" name="firstname" />
 				<base-input type="email" v-model="vmodels.email" label="Email" name="email" />
 				<base-input type="password" v-model="vmodels.password" label="Password" name="password" />
 				<base-input type="url" v-model="vmodels.url" label="URL" name="url" />
 				<base-input type="number" v-model="vmodels.number" label="Number" name="number" />
-				-->
 				<base-input type="checkbox" v-model="vmodels.checkboxBoolean" label="Checkbox" name="checkbox" />
 				<div>
 					<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
