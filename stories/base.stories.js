@@ -1,4 +1,5 @@
-// eslint-disable max-lines
+/* eslint-disable max-lines */
+
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";
@@ -93,21 +94,24 @@ storiesOf("Base Components", module)
 				password: "",
 				url: "",
 				number: 0,
+				date: "",
+				time: "",
 				checkboxBoolean: true,
 				checkboxList: ["a"],
 				switch: true,
-				radio: ["b"],
+				radio: "b",
 			},
 		}),
+
 		template: outdent`
 			<div>
 				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
-				<base-input type="text" v-model="vmodels.text" label="Vorname" name="firstname" />
-				<base-input type="email" v-model="vmodels.email" label="Email" name="email" />
-				<base-input type="password" v-model="vmodels.password" label="Password" name="password" />
-				<base-input type="url" v-model="vmodels.url" label="URL" name="url" />
-				<base-input type="number" v-model="vmodels.number" label="Number" name="number" />
-				<base-input type="checkbox" v-model="vmodels.checkboxBoolean" label="Checkbox" name="checkbox" />
+				${["text", "email", "password", "url", "number", "date", "time"]
+					.map(
+						(type) =>
+							`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />`
+					)
+					.join("\n\t")}
 				<div>
 					<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
 					<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
@@ -171,7 +175,7 @@ storiesOf("Base Components", module)
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
 		template:
-			'<base-collapsible label="Test" ><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></base-collapsible>',
+			'<base-collapsible label="Test"><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></base-collapsible>',
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
