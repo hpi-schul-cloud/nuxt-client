@@ -1,7 +1,7 @@
 <template>
 	<div class="input__wrapper">
-		<span :class="{ label: true, active: value && value !== 0 }">
-			{{ label }}
+		<span :class="{ inputLabel: true, active: value && value !== 0 }">
+			{{ inputLabel }}
 		</span>
 		<multi-select
 			v-bind="$attrs"
@@ -42,6 +42,9 @@ export default {
 		placeholder: {
 			type: String,
 			default: "",
+		},
+		inputLabel: {
+			type: String,
 		},
 		label: {
 			type: String,

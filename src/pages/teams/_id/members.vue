@@ -110,6 +110,7 @@
 								:allow-empty="false"
 								:multiple="true"
 								label="displayName"
+								input-label="Nach dem Speichern"
 							></base-select>
 						</p>
 					</div>
