@@ -1,22 +1,21 @@
 <template>
-	<div class="root">
-		<div class="input__wrapper">
-			<span :class="{ label: true, active: value && value !== 0 }">
-				{{ placeholder }}
-			</span>
-			<multi-select
-				v-model="val"
-				:options="options"
-				:multiple="multiple"
-				:label="label"
-				:placeholder="placeholder"
-				:track-by="trackBy"
-				:allow-empty="allowEmpty"
-				:show-labels="showLabels"
-				:close-on-select="!showOnSelect"
-				@input="$emit('update:value', val)"
-			></multi-select>
-		</div>
+	<div class="input__wrapper">
+		<span :class="{ label: true, active: value && value !== 0 }">
+			{{ label }}
+		</span>
+		<multi-select
+			v-bind="$attrs"
+			:value="value"
+			:options="options"
+			:multiple="multiple"
+			:label="label"
+			:placeholder="placeholder"
+			:track-by="trackBy"
+			:allow-empty="allowEmpty"
+			:show-labels="showLabels"
+			:close-on-select="!showOnSelect"
+			@input="$emit('input', $event)"
+		></multi-select>
 	</div>
 </template>
 
@@ -24,22 +23,16 @@
 import MultiSelect from "vue-multiselect";
 
 export default {
-	// currently, this only supports text input
 	name: "BaseSelect",
 	components: { MultiSelect },
-	model: {
-		event: "update",
-	},
 	props: {
 		value: {
 			type: [Array, Object],
-			default: () => [],
 			required: true,
 		},
 		selected: {
 			type: Object,
-			default: () => {},
-			required: false,
+			default: () => ({}),
 		},
 		options: {
 			type: Array,
@@ -49,11 +42,9 @@ export default {
 		placeholder: {
 			type: String,
 			default: "",
-			required: false,
 		},
 		label: {
 			type: String,
-			default: "",
 			required: true,
 		},
 		trackBy: {
@@ -73,11 +64,6 @@ export default {
 			type: Boolean,
 		},
 	},
-	data: function() {
-		return {
-			val: this.value,
-		};
-	},
 };
 </script>
 
@@ -87,14 +73,10 @@ export default {
 @import "@variables";
 $input-padding-left: 12px;
 
-.root {
-	width: 100%;
-	padding-top: 1px;
-}
-
 .input__wrapper {
 	position: relative;
 	display: block;
+	width: 100%;
 	margin: 1em 0 $size-grid-padding;
 	overflow: visible;
 	clear: both;

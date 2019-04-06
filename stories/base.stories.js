@@ -1,12 +1,16 @@
+/* eslint-disable max-lines */
+
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
-import { text } from "@storybook/addon-knobs";
+import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton.vue";
 import BaseCard from "@components/ui/BaseCard.vue";
 import BaseIcon from "@components/ui/BaseIcon.vue";
-import BaseInput from "@components/ui/BaseInput.vue";
+import BaseInput, {
+	supportedTypes as baseInputTypes,
+} from "@components/ui/BaseInput/BaseInput.vue";
 import BaseLink from "@components/ui/BaseLink.vue";
 import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
 import BaseTable from "@components/ui/BaseTable.vue";
@@ -15,14 +19,8 @@ import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
 import BaseSelect from "@components/ui/BaseSelect.vue";
 import BaseAudio from "@components/ui/BaseAudio.vue";
 import BaseVideo from "@components/ui/BaseVideo.vue";
-import BaseBlockquote from "@components/ui/BaseBlockquote.vue";
-
-export const multioptions = [
-	{ _id: 1, name: "Option 1" },
-	{ _id: 2, name: "Option 2" },
-	{ _id: 3, name: "Option 3" },
-];
 import BaseModal from "@components/ui/BaseModal.vue";
+import BaseBlockquote from "@components/ui/BaseBlockquote.vue";
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -55,59 +53,90 @@ storiesOf("Base Components", module)
 			</div>
 		`,
 	}))
-	.add("Base Input", () => ({
+	.add("Base Input (Knobs)", () => {
+		const baseInputTypesDict = {};
+		baseInputTypes.forEach((type) => {
+			baseInputTypesDict[type] = type;
+		});
+		return {
+			components: { BaseInput },
+			data: () => ({
+				vmodel: text("v-model", ""),
+				type: select("type", baseInputTypesDict, baseInputTypes[0]),
+				label: text("label", "Label"),
+				name: text("name", "name"),
+				value: text("value", ""),
+				placeholder: text("placeholder", "Placeholder"),
+			}),
+			template: outdent`
+				<div>
+					<base-input
+						v-model="vmodel"
+						:label="label"
+						:type="type"
+						:name="name"
+						:placeholder="placeholder"
+					/>
+				</div>`,
+		};
+	})
+	.add("Base Input (All)", () => ({
 		components: { BaseInput },
-		data: () => ({ content: "" }),
-		template:
-			'<base-input type="text" label="Vorname" v-model="content" name="firstname" placeholder="Max"/>',
-		methods: {},
-	}))
-	.add("Base Input Switch", () => ({
-		components: { BaseInput },
-		data: () => ({ toggled: "" }),
-		template: `<base-input type="checkbox" v-model="toggled" />`,
-	}))
-	.add("Base Input Radio Button", () => ({
-		components: { BaseInput },
+		data: () => ({
+			vmodels: {
+				text: "",
+				email: "",
+				password: "",
+				url: "",
+				number: 0,
+				date: "",
+				time: "",
+				checkboxBoolean: true,
+				checkboxList: ["a"],
+				switch: true,
+				radio: "b",
+			},
+		}),
+
 		template: outdent`
 			<div>
-				<base-input type="radio" name="choice" value="me" id="radio1">Pick me!</base-input>
-				<base-input type="radio" name="choice" value="notMe" id="radio2">Don't pick me.</base-input>
+				${["text", "email", "password", "url", "number", "date", "time"]
+					.map(
+						(type) =>
+							`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />`
+					)
+					.join("\n\t")}
+				<div>
+					<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
+					<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
+				</div>
+				<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
+				<div>
+					<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
+					<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
+				</div>
+				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
 			</div>`,
-		methods: {},
-	}))
-	.add("Base Input Date", () => ({
-		components: { BaseInput },
-		data: () => ({ content: "" }),
-		template:
-			'<base-input value="" type="date" v-model="content" label="Datum" placeholder="21.02.2019" name="date"/>',
-		methods: {},
-	}))
-	.add("Base Input Time", () => ({
-		components: { BaseInput },
-		data: () => ({ content: "" }),
-		template:
-			'<base-input value="" type="time" v-model="content" label="Uhrzeit" name="someTime"/>',
-		methods: {},
 	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },
 		data: () => ({
 			content: [],
-			options: multioptions,
+			options: [
+				{ _id: 1, name: "Option 1" },
+				{ _id: 2, name: "Option 2" },
+				{ _id: 3, name: "Option 3" },
+			],
+			label: text("label", "Label"),
+			placeholder: text("placeholder", "Etwas auswählen"),
+			multiple: select("mutliple", { true: true, false: false }, false),
 		}),
-		template:
-			'<base-select :value.sync="content" :options="options" track-by="_id" label="name" placeholder="Etwas auswählen"/>',
-		methods: {},
-	}))
-	.add("Base Select MultiSelect", () => ({
-		components: { BaseSelect },
-		data: () => ({
-			content: [],
-			options: multioptions,
-		}),
-		template:
-			'<base-select :value.sync="content" :multiple="true" :options="options" track-by="_id" label="name" placeholder="Mehrere Inhalte auswählen"/>',
+		template: `
+		<div>
+		Content: {{content}}
+		Options: {{options}}
+		<base-select v-model="content" :multiple="multiple" :options="options" track-by="_id" :label="label" :placeholder="placeholder"/>
+		</div>`,
 		methods: {},
 	}))
 	.add("Base Link", () => ({
@@ -142,7 +171,7 @@ storiesOf("Base Components", module)
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
 		template:
-			'<base-collapsible label="Test" ><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></base-collapsible>',
+			'<base-collapsible label="Test"><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></base-collapsible>',
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
@@ -235,12 +264,16 @@ storiesOf("Base Components", module)
 	}))
 	.add("BaseBlockquote", () => ({
 		components: { BaseBlockquote },
+		data: () => ({
+			cite: text("cite", "http://www.worldwildlife.org/who/index.html"),
+			quote: text(
+				"quote",
+				`For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.`
+			),
+		}),
 		template: outdent`
-			<BaseBlockquote cite="http://www.worldwildlife.org/who/index.html">
-				For 50 years, WWF has been protecting the future of nature. The world's
-				leading conservation organization, WWF works in 100 countries and is
-				supported by 1.2 million members in the United States and close to 5 million
-				globally.
+			<BaseBlockquote :cite="cite">
+				{{quote}}
 			</BaseBlockquote>
 		`,
 	}));
