@@ -14,6 +14,7 @@ export default {
 	props: {
 		cite: {
 			type: String,
+			default: "",
 		},
 		srcText: {
 			type: String,
