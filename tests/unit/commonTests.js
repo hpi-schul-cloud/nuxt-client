@@ -22,6 +22,7 @@ export function rendersDefaultSlotContent(component, mountOptions) {
 		},
 	];
 }
+
 export default {
 	isValidComponent,
 	rendersDefaultSlotContent,
