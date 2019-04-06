@@ -5,7 +5,12 @@
 			'has-label': inputLabel && value && value !== 0,
 		}"
 	>
-		<span :class="{ 'input-label': true, active: value && value !== 0 }">
+		<span
+			:class="{
+				'input-label': true,
+				active: inputLabel && value && value !== 0,
+			}"
+		>
 			{{ inputLabel }}
 		</span>
 		<multi-select
@@ -50,6 +55,7 @@ export default {
 		},
 		inputLabel: {
 			type: String,
+			default: "",
 		},
 		label: {
 			type: String,

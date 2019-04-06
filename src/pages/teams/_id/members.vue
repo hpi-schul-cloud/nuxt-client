@@ -90,7 +90,7 @@
 						<p>
 							<span>Füge Lehrer und Schüler deiner Schule zum Team hinzu</span>
 							<base-select
-								:value.sync="membersSelected"
+								v-model="membersSelected"
 								:options="members"
 								:allow-empty="false"
 								:multiple="true"
@@ -105,7 +105,7 @@
 								hinzu</span
 							>
 							<base-select
-								:value.sync="classesSelected"
+								v-model="classesSelected"
 								:options="classes"
 								:allow-empty="false"
 								:multiple="true"
@@ -132,7 +132,8 @@
 			<div class="modal-body">
 				<p>Ändere die Rolle des Nutzers:</p>
 				<base-select
-					:value.sync="memberSelected.role"
+					v-if="memberSelected && memberSelected.role"
+					v-model="memberSelected.role"
 					:options="teamRoles"
 					track-by="_id"
 					:allow-empty="false"
@@ -357,7 +358,7 @@ export default {
 		},
 		editMember(teamMember) {
 			this.editMemberModalActive = true;
-			this.memberSelected = teamMember;
+			this.memberSelected = Object.assign({}, teamMember);
 			this.memberSelected.role.label =
 				roleTranslations[this.memberSelected.role.name];
 		},
@@ -368,7 +369,7 @@ export default {
 					u.role = u.role._id;
 					u.userId = u.userId._id;
 
-					if (u.userId === this.memberSelected.userId._id) {
+					if (u.userId == this.memberSelected.userId._id) {
 						u.role = this.memberSelected.role._id;
 					}
 					return u;
