@@ -25,10 +25,9 @@ progress {
 	background-color: #f3f3f3;
 	background-size: auto;
 	border-radius: 9px;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 }
+// TODO check if we can remove browser prefixes with postcss
 progress::-moz-progress-bar {
 	background-color: $color-primary;
 	border: 0;

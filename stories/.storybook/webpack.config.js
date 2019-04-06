@@ -22,6 +22,15 @@ module.exports = ({ config }) => {
 				},
 			],
 		},
+		{
+			enforce: "pre",
+			test: /\.(js|vue)$/,
+			loader: "eslint-loader",
+			exclude: /(node_modules)/,
+			options: {
+				fix: true,
+			},
+		},
 	];
 	const alias = require("../../aliases.config").webpack;
 

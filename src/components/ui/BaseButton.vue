@@ -1,20 +1,26 @@
 <template>
 	<button class="button" v-on="$listeners">
 		<slot />
+		<!--
+			TODO: discuss if this button shoud render a BaseLink,
+			styled as a Button if you give him a href/to property
+		-->
 	</button>
 </template>
+
 <script>
 export default {
 	name: "BaseButton",
 };
 </script>
+
 <style lang="scss" scoped>
 @import "@variables";
 
 .button {
 	display: flex;
 	align-items: center;
-	padding: $color-text-on-primary;
+	padding: $size-padding;
 	color: $color-body-bg;
 	text-transform: uppercase;
 	cursor: pointer;

@@ -1,18 +1,18 @@
 <template>
 	<section class="section">
-		<Searchbar
+		<searchbar
 			v-model.lazy="searchQuery"
 			class="searchbar"
 			type="text"
 			placeholder="Suche nach..."
 		/>
-		<Pagination v-model="skippedItems" :state="pagination" />
+		<pagination v-model="skippedItems" :state="pagination" />
 		<div class="columns">
 			<div v-for="content of searchResults" :key="content._id" class="column">
-				<ContentCard :data="content" />
+				<content-card :data="content" />
 			</div>
 		</div>
-		<Pagination v-model="skippedItems" :state="pagination" />
+		<pagination v-model="skippedItems" :state="pagination" />
 	</section>
 </template>
 

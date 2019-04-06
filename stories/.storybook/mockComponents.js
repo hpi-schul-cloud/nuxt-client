@@ -10,6 +10,10 @@ Vue.use({
 	},
 });
 
+// Dialog
+import BaseDialog from "@components/ui/BaseDialog";
+Vue.use(BaseDialog);
+
 // Nuxt Components
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";

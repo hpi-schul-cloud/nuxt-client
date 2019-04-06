@@ -1,7 +1,7 @@
 <template>
 	<div class="course-card">
 		<div
-			v-if="course.notification != 0 && course.notification != null"
+			v-if="course.notification !== 0 && course.notification !== null"
 			class="caption dot"
 			>{{ course.notification }}</div
 		>
@@ -11,12 +11,12 @@
 				<div class="caption tab-label">{{ course.teacherName }}</div>
 			</div>
 			<div
-				v-if="course.newAssignments != 0 && course.notification != null"
+				v-if="course.newAssignments !== 0 && course.notification !== null"
 				class="assignments-label align-center"
 			>
 				<div class="align-center">{{ course.newAssignments }}</div>
 				<div class="align-center pl-6">
-					<BaseIcon source="custom" icon="tasks" />
+					<base-icon source="custom" icon="tasks" />
 				</div>
 			</div>
 		</div>
@@ -24,7 +24,7 @@
 			<h2 class="h2 mt-5 mb-26 abrivation-label">{{ courseAbbreviation }}</h2>
 			<h3 class="h6 mb-5 ml-4 course-name-label">{{ course.name }}</h3>
 		</div>
-		<CardFooter :course="course"></CardFooter>
+		<card-footer :course="course"></card-footer>
 	</div>
 </template>
 
@@ -66,7 +66,7 @@ export default {
 			}
 		},
 		courseAbbreviation() {
-			if (this.course.abbreviation == "") return this.course.abbreviation;
+			if (!!this.course.abbreviation) return this.course.abbreviation;
 			else return this.course.name.substring(0, 3).toUpperCase();
 		},
 	},
@@ -157,7 +157,7 @@ export default {
 }
 .course-card:hover {
 	box-shadow: $shadow-5;
-	transition: box-shadow 0.3s;
+	transition: box-shadow $duration-animation-medium;
 }
 .card-info {
 	padding: 10px;

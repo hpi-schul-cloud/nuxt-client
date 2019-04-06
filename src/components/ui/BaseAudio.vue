@@ -1,20 +1,24 @@
 <template>
-	<audio controls :loop="loop" :autoplay="autoplay" :preload="preload">
-		<source v-for="src in sources" :key="src" :src="src" :type="getType(src)" />
+	<audio controls v-bind="$attrs">
+		<source
+			v-for="streamsrc in sources"
+			:key="streamsrc"
+			:src="streamsrc"
+			:type="getType(streamsrc)"
+		/>
 		<p>
 			Your browser does not support the audio element. Here is a
-			<a :href="src">link to the audio</a> instead.
+			<a :href="streamsrc">link to the audio</a> instead.
 		</p>
 	</audio>
 </template>
 <script>
-const KNOWN_TYPES = Object.assign(Object.create(null), {
+const KNOWN_TYPES = {
 	mp3: "audio/mpeg",
 	ogg: "audio/ogg",
 	wav: "audio/wav",
-});
+};
 export default {
-	name: "BaseAudio",
 	props: {
 		/**
 		 * url
@@ -22,21 +26,7 @@ export default {
 		src: {
 			type: [String, Array],
 			required: true,
-		},
-		autoplay: {
-			type: Boolean,
-			default: false,
-		},
-		loop: {
-			type: Boolean,
-			default: false,
-		},
-		/**
-		 * none / metadata / auto
-		 */
-		preload: {
-			type: String,
-			default: "auto",
+			// TODO validate that type is unique
 		},
 	},
 	computed: {
@@ -46,13 +36,9 @@ export default {
 	},
 	methods: {
 		getType(src) {
-			const ext = src.slice(src.lastIndexOf(".") + 1);
+			const [ext] = src.split(".").reverse();
 			return KNOWN_TYPES[ext];
 		},
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@variables";
-</style>
