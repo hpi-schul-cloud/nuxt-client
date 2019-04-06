@@ -1,6 +1,11 @@
 <template>
-	<div class="input__wrapper">
-		<span :class="{ inputLabel: true, active: value && value !== 0 }">
+	<div
+		:class="{
+			input__wrapper: true,
+			'has-label': inputLabel && value && value !== 0,
+		}"
+	>
+		<span :class="{ 'input-label': true, active: value && value !== 0 }">
 			{{ inputLabel }}
 		</span>
 		<multi-select
@@ -86,9 +91,12 @@ $input-padding-left: 12px;
 	background: $color-text-bg;
 	border: $size-border-width solid $color-border;
 	border-radius: $size-border-radius;
+	&.has-label {
+		margin-top: 2em;
+	}
 }
 
-.label {
+.input-label {
 	@extend %typography-small;
 
 	position: absolute;

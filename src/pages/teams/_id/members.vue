@@ -110,7 +110,7 @@
 								:allow-empty="false"
 								:multiple="true"
 								label="displayName"
-								input-label="Nach dem Speichern"
+								input-label="Nach dem Speichern werden alle Schüler automatisch hinzugefügt."
 							></base-select>
 						</p>
 					</div>
