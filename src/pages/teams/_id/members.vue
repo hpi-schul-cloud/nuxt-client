@@ -35,6 +35,10 @@
 				v-slot:default="slotProps"
 				:data="teamMembers"
 				:columns="columns"
+				:paginated="true"
+				:pagination-state="stateMembers"
+				:skip.sync="membersSkip"
+				:total="stateMembers.total"
 			>
 				<base-icon
 					icon="delete"
@@ -177,10 +181,12 @@ export default {
 				{
 					field: "userId.firstName",
 					label: "First Name",
+					sortable: true,
 				},
 				{
 					field: "userId.lastName",
 					label: "Last Name",
+					sortable: true,
 				},
 				{
 					field: "role.label",
@@ -197,9 +203,17 @@ export default {
 					label: "Jahrgang",
 				},
 			],
+			membersSkip: 0,
 		};
 	},
 	computed: {
+		stateMembers() {
+			return {
+				total: this.team ? this.team.userIds.length : 0,
+				limit: 3,
+				skip: this.membersSkip,
+			};
+		},
 		...mapGetters("teams", {
 			team: "current",
 		}),

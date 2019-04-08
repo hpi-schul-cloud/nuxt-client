@@ -71,7 +71,7 @@ describe("@components/BaseTable", () => {
 			wrapper
 				.findAll("thead tr")
 				.at(0)
-				.findAll("td")
+				.findAll("th")
 				.at(0)
 				.html()
 				.includes("Vorname")
