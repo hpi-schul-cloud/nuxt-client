@@ -57,7 +57,7 @@ describe("@components/BaseTable", () => {
 			wrapper
 				.findAll("thead tr")
 				.at(0)
-				.findAll("td").length
+				.findAll("th").length
 		).toBe(4);
 
 		expect(
