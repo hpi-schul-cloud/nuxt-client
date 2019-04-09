@@ -20,6 +20,7 @@ import BaseSelect from "@components/ui/BaseSelect.vue";
 import BaseAudio from "@components/ui/BaseAudio.vue";
 import BaseVideo from "@components/ui/BaseVideo.vue";
 import BaseModal from "@components/ui/BaseModal.vue";
+import BaseBlockquote from "@components/ui/BaseBlockquote.vue";
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -258,5 +259,22 @@ storiesOf("Base Components", module)
 				}],
 				initialState: {playState: 'PAUSED'},
 				videoPreload: false
-			}" />`,
+			}"
+		/>`,
+	}))
+	.add("BaseBlockquote", () => ({
+		components: { BaseBlockquote },
+		data: () => ({
+			cite: text("cite", "http://www.worldwildlife.org/who/index.html"),
+			quote: text(
+				"quote",
+				`For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.`
+			),
+			srcText: text("src-text", ""),
+		}),
+		template: outdent`
+			<BaseBlockquote :cite="cite" :src-text="srcText || undefined">
+				{{quote}}
+			</BaseBlockquote>
+		`,
 	}));
