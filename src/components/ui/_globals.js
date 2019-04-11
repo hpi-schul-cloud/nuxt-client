@@ -11,7 +11,7 @@ const requireComponent = require.context(
 	// Look for files in the current directory
 	".",
 	// Do not look in subdirectories
-	false,
+	true,
 	// Only include "Base" prefixed .vue files
 	/Base[\w]+\.vue$/
 );
@@ -20,16 +20,18 @@ const requireComponent = require.context(
 requireComponent.keys().forEach((fileName) => {
 	// Get the component config
 	const componentConfig = requireComponent(fileName);
-	// Get the PascalCase version of the component name
-	const componentName = upperFirst(
-		camelCase(
-			fileName
-				// Remove the "./_" from the beginning
-				.replace(/^\.\//, "")
-				// Remove the file extension from the end
-				.replace(/\.\w+$/, "")
-		)
-	);
+	// Get Component Name
+	const componentName = fileName.match(/([\w]+).vue$/)[1];
+	// Is naming scheme valid?
+	if (componentName !== upperFirst(camelCase(componentName))) {
+		return console.error(`${fileName} is not in PascalCase.`);
+	}
+	// Is it a Entrypoint?
+	const isEntrypoint =
+		fileName.startsWith(`./${componentName}.vue`) || // standalone component
+		fileName.startsWith(`./${componentName}/`); // or root component of folder
 	// Globally register the component
-	Vue.component(componentName, componentConfig.default || componentConfig);
+	if (isEntrypoint) {
+		Vue.component(componentName, componentConfig.default || componentConfig);
+	}
 });

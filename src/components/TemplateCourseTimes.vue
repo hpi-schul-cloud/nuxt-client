@@ -45,14 +45,8 @@
 </template>
 
 <script>
-import BaseInput from "./ui/BaseInput";
-import BaseButton from "./ui/BaseButton";
-import BaseSelect from "./ui/BaseSelect";
-import BaseIcon from "@components/ui/BaseIcon.vue";
-
 export default {
 	name: "TemplateCourseTimes",
-	components: { BaseIcon },
 	props: {
 		value: {
 			type: Array,
