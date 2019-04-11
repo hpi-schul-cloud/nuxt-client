@@ -30,4 +30,4 @@ props: {
 },
 ```
 
-Die andere Möglichkeit ist `data: () => ({})` zu setzten um so das v-model ändern kann.
+Die andere Möglichkeit ist `data: () => ({})` zu setzten um so das v-model ändern zu können. Mehr Details zu Knobs sind in der [Storybook-Knobs-Package Dokumentation](https://www.npmjs.com/package/@storybook/addon-knobs) zu finden.
