@@ -1,0 +1,33 @@
+pull_request_rules:
+  - name: automatic merging of greenkeeper pulls
+    conditions:
+      - author=greenkeeper[bot]
+      - label~=greenkeeper
+      - label!=WIP
+      - label!=waiting
+    actions:
+      merge:
+        method: merge
+        strict: true
+  - name: automatic merging when label is set
+    conditions:
+      - label!=WIP
+      - label!=waiting
+      - label~=ready to merge
+    actions:
+      merge:
+        method: merge
+        strict: true
+  - name: delete merged branches
+    conditions:
+      - merged
+    actions:
+      delete_head_branch: {}
+  - name: add WIP label whenn WIP in title
+    conditions:
+      - title~=WIP
+      - label!=WIP
+    actions:
+      label:
+        add:
+          - WIP
