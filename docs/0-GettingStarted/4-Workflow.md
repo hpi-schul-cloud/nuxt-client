@@ -56,6 +56,8 @@ Die Bescheibung des Pull Requests sollte das entsprechende Template bestmöglich
 
 ### Pull Request Review
 
+Der Review Prozess sollte erst Beginnen, wenn das WIP Label vom ersteller des Pulls entfernt wurde.
+
 ::: tip Hinweis
 
 Wenn jemand schlechten Code sieht sollte er dies direkt Anmerken um die Codequalität hoch zu halten. Niemand soll hierdurch angegriffen oder bloßgestellt werden. Wir alle können nur durch Hinweise auf Verbesserungsmöglichkeiten besser werden und jeder macht Fehler. Solche Fehler später zu beheben ist wesentlich aufwändiger als sie direkt anzumerken und zu beheben.
