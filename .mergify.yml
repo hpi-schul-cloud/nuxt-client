@@ -1,0 +1,43 @@
+pull_request_rules:
+  - name: automatic merging of greenkeeper pulls
+    conditions:
+      - author=greenkeeper[bot]
+      - label~=greenkeeper
+      - label!=WIP
+      - label!=waiting
+      - status-success=Travis CI - Branch
+      - status-success=Mergeable
+    actions:
+      merge:
+        method: merge
+        strict: true
+  - name: automatic merging when label is set
+    conditions:
+      - label!=WIP
+      - label!=waiting
+      - label~=ready to merge
+      - status-success=Travis CI - Branch
+      - status-success=Mergeable
+    actions:
+      merge:
+        method: merge
+        strict: true
+      label:
+        remove:
+          - ready to merge
+
+  - name: delete merged branches
+    conditions:
+      - merged
+      - label!=WIP
+    actions:
+      delete_head_branch: {}
+  - name: add WIP label when WIP is in title
+    conditions:
+      - title~=WIP
+    actions:
+      comment:
+        message: Please remove WIP from the title. We have set the WIP Label for you instead.
+      label:
+        add:
+          - WIP

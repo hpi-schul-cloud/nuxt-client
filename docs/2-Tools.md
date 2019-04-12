@@ -80,3 +80,17 @@ Für alles weitere bleiben wir bisher bei den default Einstellungen und verwende
 
 - [Babel](https://github.com/igorshubovych/markdownlint-cli)
   - `babel.config.js`
+
+## GitHub Bots
+
+### [Mergify](https://mergify.io)
+
+Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label "ready to merge" an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom master, solange keine Merge-Konflikte enstehen.
+
+Zusätzlich werden Pull Requests von Greenkeeper sofort automatisch gemerged, sobald alle Status Reports (Bspw. Travis) ihr okay gegeben haben. Außer es wird explizit das Label `WIP`/`waiting` an den Pullg angefügt.
+
+Gemergte Branches werden von diesme Bot ebenfalls automatisch gelöscht.
+
+### [Accesslint](https://www.accesslint.com/)
+
+Accesslint prüft grundsätzliche Accessibility verstöße und weist mit Kommentaren direkt im Pull Request darauf hin. Aktuell versteht der Bot die Vue Syntax allerding noch nicht, sodass er teils Falsche Alarme bei bspw. `:aria-label="labelVariable"` wirft, da er `:aria-label` nicht mit `aria-label` gleichsetzt. Die Hinweise sollten also eher als Hinweis für genauere Kontrolle auf Accessibility gesehen werden.

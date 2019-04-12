@@ -1,7 +1,7 @@
 <template>
 	<footer class="footer">
 		<div class="content">
-			<div class="is-flex align-items-center justify-content-center">
+			<div class="">
 				<img
 					class="hpi-logo"
 					style="height: 35px"
@@ -11,43 +11,42 @@
 				<span>© {{ currentYear }} {{ $theme.name }}</span>
 			</div>
 
-			<div class="mt-2">
-				<base-link to="/impressum" target="_blank">Impressum</base-link>
-				<span>-</span>
-				<base-link to="/impressum#data_security" target="_blank"
-					>Datenschutzerklärung</base-link
-				>
-				<span>-</span>
-				<base-link
-					href="mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage"
-					target="_blank"
-					>Kontakt</base-link
-				>
-				<span>-</span>
-				<base-link to="/team" target="_blank">Team</base-link>
-				<span>-</span>
-				<base-link to="/about" target="_blank">Über das Projekt</base-link>
-				<span>-</span>
-				<base-link to="/community" target="_blank">Mitmachen</base-link>
-				<span>-</span>
-				<base-link to="/partner" target="_blank">Partner</base-link>
-				<span>-</span>
-				<base-link href="https://github.com/schul-cloud/" target="_blank"
-					>GitHub</base-link
-				>
+			<div>
+				<template v-for="(link, index) in links">
+					<span v-if="index !== 0" :key="index">-</span>
+					<base-link :key="link.text" v-bind="link">{{ link.text }}</base-link>
+				</template>
 			</div>
-			<div class="mt-2">
-				<p class="made-with-love">
-					Made with
-					<span class="heart">❤</span> in Potsdam
-				</p>
-			</div>
+			<p>
+				Made with
+				<span>❤</span> in Potsdam
+			</p>
 		</div>
 	</footer>
 </template>
 
 <script>
 export default {
+	data() {
+		return {
+			links: [
+				{ href: "https://schul-cloud.org/impressum", text: "Impressum" },
+				{
+					href: "https://schul-cloud.org/impressum#data_security",
+					text: "Datenschutzerklärung",
+				},
+				{
+					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
+					text: "Kontakt",
+				},
+				{ href: "https://schul-cloud.org/team", text: "Team" },
+				{ href: "https://schul-cloud.org/about", text: "Über das Projekt" },
+				{ href: "https://schul-cloud.org/community", text: "Mitmachen" },
+				{ href: "https://schul-cloud.org/partner", text: "Partner" },
+				{ href: "https://github.com/schul-cloud/", text: "GitHub" },
+			],
+		};
+	},
 	computed: {
 		currentYear() {
 			return new Date().getFullYear();
