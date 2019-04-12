@@ -5,8 +5,7 @@ pull_request_rules:
       - label~=greenkeeper
       - label!=WIP
       - label!=waiting
-      - status-success:
-          - Travis CI - Branch
+      - status-success=Travis CI - Branch
     actions:
       merge:
         method: merge
@@ -16,9 +15,8 @@ pull_request_rules:
       - label!=WIP
       - label!=waiting
       - label~=ready to merge
-      - status-success:
-          - Travis CI - Branch
-          - Mergeable
+      - status-success=Travis CI - Branch
+      - status-success=Mergeable
     actions:
       merge:
         method: merge
