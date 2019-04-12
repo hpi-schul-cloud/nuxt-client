@@ -45,19 +45,6 @@
 				<base-icon icon="close"></base-icon>
 				<span>Clear selected</span>
 			</base-button>
-			<BTabs>
-				<BTabItem label="Table">
-					<BTable
-						:data="team.userIds"
-						:columns="columns"
-						:selected.sync="selected"
-						focusable
-					></BTable>
-				</BTabItem>
-				<BTabItem label="Selected">
-					<pre>\n{{ selected }}</pre>
-				</BTabItem>
-			</BTabs>
 		</section>
 	</div>
 </template>

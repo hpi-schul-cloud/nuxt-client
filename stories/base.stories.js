@@ -28,14 +28,24 @@ storiesOf("Base Components", module)
 	})
 	.add("Base Button Primary", () => ({
 		components: { BaseButton },
+		props: {
+			text: {
+				default: text("Text", "Primary"),
+			},
+		},
 		template:
-			'<div><base-button class ="is-primary is-small">Primary</base-button> <br/> <base-button class ="is-primary is-medium">Primary</base-button><br/><base-button class ="is-primary is-large">Primary</base-button></div>',
+			'<div><base-button class ="is-primary is-small">{{ text }}</base-button> <br/> <base-button class ="is-primary is-medium">{{ text }}</base-button><br/><base-button class ="is-primary is-large">{{ text }}</base-button></div>',
 		methods: {},
 	}))
 	.add("Base Button Secondary", () => ({
 		components: { BaseButton },
+		props: {
+			text: {
+				default: text("Text", "Secondary"),
+			},
+		},
 		template:
-			'<div><base-button class="is-secondary is-small">Secondary</base-button><br/><base-button class ="is-secondary is-medium">Secondary</base-button><br/><base-button class ="is-secondary is-large">Secondary</base-button><br/></div>',
+			'<div><base-button class="is-secondary is-small">{{ text }}</base-button><br/><base-button class ="is-secondary is-medium">{{ text }}</base-button><br/><base-button class ="is-secondary is-large">{{ text }}</base-button><br/></div>',
 		methods: {},
 	}))
 	.add("Base Card", () => ({

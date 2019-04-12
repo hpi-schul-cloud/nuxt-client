@@ -1,68 +1,45 @@
 <template>
-	<section class="hero is-fullheight">
-		<div class="hero-body">
-			<div class="container has-text-centered">
-				<div class="column is-8 is-offset-2">
-					<h3 class="title has-text-grey">Login</h3>
-					<p class="subtitle has-text-grey">Please login to proceed.</p>
-					<div class="box">
-						<div class="logo-round">
-							<img
-								src="@assets/cloud.svg"
-								alt="Schul-Cloud"
-								style="width: 78px"
-							/>
-						</div>
-						<form @submit.prevent="onSubmit(email, password)">
-							<div class="field">
-								<div class="control">
-									<input
-										v-model="email"
-										class="input is-large"
-										type="email"
-										placeholder="Your Email"
-										autofocus
-									/>
-								</div>
-							</div>
+	<section>
+		<div>
+			<h1 class="h3">Login</h1>
+			<p>Please login to proceed.</p>
 
-							<div class="field">
-								<div class="control">
-									<input
-										v-model="password"
-										class="input is-large"
-										type="password"
-										placeholder="Your Password"
-									/>
-								</div>
-							</div>
-							<div class="field">
-								<label class="checkbox">
-									<input type="checkbox" />
-									Remember me
-								</label>
-							</div>
-							<button class="button is-block is-info is-large is-fullwidth"
-								>Login</button
-							>
-						</form>
-						<div v-if="error" class="error">
-							{{ error.message }}
-							<a
-								class="close"
-								href="javascript://"
-								@click.prevent="dismissError"
-								>dismiss</a
-							>
-						</div>
-					</div>
-					<p class="has-text-grey">
-						<a href="../">Sign Up</a> &nbsp;·&nbsp;
-						<a href="../">Forgot Password</a> &nbsp;·&nbsp;
-						<a href="../">Need Help?</a>
-					</p>
-				</div>
+			<img
+				src="@assets/cloud.svg"
+				alt="Schul-Cloud"
+				style="width: 78px; filter: invert(1)"
+			/>
+
+			<form @submit.prevent="onSubmit(email, password)">
+				<base-input
+					v-model="email"
+					label="Your E-Mail"
+					type="email"
+					placeholder="user@schul-cloud.org"
+					autofocus
+				/>
+
+				<base-input v-model="password" label="Your Password" type="password" />
+				<base-input type="checkbox" label="Remember me" />
+
+				<base-button class="button is-primary">
+					Login
+				</base-button>
+			</form>
+
+			<div v-if="error" class="error">
+				{{ error.message }}
+				<a class="close" href="javascript://" @click.prevent="dismissError"
+					>dismiss</a
+				>
 			</div>
+
+			<p class="has-text-grey">
+				<!-- TODO -->
+				<a href="../">Sign Up</a> &nbsp;·&nbsp;
+				<a href="../">Forgot Password</a> &nbsp;·&nbsp;
+				<a href="../">Need Help?</a>
+			</p>
 		</div>
 	</section>
 </template>
