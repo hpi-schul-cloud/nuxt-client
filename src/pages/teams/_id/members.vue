@@ -1,9 +1,8 @@
 <template>
 	<div v-if="team">
 		<section class="section">
-			<base-link :to="{ name: 'teams-id', params: { id: team._id } }">
-				<h4>{{ team.name }}</h4>
-			</base-link>
+			<base-breadcrumb :inputs="breadcrumbs" />
+
 			<h1>Mitglieder Übersicht</h1>
 		</section>
 		<section class="section">
@@ -45,19 +44,6 @@
 				<base-icon icon="close"></base-icon>
 				<span>Clear selected</span>
 			</button>
-			<BTabs>
-				<BTabItem label="Table">
-					<BTable
-						:data="team.userIds"
-						:columns="columns"
-						:selected.sync="selected"
-						focusable
-					></BTable>
-				</BTabItem>
-				<BTabItem label="Selected">
-					<pre>\n{{ selected }}</pre>
-				</BTabItem>
-			</BTabs>
 		</section>
 	</div>
 </template>
@@ -91,6 +77,16 @@ export default {
 		...mapGetters("teams", {
 			team: "current",
 		}),
+		breadcrumbs() {
+			return [
+				{ text: "Teams", to: { name: "teams" } },
+				{
+					text: this.team.name,
+					to: { name: "teams-id", params: { id: this.team._id } },
+				},
+				{ text: "Mitglieder" },
+			];
+		},
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);

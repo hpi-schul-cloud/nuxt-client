@@ -9,7 +9,6 @@
 					v-bind="$attrs"
 					:type="type"
 					:value="vmodel"
-					:aria-label="label"
 					@input="handleInput"
 				/>
 			</slot>
