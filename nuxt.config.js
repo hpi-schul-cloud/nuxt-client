@@ -122,6 +122,12 @@ module.exports = {
 				});
 			}
 		},
+		postcss: {
+			plugins: {},
+			preset: {
+				autoprefixer: {},
+			},
+		},
 	},
 	generate: {
 		dir: "dist/nuxt",
