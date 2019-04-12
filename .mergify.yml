@@ -27,7 +27,8 @@ pull_request_rules:
     conditions:
       - title~=WIP
     actions:
-      message: Please remove WIP from the title. We have set the WIP Label for you instead.
+      comment:
+        message: Please remove WIP from the title. We have set the WIP Label for you instead.
       label:
         add:
           - WIP
