@@ -9,9 +9,9 @@ function storybook {
 	docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f Dockerfile.storybook .
 	docker push schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-storybook:latest
-	
+
 	eval "echo \"$( cat compose-storybook-test.dummy )\"" > docker-compose-nuxt-storybook.yml
-	
+
 	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-storybook.yml linux@test.schul-cloud.org:~
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-storybook.yml test-schul-cloud
 }
@@ -21,9 +21,9 @@ function nuxtclient {
 	docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f Dockerfile.nuxt .
 	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-client:latest
-	
+
 	eval "echo \"$( cat compose-nuxt-test.dummy )\"" > docker-compose-nuxt-client.yml
-	
+
 	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-client.yml linux@test.schul-cloud.org:~
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-client.yml test-schul-cloud
 }
@@ -33,9 +33,9 @@ function vuepress {
 	docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f Dockerfile.vuepress .
 	docker push schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-vuepress:latest
-	
+
 	eval "echo \"$( cat compose-vuepress-test.dummy )\"" > docker-compose-nuxt-vuepress.yml
-	
+
 	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-vuepress.yml linux@test.schul-cloud.org:~
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-vuepress.yml test-schul-cloud
 }
@@ -47,16 +47,17 @@ chmod 600 travis_rsa
 # Log in to the docker CLI
 echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-if [[ $DOCKERTAG == story* ]]
-then
-  storybook
-elif [[ $DOCKERTAG == nuxt* ]]
-then
-  nuxtclient
-elif [[ $DOCKERTAG == doc* ]]
-then
-  vuepress
-elif [[ $DOCKERTAG == master ]]
+# if [[ $DOCKERTAG == story* ]]
+# then
+#   storybook
+# elif [[ $DOCKERTAG == nuxt* ]]
+# then
+#   nuxtclient
+# elif [[ $DOCKERTAG == doc* ]]
+# then
+#   vuepress
+# el
+if [[ $DOCKERTAG == master ]]
 then
   storybook
   nuxtclient
