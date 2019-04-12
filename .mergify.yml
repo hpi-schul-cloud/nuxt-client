@@ -6,6 +6,7 @@ pull_request_rules:
       - label!=WIP
       - label!=waiting
       - status-success=Travis CI - Branch
+      - status-success=Mergeable
     actions:
       merge:
         method: merge
