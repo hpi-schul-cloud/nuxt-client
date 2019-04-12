@@ -1,26 +1,16 @@
 <template>
-	<section class="section">
-		<div class="columns is-mobile">
-			<button @click="find">Schulen laden</button>
+	<section>
+		<base-button @click="find">Schulen laden</base-button>
 
-			<div v-for="(school, i) of schools" :key="i" class="column">
-				<div class="card">
-					<header class="card-header">
-						<p class="card-header-title has-text-grey">{{ school.name }}</p>
-					</header>
-					<div class="card-content">
-						<div class="content">{{ school.description }}</div>
-					</div>
-					<footer class="card-footer">
-						<div class="card-footer-item">
-							<base-link :to="{ name: 'schools-id', params: { id: school.id } }"
-								>Öffnen</base-link
-							>
-						</div>
-					</footer>
-				</div>
-			</div>
-		</div>
+		<base-card v-for="(school, i) of schools" :key="i">
+			<p slot="header">{{ school.name }}</p>
+			<div>{{ school.description }}</div>
+			<p slot="footer">
+				<base-link :to="{ name: 'schools-id', params: { id: school.id } }">
+					Öffnen
+				</base-link>
+			</p>
+		</base-card>
 	</section>
 </template>
 

@@ -3,13 +3,15 @@
 		<searchbar
 			v-model.lazy="searchQuery"
 			class="searchbar"
-			type="text"
 			placeholder="Suche nach..."
 		/>
 		<pagination v-model="skippedItems" :state="pagination" />
 		<div class="columns">
 			<div v-for="content of searchResults" :key="content._id" class="column">
-				<content-card :data="content" />
+				<pre>
+					{{ content }}
+				</pre
+				>
 			</div>
 		</div>
 		<pagination v-model="skippedItems" :state="pagination" />
@@ -18,8 +20,7 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import ContentCard from "@components/CardLernStoreContent.vue";
-import Searchbar from "@components/SearchbarContent.vue";
+import Searchbar from "@components/Searchbar.vue";
 import Pagination from "@components/Pagination.vue";
 
 export default {
@@ -30,7 +31,6 @@ export default {
 	},
 	name: "LernStore",
 	components: {
-		ContentCard,
 		Searchbar,
 		Pagination,
 	},

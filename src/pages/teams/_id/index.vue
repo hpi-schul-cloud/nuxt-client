@@ -1,30 +1,26 @@
 <template>
 	<div v-if="team">
 		<section class="section">
-			<h4>
-				<span>
-					<base-link :to="{ name: 'teams' }">Teams</base-link>
-				</span>
-				<span>/ {{ team.name }}</span>
-			</h4>
-			<h5>{{ team.description }}</h5>
-			<hr />
-			<button
+			<base-breadcrumb :inputs="breadcrumbs" />
+
+			<base-button
 				class="button is-info"
 				@click="$router.push({ name: 'teams-id-edit' })"
-				>Team bearbeiten</button
 			>
+				Team bearbeiten
+			</base-button>
 		</section>
 		<section v-if="team.userIds" class="section">
 			<h3>Teilnehmer</h3>
 			<p>Es befinden sich {{ team.userIds.length }} Teilnehmer im Team</p>
-			<button
+			<base-button
 				class="button is-info"
 				@click="
 					$router.push({ name: 'teams-id-members', params: { id: team._id } })
 				"
-				>Zur Teilnehmer-Übersicht</button
 			>
+				Zur Teilnehmer-Übersicht
+			</base-button>
 		</section>
 		<section class="section">
 			<h3>News</h3>
@@ -47,10 +43,21 @@
 import { mapGetters } from "vuex";
 
 export default {
+	data() {
+		return {};
+	},
 	computed: {
 		...mapGetters("teams", {
 			team: "current",
 		}),
+		breadcrumbs() {
+			return [
+				{ text: "Teams", to: { name: "teams" } },
+				{
+					text: this.team.name,
+				},
+			];
+		},
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);
