@@ -23,11 +23,11 @@ pull_request_rules:
       - merged
     actions:
       delete_head_branch: {}
-  - name: add WIP label whenn WIP in title
+  - name: add WIP label when WIP is in title
     conditions:
       - title~=WIP
-      - label!=WIP
     actions:
+      message: Please remove WIP from the title. We have set the WIP Label for you instead.
       label:
         add:
           - WIP
