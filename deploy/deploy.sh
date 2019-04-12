@@ -50,16 +50,7 @@ chmod 600 travis_rsa
 # Log in to the docker CLI
 echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-if [[ $DOCKERTAG == deploy-story* ]]
-then
-  storybook
-elif [[ $DOCKERTAG == deploy-nuxt* ]]
-then
-  nuxtclient
-elif [[ $DOCKERTAG == deploy-doc* ]]
-then
-  vuepress
-elif [[ $DOCKERTAG == master ]]
+if [[ $DOCKERTAG == master ]]
 then
   storybook
   nuxtclient
