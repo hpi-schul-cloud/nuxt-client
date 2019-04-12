@@ -14,9 +14,11 @@ import BaseInputDefault, {
 import BaseInputHidden, {
 	supportedTypes as hiddenInputTypes,
 } from "./BaseInputHidden.vue";
+
 import BaseInputCalendar, {
 	supportedTypes as calendarInputTypes,
 } from "./BaseInputCalendar.vue";
+
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox.vue";
@@ -25,7 +27,6 @@ import BaseInputRadio, {
 } from "./BaseInputRadio.vue";
 
 const componentDictionary = {};
-
 defaultInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputDefault)
 );
@@ -39,7 +40,6 @@ checkboxInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputCheckbox)
 );
 radioInputTypes.forEach((type) => (componentDictionary[type] = BaseInputRadio));
-
 export const supportedTypes = Object.keys(componentDictionary);
 
 export default {
@@ -56,7 +56,7 @@ export default {
 			type: String,
 			required: true,
 			validator: (type) => {
-				return !!componentDictionary[type];
+				return supportedTypes.includes(type);
 			},
 		},
 	},

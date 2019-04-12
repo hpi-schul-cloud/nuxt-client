@@ -38,8 +38,8 @@ export default {
 		},
 		type: {
 			type: String,
-			default: "",
-			validate(type) {
+			required: true,
+			validator: (type) => {
 				return supportedTypes.includes(type);
 			},
 		},
