@@ -44,7 +44,7 @@ Branches werden nach folgendem Schema benannt: `${TICKETID}-${Kurzbeschreibung}`
 
 Beim erstellen des Pull Requests sollten alle beteiligten Entwickler, welche aktiv Code zur Problemlösung beigetragen haben als `Assignees` dem Pull angefügt werden. Dies erleichtert es später nachzuvollziehen, wer bei Fragen direkt kontaktiert werden kann.
 
-Sollte ein Ticket/Issue noch nicht abgeschlossen sein oder nach einem Review noch Änderungen zu tun sein, so sollte an den Titel `[WIP]` angefügt werden (`[WIP] VUE-40 - Farbpalette in Storybook einpflegen`). Zusätzlich sollte auch das entsprechende Label `WIP` gesetzt werden.
+Sollte ein Ticket/Issue noch nicht abgeschlossen sein oder nach einem Review noch Änderungen zu tun sein, so sollte das entsprechende Label `WIP` gesetzt werden.
 
 #### Pull Request Titel
 
@@ -56,6 +56,8 @@ Die Bescheibung des Pull Requests sollte das entsprechende Template bestmöglich
 
 ### Pull Request Review
 
+Der Review Prozess sollte erst Beginnen, wenn das WIP Label vom ersteller des Pulls entfernt wurde.
+
 ::: tip Hinweis
 
 Wenn jemand schlechten Code sieht sollte er dies direkt Anmerken um die Codequalität hoch zu halten. Niemand soll hierdurch angegriffen oder bloßgestellt werden. Wir alle können nur durch Hinweise auf Verbesserungsmöglichkeiten besser werden und jeder macht Fehler. Solche Fehler später zu beheben ist wesentlich aufwändiger als sie direkt anzumerken und zu beheben.
@@ -64,4 +66,4 @@ Wenn jemand schlechten Code sieht sollte er dies direkt Anmerken um die Codequal
 
 1. Code Review gewissenhaft ausführen
 2. UI Reviews durchführen - An Tickets zu UI Änderungen sollte ein Screenshot hinterlegt sein, welcher das Zielresultat aufzeigen soll. Mit diesem sollte verglichen werden und entsprechende Abweichungen vor dem Approve abgeklärt werden.
-3. Mergen
+3. Mergen oder das Label `ready to merge` setzen. Wenn das Label `ready to merge` gesetzt ist, wird der Mergify Bot sich um alles weitere kümmern. (Siehe [Tools](../2-Tools.md#mergify)).
