@@ -20,7 +20,7 @@
 				/>
 
 				<base-input v-model="password" label="Your Password" type="password" />
-				<base-input type="checkbox" label="Remember me" />
+				<base-input v-model="remember" type="checkbox" label="Remember me" />
 
 				<base-button class="button is-primary">
 					Login
@@ -50,9 +50,10 @@ import { mapMutations, mapActions } from "vuex";
 export default {
 	data() {
 		return {
-			email: undefined,
-			password: undefined,
-			error: undefined,
+			email: "",
+			password: "",
+			remember: false,
+			error: "",
 		};
 	},
 	methods: {
