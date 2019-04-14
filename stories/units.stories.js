@@ -1,11 +1,11 @@
 import { storiesOf, addDecorator } from "@storybook/vue";
-import notes from "@docs/storybook/typography.md";
+import notes from "@docs/storybook/units.md";
 
-storiesOf("Typography", module)
+storiesOf("Units", module)
 	.addParameters({
 		notes,
 	})
-	.add("Everything in one", () => ({
+	.add("Typography", () => ({
 		components: {},
 		template: `
 <div>
@@ -20,5 +20,12 @@ storiesOf("Typography", module)
 	<div class="caption">caption / PT Sans Narrow regular </div>
 </div>
 			`,
+		methods: {},
+	}))
+	.add("Spacing", () => ({
+		components: {},
+		template: `<div>
+		<div class="s-1"><p>Space 1</p></div>
+		</div>`,
 		methods: {},
 	}));
