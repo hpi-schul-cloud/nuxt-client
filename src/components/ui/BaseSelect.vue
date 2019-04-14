@@ -7,6 +7,7 @@
 			v-bind="$attrs"
 			:value="populatedValue"
 			:options="options"
+			:multiple="multiple"
 			track-by="value"
 			label="label"
 			@input="updatevmodel"
@@ -26,12 +27,15 @@ export default {
 	},
 	props: {
 		value: {
-			type: Array,
+			type: [String, Array, Object],
 			required: true,
 		},
 		selected: {
 			type: Object,
 			default: () => ({}),
+		},
+		multiple: {
+			type: Boolean,
 		},
 		options: {
 			type: Array,
@@ -46,12 +50,19 @@ export default {
 	},
 	computed: {
 		populatedValue() {
-			return this.options.filter((option) => this.value.includes(option.value));
+			return this.multiple
+				? this.options.filter((option) => this.value.includes(option.value))
+				: this.options.find(
+						(option) =>
+							JSON.stringify(this.value) == JSON.stringify(option.value)
+				  );
 		},
 	},
 	methods: {
 		updatevmodel(event) {
-			const newModel = event.map((selection) => selection.value);
+			const newModel = this.multiple
+				? event.map((selection) => selection.value)
+				: event.value;
 			this.$emit("update:vmodel", newModel);
 		},
 	},
