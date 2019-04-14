@@ -26,17 +26,19 @@ export default {
 		event: "update:vmodel",
 	},
 	props: {
+		/**
+		 * Must match an entry of the options prop.
+		 */
 		value: {
 			type: [String, Number, Array, Object],
 			required: true,
 		},
-		selected: {
-			type: Object,
-			default: () => ({}),
-		},
 		multiple: {
 			type: Boolean,
 		},
+		/**
+		 * Format: [ { value: [String, Number, Array, Object], label: String }, ... ]
+		 */
 		options: {
 			type: Array,
 			required: true,
