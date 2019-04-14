@@ -10,7 +10,10 @@
 			:value="vmodel"
 			v-on="$listeners"
 			@input="$emit('updatemodel', $event.target.value)"
-		></textarea>
+		>
+			<slot/>
+		</textarea
+		>
 	</base-input-default>
 </template>
 
