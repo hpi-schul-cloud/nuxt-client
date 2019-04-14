@@ -67,7 +67,7 @@ export default {
 .topbar {
 	display: flex;
 	align-items: center;
-	padding: $size-padding;
+	padding: $size-space 2 * $size-space;
 	box-shadow: $shadow-1;
 }
 .page-title {
@@ -79,6 +79,6 @@ export default {
 	text-transform: capitalize;
 }
 .action {
-	padding: $size-padding;
+	padding: $size-space 2 * $size-space;
 }
 </style>

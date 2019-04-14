@@ -10,19 +10,19 @@
 <script>
 import BaseInputDefault, {
 	supportedTypes as defaultInputTypes,
-} from "./BaseInputDefault.vue";
+} from "./BaseInputDefault";
 import BaseInputHidden, {
 	supportedTypes as hiddenInputTypes,
-} from "./BaseInputHidden.vue";
+} from "./BaseInputHidden";
 import BaseInputCalendar, {
 	supportedTypes as calendarInputTypes,
-} from "./BaseInputCalendar.vue";
+} from "./BaseInputCalendar";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
-} from "./BaseInputCheckbox.vue";
+} from "./BaseInputCheckbox";
 import BaseInputRadio, {
 	supportedTypes as radioInputTypes,
-} from "./BaseInputRadio.vue";
+} from "./BaseInputRadio";
 
 const componentDictionary = {};
 

@@ -1,19 +1,18 @@
-// SCREEN
+// SPACING
+$size-space: 8px;
+
+// LAYOUT
+$size-content-width-max: 60rem;
+$size-content-width-min: 25rem;
+
+// SCREEN BREAKPOINTS
 $size-tablet-max-width: 767px;
 $size-mobile-max-width: 480px;
 
 // GRID
 $size-grid-padding: 1.3rem;
 
-// LAYOUT
-$size-content-width-max: 60rem;
-$size-content-width-min: 25rem;
-
-// SPACING
-$size-padding-x: 1em;
-$size-padding-y: 0.75em;
-$size-padding: $size-padding-y $size-padding-x;
-$size-margin: 1em;
+// BORDER
 $size-border-width: 1px;
 $size-border-radius: 8px;
 $size-border-radius-round: 100vmax;

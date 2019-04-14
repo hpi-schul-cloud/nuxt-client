@@ -78,7 +78,7 @@ export default {
 @import "@variables";
 
 .pagination {
-	margin: $size-margin auto;
+	margin: 2 * $size-space auto;
 }
 
 .pagination-list {
@@ -92,8 +92,8 @@ export default {
 }
 .pagination-link {
 	display: inline-block;
-	padding: $size-padding-y $size-padding-y;
-	margin: 0 0.5 * $size-margin;
+	padding: $size-space $size-space;
+	margin: 0 $size-space;
 	background-color: darken($color-text-bg, 10%);
 	border-radius: $size-border-radius-round;
 	&:not(.current) {

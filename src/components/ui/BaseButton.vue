@@ -20,7 +20,7 @@ export default {
 .button {
 	display: flex;
 	align-items: center;
-	padding: $size-padding;
+	padding: $size-space 2 * $size-space;
 	color: $color-body-bg;
 	text-transform: uppercase;
 	cursor: pointer;

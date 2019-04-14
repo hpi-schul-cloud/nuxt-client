@@ -16,7 +16,7 @@
 @import "@variables";
 
 .card {
-	padding: $size-padding;
+	padding: $size-space 2 * $size-space;
 	overflow: hidden;
 	background: #fff;
 	border: $size-border-width solid $color-border;

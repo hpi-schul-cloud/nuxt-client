@@ -60,7 +60,7 @@ export default {
 	@extend %font-content;
 
 	display: block;
-	padding: $size-padding-y * 0.5 $size-padding-x;
+	padding: $size-space 2 * $size-space;
 	text-decoration: none;
 	&.active {
 		color: $color-link;

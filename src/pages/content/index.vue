@@ -20,8 +20,8 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Searchbar from "@components/Searchbar.vue";
-import Pagination from "@components/Pagination.vue";
+import Searchbar from "@components/Searchbar";
+import Pagination from "@components/Pagination";
 
 export default {
 	head() {
@@ -119,7 +119,7 @@ export default {
 @import "@variables";
 
 .searchbar {
-	margin: $size-margin auto;
+	margin: 2 * $size-space auto;
 }
 .columns {
 	display: flex;
@@ -129,6 +129,6 @@ export default {
 .column {
 	width: 100%;
 	max-width: 400px;
-	margin: $size-margin;
+	margin: 2 * $size-space;
 }
 </style>
