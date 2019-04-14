@@ -76,7 +76,7 @@ $input-padding-left: 12px;
 	position: relative;
 	display: block;
 	width: 100%;
-	margin: 1em 0 $size-grid-padding;
+	margin: 2em 0 $size-grid-padding;
 	overflow: visible;
 	clear: both;
 	background: $color-text-bg;
