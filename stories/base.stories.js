@@ -128,6 +128,23 @@ storiesOf("Base Components", module)
 				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
 			</div>`,
 	}))
+	.add("Base Textarea", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			value: "",
+			label: text("label", "Label"),
+			placeholder: text(
+				"placeholder",
+				"Lange Geschichten brauchen eine BaseTextarea."
+			),
+		}),
+		template: `
+			<div>
+				v-model: {{value}} <br/>
+				<base-textarea v-model="value" :label="label" :placeholder="placeholder"/>
+			</div>`,
+		methods: {},
+	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },
 		data: () => ({
