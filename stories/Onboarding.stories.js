@@ -4,7 +4,7 @@ import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { text, number } from "@storybook/addon-knobs";
 
-import LandingCTA from "@components/TemplateLandingCTA";
+import LandingCTA from "@components/LandingCTA";
 import StepProgress from "@components/StepProgress";
 
 export const steps = [

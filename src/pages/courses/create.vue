@@ -1,6 +1,6 @@
 <template>
 	<div v-if="course" class="root">
-		<template-course-wizard
+		<course-wizard
 			:steps="stepList"
 			:course="course"
 			:user="user"
@@ -14,12 +14,12 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import TemplateCourseWizard from "@components/TemplateCourseWizard";
+import CourseWizard from "@components/CourseWizard";
 
 var moment = require("moment");
 
 export default {
-	components: { TemplateCourseWizard },
+	components: { CourseWizard },
 	data() {
 		return {
 			stepList: [
@@ -64,7 +64,7 @@ export default {
 				roles: [studentsRole._id],
 			};
 			const students = (await store.dispatch("users/find", {
-				query: queryStudents,
+				query: {}, // queryStudents,
 			})).data;
 
 			await store.dispatch("classes/find");
@@ -100,11 +100,11 @@ export default {
 				(course.classIds = course.classes),
 				(course.userIds = course.students);
 
-			this.$toast.success("Kurs erstellt");
-
 			try {
 				await course.create();
+				this.$toast.success("Kurs erstellt");
 			} catch (e) {
+				console.error(e);
 				this.$toast.error("Fehler beim Erstellen");
 			}
 
