@@ -9,6 +9,8 @@ function getMock() {
 }
 
 describe("@components/BaseTextarea", () => {
+	it(...isValidComponent(BaseTextarea));
+
 	it("textarea has label", () => {
 		const wrapper = getMock();
 		expect(wrapper.find(`label`).element.innerHTML.includes("test")).toBeTruthy;
