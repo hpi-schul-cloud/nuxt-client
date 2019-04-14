@@ -27,7 +27,7 @@ export default {
 	},
 	props: {
 		value: {
-			type: [String, Array, Object],
+			type: [String, Number, Array, Object],
 			required: true,
 		},
 		selected: {
