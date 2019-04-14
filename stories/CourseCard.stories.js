@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { text, number, color } from "@storybook/addon-knobs";
 
-import CourseCard from "@components/CourseCard.vue";
+import CourseCard from "@components/CourseCard";
 import notes from "@docs/storybook/courseCard.md";
 
 import { defaultCourse, courseOldDataFormat } from "./mockData/CourseCard";

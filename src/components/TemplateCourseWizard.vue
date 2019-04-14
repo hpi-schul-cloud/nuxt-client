@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import StepProgress from "./StepProgress.vue";
+import StepProgress from "./StepProgress";
 import TemplateCourseTimes from "./TemplateCourseTimes";
 
 export default {
