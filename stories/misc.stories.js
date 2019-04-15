@@ -3,13 +3,13 @@ import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
-import PulsatingDot from "@components/PulsatingDot.vue";
-import ProfilePicture from "@components/ProfilePicture.vue";
+import PulsatingDot from "@components/PulsatingDot";
+import ProfilePicture from "@components/ProfilePicture";
 import ExampleImage from "@assets/avatarExample.svg";
-import MenuLink from "@components/MenuLink.vue";
-import DropdownMenu from "@components/DropdownMenu.vue";
-import BaseButton from "@components/ui/BaseButton.vue";
-import Searchbar from "@components/Searchbar.vue";
+import MenuLink from "@components/MenuLink";
+import DropdownMenu from "@components/DropdownMenu";
+import BaseButton from "@components/ui/BaseButton";
+import Searchbar from "@components/Searchbar";
 
 storiesOf("Misc", module)
 	.addParameters({
