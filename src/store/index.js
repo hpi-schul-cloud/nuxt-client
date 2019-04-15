@@ -21,11 +21,7 @@ if (process.client) {
 			secure: false,
 		})
 	);
-	const {
-		service: browserService,
-		auth: browserAuth,
-		FeathersVuex,
-	} = feathersVuex(browserClient, {
+	const { service, auth, FeathersVuex } = feathersVuex(browserClient, {
 		idField: "_id",
 		enableEvents: enableEvents,
 	});
@@ -33,13 +29,13 @@ if (process.client) {
 	Vue.use(FeathersVuex);
 
 	plugins = [
-		browserService("/content/search", {
+		service("/content/search", {
 			namespace: "content_search",
 			paginate: true,
 			autoRemove: true,
 			replaceItems: true,
 		}),
-		browserService("courses", {
+		service("courses", {
 			instanceDefaults: {
 				name: "",
 				description: "",
@@ -53,13 +49,25 @@ if (process.client) {
 			},
 			paginate: true,
 		}),
-		browserService("teams", { paginate: true }),
-		browserService("news", { paginate: true }),
-		browserService("schools", { paginate: true }),
-		browserService("roles", { paginate: true }),
-		browserService("classes", { paginate: true }),
-		browserService("users", { paginate: true }),
-		browserAuth({
+		service("teams", {
+			paginate: true,
+			actions: {
+				inviteExternal: async function(ctx, payload) {
+					return this.$axios.$patch("/teams/extern/add/" + payload.teamId, {
+						userId: payload.userId,
+						email: payload.email,
+						role: payload.role,
+					});
+				},
+			},
+		}),
+		service("news", { paginate: true }),
+		service("schools", { paginate: true }),
+		service("roles", { paginate: true }),
+		service("classes", { paginate: true }),
+		service("users", { paginate: true }),
+		service("publicTeachers", { paginate: true }),
+		auth({
 			userService: "users",
 			actions: {
 				hasRole: async (
@@ -97,42 +105,30 @@ plugins.push();
 const createStore = () => {
 	return new Vuex.Store({
 		state: {},
-		actions: {
-			nuxtServerInit({ commit, dispatch, state }, { req, store }) {
-				let origin = req.headers.host.split(":");
-				origin = `http://${origin[0]}`;
-
-				const storage = {
-					getItem(key) {
-						return store.state.auth ? store.state.auth.accessToken : "";
+		modules: {
+			federalStates: {
+				namespaced: true,
+				actions: {
+					async find({ commit }, payload) {
+						const federalStates = await this.$axios.$get("/federalStates");
+						commit("add", { items: federalStates.data });
 					},
-					setItem(key, value) {
-						store.state.auth.accessToken = value;
+				},
+				getters: {
+					list: (state) => {
+						return state.list;
 					},
-					removeItem(key) {
-						store.state.auth.accessToken = null;
+				},
+				state: () => ({
+					list: [],
+				}),
+				mutations: {
+					add(state, { items }) {
+						for (const item of items) {
+							state.list.push(item);
+						}
 					},
-				};
-
-				// Create a new client for the server
-				const client = feathersClient(origin, storage);
-				const { service } = feathersVuex(client, {
-					idField: "_id",
-					enableEvents: false,
-				});
-
-				// Register services for the server
-				service("users", { paginate: true })(store);
-				service("teams", { paginate: true })(store);
-				service("schools", { paginate: true })(store);
-
-				return initAuth({
-					commit: store.commit,
-					dispatch,
-					req,
-					moduleName: "auth",
-					cookieName: "feathers-jwt",
-				});
+				},
 			},
 		},
 		plugins: plugins,

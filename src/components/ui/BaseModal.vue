@@ -21,6 +21,15 @@ export default {
 			type: Boolean,
 		},
 	},
+	watch: {
+		active() {
+			if (this.active) {
+				document.body.classList.add("is-noscroll");
+			} else {
+				document.body.classList.remove("is-noscroll");
+			}
+		},
+	},
 	methods: {
 		handleBackgroundClick() {
 			this.close();
@@ -53,8 +62,13 @@ export default {
 }
 
 .modal-container {
+	display: flex;
+	flex-direction: column;
 	width: 80%;
+	min-height: 80%;
+	max-height: calc(100vh - 40px);
 	margin: 0 auto;
+	overflow: hidden;
 	border-radius: 2px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 	transition: all $duration-animation-medium ease;
@@ -79,7 +93,10 @@ export default {
 }
 
 .modal-body {
+	flex-grow: 1;
+	flex-shrink: 1;
 	padding: 20px;
+	overflow: auto;
 	background-color: #fff;
 }
 

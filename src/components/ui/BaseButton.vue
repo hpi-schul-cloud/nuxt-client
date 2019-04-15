@@ -33,6 +33,7 @@ export default {
 	&:hover,
 	&:focus {
 		background-color: transparentize($color-text, 0.1);
+		outline: 0;
 	}
 	.is-light {
 		color: $color-button-light;

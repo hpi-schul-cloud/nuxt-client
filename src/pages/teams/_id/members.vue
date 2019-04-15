@@ -17,6 +17,14 @@
 						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
+				<div class="column">
+					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
+					<base-button
+						class="button is-primary"
+						@click="addExternalModalActive = true"
+						>Externe Teilnehmer einladen</base-button
+					>
+				</div>
 				<!-- TODO -->
 				<!-- <div class="column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
@@ -76,21 +84,21 @@
 			<div class="modal-body">
 				<div class="d-flex">
 					<base-button
-						:class="{ 'is-primary': internalTab === 'addMember' }"
-						@click="internalTab = 'addMember'"
+						:class="{ 'is-primary': tabs.internal === 'addMember' }"
+						@click="tabs.internal = 'addMember'"
 					>
 						Person hinzufügen
 					</base-button>
 					<base-button
-						:class="{ 'is-primary': internalTab === 'addClass' }"
-						@click="internalTab = 'addClass'"
+						:class="{ 'is-primary': tabs.internal === 'addClass' }"
+						@click="tabs.internal = 'addClass'"
 					>
 						Klasse hinzufügen
 					</base-button>
 				</div>
 
 				<div>
-					<div v-if="internalTab === 'addMember'">
+					<div v-if="tabs.internal === 'addMember'">
 						<p>
 							<span>Füge Lehrer und Schüler deiner Schule zum Team hinzu</span>
 							<base-select
@@ -102,7 +110,7 @@
 							></base-select>
 						</p>
 					</div>
-					<div v-if="internalTab === 'addClass'">
+					<div v-if="tabs.internal === 'addClass'">
 						<p>
 							<span
 								>Füge eine oder mehrere Klassen deiner Schule zum Team
@@ -123,6 +131,136 @@
 
 			<div class="modal-footer">
 				<base-button id="button" class="is-light" @click="addTeamMembers">
+					Hinzufügen
+				</base-button>
+			</div>
+		</base-modal>
+
+		<base-modal :active.sync="addExternalModalActive">
+			<div class="modal-header">
+				<h3>Externen Teilnehmer einladen</h3>
+			</div>
+
+			<div class="modal-body">
+				<h3>Wen möchtest du ins Team einladen?</h3>
+				<div class="d-flex">
+					<base-button
+						:class="{ 'is-primary': tabs.who === 'teacher' }"
+						@click="tabs.who = 'teacher'"
+					>
+						Lehrer anderer Schulen
+					</base-button>
+					<base-button
+						:class="{ 'is-primary': tabs.who === 'expert' }"
+						@click="tabs.who = 'expert'"
+					>
+						Externe Experten
+					</base-button>
+				</div>
+
+				<div>
+					<div v-if="tabs.who === 'teacher'">
+						<h3>Lehrer anderer Schulen einladen</h3>
+						<p>
+							Wähle eine Lehrkraft anderer Schulen aus einem zentralen
+							Verzeichnis aus oder gib die E-Mail-Adresse an, mit der sie
+							registriert ist. Nach Beitritt zu deinem Team kann sie Schüler und
+							Lehrer ihrer Schule zum Team hinzufügen.
+						</p>
+						<div class="d-flex">
+							<base-button
+								:class="{ 'is-primary': tabs.from === 'directory' }"
+								@click="tabs.from = 'directory'"
+							>
+								Aus Verzeichnis auswählen
+							</base-button>
+							<base-button
+								:class="{ 'is-primary': tabs.from === 'email' }"
+								@click="tabs.from = 'email'"
+							>
+								per E-Mail einladen
+							</base-button>
+						</div>
+
+						<div v-if="tabs.from === 'directory'">
+							<h3>Lehrer auswählen und hinzufügen</h3>
+							<p>Bundesland wählen</p>
+							<base-select
+								v-if="federalStates"
+								v-model="externalInvite.teacher.federalState"
+								:options="federalStates"
+								track-by="_id"
+								:allow-empty="false"
+								label="name"
+							></base-select>
+
+							<div v-if="externalInvite.teacher.federalState._id">
+								<div v-if="schools.length > 0">
+									<p>Schule auswählen ({{ schools.length }} verfügbar)</p>
+									<base-select
+										v-if="schools"
+										v-model="externalInvite.teacher.school"
+										:options="schools"
+										track-by="_id"
+										:allow-empty="false"
+										label="name"
+									></base-select>
+								</div>
+								<div v-else>
+									<p
+										>Keine Schulen in
+										{{ externalInvite.teacher.federalState.name }} gefunden.</p
+									>
+								</div>
+							</div>
+
+							<div v-if="externalInvite.teacher.school._id">
+								<div v-if="teachers.length > 0">
+									<p>Lehrer auswählen ({{ teachers.length }} verfügbar)</p>
+									<base-select
+										v-model="externalInvite.teacher.user"
+										:options="teachers"
+										track-by="_id"
+										:allow-empty="false"
+										label="fullName"
+									></base-select>
+								</div>
+								<div v-else>
+									<p>Keine Lehrer gefunden.</p>
+								</div>
+							</div>
+						</div>
+
+						<div v-if="tabs.from === 'email'">
+							<h3>Lehrer per E-Mail einladen</h3>
+							<p
+								>Gebe die E-Mail des Lehrers ein, an welchen die Einladung
+								verschickt wird.</p
+							>
+							<base-input
+								v-model="externalInvite.teacher.email"
+								type="email"
+								label="E-Mail eingeben"
+							/>
+						</div>
+					</div>
+					<div v-if="tabs.who === 'expert'">
+						<h3>Externen Experten einladen</h3>
+						<p
+							>Gebe die E-Mail des Experten ein, an welchen die Einladung
+							verschickt wird.</p
+						>
+						<base-input
+							v-model="externalInvite.expert.email"
+							type="email"
+							label="E-Mail eingeben"
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<base-button id="button" class="is-light" @click="addExternalMember">
 					Hinzufügen
 				</base-button>
 			</div>
@@ -155,7 +293,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
+import Vue from "vue";
 
 const roleTranslations = {
 	teammember: "Teilnehmer",
@@ -171,12 +310,28 @@ export default {
 			addInternalModalActive: false,
 			addExternalModalActive: false,
 			editMemberModalActive: false,
-			internalTab: "addMember",
+			externalInvite: {
+				teacher: {
+					federalState: {},
+					school: {},
+					user: {},
+					email: "",
+				},
+				expert: {
+					email: "",
+				},
+			},
+			tabs: {
+				internal: "addMember",
+				who: "teacher",
+				from: "directory",
+			},
 			membersSelected: [],
+			membersSkip: 0,
 			members: [],
+			memberSelected: {},
 			classesSelected: [],
 			classes: [],
-			memberSelected: {},
 			columns: [
 				{
 					field: "userId.firstName",
@@ -203,14 +358,13 @@ export default {
 					label: "Jahrgang",
 				},
 			],
-			membersSkip: 0,
 		};
 	},
 	computed: {
 		stateMembers() {
 			return {
 				total: this.team ? this.team.userIds.length : 0,
-				limit: 3,
+				limit: 10,
 				skip: this.membersSkip,
 			};
 		},
@@ -220,6 +374,48 @@ export default {
 		...mapGetters("roles", {
 			roles: "list",
 		}),
+		...mapGetters("federalStates", {
+			federalStates: "list",
+		}),
+		...mapGetters("schools", {
+			getSchool: "get",
+		}),
+		...mapGetters("publicTeachers", {
+			getTeacher: "get",
+		}),
+		...mapState("schools", {
+			schoolsPagination: (state) => {
+				return state.pagination &&
+					state.pagination.default &&
+					state.pagination.default.ids
+					? state.pagination.default.ids
+					: [];
+			},
+		}),
+		...mapState("publicTeachers", {
+			teachersPagination: (state) => {
+				return state.pagination &&
+					state.pagination.default &&
+					state.pagination.default.ids
+					? state.pagination.default.ids
+					: [];
+			},
+		}),
+		schools() {
+			return this.schoolsPagination
+				? this.schoolsPagination.map((id) => this.getSchool(id))
+				: [];
+		},
+		teachers() {
+			let teachers = this.teachersPagination
+				? this.teachersPagination.map((id) => this.getTeacher(id))
+				: [];
+			teachers = teachers.map((t) => {
+				t.fullName = t.firstName + " " + t.lastName;
+				return t;
+			});
+			return teachers;
+		},
 		teamRoles() {
 			return this.roles
 				.filter((r) => r.name.includes("team"))
@@ -253,8 +449,32 @@ export default {
 			return classes;
 		},
 	},
+	watch: {
+		"externalInvite.teacher.federalState": async function() {
+			await this.$store.dispatch("schools/find", {
+				query: {
+					federalState: this.externalInvite.teacher.federalState._id,
+					$limit: 10000,
+				},
+			});
+		},
+		"externalInvite.teacher.school": async function() {
+			await this.$store.dispatch("publicTeachers/find", {
+				query: {
+					$limit: false,
+					schoolId: this.externalInvite.teacher.school._id,
+					$sort: "firstName",
+				},
+			});
+		},
+	},
 	async created(ctx) {
 		await this.$store.dispatch("roles/find", { query: { $limit: 1000 } });
+		await this.$store.dispatch("federalStates/find", {
+			query: {
+				$limit: 10000,
+			},
+		});
 		await this.getTeam();
 		await this.getMembers();
 		await this.getClasses();
@@ -329,9 +549,40 @@ export default {
 			this.getMembers();
 			this.addInternalModalActive = false;
 			this.$toast.success(
-				(this.internalTab === "addMember" ? "Mitglied/er" : "Klasse/n") +
+				(this.tabs.internal === "addMember" ? "Mitglied/er" : "Klasse/n") +
 					" hinzugefügt"
 			);
+		},
+		async addExternalMember() {
+			try {
+				await this.$store.dispatch("teams/inviteExternal", {
+					teamId: this.team._id,
+					userId: this.externalInvite.teacher.user._id,
+					email:
+						this.tabs.who === "teacher"
+							? this.externalInvite.teacher.email
+							: this.externalInvite.expert.email,
+					role: this.tabs.who === "teacher" ? "teamadministrator" : "expert",
+				});
+				this.$toast.success("Einladung erfolgreich verschickt");
+				this.resetExternalInvite();
+				this.addExternalModalActive = false;
+			} catch (e) {
+				this.$toast.error("Fehler beim Versand der Einladung");
+			}
+		},
+		resetExternalInvite() {
+			this.externalInvite = {
+				teacher: {
+					federalState: {},
+					school: {},
+					user: {},
+					email: "",
+				},
+				expert: {
+					email: "",
+				},
+			};
 		},
 		removeMember(user) {
 			this.$dialog.confirm({

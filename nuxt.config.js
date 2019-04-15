@@ -59,6 +59,7 @@ module.exports = {
 			src: "@plugins/authenticate",
 			ssr: false,
 		},
+		"@plugins/axios",
 		"@plugins/global",
 		"@plugins/dialog",
 		"@plugins/directives",
@@ -86,6 +87,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
+		baseUrl: "https://localhost:3030",
 	},
 
 	/*

@@ -94,6 +94,11 @@ export default {
 			);
 		},
 	},
+	watch: {
+		data(data) {
+			this.newData = data;
+		},
+	},
 	methods: {
 		sort(column) {
 			if (!column || !column.sortable) return;
