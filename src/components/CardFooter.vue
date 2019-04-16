@@ -26,7 +26,6 @@
 import PulsatingDot from "./PulsatingDot.vue";
 
 export default {
-	name: "CardFooter",
 	components: { PulsatingDot },
 	props: {
 		course: {
