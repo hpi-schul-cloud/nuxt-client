@@ -1,8 +1,11 @@
 <template>
-	<img v-if="image" :src="image" class="borderradius" :class="size" />
+	<div class="profilePicture">
+		<img v-if="image" :src="image" class="borderradius" :class="size" />
+	</div>
 </template>
 <script>
 export default {
+	name: "ProfilePicture",
 	props: {
 		image: {
 			type: String,

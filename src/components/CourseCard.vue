@@ -2,7 +2,7 @@
 	<div class="course-card">
 		<div
 			v-if="course.notification !== 0 && course.notification !== null"
-			class="caption notification-dot"
+			class="caption dot"
 			>{{ course.notification }}</div
 		>
 		<div class="header">
@@ -32,6 +32,7 @@
 import CardFooter from "./CardFooter";
 
 export default {
+	name: "CourseCard",
 	components: {
 		CardFooter,
 	},
@@ -107,7 +108,7 @@ export default {
 	align-items: center;
 }
 
-.notification-dot {
+.dot {
 	position: absolute;
 	top: -12px;
 	right: -12px;

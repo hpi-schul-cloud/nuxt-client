@@ -26,6 +26,7 @@
 import PulsatingDot from "./PulsatingDot";
 
 export default {
+	name: "CardFooter",
 	components: { PulsatingDot },
 	props: {
 		course: {

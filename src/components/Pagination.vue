@@ -50,16 +50,14 @@ export default {
 		},
 	},
 	computed: {
-		// Shouldn't this be rounded
 		currentPage() {
-			return Math.floor(this.state.skip / this.state.limit + 1);
+			return this.state.skip / this.state.limit + 1;
 		},
 		lastPage() {
 			return Math.ceil(this.state.total / this.state.limit);
 		},
 	},
 	methods: {
-		//TODO is gotoPage needed? not called anywhere
 		gotoPage(pageNumber) {
 			this.updateModel(this.state.limit * (pageNumber - 1));
 		},
