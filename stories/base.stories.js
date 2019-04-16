@@ -5,22 +5,22 @@ import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
-import BaseButton from "@components/ui/BaseButton.vue";
-import BaseCard from "@components/ui/BaseCard.vue";
-import BaseIcon from "@components/ui/BaseIcon.vue";
+import BaseButton from "@components/ui/BaseButton";
+import BaseCard from "@components/ui/BaseCard";
+import BaseIcon from "@components/ui/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
-} from "@components/ui/BaseInput/BaseInput.vue";
-import BaseLink from "@components/ui/BaseLink.vue";
-import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
-import BaseTable from "@components/ui/BaseTable.vue";
-import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
-import BaseSelect from "@components/ui/BaseSelect.vue";
-import BaseAudio from "@components/ui/BaseAudio.vue";
-import BaseVideo from "@components/ui/BaseVideo.vue";
-import BaseModal from "@components/ui/BaseModal.vue";
-import BaseBlockquote from "@components/ui/BaseBlockquote.vue";
+} from "@components/ui/BaseInput/BaseInput";
+import BaseLink from "@components/ui/BaseLink";
+import BaseProgressbar from "@components/ui/BaseProgressbar";
+import BaseTable from "@components/ui/BaseTable";
+import BaseCollapsible from "@components/ui/BaseCollapsible";
+import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
+import BaseSelect from "@components/ui/BaseSelect";
+import BaseAudio from "@components/ui/BaseAudio";
+import BaseVideo from "@components/ui/BaseVideo";
+import BaseModal from "@components/ui/BaseModal";
+import BaseBlockquote from "@components/ui/BaseBlockquote";
 
 storiesOf("Base Components", module)
 	.addParameters({
