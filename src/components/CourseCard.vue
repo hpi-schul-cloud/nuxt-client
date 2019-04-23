@@ -1,7 +1,7 @@
 <template>
 	<div class="course-card">
 		<div
-			v-if="course.notification !== 0 && course.notification !== null"
+			v-if="course.notification !== 0 && course.notification"
 			class="caption dot"
 			>{{ course.notification }}</div
 		>
@@ -11,7 +11,7 @@
 				<div class="caption tab-label">{{ course.teacherName }}</div>
 			</div>
 			<div
-				v-if="course.newAssignments !== 0 && course.notification !== null"
+				v-if="course.newAssignments !== 0 && course.newAssignments"
 				class="assignments-label align-center"
 			>
 				<div class="align-center">{{ course.newAssignments }}</div>
@@ -152,7 +152,7 @@ export default {
 	padding: 10px;
 	margin: 15px;
 	cursor: pointer;
-	border-radius: 4px;
+	border-radius: $size-border-radius / 2;
 	box-shadow: $shadow-1;
 }
 .course-card:hover {
@@ -163,7 +163,7 @@ export default {
 	padding: 10px;
 	margin-top: -5px;
 	color: white;
-	border-radius: 4px;
+	border-radius: $size-border-radius / 2;
 }
 
 .card-info p {
@@ -176,7 +176,7 @@ export default {
 	z-index: 10;
 	display: inline-block;
 	float: left;
-	width: 100px;
+	width: 100%;
 	padding: 5.5px 10px;
 	overflow: hidden;
 	color: white;
@@ -200,7 +200,7 @@ export default {
 	top: 0;
 	bottom: 0;
 	left: 0;
-	width: 125px;
+	width: 80%;
 	content: "";
 	border-top-right-radius: 5px;
 	transform: skewX(25deg);
@@ -216,6 +216,7 @@ export default {
 	height: 100%;
 	background: black;
 	background-size: cover;
+	border-top-right-radius: 5px;
 	opacity: 0.5;
 }
 </style>
