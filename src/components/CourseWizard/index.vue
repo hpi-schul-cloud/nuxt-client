@@ -86,11 +86,12 @@ export default {
 				startDate: "",
 				untilDate: "",
 				times: [],
+				teachers: [],
 			}),
 		},
 		user: {
 			type: Object,
-			default: () => {},
+			required: true,
 		},
 		teachers: {
 			type: Array,
