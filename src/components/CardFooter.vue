@@ -13,7 +13,7 @@
 				<base-icon source="custom" icon="clock" />
 			</div>
 			<div class="caption align-center next-course-label"
-				>{{ course.nextCourseTime }} | &nbsp;
+				>{{ course.nextCourseTime }} |&nbsp;
 				<span class="next-course-room-label">
 					{{ course.nextCourseRoom }}
 				</span></div
@@ -109,6 +109,7 @@ export default {
 	-webkit-animation-iteration-count: infinite;
 }
 .next-course-label {
+	padding-left: 0.25rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
