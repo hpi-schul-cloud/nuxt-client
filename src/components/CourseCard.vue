@@ -176,7 +176,7 @@ export default {
 	z-index: 10;
 	display: inline-block;
 	float: left;
-	width: 100%;
+	width: 95%;
 	padding: 5.5px 10px;
 	overflow: hidden;
 	color: white;
