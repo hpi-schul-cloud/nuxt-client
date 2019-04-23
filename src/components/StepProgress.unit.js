@@ -28,7 +28,7 @@ describe("@components/StepProgress", () => {
 		).toContain("active");
 		expect(wrapper.findAll(".active").length).toBe(1);
 	});
-	it("Test with at the 3rd step all steps are rendered", () => {
+	it("Test with the 3rd step all steps are rendered", () => {
 		const mockSteps = [
 			{ name: "Test one" },
 			{ name: "Test two" },
@@ -57,5 +57,17 @@ describe("@components/StepProgress", () => {
 				.at(step)
 				.classes()
 		).toContain("active");
+
+		expect(
+			wrapper
+				.findAll(".description")
+				.at(step - 1)
+				.text()
+		).toBe(mockSteps[step - 1].name);
+	});
+
+	it("Test with required default data only active on step 0", () => {
+		const wrapper = shallowMount(StepProgress);
+		expect(wrapper.find("li").classes()).toContain("active");
 	});
 });
