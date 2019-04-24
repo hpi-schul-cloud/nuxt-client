@@ -10,7 +10,7 @@
 	</nav>
 </template>
 <script>
-import BaseLink from "@basecomponents/BaseLink.vue";
+import BaseLink from "@basecomponents/BaseLink";
 
 export default {
 	name: "BaseBreadcrumb",
