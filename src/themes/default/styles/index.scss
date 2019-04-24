@@ -95,6 +95,11 @@ button {
 	@extend %font-button;
 }
 
+a {
+	color: $color-primary;
+	text-decoration: underline;
+}
+
 img {
 	max-width: 100%;
 }

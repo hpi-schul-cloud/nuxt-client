@@ -1,13 +1,42 @@
 <template>
 	<div>
-		<section class="section">
+		<section class="mt-3 section">
 			<base-button
 				class="button is-info"
 				@click="$router.push({ name: 'teams-create' })"
 				>Neues Team erstellen
 			</base-button>
 		</section>
+
 		<section class="section">
+			<h2>Einladungen</h2>
+			<div class="grid">
+				<div v-for="(team, i) of myInvitations" :key="i" class="tile">
+					<base-card class="teams-card">
+						<div slot="header" class="card-image"></div>
+						<div class="card-content">
+							<div class="media">
+								<div class="media-content">
+									<p class="title is-4">{{ team.name }}</p>
+								</div>
+							</div>
+
+							<div class="content">
+								<p>{{ team.description }}</p>
+							</div>
+						</div>
+						<div slot="footer">
+							<div class="footer-actions">
+								<a class="link" @click="acceptInvitation(team)">Akzeptieren</a>
+							</div>
+						</div>
+					</base-card>
+				</div>
+			</div>
+		</section>
+
+		<section class="section">
+			<h2>Meine Teams</h2>
 			<div class="grid">
 				<div v-for="(team, i) of teams" :key="i" class="tile">
 					<base-card class="teams-card">
@@ -47,6 +76,11 @@ import { mapGetters } from "vuex";
 import isAuthenticated from "@middleware/is-authenticated";
 
 export default {
+	data() {
+		return {
+			myInvitations: [],
+		};
+	},
 	head() {
 		return {
 			title: "Teams",
@@ -58,10 +92,26 @@ export default {
 			teams: "list",
 		}),
 	},
-	created(ctx) {
+	async created(ctx) {
 		this.find();
+		try {
+			this.myInvitations = (await this.$store.dispatch(
+				"teams/getMyInvitations"
+			)).data;
+		} catch {
+			this.$toast.error("Fehler beim Laden der Einladungen");
+		}
 	},
 	methods: {
+		async acceptInvitation(team) {
+			try {
+				await this.$store.dispatch("teams/acceptInvitation", team._id);
+				this.$toast.success('Willkommen im Team "' + team.name + '"');
+				this.$router.push({ name: "teams-id", params: { id: team._id } });
+			} catch (e) {
+				this.$toast.error("Fehler beim Akzeptieren der Einladung");
+			}
+		},
 		find() {
 			this.$store.dispatch("teams/find");
 		},

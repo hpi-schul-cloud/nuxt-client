@@ -38,6 +38,26 @@
 		</section>
 
 		<section>
+			<h3>Ausstehende Einladungen</h3>
+			<base-table
+				v-slot:default="slotProps"
+				:data="invitedMembers"
+				:columns="columnsInvited"
+			>
+				<base-icon
+					icon="mail"
+					class="cursor-pointer"
+					@click.native="resendInvitation(slotProps.row.email)"
+				/>
+				<base-icon
+					icon="delete"
+					class="cursor-pointer"
+					@click.native="deleteInvitation(slotProps.row.email)"
+				/>
+			</base-table>
+		</section>
+
+		<section>
 			<h3>Mitglieder</h3>
 			<base-table
 				v-slot:default="slotProps"
@@ -295,6 +315,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import Vue from "vue";
+var moment = require("moment");
 
 const roleTranslations = {
 	teammember: "Teilnehmer",
@@ -358,9 +379,30 @@ export default {
 					label: "Jahrgang",
 				},
 			],
+			columnsInvited: [
+				{
+					field: "email",
+					label: "E-Mail",
+				},
+				{
+					field: "createdAt",
+					label: "Eingeladen am",
+				},
+				{
+					field: "roleName",
+					label: "Rolle",
+				},
+			],
 		};
 	},
 	computed: {
+		invitedMembers() {
+			return this.team.invitedUserIds.map((invite) => {
+				invite.createdAt = moment(invite.createdAt).format("DD.MM.YYYY");
+				invite.roleName = roleTranslations[invite.role];
+				return invite;
+			});
+		},
 		stateMembers() {
 			return {
 				total: this.team ? this.team.userIds.length : 0,
@@ -552,6 +594,45 @@ export default {
 				(this.tabs.internal === "addMember" ? "Mitglied/er" : "Klasse/n") +
 					" hinzugefügt"
 			);
+		},
+		async resendInvitation(email) {
+			this.$dialog.confirm({
+				title: "Einladung erneut versenden",
+				message:
+					"Möchtest du die Einladung wirklich nochmal per E-Mail verschicken?",
+				confirmText: "Einladung versenden",
+				onConfirm: async () => {
+					try {
+						await this.$store.dispatch("teams/resendInvitation", {
+							teamId: this.team._id,
+							email,
+						});
+						this.$toast.success("Einladung erfolgreich nochmals verschickt!");
+					} catch (e) {
+						this.$toast.error("Fehler beim Versenden der Einladung.");
+					}
+				},
+			});
+		},
+		async deleteInvitation(email) {
+			this.$dialog.confirm({
+				title: "Einladung löschen",
+				message:
+					"Möchtest du die Einladung wirklich nochmal per E-Mail verschicken?",
+				confirmText: "Einladung löschen",
+				onConfirm: async () => {
+					try {
+						await this.$store.dispatch("teams/deleteInvitation", {
+							teamId: this.team._id,
+							email,
+						});
+						this.$toast.success("Einladung erfolgreich gelöscht!");
+						this.getTeam();
+					} catch (e) {
+						this.$toast.error("Fehler beim Löschen der Einladung.");
+					}
+				},
+			});
 		},
 		async addExternalMember() {
 			try {
