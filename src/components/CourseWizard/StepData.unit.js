@@ -1,85 +1,65 @@
-import { shallowMount } from "@vue/test-utils";
 import StepData from "./StepData";
+
+const getValidCourse = () => ({
+	name: "1",
+	description: "2",
+	startDate: "",
+	untilDate: "",
+	times: [],
+	teachers: ["test"],
+});
+
+const getRequiredPropsMock = () => ({
+	vmodel: "text",
+	options: "test",
+	value: "test2",
+});
+
+const mountWithCourse = (propsData) => {
+	return shallowMount(StepData, {
+		propsData,
+		stubs: {
+			"base-input": true,
+			"base-select": true,
+			"base-textarea": true,
+		},
+	});
+};
+
+const checkRendering = (wrapper) => {
+	expect(wrapper.findAll("base-input-stub").length).toBe(3);
+	expect(wrapper.find("base-textarea-stub").exists()).toBe(true);
+	expect(wrapper.findAll("base-select-stub").length).toBe(2);
+};
 
 describe("@components/StepData", () => {
 	it(...isValidComponent(StepData));
 
 	it("Check that everthing is rendering", () => {
-		const mockCourse = {
-			name: "1",
-			description: "2",
-			startDate: "",
-			untilDate: "",
-			times: [],
-			teachers: ["test"],
-		};
-		const wrapper = shallowMount(StepData, {
-			propsData: {
-				course: mockCourse,
-				availableTeachers: ["Test"],
-				vmodel: "text",
-				options: "test",
-				value: "test2",
-			},
-			stubs: {
-				"base-input": true,
-				"base-select": true,
-				"base-textarea": true,
-			},
-		});
-		expect(wrapper.findAll("base-input-stub").length).toBe(3);
-		expect(wrapper.find("base-textarea-stub").exists()).toBe(true);
-		expect(wrapper.findAll("base-select-stub").length).toBe(2);
+		const propsData = getRequiredPropsMock();
+		propsData.availableTeachers = ["Test"];
+		propsData.course = getValidCourse();
+		checkRendering(mountWithCourse(propsData));
 	});
 	it("Test with non required as default", () => {
-		const mockCourse = {
-			name: "3",
-			description: "4",
-			startDate: "",
-			untilDate: "",
-			times: [],
-			teachers: ["test"],
-		};
-		const wrapper = shallowMount(StepData, {
-			propsData: {
-				course: mockCourse,
-				vmodel: "text",
-				options: "test",
-				value: "test2",
-			},
-			stubs: {
-				"base-input": true,
-				"base-select": true,
-				"base-textarea": true,
-			},
-		});
-		expect(wrapper.findAll("base-input-stub").length).toBe(3);
-		expect(wrapper.find("base-textarea-stub").exists()).toBe(true);
-		expect(wrapper.findAll("base-select-stub").length).toBe(2);
+		const propsData = getRequiredPropsMock();
+		propsData.course = getValidCourse();
+		checkRendering(mountWithCourse(propsData));
 	});
 
-	//should print error that the validator is failing
 	it("Test validator by leaving out a key in courses", () => {
-		const mockCourse = {
+		//should print error that the validator is failing
+		let outputData = "";
+		console.error = jest.fn((inputs) => (outputData += inputs));
+
+		const propsData = getRequiredPropsMock();
+		propsData.course = {
+			// some required values are missing (name)
 			untilDate: "",
 			times: [],
 			teachers: ["test"],
 		};
-		const wrapper = shallowMount(StepData, {
-			propsData: {
-				course: mockCourse,
-				vmodel: "text",
-				options: "test",
-				value: "test2",
-			},
-			stubs: {
-				"base-input": true,
-				"base-select": true,
-				"base-textarea": true,
-			},
-		});
-		expect(wrapper.findAll("base-input-stub").length).toBe(3);
-		expect(wrapper.find("base-textarea-stub").exists()).toBe(true);
-		expect(wrapper.findAll("base-select-stub").length).toBe(2);
+		checkRendering(mountWithCourse(propsData));
+		expect(outputData).toContain("Invalid prop");
 	});
 });
