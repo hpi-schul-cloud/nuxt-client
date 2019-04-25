@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import PulsatingDot from "./PulsatingDot.vue";
+import PulsatingDot from "./PulsatingDot";
 
 export default {
 	name: "CardFooter",
