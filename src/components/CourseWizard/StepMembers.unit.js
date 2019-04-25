@@ -1,4 +1,3 @@
-import { shallowMount } from "@vue/test-utils";
 import StepMembers from "./StepMembers";
 
 describe("@components/StepMembers", () => {

@@ -1,4 +1,3 @@
-import { shallowMount } from "@vue/test-utils";
 import CourseWizard from "./index";
 
 describe("@components/CourseWizard", () => {
