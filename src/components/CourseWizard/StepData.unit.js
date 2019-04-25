@@ -35,7 +35,7 @@ const checkRendering = (wrapper) => {
 describe("@components/StepData", () => {
 	it(...isValidComponent(StepData));
 
-	it("Check that everthing is rendering", () => {
+	it("Check that everything is rendering", () => {
 		const propsData = getRequiredPropsMock();
 		propsData.availableTeachers = ["Test"];
 		propsData.course = getValidCourse();
