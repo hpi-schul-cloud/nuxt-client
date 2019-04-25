@@ -50,8 +50,17 @@ module.exports = {
 	port: "4002",
 	description: "documentation",
 	themeConfig: {
+		// https://vuepress.vuejs.org/default-theme-config/
 		sidebar: listFiles(baseDir),
 		logo: "/cloud-transparent.png",
+		lastUpdated: "Last Updated",
+		repo: "schul-cloud/nuxt-client",
+		docsDir: "/docs",
+		editLinks: true,
+		editLinkText: "Improve this page!",
+	},
+	serviceWorker: {
+		updatePopup: true,
 	},
 	configureWebpack: {
 		resolve: {
@@ -62,4 +71,5 @@ module.exports = {
 		lineNumbers: true,
 		toc: { includeLevel: [2, 3] },
 	},
+	evergreen: true, // https://vuepress.vuejs.org/config/#evergreen
 };

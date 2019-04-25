@@ -6,7 +6,7 @@
 
 Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels [Hygen](http://www.hygen.io/) erstellt.
 
-```bash
+```bash{2,5,8}
 # Generate a new component with adjacent unit test
 yarn new component
 
