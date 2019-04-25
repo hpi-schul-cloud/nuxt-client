@@ -92,6 +92,7 @@ export default {
 		user: {
 			type: Object,
 			required: true,
+			validator: (user) => ["_id"].every((key) => user[key] !== undefined),
 		},
 		teachers: {
 			type: Array,
