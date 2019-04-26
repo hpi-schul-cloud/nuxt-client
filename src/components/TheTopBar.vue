@@ -54,6 +54,7 @@ export default {
 	},
 	methods: {
 		sendEvent(eventName) {
+			// Is this if needed? Currently I don't think the sendEvent can be triggered without an eventName
 			if (eventName) {
 				this.$emit("action", eventName);
 			}
