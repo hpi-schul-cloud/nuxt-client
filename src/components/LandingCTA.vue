@@ -22,9 +22,10 @@ export default {
 		return {};
 	},
 	methods: {
-		onClick() {
-			this.$emit("click");
-		},
+		//TODO can this be removed? I don't think it does anything
+		// onClick() {
+		// 	this.$emit("click");
+		// },
 	},
 };
 </script>
