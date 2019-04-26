@@ -1,0 +1,30 @@
+/* --------------------------------
+
+Breakpoints
+
+-------------------------------- */
+
+$breakpoints: (
+	xs: 575px,
+	sm: 768px,
+	md: 991px,
+	lg: 1199px
+);
+
+// Usage: `@include breakpoint(md) { ... }`
+@mixin breakpoint($breakpoint) {
+	@if map-has-key($breakpoints, $breakpoint) {
+		// Get the breakpoint value.
+		$breakpoint-value: map-get($breakpoints, $breakpoint);
+
+		// Write the media query.
+		@media (min-width: $breakpoint-value) {
+			@content;
+		}
+
+		// If the breakpoint doesn't exist in the map.
+	} @else {
+		// Log a warning.
+		@warn 'Invalid breakpoint: #{$breakpoint}.';
+	}
+}
