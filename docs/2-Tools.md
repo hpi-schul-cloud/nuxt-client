@@ -6,7 +6,7 @@
 
 Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels [Hygen](http://www.hygen.io/) erstellt.
 
-```bash
+```bash{2,5,8}
 # Generate a new component with adjacent unit test
 yarn new component
 
@@ -85,11 +85,9 @@ Für alles weitere bleiben wir bisher bei den default Einstellungen und verwende
 
 ### [Mergify](https://mergify.io)
 
-Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label "ready to merge" an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom master, solange keine Merge-Konflikte enstehen.
+Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label `ready to merge` an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom master (solange keine Merge-Konflikte enstehen).
 
-Zusätzlich werden Pull Requests von Greenkeeper sofort automatisch gemerged, sobald alle Status Reports (Bspw. Travis) ihr okay gegeben haben. Außer es wird explizit das Label `WIP`/`waiting` an den Pullg angefügt.
-
-Gemergte Branches werden von diesme Bot ebenfalls automatisch gelöscht.
+Gemergte Branches werden von diesem Bot ebenfalls automatisch gelöscht.
 
 ### [Accesslint](https://www.accesslint.com/)
 
