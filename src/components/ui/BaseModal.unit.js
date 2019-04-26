@@ -57,7 +57,7 @@ describe("@components/BaseModal", () => {
 		const wrapper = mount(modal);
 		wrapper.vm.active = true;
 		expect(wrapper.find("#button").exists()).toBe(true);
-		wrapper.find(".modal-wrapper").trigger("mousedown");
+		wrapper.find(".modal-wrapper").trigger("click");
 		expect(wrapper.find("#button").exists()).toBe(false);
 	});
 });

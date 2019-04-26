@@ -1,7 +1,7 @@
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInputHidden";
 
-describe("@components/BaseInputDefault", () => {
+describe("@components/BaseInputHidden", () => {
 	it("input is not visible", () => {
 		const mockText = "test input";
 		supportedTypes.forEach((type) => {
