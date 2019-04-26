@@ -128,25 +128,42 @@ storiesOf("Base Components", module)
 				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
 			</div>`,
 	}))
+	.add("Base Textarea", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			value: "",
+			label: text("label", "Label"),
+			placeholder: text(
+				"placeholder",
+				"Lange Geschichten brauchen eine BaseTextarea."
+			),
+		}),
+		template: `
+			<div>
+				v-model: {{value}} <br/>
+				<base-textarea v-model="value" :label="label" :placeholder="placeholder"/>
+			</div>`,
+		methods: {},
+	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },
 		data: () => ({
 			content: [],
 			options: [
-				{ _id: 1, name: "Option 1" },
-				{ _id: 2, name: "Option 2" },
-				{ _id: 3, name: "Option 3" },
+				{ value: 1, label: "Option 1" },
+				{ value: 2, label: "Option 2" },
+				{ value: 3, label: "Option 3" },
 			],
 			label: text("label", "Label"),
 			placeholder: text("placeholder", "Etwas auswählen"),
 			multiple: select("mutliple", { true: true, false: false }, false),
 		}),
 		template: `
-		<div>
-		Content: {{content}}
-		Options: {{options}}
-		<base-select v-model="content" :multiple="multiple" :options="options" track-by="_id" :label="label" :placeholder="placeholder"/>
-		</div>`,
+			<div>
+				Content: {{content}} <br/>
+				Options: {{options}} <br/>
+				<base-select v-model="content" :multiple="multiple" :options="options" :label="label" :placeholder="placeholder"/>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Link", () => ({
