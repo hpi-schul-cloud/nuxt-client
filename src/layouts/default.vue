@@ -69,7 +69,7 @@ export default {
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
-				this.$router.push("login");
+				this.$router.push({ name: "login" });
 			}
 		},
 		updateTopBarActions(isAuthenticated) {

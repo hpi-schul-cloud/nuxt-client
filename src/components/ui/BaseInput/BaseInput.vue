@@ -63,6 +63,11 @@ export default {
 			return componentDictionary[this.type];
 		},
 	},
+	created() {
+		if (!componentDictionary[this.type]) {
+			console.error("invalid prop type", this.type, "\n$attrs", this.$attrs);
+		}
+	},
 };
 </script>
 
