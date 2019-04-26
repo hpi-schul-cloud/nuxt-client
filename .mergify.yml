@@ -42,7 +42,7 @@ pull_request_rules:
           - WIP
   - name: remove "ready to merge" label when pull is not approved
     conditions:
-      - "#approved-reviews-by>0"
+      - "#approved-reviews-by=0"
       - "#changes-requested-reviews-by=0"
       - label~=ready to merge
     actions:
