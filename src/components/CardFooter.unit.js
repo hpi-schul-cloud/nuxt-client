@@ -2,9 +2,8 @@ import CardFooter from "./CardFooter";
 import PulsatingDot from "./PulsatingDot.vue";
 
 describe("@components/CardFooter", () => {
-	it("exports a valid component", () => {
-		expect(CardFooter).toBeAComponent();
-	});
+	it(...isValidComponent(CardFooter));
+
 	it("Check if alert is rendering", () => {
 		const testAlert = "Test Alert";
 		const wrapper = shallowMount(CardFooter, {

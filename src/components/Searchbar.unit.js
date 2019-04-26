@@ -10,9 +10,7 @@ const searchBarComponent = {
 };
 
 describe("@components/Searchbar", () => {
-	it("exports a valid component", () => {
-		expect(Searchbar).toBeAComponent();
-	});
+	it(...isValidComponent(Searchbar));
 
 	it("Test if defaults render", () => {
 		const wrapper = mount(searchBarComponent);

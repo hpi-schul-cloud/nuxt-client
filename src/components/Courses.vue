@@ -18,7 +18,7 @@ export default {
 	props: {
 		courses: {
 			type: String,
-			default: "",
+			default: "{}",
 		},
 	},
 	computed: {

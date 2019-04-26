@@ -1,9 +1,8 @@
 import CourseCard from "./CourseCard";
 
 describe("@components/CourseCard", () => {
-	it("exports a valid component", () => {
-		expect(CourseCard).toBeAComponent();
-	});
+	it(...isValidComponent(CourseCard));
+
 	it("check for footer and tab", () => {
 		const course = {
 			color: "#01B1AA",

@@ -1,9 +1,8 @@
 import TheFooter from "./TheFooter";
 
 describe("@components/TheFooter", () => {
-	it("exports a valid component", () => {
-		expect(TheFooter).toBeAComponent();
-	});
+	it(...isValidComponent(TheFooter));
+
 	const $theme = { name: "test" };
 	it("check that all links are returned in the footer", () => {
 		const wrapper = shallowMount(TheFooter, {

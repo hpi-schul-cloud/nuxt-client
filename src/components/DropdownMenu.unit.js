@@ -1,9 +1,7 @@
 import DropdownMenu from "./DropdownMenu";
 
 describe("@components/DropdownMenu", () => {
-	it("exports a valid component", () => {
-		expect(DropdownMenu).toBeAComponent();
-	});
+	it(...isValidComponent(DropdownMenu));
 
 	it("Check for showing content by events", () => {
 		const wrapper = shallowMount(DropdownMenu, {

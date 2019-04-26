@@ -14,9 +14,7 @@ const tabs = {
 };
 
 describe("@components/TemplateTabs", () => {
-	it("exports a valid component", () => {
-		expect(TemplateTabs).toBeAComponent();
-	});
+	it(...isValidComponent(TemplateTabs));
 
 	it("Check if all 3 tabs are added", () => {
 		const wrapper = mount(tabs);

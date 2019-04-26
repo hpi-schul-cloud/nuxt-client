@@ -1,9 +1,8 @@
 import Pagination from "./Pagination";
 
 describe("@components/Pagination", () => {
-	it("exports a valid component", () => {
-		expect(Pagination).toBeAComponent();
-	});
+	it(...isValidComponent(Pagination));
+
 	it("Check that no previous page link is being rendered on first page", () => {
 		const wrapper = shallowMount(Pagination, {
 			propsData: {
