@@ -1,11 +1,7 @@
 <template>
 	<transition name="modal">
 		<div v-if="active" class="modal-mask">
-			<div
-				class="modal-wrapper"
-				@mousedown.self="handleBackgroundClick"
-				@touchstart.self="handleBackgroundClick"
-			>
+			<div class="modal-wrapper" @click.self="handleBackgroundClick">
 				<div class="modal-container">
 					<slot />
 				</div>
@@ -27,15 +23,6 @@ export default {
 		},
 		close() {
 			this.$emit("update:active", false);
-
-			setTimeout(() => {
-				this.$destroy();
-				if (typeof this.$el.remove !== "undefined") {
-					this.$el.remove();
-				} else if (typeof el.parentNode !== "undefined") {
-					this.$el.parentNode.removeChild(el);
-				}
-			}, 150);
 		},
 	},
 };
