@@ -11,8 +11,8 @@ Please read the following Code Styleguides before you start contributing:
 
 ::: warning Please don't use npm!!!
 
-- [yarn](https://yarnpkg.com/lang/en/docs/install/) is faster and cleaner.
-- It's also not recommended to mix npm & yarn in one repository.
+- It's not recommended to mix npm & yarn in one repository.
+- You can [download yarn here](https://yarnpkg.com/lang/en/docs/install/).
 
 :::
 
