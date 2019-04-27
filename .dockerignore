@@ -1,11 +1,6 @@
-#.git
-.gitignore
-.travis.yml*
-Dockerfile
-README.md
-build
-compose-nuxt-test.dummy
-deploy.sh
-node_modules
-travis_rsa.enc
+.github
 .nuxt
+.vscode
+deploy
+node_modules
+.travis.yml*
