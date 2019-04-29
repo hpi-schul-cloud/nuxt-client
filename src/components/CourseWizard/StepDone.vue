@@ -19,7 +19,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .final-step {
 	display: flex;

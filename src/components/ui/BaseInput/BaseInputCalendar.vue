@@ -73,7 +73,7 @@ export default {
 
 <style src="flatpickr/dist/flatpickr.css"></style>
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .calendar-input /deep/ .flatpickr-input {
 	box-sizing: border-box;

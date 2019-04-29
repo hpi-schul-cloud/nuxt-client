@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .grid {
 	display: flex;

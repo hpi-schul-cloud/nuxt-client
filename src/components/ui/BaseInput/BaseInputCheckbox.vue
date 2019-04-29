@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 $background-color: #ccc;
 $background-color-active: $color-secondary;

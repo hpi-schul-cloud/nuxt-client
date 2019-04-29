@@ -135,7 +135,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .content-wrapper {
 	width: 70%;
 	margin: 150px auto 0 auto;

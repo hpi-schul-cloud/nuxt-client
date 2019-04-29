@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .breadcrumb {
 	padding: 10px 16px;
 	list-style: none;

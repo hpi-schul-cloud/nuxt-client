@@ -18,8 +18,8 @@ const aliases = {
 	"@store": "src/store",
 	"@static": `src/themes/${themeName}/static`,
 	"@theme": `src/themes/${themeName}`,
-	"@styles": `src/themes/${themeName}/styles`,
-	"@styles-default": `src/themes/default/styles`,
+	"@styles": `src/themes/${themeName}/styles/index.scss`,
+	"@styles-default": `src/themes/default/styles/index.scss`,
 	"@variables": `src/themes/${themeName}/styles/variables.scss`,
 };
 

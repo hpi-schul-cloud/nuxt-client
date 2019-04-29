@@ -13,7 +13,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .card {
 	padding: $size-padding;

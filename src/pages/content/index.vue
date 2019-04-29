@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .searchbar {
 	margin: $size-margin auto;

@@ -74,7 +74,7 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 $input-padding-left: 12px;
 
 .input__wrapper {

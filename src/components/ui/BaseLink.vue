@@ -96,7 +96,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .link {
 	color: $color-link;
 	text-decoration: underline;
