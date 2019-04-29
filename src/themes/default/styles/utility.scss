@@ -1,14 +1,7 @@
 @import "./utility/fonts";
+@import "./utility/resets";
 @import "./utility/spacing";
 @import "./utility/typography";
-
-* {
-	box-sizing: border-box;
-}
-
-img {
-	max-width: 100%;
-}
 
 .visually-hidden {
 	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */

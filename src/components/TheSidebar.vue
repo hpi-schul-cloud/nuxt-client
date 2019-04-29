@@ -56,11 +56,10 @@ export default {
 	padding: 0;
 	margin: 0;
 }
-.list-content {
-	@extend %font-content;
-
+.link.list-content {
+	font-size: var(--text-md);
 	display: block;
-	padding: $size-padding-y * 0.5 $size-padding-x;
+	padding: calc(var(--space-sm) * 0.5) var(--space-md);
 	text-decoration: none;
 	&.active {
 		color: $color-link;

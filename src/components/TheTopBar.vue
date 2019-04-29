@@ -71,11 +71,10 @@ export default {
 	box-shadow: $shadow-1;
 }
 .page-title {
-	@extend %font-heading;
-
+	font-family: var(--font-secondary);
+	font-size: var(--text-lg);
 	flex: 1;
 	margin: 0;
-	font-size: 2em;
 	text-transform: capitalize;
 }
 .action {

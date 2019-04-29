@@ -97,12 +97,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@styles";
+
 .link {
-	color: $color-link;
+	color: var(--color-link);
 	text-decoration: underline;
 	cursor: pointer;
 	&:active {
 		color: $color-link-active;
+	}
+	&:visited {
+		color: var(--color-link-visited);
 	}
 }
 </style>

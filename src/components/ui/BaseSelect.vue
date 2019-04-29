@@ -1,26 +1,30 @@
 <template>
-	<div class="input__wrapper">
-		<span :class="{ label: true }">
-			{{ label }}
-		</span>
+	<base-input-default
+		v-bind="$attrs"
+		:type="false"
+		vmodel=""
+		class="calendar-input"
+		:label="label"
+	>
 		<multi-select
 			v-bind="$attrs"
 			:value="populatedValue"
 			:options="options"
 			:multiple="multiple"
 			track-by="value"
+			class="input"
 			label="label"
 			@input="updatevmodel"
 		></multi-select>
-	</div>
+	</base-input-default>
 </template>
 
 <script>
+import BaseInputDefault from "./BaseInput/BaseInputDefault";
 import MultiSelect from "vue-multiselect";
 
 export default {
-	name: "BaseSelect",
-	components: { MultiSelect },
+	components: { BaseInputDefault, MultiSelect },
 	model: {
 		prop: "value",
 		event: "update:vmodel",
@@ -72,31 +76,9 @@ export default {
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
 <style lang="scss" scoped>
-@import "@styles";
-$input-padding-left: 12px;
-
-.input__wrapper {
-	position: relative;
-	display: block;
-	width: 100%;
-	margin: 2em 0 $size-grid-padding;
-	overflow: visible;
-	clear: both;
-	background: $color-text-bg;
-	border: $size-border-width solid $color-border;
-	border-radius: $size-border-radius;
-}
-
-.label {
-	@extend %typography-small;
-
-	position: absolute;
-	top: 0;
-	left: $input-padding-left;
-	z-index: 0;
-	background-color: inherit;
-	transform: translateY(-1.5em);
+.input /deep/ .multiselect__tags {
+	border: 0;
+	border-radius: 1em;
 }
 </style>

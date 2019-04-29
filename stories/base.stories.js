@@ -77,6 +77,8 @@ storiesOf("Base Components", module)
 				name: text("name", "name"),
 				value: text("value", ""),
 				placeholder: text("placeholder", "Placeholder"),
+				hint: text("hint", "* required"),
+				error: text("error", ""),
 			}),
 			template: outdent`
 				<div>
@@ -86,6 +88,8 @@ storiesOf("Base Components", module)
 						:type="type"
 						:name="name"
 						:placeholder="placeholder"
+						:hint="hint"
+						:error="error"
 					/>
 				</div>`,
 		};
