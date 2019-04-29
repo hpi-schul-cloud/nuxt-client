@@ -65,7 +65,7 @@ label {
 	height: 0.7em;
 	margin-right: 0.25em;
 	background-color: $background-color;
-	border-radius: $size-border-radius-round;
+	border-radius: var(--curve-round);
 	transition: background-color var(--duration-transition-medium);
 }
 

@@ -114,8 +114,8 @@ export default {
 }
 .content {
 	grid-area: content;
-	min-width: $size-content-width-min;
-	max-width: $size-content-width-max;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
 	margin: 0 auto;
 }
 </style>

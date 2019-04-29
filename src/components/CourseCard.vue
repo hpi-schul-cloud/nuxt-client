@@ -14,15 +14,13 @@
 				v-if="course.newAssignments !== 0 && course.notification !== null"
 				class="assignments-label align-center"
 			>
-				<div class="align-center">{{ course.newAssignments }}</div>
-				<div class="align-center pl-6">
-					<base-icon source="custom" icon="tasks" />
-				</div>
+				{{ course.newAssignments }}
+				<base-icon source="custom" icon="tasks" />
 			</div>
 		</div>
 		<div class="card-info" :style="background_style">
-			<h2 class="h2 mt-5 mb-26 abrivation-label">{{ courseAbbreviation }}</h2>
-			<h3 class="h6 mb-5 ml-4 course-name-label">{{ course.name }}</h3>
+			<h2 class="abrivation-label">{{ courseAbbreviation }}</h2>
+			<h3 class="course-name-label">{{ course.name }}</h3>
 		</div>
 		<card-footer :course="course"></card-footer>
 	</div>
@@ -75,32 +73,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-.mt-0 {
-	margin-top: 0 !important;
-}
-
-.mb-0 {
-	margin-bottom: 0 !important;
-}
-
-.mb-26 {
-	margin-bottom: -26px !important;
-}
-
-.mb-5 {
-	margin-bottom: -5px !important;
-}
-
-.mt-5 {
-	margin-top: -5px !important;
-}
-
-.ml-4 {
-	margin-left: 4px !important;
-}
-.pl-6 {
-	padding-left: 6px !important;
-}
 
 .align-center {
 	display: flex;
@@ -113,19 +85,24 @@ export default {
 	top: -12px;
 	right: -12px;
 	display: inline-block;
-	width: 25px;
-	height: 25px;
+	--min-size: calc(var(--text-sm) + var(--space-xxs) + var(--space-xxs));
+	min-width: var(--min-size);
+	min-height: var(--min-size);
+	font-size: var(--text-sm);
+	padding: var(--space-xxs);
 	font-weight: bold;
-	line-height: 25px;
+	line-height: 1;
 	color: white;
 	text-align: center;
-	background: #b1063a;
-	border-radius: 50%;
+	background: var(--color-primary);
+	border-radius: var(--curve-round);
 }
 
 .abrivation-label {
 	font-family: PTSans-Caption, sans-serif;
 	color: white;
+	font-size: var(--text-xxxl);
+	margin: 0;
 }
 
 .course-name-label {
@@ -133,6 +110,8 @@ export default {
 	color: white;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	font-size: var(--text-md);
+	margin: 0;
 }
 
 .assignments-label {
@@ -186,7 +165,7 @@ export default {
 
 .header {
 	position: relative;
-	z-index: var(layer-behind);
+	z-index: var(--layer-behind);
 	height: 34px;
 	overflow: hidden;
 	border-radius: 5px;
@@ -209,7 +188,7 @@ export default {
 	top: 0;
 	bottom: 0;
 	left: 0;
-	z-index: var(layer-behind);
+	z-index: var(--layer-behind);
 	width: 100%;
 	height: 100%;
 	background: black;

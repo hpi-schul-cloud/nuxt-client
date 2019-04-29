@@ -119,7 +119,7 @@ export default {
 @import "@styles";
 
 .searchbar {
-	margin: $size-margin auto;
+	margin: var(--space-sm) auto;
 }
 .columns {
 	display: flex;
@@ -129,6 +129,6 @@ export default {
 .column {
 	width: 100%;
 	max-width: 400px;
-	margin: $size-margin;
+	margin: var(--space-sm) var(--space-md);
 }
 </style>

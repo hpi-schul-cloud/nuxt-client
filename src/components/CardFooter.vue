@@ -95,7 +95,7 @@ export default {
 	width: 9px;
 	height: 9px;
 	background-color: #d00;
-	border-radius: 50%;
+	border-radius: var(--curve-round);
 }
 
 .ringring {

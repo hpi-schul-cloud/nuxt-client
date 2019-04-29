@@ -54,8 +54,8 @@ export default {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
-	min-width: $size-content-width-min;
-	max-width: $size-content-width-max;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
 	margin: 0 auto;
 }
 

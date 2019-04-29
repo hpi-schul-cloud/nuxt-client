@@ -18,12 +18,12 @@ export default {};
 .button {
 	display: flex;
 	align-items: center;
-	padding: $size-padding;
+	padding: var(--space-sm) var(--space-md);
 	color: var(--grey-3);
 	text-transform: uppercase;
 	cursor: pointer;
 	border: 1px solid var(--color-border);
-	border-radius: $size-border-radius;
+	border-radius: var(--curve-md);
 	transition: background-color var(--duration-transition-medium) ease;
 	&:hover,
 	&:focus {

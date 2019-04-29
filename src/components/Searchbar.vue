@@ -69,7 +69,7 @@ export default {
 		width: 100%;
 		padding: 0 16px;
 		color: var(--color-text);
-		background: var(--gray-6);
+		background: var(--gray-1);
 		border-radius: 50rem;
 
 		.search-icon,

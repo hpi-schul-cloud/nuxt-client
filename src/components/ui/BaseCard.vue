@@ -16,11 +16,11 @@
 @import "@styles";
 
 .card {
-	padding: $size-padding;
+	padding: var(--space-sm) var(--space-md);
 	overflow: hidden;
 	background: #fff;
-	border: $size-border-width solid var(--color-border);
-	border-radius: $size-border-radius;
+	border: 1px solid var(--color-border);
+	border-radius: var(--curve-md);
 	box-shadow: var(--shadow-1);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 	&:hover {

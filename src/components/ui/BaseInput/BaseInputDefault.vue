@@ -85,7 +85,7 @@ export default {
 .border {
 	position: relative;
 	display: block;
-	margin: 1em 0 $size-grid-padding;
+	margin: 1em 0;
 	clear: both;
 	background-color: var(--form-element-bg);
 	border: var(--border-width) solid var(--form-element-border);
