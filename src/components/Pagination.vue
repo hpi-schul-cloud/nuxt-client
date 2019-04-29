@@ -78,7 +78,7 @@ export default {
 @import "@styles";
 
 .pagination {
-	margin: $size-margin auto;
+	margin: 0 auto;
 }
 
 .pagination-list {
@@ -92,10 +92,6 @@ export default {
 }
 .pagination-link {
 	display: inline-block;
-	padding: $size-padding-y $size-padding-y;
-	margin: 0 0.5 * $size-margin;
-	background-color: darken($color-text-bg, 10%);
-	border-radius: $size-border-radius-round;
 	&:not(.current) {
 		cursor: pointer;
 	}

@@ -68,8 +68,8 @@ export default {
 		align-items: center;
 		width: 100%;
 		padding: 0 16px;
-		color: $color-text;
-		background: darken($color-text-bg, 10%);
+		color: var(--color-text);
+		background: var(--gray-6);
 		border-radius: 50rem;
 
 		.search-icon,

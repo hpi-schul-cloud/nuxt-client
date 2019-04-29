@@ -29,12 +29,12 @@ progress {
 }
 // TODO check if we can remove browser prefixes with postcss
 progress::-moz-progress-bar {
-	background-color: $color-primary;
+	background-color: var(--color-primary);
 	border: 0;
 	border-radius: 6px;
 }
 progress::-webkit-progress-value {
-	background-color: $color-primary;
+	background-color: var(--color-primary);
 	border-radius: 6px;
 }
 

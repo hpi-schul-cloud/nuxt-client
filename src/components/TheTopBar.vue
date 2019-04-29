@@ -71,7 +71,7 @@ export default {
 	box-shadow: $shadow-1;
 }
 .page-title {
-	font-family: var(--font-secondary);
+	font-family: var(--font-accent);
 	font-size: var(--text-lg);
 	flex: 1;
 	margin: 0;

@@ -62,7 +62,7 @@ export default {
 	padding: calc(var(--space-sm) * 0.5) var(--space-md);
 	text-decoration: none;
 	&.active {
-		color: $color-link;
+		color: var(--color-link);
 	}
 }
 </style>

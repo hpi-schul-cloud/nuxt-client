@@ -19,7 +19,7 @@
 	padding: $size-padding;
 	overflow: hidden;
 	background: #fff;
-	border: $size-border-width solid $color-border;
+	border: $size-border-width solid var(--color-border);
 	border-radius: $size-border-radius;
 	box-shadow: $shadow-1;
 	transition: box-shadow ($duration-animation-base * 0.5) ease-in;

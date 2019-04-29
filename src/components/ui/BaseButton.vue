@@ -9,9 +9,7 @@
 </template>
 
 <script>
-export default {
-	name: "BaseButton",
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -21,72 +19,41 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: $size-padding;
-	color: $color-button-light;
+	color: var(--grey-3);
 	text-transform: uppercase;
 	cursor: pointer;
-	border: $size-border-width solid;
+	border: 1px solid var(--color-border);
 	border-radius: $size-border-radius;
 	transition: background-color $duration-animation-base ease;
 	&:hover,
 	&:focus {
-		color: #fff;
-		background-color: transparentize($color-text, 0.1);
+		filter: brightness(0.7);
 	}
 	.is-light {
-		color: $color-button-light;
-		background-color: $color-button-light-bg;
-		border-color: $color-button-light-border;
+		color: var(--grey-3);
+		background-color: white;
 		border-width: 1px;
 	}
 }
 
 .is-primary {
-	background-color: $color-button-primary;
+	color: white;
+	background-color: var(--color-primary);
 }
 
-.is-secondary {
-	background-color: $color-button-secondary;
+.is-accent {
+	background-color: var(--color-accent);
 }
 
 .is-small {
-	font-size: $size-button-small-desktop;
-
-	// Tablet size
-	@media screen and (max-width: $size-tablet-max-width) {
-		font-size: $size-button-small-tablet;
-	}
-
-	// Mobile size
-	@media screen and (max-width: $size-mobile-max-width) {
-		font-size: $size-button-small-mobile;
-	}
+	font-size: var(--text-sm);
 }
 
 .is-medium {
-	font-size: $size-button-medium-desktop;
-
-	// Tablet size
-	@media screen and (max-width: $size-tablet-max-width) {
-		font-size: $size-button-medium-tablet;
-	}
-
-	// Mobile size
-	@media screen and (max-width: $size-mobile-max-width) {
-		font-size: $size-button-medium-mobile;
-	}
+	font-size: var(--text-md);
 }
 
 .is-large {
-	font-size: $size-button-large-desktop;
-
-	// Tablet size
-	@media screen and (max-width: $size-tablet-max-width) {
-		font-size: $size-button-large-tablet;
-	}
-
-	// Mobile size
-	@media screen and (max-width: $size-mobile-max-width) {
-		font-size: $size-button-large-mobile;
-	}
+	font-size: var(--text-lg);
 }
 </style>

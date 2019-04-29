@@ -72,7 +72,7 @@ export default {
 @import "@styles";
 
 $background-color: #ccc;
-$background-color-active: $color-secondary;
+$background-color-active: var(--color-accent);
 
 label {
 	position: relative;
