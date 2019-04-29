@@ -29,13 +29,13 @@ export default {};
 	&:focus {
 		filter: brightness(0.7);
 	}
-	.is-light {
-		color: var(--grey-3);
-		background-color: white;
-		border-width: 1px;
-	}
 }
 
+.is-light {
+	color: var(--grey-3);
+	background-color: transparent;
+	border-width: 1px;
+}
 .is-primary {
 	color: white;
 	background-color: var(--color-primary);

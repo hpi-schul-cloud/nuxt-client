@@ -40,6 +40,7 @@ storiesOf("Base Components", module)
 				default: "",
 				primary: "is-primary",
 				accent: "is-accent",
+				light: "is-light",
 			}),
 		}),
 		template: `<base-button :class="[size, style]"> {{ text }} </base-button>`,
