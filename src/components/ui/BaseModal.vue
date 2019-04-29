@@ -33,7 +33,7 @@ export default {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 9998;
+	z-index: var(--layer-modal);
 	display: table;
 	width: 100%;
 	height: 100%;

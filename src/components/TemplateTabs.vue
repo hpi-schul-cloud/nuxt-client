@@ -73,7 +73,6 @@ ul.tabs {
 				position: absolute;
 				bottom: -2px;
 				left: 0;
-				z-index: 100;
 				width: 100%;
 				height: 2px;
 				content: " ";

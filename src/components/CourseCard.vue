@@ -112,7 +112,6 @@ export default {
 	position: absolute;
 	top: -12px;
 	right: -12px;
-	z-index: 10;
 	display: inline-block;
 	width: 25px;
 	height: 25px;
@@ -173,7 +172,6 @@ export default {
 
 .tab-label {
 	position: absolute;
-	z-index: 10;
 	display: inline-block;
 	float: left;
 	width: 100px;
@@ -188,7 +186,7 @@ export default {
 
 .header {
 	position: relative;
-	z-index: -1;
+	z-index: var(layer-behind);
 	height: 34px;
 	overflow: hidden;
 	border-radius: 5px;
@@ -211,7 +209,7 @@ export default {
 	top: 0;
 	bottom: 0;
 	left: 0;
-	z-index: -1;
+	z-index: var(layer-behind);
 	width: 100%;
 	height: 100%;
 	background: black;

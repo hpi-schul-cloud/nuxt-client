@@ -109,7 +109,7 @@ ul.progressbar {
 	position: absolute;
 	top: 25px;
 	left: -50%;
-	z-index: -1;
+	z-index: var(layer-behind);
 	width: 100%;
 	height: 3px;
 	content: "";
