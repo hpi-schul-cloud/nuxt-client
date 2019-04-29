@@ -68,7 +68,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: $size-padding;
-	box-shadow: $shadow-1;
+	box-shadow: var(--shadow-1);
 }
 .page-title {
 	font-family: var(--font-accent);

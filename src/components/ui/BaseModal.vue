@@ -50,7 +50,7 @@ export default {
 	width: 300px;
 	margin: 0 auto;
 	border-radius: 2px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+	box-shadow: var(--shadow-2);
 	transition: all var(--duration-transition-medium) ease;
 }
 

@@ -152,10 +152,10 @@ export default {
 	margin: 15px;
 	cursor: pointer;
 	border-radius: 4px;
-	box-shadow: $shadow-1;
+	box-shadow: var(--shadow-1);
 }
 .course-card:hover {
-	box-shadow: $shadow-5;
+	box-shadow: var(--shadow-5);
 	transition: box-shadow var(--duration-transition-medium);
 }
 .card-info {

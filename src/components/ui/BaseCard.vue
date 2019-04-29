@@ -21,10 +21,10 @@
 	background: #fff;
 	border: $size-border-width solid var(--color-border);
 	border-radius: $size-border-radius;
-	box-shadow: $shadow-1;
+	box-shadow: var(--shadow-1);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 	&:hover {
-		box-shadow: $shadow-2;
+		box-shadow: var(--shadow-2);
 	}
 }
 </style>

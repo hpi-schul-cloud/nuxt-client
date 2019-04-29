@@ -23,7 +23,7 @@ export default {
 @import "@styles";
 
 img:hover {
-	box-shadow: $shadow-5;
+	box-shadow: var(--shadow-5);
 	transition: box-shadow var(--duration-transition-medium);
 }
 
