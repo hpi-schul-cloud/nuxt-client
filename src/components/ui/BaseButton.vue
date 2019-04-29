@@ -24,7 +24,7 @@ export default {};
 	cursor: pointer;
 	border: 1px solid var(--color-border);
 	border-radius: $size-border-radius;
-	transition: background-color $duration-animation-base ease;
+	transition: background-color var(--duration-transition-medium) ease;
 	&:hover,
 	&:focus {
 		filter: brightness(0.7);

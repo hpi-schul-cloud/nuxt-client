@@ -83,7 +83,7 @@ label {
 	display: inline-block;
 	margin-right: 0.25em;
 	background-color: $background-color;
-	transition: background-color $duration-animation-base;
+	transition: background-color var(--duration-transition-medium);
 }
 
 .checkbox {
@@ -103,7 +103,7 @@ label {
 		height: 0.5em;
 		content: "";
 		background-color: white;
-		transition: transform $duration-animation-base;
+		transition: transform var(--duration-transition-medium);
 	}
 }
 

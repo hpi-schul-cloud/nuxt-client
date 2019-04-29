@@ -157,7 +157,7 @@ export default {
 }
 .course-card:hover {
 	box-shadow: $shadow-5;
-	transition: box-shadow $duration-animation-medium;
+	transition: box-shadow var(--duration-transition-medium);
 }
 .card-info {
 	padding: 10px;

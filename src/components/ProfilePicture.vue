@@ -24,7 +24,7 @@ export default {
 
 img:hover {
 	box-shadow: $shadow-5;
-	transition: box-shadow $duration-animation-medium;
+	transition: box-shadow var(--duration-transition-medium);
 }
 
 .borderradius {

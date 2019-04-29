@@ -87,7 +87,7 @@ export default {
 		}
 
 		.search-icon {
-			transition: transform $duration-animation-base ease-in-out;
+			transition: transform var(--duration-transition-medium) ease-in-out;
 		}
 
 		.clear-btn {
@@ -101,7 +101,7 @@ export default {
 
 			&.fade-enter-active,
 			&.fade-leave-active {
-				transition: opacity $duration-animation-base;
+				transition: opacity var(--duration-transition-medium);
 			}
 			&.fade-enter,
 			&.fade-leave-to {

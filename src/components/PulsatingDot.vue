@@ -41,7 +41,7 @@ export default {
 	border: 1px solid #d00;
 	border-radius: 30px;
 	opacity: 0;
-	animation: pulsate $duration-animation-slow ease-out;
+	animation: pulsate var(--duration-transition-slow) ease-out;
 	animation-iteration-count: infinite;
 }
 

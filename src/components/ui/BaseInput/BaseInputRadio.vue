@@ -66,7 +66,7 @@ label {
 	margin-right: 0.25em;
 	background-color: $background-color;
 	border-radius: $size-border-radius-round;
-	transition: background-color $duration-animation-base;
+	transition: background-color var(--duration-transition-medium);
 }
 
 input:checked + .radio {

@@ -105,7 +105,7 @@ export default {
 	border: 1px solid #d00;
 	-webkit-border-radius: 30px;
 	opacity: 0;
-	-webkit-animation: pulsate $duration-animation-slow ease-out;
+	-webkit-animation: pulsate var(--duration-transition-slow) ease-out;
 	-webkit-animation-iteration-count: infinite;
 }
 .next-course-label {

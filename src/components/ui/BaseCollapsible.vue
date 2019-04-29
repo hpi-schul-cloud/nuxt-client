@@ -58,7 +58,7 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity $duration-animation-base;
+	transition: opacity var(--duration-transition-medium);
 }
 .fade-enter,
 .fade-leave-to {
