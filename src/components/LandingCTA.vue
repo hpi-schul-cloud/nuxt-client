@@ -14,18 +14,9 @@
 <script>
 export default {
 	props: {
-		subtitle: { type: String, default: "" },
-		title: { type: String, default: "" },
-		ctaText: { type: String, default: "" },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		//TODO can this be removed? I don't think it does anything
-		// onClick() {
-		// 	this.$emit("click");
-		// },
+		subtitle: { type: String, required: true },
+		title: { type: String, required: true },
+		ctaText: { type: String, required: true },
 	},
 };
 </script>

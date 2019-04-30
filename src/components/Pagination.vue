@@ -50,7 +50,6 @@ export default {
 		},
 	},
 	computed: {
-		// Shouldn't this be rounded
 		currentPage() {
 			return Math.floor(this.state.skip / this.state.limit + 1);
 		},

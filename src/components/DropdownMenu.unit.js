@@ -3,6 +3,14 @@ import DropdownMenu from "./DropdownMenu";
 describe("@components/DropdownMenu", () => {
 	it(...isValidComponent(DropdownMenu));
 
+	it(
+		...rendersDefaultSlotContent(DropdownMenu, {
+			propsData: {
+				title: "test title",
+			},
+		})
+	);
+
 	it("Check for showing content by events", () => {
 		const wrapper = shallowMount(DropdownMenu, {
 			propsData: {
@@ -20,16 +28,5 @@ describe("@components/DropdownMenu", () => {
 		expect(content.contains(".open")).toBe(true);
 		dropdown.trigger("blur");
 		expect(content.contains(".open")).toBe(false);
-	});
-	it("Check if everything is rendered", () => {
-		const titleString = "Test Dropdown";
-		const wrapper = shallowMount(DropdownMenu, {
-			propsData: {
-				title: titleString,
-			},
-		});
-		expect(wrapper.find(".dropdown").isVisible()).toBe(true);
-		expect(wrapper.find(".button").isVisible()).toBe(true);
-		expect(wrapper.find(".button").text()).toBe(titleString);
 	});
 });
