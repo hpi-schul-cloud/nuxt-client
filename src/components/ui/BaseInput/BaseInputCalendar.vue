@@ -1,7 +1,7 @@
 <template>
 	<base-input-default
 		v-bind="$attrs"
-		:type="type"
+		:type="false"
 		:vmodel="vmodel"
 		class="calendar-input"
 	>
@@ -36,8 +36,8 @@ export default {
 		},
 		type: {
 			type: String,
-			default: "",
-			validate(type) {
+			required: true,
+			validator: (type) => {
 				return supportedTypes.includes(type);
 			},
 		},

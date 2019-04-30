@@ -10,12 +10,14 @@ Wenn die Story schon existiert und nur ein Unterpunkt hinzukommen soll kann man 
 
 Als Beispiel der Base Button:
 
-```javascript
-.add("Base Button Primary", () => ({
+```javascript{3-7}
+import { storiesOf } from "@storybook/vue";
+
+storiesOf("Base Components", module).add("Base Button Primary", () => ({
 	components: { BaseButton },
-	template: '<div><base-button>Primary</base-button></div>',
+	template: "<div><base-button>Primary</base-button></div>",
 	methods: {},
-	}))
+}));
 ```
 
 Im template sollte dann die Komponente sein. Wenn man mehrere Komponenten auf einer Seite darstellen möchte muss man ein Rahmen tag wie ein `<div></div>` setzten.
@@ -30,4 +32,4 @@ props: {
 },
 ```
 
-Die andere Möglichkeit ist `data: () => ({})` zu setzten um so das v-model ändern zu können. Mehr Details zu Knobs sind in der [Storybook-Knobs-Package Dokumentation](https://www.npmjs.com/package/@storybook/addon-knobs) zu finden.
+Die andere Möglichkeit ist `data: () => ({})` zu setzten um so beispielsweise das v-model ändern zu können. Mehr Details zu Knobs sind in der [Storybook-Knobs-Package Dokumentation](https://www.npmjs.com/package/@storybook/addon-knobs) zu finden.

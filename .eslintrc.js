@@ -31,7 +31,7 @@ module.exports = {
 				: "off",
 
 		"max-lines": [
-			"warn",
+			"error",
 			{ max: 250, skipBlankLines: true, skipComments: true },
 		],
 		// vue specific stuff
