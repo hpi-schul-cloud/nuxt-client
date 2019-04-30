@@ -23,7 +23,7 @@ describe("@components/TheTopBar", () => {
 		//Issue with the ripple effect => Failed to resolve directive: ripple
 		const mockActions = [
 			{ icon: "house", title: "test home", to: "home" },
-			{ title: "test away", href: "https://www.google.com" },
+			{ title: "test away", href: "https://schul-cloud.org" },
 			{ title: "test action", event: "light-camera" },
 		];
 		const wrapper = shallowMount(TheTopBar, {
