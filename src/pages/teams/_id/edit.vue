@@ -13,7 +13,7 @@
 				<span>/ Bearbeiten</span>
 			</h4>
 			<base-button
-				v-if="team.user && team.user.permissions.includes('DELETE_TEAM')"
+				v-if="team.user && hasTeamPermission('DELETE_TEAM')"
 				class="is-danger"
 				@click="confirmDelete"
 				>Löschen</base-button
@@ -52,6 +52,7 @@ export default {
 	computed: {
 		...mapGetters("teams", {
 			team: "current",
+			hasTeamPermission: "hasTeamPermission",
 		}),
 	},
 	created(ctx) {

@@ -6,7 +6,10 @@
 				@mousedown.self="handleBackgroundClick"
 				@touchstart.self="handleBackgroundClick"
 			>
-				<div class="modal-container">
+				<div
+					class="modal-container"
+					:class="{ 'modal-container--large': size === 'large' }"
+				>
 					<slot />
 				</div>
 			</div>
@@ -19,6 +22,10 @@ export default {
 	props: {
 		active: {
 			type: Boolean,
+		},
+		size: {
+			type: String,
+			default: "medium",
 		},
 	},
 	watch: {
@@ -65,13 +72,15 @@ export default {
 	display: flex;
 	flex-direction: column;
 	width: 80%;
-	min-height: 80%;
 	max-height: calc(100vh - 40px);
 	margin: 0 auto;
 	overflow: hidden;
 	border-radius: 2px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 	transition: all $duration-animation-medium ease;
+	&--large {
+		min-height: 80%;
+	}
 }
 
 .modal-header {

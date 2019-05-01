@@ -8,7 +8,7 @@
 			</base-button>
 		</section>
 
-		<section class="section">
+		<section v-if="myInvitations.length > 0" class="section">
 			<h2>Einladungen</h2>
 			<div class="grid">
 				<div v-for="(team, i) of myInvitations" :key="i" class="tile">
@@ -37,6 +37,7 @@
 
 		<section class="section">
 			<h2>Meine Teams</h2>
+			<p v-if="teams.length === 0">Du bist noch in keinen Teams.</p>
 			<div class="grid">
 				<div v-for="(team, i) of teams" :key="i" class="tile">
 					<base-card class="teams-card">

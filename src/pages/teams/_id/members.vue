@@ -9,7 +9,7 @@
 		</section>
 		<section class="section">
 			<div class="columns">
-				<div class="column">
+				<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="column">
 					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
 					<base-button
 						class="button is-primary"
@@ -17,7 +17,7 @@
 						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
-				<div class="column">
+				<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
 					<base-button
 						class="button is-primary"
@@ -412,6 +412,7 @@ export default {
 		},
 		...mapGetters("teams", {
 			team: "current",
+			hasTeamPermission: "hasTeamPermission",
 		}),
 		...mapGetters("roles", {
 			roles: "list",
@@ -617,8 +618,7 @@ export default {
 		async deleteInvitation(email) {
 			this.$dialog.confirm({
 				title: "Einladung löschen",
-				message:
-					"Möchtest du die Einladung wirklich nochmal per E-Mail verschicken?",
+				message: "Möchtest du die Einladung löschen möchtest?",
 				confirmText: "Einladung löschen",
 				onConfirm: async () => {
 					try {

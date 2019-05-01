@@ -10,10 +10,8 @@
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
-			<button
-				class="button is-info"
-				@click="$router.push({ name: 'news-id-edit' })"
-				>Artikel bearbeiten</button
+			<base-button @click="$router.push({ name: 'news-id-edit' })"
+				>Artikel bearbeiten</base-button
 			>
 		</section>
 	</div>

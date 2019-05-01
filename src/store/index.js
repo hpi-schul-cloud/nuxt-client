@@ -51,6 +51,13 @@ if (process.client) {
 		}),
 		service("teams", {
 			paginate: true,
+			getters: {
+				hasTeamPermission: (state, getters) => (permission) => {
+					return getters.current.user
+						? getters.current.user.permissions.find((p) => p === permission)
+						: false;
+				},
+			},
 			actions: {
 				acceptInvitation: async function(ctx, teamId) {
 					return this.$axios.$get("/teams/extern/accept/" + teamId);
