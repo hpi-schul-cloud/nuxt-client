@@ -9,7 +9,6 @@
 					v-bind="$attrs"
 					:type="type"
 					:value="vmodel"
-					:aria-label="label"
 					@input="handleInput"
 				/>
 			</slot>
@@ -40,10 +39,10 @@ export default {
 			required: true,
 		},
 		type: {
-			type: String,
+			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
-			validate(value) {
-				return supportedTypes.includes(value);
+			validator: (type) => {
+				return supportedTypes.includes(type) || !type;
 			},
 		},
 		label: {

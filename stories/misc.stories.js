@@ -3,12 +3,13 @@ import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
-import PulsatingDot from "@components/PulsatingDot.vue";
-import ProfilePicture from "@components/ProfilePicture.vue";
+import PulsatingDot from "@components/PulsatingDot";
+import ProfilePicture from "@components/ProfilePicture";
 import ExampleImage from "@assets/avatarExample.svg";
-import MenuLink from "@components/MenuLink.vue";
-import DropdownMenu from "@components/DropdownMenu.vue";
-import BaseButton from "@components/ui/BaseButton.vue";
+import MenuLink from "@components/MenuLink";
+import DropdownMenu from "@components/DropdownMenu";
+import BaseButton from "@components/ui/BaseButton";
+import Searchbar from "@components/Searchbar";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -21,7 +22,7 @@ storiesOf("Misc", module)
 	.add("Profile Pic", () => ({
 		components: { ProfilePicture },
 		data: () => ({ imgsrc: ExampleImage }),
-		template: `<div><ProfilePicture :image="imgsrc" size="small"/><ProfilePicture size="medium"/><ProfilePicture size="large"/></div>`,
+		template: `<div><ProfilePicture :image="imgsrc" size="small"/><ProfilePicture :image="imgsrc" size="medium"/><ProfilePicture :image="imgsrc" size="large"/></div>`,
 	}))
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
@@ -32,6 +33,14 @@ storiesOf("Misc", module)
 				<MenuLink to="/">Link 3</MenuLink>
 			</DropdownMenu>
 		`,
+	}))
+	.add("Searchbar", () => ({
+		components: { Searchbar },
+		data: () => ({
+			searchQuery: text("searchQuery", ""),
+			placeholder: text("placeholder", "Suche nach..."),
+		}),
+		template: outdent`<searchbar v-model.lazy="searchQuery" :placeholder="placeholder" />`,
 	}))
 	.add("Toast", () => ({
 		components: { BaseButton },

@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div class="app">
 		<course-card
 			v-for="course in courses_obj"
 			:key="course._id"
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import CourseCard from "./CourseCard.vue";
+import CourseCard from "./CourseCard";
 
 export default {
 	components: {
@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style>
-#app {
+.app {
 	display: flex;
 	flex-wrap: wrap;
 }

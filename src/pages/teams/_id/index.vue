@@ -1,5 +1,6 @@
 <template>
 	<div v-if="team">
+		<base-breadcrumb :inputs="breadcrumbs" />
 		<section class="section">
 			<h4>
 				<span>
@@ -18,8 +19,9 @@
 				@click="
 					$router.push({ name: 'teams-id-members', params: { id: team._id } })
 				"
-				>Zur Teilnehmer-Übersicht</base-button
 			>
+				Zur Teilnehmer-Übersicht
+			</base-button>
 		</section>
 
 		<section class="section">
@@ -112,6 +114,14 @@ export default {
 				article.color = colors[_.random(0, colors.length - 1)];
 				return article;
 			});
+		},
+		breadcrumbs() {
+			return [
+				{ text: "Teams", to: { name: "teams" } },
+				{
+					text: this.team.name,
+				},
+			];
 		},
 	},
 	async created(ctx) {

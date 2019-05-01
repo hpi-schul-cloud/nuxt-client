@@ -4,3 +4,4 @@ dist
 .nuxt
 docs/storybook/**/*.md
 LICENSE.md
+.browserslistrc

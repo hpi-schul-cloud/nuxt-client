@@ -5,6 +5,9 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
+	env: {
+		API_URL: process.env.API_URL || "http://localhost:3030",
+	},
 	/*
 	 ** Headers of the page
 	 */
@@ -125,6 +128,12 @@ module.exports = {
 					},
 				});
 			}
+		},
+		postcss: {
+			plugins: {},
+			preset: {
+				autoprefixer: {},
+			},
 		},
 	},
 	generate: {

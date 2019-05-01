@@ -1,12 +1,11 @@
+<!-- eslint-disable max-lines -->
 <template>
-	<!-- eslint-disable max-lines -->
 	<div v-if="team">
 		<section class="section">
-			<base-link :to="{ name: 'teams-id', params: { id: team._id } }">
-				<h4>{{ team.name }}</h4>
-			</base-link>
-			<h2>Mitglieder Übersicht</h2>
+			<base-breadcrumb :inputs="breadcrumbs" />
+			<h1>Mitglieder Übersicht</h1>
 		</section>
+
 		<section class="section">
 			<div class="columns">
 				<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="column">
@@ -490,6 +489,16 @@ export default {
 			});
 
 			return classes;
+		},
+		breadcrumbs() {
+			return [
+				{ text: "Teams", to: { name: "teams" } },
+				{
+					text: this.team.name,
+					to: { name: "teams-id", params: { id: this.team._id } },
+				},
+				{ text: "Mitglieder" },
+			];
 		},
 	},
 	watch: {

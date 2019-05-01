@@ -2,24 +2,10 @@ import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { text, number, color } from "@storybook/addon-knobs";
 
-import CourseCard from "@components/CourseCard.vue";
+import CourseCard from "@components/CourseCard";
 import notes from "@docs/storybook/courseCard.md";
 
-import {
-	defaultCourse,
-	courseWithAlert,
-	courseWithAssignment,
-	courseWithNotification,
-	courseOldDataFormat,
-} from "./mockData/CourseCard";
-
-function injectKnobsInCourse(course) {
-	return {
-		...course,
-		color: color("Color", course.color || ""),
-		colorGradient: color("colorGradient", course.colorGradient || ""),
-	};
-}
+import { defaultCourse, courseOldDataFormat } from "./mockData/CourseCard";
 
 storiesOf("CourseCard", module)
 	.addParameters({

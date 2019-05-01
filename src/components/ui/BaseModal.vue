@@ -1,15 +1,12 @@
 <template>
 	<transition name="modal">
 		<div v-if="active" class="modal-mask">
-			<div
-				class="modal-wrapper"
-				@mousedown.self="handleBackgroundClick"
-				@touchstart.self="handleBackgroundClick"
-			>
+			<div class="modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
 				>
+					>>>>>>> master
 					<slot />
 				</div>
 			</div>

@@ -1,17 +1,7 @@
 <template>
 	<div v-if="team">
 		<section class="section">
-			<h4>
-				<span>
-					<base-link :to="{ name: 'teams' }">Teams</base-link>
-				</span>
-				<span>
-					<base-link :to="{ name: 'teams-id', params: { id: team._id } }"
-						>/ {{ team.name }}</base-link
-					>
-				</span>
-				<span>/ Bearbeiten</span>
-			</h4>
+			<base-breadcrumb :inputs="breadcrumbs" />
 			<base-button
 				v-if="team.user && hasTeamPermission('DELETE_TEAM')"
 				class="is-danger"
@@ -54,6 +44,16 @@ export default {
 			team: "current",
 			hasTeamPermission: "hasTeamPermission",
 		}),
+		breadcrumbs() {
+			return [
+				{ text: "Teams", to: { name: "teams" } },
+				{
+					text: this.team.name,
+					to: { name: "teams-id", params: { id: this.team._id } },
+				},
+				{ text: "Bearbeiten" },
+			];
+		},
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);

@@ -23,6 +23,7 @@ export default {
 	padding: $size-padding;
 	font-size: $size-button-medium-desktop;
 	color: $color-body-bg;
+	// color: $color-button-light; // Passt color-body-bg als button color?
 	text-transform: uppercase;
 	cursor: pointer;
 	background-color: #999;
@@ -32,6 +33,7 @@ export default {
 
 	&:hover,
 	&:focus {
+		color: #fff;
 		background-color: transparentize($color-text, 0.1);
 		outline: 0;
 	}

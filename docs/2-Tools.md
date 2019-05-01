@@ -6,7 +6,7 @@
 
 Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels [Hygen](http://www.hygen.io/) erstellt.
 
-```bash
+```bash{2,5,8}
 # Generate a new component with adjacent unit test
 yarn new component
 
@@ -80,3 +80,15 @@ Für alles weitere bleiben wir bisher bei den default Einstellungen und verwende
 
 - [Babel](https://github.com/igorshubovych/markdownlint-cli)
   - `babel.config.js`
+
+## GitHub Bots
+
+### [Mergify](https://mergify.io)
+
+Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label `ready to merge` an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom master (solange keine Merge-Konflikte enstehen).
+
+Gemergte Branches werden von diesem Bot ebenfalls automatisch gelöscht.
+
+### [Accesslint](https://www.accesslint.com/)
+
+Accesslint prüft grundsätzliche Accessibility verstöße und weist mit Kommentaren direkt im Pull Request darauf hin. Aktuell versteht der Bot die Vue Syntax allerding noch nicht, sodass er teils Falsche Alarme bei bspw. `:aria-label="labelVariable"` wirft, da er `:aria-label` nicht mit `aria-label` gleichsetzt. Die Hinweise sollten also eher als Hinweis für genauere Kontrolle auf Accessibility gesehen werden.
