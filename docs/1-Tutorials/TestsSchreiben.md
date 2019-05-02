@@ -33,7 +33,7 @@ Für Visual Studio Code liegen Debug Konfigurationen Bereit (`.vscode/launch.jso
 - `Test (unit) All`: Lässt alle Unit Tests nacheinander laufen und hält an entsprechenden Breakpoints an.
 - `Test (unit) Current File`: Lässt alle Tests in der aktuell fokussierten Datei laufen und stoppt an entsprechenden Breakpoints.
 
-### Beispieltest
+### Beispieltests
 
 ```js
 // Importieren der zu testenden Komponente
@@ -52,13 +52,53 @@ describe("@components/BaseCard", () => {
 		// Testdaten definieren
 		const slotContent = "<p>Hello!</p>";
 		// Mounten/Rendern der Komponente, mit Eigenschaften
-		const { element } = shallowMount(BaseCard, {
+		const wrapper = shallowMount(BaseCard, {
 			slots: {
 				default: slotContent,
 			},
 		});
 		// Test ob alles richtige gerendert wurde
-		expect(element.innerHTML).toContain(slotContent);
+		expect(wrapper.element.innerHTML).toContain(slotContent);
+	});
+});
+```
+
+#### Common tests
+
+Die soeben beschriebenen Tests werden so häufig verwendet, dass wir sie ausgelagert haben. Die Nutzung ist folgendermaßen möglich:
+
+```js{4-5}
+import BaseCard from "./BaseCard";
+
+describe("@components/BaseCard", () => {
+	it(...isValidComponent(BaseCard));
+	it(...rendersDefaultSlotContent(BaseCard));
+});
+```
+
+#### Test `v-model`
+
+Soll das `v-model` einer Komponente getestet werden, so kann die Komponente nicht direkt gemountet werden, sondern muss per template eingebunden werden. Die Vue-Test-Utils stellen leider keine bessere Möglichkeit bereit. Das setzen der für das v-model verwendeten Prop klappt leider nicht, da der verwendete Wert nicht automatisch durch das `v-model-update-event` verändert wird.
+
+```js{8-13}
+import BaseInput from "./BaseInput";
+
+describe("@components/BaseInput", () => {
+	it("changing the element's value, updates the v-model", () => {
+		const testInput = "test string";
+		const wrapper = mount({
+			data: () => ({ content: "" }),
+			template: `<base-input
+				v-model="content"
+				label="test"
+				type="text"
+				name="test"
+			/>`,
+			components: { BaseInput },
+		});
+		const input = wrapper.find(`input`);
+		input.setValue(testInput);
+		expect(wrapper.vm.content).toBe(testInput);
 	});
 });
 ```
