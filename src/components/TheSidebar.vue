@@ -19,7 +19,6 @@
 
 <script>
 export default {
-	name: "TheSidebar",
 	props: {
 		routes: {
 			type: Array,
