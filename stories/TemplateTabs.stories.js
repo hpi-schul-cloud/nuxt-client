@@ -2,8 +2,8 @@ import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 
 import notes from "@docs/storybook/TemplateTabs.md";
-import TemplateTabs from "@components/TemplateTabs.vue";
-import TemplateTab from "@components/TemplateTab.vue";
+import TemplateTabs from "@components/TemplateTabs";
+import TemplateTab from "@components/TemplateTab";
 
 storiesOf("TemplateTabs", module)
 	.addParameters({

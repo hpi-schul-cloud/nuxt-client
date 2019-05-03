@@ -9,9 +9,7 @@
 </template>
 
 <script>
-export default {
-	name: "BaseButton",
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -21,7 +19,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: $size-padding;
-	color: $color-body-bg;
+	color: $color-button-light;
 	text-transform: uppercase;
 	cursor: pointer;
 	border: $size-border-width solid;
@@ -29,6 +27,7 @@ export default {
 	transition: background-color $duration-animation-base ease;
 	&:hover,
 	&:focus {
+		color: #fff;
 		background-color: transparentize($color-text, 0.1);
 	}
 	.is-light {

@@ -20,8 +20,8 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Searchbar from "@components/Searchbar.vue";
-import Pagination from "@components/Pagination.vue";
+import Searchbar from "@components/Searchbar";
+import Pagination from "@components/Pagination";
 
 export default {
 	head() {
@@ -29,7 +29,6 @@ export default {
 			title: "LernStore",
 		};
 	},
-	name: "LernStore",
 	components: {
 		Searchbar,
 		Pagination,
