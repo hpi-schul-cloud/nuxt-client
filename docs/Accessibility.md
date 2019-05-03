@@ -17,7 +17,7 @@ sind eine in HTML5 geschaffene Basis
 
 ## Section, Nav, Header und Footer Elemente
 
-`<aside>`kennzeichnet eine weiterführende Option
+`<aside>` kennzeichnet eine weiterführende Option
 
 Screenreader strukturieren Seiten anhand von `h1-h6`. Jedes Element braucht eine Überschrift, articles, sections, etc. Es gibt nur eine `h1` --> Separation of concern, styling erfolgt per Klasse. Wir haben dafür die Klassen `.h1, .h2, ...` global verfügbar gemacht.
 
