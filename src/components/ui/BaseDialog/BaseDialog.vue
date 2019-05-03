@@ -31,7 +31,6 @@
 <script>
 import BaseModal from "../BaseModal";
 export default {
-	name: "BaseDialog",
 	components: {
 		BaseModal,
 	},
@@ -77,19 +76,6 @@ export default {
 		return {
 			isActive: false,
 		};
-	},
-	computed: {
-		/**
-		 * Icon name (MDI) based on the type.
-		 */
-		iconByType() {
-			return {
-				"is-info": "information",
-				"is-success": "check-circle",
-				"is-warning": "alert",
-				"is-danger": "alert-circle",
-			}[this.type];
-		},
 	},
 	beforeMount() {
 		// Insert the Dialog component in body tag

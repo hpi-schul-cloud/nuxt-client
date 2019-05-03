@@ -1,16 +1,4 @@
 pull_request_rules:
-  - name: automatic merging of greenkeeper pulls
-    conditions:
-      - author=greenkeeper[bot]
-      - label~=greenkeeper
-      - label!=WIP
-      - label!=waiting
-      - status-success=Travis CI - Branch
-      - status-success=Mergeable
-    actions:
-      merge:
-        method: merge
-        strict: true
   - name: automatic merging when label is set
     conditions:
       - label!=WIP
@@ -25,7 +13,6 @@ pull_request_rules:
       label:
         remove:
           - ready to merge
-
   - name: delete merged branches
     conditions:
       - merged
@@ -41,3 +28,13 @@ pull_request_rules:
       label:
         add:
           - WIP
+  - name: remove "ready to merge" label when pull is not approved
+    conditions:
+      - "#approved-reviews-by=0"
+      - label~=ready to merge
+    actions:
+      comment:
+        message: The "ready to merge" label can only be set after one pull request approval
+      label:
+        remove:
+          - ready to merge

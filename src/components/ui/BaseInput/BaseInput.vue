@@ -10,7 +10,7 @@
 <script>
 import BaseInputDefault, {
 	supportedTypes as defaultInputTypes,
-} from "./BaseInputDefault.vue";
+} from "./BaseInputDefault";
 import BaseInputHidden, {
 	supportedTypes as hiddenInputTypes,
 } from "./BaseInputHidden.vue";
@@ -19,13 +19,12 @@ import BaseInputCalendar, {
 } from "./BaseInputCalendar.vue";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
-} from "./BaseInputCheckbox.vue";
+} from "./BaseInputCheckbox";
 import BaseInputRadio, {
 	supportedTypes as radioInputTypes,
-} from "./BaseInputRadio.vue";
+} from "./BaseInputRadio";
 
 const componentDictionary = {};
-
 defaultInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputDefault)
 );
@@ -39,7 +38,6 @@ checkboxInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputCheckbox)
 );
 radioInputTypes.forEach((type) => (componentDictionary[type] = BaseInputRadio));
-
 export const supportedTypes = Object.keys(componentDictionary);
 
 export default {
@@ -56,7 +54,7 @@ export default {
 			type: String,
 			required: true,
 			validator: (type) => {
-				return !!componentDictionary[type];
+				return supportedTypes.includes(type);
 			},
 		},
 	},
@@ -64,6 +62,11 @@ export default {
 		component() {
 			return componentDictionary[this.type];
 		},
+	},
+	created() {
+		if (!componentDictionary[this.type]) {
+			console.error("invalid prop type", this.type, "\n$attrs", this.$attrs);
+		}
 	},
 };
 </script>

@@ -45,7 +45,7 @@ describe("@components/BaseInputCheckbox", () => {
 		const testValue = "test";
 		const wrapper = mount({
 			data: () => ({ value: [] }),
-			template: `<base-input v-model="value" value="${testValue}" label="test" type="checkbox" name="checkbox"></base-input>`,
+			template: `<base-input v-model="value" value="${testValue}" label="test" type="checkbox" name="checkbox"/>`,
 			components: { BaseInput },
 		});
 
@@ -56,5 +56,6 @@ describe("@components/BaseInputCheckbox", () => {
 		expect(wrapper.vm.value.includes(testValue)).toBeTruthy();
 		input.setChecked(false);
 		expect(wrapper.vm.value.length).toBe(0);
+		expect(wrapper.vm.value.includes(testValue)).toBeFalsy();
 	});
 });

@@ -23,8 +23,8 @@ export default {
 		type: {
 			type: String,
 			required: true,
-			validate(value) {
-				return supportedTypes.includes(value);
+			validator: (type) => {
+				return supportedTypes.includes(type);
 			},
 		},
 	},

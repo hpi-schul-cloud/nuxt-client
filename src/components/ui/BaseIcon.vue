@@ -9,7 +9,6 @@
 
 <script>
 export default {
-	name: "BaseIcon",
 	inheritAttrs: false,
 	props: {
 		source: {
@@ -53,9 +52,9 @@ export default {
 			}
 			if (this.source === "material") {
 				// src: https://material.io/tools/icons/?style=baseline
-				importPromise = import(`material-icons-svg/icons/baseline-${
-					this.icon
-				}-24px.svg`);
+				importPromise = import(
+					`material-icons-svg/icons/baseline-${this.icon}-24px.svg`
+				);
 			}
 			if (importPromise) {
 				return importPromise.then((iconPath) => {

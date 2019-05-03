@@ -19,9 +19,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import TheTopBar from "@components/TheTopBar.vue";
-import TheSidebar from "@components/TheSidebar.vue";
-import TheFooter from "@components/TheFooter.vue";
+import TheTopBar from "@components/TheTopBar";
+import TheSidebar from "@components/TheSidebar";
+import TheFooter from "@components/TheFooter";
 
 const topbarBaseActions = [];
 
@@ -69,7 +69,7 @@ export default {
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
-				this.$router.push("login");
+				this.$router.push({ name: "login" });
 			}
 		},
 		updateTopBarActions(isAuthenticated) {

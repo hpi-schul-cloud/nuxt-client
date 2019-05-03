@@ -5,22 +5,22 @@ import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
-import BaseButton from "@components/ui/BaseButton.vue";
-import BaseCard from "@components/ui/BaseCard.vue";
-import BaseIcon from "@components/ui/BaseIcon.vue";
+import BaseButton from "@components/ui/BaseButton";
+import BaseCard from "@components/ui/BaseCard";
+import BaseIcon from "@components/ui/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
-} from "@components/ui/BaseInput/BaseInput.vue";
-import BaseLink from "@components/ui/BaseLink.vue";
-import BaseProgressbar from "@components/ui/BaseProgressbar.vue";
-import BaseTable from "@components/ui/BaseTable.vue";
-import BaseCollapsible from "@components/ui/BaseCollapsible.vue";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb.vue";
-import BaseSelect from "@components/ui/BaseSelect.vue";
-import BaseAudio from "@components/ui/BaseAudio.vue";
-import BaseVideo from "@components/ui/BaseVideo.vue";
-import BaseModal from "@components/ui/BaseModal.vue";
-import BaseBlockquote from "@components/ui/BaseBlockquote.vue";
+} from "@components/ui/BaseInput/BaseInput";
+import BaseLink from "@components/ui/BaseLink";
+import BaseProgressbar from "@components/ui/BaseProgressbar";
+import BaseTable from "@components/ui/BaseTable";
+import BaseCollapsible from "@components/ui/BaseCollapsible";
+import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
+import BaseSelect from "@components/ui/BaseSelect";
+import BaseAudio from "@components/ui/BaseAudio";
+import BaseVideo from "@components/ui/BaseVideo";
+import BaseModal from "@components/ui/BaseModal";
+import BaseBlockquote from "@components/ui/BaseBlockquote";
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -128,25 +128,42 @@ storiesOf("Base Components", module)
 				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
 			</div>`,
 	}))
+	.add("Base Textarea", () => ({
+		components: { BaseSelect },
+		data: () => ({
+			value: "",
+			label: text("label", "Label"),
+			placeholder: text(
+				"placeholder",
+				"Lange Geschichten brauchen eine BaseTextarea."
+			),
+		}),
+		template: `
+			<div>
+				v-model: {{value}} <br/>
+				<base-textarea v-model="value" :label="label" :placeholder="placeholder"/>
+			</div>`,
+		methods: {},
+	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },
 		data: () => ({
 			content: [],
 			options: [
-				{ _id: 1, name: "Option 1" },
-				{ _id: 2, name: "Option 2" },
-				{ _id: 3, name: "Option 3" },
+				{ value: 1, label: "Option 1" },
+				{ value: 2, label: "Option 2" },
+				{ value: 3, label: "Option 3" },
 			],
 			label: text("label", "Label"),
 			placeholder: text("placeholder", "Etwas auswählen"),
 			multiple: select("mutliple", { true: true, false: false }, false),
 		}),
 		template: `
-		<div>
-		Content: {{content}}
-		Options: {{options}}
-		<base-select v-model="content" :multiple="multiple" :options="options" track-by="_id" :label="label" :placeholder="placeholder"/>
-		</div>`,
+			<div>
+				Content: {{content}} <br/>
+				Options: {{options}} <br/>
+				<base-select v-model="content" :multiple="multiple" :options="options" :label="label" :placeholder="placeholder"/>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Link", () => ({
@@ -259,18 +276,19 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Video", () => ({
 		components: { BaseVideo },
-		template: outdent`<base-video
-			:configuration="{
-				streams: [{
-					hd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4',
-					sd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/sd/video.mp4',
-					poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
-					hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
-				}],
-				initialState: {playState: 'PAUSED'},
-				videoPreload: false
-			}"
-		/>`,
+		template: outdent`
+			<base-video
+				:configuration="{
+					streams: [{
+						hd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4',
+						sd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/sd/video.mp4',
+						poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
+						hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
+					}],
+					initialState: {playState: 'PAUSED'},
+					videoPreload: false
+				}"
+			/>`,
 	}))
 	.add("BaseBlockquote", () => ({
 		components: { BaseBlockquote },

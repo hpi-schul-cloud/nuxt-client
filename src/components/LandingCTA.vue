@@ -12,12 +12,7 @@
 </template>
 
 <script>
-import BaseButton from "./ui/BaseButton.vue";
 export default {
-	name: "LandingCTA",
-	components: {
-		BaseButton,
-	},
 	props: {
 		subtitle: { type: String, default: "" },
 		title: { type: String, default: "" },
