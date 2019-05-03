@@ -50,16 +50,13 @@ export default {
 	},
 	computed: {
 		currentPage() {
-			return this.state.skip / this.state.limit + 1;
+			return Math.floor(this.state.skip / this.state.limit + 1);
 		},
 		lastPage() {
 			return Math.ceil(this.state.total / this.state.limit);
 		},
 	},
 	methods: {
-		gotoPage(pageNumber) {
-			this.updateModel(this.state.limit * (pageNumber - 1));
-		},
 		previousPage() {
 			this.updateModel(this.value - this.state.limit);
 		},
