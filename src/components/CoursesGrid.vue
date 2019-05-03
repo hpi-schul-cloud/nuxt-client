@@ -1,9 +1,7 @@
 <template>
-	<div class="app">
-		<div class="grid">
-			<div v-for="(course, i) of courses" :key="i" class="tile">
-				<course-card :course="course" />
-			</div>
+	<div class="grid">
+		<div v-for="(course, i) of courses" :key="i" class="tile">
+			<course-card :course="course" />
 		</div>
 	</div>
 </template>
@@ -31,12 +29,8 @@ export default {
 
 .grid {
 	display: flex;
-	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
-	min-width: $size-content-width-min;
-	max-width: $size-content-width-max;
-	margin: 0 auto;
 }
 
 .tile {
