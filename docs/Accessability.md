@@ -37,7 +37,10 @@ Für die Navigation zwischen Ressourcen/Seiten sollte, unabhängig vom styling, 
 
 Beispiele für `<a>`-Tag Anwendungsfälle: "Nächste Seite", "Gehe zu Bereich x", ...
 
-`<Button>` wird verwendet für Form Action, Modal Trigger, irgendwelche Trigger
+Für alle anderen Aktionen, welche eine Äktion ausführen sollte ein `<Button>` verwendet werden. 
+Soll nach einer Aktion ein Seitenwechsel stattfinden, so muss statt eines Buttons ein `<a>`-Tag verwendet werden.
+
+Beispiele für `<button>`-Aktionen: "Modal öffnen", "Änderungen Speichern", ...
 
 ## CSS Farben
 
