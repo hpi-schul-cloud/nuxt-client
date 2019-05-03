@@ -57,10 +57,6 @@ export default {
 		},
 	},
 	methods: {
-		//TODO is gotoPage needed? not called anywhere
-		gotoPage(pageNumber) {
-			this.updateModel(this.state.limit * (pageNumber - 1));
-		},
 		previousPage() {
 			this.updateModel(this.value - this.state.limit);
 		},
