@@ -15,7 +15,7 @@ describe("@components/BaseDialog", () => {
 		const wrapper = shallowMount(BaseDialog, {
 			attachToDocument: true,
 		});
-		expect(wrapper.name()).toBe("BaseDialog");
+		expect(wrapper.find("base-button-stub")).toBeTruthy();
 		expect(wrapper.isVueInstance()).toBeTruthy();
 	});
 

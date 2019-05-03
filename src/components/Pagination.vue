@@ -28,7 +28,6 @@
 
 <script>
 export default {
-	name: "Pagination",
 	model: {
 		event: "update",
 	},
