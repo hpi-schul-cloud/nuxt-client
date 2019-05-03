@@ -10,14 +10,6 @@ import commonTest from "./commonTests.js";
 
 // https://vue-test-utils.vuejs.org/
 import vueTestUtils from "@vue/test-utils";
-// https://lodash.com/
-import _ from "lodash";
-_.mixin({
-	pascalCase: _.flow(
-		_.camelCase,
-		_.upperFirst
-	),
-});
 
 // ===
 // Configure Vue
@@ -33,6 +25,35 @@ Vue.config.productionTip = false;
 // ===
 
 import "@plugins/global";
+import { mountBaseComponents } from "@basecomponents/_globals";
+
+const baseComponentDir = path.join(__dirname, "../../src/components/ui/");
+
+function readDirRecursiveSync(dir) {
+	let results = [];
+	const list = fs.readdirSync(dir);
+	list.forEach((file) => {
+		file = path.join(dir, file);
+		const stat = fs.statSync(file);
+		if (stat && stat.isDirectory()) {
+			/* Recurse into a subdirectory */
+			results.push(...readDirRecursiveSync(file));
+		} else {
+			/* Is a file */
+			results.push(file);
+		}
+	});
+	return results;
+}
+
+const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
+	// Only include "Base" prefixed .vue files
+	.filter((fileName) => /Base[A-Z][\w]+\.vue$/.test(fileName))
+	.map((fileName) => "./" + path.relative(baseComponentDir, fileName));
+
+mountBaseComponents(globalComponentFiles, (fileName) =>
+	require(path.join(baseComponentDir, fileName))
+);
 
 // ===
 // Mock window properties not handled by jsdom

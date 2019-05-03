@@ -131,9 +131,5 @@
 	"engines": {
 		"node": ">=10.x.x",
 		"yarn": ">=1.12.0"
-	},
-	"browser": {
-		"fs": false,
-		"path": false
 	}
 }

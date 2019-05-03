@@ -6,27 +6,10 @@ import Vue from "vue";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 
-import fs from "fs";
-import path from "path";
-
-function readDirRecursiveSync(dir) {
-	let results = [];
-	const list = fs.readdirSync(dir);
-	list.forEach((file) => {
-		file = path.join(dir, file);
-		const stat = fs.statSync(file);
-		if (stat && stat.isDirectory()) {
-			/* Recurse into a subdirectory */
-			results.push(...readDirRecursiveSync(file));
-		} else {
-			/* Is a file */
-			results.push(file);
-		}
-	});
-	return results;
-}
-
-const mountBaseComponents = (globalComponentFiles, getComponentConfig) => {
+export const mountBaseComponents = (
+	globalComponentFiles,
+	getComponentConfig
+) => {
 	for (const fileName of globalComponentFiles) {
 		// Get Component Name
 		const componentName = fileName.match(/([\w]+).vue$/)[1];
@@ -62,20 +45,7 @@ const mountWithWebpack = () => {
 	);
 };
 
-const mountWithFs = () => {
-	const globalComponentFiles = readDirRecursiveSync(__dirname)
-		// Only include "Base" prefixed .vue files
-		.filter((fileName) => /Base[A-Z][\w]+\.vue$/.test(fileName))
-		.map((fileName) => "./" + path.relative(__dirname, fileName));
-
-	mountBaseComponents(globalComponentFiles, (fileName) =>
-		require(path.join("../../src/components/ui/", fileName))
-	);
-};
-
-if (process.env.JEST_WORKER_ID !== undefined) {
-	// used for tests (jest)
-	mountWithFs();
-} else {
+if (process.env.JEST_WORKER_ID === undefined) {
+	// don't use for tests (jest)
 	mountWithWebpack();
 }
