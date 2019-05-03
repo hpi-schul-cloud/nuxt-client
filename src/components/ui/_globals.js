@@ -6,7 +6,8 @@ import Vue from "vue";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 
-let fs, path; // will be imported dynamicly
+import fs from "fs";
+import path from "path";
 
 function readDirRecursiveSync(dir) {
 	let results = [];
@@ -72,14 +73,9 @@ const mountWithFs = () => {
 	);
 };
 
-if (process.client || process.server || process.static) {
-	// used by nuxt
-	mountWithWebpack();
+if (process.env.JEST_WORKER_ID !== undefined) {
+	// used for tests (jest)
+	mountWithFs();
 } else {
-	// used for tests
-	Promise.all([require("fs"), require("path")]).then(([fsPkg, pathPkg]) => {
-		fs = fsPkg;
-		path = pathPkg;
-		mountWithFs();
-	});
+	mountWithWebpack();
 }
