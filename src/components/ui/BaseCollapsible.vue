@@ -16,7 +16,6 @@
 </template>
 <script>
 export default {
-	name: "BaseCollapsible",
 	props: {
 		label: {
 			type: String,
