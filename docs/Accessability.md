@@ -42,7 +42,7 @@ Interne Navigation auf Ressourcen `<a>` --> Styling egal
 Achten auf:
 
 - Kontraste
-- CSS Selektoren
+- CSS Selektoren (:before, :after)
 
 ## Inhalte verstecken für not-impaired Benutzer
 
@@ -52,9 +52,25 @@ a11yproject.com/posts/how-to-hide-content
 
 ## Images
 
-`<img alt="">` muss eine Beschreibung des Bildinhaltes enthalten. Statt einer Beschreibung à la "Bild für Kurs" lieber das alt-Attribut leer lassen. Die Beschreibung soll den tatsächlichen Inhalt des Bildes beschreiben und nicht den Kontext, in welchem es Eingebunden ist.
+`<img alt="">` muss eine Beschreibung des Bildinhaltes enthalten. Statt einer Beschreibung à la "Bild für Kurs" lieber das alt-Attribut leer lassen. Die Beschreibung soll den tatsächlichen Inhalt des Bildes beschreiben und nicht den Kontext, in welchem es eingebunden ist.
 
 `<svg>` title vergeben, mit `aria-labelledby` beschreiben
+
+```html
+<svg
+	version="1.1"
+	width="300"
+	height="200"
+	aria-labelledby="title desc"
+	role="img"
+>
+	<title id="title">Green rectangle</title>
+	<desc id="desc">
+		A light green rectangle with rounded corners and a dark green border.
+	</desc>
+	<rect />
+</svg>
+```
 
 ## TabIndex
 
