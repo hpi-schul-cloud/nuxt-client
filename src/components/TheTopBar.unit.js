@@ -14,13 +14,11 @@ describe("@components/TheTopBar", () => {
 				$theme,
 			},
 		});
-		expect(wrapper.find("img").exists()).toBe(true);
 		expect(wrapper.find(".page-title").text()).toBe("HPI Schul-Cloud");
 		expect(wrapper.find(".action").exists()).toBe(false);
 	});
 
 	it("Render with links and buttons", () => {
-		//Issue with the ripple effect => Failed to resolve directive: ripple
 		const mockActions = [
 			{ icon: "house", title: "test home", to: "home" },
 			{ title: "test away", href: "https://schul-cloud.org" },

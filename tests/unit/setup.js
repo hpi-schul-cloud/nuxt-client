@@ -32,17 +32,7 @@ Vue.config.productionTip = false;
 // Register global components
 // ===
 
-const globalComponentFiles = fs
-	.readdirSync(path.join(__dirname, "../../src/components/ui"))
-	.filter((fileName) => /^Base[A-Z][\w]+\.vue$/.test(fileName));
-
-for (const fileName of globalComponentFiles) {
-	const componentName = _.pascalCase(
-		fileName.match(/^(Base[A-Z][\w]+)\.vue$/)[1]
-	);
-	const componentConfig = require("../../src/components/ui/" + fileName);
-	Vue.component(componentName, componentConfig.default || componentConfig);
-}
+import "@plugins/global";
 
 // ===
 // Mock window properties not handled by jsdom
