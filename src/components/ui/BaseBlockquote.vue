@@ -10,7 +10,6 @@
 
 <script>
 export default {
-	name: "BaseBlockquote",
 	props: {
 		cite: {
 			type: String,

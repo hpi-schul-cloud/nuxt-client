@@ -20,7 +20,6 @@
 import uidMixin from "@mixins/uid";
 
 export default {
-	name: "DropdownMenu",
 	mixins: [uidMixin],
 	props: {
 		title: {

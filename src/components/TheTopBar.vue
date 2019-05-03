@@ -54,9 +54,7 @@ export default {
 	},
 	methods: {
 		sendEvent(eventName) {
-			if (eventName) {
-				this.$emit("action", eventName);
-			}
+			this.$emit("action", eventName);
 		},
 	},
 };
@@ -71,10 +69,10 @@ export default {
 	box-shadow: var(--shadow-1);
 }
 .page-title {
-	font-family: var(--font-accent);
-	font-size: var(--text-lg);
 	flex: 1;
 	margin: 0;
+	font-family: var(--font-accent);
+	font-size: var(--text-lg);
 	text-transform: capitalize;
 }
 .action {

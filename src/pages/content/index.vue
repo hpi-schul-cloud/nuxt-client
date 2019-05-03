@@ -29,7 +29,6 @@ export default {
 			title: "LernStore",
 		};
 	},
-	name: "LernStore",
 	components: {
 		Searchbar,
 		Pagination,

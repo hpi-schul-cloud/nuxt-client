@@ -17,7 +17,6 @@
 
 <script>
 export default {
-	name: "BaseLink",
 	inheritAttrs: false,
 	props: {
 		href: {
@@ -103,7 +102,7 @@ export default {
 	text-decoration: underline;
 	cursor: pointer;
 	&:active {
-		color: var(--color-link)-active;
+		color: var(--color-link) -active;
 	}
 	&:visited {
 		color: var(--color-link-visited);

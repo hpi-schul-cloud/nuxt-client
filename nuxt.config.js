@@ -60,8 +60,6 @@ module.exports = {
 			ssr: false,
 		},
 		"@plugins/global",
-		"@plugins/directives",
-		"@plugins/theme",
 	],
 
 	/*

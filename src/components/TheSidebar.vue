@@ -19,7 +19,6 @@
 
 <script>
 export default {
-	name: "TheSidebar",
 	props: {
 		routes: {
 			type: Array,
@@ -57,9 +56,9 @@ export default {
 	margin: 0;
 }
 .link.list-content {
-	font-size: var(--text-md);
 	display: block;
 	padding: calc(var(--space-sm) * 0.5) var(--space-md);
+	font-size: var(--text-md);
 	text-decoration: none;
 	&.active {
 		color: var(--color-link);

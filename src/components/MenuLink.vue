@@ -5,9 +5,7 @@
 </template>
 
 <script>
-export default {
-	name: "MenuLink",
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>

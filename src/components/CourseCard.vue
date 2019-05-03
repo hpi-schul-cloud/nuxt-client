@@ -2,7 +2,7 @@
 	<div class="course-card">
 		<div
 			v-if="course.notification !== 0 && course.notification !== null"
-			class="caption dot"
+			class="caption notification-dot"
 			>{{ course.notification }}</div
 		>
 		<div class="header">
@@ -30,7 +30,6 @@
 import CardFooter from "./CardFooter";
 
 export default {
-	name: "CourseCard",
 	components: {
 		CardFooter,
 	},
@@ -80,38 +79,39 @@ export default {
 	align-items: center;
 }
 
-.dot {
+.notification-dot {
 	position: absolute;
 	top: -12px;
 	right: -12px;
 	display: inline-block;
-	--min-size: calc(var(--text-sm) + var(--space-xxs) + var(--space-xxs));
 	min-width: var(--min-size);
 	min-height: var(--min-size);
-	font-size: var(--text-sm);
 	padding: var(--space-xxs);
+	font-size: var(--text-sm);
 	font-weight: bold;
 	line-height: 1;
 	color: white;
 	text-align: center;
 	background: var(--color-primary);
 	border-radius: var(--curve-round);
+
+	--min-size: calc(var(--text-sm) + var(--space-xxs) + var(--space-xxs));
 }
 
 .abrivation-label {
-	font-family: PTSans-Caption, sans-serif;
-	color: white;
-	font-size: var(--text-xxxl);
 	margin: 0;
+	font-family: PTSans-Caption, sans-serif;
+	font-size: var(--text-xxxl);
+	color: white;
 }
 
 .course-name-label {
+	margin: 0;
 	overflow: hidden;
+	font-size: var(--text-md);
 	color: white;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	font-size: var(--text-md);
-	margin: 0;
 }
 
 .assignments-label {

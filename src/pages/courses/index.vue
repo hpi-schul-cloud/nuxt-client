@@ -1,11 +1,7 @@
 <template>
 	<div>
 		<section class="section">
-			<div class="grid">
-				<div v-for="(course, i) of courses" :key="i" class="tile">
-					<course-card :course="course" />
-				</div>
-			</div>
+			<courses-grid :courses="courses" />
 		</section>
 		<section class="section">
 			<base-button
@@ -19,7 +15,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import CourseCard from "@components/CourseCard";
+import CoursesGrid from "@components/CoursesGrid";
 
 export default {
 	head() {
@@ -28,7 +24,7 @@ export default {
 		};
 	},
 	components: {
-		CourseCard,
+		CoursesGrid,
 	},
 	computed: {
 		...mapGetters("courses", {
@@ -45,22 +41,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@styles";
-
-.grid {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
-	margin: 0 auto;
-}
-
-.tile {
-	display: flex;
-	margin: 10px;
-}
-</style>

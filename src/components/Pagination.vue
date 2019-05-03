@@ -28,7 +28,6 @@
 
 <script>
 export default {
-	name: "Pagination",
 	model: {
 		event: "update",
 	},
@@ -51,16 +50,13 @@ export default {
 	},
 	computed: {
 		currentPage() {
-			return this.state.skip / this.state.limit + 1;
+			return Math.floor(this.state.skip / this.state.limit + 1);
 		},
 		lastPage() {
 			return Math.ceil(this.state.total / this.state.limit);
 		},
 	},
 	methods: {
-		gotoPage(pageNumber) {
-			this.updateModel(this.state.limit * (pageNumber - 1));
-		},
 		previousPage() {
 			this.updateModel(this.value - this.state.limit);
 		},
@@ -92,8 +88,8 @@ export default {
 }
 .pagination-link {
 	display: inline-block;
-	background-color: var(--grey-1);
 	padding: var(--space-sm);
+	background-color: var(--grey-1);
 	&:not(.current) {
 		cursor: pointer;
 	}

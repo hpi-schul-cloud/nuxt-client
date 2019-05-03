@@ -8,7 +8,7 @@ describe("@components/BaseSelect", () => {
 		const wrapper = shallowMount(BaseSelect, {
 			propsData: {
 				value: [2, 3],
-				options: [4, 5],
+				options: [{ label: "t", value: "e" }],
 				label: testLabel,
 			},
 		});
