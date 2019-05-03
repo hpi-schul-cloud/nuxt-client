@@ -19,7 +19,6 @@
 <script>
 import { mapGetters } from "vuex";
 import NewsCard from "@components/NewsCard";
-import _ from "lodash";
 
 export default {
 	head() {
@@ -51,7 +50,7 @@ export default {
 			];
 
 			return this.news.map((article) => {
-				article.color = colors[_.random(0, colors.length - 1)];
+				article.color = colors[Math.floor(Math.random() * colors.length)];
 				return article;
 			});
 		},

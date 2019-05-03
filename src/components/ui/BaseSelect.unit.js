@@ -31,8 +31,8 @@ describe("@components/BaseSelect", () => {
 						id: "gerhard",
 					},
 				],
-				label: "name",
-				inputLabel: testLabel,
+				optionLabel: "name",
+				label: testLabel,
 			},
 		});
 		expect(wrapper.find("multi-select-stub").exists()).toBe(true);

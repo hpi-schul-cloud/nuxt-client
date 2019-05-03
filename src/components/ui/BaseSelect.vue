@@ -2,16 +2,16 @@
 	<div
 		:class="{
 			input__wrapper: true,
-			'has-label': inputLabel && value && value !== 0,
+			'has-label': label && value && value !== 0,
 		}"
 	>
 		<span
 			:class="{
 				label: true,
-				active: inputLabel && value && value !== 0,
+				active: label && value && value !== 0,
 			}"
 		>
-			{{ inputLabel }}
+			{{ label }}
 		</span>
 		<multi-select
 			v-bind="$attrs"
@@ -19,7 +19,7 @@
 			:options="options"
 			:multiple="multiple"
 			track-by="value"
-			:label="label"
+			:label="optionLabel"
 			@input="updatevmodel"
 		></multi-select>
 	</div>
@@ -55,11 +55,11 @@ export default {
 			validator: (options) =>
 				options.every((option) => option.label && option.value),
 		},
-		inputLabel: {
+		label: {
 			type: String,
 			required: true,
 		},
-		label: {
+		optionLabel: {
 			type: String,
 			default: "",
 		},

@@ -155,8 +155,8 @@ storiesOf("Base Components", module)
 				{ value: 2, name: "Option 2" },
 				{ value: 3, name: "Option 3" },
 			],
-			label: "name",
-			inputLabel: text("label", "Label"),
+			optionLabel: "name",
+			label: text("label", "Label"),
 			placeholder: text("placeholder", "Etwas auswählen"),
 			multiple: select("mutliple", { true: true, false: false }, false),
 		}),
@@ -164,7 +164,7 @@ storiesOf("Base Components", module)
 		<div>
 		Content: {{content}} <br/>
 		Options: {{options}} <br/>
-			<base-select v-model="content" :multiple="multiple" :options="options" track-by="_id" :inputLabel="inputLabel" :label="label" :placeholder="placeholder"/>
+			<base-select v-model="content" :multiple="multiple" :options="options" track-by="_id" :label="label" optionLabel="name" :placeholder="placeholder"/>
 		</div>`,
 		methods: {},
 	}))

@@ -90,7 +90,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
-		baseUrl: "https://localhost:3030",
+		baseUrl: process.env.BASE_URL || "https://localhost:3030",
 	},
 
 	/*

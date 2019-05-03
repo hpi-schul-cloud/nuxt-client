@@ -125,7 +125,7 @@
 								:options="members"
 								:allow-empty="false"
 								:multiple="true"
-								label="fullName"
+								option-label="fullName"
 							></base-select>
 						</p>
 					</div>
@@ -140,7 +140,7 @@
 								:options="classes"
 								:allow-empty="false"
 								:multiple="true"
-								label="displayName"
+								option-label="displayName"
 								input-label="Nach dem Speichern werden alle Schüler automatisch hinzugefügt."
 							></base-select>
 						</p>
@@ -210,7 +210,7 @@
 								:options="federalStates"
 								track-by="_id"
 								:allow-empty="false"
-								label="name"
+								option-label="name"
 							></base-select>
 
 							<div v-if="externalInvite.teacher.federalState._id">
@@ -222,7 +222,7 @@
 										:options="schools"
 										track-by="_id"
 										:allow-empty="false"
-										label="name"
+										option-label="name"
 									></base-select>
 								</div>
 								<div v-else>
@@ -241,7 +241,7 @@
 										:options="teachers"
 										track-by="_id"
 										:allow-empty="false"
-										label="fullName"
+										option-label="fullName"
 									></base-select>
 								</div>
 								<div v-else>
@@ -298,7 +298,7 @@
 					:options="teamRoles"
 					track-by="_id"
 					:allow-empty="false"
-					label="label"
+					option-label="label"
 				></base-select>
 			</div>
 

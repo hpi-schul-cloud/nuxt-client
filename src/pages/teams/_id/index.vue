@@ -74,17 +74,10 @@
 <script>
 import { mapGetters } from "vuex";
 import NewsCard from "@components/NewsCard";
-var moment = require("moment");
-import _ from "lodash";
 
 export default {
 	components: {
 		NewsCard,
-	},
-	data() {
-		return {
-			moment,
-		};
 	},
 	computed: {
 		...mapGetters("teams", {
@@ -111,7 +104,7 @@ export default {
 			];
 
 			return this.news.map((article) => {
-				article.color = colors[_.random(0, colors.length - 1)];
+				article.color = colors[Math.floor(Math.random() * colors.length)];
 				return article;
 			});
 		},
