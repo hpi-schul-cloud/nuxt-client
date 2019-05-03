@@ -33,7 +33,9 @@ Forms sollten groupiert sein durch `<fieldset>`. Dort sollte auch das `<legend>`
 
 ## Buttons
 
-Interne Navigation auf Ressourcen `<a>` --> Styling egal
+Für die Navigation zwischen Ressourcen/Seiten sollte, unabhängig vom styling, ein `<a>`-Tag verwendet werden. Immer wenn sich also die URL ändert/auf eine andere Seite navigiert wird einen a-Tag verwenden und nur ansonsten einen Button.
+
+Beispiele für `<a>`-Tag Anwendungsfälle: "Nächste Seite", "Gehe zu Bereich x", ...
 
 `<Button>` wird verwendet für Form Action, Modal Trigger, irgendwelche Trigger
 
