@@ -127,7 +127,6 @@ export default {
 }
 .column {
 	width: 100%;
-	max-width: 400px;
 	margin: var(--space-sm) var(--space-md);
 }
 </style>

@@ -34,25 +34,23 @@ export default {
 @import "@styles";
 .collapsible {
 	width: 100%;
-	padding: 18px;
-	font-size: 15px;
-	color: #444;
+	padding: var(--space-sm) var(--space-md);
 	text-align: left;
 	cursor: pointer;
-	background-color: #eee;
+	background-color: var(--gray-1);
 	border: none;
 	outline: none;
 }
 .active,
 .collapsible:hover {
-	background-color: #ccc;
+	background-color: var(--gray-2);
 }
 
 .content {
 	display: block;
-	padding: 0 18px;
+	padding: 0 var(--space-md);
 	overflow: hidden;
-	background-color: #f1f1f1;
+	background-color: color-mod(var(--gray-1) tint(50%));
 }
 
 .fade-enter-active,

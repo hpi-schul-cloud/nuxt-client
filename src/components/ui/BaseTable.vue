@@ -16,9 +16,9 @@ export default {};
 	border: 1px solid black;
 }
 .table tr:nth-child(odd) {
-	background-color: #fff;
+	background-color: var(--white);
 }
 .table tr:nth-child(even) {
-	background-color: #eee;
+	background-color: var(--gray-1);
 }
 </style>

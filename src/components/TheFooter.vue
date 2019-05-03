@@ -4,7 +4,6 @@
 			<div class="">
 				<img
 					class="hpi-logo"
-					style="height: 35px"
 					src="/images/footer-logo.png"
 					alt="Anbieterlogo"
 				/>
@@ -58,13 +57,14 @@ export default {
 <style lang="scss" scoped>
 .footer {
 	width: 100%;
-	margin-top: 30px;
+	margin-top: var(--space-lg);
 }
 .content {
 	text-align: center;
 }
 .hpi-logo {
 	display: block;
+	height: var(--text-xl);
 	margin: 0 auto;
 }
 </style>

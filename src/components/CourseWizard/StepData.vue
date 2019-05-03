@@ -106,6 +106,9 @@ export default {
 }
 
 .date {
-	width: 49%;
+	flex: 1;
+	&:not(:first-of-type) {
+		margin-left: var(--space-sm);
+	}
 }
 </style>

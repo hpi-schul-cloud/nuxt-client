@@ -34,6 +34,6 @@ export default {
 
 .tile {
 	display: flex;
-	margin: 10px;
+	margin: var(--space-sm);
 }
 </style>

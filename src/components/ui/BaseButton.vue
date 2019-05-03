@@ -18,7 +18,7 @@ export default {};
 .button {
 	display: flex;
 	align-items: center;
-	padding: var(--space-sm) var(--space-md);
+	padding: var(--space-xs) var(--space-sm);
 	color: var(--grey-3);
 	text-transform: uppercase;
 	cursor: pointer;
@@ -37,7 +37,7 @@ export default {};
 	border-width: 1px;
 }
 .is-primary {
-	color: white;
+	color: var(--white);
 	background-color: var(--color-primary);
 }
 

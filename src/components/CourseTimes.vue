@@ -84,7 +84,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .time-wrapper {
 	display: flex;
@@ -95,6 +94,6 @@ export default {
 	padding-right: 10px;
 }
 .item {
-	padding: 0 2px;
+	padding: 0 var(--space-xxxs);
 }
 </style>

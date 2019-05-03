@@ -28,7 +28,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "@styles";
+
 .modal-mask {
 	position: fixed;
 	top: 0;

@@ -1,10 +1,6 @@
 <template>
 	<div class="topbar">
-		<img
-			style="height: 40px; margin-right: 10px"
-			:src="$theme.logo.app"
-			alt=""
-		/>
+		<img class="logo" :src="$theme.logo.app" alt="Website Logo" />
 		<h1 class="page-title">{{ title }}</h1>
 
 		<!-- ACTIONS -->
@@ -67,6 +63,10 @@ export default {
 	align-items: center;
 	padding: var(--space-sm) var(--space-md);
 	box-shadow: var(--shadow-1);
+}
+.logo {
+	height: var(--text-lg);
+	margin-right: var(--space-sm);
 }
 .page-title {
 	flex: 1;

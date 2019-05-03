@@ -7,7 +7,7 @@
 			<img
 				src="@assets/cloud.svg"
 				alt="Schul-Cloud"
-				style="width: 78px; filter: invert(1)"
+				style="width: var(--text-lg); filter: invert(1)"
 			/>
 
 			<form @submit.prevent="onSubmit(email, password)">

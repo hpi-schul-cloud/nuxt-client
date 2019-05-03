@@ -71,7 +71,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$background-color: #ccc;
+$background-color: var(--gray-3);
 $background-color-active: var(--color-accent);
 
 label {
@@ -102,7 +102,7 @@ label {
 		width: 0.5em;
 		height: 0.5em;
 		content: "";
-		background-color: white;
+		background-color: var(--white);
 		transition: transform var(--duration-transition-medium);
 	}
 }

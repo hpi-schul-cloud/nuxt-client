@@ -25,9 +25,9 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin-bottom: 30px;
+	margin-bottom: var(space-lg);
 	.image {
-		padding: 30px;
+		padding: var(--space-lg);
 	}
 }
 </style>

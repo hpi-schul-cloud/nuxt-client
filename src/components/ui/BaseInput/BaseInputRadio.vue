@@ -61,8 +61,8 @@ label {
 .radio {
 	position: relative;
 	display: inline-block;
-	width: 0.7em;
-	height: 0.7em;
+	width: 0.7em; // stylelint-disable-line
+	height: 0.7em; // stylelint-disable-line
 	margin-right: 0.25em;
 	background-color: $background-color;
 	border-radius: var(--curve-round);

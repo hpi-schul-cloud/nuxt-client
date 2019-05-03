@@ -10,7 +10,7 @@ module.exports = ({ config }) => {
 		},
 		{
 			test: /\.scss$/,
-			loaders: ["style-loader", "css-loader", "sass-loader"],
+			loaders: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
 			include: path.resolve(__dirname, "../../"),
 		},
 		{

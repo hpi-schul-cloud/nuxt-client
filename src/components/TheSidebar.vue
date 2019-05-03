@@ -38,14 +38,6 @@ export default {
 
 .sidebar {
 	width: 100%;
-	max-width: 300px;
-	&.small {
-		max-width: 56px;
-	}
-	&.full {
-		min-width: 100%;
-		max-width: 100%;
-	}
 }
 .contents {
 	display: contents;
