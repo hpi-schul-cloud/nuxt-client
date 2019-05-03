@@ -6,7 +6,6 @@
 
 <script>
 export default {
-	name: "TemplateTab",
 	props: {
 		name: {
 			type: String,

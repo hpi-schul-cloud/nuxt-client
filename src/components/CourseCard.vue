@@ -32,7 +32,6 @@
 import CardFooter from "./CardFooter";
 
 export default {
-	name: "CourseCard",
 	components: {
 		CardFooter,
 	},

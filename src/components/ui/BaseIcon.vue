@@ -9,7 +9,6 @@
 
 <script>
 export default {
-	name: "BaseIcon",
 	inheritAttrs: false,
 	props: {
 		source: {

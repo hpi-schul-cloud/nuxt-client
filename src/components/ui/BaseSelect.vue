@@ -29,7 +29,6 @@
 import MultiSelect from "vue-multiselect";
 
 export default {
-	name: "BaseSelect",
 	components: { MultiSelect },
 	model: {
 		prop: "value",
