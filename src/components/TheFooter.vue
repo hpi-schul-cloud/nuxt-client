@@ -30,7 +30,7 @@ export default {
 	data() {
 		return {
 			links: [
-				{ href: "https://schul-cloud.org/impressum", text: "Impressum" },
+				{ href: "/impressum", text: "Impressum" },
 				{
 					href: "https://schul-cloud.org/impressum#data_security",
 					text: "Datenschutzerklärung",
