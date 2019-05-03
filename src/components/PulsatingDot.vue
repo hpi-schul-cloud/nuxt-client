@@ -7,7 +7,6 @@
 
 <script>
 export default {
-	name: "PulsatingDot",
 	components: {},
 	props: {},
 	computed: {},

@@ -10,7 +10,6 @@
 import CourseCard from "./CourseCard.vue";
 
 export default {
-	name: "CoursesGrid",
 	components: {
 		CourseCard,
 	},
