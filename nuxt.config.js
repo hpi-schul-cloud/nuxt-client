@@ -62,12 +62,7 @@ module.exports = {
 			src: "@plugins/authenticate",
 			ssr: false,
 		},
-		"@plugins/axios",
 		"@plugins/global",
-		"@plugins/dialog",
-		"@plugins/directives",
-		"@plugins/theme",
-		"@plugins/user",
 	],
 
 	/*
