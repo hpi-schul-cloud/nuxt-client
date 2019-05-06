@@ -21,6 +21,7 @@ import BaseAudio from "@components/ui/BaseAudio";
 import BaseVideo from "@components/ui/BaseVideo";
 import BaseModal from "@components/ui/BaseModal";
 import BaseBlockquote from "@components/ui/BaseBlockquote";
+import BaseNewscard from "@components/ui/BaseNewscard";
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -50,7 +51,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Card", () => ({
 		components: { BaseCard },
-		template: "<base-card>Card</base-card>",
+		template: '<base-card badge="8">Card</base-card>',
 		methods: {},
 	}))
 	.add("Base Icon", () => ({
@@ -286,5 +287,11 @@ storiesOf("Base Components", module)
 			<BaseBlockquote :cite="cite" :src-text="srcText || undefined">
 				{{quote}}
 			</BaseBlockquote>
+		`,
+	}))
+	.add("Base Newscard", () => ({
+		components: { BaseNewscard },
+		template: outdent`
+			<BaseNewscard></BaseNewscard>
 		`,
 	}));
