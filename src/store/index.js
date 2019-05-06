@@ -128,6 +128,44 @@ plugins.push();
 const createStore = () => {
 	return new Vuex.Store({
 		state: {},
+		actions: {
+			nuxtServerInit({ commit, dispatch, state }, { req, store }) {
+				let origin = req.headers.host.split(":");
+				origin = `http://${origin[0]}`;
+
+				const storage = {
+					getItem(key) {
+						return store.state.auth ? store.state.auth.accessToken : "";
+					},
+					setItem(key, value) {
+						store.state.auth.accessToken = value;
+					},
+					removeItem(key) {
+						store.state.auth.accessToken = null;
+					},
+				};
+
+				// Create a new client for the server
+				const client = feathersClient(origin, storage);
+				const { service, auth } = feathersVuex(client, {
+					idField: "_id",
+					enableEvents: false,
+				});
+
+				// Register services for the server
+				service("users", { paginate: true })(store);
+				service("teams", { paginate: true })(store);
+				service("schools", { paginate: true })(store);
+
+				return initAuth({
+					commit: store.commit,
+					dispatch,
+					req,
+					moduleName: "auth",
+					cookieName: "feathers-jwt",
+				});
+			},
+		},
 		modules: {
 			federalStates: {
 				namespaced: true,

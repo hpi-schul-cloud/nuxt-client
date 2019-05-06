@@ -39,7 +39,7 @@ export default {
 				{ title: "Kurse", to: { name: "courses" } },
 				{ title: "Termine", to: { name: "events" } },
 				{ title: "Aufgaben", to: { name: "tasks" } },
-				{ title: "Dateien", to: { name: "files" } },
+				{ title: "Dateien", href: "/files" },
 				{ title: "Lernstore", to: { name: "content" } },
 				{ title: "Verwaltung", to: { name: "administration" } },
 			],

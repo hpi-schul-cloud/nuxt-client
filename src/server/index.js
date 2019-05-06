@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const consola = require("consola");
 const path = require("path");
 const handlebars = require("handlebars");
@@ -7,6 +8,18 @@ const handlebarsWax = require("handlebars-wax");
 const { Nuxt, Builder } = require("nuxt");
 const app = express();
 const themeName = process.env.SC_THEME || "default";
+
+const sessionStore = new session.MemoryStore();
+const cookieParser = require("cookie-parser");
+app.use(
+	session({
+		cookie: { maxAge: 60000 },
+		store: sessionStore,
+		saveUninitialized: true,
+		resave: "true",
+		secret: "secret",
+	})
+);
 
 const host = process.env.HOST || "127.0.0.1";
 const port = process.env.PORT || 4000;
@@ -41,12 +54,22 @@ app.set("port", port);
 let config = require("../../nuxt.config.js");
 config.dev = !(process.env.NODE_ENV === "production");
 
+app.use("/test", function(req, res, next) {
+	// console.log(req.headers)
+	// console.log(req.cookies)
+	res.send(123);
+});
+
 // The legacy routings go here
 setLegacyControllers([
 	"about",
 	"community",
 	"help",
 	"helpdesk",
+	{
+		route: "files",
+		controller: "files",
+	},
 	{
 		route: "impressum",
 		controller: "imprint",
