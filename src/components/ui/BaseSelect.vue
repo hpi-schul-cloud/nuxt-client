@@ -1,20 +1,16 @@
 <template>
 	<div class="input__wrapper">
-		<span :class="{ label: true, active: value && value !== 0 }">
+		<span :class="{ label: true }">
 			{{ label }}
 		</span>
 		<multi-select
 			v-bind="$attrs"
-			:value="value"
+			:value="populatedValue"
 			:options="options"
 			:multiple="multiple"
-			:label="label"
-			:placeholder="placeholder"
-			:track-by="trackBy"
-			:allow-empty="allowEmpty"
-			:show-labels="showLabels"
-			:close-on-select="!showOnSelect"
-			@input="$emit('input', $event)"
+			track-by="value"
+			label="label"
+			@input="updatevmodel"
 		></multi-select>
 	</div>
 </template>
@@ -23,45 +19,52 @@
 import MultiSelect from "vue-multiselect";
 
 export default {
-	name: "BaseSelect",
 	components: { MultiSelect },
+	model: {
+		prop: "value",
+		event: "update:vmodel",
+	},
 	props: {
+		/**
+		 * Must match an entry of the options prop.
+		 */
 		value: {
-			type: [Array, Object],
+			type: [String, Number, Array, Object],
 			required: true,
 		},
-		selected: {
-			type: Object,
-			default: () => ({}),
+		multiple: {
+			type: Boolean,
 		},
+		/**
+		 * Format: [ { value: [String, Number, Array, Object], label: String }, ... ]
+		 */
 		options: {
 			type: Array,
-			default: () => [],
 			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: "",
+			validator: (options) =>
+				options.every((option) => option.label && option.value),
 		},
 		label: {
 			type: String,
 			required: true,
 		},
-		trackBy: {
-			type: String,
-			default: "",
+	},
+	computed: {
+		populatedValue() {
+			return this.multiple
+				? this.options.filter((option) => this.value.includes(option.value))
+				: this.options.find(
+						(option) =>
+							JSON.stringify(this.value) == JSON.stringify(option.value)
+				  );
 		},
-		multiple: {
-			type: Boolean,
-		},
-		allowEmpty: {
-			type: Boolean,
-		},
-		showLabels: {
-			type: Boolean,
-		},
-		showOnSelect: {
-			type: Boolean,
+	},
+	methods: {
+		updatevmodel(event) {
+			const newModel = this.multiple
+				? event.map((selection) => selection.value)
+				: event.value;
+			this.$emit("update:vmodel", newModel);
 		},
 	},
 };
@@ -77,7 +80,7 @@ $input-padding-left: 12px;
 	position: relative;
 	display: block;
 	width: 100%;
-	margin: 1em 0 $size-grid-padding;
+	margin: 2em 0 $size-grid-padding;
 	overflow: visible;
 	clear: both;
 	background: $color-text-bg;

@@ -15,6 +15,7 @@
 				@blur="isActive = false"
 			/>
 			<transition name="fade">
+				<!-- shouldn't this be baseButton -->
 				<button
 					v-if="isActive && value !== ''"
 					type="button"

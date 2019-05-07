@@ -12,24 +12,11 @@
 </template>
 
 <script>
-import BaseButton from "./ui/BaseButton";
 export default {
-	name: "LandingCTA",
-	components: {
-		BaseButton,
-	},
 	props: {
-		subtitle: { type: String, default: "" },
-		title: { type: String, default: "" },
-		ctaText: { type: String, default: "" },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		onClick() {
-			this.$emit("click");
-		},
+		subtitle: { type: String, required: true },
+		title: { type: String, required: true },
+		ctaText: { type: String, required: true },
 	},
 };
 </script>
