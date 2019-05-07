@@ -54,9 +54,7 @@ export default {
 	},
 	methods: {
 		sendEvent(eventName) {
-			if (eventName) {
-				this.$emit("action", eventName);
-			}
+			this.$emit("action", eventName);
 		},
 	},
 };

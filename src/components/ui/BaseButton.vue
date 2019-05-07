@@ -9,9 +9,7 @@
 </template>
 
 <script>
-export default {
-	name: "BaseButton",
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
