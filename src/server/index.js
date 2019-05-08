@@ -11,6 +11,8 @@ const themeName = process.env.SC_THEME || "default";
 
 const sessionStore = new session.MemoryStore();
 const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 app.use(
 	session({
 		cookie: { maxAge: 60000 },
@@ -31,6 +33,9 @@ const handlebarsHelper = require(path.join(
 	legacyClientRoot,
 	"./helpers/handlebars"
 ));
+
+app.use(handlebarsHelper.middleware);
+
 // console.log(path.join(legacyClientRoot, './helpers/handlebars'))
 const wax = handlebarsWax(handlebars)
 	.partials(path.join(legacyClientRoot, "./views/**/*.{hbs,js}"))
@@ -54,18 +59,13 @@ app.set("port", port);
 let config = require("../../nuxt.config.js");
 config.dev = !(process.env.NODE_ENV === "production");
 
-app.use("/test", function(req, res, next) {
-	// console.log(req.headers)
-	// console.log(req.cookies)
-	res.send(123);
-});
-
 // The legacy routings go here
 setLegacyControllers([
 	"about",
 	"community",
 	"help",
 	"helpdesk",
+	"homework",
 	{
 		route: "files",
 		controller: "files",

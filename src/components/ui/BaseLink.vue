@@ -4,7 +4,7 @@
 		class="link"
 		:href="href"
 		v-bind="$attrs"
-		target="_blank"
+		:target="target"
 		rel="noreferrer"
 	>
 		<slot />
@@ -29,6 +29,10 @@ export default {
 		to: {
 			type: [Object, String],
 			default: null,
+		},
+		target: {
+			type: String,
+			default: "_blank",
 		},
 		name: {
 			type: String,

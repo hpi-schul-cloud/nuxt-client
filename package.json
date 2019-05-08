@@ -49,6 +49,7 @@
 		"consola": "^2.6.0",
 		"cookie-parser": "^1.4.4",
 		"cookie-storage": "^3.2.0",
+		"cookie-universal-nuxt": "^2.0.14",
 		"express": "^4.16.4",
 		"express-session": "^1.16.1",
 		"feathers-vuex": "1.7.0",

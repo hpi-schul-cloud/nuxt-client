@@ -62,6 +62,7 @@ module.exports = {
 			src: "@plugins/authenticate",
 			ssr: false,
 		},
+		"@plugins/cookies",
 		"@plugins/axios",
 		"@plugins/global",
 		"@plugins/dialog",
@@ -80,6 +81,7 @@ module.exports = {
 		"@nuxtjs/axios",
 		"@nuxtjs/toast",
 		"nuxt-babel",
+		"cookie-universal-nuxt",
 	],
 
 	toast: {

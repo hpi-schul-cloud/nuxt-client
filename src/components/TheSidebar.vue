@@ -7,14 +7,15 @@
 					:key="JSON.stringify(route.to) || route.href"
 					:class="{ 'list-item': true, active: route.active }"
 				>
-					<base-link v-if="route.to" class="list-content" :to="route.to">
+					<base-link
+						:href="route.href"
+						class="list-content"
+						target="_self"
+						:to="route.to || undefined"
+					>
 						<base-icon v-if="route.icon" :icon="route.icon" />
 						{{ route.title }}
 					</base-link>
-					<a v-else :href="route.href" class="list-content">
-						<base-icon v-if="route.icon" :icon="route.icon" />
-						{{ route.title }}
-					</a>
 				</li>
 			</ul>
 		</nav>

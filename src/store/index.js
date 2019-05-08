@@ -162,7 +162,7 @@ const createStore = () => {
 					dispatch,
 					req,
 					moduleName: "auth",
-					cookieName: "feathers-jwt",
+					cookieName: "jwt",
 				});
 			},
 		},
