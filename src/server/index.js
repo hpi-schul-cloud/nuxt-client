@@ -63,6 +63,7 @@ config.dev = !(process.env.NODE_ENV === "production");
 setLegacyControllers([
 	"about",
 	"community",
+	"dashboard",
 	"help",
 	"helpdesk",
 	"homework",

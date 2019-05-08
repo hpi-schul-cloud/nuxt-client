@@ -34,6 +34,7 @@ export default {
 	data() {
 		return {
 			sidebarItems: [
+				{ title: "Übersicht", href: "/dashboard" },
 				{ title: "News", to: { name: "news" } },
 				{ title: "Teams", to: { name: "teams" } },
 				{ title: "Kurse", to: { name: "courses" } },
