@@ -6,7 +6,6 @@
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
 				>
-					>>>>>>> master
 					<slot />
 				</div>
 			</div>
