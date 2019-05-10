@@ -61,11 +61,10 @@ label {
 .radio {
 	position: relative;
 	display: inline-block;
-	width: 0.7em; // stylelint-disable-line
-	height: 0.7em; // stylelint-disable-line
-	margin-right: 0.25em;
+	width: 0.7em;
+	height: 0.7em;
 	background-color: $background-color;
-	border-radius: var(--curve-round);
+	border-radius: var(--radius-round);
 	transition: background-color var(--duration-transition-medium);
 }
 

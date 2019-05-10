@@ -45,7 +45,7 @@ ul {
 ul.tabs {
 	width: 100%;
 	margin-bottom: var(--space-md);
-	border-bottom: 2px solid var(--gray-1);
+	border-bottom: 2px solid var(--color-gray-light);
 	li {
 		box-sizing: border-box;
 		display: inline-block;

@@ -55,7 +55,7 @@ export default {
 	z-index: var(--layer-dropdown);
 	display: none;
 	flex-direction: column;
-	background-color: var(--gray-1);
+	background-color: var(--color-gray-light);
 
 	&.open {
 		display: flex;

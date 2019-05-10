@@ -22,8 +22,8 @@ export default {};
 	color: var(--grey-3);
 	text-transform: uppercase;
 	cursor: pointer;
-	border: 1px solid var(--color-border);
-	border-radius: var(--curve-md);
+	border: 1px solid var(--color-gray);
+	border-radius: var(--radius-md);
 	transition: background-color var(--duration-transition-medium) ease;
 	&:hover,
 	&:focus {
@@ -37,7 +37,7 @@ export default {};
 	border-width: 1px;
 }
 .is-primary {
-	color: var(--white);
+	color: var(--color-white);
 	background-color: var(--color-primary);
 }
 

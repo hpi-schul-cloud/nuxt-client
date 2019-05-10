@@ -1,12 +1,12 @@
-import CardFooter from "./CardFooter";
-import PulsatingDot from "./PulsatingDot.vue";
+import CourseCardFooter from "./CourseCardFooter";
+import PulsatingDot from "../PulsatingDot";
 
-describe("@components/CardFooter", () => {
-	it(...isValidComponent(CardFooter));
+describe("@components/CourseCardFooter", () => {
+	it(...isValidComponent(CourseCardFooter));
 
 	it("Check if alert is rendering", () => {
 		const testAlert = "Test Alert";
-		const wrapper = shallowMount(CardFooter, {
+		const wrapper = shallowMount(CourseCardFooter, {
 			propsData: {
 				course: {
 					alert: testAlert,
@@ -22,7 +22,7 @@ describe("@components/CardFooter", () => {
 	it("Check if next course is rendering", () => {
 		const testNextCourseTime = "Monday 10:30";
 		const testNextCourseRoom = "B112";
-		const wrapper = shallowMount(CardFooter, {
+		const wrapper = shallowMount(CourseCardFooter, {
 			propsData: {
 				course: {
 					alert: "",
@@ -33,13 +33,10 @@ describe("@components/CardFooter", () => {
 		});
 		expect(wrapper.classes("footer")).toBe(true);
 		expect(wrapper.find("base-icon-stub").attributes("icon")).toBe("clock");
-		expect(wrapper.find(".next-course-label").isVisible()).toBe(true);
-		expect(wrapper.find(".next-course-room-label").text()).toBe(
-			testNextCourseRoom
-		);
+		expect(wrapper.find(".next-course").text()).toContain(testNextCourseRoom);
 	});
 	it("Check when footer has empty data it's empty", () => {
-		const wrapper = shallowMount(CardFooter, {
+		const wrapper = shallowMount(CourseCardFooter, {
 			propsData: {
 				course: {
 					alert: "",
@@ -52,7 +49,7 @@ describe("@components/CardFooter", () => {
 		expect(wrapper.isEmpty()).toBe(true);
 	});
 	it("Check when footer has no data it's empty", () => {
-		const wrapper = shallowMount(CardFooter, {
+		const wrapper = shallowMount(CourseCardFooter, {
 			propsData: {},
 		});
 	});

@@ -82,7 +82,7 @@ export default {
 	border-bottom-right-radius: calc(var(--border-radius) - var(--border-width));
 	border-bottom-left-radius: calc(var(--border-radius) - var(--border-width));
 	&::placeholder {
-		color: var(--form-text-placeholder);
+		color: var(--color-gray);
 	}
 }
 </style>

@@ -1,8 +1,13 @@
+:root {
+	--size-content-width-min: 40ch;
+	--size-content-width-max: 80ch;
+}
+
 $breakpoints: (
 	xs: 575px,
 	sm: 768px,
 	md: 991px,
-	lg: 1199px
+	lg: 1199px,
 );
 
 // Usage: `@include breakpoint(md) { ... }`

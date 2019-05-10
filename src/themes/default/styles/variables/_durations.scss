@@ -1,13 +1,16 @@
+$transition-base: 0.3s;
+
 :root {
-	--duration-transition-base: 0.3s;
-	--duration-transition-slow: calc(var(--duration-transition-base) * 3);
-	--duration-transition-medium: var(--duration-transition-base);
-	--duration-transition-fast: calc(var(--duration-transition-base) * 0.5);
+	--duration-transition-slow: calc(#{$transition-base} * 3);
+	--duration-transition-medium: #{$transition-base};
+	--duration-transition-fast: calc(#{$transition-base} * 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
-	:root {
-		// 0 would break js transition events
-		--duration-transition-base: 0.0001s;
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001s !important;
+		transition-duration: 0.001s !important;
 	}
 }

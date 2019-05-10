@@ -91,7 +91,7 @@ export default {
 	align-items: center;
 }
 .icon-button {
-	padding-right: 10px;
+	padding-right: var(--space-sm);
 }
 .item {
 	padding: 0 var(--space-xxxs);

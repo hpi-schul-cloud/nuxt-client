@@ -62,7 +62,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: var(--space-sm) var(--space-md);
-	box-shadow: var(--shadow-1);
+	box-shadow: var(--shadow-sm);
 }
 .logo {
 	height: var(--text-lg);

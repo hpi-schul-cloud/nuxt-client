@@ -1,8 +1,8 @@
 @import "./breakpoints";
 
 :root {
-	--font-primary: "PT Sans Narrow", sans-serif;
-	--font-secondary: "PT Sans", sans-serif;
+	--font-primary: "PT Sans", sans-serif;
+	--font-accent: "PT Sans Narrow", sans-serif;
 
 	/* set base values */
 	--text-base-size: 1em;
@@ -13,7 +13,10 @@
 	--text-sm: calc(1em / var(--text-scale-ratio));
 	--text-md: calc(1em * var(--text-scale-ratio));
 	--text-lg: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio));
-	--text-xl: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+	--text-xl: calc(
+		1em * var(--text-scale-ratio) * var(--text-scale-ratio) *
+			var(--text-scale-ratio)
+	);
 	// prettier-ignore
 	--text-xxl: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
 	// prettier-ignore

@@ -98,14 +98,14 @@ export default {
 @import "@styles";
 
 .link {
-	color: var(--color-link);
+	color: var(--color-primary);
 	text-decoration: underline;
 	cursor: pointer;
 	&:active {
-		color: var(--color-link) -active;
+		color: var(--color-primary-light);
 	}
 	&:visited {
-		color: var(--color-link-visited);
+		color: var(--color-primary-dark);
 	}
 }
 </style>

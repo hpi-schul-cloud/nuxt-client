@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import CourseCard from "./CourseCard.vue";
+import CourseCard from "./CourseCard";
 
 export default {
 	components: {

@@ -79,6 +79,6 @@ export default {
 <style lang="scss" scoped>
 .input /deep/ .multiselect__tags {
 	border: 0;
-	border-radius: 1em;
+	border-radius: var(--radius-md);
 }
 </style>

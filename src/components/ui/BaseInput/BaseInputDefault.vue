@@ -87,15 +87,15 @@ export default {
 	display: block;
 	margin: var(--indentation) 0;
 	clear: both;
-	background-color: var(--form-element-bg);
-	border: var(--border-width) solid var(--form-element-border);
+	background-color: var(--color-white);
+	border: var(--border-width) solid var(--color-gray);
 	border-radius: var(--border-radius);
 	transition: border-color var(--duration-transition-fast) ease;
 	&.with-hint {
 		margin-bottom: 0;
 	}
 	&:focus-within {
-		border-color: var(--form-element-border-focus);
+		border-color: var(--color-gray-dark);
 	}
 }
 .label {
@@ -113,7 +113,7 @@ input,
 	border-bottom-right-radius: calc(var(--border-radius) - var(--border-width));
 	border-bottom-left-radius: calc(var(--border-radius) - var(--border-width));
 	&::placeholder {
-		color: var(--form-text-placeholder);
+		color: var(--color-gray);
 	}
 	&:focus {
 		outline: none;

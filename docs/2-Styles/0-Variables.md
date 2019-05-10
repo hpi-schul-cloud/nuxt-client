@@ -18,6 +18,10 @@
 
 <<< @/src/themes/default/styles/variables/\_shadows.scss
 
+## Sizes
+
+<<< @/src/themes/default/styles/variables/\_sizes.scss
+
 ## Spacing
 
 <<< @/src/themes/default/styles/variables/\_spacing.scss

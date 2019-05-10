@@ -5,7 +5,7 @@
 body {
 	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
-	color: var(--color-text);
+	color: var(--color-black);
 }
 
 h1,
@@ -15,7 +15,7 @@ h4,
 form legend {
 	margin-bottom: var(--space-xxs);
 	line-height: var(--heading-line-height);
-	color: var(--color-text-heading);
+	color: var(--color-black);
 }
 
 /* text size */
@@ -57,10 +57,10 @@ p {
 }
 
 a {
-	color: var(--color-link);
+	color: var(--color-primary);
 
 	&:visited {
-		color: var(--color-link-visited);
+		color: var(--color-primary-visited);
 	}
 }
 

@@ -37,20 +37,20 @@ export default {
 	padding: var(--space-sm) var(--space-md);
 	text-align: left;
 	cursor: pointer;
-	background-color: var(--gray-1);
+	background-color: var(--color-gray-light);
 	border: none;
 	outline: none;
 }
 .active,
 .collapsible:hover {
-	background-color: var(--gray-2);
+	background-color: var(--color-gray-light);
 }
 
 .content {
 	display: block;
 	padding: 0 var(--space-md);
 	overflow: hidden;
-	background-color: color-mod(var(--gray-1) tint(50%));
+	background-color: color-mod(var(--color-gray-light) tint(50%));
 }
 
 .fade-enter-active,

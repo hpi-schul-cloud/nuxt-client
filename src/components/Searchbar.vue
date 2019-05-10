@@ -16,14 +16,14 @@
 			/>
 			<transition name="fade">
 				<!-- shouldn't this be baseButton -->
-				<button
+				<base-button
 					v-if="isActive && value !== ''"
 					type="button"
 					class="clear-btn"
 					@click="updateSearchString('')"
 				>
 					<base-icon class="clear-icon" source="custom" icon="clear" />
-				</button>
+				</base-button>
 			</transition>
 		</div>
 	</div>
@@ -60,28 +60,28 @@ export default {
 .live-search {
 	position: relative;
 	width: 100%;
-	max-width: 500px;
-	margin: 0 auto 2rem;
+	max-width: var(--size-content-width-max);
+	margin: 0 auto;
 
 	.search-container {
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
 		width: 100%;
-		padding: 0 16px;
-		color: var(--color-text);
-		background: var(--gray-1);
-		border-radius: 50rem;
+		padding: 0 var(--space-md);
+		color: var(--color-black);
+		background: var(--color-gray-light);
+		border-radius: var(--radius-round);
 
 		.search-icon,
 		input {
-			padding: 16px 4px;
-			font-size: 1.3rem;
+			padding: var(--space-md) var(--space-xs);
+			font-size: var(--text-md);
 		}
 
 		input {
 			flex: 1;
-			padding: 12px;
+			padding: var(--space-xs);
 			background: transparent;
 			border: 0;
 			outline: none;
@@ -110,7 +110,7 @@ export default {
 			}
 
 			.clear-icon {
-				padding: 16px;
+				padding: var(--space-md);
 			}
 		}
 	}

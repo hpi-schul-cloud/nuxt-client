@@ -53,7 +53,7 @@ export default {
 	font-size: var(--text-md);
 	text-decoration: none;
 	&.active {
-		color: var(--color-link);
+		color: var(--color-primary);
 	}
 }
 </style>

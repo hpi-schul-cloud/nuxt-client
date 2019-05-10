@@ -28,6 +28,13 @@ export default {
 				{ name: "Four" },
 				{ name: "Five" },
 			],
+			validator: function(value) {
+				const isValid = value.length <= 7;
+				if (!isValid) {
+					console.error("You shoudn't use more than 7 steps.");
+				}
+				return isValid;
+			},
 		},
 		currentStep: {
 			type: Number,
@@ -58,61 +65,59 @@ ul.progressbar {
 	counter-reset: step;
 }
 
+.description {
+	font-size: var(--text-sm);
+}
+
 .progressbar li {
 	position: relative;
 	float: left;
 	text-align: center;
-}
+	&::before {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 50px;
+		height: 50px;
+		margin: 0 auto;
+		margin-bottom: var(--space-xs);
+		font-weight: bold;
+		color: var(--color-white);
+		content: counter(step);
+		counter-increment: step;
+		background: var(--color-gray-dark);
+		border-radius: var(--radius-round);
+	}
 
-.description {
-	font-size: small;
+	&::after {
+		position: absolute;
+		top: 25px;
+		left: -50%;
+		z-index: var(--layer-behind);
+		width: 100%;
+		height: calc(3 * var(--border-width));
+		content: "";
+		background: var(--color-gray);
+	}
 }
-
-.progressbar li.active::after {
-	background: #979797;
+.progressbar li.active {
+	&::after {
+		background: var(--color-gray);
+	}
+	&::before {
+		color: var(--color-white);
+		background: var(--color-primary);
+	}
 }
-.progressbar li.active::before {
-	color: white;
-	background: #b1063a;
-	border-color: #b1063a;
-}
-.progressbar li.done::before {
-	color: white;
-	background: #3aac5d;
-	border-color: #3aac5d;
-}
-.progressbar li.done::after {
-	color: white;
-	background: #979797;
-}
-
-.progressbar li::before {
-	display: block;
-	width: 50px;
-	height: 50px;
-	margin: 0 auto 10px auto;
-	font-weight: bold;
-	line-height: 50px;
-	color: white;
-	text-align: center;
-	content: counter(step);
-	counter-increment: step;
-	background: white;
-	background: #4a4a4a;
-	border: 2px solid #bebebe;
-	border-color: #4a4a4a;
-	border-radius: 50%;
-}
-
-.progressbar li::after {
-	position: absolute;
-	top: 25px;
-	left: -50%;
-	z-index: var(--layer-behind);
-	width: 100%;
-	height: 3px;
-	content: "";
-	background: #979797;
+.progressbar li.done {
+	&::before {
+		color: var(--color-white);
+		background: var(--color-success);
+	}
+	&::after {
+		color: var(--color-var(--color-white));
+		background: var(--color-gray);
+	}
 }
 
 .progressbar li:first-child::after {

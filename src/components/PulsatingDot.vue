@@ -6,11 +6,7 @@
 </template>
 
 <script>
-export default {
-	components: {},
-	props: {},
-	computed: {},
-};
+export default {};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -21,24 +17,24 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 25px;
-	height: 25px;
+	width: 1em;
+	height: 1em;
 }
 
 .circle {
 	position: absolute;
-	width: 9px;
-	height: 9px;
-	background-color: #d00;
-	border-radius: 50%;
+	width: 0.5em;
+	height: 0.5em;
+	background-color: var(--color-error);
+	border-radius: var(--radius-round);
 }
 
 .ringring {
 	align-self: center;
-	width: 15px;
-	height: 15px;
-	border: 1px solid #d00;
-	border-radius: 30px;
+	width: 1em;
+	height: 1em;
+	border: 1px solid var(--color-error);
+	border-radius: var(--radius-round);
 	opacity: 0;
 	animation: pulsate var(--duration-transition-slow) ease-out;
 	animation-iteration-count: infinite;
@@ -47,14 +43,14 @@ export default {
 @keyframes pulsate {
 	0% {
 		opacity: 0;
-		transform: scale(0.1, 0.1);
+		transform: scale(0.1);
 	}
 	50% {
 		opacity: 1;
 	}
 	100% {
 		opacity: 0;
-		transform: scale(1.2, 1.2);
+		transform: scale(1.1);
 	}
 }
 </style>
