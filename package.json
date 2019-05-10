@@ -49,6 +49,7 @@
 		"cookie-storage": "^5.0.0",
 		"feathers-vuex": "1.7.0",
 		"lodash": "^4.17.11",
+		"markdownlint": "^0.14.1",
 		"material-icons-svg": "^1.0.0",
 		"moment": "^2.23.0",
 		"nuxt": "^2.5.1",

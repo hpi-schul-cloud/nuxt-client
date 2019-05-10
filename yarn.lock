@@ -11623,6 +11623,13 @@ markdown-to-jsx@^6.9.1:
     minimatch "~3.0.4"
     rc "~1.2.7"
 
+markdownlint@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/markdownlint/-/markdownlint-0.14.1.tgz#62666d897284b44af20627229334045248f1c941"
+  integrity sha512-W3RxMP8GYyJAhgUXIXvBOXT2ai89qDIuLf2ZM0Xd+XcwXBS6Hu06Hg2UKNwMDPTy0uQK8YWCH4hkdxlevm/BgQ==
+  dependencies:
+    markdown-it "8.4.2"
+
 markdownlint@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/markdownlint/-/markdownlint-0.12.0.tgz#998e0c22698a753c406f19b06c2375321a2b4fb0"
