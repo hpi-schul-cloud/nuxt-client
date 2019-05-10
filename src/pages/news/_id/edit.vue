@@ -6,7 +6,7 @@
 					<h5>{{ news.title }}</h5>
 				</base-link>
 				<h1>News bearbeiten</h1>
-				<base-button class="is-danger" @click="active = true">
+				<base-button class="is-danger" @click="confirmDelete">
 					Löschen
 				</base-button>
 			</section>
@@ -34,25 +34,6 @@
 				<div v-html="news.content" />
 			</section>
 		</div>
-
-		<base-modal ref="modal" :active.sync="active">
-			<div class="modal-header">
-				<h3>Löschen?</h3>
-			</div>
-
-			<div class="modal-body">
-				Bist du sicher, dass du diesen Artikel löschen möchtest?
-			</div>
-
-			<div class="modal-footer">
-				<base-button class="is-light" @click="$refs.modal.close">
-					Abbrechen
-				</base-button>
-				<base-button @click="confirmDelete">
-					Löschen
-				</base-button>
-			</div>
-		</base-modal>
 	</div>
 </template>
 
@@ -76,7 +57,20 @@ export default {
 	methods: {
 		...mapActions("news", ["remove"]),
 		confirmDelete() {
-			// TODO
+			this.$dialog.confirm({
+				title: "Artikel löschen",
+				message: "Möchtest du diesen Artikel wirklich löschen?",
+				confirmText: "Artikel löschen",
+				onConfirm: async () => {
+					try {
+						await this.$store.dispatch("news/remove", this.news._id);
+						this.$toast.success("Artikel erfolgreich gelöscht!");
+						this.$router.push({ name: "news" });
+					} catch (e) {
+						this.$toast.error("Fehler beim Löschen des Artikels.");
+					}
+				},
+			});
 		},
 		get(id) {
 			this.$store.dispatch("news/get", id);

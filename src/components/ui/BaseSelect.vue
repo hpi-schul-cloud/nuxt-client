@@ -1,6 +1,16 @@
 <template>
-	<div class="input__wrapper">
-		<span :class="{ label: true }">
+	<div
+		:class="{
+			input__wrapper: true,
+			'has-label': label && value && value !== 0,
+		}"
+	>
+		<span
+			:class="{
+				label: true,
+				active: label && value && value !== 0,
+			}"
+		>
 			{{ label }}
 		</span>
 		<multi-select
@@ -9,7 +19,7 @@
 			:options="options"
 			:multiple="multiple"
 			track-by="value"
-			label="label"
+			:label="optionLabel"
 			@input="updatevmodel"
 		></multi-select>
 	</div>
@@ -47,6 +57,10 @@ export default {
 		label: {
 			type: String,
 			required: true,
+		},
+		optionLabel: {
+			type: String,
+			default: "",
 		},
 	},
 	computed: {
@@ -86,6 +100,9 @@ $input-padding-left: 12px;
 	background: $color-text-bg;
 	border: $size-border-width solid $color-border;
 	border-radius: $size-border-radius;
+	&.has-label {
+		margin-top: 2em;
+	}
 }
 
 .label {
