@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 
 import { storiesOf } from "@storybook/vue";
-import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
@@ -55,7 +54,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: outdent`
+		template: `
 			<div>
 				<base-icon source="material" icon="home"/>
 				<base-icon source="custom" icon="clock"/>
@@ -78,7 +77,7 @@ storiesOf("Base Components", module)
 				value: text("value", ""),
 				placeholder: text("placeholder", "Placeholder"),
 			}),
-			template: outdent`
+			template: `
 				<div>
 					<base-input
 						v-model="vmodel"
@@ -108,7 +107,7 @@ storiesOf("Base Components", module)
 			},
 		}),
 
-		template: outdent`
+		template: `
 			<div>
 				${["text", "email", "password", "url", "number", "date", "time"]
 					.map(
@@ -168,7 +167,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: outdent`
+		template: `
 			<div>
 				<base-link href="https://schul-cloud.org">external Link to https://schul-cloud.org</base-link>
 				<base-link to="/news">Internal Link to /news</base-link>
@@ -182,7 +181,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
-		template: outdent`
+		template: `
 			<base-table>
 					<tr>
 							<th>Firstname</th>
@@ -225,7 +224,7 @@ storiesOf("Base Components", module)
 				"Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below."
 			),
 		}),
-		template: outdent`
+		template: `
 			<div>
 				<base-button @click="active = true">
 					Open Modal
@@ -250,7 +249,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Dialog", () => ({
 		data: () => ({ active: false }),
-		template: outdent`
+		template: `
 			<div>
 				<BaseButton @click="confirm">
 					Delete User
@@ -276,7 +275,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Video", () => ({
 		components: { BaseVideo },
-		template: outdent`
+		template: `
 			<base-video
 				:configuration="{
 					streams: [{
@@ -300,7 +299,7 @@ storiesOf("Base Components", module)
 			),
 			srcText: text("src-text", ""),
 		}),
-		template: outdent`
+		template: `
 			<BaseBlockquote :cite="cite" :src-text="srcText || undefined">
 				{{quote}}
 			</BaseBlockquote>
