@@ -174,7 +174,6 @@ export default {
 	position: absolute;
 	z-index: 10;
 	display: inline-block;
-	float: left;
 	width: 95%;
 	padding: 5.5px 10px;
 	overflow: hidden;

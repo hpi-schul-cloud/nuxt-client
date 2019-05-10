@@ -5,6 +5,9 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
+	env: {
+		API_URL: process.env.API_URL || "http://localhost:3030",
+	},
 	/*
 	 ** Headers of the page
 	 */
@@ -82,6 +85,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
+		baseUrl: process.env.BASE_URL || "https://localhost:3030",
 	},
 
 	/*

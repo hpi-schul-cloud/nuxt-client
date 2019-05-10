@@ -10,6 +10,7 @@
 /* stylelint-disable */
 
 @import "@variables";
+@import "helpers";
 
 @for $i from 1 through 6 {
 	h#{$i},
@@ -92,6 +93,11 @@ select,
 textarea,
 button {
 	@extend %font-button;
+}
+
+a {
+	color: $color-primary;
+	text-decoration: underline;
 }
 
 img {

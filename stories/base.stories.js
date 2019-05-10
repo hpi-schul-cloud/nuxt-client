@@ -2,6 +2,7 @@
 
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
+import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
@@ -150,20 +151,21 @@ storiesOf("Base Components", module)
 		data: () => ({
 			content: [],
 			options: [
-				{ value: 1, label: "Option 1" },
-				{ value: 2, label: "Option 2" },
-				{ value: 3, label: "Option 3" },
+				{ value: 1, name: "Option 1" },
+				{ value: 2, name: "Option 2" },
+				{ value: 3, name: "Option 3" },
 			],
+			optionLabel: "name",
 			label: text("label", "Label"),
 			placeholder: text("placeholder", "Etwas auswählen"),
 			multiple: select("mutliple", { true: true, false: false }, false),
 		}),
 		template: `
-			<div>
-				Content: {{content}} <br/>
-				Options: {{options}} <br/>
-				<base-select v-model="content" :multiple="multiple" :options="options" :label="label" :placeholder="placeholder"/>
-			</div>`,
+		<div>
+		Content: {{content}} <br/>
+		Options: {{options}} <br/>
+			<base-select v-model="content" :multiple="multiple" :options="options" track-by="_id" :label="label" optionLabel="name" :placeholder="placeholder"/>
+		</div>`,
 		methods: {},
 	}))
 	.add("Base Link", () => ({
@@ -181,17 +183,14 @@ storiesOf("Base Components", module)
 		template: '<base-progressbar :value="2" :max="3"/>',
 	}))
 	.add("Base Table", () => ({
+		data: () => ({
+			data: tableData,
+			columns: tableColumns,
+		}),
 		components: { BaseTable },
 		template: outdent`
-			<base-table>
-					<tr>
-							<th>Firstname</th>
-							<th>Lastname</th>
-					</tr>
-					<tr>
-							<td>Peter</td>
-							<td>Griffin</td>
-					</tr>
+			<base-table v-slot:default="slotProps" :data="data" :columns="columns">
+				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>
 		`,
 	}))
