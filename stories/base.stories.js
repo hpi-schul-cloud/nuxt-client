@@ -32,8 +32,11 @@ storiesOf("Base Components", module)
 				default: text("Text", "Primary"),
 			},
 		},
-		template:
-			'<div><base-button class ="is-primary is-small">{{ text }}</base-button> <br/> <base-button class ="is-primary is-medium">{{ text }}</base-button><br/><base-button class ="is-primary is-large">{{ text }}</base-button></div>',
+		template: `<div>
+				<base-button class ="is-primary is-small">{{ text }}</base-button> <br/>
+				<base-button class ="is-primary is-medium">{{ text }}</base-button><br/>
+				<base-button class ="is-primary is-large">{{ text }}</base-button>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Button Secondary", () => ({
@@ -43,8 +46,11 @@ storiesOf("Base Components", module)
 				default: text("Text", "Secondary"),
 			},
 		},
-		template:
-			'<div><base-button class="is-secondary is-small">{{ text }}</base-button><br/><base-button class ="is-secondary is-medium">{{ text }}</base-button><br/><base-button class ="is-secondary is-large">{{ text }}</base-button><br/></div>',
+		template: `<div>
+				<base-button class="is-secondary is-small">{{ text }}</base-button><br/>
+				<base-button class ="is-secondary is-medium">{{ text }}</base-button><br/>
+				<base-button class ="is-secondary is-large">{{ text }}</base-button>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Card", () => ({
@@ -107,25 +113,25 @@ storiesOf("Base Components", module)
 			},
 		}),
 
-		template: `
+		template: `<div>
+			${["text", "email", "password", "url", "number", "date", "time"]
+				.map(
+					(type) =>
+						`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />\n`
+				)
+				.join("")
+				.trimRight()}
 			<div>
-				${["text", "email", "password", "url", "number", "date", "time"]
-					.map(
-						(type) =>
-							`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />`
-					)
-					.join("\n\t")}
-				<div>
-					<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
-					<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
-				</div>
-				<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
-				<div>
-					<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
-					<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
-				</div>
-				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
-			</div>`,
+				<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
+				<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
+			</div>
+			<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
+			<div>
+				<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
+				<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
+			</div>
+			<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
+		</div>`,
 	}))
 	.add("Base Textarea", () => ({
 		components: { BaseSelect },
@@ -181,23 +187,23 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Table", () => ({
 		components: { BaseTable },
-		template: `
-			<base-table>
-					<tr>
-							<th>Firstname</th>
-							<th>Lastname</th>
-					</tr>
-					<tr>
-							<td>Peter</td>
-							<td>Griffin</td>
-					</tr>
+		template: `<base-table>
+				<tr>
+					<th>Firstname</th>
+					<th>Lastname</th>
+				</tr>
+				<tr>
+					<td>Peter</td>
+					<td>Griffin</td>
+				</tr>
 			</base-table>
 		`,
 	}))
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
-		template:
-			'<base-collapsible label="Test"><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></base-collapsible>',
+		template: `<base-collapsible label="Test">
+			<p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</base-collapsible>`,
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
@@ -208,7 +214,7 @@ storiesOf("Base Components", module)
 				{ text: "Mathematik" },
 			],
 		}),
-		template: `<base-breadcrumb :inputs="inputs"></base-breadcrumb>`,
+		template: `<base-breadcrumb :inputs="inputs" />`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
