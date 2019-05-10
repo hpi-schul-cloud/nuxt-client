@@ -11,7 +11,7 @@
 	/* type scale */
 	--text-xs: calc(1em / (var(--text-scale-ratio) * var(--text-scale-ratio)));
 	--text-sm: calc(1em / var(--text-scale-ratio));
-	--text-md: calc(1em * var(--text-scale-ratio));
+	--text-md: calc(1em);
 	--text-lg: calc(1em * var(--text-scale-ratio) * var(--text-scale-ratio));
 	--text-xl: calc(
 		1em * var(--text-scale-ratio) * var(--text-scale-ratio) *

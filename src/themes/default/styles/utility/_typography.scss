@@ -4,7 +4,8 @@
 
 body {
 	font-family: var(--font-primary);
-	font-size: var(--text-base-size);
+	font-size: var(--text-md);
+	line-height: var(--body-line-height);
 	color: var(--color-black);
 }
 
@@ -67,54 +68,6 @@ a {
 b,
 strong {
 	font-weight: bold;
-}
-
-.text-container {
-	h2,
-	h3,
-	h4 {
-		margin-top: var(--space-sm);
-	}
-
-	ul,
-	ol,
-	p {
-		margin-bottom: var(--space-md);
-	}
-
-	ul,
-	ol {
-		padding-left: var(--space-md);
-		list-style-position: outside;
-	}
-
-	ul {
-		list-style-type: disc;
-	}
-
-	ol {
-		list-style-type: decimal;
-	}
-
-	ul li,
-	ol li {
-		line-height: var(--body-line-height);
-	}
-
-	em {
-		font-style: italic;
-	}
-
-	u {
-		text-decoration: underline;
-	}
-}
-
-input,
-select,
-textarea,
-button {
-	font: inherit;
 }
 
 /* utility classes */

@@ -101,6 +101,7 @@ export default {
 .label {
 	position: relative;
 	padding-left: var(--indentation);
+	font-size: var(--text-md);
 	font-weight: bold;
 }
 input,
