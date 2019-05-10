@@ -13,7 +13,6 @@
 import BaseLink from "@basecomponents/BaseLink";
 
 export default {
-	name: "BaseBreadcrumb",
 	props: {
 		inputs: {
 			type: Array,

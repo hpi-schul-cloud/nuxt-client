@@ -11,9 +11,8 @@ const tabContentHide = {
 };
 
 describe("@components/TemplateTab", () => {
-	it("exports a valid component", () => {
-		expect(TemplateTab).toBeAComponent();
-	});
+	it(...isValidComponent(TemplateTab));
+
 	it("Shows when active", () => {
 		const wrapper = mount(tabContentShow);
 		expect(wrapper.find(".tab-content").isVisible()).toBe(true);
