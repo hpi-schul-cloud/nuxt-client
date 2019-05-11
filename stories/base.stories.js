@@ -3,7 +3,7 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean } from "@storybook/addon-knobs";
+import { text, select, boolean, color } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
@@ -56,13 +56,29 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: outdent`
-			<div>
-				<base-icon source="material" icon="home"/>
-				<base-icon source="custom" icon="clock"/>
+		data: () => ({
+			icon: text("icon", "home"),
+			source: select(
+				"source",
+				{ material: "material", custom: "custom" },
+				"material"
+			),
+			size: text("size", "1em"),
+			color: color("color", "#f8a41b"),
+		}),
+		template: `<div>
+			<p>
+				Icon usage is simple: <base-icon :source="source" :icon="icon" :style="{'font-size': size, fill: color}"/>
+			</p>
+			<p>
+				The Color can be also be set using fill:
+				<base-icon source="material" icon="add" :fill="color"/>
+			</p>
+			<p>
+				Scaling works, by setting the font-size attribute:
 				<base-icon source="custom" icon="tasks" style="font-size: 2em" />
-			</div>
-		`,
+			</p>
+		</div>`,
 	}))
 	.add("Base Input (Knobs)", () => {
 		const baseInputTypesDict = {};

@@ -98,18 +98,6 @@ module.exports = {
 		extend(config, ctx) {
 			config.resolve.alias = require("./aliases.config").webpack;
 
-			// https://www.npmjs.com/package/svg-inline-loader
-			const svgRule = config.module.rules.find((rule) =>
-				rule.test.test(".svg")
-			);
-
-			svgRule.test = /\.(png|jpe?g|gif|webp)$/;
-
-			config.module.rules.push({
-				test: /\.svg$/,
-				loader: "svg-inline-loader",
-			});
-
 			// Run ESLint on save
 			if (ctx.isDev && ctx.isClient) {
 				config.module.rules.push({

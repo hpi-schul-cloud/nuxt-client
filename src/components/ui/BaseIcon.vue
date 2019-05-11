@@ -1,6 +1,12 @@
 <template>
-	<!-- eslint-disable-next-line -->
-	<div class="icon" v-html="svgFile" />
+	<component
+		:is="svgComponent"
+		ref="icon"
+		:class="['icon', source]"
+		v-bind="$attrs"
+		:fill="fill"
+		v-on="$listeners"
+	/>
 </template>
 
 <script>
@@ -9,47 +15,63 @@ export default {
 	props: {
 		source: {
 			type: String,
-			default: "material",
+			required: true,
+			validator: function(to) {
+				return ["material", "custom"].includes(to);
+			},
 		},
 		icon: {
 			type: String,
 			required: true,
 		},
-		color: {
+		fill: {
 			type: String,
-			default: "",
+			default: "currentColor",
 		},
 	},
 	computed: {
-		svgFile() {
+		svgComponent() {
 			let icon;
-			if (this.source === "custom") {
-				// src: @assets/icons
-				icon = require(`!!html-loader!@assets/icons/${this.icon}.svg`);
+			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
+			try {
+				if (this.source === "custom") {
+					// src: @assets/icons
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/icons/${
+						this.icon
+					}.svg`);
+				}
+				if (this.source === "material") {
+					// src: https://material.io/tools/icons/?style=baseline
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/baseline-${
+						this.icon
+					}-24px.svg`);
+				}
+				return icon.default;
+			} catch (error) {
+				console.error(
+					`error loading icon "${this.icon}" from "${
+						this.source
+					}". It might be not available.`,
+					error
+				);
+				return undefined;
 			}
-			if (this.source === "material") {
-				// src: https://material.io/tools/icons/?style=baseline
-				icon = require(`!!html-loader!material-icons-svg/icons/baseline-${
-					this.icon
-				}-24px.svg`);
-			}
-			return icon;
 		},
 	},
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .icon {
 	display: inline-block;
 	width: 1em;
 	height: 1em;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: contain;
-	svg {
-		max-width: 100%;
-		max-height: 100%;
-	}
+	vertical-align: baseline;
+}
+.material {
+	// remove material icon margin
+	width: calc(1em + 4px);
+	height: calc(1em + 4px);
+	margin: -4px 0;
 }
 </style>
