@@ -1,10 +1,6 @@
 <template>
-	<span
-		v-bind="$attrs"
-		class="icon"
-		aria-hidden="true"
-		:style="customIconStyle"
-	/>
+	<!-- eslint-disable-next-line -->
+	<div class="icon" v-html="svgFile" />
 </template>
 
 <script>
@@ -19,55 +15,31 @@ export default {
 			type: String,
 			required: true,
 		},
-	},
-	data() {
-		return {
-			svgPath: "",
-		};
+		color: {
+			type: String,
+			default: "",
+		},
 	},
 	computed: {
-		// Gets a CSS module class, e.g. iconCustomLogo
-		customIconStyle() {
-			return {
-				"background-image": `url(${this.svgPath})`,
-			};
-		},
-	},
-	watch: {
-		icon: function(to, from) {
-			if (to !== from) {
-				this.getIconPath();
-			}
-		},
-	},
-	created() {
-		this.getIconPath();
-	},
-	methods: {
-		getIconPath() {
-			let importPromise;
+		svgFile() {
+			let icon;
 			if (this.source === "custom") {
 				// src: @assets/icons
-				importPromise = import(`@assets/icons/${this.icon}.svg`);
+				icon = require(`!!html-loader!@assets/icons/${this.icon}.svg`);
 			}
 			if (this.source === "material") {
 				// src: https://material.io/tools/icons/?style=baseline
-				importPromise = import(
-					`material-icons-svg/icons/baseline-${this.icon}-24px.svg`
-				);
+				icon = require(`!!html-loader!material-icons-svg/icons/baseline-${
+					this.icon
+				}-24px.svg`);
 			}
-			if (importPromise) {
-				return importPromise.then((iconPath) => {
-					this.svgPath = iconPath.default;
-					return iconPath.default;
-				});
-			}
+			return icon;
 		},
 	},
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .icon {
 	display: inline-block;
 	width: 1em;
@@ -75,5 +47,9 @@ export default {
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
+	svg {
+		max-width: 100%;
+		max-height: 100%;
+	}
 }
 </style>

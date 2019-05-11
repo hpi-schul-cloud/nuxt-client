@@ -5,7 +5,7 @@ import { text, select } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/misc.md";
 import PulsatingDot from "@components/PulsatingDot";
 import ProfilePicture from "@components/ProfilePicture";
-import ExampleImage from "@assets/avatarExample.svg";
+// import ExampleImage from "@assets/avatarExample.svg";
 import MenuLink from "@components/MenuLink";
 import DropdownMenu from "@components/DropdownMenu";
 import BaseButton from "@components/ui/BaseButton";
@@ -21,7 +21,7 @@ storiesOf("Misc", module)
 	}))
 	.add("Profile Pic", () => ({
 		components: { ProfilePicture },
-		data: () => ({ imgsrc: ExampleImage }),
+		data: () => ({ imgsrc: "" }), // ExampleImage
 		template: `<div><ProfilePicture :image="imgsrc" size="small"/><ProfilePicture :image="imgsrc" size="medium"/><ProfilePicture :image="imgsrc" size="large"/></div>`,
 	}))
 	.add("DropdownMenu", () => ({

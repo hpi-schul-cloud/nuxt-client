@@ -97,9 +97,8 @@ module.exports = {
 		 */
 		extend(config, ctx) {
 			config.resolve.alias = require("./aliases.config").webpack;
-			/*
-			// this is breaking normal svg image loading
-			// https://www.npmjs.com/package/vue-svg-loader
+
+			// https://www.npmjs.com/package/svg-inline-loader
 			const svgRule = config.module.rules.find((rule) =>
 				rule.test.test(".svg")
 			);
@@ -108,9 +107,9 @@ module.exports = {
 
 			config.module.rules.push({
 				test: /\.svg$/,
-				loader: "vue-svg-loader",
+				loader: "svg-inline-loader",
 			});
-			*/
+
 			// Run ESLint on save
 			if (ctx.isDev && ctx.isClient) {
 				config.module.rules.push({
