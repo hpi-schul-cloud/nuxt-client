@@ -53,7 +53,7 @@ export default {
 			},
 		}),
 		searchResults() {
-			const { $store, getContent, pagination } = this;
+			const { getContent, pagination } = this;
 
 			if (pagination) {
 				return pagination.ids.map((id) => getContent(id));
@@ -99,7 +99,7 @@ export default {
 		this.find(this.searchQuery);
 	},
 	methods: {
-		async find(searchString) {
+		async find() {
 			await this.$store.dispatch("content_search/find", {
 				query: this.query,
 				qid: "content_list",

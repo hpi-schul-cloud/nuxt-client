@@ -52,7 +52,7 @@ describe("@components/CardFooter", () => {
 		expect(wrapper.isEmpty()).toBe(true);
 	});
 	it("Check when footer has no data it's empty", () => {
-		const wrapper = shallowMount(CardFooter, {
+		shallowMount(CardFooter, {
 			propsData: {},
 		});
 	});

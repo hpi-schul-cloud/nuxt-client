@@ -30,17 +30,17 @@ import { mountBaseComponents } from "@basecomponents/_globals";
 const baseComponentDir = path.join(__dirname, "../../src/components/ui/");
 
 function readDirRecursiveSync(dir) {
-	let results = [];
+	const results = [];
 	const list = fs.readdirSync(dir);
 	list.forEach((file) => {
-		file = path.join(dir, file);
-		const stat = fs.statSync(file);
+		const filepath = path.join(dir, file);
+		const stat = fs.statSync(filepath);
 		if (stat && stat.isDirectory()) {
 			/* Recurse into a subdirectory */
-			results.push(...readDirRecursiveSync(file));
+			results.push(...readDirRecursiveSync(filepath));
 		} else {
 			/* Is a file */
-			results.push(file);
+			results.push(filepath);
 		}
 	});
 	return results;
@@ -104,7 +104,11 @@ global.shallowMountView = (Component, options = {}) => {
 };
 */
 // A helper for creating Vue component mocks
-global.createComponentMocks = ({ store, router, style, mocks, stubs }) => {
+global.createComponentMocks = ({
+	/*store,*/ router,
+	/*style,*/ mocks,
+	stubs,
+}) => {
 	// Use a local version of Vue, to avoid polluting the global
 	// Vue and thereby affecting other tests.
 	// https://vue-test-utils.vuejs.org/api/#createlocalvue

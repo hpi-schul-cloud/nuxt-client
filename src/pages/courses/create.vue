@@ -47,12 +47,14 @@ export default {
 				},
 			})).data[0];
 
+			// TODO @domi studentsRole is unused, can we remove it?
+			/*
 			const studentsRole = (await store.dispatch("roles/find", {
 				query: {
 					name: "student",
 				},
 			})).data[0];
-
+		*/
 			const queryTeachers = {
 				roles: [teacherRole._id],
 			};
@@ -60,9 +62,12 @@ export default {
 				query: queryTeachers,
 			})).data;
 
+			// TODO @domi queryStudents is unused, can we remove it?
+			/*
 			const queryStudents = {
 				roles: [studentsRole._id],
 			};
+			*/
 			const students = (await store.dispatch("users/find", {
 				query: {}, // queryStudents,
 			})).data;
@@ -82,8 +87,8 @@ export default {
 		});
 	},
 	methods: {
-		async create(id) {
-			const course = this.course;
+		async create() {
+			const { course } = this;
 
 			course.times = this.course.times.map((time) => {
 				time.startTime = moment

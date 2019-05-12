@@ -18,7 +18,7 @@ describe("@components/BaseBreadcrumb", () => {
 			const linkElement = link.to
 				? element.querySelector(`[to="${link.to}"]`)
 				: element.querySelector(`[href="${link.href}"]`);
-			expect(element.textContent).toContain(link.text);
+			expect(linkElement.textContent).toContain(link.text);
 		});
 	});
 

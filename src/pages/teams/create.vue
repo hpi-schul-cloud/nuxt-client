@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 
 export default {
 	data() {
@@ -41,7 +41,7 @@ export default {
 		}),
 	},
 	methods: {
-		async create(id) {
+		async create() {
 			try {
 				const team = await this.$store.dispatch("teams/create", {
 					schoolId: this.user.schoolId,

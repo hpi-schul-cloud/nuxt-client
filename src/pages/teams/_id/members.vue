@@ -1,4 +1,5 @@
 <!-- eslint-disable max-lines -->
+<!-- TODO -->
 <template>
 	<div v-if="team">
 		<section class="section">
@@ -313,7 +314,6 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Vue from "vue";
 var moment = require("moment");
 
 const roleTranslations = {
@@ -568,23 +568,23 @@ export default {
 			this.classes = classes;
 		},
 		async addTeamMembers() {
-			let newMembers = this.membersSelected.map((m) => {
+			const newMembers = this.membersSelected.map((m) => {
 				return {
 					userId: m._id,
 				};
 			});
 
-			let currentMembers = this.team.userIds.map((u) => {
+			const currentMembers = this.team.userIds.map((u) => {
 				u.role = u.role._id;
 				u.userId = u.userId._id;
 				return u;
 			});
 
-			let userIds = newMembers.concat(currentMembers);
+			const userIds = newMembers.concat(currentMembers);
 
-			let newClasses = this.classesSelected.map((c) => c._id);
-			let currentClasses = this.team.classIds.map((c) => c._id);
-			let classIds = newClasses.concat(currentClasses);
+			const newClasses = this.classesSelected.map((c) => c._id);
+			const currentClasses = this.team.classIds.map((c) => c._id);
+			const classIds = newClasses.concat(currentClasses);
 
 			await this.$store.dispatch("teams/patch", [
 				this.team._id,
