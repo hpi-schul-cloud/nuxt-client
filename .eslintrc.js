@@ -14,12 +14,11 @@ module.exports = {
 		"prettier/vue",
 	],
 	rules: {
-		// Only allow debugger in development
+		// Only allow `console.log` & debugger in development
 		"no-debugger":
 			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
 				? "error"
 				: "off",
-		// Only allow `console.log` in development
 		"no-console":
 			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
 				? [
@@ -29,10 +28,26 @@ module.exports = {
 						},
 				  ]
 				: "off",
-
+		// reduce complexity of each file by limiting the file length
 		"max-lines": [
 			"error",
 			{ max: 250, skipBlankLines: true, skipComments: true },
+		],
+		// Config from existing client & server
+		"no-underscore-dangle": ["error", { allow: ["_id", "_v", "__v"] }],
+		"no-shadow": ["error", { allow: ["err"] }],
+		"prefer-destructuring": ["error", { object: true, array: false }],
+		"no-param-reassign": ["error", { props: false }],
+		"no-unused-vars": [
+			"error",
+			{ args: "after-used", argsIgnorePattern: "ctx|to|from" },
+		],
+		"prefer-const": [
+			"error",
+			{
+				destructuring: "any",
+				ignoreReadBeforeAssign: false,
+			},
 		],
 		// vue specific stuff
 		"vue/component-name-in-template-casing": ["error", "kebab-case"],
