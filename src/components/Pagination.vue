@@ -89,7 +89,7 @@ export default {
 .pagination-link {
 	display: inline-block;
 	padding: var(--space-sm);
-	background-color: var(--grey-1);
+	background-color: var(--color-gray-light);
 	&:not(.current) {
 		cursor: pointer;
 	}

@@ -2,7 +2,10 @@
 	<transition name="modal">
 		<div v-if="active" class="modal-mask">
 			<div class="modal-wrapper" @click.self="handleBackgroundClick">
-				<div class="modal-container">
+				<div
+					class="modal-container"
+					:class="{ 'modal-container--large': size === 'large' }"
+				>
 					<slot />
 				</div>
 			</div>
@@ -15,6 +18,19 @@ export default {
 	props: {
 		active: {
 			type: Boolean,
+		},
+		size: {
+			type: String,
+			default: "medium",
+		},
+	},
+	watch: {
+		active() {
+			if (this.active) {
+				document.body.classList.add("is-noscroll");
+			} else {
+				document.body.classList.remove("is-noscroll");
+			}
 		},
 	},
 	methods: {
@@ -49,12 +65,18 @@ export default {
 }
 
 .modal-container {
-	width: 300px;
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+	max-height: calc(100vh - 40px);
 	margin: 0 auto;
 	background-color: var(--color-white);
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-sm);
 	transition: all var(--duration-transition-medium) ease;
+	&--large {
+		min-height: 80%;
+	}
 }
 
 .modal-header {
@@ -75,7 +97,10 @@ export default {
 }
 
 .modal-body {
+	flex-grow: 1;
+	flex-shrink: 1;
 	padding: var(--space-md);
+	overflow: auto;
 }
 
 .modal-footer {

@@ -50,9 +50,9 @@ import { mapMutations, mapActions } from "vuex";
 export default {
 	data() {
 		return {
-			email: undefined,
-			password: undefined,
-			error: undefined,
+			email: "",
+			password: "",
+			error: "",
 		};
 	},
 	methods: {

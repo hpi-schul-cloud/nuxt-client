@@ -19,7 +19,7 @@ export default {};
 	display: flex;
 	align-items: center;
 	padding: var(--space-xs) var(--space-sm);
-	color: var(--grey-3);
+	color: var(--color-gray);
 	text-transform: uppercase;
 	cursor: pointer;
 	border: 1px solid var(--color-gray);
@@ -29,10 +29,20 @@ export default {};
 	&:focus {
 		filter: brightness(0.7);
 	}
+
+	// Tablet size
+	@media screen and (max-width: $size-tablet-max-width) {
+		font-size: $size-button-medium-tablet;
+	}
+
+	// Mobile size
+	@media screen and (max-width: $size-mobile-max-width) {
+		font-size: $size-button-medium-mobile;
+	}
 }
 
 .is-light {
-	color: var(--grey-3);
+	color: var(--color-gray);
 	background-color: transparent;
 	border-width: 1px;
 }

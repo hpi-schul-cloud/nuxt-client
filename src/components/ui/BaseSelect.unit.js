@@ -10,8 +10,31 @@ describe("@components/BaseSelect", () => {
 				"multi-select": true,
 			},
 			propsData: {
-				value: [2, 3],
-				options: [{ label: "t", value: "e" }],
+				value: [
+					{
+						name: "Donald",
+						id: "donald",
+					},
+					{
+						name: "Kim",
+						id: "kim",
+					},
+				],
+				options: [
+					{
+						name: "Donald",
+						id: "donald",
+					},
+					{
+						name: "Kim",
+						id: "kim",
+					},
+					{
+						name: "Gerhard",
+						id: "gerhard",
+					},
+				],
+				optionLabel: "name",
 				label: testLabel,
 			},
 		});

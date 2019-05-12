@@ -1,5 +1,5 @@
 /node_modules/**
-/schulcloud-client/**
+/src/legacy-client/**
 dist
 .nuxt
 docs/storybook/**/*.md

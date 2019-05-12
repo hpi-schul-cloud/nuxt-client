@@ -1,11 +1,5 @@
 <template>
-	<base-input-default
-		v-bind="$attrs"
-		:type="false"
-		vmodel=""
-		class="calendar-input"
-		:label="label"
-	>
+	<base-input-default v-bind="$attrs" :type="false" vmodel="" :label="label">
 		<multi-select
 			v-bind="$attrs"
 			:value="populatedValue"
@@ -13,9 +7,8 @@
 			:multiple="multiple"
 			track-by="value"
 			class="input"
-			label="label"
-			@input="updatevmodel"
-		></multi-select>
+			:label="optionLabel"
+		/>
 	</base-input-default>
 </template>
 
@@ -53,6 +46,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		optionLabel: {
+			type: String,
+			default: "",
+		},
 	},
 	computed: {
 		populatedValue() {
@@ -77,6 +74,7 @@ export default {
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style lang="scss" scoped>
+@import "@styles";
 .input /deep/ .multiselect__tags {
 	border: 0;
 	border-radius: var(--radius-md);
