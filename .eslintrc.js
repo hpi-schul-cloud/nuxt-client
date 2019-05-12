@@ -35,7 +35,7 @@ module.exports = {
 		],
 		// Config from existing client & server
 		"no-underscore-dangle": ["error", { allow: ["_id", "_v", "__v"] }],
-		"no-shadow": ["error", { allow: ["err", "Vue"] }],
+		"no-shadow": ["error", { allow: ["err", "error", "Vue"] }],
 		"prefer-destructuring": ["error", { object: true, array: false }],
 		"no-param-reassign": ["error", { props: false }],
 		"no-unused-vars": [
