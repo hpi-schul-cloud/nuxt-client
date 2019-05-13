@@ -12890,11 +12890,6 @@ osenv@0, osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-outdent@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/outdent/-/outdent-0.7.0.tgz#cfd1f1956305141e0cf3e898ada6547373c1997a"
-  integrity sha512-Ue462G+UIFoyQmOzapGIKWS3d/9NHeD/018WGEDZIhN2/VaQpVXbofMcZX0socv1fw4/tmEn7Vd3McOdPZfKzQ==
-
 p-cancelable@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-0.3.0.tgz#b9e123800bcebb7ac13a479be195b507b98d30fa"
@@ -16593,7 +16588,7 @@ stealthy-require@^1.1.1:
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
 
-storybook-addon-vue-info@^1.0.0:
+storybook-addon-vue-info@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/storybook-addon-vue-info/-/storybook-addon-vue-info-1.2.0.tgz#3eef6a9d5e09a7a077c0c94fed65e2cf132fcf6b"
   integrity sha512-ioAsqPxUToC2xws40I1mE7a15S8EpJXlf6tdTbvUBNB/QXIaDXR/NFnCwx5MO/P2FwmYRUDeHWxOCA3yDPOTRw==
