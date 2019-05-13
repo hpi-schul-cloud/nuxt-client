@@ -40,7 +40,7 @@ export default {
 			type: Array,
 			required: true,
 			validator: (options) =>
-				options.every((option) => option.label && option.value),
+				options.every((option) => option.value !== undefined),
 		},
 		label: {
 			type: String,

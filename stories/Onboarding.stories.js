@@ -1,7 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope, react/no-this-in-sfc */
 
 import { storiesOf } from "@storybook/vue";
-import outdent from "outdent";
 import { text, number } from "@storybook/addon-knobs";
 
 import LandingCTA from "@components/LandingCTA";
@@ -41,7 +40,7 @@ storiesOf("Wizard", module).add("StepProgress", () => ({
 		progressSteps: steps,
 		currentStep: number("currentStep", 0),
 	}),
-	template: outdent`
+	template: `
 		<div>
 			<StepProgress :steps="progressSteps" :currentStep="currentStep"/>
 		</div>`,

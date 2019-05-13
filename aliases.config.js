@@ -4,8 +4,8 @@ const prettier = require("prettier");
 const themeName = process.env.SC_THEME || "default";
 
 const aliases = {
-	"~": ".",
 	"@": "src",
+	"@@": ".",
 	"@assets": "src/assets",
 	"@components": "src/components",
 	"@basecomponents": "src/components/ui",

@@ -36,7 +36,7 @@ Branches werden nach folgendem Schema benannt: `${TICKETID}-${Kurzbeschreibung}`
 - UI Reviews schon während der Entwicklung anstoßen (z. B. mit dem jeweiligen Designer)
 - Tests schreiben
 - Komponenten reusable gestalten
-- [Richtlinien zur Accessability eingehalten](../Accessability.md)
+- [Richtlinien zur Accessibility einhalten](../Accessibility.md)
 
 ## Pull Requests
 
