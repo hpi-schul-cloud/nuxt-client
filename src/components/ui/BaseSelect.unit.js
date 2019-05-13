@@ -20,15 +20,15 @@ describe("@components/BaseSelect", () => {
 				options: [
 					{
 						name: "Donald",
-						id: "donald",
+						value: "donald",
 					},
 					{
 						name: "Kim",
-						id: "kim",
+						value: "kim",
 					},
 					{
 						name: "Gerhard",
-						id: "gerhard",
+						value: "gerhard",
 					},
 				],
 				optionLabel: "name",
