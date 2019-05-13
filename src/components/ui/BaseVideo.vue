@@ -1,25 +1,59 @@
 <template>
-	<video-player :configuration="configurationString"></video-player>
+	<video v-bind="attributes" :preload="preload" v-on="$listeners">
+		<source
+			v-for="source in sources"
+			:key="source.type"
+			:src="source.src"
+			:type="source.type"
+		/>
+		<track
+			v-for="track in tracks"
+			:key="track.type"
+			:src="track.src"
+			:kind="track.kind"
+			:srclang="track.srclang"
+			:label="track.label"
+		/>
+		Your browser does not support the video tag. Please Update.
+	</video>
 </template>
 
 <script>
-import "./video-player-helper";
-import "video-player";
-
 export default {
 	props: {
-		/**
-		 * Documentation: https://github.com/openHPI/video-player/blob/master/docs/configuration.md
-		 */
-		configuration: {
-			type: Object,
+		sources: {
+			type: Array,
 			required: true,
+			validator: (sources) =>
+				sources.length && sources.every((source) => source.src && source.type),
+		},
+		tracks: {
+			type: Array,
+			default: () => [],
+			validator: (tracks) =>
+				tracks.every(
+					(track) => track.src && track.kind && track.srclang && track.label
+				),
+		},
+		preload: {
+			type: String,
+			default: "metadata",
+		},
+		noControls: {
+			type: Boolean,
 		},
 	},
 	computed: {
-		configurationString() {
-			return JSON.stringify(this.configuration);
+		attributes() {
+			return this.noControls ? this.$attrs : { controls: true, ...this.$attrs };
 		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+video {
+	width: 100%;
+	max-width: var(--size-content-width-max);
+}
+</style>
