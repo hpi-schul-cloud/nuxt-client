@@ -32,9 +32,9 @@ module.exports = ({ config }) => {
 			},
 		},
 	];
-	const alias = require("../../aliases.config").webpack;
-
 	config.module.rules.push(...rules);
+
+	const alias = require("../../aliases.config").webpack;
 	Object.assign(config.resolve.alias, alias);
 
 	return config;
