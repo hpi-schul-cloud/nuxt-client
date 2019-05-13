@@ -96,7 +96,8 @@ module.exports = {
 		 ** You can extend webpack config here
 		 */
 		extend(config, ctx) {
-			config.resolve.alias = require("./aliases.config").webpack;
+			Object.assign(config.resolve.alias, require("./aliases.config").webpack);
+
 			/*
 			// this is breaking normal svg image loading
 			// https://www.npmjs.com/package/vue-svg-loader
