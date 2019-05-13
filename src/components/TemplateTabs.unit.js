@@ -1,11 +1,10 @@
 import { mount } from "@vue/test-utils";
 import TemplateTabs from "./TemplateTabs";
 import TemplateTab from "./TemplateTab";
-import { outdent } from "~/node_modules/outdent/lib/index";
 
 const tabs = {
 	components: { TemplateTabs, TemplateTab },
-	template: outdent`
+	template: `
 		<TemplateTabs>
 			<TemplateTab name="Tab 1" :selected=true>Test</TemplateTab>
 			<TemplateTab name="Tab 2">Test2</TemplateTab>
