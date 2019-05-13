@@ -1,5 +1,4 @@
 import { storiesOf } from "@storybook/vue";
-import outdent from "outdent";
 import { text, number, color } from "@storybook/addon-knobs";
 
 import CourseCard from "@components/CourseCard";
@@ -13,7 +12,7 @@ storiesOf("CourseCard", module)
 	})
 	.add("CourseCard", () => ({
 		components: { CourseCard },
-		template: outdent`<CourseCard :course="course" />`,
+		template: `<CourseCard :course="course" />`,
 		data: () => ({
 			course: {
 				...defaultCourse,
@@ -42,5 +41,5 @@ storiesOf("CourseCard", module)
 	}))
 	.add("CourseCard Empty", () => ({
 		components: { CourseCard },
-		template: outdent`<CourseCard />`,
+		template: `<CourseCard />`,
 	}));
