@@ -51,7 +51,8 @@ export default {
 		options: {
 			type: Array,
 			required: true,
-			validator: (options) => options.every((option) => option.value),
+			validator: (options) =>
+				options.every((option) => option.value !== undefined),
 		},
 		label: {
 			type: String,
