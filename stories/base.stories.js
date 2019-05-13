@@ -3,7 +3,7 @@
 import { storiesOf } from "@storybook/vue";
 import outdent from "outdent";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select } from "@storybook/addon-knobs";
+import { text, select, boolean } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
@@ -275,18 +275,28 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Video", () => ({
 		components: { BaseVideo },
-		template: outdent`
+		data: () => ({
+			poster: text(
+				"poster",
+				"https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg"
+			),
+			source: text(
+				"source",
+				"https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4"
+			),
+			noControls: boolean("noControls", false),
+		}),
+		template: `
 			<base-video
-				:configuration="{
-					streams: [{
-						hd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4',
-						sd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/sd/video.mp4',
-						poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
-						hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
-					}],
-					initialState: {playState: 'PAUSED'},
-					videoPreload: false
-				}"
+				style="max-width: 400px"
+				:noControls="noControls"
+				:poster="poster"
+				:sources="[
+					{
+						src: source,
+						type: 'video/mp4',
+					}
+				]"
 			/>`,
 	}))
 	.add("BaseBlockquote", () => ({
