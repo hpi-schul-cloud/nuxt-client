@@ -6,6 +6,7 @@ pull_request_rules:
       - label~=ready to merge
       - status-success=Travis CI - Branch
       - status-success=Mergeable
+      - status-success=codecov/project
     actions:
       merge:
         method: merge
@@ -32,6 +33,7 @@ pull_request_rules:
     conditions:
       - "#approved-reviews-by=0"
       - label~=ready to merge
+      - -merged
     actions:
       comment:
         message: The "ready to merge" label can only be set after one pull request approval
