@@ -2,6 +2,16 @@
 
 [[toc]]
 
+::: tip Usage of variables
+
+```css
+p {
+	color: var(--color-black);
+}
+```
+
+[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) :::
+
 ## Colors
 
 <<< @/src/themes/default/styles/variables/\_colors.scss
@@ -11,6 +21,8 @@
 <<< @/src/themes/default/styles/variables/\_durations.scss
 
 ## Layers
+
+used for `z-index`.
 
 <<< @/src/themes/default/styles/variables/\_layers.scss
 

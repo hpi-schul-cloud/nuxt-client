@@ -19,6 +19,16 @@ form legend {
 	color: var(--color-black);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-accent);
+	font-weight: bold;
+}
+
 /* text size */
 .text--xxxl {
 	font-size: var(--text-xxxl);

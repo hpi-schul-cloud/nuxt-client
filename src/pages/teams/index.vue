@@ -128,8 +128,8 @@ export default {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
-	min-width: $size-content-width-min;
-	max-width: $size-content-width-max;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
 	margin: 0 auto;
 }
 
@@ -145,6 +145,6 @@ export default {
 	margin: var(--space-md);
 	cursor: pointer;
 	border-radius: var(--radius-sm);
-	box-shadow: $shadow-1;
+	box-shadow: var(--shadow-sm);
 }
 </style>

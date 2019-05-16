@@ -29,16 +29,6 @@ export default {};
 	&:focus {
 		filter: brightness(0.7);
 	}
-
-	// Tablet size
-	@media screen and (max-width: $size-tablet-max-width) {
-		font-size: $size-button-medium-tablet;
-	}
-
-	// Mobile size
-	@media screen and (max-width: $size-mobile-max-width) {
-		font-size: $size-button-medium-mobile;
-	}
 }
 
 .is-light {
