@@ -9,9 +9,7 @@
 </template>
 
 <script>
-export default {
-	name: "BaseButton",
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -21,21 +19,37 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: $size-padding;
+	font-size: $size-button-medium-desktop;
 	color: $color-body-bg;
+	// color: $color-button-light; // Passt color-body-bg als button color?
 	text-transform: uppercase;
 	cursor: pointer;
+	background-color: #999;
 	border: $size-border-width solid;
 	border-radius: $size-border-radius;
 	transition: background-color $duration-animation-base ease;
+
 	&:hover,
 	&:focus {
+		color: #fff;
 		background-color: transparentize($color-text, 0.1);
+		outline: 0;
 	}
 	.is-light {
 		color: $color-button-light;
 		background-color: $color-button-light-bg;
 		border-color: $color-button-light-border;
 		border-width: 1px;
+	}
+
+	// Tablet size
+	@media screen and (max-width: $size-tablet-max-width) {
+		font-size: $size-button-medium-tablet;
+	}
+
+	// Mobile size
+	@media screen and (max-width: $size-mobile-max-width) {
+		font-size: $size-button-medium-mobile;
 	}
 }
 

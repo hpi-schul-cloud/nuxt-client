@@ -1,12 +1,11 @@
 <template>
 	<transition name="modal">
 		<div v-if="active" class="modal-mask">
-			<div
-				class="modal-wrapper"
-				@mousedown.self="handleBackgroundClick"
-				@touchstart.self="handleBackgroundClick"
-			>
-				<div class="modal-container">
+			<div class="modal-wrapper" @click.self="handleBackgroundClick">
+				<div
+					class="modal-container"
+					:class="{ 'modal-container--large': size === 'large' }"
+				>
 					<slot />
 				</div>
 			</div>
@@ -20,6 +19,19 @@ export default {
 		active: {
 			type: Boolean,
 		},
+		size: {
+			type: String,
+			default: "medium",
+		},
+	},
+	watch: {
+		active() {
+			if (this.active) {
+				document.body.classList.add("is-noscroll");
+			} else {
+				document.body.classList.remove("is-noscroll");
+			}
+		},
 	},
 	methods: {
 		handleBackgroundClick() {
@@ -27,21 +39,14 @@ export default {
 		},
 		close() {
 			this.$emit("update:active", false);
-
-			setTimeout(() => {
-				this.$destroy();
-				if (typeof this.$el.remove !== "undefined") {
-					this.$el.remove();
-				} else if (typeof el.parentNode !== "undefined") {
-					this.$el.parentNode.removeChild(el);
-				}
-			}, 150);
 		},
 	},
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "@variables";
+
 .modal-mask {
 	position: fixed;
 	top: 0;
@@ -60,11 +65,18 @@ export default {
 }
 
 .modal-container {
-	width: 300px;
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+	max-height: calc(100vh - 40px);
 	margin: 0 auto;
+	overflow: hidden;
 	border-radius: 2px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 	transition: all $duration-animation-medium ease;
+	&--large {
+		min-height: 80%;
+	}
 }
 
 .modal-header {
@@ -86,7 +98,10 @@ export default {
 }
 
 .modal-body {
+	flex-grow: 1;
+	flex-shrink: 1;
 	padding: 20px;
+	overflow: auto;
 	background-color: #fff;
 }
 
