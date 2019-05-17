@@ -65,10 +65,9 @@ export default {
 	},
 	created() {
 		if (!componentDictionary[this.type]) {
-			throw new Error(
-				`invalid prop type ${this.type}: \n$attrs ${JSON.stringify(
-					this.$attrs
-				)}`
+			console.error(
+				`invalid prop type ${this.type}:\n`,
+				`$attrs ${JSON.stringify(this.$attrs)}`
 			);
 		}
 	},

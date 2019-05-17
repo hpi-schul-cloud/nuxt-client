@@ -193,6 +193,13 @@ global.createModuleStore = (vuexModule, options = {}) => {
 */
 
 // ===
+// Let tests fail on console.error
+// ===
+console.error = jest.fn((error) => {
+	throw `💔 ${error}`;
+});
+
+// ===
 // Common tests
 // ===
 for (name in commonTest) {

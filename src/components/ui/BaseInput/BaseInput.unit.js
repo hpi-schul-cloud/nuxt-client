@@ -40,7 +40,6 @@ describe("@components/BaseInput", () => {
 	});
 
 	it("throws an error on unsupported types", () => {
-		console.error = jest.fn(() => {}); // don't show error messages in test log
 		try {
 			const wrapper = mount({
 				data: () => ({ value: "" }),
