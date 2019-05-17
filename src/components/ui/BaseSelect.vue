@@ -14,13 +14,12 @@
 			{{ label }}
 		</span>
 		<multi-select
+			v-model="vmodelProxy"
 			v-bind="$attrs"
-			:value="populatedValue"
 			:options="options"
 			:multiple="multiple"
 			track-by="value"
 			:label="optionLabel"
-			@input="updatevmodel"
 		></multi-select>
 	</div>
 </template>
@@ -72,13 +71,16 @@ export default {
 							JSON.stringify(this.value) == JSON.stringify(option.value)
 				  );
 		},
-	},
-	methods: {
-		updatevmodel(event) {
-			const newModel = this.multiple
-				? event.map((selection) => selection.value)
-				: event.value;
-			this.$emit("update:vmodel", newModel);
+		vmodelProxy: {
+			get() {
+				return this.populatedValue;
+			},
+			set() {
+				const newModel = this.multiple
+					? event.map((selection) => selection.value)
+					: event.value;
+				this.$emit("update:vmodel", newModel);
+			},
 		},
 	},
 };
