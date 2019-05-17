@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";

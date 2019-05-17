@@ -91,6 +91,15 @@ module.exports = {
 	},
 	overrides: [
 		{
+			files: ["**/*.stories.js"],
+			rules: {
+				"max-lines": [
+					"warn",
+					{ max: 500, skipBlankLines: true, skipComments: true },
+				],
+			},
+		},
+		{
 			files: ["**/*.unit.js"],
 			parserOptions: {
 				parser: "babel-eslint",
