@@ -314,7 +314,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import Vue from "vue";
-var moment = require("moment");
+import dayjs from "dayjs";
 
 const roleTranslations = {
 	teammember: "Teilnehmer",
@@ -397,7 +397,7 @@ export default {
 	computed: {
 		invitedMembers() {
 			return this.team.invitedUserIds.map((invite) => {
-				invite.createdAt = moment(invite.createdAt).format("DD.MM.YYYY");
+				invite.createdAt = dayjs(invite.createdAt).format("DD.MM.YYYY");
 				invite.roleName = roleTranslations[invite.role];
 				return invite;
 			});

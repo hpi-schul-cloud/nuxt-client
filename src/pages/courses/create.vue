@@ -16,7 +16,7 @@
 import { mapState, mapGetters } from "vuex";
 import CourseWizard from "@components/CourseWizard";
 
-var moment = require("moment");
+import dayjs from "dayjs";
 
 export default {
 	components: { CourseWizard },
@@ -28,7 +28,7 @@ export default {
 				{ name: "Abschließen" },
 			],
 			course: {},
-			moment: moment,
+			dayjs,
 		};
 	},
 	computed: {
@@ -86,7 +86,7 @@ export default {
 			const course = this.course;
 
 			course.times = this.course.times.map((time) => {
-				time.startTime = moment
+				time.startTime = dayjs
 					.duration(time.startTime, "HH:mm")
 					.asMilliseconds()
 					.toString();
