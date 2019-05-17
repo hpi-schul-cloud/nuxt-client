@@ -18,6 +18,10 @@
 
 <script>
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export default {
 	props: {
