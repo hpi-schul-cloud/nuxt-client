@@ -14,7 +14,7 @@
 			{{ label }}
 		</span>
 		<multi-select
-			v-model="vmodelProxy"
+			v-model="vmodel"
 			v-bind="$attrs"
 			:options="options"
 			:multiple="multiple"
@@ -63,22 +63,19 @@ export default {
 		},
 	},
 	computed: {
-		populatedValue() {
-			return this.multiple
-				? this.options.filter((option) => this.value.includes(option.value))
-				: this.options.find(
-						(option) =>
-							JSON.stringify(this.value) == JSON.stringify(option.value)
-				  );
-		},
-		vmodelProxy: {
+		vmodel: {
 			get() {
-				return this.populatedValue;
+				return this.multiple
+					? this.options.filter((option) => this.value.includes(option.value))
+					: this.options.find(
+							(option) =>
+								JSON.stringify(this.value) == JSON.stringify(option.value)
+					  );
 			},
-			set() {
+			set(to) {
 				const newModel = this.multiple
-					? event.map((selection) => selection.value)
-					: event.value;
+					? to.map((selection) => selection.value)
+					: to.value;
 				this.$emit("update:vmodel", newModel);
 			},
 		},
