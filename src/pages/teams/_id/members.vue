@@ -313,7 +313,6 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Vue from "vue";
 import dayjs from "dayjs";
 
 const roleTranslations = {
