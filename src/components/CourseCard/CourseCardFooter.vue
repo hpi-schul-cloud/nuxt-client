@@ -5,11 +5,15 @@
 
 			<div class="alert-label">{{ course.alert }}</div>
 		</div>
-		<div v-else-if="course.nextCourseTime" class="next-course truncate">
-			<div class="next-course-icon">
-				<base-icon source="custom" icon="clock" />
-			</div>
-			{{ course.nextCourseTime }} | {{ course.nextCourseRoom }}
+		<div v-else class="next-course">
+			<template v-if="course.nextCourseTime">
+				<div class="next-course-icon">
+					<base-icon source="custom" icon="clock" />
+				</div>
+				<span class="truncate">
+					{{ course.nextCourseTime }} | {{ course.nextCourseRoom }}
+				</span>
+			</template>
 		</div>
 	</div>
 </template>
@@ -42,6 +46,7 @@ export default {
 .next-course {
 	display: flex;
 	align-items: center;
+	min-height: calc(1em + 2 * var(--space-xxs));
 	.next-course-icon {
 		display: inline-flex;
 		align-items: center;

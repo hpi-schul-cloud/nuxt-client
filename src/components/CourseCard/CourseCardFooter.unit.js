@@ -46,11 +46,6 @@ describe("@components/CourseCardFooter", () => {
 			},
 		});
 		expect(wrapper.classes("footer")).toBe(true);
-		expect(wrapper.isEmpty()).toBe(true);
-	});
-	it("Check when footer has no data it's empty", () => {
-		const wrapper = shallowMount(CourseCardFooter, {
-			propsData: {},
-		});
+		expect(wrapper.element.textContent).toBe("");
 	});
 });

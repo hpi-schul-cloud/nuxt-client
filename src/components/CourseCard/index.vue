@@ -1,18 +1,13 @@
 <template>
 	<div class="course-card">
-		<div
-			v-if="course.notification !== 0 && course.notification !== null"
-			class="caption notification-dot"
-			>{{ course.notification }}</div
-		>
+		<div v-if="course.notification" class="caption notification-dot">{{
+			course.notification
+		}}</div>
 		<div class="header">
 			<div class="tab" :style="background_style">
 				<div class="caption tab-label truncate">{{ course.teacherName }}</div>
 			</div>
-			<div
-				v-if="course.newAssignments !== 0 && course.notification !== null"
-				class="assignments-label"
-			>
+			<div v-if="course.newAssignments" class="assignments-label">
 				{{ course.newAssignments }}
 				<base-icon source="custom" icon="tasks" />
 			</div>
@@ -76,6 +71,7 @@ export default {
 	position: relative;
 	width: 240px;
 	padding: var(--space-xs);
+	padding-bottom: 0;
 	margin: var(--space-sm);
 	cursor: pointer;
 	border-radius: var(--radius-md);
@@ -103,7 +99,7 @@ export default {
 .tab {
 	position: absolute;
 	z-index: var(--layer-behind);
-	width: 125px;
+	width: 80%;
 	height: 100%;
 	border-top-right-radius: var(--radius-sm);
 	transform: skewX(25deg);
@@ -117,6 +113,7 @@ export default {
 		height: 100%;
 		content: "";
 		background: var(--color-overlay);
+		border-top-right-radius: var(--radius-sm);
 	}
 
 	.tab-label {
@@ -176,9 +173,10 @@ export default {
 
 .abrivation-label {
 	margin: 0;
-	font-family: var(--font-accent);
+	font-family: var(--font-primary);
 	font-size: var(--text-xxxl);
 	color: var(--color-white);
+	text-transform: uppercase;
 }
 
 .course-name-label {
