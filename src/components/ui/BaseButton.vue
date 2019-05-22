@@ -29,7 +29,7 @@ export default {};
 	white-space: nowrap;
 	cursor: pointer;
 	border: 1px solid var(--color-gray);
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-sm);
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 	&:hover,
