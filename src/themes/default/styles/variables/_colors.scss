@@ -1,22 +1,22 @@
 :root {
 	/* main colors */
-	--color-primary: #b10438;
+	--color-primary: #b1063a;
 	--color-primary-light: color-mod(var(--color-primary) tint(15%));
-	--color-primary-dark: color-mod(var(--color-primary) shade(15%));
-	--color-accent: #f8a41b;
+	--color-primary-dark: color-mod(var(--color-primary) shade(20%));
+	--color-accent: #e98404;
 	--color-accent-light: color-mod(var(--color-accent) tint(15%));
-	--color-accent-dark: color-mod(var(--color-accent) shade(10%));
+	--color-accent-dark: color-mod(var(--color-accent) shade(20%));
 
 	// shades
 	--color-black: #1d1d21;
-	--color-gray-light: #eee;
+	--color-gray-light: #ddd;
 	--color-gray: #aaa;
 	--color-gray-dark: #444;
 	--color-white: white;
 	--color-overlay: rgba(0, 0, 0, 0.5);
 
 	/* feedback */
-	--color-success: #3aac5d;
-	--color-error: #f5414f;
+	--color-success: #13ba98;
+	--color-danger: #ff114f;
 	--color-warning: #ffd137;
 }

@@ -3,4 +3,3 @@ node_modules
 src/legacy-client
 dist
 .nuxt
-/**/styles/variables/**/*.scss

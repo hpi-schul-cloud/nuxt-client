@@ -23,6 +23,11 @@
 	/* line-height */
 	--heading-line-height: 1.2;
 	--body-line-height: 1.4;
+	--button-line-height: 1.25;
+
+	/* font-weight */
+	--button-font-weight: 700;
+	--button-font-large: 1.25rem;
 }
 
 @include breakpoint(md) {
