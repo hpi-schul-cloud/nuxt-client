@@ -10,7 +10,7 @@ $transition-base: 0.3s;
 	*,
 	*::before,
 	*::after {
-		animation-duration: 0.001s !important;
 		transition-duration: 0.001s !important;
+		animation-duration: 0.001s !important;
 	}
 }

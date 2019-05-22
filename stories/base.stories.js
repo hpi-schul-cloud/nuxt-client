@@ -36,8 +36,8 @@ storiesOf("Base Components", module)
 		template: `<div style="padding: 2rem;">
 				<base-button class ="is-primary is-small">{{ text }}</base-button>
 				<base-button class ="is-primary is-small is-outline">{{ text }}</base-button>
-				<base-button class ="is-primary is-medium">{{ text }}</base-button>
-				<base-button class ="is-primary is-medium is-outline">{{ text }}</base-button>
+				<base-button class ="is-primary">{{ text }}</base-button>
+				<base-button class ="is-primary is-outline">{{ text }}</base-button>
 				<base-button class ="is-primary is-large">{{ text }}</base-button>
 				<base-button class ="is-primary is-large is-outline">{{ text }}</base-button>
 				<base-button class ="is-hero-cta is-large">Hero C2A</base-button>
@@ -54,8 +54,8 @@ storiesOf("Base Components", module)
 		template: `<div style="padding: 2rem;">
 				<base-button class ="is-secondary is-small">{{ text }}</base-button>
 				<base-button class ="is-secondary is-small is-outline">{{ text }}</base-button>
-				<base-button class ="is-secondary is-medium">{{ text }}</base-button>
-				<base-button class ="is-secondary is-medium is-outline">{{ text }}</base-button>
+				<base-button class ="is-secondary">{{ text }}</base-button>
+				<base-button class ="is-secondary is-outline">{{ text }}</base-button>
 				<base-button class ="is-secondary is-large">{{ text }}</base-button>
 				<base-button class ="is-secondary is-large is-outline">{{ text }}</base-button>
 			</div>`,
@@ -70,7 +70,7 @@ storiesOf("Base Components", module)
 		},
 		template: `<div style="padding: 2rem;">
 				<base-button class="is-small">{{ text }}</base-button>
-				<base-button class ="is-medium">{{ text }}</base-button>
+				<base-button>{{ text }}</base-button>
 				<base-button class ="is-large">{{ text }}</base-button>
 			</div>`,
 		data: () => ({}),
@@ -83,9 +83,12 @@ storiesOf("Base Components", module)
 			},
 		},
 		template: `<div style="padding: 2rem;">
-				<base-button disabled class="is-small">{{ text }}</base-button>
-				<base-button disabled class ="is-medium">{{ text }}</base-button>
-				<base-button disabled class ="is-large">{{ text }}</base-button>
+				<base-button disabled class ="is-primary">{{ text }}</base-button>
+				<base-button disabled class ="is-secondary">{{ text }}</base-button>
+				<base-button disabled class ="is-secondary">{{ text }}</base-button>
+				<base-button disabled class ="is-success">{{ text }}</base-button>
+				<base-button disabled class ="is-danger">{{ text }}</base-button>
+				<base-button disabled>{{ text }}</base-button>
 			</div>`,
 		data: () => ({}),
 	}))

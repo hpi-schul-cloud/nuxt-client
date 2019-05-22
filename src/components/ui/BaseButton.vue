@@ -19,7 +19,7 @@ export default {};
 	display: inline-block;
 	align-items: center;
 	min-width: var(--space-xxxl);
-	padding: var(--space-xs) var(--space-sm);
+	padding: var(--space-xs) var(--space-sm) var(--space-xxs) var(--space-sm);
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
@@ -42,7 +42,18 @@ export default {};
 		outline: none;
 	}
 
+	&:disabled {
+		color: var(--color-white);
+		pointer-events: none;
+		cursor: default;
+		background-color: var(--color-gray);
+		&:hover {
+			background-color: var(--color-gray);
+		}
+	}
+
 	@include breakpoint(md) {
+		padding: var(--space-sm) var(--space-sm) var(--space-xs) var(--space-sm);
 		font-size: var(--button-font-large);
 	}
 }
@@ -114,14 +125,6 @@ export default {};
 
 .is-small {
 	padding: var(--space-xxxs) var(--space-sm) var(--space-xxxxs) var(--space-sm);
-}
-
-.is-medium {
-	padding: var(--space-xs) var(--space-sm) var(--space-xxs) var(--space-sm);
-
-	@include breakpoint(md) {
-		padding: var(--space-sm) var(--space-sm) var(--space-xs) var(--space-sm);
-	}
 }
 
 .is-large {
