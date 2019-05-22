@@ -1,7 +1,7 @@
 <template>
 	<a
 		v-if="href"
-		class="link"
+		class="link is-external"
 		:href="href"
 		v-bind="$attrs"
 		target="_blank"
@@ -98,14 +98,24 @@ export default {
 @import "@styles";
 
 .link {
-	color: var(--color-primary);
-	text-decoration: underline;
+	display: inline;
+	color: var(--color-black);
+	text-decoration: none;
 	cursor: pointer;
+	border-bottom: 2px solid var(--color-gray);
+	&:hover,
+	&:focus {
+		color: var(--color-primary-dark);
+	}
+	&:visited {
+		color: var(--color-primary);
+	}
 }
 
-.is-nav-link {
+.is-external {
+	border: none;
 	&:active {
-		color: var(--color-primary);
+		color: var(--color-black);
 	}
 	&:hover {
 		color: var(--color-primary-dark);
