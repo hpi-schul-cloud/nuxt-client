@@ -48,7 +48,7 @@ export default {
 		},
 		optionLabel: {
 			type: String,
-			default: "",
+			default: "label",
 		},
 	},
 	computed: {
