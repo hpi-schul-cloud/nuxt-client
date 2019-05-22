@@ -44,8 +44,10 @@ deploy:
   # deploy docs for all pull requests
   - provider: surge
     skip_cleanup: true
-    project: ./dist/storybook/
+    project: ./dist/docs/
     domain: docs.$TRAVIS_PULL_REQUEST.nuxt.schul-cloud.surge.sh
     on:
       all_branches: true
       condition: $TRAVIS_PULL_REQUEST AND $TRAVIS_BRANCH != master
+after_deploy:
+  - ./deploy/comment.sh
