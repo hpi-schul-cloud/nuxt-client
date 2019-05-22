@@ -26,6 +26,7 @@ cache:
   directories:
     - node_modules
 deploy:
+  # deploy master to staging system
   - provider: script
     skip_cleanup: true
     script: bash ./deploy/deploy.sh
