@@ -25,11 +25,26 @@ notifications:
 cache:
   directories:
     - node_modules
-
 deploy:
-  skip_cleanup: true
-  provider: script
-  script: bash ./deploy/deploy.sh
-  on:
-    all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^master$
+  - provider: script
+    skip_cleanup: true
+    script: bash ./deploy/deploy.sh
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH =~ ^master$
+  # deploy storybook for all pull requests
+  - provider: surge
+    skip_cleanup: true
+    project: ./dist/storybook/
+    domain: stories.$TRAVIS_PULL_REQUEST.nuxt.schul-cloud.surge.sh
+    on:
+      all_branches: true
+      condition: $TRAVIS_PULL_REQUEST AND $TRAVIS_BRANCH != master
+  # deploy docs for all pull requests
+  - provider: surge
+    skip_cleanup: true
+    project: ./dist/storybook/
+    domain: docs.$TRAVIS_PULL_REQUEST.nuxt.schul-cloud.surge.sh
+    on:
+      all_branches: true
+      condition: $TRAVIS_PULL_REQUEST AND $TRAVIS_BRANCH != master
