@@ -10,7 +10,9 @@ p {
 }
 ```
 
-[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) :::
+[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+
+:::
 
 ## Colors
 
