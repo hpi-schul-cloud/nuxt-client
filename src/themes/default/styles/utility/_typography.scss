@@ -2,9 +2,10 @@
 	tab-size: 2;
 }
 
+html,
 body {
 	font-family: var(--font-primary);
-	font-size: var(--text-md);
+	font-size: var(--text-base-size);
 	line-height: var(--body-line-height);
 	color: var(--color-black);
 }

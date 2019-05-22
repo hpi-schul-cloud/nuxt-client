@@ -101,10 +101,13 @@ export default {
 	color: var(--color-primary);
 	text-decoration: underline;
 	cursor: pointer;
+}
+
+.is-nav-link {
 	&:active {
-		color: var(--color-primary-light);
+		color: var(--color-primary);
 	}
-	&:visited {
+	&:hover {
 		color: var(--color-primary-dark);
 	}
 }

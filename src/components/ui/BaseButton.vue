@@ -51,11 +51,6 @@ export default {};
 			background-color: var(--color-gray);
 		}
 	}
-
-	@include breakpoint(md) {
-		padding: var(--space-sm) var(--space-sm) var(--space-xs) var(--space-sm);
-		font-size: var(--button-font-large);
-	}
 }
 
 .is-primary.is-outline {
@@ -129,9 +124,5 @@ export default {};
 
 .is-large {
 	padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-sm);
-
-	@include breakpoint(md) {
-		padding: var(--space-md) var(--space-sm);
-	}
 }
 </style>

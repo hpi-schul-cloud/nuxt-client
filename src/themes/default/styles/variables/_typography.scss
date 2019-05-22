@@ -27,12 +27,10 @@
 
 	/* font-weight */
 	--button-font-weight: 700;
-	--button-font-large: 1.25rem;
 }
 
 @include breakpoint(md) {
 	:root {
-		--text-base-size: 1.25rem;
-		--text-scale-ratio: 1.25;
+		--text-base-size: 1.125rem;
 	}
 }
