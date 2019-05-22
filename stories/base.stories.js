@@ -26,24 +26,80 @@ storiesOf("Base Components", module)
 	.addParameters({
 		notes,
 	})
-	.add("Base Button", () => ({
+	.add("Button Primary Action", () => ({
 		components: { BaseButton },
-		data: () => ({
-			text: text("Text", "Press Me!"),
-			size: select("Size", {
-				default: "",
-				small: "is-small",
-				medium: "is-medium",
-				large: "is-large",
-			}),
-			style: select("Style", {
-				default: "",
-				primary: "is-primary",
-				accent: "is-accent",
-				light: "is-light",
-			}),
-		}),
-		template: `<base-button :class="[size, style]"> {{ text }} </base-button>`,
+		props: {
+			text: {
+				default: text("Text", "Primary"),
+			},
+		},
+		template: `<div style="padding: 2rem;">
+				<base-button class ="is-primary is-small">{{ text }}</base-button>
+				<base-button class ="is-primary is-small is-outline">{{ text }}</base-button>
+				<base-button class ="is-primary is-medium">{{ text }}</base-button>
+				<base-button class ="is-primary is-medium is-outline">{{ text }}</base-button>
+				<base-button class ="is-primary is-large">{{ text }}</base-button>
+				<base-button class ="is-primary is-large is-outline">{{ text }}</base-button>
+				<base-button class ="is-hero-cta is-large">Hero C2A</base-button>
+			</div>`,
+		methods: {},
+	}))
+	.add("Button Secondary Action", () => ({
+		components: { BaseButton },
+		props: {
+			text: {
+				default: text("Text", "Secondary"),
+			},
+		},
+		template: `<div style="padding: 2rem;">
+				<base-button class ="is-secondary is-small">{{ text }}</base-button>
+				<base-button class ="is-secondary is-small is-outline">{{ text }}</base-button>
+				<base-button class ="is-secondary is-medium">{{ text }}</base-button>
+				<base-button class ="is-secondary is-medium is-outline">{{ text }}</base-button>
+				<base-button class ="is-secondary is-large">{{ text }}</base-button>
+				<base-button class ="is-secondary is-large is-outline">{{ text }}</base-button>
+			</div>`,
+		data: () => ({}),
+	}))
+	.add("Button Tertiary", () => ({
+		components: { BaseButton },
+		props: {
+			text: {
+				default: text("Text", "Tertiär"),
+			},
+		},
+		template: `<div style="padding: 2rem;">
+				<base-button class="is-small">{{ text }}</base-button>
+				<base-button class ="is-medium">{{ text }}</base-button>
+				<base-button class ="is-large">{{ text }}</base-button>
+			</div>`,
+		data: () => ({}),
+	}))
+	.add("Button Disabled", () => ({
+		components: { BaseButton },
+		props: {
+			text: {
+				default: text("Text", "Disabled"),
+			},
+		},
+		template: `<div style="padding: 2rem;">
+				<base-button disabled class="is-small">{{ text }}</base-button>
+				<base-button disabled class ="is-medium">{{ text }}</base-button>
+				<base-button disabled class ="is-large">{{ text }}</base-button>
+			</div>`,
+		data: () => ({}),
+	}))
+	.add("Button Signal", () => ({
+		components: { BaseButton },
+		props: {
+			text: {
+				default: text("Text", "Primary"),
+			},
+		},
+		template: `<div style="padding: 2rem;">
+				<base-button class ="is-success is-medium">Success</base-button>
+				<base-button class ="is-danger is-medium">Danger</base-button>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Card", () => ({
