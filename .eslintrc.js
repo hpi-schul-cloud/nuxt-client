@@ -14,7 +14,7 @@ module.exports = {
 		"prettier/vue",
 	],
 	rules: {
-		// Only allow `console.log` & debugger in development
+		// Only allow console.log & debugger in development
 		"no-debugger":
 			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
 				? "error"
