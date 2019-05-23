@@ -1,7 +1,14 @@
 <template>
 	<div class="grid">
 		<div v-for="(course, i) of courses" :key="i" class="tile">
-			<course-card :course="course" />
+			<NuxtLink
+				class="link"
+				tag="div"
+				:to="{ name: 'courses-id', params: { id: course._id } }"
+				v-bind="$attrs"
+			>
+				<course-card :course="course" />
+			</NuxtLink>
 		</div>
 	</div>
 </template>
