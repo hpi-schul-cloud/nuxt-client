@@ -13,7 +13,6 @@ env:
     - API_HOST=http://localhost:3030
 before_install:
   - openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in deploy/travis_rsa.enc -out deploy/travis_rsa -d
-  - chmod +x ./deploy/deploy.sh
 install:
   - yarn global add codecov surge
   - yarn install --production=false
@@ -23,7 +22,7 @@ script:
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 # deploy docs & storybook for all pull requests
 after_success:
-  - ./deploy/pull-deploy.sh
+  - bash ./deploy/pull-deploy.sh
 notifications:
   email: false
 cache:
