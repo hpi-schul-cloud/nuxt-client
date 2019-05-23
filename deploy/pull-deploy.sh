@@ -7,12 +7,6 @@ then
 	echo "Do not deploy to test system. This is not a pull request."
 	exit 0;
 fi
-# and are not in master
-if [ "$TRAVIS_BRANCH" == "master" ];
-then
-	echo "Do not deploy to test system. We are on the master branch."
-	exit 0;
-fi
 
 # deploy docs
 echo "Deploy docs to surge.sh"
