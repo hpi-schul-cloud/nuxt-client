@@ -13,6 +13,7 @@ env:
     - API_HOST=http://localhost:3030
 before_install:
   - openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in deploy/travis_rsa.enc -out deploy/travis_rsa -d
+  - chmod +x ./deploy/deploy.sh
 install:
   - yarn global add codecov surge
   - yarn install --production=false
