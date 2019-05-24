@@ -85,7 +85,6 @@ storiesOf("Base Components", module)
 				<h2>Signal</h2>
 				<base-button class="is-success is-medium">Success</base-button>
 				<base-button class="is-danger is-medium">Danger</base-button>
-				<style></style>
 			</div>`,
 		methods: {},
 	}))
