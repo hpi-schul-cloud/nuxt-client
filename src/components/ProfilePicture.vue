@@ -19,15 +19,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 img:hover {
-	box-shadow: $shadow-5;
-	transition: box-shadow $duration-animation-medium;
+	box-shadow: var(--shadow-lg);
+	transition: box-shadow var(--duration-transition-medium);
 }
 
 .borderradius {
-	border-radius: 50%;
+	border-radius: var(--radius-round);
 }
 .small {
 	width: 64px;

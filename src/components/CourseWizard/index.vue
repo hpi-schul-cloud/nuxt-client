@@ -5,11 +5,11 @@
 				<base-icon source="custom" icon="shuttle" />
 			</div>
 			<div class="headlines">
-				<h3>Kurs anlegen</h3>
-				<h6>
+				<h2 class="text--xl">Kurs anlegen</h2>
+				<h3 class="text--md">
 					In einem Kurs wird gemeinsam mit den Teilnehmern an Themen,
 					Hausaufgaben und Dateien gearbeitet.
-				</h6>
+				</h3>
 			</div>
 		</div>
 		<step-progress :steps="steps" :current-step="currentStep" />
@@ -134,16 +134,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .content-wrapper {
-	width: 70%;
-	margin: 150px auto 0 auto;
+	max-width: 100ch;
+	margin: var(--space-xxxl) auto 0;
 }
 
 .step-wrapper {
 	display: flex;
 	justify-content: flex-end;
-	max-width: 70%;
+	max-width: 80ch;
 	margin: 0 auto;
 }
 
@@ -151,15 +151,15 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin: 20px 0;
+	margin: var(--space-lg) 0;
 
 	.headlines h3 {
 		margin-top: 0;
 	}
 
 	.header-icon {
-		margin-right: 20px;
-		font-size: 60px;
+		margin-right: var(--space-sm);
+		font-size: var(--heading-3);
 	}
 }
 </style>

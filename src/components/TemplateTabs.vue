@@ -38,41 +38,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 ul {
 	padding: 0;
 }
 ul.tabs {
 	width: 100%;
-	margin-bottom: 24px;
-	border-bottom: 2px solid rgb(234, 234, 234);
+	margin-bottom: var(--space-md);
+	border-bottom: 2px solid var(--color-gray-light);
 	li {
 		box-sizing: border-box;
 		display: inline-block;
-		height: 40px;
-		padding: 8px;
+		padding: var(--space-xs);
 		list-style: none;
 		cursor: pointer;
 		.tab-button {
 			display: block;
 			width: 100%;
 			height: 100%;
-			font-size: 14px;
-			font-weight: 600;
-			color: #707070;
+			font-size: var(--text-sm);
+			font-weight: var(--font-weight-bold);
+			color: var(--gray-5);
 			background: transparent;
 			border: 0;
 		}
 		&.is-active {
 			position: relative;
 			.tab-button {
-				color: #000;
+				color: var(--color-black);
 			}
 			&::after {
 				position: absolute;
 				bottom: -2px;
 				left: 0;
-				z-index: 100;
 				width: 100%;
 				height: 2px;
 				content: " ";

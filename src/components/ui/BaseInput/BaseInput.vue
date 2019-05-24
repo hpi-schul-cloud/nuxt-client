@@ -13,10 +13,10 @@ import BaseInputDefault, {
 } from "./BaseInputDefault";
 import BaseInputHidden, {
 	supportedTypes as hiddenInputTypes,
-} from "./BaseInputHidden.vue";
+} from "./BaseInputHidden";
 import BaseInputCalendar, {
 	supportedTypes as calendarInputTypes,
-} from "./BaseInputCalendar.vue";
+} from "./BaseInputCalendar";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox";
@@ -75,5 +75,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 </style>

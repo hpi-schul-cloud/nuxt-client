@@ -5,7 +5,10 @@ describe("@components/BaseSelect", () => {
 
 	it("render component", () => {
 		const testLabel = "test";
-		const wrapper = shallowMount(BaseSelect, {
+		const wrapper = mount(BaseSelect, {
+			stubs: {
+				"multi-select": true,
+			},
 			propsData: {
 				value: [
 					{
@@ -36,7 +39,12 @@ describe("@components/BaseSelect", () => {
 			},
 		});
 		expect(wrapper.find("multi-select-stub").exists()).toBe(true);
-		expect(wrapper.find(".label").text()).toBe(testLabel);
+		expect(
+			wrapper
+				.find("label")
+				.text()
+				.includes(testLabel)
+		).toBe(true);
 	});
 
 	it("uses default option label", () => {
