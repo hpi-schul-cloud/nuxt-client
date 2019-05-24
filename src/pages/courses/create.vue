@@ -16,8 +16,6 @@
 import { mapState, mapGetters } from "vuex";
 import CourseWizard from "@components/CourseWizard";
 
-var moment = require("moment");
-
 export default {
 	components: { CourseWizard },
 	data() {
@@ -28,7 +26,6 @@ export default {
 				{ name: "Abschließen" },
 			],
 			course: {},
-			moment: moment,
 		};
 	},
 	computed: {
@@ -86,10 +83,10 @@ export default {
 			const course = this.course;
 
 			course.times = this.course.times.map((time) => {
-				time.startTime = moment
-					.duration(time.startTime, "HH:mm")
-					.asMilliseconds()
-					.toString();
+				let [startHours, startMinutes] = time.startTime.split(":");
+				startMinutes = startMinutes * 60 * 1000;
+				startHours = startHours * 60 * 60 * 1000;
+				time.startTime = startHours + startMinutes;
 				time.duration = (time.duration * 60 * 1000).toString();
 				time.weekday = time.weekday.value;
 				return time;

@@ -2,7 +2,7 @@
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
 			<base-button class="icon-button" @click="popTime(time)">
-				<base-icon icon="delete" />
+				<base-icon icon="delete" source="material" />
 			</base-button>
 			<base-select
 				v-model="time.weekday"

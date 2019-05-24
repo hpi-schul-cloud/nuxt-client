@@ -8,7 +8,11 @@
 					:class="{ 'list-item': true, active: route.active }"
 				>
 					<base-link class="list-content" :to="route.to" :href="route.href">
-						<base-icon v-if="route.icon" :icon="route.icon" />
+						<base-icon
+							v-if="route.icon"
+							:icon="route.icon"
+							:source="route.source || 'material'"
+						/>
 						{{ route.title }}
 					</base-link>
 				</li>

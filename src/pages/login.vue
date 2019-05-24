@@ -20,7 +20,6 @@
 				/>
 
 				<base-input v-model="password" label="Your Password" type="password" />
-				<base-input type="checkbox" label="Remember me" />
 
 				<base-button class="button is-primary">
 					Login

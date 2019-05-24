@@ -1,8 +1,8 @@
 <template>
 	<base-input-default v-bind="$attrs" :type="false" vmodel="" :label="label">
 		<multi-select
+			v-model="vmodel"
 			v-bind="$attrs"
-			:value="populatedValue"
 			:options="options"
 			:multiple="multiple"
 			track-by="value"
@@ -52,21 +52,21 @@ export default {
 		},
 	},
 	computed: {
-		populatedValue() {
-			return this.multiple
-				? this.options.filter((option) => this.value.includes(option.value))
-				: this.options.find(
-						(option) =>
-							JSON.stringify(this.value) == JSON.stringify(option.value)
-				  );
-		},
-	},
-	methods: {
-		updatevmodel(event) {
-			const newModel = this.multiple
-				? event.map((selection) => selection.value)
-				: event.value;
-			this.$emit("update:vmodel", newModel);
+		vmodel: {
+			get() {
+				return this.multiple
+					? this.options.filter((option) => this.value.includes(option.value))
+					: this.options.find(
+							(option) =>
+								JSON.stringify(this.value) == JSON.stringify(option.value)
+					  );
+			},
+			set(to) {
+				const newModel = this.multiple
+					? to.map((selection) => selection.value)
+					: to.value;
+				this.$emit("update:vmodel", newModel);
+			},
 		},
 	},
 };

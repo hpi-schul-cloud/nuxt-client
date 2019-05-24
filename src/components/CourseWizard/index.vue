@@ -1,5 +1,4 @@
 <template>
-	<!-- eslint-disable max-lines -->
 	<div class="root">
 		<div class="header">
 			<div class="header-icon">
