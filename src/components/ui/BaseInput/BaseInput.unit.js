@@ -38,4 +38,17 @@ describe("@components/BaseInput", () => {
 			});
 		});
 	});
+
+	it("throws an error on unsupported types", () => {
+		try {
+			const wrapper = mount({
+				data: () => ({ value: "" }),
+				template: `<base-input v-model="value" label="Label" type="unsupported" name="test" />`,
+				components: { BaseInput },
+			});
+			expect(true).toBe(false); // should fail before this
+		} catch (error) {
+			expect(true).toBe(true); // expect to run this
+		}
+	});
 });

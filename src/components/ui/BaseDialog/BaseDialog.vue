@@ -6,7 +6,6 @@
 			</div>
 
 			<div class="modal-body">
-				<!-- eslint-disable-next-line vue/no-v-html -->
 				<div>{{ message }}</div>
 			</div>
 
