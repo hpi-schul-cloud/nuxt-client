@@ -2,6 +2,10 @@
 
 [[toc]]
 
+## Colors
+
+<<< @/src/themes/default/styles/utility/\_colors.scss
+
 ## Spacing
 
 <<< @/src/themes/default/styles/utility/\_spacing.scss

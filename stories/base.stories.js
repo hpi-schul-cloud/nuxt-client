@@ -78,8 +78,11 @@ storiesOf("Base Components", module)
 				<base-button class="is-secondary is-large is-outline">Secondary</base-button>
 				<h2>Tertiary Action</h2>
 				<base-button class="is-small">Small</base-button>
+				<base-button class="is-small is-outline">Small</base-button>
 				<base-button>Default</base-button>
+				<base-button class="is-outline">Default</base-button>
 				<base-button class="is-large">Large</base-button>
+				<base-button class="is-large is-outline">Large</base-button>
 				<h2>Disabled</h2>
 				<base-button disabled>Disabled</base-button>
 				<h2>Signal</h2>

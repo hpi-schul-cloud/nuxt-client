@@ -10,24 +10,17 @@ body {
 	color: var(--color-black);
 }
 
-h1,
-h2,
-h3,
-h4,
-form legend {
-	margin-bottom: var(--space-xxs);
-	line-height: var(--line-height-sm);
-	color: var(--color-black);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	font-family: var(--font-accent);
-	font-weight: var(--font-weight-bold);
+/* heading size */
+@for $i from 1 through 6 {
+	h#{$i},
+	.h#{$i} {
+		margin-bottom: var(--space-xxs);
+		font-family: var(--font-accent);
+		font-size: var(--heading-#{$i});
+		font-weight: var(--font-weight-bold);
+		line-height: var(--line-height-sm);
+		color: var(--color-black);
+	}
 }
 
 /* text size */
@@ -41,26 +34,6 @@ h6 {
 	font-size: var(--text-lg);
 }
 
-@for $i from 1 through 6 {
-	h#{$i},
-	.h#{$i} {
-		font-size: var(--heading-#{$i});
-		font-weight: var(--font-weight-bold);
-	}
-}
-
-input,
-select,
-textarea,
-button {
-	font-family: inherit;
-	font-size: var(--text-md);
-}
-
-p {
-	line-height: var(--line-height-md);
-}
-
 a {
 	color: var(--color-primary);
 
@@ -72,6 +45,14 @@ a {
 b,
 strong {
 	font-weight: var(--font-weight-bold);
+}
+
+input,
+select,
+textarea,
+button {
+	font-family: inherit;
+	font-size: var(--text-md);
 }
 
 /* utility classes */
