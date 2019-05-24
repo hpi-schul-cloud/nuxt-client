@@ -1,5 +1,5 @@
 $brighten: 15%;
-$darken: 30%;
+$darken: 25%;
 
 :root {
 	/* main colors */
@@ -28,7 +28,7 @@ $darken: 30%;
 	--color-warning: #ffd137;
 	--color-warning-light: color-mod(var(--color-warning) tint(#{$brighten}));
 	--color-warning--dark: color-mod(var(--color-warning) shade(#{$darken}));
-	--color-danger: #ff114f;
+	--color-danger: #f44336;
 	--color-danger-light: color-mod(var(--color-danger) tint(#{$brighten}));
 	--color-danger--dark: color-mod(var(--color-danger) shade(#{$darken}));
 }
