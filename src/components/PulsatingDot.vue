@@ -25,7 +25,7 @@ export default {};
 	position: absolute;
 	width: 0.5em;
 	height: 0.5em;
-	background-color: var(--color-error);
+	background-color: var(--color-danger);
 	border-radius: var(--radius-round);
 }
 
@@ -33,7 +33,7 @@ export default {};
 	align-self: center;
 	width: 1em;
 	height: 1em;
-	border: 1px solid var(--color-error);
+	border: 1px solid var(--color-danger);
 	border-radius: var(--radius-round);
 	opacity: 0;
 	animation: pulsate var(--duration-transition-slow) ease-out;

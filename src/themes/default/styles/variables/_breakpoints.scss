@@ -4,13 +4,11 @@
 }
 
 $breakpoints: (
-	xs: 575px,
-	sm: 768px,
-	md: 991px,
-	lg: 1199px,
+	tablet: 750px,
+	desktop: 991px,
 );
 
-// Usage: `@include breakpoint(md) { ... }`
+// Usage: `@include breakpoint(tablet) { ... }`
 @mixin breakpoint($breakpoint) {
 	@if map-has-key($breakpoints, $breakpoint) {
 		// Get the breakpoint value.

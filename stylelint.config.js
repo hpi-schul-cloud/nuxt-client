@@ -32,6 +32,8 @@ module.exports = {
 				"/color/",
 				"font-family",
 				"font-size",
+				"font-weight",
+				"line-height",
 				"/padding/",
 				"/margin/",
 				"z-index",

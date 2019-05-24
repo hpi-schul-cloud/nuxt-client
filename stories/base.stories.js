@@ -26,82 +26,66 @@ storiesOf("Base Components", module)
 	.addParameters({
 		notes,
 	})
-	.add("Button Primary Action", () => ({
+	.add("Base Button", () => ({
 		components: { BaseButton },
-		props: {
-			text: {
-				default: text("Text", "Primary"),
+		data: () => ({
+			text: text("Text", "Action"),
+			style: select(
+				"Style",
+				{
+					default: "",
+					primary: "is-primary",
+					secondary: "is-secondary",
+					success: "is-success",
+					danger: "is-danger",
+				},
+				""
+			),
+			size: select(
+				"Size",
+				{ small: "is-small", default: "", large: "is-large" },
+				""
+			),
+			outline: boolean("outline", false),
+			disabled: boolean("disabled", false),
+		}),
+		computed: {
+			classes() {
+				const classes = [this.style, this.size];
+				if (this.outline) {
+					classes.push("is-outline");
+				}
+				return classes;
 			},
 		},
 		template: `<div style="padding: 2rem;">
-				<base-button class ="is-primary is-small">{{ text }}</base-button>
-				<base-button class ="is-primary is-small is-outline">{{ text }}</base-button>
-				<base-button class ="is-primary">{{ text }}</base-button>
-				<base-button class ="is-primary is-outline">{{ text }}</base-button>
-				<base-button class ="is-primary is-large">{{ text }}</base-button>
-				<base-button class ="is-primary is-large is-outline">{{ text }}</base-button>
-				<base-button class ="is-hero-cta is-large">Hero C2A</base-button>
-			</div>`,
-		methods: {},
-	}))
-	.add("Button Secondary Action", () => ({
-		components: { BaseButton },
-		props: {
-			text: {
-				default: text("Text", "Secondary"),
-			},
-		},
-		template: `<div style="padding: 2rem;">
-				<base-button class ="is-secondary is-small">{{ text }}</base-button>
-				<base-button class ="is-secondary is-small is-outline">{{ text }}</base-button>
-				<base-button class ="is-secondary">{{ text }}</base-button>
-				<base-button class ="is-secondary is-outline">{{ text }}</base-button>
-				<base-button class ="is-secondary is-large">{{ text }}</base-button>
-				<base-button class ="is-secondary is-large is-outline">{{ text }}</base-button>
-			</div>`,
-		data: () => ({}),
-	}))
-	.add("Button Tertiary", () => ({
-		components: { BaseButton },
-		props: {
-			text: {
-				default: text("Text", "Tertiär"),
-			},
-		},
-		template: `<div style="padding: 2rem;">
-				<base-button class="is-small">{{ text }}</base-button>
-				<base-button>{{ text }}</base-button>
-				<base-button class ="is-large">{{ text }}</base-button>
-			</div>`,
-		data: () => ({}),
-	}))
-	.add("Button Disabled", () => ({
-		components: { BaseButton },
-		props: {
-			text: {
-				default: text("Text", "Disabled"),
-			},
-		},
-		template: `<div style="padding: 2rem;">
-				<base-button disabled class ="is-primary">{{ text }}</base-button>
-				<base-button disabled class ="is-secondary">{{ text }}</base-button>
-				<base-button disabled class ="is-secondary">{{ text }}</base-button>
-				<base-button disabled class ="is-success">{{ text }}</base-button>
-				<base-button disabled class ="is-danger">{{ text }}</base-button>
-				<base-button disabled>{{ text }}</base-button>
-			</div>`,
-		data: () => ({}),
-	}))
-	.add("Button Signal", () => ({
-		components: { BaseButton },
-		props: {
-			text: {
-				default: text("Text", "Primary"),
-			},
-		},
-		template: `<div style="padding: 2rem;">
-				<base-button class ="is-success is-medium">Success</base-button>
-				<base-button class ="is-danger is-medium">Danger</base-button>
+				<h2>Knobs</h2>
+				<base-button :disabled="disabled" :class="classes">{{ text }}</base-button>
+				<h2>Primary Action</h2>
+				<base-button class="is-primary is-small">Primary</base-button>
+				<base-button class="is-primary is-small is-outline">Primary</base-button>
+				<base-button class="is-primary">Primary</base-button>
+				<base-button class="is-primary is-outline">Primary</base-button>
+				<base-button class="is-primary is-large">Primary</base-button>
+				<base-button class="is-primary is-large is-outline">Primary</base-button>
+				<base-button class="is-hero-cta is-large">Hero C2A</base-button>
+				<h2>Secondary Action</h2>
+				<base-button class="is-secondary is-small">Secondary</base-button>
+				<base-button class="is-secondary is-small is-outline">Secondary</base-button>
+				<base-button class="is-secondary">Secondary</base-button>
+				<base-button class="is-secondary is-outline">Secondary</base-button>
+				<base-button class="is-secondary is-large">Secondary</base-button>
+				<base-button class="is-secondary is-large is-outline">Secondary</base-button>
+				<h2>Tertiary Action</h2>
+				<base-button class="is-small">Small</base-button>
+				<base-button>Default</base-button>
+				<base-button class="is-large">Large</base-button>
+				<h2>Disabled</h2>
+				<base-button disabled>Disabled</base-button>
+				<h2>Signal</h2>
+				<base-button class="is-success is-medium">Success</base-button>
+				<base-button class="is-danger is-medium">Danger</base-button>
+				<style></style>
 			</div>`,
 		methods: {},
 	}))

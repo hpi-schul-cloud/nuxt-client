@@ -57,7 +57,7 @@ ul.tabs {
 			width: 100%;
 			height: 100%;
 			font-size: var(--text-sm);
-			font-weight: 600;
+			font-weight: var(--font-weight-bold);
 			color: var(--gray-5);
 			background: transparent;
 			border: 0;

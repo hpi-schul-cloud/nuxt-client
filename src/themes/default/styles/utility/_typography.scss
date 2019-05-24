@@ -6,7 +6,7 @@ html,
 body {
 	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
-	line-height: var(--body-line-height);
+	line-height: var(--line-height-md);
 	color: var(--color-black);
 }
 
@@ -16,7 +16,7 @@ h3,
 h4,
 form legend {
 	margin-bottom: var(--space-xxs);
-	line-height: var(--heading-line-height);
+	line-height: var(--line-height-sm);
 	color: var(--color-black);
 }
 
@@ -27,45 +27,38 @@ h4,
 h5,
 h6 {
 	font-family: var(--font-accent);
-	font-weight: bold;
+	font-weight: var(--font-weight-bold);
 }
 
 /* text size */
-.text--xxxl {
-	font-size: var(--text-xxxl);
+.text-sm {
+	font-size: var(--text-sm);
 }
-
-h1,
-.text--xxl {
-	font-size: var(--text-xxl);
+.text-md {
+	font-size: var(--text-md);
 }
-
-h2,
-.text--xl {
-	font-size: var(--text-xl);
-}
-
-h3,
-.text--lg {
+.text-lg {
 	font-size: var(--text-lg);
 }
 
-h4,
-.text--md {
+@for $i from 1 through 6 {
+	h#{$i},
+	.h#{$i} {
+		font-size: var(--heading-#{$i});
+		font-weight: var(--font-weight-bold);
+	}
+}
+
+input,
+select,
+textarea,
+button {
+	font-family: inherit;
 	font-size: var(--text-md);
 }
 
-.text--sm,
-small {
-	font-size: var(--text-sm);
-}
-
-.text--xs {
-	font-size: var(--text-xs);
-}
-
 p {
-	line-height: var(--body-line-height);
+	line-height: var(--line-height-md);
 }
 
 a {
@@ -78,7 +71,7 @@ a {
 
 b,
 strong {
-	font-weight: bold;
+	font-weight: var(--font-weight-bold);
 }
 
 /* utility classes */

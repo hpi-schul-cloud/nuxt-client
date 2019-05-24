@@ -89,7 +89,7 @@ export default {
 .header {
 	position: relative;
 	// text-size + padding top/bottom + overlap
-	height: calc(var(--text-sm) + 2 * var(--space-xxs) + var(--space-xs));
+	height: calc(var(--text-md) + 2 * var(--space-xxs) + var(--space-xs));
 	overflow: hidden;
 	border-radius: var(--radius-sm);
 	border-bottom-left-radius: 0;
@@ -120,7 +120,7 @@ export default {
 		display: inline-block;
 		width: 100%;
 		padding: var(--space-xxs) var(--space-sm);
-		font-size: var(--text-sm);
+		font-size: var(--text-md);
 		color: var(--color-white);
 		transform: skewX(-25deg);
 		transform-origin: bottom left;
@@ -148,7 +148,7 @@ export default {
 	min-height: var(--min-size);
 	padding: 0 var(--space-xxs);
 	font-size: var(--text-sm);
-	font-weight: bold;
+	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	background: var(--color-primary);
 	border-radius: var(--radius-round);
@@ -174,7 +174,7 @@ export default {
 .abrivation-label {
 	margin: 0;
 	font-family: var(--font-primary);
-	font-size: var(--text-xxxl);
+	font-size: var(--heading-2);
 	color: var(--color-white);
 	text-transform: uppercase;
 }

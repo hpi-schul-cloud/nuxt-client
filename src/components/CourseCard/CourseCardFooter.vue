@@ -58,8 +58,8 @@ export default {
 	align-items: center;
 	.alert-label {
 		flex: 1;
-		font-weight: bold;
-		color: var(--color-error);
+		font-weight: var(--font-weight-bold);
+		color: var(--color-danger);
 	}
 }
 </style>

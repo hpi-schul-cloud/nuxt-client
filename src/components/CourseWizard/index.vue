@@ -160,7 +160,7 @@ export default {
 
 	.header-icon {
 		margin-right: var(--space-sm);
-		font-size: var(--text-xl);
+		font-size: var(--heading-3);
 	}
 }
 </style>

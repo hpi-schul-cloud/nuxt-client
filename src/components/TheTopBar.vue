@@ -65,14 +65,14 @@ export default {
 	box-shadow: var(--shadow-sm);
 }
 .logo {
-	height: var(--text-lg);
+	height: var(--heading-3);
 	margin-right: var(--space-sm);
 }
 .page-title {
 	flex: 1;
 	margin: 0;
 	font-family: var(--font-accent);
-	font-size: var(--text-lg);
+	font-size: var(--heading-4);
 	text-transform: capitalize;
 }
 .action {

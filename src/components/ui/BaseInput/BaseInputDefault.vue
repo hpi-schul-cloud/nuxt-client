@@ -102,7 +102,7 @@ export default {
 	position: relative;
 	padding-left: var(--indentation);
 	font-size: var(--text-md);
-	font-weight: bold;
+	font-weight: var(--font-weight-bold);
 }
 input,
 /deep/ input {
@@ -126,6 +126,6 @@ input,
 	margin-left: var(--indentation);
 }
 .error {
-	color: var(--color-error);
+	color: var(--color-danger);
 }
 </style>

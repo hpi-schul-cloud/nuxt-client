@@ -16,6 +16,9 @@ export default {};
 @import "@styles";
 
 .button {
+	--button-font-weight: var(--font-weight-bold);
+	--button-line-height: var(--line-height-md);
+
 	display: inline-block;
 	align-items: center;
 	min-width: var(--space-xxxl);
@@ -35,10 +38,6 @@ export default {};
 	&:hover,
 	&:focus {
 		background-color: var(--color-gray-light);
-	}
-
-	&:focus {
-		background-color: var(--color-gray-light);
 		outline: none;
 	}
 
@@ -47,7 +46,8 @@ export default {};
 		pointer-events: none;
 		cursor: default;
 		background-color: var(--color-gray);
-		&:hover {
+		&:hover,
+		&:focus {
 			background-color: var(--color-gray);
 		}
 	}
@@ -61,7 +61,8 @@ export default {};
 
 .is-primary,
 .is-hero-cta,
-.is-primary.is-outline:hover {
+.is-primary.is-outline:hover,
+.is-primary.is-outline:focus {
 	color: var(--color-white);
 	background-color: var(--color-primary);
 	border: 1px solid transparent;
@@ -72,10 +73,12 @@ export default {};
 		0 5px 22px 4px rgba(0, 0, 0, 0.12), 0 7px 8px -4px rgba(0, 0, 0, 0.2);
 }
 
-.is-primary:hover,
-.is-primary:focus,
-.is-hero-cta:hover {
-	background-color: var(--color-primary-dark);
+.is-primary,
+.is-hero-cta {
+	&:hover,
+	&:focus {
+		background-color: var(--color-primary-dark);
+	}
 }
 
 .is-secondary.is-outline {
@@ -85,15 +88,18 @@ export default {};
 }
 
 .is-secondary,
-.is-secondary.is-outline:hover {
+.is-secondary.is-outline:hover,
+.is-secondary.is-outline:focus {
 	color: var(--color-white);
 	background-color: var(--color-accent);
 	border: 1px solid transparent;
 }
 
-.is-secondary:hover,
-.is-secondary:focus {
-	background-color: var(--color-accent-dark);
+.is-secondary {
+	&:hover,
+	&:focus {
+		background-color: var(--color-accent-dark);
+	}
 }
 
 .is-success {

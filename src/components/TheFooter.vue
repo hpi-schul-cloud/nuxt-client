@@ -64,7 +64,7 @@ export default {
 }
 .hpi-logo {
 	display: block;
-	height: var(--text-xl);
+	height: var(--heading-3);
 	margin: 0 auto;
 }
 </style>
