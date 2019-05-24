@@ -16,119 +16,113 @@ export default {};
 @import "@styles";
 
 .button {
+	// typo
 	--button-font-weight: var(--font-weight-bold);
 	--button-line-height: var(--line-height-md);
+
+	// color modes
+	--button-color: var(--color-gray-light);
+	--button-text-color: var(--color-gray-dark);
+	&.is-outline {
+		--button-color: var(--color-gray-dark);
+	}
+	&.is-primary,
+	&.is-hero-cta {
+		--button-color: var(--color-primary);
+		--button-text-color: var(--color-white);
+		&:hover,
+		&:focus {
+			--button-color: var(--color-primary-dark);
+		}
+	}
+	&.is-secondary {
+		--button-color: var(--color-accent);
+		--button-text-color: var(--color-white);
+		&:hover,
+		&:focus {
+			--button-color: var(--color-accent-dark);
+		}
+	}
+	&.is-success {
+		--button-color: var(--color-success);
+		--button-text-color: var(--color-white);
+		&:hover,
+		&:focus {
+			--button-color: var(--color-success--dark);
+		}
+	}
+	&.is-danger {
+		--button-color: var(--color-danger);
+		--button-text-color: var(--color-white);
+		&:hover,
+		&:focus {
+			--button-color: var(--color-danger--dark);
+		}
+	}
+	&:disabled {
+		--button-color: var(--color-gray);
+		--button-text-color: var(--color-white);
+	}
+
+	/* SIZES */
+	--button-padding: var(--space-xs) var(--space-sm) var(--space-xxs)
+		var(--space-sm);
+	&.is-small {
+		--button-padding: var(--space-xxxs) var(--space-sm) var(--space-xxxxs)
+			var(--space-sm);
+	}
+
+	&.is-large {
+		--button-padding: var(--space-sm) var(--space-sm) var(--space-sm)
+			var(--space-sm);
+	}
 
 	display: inline-block;
 	align-items: center;
 	min-width: var(--space-xxxl);
-	padding: var(--space-xs) var(--space-sm) var(--space-xxs) var(--space-sm);
+	padding: var(--button-padding);
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
 	line-height: var(--button-line-height);
-	color: var(--color-gray-dark);
+	color: var(--button-text-color);
 	text-align: center;
 	white-space: nowrap;
 	cursor: pointer;
-	border: 1px solid var(--color-gray);
+	background-color: var(--button-color);
+	border: 1px solid transparent;
 	border-radius: var(--radius-sm);
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
 	&:hover,
 	&:focus {
-		background-color: var(--color-gray-light);
 		outline: none;
 	}
 
-	&:disabled {
-		color: var(--color-white);
-		pointer-events: none;
-		cursor: default;
-		background-color: var(--color-gray);
+	/* stylelint-disable */
+	// defined multiple to seperate style from behaviour
+	&.is-outline {
+		/* stylelint-enable */
+		color: var(--button-color);
+		background: transparent;
+		border-color: var(--button-color);
 		&:hover,
 		&:focus {
-			background-color: var(--color-gray);
+			// increase border size to increase visiblity
+			box-shadow: 0 0 0 1px var(--button-color);
 		}
 	}
+	/* stylelint-disable */
+	// defined multiple to seperate style from behaviour
+	&:disabled {
+		/* stylelint-enable */
+		pointer-events: none;
+		cursor: default;
+	}
 }
-
-.is-primary.is-outline {
-	color: var(--color-primary);
-	background-color: var(--color-white);
-	border: 1px solid var(--color-primary);
-}
-
-.is-primary,
-.is-hero-cta,
-.is-primary.is-outline:hover,
-.is-primary.is-outline:focus {
-	color: var(--color-white);
-	background-color: var(--color-primary);
-	border: 1px solid transparent;
-}
-
 .is-hero-cta {
 	box-shadow: 0 12px 17px 2px rgba(0, 0, 0, 0.14),
 		0 5px 22px 4px rgba(0, 0, 0, 0.12), 0 7px 8px -4px rgba(0, 0, 0, 0.2);
-}
-
-.is-primary,
-.is-hero-cta {
-	&:hover,
-	&:focus {
-		background-color: var(--color-primary-dark);
-	}
-}
-
-.is-secondary.is-outline {
-	color: var(--color-accent);
-	background-color: var(--color-white);
-	border: 1px solid var(--color-accent);
-}
-
-.is-secondary,
-.is-secondary.is-outline:hover,
-.is-secondary.is-outline:focus {
-	color: var(--color-white);
-	background-color: var(--color-accent);
-	border: 1px solid transparent;
-}
-
-.is-secondary {
-	&:hover,
-	&:focus {
-		background-color: var(--color-accent-dark);
-	}
-}
-
-.is-success {
-	color: var(--color-white);
-	background-color: var(--color-success);
-	border: 1px solid transparent;
-	&:hover,
-	&:focus {
-		background-color: var(--color-success);
-		filter: brightness(80%);
-	}
-}
-
-.is-danger {
-	color: var(--color-white);
-	background-color: var(--color-danger);
-	border: 1px solid transparent;
-	&:hover,
-	&:focus {
-		background-color: var(--color-danger);
-		filter: brightness(80%);
-	}
-}
-
-.is-small {
-	padding: var(--space-xxxs) var(--space-sm) var(--space-xxxxs) var(--space-sm);
-}
-
-.is-large {
-	padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-sm);
 }
 </style>
