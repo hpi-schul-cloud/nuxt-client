@@ -93,7 +93,7 @@ export default {
 
 .modal-header h3 {
 	font-size: var(--text-lg);
-	font-weight: 600;
+	font-weight: var(--font-weight-bold);
 }
 
 .modal-body {

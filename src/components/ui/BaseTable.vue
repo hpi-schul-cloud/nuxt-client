@@ -138,7 +138,7 @@ export default {
 .table {
 	width: 100%;
 	thead {
-		font-weight: bolder;
+		font-weight: var(--font-weight-bold);
 		tr {
 			th {
 				padding: var(--sapce-xs);
