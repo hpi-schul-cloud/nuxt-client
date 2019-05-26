@@ -17,29 +17,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
+
+$color-todo: var(--color-gray-light);
+$color-done: var(--color-primary);
+
 progress {
 	display: inline-block;
-	height: 18px;
-	background-color: #f3f3f3;
+	height: 1em;
+	background-color: $color-todo;
 	background-size: auto;
-	border-radius: 9px;
+	border-radius: var(--radius-round);
 	appearance: none;
 }
 // TODO check if we can remove browser prefixes with postcss
 progress::-moz-progress-bar {
-	background-color: $color-primary;
+	background-color: $color-done;
 	border: 0;
-	border-radius: 6px;
+	border-radius: var(--radius-round);
 }
 progress::-webkit-progress-value {
-	background-color: $color-primary;
-	border-radius: 6px;
+	background-color: $color-done;
+	border-radius: var(--radius-round);
 }
 
 progress::-webkit-progress-bar {
-	background-color: #f3f3f3;
+	background-color: $color-todo;
 	border: 0;
-	border-radius: 9px;
+	border-radius: var(--radius-round);
 }
 </style>

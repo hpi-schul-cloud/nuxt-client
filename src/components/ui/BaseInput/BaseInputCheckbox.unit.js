@@ -44,18 +44,18 @@ describe("@components/BaseInputCheckbox", () => {
 	it(`use array v-model if value is specified`, () => {
 		const testValue = "test";
 		const wrapper = mount({
-			data: () => ({ value: [] }),
+			data: () => ({ value: ["other Value"] }),
 			template: `<base-input v-model="value" value="${testValue}" label="test" type="checkbox" name="checkbox"/>`,
 			components: { BaseInput },
 		});
 
 		const input = wrapper.find("input");
-		expect(wrapper.vm.value.length).toBe(0);
+		const valueBefore = wrapper.vm.value.length;
 		input.setChecked(true);
-		expect(wrapper.vm.value.length).toBe(1);
+		expect(wrapper.vm.value.length).toBe(valueBefore + 1);
 		expect(wrapper.vm.value.includes(testValue)).toBeTruthy();
 		input.setChecked(false);
-		expect(wrapper.vm.value.length).toBe(0);
+		expect(wrapper.vm.value.length).toBe(valueBefore);
 		expect(wrapper.vm.value.includes(testValue)).toBeFalsy();
 	});
 });

@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .date-wrapper {
 	display: flex;
@@ -106,6 +106,9 @@ export default {
 }
 
 .date {
-	width: 49%;
+	flex: 1;
+	&:not(:first-of-type) {
+		margin-left: var(--space-sm);
+	}
 }
 </style>

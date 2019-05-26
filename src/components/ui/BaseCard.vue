@@ -13,18 +13,18 @@
 </template>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .card {
-	padding: $size-padding;
+	padding: var(--space-sm) var(--space-md);
 	overflow: hidden;
 	background: #fff;
-	border: $size-border-width solid $color-border;
-	border-radius: $size-border-radius;
-	box-shadow: $shadow-1;
-	transition: box-shadow ($duration-animation-base * 0.5) ease-in;
+	border: 1px solid var(--color-gray);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 	&:hover {
-		box-shadow: $shadow-2;
+		box-shadow: var(--shadow-sm);
 	}
 }
 </style>

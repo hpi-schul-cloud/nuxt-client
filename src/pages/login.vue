@@ -7,7 +7,7 @@
 			<img
 				src="@assets/cloud.svg"
 				alt="Schul-Cloud"
-				style="width: 78px; filter: invert(1)"
+				style="width: var(--text-lg); filter: invert(1)"
 			/>
 
 			<form @submit.prevent="onSubmit(email, password)">
@@ -20,7 +20,6 @@
 				/>
 
 				<base-input v-model="password" label="Your Password" type="password" />
-				<base-input type="checkbox" label="Remember me" />
 
 				<base-button class="button is-primary">
 					Login

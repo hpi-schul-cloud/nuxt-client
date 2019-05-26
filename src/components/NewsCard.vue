@@ -6,7 +6,7 @@
 			</div>
 		</div>
 		<div class="news-card__content">
-			<span>{{ moment(article.createdAt).fromNow() }}</span>
+			<span>{{ dayjs(article.createdAt).fromNow() }}</span>
 			<div class="mt-2">
 				<BaseLink :to="{ name: 'news-id', params: { id: article._id } }"
 					>Weiterlesen</BaseLink
@@ -17,7 +17,11 @@
 </template>
 
 <script>
-var moment = require("moment");
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export default {
 	props: {
@@ -30,7 +34,7 @@ export default {
 	},
 	data() {
 		return {
-			moment,
+			dayjs,
 		};
 	},
 };
@@ -42,14 +46,14 @@ export default {
 .news-card {
 	padding: 0 !important;
 	&__heading {
-		padding: $size-padding;
+		padding: var(--space-md);
 		h4 {
-			color: white;
+			color: var(--color-white);
 			text-shadow: 1px 0 5px rgba(0, 0, 0, 0.6);
 		}
 	}
 	&__content {
-		padding: $size-padding;
+		padding: var(--space-md);
 	}
 }
 </style>

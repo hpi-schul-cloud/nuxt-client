@@ -8,7 +8,11 @@
 					:class="{ 'list-item': true, active: route.active }"
 				>
 					<base-link class="list-content" :to="route.to" :href="route.href">
-						<base-icon v-if="route.icon" :icon="route.icon" />
+						<base-icon
+							v-if="route.icon"
+							:icon="route.icon"
+							:source="route.source || 'material'"
+						/>
 						{{ route.title }}
 					</base-link>
 				</li>
@@ -34,18 +38,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .sidebar {
 	width: 100%;
-	max-width: 300px;
-	&.small {
-		max-width: 56px;
-	}
-	&.full {
-		min-width: 100%;
-		max-width: 100%;
-	}
 }
 .contents {
 	display: contents;
@@ -55,14 +51,13 @@ export default {
 	padding: 0;
 	margin: 0;
 }
-.list-content {
-	@extend %font-content;
-
+.link.list-content {
 	display: block;
-	padding: $size-padding-y * 0.5 $size-padding-x;
+	padding: calc(var(--space-sm) * 0.5) var(--space-md);
+	font-size: var(--text-md);
 	text-decoration: none;
 	&.active {
-		color: $color-link;
+		color: var(--color-primary);
 	}
 }
 </style>

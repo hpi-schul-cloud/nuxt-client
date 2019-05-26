@@ -2,7 +2,7 @@
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
 			<base-button class="icon-button" @click="popTime(time)">
-				<base-icon icon="delete" />
+				<base-icon icon="delete" source="material" />
 			</base-button>
 			<base-select
 				v-model="time.weekday"
@@ -84,7 +84,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .time-wrapper {
 	display: flex;
@@ -92,9 +91,9 @@ export default {
 	align-items: center;
 }
 .icon-button {
-	padding-right: 10px;
+	padding-right: var(--space-sm);
 }
 .item {
-	padding: 0 2px;
+	padding: 0 var(--space-xxxs);
 }
 </style>
