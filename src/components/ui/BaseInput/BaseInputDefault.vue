@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="baseinput">
 		<label :class="classList">
 			<div class="label">
 				{{ label }}
@@ -76,47 +76,56 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
+.baseinput {
+	--border-width: 2px;
+	--border-radius: var(--space-sm);
+	--indentation: var(--space-xs);
+}
 .border {
 	position: relative;
 	display: block;
-	margin: 1em 0 $size-grid-padding;
+	margin: var(--indentation) 0;
 	clear: both;
-	background: $color-text-bg;
-	border: $size-border-width solid $color-border;
-	border-radius: $size-border-radius;
+	background-color: var(--color-white);
+	border: var(--border-width) solid var(--color-gray);
+	border-radius: var(--border-radius);
+	transition: border-color var(--duration-transition-fast) ease;
 	&.with-hint {
 		margin-bottom: 0;
 	}
+	&:focus-within {
+		border-color: var(--color-gray-dark);
+	}
 }
 .label {
-	@extend %typography-small;
-
 	position: relative;
-	padding-top: 4px;
-	padding-left: 8px;
+	padding-left: var(--indentation);
+	font-size: var(--text-md);
+	font-weight: var(--font-weight-bold);
 }
 input,
 /deep/ input {
-	@extend %typography-small;
-
 	display: block;
 	width: 100%;
-	padding: 4px 8px;
+	padding: var(--space-xs) var(--indentation);
 	background-color: transparent;
 	border: 0;
-	border-radius: $size-border-radius - $size-border-width;
+	border-bottom-right-radius: calc(var(--border-radius) - var(--border-width));
+	border-bottom-left-radius: calc(var(--border-radius) - var(--border-width));
 	&::placeholder {
-		color: lighten($color-text, 40%);
+		color: var(--color-gray);
+	}
+	&:focus {
+		outline: none;
 	}
 }
 .hint,
 .error {
 	display: block;
-	margin-bottom: $size-grid-padding - 1rem;
-	margin-left: 12px;
+	margin-left: var(--indentation);
 }
 .error {
-	color: red;
+	color: var(--color-danger);
 }
 </style>

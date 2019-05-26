@@ -1,0 +1,27 @@
+:root {
+	--size-content-width-min: 40ch;
+	--size-content-width-max: 80ch;
+}
+
+$breakpoints: (
+	tablet: 750px,
+	desktop: 991px,
+);
+
+// Usage: `@include breakpoint(tablet) { ... }`
+@mixin breakpoint($breakpoint) {
+	@if map-has-key($breakpoints, $breakpoint) {
+		// Get the breakpoint value.
+		$breakpoint-value: map-get($breakpoints, $breakpoint);
+
+		// Write the media query.
+		@media (min-width: $breakpoint-value) {
+			@content;
+		}
+
+		// If the breakpoint doesn't exist in the map.
+	} @else {
+		// Log a warning.
+		@warn 'Invalid breakpoint: #{$breakpoint}.';
+	}
+}

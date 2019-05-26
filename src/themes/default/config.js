@@ -2,7 +2,7 @@ export default {
 	name: "HPI Schul-Cloud",
 	short_name: "Schul-Cloud",
 	logo: {
-		app: "/images/logo/app-icon-128.png",
-		white: "/images/logo/logo-white.svg",
+		app: require("@static/images/logo/app-icon-128.png"),
+		white: require("@static/images/logo/logo-white.svg"),
 	},
 };
