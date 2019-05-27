@@ -9,15 +9,15 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .link {
-	padding: 12px 16px;
-	color: black;
+	padding: var(--space-sm) var(--space-md);
+	color: var(--color-black);
 	text-decoration: none;
 
 	&:hover {
-		background-color: #f1f1f1;
+		background-color: var(--color-gray-light);
 	}
 }
 </style>

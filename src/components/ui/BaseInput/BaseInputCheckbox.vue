@@ -69,10 +69,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
-$background-color: #ccc;
-$background-color-active: $color-secondary;
+$background-color: var(--color-gray);
+$background-color-active: var(--color-accent);
 
 label {
 	position: relative;
@@ -81,9 +81,8 @@ label {
 .icon {
 	position: relative;
 	display: inline-block;
-	margin-right: 0.25em;
 	background-color: $background-color;
-	transition: background-color $duration-animation-base;
+	transition: background-color var(--duration-transition-medium);
 }
 
 .checkbox {
@@ -102,8 +101,8 @@ label {
 		width: 0.5em;
 		height: 0.5em;
 		content: "";
-		background-color: white;
-		transition: transform $duration-animation-base;
+		background-color: var(--color-white);
+		transition: transform var(--duration-transition-medium);
 	}
 }
 

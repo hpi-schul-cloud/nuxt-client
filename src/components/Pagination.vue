@@ -71,10 +71,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .pagination {
-	margin: $size-margin auto;
+	margin: 0 auto;
 }
 
 .pagination-list {
@@ -88,10 +88,8 @@ export default {
 }
 .pagination-link {
 	display: inline-block;
-	padding: $size-padding-y $size-padding-y;
-	margin: 0 0.5 * $size-margin;
-	background-color: darken($color-text-bg, 10%);
-	border-radius: $size-border-radius-round;
+	padding: var(--space-sm);
+	background-color: var(--color-gray-light);
 	&:not(.current) {
 		cursor: pointer;
 	}

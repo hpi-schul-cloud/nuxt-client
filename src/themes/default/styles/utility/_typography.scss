@@ -1,0 +1,65 @@
+* {
+	tab-size: 2;
+}
+
+html,
+body {
+	font-family: var(--font-primary);
+	font-size: var(--text-base-size);
+	line-height: var(--line-height-md);
+	color: var(--color-black);
+}
+
+/* heading size */
+@for $i from 1 through 6 {
+	h#{$i},
+	.h#{$i} {
+		margin-bottom: var(--space-xxs);
+		font-family: var(--font-accent);
+		font-size: var(--heading-#{$i});
+		font-weight: var(--font-weight-bold);
+		line-height: var(--line-height-sm);
+		color: var(--color-black);
+	}
+}
+
+/* text size */
+.text-sm {
+	font-size: var(--text-sm);
+}
+.text-md {
+	font-size: var(--text-md);
+}
+.text-lg {
+	font-size: var(--text-lg);
+}
+
+a {
+	color: var(--color-primary);
+
+	&:visited {
+		color: var(--color-primary-visited);
+	}
+}
+
+b,
+strong {
+	font-weight: var(--font-weight-bold);
+}
+
+input,
+select,
+textarea,
+button {
+	font-family: inherit;
+	font-size: var(--text-md);
+}
+
+/* utility classes */
+
+.truncate {
+	// truncate text if it exceeds parent
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

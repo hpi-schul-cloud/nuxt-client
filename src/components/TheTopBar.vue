@@ -1,10 +1,6 @@
 <template>
 	<div class="topbar">
-		<img
-			style="height: 40px; margin-right: 10px"
-			:src="$theme.logo.app"
-			alt=""
-		/>
+		<img class="logo" :src="$theme.logo.app" alt="Website Logo" />
 		<h1 class="page-title">{{ title }}</h1>
 
 		<!-- ACTIONS -->
@@ -61,22 +57,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .topbar {
 	display: flex;
 	align-items: center;
-	padding: $size-padding;
-	box-shadow: $shadow-1;
+	padding: var(--space-sm) var(--space-md);
+	box-shadow: var(--shadow-sm);
+}
+.logo {
+	height: var(--heading-3);
+	margin-right: var(--space-sm);
 }
 .page-title {
-	@extend %font-heading;
-
 	flex: 1;
 	margin: 0;
-	font-size: 2em;
+	font-family: var(--font-accent);
+	font-size: var(--heading-4);
 	text-transform: capitalize;
 }
 .action {
-	padding: $size-padding;
+	padding: var(--space-sm) var(--space-md);
 }
 </style>

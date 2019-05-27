@@ -1,5 +1,5 @@
 <template>
-	<div v-if="course" class="root">
+	<div v-if="course">
 		<course-wizard
 			:steps="stepList"
 			:course="course"
@@ -112,11 +112,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
-
-.root {
-	min-width: $size-content-width-min;
-	max-width: $size-content-width-max;
-	margin: 0 auto;
-}
+@import "@styles";
 </style>

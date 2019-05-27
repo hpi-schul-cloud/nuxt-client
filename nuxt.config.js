@@ -133,11 +133,12 @@ module.exports = {
 			}
 		},
 		postcss: {
-			plugins: {},
+			plugins: [require("postcss-color-mod-function")()],
 			preset: {
 				autoprefixer: {},
 			},
 		},
+		extractCSS: true,
 	},
 	generate: {
 		dir: "dist/nuxt",

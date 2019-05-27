@@ -49,10 +49,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 $background-color: #ccc;
-$background-color-active: $color-secondary;
+$background-color-active: var(--color-accent);
 
 label {
 	position: relative;
@@ -63,10 +63,9 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	margin-right: 0.25em;
 	background-color: $background-color;
-	border-radius: $size-border-radius-round;
-	transition: background-color $duration-animation-base;
+	border-radius: var(--radius-round);
+	transition: background-color var(--duration-transition-medium);
 }
 
 input:checked + .radio {
