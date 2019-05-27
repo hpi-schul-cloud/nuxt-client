@@ -75,6 +75,27 @@ module.exports = {
 		"@nuxtjs/axios",
 		"@nuxtjs/toast",
 		"nuxt-babel",
+		[
+			"nuxt-i18n",
+			{
+				locales: [
+					{
+						name: "Deutsch",
+						code: "de",
+						iso: "de-DE",
+						file: "de-DE.js",
+					},
+					{
+						name: "English",
+						code: "en",
+						iso: "en-US",
+						file: "en-US.js",
+					},
+				],
+				langDir: "lang/",
+				defaultLocale: "de",
+			},
+		],
 	],
 
 	toast: {
