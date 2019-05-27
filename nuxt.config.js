@@ -51,18 +51,14 @@ module.exports = {
 	cssSourceMap: true,
 
 	router: {
-		middleware: ["is-authenticated"],
+		middleware: ["is-authenticated", "links-fallback"],
 	},
 
 	/*
 	 ** Plugins to load before mounting the App
 	 */
 	plugins: [
-		{
-			src: "@plugins/authenticate",
-			ssr: false,
-		},
-		"@plugins/cookies",
+		"@plugins/authenticate",
 		"@plugins/axios",
 		"@plugins/global",
 		"@plugins/dialog",
@@ -75,8 +71,6 @@ module.exports = {
 	 ** Nuxt.js modules
 	 */
 	modules: [
-		/* other options */
-
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
 		"@nuxtjs/toast",
@@ -92,7 +86,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
-		baseUrl: process.env.BASE_URL || "https://localhost:3030",
+		baseUrl: process.env.API_URL || "https://localhost:3030",
 	},
 
 	/*

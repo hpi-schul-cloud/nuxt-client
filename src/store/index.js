@@ -2,170 +2,131 @@ import Vue from "vue";
 import Vuex from "vuex";
 // import { app } from './feathers-client'
 import { CookieStorage } from "cookie-storage";
-import feathersVuex, { initAuth } from "feathers-vuex";
+import feathersVuex from "feathers-vuex";
 import feathersClient from "./feathers-client";
 const moment = require("moment");
 
 let plugins = [];
 const enableEvents = typeof window !== "undefined";
 
-if (process.client) {
-	const browserClient = feathersClient(
-		"",
-		new CookieStorage({
-			domain: "localhost",
-			path: "/",
-			expires: moment()
-				.add(14, "d")
-				.toDate(),
-			secure: false,
-		})
-	);
-	const { service, auth, FeathersVuex } = feathersVuex(browserClient, {
-		idField: "_id",
-		enableEvents: enableEvents,
-	});
+const browserClient = feathersClient(
+	"",
+	new CookieStorage({
+		domain: "localhost",
+		path: "/",
+		expires: moment()
+			.add(14, "d")
+			.toDate(),
+		secure: false,
+	})
+);
+const { service, auth, FeathersVuex } = feathersVuex(browserClient, {
+	idField: "_id",
+	enableEvents: enableEvents,
+});
 
-	Vue.use(FeathersVuex);
+Vue.use(FeathersVuex);
 
-	plugins = [
-		service("/content/search", {
-			namespace: "content_search",
-			paginate: true,
-			autoRemove: true,
-			replaceItems: true,
-		}),
-		service("courses", {
-			instanceDefaults: {
-				name: "",
-				description: "",
-				startDate: "",
-				untilDate: "",
-				teachers: [],
-				substitutions: [],
-				classes: [],
-				students: [],
-				times: [],
+plugins = [
+	service("/content/search", {
+		namespace: "content_search",
+		paginate: true,
+		autoRemove: true,
+		replaceItems: true,
+	}),
+	service("courses", {
+		instanceDefaults: {
+			name: "",
+			description: "",
+			startDate: "",
+			untilDate: "",
+			teachers: [],
+			substitutions: [],
+			classes: [],
+			students: [],
+			times: [],
+		},
+		paginate: true,
+	}),
+	service("teams", {
+		paginate: true,
+		getters: {
+			hasTeamPermission: (state, getters) => (permission) => {
+				return getters.current.user
+					? getters.current.user.permissions.find((p) => p === permission)
+					: false;
 			},
-			paginate: true,
-		}),
-		service("teams", {
-			paginate: true,
-			getters: {
-				hasTeamPermission: (state, getters) => (permission) => {
-					return getters.current.user
-						? getters.current.user.permissions.find((p) => p === permission)
-						: false;
-				},
+		},
+		actions: {
+			acceptInvitation: async function(ctx, teamId) {
+				return this.$axios.$get("/teams/extern/accept/" + teamId);
 			},
-			actions: {
-				acceptInvitation: async function(ctx, teamId) {
-					return this.$axios.$get("/teams/extern/accept/" + teamId);
-				},
-				getMyInvitations: async function() {
-					return this.$axios.$get("/teams/extern/get/");
-				},
-				inviteExternal: async function(ctx, payload) {
-					return this.$axios.$patch("/teams/extern/add/" + payload.teamId, {
-						userId: payload.userId,
-						email: payload.email,
-						role: payload.role,
-					});
-				},
-				resendInvitation: async function(ctx, payload) {
-					return this.$axios.$patch("/teams/extern/add/" + payload.teamId, {
-						email: payload.email,
-					});
-				},
-				deleteInvitation: async function(ctx, payload) {
-					return this.$axios.$patch("/teams/extern/remove/" + payload.teamId, {
-						email: payload.email,
-					});
-				},
+			getMyInvitations: async function() {
+				return this.$axios.$get("/teams/extern/get/");
 			},
-		}),
-		service("news", { paginate: true }),
-		service("schools", { paginate: true }),
-		service("roles", { paginate: true }),
-		service("classes", { paginate: true }),
-		service("users", { paginate: true }),
-		service("publicTeachers", { paginate: true }),
-		auth({
-			userService: "users",
-			actions: {
-				hasRole: async (
-					{ dispatch, rootGetters, state, rootState },
-					roleName
-				) => {
-					if (rootState.roles.ids.length < 1) {
-						await dispatch(
-							"roles/find",
-							{ query: { $limit: 1000 } },
-							{ root: true }
-						);
-					}
+			inviteExternal: async function(ctx, payload) {
+				return this.$axios.$patch("/teams/extern/add/" + payload.teamId, {
+					userId: payload.userId,
+					email: payload.email,
+					role: payload.role,
+				});
+			},
+			resendInvitation: async function(ctx, payload) {
+				return this.$axios.$patch("/teams/extern/add/" + payload.teamId, {
+					email: payload.email,
+				});
+			},
+			deleteInvitation: async function(ctx, payload) {
+				return this.$axios.$patch("/teams/extern/remove/" + payload.teamId, {
+					email: payload.email,
+				});
+			},
+		},
+	}),
+	service("news", { paginate: true }),
+	service("schools", { paginate: true }),
+	service("roles", { paginate: true }),
+	service("classes", { paginate: true }),
+	service("users", { paginate: true }),
+	service("publicTeachers", { paginate: true }),
+	auth({
+		userService: "users",
+		actions: {
+			hasRole: async (
+				{ dispatch, rootGetters, state, rootState },
+				roleName
+			) => {
+				if (rootState.roles.ids.length < 1) {
+					await dispatch(
+						"roles/find",
+						{ query: { $limit: 1000 } },
+						{ root: true }
+					);
+				}
 
-					const roles = rootGetters["roles/list"];
-					const userRoles = state.user.roles;
+				const roles = rootGetters["roles/list"];
+				const userRoles = state.user.roles;
 
-					const userRolesMapped = userRoles.map((id) => {
-						id = roles.find((role) => role._id === id);
-						return id;
-					});
+				const userRolesMapped = userRoles.map((id) => {
+					id = roles.find((role) => role._id === id);
+					return id;
+				});
 
-					return userRolesMapped.find((r) => r.name === roleName) !== undefined;
-				},
+				return userRolesMapped.find((r) => r.name === roleName) !== undefined;
 			},
-			state: {
-				publicPages: ["index", "login", "signup"],
-			},
-		}),
-	];
-}
+		},
+		state: {
+			publicPages: ["index", "login", "signup"],
+		},
+	}),
+];
 
 plugins.push();
 
 const createStore = () => {
 	return new Vuex.Store({
 		state: {},
-		actions: {
-			nuxtServerInit({ commit, dispatch, state }, { req, store }) {
-				let origin = req.headers.host.split(":");
-				origin = `http://${origin[0]}`;
-
-				const storage = {
-					getItem(key) {
-						return store.state.auth ? store.state.auth.accessToken : "";
-					},
-					setItem(key, value) {
-						store.state.auth.accessToken = value;
-					},
-					removeItem(key) {
-						store.state.auth.accessToken = null;
-					},
-				};
-
-				// Create a new client for the server
-				const client = feathersClient(origin, storage);
-				const { service, auth } = feathersVuex(client, {
-					idField: "_id",
-					enableEvents: false,
-				});
-
-				// Register services for the server
-				service("users", { paginate: true })(store);
-				service("teams", { paginate: true })(store);
-				service("schools", { paginate: true })(store);
-
-				return initAuth({
-					commit: store.commit,
-					dispatch,
-					req,
-					moduleName: "auth",
-					cookieName: "jwt",
-				});
-			},
-		},
+		actions: {},
 		modules: {
 			federalStates: {
 				namespaced: true,

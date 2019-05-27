@@ -15,7 +15,13 @@ export default (origin, storage) => {
 
 	const feathersClient = feathers()
 		.configure(socketio(socket))
-		.configure(auth({ storage }));
+		.configure(
+			auth({
+				storage,
+				storageKey: "jwt",
+				cookie: "jwt",
+			})
+		);
 
 	return feathersClient;
 };

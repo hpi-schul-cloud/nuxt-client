@@ -1,6 +1,6 @@
 // If it's a private page and there's no payload, redirect.
-export default function(context) {
-	const { store, redirect, route } = context;
+export default async function(ctx) {
+	const { store, redirect, route } = ctx;
 	const { auth } = store.state;
 
 	if (
