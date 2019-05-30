@@ -57,15 +57,7 @@ module.exports = {
 	/*
 	 ** Plugins to load before mounting the App
 	 */
-	plugins: [
-		"@plugins/authenticate",
-		"@plugins/axios",
-		"@plugins/global",
-		"@plugins/dialog",
-		"@plugins/directives",
-		"@plugins/theme",
-		"@plugins/user",
-	],
+	plugins: ["@plugins/authenticate", "@plugins/axios", "@plugins/global"],
 
 	/*
 	 ** Nuxt.js modules
@@ -75,7 +67,6 @@ module.exports = {
 		"@nuxtjs/axios",
 		"@nuxtjs/toast",
 		"nuxt-babel",
-		"cookie-universal-nuxt",
 	],
 
 	toast: {
@@ -97,21 +88,8 @@ module.exports = {
 		 ** You can extend webpack config here
 		 */
 		extend(config, ctx) {
-			config.resolve.alias = require("./aliases.config").webpack;
-			/*
-			// this is breaking normal svg image loading
-			// https://www.npmjs.com/package/vue-svg-loader
-			const svgRule = config.module.rules.find((rule) =>
-				rule.test.test(".svg")
-			);
+			Object.assign(config.resolve.alias, require("./aliases.config").webpack);
 
-			svgRule.test = /\.(png|jpe?g|gif|webp)$/;
-
-			config.module.rules.push({
-				test: /\.svg$/,
-				loader: "vue-svg-loader",
-			});
-			*/
 			// Run ESLint on save
 			if (ctx.isDev && ctx.isClient) {
 				config.module.rules.push({
@@ -126,11 +104,12 @@ module.exports = {
 			}
 		},
 		postcss: {
-			plugins: {},
+			plugins: [require("postcss-color-mod-function")()],
 			preset: {
 				autoprefixer: {},
 			},
 		},
+		extractCSS: true,
 	},
 	generate: {
 		dir: "dist/nuxt",

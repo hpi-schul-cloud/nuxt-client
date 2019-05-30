@@ -1,5 +1,4 @@
 import { storiesOf } from "@storybook/vue";
-import outdent from "outdent";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
@@ -17,7 +16,7 @@ storiesOf("Misc", module)
 	})
 	.add("Pulsing Dot", () => ({
 		components: { PulsatingDot },
-		template: outdent`<PulsatingDot />`,
+		template: `<PulsatingDot />`,
 	}))
 	.add("Profile Pic", () => ({
 		components: { ProfilePicture },
@@ -26,7 +25,7 @@ storiesOf("Misc", module)
 	}))
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
-		template: outdent`
+		template: `
 			<DropdownMenu title="Dropdown">
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
@@ -40,7 +39,7 @@ storiesOf("Misc", module)
 			searchQuery: text("searchQuery", ""),
 			placeholder: text("placeholder", "Suche nach..."),
 		}),
-		template: outdent`<searchbar v-model.lazy="searchQuery" :placeholder="placeholder" />`,
+		template: `<searchbar v-model.lazy="searchQuery" :placeholder="placeholder" />`,
 	}))
 	.add("Toast", () => ({
 		components: { BaseButton },
@@ -52,7 +51,7 @@ storiesOf("Misc", module)
 			),
 			message: text("message", "Toast 🧐"),
 		}),
-		template: outdent`
+		template: `
 			<div>
 				<BaseButton @click="$toast[type](message)">Knobs Toast</BaseButton>
 				<br>

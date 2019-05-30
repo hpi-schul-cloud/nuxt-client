@@ -9,6 +9,10 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+	environment:
+	  # Algolia search
+	  - ALGOLIA_API_KEY=$ALGOLIA_API_KEY
+	  - ALGOLIA_NAME=$ALGOLIA_NAME
     ports:
       - \"3300:80\"
     restart: always

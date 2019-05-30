@@ -1,9 +1,8 @@
 /* eslint-disable max-lines */
 
 import { storiesOf } from "@storybook/vue";
-import outdent from "outdent";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select } from "@storybook/addon-knobs";
+import { text, select, boolean, color } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
@@ -27,26 +26,69 @@ storiesOf("Base Components", module)
 	.addParameters({
 		notes,
 	})
-	.add("Base Button Primary", () => ({
+	.add("Base Button", () => ({
 		components: { BaseButton },
-		props: {
-			text: {
-				default: text("Text", "Primary"),
+		data: () => ({
+			text: text("Text", "Action"),
+			style: select(
+				"Style",
+				{
+					default: "",
+					primary: "is-primary",
+					secondary: "is-secondary",
+					success: "is-success",
+					danger: "is-danger",
+				},
+				""
+			),
+			size: select(
+				"Size",
+				{ small: "is-small", default: "", large: "is-large" },
+				""
+			),
+			outline: boolean("outline", false),
+			disabled: boolean("disabled", false),
+		}),
+		computed: {
+			classes() {
+				const classes = [this.style, this.size];
+				if (this.outline) {
+					classes.push("is-outline");
+				}
+				return classes;
 			},
 		},
-		template:
-			'<div><base-button class ="is-primary is-small">{{ text }}</base-button> <br/> <base-button class ="is-primary is-medium">{{ text }}</base-button><br/><base-button class ="is-primary is-large">{{ text }}</base-button></div>',
-		methods: {},
-	}))
-	.add("Base Button Secondary", () => ({
-		components: { BaseButton },
-		props: {
-			text: {
-				default: text("Text", "Secondary"),
-			},
-		},
-		template:
-			'<div><base-button class="is-secondary is-small">{{ text }}</base-button><br/><base-button class ="is-secondary is-medium">{{ text }}</base-button><br/><base-button class ="is-secondary is-large">{{ text }}</base-button><br/></div>',
+		template: `<div style="padding: 2rem;">
+				<h2>Knobs</h2>
+				<base-button :disabled="disabled" :class="classes">{{ text }}</base-button>
+				<h2>Primary Action</h2>
+				<base-button class="is-primary is-small">Primary</base-button>
+				<base-button class="is-primary is-small is-outline">Primary</base-button>
+				<base-button class="is-primary">Primary</base-button>
+				<base-button class="is-primary is-outline">Primary</base-button>
+				<base-button class="is-primary is-large">Primary</base-button>
+				<base-button class="is-primary is-large is-outline">Primary</base-button>
+				<base-button class="is-hero-cta is-large">Hero C2A</base-button>
+				<h2>Secondary Action</h2>
+				<base-button class="is-secondary is-small">Secondary</base-button>
+				<base-button class="is-secondary is-small is-outline">Secondary</base-button>
+				<base-button class="is-secondary">Secondary</base-button>
+				<base-button class="is-secondary is-outline">Secondary</base-button>
+				<base-button class="is-secondary is-large">Secondary</base-button>
+				<base-button class="is-secondary is-large is-outline">Secondary</base-button>
+				<h2>Tertiary Action</h2>
+				<base-button class="is-small">Small</base-button>
+				<base-button class="is-small is-outline">Small</base-button>
+				<base-button>Default</base-button>
+				<base-button class="is-outline">Default</base-button>
+				<base-button class="is-large">Large</base-button>
+				<base-button class="is-large is-outline">Large</base-button>
+				<h2>Disabled</h2>
+				<base-button disabled>Disabled</base-button>
+				<h2>Signal</h2>
+				<base-button class="is-success is-medium">Success</base-button>
+				<base-button class="is-danger is-medium">Danger</base-button>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Card", () => ({
@@ -56,13 +98,29 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Icon", () => ({
 		components: { BaseIcon },
-		template: outdent`
-			<div>
-				<base-icon source="material" icon="home"/>
-				<base-icon source="custom" icon="clock"/>
+		data: () => ({
+			icon: text("icon", "home"),
+			source: select(
+				"source",
+				{ material: "material", custom: "custom" },
+				"material"
+			),
+			size: text("size", "1em"),
+			color: color("color", "#f8a41b"),
+		}),
+		template: `<div>
+			<p>
+				Icon usage is simple: <base-icon :source="source" :icon="icon" :style="{'font-size': size, fill: color}"/>
+			</p>
+			<p>
+				The Color can be also be set using fill:
+				<base-icon source="material" icon="add" :fill="color"/>
+			</p>
+			<p>
+				Scaling works, by setting the font-size attribute:
 				<base-icon source="custom" icon="tasks" style="font-size: 2em" />
-			</div>
-		`,
+			</p>
+		</div>`,
 	}))
 	.add("Base Input (Knobs)", () => {
 		const baseInputTypesDict = {};
@@ -78,8 +136,10 @@ storiesOf("Base Components", module)
 				name: text("name", "name"),
 				value: text("value", ""),
 				placeholder: text("placeholder", "Placeholder"),
+				hint: text("hint", "* required"),
+				error: text("error", ""),
 			}),
-			template: outdent`
+			template: `
 				<div>
 					<base-input
 						v-model="vmodel"
@@ -87,6 +147,8 @@ storiesOf("Base Components", module)
 						:type="type"
 						:name="name"
 						:placeholder="placeholder"
+						:hint="hint"
+						:error="error"
 					/>
 				</div>`,
 		};
@@ -109,25 +171,25 @@ storiesOf("Base Components", module)
 			},
 		}),
 
-		template: outdent`
+		template: `<div>
+			${["text", "email", "password", "url", "number", "date", "time"]
+				.map(
+					(type) =>
+						`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />\n`
+				)
+				.join("")
+				.trimRight()}
 			<div>
-				${["text", "email", "password", "url", "number", "date", "time"]
-					.map(
-						(type) =>
-							`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />`
-					)
-					.join("\n\t")}
-				<div>
-					<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
-					<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
-				</div>
-				<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
-				<div>
-					<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
-					<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
-				</div>
-				<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
-			</div>`,
+				<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
+				<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
+			</div>
+			<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
+			<div>
+				<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
+				<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
+			</div>
+			<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
+		</div>`,
 	}))
 	.add("Base Textarea", () => ({
 		components: { BaseSelect },
@@ -170,7 +232,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Link", () => ({
 		components: { BaseLink },
-		template: outdent`
+		template: `
 			<div>
 				<base-link href="https://schul-cloud.org">external Link to https://schul-cloud.org</base-link>
 				<base-link to="/news">Internal Link to /news</base-link>
@@ -188,7 +250,7 @@ storiesOf("Base Components", module)
 			columns: tableColumns,
 		}),
 		components: { BaseTable },
-		template: outdent`
+		template: `
 			<base-table v-slot:default="slotProps" :data="data" :columns="columns">
 				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>
@@ -196,8 +258,9 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
-		template:
-			'<base-collapsible label="Test"><p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></base-collapsible>',
+		template: `<base-collapsible label="Test">
+			<p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</base-collapsible>`,
 	}))
 	.add("Base Breadcrumb", () => ({
 		components: { BaseBreadcrumb },
@@ -208,7 +271,7 @@ storiesOf("Base Components", module)
 				{ text: "Mathematik" },
 			],
 		}),
-		template: `<base-breadcrumb :inputs="inputs"></base-breadcrumb>`,
+		template: `<base-breadcrumb :inputs="inputs" />`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
@@ -224,7 +287,7 @@ storiesOf("Base Components", module)
 				"Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below."
 			),
 		}),
-		template: outdent`
+		template: `
 			<div>
 				<base-button @click="active = true">
 					Open Modal
@@ -249,7 +312,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Dialog", () => ({
 		data: () => ({ active: false }),
-		template: outdent`
+		template: `
 			<div>
 				<BaseButton @click="confirm">
 					Delete User
@@ -275,18 +338,28 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Video", () => ({
 		components: { BaseVideo },
-		template: outdent`
+		data: () => ({
+			poster: text(
+				"poster",
+				"https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg"
+			),
+			source: text(
+				"source",
+				"https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4"
+			),
+			noControls: boolean("noControls", false),
+		}),
+		template: `
 			<base-video
-				:configuration="{
-					streams: [{
-						hd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hd/video.mp4',
-						sd: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/sd/video.mp4',
-						poster: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/explainer-poster.jpg',
-						hls: 'https://www10-fms.hpi.uni-potsdam.de/vod/media/SCHUL-CLOUD/explainer2018/hls/video.m3u8',
-					}],
-					initialState: {playState: 'PAUSED'},
-					videoPreload: false
-				}"
+				style="max-width: 400px"
+				:noControls="noControls"
+				:poster="poster"
+				:sources="[
+					{
+						src: source,
+						type: 'video/mp4',
+					}
+				]"
 			/>`,
 	}))
 	.add("BaseBlockquote", () => ({
@@ -299,7 +372,7 @@ storiesOf("Base Components", module)
 			),
 			srcText: text("src-text", ""),
 		}),
-		template: outdent`
+		template: `
 			<BaseBlockquote :cite="cite" :src-text="srcText || undefined">
 				{{quote}}
 			</BaseBlockquote>

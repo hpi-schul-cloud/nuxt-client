@@ -7,11 +7,11 @@ module.exports = {
 		".*\\.(vue)$": "vue-jest",
 		"^.+\\.js$": "babel-jest",
 	},
+	transformIgnorePatterns: ["<roodDir>/node_modules/(?!vue-ripple-directive)"],
 	moduleNameMapper: {
 		// Transform any static assets to empty strings
 		"\\.(jpe?g|png|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff2?|eot|ttf|otf)$":
 			"<rootDir>/tests/unit/fixtures/empty-string.js",
-		"video-player": "<rootDir>/tests/unit/mocks/video-player-mock.js",
 		...require("./aliases.config").jest,
 	},
 	snapshotSerializers: ["jest-serializer-vue"],

@@ -6,7 +6,6 @@
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
 				>
-					>>>>>>> master
 					<slot />
 				</div>
 			</div>
@@ -46,18 +45,18 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@variables";
+@import "@styles";
 
 .modal-mask {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 9998;
+	z-index: var(--layer-modal);
 	display: table;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	transition: opacity $duration-animation-medium ease;
+	background-color: var(--color-overlay);
+	transition: opacity var(--duration-transition-medium) ease;
 }
 
 .modal-wrapper {
@@ -71,10 +70,10 @@ export default {
 	width: 80%;
 	max-height: calc(100vh - 40px);
 	margin: 0 auto;
-	overflow: hidden;
-	border-radius: 2px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-	transition: all $duration-animation-medium ease;
+	background-color: var(--color-white);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-sm);
+	transition: all var(--duration-transition-medium) ease;
 	&--large {
 		min-height: 80%;
 	}
@@ -86,24 +85,22 @@ export default {
 	flex-shrink: 0;
 	align-items: center;
 	justify-content: flex-start;
-	padding: 20px;
-	background-color: #f5f5f5;
-	border-bottom: 1px solid #dbdbdb;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
+	padding: var(--space-md);
+	border-bottom: 1px solid var(--color-gray);
+	border-top-left-radius: var(--radius-md);
+	border-top-right-radius: var(--radius-md);
 }
 
 .modal-header h3 {
-	font-size: 1.5rem;
-	font-weight: 600;
+	font-size: var(--text-lg);
+	font-weight: var(--font-weight-bold);
 }
 
 .modal-body {
 	flex-grow: 1;
 	flex-shrink: 1;
-	padding: 20px;
+	padding: var(--space-md);
 	overflow: auto;
-	background-color: #fff;
 }
 
 .modal-footer {
@@ -112,9 +109,8 @@ export default {
 	flex-shrink: 0;
 	align-items: center;
 	justify-content: flex-end;
-	padding: 20px;
-	background-color: #f5f5f5;
-	border-top: 1px solid #dbdbdb;
+	padding: var(--space-md);
+	border-top: 1px solid var(--color-gray);
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
 }

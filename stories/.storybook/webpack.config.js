@@ -10,7 +10,7 @@ module.exports = ({ config }) => {
 		},
 		{
 			test: /\.scss$/,
-			loaders: ["style-loader", "css-loader", "sass-loader"],
+			loaders: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
 			include: path.resolve(__dirname, "../../"),
 		},
 		{
@@ -32,9 +32,9 @@ module.exports = ({ config }) => {
 			},
 		},
 	];
-	const alias = require("../../aliases.config").webpack;
-
 	config.module.rules.push(...rules);
+
+	const alias = require("../../aliases.config").webpack;
 	Object.assign(config.resolve.alias, alias);
 
 	return config;

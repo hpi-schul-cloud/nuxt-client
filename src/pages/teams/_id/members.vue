@@ -7,36 +7,28 @@
 		</section>
 
 		<section class="section">
-			<div class="columns">
-				<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="column">
-					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
-					<base-button
-						class="button is-primary"
-						@click="addInternalModalActive = true"
-						>Interne Teilnehmer hinzufügen</base-button
-					>
-				</div>
-				<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="column">
-					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
-					<base-button
-						class="button is-primary"
-						@click="addExternalModalActive = true"
-						>Externe Teilnehmer einladen</base-button
-					>
-				</div>
-				<!-- TODO -->
-				<!-- <div class="column">
-					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
-					<base-button
-						class="button is-primary"
-						@click="addInternalModalActive = true"
-						>Externe Teilnehmer hinzufügen</base-button
-					>
-				</div> -->
+			<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="column">
+				<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
+				<base-button
+					class="button is-primary"
+					@click="addInternalModalActive = true"
+					>Interne Teilnehmer hinzufügen</base-button
+				>
 			</div>
 		</section>
 
-		<section>
+		<section class="section">
+			<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="column">
+				<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
+				<base-button
+					class="button is-primary"
+					@click="addExternalModalActive = true"
+					>Externe Teilnehmer einladen</base-button
+				>
+			</div>
+		</section>
+
+		<section class="section">
 			<h3>Ausstehende Einladungen</h3>
 			<base-table
 				v-slot:default="slotProps"
@@ -56,7 +48,7 @@
 			</base-table>
 		</section>
 
-		<section>
+		<section class="section">
 			<h3>Mitglieder</h3>
 			<base-table
 				v-slot:default="slotProps"
@@ -80,7 +72,7 @@
 			</base-table>
 		</section>
 
-		<section>
+		<section class="section">
 			<h3>Klassen</h3>
 			<base-table
 				v-slot:default="slotProps"
@@ -313,8 +305,7 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Vue from "vue";
-var moment = require("moment");
+import dayjs from "dayjs";
 
 const roleTranslations = {
 	teammember: "Teilnehmer",
@@ -397,7 +388,7 @@ export default {
 	computed: {
 		invitedMembers() {
 			return this.team.invitedUserIds.map((invite) => {
-				invite.createdAt = moment(invite.createdAt).format("DD.MM.YYYY");
+				invite.createdAt = dayjs(invite.createdAt).format("DD.MM.YYYY");
 				invite.roleName = roleTranslations[invite.role];
 				return invite;
 			});

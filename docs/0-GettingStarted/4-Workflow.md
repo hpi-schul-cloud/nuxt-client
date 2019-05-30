@@ -36,7 +36,7 @@ Branches werden nach folgendem Schema benannt: `${TICKETID}-${Kurzbeschreibung}`
 - UI Reviews schon während der Entwicklung anstoßen (z. B. mit dem jeweiligen Designer)
 - Tests schreiben
 - Komponenten reusable gestalten
-- [Richtlinien zur Accessability eingehalten](../Accessability.md)
+- [Richtlinien zur Accessibility einhalten](../Accessibility.md)
 
 ## Pull Requests
 
@@ -66,4 +66,4 @@ Wenn jemand schlechten Code sieht sollte er dies direkt Anmerken um die Codequal
 
 1. Code Review gewissenhaft ausführen
 2. UI Reviews durchführen - An Tickets zu UI Änderungen sollte ein Screenshot hinterlegt sein, welcher das Zielresultat aufzeigen soll. Mit diesem sollte verglichen werden und entsprechende Abweichungen vor dem Approve abgeklärt werden.
-3. Mergen oder das Label `ready to merge` setzen. Wenn das Label `ready to merge` gesetzt ist, wird der Mergify Bot sich um alles weitere kümmern. (Siehe [Tools](../2-Tools.md#mergify)).
+3. Mergen oder das Label `ready to merge` setzen. Wenn das Label `ready to merge` gesetzt ist, wird der Mergify Bot sich um alles weitere kümmern. (Siehe [Tools](../4-Tools.md#mergify)).

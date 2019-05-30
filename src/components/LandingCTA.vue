@@ -14,17 +14,9 @@
 <script>
 export default {
 	props: {
-		subtitle: { type: String, default: "" },
-		title: { type: String, default: "" },
-		ctaText: { type: String, default: "" },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		onClick() {
-			this.$emit("click");
-		},
+		subtitle: { type: String, required: true },
+		title: { type: String, required: true },
+		ctaText: { type: String, required: true },
 	},
 };
 </script>
@@ -40,19 +32,19 @@ export default {
 }
 
 .subtitle {
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 }
 
 .cta-button {
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 }
 
 .landing-image {
 	display: block;
 	width: 35%;
-	margin-top: 30px;
+	margin-top: var(--space-lg);
 	margin-right: auto;
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 	margin-left: auto;
 }
 

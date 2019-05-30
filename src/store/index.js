@@ -4,7 +4,7 @@ import Vuex from "vuex";
 import { CookieStorage } from "cookie-storage";
 import feathersVuex from "feathers-vuex";
 import feathersClient from "./feathers-client";
-const moment = require("moment");
+import dayjs from "dayjs";
 
 let plugins = [];
 const enableEvents = typeof window !== "undefined";
@@ -14,7 +14,7 @@ const browserClient = feathersClient(
 	new CookieStorage({
 		domain: "localhost",
 		path: "/",
-		expires: moment()
+		expires: dayjs()
 			.add(14, "d")
 			.toDate(),
 		secure: false,

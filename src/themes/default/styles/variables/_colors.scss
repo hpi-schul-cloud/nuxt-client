@@ -1,24 +1,34 @@
-$color-primary: #b10438;
-$color-secondary: #f8a41b;
+$brighten: 15%;
+$darken: 25%;
 
-// Layout
-$color-border: #999;
+:root {
+	/* main colors */
+	--color-primary: #b1063a;
+	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
+	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
+	--color-accent: #e98404;
+	--color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
+	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
 
-// CONTENT
-$color-body-bg: #eee;
-$color-heading-text: #000;
-$color-text: #000;
-$color-text-bg: #fff;
-$color-link: $color-primary;
-$color-link-active: darken($color-primary, 50%);
+	// shades
+	--color-black: #1d1d21;
+	--color-gray-light: #ddd;
+	--color-gray: #aaa;
+	--color-gray-dark: #444;
+	--color-white: #fff;
+	--color-overlay: rgba(0, 0, 0, 0.5);
 
-$color-text-on-primary: #fff;
-$color-link-on-primary: #fff;
-$color-link-active-on-primary: #fff;
-
-// Button
-$color-button-primary: #b10438;
-$color-button-secondary: #f8a41b;
-$color-button-light: #363636;
-$color-button-light-bg: #fff;
-$color-button-light-border: #dbdbdb;
+	/* feedback */
+	--color-info: #17a2b8;
+	--color-info-light: color-mod(var(--color-info) tint(#{$brighten}));
+	--color-info--dark: color-mod(var(--color-info) shade(#{$darken}));
+	--color-success: #13ba98;
+	--color-success-light: color-mod(var(--color-success) tint(#{$brighten}));
+	--color-success--dark: color-mod(var(--color-success) shade(#{$darken}));
+	--color-warning: #ffd137;
+	--color-warning-light: color-mod(var(--color-warning) tint(#{$brighten}));
+	--color-warning--dark: color-mod(var(--color-warning) shade(#{$darken}));
+	--color-danger: #f44336;
+	--color-danger-light: color-mod(var(--color-danger) tint(#{$brighten}));
+	--color-danger--dark: color-mod(var(--color-danger) shade(#{$darken}));
+}

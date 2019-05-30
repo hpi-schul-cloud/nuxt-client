@@ -132,7 +132,6 @@ async function start() {
 	// Listen the server
 	app.listen(port, host);
 
-	// eslint-disable-next-line no-console
 	consola.ready({
 		message: `Server listening on http://${host}:${port}`,
 		badge: true,

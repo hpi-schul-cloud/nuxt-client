@@ -1,7 +1,7 @@
 <template>
 	<a
 		v-if="href"
-		class="link"
+		class="link is-external"
 		:href="href"
 		v-bind="$attrs"
 		:target="target"
@@ -10,7 +10,7 @@
 		<slot />
 	</a>
 	<!-- TODO use RouterLink if used outside nuxt -->
-	<NuxtLink v-else class="link" :to="routerLinkTo" v-bind="$attrs">
+	<NuxtLink v-else class="link" tag="a" :to="routerLinkTo" v-bind="$attrs">
 		<slot />
 	</NuxtLink>
 </template>
@@ -99,13 +99,30 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
+
 .link {
-	color: $color-link;
-	text-decoration: underline;
+	display: inline;
+	color: var(--color-black);
+	text-decoration: none;
 	cursor: pointer;
+	border-bottom: 2px solid var(--color-gray);
+	&:hover,
+	&:focus {
+		color: var(--color-primary-dark);
+	}
+	&:visited {
+		color: var(--color-primary);
+	}
+}
+
+.is-external {
+	border: none;
 	&:active {
-		color: $color-link-active;
+		color: var(--color-black);
+	}
+	&:hover {
+		color: var(--color-primary-dark);
 	}
 }
 </style>

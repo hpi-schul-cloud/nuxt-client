@@ -72,7 +72,17 @@ Für unit-tests verwenden wir [Jest](https://jestjs.io/). Die Konfigurationsdate
 
 Um unsere Testabdeckung zu überwachen verwenden wir [codecov.io](https://codecov.io). Der aktuelle Status ist auf dem entsprechenden [Dashboard](https://codecov.io/gh/schul-cloud/nuxt-client/) einzusehen.
 
-## Babel
+## Polyfills
+
+### Postcss
+
+Postcss wird verwendet um CSS zu autoprefixen.
+
+Zusätzlich verwenden wir das Plugin ["postcss color mod function"](https://github.com/jonathantneal/postcss-color-mod-function) welches es uns ermöglicht Farben einfacher zu manipulieren. Dies sollte jedoch nur in den Variablen-Dateien genutzt werden.
+
+Die Konfiguration ist unter `postcss.config.js` zu finden.
+
+### Babel
 
 Für Tests benötigen wir zwingend `@babel/preset-env` mit `babel-core ^7.0.0` und `babel-jest ^24.1.0`.
 

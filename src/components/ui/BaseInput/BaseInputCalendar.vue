@@ -73,22 +73,16 @@ export default {
 
 <style src="flatpickr/dist/flatpickr.css"></style>
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .calendar-input /deep/ .flatpickr-input {
-	box-sizing: border-box;
 	display: block;
 	width: 100%;
-	line-height: 1;
-	color: $color-text;
-	background: inherit;
 	border: 0;
-	border-radius: calc(#{$size-border-radius} - #{$size-border-width});
-	transition: color $duration-animation-base linear;
-
-	@extend %typography-small;
+	border-bottom-right-radius: calc(var(--border-radius) - var(--border-width));
+	border-bottom-left-radius: calc(var(--border-radius) - var(--border-width));
 	&::placeholder {
-		color: lighten($color-text, 40%);
+		color: var(--color-gray);
 	}
 }
 </style>

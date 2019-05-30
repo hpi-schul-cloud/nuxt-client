@@ -58,6 +58,10 @@ module.exports = {
 		docsDir: "/docs",
 		editLinks: true,
 		editLinkText: "Improve this page!",
+		algolia: {
+			apiKey: process.env.ALGOLIA_API_KEY,
+			indexName: process.env.ALGOLIA_NAME,
+		},
 	},
 	serviceWorker: {
 		updatePopup: true,

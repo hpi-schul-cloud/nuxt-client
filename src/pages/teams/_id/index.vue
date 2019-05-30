@@ -38,7 +38,7 @@
 				>Artikel anlegen</base-button
 			>
 			<news-card
-				v-for="article of newsColored"
+				v-for="article of news"
 				:key="article._id"
 				:article="article"
 				class="mb-2"
@@ -87,27 +87,6 @@ export default {
 		...mapGetters("news", {
 			news: "list",
 		}),
-		newsColored() {
-			const colors = [
-				"#F44336",
-				"#E91E63",
-				"#3F51B5",
-				"#2196F3",
-				"#03A9F4",
-				"#00BCD4",
-				"#009688",
-				"#4CAF50",
-				"#CDDC39",
-				"#FFC107",
-				"#FF9800",
-				"#FF5722",
-			];
-
-			return this.news.map((article) => {
-				article.color = colors[Math.floor(Math.random() * colors.length)];
-				return article;
-			});
-		},
 		breadcrumbs() {
 			return [
 				{ text: "Teams", to: { name: "teams" } },
