@@ -1,0 +1,16 @@
+{
+	"links": {
+		"home": "Heim",
+		"about": "Über",
+		"english": "Englische Verison",
+		"german": "Deutsche Version"
+	},
+	"home": {
+		"title": "Willkommen",
+		"introduction": "Dies ist ein einleitungs Text in Deutsch"
+	},
+	"about": {
+		"title": "Über",
+		"introduction": "Diese seite gibt mehr infos über uns."
+	}
+}

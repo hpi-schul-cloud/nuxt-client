@@ -51,7 +51,7 @@ module.exports = {
 	cssSourceMap: true,
 
 	router: {
-		middleware: ["is-authenticated"],
+		middleware: ["is-authenticated", "i18n"],
 	},
 
 	/*
@@ -63,6 +63,7 @@ module.exports = {
 			ssr: false,
 		},
 		"@plugins/global",
+		"@plugins/i18n.js",
 	],
 
 	/*
@@ -74,28 +75,6 @@ module.exports = {
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
 		"@nuxtjs/toast",
-		"nuxt-babel",
-		[
-			"nuxt-i18n",
-			{
-				locales: [
-					{
-						name: "Deutsch",
-						code: "de",
-						iso: "de-DE",
-						file: "de-DE.js",
-					},
-					{
-						name: "English",
-						code: "en",
-						iso: "en-US",
-						file: "en-US.js",
-					},
-				],
-				langDir: "lang/",
-				defaultLocale: "de",
-			},
-		],
 	],
 
 	toast: {
@@ -139,6 +118,7 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
+		vendor: ["vue-i18n"],
 	},
 	generate: {
 		dir: "dist/nuxt",
