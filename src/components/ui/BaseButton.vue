@@ -1,5 +1,5 @@
 <template>
-	<button class="button" v-on="$listeners">
+	<button :class="classes" v-on="$listeners">
 		<slot />
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
@@ -9,7 +9,46 @@
 </template>
 
 <script>
-export default {};
+export default {
+	props: {
+		size: {
+			type: String,
+			default: "medium",
+			validator: (size) => ["small", "medium", "large"].includes(size),
+		},
+		design: {
+			type: String,
+			default: "",
+			validator: (design) => {
+				const defined = [
+					"",
+					"outline",
+					"primary",
+					"primary outline",
+					"secondary",
+					"secondary outline",
+					"hero-cta",
+					"success",
+					"success outline",
+					"danger",
+					"danger outline",
+				].includes(design);
+				if (!defined) {
+					throw new Error(`the design "${design}" is not available`);
+				}
+			},
+		},
+	},
+	computed: {
+		classes() {
+			return [
+				"button",
+				`is-${this.size}`,
+				...this.design.split(" ").map((a) => `is-${a}`),
+			];
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>
