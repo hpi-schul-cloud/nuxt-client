@@ -4,7 +4,7 @@ import Vue from "vue";
 import "@components/ui/_globals";
 
 // HTTP REQUESTS (API)
-import "./axios";
+import axios from "./axios";
 
 // CURRENT USER INFO
 import "./user";
@@ -19,3 +19,7 @@ Vue.prototype.$theme = Theme;
 
 // Dialog
 import "./dialog";
+
+export default function(ctx) {
+	axios(ctx);
+}
