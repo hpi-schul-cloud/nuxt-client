@@ -16,10 +16,9 @@ install:
   - yarn global add codecov
   - yarn install --production=false
 script:
-  #  - yarn test:ci
-  #  - yarn lint:ci
-  #  - yarn build
-  - yarn build:docs
+  - yarn lint:ci
+  - yarn test:ci
+  - yarn build
   - codecov
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 notifications:
@@ -27,11 +26,9 @@ notifications:
 cache:
   directories:
     - node_modules
-
 deploy:
   skip_cleanup: true
   provider: script
   script: bash ./deploy/deploy.sh
   on:
-    all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^master$
+    branch: master
