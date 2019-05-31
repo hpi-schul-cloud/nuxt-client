@@ -19,7 +19,7 @@ surge --project ./dist/storybook --domain stories.${TRAVIS_PULL_REQUEST}.nuxt.sc
 
 
 # and there is not already a comment
-if curl -s "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments" | grep "${TRAVIS_PULL_REQUEST}.nuxt.schul-cloud.surge.sh"
+if curl -s "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments" | grep "deployed this pull-request for you"
 then
 	echo "URL Comment already exists. => Skip"
 else
