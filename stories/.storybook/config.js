@@ -6,6 +6,11 @@ import { withKnobs } from "@storybook/addon-knobs";
 
 import "./mockComponents";
 import "@components/ui/_globals";
+
+import Vue from "vue";
+import VueI18n from "vue-i18n";
+Vue.use(VueI18n);
+
 import "@styles";
 
 // Vue Docs ( storybook-addon-vue-info )
@@ -23,6 +28,21 @@ addDecorator(withKnobs);
 // Padding
 addDecorator(() => ({
 	template: '<div style="padding: 2rem"><story/></div>',
+}));
+
+// add i18n
+addDecorator(() => ({
+	i18n: new VueI18n({
+		locale: "ja",
+		messages: {
+			ja: {
+				links: {
+					home: "ようこそ、",
+				},
+			},
+		},
+	}),
+	template: "<story/>",
 }));
 
 // automatically import all files ending in *.stories.js
