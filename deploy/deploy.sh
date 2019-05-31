@@ -8,7 +8,11 @@ DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
 
 # storybook doku bauen und deployen
 function storybook {
-	docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f $DOCKERFILE_VERSION.storybook ../
+	if [ -f "$DOCKERFILE_VERSION.storybook" ]; then
+		docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f $DOCKERFILE_VERSION.storybook ../
+	else
+		docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f Dockerfile.storybook ../
+	fi
 	docker push schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-storybook:latest
 
@@ -20,7 +24,11 @@ function storybook {
 
 # client doku bauen und deployen
 function nuxtclient {
-	docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f $DOCKERFILE_VERSION.nuxt ../
+	if [ -f "$DOCKERFILE_VERSION.nuxt" ]; then
+		docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f $DOCKERFILE_VERSION.nuxt ../
+	else
+			docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f Dockerfile.nuxt ../
+	fi
 	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-client:latest
 
@@ -32,7 +40,11 @@ function nuxtclient {
 
 # vuepress doku bauen und deployen
 function vuepress {
-	docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f $DOCKERFILE_VERSION.vuepress ../
+	if [ -f "$DOCKERFILE_VERSION.nuxt" ]; then
+		docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f $DOCKERFILE_VERSION.vuepress ../
+	else
+		docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f Dockerfile.vuepress ../
+	fi
 	docker push schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-vuepress:latest
 
