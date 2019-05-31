@@ -16,7 +16,10 @@ install:
   - yarn global add codecov
   - yarn install --production=false
 script:
-  - yarn ci
+  #  - yarn test:ci
+  #  - yarn lint:ci
+  #  - yarn build
+  - yarn build:docs
   - codecov
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 notifications:
