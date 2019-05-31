@@ -32,19 +32,19 @@ export default {
 }
 
 .subtitle {
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 }
 
 .cta-button {
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 }
 
 .landing-image {
 	display: block;
 	width: 35%;
-	margin-top: 30px;
+	margin-top: var(--space-lg);
 	margin-right: auto;
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 	margin-left: auto;
 }
 

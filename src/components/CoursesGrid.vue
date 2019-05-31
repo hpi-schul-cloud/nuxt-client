@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import CourseCard from "./CourseCard.vue";
+import CourseCard from "./CourseCard";
 
 export default {
 	components: {
@@ -41,6 +41,6 @@ export default {
 
 .tile {
 	display: flex;
-	margin: 10px;
+	margin: var(--space-sm);
 }
 </style>

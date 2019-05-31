@@ -1,6 +1,8 @@
-$layer-negative-z-index: -1;
-$layer-page-z-index: 1;
-$layer-dropdown-z-index: 2;
-$layer-modal-z-index: 3;
-$layer-popover-z-index: 4;
-$layer-tooltip-z-index: 5;
+:root {
+	--layer-behind: -1;
+	--layer-page: 1;
+	--layer-dropdown: 2;
+	--layer-modal: 3;
+	--layer-popover: 4;
+	--layer-tooltip: 5;
+}

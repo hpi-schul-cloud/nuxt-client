@@ -1,4 +1,16 @@
-$duration-animation-base: 0.3s;
-$duration-animation-slow: $duration-animation-base * 3;
-$duration-animation-medium: $duration-animation-base;
-$duration-animation-fast: $duration-animation-base * 0.5;
+$transition-base: 0.3s;
+
+:root {
+	--duration-transition-slow: calc(#{$transition-base} * 3);
+	--duration-transition-medium: #{$transition-base};
+	--duration-transition-fast: calc(#{$transition-base} * 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.001s !important;
+		animation-duration: 0.001s !important;
+	}
+}

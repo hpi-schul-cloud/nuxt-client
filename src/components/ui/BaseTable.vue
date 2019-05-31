@@ -134,16 +134,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .table {
 	width: 100%;
 	thead {
-		font-weight: bolder;
+		font-weight: var(--font-weight-bold);
 		tr {
 			th {
-				padding: 8px;
+				padding: var(--sapce-xs);
 				cursor: pointer;
-				border-bottom: 2px solid grey;
+				border-bottom: calc(2 * var(--border-width)) solid var(--color-gray);
 				opacity: 0.66;
 				&.is-current-sort {
 					opacity: 1;
@@ -152,13 +152,13 @@ export default {
 					display: inline-block;
 					width: 0;
 					height: 0;
-					margin-left: 5px;
+					margin-left: var(--space-xxs);
 					vertical-align: middle;
 					border-right: 4px solid transparent;
-					border-bottom: 4px solid grey;
+					border-bottom: 4px solid var(--color-gray);
 					border-left: 4px solid transparent;
 					&.is-desc {
-						border-top: 4px solid grey;
+						border-top: 4px solid var(--color-gray);
 						border-right: 4px solid transparent;
 						border-bottom: 0;
 						border-left: 4px solid transparent;
@@ -170,13 +170,13 @@ export default {
 	tbody {
 		tr {
 			&:nth-child(odd) {
-				background-color: #fff;
+				background-color: var(--color-white);
 			}
 			&:nth-child(even) {
-				background-color: #eee;
+				background-color: var(--color-gray-light);
 			}
 			td {
-				padding: 8px;
+				padding: var(--space-xs);
 			}
 		}
 	}
