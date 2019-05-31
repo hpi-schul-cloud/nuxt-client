@@ -31,17 +31,9 @@ addDecorator(() => ({
 }));
 
 // add i18n
+import { i18n } from "@plugins/i18n";
 addDecorator(() => ({
-	i18n: new VueI18n({
-		locale: "ja",
-		messages: {
-			ja: {
-				links: {
-					home: "ようこそ、",
-				},
-			},
-		},
-	}),
+	i18n: i18n(),
 	template: "<story/>",
 }));
 
