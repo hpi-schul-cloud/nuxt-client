@@ -21,9 +21,9 @@ Vue.prototype.$theme = Theme;
 import "./dialog";
 
 // i18n
-import VueI18n from "vue-i18n";
-Vue.use(VueI18n);
+import i18n from "./i18n";
 
 export default function(ctx) {
 	axios(ctx);
+	i18n(ctx);
 }

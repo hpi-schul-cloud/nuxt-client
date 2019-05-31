@@ -51,7 +51,7 @@ module.exports = {
 	cssSourceMap: true,
 
 	router: {
-		middleware: ["is-authenticated", "i18n"],
+		middleware: ["is-authenticated"],
 	},
 
 	/*
@@ -63,7 +63,6 @@ module.exports = {
 			ssr: false,
 		},
 		"@plugins/global",
-		"@plugins/i18n.js",
 	],
 
 	/*
