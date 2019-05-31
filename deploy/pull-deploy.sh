@@ -19,10 +19,10 @@ surge --project ./dist/storybook --domain stories.${TRAVIS_PULL_REQUEST}.nuxt.sc
 
 
 # and there is not already a comment
-if curl -s "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments" | grep "We deployed this pull-request for you."
+if curl -s "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments" | grep "${TRAVIS_PULL_REQUEST}.nuxt.schul-cloud.surge.sh"
 then
 	echo "URL Comment already exists. => Skip"
 else
-	curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST -d "{\"body\": \"We deployed this pull-request for you. Check it out:\n\n**Docs:** http://docs.${TRAVIS_PULL_REQUEST}.nuxt.schul-cloud.surge.sh \n**Storybook:** http://stories.${TRAVIS_PULL_REQUEST}.nuxt.schul-cloud.surge.sh\"}" "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments"
+	curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST -d "{\"body\": \"❤️ I have deployed this pull-request for you: \n\n**Docs:** http://docs.${TRAVIS_PULL_REQUEST}.nuxt.schul-cloud.surge.sh \n**Storybook:** http://stories.${TRAVIS_PULL_REQUEST}.nuxt.schul-cloud.surge.sh\"}" "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments"
 	echo "Commented URLs to github"
 fi
