@@ -16,30 +16,37 @@ p {
 
 ## Colors
 
-<<< @/src/themes/default/styles/variables/\_colors.scss
+<!-- prettier-ignore -->
+<<< @/src/themes/default/styles/variables/_colors.scss
 
 ## Durations
 
-<<< @/src/themes/default/styles/variables/\_durations.scss
+<!-- prettier-ignore -->
+<<< @/src/themes/default/styles/variables/_durations.scss
 
 ## Layers
 
 used for `z-index`.
 
-<<< @/src/themes/default/styles/variables/\_layers.scss
+<!-- prettier-ignore -->
+<<< @/src/themes/default/styles/variables/_layers.scss
 
 ## Shadows
 
-<<< @/src/themes/default/styles/variables/\_shadows.scss
+<!-- prettier-ignore -->
+<<< @/src/themes/default/styles/variables/_shadows.scss
 
 ## Sizes
 
-<<< @/src/themes/default/styles/variables/\_sizes.scss
+<!-- prettier-ignore -->
+<<< @/src/themes/default/styles/variables/_sizes.scss
 
 ## Spacing
 
-<<< @/src/themes/default/styles/variables/\_spacing.scss
+<!-- prettier-ignore -->
+<<< @/src/themes/default/styles/variables/_spacing.scss
 
 ## Typography
 
-<<< @/src/themes/default/styles/variables/\_typography.scss
+<!-- prettier-ignore -->
+<<< @/src/themes/default/styles/variables/_typography.scss

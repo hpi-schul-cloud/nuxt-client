@@ -14,16 +14,14 @@ yarn build:nuxt
 
 Output Directory: `./dist/nuxt`
 
-### NODE_ENV during build
+### Environment-Variables
 
-| node-env | default | info |
+| env-variable | default | info |
 | --- | --- | --- |
 | API_HOST | `http://localhost:3030` | URL to [schulcloud-server](https://github.com/schul-cloud/schulcloud-server) |
 | SC_THEME | `default` | theme used, same as in [schulcloud-client](https://github.com/schul-cloud/schulcloud-client) |
 | SC_TITLE | `HPI Schul-Cloud` |  |
 | SC_SHORT_TITLE | `Schul-Cloud` |  |
-| ALGOLIA_API_KEY | please ask a nuxt dev | this is not really useful locally, since the online site is the indexed one |
-| ALGOLIA_NAME | please ask a nuxt dev | this is not really useful locally, since the online site is the indexed one |
 
 ## Storybook
 
@@ -33,6 +31,12 @@ yarn build:storybook
 
 Output Directory: `./dist/storybook`
 
+### Environment-Variables
+
+| env-variable | default | info |
+| ------------ | ------- | ---- |
+|              |         |      |
+
 ## Vuepress Docs
 
 ```bash
@@ -40,3 +44,10 @@ yarn build:docs
 ```
 
 Output Directory: `./dist/docs`
+
+### Environment-Variables
+
+| env-variable | default | info |
+| --- | --- | --- |
+| ALGOLIA_API_KEY | _undefined_ | only production is indexed ([docs](https://vuepress.vuejs.org/default-theme-config/#algolia-search)) |
+| ALGOLIA_NAME | _undefined_ | only production is indexed ([docs](https://vuepress.vuejs.org/default-theme-config/#algolia-search)) |
