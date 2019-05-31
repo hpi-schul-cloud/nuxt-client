@@ -29,7 +29,7 @@ yarn install
 git submodule init && git submodule update
 
 # install legacy schulcloud-client dependencies
-cd schulcloud-client && npm i
+cd legacy-client && npm i
 
 # navigate back to the nuxt client
 cd ..

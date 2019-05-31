@@ -58,7 +58,7 @@ Wird verwendet um sämtliches CSS zu prüfen. Welche Regeln warum aktiviert sind
 
 ### [Markdownlint](https://github.com/igorshubovych/markdownlint-cli)
 
-Wir verwenden einen fork von Markdownlint. Dieser hat die Möglichkeit zum ignorieren von Dateien hinzugefügt, sodass auf dem alten /schulcloud-client repo kein Markdownlint ausgeführt werden muss (verursacht einige Fehler).
+Wir verwenden einen fork von Markdownlint. Dieser hat die Möglichkeit zum ignorieren von Dateien hinzugefügt, sodass auf dem alten /legacy-client repo kein Markdownlint ausgeführt werden muss (verursacht einige Fehler).
 
 ## Tests
 

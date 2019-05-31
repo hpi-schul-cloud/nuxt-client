@@ -98,7 +98,7 @@
 	// MARKDOWN
 	// ===
 
-	"markdownlint.ignore": ["schulcloud-client/**/*.md"],
+	"markdownlint.ignore": ["legacy-client/**/*.md"],
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
 		"editor.wordWrapColumn": 80
