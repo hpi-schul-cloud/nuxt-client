@@ -28,6 +28,13 @@ addDecorator(() => ({
 	template: '<div style="padding: 2rem"><story/></div>',
 }));
 
+// add axios support
+import axios from "axios";
+Vue.prototype.$axios = axios;
+Object.entries(axios).forEach(([key, value]) => {
+	Vue.prototype.$axios[`$${key}`] = value;
+});
+
 // add vuex support
 import Vuex from "vuex";
 Vue.use(Vuex);
