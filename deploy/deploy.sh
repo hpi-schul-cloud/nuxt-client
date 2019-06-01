@@ -12,6 +12,10 @@ function nuxtclient {
 		-t schulcloud/schulcloud-nuxt-client:latest \
 		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
 		-f $DOCKERFILE_VERSION.nuxt \
+		--build-arg API_HOST \
+		--build-arg SC_THEME \
+		--build-arg SC_TITLE \
+		--build-arg SC_SHORT_TITLE \
 		../
 	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-client:latest
