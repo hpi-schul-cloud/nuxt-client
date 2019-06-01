@@ -8,7 +8,13 @@ DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
 
 # storybook doku bauen und deployen
 function storybook {
-	docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f $DOCKERFILE_VERSION.storybook ../
+	docker build \
+		-t schulcloud/schulcloud-nuxt-storybook:latest \
+		-t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA \
+		-f $DOCKERFILE_VERSION.storybook \
+		--build-arg ALGOLIA_NAME \
+		--build-arg ALGOLIA_API_KEY \
+		../
 	docker push schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-storybook:latest
 
