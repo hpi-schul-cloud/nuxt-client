@@ -12,3 +12,4 @@ no-inline-html: false
 no-trailing-punctuation: false
 no-multiple-blanks: false
 list-marker-space: false
+no-duplicate-heading: false

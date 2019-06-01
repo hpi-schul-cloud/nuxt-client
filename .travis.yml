@@ -10,29 +10,29 @@ env:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
     - SC_THEME=default
-    - API_HOST=http://localhost:3030
 before_install:
   - openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in deploy/travis_rsa.enc -out deploy/travis_rsa -d
 install:
   - yarn global add codecov surge
   - yarn install --production=false
 script:
-  - yarn ci
+  - yarn lint:ci
+  - yarn test:ci
+  - yarn build
   - codecov
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
-# deploy docs & storybook for all pull requests
-after_success:
-  - bash ./deploy/pull-deploy.sh
 notifications:
   email: false
 cache:
   directories:
     - node_modules
+# deploy docs & storybook for all pull requests
+after_success:
+  - bash ./deploy/pull-deploy.sh
+# deploy master to staging system
 deploy:
-  # deploy master to staging system
-  - provider: script
-    skip_cleanup: true
-    script: bash ./deploy/deploy.sh
-    on:
-      all_branches: true
-      condition: $TRAVIS_BRANCH =~ ^master$
+  skip_cleanup: true
+  provider: script
+  script: bash ./deploy/deploy.sh
+  on:
+    branch: master
