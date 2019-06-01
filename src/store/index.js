@@ -154,6 +154,7 @@ const createStore = () => {
 				},
 			},
 			i18n: {
+				namespaced: true,
 				state: () => ({
 					locales: ["en", "de"],
 					locale: "de",

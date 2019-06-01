@@ -8,8 +8,6 @@ import "./mockComponents";
 import "@components/ui/_globals";
 
 import Vue from "vue";
-import VueI18n from "vue-i18n";
-Vue.use(VueI18n);
 
 import "@styles";
 
@@ -30,7 +28,16 @@ addDecorator(() => ({
 	template: '<div style="padding: 2rem"><story/></div>',
 }));
 
-// add i18n
+// add vuex support
+import Vuex from "vuex";
+Vue.use(Vuex);
+import createStore from "@store";
+addDecorator(() => ({
+	store: createStore(),
+	template: "<story/>",
+}));
+
+// add i18n support
 import { i18n } from "@plugins/i18n";
 addDecorator(() => ({
 	i18n: i18n(),

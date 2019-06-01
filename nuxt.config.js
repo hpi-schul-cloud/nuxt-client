@@ -63,6 +63,8 @@ module.exports = {
 			ssr: false,
 		},
 		"@plugins/global",
+		"@plugins/axios",
+		"@plugins/i18n",
 	],
 
 	/*
