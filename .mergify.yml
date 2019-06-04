@@ -4,7 +4,7 @@ pull_request_rules:
       - label!=WIP
       - label!=waiting
       - label~=ready to merge
-      - status-success=Travis CI - Branch
+      - status-success~=Travis CI
       - status-success=Mergeable
       - status-success=codecov/project
     actions:
