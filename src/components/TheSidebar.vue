@@ -10,7 +10,7 @@
 					<base-link
 						:href="route.href"
 						class="list-content"
-						:to="route.to || undefined"
+						:to="route.to"
 						target="_self"
 					>
 						<base-icon

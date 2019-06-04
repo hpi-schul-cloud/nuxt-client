@@ -1,4 +1,3 @@
-// const app = require('../server')
 const routes = require("../server/routes");
 
 export default async function(ctx, cb) {

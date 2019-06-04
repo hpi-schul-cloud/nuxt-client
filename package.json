@@ -5,7 +5,7 @@
 	"author": "HPI Schul-Cloud",
 	"private": true,
 	"scripts": {
-		"dev:nuxt": "API_URL=http://localhost:3030 FEATURE_TEAMS_ENABLED=true nodemon --inspect --watch src/ --ignore src/legacy-client src/server",
+		"dev:nuxt": "EATURE_TEAMS_ENABLED=true nodemon --inspect --watch src/ --ignore src/legacy-client src/server",
 		"dev:storybook": "start-storybook -c stories/.storybook -p 4001",
 		"dev:docs": "vuepress dev docs",
 		"dev": "concurrently \"yarn dev:nuxt\" \"yarn dev:storybook\" \"yarn dev:docs\" -n \"nuxt,story,docs\" -c \"green,magenta,cyan\" -i false --kill-others-on-fail",

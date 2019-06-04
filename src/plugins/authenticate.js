@@ -1,5 +1,3 @@
-// import { initAuth } from "feathers-vuex";
-
 export default async (ctx) => {
 	const { store } = ctx;
 	try {
