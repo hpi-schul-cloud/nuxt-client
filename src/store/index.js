@@ -5,6 +5,8 @@ import { CookieStorage } from "cookie-storage";
 import feathersVuex, { initAuth } from "feathers-vuex";
 import feathersClient from "./feathers-client";
 import dayjs from "dayjs";
+import i18n from "@store/i18n";
+import federalStates from "@store/federalStates";
 
 let plugins = [];
 const enableEvents = typeof window !== "undefined";
@@ -129,44 +131,8 @@ const createStore = () => {
 	return new Vuex.Store({
 		state: {},
 		modules: {
-			federalStates: {
-				namespaced: true,
-				actions: {
-					async find({ commit }, payload) {
-						const federalStates = await this.$axios.$get("/federalStates");
-						commit("add", { items: federalStates.data });
-					},
-				},
-				getters: {
-					list: (state) => {
-						return state.list;
-					},
-				},
-				state: () => ({
-					list: [],
-				}),
-				mutations: {
-					add(state, { items }) {
-						for (const item of items) {
-							state.list.push(item);
-						}
-					},
-				},
-			},
-			i18n: {
-				namespaced: true,
-				state: () => ({
-					locales: ["en", "de"],
-					locale: "de",
-				}),
-				mutations: {
-					SET_LANG(state, locale) {
-						if (state.locales.indexOf(locale) !== -1) {
-							state.locale = locale;
-						}
-					},
-				},
-			},
+			federalStates,
+			i18n,
 		},
 		plugins: plugins,
 	});

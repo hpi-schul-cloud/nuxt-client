@@ -8,6 +8,7 @@ import "./mockComponents";
 import "@components/ui/_globals";
 
 import Vue from "vue";
+import Vuex from "vuex";
 
 import "@styles";
 
@@ -28,21 +29,8 @@ addDecorator(() => ({
 	template: '<div style="padding: 2rem"><story/></div>',
 }));
 
-// add axios support
-import axios from "axios";
-Vue.prototype.$axios = axios;
-Object.entries(axios).forEach(([key, value]) => {
-	Vue.prototype.$axios[`$${key}`] = value;
-});
-
 // add vuex support
-import Vuex from "vuex";
 Vue.use(Vuex);
-import createStore from "@store";
-addDecorator(() => ({
-	store: createStore(),
-	template: "<story/>",
-}));
 
 // add i18n support
 import { i18n } from "@plugins/i18n";
