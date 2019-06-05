@@ -1,9 +1,12 @@
 {
+	"landing.welcome": "Welcome to the School-Cloud",
+	"links.home": "Home",
+	"storybook.lang": "I'm in English now!",
 	"links": {
 		"home": "Home",
 		"about": "About",
 		"english": "English version",
-		"french": "French version"
+		"german": "German version"
 	},
 	"home": {
 		"title": "Welcome",

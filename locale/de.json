@@ -1,4 +1,7 @@
 {
+	"landing.welcome": "Willkommen auf der Schul-Cloud",
+	"links.home": "Zu Hause",
+	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"links": {
 		"home": "Heim",
 		"about": "Über",
@@ -7,7 +10,7 @@
 	},
 	"home": {
 		"title": "Willkommen",
-		"introduction": "Dies ist ein einleitungs Text in Deutsch"
+		"introduction": "Dies ist ein Einleitungs Text in Deutsch"
 	},
 	"about": {
 		"title": "Über",

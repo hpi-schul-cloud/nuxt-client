@@ -17,7 +17,7 @@ storiesOf("LanguageSwitcher", module)
 		Current locale:
 		{{ this.$i18n.locale }}
 		<br />
-		{{ $t("home.title") }} </div>`,
+		{{ $t("storybook.lang") }} </div>`,
 		store: store,
 		methods: {},
 	}));

@@ -49,6 +49,7 @@
 		"dayjs": "^1.8.14",
 		"feathers-vuex": "1.7.0",
 		"lodash": "^4.17.11",
+		"lokalise": "^0.0.6",
 		"material-icons-svg": "^1.0.0",
 		"nuxt": "^2.6.3",
 		"socket.io-client": "^2.2.0",

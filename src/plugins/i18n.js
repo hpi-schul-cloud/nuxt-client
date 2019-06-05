@@ -9,8 +9,8 @@ export const i18n = (store) =>
 		locale: store ? store.state.i18n.locale : "de",
 		fallbackLocale: "de",
 		messages: {
-			en: require("@@/locales/en.json"),
-			de: require("@@/locales/de.json"),
+			en: require("@@/locale/en.json"),
+			de: require("@@/locale/de.json"),
 		},
 	});
 
