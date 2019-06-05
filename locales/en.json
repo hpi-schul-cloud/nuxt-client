@@ -1,16 +1,19 @@
 {
-	"links": {
-		"home": "Home",
-		"about": "About",
-		"english": "English version",
-		"french": "French version"
+	"about": {
+		"introduction": "This page is made to give you more informations.",
+		"title": "About"
 	},
 	"home": {
-		"title": "Welcome",
-		"introduction": "This is an introduction in English."
+		"introduction": "This is an introduction in English.",
+		"title": "Welcome"
 	},
-	"about": {
-		"title": "About",
-		"introduction": "This page is made to give you more informations."
-	}
+	"links": {
+		"german": "German version",
+		"english": "English version",
+		"about": "About",
+		"home": "Home"
+	},
+	"storybook.lang": "I'm in English now!",
+	"links.home": "Home",
+	"landing.welcome": "Welcome to the School-Cloud"
 }
