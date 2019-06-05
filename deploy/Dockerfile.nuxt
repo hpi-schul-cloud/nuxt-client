@@ -1,5 +1,5 @@
 FROM node:lts as builder
-RUN apk update &&
+RUN apk update && \
     apk add --no-cache git
 
 WORKDIR '/app'
