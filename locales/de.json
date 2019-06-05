@@ -1,16 +1,19 @@
 {
-	"links": {
-		"home": "Heim",
-		"about": "Über",
-		"english": "Englische Verison",
-		"german": "Deutsche Version"
+	"about": {
+		"introduction": "Diese seite gibt mehr infos über uns.",
+		"title": "Über"
 	},
 	"home": {
-		"title": "Willkommen",
-		"introduction": "Dies ist ein einleitungs Text in Deutsch"
+		"introduction": "Dies ist ein Einleitungs Text in Deutsch",
+		"title": "Willkommen"
 	},
-	"about": {
-		"title": "Über",
-		"introduction": "Diese seite gibt mehr infos über uns."
-	}
+	"links": {
+		"german": "Deutsche Version",
+		"english": "Englische Verison",
+		"about": "Über",
+		"home": "Heim"
+	},
+	"storybook.lang": "Ich bin jetzt auf Deutsch!",
+	"links.home": "Zu Hause",
+	"landing.welcome": "Willkommen auf der Schul-Cloud"
 }
