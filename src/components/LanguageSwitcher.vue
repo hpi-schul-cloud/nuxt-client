@@ -1,15 +1,15 @@
 <template>
 	<div>
-		<base-select
-			v-model="content"
-			:multiple="false"
-			:options="options"
-			track-by="_id"
-			label="Language"
-			option-label="name"
-			:placeholder="this.$i18n.locale"
+		<base-input
+			v-for="lang in languages"
+			:key="lang"
+			v-model="value"
+			:value="lang"
+			:label="lang"
+			type="radio"
+			name="radio"
+			@click.native="changeLanguage(lang)"
 		/>
-		<button @click="changeLanguage">Change Language</button>
 	</div>
 </template>
 <script>
@@ -17,15 +17,12 @@ import Vuex from "vuex";
 
 export default {
 	data: () => ({
-		content: [],
-		options: [{ value: "de", name: "DE" }, { value: "en", name: "EN" }],
+		languages: ["de", "en"],
 	}),
 	methods: {
-		changeLanguage: function() {
-			if (content.length > 0) {
-				this.$i18n.locale = this.content;
-				this.$store.commit("i18n/SET_LANG", this.content);
-			}
+		changeLanguage: function(lang) {
+			this.$store.commit("i18n/SET_LANG", lang);
+			this.$i18n.locale = lang;
 		},
 	},
 };
