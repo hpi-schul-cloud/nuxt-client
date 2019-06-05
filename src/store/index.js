@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import { app } from './feathers-client'
 import { CookieStorage } from "cookie-storage";
 import feathersVuex from "feathers-vuex";
+import federalStates from "./modules/federal-states";
 import feathersClient from "./feathers-client";
 import dayjs from "dayjs";
 
@@ -128,32 +128,9 @@ const createStore = () => {
 		state: {},
 		actions: {},
 		modules: {
-			federalStates: {
-				namespaced: true,
-				actions: {
-					async find({ commit }, payload) {
-						const federalStates = await this.$axios.$get("/federalStates");
-						commit("add", { items: federalStates.data });
-					},
-				},
-				getters: {
-					list: (state) => {
-						return state.list;
-					},
-				},
-				state: () => ({
-					list: [],
-				}),
-				mutations: {
-					add(state, { items }) {
-						for (const item of items) {
-							state.list.push(item);
-						}
-					},
-				},
-			},
+			federalStates,
 		},
-		plugins: plugins,
+		plugins,
 	});
 };
 

@@ -1,4 +1,5 @@
 FROM node:lts as builder
+RUN apk add --no-cache git
 
 WORKDIR '/app'
 COPY ./package.json ./
