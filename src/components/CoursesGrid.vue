@@ -1,14 +1,14 @@
 <template>
 	<div class="grid">
-		<div v-for="(course, i) of courses" :key="i" class="tile">
-			<NuxtLink
-				class="link"
+		<div v-for="(course, i) of courses" :key="i" class="">
+			<BaseLink
+				class="link tile"
 				tag="div"
 				:to="{ name: 'courses-id', params: { id: course._id } }"
 				v-bind="$attrs"
 			>
 				<course-card :course="course" />
-			</NuxtLink>
+			</BaseLink>
 		</div>
 	</div>
 </template>
@@ -30,7 +30,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@variables";
 
 .grid {
@@ -41,6 +41,5 @@ export default {
 
 .tile {
 	display: flex;
-	margin: var(--space-sm);
 }
 </style>

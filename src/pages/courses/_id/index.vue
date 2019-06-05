@@ -1,13 +1,7 @@
 <template>
 	<div v-if="course">
 		<section class="section">
-			<h5>
-				<span>
-					<base-link :to="{ name: 'courses' }">Courses</base-link>
-				</span>
-				<span>/ {{ course.name }}</span>
-			</h5>
-
+			<base-breadcrumb :inputs="breadcrumbs" />
 			<h1 class="h2">{{ course.name }}</h1>
 		</section>
 	</div>
@@ -21,6 +15,15 @@ export default {
 		...mapGetters("courses", {
 			course: "current",
 		}),
+		breadcrumbs() {
+			return [
+				{ text: "Kurse", to: { name: "courses" } },
+				{
+					text: this.course.name,
+					to: { name: "courses-id", params: { id: this.course._id } },
+				},
+			];
+		},
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);
