@@ -1,10 +1,76 @@
 # How to get data from our backend <Badge text="WIP" type="warn"/>
 
+Getting and Sending data is pretty simple and works completely over sockets.
+
+However, custom API requests to the server's REST interface are made with Axios.
+
 [[toc]]
 
-## find
+## Structure
 
-### reactivity
+There are basically 3 different layers where the data is flowing between.
+
+### Nuxt Client
+
+In our `pages` and `components` we have This is basically everything that happens in our . We are using `this.$store.dispatch` to manipulate the store.
+
+### Vuex Store
+
+The Vuex store is the place where the `state` of the web application is. Inside the `state` you can save everything that you want to be accessible from everywhere. In order to manipulate the state you have to use `actions` and `mutations`. In order to get the data from the state you can access the `state` directly or use `getters` which are more convenient in many cases.
+
+#### Modules
+
+However the state can get very complex because we have different models like schools, teams, courses, etc. The solution for this problem are `modules`. A `module` is a subset of the store and has it's own `state, actions, mutations and getters`.
+
+You can define new modules inside the `store/index.js`
+
+#### Actions
+
+The actions are methods inside
+
+#### Getters
+
+#### Mutations
+
+### Backend
+
+### Example
+
+## CRUD
+
+### Create
+
+```js
+const news = await this.$store.dispatch("news/create", [
+	{
+		title: this.news.title,
+		content: this.news.content,
+		schoolId: this.$user.schoolId,
+		target: this.$route.query.target,
+		targetModel: this.$route.query.Model,
+	},
+]);
+```
+
+### Update
+
+### Patch
+
+```js
+await this.$store.dispatch("news/patch", [
+	this.$route.params.id,
+	{
+		name: this.news.name,
+		content: this.news.content,
+	},
+]);
+```
+
+### Delete
+
+### Find
+
+## Reactivity
 
 If the list should be reactively updated, use get together with a computed property instead of list.
 
@@ -51,3 +117,5 @@ export default {
 
 - Getting the list of results from the content_search getter
 - Getting the pagination from the content_search state
+
+## Custom API Requests
