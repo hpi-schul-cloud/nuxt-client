@@ -3,7 +3,6 @@
 		<div v-for="(course, i) of courses" :key="i" class="">
 			<BaseLink
 				class="link tile"
-				tag="div"
 				:to="{ name: 'courses-id', params: { id: course._id } }"
 				v-bind="$attrs"
 			>
