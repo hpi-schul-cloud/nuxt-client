@@ -32,6 +32,7 @@ export default {
 					"success outline",
 					"danger",
 					"danger outline",
+					"fancy",
 				].includes(design);
 				if (!defined) {
 					throw new Error(`the design "${design}" is not available`);
@@ -60,46 +61,62 @@ export default {
 	--button-line-height: var(--line-height-md);
 
 	// color modes
-	--button-color: var(--color-gray-light);
+	--button-background: var(--color-gray-light);
 	--button-text-color: var(--color-gray-dark);
 	&.is-outline {
-		--button-color: var(--color-gray-dark);
+		--button-background: var(--color-gray-dark);
 	}
 	&.is-primary,
 	&.is-hero-cta {
-		--button-color: var(--color-primary);
+		--button-background: var(--color-primary);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-primary-dark);
+			--button-background: var(--color-primary-dark);
 		}
 	}
 	&.is-secondary {
-		--button-color: var(--color-accent);
+		--button-background: var(--color-accent);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-accent-dark);
+			--button-background: var(--color-accent-dark);
 		}
 	}
 	&.is-success {
-		--button-color: var(--color-success);
+		--button-background: var(--color-success);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-success--dark);
+			--button-background: var(--color-success--dark);
 		}
 	}
 	&.is-danger {
-		--button-color: var(--color-danger);
+		--button-background: var(--color-danger);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-danger--dark);
+			--button-background: var(--color-danger--dark);
+		}
+	}
+	&.is-fancy {
+		--button-background: linear-gradient(
+			45deg,
+			var(--color-primary),
+			var(--color-accent)
+		);
+		--button-text-color: var(--color-white);
+		&:hover,
+		&:focus {
+			--button-background: linear-gradient(
+				45deg,
+				var(--color-primary-dark),
+				var(--color-accent-dark)
+			);
 		}
 	}
 	&:disabled {
-		--button-color: var(--color-gray);
+		--button-background: var(--color-gray);
 		--button-text-color: var(--color-white);
 	}
 
@@ -128,11 +145,11 @@ export default {
 	text-align: center;
 	white-space: nowrap;
 	cursor: pointer;
-	background-color: var(--button-color);
-	border: 1px solid transparent;
+	background: var(--button-background);
+	border: 0;
 	border-radius: var(--radius-sm);
 	transition: all var(--duration-transition-medium)
-		cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+		cubic-bezier(0.23, 1, 0.32, 1);
 
 	&:hover,
 	&:focus {
@@ -143,13 +160,14 @@ export default {
 	// defined multiple to seperate style from behaviour
 	&.is-outline {
 		/* stylelint-enable */
-		color: var(--button-color);
+		color: var(--button-background);
 		background: transparent;
-		border-color: var(--button-color);
+		border: 1px solid var(--button-background);
+
 		&:hover,
 		&:focus {
 			// increase border size to increase visiblity
-			box-shadow: 0 0 0 1px var(--button-color);
+			box-shadow: 0 0 0 1px var(--button-background);
 		}
 	}
 	/* stylelint-disable */
@@ -160,8 +178,8 @@ export default {
 		cursor: default;
 	}
 }
-.is-hero-cta {
-	box-shadow: 0 12px 17px 2px rgba(0, 0, 0, 0.14),
-		0 5px 22px 4px rgba(0, 0, 0, 0.12), 0 7px 8px -4px rgba(0, 0, 0, 0.2);
+.is-hero-cta,
+.is-fancy {
+	box-shadow: var(--shadow-md);
 }
 </style>

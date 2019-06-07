@@ -38,6 +38,7 @@ storiesOf("Base Components", module)
 					primary: "primary",
 					"primary outline": "primary outline",
 					"hero-cta": "hero-cta",
+					fancy: "fancy",
 					secondary: "secondary",
 					"secondary outline": "secondary outline",
 					success: "success",
@@ -67,6 +68,7 @@ storiesOf("Base Components", module)
 				<base-button design="primary">primary</base-button>
 				<base-button design="primary outline">primary outline</base-button>
 				<base-button design="hero-cta">hero-cta</base-button>
+				<base-button design="fancy">fancy</base-button>
 
 				<h2>Secondary Action</h2>
 				<base-button design="secondary">secondary</base-button>
