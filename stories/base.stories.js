@@ -67,27 +67,34 @@ storiesOf("Base Components", module)
 				<h2>Primary Action</h2>
 				<base-button design="primary">primary</base-button>
 				<base-button design="primary outline">primary outline</base-button>
+				<base-button design="primary text">primary text</base-button>
+				<br/><br/>
 				<base-button design="hero-cta">hero-cta</base-button>
 				<base-button design="fancy">fancy</base-button>
 
 				<h2>Secondary Action</h2>
 				<base-button design="secondary">secondary</base-button>
 				<base-button design="secondary outline">secondary outline</base-button>
+				<base-button design="secondary text">secondary text</base-button>
 
 				<h2>Tertiary Action</h2>
 				<base-button>Default</base-button>
 				<base-button design="outline">outline</base-button>
+				<base-button design="text">text</base-button>
 
 				<h2>Disabled</h2>
 				<base-button disabled>Disabled</base-button>
-				<base-button disabled design="outline">Disabled</base-button>
+				<base-button disabled design="outline">Disabled outline</base-button>
+				<base-button disabled design="text">Disabled text</base-button>
 
 				<h2>Signal</h2>
 				<base-button design="success">success</base-button>
 				<base-button design="success outline">success outline</base-button>
-				<br/>
+				<base-button design="success text">success text</base-button>
+				<br/><br/>
 				<base-button design="danger">danger</base-button>
 				<base-button design="danger outline">danger outline</base-button>
+				<base-button design="danger text">danger text</base-button>
 			</div>`,
 	}))
 	.add("Base Card", () => ({

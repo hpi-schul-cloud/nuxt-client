@@ -22,15 +22,20 @@ export default {
 			validator: (design) => {
 				const defined = [
 					"",
+					"text",
 					"outline",
 					"primary",
+					"primary text",
 					"primary outline",
 					"secondary",
+					"secondary text",
 					"secondary outline",
 					"hero-cta",
 					"success",
+					"success text",
 					"success outline",
 					"danger",
+					"danger text",
 					"danger outline",
 					"fancy",
 				].includes(design);
@@ -65,6 +70,9 @@ export default {
 	--button-background: var(--color-gray-light);
 	--button-text-color: var(--color-gray-dark);
 	&.is-outline {
+		--button-background: var(--color-gray-dark);
+	}
+	&.is-text {
 		--button-background: var(--color-gray-dark);
 	}
 	&.is-primary,
@@ -169,6 +177,20 @@ export default {
 		&:focus {
 			// increase border size to increase visiblity
 			box-shadow: 0 0 0 1px var(--button-background);
+		}
+	}
+	/* stylelint-disable */
+	// defined multiple to seperate style from behaviour
+	&.is-text {
+		/* stylelint-enable */
+		color: var(--button-background);
+		background: transparent;
+		border: 0;
+
+		&:hover,
+		&:focus {
+			background-color: var(--color-gray-light);
+			box-shadow: none;
 		}
 	}
 	/* stylelint-disable */
