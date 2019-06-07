@@ -18,14 +18,10 @@ export default async function(ctx, cb) {
 		if (!legacyRoute.routesExcluded) {
 			window.location = route.path;
 		} else {
-			let isLegacy = false;
-
-			for (const excludedRoute of legacyRoute.routesExcluded) {
-				let fullPath = "/" + legacyRoute.route + excludedRoute;
-				if (!fullPath.match(route.matched[0].regex)) {
-					isLegacy = true;
-				}
-			}
+			const isLegacy = legacyRoute.routesExcluded.some((excludedRoute) => {
+				const fullPath = "/" + legacyRoute.route + excludedRoute;
+				return !fullPath.match(route.matched[0].regex);
+			});
 
 			if (isLegacy) {
 				window.location = route.path;
