@@ -152,9 +152,7 @@ export default {
 			var(--space-sm);
 	}
 
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+	display: inline-block;
 	min-width: var(--space-xxxl);
 	padding: var(--button-padding);
 	font-family: var(--font-accent);
@@ -164,6 +162,7 @@ export default {
 	color: var(--button-text-color);
 	text-align: center;
 	white-space: nowrap;
+	vertical-align: center;
 	cursor: pointer;
 	background: var(--button-background);
 	border: 0;

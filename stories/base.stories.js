@@ -65,7 +65,10 @@ storiesOf("Base Components", module)
 				<base-button size="large">large</base-button>
 
 				<h2>Primary Action</h2>
-				<base-button design="primary">primary</base-button>
+				<base-button design="primary">
+					<base-icon source="material" icon="home"/>
+					primary
+				</base-button>
 				<base-button design="primary outline">primary outline</base-button>
 				<base-button design="primary text">primary text</base-button>
 				<base-button design="primary icon">
