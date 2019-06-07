@@ -27,7 +27,7 @@ storiesOf("Base Components", module)
 		notes,
 	})
 	.add("Base Button", () => ({
-		components: { BaseButton },
+		components: { BaseButton, BaseIcon },
 		data: () => ({
 			text: text("Text", "Action"),
 			design: select(
@@ -68,6 +68,12 @@ storiesOf("Base Components", module)
 				<base-button design="primary">primary</base-button>
 				<base-button design="primary outline">primary outline</base-button>
 				<base-button design="primary text">primary text</base-button>
+				<base-button design="primary icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="primary icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 				<br/><br/>
 				<base-button design="hero-cta">hero-cta</base-button>
 				<base-button design="fancy">fancy</base-button>
@@ -76,11 +82,23 @@ storiesOf("Base Components", module)
 				<base-button design="secondary">secondary</base-button>
 				<base-button design="secondary outline">secondary outline</base-button>
 				<base-button design="secondary text">secondary text</base-button>
+				<base-button design="secondary icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="secondary icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 
 				<h2>Tertiary Action</h2>
 				<base-button>Default</base-button>
 				<base-button design="outline">outline</base-button>
 				<base-button design="text">text</base-button>
+				<base-button design="icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 
 				<h2>Disabled</h2>
 				<base-button disabled>Disabled</base-button>
@@ -91,10 +109,22 @@ storiesOf("Base Components", module)
 				<base-button design="success">success</base-button>
 				<base-button design="success outline">success outline</base-button>
 				<base-button design="success text">success text</base-button>
+				<base-button design="success icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="success icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 				<br/><br/>
 				<base-button design="danger">danger</base-button>
 				<base-button design="danger outline">danger outline</base-button>
 				<base-button design="danger text">danger text</base-button>
+				<base-button design="danger icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="danger icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 			</div>`,
 	}))
 	.add("Base Card", () => ({

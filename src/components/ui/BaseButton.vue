@@ -23,19 +23,29 @@ export default {
 				const defined = [
 					"",
 					"text",
+					"icon",
+					"icon outline",
 					"outline",
 					"primary",
 					"primary text",
+					"primary icon",
+					"primary icon outline",
 					"primary outline",
 					"secondary",
 					"secondary text",
+					"secondary icon",
+					"secondary icon outline",
 					"secondary outline",
 					"hero-cta",
 					"success",
 					"success text",
+					"success icon",
+					"success icon outline",
 					"success outline",
 					"danger",
 					"danger text",
+					"danger icon",
+					"danger icon outline",
 					"danger outline",
 					"fancy",
 				].includes(design);
@@ -142,8 +152,9 @@ export default {
 			var(--space-sm);
 	}
 
-	display: inline-block;
+	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	min-width: var(--space-xxxl);
 	padding: var(--button-padding);
 	font-family: var(--font-accent);
@@ -191,6 +202,21 @@ export default {
 		&:focus {
 			background-color: var(--color-gray-light);
 			box-shadow: none;
+		}
+	}
+	&.is-icon {
+		--button-size: 2em;
+
+		width: var(--button-size);
+		min-width: auto;
+		height: var(--button-size);
+		padding: 0;
+		border-radius: var(--radius-round);
+		&.is-small {
+			--button-size: 1.5em;
+		}
+		&.is-large {
+			--button-size: 2.75em;
 		}
 	}
 	/* stylelint-disable */
