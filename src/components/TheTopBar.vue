@@ -20,6 +20,7 @@
 				v-if="action.event"
 				:key="action.event + action.icon"
 				v-ripple
+				design="text"
 				class="action"
 				@click="sendEvent(action.event)"
 				>{{ action.title }}</base-button

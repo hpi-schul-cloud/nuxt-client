@@ -56,6 +56,10 @@ export default {
 				return defined;
 			},
 		},
+		type: {
+			type: String,
+			default: "button",
+		},
 	},
 	computed: {
 		classes() {
@@ -205,18 +209,16 @@ export default {
 		}
 	}
 	&.is-icon {
-		--button-size: 2em;
+		--button-padding: var(--space-xs);
 
-		width: var(--button-size);
-		min-width: auto;
-		height: var(--button-size);
-		padding: 0;
+		min-width: initial;
+		padding: var(--button-padding);
 		border-radius: var(--radius-round);
 		&.is-small {
-			--button-size: 1.5em;
+			--button-padding: var(--space-xxxs);
 		}
 		&.is-large {
-			--button-size: 2.75em;
+			--button-padding: var(--space-sm);
 		}
 	}
 	&.is-none {

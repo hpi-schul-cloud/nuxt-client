@@ -18,11 +18,12 @@
 				<!-- shouldn't this be baseButton -->
 				<base-button
 					v-if="isActive && value !== ''"
+					design="icon"
 					type="button"
 					class="clear-btn"
 					@click="updateSearchString('')"
 				>
-					<base-icon class="clear-icon" source="custom" icon="clear" />
+					<base-icon source="custom" icon="clear" />
 				</base-button>
 			</transition>
 		</div>
@@ -73,28 +74,25 @@ export default {
 		background: var(--color-gray-light);
 		border-radius: var(--radius-round);
 
-		.search-icon,
-		input {
-			padding: var(--space-md) var(--space-xs);
-			font-size: var(--text-md);
-		}
-
 		input {
 			flex: 1;
+			padding: var(--space-md) var(--space-xs);
 			padding: var(--space-xs);
+			font-size: var(--text-md);
 			background: transparent;
 			border: 0;
 			outline: none;
 		}
 
 		.search-icon {
+			font-size: var(--text-md);
 			transition: transform var(--duration-transition-medium) ease-in-out;
 		}
 
 		.clear-btn {
 			display: flex;
 			align-items: center;
-			padding: 0;
+			padding: var(--space-xs);
 			line-height: 100%;
 			cursor: pointer;
 			background: transparent;
@@ -107,10 +105,6 @@ export default {
 			&.fade-enter,
 			&.fade-leave-to {
 				opacity: 0;
-			}
-
-			.clear-icon {
-				padding: var(--space-md);
 			}
 		}
 	}
