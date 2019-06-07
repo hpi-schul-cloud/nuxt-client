@@ -128,6 +128,9 @@ storiesOf("Base Components", module)
 				<base-button design="danger icon outline">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+
+				<h2>Other</h2>
+				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
 	}))
 	.add("Base Card", () => ({

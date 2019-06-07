@@ -22,6 +22,7 @@ export default {
 			validator: (design) => {
 				const defined = [
 					"",
+					"none",
 					"text",
 					"icon",
 					"icon outline",
@@ -217,6 +218,14 @@ export default {
 		&.is-large {
 			--button-size: 2.75em;
 		}
+	}
+	&.is-none {
+		min-width: initial;
+		padding: 0;
+		font: inherit;
+		font-weight: initial;
+		background: transparent;
+		border: 0;
 	}
 	/* stylelint-disable */
 	// defined multiple to seperate style from behaviour
