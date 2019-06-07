@@ -1,6 +1,3 @@
-[submodule "legacy-client"]
-	path = legacy-client
-	url = git://github.com/schul-cloud/schulcloud-client.git
 [submodule "src/legacy-client"]
 	path = src/legacy-client
-	url = https://github.com/schul-cloud/schulcloud-client
+	url = git://github.com/schul-cloud/schulcloud-client.git

@@ -98,7 +98,7 @@
 	// MARKDOWN
 	// ===
 
-	"markdownlint.ignore": ["legacy-client/**/*.md"],
+	"markdownlint.ignore": ["src/legacy-client/**/*.md"],
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
 		"editor.wordWrapColumn": 80
