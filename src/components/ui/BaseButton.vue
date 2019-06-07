@@ -37,6 +37,7 @@ export default {
 				if (!defined) {
 					throw new Error(`the design "${design}" is not available`);
 				}
+				return defined;
 			},
 		},
 	},
