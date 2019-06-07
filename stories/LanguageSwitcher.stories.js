@@ -2,7 +2,6 @@ import { storiesOf } from "@storybook/vue";
 
 import notes from "@docs/storybook/LanguageSwitcher.md";
 import LanguageSwitcher from "@components/LanguageSwitcher";
-import store from "@/store/index";
 
 storiesOf("LanguageSwitcher", module)
 	.addParameters({
@@ -18,6 +17,5 @@ storiesOf("LanguageSwitcher", module)
 		{{ this.$i18n.locale }}
 		<br />
 		{{ $t("storybook.lang") }} </div>`,
-		store: store,
 		methods: {},
 	}));

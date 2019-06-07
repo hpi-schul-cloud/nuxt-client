@@ -29,7 +29,12 @@ addDecorator(() => ({
 // add vuex support
 import Vue from "vue";
 import Vuex from "vuex";
+import store from "@/store/index";
 Vue.use(Vuex);
+addDecorator(() => ({
+	store: store(),
+	template: "<story/>",
+}));
 
 // add i18n support
 import { i18n } from "@plugins/i18n";
