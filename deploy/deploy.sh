@@ -6,29 +6,17 @@ echo GITSHA $GIT_SHA
 
 DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
 
-# storybook doku bauen und deployen
-function storybook {
-	if [ -f "$DOCKERFILE_VERSION.storybook" ]; then
-		docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f $DOCKERFILE_VERSION.storybook ../
-	else
-		docker build -t schulcloud/schulcloud-nuxt-storybook:latest -t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA -f Dockerfile.storybook ../
-	fi
-	docker push schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
-	docker push schulcloud/schulcloud-nuxt-storybook:latest
-
-	eval "echo \"$( cat compose-storybook.dummy )\"" > docker-compose-nuxt-storybook.yml
-
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-storybook.yml linux@test.schul-cloud.org:~
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-storybook.yml test-schul-cloud
-}
-
-# client doku bauen und deployen
+# nuxt client bauen und deployen
 function nuxtclient {
-	if [ -f "$DOCKERFILE_VERSION.nuxt" ]; then
-		docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f $DOCKERFILE_VERSION.nuxt ../
-	else
-			docker build -t schulcloud/schulcloud-nuxt-client:latest -t schulcloud/schulcloud-nuxt-client:$GIT_SHA -f Dockerfile.nuxt ../
-	fi
+	docker build \
+			-t schulcloud/schulcloud-nuxt-client:latest \
+			-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
+			-f Dockerfile.nuxt \
+			--build-arg API_HOST \
+			--build-arg SC_THEME \
+			--build-arg SC_TITLE \
+			--build-arg SC_SHORT_TITLE \
+			../
 	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-client:latest
 
@@ -38,13 +26,31 @@ function nuxtclient {
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-client.yml test-schul-cloud
 }
 
+# storybook doku bauen und deployen
+function storybook {
+	docker build \
+		-t schulcloud/schulcloud-nuxt-storybook:latest \
+		-t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA \
+		-f $DOCKERFILE_VERSION.storybook \
+		../
+	docker push schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
+	docker push schulcloud/schulcloud-nuxt-storybook:latest
+
+	eval "echo \"$( cat compose-storybook.dummy )\"" > docker-compose-nuxt-storybook.yml
+
+	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-storybook.yml linux@test.schul-cloud.org:~
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-storybook.yml test-schul-cloud
+}
+
 # vuepress doku bauen und deployen
 function vuepress {
-	if [ -f "$DOCKERFILE_VERSION.nuxt" ]; then
-		docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f $DOCKERFILE_VERSION.vuepress ../
-	else
-		docker build -t schulcloud/schulcloud-nuxt-vuepress:latest -t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA -f Dockerfile.vuepress ../
-	fi
+	docker build \
+		-t schulcloud/schulcloud-nuxt-vuepress:latest \
+		-t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA \
+		-f $DOCKERFILE_VERSION.vuepress \
+		--build-arg ALGOLIA_NAME \
+		--build-arg ALGOLIA_API_KEY \
+		../
 	docker push schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-vuepress:latest
 
@@ -54,6 +60,9 @@ function vuepress {
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-vuepress.yml test-schul-cloud
 }
 
+# ----------------
+# MAIN SCRIPT
+# ----------------
 cd deploy
 
 openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
@@ -64,8 +73,8 @@ echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
 if [[ $DOCKERTAG == master ]]
 then
-  storybook
   nuxtclient
+  storybook
   vuepress
 else
   echo "Branch will not be deployed"
