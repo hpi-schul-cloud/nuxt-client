@@ -7,9 +7,6 @@ import { withKnobs } from "@storybook/addon-knobs";
 import "./mockComponents";
 import "@components/ui/_globals";
 
-import Vue from "vue";
-import Vuex from "vuex";
-
 import "@styles";
 
 // Vue Docs ( storybook-addon-vue-info )
@@ -30,6 +27,8 @@ addDecorator(() => ({
 }));
 
 // add vuex support
+import Vue from "vue";
+import Vuex from "vuex";
 Vue.use(Vuex);
 
 // add i18n support
