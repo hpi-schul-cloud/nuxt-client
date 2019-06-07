@@ -15,10 +15,10 @@ export default {
 	props: {
 		source: {
 			type: String,
+			required: true,
 			validator: function(to) {
 				return ["material", "custom"].includes(to);
 			},
-			default: "material",
 		},
 		icon: {
 			type: String,

@@ -36,11 +36,13 @@
 				:columns="columnsInvited"
 			>
 				<base-icon
+					source="material"
 					icon="mail"
 					class="cursor-pointer"
 					@click.native="resendInvitation(slotProps.row.email)"
 				/>
 				<base-icon
+					source="material"
 					icon="delete"
 					class="cursor-pointer"
 					@click.native="deleteInvitation(slotProps.row.email)"
@@ -60,11 +62,13 @@
 				:total="stateMembers.total"
 			>
 				<base-icon
+					source="material"
 					icon="delete"
 					class="cursor-pointer"
 					@click.native="removeMember(slotProps.row.userId)"
 				/>
 				<base-icon
+					source="material"
 					icon="edit"
 					class="cursor-pointer"
 					@click.native="editMember(slotProps.row)"
@@ -80,6 +84,7 @@
 				:columns="columnsClasses"
 			>
 				<base-icon
+					source="material"
 					icon="delete"
 					class="cursor-pointer"
 					@click.native="removeClass(slotProps.row._id)"
