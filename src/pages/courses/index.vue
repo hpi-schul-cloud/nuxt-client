@@ -4,8 +4,11 @@
 			<courses-grid :courses="courses" />
 		</section>
 		<section class="section">
-			<base-button @click="$router.push({ name: 'courses-create' })"
-				>Neuen Kurs erstellen
+			<base-button
+				design="primary"
+				@click="$router.push({ name: 'courses-create' })"
+			>
+				Neuen Kurs erstellen
 			</base-button>
 		</section>
 	</div>

@@ -6,11 +6,19 @@
 		v-bind="$attrs"
 		target="_blank"
 		rel="noreferrer"
+		v-on="$listeners"
 	>
 		<slot />
 	</a>
 	<!-- TODO use RouterLink if used outside nuxt -->
-	<NuxtLink v-else class="link" tag="a" :to="routerLinkTo" v-bind="$attrs">
+	<NuxtLink
+		v-else
+		class="link"
+		tag="a"
+		:to="routerLinkTo"
+		v-bind="$attrs"
+		v-on="$listeners"
+	>
 		<slot />
 	</NuxtLink>
 </template>

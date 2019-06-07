@@ -5,11 +5,11 @@
 				<base-icon source="custom" icon="shuttle" />
 			</div>
 			<div class="headlines">
-				<h2 class="text--xl">Kurs anlegen</h2>
-				<h3 class="text--md">
+				<h1 class="h3">Kurs anlegen</h1>
+				<h2 class="h5">
 					In einem Kurs wird gemeinsam mit den Teilnehmern an Themen,
 					Hausaufgaben und Dateien gearbeitet.
-				</h3>
+				</h2>
 			</div>
 		</div>
 		<step-progress :steps="steps" :current-step="currentStep" />
