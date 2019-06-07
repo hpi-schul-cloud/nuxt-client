@@ -4,7 +4,7 @@
 		class="link is-external"
 		:href="href"
 		v-bind="$attrs"
-		:target="target"
+		:target="linkTarget"
 		rel="noreferrer"
 	>
 		<slot />
@@ -32,7 +32,7 @@ export default {
 		},
 		target: {
 			type: String,
-			default: "_blank",
+			default: "",
 		},
 		name: {
 			type: String,
@@ -55,6 +55,13 @@ export default {
 				return this.to;
 			}
 		},
+		linkTarget() {
+			return this.target
+				? this.target
+				: this.href.startsWith("/")
+				? "_self" // fallback should stay on same page
+				: "_blank"; // external links should be in new window opened
+		},
 	},
 	created() {
 		this.validateProps();
@@ -67,6 +74,8 @@ export default {
 
 			if (this.href) {
 				// Check for non-external URL in href.
+				/*
+				// currently used for the legacy fallback. Therefore disabled
 				if (!/^\w+:/.test(this.href)) {
 					return console.warn(
 						`Invalid href <base-link>: ${
@@ -74,8 +83,12 @@ export default {
 						}.\nIf you're trying to link to a local URL, provide at least a name or to`
 					);
 				}
+				*/
 				// Check for insecure URL in href.
-				if (!this.allowInsecure && !/^(https|mailto|tel):/.test(this.href)) {
+				if (
+					!this.allowInsecure &&
+					!/^(https:|mailto:|tel:|\/)/.test(this.href)
+				) {
 					return console.warn(
 						`Insecure href <base-link>: ${
 							this.href

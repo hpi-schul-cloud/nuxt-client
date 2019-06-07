@@ -26,6 +26,13 @@
 		"**/coverage": true
 	},
 
+	"search.exclude": {
+		"**/node_modules": true,
+		".git/*": true,
+		".nuxt/*": true,
+		"src/legacy-client/*": true
+	},
+
 	// ===
 	// Event Triggers
 	// ===
