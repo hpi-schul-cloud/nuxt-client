@@ -1,7 +1,13 @@
 <template>
 	<div class="grid">
-		<div v-for="(course, i) of courses" :key="i" class="tile">
-			<course-card :course="course" />
+		<div v-for="(course, i) of courses" :key="i" class="">
+			<BaseLink
+				class="link tile"
+				:to="{ name: 'courses-id', params: { id: course._id } }"
+				v-bind="$attrs"
+			>
+				<course-card :course="course" />
+			</BaseLink>
 		</div>
 	</div>
 </template>
@@ -23,7 +29,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@variables";
 
 .grid {
@@ -34,6 +40,5 @@ export default {
 
 .tile {
 	display: flex;
-	margin: var(--space-sm);
 }
 </style>
