@@ -83,7 +83,7 @@
 		"babel-preset-vue": "^2.0.2",
 		"concurrently": "^4.1.0",
 		"cross-env": "^5.2.0",
-		"css-loader": "^2.1.1",
+		"css-loader": "^3.0.0",
 		"eslint": "^5.12.1",
 		"eslint-config-prettier": "^4.0.0",
 		"eslint-loader": "^2.0.0",
