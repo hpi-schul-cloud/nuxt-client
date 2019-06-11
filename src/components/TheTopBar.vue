@@ -8,7 +8,6 @@
 			<base-link
 				v-if="action.to || action.href"
 				:key="action.to + action.icon"
-				v-ripple
 				tag="button"
 				:to="action.to"
 				:href="action.href"
@@ -19,7 +18,6 @@
 			<base-button
 				v-if="action.event"
 				:key="action.event + action.icon"
-				v-ripple
 				design="text"
 				class="action"
 				@click="sendEvent(action.event)"
