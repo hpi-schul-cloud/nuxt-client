@@ -27,7 +27,7 @@ describe("@components/CourseTimes", () => {
 				"base-input": true,
 			},
 		});
-		expect(wrapper.findAll(".icon-button").length).toBe(initTimes.length);
+		expect(wrapper.findAll(".btn-delete").length).toBe(initTimes.length);
 		expect(wrapper.findAll(".item").length).toBe(initTimes.length * 4);
 	});
 

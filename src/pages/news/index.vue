@@ -1,8 +1,6 @@
 <template>
 	<div>
-		<base-button
-			class="is-primary"
-			@click="$router.push({ name: 'news-create' })"
+		<base-button design="primary" @click="$router.push({ name: 'news-create' })"
 			>Artikel anlegen</base-button
 		>
 		<section v-if="news && news.length > 0" class="section">

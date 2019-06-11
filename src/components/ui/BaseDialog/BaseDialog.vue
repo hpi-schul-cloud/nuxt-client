@@ -10,13 +10,13 @@
 			</div>
 
 			<div class="modal-footer">
-				<base-button ref="cancelButton" @click="close">
+				<base-button ref="cancelButton" design="text" @click="close">
 					{{ cancelText }}
 				</base-button>
 				<base-button
-					id="confirm-button"
 					ref="confirmButton"
-					class="is-primary"
+					design="primary"
+					test-confirm
 					:class="type"
 					@click="confirm"
 				>
