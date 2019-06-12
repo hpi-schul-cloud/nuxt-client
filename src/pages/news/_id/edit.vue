@@ -2,13 +2,22 @@
 	<div>
 		<div v-if="news">
 			<section class="section">
-				<base-link :to="{ name: 'news-id', params: { id: news._id } }">
-					<h5>{{ news.title }}</h5>
-				</base-link>
-				<h1>News bearbeiten</h1>
-				<base-button class="is-danger" @click="confirmDelete">
-					Löschen
-				</base-button>
+				<base-breadcrumb
+					:inputs="[
+						{
+							to: { name: 'news' },
+							text: 'News',
+						},
+						{
+							to: { name: 'news-id', params: { id: news._id } },
+							text: news.title,
+						},
+						{
+							text: 'bearbeiten',
+						},
+					]"
+				/>
+				<h3>News bearbeiten</h3>
 			</section>
 
 			<section class="section">
@@ -25,7 +34,10 @@
 					name="content"
 					type="text"
 				></base-input>
-				<base-button class="is-primary" @click="save">Speichern</base-button>
+				<base-button design="danger text" @click="confirmDelete">
+					Löschen
+				</base-button>
+				<base-button design="primary" @click="save">Speichern</base-button>
 			</section>
 
 			<section class="section">
