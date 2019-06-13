@@ -18,7 +18,7 @@
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></base-input>
-			<base-button class="is-primary" @click="create">Speichern</base-button>
+			<base-button design="primary" @click="create">Speichern</base-button>
 		</section>
 	</div>
 </template>
