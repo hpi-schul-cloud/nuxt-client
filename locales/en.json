@@ -1,0 +1,20 @@
+{
+	"Team": "Panel and project management",
+	"about": {
+		"introduction": "This page is made to give you more information about everything",
+		"title": "About"
+	},
+	"home": {
+		"introduction": "This is an introduction in English.",
+		"title": "Welcome"
+	},
+	"links": {
+		"german": "German version",
+		"english": "English version",
+		"about": "About",
+		"home": "Home"
+	},
+	"storybook.lang": "I'm in English now!",
+	"links.home": "Home",
+	"landing.welcome": "Welcome to the School-Cloud"
+}
