@@ -1,5 +1,6 @@
 {
-	"Team": "Gremium und Projektleitung",
+	"team.management": "Projektkoordination und wissenschaftliche Mitarbeiter",
+	"Team.panel": "Gremium und Projektleitung",
 	"about": {
 		"introduction": "Diese Seite gibt mehr Infos über alles.",
 		"title": "Über"
