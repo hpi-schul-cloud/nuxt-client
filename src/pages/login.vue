@@ -21,7 +21,7 @@
 
 				<base-input v-model="password" label="Your Password" type="password" />
 
-				<base-button class="button is-primary">
+				<base-button design="fancy">
 					Login
 				</base-button>
 			</form>

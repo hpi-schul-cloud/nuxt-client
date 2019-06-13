@@ -1,8 +1,8 @@
 <template>
 	<div class="course-card">
-		<div v-if="course.notification" class="caption notification-dot">{{
-			course.notification
-		}}</div>
+		<div v-if="course.notification" class="caption notification-dot">
+			{{ course.notification }}
+		</div>
 		<div class="header">
 			<div class="tab" :style="background_style">
 				<div class="caption tab-label truncate">{{ course.teacherName }}</div>

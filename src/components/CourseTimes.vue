@@ -1,7 +1,7 @@
 <template>
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
-			<base-button class="icon-button" @click="popTime(time)">
+			<base-button design="icon" class="btn-delete" @click="popTime(time)">
 				<base-icon icon="delete" source="material" />
 			</base-button>
 			<base-select
@@ -33,7 +33,7 @@
 				class="item"
 			/>
 		</div>
-		<base-button type="button" class="btn btn-primary" @click="addTime">
+		<base-button design="primary" @click="addTime">
 			Schulstundentermin im Stundenplan anlegen
 		</base-button>
 	</div>
@@ -90,7 +90,7 @@ export default {
 	flex-direction: row;
 	align-items: center;
 }
-.icon-button {
+.btn-delete {
 	padding-right: var(--space-sm);
 }
 .item {
