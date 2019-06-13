@@ -1,5 +1,6 @@
 {
-	"Team": "Panel and project management",
+	"team.management": "Project Coordination and Research Assistants",
+	"Team.panel": "Panel and project management",
 	"about": {
 		"introduction": "This page is made to give you more information about everything",
 		"title": "About"
