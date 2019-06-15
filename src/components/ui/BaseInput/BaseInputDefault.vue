@@ -103,7 +103,6 @@ export default {
 @import "@styles";
 .wrapper {
 	display: block;
-	max-width: 400px;
 	&:not(.with-hint) {
 		margin-bottom: calc(var(--text-sm) * var(--line-height-md));
 	}
