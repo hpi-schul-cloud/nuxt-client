@@ -15,7 +15,7 @@ export default = {
 props: {
   design: {
     type: String,
-    validator: (design) => { ["textbutton primary"].includes(design) }
+    validator: (design) => ["textbutton primary"].includes(design)
   }
 }
 }
