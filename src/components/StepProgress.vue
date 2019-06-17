@@ -9,7 +9,8 @@
 					index === currentStep ? 'active' : '',
 					index < currentStep ? 'done' : '',
 				]"
-				><div class="description">{{ s.name }}</div>
+			>
+				<div class="description">{{ s.name }}</div>
 			</li>
 		</ul>
 	</div>
@@ -105,14 +106,16 @@ ul.progressbar {
 		background: var(--color-gray);
 	}
 	&::before {
-		color: var(--color-white);
-		background: var(--color-primary);
+		color: var(--color-black);
+		background: var(--color-white);
+		border-style: solid;
 	}
 }
 .progressbar li.done {
 	&::before {
 		color: var(--color-white);
-		background: var(--color-success);
+		// background: var(--color-success);
+		border-radius: var(--radius-none);
 	}
 	&::after {
 		color: var(--color-var(--color-white));
