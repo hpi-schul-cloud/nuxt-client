@@ -71,7 +71,7 @@ module.exports = {
 			alias: require("../../aliases.config").webpack,
 		},
 	},
-	markdown: {
+	extendMarkdown: {
 		lineNumbers: true,
 		toc: { includeLevel: [2, 3] },
 	},
