@@ -83,10 +83,12 @@ ul.progressbar {
 		margin: 0 auto;
 		margin-bottom: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-white);
+		color: var(--color-black);
 		content: counter(step);
 		counter-increment: step;
-		background: var(--color-gray-dark);
+		background: var(--color-white);
+		border-color: var(--color-primary);
+		border-style: dotted;
 		border-radius: var(--radius-round);
 	}
 
@@ -107,6 +109,7 @@ ul.progressbar {
 	}
 	&::before {
 		color: var(--color-black);
+		text-decoration: underline;
 		background: var(--color-white);
 		border-style: solid;
 	}
@@ -114,8 +117,10 @@ ul.progressbar {
 .progressbar li.done {
 	&::before {
 		color: var(--color-white);
-		// background: var(--color-success);
-		border-radius: var(--radius-none);
+		background: var(--color-success);
+		border-color: var(--color-success);
+		border-style: solid;
+		border-radius: var(--radius-round);
 	}
 	&::after {
 		color: var(--color-var(--color-white));
