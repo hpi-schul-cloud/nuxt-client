@@ -38,11 +38,11 @@ storiesOf("Base Components", module)
 					text: "text",
 					outline: "outline",
 					icon: "icon",
-					"icon only": "icon only",
+					"icon text": "icon text",
 					primary: "primary",
 					"primary text": "primary text",
 					"primary icon": "primary icon",
-					"primary icon only": "primary icon only",
+					"primary icon text": "primary icon text",
 					"primary outline": "primary outline",
 					"hero-cta": "hero-cta",
 					"hero-cta icon": "hero-cta icon",
@@ -51,17 +51,17 @@ storiesOf("Base Components", module)
 					secondary: "secondary",
 					"secondary text": "secondary text",
 					"secondary icon": "secondary icon",
-					"secondary icon only": "secondary icon only",
+					"secondary icon text": "secondary icon text",
 					"secondary outline": "secondary outline",
 					success: "success",
 					"success text": "success text",
 					"success icon": "success icon",
-					"success icon only": "success icon only",
+					"success icon text": "success icon text",
 					"success outline": "success outline",
 					danger: "danger",
 					"danger text": "danger text",
 					"danger icon": "danger icon",
-					"danger icon only": "danger icon only",
+					"danger icon text": "danger icon text",
 					"danger outline": "danger outline",
 				},
 				""
@@ -92,7 +92,7 @@ storiesOf("Base Components", module)
 				<base-button design="primary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="primary icon only">
+				<base-button design="primary icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
@@ -113,7 +113,7 @@ storiesOf("Base Components", module)
 				<base-button design="secondary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="secondary icon only">
+				<base-button design="secondary icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -124,7 +124,7 @@ storiesOf("Base Components", module)
 				<base-button design="icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="icon only">
+				<base-button design="icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -135,7 +135,7 @@ storiesOf("Base Components", module)
 				<base-button disabled design="icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button disabled design="icon only">
+				<base-button disabled design="icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -146,7 +146,7 @@ storiesOf("Base Components", module)
 				<base-button design="success icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="success icon only">
+				<base-button design="success icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
@@ -156,7 +156,7 @@ storiesOf("Base Components", module)
 				<base-button design="danger icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="danger icon only">
+				<base-button design="danger icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 

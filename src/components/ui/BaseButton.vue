@@ -26,29 +26,29 @@ export default {
 					"none",
 					"text",
 					"icon",
-					"icon only",
+					"icon text",
 					"outline",
 					"primary",
 					"primary text",
 					"primary icon",
-					"primary icon only",
+					"primary icon text",
 					"primary outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
-					"secondary icon only",
+					"secondary icon text",
 					"secondary outline",
 					"hero-cta",
 					"hero-cta icon",
 					"success",
 					"success text",
 					"success icon",
-					"success icon only",
+					"success icon text",
 					"success outline",
 					"danger",
 					"danger text",
 					"danger icon",
-					"danger icon only",
+					"danger icon text",
 					"danger outline",
 					"fancy",
 					"fancy icon",
@@ -162,23 +162,12 @@ export default {
 			height: 56px;
 		}
 	}
-	&.is-only {
-		color: var(--button-background);
-		background: transparent;
-		border: 0;
 
-		&:hover,
-		&:focus {
-			background-color: var(--color-gray-light);
-			box-shadow: none;
-		}
-	}
 	&:disabled {
 		--button-background: color-mod(var(--color-black) lightness(85%));
 		--button-text-color: color-mod(var(--color-black) lightness(62%));
 		&.is-outline,
-		&.is-text,
-		&.is-only {
+		&.is-text {
 			--button-background: color-mod(var(--color-white) lightness(62%));
 		}
 	}
