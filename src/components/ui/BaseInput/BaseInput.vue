@@ -4,7 +4,13 @@
 		:vmodel="vmodel"
 		v-bind="{ ...$attrs, ...$props }"
 		@input="$emit('update:vmodel', $event)"
-	/>
+	>
+		<template v-for="(cmp, name) in $slots">
+			<slot :slot="name" :name="name">
+				<component :is="cmp.context" :key="name" />
+			</slot>
+		</template>
+	</component>
 </template>
 
 <script>
