@@ -186,7 +186,7 @@ storiesOf("Base Components", module)
 			baseInputTypesDict[type] = type;
 		});
 		return {
-			components: { BaseInput },
+			components: { BaseInput, BaseIcon },
 			data: () => ({
 				vmodel: text("v-model", ""),
 				type: select("type", baseInputTypesDict, baseInputTypes[0]),
@@ -207,7 +207,9 @@ storiesOf("Base Components", module)
 						:placeholder="placeholder"
 						:hint="hint"
 						:error="error"
-					/>
+					>
+						<base-icon slot="icon" source="material" icon="alarm" />
+					</base-input>
 				</div>`,
 		};
 	})
