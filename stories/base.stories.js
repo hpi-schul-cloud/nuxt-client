@@ -38,28 +38,30 @@ storiesOf("Base Components", module)
 					text: "text",
 					outline: "outline",
 					icon: "icon",
-					"icon outline": "icon outline",
+					"icon only": "icon only",
 					primary: "primary",
 					"primary text": "primary text",
 					"primary icon": "primary icon",
-					"primary icon outline": "primary icon outline",
+					"primary icon only": "primary icon only",
 					"primary outline": "primary outline",
 					"hero-cta": "hero-cta",
+					"hero-cta icon": "hero-cta icon",
 					fancy: "fancy",
+					"fancy icon": "fancy icon",
 					secondary: "secondary",
 					"secondary text": "secondary text",
 					"secondary icon": "secondary icon",
-					"secondary icon outline": "secondary icon outline",
+					"secondary icon only": "secondary icon only",
 					"secondary outline": "secondary outline",
 					success: "success",
 					"success text": "success text",
 					"success icon": "success icon",
-					"success icon outline": "success icon outline",
+					"success icon only": "success icon only",
 					"success outline": "success outline",
 					danger: "danger",
 					"danger text": "danger text",
 					"danger icon": "danger icon",
-					"danger icon outline": "danger icon outline",
+					"danger icon only": "danger icon only",
 					"danger outline": "danger outline",
 				},
 				""
@@ -90,12 +92,19 @@ storiesOf("Base Components", module)
 				<base-button design="primary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="primary icon outline">
+				<base-button design="primary icon only">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
-				<base-button design="hero-cta">hero-cta</base-button>
-				<base-button design="fancy">fancy</base-button>
+				<base-button design="hero-cta" size="large">hero-cta</base-button>
+				<base-button design="fancy" size="large">hero-cta fancy</base-button>
+				<base-button design="hero-cta icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="fancy icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<br/><br/>
 
 				<h2>Secondary Action</h2>
 				<base-button design="secondary">secondary</base-button>
@@ -104,7 +113,7 @@ storiesOf("Base Components", module)
 				<base-button design="secondary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="secondary icon outline">
+				<base-button design="secondary icon only">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -115,7 +124,7 @@ storiesOf("Base Components", module)
 				<base-button design="icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="icon outline">
+				<base-button design="icon only">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -123,6 +132,12 @@ storiesOf("Base Components", module)
 				<base-button disabled>Disabled</base-button>
 				<base-button disabled design="outline">Disabled outline</base-button>
 				<base-button disabled design="text">Disabled text</base-button>
+				<base-button disabled design="icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button disabled design="icon only">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 
 				<h2>Signal</h2>
 				<base-button design="success">success</base-button>
@@ -131,7 +146,7 @@ storiesOf("Base Components", module)
 				<base-button design="success icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="success icon outline">
+				<base-button design="success icon only">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
@@ -141,7 +156,7 @@ storiesOf("Base Components", module)
 				<base-button design="danger icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="danger icon outline">
+				<base-button design="danger icon only">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
