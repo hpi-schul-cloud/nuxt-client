@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<button :class="classes" v-on="$listeners">
 		<slot />
