@@ -34,4 +34,6 @@ $darken: 25%;
 	--color-danger: #ff1134;
 	--color-danger-light: color-mod(var(--color-danger) tint(#{$brighten}));
 	--color-danger--dark: color-mod(var(--color-danger) shade(#{$darken}));
+	--color-disabled: #d9d9d9;
+	--color-disabled-dark: #9e9e9e;
 }

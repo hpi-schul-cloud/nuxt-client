@@ -163,11 +163,11 @@ export default {
 	}
 
 	&:disabled {
-		--button-background: color-mod(var(--color-black) lightness(85%));
-		--button-text-color: color-mod(var(--color-black) lightness(62%));
+		--button-background: var(--color-disabled);
+		--button-text-color: var(--color-disabled-dark);
 		&.is-outline,
 		&.is-text {
-			--button-background: color-mod(var(--color-white) lightness(62%));
+			--button-background: var(--color-disabled-dark);
 		}
 	}
 
@@ -205,6 +205,8 @@ export default {
 	&:hover,
 	&:focus {
 		outline: none;
+
+		--button-background: var(--color-tertiary-dark);
 	}
 
 	/* stylelint-disable */
