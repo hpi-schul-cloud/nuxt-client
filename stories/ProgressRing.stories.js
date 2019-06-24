@@ -12,11 +12,5 @@ storiesOf("ProgressRing", module)
 		data: () => ({
 			currentPercentage: 40,
 		}),
-		// methods: {
-		//     randomNumber() {
-		//       this.percent = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
-		//     }
-		//   }
-
 		template: `<ProgressRing  :percent="currentPercentage"/>`,
 	}));

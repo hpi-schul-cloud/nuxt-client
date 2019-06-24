@@ -36,7 +36,7 @@ export default {
 		percent: {
 			type: Number,
 			default: 0,
-			isComplete: false,
+			// isComplete: false,
 		},
 	},
 	computed: {
