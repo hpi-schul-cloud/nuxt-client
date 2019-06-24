@@ -63,8 +63,11 @@ module.exports = {
 			indexName: process.env.ALGOLIA_NAME,
 		},
 	},
-	serviceWorker: {
-		updatePopup: true,
+	plugins: {
+		"@vuepress/pwa": {
+			serviceWorker: true,
+			updatePopup: true,
+		},
 	},
 	configureWebpack: {
 		resolve: {
