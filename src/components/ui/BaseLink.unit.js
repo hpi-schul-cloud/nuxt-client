@@ -62,7 +62,7 @@ describe("@components/BaseLink", () => {
 		let outputData = "";
 		console.warn = jest.fn((inputs) => (outputData += inputs));
 
-		const { element } = shallowMount(BaseLink, {
+		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 			propsData: {
 				href: "/news",
@@ -75,7 +75,7 @@ describe("@components/BaseLink", () => {
 		let outputData = "";
 		console.warn = jest.fn((inputs) => (outputData += inputs));
 
-		const { element } = shallowMount(BaseLink, {
+		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 			propsData: {
 				href: "http://schul-cloud.org",
@@ -88,7 +88,7 @@ describe("@components/BaseLink", () => {
 		let outputData = "";
 		console.warn = jest.fn((inputs) => (outputData += inputs));
 
-		const { element } = shallowMount(BaseLink, {
+		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 		});
 		expect(outputData).toContain("Invalid props");
