@@ -1,16 +1,15 @@
 <template>
-	<!-- eslint-disable max-lines -->
 	<div class="root">
 		<div class="header">
 			<div class="header-icon">
 				<base-icon source="custom" icon="shuttle" />
 			</div>
 			<div class="headlines">
-				<h3>Kurs anlegen</h3>
-				<h6>
+				<h1 class="h3">Kurs anlegen</h1>
+				<h2 class="h5">
 					In einem Kurs wird gemeinsam mit den Teilnehmern an Themen,
 					Hausaufgaben und Dateien gearbeitet.
-				</h6>
+				</h2>
 			</div>
 		</div>
 		<step-progress :steps="steps" :current-step="currentStep" />
@@ -32,31 +31,19 @@
 			<step-done v-show="currentStep === 2" />
 		</div>
 		<div class="step-wrapper">
-			<base-button
-				v-if="!firststep"
-				type="button"
-				class="btn btn-primary"
-				@click="lastStep"
+			<base-button v-if="!firststep" design="text" @click="lastStep"
 				>Zurück</base-button
 			>
-			<base-button
-				v-if="currentStep === 1"
-				type="button"
-				class="btn btn-primary"
-				@click="nextStep"
+			<base-button v-if="currentStep === 1" design="text" @click="nextStep"
 				>Überspringen</base-button
 			>
-			<base-button
-				v-if="!laststep"
-				type="button"
-				class="btn btn-primary"
-				@click="nextStep"
+			<base-button v-if="!laststep" design="primary" @click="nextStep"
 				>Weiter</base-button
 			>
 			<base-button
 				v-if="laststep"
 				type="submit"
-				class="btn btn-primary"
+				design="primary"
 				@click="$emit('course-creation-submit')"
 			>
 				Kurs anlegen und weiter
@@ -135,16 +122,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .content-wrapper {
-	width: 70%;
-	margin: 150px auto 0 auto;
+	max-width: 100ch;
+	margin: var(--space-xxxl) auto 0;
 }
 
 .step-wrapper {
 	display: flex;
 	justify-content: flex-end;
-	max-width: 70%;
+	max-width: 80ch;
 	margin: 0 auto;
 }
 
@@ -152,15 +139,15 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin: 20px 0;
+	margin: var(--space-lg) 0;
 
 	.headlines h3 {
 		margin-top: 0;
 	}
 
 	.header-icon {
-		margin-right: 20px;
-		font-size: 60px;
+		margin-right: var(--space-sm);
+		font-size: var(--heading-3);
 	}
 }
 </style>

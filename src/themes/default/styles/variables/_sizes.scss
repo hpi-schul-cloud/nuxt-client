@@ -1,44 +1,7 @@
-// SCREEN
-$size-tablet-max-width: 767px;
-$size-mobile-max-width: 480px;
-
-// GRID
-$size-grid-padding: 1.3rem;
-
-// LAYOUT
-$size-content-width-max: 60rem;
-$size-content-width-min: 25rem;
-
-// SPACING
-$size-padding-x: 1em;
-$size-padding-y: 0.75em;
-$size-padding: $size-padding-y $size-padding-x;
-$size-margin: 1em;
-$size-border-width: 1px;
-$size-border-radius: 8px;
-$size-border-radius-round: 100vmax;
-
-// FONTS
-$size-text-desktop: (21px, 16px);
-$size-text-tablet: (21px, 16px);
-$size-text-mobile: (18px, 14px);
-
-$size-heading-desktop: (96px, 60px, 48px, 32px, 24px, 20px);
-$size-heading-tablet: (60px, 48px, 32px, 24px, 20px, 16px);
-$size-heading-mobile: (48px, 32px, 28px, 24px, 20px, 16px);
-
-$size-button-small-desktop: 16px;
-$size-button-small-tablet: 15px;
-$size-button-small-mobile: 15px;
-
-$size-button-medium-desktop: 18px;
-$size-button-medium-tablet: 16px;
-$size-button-medium-mobile: 16px;
-
-$size-button-large-desktop: 20px;
-$size-button-large-tablet: 17px;
-$size-button-large-mobile: 27px;
-
-$size-caption-desktop: 16px;
-$size-caption-tablet: 14px;
-$size-caption-mobile: 14px;
+:root {
+	--radius-round: 100vmax;
+	--radius-sm: 0.25rem;
+	--radius-md: 0.5rem;
+	--radius-lg: 1rem;
+	--border-width: 1px;
+}

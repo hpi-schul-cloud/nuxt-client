@@ -36,11 +36,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .button {
-	padding: 16px;
-	font-size: 16px;
+	padding: var(--space-sm) var(--space-md);
 	cursor: pointer;
 	border: 1px solid black;
 }
@@ -53,10 +52,10 @@ export default {
 // Hidden by default
 .content {
 	position: absolute;
-	z-index: $layer-dropdown-z-index;
+	z-index: var(--layer-dropdown);
 	display: none;
 	flex-direction: column;
-	background-color: #f9f9f9;
+	background-color: var(--color-gray-light);
 
 	&.open {
 		display: flex;

@@ -4,7 +4,13 @@
 		:vmodel="vmodel"
 		v-bind="{ ...$attrs, ...$props }"
 		@input="$emit('update:vmodel', $event)"
-	/>
+	>
+		<template v-for="(cmp, name) in $slots">
+			<slot :slot="name" :name="name">
+				<component :is="cmp.context" :key="name" />
+			</slot>
+		</template>
+	</component>
 </template>
 
 <script>
@@ -13,10 +19,10 @@ import BaseInputDefault, {
 } from "./BaseInputDefault";
 import BaseInputHidden, {
 	supportedTypes as hiddenInputTypes,
-} from "./BaseInputHidden.vue";
+} from "./BaseInputHidden";
 import BaseInputCalendar, {
 	supportedTypes as calendarInputTypes,
-} from "./BaseInputCalendar.vue";
+} from "./BaseInputCalendar";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox";
@@ -65,12 +71,15 @@ export default {
 	},
 	created() {
 		if (!componentDictionary[this.type]) {
-			console.error("invalid prop type", this.type, "\n$attrs", this.$attrs);
+			console.error(
+				`invalid prop type ${this.type}:\n` +
+					`$attrs ${JSON.stringify(this.$attrs)}`
+			);
 		}
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 </style>

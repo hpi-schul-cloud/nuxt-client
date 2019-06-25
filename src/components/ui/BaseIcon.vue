@@ -72,6 +72,8 @@ export default {
 	// remove material icon margin
 	width: calc(1em + 4px);
 	height: calc(1em + 4px);
+	/* stylelint-disable */
 	margin: -4px 0;
+	/* stylelint-enable */
 }
 </style>

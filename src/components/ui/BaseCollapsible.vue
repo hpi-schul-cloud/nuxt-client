@@ -31,33 +31,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .collapsible {
 	width: 100%;
-	padding: 18px;
-	font-size: 15px;
-	color: #444;
+	padding: var(--space-sm) var(--space-md);
 	text-align: left;
 	cursor: pointer;
-	background-color: #eee;
+	background-color: var(--color-gray-light);
 	border: none;
 	outline: none;
 }
 .active,
 .collapsible:hover {
-	background-color: #ccc;
+	background-color: var(--color-gray-light);
 }
 
 .content {
 	display: block;
-	padding: 0 18px;
+	padding: 0 var(--space-md);
 	overflow: hidden;
-	background-color: #f1f1f1;
+	background-color: color-mod(var(--color-gray-light) tint(50%));
 }
 
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity $duration-animation-base;
+	transition: opacity var(--duration-transition-medium);
 }
 .fade-enter,
 .fade-leave-to {

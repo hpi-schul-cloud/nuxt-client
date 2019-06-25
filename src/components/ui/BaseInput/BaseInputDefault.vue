@@ -1,21 +1,45 @@
 <template>
-	<div>
-		<label :class="classList">
-			<div class="label">
-				{{ label }}
+	<label
+		:class="{
+			wrapper: true,
+			'with-hint': hasInfo,
+		}"
+	>
+		<div class="top">
+			<div v-if="$slots.icon" class="icon-before">
+				<slot name="icon" />
 			</div>
-			<slot>
-				<input
-					v-bind="$attrs"
-					:type="type"
-					:value="vmodel"
-					@input="handleInput"
-				/>
-			</slot>
-		</label>
-		<span v-if="error" class="error">{{ error }}</span>
-		<span v-else-if="hint" class="hint">{{ hint }}</span>
-	</div>
+			<div class="core">
+				<div class="label">
+					{{ label }}
+				</div>
+				<slot>
+					<input
+						v-bind="$attrs"
+						:type="type"
+						:value="vmodel"
+						@input="handleInput"
+					/>
+				</slot>
+			</div>
+			<base-icon
+				v-if="error"
+				source="material"
+				icon="warning"
+				class="icon-behind"
+			/>
+		</div>
+		<span
+			v-if="hasInfo"
+			:class="{
+				info: true,
+				hint: !!hint & !error,
+				error: !!error,
+			}"
+		>
+			{{ error || hint }}
+		</span>
+	</label>
 </template>
 <script>
 export const supportedTypes = [
@@ -59,8 +83,8 @@ export default {
 		},
 	},
 	computed: {
-		classList() {
-			return this.hint || this.error ? ["border", "with-hint"] : ["border"];
+		hasInfo() {
+			return !!(this.error || this.hint);
 		},
 	},
 	methods: {
@@ -76,47 +100,51 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
-.border {
-	position: relative;
+@import "@styles";
+.wrapper {
 	display: block;
-	margin: 1em 0 $size-grid-padding;
-	clear: both;
-	background: $color-text-bg;
-	border: $size-border-width solid $color-border;
-	border-radius: $size-border-radius;
-	&.with-hint {
-		margin-bottom: 0;
+	&:not(.with-hint) {
+		margin-bottom: calc(var(--text-sm) * var(--line-height-md));
 	}
 }
-.label {
-	@extend %typography-small;
 
-	position: relative;
-	padding-top: 4px;
-	padding-left: 8px;
-}
-input,
-/deep/ input {
-	@extend %typography-small;
-
-	display: block;
+.top {
+	display: flex;
+	align-items: center;
 	width: 100%;
-	padding: 4px 8px;
-	background-color: transparent;
-	border: 0;
-	border-radius: $size-border-radius - $size-border-width;
-	&::placeholder {
-		color: lighten($color-text, 40%);
+	border-bottom: 1px solid var(--color-gray);
+	&:focus-within {
+		border-bottom-color: var(--color-gray-dark);
+		outline: none;
+	}
+	.icon-before {
+		margin-right: var(--space-xs);
+		font-size: var(--text-lg);
+	}
+	.core {
+		flex: 1;
+		.label {
+			font-size: var(--text-sm);
+		}
+		input {
+			width: 100%;
+			color: var(--color-text);
+			border: none;
+		}
+	}
+	.icon-behind {
+		margin-left: var(--space-xs);
+		font-size: var(--text-lg);
+		color: var(--color-danger);
 	}
 }
-.hint,
-.error {
+
+.info {
 	display: block;
-	margin-bottom: $size-grid-padding - 1rem;
-	margin-left: 12px;
-}
-.error {
-	color: red;
+	font-size: var(--text-sm);
+	color: var(--color-gray);
+	&.error {
+		color: var(--color-danger);
+	}
 }
 </style>

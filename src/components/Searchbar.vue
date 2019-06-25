@@ -16,14 +16,15 @@
 			/>
 			<transition name="fade">
 				<!-- shouldn't this be baseButton -->
-				<button
+				<base-button
 					v-if="isActive && value !== ''"
+					design="icon"
 					type="button"
 					class="clear-btn"
 					@click="updateSearchString('')"
 				>
-					<base-icon class="clear-icon" source="custom" icon="clear" />
-				</button>
+					<base-icon source="custom" icon="clear" />
+				</base-button>
 			</transition>
 		</div>
 	</div>
@@ -55,46 +56,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .live-search {
 	position: relative;
 	width: 100%;
-	max-width: 500px;
-	margin: 0 auto 2rem;
+	max-width: var(--size-content-width-max);
+	margin: 0 auto;
 
 	.search-container {
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
 		width: 100%;
-		padding: 0 16px;
-		color: $color-text;
-		background: darken($color-text-bg, 10%);
-		border-radius: 50rem;
-
-		.search-icon,
-		input {
-			padding: 16px 4px;
-			font-size: 1.3rem;
-		}
+		padding: 0 var(--space-md);
+		color: var(--color-black);
+		background: var(--color-gray-light);
+		border-radius: var(--radius-round);
 
 		input {
 			flex: 1;
-			padding: 12px;
+			padding: var(--space-md) var(--space-xs);
+			padding: var(--space-xs);
+			font-size: var(--text-md);
 			background: transparent;
 			border: 0;
 			outline: none;
 		}
 
 		.search-icon {
-			transition: transform $duration-animation-base ease-in-out;
+			font-size: var(--text-md);
+			transition: transform var(--duration-transition-medium) ease-in-out;
 		}
 
 		.clear-btn {
 			display: flex;
 			align-items: center;
-			padding: 0;
+			padding: var(--space-xs);
 			line-height: 100%;
 			cursor: pointer;
 			background: transparent;
@@ -102,15 +100,11 @@ export default {
 
 			&.fade-enter-active,
 			&.fade-leave-active {
-				transition: opacity $duration-animation-base;
+				transition: opacity var(--duration-transition-medium);
 			}
 			&.fade-enter,
 			&.fade-leave-to {
 				opacity: 0;
-			}
-
-			.clear-icon {
-				padding: 16px;
 			}
 		}
 	}

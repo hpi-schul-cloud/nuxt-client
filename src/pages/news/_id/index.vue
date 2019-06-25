@@ -1,12 +1,18 @@
 <template>
 	<div v-if="news">
 		<section class="section">
-			<h5>
-				<span>
-					<base-link :to="{ name: 'news' }">News</base-link>
-				</span>
-				<span>/ {{ news.title }}</span>
-			</h5>
+			<base-breadcrumb
+				:inputs="[
+					{
+						to: { name: 'news' },
+						text: 'News',
+					},
+					{
+						to: { name: 'news-id', params: { id: news._id } },
+						text: news.title,
+					},
+				]"
+			/>
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />

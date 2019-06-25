@@ -1,4 +1,4 @@
-import CourseCard from "./CourseCard";
+import CourseCard from "./index.vue";
 
 describe("@components/CourseCard", () => {
 	it(...isValidComponent(CourseCard));

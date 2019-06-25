@@ -58,16 +58,23 @@ module.exports = {
 		docsDir: "/docs",
 		editLinks: true,
 		editLinkText: "Improve this page!",
+		algolia: {
+			apiKey: process.env.ALGOLIA_API_KEY,
+			indexName: process.env.ALGOLIA_NAME,
+		},
 	},
-	serviceWorker: {
-		updatePopup: true,
+	plugins: {
+		"@vuepress/pwa": {
+			serviceWorker: true,
+			updatePopup: true,
+		},
 	},
 	configureWebpack: {
 		resolve: {
 			alias: require("../../aliases.config").webpack,
 		},
 	},
-	markdown: {
+	extendMarkdown: {
 		lineNumbers: true,
 		toc: { includeLevel: [2, 3] },
 	},

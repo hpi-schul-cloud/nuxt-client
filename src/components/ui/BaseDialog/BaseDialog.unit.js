@@ -29,7 +29,7 @@ describe("@components/BaseDialog", () => {
 			onConfirm: () => this.$toast.success("Account deleted!"),
 		});
 
-		expect(dialog.$el.querySelector("#confirm-button")).toBeTruthy();
+		expect(dialog.$el.querySelector("[test-confirm]")).toBeTruthy();
 		dialog.close();
 
 		setTimeout(() => {

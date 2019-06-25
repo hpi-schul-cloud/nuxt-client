@@ -120,7 +120,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@variables";
 
 .grid {
@@ -128,23 +128,23 @@ export default {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
-	min-width: $size-content-width-min;
-	max-width: $size-content-width-max;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
 	margin: 0 auto;
 }
 
 .tile {
 	display: flex;
-	margin: 10px;
+	margin: var(--space-sm);
 }
 
 .teams-card {
 	position: relative;
 	width: 240px;
-	padding: 10px;
-	margin: 15px;
+	padding: var(--space-sm);
+	margin: var(--space-md);
 	cursor: pointer;
-	border-radius: 4px;
-	box-shadow: $shadow-1;
+	border-radius: var(--radius-sm);
+	box-shadow: var(--shadow-sm);
 }
 </style>
