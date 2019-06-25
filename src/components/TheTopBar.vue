@@ -1,40 +1,38 @@
 <template>
 	<div class="topbar">
-		<img class="logo" :src="$theme.logo.app" alt="Website Logo" />
-		<h1 class="page-title">{{ title }}</h1>
+		<div class="top-sidebar">
+			<img class="logo" :src="$theme.logo.transparent" alt="Website Logo" />
+			<h1 class="page-title">Schul-Cloud</h1>
+		</div>
 
 		<!-- ACTIONS -->
-		<template v-for="action in actions">
-			<base-link
-				v-if="action.to || action.href"
-				:key="action.to + action.icon"
-				v-ripple
-				tag="button"
-				:to="action.to"
-				:href="action.href"
-				class="action"
-				>{{ action.title }}</base-link
-			>
+		<div class="top-main">
+			<template v-for="action in actions">
+				<base-icon-button v-if="action.icon" :key="action.title" source="fa" :icon="action.icon"/>
 
-			<base-button
-				v-if="action.event"
-				:key="action.event + action.icon"
-				v-ripple
-				class="action"
-				@click="sendEvent(action.event)"
-				>{{ action.title }}</base-button
-			>
-		</template>
+				<div v-else :key="action.title">{{ action.title }}</div>
+
+				<base-button
+					v-if="action.event === 'logout'"
+					:key="action.title"
+					v-ripple
+					class="action"
+					@click="sendEvent(action.event)"
+					>{{ action.title }}</base-button
+				>
+
+			</template>
+		</div>
 	</div>
 </template>
 
 <script>
 export default {
 	props: {
-		title: {
-			type: String,
-			default: "HPI Schul-Cloud",
-		},
+		// title: {
+		// 	type: String,
+		// 	default: "HPI Schul-Cloud",
+		// },
 		actions: {
 			type: Array,
 			default: () => [],
@@ -61,19 +59,42 @@ export default {
 .topbar {
 	display: flex;
 	align-items: center;
-	padding: var(--space-sm) var(--space-md);
-	box-shadow: var(--shadow-sm);
-}
-.logo {
-	height: var(--heading-3);
-	margin-right: var(--space-sm);
-}
-.page-title {
-	flex: 1;
-	margin: 0;
-	font-family: var(--font-accent);
-	font-size: var(--heading-4);
-	text-transform: capitalize;
+	// background: green;
+	// padding: var(--space-sm) var(--space-md);
+	// box-shadow: var(--shadow-sm);
+
+	.top-sidebar {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		width: 240px;
+		height: 100%;
+		padding: var(--space-sm) var(--space-md);
+		background-color: var(--color-primary);
+
+		.logo {
+			height: var(--heading-3);
+			margin-right: var(--space-sm);
+
+		}
+		.page-title {
+			flex: 1;
+			margin: 0;
+			font-family: var(--font-accent);
+			font-size: var(--heading-4);
+			color: var(--color-white);
+			text-transform: capitalize;
+		}
+	}
+
+	.top-main {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 1;
+		align-items: center;
+		justify-content: flex-end;
+
+	}
 }
 .action {
 	padding: var(--space-sm) var(--space-md);

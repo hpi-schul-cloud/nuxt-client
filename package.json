@@ -49,6 +49,7 @@
 		"cookie-storage": "^5.0.0",
 		"dayjs": "^1.8.14",
 		"feathers-vuex": "1.7.0",
+		"font-awesome": "^4.7.0",
 		"lodash": "^4.17.11",
 		"material-icons-svg": "^1.0.0",
 		"nuxt": "^2.6.3",
@@ -62,6 +63,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.4.3",
 		"@babel/preset-env": "^7.4.3",
+		"@fortawesome/fontawesome-free": "^5.8.2",
 		"@storybook/addon-a11y": "^5.0.3",
 		"@storybook/addon-actions": "^5.0.3",
 		"@storybook/addon-centered": "^5.0.3",

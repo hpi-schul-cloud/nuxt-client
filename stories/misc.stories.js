@@ -9,6 +9,7 @@ import MenuLink from "@components/MenuLink";
 import DropdownMenu from "@components/DropdownMenu";
 import BaseButton from "@components/ui/BaseButton";
 import Searchbar from "@components/Searchbar";
+import IconWithPopup from "@components/IconWithPopup";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -61,4 +62,11 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
 			</div>
 		`,
+	}))
+	.add("Icon with Popup", () => ({
+		components: { IconWithPopup },
+		template: `<div>
+			<div><IconWithPopup source="fa" icon="solid/address-book"></IconWithPopup></div>
+			<div><IconWithPopup source="fa" icon="solid/address-book"></IconWithPopup></div>
+		</div>`,
 	}));

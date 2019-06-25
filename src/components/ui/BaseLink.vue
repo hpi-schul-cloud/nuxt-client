@@ -2,6 +2,7 @@
 	<a
 		v-if="href"
 		class="link is-external"
+		:class="{inactive: inactive}"
 		:href="href"
 		v-bind="$attrs"
 		target="_blank"
@@ -10,7 +11,7 @@
 		<slot />
 	</a>
 	<!-- TODO use RouterLink if used outside nuxt -->
-	<NuxtLink v-else class="link" tag="a" :to="routerLinkTo" v-bind="$attrs">
+	<NuxtLink v-else class="link" :class="{inactive: inactive}" tag="a" :to="routerLinkTo" v-bind="$attrs">
 		<slot />
 	</NuxtLink>
 </template>
@@ -38,6 +39,9 @@ export default {
 			type: Object,
 			default: () => ({}),
 		},
+		inactive: {
+			type: Boolean,
+		}
 	},
 	computed: {
 		routerLinkTo({ name, params }) {
@@ -110,7 +114,12 @@ export default {
 	&:visited {
 		color: var(--color-primary);
 	}
+	&.inactive {
+		color: var(--color-black);
+	}
+
 }
+
 
 .is-external {
 	border: none;
@@ -120,5 +129,9 @@ export default {
 	&:hover {
 		color: var(--color-primary-dark);
 	}
+	&.inactive {
+		color: var(--color-black);
+	}
+
 }
 </style>

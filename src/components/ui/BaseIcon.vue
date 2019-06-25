@@ -17,7 +17,7 @@ export default {
 			type: String,
 			required: true,
 			validator: function(to) {
-				return ["material", "custom"].includes(to);
+				return ["material", "custom", "fa"].includes(to);
 			},
 		},
 		icon: {
@@ -46,6 +46,12 @@ export default {
 						this.icon
 					}-24px.svg`);
 				}
+				if (this.source === "fa") {
+					// src: https://fontawesome.com/icons?d=gallery
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@fortawesome/fontawesome-free/svgs/${
+						this.icon
+					}.svg`);
+				}
 				return icon.default;
 			} catch (error) {
 				console.error(
@@ -68,6 +74,7 @@ export default {
 	height: 1em;
 	vertical-align: baseline;
 }
+
 .material {
 	// remove material icon margin
 	width: calc(1em + 4px);
