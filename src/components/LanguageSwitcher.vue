@@ -18,6 +18,7 @@ import Vuex from "vuex";
 export default {
 	data: () => ({
 		languages: ["de", "en"],
+		value: "de",
 	}),
 	methods: {
 		changeLanguage: function(lang) {
