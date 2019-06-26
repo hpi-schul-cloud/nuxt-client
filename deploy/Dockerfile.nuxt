@@ -18,12 +18,11 @@ RUN npm i -g gulp
 RUN yarn
 COPY . /app
 RUN git submodule init && git submodule update
-RUN cd src/legacy-client && npm i
-RUN gulp && cd ../..
+WORKDIR '/app/src/legacy-client'
+RUN npm i
+RUN gulp
+WORKDIR '/app'
 RUN yarn build:nuxt
-
-FROM nginx:alpine
-EXPOSE 80
 
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=80
