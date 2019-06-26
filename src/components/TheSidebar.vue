@@ -43,15 +43,17 @@ export default {
 @import "@styles";
 
 .sidebar {
-	 display: flex;
+	display: flex;
 	flex-direction: column;
     width: 240px;
 	background-color: var(--color-white);
 	border-right: 1px solid rgba(0,0,0,.15);
 
 	@include breakpoint(tablet) {
-		background-color: green;
+		width: 60px;
 	}
+
+
 
 	.contents {
 		display: contents;
@@ -90,7 +92,12 @@ export default {
 					.title {
 						padding: calc(var(--space-sm) * 0.5) var(--space-md);
 						text-transform: uppercase;
+
+						@include breakpoint(tablet) {
+							display: none;
+						}
 					}
+
 				}
 
 				// .list-content {

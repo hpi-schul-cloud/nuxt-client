@@ -68,7 +68,6 @@ export default {
 		border-color:  transparent transparent #555 transparent;
 		border-style: solid;
 		border-width: 5px;
-
 	}
 }
 

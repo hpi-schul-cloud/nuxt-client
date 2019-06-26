@@ -8,15 +8,15 @@
 		<!-- ACTIONS -->
 		<div class="top-main">
 			<template v-for="action in actions">
-				<base-icon-button v-if="action.icon" :key="action.title" source="fa" :icon="action.icon"/>
+				<base-icon-button v-if="action.icon" :key="action.title" class="item" source="fa" :icon="action.icon"/>
 
-				<div v-else :key="action.title">{{ action.title }}</div>
+				<div v-else :key="action.title" class="item" >{{ action.title }}</div>
 
 				<base-button
 					v-if="action.event === 'logout'"
 					:key="action.title"
 					v-ripple
-					class="action"
+					class="action item"
 					@click="sendEvent(action.event)"
 					>{{ action.title }}</base-button
 				>
@@ -93,6 +93,11 @@ export default {
 		flex-grow: 1;
 		align-items: center;
 		justify-content: flex-end;
+
+		.item {
+			margin: 0 0.9em 0 0.9em;
+		}
+
 
 	}
 }
