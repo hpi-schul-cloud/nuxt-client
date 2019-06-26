@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import BaseCard from "@basecomponents/BaseCard";
-
 export default {
 	props: {
 		news: {
@@ -42,15 +40,15 @@ export default {
 @import "@variables";
 
 .time {
-	margin: 0 0 6px;
-	font-size: 16px;
-	color: #fff;
+	margin: 0 0 var(--space-xxxs) 0;
+	font-size: var(--text-base-size);
+	color: var(--color-white);
 }
 
 .headline {
 	margin: 0;
-	font-size: 26px;
-	line-height: 1em;
-	color: #fff;
+	font-size: var(--heading-4);
+	line-height: var(--line-height-sm);
+	color: var(--color-white);
 }
 </style>

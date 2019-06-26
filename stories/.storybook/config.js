@@ -6,7 +6,7 @@ import { withKnobs } from "@storybook/addon-knobs";
 
 import "./mockComponents";
 import "@components/ui/_globals";
-import "@styles/index.scss";
+import "@styles";
 
 // Vue Docs ( storybook-addon-vue-info )
 addParameters({

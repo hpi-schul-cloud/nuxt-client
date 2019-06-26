@@ -3,15 +3,15 @@
 		<div class="image">
 			<img alt="people" src="@assets/people.png" />
 		</div>
-		<div>
-			<h3>Geschafft!</h3>
-			<h4>Was kann ich in einem Kurs machen?</h4>
-			<h6>Themen anlegen</h6>
+		<div class="text-md">
+			<h2 class="h3">Geschafft!</h2>
+			<h3 class="h4">Was kann ich in einem Kurs machen?</h3>
+			<h4 class="h5">Themen anlegen</h4>
 			Themen sind in der Schul-Cloud der Container für dein Unterrichtsmaterial.
-			<h6>Aufgaben stellen</h6>
+			<h4 class="h6">Aufgaben stellen</h4>
 			Innerhalb eines Kurses/Themas kannst du Aufgaben an deine Teilnehmer
 			stellen.
-			<h6>Tools hinzufügen</h6>
+			<h4 class="h6">Tools hinzufügen</h4>
 			In einem Kurs kannst du außerdem Tools zum interaktiven Unterricht
 			hinzufügen.
 		</div>
@@ -19,15 +19,15 @@
 </template>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .final-step {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin-bottom: 30px;
+	margin-bottom: var(space-lg);
 	.image {
-		padding: 30px;
+		padding: var(--space-lg);
 	}
 }
 </style>

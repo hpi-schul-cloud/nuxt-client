@@ -3,14 +3,19 @@ pull_request_rules:
     conditions:
       - label!=WIP
       - label!=waiting
-      - label~=ready to merge
-      - status-success=Travis CI - Branch
+      - label=ready to merge
+      - status-success~=Travis CI
       - status-success=Mergeable
       - status-success=codecov/project
     actions:
       merge:
         method: merge
         strict: true
+  - name: remove ready to merge when merged
+    conditions:
+      - merged
+      - label=ready to merge
+    actions:
       label:
         remove:
           - ready to merge

@@ -2,14 +2,6 @@ import { createLocalVue, shallowMount } from "@vue/test-utils";
 import BaseDialogPlugin from "./";
 import BaseDialog from "./BaseDialog";
 
-const modal = {
-	data: () => ({ active: false }),
-	template: `
-	<div>
-	</div>
-	`,
-};
-
 describe("@components/BaseDialog", () => {
 	it("is called", () => {
 		const wrapper = shallowMount(BaseDialog, {
@@ -37,7 +29,7 @@ describe("@components/BaseDialog", () => {
 			onConfirm: () => this.$toast.success("Account deleted!"),
 		});
 
-		expect(dialog.$el.querySelector("#confirm-button")).toBeTruthy();
+		expect(dialog.$el.querySelector("[test-confirm]")).toBeTruthy();
 		dialog.close();
 
 		setTimeout(() => {
@@ -56,6 +48,6 @@ describe("@components/BaseDialog", () => {
 			localVue,
 		});
 
-		const dialog = wrapper.vm.$dialog.confirm();
+		wrapper.vm.$dialog.confirm();
 	});
 });

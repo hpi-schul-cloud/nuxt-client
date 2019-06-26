@@ -20,6 +20,7 @@ export default {
 		},
 	},
 	methods: {
+		// eslint-disable-next-line no-unused-vars
 		removeText({ text, ...input }) {
 			return input;
 		},
@@ -31,20 +32,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 .breadcrumb {
-	padding: 10px 16px;
+	padding: var(--space-sm) var(--space-md);
 	list-style: none;
 
 	.link {
 		display: inline;
-		font-size: 18px;
 	}
 
 	/* Add a slash symbol (/) before/behind each list item */
 	.link + .link::before {
-		padding: 8px;
-		content: "/\00a0";
+		padding: var(--space-xs);
+		content: "/\00a0"; // Slash Symbol
 	}
 }
 </style>

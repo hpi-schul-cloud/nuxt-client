@@ -1,12 +1,12 @@
-import CourseCard from "./CourseCard";
+import CourseCard from "./index.vue";
 
 describe("@components/CourseCard", () => {
 	it(...isValidComponent(CourseCard));
 
 	it("Render with default values", () => {
 		const wrapper = shallowMount(CourseCard);
-		expect(wrapper.find(".abbreviation").exists()).toBe(true);
-		expect(wrapper.find(".course-name").exists()).toBe(true);
+		expect(wrapper.find(".abrivation-label").exists()).toBe(true);
+		expect(wrapper.find(".course-name-label").exists()).toBe(true);
 	});
 	it("Background and abriviation isn't set.", () => {
 		const course = {
@@ -21,10 +21,10 @@ describe("@components/CourseCard", () => {
 		const wrapper = shallowMount(CourseCard, {
 			propsData: { course },
 		});
-		expect(wrapper.find(".abbreviation").text()).toBe(
+		expect(wrapper.find(".abrivation-label").text()).toBe(
 			course.name.substring(0, 3).toUpperCase()
 		);
-		expect(wrapper.find(".course-name").exists()).toBe(true);
+		expect(wrapper.find(".course-name-label").exists()).toBe(true);
 	});
 	it("check that assignment and notification aren't being rendered", () => {
 		const course = {
@@ -42,8 +42,8 @@ describe("@components/CourseCard", () => {
 		});
 
 		expect(wrapper.find(".assignments-label").exists()).toBe(false);
-		expect(wrapper.find(".abbreviation").text()).toBe(course.abbreviation);
-		expect(wrapper.find(".course-name").text()).toBe(course.name);
+		expect(wrapper.find(".abrivation-label").text()).toBe(course.abbreviation);
+		expect(wrapper.find(".course-name-label").text()).toBe(course.name);
 	});
 
 	it("Check that assignments and notifications render.", () => {

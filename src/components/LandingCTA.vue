@@ -4,7 +4,7 @@
 		<h2 class="center medium-emphasis title">{{ title }}</h2>
 		<h3 class="center medium-emphasis subtitle">{{ subtitle }}</h3>
 		<div class="center">
-			<base-button class="cta-button btn-primary btn-large">
+			<base-button design="hero-cta" size="large">
 				{{ ctaText }}
 			</base-button>
 		</div>
@@ -32,19 +32,19 @@ export default {
 }
 
 .subtitle {
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 }
 
 .cta-button {
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 }
 
 .landing-image {
 	display: block;
 	width: 35%;
-	margin-top: 30px;
+	margin-top: var(--space-lg);
 	margin-right: auto;
-	margin-bottom: 30px;
+	margin-bottom: var(--space-lg);
 	margin-left: auto;
 }
 

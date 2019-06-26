@@ -53,20 +53,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .card {
 	position: relative;
+	z-index: var(--layer-behind);
 	width: 240px;
-	padding: 10px;
-	margin: 15px;
+	padding: var(--space-sm) var(--space-md);
+	margin: var(--space-sm);
 	cursor: pointer;
-	border-radius: 4px;
-	box-shadow: $shadow-1;
-
+	background: #fff;
+	border: 1px solid var(--color-gray);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-sm);
+	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 	&:hover {
-		box-shadow: $shadow-5;
-		transition: box-shadow $duration-animation-medium;
+		box-shadow: var(--shadow-sm);
 	}
 }
 
@@ -74,23 +76,24 @@ export default {
 	position: absolute;
 	top: -12px;
 	right: -12px;
-	z-index: 10;
+	z-index: var(--layer-dropdown);
 	display: inline-block;
-	width: 25px;
-	height: 25px;
-	font-weight: bold;
-	line-height: 25px;
-	color: white;
+	width: 24px;
+	height: 24px;
+	font-weight: var(--font-weight-bold);
+	line-height: calc(var(--line-height-lg) + 0.2);
+	color: var(--color-white);
 	text-align: center;
 	background: #b1063a;
-	border-radius: 50%;
+	border-radius: var(--radius-round);
 }
 
 .header {
 	position: relative;
-	z-index: -1;
+	z-index: var(--layer-behind);
 	height: 34px;
 	overflow: hidden;
+	border-top-left-radius: var(--radius-sm);
 }
 
 .tab {
@@ -98,19 +101,18 @@ export default {
 	top: 0;
 	bottom: 0;
 	left: 0;
+	z-index: var(--layer-behind);
 	width: 125px;
 	overflow: hidden;
-	border-top-right-radius: 5px;
+	border-top-right-radius: var(--radius-sm);
 	transform: skewX(25deg);
 	transform-origin: bottom;
-
 	&::before {
 		position: absolute;
 		top: 0;
 		right: 0;
 		bottom: 0;
 		left: 0;
-		z-index: -1;
 		content: "";
 		background: black;
 		opacity: 0.5;
@@ -118,9 +120,9 @@ export default {
 
 	span {
 		display: block;
-		padding: 5.5px 10px;
+		padding: var(--space-xxxs) var(--space-xxs);
 		overflow: hidden;
-		color: white;
+		color: var(--color-white);
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		transform: skewX(-25deg);
@@ -129,10 +131,11 @@ export default {
 }
 
 .content {
+	z-index: var(--layer-page);
 	height: 100px;
-	padding: 10px;
-	margin-top: -5px;
-	color: white;
-	border-radius: 0 5px 5px 0;
+	padding: var(--space-xs);
+	margin-top: calc(var(--space-xxxs) * -1);
+	color: var(--color-white);
+	border-radius: var(--radius-sm) var(--radius-sm);
 }
 </style>
