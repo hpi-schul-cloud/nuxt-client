@@ -32,9 +32,7 @@ export default {
 	},
 	methods: {
 		popup () {
-			// console.log("JOJOJOJOJO");
 			this.visible = !this.visible;
-			// irgendwie visible setzen
 		},
 		removePopup() {
 			this.visible = false;

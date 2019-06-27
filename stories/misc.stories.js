@@ -9,7 +9,8 @@ import MenuLink from "@components/MenuLink";
 import DropdownMenu from "@components/DropdownMenu";
 import BaseButton from "@components/ui/BaseButton";
 import Searchbar from "@components/Searchbar";
-import IconWithPopup from "@components/IconWithPopup";
+import PopupIcon from "@components/PopupIcon";
+import PopupIconInitials from "@components/PopupIconInitials";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -63,10 +64,16 @@ storiesOf("Misc", module)
 			</div>
 		`,
 	}))
-	.add("Icon with Popup", () => ({
-		components: { IconWithPopup },
+	.add("Popup Icon", () => ({
+		components: { PopupIcon },
 		template: `<div>
-			<div><IconWithPopup source="fa" icon="solid/address-book"></IconWithPopup></div>
-			<div><IconWithPopup source="fa" icon="solid/address-book"></IconWithPopup></div>
+			<div><PopupIcon source="fa" icon="solid/address-book"></PopupIcon></div>
+			<div><PopupIcon source="fa" icon="solid/address-book"></PopupIcon></div>
+		</div>`,
+	}))
+	.add("Popup Icon with Initials", () => ({
+		components: { PopupIconInitials },
+		template: `<div>
+			<div><PopupIconInitials name="AA"></PopupIconInitials></div>
 		</div>`,
 	}));
