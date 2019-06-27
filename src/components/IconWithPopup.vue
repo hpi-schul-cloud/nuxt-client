@@ -1,7 +1,7 @@
 <template>
-	<div class="popup" @click="popup">
+	<div v-click-outside="removePopup" class="popup" @click="popup">
 		<base-icon-button :source="source" :icon="icon" :fill="fill" @click="popup"/>
-		<span class="popuptext" :class="{visible}">AHAAHAA<br>HAAH<br>AAHAA<br>HAAH<br>AAH<br>AAHAAHA</span>
+		<span class="popuptext" :class="{visible}">{{popuptext}}</span>
 	</div>
 </template>
 
@@ -20,6 +20,10 @@ export default {
 			type: String,
 			default: "currentColor",
 		},
+		popuptext: {
+			type: String,
+			default: "Lorem ipsum"
+		}
 	},
 	data () {
 		return {
@@ -31,7 +35,11 @@ export default {
 			// console.log("JOJOJOJOJO");
 			this.visible = !this.visible;
 			// irgendwie visible setzen
+		},
+		removePopup() {
+			this.visible = false;
 		}
+
 	}
 };
 </script>
@@ -46,7 +54,7 @@ export default {
 		position: absolute;
 		top: 105%;
 		left: 0%;
-		  z-index: 1;
+		z-index: 1;
 		visibility: hidden;
 		border: 1px solid black;
 
@@ -56,8 +64,6 @@ export default {
   			visibility: visible;
 		}
 	}
-
-
 
 	.popuptext::before {
 		position: absolute;
@@ -70,6 +76,5 @@ export default {
 		border-width: 5px;
 	}
 }
-
 
 </style>
