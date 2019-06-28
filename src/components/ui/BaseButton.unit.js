@@ -48,4 +48,9 @@ describe("@components/BaseButton", () => {
 		expect(wrapper.find("button").exists()).toBe(true);
 		expect(wrapper.find(".is-small").exists()).toBe(true);
 	});
+	it("Generates a success button", () => {
+		const wrapper = mount(successButton);
+		expect(wrapper.find("button").exists()).toBe(true);
+		expect(wrapper.find(".is-success").exists()).toBe(true);
+	});
 });

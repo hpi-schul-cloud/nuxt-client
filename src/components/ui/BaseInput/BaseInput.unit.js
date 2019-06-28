@@ -46,7 +46,8 @@ describe("@components/BaseInput", () => {
 				template: `<base-input v-model="value" label="Label" type="unsupported" name="test" />`,
 				components: { BaseInput },
 			});
-			expect(true).toBe(false); // should fail before this
+
+			expect(wrapper).toBe(false); // should fail before this
 		} catch (error) {
 			expect(true).toBe(true); // expect to run this
 		}

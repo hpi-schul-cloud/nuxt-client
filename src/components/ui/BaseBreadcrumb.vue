@@ -20,6 +20,7 @@ export default {
 		},
 	},
 	methods: {
+		// eslint-disable-next-line no-unused-vars
 		removeText({ text, ...input }) {
 			return input;
 		},
