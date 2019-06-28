@@ -5,12 +5,18 @@
 			'with-hint': hasInfo,
 		}"
 	>
-		<div class="top">
+		<div
+			:class="{
+				top: true,
+				error: !!error,
+				disabled: !!disabled,
+			}"
+		>
 			<div v-if="$slots.icon" class="icon-before">
 				<slot name="icon" />
 			</div>
 			<div class="core">
-				<div class="label">
+				<div :class="{ label: true, 'with-label': showLabel }">
 					{{ label }}
 				</div>
 				<slot>
@@ -18,15 +24,22 @@
 						v-bind="$attrs"
 						:type="type"
 						:value="vmodel"
+						:disabled="disabled"
 						@input="handleInput"
 					/>
 				</slot>
 			</div>
 			<base-icon
 				v-if="error"
-				source="material"
+				source="custom"
 				icon="warning"
-				class="icon-behind"
+				class="icon-behind error"
+			/>
+			<base-icon
+				v-if="success"
+				source="custom"
+				icon="success"
+				class="icon-behind success"
 			/>
 		</div>
 		<span
@@ -81,10 +94,22 @@ export default {
 			type: String,
 			default: "",
 		},
+		success: {
+			type: Boolean,
+		},
+		disabled: {
+			type: Boolean,
+		},
+		hideLabel: {
+			type: Boolean,
+		},
 	},
 	computed: {
 		hasInfo() {
 			return !!(this.error || this.hint);
+		},
+		showLabel() {
+			return !!this.vmodel || !this.$attrs.placeholder;
 		},
 	},
 	methods: {
@@ -113,35 +138,64 @@ export default {
 	align-items: center;
 	width: 100%;
 	border-bottom: 1px solid var(--color-gray);
+	&:focus-within,
+	&:hover {
+		border-bottom-color: var(--color-accent);
+	}
 	&:focus-within {
-		border-bottom-color: var(--color-gray-dark);
 		outline: none;
+		.label {
+			color: var(--color-accent);
+		}
+	}
+	&.error {
+		border-bottom-color: var(--color-danger);
+	}
+	&.disabled {
+		color: var(--color-disabled-dark);
 	}
 	.icon-before {
+		margin-top: var(--space-md);
 		margin-right: var(--space-xs);
 		font-size: var(--text-lg);
 	}
 	.core {
 		flex: 1;
 		.label {
-			font-size: var(--text-sm);
+			font-size: var(--text-xs);
+			&:not(.with-label) {
+				visibility: hidden;
+			}
 		}
 		input {
 			width: 100%;
+			height: 40px;
 			color: var(--color-text);
 			border: none;
+			&:focus {
+				outline: none;
+			}
+			&:disabled::placeholder {
+				color: var(--color-disabled-dark);
+			}
 		}
 	}
 	.icon-behind {
 		margin-left: var(--space-xs);
 		font-size: var(--text-lg);
-		color: var(--color-danger);
+		&.error {
+			color: var(--color-danger);
+		}
+		&.success {
+			color: var(--color-success);
+		}
 	}
 }
 
 .info {
 	display: block;
-	font-size: var(--text-sm);
+	padding-top: var(--space-xs);
+	font-size: var(--text-xs);
 	color: var(--color-gray);
 	&.error {
 		color: var(--color-danger);

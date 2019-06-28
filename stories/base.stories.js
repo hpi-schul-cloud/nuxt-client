@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
@@ -201,19 +203,25 @@ storiesOf("Base Components", module)
 		return {
 			components: { BaseInput, BaseIcon },
 			data: () => ({
-				vmodel: text("v-model", ""),
+				vmodels: {
+					default: "",
+					warning: "",
+					success: "",
+					disabled: "",
+				},
+				//text("v-model", ""),
 				type: select("type", baseInputTypesDict, baseInputTypes[0]),
 				label: text("label", "Label"),
 				name: text("name", "name"),
 				value: text("value", ""),
-				placeholder: text("placeholder", "Placeholder"),
+				placeholder: text("placeholder", "Placeholder (Labelname)"),
 				hint: text("hint", "* required"),
 				error: text("error", ""),
 			}),
 			template: `
 				<div>
 					<base-input
-						v-model="vmodel"
+						v-model="vmodels.default"
 						:label="label"
 						:type="type"
 						:name="name"
@@ -221,6 +229,47 @@ storiesOf("Base Components", module)
 						:hint="hint"
 						:error="error"
 					>
+						<base-icon slot="icon" source="material" icon="alarm" />
+					</base-input>
+
+					<br/>
+
+					<base-input
+						v-model="vmodels.warning"
+						:label="label"
+						:type="type"
+						:name="name"
+						:placeholder="placeholder"
+						hint="hint"
+						error="error">
+						<base-icon slot="icon" source="material" icon="alarm" />
+					</base-input>
+
+					<br/>
+
+					<base-input
+						v-model="vmodels.success"
+						:label="label"
+						:type="type"
+						:name="name"
+						:placeholder="placeholder"
+						:hint="hint"
+						:error="error"
+						:success="true">
+						<base-icon slot="icon" source="material" icon="alarm" />
+					</base-input>
+
+					<br/>
+
+					<base-input
+						v-model="vmodels.disabled"
+						:label="label"
+						:type="type"
+						:name="name"
+						:placeholder="placeholder"
+						:hint="hint"
+						:error="error"
+						:disabled="true">
 						<base-icon slot="icon" source="material" icon="alarm" />
 					</base-input>
 				</div>`,
