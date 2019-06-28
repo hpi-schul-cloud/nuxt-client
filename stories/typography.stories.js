@@ -15,10 +15,10 @@ storiesOf("Typography", module)
 				<h4 class= "h4">H4 / PT Sans Narrow bold</h4>
 				<h5 class="h5">H5 / PT Sans Narrow bold</h5>
 				<h6 class="h6">H6 / PT Sans Narrow bold</h6>
-				<div class="text-lg">text-lg / PT Sans regular</div>
-				<div class="text-md">text-md / PT Sans regular</div>
-				<div class="text-sm">text-sm / PT Sans regular</div>
-				<div class="text-xs">text-xs / PT Sans regular</div>
+				<p class="text-lg">text-lg / PT Sans regular</p>
+				<p class="text-md">text-md / PT Sans regular</p>
+				<p class="text-sm">text-sm / PT Sans regular</p>
+				<p class="text-xs">text-xs / PT Sans regular</p>
 			</div>
 			`,
 		methods: {},
