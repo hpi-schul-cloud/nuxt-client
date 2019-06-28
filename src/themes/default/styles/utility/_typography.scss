@@ -24,6 +24,9 @@ body {
 }
 
 /* text size */
+.text-xs {
+	font-size: var(--text-xs);
+}
 .text-sm {
 	font-size: var(--text-sm);
 }
