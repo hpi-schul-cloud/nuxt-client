@@ -1,6 +1,6 @@
 FROM node:lts as builder
-RUN apk update && \
-    apk add --no-cache git
+RUN apt-get update && \
+    apt-get install git
 
 ARG API_HOST
 ENV API_HOST=$API_HOST
@@ -14,13 +14,15 @@ ENV SC_SHORT_TITLE=$SC_SHORT_TITLE
 WORKDIR '/app'
 COPY ./package.json ./
 COPY ./yarn.lock ./
-RUN yarn install
+RUN npm i -g gulp
+RUN yarn
 COPY . /app
 RUN git submodule init && git submodule update
+WORKDIR '/app/src/legacy-client'
+RUN npm i
+RUN gulp
+WORKDIR '/app'
 RUN yarn build:nuxt
-
-FROM nginx:alpine
-EXPOSE 80
 
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=80
