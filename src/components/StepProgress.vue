@@ -11,37 +11,8 @@
 				]"
 			>
 				<span class="description">{{ s.name }} </span>
-				<span v-if="index < currentStep">
-					<svg
-						width="17px"
-						height="12px"
-						viewBox="0 0 17 12"
-						version="1.1"
-						xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink"
-					>
-						<g
-							id="checkmark-out"
-							stroke="none"
-							stroke-width="1"
-							fill="none"
-							fill-rule="evenodd"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<g
-								id="checkmark"
-								transform="translate(-193.000000, -158.000000)"
-								stroke="#1D1D20"
-								stroke-width="2"
-							>
-								<polyline
-									id="Path-2"
-									points="194 163.510048 199.499439 168.512593 208.573524 158.971793"
-								></polyline>
-							</g>
-						</g>
-					</svg>
+				<span v-show="index < currentStep">
+					<base-icon source="material" icon="check" />
 				</span>
 			</li>
 		</ul>
