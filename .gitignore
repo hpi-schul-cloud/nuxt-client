@@ -20,3 +20,5 @@ dist
 # Runtime data
 .nuxt
 jsconfig.json
+
+docker-compose.yml
