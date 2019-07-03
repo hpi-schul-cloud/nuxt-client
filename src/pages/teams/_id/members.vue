@@ -1,4 +1,5 @@
 <!-- eslint-disable max-lines -->
+<!-- TODO -->
 <template>
 	<div v-if="team">
 		<section class="section">
@@ -7,24 +8,28 @@
 		</section>
 
 		<section class="section">
-			<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="column">
-				<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
-				<base-button
-					class="button is-primary"
-					@click="addInternalModalActive = true"
-					>Interne Teilnehmer hinzufügen</base-button
-				>
-			</div>
-		</section>
-
-		<section class="section">
-			<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="column">
-				<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
-				<base-button
-					class="button is-primary"
-					@click="addExternalModalActive = true"
-					>Externe Teilnehmer einladen</base-button
-				>
+			<div class="columns">
+				<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="column">
+					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
+					<base-button design="primary" @click="addInternalModalActive = true"
+						>Interne Teilnehmer hinzufügen</base-button
+					>
+				</div>
+				<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="column">
+					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
+					<base-button design="primary" @click="addExternalModalActive = true"
+						>Externe Teilnehmer einladen</base-button
+					>
+				</div>
+				<!-- TODO -->
+				<!-- <div class="column">
+					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
+					<base-button
+						design="primary"
+						@click="addInternalModalActive = true"
+						>Externe Teilnehmer hinzufügen</base-button
+					>
+				</div> -->
 			</div>
 		</section>
 
@@ -100,13 +105,13 @@
 			<div class="modal-body">
 				<div class="d-flex">
 					<base-button
-						:class="{ 'is-primary': tabs.internal === 'addMember' }"
+						:design="tabs.internal === 'addMember' ? 'primary' : ''"
 						@click="tabs.internal = 'addMember'"
 					>
 						Person hinzufügen
 					</base-button>
 					<base-button
-						:class="{ 'is-primary': tabs.internal === 'addClass' }"
+						:design="tabs.internal === 'addClass' ? 'primary' : ''"
 						@click="tabs.internal = 'addClass'"
 					>
 						Klasse hinzufügen
@@ -146,7 +151,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<base-button id="button" class="is-light" @click="addTeamMembers">
+				<base-button id="button" design="text" @click="addTeamMembers">
 					Hinzufügen
 				</base-button>
 			</div>
@@ -161,13 +166,13 @@
 				<h3>Wen möchtest du ins Team einladen?</h3>
 				<div class="d-flex">
 					<base-button
-						:class="{ 'is-primary': tabs.who === 'teacher' }"
+						:design="tabs.who === 'teacher' ? 'primary' : ''"
 						@click="tabs.who = 'teacher'"
 					>
 						Lehrer anderer Schulen
 					</base-button>
 					<base-button
-						:class="{ 'is-primary': tabs.who === 'expert' }"
+						:design="tabs.who === 'expert' ? 'primary' : ''"
 						@click="tabs.who = 'expert'"
 					>
 						Externe Experten
@@ -185,13 +190,13 @@
 						</p>
 						<div class="d-flex">
 							<base-button
-								:class="{ 'is-primary': tabs.from === 'directory' }"
+								:design="tabs.from === 'directory' ? 'primary' : ''"
 								@click="tabs.from = 'directory'"
 							>
 								Aus Verzeichnis auswählen
 							</base-button>
 							<base-button
-								:class="{ 'is-primary': tabs.from === 'email' }"
+								:design="tabs.from === 'email' ? 'primary' : ''"
 								@click="tabs.from = 'email'"
 							>
 								per E-Mail einladen
@@ -276,7 +281,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<base-button id="button" class="is-light" @click="addExternalMember">
+				<base-button id="button" @click="addExternalMember">
 					Hinzufügen
 				</base-button>
 			</div>
@@ -300,7 +305,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<base-button id="button" class="is-light" @click="saveMember">
+				<base-button id="button" design="primary" @click="saveMember">
 					Speichern
 				</base-button>
 			</div>
@@ -412,13 +417,13 @@ export default {
 		...mapGetters("roles", {
 			roles: "list",
 		}),
-		...mapGetters("federalStates", {
+		...mapGetters("federal-states", {
 			federalStates: "list",
 		}),
 		...mapGetters("schools", {
 			getSchool: "get",
 		}),
-		...mapGetters("publicTeachers", {
+		...mapGetters("public-teachers", {
 			getTeacher: "get",
 		}),
 		...mapState("schools", {
@@ -430,7 +435,7 @@ export default {
 					: [];
 			},
 		}),
-		...mapState("publicTeachers", {
+		...mapState("public-teachers", {
 			teachersPagination: (state) => {
 				return state.pagination &&
 					state.pagination.default &&
@@ -507,7 +512,7 @@ export default {
 			});
 		},
 		"externalInvite.teacher.school": async function() {
-			await this.$store.dispatch("publicTeachers/find", {
+			await this.$store.dispatch("public-teachers/find", {
 				query: {
 					$limit: false,
 					schoolId: this.externalInvite.teacher.school._id,
@@ -518,7 +523,7 @@ export default {
 	},
 	async created(ctx) {
 		await this.$store.dispatch("roles/find", { query: { $limit: 1000 } });
-		await this.$store.dispatch("federalStates/find", {
+		await this.$store.dispatch("federal-states/find", {
 			query: {
 				$limit: 10000,
 			},
@@ -529,58 +534,68 @@ export default {
 	},
 	methods: {
 		async getMembers() {
-			let members = (await this.$store.dispatch("users/find", {
-				query: {
-					$limit: 10000,
-				},
-			})).data;
+			try {
+				let members = (await this.$store.dispatch("users/find", {
+					query: {
+						$limit: 10000,
+					},
+				})).data;
 
-			members = members.filter((member) => {
-				return !this.team.userIds.find((user) => {
-					return member._id === user.userId._id;
+				members = members.filter((member) => {
+					return !this.team.userIds.find((user) => {
+						return member._id === user.userId._id;
+					});
 				});
-			});
 
-			members = members.map((member) => {
-				member.fullName = member.firstName + " " + member.lastName;
-				return member;
-			});
+				members = members.map((member) => {
+					member.fullName = member.firstName + " " + member.lastName;
+					return member;
+				});
 
-			this.members = members;
+				this.members = members;
+			} catch (e) {
+				this.$toast.error("Fehler beim Laden der Mitglieder");
+				return;
+			}
 		},
 		async getClasses() {
-			let classes = (await this.$store.dispatch("classes/find", {
-				query: {
-					$limit: 10000,
-				},
-			})).data;
+			try {
+				let classes = (await this.$store.dispatch("classes/find", {
+					query: {
+						$limit: 10000,
+					},
+				})).data;
 
-			classes = classes.filter((schoolClass) => {
-				return !this.team.classIds.find((c) => {
-					return c._id === schoolClass._id;
+				classes = classes.filter((schoolClass) => {
+					return !this.team.classIds.find((c) => {
+						return c._id === schoolClass._id;
+					});
 				});
-			});
 
-			this.classes = classes;
+				this.classes = classes;
+			} catch (e) {
+				this.$toast.error("Fehler beim Laden der Schulen");
+				return;
+			}
 		},
 		async addTeamMembers() {
-			let newMembers = this.membersSelected.map((m) => {
+			const newMembers = this.membersSelected.map((m) => {
 				return {
 					userId: m._id,
 				};
 			});
 
-			let currentMembers = this.team.userIds.map((u) => {
+			const currentMembers = this.team.userIds.map((u) => {
 				u.role = u.role._id;
 				u.userId = u.userId._id;
 				return u;
 			});
 
-			let userIds = newMembers.concat(currentMembers);
+			const userIds = newMembers.concat(currentMembers);
 
-			let newClasses = this.classesSelected.map((c) => c._id);
-			let currentClasses = this.team.classIds.map((c) => c._id);
-			let classIds = newClasses.concat(currentClasses);
+			const newClasses = this.classesSelected.map((c) => c._id);
+			const currentClasses = this.team.classIds.map((c) => c._id);
+			const classIds = newClasses.concat(currentClasses);
 
 			await this.$store.dispatch("teams/patch", [
 				this.team._id,

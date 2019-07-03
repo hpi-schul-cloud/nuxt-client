@@ -1,12 +1,11 @@
 const routes = require("../server/routes");
 
 export default async function(ctx, cb) {
-	const { store, redirect, route } = ctx;
-	const { auth } = store.state;
+	const { route } = ctx;
 
-	let segments = route.path.split("/");
-	let controllerName = segments[1];
-	let legacyRoute = routes.find((r) => {
+	const segments = route.path.split("/");
+	const controllerName = segments[1];
+	const legacyRoute = routes.find((r) => {
 		if (typeof r === "object") {
 			return r.route.includes(controllerName);
 		} else {
@@ -29,5 +28,7 @@ export default async function(ctx, cb) {
 				cb();
 			}
 		}
+	} else {
+		cb();
 	}
 }

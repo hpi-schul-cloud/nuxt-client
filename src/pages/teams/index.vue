@@ -74,7 +74,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import isAuthenticated from "@middleware/is-authenticated";
+// import isAuthenticated from "@middleware/is-authenticated";
 
 export default {
 	data() {
@@ -87,7 +87,7 @@ export default {
 			title: "Teams",
 		};
 	},
-	middleware: [isAuthenticated],
+	// middleware: [isAuthenticated],
 	computed: {
 		...mapGetters("teams", {
 			teams: "list",
@@ -120,7 +120,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@variables";
 
 .grid {

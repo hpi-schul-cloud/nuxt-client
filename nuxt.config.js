@@ -51,13 +51,16 @@ module.exports = {
 	cssSourceMap: true,
 
 	router: {
-		middleware: ["is-authenticated", "links-fallback"],
+		middleware: [
+			// "is-authenticated",
+			"links-fallback",
+		],
 	},
 
 	/*
 	 ** Plugins to load before mounting the App
 	 */
-	plugins: ["@plugins/authenticate", "@plugins/axios", "@plugins/global"],
+	plugins: ["@plugins/global", "@plugins/axios", "@plugins/authenticate"],
 
 	/*
 	 ** Nuxt.js modules
@@ -65,6 +68,7 @@ module.exports = {
 	modules: [
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
+		"cookie-universal-nuxt",
 		"@nuxtjs/toast",
 		"nuxt-babel",
 	],

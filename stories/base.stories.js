@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
@@ -27,69 +25,142 @@ storiesOf("Base Components", module)
 		notes,
 	})
 	.add("Base Button", () => ({
-		components: { BaseButton },
+		components: { BaseButton, BaseIcon },
 		data: () => ({
 			text: text("Text", "Action"),
-			style: select(
-				"Style",
+			design: select(
+				"Design",
 				{
 					default: "",
-					primary: "is-primary",
-					secondary: "is-secondary",
-					success: "is-success",
-					danger: "is-danger",
+					none: "none",
+					text: "text",
+					outline: "outline",
+					icon: "icon",
+					"icon text": "icon text",
+					primary: "primary",
+					"primary text": "primary text",
+					"primary icon": "primary icon",
+					"primary icon text": "primary icon text",
+					"primary outline": "primary outline",
+					"hero-cta": "hero-cta",
+					"hero-cta icon": "hero-cta icon",
+					fancy: "fancy",
+					"fancy icon": "fancy icon",
+					secondary: "secondary",
+					"secondary text": "secondary text",
+					"secondary icon": "secondary icon",
+					"secondary icon text": "secondary icon text",
+					"secondary outline": "secondary outline",
+					success: "success",
+					"success text": "success text",
+					"success icon": "success icon",
+					"success icon text": "success icon text",
+					"success outline": "success outline",
+					danger: "danger",
+					"danger text": "danger text",
+					"danger icon": "danger icon",
+					"danger icon text": "danger icon text",
+					"danger outline": "danger outline",
 				},
 				""
 			),
 			size: select(
 				"Size",
-				{ small: "is-small", default: "", large: "is-large" },
-				""
+				{ small: "small", medium: "medium", large: "large" },
+				"medium"
 			),
-			outline: boolean("outline", false),
 			disabled: boolean("disabled", false),
 		}),
-		computed: {
-			classes() {
-				const classes = [this.style, this.size];
-				if (this.outline) {
-					classes.push("is-outline");
-				}
-				return classes;
-			},
-		},
 		template: `<div style="padding: 2rem;">
 				<h2>Knobs</h2>
-				<base-button :disabled="disabled" :class="classes">{{ text }}</base-button>
+				<base-button :disabled="disabled" :size="size" :design="design">{{ text }}</base-button>
+
+				<h2>Sizes</h2>
+				<base-button size="small">small</base-button>
+				<base-button>medium (default)</base-button>
+				<base-button size="large">large</base-button>
+
 				<h2>Primary Action</h2>
-				<base-button class="is-primary is-small">Primary</base-button>
-				<base-button class="is-primary is-small is-outline">Primary</base-button>
-				<base-button class="is-primary">Primary</base-button>
-				<base-button class="is-primary is-outline">Primary</base-button>
-				<base-button class="is-primary is-large">Primary</base-button>
-				<base-button class="is-primary is-large is-outline">Primary</base-button>
-				<base-button class="is-hero-cta is-large">Hero C2A</base-button>
+				<base-button design="primary">
+					<base-icon source="material" icon="home"/>
+					primary
+				</base-button>
+				<base-button design="primary outline">primary outline</base-button>
+				<base-button design="primary text">primary text</base-button>
+				<base-button design="primary icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="primary icon text">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<br/><br/>
+				<base-button design="hero-cta" size="large">hero-cta</base-button>
+				<base-button design="fancy" size="large">hero-cta fancy</base-button>
+				<base-button design="hero-cta icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="fancy icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<br/><br/>
+
 				<h2>Secondary Action</h2>
-				<base-button class="is-secondary is-small">Secondary</base-button>
-				<base-button class="is-secondary is-small is-outline">Secondary</base-button>
-				<base-button class="is-secondary">Secondary</base-button>
-				<base-button class="is-secondary is-outline">Secondary</base-button>
-				<base-button class="is-secondary is-large">Secondary</base-button>
-				<base-button class="is-secondary is-large is-outline">Secondary</base-button>
+				<base-button design="secondary">secondary</base-button>
+				<base-button design="secondary outline">secondary outline</base-button>
+				<base-button design="secondary text">secondary text</base-button>
+				<base-button design="secondary icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="secondary icon text">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+
 				<h2>Tertiary Action</h2>
-				<base-button class="is-small">Small</base-button>
-				<base-button class="is-small is-outline">Small</base-button>
 				<base-button>Default</base-button>
-				<base-button class="is-outline">Default</base-button>
-				<base-button class="is-large">Large</base-button>
-				<base-button class="is-large is-outline">Large</base-button>
+				<base-button design="outline">outline</base-button>
+				<base-button design="text">text</base-button>
+				<base-button design="icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="icon text">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+
 				<h2>Disabled</h2>
 				<base-button disabled>Disabled</base-button>
+				<base-button disabled design="outline">Disabled outline</base-button>
+				<base-button disabled design="text">Disabled text</base-button>
+				<base-button disabled design="icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button disabled design="icon text">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+
 				<h2>Signal</h2>
-				<base-button class="is-success is-medium">Success</base-button>
-				<base-button class="is-danger is-medium">Danger</base-button>
+				<base-button design="success">success</base-button>
+				<base-button design="success outline">success outline</base-button>
+				<base-button design="success text">success text</base-button>
+				<base-button design="success icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="success icon text">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<br/><br/>
+				<base-button design="danger">danger</base-button>
+				<base-button design="danger outline">danger outline</base-button>
+				<base-button design="danger text">danger text</base-button>
+				<base-button design="danger icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="danger icon text">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+
+				<h2>Other</h2>
+				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
-		methods: {},
 	}))
 	.add("Base Card", () => ({
 		components: { BaseCard },
@@ -128,7 +199,7 @@ storiesOf("Base Components", module)
 			baseInputTypesDict[type] = type;
 		});
 		return {
-			components: { BaseInput },
+			components: { BaseInput, BaseIcon },
 			data: () => ({
 				vmodel: text("v-model", ""),
 				type: select("type", baseInputTypesDict, baseInputTypes[0]),
@@ -149,7 +220,9 @@ storiesOf("Base Components", module)
 						:placeholder="placeholder"
 						:hint="hint"
 						:error="error"
-					/>
+					>
+						<base-icon slot="icon" source="material" icon="alarm" />
+					</base-input>
 				</div>`,
 		};
 	})

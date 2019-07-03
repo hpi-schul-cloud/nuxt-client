@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const express = require("express");
 const session = require("express-session");
 const consola = require("consola");
@@ -11,7 +13,7 @@ const handlebarsWax = require("handlebars-wax");
 // Init Nuxt.js
 const { Nuxt, Builder } = require("nuxt");
 // Import and Set Nuxt.js options
-let config = require("../../nuxt.config.js");
+const config = require("../../nuxt.config.js");
 config.dev = !(process.env.NODE_ENV === "production");
 
 const app = express();
@@ -23,12 +25,18 @@ const cookieParser = require("cookie-parser");
 
 app.use(compression());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+	bodyParser.urlencoded({
+		extended: true,
+	})
+);
 app.use(cookieParser());
 
 app.use(
 	session({
-		cookie: { maxAge: 60000 },
+		cookie: {
+			maxAge: 60000,
+		},
 		store: sessionStore,
 		saveUninitialized: true,
 		resave: "true",
@@ -72,9 +80,9 @@ app.use(require(path.join(legacyClientRoot, `./controllers/login`)));
 app.use(require(path.join(legacyClientRoot, `./controllers/registration`)));
 
 // The legacy routings go here
-setLegacyControllers(routes);
+setLegacyControllers();
 
-function setLegacyControllers(routes) {
+function setLegacyControllers() {
 	for (const route of routes) {
 		if (typeof route === "object") {
 			app.use(
@@ -97,19 +105,19 @@ function setLegacyControllers(routes) {
 	}
 }
 
-function excludeRoutes(controllerName, routes) {
+function excludeRoutes(controllerName, routesToExclude) {
 	app._router.stack.forEach((route) => {
-		let xp = route.regexp.toString();
+		const xp = route.regexp.toString();
 
 		if (xp.includes(controllerName)) {
-			const idx = app._router.stack.indexOf(route);
-			route.handle.stack.forEach((layer, i) => {
+			let idx = app._router.stack.indexOf(route);
+			route.handle.stack.forEach((layer) => {
 				if (
 					layer.route &&
-					routes.includes(layer.route.path) &&
+					routesToExclude.includes(layer.route.path) &&
 					layer.route.methods.get
 				) {
-					const idx = route.handle.stack.indexOf(layer);
+					idx = route.handle.stack.indexOf(layer);
 					route.handle.stack.splice(idx, 1);
 				}
 			});

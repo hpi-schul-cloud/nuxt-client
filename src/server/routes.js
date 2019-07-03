@@ -17,6 +17,7 @@ module.exports = [
 	{
 		route: "impressum",
 		controller: "imprint",
+		routesExcluded: ["/"],
 	},
 	"index",
 	"link",
