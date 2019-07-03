@@ -26,7 +26,7 @@ import Pagination from "@components/Pagination";
 export default {
 	head() {
 		return {
-			title: "Lernstore",
+			title: "LernStore",
 		};
 	},
 	components: {
