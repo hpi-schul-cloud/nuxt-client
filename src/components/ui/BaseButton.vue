@@ -25,30 +25,32 @@ export default {
 					"none",
 					"text",
 					"icon",
-					"icon outline",
+					"icon text",
 					"outline",
 					"primary",
 					"primary text",
 					"primary icon",
-					"primary icon outline",
+					"primary icon text",
 					"primary outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
-					"secondary icon outline",
+					"secondary icon text",
 					"secondary outline",
 					"hero-cta",
+					"hero-cta icon",
 					"success",
 					"success text",
 					"success icon",
-					"success icon outline",
+					"success icon text",
 					"success outline",
 					"danger",
 					"danger text",
 					"danger icon",
-					"danger icon outline",
+					"danger icon text",
 					"danger outline",
 					"fancy",
+					"fancy icon",
 				].includes(design);
 				if (!defined) {
 					throw new Error(`the design "${design}" is not available`);
@@ -82,10 +84,10 @@ export default {
 	--button-line-height: var(--line-height-md);
 
 	// color modes
-	--button-background: var(--color-gray-light);
-	--button-text-color: var(--color-gray-dark);
+	--button-background: var(--color-tertiary);
+	--button-text-color: var(--color-white);
 	&.is-outline {
-		--button-background: var(--color-gray-dark);
+		--button-background: var(--color-tertiary);
 	}
 	&.is-text {
 		--button-background: var(--color-gray-dark);
@@ -139,9 +141,34 @@ export default {
 			);
 		}
 	}
+	&.is-icon {
+		--button-padding: var(--space-xs);
+
+		width: 40px;
+		min-width: initial;
+		height: 40px;
+		padding: var(--button-padding);
+		border-radius: var(--radius-round);
+		&.is-small {
+			--button-padding: var(--space-xxxs);
+		}
+		&.is-large {
+			--button-padding: var(--space-sm);
+		}
+		&.is-hero-cta,
+		&.is-fancy {
+			width: 56px;
+			height: 56px;
+		}
+	}
+
 	&:disabled {
-		--button-background: var(--color-gray);
-		--button-text-color: var(--color-white);
+		--button-background: var(--color-disabled);
+		--button-text-color: var(--color-disabled-dark);
+		&.is-outline,
+		&.is-text {
+			--button-background: var(--color-disabled-dark);
+		}
 	}
 
 	/* SIZES */
@@ -178,6 +205,8 @@ export default {
 	&:hover,
 	&:focus {
 		outline: none;
+
+		--button-background: var(--color-tertiary-dark);
 	}
 
 	/* stylelint-disable */
@@ -206,19 +235,6 @@ export default {
 		&:focus {
 			background-color: var(--color-gray-light);
 			box-shadow: none;
-		}
-	}
-	&.is-icon {
-		--button-padding: var(--space-xs);
-
-		min-width: initial;
-		padding: var(--button-padding);
-		border-radius: var(--radius-round);
-		&.is-small {
-			--button-padding: var(--space-xxxs);
-		}
-		&.is-large {
-			--button-padding: var(--space-sm);
 		}
 	}
 	&.is-none {
