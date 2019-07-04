@@ -5,42 +5,38 @@
 			'with-hint': hasInfo,
 		}"
 	>
-		<div
-			:class="{
-				top: true,
-				error: !!error,
-				disabled: !!disabled,
-			}"
-		>
-			<div v-if="$slots.icon" class="icon-before">
-				<slot name="icon" />
+		<div :class="{ top: true, error: !!error, disabled: !!disabled }">
+			<div :class="{ label: true, 'with-label': showLabel }">
+				{{ label }}
 			</div>
-			<div class="core">
-				<div :class="{ label: true, 'with-label': showLabel }">
-					{{ label }}
+			<div class="contentwrapper">
+				<div v-if="$slots.icon" class="icon-before">
+					<slot name="icon" />
 				</div>
-				<slot>
-					<input
-						v-bind="$attrs"
-						:type="type"
-						:value="vmodel"
-						:disabled="disabled"
-						@input="handleInput"
-					/>
-				</slot>
+				<div class="core">
+					<slot>
+						<input
+							v-bind="$attrs"
+							:type="type"
+							:value="vmodel"
+							:disabled="disabled"
+							@input="handleInput"
+						/>
+					</slot>
+				</div>
+				<base-icon
+					v-if="error"
+					source="custom"
+					icon="warning"
+					class="icon-behind error"
+				/>
+				<base-icon
+					v-if="success"
+					source="custom"
+					icon="success"
+					class="icon-behind success"
+				/>
 			</div>
-			<base-icon
-				v-if="error"
-				source="custom"
-				icon="warning"
-				class="icon-behind error"
-			/>
-			<base-icon
-				v-if="success"
-				source="custom"
-				icon="success"
-				class="icon-behind success"
-			/>
 		</div>
 		<span
 			v-if="hasInfo"
@@ -100,9 +96,6 @@ export default {
 		disabled: {
 			type: Boolean,
 		},
-		hideLabel: {
-			type: Boolean,
-		},
 	},
 	computed: {
 		hasInfo() {
@@ -134,13 +127,13 @@ export default {
 }
 
 .top {
-	display: flex;
-	align-items: center;
 	width: 100%;
 	border-bottom: 1px solid var(--color-gray);
-	&:focus-within,
-	&:hover {
-		border-bottom-color: var(--color-accent);
+	.label {
+		font-size: var(--text-xs);
+		&:not(.with-label) {
+			visibility: hidden;
+		}
 	}
 	&:focus-within {
 		outline: none;
@@ -148,25 +141,26 @@ export default {
 			color: var(--color-accent);
 		}
 	}
+	&:focus-within,
+	&:hover:not(.disabled) {
+		border-bottom-color: var(--color-accent);
+	}
 	&.error {
 		border-bottom-color: var(--color-danger);
 	}
 	&.disabled {
 		color: var(--color-disabled-dark);
 	}
+	.contentwrapper {
+		display: flex;
+		align-items: center;
+	}
 	.icon-before {
-		margin-top: var(--space-md);
+		height: 24px;
 		margin-right: var(--space-xs);
-		font-size: var(--text-lg);
 	}
 	.core {
 		flex: 1;
-		.label {
-			font-size: var(--text-xs);
-			&:not(.with-label) {
-				visibility: hidden;
-			}
-		}
 		input {
 			width: 100%;
 			height: 40px;

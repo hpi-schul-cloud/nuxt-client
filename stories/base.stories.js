@@ -209,7 +209,6 @@ storiesOf("Base Components", module)
 					success: "",
 					disabled: "",
 				},
-				//text("v-model", ""),
 				type: select("type", baseInputTypesDict, baseInputTypes[0]),
 				label: text("label", "Label"),
 				name: text("name", "name"),
@@ -217,6 +216,8 @@ storiesOf("Base Components", module)
 				placeholder: text("placeholder", "Placeholder (Labelname)"),
 				hint: text("hint", "* required"),
 				error: text("error", ""),
+				success: boolean("success", false),
+				disabled: boolean("disabled", false),
 			}),
 			template: `
 				<div>
@@ -228,7 +229,8 @@ storiesOf("Base Components", module)
 						:placeholder="placeholder"
 						:hint="hint"
 						:error="error"
-					>
+						:success="success"
+						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
 					</base-input>
 
@@ -241,7 +243,9 @@ storiesOf("Base Components", module)
 						:name="name"
 						:placeholder="placeholder"
 						hint="hint"
-						error="error">
+						error="error"
+						:success="success"
+						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
 					</base-input>
 
@@ -255,7 +259,8 @@ storiesOf("Base Components", module)
 						:placeholder="placeholder"
 						:hint="hint"
 						:error="error"
-						:success="true">
+						:success="true"
+						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
 					</base-input>
 
@@ -269,6 +274,7 @@ storiesOf("Base Components", module)
 						:placeholder="placeholder"
 						:hint="hint"
 						:error="error"
+						:success="success"
 						:disabled="true">
 						<base-icon slot="icon" source="material" icon="alarm" />
 					</base-input>

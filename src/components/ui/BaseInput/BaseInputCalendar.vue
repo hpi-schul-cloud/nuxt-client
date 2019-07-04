@@ -84,5 +84,8 @@ export default {
 	&::placeholder {
 		color: var(--color-gray);
 	}
+	&:focus {
+		outline: none;
+	}
 }
 </style>
