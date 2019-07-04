@@ -5,9 +5,21 @@
 			'with-hint': hasInfo,
 		}"
 	>
-		<div :class="{ top: true, error: !!error, disabled: !!disabled }">
-			<div :class="{ label: true, 'with-label': showLabel }">
-				{{ label }}
+		<div
+			:class="{
+				top: true,
+				error: !!error,
+				disabled: !!disabled,
+				'is-textarea': isTextarea,
+			}"
+		>
+			<div :class="{ topbar: true, 'with-label': showLabel }">
+				<div :class="{ label: true, 'with-label': showLabel }">
+					{{ label }}
+				</div>
+				<span v-if="hasHint" class="info hint">
+					{{ hint }}
+				</span>
 			</div>
 			<div class="contentwrapper">
 				<div v-if="$slots.icon" class="icon-before">
@@ -38,15 +50,8 @@
 				/>
 			</div>
 		</div>
-		<span
-			v-if="hasInfo"
-			:class="{
-				info: true,
-				hint: !!hint & !error,
-				error: !!error,
-			}"
-		>
-			{{ error || hint }}
+		<span v-if="hasError" class="info error">
+			{{ error }}
 		</span>
 	</label>
 </template>
@@ -57,6 +62,7 @@ export const supportedTypes = [
 	"search",
 	"tel",
 	"text",
+	"textarea",
 	"url",
 	"number",
 ];
@@ -98,11 +104,17 @@ export default {
 		},
 	},
 	computed: {
-		hasInfo() {
-			return !!(this.error || this.hint);
+		hasHint() {
+			return !!this.hint;
+		},
+		hasError() {
+			return !!this.error;
 		},
 		showLabel() {
 			return !!this.vmodel || !this.$attrs.placeholder;
+		},
+		isTextarea() {
+			return this.type === "textarea";
 		},
 	},
 	methods: {
@@ -128,19 +140,31 @@ export default {
 
 .top {
 	width: 100%;
-	border-bottom: 1px solid var(--color-gray);
-	.label {
-		font-size: var(--text-xs);
-		&:not(.with-label) {
-			visibility: hidden;
-		}
-	}
+	border-bottom: 1px solid var(--color-black);
+
 	&:focus-within {
 		outline: none;
 		.label {
 			color: var(--color-accent);
 		}
 	}
+
+	.topbar {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: var(--space-xxxxs);
+		&:not(.with-label) {
+			justify-content: flex-end;
+		}
+		.label {
+			margin-right: var(--space-sm);
+			font-size: var(--text-xs);
+			&:not(.with-label) {
+				visibility: hidden;
+			}
+		}
+	}
+
 	&:focus-within,
 	&:hover:not(.disabled) {
 		border-bottom-color: var(--color-accent);
@@ -153,17 +177,18 @@ export default {
 	}
 	.contentwrapper {
 		display: flex;
-		align-items: center;
+		align-items: top;
 	}
 	.icon-before {
+		width: 24px;
 		height: 24px;
-		margin-right: var(--space-xs);
+		margin-right: var(--space-xxs);
 	}
 	.core {
 		flex: 1;
 		input {
 			width: 100%;
-			height: 40px;
+			margin-bottom: var(--space-xxs);
 			color: var(--color-text);
 			border: none;
 			&:focus {
@@ -175,6 +200,8 @@ export default {
 		}
 	}
 	.icon-behind {
+		width: 24px;
+		height: 24px;
 		margin-left: var(--space-xs);
 		font-size: var(--text-lg);
 		&.error {
@@ -186,12 +213,23 @@ export default {
 	}
 }
 
+.is-textarea {
+	border: 1px solid var(--color-black);
+	&:focus-within,
+	&:hover:not(.disabled) {
+		border-color: var(--color-accent);
+	}
+	&.error {
+		border-color: var(--color-danger);
+	}
+}
+
 .info {
 	display: block;
-	padding-top: var(--space-xs);
 	font-size: var(--text-xs);
 	color: var(--color-gray);
 	&.error {
+		padding-top: var(--space-xxxs);
 		color: var(--color-danger);
 	}
 }

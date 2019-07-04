@@ -214,8 +214,9 @@ storiesOf("Base Components", module)
 				name: text("name", "name"),
 				value: text("value", ""),
 				placeholder: text("placeholder", "Placeholder (Labelname)"),
-				hint: text("hint", "* required"),
-				error: text("error", ""),
+				hint: text("hint", "Optional"),
+				errortext: text("errortext", ""),
+				error: boolean("error", false),
 				success: boolean("success", false),
 				disabled: boolean("disabled", false),
 			}),
@@ -228,7 +229,7 @@ storiesOf("Base Components", module)
 						:name="name"
 						:placeholder="placeholder"
 						:hint="hint"
-						:error="error"
+						:error="errortext"
 						:success="success"
 						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
@@ -243,7 +244,7 @@ storiesOf("Base Components", module)
 						:name="name"
 						:placeholder="placeholder"
 						hint="hint"
-						error="error"
+						error="Error"
 						:success="success"
 						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
@@ -297,13 +298,22 @@ storiesOf("Base Components", module)
 				switch: true,
 				radio: "b",
 			},
+			placeholders: {
+				text: "Text",
+				email: "Email / Nutzername",
+				password: "Passwort",
+				url: "Url",
+				number: "Number",
+				date: "Date",
+				time: "Time",
+			},
 		}),
 
 		template: `<div>
 			${["text", "email", "password", "url", "number", "date", "time"]
 				.map(
 					(type) =>
-						`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />\n`
+						`<base-input type="${type}" v-model="vmodels['${type}']" :label="placeholders['${type}']" :placeholder="placeholders['${type}']"/>\n`
 				)
 				.join("")
 				.trimRight()}

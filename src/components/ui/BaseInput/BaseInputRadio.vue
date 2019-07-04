@@ -51,8 +51,8 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$background-color: #ccc;
-$background-color-active: var(--color-accent);
+$border-color: #ccc;
+$border-color-active: var(--color-accent);
 
 label {
 	position: relative;
@@ -63,16 +63,25 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	background-color: $background-color;
+	border: 2px solid $border-color;
 	border-radius: var(--radius-round);
-	transition: background-color var(--duration-transition-medium);
+	transition: border-color var(--duration-transition-medium);
 }
 
 input:checked + .radio {
-	background-color: $background-color-active;
+	border-color: $border-color-active;
 	&.switch::before {
 		transform: translateX(100%);
 	}
+}
+
+input:checked + .radio::before {
+	display: block;
+	width: 60%;
+	height: 60%;
+	content: "";
+	background: $border-color-active;
+	border-radius: var(--radius-round);
 }
 
 input:focus + .radio {

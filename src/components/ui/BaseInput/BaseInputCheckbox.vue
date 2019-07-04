@@ -81,7 +81,8 @@ label {
 .icon {
 	position: relative;
 	display: inline-block;
-	background-color: $background-color;
+	border: 2px solid $background-color;
+	border-radius: var(--radius-sm);
 	transition: background-color var(--duration-transition-medium);
 }
 
@@ -107,7 +108,7 @@ label {
 }
 
 input:checked + .icon {
-	background-color: $background-color-active;
+	border-color: $background-color-active;
 	&.switch::before {
 		transform: translateX(100%);
 	}

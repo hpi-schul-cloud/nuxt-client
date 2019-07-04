@@ -1,10 +1,5 @@
 <template>
-	<base-input-default
-		v-bind="$attrs"
-		type="text"
-		vmodel=""
-		class="calendar-input"
-	>
+	<base-input-default v-bind="$attrs" type="textarea" vmodel="">
 		<textarea
 			v-bind="$attrs"
 			:value="vmodel"
@@ -44,5 +39,6 @@ textarea {
 	width: 100%;
 	resize: vertical;
 	border: none;
+	outline: none;
 }
 </style>
