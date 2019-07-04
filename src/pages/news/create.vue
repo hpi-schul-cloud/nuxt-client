@@ -17,7 +17,7 @@
 					name="content"
 					type="text"
 				></base-input>
-				<base-button class="is-primary" @click="save">Anlegen</base-button>
+				<base-button design="primary" @click="save">Anlegen</base-button>
 			</section>
 
 			<section class="section">
@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-
 export default {
 	data: function() {
 		return {

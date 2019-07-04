@@ -5,11 +5,11 @@
 				<base-icon source="custom" icon="shuttle" />
 			</div>
 			<div class="headlines">
-				<h2 class="text--xl">Kurs anlegen</h2>
-				<h3 class="text--md">
+				<h1 class="h3">Kurs anlegen</h1>
+				<h2 class="h5">
 					In einem Kurs wird gemeinsam mit den Teilnehmern an Themen,
 					Hausaufgaben und Dateien gearbeitet.
-				</h3>
+				</h2>
 			</div>
 		</div>
 		<step-progress :steps="steps" :current-step="currentStep" />
@@ -31,31 +31,19 @@
 			<step-done v-show="currentStep === 2" />
 		</div>
 		<div class="step-wrapper">
-			<base-button
-				v-if="!firststep"
-				type="button"
-				class="btn btn-primary"
-				@click="lastStep"
+			<base-button v-if="!firststep" design="text" @click="lastStep"
 				>Zurück</base-button
 			>
-			<base-button
-				v-if="currentStep === 1"
-				type="button"
-				class="btn btn-primary"
-				@click="nextStep"
+			<base-button v-if="currentStep === 1" design="text" @click="nextStep"
 				>Überspringen</base-button
 			>
-			<base-button
-				v-if="!laststep"
-				type="button"
-				class="btn btn-primary"
-				@click="nextStep"
+			<base-button v-if="!laststep" design="primary" @click="nextStep"
 				>Weiter</base-button
 			>
 			<base-button
 				v-if="laststep"
 				type="submit"
-				class="btn btn-primary"
+				design="primary"
 				@click="$emit('course-creation-submit')"
 			>
 				Kurs anlegen und weiter

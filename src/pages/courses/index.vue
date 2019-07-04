@@ -5,9 +5,10 @@
 		</section>
 		<section class="section">
 			<base-button
-				class="button is-info"
+				design="primary"
 				@click="$router.push({ name: 'courses-create' })"
-				>Neuen Kurs erstellen
+			>
+				Neuen Kurs erstellen
 			</base-button>
 		</section>
 	</div>

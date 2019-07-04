@@ -2,7 +2,6 @@
 	tab-size: 2;
 }
 
-html,
 body {
 	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
@@ -24,6 +23,9 @@ body {
 }
 
 /* text size */
+.text-xs {
+	font-size: var(--text-xs);
+}
 .text-sm {
 	font-size: var(--text-sm);
 }

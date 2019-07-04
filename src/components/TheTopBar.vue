@@ -8,19 +8,24 @@
 		<!-- ACTIONS -->
 		<div class="top-main">
 			<template v-for="action in actions">
-				<base-icon-button v-if="action.icon" :key="action.title" class="item" source="fa" :icon="action.icon"/>
+				<base-icon-button
+					v-if="action.icon"
+					:key="action.title"
+					class="item"
+					source="fa"
+					:icon="action.icon"
+				/>
 
-				<div v-else :key="action.title" class="item" >{{ action.title }}</div>
+				<div v-else :key="action.title" class="item">{{ action.title }}</div>
 
 				<base-button
 					v-if="action.event === 'logout'"
 					:key="action.title"
-					v-ripple
+					design="text"
 					class="action item"
 					@click="sendEvent(action.event)"
 					>{{ action.title }}</base-button
 				>
-
 			</template>
 		</div>
 	</div>
@@ -75,7 +80,6 @@ export default {
 		.logo {
 			height: var(--heading-3);
 			margin-right: var(--space-sm);
-
 		}
 		.page-title {
 			flex: 1;
@@ -95,10 +99,8 @@ export default {
 		justify-content: flex-end;
 
 		.item {
-			margin: 0 0.9em 0 0.9em;
+			margin: 0 var(--space-md) 0 var(--space-md);
 		}
-
-
 	}
 }
 .action {

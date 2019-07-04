@@ -1,5 +1,5 @@
 <template>
-	<button class="button" v-on="$listeners">
+	<button :class="classes" v-on="$listeners">
 		<slot />
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
@@ -9,7 +9,70 @@
 </template>
 
 <script>
-export default {};
+export default {
+	props: {
+		size: {
+			type: String,
+			default: "medium",
+			validator: (size) => ["small", "medium", "large"].includes(size),
+		},
+		design: {
+			type: String,
+			default: "",
+			validator: (design) => {
+				const defined = [
+					"",
+					"none",
+					"text",
+					"icon",
+					"icon text",
+					"outline",
+					"primary",
+					"primary text",
+					"primary icon",
+					"primary icon text",
+					"primary outline",
+					"secondary",
+					"secondary text",
+					"secondary icon",
+					"secondary icon text",
+					"secondary outline",
+					"hero-cta",
+					"hero-cta icon",
+					"success",
+					"success text",
+					"success icon",
+					"success icon text",
+					"success outline",
+					"danger",
+					"danger text",
+					"danger icon",
+					"danger icon text",
+					"danger outline",
+					"fancy",
+					"fancy icon",
+				].includes(design);
+				if (!defined) {
+					throw new Error(`the design "${design}" is not available`);
+				}
+				return defined;
+			},
+		},
+		type: {
+			type: String,
+			default: "button",
+		},
+	},
+	computed: {
+		classes() {
+			return [
+				"button",
+				`is-${this.size}`,
+				...this.design.split(" ").map((a) => `is-${a}`),
+			];
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>
@@ -21,47 +84,91 @@ export default {};
 	--button-line-height: var(--line-height-md);
 
 	// color modes
-	--button-color: var(--color-gray-light);
-	--button-text-color: var(--color-gray-dark);
+	--button-background: var(--color-tertiary);
+	--button-text-color: var(--color-white);
 	&.is-outline {
-		--button-color: var(--color-gray-dark);
+		--button-background: var(--color-tertiary);
+	}
+	&.is-text {
+		--button-background: var(--color-gray-dark);
 	}
 	&.is-primary,
 	&.is-hero-cta {
-		--button-color: var(--color-primary);
+		--button-background: var(--color-primary);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-primary-dark);
+			--button-background: var(--color-primary-dark);
 		}
 	}
 	&.is-secondary {
-		--button-color: var(--color-accent);
+		--button-background: var(--color-accent);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-accent-dark);
+			--button-background: var(--color-accent-dark);
 		}
 	}
 	&.is-success {
-		--button-color: var(--color-success);
+		--button-background: var(--color-success);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-success--dark);
+			--button-background: var(--color-success--dark);
 		}
 	}
 	&.is-danger {
-		--button-color: var(--color-danger);
+		--button-background: var(--color-danger);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-color: var(--color-danger--dark);
+			--button-background: var(--color-danger--dark);
 		}
 	}
-	&:disabled {
-		--button-color: var(--color-gray);
+	&.is-fancy {
+		--button-background: linear-gradient(
+			45deg,
+			var(--color-primary),
+			var(--color-accent)
+		);
 		--button-text-color: var(--color-white);
+		&:hover,
+		&:focus {
+			--button-background: linear-gradient(
+				45deg,
+				var(--color-primary-dark),
+				var(--color-accent-dark)
+			);
+		}
+	}
+	&.is-icon {
+		--button-padding: var(--space-xs);
+
+		width: 40px;
+		min-width: initial;
+		height: 40px;
+		padding: var(--button-padding);
+		border-radius: var(--radius-round);
+		&.is-small {
+			--button-padding: var(--space-xxxs);
+		}
+		&.is-large {
+			--button-padding: var(--space-sm);
+		}
+		&.is-hero-cta,
+		&.is-fancy {
+			width: 56px;
+			height: 56px;
+		}
+	}
+
+	&:disabled {
+		--button-background: var(--color-disabled);
+		--button-text-color: var(--color-disabled-dark);
+		&.is-outline,
+		&.is-text {
+			--button-background: var(--color-disabled-dark);
+		}
 	}
 
 	/* SIZES */
@@ -78,7 +185,6 @@ export default {};
 	}
 
 	display: inline-block;
-	align-items: center;
 	min-width: var(--space-xxxl);
 	padding: var(--button-padding);
 	font-family: var(--font-accent);
@@ -88,30 +194,56 @@ export default {};
 	color: var(--button-text-color);
 	text-align: center;
 	white-space: nowrap;
+	vertical-align: center;
 	cursor: pointer;
-	background-color: var(--button-color);
-	border: 1px solid transparent;
+	background: var(--button-background);
+	border: 0;
 	border-radius: var(--radius-sm);
 	transition: all var(--duration-transition-medium)
-		cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+		cubic-bezier(0.23, 1, 0.32, 1);
 
 	&:hover,
 	&:focus {
 		outline: none;
+
+		--button-background: var(--color-tertiary-dark);
 	}
 
 	/* stylelint-disable */
 	// defined multiple to seperate style from behaviour
 	&.is-outline {
 		/* stylelint-enable */
-		color: var(--button-color);
+		color: var(--button-background);
 		background: transparent;
-		border-color: var(--button-color);
+		border: 1px solid var(--button-background);
+
 		&:hover,
 		&:focus {
 			// increase border size to increase visiblity
-			box-shadow: 0 0 0 1px var(--button-color);
+			box-shadow: 0 0 0 1px var(--button-background);
 		}
+	}
+	/* stylelint-disable */
+	// defined multiple to seperate style from behaviour
+	&.is-text {
+		/* stylelint-enable */
+		color: var(--button-background);
+		background: transparent;
+		border: 0;
+
+		&:hover,
+		&:focus {
+			background-color: var(--color-gray-light);
+			box-shadow: none;
+		}
+	}
+	&.is-none {
+		min-width: initial;
+		padding: 0;
+		font: inherit;
+		font-weight: initial;
+		background: transparent;
+		border: 0;
 	}
 	/* stylelint-disable */
 	// defined multiple to seperate style from behaviour
@@ -121,8 +253,8 @@ export default {};
 		cursor: default;
 	}
 }
-.is-hero-cta {
-	box-shadow: 0 12px 17px 2px rgba(0, 0, 0, 0.14),
-		0 5px 22px 4px rgba(0, 0, 0, 0.12), 0 7px 8px -4px rgba(0, 0, 0, 0.2);
+.is-hero-cta,
+.is-fancy {
+	box-shadow: var(--shadow-md);
 }
 </style>

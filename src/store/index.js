@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 // import { app } from './feathers-client'
 import { CookieStorage } from "cookie-storage";
-import feathersVuex, { initAuth } from "feathers-vuex";
+import feathersVuex from "feathers-vuex";
 import feathersClient from "./feathers-client";
 import dayjs from "dayjs";
 
@@ -108,10 +108,9 @@ if (process.client) {
 					const roles = rootGetters["roles/list"];
 					const userRoles = state.user.roles;
 
-					const userRolesMapped = userRoles.map((id) => {
-						id = roles.find((role) => role._id === id);
-						return id;
-					});
+					const userRolesMapped = userRoles.map((id) =>
+						roles.find((role) => role._id === id)
+					);
 
 					return userRolesMapped.find((r) => r.name === roleName) !== undefined;
 				},
@@ -132,7 +131,7 @@ const createStore = () => {
 			federalStates: {
 				namespaced: true,
 				actions: {
-					async find({ commit }, payload) {
+					async find({ commit }) {
 						const federalStates = await this.$axios.$get("/federalStates");
 						commit("add", { items: federalStates.data });
 					},
