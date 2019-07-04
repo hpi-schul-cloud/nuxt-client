@@ -50,8 +50,8 @@
 				/>
 			</div>
 		</div>
-		<span v-if="hasError" class="info error">
-			{{ error }}
+		<span v-if="hasError || hasInfo" :class="{ info: true, error: hasError }">
+			{{ error || info }}
 		</span>
 	</label>
 </template>
@@ -88,6 +88,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		info: {
+			type: String,
+			default: "",
+		},
 		hint: {
 			type: String,
 			default: "",
@@ -109,6 +113,9 @@ export default {
 		},
 		hasError() {
 			return !!this.error;
+		},
+		hasInfo() {
+			return !!this.info;
 		},
 		showLabel() {
 			return !!this.vmodel || !this.$attrs.placeholder;
@@ -140,7 +147,7 @@ export default {
 
 .top {
 	width: 100%;
-	border-bottom: 1px solid var(--color-black);
+	border-bottom: var(--border-width) solid var(--color-black);
 
 	&:focus-within {
 		outline: none;
@@ -214,7 +221,7 @@ export default {
 }
 
 .is-textarea {
-	border: 1px solid var(--color-black);
+	border: var(--border-width) solid var(--color-black);
 	&:focus-within,
 	&:hover:not(.disabled) {
 		border-color: var(--color-accent);
@@ -226,10 +233,10 @@ export default {
 
 .info {
 	display: block;
+	padding-top: var(--space-xxxs);
 	font-size: var(--text-xs);
 	color: var(--color-gray);
 	&.error {
-		padding-top: var(--space-xxxs);
 		color: var(--color-danger);
 	}
 }

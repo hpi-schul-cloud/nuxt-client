@@ -9,7 +9,7 @@
 			class="visually-hidden"
 			@change="updateVModel"
 		/>
-		<span :class="['icon', type]" />
+		<span ref="icon" :class="['icon', type]" />
 		<span class="label">
 			{{ label }}
 		</span>
@@ -51,6 +51,9 @@ export default {
 				: this.vmodel.includes(this.value);
 		},
 	},
+	mounted() {
+		window.addEventListener("keydown", this.handleFirstTabForCheckbox);
+	},
 	methods: {
 		updateVModel() {
 			let newModel = this.vmodel;
@@ -64,6 +67,18 @@ export default {
 			}
 			this.$emit("input", newModel);
 		},
+		handleFirstTabForCheckbox(e) {
+			if (e.key === "Tab") {
+				window.removeEventListener("keydown", this.handleFirstTabForCheckbox);
+				window.addEventListener("click", this.handleFirstClickForCheckBox);
+				this.$refs.icon.classList.add("user-is-tabbing");
+			}
+		},
+		handleFirstClickForCheckBox() {
+			window.removeEventListener("click", this.handleFirstClickForCheckBox);
+			window.addEventListener("keydown", this.handleFirstTabForCheckbox);
+			this.$refs.icon.classList.remove("user-is-tabbing");
+		},
 	},
 };
 </script>
@@ -71,8 +86,8 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$background-color: var(--color-gray);
-$background-color-active: var(--color-accent);
+$border-color: var(--color-gray);
+$border-color-active: var(--color-accent);
 
 label {
 	position: relative;
@@ -81,19 +96,21 @@ label {
 .icon {
 	position: relative;
 	display: inline-block;
-	border: 2px solid $background-color;
-	border-radius: var(--radius-sm);
-	transition: background-color var(--duration-transition-medium);
 }
 
 .checkbox {
 	width: 0.7em;
 	height: 0.7em;
+	border: var(--border-width-bold) solid $border-color;
+	border-radius: var(--radius-sm);
+	transition: border-color var(--duration-transition-medium);
 }
 
 .switch {
 	width: 1.2em;
 	height: 0.7em;
+	background-color: $border-color;
+	transition: background-color var(--duration-transition-medium);
 
 	&::before {
 		position: absolute;
@@ -107,15 +124,33 @@ label {
 	}
 }
 
-input:checked + .icon {
-	border-color: $background-color-active;
-	&.switch::before {
+input:checked + .checkbox {
+	border-color: $border-color-active;
+	// create checkmark
+	&::after {
+		display: block;
+		width: 0.2em;
+		height: 0.4em;
+		margin: auto;
+		content: "";
+		border: solid $border-color-active;
+		border-width: 0 var(--border-width-bold) var(--border-width-bold) 0;
+		transform: rotate(45deg);
+	}
+}
+
+input:checked + .switch {
+	background-color: $border-color-active;
+	&::before {
 		transform: translateX(100%);
 	}
 }
 
 input:focus + .icon {
-	outline: 2px solid #4d90fe;
-	outline-offset: 0.05em;
+	outline: none;
+	&.user-is-tabbing {
+		outline: 2px solid #4d90fe;
+		outline-offset: 0.05em;
+	}
 }
 </style>

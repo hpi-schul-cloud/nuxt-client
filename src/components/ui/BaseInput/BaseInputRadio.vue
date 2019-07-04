@@ -9,7 +9,7 @@
 			class="visually-hidden"
 			@change="$emit('input', $event.target.value)"
 		/>
-		<span class="radio" />
+		<span ref="radio" class="radio" />
 		<span class="label">
 			{{ label }}
 		</span>
@@ -44,14 +44,33 @@ export default {
 			},
 		},
 	},
-	methods: {},
+	mounted() {
+		window.addEventListener("keydown", this.handleFirstTabForRadioButton);
+	},
+	methods: {
+		handleFirstTabForRadioButton(e) {
+			if (e.key === "Tab") {
+				window.removeEventListener(
+					"keydown",
+					this.handleFirstTabForRadioButton
+				);
+				window.addEventListener("click", this.handleClickForRadioButton);
+				this.$refs.radio.classList.add("user-is-tabbing");
+			}
+		},
+		handleClickForRadioButton() {
+			window.removeEventListener("click", this.handleClickForRadioButton);
+			window.addEventListener("keydown", this.handleFirstTabForRadioButton);
+			this.$refs.radio.classList.remove("user-is-tabbing");
+		},
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@styles";
 
-$border-color: #ccc;
+$border-color: var(--color-gray);
 $border-color-active: var(--color-accent);
 
 label {
@@ -70,22 +89,24 @@ label {
 
 input:checked + .radio {
 	border-color: $border-color-active;
-	&.switch::before {
-		transform: translateX(100%);
+	&::before {
+		display: block;
+		width: 60%;
+		height: 60%;
+		/* stylelint-disable */
+		margin: 20% auto;
+		/* stylelint-enable */
+		content: "";
+		background: $border-color-active;
+		border-radius: var(--radius-round);
 	}
 }
 
-input:checked + .radio::before {
-	display: block;
-	width: 60%;
-	height: 60%;
-	content: "";
-	background: $border-color-active;
-	border-radius: var(--radius-round);
-}
-
 input:focus + .radio {
-	outline: 2px solid #4d90fe;
-	outline-offset: 0.05em;
+	outline: none;
+	&.user-is-tabbing {
+		outline: 2px solid #4d90fe;
+		outline-offset: 0.05em;
+	}
 }
 </style>

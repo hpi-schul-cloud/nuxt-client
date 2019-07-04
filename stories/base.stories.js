@@ -216,6 +216,7 @@ storiesOf("Base Components", module)
 				placeholder: text("placeholder", "Placeholder (Labelname)"),
 				hint: text("hint", "Optional"),
 				errortext: text("errortext", ""),
+				info: text("info", ""),
 				error: boolean("error", false),
 				success: boolean("success", false),
 				disabled: boolean("disabled", false),
@@ -228,8 +229,9 @@ storiesOf("Base Components", module)
 						:type="type"
 						:name="name"
 						:placeholder="placeholder"
+						:info="info"
 						:hint="hint"
-						:error="errortext"
+						:error="errortext || (error? ' ' : '')"
 						:success="success"
 						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
@@ -243,7 +245,8 @@ storiesOf("Base Components", module)
 						:type="type"
 						:name="name"
 						:placeholder="placeholder"
-						hint="hint"
+						:info="info"
+						:hint="hint"
 						error="Error"
 						:success="success"
 						:disabled="disabled">
@@ -258,8 +261,9 @@ storiesOf("Base Components", module)
 						:type="type"
 						:name="name"
 						:placeholder="placeholder"
+						:info="info"
 						:hint="hint"
-						:error="error"
+						:error="errortext || (error? ' ' : '')"
 						:success="true"
 						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
@@ -273,8 +277,9 @@ storiesOf("Base Components", module)
 						:type="type"
 						:name="name"
 						:placeholder="placeholder"
+						:info="info"
 						:hint="hint"
-						:error="error"
+						:error="errortext || (error? ' ' : '')"
 						:success="success"
 						:disabled="true">
 						<base-icon slot="icon" source="material" icon="alarm" />
