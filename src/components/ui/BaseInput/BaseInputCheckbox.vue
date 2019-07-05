@@ -129,7 +129,7 @@ input:checked + .checkbox {
 	// create checkmark
 	&::after {
 		display: block;
-		width: 0.2em;
+		width: 0.25em;
 		height: 0.4em;
 		margin: auto;
 		content: "";

@@ -181,6 +181,7 @@ export default {
 	}
 	&.disabled {
 		color: var(--color-disabled-dark);
+		border-bottom-color: var(--color-disabled-dark);
 	}
 	.contentwrapper {
 		display: flex;
@@ -201,8 +202,11 @@ export default {
 			&:focus {
 				outline: none;
 			}
-			&:disabled::placeholder {
-				color: var(--color-disabled-dark);
+			&:disabled {
+				background-color: transparent;
+				&::placeholder {
+					color: var(--color-disabled-dark);
+				}
 			}
 		}
 	}

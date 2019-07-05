@@ -214,11 +214,11 @@ storiesOf("Base Components", module)
 				name: text("name", "name"),
 				value: text("value", ""),
 				placeholder: text("placeholder", "Placeholder (Labelname)"),
-				hint: text("hint", "Optional"),
-				errortext: text("errortext", ""),
 				info: text("info", ""),
-				error: boolean("error", false),
+				hint: text("hint", "Optional"),
 				success: boolean("success", false),
+				error: boolean("error", false),
+				errortext: text("errortext", ""),
 				disabled: boolean("disabled", false),
 			}),
 			template: `
@@ -236,54 +236,6 @@ storiesOf("Base Components", module)
 						:disabled="disabled">
 						<base-icon slot="icon" source="material" icon="alarm" />
 					</base-input>
-
-					<br/>
-
-					<base-input
-						v-model="vmodels.warning"
-						:label="label"
-						:type="type"
-						:name="name"
-						:placeholder="placeholder"
-						:info="info"
-						:hint="hint"
-						error="Error"
-						:success="success"
-						:disabled="disabled">
-						<base-icon slot="icon" source="material" icon="alarm" />
-					</base-input>
-
-					<br/>
-
-					<base-input
-						v-model="vmodels.success"
-						:label="label"
-						:type="type"
-						:name="name"
-						:placeholder="placeholder"
-						:info="info"
-						:hint="hint"
-						:error="errortext || (error? ' ' : '')"
-						:success="true"
-						:disabled="disabled">
-						<base-icon slot="icon" source="material" icon="alarm" />
-					</base-input>
-
-					<br/>
-
-					<base-input
-						v-model="vmodels.disabled"
-						:label="label"
-						:type="type"
-						:name="name"
-						:placeholder="placeholder"
-						:info="info"
-						:hint="hint"
-						:error="errortext || (error? ' ' : '')"
-						:success="success"
-						:disabled="true">
-						<base-icon slot="icon" source="material" icon="alarm" />
-					</base-input>
 				</div>`,
 		};
 	})
@@ -292,12 +244,33 @@ storiesOf("Base Components", module)
 		data: () => ({
 			vmodels: {
 				text: "",
+				textSuccess: "",
+				textError: "",
+				textDisabled: "",
 				email: "",
+				emailSuccess: "",
+				emailError: "",
+				emailDisabled: "",
 				password: "",
+				passwordSuccess: "",
+				passwordError: "",
+				passwordDisabled: "",
 				url: "",
+				urlSuccess: "",
+				urlError: "",
+				urlDisabled: "",
 				number: 0,
+				numberSuccess: "",
+				numberError: "",
+				numberDisabled: "",
 				date: "",
+				dateSuccess: "",
+				dateError: "",
+				dateDisabled: "",
 				time: "",
+				timeSuccess: "",
+				timeError: "",
+				timeDisabled: "",
 				checkboxBoolean: true,
 				checkboxList: ["a"],
 				switch: true,
@@ -318,7 +291,15 @@ storiesOf("Base Components", module)
 			${["text", "email", "password", "url", "number", "date", "time"]
 				.map(
 					(type) =>
-						`<base-input type="${type}" v-model="vmodels['${type}']" :label="placeholders['${type}']" :placeholder="placeholders['${type}']"/>\n`
+						`<br/>
+						<br/>
+						<base-input type="${type}" v-model="vmodels['${type}']" :label="placeholders['${type}']" :placeholder="placeholders['${type}']" info="Infotext" hint="Optional"/>\n
+						<br/>
+						<base-input type="${type}" v-model="vmodels['${type}Success']" :label="placeholders['${type}'] + ' - Success'" :placeholder="placeholders['${type}'] + ' - Success'" info="Infotext" hint="Optional" success/>\n
+						<br/>
+						<base-input type="${type}" v-model="vmodels['${type}Error']" :label="placeholders['${type}'] + ' - Error'" :placeholder="placeholders['${type}'] + ' - Error'" info="Infotext" hint="Optional" error="Error"/>\n
+						<br/>
+						<base-input type="${type}" v-model="vmodels['${type}Disabled']" :label="placeholders['${type}'] + ' - Disabled'" :placeholder="placeholders['${type}'] + ' - Disabled'" info="Infotext" hint="Optional" disabled/>\n`
 				)
 				.join("")
 				.trimRight()}
