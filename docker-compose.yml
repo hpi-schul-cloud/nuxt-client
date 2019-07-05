@@ -6,10 +6,9 @@ services:
     build:
       context: ./
       dockerfile: deploy/Dockerfile.nuxt
-    # deploy:
-    #   replicas: 1
-    #   restart_policy:
-    #     condition: any
+      args:
+        - NUXT_HOST=localhost
+        - NUXT_PORT=4004
     environment:
       # ENV
       - NODE_ENV=production
@@ -39,4 +38,5 @@ services:
       - ROCKETCHAT_SERVICE_ENABLED=true
     ports:
       - 3200:80
+      - 4000:4000
     restart: always

@@ -42,7 +42,7 @@
 	</div>
 </template>
 <script>
-import { getValueByPath } from "@/utils/helpers";
+import { getValueByPath } from "@utils/helpers";
 import Pagination from "@components/Pagination.vue";
 
 export default {

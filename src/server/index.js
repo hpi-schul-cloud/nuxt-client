@@ -14,7 +14,7 @@ const handlebarsWax = require("handlebars-wax");
 const { Nuxt, Builder } = require("nuxt");
 // Import and Set Nuxt.js options
 const config = require("../../nuxt.config.js");
-config.dev = !(process.env.NODE_ENV === "production");
+config.dev = process.env.NODE_ENV !== "production";
 
 const app = express();
 const routes = require("./routes");
