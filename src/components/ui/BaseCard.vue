@@ -16,7 +16,7 @@
 		<div class="content" :style="backgroundColor">
 			<slot />
 		</div>
-		<footer>
+		<footer class="footer">
 			<slot name="footer" />
 		</footer>
 	</section>
