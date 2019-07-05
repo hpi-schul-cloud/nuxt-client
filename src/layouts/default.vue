@@ -50,7 +50,9 @@ export default {
 	},
 	computed: mapState({
 		firstName: (state) =>
-			state.auth && state.auth.user ? state.auth.user.firstName : "",
+			state.auth && state.auth.user
+				? state.auth.user.firstName
+				: "Unknown User",
 		authenticated: (state) => (state.auth ? state.auth.accessToken : ""),
 	}),
 	watch: {

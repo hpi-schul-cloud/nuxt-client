@@ -1,5 +1,5 @@
 <template>
 	<h1>
-		Test
+		Impressum
 	</h1>
 </template>
