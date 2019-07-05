@@ -44,7 +44,7 @@ app.use(
 	})
 );
 
-const host = process.env.HOST || "127.0.0.1";
+const host = process.env.HOST || "localhost";
 const port = process.env.PORT || 4000;
 
 // Set this path to the legacy schulcloud-client
