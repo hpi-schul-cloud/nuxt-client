@@ -137,6 +137,31 @@ async function start() {
 	// Give nuxt middleware to express
 	app.use(nuxt.render);
 
+	// error handler for legacy client
+	// catches every legacy client issue except 404 issues.
+	// 404 errors are handled by nuxt itself and therefore
+	// this middleware is never called in this case
+	app.use((err, req, res, next) => {
+		consola.error(err);
+		// set locals, only providing error in development
+		const status = err.status || err.statusCode || 500;
+		if (err.statusCode && err.error) {
+			res.setHeader("error-message", err.error.message);
+			res.locals.message = err.error.message;
+		} else {
+			res.locals.message = err.message;
+		}
+		res.locals.error = req.app.get("env") === "development" ? err : { status };
+
+		if (res.locals.currentUser) res.locals.loggedin = true;
+		// render the error page
+		res.status(status);
+		res.render("lib/error", {
+			loggedin: res.locals.loggedin,
+			inline: res.locals.inline ? true : !res.locals.loggedin,
+		});
+	});
+
 	// Listen the server
 	app.listen(port, host);
 

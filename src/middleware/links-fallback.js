@@ -11,9 +11,8 @@ export default async function(ctx) {
 			: r.includes(controllerName);
 	});
 
-	// no matching vue route => use legacy router
+	// no matching route => use (default) erro handler
 	if (!route.matched.length) {
-		window.location = route.path;
 		return;
 	}
 	// no legacy route, but vue route found => use vue version
@@ -24,14 +23,15 @@ export default async function(ctx) {
 	// route defined in vue and legacy client
 	// use legacy if not excluded
 	const useLegacy =
-		!legacyRouteConfig.routesExcluded ||
-		// current url doesn't match any excluded url
+		// no routes excluded
+		!(legacyRouteConfig || {}).routesExcluded ||
+		// or current url doesn't match any excluded url
 		(legacyRouteConfig.routesExcluded || []).every((excludedRoute) => {
 			const fullPath = "/" + legacyRouteConfig.route + excludedRoute;
 			return !fullPath.match(route.matched[0].regex);
 		});
 	if (useLegacy) {
 		window.location = route.path;
-		return;
 	}
+	// use vue
 }
