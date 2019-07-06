@@ -17,7 +17,7 @@ const config = require("../../nuxt.config.js");
 config.dev = process.env.NODE_ENV !== "production";
 
 const app = express();
-const routes = require("./routes");
+const legacyRoutes = require("./routes");
 const themeName = process.env.SC_THEME || "default";
 
 const sessionStore = new session.MemoryStore();
@@ -79,11 +79,8 @@ app.set("port", port);
 app.use(require(path.join(legacyClientRoot, `./controllers/login`)));
 app.use(require(path.join(legacyClientRoot, `./controllers/registration`)));
 
-// The legacy routings go here
-setLegacyControllers();
-
 function setLegacyControllers() {
-	for (const route of routes) {
+	for (const route of legacyRoutes) {
 		if (typeof route === "object") {
 			app.use(
 				`/${route.route}/`,
@@ -124,6 +121,9 @@ function excludeRoutes(controllerName, routesToExclude) {
 		}
 	});
 }
+
+// The legacy routings go here
+setLegacyControllers();
 
 async function start() {
 	const nuxt = new Nuxt(config);
