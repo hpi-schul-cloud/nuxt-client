@@ -91,9 +91,11 @@
 		"babel-plugin-dynamic-import-node": "^2.2.0",
 		"babel-preset-vue": "^2.0.2",
 		"concurrently": "^4.1.0",
+		"core-js": "2.6.9",
 		"cross-env": "^5.2.0",
 		"css-loader": "^2.1.1",
 		"eslint": "^5.12.1",
+		"eslint-config-dev": "^2.0.0",
 		"eslint-config-prettier": "^6.0.0",
 		"eslint-loader": "^2.0.0",
 		"eslint-plugin-prettier": "^3.0.1",
@@ -134,8 +136,7 @@
 		"yorkie": "^2.0.0"
 	},
 	"resolutions": {
-		"webpack-dev-middleware": "3.6.0",
-		"core-js": "2.6.5"
+		"webpack-dev-middleware": "3.6.0"
 	},
 	"engines": {
 		"node": ">=10.x.x",

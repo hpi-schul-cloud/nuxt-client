@@ -17,7 +17,7 @@ export default async function(ctx, cb) {
 		if (!legacyRoute.routesExcluded) {
 			window.location = route.path;
 		} else {
-			const isLegacy = legacyRoute.routesExcluded.some((excludedRoute) => {
+			const isLegacy = legacyRoute.routesExcluded.every((excludedRoute) => {
 				const fullPath = "/" + legacyRoute.route + excludedRoute;
 				return !fullPath.match(route.matched[0].regex);
 			});
