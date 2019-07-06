@@ -115,7 +115,7 @@ function excludeRoutes(controllerName, routesToExclude) {
 				if (
 					layer.route &&
 					routesToExclude.includes(layer.route.path) &&
-					layer.route.methods.get
+					(layer.route.methods._all || layer.route.methods.get)
 				) {
 					idx = route.handle.stack.indexOf(layer);
 					route.handle.stack.splice(idx, 1);
