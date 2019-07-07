@@ -6,7 +6,6 @@
 				:title="pageTitle"
 				class="topbar"
 				:actions="topBarActions"
-
 				@action="handleTopAction"
 			/>
 			<the-sidebar class="sidebar" :routes="sidebarItems" />
@@ -25,10 +24,10 @@ import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
 
 const topbarBaseActions = [
-	{ title: "Fullscreen", icon:"solid/expand", event:"fullscreen" },
-	{ title: "QR-Code", icon:"solid/qrcode" },
-	{ title: "Hilfe", icon:"solid/question" },
-	{ title: "HPI Schul-Cloud Schule" }
+	{ title: "Fullscreen", icon: "solid/expand", event: "fullscreen" },
+	{ title: "QR-Code", icon: "solid/qrcode" },
+	{ title: "Hilfe", icon: "solid/question" },
+	{ type: "text", schoolname: "HPI Schul-Cloud Schule" },
 ];
 
 export default {
@@ -40,15 +39,31 @@ export default {
 	data() {
 		return {
 			sidebarItems: [
-				// @TODO: hier fehlt noch ein Name
-				{ title: "Übersicht", to: { name: "" }, icon: "solid/th-large" },
-				{ title: "Kurse", to: { name: "courses" }, icon: "solid/graduation-cap" },
+				// TODO: create dashboard
+				{
+					title: "Übersicht",
+					to: { name: "dashboard" },
+					icon: "solid/th-large",
+				},
+				{
+					title: "Kurse",
+					to: { name: "courses" },
+					icon: "solid/graduation-cap",
+				},
+				{ title: "Teams", to: { name: "teams" }, icon: "solid/users" },
 				{ title: "Aufgaben", to: { name: "tasks" }, icon: "solid/tasks" },
-				{ title: "Meine Dateien", to: { name: "files" }, icon: "solid/folder-open" },
-				{ title: "Neuigkeiten", to: { name: "news" }, icon: "regular/newspaper" },
+				{
+					title: "Meine Dateien",
+					to: { name: "files" },
+					icon: "solid/folder-open",
+				},
+				{
+					title: "Neuigkeiten",
+					to: { name: "news" },
+					icon: "regular/newspaper",
+				},
 				{ title: "Termine", to: { name: "events" }, icon: "solid/table" },
 				{ title: "Lern-store", to: { name: "content" }, icon: "solid/search" },
-				// { title: "Teams", to: { name: "teams" }, icon: "school" },
 				// { title: "Verwaltung", to: { name: "administration" }, icon: "school" },
 			],
 			topBarActions: topbarBaseActions,
@@ -88,6 +103,7 @@ export default {
 				this.topBarActions = [
 					...topbarBaseActions,
 					{
+						type: "popupWithInitials",
 						title: this.firstName,
 						event: "logout",
 					},
@@ -96,7 +112,6 @@ export default {
 				this.topBarActions = [...topbarBaseActions];
 			}
 		},
-
 	},
 };
 </script>

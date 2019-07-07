@@ -1,40 +1,46 @@
 <template>
 	<div v-click-outside="removePopup" class="popup" @click="popup">
-		<div class="icon">{{ name }}</div>
-		<span class="popuptext" :class="{visible}">{{popuptext}}</span>
+		<div class="icon">{{ initials }}</div>
+		<div
+			:id="`dropdown-content-${$uid}`"
+			class="popuptext"
+			:class="{ visible }"
+		>
+			<slot />
+		</div>
 	</div>
 </template>
 
 <script>
 export default {
 	props: {
-		name: {
+		firstname: {
 			type: String,
-			required: true
+			default: "",
 		},
-		fill: {
+		lastname: {
 			type: String,
-			default: "currentColor",
+			default: "",
 		},
-		popuptext: {
-			type: String,
-			default: "Lorem ipsum"
-		}
 	},
-	data () {
+	data() {
 		return {
-			visible: false
-		}
+			visible: false,
+		};
+	},
+	computed: {
+		initials() {
+			return this.firstname.slice(0, 1) + this.lastname.slice(0, 1);
+		},
 	},
 	methods: {
-		popup () {
+		popup() {
 			this.visible = !this.visible;
 		},
 		removePopup() {
 			this.visible = false;
-		}
-
-	}
+		},
+	},
 };
 </script>
 
@@ -45,18 +51,17 @@ export default {
 	justify-content: center;
 	width: 2em;
 	height: 2em;
-	padding: 5px;
-	background-color: var(--color-black);
+	padding: var(--space-xxs);
 	color: var(--color-white);
-	border: none;
-	border-radius: 50%;
 	-webkit-user-select: None;
+	background-color: var(--color-black);
+	border: none;
+	border-radius: var(--radius-round);
 
 	&:hover {
-		opacity: 0.9;
+		background-color: var(--color-gray-dark);
 	}
 }
-
 
 .popup {
 	position: relative;
@@ -65,29 +70,21 @@ export default {
 
 	.popuptext {
 		position: absolute;
-		top: 105%;
-		left: 0%;
-		z-index: 1;
-		visibility: hidden;
-		border: 1px solid black;
-
-
+		top: 100%;
+		right: 0%;
+		z-index: var(--layer-dropdown);
+		display: none;
+		flex-direction: column;
+		padding: var(--space-xxs);
+		margin-top: var(--space-xxxxs);
+		white-space: nowrap;
+		background-color: var(--color-white);
+		border: 1px solid var(--color-gray);
+		border-radius: var(--radius-sm);
 
 		&.visible {
-  			visibility: visible;
+			display: flex;
 		}
 	}
-
-	.popuptext::before {
-		position: absolute;
-		top: -10px;
-		left: 1em;
-		margin-left: -5px;
-		content: "";
-		border-color:  transparent transparent #555 transparent;
-		border-style: solid;
-		border-width: 5px;
-	}
 }
-
 </style>

@@ -8,14 +8,19 @@
 					:class="{ active: route.active }"
 					class="list-item"
 				>
-					<base-link class="list-content" :to="route.to" :href="route.href" :inactive="true">
-						<base-icon v-if="route.icon"
+					<base-link
+						class="list-content"
+						:to="route.to"
+						:href="route.href"
+						:inactive="true"
+					>
+						<base-icon
+							v-if="route.icon"
 							class="icon"
 							:icon="route.icon"
 							:source="route.source || 'fa'"
 						/>
 						<span class="title">{{ route.title }}</span>
-
 					</base-link>
 				</li>
 			</ul>
@@ -45,21 +50,18 @@ export default {
 .sidebar {
 	display: flex;
 	flex-direction: column;
-    width: 240px;
+	width: var(--sidebar-width);
 	background-color: var(--color-white);
-	border-right: 1px solid rgba(0,0,0,.15);
+	border-right: 1px solid var(--color-gray-light);
 
 	@include breakpoint(tablet) {
-		width: 60px;
+		width: var(--sidebar-width-tablet);
 	}
 
-
-
 	.contents {
-		display: contents;
 		display: flex;
-        flex: 1;
-        flex-direction: column;
+		flex: 1;
+		flex-direction: column;
 
 		.list {
 			flex: 1;
@@ -74,20 +76,20 @@ export default {
 			}
 
 			.list-item {
-				display: flex;
-				flex-direction: row;
-				align-content: center;
 				width: 100%;
-				// @TODO: Variable ausdenken
-				height: 60px;
-				line-height: 60px;
-				// border-bottom: 1px solid black;
-
+				height: var(--sidebar-item-height);
+				line-height: var(--sidebar-item-height);
 
 				.list-content {
+					display: block;
 					padding: calc(var(--space-sm) * 0.5) var(--space-md);
 					font-size: var(--text-md);
+					color: var(--color-black);
 					border-bottom: none;
+
+					&.nuxt-link-active {
+						color: var(--color-primary-dark);
+					}
 
 					.title {
 						padding: calc(var(--space-sm) * 0.5) var(--space-md);
@@ -97,24 +99,9 @@ export default {
 							display: none;
 						}
 					}
-
 				}
-
-				// .list-content {
-				// 	display: block;
-				// 	padding: calc(var(--space-sm) * 0.5) var(--space-md);
-				// 	font-size: var(--text-md);
-				// 	text-decoration: none;
-				// 	&.active {
-				// 		color: var(--color-primary);
-				// 	}
-				// }
 			}
 		}
 	}
 }
-
-
-
-
 </style>

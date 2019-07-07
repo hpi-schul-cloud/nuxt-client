@@ -1,6 +1,6 @@
 <template>
 	<button>
-		<base-icon :source="source" :icon="icon" :fill="fill"/>
+		<base-icon :source="source" :icon="icon" :fill="fill" />
 	</button>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 			type: String,
 			default: "currentColor",
 		},
-	}
+	},
 };
 </script>
 
@@ -30,11 +30,10 @@ button {
 	justify-content: center;
 	width: 2em;
 	height: 2em;
-	padding: 5px;
+	padding: var(--space-xxs);
 	background-color: var(--color-white);
 	border: none;
-	border-radius: 50%;
-
+	border-radius: var(--radius-round);
 
 	&:hover {
 		cursor: pointer;

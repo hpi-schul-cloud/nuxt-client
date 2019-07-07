@@ -22,7 +22,11 @@ export default {
 		},
 		icon: {
 			type: String,
-			required: true,
+			default: "solid/icons",
+		},
+		name: {
+			type: String,
+			default: "User Name",
 		},
 		fill: {
 			type: String,

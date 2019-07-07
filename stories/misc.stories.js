@@ -28,7 +28,8 @@ storiesOf("Misc", module)
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
 		template: `
-			<DropdownMenu title="Dropdown">
+			<DropdownMenu>
+				<template v-slot:header>Dropdown</template>
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 				<MenuLink to="/">Link 3</MenuLink>
@@ -67,13 +68,16 @@ storiesOf("Misc", module)
 	.add("Popup Icon", () => ({
 		components: { PopupIcon },
 		template: `<div>
-			<div><PopupIcon source="fa" icon="solid/address-book"></PopupIcon></div>
-			<div><PopupIcon source="fa" icon="solid/address-book"></PopupIcon></div>
+			<PopupIcon source="fa" icon="solid/address-book"></PopupIcon>
 		</div>`,
 	}))
 	.add("Popup Icon with Initials", () => ({
-		components: { PopupIconInitials },
-		template: `<div>
-			<div><PopupIconInitials name="AA"></PopupIconInitials></div>
+		components: { PopupIconInitials, MenuLink },
+		template: `<div style="text-align: right">
+			<PopupIconInitials firstname="Fritz" lastname="Schmidt">
+				<div>Fritz Schmidt </div>
+				<MenuLink to="/">Link 1</MenuLink>
+				<MenuLink to="/">Link 2</MenuLink>
+			</PopupIconInitials>
 		</div>`,
 	}));
