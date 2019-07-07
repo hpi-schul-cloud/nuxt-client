@@ -1,10 +1,7 @@
+<!-- eslint-disable max-lines -->
+
 <template>
-	<label
-		:class="{
-			wrapper: true,
-			'with-hint': hasInfo,
-		}"
-	>
+	<label class="wrapper">
 		<div
 			:class="{
 				top: true,
@@ -13,21 +10,26 @@
 				'is-textarea': isTextarea,
 			}"
 		>
-			<div :class="{ topbar: true, 'with-label': showLabel }">
-				<div :class="{ label: true, 'with-label': showLabel }">
+			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
+				<label
+					:class="{ label: true, info: true, 'label-visible': showLabel }"
+					for="`input-${$uid}`"
+				>
 					{{ label }}
-				</div>
-				<span v-if="hasHint" class="info hint">
+				</label>
+				<span v-if="hasHint" class="hint info">
 					{{ hint }}
 				</span>
 			</div>
-			<div class="contentwrapper">
+			<div class="input-line">
 				<div v-if="$slots.icon" class="icon-before">
 					<slot name="icon" />
 				</div>
 				<div class="core">
 					<slot>
 						<input
+							id="`input-${$uid}`"
+							ref="input"
 							v-bind="$attrs"
 							:type="type"
 							:value="vmodel"
@@ -50,12 +52,21 @@
 				/>
 			</div>
 		</div>
-		<span v-if="hasError || hasInfo" :class="{ info: true, error: hasError }">
+		<span
+			v-if="hasError || hasInfo"
+			:class="{ info: true, help: true, error: hasError }"
+		>
 			{{ error || info }}
 		</span>
+		<div v-if="type === 'password'" class="show-password-wrapper">
+			<input type="checkbox" @click="togglePasswordVisibility" />
+			<span class="show-password"> Password anzeigen </span>
+		</div>
 	</label>
 </template>
 <script>
+import uidMixin from "@mixins/uid";
+
 export const supportedTypes = [
 	"email",
 	"password",
@@ -68,6 +79,7 @@ export const supportedTypes = [
 ];
 
 export default {
+	mixins: [uidMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -107,6 +119,11 @@ export default {
 			type: Boolean,
 		},
 	},
+	data: function() {
+		return {
+			showPassword: [false],
+		};
+	},
 	computed: {
 		hasHint() {
 			return !!this.hint;
@@ -132,6 +149,16 @@ export default {
 			}
 			this.$emit("input", newVal);
 		},
+		togglePasswordVisibility() {
+			if (this.type === "password") {
+				const { input } = this.$refs;
+				if (input.type === "password") {
+					input.type = "text";
+				} else if (input.type === "text") {
+					input.type = "password";
+				}
+			}
+		},
 	},
 };
 </script>
@@ -140,9 +167,6 @@ export default {
 @import "@styles";
 .wrapper {
 	display: block;
-	&:not(.with-hint) {
-		margin-bottom: calc(var(--text-sm) * var(--line-height-md));
-	}
 }
 
 .top {
@@ -155,23 +179,6 @@ export default {
 			color: var(--color-accent);
 		}
 	}
-
-	.topbar {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: var(--space-xxxxs);
-		&:not(.with-label) {
-			justify-content: flex-end;
-		}
-		.label {
-			margin-right: var(--space-sm);
-			font-size: var(--text-xs);
-			&:not(.with-label) {
-				visibility: hidden;
-			}
-		}
-	}
-
 	&:focus-within,
 	&:hover:not(.disabled) {
 		border-bottom-color: var(--color-accent);
@@ -183,43 +190,57 @@ export default {
 		color: var(--color-disabled-dark);
 		border-bottom-color: var(--color-disabled-dark);
 	}
-	.contentwrapper {
+	.info-line {
 		display: flex;
-		align-items: top;
-	}
-	.icon-before {
-		width: 24px;
-		height: 24px;
-		margin-right: var(--space-xxs);
-	}
-	.core {
-		flex: 1;
-		input {
-			width: 100%;
-			margin-bottom: var(--space-xxs);
-			color: var(--color-text);
-			border: none;
-			&:focus {
-				outline: none;
+		justify-content: space-between;
+		margin-bottom: var(--space-xxxxs);
+
+		&:not(.label-visible) {
+			justify-content: flex-end;
+		}
+		.label {
+			margin-right: var(--space-sm);
+			&:not(.label-visible) {
+				visibility: hidden;
 			}
-			&:disabled {
-				background-color: transparent;
-				&::placeholder {
-					color: var(--color-disabled-dark);
+		}
+	}
+	.input-line {
+		display: flex;
+		.icon-before {
+			width: 24px;
+			height: 24px;
+			margin-right: var(--space-xxs);
+		}
+		.core {
+			flex: 1;
+			input {
+				width: 100%;
+				margin-bottom: var(--space-xxs);
+				color: var(--color-text);
+				border: none;
+				&:focus {
+					outline: none;
+				}
+				&:disabled {
+					background-color: transparent;
+					&::placeholder {
+						color: var(--color-disabled-dark);
+					}
 				}
 			}
 		}
-	}
-	.icon-behind {
-		width: 24px;
-		height: 24px;
-		margin-left: var(--space-xs);
-		font-size: var(--text-lg);
-		&.error {
-			color: var(--color-danger);
-		}
-		&.success {
-			color: var(--color-success);
+		.icon-behind {
+			width: 24px;
+			height: 24px;
+			margin-left: var(--space-xs);
+			font-size: var(--text-lg);
+			&.error {
+				color: var(--color-danger);
+			}
+			&.success {
+				color: var(--color-success);
+			}
 		}
 	}
 }
@@ -235,13 +256,24 @@ export default {
 	}
 }
 
-.info {
+.info,
+.show-password {
 	display: block;
-	padding-top: var(--space-xxxs);
 	font-size: var(--text-xs);
 	color: var(--color-gray);
-	&.error {
-		color: var(--color-danger);
-	}
+}
+.help {
+	padding-top: var(--space-xxxs);
+}
+.show-password {
+	margin-left: var(--space-xxs);
+}
+.info.error {
+	color: var(--color-danger);
+}
+
+.show-password-wrapper {
+	display: flex;
+	width: 100%;
 }
 </style>

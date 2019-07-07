@@ -242,6 +242,8 @@ storiesOf("Base Components", module)
 	.add("Base Input (All)", () => ({
 		components: { BaseInput },
 		data: () => ({
+			info: "Assistive text",
+			hint: "Optional",
 			vmodels: {
 				text: "",
 				textSuccess: "",
@@ -293,13 +295,13 @@ storiesOf("Base Components", module)
 					(type) =>
 						`<br/>
 						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}']" :label="placeholders['${type}']" :placeholder="placeholders['${type}']" info="Infotext" hint="Optional"/>\n
+						<base-input type="${type}" v-model="vmodels['${type}']" :label="placeholders['${type}']" :placeholder="placeholders['${type}']" :info="info" :hint="hint"/>\n
 						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}Success']" :label="placeholders['${type}'] + ' - Success'" :placeholder="placeholders['${type}'] + ' - Success'" info="Infotext" hint="Optional" success/>\n
+						<base-input type="${type}" v-model="vmodels['${type}Success']" :label="placeholders['${type}'] + ' - Success'" :placeholder="placeholders['${type}'] + ' - Success'" :info="info" :hint="hint" success/>\n
 						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}Error']" :label="placeholders['${type}'] + ' - Error'" :placeholder="placeholders['${type}'] + ' - Error'" info="Infotext" hint="Optional" error="Error"/>\n
+						<base-input type="${type}" v-model="vmodels['${type}Error']" :label="placeholders['${type}'] + ' - Error'" :placeholder="placeholders['${type}'] + ' - Error'" :info="info" :hint="hint" error="Error"/>\n
 						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}Disabled']" :label="placeholders['${type}'] + ' - Disabled'" :placeholder="placeholders['${type}'] + ' - Disabled'" info="Infotext" hint="Optional" disabled/>\n`
+						<base-input type="${type}" v-model="vmodels['${type}Disabled']" :label="placeholders['${type}'] + ' - Disabled'" :placeholder="placeholders['${type}'] + ' - Disabled'" :info="info" :hint="hint" disabled/>\n`
 				)
 				.join("")
 				.trimRight()}
