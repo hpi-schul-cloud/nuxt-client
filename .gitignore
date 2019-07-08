@@ -21,3 +21,4 @@ dist
 # Runtime data
 .nuxt
 jsconfig.json
+.DS_Store
