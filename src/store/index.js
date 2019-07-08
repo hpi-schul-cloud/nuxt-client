@@ -116,7 +116,7 @@ if (process.client) {
 				},
 			},
 			state: {
-				publicPages: ["index", "login", "signup"],
+				publicPages: ["index", "login", "signup", "imprint"],
 			},
 		}),
 	];

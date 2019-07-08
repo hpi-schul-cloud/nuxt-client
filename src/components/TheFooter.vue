@@ -13,7 +13,12 @@
 			<div>
 				<template v-for="(link, index) in links">
 					<span v-if="index !== 0" :key="index">-</span>
-					<base-link :key="link.text" v-bind="link">{{ link.text }}</base-link>
+					<base-link v-if="link.external" :key="link.text" v-bind="link">{{
+						link.text
+					}}</base-link>
+					<base-link v-if="link.internal" :key="link.text" v-bind="link">{{
+						link.text
+					}}</base-link>
 				</template>
 			</div>
 			<p>
@@ -29,20 +34,42 @@ export default {
 	data() {
 		return {
 			links: [
-				{ href: "https://schul-cloud.org/impressum", text: "Impressum" },
+				{
+					to: "/imprint",
+					text: "Impressum",
+					internal: true,
+				},
 				{
 					href: "https://schul-cloud.org/impressum#data_security",
 					text: "Datenschutzerklärung",
+					external: true,
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
 					text: "Kontakt",
+					external: true,
 				},
-				{ href: "https://schul-cloud.org/team", text: "Team" },
-				{ href: "https://schul-cloud.org/about", text: "Über das Projekt" },
-				{ href: "https://schul-cloud.org/community", text: "Mitmachen" },
-				{ href: "https://schul-cloud.org/partner", text: "Partner" },
-				{ href: "https://github.com/schul-cloud/", text: "GitHub" },
+				{ href: "https://schul-cloud.org/team", text: "Team", external: true },
+				{
+					href: "https://schul-cloud.org/about",
+					text: "Über das Projekt",
+					external: true,
+				},
+				{
+					href: "https://schul-cloud.org/community",
+					text: "Mitmachen",
+					external: true,
+				},
+				{
+					href: "https://schul-cloud.org/partner",
+					text: "Partner",
+					external: true,
+				},
+				{
+					href: "https://github.com/schul-cloud/",
+					text: "GitHub",
+					external: true,
+				},
 			],
 		};
 	},
