@@ -61,6 +61,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: var(--space-sm) var(--space-md);
+	background-color: var(--color-primary);
 	box-shadow: var(--shadow-sm);
 }
 .logo {
