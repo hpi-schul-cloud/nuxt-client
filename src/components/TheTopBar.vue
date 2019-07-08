@@ -1,6 +1,6 @@
 <template>
 	<div class="topbar">
-		<img class="logo" :src="$theme.logo.app" alt="Website Logo" />
+		<img class="logo" :src="$theme.logo.logo_top" alt="Website Logo" />
 		<h1 class="page-title">{{ title }}</h1>
 
 		<!-- ACTIONS -->
@@ -73,6 +73,7 @@ export default {
 	margin: 0;
 	font-family: var(--font-accent);
 	font-size: var(--heading-4);
+	color: var(--color-white);
 	text-transform: capitalize;
 }
 .action {
