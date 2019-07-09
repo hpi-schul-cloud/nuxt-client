@@ -24,9 +24,40 @@ import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
 
 const topbarBaseActions = [
-	{ title: "Fullscreen", icon: "solid/expand", event: "fullscreen" },
-	{ title: "QR-Code", icon: "solid/qrcode" },
-	{ title: "Hilfe", icon: "solid/question" },
+	{
+		type: "popupIcon",
+		title: "Fullscreen",
+		icon: "solid/expand",
+		event: "fullscreen",
+	},
+	{ type: "popupIcon", title: "QR-Code", icon: "solid/qrcode" },
+	{
+		type: "dropdown",
+		title: "Hilfe",
+		icon: "solid/question",
+		items: [
+			{
+				label: "Hilfebereich",
+				icon: "solid/question-circle",
+				action: "/help",
+			},
+			{
+				label: "Intro",
+				icon: "solid/map-signs",
+				action: "#",
+			},
+			{
+				label: "Wunsch oder Problem senden",
+				icon: "solid/pencil",
+				action: "#",
+			},
+			{
+				label: "Admin deiner Schule kontaktieren",
+				icon: "solid/comment",
+				action: "#",
+			},
+		],
+	},
 	{ type: "text", schoolname: "HPI Schul-Cloud Schule" },
 ];
 

@@ -5,7 +5,7 @@
 		:class="{ inactive: inactive }"
 		:href="href"
 		v-bind="$attrs"
-		target="_blank"
+		:target="target"
 		rel="noreferrer"
 		v-on="$listeners"
 	>
@@ -38,6 +38,13 @@ export default {
 		to: {
 			type: [Object, String],
 			default: null,
+		},
+		target: {
+			type: String,
+			default: "_blank",
+			validator: function(value) {
+				return ["_blank", "_self", "_parent", "_top"].includes(value);
+			},
 		},
 		name: {
 			type: String,
@@ -118,6 +125,7 @@ export default {
 	&:hover,
 	&:focus {
 		color: var(--color-primary-dark);
+		text-decoration: underline;
 	}
 	&:visited {
 		color: var(--color-primary);

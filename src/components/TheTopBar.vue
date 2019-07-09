@@ -10,11 +10,23 @@
 		<div class="top-main">
 			<template v-for="action in actions">
 				<popup-icon
-					v-if="action.icon"
+					v-if="action.type === 'popupIcon'"
 					:key="action.title"
 					class="item"
 					source="fa"
 					:icon="action.icon"
+					:popup-items="action.items"
+				>
+					Lorem ipsum Lorem ipsum Lorem ipsum
+				</popup-icon>
+
+				<help-dropdown
+					v-if="action.type === 'dropdown'"
+					:key="action.title"
+					class="item"
+					source="fa"
+					:icon="action.icon"
+					:menu-items="action.items"
 				/>
 
 				<div
@@ -51,8 +63,9 @@
 import PopupIcon from "@components/PopupIcon";
 import PopupIconInitials from "@components/PopupIconInitials";
 import MenuLink from "@components/MenuLink";
+import HelpDropdown from "@components/HelpDropdown";
 export default {
-	components: { PopupIcon, PopupIconInitials, MenuLink },
+	components: { PopupIcon, PopupIconInitials, MenuLink, HelpDropdown },
 	props: {
 		actions: {
 			type: Array,

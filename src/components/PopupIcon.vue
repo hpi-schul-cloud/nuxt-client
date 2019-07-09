@@ -6,7 +6,9 @@
 			:fill="fill"
 			@click="popup"
 		/>
-		<span class="popuptext" :class="{ visible }">{{ popuptext }}</span>
+		<div class="popup-content" :class="{ visible }">
+			<slot></slot>
+		</div>
 	</div>
 </template>
 
@@ -24,10 +26,6 @@ export default {
 		fill: {
 			type: String,
 			default: "currentColor",
-		},
-		popuptext: {
-			type: String,
-			default: "Lorem ipsum Lorem ipsum Lorem ipsum",
 		},
 	},
 	data() {
@@ -56,21 +54,22 @@ export default {
 	--arrow-offset: 1em;
 	--outer-arrow-size: calc(var(--arrow-size) + 1.5px);
 
-	.popuptext {
+	.popup-content {
 		position: absolute;
 		top: 100%;
 		left: 0%;
 		z-index: var(--layer-popover);
 		visibility: hidden;
 		background-color: var(--color-white);
-		border: 1px solid var(--color-gray);
+		border: 1px solid var(--color-gray-light);
+		border-radius: var(--radius-sm);
 
 		&.visible {
 			visibility: visible;
 		}
 	}
 
-	.popuptext::before {
+	.popup-content::before {
 		position: absolute;
 		top: calc(-2 * var(--outer-arrow-size));
 		left: var(--arrow-offset);
@@ -81,7 +80,7 @@ export default {
 		border-width: var(--outer-arrow-size);
 	}
 
-	.popuptext::after {
+	.popup-content::after {
 		position: absolute;
 		top: calc(-2 * var(--arrow-size));
 		left: var(--arrow-offset);
