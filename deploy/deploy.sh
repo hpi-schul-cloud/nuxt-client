@@ -75,9 +75,18 @@ echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
 if [[ $DOCKERTAG == master ]]
 then
-  nuxtclient
-  storybook
-  vuepress
+	if [[ $1 == nuxt ]]
+	then
+		nuxtclient
+	fi
+	if [[ $1 == storybook ]]
+	then
+		storybook
+	fi
+	if [[ $1 == docs ]]
+	then
+		vuepress
+	fi
 else
   echo "Branch will not be deployed"
 fi

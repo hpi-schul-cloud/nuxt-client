@@ -17,24 +17,53 @@ env:
 install:
   - yarn global add codecov surge
   - yarn install --production=false
-script:
-  - yarn lint:ci
-  - yarn test:ci
-  - yarn build
-  - codecov
-  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+jobs:
+  include:
+    # Lint
+    - stage: lint
+      script: yarn lint:all:eslint
+      name: "eslint"
+    - script: yarn lint:all:stylelint
+      name: "stylelint"
+    - script: yarn lint:all:markdownlint
+      name: "markdownlint"
+    - script: yarn lint:all:prettier
+      name: "prettier"
+    # Test
+    - stage: test
+      script: yarn test:unit:ci
+      name: "unit test"
+    # Build
+    - stage: build
+    - script: yarn build:nuxt
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh nuxt
+        on:
+          branch: master
+    - script: yarn build:docs
+      after_success: bash ./deploy/pull-deploy.sh docs
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh docs
+        on:
+          branch: master
+    - script: yarn build:storybook
+      after_success: bash ./deploy/pull-deploy.sh storybook
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh storybook
+        on:
+          branch: master
+stages:
+  - lint
+  - test
+  - build
 notifications:
   email: false
 cache:
   directories:
     - node_modules
-# deploy docs & storybook for all pull requests
-after_success:
-  - bash ./deploy/pull-deploy.sh
-# deploy master to staging system
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: bash ./deploy/deploy.sh
-  on:
-    branch: master
