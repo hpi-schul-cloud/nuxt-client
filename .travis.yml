@@ -12,10 +12,6 @@ env:
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
 jobs:
   include:
-    # Warmup Cache
-    - stage: prepare cache
-      name: "warmup cache"
-      script: true
     # Lint
     - stage: run parallel
       script: yarn lint:ci
@@ -43,9 +39,6 @@ jobs:
         script: bash ./deploy/deploy.sh
         on:
           branch: master
-stages:
-  - prepare cache
-  - run parallel
 notifications:
   email: false
 cache:
