@@ -1,0 +1,3 @@
+# User has ...
+
+These components check the user object for permissions/roles/... and restrict content to the given permission/role
