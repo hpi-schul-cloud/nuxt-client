@@ -10,7 +10,6 @@ env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
-    - SC_THEME=default
 jobs:
   include:
     # Warmup Cache
