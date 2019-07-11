@@ -1,13 +1,13 @@
 <template>
-	<div class="container">
-		<h1 v-if="error.statusCode === 404">Page not found</h1>
-		<h1 v-else>An error occurred</h1>
-		<nuxt-link to="/">Back to Home page</nuxt-link>
-	</div>
+	<error-page :error="error" />
 </template>
 
 <script>
+import ErrorPage from "@components/ErrorPage";
 export default {
+	components: {
+		ErrorPage,
+	},
 	props: {
 		error: {
 			type: Object,
@@ -16,6 +16,5 @@ export default {
 			}),
 		},
 	},
-	layout: "default",
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<div class="final-step">
 		<div class="image">
-			<img alt="people" src="@assets/people.png" />
+			<img alt="people" src="@assets/img/people.png" />
 		</div>
 		<div class="text-md">
 			<h2 class="h3">Geschafft!</h2>
