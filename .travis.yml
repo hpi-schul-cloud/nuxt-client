@@ -39,9 +39,11 @@ jobs:
         script: bash ./deploy/deploy.sh
         on:
           branch: master
-notifications:
-  email: false
 cache:
   yarn: true
   directories:
     - node_modules
+before_cache:
+  - rm -f -r ./node_modules/.cache
+notifications:
+  email: false
