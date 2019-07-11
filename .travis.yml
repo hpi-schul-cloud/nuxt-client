@@ -5,18 +5,12 @@ branches:
 language: node_js
 node_js:
   - lts/*
-sudo: required
 dist: xenial
-services:
-  - docker
 env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
     - SC_THEME=default
-install:
-  - yarn global add codecov surge
-  - yarn install --production=false
 jobs:
   include:
     - stage: prepare cache
@@ -34,12 +28,21 @@ jobs:
       name: "prettier"
     # Test
     - stage: test
-      script: yarn test:unit:ci
+      script:
+        - yarn test:unit:ci
+        - codecov
       name: "unit"
+      install:
+        - yarn global add codecov
     # Build
     - stage: build
-      script: yarn build:nuxt
       name: "nuxt"
+      install:
+        - yarn global add surge
+      services:
+        - docker
+      sudo: required
+      script: yarn build:nuxt
       deploy:
         skip_cleanup: true
         provider: script
@@ -48,6 +51,11 @@ jobs:
           branch: master
     - script: yarn build:docs
       name: "docs"
+      install:
+        - yarn global add surge
+      services:
+        - docker
+      sudo: required
       after_success: bash ./deploy/pull-deploy.sh docs
       deploy:
         skip_cleanup: true
@@ -57,6 +65,11 @@ jobs:
           branch: master
     - script: yarn build:storybook
       name: "storybook"
+      install:
+        - yarn global add surge
+      services:
+        - docker
+      sudo: required
       after_success: bash ./deploy/pull-deploy.sh storybook
       deploy:
         skip_cleanup: true
