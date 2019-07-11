@@ -20,6 +20,7 @@ install:
 jobs:
   include:
     - stage: prepare cache
+      name: "warmup cache"
       script: true
     # Lint
     - stage: lint
