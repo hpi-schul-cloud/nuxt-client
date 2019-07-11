@@ -16,18 +16,13 @@ then
 	exit 0;
 fi
 
-if [[ $1 == storybook ]]
-then
-	# deploy storybook
-	echo "Deploy storybook to surge.sh"
-	surge --project ./dist/storybook --domain stories.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
-fi
-if [[ $1 == docs ]]
-then
-	# deploy docs
-	echo "Deploy docs to surge.sh"
-	surge --project ./dist/docs --domain docs.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
-fi
+# deploy docs
+echo "Deploy docs to surge.sh"
+surge --project ./dist/docs --domain docs.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
+
+# deploy storybook
+echo "Deploy storybook to surge.sh"
+surge --project ./dist/storybook --domain stories.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
 
 
 if [ -z "$GITHUB_TOKEN" ];
