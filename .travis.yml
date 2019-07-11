@@ -64,6 +64,7 @@ jobs:
         on:
           branch: master
 stages:
+  - prepare cache
   - lint
   - test
   - build
