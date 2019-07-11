@@ -19,6 +19,8 @@ install:
   - yarn install --production=false
 jobs:
   include:
+    - stage: prepare cache
+      script: true
     # Lint
     - stage: lint
       script: yarn lint:all:eslint
@@ -68,5 +70,6 @@ stages:
 notifications:
   email: false
 cache:
+  yarn: true
   directories:
     - node_modules
