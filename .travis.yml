@@ -32,10 +32,11 @@ jobs:
     # Test
     - stage: test
       script: yarn test:unit:ci
-      name: "unit test"
+      name: "unit"
     # Build
     - stage: build
-    - script: yarn build:nuxt
+      script: yarn build:nuxt
+      name: "nuxt"
       deploy:
         skip_cleanup: true
         provider: script
@@ -43,6 +44,7 @@ jobs:
         on:
           branch: master
     - script: yarn build:docs
+      name: "docs"
       after_success: bash ./deploy/pull-deploy.sh docs
       deploy:
         skip_cleanup: true
@@ -51,6 +53,7 @@ jobs:
         on:
           branch: master
     - script: yarn build:storybook
+      name: "storybook"
       after_success: bash ./deploy/pull-deploy.sh storybook
       deploy:
         skip_cleanup: true
