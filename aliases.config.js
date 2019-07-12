@@ -3,7 +3,9 @@ const fs = require("fs");
 const prettier = require("prettier");
 const themeName = process.env.SC_THEME || "default";
 
-const aliases = {
+const variation = require("./variation")(themeName);
+
+const aliases = Object.assign(variation, {
 	"@": "src",
 	"@@": ".",
 	"@assets": "src/assets",
@@ -21,7 +23,7 @@ const aliases = {
 	"@styles": `src/themes/${themeName}/styles/index.scss`,
 	"@styles-default": `src/themes/default/styles`,
 	"@variables": `src/themes/${themeName}/styles/variables.scss`,
-};
+});
 
 module.exports = {
 	webpack: {},
