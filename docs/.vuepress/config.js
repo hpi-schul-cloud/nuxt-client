@@ -64,7 +64,7 @@ module.exports = {
 		},
 	},
 	plugins: {
-		"@vuepress/pwa": {
+		"@vuepress/plugin-pwa": {
 			serviceWorker: true,
 			updatePopup: true,
 		},
