@@ -25,6 +25,16 @@ addDecorator(() => ({
 	template: '<div style="padding: 2rem"><story/></div>',
 }));
 
+// add vuex support
+import Vue from "vue";
+import Vuex from "vuex";
+import store from "@/store/index";
+Vue.use(Vuex);
+addDecorator(() => ({
+	store: store(),
+	template: "<story/>",
+}));
+
 // automatically import all files ending in *.stories.js
 const req = require.context("../", true, /.stories.js$/);
 function loadStories() {
