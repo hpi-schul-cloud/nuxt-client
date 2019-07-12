@@ -50,7 +50,7 @@ module.exports = {
 	title: "Nuxt-Client Docs",
 	port: "4002",
 	description: "documentation",
-	cache: findCacheDir({ name: "vuepress" }),
+	cache: findCacheDir({ name: "vuepress" }), // node_modules/.cache/vuepress
 	themeConfig: {
 		// https://vuepress.vuejs.org/default-theme-config/
 		sidebar: listFiles(baseDir),
