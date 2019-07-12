@@ -44,8 +44,8 @@ cache:
   directories:
     - node_modules
 before_cache:
-  # delete cache folder before storing the cache.
-  # storybook stores some build artefacts here which potentialy invalidate the cache.
+  # delete the .cache folder before actually storing the cache.
+  # storybook stores some build artefacts here which potentialy invalidates the cache.
   - rm -f -r ./node_modules/.cache
 notifications:
   email: false
