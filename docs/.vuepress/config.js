@@ -2,6 +2,7 @@ const baseDir = "./docs";
 const { lstatSync, readdirSync } = require("fs");
 const { join } = require("path");
 const _ = require("lodash");
+const findCacheDir = require("find-cache-dir");
 
 const blacklist = [".vuepress"];
 
@@ -49,6 +50,7 @@ module.exports = {
 	title: "Nuxt-Client Docs",
 	port: "4002",
 	description: "documentation",
+	cache: findCacheDir({ name: "vuepress" }),
 	themeConfig: {
 		// https://vuepress.vuejs.org/default-theme-config/
 		sidebar: listFiles(baseDir),
