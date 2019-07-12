@@ -23,8 +23,6 @@ import TheTopBar from "@components/TheTopBar";
 import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
 
-const topbarBaseActions = [];
-
 export default {
 	components: {
 		TheTopBar,
@@ -44,48 +42,41 @@ export default {
 				{ title: "Lernstore", to: { name: "content" } },
 				{ title: "Verwaltung", to: { name: "administration" } },
 			],
-			topBarActions: topbarBaseActions,
 			pageTitle: this.$theme.short_name,
 		};
 	},
-	computed: mapState({
-		firstName: (state) =>
-			state.auth && state.auth.user
-				? state.auth.user.firstName
-				: "Unknown User",
-		authenticated: (state) => (state.auth ? state.auth.accessToken : ""),
-	}),
+	computed: {
+		topBarActions() {
+			const actions = [];
+			if (this.authenticated) {
+				actions.push({
+					event: "logout",
+					title: this.firstName,
+				});
+			}
+			return actions;
+		},
+		...mapState("auth", {
+			authenticated: (state) => state.accessToken || false,
+			user: (state) => state.user,
+		}),
+		firstName() {
+			return this.user && this.user.firstName
+				? this.user.firstName
+				: "Unknown User";
+		},
+	},
 	watch: {
 		$route: function(to) {
 			// TODO get page title from `this.$metaInfo.title`
 			this.pageTitle = to.name;
 		},
-		authenticated: function() {
-			this.updateTopBarActions;
-		},
-	},
-	created() {
-		this.updateTopBarActions(this.authenticated);
 	},
 	methods: {
 		...mapActions("auth", ["logout"]),
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
-				this.$router.push({ name: "login" });
-			}
-		},
-		updateTopBarActions(isAuthenticated) {
-			if (isAuthenticated) {
-				this.topBarActions = [
-					...topbarBaseActions,
-					{
-						event: "logout",
-						title: this.firstName,
-					},
-				];
-			} else {
-				this.topBarActions = [...topbarBaseActions];
 			}
 		},
 	},

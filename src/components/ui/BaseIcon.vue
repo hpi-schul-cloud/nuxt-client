@@ -36,22 +36,16 @@ export default {
 			try {
 				if (this.source === "custom") {
 					// src: @assets/icons
-					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/icons/${
-						this.icon
-					}.svg`);
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/icons/${this.icon}.svg`);
 				}
 				if (this.source === "material") {
 					// src: https://material.io/tools/icons/?style=baseline
-					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/baseline-${
-						this.icon
-					}-24px.svg`);
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/baseline-${this.icon}-24px.svg`);
 				}
 				return icon.default;
 			} catch (error) {
 				console.error(
-					`error loading icon "${this.icon}" from "${
-						this.source
-					}". It might be not available.`,
+					`error loading icon "${this.icon}" from "${this.source}". It might be not available.`,
 					error
 				);
 				return undefined;

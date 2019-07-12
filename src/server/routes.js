@@ -33,7 +33,7 @@ module.exports = [
 	{
 		route: "teams",
 		controller: "teams",
-		routesExcluded: ["/:teamId/members"],
+		routesExcluded: ["/:teamId/edit"],
 	},
 	"tools",
 	"topics",

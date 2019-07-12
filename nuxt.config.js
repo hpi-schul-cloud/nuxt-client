@@ -1,3 +1,4 @@
+require("dotenv").config();
 const pkg = require("./package");
 const themeName = process.env.SC_THEME || "default";
 
@@ -6,6 +7,7 @@ module.exports = {
 	srcDir: "src/",
 	theme: "default",
 	env: {
+		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
 		API_URL: process.env.API_URL || "http://localhost:3030",
 	},
 	/*
@@ -71,6 +73,7 @@ module.exports = {
 		"cookie-universal-nuxt",
 		"@nuxtjs/toast",
 		"nuxt-babel",
+		"@nuxtjs/dotenv",
 	],
 
 	toast: {

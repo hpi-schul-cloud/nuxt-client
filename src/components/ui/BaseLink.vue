@@ -98,9 +98,7 @@ export default {
 					!/^(https:|mailto:|tel:|\/)/.test(this.href)
 				) {
 					return console.warn(
-						`Insecure href <base-link>: ${
-							this.href
-						}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <base-link>.`
+						`Insecure href <base-link>: ${this.href}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <base-link>.`
 					);
 				}
 			} else {

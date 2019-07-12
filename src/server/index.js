@@ -1,5 +1,6 @@
 /* eslint-disable */
-
+require("dotenv").config();
+const fallbackDisabled = process.env.FALLBACK_DISABLED || false;
 const express = require("express");
 const session = require("express-session");
 const consola = require("consola");
@@ -123,7 +124,9 @@ function excludeRoutes(controllerName, routesToExclude) {
 }
 
 // The legacy routings go here
-setLegacyControllers();
+if (!fallbackDisabled) {
+	setLegacyControllers();
+}
 
 async function start() {
 	const nuxt = new Nuxt(config);
@@ -151,7 +154,12 @@ async function start() {
 		} else {
 			res.locals.message = err.message;
 		}
-		res.locals.error = req.app.get("env") === "development" ? err : { status };
+		res.locals.error =
+			req.app.get("env") === "development"
+				? err
+				: {
+						status,
+				  };
 
 		if (res.locals.currentUser) res.locals.loggedin = true;
 		// render the error page

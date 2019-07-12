@@ -3,6 +3,10 @@ const routes = require("../server/routes");
 export default async function(ctx) {
 	const { route } = ctx;
 
+	if (process.env.FALLBACK_DISABLED) {
+		return;
+	}
+
 	const segments = route.path.split("/");
 	const controllerName = segments[1];
 	const legacyRouteConfig = routes.find((r) => {
@@ -30,6 +34,7 @@ export default async function(ctx) {
 			const fullPath = "/" + legacyRouteConfig.route + excludedRoute;
 			return !fullPath.match(route.matched[0].regex);
 		});
+
 	if (useLegacy) {
 		window.location = route.path;
 	}

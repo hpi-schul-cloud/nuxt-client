@@ -25,7 +25,9 @@ export default {
 				{ name: "Kurs-Mitglieder" },
 				{ name: "Abschließen" },
 			],
-			course: {},
+			course: {
+				teachers: [],
+			},
 		};
 	},
 	computed: {
@@ -78,10 +80,7 @@ export default {
 		} catch (err) {}
 	},
 	created() {
-		const { Course } = this.$FeathersVuex;
-		this.course = new Course({
-			schoolId: this.user.schoolId,
-		});
+		this.course.schoolId = this.user.schoolId;
 	},
 	methods: {
 		async create() {

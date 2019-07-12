@@ -1,11 +1,40 @@
 const endpoint = "/authentication";
+var jwtDecode = require("jwt-decode");
 
 export const actions = {
-	authenticate: async () => {
-		await this.$axios.$post(endpoint);
-		// TODO
+	async authenticate({ dispatch }) {
+		const res = await this.$axios.$post(endpoint, {
+			strategy: "jwt",
+		});
+
+		if (!res.accessToken) {
+			throw new Error("No Accesstoken received");
+			return;
+		}
+
+		const payload = jwtDecode(res.accessToken);
+
+		if (!res.accessToken) {
+			throw new Error("No userId found in JWT token");
+			return;
+		}
+
+		dispatch("populateUser", payload.userId);
+		return res;
 	},
-	hasRole: async ({ dispatch, rootGetters, state, rootState }, roleName) => {
+	async logout(ctx) {
+		this.$cookies.remove("jwt");
+		window.location = "/login";
+	},
+	async populateUser({ dispatch, commit }, userId) {
+		const user = await dispatch(`users/get`, userId, {
+			root: true,
+		});
+
+		commit("setUser", user);
+		return user;
+	},
+	async hasRole({ dispatch, rootGetters, state, rootState }, roleName) {
 		if (rootState.roles.ids.length < 1) {
 			await dispatch(
 				"roles/find",
@@ -32,6 +61,9 @@ export const actions = {
 };
 
 export const mutations = {
+	setUser(state, user) {
+		state.user = user;
+	},
 	setAccessToken(state, payload) {
 		state.accessToken = payload;
 	},
@@ -41,7 +73,7 @@ export const state = () => {
 	return {
 		accessToken: "",
 		payload: null,
-		user: null,
+		user: {},
 		publicPages: ["index", "login", "signup", "impressum"],
 	};
 };
