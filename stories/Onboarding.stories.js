@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope, react/no-this-in-sfc */
-
 import { storiesOf } from "@storybook/vue";
 import { text, number } from "@storybook/addon-knobs";
 
@@ -45,5 +43,3 @@ storiesOf("Wizard", module).add("StepProgress", () => ({
 			<StepProgress :steps="progressSteps" :currentStep="currentStep"/>
 		</div>`,
 }));
-
-/* eslint-enable react/react-in-jsx-scope */
