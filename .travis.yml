@@ -47,5 +47,6 @@ before_cache:
   # delete the .cache folder before actually storing the cache.
   # storybook and vuepress stores some build artefacts here which invalidates the cache.
   - rm -rf $TRAVIS_BUILD_DIR/node_modules/.cache
+  - rm -rf $TRAVIS_BUILD_DIR/node_modules/@vuepress/core/node_modules/.cache/vuepress
 notifications:
   email: false
