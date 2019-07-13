@@ -17,7 +17,7 @@
 		"new": "hygen new",
 		"lint:eslint": "eslint",
 		"lint:stylelint": "stylelint",
-		"lint:markdownlint": "markdownlint -i \"./src/legacy-client\" -c \".markdownlint.yml\"",
+		"lint:markdownlint": "markdownlint -i \"src/legacy-client\" -c \".markdownlint.yml\"",
 		"lint:prettier": "prettier --loglevel log",
 		"lint:all:eslint": "yarn lint:eslint --ext .js,.vue .",
 		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",

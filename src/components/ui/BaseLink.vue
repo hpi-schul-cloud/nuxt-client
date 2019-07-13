@@ -5,7 +5,7 @@
 		:href="href"
 		v-bind="$attrs"
 		:target="linkTarget"
-		rel="noreferrer"
+		:rel="external ? 'noreferrer' : undefined"
 		v-on="$listeners"
 	>
 		<slot />
@@ -69,6 +69,9 @@ export default {
 				: this.href.startsWith("/")
 				? "_self" // fallback should stay on same page
 				: "_blank"; // external links should be in new window opened
+		},
+		external() {
+			return this.href && !this.href.startsWith("/");
 		},
 	},
 	created() {
