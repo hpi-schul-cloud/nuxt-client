@@ -2,6 +2,22 @@
 
 [[toc]]
 
+## Umgebungsvariablen (ENV-Variables)
+
+For convenience, you can set enviroment variables using a `.env` ([dotenv](https://www.npmjs.com/package/dotenv)) file in the root folder. All defined variablea will be available in `process.env[VARIABLE]`. Whis will speed up your workflow, because you no longer need to define all variables everytime you spin up the project.
+
+:::tip
+
+The `.env` file will never gets commited to Github. Feel free to use. :wink:
+
+:::
+
+```env
+VARIABLE_1=VALUE_1
+VARIABLE_2=VALUE_2
+...
+```
+
 ## Templates - Hygen
 
 Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels [Hygen](http://www.hygen.io/) erstellt.

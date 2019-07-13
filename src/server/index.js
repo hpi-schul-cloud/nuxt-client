@@ -1,4 +1,5 @@
-/* eslint-disable */
+/* eslint-disable no-underscore-dangle */
+require("dotenv").config();
 const fallbackDisabled = process.env.FALLBACK_DISABLED || false;
 const express = require("express");
 const session = require("express-session");
@@ -143,7 +144,7 @@ async function start() {
 	// catches every legacy client issue except 404 issues.
 	// 404 errors are handled by nuxt itself and therefore
 	// this middleware is never called in this case
-	app.use((err, req, res, next) => {
+	app.use((err, req, res /*, next */) => {
 		consola.error(err);
 		// set locals, only providing error in development
 		const status = err.status || err.statusCode || 500;

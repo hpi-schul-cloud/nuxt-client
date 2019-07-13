@@ -1,5 +1,5 @@
 <!-- eslint-disable max-lines -->
-<!-- TODO -->
+<!-- TODO refactor to reduce lines -->
 <template>
 	<div v-if="team">
 		<section class="section">

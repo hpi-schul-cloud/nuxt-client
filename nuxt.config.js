@@ -1,3 +1,4 @@
+require("dotenv").config();
 const pkg = require("./package");
 const themeName = process.env.SC_THEME || "default";
 
@@ -67,6 +68,7 @@ module.exports = {
 	 ** Nuxt.js modules
 	 */
 	modules: [
+		"@nuxtjs/dotenv",
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
 		"cookie-universal-nuxt",
