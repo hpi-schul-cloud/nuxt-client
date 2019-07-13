@@ -13,6 +13,7 @@ body {
 @for $i from 1 through 6 {
 	h#{$i},
 	.h#{$i} {
+		margin-top: var(--space-sm);
 		margin-bottom: var(--space-xxs);
 		font-family: var(--font-accent);
 		font-size: var(--heading-#{$i});
@@ -45,13 +46,6 @@ a {
 	&:visited {
 		color: var(--color-primary-visited);
 	}
-}
-
-h1,
-h2,
-h3 {
-	margin-top: var(--space-sm);
-	margin-bottom: var(--space-md);
 }
 
 p {

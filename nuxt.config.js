@@ -1,4 +1,3 @@
-require("dotenv").config();
 const pkg = require("./package");
 const themeName = process.env.SC_THEME || "default";
 
@@ -73,7 +72,6 @@ module.exports = {
 		"cookie-universal-nuxt",
 		"@nuxtjs/toast",
 		"nuxt-babel",
-		"@nuxtjs/dotenv",
 	],
 
 	toast: {

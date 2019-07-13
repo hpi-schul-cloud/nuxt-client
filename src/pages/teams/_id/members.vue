@@ -9,13 +9,16 @@
 
 		<section class="section">
 			<div>
-				<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="mb-3 column">
+				<div
+					v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')"
+					class="mb--lg column"
+				>
 					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
 					<base-button design="primary" @click="addInternalModalActive = true"
 						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
-				<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="mb-3 column">
+				<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="mb--lg column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
 					<base-button design="primary" @click="addExternalModalActive = true"
 						>Externe Teilnehmer einladen</base-button

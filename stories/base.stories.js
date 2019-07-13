@@ -15,6 +15,7 @@ import BaseTable from "@components/ui/BaseTable";
 import BaseCollapsible from "@components/ui/BaseCollapsible";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
 import BaseSelect from "@components/ui/BaseSelect";
+import BaseTextarea from "@components/ui/BaseTextarea";
 import BaseAudio from "@components/ui/BaseAudio";
 import BaseVideo from "@components/ui/BaseVideo";
 import BaseModal from "@components/ui/BaseModal";
@@ -265,7 +266,7 @@ storiesOf("Base Components", module)
 		</div>`,
 	}))
 	.add("Base Textarea", () => ({
-		components: { BaseSelect },
+		components: { BaseTextarea },
 		data: () => ({
 			value: "",
 			label: text("label", "Label"),

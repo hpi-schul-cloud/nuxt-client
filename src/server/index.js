@@ -1,5 +1,4 @@
 /* eslint-disable */
-require("dotenv").config();
 const fallbackDisabled = process.env.FALLBACK_DISABLED || false;
 const express = require("express");
 const session = require("express-session");
@@ -154,12 +153,7 @@ async function start() {
 		} else {
 			res.locals.message = err.message;
 		}
-		res.locals.error =
-			req.app.get("env") === "development"
-				? err
-				: {
-						status,
-				  };
+		res.locals.error = req.app.get("env") === "development" ? err : { status };
 
 		if (res.locals.currentUser) res.locals.loggedin = true;
 		// render the error page

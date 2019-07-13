@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<section class="mt-3 section">
+		<section class="mt--lg section">
 			<base-button
 				class="button is-info"
 				@click="$router.push({ name: 'teams-create' })"

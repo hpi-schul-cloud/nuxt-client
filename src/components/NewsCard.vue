@@ -1,13 +1,13 @@
 <template>
-	<base-card class="mt-2 news-card">
+	<base-card class="mt--md news-card">
 		<div slot="header" :style="{ backgroundColor: article.color }">
 			<div class="news-card__heading">
-				<h4 class="mb-0 mt-0">{{ article.title }}</h4>
+				<h4 style="margin: 0">{{ article.title }}</h4>
 			</div>
 		</div>
 		<div class="news-card__content">
 			<span>{{ dayjs(article.createdAt).fromNow() }}</span>
-			<div class="mt-2">
+			<div class="mt--md">
 				<BaseLink :to="{ name: 'news-id', params: { id: article._id } }"
 					>Weiterlesen</BaseLink
 				>
