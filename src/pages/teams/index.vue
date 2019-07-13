@@ -74,7 +74,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-// import isAuthenticated from "@middleware/is-authenticated";
 
 export default {
 	data() {
@@ -87,7 +86,6 @@ export default {
 			title: "Teams",
 		};
 	},
-	// middleware: [isAuthenticated],
 	computed: {
 		...mapGetters("teams", {
 			teams: "list",

@@ -33,14 +33,14 @@ export default {
 		return {
 			sidebarItems: [
 				{ title: "Übersicht", href: "/dashboard" },
-				{ title: "News", to: { name: "news" } },
-				{ title: "Teams", to: { name: "teams" } },
-				{ title: "Kurse", to: { name: "courses" } },
-				{ title: "Termine", to: { name: "events" } },
-				{ title: "Aufgaben", to: { name: "tasks" } },
+				{ title: "Kurse", href: "/courses" },
+				{ title: "Teams", href: "/teams" },
+				{ title: "Aufgaben", href: "/homework" },
 				{ title: "Dateien", href: "/files" },
-				{ title: "Lernstore", to: { name: "content" } },
-				{ title: "Verwaltung", to: { name: "administration" } },
+				{ title: "News", to: { name: "news" } },
+				{ title: "Termine", href: "/calendar" },
+				{ title: "Lern-Store", href: "/content" },
+				{ title: "Verwaltung", href: "/administration" },
 			],
 			pageTitle: this.$theme.short_name,
 		};

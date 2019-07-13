@@ -1,14 +1,14 @@
-export default async (ctx) => {
+export default async ({ app, store }) => {
 	try {
-		const jwt = ctx.app.$cookies.get("jwt");
+		const jwt = app.$cookies.get("jwt");
 
 		if (!jwt) {
 			store.dispatch("auth/logout");
 		}
 
-		ctx.store.commit("auth/setAccessToken", jwt);
-		await ctx.store.dispatch("auth/authenticate");
+		store.commit("auth/setAccessToken", jwt);
+		await store.dispatch("auth/authenticate");
 	} catch (e) {
-		ctx.store.dispatch("auth/logout");
+		store.dispatch("auth/logout");
 	}
 };

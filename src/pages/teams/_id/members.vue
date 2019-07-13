@@ -810,3 +810,13 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.d-flex {
+	display: flex;
+}
+
+.section {
+	margin: var(--space-lg) 0;
+}
+</style>

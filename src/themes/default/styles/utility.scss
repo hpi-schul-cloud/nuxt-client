@@ -1,19 +1,10 @@
 @import "./utility/colors";
 @import "./utility/fonts";
-@import "./utility/layout";
 @import "./utility/resets";
 @import "./utility/spacing";
 @import "./utility/typography";
 
-.d-flex {
-	display: flex;
-}
-
-.cursor-pointer {
-	cursor: pointer;
-}
-
-.is-noscroll {
+body.is-noscroll {
 	position: fixed;
 	top: 0;
 	width: 100%;
