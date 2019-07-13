@@ -39,7 +39,7 @@ jobs:
         script: bash ./deploy/deploy.sh
         on:
           branch: master
-cache: true
+cache: yarn
 before_cache:
   # delete the .cache folder before actually storing the cache.
   # storybook and vuepress stores some build artefacts here which invalidates the cache.
