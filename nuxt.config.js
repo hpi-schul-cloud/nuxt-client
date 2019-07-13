@@ -1,6 +1,7 @@
 require("dotenv").config();
 const pkg = require("./package");
 const themeName = process.env.SC_THEME || "default";
+const API_URL = process.env.API_URL || "http://localhost:3030";
 
 module.exports = {
 	mode: "spa",
@@ -8,7 +9,7 @@ module.exports = {
 	theme: "default",
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
-		API_URL: process.env.API_URL || "http://localhost:3030",
+		API_URL,
 	},
 	/*
 	 ** Headers of the page
@@ -84,7 +85,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
-		baseUrl: process.env.API_HOST || "https://localhost:3030",
+		baseUrl: API_URL,
 	},
 
 	/*

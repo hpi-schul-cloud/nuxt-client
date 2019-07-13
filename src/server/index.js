@@ -137,14 +137,16 @@ async function start() {
 		await builder.build();
 	}
 
-	// Give nuxt middleware to express
-	app.use(nuxt.render);
-
 	// error handler for legacy client
 	// catches every legacy client issue except 404 issues.
 	// 404 errors are handled by nuxt itself and therefore
 	// this middleware is never called in this case
-	app.use((err, req, res /*, next */) => {
+	// eslint-disable-next-line no-unused-vars
+	app.use((err, req, res, next) => {
+		if (err.error.message.startsWith("Cast to ObjectId failed for value")) {
+			consola.info(`id parsing error => we try the fallback (${err.message})`);
+			return next();
+		}
 		consola.error(err);
 		// set locals, only providing error in development
 		const status = err.status || err.statusCode || 500;
@@ -164,6 +166,9 @@ async function start() {
 			inline: res.locals.inline ? true : !res.locals.loggedin,
 		});
 	});
+
+	// Give nuxt middleware to express
+	app.use(nuxt.render);
 
 	// Listen the server
 	app.listen(port, host);
