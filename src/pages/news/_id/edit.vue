@@ -9,7 +9,7 @@
 							text: 'News',
 						},
 						{
-							to: { name: 'news-id', params: { id: news._id } },
+							to: { name: 'news-id', params: { id: $route.params.id } },
 							text: news.title,
 						},
 						{
@@ -55,13 +55,22 @@ import { mapGetters, mapActions } from "vuex";
 export default {
 	data: function() {
 		return {
+			news: {
+				title: "",
+				content: "",
+			},
 			active: false,
 		};
 	},
 	computed: {
 		...mapGetters("news", {
-			news: "current",
+			orgNews: "current",
 		}),
+	},
+	watch: {
+		orgNews(to) {
+			this.news = { ...to };
+		},
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);
@@ -75,10 +84,11 @@ export default {
 				confirmText: "Artikel löschen",
 				onConfirm: async () => {
 					try {
-						await this.$store.dispatch("news/remove", this.news._id);
+						await this.$store.dispatch("news/remove", this.$route.params.id);
 						this.$toast.success("Artikel erfolgreich gelöscht!");
 						this.$router.push({ name: "news" });
 					} catch (e) {
+						console.error(e);
 						this.$toast.error("Fehler beim Löschen des Artikels.");
 					}
 				},
@@ -92,11 +102,15 @@ export default {
 				await this.$store.dispatch("news/patch", [
 					this.$route.params.id,
 					{
-						name: this.news.name,
+						title: this.news.title,
 						content: this.news.content,
 					},
 				]);
 				this.$toast.success("Artikel gespeichert");
+				this.$router.push({
+					name: "news-id",
+					params: { id: this.$route.params.id },
+				});
 			} catch (e) {
 				this.$toast.error("Fehler beim Speichern");
 			}

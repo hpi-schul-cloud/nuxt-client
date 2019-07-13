@@ -7,7 +7,7 @@ export default function(endpoint) {
 				const res = await this.$axios.$get(baseUrl, {
 					params: query,
 				});
-				commit("add", {
+				commit("set", {
 					items: res.data,
 				});
 				return res;
@@ -23,17 +23,37 @@ export default function(endpoint) {
 				commit("setCurrent", res);
 				return res;
 			},
-			async patch(ctx, payload = {}) {
-				return await this.$axios.$patch(baseUrl + "/" + payload[0], payload[1]);
+			async create({ commit }, payload = {}) {
+				const res = await this.$axios.$post(baseUrl, payload);
+				commit("set", {
+					items: Array.isArray(res) ? res : [res],
+				});
+				return res;
 			},
-			async update(ctx, payload = {}) {
-				return await this.$axios.$update(
+			async patch({ commit }, payload = []) {
+				const res = await this.$axios.$patch(
 					baseUrl + "/" + payload[0],
 					payload[1]
 				);
+				commit("set", {
+					items: [res],
+				});
+				return res;
 			},
-			async remove(ctx, id) {
-				return await this.$axios.$delete(baseUrl + "/" + id);
+			async update({ commit }, payload = {}) {
+				const res = await this.$axios.$update(
+					baseUrl + "/" + payload[0],
+					payload[1]
+				);
+				commit("set", {
+					items: [res],
+				});
+				return res;
+			},
+			async remove({ commit }, id) {
+				const res = await this.$axios.$delete(baseUrl + "/" + id);
+				commit("remove", id);
+				return res;
 			},
 		},
 		getters: {
@@ -48,11 +68,23 @@ export default function(endpoint) {
 			},
 		},
 		mutations: {
-			add(state, { items }) {
-				state.list = [];
-				for (const item of items) {
-					state.list.push(item);
+			set(state, { items }) {
+				items.forEach((item) => {
+					const existing = state.list.findIndex((e) => e._id === item._id);
+					if (existing === -1) {
+						state.list.push(item);
+					} else {
+						state.list[existing] = item;
+					}
+				});
+			},
+			remove(state, id) {
+				const index = state.list.findIndex((e) => e._id === id);
+				if (index === -1) {
+					console.warn(`Can't remove item with id "${id}" (Not found)`);
+					return;
 				}
+				state.list.splice(index, 1);
 			},
 			setCurrent(state, item) {
 				state.current = item;
