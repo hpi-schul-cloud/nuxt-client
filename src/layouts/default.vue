@@ -68,8 +68,11 @@ export default {
 	},
 	watch: {
 		$route: function(to) {
-			// TODO get page title from `this.$metaInfo.title`
-			this.pageTitle = to.name;
+			try {
+				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
+			} catch {
+				this.pageTitle = to.name;
+			}
 		},
 	},
 	methods: {

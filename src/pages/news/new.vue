@@ -31,6 +31,11 @@
 
 <script>
 export default {
+	head() {
+		return {
+			title: "News erstellen",
+		};
+	},
 	data: function() {
 		return {
 			news: {

@@ -53,6 +53,11 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+	head() {
+		return {
+			title: `${(this.orgNews || {}).title || "News"} bearbeiten`,
+		};
+	},
 	data: function() {
 		return {
 			news: {
