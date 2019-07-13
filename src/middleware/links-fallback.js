@@ -15,7 +15,7 @@ export default async function(ctx) {
 			: r.includes(controllerName);
 	});
 
-	// no matching route => use (default) erro handler
+	// no matching route => use (default) error handler
 	if (!route.matched.length) {
 		return;
 	}
@@ -37,6 +37,11 @@ export default async function(ctx) {
 
 	if (useLegacy) {
 		window.location = route.path;
+		// prevent rendering of nuxt during window load (switch to fallback)
+		return new Promise((resolve) => {
+			setTimeout(resolve, 10000);
+		});
 	}
+
 	// use vue
 }
