@@ -6,9 +6,14 @@
 				:title="pageTitle"
 				class="topbar"
 				:actions="topBarActions"
+				:fullscreen-mode="fullscreenMode"
 				@action="handleTopAction"
 			/>
-			<the-sidebar class="sidebar" :routes="sidebarItems" />
+			<the-sidebar
+				v-if="!fullscreenMode"
+				class="sidebar"
+				:routes="sidebarItems"
+			/>
 			<main class="content">
 				<Nuxt />
 			</main>
@@ -24,12 +29,6 @@ import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
 
 const topbarBaseActions = [
-	{
-		type: "popupIcon",
-		title: "Fullscreen",
-		icon: "solid/expand",
-		event: "fullscreen",
-	},
 	{ type: "popupIcon", title: "QR-Code", icon: "solid/qrcode" },
 	{
 		type: "dropdown",
@@ -99,6 +98,7 @@ export default {
 			],
 			topBarActions: topbarBaseActions,
 			pageTitle: this.$theme.short_name,
+			fullscreenMode: false,
 		};
 	},
 	computed: mapState({
@@ -126,7 +126,7 @@ export default {
 				this.$router.push({ name: "login" });
 			}
 			if (event === "fullscreen") {
-				// implement functionality
+				this.fullscreenMode = !this.fullscreenMode;
 			}
 		},
 		updateTopBarActions(isAuthenticated) {

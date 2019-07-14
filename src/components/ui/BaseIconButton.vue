@@ -17,7 +17,7 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "currentColor",
+			default: "var(--color-tertiary-dark)",
 		},
 	},
 };
@@ -28,8 +28,8 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 2em;
-	height: 2em;
+	width: 40px;
+	height: 40px;
 	padding: var(--space-xxs);
 	background-color: var(--color-white);
 	border: none;

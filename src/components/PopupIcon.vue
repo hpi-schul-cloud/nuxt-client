@@ -25,7 +25,7 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "currentColor",
+			default: "var(--color-tertiary-dark)",
 		},
 	},
 	data() {
@@ -75,7 +75,7 @@ export default {
 		left: var(--arrow-offset);
 		margin-left: calc(-1 * var(--outer-arrow-size));
 		content: "";
-		border-color: transparent transparent var(--color-gray) transparent;
+		border-color: transparent transparent var(--color-gray-light) transparent;
 		border-style: solid;
 		border-width: var(--outer-arrow-size);
 	}

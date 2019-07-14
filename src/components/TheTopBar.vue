@@ -1,13 +1,19 @@
 <template>
 	<div class="topbar">
-		<div class="top-sidebar">
+		<div v-if="!fullscreenMode" class="top-sidebar" @click="$emit('input')">
 			<h1 class="page-title">HPI</h1>
 			<img class="logo" :src="$theme.logo.transparent" alt="Schulcloud Logo" />
 			<h1 class="page-title">Schul-Cloud</h1>
 		</div>
 
 		<!-- ACTIONS -->
-		<div class="top-main">
+		<div v-if="!fullscreenMode" class="top-main">
+			<base-icon-button
+				class="item"
+				source="fa"
+				icon="solid/expand"
+				@click.native="sendEvent('fullscreen')"
+			/>
 			<template v-for="action in actions">
 				<popup-icon
 					v-if="action.type === 'popupIcon'"
@@ -56,6 +62,14 @@
 				</popup-icon-initials>
 			</template>
 		</div>
+		<base-button
+			v-if="!!fullscreenMode"
+			class="fullscreen-button"
+			design="secondary icon"
+			@click.native="sendEvent('fullscreen')"
+		>
+			<base-icon source="fa" icon="solid/expand" />
+		</base-button>
 	</div>
 </template>
 
@@ -78,6 +92,9 @@ export default {
 					);
 				});
 			},
+		},
+		fullscreenMode: {
+			type: Boolean,
 		},
 	},
 	methods: {
@@ -152,5 +169,11 @@ export default {
 			}
 		}
 	}
+}
+
+.fullscreen-button {
+	position: fixed;
+	top: var(--space-sm);
+	right: var(--space-sm);
 }
 </style>

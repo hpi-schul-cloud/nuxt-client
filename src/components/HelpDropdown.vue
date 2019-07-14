@@ -3,7 +3,11 @@
 		<ul class="dropdown-menu">
 			<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
 				<span class="core">
-					<base-icon :source="source" :icon="menuItem.icon" fill="#555" />
+					<base-icon
+						:source="source"
+						:icon="menuItem.icon"
+						fill="var(--color-tertiary-dark)"
+					/>
 					<base-link :href="menuItem.action" target="_self" class="link">
 						{{ menuItem.label }}
 					</base-link>
@@ -29,7 +33,7 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "currentColor",
+			default: "var(--color-tertiary-dark)",
 		},
 		menuItems: {
 			type: Array,
@@ -53,7 +57,7 @@ export default {
 
 	position: relative;
 	display: block;
-	padding: var(--space-sm) var(--space-lg);
+	padding: var(--space-sm) var(--space-sm);
 	font-size: var(--text-md); // text size in legacy client 14px;
 	text-align: inherit;
 	background-color: var(--color-white);
@@ -76,7 +80,7 @@ export default {
 		align-items: center;
 	}
 	.link {
-		padding-left: var(--space-md); // space in legacy client 8px;
+		padding-left: var(--space-sm); // space in legacy client 8px;
 	}
 }
 </style>
