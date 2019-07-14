@@ -89,9 +89,7 @@ export default {
 				// currently used for the legacy fallback. Therefore disabled
 				if (!/^\w+:/.test(this.href)) {
 					return console.warn(
-						`Invalid href <base-link>: ${
-							this.href
-						}.\nIf you're trying to link to a local URL, provide at least a name or to`
+						`Invalid href <base-link>: ${this.href}.\nIf you're trying to link to a local URL, provide at least a name or to`
 					);
 				}
 				*/
