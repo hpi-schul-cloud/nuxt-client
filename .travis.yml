@@ -43,8 +43,7 @@ cache: yarn
 before_cache:
   # delete all .cache folders before actually storing the cache.
   # nuxt, storybook and vuepress stores some build artefacts here which invalidates the cache.
-  - ls
-  - cd $TRAVIS_BUILD_DIR && ls
-  - cd $TRAVIS_BUILD_DIR/node_modules && find . -name .cache -type d -exec rm -rf {} +
+  - cd node_modules && find . -name .cache -type d -exec rm -rf {} + && cd ..
+  - cd node_modules && find . -name .temp -type d -exec rm -rf {} + && cd ..
 notifications:
   email: false
