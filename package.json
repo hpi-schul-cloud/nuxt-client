@@ -49,6 +49,7 @@
 		"dayjs": "^1.8.14",
 		"feathers-vuex": "1.7.0",
 		"font-awesome": "^4.7.0",
+		"kjua": "^0.6.0",
 		"lodash": "^4.17.11",
 		"material-icons-svg": "^1.0.0",
 		"nuxt": "^2.6.3",

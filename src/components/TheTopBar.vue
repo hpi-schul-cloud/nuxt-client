@@ -23,7 +23,7 @@
 					:icon="action.icon"
 					:popup-items="action.items"
 				>
-					Lorem ipsum Lorem ipsum Lorem ipsum
+					<component :is="action.component"></component>
 				</popup-icon>
 
 				<help-dropdown
@@ -78,8 +78,16 @@ import PopupIcon from "@components/PopupIcon";
 import PopupIconInitials from "@components/PopupIconInitials";
 import MenuLink from "@components/MenuLink";
 import HelpDropdown from "@components/HelpDropdown";
+import MenuQrCode from "@components/MenuQrCode";
+
 export default {
-	components: { PopupIcon, PopupIconInitials, MenuLink, HelpDropdown },
+	components: {
+		PopupIcon,
+		PopupIconInitials,
+		MenuLink,
+		HelpDropdown,
+		MenuQrCode,
+	},
 	props: {
 		actions: {
 			type: Array,

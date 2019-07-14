@@ -29,7 +29,12 @@ import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
 
 const topbarBaseActions = [
-	{ type: "popupIcon", title: "QR-Code", icon: "solid/qrcode" },
+	{
+		type: "popupIcon",
+		title: "QR-Code",
+		icon: "solid/qrcode",
+		component: "menu-qr-code",
+	},
 	{
 		type: "dropdown",
 		title: "Hilfe",
