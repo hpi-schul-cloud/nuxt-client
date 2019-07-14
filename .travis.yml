@@ -18,7 +18,7 @@ jobs:
       name: "lint"
     # Test
     - script:
-        - yarn test
+        - yarn test:ci
         - codecov
       name: "test"
       install:
