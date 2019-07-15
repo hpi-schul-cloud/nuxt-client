@@ -40,7 +40,7 @@ export default {
 					internal: true,
 				},
 				{
-					href: "https://schul-cloud.org/impressum#data_security",
+					href: "/impressum#data_security",
 					text: "Datenschutzerklärung",
 					external: true,
 				},

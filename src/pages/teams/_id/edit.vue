@@ -22,7 +22,7 @@
 				v-model="team.description"
 				name="description"
 				label="Beschreibung"
-				type="textarea"
+				type="text"
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></base-input>
@@ -39,9 +39,14 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+	data: () => {
+		return {
+			team: null,
+		};
+	},
 	computed: {
 		...mapGetters("teams", {
-			team: "current",
+			teamStore: "current",
 			hasTeamPermission: "hasTeamPermission",
 		}),
 		breadcrumbs() {
@@ -53,6 +58,14 @@ export default {
 				},
 				{ text: "Bearbeiten" },
 			];
+		},
+	},
+	watch: {
+		teamStore: {
+			handler(val) {
+				this.team = Object.assign({}, val);
+			},
+			immediate: true,
 		},
 	},
 	created(ctx) {

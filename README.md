@@ -8,11 +8,11 @@
 
 **Dev:**
 
-[![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=master)](https://travis-ci.com/schul-cloud/nuxt-client) [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/master/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
+[![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=develop)](https://travis-ci.com/schul-cloud/nuxt-client) [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/develop/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
 
 **Production:**
 
-[![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=stable)](https://travis-ci.com/schul-cloud/nuxt-client) [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/stable/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
+[![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=master)](https://travis-ci.com/schul-cloud/nuxt-client) [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/master/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
 
 ## [docs](./docs)
 

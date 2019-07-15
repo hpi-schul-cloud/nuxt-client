@@ -39,10 +39,17 @@ export default {
 			default: () => [],
 			validator: function(value) {
 				return value.every((action) => {
-					return (
+					const isValid =
 						(action.icon || action.title) &&
-						(action.event || action.to || action.href)
-					);
+						(action.event || action.to || action.href);
+					if (!isValid) {
+						console.error(
+							`Action "${JSON.stringify(
+								action
+							)}" in prop "actions" of "TheTopBar" is invalid.`
+						);
+					}
+					return isValid;
 				});
 			},
 		},
