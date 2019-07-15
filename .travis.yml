@@ -9,6 +9,8 @@ sudo: required
 dist: xenial
 services:
   - docker
+git:
+  submodules: false
 env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )

@@ -14,6 +14,7 @@ const aliases = {
 	"@middleware": "src/middleware",
 	"@mixins": "src/mixins",
 	"@pages": "src/pages",
+	"@utils": "src/utils",
 	"@plugins": "src/plugins",
 	"@store": "src/store",
 	"@static": `src/themes/${themeName}/static`,
