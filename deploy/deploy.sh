@@ -73,7 +73,7 @@ chmod 600 travis_rsa
 # Log in to the docker CLI
 echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-if [[ $DOCKERTAG == master ]]
+if [[ $DOCKERTAG == develop ]]
 then
   nuxtclient
   storybook
