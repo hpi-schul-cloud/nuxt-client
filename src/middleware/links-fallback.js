@@ -23,6 +23,10 @@ export default async function(ctx) {
 	if (!legacyRouteConfig) {
 		return;
 	}
+	// prevent loop when ID not castable
+	if (window.location.pathname == route.path) {
+		return;
+	}
 
 	// route defined in vue and legacy client
 	// use legacy if not excluded
