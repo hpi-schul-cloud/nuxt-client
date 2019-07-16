@@ -24,8 +24,7 @@ const walkSync = function(dir, filelist, base) {
 
 module.exports = function(variation) {
 	const dirname = "./src/themes/" + variation;
-	try {
-		const aliasComponents = walkSync(dirname + "/components", {}, dirname);
-		return Object.assign({}, aliasComponents);
-	} catch (err) {}
+	const aliasComponents = walkSync(dirname + "/components", {}, dirname);
+
+	return Object.assign({}, aliasComponents);
 };
