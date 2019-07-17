@@ -40,7 +40,7 @@
 				v-for="article of news"
 				:key="article._id"
 				:article="article"
-				class="mb-2"
+				class="mb--md"
 			/>
 		</section>
 

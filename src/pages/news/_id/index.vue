@@ -27,6 +27,11 @@
 import { mapGetters } from "vuex";
 
 export default {
+	head() {
+		return {
+			title: (this.news || {}).title || "News",
+		};
+	},
 	computed: {
 		...mapGetters("news", {
 			news: "current",
