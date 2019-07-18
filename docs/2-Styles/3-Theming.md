@@ -4,6 +4,10 @@
 
 The SC themes are located in `src/themes` within the subfolders `default`, `brb`, etc.
 
+## Config, Assets & Variables
+
+Theme assets and variables are defined in `src/themes/<theme-name>/config.js`. Assets, such as logos, are placed in `src/assets/img/themes/<theme-name>/`
+
 ## CSS
 
 CSSs are located in `src/themes/<theme-name>/styles`, and subfolders.
@@ -19,10 +23,6 @@ themeName/index.scss:
 @import "@styles-default/utility.scss";
 @import "./variables";
 ```
-
-## Assets & Variables
-
-Theme assets and variables are defined in `src/themes/<theme-name>/config.js`. Assets, such as logos, are placed in `src/assets/img/themes/<theme-name>/``
 
 ## Components
 
