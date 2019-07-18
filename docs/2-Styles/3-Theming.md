@@ -22,7 +22,7 @@ themeName/index.scss:
 
 ## Assets & Variables
 
-Theme assets and variables are defined in `src/themes/<theme-name>/config.js`.
+Theme assets and variables are defined in `src/themes/<theme-name>/config.js`. Assets, such as logos, are placed in `src/assets/img/themes/<theme-name>/``
 
 ## Components
 
