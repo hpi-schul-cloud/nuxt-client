@@ -78,6 +78,9 @@ then
   nuxtclient
   storybook
   vuepress
+elif [[ $DOCKERTAG == master ]]
+then
+	nuxtclient
 else
   echo "Branch will not be deployed"
 fi
