@@ -5,8 +5,8 @@
 		:class="{ inactive: inactive }"
 		:href="href"
 		v-bind="$attrs"
-		:target="target"
-		rel="noreferrer"
+		:target="linkTarget"
+		:rel="external ? 'noreferrer' : undefined"
 		v-on="$listeners"
 	>
 		<slot />
@@ -41,7 +41,7 @@ export default {
 		},
 		target: {
 			type: String,
-			default: "_blank",
+			default: "",
 			validator: function(value) {
 				return ["_blank", "_self", "_parent", "_top"].includes(value);
 			},
@@ -70,6 +70,16 @@ export default {
 				return this.to;
 			}
 		},
+		linkTarget() {
+			return this.target
+				? this.target
+				: this.href.startsWith("/")
+				? "_self" // fallback should stay on same page
+				: "_blank"; // external links should be in new window opened
+		},
+		external() {
+			return this.href && !this.href.startsWith("/");
+		},
 	},
 	created() {
 		this.validateProps();
@@ -82,13 +92,19 @@ export default {
 
 			if (this.href) {
 				// Check for non-external URL in href.
+				/*
+				// currently used for the legacy fallback. Therefore disabled
 				if (!/^\w+:/.test(this.href)) {
 					return console.warn(
 						`Invalid href <base-link>: ${this.href}.\nIf you're trying to link to a local URL, provide at least a name or to`
 					);
 				}
+				*/
 				// Check for insecure URL in href.
-				if (!this.allowInsecure && !/^(https|mailto|tel):/.test(this.href)) {
+				if (
+					!this.allowInsecure &&
+					!/^(https:|mailto:|tel:|\/)/.test(this.href)
+				) {
 					return console.warn(
 						`Insecure href <base-link>: ${this.href}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <base-link>.`
 					);

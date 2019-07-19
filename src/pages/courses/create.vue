@@ -3,7 +3,7 @@
 		<course-wizard
 			:steps="stepList"
 			:course="course"
-			:user="user"
+			:user="$user"
 			:teachers="teachers"
 			:classes="classes"
 			:students="students"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import CourseWizard from "@components/CourseWizard";
 
 export default {
@@ -25,13 +25,12 @@ export default {
 				{ name: "Kurs-Mitglieder" },
 				{ name: "Abschließen" },
 			],
-			course: {},
+			course: {
+				teachers: [],
+			},
 		};
 	},
 	computed: {
-		...mapState("auth", {
-			user: "user",
-		}),
 		...mapGetters("classes", {
 			classes: "list",
 		}),
@@ -78,10 +77,7 @@ export default {
 		} catch (err) {}
 	},
 	created() {
-		const { Course } = this.$FeathersVuex;
-		this.course = new Course({
-			schoolId: this.user.schoolId,
-		});
+		this.course.schoolId = this.$user.schoolId;
 	},
 	methods: {
 		async create() {
