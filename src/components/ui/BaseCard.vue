@@ -1,20 +1,18 @@
 <template>
 	<section class="card">
-		<div v-if="badge" class="dot">
+		<div v-if="badge" class="caption dot">
 			<slot name="dot">{{ badge }}</slot>
 		</div>
 		<header class="header">
-			<div class="tab" :style="backgroundColor">
-				<span>
-					<slot name="header-in" />
-				</span>
+			<div class="tab" :style="background_style">
+				<div class="caption tab-label truncate"> <slot name="header-in"/></div>
 			</div>
 			<div>
 				<slot name="header-out" />
 			</div>
 		</header>
-		<div class="content" :style="backgroundColor">
-			<slot />
+		<div v-if="isContentFilled" class="content" :style="background_style">
+			<slot name="content" />
 		</div>
 		<footer class="footer">
 			<slot name="footer" />
@@ -37,7 +35,7 @@ export default {
 		},
 	},
 	computed: {
-		backgroundColor() {
+		background_style() {
 			if (this.color[1]) {
 				return (
 					"background-image: linear-gradient(-225deg, " +
@@ -47,6 +45,9 @@ export default {
 			} else {
 				return "background-color: " + this.color[0] + ";";
 			}
+		},
+		isContentFilled() {
+			return !!this.$slots.content;
 		},
 	},
 };
@@ -59,12 +60,12 @@ export default {
 	position: relative;
 	z-index: var(--layer-behind);
 	width: 240px;
-	padding: var(--space-sm) var(--space-md);
+	padding: var(--space-xs) var(--space-xs);
 	margin: var(--space-sm);
 	cursor: pointer;
 	background: #fff;
 	border: 1px solid var(--color-gray);
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-sm);
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 	&:hover {
@@ -73,25 +74,29 @@ export default {
 }
 
 .dot {
+	--min-size: calc(var(--text-sm) + (2 * var(--space-xxs)));
+
 	position: absolute;
-	top: -12px;
-	right: -12px;
-	z-index: var(--layer-dropdown);
-	display: inline-block;
-	width: 24px;
-	height: 24px;
+	bottom: 100%;
+	left: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: var(--min-size);
+	min-height: var(--min-size);
+	padding: 0 var(--space-xxs);
+	font-size: var(--text-sm);
 	font-weight: var(--font-weight-bold);
-	line-height: calc(var(--line-height-lg) + 0.2);
 	color: var(--color-white);
-	text-align: center;
-	background: #b1063a;
+	background: var(--color-primary);
 	border-radius: var(--radius-round);
+	transform: translate(-50%, 50%);
 }
 
 .header {
 	position: relative;
 	z-index: var(--layer-behind);
-	height: 34px;
+	height: 26px;
 	overflow: hidden;
 	border-top-left-radius: var(--radius-sm);
 }
@@ -118,15 +123,15 @@ export default {
 		opacity: 0.5;
 	}
 
-	span {
-		display: block;
-		padding: var(--space-xxxs) var(--space-xxs);
-		overflow: hidden;
+	.tab-label {
+		display: inline-block;
+		width: 100%;
+		padding: var(--space-xxxs) var(--space-sm) var(--space-xxs);
+		font-size: var(--text-xs);
+		font-weight: var(--font-weight-bold);
 		color: var(--color-white);
-		text-overflow: ellipsis;
-		white-space: nowrap;
 		transform: skewX(-25deg);
-		transform-origin: bottom;
+		transform-origin: bottom left;
 	}
 }
 

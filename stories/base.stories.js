@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean, color } from "@storybook/addon-knobs";
+import { text, select, boolean, color, number } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
@@ -165,7 +165,15 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Card", () => ({
 		components: { BaseCard },
-		template: '<base-card badge="8">Card</base-card>',
+		data: () => ({
+			content: text("Content", "Card"),
+			badge: number("Badge", 9),
+			header: text("Tab", "Test"),
+			color: color("Color", "#01B1AA"),
+			colorGradient: color("colorGradient", "#03B2D6"),
+		}),
+		template:
+			'<base-card :badge="badge" :color="[color, colorGradient]"><template v-slot:header-in>{{header}}</template><template v-slot:content>{{content}}</template></base-card>',
 		methods: {},
 	}))
 	.add("Base Icon", () => ({
@@ -463,8 +471,10 @@ storiesOf("Base Components", module)
 			),
 			createdAt: text("CreatedAt", "2019-07-17-14:30"),
 			createdBy: text("CreatedBy", "Mona Weizenberg"),
+			picture: text("Picture", "https://source.unsplash.com/daily"),
+			eventDate: text("Event date", "2019-02-22-19:00"),
 		}),
 		template: `
-			<BaseNewscard :category="category" :headline="headline" :createdAt="createdAt" :createdBy="createdBy">{{content}}</BaseNewscard>
+			<BaseNewscard :category="category" :headline="headline" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate">{{content}}</BaseNewscard>
 		`,
 	}));

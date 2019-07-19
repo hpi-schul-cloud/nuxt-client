@@ -3,13 +3,26 @@
 		<template v-slot:header-in>
 			{{ category }}
 		</template>
-		<template
+
+		<template v-if="picture" v-slot:content
 			><div class="content" :style="background_style"></div
 		></template>
 		<template v-slot:footer>
-			<h2 class="time">{{ dayjs(createdAt).fromNow() }} </h2>
+			<h2 class="time">{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</h2>
 			<h3 class="headline">{{ headline }}</h3>
 			<p class="news-content"><slot /></p>
+			<div v-if="eventDate">
+				<hr class="line" />
+				<base-icon
+					source="material"
+					icon="event"
+					fill="var(--color-gray-dark)"
+				/>
+				<div class="event-date">
+					{{ dayjs(eventDate).format("DD.MM.YYYY") }} um
+					{{ dayjs(eventDate).format("H") }} Uhr
+				</div>
+			</div>
 		</template>
 	</BaseCard>
 </template>
@@ -27,6 +40,8 @@ export default {
 		headline: { type: String, required: true },
 		createdAt: { type: String, required: true },
 		createdBy: { type: String, required: true },
+		picture: { type: String, default: "" },
+		eventDate: { type: String, default: "2019-02-22-19-00" },
 		color: {
 			type: Array,
 			default: () => ["#412363", "#c63e80"],
@@ -38,12 +53,13 @@ export default {
 		};
 	},
 	computed: {
-		//TODO change image link when we know which image should be used.
 		background_style() {
 			return (
 				"background-image: linear-gradient(to left, rgba(245, 246, 252, 0.0), " +
 				this.color[0] +
-				"),url(https://source.unsplash.com/daily);"
+				"),url(" +
+				this.picture +
+				");"
 			);
 		},
 	},
@@ -55,7 +71,7 @@ export default {
 
 .time {
 	margin: var(--space-xxs) 0 var(--space-xxxs) 0;
-	font-size: var(--text-sm);
+	font-size: var(--text-xs);
 	font-weight: var(--font-weight-light);
 	color: var(--color-gray);
 }
@@ -80,5 +96,15 @@ export default {
 	display: block;
 	height: 100%;
 	background-size: 100%;
+}
+.event-date {
+	display: inline;
+	font-size: var(--text-xs);
+	color: var(--color-gray-dark);
+}
+.line {
+	height: 1px;
+	background: var(--color-gray);
+	border: 0;
 }
 </style>
