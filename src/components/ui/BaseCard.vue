@@ -133,7 +133,6 @@ export default {
 .content {
 	z-index: var(--layer-page);
 	height: 100px;
-	padding: var(--space-xs);
 	margin-top: calc(var(--space-xxxs) * -1);
 	color: var(--color-white);
 	border-radius: var(--radius-sm) var(--radius-sm);

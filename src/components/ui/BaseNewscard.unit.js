@@ -8,6 +8,8 @@ describe("@components/BaseNewsCard", () => {
 			propsData: {
 				category: "Bio",
 				headline: "Bio Bio",
+				createdAt: "2018-08-08",
+				createdBy: "Me",
 			},
 		});
 		expect(wrapper.find(".footer").isEmpty()).toBe(false);
@@ -18,6 +20,8 @@ describe("@components/BaseNewsCard", () => {
 			propsData: {
 				category: "News Biologie",
 				headline: "Darwin lebt",
+				createdAt: "2018-08-08",
+				createdBy: "Me",
 				color: ["#412363", "#c63e80"],
 			},
 			slots: {

@@ -13,4 +13,5 @@ describe("@components/BaseCard", () => {
 			"rgb(1, 177, 170)"
 		);
 	});
+	//TODO add test for no colors input
 });
