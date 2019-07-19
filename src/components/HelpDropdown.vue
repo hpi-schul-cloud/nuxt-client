@@ -1,40 +1,23 @@
 <template>
-	<popup-icon :source="source" :icon="icon" :fill="fill">
-		<ul class="dropdown-menu">
-			<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
-				<span class="core">
-					<base-icon
-						:source="source"
-						:icon="menuItem.icon"
-						fill="var(--color-tertiary-dark)"
-					/>
-					<base-link :href="menuItem.action" target="_self" class="link">
-						{{ menuItem.label }}
-					</base-link>
-				</span>
-			</li>
-		</ul>
-	</popup-icon>
+	<ul class="dropdown-menu">
+		<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
+			<span class="core">
+				<base-icon
+					source="fa"
+					:icon="menuItem.icon"
+					fill="var(--color-tertiary-dark)"
+				/>
+				<base-link :href="menuItem.action" target="_self" class="link">
+					{{ menuItem.label }}
+				</base-link>
+			</span>
+		</li>
+	</ul>
 </template>
 
 <script>
-import PopupIcon from "@components/PopupIcon";
-
 export default {
-	components: { PopupIcon },
 	props: {
-		source: {
-			type: String,
-			required: true,
-		},
-		icon: {
-			type: String,
-			required: true,
-		},
-		fill: {
-			type: String,
-			default: "var(--color-tertiary-dark)",
-		},
 		menuItems: {
 			type: Array,
 			required: true,

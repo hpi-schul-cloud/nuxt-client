@@ -36,31 +36,34 @@ const topbarBaseActions = [
 		component: "menu-qr-code",
 	},
 	{
-		type: "dropdown",
+		type: "popupIcon",
 		title: "Hilfe",
 		icon: "solid/question",
-		items: [
-			{
-				label: "Hilfebereich",
-				icon: "solid/question-circle",
-				action: "/help",
-			},
-			{
-				label: "Intro",
-				icon: "solid/map-signs",
-				action: "#",
-			},
-			{
-				label: "Wunsch oder Problem senden",
-				icon: "solid/pencil",
-				action: "#",
-			},
-			{
-				label: "Admin deiner Schule kontaktieren",
-				icon: "solid/comment",
-				action: "#",
-			},
-		],
+		component: "help-dropdown",
+		config: {
+			menuItems: [
+				{
+					label: "Hilfebereich",
+					icon: "solid/question-circle",
+					action: "/help",
+				},
+				{
+					label: "Intro",
+					icon: "solid/map-signs",
+					action: "#",
+				},
+				{
+					label: "Wunsch oder Problem senden",
+					icon: "solid/pencil",
+					action: "#",
+				},
+				{
+					label: "Admin deiner Schule kontaktieren",
+					icon: "solid/comment",
+					action: "#",
+				},
+			],
+		},
 	},
 	{ type: "text", schoolname: "HPI Schul-Cloud Schule" },
 ];

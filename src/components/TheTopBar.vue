@@ -23,17 +23,8 @@
 					:icon="action.icon"
 					:popup-items="action.items"
 				>
-					<component :is="action.component"></component>
+					<component :is="action.component" v-bind="action.config"></component>
 				</popup-icon>
-
-				<help-dropdown
-					v-if="action.type === 'dropdown'"
-					:key="action.title"
-					class="item"
-					source="fa"
-					:icon="action.icon"
-					:menu-items="action.items"
-				/>
 
 				<div
 					v-if="action.type === 'text'"
