@@ -11,8 +11,8 @@ function nuxtclient {
 	docker build \
 		-t schulcloud/schulcloud-nuxt-client:latest \
 		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
-		-f $DOCKERFILE_VERSION.nuxt \
-		--build-arg API_HOST \
+		-f Dockerfile.nuxt \
+		--build-arg API_URL \
 		--build-arg SC_THEME \
 		--build-arg SC_TITLE \
 		--build-arg SC_SHORT_TITLE \

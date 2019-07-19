@@ -31,6 +31,11 @@
 
 <script>
 export default {
+	head() {
+		return {
+			title: "News erstellen",
+		};
+	},
 	data: function() {
 		return {
 			news: {
@@ -42,18 +47,17 @@ export default {
 	methods: {
 		async save() {
 			try {
-				const news = await this.$store.dispatch("news/create", [
-					{
-						title: this.news.title,
-						content: this.news.content,
-						schoolId: this.$user.schoolId,
-						target: this.$route.query.target,
-						targetModel: this.$route.query.Model,
-					},
-				]);
+				const news = await this.$store.dispatch("news/create", {
+					title: this.news.title,
+					content: this.news.content,
+					schoolId: this.$user.schoolId,
+					target: this.$route.query.target,
+					targetModel: this.$route.query.Model,
+				});
 				this.$toast.success("Artikel erstellt");
 				this.$router.push({ name: "news-id", params: { id: news._id } });
 			} catch (e) {
+				console.error(e);
 				this.$toast.error("Fehler beim Erstellen");
 			}
 		},

@@ -77,54 +77,67 @@ export default {
 	data() {
 		return {
 			sidebarItems: [
-				// TODO: create dashboard
 				{
 					title: "Übersicht",
-					to: { name: "dashboard" },
+					href: "/dashboard",
 					icon: "solid/th-large",
 				},
 				{
 					title: "Kurse",
-					to: { name: "courses" },
+					href: "/courses",
 					icon: "solid/graduation-cap",
 				},
-				{ title: "Teams", to: { name: "teams" }, icon: "solid/users" },
-				{ title: "Aufgaben", to: { name: "tasks" }, icon: "solid/tasks" },
+				{ title: "Teams", href: "/teams", icon: "solid/users" },
+				{ title: "Aufgaben", href: "/homework", icon: "solid/tasks" },
 				{
 					title: "Meine Dateien",
-					to: { name: "files" },
+					href: "/files",
 					icon: "solid/folder-open",
 				},
 				{
 					title: "Neuigkeiten",
-					to: { name: "news" },
+					href: "/news",
 					icon: "regular/newspaper",
 				},
-				{ title: "Termine", to: { name: "events" }, icon: "solid/table" },
-				{ title: "Lern-store", to: { name: "content" }, icon: "solid/search" },
-				// { title: "Verwaltung", to: { name: "administration" }, icon: "school" },
+				{ title: "Termine", href: "/calendar", icon: "solid/table" },
+				{ title: "Lern-store", href: "/content", icon: "solid/search" },
+				// { title: "Verwaltung", href: "/administration", icon: "school" },
 			],
-			topBarActions: topbarBaseActions,
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: false,
 		};
 	},
-	computed: mapState({
-		firstName: (state) =>
-			state.auth && state.auth.user ? state.auth.user.firstName : "",
-		authenticated: (state) => (state.auth ? state.auth.accessToken : ""),
-	}),
-	watch: {
-		$route: function(to) {
-			// TODO get page title from `this.$metaInfo.title`
-			this.pageTitle = to.name;
+	computed: {
+		...mapState("auth", {
+			authenticated: (state) => state.accessToken || false,
+			user: (state) => state.user,
+		}),
+		firstName() {
+			return this.user && this.user.firstName
+				? this.user.firstName
+				: "Unknown User";
 		},
-		authenticated: function() {
-			this.updateTopBarActions(this.authenticated);
+		topBarActions() {
+			return this.authenticated
+				? [
+						...topbarBaseActions,
+						{
+							type: "popupWithInitials",
+							title: this.firstName,
+							event: "logout",
+						},
+				  ]
+				: [...topbarBaseActions];
 		},
 	},
-	created() {
-		this.updateTopBarActions(this.authenticated);
+	watch: {
+		$route: function(to) {
+			try {
+				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
+			} catch {
+				this.pageTitle = to.name;
+			}
+		},
 	},
 	methods: {
 		...mapActions("auth", ["logout"]),
@@ -135,20 +148,6 @@ export default {
 			}
 			if (event === "fullscreen") {
 				this.fullscreenMode = !this.fullscreenMode;
-			}
-		},
-		updateTopBarActions(isAuthenticated) {
-			if (isAuthenticated) {
-				this.topBarActions = [
-					...topbarBaseActions,
-					{
-						type: "popupWithInitials",
-						title: this.firstName,
-						event: "logout",
-					},
-				];
-			} else {
-				this.topBarActions = [...topbarBaseActions];
 			}
 		},
 	},
@@ -182,6 +181,6 @@ export default {
 	grid-area: content;
 	min-width: var(--size-content-width-min);
 	max-width: var(--size-content-width-max);
-	margin: 0 auto;
+	margin: var(--space-md) auto;
 }
 </style>
