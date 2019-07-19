@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<base-qr-code ref="qrcode" class="qrcode" />
+		<base-qr-code ref="qrcode" class="qrcode" :url="url" />
 		<base-button design="outline" class="print-button" @click="openPrintMenu">
 			<base-icon source="fa" icon="solid/print" />
 			Drucken

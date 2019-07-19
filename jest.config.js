@@ -1,5 +1,5 @@
 module.exports = {
-	setupFiles: ["<rootDir>/tests/unit/setup"],
+	setupFiles: ["<rootDir>/tests/unit/setup", "jest-canvas-mock"],
 	setupFilesAfterEnv: ["<rootDir>/tests/unit/matchers"],
 	testMatch: ["**/(*.)unit.js"],
 	moduleFileExtensions: ["js", "json", "vue"],
