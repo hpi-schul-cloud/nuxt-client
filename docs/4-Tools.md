@@ -84,7 +84,7 @@ Für unit-tests verwenden wir [Jest](https://jestjs.io/). Die Konfigurationsdate
 
 ### Coverage
 
-[![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/master/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
+[![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/develop/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
 
 Um unsere Testabdeckung zu überwachen verwenden wir [codecov.io](https://codecov.io). Der aktuelle Status ist auf dem entsprechenden [Dashboard](https://codecov.io/gh/schul-cloud/nuxt-client/) einzusehen.
 
@@ -111,7 +111,7 @@ Für alles weitere bleiben wir bisher bei den default Einstellungen und verwende
 
 ### [Mergify](https://mergify.io)
 
-Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label `ready to merge` an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom master (solange keine Merge-Konflikte enstehen).
+Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label `ready to merge` an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom develop-Branch (solange keine Merge-Konflikte enstehen).
 
 Gemergte Branches werden von diesem Bot ebenfalls automatisch gelöscht.
 

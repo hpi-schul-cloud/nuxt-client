@@ -47,7 +47,7 @@ cd ../..
 yarn dev
 ```
 
-You can find all commands inside the [package.json](https://github.com/schul-cloud/nuxt-client/blob/master/package.json) under the `scripts` section.
+You can find all commands inside the [package.json](https://github.com/schul-cloud/nuxt-client/blob/develop/package.json) under the `scripts` section.
 
 ### Nuxt
 
