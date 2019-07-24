@@ -14,7 +14,6 @@ describe("@components/TheTopBar", () => {
 				$theme,
 			},
 		});
-		expect(wrapper.find(".page-title").text()).toBe("HPI");
 		expect(wrapper.find(".action").exists()).toBe(false);
 	});
 
@@ -24,6 +23,7 @@ describe("@components/TheTopBar", () => {
 			{ title: "test away", href: "https://schul-cloud.org" },
 			{ title: "test action", event: "light-camera" },
 		];
+		// eslint-disable-next-line no-unused-vars
 		const wrapper = shallowMount(TheTopBar, {
 			propsData: {
 				actions: mockActions,

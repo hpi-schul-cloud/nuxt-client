@@ -1,9 +1,7 @@
 <template>
 	<div class="topbar">
 		<div v-if="!fullscreenMode" class="top-sidebar" @click="$emit('input')">
-			<h1 class="page-title">HPI</h1>
 			<img class="logo" :src="$theme.logo.transparent" alt="Schulcloud Logo" />
-			<h1 class="page-title">Schul-Cloud</h1>
 		</div>
 
 		<!-- ACTIONS -->
@@ -41,7 +39,6 @@
 				>
 					<div>{{ action.title }} </div>
 					<menu-link to="/">Einstellungen</menu-link>
-
 					<base-button
 						:key="action.title"
 						v-ripple
