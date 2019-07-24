@@ -24,7 +24,9 @@ export const actions = {
 	},
 	async logout(ctx) {
 		this.$cookies.remove("jwt");
-		window.location = "/login";
+		if (location && !location.pathname.endsWith("/login")) {
+			window.location = "/login";
+		}
 	},
 	async populateUser({ dispatch, commit }, userId) {
 		const user = await dispatch(`users/get`, userId, {

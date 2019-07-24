@@ -13,7 +13,7 @@
 		"build:docs": "vuepress build docs -d dist/docs",
 		"build:storybook": "build-storybook -c stories/.storybook -o dist/storybook",
 		"build": "run-s build:*",
-		"start": "nuxt start",
+		"start": "node src/server",
 		"new": "hygen new",
 		"lint:eslint": "eslint",
 		"lint:stylelint": "stylelint",
