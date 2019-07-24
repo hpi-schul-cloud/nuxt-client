@@ -26,6 +26,12 @@
 			"windows": {
 				"program": "${workspaceFolder}/node_modules/jest/bin/jest"
 			}
+		},
+		{
+			"type": "node",
+			"request": "attach",
+			"name": "Attach to Server",
+			"port": 9229
 		}
 	]
 }

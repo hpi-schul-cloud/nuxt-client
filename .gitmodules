@@ -1,0 +1,4 @@
+[submodule "src/legacy-client"]
+	path = src/legacy-client
+	url = git://github.com/schul-cloud/schulcloud-client.git
+	branch = master

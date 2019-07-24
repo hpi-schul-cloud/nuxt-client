@@ -1,11 +1,13 @@
 branches:
   only:
-    - stable
+    - develop
     - master
 language: node_js
 node_js:
   - lts/*
 dist: xenial
+git:
+  submodules: false
 env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
@@ -38,7 +40,7 @@ jobs:
         provider: script
         script: bash ./deploy/deploy.sh
         on:
-          branch: master
+          all_branches: true
 cache: yarn
 before_cache:
   # delete all .cache folders before actually storing the cache.
