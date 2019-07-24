@@ -14,19 +14,9 @@ env:
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
 jobs:
   include:
-    # Lint
-    - stage: run parallel
-      script: yarn lint:ci
-      name: "lint"
-    # Test
-    - script:
-        - yarn test:ci
-        - codecov
-      name: "test"
-      install:
-        - yarn global add codecov
     # Build & Deploy
-    - script: yarn build
+    - stage: run parallel
+      script: yarn build
       name: "build"
       install:
         - yarn global add surge
@@ -41,6 +31,17 @@ jobs:
         script: bash ./deploy/deploy.sh
         on:
           all_branches: true
+    # Test
+    - script:
+        - yarn test:ci
+        - codecov
+      name: "test"
+      install:
+        - yarn global add codecov
+    # Lint
+    - script: yarn lint:ci
+      name: "lint"
+
 cache: yarn
 before_cache:
   # delete all .cache folders before actually storing the cache.
