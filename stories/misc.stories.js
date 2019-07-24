@@ -9,6 +9,7 @@ import MenuLink from "@components/MenuLink";
 import DropdownMenu from "@components/DropdownMenu";
 import BaseButton from "@components/ui/BaseButton";
 import Searchbar from "@components/Searchbar";
+import Newscard from "@components/Newscard";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -60,5 +61,23 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast.success('Success 😊')" class="is-success">Success Toast</BaseButton>
 				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
 			</div>
+		`,
+	}))
+	.add("Newscard", () => ({
+		components: { Newscard },
+		data: () => ({
+			category: text("Category", "Schultheater"),
+			headline: text("Headline", "HEADLINE"),
+			content: text(
+				"Content",
+				`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum`
+			),
+			createdAt: text("CreatedAt", "2019-07-17-14:30"),
+			createdBy: text("CreatedBy", "Mona Weizenberg"),
+			picture: text("Picture", "https://source.unsplash.com/random"),
+			eventDate: text("Event date", "2019-02-22-19:00"),
+		}),
+		template: `
+			<Newscard :category="category" :headline="headline" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate">{{content}}</Newscard>
 		`,
 	}));
