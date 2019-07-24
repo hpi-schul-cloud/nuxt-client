@@ -33,4 +33,4 @@ RUN gulp
 WORKDIR '/app'
 RUN yarn build:nuxt
 
-CMD [ "yarn", "start" ]
+CMD [ "./startup.sh"]
