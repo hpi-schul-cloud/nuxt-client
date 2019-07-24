@@ -17,6 +17,10 @@ function nuxtclient {
 		--build-arg SC_TITLE \
 		--build-arg SC_SHORT_TITLE \
 		../
+
+	# Log in to the docker CLI
+	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
 	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
 	docker push schulcloud/schulcloud-nuxt-client:$DOCKERTAG
 
