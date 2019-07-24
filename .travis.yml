@@ -1,6 +1,6 @@
 branches:
   only:
-    - stable
+    - develop
     - master
 language: node_js
 node_js:
@@ -9,6 +9,8 @@ sudo: required
 dist: xenial
 services:
   - docker
+git:
+  submodules: false
 env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
@@ -31,10 +33,10 @@ cache:
 # deploy docs & storybook for all pull requests
 after_success:
   - bash ./deploy/pull-deploy.sh
-# deploy master to staging system
+# deploy develop to staging system
 deploy:
   skip_cleanup: true
   provider: script
   script: bash ./deploy/deploy.sh
   on:
-    branch: master
+    all_branches: true

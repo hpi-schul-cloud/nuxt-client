@@ -2,6 +2,22 @@
 
 [[toc]]
 
+## Umgebungsvariablen (ENV-Variables)
+
+For convenience, you can set enviroment variables using a `.env` ([dotenv](https://www.npmjs.com/package/dotenv)) file in the root folder. All defined variablea will be available in `process.env[VARIABLE]`. Whis will speed up your workflow, because you no longer need to define all variables everytime you spin up the project.
+
+:::tip
+
+The `.env` file will never gets commited to Github. Feel free to use. :wink:
+
+:::
+
+```env
+VARIABLE_1=VALUE_1
+VARIABLE_2=VALUE_2
+...
+```
+
 ## Templates - Hygen
 
 Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können haben wir einige Template mittels [Hygen](http://www.hygen.io/) erstellt.
@@ -58,7 +74,7 @@ Wird verwendet um sämtliches CSS zu prüfen. Welche Regeln warum aktiviert sind
 
 ### [Markdownlint](https://github.com/igorshubovych/markdownlint-cli)
 
-Wir verwenden einen fork von Markdownlint. Dieser hat die Möglichkeit zum ignorieren von Dateien hinzugefügt, sodass auf dem alten /schulcloud-client repo kein Markdownlint ausgeführt werden muss (verursacht einige Fehler).
+Wir verwenden einen fork von Markdownlint. Dieser hat die Möglichkeit zum ignorieren von Dateien hinzugefügt, sodass auf dem alten src/legacy-client repo kein Markdownlint ausgeführt werden muss (verursacht einige Fehler).
 
 ## Tests
 
@@ -68,7 +84,7 @@ Für unit-tests verwenden wir [Jest](https://jestjs.io/). Die Konfigurationsdate
 
 ### Coverage
 
-[![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/master/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
+[![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/develop/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client)
 
 Um unsere Testabdeckung zu überwachen verwenden wir [codecov.io](https://codecov.io). Der aktuelle Status ist auf dem entsprechenden [Dashboard](https://codecov.io/gh/schul-cloud/nuxt-client/) einzusehen.
 
@@ -95,7 +111,7 @@ Für alles weitere bleiben wir bisher bei den default Einstellungen und verwende
 
 ### [Mergify](https://mergify.io)
 
-Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label `ready to merge` an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom master (solange keine Merge-Konflikte enstehen).
+Der Mergify Bot erleichtert uns das Mergen von Pull Requests. Sobald das Label `ready to merge` an einen Pull Request angefügt wird wird der Bot versuchen den Branch zu mergen. Dabei aktualisiert er den Branch auch vom develop-Branch (solange keine Merge-Konflikte enstehen).
 
 Gemergte Branches werden von diesem Bot ebenfalls automatisch gelöscht.
 
