@@ -39,4 +39,4 @@ deploy:
   provider: script
   script: bash ./deploy/deploy.sh
   on:
-    branch: develop
+    all_branches: true
