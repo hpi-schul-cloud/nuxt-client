@@ -1,4 +1,5 @@
 <!-- eslint-disable max-lines -->
+<!-- TODO refactor to reduce lines -->
 <template>
 	<div v-if="team">
 		<section class="section">
@@ -7,14 +8,17 @@
 		</section>
 
 		<section class="section">
-			<div class="columns">
-				<div v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')" class="column">
+			<div>
+				<div
+					v-if="hasTeamPermission('ADD_SCHOOL_MEMBERS')"
+					class="mb--lg column"
+				>
 					<p>Füge Lehrer und Schüler aus deiner Schule zum Team hinzu.</p>
 					<base-button design="primary" @click="addInternalModalActive = true"
 						>Interne Teilnehmer hinzufügen</base-button
 					>
 				</div>
-				<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="column">
+				<div v-if="hasTeamPermission('INVITE_EXPERTS')" class="mb--lg column">
 					<p>Lade Lehrer anderer Schulen und Experten per E-Mail ein.</p>
 					<base-button design="primary" @click="addExternalModalActive = true"
 						>Externe Teilnehmer einladen</base-button
@@ -32,7 +36,7 @@
 			</div>
 		</section>
 
-		<section>
+		<section class="section">
 			<h3>Ausstehende Einladungen</h3>
 			<base-table
 				v-slot:default="slotProps"
@@ -40,11 +44,13 @@
 				:columns="columnsInvited"
 			>
 				<base-icon
+					source="material"
 					icon="mail"
 					class="cursor-pointer"
 					@click.native="resendInvitation(slotProps.row.email)"
 				/>
 				<base-icon
+					source="material"
 					icon="delete"
 					class="cursor-pointer"
 					@click.native="deleteInvitation(slotProps.row.email)"
@@ -52,7 +58,7 @@
 			</base-table>
 		</section>
 
-		<section>
+		<section class="section">
 			<h3>Mitglieder</h3>
 			<base-table
 				v-slot:default="slotProps"
@@ -64,11 +70,13 @@
 				:total="stateMembers.total"
 			>
 				<base-icon
+					source="material"
 					icon="delete"
 					class="cursor-pointer"
 					@click.native="removeMember(slotProps.row.userId)"
 				/>
 				<base-icon
+					source="material"
 					icon="edit"
 					class="cursor-pointer"
 					@click.native="editMember(slotProps.row)"
@@ -76,7 +84,7 @@
 			</base-table>
 		</section>
 
-		<section>
+		<section class="section">
 			<h3>Klassen</h3>
 			<base-table
 				v-slot:default="slotProps"
@@ -84,6 +92,7 @@
 				:columns="columnsClasses"
 			>
 				<base-icon
+					source="material"
 					icon="delete"
 					class="cursor-pointer"
 					@click.native="removeClass(slotProps.row._id)"
@@ -122,6 +131,7 @@
 								:allow-empty="false"
 								:multiple="true"
 								option-label="fullName"
+								label="Name"
 							></base-select>
 						</p>
 					</div>
@@ -137,7 +147,7 @@
 								:allow-empty="false"
 								:multiple="true"
 								option-label="displayName"
-								input-label="Nach dem Speichern werden alle Schüler automatisch hinzugefügt."
+								label="Nach dem Speichern werden alle Schüler automatisch hinzugefügt."
 							></base-select>
 						</p>
 					</div>
@@ -157,68 +167,82 @@
 			</div>
 
 			<div class="modal-body">
-				<h3>Wen möchtest du ins Team einladen?</h3>
-				<div class="d-flex">
-					<base-button
-						:design="tabs.who === 'teacher' ? 'primary' : ''"
-						@click="tabs.who = 'teacher'"
-					>
-						Lehrer anderer Schulen
-					</base-button>
-					<base-button
-						:design="tabs.who === 'expert' ? 'primary' : ''"
-						@click="tabs.who = 'expert'"
-					>
-						Externe Experten
-					</base-button>
-				</div>
+				<section class="section">
+					<h3>Wen möchtest du ins Team einladen?</h3>
+					<div class="d-flex">
+						<base-button
+							:design="tabs.who === 'teacher' ? 'primary' : ''"
+							@click="tabs.who = 'teacher'"
+						>
+							Lehrer anderer Schulen
+						</base-button>
+						<base-button
+							:design="tabs.who === 'expert' ? 'primary' : ''"
+							@click="tabs.who = 'expert'"
+						>
+							Externe Experten
+						</base-button>
+					</div>
+				</section>
 
 				<div>
 					<div v-if="tabs.who === 'teacher'">
-						<h3>Lehrer anderer Schulen einladen</h3>
-						<p>
-							Wähle eine Lehrkraft anderer Schulen aus einem zentralen
-							Verzeichnis aus oder gib die E-Mail-Adresse an, mit der sie
-							registriert ist. Nach Beitritt zu deinem Team kann sie Schüler und
-							Lehrer ihrer Schule zum Team hinzufügen.
-						</p>
-						<div class="d-flex">
-							<base-button
-								:design="tabs.from === 'directory' ? 'primary' : ''"
-								@click="tabs.from = 'directory'"
-							>
-								Aus Verzeichnis auswählen
-							</base-button>
-							<base-button
-								:design="tabs.from === 'email' ? 'primary' : ''"
-								@click="tabs.from = 'email'"
-							>
-								per E-Mail einladen
-							</base-button>
-						</div>
+						<section class="section">
+							<h3>Lehrer anderer Schulen einladen</h3>
+							<p>
+								Wähle eine Lehrkraft anderer Schulen aus einem zentralen
+								Verzeichnis aus oder gib die E-Mail-Adresse an, mit der sie
+								registriert ist. Nach Beitritt zu deinem Team kann sie Schüler
+								und Lehrer ihrer Schule zum Team hinzufügen.
+							</p>
+							<div class="d-flex">
+								<base-button
+									:design="tabs.from === 'directory' ? 'primary' : ''"
+									@click="tabs.from = 'directory'"
+								>
+									Aus Verzeichnis auswählen
+								</base-button>
+								<base-button
+									:design="tabs.from === 'email' ? 'primary' : ''"
+									@click="tabs.from = 'email'"
+								>
+									per E-Mail einladen
+								</base-button>
+							</div>
+						</section>
 
 						<div v-if="tabs.from === 'directory'">
 							<h3>Lehrer auswählen und hinzufügen</h3>
 							<p>Bundesland wählen</p>
 							<base-select
-								v-if="federalStates"
+								v-if="federalStates && federalStates.length > 0"
 								v-model="externalInvite.teacher.federalState"
 								:options="federalStates"
 								track-by="_id"
 								:allow-empty="false"
 								option-label="name"
+								label="Bundesländer"
+								placeholder="Bitte wähle ein Bundesland aus"
 							></base-select>
 
-							<div v-if="externalInvite.teacher.federalState._id">
+							<div
+								v-if="
+									externalInvite &&
+										externalInvite.teacher &&
+										externalInvite.teacher.federalState &&
+										externalInvite.teacher.federalState._id
+								"
+							>
 								<div v-if="schools.length > 0">
 									<p>Schule auswählen ({{ schools.length }} verfügbar)</p>
 									<base-select
-										v-if="schools"
+										v-if="schools && schools.length > 0"
 										v-model="externalInvite.teacher.school"
 										:options="schools"
 										track-by="_id"
 										:allow-empty="false"
 										option-label="name"
+										label="Schulen"
 									></base-select>
 								</div>
 								<div v-else>
@@ -308,7 +332,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import dayjs from "dayjs";
 
 const roleTranslations = {
@@ -411,42 +435,18 @@ export default {
 		...mapGetters("roles", {
 			roles: "list",
 		}),
-		...mapGetters("federalStates", {
+		...mapGetters("federal-states", {
 			federalStates: "list",
 		}),
 		...mapGetters("schools", {
+			schools: "list",
 			getSchool: "get",
 		}),
-		...mapGetters("publicTeachers", {
-			getTeacher: "get",
+		...mapGetters("public-teachers", {
+			teachersResult: "list",
 		}),
-		...mapState("schools", {
-			schoolsPagination: (state) => {
-				return state.pagination &&
-					state.pagination.default &&
-					state.pagination.default.ids
-					? state.pagination.default.ids
-					: [];
-			},
-		}),
-		...mapState("publicTeachers", {
-			teachersPagination: (state) => {
-				return state.pagination &&
-					state.pagination.default &&
-					state.pagination.default.ids
-					? state.pagination.default.ids
-					: [];
-			},
-		}),
-		schools() {
-			return this.schoolsPagination
-				? this.schoolsPagination.map((id) => this.getSchool(id))
-				: [];
-		},
 		teachers() {
-			let teachers = this.teachersPagination
-				? this.teachersPagination.map((id) => this.getTeacher(id))
-				: [];
+			let teachers = this.teachersResult;
 			teachers = teachers.map((t) => {
 				t.fullName = t.firstName + " " + t.lastName;
 				return t;
@@ -506,7 +506,7 @@ export default {
 			});
 		},
 		"externalInvite.teacher.school": async function() {
-			await this.$store.dispatch("publicTeachers/find", {
+			await this.$store.dispatch("public-teachers/find", {
 				query: {
 					$limit: false,
 					schoolId: this.externalInvite.teacher.school._id,
@@ -516,9 +516,11 @@ export default {
 		},
 	},
 	async created(ctx) {
+		await this.$store.dispatch("teams/find", { query: { $limit: 1000 } });
 		await this.$store.dispatch("roles/find", { query: { $limit: 1000 } });
-		await this.$store.dispatch("federalStates/find", {
+		await this.$store.dispatch("federal-states/find", {
 			query: {
+				$sort: "name",
 				$limit: 10000,
 			},
 		});
@@ -528,58 +530,68 @@ export default {
 	},
 	methods: {
 		async getMembers() {
-			let members = (await this.$store.dispatch("users/find", {
-				query: {
-					$limit: 10000,
-				},
-			})).data;
+			try {
+				let members = (await this.$store.dispatch("users/find", {
+					query: {
+						$limit: 10000,
+					},
+				})).data;
 
-			members = members.filter((member) => {
-				return !this.team.userIds.find((user) => {
-					return member._id === user.userId._id;
+				members = members.filter((member) => {
+					return !this.team.userIds.find((user) => {
+						return member._id === user.userId._id;
+					});
 				});
-			});
 
-			members = members.map((member) => {
-				member.fullName = member.firstName + " " + member.lastName;
-				return member;
-			});
+				members = members.map((member) => {
+					member.fullName = member.firstName + " " + member.lastName;
+					return member;
+				});
 
-			this.members = members;
+				this.members = members;
+			} catch (e) {
+				this.$toast.error("Fehler beim Laden der Mitglieder");
+				return;
+			}
 		},
 		async getClasses() {
-			let classes = (await this.$store.dispatch("classes/find", {
-				query: {
-					$limit: 10000,
-				},
-			})).data;
+			try {
+				let classes = (await this.$store.dispatch("classes/find", {
+					query: {
+						$limit: 10000,
+					},
+				})).data;
 
-			classes = classes.filter((schoolClass) => {
-				return !this.team.classIds.find((c) => {
-					return c._id === schoolClass._id;
+				classes = classes.filter((schoolClass) => {
+					return !this.team.classIds.find((c) => {
+						return c._id === schoolClass._id;
+					});
 				});
-			});
 
-			this.classes = classes;
+				this.classes = classes;
+			} catch (e) {
+				this.$toast.error("Fehler beim Laden der Schulen");
+				return;
+			}
 		},
 		async addTeamMembers() {
-			let newMembers = this.membersSelected.map((m) => {
+			const newMembers = this.membersSelected.map((m) => {
 				return {
 					userId: m._id,
 				};
 			});
 
-			let currentMembers = this.team.userIds.map((u) => {
+			const currentMembers = this.team.userIds.map((u) => {
 				u.role = u.role._id;
 				u.userId = u.userId._id;
 				return u;
 			});
 
-			let userIds = newMembers.concat(currentMembers);
+			const userIds = newMembers.concat(currentMembers);
 
-			let newClasses = this.classesSelected.map((c) => c._id);
-			let currentClasses = this.team.classIds.map((c) => c._id);
-			let classIds = newClasses.concat(currentClasses);
+			const newClasses = this.classesSelected.map((c) => c._id);
+			const currentClasses = this.team.classIds.map((c) => c._id);
+			const classIds = newClasses.concat(currentClasses);
 
 			await this.$store.dispatch("teams/patch", [
 				this.team._id,
@@ -798,3 +810,13 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.d-flex {
+	display: flex;
+}
+
+.section {
+	margin: var(--space-lg) 0;
+}
+</style>

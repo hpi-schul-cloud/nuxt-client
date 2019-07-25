@@ -2,6 +2,7 @@ const baseDir = "./docs";
 const { lstatSync, readdirSync } = require("fs");
 const { join } = require("path");
 const _ = require("lodash");
+const findCacheDir = require("find-cache-dir");
 
 const blacklist = [".vuepress"];
 
@@ -49,6 +50,7 @@ module.exports = {
 	title: "Nuxt-Client Docs",
 	port: "4002",
 	description: "documentation",
+	cache: findCacheDir({ name: "vuepress" }), // node_modules/.cache/vuepress
 	themeConfig: {
 		// https://vuepress.vuejs.org/default-theme-config/
 		sidebar: listFiles(baseDir),
@@ -63,15 +65,18 @@ module.exports = {
 			indexName: process.env.ALGOLIA_NAME,
 		},
 	},
-	serviceWorker: {
-		updatePopup: true,
+	plugins: {
+		"@vuepress/plugin-pwa": {
+			serviceWorker: true,
+			updatePopup: true,
+		},
 	},
 	configureWebpack: {
 		resolve: {
 			alias: require("../../aliases.config").webpack,
 		},
 	},
-	markdown: {
+	extendMarkdown: {
 		lineNumbers: true,
 		toc: { includeLevel: [2, 3] },
 	},

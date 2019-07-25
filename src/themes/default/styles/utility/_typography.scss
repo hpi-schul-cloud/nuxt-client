@@ -2,7 +2,6 @@
 	tab-size: 2;
 }
 
-html,
 body {
 	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
@@ -14,6 +13,7 @@ body {
 @for $i from 1 through 6 {
 	h#{$i},
 	.h#{$i} {
+		margin-top: var(--space-sm);
 		margin-bottom: var(--space-xxs);
 		font-family: var(--font-accent);
 		font-size: var(--heading-#{$i});
@@ -24,12 +24,18 @@ body {
 }
 
 /* text size */
+.text-xs {
+	font-size: var(--text-xs);
+}
+
 .text-sm {
 	font-size: var(--text-sm);
 }
+
 .text-md {
 	font-size: var(--text-md);
 }
+
 .text-lg {
 	font-size: var(--text-lg);
 }
@@ -40,6 +46,10 @@ a {
 	&:visited {
 		color: var(--color-primary-visited);
 	}
+}
+
+p {
+	margin-bottom: var(--space-sm);
 }
 
 b,

@@ -29,10 +29,13 @@ yarn install
 git submodule init && git submodule update
 
 # install legacy schulcloud-client dependencies
-cd schulcloud-client && npm i
+cd src/legacy-client
+npm i -g nodemon gulp && npm i
+# build legacy schulcloud-client
+gulp
 
 # navigate back to the nuxt client
-cd ..
+cd ../..
 
 # continue with "developing"
 ```
@@ -44,7 +47,7 @@ cd ..
 yarn dev
 ```
 
-You can find all commands inside the [package.json](https://github.com/schul-cloud/nuxt-client/blob/master/package.json) under the `scripts` section.
+You can find all commands inside the [package.json](https://github.com/schul-cloud/nuxt-client/blob/develop/package.json) under the `scripts` section.
 
 ### Nuxt
 

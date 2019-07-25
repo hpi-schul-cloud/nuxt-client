@@ -13,7 +13,7 @@
 	</div>
 </template>
 <script>
-import Vuex from "vuex";
+// import Vuex from "vuex";
 
 export default {
 	data: () => ({

@@ -9,16 +9,20 @@ DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
 # nuxt client bauen und deployen
 function nuxtclient {
 	docker build \
-		-t schulcloud/schulcloud-nuxt-client:latest \
+		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
-		-f $DOCKERFILE_VERSION.nuxt \
-		--build-arg API_HOST \
+		-f Dockerfile.nuxt \
+		--build-arg API_URL \
 		--build-arg SC_THEME \
 		--build-arg SC_TITLE \
 		--build-arg SC_SHORT_TITLE \
 		../
+
+	# Log in to the docker CLI
+	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
 	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
-	docker push schulcloud/schulcloud-nuxt-client:latest
+	docker push schulcloud/schulcloud-nuxt-client:$DOCKERTAG
 
 	eval "echo \"$( cat compose-nuxt.dummy )\"" > docker-compose-nuxt-client.yml
 
@@ -65,17 +69,22 @@ function vuepress {
 # ----------------
 cd deploy
 
+
+# decrypt secrets
 openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
 chmod 600 travis_rsa
 
 # Log in to the docker CLI
 echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-if [[ $DOCKERTAG == master ]]
+if [[ $DOCKERTAG == develop ]]
 then
   nuxtclient
   storybook
   vuepress
+elif [[ $DOCKERTAG == master ]]
+then
+	nuxtclient
 else
   echo "Branch will not be deployed"
 fi

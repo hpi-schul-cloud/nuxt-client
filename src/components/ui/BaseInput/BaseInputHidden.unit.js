@@ -4,7 +4,7 @@ import { supportedTypes } from "./BaseInputHidden";
 describe("@components/BaseInputHidden", () => {
 	it("input is not visible", () => {
 		const mockText = "test input";
-		supportedTypes.forEach((type) => {
+		supportedTypes.forEach(() => {
 			const wrapper = mount(BaseInput, {
 				propsData: {
 					type: "hidden",

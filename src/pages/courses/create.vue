@@ -3,7 +3,7 @@
 		<course-wizard
 			:steps="stepList"
 			:course="course"
-			:user="user"
+			:user="$user"
 			:teachers="teachers"
 			:classes="classes"
 			:students="students"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import CourseWizard from "@components/CourseWizard";
 
 export default {
@@ -25,13 +25,12 @@ export default {
 				{ name: "Kurs-Mitglieder" },
 				{ name: "Abschließen" },
 			],
-			course: {},
+			course: {
+				teachers: [],
+			},
 		};
 	},
 	computed: {
-		...mapState("auth", {
-			user: "user",
-		}),
 		...mapGetters("classes", {
 			classes: "list",
 		}),
@@ -44,12 +43,14 @@ export default {
 				},
 			})).data[0];
 
+			// TODO @domi studentsRole is unused, can we remove it?
+			/*
 			const studentsRole = (await store.dispatch("roles/find", {
 				query: {
 					name: "student",
 				},
 			})).data[0];
-
+		*/
 			const queryTeachers = {
 				roles: [teacherRole._id],
 			};
@@ -57,9 +58,12 @@ export default {
 				query: queryTeachers,
 			})).data;
 
+			// TODO @domi queryStudents is unused, can we remove it?
+			/*
 			const queryStudents = {
 				roles: [studentsRole._id],
 			};
+			*/
 			const students = (await store.dispatch("users/find", {
 				query: {}, // queryStudents,
 			})).data;
@@ -73,14 +77,11 @@ export default {
 		} catch (err) {}
 	},
 	created() {
-		const { Course } = this.$FeathersVuex;
-		this.course = new Course({
-			schoolId: this.user.schoolId,
-		});
+		this.course.schoolId = this.$user.schoolId;
 	},
 	methods: {
-		async create(id) {
-			const course = this.course;
+		async create() {
+			const { course } = this;
 
 			course.times = this.course.times.map((time) => {
 				let [startHours, startMinutes] = time.startTime.split(":");
