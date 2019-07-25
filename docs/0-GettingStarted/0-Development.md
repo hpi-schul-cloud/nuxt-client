@@ -25,19 +25,10 @@ https://yarnpkg.com/lang/en/docs/install/
 # install dependencies
 yarn install
 
-# install legacy schulcloud-client
-git submodule init && git submodule update
+# install legacy schulcloud-client and run gulp
+yarn setup
 
-# install legacy schulcloud-client dependencies
-cd src/legacy-client
-npm i -g nodemon gulp && npm i
-# build legacy schulcloud-client
-gulp
-
-# navigate back to the nuxt client
-cd ../..
-
-# continue with "developing"
+# start "developing" :)
 ```
 
 ## Developing

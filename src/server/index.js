@@ -74,6 +74,7 @@ viewDirs.unshift(path.join(legacyClientRoot, `./theme/${themeName}/views/`));
 app.set("views", viewDirs);
 app.engine("hbs", wax.engine);
 app.set("view engine", "hbs");
+app.use(express.static(path.join(legacyClientRoot, "./static")));
 app.use(express.static(path.join(legacyClientRoot, "./build/" + themeName)));
 app.set("port", port);
 
@@ -143,7 +144,11 @@ async function start() {
 	// this middleware is never called in this case
 	// eslint-disable-next-line no-unused-vars
 	app.use((err, req, res, next) => {
-		if (err.error.message.startsWith("Cast to ObjectId failed for value")) {
+		if (
+			err &&
+			err.error &&
+			err.error.message.startsWith("Cast to ObjectId failed for value")
+		) {
 			consola.info(`id parsing error => we try the fallback (${err.message})`);
 			return next();
 		}
