@@ -1,21 +1,3 @@
 {
-	"team.management": "Projektkoordination und wissenschaftliche Mitarbeiter",
-	"Team.panel": "Gremium und Projektleitung",
-	"about": {
-		"introduction": "Diese Seite gibt mehr Infos über alles.",
-		"title": "Über"
-	},
-	"home": {
-		"introduction": "Dies ist ein Einleitungs Text in Deutsch",
-		"title": "Willkommen"
-	},
-	"links": {
-		"german": "Deutsche Version",
-		"english": "Englische Verison",
-		"about": "Über",
-		"home": "Heim"
-	},
-	"storybook.lang": "Ich bin jetzt auf Deutsch!",
-	"links.home": "Zu Hause",
-	"landing.welcome": "Willkommen auf der Schul-Cloud"
+	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }
