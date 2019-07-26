@@ -15,7 +15,7 @@ export default {
 	props: {
 		role: {
 			type: [String, Function],
-			default: () => false,
+			default: () => () => false,
 		},
 	},
 	computed: {

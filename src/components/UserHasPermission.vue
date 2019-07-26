@@ -15,7 +15,7 @@ export default {
 	props: {
 		permission: {
 			type: [String, Function],
-			default: () => false,
+			default: () => () => false,
 		},
 	},
 	computed: {

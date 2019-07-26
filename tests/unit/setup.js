@@ -1,5 +1,5 @@
 import Vue from "vue";
-//import Vuex from "vuex";
+import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
@@ -103,12 +103,9 @@ global.shallowMountView = (Component, options = {}) => {
 	});
 };
 */
+
 // A helper for creating Vue component mocks
-global.createComponentMocks = ({
-	/*store,*/ router,
-	/*style,*/ mocks,
-	stubs,
-}) => {
+global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
 	// Use a local version of Vue, to avoid polluting the global
 	// Vue and thereby affecting other tests.
 	// https://vue-test-utils.vuejs.org/api/#createlocalvue
@@ -119,7 +116,7 @@ global.createComponentMocks = ({
 	returnOptions.stubs = stubs || {};
 	// https://vue-test-utils.vuejs.org/api/options.html#mocks
 	returnOptions.mocks = mocks || {};
-	/*
+
 	// Converts a `store` option shaped like:
 	//
 	// store: {
@@ -138,6 +135,7 @@ global.createComponentMocks = ({
 	if (store) {
 		localVue.use(Vuex);
 		returnOptions.store = new Vuex.Store({
+			namespaced: true,
 			modules: Object.keys(store)
 				.map((moduleName) => {
 					const storeModule = store[moduleName];
@@ -156,7 +154,7 @@ global.createComponentMocks = ({
 				.reduce((moduleA, moduleB) => Object.assign({}, moduleA, moduleB), {}),
 		});
 	}
-	*/
+
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
 	if (router) {
