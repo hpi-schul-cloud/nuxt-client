@@ -2,7 +2,7 @@
 
 if [ ! -d "/app/dist" ]
 then
-	yarn build:nuxt
+	npm run build:nuxt
 fi
 
-yarn start
+npm run start

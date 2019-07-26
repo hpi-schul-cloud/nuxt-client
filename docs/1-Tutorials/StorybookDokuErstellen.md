@@ -2,7 +2,7 @@
 
 Das Storybook bietet über das Notes Add-on an, Komponenten mit einer Markdown Datei zu dokumentieren. Diese sollte den selbigen Namen wie die Komponente haben.
 
-Wurde die Komponente, wie empfohlen, via `yarn new component` erstellt und die Option für das Storybook ausgewählt so generiert dies auch automatisch eine Markdown Datei am richtigen Ort. Außerdem ist sie so auch automatisch in die Story mit eingebunden. Die Markdown Datei sollte im Ordner docs/stories zu finden sein.
+Wurde die Komponente, wie empfohlen, via `npm run new component` erstellt und die Option für das Storybook ausgewählt so generiert dies auch automatisch eine Markdown Datei am richtigen Ort. Außerdem ist sie so auch automatisch in die Story mit eingebunden. Die Markdown Datei sollte im Ordner docs/stories zu finden sein.
 
 Hier sollte beschrieben sein was das Ziel der Komponente ist sowie wann und wo sie eingesetzt wird. Weiterhin können hier style guidelines, States und Besonderheiten im Data-handling festgehalten werden.
 

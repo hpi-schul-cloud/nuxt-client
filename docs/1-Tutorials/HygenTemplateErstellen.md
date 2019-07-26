@@ -1,9 +1,10 @@
 # Hygen Template erstellen
 
-Um das Erstellen von wiederkehrenden Strukturen zu erleichtern, kann man Hygen Templates erstellen die anschließend mit yarn ausführbar sind. Als Beispiel für ein neues Component:
+Um das Erstellen von wiederkehrenden Strukturen zu erleichtern, kann man Hygen Templates erstellen die anschließend mit npm ausführbar sind.
+Ein Beispiel für eine neue Component:
 
 ```bash
-yarn new component
+npm run new component
 ```
 
 ## Struktur
