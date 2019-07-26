@@ -80,6 +80,7 @@ module.exports = {
 		"@nuxtjs/axios",
 		"cookie-universal-nuxt",
 		"@nuxtjs/toast",
+		"nuxt-babel",
 	],
 
 	toast: {

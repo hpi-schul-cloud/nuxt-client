@@ -13,8 +13,6 @@
 	</div>
 </template>
 <script>
-// import Vuex from "vuex";
-
 export default {
 	data: () => ({
 		languages: ["de", "en"],
