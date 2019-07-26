@@ -1,8 +1,14 @@
 // If it's a private page and there's no payload, redirect.
-export default function(context) {
-	const { store, redirect, route } = context;
-	const { auth } = store.state;
-
+export default async function(ctx) {
+	/*
+	const {
+		store,
+		redirect,
+		route
+	} = ctx;
+	const {
+		auth
+	} = store.state;
 	if (
 		auth &&
 		auth.publicPages &&
@@ -11,4 +17,5 @@ export default function(context) {
 	) {
 		return redirect("/login");
 	}
+	*/
 }

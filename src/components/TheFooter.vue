@@ -29,19 +29,21 @@ export default {
 	data() {
 		return {
 			links: [
-				{ href: "https://schul-cloud.org/impressum", text: "Impressum" },
+				{ href: "/impressum", text: "Impressum", target: "_blank" },
 				{
-					href: "https://schul-cloud.org/impressum#data_security",
+					href: "/impressum#data_security",
 					text: "Datenschutzerklärung",
+					target: "_blank",
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
 					text: "Kontakt",
+					target: "_blank",
 				},
-				{ href: "https://schul-cloud.org/team", text: "Team" },
-				{ href: "https://schul-cloud.org/about", text: "Über das Projekt" },
-				{ href: "https://schul-cloud.org/community", text: "Mitmachen" },
-				{ href: "https://schul-cloud.org/partner", text: "Partner" },
+				{ href: "/team", text: "Team", target: "_blank" },
+				{ href: "/about", text: "Über das Projekt", target: "_blank" },
+				{ href: "/community", text: "Mitmachen", target: "_blank" },
+				{ href: "/partner", text: "Partner", target: "_blank" },
 				{ href: "https://github.com/schul-cloud/", text: "GitHub" },
 			],
 		};

@@ -1,21 +1,21 @@
 FROM node:lts as builder
-
-ARG API_HOST
-ENV API_HOST=$API_HOST
-ARG SC_THEME
-ENV SC_THEME=$SC_THEME
-ARG SC_TITLE
-ENV SC_TITLE=$SC_TITLE
-ARG SC_SHORT_TITLE
-ENV SC_SHORT_TITLE=$SC_SHORT_TITLE
+RUN apt-get update && \
+    apt-get install git
 
 WORKDIR '/app'
 COPY ./package.json ./
 COPY ./yarn.lock ./
-RUN yarn install
-COPY . .
+RUN npm i -g gulp
+RUN yarn
+COPY . /app
+
+# Legacy Client
+RUN git submodule init
+RUN git submodule update --remote
+WORKDIR '/app/src/legacy-client'
+RUN npm i
+RUN gulp
+WORKDIR '/app'
 RUN yarn build:nuxt
 
-FROM nginx:alpine
-EXPOSE 80
-COPY --from=builder /app/dist/nuxt /usr/share/nginx/html/
+CMD [ "./startup.sh"]

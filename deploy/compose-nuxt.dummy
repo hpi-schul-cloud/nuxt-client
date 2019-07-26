@@ -33,6 +33,7 @@ services:
       # URIs
       - HOST=$HOSTSTAGE
       - BACKEND_URL=$BACKEND_URLSTAGE
+      - API_URL=$BACKEND_URLSTAGE
       - PUBLIC_BACKEND_URL=$PUBLIC_BACKEND_URLSTAGE
       - LIBRE_OFFICE_CLIENT_URL=$LIBRE_OFFICE_CLIENT_URLSTAGE
       # Rocketchat
@@ -41,4 +42,3 @@ services:
     ports:
       - \"3200:80\"
     restart: always
-
