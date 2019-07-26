@@ -64,4 +64,10 @@ describe("@components/UserHasRole", () => {
 	it("view false-slot if user does not have role", () => {
 		checkCorrectView("ADMIN", ["USER"], false);
 	});
+	it("defaults to view rejected", () => {
+		checkCorrectView(undefined, ["USER"], false);
+	});
+	it("defaults to false when user has no roles", () => {
+		checkCorrectView("ADMIN", undefined, false);
+	});
 });

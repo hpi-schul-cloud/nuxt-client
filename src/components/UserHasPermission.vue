@@ -21,7 +21,7 @@ export default {
 	computed: {
 		...mapState({
 			userPermissions: (state) =>
-				state && state.auth && state.auth.user
+				state && state.auth && state.auth.user && state.auth.user.permissions
 					? state.auth.user.permissions
 					: [],
 		}),

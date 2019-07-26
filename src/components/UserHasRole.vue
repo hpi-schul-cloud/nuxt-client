@@ -21,7 +21,9 @@ export default {
 	computed: {
 		...mapState({
 			userRoles: (state) =>
-				state && state.auth && state.auth.user ? state.auth.user.roles : [],
+				state && state.auth && state.auth.user && state.auth.user.roles
+					? state.auth.user.roles
+					: [],
 		}),
 		hasRole() {
 			return typeof this.role === "string"
