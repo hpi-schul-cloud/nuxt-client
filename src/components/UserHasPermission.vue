@@ -28,7 +28,7 @@ export default {
 		hasPermission() {
 			return typeof this.permission === "string"
 				? this.userPermissions.includes(this.permission)
-				: this.role(this.userPermissions);
+				: this.permission(this.userPermissions);
 		},
 	},
 };

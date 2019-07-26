@@ -1,4 +1,5 @@
 import { storiesOf } from "@storybook/vue";
+import { boolean } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/UserHas.md";
 import UserHasPermission from "@components/UserHasPermission";
@@ -10,12 +11,15 @@ storiesOf("UserHas", module)
 	})
 	.add("UserHasPermission", () => ({
 		components: { UserHasPermission },
+		data: () => ({
+			hasPermission: boolean("hasPermission", true),
+		}),
 		template: `<div>
 			<UserHasPermission permission="USER_CREATE">
 				CREATE
 			</UserHasPermission>
 
-			<UserHasPermission permission="USER_EDIT">
+			<UserHasPermission :permission="() => hasPermission">
 				<template v-slot:true>Edit</template>
 				<template v-slot:false>View</template>
 			</UserHasPermission>
@@ -28,12 +32,15 @@ storiesOf("UserHas", module)
 	}))
 	.add("UserHasRole", () => ({
 		components: { UserHasRole },
+		data: () => ({
+			hasRole: boolean("hasRole", true),
+		}),
 		template: `<div>
 			<UserHasRole role="ADMIN">
 				CREATE
 			</UserHasRole>
 
-			<UserHasRole role="ADMIN">
+			<UserHasRole :role="() => hasRole">
 			<template v-slot:true>Edit</template>
 			<template v-slot:false>View</template>
 			</UserHasRole>
