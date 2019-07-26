@@ -19,6 +19,10 @@ storiesOf("UserHas", module)
 				<template v-slot:true>Edit</template>
 				<template v-slot:false>View</template>
 			</UserHasPermission>
+
+			<UserHasPermission :permission="(permissions) => true">
+				You can also specify a validation function
+			</UserHasPermission>
 		</div>`,
 		methods: {},
 	}))
@@ -30,8 +34,12 @@ storiesOf("UserHas", module)
 			</UserHasRole>
 
 			<UserHasRole role="ADMIN">
-				<template v-slot:true>Edit</template>
-				<template v-slot:false>View</template>
+			<template v-slot:true>Edit</template>
+			<template v-slot:false>View</template>
+			</UserHasRole>
+
+			<UserHasRole :role="(role) => true">
+				You can also specify a validation function
 			</UserHasRole>
 		</div>`,
 		methods: {},

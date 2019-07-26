@@ -14,8 +14,8 @@ import { mapState } from "vuex";
 export default {
 	props: {
 		permission: {
-			type: String,
-			default: "",
+			type: [String, Function],
+			default: () => false,
 		},
 	},
 	computed: {
@@ -26,7 +26,9 @@ export default {
 					: [],
 		}),
 		hasPermission() {
-			return this.userPermissions.includes(this.permission);
+			return typeof this.permission === "string"
+				? this.userPermissions.includes(this.permission)
+				: this.role(this.userPermissions);
 		},
 	},
 };

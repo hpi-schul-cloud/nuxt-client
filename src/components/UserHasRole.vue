@@ -14,8 +14,8 @@ import { mapState } from "vuex";
 export default {
 	props: {
 		role: {
-			type: String,
-			default: "",
+			type: [String, Function],
+			default: () => false,
 		},
 	},
 	computed: {
@@ -24,7 +24,9 @@ export default {
 				state && state.auth && state.auth.user ? state.auth.user.roles : [],
 		}),
 		hasRole() {
-			return this.userRoles.includes(this.role);
+			return typeof this.role === "string"
+				? this.userRoles.includes(this.role)
+				: this.role(this.userRoles);
 		},
 	},
 };
