@@ -3,14 +3,6 @@ import DropdownMenu from "./DropdownMenu";
 describe("@components/DropdownMenu", () => {
 	it(...isValidComponent(DropdownMenu));
 
-	it(
-		...rendersDefaultSlotContent(DropdownMenu, {
-			propsData: {
-				title: "test title",
-			},
-		})
-	);
-
 	it("Check for showing content by events", () => {
 		const wrapper = shallowMount(DropdownMenu, {
 			propsData: {

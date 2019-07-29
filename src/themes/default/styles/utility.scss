@@ -11,6 +11,14 @@ body.is-noscroll {
 	overflow-y: hidden;
 }
 
+.d-flex {
+	display: flex;
+}
+
+.align-items-center {
+	align-items: center;
+}
+
 .visually-hidden {
 	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
 	position: absolute !important;

@@ -71,7 +71,7 @@ export default {
 		},
 		label: {
 			type: String,
-			required: true,
+			default: "",
 		},
 		hint: {
 			type: String,

@@ -63,6 +63,7 @@
 		"lodash": "^4.17.11",
 		"material-icons-svg": "^1.0.0",
 		"nuxt": "^2.6.3",
+		"qs": "^6.7.0",
 		"socket.io-client": "^2.2.0",
 		"vue": "^2.6.10",
 		"vue-flatpickr-component": "^8.1.1",

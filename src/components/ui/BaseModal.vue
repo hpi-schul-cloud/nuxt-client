@@ -99,7 +99,7 @@ export default {
 .modal-body {
 	flex-grow: 1;
 	flex-shrink: 1;
-	padding: var(--space-md);
+	padding: var(--space-lg) var(--space-md);
 	overflow: auto;
 }
 

@@ -1,5 +1,16 @@
 <template>
 	<nav class="pagination" role="navigation" aria-label="pagination">
+		<div class="mr--md">
+			{{ currentPage * perPage - perPage + 1 }} bis
+			{{
+				perPage > total
+					? total
+					: total * perPage > total
+					? total
+					: total * perPage
+			}}
+			von {{ total }}
+		</div>
 		<ul class="pagination-list">
 			<li v-if="currentPage > 1" class="pagination-link-wrapper">
 				<a
@@ -32,39 +43,31 @@ export default {
 		event: "update",
 	},
 	props: {
-		state: {
-			type: Object,
-			default: () => {
-				return {
-					limit: 10,
-					skip: 0,
-					total: 0,
-				};
-			},
+		perPage: {
+			type: Number,
+			default: 10,
 		},
-		value: {
-			// number of skipped items ( $skip: 0 )
+		total: {
 			type: Number,
 			default: 0,
 		},
+		currentPage: {
+			// number of skipped items
+			type: Number,
+			default: 1,
+		},
 	},
 	computed: {
-		currentPage() {
-			return Math.floor(this.state.skip / this.state.limit + 1);
-		},
 		lastPage() {
-			return Math.ceil(this.state.total / this.state.limit);
+			return Math.ceil(this.total / this.perPage);
 		},
 	},
 	methods: {
 		previousPage() {
-			this.updateModel(this.value - this.state.limit);
+			this.$emit("update:current-page", this.currentPage - 1);
 		},
 		nextPage() {
-			this.updateModel(this.value + this.state.limit);
-		},
-		updateModel(itemsSkipped) {
-			this.$emit("update", itemsSkipped);
+			this.$emit("update:current-page", this.currentPage + 1);
 		},
 	},
 };
@@ -74,11 +77,15 @@ export default {
 @import "@styles";
 
 .pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin: 0 auto;
 }
 
 .pagination-list {
 	display: flex;
+	align-items: center;
 	justify-content: center;
 	padding: 0;
 	list-style: none;

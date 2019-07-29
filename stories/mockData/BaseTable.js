@@ -15,6 +15,46 @@ const tableData = [
 		},
 		age: 999,
 	},
+	{
+		firstName: "Luigi",
+		lastName: "Super",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
+	{
+		firstName: "Wario",
+		lastName: "Super",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
+	{
+		firstName: "Honkey",
+		lastName: "Kong",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
+	{
+		firstName: "LoLo",
+		lastName: "Super",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
+	{
+		firstName: "LoLo",
+		lastName: "Nee",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
 ];
 
 const tableColumns = [

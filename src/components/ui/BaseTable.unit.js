@@ -17,6 +17,30 @@ const data = [
 		},
 		age: 999,
 	},
+	{
+		firstName: "Mario",
+		lastName: "Super",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
+	{
+		firstName: "Mario",
+		lastName: "Super",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
+	{
+		firstName: "Mario",
+		lastName: "Super",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
 ];
 
 const columns = [
@@ -51,7 +75,7 @@ describe("@components/BaseTable", () => {
 			components: { BaseTable },
 		});
 
-		expect(wrapper.findAll("tbody tr").length).toBe(2);
+		expect(wrapper.findAll("tbody tr").length).toBe(5);
 
 		expect(
 			wrapper
@@ -112,7 +136,7 @@ describe("@components/BaseTable", () => {
 			components: { BaseTable },
 		});
 
-		expect(wrapper.findAll("tbody tr").length).toBe(2);
+		expect(wrapper.findAll("tbody tr").length).toBe(5);
 
 		expect(
 			wrapper

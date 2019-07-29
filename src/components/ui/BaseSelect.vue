@@ -1,7 +1,7 @@
 <template>
-	<base-input-default v-bind="$attrs" :type="false" vmodel="" :label="label">
+	<base-input-default v-bind="$attrs" vmodel="" :type="false" :label="label">
 		<multi-select
-			v-model="model"
+			:value="value"
 			v-bind="$attrs"
 			:options="options"
 			:multiple="multiple"
@@ -9,7 +9,14 @@
 			:placeholder="placeholder"
 			class="input"
 			:label="optionLabel"
-		/>
+			select-label=""
+			@select="$emit('select', $event)"
+			@input="$emit('input', $event)"
+		>
+			<template v-slot:tag="slotProps">
+				<slot name="tag" :option="slotProps.option" />
+			</template>
+		</multi-select>
 	</base-input-default>
 </template>
 
@@ -18,7 +25,10 @@ import BaseInputDefault from "./BaseInput/BaseInputDefault";
 import MultiSelect from "vue-multiselect";
 
 export default {
-	components: { BaseInputDefault, MultiSelect },
+	components: {
+		BaseInputDefault,
+		MultiSelect,
+	},
 	props: {
 		/**
 		 * Must match an entry of the options prop.
@@ -47,7 +57,7 @@ export default {
 		},
 		label: {
 			type: String,
-			required: true,
+			default: "",
 		},
 		placeholder: {
 			type: String,
@@ -59,23 +69,26 @@ export default {
 		},
 	},
 	computed: {
-		model: {
-			get() {
-				return this.value;
-			},
-			set(v) {
-				this.$emit("input", v[this.trackBy]);
-			},
-		},
+		// model: {
+		// 	get() {
+		// 		return this.value;
+		// 	},
+		// 	set(v) {
+		// 		this.$emit("input", v[this.trackBy]);
+		// 	},
+		// },
 	},
 };
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@styles";
-.input /deep/ .multiselect__tags {
+.input .multiselect__tags {
 	border: 0;
 	border-radius: var(--radius-md);
+}
+.multiselect__content-wrapper {
+	min-width: 270px !important;
 }
 </style>

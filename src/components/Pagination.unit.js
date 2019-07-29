@@ -6,12 +6,9 @@ describe("@components/Pagination", () => {
 	it("Check that no previous page link is being rendered on first page", () => {
 		const wrapper = shallowMount(Pagination, {
 			propsData: {
-				state: {
-					limit: 5,
-					skip: 0,
-					total: 40,
-				},
-				value: 0,
+				perPage: 5,
+				page: 1,
+				total: 40,
 			},
 		});
 		const currentPageAnchor = wrapper.find(".current");
@@ -28,16 +25,13 @@ describe("@components/Pagination", () => {
 	it("Check that no next page link is being rendered on last page", () => {
 		const wrapper = shallowMount(Pagination, {
 			propsData: {
-				state: {
-					limit: 5,
-					skip: 13,
-					total: 15,
-				},
-				value: 13,
+				perPage: 5,
+				currentPage: 2,
+				total: 10,
 			},
 		});
 		const currentPageAnchor = wrapper.find(".current");
-		expect(currentPageAnchor.text()).toBe("3");
+		expect(currentPageAnchor.text()).toBe("2");
 		expect(wrapper.findAll(".pagination-link").length).toBe(2);
 		expect(
 			wrapper
