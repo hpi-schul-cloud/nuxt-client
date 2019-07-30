@@ -3,7 +3,12 @@ import TheTopBar from "./TheTopBar";
 const mockActions = [
 	{ type: "popupIcon", icon: "house", title: "test home", to: "home" },
 	{ type: "text", title: "test away", href: "https://schul-cloud.org" },
-	{ type: "text", title: "test action", event: "light-camera" },
+	{
+		type: "popupWithInitials",
+		icon: "camera",
+		title: "test action",
+		event: "light-camera",
+	},
 ];
 
 describe("@components/TheTopBar", () => {
@@ -33,12 +38,12 @@ describe("@components/TheTopBar", () => {
 				$theme,
 			},
 		});
-		//TODO
-		// expect(wrapper.findAll("base-icon-button-stub").length).toBe(1);
-		// expect(wrapper.findAll("base-button-stub").length).toBe(1);
-		// wrapper.find("base-button-stub").vm.$emit("click");
-		// expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
-		// expect(wrapper.findAll(".action").length).toBe(3);
+		expect(wrapper.findAll("base-icon-button-stub").length).toBe(1);
+		expect(wrapper.findAll("popup-icon-stub").length).toBe(1);
+		expect(wrapper.findAll("base-button-stub").length).toBe(1);
+		wrapper.find("base-button-stub").vm.$emit("click");
+		expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
+		expect(wrapper.findAll(".item").length).toBe(5);
 	});
 	it("can switch to fullscreen mode", () => {
 		const wrapper = mount(TheTopBar, {

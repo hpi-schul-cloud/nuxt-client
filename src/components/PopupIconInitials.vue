@@ -1,7 +1,7 @@
 <template>
 	<div v-click-outside="removePopup" class="popup" @click="popup">
 		<div class="icon">{{ initials }}</div>
-		<div :class="['popuptext', visible]">
+		<div class="popuptext" :class="{ visible }">
 			<slot />
 		</div>
 	</div>
