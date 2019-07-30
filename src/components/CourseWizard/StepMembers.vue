@@ -8,17 +8,21 @@
 
 		<base-select
 			v-model="course.classes"
-			:options="classOptions"
+			:options="availableClasses"
 			:multiple="true"
+			track-by="_id"
+			option-label="displayName"
 			label="Klasse auswählen"
 			placeholder="Klasse 6b"
 		></base-select>
 
 		<base-select
 			v-model="course.students"
-			:options="studentOptions"
+			:options="availableStudents"
 			:multiple="true"
 			:show-on-select="false"
+			track-by="_id"
+			option-label="displayName"
 			label="Studenten auswählen"
 			placeholder="Vorname Nachname"
 		></base-select>
@@ -39,20 +43,6 @@ export default {
 		availableStudents: {
 			type: Array,
 			default: () => [],
-		},
-	},
-	computed: {
-		studentOptions() {
-			return this.availableStudents.map((student) => ({
-				label: `${student.firstName} ${student.lastName}`,
-				value: student._id,
-			}));
-		},
-		classOptions() {
-			return this.availableClasses.map((_class) => ({
-				label: _class.displayName,
-				value: _class._id,
-			}));
 		},
 	},
 };

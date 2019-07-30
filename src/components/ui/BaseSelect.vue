@@ -9,7 +9,7 @@
 			:placeholder="placeholder"
 			class="input"
 			:label="optionLabel"
-			select-label=""
+			:select-label="selectLabel"
 			@select="$emit('select', $event)"
 			@input="$emit('input', $event)"
 		>
@@ -53,7 +53,7 @@ export default {
 		},
 		trackBy: {
 			type: String,
-			default: "value",
+			default: "_id",
 		},
 		label: {
 			type: String,
@@ -66,6 +66,10 @@ export default {
 		optionLabel: {
 			type: String,
 			default: "label",
+		},
+		selectLabel: {
+			type: String,
+			default: "Auswählen",
 		},
 	},
 	computed: {

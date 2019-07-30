@@ -19,17 +19,21 @@
 
 		<base-select
 			v-model="course.teachers"
-			:options="teacherOptions"
+			:options="availableTeachers"
 			:multiple="true"
+			track-by="_id"
 			label="Unterrichtender Lehrer"
+			option-label="displayName"
 			placeholder="Vorname Nachname"
 		/>
 
 		<base-select
 			v-model="course.substitutions"
-			:options="teacherOptions"
+			:options="availableTeachers"
 			:multiple="true"
+			track-by="_id"
 			label="Vertretungs-Lehrer"
+			option-label="displayName"
 			placeholder="Vorname Nachname"
 		/>
 
@@ -82,16 +86,6 @@ export default {
 						return course[key] !== undefined;
 					}
 				),
-		},
-	},
-	computed: {
-		teacherOptions() {
-			return this.availableTeachers.map((teacher) => {
-				return {
-					label: `${teacher.firstName} ${teacher.lastName}`,
-					value: teacher._id,
-				};
-			});
 		},
 	},
 };

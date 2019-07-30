@@ -26,7 +26,15 @@ export default {
 				{ name: "Abschließen" },
 			],
 			course: {
+				name: "",
+				description: "",
+				startDate: "",
+				untilDate: "",
+				times: [],
 				teachers: [],
+				substitutions: [],
+				students: [],
+				classes: [],
 			},
 		};
 	},
@@ -99,7 +107,7 @@ export default {
 				(course.userIds = course.students);
 
 			try {
-				await course.create();
+				await this.$store.dispatch("course/create", course);
 				this.$toast.success("Kurs erstellt");
 			} catch (e) {
 				console.error(e);

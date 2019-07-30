@@ -74,6 +74,8 @@ export default {
 				untilDate: "",
 				times: [],
 				teachers: [],
+				students: [],
+				classes: [],
 			}),
 		},
 		user: {
@@ -108,7 +110,7 @@ export default {
 		},
 	},
 	created() {
-		this.course.teachers.push(this.user._id);
+		this.course.teachers.push(this.user);
 	},
 	methods: {
 		nextStep() {
