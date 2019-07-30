@@ -71,7 +71,7 @@ export default {
 	},
 	data() {
 		return {
-			getValueByPath,
+			editFilterActive: false,
 			currentSortColumn: "",
 			newData: this.data,
 			absoluteAllChecked: false,
@@ -131,7 +131,13 @@ export default {
 		},
 	},
 	methods: {
+		getValueByPath,
+		fireAction(item) {
+			item.action(this.newCheckedRows);
+			this.uncheckAll();
+		},
 		editFilter(filter) {
+			this.editFilterActive = true;
 			this.newFiltersSelected = filter;
 		},
 		removeFilter(filter) {
@@ -143,6 +149,7 @@ export default {
 		selectFilter(filter) {
 			Vue.set(filter, "selected", true);
 			this.filterOpened = filter;
+			this.editFilterActive = true;
 		},
 		setFilter(filterData) {
 			const isNewFilter = !this.newFiltersSelected.some(
@@ -168,6 +175,7 @@ export default {
 				this.newFiltersSelected.push(filter);
 			}
 			this.filterOpened = {};
+			this.editFilterActive = false;
 		},
 		/**
 		 * Initial sorted column based on the default-sort prop.
@@ -346,11 +354,11 @@ export default {
 							</span>
 						</div>
 						<div class="ml--md">
-							<dropdown-menu :items="actions" title="Aktionen">
-								<ul>
-									<li>Einladung versenden</li>
-								</ul>
-							</dropdown-menu>
+							<dropdown-menu
+								:items="actions"
+								title="Aktionen"
+								@input="fireAction"
+							/>
 						</div>
 					</div>
 					<div>
@@ -365,7 +373,7 @@ export default {
 				</div>
 			</div>
 
-			<base-modal v-if="filterOpened" :active.sync="!!filterOpened.label">
+			<base-modal :active.sync="editFilterActive">
 				<div class="modal-header">
 					<h3>{{ filterOpened.label }}</h3>
 				</div>
@@ -456,11 +464,13 @@ export default {
 								@click.native.stop
 							/>
 						</td>
-						<td v-for="(column, index2) in columns" :key="index2">{{
-							getValueByPath(row, column.field)
-						}}</td>
+						<td v-for="(column, index2) in columns" :key="index2">
+							<slot name="column" :row="row" :column="column">
+								{{ getValueByPath(row, column.field) }}
+							</slot>
+						</td>
 						<td>
-							<slot :row="row"></slot>
+							<slot name="extra-column" :row="row" :columns="columns"></slot>
 						</td>
 					</tr>
 				</tbody>

@@ -4,7 +4,7 @@ const base = serviceTemplate("users");
 
 const module = mergeDeep(base, {
 	actions: {
-		findAdmin({ dispatch }, payload = {}) {
+		adminFind({ dispatch }, payload = {}) {
 			payload.customEndpoint = "/users/admin/students";
 			return dispatch("find", payload);
 		},

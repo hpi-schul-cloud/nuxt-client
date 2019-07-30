@@ -1,7 +1,7 @@
 <template>
 	<nav class="pagination" role="navigation" aria-label="pagination">
 		<div class="mr--md">
-			{{ currentPage * perPage - perPage + 1 }} bis
+			{{ total > 0 ? currentPage * perPage - perPage + 1 : 0 }} bis
 			{{
 				perPage > total
 					? total
@@ -11,7 +11,7 @@
 			}}
 			von {{ total }}
 		</div>
-		<ul class="pagination-list">
+		<ul v-if="total > 0" class="pagination-list">
 			<li v-if="currentPage > 1" class="pagination-link-wrapper">
 				<a
 					class="pagination-link"

@@ -15,7 +15,7 @@
 				<li
 					v-for="(item, index) of items"
 					:key="index"
-					@click="item.action || undefined"
+					@click="$emit('input', item)"
 				>
 					{{ item.label }}
 				</li>

@@ -122,14 +122,14 @@ describe("@components/BaseTable", () => {
 		).toBe(true);
 	});
 
-	it("The default slot should add an extra column with access to the current row data", () => {
+	it("The extra-column slot should add an extra column with access to the current row data", () => {
 		var wrapper = mount({
 			data: () => ({
 				data,
 				columns,
 			}),
 			template: `<div>
-				<base-table v-slot:default="slotProps" :data="data" :columns="columns">
+				<base-table v-slot:extra-column="slotProps" :data="data" :columns="columns">
 					<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 				</base-table>
 			</div>`,
