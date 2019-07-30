@@ -7,9 +7,9 @@
 		<!-- ACTIONS -->
 		<div v-if="!fullscreenMode" class="top-main">
 			<base-icon-button
-				class="item"
+				class="item fullscreen-button"
 				source="fa"
-				icon="solid/expand"
+				icon="expand"
 				@click.native="sendEvent('fullscreen')"
 			/>
 			<template v-for="action in actions">
@@ -26,9 +26,9 @@
 
 				<div
 					v-if="action.type === 'text'"
-					:key="action.schoolname"
+					:key="action.title"
 					class="school-name item"
-					>{{ action.schoolname }}</div
+					>{{ action.title }}</div
 				>
 
 				<popup-icon-initials
@@ -52,11 +52,11 @@
 		</div>
 		<base-button
 			v-if="!!fullscreenMode"
-			class="fullscreen-button"
+			class="fullscreen-button fullscreen-button-active"
 			design="secondary icon"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<base-icon source="fa" icon="solid/expand" />
+			<base-icon source="fa" icon="expand" />
 		</base-button>
 	</div>
 </template>
@@ -82,9 +82,7 @@ export default {
 			default: () => [],
 			validator: function(value) {
 				return value.every((action) => {
-					const isValid =
-						(action.icon || action.title) &&
-						(action.event || action.to || action.href);
+					const isValid = (action.icon || action.title) && action.type;
 					if (!isValid) {
 						console.error(
 							`Action "${JSON.stringify(
@@ -121,7 +119,7 @@ export default {
 		justify-content: center;
 		width: var(--sidebar-width);
 		height: 100%;
-		padding: var(--space-sm) var(--space-md);
+		padding: 0 var(--space-xxs);
 		background-color: var(--color-primary);
 
 		@include breakpoint(tablet) {
@@ -129,9 +127,10 @@ export default {
 		}
 
 		.logo {
-			height: var(--heading-3);
-			margin-right: var(--space-sm);
-			margin-left: var(--space-sm);
+			width: 100%;
+			height: var(--heading-1);
+			margin-top: var(--space-xs);
+			margin-bottom: var(--space-xs);
 
 			@include breakpoint(tablet) {
 				margin: 0;
@@ -174,7 +173,7 @@ export default {
 	}
 }
 
-.fullscreen-button {
+.fullscreen-button-active {
 	position: fixed;
 	top: var(--space-sm);
 	right: var(--space-sm);

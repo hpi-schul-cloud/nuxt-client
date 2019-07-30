@@ -41,7 +41,7 @@ export default {
 		},
 		target: {
 			type: String,
-			default: "",
+			default: "_self",
 			validator: function(value) {
 				return ["_blank", "_self", "_parent", "_top"].includes(value);
 			},

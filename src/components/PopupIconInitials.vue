@@ -1,11 +1,7 @@
 <template>
 	<div v-click-outside="removePopup" class="popup" @click="popup">
 		<div class="icon">{{ initials }}</div>
-		<div
-			:id="`dropdown-content-${$uid}`"
-			class="popuptext"
-			:class="{ visible }"
-		>
+		<div :class="['popuptext', visible]">
 			<slot />
 		</div>
 	</div>

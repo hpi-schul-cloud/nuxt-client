@@ -10,7 +10,7 @@ module.exports = {
 	transformIgnorePatterns: ["<roodDir>/node_modules/(?!vue-ripple-directive)"],
 	moduleNameMapper: {
 		// Transform any static assets to empty strings
-		"\\.(jpe?g|png|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff2?|eot|ttf|otf)$":
+		"\\.(jpe?g|png|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff2?|eot|ttf|otf|css)$":
 			"<rootDir>/tests/unit/fixtures/empty-string.js",
 		...require("./aliases.config").jest,
 	},
