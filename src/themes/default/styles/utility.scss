@@ -1,9 +1,15 @@
 @import "./utility/colors";
 @import "./utility/fonts";
-@import "./utility/layout";
 @import "./utility/resets";
 @import "./utility/spacing";
 @import "./utility/typography";
+
+body.is-noscroll {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	overflow-y: hidden;
+}
 
 .visually-hidden {
 	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */

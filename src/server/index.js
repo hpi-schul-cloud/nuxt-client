@@ -1,3 +1,6 @@
+/* eslint-disable no-underscore-dangle */
+require("dotenv").config();
+const fallbackDisabled = process.env.FALLBACK_DISABLED || false;
 const express = require("express");
 const session = require("express-session");
 const consola = require("consola");
@@ -11,11 +14,11 @@ const handlebarsWax = require("handlebars-wax");
 // Init Nuxt.js
 const { Nuxt, Builder } = require("nuxt");
 // Import and Set Nuxt.js options
-let config = require("../../nuxt.config.js");
-config.dev = !(process.env.NODE_ENV === "production");
+const config = require("../../nuxt.config.js");
+config.dev = process.env.NODE_ENV !== "production";
 
 const app = express();
-const routes = require("./routes");
+const legacyRoutes = require("./routes");
 const themeName = process.env.SC_THEME || "default";
 
 const sessionStore = new session.MemoryStore();
@@ -23,12 +26,18 @@ const cookieParser = require("cookie-parser");
 
 app.use(compression());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+	bodyParser.urlencoded({
+		extended: true,
+	})
+);
 app.use(cookieParser());
 
 app.use(
 	session({
-		cookie: { maxAge: 60000 },
+		cookie: {
+			maxAge: 60000,
+		},
 		store: sessionStore,
 		saveUninitialized: true,
 		resave: "true",
@@ -36,7 +45,7 @@ app.use(
 	})
 );
 
-const host = process.env.HOST || "127.0.0.1";
+const host = process.env.HOST || "localhost";
 const port = process.env.PORT || 4000;
 
 // Set this path to the legacy schulcloud-client
@@ -71,11 +80,8 @@ app.set("port", port);
 app.use(require(path.join(legacyClientRoot, `./controllers/login`)));
 app.use(require(path.join(legacyClientRoot, `./controllers/registration`)));
 
-// The legacy routings go here
-setLegacyControllers(routes);
-
-function setLegacyControllers(routes) {
-	for (const route of routes) {
+function setLegacyControllers() {
+	for (const route of legacyRoutes) {
 		if (typeof route === "object") {
 			app.use(
 				`/${route.route}/`,
@@ -97,24 +103,29 @@ function setLegacyControllers(routes) {
 	}
 }
 
-function excludeRoutes(controllerName, routes) {
+function excludeRoutes(controllerName, routesToExclude) {
 	app._router.stack.forEach((route) => {
-		let xp = route.regexp.toString();
+		const xp = route.regexp.toString();
 
 		if (xp.includes(controllerName)) {
-			const idx = app._router.stack.indexOf(route);
-			route.handle.stack.forEach((layer, i) => {
+			let idx = app._router.stack.indexOf(route);
+			route.handle.stack.forEach((layer) => {
 				if (
 					layer.route &&
-					routes.includes(layer.route.path) &&
-					layer.route.methods.get
+					routesToExclude.includes(layer.route.path) &&
+					(layer.route.methods._all || layer.route.methods.get)
 				) {
-					const idx = route.handle.stack.indexOf(layer);
+					idx = route.handle.stack.indexOf(layer);
 					route.handle.stack.splice(idx, 1);
 				}
 			});
 		}
 	});
+}
+
+// The legacy routings go here
+if (!fallbackDisabled) {
+	setLegacyControllers();
 }
 
 async function start() {
@@ -125,6 +136,36 @@ async function start() {
 		const builder = new Builder(nuxt);
 		await builder.build();
 	}
+
+	// error handler for legacy client
+	// catches every legacy client issue except 404 issues.
+	// 404 errors are handled by nuxt itself and therefore
+	// this middleware is never called in this case
+	// eslint-disable-next-line no-unused-vars
+	app.use((err, req, res, next) => {
+		if (err.error.message.startsWith("Cast to ObjectId failed for value")) {
+			consola.info(`id parsing error => we try the fallback (${err.message})`);
+			return next();
+		}
+		consola.error(err);
+		// set locals, only providing error in development
+		const status = err.status || err.statusCode || 500;
+		if (err.statusCode && err.error) {
+			res.setHeader("error-message", err.error.message);
+			res.locals.message = err.error.message;
+		} else {
+			res.locals.message = err.message;
+		}
+		res.locals.error = req.app.get("env") === "development" ? err : { status };
+
+		if (res.locals.currentUser) res.locals.loggedin = true;
+		// render the error page
+		res.status(status);
+		res.render("lib/error", {
+			loggedin: res.locals.loggedin,
+			inline: res.locals.inline ? true : !res.locals.loggedin,
+		});
+	});
 
 	// Give nuxt middleware to express
 	app.use(nuxt.render);

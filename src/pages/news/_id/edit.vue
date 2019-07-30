@@ -2,13 +2,22 @@
 	<div>
 		<div v-if="news">
 			<section class="section">
-				<base-link :to="{ name: 'news-id', params: { id: news._id } }">
-					<h5>{{ news.title }}</h5>
-				</base-link>
-				<h1>News bearbeiten</h1>
-				<base-button class="is-danger" @click="confirmDelete">
-					Löschen
-				</base-button>
+				<base-breadcrumb
+					:inputs="[
+						{
+							to: { name: 'news' },
+							text: 'News',
+						},
+						{
+							to: { name: 'news-id', params: { id: $route.params.id } },
+							text: news.title,
+						},
+						{
+							text: 'bearbeiten',
+						},
+					]"
+				/>
+				<h3>News bearbeiten</h3>
 			</section>
 
 			<section class="section">
@@ -25,7 +34,10 @@
 					name="content"
 					type="text"
 				></base-input>
-				<base-button class="is-primary" @click="save">Speichern</base-button>
+				<base-button design="danger text" @click="confirmDelete">
+					Löschen
+				</base-button>
+				<base-button design="primary" @click="save">Speichern</base-button>
 			</section>
 
 			<section class="section">
@@ -41,15 +53,29 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+	head() {
+		return {
+			title: `${(this.orgNews || {}).title || "News"} bearbeiten`,
+		};
+	},
 	data: function() {
 		return {
+			news: {
+				title: "",
+				content: "",
+			},
 			active: false,
 		};
 	},
 	computed: {
 		...mapGetters("news", {
-			news: "current",
+			orgNews: "current",
 		}),
+	},
+	watch: {
+		orgNews(to) {
+			this.news = { ...to };
+		},
 	},
 	created(ctx) {
 		this.get(this.$route.params.id);
@@ -63,10 +89,11 @@ export default {
 				confirmText: "Artikel löschen",
 				onConfirm: async () => {
 					try {
-						await this.$store.dispatch("news/remove", this.news._id);
+						await this.$store.dispatch("news/remove", this.$route.params.id);
 						this.$toast.success("Artikel erfolgreich gelöscht!");
 						this.$router.push({ name: "news" });
 					} catch (e) {
+						console.error(e);
 						this.$toast.error("Fehler beim Löschen des Artikels.");
 					}
 				},
@@ -80,11 +107,15 @@ export default {
 				await this.$store.dispatch("news/patch", [
 					this.$route.params.id,
 					{
-						name: this.news.name,
+						title: this.news.title,
 						content: this.news.content,
 					},
 				]);
 				this.$toast.success("Artikel gespeichert");
+				this.$router.push({
+					name: "news-id",
+					params: { id: this.$route.params.id },
+				});
 			} catch (e) {
 				this.$toast.error("Fehler beim Speichern");
 			}

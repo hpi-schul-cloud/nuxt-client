@@ -4,7 +4,7 @@
 			<base-breadcrumb :inputs="breadcrumbs" />
 			<base-button
 				v-if="team.user && hasTeamPermission('DELETE_TEAM')"
-				class="is-danger"
+				design="danger"
 				@click="confirmDelete"
 				>Löschen</base-button
 			>
@@ -22,11 +22,11 @@
 				v-model="team.description"
 				name="description"
 				label="Beschreibung"
-				type="textarea"
+				type="text"
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></base-input>
-			<base-button class="is-primary" @click="save">Speichern</base-button>
+			<base-button design="primary" @click="save">Speichern</base-button>
 		</section>
 		<section class="section">
 			<h2>{{ team.name }}</h2>
@@ -39,9 +39,14 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+	data: () => {
+		return {
+			team: null,
+		};
+	},
 	computed: {
 		...mapGetters("teams", {
-			team: "current",
+			teamStore: "current",
 			hasTeamPermission: "hasTeamPermission",
 		}),
 		breadcrumbs() {
@@ -53,6 +58,14 @@ export default {
 				},
 				{ text: "Bearbeiten" },
 			];
+		},
+	},
+	watch: {
+		teamStore: {
+			handler(val) {
+				this.team = Object.assign({}, val);
+			},
+			immediate: true,
 		},
 	},
 	created(ctx) {

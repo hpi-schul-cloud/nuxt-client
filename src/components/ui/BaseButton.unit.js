@@ -7,22 +7,22 @@ const defaultButton = {
 
 const smallButton = {
 	components: { BaseButton },
-	template: `<base-button class="is-small">Default</base-button>`,
+	template: `<base-button size="small">Default</base-button>`,
 };
 
 const primaryButton = {
 	components: { BaseButton },
-	template: `<base-button class="is-primary">Default</base-button>`,
+	template: `<base-button design="primary">Default</base-button>`,
 };
 
 const secondaryButton = {
 	components: { BaseButton },
-	template: `<base-button class="is-secondary">Default</base-button>`,
+	template: `<base-button design="secondary">Default</base-button>`,
 };
 
 const successButton = {
 	components: { BaseButton },
-	template: `<base-button class="is-success">Default</base-button>`,
+	template: `<base-button design="success">Default</base-button>`,
 };
 
 describe("@components/BaseButton", () => {
@@ -47,5 +47,10 @@ describe("@components/BaseButton", () => {
 		const wrapper = mount(smallButton);
 		expect(wrapper.find("button").exists()).toBe(true);
 		expect(wrapper.find(".is-small").exists()).toBe(true);
+	});
+	it("Generates a success button", () => {
+		const wrapper = mount(successButton);
+		expect(wrapper.find("button").exists()).toBe(true);
+		expect(wrapper.find(".is-success").exists()).toBe(true);
 	});
 });

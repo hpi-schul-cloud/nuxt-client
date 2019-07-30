@@ -17,7 +17,7 @@
 					name="content"
 					type="text"
 				></base-input>
-				<base-button class="is-primary" @click="save">Anlegen</base-button>
+				<base-button design="primary" @click="save">Anlegen</base-button>
 			</section>
 
 			<section class="section">
@@ -30,9 +30,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-
 export default {
+	head() {
+		return {
+			title: "News erstellen",
+		};
+	},
 	data: function() {
 		return {
 			news: {
@@ -44,18 +47,17 @@ export default {
 	methods: {
 		async save() {
 			try {
-				const news = await this.$store.dispatch("news/create", [
-					{
-						title: this.news.title,
-						content: this.news.content,
-						schoolId: this.$user.schoolId,
-						target: this.$route.query.target,
-						targetModel: this.$route.query.Model,
-					},
-				]);
+				const news = await this.$store.dispatch("news/create", {
+					title: this.news.title,
+					content: this.news.content,
+					schoolId: this.$user.schoolId,
+					target: this.$route.query.target,
+					targetModel: this.$route.query.Model,
+				});
 				this.$toast.success("Artikel erstellt");
 				this.$router.push({ name: "news-id", params: { id: news._id } });
 			} catch (e) {
+				console.error(e);
 				this.$toast.error("Fehler beim Erstellen");
 			}
 		},

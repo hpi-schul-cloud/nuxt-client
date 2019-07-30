@@ -18,13 +18,13 @@
 				placeholder="Everything you have to know"
 				maxlength="255"
 			></base-input>
-			<base-button class="is-primary" @click="create">Speichern</base-button>
+			<base-button design="primary" @click="create">Speichern</base-button>
 		</section>
 	</div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 
 export default {
 	data() {
@@ -41,7 +41,7 @@ export default {
 		}),
 	},
 	methods: {
-		async create(id) {
+		async create() {
 			try {
 				const team = await this.$store.dispatch("teams/create", {
 					schoolId: this.user.schoolId,

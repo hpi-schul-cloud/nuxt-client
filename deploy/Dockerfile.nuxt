@@ -1,18 +1,36 @@
 FROM node:lts as builder
-RUN apk update && \
-    apk add --no-cache git
+RUN apt-get update && \
+    apt-get install git
+
+ARG NUXT_HOST
+ENV NUXT_HOST=$NUXT_HOST
+ARG NUXT_PORT
+ENV NUXT_PORT=$NUXT_PORT
+
+ARG API_URL
+ENV API_URL=$API_URL
+
+ARG SC_THEME
+ENV SC_THEME=$SC_THEME
+ARG SC_TITLE
+ENV SC_TITLE=$SC_TITLE
+ARG SC_SHORT_TITLE
+ENV SC_SHORT_TITLE=$SC_SHORT_TITLE
 
 WORKDIR '/app'
 COPY ./package.json ./
-RUN yarn install
+COPY ./yarn.lock ./
+RUN npm i -g gulp
+RUN yarn
 COPY . /app
-RUN git submodule init && git submodule update
+
+# Legacy Client
+RUN git submodule init
+RUN git submodule update --remote
+WORKDIR '/app/src/legacy-client'
+RUN npm i
+RUN gulp
+WORKDIR '/app'
 RUN yarn build:nuxt
-
-FROM nginx:alpine
-EXPOSE 80
-
-ENV NUXT_HOST=0.0.0.0
-ENV NUXT_PORT=80
 
 CMD [ "yarn", "start" ]

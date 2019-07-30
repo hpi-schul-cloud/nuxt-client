@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<section class="mt-3 section">
+		<section class="mt--lg section">
 			<base-button
 				class="button is-info"
 				@click="$router.push({ name: 'teams-create' })"
@@ -74,7 +74,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import isAuthenticated from "@middleware/is-authenticated";
 
 export default {
 	data() {
@@ -87,7 +86,6 @@ export default {
 			title: "Teams",
 		};
 	},
-	middleware: [isAuthenticated],
 	computed: {
 		...mapGetters("teams", {
 			teams: "list",
@@ -120,7 +118,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@variables";
 
 .grid {

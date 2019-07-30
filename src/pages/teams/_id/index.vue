@@ -15,7 +15,6 @@
 			<h3>Teilnehmer</h3>
 			<p>Es befinden sich {{ team.userIds.length }} Teilnehmer im Team</p>
 			<base-button
-				class="button is-info"
 				@click="
 					$router.push({ name: 'teams-id-members', params: { id: team._id } })
 				"
@@ -28,7 +27,7 @@
 			<h3>News</h3>
 			<base-button
 				v-if="hasTeamPermission('CREATE_NEWS')"
-				class="is-primary"
+				design="primary"
 				@click="
 					$router.push({
 						name: 'news-create',
@@ -41,7 +40,7 @@
 				v-for="article of news"
 				:key="article._id"
 				:article="article"
-				class="mb-2"
+				class="mb--md"
 			/>
 		</section>
 
@@ -63,7 +62,6 @@
 			<h3>Aktionen</h3>
 			<base-button
 				v-if="hasTeamPermission('RENAME_TEAM')"
-				class="button is-info"
 				@click="$router.push({ name: 'teams-id-edit' })"
 				>Team bearbeiten</base-button
 			>

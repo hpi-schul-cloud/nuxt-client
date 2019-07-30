@@ -4,7 +4,7 @@
 		<h2 class="center medium-emphasis title">{{ title }}</h2>
 		<h3 class="center medium-emphasis subtitle">{{ subtitle }}</h3>
 		<div class="center">
-			<base-button class="cta-button btn-primary btn-large">
+			<base-button design="hero-cta" size="large">
 				{{ ctaText }}
 			</base-button>
 		</div>

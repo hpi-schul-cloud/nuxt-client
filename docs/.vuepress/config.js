@@ -63,15 +63,18 @@ module.exports = {
 			indexName: process.env.ALGOLIA_NAME,
 		},
 	},
-	serviceWorker: {
-		updatePopup: true,
+	plugins: {
+		"@vuepress/plugin-pwa": {
+			serviceWorker: true,
+			updatePopup: true,
+		},
 	},
 	configureWebpack: {
 		resolve: {
 			alias: require("../../aliases.config").webpack,
 		},
 	},
-	markdown: {
+	extendMarkdown: {
 		lineNumbers: true,
 		toc: { includeLevel: [2, 3] },
 	},

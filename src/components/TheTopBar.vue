@@ -8,7 +8,6 @@
 			<base-link
 				v-if="action.to || action.href"
 				:key="action.to + action.icon"
-				v-ripple
 				tag="button"
 				:to="action.to"
 				:href="action.href"
@@ -19,7 +18,7 @@
 			<base-button
 				v-if="action.event"
 				:key="action.event + action.icon"
-				v-ripple
+				design="text"
 				class="action"
 				@click="sendEvent(action.event)"
 				>{{ action.title }}</base-button
@@ -40,10 +39,17 @@ export default {
 			default: () => [],
 			validator: function(value) {
 				return value.every((action) => {
-					return (
+					const isValid =
 						(action.icon || action.title) &&
-						(action.event || action.to || action.href)
-					);
+						(action.event || action.to || action.href);
+					if (!isValid) {
+						console.error(
+							`Action "${JSON.stringify(
+								action
+							)}" in prop "actions" of "TheTopBar" is invalid.`
+						);
+					}
+					return isValid;
 				});
 			},
 		},

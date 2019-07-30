@@ -23,8 +23,6 @@ import TheTopBar from "@components/TheTopBar";
 import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
 
-const topbarBaseActions = [];
-
 export default {
 	components: {
 		TheTopBar,
@@ -35,55 +33,53 @@ export default {
 		return {
 			sidebarItems: [
 				{ title: "Übersicht", href: "/dashboard" },
-				{ title: "News", to: { name: "news" } },
-				{ title: "Teams", to: { name: "teams" } },
-				{ title: "Kurse", to: { name: "courses" } },
-				{ title: "Termine", to: { name: "events" } },
-				{ title: "Aufgaben", to: { name: "tasks" } },
+				{ title: "Kurse", href: "/courses" },
+				{ title: "Teams", href: "/teams" },
+				{ title: "Aufgaben", href: "/homework" },
 				{ title: "Dateien", href: "/files" },
-				{ title: "Lernstore", to: { name: "content" } },
-				{ title: "Verwaltung", to: { name: "administration" } },
+				{ title: "News", to: { name: "news" } },
+				{ title: "Termine", href: "/calendar" },
+				{ title: "Lern-Store", href: "/content" },
+				{ title: "Verwaltung", href: "/administration" },
 			],
-			topBarActions: topbarBaseActions,
 			pageTitle: this.$theme.short_name,
 		};
 	},
-	computed: mapState({
-		firstName: (state) =>
-			state.auth && state.auth.user ? state.auth.user.firstName : "",
-		authenticated: (state) => (state.auth ? state.auth.accessToken : ""),
-	}),
-	watch: {
-		$route: function(to) {
-			// TODO get page title from `this.$metaInfo.title`
-			this.pageTitle = to.name;
+	computed: {
+		topBarActions() {
+			const actions = [];
+			if (this.authenticated) {
+				actions.push({
+					event: "logout",
+					title: this.firstName,
+				});
+			}
+			return actions;
 		},
-		authenticated: function() {
-			this.updateTopBarActions;
+		...mapState("auth", {
+			authenticated: (state) => state.accessToken || false,
+			user: (state) => state.user,
+		}),
+		firstName() {
+			return this.user && this.user.firstName
+				? this.user.firstName
+				: "Unknown User";
 		},
 	},
-	created() {
-		this.updateTopBarActions(this.authenticated);
+	watch: {
+		$route: function(to) {
+			try {
+				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
+			} catch {
+				this.pageTitle = to.name;
+			}
+		},
 	},
 	methods: {
 		...mapActions("auth", ["logout"]),
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
-				this.$router.push({ name: "login" });
-			}
-		},
-		updateTopBarActions(isAuthenticated) {
-			if (isAuthenticated) {
-				this.topBarActions = [
-					...topbarBaseActions,
-					{
-						event: "logout",
-						title: this.firstName,
-					},
-				];
-			} else {
-				this.topBarActions = [...topbarBaseActions];
 			}
 		},
 	},
@@ -117,6 +113,6 @@ export default {
 	grid-area: content;
 	min-width: var(--size-content-width-min);
 	max-width: var(--size-content-width-max);
-	margin: 0 auto;
+	margin: var(--space-md) auto;
 }
 </style>

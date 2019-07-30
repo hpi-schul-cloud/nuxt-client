@@ -5,7 +5,7 @@
 			<p>Please login to proceed.</p>
 
 			<img
-				src="@assets/cloud.svg"
+				src="@assets/img/logo/Bildmarke_transparent.svg"
 				alt="Schul-Cloud"
 				style="width: var(--text-lg); filter: invert(1)"
 			/>
@@ -21,7 +21,7 @@
 
 				<base-input v-model="password" label="Your Password" type="password" />
 
-				<base-button class="button is-primary">
+				<base-button design="fancy">
 					Login
 				</base-button>
 			</form>
