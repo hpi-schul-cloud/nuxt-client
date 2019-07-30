@@ -1,4 +1,4 @@
-# Localization mit i18n <Badge text="WIP" type="warn"/>
+# Localization mit i18n
 
 Wir verwenden [Vue i18n](http://kazupon.github.io/vue-i18n) zur Internationalisierung des Nuxt-Clients. Die Sprachdateien werden dabei über [localise.co](https://lokalise.co) verwaltet.
 
@@ -26,8 +26,18 @@ Wie bereits im Beispiel oben zu sehen werden die Strings (bis auf ein paar Ausna
 
 ### Aktualisieren von Strings
 
-Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locales/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co).
+Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locales/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co). Wenn Strings über localise aktualisiert wurden, erstellt lokalise einen pull request auf Github der reviewed und approved werden muss.
 
-#### localise Tutorial <Badge text="TODO" type="warn"/>
+#### localise Tutorial
 
-[Localise Github integration](https://docs.lokalise.co/en/articles/1684090-github)
+1. Einloggen bei [lokalise.co](https://lokalise.co/). (Account Daten momentan bei Dominik)
+2. Project Schulcloud auswählen.
+3. Oben rechts: Key hinzufügen
+4. Key gemäß Namenschema angeben
+5. Die "Base language" ist Deutsch. "Base language value" ist der eigentliche String und der hier in Deutsch eingegeben wird. Platforms sollte standardmäßig auf Web sein.
+6. Save
+7. Übersetzung für den Text eingeben. (Google translate ist zu hilfe schon eingebaut)
+8. Oben links auf den Download button klicken
+9. Sicher gehen das bei "Triggers" GitHub aktiviert ist. Alle anderen Einstellungen sollten standard mäßig korrekt sein. Auf "Preview" klicken, nun wird automatisch der PR auf Github erstellt.
+
+[Localise Github integration Doku](https://docs.lokalise.co/en/articles/1684090-github)
