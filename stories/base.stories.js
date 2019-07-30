@@ -166,14 +166,16 @@ storiesOf("Base Components", module)
 	.add("Base Card", () => ({
 		components: { BaseCard },
 		data: () => ({
-			content: text("Content", "Card"),
+			topContainer: text("Top container", "Card"),
 			badge: number("Badge", 9),
 			header: text("Tab", "Test"),
 			color: color("Color", "#01B1AA"),
-			colorGradient: color("colorGradient", "#03B2D6"),
+			colorGradient: color("Gradient", "#03B2D6"),
+			bottomContainer: text("Bottom container", "Foot"),
+			landscape: boolean("Landscape Mode", false),
 		}),
 		template:
-			'<base-card :badge="badge" :color="[color, colorGradient]"><template v-slot:header-in>{{header}}</template><template v-slot:content>{{content}}</template></base-card>',
+			'<base-card :badge="badge" :color="[color, colorGradient]" :isLandscape="landscape"><template v-slot:header-in>{{header}}</template><template v-slot:topContainer>{{topContainer}}</template><template v-slot:bottomContainer>{{bottomContainer}}</template></base-card>',
 		methods: {},
 	}))
 	.add("Base Icon", () => ({

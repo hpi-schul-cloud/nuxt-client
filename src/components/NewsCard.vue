@@ -1,16 +1,18 @@
 <template>
-	<BaseCard :color="color">
+	<BaseCard v-bind="$props">
 		<template v-slot:header-in>
 			{{ category }}
 		</template>
 
-		<template v-if="picture" v-slot:content
+		<template v-if="picture" v-slot:topContainer
 			><div class="inner-card" :style="background_style"></div
 		></template>
-		<template v-slot:footer>
+		<template v-slot:bottomContainer>
 			<h2 class="time">{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</h2>
 			<h3 class="headline">{{ headline }}</h3>
 			<p class="news-content"><slot /></p>
+		</template>
+		<template v-slot:footer>
 			<div v-if="eventDate">
 				<hr class="line" />
 				<base-icon
@@ -46,6 +48,9 @@ export default {
 			type: Array,
 			default: () => ["#412363", "#c63e80"],
 		},
+		isLandscape: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
@@ -68,9 +73,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "@variables";
+@import "@mixins/multiline-ellipsis.scss";
 
 .time {
-	margin: var(--space-xxs) 0 var(--space-xxxs) 0;
+	margin: 0;
 	font-size: var(--text-xs);
 	font-weight: var(--font-weight-light);
 	color: var(--color-gray);
@@ -83,14 +89,16 @@ export default {
 	color: var(--color-black);
 }
 .news-content {
-	display: -webkit-box;
-	max-height: 150px;
-	overflow: hidden;
+	display: inline-block;
+	width: 100%;
 	font-size: var(--text-sm);
 	color: var(--color-black);
-	text-overflow: ellipsis;
-	-webkit-line-clamp: 5;
-	-webkit-box-orient: vertical;
+
+	@include multiLineEllipsis(
+		$lineHeight: 1.2em,
+		$lineCount: 3,
+		$bgColor: white
+	);
 }
 .inner-card {
 	display: block;

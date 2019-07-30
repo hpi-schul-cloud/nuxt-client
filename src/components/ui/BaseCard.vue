@@ -1,5 +1,5 @@
 <template>
-	<section class="card">
+	<section class="card" :class="{ 'landscape-mode': isLandscape }">
 		<div v-if="badge" class="caption dot">
 			<slot name="dot">{{ badge }}</slot>
 		</div>
@@ -11,8 +11,17 @@
 				<slot name="header-out" />
 			</div>
 		</header>
-		<div v-if="isContentFilled" class="content" :style="background_style">
-			<slot name="content" />
+		<div :class="{ containers: isLandscape }">
+			<div
+				v-if="isContentFilled"
+				class="top-container"
+				:style="background_style"
+			>
+				<slot name="topContainer" />
+			</div>
+			<div class="bottom-container">
+				<slot name="bottomContainer" />
+			</div>
 		</div>
 		<footer class="footer">
 			<slot name="footer" />
@@ -33,6 +42,9 @@ export default {
 			type: Number,
 			default: 0,
 		},
+		isLandscape: {
+			type: Boolean,
+		},
 	},
 	computed: {
 		background_style() {
@@ -47,7 +59,7 @@ export default {
 			}
 		},
 		isContentFilled() {
-			return !!this.$slots.content;
+			return !!this.$slots.topContainer;
 		},
 	},
 };
@@ -59,7 +71,7 @@ export default {
 .card {
 	position: relative;
 	z-index: var(--layer-behind);
-	width: 240px;
+	display: inline-block;
 	padding: var(--space-xs) var(--space-xs);
 	margin: var(--space-sm);
 	cursor: pointer;
@@ -135,11 +147,29 @@ export default {
 	}
 }
 
-.content {
+.top-container {
 	z-index: var(--layer-page);
-	height: 100px;
+	width: 220px;
+	height: var(--space-xxxl);
 	margin-top: calc(var(--space-xxxs) * -1);
 	color: var(--color-white);
 	border-radius: var(--radius-sm) var(--radius-sm);
+}
+.bottom-container {
+	width: 220px;
+	margin-top: var(--space-sm);
+	overflow: hidden;
+}
+
+.landscape-mode {
+	width: 100%;
+	.containers {
+		display: flex;
+	}
+	.bottom-container {
+		flex: 1;
+		width: 100%;
+		margin: 0 0 0 var(--space-sm);
+	}
 }
 </style>

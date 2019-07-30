@@ -1,6 +1,6 @@
 import NewsCard from "./NewsCard";
 
-describe("@components/BaseNewsCard", () => {
+describe("@components/NewsCard", () => {
 	it(...isValidComponent(NewsCard));
 
 	it("Render default color", () => {
@@ -12,7 +12,8 @@ describe("@components/BaseNewsCard", () => {
 				createdBy: "Me",
 			},
 		});
-		expect(wrapper.find(".footer").isEmpty()).toBe(false);
+		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
+		expect(wrapper.find(".event-date").exists()).toBe(false);
 	});
 
 	it("Render without picture and date", () => {
@@ -30,7 +31,8 @@ describe("@components/BaseNewsCard", () => {
 		});
 		expect(wrapper.find(".inner-card").exists()).toBe(false);
 		expect(wrapper.find(".event-date").exists()).toBe(false);
-		expect(wrapper.find(".footer").isEmpty()).toBe(false);
+		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
+		expect(wrapper.find(".event-date").exists()).toBe(false);
 	});
 	it("Render with picture and date", () => {
 		const wrapper = mount(NewsCard, {
@@ -49,6 +51,6 @@ describe("@components/BaseNewsCard", () => {
 		});
 		expect(wrapper.find(".inner-card").exists()).toBe(true);
 		expect(wrapper.find(".event-date").exists()).toBe(true);
-		expect(wrapper.find(".footer").isEmpty()).toBe(false);
+		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
 	});
 });

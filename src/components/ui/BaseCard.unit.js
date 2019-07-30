@@ -6,23 +6,23 @@ describe("@components/BaseCard", () => {
 	it("Render with some slots", () => {
 		const wrapper = shallowMount(BaseCard, {
 			slots: {
-				content: "Card",
-				footer: "foot",
+				topContainer: "Card",
+				bottomContainer: "foot",
 			},
 		});
-		expect(wrapper.contains(".content")).toBe(true);
-		expect(wrapper.find(".footer").text()).toBe("foot");
+		expect(wrapper.contains(".top-container")).toBe(true);
+		expect(wrapper.find(".bottom-container").text()).toBe("foot");
 	});
 	it("Render without content slot", () => {
 		const wrapper = shallowMount(BaseCard, {
 			slots: {
 				"header-in": "head",
-				footer: "foot",
+				bottomContainer: "foot",
 			},
 		});
 		expect(wrapper.find(".tab-label").text()).toBe("head");
-		expect(wrapper.contains(".content")).toBe(false);
-		expect(wrapper.contains(".footer")).toBe(true);
+		expect(wrapper.contains(".top-container")).toBe(false);
+		expect(wrapper.contains(".bottom-container")).toBe(true);
 	});
 	it("Render with single background color setting", () => {
 		const wrapper = shallowMount(BaseCard, {
@@ -30,11 +30,11 @@ describe("@components/BaseCard", () => {
 				color: ["#01B1AA"],
 			},
 			slots: {
-				content: "Card",
+				topContainer: "Card",
 			},
 		});
-		expect(wrapper.find(".content").element.style["background-color"]).toBe(
-			"rgb(1, 177, 170)"
-		);
+		expect(
+			wrapper.find(".top-container").element.style["background-color"]
+		).toBe("rgb(1, 177, 170)");
 	});
 });
