@@ -1,15 +1,25 @@
 <template>
-	<component
-		:is="svgComponent"
-		ref="icon"
-		:class="['icon', source]"
-		v-bind="$attrs"
-		:fill="fill"
-		v-on="$listeners"
-	/>
+	<div>
+		<component
+			:is="svgComponent"
+			v-if="source !== 'fa'"
+			ref="icon"
+			:class="['icon', source]"
+			v-bind="$attrs"
+			:fill="fill"
+			v-on="$listeners"
+		/>
+		<i
+			v-if="source === 'fa'"
+			:class="['fa', `fa-${icon}`]"
+			:style="{ color: fill }"
+		></i>
+	</div>
 </template>
 
 <script>
+import "font-awesome/css/font-awesome.css";
+
 export default {
 	inheritAttrs: false,
 	props: {
@@ -23,10 +33,6 @@ export default {
 		icon: {
 			type: String,
 			default: "solid/icons",
-		},
-		name: {
-			type: String,
-			default: "User Name",
 		},
 		fill: {
 			type: String,
@@ -45,12 +51,6 @@ export default {
 				if (this.source === "material") {
 					// src: https://material.io/tools/icons/?style=baseline
 					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/baseline-${this.icon}-24px.svg`);
-				}
-				if (this.source === "fa") {
-					// src: https://fontawesome.com/icons?d=gallery
-					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@fortawesome/fontawesome-free/svgs/${
-						this.icon
-					}.svg`);
 				}
 				return icon.default;
 			} catch (error) {
@@ -71,6 +71,9 @@ export default {
 	width: 1em;
 	height: 1em;
 	vertical-align: baseline;
+}
+.fa {
+	font-size: var(--text-lg);
 }
 
 .material {

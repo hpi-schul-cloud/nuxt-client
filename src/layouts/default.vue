@@ -32,40 +32,40 @@ const topbarBaseActions = [
 	{
 		type: "popupIcon",
 		title: "QR-Code",
-		icon: "solid/qrcode",
+		icon: "qrcode",
 		component: "menu-qr-code",
 	},
 	{
 		type: "popupIcon",
 		title: "Hilfe",
-		icon: "solid/question",
+		icon: "question",
 		component: "help-dropdown",
 		config: {
 			menuItems: [
 				{
 					label: "Hilfebereich",
-					icon: "solid/question-circle",
+					icon: "question-circle",
 					action: "/help",
 				},
 				{
 					label: "Intro",
-					icon: "solid/map-signs",
-					action: "#",
+					icon: "map-signs",
+					action: "/",
 				},
 				{
 					label: "Wunsch oder Problem senden",
-					icon: "solid/pencil",
-					action: "#",
+					icon: "pencil",
+					action: "/",
 				},
 				{
 					label: "Admin deiner Schule kontaktieren",
-					icon: "solid/comment",
-					action: "#",
+					icon: "comment",
+					action: "/",
 				},
 			],
 		},
 	},
-	{ type: "text", schoolname: "HPI Schul-Cloud Schule" },
+	{ type: "text", title: "HPI Schul-Cloud Schule" },
 ];
 
 export default {
@@ -80,27 +80,27 @@ export default {
 				{
 					title: "Übersicht",
 					href: "/dashboard",
-					icon: "solid/th-large",
+					icon: "th-large",
 				},
 				{
 					title: "Kurse",
 					href: "/courses",
-					icon: "solid/graduation-cap",
+					icon: "graduation-cap",
 				},
-				{ title: "Teams", href: "/teams", icon: "solid/users" },
-				{ title: "Aufgaben", href: "/homework", icon: "solid/tasks" },
+				{ title: "Teams", href: "/teams", icon: "users" },
+				{ title: "Aufgaben", href: "/homework", icon: "tasks" },
 				{
 					title: "Meine Dateien",
 					href: "/files",
-					icon: "solid/folder-open",
+					icon: "folder-open",
 				},
 				{
 					title: "Neuigkeiten",
 					href: "/news",
-					icon: "regular/newspaper",
+					icon: "newspaper-o",
 				},
-				{ title: "Termine", href: "/calendar", icon: "solid/table" },
-				{ title: "Lern-store", href: "/content", icon: "solid/search" },
+				{ title: "Termine", href: "/calendar", icon: "table" },
+				{ title: "Lern-store", href: "/content", icon: "search" },
 				// { title: "Verwaltung", href: "/administration", icon: "school" },
 			],
 			pageTitle: this.$theme.short_name,
