@@ -20,6 +20,7 @@ module.exports = [
 	"index",
 	"link",
 	"logs",
+	"login",
 	"my-material",
 	"news",
 	"notification",
