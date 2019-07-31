@@ -16,6 +16,5 @@ WORKDIR '/app/src/legacy-client'
 RUN npm i
 RUN gulp
 WORKDIR '/app'
-RUN yarn build:nuxt
 
 CMD [ "./startup.sh"]
