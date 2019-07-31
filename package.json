@@ -97,7 +97,6 @@
 		"core-js": "2.6.5",
 		"cross-env": "^5.2.0",
 		"css-loader": "^2.1.1",
-		"csurf": "^1.10.0",
 		"eslint": "^6.0.1",
 		"eslint-config-prettier": "^6.0.0",
 		"eslint-loader": "^2.2.1",
