@@ -34,9 +34,9 @@ Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locales/*.j
 2. Project Schulcloud auswählen.
 3. Oben rechts: Key hinzufügen
 4. Key gemäß Namenschema angeben
-5. Die "Base language" ist Deutsch. "Base language value" ist der eigentliche String und der hier in Deutsch eingegeben wird. Platforms sollte standardmäßig auf Web sein.
+5. Die "Base language" ist Deutsch. "Base language value" ist der eigentliche String und soll hier in Deutsch eingegeben werden. Platform sollte standardmäßig auf Web sein.
 6. Save
-7. Übersetzung für den Text eingeben. (Google translate ist zu hilfe schon eingebaut)
+7. Übersetzung für den Text eingeben. (Google Übersetzer ist zur Hilfe schon eingebaut)
 8. Oben links auf den Download button klicken
 9. Sicher gehen das bei "Triggers" GitHub aktiviert ist. Alle anderen Einstellungen sollten standard mäßig korrekt sein. Auf "Preview" klicken, nun wird automatisch der PR auf Github erstellt.
 
