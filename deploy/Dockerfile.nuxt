@@ -4,7 +4,7 @@ RUN apt-get update && \
 
 WORKDIR '/app'
 COPY ./package.json ./
-COPY ./packe-lock.json ./
+COPY ./package-lock.json ./
 RUN npm i -g gulp
 RUN npm i
 COPY . /app
