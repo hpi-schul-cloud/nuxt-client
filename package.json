@@ -19,7 +19,7 @@
 		"lint:stylelint": "stylelint",
 		"lint:markdownlint": "markdownlint -i \"src/legacy-client\" -c \".markdownlint.yml\"",
 		"lint:prettier": "prettier --loglevel log",
-		"lint:all:eslint": "npm run lint:eslint --ext .js,.vue .",
+		"lint:all:eslint": "npm run lint:eslint -- --ext .js,.vue .",
 		"lint:all:stylelint": "npm run lint:stylelint \"**/*.{vue,sass,scss,css}\"",
 		"lint:all:prettier": "npm run lint:prettier -c \"**/*.{js,json,css,scss,vue,html,md}\"",
 		"lint:all:markdownlint": "npm run lint:markdownlint \"@(src|docs|stories)/**/*.md\"",
