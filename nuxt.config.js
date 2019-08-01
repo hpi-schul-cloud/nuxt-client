@@ -9,7 +9,6 @@ module.exports = {
 	theme: "default",
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
-		API_URL: API_URL || "http://localhost:3030",
 	},
 	/*
 	 ** Headers of the page
@@ -90,7 +89,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
-		baseUrl: API_URL || "http://localhost:3030",
+		baseURL: API_URL,
 	},
 
 	/*
