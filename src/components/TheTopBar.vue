@@ -1,6 +1,6 @@
 <template>
 	<div class="topbar">
-		<img class="logo" :src="$theme.logo.logo_top" alt="Website Logo" />
+		<img class="logo" :src="$theme.logo.logo_image_mono" alt="Website Logo" />
 		<h1 class="page-title">{{ title }}</h1>
 
 		<!-- ACTIONS -->
