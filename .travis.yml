@@ -17,15 +17,15 @@ jobs:
   include:
     # Build & Deploy
     - stage: run parallel
-      script: yarn build
+      script: npm run build
       name: "build"
-      install:
-        - yarn global add surge
       services:
         - docker
       sudo: required
       # deploy
-      after_success: bash ./deploy/pull-deploy.sh
+      after_success:
+        - npm i -g surge
+        - bash ./deploy/pull-deploy.sh
       deploy:
         skip_cleanup: true
         provider: script
@@ -33,17 +33,16 @@ jobs:
         on:
           all_branches: true
     # Test
-    - script:
-        - yarn test:ci
-        - codecov
+    - script: npm run test:ci
       name: "test"
-      install:
-        - yarn global add codecov
+      after_success:
+        - npm i -g codecov
+        - codecov
     # Lint
-    - script: yarn lint:ci
+    - script: npm run lint:ci
       name: "lint"
 
-cache: yarn
+cache: npm
 before_cache:
   # delete all .cache folders before actually storing the cache.
   # nuxt, storybook and vuepress stores some build artefacts here which invalidates the cache.
