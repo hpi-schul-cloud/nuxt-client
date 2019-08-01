@@ -1,4 +1,5 @@
 import Vue from "vue";
+import VueI18n from "vue-i18n";
 import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
@@ -104,6 +105,8 @@ global.shallowMountView = (Component, options = {}) => {
 };
 */
 
+import { i18n } from "@plugins/i18n.js";
+
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
 	// Use a local version of Vue, to avoid polluting the global
@@ -123,6 +126,7 @@ global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
 	//   someModuleName: {
 	//     state: { ... },
 	//     getters: { ... },
+	//     mutations: { ... },
 	//     actions: { ... },
 	//   },
 	//   anotherModuleName: {
@@ -143,16 +147,20 @@ global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
 						[moduleName]: {
 							state: storeModule.state || {},
 							getters: storeModule.getters || {},
+							mutations: storeModule.mutations || {},
 							actions: storeModule.actions || {},
-							namespaced:
-								typeof storeModule.namespaced === "undefined"
-									? true
-									: storeModule.namespaced,
+							namespaced: true,
 						},
 					};
 				})
 				.reduce((moduleA, moduleB) => Object.assign({}, moduleA, moduleB), {}),
 		});
+	}
+
+	// If using `i18n: true` `this.$i18n` will be available
+	if (i18n) {
+		localVue.use(VueI18n);
+		returnOptions.i18n = i18n(returnOptions.store);
 	}
 
 	// If using `router: true`, we'll automatically stub out
