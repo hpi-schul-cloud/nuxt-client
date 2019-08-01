@@ -4,9 +4,9 @@ RUN apt-get update && \
 
 WORKDIR '/app'
 COPY ./package.json ./
-COPY ./yarn.lock ./
+COPY ./package-lock.json ./
 RUN npm i -g gulp
-RUN yarn
+RUN npm i
 COPY . /app
 
 # Legacy Client
@@ -16,6 +16,5 @@ WORKDIR '/app/src/legacy-client'
 RUN npm i
 RUN gulp
 WORKDIR '/app'
-RUN yarn build:nuxt
 
 CMD [ "./startup.sh"]

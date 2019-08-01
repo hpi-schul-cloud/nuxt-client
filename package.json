@@ -8,7 +8,7 @@
 		"dev:nuxt": "nodemon --inspect --watch src/ --ignore src/legacy-client src/server",
 		"dev:storybook": "start-storybook -c stories/.storybook -p 4001",
 		"dev:docs": "vuepress dev docs",
-		"dev": "concurrently \"yarn dev:nuxt\" \"yarn dev:storybook\" \"yarn dev:docs\" -n \"nuxt,story,docs\" -c \"green,magenta,cyan\" -i false --kill-others-on-fail",
+		"dev": "concurrently \"npm run dev:nuxt\" \"npm run dev:storybook\" \"npm run dev:docs\" -n \"nuxt,story,docs\" -c \"green,magenta,cyan\" -i false --kill-others-on-fail",
 		"build:nuxt": "cross-env NODE_ENV=production nuxt build && cross-env sh ./copy_static.sh",
 		"build:docs": "vuepress build docs -d dist/docs",
 		"build:storybook": "build-storybook -c stories/.storybook -o dist/storybook",
@@ -19,22 +19,22 @@
 		"lint:stylelint": "stylelint",
 		"lint:markdownlint": "markdownlint -i \"src/legacy-client\" -c \".markdownlint.yml\"",
 		"lint:prettier": "prettier --loglevel log",
-		"lint:all:eslint": "yarn lint:eslint --ext .js,.vue .",
-		"lint:all:stylelint": "yarn lint:stylelint \"**/*.{vue,sass,scss,css}\"",
-		"lint:all:prettier": "yarn lint:prettier -c \"**/*.{js,json,css,scss,vue,html,md}\"",
-		"lint:all:markdownlint": "yarn lint:markdownlint \"@(src|docs|stories)/**/*.md\"",
-		"lint:fix:all:eslint": "yarn lint:all:eslint --fix",
-		"lint:fix:all:stylelint": "yarn lint:all:stylelint --fix",
-		"lint:fix:all:prettier": "yarn lint:all:prettier --write",
-		"lint:fix:all:markdownlint": "yarn lint:all:markdownlint",
+		"lint:all:eslint": "npm run lint:eslint -- --ext .js,.vue .",
+		"lint:all:stylelint": "npm run lint:stylelint -- \"**/*.{vue,sass,scss,css}\"",
+		"lint:all:prettier": "npm run lint:prettier -- -c \"**/*.{js,json,css,scss,vue,html,md}\"",
+		"lint:all:markdownlint": "npm run lint:markdownlint -- \"@(src|docs|stories)/**/*.md\"",
+		"lint:fix:all:eslint": "npm run lint:all:eslint -- --fix",
+		"lint:fix:all:stylelint": "npm run lint:all:stylelint -- --fix",
+		"lint:fix:all:prettier": "npm run lint:all:prettier -- --write",
+		"lint:fix:all:markdownlint": "npm run lint:all:markdownlint",
 		"lint:ci": "run-s lint:all:*",
 		"lint": "run-s lint:fix:all:*",
 		"test:unit": "cross-env NODE_ENV=test jest",
-		"test:unit:ci": "yarn test:unit --coverage --ci",
-		"test:unit:file": "yarn test:unit --bail --findRelatedTests",
-		"test:unit:watch": "yarn test:unit --watch --notify",
-		"test:ci": "yarn test:unit:ci",
-		"test": "yarn test:unit"
+		"test:unit:ci": "npm run test:unit -- --coverage --ci",
+		"test:unit:file": "npm run test:unit -- --bail --findRelatedTests",
+		"test:unit:watch": "npm run test:unit -- --watch --notify",
+		"test:ci": "npm run test:unit:ci",
+		"test": "npm run test:unit"
 	},
 	"gitHooks": {
 		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
@@ -85,7 +85,7 @@
 		"@storybook/vue": "^5.0.3",
 		"@vue/cli-plugin-babel": "^3.3.0",
 		"@vue/cli-service": "^3.3.1",
-		"@vue/eslint-config-prettier": "^4.0.1",
+		"@vue/eslint-config-prettier": "^5.0.0",
 		"@vue/eslint-config-standard": "^4.0.0",
 		"@vue/test-utils": "^1.0.0-beta.28",
 		"@vuepress/plugin-pwa": "^1.0.2",
@@ -143,6 +143,6 @@
 	},
 	"engines": {
 		"node": ">=10.x.x",
-		"yarn": ">=1.12.0"
+		"npm": ">=6.x.x"
 	}
 }
