@@ -2,41 +2,51 @@ branches:
   only:
     - develop
     - master
+    - /^greenkeeper/.*$/
 language: node_js
 node_js:
   - lts/*
-sudo: required
 dist: xenial
-services:
-  - docker
 git:
   submodules: false
 env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
-    - SC_THEME=default
-install:
-  - yarn global add codecov surge
-  - yarn install --production=false
-script:
-  - yarn lint:ci
-  - yarn test:ci
-  - yarn build
-  - codecov
-  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+jobs:
+  include:
+    # Build & Deploy
+    - stage: run parallel
+      script: npm run build
+      name: "build"
+      services:
+        - docker
+      sudo: required
+      # deploy
+      after_success:
+        - npm i -g surge
+        - bash ./deploy/pull-deploy.sh
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh
+        on:
+          all_branches: true
+    # Test
+    - script: npm run test:ci
+      name: "test"
+      after_success:
+        - npm i -g codecov
+        - codecov
+    # Lint
+    - script: npm run lint:ci
+      name: "lint"
+
+cache: npm
+before_cache:
+  # delete all .cache folders before actually storing the cache.
+  # nuxt, storybook and vuepress stores some build artefacts here which invalidates the cache.
+  - cd node_modules && find . -name .cache -type d -exec rm -rf {} + && cd ..
+  - cd node_modules && find . -name .temp -type d -exec rm -rf {} + && cd ..
 notifications:
   email: false
-cache:
-  directories:
-    - node_modules
-# deploy docs & storybook for all pull requests
-after_success:
-  - bash ./deploy/pull-deploy.sh
-# deploy develop to staging system
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: bash ./deploy/deploy.sh
-  on:
-    all_branches: true

@@ -2,26 +2,11 @@ FROM node:lts as builder
 RUN apt-get update && \
     apt-get install git
 
-ARG NUXT_HOST
-ENV NUXT_HOST=$NUXT_HOST
-ARG NUXT_PORT
-ENV NUXT_PORT=$NUXT_PORT
-
-ARG API_URL
-ENV API_URL=$API_URL
-
-ARG SC_THEME
-ENV SC_THEME=$SC_THEME
-ARG SC_TITLE
-ENV SC_TITLE=$SC_TITLE
-ARG SC_SHORT_TITLE
-ENV SC_SHORT_TITLE=$SC_SHORT_TITLE
-
 WORKDIR '/app'
 COPY ./package.json ./
-COPY ./yarn.lock ./
+COPY ./package-lock.json ./
 RUN npm i -g gulp
-RUN yarn
+RUN npm i
 COPY . /app
 
 # Legacy Client
@@ -31,6 +16,5 @@ WORKDIR '/app/src/legacy-client'
 RUN npm i
 RUN gulp
 WORKDIR '/app'
-RUN yarn build:nuxt
 
-CMD [ "yarn", "start" ]
+CMD [ "./startup.sh"]
