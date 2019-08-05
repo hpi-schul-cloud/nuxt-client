@@ -5,16 +5,10 @@ RUN apt-get update && \
 WORKDIR '/app'
 COPY ./package.json ./
 COPY ./package-lock.json ./
-RUN npm i -g gulp
 RUN npm i
 COPY . /app
 
 # Legacy Client
-RUN git submodule init
-RUN git submodule update --remote
-WORKDIR '/app/src/legacy-client'
-RUN npm i
-RUN gulp
-WORKDIR '/app'
+RUN npm run setup
 
 CMD [ "./startup.sh"]
