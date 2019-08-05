@@ -3,7 +3,7 @@
 Eine neue Komponente geht am einfachsten mithilfe unserer Hygen Templates zu erstellen.
 
 ```bash
-yarn new component
+npm run new component
 ```
 
 Dir werden ein paar Fragen gestellt und anschließend die entsprechenden Dateien mit ein wenig Boilerplate Code generiert.

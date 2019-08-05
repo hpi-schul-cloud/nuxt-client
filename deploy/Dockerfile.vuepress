@@ -8,10 +8,10 @@ ENV ALGOLIA_NAME=$ALGOLIA_NAME
 
 WORKDIR '/app'
 COPY ./package.json ./
-COPY ./yarn.lock ./
-RUN yarn install
+COPY ./package-lock.json ./
+RUN npm i
 COPY . .
-RUN yarn build:docs
+RUN npm run build:docs
 
 FROM nginx:alpine
 EXPOSE 80

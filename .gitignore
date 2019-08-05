@@ -3,8 +3,8 @@
 # Local Developer Configs
 
 # Dependency
-## NPM package-lock.json because we are using yarn
-package-lock.json
+## yarn lockfile because we are using npm
+yarn.lock
 node_modules/
 
 # Log Files

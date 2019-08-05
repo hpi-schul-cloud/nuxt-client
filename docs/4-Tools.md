@@ -24,17 +24,17 @@ Um das nötige Boilerplate für neue Komponenten schneller erstellen zu können 
 
 ```bash{2,5,8}
 # Generate a new component with adjacent unit test
-yarn new component
+npm run new component
 
 # Generate a new page component with adjacent unit test
-yarn new page
+npm run new page
 
 # Generate a new layout component with adjacent unit test
-yarn new layout
+npm run new layout
 ```
 
 - [Hygen](http://www.hygen.io/)
-  - `_templates/new/$name` (use with `yarn new $name`)
+  - `_templates/new/$name` (use with `npm run new $name`)
     - `prompt.js` (ask for options)
     - `*.ejs.t` template file(s)
 

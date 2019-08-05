@@ -9,21 +9,21 @@ Please read the following Code Styleguides before you start contributing:
 1. [official vue 2 style guide](https://vuejs.org/v2/style-guide/)
 1. [Vue Linter Recommendations](https://eslint.vuejs.org/user-guide/) (optional, but nice to know why some rules are enabled)
 
-::: warning Please don't use npm!!!
+::: warning Please don't use yarn !!!
 
 - It's not recommended to mix npm & yarn in one repository.
-- You can [download yarn here](https://yarnpkg.com/lang/en/docs/install/).
+- we wan't to be consistent across all our repositories.
 
 :::
 
 ## Setup
 
 ```bash
-# install yarn (system specific)
-https://yarnpkg.com/lang/en/docs/install/
+# install node 10.x + npm (system specific)
+https://nodejs.org/en/
 
 # install dependencies
-yarn install
+npm i
 
 # install legacy schulcloud-client and run gulp
 yarn setup
@@ -35,7 +35,7 @@ yarn setup
 
 ```bash
 # serve nuxt, docs und storybook in parallel
-yarn dev
+npm run dev
 ```
 
 You can find all commands inside the [package.json](https://github.com/schul-cloud/nuxt-client/blob/develop/package.json) under the `scripts` section.
@@ -43,7 +43,7 @@ You can find all commands inside the [package.json](https://github.com/schul-clo
 ### Nuxt
 
 ```bash
-yarn dev:nuxt
+npm run dev:nuxt
 ```
 
 **URL**: [http://localhost:4000](http://localhost:4000)
@@ -55,7 +55,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 ### Storybook
 
 ```bash
-yarn dev:storybook
+npm run dev:storybook
 ```
 
 **URL**: [http://localhost:4001](http://localhost:4001)
@@ -65,7 +65,7 @@ For detailed explanation on how things work, checkout [Storybook](https://storyb
 ### Docs
 
 ```bash
-yarn dev:docs
+npm run dev:docs
 ```
 
 **URL**: [http://localhost:4002](http://localhost:4002)
@@ -78,14 +78,14 @@ For detailed explanation on how things work, checkout [Vuepress](https://vuepres
 
 ```bash
 # Run all (unit) tests
-yarn test
+npm run test
 ```
 
 For development we recommend using
 
 ```bash
 # Run all unit tests and watch for changes
-yarn test:unit:watch
+npm run test:unit:watch
 ```
 
 this runs all the tests that are covering a component as soon as you change something.
@@ -93,7 +93,7 @@ this runs all the tests that are covering a component as soon as you change some
 ### Lint
 
 ```bash
-yarn lint
+npm run lint
 ```
 
 The linter is configured to use the --fix option by default. So in most cases you shoudn't get a lot of warnings and errors.
