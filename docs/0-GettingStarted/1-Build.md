@@ -9,6 +9,7 @@ All Generated files can be fount at: `./dist/*`
 ## Nuxt Client
 
 ```bash
+npm run build:legacy
 npm run build:nuxt
 ```
 
