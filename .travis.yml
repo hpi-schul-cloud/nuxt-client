@@ -18,9 +18,9 @@ jobs:
     # Build & Deploy
     - stage: run parallel
       script:
-        - npm run nuxt
-        - npm run storybook
-        - npm run docs
+        - npm run build:nuxt
+        - npm run build:storybook
+        - npm run build:docs
       name: "build"
       services:
         - docker
