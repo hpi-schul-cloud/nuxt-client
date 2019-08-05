@@ -65,6 +65,7 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
+		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
 	],
@@ -122,6 +123,7 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
+		vendor: ["vue-i18n"],
 	},
 	generate: {
 		dir: "dist/nuxt",

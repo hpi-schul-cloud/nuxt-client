@@ -1,4 +1,5 @@
 import Vue from "vue";
+import VueI18n from "vue-i18n";
 import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
@@ -104,8 +105,17 @@ global.shallowMountView = (Component, options = {}) => {
 };
 */
 
+import { i18n as i18nConfig } from "@plugins/i18n.js";
+import i18nStoreModule from "@store/i18n";
+
 // A helper for creating Vue component mocks
-global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
+global.createComponentMocks = ({
+	i18n,
+	store,
+	router,
+	/*style,*/ mocks,
+	stubs,
+}) => {
 	// Use a local version of Vue, to avoid polluting the global
 	// Vue and thereby affecting other tests.
 	// https://vue-test-utils.vuejs.org/api/#createlocalvue
@@ -123,6 +133,7 @@ global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
 	//   someModuleName: {
 	//     state: { ... },
 	//     getters: { ... },
+	//     mutations: { ... },
 	//     actions: { ... },
 	//   },
 	//   anotherModuleName: {
@@ -132,27 +143,33 @@ global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	if (store) {
+	if (store || i18n) {
 		localVue.use(Vuex);
+		const storeModules = store || {};
+		if (i18n) {
+			storeModules.i18n = i18nStoreModule;
+		}
 		returnOptions.store = new Vuex.Store({
-			namespaced: true,
-			modules: Object.keys(store)
-				.map((moduleName) => {
-					const storeModule = store[moduleName];
+			modules: Object.entries(storeModules)
+				.map(([moduleName, storeModule]) => {
 					return {
 						[moduleName]: {
 							state: storeModule.state || {},
 							getters: storeModule.getters || {},
+							mutations: storeModule.mutations || {},
 							actions: storeModule.actions || {},
-							namespaced:
-								typeof storeModule.namespaced === "undefined"
-									? true
-									: storeModule.namespaced,
+							namespaced: true,
 						},
 					};
 				})
 				.reduce((moduleA, moduleB) => Object.assign({}, moduleA, moduleB), {}),
 		});
+	}
+
+	//Set `i18n: true` to enable localization and make `this.$i18n` available
+	if (i18n) {
+		localVue.use(VueI18n);
+		returnOptions.i18n = i18nConfig(returnOptions.store);
 	}
 
 	// If using `router: true`, we'll automatically stub out
@@ -161,11 +178,6 @@ global.createComponentMocks = ({ store, router, /*style,*/ mocks, stubs }) => {
 		returnOptions.stubs["NuxtLink"] = true;
 		returnOptions.stubs["Nuxt"] = true;
 	}
-	/*
-	// If a `style` object is provided, mock some styles.
-	if (style) {
-		returnOptions.mocks.$style = style;
-	}*/
 
 	return returnOptions;
 };
