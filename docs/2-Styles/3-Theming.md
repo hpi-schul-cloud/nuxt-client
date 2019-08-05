@@ -35,7 +35,7 @@ Webpack resolves the alias and replaces the assets correctly once the theme asse
 ```html
 <img
 	class="logo"
-	src="~@assets/img/logo/logo-image-mono.svg"
+	src="@assets/img/logo/logo-image-mono.svg"
 	alt="Website Logo"
 />
 ```

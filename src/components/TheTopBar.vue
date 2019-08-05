@@ -2,7 +2,7 @@
 	<div class="topbar">
 		<img
 			class="logo"
-			src="~@assets/img/logo/logo-image-mono.svg"
+			src="@assets/img/logo/logo-image-mono.svg"
 			alt="Website Logo"
 		/>
 		<h1 class="page-title">{{ title }}</h1>
