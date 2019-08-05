@@ -6,7 +6,7 @@ The SC themes are located in `src/themes` within the subfolders `default`, `brb`
 
 ## Config, Assets & Variables
 
-Theme assets and variables are defined in `src/themes/<theme-name>/config.js`. Assets, such as logos, are placed in `src/assets/img/themes/<theme-name>/`
+Variables are defined in `src/themes/<theme-name>/config.js`.
 
 ## CSS
 
@@ -24,13 +24,29 @@ themeName/index.scss:
 @import "./variables";
 ```
 
+## Assets
+
+A theme enables to replace assets at build time. This is done by using the alias concept for resolving modules of webpack (<https://webpack.js.org/configuration/resolve/>).
+
+Assets, such as logos, are placed in `src/themes/<theme-name>/assets/`, in the same folder structure as in the default asset folder `src/assets`.
+
+Webpack resolves the alias and replaces the assets correctly once the theme asset is imported in the manner of
+
+```html
+<img
+	class="logo"
+	src="~@assets/img/logo/logo-image-mono.svg"
+	alt="Website Logo"
+/>
+```
+
 ## Components
 
-A theme also enables to replace complete components at build time. This is done by using the alias concept for resolving modules of webpack (<https://webpack.js.org/configuration/resolve/>).
+A theme enables to replace complete components at build time. This is done by using the alias concept for resolving modules of webpack (<https://webpack.js.org/configuration/resolve/>).
 
 Components are located in `src/themes/<theme-name>/components`.
 
-Webpack resolves the alias correctly and replaces the component correctly once the theme component is imported in the manner of
+Webpack resolves the alias and replaces the component correctly once the theme component is imported in the manner of
 
 ```javascript
 import MyReplacedComponent from "@components/MyReplacedComponent";
