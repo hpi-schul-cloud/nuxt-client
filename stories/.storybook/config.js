@@ -6,6 +6,7 @@ import { withKnobs } from "@storybook/addon-knobs";
 
 import "./mockComponents";
 import "@components/ui/_globals";
+
 import "@styles";
 
 // Vue Docs ( storybook-addon-vue-info )
@@ -35,10 +36,17 @@ addDecorator(() => ({
 	template: "<story/>",
 }));
 
+// add i18n support
+import { i18n } from "@plugins/i18n";
+addDecorator(() => ({
+	i18n: i18n(),
+	template: "<story/>",
+}));
+
 // automatically import all files ending in *.stories.js
 const req = require.context("../", true, /.stories.js$/);
 function loadStories() {
-	req.keys().forEach((filename) => req(filename));
+	req.keys().forEach(req);
 }
 
 configure(loadStories, module);
