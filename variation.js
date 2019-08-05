@@ -5,20 +5,16 @@ const walkSync = function(dir, filelist, base) {
 		const files = fs.readdirSync(dir);
 		const extension = /\.(vue)$/i;
 		myfilelist = filelist || {};
-		files.forEach(function(file) {
+		files.forEach((file) => {
 			const dirname = dir.replace(base, "").substr(1);
 			const fullname = dir + "/" + file;
 			const filename = file.replace(/(.*)\.[^.]+$/, "$1");
 
-			if (fs.statSync(dir + "/" + file).isDirectory()) {
-				myfilelist = walkSync(dir + "/" + file, myfilelist, base);
-			} else {
-				if (extension.test(file)) {
-					myfilelist["@" + dirname + "/" + filename] = fullname;
-				} else {
-					myfilelist["@" + dirname + "/" + file] = fullname;
-				}
-			}
+			myfileList = fs.statSync(dir + "/" + file).isDirectory()
+				? walkSync(dir + "/" + file, myfilelist, base)
+				: extension.test(file)
+				? (myfilelist["@" + dirname + "/" + filename] = fullname)
+				: (myfilelist["@" + dirname + "/" + file] = fullname);
 		});
 		return myfilelist;
 	} catch (err) {
