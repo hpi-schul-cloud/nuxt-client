@@ -74,7 +74,6 @@ viewDirs.unshift(path.join(legacyClientRoot, `./theme/${themeName}/views/`));
 app.set("views", viewDirs);
 app.engine("hbs", wax.engine);
 app.set("view engine", "hbs");
-app.use(express.static(path.join(legacyClientRoot, "./static")));
 app.use(express.static(path.join(legacyClientRoot, "./build/" + themeName)));
 app.set("port", port);
 
