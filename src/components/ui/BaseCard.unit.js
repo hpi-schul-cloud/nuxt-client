@@ -6,7 +6,7 @@ describe("@components/BaseCard", () => {
 	it("Render with some slots", () => {
 		const wrapper = shallowMount(BaseCard, {
 			slots: {
-				topContainer: "Card",
+				topContent: "Card",
 				bottomContainer: "foot",
 			},
 		});
@@ -30,7 +30,7 @@ describe("@components/BaseCard", () => {
 				color: ["#01B1AA"],
 			},
 			slots: {
-				topContainer: "Card",
+				topContent: "Card",
 			},
 		});
 		expect(

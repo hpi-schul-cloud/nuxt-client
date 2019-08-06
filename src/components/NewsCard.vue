@@ -4,8 +4,10 @@
 			{{ category }}
 		</template>
 
-		<template v-if="picture" v-slot:topContainer
-			><div class="inner-card" :style="background_style"></div
+		<template v-if="picture" v-slot:topContent
+			><div class="inner-card">
+				<div class="overlay" :style="background_style"> </div>
+				<img :src="picture" /> </div
 		></template>
 		<template v-slot:bottomContainer>
 			<h2 class="time">{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</h2>
@@ -60,11 +62,9 @@ export default {
 	computed: {
 		background_style() {
 			return (
-				"background-image: linear-gradient(to left, rgba(245, 246, 252, 0.0), " +
+				"background-image: linear-gradient(to left, rgba(245, 246, 252, 0.0) 0%, " +
 				this.color[0] +
-				"),url(" +
-				this.picture +
-				");"
+				" 70%);"
 			);
 		},
 	},
@@ -83,28 +83,49 @@ export default {
 }
 
 .headline {
-	margin: 0;
+	overflow: hidden;
 	font-size: var(--heading-4);
 	line-height: var(--line-height-sm);
 	color: var(--color-black);
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .news-content {
 	display: inline-block;
 	width: 100%;
+	margin: 0;
 	font-size: var(--text-sm);
 	color: var(--color-black);
 
-	@include multiLineEllipsis(
-		$lineHeight: 1.2em,
-		$lineCount: 3,
-		$bgColor: white
+	@include excerpt(
+		$font-size: var(--text-sm),
+		$line-height: var(--line-height-md),
+		$lines-to-show: 3,
+		$excerpt-bg: var(--color-white)
 	);
 }
 .inner-card {
+	position: relative;
 	display: block;
 	height: 100%;
+	overflow: hidden;
 	background-size: 100%;
 	border-radius: var(--radius-sm) var(--radius-sm);
+	.overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+	img {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: var(--layer-behind);
+		width: 80%;
+		object-fit: cover;
+	}
 }
 .event-date {
 	display: inline;

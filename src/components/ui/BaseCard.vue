@@ -16,8 +16,9 @@
 				v-if="isContentFilled"
 				class="top-container"
 				:style="background_style"
-			>
-				<slot name="topContainer" />
+				><div class="top-content">
+					<slot name="topContent" />
+				</div>
 			</div>
 			<div class="bottom-container">
 				<slot name="bottomContainer" />
@@ -59,7 +60,7 @@ export default {
 			}
 		},
 		isContentFilled() {
-			return !!this.$slots.topContainer;
+			return !!this.$slots.topContent;
 		},
 	},
 };
@@ -81,7 +82,7 @@ export default {
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;
 	&:hover {
-		box-shadow: var(--shadow-sm);
+		box-shadow: var(--shadow-md);
 	}
 }
 
@@ -108,7 +109,7 @@ export default {
 .header {
 	position: relative;
 	z-index: var(--layer-behind);
-	height: 26px;
+	height: 1.4rem;
 	overflow: hidden;
 	border-top-left-radius: var(--radius-sm);
 }
@@ -119,7 +120,7 @@ export default {
 	bottom: 0;
 	left: 0;
 	z-index: var(--layer-behind);
-	width: 125px;
+	max-width: 90%;
 	overflow: hidden;
 	border-top-right-radius: var(--radius-sm);
 	transform: skewX(25deg);
@@ -138,7 +139,8 @@ export default {
 	.tab-label {
 		display: inline-block;
 		width: 100%;
-		padding: var(--space-xxxs) var(--space-sm) var(--space-xxs);
+		padding: var(--space-xxxxs) var(--space-md) var(--space-xxxs)
+			var(--space-xs);
 		font-size: var(--text-xs);
 		font-weight: var(--font-weight-bold);
 		color: var(--color-white);
@@ -148,28 +150,48 @@ export default {
 }
 
 .top-container {
+	$aspect-ratio: 9 / 16;
+
+	position: relative;
 	z-index: var(--layer-page);
-	width: 220px;
-	height: var(--space-xxxl);
 	margin-top: calc(var(--space-xxxs) * -1);
 	color: var(--color-white);
 	border-radius: var(--radius-sm) var(--radius-sm);
+	&::before {
+		display: block;
+		width: 100%;
+		padding-top: $aspect-ratio * 100%;
+		content: "";
+	}
+	> .top-content {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
 }
+
 .bottom-container {
-	width: 220px;
 	margin-top: var(--space-sm);
 	overflow: hidden;
 }
 
 .landscape-mode {
 	width: 100%;
+
 	.containers {
 		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: flex-start;
 	}
 	.bottom-container {
 		flex: 1;
-		width: 100%;
 		margin: 0 0 0 var(--space-sm);
+	}
+	.top-container {
+		flex: 0 1 33%;
 	}
 }
 </style>

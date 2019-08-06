@@ -22,7 +22,7 @@ module.exports = [
 	"link",
 	"logs",
 	"my-material",
-	"news",
+	// "news",
 	"notification",
 	"partner",
 	"pwrecovery",

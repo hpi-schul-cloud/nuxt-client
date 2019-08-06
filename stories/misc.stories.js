@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, select, boolean } from "@storybook/addon-knobs";
+import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
 import PulsatingDot from "@components/PulsatingDot";
@@ -67,7 +67,6 @@ storiesOf("Misc", module)
 		components: { NewsCard },
 		data: () => ({
 			category: text("Category", "Schultheater"),
-			landscape: boolean("Landscape Mode", false),
 			headline: text("Headline", "HEADLINE"),
 			content: text(
 				"Content",
@@ -75,10 +74,30 @@ storiesOf("Misc", module)
 			),
 			createdAt: text("CreatedAt", "2019-07-17-14:30"),
 			createdBy: text("CreatedBy", "Mona Weizenberg"),
-			picture: text("Picture", "https://source.unsplash.com/random"),
+			picture: text("Picture", "https://source.unsplash.com/daily"),
 			eventDate: text("Event date", "2019-02-22-19:00"),
 		}),
 		template: `
-			<news-card :category="category" :headline="headline" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate" :isLandscape="landscape">{{content}}</news-card>
+		<div style="width: 33vw;">
+			<news-card :category="category" :headline="headline" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate" >{{content}}</news-card>
+		</div>
+		`,
+	}))
+	.add("Newscard Landscape", () => ({
+		components: { NewsCard },
+		data: () => ({
+			category: text("Category", "Schultheater"),
+			headline: text("Headline", "HEADLINE"),
+			content: text(
+				"Content",
+				`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum`
+			),
+			createdAt: text("CreatedAt", "2019-07-17-14:30"),
+			createdBy: text("CreatedBy", "Mona Weizenberg"),
+			picture: text("Picture", "https://source.unsplash.com/daily"),
+			eventDate: text("Event date", "2019-02-22-19:00"),
+		}),
+		template: `
+			<news-card :category="category" :headline="headline" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate" isLandscape=true>{{content}}</news-card>
 		`,
 	}));
