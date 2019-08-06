@@ -1,6 +1,6 @@
 # Build & Deployment
 
-You can build all projects at once in parallel using `yarn build`.
+You can build all projects at once in parallel using `npm run build`.
 
 All Generated files can be fount at: `./dist/*`
 
@@ -9,7 +9,7 @@ All Generated files can be fount at: `./dist/*`
 ## Nuxt Client
 
 ```bash
-yarn build:nuxt
+npm run build:nuxt
 ```
 
 Output Directory: `./dist/nuxt`
@@ -26,7 +26,7 @@ Output Directory: `./dist/nuxt`
 ## Storybook
 
 ```bash
-yarn build:storybook
+npm run build:storybook
 ```
 
 Output Directory: `./dist/storybook`
@@ -40,7 +40,7 @@ Output Directory: `./dist/storybook`
 ## Vuepress Docs
 
 ```bash
-yarn build:docs
+npm run build:docs
 ```
 
 Output Directory: `./dist/docs`
