@@ -21,7 +21,7 @@ Für die Häufigsten Tests gibt es ebenfalls Hilfsfunktionen. Zu finden unter [`
 Zum schreiben von unit-tests ist es empfehlenswert mit folgendem Kommando zu starten:
 
 ```bash
-yarn test:unit:watch
+npm run test:unit:watch
 ```
 
 Anschließend werden die entsprechenden Tests die geändert wurden automatisch geprüft.

@@ -4,7 +4,7 @@ version: \"3.7\"
 services:
 
   nuxtclient:
-    image: schulcloud/schulcloud-nuxt-client:latest
+    image: schulcloud/schulcloud-nuxt-client:develop
     deploy:
       replicas: 1
       restart_policy:
@@ -32,6 +32,7 @@ services:
       - NEXBOARD_USER_ID=$NEXBOARD_USER_ID
       # URIs
       - HOST=$HOSTSTAGE
+      - PORT=4000
       - BACKEND_URL=$BACKEND_URLSTAGE
       - API_URL=$BACKEND_URLSTAGE
       - PUBLIC_BACKEND_URL=$PUBLIC_BACKEND_URLSTAGE
@@ -40,5 +41,5 @@ services:
       - ROCKET_CHAT_URI=ROCKET_CHAT_URISTAGE
       - ROCKETCHAT_SERVICE_ENABLED=true
     ports:
-      - \"3200:80\"
+      - \"3200:4000\"
     restart: always

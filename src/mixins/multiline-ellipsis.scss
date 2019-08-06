@@ -30,8 +30,8 @@
 			float: right;
 			width: var(--space-sm);
 			margin-left: calc(-1 * var(--space-sm));
-			content: "\2026";
-			background: red;
+			content: "";
+			background: $excerpt-bg;
 		}
 		&::after {
 			position: absolute;
