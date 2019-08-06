@@ -25,19 +25,10 @@ https://nodejs.org/en/
 # install dependencies
 npm i
 
-# install legacy schulcloud-client
-git submodule init && git submodule update
+# install legacy schulcloud-client and run gulp
+npm run setup
 
-# install legacy schulcloud-client dependencies
-cd src/legacy-client
-npm i -g nodemon gulp && npm i
-# build legacy schulcloud-client
-gulp
-
-# navigate back to the nuxt client
-cd ../..
-
-# continue with "developing"
+# start "developing" :)
 ```
 
 ## Developing
