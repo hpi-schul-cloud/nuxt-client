@@ -11,5 +11,5 @@ COPY . /app
 # Legacy Client
 RUN npm run setup
 
-chmod +x ./startup.sh
+RUN ["chmod", "550", "./startup.sh"]
 CMD [ "./startup.sh"]
