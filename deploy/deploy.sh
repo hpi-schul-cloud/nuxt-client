@@ -12,10 +12,6 @@ function nuxtclient {
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
 		-f Dockerfile.nuxt \
-		--build-arg API_URL \
-		--build-arg SC_THEME \
-		--build-arg SC_TITLE \
-		--build-arg SC_SHORT_TITLE \
 		../
 
 	# Log in to the docker CLI
