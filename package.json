@@ -61,7 +61,6 @@
 		"handlebars-wax": "^6.1.0",
 		"jwt-decode": "^2.2.0",
 		"lodash": "^4.17.11",
-		"lokalise": "^0.0.6",
 		"material-icons-svg": "^1.0.0",
 		"nuxt": "^2.6.3",
 		"socket.io-client": "^2.2.0",
