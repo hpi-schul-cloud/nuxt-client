@@ -9,6 +9,7 @@ const aliases = {
 	...variation,
 	"@": "src",
 	"@@": ".",
+	"@locales": "locales",
 	"@assets": "src/assets",
 	"@components": "src/components",
 	"@basecomponents": "src/components/ui",

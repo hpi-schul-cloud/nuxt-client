@@ -3,7 +3,7 @@
 # Local Developer Configs
 
 # Dependency
-## NPM package-lock.json because we are using yarn
+## yarn lockfile because we are using npm
 yarn.lock
 node_modules/
 
