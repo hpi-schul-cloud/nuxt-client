@@ -12,4 +12,5 @@ COPY . /app
 RUN npm run setup
 
 RUN ["chmod", "550", "./startup.sh"]
+EXPOSE 4000
 CMD [ "./startup.sh"]
