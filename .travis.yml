@@ -17,24 +17,48 @@ jobs:
   include:
     # Build & Deploy
     - stage: run parallel
-      script:
-        - npm run build:nuxt
-        - npm run build:storybook
-        - npm run build:docs
-      name: "build"
+      script: npm run build:nuxt
+      name: "build:nuxt"
       services:
         - docker
       sudo: required
-      # deploy
-      after_success:
-        - npm i -g surge
-        - bash ./deploy/pull-deploy.sh
       deploy:
         skip_cleanup: true
         provider: script
-        script: bash ./deploy/deploy.sh
+        script: bash ./deploy/deploy.sh -p client
         on:
-          all_branches: true
+          - develop
+          - master
+    - script: npm run build:storybook
+      name: "build:storybook"
+      services:
+        - docker
+      sudo: required
+      after_success:
+        - npm i -g surge
+        - bash ./deploy/pull-deploy.sh -p storybook
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh -p storybook
+        on:
+          - develop
+          - master
+    - script: npm run build:docs
+      name: "build:docs"
+      services:
+        - docker
+      sudo: required
+      after_success:
+        - npm i -g surge
+        - bash ./deploy/pull-deploy.sh -p vuepress
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh -p vuepress
+        on:
+          - develop
+          - master
     # Test
     - script: npm run test:ci
       name: "test"

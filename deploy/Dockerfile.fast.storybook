@@ -1,3 +1,0 @@
-FROM nginx:alpine
-EXPOSE 80
-COPY ./dist/storybook /usr/share/nginx/html/
