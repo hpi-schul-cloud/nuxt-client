@@ -54,7 +54,7 @@ import MyReplacedComponent from "@components/MyReplacedComponent";
 
 The below alias object is auto-extended by the `variation.js` script, for all theme components. Example for one open-theme component:
 
-```json
+```json{2}
 {
 	"@components/MyReplacedComponent": "./src/themes/open/components/MyReplacedComponent.vue",
 	"@": "src",

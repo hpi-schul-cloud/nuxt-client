@@ -5,7 +5,8 @@ const themeName = process.env.SC_THEME || "default";
 
 const variation = require("./variation")(themeName);
 
-const aliases = Object.assign(variation, {
+const aliases = {
+	...variation,
 	"@": "src",
 	"@@": ".",
 	"@assets": "src/assets",
@@ -24,7 +25,7 @@ const aliases = Object.assign(variation, {
 	"@styles": `src/themes/${themeName}/styles/index.scss`,
 	"@styles-default": `src/themes/default/styles`,
 	"@variables": `src/themes/${themeName}/styles/variables.scss`,
-});
+};
 
 module.exports = {
 	webpack: {},
