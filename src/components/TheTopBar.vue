@@ -1,6 +1,10 @@
 <template>
 	<div class="topbar">
-		<img class="logo" :src="$theme.logo.app" alt="Website Logo" />
+		<img
+			class="logo"
+			src="@assets/img/logo/logo-image-mono.svg"
+			alt="Website Logo"
+		/>
 		<h1 class="page-title">{{ title }}</h1>
 
 		<!-- ACTIONS -->
@@ -68,6 +72,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: var(--space-sm) var(--space-md);
+	background-color: var(--color-primary);
 	box-shadow: var(--shadow-sm);
 }
 .logo {
@@ -79,6 +84,7 @@ export default {
 	margin: 0;
 	font-family: var(--font-accent);
 	font-size: var(--heading-4);
+	color: var(--color-white);
 	text-transform: capitalize;
 }
 .action {
