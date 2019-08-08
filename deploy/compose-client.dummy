@@ -4,7 +4,7 @@ version: \"3.7\"
 services:
 
   nuxtclient:
-    image: schulcloud/schulcloud-nuxt-client:develop
+    image: schulcloud/schulcloud-nuxt-client:$DOCKERTAG
     deploy:
       replicas: 1
       restart_policy:

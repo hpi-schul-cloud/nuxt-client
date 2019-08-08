@@ -4,7 +4,7 @@ version: \"3.7\"
 services:
 
   vuepress:
-    image: schulcloud/schulcloud-nuxt-vuepress:develop
+    image: schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG
     deploy:
       replicas: 1
       restart_policy:
