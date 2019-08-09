@@ -174,8 +174,9 @@ storiesOf("Base Components", module)
 			bottomContainer: text("Bottom container", "Foot"),
 			landscape: boolean("Landscape Mode", false),
 		}),
-		template:
-			'<base-card :badge="badge" :color="[color, colorGradient]" :isLandscape="landscape"><template v-slot:header-in>{{header}}</template><template v-slot:topContent>{{topContent}}</template><template v-slot:bottomContainer>{{bottomContainer}}</template></base-card>',
+		template: `<div style="width: 33vw;">
+			<base-card :badge="badge" :color="[color, colorGradient]" :isLandscape="landscape"><template v-slot:header-in>{{header}}</template><template v-slot:topContent>{{topContent}}</template><template v-slot:bottomContainer>{{bottomContainer}}</template></base-card>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Icon", () => ({
