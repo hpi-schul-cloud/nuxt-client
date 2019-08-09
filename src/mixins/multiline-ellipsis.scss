@@ -9,7 +9,7 @@
 	display: block; /* Fallback for non-webkit */
 	display: -webkit-box;
 	max-height: calc(
-		$font-size * $line-height * $lines-to-show
+		#{$font-size} * #{$line-height} * #{$lines-to-show}
 	); /* Fallback for non-webkit */
 
 	overflow: hidden;
