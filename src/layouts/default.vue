@@ -65,7 +65,6 @@ const topbarBaseActions = [
 			],
 		},
 	},
-	{ type: "text", title: "HPI Schul-Cloud Schule" },
 ];
 
 export default {
@@ -76,7 +75,7 @@ export default {
 	},
 	data() {
 		return {
-			sidebarItems: [
+			sidebarBaseItems: [
 				{
 					title: "Übersicht",
 					href: "/dashboard",
@@ -101,7 +100,12 @@ export default {
 				},
 				{ title: "Termine", href: "/calendar", icon: "table" },
 				{ title: "Lern-store", href: "/content", icon: "search" },
-				// { title: "Verwaltung", href: "/administration", icon: "school" },
+				{
+					title: "Verwaltung",
+					href: "/administration",
+					icon: "cogs",
+					permission: "STUDENT_CREATE",
+				},
 			],
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: false,
@@ -117,17 +121,46 @@ export default {
 				? this.user.firstName
 				: "Unknown User";
 		},
+		lastName() {
+			return this.user && this.user.lastName
+				? this.user.lastName
+				: "Unknown User";
+		},
+		role() {
+			return this.user && this.user.roles && this.user.roles.includes("teacher")
+				? "Lehrer"
+				: "Schüler";
+		},
+		schoolName() {
+			return "Schulcloud-Schule";
+		},
 		topBarActions() {
 			return this.authenticated
 				? [
 						...topbarBaseActions,
+						{ type: "text", title: this.schoolName },
 						{
 							type: "popupWithInitials",
-							title: this.firstName,
+							firstname: this.firstName,
+							lastname: this.lastName,
+							role: this.role,
 							event: "logout",
 						},
 				  ]
 				: [...topbarBaseActions];
+		},
+		sidebarItems() {
+			const sidebarItems = this.sidebarBaseItems.filter(
+				(item) =>
+					!item.permission ||
+					(this.user.permissions &&
+						this.user.permissions.includes(item.permission))
+			);
+
+			return sidebarItems.map((item) => {
+				item.active = this.$route.path.includes(item.href);
+				return item;
+			});
 		},
 	},
 	watch: {

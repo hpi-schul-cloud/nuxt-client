@@ -11,7 +11,7 @@
 		/>
 		<i
 			v-if="source === 'fa'"
-			:class="['fa', `fa-${icon}`]"
+			:class="['icon', 'fa', `fa-${icon}`]"
 			:style="{ color: fill }"
 		></i>
 	</div>
@@ -36,7 +36,7 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "currentColor",
+			default: "var(--color-tertiary-dark)",
 		},
 	},
 	computed: {
@@ -73,7 +73,9 @@ export default {
 	vertical-align: baseline;
 }
 .fa {
+	width: min-content;
 	font-size: var(--text-lg);
+	vertical-align: middle; // should this be default?
 }
 
 .material {

@@ -16,9 +16,9 @@
 					>
 						<base-icon
 							v-if="route.icon"
-							class="icon"
 							:icon="route.icon"
 							:source="route.source || 'fa'"
+							:fill="route.active ? 'var(--color-primary)' : ''"
 						/>
 						<span class="title">{{ route.title }}</span>
 					</base-link>
@@ -36,7 +36,7 @@ export default {
 			default: () => [],
 			validator: (value) => {
 				return value.every(
-					(route) => route.title /* && route.icon */ && (route.to || route.href)
+					(route) => route.title && route.icon && (route.to || route.href)
 				);
 			},
 		},
@@ -70,7 +70,8 @@ export default {
 			margin: 0;
 			list-style-type: none;
 
-			:hover {
+			:hover,
+			.active {
 				cursor: pointer;
 				background: var(--color-gray-light);
 			}
@@ -81,18 +82,14 @@ export default {
 				line-height: var(--sidebar-item-height);
 
 				.list-content {
-					display: block;
-					padding: calc(var(--space-sm) * 0.5) var(--space-md);
-					font-size: var(--text-md);
-					color: var(--color-black);
+					display: flex;
+					padding: 0 var(--space-md); // 20 px in old client
+					font-size: var(--text-sm); // 14px in old client
+					color: var(--color-tertiary-dark);
 					border-bottom: none;
 
-					&.nuxt-link-active {
-						color: var(--color-primary-dark);
-					}
-
 					.title {
-						padding: calc(var(--space-sm) * 0.5) var(--space-md);
+						padding: 0 var(--space-md); // 20 px in old client
 						text-transform: uppercase;
 
 						@include breakpoint(tablet) {
@@ -100,6 +97,9 @@ export default {
 						}
 					}
 				}
+			}
+			.active .list-content {
+				color: var(--color-primary);
 			}
 		}
 	}

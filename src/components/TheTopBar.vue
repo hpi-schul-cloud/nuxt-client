@@ -33,11 +33,13 @@
 
 				<popup-icon-initials
 					v-if="action.type === 'popupWithInitials'"
-					:key="action.title"
-					:firstname="action.title"
+					:key="action.firstname"
+					:firstname="action.firstname"
+					:lastname="action.lastname"
+					:user="action.user"
+					:role="action.role"
 					class="item"
 				>
-					<div>{{ action.title }} </div>
 					<menu-link to="/">Einstellungen</menu-link>
 					<base-button
 						:key="action.title"
@@ -82,7 +84,11 @@ export default {
 			default: () => [],
 			validator: function(value) {
 				return value.every((action) => {
-					const isValid = (action.icon || action.title) && action.type;
+					const isValid =
+						(action.icon ||
+							action.title ||
+							(action.firstname && action.lastname && action.role)) &&
+						action.type;
 					if (!isValid) {
 						console.error(
 							`Action "${JSON.stringify(

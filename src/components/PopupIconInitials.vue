@@ -2,6 +2,8 @@
 	<div v-click-outside="removePopup" class="popup" @click="popup">
 		<div class="icon">{{ initials }}</div>
 		<div class="popuptext" :class="{ visible }">
+			<span v-if="role"> {{ firstname }} {{ lastname }} ({{ role }}) </span>
+			<span v-else> {{ firstname }} {{ lastname }} </span>
 			<slot />
 		</div>
 	</div>
@@ -15,6 +17,10 @@ export default {
 			default: "",
 		},
 		lastname: {
+			type: String,
+			default: "",
+		},
+		role: {
 			type: String,
 			default: "",
 		},

@@ -2,8 +2,10 @@
 	<div>
 		<base-qr-code ref="qrcode" class="qrcode" :url="url" />
 		<base-button design="outline" class="print-button" @click="openPrintMenu">
-			<base-icon source="fa" icon="solid/print" />
-			Drucken
+			<div class="print-button-content">
+				<base-icon source="fa" icon="print" class="print-icon" />
+				Drucken
+			</div>
 		</base-button>
 	</div>
 </template>
@@ -37,5 +39,13 @@ export default {
 .print-button {
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-md);
+}
+
+.print-icon {
+	margin-right: var(--space-xs);
+}
+
+.print-button-content {
+	display: flex;
 }
 </style>
