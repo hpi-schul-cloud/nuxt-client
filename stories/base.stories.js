@@ -19,6 +19,7 @@ import BaseSelect from "@components/ui/BaseSelect";
 import BaseTextarea from "@components/ui/BaseTextarea";
 import BaseAudio from "@components/ui/BaseAudio";
 import BaseVideo from "@components/ui/BaseVideo";
+import BaseQrCode from "@components/ui/BaseQrCode";
 import BaseModal from "@components/ui/BaseModal";
 import BaseBlockquote from "@components/ui/BaseBlockquote";
 
@@ -453,6 +454,13 @@ storiesOf("Base Components", module)
 					}
 				]"
 			/>`,
+	}))
+	.add("Base QrCode", () => ({
+		components: { BaseQrCode },
+		data: () => ({
+			url: text("Url", "http://www.schul-cloud.org"),
+		}),
+		template: `<base-qr-code :url="url"/>`,
 	}))
 	.add("BaseBlockquote", () => ({
 		components: { BaseBlockquote },

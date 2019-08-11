@@ -18,6 +18,7 @@ export default {
 	methods: {
 		createQrCode: function() {
 			const image = kjua({ text: this.url, render: "image" });
+			image.alt = this.url;
 			const qrbox = this.$refs.qrcode;
 			qrbox.append(image);
 		},
