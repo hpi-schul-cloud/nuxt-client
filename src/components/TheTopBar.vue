@@ -40,11 +40,11 @@
 					:role="action.role"
 					class="item"
 				>
-					<menu-link to="/">Einstellungen</menu-link>
+					<base-link to="/account">Einstellungen</base-link>
 					<base-button
 						:key="action.title"
 						v-ripple
-						class="item"
+						class="item logout-button"
 						@click="sendEvent(action.event)"
 					>
 						Abmelden
@@ -58,7 +58,7 @@
 			design="secondary icon"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<base-icon source="fa" icon="expand" />
+			<base-icon source="fa" icon="expand" fill="var(--color-white)" />
 		</base-button>
 	</div>
 </template>
@@ -66,7 +66,7 @@
 <script>
 import PopupIcon from "@components/PopupIcon";
 import PopupIconInitials from "@components/PopupIconInitials";
-import MenuLink from "@components/MenuLink";
+import BaseLink from "@components/ui/BaseLink";
 import HelpDropdown from "@components/HelpDropdown";
 import MenuQrCode from "@components/MenuQrCode";
 
@@ -74,7 +74,7 @@ export default {
 	components: {
 		PopupIcon,
 		PopupIconInitials,
-		MenuLink,
+		BaseLink,
 		HelpDropdown,
 		MenuQrCode,
 	},
@@ -85,9 +85,8 @@ export default {
 			validator: function(value) {
 				return value.every((action) => {
 					const isValid =
-						(action.icon ||
-							action.title ||
-							(action.firstname && action.lastname && action.role)) &&
+						// (action.icon || action.title ||
+						// (action.firstname && action.lastname && action.role)) &&
 						action.type;
 					if (!isValid) {
 						console.error(
@@ -183,5 +182,16 @@ export default {
 	position: fixed;
 	top: var(--space-sm);
 	right: var(--space-sm);
+}
+
+.logout-button {
+	width: 100%;
+	background-color: transparent;
+	border-color: transparent;
+	outline: none;
+
+	:hover {
+		background-color: var(--color-gray);
+	}
 }
 </style>

@@ -132,7 +132,7 @@ export default {
 				: "Schüler";
 		},
 		schoolName() {
-			return "Schulcloud-Schule";
+			return this.user && this.user.schoolName ? this.user.schoolName : "";
 		},
 		topBarActions() {
 			return this.authenticated

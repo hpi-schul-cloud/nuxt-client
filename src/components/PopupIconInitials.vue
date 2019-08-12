@@ -51,12 +51,13 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 2em;
-	height: 2em;
+	width: 40px;
+	height: 40px;
 	padding: var(--space-xxs);
+	font-size: var(--text-md);
 	color: var(--color-white);
 	-webkit-user-select: None;
-	background-color: var(--color-black);
+	background-color: var(--color-tertiary-dark);
 	border: none;
 	border-radius: var(--radius-round);
 
