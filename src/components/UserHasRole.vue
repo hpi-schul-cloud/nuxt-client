@@ -22,12 +22,12 @@ export default {
 		...mapState({
 			userRoles: (state) =>
 				state && state.auth && state.auth.user && state.auth.user.roles
-					? state.auth.user.roles
+					? state.auth.user.roles.map(r => r.name.toLowerCase())
 					: [],
 		}),
 		hasRole() {
 			return typeof this.role === "string"
-				? this.userRoles.includes(this.role)
+				? this.userRoles.includes(this.role.toLowerCase())
 				: this.role(this.userRoles);
 		},
 	},

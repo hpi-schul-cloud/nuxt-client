@@ -55,12 +55,12 @@ const topbarBaseActions = [
 				{
 					label: "Wunsch oder Problem senden",
 					icon: "pencil",
-					action: "/",
+					action: "/help?activeForm=team#contact-form",
 				},
 				{
 					label: "Admin deiner Schule kontaktieren",
 					icon: "comment",
-					action: "/",
+					action: "/help?activeForm=admin#contact-form",
 				},
 			],
 		},

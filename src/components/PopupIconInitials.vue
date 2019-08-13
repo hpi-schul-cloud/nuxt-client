@@ -2,15 +2,25 @@
 	<div v-click-outside="removePopup" class="popup" @click="popup">
 		<div class="icon">{{ initials }}</div>
 		<div class="popuptext" :class="{ visible }">
-			<span v-if="role"> {{ firstname }} {{ lastname }} ({{ role }}) </span>
-			<span v-else> {{ firstname }} {{ lastname }} </span>
+			<div class="username">
+				<user-has-role v-for="roleDisplayName in rolesDisplayName" :key="roleDisplayName.name" :role="roleDisplayName.name">
+					<template v-slot:true>
+						<span> {{ firstname }} {{ lastname }} ({{ roleDisplayName.displayName }}) </span>
+					</template>
+				</user-has-role>
+			</div>
 			<slot />
 		</div>
 	</div>
 </template>
 
 <script>
+import UserHasRole from "@components/UserHasRole";
+
 export default {
+	components: {
+		UserHasRole,
+	},
 	props: {
 		firstname: {
 			type: String,
@@ -28,6 +38,48 @@ export default {
 	data() {
 		return {
 			visible: false,
+			rolesDisplayName: [
+				{
+					name: 'teacher',
+					displayName: 'Lehrer',
+				},
+				{
+					name: 'student',
+					displayName: 'Schüler',
+				},
+				{
+					name: 'administrator',
+					displayName: 'Administrator',
+				},
+				{
+					name: 'superhero',
+					displayName: 'Schul-Cloud Admin',
+				},
+					{
+					name: 'demo',
+					displayName: 'Demo',
+				},
+				{
+					name: 'demoTeacher',
+					displayName: 'Demo',
+				},
+				{
+					name: 'demoStudent',
+					displayName: 'Demo',
+				},
+				{
+					name: 'helpdesk',
+					displayName: 'Helpdesk',
+				},
+				{
+					name: 'betaTeacher',
+					displayName: 'Beta',
+				},
+				{
+					name: 'expert',
+					displayName: 'Experte',
+				}
+			],
 		};
 	},
 	computed: {
@@ -78,15 +130,26 @@ export default {
 		z-index: var(--layer-dropdown);
 		display: none;
 		flex-direction: column;
-		padding: var(--space-xxs);
+		width: 214px;
+		padding: var(--space-xs) 0;
 		margin-top: var(--space-xxxxs);
+		font-size: var(--text-lg);
+		color: var(--color-tertiary-dark);
 		white-space: nowrap;
 		background-color: var(--color-white);
-		border: 1px solid var(--color-gray);
+		border: 1px solid var(--color-disabled);
 		border-radius: var(--radius-sm);
 
 		&.visible {
 			display: flex;
+		}
+
+		.username {
+			height: 40px;
+			/* stylelint-disable sh-waqar/declaration-use-variable */
+			padding: 10px 15px;
+			/* stylelint-enable */
+			border-bottom: 1px solid var(--color-disabled);
 		}
 	}
 }

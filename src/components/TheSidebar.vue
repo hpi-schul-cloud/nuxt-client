@@ -81,15 +81,18 @@ export default {
 				height: var(--sidebar-item-height);
 				line-height: var(--sidebar-item-height);
 
+				--sidebar-item-padding: 20px;
+				--sidebar-font-size: 14px;
+
 				.list-content {
 					display: flex;
-					padding: 0 var(--space-md); // 20 px in old client
-					font-size: var(--text-sm); // 14px in old client
+					padding: 0 var(--sidebar-item-padding);
+					font-size: var(--sidebar-font-size);
 					color: var(--color-tertiary-dark);
 					border-bottom: none;
 
 					.title {
-						padding: 0 var(--space-md); // 20 px in old client
+						padding: 0 var(--sidebar-item-padding);
 						text-transform: uppercase;
 
 						@include breakpoint(tablet) {
