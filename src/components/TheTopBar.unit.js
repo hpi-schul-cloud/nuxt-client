@@ -43,7 +43,7 @@ describe("@components/TheTopBar", () => {
 		expect(wrapper.findAll("button").length).toBe(1);
 		wrapper.find("button").trigger("click");
 		expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
-		expect(wrapper.findAll(".item").length).toBe(5);
+		expect(wrapper.findAll(".item").length).toBe(4);
 	});
 	it("can switch to fullscreen mode", () => {
 		const wrapper = mount(TheTopBar, {

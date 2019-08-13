@@ -35,9 +35,10 @@ button {
 	border: none;
 	border-radius: var(--radius-round);
 
-	&:hover {
+	&:hover, &:focus {
 		cursor: pointer;
 		background-color: var(--color-gray-light);
+		outline: none;
 	}
 }
 </style>

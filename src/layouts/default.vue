@@ -47,11 +47,11 @@ const topbarBaseActions = [
 					icon: "question-circle",
 					action: "/help",
 				},
-				{
-					label: "Intro",
-					icon: "map-signs",
-					action: "/",
-				},
+				// {
+				// 	label: "Intro",
+				// 	icon: "map-signs",
+				// 	action: "/",
+				// },
 				{
 					label: "Wunsch oder Problem senden",
 					icon: "pencil",

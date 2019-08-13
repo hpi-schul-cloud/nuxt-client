@@ -106,7 +106,8 @@ export default {
 	width: 40px;
 	height: 40px;
 	padding: var(--space-xxs);
-	font-size: var(--text-md);
+	font-family: var(--font-accent);
+	font-size: var(--text-lg);
 	color: var(--color-white);
 	-webkit-user-select: None;
 	background-color: var(--color-tertiary-dark);
@@ -145,10 +146,12 @@ export default {
 		}
 
 		.username {
-			height: 40px;
+			min-height: 40px;
 			/* stylelint-disable sh-waqar/declaration-use-variable */
 			padding: 10px 15px;
+			margin-bottom: 5px;
 			/* stylelint-enable */
+			white-space: normal;
 			border-bottom: 1px solid var(--color-disabled);
 		}
 	}

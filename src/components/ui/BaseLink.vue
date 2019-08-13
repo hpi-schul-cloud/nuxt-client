@@ -137,7 +137,6 @@ export default {
 	&:hover,
 	&:focus {
 		color: var(--color-primary-dark);
-		text-decoration: underline;
 	}
 	&:visited {
 		color: var(--color-primary);

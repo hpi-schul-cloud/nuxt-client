@@ -1,6 +1,7 @@
 <template>
 	<div v-click-outside="removePopup" class="popup" @click="popup">
 		<base-icon-button
+			class="icon-button"
 			:source="source"
 			:icon="icon"
 			:fill="fill"
@@ -45,6 +46,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .popup {
 	position: relative;
 	display: inline-block;
@@ -53,6 +56,12 @@ export default {
 	--arrow-size: var(--space-xxs);
 	--arrow-offset: 1em;
 	--outer-arrow-size: calc(var(--arrow-size) + 1.5px);
+
+	:focus-within {
+		.icon-button{
+			background-color: var(--color-gray-light);
+		}
+	}
 
 	.popup-content {
 		position: absolute;

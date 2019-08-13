@@ -44,11 +44,11 @@
 					:role="action.role"
 					class="item"
 				>
-					<base-link href="/account">Einstellungen</base-link>
+					<a href="/account" class="account-link">Einstellungen</a>
 					<button
 						:key="action.title"
 						v-ripple
-						class="item logout-button"
+						class="logout-button"
 						@click="sendEvent(action.event)"
 					>
 						Abmelden
@@ -62,7 +62,7 @@
 			design="secondary icon"
 			@click.native="sendEvent('fullscreen')"
 		>
-			<base-icon source="fa" icon="expand" fill="var(--color-white)" />
+			<base-icon source="fa" icon="compress" fill="var(--color-white)" />
 		</base-button>
 	</div>
 </template>
@@ -178,13 +178,17 @@ export default {
 	// box-shadow: var(--shadow-sm);
 }
 
-.logout-button {
+.logout-button, .account-link {
 	--hover-color: #f5f5f5;
 
 	width: 100%;
+	/* stylelint-disable sh-waqar/declaration-use-variable */
+	padding: 8px 27px;
+	/* stylelint-enable */
 	font-size: var(--text-lg);
 	color: var(--color-tertiary-dark);
 	text-align: left;
+	text-decoration: none;
 	background-color: transparent;
 	border-color: transparent;
 	outline: none;

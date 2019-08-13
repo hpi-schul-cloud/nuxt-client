@@ -64,6 +64,10 @@ export default {
 	}
 	.link {
 		padding-left: var(--space-sm); // space in legacy client 8px;
+		&:hover,
+		&:focus {
+			text-decoration: underline;
+		}
 	}
 }
 </style>
