@@ -2,10 +2,10 @@ FROM node:lts as builder
 
 WORKDIR '/app'
 COPY ./package.json ./
-COPY ./yarn.lock ./
-RUN yarn install
+COPY ./package-lock.json ./
+RUN npm ci
 COPY . .
-RUN yarn build:storybook
+RUN npm run build:storybook
 
 FROM nginx:alpine
 EXPOSE 80

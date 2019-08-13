@@ -1,7 +1,11 @@
 <template>
 	<div class="topbar">
 		<div v-if="!fullscreenMode" class="top-sidebar" @click="$emit('input')">
-			<img class="logo" :src="$theme.logo.transparent" alt="Schulcloud Logo" />
+			<img
+				class="logo"
+				src="@assets/img/logo/logo-image-mono.svg"
+				alt="Schulcloud Logo"
+			/>
 		</div>
 
 		<!-- ACTIONS -->
@@ -40,15 +44,15 @@
 					:role="action.role"
 					class="item"
 				>
-					<base-link to="/account">Einstellungen</base-link>
-					<base-button
+					<base-link href="/account">Einstellungen</base-link>
+					<button
 						:key="action.title"
 						v-ripple
 						class="item logout-button"
 						@click="sendEvent(action.event)"
 					>
 						Abmelden
-					</base-button>
+					</button>
 				</popup-icon-initials>
 			</template>
 		</div>
@@ -113,6 +117,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .topbar {
 	display: flex;
 	align-items: center;
@@ -133,27 +138,13 @@ export default {
 
 		.logo {
 			width: 100%;
-			height: var(--heading-1);
-			margin-top: var(--space-xs);
-			margin-bottom: var(--space-xs);
+			height: var(--sidebar-item-height);
+			padding-top: var(--space-xs);
+			padding-bottom: var(--space-xs);
 
 			@include breakpoint(tablet) {
 				margin: 0;
 				// hier fehlt noch was
-			}
-		}
-
-		.page-title {
-			padding: 0;
-			margin: 0;
-			font-family: var(--font-accent);
-			font-size: var(--heading-5);
-			font-weight: var(--font-weight-normal);
-			color: var(--color-white);
-			text-transform: capitalize;
-
-			@include breakpoint(tablet) {
-				display: none;
 			}
 		}
 	}
@@ -182,16 +173,24 @@ export default {
 	position: fixed;
 	top: var(--space-sm);
 	right: var(--space-sm);
+	// padding: var(--space-sm) var(--space-md);
+	// background-color: var(--color-primary);
+	// box-shadow: var(--shadow-sm);
 }
 
 .logout-button {
+	--hover-color: #f5f5f5;
+
 	width: 100%;
+	font-size: var(--text-lg);
+	color: var(--color-tertiary-dark);
+	text-align: left;
 	background-color: transparent;
 	border-color: transparent;
 	outline: none;
 
-	:hover {
-		background-color: var(--color-gray);
+	&:hover {
+		background-color: var(--hover-color);
 	}
 }
 </style>

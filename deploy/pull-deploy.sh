@@ -1,6 +1,15 @@
 # Deploy Docs & Storybook to surge.sh
 # and comment deployed URLs to pull requests
 
+while getopts p: option
+do
+case "${option}"
+in
+p) PROJECT=${OPTARG};;
+esac
+done
+echo PROJECT $PROJECT
+
 SURGE_SUBDOMAIN=${SURGE_SUBDOMAIN:="nuxt.schul-cloud"}
 
 # Only run if it is a pull request
@@ -16,13 +25,18 @@ then
 	exit 0;
 fi
 
-# deploy docs
-echo "Deploy docs to surge.sh"
-surge --project ./dist/docs --domain docs.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
 
-# deploy storybook
-echo "Deploy storybook to surge.sh"
-surge --project ./dist/storybook --domain stories.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
+if [[ $PROJECT == "storybook" ]]
+then
+	echo "Deploy storybook to surge.sh"
+	surge --project ./dist/storybook --domain stories.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
+elif [[ $PROJECT == "vuepress" ]]
+then
+	surge --project ./dist/docs --domain docs.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh
+else
+  echo "-p (-p vuepress or -p storybook) parameter is missing"
+	exit 1
+fi
 
 
 if [ -z "$GITHUB_TOKEN" ];

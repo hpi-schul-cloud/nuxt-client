@@ -40,8 +40,8 @@ describe("@components/TheTopBar", () => {
 		});
 		expect(wrapper.findAll("base-icon-button-stub").length).toBe(1);
 		expect(wrapper.findAll("popup-icon-stub").length).toBe(1);
-		expect(wrapper.findAll("base-button-stub").length).toBe(1);
-		wrapper.find("base-button-stub").vm.$emit("click");
+		expect(wrapper.findAll("button").length).toBe(1);
+		wrapper.find("button").trigger("click");
 		expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
 		expect(wrapper.findAll(".item").length).toBe(5);
 	});

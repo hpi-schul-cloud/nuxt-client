@@ -5,7 +5,7 @@
 			<p>Please login to proceed.</p>
 
 			<img
-				src="@assets/img/logo/Bildmarke_transparent.svg"
+				:src="$theme.logo.logo_image_mono"
 				alt="Schul-Cloud"
 				style="width: var(--text-lg); filter: invert(1)"
 			/>
