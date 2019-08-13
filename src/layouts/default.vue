@@ -104,7 +104,26 @@ export default {
 					title: "Verwaltung",
 					href: "/administration",
 					icon: "cogs",
-					permission: "STUDENT_CREATE",
+					permission: 'STUDENT_CREATE',
+        			excludedPermission: 'ADMIN_VIEW',
+				},
+				{
+					title: 'Helpdesk',
+					href: '/administration/helpdesk/',
+        			icon: 'ticket',
+       				permission: 'HELPDESK_VIEW'
+				},
+				{
+					title: 'Administration',
+       				href: '/administration/',
+        			icon: 'cogs',
+        			permission: 'ADMIN_VIEW',
+				},
+				{
+					title: 'Meine Materialien',
+       				href: '/my-material/',
+					icon: 'book',
+        			permission: 'BETA_FEATURES'
 				},
 			],
 			pageTitle: this.$theme.short_name,
@@ -150,12 +169,28 @@ export default {
 				: [...topbarBaseActions];
 		},
 		sidebarItems() {
+
 			const sidebarItems = this.sidebarBaseItems.filter(
-				(item) =>
-					!item.permission ||
-					(this.user.permissions &&
-						this.user.permissions.includes(item.permission))
-			);
+				(item) => {
+					const hasRequiredPermission = this.user.permissions && this.user.permissions.includes(item.permission);
+					const hasExcludedPermission = this.user.permissions && this.user.permissions.includes(item.excludedPermission);
+
+					return !item.permission || (hasRequiredPermission && !hasExcludedPermission);
+				});
+
+			const teamsEnabled = process.env.FEATURE_TEAMS_ENABLED === 'true';
+
+			if (teamsEnabled) {
+        		sidebarItems.splice(2, 0, {
+					title: 'Teams',
+					icon: 'users',
+					href: '/teams/',
+				});
+				// sidebarItems.find(i => i.name === 'Meine Dateien').children.splice(2, 0, {
+				// 	title: 'Teams',
+				// 	icon: 'folder-open-o',
+				// 	href: '/files/teams/',
+			}
 
 			return sidebarItems.map((item) => {
 				item.active = this.$route.path.includes(item.href);

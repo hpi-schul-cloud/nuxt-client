@@ -3,11 +3,7 @@
 		<div class="icon">{{ initials }}</div>
 		<div class="popuptext" :class="{ visible }">
 			<div class="username">
-				<user-has-role v-for="roleDisplayName in rolesDisplayName" :key="roleDisplayName.name" :role="roleDisplayName.name">
-					<template v-slot:true>
-						<span> {{ firstname }} {{ lastname }} ({{ roleDisplayName.displayName }}) </span>
-					</template>
-				</user-has-role>
+				<span> {{ firstname }} {{ lastname }} <user-role/> </span>
 			</div>
 			<slot />
 		</div>
@@ -15,11 +11,11 @@
 </template>
 
 <script>
-import UserHasRole from "@components/UserHasRole";
+import UserRole from "@components/UserRole";
 
 export default {
 	components: {
-		UserHasRole,
+		UserRole,
 	},
 	props: {
 		firstname: {
@@ -38,48 +34,6 @@ export default {
 	data() {
 		return {
 			visible: false,
-			rolesDisplayName: [
-				{
-					name: 'teacher',
-					displayName: 'Lehrer',
-				},
-				{
-					name: 'student',
-					displayName: 'Schüler',
-				},
-				{
-					name: 'administrator',
-					displayName: 'Administrator',
-				},
-				{
-					name: 'superhero',
-					displayName: 'Schul-Cloud Admin',
-				},
-					{
-					name: 'demo',
-					displayName: 'Demo',
-				},
-				{
-					name: 'demoTeacher',
-					displayName: 'Demo',
-				},
-				{
-					name: 'demoStudent',
-					displayName: 'Demo',
-				},
-				{
-					name: 'helpdesk',
-					displayName: 'Helpdesk',
-				},
-				{
-					name: 'betaTeacher',
-					displayName: 'Beta',
-				},
-				{
-					name: 'expert',
-					displayName: 'Experte',
-				}
-			],
 		};
 	},
 	computed: {
