@@ -17,6 +17,7 @@ import BaseTable from "@components/ui/BaseTable";
 import BaseCollapsible from "@components/ui/BaseCollapsible";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
 import BaseSelect from "@components/ui/BaseSelect";
+import BaseTextarea from "@components/ui/BaseTextarea";
 import BaseAudio from "@components/ui/BaseAudio";
 import BaseVideo from "@components/ui/BaseVideo";
 import BaseModal from "@components/ui/BaseModal";
@@ -318,7 +319,7 @@ storiesOf("Base Components", module)
 		</div>`,
 	}))
 	.add("Base Textarea", () => ({
-		components: { BaseSelect },
+		components: { BaseTextarea },
 		data: () => ({
 			value: "",
 			label: text("label", "Label"),
@@ -352,7 +353,7 @@ storiesOf("Base Components", module)
 		<div>
 		Content: {{content}} <br/>
 		Options: {{options}} <br/>
-			<base-select v-model="content" :multiple="multiple" :options="options" track-by="_id" :label="label" optionLabel="name" :placeholder="placeholder"/>
+			<base-select v-model="content" :multiple="multiple" :options="options" :label="label" optionLabel="name" :placeholder="placeholder"/>
 		</div>`,
 		methods: {},
 	}))

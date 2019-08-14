@@ -1,12 +1,14 @@
+require("dotenv").config();
 const pkg = require("./package");
 const themeName = process.env.SC_THEME || "default";
+const API_URL = process.env.API_URL || "http://localhost:3030";
 
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
 	env: {
-		API_URL: process.env.API_URL || "http://localhost:3030",
+		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
 	},
 	/*
 	 ** Headers of the page
@@ -51,28 +53,31 @@ module.exports = {
 	cssSourceMap: true,
 
 	router: {
-		middleware: ["is-authenticated"],
+		middleware: [
+			// "is-authenticated",
+			"links-fallback",
+		],
 	},
 
 	/*
 	 ** Plugins to load before mounting the App
 	 */
 	plugins: [
-		{
-			src: "@plugins/authenticate",
-			ssr: false,
-		},
 		"@plugins/global",
+		"@plugins/axios",
+		"@plugins/i18n",
+		"@plugins/authenticate",
+		"@plugins/user",
 	],
 
 	/*
 	 ** Nuxt.js modules
 	 */
 	modules: [
-		/* other options */
-
+		"@nuxtjs/dotenv",
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
+		"cookie-universal-nuxt",
 		"@nuxtjs/toast",
 		"nuxt-babel",
 	],
@@ -85,7 +90,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
-		baseUrl: process.env.BASE_URL || "https://localhost:3030",
+		baseURL: API_URL,
 	},
 
 	/*
@@ -118,6 +123,7 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
+		vendor: ["vue-i18n"],
 	},
 	generate: {
 		dir: "dist/nuxt",

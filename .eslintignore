@@ -3,3 +3,4 @@
 /src/legacy-client/**
 dist
 .nuxt
+locales/**/*

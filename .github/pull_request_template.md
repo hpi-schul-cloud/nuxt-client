@@ -1,4 +1,10 @@
-# Issue #{issue number}
+<!--
+please use:
+- `#{issue Number}` (#12) for github issues
+- and `[Vue-{issue Number}](https://ticketsystem.schul-cloud.org/browse/VUE-18)` for issues from our ticketsystem
+-->
+
+# Issue: ...
 
 <!--
 

@@ -1,6 +1,10 @@
 <template>
 	<div class="topbar">
-		<img class="logo" :src="$theme.logo.app" alt="Website Logo" />
+		<img
+			class="logo"
+			src="@assets/img/logo/logo-image-mono.svg"
+			alt="Website Logo"
+		/>
 		<h1 class="page-title">{{ title }}</h1>
 
 		<!-- ACTIONS -->
@@ -39,10 +43,17 @@ export default {
 			default: () => [],
 			validator: function(value) {
 				return value.every((action) => {
-					return (
+					const isValid =
 						(action.icon || action.title) &&
-						(action.event || action.to || action.href)
-					);
+						(action.event || action.to || action.href);
+					if (!isValid) {
+						console.error(
+							`Action "${JSON.stringify(
+								action
+							)}" in prop "actions" of "TheTopBar" is invalid.`
+						);
+					}
+					return isValid;
 				});
 			},
 		},
@@ -61,6 +72,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: var(--space-sm) var(--space-md);
+	background-color: var(--color-primary);
 	box-shadow: var(--shadow-sm);
 }
 .logo {
@@ -72,6 +84,7 @@ export default {
 	margin: 0;
 	font-family: var(--font-accent);
 	font-size: var(--heading-4);
+	color: var(--color-white);
 	text-transform: capitalize;
 }
 .action {

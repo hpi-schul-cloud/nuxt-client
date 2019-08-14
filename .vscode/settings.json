@@ -26,6 +26,13 @@
 		"**/coverage": true
 	},
 
+	"search.exclude": {
+		"**/node_modules": true,
+		".git/*": true,
+		".nuxt/*": true,
+		"src/legacy-client/*": true
+	},
+
 	// ===
 	// Event Triggers
 	// ===
@@ -98,7 +105,7 @@
 	// MARKDOWN
 	// ===
 
-	"markdownlint.ignore": ["schulcloud-client/**/*.md"],
+	"markdownlint.ignore": ["src/legacy-client/**/*.md"],
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
 		"editor.wordWrapColumn": 80
@@ -107,7 +114,7 @@
 	// ===
 	// EDITOR SETTINGS
 	// ===
-	"npm.packageManager": "yarn",
+	"npm.packageManager": "npm",
 	"editor.suggest.localityBonus": true,
 
 	// ===
