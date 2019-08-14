@@ -39,7 +39,7 @@
 					</slot>
 				</div>
 				<base-icon
-					v-if="type === 'password' && !passwordVisible"
+					v-if="type === 'password' && !passwordVisible && !error && !success"
 					source="custom"
 					icon="invisible"
 					fill="var(--color-gray)"
@@ -47,7 +47,7 @@
 					@click="togglePasswordVisibility"
 				/>
 				<base-icon
-					v-if="type === 'password' && passwordVisible"
+					v-if="type === 'password' && passwordVisible && !error && !success"
 					source="custom"
 					icon="visible"
 					fill="var(--color-gray)"
