@@ -75,7 +75,6 @@ export default {
 	display: inline-block;
 	width: 100%;
 	padding: var(--space-xs) var(--space-xs);
-	margin: var(--space-sm);
 	cursor: pointer;
 	background: #fff;
 	border: 1px solid var(--color-gray);

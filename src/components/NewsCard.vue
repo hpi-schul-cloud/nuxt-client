@@ -1,34 +1,39 @@
 <template>
-	<BaseCard v-bind="$props">
-		<template v-slot:header-in>
-			{{ category }}
-		</template>
-
-		<template v-if="picture" v-slot:topContent
-			><div class="inner-card">
-				<div class="overlay" :style="background_style"> </div>
-				<img :src="picture" /> </div
-		></template>
-		<template v-slot:bottomContainer>
-			<h2 class="time">{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</h2>
-			<h3 class="headline">{{ headline }}</h3>
-			<p class="news-content"><slot /></p>
-		</template>
-		<template v-slot:footer>
-			<div v-if="eventDate">
-				<hr class="line" />
-				<base-icon
-					source="material"
-					icon="event"
-					fill="var(--color-gray-dark)"
-				/>
-				<div class="event-date">
-					{{ dayjs(eventDate).format("DD.MM.YYYY") }} um
-					{{ dayjs(eventDate).format("H") }} Uhr
+	<!-- TODO: Remove underline styling of link-->
+	<base-link class="outer-card" :to="{ name: 'news-id', params: { id: id } }">
+		<BaseCard v-bind="$props">
+			<template v-slot:header-in>
+				{{ category }}
+			</template>
+			<template v-if="picture" v-slot:topContent>
+				<div class="inner-card">
+					<div class="overlay" :style="background_style"> </div>
+					<img :src="picture" />
 				</div>
-			</div>
-		</template>
-	</BaseCard>
+			</template>
+			<template v-slot:bottomContainer>
+				<h2 class="time"
+					>{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</h2
+				>
+				<h3 class="title">{{ title }}</h3>
+				<p class="news-content"><slot /></p>
+			</template>
+			<template v-slot:footer>
+				<div v-if="eventDate">
+					<hr class="line" />
+					<base-icon
+						source="material"
+						icon="event"
+						fill="var(--color-gray-dark)"
+					/>
+					<div class="event-date">
+						{{ dayjs(eventDate).format("DD.MM.YYYY") }} um
+						{{ dayjs(eventDate).format("H") }} Uhr
+					</div>
+				</div>
+			</template>
+		</BaseCard>
+	</base-link>
 </template>
 
 <script>
@@ -40,8 +45,9 @@ dayjs.locale("de");
 
 export default {
 	props: {
+		id: { type: String, required: true },
 		category: { type: String, required: true },
-		headline: { type: String, required: true },
+		title: { type: String, required: true },
 		createdAt: { type: String, required: true },
 		createdBy: { type: String, required: true },
 		picture: { type: String, default: "" },
@@ -75,6 +81,10 @@ export default {
 @import "@variables";
 @import "@mixins/multiline-ellipsis.scss";
 
+.outer-card {
+	width: 100%;
+}
+
 .time {
 	margin: 0;
 	font-size: var(--text-xs);
@@ -82,7 +92,7 @@ export default {
 	color: var(--color-gray);
 }
 
-.headline {
+.title {
 	overflow: hidden;
 	font-size: var(--heading-4);
 	line-height: var(--line-height-sm);
@@ -124,6 +134,7 @@ export default {
 		right: 0;
 		z-index: var(--layer-behind);
 		width: 80%;
+		height: 100%;
 		object-fit: cover;
 	}
 }
