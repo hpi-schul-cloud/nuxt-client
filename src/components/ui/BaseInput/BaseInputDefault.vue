@@ -39,16 +39,34 @@
 					</slot>
 				</div>
 				<base-icon
+					v-if="type === 'password' && !passwordVisible"
+					source="custom"
+					icon="invisible"
+					fill="var(--color-gray)"
+					class="icon-behind"
+					@click="togglePasswordVisibility"
+				/>
+				<base-icon
+					v-if="type === 'password' && passwordVisible"
+					source="custom"
+					icon="visible"
+					fill="var(--color-gray)"
+					class="icon-behind"
+					@click="togglePasswordVisibility"
+				/>
+				<base-icon
 					v-if="error"
 					source="custom"
 					icon="warning"
-					class="icon-behind error"
+					fill="var(--color-danger)"
+					class="icon-behind"
 				/>
 				<base-icon
 					v-if="success"
 					source="custom"
 					icon="success"
-					class="icon-behind success"
+					fill="var(--color-success)"
+					class="icon-behind"
 				/>
 			</div>
 		</div>
@@ -58,10 +76,6 @@
 		>
 			{{ error || info }}
 		</span>
-		<div v-if="type === 'password'" class="show-password-wrapper">
-			<input type="checkbox" @click="togglePasswordVisibility" />
-			<span class="show-password"> Password anzeigen </span>
-		</div>
 	</label>
 </template>
 <script>
@@ -121,7 +135,7 @@ export default {
 	},
 	data: function() {
 		return {
-			showPassword: [false],
+			passwordVisible: false,
 		};
 	},
 	computed: {
@@ -157,6 +171,7 @@ export default {
 				} else if (input.type === "text") {
 					input.type = "password";
 				}
+				this.passwordVisible = !this.passwordVisible;
 			}
 		},
 	},
@@ -165,23 +180,41 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .wrapper {
 	display: block;
+
+	.help {
+		padding-top: var(--space-xxxs);
+		visibility: hidden;
+	}
+
+	.label {
+		margin-right: var(--space-sm);
+		&:not(.label-visible) {
+			visibility: hidden;
+		}
+	}
+
+	&:focus-within,
+	&:hover:not(.disabled) {
+		.label {
+			color: var(--color-accent);
+		}
+		.help {
+			visibility: visible;
+		}
+	}
 }
 
 .top {
 	width: 100%;
 	border-bottom: var(--border-width) solid var(--color-black);
 
-	&:focus-within {
-		outline: none;
-		.label {
-			color: var(--color-accent);
-		}
-	}
 	&:focus-within,
 	&:hover:not(.disabled) {
 		border-bottom-color: var(--color-accent);
+		outline: none;
 	}
 	&.error {
 		border-bottom-color: var(--color-danger);
@@ -197,12 +230,6 @@ export default {
 
 		&:not(.label-visible) {
 			justify-content: flex-end;
-		}
-		.label {
-			margin-right: var(--space-sm);
-			&:not(.label-visible) {
-				visibility: hidden;
-			}
 		}
 	}
 	.input-line {
@@ -222,6 +249,9 @@ export default {
 				&:focus {
 					outline: none;
 				}
+				&::placeholder {
+					// color: green;
+				}
 				&:disabled {
 					background-color: transparent;
 					&::placeholder {
@@ -235,12 +265,6 @@ export default {
 			height: 24px;
 			margin-left: var(--space-xs);
 			font-size: var(--text-lg);
-			&.error {
-				color: var(--color-danger);
-			}
-			&.success {
-				color: var(--color-success);
-			}
 		}
 	}
 }
@@ -256,24 +280,13 @@ export default {
 	}
 }
 
-.info,
-.show-password {
+.info {
 	display: block;
 	font-size: var(--text-xs);
 	color: var(--color-gray);
 }
-.help {
-	padding-top: var(--space-xxxs);
-}
-.show-password {
-	margin-left: var(--space-xxs);
-}
+
 .info.error {
 	color: var(--color-danger);
-}
-
-.show-password-wrapper {
-	display: flex;
-	width: 100%;
 }
 </style>
