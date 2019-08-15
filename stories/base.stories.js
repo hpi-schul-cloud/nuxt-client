@@ -2,7 +2,7 @@
 
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean, color } from "@storybook/addon-knobs";
+import { text, select, boolean, color, number } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
@@ -325,13 +325,17 @@ storiesOf("Base Components", module)
 			label: text("label", "Label"),
 			placeholder: text(
 				"placeholder",
-				"Lange Geschichten brauchen eine BaseTextarea."
+				"Schreibe hier die Antwort rein."
 			),
+			rows: number("rows", 1),
+			maxRows: number("maxRows", 5),
+			maxLength: number("maxLength", 50),
+			withLines: boolean("withLines", false),
 		}),
 		template: `
 			<div>
 				v-model: {{value}} <br/>
-				<base-textarea v-model="value" :label="label" :placeholder="placeholder"/>
+				<base-textarea v-model="value" :label="label" :placeholder="placeholder" :rows="rows" :maxRows="maxRows" :maxLength="maxLength" :withLines="withLines"/>
 			</div>`,
 		methods: {},
 	}))

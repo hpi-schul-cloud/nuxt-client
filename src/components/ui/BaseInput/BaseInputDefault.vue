@@ -7,7 +7,6 @@
 				top: true,
 				error: !!error,
 				disabled: !!disabled,
-				'is-textarea': isTextarea,
 			}"
 		>
 			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
@@ -51,7 +50,7 @@
 					source="custom"
 					icon="visible"
 					fill="var(--color-gray)"
-					class="icon-behind"
+					class="icon-behind visible"
 					@click="togglePasswordVisibility"
 				/>
 				<base-icon
@@ -151,9 +150,6 @@ export default {
 		showLabel() {
 			return !!this.vmodel || !this.$attrs.placeholder;
 		},
-		isTextarea() {
-			return this.type === "textarea";
-		},
 	},
 	methods: {
 		handleInput(event) {
@@ -203,6 +199,9 @@ export default {
 		}
 		.help {
 			visibility: visible;
+		}
+		.visible {
+			fill: var(--color-accent);
 		}
 	}
 }
@@ -266,17 +265,6 @@ export default {
 			margin-left: var(--space-xs);
 			font-size: var(--text-lg);
 		}
-	}
-}
-
-.is-textarea {
-	border: var(--border-width) solid var(--color-black);
-	&:focus-within,
-	&:hover:not(.disabled) {
-		border-color: var(--color-accent);
-	}
-	&.error {
-		border-color: var(--color-danger);
 	}
 }
 
