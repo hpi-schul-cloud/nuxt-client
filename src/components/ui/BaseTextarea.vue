@@ -98,7 +98,11 @@ textarea {
 }
 
 .with-lines {
-	margin-bottom: calc(-1 * var(--space-xxs) + 2px);
+	--textarea-z-index: -1;
+
+	position: relative;
+	z-index: var(--textarea-z-index);
+	margin-bottom: calc(-1 * var(--space-xxs));
 	background-image: linear-gradient(var(--color-white) 50%, var(--color-white) 50%),
 	linear-gradient( 
         transparent,
