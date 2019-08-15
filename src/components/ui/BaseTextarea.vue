@@ -87,7 +87,6 @@ textarea {
 	font-size: var(--text-md);
 	line-height: var(--line-height);
 	color: var(--color-text);
-	text-align: middle;
 	resize: none;
 	border: none;
 	outline: none;
@@ -102,7 +101,7 @@ textarea {
 
 	position: relative;
 	z-index: var(--textarea-z-index);
-	margin-bottom: calc(-1 * var(--space-xxs));
+	margin-bottom: calc(-1 * var(--space-xxs) - 4px);
 	background-image: linear-gradient(var(--color-white) 50%, var(--color-white) 50%),
 	linear-gradient( 
         transparent,
