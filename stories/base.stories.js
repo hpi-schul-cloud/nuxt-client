@@ -1,6 +1,11 @@
 import { storiesOf } from "@storybook/vue";
-import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean, color } from "@storybook/addon-knobs";
+import {
+	tableData,
+	tableColumns,
+	tableFilters,
+	tableActions,
+} from "./mockData/BaseTable";
+import { text, select, boolean, color, number } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
@@ -322,12 +327,28 @@ storiesOf("Base Components", module)
 		data: () => ({
 			data: tableData,
 			columns: tableColumns,
-			perPage: 5,
-			currentPage: 1,
+			perPage: number("perPage", 5),
+			backendPagination: number("backendPagination", 5),
+			paginated: boolean("paginated", true),
+			currentPage: number("currentPage", 1),
+			filterable: boolean("filterable", true),
+			filters: tableFilters,
+			checkable: boolean("checkable", true),
+			actions: tableActions,
 		}),
 		components: { BaseTable },
 		template: `
-			<base-table v-slot:default="slotProps" :data="data" :columns="columns" :current-page.sync="currentPage" :per-page="perPage">
+			<base-table v-slot:default="slotProps"
+				:data="data"
+				:columns="columns"
+				:current-page.sync="currentPage"
+				:per-page="perPage"
+				:backendPagination="backendPagination"
+				:paginated="paginated"
+				:filterable="filterable"
+				:filters="filters"
+				:checkable="checkable"
+				:actions="actions">
 				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>
 		`,
