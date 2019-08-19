@@ -39,12 +39,13 @@ describe("@components/BaseSelect", () => {
 			},
 		});
 		expect(wrapper.find("multi-select-stub").exists()).toBe(true);
-		expect(
-			wrapper
-				.find("label")
-				.text()
-				.includes(testLabel)
-		).toBe(true);
+		// Label deactivted, makes problems with reopening the dropdown all the time
+		// expect(
+		// 	wrapper
+		// 		.find("label")
+		// 		.text()
+		// 		.includes(testLabel)
+		// ).toBe(true);
 	});
 
 	it("uses default option label", () => {

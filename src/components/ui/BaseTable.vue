@@ -132,13 +132,31 @@ export default {
 	},
 	methods: {
 		getValueByPath,
+		setSearch(val) {
+			if (this.newFiltersSelected.some((f) => f.label === "Volltextsuche")) {
+				this.newFiltersSelected = this.newFiltersSelected.map((f) => {
+					if (f.label === "Volltextsuche") {
+						f.value = val;
+						f.tagLabel = "Volltextsuche nach: " + val;
+					}
+					return f;
+				});
+			} else {
+				this.setFilter({
+					label: "Volltextsuche",
+					tagLabel: "Volltextsuche nach: " + val,
+					type: "regex",
+					value: val,
+				});
+			}
+		},
 		fireAction(item) {
 			item.action(this.newCheckedRows);
 			this.uncheckAll();
 		},
 		editFilter(filter) {
 			this.editFilterActive = true;
-			this.newFiltersSelected = filter;
+			this.filterOpened = filter;
 		},
 		removeFilter(filter) {
 			this.newFiltersSelected.splice(
@@ -162,6 +180,8 @@ export default {
 
 			if (filter.type === "string") {
 				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
+			} else if (filter.type === "regex") {
+				filter.tagLabel = `${filter.label} nach: ${filter.value}`;
 			} else if (filter.type === "select") {
 				filter.tagLabel = filter.label + ": ";
 				if (filter.multiple) {
@@ -173,6 +193,13 @@ export default {
 
 			if (isNewFilter) {
 				this.newFiltersSelected.push(filter);
+			} else {
+				this.newFiltersSelected = this.newFiltersSelected.map((f) => {
+					if (f.label === filter.label) {
+						f.value = filter.value;
+					}
+					return f;
+				});
 			}
 			this.filterOpened = {};
 			this.editFilterActive = false;
@@ -314,13 +341,18 @@ export default {
 						class="ml--md mr--md"
 					/>
 					<base-select
+						close-on-select
 						:value="newFiltersSelected"
 						:options="filters"
 						placeholder="Filter hinzufügen"
 						:allow-empty="false"
 						:multiple="true"
+						:taggable="true"
+						track-by="label"
+						tag-placeholder="Volltext-Suche nach Namen, E-Mail, ..."
 						option-label="label"
 						@select="selectFilter"
+						@tag="setSearch"
 					>
 						<template v-slot:tag="slotProps">
 							<span class="multiselect__tag">
@@ -388,7 +420,17 @@ export default {
 						></base-select>
 						<base-input
 							v-model="filterOpened.value"
+							autofocus
 							placeholder="Wert"
+							type="text"
+							@keyup.enter.native="setFilter(filterOpened)"
+						/>
+					</div>
+					<div v-if="filterOpened.type === 'regex'">
+						<base-input
+							v-model="filterOpened.value"
+							autofocus
+							placeholder="Zeichenkette"
 							type="text"
 							@keyup.enter.native="setFilter(filterOpened)"
 						/>
@@ -455,7 +497,12 @@ export default {
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(row, index) in visibleData" :key="index">
+					<tr
+						v-for="(row, index) in visibleData"
+						:key="index"
+						:class="{ checked: isRowChecked(row) }"
+						@click.shift="checkRow(row)"
+					>
 						<td v-if="checkable" class="checkbox-cell">
 							<base-input
 								type="checkbox"
@@ -482,6 +529,7 @@ export default {
 			:current-page="currentPage"
 			:total="backendPagination ? total : newData.length"
 			:per-page="perPage"
+			@update:per-page="$emit('update:per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
 	</div>
@@ -555,7 +603,10 @@ export default {
 				background-color: var(--color-white);
 			}
 			&:nth-child(even) {
-				background-color: var(--color-gray-light);
+				background-color: var(--color-gray-lighter);
+			}
+			&.checked {
+				background-color: var(--color-info-lighter);
 			}
 			td {
 				padding: var(--space-xs);

@@ -1,39 +1,56 @@
 <template>
-	<nav class="pagination" role="navigation" aria-label="pagination">
-		<div class="mr--md">
-			{{ total > 0 ? currentPage * perPage - perPage + 1 : 0 }} bis
-			{{
-				perPage > total
-					? total
-					: total * perPage > total
-					? total
-					: total * perPage
-			}}
-			von {{ total }}
+	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
+		<base-select
+			style="max-width: 150px"
+			close-on-select
+			:value="perPageSelected"
+			:options="perPageOptions"
+			placeholder="Pro Seite"
+			:allow-empty="false"
+			track-by="value"
+			option-label="label"
+			@select="setPagination"
+		/>
+		<div v-if="perPage > 0" class="d-flex align-items-center">
+			<div class="mr--md">
+				{{ total > 0 ? currentPage * perPage - perPage + 1 : 0 }} bis
+				{{
+					perPage > total
+						? total
+						: currentPage * perPage > total
+						? total
+						: currentPage * perPage
+				}}
+				von {{ total }}
+			</div>
+			<ul v-if="total > 0" class="pagination-list">
+				<li v-if="currentPage > 1" class="pagination-link-wrapper">
+					<a
+						class="pagination-link"
+						aria-label="Goto previous page"
+						@click="previousPage"
+						>←</a
+					>
+				</li>
+				<li class="pagination-link-wrapper">
+					<a
+						:aria-label="`Page ${currentPage}`"
+						class="pagination-link current"
+						aria-current="page"
+						>{{ currentPage }}</a
+					>
+				</li>
+				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
+					<a
+						class="pagination-link"
+						aria-label="Goto next page"
+						@click="nextPage"
+						>→</a
+					>
+				</li>
+			</ul>
 		</div>
-		<ul v-if="total > 0" class="pagination-list">
-			<li v-if="currentPage > 1" class="pagination-link-wrapper">
-				<a
-					class="pagination-link"
-					aria-label="Goto previous page"
-					@click="previousPage"
-					>←</a
-				>
-			</li>
-			<li class="pagination-link-wrapper">
-				<a
-					:aria-label="`Page ${currentPage}`"
-					class="pagination-link current"
-					aria-current="page"
-					>{{ currentPage }}</a
-				>
-			</li>
-			<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
-				<a class="pagination-link" aria-label="Goto next page" @click="nextPage"
-					>→</a
-				>
-			</li>
-		</ul>
+		<div v-else> Zeige alle {{ total }} Einträge </div>
 	</nav>
 </template>
 
@@ -57,12 +74,45 @@ export default {
 			default: 1,
 		},
 	},
+	data: () => ({
+		perPageOptions: [
+			{
+				label: "5 pro Seite",
+				value: 5,
+			},
+			{
+				label: "10 pro Seite",
+				value: 10,
+			},
+			{
+				label: "25 pro Seite",
+				value: 25,
+			},
+			{
+				label: "50 pro Seite",
+				value: 50,
+			},
+			{
+				label: "Alle anzeigen",
+				value: -1,
+			},
+		],
+	}),
 	computed: {
+		perPageSelected() {
+			return {
+				label: this.perPage > 0 ? this.perPage + " pro Seite" : "Alle anzeigen",
+				value: this.perPage,
+			};
+		},
 		lastPage() {
 			return Math.ceil(this.total / this.perPage);
 		},
 	},
 	methods: {
+		setPagination(val) {
+			this.$emit("update:per-page", val.value);
+		},
 		previousPage() {
 			this.$emit("update:current-page", this.currentPage - 1);
 		},
@@ -79,7 +129,7 @@ export default {
 .pagination {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	margin: 0 auto;
 }
 

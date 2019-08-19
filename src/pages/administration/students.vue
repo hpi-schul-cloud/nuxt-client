@@ -7,6 +7,7 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
+	layout: "full-width",
 	data() {
 		return {
 			total: 0,
@@ -105,6 +106,9 @@ export default {
 		currentPage() {
 			this.find();
 		},
+		perPage() {
+			this.find();
+		},
 	},
 	created() {
 		this.find();
@@ -114,11 +118,11 @@ export default {
 		getValueByPath,
 		find() {
 			const query = {
-				$limit: this.perPage,
 				$skip: this.currentPage * this.perPage - this.perPage,
 				$sort: {},
-				// $skip: 25 * (this.pagination.currentPage - 1),
 			};
+
+			query.$limit = this.perPage;
 
 			if (this.filtersSelected && this.filtersSelected.length > 0) {
 				for (const filter of this.filtersSelected) {
@@ -130,6 +134,12 @@ export default {
 								$search: filter.value,
 							};
 						}
+					} else if (filter.type === "regex") {
+						query.$or = [
+							{ email: { $search: filter.value } },
+							{ firstName: { $search: filter.value } },
+							{ lastName: { $search: filter.value } },
+						];
 					} else if (filter.type === "select") {
 						if (filter.multiple) {
 							let activeOptions = filter.options.filter((f) => f.checked);
@@ -206,7 +216,7 @@ export default {
 			:filters="filters"
 			:filters-selected.sync="filtersSelected"
 			:data="students"
-			:per-page="perPage"
+			:per-page.sync="perPage"
 			:actions="actions"
 			:current-page.sync="currentPage"
 			:total="pagination.total"
@@ -220,8 +230,11 @@ export default {
 			@update:skip="onPageChange"
 		>
 			<template v-slot:column="{ row, column }">
-				<span v-if="column.field === 'createdAt'">
-					{{ dayjs(row.createdAt) }}
+				<span v-if="column.field === 'classes'">
+					{{ row.classes.join(", ") }}
+				</span>
+				<span v-else-if="column.field === 'createdAt'">
+					{{ dayjs(row.createdAt).format("DD.MM.YYYY") }}
 				</span>
 				<div v-else-if="column.field === 'consent.consentStatus'">
 					<span v-if="row.consent.consentStatus === 'ok'">

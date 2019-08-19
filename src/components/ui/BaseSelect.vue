@@ -1,32 +1,37 @@
 <template>
-	<base-input-default v-bind="$attrs" vmodel="" :type="false" :label="label">
-		<multi-select
-			:value="value"
-			v-bind="$attrs"
-			:options="options"
-			:multiple="multiple"
-			:track-by="trackBy"
-			:placeholder="placeholder"
-			class="input"
-			:label="optionLabel"
-			:select-label="selectLabel"
-			@select="$emit('select', $event)"
-			@input="$emit('input', $event)"
-		>
-			<template v-slot:tag="slotProps">
-				<slot name="tag" :option="slotProps.option" />
-			</template>
-		</multi-select>
-	</base-input-default>
+	<!-- TODO: Disabled because it falsely reopens the dropdown after selecting an option -->
+	<!-- <base-input-default class="mb-0" v-bind="$attrs" vmodel="" :type="false" :label="label"> -->
+	<multi-select
+		:value="value"
+		v-bind="$attrs"
+		:options="options"
+		:multiple="multiple"
+		:close-on-select="closeOnSelect"
+		:track-by="trackBy"
+		:placeholder="placeholder"
+		class="input"
+		:label="optionLabel"
+		:select-label="selectLabel"
+		:selected-label="selectedLabel"
+		:deselect-label="deselectLabel"
+		@select="$emit('select', $event)"
+		@input="$emit('input', $event)"
+		@tag="$emit('tag', $event)"
+	>
+		<template v-slot:tag="slotProps">
+			<slot name="tag" :option="slotProps.option" />
+		</template>
+	</multi-select>
+	<!-- </base-input-default> -->
 </template>
 
 <script>
-import BaseInputDefault from "./BaseInput/BaseInputDefault";
+// import BaseInputDefault from "./BaseInput/BaseInputDefault";
 import MultiSelect from "vue-multiselect";
 
 export default {
 	components: {
-		BaseInputDefault,
+		// BaseInputDefault,
 		MultiSelect,
 	},
 	props: {
@@ -59,6 +64,9 @@ export default {
 			type: String,
 			default: "",
 		},
+		closeOnSelect: {
+			type: Boolean,
+		},
 		placeholder: {
 			type: String,
 			default: "Bitte wähle eine Option aus",
@@ -67,9 +75,17 @@ export default {
 			type: String,
 			default: "label",
 		},
+		deselectLabel: {
+			type: String,
+			default: "Entfernen",
+		},
 		selectLabel: {
 			type: String,
 			default: "Auswählen",
+		},
+		selectedLabel: {
+			type: String,
+			default: "Aktiv",
 		},
 	},
 	computed: {
