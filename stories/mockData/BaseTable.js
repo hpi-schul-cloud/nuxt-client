@@ -76,4 +76,40 @@ const tableColumns = [
 	},
 ];
 
-export { tableData, tableColumns };
+const tableFilters = [
+	{
+		label: "Vorname",
+		type: "string",
+		property: "firstName",
+		matchingType: {
+			value: "contains",
+			label: "enthält",
+		},
+		value: "",
+	},
+	{
+		label: "Alter",
+		type: "number",
+		property: "age",
+		matchingType: {
+			value: "equals",
+			label: "ist gleich",
+		},
+		value: "",
+	},
+];
+
+const tableActions = [
+	{
+		label: "Löschen",
+		action: (rows) => {
+			let names = "";
+			rows.map((r) =>
+				names === "" ? (names = r.firstName) : (names += `, ${r.firstName}`)
+			);
+			alert(names + " wurde(n) zum Löschen ausgewählt");
+		},
+	},
+];
+
+export { tableData, tableColumns, tableFilters, tableActions };
