@@ -198,12 +198,16 @@ export default {
 		"side content"
 		"side footer";
 	grid-template-rows: auto 1fr auto;
-	grid-template-columns: var(--sidebar-width) 1fr;
+	grid-template-columns: 0 1fr;
 	width: 100%;
 	min-height: 100vh;
 
 	@include breakpoint(tablet) {
-		grid-template-columns: 0 1fr;
+		grid-template-columns: var(--sidebar-width-tablet) 1fr;
+	}
+
+	@include breakpoint(desktop) {
+		grid-template-columns: var(--sidebar-width) 1fr;
 	}
 }
 .topbar {

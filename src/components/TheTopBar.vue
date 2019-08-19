@@ -142,8 +142,8 @@ export default {
 
 		.menu-button {
 			z-index: var(--layer-popover);
-			display: none;
-			margin: var(--space-sm);
+			display: flex;
+			margin: var(--space-xs);
 			transition: transform 0.35s;
 
 			&:hover, &:focus {
@@ -152,25 +152,31 @@ export default {
 			}
 
 			@include breakpoint(tablet) {
-				display: flex;
+				display: none;
 			}
 		}
 
-		@include breakpoint(tablet) {
-			&.expanded-menu {
-				.item {
-					display: none;
-				}
+		&.expanded-menu {
+			.item {
+				display: none;
+			}
 
-				.menu-button {
-					display: flex;
-					transform: rotate(90deg);
-				}
+			.menu-button {
+				display: flex;
+				transform: rotate(90deg);
+			}
+		}
+
+		@include breakpoint(desktop) {
+			.item {
+				display: initial;
 			}
 		}
 		.school-name {
+			display: none;
+
 			@include breakpoint(tablet) {
-				display: none;
+				display: initial;
 			}
 		}
 	}
@@ -180,9 +186,6 @@ export default {
 	position: fixed;
 	top: var(--space-sm);
 	right: var(--space-sm);
-	// padding: var(--space-sm) var(--space-md);
-	// background-color: var(--color-primary);
-	// box-shadow: var(--shadow-sm);
 }
 
 .logout-button,

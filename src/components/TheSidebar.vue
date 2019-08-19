@@ -22,6 +22,7 @@
 								:icon="route.icon"
 								:source="route.source || 'fa'"
 								:fill="route.active ? 'var(--color-primary)' : ''"
+								class="icon"
 							/>
 							<span class="title">{{ route.title }}</span>
 						</base-link>
@@ -43,6 +44,7 @@
 									:icon="child.icon"
 									:source="child.source || 'fa'"
 									:fill="$route.path.includes(child.href) ? 'var(--color-primary)' : ''"
+									class="icon"
 								/>
 								<span class="title">{{ child.title }}</span>
 							</base-link>
@@ -87,42 +89,48 @@ export default {
 }
 
 .sidebar {
+	position: absolute;
+	top: var(--topbar-height);
+	right: 0;
+	left: 0;
 	z-index: var(--layer-dropdown);
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-	overflow: auto;
+	display: none;
+	min-height: calc(100vh - 55px);
 	background-color: var(--color-white);
-	border-right: 1px solid var(--color-gray-light);
+	box-shadow: 0 5px 5px var(--color-gray-light);
+	transition: display 2s;
+	
 
+	&.expanded {
+		display: flex;
+		animation-name: menu-expand;
+		animation-duration: var(--duration-transition-medium);
+		animation-iteration-count: 1;
+	}
 
+	
 	@include breakpoint(tablet) {
-		position: absolute;
-		top: var(--topbar-height);
-		right: 0;
-		left: 0;
-		display: none;
-		min-height: calc(100vh - 55px);
-
-		&.expanded {
-			display: flex;
-			animation-name: menu-expand;
-			animation-duration: var(--duration-transition-medium);
-			animation-iteration-count: 1;
-		}
+		position: static;
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		overflow: auto;
+		border-right: 1px solid var(--color-gray-light);
+		border-bottom: none;
 	}
 
 	.logo {
+		display: none;
 		width: 100%;
 		height: var(--sidebar-item-height);
-		padding-top: var(--space-xs);
-		padding-bottom: var(--space-xs);
 		background-color: var(--color-primary);
 	}
 
 	.logo-full {
-			@include breakpoint(tablet) {
-				display: none;
+			@include breakpoint(desktop) {
+				display: initial;
+				padding-top: var(--space-xs);
+				padding-bottom: var(--space-xs);
 			}
 		}
 
@@ -132,7 +140,7 @@ export default {
 		@include breakpoint(tablet) {
 			display: initial;
 		}
-		
+
 		@include breakpoint(desktop) {
 			display: none;
 		}
@@ -159,6 +167,18 @@ export default {
 					height: var(--sidebar-sub-item-height);
 					padding-left: var(--space-sm);
 					line-height: var(--sidebar-sub-item-height);
+
+					@include breakpoint(tablet) {
+						height: var(--sidebar-item-height);
+						padding-left: 0;
+						line-height: var(--sidebar-item-height);
+					}
+
+					@include breakpoint(desktop) {
+						height: var(--sidebar-sub-item-height);
+						padding-left: var(--space-sm);
+						line-height: var(--sidebar-sub-item-height);
+					}
 				}
 
 				--sidebar-item-padding: 20px;
@@ -171,9 +191,21 @@ export default {
 					color: var(--color-tertiary-dark);
 					border-bottom: none;
 
+					.icon {
+						width: 25px;
+					}
+
 					.title {
 						padding: 0 var(--sidebar-item-padding);
 						text-transform: uppercase;
+
+						@include breakpoint(tablet) {
+							display: none;
+						}
+
+						@include breakpoint(desktop) {
+							display: initial;
+						}
 					}
 				}
 
