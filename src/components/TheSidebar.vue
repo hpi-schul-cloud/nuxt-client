@@ -2,27 +2,49 @@
 	<aside class="sidebar">
 		<nav class="contents">
 			<ul class="list">
-				<li
+				<div
 					v-for="route in routes"
 					:key="JSON.stringify(route.to) || route.href"
-					:class="{ active: route.active }"
-					class="list-item"
 				>
-					<base-link
-						class="list-content"
-						:to="route.to"
-						:href="route.href"
-						:inactive="true"
-					>
-						<base-icon
-							v-if="route.icon"
-							:icon="route.icon"
-							:source="route.source || 'fa'"
-							:fill="route.active ? 'var(--color-primary)' : ''"
-						/>
-						<span class="title">{{ route.title }}</span>
-					</base-link>
-				</li>
+					<li class="list-item" :class="{ active: route.active }">
+						<base-link
+							class="list-content"
+							:to="route.to"
+							:href="route.href"
+							:inactive="true"
+						>
+							<base-icon
+								v-if="route.icon"
+								:icon="route.icon"
+								:source="route.source || 'fa'"
+								:fill="route.active ? 'var(--color-primary)' : ''"
+							/>
+							<span class="title">{{ route.title }}</span>
+						</base-link>
+					</li>
+					<ul v-if="route.active || route.childActive">
+						<li
+							v-for="child in route.children"
+							:key="JSON.stringify(child.to) || child.href"
+							:class="{ active: $route.path.includes(child.href) }"
+							class="list-item list-sub-item">
+							<base-link
+								class="list-content"
+								:to="child.to"
+								:href="child.href"
+								:inactive="true"
+							>
+								<base-icon
+									v-if="child.icon"
+									:icon="child.icon"
+									:source="child.source || 'fa'"
+									:fill="$route.path.includes(child.href) ? 'var(--color-primary)' : ''"
+								/>
+								<span class="title">{{ child.title }}</span>
+							</base-link>
+						</li>
+					</ul>
+				</div>
 			</ul>
 		</nav>
 	</aside>
@@ -70,16 +92,16 @@ export default {
 			margin: 0;
 			list-style-type: none;
 
-			:hover,
-			.active {
-				cursor: pointer;
-				background: var(--color-gray-light);
-			}
-
 			.list-item {
 				width: 100%;
 				height: var(--sidebar-item-height);
 				line-height: var(--sidebar-item-height);
+
+				&.list-sub-item {
+					height: var(--sidebar-sub-item-height);
+					padding-left: var(--space-sm);
+					line-height: var(--sidebar-sub-item-height);
+				}
 
 				--sidebar-item-padding: 20px;
 				--sidebar-font-size: 14px;
@@ -100,9 +122,16 @@ export default {
 						}
 					}
 				}
-			}
-			.active .list-content {
-				color: var(--color-primary);
+
+				&:hover,
+				&.active {
+					cursor: pointer;
+					background-color: var(--color-gray-light);
+				}
+
+				&.active .list-content {
+					color: var(--color-primary);
+				}
 			}
 		}
 	}

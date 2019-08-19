@@ -27,6 +27,7 @@ import { mapState, mapActions } from "vuex";
 import TheTopBar from "@components/TheTopBar";
 import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
+import sidebarBaseItems from '../utils/sidebarBaseItems.js'
 
 const topbarBaseActions = [
 	{
@@ -47,6 +48,7 @@ const topbarBaseActions = [
 					icon: "question-circle",
 					action: "/help",
 				},
+				// TODO: implement intro for nuxt-client
 				// {
 				// 	label: "Intro",
 				// 	icon: "map-signs",
@@ -75,57 +77,7 @@ export default {
 	},
 	data() {
 		return {
-			sidebarBaseItems: [
-				{
-					title: "Übersicht",
-					href: "/dashboard",
-					icon: "th-large",
-				},
-				{
-					title: "Kurse",
-					href: "/courses",
-					icon: "graduation-cap",
-				},
-				{ title: "Teams", href: "/teams", icon: "users" },
-				{ title: "Aufgaben", href: "/homework", icon: "tasks" },
-				{
-					title: "Meine Dateien",
-					href: "/files",
-					icon: "folder-open",
-				},
-				{
-					title: "Neuigkeiten",
-					href: "/news",
-					icon: "newspaper-o",
-				},
-				{ title: "Termine", href: "/calendar", icon: "table" },
-				{ title: "Lern-store", href: "/content", icon: "search" },
-				{
-					title: "Verwaltung",
-					href: "/administration",
-					icon: "cogs",
-					permission: 'STUDENT_CREATE',
-        			excludedPermission: 'ADMIN_VIEW',
-				},
-				{
-					title: 'Helpdesk',
-					href: '/administration/helpdesk/',
-        			icon: 'ticket',
-       				permission: 'HELPDESK_VIEW'
-				},
-				{
-					title: 'Administration',
-       				href: '/administration/',
-        			icon: 'cogs',
-        			permission: 'ADMIN_VIEW',
-				},
-				{
-					title: 'Meine Materialien',
-       				href: '/my-material/',
-					icon: 'book',
-        			permission: 'BETA_FEATURES'
-				},
-			],
+			sidebarBaseItems: sidebarBaseItems,
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: false,
 		};
@@ -193,7 +145,11 @@ export default {
 			}
 
 			return sidebarItems.map((item) => {
-				item.active = this.$route.path.includes(item.href);
+				const isActive = this.$route.path.includes(item.href);
+				item.childActive = item.children?
+					item.children.some(child => this.$route.path.includes(child.href)) :
+					false;
+				item.active = isActive && !item.childActive;
 				return item;
 			});
 		},

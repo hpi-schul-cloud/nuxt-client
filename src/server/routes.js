@@ -6,6 +6,7 @@ module.exports = [
 	"community",
 	"content",
 	"coursegroups",
+	"courses",
 	"dashboard",
 	"files",
 	"firstLogin",
