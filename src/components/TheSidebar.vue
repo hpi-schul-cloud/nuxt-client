@@ -1,5 +1,9 @@
 <template>
 	<aside class="sidebar" :class="{ expanded: expandedMenu }">
+		<div class="top-sidebar" @click="$emit('input')">
+			<img class="logo logo-full" src="@assets/img/logo/logo-image-mono.svg" alt="Schulcloud Logo" />
+			<img class="logo logo-small" src="@assets/img/logo/logo-transparent-mono-48-48.svg" alt="Schulcloud Logo" />
+		</div>
 		<nav class="contents">
 			<ul class="list">
 				<div
@@ -86,8 +90,11 @@ export default {
 	z-index: var(--layer-dropdown);
 	display: flex;
 	flex-direction: column;
+	height: 100vh;
+	overflow: auto;
 	background-color: var(--color-white);
 	border-right: 1px solid var(--color-gray-light);
+
 
 	@include breakpoint(tablet) {
 		position: absolute;
@@ -102,6 +109,32 @@ export default {
 			animation-name: menu-expand;
 			animation-duration: var(--duration-transition-medium);
 			animation-iteration-count: 1;
+		}
+	}
+
+	.logo {
+		width: 100%;
+		height: var(--sidebar-item-height);
+		padding-top: var(--space-xs);
+		padding-bottom: var(--space-xs);
+		background-color: var(--color-primary);
+	}
+
+	.logo-full {
+			@include breakpoint(tablet) {
+				display: none;
+			}
+		}
+
+	.logo-small {
+		display: none;
+
+		@include breakpoint(tablet) {
+			display: initial;
+		}
+		
+		@include breakpoint(desktop) {
+			display: none;
 		}
 	}
 

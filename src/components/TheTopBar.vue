@@ -1,13 +1,9 @@
 <template>
-	<div class="topbar">
-		<div v-if="!fullscreenMode" class="top-sidebar" @click="$emit('input')">
-			<img class="logo" src="@assets/img/logo/logo-image-mono.svg" alt="Schulcloud Logo" />
-		</div>
-
+	<div class="topbar">		
 		<!-- ACTIONS -->
 		<div v-if="!fullscreenMode" class="top-main" :class="{ 'expanded-menu': expandedMenu }">
 			<base-icon-button
-				class="item menu-button"
+				class="menu-button"
 				:class="{ 'expanded-menu': expandedMenu }"
 				source="fa"
 				icon="bars"
@@ -125,40 +121,7 @@ export default {
 .topbar {
 	display: flex;
 	align-items: center;
-
-	.top-sidebar {
-		display: flex;
-		flex: var(--sidebar-width) 0 0;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-		height: 100%;
-		padding: 0 var(--space-xxs);
-		background-color: var(--color-primary);
-
-		// @include breakpoint(tablet) {
-		// 	width: var(--sidebar-width-tablet);
-		// }
-
-		@include breakpoint(tablet) {
-			display: none;
-			width: 0;
-		}
-
-		.logo {
-			width: 100%;
-			height: var(--sidebar-item-height);
-			padding-top: var(--space-xs);
-			padding-bottom: var(--space-xs);
-
-			@include breakpoint(tablet) {
-				display: none;
-				margin: 0;
-
-				// hier fehlt noch was
-			}
-		}
-	}
+	height: var(--sidebar-item-height);
 
 	.top-main {
 		display: flex;
@@ -180,7 +143,13 @@ export default {
 		.menu-button {
 			z-index: var(--layer-popover);
 			display: none;
+			margin: var(--space-sm);
 			transition: transform 0.35s;
+
+			&:hover, &:focus {
+				cursor: pointer;
+				background-color: transparent;
+			}
 
 			@include breakpoint(tablet) {
 				display: flex;

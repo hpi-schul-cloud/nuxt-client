@@ -194,9 +194,9 @@ export default {
 .page {
 	display: grid;
 	grid-template-areas:
-		"top top"
+		"side top"
 		"side content"
-		"footer footer";
+		"side footer";
 	grid-template-rows: auto 1fr auto;
 	grid-template-columns: var(--sidebar-width) 1fr;
 	width: 100%;
