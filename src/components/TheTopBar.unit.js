@@ -38,12 +38,12 @@ describe("@components/TheTopBar", () => {
 				$theme,
 			},
 		});
-		expect(wrapper.findAll("base-icon-button-stub").length).toBe(1);
+		expect(wrapper.findAll("base-icon-button-stub").length).toBe(2);
 		expect(wrapper.findAll("popup-icon-stub").length).toBe(1);
 		expect(wrapper.findAll("button").length).toBe(1);
 		wrapper.find("button").trigger("click");
 		expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
-		expect(wrapper.findAll(".item").length).toBe(4);
+		expect(wrapper.findAll(".item").length).toBe(5);
 	});
 	it("can switch to fullscreen mode", () => {
 		const wrapper = mount(TheTopBar, {

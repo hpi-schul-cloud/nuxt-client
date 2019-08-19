@@ -1,5 +1,5 @@
 <template>
-	<aside class="sidebar">
+	<aside class="sidebar" :class="{ expanded: expandedMenu }">
 		<nav class="contents">
 			<ul class="list">
 				<div
@@ -62,6 +62,9 @@ export default {
 				);
 			},
 		},
+		expandedMenu: {
+			type: Boolean,
+		},
 	},
 };
 </script>
@@ -69,15 +72,37 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+@keyframes menu-expand {
+	from {
+		transform: translateY(-100%);
+	}
+
+	to {
+		transform: translateY(0);
+	}
+}
+
 .sidebar {
+	z-index: var(--layer-dropdown);
 	display: flex;
 	flex-direction: column;
-	width: var(--sidebar-width);
 	background-color: var(--color-white);
 	border-right: 1px solid var(--color-gray-light);
 
 	@include breakpoint(tablet) {
-		width: var(--sidebar-width-tablet);
+		position: absolute;
+		top: var(--topbar-height);
+		right: 0;
+		left: 0;
+		display: none;
+		min-height: calc(100vh - 55px);
+
+		&.expanded {
+			display: flex;
+			animation-name: menu-expand;
+			animation-duration: var(--duration-transition-medium);
+			animation-iteration-count: 1;
+		}
 	}
 
 	.contents {
@@ -116,10 +141,6 @@ export default {
 					.title {
 						padding: 0 var(--sidebar-item-padding);
 						text-transform: uppercase;
-
-						@include breakpoint(tablet) {
-							display: none;
-						}
 					}
 				}
 

@@ -1,15 +1,19 @@
 <template>
 	<div class="topbar">
 		<div v-if="!fullscreenMode" class="top-sidebar" @click="$emit('input')">
-			<img
-				class="logo"
-				src="@assets/img/logo/logo-image-mono.svg"
-				alt="Schulcloud Logo"
-			/>
+			<img class="logo" src="@assets/img/logo/logo-image-mono.svg" alt="Schulcloud Logo" />
 		</div>
 
 		<!-- ACTIONS -->
-		<div v-if="!fullscreenMode" class="top-main">
+		<div v-if="!fullscreenMode" class="top-main" :class="{ 'expanded-menu': expandedMenu }">
+			<base-icon-button
+				class="item menu-button"
+				:class="{ 'expanded-menu': expandedMenu }"
+				source="fa"
+				icon="bars"
+				@click.native="sendEvent('expandMenu')"
+			/>
+			<div class="space"></div>
 			<base-icon-button
 				class="item fullscreen-button"
 				source="fa"
@@ -32,8 +36,7 @@
 					v-if="action.type === 'text'"
 					:key="action.title"
 					class="school-name item"
-					>{{ action.title }}</div
-				>
+				>{{ action.title }}</div>
 
 				<popup-icon-initials
 					v-if="action.type === 'popupWithInitials'"
@@ -50,9 +53,7 @@
 						v-ripple
 						class="logout-button"
 						@click="sendEvent(action.event)"
-					>
-						Abmelden
-					</button>
+					>Abmelden</button>
 				</popup-icon-initials>
 			</template>
 		</div>
@@ -106,6 +107,9 @@ export default {
 		fullscreenMode: {
 			type: Boolean,
 		},
+		expandedMenu: {
+			type: Boolean,
+		},
 	},
 	methods: {
 		sendEvent(eventName) {
@@ -124,16 +128,21 @@ export default {
 
 	.top-sidebar {
 		display: flex;
+		flex: var(--sidebar-width) 0 0;
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-		width: var(--sidebar-width);
 		height: 100%;
 		padding: 0 var(--space-xxs);
 		background-color: var(--color-primary);
 
+		// @include breakpoint(tablet) {
+		// 	width: var(--sidebar-width-tablet);
+		// }
+
 		@include breakpoint(tablet) {
-			width: var(--sidebar-width-tablet);
+			display: none;
+			width: 0;
 		}
 
 		.logo {
@@ -143,7 +152,9 @@ export default {
 			padding-bottom: var(--space-xs);
 
 			@include breakpoint(tablet) {
+				display: none;
 				margin: 0;
+
 				// hier fehlt noch was
 			}
 		}
@@ -155,12 +166,39 @@ export default {
 		flex-grow: 1;
 		align-items: center;
 		justify-content: flex-end;
+		width: 100%;
 		padding-right: var(--space-sm);
+
+		.space {
+			flex-grow: 1;
+		}
 
 		.item {
 			margin-left: var(--space-sm);
 		}
 
+		.menu-button {
+			z-index: var(--layer-popover);
+			display: none;
+			transition: transform 0.35s;
+
+			@include breakpoint(tablet) {
+				display: flex;
+			}
+		}
+
+		@include breakpoint(tablet) {
+			&.expanded-menu {
+				.item {
+					display: none;
+				}
+
+				.menu-button {
+					display: flex;
+					transform: rotate(90deg);
+				}
+			}
+		}
 		.school-name {
 			@include breakpoint(tablet) {
 				display: none;
@@ -178,7 +216,8 @@ export default {
 	// box-shadow: var(--shadow-sm);
 }
 
-.logout-button, .account-link {
+.logout-button,
+.account-link {
 	--hover-color: #f5f5f5;
 
 	width: 100%;

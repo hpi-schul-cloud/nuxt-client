@@ -7,11 +7,13 @@
 				class="topbar"
 				:actions="topBarActions"
 				:fullscreen-mode="fullscreenMode"
+				:expanded-menu="expandedMenu"
 				@action="handleTopAction"
 			/>
 			<the-sidebar
 				v-if="!fullscreenMode"
 				class="sidebar"
+				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
 			/>
 			<main class="content">
@@ -80,6 +82,7 @@ export default {
 			sidebarBaseItems: sidebarBaseItems,
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: false,
+			expandedMenu: false,
 		};
 	},
 	computed: {
@@ -121,22 +124,26 @@ export default {
 				: [...topbarBaseActions];
 		},
 		sidebarItems() {
+			const sidebarItems = this.sidebarBaseItems.filter((item) => {
+				const hasRequiredPermission =
+					this.user.permissions &&
+					this.user.permissions.includes(item.permission);
+				const hasExcludedPermission =
+					this.user.permissions &&
+					this.user.permissions.includes(item.excludedPermission);
 
-			const sidebarItems = this.sidebarBaseItems.filter(
-				(item) => {
-					const hasRequiredPermission = this.user.permissions && this.user.permissions.includes(item.permission);
-					const hasExcludedPermission = this.user.permissions && this.user.permissions.includes(item.excludedPermission);
+				return (
+					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
+				);
+			});
 
-					return !item.permission || (hasRequiredPermission && !hasExcludedPermission);
-				});
-
-			const teamsEnabled = process.env.FEATURE_TEAMS_ENABLED === 'true';
+			const teamsEnabled = process.env.FEATURE_TEAMS_ENABLED === "true";
 
 			if (teamsEnabled) {
-        		sidebarItems.splice(2, 0, {
-					title: 'Teams',
-					icon: 'users',
-					href: '/teams/',
+				sidebarItems.splice(2, 0, {
+					title: "Teams",
+					icon: "users",
+					href: "/teams/",
 				});
 				// sidebarItems.find(i => i.name === 'Meine Dateien').children.splice(2, 0, {
 				// 	title: 'Teams',
@@ -173,6 +180,9 @@ export default {
 			if (event === "fullscreen") {
 				this.fullscreenMode = !this.fullscreenMode;
 			}
+			if (event === "expandMenu") {
+				this.expandedMenu = !this.expandedMenu;
+			}
 		},
 	},
 };
@@ -188,9 +198,13 @@ export default {
 		"side content"
 		"footer footer";
 	grid-template-rows: auto 1fr auto;
-	grid-template-columns: auto 1fr;
+	grid-template-columns: var(--sidebar-width) 1fr;
 	width: 100%;
 	min-height: 100vh;
+
+	@include breakpoint(tablet) {
+		grid-template-columns: 0 1fr;
+	}
 }
 .topbar {
 	grid-area: top;
