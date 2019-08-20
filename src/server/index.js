@@ -74,7 +74,6 @@ viewDirs.unshift(path.join(legacyClientRoot, `./theme/${themeName}/views/`));
 app.set("views", viewDirs);
 app.engine("hbs", wax.engine);
 app.set("view engine", "hbs");
-app.use(express.static(path.join(legacyClientRoot, "./static")));
 app.use(express.static(path.join(legacyClientRoot, "./build/" + themeName)));
 app.set("port", port);
 
@@ -82,6 +81,7 @@ app.use(require(path.join(legacyClientRoot, `./controllers/login`)));
 app.use(require(path.join(legacyClientRoot, `./controllers/registration`)));
 
 function setLegacyControllers() {
+	// eslint-disable-next-line no-unused-vars
 	for (const route of legacyRoutes) {
 		if (typeof route === "object") {
 			app.use(

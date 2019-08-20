@@ -3,9 +3,13 @@ const fs = require("fs");
 const prettier = require("prettier");
 const themeName = process.env.SC_THEME || "default";
 
+const variation = require("./variation")(themeName);
+
 const aliases = {
+	...variation,
 	"@": "src",
 	"@@": ".",
+	"@locales": "locales",
 	"@assets": "src/assets",
 	"@components": "src/components",
 	"@basecomponents": "src/components/ui",
@@ -20,7 +24,7 @@ const aliases = {
 	"@static": `src/themes/${themeName}/static`,
 	"@theme": `src/themes/${themeName}`,
 	"@styles": `src/themes/${themeName}/styles/index.scss`,
-	"@styles-default": `src/themes/default/styles/index.scss`,
+	"@styles-default": `src/themes/default/styles`,
 	"@variables": `src/themes/${themeName}/styles/variables.scss`,
 };
 
@@ -30,6 +34,7 @@ module.exports = {
 	jsconfig: {},
 };
 
+// eslint-disable-next-line no-unused-vars
 for (const alias in aliases) {
 	const aliasTo = aliases[alias];
 	module.exports.webpack[alias] = resolveSrc(aliasTo);

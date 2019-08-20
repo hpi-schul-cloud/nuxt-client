@@ -2,6 +2,7 @@ branches:
   only:
     - develop
     - master
+    - /^greenkeeper/.*$/
 language: node_js
 node_js:
   - lts/*
@@ -16,33 +17,62 @@ jobs:
   include:
     # Build & Deploy
     - stage: run parallel
-      script: yarn build
-      name: "build"
-      install:
-        - yarn global add surge
+      script: npm run build:nuxt
+      name: "build:nuxt"
       services:
         - docker
       sudo: required
-      # deploy
-      after_success: bash ./deploy/pull-deploy.sh
       deploy:
         skip_cleanup: true
         provider: script
-        script: bash ./deploy/deploy.sh
+        script: bash ./deploy/deploy.sh -p client
         on:
-          all_branches: true
+          branch:
+            - develop
+            - master
+    - script: npm run build:storybook
+      name: "build:storybook"
+      services:
+        - docker
+      sudo: required
+      after_success:
+        - npm i -g surge
+        - bash ./deploy/pull-deploy.sh -p storybook
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh -p storybook
+        on:
+          branch:
+            - develop
+            - master
+    - script: npm run build:docs
+      name: "build:docs"
+      services:
+        - docker
+      sudo: required
+      after_success:
+        - npm i -g surge
+        - bash ./deploy/pull-deploy.sh -p vuepress
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash ./deploy/deploy.sh -p vuepress
+        on:
+          branch:
+            - develop
+            - master
     # Test
-    - script:
-        - yarn test:ci
-        - codecov
+    - script: npm run test:ci
       name: "test"
-      install:
-        - yarn global add codecov
+      after_success:
+        - npm i -g codecov
+        - codecov
     # Lint
-    - script: yarn lint:ci
+    - script: npm run lint:ci
       name: "lint"
 
-cache: yarn
+cache: npm
 before_cache:
   # delete all .cache folders before actually storing the cache.
   # nuxt, storybook and vuepress stores some build artefacts here which invalidates the cache.
