@@ -16,7 +16,7 @@ import BaseInput, {
 } from "@components/ui/BaseInput/BaseInput";
 import BaseLink from "@components/ui/BaseLink";
 import BaseProgressbar from "@components/ui/BaseProgressbar";
-import BaseTable from "@components/ui/BaseTable";
+import BaseTable from "@components/ui/BaseTable/BaseTable";
 import BaseCollapsible from "@components/ui/BaseCollapsible";
 import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
 import BaseSelect from "@components/ui/BaseSelect";
