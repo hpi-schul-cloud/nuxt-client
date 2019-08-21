@@ -3,136 +3,28 @@
 <template>
 	<div class="table-outer">
 		<div class="table-wrapper">
-			<div class="toolbelt">
-				<div v-if="filterable && newCheckedRows.length < 1" class="filters">
-					<base-icon
-						icon="filter_list"
-						source="material"
-						class="ml--md mr--md"
-					/>
-					<base-select
-						close-on-select
-						label="Filter hinzufügen"
-						:value="newFiltersSelected"
-						:options="filters"
-						placeholder="Filter hinzufügen"
-						:allow-empty="false"
-						:multiple="true"
-						:taggable="true"
-						track-by="label"
-						tag-placeholder="Volltext-Suche nach Namen, E-Mail, ..."
-						option-label="label"
-						@select="selectFilter"
-						@tag="setSearch"
-					>
-						<template v-slot:tag="slotProps">
-							<span class="multiselect__tag">
-								<span @mousedown.prevent="editFilter(slotProps.option)">{{
-									slotProps.option.tagLabel
-								}}</span>
-								<i
-									aria-hidden="true"
-									tabindex="1"
-									class="multiselect__tag-icon"
-									@keypress.enter.prevent="removeFilter(slotProps.option)"
-									@mousedown.prevent="removeFilter(slotProps.option)"
-								></i>
-							</span>
-						</template>
-					</base-select>
-				</div>
-				<div v-if="newCheckedRows.length > 0" class="check-info">
-					<div class="d-flex align-items-center">
-						<div v-if="absoluteAllChecked">Alle {{ total }} ausgewählt</div>
-						<div v-else>
-							<span>{{ newCheckedRows.length }} ausgewählt</span>
-							<span v-if="isAllChecked">
-								(oder
-								<span
-									style="text-decoration: underline; cursor: pointer"
-									@click="absoluteAllChecked = true"
-									>Alle {{ total }} auswählen</span
-								>
-								)
-							</span>
-						</div>
-						<div class="ml--md">
-							<dropdown-menu
-								:items="actions"
-								title="Aktionen"
-								@input="fireAction"
-							/>
-						</div>
-					</div>
-					<div>
-						<base-icon
-							icon="close"
-							source="material"
-							class="ml--md mr--md"
-							style="cursor: pointer"
-							@click="uncheckAll"
-						/>
-					</div>
-				</div>
-			</div>
+			<tool-belt
+				:actions="actions"
+				:filterable="filterable"
+				:checked-rows="newCheckedRows"
+				:filters="filters"
+				:filters-selected="newFiltersSelected"
+				:abolute-all-checked="absoluteAllChecked"
+				:is-all-checked="isAllChecked"
+				:total="total"
+				@uncheck-all="uncheckAll"
+				@fire-action="fireAction"
+				@select-filter="selectFilter"
+				@remove-filter="removeFilter"
+				@edit-filter="editFilter"
+				@set-search="setSearch"
+			/>
 
-			<base-modal :active.sync="editFilterActive">
-				<div class="modal-header">
-					<h3>{{ filterOpened.label }}</h3>
-				</div>
-
-				<div class="modal-body">
-					<div v-if="filterOpened.type === 'string'">
-						<base-select
-							v-model="filterOpened.matchingType"
-							label="Matching-Typ auswählen"
-							:options="stringFilters"
-							:allow-empty="false"
-							option-label="label"
-						></base-select>
-						<base-input
-							v-model="filterOpened.value"
-							label="Wert"
-							autofocus
-							placeholder="Wert"
-							type="text"
-							@keyup.enter.native="setFilter(filterOpened)"
-						/>
-					</div>
-					<div v-if="filterOpened.type === 'regex'">
-						<base-input
-							v-model="filterOpened.value"
-							label="Zeichenkette"
-							autofocus
-							placeholder="Zeichenkette"
-							type="text"
-							@keyup.enter.native="setFilter(filterOpened)"
-						/>
-					</div>
-					<div v-if="filterOpened.type === 'select'">
-						<h5>Stimmt überein mit:</h5>
-						<base-input
-							v-for="option of filterOpened.options"
-							:key="option.value"
-							v-model="option.checked"
-							class="mt--sm"
-							style="display: block"
-							:label="option.label"
-							type="checkbox"
-							name="checkbox"
-						/>
-					</div>
-				</div>
-
-				<div class="modal-footer">
-					<base-button
-						id="button"
-						design="primary"
-						@click="setFilter(filterOpened)"
-						>Übernehmen</base-button
-					>
-				</div>
-			</base-modal>
+			<filter-modal
+				:active="editFilterActive"
+				:filter-opened="filterOpened"
+				@set-filter="setFilter"
+			/>
 
 			<table class="table">
 				<thead>
@@ -141,7 +33,7 @@
 							<base-input
 								type="checkbox"
 								label="check all"
-								hide-label
+								label-hidden
 								:vmodel="isAllChecked"
 								name="checkbox"
 								@change.native="checkAll"
@@ -216,12 +108,14 @@
 <script>
 import { getValueByPath, indexOf } from "@utils/helpers";
 import Pagination from "@components/Pagination.vue";
-import DropdownMenu from "@components/DropdownMenu.vue";
+import ToolBelt from "./ToolBelt.vue";
+import FilterModal from "./FilterModal.vue";
 
 export default {
 	components: {
-		DropdownMenu,
 		Pagination,
+		ToolBelt,
+		FilterModal
 	},
 	props: {
 		data: {
@@ -289,16 +183,6 @@ export default {
 			absoluteAllChecked: false,
 			filterOpened: {},
 			newFiltersSelected: [],
-			stringFilters: [
-				{
-					label: "enthält",
-					value: "contains",
-				},
-				{
-					label: "ist gleich",
-					value: "equals",
-				},
-			],
 			newCheckedRows: [...this.checkedRows],
 			isAsc: false,
 			defaultSort: [String, Array],
