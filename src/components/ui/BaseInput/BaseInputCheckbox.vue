@@ -2,6 +2,7 @@
 	<label>
 		<input
 			ref="hiddenInput"
+			:aria-label="label"
 			v-bind="$attrs"
 			:checked="isChecked"
 			:value="value"
@@ -10,7 +11,7 @@
 			@change="updateVModel"
 		/>
 		<span :class="['icon', type]" />
-		<span class="label">
+		<span v-if="!labelHidden" class="label">
 			{{ label }}
 		</span>
 	</label>
@@ -41,8 +42,11 @@ export default {
 		},
 		label: {
 			type: String,
-			default: "",
+			required: true
 		},
+		labelHidden: {
+			type: Boolean
+		}
 	},
 	computed: {
 		isChecked() {

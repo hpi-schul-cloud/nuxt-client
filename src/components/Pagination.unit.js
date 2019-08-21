@@ -7,7 +7,7 @@ describe("@components/Pagination", () => {
 		const wrapper = shallowMount(Pagination, {
 			propsData: {
 				perPage: 5,
-				page: 1,
+				currentPage: 1,
 				total: 40,
 			},
 		});

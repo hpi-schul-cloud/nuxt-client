@@ -80,14 +80,6 @@ export default function(endpoint) {
 		mutations: {
 			set(state, { items }) {
 				state.list = items;
-				// items.forEach((item) => {
-				// 	const existing = state.list.findIndex((e) => e._id === item._id);
-				// 	if (existing === -1) {
-				// 		state.list.push(item);
-				// 	} else {
-				// 		state.list[existing] = item;
-				// 	}
-				// });
 			},
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);

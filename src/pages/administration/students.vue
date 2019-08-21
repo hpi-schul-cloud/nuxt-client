@@ -1,4 +1,65 @@
 <!-- eslint-disable max-lines -->
+
+<template>
+	<section class="section">
+		<h1>Schüler Verwaltung</h1>
+		<base-table
+			v-if="pagination"
+			:filters="filters"
+			:filters-selected.sync="filtersSelected"
+			:data="students"
+			:per-page.sync="perPage"
+			:actions="actions"
+			:current-page.sync="currentPage"
+			:total="pagination.total"
+			:columns="columns"
+			paginated
+			filterable
+			checkable
+			backend-sorting
+			backend-pagination
+			@sort="onSort"
+			@update:skip="onPageChange"
+		>
+			<template v-slot:column="{ row, column }">
+				<span v-if="column.field === 'classes'">
+					{{ row.classes.join(", ") }}
+				</span>
+				<span v-else-if="column.field === 'createdAt'">
+					{{ dayjs(row.createdAt).format("DD.MM.YYYY") }}
+				</span>
+				<div v-else-if="column.field === 'consent.consentStatus'">
+					<span v-if="row.consent.consentStatus === 'ok'">
+						<base-icon source="material" icon="check" />
+						<base-icon
+							style="position: relative; left: -10px"
+							source="material"
+							icon="check"
+						/>
+					</span>
+					<span v-else-if="row.consent.consentStatus === 'parentsAgreed'">
+						<base-icon source="material" icon="check" />
+					</span>
+					<span v-else-if="row.consent.consentStatus === 'missing'">
+						<base-icon source="material" icon="close" />
+					</span>
+				</div>
+				<span v-else>
+					{{ getValueByPath(row, column.field) }}
+				</span>
+			</template>
+			<template v-slot:extra-column="{ row }">
+				<base-icon
+					source="material"
+					icon="delete"
+					class="cursor-pointer"
+					@click.native="deleteEntity(row._id)"
+				/>
+			</template>
+		</base-table>
+	</section>
+</template>
+
 <script>
 import { mapGetters, mapState } from "vuex";
 import { getValueByPath } from "@utils/helpers";
@@ -207,63 +268,3 @@ export default {
 	},
 };
 </script>
-
-<template>
-	<section class="section">
-		<h1>Schüler Verwaltung</h1>
-		<base-table
-			v-if="pagination"
-			:filters="filters"
-			:filters-selected.sync="filtersSelected"
-			:data="students"
-			:per-page.sync="perPage"
-			:actions="actions"
-			:current-page.sync="currentPage"
-			:total="pagination.total"
-			:columns="columns"
-			paginated
-			filterable
-			checkable
-			backend-sorting
-			backend-pagination
-			@sort="onSort"
-			@update:skip="onPageChange"
-		>
-			<template v-slot:column="{ row, column }">
-				<span v-if="column.field === 'classes'">
-					{{ row.classes.join(", ") }}
-				</span>
-				<span v-else-if="column.field === 'createdAt'">
-					{{ dayjs(row.createdAt).format("DD.MM.YYYY") }}
-				</span>
-				<div v-else-if="column.field === 'consent.consentStatus'">
-					<span v-if="row.consent.consentStatus === 'ok'">
-						<base-icon source="material" icon="check" />
-						<base-icon
-							style="position: relative; left: -10px"
-							source="material"
-							icon="check"
-						/>
-					</span>
-					<span v-else-if="row.consent.consentStatus === 'parentsAgreed'">
-						<base-icon source="material" icon="check" />
-					</span>
-					<span v-else-if="row.consent.consentStatus === 'missing'">
-						<base-icon source="material" icon="close" />
-					</span>
-				</div>
-				<span v-else>
-					{{ getValueByPath(row, column.field) }}
-				</span>
-			</template>
-			<template v-slot:extra-column="{ row }">
-				<base-icon
-					source="material"
-					icon="delete"
-					class="cursor-pointer"
-					@click.native="deleteEntity(row._id)"
-				/>
-			</template>
-		</base-table>
-	</section>
-</template>

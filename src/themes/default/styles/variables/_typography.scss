@@ -44,6 +44,8 @@
 
 @include breakpoint(desktop) {
 	:root {
-		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
+		--text-base-size: calc(
+			1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio)
+		);
 	}
 }

@@ -1,7 +1,6 @@
 <template>
-	<!-- TODO: Disabled because it falsely reopens the dropdown after selecting an option -->
-	<!-- <base-input-default class="mb-0" v-bind="$attrs" vmodel="" :type="false" :label="label"> -->
 	<multi-select
+		:aria-label="label"
 		:value="value"
 		v-bind="$attrs"
 		:options="options"
@@ -22,16 +21,13 @@
 			<slot name="tag" :option="slotProps.option" />
 		</template>
 	</multi-select>
-	<!-- </base-input-default> -->
 </template>
 
 <script>
-// import BaseInputDefault from "./BaseInput/BaseInputDefault";
 import MultiSelect from "vue-multiselect";
 
 export default {
 	components: {
-		// BaseInputDefault,
 		MultiSelect,
 	},
 	props: {
@@ -62,7 +58,7 @@ export default {
 		},
 		label: {
 			type: String,
-			default: "",
+			required: true,
 		},
 		closeOnSelect: {
 			type: Boolean,
@@ -87,17 +83,7 @@ export default {
 			type: String,
 			default: "Aktiv",
 		},
-	},
-	computed: {
-		// model: {
-		// 	get() {
-		// 		return this.value;
-		// 	},
-		// 	set(v) {
-		// 		this.$emit("input", v[this.trackBy]);
-		// 	},
-		// },
-	},
+	}
 };
 </script>
 

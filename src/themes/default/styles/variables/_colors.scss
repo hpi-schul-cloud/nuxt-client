@@ -1,5 +1,4 @@
 $brighten: 15%;
-$brighten-more: 45%;
 $darken: 25%;
 
 :root {
@@ -17,7 +16,6 @@ $darken: 25%;
 	// shades
 	--color-black: #1d1d21;
 	--color-gray-light: #ddd;
-	--color-gray-lighter: #f1f1f1;
 	--color-gray: #aaa;
 	--color-gray-dark: #444;
 	--color-white: #fff;
@@ -27,7 +25,6 @@ $darken: 25%;
 	/* feedback */
 	--color-info: #17a2b8;
 	--color-info-light: color-mod(var(--color-info) tint(#{$brighten}));
-	--color-info-lighter: color-mod(var(--color-info) tint(#{$brighten-more}));
 	--color-info--dark: color-mod(var(--color-info) shade(#{$darken}));
 	--color-success: #13ba98;
 	--color-success-light: color-mod(var(--color-success) tint(#{$brighten}));

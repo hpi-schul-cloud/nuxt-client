@@ -10,7 +10,7 @@
 				<slot name="icon" />
 			</div>
 			<div class="core">
-				<div class="label">
+				<div v-if="!labelHidden" class="label">
 					{{ label }}
 				</div>
 				<slot>
@@ -71,7 +71,10 @@ export default {
 		},
 		label: {
 			type: String,
-			default: "",
+			required: true,
+		},
+		labelHidden: {
+			type: Boolean
 		},
 		hint: {
 			type: String,
