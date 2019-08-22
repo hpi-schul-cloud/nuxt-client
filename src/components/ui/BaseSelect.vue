@@ -1,8 +1,6 @@
 <template>
-	<div>
-		<span v-if="!labelHidden" class="label">{{ label }}</span>
+	<base-input-default class="mb-0" v-bind="$attrs" vmodel="" :type="false" :label-hidden="labelHidden" :label="label">
 		<multi-select
-			:aria-label="label"
 			:value="value"
 			v-bind="$attrs"
 			:options="options"
@@ -23,15 +21,17 @@
 				<slot name="tag" :option="slotProps.option" />
 			</template>
 		</multi-select>
-	</div>
+	</base-input-default>
 </template>
 
 <script>
 import MultiSelect from "vue-multiselect";
+import BaseInputDefault from "./BaseInput/BaseInputDefault";
 
 export default {
 	components: {
-		MultiSelect,
+		BaseInputDefault,
+		MultiSelect
 	},
 	props: {
 		/**

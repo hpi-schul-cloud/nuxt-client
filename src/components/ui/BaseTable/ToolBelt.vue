@@ -27,7 +27,7 @@
 						</span>
 						<i
 							aria-hidden="true"
-							tabindex="1"
+							tabindex="0"
 							class="multiselect__tag-icon"
 							@keypress.enter.prevent="$emit('remove-filter', slotProps.option)"
 							@mousedown.prevent="$emit('remove-filter', slotProps.option)"

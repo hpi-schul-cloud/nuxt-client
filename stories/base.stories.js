@@ -328,7 +328,8 @@ storiesOf("Base Components", module)
 			data: tableData,
 			columns: tableColumns,
 			perPage: number("perPage", 5),
-			backendPagination: number("backendPagination", 5),
+			backendSorting: boolean("checkable", false),
+			backendPagination: boolean("checkable", false),
 			paginated: boolean("paginated", true),
 			currentPage: number("currentPage", 1),
 			filterable: boolean("filterable", true),
@@ -342,8 +343,9 @@ storiesOf("Base Components", module)
 				:data="data"
 				:columns="columns"
 				:current-page.sync="currentPage"
-				:per-page="perPage"
-				:backendPagination="backendPagination"
+				:per-page.sync="perPage"
+				:backend-pagination="backendPagination"
+				:backend-sorting="backendSorting"
 				:paginated="paginated"
 				:filterable="filterable"
 				:filters="filters"

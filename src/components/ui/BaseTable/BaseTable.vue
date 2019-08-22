@@ -97,7 +97,7 @@
 		<pagination
 			class="mt--md"
 			:current-page="currentPage"
-			:total="backendPagination ? total : newData.length"
+			:total="newDataTotal"
 			:per-page="perPage"
 			@update:per-page="$emit('update:per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
@@ -180,6 +180,7 @@ export default {
 			editFilterActive: false,
 			currentSortColumn: "",
 			newData: this.data,
+			newDataTotal: this.backendPagination ? this.total : this.data.length,
 			absoluteAllChecked: false,
 			filterOpened: {},
 			newFiltersSelected: [],
@@ -205,14 +206,15 @@ export default {
 		visibleData() {
 			if (!this.paginated) return this.newData;
 
-			if (this.backendPagination) {
-				return this.newData;
-			} else {
-				return this.newData.slice(
-					this.skip,
-					this.paginationState.limit + this.skip
-				);
-			}
+            const { currentPage } = this
+            const { perPage } = this
+            if (this.newData.length <= perPage || perPage < 0) {
+                return this.newData
+            } else {
+                const start = (currentPage - 1) * perPage
+                const end = parseInt(start, 10) + parseInt(perPage, 10)
+                return this.newData.slice(start, end)
+            }
 		},
 	},
 	watch: {
@@ -221,7 +223,18 @@ export default {
 		},
 		data(data) {
 			this.newData = data;
+
+            if (!this.backendSorting) {
+                this.sort(this.currentSortColumn, true)
+            }
+            if (!this.backendPagination) {
+                this.newDataTotal = data.length
+            }
 		},
+        total(newTotal) {
+            if (!this.backendPagination) return
+            this.newDataTotal = newTotal
+        },
 		newFiltersSelected() {
 			this.$emit("update:filters-selected", this.newFiltersSelected);
 		},

@@ -1,9 +1,11 @@
 <template>
-	<label
+	<div
 		:class="{
+			label: true,
 			wrapper: true,
 			'with-hint': hasInfo,
 		}"
+		:aria-label="label"
 	>
 		<div class="top">
 			<div v-if="$slots.icon" class="icon-before">
@@ -39,7 +41,7 @@
 		>
 			{{ error || hint }}
 		</span>
-	</label>
+	</div>
 </template>
 <script>
 export const supportedTypes = [

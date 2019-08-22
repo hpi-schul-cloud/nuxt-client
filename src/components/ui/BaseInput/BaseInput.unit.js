@@ -14,7 +14,7 @@ describe("@components/BaseInput", () => {
 					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
 				});
-				expect(wrapper.contains("label")).toBe(true);
+				expect(wrapper.contains(".label")).toBe(true);
 				expect(wrapper.text().includes(testLabel)).toBe(true);
 			});
 	});
