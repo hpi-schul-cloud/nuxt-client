@@ -102,13 +102,14 @@ export default {
 }
 
 .sidebar {
-	position: absolute;
+	position: fixed;
 	top: var(--topbar-height);
 	right: 0;
 	left: 0;
 	z-index: var(--layer-dropdown);
 	display: none;
-	min-height: calc(100vh - 55px);
+	height: calc(100vh - 55px);
+	overflow-y: auto;
 	background-color: var(--color-white);
 	box-shadow: 0 5px 5px var(--color-gray-light);
 	transition: display 2s;
@@ -121,13 +122,19 @@ export default {
 	}
 
 	@include breakpoint(tablet) {
-		position: static;
+		position: fixed;
+		top: 0;
 		display: flex;
 		flex-direction: column;
+		width: var(--sidebar-width-tablet);
 		height: 100vh;
 		overflow: auto;
 		border-right: 1px solid var(--color-gray-light);
 		border-bottom: none;
+	}
+
+	@include breakpoint(desktop) {
+		width: var(--sidebar-width);
 	}
 
 	.logo {
@@ -198,6 +205,7 @@ export default {
 				.list-content {
 					display: flex;
 					align-items: center;
+					height: 100%;
 					padding: 0 var(--sidebar-item-padding);
 					font-size: var(--sidebar-font-size);
 					color: var(--color-tertiary-dark);
