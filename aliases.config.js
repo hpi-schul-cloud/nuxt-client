@@ -34,7 +34,6 @@ module.exports = {
 	jsconfig: {},
 };
 
-// eslint-disable-next-line no-unused-vars
 for (const alias in aliases) {
 	const aliasTo = aliases[alias];
 	module.exports.webpack[alias] = resolveSrc(aliasTo);

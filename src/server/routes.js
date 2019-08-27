@@ -33,7 +33,7 @@ module.exports = [
 	"teams",
 	{
 		route: "teams",
-		controller: "teams"
+		controller: "teams",
 	},
 	"tools",
 	"topics",

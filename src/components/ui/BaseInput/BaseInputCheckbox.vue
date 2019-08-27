@@ -42,11 +42,11 @@ export default {
 		},
 		label: {
 			type: String,
-			required: true
+			required: true,
 		},
 		labelHidden: {
-			type: Boolean
-		}
+			type: Boolean,
+		},
 	},
 	computed: {
 		isChecked() {

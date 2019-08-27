@@ -21,9 +21,7 @@
 				<template v-slot:tag="slotProps">
 					<span class="multiselect__tag">
 						<span @mousedown.prevent="$emit('edit-filter', slotProps.option)">
-							{{
-							slotProps.option.tagLabel
-							}}
+							{{ slotProps.option.tagLabel }}
 						</span>
 						<i
 							aria-hidden="true"
@@ -46,12 +44,17 @@
 						<span
 							style="text-decoration: underline; cursor: pointer"
 							@click="absoluteAllChecked = true"
-						>Alle {{ total }} auswählen</span>
+							>Alle {{ total }} auswählen</span
+						>
 						)
 					</span>
 				</div>
 				<div class="ml--md">
-					<dropdown-menu :items="actions" title="Aktionen" @input="$emit('fire-action', $event)" />
+					<dropdown-menu
+						:items="actions"
+						title="Aktionen"
+						@input="$emit('fire-action', $event)"
+					/>
 				</div>
 			</div>
 			<div>
@@ -71,39 +74,39 @@
 import DropdownMenu from "@components/DropdownMenu.vue";
 
 export default {
-    components: {
-        DropdownMenu
-    },
-    props: {
-        actions: {
-            type: Array,
-            default: () => []
-        },
-        checkedRows: {
-            type: Array,
-            default: () => []
-        },
-        filters: {
-            type: Array,
-            default: () => []
-        },
-        filtersSelected: {
-            type: Array,
-            default: () => []
-        },
-        filterable: {
-            type: Boolean
-        },
-        absoluteAllChecked: {
-            type: Boolean
-        },
-        isAllChecked: {
-            type: Boolean
-        },
-        total: {
-            type: Number,
-            default: 0
-        }
-    }
-}
+	components: {
+		DropdownMenu,
+	},
+	props: {
+		actions: {
+			type: Array,
+			default: () => [],
+		},
+		checkedRows: {
+			type: Array,
+			default: () => [],
+		},
+		filters: {
+			type: Array,
+			default: () => [],
+		},
+		filtersSelected: {
+			type: Array,
+			default: () => [],
+		},
+		filterable: {
+			type: Boolean,
+		},
+		absoluteAllChecked: {
+			type: Boolean,
+		},
+		isAllChecked: {
+			type: Boolean,
+		},
+		total: {
+			type: Number,
+			default: 0,
+		},
+	},
+};
 </script>

@@ -115,7 +115,7 @@ export default {
 	components: {
 		Pagination,
 		ToolBelt,
-		FilterModal
+		FilterModal,
 	},
 	props: {
 		data: {
@@ -206,15 +206,15 @@ export default {
 		visibleData() {
 			if (!this.paginated) return this.newData;
 
-            const { currentPage } = this
-            const { perPage } = this
-            if (this.newData.length <= perPage || perPage < 0) {
-                return this.newData
-            } else {
-                const start = (currentPage - 1) * perPage
-                const end = parseInt(start, 10) + parseInt(perPage, 10)
-                return this.newData.slice(start, end)
-            }
+			const { currentPage } = this;
+			const { perPage } = this;
+			if (this.newData.length <= perPage || perPage < 0) {
+				return this.newData;
+			} else {
+				const start = (currentPage - 1) * perPage;
+				const end = parseInt(start, 10) + parseInt(perPage, 10);
+				return this.newData.slice(start, end);
+			}
 		},
 	},
 	watch: {
@@ -224,17 +224,17 @@ export default {
 		data(data) {
 			this.newData = data;
 
-            if (!this.backendSorting) {
-                this.sort(this.currentSortColumn, true)
-            }
-            if (!this.backendPagination) {
-                this.newDataTotal = data.length
-            }
+			if (!this.backendSorting) {
+				this.sort(this.currentSortColumn, true);
+			}
+			if (!this.backendPagination) {
+				this.newDataTotal = data.length;
+			}
 		},
-        total(newTotal) {
-            if (!this.backendPagination) return
-            this.newDataTotal = newTotal
-        },
+		total(newTotal) {
+			if (!this.backendPagination) return;
+			this.newDataTotal = newTotal;
+		},
 		newFiltersSelected() {
 			this.$emit("update:filters-selected", this.newFiltersSelected);
 		},

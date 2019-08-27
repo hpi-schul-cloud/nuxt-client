@@ -48,24 +48,29 @@
 		</div>
 
 		<div class="modal-footer">
-			<base-button id="button" design="primary" @click="$emit('setFilter', filterOpened)">Übernehmen</base-button>
+			<base-button
+				id="button"
+				design="primary"
+				@click="$emit('setFilter', filterOpened)"
+				>Übernehmen</base-button
+			>
 		</div>
 	</base-modal>
 </template>
 
 <script>
 export default {
-    props: {
-        active: {
-            type: Boolean
-        },
-        filterOpened: {
-            type: Object,
-            default: () => {}
-        }
-    },
-    data () {
-        return {
+	props: {
+		active: {
+			type: Boolean,
+		},
+		filterOpened: {
+			type: Object,
+			default: () => {},
+		},
+	},
+	data() {
+		return {
 			stringFilters: [
 				{
 					label: "enthält",
@@ -76,7 +81,7 @@ export default {
 					value: "equals",
 				},
 			],
-        }
-    }
-}
+		};
+	},
+};
 </script>

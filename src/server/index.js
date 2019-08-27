@@ -81,7 +81,6 @@ app.use(require(path.join(legacyClientRoot, `./controllers/login`)));
 app.use(require(path.join(legacyClientRoot, `./controllers/registration`)));
 
 function setLegacyControllers() {
-	// eslint-disable-next-line no-unused-vars
 	for (const route of legacyRoutes) {
 		if (typeof route === "object") {
 			app.use(
@@ -142,7 +141,6 @@ async function start() {
 	// catches every legacy client issue except 404 issues.
 	// 404 errors are handled by nuxt itself and therefore
 	// this middleware is never called in this case
-	// eslint-disable-next-line no-unused-vars
 	app.use((err, req, res, next) => {
 		if (
 			err &&

@@ -76,7 +76,7 @@ export default {
 			required: true,
 		},
 		labelHidden: {
-			type: Boolean
+			type: Boolean,
 		},
 		hint: {
 			type: String,

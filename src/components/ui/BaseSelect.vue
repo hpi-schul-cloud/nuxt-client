@@ -1,5 +1,12 @@
 <template>
-	<base-input-default class="mb-0" v-bind="$attrs" vmodel="" :type="false" :label-hidden="labelHidden" :label="label">
+	<base-input-default
+		class="mb-0"
+		v-bind="$attrs"
+		vmodel=""
+		:type="false"
+		:label-hidden="labelHidden"
+		:label="label"
+	>
 		<multi-select
 			:value="value"
 			v-bind="$attrs"
@@ -31,7 +38,7 @@ import BaseInputDefault from "./BaseInput/BaseInputDefault";
 export default {
 	components: {
 		BaseInputDefault,
-		MultiSelect
+		MultiSelect,
 	},
 	props: {
 		/**
@@ -64,7 +71,7 @@ export default {
 			required: true,
 		},
 		labelHidden: {
-			type: Boolean
+			type: Boolean,
 		},
 		closeOnSelect: {
 			type: Boolean,
