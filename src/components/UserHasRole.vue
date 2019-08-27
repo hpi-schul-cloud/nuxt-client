@@ -22,7 +22,7 @@ export default {
 		...mapState({
 			userRoles: (state) =>
 				state && state.auth && state.auth.user && state.auth.user.roles
-					? state.auth.user.roles.map(r => r.name.toLowerCase())
+					? state.auth.user.roles.map((r) => r.name.toLowerCase())
 					: [],
 		}),
 		hasRole() {

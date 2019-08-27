@@ -1,8 +1,16 @@
 <template>
 	<aside class="sidebar" :class="{ expanded: expandedMenu }">
 		<div class="top-sidebar" @click="$emit('input')">
-			<img class="logo logo-full" src="@assets/img/logo/logo-image-mono.svg" alt="Schulcloud Logo" />
-			<img class="logo logo-small" src="@assets/img/logo/logo-transparent-mono-48-48.svg" alt="Schulcloud Logo" />
+			<img
+				class="logo logo-full"
+				src="@assets/img/logo/logo-image-mono.svg"
+				alt="Schulcloud Logo"
+			/>
+			<img
+				class="logo logo-small"
+				src="@assets/img/logo/logo-transparent-mono-48-48.svg"
+				alt="Schulcloud Logo"
+			/>
 		</div>
 		<nav class="contents">
 			<ul class="list">
@@ -32,7 +40,8 @@
 							v-for="child in route.children"
 							:key="JSON.stringify(child.to) || child.href"
 							:class="{ active: $route.path.includes(child.href) }"
-							class="list-item list-sub-item">
+							class="list-item list-sub-item"
+						>
 							<base-link
 								class="list-content"
 								:to="child.to"
@@ -43,7 +52,11 @@
 									v-if="child.icon"
 									:icon="child.icon"
 									:source="child.source || 'fa'"
-									:fill="$route.path.includes(child.href) ? 'var(--color-primary)' : ''"
+									:fill="
+										$route.path.includes(child.href)
+											? 'var(--color-primary)'
+											: ''
+									"
 									class="icon"
 								/>
 								<span class="title">{{ child.title }}</span>
@@ -99,7 +112,6 @@ export default {
 	background-color: var(--color-white);
 	box-shadow: 0 5px 5px var(--color-gray-light);
 	transition: display 2s;
-	
 
 	&.expanded {
 		display: flex;
@@ -108,7 +120,6 @@ export default {
 		animation-iteration-count: 1;
 	}
 
-	
 	@include breakpoint(tablet) {
 		position: static;
 		display: flex;
@@ -127,12 +138,12 @@ export default {
 	}
 
 	.logo-full {
-			@include breakpoint(desktop) {
-				display: initial;
-				padding-top: var(--space-xs);
-				padding-bottom: var(--space-xs);
-			}
+		@include breakpoint(desktop) {
+			display: initial;
+			padding-top: var(--space-xs);
+			padding-bottom: var(--space-xs);
 		}
+	}
 
 	.logo-small {
 		display: none;

@@ -22,7 +22,7 @@ export default {
 		...mapState({
 			userPermissions: (state) =>
 				state && state.auth && state.auth.user && state.auth.user.permissions
-					? state.auth.user.permissions.map(p => p.toLowerCase())
+					? state.auth.user.permissions.map((p) => p.toLowerCase())
 					: [],
 		}),
 		hasPermission() {
