@@ -205,6 +205,7 @@ export default {
 	color: var(--color-tertiary-dark);
 	text-align: left;
 	text-decoration: none;
+	cursor: pointer;
 	background-color: transparent;
 	border-color: transparent;
 	outline: none;
