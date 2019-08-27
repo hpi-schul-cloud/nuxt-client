@@ -1,51 +1,101 @@
 <template>
 	<div class="topbar">
-		<img
-			class="logo"
-			src="@assets/img/logo/logo-image-mono.svg"
-			alt="Website Logo"
-		/>
-		<h1 class="page-title">{{ title }}</h1>
-
 		<!-- ACTIONS -->
-		<template v-for="action in actions">
-			<base-link
-				v-if="action.to || action.href"
-				:key="action.to + action.icon"
-				tag="button"
-				:to="action.to"
-				:href="action.href"
-				class="action"
-				>{{ action.title }}</base-link
-			>
-
+		<div
+			v-if="!fullscreenMode"
+			class="top-main"
+			:class="{ 'expanded-menu': expandedMenu }"
+		>
 			<base-button
-				v-if="action.event"
-				:key="action.event + action.icon"
-				design="text"
-				class="action"
-				@click="sendEvent(action.event)"
-				>{{ action.title }}</base-button
+				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
+				design="icon text"
+				@click.native="sendEvent('expandMenu')"
 			>
-		</template>
+				<base-icon source="fa" icon="bars" />
+			</base-button>
+			<div class="space"></div>
+			<base-button
+				class="item fullscreen-button"
+				design="icon text"
+				@click.native="sendEvent('fullscreen')"
+			>
+				<base-icon source="fa" icon="expand" />
+			</base-button>
+			<template v-for="action in actions">
+				<popup-icon
+					v-if="action.type === 'popupIcon'"
+					:key="action.title"
+					class="item"
+					source="fa"
+					:icon="action.icon"
+					:popup-items="action.items"
+				>
+					<component :is="action.component" v-bind="action.config"></component>
+				</popup-icon>
+
+				<div
+					v-if="action.type === 'text'"
+					:key="action.title"
+					class="school-name item"
+					>{{ action.title }}</div
+				>
+
+				<popup-icon-initials
+					v-if="action.type === 'popupWithInitials'"
+					:key="action.firstname"
+					:firstname="action.firstname"
+					:lastname="action.lastname"
+					:user="action.user"
+					:role="action.role"
+					class="item"
+				>
+					<a href="/account" class="account-link">Einstellungen</a>
+					<button
+						:key="action.title"
+						v-ripple
+						class="logout-button"
+						@click="sendEvent(action.event)"
+						>Abmelden</button
+					>
+				</popup-icon-initials>
+			</template>
+		</div>
+		<base-button
+			v-if="!!fullscreenMode"
+			class="fullscreen-button fullscreen-button-active"
+			design="secondary icon"
+			@click.native="sendEvent('fullscreen')"
+		>
+			<base-icon source="fa" icon="compress" fill="var(--color-white)" />
+		</base-button>
 	</div>
 </template>
 
 <script>
+import PopupIcon from "@components/PopupIcon";
+import PopupIconInitials from "@components/PopupIconInitials";
+import BaseLink from "@components/ui/BaseLink";
+import HelpDropdown from "@components/HelpDropdown";
+import MenuQrCode from "@components/MenuQrCode";
+
 export default {
+	components: {
+		PopupIcon,
+		PopupIconInitials,
+		BaseLink,
+		HelpDropdown,
+		MenuQrCode,
+	},
 	props: {
-		title: {
-			type: String,
-			default: "HPI Schul-Cloud",
-		},
 		actions: {
 			type: Array,
 			default: () => [],
 			validator: function(value) {
 				return value.every((action) => {
 					const isValid =
-						(action.icon || action.title) &&
-						(action.event || action.to || action.href);
+						// (action.icon || action.title ||
+						// (action.firstname && action.lastname && action.role)) &&
+						action.type;
 					if (!isValid) {
 						console.error(
 							`Action "${JSON.stringify(
@@ -56,6 +106,12 @@ export default {
 					return isValid;
 				});
 			},
+		},
+		fullscreenMode: {
+			type: Boolean,
+		},
+		expandedMenu: {
+			type: Boolean,
 		},
 	},
 	methods: {
@@ -68,26 +124,93 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .topbar {
 	display: flex;
 	align-items: center;
-	padding: var(--space-sm) var(--space-md);
-	background-color: var(--color-primary);
-	box-shadow: var(--shadow-sm);
+	height: var(--sidebar-item-height);
+
+	.top-main {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 1;
+		align-items: center;
+		justify-content: flex-end;
+		width: 100%;
+		padding-right: var(--space-sm);
+
+		.space {
+			flex-grow: 1;
+		}
+
+		.item {
+			margin-left: var(--space-sm);
+		}
+
+		.menu-button {
+			z-index: var(--layer-popover);
+			display: flex;
+			margin: var(--space-xs);
+			transition: transform 0.35s;
+
+			&:hover,
+			&:focus {
+				cursor: pointer;
+				background-color: transparent;
+			}
+
+			@include breakpoint(tablet) {
+				display: none;
+			}
+		}
+
+		&.expanded-menu {
+			.item {
+				display: none;
+			}
+
+			.menu-button {
+				transform: rotate(90deg);
+			}
+		}
+
+		@include breakpoint(desktop) {
+			.item {
+				display: initial;
+			}
+		}
+		.school-name {
+			display: none;
+
+			@include breakpoint(tablet) {
+				display: initial;
+			}
+		}
+	}
 }
-.logo {
-	height: var(--heading-3);
-	margin-right: var(--space-sm);
+
+.fullscreen-button-active {
+	position: fixed;
+	top: var(--space-sm);
+	right: var(--space-sm);
 }
-.page-title {
-	flex: 1;
-	margin: 0;
-	font-family: var(--font-accent);
-	font-size: var(--heading-4);
-	color: var(--color-white);
-	text-transform: capitalize;
-}
-.action {
-	padding: var(--space-sm) var(--space-md);
+
+.logout-button,
+.account-link {
+	--hover-color: #f5f5f5;
+
+	width: 100%;
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	padding: 8px 27px;
+	color: var(--color-tertiary-dark);
+	text-align: left;
+	text-decoration: none;
+	background-color: transparent;
+	border-color: transparent;
+	outline: none;
+
+	&:hover {
+		background-color: var(--hover-color);
+	}
 }
 </style>

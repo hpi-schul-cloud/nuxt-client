@@ -1,5 +1,16 @@
 import TheTopBar from "./TheTopBar";
 
+const mockActions = [
+	{ type: "popupIcon", icon: "house", title: "test home", to: "home" },
+	{ type: "text", title: "test away", href: "https://schul-cloud.org" },
+	{
+		type: "popupWithInitials",
+		icon: "camera",
+		title: "test action",
+		event: "light-camera",
+	},
+];
+
 describe("@components/TheTopBar", () => {
 	it(...isValidComponent(TheTopBar));
 	const $theme = {
@@ -14,16 +25,10 @@ describe("@components/TheTopBar", () => {
 				$theme,
 			},
 		});
-		expect(wrapper.find(".page-title").text()).toBe("HPI Schul-Cloud");
 		expect(wrapper.find(".action").exists()).toBe(false);
 	});
 
 	it("Render with links and buttons", () => {
-		const mockActions = [
-			{ icon: "house", title: "test home", to: "home" },
-			{ title: "test away", href: "https://schul-cloud.org" },
-			{ title: "test action", event: "light-camera" },
-		];
 		const wrapper = shallowMount(TheTopBar, {
 			propsData: {
 				actions: mockActions,
@@ -32,11 +37,25 @@ describe("@components/TheTopBar", () => {
 				$theme,
 			},
 		});
-		expect(wrapper.findAll("base-link-stub").length).toBe(2);
-		expect(wrapper.findAll("base-button-stub").length).toBe(1);
-		expect(wrapper.find("base-link-stub").text()).toBe(mockActions[0].title);
-		wrapper.find("base-button-stub").vm.$emit("click");
+		expect(wrapper.findAll("base-button-stub").length).toBe(2);
+		expect(wrapper.findAll("popup-icon-stub").length).toBe(1);
+		expect(wrapper.findAll("button").length).toBe(1);
+		wrapper.find("button").trigger("click");
 		expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
-		expect(wrapper.findAll(".action").length).toBe(3);
+		expect(wrapper.findAll(".item").length).toBe(4);
+	});
+	it("can switch to fullscreen mode", () => {
+		const wrapper = mount(TheTopBar, {
+			propsData: {
+				fullscreenMode: true,
+			},
+		});
+
+		wrapper.find(".fullscreen-button").trigger("click");
+		expect(wrapper.emitted().action[0]).toEqual(["fullscreen"]);
+
+		expect(wrapper.findAll(".item").length).toBe(0);
+		expect(wrapper.findAll(".top-sidebar").length).toBe(0);
+		expect(wrapper.findAll(".fullscreen-button-active").length).toBe(1);
 	});
 });
