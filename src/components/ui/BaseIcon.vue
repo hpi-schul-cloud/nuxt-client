@@ -1,20 +1,14 @@
 <template>
-	<div>
-		<component
-			:is="svgComponent"
-			v-if="source !== 'fa'"
-			ref="icon"
-			:class="['icon', source]"
-			v-bind="$attrs"
-			:fill="fill"
-			v-on="$listeners"
-		/>
-		<i
-			v-if="source === 'fa'"
-			:class="['icon', 'fa', `fa-${icon}`]"
-			:style="{ color: fill }"
-		></i>
-	</div>
+	<component
+		:is="svgComponent"
+		v-if="source !== 'fa'"
+		ref="icon"
+		:class="['icon', source]"
+		v-bind="$attrs"
+		:fill="fill"
+		v-on="$listeners"
+	/>
+	<i v-else :class="['icon', 'fa', `fa-${icon}`]" :style="{ color: fill }"></i>
 </template>
 
 <script>
