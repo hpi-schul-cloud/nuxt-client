@@ -197,6 +197,7 @@ export default {
 
 				.list-content {
 					display: flex;
+					align-items: center;
 					padding: 0 var(--sidebar-item-padding);
 					font-size: var(--sidebar-font-size);
 					color: var(--color-tertiary-dark);
