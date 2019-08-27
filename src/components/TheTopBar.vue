@@ -200,9 +200,8 @@ export default {
 	--hover-color: #f5f5f5;
 
 	width: 100%;
-	/* stylelint-disable sh-waqar/declaration-use-variable */
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	padding: 8px 27px;
-	/* stylelint-enable */
 	color: var(--color-tertiary-dark);
 	text-align: left;
 	text-decoration: none;

@@ -30,7 +30,7 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "var(--color-tertiary-dark)",
+			default: "currentColor",
 		},
 	},
 	computed: {
