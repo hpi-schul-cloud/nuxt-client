@@ -63,6 +63,7 @@ export default {
 	font-family: var(--font-accent);
 	font-size: var(--text-lg);
 	color: var(--color-white);
+	cursor: pointer;
 	-webkit-user-select: None;
 	background-color: var(--color-tertiary-dark);
 	border: none;
