@@ -19,9 +19,9 @@ describe("@components/BaseIcon", () => {
 			propsData: testProps,
 		});
 
-		wrapper.find(".popup").trigger("click");
+		wrapper.find(".popup .icon-button").trigger("click");
 		expect(wrapper.find(".popup-content").classes()).toContain("visible");
-		wrapper.find(".popup").trigger("click");
+		wrapper.find(".popup .icon-button").trigger("click");
 		expect(wrapper.find(".popup-content").classes()).not.toContain("visible");
 	});
 });

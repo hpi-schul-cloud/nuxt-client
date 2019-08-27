@@ -29,7 +29,7 @@ import { mapState, mapActions } from "vuex";
 import TheTopBar from "@components/TheTopBar";
 import TheSidebar from "@components/TheSidebar";
 import TheFooter from "@components/TheFooter";
-import sidebarBaseItems from '../utils/sidebarBaseItems.js'
+import sidebarBaseItems from "../utils/sidebarBaseItems.js";
 
 const topbarBaseActions = [
 	{
@@ -153,9 +153,9 @@ export default {
 
 			return sidebarItems.map((item) => {
 				const isActive = this.$route.path.includes(item.href);
-				item.childActive = item.children?
-					item.children.some(child => this.$route.path.includes(child.href)) :
-					false;
+				item.childActive = item.children
+					? item.children.some((child) => this.$route.path.includes(child.href))
+					: false;
 				item.active = isActive && !item.childActive;
 				return item;
 			});
@@ -200,7 +200,9 @@ export default {
 	grid-template-rows: auto 1fr auto;
 	grid-template-columns: 0 1fr;
 	width: 100%;
+	max-width: 100%;
 	min-height: 100vh;
+	overflow-x: hidden;
 
 	@include breakpoint(tablet) {
 		grid-template-columns: var(--sidebar-width-tablet) 1fr;

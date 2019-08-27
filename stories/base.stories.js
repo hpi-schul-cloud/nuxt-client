@@ -6,7 +6,6 @@ import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
 import BaseCard from "@components/ui/BaseCard";
 import BaseIcon from "@components/ui/BaseIcon";
-import BaseIconButton from "@components/ui/BaseIconButton";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
 } from "@components/ui/BaseInput/BaseInput";
@@ -176,7 +175,7 @@ storiesOf("Base Components", module)
 			icon: text("icon", "home"),
 			source: select(
 				"source",
-				{ material: "material", custom: "custom" },
+				{ material: "material", fa: "fa", custom: "custom" },
 				"material"
 			),
 			size: text("size", "1em"),
@@ -198,20 +197,6 @@ storiesOf("Base Components", module)
 				<base-icon source="custom" icon="tasks" style="font-size: 2em" />
 			</p>
 		</div>`,
-	}))
-	.add("Base Icon Button", () => ({
-		components: { BaseIconButton },
-		data: () => ({
-			icon: text("icon", "home"),
-			source: select(
-				"source",
-				{ material: "material", custom: "custom" },
-				"material"
-			),
-			size: text("size", "1em"),
-			color: color("color", "#f8a41b"),
-		}),
-		template: `<BaseIconButton source="fa" icon="solid/address-book"></BaseIconButton>`,
 	}))
 	.add("Base Input (Knobs)", () => {
 		const baseInputTypesDict = {};

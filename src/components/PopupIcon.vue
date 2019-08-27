@@ -1,12 +1,9 @@
 <template>
-	<div v-click-outside="removePopup" class="popup" @click="popup">
-		<base-icon-button
-			class="icon-button"
-			:source="source"
-			:icon="icon"
-			:fill="fill"
-			@click="popup"
-		/>
+	<div v-click-outside="removePopup" class="popup">
+		<base-button class="icon-button" design="icon text" @click="popup">
+			<base-icon :source="source" :icon="icon" :fill="fill" />
+		</base-button>
+
 		<div class="popup-content" :class="{ visible }">
 			<slot></slot>
 		</div>
@@ -58,7 +55,7 @@ export default {
 	--outer-arrow-size: calc(var(--arrow-size) + 1.5px);
 
 	:focus-within {
-		.icon-button{
+		.icon-button {
 			background-color: var(--color-gray-light);
 		}
 	}

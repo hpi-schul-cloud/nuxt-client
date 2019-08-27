@@ -1,21 +1,26 @@
 <template>
-	<div class="topbar">		
+	<div class="topbar">
 		<!-- ACTIONS -->
-		<div v-if="!fullscreenMode" class="top-main" :class="{ 'expanded-menu': expandedMenu }">
-			<base-icon-button
-				class="menu-button"
-				:class="{ 'expanded-menu': expandedMenu }"
-				source="fa"
-				icon="bars"
+		<div
+			v-if="!fullscreenMode"
+			class="top-main"
+			:class="{ 'expanded-menu': expandedMenu }"
+		>
+			<base-button
+				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
+				design="icon text"
 				@click.native="sendEvent('expandMenu')"
-			/>
+			>
+				<base-icon source="fa" icon="bars" />
+			</base-button>
 			<div class="space"></div>
-			<base-icon-button
+			<base-button
 				class="item fullscreen-button"
-				source="fa"
-				icon="expand"
+				design="icon text"
 				@click.native="sendEvent('fullscreen')"
-			/>
+			>
+				<base-icon source="fa" icon="expand" />
+			</base-button>
 			<template v-for="action in actions">
 				<popup-icon
 					v-if="action.type === 'popupIcon'"
@@ -32,7 +37,8 @@
 					v-if="action.type === 'text'"
 					:key="action.title"
 					class="school-name item"
-				>{{ action.title }}</div>
+					>{{ action.title }}</div
+				>
 
 				<popup-icon-initials
 					v-if="action.type === 'popupWithInitials'"
@@ -49,7 +55,8 @@
 						v-ripple
 						class="logout-button"
 						@click="sendEvent(action.event)"
-					>Abmelden</button>
+						>Abmelden</button
+					>
 				</popup-icon-initials>
 			</template>
 		</div>
@@ -146,7 +153,8 @@ export default {
 			margin: var(--space-xs);
 			transition: transform 0.35s;
 
-			&:hover, &:focus {
+			&:hover,
+			&:focus {
 				cursor: pointer;
 				background-color: transparent;
 			}
@@ -162,7 +170,6 @@ export default {
 			}
 
 			.menu-button {
-				display: flex;
 				transform: rotate(90deg);
 			}
 		}
@@ -196,7 +203,6 @@ export default {
 	/* stylelint-disable sh-waqar/declaration-use-variable */
 	padding: 8px 27px;
 	/* stylelint-enable */
-	font-size: var(--text-lg);
 	color: var(--color-tertiary-dark);
 	text-align: left;
 	text-decoration: none;

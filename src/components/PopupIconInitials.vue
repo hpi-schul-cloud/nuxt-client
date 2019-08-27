@@ -3,7 +3,7 @@
 		<div class="icon">{{ initials }}</div>
 		<div class="popuptext" :class="{ visible }">
 			<div class="username">
-				<span> {{ firstname }} {{ lastname }} <user-role/> </span>
+				<span> {{ firstname }} {{ lastname }} <user-role /> </span>
 			</div>
 			<slot />
 		</div>
@@ -88,7 +88,6 @@ export default {
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xxxxs);
-		font-size: var(--text-lg);
 		color: var(--color-tertiary-dark);
 		white-space: nowrap;
 		background-color: var(--color-white);

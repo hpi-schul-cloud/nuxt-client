@@ -29,7 +29,6 @@ describe("@components/TheTopBar", () => {
 	});
 
 	it("Render with links and buttons", () => {
-		// eslint-disable-next-line no-unused-vars
 		const wrapper = shallowMount(TheTopBar, {
 			propsData: {
 				actions: mockActions,
@@ -38,7 +37,7 @@ describe("@components/TheTopBar", () => {
 				$theme,
 			},
 		});
-		expect(wrapper.findAll("base-icon-button-stub").length).toBe(2);
+		expect(wrapper.findAll("base-button-stub").length).toBe(2);
 		expect(wrapper.findAll("popup-icon-stub").length).toBe(1);
 		expect(wrapper.findAll("button").length).toBe(1);
 		wrapper.find("button").trigger("click");
