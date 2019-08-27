@@ -43,7 +43,7 @@
 	},
 	"dependencies": {
 		"@feathersjs/authentication-client": "^1.0.8",
-		"@feathersjs/feathers": "^3.2.3",
+		"@feathersjs/feathers": "^4.3.0",
 		"@feathersjs/socketio-client": "^1.1.5",
 		"@fortawesome/free-solid-svg-icons": "^5.7.2",
 		"@nuxtjs/axios": "^5.5.4",
