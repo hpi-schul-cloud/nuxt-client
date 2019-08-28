@@ -1,66 +1,6 @@
 import BaseTable from "./BaseTable";
-
-const data = [
-	{
-		firstName: "Hulk",
-		lastName: "Hogan",
-		address: {
-			city: "LA",
-		},
-		age: 54,
-	},
-	{
-		firstName: "Mario",
-		lastName: "Super",
-		address: {
-			city: "Nintendo 64",
-		},
-		age: 999,
-	},
-	{
-		firstName: "Mario",
-		lastName: "Super",
-		address: {
-			city: "Nintendo 64",
-		},
-		age: 999,
-	},
-	{
-		firstName: "Mario",
-		lastName: "Super",
-		address: {
-			city: "Nintendo 64",
-		},
-		age: 999,
-	},
-	{
-		firstName: "Mario",
-		lastName: "Super",
-		address: {
-			city: "Nintendo 64",
-		},
-		age: 999,
-	},
-];
-
-const columns = [
-	{
-		field: "firstName",
-		label: "Vorname",
-	},
-	{
-		field: "lastName",
-		label: "Nachname",
-	},
-	{
-		field: "address.city",
-		label: "Stadt",
-	},
-	{
-		field: "age",
-		label: "Alter",
-	},
-];
+import data from './data'
+import columns from './columns'
 
 describe("@components/BaseTable", () => {
 	it(...isValidComponent(BaseTable));
@@ -148,4 +88,189 @@ describe("@components/BaseTable", () => {
 				.includes("Hulk Hogan")
 		).toBe(true);
 	});
+
+	it("Should allow pagination", () => {
+		var wrapper = mount({
+			data: () => ({
+				data,
+				columns,
+				currentPage: 1,
+				perPage: 3,
+			}),
+			template: `<div>
+				<base-table
+					:data="data"
+					:columns="columns"
+					:per-page.sync="perPage"
+					:current-page.sync="currentPage"
+					paginated
+				/>
+			</div>`,
+			components: { BaseTable },
+		});
+
+		expect(wrapper.findAll("tbody tr").length).toBe(3);
+
+		wrapper
+			.findAll(".pagination-link-wrapper a")
+			.at(1)
+			.trigger("click");
+
+		expect(wrapper.findAll("tbody tr").length).toBe(2);
+	});
+
+	it("Should sort the data", () => {
+		var wrapper = mount({
+			data: () => ({
+				data,
+				columns,
+			}),
+			template: `<div>
+				<base-table
+					:data="data"
+					:columns="columns"
+				/>
+			</div>`,
+			components: { BaseTable },
+		});
+
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.at(0)
+				.findAll("td")
+				.at(0)
+				.html()
+				.includes("Hulk")
+		).toBe(true);
+
+		wrapper
+			.findAll(".is-sortable")
+			.at(0)
+			.trigger("click");
+
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.at(0)
+				.findAll("td")
+				.at(0)
+				.html()
+				.includes("Armin")
+		).toBe(true);
+	});
+
+	it("Should allow checking the rows", () => {
+		var wrapper = mount({
+			data: () => ({
+				data,
+				columns,
+			}),
+			template: `<div>
+				<base-table
+					:data="data"
+					:columns="columns"
+					checkable
+				/>
+			</div>`,
+			components: { BaseTable },
+		});
+
+		wrapper
+			.findAll("tbody tr")
+			.at(0)
+			.findAll("td")
+			.at(0)
+			.find('input[type="checkbox"]')
+			.setChecked()
+
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.at(0)
+				.classes()
+		).toContain("checked");
+	});
+
+	it("Should check all rows", () => {
+		var wrapper = mount({
+			data: () => ({
+				data,
+				columns,
+			}),
+			template: `<div>
+				<base-table
+					:data="data"
+					:columns="columns"
+					checkable
+				/>
+			</div>`,
+			components: { BaseTable },
+		});
+
+		wrapper
+			.findAll("tbody tr")
+			.at(0)
+			.findAll("td")
+			.at(0)
+			.find('input[type="checkbox"]')
+			.setChecked()
+
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.at(0)
+				.classes()
+		).toContain("checked");
+	});
+
+	it("Should check all entries and trigger an action", () => {
+		var wrapper = mount({
+			data: () => ({
+				data,
+				columns,
+				actions: [
+					{
+						label: "Test",
+						action: test
+					},
+				]
+			}),
+			template: `<div>
+				<base-table
+					:data="data"
+					:columns="columns"
+					checkable
+					:actions="actions"
+					ref="table"
+				/>
+			</div>`,
+			components: { BaseTable }
+		});
+
+		wrapper
+			.find("thead tr")
+			.findAll("th")
+			.at(0)
+			.find('input[type="checkbox"]')
+			.setChecked()
+
+		expect(wrapper.vm.$refs.table.isAllChecked).toBe(true)
+		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(5)
+
+		wrapper
+		.find("thead tr")
+		.findAll("th")
+		.at(0)
+		.find('input[type="checkbox"]')
+		.setChecked(false)
+
+		expect(wrapper.vm.$refs.table.isAllChecked).toBe(false)
+		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(0)
+
+		expect(wrapper.vm.$refs.table.$refs.toolbelt.actions.length).toBe(1)
+	});
+
+	it("Should allow data from a backend", () => {});
+
 });

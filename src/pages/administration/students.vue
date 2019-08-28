@@ -19,7 +19,6 @@
 			backend-sorting
 			backend-pagination
 			@sort="onSort"
-			@update:skip="onPageChange"
 		>
 			<template v-slot:column="{ row, column }">
 				<span v-if="column.field === 'classes'">
@@ -255,10 +254,6 @@ export default {
 					}
 				},
 			});
-		},
-		onPageChange(skip) {
-			this.skip = skip;
-			this.find();
 		},
 		onSort(field, order) {
 			this.sortField = field;

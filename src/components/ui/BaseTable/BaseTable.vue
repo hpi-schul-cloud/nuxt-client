@@ -4,6 +4,7 @@
 	<div class="table-outer">
 		<div class="table-wrapper">
 			<tool-belt
+				ref="toolbelt"
 				:actions="actions"
 				:filterable="filterable"
 				:checked-rows="newCheckedRows"
@@ -169,11 +170,7 @@ export default {
 		},
 		backendSorting: {
 			type: Boolean,
-		},
-		skip: {
-			type: Number,
-			default: 0,
-		},
+		}
 	},
 	data() {
 		return {
