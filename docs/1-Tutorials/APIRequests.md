@@ -24,7 +24,6 @@ However the state can get very complex because we have different models like sch
 
 To register a new service we just have to create a new file with the service name into the src/store folder. This will automatically create a service with its own namespace based on the filename.
 
-
 ## Feathers REST Template
 
 If a service uses our default backend, we use this service template located in this directory: `src/utils/service-template.js`
@@ -61,7 +60,7 @@ const module = mergeDeep(base, {
 	actions: {
 		acceptInvitation: async function(ctx, teamId) {
 			return this.$axios.$get("/teams/extern/accept/" + teamId);
-		}
+		},
 	},
 	getters: {
 		hasTeamPermission: (_state, localGetters) => (permission) => {
@@ -69,8 +68,8 @@ const module = mergeDeep(base, {
 				? localGetters.current.user.permissions.find((p) => p === permission)
 				: false;
 		},
-	}
-})
+	},
+});
 ```
 
 ## CRUD
