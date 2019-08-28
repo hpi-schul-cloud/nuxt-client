@@ -9,7 +9,9 @@
 		@focus="open = true"
 		@blur="open = false"
 	>
-		<base-button size="small">{{ title }}</base-button>
+		<div class="button">
+			<slot name="header"><base-button size="small">{{ title }}</base-button></slot>
+		</div>
 		<div :id="`dropdown-content-${$uid}`" class="content" :class="{ open }">
 			<ul>
 				<li
