@@ -9,7 +9,6 @@ module.exports = {
 	theme: "default",
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
-		API_URL: API_URL || "http://localhost:3030",
 	},
 	/*
 	 ** Headers of the page
@@ -66,6 +65,7 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
+		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
 	],
@@ -90,7 +90,7 @@ module.exports = {
 	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
-		baseUrl: API_URL || "http://localhost:3030",
+		baseURL: API_URL,
 	},
 
 	/*
@@ -123,6 +123,7 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
+		vendor: ["vue-i18n"],
 	},
 	generate: {
 		dir: "dist/nuxt",

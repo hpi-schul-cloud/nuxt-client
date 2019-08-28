@@ -1,6 +1,6 @@
 # Build & Deployment
 
-You can build all projects at once in parallel using `yarn build`.
+You can build all projects at once in parallel using `npm run build`.
 
 All Generated files can be fount at: `./dist/*`
 
@@ -9,24 +9,29 @@ All Generated files can be fount at: `./dist/*`
 ## Nuxt Client
 
 ```bash
-yarn build:nuxt
+npm run build:legacy
+npm run build:nuxt
 ```
 
 Output Directory: `./dist/nuxt`
 
-### Environment-Variables
+### Environment-Variables (runtime)
+
+you also need to set all variables that are required by the [legacy-client](https://github.com/schul-cloud/schulcloud-client).
 
 | env-variable | default | info |
 | --- | --- | --- |
+| NODE_ENV | _undefined_ | Possible Values: `development`, `production` |
 | API_URL | `http://localhost:3030` | URL to [schulcloud-server](https://github.com/schul-cloud/schulcloud-server) |
-| SC_THEME | `default` | theme used, same as in [schulcloud-client](https://github.com/schul-cloud/schulcloud-client) |
-| SC_TITLE | `HPI Schul-Cloud` |  |
-| SC_SHORT_TITLE | `Schul-Cloud` |  |
+| SC_THEME | `default` | Each theme has a seperate folder. See [theming](../2-Styles/3-Theming.md) for more details. |
+| HOST | `localhost` | HOST where the project should be served |
+| PORT | `4000` | PORT where the project should be served |
+| FALLBACK_DISABLED | `false` | disables the legacy client and serves only vue pages. |
 
 ## Storybook
 
 ```bash
-yarn build:storybook
+npm run build:storybook
 ```
 
 Output Directory: `./dist/storybook`
@@ -40,12 +45,12 @@ Output Directory: `./dist/storybook`
 ## Vuepress Docs
 
 ```bash
-yarn build:docs
+npm run build:docs
 ```
 
 Output Directory: `./dist/docs`
 
-### Environment-Variables
+### Environment-Variables (buildtime)
 
 | env-variable | default | info |
 | --- | --- | --- |

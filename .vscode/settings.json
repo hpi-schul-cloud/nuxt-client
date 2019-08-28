@@ -114,7 +114,7 @@
 	// ===
 	// EDITOR SETTINGS
 	// ===
-	"npm.packageManager": "yarn",
+	"npm.packageManager": "npm",
 	"editor.suggest.localityBonus": true,
 
 	// ===
