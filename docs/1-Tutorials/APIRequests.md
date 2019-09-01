@@ -12,7 +12,7 @@ There are basically 3 different components of the Vuex Store. Actions, Mutations
 
 ### Nuxt Client
 
-In our `pages` and `components` we have This is basically everything that happens in our . We are using `this.$store.dispatch` to manipulate the store.
+In our nuxt client we can talk ot the API through the Vuex Services. The services are accesible from both our `pages` or `components`. But it's highly recommended to do this from the `pages` and then pass the data to the `components`. The reason for this is that we should use the components as "stupid components" which means they shouldn't know anything about the services and API, they're just there for data input/output but should not fetch the data from themselves.
 
 ### Vuex Store
 
@@ -30,7 +30,7 @@ If a service uses our default backend, we use this service template located in t
 
 ## Example for creating a service
 
-Let's say we want to make n user service for our feathers /news REST API. So we just create this file: `src/store/news.js`
+Let's say we want to make an user service for our feathers /news REST API. So we just create this file: `src/store/news.js`
 
 With this content:
 
