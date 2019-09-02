@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, select } from "@storybook/addon-knobs";
+import { text, select, color } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
 import PulsatingDot from "@components/PulsatingDot";
@@ -77,11 +77,12 @@ storiesOf("Misc", module)
 			createdAt: text("CreatedAt", "2019-07-17 14:30"),
 			createdBy: text("CreatedBy", "Mona Weizenberg"),
 			picture: text("Picture", "https://source.unsplash.com/daily"),
+			color: color("Color", "#412363"),
 			eventDate: text("Event date", "2019-02-22 19:00"),
 		}),
 		template: `
 		<div style="width: 33vw;">
-			<news-card :id="id" :category="category" :headline="headline" :title="title" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate" >{{content}}</news-card>
+			<news-card :id="id" :category="category" :headline="headline" :title="title" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :color="[color]" :eventDate="eventDate" >{{content}}</news-card>
 		</div>
 		`,
 	}))
