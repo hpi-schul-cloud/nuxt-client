@@ -2,6 +2,7 @@
 	<a
 		v-if="href"
 		class="link is-external"
+		:class="{ 'underlined': underlined }"
 		:href="href"
 		v-bind="$attrs"
 		:target="linkTarget"
@@ -14,6 +15,7 @@
 	<NuxtLink
 		v-else
 		class="link"
+		:class="{ 'underlined': underlined }"
 		tag="a"
 		:to="routerLinkTo"
 		v-bind="$attrs"
@@ -45,6 +47,9 @@ export default {
 		name: {
 			type: String,
 			default: "",
+		},
+		underlined: {
+			type: Boolean
 		},
 		params: {
 			type: Object,
@@ -126,7 +131,9 @@ export default {
 	color: var(--color-black);
 	text-decoration: none;
 	cursor: pointer;
-	border-bottom: 2px solid var(--color-gray);
+	&.underlined{
+		border-bottom: 2px solid var(--color-gray);
+	}
 	&:hover,
 	&:focus {
 		color: var(--color-primary-dark);
