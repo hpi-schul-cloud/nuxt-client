@@ -76,7 +76,7 @@ export default {
 	width: 100%;
 	padding: var(--space-xs) var(--space-xs);
 	cursor: pointer;
-	background: #fff;
+	background: var(--color-white);
 	border: 1px solid var(--color-gray);
 	border-radius: var(--radius-sm);
 	box-shadow: var(--shadow-sm);
@@ -132,7 +132,7 @@ export default {
 		bottom: 0;
 		left: 0;
 		content: "";
-		background: black;
+		background: var(--color-black);
 		opacity: 0.5;
 	}
 
