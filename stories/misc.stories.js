@@ -66,20 +66,22 @@ storiesOf("Misc", module)
 	.add("NewsCard", () => ({
 		components: { NewsCard },
 		data: () => ({
+			id: "1",
 			category: text("Category", "Schultheater"),
 			headline: text("Headline", "HEADLINE"),
 			content: text(
 				"Content",
 				`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum`
 			),
-			createdAt: text("CreatedAt", "2019-07-17-14:30"),
+			title: text("title", "News"),
+			createdAt: text("CreatedAt", "2019-07-17 14:30"),
 			createdBy: text("CreatedBy", "Mona Weizenberg"),
 			picture: text("Picture", "https://source.unsplash.com/daily"),
-			eventDate: text("Event date", "2019-02-22-19:00"),
+			eventDate: text("Event date", "2019-02-22 19:00"),
 		}),
 		template: `
 		<div style="width: 33vw;">
-			<news-card :category="category" :headline="headline" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate" >{{content}}</news-card>
+			<news-card :id="id" :category="category" :headline="headline" :title="title" :createdAt="createdAt" :createdBy="createdBy" :picture="picture" :eventDate="eventDate" >{{content}}</news-card>
 		</div>
 		`,
 	}))

@@ -40,6 +40,7 @@ describe("@components/CourseCard", () => {
 		const wrapper = shallowMount(CourseCard, {
 			propsData: { course },
 		});
+		expect(wrapper.find(".notification-dot").exists()).toBe(false);
 		expect(wrapper.find(".assignments-label").exists()).toBe(false);
 		expect(wrapper.find(".abrivation-label").text()).toBe(course.abbreviation);
 		expect(wrapper.find(".course-name-label").text()).toBe(course.name);

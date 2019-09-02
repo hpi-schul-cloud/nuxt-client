@@ -10,7 +10,7 @@ describe("@components/BaseCard", () => {
 				bottomContainer: "foot",
 			},
 		});
-		expect(wrapper.contains(".top-container")).toBe(true);
+		expect(wrapper.find(".top-container").text()).toBe("Card");
 		expect(wrapper.find(".bottom-container").text()).toBe("foot");
 	});
 	it("Render without content slot", () => {
@@ -22,7 +22,7 @@ describe("@components/BaseCard", () => {
 		});
 		expect(wrapper.find(".tab-label").text()).toBe("head");
 		expect(wrapper.contains(".top-container")).toBe(false);
-		expect(wrapper.contains(".bottom-container")).toBe(true);
+		expect(wrapper.find(".bottom-container").text()).toBe("foot");
 	});
 	it("Render with single background color setting", () => {
 		const wrapper = shallowMount(BaseCard, {

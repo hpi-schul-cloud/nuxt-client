@@ -319,9 +319,9 @@ storiesOf("Base Components", module)
 		components: { BaseLink },
 		template: `
 			<div>
-				<base-link href="https://schul-cloud.org">external Link to https://schul-cloud.org</base-link>
-				<base-link to="/news">Internal Link to /news</base-link>
-				<base-link name="news">Internal Link with name "news"</base-link>
+				<base-link href="https://schul-cloud.org" underlined>external Link to https://schul-cloud.org</base-link>
+				<base-link to="/news" underlined>Internal Link to /news</base-link>
+				<base-link name="news" underlined>Internal Link with name "news"</base-link>
 			</div>`,
 		methods: {},
 	}))
