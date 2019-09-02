@@ -4,7 +4,7 @@ import { RouterLinkStub } from "@vue/test-utils";
 describe("@components/NewsCard", () => {
 	it(...isValidComponent(NewsCard));
 
-	it("Render default color", () => {
+	it("Renders default content", () => {
 		const wrapper = mount(NewsCard, {
 			propsData: {
 				id: "1",
@@ -41,7 +41,6 @@ describe("@components/NewsCard", () => {
 		expect(wrapper.find(".inner-card").exists()).toBe(false);
 		expect(wrapper.find(".event-date").exists()).toBe(false);
 		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
-		expect(wrapper.find(".event-date").exists()).toBe(false);
 	});
 	it("Render with picture and date", () => {
 		const wrapper = mount(NewsCard, {
@@ -53,7 +52,7 @@ describe("@components/NewsCard", () => {
 				createdBy: "Me",
 				color: ["#412363", "#c63e80"],
 				picture: "https://source.unsplash.com/daily",
-				eventDate: "2019-02-22-19-00",
+				eventDate: "2019-02-22 19:00",
 			},
 			slots: {
 				default: "News news news news",

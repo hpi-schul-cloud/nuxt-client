@@ -1,5 +1,4 @@
 <template>
-	<!-- TODO: Remove underline styling of link-->
 	<base-link class="outer-card" :to="{ name: 'news-id', params: { id: id } }">
 		<BaseCard v-bind="$props">
 			<template v-slot:header-in>
@@ -7,7 +6,7 @@
 			</template>
 			<template v-if="picture" v-slot:topContent>
 				<div class="inner-card">
-					<div class="overlay" :style="background_style"> </div>
+					<div class="overlay" :style="backgroundStyle"> </div>
 					<img :src="picture" />
 				</div>
 			</template>
@@ -48,10 +47,22 @@ export default {
 		id: { type: String, required: true },
 		category: { type: String, required: true },
 		title: { type: String, required: true },
-		createdAt: { type: String, required: true },
+		createdAt: {
+			type: String,
+			required: true,
+			validator: value => {
+				return !value || !!Date.parse(value);
+			},
+		},
 		createdBy: { type: String, required: true },
 		picture: { type: String, default: "" },
-		eventDate: { type: String, default: "" },
+		eventDate: {
+			type: String,
+			default: "",
+			validator: value => {
+				return !value || !!Date.parse(value);
+			},
+		},
 		color: {
 			type: Array,
 			default: () => ["#412363", "#c63e80"],
@@ -66,7 +77,7 @@ export default {
 		};
 	},
 	computed: {
-		background_style() {
+		backgroundStyle() {
 			return (
 				"background-image: linear-gradient(to left, rgba(245, 246, 252, 0.0) 0%, " +
 				this.color[0] +
