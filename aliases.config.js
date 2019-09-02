@@ -20,6 +20,7 @@ const aliases = {
 	"@pages": "src/pages",
 	"@utils": "src/utils",
 	"@plugins": "src/plugins",
+	"@server": "src/server",
 	"@store": "src/store",
 	"@static": `src/themes/${themeName}/static`,
 	"@theme": `src/themes/${themeName}`,

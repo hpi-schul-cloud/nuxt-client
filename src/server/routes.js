@@ -1,43 +1,7 @@
+// Whitelisted Vue routes
+// everything else will be forwarded to the legacy client
+
 module.exports = [
-	"about",
-	"account",
-	"administration",
-	"calendar",
-	"community",
-	"content",
-	"coursegroups",
-	"courses",
-	"dashboard",
-	"files",
-	"firstLogin",
-	"help",
-	"helpdesk",
-	"homework",
-	"files",
-	{
-		route: "impressum",
-		controller: "imprint",
-	},
-	"index",
-	"link",
-	"logs",
-	"login",
-	"my-material",
-	"news",
-	"notification",
-	"partner",
-	"pwrecovery",
-	"rocketChat",
-	"schools",
-	"team",
-	"teams",
-	// {
-	// 	route: "teams",
-	// 	controller: "teams",
-	// 	routesExcluded: ["/:teamId/edit"],
-	// },
-	"tools",
-	"topics",
-	"users",
-	"welcome",
+	//
+	"^/news",
 ];
