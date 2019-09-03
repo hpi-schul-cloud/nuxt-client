@@ -21,6 +21,16 @@ describe("@middleware/linksFallback", () => {
 		expect(result).toBe(true);
 		expect(window.location.pathname).toBe("/news");
 	});
+	it("use vue when fallback disabled flag is set", async () => {
+		process.env.FALLBACK_DISABLED = "true";
+		window.location.pathname = "/news";
+		const promise = linksFallback({ route: { path: "/homework" } });
+		jest.runAllTimers();
+		const result = await promise;
+		expect(result).toBe(true);
+		expect(window.location.pathname).toBe("/news");
+		process.env.FALLBACK_DISABLED = undefined;
+	});
 	it("use legacy proxy for non matching routes", async () => {
 		window.location.pathname = "/news";
 		const promise = linksFallback({ route: { path: "/homework" } });
