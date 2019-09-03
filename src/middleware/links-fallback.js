@@ -7,14 +7,14 @@ export default async function(ctx) {
 	const { route } = ctx;
 
 	if (process.env.FALLBACK_DISABLED) {
-		return;
+		return true;
 	}
 
 	const useNuxt = isNuxtRoute(route.path);
 
 	// prevent loop when ID not castable
 	if (window.location.pathname == route.path) {
-		return;
+		return true;
 	}
 
 	if (!useNuxt) {
@@ -26,4 +26,5 @@ export default async function(ctx) {
 	}
 
 	// use vue
+	return true;
 }
