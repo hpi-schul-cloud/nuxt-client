@@ -3,9 +3,9 @@
 // using the ./proxy.js serverMiddleware
 
 // const id = "[a-z0-9]+";
-const mongoId = "[a-z0-9]{24}";
+// const mongoId = "[a-z0-9]{24}";
 
 module.exports = [
-	//
-	`^/news/${mongoId}/edit`,
+	// `^/news`,
+	// or: `^/news/${mongoId}/edit`,
 ];

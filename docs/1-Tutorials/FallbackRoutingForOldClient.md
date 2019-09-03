@@ -10,3 +10,10 @@ You need to have the legacy client running to use most of this service, because 
 
 To create and use a new vue page, simply add a regex to the [`routes.js` (src/serverMiddleware/routes.js)](https://github.com/schul-cloud/nuxt-client/tree/develop/src/serverMiddleware/routes.js) that matches the route of your new page.
 All pages that match any of the specified regex there will be served with nuxt. Everything else will be forwarded to the legacy client with the [Nuxt Server Middleware](https://nuxtjs.org/api/configuration-servermiddleware/) [`proxy.js` (src/serverMiddleware/proxy.js)](https://github.com/schul-cloud/nuxt-client/tree/develop/src/serverMiddleware/proxy.js).
+
+For convienience, we have some small helper variables defined at the top that you can use.
+
+
+**Currently whitelisted vue routes:**
+
+<<< @/src/serverMiddleware/routes.js
