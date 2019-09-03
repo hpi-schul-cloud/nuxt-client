@@ -69,7 +69,7 @@ export default {
 
 .course-card {
 	position: relative;
-	width: 240px;
+	width: 260px;
 	padding: var(--space-xs);
 	padding-bottom: 0;
 	margin: var(--space-sm);
@@ -160,8 +160,7 @@ export default {
 ------------------------ */
 
 .card-info {
-	padding: var(--space-xs);
-	padding-top: 0;
+	padding: var(--space-sm) var(--space-xs);
 	margin-top: calc(var(--space-xs) * -1);
 	color: var(--color-white);
 	border-radius: var(--radius-sm);
@@ -174,15 +173,17 @@ export default {
 .abrivation-label {
 	margin: 0;
 	font-family: var(--font-primary);
-	font-size: var(--heading-2);
+	font-size: var(--heading-1);
+	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	text-transform: uppercase;
 }
 
 .course-name-label {
-	margin: 0;
+	margin: var(--space-xxxs) 0 0 0;
 	overflow: hidden;
-	font-size: var(--text-md);
+	font-size: var(--text-lg);
+	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	text-overflow: ellipsis;
 	white-space: nowrap;

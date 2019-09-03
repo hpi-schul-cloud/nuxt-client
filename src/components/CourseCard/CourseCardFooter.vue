@@ -40,24 +40,29 @@ export default {
 @import "@styles";
 
 .footer {
+	padding: var(--space-xxxxs) 0;
 	overflow: hidden;
+	font-family: var(--font-accent);
 }
 
 .next-course {
 	display: flex;
 	align-items: center;
-	min-height: calc(1em + 2 * var(--space-xxs));
+	min-height: calc(1em + 2 * var(--space-xxxs));
 	.next-course-icon {
 		display: inline-flex;
 		align-items: center;
+		margin-right: var(--space-xxxs);
 	}
 }
 
 .alert {
 	display: flex;
 	align-items: center;
+	min-height: calc(1em + 2 * var(--space-xxxs));
 	.alert-label {
 		flex: 1;
+		margin-left: var(--space-xxxs);
 		font-weight: var(--font-weight-bold);
 		color: var(--color-danger);
 	}
