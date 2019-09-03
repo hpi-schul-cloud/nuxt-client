@@ -36,6 +36,10 @@
 	--font-weight-bold: 700;
 }
 
+/*
+
+// Disabled for consistency as long as we have the legacy fallback enabled
+
 @include breakpoint(tablet) {
 	:root {
 		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
@@ -49,3 +53,5 @@
 		);
 	}
 }
+
+*/
