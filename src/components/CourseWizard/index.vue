@@ -125,7 +125,7 @@ export default {
 @import "@styles";
 .content-wrapper {
 	max-width: 100ch;
-	margin: var(--space-xxxl) auto 0;
+	margin: var(--space-xxxxxl) auto 0;
 }
 
 .step-wrapper {

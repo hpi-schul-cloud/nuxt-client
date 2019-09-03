@@ -185,7 +185,7 @@ export default {
 	}
 
 	display: inline-block;
-	min-width: var(--space-xxxl);
+	min-width: var(--space-xxxxxl);
 	padding: var(--button-padding);
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
