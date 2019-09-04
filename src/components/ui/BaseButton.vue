@@ -150,7 +150,7 @@ export default {
 		padding: var(--button-padding);
 		border-radius: var(--radius-round);
 		&.is-small {
-			--button-padding: var(--space-xxxs);
+			--button-padding: var(--space-xs-3);
 		}
 		&.is-large {
 			--button-padding: var(--space-sm);
@@ -172,10 +172,10 @@ export default {
 	}
 
 	/* SIZES */
-	--button-padding: var(--space-xs) var(--space-sm) var(--space-xxs)
+	--button-padding: var(--space-xs) var(--space-sm) var(--space-xs-2)
 		var(--space-sm);
 	&.is-small {
-		--button-padding: var(--space-xxxs) var(--space-sm) var(--space-xxxxs)
+		--button-padding: var(--space-xs-3) var(--space-sm) var(--space-xs-4)
 			var(--space-sm);
 	}
 
@@ -185,7 +185,7 @@ export default {
 	}
 
 	display: inline-block;
-	min-width: var(--space-xxxxxl);
+	min-width: var(--space-xl-5);
 	padding: var(--button-padding);
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
