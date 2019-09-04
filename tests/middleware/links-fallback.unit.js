@@ -1,6 +1,6 @@
 // import must be after mock
-jest.mock("../serverMiddleware/routes.js", () => [`^/news`]);
-import linksFallback from "./links-fallback";
+jest.mock("@serverMiddleware/routes.js", () => [`^/news`]);
+import linksFallback from "@middleware/links-fallback";
 
 jest.useFakeTimers();
 

@@ -1,4 +1,4 @@
-const vueRoutes = require("../serverMiddleware/routes.js");
+const vueRoutes = require("@serverMiddleware/routes.js");
 
 const isNuxtRoute = (url) =>
 	vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));

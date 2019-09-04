@@ -1,6 +1,9 @@
 /* Legacy Client Proxy */
-
+const glob = require("glob");
+const path = require("path");
 const proxy = require("http-proxy-middleware");
+
+const nuxtConfig = require("../../nuxt.config.js");
 
 const proxyOptions = {
 	changeOrigin: true,
@@ -12,10 +15,6 @@ const proxyInstance = proxy(proxyOptions);
 const vueRoutes = require("./routes.js");
 const isNuxtRoute = (url) =>
 	vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));
-
-const glob = require("glob");
-const path = require("path");
-const nuxtConfig = require("../../nuxt.config.js");
 
 const staticFileDir = path
 	.relative(__dirname, nuxtConfig.generate.dir)
