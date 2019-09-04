@@ -52,6 +52,12 @@ module.exports = {
 	 */
 	cssSourceMap: true,
 
+	server: {
+		port: process.env.PORT || 4000,
+		host: process.env.HOST || "localhost",
+	},
+	serverMiddleware: ["@serverMiddleware/proxy"],
+
 	router: {
 		middleware: [
 			// "is-authenticated",
