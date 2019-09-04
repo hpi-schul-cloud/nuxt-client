@@ -132,6 +132,7 @@ export default {
 	display: flex;
 	align-items: center;
 	float: right;
+	padding: var(--space-xxs) var(--space-xs);
 }
 
 // Notification Bubble
@@ -184,6 +185,7 @@ export default {
 	overflow: hidden;
 	font-size: var(--text-lg);
 	font-weight: var(--font-weight-bold);
+	line-height: inherit;
 	color: var(--color-white);
 	text-overflow: ellipsis;
 	white-space: nowrap;
