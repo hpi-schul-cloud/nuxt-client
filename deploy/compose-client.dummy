@@ -11,7 +11,7 @@ services:
         condition: any
     depends_on:
       - client
-			- server
+      - server
     environment:
       # ENV
       - NODE_ENV=production
@@ -20,8 +20,8 @@ services:
       - FEATURE_TEAMS_ENABLED=true
       # Theme and Titles
       - SC_THEME=default
-			- LEGACY_CLIENT_URL=http://client
-			- API_URL=http://server
+      - LEGACY_CLIENT_URL=http://client
+      - API_URL=http://server
     ports:
       - \"3200:4000\"
     restart: always
