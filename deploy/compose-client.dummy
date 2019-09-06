@@ -20,8 +20,8 @@ services:
       - FEATURE_TEAMS_ENABLED=true
       # Theme and Titles
       - SC_THEME=default
-      - LEGACY_CLIENT_URL=https://schul-cloud.org
-      - API_URL=https://api.schul-cloud.org
+      - LEGACY_CLIENT_URL=http://client:3100
+      - API_URL=https://api.test.schul-cloud.org
     ports:
       - \"3200:4000\"
     restart: always
