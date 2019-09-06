@@ -3,6 +3,10 @@ const pkg = require("./package");
 const themeName = process.env.SC_THEME || "default";
 const API_URL = process.env.API_URL || "http://localhost:3030";
 
+const DEFAULT_PORT = 4000;
+const DEFAULT_HOST =
+	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
@@ -53,8 +57,8 @@ module.exports = {
 	cssSourceMap: true,
 
 	server: {
-		port: process.env.PORT || 4000,
-		host: process.env.HOST || "localhost",
+		port: process.env.PORT || DEFAULT_PORT,
+		host: process.env.HOST || DEFAULT_HOST,
 	},
 	serverMiddleware: ["@serverMiddleware/proxy"],
 
