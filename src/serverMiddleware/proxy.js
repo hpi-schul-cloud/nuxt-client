@@ -12,6 +12,16 @@ const proxyOptions = {
 };
 const proxyInstance = proxy(proxyOptions);
 
+// eslint-disable-next-line no-console
+console.log(
+	process.env.LEGACY_CLIENT_URL
+		? "LEGACY_CLIENT_URL ENV found. Routing all fallback requests to: " +
+				process.env.LEGACY_CLIENT_URL
+		: "LEGACY_CLIENT_URL ENV not found. Routing fallback to default url (http://localhost:3100)."
+);
+// eslint-disable-next-line no-console
+console.log("PROXY TARGET:", proxyOptions.target);
+
 const vueRoutes = require("./routes.js");
 const isNuxtRoute = (url) =>
 	vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));
