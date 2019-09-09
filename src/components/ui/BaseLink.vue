@@ -2,6 +2,7 @@
 	<a
 		v-if="href"
 		class="link is-external"
+		:class="{ inactive: inactive }"
 		:href="href"
 		v-bind="$attrs"
 		:target="linkTarget"
@@ -40,7 +41,10 @@ export default {
 		},
 		target: {
 			type: String,
-			default: "",
+			default: "_self",
+			validator: function(value) {
+				return ["_blank", "_self", "_parent", "_top"].includes(value);
+			},
 		},
 		name: {
 			type: String,
@@ -49,6 +53,9 @@ export default {
 		params: {
 			type: Object,
 			default: () => ({}),
+		},
+		inactive: {
+			type: Boolean,
 		},
 	},
 	computed: {
@@ -134,6 +141,9 @@ export default {
 	&:visited {
 		color: var(--color-primary);
 	}
+	&.inactive {
+		color: var(--color-black);
+	}
 }
 
 .is-external {
@@ -143,6 +153,9 @@ export default {
 	}
 	&:hover {
 		color: var(--color-primary-dark);
+	}
+	&.inactive {
+		color: var(--color-black);
 	}
 }
 </style>
