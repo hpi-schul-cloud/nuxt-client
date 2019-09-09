@@ -1,67 +1,91 @@
 #! /bin/bash
 
+# ----------------
+# DECLERATIONS
+# ----------------
+
+while getopts p: option
+do
+case "${option}"
+in
+p) PROJECT=${OPTARG};;
+esac
+done
+echo PROJECT $PROJECT
+
+
 # replace special characters in branch name for docker tag
 export DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
 echo GITSHA $GIT_SHA
 
-DOCKERFILE_VERSION=${DOCKERFILE_VERSION:="Dockerfile"}
+# ----------------
+# SCRIPTS
+# ----------------
 
-# nuxt client bauen und deployen
-function nuxtclient {
-	docker build \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
-		-f Dockerfile.nuxt \
-		--build-arg API_URL \
-		--build-arg SC_THEME \
-		--build-arg SC_TITLE \
-		--build-arg SC_SHORT_TITLE \
-		../
+decryptSecrets(){
+	echo "decrypt secrets"
+
+	openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
+	chmod 600 travis_rsa
+}
+
+deploy(){
+	# $1: Project Name (client, storybook, vuepress)
+	echo "deploy" $1 "..."
+
+	eval "echo \"$( cat compose-$1.dummy )\"" > docker-compose-nuxt-$1.yml
+
+	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-$1.yml linux@test.schul-cloud.org:~
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-$1.yml test-schul-cloud
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker service update --force --image schulcloud/schulcloud-nuxt-$1:$DOCKERTAG test-schul-cloud_$2
+}
+
+dockerPush(){
+	# $1: Project Name (client, storybook, vuepress)
+	# $2: docker tag to use
 
 	# Log in to the docker CLI
 	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-	docker push schulcloud/schulcloud-nuxt-client:$GIT_SHA
-	docker push schulcloud/schulcloud-nuxt-client:$DOCKERTAG
-
-	eval "echo \"$( cat compose-nuxt.dummy )\"" > docker-compose-nuxt-client.yml
-
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-client.yml linux@test.schul-cloud.org:~
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-client.yml test-schul-cloud
+	docker push schulcloud/schulcloud-nuxt-$1:$2
 }
 
-# storybook doku bauen und deployen
-function storybook {
+# BUILD SCRIPTS
+
+buildClient(){
 	docker build \
-		-t schulcloud/schulcloud-nuxt-storybook:latest \
-		-t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA \
-		-f $DOCKERFILE_VERSION.storybook \
+		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
+		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
+		-f Dockerfile.client \
 		../
-	docker push schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
-	docker push schulcloud/schulcloud-nuxt-storybook:latest
 
-	eval "echo \"$( cat compose-storybook.dummy )\"" > docker-compose-nuxt-storybook.yml
-
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-storybook.yml linux@test.schul-cloud.org:~
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-storybook.yml test-schul-cloud
+	dockerPush "client" $DOCKERTAG
+	dockerPush "client" $GIT_SHA
 }
 
-# vuepress doku bauen und deployen
-function vuepress {
+buildStorybook(){
 	docker build \
-		-t schulcloud/schulcloud-nuxt-vuepress:latest \
+		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG \
+		-t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA \
+		-f Dockerfile.storybook \
+		../
+
+	dockerPush "storybook" "latest"
+	dockerPush "storybook" $DOCKERTAG
+	dockerPush "storybook" $GIT_SHA
+}
+
+buildVuepress(){
+	docker build \
+		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA \
-		-f $DOCKERFILE_VERSION.vuepress \
+		-f Dockerfile.vuepress \
 		--build-arg ALGOLIA_NAME \
 		--build-arg ALGOLIA_API_KEY \
 		../
-	docker push schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
-	docker push schulcloud/schulcloud-nuxt-vuepress:latest
 
-	eval "echo \"$( cat compose-vuepress.dummy )\"" > docker-compose-nuxt-vuepress.yml
-
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-vuepress.yml linux@test.schul-cloud.org:~
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-vuepress.yml test-schul-cloud
+	dockerPush "vuepress" $DOCKERTAG
+	dockerPush "vuepress" $GIT_SHA
 }
 
 # ----------------
@@ -69,24 +93,28 @@ function vuepress {
 # ----------------
 cd deploy
 
+decryptSecrets
 
-# decrypt secrets
-openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
-chmod 600 travis_rsa
 
-# Log in to the docker CLI
-echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
-if [[ $DOCKERTAG == develop ]]
+DOCKER_SERVICE_NAME="undefined"
+if [[ $PROJECT == "client" ]]
 then
-  nuxtclient
-  storybook
-  vuepress
-elif [[ $DOCKERTAG == master ]]
+	buildClient
+	DOCKER_SERVICE_NAME="nuxtclient"
+elif [[ $PROJECT == "storybook" ]]
 then
-	nuxtclient
+	buildStorybook
+	DOCKER_SERVICE_NAME="storybook"
+elif [[ $PROJECT == "vuepress" ]]
+then
+	buildVuepress
+	DOCKER_SERVICE_NAME="vuepress"
 else
-  echo "Branch will not be deployed"
+  echo "Nothing to deploy"
+	exit 1
 fi
+
+echo DOCKER_SERVICE_NAME $DOCKER_SERVICE_NAME
+deploy $PROJECT $DOCKER_SERVICE_NAME
 
 exit 0

@@ -15,6 +15,7 @@ export default {};
 	padding: var(--space-sm) var(--space-md);
 	color: var(--color-black);
 	text-decoration: none;
+	white-space: nowrap;
 
 	&:hover {
 		background-color: var(--color-gray-light);
