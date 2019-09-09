@@ -50,7 +50,7 @@ export default {
 	display: inline-block;
 	user-select: none;
 
-	--arrow-size: var(--space-xxs);
+	--arrow-size: var(--space-xs-2);
 	--arrow-offset: 1em;
 	--outer-arrow-size: calc(var(--arrow-size) + 1.5px);
 
