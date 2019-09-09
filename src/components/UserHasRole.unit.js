@@ -59,13 +59,13 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 describe("@components/UserHasRole", () => {
 	it(...isValidComponent(UserHasRole));
 	it("view true-slot if user has role", () => {
-		checkCorrectView("ADMIN", ["ADMIN"], true);
+		checkCorrectView("ADMIN", [{ name: "ADMIN" }], true);
 	});
 	it("view false-slot if user does not have role", () => {
-		checkCorrectView("ADMIN", ["USER"], false);
+		checkCorrectView("ADMIN", [{ name: "USER" }], false);
 	});
 	it("defaults to view rejected", () => {
-		checkCorrectView(undefined, ["USER"], false);
+		checkCorrectView(undefined, [{ name: "USER" }], false);
 	});
 	it("defaults to false when user has no roles", () => {
 		checkCorrectView("ADMIN", undefined, false);

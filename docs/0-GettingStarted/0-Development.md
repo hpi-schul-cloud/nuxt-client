@@ -25,9 +25,6 @@ https://nodejs.org/en/
 # install dependencies
 npm i
 
-# install legacy schulcloud-client and run gulp
-npm run setup
-
 # start "developing" :)
 ```
 
