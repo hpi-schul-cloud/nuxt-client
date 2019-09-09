@@ -35,8 +35,8 @@ deploy(){
 
 	eval "echo \"$( cat compose-$1.dummy )\"" > docker-compose-nuxt-$1.yml
 
-	# scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-$1.yml linux@test.schul-cloud.org:~
-	# ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-$1.yml test-schul-cloud
+	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-$1.yml linux@test.schul-cloud.org:~
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-$1.yml test-schul-cloud
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker service update --force --image schulcloud/schulcloud-nuxt-$1:$DOCKERTAG test-schul-cloud_$2
 }
 
