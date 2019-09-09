@@ -57,7 +57,7 @@ export default {
 			}
 		},
 		courseAbbreviation() {
-			if (!!this.course.abbreviation) return this.course.abbreviation;
+			if (this.course.abbreviation) return this.course.abbreviation;
 			else return this.course.name.substring(0, 3).toUpperCase();
 		},
 	},

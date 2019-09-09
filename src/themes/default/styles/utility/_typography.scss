@@ -17,7 +17,7 @@ body {
 		margin-bottom: var(--space-xxs);
 		font-family: var(--font-accent);
 		font-size: var(--heading-#{$i});
-		font-weight: var(--font-weight-bold);
+		font-weight: var(--font-weight-normal);
 		line-height: var(--line-height-sm);
 		color: var(--color-black);
 	}

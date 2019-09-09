@@ -5,7 +5,7 @@
 			<p>Please login to proceed.</p>
 
 			<img
-				src="@assets/img/logo/Bildmarke_transparent.svg"
+				:src="$theme.logo.logo_image_mono"
 				alt="Schul-Cloud"
 				style="width: var(--text-lg); filter: invert(1)"
 			/>
@@ -73,7 +73,7 @@ export default {
 
 				this.$router.push("/");
 			} catch (e) {
-				this.$toast.error("Fehler beim Login. E-Mail/Passwort falsch?");
+				this.$toast.error("Fehler beim Login. E-Mail/Passwort falsch?" + e);
 			}
 
 			// this.authenticate(payload)
