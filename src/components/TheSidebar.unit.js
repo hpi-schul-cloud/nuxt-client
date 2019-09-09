@@ -13,6 +13,7 @@ describe("@components/TheSidebar", () => {
 			{
 				title: "test",
 				to: "home",
+				icon: "test",
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
@@ -21,7 +22,7 @@ describe("@components/TheSidebar", () => {
 			},
 		});
 		expect(wrapper.findAll("li").length).toBe(testRoutes.length);
-		expect(wrapper.find("base-icon-stub").exists()).toBe(false);
+		expect(wrapper.find("base-icon-stub").exists()).toBe(true);
 	});
 
 	it("Render with more routes mixing to and href", () => {
@@ -30,6 +31,7 @@ describe("@components/TheSidebar", () => {
 				title: "test",
 				to: "home",
 				active: true,
+				icon: "test",
 			},
 			{
 				title: "can't go to bing",
@@ -41,11 +43,13 @@ describe("@components/TheSidebar", () => {
 				title: "test active false",
 				to: "away",
 				active: false,
+				icon: "away",
 			},
 			{
 				title: "google",
 				href: "https://www.google.com",
 				active: true,
+				icon: "google",
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
@@ -54,7 +58,7 @@ describe("@components/TheSidebar", () => {
 			},
 		});
 		expect(wrapper.findAll("li").length).toBe(testRoutes.length);
-		expect(wrapper.findAll("base-icon-stub").length).toBe(1);
+		expect(wrapper.findAll("base-icon-stub").length).toBe(4);
 		expect(
 			wrapper
 				.findAll("base-link-stub")

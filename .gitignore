@@ -21,6 +21,6 @@ dist
 .nuxt
 .env
 jsconfig.json
-.DS_Store
+**/.DS_Store
 
 docker-compose.yml

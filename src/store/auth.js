@@ -28,13 +28,10 @@ export const actions = {
 			window.location = "/login";
 		}
 	},
-	async populateUser({ dispatch, commit }, userId) {
-		const user = await dispatch(`users/get`, userId, {
-			root: true,
-		});
-
-		commit("setUser", user);
-		return user;
+	async populateUser({ commit }) {
+		const res = await this.$axios.$get("/me");
+		commit("setUser", res);
+		return res;
 	},
 	async hasRole({ dispatch, rootGetters, state, rootState }, roleName) {
 		if (rootState.roles.ids.length < 1) {

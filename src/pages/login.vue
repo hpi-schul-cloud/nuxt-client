@@ -73,7 +73,7 @@ export default {
 
 				this.$router.push("/");
 			} catch (e) {
-				this.$toast.error("Fehler beim Login. E-Mail/Passwort falsch?");
+				this.$toast.error("Fehler beim Login. E-Mail/Passwort falsch?" + e);
 			}
 
 			// this.authenticate(payload)
