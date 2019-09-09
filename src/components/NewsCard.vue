@@ -50,7 +50,7 @@ export default {
 		createdAt: {
 			type: String,
 			required: true,
-			validator: value => {
+			validator: (value) => {
 				return !value || !!Date.parse(value);
 			},
 		},
@@ -59,7 +59,7 @@ export default {
 		eventDate: {
 			type: String,
 			default: "",
-			validator: value => {
+			validator: (value) => {
 				return !value || !!Date.parse(value);
 			},
 		},
@@ -106,6 +106,7 @@ export default {
 .title {
 	overflow: hidden;
 	font-size: var(--heading-4);
+	font-weight: var(--font-weight-bold);
 	line-height: var(--line-height-sm);
 	color: var(--color-black);
 	text-overflow: ellipsis;
