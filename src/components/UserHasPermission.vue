@@ -22,12 +22,12 @@ export default {
 		...mapState({
 			userPermissions: (state) =>
 				state && state.auth && state.auth.user && state.auth.user.permissions
-					? state.auth.user.permissions
+					? state.auth.user.permissions.map((p) => p.toLowerCase())
 					: [],
 		}),
 		hasPermission() {
 			return typeof this.permission === "string"
-				? this.userPermissions.includes(this.permission)
+				? this.userPermissions.includes(this.permission.toLowerCase())
 				: this.permission(this.userPermissions);
 		},
 	},

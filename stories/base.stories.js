@@ -20,6 +20,7 @@ import BaseSelect from "@components/ui/BaseSelect";
 import BaseTextarea from "@components/ui/BaseTextarea";
 import BaseAudio from "@components/ui/BaseAudio";
 import BaseVideo from "@components/ui/BaseVideo";
+import BaseQrCode from "@components/ui/BaseQrCode";
 import BaseModal from "@components/ui/BaseModal";
 import BaseBlockquote from "@components/ui/BaseBlockquote";
 
@@ -176,7 +177,7 @@ storiesOf("Base Components", module)
 			icon: text("icon", "home"),
 			source: select(
 				"source",
-				{ material: "material", custom: "custom" },
+				{ material: "material", fa: "fa", custom: "custom" },
 				"material"
 			),
 			size: text("size", "1em"),
@@ -185,6 +186,9 @@ storiesOf("Base Components", module)
 		template: `<div>
 			<p>
 				Icon usage is simple: <base-icon :source="source" :icon="icon" :style="{'font-size': size, fill: color}"/>
+			</p>
+			<p>
+				You can als use icons from fontawesome: <base-icon source="fa" icon="solid/address-book" :style="{'font-size': size}"/>
 			</p>
 			<p>
 				The Color can be also be set using fill:
@@ -492,6 +496,13 @@ storiesOf("Base Components", module)
 					}
 				]"
 			/>`,
+	}))
+	.add("Base QrCode", () => ({
+		components: { BaseQrCode },
+		data: () => ({
+			url: text("Url", "http://www.schul-cloud.org"),
+		}),
+		template: `<base-qr-code :url="url"/>`,
 	}))
 	.add("BaseBlockquote", () => ({
 		components: { BaseBlockquote },

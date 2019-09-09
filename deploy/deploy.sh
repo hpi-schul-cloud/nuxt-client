@@ -35,9 +35,9 @@ deploy(){
 
 	eval "echo \"$( cat compose-$1.dummy )\"" > docker-compose-nuxt-$1.yml
 
-	# scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-$1.yml linux@test.schul-cloud.org:~
-	# ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-$1.yml test-schul-cloud
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker service update --force --image docker-compose-nuxt-$1:$DOCKERTAG
+	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-$1.yml linux@test.schul-cloud.org:~
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-$1.yml test-schul-cloud
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker service update --force --image schulcloud/schulcloud-nuxt-$1:$DOCKERTAG test-schul-cloud_$2
 }
 
 dockerPush(){
@@ -95,20 +95,26 @@ cd deploy
 
 decryptSecrets
 
+
+DOCKER_SERVICE_NAME="undefined"
 if [[ $PROJECT == "client" ]]
 then
 	buildClient
+	DOCKER_SERVICE_NAME="nuxtclient"
 elif [[ $PROJECT == "storybook" ]]
 then
 	buildStorybook
+	DOCKER_SERVICE_NAME="storybook"
 elif [[ $PROJECT == "vuepress" ]]
 then
 	buildVuepress
+	DOCKER_SERVICE_NAME="vuepress"
 else
   echo "Nothing to deploy"
 	exit 1
 fi
 
-deploy $PROJECT
+echo DOCKER_SERVICE_NAME $DOCKER_SERVICE_NAME
+deploy $PROJECT $DOCKER_SERVICE_NAME
 
 exit 0
