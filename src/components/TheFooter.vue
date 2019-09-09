@@ -4,7 +4,7 @@
 			<div class="">
 				<img
 					class="hpi-logo"
-					src="/images/footer-logo.png"
+					src="@assets/img/footer-logo.png"
 					alt="Anbieterlogo"
 				/>
 				<span>© {{ currentYear }} {{ $theme.name }}</span>
