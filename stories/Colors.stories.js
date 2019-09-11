@@ -72,7 +72,7 @@ storiesOf("Colors", module)
 	.add("Elevation", () => ({
 		components: { Color },
 		template: `<div>
-		<h3>States</h3>
+		<h3>Elevation</h3>
 		<Color state="pressed" shadow="3"/>
 		<Color state="pressed" shadow="5"/>
 		<Color state="pressed" shadow="7"/>
