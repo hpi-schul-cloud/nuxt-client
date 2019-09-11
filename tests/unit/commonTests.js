@@ -23,7 +23,24 @@ export function rendersDefaultSlotContent(component, mountOptions) {
 	];
 }
 
+export function rendersNamedSlotContent(component, mountOptions) {
+	return [
+		"renders its named slot content",
+		() => {
+			const slotContent = "<p>Hello!</p>";
+			const { element } = shallowMount(component, {
+				...mountOptions,
+				slots: {
+					'testSlot': slotContent,
+				},
+			});
+			expect(element.innerHTML).toContain(slotContent);
+		},
+	];
+}
+
 export default {
 	isValidComponent,
 	rendersDefaultSlotContent,
+	rendersNamedSlotContent,
 };

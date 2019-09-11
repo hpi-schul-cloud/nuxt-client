@@ -331,11 +331,12 @@ storiesOf("Base Components", module)
 			maxRows: number("maxRows", 5),
 			maxLength: number("maxLength", 50),
 			withLines: boolean("withLines", false),
+			disabled: boolean("disabled", false),
 		}),
 		template: `
 			<div>
 				v-model: {{value}} <br/>
-				<base-textarea v-model="value" :label="label" :placeholder="placeholder" :rows="rows" :maxRows="maxRows" :maxLength="maxLength" :withLines="withLines"/>
+				<base-textarea v-model="value" :label="label" :placeholder="placeholder" :rows="rows" :maxRows="maxRows" :maxLength="maxLength" :withLines="withLines" :disabled="disabled"/>
 			</div>`,
 		methods: {},
 	}))
