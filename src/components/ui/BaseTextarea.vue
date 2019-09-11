@@ -1,10 +1,13 @@
 <template>
-	<base-input-default v-bind="$attrs" type="textarea" vmodel="">
+	<base-input-default v-bind="$attrs" type="textarea" vmodel="" :disabled="disabled">
 		<template slot="icon">
 			<base-icon
 				source="custom"
 				icon="create"
 				class="icon"
+				:class="{
+					disabled: disabled,
+				}"
 			/>
 		</template>
 		<textarea
@@ -15,9 +18,13 @@
 			:maxlength="maxLength"
 			:class="{
 				'with-lines': withLines,
+				disabled: disabled,
 			}"
+			:disabled="disabled"
 			v-on="$listeners"
 			@input="inputHandler"
+			@keydown="limitRowNumberOnKeydown"
+			@paste="limitRowNumberOnPaste"
 		>
 			<slot/>
 		</textarea>
@@ -45,6 +52,11 @@ export default {
 			default: 1,
 			validator: rows => rows > 0,
 		},
+		maxRows: {
+			type: Number,
+			default: undefined,
+			validator: maxRows => maxRows > 0,
+		},
 		maxLength: {
 			type: Number,
 			default: undefined,
@@ -52,6 +64,14 @@ export default {
 		},
 		withLines: {
 			type: Boolean,
+		},
+		disabled: {
+			type: Boolean,
+		},
+	},
+	computed: {
+		numberOfLines: function () {
+			return (this.vmodel.match(/\n/g) || []).length + 1;
 		}
 	},
 	mounted: function () {
@@ -65,11 +85,32 @@ export default {
 		resize () {
 			this.$refs.textarea.style.height = "1px";
 			const { scrollHeight } = this.$refs.textarea;
-			const lineHeight = 25;
-			const height = Math.max(scrollHeight, lineHeight * this.$refs.textarea.rows);
+			const lineHeight = parseInt(getComputedStyle(this.$refs.textarea)
+				.getPropertyValue('--line-height'), 10);
+			const height = Math.max(scrollHeight, lineHeight * this.rows);
 			this.$refs.textarea.style.height = height + 'px';
+		},
+		limitRowNumberOnKeydown ($event) {
+			if (this.maxRows && $event.keyCode.toString() === "13" && this.numberOfLines === this.maxRows){
+            	$event.preventDefault();
+			}
+		},
+		limitRowNumberOnPaste ($event) {
+			if (this.maxRows){
+				const pastedText = ($event.clipboardData || window.clipboardData).getData('Text');
+				const numberOfLines = this.numberOfLines + (pastedText.match(/\n/g) || []).length + 1;
+				if (numberOfLines > this.maxRows){
+					const truncatedText = (this.vmodel + pastedText).split(/\r\n|\r|\n/)
+						.slice(0, this.maxRows)
+						.join("\n");
+					this.$refs.textarea.value = truncatedText;
+					this.$refs.textarea.dispatchEvent(new Event('input'));
+					this.resize();
+					$event.preventDefault();
+				}
+			}
 		}
-  }
+  	},
 };
 </script>
 
@@ -78,12 +119,19 @@ export default {
 
 .icon {
 	margin-top: var(--space-xs);
+
+	&.disabled {
+		color: var(--color-disabled-dark);
+	}
 }
 
 textarea {
 	--line-height: 30px;
 
 	width: 100%;
+	// needed to prevent default padding in chrome and safari
+	padding: 0;
+	margin-bottom: var(--space-xxs);
 	font-size: var(--text-md);
 	line-height: var(--line-height);
 	color: var(--color-text);
@@ -94,6 +142,9 @@ textarea {
 	&::placeholder {
 		color: var(--color-gray);
 	}
+	&.disabled {
+		color: var(--color-disabled-dark);
+	}
 }
 
 .with-lines {
@@ -101,7 +152,7 @@ textarea {
 
 	position: relative;
 	z-index: var(--textarea-z-index);
-	margin-bottom: calc(-1 * var(--space-xxs) - 4px);
+	margin-bottom: 0;
 	background-image: linear-gradient(var(--color-white) 50%, var(--color-white) 50%),
 	linear-gradient( 
         transparent,

@@ -5,13 +5,14 @@
 		<div
 			:class="{
 				top: true,
-				error: !!error,
+				error: hasError,
 				disabled: !!disabled,
 			}"
 		>
 			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
 				<label
-					:class="{ label: true, info: true, 'label-visible': showLabel }"
+					v-show="showLabel"
+					:class="{ label: true, info: true }"
 					for="`input-${$uid}`"
 				>
 					{{ label }}
@@ -187,9 +188,6 @@ export default {
 
 	.label {
 		margin-right: var(--space-sm);
-		&:not(.label-visible) {
-			visibility: hidden;
-		}
 	}
 
 	&:focus-within,
@@ -240,9 +238,13 @@ export default {
 		}
 		.core {
 			flex: 1;
+			height: min-content;
+			// needed for correct spacing
+			line-height: 0;
 			input {
 				width: 100%;
 				margin-bottom: var(--space-xxs);
+				line-height: var(--line-height-md);
 				color: var(--color-text);
 				border: none;
 				&:focus {
