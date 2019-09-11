@@ -77,6 +77,20 @@ Object.defineProperty(window, "localStorage", {
 	})(),
 });
 
+const location = {};
+Object.defineProperty(window, "location", {
+	set: function(val) {
+		location.host = "domain.io";
+		location.hostname = "domain.io";
+		location.origin = "http://domain.io";
+		location.href = "http://domain.io" + val;
+		location.pathname = val;
+	},
+	get: function() {
+		return location;
+	},
+});
+
 // ===
 // Global helpers
 // ===

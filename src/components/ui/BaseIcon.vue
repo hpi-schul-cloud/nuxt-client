@@ -1,15 +1,19 @@
 <template>
 	<component
 		:is="svgComponent"
+		v-if="source !== 'fa'"
 		ref="icon"
 		:class="['icon', source]"
 		v-bind="$attrs"
 		:fill="fill"
 		v-on="$listeners"
 	/>
+	<i v-else :class="['icon', 'fa', `fa-${icon}`]" :style="{ color: fill }"></i>
 </template>
 
 <script>
+import "font-awesome/css/font-awesome.css";
+
 export default {
 	inheritAttrs: false,
 	props: {
@@ -17,12 +21,12 @@ export default {
 			type: String,
 			required: true,
 			validator: function(to) {
-				return ["material", "custom"].includes(to);
+				return ["material", "custom", "fa"].includes(to);
 			},
 		},
 		icon: {
 			type: String,
-			required: true,
+			default: "solid/icons",
 		},
 		fill: {
 			type: String,
@@ -62,6 +66,12 @@ export default {
 	height: 1em;
 	vertical-align: baseline;
 }
+.fa {
+	width: min-content;
+	font-size: var(--text-lg);
+	vertical-align: middle; // should this be default?
+}
+
 .material {
 	// remove material icon margin
 	width: calc(1.1em + 4px);
