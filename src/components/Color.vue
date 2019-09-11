@@ -36,27 +36,35 @@ export default {
 	props: {
 		color: {
 			type: String,
+			default: "",
 		},
 		gradient1: {
 			type: String,
+			default: "",
 		},
 		gradient2: {
 			type: String,
+			default: "",
 		},
 		title: {
 			type: String,
+			default: "",
 		},
 		state: {
 			type: String,
+			default: "",
 		},
 		borderColor: {
 			type: String,
+			default: "",
 		},
 		borderThickness: {
 			type: Number,
+			default: null,
 		},
 		shadow: {
 			type: Number,
+			default: null,
 		},
 	},
 	data() {
