@@ -2,29 +2,35 @@
 	<div class="flex">
 		<div>
 			<span v-if="color">Color: {{ color }}</span>
-			<span v-else-if="borderThickness">Border: {{borderThickness}}px</span>
+			<span v-else-if="borderThickness">Border: {{ borderThickness }}px</span>
 			<span v-else-if="borderColor"></span>
-			<span v-else-if="shadow">Shadow: {{shadow}}px</span>
+			<span v-else-if="shadow">Shadow: {{ shadow }}px</span>
 			<span v-else>
 				Gradient:
-				{{gradient1}}
-				{{gradient2}}
+				{{ gradient1 }}
+				{{ gradient2 }}
 			</span>
 			<div
 				v-if="state"
-				:style="{...handleSquares,
-			'border': `${borderThickness}px solid ${borderColor}`,
-			'background-color': color,
-			'box-shadow': `0px 2px ${shadow}px rgba(157, 157, 157, 0.9)`}"
-				:class="{'state-value': state, 'border': border,}"
+				:style="{
+					...handleSquares,
+					border: `${borderThickness}px solid ${borderColor}`,
+					'background-color': color,
+					'box-shadow': `0px 2px ${shadow}px rgba(157, 157, 157, 0.9)`,
+				}"
+				:class="{ 'state-value': state, border: border }"
 			></div>
 
 			<div
 				v-else
 				:style="{
 					...handleGradient,
-					 }"
-				:class="{'color-value': handleGradient, 'state-value': state, 'border': border}"
+				}"
+				:class="{
+					'color-value': handleGradient,
+					'state-value': state,
+					border: border,
+				}"
 			></div>
 		</div>
 		<h5 v-if="title">{{ title }}</h5>
@@ -110,6 +116,3 @@ export default {
 	margin-bottom: var(--space-md);
 }
 </style>
- 
-
-
