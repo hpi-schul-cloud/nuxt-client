@@ -59,7 +59,7 @@ export default {
 	justify-content: center;
 	width: 40px;
 	height: 40px;
-	padding: var(--space-xxs);
+	padding: var(--space-xs-2);
 	font-family: var(--font-accent);
 	font-size: var(--text-lg);
 	color: var(--color-white);
@@ -88,7 +88,7 @@ export default {
 		flex-direction: column;
 		width: 214px;
 		padding: var(--space-xs) 0;
-		margin-top: var(--space-xxxxs);
+		margin-top: var(--space-xs-4);
 		color: var(--color-tertiary-dark);
 		white-space: nowrap;
 		background-color: var(--color-white);
