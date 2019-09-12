@@ -4,7 +4,7 @@
 			<span v-if="color">Color: {{ color }}</span>
 			<span v-else-if="borderThickness">Border: {{ borderThickness }}px</span>
 			<span v-else-if="borderColor"></span>
-			<span v-else-if="shadow">Shadow: {{ shadow }}px</span>
+			<span v-else-if="blur">Elevation: ({{ x }}px {{ y }}px {{ blur }}px {{ spread }}px), ({{ xB }}px {{ xB }}px {{ blurB }}px {{ spreadC }}px), ({{ xC }}px {{ yC }}px {{ blurC }}px {{ spreadC }}px)</span>
 			<span v-else>
 				Gradient:
 				{{ gradient1 }}
@@ -16,7 +16,7 @@
 					...handleSquares,
 					border: `${borderThickness}px solid ${borderColor}`,
 					'background-color': color,
-					'box-shadow': `0px 2px ${shadow}px rgba(157, 157, 157, 0.9)`,
+					'box-shadow': `${x}px ${y}px ${blur}px ${spread}px rgba(0,0,0,0.14) , ${xB}px ${yB}px ${blurB}px ${spreadB}px rgba(0,0,0,0.12), ${xC}px ${yC}px ${blurC}px ${spreadC}px rgba(0,0,0,0.20)`
 				}"
 				:class="{ 'state-value': state, border: border }"
 			></div>
@@ -68,10 +68,55 @@ export default {
 			type: Number,
 			default: null,
 		},
-		shadow: {
+		blur: {
 			type: Number,
 			default: null,
 		},
+		x: {
+			type: Number,
+			default: null,
+		},
+		y: {
+			type: Number,
+			default: null,
+		},
+		spread: {
+			type: Number,
+			default: null,
+		},
+		blurB: {
+			type: Number,
+			default: null,
+		},
+		xB: {
+			type: Number,
+			default: null,
+		},
+		yB: {
+			type: Number,
+			default: null,
+		},
+		spreadB: {
+			type: Number,
+			default: null,
+		},
+		blurC: {
+			type: Number,
+			default: null,
+		},
+		xC: {
+			type: Number,
+			default: null,
+		},
+		yC: {
+			type: Number,
+			default: null,
+		},
+		spreadC: {
+			type: Number,
+			default: null,
+		},
+	
 	},
 	data() {
 		return {};
@@ -82,7 +127,7 @@ export default {
 				? { "background-color": this.color }
 				: {
 						"background-image":
-							"linear-gradient(-225deg, " +
+							"linear-gradient(45deg, " +
 							this.gradient1 +
 							" 0%, " +
 							this.gradient2 +
