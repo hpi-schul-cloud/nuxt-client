@@ -40,7 +40,7 @@ storiesOf("Colors", module)
 		template: `<div>
 		<h3>Course Colors</h3>
 		<Color gradient1="#f22a19" gradient2="#f96464" title="Deutsch"/>
-		<Color gradient1="#02dafd" gradient2="#075DBE" title="Mathe"/>
+		<Color gradient1="#075DBE" gradient2="#02dafd" title="Mathe"/>
 		<Color gradient1="#029b95" gradient2="#03b2d6" title="Biologie, Chemie, Physik"/>
 		<Color gradient1="#0d2a36" gradient2="#147a98" title="Informatik, Technik"/>
 		<Color gradient1="#ff7400" gradient2="#ffc400" title="Fremdsprachen"/>
