@@ -7,5 +7,6 @@
 
 module.exports = [
 	`^/news`,
+	`^/teams`,
 	// or: `^/news/${mongoId}/edit`,
 ];
