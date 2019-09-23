@@ -1,15 +1,6 @@
 <template>
 	<div v-if="team">
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<section class="section">
-			<h4>
-				<span>
-					<base-link :to="{ name: 'teams' }">Teams</base-link>
-				</span>
-				<span>/ {{ team.name }}</span>
-			</h4>
-			<h5>{{ team.description }}</h5>
-		</section>
 
 		<section v-if="team.userIds" class="section">
 			<h3>Teilnehmer</h3>

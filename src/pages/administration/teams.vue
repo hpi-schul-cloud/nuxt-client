@@ -1,3 +1,31 @@
+<template>
+	<section class="section">
+		<h1>Teams Verwaltung</h1>
+		<base-table
+			v-if="pagination && pagination.total > 0"
+			v-slot:default="slotProps"
+			:data="data"
+			paginated
+			:skip="pagination.skip"
+			:pagination-state="pagination"
+			:columns="columns"
+			:default-sort="[sortField, sortOrder]"
+			default-sort-direction="asc"
+			backend-sorting
+			backend-pagination
+			@sort="onSort"
+			@update:skip="onPageChange"
+		>
+			<base-icon
+				source="material"
+				icon="delete"
+				class="cursor-pointer"
+				@click.native="deleteTeam(slotProps._id)"
+			/>
+		</base-table>
+	</section>
+</template>
+
 <script>
 import { mapGetters, mapState } from "vuex";
 
@@ -65,31 +93,3 @@ export default {
 	},
 };
 </script>
-
-<template>
-	<section class="section">
-		<h1>Teams Verwaltung</h1>
-		<base-table
-			v-if="pagination && pagination.total > 0"
-			v-slot:default="slotProps"
-			:data="data"
-			paginated
-			:skip="pagination.skip"
-			:pagination-state="pagination"
-			:columns="columns"
-			:default-sort="[sortField, sortOrder]"
-			default-sort-direction="asc"
-			backend-sorting
-			backend-pagination
-			@sort="onSort"
-			@update:skip="onPageChange"
-		>
-			<base-icon
-				source="material"
-				icon="delete"
-				class="cursor-pointer"
-				@click.native="deleteTeam(slotProps._id)"
-			/>
-		</base-table>
-	</section>
-</template>
