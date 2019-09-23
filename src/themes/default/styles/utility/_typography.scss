@@ -14,7 +14,7 @@ body {
 	h#{$i},
 	.h#{$i} {
 		margin-top: var(--space-sm);
-		margin-bottom: var(--space-xxs);
+		margin-bottom: var(--space-xs-2);
 		font-family: var(--font-accent);
 		font-size: var(--heading-#{$i});
 		font-weight: var(--font-weight-normal);

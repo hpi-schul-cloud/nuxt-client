@@ -5,7 +5,16 @@ module.exports = function(api) {
 
 	if (process.env.NODE_ENV === "test") {
 		return {
-			presets: ["@babel/preset-env"],
+			presets: [
+				[
+					"@babel/preset-env",
+					{
+						targets: {
+							node: "current",
+						},
+					},
+				],
+			],
 			plugins: ["dynamic-import-node"],
 		};
 	}
