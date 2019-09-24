@@ -1,6 +1,5 @@
 <template>
 	<nav>
-		<base-icon source="material" icon="keyboard_arrow_left" class="arrow" />
 		<ul class="breadcrumb">
 			<li v-for="(input, index) in inputs" :key="input.text" class="link">
 				<component :is="getComponent(input)" v-bind="removeText(input)">
