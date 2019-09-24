@@ -15,24 +15,13 @@ describe("@components/BaseBreadcrumb", () => {
 			},
 		});
 
-		//: element.querySelector(`[span="${link.to}"]`);
-		//expect(linkElement.textContent).toContain(link.text);
-		//console.log(links, `links!!:D`);
 		links.forEach((link, index) => {
-			//console.log(link, `link to`);
-
 			if (links.length - 1 !== index) {
 				const linkElement = link.to
 					? element.querySelector(`[to="${link.to}"]`)
 					: element.querySelector(`[href="${link.href}"]`);
 				expect(linkElement.textContent).toContain(link.text);
 			}
-			// } else {
-			// 	const linkElement = link.to;
-
-			// 	element.querySelector(`[span]`);
-			// 	expect(linkElement.textContent).toContain(link.text);
-			// }
 		});
 	});
 
@@ -45,5 +34,45 @@ describe("@components/BaseBreadcrumb", () => {
 			},
 		});
 		expect(element.textContent).toContain(text);
+	});
+
+	it("renders icon if defined", () => {
+		const icon = { source: "fa", icon: "home" };
+		const internalLink = { to: "/", text: "internal", icon };
+		const textOnly = { text: "plain text" };
+		const wrapper = mount(BaseBreadcrumb, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				inputs: [internalLink, textOnly],
+			},
+		});
+		expect(wrapper.find(".fa.fa-home").isVisible()).toBe(true);
+	});
+
+	it("renders no icon if not defined", () => {
+		const internalLink = { to: "/", text: "internal" };
+		const textOnly = { text: "plain text" };
+		const wrapper = mount(BaseBreadcrumb, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				inputs: [internalLink, textOnly],
+			},
+		});
+		expect(wrapper.find(".fa").exists()).toBe(false);
+	});
+
+	it("last item is not clickable and contains right text ", () => {
+		const internalLink = { to: "/", text: "internal" };
+		const textOnly = { text: "plain text" };
+		const emptyLink = { to: "/", text: "empty" };
+		const wrapper = mount(BaseBreadcrumb, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				inputs: [internalLink, textOnly, emptyLink],
+			},
+		});
+		const span = wrapper.find(".link:last-of-type > span");
+		expect(span.exists()).toBe(true);
+		expect(span.text()).toBe(emptyLink.text);
 	});
 });
