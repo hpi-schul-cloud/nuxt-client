@@ -351,8 +351,7 @@ storiesOf("Base Components", module)
 				},
 				{
 					text: "Biologie",
-					href:
-						"http://localhost:4001/?path=/story/base-components--base-breadcrumb",
+					href: "http:://schul-cloud.org",
 				},
 				{
 					text: "Thema - das Nervensystem",
@@ -360,8 +359,7 @@ storiesOf("Base Components", module)
 				},
 			],
 		}),
-		template: `	
-											 <base-breadcrumb :inputs="inputs"/>`,
+		template: `<base-breadcrumb :inputs="inputs"/>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
