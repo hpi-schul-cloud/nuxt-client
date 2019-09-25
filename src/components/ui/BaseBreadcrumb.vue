@@ -27,7 +27,6 @@ export default {
 		},
 	},
 
-	// const { to, href, ...lastObject } = input
 
 	created: function() {
 		const lastObject = this.inputs[this.inputs.length - 1];
