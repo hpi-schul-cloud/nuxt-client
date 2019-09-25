@@ -3,32 +3,32 @@ $darken: 25%;
 
 :root {
 	/* main colors */
-	--color-primary: #b1063a;
+	--color-primary: #e98404;
 	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
 	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
-	--color-accent: #e98404;
-	--color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
-	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
+	--color-secondary: #b1063a;
+	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
+	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
 	--color-tertiary: #455b6a;
 	--color-tertiary-light: #617480;
 	--color-tertiary-dark: #344450;
 
 	// shades
-	--color-black: #1d1d21;
-	--color-gray-light: #ddd;
+	--color-black: #000;
+	--color-gray-light: #eee;
 	--color-gray: #aaa;
 	--color-gray-dark: #444;
 	--color-white: #fff;
 	--color-overlay: rgba(0, 0, 0, 0.5);
 
 	/* feedback */
-	--color-info: #17a2b8;
+	--color-info: #36bdfb;
 	--color-info-light: color-mod(var(--color-info) tint(#{$brighten}));
 	--color-info--dark: color-mod(var(--color-info) shade(#{$darken}));
 	--color-success: #13ba98;
 	--color-success-light: color-mod(var(--color-success) tint(#{$brighten}));
 	--color-success--dark: color-mod(var(--color-success) shade(#{$darken}));
-	--color-warning: #ffd137;
+	--color-warning: #ffd611;
 	--color-warning-light: color-mod(var(--color-warning) tint(#{$brighten}));
 	--color-warning--dark: color-mod(var(--color-warning) shade(#{$darken}));
 	--color-danger: #ff1134;
