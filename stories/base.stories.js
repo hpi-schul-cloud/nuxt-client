@@ -351,7 +351,7 @@ storiesOf("Base Components", module)
 				},
 				{
 					text: "Biologie",
-					href: "http:://schul-cloud.org",
+					href: "http://schul-cloud.org",
 				},
 				{
 					text: "Thema - das Nervensystem",

@@ -6,8 +6,8 @@ describe("@components/BaseBreadcrumb", () => {
 	it("renders BaseLink for Links", () => {
 		const internalLink = { to: "/", text: "internal" };
 		const externalLink = { href: "https://schul-cloud.org", text: "external" };
-		const emptyLink = { to: "/", text: "any" };
-		const links = [internalLink, externalLink, emptyLink];
+		const textOnly = { text: "any" };
+		const links = [internalLink, externalLink, textOnly];
 		const { element } = mount(BaseBreadcrumb, {
 			...createComponentMocks({ router: true }),
 			propsData: {
