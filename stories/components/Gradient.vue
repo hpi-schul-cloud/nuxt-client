@@ -2,9 +2,11 @@
 	<div>
 		<div>
 			<h5 v-if="title">{{ title }}</h5>
-		 <span>Gradient:	{{ colorStart }} => {{ colorEnd }}</span>
-		 	<p v-if="variable">Variable: {{variable}}</p>
-     	<div :style="{...handleGradient,}" :class="{'color-value': handleGradient,}"></div>
+			<span>Gradient: {{ colorStart }} => {{ colorEnd }}</span>
+			<div
+				:style="{ ...handleGradient }"
+				:class="{ 'color-value': handleGradient }"
+			></div>
 		</div>
 	</div>
 </template>
@@ -12,8 +14,6 @@
 <script>
 export default {
 	props: {
-
-
 		colorStart: {
 			type: String,
 			default: "",
@@ -26,12 +26,6 @@ export default {
 			type: String,
 			default: "",
 		},
-
-		variable: {
-			type: String,
-			default: "",
-		}
-
 	},
 
 	computed: {
@@ -47,8 +41,6 @@ export default {
 							" 100%)",
 				  };
 		},
-
-
 	},
 };
 </script>
@@ -59,5 +51,4 @@ export default {
 	height: 30px;
 	margin-bottom: var(--space-md);
 }
-
 </style>

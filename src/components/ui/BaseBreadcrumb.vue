@@ -2,7 +2,9 @@
 	<nav>
 		<ul class="breadcrumb">
 			<li v-for="input in inputs" :key="input.text" class="link">
-				<component :is="getComponent(input)" v-bind="removeText(input)">{{ input.text }}</component>
+				<component :is="getComponent(input)" v-bind="removeText(input)">{{
+					input.text
+				}}</component>
 			</li>
 		</ul>
 	</nav>
