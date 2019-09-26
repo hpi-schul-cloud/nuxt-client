@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/vue";
-import Color from "@components/Color";
-import Gradient from "@components/Gradient";
-import Elevation from "@components/Elevation";
-import ColorOnText from "@components/ColorOnText";
+import Color from "@storyComponents/Color";
+import Gradient from "@storyComponents/Gradient";
+import Elevation from "@storyComponents/Elevation";
+import ColorOnText from "@storyComponents/ColorOnText";
 
 storiesOf("Colors", module)
 	.add("Color", () => ({
