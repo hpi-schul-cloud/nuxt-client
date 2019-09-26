@@ -2,20 +2,11 @@
 	<div>
 		<div>
 			<h5 v-if="title">{{ title }}</h5>
-		 <span>
-			Gradient:	{{ colorStart }} => {{ colorEnd }}
-		 </span>
+		 <span>Gradient:	{{ colorStart }} => {{ colorEnd }}</span>
 		 	<p v-if="variable">Variable: {{variable}}</p>
-     <div
-       :style="{
-					...handleGradient,
-				}"
-				:class="{
-					'color-value': handleGradient,
-        }"
-			></div>
+     	<div :style="{...handleGradient,}" :class="{'color-value': handleGradient,}"></div>
 		</div>
-		</div>
+	</div>
 </template>
 
 <script>

@@ -16,7 +16,7 @@ storiesOf("Colors", module)
 		<Color title="Secondary" color="#B1063A" variable="--color-secondary"/>
 		<Color title="Secondary Light" color="#bd2b58" variable="--color-secondary-light"/>
 		<Color title="Secondary Dark" color="#85052c" variable="--color-secondary-dark"/>
-		<Gradient colorStart="#F6A800" colorEnd="#B1063A" variable="--color-secondary-fancy"/>
+		<Gradient colorStart="#F6A800" colorEnd="#B1063A"/>
 		<Color title="Tertiary" color="#455b6a" variable="--color-tertiary"/>
 		<Color title="Tertiary Light" color="#617480" variable="--color-tertiary-light"/>
 		<Color title="Tertiary Dark" color="#344450" variable="--color-tertiary-dark"/>
