@@ -27,7 +27,6 @@ export default {
 		},
 	},
 
-
 	created: function() {
 		const lastObject = this.inputs[this.inputs.length - 1];
 		delete lastObject.href && delete lastObject.to;
