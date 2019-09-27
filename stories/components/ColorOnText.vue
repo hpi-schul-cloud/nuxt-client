@@ -2,9 +2,14 @@
 	<div>
 		<div>
 			<h5 v-if="title">{{ title }}</h5>
-			<span v-if="color" class="box"> on backgroud: {{ variable }} => <br> use text color: {{ textColor}}</span>
+			<span v-if="color" class="box">
+				on backgroud: {{ variable }} => <br />
+				use text color: {{ textColor }}</span
+			>
 			<div class="color-value flex" :style="{ backgroundColor: color }">
-				<p class="text" :style="{ 'color': `var(${textColor})`, 'margin': 0}" > text </p>
+				<p class="text" :style="{ color: `var(${textColor})`, margin: 0 }">
+					text
+				</p>
 			</div>
 		</div>
 	</div>
@@ -39,10 +44,5 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
 }
-
-
-
-
 </style>

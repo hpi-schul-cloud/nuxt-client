@@ -2,7 +2,10 @@
 	<div>
 		<div>
 			<h5 v-if="title">{{ title }}</h5>
-			<span v-if="color" class="color-value">Color: {{ color }} <br> Variable: {{ variable }} </span>
+			<span v-if="color" class="color-value"
+				>Color: {{ color }} <br />
+				Variable: {{ variable }}
+			</span>
 			<div class="color-value" :style="{ backgroundColor: color }"></div>
 		</div>
 	</div>

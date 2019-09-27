@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/vue";
-import Color from "@components/Color";
-import Gradient from "@components/Gradient";
-import Elevation from "@components/Elevation";
-import ColorOnText from "@components/ColorOnText";
+import Color from "@storyComponents/Color";
+import Gradient from "@storyComponents/Gradient";
+import Elevation from "@storyComponents/Elevation";
+import ColorOnText from "@storyComponents/ColorOnText";
 
 storiesOf("Colors", module)
 	.add("Color", () => ({
@@ -43,21 +43,21 @@ storiesOf("Colors", module)
 		template: `<div>
 		<h3>Main Colors</h3>
 
-		<ColorOnText title="Primary" color="#E98404" variable="--color-primary" textColor="--on-primary"/>
-		<ColorOnText title="Primary Light" color="#EC962A" variable="--color-primary-light" textColor="--on-primary-light"/>
-		<ColorOnText title="Primary Dark" color="#AF6303" variable="--color-primary-dark" textColor="--on-primary-dark"/>
-		<ColorOnText title="Secondary" color="#B1063A" variable="--color-secondary" textColor="--on-secondary"/>
-		<ColorOnText title="Secondary Light" color="#bd2b58" variable="--color-secondary-light" textColor="--on-secondary-light"/>
-		<ColorOnText title="Secondary Dark" color="#85052c" variable="--color-secondary-dark" textColor="--on-secondary-dark"/>
-		<ColorOnText title="Tertiary" color="#455b6a" variable="--color-tertiary" textColor="--on-tertiary"/>
-		<ColorOnText title="Tertiary Light" color="#617480" variable="--color-tertiary-light" textColor="--on-tertiary-light"/>
-		<ColorOnText title="Tertiary Dark" color="#344450" variable="--color-tertiary-dark" textColor="--on-tertiary-dark"/>
+		<ColorOnText title="Primary" color="#E98404" variable="--color-primary" textColor="--color-on-primary"/>
+		<ColorOnText title="Primary Light" color="#EC962A" variable="--color-primary-light" textColor="--color-on-primary-light"/>
+		<ColorOnText title="Primary Dark" color="#AF6303" variable="--color-primary-dark" textColor="--color-on-primary-dark"/>
+		<ColorOnText title="Secondary" color="#B1063A" variable="--color-secondary" textColor="--color-on-secondary"/>
+		<ColorOnText title="Secondary Light" color="#bd2b58" variable="--color-secondary-light" textColor="--color-on-secondary-light"/>
+		<ColorOnText title="Secondary Dark" color="#85052c" variable="--color-secondary-dark" textColor="--color-on-secondary-dark"/>
+		<ColorOnText title="Tertiary" color="#455b6a" variable="--color-tertiary" textColor="--color-on-tertiary"/>
+		<ColorOnText title="Tertiary Light" color="#617480" variable="--color-tertiary-light" textColor="--color-on-tertiary-light"/>
+		<ColorOnText title="Tertiary Dark" color="#344450" variable="--color-tertiary-dark" textColor="--color-on-tertiary-dark"/>
 
 		<h3>Feedback</h3>
-		<ColorOnText color="#13ba98" variable="--color-sucess" textColor="--on-success"/>
-		<ColorOnText color="#ffd611" variable="--color-warning" textColor="--on-warning"/>
-		<ColorOnText color="#ff1134" variable="--color-danger" textColor="--on-danger"/>
-		<ColorOnText color="#36bdfb" variable="--color-info" textColor="--on-info"/>
+		<ColorOnText color="#13ba98" variable="--color-sucess" textColor="--color-on-success"/>
+		<ColorOnText color="#ffd611" variable="--color-warning" textColor="--color-on-warning"/>
+		<ColorOnText color="#ff1134" variable="--color-danger" textColor="--color-on-danger"/>
+		<ColorOnText color="#36bdfb" variable="--color-info" textColor="--color-on-info"/>
 	</div>
 	`,
 
