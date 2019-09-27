@@ -1,9 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-
-import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
+import notes from "@docs/storybook/base.md";
 import BaseCard from "@components/ui/BaseCard";
 import BaseIcon from "@components/ui/BaseIcon";
 import BaseInput, {
