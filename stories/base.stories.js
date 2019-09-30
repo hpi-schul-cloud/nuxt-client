@@ -1,9 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color, number } from "@storybook/addon-knobs";
-
-import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
+import notes from "@docs/storybook/base.md";
 import BaseCard from "@components/ui/BaseCard";
 import BaseIcon from "@components/ui/BaseIcon";
 import BaseInput, {
@@ -355,12 +354,22 @@ storiesOf("Base Components", module)
 		components: { BaseBreadcrumb },
 		data: () => ({
 			inputs: [
-				{ text: "Home", to: "/" },
-				{ text: "Kurse", href: "https://schul-cloud.org" },
-				{ text: "Mathematik" },
+				{
+					text: "Kurse",
+					to: "",
+					icon: { source: "material", icon: "school" },
+				},
+				{
+					text: "Biologie",
+					href: "http://schul-cloud.org",
+				},
+				{
+					text: "Thema - das Nervensystem",
+					href: "https://schul-cloud.org",
+				},
 			],
 		}),
-		template: `<base-breadcrumb :inputs="inputs" />`,
+		template: `<base-breadcrumb :inputs="inputs"/>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
