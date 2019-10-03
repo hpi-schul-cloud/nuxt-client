@@ -23,14 +23,13 @@ jobs:
         - docker
       sudo: required
       deploy:
-        skip_cleanup: true
         provider: script
         script: bash ./deploy/deploy.sh -p client
         on:
           branch:
             - develop
             - master
-    - script: npm run build:storybook
+    - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
       services:
         - docker
@@ -39,7 +38,6 @@ jobs:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p storybook
       deploy:
-        skip_cleanup: true
         provider: script
         script: bash ./deploy/deploy.sh -p storybook
         on:
@@ -55,7 +53,6 @@ jobs:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
       deploy:
-        skip_cleanup: true
         provider: script
         script: bash ./deploy/deploy.sh -p vuepress
         on:

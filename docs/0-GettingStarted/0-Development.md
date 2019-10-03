@@ -18,15 +18,16 @@ Please read the following Code Styleguides before you start contributing:
 
 ## Setup
 
+At first, you need to have the [legacy-client](https://github.com/schul-cloud/schulcloud-client) and [schulcloud-server](https://github.com/schul-cloud/schulcloud-server) set up and running. Or you need to adjust the enviroment variables `LEGACY_CLIENT_URL` and `API_URL`. You can find [more details here](1-Build.md#nuxt-client). If you have any problems, check our [FAQ Section](../5-FAQ.md).
+
+Let's continue with the setup of this project:
+
 ```bash
 # install node 10.x + npm (system specific)
 https://nodejs.org/en/
 
 # install dependencies
 npm i
-
-# install legacy schulcloud-client and run gulp
-npm run setup
 
 # start "developing" :)
 ```

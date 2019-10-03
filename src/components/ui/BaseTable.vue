@@ -152,7 +152,7 @@ export default {
 					display: inline-block;
 					width: 0;
 					height: 0;
-					margin-left: var(--space-xxs);
+					margin-left: var(--space-xs-2);
 					vertical-align: middle;
 					border-right: 4px solid transparent;
 					border-bottom: 4px solid var(--color-gray);

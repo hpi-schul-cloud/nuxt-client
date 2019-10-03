@@ -9,7 +9,9 @@
 		@focus="open = true"
 		@blur="open = false"
 	>
-		<div class="button">{{ title }}</div>
+		<div class="button">
+			<slot name="header"></slot>
+		</div>
 		<div :id="`dropdown-content-${$uid}`" class="content" :class="{ open }">
 			<slot class="link" />
 		</div>
@@ -21,12 +23,6 @@ import uidMixin from "@mixins/uid";
 
 export default {
 	mixins: [uidMixin],
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-	},
 	data() {
 		return {
 			open: false,

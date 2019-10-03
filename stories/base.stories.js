@@ -1,9 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-
-import notes from "@docs/storybook/base.md";
 import BaseButton from "@components/ui/BaseButton";
+import notes from "@docs/storybook/base.md";
 import BaseCard from "@components/ui/BaseCard";
 import BaseIcon from "@components/ui/BaseIcon";
 import BaseInput, {
@@ -18,6 +17,7 @@ import BaseSelect from "@components/ui/BaseSelect";
 import BaseTextarea from "@components/ui/BaseTextarea";
 import BaseAudio from "@components/ui/BaseAudio";
 import BaseVideo from "@components/ui/BaseVideo";
+import BaseQrCode from "@components/ui/BaseQrCode";
 import BaseModal from "@components/ui/BaseModal";
 import BaseBlockquote from "@components/ui/BaseBlockquote";
 
@@ -174,7 +174,7 @@ storiesOf("Base Components", module)
 			icon: text("icon", "home"),
 			source: select(
 				"source",
-				{ material: "material", custom: "custom" },
+				{ material: "material", fa: "fa", custom: "custom" },
 				"material"
 			),
 			size: text("size", "1em"),
@@ -183,6 +183,9 @@ storiesOf("Base Components", module)
 		template: `<div>
 			<p>
 				Icon usage is simple: <base-icon :source="source" :icon="icon" :style="{'font-size': size, fill: color}"/>
+			</p>
+			<p>
+				You can als use icons from fontawesome: <base-icon source="fa" icon="solid/address-book" :style="{'font-size': size}"/>
 			</p>
 			<p>
 				The Color can be also be set using fill:
@@ -340,12 +343,22 @@ storiesOf("Base Components", module)
 		components: { BaseBreadcrumb },
 		data: () => ({
 			inputs: [
-				{ text: "Home", to: "/" },
-				{ text: "Kurse", href: "https://schul-cloud.org" },
-				{ text: "Mathematik" },
+				{
+					text: "Kurse",
+					to: "",
+					icon: { source: "material", icon: "school" },
+				},
+				{
+					text: "Biologie",
+					href: "http://schul-cloud.org",
+				},
+				{
+					text: "Thema - das Nervensystem",
+					href: "https://schul-cloud.org",
+				},
 			],
 		}),
-		template: `<base-breadcrumb :inputs="inputs" />`,
+		template: `<base-breadcrumb :inputs="inputs"/>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
@@ -435,6 +448,13 @@ storiesOf("Base Components", module)
 					}
 				]"
 			/>`,
+	}))
+	.add("Base QrCode", () => ({
+		components: { BaseQrCode },
+		data: () => ({
+			url: text("Url", "http://www.schul-cloud.org"),
+		}),
+		template: `<base-qr-code :url="url"/>`,
 	}))
 	.add("BaseBlockquote", () => ({
 		components: { BaseBlockquote },

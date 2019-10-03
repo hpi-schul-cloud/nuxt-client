@@ -9,6 +9,8 @@ import MenuLink from "@components/MenuLink";
 import DropdownMenu from "@components/DropdownMenu";
 import BaseButton from "@components/ui/BaseButton";
 import Searchbar from "@components/Searchbar";
+import PopupIcon from "@components/PopupIcon";
+import PopupIconInitials from "@components/PopupIconInitials";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -26,7 +28,8 @@ storiesOf("Misc", module)
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
 		template: `
-			<DropdownMenu title="Dropdown">
+			<DropdownMenu>
+				<template v-slot:header>Dropdown</template>
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 				<MenuLink to="/">Link 3</MenuLink>
@@ -61,4 +64,20 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
 			</div>
 		`,
+	}))
+	.add("Popup Icon", () => ({
+		components: { PopupIcon },
+		template: `<div>
+			<PopupIcon source="fa" icon="solid/address-book"></PopupIcon>
+		</div>`,
+	}))
+	.add("Popup Icon with Initials", () => ({
+		components: { PopupIconInitials, MenuLink },
+		template: `<div style="text-align: right">
+			<PopupIconInitials firstname="Fritz" lastname="Schmidt">
+				<div>Fritz Schmidt </div>
+				<MenuLink to="/">Link 1</MenuLink>
+				<MenuLink to="/">Link 2</MenuLink>
+			</PopupIconInitials>
+		</div>`,
 	}));
