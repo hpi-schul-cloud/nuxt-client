@@ -43,7 +43,7 @@
 </template>
 <script>
 import { getValueByPath } from "@utils/helpers";
-import Pagination from "@components/Pagination.vue";
+import Pagination from "@components/organisms/Pagination.vue";
 
 export default {
 	components: {

@@ -68,7 +68,7 @@ export default {
 }
 .fa {
 	width: min-content;
-	font-size: var(--text-lg);
+	font-size: inherit;
 	vertical-align: middle; // should this be default?
 }
 
