@@ -12,6 +12,7 @@ const aliases = {
 	"@locales": "locales",
 	"@assets": "src/assets",
 	"@components": "src/components",
+	"@storyComponents": "stories/components",
 	"@basecomponents": "src/components/ui",
 	"@docs": "docs",
 	"@layouts": "src/layouts",

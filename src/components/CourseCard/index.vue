@@ -69,7 +69,7 @@ export default {
 
 .course-card {
 	position: relative;
-	width: 240px;
+	width: 260px;
 	padding: var(--space-xs);
 	padding-bottom: 0;
 	margin: var(--space-sm);
@@ -89,7 +89,7 @@ export default {
 .header {
 	position: relative;
 	// text-size + padding top/bottom + overlap
-	height: calc(var(--text-md) + 2 * var(--space-xxs) + var(--space-xs));
+	height: calc(var(--text-md) + 2 * var(--space-xs-2) + var(--space-xs));
 	overflow: hidden;
 	border-radius: var(--radius-sm);
 	border-bottom-left-radius: 0;
@@ -119,7 +119,8 @@ export default {
 	.tab-label {
 		display: inline-block;
 		width: 100%;
-		padding: var(--space-xxs) var(--space-sm);
+		padding: var(--space-xs-2) var(--space-sm);
+		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		color: var(--color-white);
 		transform: skewX(-25deg);
@@ -132,11 +133,12 @@ export default {
 	display: flex;
 	align-items: center;
 	float: right;
+	padding: var(--space-xs-2) var(--space-xs);
 }
 
 // Notification Bubble
 .notification-dot {
-	--min-size: calc(var(--text-sm) + (2 * var(--space-xxs)));
+	--min-size: calc(var(--text-sm) + (2 * var(--space-xs-2)));
 
 	position: absolute;
 	bottom: 100%;
@@ -146,7 +148,7 @@ export default {
 	justify-content: center;
 	min-width: var(--min-size);
 	min-height: var(--min-size);
-	padding: 0 var(--space-xxs);
+	padding: 0 var(--space-xs-2);
 	font-size: var(--text-sm);
 	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
@@ -160,8 +162,7 @@ export default {
 ------------------------ */
 
 .card-info {
-	padding: var(--space-xs);
-	padding-top: 0;
+	padding: var(--space-sm) var(--space-xs);
 	margin-top: calc(var(--space-xs) * -1);
 	color: var(--color-white);
 	border-radius: var(--radius-sm);
@@ -174,15 +175,18 @@ export default {
 .abrivation-label {
 	margin: 0;
 	font-family: var(--font-primary);
-	font-size: var(--heading-2);
+	font-size: var(--heading-1);
+	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	text-transform: uppercase;
 }
 
 .course-name-label {
-	margin: 0;
+	margin: var(--space-xs-3) 0 0 0;
 	overflow: hidden;
-	font-size: var(--text-md);
+	font-size: var(--text-lg);
+	font-weight: var(--font-weight-bold);
+	line-height: inherit;
 	color: var(--color-white);
 	text-overflow: ellipsis;
 	white-space: nowrap;

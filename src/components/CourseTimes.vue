@@ -94,6 +94,6 @@ export default {
 	padding-right: var(--space-sm);
 }
 .item {
-	padding: 0 var(--space-xxxs);
+	padding: 0 var(--space-xs-3);
 }
 </style>
