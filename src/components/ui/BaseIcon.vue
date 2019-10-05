@@ -76,8 +76,7 @@ export default {
 	// remove material icon margin
 	width: calc(1em + 4px);
 	height: calc(1em + 4px);
-	/* stylelint-disable */
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin: -4px 0;
-	/* stylelint-enable */
 }
 </style>

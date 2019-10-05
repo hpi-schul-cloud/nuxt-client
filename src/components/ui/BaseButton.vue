@@ -209,10 +209,9 @@ export default {
 		--button-background: var(--color-tertiary-dark);
 	}
 
-	/* stylelint-disable */
-	// defined multiple to seperate style from behaviour
+	// defined multiple times to seperate style from behaviour
+	/* stylelint-disable-next-line */
 	&.is-outline {
-		/* stylelint-enable */
 		color: var(--button-background);
 		background: transparent;
 		border: 1px solid var(--button-background);
@@ -223,10 +222,9 @@ export default {
 			box-shadow: 0 0 0 1px var(--button-background);
 		}
 	}
-	/* stylelint-disable */
-	// defined multiple to seperate style from behaviour
+	// defined multiple times to seperate style from behaviour
+	/* stylelint-disable-next-line */
 	&.is-text {
-		/* stylelint-enable */
 		color: var(--button-background);
 		background: transparent;
 		border: 0;
@@ -245,10 +243,9 @@ export default {
 		background: transparent;
 		border: 0;
 	}
-	/* stylelint-disable */
-	// defined multiple to seperate style from behaviour
+	// defined multiple times to seperate style from behaviour
+	/* stylelint-disable-next-line */
 	&:disabled {
-		/* stylelint-enable */
 		pointer-events: none;
 		cursor: default;
 	}
