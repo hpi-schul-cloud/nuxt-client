@@ -81,7 +81,7 @@ export default {
 		return {
 			sidebarBaseItems: sidebarBaseItems,
 			pageTitle: this.$theme.short_name,
-			fullscreenMode: false,
+			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
 		};
 	},

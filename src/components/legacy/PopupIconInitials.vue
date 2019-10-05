@@ -62,6 +62,7 @@ export default {
 	padding: var(--space-xs-2);
 	font-family: var(--font-accent);
 	font-size: var(--text-lg);
+	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	cursor: pointer;
 	-webkit-user-select: None;

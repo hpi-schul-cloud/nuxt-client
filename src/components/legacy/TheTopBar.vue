@@ -61,9 +61,9 @@
 			</template>
 		</div>
 		<base-button
-			v-if="!!fullscreenMode"
+			v-else
 			class="fullscreen-button fullscreen-button-active"
-			design="secondary icon"
+			design="primary icon"
 			@click.native="sendEvent('fullscreen')"
 		>
 			<base-icon source="fa" icon="compress" fill="var(--color-white)" />
@@ -124,7 +124,6 @@ export default {
 
 <style lang="scss" scoped>
 /* stylelint-disable sh-waqar/declaration-use-variable */
-
 @import "@styles";
 
 .topbar {
@@ -139,6 +138,7 @@ export default {
 		align-items: center;
 		justify-content: flex-end;
 		width: 100%;
+		height: 100%;
 		padding-right: var(--space-sm);
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
 
@@ -154,9 +154,9 @@ export default {
 			z-index: var(--layer-popover);
 			display: flex;
 			margin: var(--space-xs);
-			transition: transform 0.35s;
 			font-size: 22px;
 			text-align: center;
+			transition: transform 0.35s;
 
 			.menu-icon {
 				padding-left: 4px;
@@ -214,7 +214,6 @@ export default {
 	--hover-color: #f5f5f5;
 
 	width: 100%;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	padding: 8px 27px;
 	color: var(--color-tertiary-dark);
 	text-align: left;
