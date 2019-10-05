@@ -215,8 +215,8 @@ export default {
 					border-bottom: none;
 
 					.icon {
-						font-size: 20px;
 						width: 25px;
+						font-size: 20px;
 					}
 
 					.title {

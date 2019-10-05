@@ -1,5 +1,5 @@
 import CourseCardFooter from "./CourseCardFooter";
-import PulsatingDot from "../PulsatingDot";
+import PulsatingDot from "@components/atoms/PulsatingDot";
 
 describe("@components/molecules/CourseCardFooter", () => {
 	it(...isValidComponent(CourseCardFooter));

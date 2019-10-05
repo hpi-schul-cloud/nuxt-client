@@ -1,4 +1,4 @@
-import TemplateTab from "./TemplateTab";
+import TemplateTab from "./Tab";
 
 const tabContentShow = {
 	components: { TemplateTab },
