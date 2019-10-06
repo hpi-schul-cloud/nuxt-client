@@ -49,7 +49,7 @@ export default {
 	},
 	methods: {
 		handleFirstTabForRadioButton(e) {
-			if (e.key === "Tab") {
+			if (e.key === "Tab" || e.keyCode.toString() === "9") {
 				window.removeEventListener(
 					"keydown",
 					this.handleFirstTabForRadioButton
@@ -85,6 +85,10 @@ label {
 	border: 2px solid $border-color;
 	border-radius: var(--radius-round);
 	transition: border-color var(--duration-transition-medium);
+}
+
+input {
+	line-height: var(--line-height-md);
 }
 
 input:checked + .radio {
