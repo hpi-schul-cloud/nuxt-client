@@ -11,7 +11,7 @@ Vue.use({
 });
 
 // Dialog
-import BaseDialog from "@components/ui/BaseDialog";
+import BaseDialog from "@components/base/BaseDialog";
 Vue.use(BaseDialog);
 
 // Nuxt Components

@@ -1,25 +1,25 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-import BaseButton from "@components/ui/BaseButton";
+import BaseButton from "@components/base/BaseButton";
 import notes from "@docs/storybook/base.md";
-import BaseCard from "@components/ui/BaseCard";
-import BaseIcon from "@components/ui/BaseIcon";
+import BaseCard from "@components/base/BaseCard";
+import BaseIcon from "@components/base/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
-} from "@components/ui/BaseInput/BaseInput";
-import BaseLink from "@components/ui/BaseLink";
-import BaseProgressbar from "@components/ui/BaseProgressbar";
-import BaseTable from "@components/ui/BaseTable";
-import BaseCollapsible from "@components/ui/BaseCollapsible";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
-import BaseSelect from "@components/ui/BaseSelect";
-import BaseTextarea from "@components/ui/BaseTextarea";
-import BaseAudio from "@components/ui/BaseAudio";
-import BaseVideo from "@components/ui/BaseVideo";
-import BaseQrCode from "@components/ui/BaseQrCode";
-import BaseModal from "@components/ui/BaseModal";
-import BaseBlockquote from "@components/ui/BaseBlockquote";
+} from "@components/base/BaseInput/BaseInput";
+import BaseLink from "@components/base/BaseLink";
+import BaseProgressbar from "@components/base/BaseProgressbar";
+import BaseTable from "@components/base/BaseTable";
+import BaseCollapsible from "@components/base/BaseCollapsible";
+import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
+import BaseSelect from "@components/base/BaseSelect";
+import BaseTextarea from "@components/base/BaseTextarea";
+import BaseAudio from "@components/base/BaseAudio";
+import BaseVideo from "@components/base/BaseVideo";
+import BaseQrCode from "@components/base/BaseQrCode";
+import BaseModal from "@components/base/BaseModal";
+import BaseBlockquote from "@components/base/BaseBlockquote";
 
 storiesOf("Base Components", module)
 	.addParameters({

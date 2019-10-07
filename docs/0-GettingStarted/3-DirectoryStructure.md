@@ -6,7 +6,7 @@ The Main Project can be found in the `/src`-directory. This mainly follows the [
 
 We extended this structure with the following directories:
 
-### `/src/components/ui`
+### `/src/components/base`
 
 This UI-Directory contains our BaseComponents. Those components must match all off the following rules and must be prefixed with `Base`:
 

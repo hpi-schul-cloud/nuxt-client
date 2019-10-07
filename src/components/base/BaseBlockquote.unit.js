@@ -1,6 +1,6 @@
 import BaseBlockquote from "./BaseBlockquote";
 
-describe("@components/ui/BaseBlockquote", () => {
+describe("@components/base/BaseBlockquote", () => {
 	it(...isValidComponent(BaseBlockquote));
 	it(...rendersDefaultSlotContent(BaseBlockquote));
 
