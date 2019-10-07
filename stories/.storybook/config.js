@@ -11,7 +11,7 @@ setOptions({
 });
 
 import "./mockComponents";
-import "@components/base/_globals";
+import "@basecomponents/_globals";
 
 import "@styles";
 

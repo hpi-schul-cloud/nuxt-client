@@ -74,7 +74,7 @@
 <script>
 import PopupIcon from "@components/legacy/PopupIcon";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
-import BaseLink from "@components/base/BaseLink";
+import BaseLink from "@basecomponents/BaseLink";
 import HelpDropdown from "@components/legacy/HelpDropdown";
 import MenuQrCode from "@components/legacy/MenuQrCode";
 

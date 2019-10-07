@@ -1,25 +1,25 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-import BaseButton from "@components/base/BaseButton";
+import BaseButton from "@basecomponents/BaseButton";
 import notes from "@docs/storybook/base.md";
-import BaseCard from "@components/base/BaseCard";
-import BaseIcon from "@components/base/BaseIcon";
+import BaseCard from "@basecomponents/BaseCard";
+import BaseIcon from "@basecomponents/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
-} from "@components/base/BaseInput/BaseInput";
-import BaseLink from "@components/base/BaseLink";
-import BaseProgressbar from "@components/base/BaseProgressbar";
-import BaseTable from "@components/base/BaseTable";
-import BaseCollapsible from "@components/base/BaseCollapsible";
-import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
-import BaseSelect from "@components/base/BaseSelect";
-import BaseTextarea from "@components/base/BaseTextarea";
-import BaseAudio from "@components/base/BaseAudio";
-import BaseVideo from "@components/base/BaseVideo";
-import BaseQrCode from "@components/base/BaseQrCode";
-import BaseModal from "@components/base/BaseModal";
-import BaseBlockquote from "@components/base/BaseBlockquote";
+} from "@basecomponents/BaseInput/BaseInput";
+import BaseLink from "@basecomponents/BaseLink";
+import BaseProgressbar from "@basecomponents/BaseProgressbar";
+import BaseTable from "@basecomponents/BaseTable";
+import BaseCollapsible from "@basecomponents/BaseCollapsible";
+import BaseBreadcrumb from "@basecomponents/BaseBreadcrumb";
+import BaseSelect from "@basecomponents/BaseSelect";
+import BaseTextarea from "@basecomponents/BaseTextarea";
+import BaseAudio from "@basecomponents/BaseAudio";
+import BaseVideo from "@basecomponents/BaseVideo";
+import BaseQrCode from "@basecomponents/BaseQrCode";
+import BaseModal from "@basecomponents/BaseModal";
+import BaseBlockquote from "@basecomponents/BaseBlockquote";
 
 storiesOf("Base Components", module)
 	.addParameters({

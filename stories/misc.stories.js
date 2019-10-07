@@ -7,7 +7,7 @@ import ProfilePicture from "@components/atoms/ProfilePicture";
 import ExampleImage from "@assets/img/avatarExample.svg";
 import MenuLink from "@components/atoms/MenuLink";
 import DropdownMenu from "@components/organisms/DropdownMenu";
-import BaseButton from "@components/base/BaseButton";
+import BaseButton from "@basecomponents/BaseButton";
 import Searchbar from "@components/molecules/Searchbar";
 import PopupIcon from "@components/legacy/PopupIcon";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
