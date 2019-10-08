@@ -214,7 +214,7 @@ export default {
 	&.is-outline {
 		/* stylelint-enable */
 		color: var(--button-background);
-		background: transparent;
+		background: var(--color-white);
 		border: 1px solid var(--button-background);
 
 		&:hover,

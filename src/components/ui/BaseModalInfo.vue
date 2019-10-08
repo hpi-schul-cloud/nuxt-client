@@ -6,7 +6,25 @@
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
 				>
-					<slot />
+					<div class="container">
+						<slot>
+							<div class="modal-header">
+								<h4>
+									<slot name="header" />
+								</h4>
+							</div>
+
+							<div class="modal-body">
+								<slot name="body" />
+							</div>
+						</slot>
+					</div>
+
+					<slot name="footer-wrapper">
+						<div class="modal-footer">
+							<slot name="footer" />
+						</div>
+					</slot>
 				</div>
 			</div>
 		</div>
@@ -63,11 +81,21 @@ export default {
 	display: table-cell;
 	vertical-align: middle;
 }
+.container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 2;
+	align-items: center;
+	justify-content: center;
+}
 
 .modal-container {
 	display: flex;
 	flex-direction: column;
-	width: 80%;
+	width: 95%;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
+	min-height: 405px;
 	max-height: calc(100vh - 40px);
 	margin: 0 auto;
 	background-color: var(--color-white);
@@ -85,22 +113,23 @@ export default {
 	flex-shrink: 0;
 	align-items: center;
 	justify-content: flex-start;
-	padding: var(--space-md);
-	border-bottom: 1px solid var(--color-gray);
+	border-bottom: none;
 	border-top-left-radius: var(--radius-md);
 	border-top-right-radius: var(--radius-md);
 }
 
-.modal-header h3 {
-	font-size: var(--text-lg);
-	font-weight: var(--font-weight-bold);
+.modal-header h4 {
+	padding: var(--space-xl) var(--space-xl) 0 var(--space-xl);
+	margin: 0 auto;
+	font-weight: var(--font-weight-regular);
 }
 
 .modal-body {
-	flex-grow: 1;
 	flex-shrink: 1;
-	padding: var(--space-md);
-	overflow: auto;
+	padding: var(--space-md) var(--space-xl);
+	overflow: inherit;
+	font-size: var(--heading-4);
+	text-align: center;
 }
 
 .modal-footer {
@@ -108,15 +137,28 @@ export default {
 	display: flex;
 	flex-shrink: 0;
 	align-items: center;
-	justify-content: flex-end;
-	padding: var(--space-md);
-	border-top: 1px solid var(--color-gray);
+	justify-content: space-between;
+	padding: var(--space-md) 0;
+	margin: 0 var(--space-xl);
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
+
+	:not(:first-child) {
+		margin-left: var(--space-md);
+	}
+
+	@include breakpoint(tablet) {
+		justify-content: flex-end;
+	}
 }
 
 .modal-default-button {
 	float: right;
+}
+
+#button.is-accent {
+	margin-left: var(--space-sm);
+	background-color: var(--color-accent);
 }
 
 /*
