@@ -88,6 +88,7 @@ export default {
 	width: 95%;
 	min-width: var(--size-content-width-min);
 	max-width: var(--size-content-width-max);
+	min-height: 405px;
 	max-height: calc(100vh - 40px);
 	margin: 0 auto;
 	background-color: var(--color-white);
@@ -97,6 +98,16 @@ export default {
 	&--large {
 		min-height: 80%;
 	}
+
+	@include breakpoint(tablet) {
+		min-height: auto;
+	}
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 }
 
 .modal-body {
@@ -104,12 +115,14 @@ export default {
 	flex-direction: column;
 	flex-grow: 1;
 	flex-shrink: 1;
+	justify-content: center;
 	padding: var(--space-md) var(--space-md);
 	overflow: auto;
 }
 
 @include breakpoint(tablet) {
 	.modal-body {
+		flex-grow: 0;
 		padding: var(--space-md) var(--space-xl);
 	}
 }
