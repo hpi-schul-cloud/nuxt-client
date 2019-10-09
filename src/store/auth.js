@@ -29,9 +29,13 @@ export const actions = {
 		}
 	},
 	async populateUser({ commit }) {
-		const res = await this.$axios.$get("/me");
-		commit("setUser", res);
-		return res;
+		const user = await this.$axios.$get("/me");
+		commit("setUser", user);
+		if (user.schoolId){
+			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
+			commit("setSchool", school);
+		}
+		return user;
 	},
 	async hasRole({ dispatch, rootGetters, state, rootState }, roleName) {
 		if (rootState.roles.ids.length < 1) {
@@ -63,6 +67,9 @@ export const mutations = {
 	setUser(state, user) {
 		state.user = user;
 	},
+	setSchool(state, school) {
+		state.school = school;
+	},
 	setAccessToken(state, payload) {
 		state.accessToken = payload;
 	},
@@ -73,6 +80,7 @@ export const state = () => {
 		accessToken: "",
 		payload: null,
 		user: {},
+		school: {},
 		publicPages: ["index", "login", "signup", "impressum"],
 	};
 };
