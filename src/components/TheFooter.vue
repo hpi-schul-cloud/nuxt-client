@@ -45,7 +45,6 @@ import { mapState } from "vuex";
 import defaultDocuments from "@utils/documents.js";
 
 export default {
-
 	computed: {
 		...mapState("auth", {
 			school: "school",
@@ -70,7 +69,7 @@ export default {
 								.privacyExemplary,
 							text: "Muster-Schulen",
 							target: "_blank",
-							rel: "noopener"
+							rel: "noopener",
 						},
 					],
 					text: "Datenschutzerklärung",
