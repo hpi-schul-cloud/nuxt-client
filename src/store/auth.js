@@ -31,7 +31,7 @@ export const actions = {
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
 		commit("setUser", user);
-		if (user.schoolId){
+		if (user.schoolId) {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
 			commit("setSchool", school);
 		}

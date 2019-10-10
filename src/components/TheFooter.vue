@@ -13,13 +13,22 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">{{ link.text }}</base-link>
+					<base-link :key="link.text" class="footer-link" v-bind="link">{{
+						link.text
+					}}</base-link>
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
 					<template v-for="(innerlink, innerindex) in link.innerlinks">
-						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`"> / </span>
-						<base-link :key="innerlink.text" v-bind="innerlink" class="footer-link">{{ innerlink.text }}</base-link>
+						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`">
+							/
+						</span>
+						<base-link
+							:key="innerlink.text"
+							v-bind="innerlink"
+							class="footer-link"
+							>{{ innerlink.text }}</base-link
+						>
 					</template>
 				</template>
 			</template>
@@ -36,14 +45,10 @@ import { mapState } from "vuex";
 import defaultDocuments from "@utils/documents.js";
 
 export default {
-	data() {
-		return {
-			
-		};
-	},
+
 	computed: {
 		...mapState("auth", {
-			school: 'school',
+			school: "school",
 		}),
 		currentYear() {
 			return new Date().getFullYear();
@@ -61,11 +66,12 @@ export default {
 							text: "HPI",
 						},
 						{
-							href: defaultDocuments.specificFiles(this.school.documentBaseDir).privacyExemplary,
+							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
+								.privacyExemplary,
 							text: "Muster-Schulen",
 							target: "_blank",
-							//rel: "noopener"
-						}
+							rel: "noopener"
+						},
 					],
 					text: "Datenschutzerklärung",
 				},
@@ -134,5 +140,4 @@ export default {
 		text-decoration: underline;
 	}
 }
-
 </style>
