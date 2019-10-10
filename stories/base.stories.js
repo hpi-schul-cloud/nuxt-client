@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean, color } from "@storybook/addon-knobs";
+import { text, select, boolean, color, number } from "@storybook/addon-knobs";
 import BaseButton from "@components/ui/BaseButton";
 import notes from "@docs/storybook/base.md";
 import BaseCard from "@components/ui/BaseCard";
@@ -75,12 +75,10 @@ storiesOf("Base Components", module)
 		template: `<div style="padding: 2rem;">
 				<h2>Knobs</h2>
 				<base-button :disabled="disabled" :size="size" :design="design">{{ text }}</base-button>
-
 				<h2>Sizes</h2>
 				<base-button size="small">small</base-button>
 				<base-button>medium (default)</base-button>
 				<base-button size="large">large</base-button>
-
 				<h2>Primary Action</h2>
 				<base-button design="primary">
 					<base-icon source="material" icon="home"/>
@@ -104,7 +102,6 @@ storiesOf("Base Components", module)
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
-
 				<h2>Secondary Action</h2>
 				<base-button design="secondary">secondary</base-button>
 				<base-button design="secondary outline">secondary outline</base-button>
@@ -115,7 +112,6 @@ storiesOf("Base Components", module)
 				<base-button design="secondary icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-
 				<h2>Tertiary Action</h2>
 				<base-button>Default</base-button>
 				<base-button design="outline">outline</base-button>
@@ -126,7 +122,6 @@ storiesOf("Base Components", module)
 				<base-button design="icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-
 				<h2>Disabled</h2>
 				<base-button disabled>Disabled</base-button>
 				<base-button disabled design="outline">Disabled outline</base-button>
@@ -137,7 +132,6 @@ storiesOf("Base Components", module)
 				<base-button disabled design="icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-
 				<h2>Signal</h2>
 				<base-button design="success">success</base-button>
 				<base-button design="success outline">success outline</base-button>
@@ -158,14 +152,24 @@ storiesOf("Base Components", module)
 				<base-button design="danger icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-
 				<h2>Other</h2>
 				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
 	}))
 	.add("Base Card", () => ({
 		components: { BaseCard },
-		template: "<base-card>Card</base-card>",
+		data: () => ({
+			topContent: text("Top Content", "Card"),
+			badge: number("Badge", 9),
+			header: text("Tab", "Test"),
+			color: color("Color", "#01B1AA"),
+			colorGradient: color("Gradient", "#03B2D6"),
+			bottomContainer: text("Bottom container", "Foot"),
+			landscape: boolean("Landscape Mode", false),
+		}),
+		template: `<div style="width: 33vw;">
+			<base-card :badge="badge" :color="[color, colorGradient]" :isLandscape="landscape"><template v-slot:header-in>{{header}}</template><template v-slot:topContent>{{topContent}}</template><template v-slot:bottomContainer>{{bottomContainer}}</template></base-card>
+			</div>`,
 		methods: {},
 	}))
 	.add("Base Icon", () => ({
@@ -311,9 +315,9 @@ storiesOf("Base Components", module)
 		components: { BaseLink },
 		template: `
 			<div>
-				<base-link href="https://schul-cloud.org">external Link to https://schul-cloud.org</base-link>
-				<base-link to="/news">Internal Link to /news</base-link>
-				<base-link name="news">Internal Link with name "news"</base-link>
+				<base-link href="https://schul-cloud.org" underlined>external Link to https://schul-cloud.org</base-link>
+				<base-link to="/news" underlined>Internal Link to /news</base-link>
+				<base-link name="news" underlined>Internal Link with name "news"</base-link>
 			</div>`,
 		methods: {},
 	}))
@@ -379,14 +383,11 @@ storiesOf("Base Components", module)
 				<base-button @click="active = true">
 					Open Modal
 				</base-button>
-
 				<base-modal :active.sync="active">
 					<div class="modal-header">
 						<h3 v-html="header" />
 					</div>
-
 					<div class="modal-body" v-html="body" />
-
 					<div class="modal-footer">
 						<base-button id="button" class="is-light" @click="active = false">
 							OK

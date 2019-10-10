@@ -2,7 +2,7 @@
 	<a
 		v-if="href"
 		class="link is-external"
-		:class="{ inactive: inactive }"
+		:class="{ underlined: underlined, inactive: inactive }"
 		:href="href"
 		v-bind="$attrs"
 		:target="linkTarget"
@@ -15,6 +15,7 @@
 	<NuxtLink
 		v-else
 		class="link"
+		:class="{ underlined: underlined }"
 		tag="a"
 		:to="routerLinkTo"
 		v-bind="$attrs"
@@ -49,6 +50,9 @@ export default {
 		name: {
 			type: String,
 			default: "",
+		},
+		underlined: {
+			type: Boolean,
 		},
 		params: {
 			type: Object,
@@ -89,7 +93,6 @@ export default {
 		// inside individual validator functions for each prop.
 		validateProps() {
 			if (process.env.NODE_ENV === "production") return;
-
 			if (this.href) {
 				// Check for non-external URL in href.
 				/*
@@ -127,13 +130,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@styles";
-
 .link {
 	display: inline;
 	color: var(--color-black);
 	text-decoration: none;
 	cursor: pointer;
-	border-bottom: 2px solid var(--color-gray);
+	&.underlined {
+		border-bottom: 2px solid var(--color-gray);
+	}
 	&:hover,
 	&:focus {
 		color: var(--color-primary-dark);
@@ -145,7 +149,6 @@ export default {
 		color: var(--color-black);
 	}
 }
-
 .is-external {
 	border: none;
 	&:active {
