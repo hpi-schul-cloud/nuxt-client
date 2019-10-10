@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean, color, number } from "@storybook/addon-knobs";
+import { text, select, boolean, color } from "@storybook/addon-knobs";
 import BaseButton from "@components/ui/BaseButton";
 import notes from "@docs/storybook/base.md";
 import BaseCard from "@components/ui/BaseCard";
@@ -158,18 +158,7 @@ storiesOf("Base Components", module)
 	}))
 	.add("Base Card", () => ({
 		components: { BaseCard },
-		data: () => ({
-			topContent: text("Top Content", "Card"),
-			badge: number("Badge", 9),
-			header: text("Tab", "Test"),
-			color: color("Color", "#01B1AA"),
-			colorGradient: color("Gradient", "#03B2D6"),
-			bottomContainer: text("Bottom container", "Foot"),
-			landscape: boolean("Landscape Mode", false),
-		}),
-		template: `<div style="width: 33vw;">
-			<base-card :badge="badge" :color="[color, colorGradient]" :isLandscape="landscape"><template v-slot:header-in>{{header}}</template><template v-slot:topContent>{{topContent}}</template><template v-slot:bottomContainer>{{bottomContainer}}</template></base-card>
-			</div>`,
+		template: "<base-card>Card</base-card>",
 		methods: {},
 	}))
 	.add("Base Icon", () => ({

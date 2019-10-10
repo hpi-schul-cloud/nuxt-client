@@ -106,7 +106,7 @@ export default {
 .header {
 	position: relative;
 	z-index: var(--layer-behind);
-	height: 1.4rem;
+	height: 1.5rem;
 	overflow: hidden;
 	border-top-left-radius: var(--radius-sm);
 }
@@ -116,7 +116,10 @@ export default {
 	bottom: 0;
 	left: 0;
 	z-index: var(--layer-behind);
-	max-width: 90%;
+	display: flex;
+	align-items: center;
+	width: 50%;
+	padding-left: var(--space-md);
 	overflow: hidden;
 	border-top-right-radius: var(--radius-sm);
 	transform: skewX(25deg);
@@ -134,10 +137,7 @@ export default {
 	.tab-label {
 		display: inline-block;
 		width: 100%;
-		padding: var(--space-xxxxs) var(--space-md) var(--space-xxxs)
-			var(--space-xs);
-		font-size: var(--text-xs);
-		font-weight: var(--font-weight-bold);
+		font-size: var(--text-sm);
 		color: var(--color-white);
 		transform: skewX(-25deg);
 		transform-origin: bottom left;
@@ -150,7 +150,7 @@ export default {
 	z-index: var(--layer-page);
 	margin-top: calc(var(--space-xxxs) * -1);
 	color: var(--color-white);
-	border-radius: var(--radius-sm) var(--radius-sm);
+	border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
 	&::before {
 		display: block;
 		width: 100%;
@@ -175,11 +175,13 @@ export default {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
-		align-items: flex-start;
 	}
 	.bottom-container {
 		flex: 1;
 		margin: 0 0 0 var(--space-sm);
+	}
+	.tab {
+		width: 25%;
 	}
 	.top-container {
 		flex: 0 1 33%;

@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, select, color, boolean } from "@storybook/addon-knobs";
+import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
 import PulsatingDot from "@components/PulsatingDot";
@@ -11,7 +11,6 @@ import BaseButton from "@components/ui/BaseButton";
 import Searchbar from "@components/Searchbar";
 import PopupIcon from "@components/PopupIcon";
 import PopupIconInitials from "@components/PopupIconInitials";
-import NewsCard from "@components/NewsCard";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -64,41 +63,6 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast.success('Success 😊')" class="is-success">Success Toast</BaseButton>
 				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
 			</div>
-		`,
-	}))
-
-	.add("Newscard", () => ({
-		components: { NewsCard },
-		data: () => ({
-			title: text("title", "Title"),
-			category: text("Category", "Schultheater"),
-			content: text(
-				"Content",
-				`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum`
-			),
-			createdAt: text("CreatedAt", "2019-07-17-14:30"),
-			createdBy: text("CreatedBy", "Mona Weizenberg"),
-			picture: text("Picture", "https://source.unsplash.com/daily"),
-			eventDate: text("Event date", "2019-02-22-19:00"),
-			color1: color("color1", "#412363"),
-			color2: color("color2", "#c63e80"),
-			isLandscape: boolean("isLandscape"),
-		}),
-		template: `
-		<div style="max-width: 500px; margin: 0 auto">
-			<news-card
-				:category="category"
-				:title="title"
-				:createdAt="createdAt"
-				:createdBy="createdBy"
-				:picture="picture"
-				:eventDate="eventDate"
-				:isLandscape="isLandscape"
-				:color="[color1, color2]"
-			>
-				{{content}}
-			</news-card>
-		</div>
 		`,
 	}))
 	.add("Popup Icon", () => ({

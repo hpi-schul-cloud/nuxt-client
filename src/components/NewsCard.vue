@@ -11,7 +11,7 @@
 				</div>
 			</template>
 			<template v-slot:bottomContainer>
-				<h2 class="time"
+				<h2 :class="isLandscape && !picture ? 'time padding-no-pic' : 'time'"
 					>{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</h2
 				>
 				<h3 class="title">{{ title }}</h3>
@@ -98,6 +98,9 @@ export default {
 	font-size: var(--text-xs);
 	font-weight: var(--font-weight-light);
 	color: var(--color-gray);
+}
+.padding-no-pic {
+	padding-top:var(--space-xs);
 }
 .title {
 	overflow: hidden;
