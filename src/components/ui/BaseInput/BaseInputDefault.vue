@@ -1,7 +1,7 @@
 <!-- eslint-disable max-lines -->
 
 <template>
-	<label class="wrapper">
+	<div class="wrapper">
 		<div
 			:class="{
 				top: true,
@@ -76,7 +76,7 @@
 		>
 			{{ error || info }}
 		</span>
-	</label>
+	</div>
 </template>
 <script>
 import uidMixin from "@mixins/uid";
