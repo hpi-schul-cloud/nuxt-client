@@ -13,7 +13,7 @@
 				<label
 					v-show="showLabel"
 					:class="{ label: true, info: true }"
-					for="`input-${$uid}`"
+					:for="`input-${$uid}`"
 				>
 					{{ label }}
 				</label>
@@ -28,7 +28,7 @@
 				<div class="core">
 					<slot>
 						<input
-							id="`input-${$uid}`"
+							:id="`input-${$uid}`"
 							ref="input"
 							v-bind="$attrs"
 							:type="type"

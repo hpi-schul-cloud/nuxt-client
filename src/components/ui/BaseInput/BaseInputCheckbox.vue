@@ -1,6 +1,7 @@
 <template>
-	<label>
+	<div class="wrapper">
 		<input
+			:id="`checkbox-${$uid}`"
 			ref="hiddenInput"
 			v-bind="$attrs"
 			:checked="isChecked"
@@ -9,16 +10,20 @@
 			class="visually-hidden"
 			@change="updateVModel"
 		/>
-		<span ref="icon" :class="['icon', type]" />
-		<span class="label">
-			{{ label }}
+		<span ref="icon" :class="['icon', type]">
+			<span v-if="type === 'checkbox' && isChecked" class="checkmark"/>
 		</span>
-	</label>
+		<label :for="`checkbox-${$uid}`" class="label">
+			{{ label }}
+		</label>
+	</div>
 </template>
 <script>
+import uidMixin from "@mixins/uid";
 export const supportedTypes = ["checkbox", "switch"];
 
 export default {
+	mixins: [uidMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -86,11 +91,14 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$border-color: var(--color-gray);
-$border-color-active: var(--color-accent);
+.wrapper {
+	display: inline-flex;
+	align-items: center;
+}
 
-label {
-	position: relative;
+.label {
+	margin: 0 var(--space-xs-2);
+	vertical-align: middle;
 }
 
 .icon {
@@ -99,17 +107,49 @@ label {
 }
 
 .checkbox {
-	width: 0.7em;
-	height: 0.7em;
-	border: var(--border-width-bold) solid $border-color;
-	border-radius: var(--radius-sm);
-	transition: border-color var(--duration-transition-medium);
+	width: var(--text-base-size);
+	height: var(--text-base-size);
+	border: var(--border-width-bold) solid var(--color-tertiary);
+	border-radius: var(--radius-xs);
+}
+
+input:checked + .checkbox {
+	background-color: var(--color-tertiary);
+}
+
+.checkmark {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	transform: rotate(225deg);
+	&::before {
+		position: absolute;
+		width: 0;
+		height: 90%;
+		margin-top: var(--space-xs-4);
+		margin-left: var(--space-xs-3);
+		content: "";
+		background-color: var(--color-white);
+		border: 0.06em solid var(--color-white);
+		border-radius: var(--space-xs-4);
+	}
+	&::after {
+		position: absolute;
+		width: 55%;
+		height: 0;
+		margin-top: var(--space-xs-4);
+		margin-left: var(--space-xs-3);
+		content: "";
+		background-color: var(--color-white);
+		border: 0.06em solid var(--color-white);
+		border-radius: var(--space-xs-4)
+	}
 }
 
 .switch {
 	width: 1.2em;
 	height: 0.7em;
-	background-color: $border-color;
+	background-color: var(--color-tertiary);
 	transition: background-color var(--duration-transition-medium);
 
 	&::before {
@@ -124,23 +164,10 @@ label {
 	}
 }
 
-input:checked + .checkbox {
-	border-color: $border-color-active;
-	// create checkmark
-	&::after {
-		display: block;
-		width: 0.25em;
-		height: 0.4em;
-		margin: auto;
-		content: "";
-		border: solid $border-color-active;
-		border-width: 0 var(--border-width-bold) var(--border-width-bold) 0;
-		transform: rotate(45deg);
-	}
-}
+
 
 input:checked + .switch {
-	background-color: $border-color-active;
+	background-color: var(--color-tertiary);
 	&::before {
 		transform: translateX(100%);
 	}

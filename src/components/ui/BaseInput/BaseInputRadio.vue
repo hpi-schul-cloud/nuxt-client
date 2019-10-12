@@ -1,6 +1,7 @@
 <template>
 	<label>
 		<input
+			:id="`radio-${$uid}`"
 			ref="hiddenInput"
 			v-bind="$attrs"
 			:checked="vmodel === value"
@@ -10,15 +11,17 @@
 			@change="$emit('input', $event.target.value)"
 		/>
 		<span ref="radio" class="radio" />
-		<span class="label">
+		<span class="label" :for="`radio-${$uid}`">
 			{{ label }}
 		</span>
 	</label>
 </template>
 <script>
+import uidMixin from "@mixins/uid";
 export const supportedTypes = ["radio"];
 
 export default {
+	mixins: [uidMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -70,9 +73,6 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$border-color: var(--color-gray);
-$border-color-active: var(--color-accent);
-
 label {
 	position: relative;
 }
@@ -82,9 +82,8 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	border: 2px solid $border-color;
+	border: 2px solid var(--color-tertiary);
 	border-radius: var(--radius-round);
-	transition: border-color var(--duration-transition-medium);
 }
 
 input {
@@ -92,7 +91,6 @@ input {
 }
 
 input:checked + .radio {
-	border-color: $border-color-active;
 	&::before {
 		display: block;
 		width: 60%;
@@ -101,7 +99,7 @@ input:checked + .radio {
 		margin: 20% auto;
 		/* stylelint-enable */
 		content: "";
-		background: $border-color-active;
+		background: var(--color-tertiary);
 		border-radius: var(--radius-round);
 	}
 }

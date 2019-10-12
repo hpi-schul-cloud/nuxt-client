@@ -310,14 +310,14 @@ storiesOf("Base Components", module)
 				)
 				.join("")
 				.trimRight()}
-			<div>
-				<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
-				<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
+			<div role="group" aria-label="checkboxes">
+				<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" name="checkbox" label="Checkbox"/>
+				<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" name="checkbox" label="Checkbox"/>
 			</div>
 			<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
-			<div>
-				<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
-				<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
+			<div role="radiogroup" aria-label="radiobuttons">
+				<base-input type="radio" v-model="vmodels.radio" value="a" name="radio" label="Radio"/>
+				<base-input type="radio" v-model="vmodels.radio" value="b" name="radio" label="Radio"/>
 			</div>
 			<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
 		</div>`,
