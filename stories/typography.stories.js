@@ -1,11 +1,11 @@
 import { storiesOf } from "@storybook/vue";
 import notes from "@docs/storybook/typography.md";
 
-storiesOf("Typography", module)
+storiesOf("Styles|Typography", module)
 	.addParameters({
 		notes,
 	})
-	.add("Everything in one", () => ({
+	.add("Size & Font", () => ({
 		components: {},
 		template: `
 			<div>

@@ -1,32 +1,30 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-
+import BaseButton from "@basecomponents/BaseButton";
 import notes from "@docs/storybook/base.md";
-import BaseButton from "@components/ui/BaseButton";
-import BaseCard from "@components/ui/BaseCard";
-import BaseIcon from "@components/ui/BaseIcon";
+import BaseCard from "@basecomponents/BaseCard";
+import BaseIcon from "@basecomponents/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
-} from "@components/ui/BaseInput/BaseInput";
-import BaseLink from "@components/ui/BaseLink";
-import BaseProgressbar from "@components/ui/BaseProgressbar";
-import BaseTable from "@components/ui/BaseTable";
-import BaseCollapsible from "@components/ui/BaseCollapsible";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
-import BaseSelect from "@components/ui/BaseSelect";
-import BaseTextarea from "@components/ui/BaseTextarea";
-import BaseAudio from "@components/ui/BaseAudio";
-import BaseVideo from "@components/ui/BaseVideo";
-import BaseQrCode from "@components/ui/BaseQrCode";
-import BaseModalScroll from "@components/ui/BaseModalScroll";
-import BaseModalAction from "@components/ui/BaseModalAction";
-import BaseModalActionSymbol from "@components/ui/BaseModalActionSymbol";
-import BaseModalInfo from "@components/ui/BaseModalInfo";
-import BaseModalFooter from "@components/ui/BaseModalFooter";
-import BaseModalFooterButton from "@components/ui/BaseModalFooterButton";
-
-import BaseBlockquote from "@components/ui/BaseBlockquote";
+} from "@basecomponents/BaseInput/BaseInput";
+import BaseLink from "@basecomponents/BaseLink";
+import BaseProgressbar from "@basecomponents/BaseProgressbar";
+import BaseTable from "@basecomponents/BaseTable";
+import BaseCollapsible from "@basecomponents/BaseCollapsible";
+import BaseBreadcrumb from "@basecomponents/BaseBreadcrumb";
+import BaseSelect from "@basecomponents/BaseSelect";
+import BaseTextarea from "@basecomponents/BaseTextarea";
+import BaseAudio from "@basecomponents/BaseAudio";
+import BaseVideo from "@basecomponents/BaseVideo";
+import BaseQrCode from "@basecomponents/BaseQrCode";
+import BaseModalScroll from "@basecomponents/BaseModalScroll";
+import BaseModalAction from "@basecomponents/BaseModalAction";
+import BaseModalActionSymbol from "@basecomponents/BaseModalActionSymbol";
+import BaseModalInfo from "@basecomponents/BaseModalInfo";
+import BaseModalFooter from "@basecomponents/BaseModalFooter";
+import BaseModalFooterButton from "@basecomponents/BaseModalFooterButton";
+import BaseBlockquote from "@basecomponents/BaseBlockquote";
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -350,12 +348,22 @@ storiesOf("Base Components", module)
 		components: { BaseBreadcrumb },
 		data: () => ({
 			inputs: [
-				{ text: "Home", to: "/" },
-				{ text: "Kurse", href: "https://schul-cloud.org" },
-				{ text: "Mathematik" },
+				{
+					text: "Kurse",
+					to: "",
+					icon: { source: "material", icon: "school" },
+				},
+				{
+					text: "Biologie",
+					href: "http://schul-cloud.org",
+				},
+				{
+					text: "Thema - das Nervensystem",
+					href: "https://schul-cloud.org",
+				},
 			],
 		}),
-		template: `<base-breadcrumb :inputs="inputs" />`,
+		template: `<base-breadcrumb :inputs="inputs"/>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",

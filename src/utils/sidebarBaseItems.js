@@ -9,7 +9,12 @@ export default [
 		href: "/courses",
 		icon: "graduation-cap",
 	},
-	{ title: "Teams", href: "/teams", icon: "users" },
+	{
+		title: "Teams",
+		href: "/teams",
+		icon: "users",
+		featureFlag: "FEATURE_ENABLED_TEAMS",
+	},
 	{
 		title: "Aufgaben",
 		href: "/homework",
