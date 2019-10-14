@@ -108,7 +108,7 @@
 
 <script>
 import { getValueByPath, indexOf } from "@utils/helpers";
-import Pagination from "@components/Pagination.vue";
+import Pagination from "@components/organisms/Pagination.vue";
 import ToolBelt from "./ToolBelt.vue";
 import FilterModal from "./FilterModal.vue";
 
@@ -170,7 +170,7 @@ export default {
 		},
 		backendSorting: {
 			type: Boolean,
-		}
+		},
 	},
 	data() {
 		return {

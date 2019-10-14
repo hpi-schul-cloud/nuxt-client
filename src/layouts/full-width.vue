@@ -19,9 +19,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import TheTopBar from "@components/TheTopBar";
-import TheSidebar from "@components/TheSidebar";
-import TheFooter from "@components/TheFooter";
+import TheTopBar from "@components/legacy/TheTopBar";
+import TheSidebar from "@components/legacy/TheSidebar";
+import TheFooter from "@components/legacy/TheFooter";
 
 export default {
 	components: {

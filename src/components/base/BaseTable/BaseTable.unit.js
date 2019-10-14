@@ -1,6 +1,6 @@
 import BaseTable from "./BaseTable";
-import data from './data'
-import columns from './columns'
+import data from "./data";
+import columns from "./columns";
 
 describe("@components/BaseTable", () => {
 	it(...isValidComponent(BaseTable));
@@ -182,7 +182,7 @@ describe("@components/BaseTable", () => {
 			.findAll("td")
 			.at(0)
 			.find('input[type="checkbox"]')
-			.setChecked()
+			.setChecked();
 
 		expect(
 			wrapper
@@ -214,7 +214,7 @@ describe("@components/BaseTable", () => {
 			.findAll("td")
 			.at(0)
 			.find('input[type="checkbox"]')
-			.setChecked()
+			.setChecked();
 
 		expect(
 			wrapper
@@ -232,9 +232,9 @@ describe("@components/BaseTable", () => {
 				actions: [
 					{
 						label: "Test",
-						action: test
+						action: test,
 					},
-				]
+				],
 			}),
 			template: `<div>
 				<base-table
@@ -245,7 +245,7 @@ describe("@components/BaseTable", () => {
 					ref="table"
 				/>
 			</div>`,
-			components: { BaseTable }
+			components: { BaseTable },
 		});
 
 		wrapper
@@ -253,24 +253,23 @@ describe("@components/BaseTable", () => {
 			.findAll("th")
 			.at(0)
 			.find('input[type="checkbox"]')
-			.setChecked()
+			.setChecked();
 
-		expect(wrapper.vm.$refs.table.isAllChecked).toBe(true)
-		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(5)
+		expect(wrapper.vm.$refs.table.isAllChecked).toBe(true);
+		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(5);
 
 		wrapper
-		.find("thead tr")
-		.findAll("th")
-		.at(0)
-		.find('input[type="checkbox"]')
-		.setChecked(false)
+			.find("thead tr")
+			.findAll("th")
+			.at(0)
+			.find('input[type="checkbox"]')
+			.setChecked(false);
 
-		expect(wrapper.vm.$refs.table.isAllChecked).toBe(false)
-		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(0)
+		expect(wrapper.vm.$refs.table.isAllChecked).toBe(false);
+		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(0);
 
-		expect(wrapper.vm.$refs.table.$refs.toolbelt.actions.length).toBe(1)
+		expect(wrapper.vm.$refs.table.$refs.toolbelt.actions.length).toBe(1);
 	});
 
 	it("Should allow data from a backend", () => {});
-
 });

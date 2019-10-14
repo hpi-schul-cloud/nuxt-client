@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import DropdownMenu from "@components/DropdownMenu.vue";
+import DropdownMenu from "@components/organisms/DropdownMenu.vue";
 
 export default {
 	components: {
