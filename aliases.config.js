@@ -13,7 +13,7 @@ const aliases = {
 	"@assets": "src/assets",
 	"@components": "src/components",
 	"@storyComponents": "stories/components",
-	"@basecomponents": "src/components/ui",
+	"@basecomponents": "src/components/base",
 	"@docs": "docs",
 	"@layouts": "src/layouts",
 	"@middleware": "src/middleware",
