@@ -8,6 +8,12 @@
 
 ## 1.1.x
 
+### 1.1.1
+
+#### New Atomic Design Directory Structure
+
+We now organize our components in a new way. Read more [here](/0-GettingStarted/3-DirectoryStructure.md#src-components).
+
 ### 1.1.0
 
 #### New Legacy Client Fallback Routing
