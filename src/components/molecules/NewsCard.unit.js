@@ -1,20 +1,17 @@
 import NewsCard from "./NewsCard";
-import { RouterLinkStub } from "@vue/test-utils";
 
 describe("@components/NewsCard", () => {
 	it(...isValidComponent(NewsCard));
 
 	it("Renders default content", () => {
 		const wrapper = mount(NewsCard, {
+			...createComponentMocks({ router: true }),
 			propsData: {
 				id: "1",
 				category: "Bio",
 				title: "Bio Bio",
 				createdAt: "2018-08-08",
 				createdBy: "Me",
-			},
-			stubs: {
-				BaseLink: RouterLinkStub,
 			},
 		});
 		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
@@ -23,6 +20,7 @@ describe("@components/NewsCard", () => {
 
 	it("Render without picture and date", () => {
 		const wrapper = mount(NewsCard, {
+			...createComponentMocks({ router: true }),
 			propsData: {
 				id: "1",
 				category: "News Biologie",
@@ -34,9 +32,6 @@ describe("@components/NewsCard", () => {
 			slots: {
 				default: "News news news news",
 			},
-			stubs: {
-				BaseLink: RouterLinkStub,
-			},
 		});
 		expect(wrapper.find(".inner-card").exists()).toBe(false);
 		expect(wrapper.find(".event-date").exists()).toBe(false);
@@ -44,6 +39,7 @@ describe("@components/NewsCard", () => {
 	});
 	it("Render with picture and date", () => {
 		const wrapper = mount(NewsCard, {
+			...createComponentMocks({ router: true }),
 			propsData: {
 				id: "1",
 				category: "News Biologie",
@@ -56,9 +52,6 @@ describe("@components/NewsCard", () => {
 			},
 			slots: {
 				default: "News news news news",
-			},
-			stubs: {
-				BaseLink: RouterLinkStub,
 			},
 		});
 		expect(wrapper.find(".inner-card").exists()).toBe(true);

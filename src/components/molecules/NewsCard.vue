@@ -100,7 +100,7 @@ export default {
 	color: var(--color-gray);
 }
 .padding-no-pic {
-	padding-top:var(--space-xs);
+	padding-top: var(--space-xs);
 }
 .title {
 	overflow: hidden;
