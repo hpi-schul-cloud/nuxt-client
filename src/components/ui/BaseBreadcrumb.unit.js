@@ -6,7 +6,8 @@ describe("@components/BaseBreadcrumb", () => {
 	it("renders BaseLink for Links", () => {
 		const internalLink = { to: "/", text: "internal" };
 		const externalLink = { href: "https://schul-cloud.org", text: "external" };
-		const links = [internalLink, externalLink];
+		const textOnly = { text: "any" };
+		const links = [internalLink, externalLink, textOnly];
 		const { element } = mount(BaseBreadcrumb, {
 			...createComponentMocks({ router: true }),
 			propsData: {
@@ -14,11 +15,13 @@ describe("@components/BaseBreadcrumb", () => {
 			},
 		});
 
-		links.forEach((link) => {
-			const linkElement = link.to
-				? element.querySelector(`[to="${link.to}"]`)
-				: element.querySelector(`[href="${link.href}"]`);
-			expect(linkElement.textContent).toContain(link.text);
+		links.forEach((link, index) => {
+			if (links.length - 1 !== index) {
+				const linkElement = link.to
+					? element.querySelector(`[to="${link.to}"]`)
+					: element.querySelector(`[href="${link.href}"]`);
+				expect(linkElement.textContent).toContain(link.text);
+			}
 		});
 	});
 
@@ -31,5 +34,45 @@ describe("@components/BaseBreadcrumb", () => {
 			},
 		});
 		expect(element.textContent).toContain(text);
+	});
+
+	it("renders icon if defined", () => {
+		const icon = { source: "fa", icon: "home" };
+		const internalLink = { to: "/", text: "internal", icon };
+		const textOnly = { text: "plain text" };
+		const wrapper = mount(BaseBreadcrumb, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				inputs: [internalLink, textOnly],
+			},
+		});
+		expect(wrapper.find(".fa.fa-home").isVisible()).toBe(true);
+	});
+
+	it("renders no icon if not defined", () => {
+		const internalLink = { to: "/", text: "internal" };
+		const textOnly = { text: "plain text" };
+		const wrapper = mount(BaseBreadcrumb, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				inputs: [internalLink, textOnly],
+			},
+		});
+		expect(wrapper.find(".fa").exists()).toBe(false);
+	});
+
+	it("last item is not clickable and contains right text ", () => {
+		const internalLink = { to: "/", text: "internal" };
+		const textOnly = { text: "plain text" };
+		const emptyLink = { to: "/", text: "empty" };
+		const wrapper = mount(BaseBreadcrumb, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				inputs: [internalLink, textOnly, emptyLink],
+			},
+		});
+		const span = wrapper.find(".link:last-of-type > span");
+		expect(span.exists()).toBe(true);
+		expect(span.text()).toBe(emptyLink.text);
 	});
 });

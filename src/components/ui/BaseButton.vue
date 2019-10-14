@@ -102,11 +102,11 @@ export default {
 		}
 	}
 	&.is-secondary {
-		--button-background: var(--color-accent);
+		--button-background: var(--color-secondary);
 		--button-text-color: var(--color-white);
 		&:hover,
 		&:focus {
-			--button-background: var(--color-accent-dark);
+			--button-background: var(--color-secondary-dark);
 		}
 	}
 	&.is-success {
@@ -129,7 +129,7 @@ export default {
 		--button-background: linear-gradient(
 			45deg,
 			var(--color-primary),
-			var(--color-accent)
+			var(--color-secondary)
 		);
 		--button-text-color: var(--color-white);
 		&:hover,
@@ -137,7 +137,7 @@ export default {
 			--button-background: linear-gradient(
 				45deg,
 				var(--color-primary-dark),
-				var(--color-accent-dark)
+				var(--color-secondary-dark)
 			);
 		}
 	}

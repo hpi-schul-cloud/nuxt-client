@@ -11,7 +11,7 @@
 			@change="updateVModel"
 		/>
 		<span ref="icon" :class="['icon', type]">
-			<span v-if="type === 'checkbox' && isChecked" class="checkmark"/>
+			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
 		</span>
 		<label :for="`checkbox-${$uid}`" class="label">
 			{{ label }}
@@ -142,7 +142,7 @@ input:checked + .checkbox {
 		content: "";
 		background-color: var(--color-white);
 		border: 0.06em solid var(--color-white);
-		border-radius: var(--space-xs-4)
+		border-radius: var(--space-xs-4);
 	}
 }
 
@@ -163,8 +163,6 @@ input:checked + .checkbox {
 		transition: transform var(--duration-transition-medium);
 	}
 }
-
-
 
 input:checked + .switch {
 	background-color: var(--color-tertiary);

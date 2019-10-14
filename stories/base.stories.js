@@ -327,10 +327,7 @@ storiesOf("Base Components", module)
 		data: () => ({
 			value: "",
 			label: text("label", "Label"),
-			placeholder: text(
-				"placeholder",
-				"Schreibe hier die Antwort rein."
-			),
+			placeholder: text("placeholder", "Schreibe hier die Antwort rein."),
 			rows: number("rows", 1),
 			maxRows: number("maxRows", 5),
 			maxLength: number("maxLength", 50),
@@ -402,12 +399,22 @@ storiesOf("Base Components", module)
 		components: { BaseBreadcrumb },
 		data: () => ({
 			inputs: [
-				{ text: "Home", to: "/" },
-				{ text: "Kurse", href: "https://schul-cloud.org" },
-				{ text: "Mathematik" },
+				{
+					text: "Kurse",
+					to: "",
+					icon: { source: "material", icon: "school" },
+				},
+				{
+					text: "Biologie",
+					href: "http://schul-cloud.org",
+				},
+				{
+					text: "Thema - das Nervensystem",
+					href: "https://schul-cloud.org",
+				},
 			],
 		}),
-		template: `<base-breadcrumb :inputs="inputs" />`,
+		template: `<base-breadcrumb :inputs="inputs"/>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
