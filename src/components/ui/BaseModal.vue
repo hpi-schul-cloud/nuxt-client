@@ -1,7 +1,7 @@
 <template>
 	<transition name="modal">
 		<div v-if="active" class="modal-mask">
-			<div class="modal-wrapper" @click.self="handleBackgroundClick">
+			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
@@ -12,7 +12,6 @@
 		</div>
 	</transition>
 </template>
-
 <script>
 export default {
 	props: {
@@ -59,7 +58,7 @@ export default {
 	transition: opacity var(--duration-transition-medium) ease;
 }
 
-.modal-wrapper {
+.base-modal-wrapper {
 	display: table-cell;
 	vertical-align: middle;
 }
@@ -67,7 +66,9 @@ export default {
 .modal-container {
 	display: flex;
 	flex-direction: column;
-	width: 80%;
+	width: 95%;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
 	max-height: calc(100vh - 40px);
 	margin: 0 auto;
 	background-color: var(--color-white);
@@ -76,6 +77,34 @@ export default {
 	transition: all var(--duration-transition-medium) ease;
 	&--large {
 		min-height: 80%;
+	}
+
+	@include breakpoint(tablet) {
+		min-height: auto;
+	}
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	padding: var(--space-xl);
+}
+
+.modal-body {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 1;
+	justify-content: center;
+	padding: var(--space-md) var(--space-md);
+	overflow: auto;
+}
+
+@include breakpoint(tablet) {
+	.modal-body {
+		flex-grow: 0;
+		padding: var(--space-md) var(--space-xl);
 	}
 }
 
@@ -86,21 +115,15 @@ export default {
 	align-items: center;
 	justify-content: flex-start;
 	padding: var(--space-md);
-	border-bottom: 1px solid var(--color-gray);
+	border-bottom: none;
 	border-top-left-radius: var(--radius-md);
 	border-top-right-radius: var(--radius-md);
 }
 
-.modal-header h3 {
-	font-size: var(--text-lg);
-	font-weight: var(--font-weight-bold);
-}
-
-.modal-body {
-	flex-grow: 1;
-	flex-shrink: 1;
-	padding: var(--space-md);
-	overflow: auto;
+.modal-header h4 {
+	padding: var(--space-xl) var(--space-xl) 0 var(--space-xl);
+	margin: 0 auto;
+	font-weight: var(--font-weight-regular);
 }
 
 .modal-footer {
@@ -108,15 +131,29 @@ export default {
 	display: flex;
 	flex-shrink: 0;
 	align-items: center;
-	justify-content: flex-end;
-	padding: var(--space-md);
+	justify-content: space-between;
+	padding: var(--space-sm) 0;
+	margin: 0 var(--space-md);
 	border-top: 1px solid var(--color-gray);
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
+	> *:not(:first-child) {
+		margin-left: var(--space-md);
+	}
+
+	@include breakpoint(tablet) {
+		justify-content: flex-end;
+		margin: 0 var(--space-xl);
+	}
 }
 
 .modal-default-button {
 	float: right;
+}
+
+#button.is-accent {
+	margin-left: var(--space-sm);
+	background-color: var(--color-accent);
 }
 
 /*

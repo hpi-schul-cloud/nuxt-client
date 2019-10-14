@@ -1,103 +1,38 @@
 <template>
-	<transition name="modal">
-		<div v-if="active" class="modal-mask">
-			<div class="modal-wrapper" @click.self="handleBackgroundClick">
-				<div
-					class="modal-container"
-					:class="{ 'modal-container--large': size === 'large' }"
-				>
-					<div class="container">
-						<slot>
-							<div class="modal-header">
-								<h4>
-									<slot name="header" />
-								</h4>
-							</div>
+	<div>
+		<base-modal v-bind="$attrs">
+			<div class="base-container">
+				<div class="container">
+					<slot>
+						<div class="modal-header">
+							<h4>
+								<slot name="header" />
+							</h4>
+						</div>
 
-							<div class="modal-body">
-								<slot name="body" />
-							</div>
-						</slot>
-					</div>
-
-					<slot name="footer-wrapper">
-						<div class="modal-footer">
-							<slot name="footer" />
+						<div class="modal-body">
+							<slot name="body" />
 						</div>
 					</slot>
 				</div>
-			</div>
-		</div>
-	</transition>
-</template>
 
-<script>
-export default {
-	props: {
-		active: {
-			type: Boolean,
-		},
-		size: {
-			type: String,
-			default: "medium",
-		},
-	},
-	watch: {
-		active() {
-			if (this.active) {
-				document.body.classList.add("is-noscroll");
-			} else {
-				document.body.classList.remove("is-noscroll");
-			}
-		},
-	},
-	methods: {
-		handleBackgroundClick() {
-			this.close();
-		},
-		close() {
-			this.$emit("update:active", false);
-		},
-	},
-};
-</script>
+				<slot name="footer-wrapper">
+					<div class="modal-footer">
+						<slot name="footer" />
+					</div>
+				</slot>
+			</div>
+		</base-modal>
+	</div>
+</template>
 
 <style lang="scss" scoped>
 @import "@styles";
 
-.modal-mask {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: var(--layer-modal);
-	display: table;
-	width: 100%;
-	height: 100%;
-	background-color: var(--color-overlay);
-	transition: opacity var(--duration-transition-medium) ease;
-}
-
-.modal-wrapper {
-	display: table-cell;
-	vertical-align: middle;
-}
-
-.modal-container {
+.base-container {
 	display: flex;
 	flex-direction: column;
-	width: 95%;
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
 	min-height: 405px;
-	max-height: calc(100vh - 40px);
-	margin: 0 auto;
-	background-color: var(--color-white);
-	border-radius: var(--radius-md);
-	box-shadow: var(--shadow-sm);
-	transition: all var(--duration-transition-medium) ease;
-	&--large {
-		min-height: 80%;
-	}
 }
 
 .container {

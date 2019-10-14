@@ -474,6 +474,7 @@ storiesOf("Base Components", module)
 								<base-button design="outline" @click="active = false"> Übernehmen</base-button>
 			 			</template>
 					</base-modal-footer>
+				</template>
 			</base-modal-action>
 		</div>
 		`,
