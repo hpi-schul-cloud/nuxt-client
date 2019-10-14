@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import { text, number } from "@storybook/addon-knobs";
 
-import LandingCTA from "@components/LandingCTA";
-import StepProgress from "@components/StepProgress";
+import LandingCTA from "@components/molecules/LandingCTA";
+import StepProgress from "@components/organisms/StepProgress";
 
 export const steps = [
 	{ name: "Kursdaten" },

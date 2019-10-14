@@ -26,9 +26,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import TheTopBar from "@components/TheTopBar";
-import TheSidebar from "@components/TheSidebar";
-import TheFooter from "@components/TheFooter";
+import TheTopBar from "@components/legacy/TheTopBar";
+import TheSidebar from "@components/legacy/TheSidebar";
+import TheFooter from "@components/legacy/TheFooter";
 import sidebarBaseItems from "../utils/sidebarBaseItems.js";
 
 const topbarBaseActions = [
@@ -81,7 +81,7 @@ export default {
 		return {
 			sidebarBaseItems: sidebarBaseItems,
 			pageTitle: this.$theme.short_name,
-			fullscreenMode: false,
+			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
 		};
 	},
@@ -131,9 +131,12 @@ export default {
 				const hasExcludedPermission =
 					this.user.permissions &&
 					this.user.permissions.includes(item.excludedPermission);
+				const featureEnabled = process.env[item.featureFlag] === "true";
 
 				return (
-					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
+					(!item.permission ||
+						(hasRequiredPermission && !hasExcludedPermission)) &&
+					(!item.featureFlag || featureEnabled)
 				);
 			});
 
