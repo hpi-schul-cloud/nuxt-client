@@ -20,6 +20,7 @@ import BaseVideo from "@components/ui/BaseVideo";
 import BaseQrCode from "@components/ui/BaseQrCode";
 import BaseModal from "@components/ui/BaseModal";
 import BaseBlockquote from "@components/ui/BaseBlockquote";
+import BaseSpinner from "@components/ui/BaseSpinner";
 
 storiesOf("Base Components", module)
 	.addParameters({
@@ -471,4 +472,9 @@ storiesOf("Base Components", module)
 				{{quote}}
 			</BaseBlockquote>
 		`,
+	}))
+	.add("BaseSpinner", () => ({
+		components: { BaseSpinner },
+		data: () => ({}),
+		template: `<BaseSpinner />`,
 	}));
