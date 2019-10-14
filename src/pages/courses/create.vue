@@ -14,7 +14,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import CourseWizard from "@components/CourseWizard";
+import CourseWizard from "@components/organisms/CourseWizard";
 
 export default {
 	components: { CourseWizard },

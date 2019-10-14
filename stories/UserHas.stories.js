@@ -2,8 +2,8 @@ import { storiesOf } from "@storybook/vue";
 import { boolean } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/UserHas.md";
-import UserHasPermission from "@components/UserHasPermission";
-import UserHasRole from "@components/UserHasRole";
+import UserHasPermission from "@components/helpers/UserHasPermission";
+import UserHasRole from "@components/helpers/UserHasRole";
 
 storiesOf("UserHas", module)
 	.addParameters({

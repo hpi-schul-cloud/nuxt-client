@@ -1,7 +1,7 @@
 import { storiesOf } from "@storybook/vue";
 
 import notes from "@docs/storybook/LanguageSwitcher.md";
-import LanguageSwitcher from "@components/LanguageSwitcher";
+import LanguageSwitcher from "@components/organisms/LanguageSwitcher";
 
 storiesOf("LanguageSwitcher", module)
 	.addParameters({
