@@ -31,7 +31,7 @@ export function rendersNamedSlotContent(component, mountOptions) {
 			const { element } = shallowMount(component, {
 				...mountOptions,
 				slots: {
-					'testSlot': slotContent,
+					testSlot: slotContent,
 				},
 			});
 			expect(element.innerHTML).toContain(slotContent);

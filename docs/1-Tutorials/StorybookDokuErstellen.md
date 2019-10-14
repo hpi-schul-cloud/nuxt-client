@@ -6,7 +6,7 @@ Wurde die Komponente, wie empfohlen, via `npm run new component` erstellt und di
 
 Hier sollte beschrieben sein was das Ziel der Komponente ist sowie wann und wo sie eingesetzt wird. Weiterhin können hier style guidelines, States und Besonderheiten im Data-handling festgehalten werden.
 
-Wenn die Story schon existiert und nur ein Unterpunkt hinzukommen soll kann man das mit einem `.add()` and die `storiesOf()` anhängen.
+Wenn die Story schon existiert und nur ein Unterpunkt hinzukommen soll kann man das mit einem `.add()` and die `storiesOf()` anhängen. Andernfalls kann mit `npm run new story` eine neue Story erstellt werden.
 
 Als Beispiel der Base Button:
 
