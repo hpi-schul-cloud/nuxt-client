@@ -41,7 +41,7 @@ describe("@components/BaseInputDefault", () => {
 	it("rejects input if it is disabled", () => {
 		supportedTypes.forEach((type) => {
 			const testInput = type === "number" ? 5 : "test string";
-			
+
 			const disabledWrapper = getMock(type, "disabled");
 			const disabledInput = disabledWrapper.find(`input[type="${type}"]`);
 			disabledInput.setValue(testInput);
@@ -91,11 +91,16 @@ describe("@components/BaseInputDefault", () => {
 					label: "test",
 					error: "error",
 				},
-				stubs: ['base-icon'],
+				stubs: ["base-icon"],
 			});
-			expect(wrapper.find(".icon-behind").exists()).toBe(true)
+			expect(wrapper.find(".icon-behind").exists()).toBe(true);
 			expect(wrapper.find(".error").exists()).toBe(true);
-			expect(wrapper.findAll(".error").at(1).text()).toBe("error");
+			expect(
+				wrapper
+					.findAll(".error")
+					.at(1)
+					.text()
+			).toBe("error");
 		});
 	});
 
@@ -108,9 +113,9 @@ describe("@components/BaseInputDefault", () => {
 					label: "test",
 					success: true,
 				},
-				stubs: ['base-icon'],
+				stubs: ["base-icon"],
 			});
-			expect(wrapper.find(".icon-behind").exists()).toBe(true)
+			expect(wrapper.find(".icon-behind").exists()).toBe(true);
 		});
 	});
 });

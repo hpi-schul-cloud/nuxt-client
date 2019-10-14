@@ -1,5 +1,10 @@
 <template>
-	<base-input-default v-bind="$attrs" type="textarea" vmodel="" :disabled="disabled">
+	<base-input-default
+		v-bind="$attrs"
+		type="textarea"
+		vmodel=""
+		:disabled="disabled"
+	>
 		<template slot="icon">
 			<base-icon
 				source="custom"
@@ -11,7 +16,7 @@
 			/>
 		</template>
 		<textarea
-			ref=textarea
+			ref="textarea"
 			v-bind="$attrs"
 			:value="vmodel"
 			:rows="rows"
@@ -27,7 +32,8 @@
 			@paste="limitRowNumberOnPaste"
 		>
 			<slot/>
-		</textarea>
+		</textarea
+		>
 	</base-input-default>
 </template>
 
@@ -50,17 +56,17 @@ export default {
 		rows: {
 			type: Number,
 			default: 1,
-			validator: rows => rows > 0,
+			validator: (rows) => rows > 0,
 		},
 		maxRows: {
 			type: Number,
 			default: undefined,
-			validator: maxRows => maxRows > 0,
+			validator: (maxRows) => maxRows > 0,
 		},
 		maxLength: {
 			type: Number,
 			default: undefined,
-			validator: maxLength => maxLength > 0,
+			validator: (maxLength) => maxLength > 0,
 		},
 		withLines: {
 			type: Boolean,
@@ -70,47 +76,57 @@ export default {
 		},
 	},
 	computed: {
-		numberOfLines: function () {
+		numberOfLines: function() {
 			return (this.vmodel.match(/\n/g) || []).length + 1;
-		}
+		},
 	},
-	mounted: function () {
+	mounted: function() {
 		this.resize();
 	},
 	methods: {
-		inputHandler ($event) {
+		inputHandler($event) {
 			this.resize();
-			this.$emit('updatemodel', $event.target.value);
+			this.$emit("updatemodel", $event.target.value);
 		},
-		resize () {
+		resize() {
 			this.$refs.textarea.style.height = "1px";
 			const { scrollHeight } = this.$refs.textarea;
-			const lineHeight = parseInt(getComputedStyle(this.$refs.textarea)
-				.getPropertyValue('--line-height'), 10);
+			const lineHeight = parseInt(
+				getComputedStyle(this.$refs.textarea).getPropertyValue("--line-height"),
+				10
+			);
 			const height = Math.max(scrollHeight, lineHeight * this.rows);
-			this.$refs.textarea.style.height = height + 'px';
+			this.$refs.textarea.style.height = height + "px";
 		},
-		limitRowNumberOnKeydown ($event) {
-			if (this.maxRows && $event.keyCode.toString() === "13" && this.numberOfLines === this.maxRows){
-            	$event.preventDefault();
+		limitRowNumberOnKeydown($event) {
+			if (
+				this.maxRows &&
+				$event.keyCode.toString() === "13" &&
+				this.numberOfLines === this.maxRows
+			) {
+				$event.preventDefault();
 			}
 		},
-		limitRowNumberOnPaste ($event) {
-			if (this.maxRows){
-				const pastedText = ($event.clipboardData || window.clipboardData).getData('Text');
-				const numberOfLines = this.numberOfLines + (pastedText.match(/\n/g) || []).length + 1;
-				if (numberOfLines > this.maxRows){
-					const truncatedText = (this.vmodel + pastedText).split(/\r\n|\r|\n/)
+		limitRowNumberOnPaste($event) {
+			if (this.maxRows) {
+				const pastedText = (
+					$event.clipboardData || window.clipboardData
+				).getData("Text");
+				const numberOfLines =
+					this.numberOfLines + (pastedText.match(/\n/g) || []).length + 1;
+				if (numberOfLines > this.maxRows) {
+					const truncatedText = (this.vmodel + pastedText)
+						.split(/\r\n|\r|\n/)
 						.slice(0, this.maxRows)
 						.join("\n");
 					this.$refs.textarea.value = truncatedText;
-					this.$refs.textarea.dispatchEvent(new Event('input'));
+					this.$refs.textarea.dispatchEvent(new Event("input"));
 					this.resize();
 					$event.preventDefault();
 				}
 			}
-		}
-  	},
+		},
+	},
 };
 </script>
 
@@ -153,16 +169,19 @@ textarea {
 	position: relative;
 	z-index: var(--textarea-z-index);
 	margin-bottom: 0;
-	background-image: linear-gradient(var(--color-white) 50%, var(--color-white) 50%),
-	linear-gradient( 
-        transparent,
-        transparent calc(var(--line-height) - 1px),
-        var(--color-gray) calc(var(--line-height) - 1px),
-		var(--color-gray) calc(var(--line-height)));
+	background-image: linear-gradient(
+			var(--color-white) 50%,
+			var(--color-white) 50%
+		),
+		linear-gradient(
+			transparent,
+			transparent calc(var(--line-height) - 1px),
+			var(--color-gray) calc(var(--line-height) - 1px),
+			var(--color-gray) calc(var(--line-height))
+		);
 	background-repeat: no-repeat, repeat;
 	background-attachment: local, local;
 	background-position: left bottom, left top;
 	background-size: 100% var(--line-height), 100% var(--line-height);
 }
-
 </style>

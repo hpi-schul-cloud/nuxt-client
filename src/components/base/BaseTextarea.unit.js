@@ -40,7 +40,9 @@ describe("@components/BaseTextarea", () => {
 	it("truncates pasted content to maximum row limit", () => {
 		const wrapper = getMock(" :maxRows='1' ");
 		const input = wrapper.find("textarea");
-		input.trigger("paste", { clipboardData: { getData: () => "test \n string" } });
+		input.trigger("paste", {
+			clipboardData: { getData: () => "test \n string" },
+		});
 		expect(wrapper.vm.content).toBe("test ");
 	});
 

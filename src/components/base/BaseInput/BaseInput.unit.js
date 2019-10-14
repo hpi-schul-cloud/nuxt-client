@@ -6,7 +6,9 @@ describe("@components/BaseInput", () => {
 
 	it("all types render named slot content", () => {
 		supportedTypes.forEach((type) => {
-			return rendersNamedSlotContent(BaseInput, { propsData: { vmodel: "dffd", type } } );
+			return rendersNamedSlotContent(BaseInput, {
+				propsData: { vmodel: "dffd", type },
+			});
 		});
 	});
 
