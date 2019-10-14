@@ -1,5 +1,5 @@
 <template>
-	<div class="wrapper">
+	<label class="wrapper">
 		<input
 			:id="`checkbox-${$uid}`"
 			ref="hiddenInput"
@@ -13,10 +13,10 @@
 		<span ref="icon" :class="['icon', type]">
 			<span v-if="type === 'checkbox' && isChecked" class="checkmark"/>
 		</span>
-		<label :for="`checkbox-${$uid}`" class="label">
+		<span class="label">
 			{{ label }}
-		</label>
-	</div>
+		</span>
+	</label>
 </template>
 <script>
 import uidMixin from "@mixins/uid";
