@@ -76,6 +76,12 @@ a11yproject.com/posts/how-to-hide-content
 </svg>
 ```
 
+::: tip
+
+Ist es nicht möglich ein Sinnvolles Label zu vergeben (Beispielsweise bei User generiertem Content) so sollte statt einem `alt` Attribut die `role="presentation"` vergeben werden, welches die Semantik des HTML-Elements entfernt.
+
+:::
+
 ## TabIndex
 
 Werte sollten nicht positiv sein

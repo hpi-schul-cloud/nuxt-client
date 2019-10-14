@@ -61,7 +61,7 @@ The below alias object is auto-extended by the `variation.js` script, for all th
 	"@@": ".",
 	"@assets": "src/assets",
 	"@components": "src/components",
-	"@basecomponents": "src/components/ui",
+	"@basecomponents": "src/components/base",
 	"@docs": "docs",
 	"@layouts": "src/layouts",
 	"@middleware": "src/middleware",

@@ -1,25 +1,25 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-import BaseButton from "@components/ui/BaseButton";
+import BaseButton from "@basecomponents/BaseButton";
 import notes from "@docs/storybook/base.md";
-import BaseCard from "@components/ui/BaseCard";
-import BaseIcon from "@components/ui/BaseIcon";
+import BaseCard from "@basecomponents/BaseCard";
+import BaseIcon from "@basecomponents/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
-} from "@components/ui/BaseInput/BaseInput";
-import BaseLink from "@components/ui/BaseLink";
-import BaseProgressbar from "@components/ui/BaseProgressbar";
-import BaseTable from "@components/ui/BaseTable";
-import BaseCollapsible from "@components/ui/BaseCollapsible";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
-import BaseSelect from "@components/ui/BaseSelect";
-import BaseTextarea from "@components/ui/BaseTextarea";
-import BaseAudio from "@components/ui/BaseAudio";
-import BaseVideo from "@components/ui/BaseVideo";
-import BaseQrCode from "@components/ui/BaseQrCode";
-import BaseModal from "@components/ui/BaseModal";
-import BaseBlockquote from "@components/ui/BaseBlockquote";
+} from "@basecomponents/BaseInput/BaseInput";
+import BaseLink from "@basecomponents/BaseLink";
+import BaseProgressbar from "@basecomponents/BaseProgressbar";
+import BaseTable from "@basecomponents/BaseTable";
+import BaseCollapsible from "@basecomponents/BaseCollapsible";
+import BaseBreadcrumb from "@basecomponents/BaseBreadcrumb";
+import BaseSelect from "@basecomponents/BaseSelect";
+import BaseTextarea from "@basecomponents/BaseTextarea";
+import BaseAudio from "@basecomponents/BaseAudio";
+import BaseVideo from "@basecomponents/BaseVideo";
+import BaseQrCode from "@basecomponents/BaseQrCode";
+import BaseModal from "@basecomponents/BaseModal";
+import BaseBlockquote from "@basecomponents/BaseBlockquote";
 
 storiesOf("Base Components", module)
 	.addParameters({

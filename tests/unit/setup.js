@@ -28,7 +28,7 @@ Vue.config.productionTip = false;
 import "@plugins/global";
 import { mountBaseComponents } from "@basecomponents/_globals";
 
-const baseComponentDir = path.join(__dirname, "../../src/components/ui/");
+const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 
 function readDirRecursiveSync(dir) {
 	const results = [];

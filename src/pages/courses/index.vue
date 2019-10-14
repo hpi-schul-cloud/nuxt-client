@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import CoursesGrid from "@components/CoursesGrid";
+import CoursesGrid from "@components/molecules/CoursesGrid";
 
 export default {
 	head() {
