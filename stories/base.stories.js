@@ -430,7 +430,7 @@ storiesOf("Base Components", module)
 					Open Modal
 			</base-button>
 
-			<base-modal-action :active.sync="active">
+			<base-modal :active.sync="active">
 				<template v-slot:header>{{header}}</template>
 
 				<template v-slot:body>
@@ -455,8 +455,8 @@ storiesOf("Base Components", module)
 				</template>
 
 				<template v-slot:footer-wrapper>
-					<base-modal-footer>
-						<template v-slot:icons>
+					<modal-footer-actions>
+						<template v-slot:left>
 
 							<base-button design="icon">
 								<base-icon source="material" icon="delete_outline" :fill="color"/>
@@ -475,15 +475,15 @@ storiesOf("Base Components", module)
 							</base-button>
 
 						</template>
-							<template v-slot:buttons>
+							<template v-slot:right>
 								<base-button @click="active = false">
 									Abbrechen
 								</base-button>
 								<base-button design="outline" @click="active = false"> Übernehmen</base-button>
 			 			</template>
-					</base-modal-footer>
+					</modal-footer-actions>
 				</template>
-			</base-modal-action>
+			</base-modal>
 		</div>
 		`,
 		methods: {},

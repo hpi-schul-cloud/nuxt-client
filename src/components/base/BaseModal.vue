@@ -6,7 +6,12 @@
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
 				>
-					<slot />
+					<slot>
+						<!-- TODO add styles so footer is always visbile -->
+						<slot name="header" />
+						<slot name="body" />
+						<slot name="footer" />
+					</slot>
 				</div>
 			</div>
 		</div>
