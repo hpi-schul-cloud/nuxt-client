@@ -1,9 +1,12 @@
 <template>
 	<div class="banner-container">
 		<p class="banner-message">
-			Dies ist ein Demoaccount. Sämtliche Aktionen, die Daten anlegen oder
-			ändern, sind deaktiviert und nicht sichtbar.</p
-		>
+			<span class="main">Dies ist ein Demoaccount.</span>
+			<span>
+				Sämtliche Aktionen, die Daten anlegen oder ändern, sind deaktiviert und
+				nicht sichtbar.
+			</span>
+		</p>
 	</div>
 </template>
 
@@ -27,6 +30,13 @@ export default {};
 .banner-message {
 	margin-bottom: 0;
 	font-family: var(--font-primary);
+	font-size: 18px;
 	color: #8a6d3b;
+	> span:not(.main) {
+		display: none;
+		@include breakpoint(desktop) {
+			display: initial;
+		}
+	}
 }
 </style>

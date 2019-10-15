@@ -3,9 +3,9 @@
 	<div>
 		<div class="page">
 			<div class="topbar">
-				<demo-banner></demo-banner>
-				<UserHasRole :role="(role) => true || role.startsWith('demo')">
-				</UserHasRole>
+				<user-has-role :role="isDemoRole">
+					<demo-banner v-if="!fullscreenMode"></demo-banner>
+				</user-has-role>
 
 				<the-top-bar
 					:title="pageTitle"
@@ -24,7 +24,7 @@
 			<main class="content">
 				<Nuxt />
 			</main>
-			<the-footer class="footer" />
+			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
 	</div>
 </template>
@@ -34,6 +34,7 @@ import { mapState, mapActions } from "vuex";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
+import UserHasRole from "@components/helpers/UserHasRole";
 import DemoBanner from "@components/legacy/DemoBanner";
 import sidebarBaseItems from "../utils/sidebarBaseItems.js";
 
@@ -83,6 +84,7 @@ export default {
 		TheSidebar,
 		TheFooter,
 		DemoBanner,
+		UserHasRole,
 	},
 	data() {
 		return {
@@ -182,6 +184,9 @@ export default {
 	},
 	methods: {
 		...mapActions("auth", ["logout"]),
+		isDemoRole(roles) {
+			return roles.some((role) => role.startsWith("demo"));
+		},
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
