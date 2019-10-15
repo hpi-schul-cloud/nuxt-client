@@ -10,7 +10,16 @@
 						<!-- TODO add styles so footer is always visbile -->
 						<slot name="header" />
 						<slot name="body" />
-						<slot name="footer" />
+						<slot name="footer">
+							<ModalFooter>
+								<template v-slot:left>
+									<slot name="footer-left" />
+								</template>
+								<template v-slot:right>
+									<slot name="footer-right" />
+								</template>
+							</ModalFooter>
+						</slot>
 					</slot>
 				</div>
 			</div>
