@@ -58,4 +58,21 @@ describe("@components/BaseInputCheckbox", () => {
 		expect(wrapper.vm.value.length).toBe(valueBefore);
 		expect(wrapper.vm.value.includes(testValue)).toBeFalsy();
 	});
+	
+	it(`shows checkmark only when it is checked`, () => {
+		const wrapper = mount({
+			data: () => ({ value: false }),
+			template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
+			components: { BaseInput },
+		});
+
+		["input", "label"].forEach((clickTargetSelector) => {
+			const clickTarget = wrapper.find(clickTargetSelector);
+			expect(wrapper.find(".checkmark").exists()).toBe(false);
+			clickTarget.trigger("click");
+			expect(wrapper.find(".checkmark").exists()).toBe(true);
+			clickTarget.trigger("click");
+			expect(wrapper.find(".checkmark").exists()).toBe(false);
+		});
+	});
 });
