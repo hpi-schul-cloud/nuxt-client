@@ -2,14 +2,19 @@
 	<!-- default template = loggedin view -->
 	<div>
 		<div class="page">
-			<the-top-bar
-				:title="pageTitle"
-				class="topbar"
-				:actions="topBarActions"
-				:fullscreen-mode="fullscreenMode"
-				:expanded-menu="expandedMenu"
-				@action="handleTopAction"
-			/>
+			<div class="topbar">
+				<user-has-role :role="isDemoRole">
+					<demo-banner v-if="!fullscreenMode"></demo-banner>
+				</user-has-role>
+
+				<the-top-bar
+					:title="pageTitle"
+					:actions="topBarActions"
+					:fullscreen-mode="fullscreenMode"
+					:expanded-menu="expandedMenu"
+					@action="handleTopAction"
+				/>
+			</div>
 			<the-sidebar
 				v-if="!fullscreenMode"
 				class="sidebar"
@@ -19,7 +24,7 @@
 			<main class="content">
 				<Nuxt />
 			</main>
-			<the-footer class="footer" />
+			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
 	</div>
 </template>
@@ -29,6 +34,8 @@ import { mapState, mapActions } from "vuex";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
+import UserHasRole from "@components/helpers/UserHasRole";
+import DemoBanner from "@components/legacy/DemoBanner";
 import sidebarBaseItems from "../utils/sidebarBaseItems.js";
 
 const topbarBaseActions = [
@@ -76,6 +83,8 @@ export default {
 		TheTopBar,
 		TheSidebar,
 		TheFooter,
+		DemoBanner,
+		UserHasRole,
 	},
 	data() {
 		return {
@@ -175,6 +184,9 @@ export default {
 	},
 	methods: {
 		...mapActions("auth", ["logout"]),
+		isDemoRole(roles) {
+			return roles.some((role) => role.startsWith("demo"));
+		},
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
