@@ -10,6 +10,7 @@ import DropdownMenu from "@components/organisms/DropdownMenu";
 import BaseButton from "@basecomponents/BaseButton";
 import Searchbar from "@components/molecules/Searchbar";
 import PopupIcon from "@components/legacy/PopupIcon";
+import DemoBanner from "@components/legacy/DemoBanner";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
 
 storiesOf("Misc", module)
@@ -79,5 +80,11 @@ storiesOf("Misc", module)
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 			</PopupIconInitials>
+		</div>`,
+	}))
+	.add("Demo Banner", () => ({
+		components: { DemoBanner },
+		template: `<div>
+			<DemoBanner></DemoBanner>
 		</div>`,
 	}));

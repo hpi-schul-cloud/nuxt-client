@@ -2,14 +2,19 @@
 	<!-- default template = loggedin view -->
 	<div>
 		<div class="page">
-			<the-top-bar
-				:title="pageTitle"
-				class="topbar"
-				:actions="topBarActions"
-				:fullscreen-mode="fullscreenMode"
-				:expanded-menu="expandedMenu"
-				@action="handleTopAction"
-			/>
+			<div class="topbar">
+				<demo-banner></demo-banner>
+				<UserHasRole :role="(role) => true || role.startsWith('demo')">
+				</UserHasRole>
+
+				<the-top-bar
+					:title="pageTitle"
+					:actions="topBarActions"
+					:fullscreen-mode="fullscreenMode"
+					:expanded-menu="expandedMenu"
+					@action="handleTopAction"
+				/>
+			</div>
 			<the-sidebar
 				v-if="!fullscreenMode"
 				class="sidebar"
@@ -29,6 +34,7 @@ import { mapState, mapActions } from "vuex";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
+import DemoBanner from "@components/legacy/DemoBanner";
 import sidebarBaseItems from "../utils/sidebarBaseItems.js";
 
 const topbarBaseActions = [
@@ -76,6 +82,7 @@ export default {
 		TheTopBar,
 		TheSidebar,
 		TheFooter,
+		DemoBanner,
 	},
 	data() {
 		return {
