@@ -34,6 +34,7 @@ export default {};
 	color: #8a6d3b;
 	> span:not(.main) {
 		display: none;
+
 		@include breakpoint(desktop) {
 			display: initial;
 		}
