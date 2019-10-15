@@ -1,8 +1,9 @@
-const endpoint = "/authentication";
+// const endpoint = "/authentication";
 var jwtDecode = require("jwt-decode");
 
 export const actions = {
 	async authenticate({ dispatch }) {
+		/*
 		const res = await this.$axios.$post(endpoint, {
 			strategy: "jwt",
 		});
@@ -18,9 +19,14 @@ export const actions = {
 			throw new Error("No userId found in JWT token");
 			return;
 		}
-
-		dispatch("populateUser", payload.userId);
-		return res;
+		*/
+		const jwt = this.$cookies.get("jwt");
+		if (!jwt) {
+			throw new Error("No Accesstoken received");
+		}
+		const payload = jwtDecode(jwt);
+		return dispatch("populateUser", payload.userId);
+		//return res;
 	},
 	async logout(ctx) {
 		this.$cookies.remove("jwt");
