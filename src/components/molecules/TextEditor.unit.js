@@ -31,4 +31,16 @@ describe("@components/BaseTextarea", () => {
 		const editorContent = wrapper.find(`[contenteditable]`).element.innerHTML;
 		expect(editorContent).toBe(testInput.toString());
 	});
+
+	/*
+	it("can insert an image", async () => {
+		const testUrl = "https://image.url";
+		window.prompt = jest.fn().mockImplementation(() => testUrl);
+		const wrapper = await getMock();
+		const addImageButton = wrapper.find(".menubar button:last-of-type");
+		addImageButton.trigger("click"); // TypeError: root.getSelection is not a function
+		const image = wrapper.find(`[contenteditable] img`);
+		expect(image.getAttribute("href")).toBe(testUrl);
+	});
+	*/
 });
