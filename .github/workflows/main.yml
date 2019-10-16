@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Run Lint
+    - name: Install
+      run: npm ci
+    - name: Lint & Test
       run: |
-        npm ci
         npm run lint
+        npm run test
