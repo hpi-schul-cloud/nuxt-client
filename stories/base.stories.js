@@ -18,12 +18,12 @@ import BaseTextarea from "@basecomponents/BaseTextarea";
 import BaseAudio from "@basecomponents/BaseAudio";
 import BaseVideo from "@basecomponents/BaseVideo";
 import BaseQrCode from "@basecomponents/BaseQrCode";
-import BaseModalScroll from "@basecomponents/BaseModalScroll";
-import BaseModalAction from "@basecomponents/BaseModalAction";
-import BaseModalActionSymbol from "@basecomponents/BaseModalActionSymbol";
-import BaseModalInfo from "@basecomponents/BaseModalInfo";
-import BaseModalFooter from "@basecomponents/BaseModalFooter";
-import BaseModalFooterButton from "@basecomponents/BaseModalFooterButton";
+// import BaseModalScroll from "@basecomponents/BaseModalScroll";
+// import BaseModalAction from "@basecomponents/BaseModalAction";
+// import BaseModalActionSymbol from "@basecomponents/BaseModalActionSymbol";
+// import BaseModalInfo from "@basecomponents/BaseModalInfo";
+// import BaseModalFooter from "@basecomponents/BaseModalFooter";
+// import BaseModalFooterButton from "@basecomponents/BaseModalFooterButton";
 import BaseBlockquote from "@basecomponents/BaseBlockquote";
 
 storiesOf("Base Components", module)

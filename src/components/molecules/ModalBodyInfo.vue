@@ -1,9 +1,9 @@
 <template>
-	<div>
+	<div class="body-container">
 		<div class="icon">
 			<slot name="icon"></slot>
 		</div>
-		<p>{{ text }}</p>
+		<h4>{{ text }}</h4>
 	</div>
 </template>
 
@@ -12,6 +12,7 @@ export default {
 	props: {
 		text: {
 			type: String,
+			default: "",
 			required: true,
 		},
 	},
@@ -20,6 +21,14 @@ export default {
 
 <style lang="scss" scoped>
 .icon {
-	font-size: 2.5rem;
+	font-size: var(--sidebar-item-height);
+}
+.body-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 220px;
+	text-align: center;
 }
 </style>

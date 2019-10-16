@@ -19,8 +19,7 @@ export default {};
 	justify-content: center;
 	width: 100%;
 	background-color: var(--color-success);
-	border-bottom-right-radius: 6px;
-	border-bottom-left-radius: 6px;
+
 
 	> *:not(:first-child) {
 		margin-left: var(--space-md);

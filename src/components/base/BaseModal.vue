@@ -8,17 +8,22 @@
 				>
 					<slot>
 						<!-- TODO add styles so footer is always visbile -->
-						<slot name="header" />
-						<slot name="body" />
+						<h4 class="modal-header">
+							<slot name="header" />
+						</h4>
+						<div class="modal-body">
+							<slot name="body" />
+						</div>
+
 						<slot name="footer">
-							<ModalFooter>
+							<modal-footer>
 								<template v-slot:left>
-									<slot name="footer-left" />
+									<slot name="footer-left"></slot>
 								</template>
 								<template v-slot:right>
-									<slot name="footer-right" />
+									<slot name="footerRight"></slot>
 								</template>
-							</ModalFooter>
+							</modal-footer>
 						</slot>
 					</slot>
 				</div>
@@ -26,8 +31,13 @@
 		</div>
 	</transition>
 </template>
+
 <script>
+import ModalFooter from "@components/molecules/ModalFooter";
 export default {
+	components: {
+		ModalFooter,
+	},
 	props: {
 		active: {
 			type: Boolean,
@@ -60,6 +70,10 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.line {
+	border: 1px solid black;
+}
+
 .modal-mask {
 	position: fixed;
 	top: 0;
@@ -85,6 +99,7 @@ export default {
 	max-width: var(--size-content-width-max);
 	max-height: calc(100vh - 40px);
 	margin: 0 auto;
+	overflow: hidden;
 	background-color: var(--color-white);
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-sm);
@@ -127,7 +142,7 @@ export default {
 	display: flex;
 	flex-shrink: 0;
 	align-items: center;
-	justify-content: flex-start;
+	justify-content: center;
 	padding: var(--space-md);
 	border-bottom: none;
 	border-top-left-radius: var(--radius-md);
@@ -138,36 +153,6 @@ export default {
 	padding: var(--space-xl) var(--space-xl) 0 var(--space-xl);
 	margin: 0 auto;
 	font-weight: var(--font-weight-regular);
-}
-
-.modal-footer {
-	position: relative;
-	display: flex;
-	flex-shrink: 0;
-	align-items: center;
-	justify-content: space-between;
-	padding: var(--space-sm) 0;
-	margin: 0 var(--space-md);
-	border-top: 1px solid var(--color-gray);
-	border-bottom-right-radius: 6px;
-	border-bottom-left-radius: 6px;
-	> *:not(:first-child) {
-		margin-left: var(--space-md);
-	}
-
-	@include breakpoint(tablet) {
-		justify-content: flex-end;
-		margin: 0 var(--space-xl);
-	}
-}
-
-.modal-default-button {
-	float: right;
-}
-
-#button.is-accent {
-	margin-left: var(--space-sm);
-	background-color: var(--color-accent);
 }
 
 /*
