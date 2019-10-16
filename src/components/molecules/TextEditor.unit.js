@@ -32,15 +32,16 @@ describe("@components/BaseTextarea", () => {
 		expect(editorContent).toBe(testInput.toString());
 	});
 
-	/*
-	it("can insert an image", async () => {
+	it("showImagePrompt calls callback with src", async () => {
+		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		const testUrl = "https://image.url";
 		window.prompt = jest.fn().mockImplementation(() => testUrl);
 		const wrapper = await getMock();
-		const addImageButton = wrapper.find(".menubar button:last-of-type");
-		addImageButton.trigger("click"); // TypeError: root.getSelection is not a function
-		const image = wrapper.find(`[contenteditable] img`);
-		expect(image.getAttribute("href")).toBe(testUrl);
+		return new Promise((resolve) => {
+			wrapper.vm.$children[0].showImagePrompt((cbValue) => {
+				expect(cbValue.src).toBe(testUrl);
+				resolve();
+			});
+		});
 	});
-	*/
 });
