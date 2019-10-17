@@ -13,7 +13,7 @@ export default [
 		title: "Teams",
 		href: "/teams",
 		icon: "users",
-		featureFlag: "FEATURE_ENABLED_TEAMS",
+		permission: 'TEAMS_ENABLED',
 	},
 	{
 		title: "Aufgaben",
@@ -53,6 +53,12 @@ export default [
 				href: "/files/courses/",
 			},
 			{
+				href: "/files/teams/",
+				icon: "folder-open-o",
+				title: "Teams",
+				permission: "TEAMS_ENABLED",
+			},
+			{
 				href: "geteilte Dateien",
 				icon: "folder-open-o",
 				href: "/files/shared/",
@@ -66,6 +72,12 @@ export default [
 	},
 	{ title: "Termine", href: "/calendar", icon: "table" },
 	{ title: "Lern-store", href: "/content", icon: "search" },
+	{
+		title: "Add-Ons",
+		href: "/addons",
+		icon: "puzzle-piece",
+		permission: "ADDONS_ENABLED",
+	},
 	{
 		title: "Verwaltung",
 		href: "/administration",

@@ -139,6 +139,10 @@ export default {
 		width: var(--sidebar-width);
 	}
 
+	.top-sidebar{
+		line-height: 0;
+	}
+
 	.logo {
 		display: none;
 		width: 100%;

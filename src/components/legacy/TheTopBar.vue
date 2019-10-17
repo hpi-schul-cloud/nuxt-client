@@ -140,7 +140,6 @@ export default {
 		width: 100%;
 		height: 100%;
 		padding-right: var(--space-sm);
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
 
 		.space {
 			flex-grow: 1;

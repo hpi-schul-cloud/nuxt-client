@@ -140,28 +140,12 @@ export default {
 				const hasExcludedPermission =
 					this.user.permissions &&
 					this.user.permissions.includes(item.excludedPermission);
-				const featureEnabled = process.env[item.featureFlag] === "true";
 
 				return (
 					(!item.permission ||
-						(hasRequiredPermission && !hasExcludedPermission)) &&
-					(!item.featureFlag || featureEnabled)
+						(hasRequiredPermission && !hasExcludedPermission))
 				);
 			});
-
-			const teamsEnabled = process.env.FEATURE_TEAMS_ENABLED === "true";
-
-			if (teamsEnabled) {
-				sidebarItems.splice(2, 0, {
-					title: "Teams",
-					icon: "users",
-					href: "/teams/",
-				});
-				// sidebarItems.find(i => i.name === 'Meine Dateien').children.splice(2, 0, {
-				// 	title: 'Teams',
-				// 	icon: 'folder-open-o',
-				// 	href: '/files/teams/',
-			}
 
 			return sidebarItems.map((item) => {
 				const isActive = this.$route.path.includes(item.href);
