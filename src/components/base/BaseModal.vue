@@ -113,13 +113,6 @@ export default {
 	}
 }
 
-.container {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	padding: var(--space-xl);
-}
-
 .modal-body {
 	display: flex;
 	flex-direction: column;
