@@ -10,6 +10,8 @@
 		v-on="$listeners"
 	>
 		<slot />
+		<!-- TODO Comment back in once fallback is deactivated -->
+		<!-- <base-icon source="material" icon="launch"/> -->
 	</a>
 	<!-- TODO use RouterLink if used outside nuxt -->
 	<NuxtLink

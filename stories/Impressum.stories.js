@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/vue";
-import Impressum from "@components/molecules/Impressum";
+import Impressum from "@pages/impressum";
 import notes from "@docs/storybook/base.md";
 
-storiesOf("Impressum", module)
+storiesOf("Pages", module)
 	.addParameters({
 		notes,
 	})
