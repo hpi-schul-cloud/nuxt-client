@@ -41,11 +41,11 @@ export const actions = {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
 			commit("setSchool", school);
 		}
-		if (process.env["FEATURE_EXTENSIONS_ENABLED"] === "true"){
-			commit("addUserPermission", "ADDONS_ENABLED")
+		if (process.env["FEATURE_EXTENSIONS_ENABLED"] === "true") {
+			commit("addUserPermission", "ADDONS_ENABLED");
 		}
-		if (process.env["FEATURE_TEAMS_ENABLED"] === "true"){
-			commit("addUserPermission", "TEAMS_ENABLED")
+		if (process.env["FEATURE_TEAMS_ENABLED"] === "true") {
+			commit("addUserPermission", "TEAMS_ENABLED");
 		}
 		return user;
 	},

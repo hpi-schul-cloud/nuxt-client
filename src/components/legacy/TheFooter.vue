@@ -134,12 +134,12 @@ export default {
 	color: var(--color-secondary);
 	border: none;
 	&:focus,
-	&:hover{
+	&:hover {
 		color: var(--color-secondary-dark);
 		text-decoration: underline;
 	}
-	&:visited{
-		color: var(--color-secondary)
+	&:visited {
+		color: var(--color-secondary);
 	}
 }
 </style>

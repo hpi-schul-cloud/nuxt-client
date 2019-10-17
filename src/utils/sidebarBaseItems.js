@@ -13,7 +13,7 @@ export default [
 		title: "Teams",
 		href: "/teams",
 		icon: "users",
-		permission: 'TEAMS_ENABLED',
+		permission: "TEAMS_ENABLED",
 	},
 	{
 		title: "Aufgaben",

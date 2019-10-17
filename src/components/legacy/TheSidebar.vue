@@ -139,7 +139,7 @@ export default {
 		width: var(--sidebar-width);
 	}
 
-	.top-sidebar{
+	.top-sidebar {
 		line-height: 0;
 	}
 

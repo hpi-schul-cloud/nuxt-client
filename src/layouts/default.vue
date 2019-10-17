@@ -142,8 +142,7 @@ export default {
 					this.user.permissions.includes(item.excludedPermission);
 
 				return (
-					(!item.permission ||
-						(hasRequiredPermission && !hasExcludedPermission))
+					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
 				);
 			});
 
