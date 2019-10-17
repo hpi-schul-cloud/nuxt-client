@@ -22,5 +22,6 @@ dist
 .env
 jsconfig.json
 **/.DS_Store
+sw.*
 
 docker-compose.yml

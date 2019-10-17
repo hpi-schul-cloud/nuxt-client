@@ -2,7 +2,9 @@
 var jwtDecode = require("jwt-decode");
 
 export const actions = {
-	async authenticate({ dispatch }) {
+	async authenticate({
+		dispatch
+	}) {
 		/*
 		const res = await this.$axios.$post(endpoint, {
 			strategy: "jwt",
@@ -34,7 +36,10 @@ export const actions = {
 			window.location = "/login";
 		}
 	},
-	async populateUser({ commit }) {
+	async populateUser({
+		commit
+	}) {
+
 		const user = await this.$axios.$get("/me");
 		commit("setUser", user);
 		if (user.schoolId) {
@@ -43,16 +48,19 @@ export const actions = {
 		}
 		return user;
 	},
-	async hasRole({ dispatch, rootGetters, state, rootState }, roleName) {
+	async hasRole({
+		dispatch,
+		rootGetters,
+		state,
+		rootState
+	}, roleName) {
 		if (rootState.roles.ids.length < 1) {
 			await dispatch(
-				"roles/find",
-				{
+				"roles/find", {
 					query: {
 						$limit: 1000,
 					},
-				},
-				{
+				}, {
 					root: true,
 				}
 			);

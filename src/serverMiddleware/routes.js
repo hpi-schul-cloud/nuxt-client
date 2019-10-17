@@ -6,6 +6,8 @@
 // const mongoId = "[a-z0-9]{24}";
 
 module.exports = [
-	// `^/news`,
+	`^/news`,
+	`^/`,
+	`^/dashboard`,
 	// or: `^/news/${mongoId}/edit`,
 ];

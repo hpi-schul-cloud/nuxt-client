@@ -19,8 +19,7 @@ module.exports = {
 	 */
 	head: {
 		title: pkg.name,
-		meta: [
-			{
+		meta: [{
 				charset: "utf-8",
 			},
 			{
@@ -33,20 +32,18 @@ module.exports = {
 				content: pkg.description,
 			},
 		],
-		link: [
-			{
-				rel: "icon",
-				type: "image/png",
-				href: "/images/logo/favicon-32.png",
-			},
-		],
+		link: [{
+			rel: "icon",
+			type: "image/png",
+			href: "/images/logo/favicon-32.png", //TODO: Fix path
+		}, ],
 	},
 
 	/*
 	 ** Customize the progress-bar color
 	 */
 	loading: {
-		color: "#fff",
+		color: "#ccc",
 	},
 
 	css: ["@/themes/" + themeName + "/styles"],
@@ -90,6 +87,7 @@ module.exports = {
 		"cookie-universal-nuxt",
 		"@nuxtjs/toast",
 		"nuxt-babel",
+		'@nuxtjs/pwa',
 	],
 
 	toast: {
@@ -101,6 +99,30 @@ module.exports = {
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
 		baseURL: API_URL,
+	},
+	/*
+	 ** Workbox and PWA config
+	 * "@assets/img/logo/logo-image-mono.svg
+	 */
+	workbox: {
+		routerBase: '/',
+		runtimeCaching: [{
+			// Should be a regex string. Compiles into new RegExp('https://my-cdn.com/.*')
+			urlPattern: API_URL + '/.*',
+			// Defaults to `networkFirst` if omitted
+			// handler: 'networkFirst',
+			// Defaults to `GET` if omitted
+			// method: 'GET'
+		}]
+	},
+	pwa: {
+		icons: {
+			/* icon options */
+		},
+		manifest: {
+			name: 'Schulcloud', //TODO Get name rom conf
+			lang: 'de'
+		}
 	},
 
 	/*
