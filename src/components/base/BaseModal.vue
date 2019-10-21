@@ -14,9 +14,11 @@
 					:class="{ 'modal-container--large': size === 'large' }"
 				>
 					<slot>
-						<!-- TODO add styles so footer is always visbile -->
-
-						<h2 :id="`modal-${$uid}-title`" class="h4 modal-header">
+						<h2
+							v-if="$slots.header"
+							:id="`modal-${$uid}-title`"
+							class="h4 modal-header"
+						>
 							<slot name="header" />
 						</h2>
 						<div :id="`modal-${$uid}-body`" class="modal-body">
