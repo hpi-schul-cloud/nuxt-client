@@ -61,7 +61,7 @@ jobs:
             - master
     # Test
     - script: npm run test:ci
-      name: "test"
+      name: "test:unit"
       after_success:
         - npm i -g codecov
         - codecov
@@ -69,7 +69,7 @@ jobs:
         - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
         - chmod 700 integration-test.sh
         - sh integration-test.sh
-      name: "integration-test"
+      name: "test:integration"
     # Lint
     - script: npm run lint:ci
       name: "lint"
