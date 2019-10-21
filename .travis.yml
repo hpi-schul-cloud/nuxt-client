@@ -70,8 +70,12 @@ jobs:
         - chmod 700 integration-test.sh
         - sh integration-test.sh
       name: "test:integration"
+      env:
+        - IT_CLIENT_HOST=nuxtclient
       git:
         clone: false
+      services:
+        - docker
       install:
         - echo "skipping install"
       before_cache:
