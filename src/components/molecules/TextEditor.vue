@@ -2,15 +2,24 @@
 	<div class="editor">
 		<editor-menu-bar v-slot="{ commands, isActive }" :editor="editor">
 			<div class="menubar">
-				<base-button design="icon text" @click="commands.undo">
+				<base-button
+					data-testid="editor_undo"
+					design="icon text"
+					@click="commands.undo"
+				>
 					<base-icon source="material" icon="undo" />
 				</base-button>
 
-				<base-button design="icon text" @click="commands.redo">
+				<base-button
+					data-testid="editor_redo"
+					design="icon text"
+					@click="commands.redo"
+				>
 					<base-icon source="material" icon="redo" />
 				</base-button>
 
 				<base-button
+					data-testid="editor_format_bold"
 					:design="isActive.bold() ? 'icon' : 'icon text'"
 					@click="commands.bold"
 				>
@@ -18,6 +27,7 @@
 				</base-button>
 
 				<base-button
+					data-testid="editor_format_italic"
 					:design="isActive.italic() ? 'icon' : 'icon text'"
 					@click="commands.italic"
 				>
@@ -25,6 +35,7 @@
 				</base-button>
 
 				<base-button
+					data-testid="editor_format_underlined"
 					:design="isActive.underline() ? 'icon' : 'icon text'"
 					@click="commands.underline"
 				>
@@ -32,25 +43,29 @@
 				</base-button>
 
 				<base-button
+					data-testid="editor_format_strikethrough"
 					:design="isActive.strike() ? 'icon' : 'icon text'"
 					@click="commands.strike"
 				>
-					<base-icon source="material" icon="strikethrough_s" />
+					<base-icon source="material" icon="format_strikethrough" />
 				</base-button>
 
 				<base-button
+					data-testid="editor_format_h1"
 					:design="isActive.heading({ level: 1 }) ? 'icon' : 'icon text'"
 					@click="commands.heading({ level: 1 })"
 				>
 					H1
 				</base-button>
 				<base-button
+					data-testid="editor_format_h2"
 					:design="isActive.heading({ level: 2 }) ? 'icon' : 'icon text'"
 					@click="commands.heading({ level: 2 })"
 				>
 					H2
 				</base-button>
 				<base-button
+					data-testid="editor_format_h3"
 					:design="isActive.heading({ level: 3 }) ? 'icon' : 'icon text'"
 					@click="commands.heading({ level: 3 })"
 				>
@@ -58,21 +73,27 @@
 				</base-button>
 
 				<base-button
+					data-testid="editor_format_list_bulleted"
 					:design="isActive.bullet_list() ? 'icon' : 'icon text'"
+					:disabled="isInHeading"
 					@click="commands.bullet_list"
 				>
 					<base-icon source="material" icon="format_list_bulleted" />
 				</base-button>
 
 				<base-button
+					data-testid="editor_format_list_numbered"
 					:design="isActive.ordered_list() ? 'icon' : 'icon text'"
+					:disabled="isInHeading"
 					@click="commands.ordered_list"
 				>
 					<base-icon source="material" icon="format_list_numbered" />
 				</base-button>
 
 				<base-button
+					data-testid="editor_add_image"
 					design="icon text"
+					:disabled="isInHeading"
 					@click="showImagePrompt(commands.image)"
 				>
 					<base-icon source="material" icon="image" />
@@ -144,6 +165,15 @@ export default {
 			}),
 			content: "",
 		};
+	},
+	computed: {
+		isInHeading() {
+			return (
+				this.editor.isActive.heading({ level: 1 }) ||
+				this.editor.isActive.heading({ level: 2 }) ||
+				this.editor.isActive.heading({ level: 3 })
+			);
+		},
 	},
 	watch: {
 		value(to) {
