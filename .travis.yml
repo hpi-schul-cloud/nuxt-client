@@ -72,6 +72,7 @@ jobs:
       name: "test:integration"
       env:
         - IT_CLIENT_HOST=nuxtclient
+        - IT_CLIENT_PORT=3200
       git:
         clone: false
       services:
