@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, color } from "@storybook/addon-knobs";
+import { text, color, select } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
 import BaseButton from "@basecomponents/BaseButton";
@@ -26,13 +26,14 @@ storiesOf("Base|Modals", module)
 				"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
 			),
 			footer: text("footer", "This is a footer"),
+			size: select("Size", { medium: "medium", large: "large" }, "medium"),
 		}),
 		template: `
 		<div>
 		<base-button @click="active = true">
 				Open Modal
 		</base-button>
-		<base-modal :active.sync="active">
+		<base-modal :active.sync="active" :size="size">
 			<template v-slot:header>{{header}}</template>
 			<template v-slot:body>{{body}}
 

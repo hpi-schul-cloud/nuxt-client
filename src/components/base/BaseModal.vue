@@ -97,7 +97,7 @@ export default {
 	width: 95%;
 	min-width: var(--size-content-width-min);
 	max-width: var(--size-content-width-max);
-	max-height: calc(100vh - 40px);
+	max-height: calc(100vh - (2 * var(--space-lg)));
 	margin: 0 auto;
 	overflow: hidden;
 	background-color: var(--color-white);
@@ -106,10 +106,10 @@ export default {
 	transition: all var(--duration-transition-medium) ease;
 	&--large {
 		min-height: 80%;
-	}
 
-	@include breakpoint(tablet) {
-		min-height: auto;
+		@include breakpoint(tablet) {
+			min-height: auto;
+		}
 	}
 }
 
