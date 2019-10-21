@@ -2,8 +2,7 @@
 	<div class="impressum-container">
 		<h1 class="h2">Impressum</h1>
 		<h2 class="h4">
-			HPI Schul-Cloud - Hasso-Plattner-Institut für Digital Engineering
-			gGmbH
+			HPI Schul-Cloud - Hasso-Plattner-Institut für Digital Engineering gGmbH
 		</h2>
 		<p
 			>Prof.-Dr.-Helmert-Str. 2-3
@@ -17,8 +16,7 @@
 			<br />
 			Internet:
 			<base-link to="/">
-				https://schul-cloud.org
-			</base-link
+				https://schul-cloud.org </base-link
 			><br />
 			Telefon: +49(0)331/5509-0
 			<br />
@@ -39,9 +37,8 @@
 		<h2 class="h4">Rechtliche Hinweise</h2>
 		<p
 			>Die HPI Schul-Cloud ist ein nicht kommerzielles Pilotprojekt, welches vom
-			HPI in Kooperation mit dem nationalen Excellence-Schulnetzwerk MINT EC (<base-link
-				href="https://www.mint-ec.de"
-				target="_blank"
+			HPI in Kooperation mit dem nationalen Excellence-Schulnetzwerk MINT EC
+			(<base-link href="https://www.mint-ec.de" target="_blank"
 				>https://www.mint-ec.de</base-link
 			>) durchgeführt und durch das Bundesministerium für Bildung und Forschung
 			(BMBF) gefördert wird (mehr Informationen finden Sie unter: (<a
@@ -89,12 +86,7 @@
 </template>
 
 <script>
-import BaseIcon from "@basecomponents/BaseIcon";
-export default {
-	components: {
-		BaseIcon,
-	},
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -104,5 +96,4 @@ p {
 	font-size: var(--text-lg);
 	line-height: var(--line-height-lg);
 }
-
 </style>
