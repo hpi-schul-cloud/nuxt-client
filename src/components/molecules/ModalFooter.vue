@@ -1,14 +1,14 @@
 <template>
-<div class="footer">
-  <div class="footer-container">
-		 <div class="icon-container">
-			  <slot name="left"></slot>
-		 </div>
-    <div class="button-container">
-			  <slot name="right"></slot>
+	<div class="footer">
+		<div class="footer-container">
+			<div class="icon-container">
+				<slot name="left"></slot>
+			</div>
+			<div class="button-container">
+				<slot name="right"></slot>
+			</div>
 		</div>
 	</div>
-</div>
 </template>
 
 <script>
@@ -17,9 +17,6 @@ export default {};
 
 <style lang="scss" scoped>
 @import "@styles";
-
-
-
 
 .footer-container {
 	position: relative;
@@ -41,19 +38,17 @@ export default {};
 	}
 }
 
-
-
 .button-container {
 	display: flex;
 	justify-content: space-between;
-  padding: var(--space-sm) var(--space-md);
+	padding: var(--space-sm) var(--space-md);
 	border-top: 1px solid var(--color-white);
 	:not(:first-child) {
 		margin-left: var(--space-sm);
 	}
 
 	@include breakpoint(tablet) {
-    padding: 0;
+		padding: 0;
 		border: none;
 	}
 }

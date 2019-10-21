@@ -20,7 +20,6 @@ export default {};
 	width: 100%;
 	background-color: var(--color-success);
 
-
 	> *:not(:first-child) {
 		margin-left: var(--space-md);
 	}
