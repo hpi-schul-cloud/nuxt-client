@@ -1,36 +1,31 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-import BaseButton from "@basecomponents/BaseButton";
 import notes from "@docs/storybook/base.md";
+
+import BaseAudio from "@basecomponents/BaseAudio";
+import BaseBlockquote from "@basecomponents/BaseBlockquote";
+import BaseBreadcrumb from "@basecomponents/BaseBreadcrumb";
+import BaseButton from "@basecomponents/BaseButton";
 import BaseCard from "@basecomponents/BaseCard";
+import BaseCollapsible from "@basecomponents/BaseCollapsible";
 import BaseIcon from "@basecomponents/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
 } from "@basecomponents/BaseInput/BaseInput";
 import BaseLink from "@basecomponents/BaseLink";
 import BaseProgressbar from "@basecomponents/BaseProgressbar";
-import BaseTable from "@basecomponents/BaseTable";
-import BaseCollapsible from "@basecomponents/BaseCollapsible";
-import BaseBreadcrumb from "@basecomponents/BaseBreadcrumb";
-import BaseSelect from "@basecomponents/BaseSelect";
-import BaseTextarea from "@basecomponents/BaseTextarea";
-import BaseAudio from "@basecomponents/BaseAudio";
-import BaseVideo from "@basecomponents/BaseVideo";
 import BaseQrCode from "@basecomponents/BaseQrCode";
-// import BaseModalScroll from "@basecomponents/BaseModalScroll";
-// import BaseModalAction from "@basecomponents/BaseModalAction";
-// import BaseModalActionSymbol from "@basecomponents/BaseModalActionSymbol";
-// import BaseModalInfo from "@basecomponents/BaseModalInfo";
-// import BaseModalFooter from "@basecomponents/BaseModalFooter";
-// import BaseModalFooterButton from "@basecomponents/BaseModalFooterButton";
-import BaseBlockquote from "@basecomponents/BaseBlockquote";
+import BaseSelect from "@basecomponents/BaseSelect";
+import BaseTable from "@basecomponents/BaseTable";
+import BaseTextarea from "@basecomponents/BaseTextarea";
+import BaseVideo from "@basecomponents/BaseVideo";
 
-storiesOf("Base Components", module)
+storiesOf("Base|Other", module)
 	.addParameters({
 		notes,
 	})
-	.add("Base Button", () => ({
+	.add("BaseButton", () => ({
 		components: { BaseButton, BaseIcon },
 		data: () => ({
 			text: text("Text", "Action"),
@@ -168,7 +163,7 @@ storiesOf("Base Components", module)
 				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
 	}))
-	.add("Base Card", () => ({
+	.add("BaseCard", () => ({
 		components: { BaseCard },
 		template: "<base-card>Card</base-card>",
 		methods: {},
@@ -368,192 +363,6 @@ storiesOf("Base Components", module)
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
 		},
-	}))
-
-	.add("Base Modal Scroll", () => ({
-		components: { BaseModalScroll, BaseButton },
-		data: () => ({
-			active: false,
-			header: text("header", "Modal Inhalt Scrollt"),
-			body: text(
-				"body",
-				"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-			),
-		}),
-		template: `
-			<div>
-				<base-button @click="active = true">
-					Open Modal
-				</base-button>
-
-				<base-modal-scroll :active.sync="active">
-				<template v-slot:header>{{header}}</template>
-				<template v-slot:body>{{body}}</template>
-				<template v-slot:footer>
-					<base-button design="secondary text" @click="active = false">
-						Abbrechen
-					</base-button>
-					<base-button design="secondary" @click="active = false">
-						Aktionsname
-					</base-button>
-				</template>
-				</base-modal-scroll>
-			</div>
-		`,
-		methods: {},
-	}))
-
-	.add("Base Modal Action", () => ({
-		components: {
-			BaseModalAction,
-			BaseButton,
-			BaseIcon,
-			BaseModalFooter,
-			BaseModalScroll,
-		},
-		data: () => ({
-			active: false,
-			header: text("header", "Plugin Einstellungen"),
-			body: text("body"),
-			color: color("color", "var(--color-white)"),
-			inputs: {
-				a: [],
-				b: [],
-				c: [],
-				d: [],
-			},
-		}),
-		template: `
-
-		<div>
-			<base-button @click="active = true">
-					Open Modal
-			</base-button>
-
-			<base-modal :active.sync="active">
-				<template v-slot:header>{{header}}</template>
-
-				<template v-slot:body>
-
-					<div>
-						<base-input v-model="inputs.a" type="checkbox" value="a" label="Anonyme Abgabe" name="checkbox" />
-						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-					</div>
-					<div>
-						<base-input v-model="inputs.b" type="checkbox" value="b" label="Schülerabgabe untereinander sichtbar" name="checkbox" />
-						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-					</div>
-					<div>
-						<base-input v-model="inputs.c" type="checkbox" value="c" label="Worte" name="checkbox" />
-						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-					</div>
-					<div>
-						<base-input v-model="inputs.d" type="checkbox" value="d" label="Punkte" name="checkbox" />
-						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-					</div>
-
-				</template>
-
-				<template v-slot:footer-wrapper>
-					<modal-footer-actions>
-						<template v-slot:left>
-
-							<base-button design="icon">
-								<base-icon source="material" icon="delete_outline" :fill="color"/>
-							</base-button>
-
-							<base-button design="icon">
-								<base-icon source="material" icon="file_copy" :fill="color"/>
-							</base-button>
-
-							<base-button design="icon">
-								<base-icon source="material" icon="share" :fill="color"/>
-							</base-button>
-
-							<base-button design="icon">
-								<base-icon source="material" icon="info" :fill="color"/>
-							</base-button>
-
-						</template>
-							<template v-slot:right>
-								<base-button @click="active = false">
-									Abbrechen
-								</base-button>
-								<base-button design="outline" @click="active = false"> Übernehmen</base-button>
-			 			</template>
-					</modal-footer-actions>
-				</template>
-			</base-modal>
-		</div>
-		`,
-		methods: {},
-	}))
-
-	.add("Base Modal Action Symbol", () => ({
-		components: {
-			BaseModalActionSymbol,
-			BaseButton,
-			BaseIcon,
-		},
-		data: () => ({
-			active: false,
-			body: text("body"),
-			color: color("color", "var(--color-danger)"),
-		}),
-		template: `
-			<div>
-				<base-button @click="active = true">
-					Open Modal
-				</base-button>
-
-				<base-modal-action-symbol :active.sync="active">
-				<template v-slot:header>
-				<base-icon slot="icon" source="material" icon="report_problem" :fill="color" style="font-size: 2.5em" />
-				</template>
-				<template v-slot:body>Bist du sicher, dass du das Thema „das Herz” löschen möchtest?</template>
-				<template v-slot:footer>
-					<base-button design="secondary text" @click="active = false">
-						Abbrechen
-					</base-button>
-					<base-button design="secondary" @click="active = false">
-						Löschen
-					</base-button>
-				</template>
-				</base-modal-action-symbol>
-			</div>
-		`,
-		methods: {},
-	}))
-	.add("Base Modal Info", () => ({
-		components: {
-			BaseModalInfo,
-			BaseButton,
-			BaseIcon,
-			BaseModalFooterButton,
-		},
-		data: () => ({
-			active: false,
-			body: text("body", "Das neue Schuljahr hat soeben begonnen"),
-			color: color("color", "var(--color-success)"),
-		}),
-		template: `
-			<div>
-				<base-button @click="active = true">
-					Open Modal
-				</base-button>
-
-				<base-modal-info :active.sync="active">
-				<template v-slot:header>
-				<base-icon slot="icon" source="material" icon="check_circle" :fill="color" style="font-size: 3em" />
-				</template>
-				<template v-slot:body>{{body}}</template>
-				<template v-slot:footer-wrapper>
-				<base-modal-footer-button @click="active = false"/>
-				</template>
-				</base-modal-info>
-			</div>
-		`,
-		methods: {},
 	}))
 	.add("Base Dialog", () => ({
 		data: () => ({ active: false }),

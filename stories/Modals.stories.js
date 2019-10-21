@@ -12,11 +12,11 @@ import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import ModalFooterBorder from "@components/molecules/ModalFooterBorder";
 import ModalFooter from "@components/molecules/ModalFooter";
 
-storiesOf("Base Components", module)
+storiesOf("Base|Modals", module)
 	.addParameters({
 		notes,
 	})
-	.add("Modal/Base", () => ({
+	.add("Base", () => ({
 		components: { BaseModal, BaseButton, ModalFooter, ModalFooterBorder },
 		data: () => ({
 			active: false,
@@ -51,7 +51,7 @@ storiesOf("Base Components", module)
 		</base-modal>
 		</div>`,
 	}))
-	.add("Modal/Action", () => ({
+	.add("Action", () => ({
 		components: { BaseModal, BaseButton, BaseIcon, ModalFooterActions },
 		data: () => ({
 			active: false,
@@ -66,62 +66,57 @@ storiesOf("Base Components", module)
 			},
 		}),
 		template: `<div>
-		<base-button @click="active = true">
-				Open Modal
-		</base-button>
-		<base-modal :active.sync="active">
-			<template v-slot:header>Plugin Einstellungen</template>
-			<template v-slot:body>
-				<div>
-					<base-input v-model="inputs.a" type="checkbox" value="a" label="Anonyme Abgabe" name="checkbox" />
-					<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-				</div>
-				<div>
-					<base-input v-model="inputs.b" type="checkbox" value="b" label="Schülerabgabe untereinander sichtbar" name="checkbox" />
-					<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-				</div>
-				<div>
-					<base-input v-model="inputs.c" type="checkbox" value="c" label="Worte" name="checkbox" />
-					<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-				</div>
-				<div>
-					<base-input v-model="inputs.d" type="checkbox" value="d" label="Punkte" name="checkbox" />
-					<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
-				</div>
-			</template>
-			<template v-slot:footer>
-				<modal-footer-actions>
+			<base-button @click="active = true">
+					Open Modal
+			</base-button>
+			<base-modal :active.sync="active">
+				<template v-slot:header>Plugin Einstellungen</template>
+				<template v-slot:body>
+					<div>
+						<base-input v-model="inputs.a" type="checkbox" value="a" label="Anonyme Abgabe" name="checkbox" />
+						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
+					</div>
+					<div>
+						<base-input v-model="inputs.b" type="checkbox" value="b" label="Schülerabgabe untereinander sichtbar" name="checkbox" />
+						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
+					</div>
+					<div>
+						<base-input v-model="inputs.c" type="checkbox" value="c" label="Worte" name="checkbox" />
+						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
+					</div>
+					<div>
+						<base-input v-model="inputs.d" type="checkbox" value="d" label="Punkte" name="checkbox" />
+						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
+					</div>
+				</template>
+				<template v-slot:footer>
+					<modal-footer-actions>
 						<template v-slot:left>
-
 							<base-button design="icon">
 								<base-icon source="material" icon="delete_outline" :fill="color"/>
 							</base-button>
-
 							<base-button design="icon">
 								<base-icon source="material" icon="file_copy" :fill="color"/>
 							</base-button>
-
 							<base-button design="icon">
 								<base-icon source="material" icon="share" :fill="color"/>
 							</base-button>
-
 							<base-button design="icon">
 								<base-icon source="material" icon="info" :fill="color"/>
 							</base-button>
-
 						</template>
-							<template v-slot:right>
-								<base-button @click="active = false">
-									Abbrechen
-								</base-button>
-								<base-button design="outline" @click="active = false"> Übernehmen</base-button>
+						<template v-slot:right>
+							<base-button @click="active = false">
+								Abbrechen
+							</base-button>
+							<base-button design="outline" @click="active = false"> Übernehmen</base-button>
 						</template>
 					</modal-footer-actions>
-			</template>
-		</base-modal>
+				</template>
+			</base-modal>
 		</div>`,
 	}))
-	.add("Modal/Info", () => ({
+	.add("Info", () => ({
 		components: {
 			BaseModal,
 			BaseButton,
@@ -134,7 +129,7 @@ storiesOf("Base Components", module)
 		}),
 		template: `<div>
 		<base-button @click="active = true">
-				Open Modal
+			Open Modal
 		</base-button>
 		<base-modal :active.sync="active">
 			<template v-slot:header></template>
@@ -142,9 +137,9 @@ storiesOf("Base Components", module)
 				<ModalBodyInfo
 					text="Das neue Schuljahr hat soeben begonnen"
 				>
-						<template v-slot:icon>
-							<base-icon source="material" icon="info" style="color: var(--color-success)"/>
-						</template>
+					<template v-slot:icon>
+						<base-icon source="material" icon="info" style="color: var(--color-success)"/>
+					</template>
 				</ModalBodyInfo>
 			</template>
 			<template v-slot:footer>
@@ -153,7 +148,7 @@ storiesOf("Base Components", module)
 		</base-modal>
 		</div>`,
 	}))
-	.add("Modal/Dialog", () => ({
+	.add("Dialog", () => ({
 		components: { BaseModal, BaseButton, BaseIcon, ModalBodyInfo, ModalFooter },
 		data: () => ({
 			active: false,
@@ -168,19 +163,19 @@ storiesOf("Base Components", module)
 				<ModalBodyInfo
 					text="Bist du sicher, dass du das Thema das Herz löschen möchtest?"
 				>
-						<template v-slot:icon>
-						<base-icon slot="icon" source="material" icon="report_problem" style="color: var(--color-danger)"/>
-						</template>
+					<template v-slot:icon>
+					<base-icon slot="icon" source="material" icon="report_problem" style="color: var(--color-danger)"/>
+					</template>
 				</ModalBodyInfo>
 			</template>
 			<template v-slot:footerRight>
-			<base-button design="primary text" @click="active = false">
-			Abbrechen
-			</base-button>
-			<base-button design="primary" @click="active = false">
-			Aktionsname
-			</base-button>
-	</template>
+				<base-button design="primary text" @click="active = false">
+					Abbrechen
+				</base-button>
+				<base-button design="primary" @click="active = false">
+					Aktionsname
+				</base-button>
+			</template>
 		</base-modal>
 		</div>`,
 	}));

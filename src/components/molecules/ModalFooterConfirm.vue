@@ -1,6 +1,6 @@
 <template>
 	<div class="footer-button">
-		<button :class="classes" class="button" v-on="$listeners">Ok</button>
+		<button class="btn-confirm" v-on="$listeners">Ok</button>
 	</div>
 </template>
 
@@ -34,7 +34,7 @@ export default {};
 	}
 }
 
-.button {
+.btn-confirm {
 	display: flex;
 	flex-shrink: 0;
 	align-items: center;
