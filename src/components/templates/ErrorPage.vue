@@ -3,7 +3,10 @@
 		<img alt="PC-Reparatur" src="@assets/img/pc_repair.png" />
 
 		<h1 class="error-msg">
-			<template v-if="error.statusCode === 404">
+			<template v-if="error.message">
+				{{ error.message }}
+			</template>
+			<template v-else-if="error.statusCode === 404">
 				Die Seite wurde leider nicht gefunden
 			</template>
 			<template v-else>
