@@ -65,6 +65,11 @@ jobs:
       after_success:
         - npm i -g codecov
         - codecov
+    - script:
+        - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
+        - chmod 700 integration-test.sh
+        - sh integration-test.sh
+      name: "integration-test"
     # Lint
     - script: npm run lint:ci
       name: "lint"
