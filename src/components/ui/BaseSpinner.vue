@@ -2,25 +2,33 @@
 <template>
 	<svg
 		class="spinner"
-		height="120"
-		width="120"
+		:height="diameter"
+		:width="diameter"
+		viewBox="0 0 30 30"
+		xmlns="http://www.w3.org/2000/svg"
+		:tabindex="-1"
+		role="img"
+		:aria-label="label"
 	>
 		<circle
-			ref="circle"
-			class="progress-ring__circle"
-			stroke="var(--color-tertiary)"
-			stroke-width="1"
+			class="circle"
+			:stroke="color"
+			:stroke-width="strokeWidth"
 			fill="none"
-			r="52"
-			cx="60"
-			cy="60"
+			:r="14"
+			:cx="15"
+			:cy="15"
 		/>
-
 	</svg>
 </template>
+
 <script>
 export default {
 	props: {
+		label: {
+			type: String,
+			default: 'Loading',
+		},
 		color: {
 			type: String,
 			default: 'var(--color-tertiary)',
@@ -33,39 +41,66 @@ export default {
 			},
 		},
 	},
+	data: function() {
+		return {
+			sizeToDiameter: {
+				small: 15,
+				medium: 30,
+				large: 60,
+				xlarge: 120,
+			},
+			sizeToStrokeWidth: {
+				small: 2,
+				medium: 1,
+				large: 0.5,
+				xlarge: 0.25,
+			},
+		};
+	},
+	computed: {
+		diameter () {
+			return this.sizeToDiameter[this.size];
+		},
+		strokeWidth () {
+			return this.sizeToStrokeWidth[this.size];
+		},
+	}
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@styles';
 
-.progress-ring__circle {
-	stroke-dasharray: 330;
-	stroke-dashoffset: -200;
-	transform: rotate(-90deg);
-	transform-origin: 50% 50%;
-	animation: spin 2s linear infinite;
-}
+.spinner {
+	--spinner-circumference: 88;
+	--spinner-quarter-circumference: 22;
+	--spinner-duration: 1.4s;
 
-@keyframes spin {
-  0%   {
-	  stroke-dashoffset: 330;
+	animation: rotate var(--spinner-duration) linear infinite;
+
+	.circle {
+		stroke-dasharray: var(--spinner-circumference);
+		stroke-dashoffset: 0;
+		stroke-linecap: round;
+		transform-origin: center;
+		animation: move-dash var(--spinner-duration) ease-in-out infinite;
 	}
-  50% {
-	  stroke-dashoffset: 0;
-  }
-  100% {
-	  stroke-dashoffset: -330;
-  }
-}
 
-.loader {
-	width: 120px;
-	height: 120px;
-	border: 10px solid transparent;
-	border-top: 10px solid #3498db;
-	border-radius: var(--radius-round);
-	animation: spin 1s ease-in-out infinite;
-}
+	@keyframes rotate {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(270deg); }
+	}
 
+	@keyframes move-dash {
+		0% { stroke-dashoffset: var(--spinner-circumference); }
+		50% {
+			stroke-dashoffset: var(--spinner-quarter-circumference);
+			transform:rotate(135deg);
+		}
+		100% {
+			stroke-dashoffset: var(--spinner-circumference);
+			transform:rotate(450deg);
+		}
+	}
+}
 </style>

@@ -475,6 +475,14 @@ storiesOf("Base Components", module)
 	}))
 	.add("BaseSpinner", () => ({
 		components: { BaseSpinner },
-		data: () => ({}),
-		template: `<BaseSpinner />`,
+		data: () => ({
+			label: text("label", "Loading"),
+			color: color("color", "var(--color-tertiary)"),
+			size: select(
+				"size",
+				{ small: "small", medium: "medium", large: "large", xlarge: "xlarge" },
+				"medium"
+			),
+		}),
+		template: `<BaseSpinner :color="color" :size="size" :aria-label="label"/>`,
 	}));
