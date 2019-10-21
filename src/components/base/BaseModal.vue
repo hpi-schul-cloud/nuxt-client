@@ -8,9 +8,9 @@
 				>
 					<slot>
 						<!-- TODO add styles so footer is always visbile -->
-						<h4 class="modal-header">
+						<h2 class="h4 modal-header">
 							<slot name="header" />
-						</h4>
+						</h2>
 						<div class="modal-body">
 							<slot name="body" />
 						</div>
@@ -131,30 +131,14 @@ export default {
 }
 
 .modal-header {
-	position: relative;
-	display: flex;
-	flex-shrink: 0;
-	align-items: center;
-	justify-content: center;
 	padding: var(--space-md);
-	border-bottom: none;
-	border-top-left-radius: var(--radius-md);
-	border-top-right-radius: var(--radius-md);
-}
-
-.modal-header h4 {
-	padding: var(--space-xl) var(--space-xl) 0 var(--space-xl);
-	margin: 0 auto;
-	font-weight: var(--font-weight-regular);
+	text-align: center;
 }
 
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled
  * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
  */
 
 .modal-enter,
