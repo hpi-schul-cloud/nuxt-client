@@ -7,7 +7,7 @@ export default async ({ app, store }) => {
 		}
 		const jwt = app.$cookies.get("jwt");
 		if (!jwt) {
-			store.dispatch("auth/logout");
+			return store.dispatch("auth/logout");
 		}
 		store.commit("auth/setAccessToken", jwt);
 		await store.dispatch("auth/authenticate");
