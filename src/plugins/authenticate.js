@@ -6,8 +6,7 @@ export default async ({ app, store }) => {
 		}
 
 		store.commit("auth/setAccessToken", jwt);
-		//removed while the legacy client login is in place
-		//await store.dispatch("auth/authenticate");
+		await store.dispatch("auth/authenticate");
 	} catch (e) {
 		store.dispatch("auth/logout");
 	}
