@@ -41,6 +41,7 @@ export const actions = {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
 			commit("setSchool", school);
 		}
+		//TODO Remove once added to User permissions SC-2401
 		if (process.env["FEATURE_EXTENSIONS_ENABLED"] === "true") {
 			commit("addUserPermission", "ADDONS_ENABLED");
 		}
