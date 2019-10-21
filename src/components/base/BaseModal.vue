@@ -1,6 +1,13 @@
 <template>
 	<transition name="modal">
-		<div v-if="active" class="modal-mask">
+		<div
+			v-if="active"
+			class="modal-mask"
+			role="dialog"
+			:aria-modal="active"
+			:aria-labelledby="`modal-${$uid}-title`"
+			:aria-describedby="`modal-${$uid}-body`"
+		>
 			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					class="modal-container"
@@ -8,10 +15,11 @@
 				>
 					<slot>
 						<!-- TODO add styles so footer is always visbile -->
-						<h2 class="h4 modal-header">
+
+						<h2 :id="`modal-${$uid}-title`" class="h4 modal-header">
 							<slot name="header" />
 						</h2>
-						<div class="modal-body">
+						<div :id="`modal-${$uid}-body`" class="modal-body">
 							<slot name="body" />
 						</div>
 
@@ -33,11 +41,13 @@
 </template>
 
 <script>
+import uidMixin from "@mixins/uid";
 import ModalFooter from "@components/molecules/ModalFooter";
 export default {
 	components: {
 		ModalFooter,
 	},
+	mixins: [uidMixin],
 	props: {
 		active: {
 			type: Boolean,
