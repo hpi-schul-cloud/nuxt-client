@@ -1,7 +1,6 @@
 <template>
 	<label class="wrapper">
 		<input
-			:id="`checkbox-${$uid}`"
 			ref="hiddenInput"
 			v-bind="$attrs"
 			:checked="isChecked"
@@ -10,7 +9,7 @@
 			class="visually-hidden"
 			@change="updateVModel"
 		/>
-		<span ref="icon" :class="['icon', type]">
+		<span ref="icon" :class="['icon', type, { 'user-is-tabbing': $userIsTabbing } ]">
 			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
 		</span>
 		<span class="label">
@@ -19,11 +18,11 @@
 	</label>
 </template>
 <script>
-import uidMixin from "@mixins/uid";
+import userIsTabbingMixin from "@mixins/userIsTabbing";
 export const supportedTypes = ["checkbox", "switch"];
 
 export default {
-	mixins: [uidMixin],
+	mixins: [userIsTabbingMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -56,9 +55,6 @@ export default {
 				: this.vmodel.includes(this.value);
 		},
 	},
-	mounted() {
-		window.addEventListener("keydown", this.handleFirstTabForCheckbox);
-	},
 	methods: {
 		updateVModel() {
 			let newModel = this.vmodel;
@@ -71,18 +67,6 @@ export default {
 				newModel = newModel.filter((entry) => entry !== this.value);
 			}
 			this.$emit("input", newModel);
-		},
-		handleFirstTabForCheckbox(e) {
-			if (e.key === "Tab") {
-				window.removeEventListener("keydown", this.handleFirstTabForCheckbox);
-				window.addEventListener("click", this.handleFirstClickForCheckBox);
-				this.$refs.icon.classList.add("user-is-tabbing");
-			}
-		},
-		handleFirstClickForCheckBox() {
-			window.removeEventListener("click", this.handleFirstClickForCheckBox);
-			window.addEventListener("keydown", this.handleFirstTabForCheckbox);
-			this.$refs.icon.classList.remove("user-is-tabbing");
 		},
 	},
 };
@@ -175,7 +159,7 @@ input:focus + .icon {
 	outline: none;
 	&.user-is-tabbing {
 		outline: 2px solid #4d90fe;
-		outline-offset: 0.05em;
+		outline-offset: 0.1em;
 	}
 }
 </style>

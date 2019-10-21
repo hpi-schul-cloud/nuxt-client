@@ -37,6 +37,21 @@ describe("@components/BaseTextarea", () => {
 		expect(input.attributes("rows")).toBe("4");
 	});
 
+	it("rejects carriage return when maximum row limit is reached", () => {
+		const wrapper = getMock(" :maxRows='2' ");
+		const input = wrapper.find("textarea");
+		
+		input.setValue("test");
+		const event = new KeyboardEvent('keydown', { 'keyCode': 13 }, );
+		const spy = jest.spyOn(event, 'preventDefault');
+		input.element.dispatchEvent(event);
+		expect(spy).not.toHaveBeenCalled()
+
+		input.setValue("test \n string");
+		input.element.dispatchEvent(event);
+		expect(spy).toHaveBeenCalled();
+	});
+
 	it("truncates pasted content to maximum row limit", () => {
 		const wrapper = getMock(" :maxRows='1' ");
 		const input = wrapper.find("textarea");

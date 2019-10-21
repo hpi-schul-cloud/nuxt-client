@@ -72,7 +72,7 @@
 		</div>
 		<span
 			v-if="hasError || hasInfo"
-			:class="{ info: true, help: true, error: hasError }"
+			:class="{ info: true, help: !hasError, error: hasError }"
 		>
 			{{ error || info }}
 		</span>

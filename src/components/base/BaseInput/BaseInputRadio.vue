@@ -1,7 +1,6 @@
 <template>
 	<label>
 		<input
-			:id="`radio-${$uid}`"
 			ref="hiddenInput"
 			v-bind="$attrs"
 			:checked="vmodel === value"
@@ -10,18 +9,18 @@
 			class="visually-hidden"
 			@change="$emit('input', $event.target.value)"
 		/>
-		<span ref="radio" class="radio" />
-		<span class="label" :for="`radio-${$uid}`">
+		<span class="radio" :class="{ 'user-is-tabbing': $userIsTabbing }"/>
+		<span class="label">
 			{{ label }}
 		</span>
 	</label>
 </template>
 <script>
-import uidMixin from "@mixins/uid";
+import userIsTabbingMixin from "@mixins/userIsTabbing";
 export const supportedTypes = ["radio"];
 
 export default {
-	mixins: [uidMixin],
+	mixins: [userIsTabbingMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -45,26 +44,6 @@ export default {
 			validator: (type) => {
 				return supportedTypes.includes(type);
 			},
-		},
-	},
-	mounted() {
-		window.addEventListener("keydown", this.handleFirstTabForRadioButton);
-	},
-	methods: {
-		handleFirstTabForRadioButton(e) {
-			if (e.key === "Tab" || e.keyCode.toString() === "9") {
-				window.removeEventListener(
-					"keydown",
-					this.handleFirstTabForRadioButton
-				);
-				window.addEventListener("click", this.handleClickForRadioButton);
-				this.$refs.radio.classList.add("user-is-tabbing");
-			}
-		},
-		handleClickForRadioButton() {
-			window.removeEventListener("click", this.handleClickForRadioButton);
-			window.addEventListener("keydown", this.handleFirstTabForRadioButton);
-			this.$refs.radio.classList.remove("user-is-tabbing");
 		},
 	},
 };
@@ -108,7 +87,7 @@ input:focus + .radio {
 	outline: none;
 	&.user-is-tabbing {
 		outline: 2px solid #4d90fe;
-		outline-offset: 0.05em;
+		outline-offset: 0.1em;
 	}
 }
 </style>
