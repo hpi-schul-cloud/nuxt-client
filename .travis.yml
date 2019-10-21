@@ -70,6 +70,10 @@ jobs:
         - chmod 700 integration-test.sh
         - sh integration-test.sh
       name: "test:integration"
+      before_install:
+        - rm -rf *
+      install:
+        - echo "skipping install"
     # Lint
     - script: npm run lint:ci
       name: "lint"
