@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [ ! -d "/app/dist" ]
+if [ ! -d "/dist" ]
 then
 	npm run build:nuxt
 fi
