@@ -6,9 +6,9 @@
 			</base-button>
 			<base-select
 				v-model="time.weekday"
-				:options="weekdayOptions"
+				:options="weekdays"
 				:allow-empty="false"
-				label="name"
+				label="Wochentag"
 				class="item"
 			/>
 			<base-input
@@ -50,32 +50,25 @@ export default {
 	data() {
 		return {
 			weekdays: [
-				{ value: 0, name: "Montag" },
-				{ value: 1, name: "Dienstag" },
-				{ value: 2, name: "Mittwoch" },
-				{ value: 3, name: "Donnerstag" },
-				{ value: 4, name: "Freitag" },
-				{ value: 5, name: "Samstag" },
-				{ value: 6, name: "Sonntag" },
+				{ value: 0, label: "Montag" },
+				{ value: 1, label: "Dienstag" },
+				{ value: 2, label: "Mittwoch" },
+				{ value: 3, label: "Donnerstag" },
+				{ value: 4, label: "Freitag" },
+				{ value: 5, label: "Samstag" },
+				{ value: 6, label: "Sonntag" },
 			],
 		};
-	},
-	computed: {
-		weekdayOptions() {
-			return this.weekdays.map((weekday) => ({
-				value: weekday,
-				label: weekday.name,
-			}));
-		},
 	},
 	methods: {
 		addTime() {
 			this.value.push({
-				weekday: this.weekdays[0],
+				weekday: this.weekdays[0].value,
 				startTime: "08:00",
-				duration: "60",
+				duration: 60,
 				room: "H1",
 			});
+			this.$emit("input", this.value);
 		},
 		popTime(t) {
 			this.value.pop(t);

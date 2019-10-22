@@ -17,7 +17,7 @@
 		<div class="content-wrapper">
 			<step-data
 				v-show="currentStep === 0"
-				:course="course"
+				:course.sync="course"
 				:available-teachers="teachers"
 			/>
 
@@ -67,14 +67,20 @@ export default {
 		},
 		course: {
 			type: Object,
-			default: () => ({
-				name: "",
-				description: "",
-				startDate: "",
-				untilDate: "",
-				times: [],
-				teachers: [],
-			}),
+			required: true,
+			validator: (course) => {
+				return [
+					"name",
+					"description",
+					"startDate",
+					"untilDate",
+					"times",
+					"teacherIds",
+					"substitutionIds",
+					"userIds",
+					"classIds",
+				].every((key) => course[key] !== undefined);
+			},
 		},
 		user: {
 			type: Object,
@@ -93,6 +99,10 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		times: {
+			type: Array,
+			default: () => [],
+		},
 	},
 	data() {
 		return {
@@ -108,7 +118,7 @@ export default {
 		},
 	},
 	created() {
-		this.course.teachers.push(this.user._id);
+		//this.course.teachers.push(this.user);
 	},
 	methods: {
 		nextStep() {

@@ -6,16 +6,13 @@ const getValidCourse = () => ({
 	startDate: "",
 	untilDate: "",
 	times: [],
-	teachers: ["test"],
+	teacherIds: ["test2"],
+	substitutionIds: [],
+	userIds: [],
+	classIds: [],
 });
 
-const getRequiredPropsMock = () => ({
-	vmodel: "text",
-	options: "test",
-	value: "test2",
-});
-
-const mountWithCourse = (propsData) => {
+const mountWithCourse = (propsData = {}) => {
 	return shallowMount(StepData, {
 		propsData,
 		stubs: {
@@ -36,13 +33,13 @@ describe("@components/StepData", () => {
 	it(...isValidComponent(StepData));
 
 	it("Check that everything is rendering", () => {
-		const propsData = getRequiredPropsMock();
+		const propsData = {};
 		propsData.availableTeachers = ["Test"];
 		propsData.course = getValidCourse();
 		checkRendering(mountWithCourse(propsData));
 	});
 	it("Test with non required as default", () => {
-		const propsData = getRequiredPropsMock();
+		const propsData = {};
 		propsData.course = getValidCourse();
 		checkRendering(mountWithCourse(propsData));
 	});
@@ -52,7 +49,7 @@ describe("@components/StepData", () => {
 		let outputData = "";
 		console.error = jest.fn((inputs) => (outputData += inputs));
 
-		const propsData = getRequiredPropsMock();
+		const propsData = {};
 		propsData.course = {
 			// some required values are missing (name)
 			untilDate: "",
