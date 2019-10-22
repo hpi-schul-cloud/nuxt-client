@@ -59,4 +59,49 @@ describe("@components/StepData", () => {
 		checkRendering(mountWithCourse(propsData));
 		expect(outputData).toContain("Invalid prop");
 	});
+
+	it("test computed courseTimes getter", () => {
+		const mockCourse = getValidCourse();
+		mockCourse.times = [
+			{
+				weekday: 0,
+				startTime: "28800000",
+				duration: "3600000",
+				room: "H1",
+			},
+		];
+		const wrapper = mountWithCourse({
+			course: mockCourse,
+		});
+		const { courseTimes } = wrapper.vm;
+		expect(courseTimes.length).toBe(1);
+		expect(courseTimes[0].duration).toBe(60);
+		expect(courseTimes[0].room).toBe("H1");
+		expect(courseTimes[0].startTime).toBe("08:00");
+		expect(courseTimes[0].weekday).toBe(0);
+	});
+});
+
+it("test computed courseTimes setter", () => {
+	const mockCourse = getValidCourse();
+	const wrapper = mountWithCourse({
+		course: mockCourse,
+	});
+	const mockTime = [
+		{
+			weekday: 0,
+			startTime: "08:00",
+			duration: 60,
+			room: "H1",
+		},
+	];
+	wrapper.vm.courseTimes = mockTime;
+	const events = wrapper.emitted();
+	expect(events["update:course"].length).toBe(1);
+	const updatedTimes = events["update:course"][0][0].times;
+	expect(updatedTimes.length).toBe(1);
+	expect(updatedTimes[0].room).toBe("H1");
+	expect(updatedTimes[0].duration).toBe("3600000");
+	expect(updatedTimes[0].startTime).toBe("28800000");
+	expect(updatedTimes[0].weekday).toBe(0);
 });

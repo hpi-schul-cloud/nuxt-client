@@ -106,8 +106,11 @@ export default {
 					const startTime = parseInt(time.startTime, 10) / (60 * 1000);
 					const startHours = Math.floor(startTime / 60);
 					const startMinutes = startTime - startHours * 60;
+
 					return {
-						startTime: `${startHours}:${startMinutes}`,
+						startTime: `${startHours
+							.toString()
+							.padStart(2, "0")}:${startMinutes.toString().padStart(2, "0")}`,
 						duration: parseInt(time.duration, 10) / (60 * 1000),
 						weekday: time.weekday,
 						room: time.room,
