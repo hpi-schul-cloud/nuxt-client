@@ -6,6 +6,6 @@ COPY ./package-lock.json ./
 RUN npm ci
 COPY . /app
 
-EXPOSE 4000
 RUN ["chmod", "550", "./startup.sh"]
+EXPOSE 4000
 CMD [ "./startup.sh"]
