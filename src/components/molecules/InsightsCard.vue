@@ -39,13 +39,13 @@ export default {
 	props: {
 		title: {
 			type: String,
-			required: true,
+			default: '',
 		},
 		data: {
 			type: [Object, String, Number],
 			default: () => {},
 		}
-	}
+	},
 }
 </script>
 
