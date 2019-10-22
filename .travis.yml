@@ -68,11 +68,11 @@ jobs:
     - script:
         - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
         - chmod 700 integration-test.sh
-        - sh integration-test.sh
+        - bash integration-test.sh
       name: "test:integration"
       env:
-        - IT_CLIENT_HOST=nuxtclient
-        - IT_CLIENT_PORT=3200
+        - IT_CLIENT_HOST=client
+        - IT_CLIENT_PORT=3100
       git:
         clone: false
       services:
