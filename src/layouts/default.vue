@@ -2,14 +2,19 @@
 	<!-- default template = loggedin view -->
 	<div>
 		<div class="page">
-			<the-top-bar
-				:title="pageTitle"
-				class="topbar"
-				:actions="topBarActions"
-				:fullscreen-mode="fullscreenMode"
-				:expanded-menu="expandedMenu"
-				@action="handleTopAction"
-			/>
+			<div class="topbar">
+				<user-has-role :role="isDemoRole">
+					<demo-banner v-if="!fullscreenMode"></demo-banner>
+				</user-has-role>
+
+				<the-top-bar
+					:title="pageTitle"
+					:actions="topBarActions"
+					:fullscreen-mode="fullscreenMode"
+					:expanded-menu="expandedMenu"
+					@action="handleTopAction"
+				/>
+			</div>
 			<the-sidebar
 				v-if="!fullscreenMode"
 				class="sidebar"
@@ -19,16 +24,18 @@
 			<main class="content">
 				<Nuxt />
 			</main>
-			<the-footer class="footer" />
+			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import TheTopBar from "@components/TheTopBar";
-import TheSidebar from "@components/TheSidebar";
-import TheFooter from "@components/TheFooter";
+import TheTopBar from "@components/legacy/TheTopBar";
+import TheSidebar from "@components/legacy/TheSidebar";
+import TheFooter from "@components/legacy/TheFooter";
+import UserHasRole from "@components/helpers/UserHasRole";
+import DemoBanner from "@components/legacy/DemoBanner";
 import sidebarBaseItems from "../utils/sidebarBaseItems.js";
 
 const topbarBaseActions = [
@@ -76,12 +83,14 @@ export default {
 		TheTopBar,
 		TheSidebar,
 		TheFooter,
+		DemoBanner,
+		UserHasRole,
 	},
 	data() {
 		return {
 			sidebarBaseItems: sidebarBaseItems,
 			pageTitle: this.$theme.short_name,
-			fullscreenMode: false,
+			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
 		};
 	},
@@ -137,20 +146,6 @@ export default {
 				);
 			});
 
-			const teamsEnabled = process.env.FEATURE_TEAMS_ENABLED === "true";
-
-			if (teamsEnabled) {
-				sidebarItems.splice(2, 0, {
-					title: "Teams",
-					icon: "users",
-					href: "/teams/",
-				});
-				// sidebarItems.find(i => i.name === 'Meine Dateien').children.splice(2, 0, {
-				// 	title: 'Teams',
-				// 	icon: 'folder-open-o',
-				// 	href: '/files/teams/',
-			}
-
 			return sidebarItems.map((item) => {
 				const isActive = this.$route.path.includes(item.href);
 				item.childActive = item.children
@@ -172,6 +167,9 @@ export default {
 	},
 	methods: {
 		...mapActions("auth", ["logout"]),
+		isDemoRole(roles) {
+			return roles.some((role) => role.startsWith("demo"));
+		},
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();

@@ -20,8 +20,8 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Searchbar from "@components/Searchbar";
-import Pagination from "@components/Pagination";
+import Searchbar from "@components/molecules/Searchbar";
+import Pagination from "@components/organisms/Pagination";
 
 export default {
 	head() {

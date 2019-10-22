@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 // BaseComponents
-import "@components/ui/_globals";
+import "@/components/base/_globals";
 
 // Directives
 import Ripple from "vue-ripple-directive";
@@ -28,5 +28,5 @@ import Theme from "@theme/config";
 Vue.prototype.$theme = Theme;
 
 // Dialog
-import BaseDialog from "@components/ui/BaseDialog";
+import BaseDialog from "@/components/base/BaseDialog";
 Vue.use(BaseDialog);

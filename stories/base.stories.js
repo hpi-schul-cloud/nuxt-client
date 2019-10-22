@@ -1,32 +1,32 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-import BaseButton from "@components/ui/BaseButton";
 import notes from "@docs/storybook/base.md";
-import BaseCard from "@components/ui/BaseCard";
-import BaseIcon from "@components/ui/BaseIcon";
+
+import BaseAudio from "@basecomponents/BaseAudio";
+import BaseBlockquote from "@basecomponents/BaseBlockquote";
+import BaseBreadcrumb from "@basecomponents/BaseBreadcrumb";
+import BaseButton from "@basecomponents/BaseButton";
+import BaseCard from "@basecomponents/BaseCard";
+import BaseCollapsible from "@basecomponents/BaseCollapsible";
+import BaseIcon from "@basecomponents/BaseIcon";
 import BaseInput, {
 	supportedTypes as baseInputTypes,
-} from "@components/ui/BaseInput/BaseInput";
-import BaseLink from "@components/ui/BaseLink";
-import BaseProgressbar from "@components/ui/BaseProgressbar";
-import BaseTable from "@components/ui/BaseTable";
-import BaseCollapsible from "@components/ui/BaseCollapsible";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
-import BaseSelect from "@components/ui/BaseSelect";
-import BaseTextarea from "@components/ui/BaseTextarea";
-import BaseAudio from "@components/ui/BaseAudio";
-import BaseVideo from "@components/ui/BaseVideo";
-import BaseQrCode from "@components/ui/BaseQrCode";
-import BaseModal from "@components/ui/BaseModal";
-import BaseBlockquote from "@components/ui/BaseBlockquote";
-import BaseSpinner from "@components/ui/BaseSpinner";
+} from "@basecomponents/BaseInput/BaseInput";
+import BaseLink from "@basecomponents/BaseLink";
+import BaseProgressbar from "@basecomponents/BaseProgressbar";
+import BaseQrCode from "@basecomponents/BaseQrCode";
+import BaseSelect from "@basecomponents/BaseSelect";
+import BaseSpinner from "@basecomponents/BaseSpinner";
+import BaseTable from "@basecomponents/BaseTable";
+import BaseTextarea from "@basecomponents/BaseTextarea";
+import BaseVideo from "@basecomponents/BaseVideo";
 
-storiesOf("Base Components", module)
+storiesOf("Base|Other", module)
 	.addParameters({
 		notes,
 	})
-	.add("Base Button", () => ({
+	.add("BaseButton", () => ({
 		components: { BaseButton, BaseIcon },
 		data: () => ({
 			text: text("Text", "Action"),
@@ -164,7 +164,7 @@ storiesOf("Base Components", module)
 				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
 	}))
-	.add("Base Card", () => ({
+	.add("BaseCard", () => ({
 		components: { BaseCard },
 		template: "<base-card>Card</base-card>",
 		methods: {},
@@ -364,39 +364,6 @@ storiesOf("Base Components", module)
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
 		},
-	}))
-	.add("Base Modal", () => ({
-		components: { BaseModal, BaseButton },
-		data: () => ({
-			active: false,
-			header: text("header", "custom header"),
-			body: text(
-				"body",
-				"Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below."
-			),
-		}),
-		template: `
-			<div>
-				<base-button @click="active = true">
-					Open Modal
-				</base-button>
-
-				<base-modal :active.sync="active">
-					<div class="modal-header">
-						<h3 v-html="header" />
-					</div>
-
-					<div class="modal-body" v-html="body" />
-
-					<div class="modal-footer">
-						<base-button id="button" class="is-light" @click="active = false">
-							OK
-						</base-button>
-					</div>
-				</base-modal>
-			</div>
-		`,
-		methods: {},
 	}))
 	.add("Base Dialog", () => ({
 		data: () => ({ active: false }),

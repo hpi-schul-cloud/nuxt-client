@@ -1,13 +1,16 @@
 export default async ({ app, store }) => {
 	try {
+		if (location.pathname.startsWith("/error/proxy")) {
+			// Do not populate store on error pages
+			// otherwise we may get into a loop.
+			return;
+		}
 		const jwt = app.$cookies.get("jwt");
 		if (!jwt) {
-			store.dispatch("auth/logout");
+			return store.dispatch("auth/logout");
 		}
-
 		store.commit("auth/setAccessToken", jwt);
-		//removed while the legacy client login is in place
-		//await store.dispatch("auth/authenticate");
+		await store.dispatch("auth/authenticate");
 	} catch (e) {
 		store.dispatch("auth/logout");
 	}

@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 
 import notes from "@docs/storybook/TemplateTabs.md";
-import TemplateTabs from "@components/TemplateTabs";
-import TemplateTab from "@components/TemplateTab";
+import TemplateTabs from "@components/organisms/Tabs/Tabs";
+import TemplateTab from "@components/organisms/Tabs/Tab";
 
 storiesOf("TemplateTabs", module)
 	.addParameters({

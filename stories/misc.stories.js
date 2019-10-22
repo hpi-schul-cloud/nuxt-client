@@ -2,15 +2,16 @@ import { storiesOf } from "@storybook/vue";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
-import PulsatingDot from "@components/PulsatingDot";
-import ProfilePicture from "@components/ProfilePicture";
+import PulsatingDot from "@components/atoms/PulsatingDot";
+import ProfilePicture from "@components/atoms/ProfilePicture";
 import ExampleImage from "@assets/img/avatarExample.svg";
-import MenuLink from "@components/MenuLink";
-import DropdownMenu from "@components/DropdownMenu";
-import BaseButton from "@components/ui/BaseButton";
-import Searchbar from "@components/Searchbar";
-import PopupIcon from "@components/PopupIcon";
-import PopupIconInitials from "@components/PopupIconInitials";
+import MenuLink from "@components/atoms/MenuLink";
+import DropdownMenu from "@components/organisms/DropdownMenu";
+import BaseButton from "@basecomponents/BaseButton";
+import Searchbar from "@components/molecules/Searchbar";
+import PopupIcon from "@components/legacy/PopupIcon";
+import DemoBanner from "@components/legacy/DemoBanner";
+import PopupIconInitials from "@components/legacy/PopupIconInitials";
 
 storiesOf("Misc", module)
 	.addParameters({
@@ -59,9 +60,9 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast[type](message)">Knobs Toast</BaseButton>
 				<br>
 				<BaseButton @click="$toast.show('Show 🧐')">Default Toast</BaseButton>
-				<BaseButton @click="$toast.info('Info 🤓')">Info Toast</BaseButton>
-				<BaseButton @click="$toast.success('Success 😊')" class="is-success">Success Toast</BaseButton>
-				<BaseButton @click="$toast.error('Error 😥')" class="is-error">Error Toast</BaseButton>
+				<BaseButton @click="$toast.info('Info 🤓')" design="info">Info Toast</BaseButton>
+				<BaseButton @click="$toast.success('Success 😊')" design="success">Success Toast</BaseButton>
+				<BaseButton @click="$toast.error('Error 😥')" design="danger">Error Toast</BaseButton>
 			</div>
 		`,
 	}))
@@ -79,5 +80,11 @@ storiesOf("Misc", module)
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 			</PopupIconInitials>
+		</div>`,
+	}))
+	.add("Demo Banner", () => ({
+		components: { DemoBanner },
+		template: `<div>
+			<DemoBanner></DemoBanner>
 		</div>`,
 	}));

@@ -23,6 +23,7 @@ module.exports = {
 		"!<rootDir>/src/serverMiddleware/routes.js",
 		// Vue Component
 		"<rootDir>/src/components/**/*.{js,vue}",
-		"!<rootDir>/src/components/ui/_globals.js",
+		"!<rootDir>/src/components/**/*.stories.js",
+		"!<rootDir>/src/components/base/_globals.js",
 	],
 };
