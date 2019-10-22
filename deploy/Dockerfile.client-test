@@ -5,7 +5,7 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 RUN npm ci
 COPY . /app
+RUN npm run build:nuxt
 
 EXPOSE 4000
-RUN ["chmod", "550", "./startup.sh"]
-CMD [ "./startup.sh"]
+CMD npm run start
