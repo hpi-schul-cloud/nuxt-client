@@ -3,7 +3,7 @@ const pkg = require("./package");
 const themeName = process.env.SC_THEME || "default";
 const API_URL = process.env.API_URL || "http://localhost:3030";
 
-const DEFAULT_PORT = 4000;
+const DEFAULT_PORT = 4005;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
@@ -107,6 +107,7 @@ module.exports = {
 	 ** Build configuration
 	 */
 	build: {
+		transpile: ['vue-echarts', 'resize-detector'],
 		/*
 		 ** You can extend webpack config here
 		 */
@@ -137,5 +138,5 @@ module.exports = {
 	},
 	generate: {
 		dir: "dist/nuxt",
-	},
+	}
 };
