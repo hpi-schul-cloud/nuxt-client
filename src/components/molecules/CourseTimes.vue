@@ -4,6 +4,8 @@
 			<base-button design="icon" class="btn-delete" @click="popTime(time)">
 				<base-icon icon="delete" source="material" />
 			</base-button>
+			{{ time.weekday }}
+			{{ time.duration }}
 			<base-select
 				v-model="time.weekday"
 				:options="weekdays"
@@ -58,8 +60,10 @@ export default {
 				{ value: 5, label: "Samstag" },
 				{ value: 6, label: "Sonntag" },
 			],
+			cache: "",
 		};
 	},
+	created() {},
 	methods: {
 		addTime() {
 			this.value.push({

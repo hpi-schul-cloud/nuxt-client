@@ -84,7 +84,6 @@ export default {
 					"teacherIds",
 				].every((key) => {
 					if (course[key] === undefined) {
-						console.error("key", key, "of course is undefined");
 					}
 					return course[key] !== undefined;
 				}),
@@ -106,7 +105,6 @@ export default {
 					const startTime = parseInt(time.startTime, 10) / (60 * 1000);
 					const startHours = Math.floor(startTime / 60);
 					const startMinutes = startTime - startHours * 60;
-
 					return {
 						startTime: `${startHours
 							.toString()
@@ -124,6 +122,7 @@ export default {
 					startHours = parseInt(startHours, 10) * 60 * 60 * 1000;
 					time.startTime = (startHours + startMinutes).toString();
 					time.duration = (time.duration * 60 * 1000).toString();
+
 					return time;
 				});
 				this.$set(this.course, "times", times);

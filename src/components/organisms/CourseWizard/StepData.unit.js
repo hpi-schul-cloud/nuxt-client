@@ -1,4 +1,5 @@
 import StepData from "./StepData";
+import BaseInput from "@components/base/BaseInput/BaseInput";
 
 const getValidCourse = () => ({
 	name: "1",
@@ -104,4 +105,21 @@ it("test computed courseTimes setter", () => {
 	expect(updatedTimes[0].duration).toBe("3600000");
 	expect(updatedTimes[0].startTime).toBe("28800000");
 	expect(updatedTimes[0].weekday).toBe(0);
+});
+it("changing the element's value, updates the v-model", () => {
+	const testInput = "any string";
+	const wrapper = mount({
+		data: () => ({ content: "" }),
+		template: `<base-input
+		v-model="content"
+		name="name"
+		label="label"
+		type="text"
+		placeholder="placehodler"
+	/>`,
+		components: { BaseInput },
+	});
+	const input = wrapper.find(`input`);
+	input.setValue(testInput);
+	expect(wrapper.vm.content).toBe(testInput);
 });
