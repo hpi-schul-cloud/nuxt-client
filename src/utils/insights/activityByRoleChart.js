@@ -1,5 +1,6 @@
 export default function(data) {
 	return {
+		color: ['#2f4554','#b1063a'],
 		tooltip: {
 			trigger: "item",
 			formatter: "{a} <br/>{b} : {c} ({d}%)",

@@ -1,5 +1,6 @@
 export default function(data) {
 	return {
+		color: ['#2f4554','#b1063a'],
 		tooltip: {
 			trigger: "item",
 			formatter: "{a} <br/>{b} : {c} ({d}%)",
@@ -35,7 +36,7 @@ export default function(data) {
 						show: false,
 					},
 				},
-				data: data[0],
+				data: data[1],
 			},
 			{
 				type: "pie",
@@ -62,7 +63,7 @@ export default function(data) {
 						show: false,
 					},
 				},
-				data: data[1],
+				data: data[0],
 			},
 		],
 	};
