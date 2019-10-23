@@ -4,8 +4,6 @@
 			<base-button design="icon" class="btn-delete" @click="popTime(time)">
 				<base-icon icon="delete" source="material" />
 			</base-button>
-			{{ time.weekday }}
-			{{ time.duration }}
 			<base-select
 				v-model="time.weekday"
 				:options="weekdays"
@@ -31,7 +29,7 @@
 				v-model="time.duration"
 				label="Dauer"
 				name="duration"
-				type="text"
+				type="number"
 				class="item"
 			/>
 		</div>
@@ -63,7 +61,18 @@ export default {
 			cache: "",
 		};
 	},
-	created() {},
+	watch: {
+		value: {
+			handler(to) {
+				const staticCopy = JSON.stringify(to);
+				if (staticCopy !== this.cache) {
+					this.cache = staticCopy;
+					this.$emit("input", to);
+				}
+			},
+			deep: true,
+		},
+	},
 	methods: {
 		addTime() {
 			this.value.push({

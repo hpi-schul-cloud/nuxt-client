@@ -89,6 +89,11 @@ export default {
 				}),
 		},
 	},
+	data() {
+		return {
+			reactiveArray: [],
+		};
+	},
 	computed: {
 		teacherOptions() {
 			return this.availableTeachers.map((teacher) => {
@@ -98,10 +103,9 @@ export default {
 				};
 			});
 		},
-
 		courseTimes: {
 			get() {
-				return this.course.times.map((time) => {
+				const result = this.course.times.map((time) => {
 					const startTime = parseInt(time.startTime, 10) / (60 * 1000);
 					const startHours = Math.floor(startTime / 60);
 					const startMinutes = startTime - startHours * 60;
@@ -114,6 +118,9 @@ export default {
 						room: time.room,
 					};
 				});
+				// this is a hack to make the result reactive. Never do this again!
+				this.$set(this, "reactiveArray", result);
+				return this.reactiveArray;
 			},
 			set(v) {
 				const times = v.map((time) => {
