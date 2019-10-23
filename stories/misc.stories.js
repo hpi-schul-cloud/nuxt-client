@@ -12,11 +12,51 @@ import Searchbar from "@components/molecules/Searchbar";
 import PopupIcon from "@components/legacy/PopupIcon";
 import DemoBanner from "@components/legacy/DemoBanner";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
+import VueSwatchesColors from 'vue-swatches'
+import "vue-swatches/dist/vue-swatches.min.css"
 
 storiesOf("Misc", module)
 	.addParameters({
 		notes,
 	})
+	.add("Color Picker Pop Up", () => ({
+		components: { VueSwatchesColors },
+		data: () => ({
+		color: '#ACACAC',
+		colors: [
+			'#ACACAC',
+			'#D4AF37',
+			'#00E5FF',
+			'#1DE9B6',
+			'#546E7A',
+			'#FFC400',
+			'#BCAAA4',
+			'#FF4081',
+			'#FFEE58',
+		] }),
+		template: `
+		<VueSwatchesColors v-model="color" :colors="colors" row-length="3" shapes="circles" show-border popover-to="right"></VueSwatchesColors>
+		`,
+	}))
+	.add("Color Picker Inline", () => ({
+		components: { VueSwatchesColors },
+		data: () => ({
+		color: '#00E5FF',
+		colors: [
+			'#ACACAC',
+			'#D4AF37',
+			'#00E5FF',
+			'#1DE9B6',
+			'#546E7A',
+			'#FFC400',
+			'#BCAAA4',
+			'#FF4081',
+			'#FFEE58',
+		] }),
+		template: `
+		<VueSwatchesColors v-model="color" :colors="colors" shapes="circles" inline></VueSwatchesColors>
+		`,
+	}))
 	.add("Pulsing Dot", () => ({
 		components: { PulsatingDot },
 		template: `<PulsatingDot />`,
