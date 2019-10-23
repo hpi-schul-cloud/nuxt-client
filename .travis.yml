@@ -21,7 +21,6 @@ jobs:
       name: "build:nuxt"
       services:
         - docker
-      sudo: required
       deploy:
         provider: script
         script: bash ./deploy/deploy.sh -p client
@@ -33,7 +32,6 @@ jobs:
       name: "build:storybook"
       services:
         - docker
-      sudo: required
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p storybook
@@ -48,7 +46,6 @@ jobs:
       name: "build:docs"
       services:
         - docker
-      sudo: required
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
