@@ -104,6 +104,7 @@ export default {
 			});
 		},
 		courseTimes: {
+			// TODO adapt server Apiv2 to avoid recalculations
 			get() {
 				const result = this.course.times.map((time) => {
 					const startTime = parseInt(time.startTime, 10) / (60 * 1000);
