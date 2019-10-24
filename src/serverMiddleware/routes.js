@@ -8,7 +8,7 @@
 module.exports = [
 	`^/error/`,
 	`^/impressum`,
-	`^/courses`,
+	//`^/courses`,
 	// `^/news`,
 	// or: `^/news/${mongoId}/edit`,
 ];
