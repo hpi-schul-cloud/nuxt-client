@@ -1,9 +1,6 @@
 <template>
 	<div class="root">
 		<div class="header">
-			<div class="header-icon">
-				<base-icon source="custom" icon="shuttle" />
-			</div>
 			<div class="headlines">
 				<h1 class="h3">Kurs anlegen</h1>
 				<h2 class="h5">
@@ -40,6 +37,7 @@
 			<base-button v-if="!laststep" design="primary" @click="nextStep"
 				>Weiter</base-button
 			>
+
 			<base-button
 				v-if="laststep"
 				type="submit"

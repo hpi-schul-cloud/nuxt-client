@@ -1,9 +1,6 @@
 <template>
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
-			<base-button design="icon" class="btn-delete" @click="popTime(i)">
-				<base-icon icon="delete" source="material" />
-			</base-button>
 			<base-select
 				v-model="time.weekday"
 				:options="weekdays"
@@ -32,9 +29,14 @@
 				type="number"
 				class="item"
 			/>
+			<base-button design="icon" class="btn-delete" @click="popTime(i)">
+				<base-icon icon="delete" source="material" />
+			</base-button>
 		</div>
+
 		<base-button design="primary" @click="addTime">
-			Schulstundentermin im Stundenplan anlegen
+			<base-icon source="material" icon="add_circle_outline" />
+			Schulstundentermin anlegen
 		</base-button>
 	</div>
 </template>
