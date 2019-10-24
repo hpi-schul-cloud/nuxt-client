@@ -1,7 +1,7 @@
 <template>
 	<div class="root">
 		<div v-for="(time, i) of value" :key="i" class="time-wrapper">
-			<base-button design="icon" class="btn-delete" @click="popTime(time)">
+			<base-button design="icon" class="btn-delete" @click="popTime(i)">
 				<base-icon icon="delete" source="material" />
 			</base-button>
 			<base-select
@@ -83,8 +83,10 @@ export default {
 			});
 			this.$emit("input", this.value);
 		},
-		popTime(t) {
-			this.value.pop(t);
+
+		popTime(i) {
+			this.value.splice(i, 1);
+			this.$emit("input", this.value);
 		},
 	},
 };
