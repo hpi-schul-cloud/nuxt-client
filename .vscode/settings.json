@@ -33,6 +33,11 @@
 		"src/legacy-client/*": true
 	},
 
+	"files.associations": {
+		"Dockerfile.*": "dockerfile",
+		"compose-*.dummy": "yaml"
+	},
+
 	// ===
 	// Event Triggers
 	// ===
