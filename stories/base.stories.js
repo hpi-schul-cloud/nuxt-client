@@ -19,6 +19,7 @@ import BaseLink from "@basecomponents/BaseLink";
 import BaseProgressbar from "@basecomponents/BaseProgressbar";
 import BaseQrCode from "@basecomponents/BaseQrCode";
 import BaseSelect from "@basecomponents/BaseSelect";
+import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseTable from "@basecomponents/BaseTable";
 import BaseTextarea from "@basecomponents/BaseTextarea";
 import BaseVideo from "@basecomponents/BaseVideo";
@@ -493,4 +494,17 @@ storiesOf("Base|Other", module)
 				{{quote}}
 			</BaseBlockquote>
 		`,
+	}))
+	.add("BaseSpinner", () => ({
+		components: { BaseSpinner },
+		data: () => ({
+			label: text("label", "Loading"),
+			color: color("color", "var(--color-tertiary)"),
+			size: select(
+				"size",
+				{ small: "small", medium: "medium", large: "large", xlarge: "xlarge" },
+				"medium"
+			),
+		}),
+		template: `<BaseSpinner :color="color" :size="size" :aria-label="label"/>`,
 	}));
