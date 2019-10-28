@@ -58,7 +58,8 @@
 		"vue-i18n": "^8.11.2",
 		"vue-loader": "^15.6.2",
 		"vue-multiselect": "^2.1.6",
-		"vue-ripple-directive": "^2.0.1"
+		"vue-ripple-directive": "^2.0.1",
+		"vue-swatches": "^1.0.4"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.4.3",
@@ -75,7 +76,7 @@
 		"@storybook/addons": "^5.2.4",
 		"@storybook/vue": "^5.2.4",
 		"@vue/cli-plugin-babel": "^3.3.0",
-		"@vue/cli-service": "^3.3.1",
+		"@vue/cli-service": "^4.0.0",
 		"@vue/eslint-config-prettier": "^5.0.0",
 		"@vue/eslint-config-standard": "^4.0.0",
 		"@vue/test-utils": "^1.0.0-beta.28",
