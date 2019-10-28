@@ -55,7 +55,7 @@ export default {
 			const studentsRole = (await store.dispatch("roles/find", {
 				query: {
 					name: "student",
-				}, // queryStudents,
+				},
 			})).data[0];
 			const students = await store.dispatch("users/getByRole", studentsRole);
 

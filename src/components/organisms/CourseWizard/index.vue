@@ -115,9 +115,7 @@ export default {
 			return this.currentStep === this.steps.length - 1;
 		},
 	},
-	created() {
-		//this.course.teachers.push(this.user);
-	},
+
 	methods: {
 		nextStep() {
 			this.currentStep = this.currentStep + 1;

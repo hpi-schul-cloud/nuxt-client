@@ -26,11 +26,14 @@ it("Test rendering with random init data", () => {
 			"base-input": true,
 		},
 	});
+	//checks if every "row" has a delete button
 	expect(wrapper.findAll(".btn-delete").length).toBe(initTimes.length);
+	//checks if every property of the object has the class ".item"
 	expect(wrapper.findAll(".item").length).toBe(initTimes.length * 4);
+	//checks the number of rows
+	expect(wrapper.findAll(".time-wrapper").length).toBe(initTimes.length);
 });
 
-//TODO something like this. But html isn't being rerendered
 it("Add and remove a time", () => {
 	const initTimes = [
 		{
