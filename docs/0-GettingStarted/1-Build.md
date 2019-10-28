@@ -29,6 +29,7 @@ Output Directory: `./dist/nuxt`
 | PROXY_LOG_LEVEL | `warn` | Loglevel of the legacy proxy. Allowed values: `debug`, `info`, `warn`, `error`, `silent` |
 | FEATURE_TEAMS_ENABLED | `true` | Enables Teams feature in sidebar |
 | FEATURE_EXTENSIONS_ENABLED | `true` | Enables Add-Ons in sidebar. Just for N21! |
+| SENTRY_DSN | `false` | If set, errors are reported to sentry. |
 
 ## Storybook
 

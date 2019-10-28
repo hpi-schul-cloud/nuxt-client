@@ -2,7 +2,6 @@
 version: \"3.7\"
 
 services:
-
   nuxtclient:
     image: schulcloud/schulcloud-nuxt-client:$DOCKERTAG
     deploy:
@@ -18,6 +17,7 @@ services:
       - TZ=Europe/Berlin
       - LEGACY_CLIENT_URL=http://client:3100
       - API_URL=https://api.test.schul-cloud.org
+      - SENTRY_DSN=https://18a7cbf1a7ef427ebcfc38429d18ba40@sentry.schul-cloud.dev/7
       # FEATURE TOGGLES
       - FEATURE_TEAMS_ENABLED=true
       # Theme and Titles
