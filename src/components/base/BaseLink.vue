@@ -132,7 +132,7 @@ export default {
 
 .link {
 	display: inline;
-	color: var(--color-black);
+	color: var(--color-primary);
 	text-decoration: none;
 	cursor: pointer;
 	border-bottom: 2px solid var(--color-gray);
