@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 module.exports = {
 	printWidth: 80,
 	useTabs: true, // we are using tabs! http://lea.verou.me/2012/01/why-tabs-are-clearly-superior/
@@ -17,3 +18,6 @@ module.exports = {
 		},
 	],
 };
+=======
+module.exports = require("@schul-cloud/prettier-config");
+>>>>>>> Stashed changes

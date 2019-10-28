@@ -11,7 +11,7 @@
 			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					class="modal-container"
-					:class="{ 'modal-container--large': size === 'large' }"
+					:class="{ 'modal-container--large': size == 'large' }"
 				>
 					<slot>
 						<h2

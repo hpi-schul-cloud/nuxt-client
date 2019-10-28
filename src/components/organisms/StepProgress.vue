@@ -25,13 +25,13 @@ export default {
 	props: {
 		steps: {
 			type: Array,
-			default: () => [
+			default: function () {return [
 				{ name: "One" },
 				{ name: "Two" },
 				{ name: "Three" },
 				{ name: "Four" },
 				{ name: "Five" },
-			],
+			]},
 			validator: function(value) {
 				const isValid = value.length <= 7;
 				if (!isValid) {
