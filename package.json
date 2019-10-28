@@ -41,6 +41,7 @@
 	},
 	"dependencies": {
 		"@nuxtjs/axios": "^5.5.4",
+		"@nuxtjs/sentry": "^3.0.1",
 		"@nuxtjs/toast": "^3.0.2",
 		"cookie-universal-nuxt": "^2.0.16",
 		"dayjs": "^1.8.14",
