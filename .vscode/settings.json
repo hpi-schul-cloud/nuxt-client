@@ -116,7 +116,7 @@
 	// ===
 	"npm.packageManager": "npm",
 	"editor.suggest.localityBonus": true,
-	"peacock.color": "#00b3e6",
+	"peacock.color": "#00bb7f",
 
 	// ===
 	// TODO HIGHLIGHT
