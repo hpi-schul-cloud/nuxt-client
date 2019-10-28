@@ -9,14 +9,6 @@
 			maxlength="30"
 		/>
 
-		<base-textarea
-			v-model="course.description"
-			name="description"
-			label="Kursbeschreibung"
-			placeholder=""
-			maxlength="255"
-		/>
-
 		<base-select
 			v-model="course.teacherIds"
 			:options="teacherOptions"

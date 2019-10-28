@@ -26,7 +26,6 @@ const mountWithCourse = (propsData = {}) => {
 
 const checkRendering = (wrapper) => {
 	expect(wrapper.findAll("base-input-stub").length).toBe(3);
-	expect(wrapper.find("base-textarea-stub").exists()).toBe(true);
 	expect(wrapper.findAll("base-select-stub").length).toBe(2);
 };
 

@@ -34,7 +34,7 @@
 			</base-button>
 		</div>
 
-		<base-button design="primary" @click="addTime">
+		<base-button design="primary outline" @click="addTime">
 			<base-icon source="material" icon="add_circle_outline" />
 			Schulstundentermin anlegen
 		</base-button>
@@ -98,9 +98,10 @@ export default {
 .time-wrapper {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: flex-end;
 }
 .btn-delete {
+	align-self: center;
 	padding-right: var(--space-sm);
 }
 .item {
