@@ -17,11 +17,11 @@ describe("@components/NewsCard", () => {
 				BaseLink: RouterLinkStub,
 			},
 		});
-		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
-		expect(wrapper.find(".event-date").exists()).toBe(false);
+		expect(wrapper.find(".header").isEmpty()).toBe(false);
+		expect(wrapper.find(".footer").exists()).toBe(false);
 	});
 
-	it("Render without picture and date", () => {
+	it("Renders without picture and date", () => {
 		const wrapper = mount(NewsCard, {
 			propsData: {
 				id: "1",
@@ -31,18 +31,15 @@ describe("@components/NewsCard", () => {
 				createdBy: "Me",
 				color: ["#412363", "#c63e80"],
 			},
-			slots: {
-				default: "News news news news",
-			},
 			stubs: {
 				BaseLink: RouterLinkStub,
 			},
 		});
-		expect(wrapper.find(".inner-card").exists()).toBe(false);
-		expect(wrapper.find(".event-date").exists()).toBe(false);
-		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
+		expect(wrapper.find(".content__picture").exists()).toBe(false);
+		expect(wrapper.find(".footer").exists()).toBe(false);
+		expect(wrapper.find(".content__text").isEmpty()).toBe(false);
 	});
-	it("Render with picture and date", () => {
+	it("Renders with picture and date", () => {
 		const wrapper = mount(NewsCard, {
 			propsData: {
 				id: "1",
@@ -54,15 +51,60 @@ describe("@components/NewsCard", () => {
 				picture: "https://source.unsplash.com/daily",
 				eventDate: "2019-02-22 19:00",
 			},
-			slots: {
-				default: "News news news news",
-			},
 			stubs: {
 				BaseLink: RouterLinkStub,
 			},
 		});
-		expect(wrapper.find(".inner-card").exists()).toBe(true);
-		expect(wrapper.find(".event-date").exists()).toBe(true);
-		expect(wrapper.find(".bottom-container").isEmpty()).toBe(false);
+		expect(wrapper.find(".content__picture").exists()).toBe(true);
+		expect(wrapper.find(".footer").exists()).toBe(true);
+		expect(wrapper.find(".content__text").isEmpty()).toBe(false);
 	});
+
+	it("Renders landscape mode classes when isLandscape", () => {
+		const wrapper = mount(NewsCard, {
+			propsData: {
+				isLandscape: true,
+				id: "1",
+				category: "News Biologie",
+				title: "Darwin lebt",
+				createdAt: "2018-08-08",
+				createdBy: "Me",
+				color: ["#412363", "#c63e80"],
+				picture: "https://source.unsplash.com/daily",
+				eventDate: "2019-02-22 19:00",
+			},
+			stubs: {
+				BaseLink: RouterLinkStub,
+			},
+		})
+		expect(wrapper.find(".landscape-mode").exists()).toBe(true);
+		expect(wrapper.find(".landscape-mode__tab").exists()).toBe(true)
+		expect(wrapper.find(".landscape-mode__content").exists()).toBe(true)
+		expect(wrapper.find(".landscape-mode__content-picture").exists()).toBe(true);
+		expect(wrapper.find(".landscape-mode__content-text").exists()).toBe(true)
+	})
+
+	it("Does not Render landscape mode classes when !isLandscape", () => {
+		const wrapper = mount(NewsCard, {
+			propsData: {
+				isLandscape: false,
+				id: "1",
+				category: "News Biologie",
+				title: "Darwin lebt",
+				createdAt: "2018-08-08",
+				createdBy: "Me",
+				color: ["#412363", "#c63e80"],
+				picture: "https://source.unsplash.com/daily",
+				eventDate: "2019-02-22 19:00",
+			},
+			stubs: {
+				BaseLink: RouterLinkStub,
+			},
+		})
+		expect(wrapper.find(".landscape-mode").exists()).toBe(false);
+		expect(wrapper.find(".landscape-mode__tab").exists()).toBe(false)
+		expect(wrapper.find(".landscape-mode__content").exists()).toBe(false)
+		expect(wrapper.find(".landscape-mode__content-picture").exists()).toBe(false);
+		expect(wrapper.find(".landscape-mode__content-text").exists()).toBe(false)
+	})
 });

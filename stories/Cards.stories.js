@@ -57,8 +57,7 @@ storiesOf("Cards", module)
 			createdBy: text("CreatedBy", "Mona Weizenberg"),
 			picture: text("Picture", "https://source.unsplash.com/daily"),
 			eventDate: text("Event date", "2019-02-22-19:00"),
-			color1: color("color1", "#412363"),
-			color2: color("color2", "#c63e80"),
+			color: color("color", "#412363"),
 			isLandscape: boolean("isLandscape"),
 		}),
 		template: `
@@ -71,7 +70,7 @@ storiesOf("Cards", module)
 				:picture="picture"
 				:eventDate="eventDate"
 				:isLandscape="isLandscape"
-				:color="[color1, color2]"
+				:color="color"
 			>
 				{{content}}
 			</news-card>

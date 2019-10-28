@@ -17,7 +17,7 @@
 					name="content"
 					type="text"
 				></base-input>
-				<p>Automatische ver-ffentlichung vorplanen (optional)</p>
+				<p>Automatische Veröffentlichung vorplanen (optional)</p>
 				<base-input v-model="news.date.date" type="date" label="Veröffentlichungsdatum"></base-input>
 				<base-input v-model="news.date.time" type="time" label="Veröffentlichungszeit"></base-input>
 				<base-button design="primary" @click="print">Anlegen</base-button>
