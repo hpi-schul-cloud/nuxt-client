@@ -18,7 +18,7 @@ jobs:
     # Build & Deploy
     - stage: run parallel
       script: npm run build:nuxt
-      name: "build:nuxt"
+      name: "build:nuxt:default"
       services:
         - docker
       deploy:
@@ -28,6 +28,18 @@ jobs:
           branch:
             - develop
             - master
+    - script: npm run build:nuxt
+      name: "build:nuxt:brb"
+      env:
+        - SC_THEME=brb
+    - script: npm run build:nuxt
+      name: "build:nuxt:n21"
+      env:
+        - SC_THEME=n21
+    - script: npm run build:nuxt
+      name: "build:nuxt:open"
+      env:
+        - SC_THEME=open
     - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
       services:
