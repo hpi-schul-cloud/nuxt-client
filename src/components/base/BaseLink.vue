@@ -151,7 +151,7 @@ export default {
 .is-external {
 	border: none;
 	&:active {
-		color: var(--color-black);
+		color: var(--color-primary-dark);
 	}
 	&:hover {
 		color: var(--color-primary-dark);
