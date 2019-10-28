@@ -9,7 +9,12 @@ export default [
 		href: "/courses",
 		icon: "graduation-cap",
 	},
-	{ title: "Teams", href: "/teams", icon: "users" },
+	{
+		title: "Teams",
+		href: "/teams",
+		icon: "users",
+		permission: "TEAMS_ENABLED",
+	},
 	{
 		title: "Aufgaben",
 		href: "/homework",
@@ -48,6 +53,12 @@ export default [
 				href: "/files/courses/",
 			},
 			{
+				href: "/files/teams/",
+				icon: "folder-open-o",
+				title: "Teams",
+				permission: "TEAMS_ENABLED",
+			},
+			{
 				href: "geteilte Dateien",
 				icon: "folder-open-o",
 				href: "/files/shared/",
@@ -61,6 +72,12 @@ export default [
 	},
 	{ title: "Termine", href: "/calendar", icon: "table" },
 	{ title: "Lern-store", href: "/content", icon: "search" },
+	{
+		title: "Add-Ons",
+		href: "/addons",
+		icon: "puzzle-piece",
+		permission: "ADDONS_ENABLED",
+	},
 	{
 		title: "Verwaltung",
 		href: "/administration",

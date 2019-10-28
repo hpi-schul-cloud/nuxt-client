@@ -45,8 +45,8 @@ export default {
 				title: "",
 				content: "",
 				date: {
-					date: '',
-					time: '',
+					date: "",
+					time: "",
 				},
 			},
 		};

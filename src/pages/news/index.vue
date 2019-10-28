@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<base-button class="create-news-btn" design="primary" @click="$router.push({ name: 'news-new' })">
+		<base-button
+			class="create-news-btn"
+			design="primary"
+			@click="$router.push({ name: 'news-new' })"
+		>
 			Artikel anlegen
 		</base-button>
 
@@ -20,7 +24,7 @@
 				<base-icon v-else source="material" icon="list" fill="gray" />
 			</base-button>
 		</div>
-		<section :class="{ 'grid-container': !isList, 'list': isList }">
+		<section :class="{ 'grid-container': !isList, list: isList }">
 			<news-card
 				v-for="article of news"
 				:id="article._id"
@@ -41,7 +45,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import NewsCard from "@components/NewsCard";
+import NewsCard from "@components/molecules/NewsCard";
 
 export default {
 	head() {
@@ -95,7 +99,7 @@ export default {
 	align-items: flex-start;
 	justify-items: center;
 	width: 100%;
-	padding:var(--space-md);
+	padding: var(--space-md);
 }
 .view-toggles {
 	display: none;

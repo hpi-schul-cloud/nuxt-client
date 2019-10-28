@@ -9,6 +9,12 @@ const proxyOptions = {
 	changeOrigin: true,
 	target: process.env.LEGACY_CLIENT_URL || "http://localhost:3100",
 	logLevel: process.env.PROXY_LOG_LEVEL || "warn",
+	onError: (err, req, res) => {
+		res.writeHead(302, {
+			Location: "/error/proxy",
+		});
+		res.end();
+	},
 };
 const proxyInstance = proxy(proxyOptions);
 
