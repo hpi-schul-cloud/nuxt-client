@@ -3,9 +3,9 @@ import { configure, addDecorator, addParameters } from "@storybook/vue";
 import { withInfo } from "storybook-addon-vue-info";
 import { withA11y } from "@storybook/addon-a11y";
 import { withKnobs } from "@storybook/addon-knobs";
-import { setOptions } from "@storybook/addon-options";
+import { withOptions } from "@storybook/addon-options";
 
-setOptions({
+withOptions({
 	hierarchySeparator: /\//,
 	hierarchyRootSeparator: /\|/,
 });
@@ -50,9 +50,15 @@ addDecorator(() => ({
 }));
 
 // automatically import all files ending in *.stories.js
-const req = require.context("../", true, /\.stories\.js$/);
+const reqStories = require.context("../", true, /\.stories\.js$/);
+const reqComponentStories = require.context(
+	"../../src",
+	true,
+	/\.stories\.js$/
+);
 function loadStories() {
-	req.keys().forEach(req);
+	reqStories.keys().forEach(reqStories);
+	reqComponentStories.keys().forEach(reqComponentStories);
 }
 
 configure(loadStories, module);

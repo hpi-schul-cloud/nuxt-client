@@ -1,9 +1,7 @@
 <template>
 	<div ref="dialog">
 		<base-modal :active.sync="isActive">
-			<div class="modal-header">
-				<h3>{{ title }}</h3>
-			</div>
+			<template v-slot:header>{{ title }}</template>
 
 			<div class="modal-body">
 				<div>{{ message }}</div>
