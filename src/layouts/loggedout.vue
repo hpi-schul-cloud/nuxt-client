@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<slot />
+		<Nuxt />
 	</div>
 </template>
 
@@ -10,4 +10,8 @@ export default {};
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.container {
+	padding: var(--space-xl-3);
+}
 </style>
