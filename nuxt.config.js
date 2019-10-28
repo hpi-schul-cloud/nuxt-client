@@ -11,8 +11,11 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
+	// to make ENV variables available in components, they need to be defined here
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
+		FEATURE_EXTENSIONS_ENABLED: process.env.FEATURE_EXTENSIONS_ENABLED || false,
+		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
 	},
 	/*
 	 ** Headers of the page
