@@ -76,7 +76,7 @@
 		"@storybook/addon-viewport": "^5.2.4",
 		"@storybook/addons": "^5.2.4",
 		"@storybook/vue": "^5.2.4",
-		"@vue/cli-plugin-babel": "^3.3.0",
+		"@vue/cli-plugin-babel": "^4.0.0",
 		"@vue/cli-service": "^4.0.0",
 		"@vue/eslint-config-prettier": "^5.0.0",
 		"@vue/eslint-config-standard": "^4.0.0",
