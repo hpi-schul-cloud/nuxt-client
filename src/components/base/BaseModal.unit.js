@@ -55,9 +55,10 @@ describe("@components/BaseModal", () => {
 
 	it("pressing outside the model content should close the modal", () => {
 		const wrapper = mount(modal);
+
 		wrapper.vm.active = true;
 		expect(wrapper.find("#button").exists()).toBe(true);
-		wrapper.find(".modal-wrapper").trigger("click");
+		wrapper.find(".base-modal-wrapper").trigger("click");
 		expect(wrapper.find("#button").exists()).toBe(false);
 	});
 
@@ -66,7 +67,7 @@ describe("@components/BaseModal", () => {
 		const wrapper = mount(modal);
 		wrapper.vm.active = true;
 		expect(wrapper.find("#button").exists()).toBe(true);
-		wrapper.find(".modal-wrapper").trigger("click");
+		wrapper.find(".base-modal-wrapper").trigger("click");
 		expect(wrapper.find("#button").exists()).toBe(false);
 		setTimeout(() => {
 			wrapper.vm.active = true;
