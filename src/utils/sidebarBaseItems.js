@@ -144,6 +144,11 @@ export default [
 				icon: "building",
 				href: "/administration/school/",
 			},
+			{
+				title: "Datenquellen",
+				icon: "database",
+				href: "/administration/datasources/",
+			},
 		],
 	},
 	{
