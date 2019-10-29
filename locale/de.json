@@ -1,14 +1,5 @@
 {
-    "storybook.lang": {
-        "translation": "Ich bin jetzt auf Deutsch!",
-        "notes": ""
-    },
-    "pages.news.title": {
-        "translation": "Neuigkeiten",
-        "notes": "Title of News Page"
-    },
-    "pages.courses.new.title": {
-        "translation": "Neuen Kurs erstellen",
-        "notes": ""
-    }
+    "storybook.lang": "Ich bin jetzt auf Deutsch!",
+    "pages.news.title": "Neuigkeiten",
+    "pages.courses.new.title": "Neuen Kurs erstellen"
 }
