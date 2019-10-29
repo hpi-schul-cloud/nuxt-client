@@ -82,7 +82,7 @@ jobs:
       name: build:docs
 
     # Deploy
-    - stage: build
+    - stage: deploy
       name: deploy:nuxt
       script: bash ./deploy/deploy.sh -p client
     - script: bash ./deploy/deploy.sh -p storybook
