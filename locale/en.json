@@ -1,0 +1,14 @@
+{
+    "storybook.lang": {
+        "translation": "I'm in English now!",
+        "notes": ""
+    },
+    "pages.news.title": {
+        "translation": "News",
+        "notes": "Title of News Page"
+    },
+    "pages.courses.new.title": {
+        "translation": "Create new course",
+        "notes": ""
+    }
+}
