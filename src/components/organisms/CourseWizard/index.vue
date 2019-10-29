@@ -139,6 +139,7 @@ export default {
 	justify-content: flex-end;
 	max-width: 80ch;
 	margin: 0 auto;
+	margin-top: var(--space-md);
 }
 
 .header {
@@ -155,5 +156,9 @@ export default {
 		margin-right: var(--space-sm);
 		font-size: var(--heading-3);
 	}
+}
+
+.button:not(:first-child) {
+	margin-left: var(--space-sm);
 }
 </style>
