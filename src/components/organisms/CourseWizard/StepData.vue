@@ -136,6 +136,10 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.wrapper {
+	padding: var(--space-md) 0;
+}
+
 .date-wrapper {
 	display: flex;
 	justify-content: space-between;

@@ -99,10 +99,12 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: flex-end;
+	padding: var(--space-md) 0;
 }
 .btn-delete {
 	align-self: center;
 	padding-right: var(--space-sm);
+	margin-left: var(--space-md);
 }
 .item {
 	padding: 0 var(--space-xs-3);
