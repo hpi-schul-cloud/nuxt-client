@@ -28,18 +28,18 @@ jobs:
     - stage: test
       script: npm run build:nuxt
       name: "build:nuxt:default"
-    # - script: npm run build:nuxt
-    #   name: "build:nuxt:brb"
-    #   env:
-    #     - SC_THEME=brb
-    # - script: npm run build:nuxt
-    #   name: "build:nuxt:n21"
-    #   env:
-    #     - SC_THEME=n21
-    # - script: npm run build:nuxt
-    #   name: "build:nuxt:open"
-    #   env:
-    #     - SC_THEME=open
+    - script: npm run build:nuxt
+      name: "build:nuxt:brb"
+      env:
+        - SC_THEME=brb
+    - script: npm run build:nuxt
+      name: "build:nuxt:n21"
+      env:
+        - SC_THEME=n21
+    - script: npm run build:nuxt
+      name: "build:nuxt:open"
+      env:
+        - SC_THEME=open
     - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
       after_success:
@@ -56,20 +56,20 @@ jobs:
       after_success:
         - npm i -g codecov
         - codecov
-    # - script:
-    #     - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
-    #     - chmod 700 integration-test.sh
-    #     - bash integration-test.sh
-    #   name: "test:integration"
-    #   env:
-    #     - IT_CLIENT_HOST=nuxtclient
-    #     - IT_CLIENT_PORT=4000
-    #   services:
-    #     - docker
-    #   install:
-    #     - echo "skipping install"
-    #   before_cache:
-    #     - mkdir -p node_modules
+    - script:
+        - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
+        - chmod 700 integration-test.sh
+        - bash integration-test.sh
+      name: "test:integration"
+      env:
+        - IT_CLIENT_HOST=nuxtclient
+        - IT_CLIENT_PORT=4000
+      services:
+        - docker
+      install:
+        - echo "skipping install"
+      before_cache:
+        - mkdir -p node_modules
     # Lint
     - script: npm run lint:ci
       name: "lint"
