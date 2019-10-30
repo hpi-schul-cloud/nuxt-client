@@ -1,5 +1,6 @@
 ---
-to: "src/components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>.unit.js"
+to: "src/components/<%= type %>/<%= name %>.unit.js"
+
 ---
 import <%= name %> from './<%= name %>'
 
