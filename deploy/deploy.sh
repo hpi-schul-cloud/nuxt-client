@@ -9,7 +9,6 @@ do
 case "${option}"
 in
 p) PROJECT=${OPTARG};;
-t) THEME=${OPTARG};;
 esac
 done
 echo PROJECT $PROJECT
