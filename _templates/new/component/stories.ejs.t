@@ -1,16 +1,16 @@
 ---
-to: "<%= story ? ('stories/' + name + '.stories.js') : null %>"
+to: "<%= story ? ('src/components/' + type + '/' + name + '.stories.js') : null %>"
 ---
 import { storiesOf } from "@storybook/vue";
 
-import notes from "@docs/storybook/<%= name %>.md";
-import <%= name %> from "@components/<%= name.match(/^Base/) ? 'ui/' : '' %><%= name %>";
+import notes from "@docs/storybook/<%= type %>/<%= name %>.md";
+import <%= name %> from "./<%= name %>";
 
-storiesOf("<%= name %>", module)
+storiesOf("<%= type.charAt(0).toUpperCase() + type.slice(1) %>|<%= name %>", module)
 	.addParameters({
 		notes,
 	})
-	.add("<%= name %>", () => ({
+	.add("default", () => ({
 		components: { <%= name %> },
 		template: `<<%= name %> />`,
 		methods: {},
