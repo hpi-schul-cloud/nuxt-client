@@ -74,20 +74,26 @@ jobs:
 
     # Build Docker Images
     - stage: build
+      language: generic
       name: build:nuxt
       script: bash ./deploy/deploy.sh -p client
     - script: bash ./deploy/deploy.sh -p storybook
+      language: generic
       name: build:storybook
     - script: bash ./deploy/deploy.sh -p vuepress
+      language: generic
       name: build:docs
 
     # Deploy
     - stage: deploy
+      language: generic
       name: deploy:nuxt
       script: bash ./deploy/deploy.sh -p client
     - script: bash ./deploy/deploy.sh -p storybook
+      language: generic
       name: deploy:storybook
     - script: bash ./deploy/deploy.sh -p vuepress
+      language: generic
       name: deploy:docs
 
 cache: npm
