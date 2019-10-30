@@ -35,7 +35,7 @@ Let's say we want to make an user service for our feathers /news REST API. So we
 With this content:
 
 ```js
-import serviceTemplate from "../utils/service-template";
+import serviceTemplate from "@utils/service-template";
 const base = serviceTemplate("news");
 
 const module = {
@@ -52,8 +52,8 @@ This will take the service-template.js and provides the endpoint name "news".
 If we have custom service actions, mutations, getters or we want to extend the state we can extend the template using the mergeDeep util. This way we can add additional actions, getters, mutations and also a custom state.
 
 ```js
-import mergeDeep from "../utils/merge-deep";
-import serviceTemplate from "../utils/service-template";
+import mergeDeep from "@utils/merge-deep";
+import serviceTemplate from "@utils/service-template";
 const base = serviceTemplate("teams");
 
 const module = mergeDeep(base, {

@@ -1,6 +1,6 @@
 <template>
 	<div class="impressum-container">
-		<h1 class="h2">Impressum</h1>
+		<h1 class="h2">{{ $t("pages.impressum.title") }}</h1>
 		<h2 class="h4">
 			HPI Schul-Cloud - Hasso-Plattner-Institut für Digital Engineering gGmbH
 		</h2>
