@@ -10,30 +10,31 @@
 					name="title"
 					type="text"
 					maxlength="30"
-				></base-input>
-				<base-input
-					v-model="news.content"
-					label="Inhalt"
-					name="content"
-					type="text"
-				></base-input>
+				/>
+				<text-editor v-model="news.content" class="mb--md" />
 				<p>Automatische Veröffentlichung vorplanen (optional)</p>
-				<base-input v-model="news.date.date" type="date" label="Veröffentlichungsdatum"></base-input>
-				<base-input v-model="news.date.time" type="time" label="Veröffentlichungszeit"></base-input>
+				<base-input
+					v-model="news.date.date"
+					type="date"
+					label="Veröffentlichungsdatum"
+				/>
+				<base-input
+					v-model="news.date.time"
+					type="time"
+					label="Veröffentlichungszeit"
+				/>
 				<base-button design="primary" @click="print">Anlegen</base-button>
-			</section>
-
-			<section class="section">
-				<h1>{{ news.title }}</h1>
-				<!-- eslint-disable-next-line vue/no-v-html -->
-				<div v-html="news.content" />
 			</section>
 		</div>
 	</div>
 </template>
 
 <script>
+import TextEditor from "@components/molecules/TextEditor";
 export default {
+	components: {
+		TextEditor,
+	},
 	head() {
 		return {
 			title: "News erstellen",

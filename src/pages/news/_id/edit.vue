@@ -20,39 +20,39 @@
 				<h3>News bearbeiten</h3>
 			</section>
 
-			<section class="section">
-				<base-input
-					v-model="news.title"
-					label="Titel"
-					name="title"
-					type="text"
-					maxlength="30"
-				></base-input>
-				<base-input
-					v-model="news.content"
-					label="Inhalt"
-					name="content"
-					type="text"
-				></base-input>
-				<base-button design="danger text" @click="confirmDelete">
-					Löschen
-				</base-button>
-				<base-button design="primary" @click="save">Speichern</base-button>
-			</section>
+			<base-input
+				v-model="news.title"
+				label="Titel"
+				name="title"
+				type="text"
+				maxlength="30"
+			/>
+			<text-editor v-model="news.content" class="mb--md" />
 
-			<section class="section">
-				<h1>{{ news.title }}</h1>
-				<!-- eslint-disable-next-line vue/no-v-html -->
-				<div v-html="news.content" />
-			</section>
+			<modal-footer>
+				<template v-slot:left>
+					<base-button design="danger text" @click="confirmDelete">
+						Löschen
+					</base-button>
+				</template>
+				<template v-slot:right>
+					<base-button design="primary" @click="save">Speichern</base-button>
+				</template>
+			</modal-footer>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import TextEditor from "@components/molecules/TextEditor";
+import ModalFooter from "@components/molecules/ModalFooter";
 
 export default {
+	components: {
+		TextEditor,
+		ModalFooter,
+	},
 	head() {
 		return {
 			title: `${(this.orgNews || {}).title || "News"} bearbeiten`,

@@ -1,16 +1,16 @@
 <template>
 	<section v-bind="$attrs" class="card">
-		<header class="customcard-header">
-			<slot name="header" />
-		</header>
-		<div class="customcard-content">
-			<slot>
-				<slot name="content"/>
-			</slot>
-		</div>
-		<footer class="customcard-footer">
-			<slot name="footer" />
-		</footer>
+		<slot>
+			<header class="customcard-header">
+				<slot name="header" />
+			</header>
+			<div class="customcard-content">
+				<slot name="content" />
+			</div>
+			<footer class="customcard-footer">
+				<slot name="footer" />
+			</footer>
+		</slot>
 	</section>
 </template>
 
