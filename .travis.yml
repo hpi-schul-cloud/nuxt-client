@@ -17,8 +17,10 @@ env:
 
 stages:
   - test
-  - build
-  - deploy
+  - name: build
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+  - name: deploy
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
 
 jobs:
   include:
@@ -74,27 +76,29 @@ jobs:
 
     # Build Docker Images
     - stage: build
-      language: generic
       name: build:nuxt
+      language: generic
       script: bash ./deploy/deploy.sh -p client
     - script: bash ./deploy/deploy.sh -p storybook
-      language: generic
       name: build:storybook
-    - script: bash ./deploy/deploy.sh -p vuepress
       language: generic
+    - script: bash ./deploy/deploy.sh -p vuepress
       name: build:docs
+      language: generic
 
     # Deploy
     - stage: deploy
-      language: generic
       name: deploy:nuxt
+      language: generic
       script: bash ./deploy/deploy.sh -p client
-    - script: bash ./deploy/deploy.sh -p storybook
-      language: generic
+    - script: skip
       name: deploy:storybook
-    - script: bash ./deploy/deploy.sh -p vuepress
       language: generic
+      script: bash ./deploy/deploy.sh -p storybook
+    - script: skip
       name: deploy:docs
+      language: generic
+      script: bash ./deploy/deploy.sh -p vuepress
 
 cache: npm
 before_cache:
