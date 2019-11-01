@@ -28,22 +28,14 @@
 			<step-done v-show="currentStep === 2" />
 		</div>
 		<div class="step-wrapper">
-			<base-button v-if="!firststep" design="text" @click="lastStep"
-				>Zurück</base-button
-			>
-			<base-button v-if="currentStep === 1" design="text" @click="nextStep"
-				>Überspringen</base-button
-			>
-			<base-button v-if="!laststep" design="primary" @click="nextStep"
-				>Weiter</base-button
-			>
-
-			<base-button
+			<base-button v-if="!firststep" design="text" @click="lastStep">Zurück</base-button>
+			<base-button v-if="currentStep === 1" design="text" @click="nextStep">Überspringen</base-button>
+			<base-button v-if="!laststep" design="primary" @click="nextStep">Weiter</base-button>
+      <base-button
 				v-if="laststep"
 				type="submit"
 				design="primary"
-				@click="$emit('course-creation-submit')"
-			>
+				@click="$emit('course-creation-submit')">
 				Kurs anlegen und weiter
 			</base-button>
 		</div>
