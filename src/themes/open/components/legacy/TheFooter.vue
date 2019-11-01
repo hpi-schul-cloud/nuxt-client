@@ -1,6 +1,11 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
+			<img
+				class="hpi-logo"
+				src="@assets/img/footer-logo.png"
+				alt="Anbieterlogo"
+			/>
 			<span class="current-year">© {{ currentYear }} </span>
 		</div>
 
@@ -22,11 +27,16 @@
 							:key="innerlink.text"
 							v-bind="innerlink"
 							class="footer-link"
-							>{{ innerlink.text }}</base-link>
+							>{{ innerlink.text }}</base-link
+						>
 					</template>
 				</template>
 			</template>
 		</div>
+			<p class="bottom-line">
+			Made with
+			<span class="heart">❤</span> in Potsdam
+		</p>
 	</footer>
 </template>
 
@@ -52,16 +62,20 @@ export default {
 					innerlinks: [
 						{
 							to: "/datenschutz",
-							text: "Datenschutzerklärung NBC",
+							text: "Datenschutzerklärung HPI",
 						},
 						{
 							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
 								.privacyExemplary,
-							text: "Datenschutzerklärung:Muster-Schulen",
+							text: "Datenschutzerklärung: Schule",
 							target: "_blank",
 							rel: "noopener",
 						},
 					],
+				},
+					{
+					href: "https://github.com/schul-cloud/",
+					text: "GitHub",
 				},
 			];
 		},
@@ -70,10 +84,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.current-year {
-	margin-bottom: var(--space-xs);
-	font-size: var(--text-lg);
-}
+
 .footer {
 	width: 100%;
 	padding: 0 var(--space-md);
@@ -85,6 +96,13 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+.bottom-line {
+	margin-top: var(--space-xs);
+
+	.heart {
+		color: var(--color-secondary);
+	}
 }
 .footer-link {
 	color: var(--color-secondary);
