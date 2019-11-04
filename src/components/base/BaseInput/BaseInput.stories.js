@@ -97,11 +97,11 @@ storiesOf("Base|Inputs/Default", module)
 			</base-input>`,
 	}));
 
-storiesOf("Base|Inputs/Checkbox", module)
+storiesOf("Base|Inputs", module)
 	.addParameters({
 		notes,
 	})
-	.add("Array", () => ({
+	.add("Checkbox", () => ({
 		components: { BaseInput },
 		data: () => ({
 			vmodel: array("vmodel", ["a"], ", "),
@@ -122,30 +122,25 @@ storiesOf("Base|Inputs/Checkbox", module)
 			</div>
 		`,
 	}))
-	.add("Boolean", () => ({
+	.add("Switch", () => ({
 		components: { BaseInput },
 		data: () => ({
 			vmodel: boolean("vmodel", true),
 			value: text("value", "published"),
 		}),
 		template: `
-			<div role="group" aria-label="checkboxes">
+			<div>
 				<base-input
-					type="checkbox"
+					type="switch"
 					v-model="vmodel"
 					:value="value"
-					name="checkbox"
+					name="switch"
 					:label="'Checkbox - ' + value"
 				/>
 				<p> {{ vmodel}} </p>
 			</div>
 		`,
-	}));
-
-storiesOf("Base|Inputs", module)
-	.addParameters({
-		notes,
-	})
+	}))
 	.add("Radio", () => ({
 		components: { BaseInput },
 		data: () => ({
