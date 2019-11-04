@@ -1,12 +1,10 @@
 <template>
-	<div class="footer">
-		<div class="actions-container">
-			<div class="primary-container">
-				<slot name="primary"></slot>
-			</div>
-			<div class="secondary-container">
-				<slot name="secondary"></slot>
-			</div>
+	<div class="actions-container">
+		<div class="primary-container">
+			<slot name="primary"></slot>
+		</div>
+		<div class="secondary-container">
+			<slot name="secondary"></slot>
 		</div>
 	</div>
 </template>
