@@ -4,13 +4,12 @@ import { supportedTypes } from "./BaseInput";
 describe("@components/BaseInput", () => {
 	it(...isValidComponent(BaseInput));
 
-	it("all types render named slot content", () => {
-		supportedTypes.forEach((type) => {
-			return rendersNamedSlotContent(BaseInput, {
-				propsData: { vmodel: "test", type },
-			});
-		});
-	});
+	// BaseInput passes all given slots to it's child components
+	it(
+		...rendersSlotContent(BaseInput, ["default", "icon", "someRandomSlot"], {
+			propsData: { vmodel: "test", type: "text", label: "Label" },
+		})
+	);
 
 	it("all types have a label", () => {
 		const testLabel = "MyTestLabel";

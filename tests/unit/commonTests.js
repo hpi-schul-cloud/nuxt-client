@@ -7,40 +7,28 @@ export function isValidComponent(component) {
 	];
 }
 
-export function rendersDefaultSlotContent(component, mountOptions) {
+export function rendersSlotContent(
+	component,
+	slotNames = ["default"],
+	mountOptions
+) {
 	return [
-		"renders its default slot content",
+		"renders his slot(s) content(s)",
 		() => {
-			const slotContent = "<p>Hello!</p>";
-			const { element } = shallowMount(component, {
-				...mountOptions,
-				slots: {
-					default: slotContent,
-				},
+			slotNames.forEach((slotName) => {
+				const slots = {};
+				slots[slotName] = `<p>Slot-${slotName}</p>`;
+				const { element } = shallowMount(component, {
+					...mountOptions,
+					slots,
+				});
+				expect(element.innerHTML).toContain(slots[slotName]);
 			});
-			expect(element.innerHTML).toContain(slotContent);
-		},
-	];
-}
-
-export function rendersNamedSlotContent(component, mountOptions) {
-	return [
-		"renders its named slot content",
-		() => {
-			const slotContent = "<p>Hello!</p>";
-			const { element } = shallowMount(component, {
-				...mountOptions,
-				slots: {
-					testSlot: slotContent,
-				},
-			});
-			expect(element.innerHTML).toContain(slotContent);
 		},
 	];
 }
 
 export default {
 	isValidComponent,
-	rendersDefaultSlotContent,
-	rendersNamedSlotContent,
+	rendersSlotContent,
 };
