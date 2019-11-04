@@ -29,16 +29,16 @@
 			/>
 			<text-editor v-model="news.content" class="mb--md" />
 
-			<modal-footer>
-				<template v-slot:left>
+			<form-actions>
+				<template v-slot:secondary>
 					<base-button design="danger text" @click="confirmDelete">
 						Löschen
 					</base-button>
 				</template>
-				<template v-slot:right>
+				<template v-slot:primary>
 					<base-button design="primary" @click="save">Speichern</base-button>
 				</template>
-			</modal-footer>
+			</form-actions>
 		</div>
 	</div>
 </template>
@@ -46,12 +46,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import TextEditor from "@components/molecules/TextEditor";
-import ModalFooter from "@components/molecules/ModalFooter";
+import FormActions from "@components/molecules/FormActions";
 
 export default {
 	components: {
 		TextEditor,
-		ModalFooter,
+		FormActions,
 	},
 	head() {
 		return {

@@ -1,0 +1,63 @@
+<template>
+	<div class="footer">
+		<div class="actions-container">
+			<div class="primary-container">
+				<slot name="primary"></slot>
+			</div>
+			<div class="secondary-container">
+				<slot name="secondary"></slot>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+.actions-container {
+	display: grid;
+	grid-template-areas: "primary" "secondary";
+	width: 100%;
+
+	@include breakpoint(tablet) {
+		grid-template-areas: "secondary primary";
+	}
+}
+
+.primary-container,
+.secondary-container {
+	display: flex;
+	flex-wrap: wrap;
+
+	> * {
+		margin: var(--space-xs) 0;
+	}
+}
+
+.primary-container {
+	// row-reverse to display most right action on mobile devices at the top
+	flex-direction: row-reverse;
+	grid-area: primary;
+
+	:not(:last-child) {
+		margin-left: var(--space-sm);
+	}
+}
+
+.secondary-container {
+	grid-area: secondary;
+	justify-content: flex-end;
+
+	@include breakpoint(tablet) {
+		justify-content: flex-start;
+	}
+
+	> *:not(:first-child) {
+		margin-left: var(--space-sm);
+	}
+}
+</style>
