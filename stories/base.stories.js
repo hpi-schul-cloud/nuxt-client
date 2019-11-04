@@ -12,9 +12,6 @@ import BaseButton from "@basecomponents/BaseButton";
 import BaseCard from "@basecomponents/BaseCard";
 import BaseCollapsible from "@basecomponents/BaseCollapsible";
 import BaseIcon from "@basecomponents/BaseIcon";
-import BaseInput, {
-	supportedTypes as baseInputTypes,
-} from "@basecomponents/BaseInput/BaseInput";
 import BaseLink from "@basecomponents/BaseLink";
 import BaseProgressbar from "@basecomponents/BaseProgressbar";
 import BaseQrCode from "@basecomponents/BaseQrCode";
@@ -198,128 +195,6 @@ storiesOf("Base|Other", module)
 				Scaling works, by setting the font-size attribute:
 				<base-icon source="custom" icon="tasks" style="font-size: 2em" />
 			</p>
-		</div>`,
-	}))
-	.add("Base Input (Knobs)", () => {
-		const baseInputTypesDict = {};
-		baseInputTypes.forEach((type) => {
-			baseInputTypesDict[type] = type;
-		});
-		return {
-			components: { BaseInput, BaseIcon },
-			data: () => ({
-				vmodels: {
-					default: "",
-					warning: "",
-					success: "",
-					disabled: "",
-				},
-				type: select("type", baseInputTypesDict, baseInputTypes[0]),
-				label: text("label", "Label"),
-				name: text("name", "name"),
-				value: text("value", ""),
-				placeholder: text("placeholder", "Placeholder (Labelname)"),
-				info: text("info", ""),
-				hint: text("hint", "Optional"),
-				success: boolean("success", false),
-				error: boolean("error", false),
-				errortext: text("errortext", ""),
-				disabled: boolean("disabled", false),
-			}),
-			template: `
-				<div>
-					<base-input
-						v-model="vmodels.default"
-						:label="label"
-						:type="type"
-						:name="name"
-						:placeholder="placeholder"
-						:info="info"
-						:hint="hint"
-						:error="errortext || (error? ' ' : '')"
-						:success="success"
-						:disabled="disabled">
-						<base-icon slot="icon" source="material" icon="alarm" />
-					</base-input>
-				</div>`,
-		};
-	})
-	.add("Base Input (All)", () => ({
-		components: { BaseInput },
-		data: () => ({
-			info: "Assistive text",
-			hint: "Optional",
-			vmodels: {
-				text: "",
-				textSuccess: "",
-				textError: "",
-				textDisabled: "",
-				email: "",
-				emailSuccess: "",
-				emailError: "",
-				emailDisabled: "",
-				password: "",
-				passwordSuccess: "",
-				passwordError: "",
-				passwordDisabled: "",
-				url: "",
-				urlSuccess: "",
-				urlError: "",
-				urlDisabled: "",
-				number: 0,
-				numberSuccess: "",
-				numberError: "",
-				numberDisabled: "",
-				date: "",
-				dateSuccess: "",
-				dateError: "",
-				dateDisabled: "",
-				time: "",
-				timeSuccess: "",
-				timeError: "",
-				timeDisabled: "",
-				checkboxBoolean: true,
-				checkboxList: ["a"],
-				switch: true,
-				radio: "b",
-			},
-			placeholders: {
-				text: "Text",
-				email: "Email / Nutzername",
-				password: "Passwort",
-				url: "Url",
-				number: "Number",
-				date: "Date",
-				time: "Time",
-			},
-		}),
-
-		template: `<div>
-			${["text", "email", "password", "url", "number", "date", "time"]
-				.map(
-					(type) =>
-						`<br/>
-						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}']" :label="placeholders['${type}']" :placeholder="placeholders['${type}']" :info="info" :hint="hint"/>\n
-						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}Success']" :label="placeholders['${type}'] + ' - Success'" :placeholder="placeholders['${type}'] + ' - Success'" :info="info" :hint="hint" success/>\n
-						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}Error']" :label="placeholders['${type}'] + ' - Error'" :placeholder="placeholders['${type}'] + ' - Error'" :info="info" :hint="hint" error="Error"/>\n
-						<br/>
-						<base-input type="${type}" v-model="vmodels['${type}Disabled']" :label="placeholders['${type}'] + ' - Disabled'" :placeholder="placeholders['${type}'] + ' - Disabled'" :info="info" :hint="hint" disabled/>\n`
-				)
-				.join("")
-				.trimRight()}
-			<div role="group" aria-label="checkboxes">
-				<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" name="checkbox" label="Checkbox"/>
-				<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" name="checkbox" label="Checkbox"/>
-			</div>
-			<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
-			<div role="radiogroup" aria-label="radiobuttons">
-				<base-input type="radio" v-model="vmodels.radio" value="a" name="radio" label="Radio"/>
-				<base-input type="radio" v-model="vmodels.radio" value="b" name="radio" label="Radio"/>
-			</div>
-			<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
 		</div>`,
 	}))
 	.add("Base Textarea", () => ({
