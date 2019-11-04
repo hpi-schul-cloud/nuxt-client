@@ -8,6 +8,7 @@
 module.exports = [
 	`^/error/`,
 	`^/impressum/?`,
+	`^/nuxtversion/?$`,
 	// `^/news`,
 	// or: `^/news/${mongoId}/edit`,
 ];
