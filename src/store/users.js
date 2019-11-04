@@ -1,4 +1,4 @@
-import serviceTemplate from "../utils/service-template";
+import serviceTemplate from "@utils/service-template";
 const base = serviceTemplate("users");
 
 const module = {
