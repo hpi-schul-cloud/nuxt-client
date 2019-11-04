@@ -33,7 +33,7 @@ inform_staging() {
 }
 
 deploy(){
-	$SYSTEM = $1 # [staging, test ,demo]
+	$SYSTEM = $1 # [staging, test, demo]
 
 	$DOCKER_IMAGE = $2 # (nuxt-client, nuxt-storybook, nuxt-vuepress), autoprefixed with "schulcloud-"
 	$DOCKER_TAG = $3 # version/tag of the image to use. Usually the branch name or a GIT_SHA

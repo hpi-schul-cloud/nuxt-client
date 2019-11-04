@@ -78,11 +78,11 @@ jobs:
     - stage: build
       name: build:nuxt
       language: generic
-      script: bash ./deploy/deploy.sh -p client
-    - script: bash ./deploy/deploy.sh -p storybook
+      script: bash ./deploy/build.sh -p client
+    - script: bash ./deploy/build.sh -p storybook
       name: build:storybook
       language: generic
-    - script: bash ./deploy/deploy.sh -p vuepress
+    - script: bash ./deploy/build.sh -p vuepress
       name: build:docs
       language: generic
 
