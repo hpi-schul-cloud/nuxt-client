@@ -2,7 +2,7 @@
 
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean, color, number } from "@storybook/addon-knobs";
+import { text, select, boolean, color } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
 import BaseAudio from "@basecomponents/BaseAudio";
@@ -18,7 +18,6 @@ import BaseQrCode from "@basecomponents/BaseQrCode";
 import BaseSelect from "@basecomponents/BaseSelect";
 import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseTable from "@basecomponents/BaseTable";
-import BaseTextarea from "@basecomponents/BaseTextarea";
 import BaseVideo from "@basecomponents/BaseVideo";
 
 storiesOf("Base|Other", module)
@@ -196,25 +195,6 @@ storiesOf("Base|Other", module)
 				<base-icon source="custom" icon="tasks" style="font-size: 2em" />
 			</p>
 		</div>`,
-	}))
-	.add("Base Textarea", () => ({
-		components: { BaseTextarea },
-		data: () => ({
-			value: "",
-			label: text("label", "Label"),
-			placeholder: text("placeholder", "Schreibe hier die Antwort rein."),
-			rows: number("rows", 1),
-			maxRows: number("maxRows", 5),
-			maxLength: number("maxLength", 50),
-			withLines: boolean("withLines", false),
-			disabled: boolean("disabled", false),
-		}),
-		template: `
-			<div>
-				v-model: {{value}} <br/>
-				<base-textarea v-model="value" :label="label" :placeholder="placeholder" :rows="rows" :maxRows="maxRows" :maxLength="maxLength" :withLines="withLines" :disabled="disabled"/>
-			</div>`,
-		methods: {},
 	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },

@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 import { text, select, boolean, array } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
-import BaseInput from "@basecomponents/BaseInput/BaseInput";
+import BaseInput from "./BaseInput";
 import BaseIcon from "@basecomponents/BaseIcon";
 
 const defaultTypes = [
