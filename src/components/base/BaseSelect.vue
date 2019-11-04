@@ -61,10 +61,21 @@ export default {
 	computed: {
 		model: {
 			get() {
-				return this.value;
+				if (this.multiple) {
+					return this.value.map((v) => {
+						return this.options.find((a) => a[this.trackBy] === v);
+					});
+				} else {
+					return this.options.find((a) => a[this.trackBy] === this.value);
+				}
 			},
-			set(v) {
-				this.$emit("input", v[this.trackBy]);
+			set(value) {
+				if (this.multiple) {
+					const out = value.map((a) => a[this.trackBy]);
+					this.$emit("input", out);
+				} else {
+					this.$emit("input", value[this.trackBy]);
+				}
 			},
 		},
 	},

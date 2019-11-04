@@ -9,16 +9,8 @@
 			maxlength="30"
 		/>
 
-		<base-textarea
-			v-model="course.description"
-			name="description"
-			label="Kursbeschreibung"
-			placeholder=""
-			maxlength="255"
-		/>
-
 		<base-select
-			v-model="course.teachers"
+			v-model="course.teacherIds"
 			:options="teacherOptions"
 			:multiple="true"
 			label="Unterrichtender Lehrer"
@@ -26,7 +18,7 @@
 		/>
 
 		<base-select
-			v-model="course.substitutions"
+			v-model="course.substitutionIds"
 			:options="teacherOptions"
 			:multiple="true"
 			label="Vertretungs-Lehrer"
@@ -54,7 +46,7 @@
 			/>
 		</div>
 
-		<course-times v-model="course.times" />
+		<course-times v-model="courseTimes" />
 	</div>
 </template>
 
@@ -74,15 +66,25 @@ export default {
 			type: Object,
 			required: true,
 			validator: (course) =>
-				["name", "description", "startDate", "untilDate", "times"].every(
-					(key) => {
-						if (course[key] === undefined) {
-							console.error("key", key, "of course is undefined");
-						}
-						return course[key] !== undefined;
+				[
+					"name",
+					"description",
+					"startDate",
+					"untilDate",
+					"times",
+					"substitutionIds",
+					"teacherIds",
+				].every((key) => {
+					if (course[key] === undefined) {
 					}
-				),
+					return course[key] !== undefined;
+				}),
 		},
+	},
+	data() {
+		return {
+			reactiveArray: [],
+		};
 	},
 	computed: {
 		teacherOptions() {
@@ -93,12 +95,50 @@ export default {
 				};
 			});
 		},
+		courseTimes: {
+			// TODO adapt server Apiv2 to avoid recalculations
+			get() {
+				const result = this.course.times.map((time) => {
+					const startTime = parseInt(time.startTime, 10) / (60 * 1000);
+					const startHours = Math.floor(startTime / 60);
+					const startMinutes = startTime - startHours * 60;
+					return {
+						startTime: `${startHours
+							.toString()
+							.padStart(2, "0")}:${startMinutes.toString().padStart(2, "0")}`,
+						duration: parseInt(time.duration, 10) / (60 * 1000),
+						weekday: time.weekday,
+						room: time.room,
+					};
+				});
+				// this is a hack to make the result reactive. Never do this again!
+				this.$set(this, "reactiveArray", result);
+				return this.reactiveArray;
+			},
+			set(v) {
+				const times = v.map((time) => {
+					let [startHours, startMinutes] = time.startTime.split(":");
+					startMinutes = parseInt(startMinutes, 10) * 60 * 1000;
+					startHours = parseInt(startHours, 10) * 60 * 60 * 1000;
+					time.startTime = (startHours + startMinutes).toString();
+					time.duration = (time.duration * 60 * 1000).toString();
+
+					return time;
+				});
+				this.$set(this.course, "times", times);
+				this.$emit("update:course", this.course);
+			},
+		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.wrapper {
+	padding: var(--space-md) 0;
+}
 
 .date-wrapper {
 	display: flex;
