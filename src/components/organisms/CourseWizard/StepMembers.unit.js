@@ -11,20 +11,9 @@ const getMockCourse = () => ({
 	startDate: "",
 	untilDate: "",
 	times: [],
-	teachers: ["test"],
-	students: {
-		_id: "idId",
-	},
-	classes: [
-		{
-			label: "test",
-			value: "idid",
-		},
-		{
-			label: "test2",
-			value: "id2",
-		},
-	],
+	teachersIds: ["test"],
+	userIds: ["idId"],
+	classIds: ["idid", "id2"],
 });
 
 describe("@components/StepMembers", () => {

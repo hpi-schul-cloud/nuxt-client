@@ -8,10 +8,10 @@
 			<h3 class="h4">Was kann ich in einem Kurs machen?</h3>
 			<h4 class="h5">Themen anlegen</h4>
 			Themen sind in der Schul-Cloud der Container für dein Unterrichtsmaterial.
-			<h4 class="h6">Aufgaben stellen</h4>
+			<h4 class="h5">Aufgaben stellen</h4>
 			Innerhalb eines Kurses/Themas kannst du Aufgaben an deine Teilnehmer
 			stellen.
-			<h4 class="h6">Tools hinzufügen</h4>
+			<h4 class="h5">Tools hinzufügen</h4>
 			In einem Kurs kannst du außerdem Tools zum interaktiven Unterricht
 			hinzufügen.
 		</div>
