@@ -12,8 +12,7 @@ storiesOf("Molecules|FormActions", module).add("default", () => ({
 				<base-button design="text">Abbrechen</base-button>
 			</template>
 			<template v-slot:secondary>
-				<base-button design="danger text">Löschen 1</base-button>
-				<base-button design="danger text">Löschen 2</base-button>
+				<base-button design="danger text">Löschen</base-button>
 			</template>
 		</FormActions>`,
 }));
