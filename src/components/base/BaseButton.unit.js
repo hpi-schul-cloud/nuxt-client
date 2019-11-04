@@ -27,7 +27,7 @@ const successButton = {
 
 describe("@components/BaseButton", () => {
 	it(...isValidComponent(BaseButton));
-	it(...rendersDefaultSlotContent(BaseButton));
+	it(...rendersSlotContent(BaseButton));
 	it("Generates a default button", () => {
 		const wrapper = mount(defaultButton);
 		expect(wrapper.find("button").exists()).toBe(true);

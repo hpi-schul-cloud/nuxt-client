@@ -3,7 +3,7 @@ import BaseLink from "./BaseLink";
 describe("@components/BaseLink", () => {
 	it(...isValidComponent(BaseLink));
 	it(
-		...rendersDefaultSlotContent(BaseLink, {
+		...rendersSlotContent(BaseLink, ["default"], {
 			...createComponentMocks({ router: true }),
 			propsData: {
 				href: "https://schul-cloud.org",
@@ -11,7 +11,7 @@ describe("@components/BaseLink", () => {
 		})
 	);
 	it(
-		...rendersDefaultSlotContent(BaseLink, {
+		...rendersSlotContent(BaseLink, ["default"], {
 			...createComponentMocks({ router: true }),
 			propsData: {
 				to: "/news",
@@ -19,7 +19,7 @@ describe("@components/BaseLink", () => {
 		})
 	);
 	it(
-		...rendersDefaultSlotContent(BaseLink, {
+		...rendersSlotContent(BaseLink, ["default"], {
 			...createComponentMocks({ router: true }),
 			propsData: {
 				name: "news",

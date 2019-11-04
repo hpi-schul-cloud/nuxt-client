@@ -4,6 +4,13 @@ import { supportedTypes } from "./BaseInput";
 describe("@components/BaseInput", () => {
 	it(...isValidComponent(BaseInput));
 
+	// BaseInput passes all given slots to it's child components
+	it(
+		...rendersSlotContent(BaseInput, ["default", "icon", "someRandomSlot"], {
+			propsData: { vmodel: "test", type: "text", label: "Label" },
+		})
+	);
+
 	it("all types have a label", () => {
 		const testLabel = "MyTestLabel";
 		supportedTypes
