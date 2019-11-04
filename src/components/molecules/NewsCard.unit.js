@@ -75,13 +75,15 @@ describe("@components/NewsCard", () => {
 			stubs: {
 				BaseLink: RouterLinkStub,
 			},
-		})
+		});
 		expect(wrapper.find(".landscape-mode").exists()).toBe(true);
-		expect(wrapper.find(".landscape-mode__tab").exists()).toBe(true)
-		expect(wrapper.find(".landscape-mode__content").exists()).toBe(true)
-		expect(wrapper.find(".landscape-mode__content-picture").exists()).toBe(true);
-		expect(wrapper.find(".landscape-mode__content-text").exists()).toBe(true)
-	})
+		expect(wrapper.find(".landscape-mode__tab").exists()).toBe(true);
+		expect(wrapper.find(".landscape-mode__content").exists()).toBe(true);
+		expect(wrapper.find(".landscape-mode__content-picture").exists()).toBe(
+			true
+		);
+		expect(wrapper.find(".landscape-mode__content-text").exists()).toBe(true);
+	});
 
 	it("Does not Render landscape mode classes when !isLandscape", () => {
 		const wrapper = mount(NewsCard, {
@@ -99,11 +101,13 @@ describe("@components/NewsCard", () => {
 			stubs: {
 				BaseLink: RouterLinkStub,
 			},
-		})
+		});
 		expect(wrapper.find(".landscape-mode").exists()).toBe(false);
-		expect(wrapper.find(".landscape-mode__tab").exists()).toBe(false)
-		expect(wrapper.find(".landscape-mode__content").exists()).toBe(false)
-		expect(wrapper.find(".landscape-mode__content-picture").exists()).toBe(false);
-		expect(wrapper.find(".landscape-mode__content-text").exists()).toBe(false)
-	})
+		expect(wrapper.find(".landscape-mode__tab").exists()).toBe(false);
+		expect(wrapper.find(".landscape-mode__content").exists()).toBe(false);
+		expect(wrapper.find(".landscape-mode__content-picture").exists()).toBe(
+			false
+		);
+		expect(wrapper.find(".landscape-mode__content-text").exists()).toBe(false);
+	});
 });

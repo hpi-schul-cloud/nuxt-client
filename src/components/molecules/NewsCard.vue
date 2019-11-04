@@ -3,7 +3,12 @@
 		<BaseCard v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
 			<template v:slot:header>
 				<div class="header">
-					<div :class="!isLandscape ? 'header__tab' : 'header__tab landscape-mode__tab'" :style="tabBackground">
+					<div
+						:class="
+							!isLandscape ? 'header__tab' : 'header__tab landscape-mode__tab'
+						"
+						:style="tabBackground"
+					>
 						<div class="header__tab-content">
 							{{ category }}
 						</div>
@@ -14,7 +19,13 @@
 			<template v:slot:content>
 				<div :class="{ 'landscape-mode__content': isLandscape }">
 					<template v-if="picture">
-						<div :class="!isLandscape ? 'content__picture' : 'content__picture landscape-mode__content-picture'">
+						<div
+							:class="
+								!isLandscape
+									? 'content__picture'
+									: 'content__picture landscape-mode__content-picture'
+							"
+						>
 							<img :src="picture" role="presentation" />
 							<div
 								class="content__picture-overlay"
@@ -22,7 +33,13 @@
 							></div>
 						</div>
 					</template>
-					<div :class="!isLandscape ? 'content__text' : 'content__text landscape-mode__content-text'">
+					<div
+						:class="
+							!isLandscape
+								? 'content__text'
+								: 'content__text landscape-mode__content-text'
+						"
+					>
 						<p class="content__text-info"
 							>{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</p
 						>

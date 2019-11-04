@@ -9,7 +9,7 @@ describe("@components/BaseCard", () => {
 			slots: {
 				header: "Header",
 				content: "Content",
-				footer: "Footer"
+				footer: "Footer",
 			},
 		});
 		expect(wrapper.find(".customcard-header").text()).toBe("Header");

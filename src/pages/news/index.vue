@@ -38,7 +38,6 @@
 				:is-landscape="isList"
 				>{{ article.content }}</news-card
 			>
-
 		</section>
 	</div>
 </template>
