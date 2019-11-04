@@ -1,19 +1,19 @@
 const userIsTabbingMixin = {
 	created: function() {
-		window.addEventListener("keydown", this.handleFirstTab);
+		window.addEventListener("keydown", this.$_handleFirstTab);
 		this.$userIsTabbing = false;
 	},
 	methods: {
-		handleFirstTab: function(e) {
+		$_handleFirstTab: function(e) {
 			if (e.key === "Tab" || e.keyCode.toString() === "9") {
-				window.removeEventListener("keydown", this.handleFirstTab);
-				window.addEventListener("click", this.handleFirstClick);
+				window.removeEventListener("keydown", this.$_handleFirstTab);
+				window.addEventListener("click", this.$_handleFirstClick);
 				this.$userIsTabbing = true;
 			}
 		},
-		handleFirstClick: function() {
-			window.removeEventListener("click", this.handleFirstClick);
-			window.addEventListener("keydown", this.handleFirstTab);
+		$_handleFirstClick: function() {
+			window.removeEventListener("click", this.$_handleFirstClick);
+			window.addEventListener("keydown", this.$_handleFirstTab);
 			this.$userIsTabbing = false;
 		},
 	},
