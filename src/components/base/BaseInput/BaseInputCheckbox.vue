@@ -9,7 +9,10 @@
 			class="visually-hidden"
 			@change="updateVModel"
 		/>
-		<span ref="icon" :class="['icon', type, { 'user-is-tabbing': $userIsTabbing } ]">
+		<span
+			ref="icon"
+			:class="['icon', type, { 'user-is-tabbing': $userIsTabbing }]"
+		>
 			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
 		</span>
 		<span class="label">

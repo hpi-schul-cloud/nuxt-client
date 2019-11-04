@@ -40,12 +40,12 @@ describe("@components/BaseTextarea", () => {
 	it("rejects carriage return when maximum row limit is reached", () => {
 		const wrapper = getMock(" :maxRows='2' ");
 		const input = wrapper.find("textarea");
-		
+
 		input.setValue("test");
-		const event = new KeyboardEvent('keydown', { 'keyCode': 13 }, );
-		const spy = jest.spyOn(event, 'preventDefault');
+		const event = new KeyboardEvent("keydown", { keyCode: 13 });
+		const spy = jest.spyOn(event, "preventDefault");
 		input.element.dispatchEvent(event);
-		expect(spy).not.toHaveBeenCalled()
+		expect(spy).not.toHaveBeenCalled();
 
 		input.setValue("test \n string");
 		input.element.dispatchEvent(event);

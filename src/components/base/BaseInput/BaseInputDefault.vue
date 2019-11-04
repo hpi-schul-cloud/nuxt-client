@@ -1,5 +1,3 @@
-<!-- eslint-disable max-lines -->
-
 <template>
 	<div class="wrapper">
 		<div
@@ -17,7 +15,7 @@
 				>
 					{{ label }}
 				</label>
-				<span v-if="hasHint" class="hint info">
+				<span v-if="!!hint" class="hint info">
 					{{ hint }}
 				</span>
 			</div>
@@ -71,7 +69,7 @@
 			</div>
 		</div>
 		<span
-			v-if="hasError || hasInfo"
+			v-if="hasError || !!info"
 			:class="{ info: true, help: !hasError, error: hasError }"
 		>
 			{{ error || info }}
@@ -99,10 +97,7 @@ export default {
 		event: "input",
 	},
 	props: {
-		vmodel: {
-			type: [String, Number],
-			required: true,
-		},
+		vmodel: { type: [String, Number], required: true },
 		type: {
 			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
@@ -110,28 +105,12 @@ export default {
 				return supportedTypes.includes(type) || !type;
 			},
 		},
-		label: {
-			type: String,
-			required: true,
-		},
-		info: {
-			type: String,
-			default: "",
-		},
-		hint: {
-			type: String,
-			default: "",
-		},
-		error: {
-			type: String,
-			default: "",
-		},
-		success: {
-			type: Boolean,
-		},
-		disabled: {
-			type: Boolean,
-		},
+		label: { type: String, required: true },
+		info: { type: String, default: "" },
+		hint: { type: String, default: "" },
+		error: { type: String, default: "" },
+		success: { type: Boolean },
+		disabled: { type: Boolean },
 	},
 	data: function() {
 		return {
@@ -139,14 +118,8 @@ export default {
 		};
 	},
 	computed: {
-		hasHint() {
-			return !!this.hint;
-		},
 		hasError() {
 			return !!this.error;
-		},
-		hasInfo() {
-			return !!this.info;
 		},
 		showLabel() {
 			return !!this.vmodel || !this.$attrs.placeholder;
@@ -235,12 +208,15 @@ export default {
 			width: 24px;
 			height: 24px;
 			margin-right: var(--space-xxs);
+			/deep/ .material {
+				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+				font-size: 1.1em;
+			}
 		}
 		.core {
 			flex: 1;
 			height: min-content;
-			// needed for correct spacing
-			line-height: 0;
+			line-height: 0; // needed for correct spacing
 			input {
 				width: 100%;
 				margin-bottom: var(--space-xxs);
@@ -249,9 +225,6 @@ export default {
 				border: none;
 				&:focus {
 					outline: none;
-				}
-				&::placeholder {
-					// color: green;
 				}
 				&:disabled {
 					background-color: transparent;

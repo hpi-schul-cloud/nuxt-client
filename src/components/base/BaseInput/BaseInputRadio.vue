@@ -9,7 +9,7 @@
 			class="visually-hidden"
 			@change="$emit('input', $event.target.value)"
 		/>
-		<span class="radio" :class="{ 'user-is-tabbing': $userIsTabbing }"/>
+		<span class="radio" :class="{ 'user-is-tabbing': $userIsTabbing }" />
 		<span class="label">
 			{{ label }}
 		</span>
