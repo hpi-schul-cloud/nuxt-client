@@ -7,7 +7,7 @@
 		</p>
 
 		<base-select
-			v-model="course.classes"
+			v-model="course.classIds"
 			:options="classOptions"
 			:multiple="true"
 			label="Klasse auswählen"
@@ -15,11 +15,11 @@
 		></base-select>
 
 		<base-select
-			v-model="course.students"
+			v-model="course.userIds"
 			:options="studentOptions"
 			:multiple="true"
 			:show-on-select="false"
-			label="Studenten auswählen"
+			label="Schüler auswählen"
 			placeholder="Vorname Nachname"
 		></base-select>
 	</div>
@@ -60,4 +60,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.wrapper {
+	padding: var(--space-md) 0;
+}
 </style>
