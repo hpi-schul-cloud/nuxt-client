@@ -4,7 +4,6 @@
 		:type="false"
 		:vmodel="vmodel"
 		class="calendar-input"
-		:class="input"
 	>
 		<flat-pickr
 			:value="vmodel"
