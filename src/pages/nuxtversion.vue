@@ -10,6 +10,9 @@ export default {
 			title: "nuxtversion",
 		};
 	},
+	meta: {
+		isPublic: true,
+	},
 	data() {
 		return {
 			info: process.env.GIT_INFO,
