@@ -4,7 +4,7 @@ describe("@components/organisms/DropdownMenu", () => {
 	it(...isValidComponent(DropdownMenu));
 
 	it(
-		...rendersDefaultSlotContent(DropdownMenu, {
+		...rendersSlotContent(DropdownMenu, ["default"], {
 			propsData: {
 				title: "test title",
 			},

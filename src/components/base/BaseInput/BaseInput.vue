@@ -6,7 +6,7 @@
 		@input="$emit('update:vmodel', $event)"
 	>
 		<template v-for="(cmp, name) in $slots">
-			<slot :slot="name" :name="name">
+			<slot v-slot:[name] :name="name">
 				<component :is="cmp.context" :key="name" />
 			</slot>
 		</template>
