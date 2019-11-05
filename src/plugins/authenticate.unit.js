@@ -1,10 +1,11 @@
 import authenticate from "./authenticate";
 
 describe("@plugins/authenticate", () => {
-	it("dispatches logout action if jwt is undefined", () => {
+	it("dispatches logout action if jwt is undefined and page not public", () => {
 		window.location.pathname = "/";
 		let calls = 0;
 		const mockContext = {
+			route: { meta: [] },
 			app: {
 				$cookie: {
 					get: () => undefined,
@@ -23,24 +24,23 @@ describe("@plugins/authenticate", () => {
 		expect(calls).toBe(1);
 	});
 
-	it("skip on proxy error page", () => {
-		window.location.pathname = "/error/proxy";
+	it("skip logout action on public pages", () => {
 		let calls = 0;
 		const mockContext = {
+			route: {
+				meta: [{ isPublic: true }],
+			},
 			app: {
 				$cookie: {
 					get: () => {
 						calls += 1;
-						("abc");
+						("some valid JWT");
 					},
 				},
 			},
 			store: {
 				dispatch: () => {
-					calls += 1;
-				},
-				commit: () => {
-					calls += 1;
+					calls += action === "auth/logout" ? 1 : 0;
 				},
 			},
 		};

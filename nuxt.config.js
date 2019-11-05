@@ -1,5 +1,6 @@
 require("dotenv").config();
 const pkg = require("./package");
+const git = require("git-rev-sync");
 
 const sentryConfig = require("./sentry.config.js");
 
@@ -8,6 +9,18 @@ const API_URL = process.env.API_URL || "http://localhost:3030";
 const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+
+const GIT_INFO = JSON.stringify(
+	{
+		sha: git.long(),
+		version: pkg.version,
+		branch: git.branch(),
+		message: git.message(),
+		commitDate: git.date(),
+	},
+	null,
+	"\t"
+);
 
 module.exports = {
 	mode: "spa",
@@ -18,6 +31,7 @@ module.exports = {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
 		FEATURE_EXTENSIONS_ENABLED: process.env.FEATURE_EXTENSIONS_ENABLED || false,
 		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
+		GIT_INFO,
 	},
 	/*
 	 ** Headers of the page
