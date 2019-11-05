@@ -1,21 +1,21 @@
 module.exports = {
 	root: true,
-	extends: ['@schul-cloud/eslint-config/javascriptVue'],
+	extends: ["@schul-cloud/eslint-config/javascriptVue"],
 	overrides: [
 		{
-			files: ['**/*.stories.js'],
+			files: ["**/*.stories.js"],
 			rules: {
-				'max-lines': [
-					'warn',
+				"max-lines": [
+					"warn",
 					{ max: 500, skipBlankLines: true, skipComments: true },
 				],
 			},
 		},
 		{
-			files: ['**/*.unit.js'],
+			files: ["**/*.unit.js"],
 			parserOptions: {
-				parser: 'babel-eslint',
-				sourceType: 'module',
+				parser: "babel-eslint",
+				sourceType: "module",
 			},
 			env: {
 				jest: true,

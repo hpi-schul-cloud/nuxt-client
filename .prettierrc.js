@@ -1,1 +1,1 @@
-module.exports = require('@schul-cloud/prettier-config');
+module.exports = require("@schul-cloud/prettier-config");
