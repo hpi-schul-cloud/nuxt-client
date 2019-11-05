@@ -22,7 +22,8 @@
 							:key="innerlink.text"
 							v-bind="innerlink"
 							class="footer-link"
-							>{{ innerlink.text }}</base-link>
+							>{{ innerlink.text }}</base-link
+						>
 					</template>
 				</template>
 			</template>

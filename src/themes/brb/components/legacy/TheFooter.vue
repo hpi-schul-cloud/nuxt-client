@@ -71,7 +71,7 @@ export default {
 							target: "_blank",
 							rel: "noopener",
 						},
-								{
+						{
 							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
 								.termsOfUseExemplary,
 							text: "Nutzungsordnung",
@@ -79,7 +79,6 @@ export default {
 							rel: "noopener",
 						},
 					],
-
 				},
 
 				{

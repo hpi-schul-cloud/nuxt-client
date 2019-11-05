@@ -33,7 +33,7 @@
 				</template>
 			</template>
 		</div>
-			<p class="bottom-line">
+		<p class="bottom-line">
 			Made with
 			<span class="heart">❤</span> in Potsdam
 		</p>
@@ -73,7 +73,7 @@ export default {
 						},
 					],
 				},
-					{
+				{
 					href: "https://github.com/schul-cloud/",
 					text: "GitHub",
 				},
@@ -84,7 +84,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .footer {
 	width: 100%;
 	padding: 0 var(--space-md);
