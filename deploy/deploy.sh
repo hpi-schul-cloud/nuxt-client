@@ -11,7 +11,6 @@ in
 p) PROJECT=${OPTARG};;
 esac
 done
-echo PROJECT $PROJECT
 
 # ----------------
 # SCRIPTS
@@ -69,6 +68,13 @@ bash ./decryptSecrets.sh
 
 echo "PROJECT" $PROJECT
 echo "DOCKERTAG" $DOCKERTAG
+
+if [ -z "$PROJECT" ] || [ -z "$DOCKERTAG" ];
+then
+	echo "PROJECT parameter or DOCKERTAG env is missing. Abort deployment."
+	exit 1;
+fi
+
 
 case "$TRAVIS_BRANCH" in
 
