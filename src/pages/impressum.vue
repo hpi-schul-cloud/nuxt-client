@@ -82,7 +82,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+	meta: {
+		isPublic: true,
+	},
+};
 </script>
 
 <style lang="scss" scoped>
