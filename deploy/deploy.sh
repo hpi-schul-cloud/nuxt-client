@@ -33,18 +33,18 @@ inform_staging() {
 }
 
 deploy(){
-	SYSTEM = $1 # [staging, test, demo]
+	SYSTEM=$1 # [staging, test, demo]
 
-	DOCKER_IMAGE = $2 # (nuxt-client, nuxt-storybook, nuxt-vuepress), autoprefixed with "schulcloud-"
-	DOCKER_TAG = $3 # version/tag of the image to use. Usually the branch name or a GIT_SHA
-	DOCKER_SERVICE_NAME = $4 # docker service name on server
+	DOCKER_IMAGE=$2 # (nuxt-client, nuxt-storybook, nuxt-vuepress), autoprefixed with "schulcloud-"
+	DOCKER_TAG=$3 # version/tag of the image to use. Usually the branch name or a GIT_SHA
+	DOCKER_SERVICE_NAME=$4 # docker service name on server
 
-	COMPOSE_SRC = $5 # name of the docker-compose file which should be used as.
-	COMPOSE_TARGET = $6 # name as which the compose file should be pushed to the server (auto prefixed with "docker-compose-")
-	COMPOSE_SERVICE_NAME = $7 # compose service name on server
+	COMPOSE_SRC=$5 # name of the docker-compose file which should be used as.
+	COMPOSE_TARGET=$6 # name as which the compose file should be pushed to the server (auto prefixed with "docker-compose-")
+	COMPOSE_SERVICE_NAME=$7 # compose service name on server
 
 	echo "deploy " $DOCKER_IMAGE ":" $DOCKER_TAG " to " $SYSTEM " as " $DOCKER_SERVICE_NAME
-	echo "DOCKERFILE: " $COMPOSE_SRC " => " $COMPOSE_TARGET
+	echo "COMPOSEFILE: " $COMPOSE_SRC " => " $COMPOSE_TARGET
 
 	# generate new compose file
 	eval "echo \"$( cat $COMPOSE_SRC )\"" > docker-compose-$COMPOSE_TARGET
