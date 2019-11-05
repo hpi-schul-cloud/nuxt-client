@@ -28,10 +28,26 @@
 			}
 		},
 		{
+			"type": "chrome",
+			"request": "launch",
+			"name": "Debug: Browser (Nuxt, Chrome)",
+			"url": "http://localhost:4000",
+			"webRoot": "${workspaceFolder/src}"
+		},
+		{
 			"type": "node",
-			"request": "attach",
-			"name": "Attach to Server",
-			"port": 9229
+			"request": "launch",
+			"name": "Debug: Sever (Nuxt)",
+			"args": ["dev"],
+			"osx": {
+				"program": "${workspaceFolder}/node_modules/.bin/nuxt"
+			},
+			"linux": {
+				"program": "${workspaceFolder}/node_modules/.bin/nuxt"
+			},
+			"windows": {
+				"program": "${workspaceFolder}/node_modules/nuxt/bin/nuxt.js"
+			}
 		}
 	]
 }

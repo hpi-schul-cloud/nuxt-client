@@ -1,15 +1,10 @@
 FROM node:lts as builder
-RUN apt-get update && \
-    apt-get install git
 
 WORKDIR '/app'
 COPY ./package.json ./
 COPY ./package-lock.json ./
 RUN npm ci
 COPY . /app
-
-# Legacy Client
-RUN npm run setup
 
 RUN ["chmod", "550", "./startup.sh"]
 EXPOSE 4000

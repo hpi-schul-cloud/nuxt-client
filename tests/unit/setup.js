@@ -28,7 +28,7 @@ Vue.config.productionTip = false;
 import "@plugins/global";
 import { mountBaseComponents } from "@basecomponents/_globals";
 
-const baseComponentDir = path.join(__dirname, "../../src/components/ui/");
+const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 
 function readDirRecursiveSync(dir) {
 	const results = [];
@@ -75,6 +75,20 @@ Object.defineProperty(window, "localStorage", {
 			},
 		};
 	})(),
+});
+
+const location = {};
+Object.defineProperty(window, "location", {
+	set: function(val) {
+		location.host = "domain.io";
+		location.hostname = "domain.io";
+		location.origin = "http://domain.io";
+		location.href = "http://domain.io" + val;
+		location.pathname = val;
+	},
+	get: function() {
+		return location;
+	},
 });
 
 // ===

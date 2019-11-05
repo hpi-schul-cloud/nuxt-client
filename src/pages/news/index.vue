@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import NewsCard from "@components/NewsCard";
+import NewsCard from "@components/molecules/NewsCard";
 
 export default {
 	head() {

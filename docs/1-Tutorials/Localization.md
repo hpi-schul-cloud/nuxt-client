@@ -26,7 +26,7 @@ Wie bereits im Beispiel oben zu sehen werden die Strings (bis auf ein paar Ausna
 
 ### Aktualisieren von Strings
 
-Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locales/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co). Wenn Strings über localise aktualisiert wurden, erstellt lokalise einen pull request auf Github der reviewed und approved werden muss.
+Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locale/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co). Wenn Strings über localise aktualisiert wurden, erstellt lokalise einen pull request auf Github der reviewed und approved werden muss.
 
 #### localise Tutorial
 

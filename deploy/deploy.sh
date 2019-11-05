@@ -11,81 +11,49 @@ in
 p) PROJECT=${OPTARG};;
 esac
 done
-echo PROJECT $PROJECT
-
-
-# replace special characters in branch name for docker tag
-export DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
-echo GITSHA $GIT_SHA
 
 # ----------------
 # SCRIPTS
 # ----------------
 
-decryptSecrets(){
-	echo "decrypt secrets"
+inform_live() {
+	# $1: Project Name (client, storybook, vuepress)
+  if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
+  then
+  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: Schul-Cloud Nuxt-$1!"}' $WEBHOOK_URL_CHAT
+  fi
+}
 
-	openssl aes-256-cbc -K $encrypted_b7461320c5f4_key -iv $encrypted_b7461320c5f4_iv -in travis_rsa.enc -out travis_rsa -d
-	chmod 600 travis_rsa
+inform_staging() {
+  if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
+  then
+    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Staging-System wurde aktualisiert: Schul-Cloud Nuxt-Client! https://staging.schul-cloud.org/nuxtversion"}' $WEBHOOK_URL_CHAT
+  fi
 }
 
 deploy(){
-	# $1: Project Name (client, storybook, vuepress)
-	echo "deploy" $1 "..."
+	SYSTEM=$1 # [staging, test, demo]
 
-	eval "echo \"$( cat compose-$1.dummy )\"" > docker-compose-nuxt-$1.yml
+	DOCKER_IMAGE=$2 # (nuxt-client, nuxt-storybook, nuxt-vuepress), autoprefixed with "schulcloud-"
+	DOCKER_TAG=$3 # version/tag of the image to use. Usually the branch name or a GIT_SHA
+	DOCKER_SERVICE_NAME=$4 # docker service name on server
 
-	# scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-nuxt-$1.yml linux@test.schul-cloud.org:~
-	# ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-nuxt-$1.yml test-schul-cloud
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@test.schul-cloud.org /usr/bin/docker service update --force --image docker-compose-nuxt-$1:$DOCKERTAG
-}
+	COMPOSE_SRC=$5 # name of the docker-compose file which should be used as.
+	COMPOSE_TARGET=$6 # name as which the compose file should be pushed to the server (auto prefixed with "docker-compose-")
+	COMPOSE_SERVICE_NAME=$7 # compose service name on server
 
-dockerPush(){
-	# $1: Project Name (client, storybook, vuepress)
-	# $2: docker tag to use
+	echo "deploy " $DOCKER_IMAGE ":" $DOCKER_TAG " to " $SYSTEM " as " $DOCKER_SERVICE_NAME
+	echo "COMPOSEFILE: " $COMPOSE_SRC " => " $COMPOSE_TARGET
 
-	# Log in to the docker CLI
-	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+	# generate new compose file
+	eval "echo \"$( cat $COMPOSE_SRC )\"" > docker-compose-$COMPOSE_TARGET
 
-	docker push schulcloud/schulcloud-nuxt-$1:$2
-}
+	# deploy new compose file
+	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.org:~
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $COMPOSE_SERVICE_NAME
 
-# BUILD SCRIPTS
-
-buildClient(){
-	docker build \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
-		-f Dockerfile.client \
-		../
-
-	dockerPush "client" $DOCKERTAG
-	dockerPush "client" $GIT_SHA
-}
-
-buildStorybook(){
-	docker build \
-		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA \
-		-f Dockerfile.storybook \
-		../
-
-	dockerPush "storybook" "latest"
-	dockerPush "storybook" $DOCKERTAG
-	dockerPush "storybook" $GIT_SHA
-}
-
-buildVuepress(){
-	docker build \
-		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA \
-		-f Dockerfile.vuepress \
-		--build-arg ALGOLIA_NAME \
-		--build-arg ALGOLIA_API_KEY \
-		../
-
-	dockerPush "vuepress" $DOCKERTAG
-	dockerPush "vuepress" $GIT_SHA
+	# deploy new dockerfile
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
 }
 
 # ----------------
@@ -93,22 +61,60 @@ buildVuepress(){
 # ----------------
 cd deploy
 
-decryptSecrets
+source ./buildAndDeployFilter.sh
+buildAndDeployFilter
 
-if [[ $PROJECT == "client" ]]
+bash ./decryptSecrets.sh
+
+echo "PROJECT" $PROJECT
+echo "DOCKERTAG" $DOCKERTAG
+
+if [ -z "$PROJECT" ] || [ -z "$DOCKERTAG" ];
 then
-	buildClient
-elif [[ $PROJECT == "storybook" ]]
-then
-	buildStorybook
-elif [[ $PROJECT == "vuepress" ]]
-then
-	buildVuepress
-else
-  echo "Nothing to deploy"
-	exit 1
+	echo "PROJECT parameter or DOCKERTAG env is missing. Abort deployment."
+	exit 1;
 fi
 
-deploy $PROJECT
+
+case "$TRAVIS_BRANCH" in
+
+	master)
+		inform_live $PROJECT
+		;;
+
+	develop)
+		echo "develop"
+		case "$PROJECT" in
+			client)
+				# deploy $SYSTEM $DOCKERFILE $DOCKERTAG $SERVICENAME
+				deploy "test" "nuxt-client" $DOCKERTAG "test-schul-cloud_nuxtclient" "compose-client_default.dummy" "nuxt-client.yml" "test-schul-cloud"
+			;;
+			storybook)
+				deploy "test" "nuxt-storybook" $DOCKERTAG "test-schul-cloud_storybook" "compose-storybook.dummy" "nuxt-storybook.yml" "test-schul-cloud"
+			;;
+			vuepress)
+				deploy "test" "nuxt-vuepress" $DOCKERTAG "test-schul-cloud_vuepress" "compose-vuepress.dummy" "nuxt-vuepress.yml" "test-schul-cloud"
+			;;
+		esac
+		;;
+	release* | hotfix*)
+		echo "release/hotfix"
+		case "$PROJECT" in
+			client)
+				# TODO deploy with themes
+				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_default.dummy" "nuxt-client_default.yml" "staging-schul-cloud"
+				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_brb.dummy" "nuxt-client_brb.yml" "staging-schul-cloud"
+				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_n21.dummy" "nuxt-client_n21.yml" "staging-schul-cloud"
+				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_open.dummy" "nuxt-client_open.yml" "staging-schul-cloud"
+			;;
+			storybook)
+				# deploy "staging" "nuxt-storybook" $DOCKERTAG "staging-schul-cloud_storybook" "compose-storybook.dummy" "nuxt-storybook.yml" "staging-schul-cloud"
+			;;
+			vuepress)
+				# deploy "staging" "nuxt-vuepress" $DOCKERTAG "staging-schul-cloud_vuepress" "compose-vuepress.dummy" "nuxt-vuepress.yml" "staging-schul-cloud"
+			;;
+		esac
+		;;
+esac
 
 exit 0

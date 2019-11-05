@@ -1,31 +1,28 @@
 import { storiesOf } from "@storybook/vue";
 import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
-
 import notes from "@docs/storybook/base.md";
-import BaseButton from "@components/ui/BaseButton";
-import BaseCard from "@components/ui/BaseCard";
-import BaseIcon from "@components/ui/BaseIcon";
-import BaseInput, {
-	supportedTypes as baseInputTypes,
-} from "@components/ui/BaseInput/BaseInput";
-import BaseLink from "@components/ui/BaseLink";
-import BaseProgressbar from "@components/ui/BaseProgressbar";
-import BaseTable from "@components/ui/BaseTable";
-import BaseCollapsible from "@components/ui/BaseCollapsible";
-import BaseBreadcrumb from "@components/ui/BaseBreadcrumb";
-import BaseSelect from "@components/ui/BaseSelect";
-import BaseTextarea from "@components/ui/BaseTextarea";
-import BaseAudio from "@components/ui/BaseAudio";
-import BaseVideo from "@components/ui/BaseVideo";
-import BaseModal from "@components/ui/BaseModal";
-import BaseBlockquote from "@components/ui/BaseBlockquote";
 
-storiesOf("Base Components", module)
+import BaseAudio from "@basecomponents/BaseAudio";
+import BaseBlockquote from "@basecomponents/BaseBlockquote";
+import BaseBreadcrumb from "@basecomponents/BaseBreadcrumb";
+import BaseButton from "@basecomponents/BaseButton";
+import BaseCard from "@basecomponents/BaseCard";
+import BaseCollapsible from "@basecomponents/BaseCollapsible";
+import BaseIcon from "@basecomponents/BaseIcon";
+import BaseLink from "@basecomponents/BaseLink";
+import BaseProgressbar from "@basecomponents/BaseProgressbar";
+import BaseQrCode from "@basecomponents/BaseQrCode";
+import BaseSelect from "@basecomponents/BaseSelect";
+import BaseSpinner from "@basecomponents/BaseSpinner";
+import BaseTable from "@basecomponents/BaseTable";
+import BaseVideo from "@basecomponents/BaseVideo";
+
+storiesOf("Base|Other", module)
 	.addParameters({
 		notes,
 	})
-	.add("Base Button", () => ({
+	.add("BaseButton", () => ({
 		components: { BaseButton, BaseIcon },
 		data: () => ({
 			text: text("Text", "Action"),
@@ -163,7 +160,7 @@ storiesOf("Base Components", module)
 				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
 	}))
-	.add("Base Card", () => ({
+	.add("BaseCard", () => ({
 		components: { BaseCard },
 		template: "<base-card>Card</base-card>",
 		methods: {},
@@ -174,7 +171,7 @@ storiesOf("Base Components", module)
 			icon: text("icon", "home"),
 			source: select(
 				"source",
-				{ material: "material", custom: "custom" },
+				{ material: "material", fa: "fa", custom: "custom" },
 				"material"
 			),
 			size: text("size", "1em"),
@@ -185,6 +182,9 @@ storiesOf("Base Components", module)
 				Icon usage is simple: <base-icon :source="source" :icon="icon" :style="{'font-size': size, fill: color}"/>
 			</p>
 			<p>
+				You can als use icons from fontawesome: <base-icon source="fa" icon="solid/address-book" :style="{'font-size': size}"/>
+			</p>
+			<p>
 				The Color can be also be set using fill:
 				<base-icon source="material" icon="add" :fill="color"/>
 			</p>
@@ -193,94 +193,6 @@ storiesOf("Base Components", module)
 				<base-icon source="custom" icon="tasks" style="font-size: 2em" />
 			</p>
 		</div>`,
-	}))
-	.add("Base Input (Knobs)", () => {
-		const baseInputTypesDict = {};
-		baseInputTypes.forEach((type) => {
-			baseInputTypesDict[type] = type;
-		});
-		return {
-			components: { BaseInput, BaseIcon },
-			data: () => ({
-				vmodel: text("v-model", ""),
-				type: select("type", baseInputTypesDict, baseInputTypes[0]),
-				label: text("label", "Label"),
-				name: text("name", "name"),
-				value: text("value", ""),
-				placeholder: text("placeholder", "Placeholder"),
-				hint: text("hint", "* required"),
-				error: text("error", ""),
-			}),
-			template: `
-				<div>
-					<base-input
-						v-model="vmodel"
-						:label="label"
-						:type="type"
-						:name="name"
-						:placeholder="placeholder"
-						:hint="hint"
-						:error="error"
-					>
-						<base-icon slot="icon" source="material" icon="alarm" />
-					</base-input>
-				</div>`,
-		};
-	})
-	.add("Base Input (All)", () => ({
-		components: { BaseInput },
-		data: () => ({
-			vmodels: {
-				text: "",
-				email: "",
-				password: "",
-				url: "",
-				number: 0,
-				date: "",
-				time: "",
-				checkboxBoolean: true,
-				checkboxList: ["a"],
-				switch: true,
-				radio: "b",
-			},
-		}),
-
-		template: `<div>
-			${["text", "email", "password", "url", "number", "date", "time"]
-				.map(
-					(type) =>
-						`<base-input type="${type}" v-model="vmodels['${type}']" label="${type}" name="${type}" />\n`
-				)
-				.join("")
-				.trimRight()}
-			<div>
-				<base-input type="checkbox" v-model="vmodels.checkboxList" value="a" label="Checkbox" name="checkbox" />
-				<base-input type="checkbox" v-model="vmodels.checkboxList" value="b" label="Checkbox" name="checkbox" />
-			</div>
-			<base-input type="switch" v-model="vmodels.switch" label="Switch" name="switch" />
-			<div>
-				<base-input type="radio" v-model="vmodels.radio" value="a" label="Radio 1" name="radio" />
-				<base-input type="radio" v-model="vmodels.radio" value="b" label="Radio 2" name="radio" />
-			</div>
-			<pre>{{ JSON.stringify(vmodels, null, 2) }}</pre>
-		</div>`,
-	}))
-	.add("Base Textarea", () => ({
-		components: { BaseTextarea },
-		data: () => ({
-			value: "",
-			label: text("label", "Label"),
-			placeholder: text(
-				"placeholder",
-				"Lange Geschichten brauchen eine BaseTextarea."
-			),
-		}),
-		template: `
-			<div>
-				v-model: {{value}} <br/>
-				<base-textarea v-model="value" :label="label" :placeholder="placeholder"/>
-			</div>`,
-		methods: {},
 	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },
@@ -340,49 +252,26 @@ storiesOf("Base Components", module)
 		components: { BaseBreadcrumb },
 		data: () => ({
 			inputs: [
-				{ text: "Home", to: "/" },
-				{ text: "Kurse", href: "https://schul-cloud.org" },
-				{ text: "Mathematik" },
+				{
+					text: "Kurse",
+					to: "",
+					icon: { source: "material", icon: "school" },
+				},
+				{
+					text: "Biologie",
+					href: "http://schul-cloud.org",
+				},
+				{
+					text: "Thema - das Nervensystem",
+					href: "https://schul-cloud.org",
+				},
 			],
 		}),
-		template: `<base-breadcrumb :inputs="inputs" />`,
+		template: `<base-breadcrumb :inputs="inputs"/>`,
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
 		},
-	}))
-	.add("Base Modal", () => ({
-		components: { BaseModal, BaseButton },
-		data: () => ({
-			active: false,
-			header: text("header", "custom header"),
-			body: text(
-				"body",
-				"Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below."
-			),
-		}),
-		template: `
-			<div>
-				<base-button @click="active = true">
-					Open Modal
-				</base-button>
-
-				<base-modal :active.sync="active">
-					<div class="modal-header">
-						<h3 v-html="header" />
-					</div>
-
-					<div class="modal-body" v-html="body" />
-
-					<div class="modal-footer">
-						<base-button id="button" class="is-light" @click="active = false">
-							OK
-						</base-button>
-					</div>
-				</base-modal>
-			</div>
-		`,
-		methods: {},
 	}))
 	.add("Base Dialog", () => ({
 		data: () => ({ active: false }),
@@ -436,6 +325,13 @@ storiesOf("Base Components", module)
 				]"
 			/>`,
 	}))
+	.add("Base QrCode", () => ({
+		components: { BaseQrCode },
+		data: () => ({
+			url: text("Url", "http://www.schul-cloud.org"),
+		}),
+		template: `<base-qr-code :url="url"/>`,
+	}))
 	.add("BaseBlockquote", () => ({
 		components: { BaseBlockquote },
 		data: () => ({
@@ -451,4 +347,17 @@ storiesOf("Base Components", module)
 				{{quote}}
 			</BaseBlockquote>
 		`,
+	}))
+	.add("BaseSpinner", () => ({
+		components: { BaseSpinner },
+		data: () => ({
+			label: text("label", "Loading"),
+			color: color("color", "var(--color-tertiary)"),
+			size: select(
+				"size",
+				{ small: "small", medium: "medium", large: "large", xlarge: "xlarge" },
+				"medium"
+			),
+		}),
+		template: `<BaseSpinner :color="color" :size="size" :aria-label="label"/>`,
 	}));

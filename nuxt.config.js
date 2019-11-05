@@ -1,14 +1,26 @@
 require("dotenv").config();
 const pkg = require("./package");
+
+const sentryConfig = require("./sentry.config.js");
+
 const themeName = process.env.SC_THEME || "default";
 const API_URL = process.env.API_URL || "http://localhost:3030";
+const DEFAULT_PORT = 4000;
+const DEFAULT_HOST =
+	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+
+const GIT_INFO = require("./git-info.js");
 
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
+	// to make ENV variables available in components, they need to be defined here
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
+		FEATURE_EXTENSIONS_ENABLED: process.env.FEATURE_EXTENSIONS_ENABLED || false,
+		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
+		GIT_INFO: JSON.stringify(GIT_INFO, null, "\t"),
 	},
 	/*
 	 ** Headers of the page
@@ -52,6 +64,12 @@ module.exports = {
 	 */
 	cssSourceMap: true,
 
+	server: {
+		port: process.env.PORT || DEFAULT_PORT,
+		host: process.env.HOST || DEFAULT_HOST,
+	},
+	serverMiddleware: ["@serverMiddleware/proxy"],
+
 	router: {
 		middleware: [
 			// "is-authenticated",
@@ -68,6 +86,7 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
+		"@plugins/sentry",
 	],
 
 	/*
@@ -77,20 +96,18 @@ module.exports = {
 		"@nuxtjs/dotenv",
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		"@nuxtjs/axios",
-		"cookie-universal-nuxt",
+		"@nuxtjs/sentry",
 		"@nuxtjs/toast",
+		"cookie-universal-nuxt",
 		"nuxt-babel",
 	],
-
-	toast: {
-		duration: 3000,
-	},
-	/*
-	 ** Axios module configuration
-	 */
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
 		baseURL: API_URL,
+	},
+	sentry: sentryConfig,
+	toast: {
+		duration: 3000,
 	},
 
 	/*

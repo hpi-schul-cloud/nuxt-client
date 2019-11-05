@@ -1,53 +1,136 @@
-# How to get data from our backend <Badge text="WIP" type="warn"/>
+# How to with our backend <Badge text="WIP" type="warn"/>
+
+For communication with the backend, we use the VueJS extension Vuex which is already part of NuxtJS.
+
+The big advantage of this is, that our API requests are abstracted in services instead of accessing the REST API directly. So if the backend should change we don't have to change all the code in our pages and components, just in the services.
 
 [[toc]]
 
-## find
+## Structure
 
-### reactivity
+There are basically 3 different components of the Vuex Store. Actions, Mutations and Getters.
 
-If the list should be reactively updated, use get together with a computed property instead of list.
+### Nuxt Client
 
-**Problem:** The 'list' getter itself is not reactive.
+In our nuxt client we can talk ot the API through the Vuex Services. The services are accesible from both our `pages` or `components`. But it's highly recommended to do this from the `pages` and then pass the data to the `components`. The reason for this is that we should use the components as "stupid components" which means they shouldn't know anything about the services and API, they're just there for data input/output but should not fetch the data from themselves.
 
-**Example:** [pull request](https://github.com/schul-cloud/nuxt-client/pull/12)
+### Vuex Store
 
-**Explanation:** [https://feathers-plus.github.io/v1/feathers-vuex/service-module.html#The-find-action](https://feathers-plus.github.io/v1/feathers-vuex/service-module.html#The-find-action)
+The Vuex store is the place where the `state` of the web application is located. Inside the `state` you can save everything that you want to be accessible from everywhere. In order to manipulate the state you have to use `actions` to fetch the data from the APIs and `mutations` which actually change the state. In order to get the data from the state you can access the `state` directly or use `getters` which are more convenient in many cases.
 
-![image](https://user-images.githubusercontent.com/3246782/52415495-10aa7600-2b22-11e9-8116-0da8a3150659.png)
+#### Modules
 
-**Why is it like that?** The reason for that is that the all the requests results are stored in the store so after that they can be separately fetched. _Example:_ If I search for "Mathe" the results are stored in the store. If I search for "Deutsch" the results are also stored. But the 'list' getter has now both results, Mathe and Deutsch. If I search now for 'Mathe' again, we get immediate results because the results are already in the store.
+However the state can get very complex because we have different models like schools, teams, courses, etc. So one giant state would be not appropriate. The solution for this problem are `modules`. A `module` is a subset of the store and has it's own `state, actions, mutations and getters`.
 
-As a solution there is the 'find' getter which makes a local query against the store. Unfortunately it doesn't seem to work with \_all[$match].
+To register a new service we just have to create a new file with the service name into the src/store folder. This will automatically create a service with its own namespace based on the filename.
 
-**Solution** Until now, this solution is working and doesn't generate more requests because the data is fetched from the store. We get the current results from pagination.ids and map the IDs to the individual results.
+## Feathers REST Template
+
+If a service uses our default backend, we use this service template located in this directory: `src/utils/service-template.js`
+
+## Example for creating a service
+
+Let's say we want to make an user service for our feathers /news REST API. So we just create this file: `src/store/news.js`
+
+With this content:
 
 ```js
-import { mapGetters, mapState } from "vuex";
+import serviceTemplate from "@utils/service-template";
+const base = serviceTemplate("news");
 
-export default {
-	computed: {
-		...mapGetters("content_search", {
-			getContent: "get",
-			fetchContent: "find",
-		}),
-		...mapState("content_search", {
-			pagination: (state) => {
-				return state.pagination.content_list;
-			},
-		}),
-		searchResults() {
-			const { $store, getContent, pagination } = this;
-
-			if (pagination) {
-				return pagination.ids.map((id) => getContent(id));
-			}
-
-			return [];
-		},
-	},
+const module = {
+	...base,
 };
+
+export default module;
 ```
 
-- Getting the list of results from the content_search getter
-- Getting the pagination from the content_search state
+This will take the service-template.js and provides the endpoint name "news".
+
+## Extending or overriding the template
+
+If we have custom service actions, mutations, getters or we want to extend the state we can extend the template using the mergeDeep util. This way we can add additional actions, getters, mutations and also a custom state.
+
+```js
+import mergeDeep from "@utils/merge-deep";
+import serviceTemplate from "@utils/service-template";
+const base = serviceTemplate("teams");
+
+const module = mergeDeep(base, {
+	actions: {
+		acceptInvitation: async function(ctx, teamId) {
+			return this.$axios.$get("/teams/extern/accept/" + teamId);
+		},
+	},
+	getters: {
+		hasTeamPermission: (_state, localGetters) => (permission) => {
+			return localGetters.current.user
+				? localGetters.current.user.permissions.find((p) => p === permission)
+				: false;
+		},
+	},
+});
+```
+
+## CRUD
+
+This paragraph shows how to use the services to make simple CRUD operations.
+
+### Create
+
+```js
+const news = await this.$store.dispatch("news/create", [
+	{
+		title: this.news.title,
+		content: this.news.content,
+		schoolId: this.$user.schoolId,
+		target: this.$route.query.target,
+		targetModel: this.$route.query.Model,
+	},
+]);
+```
+
+### Update
+
+```js
+await this.$store.dispatch("news/update", [
+	id,
+	{
+		title: this.news.newTitle,
+		content: this.news.content,
+		schoolId: this.$user.schoolId,
+		target: this.$route.query.target,
+		targetModel: this.$route.query.Model,
+	},
+]);
+```
+
+### Patch
+
+```js
+await this.$store.dispatch("news/patch", [
+	id,
+	{
+		name: this.news.name,
+		content: this.news.content,
+	},
+]);
+```
+
+### Delete
+
+```js
+await this.$store.dispatch("news/remove", id);
+```
+
+### Find
+
+```js
+await this.$store.dispatch("news/find", {
+	query: {
+		$sort: {
+			createdAt: -1,
+		},
+	},
+});
+```
