@@ -72,7 +72,8 @@ export default {
 	width: 260px;
 	padding: var(--space-xs);
 	padding-bottom: 0;
-	margin: var(--space-sm);
+	margin: var(--space-sm) var(--space-lg);
+	margin-left: 0;
 	cursor: pointer;
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-sm);

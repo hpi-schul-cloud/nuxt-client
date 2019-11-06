@@ -3,7 +3,7 @@
 		<section class="section">
 			<courses-grid :courses="courses" />
 		</section>
-		<section class="section">
+		<section class="section bottom">
 			<base-button
 				design="primary"
 				@click="$router.push({ name: 'courses-create' })"
@@ -42,3 +42,12 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@variables";
+
+.bottom {
+	float: left;
+	margin-top: var(--space-xl);
+	margin-left: var(--space-xl-3);
+}
+</style>

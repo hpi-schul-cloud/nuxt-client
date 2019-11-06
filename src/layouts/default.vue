@@ -222,7 +222,6 @@ export default {
 .content {
 	grid-area: content;
 	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
 	margin: var(--space-md) auto;
 }
 </style>
