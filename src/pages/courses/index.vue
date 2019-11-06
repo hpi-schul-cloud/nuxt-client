@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div>
 		<base-button
 			design="hero-cta"
 			size="large"

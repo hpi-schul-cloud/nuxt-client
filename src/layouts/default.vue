@@ -225,5 +225,9 @@ export default {
 	max-width: var(--size-content-width-max);
 	padding: 0 var(--space-md);
 	margin: var(--space-md) auto;
+
+	@include breakpoint(tablet) {
+		padding: 0 var(--space-xl);
+	}
 }
 </style>
