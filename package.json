@@ -97,7 +97,7 @@
 		"eslint-config-prettier": "^6.0.0",
 		"eslint-loader": "^3.0.0",
 		"eslint-plugin-prettier": "^3.0.1",
-		"eslint-plugin-vue": "^5.2.1",
+		"eslint-plugin-vue": "^6.0.0",
 		"find-cache-dir": "^3.0.0",
 		"http-proxy-middleware": "^0.19.1",
 		"hygen": "^5.0.1",
