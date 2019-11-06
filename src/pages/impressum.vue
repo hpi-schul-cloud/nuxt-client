@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import MaxWidth from "@layouts/MaxWidth";
+import MaxWidth from "@components/atoms/MaxWidth";
 export default {
 	components: {
 		MaxWidth,
