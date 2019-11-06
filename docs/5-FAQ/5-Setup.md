@@ -1,4 +1,4 @@
-# FAQ
+# Questions regarding our setup
 
 [[toc]]
 
