@@ -1,5 +1,14 @@
+<template>
+	<impressum />
+</template>
+
 <script>
 import Impressum from "@components/templates/impressum";
-// eslint-disable-next-line vue/require-direct-export
-export default Impressum;
+
+export default {
+	components: { Impressum },
+	meta: {
+		isPublic: true,
+	},
+};
 </script>
