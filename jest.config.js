@@ -18,7 +18,6 @@ module.exports = {
 	coverageDirectory: "<rootDir>/dist/coverage",
 	collectCoverageFrom: [
 		// Nuxt extensions
-		"<rootDir>/src/plugins/**/*.js",
 		"<rootDir>/src/middleware/**/*.js",
 		"<rootDir>/src/serverMiddleware/**/*.js",
 		"!<rootDir>/src/serverMiddleware/routes.js",
