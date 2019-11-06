@@ -2,5 +2,8 @@
 	"storybook.lang": "I'm in English now!",
 	"pages.news.title": "News",
 	"pages.courses.new.title": "Create new course",
-	"pages.impressum.title": "Imprint"
+	"pages.impressum.title": "Imprint",
+	"error.400": "401 - Bad Request",
+	"error.401": "401 - Unauthorized",
+	"error.404": "404 - Not Found"
 }
