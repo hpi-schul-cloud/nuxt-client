@@ -8,7 +8,7 @@
 			<base-icon source="material" icon="add" />
 			Neuer Kurs
 		</base-button>
-		<courses-grid :courses="courses" />
+		<courses-grid class="courses-grid" :courses="courses" />
 	</div>
 </template>
 
@@ -48,5 +48,9 @@ export default {
 	float: left;
 	margin-top: var(--space-xl);
 	margin-left: var(--space-xl-3);
+}
+
+.courses-grid {
+	margin-top: var(--space-xl);
 }
 </style>

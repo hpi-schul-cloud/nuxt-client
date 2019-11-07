@@ -23,8 +23,8 @@
 		grid-area: content;
 		min-width: var(--size-content-width-min);
 		max-width: var(--size-content-width-max);
-		padding: 0 var(--space-md);
-		margin: var(--space-md) auto;
+		padding: 0 var(--space-lg);
+		margin: 0 auto;
 
 		@include breakpoint(tablet) {
 			padding: 0 var(--space-xl);

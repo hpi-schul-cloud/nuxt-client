@@ -33,12 +33,17 @@ export default {
 @import "@variables";
 
 .grid {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-}
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	grid-gap: var(--space-lg);
+	border: 2px dotted green;
 
-.tile {
-	display: flex;
+	@include breakpoint(tablet) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@include breakpoint(desktop) {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
 }
 </style>
