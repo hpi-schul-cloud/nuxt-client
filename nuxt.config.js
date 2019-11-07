@@ -74,6 +74,7 @@ module.exports = {
 		middleware: [
 			// "is-authenticated",
 			"links-fallback",
+			"permission-check",
 		],
 	},
 
