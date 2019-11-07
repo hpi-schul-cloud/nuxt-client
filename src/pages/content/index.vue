@@ -6,22 +6,33 @@
 			placeholder="Suche nach..."
 		/>
 		<pagination v-model="skippedItems" :state="pagination" />
-		<div class="columns">
-			<div v-for="content of searchResults" :key="content._id" class="column">
-				<pre>
-					{{ content }}
-				</pre
-				>
-			</div>
+		<div class="card-container">
+			<content-card
+				v-for="content of searchResults.data"
+				:id="content._id"
+				:key="content._id"
+				class="card"
+				:content-category="content.contentCategory"
+				:description="content.description"
+				:licenses="content.licenses"
+				:mime-type="content.mimeType"
+				:origin-id="content.originId"
+				:provider-name="content.providerName"
+				:tags="content.tags"
+				:thumbnail="content.thumbnail"
+				:title="content.title"
+				:url="content.url"
+			/>
 		</div>
 		<pagination v-model="skippedItems" :state="pagination" />
 	</section>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import Searchbar from "@components/molecules/Searchbar";
 import Pagination from "@components/organisms/Pagination";
+import ContentCard from "@components/molecules/ContentCard";
 
 export default {
 	head() {
@@ -32,6 +43,7 @@ export default {
 	components: {
 		Searchbar,
 		Pagination,
+		ContentCard,
 	},
 	props: {},
 	data() {
@@ -40,30 +52,21 @@ export default {
 			skippedItems: this.$route.query.skip
 				? parseInt(this.$route.query.skip, 10)
 				: 0,
+			currentPage: parseInt(this.$route.query.skip) || 1,
 		};
 	},
 	computed: {
-		...mapGetters("content_search", {
-			getContent: "get",
-			fetchContent: "find",
-		}),
-		...mapState("content_search", {
+		...mapState("content", {
 			pagination: (state) => {
-				return state.pagination.content_list;
+				return state.searchResult;
 			},
 		}),
 		searchResults() {
-			const { getContent, pagination } = this;
-
-			if (pagination) {
-				return pagination.ids.map((id) => getContent(id));
-			}
-
-			return [];
+			const { pagination } = this;
+			return pagination;
 		},
 		query() {
 			const query = {};
-
 			if (this.searchQuery) {
 				query["_all[$match]"] = this.searchQuery;
 				query["$skip"] = this.skippedItems;
@@ -82,7 +85,7 @@ export default {
 			this.$options.debounce = setInterval(() => {
 				clearInterval(this.$options.debounce);
 				this.skippedItems = 0;
-				this.find(to);
+				this.find();
 			}, 500);
 		},
 		searchResults() {
@@ -92,18 +95,18 @@ export default {
 			if (to === from) {
 				return;
 			}
-			await this.find(this.searchQuery);
+			await this.find();
 		},
 	},
-	created(ctx) {
-		this.find(this.searchQuery);
+	async asyncData({ store }) {
+		return Promise.all([
+			store.dispatch("content/getResources"),
+			store.dispatch("content/searchResources"),
+		]);
 	},
 	methods: {
 		async find() {
-			await this.$store.dispatch("content_search/find", {
-				query: this.query,
-				qid: "content_list",
-			});
+			await this.$store.dispatch("content/searchResources", this.query);
 
 			this.$router.push({
 				query: { q: this.searchQuery, skip: this.skippedItems },
@@ -120,13 +123,11 @@ export default {
 .searchbar {
 	margin: var(--space-sm) auto;
 }
-.columns {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
-}
-.column {
-	width: 100%;
-	margin: var(--space-sm) var(--space-md);
+.card-container {
+	display: grid;
+	grid-template-columns: 33% 33% 33%;
+	grid-row-gap: 20px;
+	grid-column-gap: 20px;
+	margin: var(--space-md) 0;
 }
 </style>
