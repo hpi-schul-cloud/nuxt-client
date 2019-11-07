@@ -1,7 +1,7 @@
 {
 	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"pages.news.title": "Neuigkeiten",
-	"pages.courses.new.title": "Neuen Kurs erstellen",
+	"pages.courses.new.btn_new": "Erstelle neuen Kurs",
 	"pages.courses.index.title": "Alle Kurse",
 	"pages.impressum.title": "Impressum",
 	"error.400": "400 - Fehlerhafte Anfrage",

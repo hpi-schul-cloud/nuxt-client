@@ -6,7 +6,7 @@
 			@click="$router.push({ name: 'courses-create' })"
 		>
 			<base-icon source="material" icon="add" />
-			Neuer Kurs
+			{{ $t("pages.courses.new.btn_new") }}
 		</base-button>
 		<courses-grid class="courses-grid" :courses="courses" />
 	</div>
