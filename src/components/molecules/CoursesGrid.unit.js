@@ -2,11 +2,25 @@ import CoursesGrid from "./CoursesGrid";
 
 const course1 = {
 	_id: "0000dcfbfb5c7a3f00bf21abc",
-	name: "Deutsch",
+	color: "#01B1AA",
+	colorGradient: "#03B2D6",
+	abbreviation: "ENG",
+	newAssignments: 0,
+	name: "Test Englisch",
+	teacherName: "Mr.Mensch",
+	alert: "Test Alert!",
+	notification: 0,
 };
 const course2 = {
 	_id: "0000dcfbfb5c7a3f00bf21abd",
-	name: "Mathe",
+	color: "#01B1AA",
+	colorGradient: "#03B2D6",
+	abbreviation: "ENG",
+	newAssignments: 0,
+	name: "Test Englisch",
+	teacherName: "Mr.Mensch",
+	alert: "Test Alert!",
+	notification: 0,
 };
 
 describe("@components/molecules/CoursesGrid", () => {

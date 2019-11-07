@@ -6,7 +6,7 @@
 				:to="{ name: 'courses-id', params: { id: course._id } }"
 				v-bind="$attrs"
 			>
-				<course-card :course="course" />
+				<course-card v-bind="course" />
 			</BaseLink>
 		</div>
 	</div>

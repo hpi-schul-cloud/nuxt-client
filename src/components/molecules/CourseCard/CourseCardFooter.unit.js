@@ -8,11 +8,9 @@ describe("@components/molecules/CourseCardFooter", () => {
 		const testAlert = "Test Alert";
 		const wrapper = shallowMount(CourseCardFooter, {
 			propsData: {
-				course: {
-					alert: testAlert,
-					nextCourseTime: "",
-					nextCourseRoom: "",
-				},
+				alert: testAlert,
+				nextCourseTime: "",
+				nextCourseRoom: "",
 			},
 		});
 		expect(wrapper.classes("footer")).toBe(true);
@@ -24,11 +22,9 @@ describe("@components/molecules/CourseCardFooter", () => {
 		const testNextCourseRoom = "B112";
 		const wrapper = shallowMount(CourseCardFooter, {
 			propsData: {
-				course: {
-					alert: "",
-					nextCourseTime: testNextCourseTime,
-					nextCourseRoom: testNextCourseRoom,
-				},
+				alert: "",
+				nextCourseTime: testNextCourseTime,
+				nextCourseRoom: testNextCourseRoom,
 			},
 		});
 		expect(wrapper.classes("footer")).toBe(true);
@@ -38,11 +34,9 @@ describe("@components/molecules/CourseCardFooter", () => {
 	it("Check when footer has empty data it's empty", () => {
 		const wrapper = shallowMount(CourseCardFooter, {
 			propsData: {
-				course: {
-					alert: "",
-					nextCourseTime: "",
-					nextCourseRoom: "",
-				},
+				alert: "",
+				nextCourseTime: "",
+				nextCourseRoom: "",
 			},
 		});
 		expect(wrapper.classes("footer")).toBe(true);
