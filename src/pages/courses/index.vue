@@ -8,7 +8,7 @@
 			<base-icon source="material" icon="add" />
 			{{ $t("pages.courses.new.btn_new") }}
 		</base-button>
-		<courses-grid class="courses-grid">
+		<!-- <grid-layout class="courses-grid">
 			<div v-for="(course, i) of courses" :key="i" class="">
 				<BaseLink
 					class="link tile"
@@ -18,17 +18,19 @@
 					<course-card v-bind="course" />
 				</BaseLink>
 			</div>
-		</courses-grid>
+		</grid-layout> -->
+		<courses-grid :courses="courses"></courses-grid>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+// import GridLayout from "@components/molecules/GridLayout";
+// import CourseCard from "@components/molecules/CourseCard";
 import CoursesGrid from "@components/molecules/CoursesGrid";
-import CourseCard from "@components/molecules/CourseCard";
 
 export default {
-	layout: 'fullwidth',
+	layout: "fullwidth",
 	head() {
 		return {
 			title: "Kurse",
@@ -36,7 +38,6 @@ export default {
 	},
 	components: {
 		CoursesGrid,
-		CourseCard
 	},
 	computed: {
 		...mapGetters("courses", {
