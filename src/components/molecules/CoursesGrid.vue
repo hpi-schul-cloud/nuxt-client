@@ -34,20 +34,8 @@ export default {
 
 .grid {
 	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
 	grid-gap: var(--space-lg);
 	border: 2px dotted green;
-
-	@include breakpoint(tablet) {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-
-	@include breakpoint(desktop) {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-
-	@include breakpoint(desktop-lg) {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-	}
 }
 </style>
