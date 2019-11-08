@@ -5,7 +5,7 @@
 		</div>
 		<div class="header">
 			<div class="tab" :style="background_style">
-				<div class="caption tab-label truncate">{{ teacherName }}</div>
+				<div class="caption tab-label truncate">{{ cardLabel }}</div>
 			</div>
 			<div v-if="newAssignments" class="assignments-label">
 				{{ newAssignments }}
@@ -63,8 +63,14 @@ export default {
 		},
 		teacherName: {
 			type: String,
+			required: false,
 			default: ""
-		},
+		}
+	},
+	data() {
+		return {
+			cardLabel: "",
+		};
 	},
 	computed: {
 		background_style() {
@@ -91,7 +97,8 @@ export default {
 	methods: {
 		async update() {
 			try {
-				this.teacherName = (await this.$store.dispatch("users/getById", this.teacherIds[0])).displayName;
+				this.teacherName ? this.cardLabel = this.teacherName :
+				this.cardLabel = (await this.$store.dispatch("users/getById", this.teacherIds[0])).displayName;
 			} catch (err) {}
 		},
 	},
