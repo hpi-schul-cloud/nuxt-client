@@ -43,6 +43,10 @@ export default {
 	}
 
 	@include breakpoint(desktop) {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	@include breakpoint(desktop-lg) {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 }
