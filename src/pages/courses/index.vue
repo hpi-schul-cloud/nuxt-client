@@ -8,13 +8,24 @@
 			<base-icon source="material" icon="add" />
 			{{ $t("pages.courses.new.btn_new") }}
 		</base-button>
-		<courses-grid class="courses-grid" :courses="courses" />
+		<courses-grid class="courses-grid">
+			<div v-for="(course, i) of courses" :key="i" class="">
+				<BaseLink
+					class="link tile"
+					:to="{ name: 'courses-id', params: { id: course._id } }"
+					v-bind="$attrs"
+				>
+					<course-card v-bind="course" />
+				</BaseLink>
+			</div>
+		</courses-grid>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
+import CourseCard from "@components/molecules/CourseCard";
 
 export default {
 	layout: 'fullwidth',
@@ -25,6 +36,7 @@ export default {
 	},
 	components: {
 		CoursesGrid,
+		CourseCard
 	},
 	computed: {
 		...mapGetters("courses", {
