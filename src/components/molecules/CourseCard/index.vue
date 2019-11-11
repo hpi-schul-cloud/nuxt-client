@@ -54,18 +54,18 @@ export default {
 		notification: {
 			type: Number,
 			default: 0,
-			required: false
+			required: false,
 		},
 		newAssignments: {
 			type: Number,
 			default: 0,
-			required: false
+			required: false,
 		},
 		teacherName: {
 			type: String,
 			required: false,
-			default: ""
-		}
+			default: "",
+		},
 	},
 	data() {
 		return {
@@ -97,8 +97,12 @@ export default {
 	methods: {
 		async update() {
 			try {
-				this.teacherName ? this.cardLabel = this.teacherName :
-				this.cardLabel = (await this.$store.dispatch("users/getById", this.teacherIds[0])).displayName;
+				this.teacherName
+					? (this.cardLabel = this.teacherName)
+					: (this.cardLabel = (await this.$store.dispatch(
+							"users/getById",
+							this.teacherIds[0]
+					  )).displayName);
 			} catch (err) {}
 		},
 	},

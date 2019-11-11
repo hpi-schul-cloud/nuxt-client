@@ -27,18 +27,18 @@ export default {
 		alert: {
 			type: String,
 			required: false,
-			default: ""
+			default: "",
 		},
 		nextCourseTime: {
 			type: String,
 			required: false,
-			default: ""
+			default: "",
 		},
 		nextCourseRoom: {
 			type: String,
 			required: false,
-			default: ""
-		}
+			default: "",
+		},
 	},
 };
 </script>

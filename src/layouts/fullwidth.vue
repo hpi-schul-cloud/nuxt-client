@@ -7,28 +7,28 @@
 </template>
 
 <script>
-	import LegacyLoggedIn from "@layouts/legacyLoggedIn";
+import LegacyLoggedIn from "@layouts/legacyLoggedIn";
 
-	export default {
-		components: {
-			LegacyLoggedIn
-		},
-	}
+export default {
+	components: {
+		LegacyLoggedIn,
+	},
+};
 </script>
 
 <style lang="scss" scoped>
-	@import "@styles";
+@import "@styles";
 
-	.content {
-		grid-area: content;
-		width: inherit;
-		min-width: var(--size-content-width-min);
-		max-width: var(--size-content-width-max);
-		padding: 0 var(--space-lg);
-		margin: 0 auto;
+.content {
+	grid-area: content;
+	width: inherit;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
+	padding: 0 var(--space-lg);
+	margin: 0 auto;
 
-		@include breakpoint(tablet) {
-			padding: 0 var(--space-xl);
-		}
+	@include breakpoint(tablet) {
+		padding: 0 var(--space-xl);
 	}
+}
 </style>
