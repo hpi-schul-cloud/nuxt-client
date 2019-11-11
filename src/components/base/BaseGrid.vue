@@ -8,7 +8,6 @@ export default {
 	props: {
 		columnWidthRem: {
 			type: Number,
-			required: false,
 			default: 14,
 		},
 	},
