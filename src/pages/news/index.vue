@@ -10,18 +10,17 @@
 
 		<div class="view-toggles">
 			<!-- TODO: Find correct Icons! and show correct one on active -->
-			<base-button design="primary icon text" @click="toDisplayStyle('grid')">
-				<base-icon source="material" icon="view_column" fill="gray" />
+			<base-button
+				:design="isList ? 'icon text' : 'icon'"
+				@click="toDisplayStyle('grid')"
+			>
+				<base-icon source="material" icon="view_column" />
 			</base-button>
-			<base-button design="primary icon text" @click="toDisplayStyle('list')">
-				<!-- TODO: Change for correct icons -->
-				<base-icon
-					v-if="isList"
-					source="material"
-					icon="view_list"
-					fill="gray"
-				/>
-				<base-icon v-else source="material" icon="list" fill="gray" />
+			<base-button
+				:design="isList ? 'icon' : 'icon text'"
+				@click="toDisplayStyle('list')"
+			>
+				<base-icon source="material" icon="view_list" />
 			</base-button>
 		</div>
 		<section :class="{ 'grid-container': !isList, list: isList }">
@@ -32,12 +31,12 @@
 				:category="article.category"
 				:title="article.title"
 				:created-at="article.createdAt"
-				:created-by="article.creator.firstName + ' ' + article.creator.lastName"
+				:created-by="getNewsAuthor(article)"
 				:picture="article.picture"
 				:event-date="article.eventDate"
 				:is-landscape="isList"
-				>{{ article.content }}</news-card
-			>
+				:content="article.content | striphtml"
+			/>
 		</section>
 	</div>
 </template>
@@ -86,6 +85,11 @@ export default {
 				this.isList = false;
 			}
 		},
+		getNewsAuthor(article) {
+			return article.creator && article.creator.displayName
+				? article.creator.displayName
+				: "";
+		},
 	},
 };
 </script>
@@ -95,8 +99,6 @@ export default {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 	grid-gap: var(--space-lg);
-	align-items: flex-start;
-	justify-items: center;
 	width: 100%;
 	padding: var(--space-md);
 }

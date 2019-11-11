@@ -2,7 +2,7 @@
 	<base-link :to="{ name: 'news-id', params: { id: id } }">
 		<BaseCard v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
 			<template v:slot:header>
-				<div class="header">
+				<div v-if="category" class="header">
 					<div
 						:class="
 							!isLandscape ? 'header__tab' : 'header__tab landscape-mode__tab'
@@ -44,7 +44,11 @@
 							>{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</p
 						>
 						<p class="content__text-title">{{ title }}</p>
-						<p class="content__text-content"><slot /></p>
+						<p class="content__text-content">
+							<slot>
+								{{ content }}
+							</slot>
+						</p>
 					</div>
 				</div>
 			</template>
@@ -77,8 +81,9 @@ dayjs.locale("de");
 export default {
 	props: {
 		id: { type: String, required: true },
-		category: { type: String, required: true },
+		category: { type: String, default: undefined },
 		title: { type: String, required: true },
+		content: { type: String, required: true },
 		createdAt: {
 			type: String,
 			required: true,
@@ -96,8 +101,8 @@ export default {
 			},
 		},
 		color: {
-			type: Array,
-			default: () => ["#412363", "#c63e80"],
+			type: String,
+			default: "#412363",
 		},
 		isLandscape: {
 			type: Boolean,
@@ -110,16 +115,10 @@ export default {
 	},
 	computed: {
 		overlayBackground() {
-			return `background-image: linear-gradient(to left, rgba(245, 246, 252, 0.0) 0%, ${
-				this.color[0]
-			} 70%);`;
+			return `background-image: linear-gradient(to left, rgba(245, 246, 252, 0.0) 0%, ${this.color} 70%);`;
 		},
 		tabBackground() {
-			if (this.color[1]) {
-				return `background-image: linear-gradient(-225deg, ${this.color.join()});`;
-			} else {
-				return `background-color: ${this.color[0]};`;
-			}
+			return `background-color: ${this.color};`;
 		},
 	},
 };

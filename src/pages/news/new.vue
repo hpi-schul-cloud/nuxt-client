@@ -23,7 +23,7 @@
 					type="time"
 					label="Veröffentlichungszeit"
 				/>
-				<base-button design="primary" @click="print">Anlegen</base-button>
+				<base-button design="primary" @click="save">Anlegen</base-button>
 			</section>
 		</div>
 	</div>

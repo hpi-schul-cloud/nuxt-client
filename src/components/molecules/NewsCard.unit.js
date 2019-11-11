@@ -10,6 +10,7 @@ describe("@components/NewsCard", () => {
 				id: "1",
 				category: "Bio",
 				title: "Bio Bio",
+				content: "It's important!",
 				createdAt: "2018-08-08",
 				createdBy: "Me",
 			},
@@ -25,55 +26,33 @@ describe("@components/NewsCard", () => {
 				id: "1",
 				category: "News Biologie",
 				title: "Darwin lebt",
+				content: "It's important!",
 				createdAt: "2018-08-08",
 				createdBy: "Me",
-				color: ["#412363", "#c63e80"],
-			},
-			stubs: {
-				BaseLink: RouterLinkStub,
+				color: "#412363",
 			},
 		});
 		expect(wrapper.find(".content__picture").exists()).toBe(false);
 		expect(wrapper.find(".footer").exists()).toBe(false);
 		expect(wrapper.find(".content__text").isEmpty()).toBe(false);
 	});
-	it("Renders with picture and date", () => {
-		const wrapper = mount(NewsCard, {
-			...createComponentMocks({ router: true }),
-			propsData: {
-				id: "1",
-				category: "News Biologie",
-				title: "Darwin lebt",
-				createdAt: "2018-08-08",
-				createdBy: "Me",
-				color: ["#412363", "#c63e80"],
-				picture: "https://source.unsplash.com/daily",
-				eventDate: "2019-02-22 19:00",
-			},
-			stubs: {
-				BaseLink: RouterLinkStub,
-			},
-		});
-		expect(wrapper.find(".content__picture").exists()).toBe(true);
-		expect(wrapper.find(".footer").exists()).toBe(true);
-		expect(wrapper.find(".content__text").isEmpty()).toBe(false);
-	});
 
 	it("Renders landscape mode classes when isLandscape", () => {
 		const wrapper = mount(NewsCard, {
+			...createComponentMocks({
+				router: true,
+			}),
 			propsData: {
 				isLandscape: true,
 				id: "1",
 				category: "News Biologie",
 				title: "Darwin lebt",
+				content: "It's important!",
 				createdAt: "2018-08-08",
 				createdBy: "Me",
-				color: ["#412363", "#c63e80"],
+				color: "#412363",
 				picture: "https://source.unsplash.com/daily",
 				eventDate: "2019-02-22 19:00",
-			},
-			stubs: {
-				BaseLink: RouterLinkStub,
 			},
 		});
 		expect(wrapper.find(".landscape-mode").exists()).toBe(true);
@@ -87,19 +66,20 @@ describe("@components/NewsCard", () => {
 
 	it("Does not Render landscape mode classes when !isLandscape", () => {
 		const wrapper = mount(NewsCard, {
+			...createComponentMocks({
+				router: true,
+			}),
 			propsData: {
 				isLandscape: false,
 				id: "1",
 				category: "News Biologie",
 				title: "Darwin lebt",
+				content: "It's important!",
 				createdAt: "2018-08-08",
 				createdBy: "Me",
-				color: ["#412363", "#c63e80"],
+				color: "#c63e80",
 				picture: "https://source.unsplash.com/daily",
 				eventDate: "2019-02-22 19:00",
-			},
-			stubs: {
-				BaseLink: RouterLinkStub,
 			},
 		});
 		expect(wrapper.find(".landscape-mode").exists()).toBe(false);

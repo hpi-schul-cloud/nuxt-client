@@ -65,15 +65,14 @@ storiesOf("Cards", module)
 			<news-card
 				:category="category"
 				:title="title"
+				:content="content"
 				:createdAt="createdAt"
 				:createdBy="createdBy"
 				:picture="picture"
 				:eventDate="eventDate"
 				:isLandscape="isLandscape"
 				:color="color"
-			>
-				{{content}}
-			</news-card>
+			/>
 		</div>
 		`,
 	}));
