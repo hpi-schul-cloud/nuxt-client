@@ -3,8 +3,14 @@
 		<div class="content-card">
 			<template v:slot:content>
 				<div class="content">
-					<img :src="thumbnail" alt="presentation" class="content__thumbnail" />
-					<div class="content__title">{{ title }}</div>
+					<BaseLink :href="url" target="_blank">
+						<img
+							:src="thumbnail"
+							alt="content-thumbnail"
+							class="content__thumbnail"
+						/>
+						<div class="content__title">{{ title }}</div>
+					</BaseLink>
 					<div class="content__tags">
 						<span v-for="(tag, i) in tags" :key="i" class="content__tags-tag">
 							{{ tag }}
@@ -39,17 +45,16 @@
 <script>
 export default {
 	props: {
-		id: { type: String, required: true },
-		contentCategory: { type: String, required: true },
-		description: { type: String, required: true },
-		licenses: { type: Array, required: true },
-		mimeType: { type: String, required: true },
-		originId: { type: String, required: true },
-		providerName: { type: String, required: true },
-		tags: { type: Array, required: true },
-		thumbnail: { type: String, required: true },
-		title: { type: String, required: true },
-		url: { type: String, required: true },
+		id: { type: String, default: "" },
+		description: { type: [String, Array], default: "" },
+		licenses: { type: Array, default: () => [] },
+		mimeType: { type: String, default: "" },
+		originId: { type: String, default: "" },
+		providerName: { type: String, default: "" },
+		tags: { type: Array, default: () => [] },
+		thumbnail: { type: String, default: "" },
+		title: { type: String, default: "" },
+		url: { type: String, default: "" },
 	},
 };
 </script>
@@ -103,7 +108,7 @@ export default {
 		}
 	}
 	&__description {
-		@include excerpt($font-size: var(--text-md), $lines-to-show: 6);
+		@include excerpt($font-size: var(--text-md), $lines-to-show: 5);
 	}
 }
 .footer {

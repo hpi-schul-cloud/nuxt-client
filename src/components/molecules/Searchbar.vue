@@ -1,7 +1,8 @@
 <template>
 	<div :class="{ 'live-search': true, active: isActive }">
 		<div class="search-container">
-			<base-icon class="search-icon" source="custom" icon="search" />
+			<BaseSpinner v-if="loading" />
+			<base-icon v-else class="search-icon" source="custom" icon="search" />
 			<input
 				ref="searchStringInput"
 				:value="value"
@@ -40,6 +41,9 @@ export default {
 		ariaLabel: {
 			type: String,
 			default: "Search",
+		},
+		loading: {
+			type: Boolean,
 		},
 	},
 	data() {
