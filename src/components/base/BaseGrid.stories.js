@@ -36,6 +36,6 @@ storiesOf("Base|BaseGrid", module)
 			<div style="background-color: lightseagreen; height: 150px;"/>
 		</BaseGrid>`,
 		data: () => ({
-			columnWidth: text("columnWidth", "8rem")
+			columnWidth: text("columnWidth", "8rem"),
 		}),
 	}));
