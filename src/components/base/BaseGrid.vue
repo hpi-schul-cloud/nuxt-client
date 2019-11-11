@@ -8,7 +8,6 @@ export default {
 	props: {
 		columnWidth: {
 			type: String,
-			required: false,
 			default: "14rem",
 		},
 	},
