@@ -32,7 +32,7 @@
 				:title="article.title"
 				:created-at="article.createdAt"
 				:created-by="getNewsAuthor(article)"
-				:picture="article.picture"
+				:picture="getFirstImage(article)"
 				:event-date="article.eventDate"
 				:is-landscape="isList"
 				:content="article.content | striphtml"
@@ -68,12 +68,10 @@ export default {
 		this.find();
 	},
 	methods: {
-		find() {
-			this.$store.dispatch("news/find", {
+		async find() {
+			await this.$store.dispatch("news/find", {
 				query: {
-					$sort: {
-						createdAt: -1,
-					},
+					sort: "-createdAt",
 				},
 			});
 		},
@@ -89,6 +87,12 @@ export default {
 			return article.creator && article.creator.displayName
 				? article.creator.displayName
 				: "";
+		},
+		getFirstImage(article) {
+			var renderer = document.createElement("div");
+			renderer.innerHTML = article.content;
+			const image = renderer.querySelector("img");
+			return image ? image.getAttribute("src") : undefined;
 		},
 	},
 };

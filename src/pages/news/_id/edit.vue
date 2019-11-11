@@ -29,6 +29,18 @@
 			/>
 			<text-editor v-model="news.content" class="mb--md" />
 
+			<!-- <p>Automatische Veröffentlichung vorplanen (optional)</p>
+			<base-input
+				v-model="news.date.date"
+				type="date"
+				label="Veröffentlichungsdatum"
+			/>
+			<base-input
+				v-model="news.date.time"
+				type="time"
+				label="Veröffentlichungszeit"
+			/> -->
+
 			<form-actions>
 				<template v-slot:secondary>
 					<base-button design="danger text" @click="confirmDelete">
@@ -85,7 +97,7 @@ export default {
 		confirmDelete() {
 			this.$dialog.confirm({
 				title: "Artikel löschen",
-				message: "Möchtest du diesen Artikel wirklich löschen?",
+				message: "Möchtest du diesen Artikel wirklich unwiederruflich löschen?",
 				confirmText: "Artikel löschen",
 				onConfirm: async () => {
 					try {

@@ -3,11 +3,9 @@
 		<base-modal :active.sync="isActive">
 			<template v-slot:header>{{ title }}</template>
 
-			<div class="modal-body">
-				<div>{{ message }}</div>
-			</div>
+			<template v-slot:body>{{ message }}</template>
 
-			<div class="modal-footer">
+			<template v-slot:footer-right>
 				<base-button ref="cancelButton" design="text" @click="close">
 					{{ cancelText }}
 				</base-button>
@@ -20,7 +18,7 @@
 				>
 					{{ confirmText }}
 				</base-button>
-			</div>
+			</template>
 		</base-modal>
 	</div>
 </template>

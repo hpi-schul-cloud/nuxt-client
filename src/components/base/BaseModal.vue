@@ -31,7 +31,7 @@
 									<slot name="footer-left"></slot>
 								</template>
 								<template v-slot:right>
-									<slot name="footerRight"></slot>
+									<slot name="footer-right"></slot>
 								</template>
 							</modal-footer>
 						</slot>
@@ -67,6 +67,9 @@ export default {
 				document.body.classList.remove("is-noscroll");
 			}
 		},
+	},
+	beforeDestroy() {
+		document.body.classList.remove("is-noscroll");
 	},
 	methods: {
 		handleBackgroundClick() {

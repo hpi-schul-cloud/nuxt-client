@@ -2,7 +2,7 @@
 	<base-link :to="{ name: 'news-id', params: { id: id } }">
 		<BaseCard v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
 			<template v:slot:header>
-				<div v-if="category" class="header">
+				<div v-if="category !== undefined" class="header">
 					<div
 						:class="
 							!isLandscape ? 'header__tab' : 'header__tab landscape-mode__tab'
@@ -159,6 +159,9 @@ export default {
 			transform-origin: bottom left;
 		}
 	}
+	+ * .content__picture {
+		border-top-left-radius: 0;
+	}
 }
 .content {
 	width: 100%;
@@ -166,7 +169,8 @@ export default {
 	&__picture {
 		position: relative;
 		height: 100%;
-		border-radius: var(--radius-sm) var(--radius-sm);
+		border-radius: var(--radius-sm);
+		overflow: hidden;
 		&-overlay {
 			position: absolute;
 			top: 0;
@@ -176,6 +180,8 @@ export default {
 			z-index: var(--layer-popover);
 			width: 100%;
 			height: 98%;
+			border-radius: var(--radius-sm);
+			border-top-left-radius: 0;
 		}
 		img {
 			width: 100%;
@@ -186,14 +192,15 @@ export default {
 	}
 	&__text {
 		&-info {
-			padding-top: var(--space-xs);
+			padding-bottom: var(--space-xs);
+			margin: 0;
 			font-size: var(--text-sm);
 			color: var(--color-gray-dark);
 		}
 		&-title {
 			font-weight: var(--font-weight-bold);
 			color: var(--color-black);
-
+			margin: 0;
 			@include excerpt(
 				$font-size: var(--heading-4),
 				$line-height: var(--line-height-sm),
@@ -202,6 +209,7 @@ export default {
 		}
 		&-content {
 			color: var(--color-black);
+			margin: 0;
 
 			@include excerpt(
 				$font-size: var(--text-sm),

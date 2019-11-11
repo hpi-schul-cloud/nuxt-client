@@ -125,6 +125,7 @@ import {
 	Strike,
 	Underline,
 } from "tiptap-extensions";
+
 export default {
 	components: {
 		EditorContent,
@@ -159,8 +160,15 @@ export default {
 				],
 				content: this.value,
 				onUpdate: ({ getHTML }) => {
-					this.content = getHTML();
-					this.$emit("update", getHTML());
+					const content = getHTML();
+					const error = this.isInvalid(content);
+					if (error) {
+						this.$toast.error(error);
+						this.editor.commands.undo();
+					} else {
+						this.content = content;
+						this.$emit("update", content);
+					}
 				},
 			}),
 			content: "",
@@ -191,6 +199,13 @@ export default {
 			if (src !== null) {
 				command({ src });
 			}
+		},
+		isInvalid(content) {
+			let error = false;
+			if (content.includes(`src="data:`)) {
+				error = this.$t("components.molecules.TextEditor.noLocalFiles");
+			}
+			return error;
 		},
 	},
 };

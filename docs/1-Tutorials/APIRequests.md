@@ -128,9 +128,7 @@ await this.$store.dispatch("news/remove", id);
 ```js
 await this.$store.dispatch("news/find", {
 	query: {
-		$sort: {
-			createdAt: -1,
-		},
+		sort: "-createdAt",
 	},
 });
 ```
