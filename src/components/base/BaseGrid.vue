@@ -6,7 +6,7 @@
 <script>
 export default {
 	props: {
-		rem: {
+		columnWidthRem: {
 			type: Number,
 			required: false,
 			default: 14,
@@ -16,7 +16,7 @@ export default {
 		col() {
 			return (
 				"grid-template-columns: repeat(auto-fill, minmax(" +
-				this.rem +
+				this.columnWidthRem +
 				"rem, 1fr))"
 			);
 		},

@@ -1,5 +1,5 @@
 <template>
-	<grid-layout class="courses-grid">
+	<base-grid class="courses-grid">
 		<div v-for="(course, i) of courses" :key="i" class="">
 			<BaseLink
 				class="link tile"
@@ -9,16 +9,16 @@
 				<course-card v-bind="course" />
 			</BaseLink>
 		</div>
-	</grid-layout>
+	</base-grid>
 </template>
 
 <script>
-import GridLayout from "@components/molecules/GridLayout";
+import BaseGrid from "@components/base/BaseGrid";
 import CourseCard from "@components/molecules/CourseCard";
 
 export default {
 	components: {
-		GridLayout,
+		BaseGrid,
 		CourseCard,
 	},
 	props: {
