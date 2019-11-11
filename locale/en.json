@@ -1,7 +1,7 @@
 {
 	"storybook.lang": "I'm in English now!",
 	"pages.news.title": "News",
-	"pages.courses.new.title": "Create new course",
+	"pages.courses.new.btn_new": "Create",
 	"pages.impressum.title": "Imprint",
 	"error.400": "401 - Bad Request",
 	"error.401": "401 - Unauthorized",

@@ -12,7 +12,7 @@ storiesOf("CourseCard", module)
 	})
 	.add("CourseCard", () => ({
 		components: { CourseCard },
-		template: `<CourseCard :course="course" />`,
+		template: `<CourseCard v-bind="course" />`,
 		data: () => ({
 			course: {
 				...defaultCourse,
@@ -31,15 +31,11 @@ storiesOf("CourseCard", module)
 	}))
 	.add("CourseCard getting old data format", () => ({
 		components: { CourseCard },
-		template: '<CourseCard :course="course" />',
+		template: '<CourseCard v-bind="course" />',
 		data: () => ({
 			course: {
 				...courseOldDataFormat,
 				color: color("Color", courseOldDataFormat.color),
 			},
 		}),
-	}))
-	.add("CourseCard Empty", () => ({
-		components: { CourseCard },
-		template: `<CourseCard />`,
 	}));

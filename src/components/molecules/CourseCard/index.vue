@@ -1,22 +1,22 @@
 <template>
 	<div class="course-card">
-		<div v-if="course.notification" class="caption notification-dot">
-			{{ course.notification }}
+		<div v-if="notification" class="caption notification-dot">
+			{{ notification }}
 		</div>
 		<div class="header">
 			<div class="tab" :style="background_style">
-				<div class="caption tab-label truncate">{{ course.teacherName }}</div>
+				<div class="caption tab-label truncate">{{ cardLabel }}</div>
 			</div>
-			<div v-if="course.newAssignments" class="assignments-label">
-				{{ course.newAssignments }}
+			<div v-if="newAssignments" class="assignments-label">
+				{{ newAssignments }}
 				<base-icon source="custom" icon="tasks" />
 			</div>
 		</div>
 		<div class="card-info" :style="background_style">
 			<h2 class="abrivation-label">{{ courseAbbreviation }}</h2>
-			<h3 class="course-name-label">{{ course.name }}</h3>
+			<h3 class="course-name-label">{{ name }}</h3>
 		</div>
-		<course-card-footer :course="course" />
+		<course-card-footer v-bind="$attrs" />
 	</div>
 </template>
 
@@ -28,37 +28,82 @@ export default {
 		CourseCardFooter,
 	},
 	props: {
-		course: {
-			type: Object,
-			default: () => ({
-				color: "#01B1AA",
-				colorGradient: "#03B2D6",
-				abbreviation: "DEF",
-				newAssignments: 0,
-				name: "default name",
-				teacherName: "MusterMensch",
-				alert: "Default Alert!",
-				notification: 0,
-			}),
+		color: {
+			type: String,
+			required: true,
 		},
+		colorGradient: {
+			type: String,
+			required: false,
+			default: "",
+		},
+		teacherIds: {
+			type: Array,
+			required: false,
+			default: () => [],
+		},
+		abbreviation: {
+			type: String,
+			required: false,
+			default: "",
+		},
+		name: {
+			type: String,
+			required: true,
+		},
+		notification: {
+			type: Number,
+			default: 0,
+			required: false,
+		},
+		newAssignments: {
+			type: Number,
+			default: 0,
+			required: false,
+		},
+		teacherName: {
+			type: String,
+			required: false,
+			default: "",
+		},
+	},
+	data() {
+		return {
+			cardLabel: "",
+		};
 	},
 	computed: {
 		background_style() {
-			if (this.course.colorGradient) {
+			if (this.colorGradient) {
 				return (
 					"background-image: linear-gradient(-225deg, " +
-					this.course.color +
+					this.color +
 					" 0%, " +
-					this.course.colorGradient +
+					this.colorGradient +
 					" 100%);"
 				);
 			} else {
-				return "background-color: " + this.course.color + ";";
+				return "background-color: " + this.color + ";";
 			}
 		},
 		courseAbbreviation() {
-			if (this.course.abbreviation) return this.course.abbreviation;
-			else return this.course.name.substring(0, 3).toUpperCase();
+			if (this.abbreviation) return this.abbreviation;
+			else return this.name.substring(0, 3).toUpperCase();
+		},
+	},
+	created(ctx) {
+		this.update();
+	},
+	methods: {
+		async update() {
+			try {
+				this.teacherName
+					? (this.cardLabel = this.teacherName)
+					: (this.cardLabel = (await this.$store.dispatch(
+							"users/getById",
+							this.teacherIds[0]
+					  )).displayName);
+			} catch (err) {}
 		},
 	},
 };
@@ -69,10 +114,8 @@ export default {
 
 .course-card {
 	position: relative;
-	width: 260px;
 	padding: var(--space-xs);
 	padding-bottom: 0;
-	margin: var(--space-sm);
 	cursor: pointer;
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-sm);
