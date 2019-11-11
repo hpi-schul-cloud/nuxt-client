@@ -97,7 +97,7 @@
 		"eslint-config-prettier": "^6.0.0",
 		"eslint-loader": "^3.0.0",
 		"eslint-plugin-prettier": "^3.0.1",
-		"eslint-plugin-vue": "^5.2.1",
+		"eslint-plugin-vue": "^6.0.0",
 		"find-cache-dir": "^3.0.0",
 		"http-proxy-middleware": "^0.19.1",
 		"hygen": "^5.0.1",
@@ -126,7 +126,7 @@
 		"stylelint-scss": "^3.5.1",
 		"vue-jest": "^3.0.3",
 		"vue-style-loader": "^4.1.2",
-		"vue-svg-loader": "^0.12.0",
+		"vue-svg-loader": "^0.13.0",
 		"vue-template-compiler": "^2.6.10",
 		"vuepress": "^1.1.0",
 		"vuera": "^0.2.4",
@@ -136,5 +136,10 @@
 	"engines": {
 		"node": ">=10.x.x",
 		"npm": ">=6.x.x"
+	},
+	"greenkeeper": {
+		"ignore": [
+			"core-js"
+		]
 	}
 }
