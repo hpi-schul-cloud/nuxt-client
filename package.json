@@ -136,5 +136,10 @@
 	"engines": {
 		"node": ">=10.x.x",
 		"npm": ">=6.x.x"
+	},
+	"greenkeeper": {
+		"ignore": [
+			"core-js"
+		]
 	}
 }

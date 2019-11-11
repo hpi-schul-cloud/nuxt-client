@@ -17,7 +17,7 @@ module.exports = {
 	snapshotSerializers: ["jest-serializer-vue"],
 	coverageDirectory: "<rootDir>/dist/coverage",
 	collectCoverageFrom: [
-		// legacy Fallback
+		// Nuxt extensions
 		"<rootDir>/src/middleware/**/*.js",
 		"<rootDir>/src/serverMiddleware/**/*.js",
 		"!<rootDir>/src/serverMiddleware/routes.js",
