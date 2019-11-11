@@ -17,7 +17,6 @@ import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
 
 export default {
-	layout: "fullwidth",
 	head() {
 		return {
 			title: "Kurse",

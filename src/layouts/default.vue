@@ -21,6 +21,7 @@ export default {
 
 .content {
 	grid-area: content;
+	width: inherit;
 	min-width: var(--size-content-width-min);
 	max-width: var(--size-content-width-max);
 	padding: 0 var(--space-lg);
