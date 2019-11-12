@@ -10,7 +10,7 @@
 			:created-by="getNewsAuthor(article)"
 			:picture="getFirstImage(article)"
 			:event-date="article.eventDate"
-			:is-landscape="isList"
+			:is-landscape="listView"
 			:content="article.content"
 		/>
 	</section>

@@ -125,7 +125,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@mixins/multiline-ellipsis.scss";
+@import "@styles-default/utility/multiline-ellipsis";
 
 .header {
 	display: flex;
