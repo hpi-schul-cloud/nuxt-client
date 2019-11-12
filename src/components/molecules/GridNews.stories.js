@@ -39,7 +39,7 @@ storiesOf("Molecules|GridNews", module).add("default", () => ({
 			a.content += `<img src=${text(
 				"image",
 				"https://source.unsplash.com/daily"
-			)} />`;
+			)} role="presentation"/>`;
 			return a;
 		}),
 		listView: boolean("listView", false),
