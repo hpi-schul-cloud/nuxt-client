@@ -56,6 +56,7 @@ export default {
 		return {
 			bottom: false,
 			scrollY: 0,
+			searchQuery: "",
 		};
 	},
 	computed: {
@@ -125,7 +126,7 @@ export default {
 			const { scrollY } = window;
 			const visible = document.documentElement.clientHeight;
 			const pageHeight = document.documentElement.scrollHeight;
-			const bottomOfPage = visible + scrollY >= pageHeight;
+			const bottomOfPage = visible + scrollY >= pageHeight - 2;
 			return bottomOfPage || pageHeight < visible;
 		},
 		async addContent() {
