@@ -27,26 +27,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
 	head() {
 		return {
 			title: (this.news || {}).title || "News",
 		};
 	},
-	computed: {
-		...mapGetters("news", {
-			news: "current",
-		}),
-	},
-	created(ctx) {
-		this.get(this.$route.params.id);
-	},
-	methods: {
-		get(id) {
-			this.$store.dispatch("news/get", id);
-		},
+	async asyncData({ store, params }) {
+		return {
+			news: await store.dispatch("news/get", params.id),
+		};
 	},
 };
 </script>

@@ -5,7 +5,6 @@
 			:label="$t('components.organisms.FormNews.label.title')"
 			name="title"
 			type="text"
-			maxlength="30"
 			:error="errors.title"
 			:success="!errors.title"
 			:required="true"

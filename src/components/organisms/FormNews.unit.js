@@ -1,5 +1,5 @@
-import FormNews from './FormNews'
+import FormNews from "./FormNews";
 
-describe('@components/FormNews', () => {
+describe("@components/FormNews", () => {
 	it(...isValidComponent(FormNews));
-})
+});

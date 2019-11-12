@@ -23,26 +23,49 @@
 				<base-icon source="material" icon="view_list" />
 			</base-button>
 		</div>
-		<section :class="{ 'grid-container': !isList, list: isList }">
-			<news-card
-				v-for="article of news"
-				:id="article._id"
-				:key="article._id"
-				:category="article.category"
-				:title="article.title"
-				:created-at="article.createdAt"
-				:created-by="getNewsAuthor(article)"
-				:picture="getFirstImage(article)"
-				:event-date="article.eventDate"
-				:is-landscape="isList"
-				:content="article.content | striphtml"
-			/>
-		</section>
+
+		<tabs>
+			<tab name="Veröffentlicht">
+				<section :class="{ 'grid-container': !isList, list: isList }">
+					<news-card
+						v-for="article of published"
+						:id="article._id"
+						:key="article._id"
+						:category="article.category"
+						:title="article.title"
+						:created-at="article.displayAt || article.createdAt"
+						:created-by="getNewsAuthor(article)"
+						:picture="getFirstImage(article)"
+						:event-date="article.eventDate"
+						:is-landscape="isList"
+						:content="article.content | striphtml"
+					/>
+				</section>
+			</tab>
+			<tab name="Unveröffentlicht">
+				<section :class="{ 'grid-container': !isList, list: isList }">
+					<news-card
+						v-for="article of unpublished"
+						:id="article._id"
+						:key="article._id"
+						:category="article.category"
+						:title="article.title"
+						:created-at="article.displayAt || article.createdAt"
+						:created-by="getNewsAuthor(article)"
+						:picture="getFirstImage(article)"
+						:event-date="article.eventDate"
+						:is-landscape="isList"
+						:content="article.content | striphtml"
+					/>
+				</section>
+			</tab>
+		</tabs>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import Tabs from "@components/organisms/Tabs/Tabs";
+import Tab from "@components/organisms/Tabs/Tab";
 import NewsCard from "@components/molecules/NewsCard";
 
 export default {
@@ -53,40 +76,38 @@ export default {
 	},
 	components: {
 		NewsCard,
+		Tabs,
+		Tab,
 	},
 	data: function() {
 		return {
 			isList: false,
 		};
 	},
-	computed: {
-		...mapGetters("news", {
-			news: "list",
-		}),
-	},
-	created(ctx) {
-		this.find();
+	async asyncData({ store }) {
+		return {
+			published: (await store.dispatch("news/find", {
+				query: {
+					sort: "-displayAt",
+					$populate: ["createdBy"],
+				},
+			})).data,
+			unpublished: (await store.dispatch("news/find", {
+				query: {
+					sort: "-displayAt",
+					unpublished: true,
+				},
+			})).data,
+		};
 	},
 	methods: {
-		async find() {
-			await this.$store.dispatch("news/find", {
-				query: {
-					sort: "-createdAt",
-				},
-			});
-		},
 		toDisplayStyle(newStyle) {
-			if (newStyle == "list") {
-				this.isList = true;
-			}
-			if (newStyle == "grid") {
-				this.isList = false;
-			}
+			this.isList = newStyle === "list";
 		},
 		getNewsAuthor(article) {
 			return article.creator && article.creator.displayName
 				? article.creator.displayName
-				: "";
+				: `${article.creator.firstName} ${article.creator.lastName}`;
 		},
 		getFirstImage(article) {
 			var renderer = document.createElement("div");

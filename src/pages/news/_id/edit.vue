@@ -18,7 +18,7 @@
 			/>
 			<h1>News bearbeiten</h1>
 
-			<form-news v-model="news" v-slot:actions="{ patch, remove }">
+			<form-news v-slot:actions="{ patch, remove }" :news="news">
 				<form-actions>
 					<template v-slot:secondary>
 						<base-button
