@@ -48,17 +48,17 @@ import { mapGetters } from "vuex";
 import NewsCard from "@components/molecules/NewsCard";
 
 export default {
-	head() {
-		return {
-			title: "News",
-		};
-	},
 	components: {
 		NewsCard,
 	},
 	data: function() {
 		return {
 			isList: false,
+		};
+	},
+	head() {
+		return {
+			title: "News",
 		};
 	},
 	computed: {

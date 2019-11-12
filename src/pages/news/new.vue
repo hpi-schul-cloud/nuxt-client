@@ -34,11 +34,6 @@
 
 <script>
 export default {
-	head() {
-		return {
-			title: "News erstellen",
-		};
-	},
 	data: function() {
 		return {
 			news: {
@@ -68,6 +63,11 @@ export default {
 				this.$toast.error("Fehler beim Erstellen");
 			}
 		},
+	},
+	head() {
+		return {
+			title: "News erstellen",
+		};
 	},
 };
 </script>

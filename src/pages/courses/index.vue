@@ -17,13 +17,13 @@ import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
 
 export default {
+	components: {
+		CoursesGrid,
+	},
 	head() {
 		return {
 			title: "Kurse",
 		};
-	},
-	components: {
-		CoursesGrid,
 	},
 	computed: {
 		...mapGetters("courses", {
