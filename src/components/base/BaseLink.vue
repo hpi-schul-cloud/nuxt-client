@@ -2,7 +2,7 @@
 	<a
 		v-if="href"
 		class="link is-external"
-		:class="{ underlined: underlined, inactive: inactive }"
+		:class="{ underlined: !noUnderline, inactive: inactive }"
 		:href="href"
 		v-bind="$attrs"
 		:target="linkTarget"
@@ -17,7 +17,7 @@
 	<NuxtLink
 		v-else
 		class="link"
-		:class="{ underlined: underlined }"
+		:class="{ underlined: !noUnderline }"
 		tag="a"
 		:to="routerLinkTo"
 		v-bind="$attrs"
@@ -53,7 +53,7 @@ export default {
 			type: String,
 			default: "",
 		},
-		underlined: {
+		noUnderline: {
 			type: Boolean,
 		},
 		params: {

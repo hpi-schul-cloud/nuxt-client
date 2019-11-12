@@ -12,13 +12,13 @@
 						text: news.title,
 					},
 					{
-						text: 'bearbeiten',
+						text: $t('pages.news._id.edit.title'),
 					},
 				]"
 			/>
-			<h1>News bearbeiten</h1>
+			<h1>{{ $t("pages.news._id.edit.title") }}</h1>
 
-			<form-news v-slot:actions="{ patch, remove }" :news="news">
+			<form-news v-slot:actions="{ patch, remove, cancle }" :news="news">
 				<form-actions>
 					<template v-slot:secondary>
 						<base-button
@@ -26,12 +26,15 @@
 							type="button"
 							@click.prevent="remove"
 						>
-							Löschen
+							{{ $t("common.actions.remove") }}
 						</base-button>
 					</template>
 					<template v-slot:primary>
 						<base-button design="primary" type="submit" @click.prevent="patch">
-							Speichern
+							{{ $t("common.actions.save") }}
+						</base-button>
+						<base-button design="text" type="submit" @click.prevent="cancle">
+							{{ $t("common.actions.cancle") }}
 						</base-button>
 					</template>
 				</form-actions>

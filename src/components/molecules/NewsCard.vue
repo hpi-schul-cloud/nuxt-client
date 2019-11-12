@@ -1,5 +1,5 @@
 <template>
-	<base-link :to="{ name: 'news-id', params: { id: id } }">
+	<base-link :to="{ name: 'news-id', params: { id: id } }" :no-underline="true">
 		<base-card v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
 			<template v:slot:header>
 				<div v-if="category !== undefined" class="header">

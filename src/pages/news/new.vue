@@ -7,16 +7,19 @@
 					text: 'News',
 				},
 				{
-					text: 'Artikel erstellen',
+					text: $t('pages.news.new.title'),
 				},
 			]"
 		/>
-		<h1>Artikel erstellen</h1>
-		<form-news #actions="{ create }">
+		<h1>{{ $t("pages.news.new.title") }} </h1>
+		<form-news #actions="{ create, cancle }">
 			<form-actions>
 				<template #primary>
 					<base-button design="primary" type="submit" @click.prevent="create">
-						Anlegen
+						{{ $t("pages.news.new.create") }}
+					</base-button>
+					<base-button design="text" type="submit" @click.prevent="cancle">
+						{{ $t("common.actions.cancle") }}
 					</base-button>
 				</template>
 			</form-actions>

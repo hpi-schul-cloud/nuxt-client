@@ -119,7 +119,7 @@ export default {
 		async create() {
 			const errors = Object.values(this.errors).filter((a) => a);
 			if (errors.length) {
-				this.$toast.error(errors[0]);
+				return this.$toast.error(errors[0]);
 			}
 			try {
 				const news = await this.$store.dispatch("news/create", {
@@ -142,6 +142,10 @@ export default {
 			}
 		},
 		async patch() {
+			const errors = Object.values(this.errors).filter((a) => a);
+			if (errors.length) {
+				return this.$toast.error(errors[0]);
+			}
 			try {
 				await this.$store.dispatch("news/patch", [
 					this.$route.params.id,

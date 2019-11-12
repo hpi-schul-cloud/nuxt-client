@@ -19,7 +19,7 @@
 			<hr />
 			<base-link :to="{ name: 'news-id-edit' }">
 				<base-button>
-					Artikel bearbeiten
+					{{ $t("pages.news._id.index.edit") }}
 				</base-button>
 			</base-link>
 		</section>
