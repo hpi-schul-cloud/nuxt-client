@@ -2,7 +2,6 @@ import BaseCard from "./BaseCard";
 
 describe("@components/BaseCard", () => {
 	it(...isValidComponent(BaseCard));
-	it(...rendersDefaultSlotContent(BaseCard));
 
 	it("Renders header, content, and footer slots", () => {
 		const wrapper = shallowMount(BaseCard, {
@@ -16,4 +15,5 @@ describe("@components/BaseCard", () => {
 		expect(wrapper.find(".customcard-content").text()).toBe("Content");
 		expect(wrapper.find(".customcard-footer").text()).toBe("Footer");
 	});
+	it(...rendersSlotContent(BaseCard));
 });

@@ -9,16 +9,18 @@
 			class="visually-hidden"
 			@change="$emit('input', $event.target.value)"
 		/>
-		<span class="radio" />
+		<span class="radio" :class="{ 'user-is-tabbing': $userIsTabbing }" />
 		<span class="label">
 			{{ label }}
 		</span>
 	</label>
 </template>
 <script>
+import userIsTabbingMixin from "@mixins/userIsTabbing";
 export const supportedTypes = ["radio"];
 
 export default {
+	mixins: [userIsTabbingMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -44,15 +46,11 @@ export default {
 			},
 		},
 	},
-	methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@styles";
-
-$background-color: #ccc;
-$background-color-active: var(--color-secondary);
 
 label {
 	position: relative;
@@ -63,20 +61,33 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	background-color: $background-color;
+	border: 2px solid var(--color-tertiary);
 	border-radius: var(--radius-round);
-	transition: background-color var(--duration-transition-medium);
+}
+
+input {
+	line-height: var(--line-height-md);
 }
 
 input:checked + .radio {
-	background-color: $background-color-active;
-	&.switch::before {
-		transform: translateX(100%);
+	&::before {
+		display: block;
+		width: 60%;
+		height: 60%;
+		/* stylelint-disable */
+		margin: 20% auto;
+		/* stylelint-enable */
+		content: "";
+		background: var(--color-tertiary);
+		border-radius: var(--radius-round);
 	}
 }
 
 input:focus + .radio {
-	outline: 2px solid #4d90fe;
-	outline-offset: 0.05em;
+	outline: none;
+	&.user-is-tabbing {
+		outline: 2px solid #4d90fe;
+		outline-offset: 0.1em;
+	}
 }
 </style>

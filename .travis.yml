@@ -2,6 +2,7 @@ branches:
   only:
     - develop
     - master
+    - /^(?i:release|hotfix).*$/
     - /^greenkeeper/.*$/
 language: node_js
 node_js:
@@ -13,49 +14,42 @@ env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
+
+stages:
+  - test
+  - name: build
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+  - name: deploy
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+
 jobs:
   include:
-    # Build & Deploy
-    - stage: run parallel
+    # Build
+    - stage: test
       script: npm run build:nuxt
-      name: "build:nuxt"
-      services:
-        - docker
-      deploy:
-        provider: script
-        script: bash ./deploy/deploy.sh -p client
-        on:
-          branch:
-            - develop
-            - master
+      name: "build:nuxt:default"
+    - script: npm run build:nuxt
+      name: "build:nuxt:brb"
+      env:
+        - SC_THEME=brb
+    - script: npm run build:nuxt
+      name: "build:nuxt:n21"
+      env:
+        - SC_THEME=n21
+    - script: npm run build:nuxt
+      name: "build:nuxt:open"
+      env:
+        - SC_THEME=open
     - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
-      services:
-        - docker
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p storybook
-      deploy:
-        provider: script
-        script: bash ./deploy/deploy.sh -p storybook
-        on:
-          branch:
-            - develop
-            - master
     - script: npm run build:docs
       name: "build:docs"
-      services:
-        - docker
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
-      deploy:
-        provider: script
-        script: bash ./deploy/deploy.sh -p vuepress
-        on:
-          branch:
-            - develop
-            - master
     # Test
     - script: npm run test:ci
       name: "test:unit"
@@ -80,11 +74,35 @@ jobs:
     - script: npm run lint:ci
       name: "lint"
 
+    # Build Docker Images
+    - stage: build
+      name: build:nuxt
+      language: generic
+      script: bash ./deploy/build.sh -p client
+    - script: bash ./deploy/build.sh -p storybook
+      name: build:storybook
+      language: generic
+    - script: bash ./deploy/build.sh -p vuepress
+      name: build:docs
+      language: generic
+
+    # Deploy
+    - stage: deploy
+      name: deploy:nuxt
+      language: generic
+      script: bash ./deploy/deploy.sh -p client
+    - script: skip
+      name: deploy:storybook
+      language: generic
+      script: bash ./deploy/deploy.sh -p storybook
+    - script: skip
+      name: deploy:docs
+      language: generic
+      script: bash ./deploy/deploy.sh -p vuepress
+
 cache: npm
 before_cache:
   # delete all .cache folders before actually storing the cache.
   # nuxt, storybook and vuepress stores some build artefacts here which invalidates the cache.
   - cd node_modules && find . -name .cache -type d -exec rm -rf {} + && cd ..
   - cd node_modules && find . -name .temp -type d -exec rm -rf {} + && cd ..
-notifications:
-  email: false

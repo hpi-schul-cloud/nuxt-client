@@ -1,0 +1,27 @@
+---
+version: \"3.7\"
+
+services:
+  nuxtclient:
+    image: schulcloud/schulcloud-nuxt-client:$DOCKERTAG
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    depends_on:
+      - client
+      - server
+    environment:
+      # ENV
+      - NODE_ENV=production
+      - TZ=Europe/Berlin
+      - LEGACY_CLIENT_URL=http://client:3100
+      - API_URL=https://api.test.schul-cloud.org
+      - SENTRY_DSN=https://18a7cbf1a7ef427ebcfc38429d18ba40@sentry.schul-cloud.dev/7
+      # FEATURE TOGGLES
+      - FEATURE_TEAMS_ENABLED=true
+      # Theme and Titles
+      - SC_THEME=brb
+    ports:
+      - \"3200:4000\"
+    restart: always

@@ -1,13 +1,10 @@
-export default async ({ app, store }) => {
+export default async ({ app, store, route }) => {
+	const isPublic = route.meta.some((meta) => meta.isPublic);
 	try {
-		if (location.pathname.startsWith("/error/proxy")) {
-			// Do not populate store on error pages
-			// otherwise we may get into a loop.
-			return;
-		}
 		const jwt = app.$cookies.get("jwt");
-		if (!jwt) {
-			return store.dispatch("auth/logout");
+		if (!jwt & !isPublic) {
+			await store.dispatch("auth/logout");
+			window.location = "/";
 		}
 		store.commit("auth/setAccessToken", jwt);
 		await store.dispatch("auth/authenticate");

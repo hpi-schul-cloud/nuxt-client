@@ -2,24 +2,18 @@ import CourseCard from "./index.vue";
 
 describe("@components/molecules/CourseCard", () => {
 	it(...isValidComponent(CourseCard));
-
-	it("Render with default values", () => {
-		const wrapper = shallowMount(CourseCard);
-		expect(wrapper.find(".abrivation-label").exists()).toBe(true);
-		expect(wrapper.find(".course-name-label").exists()).toBe(true);
-	});
-	it("Background and abriviation isn't set.", () => {
+	it("Background and abreviation isn't set.", () => {
 		const course = {
 			color: "#01B1AA",
 			abbreviation: "",
 			newAssignments: 0,
 			name: "Deutsch",
 			teacherName: "Mr.Mensch",
-			alert: "Test Alert!",
+			alert: "Test Alert",
 			notification: 0,
 		};
 		const wrapper = shallowMount(CourseCard, {
-			propsData: { course },
+			propsData: course,
 		});
 		expect(wrapper.find(".abrivation-label").text()).toBe(
 			course.name.substring(0, 3).toUpperCase()
@@ -38,7 +32,7 @@ describe("@components/molecules/CourseCard", () => {
 			notification: 0,
 		};
 		const wrapper = shallowMount(CourseCard, {
-			propsData: { course },
+			propsData: course,
 		});
 
 		expect(wrapper.find(".notification-dot").exists()).toBe(false);
@@ -58,8 +52,8 @@ describe("@components/molecules/CourseCard", () => {
 			alert: "Test Alert!",
 			notification: 123,
 		};
-		const wrapper = mount(CourseCard, {
-			propsData: { course },
+		const wrapper = shallowMount(CourseCard, {
+			propsData: course,
 		});
 		expect(wrapper.text()).toContain(course.newAssignments.toString());
 		expect(wrapper.text()).toContain(course.notification.toString());

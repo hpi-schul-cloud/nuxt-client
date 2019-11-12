@@ -10,6 +10,8 @@
 		v-on="$listeners"
 	>
 		<slot />
+		<!-- TODO Comment back in once fallback is deactivated -->
+		<!-- <base-icon source="material" icon="launch"/> -->
 	</a>
 	<!-- TODO use RouterLink if used outside nuxt -->
 	<NuxtLink
@@ -132,7 +134,7 @@ export default {
 @import "@styles";
 .link {
 	display: inline;
-	color: var(--color-black);
+	color: var(--color-primary);
 	text-decoration: none;
 	cursor: pointer;
 	&.underlined {
@@ -152,7 +154,7 @@ export default {
 .is-external {
 	border: none;
 	&:active {
-		color: var(--color-black);
+		color: var(--color-primary-dark);
 	}
 	&:hover {
 		color: var(--color-primary-dark);
