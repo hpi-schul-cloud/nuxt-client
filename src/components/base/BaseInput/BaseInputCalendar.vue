@@ -91,9 +91,9 @@ export default {
 	input {
 		width: 100%;
 		border: none;
-	}
-	&:focus {
-		outline: none;
+		&:focus {
+			outline: none;
+		}
 	}
 }
 </style>
