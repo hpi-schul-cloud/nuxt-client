@@ -9,6 +9,9 @@ export default {
 		ErrorPage,
 	},
 	layout: "loggedout",
+	meta: {
+		isPublic: true,
+	},
 	data() {
 		return {
 			error: {

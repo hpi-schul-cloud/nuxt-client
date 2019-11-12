@@ -9,6 +9,8 @@ const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
+const GIT_INFO = require("./git-info.js");
+
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
@@ -18,6 +20,7 @@ module.exports = {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
 		FEATURE_EXTENSIONS_ENABLED: process.env.FEATURE_EXTENSIONS_ENABLED || false,
 		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
+		GIT_INFO: JSON.stringify(GIT_INFO, null, "\t"),
 	},
 	/*
 	 ** Headers of the page
@@ -71,6 +74,7 @@ module.exports = {
 		middleware: [
 			// "is-authenticated",
 			"links-fallback",
+			"permission-check",
 		],
 	},
 

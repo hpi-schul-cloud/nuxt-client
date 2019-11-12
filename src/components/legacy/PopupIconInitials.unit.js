@@ -2,7 +2,7 @@ import PopupIconInitials from "./PopupIconInitials";
 
 describe("@components/BaseIcon", () => {
 	it(...isValidComponent(PopupIconInitials));
-	it(...rendersDefaultSlotContent(PopupIconInitials));
+	it(...rendersSlotContent(PopupIconInitials));
 
 	it("computes the initals from first- and lastname", () => {
 		const wrapper = shallowMount(PopupIconInitials, {

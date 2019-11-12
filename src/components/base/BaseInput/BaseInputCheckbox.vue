@@ -1,5 +1,5 @@
 <template>
-	<label>
+	<label class="wrapper">
 		<input
 			ref="hiddenInput"
 			v-bind="$attrs"
@@ -9,16 +9,23 @@
 			class="visually-hidden"
 			@change="updateVModel"
 		/>
-		<span :class="['icon', type]" />
+		<span
+			ref="icon"
+			:class="['icon', type, { 'user-is-tabbing': $userIsTabbing }]"
+		>
+			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
+		</span>
 		<span class="label">
 			{{ label }}
 		</span>
 	</label>
 </template>
 <script>
+import userIsTabbingMixin from "@mixins/userIsTabbing";
 export const supportedTypes = ["checkbox", "switch"];
 
 export default {
+	mixins: [userIsTabbingMixin],
 	model: {
 		prop: "vmodel",
 		event: "input",
@@ -71,28 +78,66 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$background-color: var(--color-gray);
-$background-color-active: var(--color-secondary);
+.wrapper {
+	display: inline-flex;
+	align-items: center;
+}
 
-label {
-	position: relative;
+.label {
+	margin: 0 var(--space-xs-2);
+	vertical-align: middle;
 }
 
 .icon {
 	position: relative;
 	display: inline-block;
-	background-color: $background-color;
-	transition: background-color var(--duration-transition-medium);
 }
 
 .checkbox {
-	width: 0.7em;
-	height: 0.7em;
+	width: var(--text-base-size);
+	height: var(--text-base-size);
+	border: var(--border-width-bold) solid var(--color-tertiary);
+	border-radius: var(--radius-xs);
+}
+
+input:checked + .checkbox {
+	background-color: var(--color-tertiary);
+}
+
+.checkmark {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	transform: rotate(225deg);
+	&::before {
+		position: absolute;
+		width: 0;
+		height: 90%;
+		margin-top: var(--space-xs-4);
+		margin-left: var(--space-xs-3);
+		content: "";
+		background-color: var(--color-white);
+		border: 0.06em solid var(--color-white);
+		border-radius: var(--space-xs-4);
+	}
+	&::after {
+		position: absolute;
+		width: 55%;
+		height: 0;
+		margin-top: var(--space-xs-4);
+		margin-left: var(--space-xs-3);
+		content: "";
+		background-color: var(--color-white);
+		border: 0.06em solid var(--color-white);
+		border-radius: var(--space-xs-4);
+	}
 }
 
 .switch {
 	width: 1.2em;
 	height: 0.7em;
+	background-color: var(--color-tertiary);
+	transition: background-color var(--duration-transition-medium);
 
 	&::before {
 		position: absolute;
@@ -106,15 +151,18 @@ label {
 	}
 }
 
-input:checked + .icon {
-	background-color: $background-color-active;
-	&.switch::before {
+input:checked + .switch {
+	background-color: var(--color-tertiary);
+	&::before {
 		transform: translateX(100%);
 	}
 }
 
 input:focus + .icon {
-	outline: 2px solid #4d90fe;
-	outline-offset: 0.05em;
+	outline: none;
+	&.user-is-tabbing {
+		outline: 2px solid #4d90fe;
+		outline-offset: 0.1em;
+	}
 }
 </style>

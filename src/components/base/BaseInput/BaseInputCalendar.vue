@@ -92,5 +92,8 @@ export default {
 		width: 100%;
 		border: none;
 	}
+	&:focus {
+		outline: none;
+	}
 }
 </style>

@@ -1,16 +1,14 @@
 <template>
 	<div>
-		<section class="section">
-			<courses-grid :courses="courses" />
-		</section>
-		<section class="section">
-			<base-button
-				design="primary"
-				@click="$router.push({ name: 'courses-create' })"
-			>
-				Neuen Kurs erstellen
-			</base-button>
-		</section>
+		<base-button
+			design="hero-cta"
+			size="large"
+			@click="$router.push({ name: 'courses-create' })"
+		>
+			<base-icon source="material" icon="add" />
+			{{ $t("pages.courses.new.btn_new") }}
+		</base-button>
+		<courses-grid :courses="courses"></courses-grid>
 	</div>
 </template>
 
@@ -42,3 +40,16 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@variables";
+
+.bottom {
+	float: left;
+	margin-top: var(--space-xl);
+	margin-left: var(--space-xl-3);
+}
+
+.courses-grid {
+	margin-top: var(--space-xl);
+}
+</style>

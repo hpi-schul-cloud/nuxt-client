@@ -4,7 +4,7 @@ const testProps = { source: "fa", icon: "pencil", fill: "red" };
 
 describe("@components/BaseIcon", () => {
 	it(...isValidComponent(PopupIcon));
-	it(...rendersDefaultSlotContent(PopupIcon, { propsData: testProps }));
+	it(...rendersSlotContent(PopupIcon, ["default"], { propsData: testProps }));
 
 	it("contains an icon", () => {
 		const wrapper = mount(PopupIcon, {
