@@ -1,0 +1,203 @@
+<template>
+	<form v-on="$listeners">
+		<base-input
+			v-model="data.title"
+			:label="$t('components.organisms.FormNews.label.title')"
+			name="title"
+			type="text"
+			maxlength="30"
+			:error="errors.title"
+			:success="!errors.title"
+			:required="true"
+		/>
+		<text-editor
+			v-model="data.content"
+			class="mb--md"
+			:error="errors.content"
+			:required="true"
+		/>
+		<p>{{ $t("components.organisms.FormNews.label.planned_publish") }}</p>
+		<base-input
+			v-model="data.date.date"
+			type="date"
+			:label="$t('components.organisms.FormNews.label.date')"
+		/>
+		<base-input
+			v-model="data.date.time"
+			type="time"
+			:label="$t('components.organisms.FormNews.label.time')"
+		/>
+		<slot name="actions" :create="create" :patch="patch" :remove="remove">
+		</slot>
+	</form>
+</template>
+
+<script>
+import dayjs from "dayjs";
+import TextEditor from "@components/molecules/TextEditor";
+
+export default {
+	components: {
+		TextEditor,
+	},
+	model: {
+		prop: "news",
+		event: "update:news",
+	},
+	props: {
+		news: {
+			type: Object,
+			default: () => ({
+				title: "",
+				content: "",
+				date: {
+					date: undefined,
+					time: undefined,
+				},
+			}),
+		},
+	},
+	data() {
+		return {
+			data: {
+				title: "",
+				content: "",
+				date: {
+					date: "",
+					time: "",
+				},
+			},
+		};
+	},
+	computed: {
+		publishDate() {
+			if (!this.data.date.date || !this.data.date.time) {
+				return undefined;
+			}
+			const date = dayjs(
+				`${this.data.date.date} ${this.data.date.time}`,
+				"YYYY-MM-DD HH:MM"
+			);
+			return date.toISOString();
+		},
+		errors() {
+			const title = this.data.title
+				? undefined
+				: this.$t("components.organisms.FormNews.errors.missing_title");
+			const content = this.data.content
+				? undefined
+				: this.$t("components.organisms.FormNews.errors.missing_content");
+			return {
+				title,
+				content,
+			};
+		},
+	},
+	watch: {
+		news(to) {
+			this.updateFromParent(to);
+		},
+		data: {
+			deep: true,
+			handler(to) {
+				this.$emit("update:news", to);
+			},
+		},
+	},
+	created() {
+		this.updateFromParent(this.news);
+	},
+	methods: {
+		updateFromParent({ title, content, displayAt }) {
+			this.data.title = title;
+			this.data.content = content;
+			if (displayAt) {
+				const date = dayjs(displayAt);
+				this.data.date.date = date.format("YYYY-MM-DD");
+				this.data.date.time = date.format("HH:MM");
+			}
+		},
+		async create() {
+			const errors = Object.values(this.errors).filter((a) => a);
+			if (errors.length) {
+				this.$toast.error(errors[0]);
+			}
+			try {
+				const news = await this.$store.dispatch("news/create", {
+					title: this.data.title,
+					content: this.data.content,
+					displayAt: this.publishDate,
+					schoolId: this.$user.schoolId,
+					target: this.$route.query.target,
+					targetModel: this.$route.query.Model,
+				});
+				this.$toast.success(
+					this.$t("components.organisms.FormNews.success.create")
+				);
+				this.$router.push({ name: "news-id", params: { id: news._id } });
+			} catch (e) {
+				console.error(e);
+				this.$toast.error(
+					this.$t("components.organisms.FormNews.errors.create")
+				);
+			}
+		},
+		async patch() {
+			try {
+				await this.$store.dispatch("news/patch", [
+					this.$route.params.id,
+					{
+						title: this.data.title,
+						content: this.data.content,
+						displayAt: this.publishDate,
+					},
+				]);
+				this.$toast.success(
+					this.$t("components.organisms.FormNews.success.patch")
+				);
+				this.$router.push({
+					name: "news-id",
+					params: { id: this.$route.params.id },
+				});
+			} catch (e) {
+				console.error(e);
+				this.$toast.error(
+					this.$t("components.organisms.FormNews.errors.patch")
+				);
+			}
+		},
+		async remove() {
+			this.$dialog.confirm({
+				title: this.$t("components.organisms.FormNews.remove.confirm.title"),
+				message: this.$t(
+					"components.organisms.FormNews.remove.confirm.message"
+				),
+				confirmText: this.$t(
+					"components.organisms.FormNews.remove.confirm.action"
+				),
+				onConfirm: async () => {
+					try {
+						await this.$store.dispatch("news/remove", this.$route.params.id);
+						this.$toast.success(
+							this.$t("components.organisms.FormNews.success.remove")
+						);
+						this.$router.push({ name: "news" });
+					} catch (e) {
+						console.error(e);
+						this.$toast.error(
+							this.$t("components.organisms.FormNews.errors.remove")
+						);
+					}
+				},
+			});
+		},
+		async cancle() {
+			this.$router.push(-1);
+		},
+	},
+};
+</script>
+
+<style lang="scss" scoped>
+@import "@styles";
+</style>

@@ -52,22 +52,22 @@
 
 				<base-button
 					data-testid="editor_format_h1"
-					:design="isActive.heading({ level: 1 }) ? 'icon' : 'icon text'"
-					@click="commands.heading({ level: 1 })"
+					:design="isActive.heading({ level: 2 }) ? 'icon' : 'icon text'"
+					@click="commands.heading({ level: 2 })"
 				>
 					H1
 				</base-button>
 				<base-button
 					data-testid="editor_format_h2"
-					:design="isActive.heading({ level: 2 }) ? 'icon' : 'icon text'"
-					@click="commands.heading({ level: 2 })"
+					:design="isActive.heading({ level: 3 }) ? 'icon' : 'icon text'"
+					@click="commands.heading({ level: 3 })"
 				>
 					H2
 				</base-button>
 				<base-button
 					data-testid="editor_format_h3"
-					:design="isActive.heading({ level: 3 }) ? 'icon' : 'icon text'"
-					@click="commands.heading({ level: 3 })"
+					:design="isActive.heading({ level: 4 }) ? 'icon' : 'icon text'"
+					@click="commands.heading({ level: 4 })"
 				>
 					H3
 				</base-button>
@@ -148,7 +148,7 @@ export default {
 					new Bold(),
 					new BulletList(),
 					new HardBreak(),
-					new Heading({ levels: [1, 2, 3] }),
+					new Heading({ levels: [2, 3, 4] }),
 					new History(),
 					new Image(),
 					new Italic(),
@@ -177,9 +177,9 @@ export default {
 	computed: {
 		isInHeading() {
 			return (
-				this.editor.isActive.heading({ level: 1 }) ||
 				this.editor.isActive.heading({ level: 2 }) ||
-				this.editor.isActive.heading({ level: 3 })
+				this.editor.isActive.heading({ level: 3 }) ||
+				this.editor.isActive.heading({ level: 4 })
 			);
 		},
 	},

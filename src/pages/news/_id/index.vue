@@ -13,12 +13,15 @@
 					},
 				]"
 			/>
+			<h1> {{ news.title }} </h1>
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
-			<base-button @click="$router.push({ name: 'news-id-edit' })">
-				Artikel bearbeiten
-			</base-button>
+			<base-link :to="{ name: 'news-id-edit' }">
+				<base-button>
+					Artikel bearbeiten
+				</base-button>
+			</base-link>
 		</section>
 	</div>
 </template>
