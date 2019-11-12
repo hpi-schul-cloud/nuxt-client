@@ -16,22 +16,24 @@
 				<h3>No search results</h3>
 			</div>
 			<div class="content__cards-container">
-				<content-card
-					v-for="resource of resources.data"
-					:id="resource._id"
-					:key="resource._id"
-					class="card"
-					:content-category="resource.resourceCategory"
-					:description="resource.description"
-					:licenses="resource.licenses"
-					:mime-type="resource.mimeType"
-					:origin-id="resource.originId"
-					:provider-name="resource.providerName"
-					:tags="resource.tags.slice(0, 5)"
-					:thumbnail="resource.thumbnail"
-					:title="resource.title"
-					:url="resource.url"
-				/>
+				<BaseGrid column-width="20rem">
+					<content-card
+						v-for="resource of resources.data"
+						:id="resource._id"
+						:key="resource._id"
+						class="card"
+						:content-category="resource.resourceCategory"
+						:description="resource.description"
+						:licenses="resource.licenses"
+						:mime-type="resource.mimeType"
+						:origin-id="resource.originId"
+						:provider-name="resource.providerName"
+						:tags="resource.tags.slice(0, 5)"
+						:thumbnail="resource.thumbnail"
+						:title="resource.title"
+						:url="resource.url"
+					/>
+				</BaseGrid>
 			</div>
 			<BaseSpinner
 				v-if="loading && resources.data.length !== 0"
@@ -150,11 +152,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	&__cards-container {
-		display: grid;
-		grid-template-columns: 33% 33% 33%;
-		grid-row-gap: 20px;
-		grid-column-gap: 20px;
-		margin: var(--space-md) 0;
+		margin: var(--space-xl) 0;
 	}
 	&__back-to-top {
 		position: fixed;
