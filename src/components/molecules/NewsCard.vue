@@ -1,6 +1,6 @@
 <template>
 	<base-link :to="{ name: 'news-id', params: { id: id } }">
-		<BaseCard v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
+		<base-card v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
 			<template v:slot:header>
 				<div v-if="category !== undefined" class="header">
 					<div
@@ -46,7 +46,7 @@
 						<p class="content__text-title">{{ title }}</p>
 						<p class="content__text-content">
 							<slot>
-								{{ content }}
+								{{ content | striphtml }}
 							</slot>
 						</p>
 					</div>
@@ -67,7 +67,7 @@
 					</div>
 				</div>
 			</template>
-		</BaseCard>
+		</base-card>
 	</base-link>
 </template>
 

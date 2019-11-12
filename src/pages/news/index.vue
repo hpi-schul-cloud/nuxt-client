@@ -1,12 +1,14 @@
 <template>
 	<div>
-		<base-button
-			class="create-news-btn"
-			design="primary"
-			@click="$router.push({ name: 'news-new' })"
-		>
-			Artikel anlegen
-		</base-button>
+		<user-has-permission permission="NEWS_CREATE">
+			<base-button
+				class="create-news-btn"
+				design="primary"
+				@click="$router.push({ name: 'news-new' })"
+			>
+				Artikel anlegen
+			</base-button>
+		</user-has-permission>
 
 		<div class="view-toggles">
 			<!-- TODO: Find correct Icons! and show correct one on active -->
@@ -24,49 +26,29 @@
 			</base-button>
 		</div>
 
-		<tabs>
-			<tab name="Veröffentlicht">
-				<section :class="{ 'grid-container': !isList, list: isList }">
-					<news-card
-						v-for="article of published"
-						:id="article._id"
-						:key="article._id"
-						:category="article.category"
-						:title="article.title"
-						:created-at="article.displayAt || article.createdAt"
-						:created-by="getNewsAuthor(article)"
-						:picture="getFirstImage(article)"
-						:event-date="article.eventDate"
-						:is-landscape="isList"
-						:content="article.content | striphtml"
-					/>
-				</section>
-			</tab>
-			<tab name="Unveröffentlicht">
-				<section :class="{ 'grid-container': !isList, list: isList }">
-					<news-card
-						v-for="article of unpublished"
-						:id="article._id"
-						:key="article._id"
-						:category="article.category"
-						:title="article.title"
-						:created-at="article.displayAt || article.createdAt"
-						:created-by="getNewsAuthor(article)"
-						:picture="getFirstImage(article)"
-						:event-date="article.eventDate"
-						:is-landscape="isList"
-						:content="article.content | striphtml"
-					/>
-				</section>
-			</tab>
-		</tabs>
+		<user-has-permission permission="NEWS_CREATE">
+			<template #true>
+				<tabs>
+					<tab name="Veröffentlicht">
+						<grid-news :news="published" :list-view="isList" />
+					</tab>
+					<tab name="Unveröffentlicht">
+						<grid-news :news="unpublished" :list-view="isList" />
+					</tab>
+				</tabs>
+			</template>
+			<template #false>
+				<grid-news :news="published" :list-view="isList" />
+			</template>
+		</user-has-permission>
 	</div>
 </template>
 
 <script>
 import Tabs from "@components/organisms/Tabs/Tabs";
 import Tab from "@components/organisms/Tabs/Tab";
-import NewsCard from "@components/molecules/NewsCard";
+import GridNews from "@components/molecules/GridNews";
+import UserHasPermission from "@components/helpers/UserHasPermission";
 
 export default {
 	head() {
@@ -75,9 +57,10 @@ export default {
 		};
 	},
 	components: {
-		NewsCard,
-		Tabs,
+		GridNews,
 		Tab,
+		Tabs,
+		UserHasPermission,
 	},
 	data: function() {
 		return {
@@ -104,29 +87,12 @@ export default {
 		toDisplayStyle(newStyle) {
 			this.isList = newStyle === "list";
 		},
-		getNewsAuthor(article) {
-			return article.creator && article.creator.displayName
-				? article.creator.displayName
-				: `${article.creator.firstName} ${article.creator.lastName}`;
-		},
-		getFirstImage(article) {
-			var renderer = document.createElement("div");
-			renderer.innerHTML = article.content;
-			const image = renderer.querySelector("img");
-			return image ? image.getAttribute("src") : undefined;
-		},
 	},
 };
 </script>
 <style lang="scss" scoped>
 @import "@styles";
-.grid-container {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-	grid-gap: var(--space-lg);
-	width: 100%;
-	padding: var(--space-md);
-}
+
 .view-toggles {
 	display: none;
 
@@ -135,14 +101,7 @@ export default {
 		float: right;
 	}
 }
-.list {
-	display: grid;
-	grid-template-rows: auto;
-	grid-template-columns: 1fr;
-	grid-gap: var(--space-md);
-	width: 100%;
-	padding: var(--space-md);
-}
+
 .create-news-btn {
 	margin-left: var(--space-md);
 }

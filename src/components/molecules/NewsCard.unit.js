@@ -90,4 +90,23 @@ describe("@components/NewsCard", () => {
 		);
 		expect(wrapper.find(".landscape-mode__content-text").exists()).toBe(false);
 	});
+
+	it("Strips HTML from Content", () => {
+		const content = "It's important!";
+		const wrapper = mount(NewsCard, {
+			...createComponentMocks({ router: true }),
+			propsData: {
+				id: "1",
+				category: "News Biologie",
+				title: "Darwin lebt",
+				content: `<p>${content}</p>`,
+				createdAt: "2018-08-08",
+				createdBy: "Me",
+				color: "#412363",
+			},
+		});
+		expect(
+			wrapper.find(".content__text-content").element.innerHTML.trim()
+		).toBe(content);
+	});
 });
