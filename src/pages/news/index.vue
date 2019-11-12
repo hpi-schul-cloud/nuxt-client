@@ -11,18 +11,17 @@
 		</user-has-permission>
 
 		<div class="view-toggles">
-			<!-- TODO: Find correct Icons! and show correct one on active -->
 			<base-button
 				:design="isList ? 'icon text' : 'icon'"
 				@click="toDisplayStyle('grid')"
 			>
-				<base-icon source="material" icon="view_column" />
+				<base-icon source="material" icon="view_module" />
 			</base-button>
 			<base-button
 				:design="isList ? 'icon' : 'icon text'"
 				@click="toDisplayStyle('list')"
 			>
-				<base-icon source="material" icon="view_list" />
+				<base-icon source="material" icon="view_stream" />
 			</base-button>
 		</div>
 
