@@ -53,7 +53,7 @@ describe("@components/molecules/CourseCard", () => {
 			notification: 123,
 		};
 		const wrapper = mount(CourseCard, {
-			propsData: { course },
+			propsData: course,
 		});
 		expect(wrapper.text()).toContain(course.newAssignments.toString());
 		expect(wrapper.text()).toContain(course.notification.toString());
