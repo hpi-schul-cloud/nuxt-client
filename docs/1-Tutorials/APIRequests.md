@@ -132,3 +132,15 @@ await this.$store.dispatch("news/find", {
 	},
 });
 ```
+
+or depending on the service you must filter with the following syntax
+
+```js
+await this.$store.dispatch("news/find", {
+	query: {
+		$sort: {
+			createdAt: -1,
+		},
+	},
+});
+```
