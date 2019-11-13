@@ -87,8 +87,9 @@ export default {
 			}
 		},
 		courseAbbreviation() {
-			if (this.abbreviation) return this.abbreviation;
-			else return this.name.substring(0, 3).toUpperCase();
+			return this.abbreviation
+				? this.abbreviation
+				: this.name.substring(0, 3).toUpperCase();
 		},
 	},
 	created(ctx) {
