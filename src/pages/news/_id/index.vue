@@ -13,7 +13,12 @@
 					},
 				]"
 			/>
+			<i>
+				{{ dayjs(news.displayAt).fromNow() }} von {{ news.creator.firstName }}
+				{{ news.creator.lastName }}
+			</i>
 			<h1> {{ news.title }} </h1>
+
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
@@ -27,10 +32,21 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
+
 export default {
 	head() {
 		return {
 			title: (this.news || {}).title || "News",
+		};
+	},
+	data() {
+		return {
+			dayjs,
 		};
 	},
 	async asyncData({ store, params }) {

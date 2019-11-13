@@ -1,5 +1,5 @@
 <template>
-	<section :class="{ 'grid-container': !listView, list: listView }">
+	<BaseGrid :column-width="listView ? '100%' : '14rem'">
 		<news-card
 			v-for="article of news"
 			:id="article._id"
@@ -13,8 +13,9 @@
 			:is-landscape="listView"
 			:content="article.content"
 		/>
-	</section>
+	</BaseGrid>
 </template>
+
 <script>
 import NewsCard from "@components/molecules/NewsCard";
 

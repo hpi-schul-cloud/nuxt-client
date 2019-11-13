@@ -174,7 +174,7 @@ export default {
 			right: 0;
 			bottom: 0;
 			left: 0;
-			z-index: var(--layer-popover);
+			z-index: var(--layer-page);
 			width: 100%;
 			height: 98%;
 			border-radius: var(--radius-sm);

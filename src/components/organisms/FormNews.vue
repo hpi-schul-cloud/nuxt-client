@@ -26,7 +26,13 @@
 			type="time"
 			:label="$t('components.organisms.FormNews.label.time')"
 		/>
-		<slot name="actions" :create="create" :patch="patch" :remove="remove">
+		<slot
+			name="actions"
+			:create="create"
+			:patch="patch"
+			:remove="remove"
+			:cancle="cancle"
+		>
 		</slot>
 	</form>
 </template>
@@ -195,7 +201,10 @@ export default {
 			});
 		},
 		async cancle() {
-			this.$router.push(-1);
+			this.$router.push({
+				name: "news-id",
+				params: { id: this.$route.params.id },
+			});
 		},
 	},
 };
