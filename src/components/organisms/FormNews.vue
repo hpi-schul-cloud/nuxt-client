@@ -1,5 +1,5 @@
 <template>
-	<form v-on="$listeners">
+	<form v-on="$listeners" @submit="submitHandler">
 		<base-input
 			v-model="data.title"
 			:label="$t('components.organisms.FormNews.label.title')"
@@ -26,14 +26,8 @@
 			type="time"
 			:label="$t('components.organisms.FormNews.label.time')"
 		/>
-		<slot
-			name="actions"
-			:create="create"
-			:patch="patch"
-			:remove="remove"
-			:cancle="cancle"
-		>
-		</slot>
+		<!-- @slot Add your action buttons here, predefined actions are `#actions="{ remove, cancel }"` -->
+		<slot name="actions" :remove="remove" :cancel="cancel"> </slot>
 	</form>
 </template>
 
@@ -60,6 +54,15 @@ export default {
 					time: undefined,
 				},
 			}),
+		},
+		/**
+		 * Which Action to execute on Form Submit.
+		 * Submit using a `<BaseButton type="submit">Submit</BaseButton>`
+		 */
+		action: {
+			type: String,
+			required: true,
+			validator: (v) => ["create", "patch"].includes(v),
 		},
 	},
 	data() {
@@ -105,6 +108,13 @@ export default {
 		data: {
 			deep: true,
 			handler(to) {
+				/**
+				 * current news object,
+				 * updated on every change.
+				 * also defined as the v-model event
+				 *
+				 * @type {object}
+				 */
 				this.$emit("update:news", to);
 			},
 		},
@@ -113,6 +123,18 @@ export default {
 		this.updateFromParent(this.news);
 	},
 	methods: {
+		submitHandler() {
+			switch (this.action) {
+				case "create": {
+					this.create();
+					break;
+				}
+				case "patch": {
+					this.patch();
+					break;
+				}
+			}
+		},
 		updateFromParent({ title, content, displayAt }) {
 			this.data.title = title;
 			this.data.content = content;
@@ -200,7 +222,7 @@ export default {
 				},
 			});
 		},
-		async cancle() {
+		async cancel() {
 			this.$router.push({
 				name: "news-id",
 				params: { id: this.$route.params.id },

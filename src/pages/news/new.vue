@@ -12,14 +12,14 @@
 			]"
 		/>
 		<h1>{{ $t("pages.news.new.title") }} </h1>
-		<form-news #actions="{ create, cancle }">
+		<form-news #actions="{ cancel }" action="create">
 			<form-actions>
 				<template #primary>
-					<base-button design="primary" type="submit" @click.prevent="create">
+					<base-button design="primary" type="submit">
 						{{ $t("pages.news.new.create") }}
 					</base-button>
-					<base-button design="text" type="submit" @click.prevent="cancle">
-						{{ $t("common.actions.cancle") }}
+					<base-button design="text" @click.prevent="cancel">
+						{{ $t("common.actions.cancel") }}
 					</base-button>
 				</template>
 			</form-actions>

@@ -1,5 +1,5 @@
 {
-	"common.actions.cancle": "Abbrechen",
+	"common.actions.cancel": "Abbrechen",
 	"common.actions.remove": "Löschen",
 	"common.actions.save": "Speichern",
 	"components.molecules.TextEditor.noLocalFiles": "Lokale Dateien werden aktuell nicht unterstützt.",
