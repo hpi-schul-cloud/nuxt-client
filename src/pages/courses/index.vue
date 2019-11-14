@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<floating-fab
+			icon="add"
 			@click="$router.push({ name: 'courses-create' })"
 		/>
 		<courses-grid :courses="courses"></courses-grid>

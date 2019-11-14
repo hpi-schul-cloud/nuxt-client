@@ -2,7 +2,7 @@
 <template>
 	<div :style="[ pos ]" class="fab" >
 		<base-button design="hero-cta icon" v-on="$listeners">
-			<base-icon source="material" icon="add"/>
+			<base-icon source="material" :icon="icon"/>
 		</base-button>
 	</div>
 </template>
@@ -12,6 +12,10 @@ export default {
 		fabActions: {
 			type: Array,
 			default: () => [],
+		},
+		icon: {
+			type: String,
+			default: "add"
 		},
 		position: {
 			type: String,
