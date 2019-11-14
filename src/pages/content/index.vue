@@ -12,11 +12,14 @@
 				placeholder="Suche nach..."
 				:loading="loading"
 			/>
+			<p v-if="resources.total > 0" class="content__total"
+				>total resources {{ resources.total }}</p
+			>
 			<div v-if="resources.data.length === 0" class="content__no-results">
 				<content-empty-state />
 			</div>
 			<div class="content__cards-container">
-				<BaseGrid column-width="20rem">
+				<BaseGrid column-width="17rem">
 					<content-card
 						v-for="resource of resources.data"
 						:id="resource._id"
@@ -153,9 +156,19 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	&__cards-container {
-		margin: var(--space-xl) 0;
+	&__searchbar {
+		width: 100%;
+		padding: var(--space-md) 0;
 	}
+	&__total {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		width: 100%;
+		padding: var(--space-md);
+		color: var(--color-primary);
+	}
+
 	&__back-to-top {
 		position: fixed;
 		cursor: pointer;
@@ -168,9 +181,6 @@ export default {
 				transform: scale(1.3, 1.3);
 			}
 		}
-	}
-	&__searchbar {
-		width: 100%;
 	}
 	&__no-results {
 		margin-top: var(--space-md);

@@ -2,7 +2,7 @@
 	<div class="empty-state-container">
 		<img
 			class="empty-state-container__image"
-			src="@assets/empty-state/lehrer1_lupe.svg"
+			:src="getRandomSVG"
 			alt="empty-state-img"
 		/>
 		<h3 class="empty-state-container__title">Oops</h3>
@@ -23,17 +23,17 @@ export default {
 	data() {
 		return {
 			emptyStateSVGs: [
-				"@assets/empty-state/lehrer1_lupe.svg",
-				"@assets/empty-state/lehrer1.1_lupe.svg",
-				"@assets/empty-state/lehrer2_lupe.svg",
-				"@assets/empty-state/lehrer2.1_lupe.svg",
+				"/empty-state/lehrer1_lupe.svg",
+				"/empty-state/lehrer1.1_lupe.svg",
+				"/empty-state/lehrer2_lupe.svg",
+				"/empty-state/lehrer2.1_lupe.svg",
 			],
 		};
 	},
 	computed: {
 		getRandomSVG() {
 			const rand = Math.floor(Math.random() * this.emptyStateSVGs.length);
-			return require(this.emptyStateSVGs[rand]);
+			return this.emptyStateSVGs[rand];
 		},
 	},
 };
