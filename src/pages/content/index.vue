@@ -13,7 +13,7 @@
 				:loading="loading"
 			/>
 			<p v-if="resources.total > 0" class="content__total"
-				>total resources {{ resources.total }}</p
+				>total resources: {{ resources.total }}</p
 			>
 			<div v-if="resources.data.length === 0" class="content__no-results">
 				<content-empty-state />
@@ -52,6 +52,7 @@ import { mapState } from "vuex";
 import Searchbar from "@components/molecules/Searchbar";
 import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
+import infiniteScrolling from "@mixins/infiniteScrolling";
 
 export default {
 	components: {
@@ -59,13 +60,12 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 	},
+	mixins: [infiniteScrolling],
 	async asyncData({ store }) {
 		return Promise.all([store.dispatch("content/getResources")]);
 	},
 	data() {
 		return {
-			bottom: false,
-			scrollY: 0,
 			searchQuery: "",
 		};
 	},
@@ -115,36 +115,13 @@ export default {
 			return this.resources;
 		},
 	},
-	created() {
-		window.scrollTo(0, 0);
-		window.addEventListener("scroll", () => {
-			this.bottom = this.bottomVisible();
-			this.scrollY = window.scrollY;
-		});
-	},
-	beforeDestroy() {
-		window.removeEventListener("scroll", () => {
-			this.bottom = this.bottomVisible();
-			this.scrollY = window.scrollY;
-		});
-	},
 	methods: {
-		bottomVisible() {
-			const { scrollY } = window;
-			const visible = document.documentElement.clientHeight;
-			const pageHeight = document.documentElement.scrollHeight;
-			const bottomOfPage = visible + scrollY >= pageHeight - 2;
-			return bottomOfPage || pageHeight < visible;
-		},
 		async addContent() {
 			this.query["$skip"] += this.query["$limit"];
 			await this.$store.dispatch("content/addResources", this.query);
 		},
 		async searchContent() {
 			await this.$store.dispatch("content/getResources", this.query);
-		},
-		backToTop() {
-			window.scrollTo(0, 0);
 		},
 	},
 };
@@ -183,6 +160,9 @@ export default {
 		}
 	}
 	&__no-results {
+		margin-top: var(--space-md);
+	}
+	&__spinner {
 		margin-top: var(--space-md);
 	}
 }
