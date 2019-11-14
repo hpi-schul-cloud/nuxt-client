@@ -3,6 +3,7 @@
 		<img
 			class="empty-state-container__image"
 			src="@assets/empty-state/lehrer1_lupe.svg"
+			alt="empty-state-img"
 		/>
 		<h3 class="empty-state-container__title">Oops</h3>
 		<p class="empty-state-container__message"
