@@ -19,13 +19,13 @@ import { mapGetters } from "vuex";
 import NewsCard from "@components/molecules/NewsCard";
 
 export default {
+	components: {
+		NewsCard,
+	},
 	head() {
 		return {
 			title: "News",
 		};
-	},
-	components: {
-		NewsCard,
 	},
 	computed: {
 		...mapGetters("news", {

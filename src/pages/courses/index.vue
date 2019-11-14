@@ -1,13 +1,8 @@
 <template>
 	<div>
-		<base-button
-			design="hero-cta"
-			size="large"
+		<floating-fab
 			@click="$router.push({ name: 'courses-create' })"
-		>
-			<base-icon source="material" icon="add" />
-			{{ $t("pages.courses.new.btn_new") }}
-		</base-button>
+		/>
 		<courses-grid :courses="courses"></courses-grid>
 	</div>
 </template>
@@ -15,15 +10,12 @@
 <script>
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
-	head() {
-		return {
-			title: "Kurse",
-		};
-	},
 	components: {
 		CoursesGrid,
+		FloatingFab
 	},
 	computed: {
 		...mapGetters("courses", {
@@ -37,6 +29,11 @@ export default {
 		find() {
 			this.$store.dispatch("courses/find");
 		},
+	},
+	head() {
+		return {
+			title: "Kurse",
+		};
 	},
 };
 </script>

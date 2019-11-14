@@ -24,11 +24,6 @@ import Searchbar from "@components/molecules/Searchbar";
 import Pagination from "@components/organisms/Pagination";
 
 export default {
-	head() {
-		return {
-			title: "LernStore",
-		};
-	},
 	components: {
 		Searchbar,
 		Pagination,
@@ -40,6 +35,11 @@ export default {
 			skippedItems: this.$route.query.skip
 				? parseInt(this.$route.query.skip, 10)
 				: 0,
+		};
+	},
+	head() {
+		return {
+			title: "LernStore",
 		};
 	},
 	computed: {
