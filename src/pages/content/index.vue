@@ -2,7 +2,7 @@
 	<section>
 		<div v-if="scrollY > 115" class="content__back-to-top">
 			<p @click="backToTop">
-				<i class="icon fa fa-arrow-circle-up "></i>
+				<i class="icon fa fa-chevron-circle-up"></i>
 			</p>
 		</div>
 		<div class="content">
@@ -13,7 +13,7 @@
 				:loading="loading"
 			/>
 			<div v-if="resources.data.length === 0" class="content__no-results">
-				<h3>No search results</h3>
+				<content-empty-state />
 			</div>
 			<div class="content__cards-container">
 				<BaseGrid column-width="20rem">
@@ -48,11 +48,16 @@
 import { mapState } from "vuex";
 import Searchbar from "@components/molecules/Searchbar";
 import ContentCard from "@components/molecules/ContentCard";
+import ContentEmptyState from "@components/molecules/ContentEmptyState";
 
 export default {
 	components: {
 		Searchbar,
 		ContentCard,
+		ContentEmptyState,
+	},
+	async asyncData({ store }) {
+		return Promise.all([store.dispatch("content/getResources")]);
 	},
 	data() {
 		return {
@@ -107,9 +112,6 @@ export default {
 			return this.resources;
 		},
 	},
-	async asyncData({ store }) {
-		return Promise.all([store.dispatch("content/getResources")]);
-	},
 	created() {
 		window.scrollTo(0, 0);
 		window.addEventListener("scroll", () => {
@@ -157,10 +159,14 @@ export default {
 	&__back-to-top {
 		position: fixed;
 		cursor: pointer;
-		transform: translateX(-120px);
+		transform: translateX(-8vw) translateY(75vh);
 		i {
 			font-size: var(--heading-1);
 			color: var(--color-primary);
+			transition: all 0.1s ease-in-out;
+			&:hover {
+				transform: scale(1.3, 1.3);
+			}
 		}
 	}
 	&__searchbar {

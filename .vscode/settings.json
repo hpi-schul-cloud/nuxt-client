@@ -10,7 +10,6 @@
 	"files.eol": "\n",
 	"files.insertFinalNewline": true,
 	"files.trimFinalNewlines": true,
-	"prettier.useTabs": true,
 	"vetur.format.options.useTabs": true,
 	"scssFormatter.useTabs": true,
 
