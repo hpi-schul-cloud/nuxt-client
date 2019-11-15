@@ -1,8 +1,7 @@
-
 <template>
-	<div :style="[ pos ]" class="fab" >
+	<div :style="[pos]" class="fab">
 		<base-button design="hero-cta icon" v-on="$listeners">
-			<base-icon source="material" :icon="icon"/>
+			<base-icon source="material" :icon="icon" />
 		</base-button>
 	</div>
 </template>
@@ -15,17 +14,17 @@ export default {
 		},
 		icon: {
 			type: String,
-			default: "add"
+			default: "add",
 		},
 		position: {
 			type: String,
-			default: 'bottom-right',
+			default: "bottom-right",
 		},
 	},
 	data() {
 		return {
 			pos: {},
-		}
+		};
 	},
 	created() {
 		this.setPosition();
@@ -34,38 +33,38 @@ export default {
 		setPosition() {
 			this.pos = {};
 			switch (this.position) {
-				case 'bottom-right':
-					this.pos.right = '5vw';
-					this.pos.bottom = '4vh';
+				case "bottom-right":
+					this.pos.right = "5vw";
+					this.pos.bottom = "4vh";
 					break;
-				case 'bottom-left':
-					this.pos.left = '5vw';
-					this.pos.bottom = '4vh';
+				case "bottom-left":
+					this.pos.left = "5vw";
+					this.pos.bottom = "4vh";
 					break;
-				case 'top-left':
-					this.pos.left = '5vw';
-					this.pos.top = '4vh';
+				case "top-left":
+					this.pos.left = "5vw";
+					this.pos.top = "4vh";
 					break;
-				case 'top-right':
-					this.pos.right = '5vw';
-					this.pos.top = '4vh';
+				case "top-right":
+					this.pos.right = "5vw";
+					this.pos.top = "4vh";
 					break;
 				default:
-					this.pos.right = '5vw';
-					this.pos.bottom = '4vh';
+					this.pos.right = "5vw";
+					this.pos.bottom = "4vh";
 			}
 		},
-	}
-}
+	},
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@styles';
-.fab{
+@import "@styles";
+.fab {
 	position: fixed;
 	right: 5vw;
 	bottom: 4vh;
-	z-index:  var(--layer-fab);
+	z-index: var(--layer-fab);
 	cursor: pointer;
 }
 </style>

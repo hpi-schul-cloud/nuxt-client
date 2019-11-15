@@ -22,11 +22,6 @@ export default {
 	components: {
 		NewsCard,
 	},
-	head() {
-		return {
-			title: "News",
-		};
-	},
 	computed: {
 		...mapGetters("news", {
 			news: "list",
@@ -45,6 +40,11 @@ export default {
 				},
 			});
 		},
+	},
+	head() {
+		return {
+			title: "News",
+		};
 	},
 };
 </script>

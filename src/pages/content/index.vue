@@ -37,11 +37,6 @@ export default {
 				: 0,
 		};
 	},
-	head() {
-		return {
-			title: "LernStore",
-		};
-	},
 	computed: {
 		...mapGetters("content_search", {
 			getContent: "get",
@@ -110,6 +105,11 @@ export default {
 			});
 			window.scrollTo(0, 0);
 		},
+	},
+	head() {
+		return {
+			title: "LernStore",
+		};
 	},
 };
 </script>

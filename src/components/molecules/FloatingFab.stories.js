@@ -12,7 +12,7 @@ storiesOf("Molecules|FloatingFab", module)
 		components: { FloatingFab },
 		data: () => ({
 			position: text("Position", "bottom-right"),
-			icon: text("Icon", "house"),
+			icon: text("Icon", "add"),
 		}),
 		template: `<FloatingFab :position="position" :icon="icon"/>`,
 		methods: {},

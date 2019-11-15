@@ -16,7 +16,7 @@ import FloatingFab from "@components/molecules/FloatingFab";
 export default {
 	components: {
 		CoursesGrid,
-		FloatingFab
+		FloatingFab,
 	},
 	computed: {
 		...mapGetters("courses", {

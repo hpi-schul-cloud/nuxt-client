@@ -62,11 +62,6 @@ export default {
 			active: false,
 		};
 	},
-	head() {
-		return {
-			title: `${(this.orgNews || {}).title || "News"} bearbeiten`,
-		};
-	},
 	computed: {
 		...mapGetters("news", {
 			orgNews: "current",
@@ -120,6 +115,11 @@ export default {
 				this.$toast.error("Fehler beim Speichern");
 			}
 		},
+	},
+	head() {
+		return {
+			title: `${(this.orgNews || {}).title || "News"} bearbeiten`,
+		};
 	},
 };
 </script>
