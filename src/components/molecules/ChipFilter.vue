@@ -1,26 +1,16 @@
 <template>
 	<div class="container">
-		<base-chip
-			v-for="(tag, idx) in filterTags"
-			:key="tag"
-			:background-color="
-				findFilterTag(idx) ? 'var(--color-secondary)' : 'var(--color-disabled)'
-			"
-			size="medium"
-			@click="setActiveFilters(idx)"
-			>{{ tag }}</base-chip
-		>
 		<div>
 			<base-chip
-				v-for="(tag, idx) in toggleTags"
+				v-for="(tag, idx) in options"
 				:key="tag"
+				size="medium"
 				:background-color="
-					activeToggle === tag
+					setColor(tag, idx)
 						? 'var(--color-secondary)'
 						: 'var(--color-disabled)'
 				"
-				size="medium"
-				@click="setActiveToggle(idx)"
+				@click="set(idx)"
 				>{{ tag }}</base-chip
 			>
 		</div>
@@ -35,17 +25,16 @@ export default {
 		BaseChip,
 	},
 	props: {
-		toggleTags: {
-			type: Array,
+		value: {
+			type: [String, Number, Array, Object],
 			default: () => [],
 		},
-		filterTags: {
-			type: Array,
-			default: () => [],
+		multiple: {
+			type: Boolean,
 		},
-		activeToggle: {
-			type: String,
-			default: "",
+		options: {
+			type: [Array, String],
+			default: () => [],
 		},
 	},
 	data() {
@@ -54,20 +43,26 @@ export default {
 		};
 	},
 	methods: {
-		setActiveFilters(idx) {
-			const { activeFilters, filterTags, findFilterTag } = this;
-			const activeFiltersIdx = activeFilters.indexOf(filterTags[idx]);
-
-			findFilterTag(idx)
-				? activeFilters.splice(activeFiltersIdx, 1)
-				: activeFilters.push(filterTags[idx]);
+		set(idx) {
+			switch (this.multiple) {
+				case false:
+					this.$emit("update:value", this.options[idx]);
+					break;
+				case true:
+					const tagIdx = this.value.indexOf(this.options[idx]);
+					this.value.find((tag) => tag === this.options[idx])
+						? this.activeFilters.splice(tagIdx, 1)
+						: this.activeFilters.push(this.options[idx]);
+					this.$emit("update:value", this.activeFilters);
+					break;
+			}
 		},
-		findFilterTag(idx) {
-			return this.activeFilters.find((tag) => tag === this.filterTags[idx]);
-		},
-		setActiveToggle(idx) {
-			this.activeToggle = this.toggleTags[idx];
-			this.$emit("update:activeToggle", this.toggleTags[idx]);
+		setColor(tag) {
+			if (!this.multiple) {
+				return this.value === tag;
+			} else if (this.multiple) {
+				return this.activeFilters.indexOf(tag) >= 0 ? true : false;
+			}
 		},
 	},
 };

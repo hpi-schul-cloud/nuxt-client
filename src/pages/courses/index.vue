@@ -1,9 +1,14 @@
 <template>
 	<div>
 		<chip-filter
-			:toggle-tags="toggleTags"
-			:filter-tags="filterTags"
-			:active-toggle.sync="activeToggle"
+			:value.sync="activeToggle"
+			:options="toggleTags"
+			:multiple="false"
+		/>
+		<chip-filter
+			:value.sync="activeFilters"
+			:options="filterTags"
+			:multiple="true"
 		/>
 		<base-button
 			design="hero-cta"
@@ -32,6 +37,7 @@ export default {
 			toggleTags: ["Aktuell", "Archiviert"],
 			filterTags: ["Spanisch", "Deutsch", "Englisch"],
 			activeToggle: "Aktuell",
+			activeFilters: [],
 		};
 	},
 	head() {
