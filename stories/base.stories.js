@@ -17,6 +17,7 @@ import BaseSelect from "@basecomponents/BaseSelect";
 import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseTable from "@basecomponents/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
+import BaseChip from "@basecomponents/BaseChip";
 
 storiesOf("Base|Other", module)
 	.addParameters({
@@ -360,4 +361,14 @@ storiesOf("Base|Other", module)
 			),
 		}),
 		template: `<BaseSpinner :color="color" :size="size" :aria-label="label"/>`,
+	}))
+	.add("BaseChip", () => ({
+		components: { BaseChip },
+
+		template: `
+		<div>
+			<base-chip backgroundColor="var(--color-primary)" size="small">small chip</base-chip>
+										<base-chip backgroundColor="var(--color-secondary)" size="medium">medium chip</base-chip>
+										<base-chip backgroundColor="var(--color-tertiary)" size="large">large chip</base-chip>
+								</div>`,
 	}));

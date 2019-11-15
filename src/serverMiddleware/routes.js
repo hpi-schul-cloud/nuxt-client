@@ -7,6 +7,7 @@
 
 module.exports = [
 	`^/error/`,
+	`^/courses/`,
 	`^/impressum/?`,
 	`^/nuxtversion/?$`,
 	// `^/news`,
