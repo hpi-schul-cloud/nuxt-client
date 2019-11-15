@@ -29,7 +29,7 @@ export default {
 	margin: 0 auto;
 
 	@include breakpoint(tablet) {
-		padding: 0 var(--space-xl);
+		padding: 0 var(--space-xl-3);
 	}
 }
 </style>
