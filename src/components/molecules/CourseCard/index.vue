@@ -4,9 +4,7 @@
 			{{ notification }}
 		</div>
 		<div class="header">
-			<div class="tab" :style="background_style">
-				<div class="tab-label truncate">{{ cardLabel }}</div>
-			</div>
+			<card-tab :background-style="background_style">{{ cardLabel }}</card-tab>
 			<div v-if="newAssignments" class="assignments-label">
 				{{ newAssignments }}
 				<base-icon source="custom" icon="tasks" />
@@ -22,10 +20,12 @@
 
 <script>
 import CourseCardFooter from "./CourseCardFooter";
+import CardTab from "@components/atoms/CardTab";
 
 export default {
 	components: {
 		CourseCardFooter,
+		CardTab,
 	},
 	props: {
 		color: {
@@ -129,38 +129,6 @@ export default {
 	overflow: hidden;
 	border-radius: var(--radius-sm);
 	border-bottom-left-radius: 0;
-}
-
-// Course Name (left)
-.tab {
-	position: absolute;
-	width: 80%;
-	height: 100%;
-	border-top-right-radius: var(--radius-sm);
-	transform: skewX(25deg);
-	transform-origin: bottom left;
-
-	&::before {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		content: "";
-		background: var(--color-overlay);
-		border-top-right-radius: var(--radius-sm);
-	}
-
-	.tab-label {
-		display: inline-block;
-		width: 100%;
-		padding: var(--space-xs-2) var(--space-sm);
-		font-family: var(--font-accent);
-		font-size: var(--text-md);
-		color: var(--color-white);
-		transform: skewX(-25deg);
-		transform-origin: bottom left;
-	}
 }
 
 // Info (right)
