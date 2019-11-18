@@ -1,9 +1,11 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
+import VueRouter from "vue-router";
 import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
+import sinon from "sinon";
 
 // ===
 // Utility functions
@@ -77,7 +79,9 @@ Object.defineProperty(window, "localStorage", {
 	})(),
 });
 
-const location = {};
+const location = {
+	href: "",
+};
 Object.defineProperty(window, "location", {
 	set: function(val) {
 		location.host = "domain.io";
@@ -94,6 +98,9 @@ Object.defineProperty(window, "location", {
 // ===
 // Global helpers
 // ===
+
+// for mocking methods
+global.sinon = sinon;
 
 // https://vue-test-utils.vuejs.org/api/#mount
 global.mount = vueTestUtils.mount;
@@ -121,11 +128,15 @@ global.shallowMountView = (Component, options = {}) => {
 
 import { i18n as i18nConfig } from "@plugins/i18n.js";
 import i18nStoreModule from "@store/i18n";
+import authStoreModule from "@store/auth";
+import { mixin as userMixin } from "@plugins/user.js";
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
+	user,
 	store,
+	$route,
 	router,
 	/*style,*/ mocks,
 	stubs,
@@ -157,11 +168,14 @@ global.createComponentMocks = ({
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	if (store || i18n) {
+	if (store || i18n || user) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
 		if (i18n) {
 			storeModules.i18n = i18nStoreModule;
+		}
+		if (user) {
+			storeModules.auth = authStoreModule;
 		}
 		returnOptions.store = new Vuex.Store({
 			modules: Object.entries(storeModules)
@@ -186,13 +200,23 @@ global.createComponentMocks = ({
 		returnOptions.i18n = i18nConfig(returnOptions.store);
 	}
 
+	if (user) {
+		localVue.mixin(userMixin);
+	}
+
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
 	if (router) {
 		returnOptions.stubs["NuxtLink"] = true;
 		returnOptions.stubs["Nuxt"] = true;
+		localVue.use(VueRouter);
+		const r = new VueRouter(typeof router === "object" && router);
+		returnOptions.router = r;
 	}
 
+	if ($route) {
+		returnOptions.$route = $route;
+	}
 	return returnOptions;
 };
 

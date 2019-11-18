@@ -56,7 +56,7 @@ describe("@components/BaseTextarea", () => {
 
 	it("some options are disabled when cursor is in Headings", async () => {
 		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
-		let testInstances = ["h1", "h2", "h3"].map((tag) =>
+		let testInstances = ["h2", "h3", "h4"].map((tag) =>
 			getMock({
 				data: () => ({ content: `<${tag}>Hi</${tag}>` }),
 			})
