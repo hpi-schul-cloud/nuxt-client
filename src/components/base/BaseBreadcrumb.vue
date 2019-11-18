@@ -48,7 +48,7 @@ export default {
 @import "@styles";
 
 .breadcrumb {
-	padding: var(--space-sm) var(--space-md);
+	padding: var(--space-sm) 0;
 	list-style: none;
 
 	.link {
@@ -69,8 +69,9 @@ export default {
 		color: var(--color-gray);
 	}
 
-	li:last-child {
+	li:last-child > * {
 		color: var(--color-gray);
+		cursor: default;
 	}
 }
 </style>

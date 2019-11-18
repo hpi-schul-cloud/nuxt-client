@@ -53,4 +53,17 @@ describe("@components/BaseButton", () => {
 		expect(wrapper.find("button").exists()).toBe(true);
 		expect(wrapper.find(".is-success").exists()).toBe(true);
 	});
+	it(`has default type="button"`, () => {
+		const wrapper = mount(BaseButton);
+		expect(wrapper.find(`button[type=button]`).exists()).toBe(true);
+	});
+	it(`type can be manipulated`, () => {
+		const wrapper = mount(BaseButton, {
+			propsData: {
+				type: "submit",
+			},
+		});
+		expect(wrapper.find(`button[type=button]`).exists()).toBe(false);
+		expect(wrapper.find(`button[type=submit]`).exists()).toBe(true);
+	});
 });
