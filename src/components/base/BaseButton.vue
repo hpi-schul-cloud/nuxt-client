@@ -1,5 +1,5 @@
 <template>
-	<button :class="classes" :type="type" v-on="$listeners">
+	<button :class="classes" v-on="$listeners">
 		<slot />
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
