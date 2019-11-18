@@ -1,5 +1,7 @@
 import Vue from "vue";
 
+import "@plugins/global";
+
 // Toasts
 import Toasted from "vue-toasted";
 Vue.prototype.$toast = Toasted;
