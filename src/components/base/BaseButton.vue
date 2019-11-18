@@ -252,6 +252,6 @@ export default {
 }
 .is-hero-cta,
 .is-fancy {
-	box-shadow: var(--shadow-md);
+	box-shadow: var(--shadow-xl);
 }
 </style>
