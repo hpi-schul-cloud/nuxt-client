@@ -18,7 +18,7 @@ import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseTable from "@basecomponents/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
 
-storiesOf("Base|Other", module)
+storiesOf("Base|Base UI", module)
 	.addParameters({
 		notes,
 	})
@@ -80,7 +80,7 @@ storiesOf("Base|Other", module)
 
 				<h2>Primary Action</h2>
 				<base-button design="primary">
-					<base-icon source="material" icon="home"/>
+					<base-icon source="material" icon="add"/>
 					primary
 				</base-button>
 				<base-button design="primary outline">primary outline</base-button>
