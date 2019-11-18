@@ -1,13 +1,9 @@
 import { storiesOf } from "@storybook/vue";
 
-import notes from "@docs/storybook/Tabs.md";
 import Tabs from "@components/organisms/Tabs/Tabs";
 import SingleTab from "@components/atoms/Tab";
 
 storiesOf("Molecules|Tabs", module)
-	.addParameters({
-		notes,
-	})
 	.add("Tabs", () => ({
 		components: { Tabs, SingleTab },
 		template: `
