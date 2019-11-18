@@ -81,11 +81,6 @@ export default {
 			myInvitations: [],
 		};
 	},
-	head() {
-		return {
-			title: "Teams",
-		};
-	},
 	computed: {
 		...mapGetters("teams", {
 			teams: "list",
@@ -114,6 +109,11 @@ export default {
 		find() {
 			this.$store.dispatch("teams/find");
 		},
+	},
+	head() {
+		return {
+			title: "Teams",
+		};
 	},
 };
 </script>
