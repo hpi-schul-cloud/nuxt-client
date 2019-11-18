@@ -12,7 +12,7 @@ storiesOf("Molecules|CourseCard", module)
 	})
 	.add("CourseCard", () => ({
 		components: { CourseCard },
-		template: `<CourseCard v-bind="course" />`,
+		template: `<base-grid><CourseCard v-bind="course" /><CourseCard v-bind="course" /><CourseCard v-bind="course" /></base-grid>`,
 		data: () => ({
 			course: {
 				...defaultCourse,
@@ -31,7 +31,7 @@ storiesOf("Molecules|CourseCard", module)
 	}))
 	.add("CourseCard getting old data format", () => ({
 		components: { CourseCard },
-		template: '<CourseCard v-bind="course" />',
+		template: '<base-grid><CourseCard v-bind="course" /></base-grid>',
 		data: () => ({
 			course: {
 				...courseOldDataFormat,
