@@ -61,13 +61,13 @@ export default {
 			news: await store.dispatch("news/get", params.id),
 		};
 	},
+	meta: {
+		requiredPermissions: ["NEWS_EDIT"],
+	},
 	head() {
 		return {
 			title: `${(this.news || {}).title || "News"} bearbeiten`,
 		};
-	},
-	meta: {
-		requiredPermissions: ["NEWS_EDIT"],
 	},
 };
 </script>

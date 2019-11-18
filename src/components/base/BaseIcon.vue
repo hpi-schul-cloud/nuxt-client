@@ -77,6 +77,6 @@ export default {
 	width: calc(1em + 4px);
 	height: calc(1em + 4px);
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin: -4px 0;
+	margin: -6px 0;
 }
 </style>

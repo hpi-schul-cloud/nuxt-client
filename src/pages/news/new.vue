@@ -44,5 +44,10 @@ export default {
 	meta: {
 		requiredPermissions: ["NEWS_CREATE"],
 	},
+	head() {
+		return {
+			title: "News erstellen",
+		};
+	},
 };
 </script>
