@@ -8,8 +8,8 @@ storiesOf("Molecules|Tabs", module)
 		components: { Tabs, SingleTab },
 		template: `
 			<Tabs>
-				<SingleTab name="Tab 1" :selected="true">Test</SingleTab>
-				<SingleTab name="Tab 2">Test2</SingleTab>
+				<SingleTab name="Tab 1">Test</SingleTab>
+				<SingleTab name="Tab 2" :selected="true">Test2</SingleTab>
 				<SingleTab name="Tab 3">Test 3 lorum ipsum test with a long line of text</SingleTab>
 			</Tabs>
 		`,
