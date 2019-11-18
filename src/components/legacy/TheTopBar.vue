@@ -184,6 +184,9 @@ export default {
 			}
 
 			.menu-button {
+				position: fixed;
+				top: 0;
+				left: 0;
 				transform: rotate(90deg);
 			}
 		}
