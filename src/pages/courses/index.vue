@@ -10,14 +10,10 @@
 			:options="filterTags"
 			:multiple="true"
 		/> -->
-		<base-button
-			design="hero-cta"
-			size="large"
+		<floating-fab
+			icon="add"
 			@click="$router.push({ name: 'courses-create' })"
-		>
-			<base-icon source="material" icon="add" />
-			{{ $t("pages.courses.new.btn_new") }}
-		</base-button>
+		/>
 		<courses-grid :courses="filteredCourses"></courses-grid>
 	</div>
 </template>
@@ -26,11 +22,13 @@
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
 import ChipFilter from "@components/molecules/ChipFilter";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
 	components: {
 		CoursesGrid,
 		ChipFilter,
+		FloatingFab,
 	},
 	data() {
 		return {
