@@ -14,9 +14,6 @@ env:
   global:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" )
-    - SENTRY_URL=https://sentry.schul-cloud.dev
-    - SENTRY_ORG=schul-cloud
-    - SENTRY_PROJECT=nuxt-client
 
 stages:
   - test
