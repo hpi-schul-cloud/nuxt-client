@@ -92,7 +92,7 @@ describe("@components/BaseTextarea", () => {
 	});
 
 	it("external img src's are NOT detected as invalid", async () => {
-		const validContent = `<img src="https://source.unsplash.com/random">`;
+		const validContent = `<img role="presentation" src="https://source.unsplash.com/random">`;
 		const wrapper = mount(TextEditor, {
 			...createComponentMocks({ i18n: true }),
 			propsData: { value: "" },
@@ -102,7 +102,7 @@ describe("@components/BaseTextarea", () => {
 	});
 
 	it("data-url img src's are detected as invalid", async () => {
-		const invalidContent = `<img src="${base64Image}">`;
+		const invalidContent = `<img role="presentation" src="${base64Image}">`;
 		const wrapper = mount(TextEditor, {
 			...createComponentMocks({ i18n: true }),
 			propsData: { value: "" },
