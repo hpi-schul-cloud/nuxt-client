@@ -27,6 +27,7 @@ export default {
 <style lang="scss" scoped>
 .chip {
 	display: inline-block;
+	margin: var(--space-xs) var(--space-xs) 0 0;
 	font-family: var(--font-accent);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
