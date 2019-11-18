@@ -1,7 +1,6 @@
 const pkg = require("./package");
 
 module.exports = {
-	publishRelease: true,
 	config: {
 		// environment: "{{@root.env}}", // TODO implement & enable
 		release: pkg.version,
