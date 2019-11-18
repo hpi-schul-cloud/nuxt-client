@@ -24,11 +24,6 @@ import Searchbar from "@components/molecules/Searchbar";
 import Pagination from "@components/organisms/Pagination";
 
 export default {
-	head() {
-		return {
-			title: "LernStore",
-		};
-	},
 	components: {
 		Searchbar,
 		Pagination,
@@ -110,6 +105,11 @@ export default {
 			});
 			window.scrollTo(0, 0);
 		},
+	},
+	head() {
+		return {
+			title: "LernStore",
+		};
 	},
 };
 </script>
