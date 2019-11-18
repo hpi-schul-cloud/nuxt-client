@@ -1,12 +1,10 @@
 <template>
-	<div class="course-card">
-		<div v-if="notification" class="caption notification-dot">
+	<base-card class="course-card">
+		<div v-if="notification" class="notification-dot">
 			{{ notification }}
 		</div>
 		<div class="header">
-			<div class="tab" :style="background_style">
-				<div class="caption tab-label truncate">{{ cardLabel }}</div>
-			</div>
+			<card-tab :background-style="background_style">{{ cardLabel }}</card-tab>
 			<div v-if="newAssignments" class="assignments-label">
 				{{ newAssignments }}
 				<base-icon source="custom" icon="tasks" />
@@ -17,15 +15,17 @@
 			<h3 class="course-name-label">{{ name }}</h3>
 		</div>
 		<course-card-footer v-bind="$attrs" />
-	</div>
+	</base-card>
 </template>
 
 <script>
 import CourseCardFooter from "./CourseCardFooter";
+import CardTab from "@components/atoms/CardTab";
 
 export default {
 	components: {
 		CourseCardFooter,
+		CardTab,
 	},
 	props: {
 		color: {
@@ -114,15 +114,8 @@ export default {
 
 .course-card {
 	position: relative;
-	padding: var(--space-xs);
 	padding-bottom: 0;
 	cursor: pointer;
-	border-radius: var(--radius-md);
-	box-shadow: var(--shadow-sm);
-	transition: box-shadow var(--duration-transition-medium);
-}
-.course-card:hover {
-	box-shadow: var(--shadow-lg);
 }
 
 /* ------------------------
@@ -136,39 +129,6 @@ export default {
 	overflow: hidden;
 	border-radius: var(--radius-sm);
 	border-bottom-left-radius: 0;
-}
-
-// Course Name (left)
-.tab {
-	position: absolute;
-	z-index: var(--layer-behind);
-	width: 80%;
-	height: 100%;
-	border-top-right-radius: var(--radius-sm);
-	transform: skewX(25deg);
-	transform-origin: bottom left;
-
-	&::before {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		content: "";
-		background: var(--color-overlay);
-		border-top-right-radius: var(--radius-sm);
-	}
-
-	.tab-label {
-		display: inline-block;
-		width: 100%;
-		padding: var(--space-xs-2) var(--space-sm);
-		font-family: var(--font-accent);
-		font-size: var(--text-md);
-		color: var(--color-white);
-		transform: skewX(-25deg);
-		transform-origin: bottom left;
-	}
 }
 
 // Info (right)
@@ -205,6 +165,7 @@ export default {
 ------------------------ */
 
 .card-info {
+	position: relative;
 	padding: var(--space-sm) var(--space-xs);
 	margin-top: calc(var(--space-xs) * -1);
 	color: var(--color-white);

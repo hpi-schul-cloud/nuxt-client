@@ -34,7 +34,7 @@ describe("@components/molecules/CourseCard", () => {
 			alert: "Test Alert!",
 			notification: 0,
 		};
-		const wrapper = shallowMount(CourseCard, {
+		const wrapper = mount(CourseCard, {
 			propsData: course,
 		});
 

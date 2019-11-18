@@ -55,7 +55,7 @@ export default {
 		links() {
 			return [
 				{
-					to: "/impressum",
+					to: "/imprint",
 					text: "Impressum",
 				},
 				{

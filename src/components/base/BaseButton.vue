@@ -1,5 +1,5 @@
 <template>
-	<button :class="classes" v-on="$listeners">
+	<button :class="classes" :type="type" v-on="$listeners">
 		<slot />
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
@@ -252,6 +252,6 @@ export default {
 }
 .is-hero-cta,
 .is-fancy {
-	box-shadow: var(--shadow-md);
+	box-shadow: var(--shadow-xl);
 }
 </style>
