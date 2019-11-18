@@ -116,7 +116,6 @@
 		"postcss-loader": "^3.0.0",
 		"prettier": "^1.18.2",
 		"sass-loader": "^8.0.0",
-		"sinon": "^7.5.0",
 		"storybook-addon-vue-info": "^1.1.1",
 		"style-loader": "^1.0.0",
 		"stylelint": "^11.0.0",

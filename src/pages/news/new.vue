@@ -1,45 +1,66 @@
 <template>
 	<div>
-		<base-breadcrumb
-			:inputs="[
-				{
-					to: { name: 'news' },
-					text: 'News',
-				},
-				{
-					text: $t('pages.news.new.title'),
-				},
-			]"
-		/>
-		<h1>{{ $t("pages.news.new.title") }} </h1>
-		<form-news #actions="{ cancel }" action="create">
-			<form-actions>
-				<template #primary>
-					<base-button design="primary" type="submit">
-						{{ $t("pages.news.new.create") }}
-					</base-button>
-					<base-button design="text" @click.prevent="cancel">
-						{{ $t("common.actions.cancel") }}
-					</base-button>
-				</template>
-			</form-actions>
-		</form-news>
+		<div v-if="news">
+			<h1>Artikel erstellen</h1>
+
+			<section class="section">
+				<base-input
+					v-model="news.title"
+					label="Titel"
+					name="title"
+					type="text"
+					maxlength="30"
+				></base-input>
+				<base-input
+					v-model="news.content"
+					label="Inhalt"
+					name="content"
+					type="text"
+				></base-input>
+				<base-button design="primary" @click="save">Anlegen</base-button>
+			</section>
+
+			<section class="section">
+				<h1>{{ news.title }}</h1>
+				<!-- eslint-disable-next-line vue/no-v-html -->
+				<div v-html="news.content" />
+			</section>
+		</div>
 	</div>
 </template>
 
 <script>
-import FormNews from "@components/organisms/FormNews";
-import FormActions from "@components/molecules/FormActions";
-
 export default {
-	components: {
-		FormNews,
-		FormActions,
-	},
 	head() {
 		return {
 			title: "News erstellen",
 		};
+	},
+	data: function() {
+		return {
+			news: {
+				title: "",
+				content: "",
+			},
+		};
+	},
+	methods: {
+		async save() {
+			try {
+				const news = await this.$store.dispatch("news/create", {
+					title: this.news.title,
+					content: this.news.content,
+					schoolId: this.$user.schoolId,
+					target: this.$route.query.target,
+					targetModel: this.$route.query.Model,
+				});
+				this.$toast.success("Artikel erstellt");
+				this.$router.push({ name: "news-id", params: { id: news._id } });
+			} catch (e) {
+				console.error(e);
+				this.$toast.error("Fehler beim Erstellen");
+			}
+		},
 	},
 };
 </script>

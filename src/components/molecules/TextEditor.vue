@@ -52,22 +52,22 @@
 
 				<base-button
 					data-testid="editor_format_h1"
-					:design="isActive.heading({ level: 2 }) ? 'icon' : 'icon text'"
-					@click="commands.heading({ level: 2 })"
+					:design="isActive.heading({ level: 1 }) ? 'icon' : 'icon text'"
+					@click="commands.heading({ level: 1 })"
 				>
 					H1
 				</base-button>
 				<base-button
 					data-testid="editor_format_h2"
-					:design="isActive.heading({ level: 3 }) ? 'icon' : 'icon text'"
-					@click="commands.heading({ level: 3 })"
+					:design="isActive.heading({ level: 2 }) ? 'icon' : 'icon text'"
+					@click="commands.heading({ level: 2 })"
 				>
 					H2
 				</base-button>
 				<base-button
 					data-testid="editor_format_h3"
-					:design="isActive.heading({ level: 4 }) ? 'icon' : 'icon text'"
-					@click="commands.heading({ level: 4 })"
+					:design="isActive.heading({ level: 3 }) ? 'icon' : 'icon text'"
+					@click="commands.heading({ level: 3 })"
 				>
 					H3
 				</base-button>
@@ -125,7 +125,6 @@ import {
 	Strike,
 	Underline,
 } from "tiptap-extensions";
-
 export default {
 	components: {
 		EditorContent,
@@ -148,7 +147,7 @@ export default {
 					new Bold(),
 					new BulletList(),
 					new HardBreak(),
-					new Heading({ levels: [2, 3, 4] }),
+					new Heading({ levels: [1, 2, 3] }),
 					new History(),
 					new Image(),
 					new Italic(),
@@ -160,15 +159,8 @@ export default {
 				],
 				content: this.value,
 				onUpdate: ({ getHTML }) => {
-					const content = getHTML();
-					const error = this.isInvalid(content);
-					if (error) {
-						this.$toast.error(error);
-						this.editor.commands.undo();
-					} else {
-						this.content = content;
-						this.$emit("update", content);
-					}
+					this.content = getHTML();
+					this.$emit("update", getHTML());
 				},
 			}),
 			content: "",
@@ -177,9 +169,9 @@ export default {
 	computed: {
 		isInHeading() {
 			return (
+				this.editor.isActive.heading({ level: 1 }) ||
 				this.editor.isActive.heading({ level: 2 }) ||
-				this.editor.isActive.heading({ level: 3 }) ||
-				this.editor.isActive.heading({ level: 4 })
+				this.editor.isActive.heading({ level: 3 })
 			);
 		},
 	},
@@ -199,13 +191,6 @@ export default {
 			if (src !== null) {
 				command({ src });
 			}
-		},
-		isInvalid(content) {
-			let error = false;
-			if (content.includes(`src="data:`)) {
-				error = this.$t("components.molecules.TextEditor.noLocalFiles");
-			}
-			return error;
 		},
 	},
 };
