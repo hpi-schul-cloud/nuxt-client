@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import TemplateTabs from "./Tabs";
-import TemplateTab from "./Tab";
+import TemplateTab from "@components/atoms/Tab";
 
 const tabs = {
 	components: { TemplateTabs, TemplateTab },
