@@ -2,13 +2,13 @@ import { storiesOf } from "@storybook/vue";
 
 import notes from "@docs/storybook/Tabs.md";
 import Tabs from "@components/organisms/Tabs/Tabs";
-import SingleTab from "@components/organisms/Tabs/Tab";
+import SingleTab from "@components/atoms/Tab";
 
 storiesOf("Molecules|Tabs", module)
 	.addParameters({
 		notes,
 	})
-	.add("Template tabs", () => ({
+	.add("Tabs", () => ({
 		components: { Tabs, SingleTab },
 		template: `
 			<Tabs>
@@ -19,7 +19,7 @@ storiesOf("Molecules|Tabs", module)
 		`,
 		methods: {},
 	}))
-	.add("Template tab content", () => ({
+	.add("SingleTab", () => ({
 		components: { SingleTab },
 		template: `<SingleTab name="Tab 1" :selected="true">Lorum ipsum dipsum</SingleTab>`,
 	}));
