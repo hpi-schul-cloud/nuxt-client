@@ -4,7 +4,7 @@ import notes from "@docs/storybook/base.md";
 
 import BaseTextarea from "./BaseTextarea";
 
-storiesOf("Base|other", module)
+storiesOf("Base|BaseComponents", module)
 	.addParameters({
 		notes,
 	})
