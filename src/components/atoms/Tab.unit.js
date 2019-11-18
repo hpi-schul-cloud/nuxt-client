@@ -10,7 +10,7 @@ const tabContentHide = {
 	template: `<TemplateTab name='Test Tab 1'>Testing Testing 123</TemplateTab>`,
 };
 
-describe("@components/organisms/Tabs/Tab", () => {
+describe("@components/atoms/Tab", () => {
 	it(...isValidComponent(TemplateTab));
 
 	it("Shows when active", () => {
