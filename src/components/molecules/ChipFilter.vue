@@ -4,12 +4,8 @@
 			<base-chip
 				v-for="(tag, idx) in options"
 				:key="tag"
+				:selected="setColor(tag, idx) ? true : false"
 				size="medium"
-				:background-color="
-					setColor(tag, idx)
-						? 'var(--color-secondary)'
-						: 'var(--color-disabled)'
-				"
 				@click="set(idx)"
 				>{{ tag }}</base-chip
 			>

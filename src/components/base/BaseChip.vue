@@ -1,7 +1,7 @@
 <template>
 	<div
-		:class="['chip', size]"
-		:style="{ backgroundColor: backgroundColor, padding: size }"
+		:class="['chip', size, selected, classes]"
+		:style="{ padding: size }"
 		v-on="$listeners"
 		><slot></slot>
 	</div>
@@ -10,15 +10,24 @@
 <script>
 export default {
 	props: {
-		backgroundColor: {
-			type: String,
-			default: "",
-			active: false,
-		},
 		size: {
 			type: String,
 			default: "medium",
 			validator: (size) => ["small", "medium", "large"].includes(size),
+		},
+		selected: {
+			type: Boolean,
+			active: false,
+		},
+	},
+
+	computed: {
+		classes() {
+			if (this.selected) {
+				return "selected";
+			} else {
+				return "default";
+			}
 		},
 	},
 };
@@ -42,8 +51,19 @@ export default {
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1);
 }
+
+.selected {
+	color: var(--color-secondary-dark);
+	background-color: var(--color-secondary-extra-light);
+	border: 0.5px solid var(--color-secondary);
+}
+.default {
+	color: var(--color-gray-dark);
+	background-color: var(--color-white);
+	border: 0.5px solid var(--color-gray);
+}
 .medium {
-	padding: var(--space-xs) var(--space-md) var(--space-xs-2) var(--space-md);
+	padding: var(--space-xs-2) var(--space-lg) var(--space-xs-2) var(--space-lg);
 }
 .small {
 	padding: var(--space-xs-3) var(--space-sm) var(--space-xs-4) var(--space-sm);
