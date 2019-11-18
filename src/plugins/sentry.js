@@ -4,7 +4,6 @@ export default ({ app, store }) => {
 	const { user } = store.state.auth;
 	app.$sentry.configureScope((scope) => {
 		scope.setLevel("warn");
-		scope.setTag("frontend", true);
 		scope.setTag("theme", Theme.name);
 		scope.setTag("domain", window.location.host);
 
