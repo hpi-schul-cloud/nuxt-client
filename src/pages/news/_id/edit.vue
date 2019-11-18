@@ -66,5 +66,8 @@ export default {
 			title: `${(this.news || {}).title || "News"} bearbeiten`,
 		};
 	},
+	meta: {
+		requiredPermissions: ["NEWS_EDIT"],
+	},
 };
 </script>
