@@ -122,7 +122,7 @@ export default {
 	transition: box-shadow var(--duration-transition-medium);
 }
 .course-card:hover {
-	box-shadow: var(--shadow-lg);
+	box-shadow: var(--shadow-m);
 }
 
 /* ------------------------
