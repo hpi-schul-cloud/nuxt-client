@@ -34,7 +34,11 @@
 						</base-button>
 					</template>
 					<template v-slot:primary>
-						<base-button design="primary" type="submit">
+						<base-button
+							design="primary"
+							type="submit"
+							data-testid="btn_news_submit"
+						>
 							{{ $t("common.actions.save") }}
 						</base-button>
 						<base-button design="text" @click.prevent="cancel">

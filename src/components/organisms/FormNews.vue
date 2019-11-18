@@ -8,6 +8,7 @@
 			:error="errors.title"
 			:success="!errors.title"
 			:required="true"
+			data-testid="news_title"
 		/>
 		<text-editor
 			v-model="data.content"
@@ -20,11 +21,13 @@
 			v-model="data.date.date"
 			type="date"
 			:label="$t('components.organisms.FormNews.label.date')"
+			data-testid="news_date"
 		/>
 		<base-input
 			v-model="data.date.time"
 			type="time"
 			:label="$t('components.organisms.FormNews.label.time')"
+			data-testid="news_time"
 		/>
 		<!-- @slot Add your action buttons here, predefined actions are `#actions="{ remove, cancel }"` -->
 		<slot name="actions" :remove="remove" :cancel="cancel"> </slot>

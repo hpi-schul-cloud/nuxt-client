@@ -1,6 +1,11 @@
 import TextEditor from "./TextEditor";
 
-function getMock(options) {
+const base64Image = `data:image/gif;base64,R0lGODdhEAAQAMwAAPj7+FmhUYjNfGuxYY
+DJdYTIeanOpT+DOTuANXi/bGOrWj6CONzv2sPjv2CmV1unU4zPgISg6DJnJ3ImTh8Mtbs00aNP1CZSGy0YqLEn47RgXW8amasW
+7XWsmmvX2iuXiwAAAAAEAAQAAAFVyAgjmRpnihqGCkpDQPbGkNUOFk6DZqgHCNGg2T4QAQBoIiRSAwBE4VA4FACKgkB5NGReAS
+FZEmxsQ0whPDi9BiACYQAInXhwOUtgCUQoORFCGt/g4QAIQA7`;
+
+function getMock(options = {}) {
 	return new Promise((resolve) => {
 		const wrapper = mount({
 			data: () => ({ content: "" }),
@@ -24,7 +29,6 @@ describe("@components/BaseTextarea", () => {
 		// simulate type events on an [contenteditable] field.
 	});
 	*/
-
 	it("changing the v-model, updates the element's value", async () => {
 		const testInput = "<p>test string</p>";
 		const wrapper = await getMock();
@@ -55,7 +59,6 @@ describe("@components/BaseTextarea", () => {
 	});
 
 	it("some options are disabled when cursor is in Headings", async () => {
-		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		let testInstances = ["h2", "h3", "h4"].map((tag) =>
 			getMock({
 				data: () => ({ content: `<${tag}>Hi</${tag}>` }),
@@ -75,7 +78,6 @@ describe("@components/BaseTextarea", () => {
 	});
 
 	it("some options are enabled when cursor is outside Headings", async () => {
-		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		const wrapper = await getMock({
 			data: () => ({ content: `<p>Hi</p>` }),
 		});
@@ -87,5 +89,25 @@ describe("@components/BaseTextarea", () => {
 		listOptionSelectors.forEach((selector) => {
 			expect(wrapper.contains(`${selector}:not([disabled])`)).toBe(true);
 		});
+	});
+
+	it("external img src's are NOT detected as invalid", async () => {
+		const validContent = `<img src="https://source.unsplash.com/random">`;
+		const wrapper = mount(TextEditor, {
+			...createComponentMocks({ i18n: true }),
+			propsData: { value: "" },
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.isInvalid(validContent)).toBe(false);
+	});
+
+	it("data-url img src's are detected as invalid", async () => {
+		const invalidContent = `<img src="${base64Image}">`;
+		const wrapper = mount(TextEditor, {
+			...createComponentMocks({ i18n: true }),
+			propsData: { value: "" },
+		});
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.isInvalid(invalidContent)).not.toBe(false);
 	});
 });

@@ -15,7 +15,11 @@
 		<form-news #actions="{ cancel }" action="create">
 			<form-actions>
 				<template #primary>
-					<base-button design="primary" type="submit">
+					<base-button
+						design="primary"
+						type="submit"
+						data-testid="btn_news_submit"
+					>
 						{{ $t("pages.news.new.create") }}
 					</base-button>
 					<base-button design="text" @click.prevent="cancel">
