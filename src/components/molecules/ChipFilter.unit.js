@@ -38,7 +38,7 @@ describe("@components/molecules/ChipFilter", () => {
 		expect(wrapper.props().multiple).toBe(true);
 	});
 
-	it("filters get selected", () => {
+	it("filtertTag gets selected", () => {
 		const activeFilters = [];
 		const filterTags = ["Spanisch", "Deutsch", "Englisch"];
 
@@ -50,12 +50,28 @@ describe("@components/molecules/ChipFilter", () => {
 			},
 		});
 
-		wrapper.props("value").length;
+		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find(".chip").trigger("click"));
+		const firstEvent = wrapper.emitted("update:value")[0][0];
+		expect(firstEvent.length).toBe(1);
+	});
+	it("filtertTag gets removed", () => {
+		const activeFilters = ["Spanisch", "Deutsch", "Englisch"];
+		const filterTags = ["Spanisch", "Deutsch", "Englisch"];
 
-		wrapper.find(".chip").trigger("click");
-		expect(wrapper.props("value").length).toBe(0);
-		// console.log(wrapper.vm.value.length);
-		// console.log(wrapper.emitted().value);
-		// expect(wrapper.emitted().value.length).toBe(1);
+		const wrapper = mount(ChipFilter, {
+			propsData: {
+				value: activeFilters,
+				options: filterTags,
+				multiple: true,
+			},
+		});
+
+		const testChip = wrapper.find(".chip");
+		const chipText = testChip.text();
+		expect(testChip.trigger("click"));
+		const newSelection = wrapper.emitted("update:value")[0][0];
+		expect(newSelection.length).toBe(2);
+		expect(newSelection.every((chip) => !chip.includes(chipText)));
 	});
 });
