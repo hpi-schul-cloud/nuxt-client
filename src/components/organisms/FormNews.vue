@@ -144,7 +144,7 @@ export default {
 			if (displayAt) {
 				const date = dayjs(displayAt);
 				this.data.date.date = date.format("YYYY-MM-DD");
-				this.data.date.time = date.format("HH:MM");
+				this.data.date.time = date.format("HH:mm");
 			}
 		},
 		async create() {

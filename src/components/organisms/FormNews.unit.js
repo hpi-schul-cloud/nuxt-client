@@ -3,10 +3,11 @@ import FormNews from "./FormNews";
 const validNews = {
 	title: "Hi",
 	content: "lalaland",
-	date: {
-		date: undefined,
-		time: undefined,
-	},
+	displayAt: "2019-11-05T13:07:00.000Z",
+};
+const validNewsDate = {
+	date: "2019-11-05",
+	time: "14:07", // +1h because of utc conversion
 };
 
 const getMockActions = () => ({
@@ -15,7 +16,7 @@ const getMockActions = () => ({
 	remove: sinon.stub(),
 });
 
-const getMocks = (actions) =>
+const getMocks = (actions = getMockActions()) =>
 	createComponentMocks({
 		router: {
 			routes: [
@@ -27,6 +28,7 @@ const getMocks = (actions) =>
 			],
 		},
 		$route: {
+			name: "news-id",
 			params: {
 				id: "randomId",
 			},
@@ -81,11 +83,11 @@ describe("@components/FormNews", () => {
 	});
 
 	/*
-	it("dispatches cancel action when triggered from slot", async () => {
-		const actions = getMockActions();
-		const mock = getMocks(actions);
+		it("navigates back to article when cancel action gets triggered from slot on edit page", async () => {
+		const mocks = getMocks();
+		delete mocks.router;
 		const wrapper = mount(FormNews, {
-			...mock,
+			...getMocks(),
 			propsData: {
 				action: "patch",
 				news: validNews,
@@ -94,12 +96,29 @@ describe("@components/FormNews", () => {
 				actions: `<button type="button" id="cancel" @click.prevent="props.cancel()">cancel</button>`,
 			},
 		});
+		const spy = sinon.stub();
+		const routerPushMock = (target) => {
+			spy(target);
+			expect(target.name).toBe("news-id");
+			expect(target.params.id).toBe("randomId");
+		};
+		wrapper.vm.$router.push = routerPushMock;
+		wrapper.find("#cancel").trigger("click");
 
-		const cancelBtn = wrapper.find("#cancel");
-		cancelBtn.trigger("click");
-		expect(actions.create.called).toBe(false);
-		expect(actions.patch.called).toBe(false);
-		expect(actions.remove.called).toBe(false);
+		expect(spy.called).toBe(true);
 	});
 	*/
+
+	it("converts date correctly", async () => {
+		const wrapper = shallowMount(FormNews, {
+			...getMocks(),
+			propsData: {
+				action: "patch",
+				news: validNews,
+			},
+		});
+		expect(wrapper.vm.data.date.date).toEqual(validNewsDate.date);
+		expect(wrapper.vm.data.date.time).toEqual(validNewsDate.time);
+		expect(wrapper.vm.publishDate).toEqual(validNews.displayAt);
+	});
 });
