@@ -159,17 +159,7 @@ export default {
 					new Underline(),
 				],
 				content: this.value,
-				onUpdate: ({ getHTML }) => {
-					const content = getHTML();
-					const error = this.isInvalid(content);
-					if (error) {
-						this.$toast.error(error);
-						this.editor.commands.undo();
-					} else {
-						this.content = content;
-						this.$emit("update", content);
-					}
-				},
+				onUpdate: this.editorUpdateHandler,
 			}),
 			content: "",
 		};
@@ -194,6 +184,17 @@ export default {
 		this.editor.destroy();
 	},
 	methods: {
+		editorUpdateHandler({ getHTML }) {
+			const content = getHTML();
+			const error = this.isInvalid(content);
+			if (error) {
+				this.$toast.error(error);
+				this.editor.commands.undo();
+			} else {
+				this.content = content;
+				this.$emit("update", content);
+			}
+		},
 		showImagePrompt(command) {
 			const src = prompt("Bitte gib die URL deines Bildes hier ein:");
 			if (src !== null) {

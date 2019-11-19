@@ -29,12 +29,18 @@ describe("@components/BaseTextarea", () => {
 		// simulate type events on an [contenteditable] field.
 	});
 	*/
+
 	it("changing the v-model, updates the element's value", async () => {
-		const testInput = "<p>test string</p>";
-		const wrapper = await getMock();
-		wrapper.setData({ content: testInput });
-		const editorContent = wrapper.find(`[contenteditable]`).element.innerHTML;
-		expect(editorContent).toBe(testInput.toString());
+		const before = `<p>before</p>`;
+		const after = `<p>after</p>`;
+		const wrapper = await getMock({ data: () => ({ content: before }) });
+		const contentContainer = wrapper.find(`[contenteditable]`);
+		expect(contentContainer.html()).toEqual(expect.stringContaining(before));
+		wrapper.setData({ content: after });
+		expect(contentContainer.html()).toEqual(
+			expect.not.stringContaining(before)
+		);
+		expect(contentContainer.html()).toEqual(expect.stringContaining(after));
 	});
 
 	it("showImagePrompt calls callback with src", async () => {
@@ -91,7 +97,7 @@ describe("@components/BaseTextarea", () => {
 		});
 	});
 
-	it("external img src's are NOT detected as invalid", async () => {
+	it("isInvalid() - external img src's are NOT detected as invalid", async () => {
 		const validContent = `<img role="presentation" src="https://source.unsplash.com/random">`;
 		const wrapper = mount(TextEditor, {
 			...createComponentMocks({ i18n: true }),
@@ -101,7 +107,7 @@ describe("@components/BaseTextarea", () => {
 		expect(wrapper.vm.isInvalid(validContent)).toBe(false);
 	});
 
-	it("data-url img src's are detected as invalid", async () => {
+	it("isInvalid() - data-url img src's are detected as invalid", async () => {
 		const invalidContent = `<img role="presentation" src="${base64Image}">`;
 		const wrapper = mount(TextEditor, {
 			...createComponentMocks({ i18n: true }),
@@ -109,5 +115,48 @@ describe("@components/BaseTextarea", () => {
 		});
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.isInvalid(invalidContent)).not.toBe(false);
+	});
+
+	it("triggers Toast and Undo on error", async () => {
+		const invalidContent = `<img role="presentation" src="${base64Image}">`;
+		const wrapper = mount(TextEditor, {
+			...createComponentMocks({ i18n: true }),
+			propsData: { value: "" },
+		});
+		const { editorUpdateHandler } = wrapper.vm;
+
+		const undoStub = sinon.stub();
+		const toastStub = sinon.stub();
+		wrapper.vm.$toast = {};
+		wrapper.vm.$toast.error = toastStub;
+		wrapper.vm.editor.commands.undo = undoStub;
+
+		editorUpdateHandler({ getHTML: () => invalidContent });
+
+		expect(undoStub.called).toBe(true);
+		expect(toastStub.called).toBe(true);
+		expect(wrapper.emitted().update).toBeFalsy();
+	});
+
+	it("emits update for valid content", async () => {
+		const validContent = `<img role="presentation" src="https://source.unsplash.com/random">`;
+		const wrapper = mount(TextEditor, {
+			...createComponentMocks({ i18n: true }),
+			propsData: { value: "" },
+		});
+
+		const { editorUpdateHandler } = wrapper.vm;
+
+		const undoStub = sinon.stub();
+		const toastStub = sinon.stub();
+		wrapper.vm.$toast = {};
+		wrapper.vm.$toast.error = toastStub;
+		wrapper.vm.editor.commands.undo = undoStub;
+
+		editorUpdateHandler({ getHTML: () => validContent });
+
+		expect(undoStub.called).toBe(false);
+		expect(toastStub.called).toBe(false);
+		expect(wrapper.emitted("update")[0][0]).toEqual(validContent);
 	});
 });
