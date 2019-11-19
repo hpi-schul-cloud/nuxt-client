@@ -155,7 +155,7 @@ export default {
 		},
 		style() {
 			if (this.fullscreenMode) return "display: inherit;";
-			else return "";
+			return this.fullscreenMode ? "display: inherit;" : "";
 		},
 	},
 	watch: {
