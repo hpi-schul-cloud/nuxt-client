@@ -1,15 +1,13 @@
 <template>
 	<div class="container">
-		<div>
-			<base-chip
-				v-for="(tag, idx) in options"
-				:key="tag"
-				:selected="setSelected(tag, idx) ? true : false"
-				size="medium"
-				@click="set(idx)"
-				>{{ tag }}</base-chip
-			>
-		</div>
+		<base-chip
+			v-for="(tag, idx) in options"
+			:key="tag"
+			:selected="setSelected(tag, idx) ? true : false"
+			size="medium"
+			@click="set(idx)"
+			>{{ tag }}</base-chip
+		>
 	</div>
 </template>
 
@@ -37,6 +35,14 @@ export default {
 		return {
 			activeFilters: [],
 		};
+	},
+	watch: {
+		value(to) {
+			this.activeFilters = to;
+		},
+	},
+	created() {
+		this.activeFilters = this.value;
 	},
 	methods: {
 		set(idx) {
