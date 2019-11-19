@@ -154,7 +154,6 @@ export default {
 			});
 		},
 		style() {
-			if (this.fullscreenMode) return "display: inherit;";
 			return this.fullscreenMode ? "display: inherit;" : "";
 		},
 	},
