@@ -15,6 +15,15 @@ export default {
 		...mapGetters("courses", {
 			course: "current",
 		}),
+		...mapGetters("lessons", {
+			lessons: "list",
+		}),
+		...mapGetters("homeworks", {
+			homeworks: "list",
+		}),
+		...mapGetters("course-groups", {
+			courseGroups: "list",
+		}),
 		breadcrumbs() {
 			return [
 				{ text: "Kurse", to: { name: "courses" } },
@@ -26,11 +35,35 @@ export default {
 		},
 	},
 	created(ctx) {
-		this.get(this.$route.params.id);
+		this.getCourse(this.$route.params.id);
+		this.getLessons(this.$route.params.id);
+		this.getHomeworks(this.$route.params.id);
+		this.getCourseGroups(this.$route.params.id);
 	},
 	methods: {
-		get(id) {
+		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
+		},
+		getLessons(id) {
+			this.$store.dispatch("lessons/find", {
+				query: {
+					courseId: id,
+				},
+			});
+		},
+		getHomeworks(id) {
+			this.$store.dispatch("homeworks/find", {
+				query: {
+					courseId: id,
+				},
+			});
+		},
+		getCourseGroups(id) {
+			this.$store.dispatch("course-groups/find", {
+				query: {
+					courseId: id,
+				},
+			});
 		},
 	},
 };
