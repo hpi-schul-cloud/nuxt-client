@@ -11,9 +11,9 @@ const validNewsDate = {
 };
 
 const getMockActions = () => ({
-	create: sinon.stub(),
-	patch: sinon.stub(),
-	remove: sinon.stub(),
+	create: sinon.stub().resolves(true),
+	patch: sinon.stub().resolves(true),
+	remove: sinon.stub().resolves(true),
 });
 
 const getMocks = (actions = getMockActions()) =>
@@ -37,6 +37,18 @@ const getMocks = (actions = getMockActions()) =>
 		},
 	});
 
+const getRouterPushSpy = (wrapper, expects) => {
+	return new Promise((resolve) => {
+		const routerPushSpy = sinon.stub();
+		const routerPushMock = (target) => {
+			routerPushSpy(target);
+			expects(target);
+			resolve(routerPushSpy);
+		};
+		wrapper.vm.$router = { push: routerPushMock };
+	});
+};
+
 describe("@components/FormNews", () => {
 	it(...isValidComponent(FormNews));
 
@@ -50,7 +62,6 @@ describe("@components/FormNews", () => {
 				news: validNews,
 			},
 		});
-
 		wrapper.trigger("submit");
 		expect(actions.create.called).toBe(true);
 		expect(actions.patch.called).toBe(false);
@@ -67,8 +78,12 @@ describe("@components/FormNews", () => {
 				news: validNews,
 			},
 		});
-
+		wrapper.vm.$toast = { success: sinon.stub() };
+		const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
+			expect(target.name).toBe("news-id");
+		});
 		wrapper.trigger("submit");
+		expect((await routerPushSpy).called).toBe(true);
 		expect(actions.create.called).toBe(false);
 		expect(actions.patch.called).toBe(true);
 		expect(actions.remove.called).toBe(false);
@@ -85,15 +100,11 @@ describe("@components/FormNews", () => {
 				actions: `<button type="button" id="cancel" @click.prevent="props.cancel()">cancel</button>`,
 			},
 		});
-		const spy = sinon.stub();
-		const routerPushMock = (target) => {
-			spy(target);
+		const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
 			expect(target.name).toBe("news-id");
-			expect(target.params.id).toBe("randomId");
-		};
-		wrapper.vm.$router = { push: routerPushMock };
+		});
 		wrapper.find("#cancel").trigger("click");
-		expect(spy.called).toBe(true);
+		expect((await routerPushSpy).called).toBe(true);
 	});
 
 	it("navigates back to overview when cancel action gets triggered from slot on new page", async () => {
@@ -109,14 +120,12 @@ describe("@components/FormNews", () => {
 				actions: `<button type="button" id="cancel" @click.prevent="props.cancel()">cancel</button>`,
 			},
 		});
-		const spy = sinon.stub();
-		const routerPushMock = (target) => {
-			spy(target);
+		const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
 			expect(target.name).toBe("news");
-		};
-		wrapper.vm.$router = { push: routerPushMock };
+		});
 		wrapper.find("#cancel").trigger("click");
-		expect(spy.called).toBe(true);
+
+		expect((await routerPushSpy).called).toBe(true);
 	});
 
 	it("converts date correctly", async () => {
@@ -130,5 +139,60 @@ describe("@components/FormNews", () => {
 		expect(wrapper.vm.data.date.date).toEqual(validNewsDate.date);
 		expect(wrapper.vm.data.date.time).toEqual(validNewsDate.time);
 		expect(wrapper.vm.publishDate).toEqual(validNews.displayAt);
+	});
+
+	it("confirming remove dispatches the news/remove action", async () => {
+		const actions = getMockActions();
+		const mock = getMocks(actions);
+		const wrapper = shallowMount(FormNews, {
+			...mock,
+			propsData: {
+				action: "patch",
+				news: validNews,
+			},
+		});
+		const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+		wrapper.vm.$toast = toastStubs;
+		const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
+			expect(target.name).toBe("news");
+		});
+
+		await wrapper.vm.confirmRemoveHandler();
+
+		expect(actions.create.called).toBe(false);
+		expect(actions.patch.called).toBe(false);
+		expect(actions.remove.called).toBe(true);
+		expect((await routerPushSpy).called).toBe(true);
+		expect(toastStubs.error.called).toBe(false);
+		expect(toastStubs.success.called).toBe(true);
+	});
+
+	it("error toast is shown if remove fails", async () => {
+		const errorMessage = "expected error that should be catched";
+		const mock = getMocks({
+			remove: () => {
+				throw new Error(errorMessage);
+			},
+		});
+		const wrapper = shallowMount(FormNews, {
+			...mock,
+			propsData: {
+				action: "patch",
+				news: validNews,
+			},
+		});
+		const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+		wrapper.vm.$toast = toastStubs;
+		const routerPushSpy = sinon.stub();
+		wrapper.vm.$router = { push: routerPushSpy };
+		let errorOutput = "";
+		console.error = jest.fn((inputs) => (errorOutput += inputs));
+
+		await wrapper.vm.confirmRemoveHandler();
+
+		expect(routerPushSpy.called).toBe(false); // no navigation
+		expect(toastStubs.success.called).toBe(false); // or success message
+		expect(errorOutput.includes(errorMessage)).toBe(true); // but error log
+		expect(toastStubs.error.called).toBe(true); // and info toast
 	});
 });

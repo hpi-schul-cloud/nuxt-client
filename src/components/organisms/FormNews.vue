@@ -209,21 +209,22 @@ export default {
 				confirmText: this.$t(
 					"components.organisms.FormNews.remove.confirm.action"
 				),
-				onConfirm: async () => {
-					try {
-						await this.$store.dispatch("news/remove", this.$route.params.id);
-						this.$toast.success(
-							this.$t("components.organisms.FormNews.success.remove")
-						);
-						this.$router.push({ name: "news" });
-					} catch (e) {
-						console.error(e);
-						this.$toast.error(
-							this.$t("components.organisms.FormNews.errors.remove")
-						);
-					}
-				},
+				onConfirm: this.confirmRemoveHandler,
 			});
+		},
+		async confirmRemoveHandler() {
+			try {
+				await this.$store.dispatch("news/remove", this.$route.params.id);
+				this.$toast.success(
+					this.$t("components.organisms.FormNews.success.remove")
+				);
+				this.$router.push({ name: "news" });
+			} catch (e) {
+				console.error(e);
+				this.$toast.error(
+					this.$t("components.organisms.FormNews.errors.remove")
+				);
+			}
 		},
 		async cancel() {
 			const cancelTarget = this.$route.params.id
