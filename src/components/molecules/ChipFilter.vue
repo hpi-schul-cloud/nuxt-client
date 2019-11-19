@@ -4,7 +4,7 @@
 			<base-chip
 				v-for="(tag, idx) in options"
 				:key="tag"
-				:selected="setColor(tag, idx) ? true : false"
+				:selected="setSelected(tag, idx) ? true : false"
 				size="medium"
 				@click="set(idx)"
 				>{{ tag }}</base-chip
@@ -53,7 +53,7 @@ export default {
 					break;
 			}
 		},
-		setColor(tag) {
+		setSelected(tag) {
 			if (!this.multiple) {
 				return this.value === tag;
 			} else if (this.multiple) {

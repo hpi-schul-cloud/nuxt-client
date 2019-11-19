@@ -5,11 +5,11 @@
 			:options="toggleTags"
 			:multiple="false"
 		/>
-		<!-- <chip-filter
+		<chip-filter
 			:value.sync="activeFilters"
 			:options="filterTags"
 			:multiple="true"
-		/> -->
+		/>
 		<floating-fab
 			icon="add"
 			@click="$router.push({ name: 'courses-create' })"
