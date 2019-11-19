@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
-import VueRouter from "vue-router";
 import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
@@ -137,6 +136,7 @@ global.createComponentMocks = ({
 	user,
 	store,
 	$route,
+	$router,
 	router,
 	/*style,*/ mocks,
 	stubs,
@@ -209,13 +209,13 @@ global.createComponentMocks = ({
 	if (router) {
 		returnOptions.stubs["NuxtLink"] = true;
 		returnOptions.stubs["Nuxt"] = true;
-		localVue.use(VueRouter);
-		const r = new VueRouter(typeof router === "object" && router);
-		returnOptions.router = r;
 	}
 
 	if ($route) {
-		returnOptions.$route = $route;
+		returnOptions.mocks.$route = $route;
+	}
+	if ($router) {
+		returnOptions.mocks.$router = $router;
 	}
 	return returnOptions;
 };

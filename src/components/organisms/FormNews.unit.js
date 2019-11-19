@@ -18,20 +18,12 @@ const getMockActions = () => ({
 
 const getMocks = (actions = getMockActions()) =>
 	createComponentMocks({
-		router: {
-			routes: [
-				{
-					path: "/news/:id",
-					name: "news-id",
-					component: {},
-				},
-			],
-		},
 		$route: {
 			name: "news-id",
 			params: {
 				id: "randomId",
 			},
+			query: {},
 		},
 		i18n: true,
 		user: true,
@@ -82,10 +74,7 @@ describe("@components/FormNews", () => {
 		expect(actions.remove.called).toBe(false);
 	});
 
-	/*
-		it("navigates back to article when cancel action gets triggered from slot on edit page", async () => {
-		const mocks = getMocks();
-		delete mocks.router;
+	it("navigates back to article when cancel action gets triggered from slot on edit page", async () => {
 		const wrapper = mount(FormNews, {
 			...getMocks(),
 			propsData: {
@@ -102,12 +91,33 @@ describe("@components/FormNews", () => {
 			expect(target.name).toBe("news-id");
 			expect(target.params.id).toBe("randomId");
 		};
-		wrapper.vm.$router.push = routerPushMock;
+		wrapper.vm.$router = { push: routerPushMock };
 		wrapper.find("#cancel").trigger("click");
-
 		expect(spy.called).toBe(true);
 	});
-	*/
+
+	it("navigates back to overview when cancel action gets triggered from slot on new page", async () => {
+		const overviewMock = getMocks();
+		overviewMock.mocks.$route.params = {};
+		const wrapper = mount(FormNews, {
+			...overviewMock,
+			propsData: {
+				action: "patch",
+				news: validNews,
+			},
+			scopedSlots: {
+				actions: `<button type="button" id="cancel" @click.prevent="props.cancel()">cancel</button>`,
+			},
+		});
+		const spy = sinon.stub();
+		const routerPushMock = (target) => {
+			spy(target);
+			expect(target.name).toBe("news");
+		};
+		wrapper.vm.$router = { push: routerPushMock };
+		wrapper.find("#cancel").trigger("click");
+		expect(spy.called).toBe(true);
+	});
 
 	it("converts date correctly", async () => {
 		const wrapper = shallowMount(FormNews, {
