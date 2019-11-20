@@ -1,10 +1,11 @@
 <template>
-	<div
+	<button
+		type="button"
 		:class="['chip', size, selected, classes]"
 		:style="{ padding: size }"
 		v-on="$listeners"
 		><slot></slot>
-	</div>
+	</button>
 </template>
 
 <script>
@@ -34,6 +35,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
 .chip {
 	display: inline-block;
 	margin: var(--space-xs) var(--space-xs) 0 0;
@@ -52,6 +54,14 @@ export default {
 		cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+button {
+	&:hover,
+	&:focus {
+		outline: 0;
+		// increase border size to increase visiblity
+		box-shadow: var(--shadow-s);
+	}
+}
 .selected {
 	color: var(--color-secondary-dark);
 	background-color: var(--color-secondary-extra-light);
