@@ -1,8 +1,6 @@
 <template>
 	<div>
-		<base-button design="primary" @click="$router.push({ name: 'news-new' })">
-			Artikel anlegen
-		</base-button>
+		<floating-fab icon="add" @click="$router.push({ name: 'news-new' })" />
 		<section v-if="news && news.length > 0" class="section">
 			<news-card
 				v-for="article of news"
@@ -17,10 +15,12 @@
 <script>
 import { mapGetters } from "vuex";
 import NewsCard from "@components/molecules/NewsCard";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
 	components: {
 		NewsCard,
+		FloatingFab,
 	},
 	computed: {
 		...mapGetters("news", {

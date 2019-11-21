@@ -19,7 +19,7 @@ import BaseTable from "@basecomponents/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
 import BaseChip from "@basecomponents/BaseChip";
 
-storiesOf("Base|BaseComponents", module)
+storiesOf("Base|Base UI", module)
 	.addParameters({
 		notes,
 	})

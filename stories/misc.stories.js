@@ -2,8 +2,6 @@ import { storiesOf } from "@storybook/vue";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
-import ProfilePicture from "@components/atoms/ProfilePicture";
-import ExampleImage from "@assets/img/avatarExample.svg";
 import MenuLink from "@components/atoms/MenuLink";
 import DropdownMenu from "@components/organisms/DropdownMenu";
 import BaseButton from "@basecomponents/BaseButton";
@@ -15,11 +13,6 @@ storiesOf("Misc", module)
 	.addParameters({
 		notes,
 	})
-	.add("Profile Pic", () => ({
-		components: { ProfilePicture },
-		data: () => ({ imgsrc: ExampleImage }),
-		template: `<div><ProfilePicture :image="imgsrc" size="small"/><ProfilePicture :image="imgsrc" size="medium"/><ProfilePicture :image="imgsrc" size="large"/></div>`,
-	}))
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
 		template: `

@@ -26,6 +26,12 @@ export default {
 	},
 	mounted() {
 		this.tabs = this.$children;
+		const hasSelection = this.tabs.some(
+			(tab) => tab && tab.props && tab.props.selected
+		);
+		if (!hasSelection) {
+			this.selectTab(this.tabs[0]);
+		}
 	},
 	methods: {
 		selectTab(selectedTab) {

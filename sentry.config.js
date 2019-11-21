@@ -1,7 +1,9 @@
+const pkg = require("./package");
+
 module.exports = {
 	config: {
 		// environment: "{{@root.env}}", // TODO implement & enable
-		// release: "{{@root.version}}", // TODO implement & enable
+		release: pkg.version,
 		beforeSend: (event) => {
 			function removeIds(url) {
 				var checkForHexRegExp = /[a-f\d]{24}/gi;

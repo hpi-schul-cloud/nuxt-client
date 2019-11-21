@@ -2,7 +2,7 @@
 	<div class="landing">
 		<img class="landing-image" src="" />
 		<h2 class="center medium-emphasis title">{{ title }}</h2>
-		<h3 class="center medium-emphasis subtitle">{{ subtitle }}</h3>
+		<h3 class="h4 center medium-emphasis subtitle">{{ subtitle }}</h3>
 		<div class="center">
 			<base-button design="hero-cta" size="large">
 				{{ ctaText }}
