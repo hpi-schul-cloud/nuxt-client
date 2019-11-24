@@ -55,12 +55,29 @@ const tableData = [
 		},
 		age: 999,
 	},
+	{
+		firstName: "anna",
+		lastName: "test",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
+	{
+		firstName: "felix",
+		lastName: "test",
+		address: {
+			city: "Nintendo 64",
+		},
+		age: 999,
+	},
 ];
 
 const tableColumns = [
 	{
 		field: "firstName",
 		label: "Vorname",
+		sortable: true,
 	},
 	{
 		field: "lastName",
@@ -69,6 +86,7 @@ const tableColumns = [
 	{
 		field: "address.city",
 		label: "Stadt",
+		sortable: true,
 	},
 	{
 		field: "age",
@@ -89,7 +107,7 @@ const tableFilters = [
 	},
 	{
 		label: "Alter",
-		type: "number",
+		type: "string",
 		property: "age",
 		matchingType: {
 			value: "equals",

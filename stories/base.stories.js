@@ -332,14 +332,16 @@ storiesOf("Base Components", module)
 		data: () => ({
 			data: tableData,
 			columns: tableColumns,
-			perPage: number("perPage", 5),
-			backendSorting: boolean("checkable", false),
-			backendPagination: boolean("checkable", false),
+			backendSorting: boolean("backendSorting", false),
+			backendPagination: boolean("backendPagination", false),
 			paginated: boolean("paginated", true),
 			currentPage: number("currentPage", 1),
+			rowsPerPage: number("rowsPerPage", 5),
+			total: number("total", 10),
 			filterable: boolean("filterable", true),
 			filters: tableFilters,
-			checkable: boolean("checkable", true),
+			showRowSelection: boolean("showRowSelection", true),
+			selectedRows: boolean("selectedRows", true),
 			actions: tableActions,
 		}),
 		components: { BaseTable },
@@ -348,13 +350,14 @@ storiesOf("Base Components", module)
 				:data="data"
 				:columns="columns"
 				:current-page.sync="currentPage"
-				:per-page.sync="perPage"
+				:rows-per-page.sync="rowsPerPage"
 				:backend-pagination="backendPagination"
 				:backend-sorting="backendSorting"
 				:paginated="paginated"
+				:total="total"
 				:filterable="filterable"
 				:filters="filters"
-				:checkable="checkable"
+				:showRowSelection="showRowSelection"
 				:actions="actions">
 				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>

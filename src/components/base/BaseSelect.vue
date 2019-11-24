@@ -23,6 +23,7 @@
 			@select="$emit('select', $event)"
 			@input="$emit('input', $event)"
 			@tag="$emit('tag', $event)"
+			@search-change="$emit('search-change', $event)"
 		>
 			<template v-slot:tag="slotProps">
 				<slot name="tag" :option="slotProps.option" />

@@ -92,9 +92,9 @@ export default {
 				{
 					label: "Einverständniserklärung Status",
 					type: "select",
-					property: "consentStatus",
+					property: "consent.consentStatus",
 					multiple: true,
-					options: [
+					value: [
 						{
 							label: "Alle Zustimmungen vorhanden",
 							value: "ok",
@@ -202,7 +202,7 @@ export default {
 						];
 					} else if (filter.type === "select") {
 						if (filter.multiple) {
-							let activeOptions = filter.options.filter((f) => f.checked);
+							let activeOptions = filter.value.filter((f) => f.checked);
 							activeOptions = activeOptions.map((f) => f.value);
 							query[filter.property] = {
 								$in: activeOptions,

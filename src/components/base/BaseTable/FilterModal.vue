@@ -22,7 +22,7 @@
 					@keyup.enter.native="$emit('set-filter', filterOpened)"
 				/>
 			</div>
-			<div v-if="filterOpened.type === 'regex'">
+			<div v-if="filterOpened.type === 'fulltextSearch'">
 				<base-input
 					v-model="filterOpened.value"
 					label="Zeichenkette"
@@ -35,7 +35,7 @@
 			<div v-if="filterOpened.type === 'select'">
 				<h5>Stimmt überein mit:</h5>
 				<base-input
-					v-for="option of filterOpened.options"
+					v-for="option of filterOpened.value"
 					:key="option.value"
 					v-model="option.checked"
 					class="mt--sm"
@@ -51,7 +51,7 @@
 			<base-button
 				id="button"
 				design="primary"
-				@click="$emit('setFilter', filterOpened)"
+				@click="$emit('set-filter', filterOpened)"
 				>Übernehmen</base-button
 			>
 		</div>

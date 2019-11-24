@@ -7,6 +7,18 @@ export function getValueByPath(obj, path) {
 }
 
 /**
+ * Get all property values of an object property even if it's nested
+ */
+export function getNestedObjectValues(obj) {
+	return Object.values(obj).map((value) => {
+		if (typeof value === "object") {
+			return getNestedObjectValues(value);
+		}
+		return value;
+	});
+}
+
+/**
  * Extension of indexOf method by equality function if specified
  */
 export function indexOf(array, obj, fn) {

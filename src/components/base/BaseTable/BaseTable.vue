@@ -3,41 +3,35 @@
 <template>
 	<div class="table-outer">
 		<div class="table-wrapper">
-			<tool-belt
-				ref="toolbelt"
-				:actions="actions"
-				:filterable="filterable"
-				:checked-rows="newCheckedRows"
-				:filters="filters"
-				:filters-selected="newFiltersSelected"
-				:abolute-all-checked="absoluteAllChecked"
-				:is-all-checked="isAllChecked"
-				:total="total"
-				@uncheck-all="uncheckAll"
-				@fire-action="fireAction"
-				@select-filter="selectFilter"
-				@remove-filter="removeFilter"
-				@edit-filter="editFilter"
-				@set-search="setSearch"
-			/>
-
-			<filter-modal
-				:active="editFilterActive"
-				:filter-opened="filterOpened"
-				@set-filter="setFilter"
-			/>
+			<div class="toolbelt">
+				<filter-menu
+					v-if="filterable && newSelectedRows.length < 1"
+					v-model="newFiltersSelected"
+					:filters="filters"
+				/>
+				<row-selection-bar
+					ref="rowSelectionBar"
+					:actions="actions"
+					:selected-rows="newSelectedRows"
+					:all-rows-of-all-pages-selected="allRowsOfAllPagesSelected"
+					:all-rows-of-current-page-selected="allRowsOfCurrentPageSelected"
+					:total="total"
+					@unselect-all-rows="unselectAllRows"
+					@fire-action="fireAction"
+				/>
+			</div>
 
 			<table class="table">
 				<thead>
 					<tr>
-						<th v-if="checkable" class="checkbox-cell">
+						<th v-if="showRowSelection">
 							<base-input
 								type="checkbox"
-								label="check all"
+								label="Alle Zeilen auswählen"
 								label-hidden
-								:vmodel="isAllChecked"
+								:vmodel="allRowsOfCurrentPageSelected"
 								name="checkbox"
-								@change.native="checkAll"
+								@change.native="selectAllRows"
 							/>
 						</th>
 						<th
@@ -57,32 +51,28 @@
 									:icon="isAsc ? 'arrow_upward' : 'arrow_downward'"
 									source="material"
 								/>
-								<div
-									v-if="column.sortable"
-									:class="{ 'is-desc': !isAsc && currentSortColumn === column }"
-								></div>
 							</div>
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr
-						v-for="(row, index) in visibleData"
-						:key="index"
-						:class="{ checked: isRowChecked(row) }"
-						@click.shift="checkRow(row)"
+						v-for="(row, rowindex) in visibleRows"
+						:key="rowindex"
+						:class="{ checked: isRowSelected(row) }"
+						@click.shift="selectRow(row)"
 					>
-						<td v-if="checkable" class="checkbox-cell">
+						<td v-if="showRowSelection">
 							<base-input
 								type="checkbox"
-								:label="'Zeile ' + index"
+								:label="`Zeile ${rowindex + 1} auswählen`"
 								label-hidden
-								:vmodel="isRowChecked(row)"
-								@change.native="checkRow(row)"
+								:vmodel="isRowSelected(row)"
+								@change.native="selectRow(row)"
 								@click.native.stop
 							/>
 						</td>
-						<td v-for="(column, index2) in columns" :key="index2">
+						<td v-for="(column, columnindex) in columns" :key="columnindex">
 							<slot name="column" :row="row" :column="column">
 								{{ getValueByPath(row, column.field) }}
 							</slot>
@@ -98,8 +88,8 @@
 		<pagination
 			class="mt--md"
 			:current-page="currentPage"
-			:total="newDataTotal"
-			:per-page="perPage"
+			:total="tableDataTotal"
+			:per-page="rowsPerPage"
 			@update:per-page="$emit('update:per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
@@ -107,17 +97,20 @@
 </template>
 
 <script>
-import { getValueByPath, indexOf } from "@utils/helpers";
+import { getValueByPath, getNestedObjectValues, indexOf } from "@utils/helpers";
+import camelCase from "lodash/camelCase";
 import Pagination from "@components/organisms/Pagination.vue";
-import ToolBelt from "./ToolBelt.vue";
-import FilterModal from "./FilterModal.vue";
+import FilterMenu from "./FilterMenu.vue";
+import RowSelectionBar from "./RowSelectionBar.vue";
+import defaultFiltersMixin from "@mixins/defaultFilters";
 
 export default {
 	components: {
 		Pagination,
-		ToolBelt,
-		FilterModal,
+		FilterMenu,
+		RowSelectionBar,
 	},
+	mixins: [defaultFiltersMixin],
 	props: {
 		data: {
 			type: Array,
@@ -126,6 +119,22 @@ export default {
 		filters: {
 			type: Array,
 			default: () => [],
+			validator: function(filters) {
+				return filters.every((filter) => {
+					return (
+						filter.label &&
+						filter.type &&
+						["string", "select", "number", "date", "fulltextSearch"].includes(
+							filter.type
+						) &&
+						filter.property &&
+						filter.value
+						// filter.matchingType &&
+						// filter.matchingType.label &&
+						// filter.matchingType.value
+					);
+				});
+			},
 		},
 		filtersSelected: {
 			type: Array,
@@ -138,10 +147,10 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-		checkable: {
+		showRowSelection: {
 			type: Boolean,
 		},
-		checkedRows: {
+		selectedRows: {
 			type: Array,
 			default: () => [],
 		},
@@ -150,14 +159,12 @@ export default {
 			default: () => [],
 		},
 		loading: Boolean,
-		paginated: {
-			type: Boolean,
-		},
+		paginated: Boolean,
 		currentPage: {
 			type: Number,
 			default: 1,
 		},
-		perPage: {
+		rowsPerPage: {
 			type: Number,
 			default: 10,
 		},
@@ -165,23 +172,19 @@ export default {
 			type: Number,
 			default: 0,
 		},
-		backendPagination: {
-			type: Boolean,
-		},
-		backendSorting: {
-			type: Boolean,
-		},
+		backendPagination: Boolean,
+		backendSorting: Boolean,
 	},
 	data() {
 		return {
 			editFilterActive: false,
 			currentSortColumn: "",
-			newData: this.data,
-			newDataTotal: this.backendPagination ? this.total : this.data.length,
-			absoluteAllChecked: false,
+			tableData: this.data,
+			tableDataTotal: this.backendPagination ? this.total : this.data.length,
+			allRowsOfAllPagesSelected: false,
 			filterOpened: {},
 			newFiltersSelected: [],
-			newCheckedRows: [...this.checkedRows],
+			newSelectedRows: [...this.selectedRows],
 			isAsc: false,
 			defaultSort: [String, Array],
 			defaultSortDirection: {
@@ -191,46 +194,82 @@ export default {
 		};
 	},
 	computed: {
-		/**
-		 * Check if all rows in the page are checked.
-		 */
-		isAllChecked() {
-			const isAllChecked = this.visibleData.some((currentVisibleRow) => {
-				return indexOf(this.newCheckedRows, currentVisibleRow) < 0;
-			});
-			return !isAllChecked;
+		currentSortDirection() {
+			return this.isAsc ? "asc" : "desc";
 		},
-		visibleData() {
-			if (!this.paginated) return this.newData;
+		filteredRows() {
+			return this.data.filter((row) => {
+				return this.newFiltersSelected.every((filter) => {
+					if (filter.type === "fulltextSearch") {
+						return getNestedObjectValues(row).some((value) =>
+							(value.toString() || "").includes(filter.value)
+						);
+					} else {
+						const functionName = camelCase(
+							`filter-${filter.type}-${(filter.matchingType || {}).value}`
+						);
+						const defaultFunctionName = camelCase(
+							`filter-${filter.type}-default`
+						);
+						const filterFunction = this[functionName] || this[defaultFunctionName];
+						return filterFunction(
+							getValueByPath(row, filter.property),
+							filter.value
+						);
+					}
+				});
+			});
+		},
+		filteredAndSortedRows() {
+			if (
+				this.backendSorting ||
+				!this.currentSortColumn ||
+				!this.currentSortColumn.sortable
+			) {
+				return this.filteredRows;
+			}
+			return this.sortBy(
+				this.filteredRows,
+				this.currentSortColumn.field,
+				this.isAsc
+			);
+		},
+		visibleRows() {
+			if (!this.paginated) return this.filteredAndSortedRows;
 
 			const { currentPage } = this;
-			const { perPage } = this;
-			if (this.newData.length <= perPage || perPage < 0) {
-				return this.newData;
+			const { rowsPerPage } = this;
+			if (this.filteredAndSortedRows.length <= rowsPerPage || rowsPerPage < 0) {
+				return this.filteredAndSortedRows;
 			} else {
-				const start = (currentPage - 1) * perPage;
-				const end = parseInt(start, 10) + parseInt(perPage, 10);
-				return this.newData.slice(start, end);
+				const start = (currentPage - 1) * rowsPerPage;
+				const end = parseInt(start, 10) + parseInt(rowsPerPage, 10);
+				return this.filteredAndSortedRows.slice(start, end);
 			}
+		},
+		allRowsOfCurrentPageSelected() {
+			return this.visibleRows.every((visibleRow) =>
+				this.newSelectedRows.includes(visibleRow)
+			);
 		},
 	},
 	watch: {
-		checkedRows(rows) {
-			this.newCheckedRows = [...rows];
+		selectedRows(rows) {
+			this.newSelectedRows = [...rows];
 		},
 		data(data) {
-			this.newData = data;
+			this.tableData = data;
 
 			if (!this.backendSorting) {
 				this.sort(this.currentSortColumn, true);
 			}
 			if (!this.backendPagination) {
-				this.newDataTotal = data.length;
+				this.tableDataTotal = data.length;
 			}
 		},
-		total(newTotal) {
+		total(total) {
 			if (!this.backendPagination) return;
-			this.newDataTotal = newTotal;
+			this.tableDataTotal = total;
 		},
 		newFiltersSelected() {
 			this.$emit("update:filters-selected", this.newFiltersSelected);
@@ -238,112 +277,19 @@ export default {
 	},
 	methods: {
 		getValueByPath,
-		setSearch(val) {
-			if (this.newFiltersSelected.some((f) => f.label === "Volltextsuche")) {
-				this.newFiltersSelected = this.newFiltersSelected.map((f) => {
-					if (f.label === "Volltextsuche") {
-						f.value = val;
-						f.tagLabel = "Volltextsuche nach: " + val;
-					}
-					return f;
-				});
-			} else {
-				this.setFilter({
-					label: "Volltextsuche",
-					tagLabel: "Volltextsuche nach: " + val,
-					type: "regex",
-					value: val,
-				});
-			}
-		},
 		fireAction(item) {
-			item.action(this.newCheckedRows);
-			this.uncheckAll();
-		},
-		editFilter(filter) {
-			this.editFilterActive = true;
-			this.filterOpened = filter;
-		},
-		removeFilter(filter) {
-			this.newFiltersSelected.splice(
-				this.newFiltersSelected.indexOf(filter),
-				1
-			);
-		},
-		selectFilter(filter) {
-			this.$set(filter, "selected", true);
-			this.filterOpened = filter;
-			this.editFilterActive = true;
-		},
-		setFilter(filterData) {
-			const isNewFilter = !this.newFiltersSelected.some(
-				(f) => f.label === filterData.label
-			);
-
-			const filter = isNewFilter
-				? JSON.parse(JSON.stringify(filterData))
-				: filterData;
-
-			if (filter.type === "string") {
-				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
-			} else if (filter.type === "regex") {
-				filter.tagLabel = `${filter.label} nach: ${filter.value}`;
-			} else if (filter.type === "select") {
-				filter.tagLabel = filter.label + ": ";
-				if (filter.multiple) {
-					let activeOptions = filter.options.filter((f) => f.checked);
-					activeOptions = activeOptions.map((f) => f.label);
-					filter.tagLabel += activeOptions.join(", ");
-				}
-			}
-
-			if (isNewFilter) {
-				this.newFiltersSelected.push(filter);
-			} else {
-				this.newFiltersSelected = this.newFiltersSelected.map((f) => {
-					if (f.label === filter.label) {
-						f.value = filter.value;
-					}
-					return f;
-				});
-			}
-			this.filterOpened = {};
-			this.editFilterActive = false;
-		},
-		/**
-		 * Initial sorted column based on the default-sort prop.
-		 */
-		initSort() {
-			if (!this.defaultSort) return;
-			let sortField = "";
-			let sortDirection = this.defaultSortDirection;
-			if (Array.isArray(this.defaultSort)) {
-				sortField = this.defaultSort[0];
-				if (this.defaultSort[1]) {
-					sortDirection = this.defaultSort[1];
-				}
-			} else {
-				sortField = this.defaultSort;
-			}
-			this.newColumns.forEach((column) => {
-				if (column.field === sortField) {
-					this.isAsc = sortDirection.toLowerCase() !== "desc";
-					this.sort(column, true);
-				}
-			});
+			item.action(this.newSelectedRows);
+			this.unselectAllRows();
 		},
 		sort(column) {
-			if (!column || !column.sortable) return;
-
-			this.isAsc = column === this.currentSortColumn ? !this.isAsc : "desc";
-
-			this.$emit("sort", column.field, this.isAsc ? "asc" : "desc");
-
-			if (!this.backendSorting) {
-				this.newData = this.sortBy(this.newData, column.field, this.isAsc);
+			if (column === this.currentSortColumn) {
+				this.isAsc = !this.isAsc;
+				this.$emit("sort", column.field, this.isAsc ? "asc" : "desc");
+			} else if (column.sortable) {
+				this.currentSortColumn = column;
+				this.isAsc = true;
+				this.$emit("sort", column.field, "asc");
 			}
-
-			this.currentSortColumn = column;
 		},
 		sortBy(array, key, isAsc) {
 			let sorted = [];
@@ -365,72 +311,53 @@ export default {
 			});
 			return sorted;
 		},
-
-		/**
-		 * Check if the row is checked (is added to the array).
-		 */
-		isRowChecked(row) {
-			return indexOf(this.newCheckedRows, row) >= 0;
+		isRowSelected(row) {
+			return this.newSelectedRows.includes(row);
 		},
 
-		/**
-		 * Remove a checked row from the array.
-		 */
-		removeCheckedRow(row) {
-			const index = indexOf(this.newCheckedRows, row);
+		selectRow(row) {
+			this.allRowsOfAllPagesSelected = false;
+			if (!this.isRowSelected(row)) {
+				this.newSelectedRows.push(row);
+			} else {
+				this.unselectRow(row);
+			}
+			this.$emit("check", this.newSelectedRows, row);
+			// Emit checked rows to update user variable
+			this.$emit("update:selectedRows", this.newSelectedRows);
+		},
+
+		unselectRow(row) {
+			const index = indexOf(this.newSelectedRows, row);
 			if (index >= 0) {
-				this.newCheckedRows.splice(index, 1);
+				this.newSelectedRows.splice(index, 1);
 			}
 		},
 
-		/**
-		 * Header checkbox click listener.
-		 * Add or remove all rows in current page.
-		 */
-		uncheckAll() {
-			this.absoluteAllChecked = false;
-			this.visibleData.forEach((currentRow) => {
-				this.removeCheckedRow(currentRow);
-			});
-			this.$emit("check", this.newCheckedRows);
-			this.$emit("check-all", this.newCheckedRows);
-			// Emit checked rows to update user variable
-			this.$emit("update:checkedRows", this.newCheckedRows);
-		},
-
-		/**
-		 * Header checkbox click listener.
-		 * Add or remove all rows in current page.
-		 */
-		checkAll() {
-			const { isAllChecked } = this;
-			this.absoluteAllChecked = false;
-			this.visibleData.forEach((currentRow) => {
-				this.removeCheckedRow(currentRow);
-				if (!isAllChecked) {
-					this.newCheckedRows.push(currentRow);
+		selectAllRows() {
+			const { allRowsOfCurrentPageSelected } = this;
+			this.allRowsOfAllPagesSelected = false;
+			this.visibleRows.forEach((currentRow) => {
+				this.unselectRow(currentRow);
+				if (!allRowsOfCurrentPageSelected) {
+					this.newSelectedRows.push(currentRow);
 				}
 			});
-			this.$emit("check", this.newCheckedRows);
-			this.$emit("check-all", this.newCheckedRows);
+			this.$emit("check", this.newSelectedRows);
+			this.$emit("check-all", this.newSelectedRows);
 			// Emit checked rows to update user variable
-			this.$emit("update:checkedRows", this.newCheckedRows);
+			this.$emit("update:selectedRows", this.newSelectedRows);
 		},
 
-		/**
-		 * Row checkbox click listener.
-		 * Add or remove a single row.
-		 */
-		checkRow(row) {
-			this.absoluteAllChecked = false;
-			if (!this.isRowChecked(row)) {
-				this.newCheckedRows.push(row);
-			} else {
-				this.removeCheckedRow(row);
-			}
-			this.$emit("check", this.newCheckedRows, row);
+		unselectAllRows() {
+			this.allRowsOfAllPagesSelected = false;
+			this.visibleRows.forEach((row) => {
+				this.unselectRow(row);
+			});
+			this.$emit("check", this.newSelectedRows);
+			this.$emit("check-all", this.newSelectedRows);
 			// Emit checked rows to update user variable
-			this.$emit("update:checkedRows", this.newCheckedRows);
+			this.$emit("update:selectedRows", this.newSelectedRows);
 		},
 	},
 };
@@ -445,22 +372,6 @@ export default {
 	display: flex;
 	align-items: center;
 	height: 55px;
-	.filters {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		.wrapper {
-			margin-bottom: 0;
-		}
-	}
-	.check-info {
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
-		padding: var(--space-md);
-		color: var(--color-white);
-		background: var(--color-info-light);
-	}
 }
 .table {
 	width: 100%;
@@ -478,22 +389,6 @@ export default {
 					display: flex;
 					align-items: center;
 					padding: var(--space-sm);
-				}
-				.arrow {
-					display: inline-block;
-					width: 0;
-					height: 0;
-					margin-left: var(--space-xxs);
-					vertical-align: middle;
-					border-right: 4px solid transparent;
-					border-bottom: 4px solid var(--color-gray);
-					border-left: 4px solid transparent;
-					&.is-desc {
-						border-top: 4px solid var(--color-gray);
-						border-right: 4px solid transparent;
-						border-bottom: 0;
-						border-left: 4px solid transparent;
-					}
 				}
 			}
 		}

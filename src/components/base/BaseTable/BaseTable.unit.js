@@ -2,18 +2,21 @@ import BaseTable from "./BaseTable";
 import data from "./data";
 import columns from "./columns";
 
+function getWrapper(attributes) {
+	return mount(BaseTable, {
+		propsData: {
+			data: data,
+			columns: columns,
+			...attributes,
+		},
+	});
+}
+
 describe("@components/BaseTable", () => {
 	it(...isValidComponent(BaseTable));
 
 	it("Passing the columns and data should render the table. Nested properties should be possible.", () => {
-		var wrapper = mount({
-			data: () => ({
-				data,
-				columns,
-			}),
-			template: '<div><base-table :data="data" :columns="columns" /></div>',
-			components: { BaseTable },
-		});
+		var wrapper = getWrapper();
 
 		expect(wrapper.findAll("tbody tr").length).toBe(5);
 
@@ -95,17 +98,15 @@ describe("@components/BaseTable", () => {
 				data,
 				columns,
 				currentPage: 1,
-				perPage: 3,
+				rowsPerPage: 3,
 			}),
-			template: `<div>
-				<base-table
+			template: `<base-table
 					:data="data"
 					:columns="columns"
-					:per-page.sync="perPage"
+					:rows-per-page.sync="rowsPerPage"
 					:current-page.sync="currentPage"
 					paginated
-				/>
-			</div>`,
+				/>`,
 			components: { BaseTable },
 		});
 
@@ -120,19 +121,7 @@ describe("@components/BaseTable", () => {
 	});
 
 	it("Should sort the data", () => {
-		var wrapper = mount({
-			data: () => ({
-				data,
-				columns,
-			}),
-			template: `<div>
-				<base-table
-					:data="data"
-					:columns="columns"
-				/>
-			</div>`,
-			components: { BaseTable },
-		});
+		var wrapper = getWrapper();
 
 		expect(
 			wrapper
@@ -160,21 +149,118 @@ describe("@components/BaseTable", () => {
 		).toBe(true);
 	});
 
-	it("Should allow checking the rows", () => {
-		var wrapper = mount({
-			data: () => ({
-				data,
-				columns,
-			}),
-			template: `<div>
-				<base-table
-					:data="data"
-					:columns="columns"
-					checkable
-				/>
-			</div>`,
-			components: { BaseTable },
-		});
+	it("Should only sort sortable columns", () => {
+		var wrapper = getWrapper();
+
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.at(0)
+				.findAll("td")
+				.at(0)
+				.html()
+				.includes("Hulk")
+		).toBe(true);
+
+		wrapper
+			.findAll("th")
+			.at(2)
+			.trigger("click");
+
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.at(0)
+				.findAll("td")
+				.at(0)
+				.html()
+				.includes("Hulk")
+		).toBe(true);
+	});
+
+	it("Should allow filtering the based on string properties", () => {
+		var wrapper = getWrapper({ filterable: true });
+
+		var newFiltersSelected = [
+			{
+				label: "Vorname",
+				type: "string",
+				property: "firstName",
+				matchingType: {
+					value: "contains",
+					label: "enthält",
+				},
+				value: "Mar",
+			},
+		];
+		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+
+		expect(wrapper.text()).toContain("Mario");
+		expect(wrapper.text()).not.toContain("Hulk");
+
+		var newFiltersSelected = [
+			{
+				label: "Vorname",
+				type: "string",
+				property: "firstName",
+				matchingType: {
+					value: "equals",
+					label: "ist gleich",
+				},
+				value: "Mario",
+			},
+		];
+		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+
+		expect(wrapper.text()).toContain("Mario");
+		expect(wrapper.text()).not.toContain("Hulk");
+	});
+
+	it("Should allow filtering the based on numeric properties", () => {
+		var wrapper = getWrapper({ filterable: true });
+
+		var newFiltersSelected = [
+			{
+				label: "Alter",
+				type: "number",
+				property: "age",
+				matchingType: {
+					value: "equals",
+					label: "ist gleich",
+				},
+				value: "999",
+			},
+		];
+		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+
+		expect(wrapper.text()).toContain("Mario");
+		expect(wrapper.text()).not.toContain("Hulk");
+	});
+
+	it("Should allow filtering the based on multiple options", () => {
+		var wrapper = getWrapper({ filterable: true });
+
+		var newFiltersSelected = [
+			{
+				label: "Vorname",
+				type: "select",
+				property: "firstName",
+				value: [
+					{
+						checked: true,
+						value: "Mario",
+					},
+				],
+			},
+		];
+		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+
+		expect(wrapper.text()).toContain("Mario");
+		expect(wrapper.text()).not.toContain("Hulk");
+	});
+
+	it("Should allow selecting the rows", () => {
+		var wrapper = getWrapper({ showRowSelection: true });
 
 		wrapper
 			.findAll("tbody tr")
@@ -192,21 +278,8 @@ describe("@components/BaseTable", () => {
 		).toContain("checked");
 	});
 
-	it("Should check all rows", () => {
-		var wrapper = mount({
-			data: () => ({
-				data,
-				columns,
-			}),
-			template: `<div>
-				<base-table
-					:data="data"
-					:columns="columns"
-					checkable
-				/>
-			</div>`,
-			components: { BaseTable },
-		});
+	it("Should select all rows", () => {
+		var wrapper = getWrapper({ showRowSelection: true });
 
 		wrapper
 			.findAll("tbody tr")
@@ -224,7 +297,7 @@ describe("@components/BaseTable", () => {
 		).toContain("checked");
 	});
 
-	it("Should check all entries and trigger an action", () => {
+	it("Should select all rows and trigger an action", () => {
 		var wrapper = mount({
 			data: () => ({
 				data,
@@ -240,7 +313,7 @@ describe("@components/BaseTable", () => {
 				<base-table
 					:data="data"
 					:columns="columns"
-					checkable
+					showRowSelection
 					:actions="actions"
 					ref="table"
 				/>
@@ -255,8 +328,8 @@ describe("@components/BaseTable", () => {
 			.find('input[type="checkbox"]')
 			.setChecked();
 
-		expect(wrapper.vm.$refs.table.isAllChecked).toBe(true);
-		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(5);
+		expect(wrapper.vm.$refs.table.allRowsOfCurrentPageSelected).toBe(true);
+		expect(wrapper.vm.$refs.table.newSelectedRows.length).toBe(5);
 
 		wrapper
 			.find("thead tr")
@@ -265,10 +338,10 @@ describe("@components/BaseTable", () => {
 			.find('input[type="checkbox"]')
 			.setChecked(false);
 
-		expect(wrapper.vm.$refs.table.isAllChecked).toBe(false);
-		expect(wrapper.vm.$refs.table.newCheckedRows.length).toBe(0);
+		expect(wrapper.vm.$refs.table.allRowsOfCurrentPageSelected).toBe(false);
+		expect(wrapper.vm.$refs.table.newSelectedRows.length).toBe(0);
 
-		expect(wrapper.vm.$refs.table.$refs.toolbelt.actions.length).toBe(1);
+		expect(wrapper.vm.$refs.table.$refs.rowSelectionBar.actions.length).toBe(1);
 	});
 
 	it("Should allow data from a backend", () => {});
