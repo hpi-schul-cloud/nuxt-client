@@ -8,14 +8,14 @@
 			:filters="filters"
 			:filters-selected.sync="filtersSelected"
 			:data="students"
-			:per-page.sync="perPage"
+			:rows-per-page.sync="rowsPerPage"
 			:actions="actions"
 			:current-page.sync="currentPage"
 			:total="pagination.total"
 			:columns="columns"
 			paginated
 			filterable
-			checkable
+			show-row-selection
 			backend-sorting
 			backend-pagination
 			@sort="onSort"
@@ -29,18 +29,31 @@
 				</span>
 				<div v-else-if="column.field === 'consent.consentStatus'">
 					<span v-if="row.consent.consentStatus === 'ok'">
-						<base-icon source="material" icon="check" />
+						<base-icon
+							source="material"
+							icon="check"
+							color="var(--color-success)"
+						/>
 						<base-icon
 							style="position: relative; left: -10px"
 							source="material"
 							icon="check"
+							color="var(--color-success)"
 						/>
 					</span>
 					<span v-else-if="row.consent.consentStatus === 'parentsAgreed'">
-						<base-icon source="material" icon="check" />
+						<base-icon
+							source="material"
+							icon="check"
+							color="var(--color-warning)"
+						/>
 					</span>
 					<span v-else-if="row.consent.consentStatus === 'missing'">
-						<base-icon source="material" icon="close" />
+						<base-icon
+							source="material"
+							icon="close"
+							color="var(--color-danger)"
+						/>
 					</span>
 				</div>
 				<span v-else>
@@ -73,7 +86,7 @@ export default {
 			total: 0,
 			loading: false,
 			currentPage: 1,
-			perPage: 10,
+			rowsPerPage: 10,
 			sortField: "firstName",
 			sortOrder: "asc",
 			defaultSortOrder: "asc",
