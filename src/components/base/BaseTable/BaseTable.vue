@@ -121,17 +121,16 @@ export default {
 			default: () => [],
 			validator: function(filters) {
 				return filters.every((filter) => {
+					const hasValidType = filter.type && ["string", "select", "number", "date", "fulltextSearch"].includes(filter.type);
+
+					const hasValidMatchingType = filter.type === "select" || filter.type === "fulltextSearch" || filter.matchingType && filter.matchingType.label;
+
 					return (
 						filter.label &&
-						filter.type &&
-						["string", "select", "number", "date", "fulltextSearch"].includes(
-							filter.type
-						) &&
 						filter.property &&
-						filter.value
-						// filter.matchingType &&
-						// filter.matchingType.label &&
-						// filter.matchingType.value
+						filter.value &&
+						hasValidType &&
+						hasValidMatchingType
 					);
 				});
 			},
@@ -211,7 +210,7 @@ export default {
 						const defaultFunctionName = camelCase(
 							`filter-${filter.type}-default`
 						);
-						const filterFunction = this[functionName] || this[defaultFunctionName];
+						const filterFunction = (filter.matchingType || {}).implementation || this[functionName] || this[defaultFunctionName];
 						return filterFunction(
 							getValueByPath(row, filter.property),
 							filter.value

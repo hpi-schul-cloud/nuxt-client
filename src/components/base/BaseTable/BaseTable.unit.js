@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 import BaseTable from "./BaseTable";
 import data from "./data";
 import columns from "./columns";
@@ -257,6 +259,27 @@ describe("@components/BaseTable", () => {
 
 		expect(wrapper.text()).toContain("Mario");
 		expect(wrapper.text()).not.toContain("Hulk");
+	});
+
+	it("Should allow filtering with custom filter implementation", () => {
+		var wrapper = getWrapper({ filterable: true });
+
+		var newFiltersSelected = [
+			{
+				label: "Vorname",
+				type: "string",
+				property: "firstName",
+				value: "Mario",
+				matchingType: {
+					implementation: (value, targetValue) => value < targetValue,
+					label: "ist kleiner",
+				},
+			},
+		];
+		wrapper.setData({ newFiltersSelected: newFiltersSelected });
+
+		expect(wrapper.text()).toContain("Hulk");
+		expect(wrapper.text()).not.toContain("Mario");
 	});
 
 	it("Should allow selecting the rows", () => {
