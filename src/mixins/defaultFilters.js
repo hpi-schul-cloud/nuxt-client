@@ -4,14 +4,16 @@ const defaultFiltersMixin = {
 			return this.filterStringContains(value, targetValue);
 		},
 		filterStringContains(value, targetValue) {
-			return value
+			return (value || "")
+				.toString()
 				.toString()
 				.toLowerCase()
 				.includes(targetValue.toString().toLowerCase());
 		},
 		filterStringEquals(value, targetValue) {
 			return (
-				value.toString().toLowerCase() === targetValue.toString().toLowerCase()
+				(value || "").toString().toLowerCase() ===
+				targetValue.toString().toLowerCase()
 			);
 		},
 
@@ -39,7 +41,7 @@ const defaultFiltersMixin = {
 				return (
 					option.checked &&
 					option.value &&
-					option.value.toString() === value.toString()
+					option.value.toString() === (value || "").toString()
 				);
 			});
 		},
