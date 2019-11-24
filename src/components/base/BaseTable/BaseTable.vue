@@ -90,7 +90,7 @@
 			:current-page="currentPage"
 			:total="tableDataTotal"
 			:per-page="rowsPerPage"
-			@update:per-page="$emit('update:per-page', $event)"
+			@update:per-page="$emit('update:rows-per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
 	</div>
