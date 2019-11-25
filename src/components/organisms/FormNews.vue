@@ -1,5 +1,5 @@
 <template>
-	<form v-on="$listeners" @submit="submitHandler">
+	<form v-on="$listeners" @submit.prevent="submitHandler">
 		<base-input
 			v-model="data.title"
 			:label="$t('components.organisms.FormNews.label.title')"
