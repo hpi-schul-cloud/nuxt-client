@@ -1,8 +1,8 @@
 <template>
 	<legacy-logged-in>
-		<base-content-container tag="main" class="content">
+		<main class="content">
 			<Nuxt />
-		</base-content-container>
+		</main>
 	</legacy-logged-in>
 </template>
 
