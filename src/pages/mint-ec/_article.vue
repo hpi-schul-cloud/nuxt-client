@@ -1,25 +1,36 @@
 <template>
 	<div>
-		<page-header :image="page.feature_image"></page-header>
-
-		<h1>{{ page.title }}</h1>
-		<render-html :html="page.html" />
+		<mint-ec-page-header
+			:image="page.feature_image"
+			:heading="page.title"
+			:teaser="page.excerpt"
+		>
+		</mint-ec-page-header>
+		<base-content-container :style="{ marginTop: `var(--space-xl)` }">
+			<render-html :html="page.html" />
+		</base-content-container>
 	</div>
 </template>
 
 <script>
-import PageHeader from "@components/molecules/Ghost/PageHeader";
-import RenderHtml from "@components/helpers/RenderHtml";
+import MintEcPageHeader from "@components/molecules/MintEcPageHeader";
+
+import RenderHtml from "@components/molecules/RenderHtmlMintEc";
 export default {
 	components: {
-		PageHeader,
+		MintEcPageHeader,
 		RenderHtml,
 	},
 	async asyncData({ store, params }) {
 		const page = await store.dispatch("ghost/getSinglePage", params.article);
 		return { page: page };
 	},
-	layout: "loggedout",
+	data: function() {
+		return {
+			color: "var(--color-primary)",
+		};
+	},
+	layout: "loggedoutFullWidth",
 	head() {
 		return {
 			title: this.page.title,
@@ -28,7 +39,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-h1 {
-	color: var(--color-secondary);
+/deep/ {
+	h2 {
+		color: var(--color-secondary);
+	}
+	h3 {
+		color: var(--color-secondary);
+	}
 }
 </style>
