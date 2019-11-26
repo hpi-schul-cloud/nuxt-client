@@ -1,8 +1,6 @@
 <template>
 	<div>
-		<base-link to="/courses/create">
-			<floating-fab icon="add" />
-		</base-link>
+		<floating-fab icon="add" to="/courses/create" />
 		<courses-grid :courses="courses"></courses-grid>
 	</div>
 </template>

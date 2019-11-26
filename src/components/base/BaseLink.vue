@@ -1,8 +1,11 @@
 <template>
 	<a
 		v-if="href"
-		class="link is-external"
-		:class="{ inactive: inactive }"
+		:class="{
+			link: !noStyles,
+			'is-external': !noStyles,
+			'text-only': noStyles,
+		}"
 		:href="href"
 		v-bind="$attrs"
 		:target="linkTarget"
@@ -16,7 +19,7 @@
 	<!-- TODO use RouterLink if used outside nuxt -->
 	<NuxtLink
 		v-else
-		class="link"
+		:class="{ link: !noStyles, 'text-only': noStyles }"
 		tag="a"
 		:to="routerLinkTo"
 		v-bind="$attrs"
@@ -56,7 +59,7 @@ export default {
 			type: Object,
 			default: () => ({}),
 		},
-		inactive: {
+		noStyles: {
 			type: Boolean,
 		},
 	},
@@ -130,6 +133,10 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.text-only {
+	text-decoration: none;
+}
+
 .link {
 	display: inline;
 	color: var(--color-primary);
@@ -143,9 +150,6 @@ export default {
 	&:visited {
 		color: var(--color-primary);
 	}
-	&.inactive {
-		color: var(--color-black);
-	}
 }
 
 .is-external {
@@ -155,9 +159,6 @@ export default {
 	}
 	&:hover {
 		color: var(--color-primary-dark);
-	}
-	&.inactive {
-		color: var(--color-black);
 	}
 }
 </style>
