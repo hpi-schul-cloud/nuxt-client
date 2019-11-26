@@ -22,11 +22,10 @@
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
-			<base-link :to="{ name: 'news-id-edit' }">
-				<base-button>
-					{{ $t("pages.news._id.index.edit") }}
-				</base-button>
-			</base-link>
+
+			<base-button :to="{ name: 'news-id-edit' }">
+				{{ $t("pages.news._id.index.edit") }}
+			</base-button>
 		</section>
 	</div>
 </template>
