@@ -3,7 +3,8 @@
 		<div class="icon">
 			<slot name="icon"></slot>
 		</div>
-		<h4>{{ text }}</h4>
+		<!-- eslint-disable-next-line vue/no-v-html -->
+		<h4 v-html="text" />
 	</div>
 </template>
 

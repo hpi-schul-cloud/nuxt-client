@@ -1,78 +1,96 @@
 <template>
-	<div ref="dialog">
+	<div ref="dialog" data-testid="dialog">
 		<base-modal :active.sync="isActive">
-			<template v-slot:header>{{ title }}</template>
-
-			<div class="modal-body">
-				<div>{{ message }}</div>
-			</div>
-
-			<div class="modal-footer">
-				<base-button ref="cancelButton" design="text" @click="close">
-					{{ cancelText }}
+			<template v-slot:body>
+				<modal-body-info :text="message">
+					<template v-slot:icon>
+						<base-icon
+							v-if="icon"
+							slot="icon"
+							:source="iconSource"
+							:icon="icon"
+							:style="`color: ${currentIconColor}`"
+						/>
+					</template>
+				</modal-body-info>
+			</template>
+			<template v-slot:footerRight>
+				<base-button design="text" @click="cancel">
+					{{ cancelText || $t("common.btn.cancel") }}
 				</base-button>
-				<base-button
-					ref="confirmButton"
-					design="primary"
-					test-confirm
-					:class="type"
-					@click="confirm"
-				>
-					{{ confirmText }}
+				<base-button :design="actionDesign" @click="confirm">
+					{{ confirmText || $t("common.btn.confirm") }}
 				</base-button>
-			</div>
+			</template>
 		</base-modal>
 	</div>
 </template>
 
 <script>
 import BaseModal from "../BaseModal";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+
 export default {
 	components: {
 		BaseModal,
+		ModalBodyInfo,
 	},
 	props: {
-		title: {
-			type: String,
-			default: "",
-		},
 		message: {
 			type: String,
 			default: "",
 		},
-		type: {
-			type: String,
-			default: "primary",
-		},
-		size: {
+		icon: {
 			type: String,
 			default: "",
 		},
+		iconSource: {
+			type: String,
+			default: "material",
+		},
+		iconColor: {
+			type: String,
+			default: undefined,
+		},
+		actionDesign: {
+			type: String,
+			default: "primary",
+		},
 		confirmText: {
 			type: String,
-			default: () => {
-				return "Bestätigen";
-			},
+			default: undefined,
 		},
 		cancelText: {
 			type: String,
-			default: () => {
-				return "Abbrechen";
-			},
+			default: undefined,
+		},
+		onCancel: {
+			type: Function,
+			default: () => {},
 		},
 		onConfirm: {
 			type: Function,
 			default: () => {},
-		},
-		focusOn: {
-			type: String,
-			default: "confirm",
 		},
 	},
 	data() {
 		return {
 			isActive: false,
 		};
+	},
+	computed: {
+		currentIconColor() {
+			return this.iconColor
+				? this.iconColor
+				: `var(--color-${this.actionDesign})`;
+		},
+	},
+	watch: {
+		isActive(to, from) {
+			if (from && !to) {
+				this.onCancel();
+			}
+		},
 	},
 	beforeMount() {
 		// Insert the Dialog component in body tag
@@ -92,6 +110,11 @@ export default {
 			this.onConfirm(this.prompt);
 			this.close();
 		},
+		cancel() {
+			this.onCancel(this.prompt);
+			this.close();
+		},
+
 		/**
 		 * Close the Dialog.
 		 */
