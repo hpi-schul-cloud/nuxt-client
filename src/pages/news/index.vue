@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<floating-fab icon="add" @click="$router.push({ name: 'news-new' })" />
+		<base-link to="/news/new">
+			<floating-fab icon="add" />
+		</base-link>
 		<section v-if="news && news.length > 0" class="section">
 			<news-card
 				v-for="article of news"
