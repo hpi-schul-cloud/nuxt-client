@@ -158,8 +158,9 @@ export default {
 					content: this.data.content,
 					displayAt: this.publishDate,
 					schoolId: this.$user.schoolId,
-					target: this.$route.query.target,
-					targetModel: this.$route.query.Model,
+					target: this.$route.query.target || this.$route.query.contextId,
+					targetModel:
+						this.$route.query.targetmodel || this.$route.query.context,
 				});
 				this.$toast.success(
 					this.$t("components.organisms.FormNews.success.create")

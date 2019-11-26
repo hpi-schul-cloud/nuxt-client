@@ -20,15 +20,18 @@ const getMockActions = () => ({
 	remove: sinon.stub().resolves(true),
 });
 
-const getMocks = (actions = getMockActions()) =>
-	createComponentMocks({
-		$route: {
-			name: "news-id",
-			params: {
-				id: "randomId",
-			},
-			query: {},
+const getMocks = ({
+	actions = getMockActions(),
+	$route = {
+		name: "news-id",
+		params: {
+			id: "randomId",
 		},
+		query: {},
+	},
+} = {}) =>
+	createComponentMocks({
+		$route,
 		i18n: true,
 		user: true,
 		stubs: {
@@ -72,7 +75,7 @@ describe("@components/FormNews", () => {
 	describe("create", () => {
 		it("dispatches create action on form submit", async () => {
 			const actions = getMockActions();
-			const mock = getMocks(actions);
+			const mock = getMocks({ actions });
 			const wrapper = shallowMount(FormNews, {
 				...mock,
 				propsData: {
@@ -86,9 +89,71 @@ describe("@components/FormNews", () => {
 			expect(actions.remove.called).toBe(false);
 		});
 
+		it("dispatches create action with target if target query parameter exists", async () => {
+			const testTarget = "1234";
+			const testTargetModel = "teams";
+			const actions = getMockActions();
+			const mock = getMocks({
+				actions,
+				$route: {
+					name: "news-id",
+					params: {
+						id: "randomId",
+					},
+					query: {
+						target: testTarget,
+						targetmodel: testTargetModel,
+					},
+				},
+			});
+			const wrapper = shallowMount(FormNews, {
+				...mock,
+				propsData: {
+					action: "create",
+					news: validNews,
+				},
+			});
+			wrapper.trigger("submit");
+			expect(actions.create.called).toBe(true);
+			const { target, targetModel } = actions.create.getCall(0).args[1];
+			expect(target).toBe(testTarget);
+			expect(targetModel).toBe(testTargetModel);
+		});
+
+		it("dispatches create action with target if context query parameter exists", async () => {
+			const testTarget = "1234";
+			const testTargetModel = "teams";
+			const actions = getMockActions();
+			const mock = getMocks({
+				actions,
+				$route: {
+					name: "news-id",
+					params: {
+						id: "randomId",
+					},
+					query: {
+						contextId: testTarget,
+						context: testTargetModel,
+					},
+				},
+			});
+			const wrapper = shallowMount(FormNews, {
+				...mock,
+				propsData: {
+					action: "create",
+					news: validNews,
+				},
+			});
+			wrapper.trigger("submit");
+			expect(actions.create.called).toBe(true);
+			const { target, targetModel } = actions.create.getCall(0).args[1];
+			expect(target).toBe(testTarget);
+			expect(targetModel).toBe(testTargetModel);
+		});
+
 		it("shows validation error before submiting", async () => {
 			const actions = getMockActions();
-			const mock = getMocks(actions);
+			const mock = getMocks({ actions });
 			const wrapper = shallowMount(FormNews, {
 				...mock,
 				propsData: {
@@ -107,8 +172,10 @@ describe("@components/FormNews", () => {
 		it("shows error toast if create fails", async () => {
 			const errorMessage = "expected error that should be catched";
 			const mock = getMocks({
-				create: () => {
-					throw new Error(errorMessage);
+				actions: {
+					create: () => {
+						throw new Error(errorMessage);
+					},
 				},
 			});
 			const wrapper = shallowMount(FormNews, {
@@ -133,7 +200,7 @@ describe("@components/FormNews", () => {
 	describe("patch", () => {
 		it("dispatches patch action on form submit", async () => {
 			const actions = getMockActions();
-			const mock = getMocks(actions);
+			const mock = getMocks({ actions });
 			const wrapper = shallowMount(FormNews, {
 				...mock,
 				propsData: {
@@ -154,7 +221,7 @@ describe("@components/FormNews", () => {
 
 		it("shows validation error before submiting", async () => {
 			const actions = getMockActions();
-			const mock = getMocks(actions);
+			const mock = getMocks({ actions });
 			const wrapper = shallowMount(FormNews, {
 				...mock,
 				propsData: {
@@ -173,8 +240,10 @@ describe("@components/FormNews", () => {
 		it("shows error toast if patch fails", async () => {
 			const errorMessage = "expected error that should be catched";
 			const mock = getMocks({
-				patch: () => {
-					throw new Error(errorMessage);
+				actions: {
+					patch: () => {
+						throw new Error(errorMessage);
+					},
 				},
 			});
 			const wrapper = shallowMount(FormNews, {
@@ -199,7 +268,7 @@ describe("@components/FormNews", () => {
 	describe("remove", () => {
 		it("confirming remove dispatches the news/remove action", async () => {
 			const actions = getMockActions();
-			const mock = getMocks(actions);
+			const mock = getMocks({ actions });
 			const wrapper = shallowMount(FormNews, {
 				...mock,
 				propsData: {
@@ -225,8 +294,10 @@ describe("@components/FormNews", () => {
 		it("shows error toast if remove fails", async () => {
 			const errorMessage = "expected error that should be catched";
 			const mock = getMocks({
-				remove: () => {
-					throw new Error(errorMessage);
+				actions: {
+					remove: () => {
+						throw new Error(errorMessage);
+					},
 				},
 			});
 			const wrapper = shallowMount(FormNews, {
