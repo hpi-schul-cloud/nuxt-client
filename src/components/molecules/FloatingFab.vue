@@ -1,6 +1,6 @@
 <template>
 	<div :style="[pos]" class="fab">
-		<base-button design="hero-cta icon" v-on="$listeners">
+		<base-button design="hero-cta icon" v-bind="$attrs" v-on="$listeners">
 			<base-icon source="material" :icon="icon" />
 		</base-button>
 	</div>
