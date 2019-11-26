@@ -107,7 +107,10 @@
 			var(--space-sm);
 	}
 
-	display: inline-block;
+	display: inline-flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
 	min-width: var(--space-xl-5);
 	padding: var(--button-padding);
 	font-family: var(--font-accent);
@@ -115,9 +118,7 @@
 	font-weight: var(--button-font-weight);
 	line-height: var(--button-line-height);
 	color: var(--button-text-color);
-	text-align: center;
 	white-space: nowrap;
-	vertical-align: center;
 	cursor: pointer;
 	background: var(--button-background);
 	border: 0;
