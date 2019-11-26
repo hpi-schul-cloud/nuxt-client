@@ -13,17 +13,17 @@
 					},
 				]"
 			/>
-			<i>
+			<div class="text-sm">
 				{{ dayjs(news.displayAt).fromNow() }} von {{ news.creator.firstName }}
 				{{ news.creator.lastName }}
-			</i>
+			</div>
 			<h1> {{ news.title }} </h1>
 
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
-			<hr />
 			<base-link :to="{ name: 'news-id-edit' }">
 				<base-button>
+					<base-icon source="material" icon="edit"/>
 					{{ $t("pages.news._id.index.edit") }}
 				</base-button>
 			</base-link>

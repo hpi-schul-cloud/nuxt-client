@@ -20,10 +20,12 @@
 						type="submit"
 						data-testid="btn_news_submit"
 					>
+						<base-icon source="material" icon="check"/>
 						{{ $t("pages.news.new.create") }}
 					</base-button>
 					<base-button design="text" @click.prevent="cancel">
-						{{ $t("common.actions.cancel") }}
+						<base-icon source="material" icon="clear"/>
+						{{ $t("common.actions.discard") }}
 					</base-button>
 				</template>
 			</form-actions>
