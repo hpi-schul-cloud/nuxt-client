@@ -15,12 +15,15 @@
 			/>
 			<h1> {{ news.title }} </h1>
 			<!-- eslint-disable vue/no-v-html -->
-			<p
-				class="info"
-				v-html="
+			<render-html
+				:html="
+					`<p class='info'>
+				${
 					news.targetModel
 						? $t('pages.news._id.index.info_with_target', infoVariables)
 						: $t('pages.news._id.index.info', infoVariables)
+				} </p>
+				`
 				"
 			/>
 			<!-- eslint-enable vue/no-v-html -->
@@ -43,16 +46,15 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 import "dayjs/locale/de";
 dayjs.locale("de");
+import RenderHtml from "@components/helpers/RenderHtml";
 
 export default {
+	components: {
+		RenderHtml,
+	},
 	async asyncData({ store, params }) {
 		return {
 			news: await store.dispatch("news/get", params.id),
-		};
-	},
-	data() {
-		return {
-			dayjs,
 		};
 	},
 	computed: {
@@ -65,7 +67,7 @@ export default {
 				updaterFirstName: this.news.updater.firstName,
 				updaterLastName: this.news.updater.lastName,
 				target: this.targetName,
-				targetWithLink: `<a href="/${this.news.targetModel}/${this.news.target._id}">${this.targetName}</a>`,
+				targetWithLink: `<base-link to="/${this.news.targetModel}/${this.news.target._id}">${this.targetName}</base-link>`,
 				school:
 					this.news.schoolId === this.$user.schoolId
 						? this.$t("pages.news._id.index.info.your_school", {
