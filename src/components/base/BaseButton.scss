@@ -55,6 +55,9 @@
 			var(--color-secondary)
 		);
 		--button-text-color: var(--color-white);
+
+		border: 0;
+
 		&:hover,
 		&:focus {
 			--button-background: linear-gradient(
@@ -119,9 +122,10 @@
 	line-height: var(--button-line-height);
 	color: var(--button-text-color);
 	white-space: nowrap;
+	vertical-align: middle;
 	cursor: pointer;
 	background: var(--button-background);
-	border: 0;
+	border: 1px solid transparent;
 	border-radius: var(--radius-sm);
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1);
@@ -151,7 +155,7 @@
 	&.is-text {
 		color: var(--button-background);
 		background: transparent;
-		border: 0;
+		border: 1px solid transparent;
 
 		&:hover,
 		&:focus {
