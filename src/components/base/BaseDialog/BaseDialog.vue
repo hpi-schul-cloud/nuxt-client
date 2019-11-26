@@ -16,10 +16,10 @@
 			</template>
 			<template v-slot:footerRight>
 				<base-button design="text" @click="cancel">
-					{{ cancelText || $t("common.btn.cancel") }}
+					{{ cancelText }}
 				</base-button>
 				<base-button :design="actionDesign" @click="confirm">
-					{{ confirmText || $t("common.btn.confirm") }}
+					{{ confirmText }}
 				</base-button>
 			</template>
 		</base-modal>
@@ -58,11 +58,11 @@ export default {
 		},
 		confirmText: {
 			type: String,
-			default: undefined,
+			default: "Bestätigen",
 		},
 		cancelText: {
 			type: String,
-			default: undefined,
+			default: "Abbrechen",
 		},
 		onCancel: {
 			type: Function,
