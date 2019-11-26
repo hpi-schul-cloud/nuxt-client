@@ -5,6 +5,13 @@
 	"pages.courses.new.btn_new": "Erstelle neuen Kurs",
 	"pages.impressum.title": "Impressum",
 	"pages.news._id.index.edit": "Artikel bearbeiten",
+	"pages.news._id.index.info": "{relativePublishedDate} von {creatorFirstName} {creatorLastName} {school} veröffentlicht <br/><i>(von {updaterFirstName} {updaterLastName} {relativeUpdateDate} zuletzt bearbeitet)</i>",
+	"pages.news._id.index.info_with_target": "{relativeDate} von {firstName} {lastName} in {targetWithLink} {school} veröffentlicht <br/><i>(von {updaterFirstName} {updaterLastName} {relativeUpdateDate} zuletzt bearbeitet)</i>",
+	"pages.news._id.index.info.your_school": "an deiner Schule",
+	"pages.news._id.index.info.other_school": "an der Schule {schoolName}",
+	"pages.news._id.index.target.team": "im Team",
+	"pages.news._id.index.target.course": "im Kurs",
+	"pages.news._id.index.target.class": "in der Klasse",
 	"pages.news.title": "Neuigkeiten",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }

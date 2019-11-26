@@ -13,11 +13,17 @@
 					},
 				]"
 			/>
-			<i>
-				{{ dayjs(news.displayAt).fromNow() }} von {{ news.creator.firstName }}
-				{{ news.creator.lastName }}
-			</i>
 			<h1> {{ news.title }} </h1>
+			<!-- eslint-disable vue/no-v-html -->
+			<p
+				class="info"
+				v-html="
+					news.targetModel
+						? $t('pages.news._id.index.info_with_target', infoVariables)
+						: $t('pages.news._id.index.info', infoVariables)
+				"
+			/>
+			<!-- eslint-enable vue/no-v-html -->
 
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
@@ -49,6 +55,38 @@ export default {
 			dayjs,
 		};
 	},
+	computed: {
+		infoVariables() {
+			return {
+				relativePublishedDate: dayjs(this.news.displayAt).fromNow(),
+				relativeUpdateDate: dayjs(this.news.updatedAt).fromNow(),
+				creatorFirstName: this.news.creator.firstName,
+				creatorLastName: this.news.creator.lastName,
+				updaterFirstName: this.news.updater.firstName,
+				updaterLastName: this.news.updater.lastName,
+				target: this.targetName,
+				targetWithLink: `<a href="/${this.news.targetModel}/${this.news.target._id}">${this.targetName}</a>`,
+				school:
+					this.news.schoolId === this.$user.schoolId
+						? this.$t("pages.news._id.index.info.your_school", {
+								schoolName: this.$user.schoolName,
+						  })
+						: this.$t("pages.news._id.index.info.other_school", {
+								schoolName: this.news.school.name,
+						  }),
+			};
+		},
+		targetName() {
+			const targetMap = {
+				teams: this.$t("pages.news._id.index.target.team"),
+				courses: this.$t("pages.news._id.index.target.course"),
+				class: this.$t("pages.news._id.index.target.class"),
+			};
+			return this.news.targetModel
+				? targetMap[this.news.targetModel]
+				: undefined;
+		},
+	},
 	head() {
 		return {
 			title: (this.news || {}).title || "News",
@@ -56,3 +94,10 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@styles";
+
+.info {
+	margin-bottom: var(--space-md);
+}
+</style>
