@@ -5,7 +5,7 @@
 				:inputs="[
 					{
 						to: { name: 'news' },
-						text: 'News',
+						text: $t('pages.news.title'),
 					},
 					{
 						to: { name: 'news-id', params: { id: $route.params.id } },
@@ -72,8 +72,11 @@ export default {
 		requiredPermissions: ["NEWS_EDIT"],
 	},
 	head() {
+		const hasTitle = (this.news || {}).title;
 		return {
-			title: `${(this.news || {}).title || "News"} bearbeiten`,
+			title: hasTitle
+				? `${(this.news || {}).title} bearbeiten`
+				: this.$t("pages.news._id.edit.title"),
 		};
 	},
 };

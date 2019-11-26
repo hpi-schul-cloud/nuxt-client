@@ -40,17 +40,12 @@ export default {
 		FormNews,
 		FormActions,
 	},
-	head() {
-		return {
-			title: "News erstellen",
-		};
-	},
 	meta: {
 		requiredPermissions: ["NEWS_CREATE"],
 	},
 	head() {
 		return {
-			title: "News erstellen",
+			title: this.$t("pages.news.new.title"),
 		};
 	},
 };
