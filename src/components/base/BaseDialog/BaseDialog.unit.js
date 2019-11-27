@@ -3,11 +3,11 @@ import BaseDialog from "./BaseDialog";
 describe("@components/BaseDialog", () => {
 	it(...isValidComponent(BaseDialog));
 
-	describe("appearance", () => {
+	xdescribe("appearance", () => {
 		xit("should display message", () => {});
 		xit("icon should have by default the actionDesign prop color", () => {});
 	});
-	describe("behaviour", () => {
+	xdescribe("behaviour", () => {
 		xit("should auto open on mount", () => {});
 		xit("should close on confirm", () => {});
 		xit("should close on cancel", () => {});
