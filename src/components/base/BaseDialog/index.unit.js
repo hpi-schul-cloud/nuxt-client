@@ -7,4 +7,7 @@ describe("@components/BaseDialog", () => {
 		localVue.use(BaseDialogPlugin);
 		expect(typeof localVue.prototype.$dialog.confirm).toBe("function");
 	});
+	xit("should mount BaseDialog on body when Vue.$dialog.confirm() is called", () => {});
+	xit("confirm() should return BaseDialog instance", () => {});
+	xit("confirm passes props to BaseDialog instance", () => {});
 });
