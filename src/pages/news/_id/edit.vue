@@ -30,7 +30,7 @@
 							type="button"
 							@click.prevent="remove"
 						>
-							<base-icon source="material" icon="delete"/>
+							<base-icon source="material" icon="delete" />
 							{{ $t("common.actions.remove") }}
 						</base-button>
 					</template>
@@ -40,11 +40,11 @@
 							type="submit"
 							data-testid="btn_news_submit"
 						>
-							<base-icon source="material" icon="check"/>
+							<base-icon source="material" icon="check" />
 							{{ $t("common.actions.save") }}
 						</base-button>
 						<base-button design="text" @click.prevent="cancel">
-							<base-icon source="material" icon="clear"/>
+							<base-icon source="material" icon="clear" />
 							{{ $t("common.actions.cancel") }}
 						</base-button>
 					</template>

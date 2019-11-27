@@ -22,7 +22,7 @@
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<base-button :to="{ name: 'news-id-edit' }">
-        <base-icon source="material" icon="edit"/>
+				<base-icon source="material" icon="edit" />
 				{{ $t("pages.news._id.index.edit") }}
 			</base-button>
 		</section>
