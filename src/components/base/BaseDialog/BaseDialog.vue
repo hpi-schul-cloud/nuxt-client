@@ -1,6 +1,6 @@
 <template>
 	<div ref="dialog" data-testid="dialog">
-		<base-modal :active.sync="isActive">
+		<base-modal :active="isActive" @update:active="clickOutside">
 			<template v-slot:body>
 				<modal-body-info :text="message">
 					<template v-slot:icon>
@@ -64,6 +64,10 @@ export default {
 			type: String,
 			default: "Abbrechen",
 		},
+		onClickOutside: {
+			type: Function,
+			default: () => {},
+		},
 		onCancel: {
 			type: Function,
 			default: () => {},
@@ -83,13 +87,6 @@ export default {
 			return this.iconColor
 				? this.iconColor
 				: `var(--color-${this.actionDesign})`;
-		},
-	},
-	watch: {
-		isActive(to, from) {
-			if (from && !to) {
-				this.onCancel();
-			}
 		},
 	},
 	beforeMount() {
@@ -112,6 +109,10 @@ export default {
 		},
 		cancel() {
 			this.onCancel(this.prompt);
+			this.close();
+		},
+		clickOutside() {
+			this.onClickOutside(this.prompt);
 			this.close();
 		},
 
