@@ -23,7 +23,7 @@
 							class="list-content"
 							:to="route.to"
 							:href="route.href"
-							:inactive="true"
+							:no-styles="true"
 						>
 							<base-icon
 								v-if="route.icon"
@@ -46,7 +46,7 @@
 								class="list-content"
 								:to="child.to"
 								:href="child.href"
-								:inactive="true"
+								:no-styles="true"
 							>
 								<base-icon
 									v-if="child.icon"

@@ -2,13 +2,9 @@ import { storiesOf } from "@storybook/vue";
 import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
-import PulsatingDot from "@components/atoms/PulsatingDot";
-import ProfilePicture from "@components/atoms/ProfilePicture";
-import ExampleImage from "@assets/img/avatarExample.svg";
 import MenuLink from "@components/atoms/MenuLink";
 import DropdownMenu from "@components/organisms/DropdownMenu";
 import BaseButton from "@basecomponents/BaseButton";
-import Searchbar from "@components/molecules/Searchbar";
 import PopupIcon from "@components/legacy/PopupIcon";
 import DemoBanner from "@components/legacy/DemoBanner";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
@@ -17,15 +13,6 @@ storiesOf("Misc", module)
 	.addParameters({
 		notes,
 	})
-	.add("Pulsing Dot", () => ({
-		components: { PulsatingDot },
-		template: `<PulsatingDot />`,
-	}))
-	.add("Profile Pic", () => ({
-		components: { ProfilePicture },
-		data: () => ({ imgsrc: ExampleImage }),
-		template: `<div><ProfilePicture :image="imgsrc" size="small"/><ProfilePicture :image="imgsrc" size="medium"/><ProfilePicture :image="imgsrc" size="large"/></div>`,
-	}))
 	.add("DropdownMenu", () => ({
 		components: { DropdownMenu, MenuLink },
 		template: `
@@ -36,14 +23,6 @@ storiesOf("Misc", module)
 				<MenuLink to="/">Link 3</MenuLink>
 			</DropdownMenu>
 		`,
-	}))
-	.add("Searchbar", () => ({
-		components: { Searchbar },
-		data: () => ({
-			searchQuery: text("searchQuery", ""),
-			placeholder: text("placeholder", "Suche nach..."),
-		}),
-		template: `<searchbar v-model.lazy="searchQuery" :placeholder="placeholder" />`,
 	}))
 	.add("Toast", () => ({
 		components: { BaseButton },

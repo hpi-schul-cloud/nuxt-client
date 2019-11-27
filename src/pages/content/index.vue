@@ -124,6 +124,11 @@ export default {
 			await this.$store.dispatch("content/getResources", this.query);
 		},
 	},
+	head() {
+		return {
+			title: "LernStore",
+		};
+	},
 };
 </script>
 

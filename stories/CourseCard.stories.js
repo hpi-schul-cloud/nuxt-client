@@ -6,13 +6,13 @@ import notes from "@docs/storybook/courseCard.md";
 
 import { defaultCourse, courseOldDataFormat } from "./mockData/CourseCard";
 
-storiesOf("CourseCard", module)
+storiesOf("Molecules|CourseCard", module)
 	.addParameters({
 		notes,
 	})
 	.add("CourseCard", () => ({
 		components: { CourseCard },
-		template: `<CourseCard v-bind="course" />`,
+		template: `<base-grid><CourseCard v-bind="course" /><CourseCard v-bind="course" /><CourseCard v-bind="course" /></base-grid>`,
 		data: () => ({
 			course: {
 				...defaultCourse,
@@ -31,7 +31,7 @@ storiesOf("CourseCard", module)
 	}))
 	.add("CourseCard getting old data format", () => ({
 		components: { CourseCard },
-		template: '<CourseCard v-bind="course" />',
+		template: '<base-grid><CourseCard v-bind="course" /></base-grid>',
 		data: () => ({
 			course: {
 				...courseOldDataFormat,

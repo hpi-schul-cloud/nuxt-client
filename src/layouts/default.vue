@@ -1,8 +1,8 @@
 <template>
 	<legacy-logged-in>
-		<main class="content">
+		<base-content-container tag="main" class="content">
 			<Nuxt />
-		</main>
+		</base-content-container>
 	</legacy-logged-in>
 </template>
 
@@ -22,13 +22,11 @@ export default {
 .content {
 	grid-area: content;
 	width: inherit;
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
+	min-height: 100vh;
 	padding: 0 var(--space-lg);
-	margin: 0 auto;
 
 	@include breakpoint(tablet) {
-		padding: 0 var(--space-xl);
+		padding: 0 var(--space-xl-3);
 	}
 }
 </style>

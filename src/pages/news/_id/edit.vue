@@ -121,5 +121,10 @@ export default {
 			}
 		},
 	},
+	head() {
+		return {
+			title: `${(this.orgNews || {}).title || "News"} bearbeiten`,
+		};
+	},
 };
 </script>

@@ -1,30 +1,7 @@
 <template>
 	<div>
-		<base-button
-			class="create-news-btn"
-			design="primary"
-			@click="$router.push({ name: 'news-new' })"
-		>
-			Artikel anlegen
-		</base-button>
-
-		<div class="view-toggles">
-			<!-- TODO: Find correct Icons! and show correct one on active -->
-			<base-button design="primary icon text" @click="toDisplayStyle('grid')">
-				<base-icon source="material" icon="view_column" fill="gray" />
-			</base-button>
-			<base-button design="primary icon text" @click="toDisplayStyle('list')">
-				<!-- TODO: Change for correct icons -->
-				<base-icon
-					v-if="isList"
-					source="material"
-					icon="view_list"
-					fill="gray"
-				/>
-				<base-icon v-else source="material" icon="list" fill="gray" />
-			</base-button>
-		</div>
-		<section :class="{ 'grid-container': !isList, list: isList }">
+		<floating-fab icon="add" to="/news/new" />
+		<section v-if="news && news.length > 0" class="section">
 			<news-card
 				v-for="article of news"
 				:id="article._id"
@@ -38,7 +15,6 @@
 				:is-landscape="isList"
 				>{{ article.content }}</news-card
 			>
-
 		</section>
 	</div>
 </template>
@@ -46,20 +22,12 @@
 <script>
 import { mapGetters } from "vuex";
 import NewsCard from "@components/molecules/NewsCard";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
 	components: {
 		NewsCard,
-	},
-	data: function() {
-		return {
-			isList: false,
-		};
-	},
-	head() {
-		return {
-			title: "News",
-		};
+		FloatingFab,
 	},
 	computed: {
 		...mapGetters("news", {
@@ -87,6 +55,11 @@ export default {
 				this.isList = false;
 			}
 		},
+	},
+	head() {
+		return {
+			title: "News",
+		};
 	},
 };
 </script>
