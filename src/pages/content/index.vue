@@ -12,8 +12,8 @@
 				placeholder="Suche nach..."
 				:loading="loading"
 			/>
-			<p v-if="resources.total > 0" class="content__total"
-				>total resources: {{ resources.total }}</p
+			<p v-if="searchQuery.length > 0" class="content__total"
+				>{{ resources.total }} Suchergebnisse für "{{ searchQuery }}"</p
 			>
 			<div v-if="resources.data.length === 0" class="content__no-results">
 				<content-empty-state />
