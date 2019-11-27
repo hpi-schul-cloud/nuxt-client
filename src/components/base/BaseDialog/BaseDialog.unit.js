@@ -17,7 +17,7 @@ describe("@components/BaseDialog", () => {
 		const dialogue = wrapper.vm.$dialog.confirm();
 		expect(dialogue.isActive).toBe(true);
 		expect(dialogue.currentIconColor).toBe("var(--color-primary)");
-		dialogue.close();
+		dialogue.cancel();
 		expect(dialogue.isActive).toBe(false);
 	});
 
@@ -37,7 +37,7 @@ describe("@components/BaseDialog", () => {
 		expect(dialogue.isActive).toBe(true);
 		expect(dialogue.currentIconColor).toBe("var(--color-danger)");
 		//TODO Validate more parameters
-		dialogue.close();
+		dialogue.cancel();
 		expect(dialogue.isActive).toBe(false);
 	});
 });
