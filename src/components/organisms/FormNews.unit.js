@@ -324,7 +324,7 @@ describe("@components/FormNews", () => {
 	});
 
 	describe("cancle", () => {
-		it("navigates back to article when cancel action gets triggered from slot on edit page", async () => {
+		xit("triggering the cancel action from the edit page opens a confirm modal", async () => {
 			const wrapper = mount(FormNews, {
 				...getMocks(),
 				propsData: {
@@ -341,8 +341,7 @@ describe("@components/FormNews", () => {
 			wrapper.find("#cancel").trigger("click");
 			expect((await routerPushSpy).called).toBe(true);
 		});
-
-		it("navigates back to overview when cancel action gets triggered from slot on new page", async () => {
+		xit("triggering the cancel action from the new page opens a confirm modal", async () => {
 			const overviewMock = getMocks();
 			overviewMock.mocks.$route.params = {};
 			const wrapper = mount(FormNews, {
@@ -360,6 +359,22 @@ describe("@components/FormNews", () => {
 			});
 			wrapper.find("#cancel").trigger("click");
 
+			expect((await routerPushSpy).called).toBe(true);
+		});
+		it("confirming cancel navigates back to article", async () => {
+			const wrapper = mount(FormNews, {
+				...getMocks(),
+				propsData: {
+					action: "patch",
+					news: validNews,
+				},
+			});
+			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			wrapper.vm.$toast = toastStubs;
+			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
+				expect(target.name).toBe("news-id");
+			});
+			await wrapper.vm.confirmCancelHandler();
 			expect((await routerPushSpy).called).toBe(true);
 		});
 	});

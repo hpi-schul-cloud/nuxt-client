@@ -203,12 +203,16 @@ export default {
 		},
 		async remove() {
 			this.$dialog.confirm({
-				title: this.$t("components.organisms.FormNews.remove.confirm.title"),
+				icon: "warning",
+				actionDesign: "danger",
 				message: this.$t(
 					"components.organisms.FormNews.remove.confirm.message"
 				),
 				confirmText: this.$t(
-					"components.organisms.FormNews.remove.confirm.action"
+					"components.organisms.FormNews.remove.confirm.confirm"
+				),
+				cancelText: this.$t(
+					"components.organisms.FormNews.remove.confirm.cancel"
 				),
 				onConfirm: this.confirmRemoveHandler,
 			});
@@ -228,6 +232,23 @@ export default {
 			}
 		},
 		async cancel() {
+			this.$dialog.confirm({
+				message: this.$t(
+					"components.organisms.FormNews.cancel.confirm.message"
+				),
+				icon: "warning",
+				cancelText: this.$t(
+					"components.organisms.FormNews.cancel.confirm.confirm"
+				),
+				confirmText: this.$t(
+					"components.organisms.FormNews.cancel.confirm.cancel"
+				),
+				actionDesign: "",
+				iconColor: "var(--color-danger)",
+				onCancel: this.confirmCancelHandler,
+			});
+		},
+		async confirmCancelHandler() {
 			const cancelTarget = this.$route.params.id
 				? {
 						name: "news-id",
