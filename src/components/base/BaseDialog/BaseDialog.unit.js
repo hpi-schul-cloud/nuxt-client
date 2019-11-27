@@ -14,6 +14,6 @@ describe("@components/BaseDialog", () => {
 		xit("should close on click outside", () => {});
 		xit("should call onConfirm prop on primary action click", () => {});
 		xit("should call onCancel prop on secondary action click", () => {});
-		xit("should call onCancel prop on click outside", () => {});
+		xit("should call onClickOutside prop on click outside", () => {});
 	});
 });
