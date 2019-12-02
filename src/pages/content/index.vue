@@ -5,7 +5,7 @@
 				<i class="icon fa fa-chevron-circle-up"></i>
 			</p>
 		</div>
-		<div class="content">
+		<base-grid class="content">
 			<searchbar
 				v-model.lazy="searchQuery"
 				class="content__searchbar"
@@ -18,7 +18,7 @@
 			<div v-if="resources.data.length === 0" class="content__no-results">
 				<content-empty-state />
 			</div>
-			<div class="content__cards-container">
+			<base-grid class="content__cards-container">
 				<base-grid column-width="17rem">
 					<content-card
 						v-for="resource of resources.data"
@@ -37,13 +37,13 @@
 						:url="resource.url"
 					/>
 				</base-grid>
-			</div>
+			</base-grid>
 			<BaseSpinner
 				v-if="loading && resources.data.length !== 0"
 				class="content__spinner"
 				color="var(--color-primary)"
 			/>
-		</div>
+		</base-grid>
 	</section>
 </template>
 
