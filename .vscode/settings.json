@@ -121,20 +121,9 @@
 	// ===
 	"npm.packageManager": "npm",
 	"editor.suggest.localityBonus": true,
-	"peacock.color": "#00bb7f",
 
 	// ===
 	// TODO HIGHLIGHT
 	// ===
-	"todohighlight.keywords": [
-		"TODO",
-		"FIX",
-		"REFACTOR"
-	],
-	"workbench.colorCustomizations": {
-		"titleBar.activeBackground": "#00bb7f",
-		"titleBar.inactiveBackground": "#00bb7f99",
-		"titleBar.activeForeground": "#e7e7e7",
-		"titleBar.inactiveForeground": "#e7e7e799"
-	}
+	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"]
 }
