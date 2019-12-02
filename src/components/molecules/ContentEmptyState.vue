@@ -23,10 +23,10 @@ export default {
 	data() {
 		return {
 			emptyStateSVGs: [
-				"/empty-state/lehrer1_lupe.svg",
-				"/empty-state/lehrer1.1_lupe.svg",
-				"/empty-state/lehrer2_lupe.svg",
-				"/empty-state/lehrer2.1_lupe.svg",
+				"/empty-state/emptyStateSvg_lehrer1.svg",
+				"/empty-state/emptyStateSvg_lehrer2.svg",
+				"/empty-state/emptyStateSvg_lehrer3.svg",
+				"/empty-state/emptyStateSvg_lehrer4.svg",
 			],
 		};
 	},

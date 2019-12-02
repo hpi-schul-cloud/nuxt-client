@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<div v-if="scrollY > 115" class="content__back-to-top">
-			<p @click="backToTop">
+			<p @click="$_backToTop">
 				<i class="icon fa fa-chevron-circle-up"></i>
 			</p>
 		</div>
@@ -62,7 +62,7 @@ export default {
 	},
 	mixins: [infiniteScrolling],
 	async asyncData({ store }) {
-		return Promise.all([store.dispatch("content/getResources")]);
+		return store.dispatch("content/getResources");
 	},
 	data() {
 		return {

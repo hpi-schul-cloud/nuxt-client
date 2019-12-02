@@ -72,10 +72,12 @@ storiesOf("Base|Base UI", module)
 		template: `<div style="padding: 2rem;">
 				<h2>Knobs</h2>
 				<base-button :disabled="disabled" :size="size" :design="design">{{ text }}</base-button>
+
 				<h2>Sizes</h2>
 				<base-button size="small">small</base-button>
 				<base-button>medium (default)</base-button>
 				<base-button size="large">large</base-button>
+
 				<h2>Primary Action</h2>
 				<base-button design="primary">
 					<base-icon source="material" icon="add"/>
@@ -99,6 +101,7 @@ storiesOf("Base|Base UI", module)
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
+
 				<h2>Secondary Action</h2>
 				<base-button design="secondary">secondary</base-button>
 				<base-button design="secondary outline">secondary outline</base-button>
@@ -109,6 +112,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="secondary icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+
 				<h2>Tertiary Action</h2>
 				<base-button>Default</base-button>
 				<base-button design="outline">outline</base-button>
@@ -119,6 +123,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+
 				<h2>Disabled</h2>
 				<base-button disabled>Disabled</base-button>
 				<base-button disabled design="outline">Disabled outline</base-button>
@@ -129,6 +134,7 @@ storiesOf("Base|Base UI", module)
 				<base-button disabled design="icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+
 				<h2>Signal</h2>
 				<base-button design="success">success</base-button>
 				<base-button design="success outline">success outline</base-button>
@@ -149,6 +155,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="danger icon text">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+
 				<h2>Other</h2>
 				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
@@ -213,9 +220,9 @@ storiesOf("Base|Base UI", module)
 		components: { BaseLink },
 		template: `
 			<div>
-				<base-link href="https://schul-cloud.org" underlined>external Link to https://schul-cloud.org</base-link>
-				<base-link to="/news" underlined>Internal Link to /news</base-link>
-				<base-link name="news" underlined>Internal Link with name "news"</base-link>
+				<base-link href="https://schul-cloud.org">external Link to https://schul-cloud.org</base-link>
+				<base-link to="/news">Internal Link to /news</base-link>
+				<base-link name="news">Internal Link with name "news"</base-link>
 			</div>`,
 		methods: {},
 	}))

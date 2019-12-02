@@ -4,9 +4,7 @@
 			<slot name="header" />
 		</header>
 		<div class="customcard-content">
-			<slot>
-				<slot name="content"/>
-			</slot>
+			<slot />
 		</div>
 		<footer class="customcard-footer">
 			<slot name="footer" />

@@ -3,7 +3,7 @@
 		<div class="content-card">
 			<template v:slot:content>
 				<div class="content">
-					<BaseLink :href="url" target="_blank">
+					<BaseLink :href="url" target="_blank" :no-style="true">
 						<img
 							:src="thumbnail"
 							alt="content-thumbnail"
@@ -22,11 +22,7 @@
 			<template v:slot:footer>
 				<div class="footer">
 					<div class="footer__melden">
-						<a
-							href="mailto:inhalte@schul-cloud.org?Subject=Melden%20des%20Inhaltes%20mit%20der%20ID%20&body=Liebes%20%20Team%2C%0Ahiermit%20m%C3%B6chte%20ich%20den%20im%20Betreff%20genannten%20Inhalt%20melden%2C%20da%3A%0A%5Bhier%20bitte%20Ihre%20Gr%C3%BCnde%5D"
-							target="_blank"
-							rel="noopener"
-						>
+						<a :href="mailContent" target="_blank" rel="noopener">
 							melden <i class="fa fa-flag foo" aria-hidden="true"></i>
 						</a>
 					</div>
@@ -56,11 +52,16 @@ export default {
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
 	},
+	computed: {
+		mailContent() {
+			return "mailto:inhalte@schul-cloud.org?Subject=Melden%20des%20Inhaltes%20mit%20der%20ID%20&body=Liebes%20%20Team%2C%0Ahiermit%20m%C3%B6chte%20ich%20den%20im%20Betreff%20genannten%20Inhalt%20melden%2C%20da%3A%0A%5Bhier%20bitte%20Ihre%20Gr%C3%BCnde%5D";
+		},
+	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@mixins/multiline-ellipsis.scss";
+@import "@utils/multiline-ellipsis.scss";
 
 .content-card {
 	display: flex;

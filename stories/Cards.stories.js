@@ -3,7 +3,6 @@ import { text, number, color, boolean } from "@storybook/addon-knobs";
 
 import CourseCard from "@components/molecules/CourseCard";
 import notes from "@docs/storybook/courseCard.md";
-import NewsCard from "@components/molecules/NewsCard";
 
 import { defaultCourse, courseOldDataFormat } from "./mockData/CourseCard";
 
