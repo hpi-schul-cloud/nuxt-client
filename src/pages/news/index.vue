@@ -1,70 +1,25 @@
 <template>
 	<div>
-		<user-has-permission permission="NEWS_CREATE">
-			<base-button
-				class="create-news-btn"
-				design="primary"
-				@click="$router.push({ name: 'news-new' })"
-			>
-				Artikel anlegen
-			</base-button>
-		</user-has-permission>
-
-		<div class="view-toggles">
-			<base-button
-				:design="isList ? 'icon text' : 'icon'"
-				@click="toDisplayStyle('grid')"
-			>
-				<base-icon source="material" icon="view_module" />
-			</base-button>
-			<base-button
-				:design="isList ? 'icon' : 'icon text'"
-				@click="toDisplayStyle('list')"
-			>
-				<base-icon source="material" icon="view_stream" />
-			</base-button>
-		</div>
-
-		<user-has-permission permission="NEWS_CREATE">
-			<template #true>
-				<tabs>
-					<tab name="Veröffentlicht">
-						<grid-news :news="published" :list-view="isList" />
-					</tab>
-					<tab name="Unveröffentlicht">
-						<grid-news :news="unpublished" :list-view="isList" />
-					</tab>
-				</tabs>
-			</template>
-			<template #false>
-				<grid-news :news="published" :list-view="isList" />
-			</template>
-		</user-has-permission>
+		<floating-fab icon="add" to="/news/new" />
+		<section v-if="news && news.length > 0" class="section">
+			<news-card
+				v-for="article of news"
+				:key="article._id"
+				:article="article"
+				class="mb--md"
+			/>
+		</section>
 	</div>
 </template>
 
 <script>
-import Tabs from "@components/organisms/Tabs/Tabs";
-import Tab from "@components/organisms/Tabs/Tab";
-import GridNews from "@components/molecules/GridNews";
-import UserHasPermission from "@components/helpers/UserHasPermission";
+import NewsCard from "@components/molecules/NewsCard";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
-	head() {
-		return {
-			title: "News",
-		};
-	},
 	components: {
-		GridNews,
-		Tab,
-		Tabs,
-		UserHasPermission,
-	},
-	data: function() {
-		return {
-			isList: false,
-		};
+		NewsCard,
+		FloatingFab,
 	},
 	async asyncData({ store }) {
 		return {
@@ -82,10 +37,20 @@ export default {
 			})).data,
 		};
 	},
+	data: function() {
+		return {
+			isList: false,
+		};
+	},
 	methods: {
 		toDisplayStyle(newStyle) {
 			this.isList = newStyle === "list";
 		},
+	},
+	head() {
+		return {
+			title: "News",
+		};
 	},
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<!-- default template = loggedin view -->
 	<div>
-		<div class="page">
+		<div class="page" :style="style">
 			<div class="topbar">
 				<user-has-role :role="isDemoRole">
 					<demo-banner v-if="!fullscreenMode"></demo-banner>
@@ -152,6 +152,9 @@ export default {
 				item.active = isActive && !item.childActive;
 				return item;
 			});
+		},
+		style() {
+			return this.fullscreenMode ? "display: inherit;" : "";
 		},
 	},
 	watch: {

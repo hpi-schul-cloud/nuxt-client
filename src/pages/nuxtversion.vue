@@ -5,6 +5,11 @@
 <script>
 export default {
 	layout: "plain",
+	data() {
+		return {
+			info: process.env.GIT_INFO,
+		};
+	},
 	head() {
 		return {
 			title: "nuxtversion",
@@ -12,11 +17,6 @@ export default {
 	},
 	meta: {
 		isPublic: true,
-	},
-	data() {
-		return {
-			info: process.env.GIT_INFO,
-		};
 	},
 };
 </script>

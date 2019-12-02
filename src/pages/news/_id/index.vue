@@ -13,32 +13,45 @@
 					},
 				]"
 			/>
+			<i>
+				{{ dayjs(news.displayAt).fromNow() }} von {{ news.creator.firstName }}
+				{{ news.creator.lastName }}
+			</i>
+			<h1> {{ news.title }} </h1>
+
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
-			<base-button @click="$router.push({ name: 'news-id-edit' })">
-				Artikel bearbeiten
+
+			<base-button :to="{ name: 'news-id-edit' }">
+				{{ $t("pages.news._id.index.edit") }}
 			</base-button>
 		</section>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export default {
-	computed: {
-		...mapGetters("news", {
-			news: "current",
-		}),
+	async asyncData({ store, params }) {
+		return {
+			news: await store.dispatch("news/get", params.id),
+		};
 	},
-	created(ctx) {
-		this.get(this.$route.params.id);
+	data() {
+		return {
+			dayjs,
+		};
 	},
-	methods: {
-		get(id) {
-			this.$store.dispatch("news/get", id);
-		},
+	head() {
+		return {
+			title: (this.news || {}).title || "News",
+		};
 	},
 	head() {
 		return {
