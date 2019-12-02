@@ -17,7 +17,7 @@
 	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
 	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiederruflich löschen?",
 	"components.organisms.FormNews.cancel.confirm.cancel": "Weiter arbeiten",
-	"components.organisms.FormNews.cancel.confirm.confirm": "Abbrechen",
+	"components.organisms.FormNews.cancel.confirm.confirm": "Änderungen verwerfen",
 	"components.organisms.FormNews.cancel.confirm.message": "Wenn du die Bearbeitung abbrichst gehen alle ungespeicherten Änderungen verloren.",
 	"components.organisms.FormNews.success.create": "Artikel erstellt.",
 	"components.organisms.FormNews.success.patch": "Artikel wurde aktualisiert.",

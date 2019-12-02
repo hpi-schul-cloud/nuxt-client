@@ -238,14 +238,15 @@ export default {
 				),
 				icon: "warning",
 				cancelText: this.$t(
-					"components.organisms.FormNews.cancel.confirm.confirm"
-				),
-				confirmText: this.$t(
 					"components.organisms.FormNews.cancel.confirm.cancel"
 				),
-				actionDesign: "",
+				confirmText: this.$t(
+					"components.organisms.FormNews.cancel.confirm.confirm"
+				),
+				actionDesign: "danger",
 				iconColor: "var(--color-danger)",
-				onCancel: this.confirmCancelHandler,
+				invertedDesign: true,
+				onConfirm: this.confirmCancelHandler,
 			});
 		},
 		async confirmCancelHandler() {
