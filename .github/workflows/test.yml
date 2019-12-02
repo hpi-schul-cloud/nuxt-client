@@ -10,8 +10,15 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: npm ci
-        run: npm ci
+        run: npm ci --prefer-offline
       - name: npm run test:unit
         run: npm run test:ci
       - name: codecov
@@ -23,8 +30,15 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: npm ci
-        run: npm ci
+        run: npm ci --prefer-offline
       - name: npm run lint
         run: npm run lint
   build:
@@ -33,11 +47,18 @@ jobs:
         platform: [ubuntu-latest, macos-latest, windows-latest]
         theme: [default, brb, n21, open]
     runs-on: ${{ matrix.platform }}
-    env:
-      SC_THEME: ${{ matrix.theme }}
     steps:
       - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: npm ci
-        run: npm ci
+        run: npm ci --prefer-offline
       - name: npm run build:nuxt
         run: npm run build:nuxt
+        env:
+          SC_THEME: ${{ matrix.theme }}
