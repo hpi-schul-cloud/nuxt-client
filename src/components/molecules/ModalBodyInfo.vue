@@ -4,7 +4,7 @@
 			<slot name="icon"></slot>
 		</div>
 		<!-- eslint-disable-next-line vue/no-v-html -->
-		<h4 v-html="text" />
+		<h1 class="h4" v-html="text" />
 	</div>
 </template>
 
