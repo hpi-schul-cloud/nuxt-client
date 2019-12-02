@@ -5,11 +5,17 @@ const proxy = require("http-proxy-middleware");
 
 const nuxtConfig = require("../../nuxt.config.js");
 
+const proxyErrors = [];
+
 const proxyOptions = {
 	changeOrigin: true,
 	target: process.env.LEGACY_CLIENT_URL || "http://localhost:3100",
 	logLevel: process.env.PROXY_LOG_LEVEL || "warn",
 	onError: (err, req, res) => {
+		proxyErrors.push({
+			err,
+			path: path,
+		});
 		res.writeHead(302, {
 			Location: "/error/proxy",
 		});
@@ -48,6 +54,9 @@ const isStaticFile = (url) => staticFiles.includes(url);
 export default async function(req, res, next) {
 	if (process.env.FALLBACK_DISABLED === "true") {
 		return next();
+	}
+	if (proxyErrors.length) {
+		// TODO: log to sentry + remove from list after log
 	}
 
 	const useNuxt =
