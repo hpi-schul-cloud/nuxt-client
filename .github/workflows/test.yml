@@ -14,11 +14,11 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-nuxt-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-nuxt-node-
       - name: npm ci
-        run: npm ci --prefer-offline
+        run: npm ci --prefer-offline --no-audit
       - name: npm run test:unit
         run: npm run test:ci
       - name: codecov
@@ -36,11 +36,11 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-nuxt-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-nuxt-node-
       - name: npm ci
-        run: npm ci --prefer-offline
+        run: npm ci --prefer-offline --no-audit
       - name: npm run lint
         run: npm run lint
   # build:
