@@ -28,6 +28,10 @@ jobs:
     - stage: test
       script: npm run build:nuxt
       name: "build:nuxt:default"
+      os:
+        - windows
+        - linux
+        - osx
     - script: npm run build:nuxt
       name: "build:nuxt:brb"
       env:
@@ -42,11 +46,19 @@ jobs:
         - SC_THEME=open
     - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
+      os:
+        - windows
+        - linux
+        - osx
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p storybook
     - script: npm run build:docs
       name: "build:docs"
+      os:
+        - windows
+        - linux
+        - osx
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
@@ -56,6 +68,10 @@ jobs:
       after_success:
         - npm i -g codecov
         - codecov
+      os:
+        - windows
+        - linux
+        - osx
     - script:
         - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
         - chmod 700 integration-test.sh
@@ -76,6 +92,10 @@ jobs:
     # Lint
     - script: npm run lint:ci
       name: "lint"
+      os:
+        - windows
+        - linux
+        - osx
 
     # Build Docker Images
     - stage: build
