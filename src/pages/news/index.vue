@@ -1,25 +1,18 @@
 <template>
 	<div>
 		<floating-fab icon="add" to="/news/new" />
-		<section v-if="news && news.length > 0" class="section">
-			<news-card
-				v-for="article of news"
-				:key="article._id"
-				:article="article"
-				class="mb--md"
-			/>
-		</section>
+		<grid-news :news="published" :list-view="isList" />
 	</div>
 </template>
 
 <script>
-import NewsCard from "@components/molecules/NewsCard";
 import FloatingFab from "@components/molecules/FloatingFab";
+import GridNews from "@components/molecules/GridNews";
 
 export default {
 	components: {
-		NewsCard,
 		FloatingFab,
+		GridNews,
 	},
 	async asyncData({ store }) {
 		return {
