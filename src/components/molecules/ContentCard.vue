@@ -39,7 +39,12 @@
 </template>
 
 <script>
+import BaseLink from "@components/base/BaseLink";
+
 export default {
+	components: {
+		BaseLink,
+	},
 	props: {
 		id: { type: String, default: "" },
 		description: { type: [String, Array], default: "" },

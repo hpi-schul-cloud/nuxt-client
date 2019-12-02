@@ -14,12 +14,6 @@
 
 <script>
 export default {
-	props: {
-		img: {
-			type: String,
-			default: "",
-		},
-	},
 	data() {
 		return {
 			emptyStateSVGs: [
