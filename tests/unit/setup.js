@@ -98,7 +98,7 @@ Object.defineProperty(window, "location", {
 // Global helpers
 // ===
 
-// for mocking methods
+// for mocking methods - https://sinonjs.org
 global.sinon = sinon;
 
 // https://vue-test-utils.vuejs.org/api/#mount

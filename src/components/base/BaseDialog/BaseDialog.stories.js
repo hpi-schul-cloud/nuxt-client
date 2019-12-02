@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, select } from "@storybook/addon-knobs";
+import { text, select, boolean } from "@storybook/addon-knobs";
 
 import BaseButton from "@basecomponents/BaseButton";
 
@@ -37,20 +37,22 @@ storiesOf("Base|Dialog", module).add(
 				},
 				"danger"
 			),
+			invertedDesign: boolean("invertedDesign", false),
 		}),
 		template: `
 		<div>
 			<BaseButton @click="
 				$dialog.confirm({
-					message: message,
-					confirmText: confirmText,
-					cancelText: cancelText,
-					icon: icon,
-					iconSource: iconSource,
-					iconColor: iconColor,
-					actionDesign: actionDesign,
+					message,
+					confirmText,
+					cancelText,
+					icon,
+					iconSource,
+					iconColor,
+					actionDesign,
 					onConfirm,
 					onCancel,
+					invertedDesign,
 				})
 			">
 				Delete User

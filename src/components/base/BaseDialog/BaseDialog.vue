@@ -9,16 +9,26 @@
 							slot="icon"
 							:source="iconSource"
 							:icon="icon"
-							:style="`color: ${currentIconColor}`"
+							:style="{
+								color: currentIconColor,
+							}"
 						/>
 					</template>
 				</modal-body-info>
 			</template>
 			<template v-slot:footerRight>
-				<base-button design="text" @click="cancel">
+				<base-button
+					:design="invertedDesign ? actionDesign : 'text'"
+					data-testid="btn-dialog-cancel"
+					@click="cancel"
+				>
 					{{ cancelText }}
 				</base-button>
-				<base-button :design="actionDesign" @click="confirm">
+				<base-button
+					:design="actionDesign ? 'text' : actionDesign"
+					data-testid="btn-dialog-confirm"
+					@click="confirm"
+				>
 					{{ confirmText }}
 				</base-button>
 			</template>
@@ -75,6 +85,9 @@ export default {
 		onConfirm: {
 			type: Function,
 			default: () => {},
+		},
+		invertedDesign: {
+			type: Boolean,
 		},
 	},
 	data() {
