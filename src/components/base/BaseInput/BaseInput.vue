@@ -3,6 +3,7 @@
 		:is="component"
 		:vmodel="vmodel"
 		v-bind="{ ...$attrs, ...$props }"
+		class="input"
 		@input="$emit('update:vmodel', $event)"
 	>
 		<template v-for="(cmp, name) in $slots">
@@ -82,4 +83,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.input {
+	margin-bottom: var(--space-sm);
+}
 </style>
