@@ -1,7 +1,7 @@
 <template>
 	<div :class="{ 'live-search': true, active: isActive }">
 		<div class="search-container">
-			<BaseSpinner v-if="loading" />
+			<base-spinner v-if="loading" />
 			<base-icon v-else class="search-icon" source="custom" icon="search" />
 			<input
 				ref="searchStringInput"

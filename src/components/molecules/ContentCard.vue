@@ -1,16 +1,16 @@
 <template>
-	<BaseCard v-bind="$props">
+	<base-card v-bind="$props">
 		<div class="content-card">
 			<template v:slot:content>
 				<div class="content">
-					<BaseLink :href="url" target="_blank" :no-style="true">
+					<base-link :href="url" target="_blank" :no-style="true">
 						<img
 							:src="thumbnail"
 							alt="content-thumbnail"
 							class="content__thumbnail"
 						/>
 						<div class="content__title">{{ title }}</div>
-					</BaseLink>
+					</base-link>
 					<div class="content__tags">
 						<span v-for="(tag, i) in tags" :key="i" class="content__tags-tag">
 							{{ tag }}
@@ -35,7 +35,7 @@
 				</div>
 			</template>
 		</div>
-	</BaseCard>
+	</base-card>
 </template>
 
 <script>

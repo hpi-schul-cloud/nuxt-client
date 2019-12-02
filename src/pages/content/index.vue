@@ -19,7 +19,7 @@
 				<content-empty-state />
 			</div>
 			<div class="content__cards-container">
-				<BaseGrid column-width="17rem">
+				<base-grid column-width="17rem">
 					<content-card
 						v-for="resource of resources.data"
 						:id="resource._id"
@@ -36,7 +36,7 @@
 						:title="resource.title"
 						:url="resource.url"
 					/>
-				</BaseGrid>
+				</base-grid>
 			</div>
 			<BaseSpinner
 				v-if="loading && resources.data.length !== 0"
