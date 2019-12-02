@@ -5,20 +5,23 @@
 				<i class="icon fa fa-chevron-circle-up"></i>
 			</p>
 		</div>
-		<base-grid class="content">
+		<div class="content">
 			<searchbar
 				v-model.lazy="searchQuery"
 				class="content__searchbar"
 				placeholder="Suche nach..."
 				:loading="loading"
 			/>
-			<p v-if="searchQuery.length > 0" class="content__total"
-				>{{ resources.total }} Suchergebnisse für "{{ searchQuery }}"</p
-			>
+			<p class="content__total">
+				<span v-if="searchQuery.length > 0">
+					{{ resources.total }} Suchergebnisse für "{{ searchQuery }}"
+				</span>
+				<span v-else> {{ resources.total }} resources </span>
+			</p>
 			<div v-if="resources.data.length === 0" class="content__no-results">
 				<content-empty-state />
 			</div>
-			<base-grid class="content__cards-container">
+			<div class="content__cards-container">
 				<base-grid column-width="17rem">
 					<content-card
 						v-for="resource of resources.data"
@@ -37,13 +40,13 @@
 						:url="resource.url"
 					/>
 				</base-grid>
-			</base-grid>
-			<BaseSpinner
+			</div>
+			<base-spinner
 				v-if="loading && resources.data.length !== 0"
 				class="content__spinner"
 				color="var(--color-primary)"
 			/>
-		</base-grid>
+		</div>
 	</section>
 </template>
 
@@ -53,12 +56,14 @@ import Searchbar from "@components/molecules/Searchbar";
 import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
+import BaseGrid from "@components/base/BaseGrid";
 
 export default {
 	components: {
 		Searchbar,
 		ContentCard,
 		ContentEmptyState,
+		BaseGrid,
 	},
 	mixins: [infiniteScrolling],
 	async asyncData({ store }) {
@@ -147,7 +152,6 @@ export default {
 		align-items: center;
 		justify-content: flex-end;
 		width: 100%;
-		padding: var(--space-md);
 		color: var(--color-primary);
 	}
 
