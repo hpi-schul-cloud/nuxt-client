@@ -204,7 +204,9 @@ export default {
 		async remove() {
 			this.$dialog.confirm({
 				icon: "warning",
-				actionDesign: "danger",
+				actionDesign: "success",
+				iconColor: "var(--color-danger)",
+				invertedDesign: true,
 				message: this.$t(
 					"components.organisms.FormNews.remove.confirm.message"
 				),
@@ -243,7 +245,7 @@ export default {
 				confirmText: this.$t(
 					"components.organisms.FormNews.cancel.confirm.confirm"
 				),
-				actionDesign: "danger",
+				actionDesign: "success",
 				iconColor: "var(--color-danger)",
 				invertedDesign: true,
 				onConfirm: this.confirmCancelHandler,
