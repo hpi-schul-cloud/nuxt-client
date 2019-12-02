@@ -68,7 +68,7 @@ module.exports = {
 		port: process.env.PORT || DEFAULT_PORT,
 		host: process.env.HOST || DEFAULT_HOST,
 	},
-	serverMiddleware: ["@serverMiddleware/proxy"],
+	serverMiddleware: [],
 
 	router: {
 		middleware: [
@@ -101,6 +101,7 @@ module.exports = {
 		"@nuxtjs/toast",
 		"cookie-universal-nuxt",
 		"nuxt-babel",
+		"@modules/proxyWithSentry",
 	],
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options

@@ -51,19 +51,22 @@ const staticFiles = glob
 
 const isStaticFile = (url) => staticFiles.includes(url);
 
-export default async function(req, res, next) {
-	if (process.env.FALLBACK_DISABLED === "true") {
-		return next();
-	}
-	if (proxyErrors.length) {
-		// TODO: log to sentry + remove from list after log
-	}
+export default (sentry) =>
+	async function(req, res, next) {
+		if (process.env.FALLBACK_DISABLED === "true") {
+			return next();
+		}
+		// TODO for testing only
+		console.warn(sentry);
+		if (proxyErrors.length) {
+			// TODO: log to sentry + remove from list after log
+		}
 
-	const useNuxt =
-		req.method === "GET" && (isNuxtRoute(req.url) || isStaticFile(req.url));
-	if (useNuxt) {
-		return next();
-	} else {
-		return proxyInstance(req, res, next);
-	}
-}
+		const useNuxt =
+			req.method === "GET" && (isNuxtRoute(req.url) || isStaticFile(req.url));
+		if (useNuxt) {
+			return next();
+		} else {
+			return proxyInstance(req, res, next);
+		}
+	};
