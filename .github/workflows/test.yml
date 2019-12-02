@@ -23,6 +23,8 @@ jobs:
         run: npm run test:ci
       - name: codecov
         run: npx codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   lint:
     strategy:
       matrix:
