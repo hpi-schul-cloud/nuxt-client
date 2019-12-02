@@ -51,6 +51,9 @@ export default {
 	components: {
 		RenderHtml,
 	},
+	validate({ params }) {
+		return /^[a-z0-9]{24}$/.test(params.id);
+	},
 	async asyncData({ store, params }) {
 		return {
 			news: await store.dispatch("news/get", params.id),
