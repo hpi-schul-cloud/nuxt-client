@@ -2,19 +2,10 @@ import { storiesOf } from "@storybook/vue";
 import { text, select, boolean, array } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
-import BaseInput from "./BaseInput";
+import BaseInput, { supportedTypes } from "./BaseInput";
 import BaseIcon from "@basecomponents/BaseIcon";
 
-const defaultTypes = [
-	"email",
-	"password",
-	"search",
-	"tel",
-	"text",
-	"textarea",
-	"url",
-	"number",
-].reduce((obj, val) => {
+const defaultTypes = supportedTypes.reduce((obj, val) => {
 	obj[val] = val;
 	return obj;
 }, {});
