@@ -15,9 +15,7 @@ jobs:
       - name: npm run test:unit
         run: npm run test:ci
       - name: codecov
-        run: |
-          npm i -g codecov
-          codecov
+        run: npx codecov
   lint:
     strategy:
       matrix:
