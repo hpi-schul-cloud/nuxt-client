@@ -11,18 +11,28 @@
 import { mapGetters } from "vuex";
 
 export default {
+	async asyncData({ store, params }) {
+		return {
+			lessons: await store.dispatch("lessons/find", {
+				query: {
+					courseId: params.id,
+				},
+			}),
+			homeworks: await store.dispatch("homeworks/find", {
+				query: {
+					courseId: params.id,
+				},
+			}),
+			courseGroups: await store.dispatch("course-groups/find", {
+				query: {
+					courseId: params.id,
+				},
+			}),
+		};
+	},
 	computed: {
 		...mapGetters("courses", {
 			course: "current",
-		}),
-		...mapGetters("lessons", {
-			lessons: "list",
-		}),
-		...mapGetters("homeworks", {
-			homeworks: "list",
-		}),
-		...mapGetters("course-groups", {
-			courseGroups: "list",
 		}),
 		breadcrumbs() {
 			return [
@@ -36,34 +46,10 @@ export default {
 	},
 	created(ctx) {
 		this.getCourse(this.$route.params.id);
-		this.getLessons(this.$route.params.id);
-		this.getHomeworks(this.$route.params.id);
-		this.getCourseGroups(this.$route.params.id);
 	},
 	methods: {
 		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
-		},
-		getLessons(id) {
-			this.$store.dispatch("lessons/find", {
-				query: {
-					courseId: id,
-				},
-			});
-		},
-		getHomeworks(id) {
-			this.$store.dispatch("homeworks/find", {
-				query: {
-					courseId: id,
-				},
-			});
-		},
-		getCourseGroups(id) {
-			this.$store.dispatch("course-groups/find", {
-				query: {
-					courseId: id,
-				},
-			});
 		},
 	},
 };
