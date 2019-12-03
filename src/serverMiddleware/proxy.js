@@ -5,17 +5,12 @@ const proxy = require("http-proxy-middleware");
 
 const nuxtConfig = require("../../nuxt.config.js");
 
-const proxyErrors = [];
-
 const proxyOptions = {
 	changeOrigin: true,
 	target: process.env.LEGACY_CLIENT_URL || "http://localhost:3100",
-	logLevel: process.env.PROXY_LOG_LEVEL || "warn",
+	logLevel: process.env.PROXY_LOG_LEVEL || "silent",
 	onError: (err, req, res) => {
-		proxyErrors.push({
-			err,
-			path: path,
-		});
+		console.error("Error occurred while trying to proxy request");
 		res.writeHead(302, {
 			Location: "/error/proxy",
 		});
@@ -51,22 +46,16 @@ const staticFiles = glob
 
 const isStaticFile = (url) => staticFiles.includes(url);
 
-export default (sentry) =>
-	async function(req, res, next) {
-		if (process.env.FALLBACK_DISABLED === "true") {
-			return next();
-		}
-		// TODO for testing only
-		console.warn(sentry);
-		if (proxyErrors.length) {
-			// TODO: log to sentry + remove from list after log
-		}
+export default async function(req, res, next) {
+	if (process.env.FALLBACK_DISABLED === "true") {
+		return next();
+	}
 
-		const useNuxt =
-			req.method === "GET" && (isNuxtRoute(req.url) || isStaticFile(req.url));
-		if (useNuxt) {
-			return next();
-		} else {
-			return proxyInstance(req, res, next);
-		}
-	};
+	const useNuxt =
+		req.method === "GET" && (isNuxtRoute(req.url) || isStaticFile(req.url));
+	if (useNuxt) {
+		return next();
+	} else {
+		return proxyInstance(req, res, next);
+	}
+}
