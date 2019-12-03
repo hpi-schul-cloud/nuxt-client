@@ -2,19 +2,10 @@ import { storiesOf } from "@storybook/vue";
 import { text, select, boolean, array } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
-import BaseInput from "./BaseInput";
+import BaseInput, { supportedTypes } from "./BaseInput";
 import BaseIcon from "@basecomponents/BaseIcon";
 
-const defaultTypes = [
-	"email",
-	"password",
-	"search",
-	"tel",
-	"text",
-	"textarea",
-	"url",
-	"number",
-].reduce((obj, val) => {
+const defaultTypes = supportedTypes.reduce((obj, val) => {
 	obj[val] = val;
 	return obj;
 }, {});
@@ -27,9 +18,9 @@ storiesOf("Base|Inputs/Default", module)
 		components: { BaseInput },
 		data: () => ({
 			type: select("Type", defaultTypes, "text"),
-			vmodel: text("Value", ""),
-			label: text("Label", "Label"),
-			placeholder: text("Placeholder", "Placeholder"),
+			vmodel: text("value", ""),
+			label: text("label", "Label"),
+			placeholder: text("placeholder", "Placeholder"),
 			info: text("info", "Info"),
 			hint: text("hint", "Hint"),
 		}),
@@ -101,6 +92,20 @@ storiesOf("Base|Inputs", module)
 	.addParameters({
 		notes,
 	})
+	.add("Multiple", () => ({
+		components: { BaseInput },
+		data: () => ({
+			type: select("Type", defaultTypes, "text"),
+			vmodel: text("value", ""),
+			label: text("label", "Label"),
+			placeholder: text("placeholder", "Placeholder"),
+			info: text("info", "Info"),
+			hint: text("hint", "Hint"),
+		}),
+		template: `<div style="max-width: 300px">
+			<base-input v-for="i in [0,0,0,0,0]" :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint"/>
+		</div>`,
+	}))
 	.add("Checkbox", () => ({
 		components: { BaseInput },
 		data: () => ({
@@ -161,4 +166,26 @@ storiesOf("Base|Inputs", module)
 				<p> {{ vmodel}} </p>
 			</div>
 		`,
+	}))
+	.add("Date", () => ({
+		components: { BaseInput },
+		data: () => ({
+			vmodel: text("Value", "31.12.2019"),
+			label: text("Label", "Label"),
+			placeholder: text("Placeholder", "Placeholder"),
+			info: text("info", "Info"),
+			hint: text("hint", "Hint"),
+		}),
+		template: `<base-input type="date" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint"/>`,
+	}))
+	.add("Time", () => ({
+		components: { BaseInput },
+		data: () => ({
+			vmodel: text("Value", "15:00"),
+			label: text("Label", "Label"),
+			placeholder: text("Placeholder", "Placeholder"),
+			info: text("info", "Info"),
+			hint: text("hint", "Hint"),
+		}),
+		template: `<base-input type="time" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint"/>`,
 	}));

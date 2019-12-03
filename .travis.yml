@@ -51,11 +51,6 @@ jobs:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
     # Test
-    - script: npm run test:ci
-      name: "test:unit"
-      after_success:
-        - npm i -g codecov
-        - codecov
     - script:
         - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
         - chmod 700 integration-test.sh
@@ -73,9 +68,6 @@ jobs:
       after_script:
         - npm i -g @adrianjost/report-viewer
         - rv-upload -F **/reports/**/*.html
-    # Lint
-    - script: npm run lint:ci
-      name: "lint"
 
     # Build Docker Images
     - stage: build
