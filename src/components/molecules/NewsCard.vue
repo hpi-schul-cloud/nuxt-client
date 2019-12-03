@@ -50,7 +50,7 @@
 				</div>
 			</template>
 
-			<template v-slot:footer>
+			<template v:slot:footer>
 				<div v-if="eventDate" class="footer">
 					<hr class="footer__line" />
 					<base-icon
@@ -147,7 +147,7 @@ export default {
 	display: flex;
 	align-items: center;
 	width: 100%;
-	height: 28px;
+	height: 30px;
 	overflow: hidden;
 	border-top-left-radius: var(--radius-sm);
 	&__tab {
