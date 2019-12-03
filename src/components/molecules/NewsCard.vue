@@ -2,14 +2,20 @@
 	<base-link :to="{ name: 'news-id', params: { id: id } }" :no-underline="true">
 		<base-card v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
 			<template v:slot:header>
-				<div v-if="category !== undefined" class="header">
+				<div class="header">
 					<card-tab
 						:class="
 							!isLandscape ? 'header__tab' : 'header__tab landscape-mode__tab'
 						"
 						:background-style="tabBackground"
-						>{{ category }}</card-tab
 					>
+						<span v-if="category !== undefined">
+							{{ category }}
+						</span>
+						<span v-else>
+							{{ $t("components.organisms.NewsCard.tabDefault") }}
+						</span>
+					</card-tab>
 				</div>
 			</template>
 

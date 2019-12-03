@@ -14,6 +14,7 @@ export default {
 		FloatingFab,
 		GridNews,
 	},
+	layout: "loggedInFull",
 	async asyncData({ store }) {
 		return {
 			published: (await store.dispatch("news/find", {

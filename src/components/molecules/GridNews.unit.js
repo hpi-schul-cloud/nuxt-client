@@ -33,7 +33,7 @@ describe("@components/GridNews", () => {
 	it("should render all news cards", () => {
 		const news = NewsFactory(20);
 		const wrapper = mount(GridNews, {
-			...createComponentMocks({ router: true }),
+			...createComponentMocks({ router: true, i18n: true }),
 			propsData: {
 				news,
 			},
@@ -46,7 +46,7 @@ describe("@components/GridNews", () => {
 	it("should render all news in landscape", () => {
 		const news = NewsFactory(20);
 		const wrapper = mount(GridNews, {
-			...createComponentMocks({ router: true }),
+			...createComponentMocks({ router: true, i18n: true }),
 			propsData: {
 				news,
 				listView: true,
