@@ -1,9 +1,9 @@
-branches:
-  only:
-    - develop
-    - master
-    - /^(?i:release|hotfix).*$/
-    - /^greenkeeper/.*$/
+# branches:
+#   only:
+#     - develop
+#     - master
+#     - /^(?i:release|hotfix).*$/
+#     - /^greenkeeper/.*$/
 language: node_js
 node_js:
   - lts/*
