@@ -19,32 +19,28 @@
 	&.is-hero-cta {
 		--button-background: var(--color-primary);
 		--button-text-color: var(--color-white);
-		&:hover,
-		&:focus {
+		&:hover {
 			--button-background: var(--color-primary-dark);
 		}
 	}
 	&.is-secondary {
 		--button-background: var(--color-secondary);
 		--button-text-color: var(--color-white);
-		&:hover,
-		&:focus {
+		&:hover {
 			--button-background: var(--color-secondary-dark);
 		}
 	}
 	&.is-success {
 		--button-background: var(--color-success);
 		--button-text-color: var(--color-white);
-		&:hover,
-		&:focus {
+		&:hover {
 			--button-background: var(--color-success--dark);
 		}
 	}
 	&.is-danger {
 		--button-background: var(--color-danger);
 		--button-text-color: var(--color-white);
-		&:hover,
-		&:focus {
+		&:hover {
 			--button-background: var(--color-danger--dark);
 		}
 	}
@@ -58,8 +54,7 @@
 
 		border: 0;
 
-		&:hover,
-		&:focus {
+		&:hover {
 			--button-background: linear-gradient(
 				45deg,
 				var(--color-primary-dark),
@@ -130,11 +125,13 @@
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1);
 
-	&:hover,
+	&:hover {
+		--button-background: var(--color-tertiary-dark);
+	}
+
 	&:focus {
 		outline: none;
-
-		--button-background: var(--color-tertiary-dark);
+		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--button-background);
 	}
 
 	// defined multiple times to seperate style from behaviour
@@ -144,9 +141,7 @@
 		background: var(--color-white);
 		border: 1px solid var(--button-background);
 
-		&:hover,
-		&:focus {
-			// increase border size to increase visiblity
+		&:hover {
 			box-shadow: 0 0 0 1px var(--button-background);
 		}
 	}
@@ -157,8 +152,7 @@
 		background: transparent;
 		border: 1px solid transparent;
 
-		&:hover,
-		&:focus {
+		&:hover {
 			background-color: var(--color-gray-light);
 			box-shadow: none;
 		}
@@ -181,4 +175,7 @@
 .is-hero-cta,
 .is-fancy {
 	box-shadow: var(--shadow-xl);
+	&:focus {
+		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-primary);
+	}
 }
