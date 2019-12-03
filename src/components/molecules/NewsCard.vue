@@ -3,16 +3,13 @@
 		<base-card v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
 			<template v:slot:header>
 				<div v-if="category !== undefined" class="header">
-					<div
+					<card-tab
 						:class="
 							!isLandscape ? 'header__tab' : 'header__tab landscape-mode__tab'
 						"
-						:style="tabBackground"
+						:background-style="tabBackground"
+						>{{ category }}</card-tab
 					>
-						<div class="header__tab-content">
-							{{ category }}
-						</div>
-					</div>
 				</div>
 			</template>
 
@@ -72,6 +69,7 @@
 </template>
 
 <script>
+import CardTab from "@components/atoms/CardTab";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
@@ -79,6 +77,9 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
+	components: {
+		CardTab,
+	},
 	props: {
 		id: { type: String, required: true },
 		category: { type: String, default: undefined },
@@ -102,7 +103,11 @@ export default {
 		},
 		color: {
 			type: String,
-			default: "#412363",
+			default: "#671E41",
+		},
+		colorGradient: {
+			type: String,
+			default: "#CE126D",
 		},
 		isLandscape: {
 			type: Boolean,
@@ -118,7 +123,17 @@ export default {
 			return `background-image: linear-gradient(to left, rgba(245, 246, 252, 0.0) 0%, ${this.color} 70%);`;
 		},
 		tabBackground() {
-			return `background-color: ${this.color};`;
+			if (this.colorGradient) {
+				return (
+					"background-image: linear-gradient(-225deg, " +
+					this.color +
+					" 0%, " +
+					this.colorGradient +
+					" 100%);"
+				);
+			} else {
+				return "background-color: " + this.color + ";";
+			}
 		},
 	},
 };
@@ -128,36 +143,15 @@ export default {
 @import "@styles-default/utility/multiline-ellipsis";
 
 .header {
+	position: relative;
 	display: flex;
 	align-items: center;
 	width: 100%;
+	height: 28px;
 	overflow: hidden;
 	border-top-left-radius: var(--radius-sm);
 	&__tab {
 		width: 50%;
-		padding-left: var(--space-sm);
-		overflow-x: hidden;
-		border-top-right-radius: var(--radius-sm);
-		transform: skewX(25deg);
-		transform-origin: bottom;
-		&::before {
-			position: absolute;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			content: "";
-			background: var(--color-black);
-			opacity: 0.5;
-		}
-		&-content {
-			width: 100%;
-			padding: var(--space-xs-4) 0;
-			font-size: var(--text-sm);
-			color: var(--color-white);
-			transform: skewX(-25deg);
-			transform-origin: bottom left;
-		}
 	}
 }
 .content {
@@ -182,14 +176,14 @@ export default {
 		}
 		img {
 			width: 100%;
-			height: 11rem;
+			height: 8rem;
 			border-radius: var(--radius-sm);
 			object-fit: cover;
 		}
 	}
 	&__text {
 		&-info {
-			padding-bottom: var(--space-xs);
+			padding: var(--space-xs) 0;
 			margin: 0;
 			font-size: var(--text-sm);
 			color: var(--color-gray-dark);
@@ -199,11 +193,7 @@ export default {
 			font-weight: var(--font-weight-bold);
 			color: var(--color-black);
 
-			@include excerpt(
-				$font-size: var(--heading-4),
-				$line-height: var(--line-height-sm),
-				$lines-to-show: 1
-			);
+			@include excerpt($font-size: var(--heading-5), $lines-to-show: 1);
 		}
 		&-content {
 			margin: 0;
@@ -211,7 +201,7 @@ export default {
 
 			@include excerpt(
 				$font-size: var(--text-sm),
-				$line-height: var(--line-height-lg),
+				$line-height: 1.5rem,
 				$lines-to-show: 3
 			);
 		}
@@ -242,7 +232,7 @@ export default {
 		flex-direction: row;
 		flex-wrap: nowrap;
 		&-picture {
-			flex: 0 1 33%;
+			flex: 0 1 45%;
 			img {
 				height: 8.2rem;
 			}
