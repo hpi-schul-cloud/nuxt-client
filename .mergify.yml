@@ -5,6 +5,18 @@ pull_request_rules:
       - label!=waiting
       - label=ready to merge
       - status-success~=Travis CI
+
+      # make sure the complete matrix passed
+      - status-success~=lint
+      - -status-neutral~=lint
+      - -status-failure~=lint
+      - status-success~=test-unit
+      - -status-neutral~=test-unit
+      - -status-failure~=test-unit
+      # - status-success~=build
+      # - -status-neutral~=build
+      # - -status-failure~=build
+
       - status-success=Mergeable
       - status-success=codecov/project
     actions:

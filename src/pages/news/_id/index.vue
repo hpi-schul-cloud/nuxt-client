@@ -22,11 +22,10 @@
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
 			<hr />
-			<base-link :to="{ name: 'news-id-edit' }">
-				<base-button>
-					{{ $t("pages.news._id.index.edit") }}
-				</base-button>
-			</base-link>
+
+			<base-button :to="{ name: 'news-id-edit' }">
+				{{ $t("pages.news._id.index.edit") }}
+			</base-button>
 		</section>
 	</div>
 </template>
@@ -39,6 +38,9 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
+	validate({ params }) {
+		return /^[a-z0-9]{24}$/.test(params.id);
+	},
 	async asyncData({ store, params }) {
 		return {
 			news: await store.dispatch("news/get", params.id),
