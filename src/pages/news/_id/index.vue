@@ -37,6 +37,9 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
+	validate({ params }) {
+		return /^[a-z0-9]{24}$/.test(params.id);
+	},
 	async asyncData({ store, params }) {
 		return {
 			news: await store.dispatch("news/get", params.id),

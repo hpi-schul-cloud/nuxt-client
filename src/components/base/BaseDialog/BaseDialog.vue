@@ -25,7 +25,7 @@
 					{{ cancelText }}
 				</base-button>
 				<base-button
-					:design="actionDesign ? 'text' : actionDesign"
+					:design="invertedDesign ? 'text' : actionDesign"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
 				>
@@ -135,12 +135,14 @@ export default {
 		close() {
 			this.isActive = false;
 			// Timeout for the animation complete before destroying
-			this.$destroy();
-			if (typeof this.$el.remove !== "undefined") {
-				this.$el.remove();
-			} else if (typeof el.parentNode !== "undefined") {
-				this.$el.parentNode.removeChild(el);
-			}
+			setTimeout(() => {
+				this.$destroy();
+				if (typeof this.$el.remove !== "undefined") {
+					this.$el.remove();
+				} else if (typeof el.parentNode !== "undefined") {
+					this.$el.parentNode.removeChild(el);
+				}
+			}, 2000);
 		},
 	},
 };

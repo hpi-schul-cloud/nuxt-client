@@ -54,6 +54,17 @@ describe("@components/BaseDialog", () => {
 			};
 			return Promise.all(["success", "danger", "primary"].map(testWithDesign));
 		});
+		it("passes correct button designs", async () => {
+			const wrapper = await mountDialog({
+				propsData: {
+					actionDesign: "success",
+				},
+			});
+			const confirmBtn = wrapper.find(`[data-testid="btn-dialog-confirm"]`);
+			const cancelBtn = wrapper.find(`[data-testid="btn-dialog-cancel"]`);
+			expect(confirmBtn.classes("is-success")).toBe(true);
+			expect(cancelBtn.classes("is-text")).toBe(true);
+		});
 		it("invertedDesign: true switches the confirm and cancel button design", async () => {
 			const wrapper = await mountDialog({
 				propsData: {

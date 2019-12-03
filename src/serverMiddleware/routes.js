@@ -8,10 +8,8 @@ const mongoId = "[a-z0-9]{24}";
 module.exports = [
 	`^/error/`,
 	`^/imprint/?`,
-	`^/news/${mongoId}/?$`,
+	// `^/news/${mongoId}/?$`,
 	`^/news/${mongoId}/edit`,
 	`^/news/new`,
 	`^/nuxtversion/?$`,
-	// `^/news`,
-	// or: `^/news/${mongoId}/edit`,
 ];
