@@ -40,6 +40,10 @@ jobs:
       name: "build:nuxt:open"
       env:
         - SC_THEME=open
+    - script: echo $SHA && git reset --hard $SHA && git show
+      name: "GIT CHECKOUT"
+      env:
+        - SHA=${TRAVIS_PULL_REQUEST_SHA:=$TRAVIS_COMMIT}
     - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
       after_success:
