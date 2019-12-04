@@ -1,19 +1,21 @@
 <template>
-	<BaseGrid :column-width="listView ? '100%' : '14rem'">
-		<news-card
-			v-for="article of news"
-			:id="article._id"
-			:key="article._id"
-			:category="article.category"
-			:title="article.title"
-			:created-at="article.displayAt || article.createdAt"
-			:created-by="getNewsAuthor(article)"
-			:picture="getFirstImage(article)"
-			:event-date="article.eventDate"
-			:is-landscape="listView"
-			:content="article.content"
-		/>
-	</BaseGrid>
+	<component :is="listView ? 'BaseContentContainer' : 'div'">
+		<BaseGrid :column-width="listView ? '100%' : '14rem'">
+			<news-card
+				v-for="article of news"
+				:id="article._id"
+				:key="article._id"
+				:category="article.category"
+				:title="article.title"
+				:created-at="article.displayAt || article.createdAt"
+				:created-by="getNewsAuthor(article)"
+				:picture="getFirstImage(article)"
+				:event-date="article.eventDate"
+				:is-landscape="listView"
+				:content="article.content"
+			/>
+		</BaseGrid>
+	</component>
 </template>
 
 <script>

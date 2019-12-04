@@ -1,18 +1,46 @@
 <template>
 	<div>
-		<floating-fab icon="add" to="/news/new" />
-		<grid-news :news="published" :list-view="isList" />
+		<user-has-permission permission="NEWS_CREATE">
+			<floating-fab icon="add" to="/news/new" />
+		</user-has-permission>
+
+		<user-has-permission permission="NEWS_CREATE">
+			<template #true>
+				<div>
+					<list-grid-view-toggle v-model="viewType" class="view-toggle" />
+					<tabs>
+						<tab name="Veröffentlicht">
+							<grid-news :news="published" :list-view="isListView" />
+						</tab>
+						<tab name="Unveröffentlicht">
+							<grid-news :news="unpublished" :list-view="isListView" />
+						</tab>
+					</tabs>
+				</div>
+			</template>
+			<template #false>
+				<grid-news :news="published" :list-view="isListView" />
+			</template>
+		</user-has-permission>
 	</div>
 </template>
 
 <script>
 import FloatingFab from "@components/molecules/FloatingFab";
 import GridNews from "@components/molecules/GridNews";
+import ListGridViewToggle from "@components/molecules/ListGridViewToggle";
+import Tab from "@components/atoms/Tab";
+import Tabs from "@components/organisms/Tabs/Tabs";
+import UserHasPermission from "@components/helpers/UserHasPermission";
 
 export default {
 	components: {
 		FloatingFab,
 		GridNews,
+		ListGridViewToggle,
+		Tab,
+		Tabs,
+		UserHasPermission,
 	},
 	layout: "loggedInFull",
 	async asyncData({ store }) {
@@ -33,12 +61,12 @@ export default {
 	},
 	data: function() {
 		return {
-			isList: false,
+			viewType: "grid",
 		};
 	},
-	methods: {
-		toDisplayStyle(newStyle) {
-			this.isList = newStyle === "list";
+	computed: {
+		isListView() {
+			return this.viewType === "list";
 		},
 	},
 	head() {
@@ -51,16 +79,13 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.view-toggles {
-	display: none;
-
-	@include breakpoint(tablet) {
-		display: inline;
-		float: right;
-	}
-}
-
 .create-news-btn {
 	margin-left: var(--space-md);
+}
+
+.view-toggle {
+	display: block;
+	margin-left: var(--space-md);
+	text-align: right;
 }
 </style>
