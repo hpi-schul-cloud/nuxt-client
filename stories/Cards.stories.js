@@ -40,7 +40,7 @@ storiesOf("Cards", module)
 			},
 		}),
 	}))
-	.add("Newscard", () => ({
+	.add("NewsCard", () => ({
 		components: { NewsCard },
 		data: () => ({
 			title: text("title", "Title"),
