@@ -46,7 +46,7 @@
 						<p class="content__text-info"
 							>{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</p
 						>
-						<h2 class="h4">{{ title }}</h2>
+						<h2 class="h4 content__text-title">{{ title }}</h2>
 						<p class="content__text-content">
 							<slot>
 								{{ content | striphtml }}
@@ -157,7 +157,7 @@ export default {
 	overflow: hidden;
 	border-top-left-radius: var(--radius-sm);
 	&__tab {
-		width: 50%;
+		width: 80%;
 	}
 }
 .content {
@@ -195,11 +195,7 @@ export default {
 			color: var(--color-gray-dark);
 		}
 		&-title {
-			margin: 0;
-			font-weight: var(--font-weight-bold);
-			color: var(--color-black);
-
-			@include excerpt($font-size: var(--heading-5), $lines-to-show: 1);
+			margin: 0 !important;
 		}
 		&-content {
 			margin: 0;
@@ -208,7 +204,7 @@ export default {
 			@include excerpt(
 				$font-size: var(--text-sm),
 				$line-height: 1.5rem,
-				$lines-to-show: 3
+				$lines-to-show: 5
 			);
 		}
 	}
