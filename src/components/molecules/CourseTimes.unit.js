@@ -67,37 +67,20 @@ describe("@components/molecules/CourseTimes", () => {
 		expect(wrapper.vm.value.length).toBe(1);
 	});
 
-	/*
-	TODO test is broken
-	it("changing the element's value, updates the v-model", () => {
-		const wrapper = mount(
-			{
-				data: () => ({
-					content: [
-						{
-							weekday: "Dienstag",
-							startTime: "08:00",
-							duration: 60,
-							room: "H1",
-						},
-					],
-				}),
-				template: `<course-times v-model="content" />`,
-				components: { CourseTimes },
-			},
-			{
-				...createComponentMocks({
-					stubs: {
-						BaseInput: {
-							template: "<input />",
-						},
-					},
-				}),
-			}
-		);
-		const input = wrapper.find(`input[name="duration"]`);
-		input.setValue("65");
-		expect(wrapper.vm.content[0].duration).toBe(65);
+// TODO: currently broken on windows
+xit("changing the element's value, updates the v-model", () => {
+	const wrapper = mount({
+		data: () => ({
+			content: [
+				{
+					weekday: "Dienstag",
+					startTime: "08:00",
+					duration: 60,
+					room: "H1",
+				},
+			],
+		}),
+		template: `<course-times v-model="content" />`,
+		components: { CourseTimes },
 	});
-	*/
 });

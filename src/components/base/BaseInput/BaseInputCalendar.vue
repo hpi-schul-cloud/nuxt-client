@@ -76,7 +76,8 @@ export default {
 @import "@styles";
 
 .calendar-input /deep/ {
-	.flatpickr-input {
+	.flatpickr-input,
+	input {
 		display: block;
 		width: 100%;
 		border: 0;
@@ -87,10 +88,6 @@ export default {
 		&::placeholder {
 			color: var(--color-gray);
 		}
-	}
-	input {
-		width: 100%;
-		border: none;
 		&:focus {
 			outline: none;
 		}
