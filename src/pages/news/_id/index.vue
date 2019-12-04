@@ -56,10 +56,5 @@ export default {
 			title: (this.news || {}).title || "News",
 		};
 	},
-	head() {
-		return {
-			title: (this.news || {}).title || "News",
-		};
-	},
 };
 </script>
