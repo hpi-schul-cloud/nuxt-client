@@ -46,7 +46,7 @@
 						<p class="content__text-info"
 							>{{ dayjs(createdAt).fromNow() }} von {{ createdBy }}</p
 						>
-						<p class="content__text-title">{{ title }}</p>
+						<h2 class="h4">{{ title }}</h2>
 						<p class="content__text-content">
 							<slot>
 								{{ content | striphtml }}
