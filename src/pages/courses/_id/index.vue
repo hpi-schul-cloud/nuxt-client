@@ -11,6 +11,25 @@
 import { mapGetters } from "vuex";
 
 export default {
+	async asyncData({ store, params }) {
+		return {
+			lessons: await store.dispatch("lessons/find", {
+				query: {
+					courseId: params.id,
+				},
+			}),
+			homeworks: await store.dispatch("homeworks/find", {
+				query: {
+					courseId: params.id,
+				},
+			}),
+			courseGroups: await store.dispatch("course-groups/find", {
+				query: {
+					courseId: params.id,
+				},
+			}),
+		};
+	},
 	computed: {
 		...mapGetters("courses", {
 			course: "current",
@@ -26,10 +45,10 @@ export default {
 		},
 	},
 	created(ctx) {
-		this.get(this.$route.params.id);
+		this.getCourse(this.$route.params.id);
 	},
 	methods: {
-		get(id) {
+		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
 		},
 	},
