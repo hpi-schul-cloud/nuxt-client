@@ -22,7 +22,7 @@ jobs:
       - name: npm run test:unit
         run: npm run test:ci
         env:
-          TZ: UTC+1
+          TZ: CET
       - name: codecov
         run: npx codecov
         env:
