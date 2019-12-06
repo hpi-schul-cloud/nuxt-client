@@ -18,23 +18,6 @@ import CourseWizard from "@components/organisms/CourseWizard";
 
 export default {
 	components: { CourseWizard },
-	data() {
-		return {
-			stepList: [
-				{ name: "Kursdaten" },
-				{ name: "Kurs-Mitglieder" },
-				{ name: "Abschließen" },
-			],
-			course: {
-				teachers: [],
-			},
-		};
-	},
-	computed: {
-		...mapGetters("classes", {
-			classes: "list",
-		}),
-	},
 	async asyncData({ store }) {
 		try {
 			const teacherRole = (await store.dispatch("roles/find", {
@@ -42,31 +25,14 @@ export default {
 					name: "teacher",
 				},
 			})).data[0];
+			const teachers = await store.dispatch("users/getByRole", teacherRole);
 
-			// TODO @domi studentsRole is unused, can we remove it?
-			/*
 			const studentsRole = (await store.dispatch("roles/find", {
 				query: {
 					name: "student",
 				},
 			})).data[0];
-		*/
-			const queryTeachers = {
-				roles: [teacherRole._id],
-			};
-			const teachers = (await store.dispatch("users/find", {
-				query: queryTeachers,
-			})).data;
-
-			// TODO @domi queryStudents is unused, can we remove it?
-			/*
-			const queryStudents = {
-				roles: [studentsRole._id],
-			};
-			*/
-			const students = (await store.dispatch("users/find", {
-				query: {}, // queryStudents,
-			})).data;
+			const students = await store.dispatch("users/getByRole", studentsRole);
 
 			await store.dispatch("classes/find");
 
@@ -76,6 +42,31 @@ export default {
 			};
 		} catch (err) {}
 	},
+	data() {
+		return {
+			stepList: [
+				{ name: "Kursdaten" },
+				{ name: "Kurs-Mitglieder" },
+				{ name: "Abschließen" },
+			],
+			course: {
+				name: "",
+				description: "",
+				startDate: "",
+				untilDate: "",
+				times: [],
+				teacherIds: [],
+				substitutionIds: [],
+				userIds: [],
+				classIds: [],
+			},
+		};
+	},
+	computed: {
+		...mapGetters("classes", {
+			classes: "list",
+		}),
+	},
 	created() {
 		this.course.schoolId = this.$user.schoolId;
 	},
@@ -83,23 +74,8 @@ export default {
 		async create() {
 			const { course } = this;
 
-			course.times = this.course.times.map((time) => {
-				let [startHours, startMinutes] = time.startTime.split(":");
-				startMinutes = startMinutes * 60 * 1000;
-				startHours = startHours * 60 * 60 * 1000;
-				time.startTime = startHours + startMinutes;
-				time.duration = (time.duration * 60 * 1000).toString();
-				time.weekday = time.weekday.value;
-				return time;
-			});
-
-			(course.teacherIds = course.teachers),
-				(course.substitutionIds = course.substitutions),
-				(course.classIds = course.classes),
-				(course.userIds = course.students);
-
 			try {
-				await course.create();
+				await this.$store.dispatch("courses/create", course);
 				this.$toast.success("Kurs erstellt");
 			} catch (e) {
 				console.error(e);

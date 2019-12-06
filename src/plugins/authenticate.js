@@ -1,13 +1,13 @@
-export default async ({ app, store }) => {
+export default async ({ app, store, route }) => {
+	const isPublic = route.meta.some((meta) => meta.isPublic);
 	try {
 		const jwt = app.$cookies.get("jwt");
-		if (!jwt) {
-			store.dispatch("auth/logout");
+		if (!jwt & !isPublic) {
+			await store.dispatch("auth/logout");
+			window.location = "/";
 		}
-
 		store.commit("auth/setAccessToken", jwt);
-		//removed while the legacy client login is in place
-		//await store.dispatch("auth/authenticate");
+		await store.dispatch("auth/authenticate");
 	} catch (e) {
 		store.dispatch("auth/logout");
 	}

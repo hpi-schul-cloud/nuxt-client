@@ -8,7 +8,14 @@ const nuxtConfig = require("../../nuxt.config.js");
 const proxyOptions = {
 	changeOrigin: true,
 	target: process.env.LEGACY_CLIENT_URL || "http://localhost:3100",
-	logLevel: process.env.PROXY_LOG_LEVEL || "warn",
+	logLevel: process.env.PROXY_LOG_LEVEL || "silent",
+	onError: (err, req, res) => {
+		console.error("Error occurred while trying to proxy request");
+		res.writeHead(302, {
+			Location: "/error/proxy",
+		});
+		res.end();
+	},
 };
 const proxyInstance = proxy(proxyOptions);
 

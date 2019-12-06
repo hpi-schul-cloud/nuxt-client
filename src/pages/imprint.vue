@@ -1,12 +1,14 @@
 <template>
-	<section class="section">
-		<div class="columns is-mobile">
-			<h1>Imprint - {{ $theme.short_name }}</h1>
-		</div>
-	</section>
+	<impressum />
 </template>
+
 <script>
+import Impressum from "@components/templates/impressum";
+
 export default {
-	components: {},
+	components: { Impressum },
+	meta: {
+		isPublic: true,
+	},
 };
 </script>

@@ -10,9 +10,10 @@
 	"files.eol": "\n",
 	"files.insertFinalNewline": true,
 	"files.trimFinalNewlines": true,
-	"prettier.useTabs": true,
 	"vetur.format.options.useTabs": true,
 	"scssFormatter.useTabs": true,
+	"prettier.configPath": ".prettierrc.js",
+	"prettier.ignorePath": ".prettierignore",
 
 	// ===
 	// Files
@@ -31,6 +32,11 @@
 		".git/*": true,
 		".nuxt/*": true,
 		"src/legacy-client/*": true
+	},
+
+	"files.associations": {
+		"Dockerfile.*": "dockerfile",
+		"compose-*.dummy": "yaml"
 	},
 
 	// ===
@@ -63,7 +69,6 @@
 		}
 	],
 	"vetur.completion.useScaffoldSnippets": false,
-	"prettier.disableLanguages": [],
 	"trailing-spaces.trimOnSave": true,
 
 	// ===

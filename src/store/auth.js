@@ -1,8 +1,9 @@
-const endpoint = "/authentication";
+// const endpoint = "/authentication";
 var jwtDecode = require("jwt-decode");
 
 export const actions = {
 	async authenticate({ dispatch }) {
+		/*
 		const res = await this.$axios.$post(endpoint, {
 			strategy: "jwt",
 		});
@@ -18,15 +19,17 @@ export const actions = {
 			throw new Error("No userId found in JWT token");
 			return;
 		}
-
-		dispatch("populateUser", payload.userId);
-		return res;
+		*/
+		const jwt = this.$cookies.get("jwt");
+		if (!jwt) {
+			throw new Error("No Accesstoken received");
+		}
+		const payload = jwtDecode(jwt);
+		return dispatch("populateUser", payload.userId);
+		//return res;
 	},
 	async logout(ctx) {
 		this.$cookies.remove("jwt");
-		if (location && !location.pathname.endsWith("/login")) {
-			window.location = "/login";
-		}
 	},
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
@@ -34,6 +37,13 @@ export const actions = {
 		if (user.schoolId) {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
 			commit("setSchool", school);
+		}
+		//TODO Remove once added to User permissions SC-2401
+		if (process.env["FEATURE_EXTENSIONS_ENABLED"] === "true") {
+			commit("addUserPermission", "ADDONS_ENABLED");
+		}
+		if (process.env["FEATURE_TEAMS_ENABLED"] === "true") {
+			commit("addUserPermission", "TEAMS_ENABLED");
 		}
 		return user;
 	},
@@ -72,6 +82,9 @@ export const mutations = {
 	},
 	setAccessToken(state, payload) {
 		state.accessToken = payload;
+	},
+	addUserPermission(state, permission) {
+		state.user.permissions.push(permission);
 	},
 };
 

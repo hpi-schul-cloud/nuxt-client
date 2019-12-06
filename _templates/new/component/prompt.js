@@ -23,6 +23,42 @@ module.exports = [
 		},
 	},
 	{
+		type: "select",
+		name: "type",
+		message: "Type:",
+		initial: "atoms",
+		choices: [
+			{
+				name: "atoms",
+				message: "atom",
+			},
+			{
+				name: "base",
+				message: "base",
+			},
+			{
+				name: "helpers",
+				message: "helper",
+			},
+			{
+				name: "legacy",
+				message: "legacy",
+			},
+			{
+				name: "molecules",
+				message: "molecule",
+			},
+			{
+				name: "organisms",
+				message: "organism",
+			},
+			{
+				name: "templates",
+				message: "template",
+			},
+		],
+	},
+	{
 		type: "multiselect",
 		name: "blocks",
 		message: "Blocks:",
@@ -52,5 +88,10 @@ module.exports = [
 		type: "Confirm",
 		name: "story",
 		message: "Story generation?",
+	},
+	{
+		type: "Confirm",
+		name: "storynotes",
+		message: "with notes?",
 	},
 ];

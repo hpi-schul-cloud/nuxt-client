@@ -1,0 +1,10 @@
+{
+	"error.400": "400 - Fehlerhafte Anfrage",
+	"error.401": "401 - Das dürfen wir dir leider nicht zeigen",
+	"error.404": "404 - Seite nicht gefunden",
+	"pages.courses.new.btn_new": "Erstelle neuen Kurs",
+	"pages.impressum.title": "Impressum",
+	"pages.news._id.index.edit": "Artikel bearbeiten",
+	"pages.news.title": "Neuigkeiten",
+	"storybook.lang": "Ich bin jetzt auf Deutsch!"
+}

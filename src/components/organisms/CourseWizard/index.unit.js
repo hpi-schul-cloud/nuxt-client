@@ -9,6 +9,17 @@ describe("@components/organisms/CourseWizard", () => {
 				user: {
 					_id: "test1",
 				},
+				course: {
+					name: "",
+					description: "",
+					startDate: "",
+					untilDate: "",
+					times: [],
+					teacherIds: [],
+					substitutionIds: [],
+					userIds: [],
+					classIds: [],
+				},
 			},
 		});
 		expect(wrapper.find("step-progress-stub").isVisible()).toBe(true);
@@ -33,6 +44,17 @@ describe("@components/organisms/CourseWizard", () => {
 				],
 				user: {
 					_id: "test1",
+				},
+				course: {
+					name: "",
+					description: "",
+					startDate: "",
+					untilDate: "",
+					times: [],
+					teacherIds: [],
+					substitutionIds: [],
+					userIds: [],
+					classIds: [],
 				},
 			},
 		});

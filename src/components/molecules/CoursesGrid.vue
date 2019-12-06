@@ -1,44 +1,39 @@
 <template>
-	<div class="grid">
+	<base-grid class="courses-grid">
 		<div v-for="(course, i) of courses" :key="i" class="">
 			<BaseLink
 				class="link tile"
 				:to="{ name: 'courses-id', params: { id: course._id } }"
 				v-bind="$attrs"
 			>
-				<course-card :course="course" />
+				<course-card v-bind="course" />
 			</BaseLink>
 		</div>
-	</div>
+	</base-grid>
 </template>
 
 <script>
-import CourseCard from "./CourseCard";
+import BaseGrid from "@components/base/BaseGrid";
+import CourseCard from "@components/molecules/CourseCard";
 
 export default {
 	components: {
+		BaseGrid,
 		CourseCard,
 	},
 	props: {
 		courses: {
 			type: Array,
-			default: () => [],
+			required: true,
 		},
 	},
-	computed: {},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@variables";
 
-.grid {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-}
-
-.tile {
-	display: flex;
+.courses-grid {
+	margin-top: var(--space-xl);
 }
 </style>

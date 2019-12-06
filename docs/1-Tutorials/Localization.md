@@ -4,14 +4,44 @@ Wir verwenden [Vue i18n](http://kazupon.github.io/vue-i18n) zur Internationalisi
 
 ## Verwendung
 
+### Komponenten
+
 In Vue Komponenten wird anstatt eines Strings stets, über einen Identifier, auf die Sprachdateien verwiesen.
 
 Ein minimales Beispiel sähe so aus:
+
+#### Template
 
 ```vue{2}
 <template>
 	Localized: {{ $t(fileName.identifier) }}
 </template>
+```
+
+#### Script
+
+Alternativ kann auch mit JS der Übersetzte String ausgelesen werden.
+
+```vue{4}
+<script>
+export default {
+	computed: {
+		title() {
+			return this.$t(fileName.identifier);
+		},
+	},
+};
+</script>
+```
+
+### Nuxt MIddlewares/Plugins
+
+Indem die `app` importiert wird kann auch hier auf i18n zugegriffen werden.
+
+```js{2}
+export default async ({ app }) => {
+	console.log(app.i18n.t(fileName.identifier));
+};
 ```
 
 ### Namensschema für keys
@@ -23,10 +53,11 @@ Wie bereits im Beispiel oben zu sehen werden die Strings (bis auf ein paar Ausna
 **Ausnahmen:**
 
 - Für `index.*` Dateien wird der Name des Ordners verwendet.
+- Für HTTP-Status Fehlermeldungen wird `error.<STATUS_NUMBER>` verwendet.
 
 ### Aktualisieren von Strings
 
-Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locales/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co). Wenn Strings über localise aktualisiert wurden, erstellt lokalise einen pull request auf Github der reviewed und approved werden muss.
+Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locale/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co). Wenn Strings über localise aktualisiert wurden, erstellt lokalise einen pull request auf Github der reviewed und approved werden muss.
 
 #### localise Tutorial
 
