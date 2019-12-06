@@ -1,3 +1,5 @@
+process.env.TZ = "Europe/Berlin";
+
 module.exports = {
 	setupFiles: ["<rootDir>/tests/unit/setup", "jest-canvas-mock"],
 	setupFilesAfterEnv: ["<rootDir>/tests/unit/matchers"],
