@@ -20,7 +20,9 @@ jobs:
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run test:unit
-        run: npm run test:ci
+		run: npm run test:ci
+		env:
+			TZ=Europe/Berlin
       - name: codecov
         run: npx codecov
         env:
