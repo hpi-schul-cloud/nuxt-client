@@ -18,6 +18,30 @@ import CourseWizard from "@components/organisms/CourseWizard";
 
 export default {
 	components: { CourseWizard },
+	async asyncData({ store }) {
+		try {
+			const teacherRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "teacher",
+				},
+			})).data[0];
+			const teachers = await store.dispatch("users/getByRole", teacherRole);
+
+			const studentsRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "student",
+				},
+			})).data[0];
+			const students = await store.dispatch("users/getByRole", studentsRole);
+
+			await store.dispatch("classes/find");
+
+			return {
+				teachers,
+				students,
+			};
+		} catch (err) {}
+	},
 	data() {
 		return {
 			stepList: [
@@ -31,10 +55,10 @@ export default {
 				startDate: "",
 				untilDate: "",
 				times: [],
-				teachers: [],
-				substitutions: [],
-				students: [],
-				classes: [],
+				teacherIds: [],
+				substitutionIds: [],
+				userIds: [],
+				classIds: [],
 			},
 		};
 	},
@@ -43,47 +67,6 @@ export default {
 			classes: "list",
 		}),
 	},
-	async asyncData({ store }) {
-		try {
-			const teacherRole = (await store.dispatch("roles/find", {
-				query: {
-					name: "teacher",
-				},
-			})).data[0];
-
-			// TODO @domi studentsRole is unused, can we remove it?
-			/*
-			const studentsRole = (await store.dispatch("roles/find", {
-				query: {
-					name: "student",
-				},
-			})).data[0];
-		*/
-			const queryTeachers = {
-				roles: [teacherRole._id],
-			};
-			const teachers = (await store.dispatch("users/find", {
-				query: queryTeachers,
-			})).data;
-
-			// TODO @domi queryStudents is unused, can we remove it?
-			/*
-			const queryStudents = {
-				roles: [studentsRole._id],
-			};
-			*/
-			const students = (await store.dispatch("users/find", {
-				query: {}, // queryStudents,
-			})).data;
-
-			await store.dispatch("classes/find");
-
-			return {
-				teachers,
-				students,
-			};
-		} catch (err) {}
-	},
 	created() {
 		this.course.schoolId = this.$user.schoolId;
 	},
@@ -91,23 +74,8 @@ export default {
 		async create() {
 			const { course } = this;
 
-			course.times = this.course.times.map((time) => {
-				let [startHours, startMinutes] = time.startTime.split(":");
-				startMinutes = startMinutes * 60 * 1000;
-				startHours = startHours * 60 * 60 * 1000;
-				time.startTime = startHours + startMinutes;
-				time.duration = (time.duration * 60 * 1000).toString();
-				time.weekday = time.weekday.value;
-				return time;
-			});
-
-			(course.teacherIds = course.teachers),
-				(course.substitutionIds = course.substitutions),
-				(course.classIds = course.classes),
-				(course.userIds = course.students);
-
 			try {
-				await this.$store.dispatch("course/create", course);
+				await this.$store.dispatch("courses/create", course);
 				this.$toast.success("Kurs erstellt");
 			} catch (e) {
 				console.error(e);

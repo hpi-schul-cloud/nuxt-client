@@ -55,7 +55,7 @@ export default {
 		links() {
 			return [
 				{
-					to: "/impressum",
+					to: "/imprint",
 					text: "Impressum",
 				},
 				{
@@ -127,16 +127,19 @@ export default {
 	margin-top: var(--space-xs);
 
 	.heart {
-		color: var(--color-primary);
+		color: var(--color-secondary);
 	}
 }
 .footer-link {
-	color: var(--color-primary);
+	color: var(--color-secondary);
 	border: none;
-	&:hover,
-	&:focus {
-		color: var(--color-primary-dark);
+	&:focus,
+	&:hover {
+		color: var(--color-secondary-dark);
 		text-decoration: underline;
+	}
+	&:visited {
+		color: var(--color-secondary);
 	}
 }
 </style>

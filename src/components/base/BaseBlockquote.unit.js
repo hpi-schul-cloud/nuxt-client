@@ -2,7 +2,7 @@ import BaseBlockquote from "./BaseBlockquote";
 
 describe("@basecomponents/BaseBlockquote", () => {
 	it(...isValidComponent(BaseBlockquote));
-	it(...rendersDefaultSlotContent(BaseBlockquote));
+	it(...rendersSlotContent(BaseBlockquote));
 
 	it("renders no empty source", () => {
 		const { element } = shallowMount(BaseBlockquote, {

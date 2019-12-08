@@ -1,12 +1,41 @@
 <template>
 	<transition name="modal">
-		<div v-if="active" class="modal-mask">
-			<div class="modal-wrapper" @click.self="handleBackgroundClick">
+		<div
+			v-if="active"
+			class="modal-mask"
+			role="dialog"
+			:aria-modal="active"
+			:aria-labelledby="`modal-${$uid}-title`"
+			:aria-describedby="`modal-${$uid}-body`"
+		>
+			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
 				>
-					<slot />
+					<slot>
+						<h2
+							v-if="$slots.header"
+							:id="`modal-${$uid}-title`"
+							class="h4 modal-header"
+						>
+							<slot name="header" />
+						</h2>
+						<div :id="`modal-${$uid}-body`" class="modal-body">
+							<slot name="body" />
+						</div>
+
+						<slot name="footer">
+							<modal-footer>
+								<template v-slot:left>
+									<slot name="footer-left"></slot>
+								</template>
+								<template v-slot:right>
+									<slot name="footerRight"></slot>
+								</template>
+							</modal-footer>
+						</slot>
+					</slot>
 				</div>
 			</div>
 		</div>
@@ -14,7 +43,13 @@
 </template>
 
 <script>
+import uidMixin from "@mixins/uid";
+import ModalFooter from "@components/molecules/ModalFooter";
 export default {
+	components: {
+		ModalFooter,
+	},
+	mixins: [uidMixin],
 	props: {
 		active: {
 			type: Boolean,
@@ -44,8 +79,12 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@styles";
+
+.line {
+	border: 1px solid black;
+}
 
 .modal-mask {
 	position: fixed;
@@ -59,7 +98,7 @@ export default {
 	transition: opacity var(--duration-transition-medium) ease;
 }
 
-.modal-wrapper {
+.base-modal-wrapper {
 	display: table-cell;
 	vertical-align: middle;
 }
@@ -67,65 +106,51 @@ export default {
 .modal-container {
 	display: flex;
 	flex-direction: column;
-	width: 80%;
-	max-height: calc(100vh - 40px);
+	width: 95%;
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
+	max-height: calc(100vh - (2 * var(--space-lg)));
 	margin: 0 auto;
+	overflow: hidden;
 	background-color: var(--color-white);
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-sm);
 	transition: all var(--duration-transition-medium) ease;
 	&--large {
 		min-height: 80%;
+
+		@include breakpoint(tablet) {
+			min-height: auto;
+		}
+	}
+}
+
+.modal-body {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 1;
+	justify-content: center;
+	padding: var(--space-md) var(--space-md);
+	overflow: auto;
+}
+
+@include breakpoint(tablet) {
+	.modal-body {
+		flex-grow: 0;
+		padding: var(--space-md) var(--space-xl);
 	}
 }
 
 .modal-header {
-	position: relative;
-	display: flex;
-	flex-shrink: 0;
-	align-items: center;
-	justify-content: flex-start;
 	padding: var(--space-md);
-	border-bottom: 1px solid var(--color-gray);
-	border-top-left-radius: var(--radius-md);
-	border-top-right-radius: var(--radius-md);
-}
-
-.modal-header h3 {
-	font-size: var(--text-lg);
-	font-weight: var(--font-weight-bold);
-}
-
-.modal-body {
-	flex-grow: 1;
-	flex-shrink: 1;
-	padding: var(--space-lg) var(--space-md);
-	overflow: auto;
-}
-
-.modal-footer {
-	position: relative;
-	display: flex;
-	flex-shrink: 0;
-	align-items: center;
-	justify-content: flex-end;
-	padding: var(--space-md);
-	border-top: 1px solid var(--color-gray);
-	border-bottom-right-radius: 6px;
-	border-bottom-left-radius: 6px;
-}
-
-.modal-default-button {
-	float: right;
+	text-align: center;
 }
 
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled
  * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
  */
 
 .modal-enter,

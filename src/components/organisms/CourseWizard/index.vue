@@ -1,9 +1,6 @@
 <template>
 	<div class="root">
 		<div class="header">
-			<div class="header-icon">
-				<base-icon source="custom" icon="shuttle" />
-			</div>
 			<div class="headlines">
 				<h1 class="h3">Kurs anlegen</h1>
 				<h2 class="h5">
@@ -17,7 +14,7 @@
 		<div class="content-wrapper">
 			<step-data
 				v-show="currentStep === 0"
-				:course="course"
+				:course.sync="course"
 				:available-teachers="teachers"
 			/>
 
@@ -31,15 +28,15 @@
 			<step-done v-show="currentStep === 2" />
 		</div>
 		<div class="step-wrapper">
-			<base-button v-if="!firststep" design="text" @click="lastStep"
-				>Zurück</base-button
-			>
-			<base-button v-if="currentStep === 1" design="text" @click="nextStep"
-				>Überspringen</base-button
-			>
-			<base-button v-if="!laststep" design="primary" @click="nextStep"
-				>Weiter</base-button
-			>
+			<base-button v-if="!firststep" design="text" @click="lastStep">
+				Zurück
+			</base-button>
+			<base-button v-if="currentStep === 1" design="text" @click="nextStep">
+				Überspringen
+			</base-button>
+			<base-button v-if="!laststep" design="primary" @click="nextStep">
+				Weiter
+			</base-button>
 			<base-button
 				v-if="laststep"
 				type="submit"
@@ -67,16 +64,20 @@ export default {
 		},
 		course: {
 			type: Object,
-			default: () => ({
-				name: "",
-				description: "",
-				startDate: "",
-				untilDate: "",
-				times: [],
-				teachers: [],
-				students: [],
-				classes: [],
-			}),
+			required: true,
+			validator: (course) => {
+				return [
+					"name",
+					"description",
+					"startDate",
+					"untilDate",
+					"times",
+					"teacherIds",
+					"substitutionIds",
+					"userIds",
+					"classIds",
+				].every((key) => course[key] !== undefined);
+			},
 		},
 		user: {
 			type: Object,
@@ -95,6 +96,10 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		times: {
+			type: Array,
+			default: () => [],
+		},
 	},
 	data() {
 		return {
@@ -110,7 +115,7 @@ export default {
 		},
 	},
 	created() {
-		this.course.teachers.push(this.user);
+		this.course.teacherIds.push(this.user._id);
 	},
 	methods: {
 		nextStep() {
@@ -135,6 +140,7 @@ export default {
 	justify-content: flex-end;
 	max-width: 80ch;
 	margin: 0 auto;
+	margin-top: var(--space-md);
 }
 
 .header {
@@ -151,5 +157,9 @@ export default {
 		margin-right: var(--space-sm);
 		font-size: var(--heading-3);
 	}
+}
+
+.button:not(:first-child) {
+	margin-left: var(--space-sm);
 }
 </style>

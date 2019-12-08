@@ -1,17 +1,17 @@
 <template>
 	<div class="footer">
-		<div v-if="course.alert" class="alert">
+		<div v-if="alert" class="alert">
 			<pulsating-dot class="alert-dot"></pulsating-dot>
 
-			<div class="alert-label">{{ course.alert }}</div>
+			<div class="alert-label">{{ alert }}</div>
 		</div>
 		<div v-else class="next-course">
-			<template v-if="course.nextCourseTime">
+			<template v-if="nextCourseTime">
 				<div class="next-course-icon">
 					<base-icon source="custom" icon="clock" />
 				</div>
 				<span class="truncate">
-					{{ course.nextCourseTime }} | {{ course.nextCourseRoom }}
+					{{ nextCourseTime }} | {{ nextCourseRoom }}
 				</span>
 			</template>
 		</div>
@@ -24,13 +24,20 @@ import PulsatingDot from "@components/atoms/PulsatingDot";
 export default {
 	components: { PulsatingDot },
 	props: {
-		course: {
-			type: Object,
-			default: () => ({
-				alert: "",
-				nextCourseTime: "",
-				nextCourseRoom: "",
-			}),
+		alert: {
+			type: String,
+			required: false,
+			default: "",
+		},
+		nextCourseTime: {
+			type: String,
+			required: false,
+			default: "",
+		},
+		nextCourseRoom: {
+			type: String,
+			required: false,
+			default: "",
 		},
 	},
 };

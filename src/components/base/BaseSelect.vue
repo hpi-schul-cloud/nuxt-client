@@ -98,6 +98,27 @@ export default {
 			default: "Aktiv",
 		},
 	},
+	computed: {
+		model: {
+			get() {
+				if (this.multiple) {
+					return this.value.map((v) => {
+						return this.options.find((a) => a[this.trackBy] === v);
+					});
+				} else {
+					return this.options.find((a) => a[this.trackBy] === this.value);
+				}
+			},
+			set(value) {
+				if (this.multiple) {
+					const out = value.map((a) => a[this.trackBy]);
+					this.$emit("input", out);
+				} else {
+					this.$emit("input", value[this.trackBy]);
+				}
+			},
+		},
+	},
 };
 </script>
 

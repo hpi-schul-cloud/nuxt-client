@@ -38,3 +38,12 @@ body.is-noscroll {
 	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
 	clip: rect(1px, 1px, 1px, 1px);
 }
+
+::-moz-focus-inner {
+	border: 0;
+}
+
+:focus {
+	outline: 2px solid var(--color-tertiary-light);
+	outline-offset: 3px;
+}

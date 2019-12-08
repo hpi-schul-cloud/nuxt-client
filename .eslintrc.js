@@ -115,6 +115,9 @@ module.exports = {
 				createComponentMocks: false,
 				//createModuleStore: false,
 			},
+			rules: {
+				"max-lines": 0,
+			},
 		},
 	],
 };
