@@ -29,5 +29,6 @@ export default {
 .grid {
 	display: grid;
 	grid-gap: var(--space-lg);
+	justify-items: center;
 }
 </style>
