@@ -16,7 +16,6 @@
 @import "@styles";
 
 .card {
-	padding: var(--space-xs);
 	background: #fff;
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow-sm);
