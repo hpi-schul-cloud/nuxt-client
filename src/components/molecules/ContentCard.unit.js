@@ -5,9 +5,7 @@ describe("@components/ContentCard", () => {
 
 	it("Renders content and footer slots", () => {
 		const wrapper = shallowMount(ContentCard, {
-			mocks: {
-				$t: (msg) => msg,
-			},
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				title: "Title",
 				providerName: "ProviderName",
@@ -19,9 +17,7 @@ describe("@components/ContentCard", () => {
 
 	it("Renders props when passed in", () => {
 		const wrapper = shallowMount(ContentCard, {
-			mocks: {
-				$t: (msg) => msg,
-			},
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				title: "Title",
 				providerName: "ProviderName",
