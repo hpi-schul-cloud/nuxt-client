@@ -11,7 +11,7 @@
 				},
 			]"
 		/>
-		<h1>{{ $t("pages.news.new.title") }} </h1>
+		<h1 :aria-label="$t('pages.news.new.title')"></h1>
 		<form-news #actions="{ cancel }" action="create">
 			<form-actions>
 				<template #primary>

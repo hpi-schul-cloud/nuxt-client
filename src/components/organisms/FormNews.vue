@@ -2,35 +2,37 @@
 	<form v-on="$listeners" @submit.prevent="submitHandler">
 		<base-input
 			v-model="data.title"
+			:focus="true"
 			:label="$t('components.organisms.FormNews.label.title')"
 			name="title"
 			type="text"
-			:error="errors.title"
 			:success="!errors.title"
 			:required="true"
 			data-testid="news_title"
 		/>
-		<text-editor
-			v-model="data.content"
-			class="mb--md"
-			:error="errors.content"
-			:required="true"
-		/>
-		<p>{{ $t("components.organisms.FormNews.label.planned_publish") }}</p>
-		<base-input
-			v-model="data.date.date"
-			type="date"
-			:label="$t('components.organisms.FormNews.label.date')"
-			data-testid="news_date"
-		/>
-		<base-input
-			v-model="data.date.time"
-			type="time"
-			:label="$t('components.organisms.FormNews.label.time')"
-			data-testid="news_time"
-		/>
-		<!-- @slot Add your action buttons here, predefined actions are `#actions="{ remove, cancel }"` -->
-		<slot name="actions" :remove="remove" :cancel="cancel"> </slot>
+		<div v-if="data.title">
+			<text-editor
+				v-model="data.content"
+				class="mb--md"
+				:error="errors.content"
+				:required="true"
+			/>
+			<p>{{ $t("components.organisms.FormNews.label.planned_publish") }}</p>
+			<base-input
+				v-model="data.date.date"
+				type="date"
+				:label="$t('components.organisms.FormNews.label.date')"
+				data-testid="news_date"
+			/>
+			<base-input
+				v-model="data.date.time"
+				type="time"
+				:label="$t('components.organisms.FormNews.label.time')"
+				data-testid="news_time"
+			/>
+			<!-- @slot Add your action buttons here, predefined actions are `#actions="{ remove, cancel }"` -->
+			<slot name="actions" :remove="remove" :cancel="cancel"> </slot>
+		</div>
 	</form>
 </template>
 

@@ -12,7 +12,7 @@
 	"components.organisms.FormNews.label.date": "Datum",
 	"components.organisms.FormNews.label.planned_publish": "Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
 	"components.organisms.FormNews.label.time": "Uhrzeit",
-	"components.organisms.FormNews.label.title": "Titel",
+	"components.organisms.FormNews.label.title": "Gib hier den Titel deiner Neuigkeit ein",
 	"components.organisms.FormNews.remove.confirm.cancel": "Abbrechen",
 	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
 	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiederruflich löschen?",

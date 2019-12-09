@@ -28,6 +28,7 @@
 						<input
 							:id="`input-${$uid}`"
 							ref="input"
+							v-focus="focus"
 							v-bind="$attrs"
 							:type="type"
 							:value="vmodel"
