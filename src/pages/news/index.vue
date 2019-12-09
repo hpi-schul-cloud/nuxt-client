@@ -43,7 +43,7 @@ export default {
 	},
 	head() {
 		return {
-			title: "News",
+			title: this.$t("pages.news.title"),
 		};
 	},
 };

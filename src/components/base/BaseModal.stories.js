@@ -16,7 +16,7 @@ storiesOf("Base|Modals", module)
 	.addParameters({
 		notes,
 	})
-	.add("Base", () => ({
+	.add("Default", () => ({
 		components: { BaseModal, BaseButton, ModalFooter, ModalFooterBorder },
 		data: () => ({
 			active: false,
@@ -39,13 +39,12 @@ storiesOf("Base|Modals", module)
 
 			</template>
 			<template v-slot:footer>
-			<modal-footer-border>
-
-						<template v-slot:right>
-							<base-button design="primary text" @click="active = false">
-								Abbrechen
-							</base-button>
-							<base-button design="primary" @click="active = false"> Übernehmen</base-button>
+				<modal-footer-border>
+					<template v-slot:right>
+						<base-button design="primary text" @click="active = false">
+							Abbrechen
+						</base-button>
+						<base-button design="primary" @click="active = false"> Übernehmen</base-button>
 					</template>
 				</modal-footer-border>
 		</template>
