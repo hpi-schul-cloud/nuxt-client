@@ -1,9 +1,17 @@
 {
-	"storybook.lang": "I'm in English now!",
-	"pages.news.title": "News",
-	"pages.courses.new.btn_new": "Create",
-	"pages.impressum.title": "Imprint",
+	"contentcard.report.email": "inhalte@schul-cloud.org",
+	"contentcard.report.body": "Melden%20des%20Inhaltes%20mit%20der%20ID%20&",
+	"contentcard.report.subject": "Liebes%20%20Team%2C%0Ahiermit%20m%C3%B6chte%20ich%20den%20im%20Betreff%20genannten%20Inhalt%20melden%2C%20da%3A%0A%5Bhier%20bitte%20Ihre%20Gr%C3%BCnde%5D",
 	"error.400": "401 - Bad Request",
 	"error.401": "401 - Unauthorized",
-	"error.404": "404 - Not Found"
+	"error.404": "404 - Not Found",
+	"pages.courses.new.btn_new": "Create",
+	"pages.impressum.title": "Imprint",
+	"pages.news.title": "News",
+	"pages.content.index.search_for": "Search for...",
+	"pages.content.index.search_results": "Search results for",
+	"pages.content.index.search_resources": "Resources",
+	"pages.content.empty_state.error.oops": "Oops",
+	"pages.content.empty_state.error.message": "We couldn't find any search result, please try entering other keywords.",
+	"storybook.lang": "I'm in English now!"
 }

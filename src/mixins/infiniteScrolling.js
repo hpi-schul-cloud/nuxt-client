@@ -6,7 +6,7 @@ const infiniteScrolling = {
 		};
 	},
 	created() {
-		window.scrollTo(0, 0);
+		window.scrollTo({ top: 0, behavior: "smooth" });
 		window.addEventListener("scroll", () => {
 			this.bottom = this.$_bottomVisible();
 			this.scrollY = window.scrollY;

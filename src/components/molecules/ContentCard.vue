@@ -1,5 +1,5 @@
 <template>
-	<base-card v-bind="$props">
+	<base-card v-bind="$attrs">
 		<div class="content-card">
 			<template v:slot:content>
 				<div class="content">
@@ -22,7 +22,7 @@
 			<template v:slot:footer>
 				<div class="footer">
 					<div class="footer__melden">
-						<a :href="mailContent" target="_blank" rel="noopener">
+						<a :href="reportMail" target="_blank" rel="noopener">
 							melden <i class="fa fa-flag foo" aria-hidden="true"></i>
 						</a>
 					</div>
@@ -58,8 +58,16 @@ export default {
 		url: { type: String, default: "" },
 	},
 	computed: {
-		mailContent() {
-			return "mailto:inhalte@schul-cloud.org?Subject=Melden%20des%20Inhaltes%20mit%20der%20ID%20&body=Liebes%20%20Team%2C%0Ahiermit%20m%C3%B6chte%20ich%20den%20im%20Betreff%20genannten%20Inhalt%20melden%2C%20da%3A%0A%5Bhier%20bitte%20Ihre%20Gr%C3%BCnde%5D";
+		reportMail() {
+			const mailContent = {
+				subject: this.$t("contentcard.report.subject"),
+				body: this.$t("contentcard.report.body"),
+			};
+			const querystring = Object.keys(mailContent)
+				.map((key) => key + "=" + encodeURIComponent(mailContent[key]))
+				.join("&");
+			const email = this.$t("contentcard.report.email");
+			return `mailto:${email}?${querystring}`;
 		},
 	},
 };

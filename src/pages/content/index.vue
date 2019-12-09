@@ -1,22 +1,23 @@
 <template>
 	<section>
 		<div v-if="scrollY > 115" class="content__back-to-top">
-			<p @click="$_backToTop">
-				<i class="icon fa fa-chevron-circle-up"></i>
-			</p>
+			<floating-fab icon="add" @click="$_backToTop" />
 		</div>
 		<div class="content">
 			<searchbar
 				v-model.lazy="searchQuery"
 				class="content__searchbar"
-				placeholder="Suche nach..."
+				:placeholder="$t('pages.content.index.search_for')"
 				:loading="loading"
 			/>
 			<p class="content__total">
 				<span v-if="searchQuery.length > 0">
-					{{ resources.total }} Suchergebnisse für "{{ searchQuery }}"
+					{{ resources.total }}
+					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
 				</span>
-				<span v-else> {{ resources.total }} resources </span>
+				<span v-else>
+					{{ resources.total }} {{ $t("pages.content.index.search_resources") }}
+				</span>
 			</p>
 			<div v-if="resources.data.length === 0" class="content__no-results">
 				<content-empty-state />
@@ -57,6 +58,7 @@ import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
 	components: {
@@ -64,8 +66,10 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
+		FloatingFab,
 	},
 	mixins: [infiniteScrolling],
+	layout: "loggedInFull",
 	async asyncData({ store }) {
 		return store.dispatch("content/getResources");
 	},
@@ -153,20 +157,6 @@ export default {
 		justify-content: flex-end;
 		width: 100%;
 		color: var(--color-primary);
-	}
-
-	&__back-to-top {
-		position: fixed;
-		cursor: pointer;
-		transform: translateX(-8vw) translateY(75vh);
-		i {
-			font-size: var(--heading-1);
-			color: var(--color-primary);
-			transition: all 0.1s ease-in-out;
-			&:hover {
-				transform: scale(1.3, 1.3);
-			}
-		}
 	}
 	&__no-results {
 		margin-top: var(--space-md);

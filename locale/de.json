@@ -1,4 +1,7 @@
 {
+	"contentcard.report.email": "inhalte@schul-cloud.org",
+	"contentcard.report.body": "Melden%20des%20Inhaltes%20mit%20der%20ID%20&",
+	"contentcard.report.subject": "Liebes%20%20Team%2C%0Ahiermit%20m%C3%B6chte%20ich%20den%20im%20Betreff%20genannten%20Inhalt%20melden%2C%20da%3A%0A%5Bhier%20bitte%20Ihre%20Gr%C3%BCnde%5D",
 	"error.400": "400 - Fehlerhafte Anfrage",
 	"error.401": "401 - Das dürfen wir dir leider nicht zeigen",
 	"error.404": "404 - Seite nicht gefunden",
@@ -6,5 +9,10 @@
 	"pages.impressum.title": "Impressum",
 	"pages.news._id.index.edit": "Artikel bearbeiten",
 	"pages.news.title": "Neuigkeiten",
+	"pages.content.index.search_for": "Suche nach...",
+	"pages.content.index.search_results": "Suchergebnisse für",
+	"pages.content.index.search_resources": "Ressourcen",
+	"pages.content.empty_state.error.oops": "Oops",
+	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }

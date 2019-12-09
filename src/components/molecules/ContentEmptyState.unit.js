@@ -5,6 +5,9 @@ describe("@components/ContentEmptyState", () => {
 
 	it("Renders svg image", () => {
 		const wrapper = shallowMount(ContentEmptyState, {
+			mocks: {
+				$t: (msg) => msg,
+			},
 			data: () => ({
 				emptyStateSVGs: ["/empty-state/emptyStateSvg_lehrer1.svg"],
 			}),

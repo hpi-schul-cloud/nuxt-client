@@ -5,10 +5,12 @@
 			:src="getRandomSVG"
 			alt="empty-state-img"
 		/>
-		<h3 class="empty-state-container__title">Oops</h3>
-		<p class="empty-state-container__message"
-			>We couldn't find any search result, please try entering other keywords</p
-		>
+		<h3 class="empty-state-container__title">{{
+			$t("pages.content.empty_state.error.oops")
+		}}</h3>
+		<p class="empty-state-container__message">{{
+			$t("pages.content.empty_state.error.message")
+		}}</p>
 	</div>
 </template>
 
@@ -17,10 +19,10 @@ export default {
 	data() {
 		return {
 			emptyStateSVGs: [
-				"/empty-state/emptyStateSvg_lehrer1.svg",
-				"/empty-state/emptyStateSvg_lehrer2.svg",
-				"/empty-state/emptyStateSvg_lehrer3.svg",
-				"/empty-state/emptyStateSvg_lehrer4.svg",
+				"/empty-state/emptyStateSvg_teacher_male.svg",
+				"/empty-state/emptyStateSvg_teacher_male_hand_down.svg",
+				"/empty-state/emptyStateSvg_teacher_female_hand_raised.svg",
+				"/empty-state/emptyStateSvg_teacher_female.svg",
 			],
 		};
 	},
