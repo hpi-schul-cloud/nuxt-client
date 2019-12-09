@@ -4,7 +4,7 @@
 			:inputs="[
 				{
 					to: { name: 'news' },
-					text: 'News',
+					text: $t('pages.news.title'),
 				},
 				{
 					text: $t('pages.news.new.title'),

@@ -3,7 +3,7 @@
 		<base-input
 			v-model="data.title"
 			:focus="true"
-			:placeholder="$t('components.organisms.FormNews.label.title')"
+			:placeholder="$t('components.organisms.FormNews.input.title.placeholder')"
 			name="title"
 			type="text"
 			:label="$t('components.organisms.FormNews.label.title')"
