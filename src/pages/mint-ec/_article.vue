@@ -186,17 +186,7 @@ export default {
 	}
 
 	a {
-		color: var(--color-primary);
-		text-decoration: none;
-		cursor: pointer;
-		border-bottom: 2px solid var(--color-gray);
-		&:hover,
-		&:focus {
-			color: var(--color-primary-dark);
-		}
-		&:visited {
-			color: var(--color-primary);
-		}
+		@extend .default-link;
 	}
 
 	.item {

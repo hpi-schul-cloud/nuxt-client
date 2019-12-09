@@ -7,7 +7,6 @@
 
 module.exports = [
 	`^/error/`,
-	`^/courses/`,
 	`^/mint-ec/?`,
 	`^/imprint/?`,
 	// `^/news/${mongoId}/?$`,
