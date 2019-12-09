@@ -18,6 +18,7 @@
 					class="mb--md"
 					:error="errors.content"
 					:required="true"
+					:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
 				/>
 				<p>{{ $t("components.organisms.FormNews.label.planned_publish") }}</p>
 				<base-input
