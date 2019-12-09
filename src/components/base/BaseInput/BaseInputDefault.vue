@@ -114,6 +114,7 @@ export default {
 		success: { type: Boolean },
 		disabled: { type: Boolean },
 		inputTeaser: { type: Boolean },
+		focus: { type: Boolean }
 	},
 	data: function() {
 		return {

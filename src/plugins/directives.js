@@ -4,8 +4,8 @@ import Ripple from "vue-ripple-directive";
 Vue.directive("ripple", Ripple);
 
 Vue.directive("focus", {
-	inserted: function(el) {
-		el.focus();
+	inserted: function(el, binding) {
+		if (binding.value) el.focus();
 	},
 });
 

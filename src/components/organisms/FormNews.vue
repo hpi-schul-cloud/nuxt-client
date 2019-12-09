@@ -6,6 +6,7 @@
 			:placeholder="$t('components.organisms.FormNews.label.title')"
 			name="title"
 			type="text"
+			:label="$t('components.organisms.FormNews.label.title')"
 			:required="true"
 			data-testid="news_title"
 			:input-teaser="true"
