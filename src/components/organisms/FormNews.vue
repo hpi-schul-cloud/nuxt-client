@@ -20,7 +20,7 @@
 					:required="true"
 					:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
 				/>
-				<p>{{ $t("components.organisms.FormNews.label.planned_publish") }}</p>
+				<p class="mt--xl-3">{{ $t("components.organisms.FormNews.label.planned_publish") }}</p>
 				<base-input
 					v-model="data.date.date"
 					type="date"
