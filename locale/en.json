@@ -1,7 +1,7 @@
 {
-	"contentcard.report.email": "inhalte@schul-cloud.org",
-	"contentcard.report.body": "Melden%20des%20Inhaltes%20mit%20der%20ID%20&",
-	"contentcard.report.subject": "Liebes%20%20Team%2C%0Ahiermit%20m%C3%B6chte%20ich%20den%20im%20Betreff%20genannten%20Inhalt%20melden%2C%20da%3A%0A%5Bhier%20bitte%20Ihre%20Gr%C3%BCnde%5D",
+	"components.organisms.contentcard.report.email": "inhalte@schul-cloud.org",
+	"components.organisms.contentcard.report.body": "Melden des Inhaltes mit der ID",
+	"components.organisms.contentcard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da:[hier bitte Ihre Gründe]",
 	"error.400": "401 - Bad Request",
 	"error.401": "401 - Unauthorized",
 	"error.404": "404 - Not Found",

@@ -3,7 +3,7 @@ import ContentCard from "./ContentCard";
 describe("@components/ContentCard", () => {
 	it(...isValidComponent(ContentCard));
 
-	it("Renders content and footer slots", () => {
+	it("Renders body and footer content", () => {
 		const wrapper = shallowMount(ContentCard, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
