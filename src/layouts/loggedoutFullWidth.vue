@@ -18,17 +18,17 @@ export default {
 	data() {
 		return {
 			links: [
+				// {
+				// 	title: "Intro",
+				// 	href: "https://schul-cloud.org/#",
+				// },
 				{
-					title: "Intro",
-					href: "https://schul-cloud.org/#",
-				},
-				{
-					title: "Über das Projekt",
-					href: "https://schul-cloud.org/about",
+					title: "Projekt",
+					href: "/about",
 				},
 				{
 					title: "Mitmachen",
-					href: "https://schul-cloud.org/community",
+					href: "/community",
 				},
 				{
 					title: "Blog",
@@ -37,11 +37,11 @@ export default {
 				{
 					title: "FAQ",
 					href:
-						"https://docs.schul-cloud.org/display/SCDOK/FAQs+zum+Projekt+HPI+Schul-Cloud",
+						"https://blog.schul-cloud.org/faq",
 				},
 				{
-					title: "Mint Ec",
-					href: "http://localhost:4000/mint-ec/mint-ec-willkommenspaket",
+					title: "Onboarding",
+					href: "/mint-ec/mint-ec-willkommenspaket",
 				},
 			],
 		};
