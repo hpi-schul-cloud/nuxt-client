@@ -19,9 +19,7 @@
 				>{{ link.name }}</menu-link
 			>
 		</dropdown-menu>
-		<base-content-container
-			:style="{ marginTop: `var(--space-xs)`, padding: `var(--space-sm)` }"
-		>
+		<base-content-container class="base-content">
 			<render-html :html="`<div>${page.html}</div>`" />
 		</base-content-container>
 		<mint-ec-footer :chapters="chapters" />
@@ -56,20 +54,20 @@ export default {
 
 			links: [
 				{
-					title: "Impressum",
+					title: this.$t("pages.mint-ec.article.footer.impressum"),
 					href: "https://schul-cloud.org/impressum",
 				},
 				{
-					title: "Datenschutzerklärung HPI",
+					title: this.$t("pages.mint-ec.article.footer.datenschutz"),
 					href: "https://schul-cloud.org/datenschutz",
 				},
 				{
-					title: "Datenschutzerklärung Muster Schulen",
+					title: this.$t("pages.mint-ec.article.footer.datenschutzerklärung"),
 					href:
 						"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 				},
 				{
-					title: "Nutzungsordnung",
+					title: this.$t("pages.mint-ec.article.footer.nutzungsordnung"),
 					href:
 						"https://schul-cloud.org/datenschutzhttps://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
 				},
@@ -88,7 +86,7 @@ export default {
 			],
 			contacts: [
 				{
-					title: "Allgemein: info@schulcloud.org",
+					title: this.$t("pages.mint-ec.article.footer.info-mail"),
 					href: "mailto:info@schulcloud.org",
 				},
 				{
@@ -96,15 +94,15 @@ export default {
 					href: "mailto:feedback@schulcloud.org",
 				},
 				{
-					title: "Inhalteanbieter: inhalte@schulcloud.org",
+					title: this.$t("pages.mint-ec.article.footer.anbieter"),
 					href: "mailto:inhalte@schulcloud.org",
 				},
 				{
-					title: "Datenschutz: datenschutz@schulcloud.org",
+					title: this.$t("pages.mint-ec.article.footer.datenschutz-mail"),
 					href: "mailto:datenschutz@schulcloud.org",
 				},
 				{
-					title: "Newsletter abonieren",
+					title: this.$t("pages.mint-ec.article.footer.newsletter"),
 					href:
 						"https://hpi.de/open-campus/registrierung/hpi-schul-cloud-newsletter/",
 				},
@@ -112,23 +110,23 @@ export default {
 
 			chapters: [
 				{
-					title: "Meine Schule informieren",
+					title: this.$t("pages.mint-ec.article.footer.schule-informieren"),
 					href: "/mint-ec/schule-informieren",
 				},
 				{
-					title: "Meinen Unterricht gestalten ",
+					title: this.$t("pages.mint-ec.article.footer.unterricht-gestalten"),
 					href: "/mint-ec/unterricht-gestalten",
 				},
 				{
-					title: "Meine Kollegium informieren",
+					title: this.$t("pages.mint-ec.article.footer.kollegium-informieren"),
 					href: "/mint-ec/kollegium-mitnehmen",
 				},
 				{
-					title: "Mich im Projekt engagieren",
+					title: this.$t("pages.mint-ec.article.footer.engagieren"),
 					href: "/mint-ec/im-projekt-engagieren",
 				},
 				{
-					title: "Technische und rechtliche Grundlagen",
+					title: this.$t("pages.mint-ec.article.footer.rechtlich"),
 					href: "/mint-ec/technik-und-recht",
 				},
 			],
@@ -157,6 +155,11 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 /deep/ {
+	.base-content {
+		padding: var(--space-sm);
+		margin-top: var(--space-xs);
+	}
+
 	h2 {
 		font-size: var(--heading-4);
 		font-weight: var(--font-weight-normal);

@@ -4,7 +4,7 @@
 			<base-link href="https://schul-cloud.org/">
 				<img
 					class="logo logo-full"
-					src="@assets/img/logo/logo-image-default.svg"
+					src="@assets/img/logo/logo-image-color.svg"
 					alt="Schulcloud Logo"
 				/>
 			</base-link>

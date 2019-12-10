@@ -1,7 +1,10 @@
 <template>
 	<div class="section">
 		<div class="footer-container">
-			<base-grid :column-width="windowWidth">
+			<base-grid
+				:column-width="windowWidth"
+				:style="{ justifyItems: `center` }"
+			>
 				<div class="link-container hover">
 					<h2 class="h3">Kontakt</h2>
 					<base-link

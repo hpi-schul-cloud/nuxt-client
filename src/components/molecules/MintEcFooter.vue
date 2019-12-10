@@ -1,7 +1,10 @@
 <template>
 	<div class="section">
 		<div class="footer-container">
-			<base-grid :column-width="windowWidth">
+			<base-grid
+				:column-width="windowWidth"
+				:style="{ justifyItems: `center` }"
+			>
 				<div class="link-container hover">
 					<h2 class="h3">Kapitelübersicht</h2>
 					<base-link
@@ -25,7 +28,7 @@
 					<base-link href="http://creativecommons.org/licenses/by-sa/4.0/">
 						<img
 							class="cc"
-							src="@assets/img/by-sa.svg"
+							src="@assets/img/mint-ec-ghost/by-sa.svg"
 							alt="Creative Commons Lizenzvertrag"
 						/>
 					</base-link>
