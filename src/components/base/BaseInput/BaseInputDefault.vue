@@ -28,7 +28,7 @@
 						<input
 							:id="`input-${$uid}`"
 							ref="input"
-							v-focus="focus"
+							v-focus-on-mount="focus"
 							v-bind="$attrs"
 							:type="type"
 							:value="vmodel"
@@ -114,7 +114,7 @@ export default {
 		success: { type: Boolean },
 		disabled: { type: Boolean },
 		inputTeaser: { type: Boolean },
-		focus: { type: Boolean }
+		focus: { type: Boolean },
 	},
 	data: function() {
 		return {
