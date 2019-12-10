@@ -23,7 +23,7 @@
 				<content-empty-state />
 			</div>
 			<div class="content__cards-container">
-				<base-grid column-width="17rem">
+				<base-grid column-width="15rem">
 					<content-card
 						v-for="resource of resources.data"
 						:id="resource._id"

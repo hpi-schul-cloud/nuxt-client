@@ -4,32 +4,47 @@
 			<template v:slot:content>
 				<div class="content">
 					<base-link :href="url" target="_blank" :no-style="true">
-						<img
-							:src="thumbnail"
-							alt="content-thumbnail"
-							class="content__thumbnail"
-						/>
+						<div class="content__img">
+							<div class="img-container">
+								<img
+									:src="thumbnail"
+									alt="content-thumbnail"
+									class="content__img-thumbnail"
+								/>
+
+								<base-icon
+									class="content__img-icon"
+									source="material"
+									icon="photo"
+								/>
+							</div>
+						</div>
 						<div class="content__title">{{ title }}</div>
 					</base-link>
-					<div class="content__tags">
-						<span v-for="(tag, i) in tags" :key="i" class="content__tags-tag">
-							{{ tag }}
-						</span>
-					</div>
 					<div class="content__description">{{ description }}</div>
 				</div>
 			</template>
 			<template v:slot:footer>
 				<div class="footer">
-					<div class="footer__melden">
-						<a :href="reportMail" target="_blank" rel="noopener">
-							melden <i class="fa fa-flag foo" aria-hidden="true"></i>
-						</a>
-					</div>
-					<div class="footer__info">
-						<div> via {{ providerName }} </div>
+					<div class="footer__separator"></div>
+					<div class="footer__content">
+						<base-icon
+							class="footer__content-icon"
+							source="material"
+							icon="bookmark_border"
+						/>
+
 						<div>
-							<i class="fa fa-plus-square"></i>
+							<base-icon
+								class="footer__content-icon"
+								source="material"
+								icon="add_circle_outline"
+							/>
+							<base-icon
+								class="footer__content-icon"
+								source="material"
+								icon="more_vert"
+							/>
 						</div>
 					</div>
 				</div>
@@ -80,72 +95,78 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	width: 100%;
-	height: 600px;
+	height: 23rem;
+}
+.img-container {
+	position: relative;
+	min-height: 200px;
 }
 .content {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
-	width: 100%;
-	&__thumbnail {
-		width: 100%;
-		height: 200px;
-		object-fit: cover;
+	height: 100%;
+	&__img {
+		min-height: 200px;
+		&-thumbnail {
+			width: 100%;
+			height: 200px;
+			object-fit: cover;
+			border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+		}
+		&-icon {
+			position: absolute;
+			top: 40%;
+			left: 40%;
+			padding: var(--space-xs);
+			font-size: var(--heading-1);
+			color: var(--color-gray-dark);
+			background-color: var(--color-white);
+			border-radius: var(--radius-round);
+			opacity: 0.8;
+		}
 	}
 	&__title {
-		display: flex;
-		margin: var(--space-xs) 0;
+		min-height: 2.5rem;
+		margin: var(--space-xs) var(--space-sm) var(--space-xs-3) var(--space-sm);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-secondary);
+		color: var(--color-tertiary);
+		text-align: center;
 
 		@include excerpt(
-			$font-size: var(--heading-6),
+			$font-size: 20px,
 			$line-height: var(--line-height-sm),
 			$lines-to-show: 2
 		);
 	}
-	&__tags {
-		display: flex;
-		flex-wrap: wrap;
-		width: 100%;
-		margin: var(--space-xs) 0;
-		&-tag {
-			padding: var(--space-xs-4);
-			margin: var(--space-xs-4);
-			font-size: var(--text-xs);
-			font-weight: var(--font-weight-bold);
-			color: var(--color-white);
-			background-color: var(--color-tertiary-light);
-			border: 1px solid var(--color-tertiary-light);
-			border-radius: var(--radius-md);
-		}
-	}
 	&__description {
-		@include excerpt($font-size: var(--text-md), $lines-to-show: 5);
+		padding: 0 var(--space-xs);
+		margin-bottom: var(--space-xs);
+
+		@include excerpt(
+			$font-size: var(--text-sm),
+			$lines-to-show: 3,
+			$line-height: 1.2rem
+		);
 	}
 }
 .footer {
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	&__melden {
-		align-self: flex-end;
-		font-size: var(--text-md);
-		a {
-			color: var(--color-gray);
-			text-decoration: none;
-		}
+	height: 13%;
+	padding: 0 var(--space-xs);
+	&__separator {
+		border-top: 1px solid var(--color-gray);
 	}
-	&__info {
+	&__content {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-top: var(--space-xs);
-		font-size: var(--text-sm);
-		color: var(--color-gray);
-		i {
-			color: var(--color-secondary);
+		height: 100%;
+		padding: var(--space-xs-3);
+
+		&-icon {
+			font-size: var(--text-lg);
+			color: var(--color-tertiary);
 		}
 	}
 }
