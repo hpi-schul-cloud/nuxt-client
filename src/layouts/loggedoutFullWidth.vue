@@ -18,10 +18,10 @@ export default {
 	data() {
 		return {
 			links: [
-				{
-					title: "Intro",
-					href: "https://schul-cloud.org/#",
-				},
+				// {
+				// 	title: "Intro",
+				// 	href: "https://schul-cloud.org/#",
+				// },
 				{
 					title: "Projekt",
 					href: "/about",
