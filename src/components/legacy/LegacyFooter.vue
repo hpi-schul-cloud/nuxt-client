@@ -41,7 +41,7 @@
 					<base-link href="https://testflight.apple.com/join/7i2xN7hH">
 						<img
 							class="apple-badge"
-							src="@assets/img/apple-app-store-badge.svg"
+							src="https://s3.hidrive.strato.com/schul-cloud-hpi/images/google-play-badge.png"
 							alt="Apple Badge"
 						/>
 					</base-link>
@@ -58,6 +58,15 @@
 						}"
 						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/web-developer-mwd-im-projekt-hpi-schul-cloud.html"
 						>Web Developer</base-link
+					>
+					<base-link
+						:style="{
+							color: `var(--color-white)`,
+							borderBottom: `none`,
+							fontSize: `var(--text-lg)`,
+						}"
+						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/system-engineer-dev-ops-mw.html"
+						>DevOps</base-link
 					>
 				</div>
 			</base-grid>
