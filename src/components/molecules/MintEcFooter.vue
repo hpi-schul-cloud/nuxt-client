@@ -30,10 +30,10 @@
 							alt="Creative Commons Lizenzvertrag"
 						/>
 					</base-link>
-					<base-link href="twitter.com/mint_ec">
+					<base-link href="https://twitter.com/mint_ec">
 						<base-icon class="icon-style" source="fa" icon="fab fa-twitter" />
 					</base-link>
-					<base-link href="twitter.com/mint_ec">
+					<base-link href="https://instagram.com/mint_ec_netzwerk">
 						<base-icon class="icon-style" source="fa" icon="fab fa-instagram" />
 					</base-link>
 				</div>

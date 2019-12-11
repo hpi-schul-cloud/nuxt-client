@@ -190,6 +190,10 @@ export default {
 
 	a {
 		@extend .default-link;
+
+		&:hover {
+			color: var(--color-primary-dark);
+		}
 	}
 }
 </style>

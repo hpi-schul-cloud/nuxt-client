@@ -35,7 +35,7 @@ export default {
 					href: "https://blog.schul-cloud.org/faq",
 				},
 				{
-					title: "Onboarding",
+					title: this.$t("layouts.loggedoutFullWidth.steps"),
 					href: "/mint-ec/mint-ec-willkommenspaket",
 				},
 			],

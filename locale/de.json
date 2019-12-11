@@ -51,5 +51,6 @@
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"layouts.loggedoutFullWidth.project": "Projekt",
 	"layouts.loggedoutFullWidth.join": "Mitmachen",
+	"layouts.loggedoutFullWidth.steps": "Erste Schritte",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }

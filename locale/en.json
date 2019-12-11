@@ -19,6 +19,7 @@
 	"components.molecules.MintEcFooter.chapters": "Chapters",
 	"layouts.loggedoutFullWidth.project": "Project",
 	"layouts.loggedoutFullWidth.join": "Join",
+	"layouts.loggedoutFullWidth.steps": "First steps",
 	"pages.courses.new.btn_new": "Create",
 	"pages.impressum.title": "Imprint",
 	"error.400": "401 - Bad Request",
