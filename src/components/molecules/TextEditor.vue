@@ -124,7 +124,7 @@ import {
 	OrderedList,
 	Strike,
 	Underline,
-	Placeholder
+	Placeholder,
 } from "tiptap-extensions";
 
 export default {
@@ -143,8 +143,8 @@ export default {
 		},
 		placeholder: {
 			type: String,
-			default: ""
-		}
+			default: "",
+		},
 	},
 	data() {
 		return {
@@ -163,8 +163,8 @@ export default {
 					new Strike(),
 					new Underline(),
 					new Placeholder({
-						emptyEditorClass: 'is-editor-empty',
-						emptyNodeClass: 'is-empty',
+						emptyEditorClass: "is-editor-empty",
+						emptyNodeClass: "is-empty",
 						emptyNodeText: this.placeholder,
 						showOnlyWhenEditable: true,
 						showOnlyCurrent: true,
@@ -247,5 +247,4 @@ export default {
 		content: attr(data-empty-text);
 	}
 }
-
 </style>

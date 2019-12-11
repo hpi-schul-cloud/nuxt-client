@@ -5,9 +5,11 @@ const validNews = {
 	content: "lalaland",
 	displayAt: "2019-11-05T13:07:00.000Z",
 };
+
+const timezoneOffset = new Date().getTimezoneOffset() / 60;
 const validNewsDate = {
 	date: "2019-11-05",
-	time: "13:07", // +1h because of utc conversion
+	time: `${13 - timezoneOffset}:07`, // timezone conversion
 };
 const invalidNews = {
 	title: "", // no title
