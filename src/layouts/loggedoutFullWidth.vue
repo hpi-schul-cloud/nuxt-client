@@ -1,6 +1,9 @@
 <template>
 	<div>
-		<navigation-bar :links="links" />
+		<navigation-bar
+			:links="links"
+			:img="require('@assets/img/logo/logo-image-color.svg')"
+		/>
 		<div class="container">
 			<Nuxt />
 		</div>

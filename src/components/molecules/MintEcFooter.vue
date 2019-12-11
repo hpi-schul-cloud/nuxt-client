@@ -1,10 +1,7 @@
 <template>
 	<div class="section">
 		<div class="footer-container">
-			<base-grid
-				:column-width="windowWidth"
-				:style="{ justifyItems: `center` }"
-			>
+			<base-grid :column-width="colWidth" :style="{ justifyItems: `center` }">
 				<div class="link-container">
 					<h2 class="h4">{{
 						$t("components.molecules.MintEcFooter.chapters")
@@ -51,7 +48,7 @@ export default {
 		},
 	},
 	computed: {
-		windowWidth() {
+		colWidth() {
 			if (window.innerWidth <= 750) {
 				return "20rem";
 			}
