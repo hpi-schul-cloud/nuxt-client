@@ -7,7 +7,11 @@
 			:teaser="page.excerpt"
 		/>
 
-		<dropdown-menu v-if="downloadLinks.length > 0" :style="{ float: `right` }">
+		<dropdown-menu
+			v-if="downloadLinks.length > 0"
+			class="mb--xl"
+			:style="{ float: `right` }"
+		>
 			<template v-slot:header
 				>Downloads</template
 			>
