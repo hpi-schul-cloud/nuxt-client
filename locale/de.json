@@ -46,5 +46,10 @@
 	"pages.mint-ec.article.footer.kollegium-informieren": "Meine Kollegium informieren",
 	"pages.mint-ec.article.footer.engagieren": "Mich im Projekt engagieren",
 	"pages.mint-ec.article.footer.rechtlich": "Technische und rechtliche Grundlagen",
+	"components.organisms.legacyFooter.contact": "Kontakt",
+	"components.organisms.legacyFooter.job-offer": "Stellenausschreibungen",
+	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"layouts.loggedoutFullWidth.project": "Projekt",
+	"layouts.loggedoutFullWidth.join": "Mitmachen",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }

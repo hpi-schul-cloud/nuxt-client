@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import NavigationBar from "@components/molecules/NavigationBar";
+import NavigationBar from "@components/legacy/NavigationBar";
 
 export default {
 	components: {
@@ -18,16 +18,12 @@ export default {
 	data() {
 		return {
 			links: [
-				// {
-				// 	title: "Intro",
-				// 	href: "https://schul-cloud.org/#",
-				// },
 				{
-					title: "Projekt",
+					title: this.$t("layouts.loggedoutFullWidth.project"),
 					href: "/about",
 				},
 				{
-					title: "Mitmachen",
+					title: this.$t("layouts.loggedoutFullWidth.join"),
 					href: "/community",
 				},
 				{
@@ -36,8 +32,7 @@ export default {
 				},
 				{
 					title: "FAQ",
-					href:
-						"https://blog.schul-cloud.org/faq",
+					href: "https://blog.schul-cloud.org/faq",
 				},
 				{
 					title: "Onboarding",

@@ -23,7 +23,7 @@ describe("@components/MintEcPageHeader", () => {
 				heading: "heading",
 			},
 		});
-		expect(wrapper.find(".heading").exists()).toBe(true);
+		expect(wrapper.find(".custom-heading-style").exists()).toBe(true);
 		expect(wrapper.find(".teaser").exists()).toBe(true);
 	});
 });

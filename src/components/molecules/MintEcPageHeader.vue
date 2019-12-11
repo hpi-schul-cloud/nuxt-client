@@ -15,7 +15,7 @@
 				}"
 			>
 				<base-content-container :style="{ float: `left` }">
-					<h1 class="heading">{{ heading }}</h1>
+					<h3 class="custom-heading-style">{{ heading }}</h3>
 					<p class="teaser">{{ teaser }}</p>
 				</base-content-container>
 			</div>
@@ -77,22 +77,13 @@ export default {
 	}
 }
 
-.heading {
-	font-size: var(--heading-3);
+.custom-heading-style {
 	color: var(--color-white);
-
-	@include breakpoint(tablet) {
-		font-size: var(--heading-1);
-	}
 }
 
 p {
 	font-size: var(--text-md);
 	color: var(--color-white);
-
-	@include breakpoint(tablet) {
-		font-size: var(--text-lg);
-	}
 }
 .overlay {
 	position: absolute;

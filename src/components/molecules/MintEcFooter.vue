@@ -5,16 +5,14 @@
 				:column-width="windowWidth"
 				:style="{ justifyItems: `center` }"
 			>
-				<div class="link-container hover">
-					<h2 class="h3">Kapitelübersicht</h2>
+				<div class="link-container">
+					<h2 class="h4">{{
+						$t("components.molecules.MintEcFooter.chapters")
+					}}</h2>
 					<base-link
 						v-for="route in chapters"
 						:key="route.title"
-						:style="{
-							color: `var(--color-white)`,
-							borderBottom: `none`,
-							fontSize: `var(--text-lg)`,
-						}"
+						class="link-style"
 						:to="route.to"
 						:href="route.href"
 						:no-styles="true"
@@ -23,34 +21,20 @@
 					</base-link>
 				</div>
 
-				<div class="social-container hover">
-					<h2 class="h3">Social Links</h2>
+				<div class="social-container">
+					<h2 class="h4">Social Links</h2>
 					<base-link href="http://creativecommons.org/licenses/by-sa/4.0/">
 						<img
-							class="cc"
+							class="img-cc"
 							src="@assets/img/mint-ec-ghost/by-sa.svg"
 							alt="Creative Commons Lizenzvertrag"
 						/>
 					</base-link>
 					<base-link href="twitter.com/mint_ec">
-						<base-icon
-							source="fa"
-							icon="fab fa-twitter"
-							:style="{
-								color: `var(--color-white)`,
-								fontSize: `var(--heading-2)`,
-							}"
-						/>
+						<base-icon class="icon-style" source="fa" icon="fab fa-twitter" />
 					</base-link>
 					<base-link href="twitter.com/mint_ec">
-						<base-icon
-							source="fa"
-							icon="fab fa-instagram"
-							:style="{
-								color: `var(--color-white)`,
-								fontSize: `var(--heading-2)`,
-							}"
-						/>
+						<base-icon class="icon-style" source="fa" icon="fab fa-instagram" />
 					</base-link>
 				</div>
 			</base-grid>
@@ -98,41 +82,47 @@ export default {
 		transform: skewY(-3deg);
 		transform-origin: bottom left;
 	}
-}
+	.h4 {
+		color: var(--color-white);
+	}
+	.footer-text {
+		font-size: var(--text-md);
+		line-height: var(--line-height-lg);
+		color: var(--color-white);
+	}
+	.link-container {
+		display: flex;
+		flex-direction: column;
+		line-height: var(--line-height-xl);
 
-.h3 {
-	color: var(--color-white);
-}
+		@include breakpoint(tablet) {
+			min-height: auto;
+			padding: var(--space-xl) var(--space-lg);
+		}
+		.link-style {
+			font-size: var(--text-md) !important;
+			color: var(--color-white) !important;
+			border-bottom: none !important;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+	.social-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: var(--space-xl) var(--space-lg);
+		line-height: var(--line-height-xl);
 
-.footer-text {
-	font-size: var(--text-lg);
-	line-height: var(--line-height-lg);
-	color: var(--color-white);
-}
-
-.link-container {
-	display: flex;
-	flex-direction: column;
-	padding: var(--space-xl) var(--space-lg);
-	line-height: var(--line-height-xl);
-}
-
-.social-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: var(--space-xl) var(--space-lg);
-	line-height: var(--line-height-xl);
-}
-
-.cc {
-	width: 163.5px;
-	border-radius: var(--radius-sm);
-}
-
-.hover {
-	> a:hover {
-		text-decoration: underline;
+		.icon-style {
+			font-size: var(--heading-2) !important;
+			color: var(--color-white) !important;
+		}
+		.img-cc {
+			width: 140px;
+			border-radius: var(--radius-sm);
+		}
 	}
 }
 </style>

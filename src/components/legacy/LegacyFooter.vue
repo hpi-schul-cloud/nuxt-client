@@ -1,20 +1,15 @@
 <template>
 	<div class="section">
 		<div class="footer-container">
-			<base-grid
-				:column-width="windowWidth"
-				:style="{ justifyItems: `center` }"
-			>
-				<div class="link-container hover">
-					<h2 class="h3">Kontakt</h2>
+			<base-grid :column-width="colWidth" :style="{ justifyItems: `center` }">
+				<div class="link-container">
+					<h2 class="h4">{{
+						$t("components.organisms.legacyFooter.contact")
+					}}</h2>
 					<base-link
 						v-for="route in contacts"
 						:key="route.title"
-						:style="{
-							color: `var(--color-white)`,
-							borderBottom: `none`,
-							fontSize: `var(--text-lg)`,
-						}"
+						class="link-style"
 						:to="route.to"
 						:href="route.href"
 						:no-styles="true"
@@ -22,16 +17,12 @@
 						{{ route.title }}
 					</base-link>
 				</div>
-				<div class="link-container hover">
-					<h2 class="h3">Links</h2>
+				<div class="link-container">
+					<h2 class="h4">Links</h2>
 					<base-link
 						v-for="route in links"
 						:key="route.title"
-						:style="{
-							color: `var(--color-white)`,
-							borderBottom: `none`,
-							fontSize: `var(--text-lg)`,
-						}"
+						class="link-style"
 						:to="route.to"
 						:href="route.href"
 						:no-styles="true"
@@ -39,35 +30,29 @@
 						{{ route.title }}
 					</base-link>
 				</div>
-				<div class="link-container hover">
-					<h2 class="h3">Mobile App</h2>
+				<div class="link-container">
+					<h2 class="h4">Mobile App</h2>
 					<base-link href="https://testflight.apple.com/join/7i2xN7hH">
 						<img
-							class="apple-badge"
+							class="img-apple-badge"
 							src="https://s3.hidrive.strato.com/schul-cloud-hpi/images/google-play-badge.png"
 							alt="Apple Badge"
 						/>
 					</base-link>
-					<h2 class="h3">Stellenausschreibungen</h2>
+					<h2 class="h4">{{
+						$t("components.organisms.legacyFooter.job-offer")
+					}}</h2>
 					<p class="footer-text">
 						Du möchtest gerne Mitglied in unserem HPI
 						<br />Schul-Cloud Team werden? Wir suchen:
 					</p>
 					<base-link
-						:style="{
-							color: `var(--color-white)`,
-							borderBottom: `none`,
-							fontSize: `var(--text-lg)`,
-						}"
+						class="link-style"
 						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/web-developer-mwd-im-projekt-hpi-schul-cloud.html"
 						>Web Developer</base-link
 					>
 					<base-link
-						:style="{
-							color: `var(--color-white)`,
-							borderBottom: `none`,
-							fontSize: `var(--text-lg)`,
-						}"
+						class="link-style"
 						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/system-engineer-dev-ops-mw.html"
 						>DevOps</base-link
 					>
@@ -93,7 +78,7 @@ export default {
 	},
 
 	computed: {
-		windowWidth() {
+		colWidth() {
 			if (window.innerWidth <= 750) {
 				return "20rem";
 			}
@@ -125,32 +110,30 @@ export default {
 		transform: skewY(-3deg);
 		transform-origin: bottom left;
 	}
-}
-
-.h3 {
-	color: var(--color-white);
-}
-
-.footer-text {
-	font-size: var(--text-lg);
-	line-height: var(--line-height-lg);
-	color: var(--color-white);
-}
-
-.apple-badge {
-	width: 163.5px;
-	height: 70px;
-}
-
-.link-container {
-	display: flex;
-	flex-direction: column;
-	line-height: var(--line-height-xl);
-}
-
-.hover {
-	> a:hover {
-		text-decoration: underline;
+	.h4 {
+		color: var(--color-white);
+	}
+	.footer-text {
+		font-size: var(--text-md);
+		line-height: var(--line-height-lg);
+		color: var(--color-white);
+	}
+	.img-apple-badge {
+		width: 163.5px;
+		height: 70px;
+	}
+	.link-container {
+		display: flex;
+		flex-direction: column;
+		line-height: var(--line-height-xl);
+		.link-style {
+			font-size: var(--text-md) !important;
+			color: var(--color-white) !important;
+			border-bottom: none !important;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 }
 </style>

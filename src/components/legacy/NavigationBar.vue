@@ -27,10 +27,6 @@
 <script>
 export default {
 	props: {
-		logo: {
-			type: String,
-			default: "",
-		},
 		links: {
 			type: Array,
 			reqired: true,
@@ -70,7 +66,6 @@ export default {
 	background-color: var(--color-white-transparent);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 	box-shadow: var(--shadow-sm);
 
 	@include breakpoint(desktop) {

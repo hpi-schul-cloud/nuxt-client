@@ -191,13 +191,5 @@ export default {
 	a {
 		@extend .default-link;
 	}
-
-	.item {
-		color: var(--color-black) !important;
-
-		&:hover {
-			color: var(--color-secondary) !important;
-		}
-	}
 }
 </style>

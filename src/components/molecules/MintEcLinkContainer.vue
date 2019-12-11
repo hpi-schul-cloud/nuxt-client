@@ -21,8 +21,8 @@
 					>
 					</base-icon>
 				</div>
-				<p
-					>{{ heading }}
+				<p class="heading">
+					{{ heading }}
 					<base-icon
 						source="fa"
 						icon="fas fa-chevron-right"
@@ -89,8 +89,8 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-end;
-	width: 270px;
-	height: 90px;
+	// width: 270px;
+	// height: 90px;
 	padding: var(--space-md);
 	background-color: var(--color-secondary);
 	border-radius: 0 0 var(--radius-md) var(--radius-md);
@@ -102,7 +102,7 @@ export default {
 }
 
 .image-container {
-	width: 270px;
+	// width: 270px;
 	height: 200px;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -114,8 +114,8 @@ export default {
 		box-shadow: var(--shadow-m);
 	}
 }
-p {
-	margin-bottom: 0;
+.heading {
+	margin: var(--space-md) 0;
 	color: var(--color-white);
 }
 </style>
