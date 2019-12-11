@@ -7,7 +7,7 @@ const validNews = {
 };
 const validNewsDate = {
 	date: "2019-11-05",
-	time: "13:07", // +1h because of utc conversion
+	time: "14:07", // +1h because of utc conversion
 };
 const invalidNews = {
 	title: "", // no title

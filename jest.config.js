@@ -1,4 +1,4 @@
-process.env.TZ = "UTC";
+process.env.TZ = "Europe/Berlin";
 
 module.exports = {
 	setupFiles: ["<rootDir>/tests/unit/setup", "jest-canvas-mock"],
