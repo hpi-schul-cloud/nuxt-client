@@ -1,4 +1,7 @@
 {
+	"components.organisms.contentcard.report.email": "inhalte@schul-cloud.org",
+	"components.organisms.contentcard.report.body": "Melden des Inhaltes mit der ID",
+	"components.organisms.contentcard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da:[hier bitte Ihre Gründe]",
 	"common.actions.cancel": "Abbrechen",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.remove": "Löschen",
@@ -10,9 +13,10 @@
 	"components.organisms.FormNews.errors.patch": "Fehler beim aktualisieren.",
 	"components.organisms.FormNews.errors.remove": "Fehler beim löschen.",
 	"components.organisms.FormNews.label.date": "Datum",
-	"components.organisms.FormNews.label.planned_publish": "Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
+	"components.organisms.FormNews.label.planned_publish": "Setze ein Datum für die Veröffentlichung in der Zukunft (optional):",
 	"components.organisms.FormNews.label.time": "Uhrzeit",
 	"components.organisms.FormNews.label.title": "Titel",
+	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.remove.confirm.cancel": "Abbrechen",
 	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
 	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiederruflich löschen?",
@@ -22,7 +26,7 @@
 	"components.organisms.FormNews.success.create": "Artikel erstellt.",
 	"components.organisms.FormNews.success.patch": "Artikel wurde aktualisiert.",
 	"components.organisms.FormNews.success.remove": "Artikel erfolgreich gelöscht.",
-
+	"components.organisms.FormNews.editor.placeholder": "Es war einmal...",
 	"error.400": "400 - Fehlerhafte Anfrage",
 	"error.401": "401 - Das dürfen wir dir leider nicht zeigen",
 	"error.404": "404 - Seite nicht gefunden",
@@ -52,5 +56,10 @@
 	"layouts.loggedoutFullWidth.project": "Projekt",
 	"layouts.loggedoutFullWidth.join": "Mitmachen",
 	"layouts.loggedoutFullWidth.steps": "Erste Schritte",
+	"pages.content.index.search_for": "Suche nach...",
+	"pages.content.index.search_results": "Suchergebnisse für",
+	"pages.content.index.search_resources": "Ressourcen",
+	"pages.content.empty_state.error.oops": "Oops",
+	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }
