@@ -1,17 +1,19 @@
 {
-	"components.organisms.contentcard.report.email": "inhalte@schul-cloud.org",
-	"components.organisms.contentcard.report.body": "Melden des Inhaltes mit der ID",
-	"components.organisms.contentcard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da:[hier bitte Ihre Gründe]",
+	"storybook.lang": "I'm in English now!",
+	"pages.news.title": "News",
+	"pages.courses.new.title": "Create new course",
+	"pages.impressum.title": "Imprint",
 	"error.400": "401 - Bad Request",
 	"error.401": "401 - Unauthorized",
 	"error.404": "404 - Not Found",
 	"pages.courses.new.btn_new": "Create",
-	"pages.impressum.title": "Imprint",
-	"pages.news.title": "News",
+	"pages.news.new.title": "Create News",
+	"components.organisms.contentcard.report.email": "inhalte@schul-cloud.org",
+	"components.organisms.contentcard.report.body": "Melden des Inhaltes mit der ID",
+	"components.organisms.contentcard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da:[hier bitte Ihre Gründe]",
 	"pages.content.index.search_for": "Search for...",
 	"pages.content.index.search_results": "Search results for",
 	"pages.content.index.search_resources": "Resources",
 	"pages.content.empty_state.error.oops": "Oops",
-	"pages.content.empty_state.error.message": "We couldn't find any search result, please try entering other keywords.",
-	"storybook.lang": "I'm in English now!"
+	"pages.content.empty_state.error.message": "We couldn't find any search result, please try entering other keywords."
 }
