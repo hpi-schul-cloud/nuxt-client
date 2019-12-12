@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .wrapper {
 	position: relative;
@@ -65,7 +65,6 @@ export default {
 
 	@include breakpoint(tablet) {
 		height: 30rem;
-		padding: var(--space-xl);
 	}
 }
 .container {

@@ -89,8 +89,6 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-end;
-	// width: 270px;
-	// height: 90px;
 	padding: var(--space-md);
 	background-color: var(--color-secondary);
 	border-radius: 0 0 var(--radius-md) var(--radius-md);
@@ -102,7 +100,6 @@ export default {
 }
 
 .image-container {
-	// width: 270px;
 	height: 200px;
 	background-repeat: no-repeat;
 	background-position: center;
