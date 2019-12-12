@@ -39,7 +39,7 @@ export default {
 				},
 				{
 					title: this.$t("layouts.loggedoutFullWidth.steps"),
-					href: "/mint-ec/mint-ec-willkommenspaket",
+					href: "/mint-ec/willkommenspaket",
 				},
 			],
 		};
