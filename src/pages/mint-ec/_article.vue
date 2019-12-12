@@ -134,6 +134,10 @@ export default {
 					title: this.$t("pages.mint-ec.article.footer.rechtlich"),
 					href: "/mint-ec/technik-und-recht",
 				},
+				{
+					title: this.$t("pages.mint-ec.article.footer.datasecurity"),
+					href: "/mint-ec/datenschutz-und-urheberrecht",
+				},
 			],
 		};
 	},
