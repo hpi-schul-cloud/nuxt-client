@@ -1,4 +1,5 @@
 import NavigationBar from "./NavigationBar";
+import BaseLink from "@components/base/BaseLink";
 
 describe("@components/NavigationBar", () => {
 	it(...isValidComponent(NavigationBar));
@@ -48,6 +49,7 @@ describe("@components/NavigationBar", () => {
 				img: "@assets/img/logo/logo-image-color.svg",
 			},
 		});
+		expect(wrapper.find(BaseLink).exists()).toBe(true);
 		expect(wrapper.props().img).toBe("@assets/img/logo/logo-image-color.svg");
 		expect(wrapper.find(".link-container").exists()).toBe(true);
 	});

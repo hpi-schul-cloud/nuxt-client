@@ -20,6 +20,7 @@
 				:key="link.name"
 				class="item"
 				:href="link.href"
+				target="_blank"
 				>{{ link.name }}</menu-link
 			>
 		</dropdown-menu>
