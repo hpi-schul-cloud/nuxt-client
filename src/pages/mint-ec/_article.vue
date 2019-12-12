@@ -74,7 +74,7 @@ export default {
 				{
 					title: this.$t("pages.mint-ec.article.footer.nutzungsordnung"),
 					href:
-						"https://schul-cloud.org/datenschutzhttps://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+						"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
 				},
 				{
 					title: "Team",
