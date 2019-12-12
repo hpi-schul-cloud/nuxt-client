@@ -54,6 +54,7 @@
 						:key="action.title"
 						v-ripple
 						class="logout-button"
+						data-testid="logout"
 						@click="sendEvent(action.event)"
 						>Abmelden</button
 					>
