@@ -16,7 +16,7 @@
 					</template>
 				</modal-body-info>
 			</template>
-			<template v-slot:footerRight>
+			<template v-slot:footer-right>
 				<base-button
 					:design="invertedDesign ? actionDesign : 'text'"
 					data-testid="btn-dialog-cancel"
