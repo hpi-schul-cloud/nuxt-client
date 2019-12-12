@@ -13,7 +13,7 @@
 							{{ category }}
 						</span>
 						<span v-else>
-							{{ $t("components.organisms.NewsCard.tabDefault") }}
+							{{ $t("components.molecules.NewsCard.tabDefault") }}
 						</span>
 					</card-tab>
 				</div>
