@@ -1,6 +1,9 @@
 <template>
 	<base-link :to="{ name: 'news-id', params: { id: id } }" :no-underline="true">
-		<base-card v-bind="$props" :class="{ 'landscape-mode': isLandscape }">
+		<base-card
+			v-bind="$props"
+			:class="{ 'news-card': true, 'landscape-mode': isLandscape }"
+		>
 			<template v:slot:header>
 				<div class="header">
 					<card-tab
@@ -147,6 +150,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles-default/utility/multiline-ellipsis";
+
+.news-card {
+	padding: var(--space-xs);
+}
 
 .header {
 	position: relative;
