@@ -13,5 +13,5 @@ module.exports = [
 	//`^/news/${mongoId}/?$`,
 	//`^/news/${mongoId}/edit`,
 	`^/news/new/?$`,
-	`^/news/$`,
+	`^/news/?$`,
 ];
