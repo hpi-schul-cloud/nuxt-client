@@ -2,7 +2,7 @@
 	<section>
 		<base-button @click="find">Schulen laden</base-button>
 
-		<base-card v-for="(school, i) of schools" :key="i" class="school-card">
+		<base-card v-for="(school, i) of schools" :key="i">
 			<p slot="header">{{ school.name }}</p>
 			<div>{{ school.description }}</div>
 			<p slot="footer">
@@ -39,9 +39,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.school-card {
-	padding: var(--space-xs);
-}
-</style>

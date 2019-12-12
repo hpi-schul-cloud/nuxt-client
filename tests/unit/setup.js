@@ -78,9 +78,7 @@ Object.defineProperty(window, "localStorage", {
 	})(),
 });
 
-const location = {
-	href: "",
-};
+const location = {};
 Object.defineProperty(window, "location", {
 	set: function(val) {
 		location.host = "domain.io";
@@ -127,16 +125,11 @@ global.shallowMountView = (Component, options = {}) => {
 
 import { i18n as i18nConfig } from "@plugins/i18n.js";
 import i18nStoreModule from "@store/i18n";
-import authStoreModule from "@store/auth";
-import { mixin as userMixin } from "@plugins/user.js";
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
-	user,
 	store,
-	$route,
-	$router,
 	router,
 	/*style,*/ mocks,
 	stubs,
@@ -168,14 +161,11 @@ global.createComponentMocks = ({
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	if (store || i18n || user) {
+	if (store || i18n) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
 		if (i18n) {
 			storeModules.i18n = i18nStoreModule;
-		}
-		if (user) {
-			storeModules.auth = authStoreModule;
 		}
 		returnOptions.store = new Vuex.Store({
 			modules: Object.entries(storeModules)
@@ -200,10 +190,6 @@ global.createComponentMocks = ({
 		returnOptions.i18n = i18nConfig(returnOptions.store);
 	}
 
-	if (user) {
-		localVue.mixin(userMixin);
-	}
-
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
 	if (router) {
@@ -211,12 +197,6 @@ global.createComponentMocks = ({
 		returnOptions.stubs["Nuxt"] = true;
 	}
 
-	if ($route) {
-		returnOptions.mocks.$route = $route;
-	}
-	if ($router) {
-		returnOptions.mocks.$router = $router;
-	}
 	return returnOptions;
 };
 

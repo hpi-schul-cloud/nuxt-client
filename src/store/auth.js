@@ -97,10 +97,3 @@ export const state = () => {
 		publicPages: ["index", "login", "signup", "impressum"],
 	};
 };
-
-export default {
-	namespaced: true,
-	actions,
-	mutations,
-	state,
-};

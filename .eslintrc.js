@@ -31,7 +31,7 @@ module.exports = {
 		// reduce complexity of each file by limiting the file length
 		"max-lines": [
 			"error",
-			{ max: 300, skipBlankLines: true, skipComments: true },
+			{ max: 250, skipBlankLines: true, skipComments: true },
 		],
 		// Config from existing client & server
 		"no-underscore-dangle": ["error", { allow: ["_id", "_v", "__v"] }],
@@ -114,9 +114,6 @@ module.exports = {
 				//shallowMountView: false,
 				createComponentMocks: false,
 				//createModuleStore: false,
-			},
-			rules: {
-				"max-lines": 0,
 			},
 		},
 	],

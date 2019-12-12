@@ -42,7 +42,7 @@ jobs:
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run lint
-        run: npm run lint:ci
+        run: npm run lint
   # build:
   #   strategy:
   #     matrix:

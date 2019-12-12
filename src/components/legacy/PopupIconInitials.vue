@@ -1,10 +1,5 @@
 <template>
-	<div
-		v-click-outside="removePopup"
-		class="popup"
-		data-testid="initials"
-		@click="popup"
-	>
+	<div v-click-outside="removePopup" class="popup" @click="popup">
 		<div class="icon">{{ initials }}</div>
 		<div class="popuptext" :class="{ visible }">
 			<div class="username">

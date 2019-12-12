@@ -1,6 +1,6 @@
 # Localization mit i18n
 
-Wir verwenden [Vue i18n](http://kazupon.github.io/vue-i18n) zur Internationalisierung des Nuxt-Clients. Die Sprachdateien werden dabei über [lokalise.com](https://lokalise.com) verwaltet.
+Wir verwenden [Vue i18n](http://kazupon.github.io/vue-i18n) zur Internationalisierung des Nuxt-Clients. Die Sprachdateien werden dabei über [localise.co](https://lokalise.co) verwaltet.
 
 ## Verwendung
 
@@ -34,7 +34,7 @@ export default {
 </script>
 ```
 
-### Nuxt Middlewares/Plugins
+### Nuxt MIddlewares/Plugins
 
 Indem die `app` importiert wird kann auch hier auf i18n zugegriffen werden.
 
@@ -57,29 +57,18 @@ Wie bereits im Beispiel oben zu sehen werden die Strings (bis auf ein paar Ausna
 
 ### Aktualisieren von Strings
 
-Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locale/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co). Wenn Strings über lokalise aktualisiert wurden, erstellt lokalise einen pull request auf Github der reviewed und approved werden muss.
+Das aktualisieren kann entweder direkt in den JSON.Objekten unter `./locale/*.json` erfolgen oder über das [lokalise.co Projekt](https://lokalise.co). Wenn Strings über localise aktualisiert wurden, erstellt lokalise einen pull request auf Github der reviewed und approved werden muss.
 
-#### Lokalise Tutorial
+#### localise Tutorial
 
-1. log in at [lokalise.co](https://lokalise.co/). (Account data currently at Dominik)
-2. Select Project School Cloud.
-3. top right: add key
-4. specify the key according to the naming scheme
-5. the "base language" is German. "Base language value" is the actual string and should be entered here in German. Platform should be on Web by default.
-6. save
-7. enter the translation for the text. (Google Translator is already built in to help)
-8. click on the download button in the upper left corner
-9. Set Export Settings: (most should be correct by default)
-   - Format: `JSON (.json)` (not `structured JSON`)
-   - File-Structure: `All keys to a single file per language with the following bundle structure`: `locale/%LANG_ISO%.%FORMAT%`
-   - Empty translations: `Export as emptry strings`
-   - Order keys by: `Key name A-Z`
-   - Plural format: `Symfony`
-   - Indentation: `Tab`
-   - `Add new line at EOF` must be checked
-   - Data to export: `All`
-   - Triggers: `GitHub`
-10. Check the export by clicking `Preview`
-11. Open a Pull Request by clicking `Build`
+1. Einloggen bei [lokalise.co](https://lokalise.co/). (Account Daten momentan bei Dominik)
+2. Project Schulcloud auswählen.
+3. Oben rechts: Key hinzufügen
+4. Key gemäß Namenschema angeben
+5. Die "Base language" ist Deutsch. "Base language value" ist der eigentliche String und soll hier in Deutsch eingegeben werden. Platform sollte standardmäßig auf Web sein.
+6. Save
+7. Übersetzung für den Text eingeben. (Google Übersetzer ist zur Hilfe schon eingebaut)
+8. Oben links auf den Download button klicken
+9. Sicher gehen das bei "Triggers" GitHub aktiviert ist. Alle anderen Einstellungen sollten standard mäßig korrekt sein. Auf "Preview" klicken, nun wird automatisch der PR auf Github erstellt.
 
 [Localise Github integration Doku](https://docs.lokalise.co/en/articles/1684090-github)

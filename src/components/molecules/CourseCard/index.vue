@@ -115,7 +115,6 @@ export default {
 
 .course-card {
 	position: relative;
-	padding: var(--space-xs);
 	padding-bottom: 0;
 	cursor: pointer;
 }

@@ -71,7 +71,7 @@ export default {
 	},
 	head() {
 		return {
-			title: this.$t("pages.news.title"),
+			title: "News",
 		};
 	},
 };
