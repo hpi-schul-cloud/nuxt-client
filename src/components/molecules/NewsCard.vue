@@ -1,5 +1,5 @@
 <template>
-	<base-link :to="{ name: 'news-id', params: { id: id } }" :no-underline="true">
+	<base-link :to="{ name: 'news-id', params: { id: id } }" :no-styles="true">
 		<base-card
 			v-bind="$props"
 			:class="{ 'news-card': true, 'landscape-mode': isLandscape }"

@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@utils/multiline-ellipsis.scss";
+@import "@styles-default/utility/multiline-ellipsis";
 
 .content-card {
 	display: flex;
