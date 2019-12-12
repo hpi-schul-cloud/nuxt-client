@@ -10,8 +10,7 @@ module.exports = [
 	`^/error/`,
 	`^/imprint/?`,
 	`^/nuxtversion/?$`,
-	// `^/news/${mongoId}/?$`,
+	`^/news/${mongoId}/?$`,
 	// `^/news/${mongoId}/edit`,
-	`^/news/new?$`,
-	// or: `^/news/${mongoId}/edit`,
+	`^/news/new/?$`,
 ];
