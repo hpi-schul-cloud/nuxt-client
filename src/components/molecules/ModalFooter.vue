@@ -52,16 +52,4 @@ export default {};
 		border: none;
 	}
 }
-
-.icon-container {
-	float: left;
-
-	> *:not(:first-child) {
-		margin-left: var(--space-sm);
-	}
-
-	@include breakpoint(tablet) {
-		padding: 0;
-	}
-}
 </style>

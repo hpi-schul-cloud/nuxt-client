@@ -18,7 +18,7 @@ import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseTable from "@basecomponents/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
 
-storiesOf("Base|Other", module)
+storiesOf("Base|Base UI", module)
 	.addParameters({
 		notes,
 	})
@@ -80,7 +80,7 @@ storiesOf("Base|Other", module)
 
 				<h2>Primary Action</h2>
 				<base-button design="primary">
-					<base-icon source="material" icon="home"/>
+					<base-icon source="material" icon="add"/>
 					primary
 				</base-button>
 				<base-button design="primary outline">primary outline</base-button>
@@ -271,28 +271,6 @@ storiesOf("Base|Other", module)
 		propsDescription: {
 			inputs:
 				"Strings are rendered as simple text, Objects are passed to BaseLink (text is interpreted as text, and the rest as properties)",
-		},
-	}))
-	.add("Base Dialog", () => ({
-		data: () => ({ active: false }),
-		template: `
-			<div>
-				<BaseButton @click="confirm">
-					Delete User
-				</BaseButton>
-			</div>
-		`,
-		methods: {
-			confirm() {
-				this.$dialog.confirm({
-					title: "Deleting account",
-					message:
-						"Are you sure you want to <b>delete</b> this user? This action cannot be undone.",
-					confirmText: "Delete Account",
-					type: "is-danger",
-					onConfirm: () => this.$toast.success("Account deleted!"),
-				});
-			},
 		},
 	}))
 	.add("Base Audio", () => ({

@@ -16,7 +16,7 @@ services:
       - NODE_ENV=production
       - TZ=Europe/Berlin
       - LEGACY_CLIENT_URL=http://client:3100
-      - API_URL=https://api.test.schul-cloud.org
+      - API_URL=https://api.$SYSTEM.schul-cloud.org
       - SENTRY_DSN=https://18a7cbf1a7ef427ebcfc38429d18ba40@sentry.schul-cloud.dev/7
       # FEATURE TOGGLES
       - FEATURE_TEAMS_ENABLED=true

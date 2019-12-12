@@ -79,8 +79,8 @@
 		"@storybook/vue": "^5.2.4",
 		"@vue/cli-plugin-babel": "^4.0.0",
 		"@vue/cli-service": "^4.0.0",
-		"@vue/eslint-config-prettier": "^5.0.0",
-		"@vue/eslint-config-standard": "^4.0.0",
+		"@vue/eslint-config-prettier": "^6.0.0",
+		"@vue/eslint-config-standard": "^5.0.0",
 		"@vue/test-utils": "^1.0.0-beta.28",
 		"@vuepress/plugin-pwa": "^1.0.2",
 		"babel-core": "^7.0.0-bridge.0",
@@ -97,7 +97,7 @@
 		"eslint-config-prettier": "^6.0.0",
 		"eslint-loader": "^3.0.0",
 		"eslint-plugin-prettier": "^3.0.1",
-		"eslint-plugin-vue": "^5.2.1",
+		"eslint-plugin-vue": "^6.0.0",
 		"find-cache-dir": "^3.0.0",
 		"http-proxy-middleware": "^0.19.1",
 		"hygen": "^5.0.1",
@@ -116,17 +116,18 @@
 		"postcss-loader": "^3.0.0",
 		"prettier": "^1.18.2",
 		"sass-loader": "^8.0.0",
+		"sinon": "^7.5.0",
 		"storybook-addon-vue-info": "^1.1.1",
 		"style-loader": "^1.0.0",
-		"stylelint": "^11.0.0",
-		"stylelint-config-prettier": "^6.0.0",
+		"stylelint": "^12.0.0",
+		"stylelint-config-prettier": "^7.0.0",
 		"stylelint-config-recess-order": "^2.0.1",
 		"stylelint-config-standard": "^19.0.0",
 		"stylelint-declaration-use-variable": "^1.7.0",
 		"stylelint-scss": "^3.5.1",
 		"vue-jest": "^3.0.3",
 		"vue-style-loader": "^4.1.2",
-		"vue-svg-loader": "^0.12.0",
+		"vue-svg-loader": "^0.15.0",
 		"vue-template-compiler": "^2.6.10",
 		"vuepress": "^1.1.0",
 		"vuera": "^0.2.4",
@@ -136,5 +137,10 @@
 	"engines": {
 		"node": ">=10.x.x",
 		"npm": ">=6.x.x"
+	},
+	"greenkeeper": {
+		"ignore": [
+			"core-js"
+		]
 	}
 }

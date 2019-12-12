@@ -1,8 +1,11 @@
 <template>
 	<a
 		v-if="href"
-		class="link is-external"
-		:class="{ inactive: inactive }"
+		:class="{
+			link: !noStyles,
+			'is-external': !noStyles,
+			'text-only': noStyles,
+		}"
 		:href="href"
 		v-bind="$attrs"
 		:target="linkTarget"
@@ -16,7 +19,7 @@
 	<!-- TODO use RouterLink if used outside nuxt -->
 	<NuxtLink
 		v-else
-		class="link"
+		:class="{ link: !noStyles, 'text-only': noStyles }"
 		tag="a"
 		:to="routerLinkTo"
 		v-bind="$attrs"
@@ -52,11 +55,14 @@ export default {
 			type: String,
 			default: "",
 		},
+		noUnderline: {
+			type: Boolean,
+		},
 		params: {
 			type: Object,
 			default: () => ({}),
 		},
-		inactive: {
+		noStyles: {
 			type: Boolean,
 		},
 	},
@@ -91,7 +97,6 @@ export default {
 		// inside individual validator functions for each prop.
 		validateProps() {
 			if (process.env.NODE_ENV === "production") return;
-
 			if (this.href) {
 				// Check for non-external URL in href.
 				/*
@@ -130,12 +135,18 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.text-only {
+	text-decoration: none;
+}
+
 .link {
 	display: inline;
 	color: var(--color-primary);
 	text-decoration: none;
 	cursor: pointer;
-	border-bottom: 2px solid var(--color-gray);
+	&.underlined {
+		border-bottom: 2px solid var(--color-gray);
+	}
 	&:hover,
 	&:focus {
 		color: var(--color-primary-dark);
@@ -143,11 +154,7 @@ export default {
 	&:visited {
 		color: var(--color-primary);
 	}
-	&.inactive {
-		color: var(--color-black);
-	}
 }
-
 .is-external {
 	border: none;
 	&:active {
@@ -155,9 +162,6 @@ export default {
 	}
 	&:hover {
 		color: var(--color-primary-dark);
-	}
-	&.inactive {
-		color: var(--color-black);
 	}
 }
 </style>

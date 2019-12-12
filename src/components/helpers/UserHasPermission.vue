@@ -1,13 +1,3 @@
-<template>
-	<div v-if="hasPermission" class="user-has-permission">
-		<slot />
-		<slot name="true" />
-	</div>
-	<div v-else class="user-has-no-permission">
-		<slot name="false" />
-	</div>
-</template>
-
 <script>
 import { mapState } from "vuex";
 
@@ -30,6 +20,13 @@ export default {
 				? this.userPermissions.includes(this.permission.toLowerCase())
 				: this.permission(this.userPermissions);
 		},
+	},
+	render() {
+		const slots = this.$slots;
+		if (this.hasPermission) {
+			return slots.true || slots.default;
+		}
+		return slots.false;
 	},
 };
 </script>

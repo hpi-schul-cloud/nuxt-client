@@ -1,77 +1,114 @@
 <template>
-	<section class="section">
-		<searchbar
-			v-model.lazy="searchQuery"
-			class="searchbar"
-			placeholder="Suche nach..."
-		/>
-		<pagination v-model="skippedItems" :state="pagination" />
-		<div class="columns">
-			<div v-for="content of searchResults" :key="content._id" class="column">
-				<pre>
-					{{ content }}
-				</pre
-				>
-			</div>
+	<section>
+		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
+			<floating-fab icon="add" @click="$_backToTop" />
 		</div>
-		<pagination v-model="skippedItems" :state="pagination" />
+		<div class="content">
+			<searchbar
+				v-model.lazy="searchQuery"
+				class="content__searchbar"
+				:placeholder="$t('pages.content.index.search_for')"
+				:loading="loading"
+			/>
+			<p class="content__total">
+				<span v-if="searchQuery.length > 0">
+					{{ resources.total }}
+					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+				</span>
+				<span v-else>
+					{{ resources.total }} {{ $t("pages.content.index.search_resources") }}
+				</span>
+			</p>
+			<div v-if="resources.data.length === 0" class="content__no-results">
+				<content-empty-state />
+			</div>
+			<div class="content__cards-container">
+				<base-grid column-width="17rem">
+					<content-card
+						v-for="resource of resources.data"
+						:id="resource._id"
+						:key="resource._id"
+						class="card"
+						:content-category="resource.resourceCategory"
+						:description="resource.description"
+						:licenses="resource.licenses"
+						:mime-type="resource.mimeType"
+						:origin-id="resource.originId"
+						:provider-name="resource.providerName"
+						:tags="resource.tags.slice(0, 5)"
+						:thumbnail="resource.thumbnail"
+						:title="resource.title"
+						:url="resource.url"
+					/>
+				</base-grid>
+			</div>
+			<base-spinner
+				v-if="loading && resources.data.length !== 0"
+				class="content__spinner"
+				color="var(--color-primary)"
+			/>
+		</div>
 	</section>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import Searchbar from "@components/molecules/Searchbar";
-import Pagination from "@components/organisms/Pagination";
+import ContentCard from "@components/molecules/ContentCard";
+import ContentEmptyState from "@components/molecules/ContentEmptyState";
+import infiniteScrolling from "@mixins/infiniteScrolling";
+import BaseGrid from "@components/base/BaseGrid";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
-	head() {
-		return {
-			title: "LernStore",
-		};
-	},
 	components: {
 		Searchbar,
-		Pagination,
+		ContentCard,
+		ContentEmptyState,
+		BaseGrid,
+		FloatingFab,
 	},
-	props: {},
+	mixins: [infiniteScrolling],
+	layout: "loggedInFull",
+	async asyncData({ store }) {
+		return store.dispatch("content/getResources");
+	},
 	data() {
 		return {
-			searchQuery: this.$route.query.q || "",
-			skippedItems: this.$route.query.skip
-				? parseInt(this.$route.query.skip, 10)
-				: 0,
+			searchQuery: "",
+			backToTopScrollYLimit: 115,
 		};
 	},
 	computed: {
-		...mapGetters("content_search", {
-			getContent: "get",
-			fetchContent: "find",
-		}),
-		...mapState("content_search", {
-			pagination: (state) => {
-				return state.pagination.content_list;
+		...mapState("content", {
+			resources: (state) => {
+				return state.resources;
+			},
+			loading: (state) => {
+				return state.loading;
 			},
 		}),
-		searchResults() {
-			const { getContent, pagination } = this;
-
-			if (pagination) {
-				return pagination.ids.map((id) => getContent(id));
-			}
-
-			return [];
-		},
 		query() {
-			const query = {};
-
+			const query = {
+				$limit: 9,
+				$skip: 0,
+			};
 			if (this.searchQuery) {
 				query["_all[$match]"] = this.searchQuery;
-				query["$skip"] = this.skippedItems;
 			}
 			return query;
 		},
 	},
 	watch: {
+		bottom(bottom) {
+			const { limit, skip, total } = this.resources;
+			if (bottom && !this.loading && total > limit * skip) {
+				this.addContent();
+			}
+		},
+		loading() {
+			return this.loading;
+		},
 		searchQuery(to, from) {
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
@@ -81,52 +118,52 @@ export default {
 			}
 			this.$options.debounce = setInterval(() => {
 				clearInterval(this.$options.debounce);
-				this.skippedItems = 0;
-				this.find(to);
+				this.searchContent();
 			}, 500);
 		},
-		searchResults() {
-			this.skippedItems = parseInt(this.pagination.skip, 10);
+		resources() {
+			return this.resources;
 		},
-		async skippedItems(to, from) {
-			if (to === from) {
-				return;
-			}
-			await this.find(this.searchQuery);
-		},
-	},
-	created(ctx) {
-		this.find(this.searchQuery);
 	},
 	methods: {
-		async find() {
-			await this.$store.dispatch("content_search/find", {
-				query: this.query,
-				qid: "content_list",
-			});
-
-			this.$router.push({
-				query: { q: this.searchQuery, skip: this.skippedItems },
-			});
-			window.scrollTo(0, 0);
+		async addContent() {
+			this.query["$skip"] += this.query["$limit"];
+			await this.$store.dispatch("content/addResources", this.query);
 		},
+		async searchContent() {
+			await this.$store.dispatch("content/getResources", this.query);
+		},
+	},
+	head() {
+		return {
+			title: "LernStore",
+		};
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@styles";
-
-.searchbar {
-	margin: var(--space-sm) auto;
-}
-.columns {
+.content {
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
-}
-.column {
-	width: 100%;
-	margin: var(--space-sm) var(--space-md);
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	&__searchbar {
+		width: 100%;
+		padding: var(--space-md) 0;
+	}
+	&__total {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		width: 100%;
+		color: var(--color-primary);
+	}
+	&__no-results {
+		margin-top: var(--space-md);
+	}
+	&__spinner {
+		margin-top: var(--space-md);
+	}
 }
 </style>

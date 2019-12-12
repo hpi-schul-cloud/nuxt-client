@@ -14,6 +14,15 @@ const module = mergeDeep(base, {
 				query: queryRole,
 			})).data;
 		},
+		getById: async function(ctx, id) {
+			const queryId = {
+				_id: id,
+			};
+
+			return (await this.dispatch("users/find", {
+				query: queryId,
+			})).data[0];
+		},
 	},
 });
 
