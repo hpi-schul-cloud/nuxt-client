@@ -60,11 +60,11 @@ export default {
 			links: [
 				{
 					title: this.$t("pages.mint-ec.article.footer.impressum"),
-					href: "https://schul-cloud.org/impressum",
+					href: "/impressum",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutz"),
-					href: "https://schul-cloud.org/datenschutz",
+					href: "/datenschutz",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutzerklärung"),
@@ -78,15 +78,15 @@ export default {
 				},
 				{
 					title: "Team",
-					href: "https://schul-cloud.org/team",
+					href: "/team",
 				},
 				{
 					title: "Partner",
-					href: "https://schul-cloud.org/partner",
+					href: "/partner",
 				},
 				{
 					title: "GitHub",
-					href: "https://github.com/schul-cloud/",
+					href: "/schul-cloud",
 				},
 			],
 			contacts: [

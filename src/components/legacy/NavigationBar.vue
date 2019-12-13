@@ -8,8 +8,8 @@
 		<div class="link-container">
 			<base-link
 				v-for="(route, idx) in links"
-				:key="route.title"
-				:class="activeLink === idx ? 'li active' : 'li'"
+				:key="route.href"
+				:class="{ li: true, active: activeLink === route.href }"
 				:to="route.to"
 				:href="route.href"
 				:no-styles="true"
@@ -35,7 +35,7 @@ export default {
 	},
 	data: function() {
 		return {
-			activeLink: null,
+			activeLink: window.location.pathname,
 		};
 	},
 
@@ -124,9 +124,17 @@ export default {
 		background-color: var(--color-gray-light);
 		border-radius: var(--radius-sm);
 	}
-	.active {
+}
+
+a.active {
+	color: var(--color-white);
+	background-color: var(--color-primary);
+	border-radius: var(--radius-sm);
+
+	&:hover {
 		color: var(--color-white);
 		background-color: var(--color-primary);
+		border-radius: var(--radius-sm);
 	}
 }
 </style>

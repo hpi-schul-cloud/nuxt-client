@@ -10,16 +10,15 @@ describe("@components/LegacyFooter", () => {
 				links: [
 					{
 						title: "link1",
-						href: "https://schul-cloud.org/impressum",
+						href: "/impressum",
 					},
 					{
 						title: "link2",
-						href: "https://schul-cloud.org/datenschutz",
+						href: "/datenschutz",
 					},
 					{
 						title: "link3",
-						href:
-							"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+						href: "/team",
 					},
 				],
 			},
