@@ -53,4 +53,6 @@ describe("@components/NavigationBar", () => {
 		expect(wrapper.props().img).toBe("@assets/img/logo/logo-image-color.svg");
 		expect(wrapper.find(".link-container").exists()).toBe(true);
 	});
+
+	xit("setActive function sets active link accordingly", () => {});
 });
