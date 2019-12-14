@@ -2,7 +2,7 @@
 	<label class="wrapper">
 		<input
 			ref="hiddenInput"
-			:aria-label="label"
+			:aria-label="labelHidden ? label : undefined"
 			v-bind="$attrs"
 			:checked="isChecked"
 			:value="value"
@@ -16,7 +16,7 @@
 		>
 			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
 		</span>
-		<span class="label">
+		<span v-if=!labelHidden class="label">
 			{{ label }}
 		</span>
 	</label>

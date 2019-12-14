@@ -2,6 +2,7 @@
 	<label>
 		<input
 			ref="hiddenInput"
+			:aria-label="labelHidden ? label : undefined"
 			v-bind="$attrs"
 			:checked="vmodel === value"
 			:value="value"
@@ -10,7 +11,7 @@
 			@change="$emit('input', $event.target.value)"
 		/>
 		<span class="radio" :class="{ 'user-is-tabbing': $userIsTabbing }" />
-		<span class="label">
+		<span v-if="!labelHidden" class="label">
 			{{ label }}
 		</span>
 	</label>
@@ -37,6 +38,9 @@ export default {
 		label: {
 			type: String,
 			required: true,
+		},
+		labelHidden: {
+			type: Boolean,
 		},
 		type: {
 			type: String,

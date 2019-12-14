@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style src="flatpickr/dist/flatpickr.css"></style>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@styles";
 
 .calendar-input /deep/ {
