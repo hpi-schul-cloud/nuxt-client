@@ -1,4 +1,4 @@
-const micromatch = require('micromatch')
+const micromatch = require("micromatch");
 
 module.exports = {
 	"*.js": [
@@ -29,8 +29,10 @@ module.exports = {
 		"npm run lint:prettier --write",
 		"git add",
 	],
-	"*.{png,jpeg,jpg,gif,svg}": files => {
-		const match = micromatch.not(files, '**/__image_snapshots__/**')
-		return ["imagemin-lint-staged", "git add"].map(e => `${e} ${match.join(" ")}`)
+	"*.{png,jpeg,jpg,gif,svg}": (files) => {
+		const match = micromatch.not(files, "**/__image_snapshots__/**");
+		return ["imagemin-lint-staged", "git add"].map(
+			(e) => `${e} ${match.join(" ")}`
+		);
 	},
 };
