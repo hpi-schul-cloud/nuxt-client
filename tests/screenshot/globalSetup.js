@@ -7,9 +7,7 @@ const { storybookUrl, routesFilePath } = require("./config");
 const fetchRoutes = async () => {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
-	await page.goto(`${storybookUrl}/iframe.html?path=/story/story-list--all`, {
-		waitUntil: "load",
-	});
+	await page.goto(`${storybookUrl}/iframe.html?path=/story/story-list--all`);
 	const HTML = await page.$eval("#stories", (e) => e.innerHTML);
 	await browser.close();
 	return HTML.split("\n").map((e) => e.trim());

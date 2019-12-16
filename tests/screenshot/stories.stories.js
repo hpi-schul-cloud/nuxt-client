@@ -8,7 +8,7 @@ import { storiesOf, getStorybook } from "@storybook/vue";
 const cleanPath = (str) => str.replace(/[\| ]/g, "-").toLowerCase();
 // You may need to adjust the replace regex. These are just guesses how storybook generates the path
 const formatGroup = (str) => cleanPath(str).replace(/[\/]/g, "-");
-const formatName = (str) => cleanPath(str).replace(/[\/\&]/g, "");
+const formatName = (str) => cleanPath(str).replace(/[\/ ]/g, "").replace(/[\&]/g, "-");
 
 const stories = getStorybook()
 	.map((group) =>

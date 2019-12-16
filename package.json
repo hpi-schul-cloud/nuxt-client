@@ -33,8 +33,9 @@
 		"test:unit:ci": "npm run test:unit -- --coverage --ci",
 		"test:unit:file": "npm run test:unit -- --bail --findRelatedTests",
 		"test:unit:watch": "npm run test:unit -- --watch --notify",
+		"test:screenshot:server": "npm run build:storybook && npx http-server dist/storybook -p 4001",
 		"test:screenshot:jest": "cross-env NODE_ENV=test jest --config tests/screenshot/jest.config.js",
-		"test:screenshot": "start-server-and-test dev:storybook http-get://localhost:4001 test:screenshot:jest",
+		"test:screenshot": "start-server-and-test test:screenshot:server http-get://localhost:4001 test:screenshot:jest",
 		"test:ci": "npm run test:unit:ci",
 		"test": "npm run test:unit"
 	},
@@ -103,6 +104,7 @@
 		"eslint-plugin-vue": "^6.0.0",
 		"find-cache-dir": "^3.0.0",
 		"http-proxy-middleware": "^0.19.1",
+		"http-server": "^0.12.0",
 		"hygen": "^5.0.1",
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^24.1.0",
