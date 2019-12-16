@@ -32,6 +32,7 @@ describe("screenshots", () => {
 					customDiffConfig: {
 						threshold: 0.1,
 					},
+					failureThresholdType: "percent",
 					failureThreshold: 3, // accept <x% overall diff
 				});
 			});
