@@ -39,7 +39,7 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast[type](message)">Knobs Toast</BaseButton>
 				<br>
 				<BaseButton @click="$toast.show('Show 🧐')">Default Toast</BaseButton>
-				<BaseButton @click="$toast.info('Info 🤓')" design="info">Info Toast</BaseButton>
+				<BaseButton @click="$toast.info('Info 🤓')">Info Toast</BaseButton>
 				<BaseButton @click="$toast.success('Success 😊')" design="success">Success Toast</BaseButton>
 				<BaseButton @click="$toast.error('Error 😥')" design="danger">Error Toast</BaseButton>
 			</div>
