@@ -56,11 +56,7 @@ const reqComponentStories = require.context(
 	true,
 	/\.stories\.js$/
 );
-const testStories = require.context(
-	"../../tests",
-	true,
-	/\.stories\.js$/
-);
+const testStories = require.context("../../tests", true, /\.stories\.js$/);
 function loadStories() {
 	reqStories.keys().forEach(reqStories);
 	reqComponentStories.keys().forEach(reqComponentStories);
