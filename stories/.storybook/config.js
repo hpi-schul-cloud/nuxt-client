@@ -56,9 +56,15 @@ const reqComponentStories = require.context(
 	true,
 	/\.stories\.js$/
 );
+const testStories = require.context(
+	"../../tests",
+	true,
+	/\.stories\.js$/
+);
 function loadStories() {
 	reqStories.keys().forEach(reqStories);
 	reqComponentStories.keys().forEach(reqComponentStories);
+	// testStories must be the last entry to ensure all other stories are already registerd!
+	testStories.keys().forEach(testStories);
 }
-
 configure(loadStories, module);
