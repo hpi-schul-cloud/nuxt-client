@@ -2,10 +2,20 @@ const fs = require("fs");
 const { storybookUrl, routesFilePath } = require("./config");
 const ignoredStories = require("./ignoredStories");
 
+const blockRequest = (request) => {
+	// block webpack hot reload connection
+	if (request.url().endsWith("__webpack_hmr")) {
+		request.abort();
+	} else {
+		request.continue();
+	}
+};
+
 const storyNotIgnored = (storyPath) =>
 	!ignoredStories.some(
 		(regexString) => !!new RegExp(regexString).exec(storyPath)
 	);
+
 // get all stories to screenshot, except ignored ones
 const stories = JSON.parse(fs.readFileSync(routesFilePath)).filter(
 	storyNotIgnored
@@ -24,6 +34,9 @@ describe("screenshots", () => {
 		const [group, name] = storyName.split("--");
 		describe(group, () => {
 			it(name, async () => {
+				page = await browser.newPage();
+				await page.setRequestInterception(true);
+				page.on("request", blockRequest);
 				await page.goto(`${storybookUrl}/iframe.html?path=${storyPath}`, {
 					waitUntil: "networkidle0",
 				});
