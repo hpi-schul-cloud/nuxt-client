@@ -65,7 +65,7 @@ describe("screenshots", () => {
 						threshold: 0.1,
 					},
 					failureThresholdType: "percent",
-					failureThreshold: 3, // accept <x% overall diff
+					failureThreshold: 1, // accept <x% overall diff
 				});
 			});
 		});
