@@ -48,14 +48,15 @@ storiesOf("Misc", module)
 	.add("Popup Icon", () => ({
 		components: { PopupIcon },
 		template: `<div>
-			<PopupIcon source="fa" icon="solid/address-book"></PopupIcon>
+			<PopupIcon source="fa" icon="address-book">
+				DropDown Content
+			</PopupIcon>
 		</div>`,
 	}))
 	.add("Popup Icon with Initials", () => ({
 		components: { PopupIconInitials, MenuLink },
 		template: `<div style="text-align: right">
 			<PopupIconInitials firstname="Fritz" lastname="Schmidt">
-				<div>Fritz Schmidt </div>
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 			</PopupIconInitials>
