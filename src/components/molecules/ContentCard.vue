@@ -133,7 +133,7 @@ export default {
 		text-align: center;
 
 		@include excerpt(
-			$font-size: 20px,
+			$font-size: var(--heading-5),
 			$line-height: var(--line-height-sm),
 			$lines-to-show: 2
 		);
@@ -147,6 +147,14 @@ export default {
 			$lines-to-show: 3,
 			$line-height: 1.2rem
 		);
+
+		@include breakpoint(desktop) {
+			@include excerpt(
+				$font-size: var(--text-sm),
+				$lines-to-show: 2,
+				$line-height: 1.2rem
+			);
+		}
 	}
 }
 .footer {

@@ -18,9 +18,7 @@
 	--heading-6: calc(var(--text-base-size) * var(--text-scale-ratio));
 
 	/* text sizes */
-	--text-xs: calc(
-		var(--text-base-size) / var(--text-scale-ratio) / var(--text-scale-ratio)
-	);
+	--text-xs: calc(var(--text-base-size) / var(--text-scale-ratio) / var(--text-scale-ratio));
 	--text-sm: calc(var(--text-base-size) / var(--text-scale-ratio));
 	--text-md: var(--text-base-size);
 	--text-lg: calc(var(--text-base-size) * var(--text-scale-ratio));
@@ -36,7 +34,7 @@
 	--font-weight-bold: 700;
 }
 
-/*
+
 
 // Disabled for consistency as long as we have the legacy fallback enabled
 
@@ -48,10 +46,6 @@
 
 @include breakpoint(desktop) {
 	:root {
-		--text-base-size: calc(
-			1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio)
-		);
+		--text-base-size: calc(1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio));
 	}
 }
-
-*/
