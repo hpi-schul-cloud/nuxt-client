@@ -8,6 +8,7 @@
 module.exports = [
 	// `^/content/`
 	`^/error/`,
+	`^/mint-ec/?`,
 	`^/imprint/?`,
 	`^/nuxtversion/?$`,
 	//`^/news/${mongoId}/?$`,
