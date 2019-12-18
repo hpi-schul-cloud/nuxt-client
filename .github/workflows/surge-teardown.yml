@@ -1,0 +1,12 @@
+name: Surge Teardown
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: "0 0 1 * *"
+jobs:
+  surge-teardown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: teardown
+        # teardown projects older than 2 months
+        run: node deploy/surgeTeardown "[2-9]+ months ago"
