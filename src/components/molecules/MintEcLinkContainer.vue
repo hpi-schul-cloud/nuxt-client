@@ -1,5 +1,5 @@
 <template>
-	<base-link :href="href">
+	<base-link class="flex" :href="href">
 		<div
 			class="image-container"
 			:style="{
@@ -63,11 +63,16 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+.flex {
+	display: flex;
+	flex-direction: column;
+}
 
 .container-base {
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	flex-grow: 1;
 	justify-content: center;
 }
 .container-icon {
@@ -87,8 +92,9 @@ export default {
 .container {
 	display: flex;
 	flex-direction: column;
+	flex-grow: 1;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: center;
 	padding: var(--space-md);
 	background-color: var(--color-secondary);
 	border-radius: 0 0 var(--radius-md) var(--radius-md);

@@ -1,11 +1,6 @@
 <template>
 	<div class="wrapper">
-		<div
-			class="hero-image"
-			:style="{
-				'background-image': `url(${image} )`,
-			}"
-		>
+		<div class="hero-image" :style="compressed">
 			<div
 				class="container"
 				:style="{
@@ -29,7 +24,7 @@ export default {
 	props: {
 		image: {
 			type: String,
-			default: undefined,
+			default: "",
 		},
 		heading: {
 			type: String,
@@ -38,6 +33,16 @@ export default {
 		teaser: {
 			type: String,
 			default: "",
+		},
+	},
+
+	computed: {
+		compressed() {
+			return (
+				"background-image: url(" +
+				this.image.replace("/images/", "/images/size/w2000/") +
+				");"
+			);
 		},
 	},
 };
