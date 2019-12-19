@@ -107,7 +107,7 @@ export default {
 				return supportedTypes.includes(type) || !type;
 			},
 		},
-		label: { type: String, required: true },
+		label: { type: String, default: "" },
 		info: { type: String, default: "" },
 		hint: { type: String, default: "" },
 		error: { type: String, default: "" },

@@ -1,15 +1,13 @@
 <template>
 	<form v-on="$listeners" @submit.prevent="submitHandler">
-		<base-input
+		<title-input
 			v-model="data.title"
 			:focus="true"
 			:placeholder="$t('components.organisms.FormNews.input.title.placeholder')"
 			name="title"
 			type="text"
-			:label="$t('components.organisms.FormNews.label.title')"
 			:required="true"
 			data-testid="news_title"
-			:input-teaser="true"
 		/>
 		<transition name="fade">
 			<div v-if="data.title">
@@ -49,10 +47,12 @@
 <script>
 import dayjs from "dayjs";
 import TextEditor from "@components/molecules/TextEditor";
+import TitleInput from "@components/molecules/TitleInput";
 
 export default {
 	components: {
 		TextEditor,
+		TitleInput
 	},
 	model: {
 		prop: "news",
