@@ -14,7 +14,7 @@ env:
   global:
     - TZ=Europe/Berlin
     - GIT_SHA=$( git rev-parse HEAD )
-    - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" | tr -s "[:upper:]" "[:lower:] )_v$( jq -r '.version' package.json )_$( date +"%y%m%d%H%M" )
+    - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" | tr -s "[:upper:]" "[:lower:]" )_v$( jq -r '.version' package.json )_$( date +"%y%m%d%H%M" )
 
 stages:
   - test
