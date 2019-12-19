@@ -20,6 +20,9 @@
 
 				<div class="social-container">
 					<h2 class="h4">Social Links</h2>
+					<base-link class="link-style" href="mailto:schul-cloud@mint-ec.de"
+						>schul-cloud@mint-ec.de</base-link
+					>
 					<base-link href="http://creativecommons.org/licenses/by-sa/4.0/">
 						<img
 							class="img-cc"
@@ -96,13 +99,14 @@ export default {
 			min-height: auto;
 			padding: var(--space-xl) var(--space-lg);
 		}
-		.link-style {
-			font-size: var(--text-md) !important;
-			color: var(--color-white) !important;
-			border-bottom: none !important;
-			&:hover {
-				text-decoration: underline;
-			}
+	}
+
+	.link-style {
+		font-size: var(--text-md) !important;
+		color: var(--color-white) !important;
+		border-bottom: none !important;
+		&:hover {
+			text-decoration: underline;
 		}
 	}
 	.social-container {
