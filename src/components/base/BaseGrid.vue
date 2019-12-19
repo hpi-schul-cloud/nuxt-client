@@ -28,6 +28,6 @@ export default {
 
 .grid {
 	display: grid;
-	grid-gap: var(--space-lg);
+	grid-gap: 2rem;
 }
 </style>

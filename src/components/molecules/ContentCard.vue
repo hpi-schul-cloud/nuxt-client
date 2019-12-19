@@ -148,13 +148,13 @@ export default {
 			$line-height: 1.2rem
 		);
 
-		@include breakpoint(desktop) {
-			@include excerpt(
-				$font-size: var(--text-sm),
-				$lines-to-show: 2,
-				$line-height: 1.2rem
-			);
-		}
+		// @include breakpoint(desktop) {
+		// 	@include excerpt(
+		// 		$font-size: var(--text-sm),
+		// 		$lines-to-show: 2,
+		// 		$line-height: 1.2rem
+		// 	);
+		// }
 	}
 }
 .footer {

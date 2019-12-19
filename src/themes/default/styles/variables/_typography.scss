@@ -38,14 +38,14 @@
 
 // Disabled for consistency as long as we have the legacy fallback enabled
 
-@include breakpoint(tablet) {
-	:root {
-		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
-	}
-}
+// @include breakpoint(tablet) {
+// 	:root {
+// 		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
+// 	}
+// }
 
-@include breakpoint(desktop) {
-	:root {
-		--text-base-size: calc(1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio));
-	}
-}
+// @include breakpoint(desktop) {
+// 	:root {
+// 		--text-base-size: calc(1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio));
+// 	}
+// }
