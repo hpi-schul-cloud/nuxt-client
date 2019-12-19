@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "20.0.0",
+	"version": "20.2.0",
 	"description": "The next Level of Schul-Cloud",
 	"author": "HPI Schul-Cloud",
 	"private": true,
@@ -121,7 +121,7 @@
 		"storybook-addon-vue-info": "^1.1.1",
 		"style-loader": "^1.0.0",
 		"stylelint": "^12.0.0",
-		"stylelint-config-prettier": "^7.0.0",
+		"stylelint-config-prettier": "^8.0.0",
 		"stylelint-config-recess-order": "^2.0.1",
 		"stylelint-config-standard": "^19.0.0",
 		"stylelint-declaration-use-variable": "^1.7.0",
