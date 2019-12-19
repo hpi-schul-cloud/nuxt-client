@@ -8,8 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: teardown
-        # teardown projects older than 2 months
-        run: node deploy/surgeTeardown "[2-9]+ months ago"
+        uses: adrianjost/actions-surge.sh-teardown@v1.0.1
+        with:
+          # teardown projects older than 2 months
+          regex: "[2-9]+ months ago"
         env:
           SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
