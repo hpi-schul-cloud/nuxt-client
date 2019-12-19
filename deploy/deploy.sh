@@ -20,14 +20,14 @@ inform_live() {
 	# $1: Project Name (client, storybook, vuepress)
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: Schul-Cloud Nuxt-$1!"}' $WEBHOOK_URL_CHAT
+  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: Schul-Cloud Nuxt-$1! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
   fi
 }
 
 inform_staging() {
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Staging-System wurde aktualisiert: Schul-Cloud Nuxt-Client! https://staging.schul-cloud.org/nuxtversion"}' $WEBHOOK_URL_CHAT
+    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Staging-System wurde aktualisiert: Schul-Cloud Nuxt-Client! https://staging.schul-cloud.org/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
   fi
 }
 
