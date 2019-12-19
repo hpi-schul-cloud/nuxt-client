@@ -1,31 +1,20 @@
 <template>
 	<div>
-		<section class="section">
-			<courses-grid :courses="courses" />
-		</section>
-		<section class="section">
-			<base-button
-				design="primary"
-				@click="$router.push({ name: 'courses-create' })"
-			>
-				Neuen Kurs erstellen
-			</base-button>
-		</section>
+		<floating-fab icon="add" to="/courses/create" />
+		<courses-grid :courses="courses"></courses-grid>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
+import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
-	head() {
-		return {
-			title: "Kurse",
-		};
-	},
+	layout: "loggedInFull",
 	components: {
 		CoursesGrid,
+		FloatingFab,
 	},
 	computed: {
 		...mapGetters("courses", {
@@ -40,5 +29,23 @@ export default {
 			this.$store.dispatch("courses/find");
 		},
 	},
+	head() {
+		return {
+			title: "Kurse",
+		};
+	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@variables";
+
+.bottom {
+	float: left;
+	margin-top: var(--space-xl);
+	margin-left: var(--space-xl-3);
+}
+
+.courses-grid {
+	margin-top: var(--space-xl);
+}
+</style>

@@ -53,4 +53,49 @@ describe("@components/BaseButton", () => {
 		expect(wrapper.find("button").exists()).toBe(true);
 		expect(wrapper.find(".is-success").exists()).toBe(true);
 	});
+	it(`has default type="button"`, () => {
+		const wrapper = mount(BaseButton);
+		expect(wrapper.find(`button[type=button]`).exists()).toBe(true);
+	});
+	it(`type can be manipulated`, () => {
+		const wrapper = mount(BaseButton, {
+			propsData: {
+				type: "submit",
+			},
+		});
+		expect(wrapper.find(`button[type=button]`).exists()).toBe(false);
+		expect(wrapper.find(`button[type=submit]`).exists()).toBe(true);
+	});
+	it(`renders a button by default`, () => {
+		const wrapper = shallowMount(BaseButton);
+		expect(wrapper.find(`button`).exists()).toBe(true);
+	});
+	it(`renders a base-link if to is specified`, () => {
+		const wrapper = shallowMount(BaseButton, {
+			propsData: {
+				to: "/news",
+			},
+		});
+		expect(wrapper.find(`base-link-stub`).exists()).toBe(true);
+	});
+	it(`renders a base-link if a href is specified`, () => {
+		const wrapper = shallowMount(BaseButton, {
+			propsData: {
+				href: "/news",
+			},
+		});
+		expect(wrapper.find(`base-link-stub`).exists()).toBe(true);
+	});
+	it(`passes attributes and props to base-link`, () => {
+		const wrapper = shallowMount(BaseButton, {
+			propsData: {
+				href: "/news",
+				class: "test",
+			},
+		});
+		const link = wrapper.find(`base-link-stub`);
+		expect(link.exists()).toBe(true);
+		expect(link.attributes("href")).toBe("/news");
+		expect(link.attributes("class")).toBe("test");
+	});
 });

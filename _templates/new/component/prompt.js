@@ -89,4 +89,9 @@ module.exports = [
 		name: "story",
 		message: "Story generation?",
 	},
+	{
+		type: "Confirm",
+		name: "storynotes",
+		message: "with notes?",
+	},
 ];
