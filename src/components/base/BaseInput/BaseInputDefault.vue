@@ -33,7 +33,7 @@
 							:type="type"
 							:value="vmodel"
 							:disabled="disabled"
-							:class="addedClasses"
+							:class="classes"
 							@input="handleInput"
 						/>
 					</slot>
@@ -113,7 +113,7 @@ export default {
 		error: { type: String, default: "" },
 		success: { type: Boolean },
 		disabled: { type: Boolean },
-		inputTeaser: { type: Boolean },
+		classes: { type: String, default: "" },
 		focus: { type: Boolean },
 	},
 	data: function() {
@@ -127,9 +127,6 @@ export default {
 		},
 		showLabel() {
 			return !!this.vmodel || !this.$attrs.placeholder;
-		},
-		addedClasses() {
-			return this.inputTeaser ? "h1" : "";
 		},
 	},
 	methods: {

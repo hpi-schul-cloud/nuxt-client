@@ -3,7 +3,7 @@
 	<base-input
 		v-bind="{ ...$attrs, ...$props }"
 		:vmodel="vmodel"
-		:input-teaser="true"
+		classes="h1"
 		v-on="$listeners"
 	/>
 </template>
