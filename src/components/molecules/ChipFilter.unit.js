@@ -56,7 +56,7 @@ describe("@components/molecules/ChipFilter", () => {
 		expect(firstEvent.length).toBe(1);
 	});
 
-	it("chips wont get rendered if filter tags are epmty", () => {
+	it("filter chips wont get rendered if filter tags are epmty", () => {
 		const activeFilters = [];
 		const filterTags = [];
 
