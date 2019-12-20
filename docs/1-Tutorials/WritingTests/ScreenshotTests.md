@@ -2,7 +2,7 @@
 
 [[toc]]
 
-We use screenshot tests to ensure that we do not accitently break components visually.
+We use screenshot tests to ensure that we do not accidently break components visually.
 
 ::: warning Challenges
 
@@ -35,11 +35,11 @@ Writing a new screenshot test is easy. We snapshot all storybook stories by defa
 
 ### Exclude stories from screenshot tests
 
-But some things are not usefull to test with a static screenshot (like a loading spinner). To exclude these stories you can add them to the list of excluded stories.
+But some things are not useful to test with a static screenshot (such as a loading spinner). To exclude these stories you can add them to the list of excluded stories.
 
 <<< @/tests/screenshot/ignoredStories.js
 
-### What not to test
+### What to not test
 
 In general you should not test:
 
