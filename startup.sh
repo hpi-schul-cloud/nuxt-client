@@ -5,4 +5,4 @@ then
 	npm run build:nuxt
 fi
 
-npm run start
+npm run start:nuxt
