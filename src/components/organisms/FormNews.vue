@@ -52,7 +52,7 @@ import TitleInput from "@components/molecules/TitleInput";
 export default {
 	components: {
 		TextEditor,
-		TitleInput
+		TitleInput,
 	},
 	model: {
 		prop: "news",

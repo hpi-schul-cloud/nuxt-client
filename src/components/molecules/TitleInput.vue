@@ -1,4 +1,3 @@
-
 <template>
 	<base-input
 		v-bind="{ ...$attrs, ...$props }"
@@ -19,10 +18,10 @@ export default {
 			type: [Array, String, Number, Boolean],
 			required: true,
 		},
-	}
+	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@styles';
+@import "@styles";
 </style>
