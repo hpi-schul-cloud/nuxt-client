@@ -116,27 +116,27 @@ export default {
 			chapters: [
 				{
 					title: this.$t("pages.mint-ec.article.footer.schule-informieren"),
-					href: "/mint-ec/schule-informieren",
+					href: "/mint-ec/01-schule-informieren",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.unterricht-gestalten"),
-					href: "/mint-ec/unterricht-gestalten",
+					href: "/mint-ec/02-unterricht-gestalten",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.kollegium-informieren"),
-					href: "/mint-ec/kollegium-mitnehmen",
+					href: "/mint-ec/03-kollegium-mitnehmen",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.engagieren"),
-					href: "/mint-ec/im-projekt-engagieren",
+					href: "/mint-ec/04-im-projekt-engagieren",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.rechtlich"),
-					href: "/mint-ec/technik-und-recht",
+					href: "/mint-ec/05-technik-und-recht",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datasecurity"),
-					href: "/mint-ec/datenschutz-und-urheberrecht",
+					href: "/mint-ec/06-datenschutz-und-urheberrecht",
 				},
 			],
 		};
