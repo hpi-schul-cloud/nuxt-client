@@ -55,6 +55,23 @@ describe("@components/molecules/ChipFilter", () => {
 		const firstEvent = wrapper.emitted("update:value")[0][0];
 		expect(firstEvent.length).toBe(1);
 	});
+
+	it("chips wont get rendered if filter tags are epmty", () => {
+		const activeFilters = [];
+		const filterTags = [];
+
+		const wrapper = mount(ChipFilter, {
+			propsData: {
+				value: activeFilters,
+				options: filterTags,
+				multiple: true,
+			},
+		});
+
+		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find(".chip").exists()).toBe(false);
+	});
+
 	it("filtertTag gets removed", () => {
 		const activeFilters = ["Spanisch", "Deutsch", "Englisch"];
 		const filterTags = ["Spanisch", "Deutsch", "Englisch"];

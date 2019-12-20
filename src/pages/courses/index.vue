@@ -1,10 +1,6 @@
 <template>
 	<div>
-		<chip-filter
-			:value.sync="activeToggle"
-			:options="toggleTags"
-			:multiple="false"
-		/>
+		<chip-filter :value.sync="activeToggle" :options="toggleTags" />
 		<!-- <chip-filter
 			:value.sync="activeFilters"
 			:options="filterTags"

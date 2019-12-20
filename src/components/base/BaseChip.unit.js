@@ -11,7 +11,7 @@ describe("@components/base/BaseChip", () => {
 		expect(wrapper.props("selected")).toBe(false);
 	});
 
-	it("renders default when not active", () => {
+	it("renders default style when not active", () => {
 		const wrapper = mount(BaseChip, {
 			propsData: {
 				selected: false,
@@ -19,7 +19,7 @@ describe("@components/base/BaseChip", () => {
 		});
 		expect(wrapper.classes()).toContain("default");
 	});
-	it("renders default when not active", () => {
+	it("renders default style when not active", () => {
 		const wrapper = mount(BaseChip, {
 			propsData: {
 				selected: true,

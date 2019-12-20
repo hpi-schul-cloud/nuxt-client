@@ -18,26 +18,6 @@ import CourseWizard from "@components/organisms/CourseWizard";
 
 export default {
 	components: { CourseWizard },
-	data() {
-		return {
-			stepList: [
-				{ name: "Kursdaten" },
-				{ name: "Kurs-Mitglieder" },
-				{ name: "Abschließen" },
-			],
-			course: {
-				name: "",
-				description: "",
-				startDate: "",
-				untilDate: "",
-				times: [],
-				teacherIds: [],
-				substitutionIds: [],
-				userIds: [],
-				classIds: [],
-			},
-		};
-	},
 	async asyncData({ store }) {
 		try {
 			const teacherRole = (await store.dispatch("roles/find", {
@@ -61,6 +41,26 @@ export default {
 				students,
 			};
 		} catch (err) {}
+	},
+	data() {
+		return {
+			stepList: [
+				{ name: "Kursdaten" },
+				{ name: "Kurs-Mitglieder" },
+				{ name: "Abschließen" },
+			],
+			course: {
+				name: "",
+				description: "",
+				startDate: "",
+				untilDate: "",
+				times: [],
+				teacherIds: [],
+				substitutionIds: [],
+				userIds: [],
+				classIds: [],
+			},
+		};
 	},
 	computed: {
 		...mapGetters("classes", {

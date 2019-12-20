@@ -18,17 +18,12 @@ export default {
 		},
 		selected: {
 			type: Boolean,
-			active: false,
 		},
 	},
 
 	computed: {
 		classes() {
-			if (this.selected) {
-				return "selected";
-			} else {
-				return "default";
-			}
+			return this.selected ? "selected" : "default";
 		},
 	},
 };
@@ -65,20 +60,20 @@ button {
 .selected {
 	color: var(--color-secondary-dark);
 	background-color: var(--color-secondary-extra-light);
-	border: 0.5px solid var(--color-secondary);
+	border: 1px solid var(--color-secondary);
 }
 .default {
 	color: var(--color-gray-dark);
 	background-color: var(--color-white);
-	border: 0.5px solid var(--color-gray);
+	border: 1px solid var(--color-gray);
 }
 .medium {
-	padding: var(--space-xs-2) var(--space-lg) var(--space-xs-2) var(--space-lg);
+	padding: var(--space-xs-2) var(--space-lg);
 }
 .small {
-	padding: var(--space-xs-3) var(--space-sm) var(--space-xs-4) var(--space-sm);
+	padding: var(--space-xs-3) var(--space-sm) var(--space-xs-4);
 }
 .large {
-	padding: var(--space-xs) var(--space-xl) var(--space-xs) var(--space-xl);
+	padding: var(--space-xs) var(--space-xl);
 }
 </style>
