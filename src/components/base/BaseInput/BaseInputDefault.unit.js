@@ -1,4 +1,5 @@
 import BaseInput from "./BaseInput";
+import BaseInputDefault from "./BaseInputDefault";
 import { supportedTypes } from "./BaseInputDefault";
 
 function getMock(type, attributes) {
@@ -61,17 +62,32 @@ describe("@components/BaseInputDefault", () => {
 		});
 	});
 
-	it("shows its label when it contains a value or when no placeholder is provided", () => {
+	it("shows its label when no placeholder is provided", () => {
+		supportedTypes.forEach((type) => {
+			const wrapperWithoutPlaceholder = getMock(type);
+			const baseInputDefaultWithoutPlaceholder = wrapperWithoutPlaceholder.find(
+				BaseInputDefault
+			);
+			expect(baseInputDefaultWithoutPlaceholder.vm.showLabel).toBe(true);
+			expect(wrapperWithoutPlaceholder.find(".label").isVisible()).toBe(true);
+		});
+	});
+
+	it("shows its label when it contains a value", () => {
 		supportedTypes.forEach((type) => {
 			const testInput = type === "number" ? 5 : "test string";
-			const wrapperWithoutPlaceholder = getMock(type);
-			expect(wrapperWithoutPlaceholder.find(".label").isVisible()).toBe(true);
-
 			const wrapperWithPlaceHolder = getMock(type, "placeholder='placeholder'");
+			const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.find(
+				BaseInputDefault
+			);
 			const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
+
+			expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
 			expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(false);
+
 			input.setValue(testInput);
 			expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(true);
+			expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(true);
 		});
 	});
 
@@ -93,6 +109,9 @@ describe("@components/BaseInputDefault", () => {
 				},
 				stubs: ["base-icon"],
 			});
+			const baseInputDefault = wrapper.find(BaseInputDefault);
+			expect(baseInputDefault.vm.hasError).toBe(true);
+
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);
 			expect(wrapper.find(".error").exists()).toBe(true);
 			expect(
@@ -117,5 +136,20 @@ describe("@components/BaseInputDefault", () => {
 			});
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);
 		});
+	});
+
+	it("can toggle pwd visibility", () => {
+		const wrapper = mount(BaseInput, {
+			propsData: {
+				vmodel: "",
+				type: "password",
+				label: "test",
+				success: true,
+			},
+		});
+		const baseInputDefault = wrapper.find(BaseInputDefault);
+		expect(baseInputDefault.vm.passwordVisible).toBe(false);
+		baseInputDefault.vm.togglePasswordVisibility();
+		expect(baseInputDefault.vm.passwordVisible).toBe(true);
 	});
 });
