@@ -86,7 +86,7 @@ export default {
 				},
 				{
 					title: "GitHub",
-					href: "/schul-cloud",
+					href: "https://github.com/schul-cloud",
 				},
 			],
 			contacts: [
