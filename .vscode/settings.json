@@ -109,8 +109,5 @@
 	// ===
 	// TODO HIGHLIGHT
 	// ===
-	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"],
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	}
+	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"]
 }
