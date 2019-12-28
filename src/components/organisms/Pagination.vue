@@ -6,7 +6,7 @@
 			close-on-select
 			:value="perPageSelected"
 			:options="perPageOptions"
-			placeholder="Pro Seite"
+			:placeholder="placeholder"
 			:allow-empty="false"
 			track-by="value"
 			option-label="label"
@@ -61,6 +61,10 @@ export default {
 		event: "update",
 	},
 	props: {
+		currentPage: {
+			type: Number,
+			default: 1,
+		},
 		perPage: {
 			type: Number,
 			default: 10,
@@ -69,11 +73,10 @@ export default {
 			type: Number,
 			default: 0,
 		},
-		currentPage: {
-			// number of skipped items
-			type: Number,
-			default: 1,
-		},
+		placeholder: {
+			type: String,
+			default: "Pro Seite",
+		}
 	},
 	data: () => ({
 		perPageOptions: [
