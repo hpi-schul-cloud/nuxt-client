@@ -1,5 +1,10 @@
 import { storiesOf } from "@storybook/vue";
-import { tableData, tableColumns, tableFilters, tableActions } from "./mockData/BaseTable";
+import {
+	tableData,
+	tableColumns,
+	tableFilters,
+	tableActions,
+} from "./mockData/BaseTable";
 import { text, select, boolean, color, number } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
@@ -203,16 +208,31 @@ storiesOf("Base|Base UI", module)
 				{ value: 2, name: "Option 2" },
 				{ value: 3, name: "Option 3" },
 			],
-			optionLabel: "name",
+			closeOnSelect: boolean("closeOnSelect", false),
+			deselectLabel: text("deselectLabel", "Entfernen"),
 			label: text("label", "Label"),
+			multiple: select("mutiple", { true: true, false: false }, false),
+			optionLabel: text("optionLabel", "name"),
 			placeholder: text("placeholder", "Etwas auswählen"),
-			multiple: select("mutliple", { true: true, false: false }, false),
+			selectLabel: text("deselectLabel", "Auswählen"),
+			selectedLabel: text("deselectLabel", "Aktiv"),
 		}),
 		template: `
 		<div>
 		Content: {{content}} <br/>
 		Options: {{options}} <br/>
-			<base-select v-model="content" :multiple="multiple" :options="options" :label="label" optionLabel="name" :placeholder="placeholder"/>
+			<base-select
+				v-model="content"
+				:closeOnSelect="closeOnSelect"
+				:deselectLabel="deselectLabel"
+				:label="label"
+				:multiple="multiple"
+				:options="options"
+				:optionLabel="optionLabel"
+				:placeholder="placeholder"
+				:selectLabel="selectLabel"
+				:selectedLabel="selectedLabel">
+			</base-select>
 		</div>`,
 		methods: {},
 	}))
