@@ -84,17 +84,16 @@ describe("@components/BaseSelect", () => {
 			name: "Donald Duck",
 			value: "donald",
 		};
-		const wrapperProps = {
-			value: [],
-			options: [testOption],
-			label: testLabel,
-		};
 
 		[true, false].forEach((multiple) => {
-			const wrapper = mount({
-				data: () => wrapperProps,
-				template: `<base-select v-model="value" label="${testLabel}" optionLabel="name" :options="options" :multiple="${multiple}" />`,
-				components: { BaseSelect },
+			const wrapper = mount(BaseSelect, {
+				propsData: {
+					label: testLabel,
+					optionLabel: "name",
+					options: [testOption],
+					multiple: multiple,
+					value: [],
+				},
 			});
 			const options = wrapper.findAll(".multiselect__option");
 			expect(

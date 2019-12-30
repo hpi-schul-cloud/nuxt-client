@@ -57,9 +57,9 @@ export default {
 	},
 	computed: {
 		isChecked() {
-			return typeof this.vmodel === "boolean"
-				? this.vmodel
-				: this.vmodel.includes(this.value);
+			return Array.isArray(this.vmodel)
+				? this.vmodel.includes(this.value)
+				: !!this.vmodel;
 		},
 	},
 	methods: {

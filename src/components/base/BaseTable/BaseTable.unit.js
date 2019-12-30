@@ -8,6 +8,18 @@ function getWrapper(attributes) {
 	return mount(BaseTable, {
 		propsData: {
 			data: data,
+			trackBy: "id",
+			columns: columns,
+			...attributes,
+		},
+	});
+}
+
+function getShallowWrapper(attributes) {
+	return shallowMount(BaseTable, {
+		propsData: {
+			data: data,
+			trackBy: "id",
 			columns: columns,
 			...attributes,
 		},
@@ -21,45 +33,26 @@ describe("@components/BaseTable", () => {
 		var wrapper = getWrapper();
 
 		expect(wrapper.findAll("tbody tr").length).toBe(5);
+		expect(wrapper.find("thead tr").findAll("th").length).toBe(4);
+		expect(wrapper.find("tbody tr").contains("td")).toBe(true);
 
 		expect(
 			wrapper
-				.findAll("thead tr")
-				.at(0)
-				.findAll("th").length
-		).toBe(4);
-
-		expect(
-			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.contains("td")
-		).toBe(true);
-
-		expect(
-			wrapper
-				.findAll("thead tr")
-				.at(0)
-				.findAll("th")
-				.at(0)
+				.find("thead tr th")
 				.html()
 				.includes("Vorname")
 		).toBe(true);
 
 		expect(
 			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.findAll("td")
-				.at(0)
+				.find("tbody tr td")
 				.html()
 				.includes("Hulk")
 		).toBe(true);
 
 		expect(
 			wrapper
-				.findAll("tbody tr")
-				.at(0)
+				.find("tbody tr")
 				.findAll("td")
 				.at(2)
 				.html()
@@ -70,11 +63,11 @@ describe("@components/BaseTable", () => {
 	it("The extra-column slot should add an extra column with access to the current row data", () => {
 		var wrapper = mount({
 			data: () => ({
-				data,
 				columns,
+				data,
 			}),
 			template: `<div>
-				<base-table v-slot:extra-column="slotProps" :data="data" :columns="columns">
+				<base-table v-slot:extra-column="slotProps" :data="data" :columns="columns" track-by="id">
 					<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 				</base-table>
 			</div>`,
@@ -85,8 +78,7 @@ describe("@components/BaseTable", () => {
 
 		expect(
 			wrapper
-				.findAll("tbody tr")
-				.at(0)
+				.find("tbody tr")
 				.findAll("td")
 				.at(4)
 				.html()
@@ -107,6 +99,7 @@ describe("@components/BaseTable", () => {
 					:columns="columns"
 					:rows-per-page.sync="rowsPerPage"
 					:current-page.sync="currentPage"
+					track-by="id"
 					paginated
 				/>`,
 			components: { BaseTable },
@@ -127,10 +120,7 @@ describe("@components/BaseTable", () => {
 
 		expect(
 			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.findAll("td")
-				.at(0)
+				.find("tbody tr td")
 				.html()
 				.includes("Hulk")
 		).toBe(true);
@@ -142,10 +132,7 @@ describe("@components/BaseTable", () => {
 
 		expect(
 			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.findAll("td")
-				.at(0)
+				.find("tbody tr td")
 				.html()
 				.includes("Armin")
 		).toBe(true);
@@ -156,10 +143,7 @@ describe("@components/BaseTable", () => {
 
 		expect(
 			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.findAll("td")
-				.at(0)
+				.find("tbody tr td")
 				.html()
 				.includes("Hulk")
 		).toBe(true);
@@ -171,17 +155,14 @@ describe("@components/BaseTable", () => {
 
 		expect(
 			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.findAll("td")
-				.at(0)
+				.find("tbody tr td")
 				.html()
 				.includes("Hulk")
 		).toBe(true);
 	});
 
 	it("Should allow filtering the based on string properties", () => {
-		var wrapper = getWrapper({ filterable: true });
+		var wrapper = getShallowWrapper({ filterable: true });
 
 		var newFiltersSelected = [
 			{
@@ -219,7 +200,7 @@ describe("@components/BaseTable", () => {
 	});
 
 	it("Should allow filtering the based on numeric properties", () => {
-		var wrapper = getWrapper({ filterable: true });
+		var wrapper = getShallowWrapper({ filterable: true });
 
 		var newFiltersSelected = [
 			{
@@ -240,7 +221,7 @@ describe("@components/BaseTable", () => {
 	});
 
 	it("Should allow filtering the based on multiple options", () => {
-		var wrapper = getWrapper({ filterable: true });
+		var wrapper = getShallowWrapper({ filterable: true });
 
 		var newFiltersSelected = [
 			{
@@ -262,7 +243,7 @@ describe("@components/BaseTable", () => {
 	});
 
 	it("Should allow filtering with custom filter implementation", () => {
-		var wrapper = getWrapper({ filterable: true });
+		var wrapper = getShallowWrapper({ filterable: true });
 
 		var newFiltersSelected = [
 			{
@@ -282,89 +263,184 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.text()).not.toContain("Mario");
 	});
 
-	it("Should allow selecting the rows", () => {
+	it("allows to select and unselect a row", () => {
 		var wrapper = getWrapper({ showRowSelection: true });
+		const rowSelection = wrapper.find("tbody tr td input[type='checkbox']");
 
-		wrapper
-			.findAll("tbody tr")
-			.at(0)
-			.findAll("td")
-			.at(0)
-			.find('input[type="checkbox"]')
-			.setChecked();
+		rowSelection.setChecked();
 
-		expect(
-			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.classes()
-		).toContain("checked");
+		expect(wrapper.find("tbody tr").classes()).toContain("checked");
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+		expect(wrapper.emitted()["update:selectedRows"][0]).toEqual([[data[0]]]);
+		expect(wrapper.emitted()["check"][0]).toEqual([[data[0]]]);
+
+		rowSelection.setChecked(false);
+
+		expect(wrapper.find("tbody tr").classes()).not.toContain("checked");
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+		expect(wrapper.emitted()["update:selectedRows"][1]).toEqual([[]]);
+		expect(wrapper.emitted()["check"][1]).toEqual([[]]);
 	});
 
-	it("Should select all rows", () => {
-		var wrapper = getWrapper({ showRowSelection: true });
+	it("allows to select and unselect all rows of current page", () => {
+		const wrapper = getWrapper({
+			showRowSelection: true,
+			paginated: true,
+			rowsPerPage: 2,
+		});
+		const allRowsSelection = wrapper.find("thead tr th input[type='checkbox']");
 
-		wrapper
-			.findAll("tbody tr")
-			.at(0)
-			.findAll("td")
-			.at(0)
-			.find('input[type="checkbox"]')
-			.setChecked();
+		allRowsSelection.setChecked();
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
 
-		expect(
-			wrapper
-				.findAll("tbody tr")
-				.at(0)
-				.classes()
-		).toContain("checked");
+		expect(wrapper.emitted()["update:selectedRows"].length).toBe(1);
+		expect(wrapper.emitted()["update:selectedRows"][0]).toEqual([
+			data.slice(0, 2),
+		]);
+
+		expect(wrapper.emitted()["check"].length).toBe(1);
+		expect(wrapper.emitted()["check"][0]).toEqual([data.slice(0, 2)]);
+
+		expect(wrapper.emitted()["check-all"].length).toBe(1);
+		expect(wrapper.emitted()["check-all"][0]).toEqual([data.slice(0, 2)]);
+
+		allRowsSelection.setChecked(false);
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+
+		expect(wrapper.emitted()["update:selectedRows"].length).toBe(2);
+		expect(wrapper.emitted()["update:selectedRows"][1]).toEqual([[]]);
+
+		expect(wrapper.emitted()["check"].length).toBe(2);
+		expect(wrapper.emitted()["check"][1]).toEqual([[]]);
+
+		expect(wrapper.emitted()["check-all"].length).toBe(2);
+		expect(wrapper.emitted()["check-all"][1]).toEqual([[]]);
 	});
 
-	it("Should select all rows and trigger an action", () => {
-		var wrapper = mount({
-			data: () => ({
-				data,
-				columns,
-				actions: [
-					{
-						label: "Test",
-						action: test,
-					},
-				],
-			}),
-			template: `<div>
-				<base-table
-					:data="data"
-					:columns="columns"
-					showRowSelection
-					:actions="actions"
-					ref="table"
-				/>
-			</div>`,
-			components: { BaseTable },
+	it("allows to select and unselect all rows of current page manually", () => {
+		const wrapper = getWrapper({
+			showRowSelection: true,
+			paginated: true,
+			rowsPerPage: 2,
 		});
 
-		wrapper
-			.find("thead tr")
-			.findAll("th")
-			.at(0)
-			.find('input[type="checkbox"]')
-			.setChecked();
+		wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
 
-		expect(wrapper.vm.$refs.table.allRowsOfCurrentPageSelected).toBe(true);
-		expect(wrapper.vm.$refs.table.newSelectedRows.length).toBe(5);
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.wrappers.every((tr) => tr.classes().includes("checked"))
+		).toBe(true);
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
 
-		wrapper
-			.find("thead tr")
-			.findAll("th")
-			.at(0)
-			.find('input[type="checkbox"]')
-			.setChecked(false);
+		wrapper.findAll("tbody tr td input[type='checkbox']").setChecked(false);
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.wrappers.some((tr) => tr.classes().includes("checked"))
+		).toBe(false);
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+	});
 
-		expect(wrapper.vm.$refs.table.allRowsOfCurrentPageSelected).toBe(false);
-		expect(wrapper.vm.$refs.table.newSelectedRows.length).toBe(0);
+	it("allows to select all rows of all pages", () => {
+		const wrapper = getWrapper({
+			showRowSelection: true,
+			paginated: true,
+			rowsPerPage: 2,
+		});
+		const allRowsSelection = wrapper.find("thead tr th input[type='checkbox']");
 
-		expect(wrapper.vm.$refs.table.$refs.rowSelectionBar.actions.length).toBe(1);
+		allRowsSelection.setChecked();
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+		const allRowsOfAllPagesSelection = wrapper.find(".select-all-rows");
+		expect(allRowsOfAllPagesSelection.exists()).toBe(true);
+		allRowsOfAllPagesSelection.trigger("click");
+
+		expect(wrapper.vm.allRowsOfAllPagesSelected).toBe(true);
+	});
+
+	it("can trigger an action on selected rows", () => {
+		const testAction = jest.fn();
+		var wrapper = getWrapper({
+			showRowSelection: true,
+			actions: [
+				{
+					label: "Test",
+					action: testAction,
+				},
+			],
+		});
+
+		wrapper.find("thead tr th input[type='checkbox']").setChecked();
+		wrapper.find(".dropdown li").trigger("click");
+		expect(testAction).toHaveBeenCalled();
+
+		expect(wrapper.emitted()["update:selectedRows"].length).toBe(2);
+		expect(wrapper.emitted()["update:selectedRows"][1]).toEqual([[]]);
+
+		expect(wrapper.emitted()["check-all"].length).toBe(2);
+		expect(wrapper.emitted()["check-all"][1]).toEqual([[]]);
+	});
+
+	it("does not change row selection when new rows are added", () => {
+		var wrapper = getWrapper({
+			showRowSelection: true,
+			paginated: true,
+			rowsPerPage: 2,
+		});
+
+		wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+
+		wrapper.setProps({
+			data: [
+				...data,
+				{
+					id: "6",
+					firstName: "Test",
+					lastName: "Test",
+					address: {
+						city: "Test",
+					},
+					age: 999,
+				},
+			],
+		});
+
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+	});
+
+	it("does not change row selection during navigation between different pages", () => {
+		var wrapper = getWrapper({
+			showRowSelection: true,
+			paginated: true,
+			rowsPerPage: 2,
+		});
+
+		wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+
+		wrapper.setProps({ currentPage: 2 });
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+
+		wrapper.setProps({ currentPage: 1 });
+		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+	});
+
+	it("paginates its rows", () => {
+		var wrapper = getWrapper({ paginated: true, rowsPerPage: 2 });
+		expect(wrapper.vm.visibleRows.length).toBe(2);
+
+		wrapper.setProps({ rowsPerPage: 3 });
+		expect(wrapper.vm.visibleRows.length).toBe(3);
+	});
+
+	it("passes computed value to total prop of subcomponents when backend pagination is disabled", () => {
+		var wrapper = getShallowWrapper();
+		expect(wrapper.find("row-selection-bar-stub").props("total")).toBe(
+			data.length
+		);
+		expect(wrapper.find("pagination-stub").props("total")).toBe(data.length);
 	});
 
 	it("Should allow data from a backend", () => {});

@@ -13,6 +13,7 @@
 			default-sort-direction="asc"
 			backend-sorting
 			backend-pagination
+			track-by="id"
 			@sort="onSort"
 			@update:skip="onPageChange"
 		>

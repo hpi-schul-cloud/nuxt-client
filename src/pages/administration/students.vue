@@ -18,6 +18,7 @@
 			show-row-selection
 			backend-sorting
 			backend-pagination
+			track-by="id"
 			@sort="onSort"
 		>
 			<template v-slot:column="{ row, column }">

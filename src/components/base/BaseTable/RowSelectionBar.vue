@@ -4,12 +4,12 @@
 			<div v-if="allRowsOfAllPagesSelected">Alle {{ total }} ausgewählt</div>
 			<div v-else>
 				<span>{{ selectedRows.length }} ausgewählt</span>
-				<span v-if="allRowsOfCurrentPageSelected">
+				<span v-if="allRowsOfCurrentPageSelected && selectedRows.length < total">
 					(oder
 					<span
-						style="text-decoration: underline; cursor: pointer"
-						@click="allRowsOfAllPagesSelected = true"
-						>Alle {{ total }} auswählen</span
+						class="select-all-rows"
+						@click="$emit('select-all-rows')"
+						>alle {{ total }} auswählen</span
 					>
 					)
 				</span>
@@ -73,6 +73,11 @@ export default {
 	padding: var(--space-md);
 	color: var(--color-white);
 	background: var(--color-info-light);
+}
+
+.select-all-rows {
+	text-decoration: underline;
+	cursor: pointer
 }
 
 </style>

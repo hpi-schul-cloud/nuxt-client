@@ -263,8 +263,8 @@ storiesOf("Base|Base UI", module)
 			filterable: boolean("filterable", true),
 			filters: tableFilters,
 			showRowSelection: boolean("showRowSelection", true),
-			selectedRows: boolean("selectedRows", true),
 			actions: tableActions,
+			trackBy: text("trackBy", "id"),
 		}),
 		components: { BaseTable },
 		template: `
@@ -280,7 +280,8 @@ storiesOf("Base|Base UI", module)
 				:filterable="filterable"
 				:filters="filters"
 				:showRowSelection="showRowSelection"
-				:actions="actions">
+				:actions="actions"
+				:trackBy="trackBy">
 				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>
 		`,

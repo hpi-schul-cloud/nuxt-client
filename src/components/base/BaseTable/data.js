@@ -1,5 +1,6 @@
 module.exports = [
 	{
+		id: "1",
 		firstName: "Hulk",
 		lastName: "Hogan",
 		address: {
@@ -8,6 +9,7 @@ module.exports = [
 		age: 54,
 	},
 	{
+		id: "2",
 		firstName: "Mario",
 		lastName: "Super",
 		address: {
@@ -16,6 +18,7 @@ module.exports = [
 		age: 999,
 	},
 	{
+		id: "3",
 		firstName: "Luigi",
 		lastName: "Super",
 		address: {
@@ -24,6 +27,7 @@ module.exports = [
 		age: 999,
 	},
 	{
+		id: "4",
 		firstName: "Armin",
 		lastName: "Mann",
 		address: {
@@ -32,6 +36,7 @@ module.exports = [
 		age: 999,
 	},
 	{
+		id: "5",
 		firstName: "Mario",
 		lastName: "Super",
 		address: {
