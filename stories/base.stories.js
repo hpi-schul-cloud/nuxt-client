@@ -5,7 +5,14 @@ import {
 	tableFilters,
 	tableActions,
 } from "./mockData/BaseTable";
-import { text, select, boolean, color, number } from "@storybook/addon-knobs";
+import {
+	text,
+	select,
+	boolean,
+	color,
+	number,
+	object,
+} from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 import notes from "@docs/storybook/base.md";
 
@@ -255,18 +262,20 @@ storiesOf("Base|Base UI", module)
 	}))
 	.add("Base Table", () => ({
 		data: () => ({
-			data: tableData,
-			columns: tableColumns,
-			backendSorting: boolean("backendSorting", false),
+			actions: tableActions,
 			backendPagination: boolean("backendPagination", false),
-			paginated: boolean("paginated", true),
+			backendSorting: boolean("backendSorting", false),
+			columns: tableColumns,
 			currentPage: number("currentPage", 1),
-			rowsPerPage: number("rowsPerPage", 5),
-			total: number("total", 10),
+			data: tableData,
 			filterable: boolean("filterable", true),
 			filters: tableFilters,
+			filtersSelected: object("filtersSelected", [tableFilters[0]]),
+			paginated: boolean("paginated", true),
+			rowsPerPage: number("rowsPerPage", 5),
 			showRowSelection: boolean("showRowSelection", true),
-			actions: tableActions,
+			selectedRows: object("selectedRows", [tableData[0]]),
+			total: number("total", 10),
 			trackBy: text("trackBy", "id"),
 		}),
 		components: { BaseTable },
@@ -283,18 +292,20 @@ storiesOf("Base|Base UI", module)
 		},
 		template: `
 			<base-table v-slot:default="slotProps"
-				:data="data"
-				:columns="columns"
-				:current-page.sync="currentPage"
-				:rows-per-page.sync="rowsPerPage"
+				:actions="actions"
 				:backend-pagination="backendPagination"
 				:backend-sorting="backendSorting"
-				:paginated="paginated"
-				:total="total"
+				:columns="columns"
+				:current-page.sync="currentPage"
+				:data="data"
 				:filterable="filterable"
 				:filters="filters"
+				:filtersSelected="filtersSelected"
+				:paginated="paginated"
+				:rows-per-page.sync="rowsPerPage"
 				:showRowSelection="showRowSelection"
-				:actions="actions"
+				:selectedRows="selectedRows"
+				:total="total"
 				:trackBy="trackBy"
 				@all-rows-selected="onAllRowsSelected"
 				@all-rows-of-current-page-selected="onAllRowsOfCurrentPageSelected"

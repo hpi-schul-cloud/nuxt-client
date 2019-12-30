@@ -263,6 +263,27 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.text()).not.toContain("Mario");
 	});
 
+	it("updates its filters when filtersSelected property is changed", () => {
+		var wrapper = getShallowWrapper({ filterable: true });
+
+		expect(wrapper.vm.newFiltersSelected).toEqual([]);
+
+		const newFilters = [{
+			label: "Alter",
+			type: "number",
+			property: "age",
+			matchingType: {
+				value: "equals",
+				label: "ist gleich",
+			},
+			value: "999",
+		}]
+
+		wrapper.setProps({ filtersSelected: newFilters });
+		expect(wrapper.vm.newFiltersSelected).toEqual(newFilters);
+
+	});
+
 	it("allows to select and unselect a row", () => {
 		var wrapper = getWrapper({ showRowSelection: true });
 		const rowSelection = wrapper.find("tbody tr td input[type='checkbox']");

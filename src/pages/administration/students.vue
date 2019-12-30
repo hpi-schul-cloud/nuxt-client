@@ -85,7 +85,6 @@ export default {
 	data() {
 		return {
 			total: 0,
-			loading: false,
 			currentPage: 1,
 			rowsPerPage: 10,
 			sortField: "firstName",

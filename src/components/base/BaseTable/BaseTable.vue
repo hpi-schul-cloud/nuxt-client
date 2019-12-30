@@ -113,23 +113,39 @@ export default {
 	},
 	mixins: [defaultFiltersMixin],
 	props: {
+		actions: {
+			type: Array,
+			default: () => [],
+		},
+		backendPagination: Boolean,
+		backendSorting: Boolean,
+		columns: {
+			type: Array,
+			default: () => [],
+		},
+		currentPage: {
+			type: Number,
+			default: 1,
+		},
 		data: {
 			type: Array,
 			default: () => [],
+		},
+		filterable: {
+			type: Boolean,
 		},
 		filters: {
 			type: Array,
 			default: () => [],
 			validator: function(filters) {
 				return filters.every((filter) => {
-					const hasValidType = filter.type && ["string", "select", "number", "date", "fulltextSearch"].includes(filter.type);
+					const hasValidType = !!filter.type && ["string", "select", "number", "date", "fulltextSearch"].includes(filter.type);
 
-					const hasValidMatchingType = filter.type === "select" || filter.type === "fulltextSearch" || filter.matchingType && filter.matchingType.label;
+					const hasValidMatchingType = (filter.type === "select" || filter.type === "fulltextSearch" || !!filter.matchingType && !!filter.matchingType.label);
 
 					return (
 						filter.label &&
 						filter.property &&
-						filter.value &&
 						hasValidType &&
 						hasValidMatchingType
 					);
@@ -140,12 +156,10 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-		filterable: {
-			type: Boolean,
-		},
-		actions: {
-			type: Array,
-			default: () => [],
+		paginated: Boolean,
+		rowsPerPage: {
+			type: Number,
+			default: 10,
 		},
 		showRowSelection: {
 			type: Boolean,
@@ -154,30 +168,14 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-		columns: {
-			type: Array,
-			default: () => [],
-		},
-		loading: Boolean,
-		paginated: Boolean,
-		currentPage: {
+		total: {
 			type: Number,
-			default: 1,
-		},
-		rowsPerPage: {
-			type: Number,
-			default: 10,
+			default: 0,
 		},
 		trackBy: {
 			type: String,
 			required: true,
 		},
-		total: {
-			type: Number,
-			default: 0,
-		},
-		backendPagination: Boolean,
-		backendSorting: Boolean,
 	},
 	data() {
 		return {
@@ -185,7 +183,7 @@ export default {
 			currentSortColumn: "",
 			tableData: this.data,
 			filterOpened: {},
-			newFiltersSelected: [],
+			newFiltersSelected: this.filtersSelected,
 			selectedRowIds: this.selectedRows.map(row => row[this.trackBy]),
 			isAsc: false,
 			defaultSort: [String, Array],
@@ -273,6 +271,9 @@ export default {
 			if (!this.backendSorting) {
 				this.sort(this.currentSortColumn, true);
 			}
+		},
+		filtersSelected() {
+			this.newFiltersSelected = this.filtersSelected;
 		},
 		newFiltersSelected() {
 			this.$emit("update:filters-selected", this.newFiltersSelected);

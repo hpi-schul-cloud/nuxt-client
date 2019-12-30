@@ -33,7 +33,6 @@ import { mapGetters, mapState } from "vuex";
 export default {
 	data: () => ({
 		total: 0,
-		loading: false,
 		sortField: "createdAt",
 		sortOrder: "asc",
 		defaultSortOrder: "asc",
