@@ -5,18 +5,19 @@
 		<div class="table-wrapper">
 			<div class="toolbelt">
 				<filter-menu
-					v-if="filterable && newSelectedRows.length < 1"
+					v-if="filterable && selectedRowIds.length < 1"
 					v-model="newFiltersSelected"
 					:filters="filters"
 				/>
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
-					:selected-rows="newSelectedRows"
+					:selected-rows="selectedRowIds"
 					:all-rows-of-all-pages-selected="allRowsOfAllPagesSelected"
 					:all-rows-of-current-page-selected="allRowsOfCurrentPageSelected"
-					:total="total"
-					@unselect-all-rows="unselectAllRows"
+					:total="tableDataTotal"
+					@select-all-rows="selectAllRowsOfAllPages"
+					@unselect-all-rows="unselectAllRowsOfAllPages"
 					@fire-action="fireAction"
 				/>
 			</div>
@@ -31,7 +32,7 @@
 								label-hidden
 								:vmodel="allRowsOfCurrentPageSelected"
 								name="checkbox"
-								@change.native="selectAllRows"
+								@change.native="toggleAllRowSelectionsOfCurrentPage"
 							/>
 						</th>
 						<th
@@ -60,7 +61,7 @@
 						v-for="(row, rowindex) in visibleRows"
 						:key="rowindex"
 						:class="{ checked: isRowSelected(row) }"
-						@click.shift="selectRow(row)"
+						@click.shift="toggleRowSelection(row)"
 					>
 						<td v-if="showRowSelection">
 							<base-input
@@ -68,7 +69,7 @@
 								:label="`Zeile ${rowindex + 1} auswählen`"
 								label-hidden
 								:vmodel="isRowSelected(row)"
-								@change.native="selectRow(row)"
+								@change.native="toggleRowSelection(row)"
 								@click.native.stop
 							/>
 						</td>
@@ -167,6 +168,10 @@ export default {
 			type: Number,
 			default: 10,
 		},
+		trackBy: {
+			type: String,
+			required: true,
+		},
 		total: {
 			type: Number,
 			default: 0,
@@ -179,11 +184,9 @@ export default {
 			editFilterActive: false,
 			currentSortColumn: "",
 			tableData: this.data,
-			tableDataTotal: this.backendPagination ? this.total : this.data.length,
-			allRowsOfAllPagesSelected: false,
 			filterOpened: {},
 			newFiltersSelected: [],
-			newSelectedRows: [...this.selectedRows],
+			selectedRowIds: this.selectedRows.map(row => row[this.trackBy]),
 			isAsc: false,
 			defaultSort: [String, Array],
 			defaultSortDirection: {
@@ -193,6 +196,9 @@ export default {
 		};
 	},
 	computed: {
+		tableDataTotal() {
+			return this.backendPagination ? this.total : this.data.length;
+		},
 		currentSortDirection() {
 			return this.isAsc ? "asc" : "desc";
 		},
@@ -248,27 +254,28 @@ export default {
 		},
 		allRowsOfCurrentPageSelected() {
 			return this.visibleRows.every((visibleRow) =>
-				this.newSelectedRows.includes(visibleRow)
+				this.selectedRowIds.includes(visibleRow[this.trackBy])
 			);
+		},
+		allRowsOfAllPagesSelected() {
+			return this.filteredAndSortedRows.every(row =>
+				this.selectedRowIds.includes(row[this.trackBy]));
+		},
+		newSelectedRows() {
+			return this.data.filter(row => this.selectedRowIds.some(id => id === row[this.trackBy]));
 		},
 	},
 	watch: {
 		selectedRows(rows) {
-			this.newSelectedRows = [...rows];
+			this.selectedRowIds = rows.map(row => row[this.trackBy])
 		},
 		data(data) {
+			this.selectedRowIds = this.selectedRowIds.filter(id => data.some(row => row[this.trackBy] === id))
 			this.tableData = data;
 
 			if (!this.backendSorting) {
 				this.sort(this.currentSortColumn, true);
 			}
-			if (!this.backendPagination) {
-				this.tableDataTotal = data.length;
-			}
-		},
-		total(total) {
-			if (!this.backendPagination) return;
-			this.tableDataTotal = total;
 		},
 		newFiltersSelected() {
 			this.$emit("update:filters-selected", this.newFiltersSelected);
@@ -276,9 +283,9 @@ export default {
 	},
 	methods: {
 		getValueByPath,
-		fireAction(item) {
-			item.action(this.newSelectedRows);
-			this.unselectAllRows();
+		fireAction(action) {
+			action.action(this.newSelectedRows);
+			this.unselectAllRowsOfAllPages();
 		},
 		sort(column) {
 			if (column === this.currentSortColumn) {
@@ -311,53 +318,72 @@ export default {
 			return sorted;
 		},
 		isRowSelected(row) {
-			return this.newSelectedRows.includes(row);
+			return this.selectedRowIds.includes(row[this.trackBy]);
+		},
+
+		toggleRowSelection(row) {
+			this.isRowSelected(row)? this.unselectRow(row) : this.selectRow(row);
+			this.$emit("row-selected", this.newSelectedRows);
+			// Emit checked rows to update user variable
+			this.$emit("update:selected-rows", this.newSelectedRows);
 		},
 
 		selectRow(row) {
-			this.allRowsOfAllPagesSelected = false;
 			if (!this.isRowSelected(row)) {
-				this.newSelectedRows.push(row);
-			} else {
-				this.unselectRow(row);
+				this.selectedRowIds.push(row[this.trackBy]);
 			}
-			this.$emit("check", this.newSelectedRows, row);
-			// Emit checked rows to update user variable
-			this.$emit("update:selectedRows", this.newSelectedRows);
 		},
 
 		unselectRow(row) {
-			const index = indexOf(this.newSelectedRows, row);
+			const index = indexOf(this.selectedRowIds, row[this.trackBy]);
 			if (index >= 0) {
-				this.newSelectedRows.splice(index, 1);
+				this.selectedRowIds.splice(index, 1);
 			}
 		},
 
-		selectAllRows() {
-			const { allRowsOfCurrentPageSelected } = this;
-			this.allRowsOfAllPagesSelected = false;
-			this.visibleRows.forEach((currentRow) => {
-				this.unselectRow(currentRow);
-				if (!allRowsOfCurrentPageSelected) {
-					this.newSelectedRows.push(currentRow);
-				}
-			});
-			this.$emit("check", this.newSelectedRows);
-			this.$emit("check-all", this.newSelectedRows);
+		toggleAllRowSelectionsOfCurrentPage() {
+			this.allRowsOfCurrentPageSelected? this.unselectAllRowsOfCurrentPage() : this.selectAllRowsOfCurrentPage();
+			this.$emit("row-selected", this.newSelectedRows);
+			this.$emit("all-rows-selected", this.newSelectedRows);
 			// Emit checked rows to update user variable
-			this.$emit("update:selectedRows", this.newSelectedRows);
+			this.$emit("update:selected-rows", this.newSelectedRows);
 		},
 
-		unselectAllRows() {
-			this.allRowsOfAllPagesSelected = false;
+		selectAllRowsOfCurrentPage() {
+			this.visibleRows.forEach((row) => {
+				if (!this.selectedRowIds.includes(row[this.trackBy])) {
+					this.selectedRowIds.push(row[this.trackBy]);
+				}
+			});
+		},
+
+		unselectAllRowsOfCurrentPage() {
 			this.visibleRows.forEach((row) => {
 				this.unselectRow(row);
 			});
-			this.$emit("check", this.newSelectedRows);
-			this.$emit("check-all", this.newSelectedRows);
-			// Emit checked rows to update user variable
-			this.$emit("update:selectedRows", this.newSelectedRows);
 		},
+
+		selectAllRowsOfAllPages() {
+			this.filteredRows.forEach((row) => {
+				if (!this.selectedRowIds.includes(row[this.trackBy])) {
+					this.selectedRowIds.push(row[this.trackBy]);
+				}
+			});
+			this.$emit("row-selected", this.newSelectedRows);
+			this.$emit("all-rows-selected", this.newSelectedRows);
+			// Emit checked rows to update user variable
+			this.$emit("update:selected-rows", this.newSelectedRows);
+		},
+
+		unselectAllRowsOfAllPages() {
+			this.filteredRows.forEach((row) => {
+				this.unselectRow(row);
+			});
+			this.$emit("row-selected", this.newSelectedRows);
+			this.$emit("all-rows-selected", this.newSelectedRows);
+			// Emit checked rows to update user variable
+			this.$emit("update:selected-rows", this.newSelectedRows);
+		}
 	},
 };
 </script>

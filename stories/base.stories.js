@@ -6,6 +6,7 @@ import {
 	tableActions,
 } from "./mockData/BaseTable";
 import { text, select, boolean, color, number } from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
 import notes from "@docs/storybook/base.md";
 
 import BaseAudio from "@basecomponents/BaseAudio";
@@ -267,6 +268,15 @@ storiesOf("Base|Base UI", module)
 			trackBy: text("trackBy", "id"),
 		}),
 		components: { BaseTable },
+		methods: {
+			onAllRowsSelected: action("@all-rows-selected"),
+			onRowSelected: action("@row-selected"),
+			onSort: action("@sort"),
+			onUpdateCurrentPage: action("@update:current-page"),
+			onUpdateFiltersSelected: action("@update:filters-selected"),
+			onUpdateRowsPerPage: action("@update:rows-per-page"),
+			onUpdateSelectedRows: action("@update:selected-rows"),
+		},
 		template: `
 			<base-table v-slot:default="slotProps"
 				:data="data"
@@ -281,8 +291,15 @@ storiesOf("Base|Base UI", module)
 				:filters="filters"
 				:showRowSelection="showRowSelection"
 				:actions="actions"
-				:trackBy="trackBy">
-				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
+				:trackBy="trackBy"
+				@all-rows-selected="onAllRowsSelected"
+				@row-selected="onRowSelected"
+				@sort="onSort"
+				@update:current-page="onUpdateCurrentPage"
+				@update:filters-selected="onUpdateFiltersSelected"
+				@update:rows-per-page="onUpdateRowsPerPage"
+				@update:selected-rows="onUpdateSelectedRows">
+					<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>
 		`,
 	}))
