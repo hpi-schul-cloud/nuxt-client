@@ -272,14 +272,12 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.find("tbody tr").classes()).toContain("checked");
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 		expect(wrapper.emitted()["update:selected-rows"][0]).toEqual([[data[0]]]);
-		expect(wrapper.emitted()["row-selected"][0]).toEqual([[data[0]]]);
 
 		rowSelection.setChecked(false);
 
 		expect(wrapper.find("tbody tr").classes()).not.toContain("checked");
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
-		expect(wrapper.emitted()["row-selected"][1]).toEqual([[]]);
 	});
 
 	it("allows to select and unselect all rows of current page", () => {
@@ -298,11 +296,12 @@ describe("@components/BaseTable", () => {
 			data.slice(0, 2),
 		]);
 
-		expect(wrapper.emitted()["row-selected"].length).toBe(1);
-		expect(wrapper.emitted()["row-selected"][0]).toEqual([data.slice(0, 2)]);
-
-		expect(wrapper.emitted()["all-rows-selected"].length).toBe(1);
-		expect(wrapper.emitted()["all-rows-selected"][0]).toEqual([data.slice(0, 2)]);
+		expect(wrapper.emitted()["all-rows-of-current-page-selected"].length).toBe(
+			1
+		);
+		expect(wrapper.emitted()["all-rows-of-current-page-selected"][0]).toEqual([
+			data.slice(0, 2),
+		]);
 
 		allRowsSelection.setChecked(false);
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
@@ -310,11 +309,12 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.emitted()["update:selected-rows"].length).toBe(2);
 		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
 
-		expect(wrapper.emitted()["row-selected"].length).toBe(2);
-		expect(wrapper.emitted()["row-selected"][1]).toEqual([[]]);
-
-		expect(wrapper.emitted()["all-rows-selected"].length).toBe(2);
-		expect(wrapper.emitted()["all-rows-selected"][1]).toEqual([[]]);
+		expect(wrapper.emitted()["all-rows-of-current-page-selected"].length).toBe(
+			2
+		);
+		expect(wrapper.emitted()["all-rows-of-current-page-selected"][1]).toEqual([
+			[],
+		]);
 	});
 
 	it("allows to select and unselect all rows of current page manually", () => {
@@ -357,6 +357,12 @@ describe("@components/BaseTable", () => {
 		allRowsOfAllPagesSelection.trigger("click");
 
 		expect(wrapper.vm.allRowsOfAllPagesSelected).toBe(true);
+
+		expect(wrapper.emitted()["update:selected-rows"].length).toBe(2);
+		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([data]);
+
+		expect(wrapper.emitted()["all-rows-selected"].length).toBe(1);
+		expect(wrapper.emitted()["all-rows-selected"][0]).toEqual([data]);
 	});
 
 	it("can trigger an action on selected rows", () => {
@@ -378,8 +384,8 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.emitted()["update:selected-rows"].length).toBe(2);
 		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
 
-		expect(wrapper.emitted()["all-rows-selected"].length).toBe(2);
-		expect(wrapper.emitted()["all-rows-selected"][1]).toEqual([[]]);
+		expect(wrapper.emitted()["all-rows-selected"].length).toBe(1);
+		expect(wrapper.emitted()["all-rows-selected"][0]).toEqual([[]]);
 	});
 
 	it("does not change row selection when new rows are added", () => {

@@ -270,7 +270,9 @@ storiesOf("Base|Base UI", module)
 		components: { BaseTable },
 		methods: {
 			onAllRowsSelected: action("@all-rows-selected"),
-			onRowSelected: action("@row-selected"),
+			onAllRowsOfCurrentPageSelected: action(
+				"@all-rows-of-current-page-selected"
+			),
 			onSort: action("@sort"),
 			onUpdateCurrentPage: action("@update:current-page"),
 			onUpdateFiltersSelected: action("@update:filters-selected"),
@@ -293,7 +295,7 @@ storiesOf("Base|Base UI", module)
 				:actions="actions"
 				:trackBy="trackBy"
 				@all-rows-selected="onAllRowsSelected"
-				@row-selected="onRowSelected"
+				@all-rows-of-current-page-selected="onAllRowsOfCurrentPageSelected"
 				@sort="onSort"
 				@update:current-page="onUpdateCurrentPage"
 				@update:filters-selected="onUpdateFiltersSelected"

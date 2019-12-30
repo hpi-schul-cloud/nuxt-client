@@ -266,9 +266,6 @@ export default {
 		},
 	},
 	watch: {
-		selectedRows(rows) {
-			this.selectedRowIds = rows.map(row => row[this.trackBy])
-		},
 		data(data) {
 			this.selectedRowIds = this.selectedRowIds.filter(id => data.some(row => row[this.trackBy] === id))
 			this.tableData = data;
@@ -279,6 +276,9 @@ export default {
 		},
 		newFiltersSelected() {
 			this.$emit("update:filters-selected", this.newFiltersSelected);
+		},
+		selectedRows(rows) {
+			this.selectedRowIds = rows.map(row => row[this.trackBy]);
 		},
 	},
 	methods: {
@@ -323,8 +323,6 @@ export default {
 
 		toggleRowSelection(row) {
 			this.isRowSelected(row)? this.unselectRow(row) : this.selectRow(row);
-			this.$emit("row-selected", this.newSelectedRows);
-			// Emit checked rows to update user variable
 			this.$emit("update:selected-rows", this.newSelectedRows);
 		},
 
@@ -343,9 +341,7 @@ export default {
 
 		toggleAllRowSelectionsOfCurrentPage() {
 			this.allRowsOfCurrentPageSelected? this.unselectAllRowsOfCurrentPage() : this.selectAllRowsOfCurrentPage();
-			this.$emit("row-selected", this.newSelectedRows);
-			this.$emit("all-rows-selected", this.newSelectedRows);
-			// Emit checked rows to update user variable
+			this.$emit("all-rows-of-current-page-selected", this.newSelectedRows);
 			this.$emit("update:selected-rows", this.newSelectedRows);
 		},
 
@@ -358,9 +354,9 @@ export default {
 		},
 
 		unselectAllRowsOfCurrentPage() {
-			this.visibleRows.forEach((row) => {
-				this.unselectRow(row);
-			});
+			this.selectedRowIds = this.selectedRowIds.filter(
+				id => this.visibleRows.every(row => row[this.trackBy] != id)
+			);
 		},
 
 		selectAllRowsOfAllPages() {
@@ -369,20 +365,14 @@ export default {
 					this.selectedRowIds.push(row[this.trackBy]);
 				}
 			});
-			this.$emit("row-selected", this.newSelectedRows);
-			this.$emit("all-rows-selected", this.newSelectedRows);
-			// Emit checked rows to update user variable
 			this.$emit("update:selected-rows", this.newSelectedRows);
+			this.$emit("all-rows-selected", this.newSelectedRows);
 		},
 
 		unselectAllRowsOfAllPages() {
-			this.filteredRows.forEach((row) => {
-				this.unselectRow(row);
-			});
-			this.$emit("row-selected", this.newSelectedRows);
-			this.$emit("all-rows-selected", this.newSelectedRows);
-			// Emit checked rows to update user variable
+			this.selectedRowIds = [];
 			this.$emit("update:selected-rows", this.newSelectedRows);
+			this.$emit("all-rows-selected", this.newSelectedRows);
 		}
 	},
 };

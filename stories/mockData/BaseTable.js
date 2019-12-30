@@ -1,5 +1,6 @@
 const tableData = [
 	{
+		id: "1",
 		firstName: "Hulk",
 		lastName: "Hogan",
 		address: {
@@ -8,6 +9,7 @@ const tableData = [
 		age: 54,
 	},
 	{
+		id: "2",
 		firstName: "Mario",
 		lastName: "Super",
 		address: {
@@ -16,6 +18,7 @@ const tableData = [
 		age: 999,
 	},
 	{
+		id: "3",
 		firstName: "Luigi",
 		lastName: "Super",
 		address: {
@@ -24,6 +27,7 @@ const tableData = [
 		age: 999,
 	},
 	{
+		id: "4",
 		firstName: "Wario",
 		lastName: "Super",
 		address: {
@@ -32,6 +36,7 @@ const tableData = [
 		age: 999,
 	},
 	{
+		id: "5",
 		firstName: "Honkey",
 		lastName: "Kong",
 		address: {
@@ -40,6 +45,7 @@ const tableData = [
 		age: 999,
 	},
 	{
+		id: "6",
 		firstName: "LoLo",
 		lastName: "Super",
 		address: {
@@ -48,6 +54,7 @@ const tableData = [
 		age: 999,
 	},
 	{
+		id: "7",
 		firstName: "LoLo",
 		lastName: "Nee",
 		address: {
@@ -56,6 +63,7 @@ const tableData = [
 		age: 999,
 	},
 	{
+		id: "8",
 		firstName: "anna",
 		lastName: "test",
 		address: {
@@ -64,6 +72,7 @@ const tableData = [
 		age: 999,
 	},
 	{
+		id: "9",
 		firstName: "felix",
 		lastName: "test",
 		address: {
