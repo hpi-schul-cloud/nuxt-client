@@ -205,18 +205,19 @@ storiesOf("Base|Base UI", module)
 		data: () => ({
 			content: [],
 			options: [
-				{ value: 1, name: "Option 1" },
-				{ value: 2, name: "Option 2" },
-				{ value: 3, name: "Option 3" },
+				{ _id: 1, value: 1, name: "Option 1" },
+				{ _id: 2, value: 2, name: "Option 2" },
+				{ _id: 3, value: 3, name: "Option 3" },
 			],
 			closeOnSelect: boolean("closeOnSelect", false),
 			deselectLabel: text("deselectLabel", "Entfernen"),
 			label: text("label", "Label"),
-			multiple: select("mutiple", { true: true, false: false }, false),
+			multiple: boolean("mutiple", false),
 			optionLabel: text("optionLabel", "name"),
 			placeholder: text("placeholder", "Etwas auswählen"),
-			selectLabel: text("deselectLabel", "Auswählen"),
-			selectedLabel: text("deselectLabel", "Aktiv"),
+			selectLabel: text("selectLabel", "Auswählen"),
+			selectedLabel: text("selectedLabel", "Aktiv"),
+			trackBy: text("trackBy", "_id"),
 		}),
 		template: `
 		<div>
@@ -232,7 +233,8 @@ storiesOf("Base|Base UI", module)
 				:optionLabel="optionLabel"
 				:placeholder="placeholder"
 				:selectLabel="selectLabel"
-				:selectedLabel="selectedLabel">
+				:selectedLabel="selectedLabel"
+				:trackBy="trackBy">
 			</base-select>
 		</div>`,
 		methods: {},
