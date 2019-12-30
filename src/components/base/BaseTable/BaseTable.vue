@@ -60,7 +60,7 @@
 					<tr
 						v-for="(row, rowindex) in visibleRows"
 						:key="rowindex"
-						:class="{ checked: isRowSelected(row) }"
+						:class="{ selected: isRowSelected(row) }"
 						@click.shift="toggleRowSelection(row)"
 					>
 						<td v-if="showRowSelection">
@@ -416,7 +416,7 @@ export default {
 			&:nth-child(even) {
 				background-color: var(--color-gray-light);
 			}
-			&.checked {
+			&.selected {
 				background-color: var(--color-info-light);
 			}
 			td {

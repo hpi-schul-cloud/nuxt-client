@@ -269,13 +269,13 @@ describe("@components/BaseTable", () => {
 
 		rowSelection.setChecked();
 
-		expect(wrapper.find("tbody tr").classes()).toContain("checked");
+		expect(wrapper.find("tbody tr").classes()).toContain("selected");
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 		expect(wrapper.emitted()["update:selected-rows"][0]).toEqual([[data[0]]]);
 
 		rowSelection.setChecked(false);
 
-		expect(wrapper.find("tbody tr").classes()).not.toContain("checked");
+		expect(wrapper.find("tbody tr").classes()).not.toContain("selected");
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
 	});
@@ -329,7 +329,7 @@ describe("@components/BaseTable", () => {
 		expect(
 			wrapper
 				.findAll("tbody tr")
-				.wrappers.every((tr) => tr.classes().includes("checked"))
+				.wrappers.every((tr) => tr.classes().includes("selected"))
 		).toBe(true);
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
 
@@ -337,7 +337,7 @@ describe("@components/BaseTable", () => {
 		expect(
 			wrapper
 				.findAll("tbody tr")
-				.wrappers.some((tr) => tr.classes().includes("checked"))
+				.wrappers.some((tr) => tr.classes().includes("selected"))
 		).toBe(false);
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 	});
@@ -431,6 +431,19 @@ describe("@components/BaseTable", () => {
 
 		wrapper.setProps({ currentPage: 1 });
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+	});
+
+	it("updates its row selection when selectedRows property is changed", () => {
+		var wrapper = getShallowWrapper({ showRowSelection: true });
+
+		expect(
+			wrapper
+				.findAll("tbody tr")
+				.wrappers.some((tr) => tr.classes().includes("selected"))
+		).toBe(false);
+
+		wrapper.setProps({ selectedRows: [data[0]] });
+		expect(wrapper.find("tbody tr").classes()).toContain("selected");
 	});
 
 	it("paginates its rows", () => {
