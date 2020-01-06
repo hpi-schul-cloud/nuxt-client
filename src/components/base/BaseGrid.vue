@@ -10,14 +10,16 @@ export default {
 			type: String,
 			default: "15rem",
 		},
+		columnGap: {
+			type: String,
+			default: "var(--space-lg)",
+		},
 	},
 	computed: {
 		col() {
-			return (
-				"grid-template-columns: repeat(auto-fill, minmax(" +
-				this.columnWidth +
-				", 1fr))"
-			);
+			return `grid-template-columns: repeat(auto-fill, minmax(${this.columnWidth}, 1fr));
+				grid-gap: ${this.columnGap};
+				`;
 		},
 	},
 };
@@ -28,6 +30,5 @@ export default {
 
 .grid {
 	display: grid;
-	grid-gap: var(--space-lg);
 }
 </style>
