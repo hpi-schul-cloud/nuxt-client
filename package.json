@@ -125,7 +125,7 @@
 		"prettier": "^1.18.2",
 		"puppeteer": "^2.0.0",
 		"sass-loader": "^8.0.0",
-		"sinon": "^7.5.0",
+		"sinon": "^8.0.0",
 		"start-server-and-test": "^1.10.6",
 		"storybook-addon-vue-info": "^1.1.1",
 		"style-loader": "^1.0.0",
