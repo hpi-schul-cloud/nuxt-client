@@ -8,6 +8,8 @@
 			type="text"
 			:required="true"
 			data-testid="news_title"
+			:label="$t('components.organisms.FormNews.input.title.label')"
+			:label-hidden="true"
 		/>
 		<transition name="fade">
 			<div v-if="data.title">

@@ -17,6 +17,7 @@
 	"components.organisms.FormNews.errors.patch": "Fehler beim aktualisieren.",
 	"components.organisms.FormNews.errors.remove": "Fehler beim löschen.",
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
+	"components.organisms.FormNews.input.title.label": "Titel der Neuigkeit",
 	"components.organisms.FormNews.label.date": "Datum",
 	"components.organisms.FormNews.label.planned_publish": "Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
 	"components.organisms.FormNews.label.time": "Uhrzeit",
