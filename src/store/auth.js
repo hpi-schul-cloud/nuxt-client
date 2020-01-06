@@ -30,9 +30,6 @@ export const actions = {
 	},
 	async logout(ctx) {
 		this.$cookies.remove("jwt");
-		if (location && !location.pathname.endsWith("/login")) {
-			window.location = "/login";
-		}
 	},
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
@@ -99,4 +96,11 @@ export const state = () => {
 		school: {},
 		publicPages: ["index", "login", "signup", "impressum"],
 	};
+};
+
+export default {
+	namespaced: true,
+	actions,
+	mutations,
+	state,
 };

@@ -81,11 +81,6 @@ export default {
 			myInvitations: [],
 		};
 	},
-	head() {
-		return {
-			title: "Teams",
-		};
-	},
 	computed: {
 		...mapGetters("teams", {
 			teams: "list",
@@ -115,6 +110,11 @@ export default {
 			this.$store.dispatch("teams/find");
 		},
 	},
+	head() {
+		return {
+			title: "Teams",
+		};
+	},
 };
 </script>
 
@@ -139,7 +139,7 @@ export default {
 .teams-card {
 	position: relative;
 	width: 240px;
-	padding: var(--space-sm);
+	padding: var(--space-md);
 	margin: var(--space-md);
 	cursor: pointer;
 	border-radius: var(--radius-sm);

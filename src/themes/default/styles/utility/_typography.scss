@@ -13,13 +13,20 @@ body {
 @for $i from 1 through 6 {
 	h#{$i},
 	.h#{$i} {
-		margin-top: var(--space-sm);
-		margin-bottom: var(--space-xs-2);
+		margin-top: var(--space-xl);
+		margin-bottom: var(--space-sm);
 		font-family: var(--font-accent);
 		font-size: var(--heading-#{$i});
 		font-weight: var(--font-weight-normal);
 		line-height: var(--line-height-sm);
 		color: var(--color-black);
+	}
+}
+
+h1,
+.h1 {
+	&:first-of-type:not(.h2):not(.h3):not(.h4):not(.h5):not(.h6) {
+		margin-top: 0;
 	}
 }
 
@@ -40,16 +47,8 @@ body {
 	font-size: var(--text-lg);
 }
 
-a {
-	color: var(--color-primary);
-
-	&:visited {
-		color: var(--color-primary-visited);
-	}
-}
-
 p {
-	margin-bottom: var(--space-sm);
+	margin-bottom: var(--space-md);
 }
 
 b,
@@ -72,4 +71,18 @@ button {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+.default-link {
+	color: var(--color-primary);
+	text-decoration: none;
+	cursor: pointer;
+	border-bottom: 2px solid var(--color-gray);
+	&:hover,
+	&:focus {
+		color: var(--color-primary-dark);
+	}
+	&:visited {
+		color: var(--color-primary);
+	}
 }

@@ -22,5 +22,7 @@ dist
 .env
 jsconfig.json
 **/.DS_Store
+**/.tmp*
 
 docker-compose.yml
+tests/screenshot/__image_snapshots__/__diff_output__/**/*

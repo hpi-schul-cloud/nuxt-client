@@ -54,6 +54,7 @@
 						:key="action.title"
 						v-ripple
 						class="logout-button"
+						data-testid="logout"
 						@click="sendEvent(action.event)"
 						>Abmelden</button
 					>
@@ -183,6 +184,9 @@ export default {
 			}
 
 			.menu-button {
+				position: fixed;
+				top: 0;
+				left: 0;
 				transform: rotate(90deg);
 			}
 		}

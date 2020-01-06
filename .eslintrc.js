@@ -13,6 +13,7 @@ module.exports = {
 		},
 		{
 			files: ["**/*.unit.js"],
+			extends: ["@schul-cloud/eslint-config/jest"],
 			parserOptions: {
 				parser: "babel-eslint",
 				sourceType: "module",
@@ -26,6 +27,9 @@ module.exports = {
 				//shallowMountView: false,
 				createComponentMocks: false,
 				//createModuleStore: false,
+			},
+			rules: {
+				"max-lines": 0,
 			},
 		},
 	],

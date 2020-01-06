@@ -10,9 +10,10 @@
 	"files.eol": "\n",
 	"files.insertFinalNewline": true,
 	"files.trimFinalNewlines": true,
-	"prettier.useTabs": true,
 	"vetur.format.options.useTabs": true,
 	"scssFormatter.useTabs": true,
+	"prettier.configPath": ".prettierrc.js",
+	"prettier.ignorePath": ".prettierignore",
 
 	// ===
 	// Files
@@ -29,8 +30,7 @@
 	"search.exclude": {
 		"**/node_modules": true,
 		".git/*": true,
-		".nuxt/*": true,
-		"src/legacy-client/*": true
+		".nuxt/*": true
 	},
 
 	"files.associations": {
@@ -43,32 +43,16 @@
 	// ===
 
 	"editor.formatOnSave": true,
-	"eslint.autoFixOnSave": true,
-	"eslint.run": "onSave",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
 	"eslint.validate": [
-		{
-			"language": "javascript",
-			"autoFix": true
-		},
-		{
-			"language": "javascriptreact",
-			"autoFix": true
-		},
-		{
-			"language": "vue",
-			"autoFix": true
-		},
-		{
-			"language": "vue-html",
-			"autoFix": true
-		},
-		{
-			"language": "html",
-			"autoFix": true
-		}
+		"javascript",
+		"javascriptreact",
+		"vue",
+		"vue-html",
+		"html"
 	],
-	"vetur.completion.useScaffoldSnippets": false,
-	"prettier.disableLanguages": [],
 	"trailing-spaces.trimOnSave": true,
 
 	// ===
