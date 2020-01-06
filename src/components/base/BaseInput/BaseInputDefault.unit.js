@@ -152,4 +152,18 @@ describe("@components/BaseInputDefault", () => {
 		pwdToggle.trigger("click");
 		expect(inputField.attributes("type")).toBe("text");
 	});
+
+	it("should have an aria label if the label is hidden", () => {
+		supportedTypes.forEach((type) => {
+			const wrapper = mount(BaseInput, {
+				propsData: {
+					vmodel: "",
+					type,
+					label: "test",
+					labelHidden: true,
+				},
+			});
+			expect(wrapper.find(`[aria-label="test"]`).exists()).toBe(true);
+		});
+	});
 });
