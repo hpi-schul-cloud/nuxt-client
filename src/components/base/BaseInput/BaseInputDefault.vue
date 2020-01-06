@@ -29,8 +29,9 @@
 							:id="`input-${$uid}`"
 							ref="input"
 							v-focus-on-mount="focus"
+							:aria-label="showLabel ? undefined : label"
 							v-bind="$attrs"
-							:type="type"
+							:type="appliedType"
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
@@ -38,22 +39,28 @@
 						/>
 					</slot>
 				</div>
-				<base-icon
-					v-if="type === 'password' && !passwordVisible && !error && !success"
-					source="custom"
-					icon="invisible"
-					fill="var(--color-gray)"
-					class="icon-behind"
+				<base-button
+					v-if="type === 'password' && !error && !success"
+					design="none"
+					type="button"
+					data-testid="pwd-visibility-toggle"
 					@click="togglePasswordVisibility"
-				/>
-				<base-icon
-					v-if="type === 'password' && passwordVisible && !error && !success"
-					source="custom"
-					icon="visible"
-					fill="var(--color-gray)"
-					class="icon-behind visible"
-					@click="togglePasswordVisibility"
-				/>
+				>
+					<base-icon
+						v-if="!passwordVisible"
+						source="custom"
+						icon="invisible"
+						fill="var(--color-gray)"
+						class="icon-behind"
+					/>
+					<base-icon
+						v-else
+						source="custom"
+						icon="visible"
+						fill="var(--color-gray)"
+						class="icon-behind visible"
+					/>
+				</base-button>
 				<base-icon
 					v-if="error"
 					source="custom"
@@ -107,7 +114,8 @@ export default {
 				return supportedTypes.includes(type) || !type;
 			},
 		},
-		label: { type: String, default: "" },
+		label: { type: String, required: true },
+		labelHidden: { type: Boolean },
 		info: { type: String, default: "" },
 		hint: { type: String, default: "" },
 		error: { type: String, default: "" },
@@ -122,11 +130,17 @@ export default {
 		};
 	},
 	computed: {
+		appliedType() {
+			if (this.passwordVisible) {
+				return "text";
+			}
+			return this.type;
+		},
 		hasError() {
 			return !!this.error;
 		},
 		showLabel() {
-			return !!this.vmodel || !this.$attrs.placeholder;
+			return (!!this.vmodel || !this.$attrs.placeholder) && !this.labelHidden;
 		},
 	},
 	methods: {
@@ -138,15 +152,7 @@ export default {
 			this.$emit("input", newVal);
 		},
 		togglePasswordVisibility() {
-			if (this.type === "password") {
-				const { input } = this.$refs;
-				if (input.type === "password") {
-					input.type = "text";
-				} else if (input.type === "text") {
-					input.type = "password";
-				}
-				this.passwordVisible = !this.passwordVisible;
-			}
+			this.passwordVisible = !this.passwordVisible;
 		},
 	},
 };

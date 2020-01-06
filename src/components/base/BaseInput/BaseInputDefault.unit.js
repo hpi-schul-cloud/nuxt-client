@@ -138,18 +138,18 @@ describe("@components/BaseInputDefault", () => {
 		});
 	});
 
-	it("can toggle pwd visibility", () => {
+	it("can toggle pwd visibility", async () => {
 		const wrapper = mount(BaseInput, {
 			propsData: {
 				vmodel: "",
 				type: "password",
 				label: "test",
-				success: true,
 			},
 		});
-		const baseInputDefault = wrapper.find(BaseInputDefault);
-		expect(baseInputDefault.vm.passwordVisible).toBe(false);
-		baseInputDefault.vm.togglePasswordVisibility();
-		expect(baseInputDefault.vm.passwordVisible).toBe(true);
+		const inputField = wrapper.find("input");
+		const pwdToggle = wrapper.find(`[data-testid="pwd-visibility-toggle"]`);
+		expect(inputField.attributes("type")).toBe("password");
+		pwdToggle.trigger("click");
+		expect(inputField.attributes("type")).toBe("text");
 	});
 });
