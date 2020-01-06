@@ -101,8 +101,8 @@ export default {
 	},
 	watch: {
 		bottom(bottom) {
-			const { limit, skip, total } = this.resources;
-			if (bottom && !this.loading && total > limit * skip) {
+			const { skip, total } = this.resources;
+			if (bottom && !this.loading && skip < total) {
 				this.addContent();
 			}
 		},
