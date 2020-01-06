@@ -91,4 +91,24 @@ describe("@components/molecules/ChipFilter", () => {
 		expect(newSelection.length).toBe(2);
 		expect(newSelection.every((chip) => !chip.includes(chipText)));
 	});
+
+	it("filtertTag gets selected", () => {
+		const activeFilters = ["Englisch", "Deutsch"];
+		const filterTags = ["Spanisch", "Deutsch", "Englisch"];
+
+		const wrapper = mount(ChipFilter, {
+			propsData: {
+				value: activeFilters,
+				options: filterTags,
+				multiple: true,
+			},
+		});
+
+		const testChip = wrapper.find(".chip");
+		const chipText = testChip.text();
+		expect(testChip.trigger("click"));
+		const newSelection = wrapper.emitted("update:value")[0][0];
+		expect(newSelection.length).toBe(3);
+		expect(newSelection.every((chip) => !chip.includes(chipText)));
+	});
 });
