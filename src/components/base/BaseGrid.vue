@@ -30,5 +30,6 @@ export default {
 
 .grid {
 	display: grid;
+	width: 100%;
 }
 </style>
