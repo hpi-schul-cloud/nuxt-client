@@ -29,5 +29,6 @@ export default {
 .grid {
 	display: grid;
 	grid-gap: 2rem;
+	width: 100%;
 }
 </style>

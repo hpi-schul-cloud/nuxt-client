@@ -22,26 +22,24 @@
 			<div v-if="resources.data.length === 0" class="content__no-results">
 				<content-empty-state />
 			</div>
-			<div class="content__cards-container">
-				<base-grid column-width="15rem">
-					<content-card
-						v-for="resource of resources.data"
-						:id="resource._id"
-						:key="resource._id"
-						class="card"
-						:content-category="resource.resourceCategory"
-						:description="resource.description"
-						:licenses="resource.licenses"
-						:mime-type="resource.mimeType"
-						:origin-id="resource.originId"
-						:provider-name="resource.providerName"
-						:tags="resource.tags.slice(0, 5)"
-						:thumbnail="resource.thumbnail"
-						:title="resource.title"
-						:url="resource.url"
-					/>
-				</base-grid>
-			</div>
+			<base-grid column-width="15rem">
+				<content-card
+					v-for="resource of resources.data"
+					:id="resource._id"
+					:key="resource._id"
+					class="card"
+					:content-category="resource.resourceCategory"
+					:description="resource.description"
+					:licenses="resource.licenses"
+					:mime-type="resource.mimeType"
+					:origin-id="resource.originId"
+					:provider-name="resource.providerName"
+					:tags="resource.tags.slice(0, 5)"
+					:thumbnail="resource.thumbnail"
+					:title="resource.title"
+					:url="resource.url"
+				/>
+			</base-grid>
 			<base-spinner
 				v-if="loading && resources.data.length !== 0"
 				class="content__spinner"
