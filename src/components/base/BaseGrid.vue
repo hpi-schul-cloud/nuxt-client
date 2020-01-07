@@ -10,7 +10,7 @@ export default {
 			type: String,
 			default: "15rem",
 		},
-		columnGap: {
+		gridGap: {
 			type: String,
 			default: "var(--space-lg)",
 		},
@@ -18,7 +18,7 @@ export default {
 	computed: {
 		col() {
 			return `grid-template-columns: repeat(auto-fill, minmax(${this.columnWidth}, 1fr));
-				grid-gap: ${this.columnGap};
+				grid-gap: ${this.gridGap};
 				`;
 		},
 	},
