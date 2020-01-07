@@ -5,20 +5,22 @@
 		</div>
 
 		<div class="modal-body">
-			<div v-if="filterOpened.type === 'string'">
+			<div v-if="['text', 'number', 'date'].includes(filterOpened.type)">
 				<base-select
 					v-model="filterOpened.matchingType"
 					label="Matching-Typ auswählen"
-					:options="stringFilters"
+					:close-on-select="true"
+					:options="matchingTypes(filterOpened.type)"
 					:allow-empty="false"
 					option-label="label"
+					track-by="value"
 				/>
 				<base-input
 					v-model="filterOpened.value"
 					label="Wert"
 					autofocus
 					placeholder="Wert"
-					type="text"
+					:type="filterOpened.type"
 					@keyup.enter.native="$emit('set-filter', filterOpened)"
 				/>
 			</div>
@@ -59,6 +61,8 @@
 </template>
 
 <script>
+import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
+
 export default {
 	props: {
 		active: {
@@ -69,19 +73,10 @@ export default {
 			default: () => {},
 		},
 	},
-	data() {
-		return {
-			stringFilters: [
-				{
-					label: "enthält",
-					value: "contains",
-				},
-				{
-					label: "ist gleich",
-					value: "equals",
-				},
-			],
-		};
+	methods: {
+		matchingTypes(type) {
+			return Object.values(supportedFilterMatchingTypes[type]);
+		},
 	},
 };
 </script>

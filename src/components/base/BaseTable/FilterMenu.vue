@@ -2,18 +2,17 @@
 	<div class="filter-menu">
 		<base-icon icon="filter_list" source="material" class="ml--md mr--md" />
 		<base-select
+			:allow-empty="false"
 			close-on-select
 			label="Filter hinzufügen"
-			label-hidden
-			:value="value"
-			:options="filters"
-			placeholder="Filter hinzufügen"
-			:allow-empty="false"
 			:multiple="true"
-			:taggable="true"
-			track-by="label"
-			:tag-placeholder="`Volltextsuche`"
+			placeholder="Filter hinzufügen"
+			:options="filters"
 			option-label="label"
+			:taggable="true"
+			:tag-placeholder="`Volltextsuche`"
+			track-by="label"
+			:value="value"
 			@select="selectFilter"
 			@tag="setSearch"
 		>
@@ -43,7 +42,6 @@
 
 <script>
 import FilterModal from "./FilterModal.vue";
-
 export default {
 	components: {
 		FilterModal,
@@ -57,10 +55,6 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-		filtersSelected: {
-			type: Array,
-			default: () => [],
-		},
 	},
 	data() {
 		return {
@@ -69,21 +63,19 @@ export default {
 		};
 	},
 	methods: {
-		setSearch(val) {
-			if (this.value.some((f) => f.label === "Volltextsuche")) {
-				this.value = this.value.map((f) => {
-					if (f.label === "Volltextsuche") {
-						f.value = val;
-						f.tagLabel = "Volltextsuche nach: " + val;
-					}
-					return f;
-				});
+		setSearch(searchString) {
+			const fulltextSearchQuery = this.value.find(
+				(filter) => filter.label === "Volltextsuche"
+			);
+			if (fulltextSearchQuery) {
+				fulltextSearchQuery.value = searchString;
+				fulltextSearchQuery.tagLabel = `Volltextsuche nach: ${searchString}`;
 			} else {
 				this.setFilter({
 					label: "Volltextsuche",
-					tagLabel: "Volltextsuche nach: " + val,
+					tagLabel: `Volltextsuche nach: ${searchString}`,
 					type: "fulltextSearch",
-					value: val,
+					value: searchString,
 				});
 			}
 			this.$emit("input", this.value);
@@ -104,12 +96,11 @@ export default {
 		},
 		setFilter(filterData) {
 			const isNewFilter = !this.value.some((f) => f.label === filterData.label);
-
 			const filter = isNewFilter
 				? JSON.parse(JSON.stringify(filterData))
 				: filterData;
 
-			if (filter.type === "string") {
+			if (["date", "number", "text"].includes(filter.type)) {
 				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
 			} else if (filter.type === "fulltextSearch") {
 				filter.tagLabel = `${filter.label} nach: ${filter.value}`;
