@@ -10,21 +10,21 @@ const wrapper = mount(Component, {
 
 describe("defaultFiltersMixin", () => {
 	it("can filter strings", () => {
-		expect(wrapper.vm.filterStringDefault("test", "te")).toBe(true);
-		expect(wrapper.vm.filterStringDefault("test", "a")).toBe(false);
-		expect(wrapper.vm.filterStringDefault("Test", "te")).toBe(true);
-		expect(wrapper.vm.filterStringDefault(11, 1)).toBe(true);
-		expect(wrapper.vm.filterStringDefault(11, 2)).toBe(false);
+		expect(wrapper.vm.filterTextDefault("test", "te")).toBe(true);
+		expect(wrapper.vm.filterTextDefault("test", "a")).toBe(false);
+		expect(wrapper.vm.filterTextDefault("Test", "te")).toBe(true);
+		expect(wrapper.vm.filterTextDefault(11, 1)).toBe(true);
+		expect(wrapper.vm.filterTextDefault(11, 2)).toBe(false);
 
-		expect(wrapper.vm.filterStringContains("test", "te")).toBe(true);
-		expect(wrapper.vm.filterStringContains("test", "a")).toBe(false);
-		expect(wrapper.vm.filterStringContains("Test", "te")).toBe(true);
-		expect(wrapper.vm.filterStringContains(11, 1)).toBe(true);
-		expect(wrapper.vm.filterStringContains(11, 2)).toBe(false);
+		expect(wrapper.vm.filterTextContains("test", "te")).toBe(true);
+		expect(wrapper.vm.filterTextContains("test", "a")).toBe(false);
+		expect(wrapper.vm.filterTextContains("Test", "te")).toBe(true);
+		expect(wrapper.vm.filterTextContains(11, 1)).toBe(true);
+		expect(wrapper.vm.filterTextContains(11, 2)).toBe(false);
 
-		expect(wrapper.vm.filterStringEquals("test", "test")).toBe(true);
-		expect(wrapper.vm.filterStringEquals("test", "te")).toBe(false);
-		expect(wrapper.vm.filterStringEquals("Test", "test")).toBe(true);
+		expect(wrapper.vm.filterTextEquals("test", "test")).toBe(true);
+		expect(wrapper.vm.filterTextEquals("test", "te")).toBe(false);
+		expect(wrapper.vm.filterTextEquals("Test", "test")).toBe(true);
 	});
 	it("can filter numbers", () => {
 		expect(wrapper.vm.filterNumberDefault(1, 1)).toBe(true);

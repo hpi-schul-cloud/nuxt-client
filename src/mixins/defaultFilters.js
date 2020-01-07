@@ -1,16 +1,73 @@
+export const supportedFilterTypes = [
+	"date",
+	"fulltextSearch",
+	"number",
+	"select",
+	"text",
+];
+
+export const supportedFilterMatchingTypes = {
+	date: {
+		equal: {
+			value: "equal",
+			label: "ist",
+		},
+		before: {
+			value: "before",
+			label: "vor dem",
+		},
+		after: {
+			value: "after",
+			label: "nach dem",
+		},
+	},
+	number: {
+		equal: {
+			value: "equal",
+			label: "=",
+		},
+		greater: {
+			value: "greater",
+			label: ">",
+		},
+		less: {
+			value: "less",
+			label: "<",
+		},
+		greaterEqual: {
+			value: "greaterEqual",
+			label: "≥",
+		},
+		lessEqual: {
+			value: "lessEqual",
+			label: "≤",
+		},
+	},
+	text: {
+		equals: {
+			value: "equals",
+			label: "ist gleich",
+		},
+		contains: {
+			value: "contains",
+			label: "enthält",
+		},
+	},
+};
+
 const defaultFiltersMixin = {
 	methods: {
-		filterStringDefault: function(value, targetValue) {
-			return this.filterStringContains(value, targetValue);
+		filterTextDefault: function(value, targetValue) {
+			return this.filterTextContains(value, targetValue);
 		},
-		filterStringContains(value, targetValue) {
+		filterTextContains(value, targetValue) {
 			return (value || "")
 				.toString()
 				.toString()
 				.toLowerCase()
 				.includes(targetValue.toString().toLowerCase());
 		},
-		filterStringEquals(value, targetValue) {
+		filterTextEquals(value, targetValue) {
 			return (
 				(value || "").toString().toLowerCase() ===
 				targetValue.toString().toLowerCase()
@@ -18,7 +75,7 @@ const defaultFiltersMixin = {
 		},
 
 		filterNumberDefault(value, targetValue) {
-			return this.filterStringEquals(value, targetValue);
+			return this.filterNumberEqual(value, targetValue);
 		},
 		filterNumberEqual(value, targetValue) {
 			return Number(value) === Number(targetValue);

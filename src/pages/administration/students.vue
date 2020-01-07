@@ -94,7 +94,7 @@ export default {
 			filters: [
 				{
 					label: "Vorname",
-					type: "string",
+					type: "text",
 					property: "firstName",
 					matchingType: {
 						value: "contains",
@@ -199,7 +199,7 @@ export default {
 
 			if (this.filtersSelected && this.filtersSelected.length > 0) {
 				for (const filter of this.filtersSelected) {
-					if (filter.type === "string") {
+					if (filter.type === "text") {
 						if (filter.matchingType.value === "equals") {
 							query[filter.property] = filter.value;
 						} else if (filter.matchingType.value === "contains") {
@@ -207,7 +207,7 @@ export default {
 								$search: filter.value,
 							};
 						}
-					} else if (filter.type === "regex") {
+					} else if (filter.type === "fulltextSearch") {
 						query.$or = [
 							{ email: { $search: filter.value } },
 							{ firstName: { $search: filter.value } },

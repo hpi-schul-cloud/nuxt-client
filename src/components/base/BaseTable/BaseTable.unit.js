@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 
 import BaseTable from "./BaseTable";
-import data from "./data";
+import data from "./testdata";
 import columns from "./columns";
 
 function getWrapper(attributes) {
@@ -167,7 +167,7 @@ describe("@components/BaseTable", () => {
 		var newFiltersSelected = [
 			{
 				label: "Vorname",
-				type: "string",
+				type: "text",
 				property: "firstName",
 				matchingType: {
 					value: "contains",
@@ -184,7 +184,7 @@ describe("@components/BaseTable", () => {
 		var newFiltersSelected = [
 			{
 				label: "Vorname",
-				type: "string",
+				type: "text",
 				property: "firstName",
 				matchingType: {
 					value: "equals",
@@ -248,7 +248,7 @@ describe("@components/BaseTable", () => {
 		var newFiltersSelected = [
 			{
 				label: "Vorname",
-				type: "string",
+				type: "text",
 				property: "firstName",
 				value: "Mario",
 				matchingType: {
@@ -264,28 +264,29 @@ describe("@components/BaseTable", () => {
 	});
 
 	it("updates its filters when filtersSelected property is changed", () => {
-		var wrapper = getShallowWrapper({ filterable: true });
+		const wrapper = getShallowWrapper({ filterable: true });
 
 		expect(wrapper.vm.newFiltersSelected).toEqual([]);
 
-		const newFilters = [{
-			label: "Alter",
-			type: "number",
-			property: "age",
-			matchingType: {
-				value: "equals",
-				label: "ist gleich",
+		const newFilters = [
+			{
+				label: "Alter",
+				type: "number",
+				property: "age",
+				matchingType: {
+					value: "equals",
+					label: "ist gleich",
+				},
+				value: "999",
 			},
-			value: "999",
-		}]
+		];
 
 		wrapper.setProps({ filtersSelected: newFilters });
 		expect(wrapper.vm.newFiltersSelected).toEqual(newFilters);
-
 	});
 
 	it("allows to select and unselect a row", () => {
-		var wrapper = getWrapper({ showRowSelection: true });
+		const wrapper = getWrapper({ showRowSelection: true });
 		const rowSelection = wrapper.find("tbody tr td input[type='checkbox']");
 
 		rowSelection.setChecked();

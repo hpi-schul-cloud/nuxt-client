@@ -104,6 +104,8 @@ import Pagination from "@components/organisms/Pagination.vue";
 import FilterMenu from "./FilterMenu.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 import defaultFiltersMixin from "@mixins/defaultFilters";
+import { supportedFilterTypes } from "@mixins/defaultFilters";
+import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 export default {
 	components: {
@@ -139,13 +141,40 @@ export default {
 			default: () => [],
 			validator: function(filters) {
 				return filters.every((filter) => {
-					const hasValidType = !!filter.type && ["string", "select", "number", "date", "fulltextSearch"].includes(filter.type);
+					const hasValidType =
+						!!filter.type && supportedFilterTypes.includes(filter.type);
 
-					const hasValidMatchingType = (filter.type === "select" || filter.type === "fulltextSearch" || !!filter.matchingType && !!filter.matchingType.label);
+					var hasValidMatchingType = false;
+
+					if (
+						!supportedFilterMatchingTypes[filter.type] &&
+						!filter.matchingType
+					) {
+						hasValidMatchingType = true;
+					}
+
+					else if (
+						supportedFilterMatchingTypes[filter.type] &&
+						filter.matchingType &&
+						supportedFilterMatchingTypes[filter.type][
+							filter.matchingType.value
+						]
+					) {
+						hasValidMatchingType = true;
+					}
+
+					else if (
+						filter.matchingType &&
+						filter.matchingType.implementation &&
+						filter.matchingType.value &&
+						filter.matchingType.label
+					) {
+						hasValidMatchingType = true;
+					}
 
 					return (
 						filter.label &&
-						filter.property &&
+						(filter.property || filter.type == "fulltextSearch" ) &&
 						hasValidType &&
 						hasValidMatchingType
 					);
@@ -184,7 +213,7 @@ export default {
 			tableData: this.data,
 			filterOpened: {},
 			newFiltersSelected: this.filtersSelected,
-			selectedRowIds: this.selectedRows.map(row => row[this.trackBy]),
+			selectedRowIds: this.selectedRows.map((row) => row[this.trackBy]),
 			isAsc: false,
 			defaultSort: [String, Array],
 			defaultSortDirection: {
@@ -214,7 +243,10 @@ export default {
 						const defaultFunctionName = camelCase(
 							`filter-${filter.type}-default`
 						);
-						const filterFunction = (filter.matchingType || {}).implementation || this[functionName] || this[defaultFunctionName];
+						const filterFunction =
+							(filter.matchingType || {}).implementation ||
+							this[functionName] ||
+							this[defaultFunctionName];
 						return filterFunction(
 							getValueByPath(row, filter.property),
 							filter.value
@@ -256,16 +288,21 @@ export default {
 			);
 		},
 		allRowsOfAllPagesSelected() {
-			return this.filteredAndSortedRows.every(row =>
-				this.selectedRowIds.includes(row[this.trackBy]));
+			return this.filteredAndSortedRows.every((row) =>
+				this.selectedRowIds.includes(row[this.trackBy])
+			);
 		},
 		newSelectedRows() {
-			return this.data.filter(row => this.selectedRowIds.some(id => id === row[this.trackBy]));
+			return this.data.filter((row) =>
+				this.selectedRowIds.some((id) => id === row[this.trackBy])
+			);
 		},
 	},
 	watch: {
 		data(data) {
-			this.selectedRowIds = this.selectedRowIds.filter(id => data.some(row => row[this.trackBy] === id))
+			this.selectedRowIds = this.selectedRowIds.filter((id) =>
+				data.some((row) => row[this.trackBy] === id)
+			);
 			this.tableData = data;
 
 			if (!this.backendSorting) {
@@ -279,7 +316,7 @@ export default {
 			this.$emit("update:filters-selected", this.newFiltersSelected);
 		},
 		selectedRows(rows) {
-			this.selectedRowIds = rows.map(row => row[this.trackBy]);
+			this.selectedRowIds = rows.map((row) => row[this.trackBy]);
 		},
 	},
 	methods: {
@@ -323,7 +360,7 @@ export default {
 		},
 
 		toggleRowSelection(row) {
-			this.isRowSelected(row)? this.unselectRow(row) : this.selectRow(row);
+			this.isRowSelected(row) ? this.unselectRow(row) : this.selectRow(row);
 			this.$emit("update:selected-rows", this.newSelectedRows);
 		},
 
@@ -341,7 +378,9 @@ export default {
 		},
 
 		toggleAllRowSelectionsOfCurrentPage() {
-			this.allRowsOfCurrentPageSelected? this.unselectAllRowsOfCurrentPage() : this.selectAllRowsOfCurrentPage();
+			this.allRowsOfCurrentPageSelected
+				? this.unselectAllRowsOfCurrentPage()
+				: this.selectAllRowsOfCurrentPage();
 			this.$emit("all-rows-of-current-page-selected", this.newSelectedRows);
 			this.$emit("update:selected-rows", this.newSelectedRows);
 		},
@@ -355,8 +394,8 @@ export default {
 		},
 
 		unselectAllRowsOfCurrentPage() {
-			this.selectedRowIds = this.selectedRowIds.filter(
-				id => this.visibleRows.every(row => row[this.trackBy] != id)
+			this.selectedRowIds = this.selectedRowIds.filter((id) =>
+				this.visibleRows.every((row) => row[this.trackBy] != id)
 			);
 		},
 
@@ -374,7 +413,7 @@ export default {
 			this.selectedRowIds = [];
 			this.$emit("update:selected-rows", this.newSelectedRows);
 			this.$emit("all-rows-selected", this.newSelectedRows);
-		}
+		},
 	},
 };
 </script>

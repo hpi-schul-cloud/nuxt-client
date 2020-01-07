@@ -7,6 +7,8 @@ const tableData = [
 			city: "LA",
 		},
 		age: 54,
+		birthday: "1990-01-02",
+		agreed: true,
 	},
 	{
 		id: "2",
@@ -16,6 +18,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "1990-01-03",
+		agreed: true,
 	},
 	{
 		id: "3",
@@ -25,6 +29,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "2000-01-02",
+		agreed: false,
 	},
 	{
 		id: "4",
@@ -34,6 +40,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "1990-01-02",
+		agreed: true,
 	},
 	{
 		id: "5",
@@ -43,6 +51,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "1996-10-02",
+		agreed: false,
 	},
 	{
 		id: "6",
@@ -52,6 +62,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "1990-01-02",
+		agreed: false,
 	},
 	{
 		id: "7",
@@ -61,6 +73,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "1999-05-03",
+		agreed: true,
 	},
 	{
 		id: "8",
@@ -70,6 +84,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "1990-01-02",
+		agreed: false,
 	},
 	{
 		id: "9",
@@ -79,6 +95,8 @@ const tableData = [
 			city: "Nintendo 64",
 		},
 		age: 999,
+		birthday: "1990-01-02",
+		agreed: false,
 	},
 ];
 
@@ -101,26 +119,54 @@ const tableColumns = [
 		field: "age",
 		label: "Alter",
 	},
+	{
+		field: "birthday",
+		label: "Geburtstag",
+	},
+	{
+		field: "agreed",
+		label: "Zustimmung",
+	},
 ];
 
 const tableFilters = [
 	{
-		label: "Vorname",
-		type: "string",
-		property: "firstName",
+		label: "Geburtstag",
+		type: "date",
+		property: "birthday",
 		matchingType: {
-			value: "contains",
-			label: "enthält",
+			value: "after",
 		},
-		value: "",
+		value: "1990-01-02",
 	},
 	{
 		label: "Alter",
-		type: "string",
+		type: "number",
 		property: "age",
 		matchingType: {
 			value: "equals",
 			label: "ist gleich",
+		},
+		value: "",
+	},
+	{
+		label: "Zustimmung",
+		type: "select",
+		property: "agreed",
+		value: [
+			{
+				agreed: true,
+				value: "Zustimmung vorhanden",
+			},
+		],
+	},
+	{
+		label: "Vorname",
+		type: "text",
+		property: "firstName",
+		matchingType: {
+			value: "contains",
+			label: "enthält",
 		},
 		value: "",
 	},
