@@ -3,6 +3,11 @@
 import BaseTable from "./BaseTable";
 import data from "./testdata";
 import columns from "./columns";
+import filters from "./testfilters";
+import MultiSelect from "vue-multiselect";
+
+import { supportedFilterTypes } from "@mixins/defaultFilters";
+import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 function getWrapper(attributes) {
 	return mount(BaseTable, {
@@ -24,6 +29,34 @@ function getShallowWrapper(attributes) {
 			...attributes,
 		},
 	});
+}
+
+function openFilterModal(wrapper) {
+	const filterMenu = wrapper.find(MultiSelect);
+	const filter = filterMenu.vm.options[0];
+
+	filterMenu.vm.select(filter);
+
+	// filter is already selected
+	if (!wrapper.find(".modal-body").exists()) {
+		const tag = wrapper.find(".multiselect__tag span");
+		tag.trigger("mousedown");
+	}
+}
+
+
+
+function selectMatchingType(wrapper, type) {
+	const matchingTypeSelection = wrapper.find(".modal-body").find(MultiSelect);
+	const newMatchingType = matchingTypeSelection.vm.options.find(
+		(matchingtype) => matchingtype.value === type
+	);
+	matchingTypeSelection.vm.select(newMatchingType);
+}
+
+function submitFilterModal(wrapper) {
+	const filterModalButton = wrapper.find(".modal-footer button");
+	filterModalButton.trigger("click");
 }
 
 describe("@components/BaseTable", () => {
@@ -283,6 +316,96 @@ describe("@components/BaseTable", () => {
 
 		wrapper.setProps({ filtersSelected: newFilters });
 		expect(wrapper.vm.newFiltersSelected).toEqual(newFilters);
+	});
+
+	it("allows to set filters", () => {
+		const textFilter = filters.find((filter) => filter.type === "text");
+		const wrapper = getWrapper({
+			showRowSelection: true,
+			filterable: true,
+			filters: [textFilter],
+		});
+
+		openFilterModal(wrapper);
+		submitFilterModal(wrapper);
+		expect(wrapper.vm.newFiltersSelected[0].value).toEqual("Mario");
+		expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+		expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+			[
+				{
+					...textFilter,
+					tagLabel: "Vorname enthält Mario",
+				},
+			],
+		]);
+	});
+
+	it("allows to select matching type of filters", () => {
+		supportedFilterTypes.forEach((filterType) => {
+			const filter = filters.find((f) => f.type === filterType);
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				filterable: true,
+				filters: [filter],
+			});
+			if (supportedFilterMatchingTypes[filterType]) {
+				Object.values(supportedFilterMatchingTypes[filterType]).forEach(
+					(matchingType, index) => {
+						openFilterModal(wrapper);
+						selectMatchingType(wrapper, matchingType.value);
+						submitFilterModal(wrapper);
+						expect(wrapper.vm.newFiltersSelected[0].matchingType.value).toEqual(
+							matchingType.value
+						);
+						expect(wrapper.vm.newFiltersSelected[0].matchingType.label).toEqual(
+							matchingType.label
+						);
+						expect(wrapper.emitted()["update:filters-selected"].length).toBe(
+							index + 1
+						);
+						expect(wrapper.emitted()["update:filters-selected"][index]).toEqual(
+							[
+								[
+									{
+										...filter,
+										matchingType,
+										tagLabel: `${filter.label} ${matchingType.label} ${filter.value}`,
+									},
+								],
+							]
+						);
+					}
+				);
+			}
+		});
+	});
+
+
+
+	it("allows to modify filter values", async () => {
+		const textFilter = filters.find((filter) => filter.type === "text");
+		const wrapper = getWrapper({
+			showRowSelection: true,
+			filterable: true,
+			filters: [textFilter],
+		});
+
+		openFilterModal(wrapper);
+		selectMatchingType(wrapper, "equals");
+		const filterModalInput = wrapper.find(".modal-body .input-line input");
+		filterModalInput.setValue("newFilterValue");
+		submitFilterModal(wrapper);
+		expect(wrapper.vm.newFiltersSelected[0].value).toEqual("newFilterValue");
+		expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+		expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+			[
+				{
+					...textFilter,
+					value: "newFilterValue",
+					tagLabel: `Vorname ist gleich newFilterValue`,
+				},
+			],
+		]);
 	});
 
 	it("allows to select and unselect a row", () => {

@@ -12,7 +12,7 @@
 			:taggable="true"
 			:tag-placeholder="`Volltextsuche`"
 			track-by="label"
-			:value="value"
+			:value="selectedFilters"
 			@select="selectFilter"
 			@tag="setSearch"
 		>
@@ -60,11 +60,17 @@ export default {
 		return {
 			editFilterActive: false,
 			filterOpened: {},
+			selectedFilters: this.value,
 		};
+	},
+	watch: {
+		value() {
+			this.selectedFilters = this.value;
+		},
 	},
 	methods: {
 		setSearch(searchString) {
-			const fulltextSearchQuery = this.value.find(
+			const fulltextSearchQuery = this.selectedFilters.find(
 				(filter) => filter.label === "Volltextsuche"
 			);
 			if (fulltextSearchQuery) {
@@ -78,16 +84,16 @@ export default {
 					value: searchString,
 				});
 			}
-			this.$emit("input", this.value);
+			this.$emit("input", this.selectedFilters);
 		},
 		editFilter(filter) {
 			this.editFilterActive = true;
 			this.filterOpened = filter;
-			this.$emit("input", this.value);
+			this.$emit("input", this.selectedFilters);
 		},
 		removeFilter(filter) {
-			this.value.splice(this.value.indexOf(filter), 1);
-			this.$emit("input", this.value);
+			this.selectedFilters.splice(this.selectedFilters.indexOf(filter), 1);
+			this.$emit("input", this.selectedFilters);
 		},
 		selectFilter(filter) {
 			this.$set(filter, "selected", true);
@@ -95,7 +101,9 @@ export default {
 			this.editFilterActive = true;
 		},
 		setFilter(filterData) {
-			const isNewFilter = !this.value.some((f) => f.label === filterData.label);
+			const isNewFilter = !this.selectedFilters.some(
+				(f) => f.label === filterData.label
+			);
 			const filter = isNewFilter
 				? JSON.parse(JSON.stringify(filterData))
 				: filterData;
@@ -114,9 +122,9 @@ export default {
 			}
 
 			if (isNewFilter) {
-				this.value.push(filter);
+				this.selectedFilters.push(filter);
 			} else {
-				this.value = this.value.map((f) => {
+				this.selectedFilters = this.selectedFilters.map((f) => {
 					if (f.label === filter.label) {
 						f.value = filter.value;
 					}
@@ -125,7 +133,7 @@ export default {
 			}
 			this.filterOpened = {};
 			this.editFilterActive = false;
-			this.$emit("input", this.value);
+			this.$emit("input", this.selectedFilters);
 		},
 	},
 };
