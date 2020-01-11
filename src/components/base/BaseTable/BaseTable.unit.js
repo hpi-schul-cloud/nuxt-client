@@ -492,15 +492,18 @@ describe("@components/BaseTable", () => {
 						openFilterModal(wrapper);
 						selectMatchingType(wrapper, matchingType.value);
 
+						let expectedFilterValue;
 						if (filterType === "date") {
 							const flatPickr = wrapper.find(FlatPickr);
 							flatPickr.setProps({ value: "2020-01-02" });
 							flatPickr.vm.$emit("input", newFilterValue);
+							expectedFilterValue = (new Date(newFilterValue)).toLocaleDateString('de-DE', { day: "2-digit", month: "2-digit", year: "numeric" });
 						} else {
 							const filterModalInput = wrapper.find(
 								".modal-body .input-line input"
 							);
 							filterModalInput.setValue(newFilterValue);
+							expectedFilterValue = newFilterValue;
 						}
 
 						submitFilterModal(wrapper);
@@ -518,14 +521,14 @@ describe("@components/BaseTable", () => {
 										...filter,
 										matchingType,
 										value: newFilterValue,
-										tagLabel: `${filter.label} ${matchingType.label} ${newFilterValue}`,
+										tagLabel: `${filter.label} ${matchingType.label} ${expectedFilterValue}`,
 									},
 								],
 							]
 						);
 						const tag = wrapper.find(".multiselect__tag span");
 						expect(tag.text()).toEqual(
-							`${filter.label} ${matchingType.label} ${newFilterValue}`
+							`${filter.label} ${matchingType.label} ${expectedFilterValue}`
 						);
 					}
 				);
