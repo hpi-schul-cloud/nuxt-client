@@ -4,18 +4,15 @@
 		<base-table
 			v-if="pagination && pagination.total > 0"
 			v-slot:default="slotProps"
+			backend-pagination
+			backend-sorting
+			:columns="columns"
 			:data="data"
 			paginated
-			:skip="pagination.skip"
-			:pagination-state="pagination"
-			:columns="columns"
-			:default-sort="[sortField, sortOrder]"
-			default-sort-direction="asc"
-			backend-sorting
-			backend-pagination
+			:current-page="pagination.skip"
 			track-by="id"
 			@sort="onSort"
-			@update:skip="onPageChange"
+			@update:current-page="onPageChange"
 		>
 			<base-icon
 				source="material"
@@ -31,6 +28,7 @@
 import { mapGetters, mapState } from "vuex";
 
 export default {
+	layout: "loggedInFull",
 	data: () => ({
 		total: 0,
 		sortField: "createdAt",

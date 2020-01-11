@@ -5,19 +5,19 @@
 		<h1>Schüler Verwaltung</h1>
 		<base-table
 			v-if="pagination"
+			:actions="actions"
+			backend-pagination
+			backend-sorting
+			:columns="columns"
+			:current-page.sync="currentPage"
+			:data="students"
+			filterable
 			:filters="filters"
 			:filters-selected.sync="filtersSelected"
-			:data="students"
-			:rows-per-page.sync="rowsPerPage"
-			:actions="actions"
-			:current-page.sync="currentPage"
-			:total="pagination.total"
-			:columns="columns"
 			paginated
-			filterable
+			:rows-per-page.sync="rowsPerPage"
 			show-row-selection
-			backend-sorting
-			backend-pagination
+			:total="pagination.total"
 			track-by="id"
 			@sort="onSort"
 		>
