@@ -207,7 +207,7 @@ describe("@components/BaseTable", () => {
 		).toBe(true);
 	});
 
-	it("Should allow filtering the based on string properties", () => {
+	it("Should allow filtering the rows based on string properties", () => {
 		var wrapper = getShallowWrapper({ filterable: true });
 
 		var newFiltersSelected = [
@@ -349,7 +349,7 @@ describe("@components/BaseTable", () => {
 			if (["number", "text"].includes(filter.type)) {
 				expectedTagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
 			} else if (filter.type === "date") {
-				const dateString = new Date(filter.value).toLocaleDateString("de-DE", {
+				const dateString = (new Date(filter.value)).toLocaleDateString("de-DE", {
 					day: "2-digit",
 					month: "2-digit",
 					year: "numeric",
@@ -801,6 +801,4 @@ describe("@components/BaseTable", () => {
 		);
 		expect(wrapper.find("pagination-stub").props("total")).toBe(data.length);
 	});
-
-	it("Should allow data from a backend", () => {});
 });
