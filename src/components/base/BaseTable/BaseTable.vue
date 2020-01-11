@@ -151,19 +151,13 @@ export default {
 						!filter.matchingType
 					) {
 						hasValidMatchingType = true;
-					}
-
-					else if (
+					} else if (
 						supportedFilterMatchingTypes[filter.type] &&
 						filter.matchingType &&
-						supportedFilterMatchingTypes[filter.type][
-							filter.matchingType.value
-						]
+						supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
 					) {
 						hasValidMatchingType = true;
-					}
-
-					else if (
+					} else if (
 						filter.matchingType &&
 						filter.matchingType.implementation &&
 						filter.matchingType.value &&
@@ -172,11 +166,18 @@ export default {
 						hasValidMatchingType = true;
 					}
 
+					const isValidSelectFilter =
+						filter.value &&
+						Array.isArray(filter.value) &&
+						filter.value.length > 0 &&
+						filter.value.every((value) => value.value && value.label);
+
 					return (
 						filter.label &&
-						(filter.property || filter.type == "fulltextSearch" ) &&
+						(filter.property || filter.type == "fulltextSearch") &&
 						hasValidType &&
-						hasValidMatchingType
+						hasValidMatchingType &&
+						(isValidSelectFilter || filter.type !== "select")
 					);
 				});
 			},

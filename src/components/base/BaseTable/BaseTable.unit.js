@@ -5,6 +5,8 @@ import data from "./testdata";
 import columns from "./columns";
 import filters from "./testfilters";
 import MultiSelect from "vue-multiselect";
+import FlatPickr from "vue-flatpickr-component";
+const _ = require("lodash");
 
 import { supportedFilterTypes } from "@mixins/defaultFilters";
 import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
@@ -20,6 +22,10 @@ function getWrapper(attributes) {
 	});
 }
 
+function getTestFilters() {
+	return _.cloneDeep(filters);
+}
+
 function getShallowWrapper(attributes) {
 	return shallowMount(BaseTable, {
 		propsData: {
@@ -31,20 +37,27 @@ function getShallowWrapper(attributes) {
 	});
 }
 
-function openFilterModal(wrapper) {
+function openFilterModal(wrapper, filter) {
 	const filterMenu = wrapper.find(MultiSelect);
-	const filter = filterMenu.vm.options[0];
+	const selectedFilter = filter || filterMenu.vm.options[0];
 
-	filterMenu.vm.select(filter);
-
-	// filter is already selected
-	if (!wrapper.find(".modal-body").exists()) {
-		const tag = wrapper.find(".multiselect__tag span");
-		tag.trigger("mousedown");
+	const tags = wrapper.findAll(".multiselect__tag span");
+	if (tags.exists()) {
+		const tag = tags.filter((t) => t.text().includes(selectedFilter.label));
+		// option is already selected
+		if (tag.exists()) {
+			return tag.trigger("mousedown");
+		}
 	}
+	return filterMenu.vm.select(selectedFilter);
 }
 
-
+function closeFilterModal(wrapper) {
+	const modalWrapper = wrapper.find(".base-modal-wrapper");
+	if (modalWrapper) {
+		modalWrapper.trigger("click");
+	}
+}
 
 function selectMatchingType(wrapper, type) {
 	const matchingTypeSelection = wrapper.find(".modal-body").find(MultiSelect);
@@ -265,6 +278,7 @@ describe("@components/BaseTable", () => {
 					{
 						checked: true,
 						value: "Mario",
+						label: "Mario",
 					},
 				],
 			},
@@ -319,30 +333,75 @@ describe("@components/BaseTable", () => {
 	});
 
 	it("allows to set filters", () => {
-		const textFilter = filters.find((filter) => filter.type === "text");
-		const wrapper = getWrapper({
-			showRowSelection: true,
-			filterable: true,
-			filters: [textFilter],
-		});
+		supportedFilterTypes.forEach((filterType) => {
+			const filter = getTestFilters().find((f) => f.type === filterType);
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				filterable: true,
+				filters: [filter],
+			});
 
-		openFilterModal(wrapper);
-		submitFilterModal(wrapper);
-		expect(wrapper.vm.newFiltersSelected[0].value).toEqual("Mario");
-		expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
-		expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
-			[
-				{
-					...textFilter,
-					tagLabel: "Vorname enthält Mario",
-				},
-			],
-		]);
+			openFilterModal(wrapper);
+			submitFilterModal(wrapper);
+			expect(wrapper.vm.newFiltersSelected[0].value).toEqual(filter.value);
+			expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+			let expectedTagLabel;
+			if (["number", "text"].includes(filter.type)) {
+				expectedTagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
+			} else if (filter.type === "date") {
+				const dateString = new Date(filter.value).toLocaleDateString("de-DE", {
+					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
+				});
+				expectedTagLabel = `${filter.label} ${filter.matchingType.label} ${dateString}`;
+			} else if (filter.type === "fulltextSearch") {
+				expectedTagLabel = `Volltextsuche nach: ${filter.value}`;
+			} else if (filter.type === "select") {
+				expectedTagLabel = `${filter.label}: ${filter.value[0].value}`;
+			}
+			expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+				[
+					{
+						...filter,
+						tagLabel: expectedTagLabel,
+					},
+				],
+			]);
+		});
+	});
+
+	it("allows to remove filters", () => {
+		supportedFilterTypes.forEach((filterType) => {
+			const filter = getTestFilters().find((f) => f.type === filterType);
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				filterable: true,
+				filters: [filter],
+			});
+			openFilterModal(wrapper);
+			submitFilterModal(wrapper);
+
+			wrapper.find(".multiselect__tag-icon").trigger("mousedown");
+
+			expect(wrapper.emitted()["update:filters-selected"].length).toBe(2);
+			expect(wrapper.emitted()["update:filters-selected"][1]).toEqual([[]]);
+
+			openFilterModal(wrapper);
+			submitFilterModal(wrapper);
+
+			// remove Filter via Multiselect-Menu
+			const filterMenu = wrapper.find(MultiSelect);
+			filterMenu.vm.select(filter);
+
+			expect(wrapper.emitted()["update:filters-selected"].length).toBe(4);
+			expect(wrapper.emitted()["update:filters-selected"][1]).toEqual([[]]);
+		});
 	});
 
 	it("allows to select matching type of filters", () => {
 		supportedFilterTypes.forEach((filterType) => {
-			const filter = filters.find((f) => f.type === filterType);
+			const filter = getTestFilters().find((f) => f.type === filterType);
 			const wrapper = getWrapper({
 				showRowSelection: true,
 				filterable: true,
@@ -363,13 +422,24 @@ describe("@components/BaseTable", () => {
 						expect(wrapper.emitted()["update:filters-selected"].length).toBe(
 							index + 1
 						);
+						let expectedFilterValue = filter.value;
+						if (filter.type === "date") {
+							expectedFilterValue = new Date(filter.value).toLocaleDateString(
+								"de-DE",
+								{
+									day: "2-digit",
+									month: "2-digit",
+									year: "numeric",
+								}
+							);
+						}
 						expect(wrapper.emitted()["update:filters-selected"][index]).toEqual(
 							[
 								[
 									{
 										...filter,
 										matchingType,
-										tagLabel: `${filter.label} ${matchingType.label} ${filter.value}`,
+										tagLabel: `${filter.label} ${matchingType.label} ${expectedFilterValue}`,
 									},
 								],
 							]
@@ -380,32 +450,157 @@ describe("@components/BaseTable", () => {
 		});
 	});
 
-
+	it("allows to open and close the FilterModal several times", () => {
+		supportedFilterTypes.forEach((filterType) => {
+			const filter = getTestFilters().find((f) => f.type === filterType);
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				filterable: true,
+				filters: [filter],
+			});
+			openFilterModal(wrapper);
+			expect(wrapper.find(".modal-container").exists()).toBe(true);
+			closeFilterModal(wrapper);
+			expect(wrapper.find(".modal-container").exists()).toBe(false);
+			openFilterModal(wrapper);
+			expect(wrapper.find(".modal-container").exists()).toBe(true);
+		});
+	});
 
 	it("allows to modify filter values", async () => {
-		const textFilter = filters.find((filter) => filter.type === "text");
+		supportedFilterTypes.forEach((filterType) => {
+			const filter = getTestFilters().find((f) => f.type === filterType);
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				filterable: true,
+				filters: [filter],
+			});
+
+			const newFilterValues = {
+				date: "2020-01-02",
+				fulltextSearch: "newSearchString",
+				number: 10,
+				select: "Mario",
+				text: "newFilterValue",
+			};
+
+			const newFilterValue = newFilterValues[filter.type];
+
+			if (supportedFilterMatchingTypes[filterType]) {
+				Object.values(supportedFilterMatchingTypes[filterType]).forEach(
+					(matchingType, index) => {
+						openFilterModal(wrapper);
+						selectMatchingType(wrapper, matchingType.value);
+
+						if (filterType === "date") {
+							const flatPickr = wrapper.find(FlatPickr);
+							flatPickr.setProps({ value: "2020-01-02" });
+							flatPickr.vm.$emit("input", newFilterValue);
+						} else {
+							const filterModalInput = wrapper.find(
+								".modal-body .input-line input"
+							);
+							filterModalInput.setValue(newFilterValue);
+						}
+
+						submitFilterModal(wrapper);
+
+						expect(wrapper.vm.newFiltersSelected[0].value).toEqual(
+							newFilterValue
+						);
+						expect(wrapper.emitted()["update:filters-selected"].length).toBe(
+							index + 1
+						);
+						expect(wrapper.emitted()["update:filters-selected"][index]).toEqual(
+							[
+								[
+									{
+										...filter,
+										matchingType,
+										value: newFilterValue,
+										tagLabel: `${filter.label} ${matchingType.label} ${newFilterValue}`,
+									},
+								],
+							]
+						);
+						const tag = wrapper.find(".multiselect__tag span");
+						expect(tag.text()).toEqual(
+							`${filter.label} ${matchingType.label} ${newFilterValue}`
+						);
+					}
+				);
+			} else {
+				if (filter.type === "fulltextSearch") {
+					const multiSelectInput = wrapper.find(".multiselect__input");
+					multiSelectInput.setValue(newFilterValue);
+					multiSelectInput.trigger("keypress.enter");
+					expect(wrapper.vm.newFiltersSelected[0].value).toEqual(
+						newFilterValue
+					);
+					expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+					expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+						[
+							{
+								...filter,
+								value: newFilterValue,
+								tagLabel: `Volltextsuche nach: ${newFilterValue}`,
+							},
+						],
+					]);
+					const tag = wrapper.find(".multiselect__tag span");
+					expect(tag.text()).toEqual(`Volltextsuche nach: ${newFilterValue}`);
+				}
+				if (filter.type === "select") {
+					const filterValue = filter.value.filter(
+						(f) => f.value === newFilterValue
+					);
+					filterValue.checked = false;
+					openFilterModal(wrapper);
+
+					const checkbox = wrapper.find(".modal-body input[type='checkbox']");
+					checkbox.setChecked();
+
+					submitFilterModal(wrapper);
+					expect(wrapper.vm.newFiltersSelected[0].value[0].checked).toEqual(
+						true
+					);
+					expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+					expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+						[
+							{
+								...filter,
+								value: [
+									{
+										...filter.value[0],
+										value: newFilterValue,
+										checked: true,
+									},
+								],
+								tagLabel: `${filter.label}: ${newFilterValue}`,
+							},
+						],
+					]);
+					const tag = wrapper.find(".multiselect__tag span");
+					expect(tag.text()).toEqual(`${filter.label}: ${newFilterValue}`);
+				}
+			}
+		});
+	});
+
+	it("allows to combine several filters", () => {
+		const testFilters = getTestFilters();
 		const wrapper = getWrapper({
 			showRowSelection: true,
 			filterable: true,
-			filters: [textFilter],
+			filters: testFilters,
 		});
 
-		openFilterModal(wrapper);
-		selectMatchingType(wrapper, "equals");
-		const filterModalInput = wrapper.find(".modal-body .input-line input");
-		filterModalInput.setValue("newFilterValue");
+		openFilterModal(wrapper, testFilters[0]);
 		submitFilterModal(wrapper);
-		expect(wrapper.vm.newFiltersSelected[0].value).toEqual("newFilterValue");
-		expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
-		expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
-			[
-				{
-					...textFilter,
-					value: "newFilterValue",
-					tagLabel: `Vorname ist gleich newFilterValue`,
-				},
-			],
-		]);
+		openFilterModal(wrapper, testFilters[1]);
+		submitFilterModal(wrapper);
+
+		expect(wrapper.emitted()["update:filters-selected"].length).toBe(2);
 	});
 
 	it("allows to select and unselect a row", () => {

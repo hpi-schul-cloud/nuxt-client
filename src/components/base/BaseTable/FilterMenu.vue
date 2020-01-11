@@ -2,7 +2,6 @@
 	<div class="filter-menu">
 		<base-icon icon="filter_list" source="material" class="ml--md mr--md" />
 		<base-select
-			:allow-empty="false"
 			close-on-select
 			label="Filter hinzufügen"
 			:multiple="true"
@@ -12,7 +11,8 @@
 			:taggable="true"
 			:tag-placeholder="`Volltextsuche`"
 			track-by="label"
-			:value="selectedFilters"
+			:value="selectedFiltersWithLabels"
+			@remove="removeFilter"
 			@select="selectFilter"
 			@tag="setSearch"
 		>
@@ -33,7 +33,7 @@
 		</base-select>
 
 		<filter-modal
-			:active="editFilterActive"
+			:active.sync="editFilterActive"
 			:filter-opened="filterOpened"
 			@set-filter="setFilter"
 		/>
@@ -62,6 +62,17 @@ export default {
 			filterOpened: {},
 			selectedFilters: this.value,
 		};
+	},
+	computed: {
+		selectedFiltersWithLabels: {
+			get: function() {
+				this.selectedFilters.forEach(filter => this.setTagLabel(filter));
+				return this.selectedFilters;
+			},
+			set: function(newValue) {
+				this.selectedFilters = newValue;
+			}
+		},
 	},
 	watch: {
 		value() {
@@ -100,6 +111,21 @@ export default {
 			this.filterOpened = filter;
 			this.editFilterActive = true;
 		},
+		setTagLabel(filter) {
+			if (["number", "text"].includes(filter.type)) {
+				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
+			} else if (filter.type === "date") {
+				const dateString = (new Date(filter.value.toString())).toLocaleDateString('de-DE', { day: "2-digit", month: "2-digit", year: "numeric" });
+				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${dateString}`;
+			} else if (filter.type === "fulltextSearch") {
+				filter.tagLabel = `${filter.label} nach: ${filter.value}`;
+			} else if (filter.type === "select") {
+				filter.tagLabel = filter.label + ": ";
+				let activeOptions = filter.value.filter((f) => f.checked);
+				activeOptions = activeOptions.map((f) => f.label);
+				filter.tagLabel += activeOptions.join(", ");
+			}
+		},
 		setFilter(filterData) {
 			const isNewFilter = !this.selectedFilters.some(
 				(f) => f.label === filterData.label
@@ -108,18 +134,7 @@ export default {
 				? JSON.parse(JSON.stringify(filterData))
 				: filterData;
 
-			if (["date", "number", "text"].includes(filter.type)) {
-				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
-			} else if (filter.type === "fulltextSearch") {
-				filter.tagLabel = `${filter.label} nach: ${filter.value}`;
-			} else if (filter.type === "select") {
-				filter.tagLabel = filter.label + ": ";
-				if (filter.multiple) {
-					let activeOptions = filter.value.filter((f) => f.checked);
-					activeOptions = activeOptions.map((f) => f.label);
-					filter.tagLabel += activeOptions.join(", ");
-				}
-			}
+			this.setTagLabel(filter);
 
 			if (isNewFilter) {
 				this.selectedFilters.push(filter);
@@ -135,7 +150,7 @@ export default {
 			this.editFilterActive = false;
 			this.$emit("input", this.selectedFilters);
 		},
-	},
+	}
 };
 </script>
 

@@ -136,6 +136,7 @@ const tableFilters = [
 		property: "birthday",
 		matchingType: {
 			value: "after",
+			label: "ist nach dem",
 		},
 		value: "1990-01-02",
 	},
@@ -144,7 +145,7 @@ const tableFilters = [
 		type: "number",
 		property: "age",
 		matchingType: {
-			value: "equals",
+			value: "equal",
 			label: "ist gleich",
 		},
 		value: "",
@@ -155,8 +156,9 @@ const tableFilters = [
 		property: "agreed",
 		value: [
 			{
-				agreed: true,
-				value: "Zustimmung vorhanden",
+				checked: false,
+				value: true,
+				label: "Zustimmung vorhanden",
 			},
 		],
 	},

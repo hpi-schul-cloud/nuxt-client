@@ -1,5 +1,5 @@
 <template>
-	<base-modal :active.sync="active">
+	<base-modal :active.sync="modalOpened">
 		<div class="modal-header">
 			<h3>{{ filterOpened.label }}</h3>
 		</div>
@@ -71,6 +71,24 @@ export default {
 		filterOpened: {
 			type: Object,
 			default: () => {},
+		},
+	},
+	data() {
+		return {
+			modalOpened: this.active,
+		};
+	},
+	computed: {
+		openedMatchingType() {
+			return this.filterOpened.matchingType;
+		}
+	},
+	watch: {
+		active(newValue) {
+			this.modalOpened = newValue;
+		},
+		modalOpened() {
+			this.$emit("update:active", this.modalOpened);
 		},
 	},
 	methods: {

@@ -32,6 +32,7 @@ module.exports = [
 			{
 				checked: true,
 				value: "Mario",
+				label: "Mario",
 			},
 		],
 	},
