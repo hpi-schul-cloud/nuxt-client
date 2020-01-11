@@ -81,7 +81,7 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
-	layout: "full-width",
+	layout: "loggedInFull",
 	data() {
 		return {
 			total: 0,
