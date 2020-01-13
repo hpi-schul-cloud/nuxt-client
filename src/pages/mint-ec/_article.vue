@@ -12,17 +12,18 @@
 			class="mb--xl"
 			:style="{ float: `right` }"
 		>
-			<template v-slot:header
-				>Downloads</template
-			>
+			<template v-slot:header>
+				Downloads
+			</template>
 			<menu-link
 				v-for="link in downloadLinks"
 				:key="link.name"
 				class="item"
 				:href="link.href"
 				target="_blank"
-				>{{ link.name }}</menu-link
 			>
+				{{ link.name }}
+			</menu-link>
 		</dropdown-menu>
 		<base-content-container class="base-content">
 			<render-html :html="`<div>${page.html}</div>`" />
@@ -33,30 +34,35 @@
 </template>
 
 <script>
-import MintEcPageHeader from "@components/molecules/MintEcPageHeader";
-import RenderHtml from "@components/molecules/RenderHtmlMintEc";
-import MenuLink from "@components/atoms/MenuLink";
 import DropdownMenu from "@components/organisms/DropdownMenu";
 import LegacyFooter from "@components/legacy/LegacyFooter";
+import MenuLink from "@components/atoms/MenuLink";
 import MintEcFooter from "@components/molecules/MintEcFooter";
+import MintEcPageHeader from "@components/molecules/MintEcPageHeader";
+import RenderHtml from "@components/molecules/RenderHtmlMintEc";
 
 export default {
 	components: {
+		DropdownMenu,
+		LegacyFooter,
+		MenuLink,
+		MintEcFooter,
 		MintEcPageHeader,
 		RenderHtml,
-		DropdownMenu,
-		MenuLink,
-		LegacyFooter,
-		MintEcFooter,
 	},
-	async asyncData({ store, params }) {
-		const page = await store.dispatch("ghost/getSinglePage", params.article);
-		return { page: page };
+	async asyncData({ store, params, error, app: { i18n } }) {
+		try {
+			const page = await store.dispatch("ghost/getSinglePage", params.article);
+			return { page: page };
+		} catch (e) {
+			error({
+				statusCode: 404,
+				message: i18n.t("error.404"),
+			});
+		}
 	},
 	data: function() {
 		return {
-			color: "var(--color-primary)",
-
 			links: [
 				{
 					title: this.$t("pages.mint-ec.article.footer.impressum"),
@@ -112,7 +118,6 @@ export default {
 						"https://hpi.de/open-campus/registrierung/hpi-schul-cloud-newsletter/",
 				},
 			],
-
 			chapters: [
 				{
 					title: this.$t("pages.mint-ec.article.footer.schule-informieren"),
