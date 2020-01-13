@@ -1,10 +1,10 @@
-import DropdownMenu from "./DropdownMenu";
+import DropdownMenuMintEc from "./DropdownMenuMintEc";
 
-describe("@components/organisms/DropdownMenu", () => {
-	it(...isValidComponent(DropdownMenu));
+describe("@components/organisms/DropDownMenuMintEc", () => {
+	it(...isValidComponent(DropdownMenuMintEc));
 
 	it(
-		...rendersSlotContent(DropdownMenu, ["default"], {
+		...rendersSlotContent(DropdownMenuMintEc, ["default"], {
 			propsData: {
 				title: "test title",
 			},
@@ -12,7 +12,7 @@ describe("@components/organisms/DropdownMenu", () => {
 	);
 
 	it("Check for showing content by events", () => {
-		const wrapper = shallowMount(DropdownMenu, {
+		const wrapper = shallowMount(DropdownMenuMintEc, {
 			propsData: {
 				title: "Test Dropdown",
 			},
