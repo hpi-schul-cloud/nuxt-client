@@ -7,7 +7,7 @@
 			:teaser="page.excerpt"
 		/>
 
-		<dropdown-menu
+		<dropdown-menu-mint-ec
 			v-if="downloadLinks.length > 0"
 			class="mb--xl"
 			:style="{ float: `right` }"
@@ -24,7 +24,7 @@
 			>
 				{{ link.name }}
 			</menu-link>
-		</dropdown-menu>
+		</dropdown-menu-mint-ec>
 		<base-content-container class="base-content">
 			<render-html :html="`<div>${page.html}</div>`" />
 		</base-content-container>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import DropdownMenu from "@components/organisms/DropdownMenu";
+import DropdownMenuMintEc from "@components/organisms/DropdownMenuMintEc";
 import LegacyFooter from "@components/legacy/LegacyFooter";
 import MenuLink from "@components/atoms/MenuLink";
 import MintEcFooter from "@components/molecules/MintEcFooter";
@@ -43,7 +43,7 @@ import RenderHtml from "@components/molecules/RenderHtmlMintEc";
 
 export default {
 	components: {
-		DropdownMenu,
+		DropdownMenuMintEc,
 		LegacyFooter,
 		MenuLink,
 		MintEcFooter,
