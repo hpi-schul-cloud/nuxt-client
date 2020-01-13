@@ -62,7 +62,7 @@ describe("@components/FormNews", () => {
 	it(...isValidComponent(FormNews));
 
 	it("converts date correctly", async () => {
-		const wrapper = shallowMount(FormNews, {
+		const wrapper = mount(FormNews, {
 			...getMocks(),
 			propsData: {
 				action: "patch",
@@ -78,7 +78,7 @@ describe("@components/FormNews", () => {
 		it("dispatches create action on form submit", async () => {
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "create",
@@ -108,7 +108,7 @@ describe("@components/FormNews", () => {
 					},
 				},
 			});
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "create",
@@ -139,7 +139,7 @@ describe("@components/FormNews", () => {
 					},
 				},
 			});
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "create",
@@ -156,7 +156,7 @@ describe("@components/FormNews", () => {
 		it("shows validation error before submiting", async () => {
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "create",
@@ -180,7 +180,7 @@ describe("@components/FormNews", () => {
 					},
 				},
 			});
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "create",
@@ -203,7 +203,7 @@ describe("@components/FormNews", () => {
 		it("dispatches patch action on form submit", async () => {
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "patch",
@@ -224,7 +224,7 @@ describe("@components/FormNews", () => {
 		it("shows validation error before submiting", async () => {
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "patch",
@@ -248,7 +248,7 @@ describe("@components/FormNews", () => {
 					},
 				},
 			});
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "patch",
@@ -271,7 +271,7 @@ describe("@components/FormNews", () => {
 		it("confirming remove dispatches the news/remove action", async () => {
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "patch",
@@ -302,7 +302,7 @@ describe("@components/FormNews", () => {
 					},
 				},
 			});
-			const wrapper = shallowMount(FormNews, {
+			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
 					action: "patch",
