@@ -1,10 +1,10 @@
-import DropdownMenu from "./DropdownMenu";
+import DropdownMenuMintEc from "./DropdownMenuMintEc";
 
-describe("@components/organisms/DropdownMenu", () => {
-	it(...isValidComponent(DropdownMenu));
+describe("@components/organisms/DropDownMenuMintEc", () => {
+	it(...isValidComponent(DropdownMenuMintEc));
 
 	it(
-		...rendersSlotContent(DropdownMenu, ["header"], {
+		...rendersSlotContent(DropdownMenuMintEc, ["default"], {
 			propsData: {
 				title: "test title",
 			},
@@ -12,7 +12,7 @@ describe("@components/organisms/DropdownMenu", () => {
 	);
 
 	it("renders default content for its header slot", () => {
-		const wrapper = shallowMount(DropdownMenu, {
+		const wrapper = shallowMount(DropdownMenuMintEc, {
 			propsData: {
 				title: "Test Dropdown",
 			},
@@ -21,7 +21,7 @@ describe("@components/organisms/DropdownMenu", () => {
 	});
 
 	it("Check for showing content by events", () => {
-		const wrapper = shallowMount(DropdownMenu, {
+		const wrapper = shallowMount(DropdownMenuMintEc, {
 			propsData: {
 				title: "Test Dropdown",
 			},
@@ -40,7 +40,7 @@ describe("@components/organisms/DropdownMenu", () => {
 	});
 
 	it("shows a list of options", () => {
-		const wrapper = mount(DropdownMenu, {
+		const wrapper = mount(DropdownMenuMintEc, {
 			propsData: {
 				title: "Test Dropdown",
 				items: [{ label: "a" }, { label: "b" }],
@@ -53,7 +53,7 @@ describe("@components/organisms/DropdownMenu", () => {
 
 	it("emits an input event when an item is clicked", () => {
 		const item = { label: "a" };
-		const wrapper = mount(DropdownMenu, {
+		const wrapper = mount(DropdownMenuMintEc, {
 			propsData: {
 				title: "Test Dropdown",
 				items: [item],

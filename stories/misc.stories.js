@@ -3,6 +3,7 @@ import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
 import MenuLink from "@components/atoms/MenuLink";
+import DropdownMenuMintEc from "@components/organisms/DropdownMenuMintEc";
 import BaseButton from "@basecomponents/BaseButton";
 import PopupIcon from "@components/legacy/PopupIcon";
 import DemoBanner from "@components/legacy/DemoBanner";
@@ -12,6 +13,17 @@ storiesOf("Misc", module)
 	.addParameters({
 		notes,
 	})
+	.add("DropdownMenuMintEc", () => ({
+		components: { DropdownMenuMintEc, MenuLink },
+		template: `
+			<DropdownMenuMintEc>
+				<template v-slot:header>Dropdown</template>
+				<MenuLink to="/">Link 1</MenuLink>
+				<MenuLink to="/">Link 2</MenuLink>
+				<MenuLink to="/">Link 3</MenuLink>
+			</DropdownMenuMintEc>
+		`,
+	}))
 	.add("Toast", () => ({
 		components: { BaseButton },
 		data: () => ({
