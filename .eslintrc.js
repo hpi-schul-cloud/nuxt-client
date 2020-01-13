@@ -13,22 +13,33 @@ module.exports = {
 		},
 		{
 			files: ["**/*.unit.js"],
-			parserOptions: {
-				parser: "babel-eslint",
-				sourceType: "module",
-			},
-			env: {
-				jest: true,
-			},
+			extends: ["@schul-cloud/eslint-config/javascriptJest"],
 			globals: {
 				mount: false,
 				shallowMount: false,
-				//shallowMountView: false,
 				createComponentMocks: false,
-				//createModuleStore: false,
 			},
 			rules: {
+				// you should be allowed to write as much tests as needed
 				"max-lines": 0,
+				// the following rules do not understand spreading - https://github.com/jest-community/eslint-plugin-jest/issues/518
+				"jest/expect-expect": "off",
+				"jest/no-disabled-tests": "off",
+				"jest/valid-title": "off",
+				// to reduce the number of errors we disable some rules for now.
+				// But they should be removed here ASAP.
+				"jest/no-expect-resolves": "off",
+				"jest/prefer-to-have-length": "off",
+				"jest/prefer-spy-on": "off",
+				"jest/prefer-to-contain": "off",
+				"jest/prefer-strict-equal": "off",
+				"jest/no-truthy-falsy": "off",
+				"jest/no-test-return-statement": "off",
+				"jest/require-top-level-describe": "off",
+				"jest/consistent-test-it": [
+					"error",
+					{ fn: "it", withinDescribe: "it" },
+				],
 			},
 		},
 	],
