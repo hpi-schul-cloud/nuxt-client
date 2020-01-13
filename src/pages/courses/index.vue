@@ -1,16 +1,8 @@
 <template>
 	<div>
 		<chip-filter :value.sync="activeToggle" :options="toggleTags" />
-		<!-- <chip-filter
-			:value.sync="activeFilters"
-			:options="filterTags"
-			:multiple="true"
-		/> -->
-		<floating-fab
-			icon="add"
-			@click="$router.push({ name: 'courses-create' })"
-		/>
-		<courses-grid :courses="filteredCourses"></courses-grid>
+		<floating-fab icon="add" to="/courses/create" />
+		<courses-grid :courses="courses"></courses-grid>
 	</div>
 </template>
 
@@ -21,6 +13,7 @@ import ChipFilter from "@components/molecules/ChipFilter";
 import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
+	layout: "loggedInFull",
 	components: {
 		CoursesGrid,
 		ChipFilter,

@@ -16,10 +16,10 @@ storiesOf("Base|Modals", module)
 	.addParameters({
 		notes,
 	})
-	.add("Base", () => ({
+	.add("Default", () => ({
 		components: { BaseModal, BaseButton, ModalFooter, ModalFooterBorder },
 		data: () => ({
-			active: false,
+			active: true,
 			header: text("header", "Modal Inhalt Scrollt"),
 			body: text(
 				"body",
@@ -39,13 +39,12 @@ storiesOf("Base|Modals", module)
 
 			</template>
 			<template v-slot:footer>
-			<modal-footer-border>
-
-						<template v-slot:right>
-							<base-button design="primary text" @click="active = false">
-								Abbrechen
-							</base-button>
-							<base-button design="primary" @click="active = false"> Übernehmen</base-button>
+				<modal-footer-border>
+					<template v-slot:right>
+						<base-button design="primary text" @click="active = false">
+							Abbrechen
+						</base-button>
+						<base-button design="primary" @click="active = false"> Übernehmen</base-button>
 					</template>
 				</modal-footer-border>
 		</template>
@@ -55,7 +54,7 @@ storiesOf("Base|Modals", module)
 	.add("Action", () => ({
 		components: { BaseModal, BaseButton, BaseIcon, ModalFooterActions },
 		data: () => ({
-			active: false,
+			active: true,
 			header: text("header", "Plugin Einstellungen"),
 			body: text("body"),
 			color: color("color", "var(--color-white)"),
@@ -126,7 +125,7 @@ storiesOf("Base|Modals", module)
 			ModalFooterConfirm,
 		},
 		data: () => ({
-			active: false,
+			active: true,
 		}),
 		template: `<div>
 		<base-button @click="active = true">
@@ -152,7 +151,7 @@ storiesOf("Base|Modals", module)
 	.add("Dialog", () => ({
 		components: { BaseModal, BaseButton, BaseIcon, ModalBodyInfo, ModalFooter },
 		data: () => ({
-			active: false,
+			active: true,
 		}),
 		template: `<div>
 		<base-button @click="active = true">

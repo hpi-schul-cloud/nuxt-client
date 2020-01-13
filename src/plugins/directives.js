@@ -3,6 +3,12 @@ import Vue from "vue";
 import Ripple from "vue-ripple-directive";
 Vue.directive("ripple", Ripple);
 
+Vue.directive("focus-on-mount", {
+	inserted: function(el, binding) {
+		if (binding.value) el.focus();
+	},
+});
+
 Vue.directive("click-outside", {
 	bind: function(el, binding, vnode) {
 		el.clickOutsideEvent = function(event) {

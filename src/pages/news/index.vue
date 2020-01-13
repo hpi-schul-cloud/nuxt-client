@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<floating-fab icon="add" @click="$router.push({ name: 'news-new' })" />
+		<floating-fab icon="add" to="/news/new" />
 		<section v-if="news && news.length > 0" class="section">
 			<news-card
 				v-for="article of news"
@@ -43,7 +43,7 @@ export default {
 	},
 	head() {
 		return {
-			title: "News",
+			title: this.$t("pages.news.title"),
 		};
 	},
 };

@@ -9,8 +9,14 @@ All Generated files can be fount at: `./dist/*`
 ## Nuxt Client
 
 ```bash
-npm run build:legacy
 npm run build:nuxt
+npm run start:nuxt
+```
+
+or using the docker bash script
+
+```bash
+bash ./startup.sh
 ```
 
 Output Directory: `./dist/nuxt`
@@ -26,9 +32,9 @@ Output Directory: `./dist/nuxt`
 | LEGACY_CLIENT_URL | `http://localhost:3100` | URL to proxy legacy requests to. Required unless `FALLBACK_DISABLED=true`. |
 | SC_THEME | `default` | Each theme has a seperate folder. See [theming](../2-Styles/3-Theming.md) for more details. |
 | FALLBACK_DISABLED | `false` | disables the legacy client and serves only vue pages. |
-| PROXY_LOG_LEVEL | `warn` | Loglevel of the legacy proxy. Allowed values: `debug`, `info`, `warn`, `error`, `silent` |
-| FEATURE_TEAMS_ENABLED | `true` | Enables Teams feature in sidebar |
-| FEATURE_EXTENSIONS_ENABLED | `true` | Enables Add-Ons in sidebar. Just for N21! |
+| PROXY_LOG_LEVEL | `silent` | Loglevel of the legacy proxy. Allowed values: `debug`, `info`, `warn`, `error`, `silent` |
+| FEATURE_TEAMS_ENABLED | `false` | Enables Teams feature in sidebar |
+| FEATURE_EXTENSIONS_ENABLED | `false` | Enables Add-Ons in sidebar. Just for N21! |
 | SENTRY_DSN | `false` | If set, errors are reported to sentry. |
 
 ## Storybook
