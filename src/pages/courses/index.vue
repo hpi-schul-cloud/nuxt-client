@@ -11,6 +11,7 @@ import CoursesGrid from "@components/molecules/CoursesGrid";
 import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
+	layout: "loggedInFull",
 	components: {
 		CoursesGrid,
 		FloatingFab,

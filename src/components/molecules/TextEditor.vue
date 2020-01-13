@@ -124,6 +124,7 @@ import {
 	OrderedList,
 	Strike,
 	Underline,
+	Placeholder,
 } from "tiptap-extensions";
 
 export default {
@@ -139,6 +140,10 @@ export default {
 		value: {
 			type: String,
 			required: true,
+		},
+		placeholder: {
+			type: String,
+			default: "",
 		},
 	},
 	data() {
@@ -157,6 +162,13 @@ export default {
 					new OrderedList(),
 					new Strike(),
 					new Underline(),
+					new Placeholder({
+						emptyEditorClass: "is-editor-empty",
+						emptyNodeClass: "is-empty",
+						emptyNodeText: this.placeholder,
+						showOnlyWhenEditable: true,
+						showOnlyCurrent: true,
+					}),
 				],
 				content: this.value,
 				onUpdate: this.editorUpdateHandler,
@@ -225,6 +237,14 @@ export default {
 		&:focus {
 			border-bottom: 1px solid var(--color-secondary);
 		}
+	}
+
+	/deep/ *.is-empty:first-child::before {
+		float: left;
+		height: 0;
+		color: var(--color-gray);
+		pointer-events: none;
+		content: attr(data-empty-text);
 	}
 }
 </style>
