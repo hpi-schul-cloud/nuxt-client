@@ -6,10 +6,10 @@
 //const mongoId = "[a-z0-9]{24}";
 
 module.exports = [
-	`^/teams`,
+	//`^/teams`,
 	// `^/administration/?$`,
 	// `^/administration/teams/?$`,
-	`^/administration/students/?$`,
+	//`^/administration/students/?$`,
 	// `^/content/`,
 	`^/error/`,
 	`^/mint-ec/?`,

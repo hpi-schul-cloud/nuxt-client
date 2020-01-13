@@ -1,4 +1,3 @@
-// ToDo: BaseInput-wrapper unnötig
 <template>
 	<multi-select
 		:aria-label="label"
