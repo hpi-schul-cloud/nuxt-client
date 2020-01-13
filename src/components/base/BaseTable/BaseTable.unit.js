@@ -497,13 +497,14 @@ describe("@components/BaseTable", () => {
 							const flatPickr = wrapper.find(FlatPickr);
 							flatPickr.setProps({ value: "2020-01-02" });
 							flatPickr.vm.$emit("input", newFilterValue);
-							expectedFilterValue = new Date(
-								newFilterValue
-							).toLocaleDateString("de-DE", {
-								day: "2-digit",
-								month: "2-digit",
-								year: "numeric",
-							});
+							expectedFilterValue = new Date(newFilterValue).toLocaleDateString(
+								"de-DE",
+								{
+									day: "2-digit",
+									month: "2-digit",
+									year: "numeric",
+								}
+							);
 						} else {
 							const filterModalInput = wrapper.find(
 								".modal-body .input-line input"
