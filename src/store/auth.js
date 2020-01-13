@@ -22,7 +22,7 @@ export const actions = {
 		*/
 		const jwt = this.$cookies.get("jwt");
 		if (!jwt) {
-			throw new Error("No Accesstoken received");
+			throw new Error("Can not read jwt from cookies.");
 		}
 		const payload = jwtDecode(jwt);
 		return dispatch("populateUser", payload.userId);
