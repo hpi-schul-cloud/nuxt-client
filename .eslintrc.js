@@ -28,6 +28,7 @@ module.exports = {
 				"jest/valid-title": "off",
 				// to reduce the number of errors we disable some rules for now.
 				// But they should be removed here ASAP.
+				// https://github.com/jest-community/eslint-plugin-jest
 				"jest/no-expect-resolves": "off",
 				"jest/prefer-to-have-length": "off",
 				"jest/prefer-spy-on": "off",
