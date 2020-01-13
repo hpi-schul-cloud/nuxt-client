@@ -10,20 +10,21 @@
 		@blur="open = false"
 	>
 		<div class="button">
-			<slot name="header">
-				<base-button size="small">{{ title }}</base-button>
-			</slot>
+			<div class="container">
+				<slot name="header"></slot>
+				<base-icon
+					source="fa"
+					icon="fas fa-chevron-down"
+					:style="{
+						'font-size': `var(--space-md)`,
+						color: `var(--color-white)`,
+					}"
+				>
+				</base-icon>
+			</div>
 		</div>
 		<div :id="`dropdown-content-${$uid}`" class="content" :class="{ open }">
-			<ul>
-				<li
-					v-for="(item, index) of items"
-					:key="index"
-					@click="$emit('input', item)"
-				>
-					{{ item.label }}
-				</li>
-			</ul>
+			<slot class="link" />
 		</div>
 	</div>
 </template>
@@ -33,16 +34,6 @@ import uidMixin from "@mixins/uid";
 
 export default {
 	mixins: [uidMixin],
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-		items: {
-			type: Array,
-			default: () => [],
-		},
-	},
 	data() {
 		return {
 			open: false,
@@ -54,9 +45,38 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.button {
+	width: 100%;
+	padding: var(--space-sm) var(--space-md);
+	color: var(--color-white);
+	cursor: pointer;
+	background-color: var(--color-secondary);
+	border: 1px solid var(--color-secondary);
+
+	@include breakpoint(desktop) {
+		width: 300px;
+	}
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 .dropdown {
 	position: relative;
 	display: inline-block;
+	width: 100%;
+
+	&:focus {
+		outline: 0;
+	}
+
+	@include breakpoint(desktop) {
+		float: right;
+		width: 300px;
+	}
 }
 
 // Hidden by default
@@ -65,24 +85,31 @@ export default {
 	z-index: var(--layer-dropdown);
 	display: none;
 	flex-direction: column;
-	color: var(--color-black);
-	background-color: var(--color-white);
-	box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
-		0 2px 4px -1px rgba(0, 0, 0, 0.2);
-
-	ul {
-		li {
-			padding: var(--space-sm);
-			list-style: none;
-			cursor: pointer;
-			&:hover {
-				background-color: var(--color-gray-light);
-			}
-		}
-	}
+	width: 100%;
+	background-color: var(--color-gray-light);
 
 	&.open {
 		display: flex;
+	}
+	.link {
+		display: inline-block;
+		color: var(--color-black);
+		word-break: break-word;
+		white-space: normal;
+		border-bottom: 0;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--color-gray);
+		}
+
+		&:hover {
+			color: var(--color-secondary);
+			background-color: var(--color-gray-light);
+		}
+	}
+
+	@include breakpoint(desktop) {
+		max-width: 300px;
 	}
 }
 </style>
