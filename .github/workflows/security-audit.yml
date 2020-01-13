@@ -1,0 +1,12 @@
+name: Security Audit
+
+on: [push]
+
+jobs:
+  npmaudit:
+    runs-on: ubuntu-latest
+    name: "npm audit"
+    steps:
+      - uses: actions/checkout@v1
+      - name: npm audit
+        run: npm audit
