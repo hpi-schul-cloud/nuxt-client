@@ -16,7 +16,7 @@
 		>
 			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
 		</span>
-		<span v-if=!labelHidden class="label">
+		<span v-if="!labelHidden" class="label">
 			{{ label }}
 		</span>
 	</label>

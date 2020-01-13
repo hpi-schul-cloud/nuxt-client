@@ -76,7 +76,7 @@ export default {
 		placeholder: {
 			type: String,
 			default: "Pro Seite",
-		}
+		},
 	},
 	data: () => ({
 		perPageOptions: [

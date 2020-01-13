@@ -81,7 +81,7 @@ export default {
 	computed: {
 		openedMatchingType() {
 			return this.filterOpened.matchingType;
-		}
+		},
 	},
 	watch: {
 		active(newValue) {

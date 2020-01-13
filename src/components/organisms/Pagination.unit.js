@@ -82,10 +82,10 @@ describe("@components/organisms/Pagination", () => {
 	it("can show a custom placeholder", () => {
 		const wrapper = mount(Pagination, {
 			propsData: {
-				placeholder: "test"
+				placeholder: "test",
 			},
 		});
 
 		expect(wrapper.find("input").attributes("placeholder")).toContain("test");
-	})
+	});
 });

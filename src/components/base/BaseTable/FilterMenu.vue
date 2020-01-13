@@ -66,12 +66,12 @@ export default {
 	computed: {
 		selectedFiltersWithLabels: {
 			get: function() {
-				this.selectedFilters.forEach(filter => this.setTagLabel(filter));
+				this.selectedFilters.forEach((filter) => this.setTagLabel(filter));
 				return this.selectedFilters;
 			},
 			set: function(newValue) {
 				this.selectedFilters = newValue;
-			}
+			},
 		},
 	},
 	watch: {
@@ -115,7 +115,11 @@ export default {
 			if (["number", "text"].includes(filter.type)) {
 				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
 			} else if (filter.type === "date") {
-				const dateString = (new Date(filter.value)).toLocaleDateString('de-DE', { day: "2-digit", month: "2-digit", year: "numeric" });
+				const dateString = new Date(filter.value).toLocaleDateString("de-DE", {
+					day: "2-digit",
+					month: "2-digit",
+					year: "numeric",
+				});
 				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${dateString}`;
 			} else if (filter.type === "fulltextSearch") {
 				filter.tagLabel = `${filter.label} nach: ${filter.value}`;
@@ -150,7 +154,7 @@ export default {
 			this.editFilterActive = false;
 			this.$emit("input", this.selectedFilters);
 		},
-	}
+	},
 };
 </script>
 
