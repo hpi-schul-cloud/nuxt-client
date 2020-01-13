@@ -11,7 +11,6 @@ describe("@components/ContentCard", () => {
 			},
 		});
 		expect(wrapper.find(".content__title").text()).toBe("Title");
-		expect(wrapper.find(".footer__content").exists()).toBe(true);
 	});
 
 	it("Renders props when passed in", () => {
@@ -20,13 +19,11 @@ describe("@components/ContentCard", () => {
 			propsData: {
 				title: "Title",
 				thumbnail: "Thumbnail",
-				description: "Description",
 			},
 		});
 		expect(wrapper.find(".content__title").text()).toBe("Title");
 		expect(wrapper.find(".content__img-thumbnail").attributes().src).toBe(
 			"Thumbnail"
 		);
-		expect(wrapper.find(".content__description").text()).toBe("Description");
 	});
 });

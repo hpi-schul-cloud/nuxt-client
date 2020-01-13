@@ -3,25 +3,33 @@
 		<div class="content-card">
 			<template v:slot:content>
 				<div class="content">
-					<base-link :href="url" target="_blank" :no-style="true">
-						<div class="content__img">
-							<div class="img-container">
-								<img
-									:src="thumbnail"
-									alt="content-thumbnail"
-									class="content__img-thumbnail"
-								/>
+					<div class="content__img">
+						<div class="img-container">
+							<base-icon
+								class="content__img-checkbox"
+								source="material"
+								:icon="checkboxSelector"
+								@click="checkboxHandler"
+							/>
 
-								<base-icon
-									class="content__img-icon"
-									source="material"
-									icon="photo"
-								/>
-							</div>
+							<div class="content__img-background-gradient" />
+
+							<img
+								:src="thumbnail"
+								alt="content-thumbnail"
+								class="content__img-thumbnail"
+							/>
+
+							<base-icon
+								class="content__img-icon"
+								source="material"
+								icon="photo"
+							/>
 						</div>
-						<div class="content__title">{{ title }}</div>
+					</div>
+					<base-link :href="url" target="_blank" :no-style="true">
+						<h6 class="content__title">{{ title }}</h6>
 					</base-link>
-					<div class="content__description">{{ description }}</div>
 				</div>
 			</template>
 			<template v:slot:footer>
@@ -35,11 +43,6 @@
 						/>
 
 						<div>
-							<base-icon
-								class="footer__content-icon"
-								source="material"
-								icon="add_circle_outline"
-							/>
 							<base-icon
 								class="footer__content-icon"
 								source="material"
@@ -72,6 +75,11 @@ export default {
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
 	},
+	data() {
+		return {
+			isChecked: false,
+		};
+	},
 	computed: {
 		reportMail() {
 			const mailContent = {
@@ -84,6 +92,14 @@ export default {
 			const email = this.$t("components.molecules.ContentCard.report.email");
 			return `mailto:${email}?${querystring}`;
 		},
+		checkboxSelector() {
+			return this.isChecked ? "check_box" : "check_box_outline_blank";
+		},
+	},
+	methods: {
+		checkboxHandler() {
+			this.isChecked = !this.isChecked;
+		},
 	},
 };
 </script>
@@ -95,7 +111,6 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: 23rem;
 }
 .img-container {
 	position: relative;
@@ -104,19 +119,29 @@ export default {
 .content {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
 	&__img {
-		min-height: 200px;
 		&-thumbnail {
 			width: 100%;
 			height: 200px;
+			background-color: var(--color-black);
+			border-radius: var(--radius-md) var(--radius-md) 0 0;
+			opacity: 0.8;
 			object-fit: cover;
-			border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+		}
+		&-background-gradient {
+			position: absolute;
+			z-index: var(--layer-page);
+			width: 100%;
+			height: 50%;
+			background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+			border-radius: var(--radius-md) var(--radius-md) 0 0;
+			opacity: 0.8;
 		}
 		&-icon {
 			position: absolute;
 			top: 40%;
 			left: 40%;
+			z-index: var(--layer-dropdown);
 			padding: var(--space-xs);
 			font-size: var(--heading-1);
 			color: var(--color-gray-dark);
@@ -124,18 +149,24 @@ export default {
 			border-radius: var(--radius-round);
 			opacity: 0.8;
 		}
+		&-checkbox {
+			position: absolute;
+			top: 5%;
+			left: 90%;
+			z-index: var(--layer-dropdown);
+			color: var(--color-white);
+			cursor: pointer;
+		}
 	}
 	&__title {
-		min-height: 2.5rem;
-		margin: var(--space-xs) var(--space-sm) var(--space-xs-3) var(--space-sm);
-		font-weight: var(--font-weight-bold);
+		min-height: 62px;
+		margin: var(--space-xs) var(--space-sm);
 		color: var(--color-tertiary);
-		text-align: center;
 
 		@include excerpt(
-			$font-size: var(--heading-5),
+			$font-size: var(--heading-6),
 			$line-height: var(--line-height-sm),
-			$lines-to-show: 2
+			$lines-to-show: 3
 		);
 	}
 	&__description {
@@ -147,14 +178,6 @@ export default {
 			$lines-to-show: 3,
 			$line-height: 1.2rem
 		);
-
-		// @include breakpoint(desktop) {
-		// 	@include excerpt(
-		// 		$font-size: var(--text-sm),
-		// 		$lines-to-show: 2,
-		// 		$line-height: 1.2rem
-		// 	);
-		// }
 	}
 }
 .footer {
@@ -170,7 +193,7 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
-		padding: var(--space-xs-3);
+		padding: var(--space-xs-2);
 
 		&-icon {
 			font-size: var(--text-lg);
