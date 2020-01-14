@@ -4,15 +4,31 @@ import BaseChip from "./BaseChip";
 
 storiesOf("Base|BaseChip", module).add("default", () => ({
 	components: { BaseChip },
-
+	data() {
+		return {
+			sizes: ["small", "medium", "large"],
+			selections: ["medium"],
+		};
+	},
+	methods: {
+		toggle(name) {
+			if (this.selections.includes(name)) {
+				this.selections.splice(this.selections.indexOf(name), 1);
+			} else {
+				this.selections.push(name);
+			}
+		},
+	},
 	template: `
 	<div>
-		<base-chip backgroundColor="var(--color-primary)" size="small">small chip</base-chip>
-		<base-chip backgroundColor="var(--color-secondary)" size="medium">medium chip</base-chip>
-		<base-chip backgroundColor="var(--color-tertiary)" size="large">large chip</base-chip>
-		<br/>
-		<base-chip backgroundColor="var(--color-primary)" size="small" :selected="true">small chip</base-chip>
-		<base-chip backgroundColor="var(--color-secondary)" size="medium" :selected="true">medium chip</base-chip>
-		<base-chip backgroundColor="var(--color-tertiary)" size="large" :selected="true">large chip</base-chip>
+		<base-chip
+			v-for="size in sizes" :key="size"
+			backgroundColor="var(--color-primary)"
+			:size="size"
+			:selected="selections.includes(size)"
+			@click="toggle(size)"
+		>
+				{{size}} chip
+		</base-chip>
 	</div>`,
 }));
