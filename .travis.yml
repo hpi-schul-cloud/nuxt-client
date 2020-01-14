@@ -27,9 +27,7 @@ jobs:
   include:
     # Build
     - stage: test
-      script: npm audit --audit-level=high
-      name: "test:npm-audit"
-    - script: npm run build:nuxt
+      script: npm run build:nuxt
       name: "build:nuxt:default"
     - script: npm run build:nuxt
       name: "build:nuxt:brb"

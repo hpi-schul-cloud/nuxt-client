@@ -13,9 +13,11 @@
 				Ein Fehler ist aufgetreten
 			</template>
 		</h1>
-		<base-button design="primary" @click="$router.go(-1)">
-			Hier geht es zurück
-		</base-button>
+		<slot name="action">
+			<base-button design="primary" @click="$router.go(-1)">
+				{{ $t("error.action.back") }}
+			</base-button>
+		</slot>
 	</div>
 </template>
 <script>
