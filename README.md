@@ -6,10 +6,10 @@
 
 ## Status
 
-| Environment | Tests (GitHub Actions) | Build (Travis CI) | Coverage |
-| --: | :-: | :-: | :-: |
-| **Production** | ![Test Status](https://github.com/schul-cloud/nuxt-client/workflows/Test/badge.svg?branch=master) | [![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=master)](https://travis-ci.com/schul-cloud/nuxt-client) | [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/master/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client) |
-| **Dev** | ![Test Status](https://github.com/schul-cloud/nuxt-client/workflows/Test/badge.svg?branch=develop) | [![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=develop)](https://travis-ci.com/schul-cloud/nuxt-client) | [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/develop/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client) |
+| Environment | Tests (GitHub Actions) | Build (Travis CI) | Coverage | Security Audit |
+| --: | :-: | :-: | :-: | :-: |
+| **Production** | ![Test Status](https://github.com/schul-cloud/nuxt-client/workflows/Test/badge.svg?branch=master) | [![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=master)](https://travis-ci.com/schul-cloud/nuxt-client) | [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/master/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client) | ![Security Status Status](https://github.com/schul-cloud/nuxt-client/workflows/Security%20Audit/badge.svg?branch=master) |
+| **Dev** | ![Security Audit Status](https://github.com/schul-cloud/nuxt-client/workflows/Test/badge.svg?branch=develop) | [![Build Status](https://travis-ci.com/schul-cloud/nuxt-client.svg?branch=develop)](https://travis-ci.com/schul-cloud/nuxt-client) | [![codecov](https://codecov.io/gh/schul-cloud/nuxt-client/branch/develop/graph/badge.svg)](https://codecov.io/gh/schul-cloud/nuxt-client) | ![Security Status Status](https://github.com/schul-cloud/nuxt-client/workflows/Security%20Audit/badge.svg?branch=develop) |
 
 ## Deployments
 
