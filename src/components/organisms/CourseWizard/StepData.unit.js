@@ -54,7 +54,7 @@ describe("@components/StepData", () => {
 			// some required values are missing (name)
 			untilDate: "",
 			times: [],
-			teachers: ["test"],
+			teacherIds: ["test"],
 		};
 		checkRendering(mountWithCourse(propsData));
 		expect(outputData).toContain("Invalid prop");

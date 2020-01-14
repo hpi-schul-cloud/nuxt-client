@@ -10,17 +10,19 @@
 		/>
 
 		<base-select
-			v-model="course.teacherIds"
-			:options="teacherOptions"
+			v-model="teacherModel"
+			close-on-select
 			:multiple="true"
+			:options="teacherOptions"
 			label="Unterrichtender Lehrer"
 			placeholder="Vorname Nachname"
 		/>
 
 		<base-select
-			v-model="course.substitutionIds"
-			:options="teacherOptions"
+			v-model="substitutionModel"
+			close-on-select
 			:multiple="true"
+			:options="teacherOptions"
 			label="Vertretungs-Lehrer"
 			placeholder="Vorname Nachname"
 		/>
@@ -94,6 +96,26 @@ export default {
 					value: teacher._id,
 				};
 			});
+		},
+		teacherModel: {
+			get() {
+				return (this.course.teacherIds || []).map((teacherId) =>
+					this.teacherOptions.find((teacher) => teacher.value === teacherId)
+				);
+			},
+			set(teachers) {
+				this.course.teacherIds = teachers.map((teacher) => teacher.value);
+			},
+		},
+		substitutionModel: {
+			get() {
+				return (this.course.substitutionIds || []).map((teacherId) =>
+					this.teacherOptions.find((teacher) => teacher.value === teacherId)
+				);
+			},
+			set(teachers) {
+				this.course.substitutionIds = teachers.map((teacher) => teacher.value);
+			},
 		},
 		courseTimes: {
 			// TODO adapt server Apiv2 to avoid recalculations
