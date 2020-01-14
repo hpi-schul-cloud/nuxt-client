@@ -7,7 +7,6 @@ $darken: 25%;
 	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
 	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
 	--color-secondary: #b1063a;
-	--color-secondary-extra-light: #f8eaee;
 	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
 	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
 	--color-tertiary: #455b6a;
