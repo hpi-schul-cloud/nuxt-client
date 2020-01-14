@@ -119,6 +119,8 @@ export default {
 .content {
 	display: flex;
 	flex-direction: column;
+	min-height: 300px;
+
 	&__img {
 		&-thumbnail {
 			width: 100%;
