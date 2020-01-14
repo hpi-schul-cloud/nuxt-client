@@ -13,9 +13,7 @@
 			v-model="course.teacherIds"
 			:options="teacherOptions"
 			:multiple="true"
-			track-by="_id"
 			label="Unterrichtender Lehrer"
-			option-label="displayName"
 			placeholder="Vorname Nachname"
 		/>
 
@@ -23,9 +21,7 @@
 			v-model="course.substitutionIds"
 			:options="teacherOptions"
 			:multiple="true"
-			track-by="_id"
 			label="Vertretungs-Lehrer"
-			option-label="displayName"
 			placeholder="Vorname Nachname"
 		/>
 
