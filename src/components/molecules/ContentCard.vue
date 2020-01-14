@@ -36,18 +36,27 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
-						<base-icon
-							class="footer__content-icon"
-							source="material"
-							icon="bookmark_border"
-						/>
-
-						<div>
+						<base-button design="icon text">
 							<base-icon
 								class="footer__content-icon"
 								source="material"
-								icon="more_vert"
+								icon="bookmark_border"
 							/>
+						</base-button>
+
+						<div v-click-outside="removeMenu" class="footer__icon-container">
+							<base-button
+								design="icon text"
+								@click="menuHandler"
+								@keydown.esc="removeMenu"
+							>
+								<base-icon
+									class="footer__content-icon"
+									source="material"
+									icon="more_vert"
+								/>
+							</base-button>
+							<content-card-menu v-if="menuActive" />
 						</div>
 					</div>
 				</div>
@@ -58,10 +67,12 @@
 
 <script>
 import BaseLink from "@components/base/BaseLink";
+import ContentCardMenu from "@components/molecules/ContentCardMenu";
 
 export default {
 	components: {
 		BaseLink,
+		ContentCardMenu,
 	},
 	props: {
 		id: { type: String, default: "" },
@@ -78,6 +89,7 @@ export default {
 	data() {
 		return {
 			isChecked: false,
+			menuActive: false,
 		};
 	},
 	computed: {
@@ -100,6 +112,15 @@ export default {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
 		},
+		menuHandler() {
+			this.menuActive = !this.menuActive;
+		},
+		removeMenu() {
+			this.menuActive = false;
+		},
+		keydownRemoveMenu() {
+			this.menuActive = false;
+		},
 	},
 };
 </script>
@@ -119,6 +140,7 @@ export default {
 .content {
 	display: flex;
 	flex-direction: column;
+	min-height: 300px;
 	&__img {
 		&-thumbnail {
 			width: 100%;
@@ -186,6 +208,7 @@ export default {
 	height: 13%;
 	padding: 0 var(--space-xs);
 	&__separator {
+		margin: 0 var(--space-xs-4);
 		border-top: 1px solid var(--color-gray);
 	}
 	&__content {
@@ -193,12 +216,18 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
-		padding: var(--space-xs-2);
+		padding: var(--space-xs-4) 0;
 
 		&-icon {
 			font-size: var(--text-lg);
 			color: var(--color-tertiary);
 		}
+	}
+	&__icon-container {
+		position: relative;
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
 	}
 }
 </style>
