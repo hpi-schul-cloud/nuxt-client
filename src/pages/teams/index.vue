@@ -89,9 +89,9 @@ export default {
 	async created(ctx) {
 		this.find();
 		try {
-			this.myInvitations = (
-				await this.$store.dispatch("teams/getMyInvitations")
-			).data;
+			this.myInvitations = (await this.$store.dispatch(
+				"teams/getMyInvitations"
+			)).data;
 		} catch {
 			this.$toast.error("Fehler beim Laden der Einladungen");
 		}

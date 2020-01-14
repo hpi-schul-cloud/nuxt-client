@@ -20,22 +20,18 @@ export default {
 	components: { CourseWizard },
 	async asyncData({ store }) {
 		try {
-			const teacherRole = (
-				await store.dispatch("roles/find", {
-					query: {
-						name: "teacher",
-					},
-				})
-			).data[0];
+			const teacherRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "teacher",
+				},
+			})).data[0];
 			const teachers = await store.dispatch("users/getByRole", teacherRole);
 
-			const studentsRole = (
-				await store.dispatch("roles/find", {
-					query: {
-						name: "student",
-					},
-				})
-			).data[0];
+			const studentsRole = (await store.dispatch("roles/find", {
+				query: {
+					name: "student",
+				},
+			})).data[0];
 			const students = await store.dispatch("users/getByRole", studentsRole);
 
 			await store.dispatch("classes/find");
