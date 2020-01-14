@@ -507,7 +507,7 @@ describe("@components/BaseTable", () => {
 							);
 						} else {
 							const filterModalInput = wrapper.find(
-								".modal-body .input-line input"
+								`div[placeholder='Filterwert'] input[type=${filterType}]`
 							);
 							filterModalInput.setValue(newFilterValue);
 							expectedFilterValue = newFilterValue;

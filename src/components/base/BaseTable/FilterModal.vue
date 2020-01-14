@@ -17,9 +17,9 @@
 				/>
 				<base-input
 					v-model="filterOpened.value"
-					label="Wert"
+					label="Filterwert"
 					autofocus
-					placeholder="Wert"
+					placeholder="Filterwert"
 					:type="filterOpened.type"
 					@keyup.enter.native="$emit('set-filter', filterOpened)"
 				/>
