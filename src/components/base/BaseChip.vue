@@ -59,8 +59,8 @@ button {
 	}
 }
 .selected {
-	color: var(--color-secondary-dark);
-	background-color: var(--color-secondary-extra-light);
+	color: var(--color-white);
+	background-color: var(--color-secondary);
 	border: 1px solid var(--color-secondary);
 }
 .default {
