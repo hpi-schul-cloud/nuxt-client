@@ -25,11 +25,6 @@ export default {
 			activeToggle: "Aktuell",
 		};
 	},
-	head() {
-		return {
-			title: "Kurse",
-		};
-	},
 	computed: {
 		...mapGetters("courses", {
 			courses: "list",
@@ -49,6 +44,11 @@ export default {
 		find() {
 			this.$store.dispatch("courses/find");
 		},
+	},
+	head() {
+		return {
+			title: "Kurse",
+		};
 	},
 };
 </script>
