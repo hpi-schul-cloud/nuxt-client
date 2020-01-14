@@ -1,9 +1,7 @@
 import ChipFilter from "@components/molecules/ChipFilter";
 
 describe("@components/molecules/ChipFilter", () => {
-	it("exports a valid component", () => {
-		expect(ChipFilter).toBeAComponent();
-	});
+	it(...isValidComponent(ChipFilter));
 
 	it("renders toggle option", () => {
 		const toggleTags = ["Aktuell", "Archiviert"];
@@ -16,7 +14,7 @@ describe("@components/molecules/ChipFilter", () => {
 				multiple: false,
 			},
 		});
-		expect(wrapper.props().options.length).toBe(2);
+		expect(wrapper.props().options.length).toBe(toggleTags.length);
 		expect(wrapper.props().value).toBe("Aktuell");
 		expect(wrapper.props().multiple).toBe(false);
 	});
@@ -33,12 +31,12 @@ describe("@components/molecules/ChipFilter", () => {
 			},
 		});
 
-		expect(wrapper.props().options.length).toBe(3);
+		expect(wrapper.props().options.length).toBe(filterTags.length);
 		expect(wrapper.props().value.length).toBe(0);
 		expect(wrapper.props().multiple).toBe(true);
 	});
 
-	it("filtertTag gets selected", () => {
+	it("filtertTag gets selected if there was no selection before", () => {
 		const activeFilters = [];
 		const filterTags = ["Spanisch", "Deutsch", "Englisch"];
 
@@ -92,7 +90,7 @@ describe("@components/molecules/ChipFilter", () => {
 		expect(newSelection.every((chip) => !chip.includes(chipText)));
 	});
 
-	it("filtertTag gets selected", () => {
+	it("filtertTag gets selected and existing ones are kept", () => {
 		const activeFilters = ["Englisch", "Deutsch"];
 		const filterTags = ["Spanisch", "Deutsch", "Englisch"];
 

@@ -19,7 +19,7 @@ describe("@components/base/BaseChip", () => {
 		});
 		expect(wrapper.classes()).toContain("default");
 	});
-	it("renders default style when not active", () => {
+	it("renders default style when active", () => {
 		const wrapper = mount(BaseChip, {
 			propsData: {
 				selected: true,

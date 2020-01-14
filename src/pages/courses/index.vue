@@ -22,9 +22,7 @@ export default {
 	data() {
 		return {
 			toggleTags: ["Aktuell", "Archiviert"],
-			filterTags: ["Spanisch", "Deutsch", "Englisch"],
 			activeToggle: "Aktuell",
-			activeFilters: [],
 		};
 	},
 	head() {

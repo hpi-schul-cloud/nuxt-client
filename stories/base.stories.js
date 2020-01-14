@@ -346,7 +346,7 @@ storiesOf("Base|Base UI", module)
 		template: `
 		<div>
 			<base-chip backgroundColor="var(--color-primary)" size="small">small chip</base-chip>
-										<base-chip backgroundColor="var(--color-secondary)" size="medium">medium chip</base-chip>
-										<base-chip backgroundColor="var(--color-tertiary)" size="large">large chip</base-chip>
-								</div>`,
+			<base-chip backgroundColor="var(--color-secondary)" size="medium">medium chip</base-chip>
+			<base-chip backgroundColor="var(--color-tertiary)" size="large">large chip</base-chip>
+		</div>`,
 	}));

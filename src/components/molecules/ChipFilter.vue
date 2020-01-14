@@ -6,8 +6,8 @@
 			:selected="setSelected(tag, idx) ? true : false"
 			size="medium"
 			@click="set(idx)"
-			>{{ tag }}</base-chip
-		>
+			>{{ tag }}
+		</base-chip>
 	</div>
 </template>
 

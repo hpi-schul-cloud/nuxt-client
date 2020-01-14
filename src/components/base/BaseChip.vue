@@ -4,7 +4,8 @@
 		:class="['chip', size, selected, classes]"
 		:style="{ padding: size }"
 		v-on="$listeners"
-		><slot></slot>
+	>
+		<slot />
 	</button>
 </template>
 
