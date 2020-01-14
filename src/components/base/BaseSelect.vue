@@ -1,36 +1,40 @@
 <template>
-	<multi-select
-		:aria-label="label"
-		:value="value"
-		v-bind="$attrs"
-		:options="options"
-		:multiple="multiple"
-		:close-on-select="closeOnSelect"
-		:track-by="trackBy"
-		:placeholder="placeholder"
-		class="input mb-0"
-		:label="optionLabel"
-		:select-label="selectLabel"
-		:selected-label="selectedLabel"
-		:deselect-label="deselectLabel"
-		@select="$emit('select', $event)"
-		@input="$emit('input', $event)"
-		@tag="$emit('tag', $event)"
-		@remove="$emit('remove', $event)"
-		@search-change="$emit('search-change', $event)"
-	>
-		<template v-slot:tag="slotProps">
-			<slot name="tag" :option="slotProps.option" />
-		</template>
-	</multi-select>
+	<base-input-default v-bind="$attrs" :type="false" vmodel="" :label="label">
+		<multi-select
+			:aria-label="label"
+			:value="value"
+			v-bind="$attrs"
+			:options="options"
+			:multiple="multiple"
+			:close-on-select="closeOnSelect"
+			:track-by="trackBy"
+			:placeholder="placeholder"
+			class="input mb-0"
+			:label="optionLabel"
+			:select-label="selectLabel"
+			:selected-label="selectedLabel"
+			:deselect-label="deselectLabel"
+			@select="$emit('select', $event)"
+			@input="$emit('input', $event)"
+			@tag="$emit('tag', $event)"
+			@remove="$emit('remove', $event)"
+			@search-change="$emit('search-change', $event)"
+		>
+			<template v-slot:tag="slotProps">
+				<slot name="tag" :option="slotProps.option" />
+			</template>
+		</multi-select>
+	</base-input-default>
 </template>
 
 <script>
 import MultiSelect from "vue-multiselect";
+import BaseInputDefault from "./BaseInput/BaseInputDefault";
 
 export default {
 	components: {
 		MultiSelect,
+		BaseInputDefault,
 	},
 	props: {
 		/**

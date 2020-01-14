@@ -1,4 +1,5 @@
 import BaseSelect from "./BaseSelect";
+import MultiSelect from "vue-multiselect";
 
 describe("@components/BaseSelect", () => {
 	it(...isValidComponent(BaseSelect));
@@ -41,7 +42,7 @@ describe("@components/BaseSelect", () => {
 		expect(wrapper.find("multi-select-stub").exists()).toBe(true);
 	});
 
-	it("has an aria-label", () => {
+	it("has an aria-label ", () => {
 		const wrapper = mount(BaseSelect, {
 			propsData: {
 				label: "label",
@@ -50,7 +51,9 @@ describe("@components/BaseSelect", () => {
 				value: [],
 			},
 		});
-		expect(wrapper.attributes()["aria-label"]).toEqual("label");
+		expect(wrapper.find(MultiSelect).attributes()["aria-label"]).toEqual(
+			"label"
+		);
 	});
 
 	it("uses default option label", () => {
