@@ -29,7 +29,7 @@ customMatchers.toBeAComponent = function(options) {
 };
 
 customMatchers.toBeAViewComponent = function(options, mockInstance) {
-	if (usesALayout() && definesAPageTitleAndDescription()) {
+	if (/* usesALayout() && */ definesAPageTitleAndDescription()) {
 		return {
 			message: () =>
 				`expected ${this.utils.printReceived(
@@ -47,17 +47,20 @@ customMatchers.toBeAViewComponent = function(options, mockInstance) {
 		};
 	}
 
+	/*
 	function usesALayout() {
 		return options.components && options.components.Layout;
 	}
+	*/
 
 	function definesAPageTitleAndDescription() {
-		if (!options.page) return false;
+		if (!options.head) return false;
 		const pageObject =
-			typeof options.page === "function"
-				? options.page.apply(mockInstance || {})
-				: options.page;
+			typeof options.head === "function"
+				? options.head.apply(mockInstance || {})
+				: options.head;
 		if (!pageObject.hasOwnProperty("title")) return false;
+		/*
 		if (!pageObject.meta) return false;
 		const hasMetaDescription = pageObject.meta.some(
 			(metaProperty) =>
@@ -65,6 +68,7 @@ customMatchers.toBeAViewComponent = function(options, mockInstance) {
 				metaProperty.hasOwnProperty("content")
 		);
 		if (!hasMetaDescription) return false;
+		*/
 		return true;
 	}
 };

@@ -13,24 +13,32 @@
 					},
 				]"
 			/>
-			<div class="text-sm">
-				{{ dayjs(news.displayAt).fromNow() }} von {{ news.creator.firstName }}
-				{{ news.creator.lastName }}
-			</div>
 			<h1> {{ news.title }} </h1>
-			<!-- eslint-disable vue/no-v-html -->
 			<render-html
 				:html="
-					`<p class='info'>
-				${
-					news.targetModel
-						? $t('pages.news._id.index.info_with_target', infoVariables)
-						: $t('pages.news._id.index.info', infoVariables)
-				} </p>
+					`<p class='mb--md'> ${
+						news.targetModel
+							? $t(
+									'pages.news._id.index.info.creator_with_target',
+									infoVariables
+							  )
+							: $t('pages.news._id.index.info.creator', infoVariables)
+					} <br/> ${
+						news.updatedAt
+							? $t('pages.news._id.index.info.updater', infoVariables)
+							: ''
+					}</p>`
+				"
+			/>
+			<render-html
+				:html="
+					`<p class='mb--md'>
+				 </p>
 				`
 				"
 			/>
-			<!-- eslint-enable vue/no-v-html -->
+
+			<hr />
 
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>
@@ -57,22 +65,38 @@ export default {
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
-	async asyncData({ store, params }) {
+	async asyncData({ store, params, error }) {
+		const news = await store.dispatch("news/get", params.id);
+		if (!news) {
+			error({
+				statusCode: 404,
+				message: i18n.t("error.404"),
+			});
+		}
 		return {
-			news: await store.dispatch("news/get", params.id),
+			news: news,
+		};
+	},
+	data() {
+		return {
+			dayjs,
 		};
 	},
 	computed: {
 		infoVariables() {
 			return {
 				relativePublishedDate: dayjs(this.news.displayAt).fromNow(),
-				relativeUpdateDate: dayjs(this.news.updatedAt).fromNow(),
+				relativeUpdateDate: dayjs(
+					this.news.updatedAt || this.news.displayAt
+				).fromNow(),
 				creatorFirstName: this.news.creator.firstName,
 				creatorLastName: this.news.creator.lastName,
-				updaterFirstName: this.news.updater.firstName,
-				updaterLastName: this.news.updater.lastName,
+				updaterFirstName: (this.news.updater || {}).firstName,
+				updaterLastName: (this.news.updater || {}).lastName,
 				target: this.targetName,
-				targetWithLink: `<base-link to="/${this.news.targetModel}/${this.news.target._id}">${this.targetName}</base-link>`,
+				targetWithLink: `<base-link to="/${this.news.targetModel}/${
+					(this.news.target || {})._id
+				}">${this.targetName}</base-link>`,
 				school:
 					this.news.schoolId === this.$user.schoolId
 						? this.$t("pages.news._id.index.info.your_school", {
@@ -85,9 +109,9 @@ export default {
 		},
 		targetName() {
 			const targetMap = {
-				teams: this.$t("pages.news._id.index.target.team"),
-				courses: this.$t("pages.news._id.index.target.course"),
-				class: this.$t("pages.news._id.index.target.class"),
+				teams: this.$t("pages.news._id.index.info.target.team"),
+				courses: this.$t("pages.news._id.index.info.target.course"),
+				class: this.$t("pages.news._id.index.info.target.class"),
 			};
 			return this.news.targetModel
 				? targetMap[this.news.targetModel]
@@ -96,15 +120,11 @@ export default {
 	},
 	head() {
 		return {
-			title: (this.news || {}).title || "News",
+			title: (this.news || {}).title,
 		};
 	},
 };
 </script>
 <style lang="scss" scoped>
 @import "@styles";
-
-.info {
-	margin-bottom: var(--space-md);
-}
 </style>

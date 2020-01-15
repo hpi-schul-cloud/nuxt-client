@@ -1,3 +1,12 @@
+export function isValidPage(page, mockInstance) {
+	return [
+		"exports a valid page",
+		() => {
+			expect(page).toBeAViewComponent(mockInstance);
+		},
+	];
+}
+
 export function isValidComponent(component) {
 	return [
 		"exports a valid component",
@@ -29,6 +38,7 @@ export function rendersSlotContent(
 }
 
 export default {
+	isValidPage,
 	isValidComponent,
 	rendersSlotContent,
 };
