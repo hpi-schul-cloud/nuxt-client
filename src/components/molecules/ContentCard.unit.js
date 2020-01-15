@@ -22,8 +22,8 @@ describe("@components/ContentCard", () => {
 			},
 		});
 		expect(wrapper.find(".content__title").text()).toBe("Title");
-		// expect(wrapper.find(".content__img-thumbnail").attributes().src).toBe(
-		// 	"Thumbnail"
-		// );
+		expect(wrapper.find(".content__img-thumbnail").attributes().src).toBe(
+			"Thumbnail"
+		);
 	});
 });

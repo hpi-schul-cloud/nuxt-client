@@ -5,13 +5,12 @@
 				<div class="content">
 					<div class="content__img">
 						<div class="img-container">
-							<base-button design="none" class="content__img-checkbox">
-								<base-icon
-									class="content__img-checkbox"
-									source="material"
-									:icon="checkboxSelector"
-									@click="checkboxHandler"
-								/>
+							<base-button
+								design="none"
+								class="content__img-checkbox"
+								@click="checkboxHandler"
+							>
+								<base-icon source="material" :icon="checkboxSelector" />
 							</base-button>
 
 							<div class="content__img-background-gradient" />
@@ -47,18 +46,14 @@
 						</base-button>
 
 						<div v-click-outside="removeMenu" class="footer__icon-container">
-							<base-button
-								design="icon text"
-								@click="menuHandler"
-								@keydown.esc="removeMenu"
-							>
+							<base-button design="icon text" @click="menuHandler">
 								<base-icon
 									class="footer__content-icon"
 									source="material"
 									icon="more_vert"
 								/>
 							</base-button>
-							<content-card-menu v-if="menuActive" />
+							<card-context-menu v-if="menuActive" :actions="actions" />
 						</div>
 					</div>
 				</div>
@@ -69,22 +64,16 @@
 
 <script>
 import BaseLink from "@components/base/BaseLink";
-import ContentCardMenu from "@components/molecules/ContentCardMenu";
+import CardContextMenu from "@components/molecules/CardContextMenu";
 
 export default {
 	components: {
 		BaseLink,
-		ContentCardMenu,
+		CardContextMenu,
 	},
 	props: {
-		// id: { type: String, default: "" },
-		// description: { type: [String, Array], default: "" },
-		// licenses: { type: Array, default: () => [] },
-		// mimeType: { type: String, default: "" },
-		// originId: { type: String, default: "" },
-		// providerName: { type: String, default: "" },
-		// tags: { type: Array, default: () => [] },
-		// thumbnail: { type: String, default: "" },
+		id: { type: String, default: "" },
+		thumbnail: { type: String, default: "" },
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
 	},
@@ -92,6 +81,28 @@ export default {
 		return {
 			isChecked: false,
 			menuActive: false,
+			actions: [
+				{
+					type: "copy",
+					text: this.$t("components.molecules.ContentCardMenu.action.copy"),
+					icon: "file_copy",
+				},
+				{
+					type: "share",
+					text: this.$t("components.molecules.ContentCardMenu.action.share"),
+					icon: "share",
+				},
+				{
+					type: "delete",
+					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
+					icon: "delete_outline",
+				},
+				{
+					type: "report",
+					text: this.$t("components.molecules.ContentCardMenu.action.report"),
+					icon: "report",
+				},
+			],
 		};
 	},
 	computed: {
@@ -110,6 +121,12 @@ export default {
 			return this.isChecked ? "check_box" : "check_box_outline_blank";
 		},
 	},
+	created() {
+		window.addEventListener("keyup", this.escKeyHandler);
+	},
+	beforeDestroy() {
+		window.removeEventListener("keyup", this.escKeyHandler);
+	},
 	methods: {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
@@ -119,6 +136,11 @@ export default {
 		},
 		removeMenu() {
 			this.menuActive = false;
+		},
+		escKeyHandler(e) {
+			if (this.menuActive && e.keyCode === 27) {
+				this.removeMenu();
+			}
 		},
 	},
 };
