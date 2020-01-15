@@ -52,10 +52,13 @@ export default {
 	z-index: var(--layer-modal);
 	display: flex;
 	flex-direction: column;
-	width: 80%;
+	width: 90%;
 	height: 13rem;
 	background-color: var(--color-white);
 	box-shadow: var(--shadow-m);
+	:hover {
+		background-color: var(--color-gray-light);
+	}
 	&__button {
 		display: flex;
 		align-items: center;

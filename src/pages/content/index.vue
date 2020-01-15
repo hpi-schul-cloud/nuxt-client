@@ -12,19 +12,27 @@
 			/>
 			<p class="content__total">
 				<span v-if="searchQuery.length > 0">
-					{{ resources.total }}
+					{{ resources.nodes.length }}
 					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
 				</span>
 				<span v-else>
-					{{ resources.total }} {{ $t("pages.content.index.search_resources") }}
+					{{ resources.nodes.length }}
+					{{ $t("pages.content.index.search_resources") }}
 				</span>
 			</p>
-			<div v-if="resources.data.length === 0" class="content__no-results">
+			<div v-if="resources.nodes.length === 0" class="content__no-results">
 				<content-empty-state />
 			</div>
 			<base-grid column-width="15rem">
 				<content-card
-					v-for="resource of resources.data"
+					v-for="resource of resources.nodes"
+					:key="resource.title"
+					class="card"
+					:thumbnail="resource.preview.url"
+					:title="resource.title"
+				/>
+				<!-- <content-card
+					v-for="resource of resources.nodes"
 					:id="resource._id"
 					:key="resource._id"
 					class="card"
@@ -38,10 +46,10 @@
 					:thumbnail="resource.thumbnail"
 					:title="resource.title"
 					:url="resource.url"
-				/>
+				/> -->
 			</base-grid>
 			<base-spinner
-				v-if="loading && resources.data.length !== 0"
+				v-if="loading && resources.nodes.length !== 0"
 				class="content__spinner"
 				color="var(--color-primary)"
 			/>
@@ -71,7 +79,7 @@ export default {
 	async asyncData({ store }) {
 		return store.dispatch("content/getResources");
 	},
-	data() {
+	nodes() {
 		return {
 			searchQuery: "",
 			backToTopScrollYLimit: 115,

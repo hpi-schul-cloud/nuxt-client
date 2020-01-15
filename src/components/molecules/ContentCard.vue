@@ -5,12 +5,14 @@
 				<div class="content">
 					<div class="content__img">
 						<div class="img-container">
-							<base-icon
-								class="content__img-checkbox"
-								source="material"
-								:icon="checkboxSelector"
-								@click="checkboxHandler"
-							/>
+							<base-button design="none" class="content__img-checkbox">
+								<base-icon
+									class="content__img-checkbox"
+									source="material"
+									:icon="checkboxSelector"
+									@click="checkboxHandler"
+								/>
+							</base-button>
 
 							<div class="content__img-background-gradient" />
 
@@ -75,14 +77,14 @@ export default {
 		ContentCardMenu,
 	},
 	props: {
-		id: { type: String, default: "" },
-		description: { type: [String, Array], default: "" },
-		licenses: { type: Array, default: () => [] },
-		mimeType: { type: String, default: "" },
-		originId: { type: String, default: "" },
-		providerName: { type: String, default: "" },
-		tags: { type: Array, default: () => [] },
-		thumbnail: { type: String, default: "" },
+		// id: { type: String, default: "" },
+		// description: { type: [String, Array], default: "" },
+		// licenses: { type: Array, default: () => [] },
+		// mimeType: { type: String, default: "" },
+		// originId: { type: String, default: "" },
+		// providerName: { type: String, default: "" },
+		// tags: { type: Array, default: () => [] },
+		// thumbnail: { type: String, default: "" },
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
 	},
@@ -116,9 +118,6 @@ export default {
 			this.menuActive = !this.menuActive;
 		},
 		removeMenu() {
-			this.menuActive = false;
-		},
-		keydownRemoveMenu() {
 			this.menuActive = false;
 		},
 	},
