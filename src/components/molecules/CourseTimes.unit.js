@@ -27,11 +27,11 @@ it("Test rendering with random init data", () => {
 		},
 	});
 	//checks if every "row" has a delete button
-	expect(wrapper.findAll(".btn-delete").length).toBe(initTimes.length);
+	expect(wrapper.findAll(".btn-delete")).toHaveLength(initTimes.length);
 	//checks if every property of the object has the class ".item"
-	expect(wrapper.findAll(".item").length).toBe(initTimes.length * 4);
+	expect(wrapper.findAll(".item")).toHaveLength(initTimes.length * 4);
 	//checks the number of rows
-	expect(wrapper.findAll(".time-wrapper").length).toBe(initTimes.length);
+	expect(wrapper.findAll(".time-wrapper")).toHaveLength(initTimes.length);
 });
 
 it("Add and remove a time", () => {
@@ -51,19 +51,19 @@ it("Add and remove a time", () => {
 			"base-input": true,
 		},
 	});
-	expect(wrapper.vm.value.length).toBe(1);
+	expect(wrapper.vm.value).toHaveLength(1);
 	// Add a time
 	wrapper
 		.findAll("base-button-stub")
 		.at(1)
 		.vm.$emit("click");
-	expect(wrapper.vm.value.length).toBe(2);
+	expect(wrapper.vm.value).toHaveLength(2);
 	// Remove a time
 	wrapper
 		.findAll("base-button-stub")
 		.at(0)
 		.vm.$emit("click");
-	expect(wrapper.vm.value.length).toBe(1);
+	expect(wrapper.vm.value).toHaveLength(1);
 });
 
 // TODO: currently broken on windows

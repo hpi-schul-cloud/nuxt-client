@@ -61,7 +61,7 @@ describe("@components/BaseTextarea", () => {
 		const mockFn = jest.fn().mockImplementation(() => true);
 		const wrapper = await getMock({ destroyed: mockFn });
 		wrapper.destroy();
-		expect(mockFn.mock.calls.length).toBe(1);
+		expect(mockFn.mock.calls).toHaveLength(1);
 	});
 
 	it("some options are disabled when cursor is in Headings", async () => {

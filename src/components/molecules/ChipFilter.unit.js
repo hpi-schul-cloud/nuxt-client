@@ -14,7 +14,7 @@ describe("@components/molecules/ChipFilter", () => {
 				multiple: false,
 			},
 		});
-		expect(wrapper.props().options.length).toBe(toggleTags.length);
+		expect(wrapper.props().options).toHaveLength(toggleTags.length);
 		expect(wrapper.props().value).toBe("Aktuell");
 		expect(wrapper.props().multiple).toBe(false);
 	});
@@ -31,8 +31,8 @@ describe("@components/molecules/ChipFilter", () => {
 			},
 		});
 
-		expect(wrapper.props().options.length).toBe(filterTags.length);
-		expect(wrapper.props().value.length).toBe(0);
+		expect(wrapper.props().options).toHaveLength(filterTags.length);
+		expect(wrapper.props().value).toHaveLength(0);
 		expect(wrapper.props().multiple).toBe(true);
 	});
 
@@ -51,7 +51,7 @@ describe("@components/molecules/ChipFilter", () => {
 		expect(wrapper.exists()).toBe(true);
 		expect(wrapper.find(".chip").trigger("click"));
 		const firstEvent = wrapper.emitted("update:value")[0][0];
-		expect(firstEvent.length).toBe(1);
+		expect(firstEvent).toHaveLength(1);
 	});
 
 	it("filter chips wont get rendered if filter tags are epmty", () => {
@@ -86,7 +86,7 @@ describe("@components/molecules/ChipFilter", () => {
 		const chipText = testChip.text();
 		expect(testChip.trigger("click"));
 		const newSelection = wrapper.emitted("update:value")[0][0];
-		expect(newSelection.length).toBe(2);
+		expect(newSelection).toHaveLength(2);
 		expect(newSelection.every((chip) => !chip.includes(chipText)));
 	});
 
@@ -106,7 +106,7 @@ describe("@components/molecules/ChipFilter", () => {
 		const chipText = testChip.text();
 		expect(testChip.trigger("click"));
 		const newSelection = wrapper.emitted("update:value")[0][0];
-		expect(newSelection.length).toBe(3);
+		expect(newSelection).toHaveLength(3);
 		expect(newSelection.every((chip) => !chip.includes(chipText)));
 	});
 });

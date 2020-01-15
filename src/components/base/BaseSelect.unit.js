@@ -76,8 +76,8 @@ describe("@components/BaseSelect", () => {
 			});
 			const options = wrapper.findAll(".multiselect__option");
 			expect(
-				options.filter((w) => w.element.textContent === testOption.label).length
-			).toBe(1);
+				options.filter((w) => w.element.textContent === testOption.label)
+			).toHaveLength(1);
 		});
 	});
 
@@ -100,8 +100,8 @@ describe("@components/BaseSelect", () => {
 			});
 			const options = wrapper.findAll(".multiselect__option");
 			expect(
-				options.filter((w) => w.element.textContent === testOption.name).length
-			).toBe(1);
+				options.filter((w) => w.element.textContent === testOption.name)
+			).toHaveLength(1);
 		});
 	});
 
