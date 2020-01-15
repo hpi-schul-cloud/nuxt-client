@@ -1,6 +1,19 @@
 import { storiesOf } from "@storybook/vue";
-import { tableData, tableColumns } from "./mockData/BaseTable";
-import { text, select, boolean, color } from "@storybook/addon-knobs";
+import {
+	tableData,
+	tableColumns,
+	tableFilters,
+	tableActions,
+} from "./mockData/BaseTable";
+import {
+	text,
+	select,
+	boolean,
+	color,
+	number,
+	object,
+} from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
 import notes from "@docs/storybook/base.md";
 
 import BaseAudio from "@basecomponents/BaseAudio";
@@ -15,7 +28,7 @@ import BaseProgressbar from "@basecomponents/BaseProgressbar";
 import BaseQrCode from "@basecomponents/BaseQrCode";
 import BaseSelect from "@basecomponents/BaseSelect";
 import BaseSpinner from "@basecomponents/BaseSpinner";
-import BaseTable from "@basecomponents/BaseTable";
+import BaseTable from "@basecomponents/BaseTable/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
 
 storiesOf("Base|Base UI", module)
@@ -199,20 +212,37 @@ storiesOf("Base|Base UI", module)
 		data: () => ({
 			content: [],
 			options: [
-				{ value: 1, name: "Option 1" },
-				{ value: 2, name: "Option 2" },
-				{ value: 3, name: "Option 3" },
+				{ _id: 1, value: 1, name: "Option 1" },
+				{ _id: 2, value: 2, name: "Option 2" },
+				{ _id: 3, value: 3, name: "Option 3" },
 			],
-			optionLabel: "name",
+			closeOnSelect: boolean("closeOnSelect", false),
+			deselectLabel: text("deselectLabel", "Entfernen"),
 			label: text("label", "Label"),
+			multiple: boolean("mutiple", false),
+			optionLabel: text("optionLabel", "name"),
 			placeholder: text("placeholder", "Etwas auswählen"),
-			multiple: select("mutliple", { true: true, false: false }, false),
+			selectLabel: text("selectLabel", "Auswählen"),
+			selectedLabel: text("selectedLabel", "Aktiv"),
+			trackBy: text("trackBy", "_id"),
 		}),
 		template: `
 		<div>
 		Content: {{content}} <br/>
 		Options: {{options}} <br/>
-			<base-select v-model="content" :multiple="multiple" :options="options" :label="label" optionLabel="name" :placeholder="placeholder"/>
+			<base-select
+				v-model="content"
+				:closeOnSelect="closeOnSelect"
+				:deselectLabel="deselectLabel"
+				:label="label"
+				:multiple="multiple"
+				:options="options"
+				:optionLabel="optionLabel"
+				:placeholder="placeholder"
+				:selectLabel="selectLabel"
+				:selectedLabel="selectedLabel"
+				:trackBy="trackBy">
+			</base-select>
 		</div>`,
 		methods: {},
 	}))
@@ -232,13 +262,59 @@ storiesOf("Base|Base UI", module)
 	}))
 	.add("Base Table", () => ({
 		data: () => ({
-			data: tableData,
+			actions: tableActions,
+			backendPagination: boolean("backendPagination", false),
+			backendSorting: boolean("backendSorting", false),
 			columns: tableColumns,
+			currentPage: number("currentPage", 1),
+			data: tableData,
+			filterable: boolean("filterable", true),
+			filters: tableFilters,
+			filtersSelected: object("filtersSelected", [tableFilters[0]]),
+			paginated: boolean("paginated", true),
+			rowsPerPage: number("rowsPerPage", 5),
+			showRowSelection: boolean("showRowSelection", true),
+			selectedRows: object("selectedRows", [tableData[0]]),
+			total: number("total", 10),
+			trackBy: text("trackBy", "id"),
 		}),
 		components: { BaseTable },
+		methods: {
+			onAllRowsSelected: action("@all-rows-selected"),
+			onAllRowsOfCurrentPageSelected: action(
+				"@all-rows-of-current-page-selected"
+			),
+			onSort: action("@sort"),
+			onUpdateCurrentPage: action("@update:current-page"),
+			onUpdateFiltersSelected: action("@update:filters-selected"),
+			onUpdateRowsPerPage: action("@update:rows-per-page"),
+			onUpdateSelectedRows: action("@update:selected-rows"),
+		},
 		template: `
-			<base-table v-slot:default="slotProps" :data="data" :columns="columns">
-				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
+			<base-table v-slot:default="slotProps"
+				:actions="actions"
+				:backend-pagination="backendPagination"
+				:backend-sorting="backendSorting"
+				:columns="columns"
+				:current-page.sync="currentPage"
+				:data="data"
+				:filterable="filterable"
+				:filters="filters"
+				:filtersSelected="filtersSelected"
+				:paginated="paginated"
+				:rows-per-page.sync="rowsPerPage"
+				:showRowSelection="showRowSelection"
+				:selectedRows="selectedRows"
+				:total="total"
+				:trackBy="trackBy"
+				@all-rows-selected="onAllRowsSelected"
+				@all-rows-of-current-page-selected="onAllRowsOfCurrentPageSelected"
+				@sort="onSort"
+				@update:current-page="onUpdateCurrentPage"
+				@update:filters-selected="onUpdateFiltersSelected"
+				@update:rows-per-page="onUpdateRowsPerPage"
+				@update:selected-rows="onUpdateSelectedRows">
+					<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
 			</base-table>
 		`,
 	}))
