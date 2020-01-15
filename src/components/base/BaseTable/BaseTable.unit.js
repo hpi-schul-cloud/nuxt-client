@@ -86,15 +86,15 @@ describe("@components/BaseTable", () => {
 			wrapper
 				.find("thead tr th")
 				.html()
-				.includes("Vorname")
-		).toBe(true);
+				
+		).toContain("Vorname");
 
 		expect(
 			wrapper
 				.find("tbody tr td")
 				.html()
-				.includes("Hulk")
-		).toBe(true);
+				
+		).toContain("Hulk");
 
 		expect(
 			wrapper
@@ -102,8 +102,8 @@ describe("@components/BaseTable", () => {
 				.findAll("td")
 				.at(2)
 				.html()
-				.includes("LA")
-		).toBe(true);
+				
+		).toContain("LA");
 	});
 
 	it("The extra-column slot should add an extra column with access to the current row data", () => {
@@ -128,8 +128,8 @@ describe("@components/BaseTable", () => {
 				.findAll("td")
 				.at(4)
 				.html()
-				.includes("Hulk Hogan")
-		).toBe(true);
+				
+		).toContain("Hulk Hogan");
 	});
 
 	it("Should allow pagination", () => {
@@ -168,8 +168,8 @@ describe("@components/BaseTable", () => {
 			wrapper
 				.find("tbody tr td")
 				.html()
-				.includes("Hulk")
-		).toBe(true);
+				
+		).toContain("Hulk");
 
 		wrapper
 			.findAll(".is-sortable")
@@ -180,8 +180,8 @@ describe("@components/BaseTable", () => {
 			wrapper
 				.find("tbody tr td")
 				.html()
-				.includes("Armin")
-		).toBe(true);
+				
+		).toContain("Armin");
 	});
 
 	it("Should only sort sortable columns", () => {
@@ -191,8 +191,8 @@ describe("@components/BaseTable", () => {
 			wrapper
 				.find("tbody tr td")
 				.html()
-				.includes("Hulk")
-		).toBe(true);
+				
+		).toContain("Hulk");
 
 		wrapper
 			.findAll("th")
@@ -203,8 +203,8 @@ describe("@components/BaseTable", () => {
 			wrapper
 				.find("tbody tr td")
 				.html()
-				.includes("Hulk")
-		).toBe(true);
+				
+		).toContain("Hulk");
 	});
 
 	it("Should allow filtering the rows based on string properties", () => {

@@ -22,7 +22,7 @@ describe("@components/BaseInput", () => {
 					components: { BaseInput },
 				});
 				expect(wrapper.contains(".label")).toBe(true);
-				expect(wrapper.text().includes(testLabel)).toBe(true);
+				expect(wrapper.text()).toContain(testLabel);
 			});
 	});
 
