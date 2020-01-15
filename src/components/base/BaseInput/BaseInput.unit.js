@@ -21,9 +21,22 @@ describe("@components/BaseInput", () => {
 					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
 				});
-				expect(wrapper.contains("label")).toBe(true);
+				expect(wrapper.contains(".label")).toBe(true);
 				expect(wrapper.text().includes(testLabel)).toBe(true);
 			});
+	});
+
+	it("label of checkboxes and radio buttons can be hidden", () => {
+		const testLabel = "MyTestLabel";
+		["checkbox", "radio"].forEach((type, index) => {
+			const wrapper = mount({
+				data: () => ({ value: "" }),
+				template: `<base-input v-model="value" label="${testLabel}" label-hidden type="${type}" value="${index}"/>`,
+				components: { BaseInput },
+			});
+			expect(wrapper.contains(".label")).toBe(false);
+			expect(wrapper.find("input").attributes("aria-label")).toBe(testLabel);
+		});
 	});
 
 	it("all types are passing through attributes", () => {

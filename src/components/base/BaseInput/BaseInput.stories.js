@@ -111,6 +111,8 @@ storiesOf("Base|Inputs", module)
 		data: () => ({
 			vmodel: array("vmodel", ["a"], ", "),
 			values: array("values", ["a", "b"], ", "),
+			labels: array("labels", ["Checkbox a", "Checkbox b"], ", "),
+			labelHidden: boolean("labelHidden", false),
 		}),
 		template: `
 			<div role="group" aria-label="checkboxes">
@@ -121,7 +123,8 @@ storiesOf("Base|Inputs", module)
 					v-model="vmodel"
 					:value="value"
 					name="checkbox"
-					:label="'Checkbox - ' + value"
+					:label="labels[i]"
+					:labelHidden="labelHidden"
 				/>
 				<p> {{ vmodel.join(", ")}} </p>
 			</div>
@@ -151,6 +154,8 @@ storiesOf("Base|Inputs", module)
 		data: () => ({
 			vmodel: text("vmodel", "a"),
 			values: array("values", ["a", "b"], ", "),
+			labels: array("labels", ["Radio a", "Radio b"], ", "),
+			labelHidden: boolean("labelHidden", false),
 		}),
 		template: `
 			<div role="group" aria-label="checkboxes">
@@ -161,7 +166,8 @@ storiesOf("Base|Inputs", module)
 					v-model="vmodel"
 					:value="value"
 					name="radio"
-					:label="'Radio - ' + value"
+					:label="labels[i]"
+					:labelHidden="labelHidden"
 				/>
 				<p> {{ vmodel}} </p>
 			</div>
