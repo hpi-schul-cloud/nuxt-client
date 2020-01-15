@@ -4,11 +4,11 @@
 
 ## Umgebungsvariablen (ENV-Variables)
 
-For convenience, you can set enviroment variables using a `.env` ([dotenv](https://www.npmjs.com/package/dotenv)) file in the root folder. All defined variablea will be available in `process.env[VARIABLE]`. Whis will speed up your workflow, because you no longer need to define all variables everytime you spin up the project.
+For convenience, you can set enviroment variables using a `.env` ([dotenv](https://www.npmjs.com/package/dotenv)) file in the root folder. All defined variables will be available in `process.env[VARIABLE]`. This will speed up your workflow, because you no longer need to define all variables every time you spin up the project.
 
 :::tip
 
-The `.env` file will never gets commited to Github. Feel free to use. :wink:
+The `.env` file will never get commited to Github. Feel free to use it. :wink:
 
 :::
 

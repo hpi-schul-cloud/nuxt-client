@@ -9,8 +9,14 @@ All Generated files can be fount at: `./dist/*`
 ## Nuxt Client
 
 ```bash
-npm run build:legacy
 npm run build:nuxt
+npm run start:nuxt
+```
+
+or using the docker bash script
+
+```bash
+bash ./startup.sh
 ```
 
 Output Directory: `./dist/nuxt`

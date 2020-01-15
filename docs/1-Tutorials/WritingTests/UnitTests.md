@@ -1,10 +1,8 @@
-# Tests schreiben
+# Unit-Tests
 
 [[toc]]
 
-## Unit-Tests
-
-### Dokumentation
+## Dokumentation
 
 Für das Unit-Testing verwenden wir [jest](https://jestjs.io/docs/en/using-matchers) mit den [vue-test-utils](https://vue-test-utils.vuejs.org/guides/#getting-started).
 
@@ -16,7 +14,7 @@ Zusätzlich haben wir einige global verfügbare Matcher eingeführt.
 
 Für die Häufigsten Tests gibt es ebenfalls Hilfsfunktionen. Zu finden unter [`/tests/unit/commonTests.js`](https://github.com/schul-cloud/nuxt-client/blob/develop/tests/unit/commonTests.js)
 
-### Development Script
+## Development Script
 
 Zum schreiben von unit-tests ist es empfehlenswert mit folgendem Kommando zu starten:
 
@@ -26,14 +24,14 @@ npm run test:unit:watch
 
 Anschließend werden die entsprechenden Tests die geändert wurden automatisch geprüft.
 
-#### Debugging von Tests
+### Debugging von Tests
 
 Für Visual Studio Code liegen Debug Konfigurationen Bereit (`.vscode/launch.json`). Wenn die Tests mit diesen gestartet werden, können Breakpoints gesetzt werden und der Test mit allen VS-Code debug features debuggt werden.
 
 - `Test (unit) All`: Lässt alle Unit Tests nacheinander laufen und hält an entsprechenden Breakpoints an.
 - `Test (unit) Current File`: Lässt alle Tests in der aktuell fokussierten Datei laufen und stoppt an entsprechenden Breakpoints.
 
-### Beispieltests
+## Beispieltests
 
 ```js
 // Importieren der zu testenden Komponente
@@ -63,7 +61,7 @@ describe("@components/BaseCard", () => {
 });
 ```
 
-#### Common tests
+### Common tests
 
 Die soeben beschriebenen Tests werden so häufig verwendet, dass wir sie ausgelagert haben. Die Nutzung ist folgendermaßen möglich:
 
@@ -76,7 +74,7 @@ describe("@components/BaseCard", () => {
 });
 ```
 
-#### Test `v-model`
+### Test `v-model`
 
 Soll das `v-model` einer Komponente getestet werden, so kann die Komponente nicht direkt gemountet werden, sondern muss per template eingebunden werden. Die Vue-Test-Utils stellen leider keine bessere Möglichkeit bereit. Das setzen der für das v-model verwendeten Prop klappt leider nicht, da der verwendete Wert nicht automatisch durch das `v-model-update-event` verändert wird.
 
@@ -102,7 +100,3 @@ describe("@components/BaseInput", () => {
 	});
 });
 ```
-
-## e2e-Tests
-
-Integration Tests werden in einem seperaten Repo [schul-cloud/integration-tests](https://github.com/schul-cloud/integration-tests) entwickelt. Aktuell ist dieses Projekt jedoch noch nicht in den Workflow integriert. Eine [Liste an zu testenden Funktionen ist hier zu zu finden](https://docs.schul-cloud.org/pages/viewpage.action?spaceKey=Intern&title=Integrationstest+Status).

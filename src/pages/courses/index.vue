@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<chip-filter :value.sync="activeToggle" :options="toggleTags" />
 		<floating-fab icon="add" to="/courses/create" />
 		<courses-grid :courses="courses"></courses-grid>
 	</div>
@@ -8,17 +9,33 @@
 <script>
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
+import ChipFilter from "@components/molecules/ChipFilter";
 import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
+	layout: "loggedInFull",
 	components: {
 		CoursesGrid,
+		ChipFilter,
 		FloatingFab,
+	},
+	data() {
+		return {
+			toggleTags: ["Aktuell", "Archiviert"],
+			activeToggle: "Aktuell",
+		};
 	},
 	computed: {
 		...mapGetters("courses", {
 			courses: "list",
 		}),
+		filteredCourses() {
+			if (this.activeToggle === "Aktuell") {
+				return this.courses.filter((course) => !course.isArchived);
+			} else {
+				return this.courses.filter((course) => course.isArchived);
+			}
+		},
 	},
 	created(ctx) {
 		this.find();

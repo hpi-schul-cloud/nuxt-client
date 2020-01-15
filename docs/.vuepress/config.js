@@ -14,7 +14,7 @@ function extractName(filepath) {
 	} else {
 		name = filepath.replace(/^.*[\\\/]/, "");
 	}
-	name = name.replace(/[0-9]+/, "");
+	name = name.replace(/^[0-9]+/, "");
 	return _.startCase(name);
 }
 
