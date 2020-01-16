@@ -28,7 +28,7 @@ describe("@components/organisms/Pagination", () => {
 		const wrapper = getFirstPageWrapper();
 		const currentPageAnchor = wrapper.find(".current");
 		expect(currentPageAnchor.text()).toBe("1");
-		expect(wrapper.findAll(".pagination-link-wrapper").length).toBe(2);
+		expect(wrapper.findAll(".pagination-link-wrapper")).toHaveLength(2);
 		expect(
 			wrapper
 				.findAll(".pagination-link-wrapper")
@@ -41,7 +41,7 @@ describe("@components/organisms/Pagination", () => {
 		const wrapper = getLastPageWrapper();
 		const currentPageAnchor = wrapper.find(".current");
 		expect(currentPageAnchor.text()).toBe("2");
-		expect(wrapper.findAll(".pagination-link").length).toBe(2);
+		expect(wrapper.findAll(".pagination-link")).toHaveLength(2);
 		expect(
 			wrapper
 				.findAll(".pagination-link")

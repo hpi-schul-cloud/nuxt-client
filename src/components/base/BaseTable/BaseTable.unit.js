@@ -78,8 +78,8 @@ describe("@components/BaseTable", () => {
 	it("Passing the columns and data should render the table. Nested properties should be possible.", () => {
 		var wrapper = getWrapper();
 
-		expect(wrapper.findAll("tbody tr").length).toBe(5);
-		expect(wrapper.find("thead tr").findAll("th").length).toBe(4);
+		expect(wrapper.findAll("tbody tr")).toHaveLength(5);
+		expect(wrapper.find("thead tr").findAll("th")).toHaveLength(4);
 		expect(wrapper.find("tbody tr").contains("td")).toBe(true);
 
 		expect(
@@ -120,7 +120,7 @@ describe("@components/BaseTable", () => {
 			components: { BaseTable },
 		});
 
-		expect(wrapper.findAll("tbody tr").length).toBe(5);
+		expect(wrapper.findAll("tbody tr")).toHaveLength(5);
 
 		expect(
 			wrapper
@@ -151,14 +151,14 @@ describe("@components/BaseTable", () => {
 			components: { BaseTable },
 		});
 
-		expect(wrapper.findAll("tbody tr").length).toBe(3);
+		expect(wrapper.findAll("tbody tr")).toHaveLength(3);
 
 		wrapper
 			.findAll(".pagination-link-wrapper a")
 			.at(1)
 			.trigger("click");
 
-		expect(wrapper.findAll("tbody tr").length).toBe(2);
+		expect(wrapper.findAll("tbody tr")).toHaveLength(2);
 	});
 
 	it("Should sort the data", () => {
@@ -344,7 +344,7 @@ describe("@components/BaseTable", () => {
 			openFilterModal(wrapper);
 			submitFilterModal(wrapper);
 			expect(wrapper.vm.newFiltersSelected[0].value).toEqual(filter.value);
-			expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+			expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(1);
 			let expectedTagLabel;
 			if (["number", "text"].includes(filter.type)) {
 				expectedTagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
@@ -384,7 +384,7 @@ describe("@components/BaseTable", () => {
 
 			wrapper.find(".multiselect__tag-icon").trigger("mousedown");
 
-			expect(wrapper.emitted()["update:filters-selected"].length).toBe(2);
+			expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(2);
 			expect(wrapper.emitted()["update:filters-selected"][1]).toEqual([[]]);
 
 			openFilterModal(wrapper);
@@ -394,7 +394,7 @@ describe("@components/BaseTable", () => {
 			const filterMenu = wrapper.find(MultiSelect);
 			filterMenu.vm.select(filter);
 
-			expect(wrapper.emitted()["update:filters-selected"].length).toBe(4);
+			expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(4);
 			expect(wrapper.emitted()["update:filters-selected"][1]).toEqual([[]]);
 		});
 	});
@@ -419,7 +419,7 @@ describe("@components/BaseTable", () => {
 						expect(wrapper.vm.newFiltersSelected[0].matchingType.label).toEqual(
 							matchingType.label
 						);
-						expect(wrapper.emitted()["update:filters-selected"].length).toBe(
+						expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(
 							index + 1
 						);
 						let expectedFilterValue = filter.value;
@@ -518,7 +518,7 @@ describe("@components/BaseTable", () => {
 						expect(wrapper.vm.newFiltersSelected[0].value).toEqual(
 							newFilterValue
 						);
-						expect(wrapper.emitted()["update:filters-selected"].length).toBe(
+						expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(
 							index + 1
 						);
 						expect(wrapper.emitted()["update:filters-selected"][index]).toEqual(
@@ -547,7 +547,7 @@ describe("@components/BaseTable", () => {
 					expect(wrapper.vm.newFiltersSelected[0].value).toEqual(
 						newFilterValue
 					);
-					expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+					expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(1);
 					expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
 						[
 							{
@@ -574,7 +574,7 @@ describe("@components/BaseTable", () => {
 					expect(wrapper.vm.newFiltersSelected[0].value[0].checked).toEqual(
 						true
 					);
-					expect(wrapper.emitted()["update:filters-selected"].length).toBe(1);
+					expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(1);
 					expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
 						[
 							{
@@ -610,7 +610,7 @@ describe("@components/BaseTable", () => {
 		openFilterModal(wrapper, testFilters[1]);
 		submitFilterModal(wrapper);
 
-		expect(wrapper.emitted()["update:filters-selected"].length).toBe(2);
+		expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(2);
 	});
 
 	it("allows to select and unselect a row", () => {
@@ -641,12 +641,12 @@ describe("@components/BaseTable", () => {
 		allRowsSelection.setChecked();
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
 
-		expect(wrapper.emitted()["update:selected-rows"].length).toBe(1);
+		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(1);
 		expect(wrapper.emitted()["update:selected-rows"][0]).toEqual([
 			data.slice(0, 2),
 		]);
 
-		expect(wrapper.emitted()["all-rows-of-current-page-selected"].length).toBe(
+		expect(wrapper.emitted()["all-rows-of-current-page-selected"]).toHaveLength(
 			1
 		);
 		expect(wrapper.emitted()["all-rows-of-current-page-selected"][0]).toEqual([
@@ -656,10 +656,10 @@ describe("@components/BaseTable", () => {
 		allRowsSelection.setChecked(false);
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 
-		expect(wrapper.emitted()["update:selected-rows"].length).toBe(2);
+		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
 		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
 
-		expect(wrapper.emitted()["all-rows-of-current-page-selected"].length).toBe(
+		expect(wrapper.emitted()["all-rows-of-current-page-selected"]).toHaveLength(
 			2
 		);
 		expect(wrapper.emitted()["all-rows-of-current-page-selected"][1]).toEqual([
@@ -708,10 +708,10 @@ describe("@components/BaseTable", () => {
 
 		expect(wrapper.vm.allRowsOfAllPagesSelected).toBe(true);
 
-		expect(wrapper.emitted()["update:selected-rows"].length).toBe(2);
+		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
 		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([data]);
 
-		expect(wrapper.emitted()["all-rows-selected"].length).toBe(1);
+		expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
 		expect(wrapper.emitted()["all-rows-selected"][0]).toEqual([data]);
 	});
 
@@ -731,10 +731,10 @@ describe("@components/BaseTable", () => {
 		wrapper.find(".dropdown li").trigger("click");
 		expect(testAction).toHaveBeenCalled();
 
-		expect(wrapper.emitted()["update:selected-rows"].length).toBe(2);
+		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
 		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
 
-		expect(wrapper.emitted()["all-rows-selected"].length).toBe(1);
+		expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
 		expect(wrapper.emitted()["all-rows-selected"][0]).toEqual([[]]);
 	});
 
@@ -798,10 +798,10 @@ describe("@components/BaseTable", () => {
 
 	it("paginates its rows", () => {
 		var wrapper = getWrapper({ paginated: true, rowsPerPage: 2 });
-		expect(wrapper.vm.visibleRows.length).toBe(2);
+		expect(wrapper.vm.visibleRows).toHaveLength(2);
 
 		wrapper.setProps({ rowsPerPage: 3 });
-		expect(wrapper.vm.visibleRows.length).toBe(3);
+		expect(wrapper.vm.visibleRows).toHaveLength(3);
 	});
 
 	it("passes computed value to total prop of subcomponents when backend pagination is disabled", () => {

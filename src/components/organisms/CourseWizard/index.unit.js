@@ -27,8 +27,8 @@ describe("@components/organisms/CourseWizard", () => {
 		expect(wrapper.find("step-members-stub").isVisible()).toBe(false);
 		expect(wrapper.find("step-done-stub").isVisible()).toBe(false);
 		expect(
-			wrapper.find(".step-wrapper").findAll("base-button-stub").length
-		).toBe(1);
+			wrapper.find(".step-wrapper").findAll("base-button-stub")
+		).toHaveLength(1);
 	});
 
 	it("Test click next step", () => {
@@ -60,7 +60,7 @@ describe("@components/organisms/CourseWizard", () => {
 		});
 
 		expect(wrapper.vm.currentStep).toBe(0);
-		expect(wrapper.findAll("base-button-stub").length).toBe(1);
+		expect(wrapper.findAll("base-button-stub")).toHaveLength(1);
 		//find button next step, click next
 		wrapper
 			.findAll("base-button-stub")
@@ -68,7 +68,7 @@ describe("@components/organisms/CourseWizard", () => {
 			.vm.$emit("click");
 		expect(wrapper.vm.currentStep).toBe(1);
 		//has buttons: "Zurück", "Überspringen", "Weiter"
-		expect(wrapper.findAll("base-button-stub").length).toBe(3);
+		expect(wrapper.findAll("base-button-stub")).toHaveLength(3);
 
 		//find button next step, click next
 		wrapper
@@ -77,7 +77,7 @@ describe("@components/organisms/CourseWizard", () => {
 			.vm.$emit("click");
 		expect(wrapper.vm.currentStep).toBe(2);
 		//has buttons: "Zurück", "Weiter"
-		expect(wrapper.findAll("base-button-stub").length).toBe(2);
+		expect(wrapper.findAll("base-button-stub")).toHaveLength(2);
 
 		// //find button step back, click back
 		wrapper
