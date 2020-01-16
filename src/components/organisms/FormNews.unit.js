@@ -194,7 +194,7 @@ describe("@components/FormNews", () => {
 
 			wrapper.trigger("submit");
 			expect(toastStubs.success.called).toBe(false); // no success message expected
-			expect(errorOutput.includes(errorMessage)).toBe(true); // but error log
+			expect(errorOutput).toContain(errorMessage); // but error log
 			expect(toastStubs.error.called).toBe(true); // and info toast
 		});
 	});
@@ -262,7 +262,7 @@ describe("@components/FormNews", () => {
 
 			wrapper.trigger("submit");
 			expect(toastStubs.success.called).toBe(false); // no success message expected
-			expect(errorOutput.includes(errorMessage)).toBe(true); // but error log
+			expect(errorOutput).toContain(errorMessage); // but error log
 			expect(toastStubs.error.called).toBe(true); // and info toast
 		});
 	});
@@ -320,7 +320,7 @@ describe("@components/FormNews", () => {
 
 			expect(routerPushSpy.called).toBe(false); // no navigation
 			expect(toastStubs.success.called).toBe(false); // or success message
-			expect(errorOutput.includes(errorMessage)).toBe(true); // but error log
+			expect(errorOutput).toContain(errorMessage); // but error log
 			expect(toastStubs.error.called).toBe(true); // and info toast
 		});
 	});

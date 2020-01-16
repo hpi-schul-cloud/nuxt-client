@@ -30,7 +30,6 @@ module.exports = {
 				// But they should be removed here ASAP.
 				// https://github.com/jest-community/eslint-plugin-jest
 				"jest/prefer-spy-on": "off",
-				"jest/prefer-to-contain": "off",
 				"jest/prefer-strict-equal": "off",
 				"jest/no-truthy-falsy": "off",
 				"jest/no-test-return-statement": "off",

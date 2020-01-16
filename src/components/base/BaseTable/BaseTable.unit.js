@@ -82,19 +82,9 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.find("thead tr").findAll("th")).toHaveLength(4);
 		expect(wrapper.find("tbody tr").contains("td")).toBe(true);
 
-		expect(
-			wrapper
-				.find("thead tr th")
-				.html()
-				.includes("Vorname")
-		).toBe(true);
+		expect(wrapper.find("thead tr th").html()).toContain("Vorname");
 
-		expect(
-			wrapper
-				.find("tbody tr td")
-				.html()
-				.includes("Hulk")
-		).toBe(true);
+		expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
 
 		expect(
 			wrapper
@@ -102,8 +92,7 @@ describe("@components/BaseTable", () => {
 				.findAll("td")
 				.at(2)
 				.html()
-				.includes("LA")
-		).toBe(true);
+		).toContain("LA");
 	});
 
 	it("The extra-column slot should add an extra column with access to the current row data", () => {
@@ -128,8 +117,7 @@ describe("@components/BaseTable", () => {
 				.findAll("td")
 				.at(4)
 				.html()
-				.includes("Hulk Hogan")
-		).toBe(true);
+		).toContain("Hulk Hogan");
 	});
 
 	it("Should allow pagination", () => {
@@ -164,47 +152,27 @@ describe("@components/BaseTable", () => {
 	it("Should sort the data", () => {
 		var wrapper = getWrapper();
 
-		expect(
-			wrapper
-				.find("tbody tr td")
-				.html()
-				.includes("Hulk")
-		).toBe(true);
+		expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
 
 		wrapper
 			.findAll(".is-sortable")
 			.at(0)
 			.trigger("click");
 
-		expect(
-			wrapper
-				.find("tbody tr td")
-				.html()
-				.includes("Armin")
-		).toBe(true);
+		expect(wrapper.find("tbody tr td").html()).toContain("Armin");
 	});
 
 	it("Should only sort sortable columns", () => {
 		var wrapper = getWrapper();
 
-		expect(
-			wrapper
-				.find("tbody tr td")
-				.html()
-				.includes("Hulk")
-		).toBe(true);
+		expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
 
 		wrapper
 			.findAll("th")
 			.at(2)
 			.trigger("click");
 
-		expect(
-			wrapper
-				.find("tbody tr td")
-				.html()
-				.includes("Hulk")
-		).toBe(true);
+		expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
 	});
 
 	it("Should allow filtering the rows based on string properties", () => {
