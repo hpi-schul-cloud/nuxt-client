@@ -11,7 +11,7 @@ describe("@components/BaseInputRadio", () => {
 				vmodel: "test",
 			},
 		});
-		expect(wrapper.find("input[type='radio']").exists()).toBeTruthy();
+		expect(wrapper.find("input[type='radio']").exists()).toBe(true);
 	});
 
 	it(`input updates v-model`, () => {
@@ -43,10 +43,10 @@ describe("@components/BaseInputRadio", () => {
 			components: { BaseInput },
 		});
 
-		expect(wrapper.find("input[value=b]:checked")).toBeTruthy();
+		expect(wrapper.find("input[value=b]:checked").exists()).toBe(true);
 		wrapper.setData({ value: "a" });
-		expect(wrapper.find("input[value=a]:checked")).toBeTruthy();
+		expect(wrapper.find("input[value=a]:checked").exists()).toBe(true);
 		wrapper.setData({ value: "b" });
-		expect(wrapper.find("input[value=b]:checked")).toBeTruthy();
+		expect(wrapper.find("input[value=b]:checked").exists()).toBe(true);
 	});
 });

@@ -13,7 +13,7 @@ describe("@components/BaseInputHidden", () => {
 			});
 			const input = wrapper.find(`input`);
 			expect(input.element.value).toBe(mockText);
-			expect(input.isVisible()).toBeFalsy();
+			expect(input.isVisible()).toBe(false);
 		});
 	});
 });

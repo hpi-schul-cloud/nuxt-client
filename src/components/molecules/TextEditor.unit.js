@@ -139,7 +139,7 @@ describe("@components/BaseTextarea", () => {
 
 		expect(undoStub.called).toBe(true);
 		expect(toastStub.called).toBe(true);
-		expect(wrapper.emitted().update).toBeFalsy();
+		expect(wrapper.emitted("update")).toBeUndefined();
 	});
 
 	it("emits update for valid content", async () => {

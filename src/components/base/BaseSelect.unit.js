@@ -128,16 +128,16 @@ describe("@components/BaseSelect", () => {
 			},
 		});
 		const multiSelect = wrapper.find("multi-select-stub");
-		expect(multiSelect.attributes("closeonselect")).toBeTruthy();
+		expect(multiSelect.attributes("closeonselect")).toBe("true");
 		expect(multiSelect.attributes("deselectlabel")).toBe("deselectLabel");
-		expect(multiSelect.attributes("multiple")).toBeTruthy();
+		expect(multiSelect.attributes("multiple")).toBe("true");
 		expect(multiSelect.attributes("label")).toBe("optionLabel");
-		expect(multiSelect.props("options")).toStrictEqual(options);
+		expect(multiSelect.props("options")).toStrictEqual(options); // TODO: this doesn't seem testing anything except the render method
 		expect(multiSelect.attributes("placeholder")).toBe("placeholder");
 		expect(multiSelect.attributes("selectlabel")).toBe("selectLabel");
 		expect(multiSelect.attributes("selectedlabel")).toBe("selectedLabel");
 		expect(multiSelect.attributes("trackby")).toBe("id");
-		expect(multiSelect.props("value")).toStrictEqual(options);
+		expect(multiSelect.props("value")).toStrictEqual(options); // TODO: this doesn't seem testing anything except the render method
 	});
 
 	it("emits events", () => {
