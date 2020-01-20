@@ -1,7 +1,7 @@
 <template>
 	<div class="card">
 		<div class="card-body">
-	    <img :src="image" class="image" />
+	    <img :src="image" class="image" alt="Datensource Logo" />
       <div class="card-heading">
 			  <div class="card-title">{{ title }}</div>
 			  <div class="subtitle">{{ subtitle }}</div>
