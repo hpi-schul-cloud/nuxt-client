@@ -41,7 +41,7 @@ describe("@components/legacy/TheTopBar", () => {
 		expect(wrapper.findAll("popup-icon-stub")).toHaveLength(1);
 		expect(wrapper.findAll("button")).toHaveLength(1);
 		wrapper.find("button").trigger("click");
-		expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
+		expect(wrapper.emitted("action")[0]).toStrictEqual(["light-camera"]);
 		expect(wrapper.findAll(".item")).toHaveLength(4);
 	});
 	it("can switch to fullscreen mode", () => {
@@ -52,7 +52,7 @@ describe("@components/legacy/TheTopBar", () => {
 		});
 
 		wrapper.find(".fullscreen-button").trigger("click");
-		expect(wrapper.emitted().action[0]).toEqual(["fullscreen"]);
+		expect(wrapper.emitted().action[0]).toStrictEqual(["fullscreen"]);
 
 		expect(wrapper.findAll(".item")).toHaveLength(0);
 		expect(wrapper.findAll(".top-sidebar")).toHaveLength(0);

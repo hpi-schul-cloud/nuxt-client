@@ -54,14 +54,14 @@ describe("@components/organisms/Pagination", () => {
 		const wrapper = getFirstPageWrapper();
 		const nextPageLink = wrapper.findAll(".pagination-link").at(1);
 		nextPageLink.trigger("click");
-		expect(wrapper.emitted()["update:current-page"]).toEqual([[2]]);
+		expect(wrapper.emitted()["update:current-page"]).toStrictEqual([[2]]);
 	});
 
 	it("emits update:current-page when previous page link is clicked", () => {
 		const wrapper = getLastPageWrapper();
 		const previousPageLink = wrapper.find(".pagination-link");
 		previousPageLink.trigger("click");
-		expect(wrapper.emitted()["update:current-page"]).toEqual([[1]]);
+		expect(wrapper.emitted()["update:current-page"]).toStrictEqual([[1]]);
 	});
 
 	it("emits update:per-page when new perPage value is selected", () => {
@@ -74,7 +74,7 @@ describe("@components/organisms/Pagination", () => {
 		const perPageSelect = wrapper.find(MultiSelect);
 		const secondOption = perPageSelect.vm.options[2];
 		perPageSelect.vm.select(secondOption);
-		expect(wrapper.emitted()["update:per-page"]).toEqual([
+		expect(wrapper.emitted()["update:per-page"]).toStrictEqual([
 			[secondOption.value],
 		]);
 	});

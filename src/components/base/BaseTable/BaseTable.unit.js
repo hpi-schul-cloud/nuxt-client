@@ -281,7 +281,7 @@ describe("@components/BaseTable", () => {
 	it("updates its filters when filtersSelected property is changed", () => {
 		const wrapper = getShallowWrapper({ filterable: true });
 
-		expect(wrapper.vm.newFiltersSelected).toEqual([]);
+		expect(wrapper.vm.newFiltersSelected).toStrictEqual([]);
 
 		const newFilters = [
 			{
@@ -297,7 +297,7 @@ describe("@components/BaseTable", () => {
 		];
 
 		wrapper.setProps({ filtersSelected: newFilters });
-		expect(wrapper.vm.newFiltersSelected).toEqual(newFilters);
+		expect(wrapper.vm.newFiltersSelected).toStrictEqual(newFilters);
 	});
 
 	it("allows to set filters", () => {
@@ -311,7 +311,9 @@ describe("@components/BaseTable", () => {
 
 			openFilterModal(wrapper);
 			submitFilterModal(wrapper);
-			expect(wrapper.vm.newFiltersSelected[0].value).toEqual(filter.value);
+			expect(wrapper.vm.newFiltersSelected[0].value).toStrictEqual(
+				filter.value
+			);
 			expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(1);
 			let expectedTagLabel;
 			if (["number", "text"].includes(filter.type)) {
@@ -328,7 +330,7 @@ describe("@components/BaseTable", () => {
 			} else if (filter.type === "select") {
 				expectedTagLabel = `${filter.label}: ${filter.value[0].value}`;
 			}
-			expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+			expect(wrapper.emitted()["update:filters-selected"][0]).toStrictEqual([
 				[
 					{
 						...filter,
@@ -353,7 +355,9 @@ describe("@components/BaseTable", () => {
 			wrapper.find(".multiselect__tag-icon").trigger("mousedown");
 
 			expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(2);
-			expect(wrapper.emitted()["update:filters-selected"][1]).toEqual([[]]);
+			expect(wrapper.emitted()["update:filters-selected"][1]).toStrictEqual([
+				[],
+			]);
 
 			openFilterModal(wrapper);
 			submitFilterModal(wrapper);
@@ -363,7 +367,9 @@ describe("@components/BaseTable", () => {
 			filterMenu.vm.select(filter);
 
 			expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(4);
-			expect(wrapper.emitted()["update:filters-selected"][1]).toEqual([[]]);
+			expect(wrapper.emitted()["update:filters-selected"][1]).toStrictEqual([
+				[],
+			]);
 		});
 	});
 
@@ -381,12 +387,12 @@ describe("@components/BaseTable", () => {
 						openFilterModal(wrapper);
 						selectMatchingType(wrapper, matchingType.value);
 						submitFilterModal(wrapper);
-						expect(wrapper.vm.newFiltersSelected[0].matchingType.value).toEqual(
-							matchingType.value
-						);
-						expect(wrapper.vm.newFiltersSelected[0].matchingType.label).toEqual(
-							matchingType.label
-						);
+						expect(
+							wrapper.vm.newFiltersSelected[0].matchingType.value
+						).toStrictEqual(matchingType.value);
+						expect(
+							wrapper.vm.newFiltersSelected[0].matchingType.label
+						).toStrictEqual(matchingType.label);
 						expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(
 							index + 1
 						);
@@ -401,17 +407,17 @@ describe("@components/BaseTable", () => {
 								}
 							);
 						}
-						expect(wrapper.emitted()["update:filters-selected"][index]).toEqual(
+						expect(
+							wrapper.emitted()["update:filters-selected"][index]
+						).toStrictEqual([
 							[
-								[
-									{
-										...filter,
-										matchingType,
-										tagLabel: `${filter.label} ${matchingType.label} ${expectedFilterValue}`,
-									},
-								],
-							]
-						);
+								{
+									...filter,
+									matchingType,
+									tagLabel: `${filter.label} ${matchingType.label} ${expectedFilterValue}`,
+								},
+							],
+						]);
 					}
 				);
 			}
@@ -483,26 +489,26 @@ describe("@components/BaseTable", () => {
 
 						submitFilterModal(wrapper);
 
-						expect(wrapper.vm.newFiltersSelected[0].value).toEqual(
+						expect(wrapper.vm.newFiltersSelected[0].value).toStrictEqual(
 							newFilterValue
 						);
 						expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(
 							index + 1
 						);
-						expect(wrapper.emitted()["update:filters-selected"][index]).toEqual(
+						expect(
+							wrapper.emitted()["update:filters-selected"][index]
+						).toStrictEqual([
 							[
-								[
-									{
-										...filter,
-										matchingType,
-										value: newFilterValue,
-										tagLabel: `${filter.label} ${matchingType.label} ${expectedFilterValue}`,
-									},
-								],
-							]
-						);
+								{
+									...filter,
+									matchingType,
+									value: newFilterValue,
+									tagLabel: `${filter.label} ${matchingType.label} ${expectedFilterValue}`,
+								},
+							],
+						]);
 						const tag = wrapper.find(".multiselect__tag span");
-						expect(tag.text()).toEqual(
+						expect(tag.text()).toStrictEqual(
 							`${filter.label} ${matchingType.label} ${expectedFilterValue}`
 						);
 					}
@@ -512,21 +518,25 @@ describe("@components/BaseTable", () => {
 					const multiSelectInput = wrapper.find(".multiselect__input");
 					multiSelectInput.setValue(newFilterValue);
 					multiSelectInput.trigger("keypress.enter");
-					expect(wrapper.vm.newFiltersSelected[0].value).toEqual(
+					expect(wrapper.vm.newFiltersSelected[0].value).toStrictEqual(
 						newFilterValue
 					);
 					expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(1);
-					expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+					expect(wrapper.emitted()["update:filters-selected"][0]).toStrictEqual(
 						[
-							{
-								...filter,
-								value: newFilterValue,
-								tagLabel: `Volltextsuche nach: ${newFilterValue}`,
-							},
-						],
-					]);
+							[
+								{
+									...filter,
+									value: newFilterValue,
+									tagLabel: `Volltextsuche nach: ${newFilterValue}`,
+								},
+							],
+						]
+					);
 					const tag = wrapper.find(".multiselect__tag span");
-					expect(tag.text()).toEqual(`Volltextsuche nach: ${newFilterValue}`);
+					expect(tag.text()).toStrictEqual(
+						`Volltextsuche nach: ${newFilterValue}`
+					);
 				}
 				if (filter.type === "select") {
 					const filterValue = filter.value.filter(
@@ -539,27 +549,31 @@ describe("@components/BaseTable", () => {
 					checkbox.setChecked();
 
 					submitFilterModal(wrapper);
-					expect(wrapper.vm.newFiltersSelected[0].value[0].checked).toEqual(
-						true
-					);
+					expect(
+						wrapper.vm.newFiltersSelected[0].value[0].checked
+					).toStrictEqual(true);
 					expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(1);
-					expect(wrapper.emitted()["update:filters-selected"][0]).toEqual([
+					expect(wrapper.emitted()["update:filters-selected"][0]).toStrictEqual(
 						[
-							{
-								...filter,
-								value: [
-									{
-										...filter.value[0],
-										value: newFilterValue,
-										checked: true,
-									},
-								],
-								tagLabel: `${filter.label}: ${newFilterValue}`,
-							},
-						],
-					]);
+							[
+								{
+									...filter,
+									value: [
+										{
+											...filter.value[0],
+											value: newFilterValue,
+											checked: true,
+										},
+									],
+									tagLabel: `${filter.label}: ${newFilterValue}`,
+								},
+							],
+						]
+					);
 					const tag = wrapper.find(".multiselect__tag span");
-					expect(tag.text()).toEqual(`${filter.label}: ${newFilterValue}`);
+					expect(tag.text()).toStrictEqual(
+						`${filter.label}: ${newFilterValue}`
+					);
 				}
 			}
 		});
@@ -589,13 +603,15 @@ describe("@components/BaseTable", () => {
 
 		expect(wrapper.find("tbody tr").classes()).toContain("selected");
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-		expect(wrapper.emitted()["update:selected-rows"][0]).toEqual([[data[0]]]);
+		expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
+			[data[0]],
+		]);
 
 		rowSelection.setChecked(false);
 
 		expect(wrapper.find("tbody tr").classes()).not.toContain("selected");
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
+		expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
 	});
 
 	it("allows to select and unselect all rows of current page", () => {
@@ -610,29 +626,29 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
 
 		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(1);
-		expect(wrapper.emitted()["update:selected-rows"][0]).toEqual([
+		expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
 			data.slice(0, 2),
 		]);
 
 		expect(wrapper.emitted()["all-rows-of-current-page-selected"]).toHaveLength(
 			1
 		);
-		expect(wrapper.emitted()["all-rows-of-current-page-selected"][0]).toEqual([
-			data.slice(0, 2),
-		]);
+		expect(
+			wrapper.emitted()["all-rows-of-current-page-selected"][0]
+		).toStrictEqual([data.slice(0, 2)]);
 
 		allRowsSelection.setChecked(false);
 		expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 
 		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
+		expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
 
 		expect(wrapper.emitted()["all-rows-of-current-page-selected"]).toHaveLength(
 			2
 		);
-		expect(wrapper.emitted()["all-rows-of-current-page-selected"][1]).toEqual([
-			[],
-		]);
+		expect(
+			wrapper.emitted()["all-rows-of-current-page-selected"][1]
+		).toStrictEqual([[]]);
 	});
 
 	it("allows to select and unselect all rows of current page manually", () => {
@@ -677,10 +693,10 @@ describe("@components/BaseTable", () => {
 		expect(wrapper.vm.allRowsOfAllPagesSelected).toBe(true);
 
 		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([data]);
+		expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([data]);
 
 		expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
-		expect(wrapper.emitted()["all-rows-selected"][0]).toEqual([data]);
+		expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([data]);
 	});
 
 	it("can trigger an action on selected rows", () => {
@@ -700,10 +716,10 @@ describe("@components/BaseTable", () => {
 		expect(testAction).toHaveBeenCalled();
 
 		expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-		expect(wrapper.emitted()["update:selected-rows"][1]).toEqual([[]]);
+		expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
 
 		expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
-		expect(wrapper.emitted()["all-rows-selected"][0]).toEqual([[]]);
+		expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([[]]);
 	});
 
 	it("does not change row selection when new rows are added", () => {

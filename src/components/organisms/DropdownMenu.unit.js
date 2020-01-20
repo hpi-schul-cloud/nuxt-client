@@ -60,6 +60,6 @@ describe("@components/organisms/DropdownMenu", () => {
 			},
 		});
 		wrapper.find("li").trigger("click");
-		expect(wrapper.emitted().input).toEqual([[item]]);
+		expect(wrapper.emitted().input).toStrictEqual([[item]]);
 	});
 });
