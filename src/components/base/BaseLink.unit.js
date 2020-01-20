@@ -75,25 +75,28 @@ describe("@components/BaseLink", () => {
 	*/
 
 	it("log warning for insecure external urls", () => {
-		let outputData = "";
-		console.warn = jest.fn((inputs) => (outputData += inputs));
-
+		// use .mockImplementation() to prevent output to console
+		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
 		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 			propsData: {
 				href: "http://schul-cloud.org",
 			},
 		});
-		expect(outputData).toContain("Insecure href");
+		expect(consoleWarn).toHaveBeenCalledWith(
+			expect.stringContaining("Insecure href")
+		);
 	});
 
 	it("log warning for invalid props", () => {
-		let outputData = "";
-		console.warn = jest.fn((inputs) => (outputData += inputs));
+		// use .mockImplementation() to prevent output to console
+		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
 
 		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 		});
-		expect(outputData).toContain("Invalid props");
+		expect(consoleWarn).toHaveBeenCalledWith(
+			expect.stringContaining("Invalid props")
+		);
 	});
 });

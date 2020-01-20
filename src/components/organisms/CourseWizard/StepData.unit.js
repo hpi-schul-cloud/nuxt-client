@@ -46,8 +46,7 @@ describe("@components/StepData", () => {
 
 	it("Test validator by leaving out a key in courses", () => {
 		//should print error that the validator is failing
-		let outputData = "";
-		console.error = jest.fn((inputs) => (outputData += inputs));
+		const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 		const propsData = {};
 		propsData.course = {
@@ -57,7 +56,9 @@ describe("@components/StepData", () => {
 			teacherIds: ["test"],
 		};
 		checkRendering(mountWithCourse(propsData));
-		expect(outputData).toContain("Invalid prop");
+		expect(consoleError).toHaveBeenCalledWith(
+			expect.stringContaining("Invalid prop")
+		);
 	});
 
 	it("test computed courseTimes getter", () => {
