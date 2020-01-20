@@ -115,10 +115,10 @@ export default {
 		},
 	},
 	mounted() {
-		window.addEventListener("keyup", this.escKeyHandler);
+		window.addEventListener("keydown", this.escKeyHandler);
 	},
 	beforeDestroy() {
-		window.removeEventListener("keyup", this.escKeyHandler);
+		window.removeEventListener("keydown", this.escKeyHandler);
 	},
 	methods: {
 		focusPrev(currentIndex) {
