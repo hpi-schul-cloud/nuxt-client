@@ -20,9 +20,9 @@
 
 				<div class="social-container">
 					<h2 class="h4">Social Links</h2>
-					<base-link class="link-style" href="mailto:schul-cloud@mint-ec.de"
-						>schul-cloud@mint-ec.de</base-link
-					>
+					<base-link class="link-style" href="mailto:schul-cloud@mint-ec.de">
+						schul-cloud@mint-ec.de
+					</base-link>
 					<base-link href="https://creativecommons.org/licenses/by-sa/4.0/">
 						<img
 							class="img-cc"
