@@ -37,12 +37,12 @@ describe("@components/legacy/TheTopBar", () => {
 				$theme,
 			},
 		});
-		expect(wrapper.findAll("base-button-stub").length).toBe(2);
-		expect(wrapper.findAll("popup-icon-stub").length).toBe(1);
-		expect(wrapper.findAll("button").length).toBe(1);
+		expect(wrapper.findAll("base-button-stub")).toHaveLength(2);
+		expect(wrapper.findAll("popup-icon-stub")).toHaveLength(1);
+		expect(wrapper.findAll("button")).toHaveLength(1);
 		wrapper.find("button").trigger("click");
 		expect(wrapper.emitted("action")[0]).toEqual(["light-camera"]);
-		expect(wrapper.findAll(".item").length).toBe(4);
+		expect(wrapper.findAll(".item")).toHaveLength(4);
 	});
 	it("can switch to fullscreen mode", () => {
 		const wrapper = mount(TheTopBar, {
@@ -54,8 +54,8 @@ describe("@components/legacy/TheTopBar", () => {
 		wrapper.find(".fullscreen-button").trigger("click");
 		expect(wrapper.emitted().action[0]).toEqual(["fullscreen"]);
 
-		expect(wrapper.findAll(".item").length).toBe(0);
-		expect(wrapper.findAll(".top-sidebar").length).toBe(0);
-		expect(wrapper.findAll(".fullscreen-button-active").length).toBe(1);
+		expect(wrapper.findAll(".item")).toHaveLength(0);
+		expect(wrapper.findAll(".top-sidebar")).toHaveLength(0);
+		expect(wrapper.findAll(".fullscreen-button-active")).toHaveLength(1);
 	});
 });
