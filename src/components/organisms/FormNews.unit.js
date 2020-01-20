@@ -69,9 +69,9 @@ describe("@components/FormNews", () => {
 				news: validNews,
 			},
 		});
-		expect(wrapper.vm.data.date.date).toEqual(validNewsDate.date);
-		expect(wrapper.vm.data.date.time).toEqual(validNewsDate.time);
-		expect(wrapper.vm.publishDate).toEqual(validNews.displayAt);
+		expect(wrapper.vm.data.date.date).toStrictEqual(validNewsDate.date);
+		expect(wrapper.vm.data.date.time).toStrictEqual(validNewsDate.time);
+		expect(wrapper.vm.publishDate).toStrictEqual(validNews.displayAt);
 	});
 
 	describe("create", () => {

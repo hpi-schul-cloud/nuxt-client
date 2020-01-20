@@ -35,12 +35,16 @@ describe("@components/BaseTextarea", () => {
 		const after = `<p>after</p>`;
 		const wrapper = await getMock({ data: () => ({ content: before }) });
 		const contentContainer = wrapper.find(`[contenteditable]`);
-		expect(contentContainer.html()).toEqual(expect.stringContaining(before));
+		expect(contentContainer.html()).toStrictEqual(
+			expect.stringContaining(before)
+		);
 		wrapper.setData({ content: after });
-		expect(contentContainer.html()).toEqual(
+		expect(contentContainer.html()).toStrictEqual(
 			expect.not.stringContaining(before)
 		);
-		expect(contentContainer.html()).toEqual(expect.stringContaining(after));
+		expect(contentContainer.html()).toStrictEqual(
+			expect.stringContaining(after)
+		);
 	});
 
 	it("showImagePrompt calls callback with src", async () => {
@@ -157,6 +161,6 @@ describe("@components/BaseTextarea", () => {
 
 		expect(undoStub.called).toBe(false);
 		expect(toastStub.called).toBe(false);
-		expect(wrapper.emitted("update")[0][0]).toEqual(validContent);
+		expect(wrapper.emitted("update")[0][0]).toStrictEqual(validContent);
 	});
 });
