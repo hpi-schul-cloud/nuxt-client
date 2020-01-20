@@ -7,6 +7,7 @@ const actions = [
 ];
 
 const wrapper = mount(ContextMenu, {
+	...createComponentMocks({ i18n: true }),
 	propsData: {
 		show: true,
 		actions,

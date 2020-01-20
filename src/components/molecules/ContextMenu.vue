@@ -1,20 +1,45 @@
 <template>
 	<transition name="fade">
-		<div v-if="show" class="context-menu" :style="anchorCSS">
+		<div
+			v-if="show"
+			ref="context-menu"
+			class="context-menu"
+			:style="anchorCSS"
+			role="menu"
+		>
 			<base-button
-				v-for="action of actions"
+				v-for="(action, index) of actions"
 				:key="action.text"
 				design="none"
 				class="context-menu__button"
+				role="menuitem"
 				@click="emitEvent(action.event, action.arguments)"
+				@keydown.up="focusPrev(index)"
+				@keydown.down="focusNext(index)"
 			>
 				<base-icon
+					v-if="action.icon"
 					source="material"
 					:icon="action.icon"
 					class="context-menu__button-icon"
 				/>
-				<div class="context-menu__button-text">
+				<div
+					:class="{
+						'context-menu__button-text': true,
+						'no-icon': !action.icon,
+					}"
+				>
 					{{ action.text }}
+				</div>
+			</base-button>
+			<base-button
+				design="none"
+				class="context-menu__button-close"
+				@click="closeMenu"
+				@keydown.up="focusPrev(actions.length)"
+			>
+				<div class="context-menu__button-text no-icon">
+					{{ $t("components.molecules.ContextMenu.action.close") }}
 				</div>
 			</base-button>
 		</div>
@@ -76,6 +101,19 @@ export default {
 			}
 		},
 	},
+	watch: {
+		show: {
+			handler(to) {
+				this.$nextTick(() => {
+					const menu = this.$refs["context-menu"];
+					if (to && menu) {
+						menu.querySelector("button").focus();
+					}
+				});
+			},
+			immediate: true,
+		},
+	},
 	mounted() {
 		window.addEventListener("keyup", this.escKeyHandler);
 	},
@@ -83,6 +121,16 @@ export default {
 		window.removeEventListener("keyup", this.escKeyHandler);
 	},
 	methods: {
+		focusPrev(currentIndex) {
+			const buttons = this.$refs["context-menu"].querySelectorAll("button");
+			const prefIndex = Math.max(currentIndex - 1, 0);
+			buttons[prefIndex].focus();
+		},
+		focusNext(currentIndex) {
+			const buttons = this.$refs["context-menu"].querySelectorAll("button");
+			const nextIndex = Math.min(currentIndex + 1, buttons.length - 1);
+			buttons[nextIndex].focus();
+		},
 		escKeyHandler(e) {
 			if (this.menuActive && e.keyCode === 27) {
 				this.removeMenu();
@@ -104,6 +152,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .context-menu {
 	--transition-duration: var(--duration-transition-fast);
 
@@ -111,6 +161,8 @@ export default {
 	z-index: var(--layer-dropdown);
 	display: flex;
 	flex-direction: column;
+	min-width: 150px;
+	max-width: 350px;
 	background-color: var(--color-white);
 	border-radius: var(--radius-sm);
 	box-shadow: var(--shadow-m);
@@ -130,8 +182,17 @@ export default {
 			color: var(--color-tertiary-light);
 		}
 		&-text {
+			width: max-content;
 			font-size: var(--text-md);
 			color: var(--color-black);
+			text-align: left;
+			white-space: normal;
+			&.no-icon {
+				margin: var(--space-md);
+			}
+		}
+		&-close:not(:focus) {
+			@include visually-hidden;
 		}
 	}
 }

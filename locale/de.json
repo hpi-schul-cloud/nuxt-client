@@ -10,6 +10,7 @@
 	"components.molecules.ContentCardMenu.action.delete": "Löschen",
 	"components.molecules.ContentCardMenu.action.report": "Melden",
 	"components.molecules.ContentCardMenu.action.share": "Teilen",
+	"components.molecules.ContextMenu.action.close": "Kontextmenü schließen",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.TextEditor.noLocalFiles": "Lokale Dateien werden aktuell nicht unterstützt.",
 	"components.organisms.FormNews.cancel.confirm.cancel": "Weiter arbeiten",
