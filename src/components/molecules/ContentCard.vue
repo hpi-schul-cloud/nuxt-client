@@ -45,15 +45,28 @@
 							/>
 						</base-button>
 
-						<div v-click-outside="removeMenu" class="footer__icon-container">
-							<base-button design="icon text" @click="menuHandler">
-								<base-icon
-									class="footer__content-icon"
-									source="material"
-									icon="more_vert"
+						<div
+							v-click-outside="handleMenuClickOutside"
+							class="footer__icon-container"
+						>
+							<div class="footer_more">
+								<base-button design="icon text" @click="openMenu">
+									<base-icon
+										class="footer__content-icon"
+										source="material"
+										icon="more_vert"
+									/>
+								</base-button>
+								<context-menu
+									:show.sync="menuActive"
+									anchor="bottom-right"
+									:actions="actions"
+									@copy="handleCopy"
+									@share="handleShare"
+									@delete="handleDelete"
+									@report="handleReport"
 								/>
-							</base-button>
-							<card-context-menu v-if="menuActive" :actions="actions" />
+							</div>
 						</div>
 					</div>
 				</div>
@@ -64,12 +77,12 @@
 
 <script>
 import BaseLink from "@components/base/BaseLink";
-import CardContextMenu from "@components/molecules/CardContextMenu";
+import ContextMenu from "@components/molecules/ContextMenu";
 
 export default {
 	components: {
 		BaseLink,
-		CardContextMenu,
+		ContextMenu,
 	},
 	props: {
 		id: { type: String, default: "" },
@@ -83,22 +96,22 @@ export default {
 			menuActive: false,
 			actions: [
 				{
-					type: "copy",
+					event: "copy",
 					text: this.$t("components.molecules.ContentCardMenu.action.copy"),
 					icon: "file_copy",
 				},
 				{
-					type: "share",
+					event: "share",
 					text: this.$t("components.molecules.ContentCardMenu.action.share"),
 					icon: "share",
 				},
 				{
-					type: "delete",
+					event: "delete",
 					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
 					icon: "delete_outline",
 				},
 				{
-					type: "report",
+					event: "report",
 					text: this.$t("components.molecules.ContentCardMenu.action.report"),
 					icon: "report",
 				},
@@ -121,27 +134,24 @@ export default {
 			return this.isChecked ? "check_box" : "check_box_outline_blank";
 		},
 	},
-	created() {
-		window.addEventListener("keyup", this.escKeyHandler);
-	},
-	beforeDestroy() {
-		window.removeEventListener("keyup", this.escKeyHandler);
-	},
 	methods: {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
 		},
-		menuHandler() {
-			this.menuActive = !this.menuActive;
+		openMenu() {
+			this.menuActive = true;
 		},
-		removeMenu() {
+		handleMenuClickOutside(event) {
+			if (!this.menuActive) {
+				return;
+			}
+			event.preventDefault();
 			this.menuActive = false;
 		},
-		escKeyHandler(e) {
-			if (this.menuActive && e.keyCode === 27) {
-				this.removeMenu();
-			}
-		},
+		handleCopy() {},
+		handleShare() {},
+		handleDelete() {},
+		handleReport() {},
 	},
 };
 </script>
@@ -243,6 +253,9 @@ export default {
 			font-size: var(--text-lg);
 			color: var(--color-tertiary);
 		}
+	}
+	&_more {
+		position: relative;
 	}
 	&__icon-container {
 		position: relative;
