@@ -59,7 +59,7 @@ export default {
 }
 
 .subtitle {
-	font-size: var(--text-xs);
+	font-size: var(--text-sm);
 }
 .image {
 	height: calc(var(--text-md) + var(--text-lg));
