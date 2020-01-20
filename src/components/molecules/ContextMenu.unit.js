@@ -15,6 +15,16 @@ const hasWrapperFocus = (wrapper) => {
 	return wrapper.element.matches(":focus");
 };
 
+const getWrapper = (options = {}) =>
+	mount(ContextMenu, {
+		...createComponentMocks({ i18n: true }),
+		propsData: {
+			show: true,
+			actions,
+		},
+		...options,
+	});
+
 describe("@components/CardContextMenu", () => {
 	it(...isValidComponent(ContextMenu));
 
@@ -33,13 +43,7 @@ describe("@components/CardContextMenu", () => {
 	});
 
 	it("Emits defined event when clicked", () => {
-		const wrapper = mount(ContextMenu, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				show: true,
-				actions,
-			},
-		});
+		const wrapper = getWrapper();
 
 		expect.assertions(2 * actions.length);
 		const buttons = wrapper.findAll(".context-menu__button");
@@ -53,13 +57,7 @@ describe("@components/CardContextMenu", () => {
 	});
 
 	it("emits update:show event when button gets clicked", async () => {
-		const wrapper = mount(ContextMenu, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				show: true,
-				actions,
-			},
-		});
+		const wrapper = getWrapper();
 		wrapper.vm.show = true;
 		const button = wrapper.find(".context-menu__button");
 		button.trigger("click");
@@ -71,13 +69,7 @@ describe("@components/CardContextMenu", () => {
 
 	describe("a11y", () => {
 		it("has a focusable close button", () => {
-			const wrapper = mount(ContextMenu, {
-				...createComponentMocks({ i18n: true }),
-				propsData: {
-					show: true,
-					actions,
-				},
-			});
+			const wrapper = getWrapper();
 			const closeButton = wrapper.find(".context-menu__button-close");
 			closeButton.element.focus();
 			closeButton.trigger("click");
@@ -86,26 +78,14 @@ describe("@components/CardContextMenu", () => {
 		});
 
 		it("first element get's focused on mount", async () => {
-			const wrapper = mount(ContextMenu, {
-				...createComponentMocks({ i18n: true }),
-				propsData: {
-					show: true,
-					actions,
-				},
-			});
+			const wrapper = getWrapper();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
 		});
 
 		it("arrow up keeps focus on first element if already focused", async () => {
-			const wrapper = mount(ContextMenu, {
-				...createComponentMocks({ i18n: true }),
-				propsData: {
-					show: true,
-					actions,
-				},
-			});
+			const wrapper = getWrapper();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			buttons.at(0).element.focus();
@@ -115,13 +95,7 @@ describe("@components/CardContextMenu", () => {
 		});
 
 		it("arrow up focuses previous button", async () => {
-			const wrapper = mount(ContextMenu, {
-				...createComponentMocks({ i18n: true }),
-				propsData: {
-					show: true,
-					actions,
-				},
-			});
+			const wrapper = getWrapper();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			buttons.at(buttons.length - 1).element.focus();
@@ -137,13 +111,7 @@ describe("@components/CardContextMenu", () => {
 		});
 
 		it("arrow down focuses next button", async () => {
-			const wrapper = mount(ContextMenu, {
-				...createComponentMocks({ i18n: true }),
-				propsData: {
-					show: true,
-					actions,
-				},
-			});
+			const wrapper = getWrapper();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			for (let i = 1; i < buttons.length - 2; i += 1) {
