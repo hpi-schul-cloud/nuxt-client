@@ -52,10 +52,10 @@ describe("@components/BaseInputCheckbox", () => {
 		const input = wrapper.find("input");
 		const valueBefore = wrapper.vm.value.length;
 		input.setChecked(true);
-		expect(wrapper.vm.value.length).toBe(valueBefore + 1);
+		expect(wrapper.vm.value).toHaveLength(valueBefore + 1);
 		expect(wrapper.vm.value.includes(testValue)).toBeTruthy();
 		input.setChecked(false);
-		expect(wrapper.vm.value.length).toBe(valueBefore);
+		expect(wrapper.vm.value).toHaveLength(valueBefore);
 		expect(wrapper.vm.value.includes(testValue)).toBeFalsy();
 	});
 

@@ -20,7 +20,7 @@ describe("@components/BaseDialog", () => {
 					message: testMessage,
 				},
 			});
-			expect(wrapper.text().includes(testMessage)).toBe(true);
+			expect(wrapper.text()).toContain(testMessage);
 		});
 		it("iconColor Prop should override actionDesign", async () => {
 			const testColor = "lime";

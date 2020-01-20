@@ -14,14 +14,14 @@ describe("@serverMiddleware/proxy", () => {
 		const req = { method: "POST" };
 		const next = getNextMock();
 		const result = await proxy(req, undefined, next);
-		expect(next.mock.calls.length).toBe(0);
+		expect(next.mock.calls).toHaveLength(0);
 		expect(result.type).toBe("proxy");
 	});
 	it("use vue route for whitelisted regex", async () => {
 		const req = { method: "GET", url: "/news/add" };
 		const next = getNextMock();
 		const result = await proxy(req, undefined, next);
-		expect(next.mock.calls.length).toBe(1);
+		expect(next.mock.calls).toHaveLength(1);
 		expect(result.type).toBe("next");
 	});
 	it("use vue when fallback disabled flag is set", async () => {
@@ -29,7 +29,7 @@ describe("@serverMiddleware/proxy", () => {
 		const req = { method: "GET", url: "/homework" };
 		const next = getNextMock();
 		const result = await proxy(req, undefined, next);
-		expect(next.mock.calls.length).toBe(1);
+		expect(next.mock.calls).toHaveLength(1);
 		expect(result.type).toBe("next");
 		process.env.FALLBACK_DISABLED = undefined;
 	});
@@ -37,7 +37,7 @@ describe("@serverMiddleware/proxy", () => {
 		const req = { method: "GET", url: "/homework" };
 		const next = getNextMock();
 		const result = await proxy(req, undefined, next);
-		expect(next.mock.calls.length).toBe(0);
+		expect(next.mock.calls).toHaveLength(0);
 		expect(result.type).toBe("proxy");
 	});
 });

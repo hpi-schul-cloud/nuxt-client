@@ -1,28 +1,57 @@
 <template>
-	<nav class="pagination" role="navigation" aria-label="pagination">
-		<ul class="pagination-list">
-			<li v-if="currentPage > 1" class="pagination-link-wrapper">
-				<a
-					class="pagination-link"
-					aria-label="Goto previous page"
-					@click="previousPage"
-					>←</a
-				>
-			</li>
-			<li class="pagination-link-wrapper">
-				<a
-					:aria-label="`Page ${currentPage}`"
-					class="pagination-link current"
-					aria-current="page"
-					>{{ currentPage }}</a
-				>
-			</li>
-			<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
-				<a class="pagination-link" aria-label="Goto next page" @click="nextPage"
-					>→</a
-				>
-			</li>
-		</ul>
+	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
+		<base-select
+			label="Einträge pro Seite"
+			style="max-width: 150px"
+			close-on-select
+			:value="perPageSelected"
+			:options="perPageOptions"
+			:placeholder="placeholder"
+			:allow-empty="false"
+			track-by="value"
+			option-label="label"
+			@select="setPagination"
+		/>
+		<div v-if="perPage > 0" class="d-flex align-items-center">
+			<div class="mr--md">
+				{{ total > 0 ? currentPage * perPage - perPage + 1 : 0 }} bis
+				{{
+					perPage > total
+						? total
+						: currentPage * perPage > total
+						? total
+						: currentPage * perPage
+				}}
+				von {{ total }}
+			</div>
+			<ul v-if="total > 0" class="pagination-list">
+				<li v-if="currentPage > 1" class="pagination-link-wrapper">
+					<a
+						class="pagination-link"
+						aria-label="Goto previous page"
+						@click="previousPage"
+						>←</a
+					>
+				</li>
+				<li class="pagination-link-wrapper">
+					<a
+						:aria-label="`Page ${currentPage}`"
+						class="pagination-link current"
+						aria-current="page"
+						>{{ currentPage }}</a
+					>
+				</li>
+				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
+					<a
+						class="pagination-link"
+						aria-label="Goto next page"
+						@click="nextPage"
+						>→</a
+					>
+				</li>
+			</ul>
+		</div>
+		<div v-else> Zeige alle {{ total }} Einträge </div>
 	</nav>
 </template>
 
@@ -32,39 +61,67 @@ export default {
 		event: "update",
 	},
 	props: {
-		state: {
-			type: Object,
-			default: () => {
-				return {
-					limit: 10,
-					skip: 0,
-					total: 0,
-				};
-			},
+		currentPage: {
+			type: Number,
+			default: 1,
 		},
-		value: {
-			// number of skipped items ( $skip: 0 )
+		perPage: {
+			type: Number,
+			default: 10,
+		},
+		total: {
 			type: Number,
 			default: 0,
 		},
+		placeholder: {
+			type: String,
+			default: "Pro Seite",
+		},
 	},
+	data: () => ({
+		perPageOptions: [
+			{
+				label: "5 pro Seite",
+				value: 5,
+			},
+			{
+				label: "10 pro Seite",
+				value: 10,
+			},
+			{
+				label: "25 pro Seite",
+				value: 25,
+			},
+			{
+				label: "50 pro Seite",
+				value: 50,
+			},
+			{
+				label: "Alle anzeigen",
+				value: -1,
+			},
+		],
+	}),
 	computed: {
-		currentPage() {
-			return Math.floor(this.state.skip / this.state.limit + 1);
+		perPageSelected() {
+			return {
+				label: this.perPage > 0 ? this.perPage + " pro Seite" : "Alle anzeigen",
+				value: this.perPage,
+			};
 		},
 		lastPage() {
-			return Math.ceil(this.state.total / this.state.limit);
+			return Math.ceil(this.total / this.perPage);
 		},
 	},
 	methods: {
+		setPagination(val) {
+			this.$emit("update:per-page", val.value);
+		},
 		previousPage() {
-			this.updateModel(this.value - this.state.limit);
+			this.$emit("update:current-page", this.currentPage - 1);
 		},
 		nextPage() {
-			this.updateModel(this.value + this.state.limit);
-		},
-		updateModel(itemsSkipped) {
-			this.$emit("update", itemsSkipped);
+			this.$emit("update:current-page", this.currentPage + 1);
 		},
 	},
 };
@@ -74,11 +131,15 @@ export default {
 @import "@styles";
 
 .pagination {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	margin: 0 auto;
 }
 
 .pagination-list {
 	display: flex;
+	align-items: center;
 	justify-content: center;
 	padding: 0;
 	list-style: none;

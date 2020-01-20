@@ -2,8 +2,7 @@ import authenticate from "./authenticate";
 
 describe("@plugins/authenticate", () => {
 	it("should log an error if jwt is undefined and page is not public", () => {
-		const outputData = [];
-		console.error = jest.fn((inputs) => outputData.push(inputs));
+		const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 		window.location.pathname = "/";
 		const mockContext = {
@@ -22,7 +21,8 @@ describe("@plugins/authenticate", () => {
 			},
 		};
 		authenticate(mockContext);
-		expect(outputData.join("")).toContain("Can not read jwt from cookies.");
+		const errors = consoleError.mock.calls.map((e) => e.toString());
+		expect(errors).toContain(`Error: Can not read jwt from cookies.`);
 	});
 
 	it("dispatches logout action if jwt is undefined and page is not public", () => {

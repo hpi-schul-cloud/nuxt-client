@@ -17,7 +17,7 @@ describe("@components/organisms/Tabs/Tabs", () => {
 
 	it("Check if all 3 tabs are added", () => {
 		const wrapper = mount(tabs);
-		expect(wrapper.findAll(".tab-content").length).toBe(3);
+		expect(wrapper.findAll(".tab-content")).toHaveLength(3);
 	});
 
 	it("Test if only first tab contents is being shown", () => {

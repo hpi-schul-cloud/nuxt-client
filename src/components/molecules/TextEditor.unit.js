@@ -46,7 +46,7 @@ describe("@components/BaseTextarea", () => {
 	it("showImagePrompt calls callback with src", async () => {
 		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		const testUrl = "https://image.url";
-		window.prompt = jest.fn().mockImplementation(() => testUrl);
+		jest.spyOn(window, "prompt").mockImplementation(() => testUrl);
 		const wrapper = await getMock();
 		return new Promise((resolve) => {
 			wrapper.vm.$children[0].showImagePrompt((cbValue) => {
@@ -61,7 +61,7 @@ describe("@components/BaseTextarea", () => {
 		const mockFn = jest.fn().mockImplementation(() => true);
 		const wrapper = await getMock({ destroyed: mockFn });
 		wrapper.destroy();
-		expect(mockFn.mock.calls.length).toBe(1);
+		expect(mockFn.mock.calls).toHaveLength(1);
 	});
 
 	it("some options are disabled when cursor is in Headings", async () => {
