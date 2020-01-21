@@ -19,7 +19,7 @@
 			>
 				<base-icon
 					v-if="action.icon"
-					source="material"
+					:source="action['icon-source'] || 'material'"
 					:icon="action.icon"
 					class="context-menu__button-icon"
 				/>
@@ -49,13 +49,23 @@
 <script>
 export default {
 	props: {
+		/**
+		 * defines whether the menu is visible or not. Should be used with the .sync modifier
+		 * ( https://vuejs.org/v2/guide/components-custom-events.html#sync-Modifier )
+		 */
 		show: {
 			type: Boolean,
 			required: true,
 		},
+		/**
+		 * if true, the menu will not trigger a (update:show false) event on click of menu items
+		 */
 		noClose: {
 			type: Boolean,
 		},
+		/**
+		 * defines the anchor from where the menu should open. Behaves similar to the CSS transform-origin attribute.
+		 */
 		anchor: {
 			type: String,
 			default: "bottom-right",
@@ -64,9 +74,16 @@ export default {
 					value
 				),
 		},
+		/**
+		 * defines the text, icon and event for each menu item
+		 * ( { text, icon?, icon-source?, event, argument? }[] )
+		 * the text and event keys are required. The default icon source is "material".
+		 * The value in arguments will be the first argument in the triggered event.
+		 */
 		actions: {
 			type: Array,
 			required: true,
+			validator: (values) => values.every((value) => value.text && value.event),
 		},
 	},
 	computed: {
@@ -138,6 +155,12 @@ export default {
 		},
 		closeMenu() {
 			if (!this.noClose && this.show) {
+				/**
+				 * will report the new state of the menu. Should be fetched by the .snyc modifier.
+				 *
+				 * @event update:show
+				 * @type {Boolean} show only close events will be send from the component
+				 */
 				this.$emit("update:show", false);
 			}
 		},
@@ -145,6 +168,12 @@ export default {
 			setTimeout(() => {
 				this.closeMenu();
 			}, 300); // wait 500ms for the ripple animation to finish
+			/**
+			 * your custom event for each menu item
+			 *
+			 * @event event Whatever you defined in the actions Array
+			 * @type {any} args Whatever you defined in the actions Array
+			 */
 			this.$emit(event, args);
 		},
 	},

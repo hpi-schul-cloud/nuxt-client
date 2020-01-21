@@ -35,25 +35,24 @@ const actionsWithoutIcon = actionsWithIcon.map((o) => {
 	return { ...o, icon: undefined };
 });
 
-const template = `<span style="position: relative; margin: 10rem;">
-<base-button design="icon text"
-	@click="active = true"
->
-	<base-icon
-		class="footer__content-icon"
-		source="material"
-		icon="more_vert"
-	/>
-</base-button>
-<ContextMenu
-	:show.sync="active"
-	:anchor="anchor"
-	:actions="actions"
-	@copy="copy"
-	@share="share"
-	@report="report"
-/>
-</span>`;
+const template = `
+	<span style="position: relative; margin: 10rem;">
+		<base-button design="icon text" @click="active = true">
+			<base-icon
+				class="footer__content-icon"
+				source="material"
+				icon="more_vert"
+			/>
+		</base-button>
+		<ContextMenu
+			:show.sync="active"
+			:anchor="anchor"
+			:actions="actions"
+			@copy="copy"
+			@share="share"
+			@report="report"
+		/>
+	</span>`;
 
 const anchorOptions = {
 	"top-left": "top-left",
