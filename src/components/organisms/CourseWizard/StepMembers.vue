@@ -7,7 +7,8 @@
 		</p>
 
 		<base-select
-			v-model="course.classIds"
+			v-model="classModel"
+			close-on-select
 			:options="classOptions"
 			:multiple="true"
 			label="Klasse auswählen"
@@ -15,7 +16,8 @@
 		></base-select>
 
 		<base-select
-			v-model="course.userIds"
+			v-model="studentModel"
+			close-on-select
 			:options="studentOptions"
 			:multiple="true"
 			:show-on-select="false"
@@ -53,6 +55,26 @@ export default {
 				label: _class.displayName,
 				value: _class._id,
 			}));
+		},
+		studentModel: {
+			get() {
+				return (this.course.userIds || []).map((userId) =>
+					this.studentOptions.find((student) => student.value === userId)
+				);
+			},
+			set(students) {
+				this.course.userIds = students.map((student) => student.value);
+			},
+		},
+		classModel: {
+			get() {
+				return (this.course.classIds || []).map((classId) =>
+					this.classOptions.find((_class) => _class.value === classId)
+				);
+			},
+			set(classes) {
+				this.course.classIds = classes.map((_class) => _class.value);
+			},
 		},
 	},
 };

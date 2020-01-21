@@ -12,7 +12,7 @@ describe("@components/BaseInputCheckbox", () => {
 					vmodel: true,
 				},
 			});
-			expect(wrapper.find("input[type='checkbox']").exists()).toBeTruthy();
+			expect(wrapper.find("input[type='checkbox']").exists()).toBe(true);
 		});
 	});
 
@@ -52,11 +52,11 @@ describe("@components/BaseInputCheckbox", () => {
 		const input = wrapper.find("input");
 		const valueBefore = wrapper.vm.value.length;
 		input.setChecked(true);
-		expect(wrapper.vm.value.length).toBe(valueBefore + 1);
-		expect(wrapper.vm.value.includes(testValue)).toBeTruthy();
+		expect(wrapper.vm.value).toHaveLength(valueBefore + 1);
+		expect(wrapper.vm.value).toContain(testValue);
 		input.setChecked(false);
-		expect(wrapper.vm.value.length).toBe(valueBefore);
-		expect(wrapper.vm.value.includes(testValue)).toBeFalsy();
+		expect(wrapper.vm.value).toHaveLength(valueBefore);
+		expect(wrapper.vm.value).not.toContain(testValue);
 	});
 
 	it(`shows checkmark only when it is checked`, () => {

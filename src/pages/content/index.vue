@@ -12,11 +12,12 @@
 			/>
 			<p class="content__total">
 				<span v-if="searchQuery.length > 0">
-					{{ resources.total }}
+					{{ resources.data.length }}
 					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
 				</span>
 				<span v-else>
-					{{ resources.total }} {{ $t("pages.content.index.search_resources") }}
+					{{ resources.data.length }}
+					{{ $t("pages.content.index.search_resources") }}
 				</span>
 			</p>
 			<div v-if="resources.data.length === 0" class="content__no-results">
@@ -28,13 +29,6 @@
 					:id="resource._id"
 					:key="resource._id"
 					class="card"
-					:content-category="resource.resourceCategory"
-					:description="resource.description"
-					:licenses="resource.licenses"
-					:mime-type="resource.mimeType"
-					:origin-id="resource.originId"
-					:provider-name="resource.providerName"
-					:tags="resource.tags.slice(0, 5)"
 					:thumbnail="resource.thumbnail"
 					:title="resource.title"
 					:url="resource.url"

@@ -2,6 +2,7 @@
 	<label class="wrapper">
 		<input
 			ref="hiddenInput"
+			:aria-label="labelHidden ? label : undefined"
 			v-bind="$attrs"
 			:checked="isChecked"
 			:value="value"
@@ -15,7 +16,7 @@
 		>
 			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
 		</span>
-		<span class="label">
+		<span v-if="!labelHidden" class="label">
 			{{ label }}
 		</span>
 	</label>
@@ -50,12 +51,15 @@ export default {
 			type: String,
 			required: true,
 		},
+		labelHidden: {
+			type: Boolean,
+		},
 	},
 	computed: {
 		isChecked() {
-			return typeof this.vmodel === "boolean"
-				? this.vmodel
-				: this.vmodel.includes(this.value);
+			return Array.isArray(this.vmodel)
+				? this.vmodel.includes(this.value)
+				: !!this.vmodel;
 		},
 	},
 	methods: {

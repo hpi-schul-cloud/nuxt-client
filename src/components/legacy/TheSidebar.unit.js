@@ -21,7 +21,7 @@ describe("@components/legacy/TheSidebar", () => {
 				routes: testRoutes,
 			},
 		});
-		expect(wrapper.findAll("li").length).toBe(testRoutes.length);
+		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
 		expect(wrapper.find("base-icon-stub").exists()).toBe(true);
 	});
 
@@ -57,8 +57,8 @@ describe("@components/legacy/TheSidebar", () => {
 				routes: testRoutes,
 			},
 		});
-		expect(wrapper.findAll("li").length).toBe(testRoutes.length);
-		expect(wrapper.findAll("base-icon-stub").length).toBe(4);
+		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
+		expect(wrapper.findAll("base-icon-stub")).toHaveLength(4);
 		expect(
 			wrapper
 				.findAll("base-link-stub")

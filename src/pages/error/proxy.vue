@@ -1,5 +1,11 @@
 <template>
-	<error-page :error="error" />
+	<error-page :error="error">
+		<template #action>
+			<base-button design="primary" @click="retryPageload">
+				{{ $t("error.proxy.action") }}
+			</base-button>
+		</template>
+	</error-page>
 </template>
 
 <script>
@@ -16,10 +22,24 @@ export default {
 		return {
 			error: {
 				statusCode: 500,
-				message:
-					"Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+				message: this.$t("error.proxy.description"),
 			},
+			url: "",
 		};
+	},
+	created() {
+		const { redirect } = this.$route.query;
+		if (redirect) {
+			this.url = redirect;
+			setTimeout(() => {
+				this.retryPageload();
+			}, 10000);
+		}
+	},
+	methods: {
+		retryPageload() {
+			location.href = this.url;
+		},
 	},
 };
 </script>

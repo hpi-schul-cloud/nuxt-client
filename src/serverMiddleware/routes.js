@@ -11,7 +11,7 @@ module.exports = [
 	`^/imprint/?`,
 	// `^/content/`,
 	// `^/news/${mongoId}/?$`,
-	//`^/news/${mongoId}/edit`,
+	// `^/news/${mongoId}/edit`,
 	`^/news/new`,
 	`^/nuxtversion/?$`,
 ];

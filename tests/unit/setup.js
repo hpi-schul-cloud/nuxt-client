@@ -51,7 +51,10 @@ function readDirRecursiveSync(dir) {
 const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
 	// Only include "Base" prefixed .vue files
 	.filter((fileName) => /Base[A-Z][\w]+\.vue$/.test(fileName))
-	.map((fileName) => "./" + path.relative(baseComponentDir, fileName));
+	.map(
+		(fileName) =>
+			"./" + path.relative(baseComponentDir, fileName).replace(/\\/g, "/")
+	);
 
 mountBaseComponents(globalComponentFiles, (fileName) =>
 	require(path.join(baseComponentDir, fileName))

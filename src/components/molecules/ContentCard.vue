@@ -5,12 +5,13 @@
 				<div class="content">
 					<div class="content__img">
 						<div class="img-container">
-							<base-icon
+							<base-button
+								design="none"
 								class="content__img-checkbox"
-								source="material"
-								:icon="checkboxSelector"
 								@click="checkboxHandler"
-							/>
+							>
+								<base-icon source="material" :icon="checkboxSelector" />
+							</base-button>
 
 							<div class="content__img-background-gradient" />
 
@@ -36,18 +37,36 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
-						<base-icon
-							class="footer__content-icon"
-							source="material"
-							icon="bookmark_border"
-						/>
-
-						<div>
+						<base-button design="icon text">
 							<base-icon
 								class="footer__content-icon"
 								source="material"
-								icon="more_vert"
+								icon="bookmark_border"
 							/>
+						</base-button>
+
+						<div
+							v-click-outside="handleMenuClickOutside"
+							class="footer__icon-container"
+						>
+							<div class="footer_more">
+								<base-button design="icon text" @click="openMenu">
+									<base-icon
+										class="footer__content-icon"
+										source="material"
+										icon="more_vert"
+									/>
+								</base-button>
+								<context-menu
+									:show.sync="menuActive"
+									anchor="bottom-right"
+									:actions="actions"
+									@copy="handleCopy"
+									@share="handleShare"
+									@delete="handleDelete"
+									@report="handleReport"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -58,19 +77,15 @@
 
 <script>
 import BaseLink from "@components/base/BaseLink";
+import ContextMenu from "@components/molecules/ContextMenu";
 
 export default {
 	components: {
 		BaseLink,
+		ContextMenu,
 	},
 	props: {
 		id: { type: String, default: "" },
-		description: { type: [String, Array], default: "" },
-		licenses: { type: Array, default: () => [] },
-		mimeType: { type: String, default: "" },
-		originId: { type: String, default: "" },
-		providerName: { type: String, default: "" },
-		tags: { type: Array, default: () => [] },
 		thumbnail: { type: String, default: "" },
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
@@ -78,6 +93,29 @@ export default {
 	data() {
 		return {
 			isChecked: false,
+			menuActive: false,
+			actions: [
+				{
+					event: "copy",
+					text: this.$t("components.molecules.ContentCardMenu.action.copy"),
+					icon: "file_copy",
+				},
+				{
+					event: "share",
+					text: this.$t("components.molecules.ContentCardMenu.action.share"),
+					icon: "share",
+				},
+				{
+					event: "delete",
+					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
+					icon: "delete_outline",
+				},
+				{
+					event: "report",
+					text: this.$t("components.molecules.ContentCardMenu.action.report"),
+					icon: "report",
+				},
+			],
 		};
 	},
 	computed: {
@@ -100,6 +138,20 @@ export default {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
 		},
+		openMenu() {
+			this.menuActive = true;
+		},
+		handleMenuClickOutside(event) {
+			if (!this.menuActive) {
+				return;
+			}
+			event.preventDefault();
+			this.menuActive = false;
+		},
+		handleCopy() {},
+		handleShare() {},
+		handleDelete() {},
+		handleReport() {},
 	},
 };
 </script>
@@ -120,7 +172,6 @@ export default {
 	display: flex;
 	flex-direction: column;
 	min-height: 300px;
-
 	&__img {
 		&-thumbnail {
 			width: 100%;
@@ -188,6 +239,7 @@ export default {
 	height: 13%;
 	padding: 0 var(--space-xs);
 	&__separator {
+		margin: 0 var(--space-xs-4);
 		border-top: 1px solid var(--color-gray);
 	}
 	&__content {
@@ -195,12 +247,21 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
-		padding: var(--space-xs-2);
+		padding: var(--space-xs-4) 0;
 
 		&-icon {
 			font-size: var(--text-lg);
 			color: var(--color-tertiary);
 		}
+	}
+	&_more {
+		position: relative;
+	}
+	&__icon-container {
+		position: relative;
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
 	}
 }
 </style>

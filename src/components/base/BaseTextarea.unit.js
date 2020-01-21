@@ -12,7 +12,7 @@ describe("@components/BaseTextarea", () => {
 
 	it("textarea has label", () => {
 		const wrapper = getMock();
-		expect(wrapper.find(`label`).element.innerHTML.includes("test")).toBeTruthy;
+		expect(wrapper.find(".label").element.innerHTML).toContain("test");
 	});
 
 	it("changing the element's value, updates the v-model", () => {

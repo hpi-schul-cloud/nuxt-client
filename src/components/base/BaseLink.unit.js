@@ -34,7 +34,7 @@ describe("@components/BaseLink", () => {
 			},
 		});
 		expect(element.outerHTML).toContain("https://schul-cloud.org");
-		expect(element.tagName).toEqual("A");
+		expect(element.tagName).toStrictEqual("A");
 	});
 
 	it("renders NuxtLink-tag for internal :to links", () => {
@@ -44,8 +44,8 @@ describe("@components/BaseLink", () => {
 				to: "/news",
 			},
 		});
-		expect(element.getAttribute("to")).toEqual("/news");
-		expect(element.tagName).not.toEqual("A");
+		expect(element.getAttribute("to")).toStrictEqual("/news");
+		expect(element.tagName).not.toStrictEqual("A");
 	});
 
 	it("renders NuxtLink-tag for internal links by name", () => {
@@ -55,7 +55,7 @@ describe("@components/BaseLink", () => {
 				name: "news",
 			},
 		});
-		expect(element.tagName).not.toEqual("A");
+		expect(element.tagName).not.toStrictEqual("A");
 	});
 
 	/*
@@ -75,25 +75,28 @@ describe("@components/BaseLink", () => {
 	*/
 
 	it("log warning for insecure external urls", () => {
-		let outputData = "";
-		console.warn = jest.fn((inputs) => (outputData += inputs));
-
+		// use .mockImplementation() to prevent output to console
+		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
 		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 			propsData: {
 				href: "http://schul-cloud.org",
 			},
 		});
-		expect(outputData).toContain("Insecure href");
+		expect(consoleWarn).toHaveBeenCalledWith(
+			expect.stringContaining("Insecure href")
+		);
 	});
 
 	it("log warning for invalid props", () => {
-		let outputData = "";
-		console.warn = jest.fn((inputs) => (outputData += inputs));
+		// use .mockImplementation() to prevent output to console
+		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
 
 		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 		});
-		expect(outputData).toContain("Invalid props");
+		expect(consoleWarn).toHaveBeenCalledWith(
+			expect.stringContaining("Invalid props")
+		);
 	});
 });

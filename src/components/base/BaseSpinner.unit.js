@@ -9,7 +9,7 @@ describe("@components/BaseSpinner", () => {
 				label: "label",
 			},
 		});
-		expect(element.getAttribute("aria-label")).toEqual("label");
+		expect(element.getAttribute("aria-label")).toStrictEqual("label");
 	});
 
 	it("can change its size", () => {
@@ -18,10 +18,10 @@ describe("@components/BaseSpinner", () => {
 				size: "large",
 			},
 		});
-		expect(wrapper.find(".spinner").attributes("height")).toEqual("60");
-		expect(wrapper.find(".spinner").attributes("width")).toEqual("60");
-		expect(wrapper.find(".circle").attributes("r")).toEqual("14");
-		expect(wrapper.find(".circle").attributes("cx")).toEqual("15");
-		expect(wrapper.find(".circle").attributes("cy")).toEqual("15");
+		expect(wrapper.find(".spinner").attributes("height")).toStrictEqual("60");
+		expect(wrapper.find(".spinner").attributes("width")).toStrictEqual("60");
+		expect(wrapper.find(".circle").attributes("r")).toStrictEqual("14");
+		expect(wrapper.find(".circle").attributes("cx")).toStrictEqual("15");
+		expect(wrapper.find(".circle").attributes("cy")).toStrictEqual("15");
 	});
 });
