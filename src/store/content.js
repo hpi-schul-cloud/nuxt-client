@@ -1,7 +1,7 @@
 export const actions = {
 	async getResources({ commit }, payload = {}) {
 		commit("setLoading", true);
-		const query = Object.assign({ $limit: 9 }, payload || {});
+		const query = Object.assign({ $limit: 10 }, payload || {});
 		const res = await this.$axios.$get("/content/search", {
 			params: query,
 		});
