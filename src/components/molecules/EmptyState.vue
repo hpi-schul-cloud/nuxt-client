@@ -4,7 +4,9 @@
     <div class="img-container">
 		  <img :src="image" class="image" alt="Datensource Logo" />
 	  </div>
-    <p class="description">{{description}}</p>
+		<div class="description">
+		  <slot name="description"/>
+		</div>
 	</div>
  </div>
 </template>
@@ -13,10 +15,6 @@ export default {
   props:{
 		image:{
       type: String,
-			required: true,
-		},
-		description:{
-			type: String,
 			required: true,
 		},
   }

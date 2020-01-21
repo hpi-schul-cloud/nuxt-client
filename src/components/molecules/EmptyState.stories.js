@@ -6,5 +6,5 @@ storiesOf("Molecules|EmptyState", module)
 	.add("default", () => ({
 		components: { EmptyState },
 		data: () => ({ imgsrc: ExampleImage }),
-		template: `<EmptyState :image="imgsrc" description="Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst du Datenquellen hinzufügen." />`,
+		template: `<EmptyState :image="imgsrc"> <template v-slot:description>Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst du eine Datenquelle hinzufügen.</template> </EmptyState>`,
 	}));
