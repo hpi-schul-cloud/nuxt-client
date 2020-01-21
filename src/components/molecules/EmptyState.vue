@@ -1,54 +1,53 @@
 <template>
- <div class="base">
-  <div class="container">
-    <div class="img-container">
-		  <img :src="image" class="image" alt="Datensource Logo" />
-	  </div>
-		<div class="description">
-		  <slot name="description"/>
+	<div class="base">
+		<div class="container">
+			<div class="img-container">
+				<img :src="image" class="image" alt="Datensource Logo" />
+			</div>
+			<div class="description">
+				<slot name="description" />
+			</div>
 		</div>
 	</div>
- </div>
 </template>
 <script>
 export default {
-  props:{
-		image:{
-      type: String,
+	props: {
+		image: {
+			type: String,
 			required: true,
 		},
-  }
-}
+	},
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@styles';
+@import "@styles";
 
-.base{
-  display: flex;
+.base {
+	display: flex;
 	justify-content: center;
 }
 
-.container{
-  width: var(--size-content-width-min);
+.container {
+	width: var(--size-content-width-min);
 }
 
-.img-container{
+.img-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 }
 
-.description{
+.description {
 	margin-top: var(--space-md);
 	font-size: var(--text-sm);
 	color: var(--color-gray);
 	text-align: center;
 }
 
-.image{
+.image {
 	width: 70%;
 }
-
 </style>
