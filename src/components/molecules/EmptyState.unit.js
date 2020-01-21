@@ -15,7 +15,7 @@ describe('@components/EmptyState', () => {
 		expect(wrapper.find(".img-container").exists()).toBe(true);
 	});
 
-	it("Renders image", () => {
+	it("renders image", () => {
 		const wrapper = shallowMount(EmptyState, {
 			propsData: {
 				image: "@assets/icons/emptystate.svg",
