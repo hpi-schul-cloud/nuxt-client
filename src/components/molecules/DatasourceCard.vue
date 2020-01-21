@@ -29,7 +29,7 @@ export default {
 		},
 		title: {
 			type: String,
-			required: true,
+			default: "",
 		},
 		subtitle: {
 			type: String,
