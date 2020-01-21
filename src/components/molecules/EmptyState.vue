@@ -1,12 +1,12 @@
 <template>
-<div class="base">
+ <div class="base">
   <div class="container">
     <div class="img-container">
 		  <img :src="image" class="image" alt="Datensource Logo" />
 	  </div>
     <p class="description">{{description}}</p>
 	</div>
-</div>
+ </div>
 </template>
 <script>
 export default {
