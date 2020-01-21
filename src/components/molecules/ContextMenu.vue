@@ -132,8 +132,8 @@ export default {
 			buttons[nextIndex].focus();
 		},
 		escKeyHandler(e) {
-			if (this.menuActive && e.keyCode === 27) {
-				this.removeMenu();
+			if (this.show && e.keyCode === 27) {
+				this.closeMenu();
 			}
 		},
 		closeMenu() {

@@ -1,4 +1,5 @@
 import ContextMenu from "./ContextMenu";
+import mergeDeep from "@utils/merge-deep";
 
 const actions = [
 	{ event: "event1", text: "testText1" },
@@ -16,14 +17,19 @@ const hasWrapperFocus = (wrapper) => {
 };
 
 const getWrapper = (options = {}) =>
-	mount(ContextMenu, {
-		...createComponentMocks({ i18n: true }),
-		propsData: {
-			show: true,
-			actions,
-		},
-		...options,
-	});
+	mount(
+		ContextMenu,
+		mergeDeep(
+			{
+				...createComponentMocks({ i18n: true }),
+				propsData: {
+					show: true,
+					actions,
+				},
+			},
+			options
+		)
+	);
 
 describe("@components/CardContextMenu", () => {
 	it(...isValidComponent(ContextMenu));
@@ -56,15 +62,65 @@ describe("@components/CardContextMenu", () => {
 		}
 	});
 
-	it("emits update:show event when button gets clicked", async () => {
+	it("emits (update:show false) event when button gets clicked", async () => {
 		const wrapper = getWrapper();
-		wrapper.vm.show = true;
 		const button = wrapper.find(".context-menu__button");
 		button.trigger("click");
-		// close even is delayed by 300ms
+		// close event is delayed by 300ms
 		await wait(350);
 		expect(wrapper.emitted("update:show")).toHaveLength(1);
 		expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
+	});
+
+	it("emits (update:show false) event when ESC Keys gets pressed", async () => {
+		const wrapper = getWrapper({
+			attachToDocument: true,
+		});
+		window.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 27 }));
+		expect(wrapper.emitted("update:show")).toHaveLength(1);
+		expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
+		wrapper.destroy();
+	});
+
+	describe("anchor positions", () => {
+		it.each([
+			["bottom-left", "", 0, 0, ""],
+			["top-left", 0, "", 0, ""],
+			["top-right", 0, "", "", 0],
+			["bottom-right", "", 0, "", 0],
+		])(
+			"menu gets positioned correctly by anchor attribute %s",
+			async (anchor, top, bottom, left, right) => {
+				const wrapper = getWrapper({
+					propsData: {
+						anchor,
+					},
+				});
+				const menuStyles = wrapper.find(".context-menu").element.style;
+				expect(menuStyles.top).toContain(top);
+				expect(menuStyles.bottom).toContain(bottom);
+				expect(menuStyles.left).toContain(left);
+				expect(menuStyles.right).toContain(right);
+			}
+		);
+
+		it("should throw an error for invalid anchor positions", async () => {
+			const consoleError = jest.spyOn(console, "error").mockImplementation();
+			try {
+				getWrapper({
+					propsData: {
+						anchor: "top-bottom",
+					},
+				});
+			} catch (error) {
+				expect(error).toStrictEqual(new Error("anchor is not defined"));
+			}
+			expect(consoleError).toHaveBeenCalledWith(
+				expect.stringMatching(
+					/^\[Vue warn\]\: Invalid prop\: custom validator check failed for prop \"anchor\"\./
+				)
+			);
+		});
 	});
 
 	describe("a11y", () => {
@@ -79,6 +135,8 @@ describe("@components/CardContextMenu", () => {
 
 		it("first element get's focused on mount", async () => {
 			const wrapper = getWrapper();
+			// wait 2 times because nextTick is also used in the component itself
+			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
