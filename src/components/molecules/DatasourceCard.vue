@@ -1,11 +1,19 @@
 <template>
 	<div class="card">
 		<div class="card-body">
-	    <img :src="image" class="image" alt="Datensource Logo" />
-      <div class="card-heading">
-			  <div class="card-title">{{ title }}</div>
-			  <div class="subtitle">{{ subtitle }}</div>
-		  </div>
+			<img :src="image" class="image" role="presentation" />
+			<div class="card-heading">
+				<div class="card-title">
+					<slot name="title">
+						{{ title }}
+					</slot>
+				</div>
+				<div class="subtitle">
+					<slot name="subtitle">
+						{{ subtitle }}
+					</slot>
+				</div>
+			</div>
 		</div>
 		<div class="card-action">
 			<slot name="actions" />
