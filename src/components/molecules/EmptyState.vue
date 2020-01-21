@@ -1,4 +1,3 @@
-
 <template>
 <div class="base">
   <div class="container">
@@ -11,8 +10,7 @@
 </template>
 <script>
 export default {
-
-	props:{
+  props:{
 		image:{
       type: String,
 			required: true,
@@ -27,7 +25,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@styles';
-
 
 .base{
   display: flex;
