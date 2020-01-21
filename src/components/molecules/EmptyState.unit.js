@@ -34,5 +34,5 @@ describe('@components/EmptyState', () => {
 			},
 		});
 		expect(wrapper.find(".description").text()).toBe("I'm a description");
-})
+  })
 })
