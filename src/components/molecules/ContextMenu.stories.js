@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/vue";
 import { select } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
+import centered from "@storybook/addon-centered/vue";
 
 import ContextMenu from "./ContextMenu";
 
@@ -36,7 +37,7 @@ const actionsWithoutIcon = actionsWithIcon.map((o) => {
 });
 
 const template = `
-	<span style="position: relative; margin: 10rem;">
+	<span style="position: relative;">
 		<base-button design="icon text" @click="active = true">
 			<base-icon
 				class="footer__content-icon"
@@ -62,6 +63,7 @@ const anchorOptions = {
 };
 
 storiesOf("Molecules|ContextMenu", module)
+	.addDecorator(centered)
 	.add("with icons", () => ({
 		components: { ContextMenu },
 		template,
