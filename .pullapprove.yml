@@ -32,27 +32,26 @@ groups:
     labels:
       pending: "waiting for review"
       rejected: "WIP"
-
   ###############################
   # LABEL SPECIFIC REQUESTS
   ###############################
-  integrathors:
-    conditions:
-      - "'IntegraTHORs' in labels"
-    reviews:
-      required: 1 # 1 approval from this group are required
-      request: 2 # 2 reviews requests will be sent at a time
-      request_order: shuffle # reviewers will be chosen in a random order
-    reviewers:
-      teams:
-        - integrathors
-  loki:
-    conditions:
-      - "'Loki' in labels"
-    reviews:
-      required: 1 # 1 approval from this group are required
-      request: 2 # 2 reviews requests will be sent at a time
-      request_order: shuffle # reviewers will be chosen in a random order
-    reviewers:
-      teams:
-        - loki
+  # integrathors:
+  #   conditions:
+  #     - "'IntegraTHORs' in labels"
+  #   reviews:
+  #     required: 1 # 1 approval from this group are required
+  #     request: 2 # 2 reviews requests will be sent at a time
+  #     request_order: shuffle # reviewers will be chosen in a random order
+  #   reviewers:
+  #     teams:
+  #       - integrathors
+  # loki:
+  #   conditions:
+  #     - "'Loki' in labels"
+  #   reviews:
+  #     required: 1 # 1 approval from this group are required
+  #     request: 2 # 2 reviews requests will be sent at a time
+  #     request_order: shuffle # reviewers will be chosen in a random order
+  #   reviewers:
+  #     teams:
+  #       - loki
