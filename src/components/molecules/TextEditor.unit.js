@@ -22,13 +22,10 @@ function getMock(options = {}) {
 describe("@components/BaseTextarea", () => {
 	it(...isValidComponent(TextEditor));
 
-	/*
-	it("changing the element's value, updates the v-model", async () => {
-		// TODO
-		// currently not possible to implement because I don't know how to
-		// simulate type events on an [contenteditable] field.
-	});
-	*/
+	// TODO:
+	// currently not possible to implement because I don't know how to
+	// simulate type events on an [contenteditable] field.
+	it.todo("changing the element's value, updates the v-model");
 
 	it("changing the v-model, updates the element's value", async () => {
 		const before = `<p>before</p>`;
