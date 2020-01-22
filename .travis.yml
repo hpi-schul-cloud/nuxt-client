@@ -41,6 +41,10 @@ jobs:
       name: "build:nuxt:open"
       env:
         - SC_THEME=open
+    - script: npm run build:nuxt
+      name: "build:nuxt:thr"
+      env:
+        - SC_THEME=thr
     - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
       after_success:
