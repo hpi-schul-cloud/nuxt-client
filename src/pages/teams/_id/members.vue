@@ -531,11 +531,13 @@ export default {
 	methods: {
 		async getMembers() {
 			try {
-				let members = (await this.$store.dispatch("users/find", {
-					query: {
-						$limit: 10000,
-					},
-				})).data;
+				let members = (
+					await this.$store.dispatch("users/find", {
+						query: {
+							$limit: 10000,
+						},
+					})
+				).data;
 
 				members = members.filter((member) => {
 					return !this.team.userIds.find((user) => {
@@ -556,11 +558,13 @@ export default {
 		},
 		async getClasses() {
 			try {
-				let classes = (await this.$store.dispatch("classes/find", {
-					query: {
-						$limit: 10000,
-					},
-				})).data;
+				let classes = (
+					await this.$store.dispatch("classes/find", {
+						query: {
+							$limit: 10000,
+						},
+					})
+				).data;
 
 				classes = classes.filter((schoolClass) => {
 					return !this.team.classIds.find((c) => {
