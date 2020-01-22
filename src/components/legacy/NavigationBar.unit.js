@@ -28,7 +28,7 @@ describe("@components/NavigationBar", () => {
 		expect(wrapper.props().links).toHaveLength(3);
 	});
 
-	it("links get rendered", () => {
+	it("logo get rendered", () => {
 		const wrapper = mount(NavigationBar, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
@@ -79,5 +79,5 @@ describe("@components/NavigationBar", () => {
 		expect(wrapper.find(".active").exists()).toBe(true);
 	});
 
-	xit("setActive function sets active link accordingly", () => {});
+	it.todo("setActive function sets active link accordingly");
 });

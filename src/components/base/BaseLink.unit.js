@@ -58,11 +58,9 @@ describe("@components/BaseLink", () => {
 		expect(element.tagName).not.toStrictEqual("A");
 	});
 
-	/*
 	// disabled for legacy fallback
-	it("log warning for internal href links", () => {
-		let outputData = "";
-		console.warn = jest.fn((inputs) => (outputData += inputs));
+	it.skip("log warning for internal href links", () => {
+		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
 
 		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
@@ -70,9 +68,10 @@ describe("@components/BaseLink", () => {
 				href: "/news",
 			},
 		});
-		expect(outputData).toContain("Invalid href");
+		expect(consoleWarn).toHaveBeenCalledWith(
+			expect.stringContaining("Invalid href")
+		);
 	});
-	*/
 
 	it("log warning for insecure external urls", () => {
 		// use .mockImplementation() to prevent output to console
