@@ -30,6 +30,7 @@ pull_request_rules:
           - has conflicts
       comment:
         message: This pull request is now in conflicts. Could you fix it? 🙏
+
   #######################
   # AUTO MERGING
   #######################
@@ -56,6 +57,7 @@ pull_request_rules:
       merge:
         method: merge
         strict: true
+
   #######################
   # CLEANUP AFTER MERGE
   #######################
