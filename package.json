@@ -87,7 +87,7 @@
 		"@storybook/addons": "^5.2.4",
 		"@storybook/vue": "^5.3.1",
 		"@vue/test-utils": "^1.0.0-beta.28",
-		"@vuepress/plugin-pwa": "^1.0.2",
+		"@vuepress/plugin-pwa": "^1.2.0",
 		"babel-core": "^7.0.0-bridge.0",
 		"babel-jest": "^24.1.0",
 		"babel-loader": "^8.0.5",
