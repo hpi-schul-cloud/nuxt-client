@@ -3,7 +3,7 @@ import { text, select } from "@storybook/addon-knobs";
 
 import notes from "@docs/storybook/misc.md";
 import MenuLink from "@components/atoms/MenuLink";
-import DropdownMenu from "@components/organisms/DropdownMenu";
+import DropdownMenuMintEc from "@components/organisms/DropdownMenuMintEc";
 import BaseButton from "@basecomponents/BaseButton";
 import PopupIcon from "@components/legacy/PopupIcon";
 import DemoBanner from "@components/legacy/DemoBanner";
@@ -13,15 +13,15 @@ storiesOf("Misc", module)
 	.addParameters({
 		notes,
 	})
-	.add("DropdownMenu", () => ({
-		components: { DropdownMenu, MenuLink },
+	.add("DropdownMenuMintEc", () => ({
+		components: { DropdownMenuMintEc, MenuLink },
 		template: `
-			<DropdownMenu>
+			<DropdownMenuMintEc>
 				<template v-slot:header>Dropdown</template>
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 				<MenuLink to="/">Link 3</MenuLink>
-			</DropdownMenu>
+			</DropdownMenuMintEc>
 		`,
 	}))
 	.add("Toast", () => ({
@@ -39,7 +39,7 @@ storiesOf("Misc", module)
 				<BaseButton @click="$toast[type](message)">Knobs Toast</BaseButton>
 				<br>
 				<BaseButton @click="$toast.show('Show 🧐')">Default Toast</BaseButton>
-				<BaseButton @click="$toast.info('Info 🤓')" design="info">Info Toast</BaseButton>
+				<BaseButton @click="$toast.info('Info 🤓')">Info Toast</BaseButton>
 				<BaseButton @click="$toast.success('Success 😊')" design="success">Success Toast</BaseButton>
 				<BaseButton @click="$toast.error('Error 😥')" design="danger">Error Toast</BaseButton>
 			</div>
@@ -48,14 +48,15 @@ storiesOf("Misc", module)
 	.add("Popup Icon", () => ({
 		components: { PopupIcon },
 		template: `<div>
-			<PopupIcon source="fa" icon="solid/address-book"></PopupIcon>
+			<PopupIcon source="fa" icon="address-book">
+				DropDown Content
+			</PopupIcon>
 		</div>`,
 	}))
 	.add("Popup Icon with Initials", () => ({
 		components: { PopupIconInitials, MenuLink },
 		template: `<div style="text-align: right">
 			<PopupIconInitials firstname="Fritz" lastname="Schmidt">
-				<div>Fritz Schmidt </div>
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 			</PopupIconInitials>

@@ -26,18 +26,6 @@ storiesOf("Base|Inputs/Default", module)
 		}),
 		template: `<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint"/>`,
 	}))
-	.add("Default h1", () => ({
-		components: { BaseInput },
-		data: () => ({
-			type: select("Type", defaultTypes, "text"),
-			vmodel: text("value", ""),
-			label: text("label", "Label"),
-			placeholder: text("placeholder", "Placeholder"),
-			info: text("info", "Info"),
-			hint: text("hint", "Hint"),
-		}),
-		template: `<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint" :input-teaser="true"/>`,
-	}))
 	.add("Success", () => ({
 		components: { BaseInput },
 		data: () => ({

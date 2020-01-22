@@ -12,7 +12,7 @@ const proxyOptions = {
 	onError: (err, req, res) => {
 		console.error("Error occurred while trying to proxy request");
 		res.writeHead(302, {
-			Location: "/error/proxy",
+			Location: `/error/proxy?redirect=${encodeURIComponent(req.url)}`,
 		});
 		res.end();
 	},

@@ -10,40 +10,24 @@ const api = new GhostContentAPI({
 const module = {
 	actions: {
 		async getSinglePost(postSlug) {
-			return await api.posts
-				.read({
-					slug: postSlug,
-				})
-				.catch((err) => {
-					console.error(err);
-				});
+			return await api.posts.read({
+				slug: postSlug,
+			});
 		},
 		async getPosts() {
-			return await api.posts
-				.browse({
-					limit: "all",
-				})
-				.catch((err) => {
-					console.error(err);
-				});
+			return await api.posts.browse({
+				limit: "all",
+			});
 		},
 		async getSinglePage(ctx, pageSlug) {
-			return await api.pages
-				.read({
-					slug: pageSlug,
-				})
-				.catch((err) => {
-					console.error(err);
-				});
+			return await api.pages.read({
+				slug: pageSlug,
+			});
 		},
 		async getPages() {
-			return await api.pages
-				.browse({
-					limit: "all",
-				})
-				.catch((err) => {
-					console.error(err);
-				});
+			return await api.pages.browse({
+				limit: "all",
+			});
 		},
 	},
 };

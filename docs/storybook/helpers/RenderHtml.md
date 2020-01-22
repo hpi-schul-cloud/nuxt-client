@@ -4,24 +4,24 @@
 
 By default, this component can only render plain HTML and all globally mounted components. But you can extend it.
 
-In this example, we allow the `DropdownMenu` Component to be rendered.
+In this example, we allow the `DropdownMenuMintEc` Component to be rendered.
 
 ```vue
 <!-- RenderHtmlDropdown.vue -->
 
 <script>
 import RenderHtml from "./RenderHtml";
-import DropdownMenu from "@components/organisms/DropdownMenu";
+import DropdownMenuMintEc from "@components/organisms/DropdownMenuMintEc";
 export default {
 	components: {
-		DropdownMenu,
+		DropdownMenuMintEc,
 	},
 	...RenderHtml,
 };
 </script>
 ```
 
-This component can now render the DropdownMenu Component:
+This component can now render the DropdownMenuMintEc Component:
 
 ```vue
 <template>
@@ -37,7 +37,7 @@ export default {
 	},
 	data(){
 		return {
-			html: `<dropdown-menu />`
+			html: `<dropdown-menu-mint-ec />`
 		}
 	}
 }
