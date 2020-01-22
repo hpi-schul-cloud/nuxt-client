@@ -106,7 +106,7 @@
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^24.1.0",
 		"jest-canvas-mock": "^2.1.0",
-		"jest-haste-map": "^24.5.0",
+		"jest-haste-map": "^25.1.0",
 		"jest-image-snapshot": "^2.11.1",
 		"jest-puppeteer": "^4.3.0",
 		"jest-resolve": "^24.5.0",
