@@ -22,13 +22,10 @@ function getMock(options = {}) {
 describe("@components/BaseTextarea", () => {
 	it(...isValidComponent(TextEditor));
 
-	/*
-	it("changing the element's value, updates the v-model", async () => {
-		// TODO
-		// currently not possible to implement because I don't know how to
-		// simulate type events on an [contenteditable] field.
-	});
-	*/
+	// TODO:
+	// currently not possible to implement because I don't know how to
+	// simulate type events on an [contenteditable] field.
+	it.todo("changing the element's value, updates the v-model");
 
 	it("changing the v-model, updates the element's value", async () => {
 		const before = `<p>before</p>`;
@@ -48,11 +45,13 @@ describe("@components/BaseTextarea", () => {
 	});
 
 	it("showImagePrompt calls callback with src", async () => {
+		// Make sure all expects get executed
+		expect.assertions(1);
 		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		const testUrl = "https://image.url";
 		jest.spyOn(window, "prompt").mockImplementation(() => testUrl);
 		const wrapper = await getMock();
-		return new Promise((resolve) => {
+		await new Promise((resolve) => {
 			wrapper.vm.$children[0].showImagePrompt((cbValue) => {
 				expect(cbValue.src).toBe(testUrl);
 				resolve();
