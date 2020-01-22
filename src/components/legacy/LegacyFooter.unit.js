@@ -26,7 +26,7 @@ describe("@components/LegacyFooter", () => {
 		expect(wrapper.props().links).toHaveLength(3);
 	});
 
-	it("links get rendered", () => {
+	it("mail links get rendered", () => {
 		const wrapper = mount(LegacyFooter, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
