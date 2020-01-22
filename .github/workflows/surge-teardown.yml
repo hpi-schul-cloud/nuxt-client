@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: teardown
-        uses: adrianjost/actions-surge.sh-teardown@v1.0.1
+        uses: adrianjost/actions-surge.sh-teardown@v1.0.2
         with:
           # teardown projects older than 2 months
           regex: "[2-9]+ months ago"

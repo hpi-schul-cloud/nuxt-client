@@ -81,45 +81,46 @@ describe("@components/StepData", () => {
 		expect(courseTimes[0].startTime).toBe("08:00");
 		expect(courseTimes[0].weekday).toBe(0);
 	});
-});
 
-it("test computed courseTimes setter", () => {
-	const mockCourse = getValidCourse();
-	const wrapper = mountWithCourse({
-		course: mockCourse,
+	it("test computed courseTimes setter", () => {
+		const mockCourse = getValidCourse();
+		const wrapper = mountWithCourse({
+			course: mockCourse,
+		});
+		const mockTime = [
+			{
+				weekday: 0,
+				startTime: "08:00",
+				duration: 60,
+				room: "H1",
+			},
+		];
+		wrapper.vm.courseTimes = mockTime;
+		const events = wrapper.emitted();
+		expect(events["update:course"]).toHaveLength(1);
+		const updatedTimes = events["update:course"][0][0].times;
+		expect(updatedTimes).toHaveLength(1);
+		expect(updatedTimes[0].room).toBe("H1");
+		expect(updatedTimes[0].duration).toBe("3600000");
+		expect(updatedTimes[0].startTime).toBe("28800000");
+		expect(updatedTimes[0].weekday).toBe(0);
 	});
-	const mockTime = [
-		{
-			weekday: 0,
-			startTime: "08:00",
-			duration: 60,
-			room: "H1",
-		},
-	];
-	wrapper.vm.courseTimes = mockTime;
-	const events = wrapper.emitted();
-	expect(events["update:course"]).toHaveLength(1);
-	const updatedTimes = events["update:course"][0][0].times;
-	expect(updatedTimes).toHaveLength(1);
-	expect(updatedTimes[0].room).toBe("H1");
-	expect(updatedTimes[0].duration).toBe("3600000");
-	expect(updatedTimes[0].startTime).toBe("28800000");
-	expect(updatedTimes[0].weekday).toBe(0);
-});
-it("changing the element's value, updates the v-model", () => {
-	const testInput = "any string";
-	const wrapper = mount({
-		data: () => ({ content: "" }),
-		template: `<base-input
-		v-model="content"
-		name="name"
-		label="label"
-		type="text"
-		placeholder="placehodler"
-	/>`,
-		components: { BaseInput },
+
+	it("changing the element's value, updates the v-model", () => {
+		const testInput = "any string";
+		const wrapper = mount({
+			data: () => ({ content: "" }),
+			template: `<base-input
+			v-model="content"
+			name="name"
+			label="label"
+			type="text"
+			placeholder="placehodler"
+		/>`,
+			components: { BaseInput },
+		});
+		const input = wrapper.find(`input`);
+		input.setValue(testInput);
+		expect(wrapper.vm.content).toBe(testInput);
 	});
-	const input = wrapper.find(`input`);
-	input.setValue(testInput);
-	expect(wrapper.vm.content).toBe(testInput);
 });

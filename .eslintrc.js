@@ -30,8 +30,6 @@ module.exports = {
 				// But they should be removed here ASAP.
 				// https://github.com/jest-community/eslint-plugin-jest
 				"jest/no-try-expect": "off",
-				"jest/no-test-return-statement": "off",
-				"jest/require-top-level-describe": "off",
 				"jest/consistent-test-it": [
 					"error",
 					{ fn: "it", withinDescribe: "it" },
