@@ -20,8 +20,8 @@ groups:
   nuxt-core:
     conditions:
       # not created by a bot
-      - "'dependabot-preview' in author"
-      - "'greenkeeper' in author"
+      - "'dependabot-preview' not in author.username"
+      - "'greenkeeper' not in author.username"
     reviews:
       required: 1 # 1 approval from this group is required
       request: 2 # 2 reviews requests will be sent at a time
