@@ -23,7 +23,7 @@ pull_request_rules:
           - ready to merge
   - name: ask to resolve conflict
     conditions:
-      - conflicts
+      - conflict
     actions:
       label:
         add:
