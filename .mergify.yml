@@ -42,7 +42,15 @@ pull_request_rules:
       merge:
         method: squash
         strict: true
-  - name: auto merge passing Dependabot pull requests
+  - name: auto merge passing Dependabot (Preview) pull requests
+    conditions:
+      - author=dependabot-preview[bot]
+      - label~=dependencies
+    actions:
+      merge:
+        method: squash
+        strict: true
+  - name: auto merge passing Dependabot (GitHub) pull requests
     conditions:
       - author=dependabot[bot]
       - label~=dependencies
