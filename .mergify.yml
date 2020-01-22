@@ -28,8 +28,14 @@ pull_request_rules:
       label:
         add:
           - has conflicts
-      comment:
-        message: This pull request is now in conflicts. Could you fix it? 🙏
+  - name: remove has conflicts label if conflicts got resolved
+    conditions:
+      - label~=has conflicts
+      - -conflict
+    actions:
+      label:
+        remove:
+          - has conflicts
 
   #######################
   # AUTO MERGING
