@@ -326,7 +326,7 @@ describe("@components/FormNews", () => {
 	});
 
 	describe("cancle", () => {
-		xit("triggering the cancel action from the edit page opens a confirm modal", async () => {
+		it.skip("triggering the cancel action from the edit page opens a confirm modal", async () => {
 			const wrapper = mount(FormNews, {
 				...getMocks(),
 				propsData: {
@@ -343,7 +343,7 @@ describe("@components/FormNews", () => {
 			wrapper.find("#cancel").trigger("click");
 			expect((await routerPushSpy).called).toBe(true);
 		});
-		xit("triggering the cancel action from the new page opens a confirm modal", async () => {
+		it.skip("triggering the cancel action from the new page opens a confirm modal", async () => {
 			const overviewMock = getMocks();
 			overviewMock.mocks.$route.params = {};
 			const wrapper = mount(FormNews, {

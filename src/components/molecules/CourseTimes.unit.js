@@ -67,7 +67,7 @@ it("Add and remove a time", () => {
 });
 
 // TODO: currently broken on windows
-xit("changing the element's value, updates the v-model", () => {
+it.skip("changing the element's value, updates the v-model", () => {
 	const wrapper = mount({
 		data: () => ({
 			content: [

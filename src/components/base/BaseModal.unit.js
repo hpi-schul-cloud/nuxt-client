@@ -1,6 +1,11 @@
 import { mount } from "@vue/test-utils";
 import BaseModal from "./BaseModal";
 
+const wait = (duration) =>
+	new Promise((resolve) => {
+		setTimeout(resolve, duration);
+	});
+
 const modal = {
 	data: () => ({ active: false }),
 	template: `
@@ -62,17 +67,15 @@ describe("@components/BaseModal", () => {
 		expect(wrapper.find("#button").exists()).toBe(false);
 	});
 
-	it("closed modal can be reopened after clicking outside", (done) => {
+	it("closed modal can be reopened after clicking outside", async () => {
 		// TODO this test may can be removed, the problematic code is removed now.
 		const wrapper = mount(modal);
 		wrapper.vm.active = true;
 		expect(wrapper.find("#button").exists()).toBe(true);
 		wrapper.find(".base-modal-wrapper").trigger("click");
 		expect(wrapper.find("#button").exists()).toBe(false);
-		setTimeout(() => {
-			wrapper.vm.active = true;
-			expect(wrapper.find("#button").exists()).toBe(true);
-			done();
-		}, 300);
+		await wait(300);
+		wrapper.vm.active = true;
+		expect(wrapper.find("#button").exists()).toBe(true);
 	});
 });
