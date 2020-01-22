@@ -52,7 +52,7 @@
 		"dayjs": "^1.8.14",
 		"font-awesome": "^4.7.0",
 		"git-rev-sync": "^2.0.0",
-		"glob": "^7.1.4",
+		"glob": "^7.1.6",
 		"jwt-decode": "^2.2.0",
 		"kjua": "^0.6.0",
 		"lodash": "^4.17.11",
