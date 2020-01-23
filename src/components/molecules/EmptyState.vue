@@ -19,8 +19,8 @@ export default {
 		},
 		alt: {
 			type: String,
-			required: true
-		}
+			required: true,
+		},
 	},
 };
 </script>
