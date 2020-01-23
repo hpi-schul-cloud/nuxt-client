@@ -21,7 +21,7 @@ pull_request_rules:
       label:
         remove:
           - ready to merge
-  - name: ask to resolve conflict
+  - name: label PRs with conflicts
     conditions:
       - conflict
     actions:
@@ -44,22 +44,19 @@ pull_request_rules:
     conditions:
       - author=greenkeeper[bot]
       - label~=greenkeeper
+      - -status-neutral~=.*
+      - -status-failure~=.*
     actions:
       merge:
         method: squash
         strict: true
-  - name: auto merge passing Dependabot (Preview) pull requests
+  - name: auto merge passing Dependabot pull requests
     conditions:
-      - author=dependabot-preview[bot]
+      # match dependabot[bot] and dependabot-preview[bot]
+      - author~=dependabot(-preview)?\[bot\]
       - label~=dependencies
-    actions:
-      merge:
-        method: squash
-        strict: true
-  - name: auto merge passing Dependabot (GitHub) pull requests
-    conditions:
-      - author=dependabot[bot]
-      - label~=dependencies
+      - -status-neutral~=.*
+      - -status-failure~=.*
     actions:
       merge:
         method: squash
