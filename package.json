@@ -85,7 +85,7 @@
 		"@storybook/addon-options": "^5.2.4",
 		"@storybook/addon-viewport": "^5.2.4",
 		"@storybook/addons": "^5.2.4",
-		"@storybook/vue": "^5.3.1",
+		"@storybook/vue": "^5.3.8",
 		"@vue/test-utils": "^1.0.0-beta.28",
 		"@vuepress/plugin-pwa": "^1.2.0",
 		"babel-core": "^7.0.0-bridge.0",
