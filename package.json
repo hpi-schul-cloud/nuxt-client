@@ -102,7 +102,7 @@
 		"find-cache-dir": "^3.0.0",
 		"http-proxy-middleware": "^0.20.0",
 		"http-server": "^0.12.1",
-		"hygen": "^5.0.1",
+		"hygen": "^5.0.3",
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^24.1.0",
 		"jest-canvas-mock": "^2.1.0",
