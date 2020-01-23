@@ -28,8 +28,9 @@ export const actions = {
 		return dispatch("populateUser", payload.userId);
 		//return res;
 	},
-	async logout(ctx) {
+	async logout({ commit }) {
 		this.$cookies.remove("jwt");
+		commit("clearAuthData");
 	},
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
@@ -85,6 +86,11 @@ export const mutations = {
 	},
 	addUserPermission(state, permission) {
 		state.user.permissions.push(permission);
+	},
+	clearAuthData(state) {
+		state.accessToken = null;
+		state.user = null;
+		state.school = null;
 	},
 };
 

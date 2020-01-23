@@ -61,6 +61,7 @@ jobs:
         - chmod 700 integration-test.sh
         - bash integration-test.sh
       name: "test:integration"
+      if: NOT (branch ~= /^greenkeeper\/.*$/ AND type != pull_request)
       env:
         - IT_CLIENT_HOST=nuxtclient
         - IT_CLIENT_PORT=4000
