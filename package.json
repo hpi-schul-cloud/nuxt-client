@@ -132,7 +132,7 @@
 		"vue-svg-loader": "^0.15.0",
 		"vue-template-compiler": "^2.6.11",
 		"vuepress": "^1.2.0",
-		"vuera": "^0.2.4",
+		"vuera": "^0.2.6",
 		"webpack": "^4.29.6",
 		"yorkie": "^2.0.0"
 	},
