@@ -36,15 +36,6 @@ pull_request_rules:
       label:
         remove:
           - has conflicts
-  - name: let dependabot recreate PRs with conflicts
-    conditions:
-      # match dependabot[bot] and dependabot-preview[bot]
-      - author~=dependabot(-preview)?\[bot\]
-      - -status-failure~=.*
-      - conflict
-    actions:
-      comment:
-        message: "@dependabot recreate"
 
   #######################
   # AUTO MERGING
