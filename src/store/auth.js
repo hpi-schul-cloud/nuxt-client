@@ -30,7 +30,7 @@ export const actions = {
 	},
 	async logout({ commit }) {
 		this.$cookies.remove("jwt");
-		commit('clearAuthData');
+		commit("clearAuthData");
 	},
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
