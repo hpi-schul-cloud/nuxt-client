@@ -7,6 +7,7 @@ describe("@components/EmptyState", () => {
 		const wrapper = mount(EmptyState, {
 			propsData: {
 				image: "@assets/icons/emptystate.svg",
+				alt: "Alt Text",
 			},
 		});
 		expect(wrapper.find(".base").exists()).toBe(true);
@@ -18,6 +19,7 @@ describe("@components/EmptyState", () => {
 		const wrapper = shallowMount(EmptyState, {
 			propsData: {
 				image: "@assets/icons/emptystate.svg",
+				alt: "Alt Text",
 			},
 		});
 		expect(wrapper.find("img").classes("image")).toBe(true);
@@ -27,6 +29,7 @@ describe("@components/EmptyState", () => {
 		...rendersSlotContent(EmptyState, ["description"], {
 			propsData: {
 				image: "@assets/icons/emptystate.svg",
+				alt: "Alt Text",
 			},
 		})
 	);
