@@ -50,6 +50,7 @@ export default {
 	width: 100%;
 	height: auto;
 	padding: var(--space-xs) var(--space-lg) var(--space-xs) var(--space-xs);
+	margin-bottom: var(--space-md);
 	border-radius: var(--radius-sm);
 	box-shadow: var(--shadow-s);
 }

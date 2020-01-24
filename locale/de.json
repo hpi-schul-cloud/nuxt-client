@@ -36,6 +36,8 @@
 	"components.organisms.FormNews.success.remove": "Artikel erfolgreich gelöscht.",
 	"components.organisms.legacyFooter.contact": "Kontakt",
 	"components.organisms.legacyFooter.job-offer": "Stellenausschreibungen",
+	"components.organisms.FormDatasources.input.name.placeholder": "Name der Datenquelle",
+	"components.organisms.FormDatasources.input.name.label": "Name",
 	"error.400": "400 - Fehlerhafte Anfrage",
 	"error.401": "401 - Das dürfen wir dir leider nicht zeigen",
 	"error.404": "404 - Seite nicht gefunden",
