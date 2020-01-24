@@ -14,19 +14,24 @@
 			</section>
 
 			<section v-if="datasources && datasources.length > 0" class="section">
-				<datasource-card
-					:image="require('@assets/img/logo/logo-webuntis.svg')"
-					title="WebUnits"
-				>
-					<template v-slot:actions>
-						<BaseButton design="primary text">
-							<BaseIcon source="custom" icon="datasource-import" :fill="color" />
-							Datenquelle importieren
-						</BaseButton>
-						<!-- lastStatus: { type: String, enum: ['Success', 'Warning', 'Error'] } -->
-						<BaseIcon source="custom" icon="success" :fill="green" />
-					</template>
-				</datasource-card>
+				<li v-for="element in datasources"  :key="element">
+					<!-- todo use from item the  name -> title and type(use method) -> image -->
+					<datasource-card
+						:image="require('@assets/img/logo/logo-webuntis.svg')"
+						title={{ element.name }}
+					>
+
+						<template v-slot:actions>
+							<BaseButton design="primary text">
+								<BaseIcon source="custom" icon="datasource-import" :fill="color" />
+								Datenquelle importieren
+							</BaseButton>
+							<!-- todo use method to return icon -> the method should return the complet icon -->
+							<!-- it exist different sketches with different styles how it should displayed, please ask ui -->
+							<BaseIcon source="custom" icon="success" :fill="green" />
+						</template>
+					</datasource-card>
+				</li>
 			</section>
 
 			<floating-fab
@@ -87,19 +92,22 @@ export default {
 		find() {
 			this.$store.dispatch("datasources/find");
 		},
-		/*
-		methods: {
-		find() {
-			this.$store.dispatch("news/find", {
-				query: {
-					$sort: {
-						createdAt: -1,
-					},
-				},
-			});
+		mapLastStatusIconName(item) {
+			const mapping = {
+				Success: 'success',
+				Warning: 'warning',
+				Error: 'error',
+			};
+			return mapping[item.lastStatus];
 		},
-	},
-	*/
+		mapTypeToDatasourceImage(item) {
+			// todo later - check naming
+			const webuntis = require('@assets/img/logo/logo-webuntis.svg');
+			const ldap = require('@assets/img/logo/logo-ldap.svg');
+			const rss = require('@assets/img/logo/logo-rss.svg');
+			const mapping = { webuntis, ldap, rss };
+			return mapping[item.config.type];
+		}
 	},
 	head() {
 		return {
