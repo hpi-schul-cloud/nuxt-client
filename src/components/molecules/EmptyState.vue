@@ -2,7 +2,7 @@
 	<div class="base">
 		<div class="container">
 			<div class="img-container">
-				<img :src="image" class="image" alt="Datensource Logo" />
+				<img :src="image" :alt="alt" class="image" />
 			</div>
 			<div class="description">
 				<slot name="description" />
@@ -14,6 +14,10 @@
 export default {
 	props: {
 		image: {
+			type: String,
+			required: true,
+		},
+		alt: {
 			type: String,
 			required: true,
 		},
