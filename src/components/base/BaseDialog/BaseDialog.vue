@@ -2,7 +2,7 @@
 	<div ref="dialog" data-testid="dialog">
 		<base-modal :active="isActive" @update:active="clickOutside">
 			<template v-slot:body>
-				<modal-body-info :text="message">
+				<modal-body-info :title="message">
 					<template v-slot:icon>
 						<base-icon
 							v-if="icon"
