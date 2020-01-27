@@ -4,9 +4,9 @@
 			<base-breadcrumb :inputs="inputs" />
 			<h3>Datenquellen</h3>
 			<empty-state :image="imgsrc">
-				<template v-slot:description
-					>Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst
-					du eine Datenquelle hinzufügen.
+				<template v-slot:description>
+					Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst du
+					eine Datenquelle hinzufügen.
 				</template>
 			</empty-state>
 			<floating-fab
