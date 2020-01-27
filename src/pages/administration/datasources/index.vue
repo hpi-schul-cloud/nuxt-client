@@ -1,74 +1,53 @@
 <template>
 	<div>
-		<user-has-permission permission="DATASOURCES_VIEW">
-			<base-breadcrumb :inputs="inputs" />
-			<h3>Datenquellen</h3>
-			<empty-state :image="imgsrc">
-				<template v-slot:description>
-					Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst du
-					eine Datenquelle hinzufügen.
-				</template>
-			</empty-state>
-			<floating-fab
-				:position="position"
-				:icon="icon"
-				to="/administration/datasources/add"
-			/>
-		</user-has-permission>
+		<base-breadcrumb :inputs="breadcrumb" />
+		<h3>{{ $t("pages.administration.datasources.index.title") }}</h3>
+
+		<empty-state :image="imgsrc">
+			<template v-slot:description>
+				{{ $t("pages.administration.datasources.index.empty") }}
+			</template>
+		</empty-state>
+
+		<floating-fab
+			:position="position"
+			:icon="icon"
+			to="/administration/datasources/new"
+		/>
 	</div>
 </template>
 
 <script>
-import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
-import ExampleImage from "@assets/img/emptystate-graph.svg";
-import UserHasPermission from "@components/helpers/UserHasPermission";
-import { mapGetters } from "vuex";
+import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
 export default {
 	components: {
-		BaseBreadcrumb,
 		EmptyState,
 		FloatingFab,
-		UserHasPermission,
+	},
+	meta: {
+		requiredPermissions: ["DATASOURCES_VIEW"],
 	},
 	data() {
 		return {
-			inputs: [
+			breadcrumb: [
 				{
-					text: "Admin",
+					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
 					icon: { source: "fa", icon: "fas fa-cog" },
 				},
 				{
-					text: "Systeme",
-					href: "http://schul-cloud.org",
-				},
-				{
-					text: "Datenquellen",
-					to: "/administration/datasources",
+					text: this.$t("pages.administration.datasources.index.title"),
 				},
 			],
-			imgsrc: ExampleImage,
+			imgsrc: ImageEmptyState,
 		};
-	},
-	computed: {
-		...mapGetters("datasources", {
-			datasources: "list",
-		}),
-	},
-	created(ctx) {
-		this.find();
-	},
-	methods: {
-		find() {
-			this.$store.dispatch("datasources/find");
-		},
 	},
 	head() {
 		return {
-			title: "Datenquellen",
+			title: this.$t("pages.administration.datasources.index.title"),
 		};
 	},
 };
@@ -76,4 +55,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+.datasources {
+	list-style: none;
+}
 </style>
