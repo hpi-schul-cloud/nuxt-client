@@ -11,20 +11,36 @@
 		>
 		</base-input>
 		<slot name="inputs" :config="data.config" />
+		<base-button type="submit" class="w-100" design="secondary" text
+			>Verbinden</base-button
+		>
 	</form>
 </template>
 
 <script>
-import dayjs from "dayjs";
-
 export default {
 	model: {
 		prop: "datasource",
 		event: "update datasource",
 	},
 	props: {
+		type: {
+			type: String,
+			required: true,
+		},
+		name: {
+			type: String,
+			required: false,
+			default: undefined,
+		},
+		schoolId: {
+			type: String,
+			required: false,
+			default: undefined,
+		},
 		config: {
 			type: Object,
+			required: false,
 			default: () => ({}),
 		},
 		/**
@@ -40,39 +56,36 @@ export default {
 	data() {
 		return {
 			data: {
-				name: "",
-				schoolId: "",
-				config: {},
+				name: this.name,
+				schoolId: this.schoolId,
+				config: this.config,
 			},
 		};
 	},
 	computed: {
-		publishDate() {
-			if (!this.data.date.date || !this.data.date.time) {
-				return undefined;
-			}
-			const date = dayjs(
-				`${this.data.date.date} ${this.data.date.time}`,
-				"YYYY-MM-DD HH:MM"
-			);
-			return date.toISOString();
-		},
-		// TODO: rewrite error messages and varibles
 		errors() {
 			const name = this.data.name
 				? undefined
-				: this.$t("components.organisms.For datasource.errors.missing_title");
-			const content = this.data.content
+				: this.$t("components.organisms.FormDatasources.errors.missing_name");
+			const schoolId = this.data.schoolId
 				? undefined
-				: this.$t("components.organisms.For datasource.errors.missing_content");
+				: this.$t(
+						"components.organisms.FormDatasources.errors.missing_hidden_data"
+				  );
 			return {
 				name,
-				content,
+				schoolId,
 			};
 		},
 	},
+	created() {
+		this.data.config.type = this.type;
+	},
 	methods: {
 		submitHandler() {
+			if (!this.data.schoolId) {
+				this.data.schoolId = this.$user.schoolId;
+			}
 			switch (this.action) {
 				case "create": {
 					this.create();
@@ -90,20 +103,18 @@ export default {
 				return this.$toast.error(errors[0]);
 			}
 			try {
-				await this.$store.dispatch("datasource/create", {
+				await this.$store.dispatch("datasources/create", {
 					name: this.data.name,
 					schoolId: this.data.schoolId,
-					config: this.props.config,
+					config: this.data.config,
 				});
-				//TODO: change text
 				this.$toast.success(
-					this.$t("components.organisms.For datasource.success.create")
+					this.$t("components.organisms.FormDatasources.success.create")
 				);
 			} catch (e) {
 				console.error(e);
-				//TODO: change text
 				this.$toast.error(
-					this.$t("components.organisms.For datasource.errors.create")
+					this.$t("components.organisms.FormDatasources.errors.create")
 				);
 			}
 		},
@@ -113,55 +124,23 @@ export default {
 				return this.$toast.error(errors[0]);
 			}
 			try {
-				await this.$store.dispatch("datasource/patch", [
+				await this.$store.dispatch("datasources/patch", [
 					this.route.params.id,
 					{
 						name: this.data.name,
 						schoolId: this.data.schoolId,
-						config: this.props.config,
+						config: this.data.config,
 					},
 				]);
-				// TODO: change text
 				this.$toast.success(
-					this.$t("components.organisms.For datasource.success.patch")
+					this.$t("components.organisms.FormDatasources.success.patch")
 				);
 			} catch (e) {
 				console.error(e);
-				// TODO: chnage text
 				this.$toast.error(
-					this.$t("components.organisms.For datasource.errors.patch")
+					this.$t("components.organisms.FormDatasources.errors.patch")
 				);
 			}
-		},
-
-		async cancel() {
-			this.$dialog.confirm({
-				message: this.$t(
-					"components.organisms.For datasource.cancel.confirm.message"
-				),
-				icon: "warning",
-				cancelText: this.$t(
-					"components.organisms.For datasource.cancel.confirm.cancel"
-				),
-				confirmText: this.$t(
-					"components.organisms.For datasource.cancel.confirm.confirm"
-				),
-				actionDesign: "success",
-				iconColor: "var(--color-danger)",
-				invertedDesign: true,
-				onConfirm: this.confirmCancelHandler,
-			});
-		},
-		async confirmCancelHandler() {
-			const cancelTarget = this.$route.params.id
-				? {
-						name: "datasource-id",
-						params: { id: this.$route.params.id },
-				  }
-				: {
-						name: "datasource",
-				  };
-			this.$router.push(cancelTarget);
 		},
 	},
 };

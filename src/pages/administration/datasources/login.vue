@@ -11,7 +11,7 @@
 				$t("pages.administration.datasources.login.text")
 			}}</p>
 
-			<form-datasource-login action="create">
+			<form-datasource-login action="create" type="webuntis">
 				<template v-slot:inputs="{ config }">
 					<base-input
 						v-model="config.username"
