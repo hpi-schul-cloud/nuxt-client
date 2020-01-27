@@ -9,30 +9,25 @@
 			/>
 
 			<form-datasource-login action="create">
-				<template v-slot:inputs="{ setValue, getValue }">
+				<template v-slot:inputs="{ config }">
 					<base-input
-						:vmodel="getValue('username') || ''"
+						v-model="config.username"
 						type="text"
 						label="Benutzername"
 						:placeholder="'WebUntis Nutzername'"
-						@update:vmodel="setValue('username', $event)"
-					>
-					</base-input>
-
+					/>
 					<base-input
-						:vmodel="getValue('password') || ''"
+						v-model="config.password"
 						type="password"
 						label="Passwort"
 						:placeholder="'WebUntis Passwort'"
-						@update:vmodel="setValue('password', $event)"
-					></base-input>
+					/>
 					<base-input
-						:vmodel="getValue('url') || ''"
+						v-model="config.url"
 						type="text"
 						label="URL"
 						:placeholder="'erato.webuntis.com'"
-						@update:vmodel="setValue('url', $event)"
-					></base-input>
+					/>
 				</template>
 			</form-datasource-login>
 		</div>
