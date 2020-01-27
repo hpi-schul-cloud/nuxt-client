@@ -9,6 +9,7 @@
 				<datasource-card
 					:image="mapTypeToDatasourceImage(element)"
 					:title="element.name"
+					class="mb--md"
 				>
 					<template v-slot:actions>
 						<BaseButton design="primary text">

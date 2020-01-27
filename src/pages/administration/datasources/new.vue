@@ -7,6 +7,7 @@
 			:key="provider.name"
 			:image="provider.icon"
 			:title="provider.name"
+			class="mb--md"
 		>
 			<template v-slot:actions>
 				<BaseButton design="primary text">
