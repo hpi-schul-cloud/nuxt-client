@@ -11,7 +11,7 @@
 		>
 			<template v-slot:actions>
 				<BaseButton design="primary text">
-					<BaseIcon source="custom" icon="add-datasource" />
+					<BaseIcon source="custom" icon="datasource-add" />
 					{{ $t("pages.administration.datasources.new.add") }}
 				</BaseButton>
 			</template>
