@@ -2,7 +2,7 @@
 	<div class="base">
 		<div class="container">
 			<div class="img-container">
-				<img :src="image" :alt="alt" class="image" />
+				<img :src="image" role="presentation" class="image" />
 			</div>
 			<div class="description">
 				<slot name="description" />
@@ -14,10 +14,6 @@
 export default {
 	props: {
 		image: {
-			type: String,
-			required: true,
-		},
-		alt: {
 			type: String,
 			required: true,
 		},
