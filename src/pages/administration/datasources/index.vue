@@ -11,6 +11,22 @@
 					:title="element.name"
 					class="mb--md"
 				>
+					<template v-slot:subtitle>
+						<template v-if="element.lastStatus === 'Success'"
+							>letzter Import {{ dayjs(element.lastRun).fromNow() }}
+							<BaseIcon
+								source="material"
+								icon="check_circle"
+								fill="var(--color-success)"
+						/></template>
+						<!-- <template v-else-if="element.lastStatus === 'something'"
+							>letzter Import 13.1</template
+						> -->
+						<template v-else
+							>Noch keine Daten importiert</template
+						>
+					</template>
+
 					<template v-slot:actions>
 						<BaseButton design="primary text">
 							<BaseIcon source="custom" icon="datasource-import" />
@@ -40,6 +56,11 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
@@ -68,6 +89,7 @@ export default {
 				},
 			],
 			imgsrc: ImageEmptyState,
+			dayjs,
 		};
 	},
 	computed: {
