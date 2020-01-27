@@ -22,33 +22,36 @@ function getMock(options = {}) {
 describe("@components/BaseTextarea", () => {
 	it(...isValidComponent(TextEditor));
 
-	/*
-	it("changing the element's value, updates the v-model", async () => {
-		// TODO
-		// currently not possible to implement because I don't know how to
-		// simulate type events on an [contenteditable] field.
-	});
-	*/
+	// TODO:
+	// currently not possible to implement because I don't know how to
+	// simulate type events on an [contenteditable] field.
+	it.todo("changing the element's value, updates the v-model");
 
 	it("changing the v-model, updates the element's value", async () => {
 		const before = `<p>before</p>`;
 		const after = `<p>after</p>`;
 		const wrapper = await getMock({ data: () => ({ content: before }) });
 		const contentContainer = wrapper.find(`[contenteditable]`);
-		expect(contentContainer.html()).toEqual(expect.stringContaining(before));
+		expect(contentContainer.html()).toStrictEqual(
+			expect.stringContaining(before)
+		);
 		wrapper.setData({ content: after });
-		expect(contentContainer.html()).toEqual(
+		expect(contentContainer.html()).toStrictEqual(
 			expect.not.stringContaining(before)
 		);
-		expect(contentContainer.html()).toEqual(expect.stringContaining(after));
+		expect(contentContainer.html()).toStrictEqual(
+			expect.stringContaining(after)
+		);
 	});
 
 	it("showImagePrompt calls callback with src", async () => {
+		// Make sure all expects get executed
+		expect.assertions(1);
 		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		const testUrl = "https://image.url";
-		window.prompt = jest.fn().mockImplementation(() => testUrl);
+		jest.spyOn(window, "prompt").mockImplementation(() => testUrl);
 		const wrapper = await getMock();
-		return new Promise((resolve) => {
+		await new Promise((resolve) => {
 			wrapper.vm.$children[0].showImagePrompt((cbValue) => {
 				expect(cbValue.src).toBe(testUrl);
 				resolve();
@@ -135,7 +138,7 @@ describe("@components/BaseTextarea", () => {
 
 		expect(undoStub.called).toBe(true);
 		expect(toastStub.called).toBe(true);
-		expect(wrapper.emitted().update).toBeFalsy();
+		expect(wrapper.emitted("update")).toBeUndefined();
 	});
 
 	it("emits update for valid content", async () => {
@@ -157,6 +160,6 @@ describe("@components/BaseTextarea", () => {
 
 		expect(undoStub.called).toBe(false);
 		expect(toastStub.called).toBe(false);
-		expect(wrapper.emitted("update")[0][0]).toEqual(validContent);
+		expect(wrapper.emitted("update")[0][0]).toStrictEqual(validContent);
 	});
 });

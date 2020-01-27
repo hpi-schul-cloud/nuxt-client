@@ -26,7 +26,7 @@ export function rendersSlotContent(
 		() => {
 			slotNames.forEach((slotName) => {
 				const slots = {};
-				slots[slotName] = `<p>Slot-${slotName}</p>`;
+				slots[slotName] = `<p>Test-Slot: ${slotName}</p>`;
 				const { element } = shallowMount(component, {
 					...mountOptions,
 					slots,

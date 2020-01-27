@@ -23,9 +23,9 @@ describe("@components/legacy/MenuQrCode", () => {
 	it("opens a print window when print button is clicked", () => {
 		const wrapper = mount(menuQrCode);
 
-		window.open = jest.fn(() => window);
-		window.print = jest.fn();
-		window.close = jest.fn();
+		jest.spyOn(window, "open").mockImplementation(() => window);
+		jest.spyOn(window, "print").mockImplementation();
+		jest.spyOn(window, "close").mockImplementation();
 		wrapper.find("button").trigger("click");
 		expect(window.open).toHaveBeenCalledTimes(1);
 		expect(window.print).toHaveBeenCalledTimes(1);

@@ -51,7 +51,7 @@ describe("@components/BaseSelect", () => {
 				value: [],
 			},
 		});
-		expect(wrapper.find(MultiSelect).attributes()["aria-label"]).toEqual(
+		expect(wrapper.find(MultiSelect).attributes()["aria-label"]).toStrictEqual(
 			"label"
 		);
 	});
@@ -128,16 +128,16 @@ describe("@components/BaseSelect", () => {
 			},
 		});
 		const multiSelect = wrapper.find("multi-select-stub");
-		expect(multiSelect.attributes("closeonselect")).toBeTruthy();
+		expect(multiSelect.attributes("closeonselect")).toBe("true");
 		expect(multiSelect.attributes("deselectlabel")).toBe("deselectLabel");
-		expect(multiSelect.attributes("multiple")).toBeTruthy();
+		expect(multiSelect.attributes("multiple")).toBe("true");
 		expect(multiSelect.attributes("label")).toBe("optionLabel");
-		expect(multiSelect.props("options")).toEqual(options);
+		expect(multiSelect.props("options")).toStrictEqual(options); // TODO: this doesn't seem testing anything except the render method
 		expect(multiSelect.attributes("placeholder")).toBe("placeholder");
 		expect(multiSelect.attributes("selectlabel")).toBe("selectLabel");
 		expect(multiSelect.attributes("selectedlabel")).toBe("selectedLabel");
 		expect(multiSelect.attributes("trackby")).toBe("id");
-		expect(multiSelect.props("value")).toEqual(options);
+		expect(multiSelect.props("value")).toStrictEqual(options); // TODO: this doesn't seem testing anything except the render method
 	});
 
 	it("emits events", () => {
@@ -151,12 +151,14 @@ describe("@components/BaseSelect", () => {
 		});
 		const multiSelect = wrapper.find("multi-select-stub");
 		multiSelect.vm.$emit("select", "select");
-		expect(wrapper.emitted().select).toEqual([["select"]]);
+		expect(wrapper.emitted().select).toStrictEqual([["select"]]);
 		multiSelect.vm.$emit("input", "input");
-		expect(wrapper.emitted().input).toEqual([["input"]]);
+		expect(wrapper.emitted().input).toStrictEqual([["input"]]);
 		multiSelect.vm.$emit("search-change", "search-change");
-		expect(wrapper.emitted()["search-change"]).toEqual([["search-change"]]);
+		expect(wrapper.emitted()["search-change"]).toStrictEqual([
+			["search-change"],
+		]);
 		multiSelect.vm.$emit("tag", "tag");
-		expect(wrapper.emitted().tag).toEqual([["tag"]]);
+		expect(wrapper.emitted().tag).toStrictEqual([["tag"]]);
 	});
 });

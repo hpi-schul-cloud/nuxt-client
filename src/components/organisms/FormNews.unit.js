@@ -69,9 +69,9 @@ describe("@components/FormNews", () => {
 				news: validNews,
 			},
 		});
-		expect(wrapper.vm.data.date.date).toEqual(validNewsDate.date);
-		expect(wrapper.vm.data.date.time).toEqual(validNewsDate.time);
-		expect(wrapper.vm.publishDate).toEqual(validNews.displayAt);
+		expect(wrapper.vm.data.date.date).toStrictEqual(validNewsDate.date);
+		expect(wrapper.vm.data.date.time).toStrictEqual(validNewsDate.time);
+		expect(wrapper.vm.publishDate).toStrictEqual(validNews.displayAt);
 	});
 
 	describe("create", () => {
@@ -189,12 +189,12 @@ describe("@components/FormNews", () => {
 			});
 			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
 			wrapper.vm.$toast = toastStubs;
-			let errorOutput = "";
-			console.error = jest.fn((inputs) => (errorOutput += inputs));
+			const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 			wrapper.trigger("submit");
 			expect(toastStubs.success.called).toBe(false); // no success message expected
-			expect(errorOutput).toContain(errorMessage); // but error log
+			const errors = consoleError.mock.calls.map((e) => e.toString());
+			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
 			expect(toastStubs.error.called).toBe(true); // and info toast
 		});
 	});
@@ -257,12 +257,12 @@ describe("@components/FormNews", () => {
 			});
 			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
 			wrapper.vm.$toast = toastStubs;
-			let errorOutput = "";
-			console.error = jest.fn((inputs) => (errorOutput += inputs));
+			const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 			wrapper.trigger("submit");
 			expect(toastStubs.success.called).toBe(false); // no success message expected
-			expect(errorOutput).toContain(errorMessage); // but error log
+			const errors = consoleError.mock.calls.map((e) => e.toString());
+			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
 			expect(toastStubs.error.called).toBe(true); // and info toast
 		});
 	});
@@ -313,20 +313,20 @@ describe("@components/FormNews", () => {
 			wrapper.vm.$toast = toastStubs;
 			const routerPushSpy = sinon.stub();
 			wrapper.vm.$router = { push: routerPushSpy };
-			let errorOutput = "";
-			console.error = jest.fn((inputs) => (errorOutput += inputs));
+			const consoleError = jest.spyOn(console, "error");
 
 			await wrapper.vm.confirmRemoveHandler();
 
 			expect(routerPushSpy.called).toBe(false); // no navigation
 			expect(toastStubs.success.called).toBe(false); // or success message
-			expect(errorOutput).toContain(errorMessage); // but error log
+			const errors = consoleError.mock.calls.map((e) => e.toString());
+			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
 			expect(toastStubs.error.called).toBe(true); // and info toast
 		});
 	});
 
 	describe("cancle", () => {
-		xit("triggering the cancel action from the edit page opens a confirm modal", async () => {
+		it.skip("triggering the cancel action from the edit page opens a confirm modal", async () => {
 			const wrapper = mount(FormNews, {
 				...getMocks(),
 				propsData: {
@@ -343,7 +343,7 @@ describe("@components/FormNews", () => {
 			wrapper.find("#cancel").trigger("click");
 			expect((await routerPushSpy).called).toBe(true);
 		});
-		xit("triggering the cancel action from the new page opens a confirm modal", async () => {
+		it.skip("triggering the cancel action from the new page opens a confirm modal", async () => {
 			const overviewMock = getMocks();
 			overviewMock.mocks.$route.params = {};
 			const wrapper = mount(FormNews, {
