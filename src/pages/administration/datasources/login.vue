@@ -3,7 +3,10 @@
 		<base-breadcrumb :inputs="inputs" />
 		<h3>WebUnits verbinden</h3>
 		<div class="container">
-			<img class="logo-image" src="@assets/img/logo/logo-webuntis-text.svg" />
+			<img
+				class="logo-image"
+				src="@assets/img/datasources/logo-webuntis-text.svg"
+			/>
 
 			<form-datasource-login action="create">
 				<template v-slot:inputs="{ setValue, getValue }">
@@ -16,18 +19,20 @@
 					>
 					</base-input>
 
-					<!-- <base-input
-						v-model="config.password"
+					<base-input
+						:vmodel="getValue('password') || ''"
 						type="password"
-						:label="password"
+						label="Passwort"
 						:placeholder="'WebUntis Passwort'"
+						@update:vmodel="setValue('password', $event)"
 					></base-input>
 					<base-input
-						v-model="config.url"
+						:vmodel="getValue('url') || ''"
 						type="text"
-						:label="url"
+						label="URL"
 						:placeholder="'erato.webuntis.com'"
-					></base-input> -->
+						@update:vmodel="setValue('url', $event)"
+					></base-input>
 				</template>
 			</form-datasource-login>
 		</div>
