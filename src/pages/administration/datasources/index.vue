@@ -4,7 +4,7 @@
 		<h3>{{ $t("pages.administration.datasources.index.title") }}</h3>
 
 		<ol v-if="datasources && datasources.length > 0" class="datasources">
-			<li v-for="element in datasources" :key="element">
+			<li v-for="element in datasources" :key="element._id">
 				<!-- todo use from item the name -> title and type(use method) -> image -->
 				<datasource-card
 					:image="mapTypeToDatasourceImage(element)"
@@ -13,11 +13,7 @@
 				>
 					<template v-slot:actions>
 						<BaseButton design="primary text">
-							<BaseIcon
-								source="custom"
-								icon="datasource-import"
-								:fill="color"
-							/>
+							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
 						</BaseButton>
 						<!-- todo use method to return icon -> the method should return the complet icon -->
@@ -36,8 +32,8 @@
 		</template>
 
 		<floating-fab
-			:position="position"
-			:icon="icon"
+			position="bottom-right"
+			icon="add"
 			to="/administration/datasources/new"
 		/>
 	</div>
