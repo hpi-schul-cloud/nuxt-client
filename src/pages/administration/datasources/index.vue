@@ -1,83 +1,76 @@
 <template>
 	<div>
-		<user-has-permission permission="DATASOURCES_VIEW">
-			<base-breadcrumb :inputs="inputs" />
-			<h3>Datenquellen</h3>
+		<base-breadcrumb :inputs="breadcrumb" />
+		<h3>{{ $t("pages.administration.datasources.index.title") }}</h3>
 
-			<section v-if="!datasources || datasources.length === 0" class="section">
-				<empty-state :image="imgsrc">
-					<template v-slot:description
-						>Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst
-						du eine Datenquelle hinzufügen.
+		<ol v-if="datasources && datasources.length > 0" class="datasources">
+			<li v-for="element in datasources" :key="element">
+				<!-- todo use from item the name -> title and type(use method) -> image -->
+				<datasource-card
+					:image="mapTypeToDatasourceImage(element)"
+					:title="element.name"
+				>
+					<template v-slot:actions>
+						<BaseButton design="primary text">
+							<BaseIcon
+								source="custom"
+								icon="datasource-import"
+								:fill="color"
+							/>
+							{{ $t("pages.administration.datasources.index.import") }}
+						</BaseButton>
+						<!-- todo use method to return icon -> the method should return the complet icon -->
+						<!-- it exist different sketches with different styles how it should displayed, please ask ui -->
+						<!-- <BaseIcon source="custom" icon="success" :fill="green" /> -->
 					</template>
-				</empty-state>
-			</section>
+				</datasource-card>
+			</li>
+		</ol>
+		<template v-else>
+			<empty-state :image="imgsrc">
+				<template v-slot:description>
+					{{ $t("pages.administration.datasources.index.empty") }}
+				</template>
+			</empty-state>
+		</template>
 
-			<section v-if="datasources && datasources.length > 0" class="section">
-				<li v-for="element in datasources"  :key="element">
-					<!-- todo use from item the  name -> title and type(use method) -> image -->
-					<datasource-card
-						:image="require('@assets/img/logo/logo-webuntis.svg')"
-						title={{ element.name }}
-					>
-
-						<template v-slot:actions>
-							<BaseButton design="primary text">
-								<BaseIcon source="custom" icon="datasource-import" :fill="color" />
-								Datenquelle importieren
-							</BaseButton>
-							<!-- todo use method to return icon -> the method should return the complet icon -->
-							<!-- it exist different sketches with different styles how it should displayed, please ask ui -->
-							<BaseIcon source="custom" icon="success" :fill="green" />
-						</template>
-					</datasource-card>
-				</li>
-			</section>
-
-			<floating-fab
-				:position="position"
-				:icon="icon"
-				to="/administration/datasources/add"
-			/>
-		</user-has-permission>
+		<floating-fab
+			:position="position"
+			:icon="icon"
+			to="/administration/datasources/new"
+		/>
 	</div>
 </template>
 
 <script>
-import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
-import ExampleImage from "@assets/img/emptystate-graph.svg";
-import UserHasPermission from "@components/helpers/UserHasPermission";
+import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import { mapGetters } from "vuex";
 
 export default {
 	components: {
-		BaseBreadcrumb,
 		EmptyState,
 		FloatingFab,
-		UserHasPermission,
 		DatasourceCard,
+	},
+	meta: {
+		requiredPermissions: ["DATASOURCES_VIEW"],
 	},
 	data() {
 		return {
-			inputs: [
+			breadcrumb: [
 				{
-					text: "Admin",
+					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
 					icon: { source: "fa", icon: "fas fa-cog" },
 				},
 				{
-					text: "Systeme",
-					href: "http://schul-cloud.org",
-				},
-				{
-					text: "Datenquellen",
-					to: "/administration/datasources",
+					text: this.$t("pages.administration.datasources.index.title"),
 				},
 			],
-			imgsrc: ExampleImage,
+			imgsrc: ImageEmptyState,
 		};
 	},
 	computed: {
@@ -90,28 +83,31 @@ export default {
 	},
 	methods: {
 		find() {
-			this.$store.dispatch("datasources/find");
+			this.$store.dispatch("datasources/find").catch((error) => {
+				console.error(error);
+				this.$toast.error(this.$t("error.load"));
+			});
 		},
 		mapLastStatusIconName(item) {
 			const mapping = {
-				Success: 'success',
-				Warning: 'warning',
-				Error: 'error',
+				Success: "success",
+				Warning: "warning",
+				Error: "error",
 			};
 			return mapping[item.lastStatus];
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
-			const webuntis = require('@assets/img/logo/logo-webuntis.svg');
-			const ldap = require('@assets/img/logo/logo-ldap.svg');
-			const rss = require('@assets/img/logo/logo-rss.svg');
+			const webuntis = require("@assets/img/logo/logo-webuntis.svg");
+			const ldap = require("@assets/img/logo/logo-ldap.svg");
+			const rss = require("@assets/img/logo/logo-rss.svg");
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.type];
-		}
+		},
 	},
 	head() {
 		return {
-			title: "Datenquellen",
+			title: this.$t("pages.administration.datasources.index.title"),
 		};
 	},
 };
@@ -119,4 +115,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.datasources {
+	list-style: none;
+}
 </style>
