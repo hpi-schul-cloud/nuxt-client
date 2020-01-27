@@ -8,7 +8,6 @@
 				$t('components.organisms.FormDatasources.input.name.placeholder')
 			"
 		>
-			<base-icon slot="icon" :source="iconSource" :icon="icon" />
 		</base-input>
 		<slot name="inputs" :setValue="setValue" :getValue="getValue" />
 	</form>
