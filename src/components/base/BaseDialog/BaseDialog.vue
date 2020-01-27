@@ -6,7 +6,6 @@
 					<template v-slot:icon>
 						<base-icon
 							v-if="icon"
-							slot="icon"
 							:source="iconSource"
 							:icon="icon"
 							:style="{
