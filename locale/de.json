@@ -50,6 +50,8 @@
 	"layouts.loggedoutFullWidth.steps": "Erste Schritte",
 	"pages.administration.datasources.index.empty": "Es sind noch keine Datenquellen vorhanden. Mit dem Plus-Button unten rechts kannst du eine neue Datenquelle hinzufügen.",
 	"pages.administration.datasources.index.import": "Daten importieren",
+	"pages.administration.datasources.index.remove.error": "Fehler beim entfernen der Datenquellen \"{name}\"",
+	"pages.administration.datasources.index.remove.success": "Datenquellen \"{name}\" wurde entfernt",
 	"pages.administration.datasources.index.title": "Datenquellen",
 	"pages.administration.datasources.new.add": "Datenquelle hinzufügen",
 	"pages.administration.datasources.new.provider.LDAP.name": "LDAP",

@@ -49,7 +49,7 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	height: auto;
-	padding: var(--space-xs) var(--space-lg) var(--space-xs) var(--space-xs);
+	padding: var(--space-xs);
 	border-radius: var(--radius-sm);
 	box-shadow: var(--shadow-s);
 }

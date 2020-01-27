@@ -172,6 +172,7 @@ export default {
 		handleClickOutside(event) {
 			if (this.shouldHandleClickOutside) {
 				event.preventDefault();
+				event.stopPropagation();
 				this.closeMenu();
 			}
 		},

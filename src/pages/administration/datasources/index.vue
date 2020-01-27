@@ -16,9 +16,24 @@
 							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
 						</BaseButton>
-						<!-- todo use method to return icon -> the method should return the complet icon -->
-						<!-- it exist different sketches with different styles how it should displayed, please ask ui -->
-						<!-- <BaseIcon source="custom" icon="success" :fill="green" /> -->
+						<span style="position: relative">
+							<BaseButton design="icon text" @click="menuOpen = element._id">
+								<base-icon
+									class="footer__content-icon"
+									source="material"
+									icon="more_vert"
+								/>
+							</BaseButton>
+							<context-menu
+								:key="element._id"
+								:show="menuOpen === element._id"
+								anchor="top-right"
+								:actions="getActions(element)"
+								@update:show="menuOpen = false"
+								@edit="handleEdit(element)"
+								@remove="handleRemove(element)"
+							/>
+						</span>
 					</template>
 				</datasource-card>
 			</li>
@@ -40,17 +55,21 @@
 </template>
 
 <script>
+import ContextMenu from "@components/molecules/ContextMenu";
+import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
+
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
-import DatasourceCard from "@components/molecules/DatasourceCard";
+
 import { mapGetters } from "vuex";
 
 export default {
 	components: {
+		ContextMenu,
+		DatasourceCard,
 		EmptyState,
 		FloatingFab,
-		DatasourceCard,
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
@@ -68,6 +87,7 @@ export default {
 				},
 			],
 			imgsrc: ImageEmptyState,
+			menuOpen: false,
 		};
 	},
 	computed: {
@@ -79,6 +99,20 @@ export default {
 		this.find();
 	},
 	methods: {
+		getActions(element) {
+			return [
+				{
+					text: "Zugangsdaten ändern",
+					event: "edit",
+					attributes: element,
+				},
+				{
+					text: "Datenquelle entfernen",
+					event: "remove",
+					attributes: element,
+				},
+			];
+		},
 		find() {
 			this.$store.dispatch("datasources/find").catch((error) => {
 				console.error(error);
@@ -100,6 +134,26 @@ export default {
 			const rss = require("@assets/img/datasources/logo-rss.png");
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.type];
+		},
+		handleEdit(/* datasource */) {
+			this.$toast.info(`TODO: redirect to not yet existing edit page`);
+		},
+		async handleRemove(datasource) {
+			try {
+				await this.$store.dispatch("datasources/remove", datasource._id);
+				this.$toast.success(
+					this.$t("pages.administration.datasources.index.remove.success", {
+						name: datasource.name,
+					})
+				);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+					this.$t("pages.administration.datasources.index.remove.error", {
+						name: datasource.name,
+					})
+				);
+			}
 		},
 	},
 	head() {
