@@ -3,14 +3,14 @@
 		<base-breadcrumb :inputs="breadcrumb" />
 		<h3>{{ $t("pages.administration.datasources.index.title") }}</h3>
 
-		<empty-state :image="imgsrc">
+		<empty-state :image="ImageEmptyState">
 			<template v-slot:description>
 				{{ $t("pages.administration.datasources.index.empty") }}
 			</template>
 		</empty-state>
 
 		<floating-fab
-			:position="bottom-right"
+			:position="bottom - right"
 			:icon="add"
 			to="/administration/datasources/new"
 		/>
@@ -20,7 +20,6 @@
 <script>
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
-import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
 export default {
 	components: {
@@ -42,7 +41,7 @@ export default {
 					text: this.$t("pages.administration.datasources.index.title"),
 				},
 			],
-			imgsrc: ImageEmptyState,
+			ImageEmptyState: require("@assets/img/emptystate-graph.svg"),
 		};
 	},
 	head() {
