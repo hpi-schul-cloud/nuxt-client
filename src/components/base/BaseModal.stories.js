@@ -165,7 +165,7 @@ storiesOf("Base|Modals", module)
 					title="Bist du sicher, dass du das Thema das Herz löschen möchtest?"
 				>
 					<template v-slot:icon>
-					<base-icon slot="icon" source="material" icon="report_problem" style="color: var(--color-danger)"/>
+						<base-icon source="material" icon="report_problem" style="color: var(--color-danger)"/>
 					</template>
 				</ModalBodyInfo>
 			</template>
