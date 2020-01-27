@@ -45,7 +45,7 @@
 	"layouts.loggedoutFullWidth.join": "Mitmachen",
 	"layouts.loggedoutFullWidth.project": "Projekt",
 	"layouts.loggedoutFullWidth.steps": "Erste Schritte",
-	"pages.administration.datasources.index.empty": "Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst du eine Datenquelle hinzufügen.",
+	"pages.administration.datasources.index.empty": "Es sind noch keine Datenquellen vorhanden. Klicke auf den Plus-Button unten rechts um eine neue Datenquelle hinzuzufügen.",
 	"pages.administration.datasources.index.title": "Datenquellen",
 	"pages.administration.index.title": "Administration",
 	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",
