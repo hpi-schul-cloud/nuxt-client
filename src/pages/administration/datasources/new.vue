@@ -52,7 +52,7 @@ export default {
 					name: this.$t(
 						"pages.administration.datasources.new.provider.WebUntis.name"
 					),
-					icon: require("@assets/img/datasources/logo-webuntis.svg"),
+					icon: require("@assets/img/datasources/logo-webuntis.png"),
 				},
 				{
 					name: this.$t(
@@ -64,7 +64,7 @@ export default {
 					name: this.$t(
 						"pages.administration.datasources.new.provider.RSS.name"
 					),
-					icon: require("@assets/img/datasources/logo-rss.svg"),
+					icon: require("@assets/img/datasources/logo-rss.png"),
 				},
 			],
 		};

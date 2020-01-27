@@ -95,9 +95,9 @@ export default {
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
-			const webuntis = require("@assets/img/datasources/logo-webuntis.svg");
+			const webuntis = require("@assets/img/datasources/logo-webuntis.png");
 			const ldap = require("@assets/img/datasources/logo-ldap.svg");
-			const rss = require("@assets/img/datasources/logo-rss.svg");
+			const rss = require("@assets/img/datasources/logo-rss.png");
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.type];
 		},
