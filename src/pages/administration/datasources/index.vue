@@ -11,7 +11,7 @@
 
 		<floating-fab
 			:position="bottom-right"
-			:icon="icon"
+			:icon="add"
 			to="/administration/datasources/new"
 		/>
 	</div>
