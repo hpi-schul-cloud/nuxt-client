@@ -240,7 +240,7 @@ export default {
 				&:hover,
 				&.active {
 					cursor: pointer;
-					background-color: var(--color-gray-light);
+					background-color: var(--color-sidebar-active-bg);
 				}
 
 				&.active .list-content {

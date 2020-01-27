@@ -2,5 +2,15 @@
 :root {
 	/* main colors */
 	--color-primary: #f56b00;
+	--color-primary-light: #ff9c3f;
+	--color-primary-dark: #bb3b00;
 	--color-secondary: #185888;
+	--color-secondary-light: #5284b8;
+	--color-secondary-dark: #002f5b;
+	--logo-gradient: linear-gradient(
+		45deg,
+		var(--color-secondary),
+		var(--color-secondary-light)
+	);
+	--color-sidebar-active-bg: rgba(24, 88, 136, 0.15);
 }
