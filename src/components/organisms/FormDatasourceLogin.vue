@@ -10,7 +10,7 @@
 		>
 			<base-icon slot="icon" :source="iconSource" :icon="icon" />
 		</base-input>
-		<slot name="inputs" />
+		<slot name="inputs" :setValue="setValue" :getValue="getValue" />
 	</form>
 </template>
 
@@ -72,6 +72,12 @@ export default {
 		},
 	},
 	methods: {
+		setValue(key, value) {
+			this.$set(this.data.config, key, value);
+		},
+		getValue(key) {
+			return this.data.config[key];
+		},
 		submitHandler() {
 			switch (this.action) {
 				case "create": {
