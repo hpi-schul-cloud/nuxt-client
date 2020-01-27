@@ -1,11 +1,9 @@
 import { storiesOf } from "@storybook/vue";
 
+import FormDatasourceLogin from "./FormDatasourceLogin";
 
-import DatasourceLoginForm from "./DatasourceLoginForm";
-
-storiesOf("Organisms|DatasourceLoginForm", module)
-	.add("default", () => ({
-		components: { DatasourceLoginForm },
-		template: `<DatasourceLoginForm />`,
-		data: () => ({}),
-	}));
+storiesOf("Organisms|FormDatasourceLogin", module).add("default", () => ({
+	components: { FormDatasourceLogin },
+	template: `<FormDatasourceLogin />`,
+	data: () => ({}),
+}));

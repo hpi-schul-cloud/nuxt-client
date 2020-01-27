@@ -1,12 +1,15 @@
 <template>
 	<div>
-		<base-breadcrumb :inputs="inputs" />
-		<h3>WebUnits verbinden</h3>
-		<div class="container">
+		<base-breadcrumb :inputs="breadcrumbs" />
+		<base-content-container size="small">
 			<img
-				class="logo-image"
+				class="mt--xl-4"
 				src="@assets/img/datasources/logo-webuntis-text.svg"
 			/>
+			<h5>{{ $t("pages.administration.datasources.login.heading") }}</h5>
+			<p class="mt--md">{{
+				$t("pages.administration.datasources.login.text")
+			}}</p>
 
 			<form-datasource-login action="create">
 				<template v-slot:inputs="{ config }">
@@ -15,50 +18,55 @@
 						type="text"
 						label="Benutzername"
 						:placeholder="'WebUntis Nutzername'"
+						class="mt--md"
 					/>
 					<base-input
 						v-model="config.password"
 						type="password"
 						label="Passwort"
 						:placeholder="'WebUntis Passwort'"
+						class="mt--md"
 					/>
 					<base-input
 						v-model="config.url"
 						type="text"
 						label="URL"
 						:placeholder="'erato.webuntis.com'"
+						class="mt--md"
 					/>
 				</template>
 			</form-datasource-login>
-		</div>
+		</base-content-container>
 	</div>
 </template>
 <script>
 import FormDatasourceLogin from "@components/organisms/FormDatasourceLogin";
+import BaseContentContainer from "@components/base/BaseContentContainer";
+
 export default {
 	components: {
 		FormDatasourceLogin,
+		BaseContentContainer,
 	},
 	data() {
 		return {
 			image: "@assets/img/logo/logo-webuntis-text.svg",
-			inputs: [
+			breadcrumbs: [
 				{
-					text: "Admin",
+					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
 					icon: { source: "fa", icon: "fas fa-cog" },
 				},
 				{
-					text: "Datenquellen",
+					text: this.$t("pages.administration.datasources.index.title"),
 					to: "/administration/datasources",
 				},
 				{
-					text: "Hinzufügen",
-					to: "/administration/datasources/add",
+					text: this.$t("pages.administration.datasources.new.short_title"),
+					to: "/administration/datasources/new",
 				},
 				{
-					text: "Login",
-					to: "/administration/datasources/login",
+					text: this.$t("pages.administration.datasources.login.title"),
 				},
 			],
 		};
@@ -73,5 +81,9 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+}
+
+h5 {
+	text-align: center;
 }
 </style>

@@ -7,6 +7,7 @@
 			:placeholder="
 				$t('components.organisms.FormDatasources.input.name.placeholder')
 			"
+			class="mt--md"
 		>
 		</base-input>
 		<slot name="inputs" :config="data.config" />
