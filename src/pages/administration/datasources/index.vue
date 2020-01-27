@@ -10,8 +10,8 @@
 		</empty-state>
 
 		<floating-fab
-			:position="bottom - right"
-			:icon="add"
+			position="bottom-right"
+			icon="add"
 			to="/administration/datasources/new"
 		/>
 	</div>
