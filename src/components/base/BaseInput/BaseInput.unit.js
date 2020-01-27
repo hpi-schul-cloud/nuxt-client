@@ -5,11 +5,20 @@ describe("@components/BaseInput", () => {
 	it(...isValidComponent(BaseInput));
 
 	// BaseInput passes all given slots to it's child components
-	it(
-		...rendersSlotContent(BaseInput, ["default", "icon", "someRandomSlot"], {
-			propsData: { vmodel: "test", type: "text", label: "Label" },
-		})
-	);
+	it("passes all given slots to it's child components", async () => {
+		const slotNames = ["default", "icon", "someRandomSlot"];
+		slotNames.forEach((slotName) => {
+			const slots = {};
+			slots[slotName] = `<p>Test-Slot: ${slotName}</p>`;
+			const wrapper = shallowMount(BaseInput, {
+				propsData: { vmodel: "test", type: "text", label: "Label" },
+				slots,
+			});
+			const childSlots = wrapper.vm.$children[0].$slots;
+			expect(childSlots.hasOwnProperty(slotName)).toBe(true);
+			expect(childSlots[slotName]).toHaveLength(1);
+		});
+	});
 
 	it("all types have a label", () => {
 		const testLabel = "MyTestLabel";
