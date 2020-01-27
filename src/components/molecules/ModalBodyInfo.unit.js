@@ -8,7 +8,7 @@ describe("@components/ModalBodyInfo", () => {
 		const slotContent = "hallo";
 		const { element } = shallowMount(ModalBodyInfo, {
 			propsData: {
-				text: "hallo",
+				title: "hallo",
 			},
 			slots: {
 				icon: slotContent,
@@ -20,7 +20,7 @@ describe("@components/ModalBodyInfo", () => {
 	it("contains text", () => {
 		const wrapper = mount(ModalBodyInfo, {
 			propsData: {
-				text: "hallo",
+				title: "hallo",
 			},
 		});
 		expect(wrapper.find(".body-container").text()).toBe("hallo");
