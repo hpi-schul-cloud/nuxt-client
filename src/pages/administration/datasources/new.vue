@@ -51,19 +51,19 @@ export default {
 					name: this.$t(
 						"pages.administration.datasources.new.provider.WebUntis.name"
 					),
-					icon: require("@assets/img/logo/logo-webuntis.svg"),
+					icon: require("@assets/img/datasources/logo-webuntis.svg"),
 				},
 				{
 					name: this.$t(
 						"pages.administration.datasources.new.provider.LDAP.name"
 					),
-					icon: require("@assets/img/logo/logo-ldap.svg"),
+					icon: require("@assets/img/datasources/logo-ldap.svg"),
 				},
 				{
 					name: this.$t(
 						"pages.administration.datasources.new.provider.RSS.name"
 					),
-					icon: require("@assets/img/logo/logo-rss.svg"),
+					icon: require("@assets/img/datasources/logo-rss.svg"),
 				},
 			],
 		};

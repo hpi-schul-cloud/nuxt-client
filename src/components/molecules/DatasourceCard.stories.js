@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 import { text } from "@storybook/addon-knobs";
 
 import DatasourceCard from "./DatasourceCard";
-import ExampleImage from "@assets/img/logo/logo-webuntis.svg";
+import ExampleImage from "@assets/img/datasources/logo-webuntis.svg";
 
 const DatasourceActions = `<BaseButton design="primary text">
 <BaseIcon source="material" icon="add"/>
