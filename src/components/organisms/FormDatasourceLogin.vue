@@ -32,15 +32,6 @@ export default {
 			type: String,
 			required: true,
 		},
-		/**
-		 * Which Action to execute on Form Submit.
-		 * Submit using a `<BaseButton type="submit">Submit</BaseButton>`
-		 */
-		action: {
-			type: String,
-			validator: (v) => ["create", "patch"].includes(v),
-			default: undefined,
-		},
 	},
 	data() {
 		return {
@@ -53,7 +44,7 @@ export default {
 	},
 	computed: {
 		actionType() {
-			return this.action || (this.$route.params.id ? "patch" : "create");
+			return this.$route.params.id ? "patch" : "create";
 		},
 		errors() {
 			const name = this.data.name
@@ -76,7 +67,9 @@ export default {
 	},
 	methods: {
 		async get(id) {
-			this.data = await this.$store.dispatch("datasources/get", id);
+			this.data = JSON.parse(
+				JSON.stringify(await this.$store.dispatch("datasources/get", id))
+			);
 		},
 		submitHandler() {
 			if (!this.data.schoolId) {
