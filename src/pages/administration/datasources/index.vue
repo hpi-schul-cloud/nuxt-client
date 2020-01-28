@@ -30,7 +30,7 @@
 								})
 							}}
 							<BaseIcon
-								source="material"
+								source="custom"
 								icon="warning"
 								fill="var(--color-danger)"
 						/></template>

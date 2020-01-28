@@ -3,7 +3,7 @@
 		<div class="card-body">
 			<img :src="image" class="image" role="presentation" />
 			<div class="card-heading">
-				<div class="card-title">
+				<div class="h6">
 					<slot name="title">
 						{{ title }}
 					</slot>
@@ -61,13 +61,12 @@ export default {
 	justify-content: space-between;
 }
 
-.card-title {
-	font-family: var(--font-accent);
-	font-size: var(--text-lg);
+.h6 {
+	margin: 0;
 }
 
 .subtitle {
-	font-size: var(--text-sm);
+	font-size: var(--text-xs);
 }
 .image {
 	height: calc(var(--text-md) + var(--text-lg));
