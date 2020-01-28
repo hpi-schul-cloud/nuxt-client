@@ -13,15 +13,31 @@
 				>
 					<template v-slot:subtitle>
 						<template v-if="element.lastStatus === 'Success'"
-							>letzter Import {{ dayjs(element.lastRun).fromNow() }}
+							>{{
+								$t("pages.administraion.datasources.index.success", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
 							<BaseIcon
 								source="material"
 								icon="check_circle"
 								fill="var(--color-success)"
 						/></template>
-						<!-- <template v-else-if="element.lastStatus === 'something'"
-							>letzter Import 13.1</template
-						> -->
+						<template v-else-if="element.lastStatus === 'Error'"
+							>{{
+								$t("pages.administraion.datasources.index.error", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
+							<BaseIcon
+								source="custom"
+								icon="warning"
+								fill="var(--color-danger)"
+						/></template>
+						<template v-else-if="element.lastStatus === 'Pending'"
+							>{{ $t("pages.administraion.datasources.index.pending") }}
+							<base-spinner :color="color" size="small"
+						/></template>
 						<template v-else
 							>Noch keine Daten importiert</template
 						>
@@ -72,6 +88,12 @@ export default {
 		EmptyState,
 		FloatingFab,
 		DatasourceCard,
+	},
+	props: {
+		color: {
+			type: String,
+			default: "var(--color-primary)",
+		},
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
