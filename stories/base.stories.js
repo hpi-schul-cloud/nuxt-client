@@ -31,7 +31,7 @@ import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseTable from "@basecomponents/BaseTable/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
 
-storiesOf("Base|Base UI", module)
+storiesOf('Base/Base UI', module)
 	.addParameters({
 		notes,
 	})

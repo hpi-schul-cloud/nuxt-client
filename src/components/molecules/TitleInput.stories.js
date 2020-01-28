@@ -3,7 +3,7 @@ import { text } from "@storybook/addon-knobs";
 
 import TitleInput from "./TitleInput";
 
-storiesOf("Base|Inputs/Default", module).add("Title Input", () => ({
+storiesOf('Base/Inputs/Default', module).add("Title Input", () => ({
 	components: { TitleInput },
 	data: () => ({
 		vmodel: text("value", ""),

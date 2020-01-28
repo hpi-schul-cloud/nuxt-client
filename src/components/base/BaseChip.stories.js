@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 
 import BaseChip from "./BaseChip";
 
-storiesOf("Base|BaseChip", module).add("default", () => ({
+storiesOf('Base/BaseChip', module).add("default", () => ({
 	components: { BaseChip },
 	data() {
 		return {

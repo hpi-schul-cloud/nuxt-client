@@ -3,7 +3,7 @@ import { text } from "@storybook/addon-knobs";
 
 import TextEditor from "./TextEditor";
 
-storiesOf("Molecules|TextEditor", module).add(
+storiesOf('Molecules/TextEditor', module).add(
 	"TextEditor",
 	() => ({
 		components: { TextEditor },
