@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<floating-fab icon="add" to="/news/new" />
+		<floating-fab
+			icon="add"
+			to="/news/new"
+			:aria-label="$t('pages.news.new.title')"
+		/>
 		<section v-if="news && news.length > 0" class="section">
 			<news-card
 				v-for="article of news"

@@ -1,7 +1,11 @@
 <template>
 	<div>
 		<chip-filter :value.sync="activeToggle" :options="toggleTags" />
-		<floating-fab icon="add" to="/courses/create" />
+		<floating-fab
+			icon="add"
+			to="/courses/create"
+			:aria-label="$t('pages.courses.new.btn_new')"
+		/>
 		<courses-grid :courses="courses"></courses-grid>
 	</div>
 </template>
