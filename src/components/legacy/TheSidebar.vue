@@ -29,7 +29,9 @@
 								v-if="route.icon"
 								:icon="route.icon"
 								:source="route.source || 'fa'"
-								:fill="route.active ? 'var(--color-sidebar-menu-item)' : ''"
+								:fill="
+									route.active ? 'var(--color-sidebar-menu-item-active)' : ''
+								"
 								class="icon"
 							/>
 							<span class="title">{{ route.title }}</span>
@@ -54,7 +56,7 @@
 									:source="child.source || 'fa'"
 									:fill="
 										$route.path.includes(child.href)
-											? 'var(--color-secondary)'
+											? 'var(--color-sidebar-menu-item-active)'
 											: ''
 									"
 									class="icon"
