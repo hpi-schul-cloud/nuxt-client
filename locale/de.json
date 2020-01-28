@@ -51,6 +51,7 @@
 	"pages.administration.datasources.index.empty": "Es sind noch keine Datenquellen vorhanden. Mit dem Plus-Button unten rechts kannst du eine neue Datenquelle hinzufügen.",
 	"pages.administration.datasources.index.import": "Daten importieren",
 	"pages.administration.datasources.index.title": "Datenquellen",
+	"pages.administration.datasources.index.trigger.error": "Datenimport fehlgeschlagen.",
 	"pages.administration.datasources.new.add": "Datenquelle hinzufügen",
 	"pages.administration.datasources.new.provider.LDAP.name": "LDAP",
 	"pages.administration.datasources.new.provider.RSS.name": "RSS",
