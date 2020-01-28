@@ -101,12 +101,16 @@ export default {
 		getActions(element) {
 			return [
 				{
-					text: "Zugangsdaten ändern",
+					text: this.$t(
+						"pages.administration.datasources.index.ctxActions.edit"
+					),
 					event: "edit",
 					attributes: element,
 				},
 				{
-					text: "Datenquelle entfernen",
+					text: this.$t(
+						"pages.administration.datasources.index.ctxActions.remove"
+					),
 					event: "remove",
 					attributes: element,
 				},
