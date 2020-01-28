@@ -35,6 +35,7 @@
 			position="bottom-right"
 			icon="add"
 			to="/administration/datasources/new"
+			:aria-label="$t('pages.administration.datasources.new.add')"
 		/>
 	</div>
 </template>
