@@ -1,5 +1,7 @@
 <template>
 	<ul>
+		<li>Should fetch data from run using webuntis metadata service</li>
+		<li>the store to fetch this data does not exist yet</li>
 		<li>Should show list of courses (table)</li>
 		<li>Should show import button if dry run</li>
 		<li>
