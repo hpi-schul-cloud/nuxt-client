@@ -75,20 +75,17 @@ export default {
 					text: "Datenschutzerklärung",
 				},
 				{
-					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
-					text: "Kontakt",
+					href:
+						"https://s3.hidrive.strato.com/schul-cloud-hpi/thr/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+					text: "Nutzungsordnung",
 				},
 				{
-					to: "/team",
-					text: "Team",
+					href: "mailto:hpi-info@hpi.de?subject=THR%20Schul_Cloud%20Anfrage",
+					text: "Kontakt",
 				},
 				{
 					to: "/about",
 					text: "Über das Projekt",
-				},
-				{
-					to: "/community",
-					text: "Mitmachen",
 				},
 				{
 					to: "/partner",
