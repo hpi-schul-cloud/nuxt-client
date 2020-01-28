@@ -33,10 +33,14 @@
 								source="custom"
 								icon="warning"
 								fill="var(--color-danger)"
+								class="text-md"
 						/></template>
 						<template v-else-if="element.lastStatus === 'Pending'"
 							>{{ $t("pages.administraion.datasources.index.pending") }}
-							<base-spinner :color="color" size="small"
+							<base-spinner
+								:color="color"
+								size="small"
+								:style="{ 'margin-left': 'var(--space-xs-3)' }"
 						/></template>
 						<template v-else>{{
 							$t("pages.administraion.datasources.index.empty")

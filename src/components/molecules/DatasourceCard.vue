@@ -66,7 +66,12 @@ export default {
 }
 
 .subtitle {
+	display: flex;
+	align-items: center;
 	font-size: var(--text-xs);
+	.icon {
+		margin-left: var(--space-xs-3);
+	}
 }
 .image {
 	height: calc(var(--text-md) + var(--text-lg));
