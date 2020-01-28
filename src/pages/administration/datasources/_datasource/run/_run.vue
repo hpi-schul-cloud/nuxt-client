@@ -1,5 +1,7 @@
 <template>
 	<div>
+		<base-breadcrumb :inputs="breadcrumb" />
+		<h1>{{ datasource.name }}</h1>
 		<loading-modal
 			:title="
 				$t('pages.administration.datasources._id.run._id.dialog.loading.title')
@@ -61,6 +63,22 @@ export default {
 		requiredPermissions: ["DATASOURCES_VIEW"],
 	},
 	computed: {
+		breadcrumb() {
+			return [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+					icon: { source: "fa", icon: "fas fa-cog" },
+				},
+				{
+					text: this.$t("pages.administration.datasources.index.title"),
+					to: "/administration/datasources",
+				},
+				{
+					text: this.datasource?.name,
+				},
+			];
+		},
 		detailComponent() {
 			const component = datasourceComponents[this.type];
 			if (!component) {
@@ -92,7 +110,10 @@ export default {
 		...mapActions("datasourceRuns", {
 			get: "get",
 		}),
-		checkStatus() {},
+		checkStatus() {
+			// TODO check status of current run in regular intervals
+			this.get(this.$route.params.datasource);
+		},
 		abbortLoading(to) {
 			if (to === false) {
 				this.$router.push({ path: "/administration/datasources" });
