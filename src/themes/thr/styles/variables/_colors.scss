@@ -13,4 +13,6 @@
 		var(--color-secondary-light)
 	);
 	--color-sidebar-active-bg: rgba(24, 88, 136, 0.15);
+	--color-sidebar-menu-item: var(--color-secondary);
+	--color-sidebar-menu-item-active: var(--color-secondary-dark);
 }

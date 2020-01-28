@@ -29,7 +29,7 @@
 								v-if="route.icon"
 								:icon="route.icon"
 								:source="route.source || 'fa'"
-								:fill="route.active ? 'var(--color-secondary)' : ''"
+								:fill="route.active ? 'var(--color-sidebar-menu-item)' : ''"
 								class="icon"
 							/>
 							<span class="title">{{ route.title }}</span>
@@ -215,7 +215,7 @@ export default {
 					padding: 0 var(--sidebar-item-padding) 5px;
 					font-size: var(--sidebar-font-size);
 					line-height: 100%;
-					color: var(--color-tertiary-dark);
+					color: var(--color-sidebar-menu-item);
 					border-bottom: none;
 
 					.icon {
@@ -244,7 +244,7 @@ export default {
 				}
 
 				&.active .list-content {
-					color: var(--color-secondary);
+					color: var(--color-sidebar-menu-item-active);
 				}
 			}
 		}
