@@ -51,7 +51,7 @@ export default {
 	},
 	computed: {
 		actionType() {
-			return this.action || this.id ? "patch" : "create";
+			return this.action || (this.id ? "patch" : "create");
 		},
 		errors() {
 			const name = this.data.name

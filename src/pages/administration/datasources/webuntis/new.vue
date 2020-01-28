@@ -62,10 +62,6 @@ export default {
 					to: "/administration/datasources",
 				},
 				{
-					text: this.$t("pages.administration.datasources.new.short_title"),
-					to: "/administration/datasources/new",
-				},
-				{
 					text: this.$t("pages.administration.datasources.login.title"),
 				},
 			],
