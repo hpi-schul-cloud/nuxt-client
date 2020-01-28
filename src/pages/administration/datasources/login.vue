@@ -6,7 +6,7 @@
 				class="mt--xl-4"
 				src="@assets/img/datasources/logo-webuntis-text.svg"
 			/>
-			<h5>{{ $t("pages.administration.datasources.login.heading") }}</h5>
+			<h1 class="h5">{{ $t("pages.administration.datasources.login.heading") }}</h1>
 			<p class="mt--md">{{
 				$t("pages.administration.datasources.login.text")
 			}}</p>
@@ -83,7 +83,7 @@ export default {
 	justify-content: center;
 }
 
-h5 {
+.h5 {
 	text-align: center;
 }
 </style>

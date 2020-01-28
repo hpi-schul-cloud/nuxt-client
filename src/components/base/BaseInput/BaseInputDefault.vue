@@ -106,7 +106,7 @@ export default {
 		event: "input",
 	},
 	props: {
-		vmodel: { type: [String, Number], required: true },
+		vmodel: { type: [String, Number], default: undefined },
 		type: {
 			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
