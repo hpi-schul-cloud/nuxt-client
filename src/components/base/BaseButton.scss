@@ -125,6 +125,13 @@
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1);
 
+	> * {
+		margin-right: var(--space-xs);
+	}
+	&:last-child {
+		margin-right: initial;
+	}
+
 	&:hover {
 		--button-background: var(--color-tertiary-dark);
 	}
