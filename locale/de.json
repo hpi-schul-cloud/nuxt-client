@@ -52,7 +52,6 @@
 	"pages.administration.datasources.index.import": "Daten importieren",
 	"pages.administration.datasources.index.ctxActions.edit": "Zugangsdaten ändern",
 	"pages.administration.datasources.index.ctxActions.remove": "Datenquelle entfernen",
-	"pages.administration.datasources.index.action.remove": "Datenquelle entfernen",
 	"pages.administration.datasources.index.remove.error": "Fehler beim entfernen der Datenquellen \"{name}\"",
 	"pages.administration.datasources.index.remove.success": "Datenquellen \"{name}\" wurde entfernt",
 	"pages.administration.datasources.index.title": "Datenquellen",

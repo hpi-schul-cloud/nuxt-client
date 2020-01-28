@@ -16,7 +16,7 @@
 							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
 						</BaseButton>
-						<span style="position: relative">
+						<span class="ctx-menu">
 							<BaseButton design="icon text" @click="menuOpen = element._id">
 								<base-icon
 									class="footer__content-icon"
@@ -172,5 +172,8 @@ export default {
 
 .datasources {
 	list-style: none;
+}
+.ctx-menu {
+	position: relative;
 }
 </style>
