@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumb" />
-		<h3>{{ $t("pages.administration.datasources.index.title") }}</h3>
+		<h1 class="h3">{{ $t("pages.administration.datasources.index.title") }}</h1>
 
 		<ol v-if="datasources && datasources.length > 0" class="datasources">
 			<li v-for="element in datasources" :key="element._id">
