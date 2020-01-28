@@ -29,7 +29,9 @@
 								v-if="route.icon"
 								:icon="route.icon"
 								:source="route.source || 'fa'"
-								:fill="route.active ? 'var(--color-secondary)' : ''"
+								:fill="
+									route.active ? 'var(--color-sidebar-menu-item-active)' : ''
+								"
 								class="icon"
 							/>
 							<span class="title">{{ route.title }}</span>
@@ -54,7 +56,7 @@
 									:source="child.source || 'fa'"
 									:fill="
 										$route.path.includes(child.href)
-											? 'var(--color-secondary)'
+											? 'var(--color-sidebar-menu-item-active)'
 											: ''
 									"
 									class="icon"
@@ -215,7 +217,7 @@ export default {
 					padding: 0 var(--sidebar-item-padding) 5px;
 					font-size: var(--sidebar-font-size);
 					line-height: 100%;
-					color: var(--color-tertiary-dark);
+					color: var(--color-sidebar-menu-item);
 					border-bottom: none;
 
 					.icon {
@@ -240,11 +242,11 @@ export default {
 				&:hover,
 				&.active {
 					cursor: pointer;
-					background-color: var(--color-gray-light);
+					background-color: var(--color-sidebar-active-bg);
 				}
 
 				&.active .list-content {
-					color: var(--color-secondary);
+					color: var(--color-sidebar-menu-item-active);
 				}
 			}
 		}
