@@ -1,5 +1,5 @@
 <template>
-	<base-modal :active.sync="active">
+	<base-modal v-bind="$attrs" v-on="$listeners">
 		<template v-slot:body>
 			<modal-body-info :title="title" :description="description">
 				<template v-slot:icon>
@@ -9,7 +9,9 @@
 		</template>
 		<template v-slot:footer>
 			<center-slot class="mb--md">
-				<base-button design="primary">Abbrechen</base-button>
+				<base-button design="primary" @click="$emit('update:active')"
+					>Abbrechen</base-button
+				>
 			</center-slot>
 		</template>
 	</base-modal>
@@ -23,10 +25,6 @@ export default {
 		CenterSlot,
 	},
 	props: {
-		active: {
-			type: Boolean,
-			reqired: true,
-		},
 		color: {
 			type: String,
 			default: "var(--color-primary)",

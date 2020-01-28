@@ -103,7 +103,7 @@ export default {
 		},
 		async triggerRun(datasource) {
 			try {
-				const run = await this.$store.dispatch("datasources/createRun", {
+				const run = await this.$store.dispatch("datasourceRuns/create", {
 					datasourceId: datasource._id,
 					dryrun: true,
 				});
