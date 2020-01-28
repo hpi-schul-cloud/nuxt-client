@@ -25,7 +25,6 @@
 								/>
 							</BaseButton>
 							<context-menu
-								:key="element._id"
 								:show="menuOpen === element._id"
 								anchor="top-right"
 								:actions="getActions(element)"
