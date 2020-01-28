@@ -8,12 +8,9 @@
 				$t('components.organisms.FormDatasources.input.name.placeholder')
 			"
 			class="mt--md"
-		>
-		</base-input>
+		></base-input>
 		<slot name="inputs" :config="data.config" />
-		<base-button type="submit" class="w-100" design="secondary" text
-			>Verbinden</base-button
-		>
+		<base-button type="submit" class="w-100" design="secondary" text>Verbinden</base-button>
 	</form>
 </template>
 
@@ -24,24 +21,14 @@ export default {
 		event: "update datasource",
 	},
 	props: {
+		id: {
+			type: String,
+			required: false,
+			default: undefined,
+		},
 		type: {
 			type: String,
 			required: true,
-		},
-		name: {
-			type: String,
-			required: false,
-			default: undefined,
-		},
-		schoolId: {
-			type: String,
-			required: false,
-			default: undefined,
-		},
-		config: {
-			type: Object,
-			required: false,
-			default: () => ({}),
 		},
 		/**
 		 * Which Action to execute on Form Submit.
@@ -49,20 +36,23 @@ export default {
 		 */
 		action: {
 			type: String,
-			required: true,
 			validator: (v) => ["create", "patch"].includes(v),
+			default: undefined,
 		},
 	},
 	data() {
 		return {
 			data: {
-				name: this.name,
-				schoolId: this.schoolId,
-				config: this.config,
+				name: "",
+				schoolId: "",
+				config: {},
 			},
 		};
 	},
 	computed: {
+		actionType() {
+			return this.action || this.id ? "patch" : "create";
+		},
 		errors() {
 			const name = this.data.name
 				? undefined
@@ -80,13 +70,17 @@ export default {
 	},
 	created() {
 		this.data.config.type = this.type;
+		if (this.id) this.get(this.id);
 	},
 	methods: {
+		async get(id) {
+			this.data = await this.$store.dispatch("datasources/get", id);
+		},
 		submitHandler() {
 			if (!this.data.schoolId) {
 				this.data.schoolId = this.$user.schoolId;
 			}
-			switch (this.action) {
+			switch (this.actionType) {
 				case "create": {
 					this.create();
 					break;
@@ -125,7 +119,7 @@ export default {
 			}
 			try {
 				await this.$store.dispatch("datasources/patch", [
-					this.route.params.id,
+					this.id,
 					{
 						name: this.data.name,
 						schoolId: this.data.schoolId,
