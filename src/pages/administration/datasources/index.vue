@@ -2,7 +2,7 @@
 	<div>
 		<user-has-permission permission="DATASOURCES_VIEW">
 			<base-breadcrumb :inputs="inputs" />
-			<h3>Datenquellen</h3>
+			<h1 class="h3">Datenquellen</h1>
 			<empty-state :image="imgsrc">
 				<template v-slot:description
 					>Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst
