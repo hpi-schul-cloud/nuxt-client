@@ -5,14 +5,15 @@
 			<h1 class="h3">Datenquellen</h1>
 			<empty-state :image="imgsrc">
 				<template v-slot:description
-					>Noch keine Datenquellen vorhanden. Mit dem Plus unten rechts kannst
-					du eine Datenquelle hinzufügen.
+					>Es sind noch keine Datenquellen vorhanden. Mit dem Plus-Button unten
+					rechts kannst du eine Datenquelle hinzufügen.
 				</template>
 			</empty-state>
 			<floating-fab
 				:position="position"
 				:icon="icon"
 				to="/administration/datasources/add"
+				:aria-label="$t('pages.administration.datasources.index.create')"
 			/>
 		</user-has-permission>
 	</div>

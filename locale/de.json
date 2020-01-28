@@ -54,6 +54,7 @@
 	"pages.content.index.search_results": "Suchergebnisse für",
 	"pages.courses.new.btn_new": "Erstelle neuen Kurs",
 	"pages.courses.new.title": "Neuen Kurs erstellen",
+	"pages.administration.datasources.index.create": "Neue Datenquelle hinzufügen",
 	"pages.administration.datasources.login.heading": "Bitte gib deine Zugangsdaten ein",
 	"pages.administration.datasources.login.text": "Bitte verwende keine privaten Zugangsdaten. Für die Einbindung der Datenquelle empfehlen wir einen Schul-Cloud spezifischen WebUntis Account zu erstellen.",
 	"pages.administration.datasources.login.title": "Login",
