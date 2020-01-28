@@ -36,6 +36,7 @@
 	"components.organisms.FormNews.success.remove": "Artikel erfolgreich gelöscht.",
 	"components.organisms.legacyFooter.contact": "Kontakt",
 	"components.organisms.legacyFooter.job-offer": "Stellenausschreibungen",
+	"components.organisms.FormDatasources.btn.connect": "Verbinden",
 	"components.organisms.FormDatasources.input.name.placeholder": "Name der Datenquelle",
 	"components.organisms.FormDatasources.input.name.label": "Name",
 	"error.400": "400 - Fehlerhafte Anfrage",

@@ -10,7 +10,9 @@
 			class="mt--md"
 		></base-input>
 		<slot name="inputs" :config="data.config" />
-		<base-button type="submit" class="w-100" design="secondary" text>Verbinden</base-button>
+		<base-button type="submit" class="w-100" design="secondary" text>{{
+			$t("components.organisms.FormDatasources.btn.connect")
+		}}</base-button>
 	</form>
 </template>
 
@@ -51,7 +53,7 @@ export default {
 	},
 	computed: {
 		actionType() {
-			return this.action || (this.id ? "patch" : "create");
+			return this.action || (this.$route.params.id ? "patch" : "create");
 		},
 		errors() {
 			const name = this.data.name
@@ -70,7 +72,7 @@ export default {
 	},
 	created() {
 		this.data.config.type = this.type;
-		if (this.id) this.get(this.id);
+		if (this.$route.params.id) this.get(this.$route.params.id);
 	},
 	methods: {
 		async get(id) {
@@ -119,7 +121,7 @@ export default {
 			}
 			try {
 				await this.$store.dispatch("datasources/patch", [
-					this.id,
+					this.$route.params.id,
 					{
 						name: this.data.name,
 						schoolId: this.data.schoolId,
