@@ -7,7 +7,7 @@
 
 module.exports = [
 	//`^/teams`,
-	`^/administration/datasources/?`,
+	// `^/administration/?$`,
 	// `^/administration/teams/?$`,
 	//`^/administration/students/?$`,
 	// `^/content/`,
