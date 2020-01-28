@@ -31,7 +31,6 @@ groups:
         - VueCoreDevs
     labels:
       pending: "waiting for review"
-      rejected: "WIP"
   ###############################
   # LABEL SPECIFIC REQUESTS
   ###############################

@@ -1,5 +1,5 @@
 import DatasourceCard from "./DatasourceCard";
-import ExampleImage from "@assets/img/logo/logo-webuntis.svg";
+import ExampleImage from "@assets/img/datasources/logo-webuntis.png";
 
 describe("@components/DatasourceCard", () => {
 	it(...isValidComponent(DatasourceCard));
