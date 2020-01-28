@@ -30,7 +30,7 @@
 								})
 							}}
 							<BaseIcon
-								source="custom"
+								source="material"
 								icon="warning"
 								fill="var(--color-danger)"
 						/></template>
@@ -38,9 +38,9 @@
 							>{{ $t("pages.administraion.datasources.index.pending") }}
 							<base-spinner :color="color" size="small"
 						/></template>
-						<template v-else
-							>Noch keine Daten importiert</template
-						>
+						<template v-else>{{
+							$t("pages.administraion.datasources.index.empty")
+						}}</template>
 					</template>
 
 					<template v-slot:actions>
