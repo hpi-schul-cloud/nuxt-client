@@ -6,12 +6,14 @@
 				class="mt--xl-4"
 				src="@assets/img/datasources/logo-webuntis-text.svg"
 			/>
-			<h1 class="h5">{{ $t("pages.administration.datasources.login.heading") }}</h1>
+			<h1 class="h5">{{
+				$t("pages.administration.datasources.login.heading")
+			}}</h1>
 			<p class="mt--md">{{
 				$t("pages.administration.datasources.login.text")
 			}}</p>
 
-			<form-datasource-login action="create" type="webuntis">
+			<form-datasource-login type="webuntis">
 				<template v-slot:inputs="{ config }">
 					<base-input
 						v-model="config.username"
