@@ -20,6 +20,10 @@ export default {
 			type: String,
 			default: "bottom-right",
 		},
+		ariaLabel: {
+			type: String,
+			required: true,
+		},
 	},
 	data() {
 		return {
