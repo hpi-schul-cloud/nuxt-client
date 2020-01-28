@@ -55,7 +55,7 @@
 	"pages.courses.new.btn_new": "Erstelle neuen Kurs",
 	"pages.courses.new.title": "Neuen Kurs erstellen",
 	"pages.administration.datasources.login.heading": "Bitte gib deine Zugangsdaten ein",
-	"pages.administration.datasources.login.text": "Bitte verwende keine privaten Konten. Für die Einbindung der Datenquelle ist ein nicht personenbezogener Account eines WebUntis Administrators nötig.",
+	"pages.administration.datasources.login.text": "Bitte verwende keine privaten Zugangsdaten. Für die Einbindung der Datenquelle empfehlen wir einen Schul-Cloud spezifischen WebUntis Account zu erstellen.",
 	"pages.administration.datasources.login.title": "Login",
 	"pages.impressum.title": "Impressum",
 	"pages.mint-ec.article.footer.anbieter": "Inhalteanbieter: inhalte@schulcloud.org",

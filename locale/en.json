@@ -48,7 +48,7 @@
 	"pages.courses.new.btn_new": "Create",
 	"pages.courses.new.title": "Create new course",
 	"pages.administration.datasources.login.heading": "Please continue with your login data",
-	"pages.administration.datasources.login.text": "Do not use your private accout please. For embedding datasources an administraion accout is needed. ",
+	"pages.administration.datasources.login.text": "Do not use your private accout please. For embedding datasources please create a Schul-Cloud account for Webuntis.",
 	"pages.impressum.title": "Imprint",
 	"pages.mint-ec.article.footer.anbieter": "Provider: inhalte@schulcloud.org",
 	"pages.mint-ec.article.footer.datasecurity": "Data security and copyright",
