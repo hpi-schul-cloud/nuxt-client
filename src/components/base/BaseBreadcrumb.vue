@@ -55,7 +55,7 @@ export default {
 		display: inline;
 		font-family: var(--font-accent);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-gray-dark);
+		color: var(--color-tertiary-dark);
 		border-bottom: none;
 	}
 
@@ -66,11 +66,11 @@ export default {
 	}
 
 	.arrow {
-		color: var(--color-gray);
+		color: var(--color-tertiary-light);
 	}
 
 	li:last-child > * {
-		color: var(--color-gray);
+		color: var(--color-tertiary-light);
 		cursor: default;
 	}
 }

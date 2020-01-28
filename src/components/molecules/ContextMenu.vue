@@ -3,6 +3,7 @@
 		<div
 			v-if="show"
 			ref="context-menu"
+			v-click-outside="handleClickOutside"
 			class="context-menu"
 			:style="anchorCSS"
 			role="menu"
@@ -86,6 +87,11 @@ export default {
 			validator: (values) => values.every((value) => value.text && value.event),
 		},
 	},
+	data() {
+		return {
+			shouldHandleClickOutside: false,
+		};
+	},
 	computed: {
 		anchorCSS() {
 			switch (this.anchor) {
@@ -121,6 +127,16 @@ export default {
 	watch: {
 		show: {
 			handler(to) {
+				if (!this.noClose) {
+					if (to) {
+						setTimeout(() => {
+							this.shouldHandleClickOutside = true;
+						}, 0);
+					} else {
+						this.shouldHandleClickOutside = false;
+					}
+				}
+
 				this.$nextTick(() => {
 					const menu = this.$refs["context-menu"];
 					if (to && menu) {
@@ -150,6 +166,13 @@ export default {
 		},
 		escKeyHandler(e) {
 			if (this.show && e.keyCode === 27) {
+				this.closeMenu();
+			}
+		},
+		handleClickOutside(event) {
+			if (this.shouldHandleClickOutside) {
+				event.preventDefault();
+				event.stopPropagation();
 				this.closeMenu();
 			}
 		},

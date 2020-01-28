@@ -82,6 +82,57 @@ describe("@components/CardContextMenu", () => {
 		wrapper.destroy();
 	});
 
+	describe("click outside", () => {
+		it("triggers event on click outside", async () => {
+			// Mount Menu wrapper to have something to click outside
+			const wrapper = mount(
+				{
+					data: () => ({ show: true, actions }),
+					template: `
+					<div>
+					<div class="outside">Outside</div>
+					<ContextMenu class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>
+					</div>
+				`,
+					components: { ContextMenu },
+					...createComponentMocks({ i18n: true }),
+				},
+				{ attachToDocument: true }
+			);
+			const Menu = wrapper.find(".ctxmenu");
+			// wait because ctxmenu is not reacting to clicks outside immediatly
+			await wait(0);
+			wrapper.find(".outside").trigger("click");
+			expect(Menu.emitted("update:show")).toHaveLength(1);
+			expect(Menu.emitted("update:show")).toStrictEqual([[false]]);
+			wrapper.destroy();
+		});
+
+		it("does not trigger event on click outside if noClose=true", async () => {
+			// Mount Menu wrapper to have something to click outside
+			const wrapper = mount(
+				{
+					data: () => ({ show: true, actions }),
+					template: `
+					<div>
+					<div class="outside">Outside</div>
+					<ContextMenu class="ctxmenu" :actions="actions" :show.sync="show" :noClose="true"></ContextMenu>
+					</div>
+				`,
+					components: { ContextMenu },
+					...createComponentMocks({ i18n: true }),
+				},
+				{ attachToDocument: true }
+			);
+			const Menu = wrapper.find(".ctxmenu");
+			// wait because ctxmenu is not reacting to clicks outside immediatly
+			await wait(0);
+			wrapper.find(".outside").trigger("click");
+			expect(Menu.emitted("update:show")).toBeUndefined();
+			wrapper.destroy();
+		});
+	});
+
 	describe("anchor positions", () => {
 		it.each([
 			["bottom-left", "", 0, 0, ""],
