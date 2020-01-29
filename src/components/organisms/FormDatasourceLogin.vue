@@ -67,9 +67,7 @@ export default {
 	},
 	methods: {
 		async get(id) {
-			this.data = JSON.parse(
-				JSON.stringify(await this.$store.dispatch("datasources/get", id))
-			);
+			this.data = { ...await this.$store.dispatch("datasources/get", id) };
 		},
 		submitHandler() {
 			if (!this.data.schoolId) {
