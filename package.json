@@ -93,7 +93,7 @@
 		"babel-loader": "^8.0.5",
 		"babel-plugin-dynamic-import-node": "^2.2.0",
 		"babel-preset-vue": "^2.0.2",
-		"concurrently": "^5.0.2",
+		"concurrently": "^5.1.0",
 		"core-js": "2.6.5",
 		"cross-env": "^7.0.0",
 		"css-loader": "^3.4.2",
