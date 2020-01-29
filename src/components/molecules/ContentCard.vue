@@ -45,10 +45,7 @@
 							/>
 						</base-button>
 
-						<div
-							v-click-outside="handleMenuClickOutside"
-							class="footer__icon-container"
-						>
+						<div class="footer__icon-container">
 							<div class="footer_more">
 								<base-button design="icon text" @click="openMenu">
 									<base-icon
@@ -140,13 +137,6 @@ export default {
 		},
 		openMenu() {
 			this.menuActive = true;
-		},
-		handleMenuClickOutside(event) {
-			if (!this.menuActive) {
-				return;
-			}
-			event.preventDefault();
-			this.menuActive = false;
 		},
 		handleCopy() {},
 		handleShare() {},
