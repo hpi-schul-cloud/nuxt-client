@@ -149,7 +149,7 @@ export default {
 					path: `/administration/datasources/${datasource._id}/run/${run._id}`,
 				});
 			} catch (error) {
-				console.error(error.response);
+				console.error(error, error.response);
 				this.$toast.error(
 					this.$t("pages.administration.datasources.index.trigger.error")
 				);

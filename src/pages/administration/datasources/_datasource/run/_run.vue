@@ -17,8 +17,10 @@
 		<component
 			:is="detailComponent"
 			v-if="state === 'Success'"
+			:key="datasource._id"
 			:datasource="datasource"
 			:datasource-id="$route.params._datasource"
+			:run="run"
 			:run-id="$route.params._run"
 		/>
 	</div>
@@ -61,6 +63,9 @@ export default {
 	data() {
 		return {
 			state: "Pending",
+			run: {
+				dryrun: true,
+			},
 			interval: startInterval,
 		};
 	},
@@ -116,7 +121,8 @@ export default {
 			get: "get",
 		}),
 		async checkStatus() {
-			const { status } = await this.get(this.$route.params.run);
+			this.run = await this.get(this.$route.params.run);
+			const { status } = this.run;
 			if (status === "Pending") {
 				this.interval = Math.min(maxInterval, this.interval * intervalFactor);
 				setTimeout(this.checkStatus, this.interval);
@@ -132,7 +138,7 @@ export default {
 	},
 	head() {
 		return {
-			title: "result",
+			title: "result", // TODO set correct title
 		};
 	},
 };

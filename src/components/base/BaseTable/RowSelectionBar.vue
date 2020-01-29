@@ -14,7 +14,7 @@
 					)
 				</span>
 			</div>
-			<div class="ml--md">
+			<div v-if="actions.length" class="ml--md">
 				<dropdown-menu
 					:items="actions"
 					title="Aktionen"
