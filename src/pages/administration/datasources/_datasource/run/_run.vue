@@ -19,9 +19,9 @@
 			v-if="state === 'Success'"
 			:key="datasource._id"
 			:datasource="datasource"
-			:datasource-id="$route.params._datasource"
+			:datasource-id="$route.params.datasource"
 			:run="run"
-			:run-id="$route.params._run"
+			:run-id="$route.params.run"
 		/>
 	</div>
 </template>

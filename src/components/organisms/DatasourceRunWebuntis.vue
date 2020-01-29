@@ -84,6 +84,10 @@ export default {
 			type: Object,
 			default: () => ({}),
 		},
+		runId: {
+			type: String,
+			required: true,
+		},
 	},
 	data: function() {
 		return {
@@ -107,7 +111,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("webuntis-course-metadata", {
+		...mapGetters("webuntis-metadata", {
 			webuntisMetadata: "list",
 		}),
 		selectedRows() {
@@ -132,7 +136,7 @@ export default {
 		},
 		pagination() {
 			return (
-				this.$store.state["webuntis-course-metadata"].pagination?.default || {
+				this.$store.state["webuntis-metadata"].pagination?.default || {
 					limit: 0,
 					total: 0,
 					skip: 0,
@@ -191,13 +195,13 @@ export default {
 			});
 		},
 		find({ $limit, page }) {
-			const skip = $limit * (page - 1);
+			const $skip = $limit * (page - 1);
 			try {
-				this.$store.dispatch("webuntis-course-metadata/find", {
+				this.$store.dispatch("webuntis-metadata/find", {
 					query: {
-						skip,
+						$skip,
 						$limit,
-						datasourceRunId: this.datasource._id,
+						datasourceRunId: this.runId,
 					},
 				});
 			} catch (error) {
