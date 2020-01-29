@@ -12,6 +12,7 @@
 				:show-row-selection="true"
 				:backend-pagination="true"
 				:backend-sorting="true"
+				:selected-rows="selectedRows"
 				@all-rows-selected="handlerAllRowsSelected"
 				@update:rows-per-page="handlerUpdateRowsPerPage"
 				@update:current-page="handlerUpdatePage"
@@ -99,6 +100,13 @@ export default {
 		...mapGetters("webuntis-course-metadata", {
 			webuntisMetadata: "list",
 		}),
+		selectedRows() {
+			return this.tableData.filter((row) => {
+				return this.sendType === "inclusive"
+					? Boolean(this.sendIds[row._id])
+					: !Boolean(this.sendIds[row._id]);
+			});
+		},
 		tableData() {
 			return this.webuntisMetadata.map((entry) => {
 				return {
