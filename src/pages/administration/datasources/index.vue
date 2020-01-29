@@ -1,12 +1,11 @@
 <template>
 	<div>
 		<user-has-permission permission="DATASOURCES_VIEW">
-			<base-breadcrumb :inputs="inputs" />
-			<h1 class="h3">Datenquellen</h1>
+			<base-breadcrumb :inputs="breadcrumbs" />
+			<h1 class="h3">{{$t('pages.administration.datasources.index.title')}}</h1>
 			<empty-state :image="imgsrc">
 				<template v-slot:description
-					>Es sind noch keine Datenquellen vorhanden. Mit dem Plus-Button unten
-					rechts kannst du eine Datenquelle hinzufügen.
+					>{{$t("pages.administration.datasources.index.emptyText")}}
 				</template>
 			</empty-state>
 			<floating-fab
@@ -36,18 +35,14 @@ export default {
 	},
 	data() {
 		return {
-			inputs: [
+			breadcrumbs: [
 				{
-					text: "Admin",
+					text: this.$t('pages.administration.index.title'),
 					to: "/administration/",
 					icon: { source: "fa", icon: "fas fa-cog" },
 				},
 				{
-					text: "Systeme",
-					href: "http://schul-cloud.org",
-				},
-				{
-					text: "Datenquellen",
+					text: this.$t('pages.administration.datasources.index.title'),
 					to: "/administration/datasources",
 				},
 			],

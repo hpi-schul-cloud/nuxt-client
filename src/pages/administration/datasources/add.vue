@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<user-has-permission permission="DATASOURCES_VIEW">
-			<base-breadcrumb :inputs="inputs" />
-			<h3>Datenquellen hinzufügen</h3>
+			<base-breadcrumb :inputs="breadcrumbs" />
+			<h3>{{$t('pages.administration.datasources.add.title')}}</h3>
 			<datasource-card
 				:image="require('@assets/img/logo/logo-webuntis.svg')"
 				title="WebUnits"
@@ -10,7 +10,7 @@
 				<template v-slot:actions>
 					<BaseButton design="primary text">
 						<BaseIcon source="custom" icon="add-datasource" :fill="color" />
-						Datenquelle hinzufügen
+						{{$t('pages.administration.datasources.add.btnAdd')}}
 					</BaseButton>
 				</template>
 			</datasource-card>
@@ -21,7 +21,7 @@
 				<template v-slot:actions>
 					<BaseButton design="primary text">
 						<BaseIcon source="custom" icon="add-datasource" :fill="color" />
-						Datenquelle hinzufügen
+						{{$t('pages.administration.datasources.add.btnAdd')}}
 					</BaseButton>
 				</template>
 			</datasource-card>
@@ -32,7 +32,7 @@
 				<template v-slot:actions>
 					<BaseButton design="primary text">
 						<BaseIcon source="custom" icon="add-datasource" :fill="color" />
-						Datenquelle hinzufügen
+						{{$t('pages.administration.datasources.add.btnAdd')}}
 					</BaseButton>
 				</template>
 			</datasource-card>
@@ -54,22 +54,18 @@ export default {
 	},
 	data() {
 		return {
-			inputs: [
+			breadcrumbs: [
 				{
-					text: "Admin",
+					text: this.$t('pages.administration.index.title'),
 					to: "/administration/",
 					icon: { source: "fa", icon: "fas fa-cog" },
 				},
 				{
-					text: "Systeme",
-					href: "http://schul-cloud.org",
-				},
-				{
-					text: "Datenquellen",
+					text: this.$t('pages.administration.datasources.index.title'),
 					to: "/administration/datasources",
 				},
 				{
-					text: "Hinzufügen",
+					text: this.$t('pages.administration.datasources.add.title'),
 					to: "/administration/datasources/add",
 				},
 			],
@@ -79,7 +75,7 @@ export default {
 	},
 	head() {
 		return {
-			title: "Datenquellen hinzufügen",
+			title: this.$t('pages.administration.datasources.add.title'),
 		};
 	},
 };

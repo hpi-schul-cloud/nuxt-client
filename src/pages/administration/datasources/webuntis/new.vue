@@ -55,12 +55,12 @@ export default {
 			image: "@assets/img/logo/logo-webuntis-text.svg",
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
+					text: this.$t('pages.administration.index.title'),
 					to: "/administration/",
 					icon: { source: "fa", icon: "fas fa-cog" },
 				},
 				{
-					text: this.$t("pages.administration.datasources.index.title"),
+					text: this.$t('pages.administration.datasources.index.title'),
 					to: "/administration/datasources",
 				},
 				{
