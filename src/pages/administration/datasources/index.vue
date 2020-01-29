@@ -137,7 +137,7 @@ export default {
 			const ldap = require("@assets/img/datasources/logo-ldap.svg");
 			const rss = require("@assets/img/datasources/logo-rss.png");
 			const mapping = { webuntis, ldap, rss };
-			return mapping[item.config.type];
+			return mapping[item.config.target];
 		},
 		handleEdit(/* datasource */) {
 			this.$toast.info(`TODO: redirect to not yet existing edit page`);
