@@ -17,7 +17,7 @@ export const moreProgressSteps = [
 	{ name: "Five" },
 ];
 
-storiesOf('Molecules/Onboarding', module).add("StepProgress", () => ({
+storiesOf("Molecules/Onboarding", module).add("StepProgress", () => ({
 	components: { StepProgress },
 	data: () => ({
 		progressSteps: steps,

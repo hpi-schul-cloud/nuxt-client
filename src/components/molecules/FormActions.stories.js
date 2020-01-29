@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/vue";
 import FormActions from "./FormActions";
 import BaseButton from "@basecomponents/BaseButton";
 
-storiesOf('Molecules/FormActions', module).add("default", () => ({
+storiesOf("Molecules/FormActions", module).add("default", () => ({
 	components: { FormActions, BaseButton },
 	template: `
 		<FormActions>

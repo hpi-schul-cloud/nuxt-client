@@ -3,7 +3,7 @@ import { text } from "@storybook/addon-knobs";
 
 import BaseGrid from "@components/base/BaseGrid";
 
-storiesOf('Layouts/BaseGrid', module)
+storiesOf("Layouts/BaseGrid", module)
 	.add("Default Grid", () => ({
 		components: { BaseGrid },
 		template: `

@@ -13,7 +13,7 @@ import ModalFooterBorder from "@components/molecules/ModalFooterBorder";
 import ModalFooter from "@components/molecules/ModalFooter";
 import LoadingModal from "@components/molecules/LoadingModal";
 
-storiesOf('Base/Modals', module)
+storiesOf("Base/Modals", module)
 	.addParameters({
 		notes,
 	})
