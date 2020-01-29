@@ -81,8 +81,8 @@ export default {
 		};
 	},
 	created() {
-		this.datasourceProvider.map((el) => {
-			this.getAddedSourcesCount(el);
+		this.datasourceProvider.map((source) => {
+			this.getAddedSourcesCount(source);
 		});
 	},
 	methods: {
