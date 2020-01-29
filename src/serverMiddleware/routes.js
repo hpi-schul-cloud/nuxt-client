@@ -6,16 +6,13 @@
 //const mongoId = "[a-z0-9]{24}";
 
 module.exports = [
-	//`^/teams`,
-	`^/administration/?`,
-	// `^/administration/teams/?$`,
-	//`^/administration/students/?$`,
+	// `^/administration/datasources?`,
 	// `^/content/`,
 	`^/error/`,
-	`^/mint-ec/?`,
 	`^/imprint/?`,
+	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
-	//`^/news/${mongoId}/edit`,
+	// `^/news/${mongoId}/edit`,
 	`^/news/new`,
 	`^/nuxtversion/?$`,
 ];
