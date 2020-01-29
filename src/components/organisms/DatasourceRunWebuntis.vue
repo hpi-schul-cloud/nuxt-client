@@ -91,7 +91,6 @@ export default {
 				{
 					field: "class",
 					label: "Name",
-					sortable: true,
 				},
 				{
 					field: "teacher",
