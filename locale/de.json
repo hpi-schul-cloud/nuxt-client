@@ -1,4 +1,5 @@
 {
+	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.cancel": "Abbrechen",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.remove": "Löschen",
