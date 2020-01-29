@@ -1,5 +1,5 @@
-import DatasourceRunWebuntis from './DatasourceRunWebuntis'
+import DatasourceRunWebuntis from "./DatasourceRunWebuntis";
 
-describe('@components/DatasourceRunWebuntis', () => {
+describe("@components/DatasourceRunWebuntis", () => {
 	it(...isValidComponent(DatasourceRunWebuntis));
-})
+});
