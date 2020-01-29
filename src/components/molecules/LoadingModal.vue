@@ -9,7 +9,7 @@
 		</template>
 		<template v-slot:footer>
 			<center-slot class="mb--md">
-				<base-button design="primary" @click="$emit('update:active')"
+				<base-button design="primary" @click="$emit('update:active', false)"
 					>Abbrechen</base-button
 				>
 			</center-slot>

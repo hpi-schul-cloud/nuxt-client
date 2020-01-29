@@ -33,6 +33,10 @@ const datasourceComponents = {
 	webuntis: () => import("@components/organisms/DatasourceRunWebuntis"),
 };
 
+const startInterval = 500;
+const intervalFactor = 2;
+const maxInterval = 10000;
+
 export default {
 	components: {
 		LoadingModal,
@@ -57,6 +61,7 @@ export default {
 	data() {
 		return {
 			state: "Pending",
+			interval: startInterval,
 		};
 	},
 	meta: {
@@ -101,18 +106,23 @@ export default {
 			immediate: true,
 		},
 	},
-	mounted() {
-		setTimeout(() => {
-			this.state = "Success";
-		}, 1000);
+	created() {
+		// TODO: enable this instead of the timeout mock
+		// this.checkStatus();
+		setTimeout(() => (this.state = "Success"), 1000);
 	},
 	methods: {
 		...mapActions("datasourceRuns", {
 			get: "get",
 		}),
-		checkStatus() {
-			// TODO check status of current run in regular intervals
-			this.get(this.$route.params.datasource);
+		async checkStatus() {
+			const { status } = await this.get(this.$route.params.run);
+			if (status === "Pending") {
+				this.interval = Math.min(maxInterval, this.interval * intervalFactor);
+				setTimeout(this.checkStatus, this.interval);
+				return;
+			}
+			this.state = status;
 		},
 		abbortLoading(to) {
 			if (to === false) {
