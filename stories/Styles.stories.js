@@ -4,7 +4,7 @@ import Gradient from "@storyComponents/Gradient";
 import Elevation from "@storyComponents/Elevation";
 import ColorOnText from "@storyComponents/ColorOnText";
 
-storiesOf("Styles|Colors", module)
+storiesOf("Styles/Colors", module)
 	.add("Main", () => ({
 		components: { Color, Gradient },
 		template: `<div>
@@ -43,7 +43,7 @@ storiesOf("Styles|Colors", module)
 	`,
 	}));
 
-storiesOf("Styles|TextOnColors", module)
+storiesOf("Styles/TextOnColors", module)
 	.add("Main", () => ({
 		components: { ColorOnText },
 		template: `<div>
@@ -70,7 +70,7 @@ storiesOf("Styles|TextOnColors", module)
 	`,
 	}));
 
-storiesOf("Styles|Gradients", module).add("CourseColors", () => ({
+storiesOf("Styles/Gradients", module).add("CourseColors", () => ({
 	components: { Gradient },
 	template: `<div>
 			<Gradient colorStart="#f22a19" colorEnd="#f96464" title="Deutsch"/>
@@ -86,7 +86,7 @@ storiesOf("Styles|Gradients", module).add("CourseColors", () => ({
 		</div>`,
 }));
 
-storiesOf("Styles|Elevation", module).add("default", () => ({
+storiesOf("Styles/Elevation", module).add("default", () => ({
 	components: { Elevation },
 	template: `<div>
 			<Elevation variable="--shadow-xxxs" title="01dp" styling="(0 1px 1px 0)(0 2px 1px -1px)(0 1px 3px 0)"/>
