@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/vue";
 import Tabs from "@components/organisms/Tabs/Tabs";
 import SingleTab from "@components/atoms/Tab";
 
-storiesOf("Molecules|Tabs", module)
+storiesOf("Molecules/Tabs", module)
 	.add("Tabs", () => ({
 		components: { Tabs, SingleTab },
 		template: `

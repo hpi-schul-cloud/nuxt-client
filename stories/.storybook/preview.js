@@ -3,11 +3,12 @@ import { configure, addDecorator, addParameters } from "@storybook/vue";
 import { withInfo } from "storybook-addon-vue-info";
 import { withA11y } from "@storybook/addon-a11y";
 import { withKnobs } from "@storybook/addon-knobs";
-import { withOptions } from "@storybook/addon-options";
 
-withOptions({
-	hierarchySeparator: /\//,
-	hierarchyRootSeparator: /\|/,
+// show root sections in sidebar
+addParameters({
+	options: {
+		showRoots: true,
+	},
 });
 
 import "./mockComponents";
