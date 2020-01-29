@@ -19,7 +19,17 @@
 				@update:selected-rows="setSelection"
 			>
 			</base-table>
-			<base-button @click="triggerRun">Auswahl importieren</base-button>
+			<form-actions>
+				<template v-slot:primary>
+					<base-button design="primary" @click="triggerRun">
+						Auswahl importieren
+					</base-button>
+					<base-button design="text" to="/administration/datasources">
+						Abbrechen
+					</base-button>
+				</template>
+				<template v-slot:secondary> </template>
+			</form-actions>
 		</template>
 		<template v-else-if="run.dryrun === false">
 			<base-modal :active="true">
@@ -57,12 +67,13 @@
 <script>
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
-
+import FormActions from "@components/molecules/FormActions";
 import { mapGetters } from "vuex";
 export default {
 	components: {
 		ModalBodyInfo,
 		ModalFooterConfirm,
+		FormActions,
 	},
 	props: {
 		datasource: {
@@ -87,7 +98,7 @@ export default {
 					label: "Lehrer",
 				},
 				{
-					field: "Raum",
+					field: "room",
 					label: "Raum",
 				},
 			],
@@ -113,7 +124,7 @@ export default {
 					_id: entry._id,
 					teacher: entry.teacher,
 					class: `${entry.subject} ${entry.class}`,
-					Raum: entry.Raum,
+					room: entry.room,
 				};
 			});
 		},
@@ -200,8 +211,8 @@ export default {
 				const run = await this.$store.dispatch("datasourceRuns/create", {
 					datasourceId: this.datasource._id,
 					dryrun: false,
-					datatype: this.sendType, // inclusive/exclusive
 					data: {
+						datatype: this.sendType, // inclusive/exclusive
 						courseMetadataIds: Object.keys(this.sendIds),
 					},
 				});
