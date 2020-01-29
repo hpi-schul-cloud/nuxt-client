@@ -20,9 +20,9 @@ env:
 stages:
   - test
   - name: build
-    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+    if: type = push && (branch = travistest || branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
   - name: deploy
-    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+    if: type = push && (branch = travistest || branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
 
 jobs:
   include:
