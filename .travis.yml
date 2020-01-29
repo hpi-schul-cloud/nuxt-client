@@ -4,7 +4,6 @@ branches:
     - master
     - /^(?i:release|hotfix).*$/
     - /^greenkeeper/.*$/
-    - travistest
 language: node_js
 node_js:
   - lts/*
@@ -20,9 +19,9 @@ env:
 stages:
   - test
   - name: build
-    if: type = push && (branch = travistest || branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
   - name: deploy
-    if: type = push && (branch = travistest || branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
 
 jobs:
   include:
