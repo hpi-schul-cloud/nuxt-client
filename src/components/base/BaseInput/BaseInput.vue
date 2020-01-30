@@ -85,6 +85,6 @@ export default {
 @import "@styles";
 
 .input {
-	margin-bottom: var(--space-md);
+	margin-bottom: var(--space-lg);
 }
 </style>

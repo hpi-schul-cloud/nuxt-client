@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<base-breadcrumb :inputs="breadcrumbs" />
 		<base-content-container size="small">
+			<base-breadcrumb :inputs="breadcrumbs" />
 			<img
 				class="mt--xl-4"
 				src="@assets/img/datasources/logo-webuntis-text.svg"
@@ -9,7 +9,7 @@
 			<h1 class="h5">{{
 				$t("pages.administration.datasources.login.heading")
 			}}</h1>
-			<p class="mt--md">{{
+			<p class="mb--xl">{{
 				$t("pages.administration.datasources.login.text")
 			}}</p>
 
@@ -74,14 +74,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-
-.container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.h5 {
-	text-align: center;
-}
 </style>

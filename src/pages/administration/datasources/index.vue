@@ -21,7 +21,7 @@
 						<span class="ctx-menu">
 							<BaseButton design="icon text" @click="menuOpen = element._id">
 								<base-icon
-									class="footer__content-icon"
+									class="context-menu-icon"
 									source="material"
 									icon="more_vert"
 								/>
@@ -147,21 +147,44 @@ export default {
 			});
 		},
 		async handleRemove(datasource) {
-			try {
-				await this.$store.dispatch("datasources/remove", datasource._id);
-				this.$toast.success(
-					this.$t("pages.administration.datasources.index.remove.success", {
+			this.$dialog.confirm({
+				icon: "warning",
+				actionDesign: "success",
+				iconColor: "var(--color-danger)",
+				invertedDesign: true,
+				message: this.$t(
+					"pages.administration.datasources.index.remove.confirm.message",
+					{
 						name: datasource.name,
-					})
-				);
-			} catch (error) {
-				console.error(error);
-				this.$toast.error(
-					this.$t("pages.administration.datasources.index.remove.error", {
+					}
+				),
+				confirmText: this.$t(
+					"pages.administration.datasources.index.remove.confirm.btnText",
+					{
 						name: datasource.name,
-					})
-				);
-			}
+					}
+				),
+				cancelText: this.$t(
+					"components.organisms.FormNews.remove.confirm.cancel"
+				),
+				onConfirm: async () => {
+					try {
+						await this.$store.dispatch("datasources/remove", datasource._id);
+						this.$toast.success(
+							this.$t("pages.administration.datasources.index.remove.success", {
+								name: datasource.name,
+							})
+						);
+					} catch (error) {
+						console.error(error);
+						this.$toast.error(
+							this.$t("pages.administration.datasources.index.remove.error", {
+								name: datasource.name,
+							})
+						);
+					}
+				},
+			});
 		},
 	},
 	head() {
@@ -180,5 +203,8 @@ export default {
 }
 .ctx-menu {
 	position: relative;
+}
+.context-menu-icon {
+	color: var(--color-tertiary);
 }
 </style>
