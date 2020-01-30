@@ -1,0 +1,11 @@
+.sidebar {
+	.logo-full {
+		@include breakpoint(desktop) {
+			padding: 0 !important;
+		}
+	}
+
+	.logo {
+		background-image: var(--logo-gradient);
+	}
+}

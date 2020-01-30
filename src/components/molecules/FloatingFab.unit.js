@@ -4,29 +4,33 @@ import BaseButton from "@components/base/BaseButton";
 
 const topRightFab = {
 	components: { FloatingFab },
-	template: `<floating-fab position="top-right"/>`,
+	template: `<floating-fab position="top-right" aria-label="Some Label"/>`,
 };
 
 const topLeftFab = {
 	components: { FloatingFab },
-	template: `<floating-fab position="top-left"/>`,
+	template: `<floating-fab position="top-left" aria-label="Some Label"/>`,
 };
 
 const bottomLeftFab = {
 	components: { FloatingFab },
-	template: `<floating-fab position="bottom-left"/>`,
+	template: `<floating-fab position="bottom-left" aria-label="Some Label"/>`,
 };
 
 const bottomRightFab = {
 	components: { FloatingFab },
-	template: `<floating-fab position="bottom-right"/>`,
+	template: `<floating-fab position="bottom-right" aria-label="Some Label"/>`,
 };
 
 describe("@components/FloatingFab", () => {
 	it(...isValidComponent(FloatingFab));
 
 	it("Renders a default fab", () => {
-		const wrapper = mount(FloatingFab);
+		const wrapper = mount(FloatingFab, {
+			propsData: {
+				ariaLabel: "Some Label",
+			},
+		});
 		expect(wrapper.contains(BaseIcon)).toBe(true);
 		expect(wrapper.contains(BaseButton)).toBe(true);
 		expect(wrapper.props("icon")).toBe("add");

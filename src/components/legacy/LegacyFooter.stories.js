@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 
 import LegacyFooter from "./LegacyFooter";
 
-storiesOf("Legacy|LegacyFooter", module).add("default", () => ({
+storiesOf("Legacy/LegacyFooter", module).add("default", () => ({
 	components: { LegacyFooter },
 	template: `<LegacyFooter :links="links" :contacts="contacts"/>`,
 	data: () => ({

@@ -11,8 +11,9 @@ import ModalFooterActions from "@components/molecules/ModalFooterActions";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import ModalFooterBorder from "@components/molecules/ModalFooterBorder";
 import ModalFooter from "@components/molecules/ModalFooter";
+import LoadingModal from "@components/molecules/LoadingModal";
 
-storiesOf("Base|Modals", module)
+storiesOf("Base/Modals", module)
 	.addParameters({
 		notes,
 	})
@@ -135,7 +136,7 @@ storiesOf("Base|Modals", module)
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<ModalBodyInfo
-					text="Das neue Schuljahr hat soeben begonnen"
+					title="Das neue Schuljahr hat soeben begonnen"
 				>
 					<template v-slot:icon>
 						<base-icon source="material" icon="info" style="color: var(--color-success)"/>
@@ -161,10 +162,10 @@ storiesOf("Base|Modals", module)
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<ModalBodyInfo
-					text="Bist du sicher, dass du das Thema das Herz löschen möchtest?"
+					title="Bist du sicher, dass du das Thema das Herz löschen möchtest?"
 				>
 					<template v-slot:icon>
-					<base-icon slot="icon" source="material" icon="report_problem" style="color: var(--color-danger)"/>
+						<base-icon source="material" icon="report_problem" style="color: var(--color-danger)"/>
 					</template>
 				</ModalBodyInfo>
 			</template>
@@ -178,4 +179,19 @@ storiesOf("Base|Modals", module)
 			</template>
 		</base-modal>
 		</div>`,
+	}))
+	.add("Loading", () => ({
+		components: { LoadingModal },
+		template: `<div>
+		<base-button @click="active = true">Open Modal</base-button>
+			<LoadingModal :title="title" :description="description" :active.sync="active"/>
+		</div>`,
+		data: () => ({
+			active: true,
+			title: text("title", "Daten werden geladen…"),
+			description: text(
+				"description",
+				"Dies kann bis zu einer Minute dauern. Wir bitten um etwas Geduld…"
+			),
+		}),
 	}));

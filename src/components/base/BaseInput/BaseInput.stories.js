@@ -10,7 +10,7 @@ const defaultTypes = supportedTypes.reduce((obj, val) => {
 	return obj;
 }, {});
 
-storiesOf("Base|Inputs/Default", module)
+storiesOf("Base/Inputs/Default", module)
 	.addParameters({
 		notes,
 	})
@@ -84,11 +84,13 @@ storiesOf("Base|Inputs/Default", module)
 		}),
 		template: `
 			<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint">
-				<base-icon slot="icon" :source="iconSource" :icon="icon" />
+				<template v-slot:icon>
+					<base-icon :source="iconSource" :icon="icon" />
+				</template>
 			</base-input>`,
 	}));
 
-storiesOf("Base|Inputs", module)
+storiesOf("Base/Inputs", module)
 	.addParameters({
 		notes,
 	})

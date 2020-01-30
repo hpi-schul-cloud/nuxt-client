@@ -2,7 +2,7 @@
 	<div class="base">
 		<div class="container">
 			<div class="img-container">
-				<img :src="image" class="image" alt="Datensource Logo" />
+				<img :src="image" role="presentation" class="image" />
 			</div>
 			<div class="description">
 				<slot name="description" />

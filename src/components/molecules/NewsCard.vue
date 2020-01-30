@@ -1,18 +1,22 @@
 <template>
 	<base-card class="mt--md news-card">
-		<div slot="header" :style="{ backgroundColor: article.color }">
-			<div class="news-card__heading">
-				<h4 style="margin: 0">{{ article.title }}</h4>
+		<template v-slot:header>
+			<div :style="{ backgroundColor: article.color }">
+				<div class="news-card__heading">
+					<h4 style="margin: 0">{{ article.title }}</h4>
+				</div>
 			</div>
-		</div>
-		<div class="news-card__content">
-			<span>{{ dayjs(article.createdAt).fromNow() }}</span>
-			<div class="mt--md">
-				<BaseLink :to="{ name: 'news-id', params: { id: article._id } }"
-					>Weiterlesen</BaseLink
-				>
+		</template>
+		<template v-slot:default>
+			<div class="news-card__content">
+				<span>{{ dayjs(article.createdAt).fromNow() }}</span>
+				<div class="mt--md">
+					<BaseLink :to="{ name: 'news-id', params: { id: article._id } }">
+						Weiterlesen
+					</BaseLink>
+				</div>
 			</div>
-		</div>
+		</template>
 	</base-card>
 </template>
 
