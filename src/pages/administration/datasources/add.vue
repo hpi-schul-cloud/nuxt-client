@@ -2,41 +2,30 @@
 	<div>
 		<user-has-permission permission="DATASOURCES_VIEW">
 			<base-breadcrumb :inputs="breadcrumbs" />
-			<h1 class="mb--md h3">{{
-				$t("pages.administration.datasources.add.title")
-			}}</h1>
+			<h1 class="h3">
+				{{ $t("pages.administration.datasources.add.title") }}</h1
+			>
 			<datasource-card
-				:image="require('@assets/img/datasources/logo-webuntis.png')"
-				title="WebUnits"
+				v-for="provider in datasourceProvider"
+				:key="provider.name"
+				:image="provider.icon"
+				:title="provider.name"
+				:subtitle="
+					provider.count === 0
+						? ''
+						: $t(
+								'pages.administration.datasources.add.provider.addedDatasources',
+								{ x: provider.count }
+						  )
+				"
 				class="mb--md"
 			>
 				<template v-slot:actions>
-					<BaseButton design="primary text" @click="forwardCreate('webuntis')">
-						<BaseIcon source="custom" icon="add-datasource" :fill="color" />
-						{{ $t("pages.administration.datasources.add.btnAdd") }}
-					</BaseButton>
-				</template>
-			</datasource-card>
-			<datasource-card
-				:image="require('@assets/img/datasources/logo-ldap.svg')"
-				title="LDAP"
-				class="mb--md"
-			>
-				<template v-slot:actions>
-					<BaseButton design="primary text">
-						<BaseIcon source="custom" icon="add-datasource" :fill="color" />
-						{{ $t("pages.administration.datasources.add.btnAdd") }}
-					</BaseButton>
-				</template>
-			</datasource-card>
-			<datasource-card
-				:image="require('@assets/img/datasources/logo-rss.png')"
-				title="rss"
-				class="mb--md"
-			>
-				<template v-slot:actions>
-					<BaseButton design="primary text">
-						<BaseIcon source="custom" icon="add-datasource" :fill="color" />
+					<BaseButton
+						design="primary text"
+						@click="forwardCreate(provider.name.toLowerCase())"
+					>
+						<BaseIcon source="custom" icon="datasource-add" />
 						{{ $t("pages.administration.datasources.add.btnAdd") }}
 					</BaseButton>
 				</template>
@@ -47,7 +36,6 @@
 
 <script>
 import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
-import ExampleImage from "@assets/img/datasources/logo-webuntis.png";
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import UserHasPermission from "@components/helpers/UserHasPermission";
 
@@ -56,6 +44,9 @@ export default {
 		BaseBreadcrumb,
 		DatasourceCard,
 		UserHasPermission,
+	},
+	meta: {
+		requiredPermissions: ["DATASOURCES_VIEW"],
 	},
 	data() {
 		return {
@@ -74,11 +65,54 @@ export default {
 					to: "/administration/datasources/add",
 				},
 			],
-			imgsrc: ExampleImage,
-			color: "var(--color-primary)",
+			datasourceProvider: [
+				{
+					name: this.$t(
+						"pages.administration.datasources.add.provider.WebUntis.name"
+					),
+					icon: require("@assets/img/datasources/logo-webuntis.png"),
+					count: 0,
+				},
+				{
+					name: this.$t(
+						"pages.administration.datasources.add.provider.LDAP.name"
+					),
+					icon: require("@assets/img/datasources/logo-ldap.svg"),
+					count: 0,
+				},
+				{
+					name: this.$t(
+						"pages.administration.datasources.add.provider.RSS.name"
+					),
+					icon: require("@assets/img/datasources/logo-rss.png"),
+					count: 0,
+				},
+			],
 		};
 	},
+	created() {
+		this.datasourceProvider.map((source) => {
+			this.getAddedSourcesCount(source);
+		});
+	},
 	methods: {
+		async getAddedSourcesCount(source) {
+			await this.$store
+				.dispatch("datasources/find", {
+					query: {
+						$limit: 0,
+						config: {
+							target: source.name.toLowerCase(),
+						},
+					},
+				})
+				.then((res) => {
+					source.count = res.total;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+		},
 		forwardCreate(name) {
 			this.$router.push({
 				path: name + "/new",
