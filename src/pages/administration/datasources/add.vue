@@ -2,10 +2,13 @@
 	<div>
 		<user-has-permission permission="DATASOURCES_VIEW">
 			<base-breadcrumb :inputs="breadcrumbs" />
-			<h3>{{ $t("pages.administration.datasources.add.title") }}</h3>
+			<h1 class="mb--md h3">{{
+				$t("pages.administration.datasources.add.title")
+			}}</h1>
 			<datasource-card
 				:image="require('@assets/img/datasources/logo-webuntis.png')"
 				title="WebUnits"
+				class="mb--md"
 			>
 				<template v-slot:actions>
 					<BaseButton design="primary text" @click="forwardCreate('webuntis')">
@@ -17,6 +20,7 @@
 			<datasource-card
 				:image="require('@assets/img/datasources/logo-ldap.svg')"
 				title="LDAP"
+				class="mb--md"
 			>
 				<template v-slot:actions>
 					<BaseButton design="primary text">
@@ -28,6 +32,7 @@
 			<datasource-card
 				:image="require('@assets/img/datasources/logo-rss.png')"
 				title="rss"
+				class="mb--md"
 			>
 				<template v-slot:actions>
 					<BaseButton design="primary text">
