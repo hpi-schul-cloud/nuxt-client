@@ -160,6 +160,7 @@ export default {
 					return !selectedIdsOnCurrentView.includes(row._id);
 				})
 				.map((row) => row._id);
+
 			let idsToPush = [];
 			let idsToRemove = [];
 			if (this.sendType === "inclusive") {

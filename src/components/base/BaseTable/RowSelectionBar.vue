@@ -71,7 +71,7 @@ export default {
 	width: 100%;
 	padding: var(--space-md);
 	color: var(--color-white);
-	background: var(--color-info-light);
+	background: var(--color-gray);
 }
 
 .select-all-rows {

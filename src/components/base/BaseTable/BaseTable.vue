@@ -289,6 +289,8 @@ export default {
 			);
 		},
 		allRowsOfAllPagesSelected() {
+			if (this.selectedRowIds.length < this.total) return false;
+
 			return this.filteredAndSortedRows.every((row) =>
 				this.selectedRowIds.includes(row[this.trackBy])
 			);
@@ -458,7 +460,7 @@ export default {
 				background-color: var(--color-gray-light);
 			}
 			&.selected {
-				background-color: var(--color-info-light);
+				background-color: var(--color-gray);
 			}
 			td {
 				padding: var(--space-xs);
