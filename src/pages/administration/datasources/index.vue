@@ -48,7 +48,7 @@
 		<floating-fab
 			position="bottom-right"
 			icon="add"
-			to="/administration/datasources/new"
+			to="/administration/datasources/add"
 			:aria-label="$t('pages.administration.datasources.index.create')"
 		/>
 	</div>
