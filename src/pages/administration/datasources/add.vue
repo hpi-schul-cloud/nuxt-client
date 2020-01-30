@@ -15,7 +15,7 @@
 						? ''
 						: $t(
 								'pages.administration.datasources.add.provider.addedDatasources',
-								{ x: provider.count }
+								{ number: provider.count }
 						  )
 				"
 				class="mb--md"

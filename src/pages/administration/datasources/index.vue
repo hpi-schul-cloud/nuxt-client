@@ -38,6 +38,14 @@
 					</template>
 				</datasource-card>
 			</li>
+			<pagination
+				class="mt--md"
+				:current-page="skip"
+				:per-page="pagination.limit"
+				:total="pagination.total"
+				@update:current-page="onPageChange"
+				@update:per-page="onCurrentPageChange"
+			/>
 		</ol>
 		<template v-else>
 			<empty-state :image="imgsrc">
@@ -61,10 +69,11 @@ import ContextMenu from "@components/molecules/ContextMenu";
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
+import Pagination from "@components/organisms/Pagination";
 
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
 	components: {
@@ -72,6 +81,7 @@ export default {
 		DatasourceCard,
 		EmptyState,
 		FloatingFab,
+		Pagination,
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
@@ -90,11 +100,16 @@ export default {
 			],
 			imgsrc: ImageEmptyState,
 			menuOpen: false,
+			skip: 1,
+			limit: 10,
 		};
 	},
 	computed: {
 		...mapGetters("datasources", {
 			datasources: "list",
+		}),
+		...mapState("datasources", {
+			pagination: (state) => state.pagination.default,
 		}),
 	},
 	created(ctx) {
@@ -120,10 +135,16 @@ export default {
 			];
 		},
 		find() {
-			this.$store.dispatch("datasources/find").catch((error) => {
-				console.error(error);
-				this.$toast.error(this.$t("error.load"));
-			});
+			const query = {
+				$limit: this.limit,
+				$skip: (this.skip - 1) * this.limit,
+			};
+			this.$store
+				.dispatch("datasources/find", { query })
+				.catch((error) => {
+					console.error(error);
+					this.$toast.error(this.$t("error.load"));
+				});
 		},
 		mapLastStatusIconName(item) {
 			const mapping = {
@@ -139,7 +160,7 @@ export default {
 			const ldap = require("@assets/img/datasources/logo-ldap.svg");
 			const rss = require("@assets/img/datasources/logo-rss.png");
 			const mapping = { webuntis, ldap, rss };
-			return mapping[item.config.target];
+			return mapping[item.config.target] || "";
 		},
 		handleEdit(source) {
 			this.$router.push({
@@ -162,6 +183,20 @@ export default {
 					})
 				);
 			}
+		},
+		onPageChange(skip) {
+			this.skip = skip;
+			this.find();
+		},
+		onCurrentPageChange(limit) {
+			//TODO make sure to set skip accordingly of limit
+
+			if (limit === -1) {
+				this.skip = 1;
+			}
+
+			this.limit = limit;
+			this.find();
 		},
 	},
 	head() {

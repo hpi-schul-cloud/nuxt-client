@@ -51,7 +51,7 @@
 	"layouts.loggedoutFullWidth.project": "Projekt",
 	"layouts.loggedoutFullWidth.steps": "Erste Schritte",
 	"pages.administration.datasources.add.btnAdd": "Datenquelle hinzufügen",
-	"pages.administration.datasources.add.provider.addedDatasources": "Bereits hinzugefügt ({x})",
+	"pages.administration.datasources.add.provider.addedDatasources": "Bereits hinzugefügt ({number})",
 	"pages.administration.datasources.add.provider.LDAP.name": "LDAP",
 	"pages.administration.datasources.add.provider.RSS.name": "RSS",
 	"pages.administration.datasources.add.provider.WebUntis.name": "WebUntis",
