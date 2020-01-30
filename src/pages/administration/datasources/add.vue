@@ -115,7 +115,7 @@ export default {
 		},
 		forwardCreate(name) {
 			this.$router.push({
-				path: name + "/new",
+				path: "/administration/datasources/" + name + "/new",
 			});
 		},
 	},
