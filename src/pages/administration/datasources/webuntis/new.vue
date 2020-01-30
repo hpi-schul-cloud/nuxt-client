@@ -52,7 +52,7 @@ export default {
 	},
 	data() {
 		return {
-			image: "@assets/img/logo/logo-webuntis-text.svg",
+			image: "@assets/img/datasources/logo-webuntis-text.svg",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
