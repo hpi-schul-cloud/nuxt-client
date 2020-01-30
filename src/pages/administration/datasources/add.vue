@@ -8,7 +8,7 @@
 				title="WebUnits"
 			>
 				<template v-slot:actions>
-					<BaseButton design="primary text">
+					<BaseButton design="primary text" @click="forwardCreate('webuntis')">
 						<BaseIcon source="custom" icon="add-datasource" :fill="color" />
 						{{ $t("pages.administration.datasources.add.btnAdd") }}
 					</BaseButton>
@@ -72,6 +72,13 @@ export default {
 			imgsrc: ExampleImage,
 			color: "var(--color-primary)",
 		};
+	},
+	methods: {
+		forwardCreate(name) {
+			this.$router.push({
+				path: name + "/new",
+			});
+		},
 	},
 	head() {
 		return {

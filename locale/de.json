@@ -61,7 +61,7 @@
 	"pages.administration.datasources.index.remove.error": "Fehler beim entfernen der Datenquellen \"{name}\"",
 	"pages.administration.datasources.index.remove.success": "Datenquellen \"{name}\" wurde entfernt",
 	"pages.administration.datasources.index.title": "Datenquellen",
-	"pages.administration.datasources.login.heading": "Bitte gib deine Zugangsdaten ein",
+	"pages.administration.datasources.login.heading": "Gib hier deine Zugangsdaten ein",
 	"pages.administration.datasources.login.text": "Bitte verwende keine privaten Zugangsdaten. Für die Einbindung der Datenquelle empfehlen wir einen Schul-Cloud spezifischen WebUntis Account zu erstellen.",
 	"pages.administration.datasources.login.title": "Login",
 	"pages.administration.datasources.new.provider.addedDatasources": "Bereits hinzugefügt ({x})",

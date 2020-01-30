@@ -139,8 +139,10 @@ export default {
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.target];
 		},
-		handleEdit(/* datasource */) {
-			this.$toast.info(`TODO: redirect to not yet existing edit page`);
+		handleEdit(source) {
+			this.$router.push({
+				path: "datasources/" + source.config.type + "/" + source._id + "/edit",
+			});
 		},
 		async handleRemove(datasource) {
 			try {
