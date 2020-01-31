@@ -2,7 +2,9 @@
 	<form v-on="$listeners" @submit.prevent="submitHandler">
 		<base-input
 			v-model="data.name"
+			name="name"
 			type="text"
+			required="true"
 			:label="$t('components.organisms.FormDatasources.input.name.label')"
 			:placeholder="
 				$t('components.organisms.FormDatasources.input.name.placeholder')
@@ -14,9 +16,9 @@
 			</template>
 		</base-input>
 		<slot name="inputs" :config="data.config" />
-		<base-button type="submit" class="w-100 mt--lg" design="secondary" text>{{
-			$t("components.organisms.FormDatasources.btn.connect")
-		}}</base-button>
+		<base-button type="submit" class="w-100 mt--lg" design="secondary" text
+			>{{ $t("components.organisms.FormDatasources.btn.connect") }}
+		</base-button>
 	</form>
 </template>
 
@@ -42,43 +44,50 @@ export default {
 			data: {
 				name: "",
 				schoolId: "",
-				config: {},
+				config: {
+					target: this.type,
+				},
 			},
 		};
 	},
 	computed: {
 		actionType() {
-			return this.$route.params.id ? "patch" : "create";
+			return this.id ? "patch" : "create";
 		},
 		errors() {
 			const name = this.data.name
 				? undefined
 				: this.$t("components.organisms.FormDatasources.errors.missing_name");
-			const schoolId = this.data.schoolId
-				? undefined
-				: this.$t(
-						"components.organisms.FormDatasources.errors.missing_hidden_data"
-				  );
+			//TODO: check target and config (test against json schema!?)
+			const config =
+				Object.keys(this.data.config).length !== 0
+					? undefined
+					: this.$t(
+							"components.organisms.FormDatasources.errors.missing_config"
+					  );
 			return {
 				name,
-				schoolId,
+				config,
 			};
 		},
 	},
 	created() {
-		this.data.config.target = this.type;
-		if (this.$route.params.id) this.get(this.$route.params.id);
+		if (this.id) this.get(this.id);
 	},
 	methods: {
 		async get(id) {
-			this.data = JSON.parse(
-				JSON.stringify(await this.$store.dispatch("datasources/get", id))
-			);
+			try {
+				this.data = JSON.parse(
+					JSON.stringify(await this.$store.dispatch("datasources/get", id))
+				);
+			} catch (e) {
+				console.error(e);
+				this.$toast.error(
+					this.$t("components.organisms.FormDatasources.errors.get")
+				);
+			}
 		},
 		submitHandler() {
-			if (!this.data.schoolId) {
-				this.data.schoolId = this.$user.schoolId;
-			}
 			switch (this.actionType) {
 				case "create": {
 					this.create();
@@ -98,7 +107,7 @@ export default {
 			try {
 				await this.$store.dispatch("datasources/create", {
 					name: this.data.name,
-					schoolId: this.data.schoolId,
+					schoolId: this.$user.schoolId,
 					config: this.data.config,
 				});
 				this.$toast.success(
@@ -121,7 +130,7 @@ export default {
 					this.$route.params.id,
 					{
 						name: this.data.name,
-						schoolId: this.data.schoolId,
+						schoolId: this.$user.schoolId,
 						config: this.data.config,
 					},
 				]);
