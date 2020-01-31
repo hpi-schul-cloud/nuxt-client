@@ -204,7 +204,7 @@ export default {
 					query: {
 						$skip,
 						$limit,
-						datasourceRunId: this.runId,
+						datasourceId: this.datasource._id,
 					},
 				});
 			} catch (error) {
