@@ -66,7 +66,7 @@ export default {
 		},
 	},
 	created() {
-		this.data.config.type = this.type;
+		this.data.config.target = this.type;
 		if (this.$route.params.id) this.get(this.$route.params.id);
 	},
 	methods: {
