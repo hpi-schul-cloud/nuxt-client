@@ -106,6 +106,10 @@ export default {
 					field: "room",
 					label: "Raum",
 				},
+				{
+					field: "state",
+					label: "Status",
+				},
 			],
 			rowsPerPage: 5,
 			sendIds: {},
@@ -130,6 +134,7 @@ export default {
 					teacher: entry.teacher,
 					class: `${entry.subject} ${entry.class}`,
 					room: entry.room,
+					state: entry.state,
 				};
 			});
 		},
