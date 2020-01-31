@@ -70,6 +70,8 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	padding: var(--space-md);
+	font-size: var(--text-md);
+	font-weight: var(--font-weight-normal);
 	color: var(--color-white);
 	background: var(--color-gray);
 }

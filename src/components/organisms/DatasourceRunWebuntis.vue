@@ -13,6 +13,8 @@
 				:backend-pagination="true"
 				:backend-sorting="true"
 				:selected-rows="selectedRows"
+				:send-type="sendType"
+				:send-ids="sendIds"
 				@all-rows-selected="handlerAllRowsSelected"
 				@update:rows-per-page="handlerUpdateRowsPerPage"
 				@update:current-page="handlerUpdatePage"

@@ -206,6 +206,14 @@ export default {
 			type: String,
 			required: true,
 		},
+		sendType: {
+			type: String,
+			default: "",
+		},
+		sendIds: {
+			type: Object,
+			default: () => {},
+		},
 	},
 	data() {
 		return {
@@ -289,6 +297,8 @@ export default {
 			);
 		},
 		allRowsOfAllPagesSelected() {
+			if (this.paginatedSelectedTotal == this.total) return true;
+
 			if (this.selectedRowIds.length < this.total) return false;
 
 			return this.filteredAndSortedRows.every((row) =>
@@ -299,6 +309,12 @@ export default {
 			return this.data.filter((row) =>
 				this.selectedRowIds.some((id) => id === row[this.trackBy])
 			);
+		},
+		paginatedSelectedTotal() {
+			if (this.sendType == "exclusive") {
+				return this.total - Object.keys(this.sendIds).length;
+			}
+			return undefined;
 		},
 	},
 	watch: {
@@ -433,20 +449,32 @@ export default {
 }
 .table {
 	width: 100%;
+	margin-bottom: var(--space-sm);
+	border-collapse: collapse;
 	thead {
-		font-weight: var(--font-weight-bold);
+		font-size: var(--text-md);
 		tr {
 			th {
+				padding: var(--space-xs);
+				padding-top: var(--space-sm);
+				text-align: left;
 				cursor: pointer;
-				border-bottom: calc(2 * var(--border-width)) solid var(--color-gray);
-				opacity: 0.66;
+				border-bottom: calc(2 * var(--border-width)) solid var(--color-tertiary);
 				&.is-current-sort {
 					opacity: 1;
 				}
 				.th-wrap {
 					display: flex;
 					align-items: center;
-					padding: var(--space-sm);
+
+					> span {
+						font-size: var(--text-md);
+						font-weight: var(--font-weight-normal);
+						color: var(--color-black);
+					}
+				}
+				> label.wrapper.input {
+					margin: 0;
 				}
 			}
 		}
@@ -454,16 +482,27 @@ export default {
 	tbody {
 		tr {
 			&:nth-child(odd) {
-				background-color: var(--color-white);
+				background-color: var(--color-gray-light);
+				border-top: 1px solid var(--color-white);
+				border-bottom: 1px solid var(--color-white);
 			}
 			&:nth-child(even) {
-				background-color: var(--color-gray-light);
+				background-color: var(--color-white);
+				border-top: 1px solid var(--color-white);
+				border-bottom: 1px solid var(--color-white);
 			}
 			&.selected {
 				background-color: var(--color-gray);
+				border-top: 1px solid var(--color-white);
+				border-bottom: 1px solid var(--color-white);
 			}
 			td {
 				padding: var(--space-xs);
+				font-size: var(--text-xs);
+
+				> label.wrapper.input {
+					margin: 0;
+				}
 			}
 		}
 	}
