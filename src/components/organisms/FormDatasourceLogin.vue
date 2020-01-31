@@ -8,9 +8,13 @@
 				$t('components.organisms.FormDatasources.input.name.placeholder')
 			"
 			class="mt--md"
-		></base-input>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="server" />
+			</template>
+		</base-input>
 		<slot name="inputs" :config="data.config" />
-		<base-button type="submit" class="w-100" design="secondary" text>{{
+		<base-button type="submit" class="w-100 mt--lg" design="secondary" text>{{
 			$t("components.organisms.FormDatasources.btn.connect")
 		}}</base-button>
 	</form>
@@ -67,7 +71,9 @@ export default {
 	},
 	methods: {
 		async get(id) {
-			this.data = { ...(await this.$store.dispatch("datasources/get", id)) };
+			this.data = JSON.parse(
+				JSON.stringify(await this.$store.dispatch("datasources/get", id))
+			);
 		},
 		submitHandler() {
 			if (!this.data.schoolId) {

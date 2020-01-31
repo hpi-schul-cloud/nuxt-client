@@ -70,7 +70,7 @@
 	"pages.administration.datasources.index.title": "Datenquellen",
 	"pages.administration.datasources.login.heading": "Gib hier deine Zugangsdaten ein",
 	"pages.administration.datasources.login.text": "Bitte verwende keine privaten Zugangsdaten. Für die Einbindung der Datenquelle empfehlen wir einen Schul-Cloud spezifischen WebUntis Account zu erstellen.",
-	"pages.administration.datasources.login.title": "Login",
+	"pages.administration.datasources.login.title": "Zugangsdaten",
 	"pages.administration.index.title": "Administration",
 	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",
 	"pages.content.empty_state.error.oops": "Oops",
