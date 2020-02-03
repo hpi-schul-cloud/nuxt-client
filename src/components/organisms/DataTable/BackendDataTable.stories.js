@@ -49,7 +49,7 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 				:actions="actions"
 				:columns="columns"
 				:current-page.sync="currentPage"
-				:data="data.slice((currentPage - 1) * rowsPerPage, currentPage  * rowsPerPage)"
+				:data="data.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)"
 				:filterable="filterable"
 				:filters="filters"
 				:filtersSelected="filtersSelected"
@@ -65,7 +65,6 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 				@update:current-page="onUpdateCurrentPage"
 				@update:filters-selected="onUpdateFiltersSelected"
 				@update:rows-per-page="onUpdateRowsPerPage""
-				>
-			</BackendDataTable>
+			/>
 		`,
 }));
