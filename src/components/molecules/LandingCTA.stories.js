@@ -3,7 +3,7 @@ import { text } from "@storybook/addon-knobs";
 
 import LandingCTA from "@components/molecules/LandingCTA";
 
-storiesOf("Molecules/Onboarding", module).add("Landing CTA", () => ({
+storiesOf("4 Molecules/Onboarding", module).add("Landing CTA", () => ({
 	components: { LandingCTA },
 	data: () => ({
 		title: text("title", "Willkommen in der Schul-Cloud, Carl Cactus"),

@@ -4,7 +4,7 @@ import notes from "@docs/storybook/molecules/FloatingFab.md";
 import FloatingFab from "./FloatingFab";
 import { text } from "@storybook/addon-knobs";
 
-storiesOf("Molecules/FloatingFab", module)
+storiesOf("4 Molecules/FloatingFab", module)
 	.addParameters({
 		notes,
 	})

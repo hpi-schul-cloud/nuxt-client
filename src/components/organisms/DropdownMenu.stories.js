@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import DropdownMenu from "@components/organisms/DropdownMenu";
 
-storiesOf("Organisms", module).add("DropdownMenu", () => ({
+storiesOf("5 Organisms", module).add("DropdownMenu", () => ({
 	components: { DropdownMenu },
 	data: () => ({
 		title: text("title", "Dropdown"),

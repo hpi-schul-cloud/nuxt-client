@@ -3,7 +3,7 @@ import { text, array, select } from "@storybook/addon-knobs";
 
 import ContentCard from "./ContentCard";
 
-storiesOf("Molecules/ContentCard", module).add("default", () => ({
+storiesOf("4 Molecules/ContentCard", module).add("default", () => ({
 	components: { ContentCard },
 	template: `<ContentCard v-bind="entry" style="max-width: 30ch"/>`,
 	data: () => ({
