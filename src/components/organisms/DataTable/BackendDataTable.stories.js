@@ -14,8 +14,6 @@ import {
 storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 	data: () => ({
 		actions: tableActions,
-		backendPagination: boolean("backendPagination", false),
-		backendSorting: boolean("backendSorting", false),
 		columns: tableColumns,
 		currentPage: number("currentPage", 1),
 		data: tableData,
@@ -24,8 +22,9 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 		filtersSelected: object("filtersSelected", [tableFilters[0]]),
 		paginated: boolean("paginated", true),
 		rowsPerPage: number("rowsPerPage", 5),
-		showRowSelection: boolean("showRowSelection", true),
-		selectedRows: object("selectedRows", [tableData[0]]),
+		selectableRows: boolean("selectableRows", true),
+		selectionType: text("selectionType", "inclusive"),
+		selectedRowIds: object("selectedRowIds", [tableData[0].id]),
 		total: number("total", 10),
 		trackBy: text("trackBy", "id"),
 	}),
@@ -44,8 +43,6 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 	template: `
 			<BackendDataTable v-slot:default="slotProps"
 				:actions="actions"
-				:backend-pagination="backendPagination"
-				:backend-sorting="backendSorting"
 				:columns="columns"
 				:current-page.sync="currentPage"
 				:data="data"
@@ -54,8 +51,7 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 				:filtersSelected="filtersSelected"
 				:paginated="paginated"
 				:rows-per-page.sync="rowsPerPage"
-				:showRowSelection="showRowSelection"
-				:selectedRows="selectedRows"
+				:selectableRows="selectableRows"
 				:total="total"
 				:trackBy="trackBy"
 				@all-rows-selected="onAllRowsSelected"
@@ -63,8 +59,8 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 				@sort="onSort"
 				@update:current-page="onUpdateCurrentPage"
 				@update:filters-selected="onUpdateFiltersSelected"
-				@update:rows-per-page="onUpdateRowsPerPage"
-				@update:selected-rows="onUpdateSelectedRows">
+				@update:rows-per-page="onUpdateRowsPerPage""
+				>
 			</BackendDataTable>
 		`,
 }));

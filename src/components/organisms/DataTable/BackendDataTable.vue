@@ -15,7 +15,7 @@
 					:selected-rows="selectedRowIds"
 					:all-rows-of-all-pages-selected="allRowsOfAllPagesSelected"
 					:all-rows-of-current-page-selected="allRowsOfCurrentPageSelected"
-					:total="tableDataTotal"
+					:total="total"
 					@select-all-rows="selectAllRowsOfAllPages"
 					@unselect-all-rows="unselectAllRowsOfAllPages"
 					@fire-action="fireAction"
@@ -26,8 +26,8 @@
 				<thead>
 					<component
 						:is="componentHeaderRow"
-						:all-rows-selectable="showRowSelection"
-						:all-rows-selected="allRowsSelected"
+						:all-rows-selectable="selectableRows"
+						:all-rows-selected="allRowsOfCurrentPageSelected"
 						:columns="columns"
 						:sort-by="sortBy"
 						:sort-order="sortOrder"
@@ -36,14 +36,14 @@
 				<tbody>
 					<component
 						:is="componentDataRow"
-						v-for="(row, rowindex) in visibleRows"
+						v-for="(row, rowindex) in data"
 						:key="rowindex"
-						:selectable="showRowSelection"
+						:selectable="selectableRows"
 						:rowindex="rowindex"
 						:selected="isRowSelected(row)"
 						:column-keys="columnKeys"
 						:data="row"
-						@update:selected="toggleRowSelection(row)"
+						@update:selected="setRowSelection(row, $event)"
 					>
 						<template
 							v-for="(cmp, name) in dataRowSlots"
@@ -59,7 +59,7 @@
 		<pagination
 			class="mt--md"
 			:current-page="currentPage"
-			:total="tableDataTotal"
+			:total="total"
 			:per-page="rowsPerPage"
 			@update:per-page="$emit('update:rows-per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
@@ -68,8 +68,7 @@
 </template>
 
 <script>
-import { getValueByPath, getNestedObjectValues, indexOf } from "@utils/helpers";
-import camelCase from "lodash/camelCase";
+import { getValueByPath } from "@utils/helpers";
 
 import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
@@ -88,24 +87,22 @@ export default {
 	},
 	mixins: [defaultFiltersMixin],
 	props: {
-		actions: {
-			type: Array,
-			default: () => [],
-		},
-		backendPagination: Boolean,
-		backendSorting: Boolean,
 		columns: {
 			type: Array,
 			default: () => [],
-		},
-		currentPage: {
-			type: Number,
-			default: 1,
 		},
 		data: {
 			type: Array,
 			default: () => [],
 		},
+		/**
+		 * Defines the path to a unqiue key in the object
+		 */
+		trackBy: {
+			type: String,
+			required: true,
+		},
+
 		filterable: {
 			type: Boolean,
 		},
@@ -159,30 +156,64 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-		paginated: Boolean,
-		rowsPerPage: {
-			type: Number,
-			default: 10,
-		},
-		showRowSelection: {
-			type: Boolean,
-		},
-		selectedRows: {
+
+		actions: {
 			type: Array,
 			default: () => [],
 		},
+
+		paginated: Boolean,
+		/**
+		 * The total number of available rows (including not visible items from other pages)
+		 */
 		total: {
 			type: Number,
 			default: 0,
 		},
-		trackBy: {
-			type: String,
-			required: true,
+		currentPage: {
+			type: Number,
+			default: 1,
 		},
+		rowsPerPage: {
+			type: Number,
+			default: 25,
+		},
+
+		/**
+		 * enables checkboxes next to each row
+		 */
+		selectableRows: {
+			type: Boolean,
+		},
+		/**
+		 * toggles wheather the selectedRowIds prop (should) contain all selected or all unselected rows
+		 * this is a trick to make all rows selectable even if we do not know all items yet.
+		 */
+		selectionType: {
+			type: String,
+			default: "inclusive",
+			validator: (val) => ["inclusive", "exclusive"].includes(val),
+		},
+		/**
+		 * All identifiers that are located at the trackBy key of the selected/deselected items.
+		 * Depending of the selectMode (inclusive/exclusive) this contains the selected or unselected Items
+		 */
+		selectedRowIds: {
+			type: Array,
+			default: () => [],
+		},
+
+		/**
+		 * Component to use for the header. Must define the same Interface as ./TableHeadRow
+		 */
 		componentHeaderRow: {
 			type: Object,
 			default: () => TableHeadRow,
 		},
+		/**
+		 * Component to use for each datarow. Must define the same Interface as ./TableDataRow
+		 * The default component provides slots for each column with the naming schema dataColumn-[index]
+		 */
 		componentDataRow: {
 			type: Object,
 			default: () => TableDataRow,
@@ -191,20 +222,22 @@ export default {
 	data() {
 		return {
 			editFilterActive: false,
-			currentSortColumn: "",
 			tableData: this.data,
 			filterOpened: {},
 			newFiltersSelected: this.filtersSelected,
-			selectedRowIds: this.selectedRows.map((row) => row[this.trackBy]),
-			isAsc: false,
-			defaultSort: [String, Array],
-			defaultSortDirection: {
-				type: String,
-				default: "asc",
-			},
+			selectionKeys: {},
+			sortBy: undefined,
+			sortOrder: undefined,
 		};
 	},
 	computed: {
+		// TODO watch for changes of parent selection and update selectionKeys data
+		// selectionKeys() {
+		// 	return this.selectedRowIds.reduce((obj) => {
+		// 		obj[selectedRowIds] = obj;
+		// 		return obj;
+		// 	}, {});
+		// },
 		columnKeys() {
 			return this.columns.map((e) => e.field);
 		},
@@ -213,196 +246,120 @@ export default {
 				name.startsWith("dataRow");
 			});
 		},
-		tableDataTotal() {
-			return this.backendPagination ? this.total : this.data.length;
-		},
-		currentSortDirection() {
-			return this.isAsc ? "asc" : "desc";
-		},
-		filteredRows() {
-			return this.data.filter((row) => {
-				return this.newFiltersSelected.every((filter) => {
-					if (filter.type === "fulltextSearch") {
-						return getNestedObjectValues(row).some((value) =>
-							(value.toString() || "").includes(filter.value)
-						);
-					} else {
-						const functionName = camelCase(
-							`filter-${filter.type}-${(filter.matchingType || {}).value}`
-						);
-						const defaultFunctionName = camelCase(
-							`filter-${filter.type}-default`
-						);
-						const filterFunction =
-							(filter.matchingType || {}).implementation ||
-							this[functionName] ||
-							this[defaultFunctionName];
-						return filterFunction(
-							getValueByPath(row, filter.property),
-							filter.value
-						);
-					}
-				});
-			});
-		},
-		filteredAndSortedRows() {
-			if (
-				this.backendSorting ||
-				!this.currentSortColumn ||
-				!this.currentSortColumn.sortable
-			) {
-				return this.filteredRows;
-			}
-			return this.sortBy(
-				this.filteredRows,
-				this.currentSortColumn.field,
-				this.isAsc
-			);
-		},
-		visibleRows() {
-			if (!this.paginated) return this.filteredAndSortedRows;
-
-			const { currentPage } = this;
-			const { rowsPerPage } = this;
-			if (this.filteredAndSortedRows.length <= rowsPerPage || rowsPerPage < 0) {
-				return this.filteredAndSortedRows;
-			} else {
-				const start = (currentPage - 1) * rowsPerPage;
-				const end = parseInt(start, 10) + parseInt(rowsPerPage, 10);
-				return this.filteredAndSortedRows.slice(start, end);
-			}
-		},
-		allRowsOfCurrentPageSelected() {
-			return this.visibleRows.every((visibleRow) =>
-				this.selectedRowIds.includes(visibleRow[this.trackBy])
-			);
-		},
+		// filteredRows() {
+		// 	return this.data.filter((row) => {
+		// 		return this.newFiltersSelected.every((filter) => {
+		// 			if (filter.type === "fulltextSearch") {
+		// 				return getNestedObjectValues(row).some((value) =>
+		// 					(value.toString() || "").includes(filter.value)
+		// 				);
+		// 			} else {
+		// 				const functionName = camelCase(
+		// 					`filter-${filter.type}-${(filter.matchingType || {}).value}`
+		// 				);
+		// 				const defaultFunctionName = camelCase(
+		// 					`filter-${filter.type}-default`
+		// 				);
+		// 				const filterFunction =
+		// 					(filter.matchingType || {}).implementation ||
+		// 					this[functionName] ||
+		// 					this[defaultFunctionName];
+		// 				return filterFunction(
+		// 					getValueByPath(row, filter.property),
+		// 					filter.value
+		// 				);
+		// 			}
+		// 		});
+		// 	});
+		// },
+		// filteredAndSortedRows() {
+		// 	if (
+		// 		this.backendSorting ||
+		// 		!this.currentSortColumn ||
+		// 		!this.currentSortColumn.sortable
+		// 	) {
+		// 		return this.filteredRows;
+		// 	}
+		// 	return this.sortBy(
+		// 		this.filteredRows,
+		// 		this.currentSortColumn.field,
+		// 		this.isAsc
+		// 	);
+		// },
 		allRowsOfAllPagesSelected() {
-			return this.filteredAndSortedRows.every((row) =>
-				this.selectedRowIds.includes(row[this.trackBy])
-			);
+			const selections = Object.keys(this.selectedRowIds);
+			return this.selectionType === "exclusive" && selections.length === 0;
 		},
-		newSelectedRows() {
-			return this.data.filter((row) =>
-				this.selectedRowIds.some((id) => id === row[this.trackBy])
-			);
+		allRowsOfCurrentPageSelected: {
+			get() {
+				const isInSelection = (row) => this.selectedRowIds[row[this.trackBy]];
+				return this.selectionType === "inclusive"
+					? Boolean(this.data.every(isInSelection))
+					: !Boolean(this.data.some(isInSelection));
+			},
+			set(state) {
+				this.data.forEach((row) => {
+					this.setRowSelection(row, state);
+				});
+			},
 		},
 	},
 	watch: {
-		data(data) {
-			this.selectedRowIds = this.selectedRowIds.filter((id) =>
-				data.some((row) => row[this.trackBy] === id)
-			);
-			this.tableData = data;
-
-			if (!this.backendSorting) {
-				this.sort(this.currentSortColumn, true);
-			}
-		},
-		filtersSelected() {
-			this.newFiltersSelected = this.filtersSelected;
-		},
-		newFiltersSelected() {
-			this.$emit("update:filters-selected", this.newFiltersSelected);
-		},
-		selectedRows(rows) {
-			this.selectedRowIds = rows.map((row) => row[this.trackBy]);
-		},
+		// data(data) {
+		// 	this.selectedRowIds = this.selectedRowIds.filter((id) =>
+		// 		data.some((row) => row[this.trackBy] === id)
+		// 	);
+		// 	this.tableData = data;
+		// 	if (!this.backendSorting) {
+		// 		this.sort(this.currentSortColumn, true);
+		// 	}
+		// },
+		// filtersSelected() {
+		// 	this.newFiltersSelected = this.filtersSelected;
+		// },
+		// newFiltersSelected() {
+		// 	this.$emit("update:filters-selected", this.newFiltersSelected);
+		// },
+		// selectedRowIds(rows) {
+		// 	this.selectedRowIds = rows.map((row) => row[this.trackBy]);
+		// },
 	},
 	methods: {
-		getValueByPath,
-		fireAction(action) {
-			action.action(this.newSelectedRows);
-			this.unselectAllRowsOfAllPages();
-		},
-		sort(column) {
-			if (column === this.currentSortColumn) {
-				this.isAsc = !this.isAsc;
-				this.$emit("sort", column.field, this.isAsc ? "asc" : "desc");
-			} else if (column.sortable) {
-				this.currentSortColumn = column;
-				this.isAsc = true;
-				this.$emit("sort", column.field, "asc");
-			}
-		},
-		sortBy(array, key, isAsc) {
-			let sorted = [];
-			// Sorting without mutating original data
-			sorted = [...array].sort((a, b) => {
-				// Get nested values from objects
-				let newA = getValueByPath(a, key);
-				let newB = getValueByPath(b, key);
-				// sort boolean type
-				if (typeof newA === "boolean" && typeof newB === "boolean") {
-					return isAsc ? newA - newB : newB - newA;
+		setRowSelection(row, state) {
+			if (this.selectionType === "inclusive") {
+				if (state) {
+					this.$set(this.selectedRowIds, row[this.trackBy], state);
+				} else {
+					this.$delete(this.selectedRowIds, row[this.trackBy]);
 				}
-				if (!newA && newA !== 0) return 1;
-				if (!newB && newB !== 0) return -1;
-				if (newA === newB) return 0;
-				newA = typeof newA === "string" ? newA.toUpperCase() : newA;
-				newB = typeof newB === "string" ? newB.toUpperCase() : newB;
-				return isAsc ? (newA > newB ? 1 : -1) : newA > newB ? -1 : 1;
-			});
-			return sorted;
+			} else {
+				if (!state) {
+					this.$set(this.selectedRowIds, row[this.trackBy], state);
+				} else {
+					this.$delete(this.selectedRowIds, row[this.trackBy]);
+				}
+			}
 		},
 		isRowSelected(row) {
-			return this.selectedRowIds.includes(row[this.trackBy]);
+			const rowId = row[this.trackBy];
+			return this.selectionType === "inclusive"
+				? this.selectionKeys[rowId]
+				: !this.selectionKeys[rowId];
 		},
-
-		toggleRowSelection(row) {
-			this.isRowSelected(row) ? this.unselectRow(row) : this.selectRow(row);
-			this.$emit("update:selected-rows", this.newSelectedRows);
-		},
-
-		selectRow(row) {
-			if (!this.isRowSelected(row)) {
-				this.selectedRowIds.push(row[this.trackBy]);
-			}
-		},
-
-		unselectRow(row) {
-			const index = indexOf(this.selectedRowIds, row[this.trackBy]);
-			if (index >= 0) {
-				this.selectedRowIds.splice(index, 1);
-			}
-		},
-
-		toggleAllRowSelectionsOfCurrentPage() {
-			this.allRowsOfCurrentPageSelected
-				? this.unselectAllRowsOfCurrentPage()
-				: this.selectAllRowsOfCurrentPage();
-			this.$emit("all-rows-of-current-page-selected", this.newSelectedRows);
-			this.$emit("update:selected-rows", this.newSelectedRows);
-		},
-
-		selectAllRowsOfCurrentPage() {
-			this.visibleRows.forEach((row) => {
-				if (!this.selectedRowIds.includes(row[this.trackBy])) {
-					this.selectedRowIds.push(row[this.trackBy]);
-				}
-			});
-		},
-
-		unselectAllRowsOfCurrentPage() {
-			this.selectedRowIds = this.selectedRowIds.filter((id) =>
-				this.visibleRows.every((row) => row[this.trackBy] != id)
-			);
+		getValueByPath,
+		fireAction(action) {
+			action.action(this.newselectedRowIds);
+			this.unselectAllRowsOfAllPages();
 		},
 
 		selectAllRowsOfAllPages() {
-			this.filteredRows.forEach((row) => {
-				if (!this.selectedRowIds.includes(row[this.trackBy])) {
-					this.selectedRowIds.push(row[this.trackBy]);
-				}
-			});
-			this.$emit("update:selected-rows", this.newSelectedRows);
-			this.$emit("all-rows-selected", this.newSelectedRows);
+			this.$set(this, "selectedRowIds", []);
+			this.$emit("update:selectionType", "exclusive");
 		},
 
 		unselectAllRowsOfAllPages() {
-			this.selectedRowIds = [];
-			this.$emit("update:selected-rows", this.newSelectedRows);
-			this.$emit("all-rows-selected", this.newSelectedRows);
+			this.$set(this, "selectedRowIds", []);
+			this.$emit("update:selectionType", "inclusive");
 		},
 	},
 };
