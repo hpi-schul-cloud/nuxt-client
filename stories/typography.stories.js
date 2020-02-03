@@ -1,7 +1,7 @@
 import { storiesOf } from "@storybook/vue";
 import notes from "@docs/storybook/typography.md";
 
-storiesOf("Styles/Typography", module)
+storiesOf("1 Design Tokens/Typography", module)
 	.addParameters({
 		notes,
 	})
