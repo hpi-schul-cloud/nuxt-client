@@ -5,7 +5,7 @@
 			<div class="card-heading">
 				<div class="card-title">
 					<slot name="title">
-						{{ title }}
+						{{ title | subStr }}
 					</slot>
 				</div>
 				<div class="subtitle">
@@ -22,6 +22,12 @@
 </template>
 <script>
 export default {
+	filters: {
+		subStr(string) {
+			if (string.length > 15) return string.substring(0, 15) + " " + "...";
+			else return string;
+		},
+	},
 	props: {
 		image: {
 			type: String,
