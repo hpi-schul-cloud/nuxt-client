@@ -52,8 +52,8 @@ storiesOf("1 Design Tokens/Colors", module)
 	`,
 	}));
 
-storiesOf("1 Design Tokens/TextOnColors", module)
-	.add("Main", () => ({
+storiesOf("1 Design Tokens/Colors", module)
+	.add("Main Text on Colors", () => ({
 		components: { ColorOnText },
 		template: `<div>
 		<ColorOnText title="Primary" color="#E98404" variable="--color-primary" textColor="--color-on-primary"/>
@@ -68,7 +68,7 @@ storiesOf("1 Design Tokens/TextOnColors", module)
 	</div>
 	`,
 	}))
-	.add("Feedback", () => ({
+	.add("Feedback Text on Color", () => ({
 		components: { ColorOnText },
 		template: `<div>
 		<ColorOnText color="#13ba98" variable="--color-sucess" textColor="--color-on-success"/>
@@ -79,7 +79,7 @@ storiesOf("1 Design Tokens/TextOnColors", module)
 	`,
 	}));
 
-storiesOf("1 Design Tokens/Gradients", module).add("CourseColors", () => ({
+storiesOf("1 Design Tokens/Colors", module).add("CourseColors", () => ({
 	components: { Gradient },
 	template: `<div>
 			<Gradient colorStart="#f22a19" colorEnd="#f96464" title="Deutsch"/>
