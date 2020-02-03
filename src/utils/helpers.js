@@ -1,5 +1,8 @@
 /**
  * Get value of an object property/path even if it's nested
+ * @param {object} obj The Object to extract data from
+ * @param {string} path The path to the data, seperated by "." (e.g. "key1.key2")
+ * @return The value of the object at obj[key1][key2] ...
  */
 export function getValueByPath(obj, path) {
 	const value = path.split(".").reduce((o, i) => o[i], obj);
