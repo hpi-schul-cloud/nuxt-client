@@ -7,6 +7,14 @@
 			:key="provider.name"
 			:image="provider.icon"
 			:title="provider.name"
+			:subtitle="
+				provider.count === 0
+					? ''
+					: $t(
+							'pages.administration.datasources.new.provider.addedDatasources',
+							{ x: provider.count }
+					  )
+			"
 			class="mb--md"
 		>
 			<template v-slot:actions>
@@ -53,21 +61,48 @@ export default {
 						"pages.administration.datasources.new.provider.WebUntis.name"
 					),
 					icon: require("@assets/img/datasources/logo-webuntis.png"),
+					count: 0,
 				},
 				{
 					name: this.$t(
 						"pages.administration.datasources.new.provider.LDAP.name"
 					),
 					icon: require("@assets/img/datasources/logo-ldap.svg"),
+					count: 0,
 				},
 				{
 					name: this.$t(
 						"pages.administration.datasources.new.provider.RSS.name"
 					),
 					icon: require("@assets/img/datasources/logo-rss.png"),
+					count: 0,
 				},
 			],
 		};
+	},
+	created() {
+		this.datasourceProvider.map((source) => {
+			this.getAddedSourcesCount(source);
+		});
+	},
+	methods: {
+		async getAddedSourcesCount(source) {
+			await this.$store
+				.dispatch("datasources/find", {
+					query: {
+						$limit: 0,
+						config: {
+							target: source.name.toLowerCase(),
+						},
+					},
+				})
+				.then((res) => {
+					source.count = res.total;
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+		},
 	},
 	head() {
 		return {
