@@ -1,5 +1,9 @@
 <template>
-	<backend-data-table v-bind="$attrs" :data="paginatedData" v-on="$listeners">
+	<backend-data-table
+		v-bind="$attrs"
+		:data="paginatedSortedData"
+		v-on="$listeners"
+	>
 		<!-- TODO pass through all slots -->
 	</backend-data-table>
 </template>
@@ -11,13 +15,17 @@ export default {
 		BackendDataTable,
 	},
 	computed: {
-		paginatedData() {
+		sortedData() {
+			// TODO should sort the data according to the selection
+			return this.$attrs.data;
+		},
+		paginatedSortedData() {
 			if (!this.$attrs.paginated) {
-				return this.$attrs.data;
+				return this.sortedData;
 			}
 			const currentPage = this.$attrs["current-page"];
 			const rowsPerPage = this.$attrs["rows-per-page"];
-			return this.$attrs.data.slice(
+			return this.sortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage
 			);
