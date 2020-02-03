@@ -126,6 +126,7 @@ export default {
 	},
 	data() {
 		return {
+			pendingIds: [],
 			breadcrumb: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -152,6 +153,12 @@ export default {
 		// TODO: dispatch action
 	},
 	methods: {
+		removeInProgressId(id) {
+			const index = this.datasourceIdsInProgress.indexOf(id);
+			if (index !== -1) {
+				this.datasourceIdsInProgress.splice(index, 1)
+			}
+		},
 		getActions(element) {
 			return [
 				{
@@ -170,6 +177,17 @@ export default {
 				},
 			];
 		},
+		getAndSavePendingIdsFromResult(result) {
+			const pendingIds = [];
+			(result.data || []).forEach((datasource) => {
+				// TODO: use global const for Progess strings
+				if (datasource.lastStatus === 'Pending') {
+					pendingIds.push(datasource._id);
+				}
+			});
+			this.pendingIds = pendingIds;
+			return result;
+		},
 		find() {
 			this.$store
 				.dispatch("datasources/find", {
@@ -177,6 +195,7 @@ export default {
 						$limit: 25,
 					},
 				})
+				.then(this.getAndSavePendingIdsFromResult)
 				.catch((error) => {
 					console.error(error);
 					this.$toast.error(this.$t("error.load"));
