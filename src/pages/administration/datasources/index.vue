@@ -12,8 +12,8 @@
 					class="mb--md"
 				>
 					<template v-slot:subtitle>
-						<template v-if="element.lastStatus === 'Success'"
-							>{{
+						<template v-if="element.lastStatus === 'Success'">
+							{{
 								$t("pages.administraion.datasources.index.success", {
 									relativeDate: dayjs(element.lastRun).fromNow(),
 								})
@@ -22,9 +22,10 @@
 								source="material"
 								icon="check_circle"
 								fill="var(--color-success)"
-						/></template>
-						<template v-else-if="element.lastStatus === 'Error'"
-							>{{
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Error'">
+							{{
 								$t("pages.administraion.datasources.index.error", {
 									relativeDate: dayjs(element.lastRun).fromNow(),
 								})
@@ -34,17 +35,21 @@
 								icon="warning"
 								fill="var(--color-danger)"
 								class="text-md"
-						/></template>
-						<template v-else-if="element.lastStatus === 'Pending'"
-							>{{ $t("pages.administraion.datasources.index.pending") }}
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Pending'">
+							{{ $t("pages.administraion.datasources.index.pending") }}
 							<base-spinner
 								:color="color"
 								size="small"
 								:style="{ 'margin-left': 'var(--space-xs-3)' }"
-						/></template>
-						<template v-else>{{
-							$t("pages.administraion.datasources.index.empty")
-						}}</template>
+							/>
+						</template>
+						<template v-else>
+							{{
+								$t("pages.administraion.datasources.index.empty")
+							}}
+						</template>
 					</template>
 
 					<template v-slot:actions>
@@ -145,6 +150,8 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+
+		// TODO: dispatch action
 	},
 	methods: {
 		getActions(element) {
@@ -170,14 +177,6 @@ export default {
 				console.error(error);
 				this.$toast.error(this.$t("error.load"));
 			});
-		},
-		mapLastStatusIconName(item) {
-			const mapping = {
-				Success: "success",
-				Warning: "warning",
-				Error: "error",
-			};
-			return mapping[item.lastStatus];
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
