@@ -4,6 +4,15 @@ import Gradient from "@storyComponents/Gradient";
 import Elevation from "@storyComponents/Elevation";
 import ColorOnText from "@storyComponents/ColorOnText";
 
+storiesOf("1 Design Tokens", module).add("0 Design Tokens", () => ({
+	template: `
+	<div>
+	<h1>Design Tokens</h1>
+	<p>Design Tokens include Colors, Gradients, Elevation, Spacings and Typography of our Design System</p>
+	</div>
+	`,
+}));
+
 storiesOf("1 Design Tokens/Colors", module)
 	.add("Main", () => ({
 		components: { Color, Gradient },
@@ -86,7 +95,7 @@ storiesOf("1 Design Tokens/Gradients", module).add("CourseColors", () => ({
 		</div>`,
 }));
 
-storiesOf("1 Design Tokens/Elevation", module).add("default", () => ({
+storiesOf("1 Design Tokens", module).add("Elevation", () => ({
 	components: { Elevation },
 	template: `<div>
 			<Elevation variable="--shadow-xxxs" title="01dp" styling="(0 1px 1px 0)(0 2px 1px -1px)(0 1px 3px 0)"/>
