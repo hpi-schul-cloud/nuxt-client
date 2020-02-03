@@ -1,13 +1,15 @@
 <template>
 	<tr class="row">
 		<th v-if="allRowsSelectable">
-			<base-input
-				v-model="selectionStatus"
-				type="checkbox"
-				label="Alle Zeilen auswählen"
-				:label-hidden="true"
-				class="select"
-			/>
+			<div class="th-wrap select-wrap">
+				<base-input
+					v-model="selectionStatus"
+					type="checkbox"
+					label="Alle Zeilen auswählen"
+					:label-hidden="true"
+					class="select"
+				/>
+			</div>
 		</th>
 		<th
 			v-for="(column, index) in columns"
@@ -126,9 +128,11 @@ export default {
 			padding: var(--space-sm);
 			font-weight: var(--font-weight-bold);
 		}
-
-		.select {
-			margin-bottom: 0;
+		.select-wrap {
+			padding: var(--space-xs);
+			.select {
+				margin-bottom: 0;
+			}
 		}
 	}
 }

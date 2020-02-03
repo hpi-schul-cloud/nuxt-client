@@ -177,12 +177,18 @@ const tableFilters = [
 const tableActions = [
 	{
 		label: "Löschen",
-		action: (rows) => {
-			let names = "";
-			rows.map((r) =>
-				names === "" ? (names = r.firstName) : (names += `, ${r.firstName}`)
-			);
-			alert(names + " wurde(n) zum Löschen ausgewählt");
+		action: (rowIds, selectionType) => {
+			let selections;
+			if (selectionType === "inclusive") {
+				selections = tableData
+					.filter((row) => rowIds.includes(row.id))
+					.map((selection) => selection.firstName);
+			} else {
+				selections = tableData
+					.filter((row) => !rowIds.includes(row.id))
+					.map((selection) => selection.firstName);
+			}
+			alert(selections.join(", ") + " wurde(n) zum Löschen ausgewählt");
 		},
 	},
 ];

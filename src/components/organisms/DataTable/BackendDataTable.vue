@@ -4,11 +4,13 @@
 	<div class="table-outer">
 		<div class="table-wrapper">
 			<div class="toolbelt">
+				<!--
 				<filter-menu
 					v-if="filterable && selectedRowIds.length < 1"
 					v-model="newFiltersSelected"
 					:filters="filters"
 				/>
+				-->
 
 				<row-selection-bar
 					ref="rowSelectionBar"
@@ -76,8 +78,8 @@ import Pagination from "@components/organisms/Pagination.vue";
 import FilterMenu from "./FilterMenu.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 import defaultFiltersMixin from "@mixins/defaultFilters";
-import { supportedFilterTypes } from "@mixins/defaultFilters";
-import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
+// import { supportedFilterTypes } from "@mixins/defaultFilters";
+// import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 export default {
 	components: {
@@ -111,63 +113,70 @@ export default {
 			required: true,
 		},
 
-		filterable: {
-			type: Boolean,
-		},
-		filters: {
-			type: Array,
-			default: () => [],
-			validator: function(filters) {
-				return filters.every((filter) => {
-					const hasValidType =
-						!!filter.type && supportedFilterTypes.includes(filter.type);
+		// filterable: {
+		// 	type: Boolean,
+		// },
+		// filters: {
+		// 	type: Array,
+		// 	default: () => [],
+		// 	validator: function(filters) {
+		// 		return filters.every((filter) => {
+		// 			const hasValidType =
+		// 				!!filter.type && supportedFilterTypes.includes(filter.type);
 
-					var hasValidMatchingType = false;
+		// 			var hasValidMatchingType = false;
 
-					if (
-						!supportedFilterMatchingTypes[filter.type] &&
-						!filter.matchingType
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						supportedFilterMatchingTypes[filter.type] &&
-						filter.matchingType &&
-						supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						filter.matchingType &&
-						filter.matchingType.implementation &&
-						filter.matchingType.value &&
-						filter.matchingType.label
-					) {
-						hasValidMatchingType = true;
-					}
+		// 			if (
+		// 				!supportedFilterMatchingTypes[filter.type] &&
+		// 				!filter.matchingType
+		// 			) {
+		// 				hasValidMatchingType = true;
+		// 			} else if (
+		// 				supportedFilterMatchingTypes[filter.type] &&
+		// 				filter.matchingType &&
+		// 				supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
+		// 			) {
+		// 				hasValidMatchingType = true;
+		// 			} else if (
+		// 				filter.matchingType &&
+		// 				filter.matchingType.implementation &&
+		// 				filter.matchingType.value &&
+		// 				filter.matchingType.label
+		// 			) {
+		// 				hasValidMatchingType = true;
+		// 			}
 
-					const isValidSelectFilter =
-						filter.value &&
-						Array.isArray(filter.value) &&
-						filter.value.length > 0 &&
-						filter.value.every((value) => value.value && value.label);
+		// 			const isValidSelectFilter =
+		// 				filter.value &&
+		// 				Array.isArray(filter.value) &&
+		// 				filter.value.length > 0 &&
+		// 				filter.value.every((value) => value.value && value.label);
 
-					return (
-						filter.label &&
-						(filter.property || filter.type == "fulltextSearch") &&
-						hasValidType &&
-						hasValidMatchingType &&
-						(isValidSelectFilter || filter.type !== "select")
-					);
-				});
-			},
-		},
-		filtersSelected: {
-			type: Array,
-			default: () => [],
-		},
+		// 			return (
+		// 				filter.label &&
+		// 				(filter.property || filter.type == "fulltextSearch") &&
+		// 				hasValidType &&
+		// 				hasValidMatchingType &&
+		// 				(isValidSelectFilter || filter.type !== "select")
+		// 			);
+		// 		});
+		// 	},
+		// },
+		// filtersSelected: {
+		// 	type: Array,
+		// 	default: () => [],
+		// },
 
+		/**
+		 * Array of Objects.
+		 * Each Object must define a function "action" that will be called with the list of current selectionIds.
+		 * Will be passed to the @components/organisms/DropdownMenu component.
+		 */
 		actions: {
 			type: Array,
 			default: () => [],
+			validator: (actions) =>
+				actions.every((action) => typeof action.action === "function"),
 		},
 
 		paginated: Boolean,
@@ -311,15 +320,9 @@ export default {
 				return this.selectionType === "exclusive" && selections.length === 0;
 			},
 			set(state) {
-				const selectAllRowsOfAllPages = () => {
-					this.$set(this, "selectionKeys", {});
-					this.$emit("update:selectionType", "exclusive");
-				};
-				const unselectAllRowsOfAllPages = () => {
-					this.$set(this, "selectionKeys", {});
-					this.$emit("update:selectionType", "inclusive");
-				};
-				state ? selectAllRowsOfAllPages() : unselectAllRowsOfAllPages();
+				state
+					? this.selectAllRowsOfAllPages()
+					: this.unselectAllRowsOfAllPages();
 			},
 		},
 		allRowsOfCurrentPageSelected: {
@@ -357,6 +360,14 @@ export default {
 		// },
 	},
 	methods: {
+		selectAllRowsOfAllPages() {
+			this.$set(this, "selectionKeys", {});
+			this.$emit("update:selectionType", "exclusive");
+		},
+		unselectAllRowsOfAllPages() {
+			this.$set(this, "selectionKeys", {});
+			this.$emit("update:selectionType", "inclusive");
+		},
 		setRowSelection(row, state) {
 			const method = (newState) => (newState ? "$set" : "$delete");
 			this[method(this.selectionType === "inclusive" ? state : !state)](
@@ -374,7 +385,8 @@ export default {
 
 		getValueByPath,
 		fireAction(action) {
-			action.action(this.newselectedRowIds);
+			const selections = Object.keys(this.selectionKeys);
+			action.action(selections);
 			this.unselectAllRowsOfAllPages();
 		},
 	},
