@@ -1,9 +1,8 @@
 /* eslint-disable max-lines */
 
+// deprecated! All these tests should be moved into there according files
 import BaseTable from "./BaseTable";
-import data from "./testdata";
-import columns from "./columns";
-import filters from "./testfilters";
+import { data, columns, filters } from "./testMockData";
 import MultiSelect from "vue-multiselect";
 import FlatPickr from "vue-flatpickr-component";
 const _ = require("lodash");
@@ -72,7 +71,7 @@ function submitFilterModal(wrapper) {
 	filterModalButton.trigger("click");
 }
 
-describe("@components/BaseTable", () => {
+describe.skip("@components/BaseTable", () => {
 	it(...isValidComponent(BaseTable));
 
 	it("Passing the columns and data should render the table. Nested properties should be possible.", () => {

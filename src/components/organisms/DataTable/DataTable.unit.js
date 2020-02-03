@@ -1,5 +1,5 @@
-import DataTable from './DataTable'
+import DataTable from "./DataTable";
 
-describe('@components/DataTable', () => {
+describe("@components/organisms/DataTable/DataTable", () => {
 	it(...isValidComponent(DataTable));
-})
+});
