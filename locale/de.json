@@ -14,6 +14,8 @@
 	"components.molecules.ContextMenu.action.close": "Kontextmenü schließen",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.TextEditor.noLocalFiles": "Lokale Dateien werden aktuell nicht unterstützt.",
+	"components.organisms.DatasourceRunWebuntis.import": "Daten importieren",
+	"components.organisms.DatasourceRunWebuntis.loading": "Lade Daten...",
 	"components.organisms.FormDatasources.input.name.label": "Name",
 	"components.organisms.FormDatasources.input.name.placeholder": "Name der Datenquelle",
 	"components.organisms.FormNews.cancel.confirm.cancel": "Weiter arbeiten",

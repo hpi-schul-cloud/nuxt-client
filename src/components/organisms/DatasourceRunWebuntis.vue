@@ -24,10 +24,10 @@
 			<form-actions>
 				<template v-slot:primary>
 					<base-button design="primary" @click="triggerRun">
-						Auswahl importieren
+						{{ $t("components.organisms.DatasourceRunWebuntis.import") }}
 					</base-button>
 					<base-button design="text" to="/administration/datasources">
-						Abbrechen
+						{{ $t("common.actions.cancel") }}
 					</base-button>
 				</template>
 				<template v-slot:secondary> </template>
@@ -52,18 +52,9 @@
 			</base-modal>
 		</template>
 		<template v-else>
-			Loading...
 			<!-- Should not be reached ever -->
+			{{ $t("components.organisms.DatasourceRunWebuntis.loading") }}
 		</template>
-
-		<!-- <li>Should fetch data from run using webuntis metadata service</li>
-		<li>DONE the store to fetch this data does not exist yet</li>
-		<li>DONE Should show list of courses (table)</li>
-		<li>Should show import button if dry run</li>
-		<li>
-			Should show number of elements to import/number of imported elements
-		</li>
-		<li>Button to import should trigger run with selection</li> -->
 	</div>
 </template>
 <script>
