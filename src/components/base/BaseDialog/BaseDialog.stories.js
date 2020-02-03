@@ -5,7 +5,7 @@ import BaseButton from "@basecomponents/BaseButton";
 
 import BaseDialog from "@basecomponents/BaseModal";
 
-storiesOf("Base/Dialog", module).add(
+storiesOf("3 Base UI Components/Dialog", module).add(
 	"Default",
 	() => ({
 		components: {
