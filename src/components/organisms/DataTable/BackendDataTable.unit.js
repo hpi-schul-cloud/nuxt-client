@@ -98,6 +98,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 
 	describe.skip("pagination", () => {
 		it.todo("should show correct number of pages if pagination is enabled");
+		it.todo("should go back to page 1 when itemsPerPage changes");
 
 		it("Should paginate correctly", () => {
 			var wrapper = mount({
