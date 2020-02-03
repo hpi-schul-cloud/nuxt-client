@@ -87,10 +87,18 @@ export default {
 	},
 	mixins: [defaultFiltersMixin],
 	props: {
+		/**
+		 * Defines the visible columns
+		 * `{ label, field?, sortable? }` (? indicates optional fields)
+		 */
 		columns: {
 			type: Array,
 			default: () => [],
+			validator: (columns) => columns.every((column) => column.label),
 		},
+		/**
+		 * Array of objects
+		 */
 		data: {
 			type: Array,
 			default: () => [],
