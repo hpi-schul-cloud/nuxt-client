@@ -62,7 +62,7 @@ const anchorOptions = {
 	"bottom-right": "bottom-right",
 };
 
-storiesOf("Molecules/ContextMenu", module)
+storiesOf("4 Molecules/ContextMenu", module)
 	.addDecorator(centered)
 	.add("with icons", () => ({
 		components: { ContextMenu },

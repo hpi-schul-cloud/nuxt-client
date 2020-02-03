@@ -9,7 +9,7 @@ import PopupIcon from "@components/legacy/PopupIcon";
 import DemoBanner from "@components/legacy/DemoBanner";
 import PopupIconInitials from "@components/legacy/PopupIconInitials";
 
-storiesOf("Others/Misc", module)
+storiesOf("6 Others/Misc", module)
 	.addParameters({
 		notes,
 	})
