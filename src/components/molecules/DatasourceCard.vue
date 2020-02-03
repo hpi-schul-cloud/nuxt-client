@@ -5,7 +5,7 @@
 			<div class="card-heading">
 				<div class="card-title">
 					<slot name="title">
-						{{ title | subStr }}
+						{{ title }}
 					</slot>
 				</div>
 				<div class="subtitle">
@@ -22,12 +22,6 @@
 </template>
 <script>
 export default {
-	filters: {
-		subStr(string) {
-			if (string.length > 15) return string.substring(0, 15) + " " + "...";
-			else return string;
-		},
-	},
 	props: {
 		image: {
 			type: String,
@@ -65,11 +59,23 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.card-heading {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .card-title {
+	overflow: hidden;
 	font-family: var(--font-accent);
 	font-size: var(--text-lg);
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .subtitle {
@@ -80,6 +86,9 @@ export default {
 	object-fit: contain;
 	margin-right: var(--space-sm);
 	border-radius: var(--radius-sm);
+}
+.card-action {
+	display: flex;
 }
 
 p {
