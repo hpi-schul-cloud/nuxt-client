@@ -46,9 +46,7 @@
 							/>
 						</template>
 						<template v-else>
-							{{
-								$t("pages.administraion.datasources.index.empty")
-							}}
+							{{ $t("pages.administraion.datasources.index.empty") }}
 						</template>
 					</template>
 
@@ -173,14 +171,16 @@ export default {
 			];
 		},
 		find() {
-			this.$store.dispatch("datasources/find", {
-				query: {
-					$limit: 25,
-				},
-			}).catch((error) => {
-				console.error(error);
-				this.$toast.error(this.$t("error.load"));
-			});
+			this.$store
+				.dispatch("datasources/find", {
+					query: {
+						$limit: 25,
+					},
+				})
+				.catch((error) => {
+					console.error(error);
+					this.$toast.error(this.$t("error.load"));
+				});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
