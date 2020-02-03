@@ -90,6 +90,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		datasourceId: {
+			type: String,
+			required: true,
+		},
 	},
 	data: function() {
 		return {
@@ -121,11 +125,25 @@ export default {
 			webuntisMetadata: "list",
 		}),
 		selectedRows() {
-			return this.tableData.filter((row) => {
+			const dataCurrentPage = this.tableData.filter((row) => {
 				return this.sendType === "inclusive"
 					? Boolean(this.sendIds[row._id])
 					: !Boolean(this.sendIds[row._id]);
 			});
+			const dataOtherPages = Object.keys(this.sendIds)
+				.filter((id) => !Boolean(this.tableDataObject[id]))
+				.map((id) => {
+					return this.tableDataObject[id]
+						? this.tableDataObject[id]
+						: { _id: id };
+				});
+			return [...dataCurrentPage, ...dataOtherPages];
+		},
+		tableDataObject() {
+			return this.tableData.reduce((obj, row) => {
+				obj[row._id] = row;
+				return obj;
+			}, {});
 		},
 		tableData() {
 			return this.webuntisMetadata.map((entry) => {
@@ -179,10 +197,10 @@ export default {
 				idsToPush = unselectedIdsOnCurrentView;
 			}
 			idsToPush.forEach((id) => {
-				this.sendIds[id] = true;
+				this.$set(this.sendIds, id, true);
 			});
 			idsToRemove.forEach((id) => {
-				delete this.sendIds[id];
+				this.$delete(this.sendIds, id);
 			});
 		},
 		handlerAllRowsSelected(value) {
@@ -209,7 +227,7 @@ export default {
 					query: {
 						$skip,
 						$limit,
-						datasourceId: this.datasource._id,
+						datasourceId: this.datasourceId,
 					},
 				});
 			} catch (error) {

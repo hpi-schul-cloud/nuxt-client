@@ -312,7 +312,7 @@ export default {
 		},
 		paginatedSelectedTotal() {
 			if (this.sendType == "exclusive") {
-				return this.total - Object.keys(this.sendIds).length;
+				return this.total - Object.keys(this.sendIds || {}).length;
 			}
 			return undefined;
 		},
