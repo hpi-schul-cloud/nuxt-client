@@ -94,5 +94,8 @@
 	"pages.news.new.create": "",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.administraion.datasources.index.success": "Last Import: {relativeDate}",
+	"pages.administraion.datasources.index.error": "Last Import failed: {relativeDate}",
+	"pages.administraion.datasources.index.pending": "In progress",
 	"storybook.lang": "I'm in English now!"
 }
