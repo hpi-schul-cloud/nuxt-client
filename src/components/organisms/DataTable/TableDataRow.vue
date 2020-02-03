@@ -70,11 +70,11 @@ export default {
 <style lang="scss" scoped>
 .row {
 	background-color: var(--color-white);
-	&.selected {
-		background-color: var(--color-info-light);
-	}
 	&.highlight {
 		background-color: var(--color-gray-light);
+	}
+	&.selected {
+		background-color: var(--color-info-light);
 	}
 
 	td {

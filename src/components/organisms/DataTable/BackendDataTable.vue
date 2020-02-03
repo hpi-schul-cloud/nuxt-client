@@ -9,15 +9,15 @@
 					v-model="newFiltersSelected"
 					:filters="filters"
 				/>
+
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
 					:selected-rows="selectedRowIds"
-					:all-rows-of-all-pages-selected="allRowsOfAllPagesSelected"
-					:all-rows-of-current-page-selected="allRowsOfCurrentPageSelected"
-					:total="total"
-					@select-all-rows="selectAllRowsOfAllPages"
-					@unselect-all-rows="unselectAllRowsOfAllPages"
+					:all-rows-of-all-pages-selected.sync="allRowsOfAllPagesSelected"
+					:all-rows-of-current-page-selected.sync="allRowsOfCurrentPageSelected"
+					:number-of-selected-items="numberOfSelectedItems"
+					:total-number-of-items="total"
 					@fire-action="fireAction"
 				/>
 			</div>
@@ -27,7 +27,7 @@
 					<component
 						:is="componentHeaderRow"
 						:all-rows-selectable="selectableRows"
-						:all-rows-selected="allRowsOfCurrentPageSelected"
+						:all-rows-selected.sync="allRowsOfCurrentPageSelected"
 						:columns="columns"
 						:sort-by="sortBy"
 						:sort-order="sortOrder"
@@ -170,6 +170,9 @@ export default {
 			type: Number,
 			default: 0,
 		},
+		/**
+		 * index of the current page. The first page is 1
+		 */
 		currentPage: {
 			type: Number,
 			default: 1,
@@ -286,13 +289,34 @@ export default {
 		// 		this.isAsc
 		// 	);
 		// },
-		allRowsOfAllPagesSelected() {
-			const selections = Object.keys(this.selectedRowIds);
-			return this.selectionType === "exclusive" && selections.length === 0;
+		numberOfSelectedItems() {
+			// TODO think about moving selections outside this method
+			const selections = Object.keys(this.selectionKeys);
+			return this.selectionType === "inclusive"
+				? selections.length
+				: this.total - selections.length;
+		},
+		allRowsOfAllPagesSelected: {
+			get() {
+				// TODO think about moving selections outside this method
+				const selections = Object.keys(this.selectionKeys);
+				return this.selectionType === "exclusive" && selections.length === 0;
+			},
+			set(state) {
+				const selectAllRowsOfAllPages = () => {
+					this.$set(this, "selectionKeys", {});
+					this.$emit("update:selectionType", "exclusive");
+				};
+				const unselectAllRowsOfAllPages = () => {
+					this.$set(this, "selectionKeys", {});
+					this.$emit("update:selectionType", "inclusive");
+				};
+				state ? selectAllRowsOfAllPages() : unselectAllRowsOfAllPages();
+			},
 		},
 		allRowsOfCurrentPageSelected: {
 			get() {
-				const isInSelection = (row) => this.selectedRowIds[row[this.trackBy]];
+				const isInSelection = (row) => this.selectionKeys[row[this.trackBy]];
 				return this.selectionType === "inclusive"
 					? Boolean(this.data.every(isInSelection))
 					: !Boolean(this.data.some(isInSelection));
@@ -326,19 +350,12 @@ export default {
 	},
 	methods: {
 		setRowSelection(row, state) {
-			if (this.selectionType === "inclusive") {
-				if (state) {
-					this.$set(this.selectedRowIds, row[this.trackBy], state);
-				} else {
-					this.$delete(this.selectedRowIds, row[this.trackBy]);
-				}
-			} else {
-				if (!state) {
-					this.$set(this.selectedRowIds, row[this.trackBy], state);
-				} else {
-					this.$delete(this.selectedRowIds, row[this.trackBy]);
-				}
-			}
+			const method = (newState) => (newState ? "$set" : "$delete");
+			this[method(this.selectionType === "inclusive" ? state : !state)](
+				this.selectionKeys,
+				row[this.trackBy],
+				true
+			);
 		},
 		isRowSelected(row) {
 			const rowId = row[this.trackBy];
@@ -346,20 +363,11 @@ export default {
 				? this.selectionKeys[rowId]
 				: !this.selectionKeys[rowId];
 		},
+
 		getValueByPath,
 		fireAction(action) {
 			action.action(this.newselectedRowIds);
 			this.unselectAllRowsOfAllPages();
-		},
-
-		selectAllRowsOfAllPages() {
-			this.$set(this, "selectedRowIds", []);
-			this.$emit("update:selectionType", "exclusive");
-		},
-
-		unselectAllRowsOfAllPages() {
-			this.$set(this, "selectedRowIds", []);
-			this.$emit("update:selectionType", "inclusive");
 		},
 	},
 };

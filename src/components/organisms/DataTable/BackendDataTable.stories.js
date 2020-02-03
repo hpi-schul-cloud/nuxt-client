@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, boolean, number, object } from "@storybook/addon-knobs";
+import { text, boolean, number, object, select } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 
 import BackendDataTable from "./BackendDataTable";
@@ -23,7 +23,11 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 		paginated: boolean("paginated", true),
 		rowsPerPage: number("rowsPerPage", 5),
 		selectableRows: boolean("selectableRows", true),
-		selectionType: text("selectionType", "inclusive"),
+		selectionType: select(
+			"selectionType",
+			{ inclusive: "inclusive", exclusive: "exclusive" },
+			"inclusive"
+		),
 		selectedRowIds: object("selectedRowIds", [tableData[0].id]),
 		total: number("total", 10),
 		trackBy: text("trackBy", "id"),
@@ -45,13 +49,14 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => ({
 				:actions="actions"
 				:columns="columns"
 				:current-page.sync="currentPage"
-				:data="data"
+				:data="data.slice((currentPage - 1) * rowsPerPage, currentPage  * rowsPerPage)"
 				:filterable="filterable"
 				:filters="filters"
 				:filtersSelected="filtersSelected"
 				:paginated="paginated"
 				:rows-per-page.sync="rowsPerPage"
 				:selectableRows="selectableRows"
+				:selectionType.sync="selectionType"
 				:total="total"
 				:trackBy="trackBy"
 				@all-rows-selected="onAllRowsSelected"

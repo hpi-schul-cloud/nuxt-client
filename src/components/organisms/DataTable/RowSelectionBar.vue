@@ -1,16 +1,19 @@
 <template>
-	<div v-if="selectedRows.length > 0" class="row-selection-info">
+	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
 		<div class="d-flex align-items-center">
-			<div v-if="allRowsOfAllPagesSelected">Alle {{ total }} ausgewählt</div>
+			<div v-if="allRowsOfAllPagesSelected"
+				>Alle {{ totalNumberOfItems }} ausgewählt</div
+			>
 			<div v-else>
-				<span>{{ selectedRows.length }} ausgewählt</span>
-				<span
-					v-if="allRowsOfCurrentPageSelected && selectedRows.length < total"
-				>
+				<span>{{ numberOfSelectedItems }} ausgewählt</span>
+				<span v-if="numberOfSelectedItems < totalNumberOfItems">
 					(oder
-					<span class="select-all-rows" @click="$emit('select-all-rows')"
-						>alle {{ total }} auswählen</span
+					<span
+						class="select-all-rows"
+						@click="$emit('update:allRowsOfAllPagesSelected', true)"
 					>
+						alle {{ totalNumberOfItems }} auswählen
+					</span>
 					)
 				</span>
 			</div>
@@ -28,7 +31,7 @@
 				source="material"
 				class="ml--md mr--md"
 				style="cursor: pointer"
-				@click="$emit('unselect-all-rows')"
+				@click="closeBanner"
 			/>
 		</div>
 	</div>
@@ -46,9 +49,13 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-		selectedRows: {
-			type: Array,
-			default: () => [],
+		totalNumberOfItems: {
+			type: Number,
+			default: 0,
+		},
+		numberOfSelectedItems: {
+			type: Number,
+			required: true,
 		},
 		allRowsOfAllPagesSelected: {
 			type: Boolean,
@@ -56,9 +63,11 @@ export default {
 		allRowsOfCurrentPageSelected: {
 			type: Boolean,
 		},
-		total: {
-			type: Number,
-			default: 0,
+	},
+	methods: {
+		closeBanner() {
+			this.$emit("update:allRowsOfCurrentPageSelected", false);
+			this.$emit("update:allRowsOfAllPagesSelected", false);
 		},
 	},
 };
