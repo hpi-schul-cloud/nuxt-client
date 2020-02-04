@@ -18,7 +18,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 	it(...isValidComponent(BackendDataTable));
 
 	describe("rendering", () => {
-		it.skip("Passing the columns and data should render the table. Nested properties should be possible.", () => {
+		it("Passing the columns and data should render the table. Nested properties should be possible.", () => {
 			var wrapper = getWrapper();
 
 			expect(wrapper.findAll("tbody tr")).toHaveLength(data.length);
@@ -37,7 +37,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 					.findAll("td")
 					.at(2)
 					.text()
-			).toContain(data[2].address.city);
+			).toContain(data[0].address.city);
 		});
 
 		it.todo("should pass slots prefixed with dataRow to tableRow component");
