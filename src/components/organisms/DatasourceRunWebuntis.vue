@@ -14,14 +14,12 @@
 				:selected-row-ids.sync="sendIds"
 			>
 				<template v-slot:datacolumn-state="{ data }">
-					<template v-if="data === 'new'">
-						<base-icon
-							source="custom"
-							icon="datasource"
-							color="var(--color-primary)"
-						/>
-						Neu
-					</template>
+					<base-icon
+						v-if="data === 'new'"
+						source="custom"
+						icon="neu"
+						color="var(--color-primary)"
+					/>
 					<template v-else-if="data === 'imported'">
 						<base-icon
 							source="custom"
@@ -33,7 +31,7 @@
 					<template v-else-if="data === 'discarded'">
 						<base-icon
 							source="custom"
-							icon="datasource-error"
+							icon="datasource-remove"
 							color="var(--color-danger)"
 						/>
 						Verworfen
