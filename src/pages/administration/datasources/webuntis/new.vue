@@ -45,7 +45,7 @@
 						v-model="config.url"
 						type="text"
 						label="URL"
-						:placeholder="'erato.webuntis.com'"
+						:placeholder="'URL der Datenquelle'"
 						class="mt--md"
 					/>
 				</template>
