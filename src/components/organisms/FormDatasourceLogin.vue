@@ -29,7 +29,7 @@ export default {
 		event: "update datasource",
 	},
 	props: {
-		id: {
+		datasourceId: {
 			type: String,
 			required: false,
 			default: undefined,
@@ -52,7 +52,7 @@ export default {
 	},
 	computed: {
 		actionType() {
-			return this.id ? "patch" : "create";
+			return this.datasourceId ? "patch" : "create";
 		},
 		errors() {
 			const name = this.data.name
@@ -72,7 +72,7 @@ export default {
 		},
 	},
 	created() {
-		if (this.id) this.get(this.id);
+		if (this.datasourceId) this.get(this.datasourceId);
 	},
 	methods: {
 		async get(id) {
@@ -127,7 +127,7 @@ export default {
 			}
 			try {
 				await this.$store.dispatch("datasources/patch", [
-					this.$route.params.id,
+					this.datasourceId,
 					{
 						name: this.data.name,
 						schoolId: this.$user.schoolId,

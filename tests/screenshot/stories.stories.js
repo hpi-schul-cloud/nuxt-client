@@ -22,7 +22,7 @@ const stories = getStorybook()
 	)
 	.flat();
 
-storiesOf("6 Others/Story List", module).add("All", () => ({
+storiesOf("7 Others/Story List", module).add("All", () => ({
 	template: `<div>
 		<small>* This story is used by the screenshot tests to get all stories. Unfortunatly storybook doesn't offer an API to get all stories.</small>
 		<p>${stories.length} Stories:</p>

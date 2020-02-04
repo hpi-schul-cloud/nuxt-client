@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 
 import BaseTitle from "@components/base/BaseTitle";
 
-storiesOf("3 Base UI Components/Base UI/BaseTitle", module).add(
+storiesOf("4 Base UI Components/Base UI/BaseTitle", module).add(
 	"BaseTitle",
 	() => ({
 		components: { BaseTitle },
