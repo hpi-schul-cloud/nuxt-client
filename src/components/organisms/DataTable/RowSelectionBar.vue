@@ -8,12 +8,13 @@
 				<span>{{ numberOfSelectedItems }} ausgewählt</span>
 				<span v-if="numberOfSelectedItems < totalNumberOfItems">
 					(oder
-					<span
+					<base-button
+						design="none"
 						class="select-all-rows"
 						@click="$emit('update:allRowsOfAllPagesSelected', true)"
 					>
 						alle {{ totalNumberOfItems }} auswählen
-					</span>
+					</base-button>
 					)
 				</span>
 			</div>
@@ -25,7 +26,7 @@
 				/>
 			</div>
 		</div>
-		<div>
+		<base-button design="none">
 			<base-icon
 				icon="close"
 				source="material"
@@ -33,7 +34,7 @@
 				style="cursor: pointer"
 				@click="closeBanner"
 			/>
-		</div>
+		</base-button>
 	</div>
 </template>
 
