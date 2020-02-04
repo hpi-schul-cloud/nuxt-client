@@ -205,6 +205,37 @@ describe("@components/FormDatasourceLogin", () => {
 			expect(actions.create.called).toBe(false);
 			expect(actions.patch.called).toBe(true);
 		});
+
+		it("shows error toast if patch fails", async () => {
+			const errorMessage = "expected error that should be catched";
+			const mock = getMocks({
+				actions: {
+					patch: () => {
+						throw new Error(errorMessage);
+					},
+				},
+			});
+			const wrapper = mount(FormDatasourceLogin, {
+				...mock,
+				propsData: {
+					id: "someId",
+					type: "webuntis",
+				},
+			});
+
+			const nameInput = wrapper.find('input[name="name"]');
+			nameInput.setValue("all courses");
+
+			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			wrapper.vm.$toast = toastStubs;
+			const consoleError = jest.spyOn(console, "error").mockImplementation();
+
+			wrapper.trigger("submit");
+			expect(toastStubs.success.called).toBe(false); // no success message expected
+			const errors = consoleError.mock.calls.map((e) => e.toString());
+			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
+			expect(toastStubs.error.called).toBe(true); // and info toast
+		});
 	});
 });
 
