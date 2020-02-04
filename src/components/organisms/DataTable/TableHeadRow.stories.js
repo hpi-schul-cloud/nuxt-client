@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import TableHeadRow from "./TableHeadRow";
 
-import { tableColumns } from "@@/stories/mockData/DataTable";
+import { tableColumns } from "./DataTable.data-factory.js";
 
 storiesOf("Organisms/DataTable/SubComponents", module).add(
 	"TableHeadRow",

@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, boolean, number, object, select } from "@storybook/addon-knobs";
+import { text, boolean, number, array, select } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 
 import DataTable from "./DataTable";
@@ -7,65 +7,76 @@ import DataTable from "./DataTable";
 import {
 	tableData,
 	tableColumns,
-	tableFilters,
 	tableActions,
-} from "@@/stories/mockData/DataTable";
+} from "./DataTable.data-factory.js";
 
 storiesOf("Organisms/DataTable", module).add("DataTable", () => {
+	const sortabelRows = tableColumns
+		.filter((c) => c.sortable)
+		.reduce((obj, c) => {
+			obj[c.field] = c.field;
+			return obj;
+		}, {});
+	const total = 100;
+	const randomData = tableData(total);
 	return {
 		data: () => ({
-			actions: tableActions,
 			columns: tableColumns,
+			randomData,
+			trackBy: text("trackBy", "id"),
+
+			total: total,
 			currentPage: number("currentPage", 1),
-			filterable: boolean("filterable", true),
-			filters: tableFilters,
-			filtersSelected: object("filtersSelected", [tableFilters[0]]),
 			paginated: boolean("paginated", true),
 			rowsPerPage: number("rowsPerPage", 5),
+
 			selectableRows: boolean("selectableRows", true),
 			selectionType: select(
 				"selectionType",
 				{ inclusive: "inclusive", exclusive: "exclusive" },
 				"inclusive"
 			),
-			selectedRowIds: object("selectedRowIds", []),
-			total: number("total", 50),
-			trackBy: text("trackBy", "id"),
-			randomData: tableData,
+			selectedRowIds: array("selectedRowIds", []),
+
+			actions: tableActions(randomData),
+
+			sortBy: select("sortBy", sortabelRows, Object.keys(sortabelRows)[0]),
+			sortOrder: select("sortOrder", { asc: "asc", desc: "desc" }, "asc"),
 		}),
 		components: { DataTable },
 		methods: {
-			onAllRowsSelected: action("@all-rows-selected"),
-			onAllRowsOfCurrentPageSelected: action(
-				"@all-rows-of-current-page-selected"
-			),
-			onSort: action("@sort"),
 			onUpdateCurrentPage: action("@update:current-page"),
-			onUpdateFiltersSelected: action("@update:filters-selected"),
 			onUpdateRowsPerPage: action("@update:rows-per-page"),
-			onUpdateSelectedRows: action("@update:selected-rows"),
+			onUpdateSelection: action("@update:selection"),
+			onUpdateSelectionType: action("@update:selectionType"),
+			onUpdateSelectedRowIds: action("@update:selectedRowIds"),
+			onSort: action("@sort"),
 		},
 		template: `
-			<DataTable v-slot:default="slotProps"
-				:actions="actions"
+			<DataTable
 				:columns="columns"
+				:data="randomData"
+				:trackBy="trackBy"
+
+				:total="total"
 				:current-page.sync="currentPage"
-				:data="randomData(total)"
-				:filterable="filterable"
-				:filters="filters"
-				:filtersSelected="filtersSelected"
+				@update:current-page="onUpdateCurrentPage"
 				:paginated="paginated"
 				:rows-per-page.sync="rowsPerPage"
+				@update:rows-per-page="onUpdateRowsPerPage"
+
 				:selectableRows="selectableRows"
 				:selectionType.sync="selectionType"
-				:total="total"
-				:trackBy="trackBy"
-				@all-rows-selected="onAllRowsSelected"
-				@all-rows-of-current-page-selected="onAllRowsOfCurrentPageSelected"
+				:selectedRowIds.sync="selectedRowIds"
+				@update:selection="onUpdateSelection"
+				@update:selectionType="onUpdateSelectionType"
+				@update:selectedRowIds="onUpdateSelectedRowIds"
+
+				:actions="actions"
+
+				:sortBy.sync="sortBy"
+				:sortOrder.sync="sortOrder"
 				@sort="onSort"
-				@update:current-page="onUpdateCurrentPage"
-				@update:filters-selected="onUpdateFiltersSelected"
-				@update:rows-per-page="onUpdateRowsPerPage""
 			/>
 		`,
 	};

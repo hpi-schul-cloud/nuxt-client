@@ -12,7 +12,6 @@ const aliases = {
 	"@locale": "locale",
 	"@assets": "src/assets",
 	"@components": "src/components",
-	"@storyMockData": "stories/mockData",
 	"@storyComponents": "stories/components",
 	"@basecomponents": "src/components/base",
 	"@docs": "docs",

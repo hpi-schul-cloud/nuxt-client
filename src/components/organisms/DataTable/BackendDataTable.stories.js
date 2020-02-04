@@ -8,7 +8,7 @@ import {
 	tableData,
 	tableColumns,
 	tableActions,
-} from "@@/stories/mockData/DataTable";
+} from "./DataTable.data-factory.js";
 
 storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => {
 	const sortabelRows = tableColumns
@@ -17,15 +17,15 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => {
 			obj[c.field] = c.field;
 			return obj;
 		}, {});
-	const items = 100;
-	const randomData = tableData(items);
+	const total = 100;
+	const randomData = tableData(total);
 	return {
 		data: () => ({
 			columns: tableColumns,
 			randomData,
 			trackBy: text("trackBy", "id"),
 
-			total: items,
+			total: total,
 			currentPage: number("currentPage", 1),
 			paginated: boolean("paginated", true),
 			rowsPerPage: number("rowsPerPage", 5),
@@ -77,7 +77,6 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => {
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
 				@sort="onSort"
-
 			/>
 		`,
 	};

@@ -2,14 +2,6 @@
 	<div class="table-outer">
 		<div class="table-wrapper">
 			<div class="toolbelt">
-				<!--
-				<filter-menu
-					v-if="filterable && selectedRowIds.length < 1"
-					v-model="newFiltersSelected"
-					:filters="filters"
-				/>
-				-->
-
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
@@ -75,8 +67,6 @@ import Pagination from "@components/organisms/Pagination.vue";
 import FilterMenu from "./FilterMenu.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 import defaultFiltersMixin from "@mixins/defaultFilters";
-// import { supportedFilterTypes } from "@mixins/defaultFilters";
-// import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 export default {
 	components: {
