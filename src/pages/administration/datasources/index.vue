@@ -40,7 +40,7 @@
 			</li>
 			<pagination
 				class="mt--md"
-				:current-page="skip"
+				:current-page="page"
 				:per-page="pagination.limit"
 				:total="pagination.total"
 				@update:current-page="onPageChange"
@@ -100,8 +100,8 @@ export default {
 			],
 			imgsrc: ImageEmptyState,
 			menuOpen: false,
-			skip: 1,
-			limit: 10,
+			page: 1,
+			limit: localStorage.getItem("datasources_overview_limit") || 10,
 		};
 	},
 	computed: {
@@ -137,7 +137,11 @@ export default {
 		find() {
 			const query = {
 				$limit: this.limit,
-				$skip: (this.skip - 1) * this.limit,
+				$skip: (this.page - 1) * this.limit,
+				$sort: {
+					// TODO sort for targets
+					createdAt: 1,
+				},
 			};
 			this.$store
 				.dispatch("datasources/find", { query })
@@ -175,6 +179,12 @@ export default {
 						name: datasource.name,
 					})
 				);
+				// if last element on list -> move one page back
+				if (this.page * this.limit > this.pagination.total && this.page > 1) {
+					this.page--;
+				}
+				// show fully populated list
+				this.find();
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(
@@ -184,18 +194,15 @@ export default {
 				);
 			}
 		},
-		onPageChange(skip) {
-			this.skip = skip;
+		onPageChange(page) {
+			this.page = page;
 			this.find();
 		},
 		onCurrentPageChange(limit) {
-			//TODO make sure to set skip accordingly of limit
-
-			if (limit === -1) {
-				this.skip = 1;
-			}
-
+			this.page = 1;
 			this.limit = limit;
+			// save user settings in localStorage
+			localStorage.setItem("datasources_overview_limit", limit);
 			this.find();
 		},
 	},
