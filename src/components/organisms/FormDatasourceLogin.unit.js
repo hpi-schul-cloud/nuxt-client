@@ -90,14 +90,14 @@ describe("@components/FormDatasourceLogin", () => {
 		const wrapper = mount(FormDatasourceLogin, {
 			...getMocks(),
 			propsData: {
-				id: validDatasourceId,
+				datasourceId: validDatasourceId,
 				type: "webuntis",
 			},
 		});
 		expect(wrapper.vm.data.config.target).toStrictEqual(
 			validDatasourceWebuntis.config.target
 		);
-		expect(wrapper.vm.id).toStrictEqual(validDatasourceId);
+		expect(wrapper.vm.datasourceId).toStrictEqual(validDatasourceId);
 		expect(wrapper.vm.actionType).toStrictEqual("patch");
 	});
 
@@ -109,7 +109,7 @@ describe("@components/FormDatasourceLogin", () => {
 				...mock,
 				propsData: {
 					type: "webuntis",
-					id: validDatasourceId,
+					datasourceId: validDatasourceId,
 				},
 			});
 
@@ -186,7 +186,76 @@ describe("@components/FormDatasourceLogin", () => {
 		});
 	});
 
-	describe("patch", () => {});
+	describe("patch", () => {
+		it("dispatches patch action on form submit", () => {
+			const actions = getMockActions();
+			const mock = getMocks({ actions });
+			const wrapper = mount(FormDatasourceLogin, {
+				...mock,
+				propsData: {
+					datasourceId: "someId",
+					type: "webuntis",
+				},
+			});
+			const nameInput = wrapper.find('input[name="name"]');
+			expect(nameInput.exists()).toBe(true);
+			nameInput.setValue("webunits Course");
+			expect(wrapper.vm.actionType).toStrictEqual("patch");
+			wrapper.trigger("submit");
+			expect(actions.create.called).toBe(false);
+			expect(actions.patch.called).toBe(true);
+		});
+
+		it("shows validation error before submiting", async () => {
+			const actions = getMockActions();
+			const mock = getMocks({ actions });
+			const wrapper = mount(FormDatasourceLogin, {
+				...mock,
+				propsData: {
+					action: "patch",
+					id: "someId",
+					type: "ldap",
+				},
+			});
+			const toastStubs = { error: sinon.stub() };
+			wrapper.vm.$toast = toastStubs;
+
+			wrapper.trigger("submit");
+			expect(toastStubs.error.called).toBe(true);
+			expect(actions.patch.called).toBe(false);
+		});
+
+		it("shows error toast if patch fails", async () => {
+			const errorMessage = "expected error that should be catched";
+			const mock = getMocks({
+				actions: {
+					patch: () => {
+						throw new Error(errorMessage);
+					},
+				},
+			});
+			const wrapper = mount(FormDatasourceLogin, {
+				...mock,
+				propsData: {
+					datasourceId: "someId",
+					type: "webuntis",
+				},
+			});
+
+			const nameInput = wrapper.find('input[name="name"]');
+			nameInput.setValue("all courses");
+
+			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			wrapper.vm.$toast = toastStubs;
+			const consoleError = jest.spyOn(console, "error").mockImplementation();
+
+			wrapper.trigger("submit");
+			expect(toastStubs.success.called).toBe(false); // no success message expected
+			const errors = consoleError.mock.calls.map((e) => e.toString());
+			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
+			expect(toastStubs.error.called).toBe(true); // and info toast
+		});
+	});
 });
 
 /*
