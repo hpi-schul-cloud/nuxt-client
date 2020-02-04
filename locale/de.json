@@ -101,5 +101,9 @@
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
+	"pages.administraion.datasources.index.success": "Letzter Import: {relativeDate}",
+	"pages.administraion.datasources.index.error": "Letzter Import fehlgeschlagen: {relativeDate}",
+	"pages.administraion.datasources.index.pending": "In Arbeit",
+	"pages.administraion.datasources.index.empty": "Noch keine Daten Importiert",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }

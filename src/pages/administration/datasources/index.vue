@@ -11,6 +11,45 @@
 					:title="element.name"
 					class="mb--md"
 				>
+					<template v-slot:subtitle>
+						<template v-if="element.lastStatus === 'Success'">
+							{{
+								$t("pages.administraion.datasources.index.success", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
+							<BaseIcon
+								source="material"
+								icon="check_circle"
+								fill="var(--color-success)"
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Error'">
+							{{
+								$t("pages.administraion.datasources.index.error", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
+							<BaseIcon
+								source="custom"
+								icon="warning"
+								fill="var(--color-danger)"
+								class="text-md"
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Pending'">
+							{{ $t("pages.administraion.datasources.index.pending") }}
+							<base-spinner
+								:color="color"
+								size="small"
+								:style="{ 'margin-left': 'var(--space-xs-3)' }"
+							/>
+						</template>
+						<template v-else>
+							{{ $t("pages.administraion.datasources.index.empty") }}
+						</template>
+					</template>
+
 					<template v-slot:actions>
 						<BaseButton design="primary text" @click="triggerRun(element)">
 							<BaseIcon source="custom" icon="datasource-import" />
@@ -63,6 +102,11 @@ import FloatingFab from "@components/molecules/FloatingFab";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
 import { mapGetters } from "vuex";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export default {
 	components: {
@@ -70,6 +114,12 @@ export default {
 		DatasourceCard,
 		EmptyState,
 		FloatingFab,
+	},
+	props: {
+		color: {
+			type: String,
+			default: "var(--color-primary)",
+		},
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
@@ -87,6 +137,7 @@ export default {
 				},
 			],
 			imgsrc: ImageEmptyState,
+			dayjs,
 			menuOpen: false,
 		};
 	},
@@ -97,6 +148,8 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+
+		// TODO: dispatch action
 	},
 	methods: {
 		getActions(element) {
@@ -118,18 +171,16 @@ export default {
 			];
 		},
 		find() {
-			this.$store.dispatch("datasources/find").catch((error) => {
-				console.error(error);
-				this.$toast.error(this.$t("error.load"));
-			});
-		},
-		mapLastStatusIconName(item) {
-			const mapping = {
-				Success: "success",
-				Warning: "warning",
-				Error: "error",
-			};
-			return mapping[item.lastStatus];
+			this.$store
+				.dispatch("datasources/find", {
+					query: {
+						$limit: 25,
+					},
+				})
+				.catch((error) => {
+					console.error(error);
+					this.$toast.error(this.$t("error.load"));
+				});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
