@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 
 import DatasourceRunWebuntis from "./DatasourceRunWebuntis";
 
-storiesOf("Organisms/DatasourceRunWebuntis", module).add("default", () => ({
+storiesOf("6 Organisms/DatasourceRunWebuntis", module).add("default", () => ({
 	components: { DatasourceRunWebuntis },
 	template: `<DatasourceRunWebuntis :datasource="datasource" />`,
 	data: () => ({

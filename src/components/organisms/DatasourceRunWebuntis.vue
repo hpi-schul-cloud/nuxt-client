@@ -1,26 +1,19 @@
 <template>
 	<div>
 		<template v-if="run.dryrun === true">
-			<base-table
+			<backend-data-table
 				:columns="columns"
 				:data="tableData"
 				track-by="_id"
-				:paginated="true"
-				:current-page="currentPage"
 				:total="pagination.total"
-				:rows-per-page="rowsPerPage"
-				:show-row-selection="true"
-				:backend-pagination="true"
-				:backend-sorting="true"
-				:selected-rows="selectedRows"
-				:send-type="sendType"
-				:send-ids="sendIds"
-				@all-rows-selected="handlerAllRowsSelected"
-				@update:rows-per-page="handlerUpdateRowsPerPage"
-				@update:current-page="handlerUpdatePage"
-				@update:selected-rows="setSelection"
+				:current-page.sync="currentPage"
+				:paginated="true"
+				:rows-per-page.sync="rowsPerPage"
+				:rows-selectable="true"
+				:selection-type.sync="sendType"
+				:selected-row-ids.sync="sendIds"
 			>
-			</base-table>
+			</backend-data-table>
 			<form-actions>
 				<template v-slot:primary>
 					<base-button design="primary" @click="triggerRun">
@@ -61,12 +54,15 @@
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import FormActions from "@components/molecules/FormActions";
+import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+
 import { mapGetters } from "vuex";
 export default {
 	components: {
 		ModalBodyInfo,
 		ModalFooterConfirm,
 		FormActions,
+		BackendDataTable,
 	},
 	props: {
 		datasource: {
@@ -107,7 +103,7 @@ export default {
 				},
 			],
 			rowsPerPage: 5,
-			sendIds: {},
+			sendIds: [],
 			sendType: "inclusive", // or exclusive
 		};
 	},
@@ -115,21 +111,6 @@ export default {
 		...mapGetters("webuntis-metadata", {
 			webuntisMetadata: "list",
 		}),
-		selectedRows() {
-			const dataCurrentPage = this.tableData.filter((row) => {
-				return this.sendType === "inclusive"
-					? Boolean(this.sendIds[row._id])
-					: !Boolean(this.sendIds[row._id]);
-			});
-			const dataOtherPages = Object.keys(this.sendIds)
-				.filter((id) => !Boolean(this.tableDataObject[id]))
-				.map((id) => {
-					return this.tableDataObject[id]
-						? this.tableDataObject[id]
-						: { _id: id };
-				});
-			return [...dataCurrentPage, ...dataOtherPages];
-		},
 		tableDataObject() {
 			return this.tableData.reduce((obj, row) => {
 				obj[row._id] = row;
@@ -167,50 +148,6 @@ export default {
 		});
 	},
 	methods: {
-		setSelection(selections) {
-			const selectedIdsOnCurrentView = selections.map(
-				(selection) => selection._id
-			);
-			const unselectedIdsOnCurrentView = this.tableData
-				.filter((row) => {
-					return !selectedIdsOnCurrentView.includes(row._id);
-				})
-				.map((row) => row._id);
-
-			let idsToPush = [];
-			let idsToRemove = [];
-			if (this.sendType === "inclusive") {
-				idsToPush = selectedIdsOnCurrentView;
-				idsToRemove = unselectedIdsOnCurrentView;
-			} else {
-				// this.sendType === "exclusive"
-				idsToRemove = selectedIdsOnCurrentView;
-				idsToPush = unselectedIdsOnCurrentView;
-			}
-			idsToPush.forEach((id) => {
-				this.$set(this.sendIds, id, true);
-			});
-			idsToRemove.forEach((id) => {
-				this.$delete(this.sendIds, id);
-			});
-		},
-		handlerAllRowsSelected(value) {
-			this.sendType = Boolean(value.length) ? "exclusive" : "inclusive";
-			this.$set(this, "sendIds", {});
-		},
-		handlerUpdatePage(newPage) {
-			this.find({
-				$limit: this.rowsPerPage,
-				page: newPage,
-			});
-		},
-		handlerUpdateRowsPerPage(newRowsPerPage) {
-			this.rowsPerPage = newRowsPerPage;
-			this.find({
-				$limit: newRowsPerPage,
-				page: 1,
-			});
-		},
 		find({ $limit, page }) {
 			const $skip = $limit * (page - 1);
 			try {
@@ -233,7 +170,7 @@ export default {
 					dryrun: false,
 					data: {
 						datatype: this.sendType, // inclusive/exclusive
-						courseMetadataIds: Object.keys(this.sendIds),
+						courseMetadataIds: this.sendIds,
 					},
 				});
 				this.$router.push({
