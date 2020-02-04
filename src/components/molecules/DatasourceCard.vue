@@ -51,7 +51,7 @@ export default {
 	height: auto;
 	padding: var(--space-xs);
 	border-radius: var(--radius-sm);
-	box-shadow: var(--shadow-s);
+	box-shadow: var(--shadow-xxxs);
 }
 
 .card-body {

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="h3"> {{ $t("pages.administration.datasources.new.title") }}</h1>
+		<h1 class="h3"> {{ $t("pages.administration.datasources.add.title") }}</h1>
 		<datasource-card
 			v-for="provider in datasourceProvider"
 			:key="provider.name"
@@ -11,16 +11,19 @@
 				provider.count === 0
 					? ''
 					: $t(
-							'pages.administration.datasources.new.provider.addedDatasources',
+							'pages.administration.datasources.add.provider.addedDatasources',
 							{ x: provider.count }
 					  )
 			"
 			class="mb--md"
 		>
 			<template v-slot:actions>
-				<BaseButton design="primary text">
+				<BaseButton
+					design="primary text"
+					@click="forwardCreate(provider.name.toLowerCase())"
+				>
 					<BaseIcon source="custom" icon="datasource-add" />
-					{{ $t("pages.administration.datasources.new.add") }}
+					{{ $t("pages.administration.datasources.add.btnAdd") }}
 				</BaseButton>
 			</template>
 		</datasource-card>
@@ -52,29 +55,30 @@ export default {
 					to: "/administration/datasources",
 				},
 				{
-					text: this.$t("pages.administration.datasources.new.short_title"),
+					text: this.$t("pages.administration.datasources.add.title"),
+					to: "/administration/datasources/add",
 				},
 			],
 			datasourceProvider: [
 				{
 					name: this.$t(
-						"pages.administration.datasources.new.provider.WebUntis.name"
+						"pages.administration.datasources.add.provider.WebUntis.name"
 					),
 					icon: require("@assets/img/datasources/logo-webuntis.png"),
 					count: 0,
 				},
 				{
 					name: this.$t(
-						"pages.administration.datasources.new.provider.LDAP.name"
+						"pages.administration.datasources.add.provider.LDAP.name"
 					),
 					icon: require("@assets/img/datasources/logo-ldap.svg"),
 					count: 0,
 				},
 				{
 					name: this.$t(
-						"pages.administration.datasources.new.provider.RSS.name"
+						"pages.administration.datasources.add.provider.RSS.name"
 					),
-					icon: require("@assets/img/datasources/logo-rss.png"),
+					icon: require("@assets/img/datasources/logo-rss.svg"),
 					count: 0,
 				},
 			],
@@ -103,10 +107,15 @@ export default {
 					console.error(err);
 				});
 		},
+		forwardCreate(name) {
+			this.$router.push({
+				path: "/administration/datasources/" + name + "/new",
+			});
+		},
 	},
 	head() {
 		return {
-			title: this.$t("pages.administration.datasources.new.title"),
+			title: this.$t("pages.administration.datasources.add.title"),
 		};
 	},
 };
