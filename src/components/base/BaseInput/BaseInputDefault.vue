@@ -8,7 +8,7 @@
 			}"
 		>
 			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
-				<transition-group name="fade">
+				<transition name="fade">
 					<label
 						v-show="showLabel"
 						:class="{ label: true, info: true }"
@@ -16,10 +16,10 @@
 					>
 						{{ label }}
 					</label>
-					<span v-if="!!hint" class="hint info">
-						{{ hint }}
-					</span>
-				</transition-group>
+				</transition>
+				<span v-if="!!hint" class="hint info">
+					{{ hint }}
+				</span>
 			</div>
 			<div class="input-line">
 				<div v-if="$slots.icon" class="icon-before">
