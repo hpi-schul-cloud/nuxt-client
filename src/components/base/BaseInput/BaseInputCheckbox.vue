@@ -34,7 +34,7 @@ export default {
 	props: {
 		vmodel: {
 			type: [Array, Boolean],
-			required: true,
+			default: false,
 		},
 		value: {
 			type: String,
