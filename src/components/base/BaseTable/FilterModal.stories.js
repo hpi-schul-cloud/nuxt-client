@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import FilterModal from "./FilterModal";
 
-storiesOf("3 Base UI Components/Modals", module).add("FilterModal", () => ({
+storiesOf("4 Base UI Components/Modals", module).add("FilterModal", () => ({
 	components: { FilterModal },
 	data: () => ({
 		active: boolean("active", false),

@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import Pagination from "@components/organisms/Pagination";
 
-storiesOf("5 Organisms", module).add("Pagination", () => ({
+storiesOf("6 Organisms", module).add("Pagination", () => ({
 	components: { Pagination },
 	data: () => ({
 		currentPage: number("currentPage", 1),

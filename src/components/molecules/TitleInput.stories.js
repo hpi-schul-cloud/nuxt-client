@@ -3,7 +3,7 @@ import { text } from "@storybook/addon-knobs";
 
 import TitleInput from "./TitleInput";
 
-storiesOf("3 Base UI Components/Inputs/Default", module).add(
+storiesOf("4 Base UI Components/Inputs/Default", module).add(
 	"Title Input",
 	() => ({
 		components: { TitleInput },
