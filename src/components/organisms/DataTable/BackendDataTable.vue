@@ -12,7 +12,6 @@
 					@fire-action="fireAction"
 				/>
 			</div>
-
 			<table class="table">
 				<thead>
 					<component
@@ -64,17 +63,13 @@ import { getValueByPath } from "@utils/helpers";
 import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@components/organisms/Pagination.vue";
-import FilterMenu from "./FilterMenu.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
-import defaultFiltersMixin from "@mixins/defaultFilters";
 
 export default {
 	components: {
 		Pagination,
-		FilterMenu,
 		RowSelectionBar,
 	},
-	mixins: [defaultFiltersMixin],
 	props: {
 		/**
 		 * Defines the visible columns
@@ -196,9 +191,11 @@ export default {
 			return this.columns.map((e) => e.field);
 		},
 		dataRowSlots() {
-			return Object.keys(this.$slots).filter((name) => {
-				name.startsWith("dataRow");
-			});
+			return Object.fromEntries(
+				Object.entries(this.$scopedSlots).filter(([name]) =>
+					name.startsWith("datacolumn")
+				)
+			);
 		},
 		sortByProxy: {
 			get() {

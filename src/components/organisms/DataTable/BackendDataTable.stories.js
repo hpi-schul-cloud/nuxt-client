@@ -77,7 +77,13 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => {
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
 				@sort="onSort"
-			/>
+			>
+				<template v-slot:datacolumn-age="slotProps">
+					<span style="text-decoration: underline">
+					{{ slotProps.data }}
+					</span>
+				</template>
+			</BackendDataTable>
 		`,
 	};
 });

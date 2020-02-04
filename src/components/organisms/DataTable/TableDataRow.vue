@@ -16,7 +16,7 @@
 			/>
 		</td>
 		<td v-for="(fieldData, index) in rowData" :key="index">
-			<slot :name="`column-${index}`" :data="fieldData">
+			<slot :name="`datacolumn-${columnKeys[index]}`" :data="fieldData">
 				{{ fieldData }}
 			</slot>
 		</td>
