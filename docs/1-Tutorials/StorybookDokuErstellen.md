@@ -13,7 +13,7 @@ Als Beispiel der Base Button:
 ```javascript{3-7}
 import { storiesOf } from "@storybook/vue";
 
-storiesOf("3 Base UI Components Components", module).add(
+storiesOf("4 Base UI Components Components", module).add(
 	"Base Button Primary",
 	() => ({
 		components: { BaseButton },

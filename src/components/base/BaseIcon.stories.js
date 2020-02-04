@@ -3,7 +3,7 @@ import { text, select, color } from "@storybook/addon-knobs";
 
 import BaseIcon from "@basecomponents/BaseIcon";
 
-storiesOf("3 Base UI Components/Base UI", module).add("Base Icon", () => ({
+storiesOf("4 Base UI Components/Base UI", module).add("Base Icon", () => ({
 	components: { BaseIcon },
 	data: () => ({
 		icon: text("icon", "home"),
