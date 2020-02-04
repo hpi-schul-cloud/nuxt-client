@@ -16,7 +16,7 @@ import BaseSelect from "@basecomponents/BaseSelect";
 import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseVideo from "@basecomponents/BaseVideo";
 
-storiesOf("3 Base UI Components/Base UI", module)
+storiesOf("4 Base UI Components/Base UI", module)
 	.addParameters({
 		notes,
 	})
