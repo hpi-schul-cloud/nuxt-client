@@ -1,49 +1,43 @@
 <template>
 	<div>
-		<user-has-permission permission="DATASOURCES_VIEW">
-			<base-breadcrumb :inputs="breadcrumbs" />
-			<h1 class="h3">
-				{{ $t("pages.administration.datasources.add.title") }}</h1
-			>
-			<datasource-card
-				v-for="provider in datasourceProvider"
-				:key="provider.name"
-				:image="provider.icon"
-				:title="provider.name"
-				:subtitle="
-					provider.count === 0
-						? ''
-						: $t(
-								'pages.administration.datasources.add.provider.addedDatasources',
-								{ x: provider.count }
-						  )
-				"
-				class="mb--md"
-			>
-				<template v-slot:actions>
-					<BaseButton
-						design="primary text"
-						@click="forwardCreate(provider.name.toLowerCase())"
-					>
-						<BaseIcon source="custom" icon="datasource-add" />
-						{{ $t("pages.administration.datasources.add.btnAdd") }}
-					</BaseButton>
-				</template>
-			</datasource-card>
-		</user-has-permission>
+		<base-breadcrumb :inputs="breadcrumbs" />
+		<h1 class="h3"> {{ $t("pages.administration.datasources.add.title") }}</h1>
+		<datasource-card
+			v-for="provider in datasourceProvider"
+			:key="provider.name"
+			:image="provider.icon"
+			:title="provider.name"
+			:subtitle="
+				provider.count === 0
+					? ''
+					: $t(
+							'pages.administration.datasources.add.provider.addedDatasources',
+							{ x: provider.count }
+					  )
+			"
+			class="mb--md"
+		>
+			<template v-slot:actions>
+				<BaseButton
+					design="primary text"
+					@click="forwardCreate(provider.name.toLowerCase())"
+				>
+					<BaseIcon source="custom" icon="datasource-add" />
+					{{ $t("pages.administration.datasources.add.btnAdd") }}
+				</BaseButton>
+			</template>
+		</datasource-card>
 	</div>
 </template>
 
 <script>
 import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
 import DatasourceCard from "@components/molecules/DatasourceCard";
-import UserHasPermission from "@components/helpers/UserHasPermission";
 
 export default {
 	components: {
 		BaseBreadcrumb,
 		DatasourceCard,
-		UserHasPermission,
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
