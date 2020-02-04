@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
@@ -77,7 +78,16 @@
 					</template>
 				</datasource-card>
 			</li>
+			<pagination
+				class="mt--md"
+				:current-page="page"
+				:per-page="pagination.limit"
+				:total="pagination.total"
+				@update:current-page="onPageChange"
+				@update:per-page="onCurrentPageChange"
+			/>
 			<!-- TODO remove dummies once all datasources are added here -->
+			<hr />
 			<li>
 				<datasource-card
 					:image="mapTypeToDatasourceImage({ config: { target: 'rss' } })"
@@ -106,14 +116,6 @@
 					</template>
 				</datasource-card>
 			</li>
-			<pagination
-				class="mt--md"
-				:current-page="page"
-				:per-page="pagination.limit"
-				:total="pagination.total"
-				@update:current-page="onPageChange"
-				@update:per-page="onCurrentPageChange"
-			/>
 		</ol>
 		<template v-else>
 			<empty-state :image="imgsrc">
@@ -181,7 +183,7 @@ export default {
 			dayjs,
 			menuOpen: false,
 			page: 1,
-			limit: localStorage.getItem("datasources_overview_limit") || 10,
+			limit: localStorage.getItem("datasources_overview_limit") || 5,
 		};
 	},
 	computed: {
