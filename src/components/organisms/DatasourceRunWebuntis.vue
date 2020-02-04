@@ -128,8 +128,16 @@ export default {
 				};
 			});
 		},
-		currentPage() {
-			return this.pagination?.skip / this.pagination?.limit + 1;
+		currentPage: {
+			get() {
+				return this.pagination?.skip / this.pagination?.limit + 1;
+			},
+			set(to) {
+				this.find({
+					$limit: this.rowsPerPage,
+					page: to,
+				});
+			},
 		},
 		pagination() {
 			return (
@@ -139,6 +147,14 @@ export default {
 					skip: 0,
 				}
 			);
+		},
+	},
+	watch: {
+		rowsPerPage(to) {
+			this.find({
+				$limit: to,
+				page: 1,
+			});
 		},
 	},
 	created(ctx) {
