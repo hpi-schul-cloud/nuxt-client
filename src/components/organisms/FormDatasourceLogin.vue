@@ -127,7 +127,7 @@ export default {
 			}
 			try {
 				await this.$store.dispatch("datasources/patch", [
-					this.$route.params.id,
+					this.id,
 					{
 						name: this.data.name,
 						schoolId: this.$user.schoolId,

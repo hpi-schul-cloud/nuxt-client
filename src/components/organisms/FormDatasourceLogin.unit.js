@@ -186,7 +186,26 @@ describe("@components/FormDatasourceLogin", () => {
 		});
 	});
 
-	describe("patch", () => {});
+	describe("patch", () => {
+		it("dispatches patch action on form submit", () => {
+			const actions = getMockActions();
+			const mock = getMocks({ actions });
+			const wrapper = mount(FormDatasourceLogin, {
+				...mock,
+				propsData: {
+					id: "someId",
+					type: "webuntis",
+				},
+			});
+			const nameInput = wrapper.find('input[name="name"]');
+			expect(nameInput.exists()).toBe(true);
+			nameInput.setValue("webunits Course");
+			expect(wrapper.vm.actionType).toStrictEqual("patch");
+			wrapper.trigger("submit");
+			expect(actions.create.called).toBe(false);
+			expect(actions.patch.called).toBe(true);
+		});
+	});
 });
 
 /*
