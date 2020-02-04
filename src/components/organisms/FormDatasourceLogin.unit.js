@@ -185,6 +185,8 @@ describe("@components/FormDatasourceLogin", () => {
 			expect(toastStubs.error.called).toBe(true); // and info toast
 		});
 	});
+
+	describe("patch", () => {});
 });
 
 /*
