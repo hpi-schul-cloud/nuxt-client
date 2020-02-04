@@ -90,14 +90,14 @@ describe("@components/FormDatasourceLogin", () => {
 		const wrapper = mount(FormDatasourceLogin, {
 			...getMocks(),
 			propsData: {
-				id: validDatasourceId,
+				datasourceId: validDatasourceId,
 				type: "webuntis",
 			},
 		});
 		expect(wrapper.vm.data.config.target).toStrictEqual(
 			validDatasourceWebuntis.config.target
 		);
-		expect(wrapper.vm.id).toStrictEqual(validDatasourceId);
+		expect(wrapper.vm.datasourceId).toStrictEqual(validDatasourceId);
 		expect(wrapper.vm.actionType).toStrictEqual("patch");
 	});
 
@@ -109,7 +109,7 @@ describe("@components/FormDatasourceLogin", () => {
 				...mock,
 				propsData: {
 					type: "webuntis",
-					id: validDatasourceId,
+					datasourceId: validDatasourceId,
 				},
 			});
 
@@ -193,7 +193,7 @@ describe("@components/FormDatasourceLogin", () => {
 			const wrapper = mount(FormDatasourceLogin, {
 				...mock,
 				propsData: {
-					id: "someId",
+					datasourceId: "someId",
 					type: "webuntis",
 				},
 			});
@@ -237,7 +237,7 @@ describe("@components/FormDatasourceLogin", () => {
 			const wrapper = mount(FormDatasourceLogin, {
 				...mock,
 				propsData: {
-					id: "someId",
+					datasourceId: "someId",
 					type: "webuntis",
 				},
 			});

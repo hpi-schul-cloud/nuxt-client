@@ -13,7 +13,11 @@
 				$t("pages.administration.datasources.login.text")
 			}}</p>
 
-			<form-datasource-login type="webuntis" autocomplete="off">
+			<form-datasource-login
+				type="webuntis"
+				autocomplete="off"
+				:datasource-id="this.$route.params.id"
+			>
 				<template v-slot:inputs="{ config }">
 					<base-input
 						v-model="config.username"
