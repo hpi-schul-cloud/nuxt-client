@@ -126,7 +126,6 @@ export default {
 	},
 	data() {
 		return {
-			pendingIds: [],
 			breadcrumb: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -153,12 +152,6 @@ export default {
 		// TODO: dispatch action
 	},
 	methods: {
-		removeInProgressId(id) {
-			const index = this.datasourceIdsInProgress.indexOf(id);
-			if (index !== -1) {
-				this.datasourceIdsInProgress.splice(index, 1)
-			}
-		},
 		getActions(element) {
 			return [
 				{
@@ -181,21 +174,32 @@ export default {
 			const pendingIds = [];
 			(result.data || []).forEach((datasource) => {
 				// TODO: use global const for Progess strings
-				if (datasource.lastStatus === 'Pending') {
+				if (datasource.lastStatus === "Pending") {
 					pendingIds.push(datasource._id);
 				}
 			});
-			this.pendingIds = pendingIds;
-			return result;
+			return pendingIds;
 		},
 		find() {
+			const query = { $limit: 25 };
 			this.$store
-				.dispatch("datasources/find", {
-					query: {
-						$limit: 25,
-					},
+				.dispatch("datasources/find", { query })
+				.then((result) => {
+					// start async look up
+					this.$store.dispatch("datasources/updateCallback", {
+						watchingIds: this.getAndSavePendingIdsFromResult(result),
+						successConditions: [
+							{ lastStatus: "Success" },
+							{ lastStatus: "Error" },
+						],
+						executer: () => { // id
+							// TODO: add mutation at this place?
+							// console.log(id);
+						},
+						query,
+					});
+					return result;
 				})
-				.then(this.getAndSavePendingIdsFromResult)
 				.catch((error) => {
 					console.error(error);
 					this.$toast.error(this.$t("error.load"));
@@ -207,7 +211,7 @@ export default {
 			const ldap = require("@assets/img/datasources/logo-ldap.svg");
 			const rss = require("@assets/img/datasources/logo-rss.png");
 			const mapping = { webuntis, ldap, rss };
-			return mapping[item.config.target.toLowerCase()];
+			return mapping[item.config.target];
 		},
 		handleEdit(/* datasource */) {
 			this.$toast.info(`TODO: redirect to not yet existing edit page`);

@@ -3,6 +3,7 @@ import qs from "qs";
 export default function(endpoint) {
 	const baseUrl = "/" + endpoint;
 	return {
+		baseUrl,
 		actions: {
 			async find({ commit }, payload = {}) {
 				const { qid = "default", query, customEndpoint } = payload;
