@@ -339,6 +339,9 @@ export default {
 
 <style lang="scss">
 @import "@styles";
+thead {
+	font-size: var(--text-md);
+}
 .table-wrapper {
 	overflow-x: auto;
 }
@@ -349,5 +352,7 @@ export default {
 }
 .table {
 	width: 100%;
+	margin-bottom: var(--space-sm);
+	border-collapse: collapse;
 }
 </style>

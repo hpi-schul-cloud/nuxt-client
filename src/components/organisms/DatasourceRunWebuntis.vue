@@ -21,23 +21,29 @@
 						color="var(--color-primary)"
 					/>
 					<template v-else-if="data === 'imported'">
-						<base-icon
-							source="custom"
-							icon="datasource-check"
-							color="var(--color-success)"
-						/>
-						Importiert
+						<div class="cell">
+							<base-icon
+								source="custom"
+								icon="datasource-check"
+								color="var(--color-success)"
+								class="icon-status"
+							/>
+							{{ $t("components.organisms.DatasourceRunWebuntis.imported") }}
+						</div>
 					</template>
 					<template v-else-if="data === 'discarded'">
-						<base-icon
-							source="custom"
-							icon="datasource-remove"
-							color="var(--color-danger)"
-						/>
-						Verworfen
+						<div class="cell">
+							<base-icon
+								source="custom"
+								icon="datasource-remove"
+								color="var(--color-danger)"
+								class="icon-status"
+							/>
+							{{ $t("components.organisms.DatasourceRunWebuntis.discarded") }}
+						</div>
 					</template>
 					<template v-else>
-						Status unbekannt
+						{{ $t("components.organisms.DatasourceRunWebuntis.unknown") }}
 					</template>
 				</template>
 			</backend-data-table>
@@ -237,4 +243,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.cell {
+	display: flex;
+	align-items: center;
+}
+.icon-status {
+	font-size: var(--text-md);
+}
 </style>

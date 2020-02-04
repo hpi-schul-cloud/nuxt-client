@@ -70,15 +70,24 @@ export default {
 <style lang="scss" scoped>
 .row {
 	background-color: var(--color-white);
+	border-top: 1px solid var(--color-white);
+	border-bottom: 1px solid var(--color-white);
+
 	&.highlight {
 		background-color: var(--color-gray-light);
+		border-top: 1px solid var(--color-white);
+		border-bottom: 1px solid var(--color-white);
 	}
 	&.selected {
-		background-color: var(--color-info-light);
+		background-color: var(--color-gray);
+		border-top: 1px solid var(--color-white);
+		border-bottom: 1px solid var(--color-white);
 	}
 
 	td {
 		padding: var(--space-xs);
+		font-size: var(--text-xs);
+		vertical-align: middle;
 		.select {
 			margin-bottom: 0;
 		}
