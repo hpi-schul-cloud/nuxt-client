@@ -25,9 +25,8 @@ body {
 
 h1,
 .h1 {
-	&:first-of-type {
-		margin-top: var(--space-md);
-		margin-bottom: var(--space-xl);
+	&:first-of-type:not(.h2):not(.h3):not(.h4):not(.h5):not(.h6) {
+		margin-top: 0;
 	}
 }
 
@@ -50,7 +49,6 @@ h1,
 
 p {
 	margin-bottom: var(--space-md);
-	line-height: var(--line-height-lg);
 }
 
 b,

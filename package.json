@@ -100,7 +100,6 @@
 		"eslint-loader": "^3.0.3",
 		"faker": "^4.1.0",
 		"find-cache-dir": "^3.2.0",
-		"flush-promises": "^1.0.2",
 		"http-proxy-middleware": "^0.20.0",
 		"http-server": "^0.12.1",
 		"hygen": "^5.0.3",

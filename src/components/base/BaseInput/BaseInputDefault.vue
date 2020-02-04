@@ -8,15 +8,13 @@
 			}"
 		>
 			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
-				<transition name="fade">
-					<label
-						v-show="showLabel"
-						:class="{ label: true, info: true }"
-						:for="`input-${$uid}`"
-					>
-						{{ label }}
-					</label>
-				</transition>
+				<label
+					v-show="showLabel"
+					:class="{ label: true, info: true }"
+					:for="`input-${$uid}`"
+				>
+					{{ label }}
+				</label>
 				<span v-if="!!hint" class="hint info">
 					{{ hint }}
 				</span>
@@ -108,7 +106,7 @@ export default {
 		event: "input",
 	},
 	props: {
-		vmodel: { type: [String, Number], default: undefined },
+		vmodel: { type: [String, Number], required: true },
 		type: {
 			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
@@ -208,7 +206,6 @@ export default {
 	.info-line {
 		display: flex;
 		justify-content: space-between;
-		min-height: var(--text-md);
 		margin-bottom: var(--space-xxxxs);
 
 		&:not(.label-visible) {
@@ -264,12 +261,5 @@ export default {
 
 .info.error {
 	color: var(--color-danger);
-}
-
-.fade-enter-active {
-	transition: opacity var(--duration-transition-medium);
-}
-.fade-enter {
-	opacity: 0;
 }
 </style>
