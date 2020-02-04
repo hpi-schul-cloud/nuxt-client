@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
@@ -77,7 +78,16 @@
 					</template>
 				</datasource-card>
 			</li>
+			<pagination
+				class="mt--md"
+				:current-page="page"
+				:per-page="pagination.limit"
+				:total="pagination.total"
+				@update:current-page="onPageChange"
+				@update:per-page="onCurrentPageChange"
+			/>
 			<!-- TODO remove dummies once all datasources are added here -->
+			<hr />
 			<li>
 				<datasource-card
 					:image="mapTypeToDatasourceImage({ config: { target: 'rss' } })"
@@ -129,10 +139,11 @@ import ContextMenu from "@components/molecules/ContextMenu";
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
+import Pagination from "@components/organisms/Pagination";
 
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
@@ -145,6 +156,7 @@ export default {
 		DatasourceCard,
 		EmptyState,
 		FloatingFab,
+		Pagination,
 	},
 	props: {
 		color: {
@@ -170,11 +182,16 @@ export default {
 			imgsrc: ImageEmptyState,
 			dayjs,
 			menuOpen: false,
+			page: 1,
+			limit: localStorage.getItem("datasources_overview_limit") || 5,
 		};
 	},
 	computed: {
 		...mapGetters("datasources", {
 			datasources: "list",
+		}),
+		...mapState("datasources", {
+			pagination: (state) => state.pagination.default,
 		}),
 	},
 	created(ctx) {
@@ -202,16 +219,18 @@ export default {
 			];
 		},
 		find() {
-			this.$store
-				.dispatch("datasources/find", {
-					query: {
-						$limit: 25,
-					},
-				})
-				.catch((error) => {
-					console.error(error);
-					this.$toast.error(this.$t("error.load"));
-				});
+			const query = {
+				$limit: this.limit,
+				$skip: (this.page - 1) * this.limit,
+				$sort: {
+					// TODO sort for targets
+					createdAt: 1,
+				},
+			};
+			this.$store.dispatch("datasources/find", { query }).catch((error) => {
+				console.error(error);
+				this.$toast.error(this.$t("error.load"));
+			});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
@@ -219,7 +238,7 @@ export default {
 			const ldap = require("@assets/img/datasources/logo-ldap.svg");
 			const rss = require("@assets/img/datasources/logo-rss.svg");
 			const mapping = { webuntis, ldap, rss };
-			return mapping[item.config.target];
+			return mapping[item.config.target] || "";
 		},
 		handleEdit(source) {
 			this.$router.push({
@@ -256,6 +275,15 @@ export default {
 								name: datasource.name,
 							})
 						);
+						// if last element on list -> move one page back
+						if (
+							this.page * this.limit > this.pagination.total &&
+							this.page > 1
+						) {
+							this.page--;
+						}
+						// show fully populated list
+						this.find();
 					} catch (error) {
 						console.error(error);
 						this.$toast.error(
@@ -266,6 +294,17 @@ export default {
 					}
 				},
 			});
+		},
+		onPageChange(page) {
+			this.page = page;
+			this.find();
+		},
+		onCurrentPageChange(limit) {
+			this.page = 1;
+			this.limit = limit;
+			// save user settings in localStorage
+			localStorage.setItem("datasources_overview_limit", limit);
+			this.find();
 		},
 	},
 	head() {
