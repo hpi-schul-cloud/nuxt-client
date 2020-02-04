@@ -1,5 +1,5 @@
 import BackendDataTable from "./BackendDataTable";
-import { tableData, tableColumns } from "./Datatable.data-factory.js";
+import { tableData, tableColumns } from "./DataTable.data-factory.js";
 
 const data = tableData(5);
 
