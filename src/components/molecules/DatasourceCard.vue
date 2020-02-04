@@ -66,27 +66,19 @@ export default {
 
 .card-heading {
 	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
-
-
-.card-title {
-	overflow: hidden;
-	font-family: var(--font-accent);
-	font-size: var(--text-lg);
-	text-overflow: ellipsis;
-	white-space: nowrap;
 
 .h6 {
 	margin: 0;
-
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .subtitle {
 	display: flex;
 	align-items: center;
 	font-size: var(--text-xs);
+
 	.icon {
 		margin-left: var(--space-xs-3);
 	}
