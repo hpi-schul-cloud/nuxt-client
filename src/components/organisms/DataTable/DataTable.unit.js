@@ -1,6 +1,6 @@
 import DataTable from "./DataTable";
 
-describe("@components/organisms/DataTable/DataTable", () => {
+describe("@components/6 Organisms/DataTable/DataTable", () => {
 	it(...isValidComponent(DataTable));
 
 	describe("pagination", () => {

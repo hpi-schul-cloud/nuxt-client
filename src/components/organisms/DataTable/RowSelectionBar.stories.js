@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import RowSelectionBar from "./RowSelectionBar";
 
-storiesOf("Organisms/DataTable/SubComponents", module).add(
+storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 	"RowSelectionBar",
 	() => ({
 		components: { RowSelectionBar },

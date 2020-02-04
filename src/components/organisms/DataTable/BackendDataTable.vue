@@ -16,7 +16,7 @@
 				<thead>
 					<component
 						:is="componentHeaderRow"
-						:all-rows-selectable="selectableRows"
+						:all-rows-selectable="rowsSelectable"
 						:all-rows-selected.sync="allRowsOfCurrentPageSelected"
 						:columns="columns"
 						:sort-by.sync="sortByProxy"
@@ -28,7 +28,7 @@
 						:is="componentDataRow"
 						v-for="(row, rowindex) in data"
 						:key="rowindex"
-						:selectable="selectableRows"
+						:selectable="rowsSelectable"
 						:rowindex="rowindex"
 						:selected="isRowSelected(row)"
 						:column-keys="columnKeys"
@@ -118,7 +118,7 @@ export default {
 		/**
 		 * enables checkboxes next to each row
 		 */
-		selectableRows: {
+		rowsSelectable: {
 			type: Boolean,
 		},
 		/**
@@ -241,7 +241,8 @@ export default {
 		},
 		allRowsOfCurrentPageSelected: {
 			get() {
-				const isInSelection = (row) => this.selectionKeys[row[this.trackBy]];
+				const isInSelection = (row) =>
+					this.selectionKeys[getValueByPath(row, this.trackBy)];
 				return this.selectionType === "inclusive"
 					? Boolean(this.data.every(isInSelection))
 					: !Boolean(this.data.some(isInSelection));
@@ -274,12 +275,12 @@ export default {
 			const method = (newState) => (newState ? "$set" : "$delete");
 			this[method(this.selectionType === "inclusive" ? state : !state)](
 				this.selectionKeys,
-				row[this.trackBy],
+				getValueByPath(row, this.trackBy),
 				true
 			);
 		},
 		isRowSelected(row) {
-			const rowId = row[this.trackBy];
+			const rowId = getValueByPath(row, this.trackBy);
 			return Boolean(
 				this.selectionType === "inclusive"
 					? this.selectionKeys[rowId]

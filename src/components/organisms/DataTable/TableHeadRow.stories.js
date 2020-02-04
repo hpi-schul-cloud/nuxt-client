@@ -6,7 +6,7 @@ import TableHeadRow from "./TableHeadRow";
 
 import { tableColumns } from "./DataTable.data-factory.js";
 
-storiesOf("Organisms/DataTable/SubComponents", module).add(
+storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 	"TableHeadRow",
 	() => {
 		const sortableColoumns = tableColumns

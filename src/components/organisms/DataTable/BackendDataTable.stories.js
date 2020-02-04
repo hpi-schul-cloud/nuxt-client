@@ -10,7 +10,7 @@ import {
 	tableActions,
 } from "./DataTable.data-factory.js";
 
-storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => {
+storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 	const sortabelRows = tableColumns
 		.filter((c) => c.sortable)
 		.reduce((obj, c) => {
@@ -30,7 +30,7 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => {
 			paginated: boolean("paginated", true),
 			rowsPerPage: number("rowsPerPage", 5),
 
-			selectableRows: boolean("selectableRows", true),
+			rowsSelectable: boolean("rowsSelectable", true),
 			selectionType: select(
 				"selectionType",
 				{ inclusive: "inclusive", exclusive: "exclusive" },
@@ -65,7 +65,7 @@ storiesOf("Organisms/DataTable", module).add("BackendDataTable", () => {
 				:rows-per-page.sync="rowsPerPage"
 				@update:rows-per-page="onUpdateRowsPerPage"
 
-				:selectableRows="selectableRows"
+				:rowsSelectable="rowsSelectable"
 				:selectionType.sync="selectionType"
 				:selectedRowIds.sync="selectedRowIds"
 				@update:selection="onUpdateSelection"
