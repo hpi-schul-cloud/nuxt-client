@@ -13,6 +13,45 @@
 					:title="element.name"
 					class="mb--md"
 				>
+					<template v-slot:subtitle>
+						<template v-if="element.lastStatus === 'Success'">
+							{{
+								$t("pages.administraion.datasources.index.success", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
+							<BaseIcon
+								source="material"
+								icon="check_circle"
+								fill="var(--color-success)"
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Error'">
+							{{
+								$t("pages.administraion.datasources.index.error", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
+							<BaseIcon
+								source="custom"
+								icon="warning"
+								fill="var(--color-danger)"
+								class="text-md"
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Pending'">
+							{{ $t("pages.administraion.datasources.index.pending") }}
+							<base-spinner
+								:color="color"
+								size="small"
+								:style="{ 'margin-left': 'var(--space-xs-3)' }"
+							/>
+						</template>
+						<template v-else>
+							{{ $t("pages.administraion.datasources.index.empty") }}
+						</template>
+					</template>
+
 					<template v-slot:actions>
 						<BaseButton design="primary text">
 							<BaseIcon source="custom" icon="datasource-import" />
@@ -21,7 +60,7 @@
 						<span class="ctx-menu">
 							<BaseButton design="icon text" @click="menuOpen = element._id">
 								<base-icon
-									class="footer__content-icon"
+									class="context-menu-icon"
 									source="material"
 									icon="more_vert"
 								/>
@@ -35,6 +74,35 @@
 								@remove="handleRemove(element)"
 							/>
 						</span>
+					</template>
+				</datasource-card>
+			</li>
+			<!-- TODO remove dummies once all datasources are added here -->
+			<li>
+				<datasource-card
+					:image="mapTypeToDatasourceImage({ config: { target: 'rss' } })"
+					title="RSS"
+					class="mb--md"
+				>
+					<template v-slot:actions>
+						<BaseButton design="primary text">
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.importRedirect") }}
+						</BaseButton>
+					</template>
+				</datasource-card>
+			</li>
+			<li>
+				<datasource-card
+					:image="mapTypeToDatasourceImage({ config: { target: 'ldap' } })"
+					title="LDAP"
+					class="mb--md"
+				>
+					<template v-slot:actions>
+						<BaseButton design="primary text">
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.importRedirect") }}
+						</BaseButton>
 					</template>
 				</datasource-card>
 			</li>
@@ -74,6 +142,11 @@ import Pagination from "@components/organisms/Pagination";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export default {
 	components: {
@@ -82,6 +155,12 @@ export default {
 		EmptyState,
 		FloatingFab,
 		Pagination,
+	},
+	props: {
+		color: {
+			type: String,
+			default: "var(--color-primary)",
+		},
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
@@ -99,6 +178,7 @@ export default {
 				},
 			],
 			imgsrc: ImageEmptyState,
+			dayjs,
 			menuOpen: false,
 			page: 1,
 			limit: localStorage.getItem("datasources_overview_limit") || 10,
@@ -114,6 +194,8 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+
+		// TODO: dispatch action
 	},
 	methods: {
 		getActions(element) {
@@ -150,49 +232,59 @@ export default {
 					this.$toast.error(this.$t("error.load"));
 				});
 		},
-		mapLastStatusIconName(item) {
-			const mapping = {
-				Success: "success",
-				Warning: "warning",
-				Error: "error",
-			};
-			return mapping[item.lastStatus];
-		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
 			const webuntis = require("@assets/img/datasources/logo-webuntis.png");
 			const ldap = require("@assets/img/datasources/logo-ldap.svg");
-			const rss = require("@assets/img/datasources/logo-rss.png");
+			const rss = require("@assets/img/datasources/logo-rss.svg");
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.target] || "";
 		},
 		handleEdit(source) {
 			this.$router.push({
-				path: "datasources/" + source.config.type + "/" + source._id + "/edit",
+				path:
+					"datasources/" + source.config.target + "/" + source._id + "/edit",
 			});
 		},
 		async handleRemove(datasource) {
-			try {
-				await this.$store.dispatch("datasources/remove", datasource._id);
-				this.$toast.success(
-					this.$t("pages.administration.datasources.index.remove.success", {
+			this.$dialog.confirm({
+				icon: "warning",
+				actionDesign: "success",
+				iconColor: "var(--color-danger)",
+				invertedDesign: true,
+				message: this.$t(
+					"pages.administration.datasources.index.remove.confirm.message",
+					{
 						name: datasource.name,
-					})
-				);
-				// if last element on list -> move one page back
-				if (this.page * this.limit > this.pagination.total && this.page > 1) {
-					this.page--;
-				}
-				// show fully populated list
-				this.find();
-			} catch (error) {
-				console.error(error);
-				this.$toast.error(
-					this.$t("pages.administration.datasources.index.remove.error", {
+					}
+				),
+				confirmText: this.$t(
+					"pages.administration.datasources.index.remove.confirm.btnText",
+					{
 						name: datasource.name,
-					})
-				);
-			}
+					}
+				),
+				cancelText: this.$t(
+					"components.organisms.FormNews.remove.confirm.cancel"
+				),
+				onConfirm: async () => {
+					try {
+						await this.$store.dispatch("datasources/remove", datasource._id);
+						this.$toast.success(
+							this.$t("pages.administration.datasources.index.remove.success", {
+								name: datasource.name,
+							})
+						);
+					} catch (error) {
+						console.error(error);
+						this.$toast.error(
+							this.$t("pages.administration.datasources.index.remove.error", {
+								name: datasource.name,
+							})
+						);
+					}
+				},
+			});
 		},
 		onPageChange(page) {
 			this.page = page;
@@ -222,5 +314,8 @@ export default {
 }
 .ctx-menu {
 	position: relative;
+}
+.context-menu-icon {
+	color: var(--color-tertiary);
 }
 </style>

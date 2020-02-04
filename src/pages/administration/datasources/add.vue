@@ -84,7 +84,7 @@ export default {
 					name: this.$t(
 						"pages.administration.datasources.add.provider.RSS.name"
 					),
-					icon: require("@assets/img/datasources/logo-rss.png"),
+					icon: require("@assets/img/datasources/logo-rss.svg"),
 					count: 0,
 				},
 			],
@@ -115,7 +115,7 @@ export default {
 		},
 		forwardCreate(name) {
 			this.$router.push({
-				path: name + "/new",
+				path: "/administration/datasources/" + name + "/new",
 			});
 		},
 	},

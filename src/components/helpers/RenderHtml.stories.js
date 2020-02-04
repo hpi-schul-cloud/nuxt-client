@@ -4,7 +4,7 @@ import notes from "@docs/storybook/helpers/RenderHtml.md";
 
 import RenderHtml from "./RenderHtml";
 
-storiesOf("Helpers/RenderHtml", module)
+storiesOf("7 Helpers/RenderHtml", module)
 	.addParameters({
 		notes,
 	})

@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<base-breadcrumb :inputs="breadcrumbs" />
 		<base-content-container size="small">
+			<base-breadcrumb :inputs="breadcrumbs" />
 			<img
 				class="mt--xl-4"
 				src="@assets/img/datasources/logo-webuntis-text.svg"
@@ -9,11 +9,11 @@
 			<h1 class="h5">{{
 				$t("pages.administration.datasources.login.heading")
 			}}</h1>
-			<p class="mt--md">{{
+			<p class="mb--xl">{{
 				$t("pages.administration.datasources.login.text")
 			}}</p>
 
-			<form-datasource-login type="webuntis">
+			<form-datasource-login type="webuntis" autocomplete="off">
 				<template v-slot:inputs="{ config }">
 					<base-input
 						v-model="config.username"
@@ -21,14 +21,22 @@
 						label="Benutzername"
 						:placeholder="'WebUntis Nutzername'"
 						class="mt--md"
-					/>
+					>
+						<template v-slot:icon>
+							<base-icon source="custom" icon="user" />
+						</template>
+					</base-input>
 					<base-input
 						v-model="config.password"
 						type="password"
 						label="Passwort"
 						:placeholder="'WebUntis Passwort'"
 						class="mt--md"
-					/>
+					>
+						<template v-slot:icon>
+							<base-icon source="custom" icon="lock" />
+						</template>
+					</base-input>
 					<base-input
 						v-model="config.url"
 						type="text"
@@ -74,14 +82,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-
-.container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.h5 {
-	text-align: center;
-}
 </style>
