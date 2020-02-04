@@ -13,6 +13,35 @@
 				:selection-type.sync="sendType"
 				:selected-row-ids.sync="sendIds"
 			>
+				<template v-slot:datacolumn-state="{ data }">
+					<template v-if="data === 'new'">
+						<base-icon
+							source="custom"
+							icon="datasource"
+							color="var(--color-primary)"
+						/>
+						Neu
+					</template>
+					<template v-else-if="data === 'imported'">
+						<base-icon
+							source="custom"
+							icon="datasource-check"
+							color="var(--color-success)"
+						/>
+						Importiert
+					</template>
+					<template v-else-if="data === 'discarded'">
+						<base-icon
+							source="custom"
+							icon="datasource-error"
+							color="var(--color-danger)"
+						/>
+						Verworfen
+					</template>
+					<template v-else>
+						Status unbekannt
+					</template>
+				</template>
 			</backend-data-table>
 			<form-actions>
 				<template v-slot:primary>
