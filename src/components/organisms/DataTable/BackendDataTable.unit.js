@@ -24,7 +24,7 @@ function getTestFilters() {
 }
 
 function getShallowWrapper(attributes) {
-	return shallowMount(BaseTable, {
+	return shallowMount(BackendDataTable, {
 		propsData: {
 			data: data,
 			trackBy: "id",
@@ -108,7 +108,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 					currentPage: 1,
 					rowsPerPage: 3,
 				}),
-				template: `<base-table
+				template: `<BackendDataTable
 						:data="data"
 						:columns="columns"
 						:rows-per-page.sync="rowsPerPage"
@@ -116,7 +116,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 						track-by="id"
 						paginated
 					/>`,
-				components: { BaseTable },
+				components: { BackendDataTable },
 			});
 
 			expect(wrapper.findAll("tbody tr")).toHaveLength(3);
@@ -145,6 +145,207 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 		});
 
 		it.todo("should emit sort event on new sort input");
+	});
+
+	describe.skip("selection", () => {
+		it("allows to select and unselect a row", () => {
+			const wrapper = getWrapper({ showRowSelection: true });
+			const rowSelection = wrapper.find("tbody tr td input[type='checkbox']");
+
+			rowSelection.setChecked();
+
+			expect(wrapper.find("tbody tr").classes()).toContain("selected");
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
+				[data[0]],
+			]);
+
+			rowSelection.setChecked(false);
+
+			expect(wrapper.find("tbody tr").classes()).not.toContain("selected");
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
+		});
+		it("allows to select and unselect all rows of current page", () => {
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				paginated: true,
+				rowsPerPage: 2,
+			});
+			const allRowsSelection = wrapper.find(
+				"thead tr th input[type='checkbox']"
+			);
+
+			allRowsSelection.setChecked();
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+
+			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(1);
+			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
+				data.slice(0, 2),
+			]);
+
+			expect(
+				wrapper.emitted()["all-rows-of-current-page-selected"]
+			).toHaveLength(1);
+			expect(
+				wrapper.emitted()["all-rows-of-current-page-selected"][0]
+			).toStrictEqual([data.slice(0, 2)]);
+
+			allRowsSelection.setChecked(false);
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+
+			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
+			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
+
+			expect(
+				wrapper.emitted()["all-rows-of-current-page-selected"]
+			).toHaveLength(2);
+			expect(
+				wrapper.emitted()["all-rows-of-current-page-selected"][1]
+			).toStrictEqual([[]]);
+		});
+		it("selecting all items on current page should toggle checkbox in header", () => {
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				paginated: true,
+				rowsPerPage: 2,
+			});
+
+			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
+
+			expect(
+				wrapper
+					.findAll("tbody tr")
+					.wrappers.every((tr) => tr.classes().includes("selected"))
+			).toBe(true);
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+
+			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked(false);
+			expect(
+				wrapper
+					.findAll("tbody tr")
+					.wrappers.some((tr) => tr.classes().includes("selected"))
+			).toBe(false);
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+		});
+		it("unselecting any item on a page after selecting all items should toggle checkbox in header", () => {
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				paginated: true,
+				rowsPerPage: 2,
+			});
+
+			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
+
+			expect(
+				wrapper
+					.findAll("tbody tr")
+					.wrappers.every((tr) => tr.classes().includes("selected"))
+			).toBe(true);
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+
+			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked(false);
+			expect(
+				wrapper
+					.findAll("tbody tr")
+					.wrappers.some((tr) => tr.classes().includes("selected"))
+			).toBe(false);
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+		});
+		it("allows to select all rows of all pages", () => {
+			const wrapper = getWrapper({
+				showRowSelection: true,
+				paginated: true,
+				rowsPerPage: 2,
+			});
+			const allRowsSelection = wrapper.find(
+				"thead tr th input[type='checkbox']"
+			);
+
+			allRowsSelection.setChecked();
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+			const allRowsOfAllPagesSelection = wrapper.find(".select-all-rows");
+			expect(allRowsOfAllPagesSelection.exists()).toBe(true);
+			allRowsOfAllPagesSelection.trigger("click");
+
+			expect(wrapper.vm.allRowsOfAllPagesSelected).toBe(true);
+
+			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
+			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([
+				data,
+			]);
+
+			expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
+			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([data]);
+		});
+
+		it("can trigger an action on selected rows", () => {
+			const testAction = jest.fn();
+			var wrapper = getWrapper({
+				showRowSelection: true,
+				actions: [
+					{
+						label: "Test",
+						action: testAction,
+					},
+				],
+			});
+
+			wrapper.find("thead tr th input[type='checkbox']").setChecked();
+			wrapper.find(".dropdown li").trigger("click");
+			expect(testAction).toHaveBeenCalled();
+
+			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
+			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
+
+			expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
+			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([[]]);
+		});
+
+		it("does not change row selection when new rows are added", () => {
+			var wrapper = getWrapper({
+				showRowSelection: true,
+				paginated: true,
+				rowsPerPage: 2,
+			});
+
+			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+
+			wrapper.setProps({
+				data: [
+					...data,
+					{
+						id: "6",
+						firstName: "Test",
+						lastName: "Test",
+						address: {
+							city: "Test",
+						},
+						age: 999,
+					},
+				],
+			});
+
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+		});
+
+		it("row selection keeps saved during navigation between pages", () => {
+			var wrapper = getWrapper({
+				showRowSelection: true,
+				paginated: true,
+				rowsPerPage: 2,
+			});
+
+			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+
+			wrapper.setProps({ currentPage: 2 });
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+
+			wrapper.setProps({ currentPage: 1 });
+			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+		});
 	});
 
 	describe.skip("filter", () => {
@@ -572,207 +773,6 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			submitFilterModal(wrapper);
 
 			expect(wrapper.emitted()["update:filters-selected"]).toHaveLength(2);
-		});
-	});
-
-	describe.skip("selection", () => {
-		it("allows to select and unselect a row", () => {
-			const wrapper = getWrapper({ showRowSelection: true });
-			const rowSelection = wrapper.find("tbody tr td input[type='checkbox']");
-
-			rowSelection.setChecked();
-
-			expect(wrapper.find("tbody tr").classes()).toContain("selected");
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
-				[data[0]],
-			]);
-
-			rowSelection.setChecked(false);
-
-			expect(wrapper.find("tbody tr").classes()).not.toContain("selected");
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
-		});
-		it("allows to select and unselect all rows of current page", () => {
-			const wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-			const allRowsSelection = wrapper.find(
-				"thead tr th input[type='checkbox']"
-			);
-
-			allRowsSelection.setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(1);
-			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
-				data.slice(0, 2),
-			]);
-
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"]
-			).toHaveLength(1);
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"][0]
-			).toStrictEqual([data.slice(0, 2)]);
-
-			allRowsSelection.setChecked(false);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
-
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"]
-			).toHaveLength(2);
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"][1]
-			).toStrictEqual([[]]);
-		});
-		it("selecting all items on current page should toggle checkbox in header", () => {
-			const wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-
-			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.every((tr) => tr.classes().includes("selected"))
-			).toBe(true);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked(false);
-			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.some((tr) => tr.classes().includes("selected"))
-			).toBe(false);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-		});
-		it("unselecting any item on a page after selecting all items should toggle checkbox in header", () => {
-			const wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-
-			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.every((tr) => tr.classes().includes("selected"))
-			).toBe(true);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked(false);
-			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.some((tr) => tr.classes().includes("selected"))
-			).toBe(false);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-		});
-		it("allows to select all rows of all pages", () => {
-			const wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-			const allRowsSelection = wrapper.find(
-				"thead tr th input[type='checkbox']"
-			);
-
-			allRowsSelection.setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-			const allRowsOfAllPagesSelection = wrapper.find(".select-all-rows");
-			expect(allRowsOfAllPagesSelection.exists()).toBe(true);
-			allRowsOfAllPagesSelection.trigger("click");
-
-			expect(wrapper.vm.allRowsOfAllPagesSelected).toBe(true);
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([
-				data,
-			]);
-
-			expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
-			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([data]);
-		});
-
-		it("can trigger an action on selected rows", () => {
-			const testAction = jest.fn();
-			var wrapper = getWrapper({
-				showRowSelection: true,
-				actions: [
-					{
-						label: "Test",
-						action: testAction,
-					},
-				],
-			});
-
-			wrapper.find("thead tr th input[type='checkbox']").setChecked();
-			wrapper.find(".dropdown li").trigger("click");
-			expect(testAction).toHaveBeenCalled();
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
-
-			expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
-			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([[]]);
-		});
-
-		it("does not change row selection when new rows are added", () => {
-			var wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.setProps({
-				data: [
-					...data,
-					{
-						id: "6",
-						firstName: "Test",
-						lastName: "Test",
-						address: {
-							city: "Test",
-						},
-						age: 999,
-					},
-				],
-			});
-
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-		});
-
-		it("row selection keeps saved during navigation between pages", () => {
-			var wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.setProps({ currentPage: 2 });
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-
-			wrapper.setProps({ currentPage: 1 });
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
 		});
 	});
 });

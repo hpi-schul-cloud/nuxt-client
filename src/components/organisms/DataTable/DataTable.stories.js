@@ -9,47 +9,48 @@ import {
 	tableColumns,
 	tableFilters,
 	tableActions,
-} from "@storyMockData/BaseTable";
+} from "@@/stories/mockData/DataTable";
 
-storiesOf("Organisms/DataTable", module).add("DataTable", () => ({
-	data: () => ({
-		actions: tableActions,
-		columns: tableColumns,
-		currentPage: number("currentPage", 1),
-		data: tableData,
-		filterable: boolean("filterable", true),
-		filters: tableFilters,
-		filtersSelected: object("filtersSelected", [tableFilters[0]]),
-		paginated: boolean("paginated", true),
-		rowsPerPage: number("rowsPerPage", 5),
-		selectableRows: boolean("selectableRows", true),
-		selectionType: select(
-			"selectionType",
-			{ inclusive: "inclusive", exclusive: "exclusive" },
-			"inclusive"
-		),
-		selectedRowIds: object("selectedRowIds", [tableData[0].id]),
-		total: number("total", 10),
-		trackBy: text("trackBy", "id"),
-	}),
-	components: { DataTable },
-	methods: {
-		onAllRowsSelected: action("@all-rows-selected"),
-		onAllRowsOfCurrentPageSelected: action(
-			"@all-rows-of-current-page-selected"
-		),
-		onSort: action("@sort"),
-		onUpdateCurrentPage: action("@update:current-page"),
-		onUpdateFiltersSelected: action("@update:filters-selected"),
-		onUpdateRowsPerPage: action("@update:rows-per-page"),
-		onUpdateSelectedRows: action("@update:selected-rows"),
-	},
-	template: `
+storiesOf("Organisms/DataTable", module).add("DataTable", () => {
+	return {
+		data: () => ({
+			actions: tableActions,
+			columns: tableColumns,
+			currentPage: number("currentPage", 1),
+			filterable: boolean("filterable", true),
+			filters: tableFilters,
+			filtersSelected: object("filtersSelected", [tableFilters[0]]),
+			paginated: boolean("paginated", true),
+			rowsPerPage: number("rowsPerPage", 5),
+			selectableRows: boolean("selectableRows", true),
+			selectionType: select(
+				"selectionType",
+				{ inclusive: "inclusive", exclusive: "exclusive" },
+				"inclusive"
+			),
+			selectedRowIds: object("selectedRowIds", []),
+			total: number("total", 50),
+			trackBy: text("trackBy", "id"),
+			randomData: tableData,
+		}),
+		components: { DataTable },
+		methods: {
+			onAllRowsSelected: action("@all-rows-selected"),
+			onAllRowsOfCurrentPageSelected: action(
+				"@all-rows-of-current-page-selected"
+			),
+			onSort: action("@sort"),
+			onUpdateCurrentPage: action("@update:current-page"),
+			onUpdateFiltersSelected: action("@update:filters-selected"),
+			onUpdateRowsPerPage: action("@update:rows-per-page"),
+			onUpdateSelectedRows: action("@update:selected-rows"),
+		},
+		template: `
 			<DataTable v-slot:default="slotProps"
 				:actions="actions"
 				:columns="columns"
 				:current-page.sync="currentPage"
-				:data="data"
+				:data="randomData(total)"
 				:filterable="filterable"
 				:filters="filters"
 				:filtersSelected="filtersSelected"
@@ -67,4 +68,5 @@ storiesOf("Organisms/DataTable", module).add("DataTable", () => ({
 				@update:rows-per-page="onUpdateRowsPerPage""
 			/>
 		`,
-}));
+	};
+});

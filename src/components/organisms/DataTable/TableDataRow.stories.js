@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import TableDataRow from "./TableDataRow";
 
-import { tableData, tableColumns } from "@storyMockData/BaseTable";
+import { tableData, tableColumns } from "@@/stories/mockData/DataTable";
 
 storiesOf("Organisms/DataTable/SubComponents", module).add(
 	"TableDataRow",
@@ -28,7 +28,7 @@ storiesOf("Organisms/DataTable/SubComponents", module).add(
 				"columnKeys",
 				tableColumns.map((e) => e.field)
 			),
-			data: object("data", tableData[0]),
+			data: object("data", tableData(1)[0]),
 		}),
 		methods: {
 			onUpdateSelected: action("@update:selected"),

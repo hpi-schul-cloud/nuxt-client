@@ -13,7 +13,6 @@
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
-					:selected-rows="selectedRowIds"
 					:all-rows-of-all-pages-selected.sync="allRowsOfAllPagesSelected"
 					:all-rows-of-current-page-selected.sync="allRowsOfCurrentPageSelected"
 					:number-of-selected-items="numberOfSelectedItems"
@@ -29,8 +28,8 @@
 						:all-rows-selectable="selectableRows"
 						:all-rows-selected.sync="allRowsOfCurrentPageSelected"
 						:columns="columns"
-						:sort-by="sortBy"
-						:sort-order="sortOrder"
+						:sort-by.sync="sortByProxy"
+						:sort-order.sync="sortOrderProxy"
 					/>
 				</thead>
 				<tbody>
@@ -61,7 +60,7 @@
 			:current-page="currentPage"
 			:total="total"
 			:per-page="rowsPerPage"
-			@update:per-page="$emit('update:rows-per-page', $event)"
+			@update:per-page="onUpdateRowsPerPage"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
 	</div>
@@ -111,72 +110,6 @@ export default {
 			required: true,
 		},
 
-		// filterable: {
-		// 	type: Boolean,
-		// },
-		// filters: {
-		// 	type: Array,
-		// 	default: () => [],
-		// 	validator: function(filters) {
-		// 		return filters.every((filter) => {
-		// 			const hasValidType =
-		// 				!!filter.type && supportedFilterTypes.includes(filter.type);
-
-		// 			var hasValidMatchingType = false;
-
-		// 			if (
-		// 				!supportedFilterMatchingTypes[filter.type] &&
-		// 				!filter.matchingType
-		// 			) {
-		// 				hasValidMatchingType = true;
-		// 			} else if (
-		// 				supportedFilterMatchingTypes[filter.type] &&
-		// 				filter.matchingType &&
-		// 				supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
-		// 			) {
-		// 				hasValidMatchingType = true;
-		// 			} else if (
-		// 				filter.matchingType &&
-		// 				filter.matchingType.implementation &&
-		// 				filter.matchingType.value &&
-		// 				filter.matchingType.label
-		// 			) {
-		// 				hasValidMatchingType = true;
-		// 			}
-
-		// 			const isValidSelectFilter =
-		// 				filter.value &&
-		// 				Array.isArray(filter.value) &&
-		// 				filter.value.length > 0 &&
-		// 				filter.value.every((value) => value.value && value.label);
-
-		// 			return (
-		// 				filter.label &&
-		// 				(filter.property || filter.type == "fulltextSearch") &&
-		// 				hasValidType &&
-		// 				hasValidMatchingType &&
-		// 				(isValidSelectFilter || filter.type !== "select")
-		// 			);
-		// 		});
-		// 	},
-		// },
-		// filtersSelected: {
-		// 	type: Array,
-		// 	default: () => [],
-		// },
-
-		/**
-		 * Array of Objects.
-		 * Each Object must define a function "action" that will be called with the list of current selectionIds.
-		 * Will be passed to the @components/organisms/DropdownMenu component.
-		 */
-		actions: {
-			type: Array,
-			default: () => [],
-			validator: (actions) =>
-				actions.every((action) => typeof action.action === "function"),
-		},
-
 		paginated: Boolean,
 		/**
 		 * The total number of available rows (including not visible items from other pages)
@@ -222,6 +155,28 @@ export default {
 		},
 
 		/**
+		 * Array of Objects.
+		 * Each Object must define a function "action" that will be called with the list of current selectionIds and the selectionType.
+		 * Will be passed to the @components/organisms/DropdownMenu component.
+		 */
+		actions: {
+			type: Array,
+			default: () => [],
+			validator: (actions) =>
+				actions.every((action) => typeof action.action === "function"),
+		},
+
+		sortBy: {
+			type: String,
+			default: "",
+		},
+		sortOrder: {
+			type: String,
+			default: "asc",
+			validator: (val) => ["asc", "desc"].includes(val),
+		},
+
+		/**
 		 * Component to use for the header. Must define the same Interface as ./TableHeadRow
 		 */
 		componentHeaderRow: {
@@ -244,18 +199,9 @@ export default {
 			filterOpened: {},
 			newFiltersSelected: this.filtersSelected,
 			selectionKeys: {},
-			sortBy: undefined,
-			sortOrder: undefined,
 		};
 	},
 	computed: {
-		// TODO watch for changes of parent selection and update selectionKeys data
-		// selectionKeys() {
-		// 	return this.selectedRowIds.reduce((obj) => {
-		// 		obj[selectedRowIds] = obj;
-		// 		return obj;
-		// 	}, {});
-		// },
 		columnKeys() {
 			return this.columns.map((e) => e.field);
 		},
@@ -264,46 +210,22 @@ export default {
 				name.startsWith("dataRow");
 			});
 		},
-		// filteredRows() {
-		// 	return this.data.filter((row) => {
-		// 		return this.newFiltersSelected.every((filter) => {
-		// 			if (filter.type === "fulltextSearch") {
-		// 				return getNestedObjectValues(row).some((value) =>
-		// 					(value.toString() || "").includes(filter.value)
-		// 				);
-		// 			} else {
-		// 				const functionName = camelCase(
-		// 					`filter-${filter.type}-${(filter.matchingType || {}).value}`
-		// 				);
-		// 				const defaultFunctionName = camelCase(
-		// 					`filter-${filter.type}-default`
-		// 				);
-		// 				const filterFunction =
-		// 					(filter.matchingType || {}).implementation ||
-		// 					this[functionName] ||
-		// 					this[defaultFunctionName];
-		// 				return filterFunction(
-		// 					getValueByPath(row, filter.property),
-		// 					filter.value
-		// 				);
-		// 			}
-		// 		});
-		// 	});
-		// },
-		// filteredAndSortedRows() {
-		// 	if (
-		// 		this.backendSorting ||
-		// 		!this.currentSortColumn ||
-		// 		!this.currentSortColumn.sortable
-		// 	) {
-		// 		return this.filteredRows;
-		// 	}
-		// 	return this.sortBy(
-		// 		this.filteredRows,
-		// 		this.currentSortColumn.field,
-		// 		this.isAsc
-		// 	);
-		// },
+		sortByProxy: {
+			get() {
+				return this.sortBy;
+			},
+			set(to) {
+				this.$emit("update:sortBy", to);
+			},
+		},
+		sortOrderProxy: {
+			get() {
+				return this.sortOrder;
+			},
+			set(to) {
+				this.$emit("update:sortOrder", to);
+			},
+		},
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
@@ -338,24 +260,12 @@ export default {
 		},
 	},
 	watch: {
-		// data(data) {
-		// 	this.selectedRowIds = this.selectedRowIds.filter((id) =>
-		// 		data.some((row) => row[this.trackBy] === id)
-		// 	);
-		// 	this.tableData = data;
-		// 	if (!this.backendSorting) {
-		// 		this.sort(this.currentSortColumn, true);
-		// 	}
-		// },
-		// filtersSelected() {
-		// 	this.newFiltersSelected = this.filtersSelected;
-		// },
-		// newFiltersSelected() {
-		// 	this.$emit("update:filters-selected", this.newFiltersSelected);
-		// },
-		// selectedRowIds(rows) {
-		// 	this.selectedRowIds = rows.map((row) => row[this.trackBy]);
-		// },
+		selectionKeys(to) {
+			this.onUpdateSelectionKeys(to);
+		},
+		selectedRowIds(to) {
+			this.onUpdateSelectedRowIds(to);
+		},
 	},
 	methods: {
 		selectAllRowsOfAllPages() {
@@ -376,15 +286,56 @@ export default {
 		},
 		isRowSelected(row) {
 			const rowId = row[this.trackBy];
-			return this.selectionType === "inclusive"
-				? this.selectionKeys[rowId]
-				: !this.selectionKeys[rowId];
+			return Boolean(
+				this.selectionType === "inclusive"
+					? this.selectionKeys[rowId]
+					: !this.selectionKeys[rowId]
+			);
+		},
+
+		onUpdateSelectionKeys(to) {
+			/**
+			 * toggle whenever the selection changes
+			 *
+			 * @event update:selection
+			 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
+			 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
+			 * Inclusive means all items in the passed array are selected.
+			 * Exclusive means all items not in the passed array are selected.
+			 */
+			this.$emit("update:selection", Object.keys(to), this.selectionType);
+			/**
+			 * helper event for the selectedRowIds .sync modifier
+			 */
+			this.$emit("update:selectedRowIds", Object.keys(to));
+		},
+		onUpdateSelectedRowIds(to) {
+			const hasSameNumberOfAttributes =
+				to.length === Object.keys(this.selectionKeys).length;
+			const hasSameAttributes = to.every((item) => this.selectionKeys[item]);
+			if (hasSameNumberOfAttributes && hasSameAttributes) {
+				// nothing to change
+				return;
+			}
+
+			const newSelectionKeys = to.reduce((obj, key) => {
+				obj[key] = true;
+				return obj;
+			}, {});
+
+			this.$set(this, "selectionKeys", newSelectionKeys);
+		},
+
+		onUpdateRowsPerPage(value) {
+			this.$emit("update:current-page", 1);
+			this.$emit("update:rows-per-page", value);
 		},
 
 		getValueByPath,
+
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);
-			action.action(selections);
+			action.action(selections, this.selectionType);
 			this.unselectAllRowsOfAllPages();
 		},
 	},
