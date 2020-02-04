@@ -225,12 +225,10 @@ export default {
 					createdAt: 1,
 				},
 			};
-			this.$store
-				.dispatch("datasources/find", { query })
-				.catch((error) => {
-					console.error(error);
-					this.$toast.error(this.$t("error.load"));
-				});
+			this.$store.dispatch("datasources/find", { query }).catch((error) => {
+				console.error(error);
+				this.$toast.error(this.$t("error.load"));
+			});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
@@ -275,6 +273,15 @@ export default {
 								name: datasource.name,
 							})
 						);
+						// if last element on list -> move one page back
+						if (
+							this.page * this.limit > this.pagination.total &&
+							this.page > 1
+						) {
+							this.page--;
+						}
+						// show fully populated list
+						this.find();
 					} catch (error) {
 						console.error(error);
 						this.$toast.error(
