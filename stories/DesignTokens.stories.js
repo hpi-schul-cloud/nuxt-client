@@ -4,7 +4,7 @@ import Gradient from "@storyComponents/Gradient";
 import Elevation from "@storyComponents/Elevation";
 import ColorOnText from "@storyComponents/ColorOnText";
 
-storiesOf("1 Design Tokens", module).add("0 Design Tokens", () => ({
+storiesOf("1 Design Tokens", module).add("1 Design Tokens", () => ({
 	template: `
 	<div>
 	<h1>Design Tokens</h1>

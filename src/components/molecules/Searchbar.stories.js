@@ -3,7 +3,7 @@ import { text } from "@storybook/addon-knobs";
 
 import Searchbar from "@components/molecules/Searchbar";
 
-storiesOf("4 Molecules/Searchbar", module).add("Searchbar", () => ({
+storiesOf("5 Molecules/Searchbar", module).add("Searchbar", () => ({
 	components: { Searchbar },
 	data: () => ({
 		searchQuery: text("searchQuery", ""),

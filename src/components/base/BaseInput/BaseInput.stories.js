@@ -10,7 +10,7 @@ const defaultTypes = supportedTypes.reduce((obj, val) => {
 	return obj;
 }, {});
 
-storiesOf("3 Base UI Components/Inputs/Default", module)
+storiesOf("4 Base UI Components/Inputs/Default", module)
 	.addParameters({
 		notes,
 	})
@@ -90,7 +90,7 @@ storiesOf("3 Base UI Components/Inputs/Default", module)
 			</base-input>`,
 	}));
 
-storiesOf("3 Base UI Components/Inputs", module)
+storiesOf("4 Base UI Components/Inputs", module)
 	.addParameters({
 		notes,
 	})
