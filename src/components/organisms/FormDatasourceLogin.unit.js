@@ -206,6 +206,25 @@ describe("@components/FormDatasourceLogin", () => {
 			expect(actions.patch.called).toBe(true);
 		});
 
+		it("shows validation error before submiting", async () => {
+			const actions = getMockActions();
+			const mock = getMocks({ actions });
+			const wrapper = mount(FormDatasourceLogin, {
+				...mock,
+				propsData: {
+					action: "patch",
+					id: "someId",
+					type: "ldap",
+				},
+			});
+			const toastStubs = { error: sinon.stub() };
+			wrapper.vm.$toast = toastStubs;
+
+			wrapper.trigger("submit");
+			expect(toastStubs.error.called).toBe(true);
+			expect(actions.patch.called).toBe(false);
+		});
+
 		it("shows error toast if patch fails", async () => {
 			const errorMessage = "expected error that should be catched";
 			const mock = getMocks({
