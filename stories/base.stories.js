@@ -1,19 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import {
-	tableData,
-	tableColumns,
-	tableFilters,
-	tableActions,
-} from "./mockData/BaseTable";
-import {
-	text,
-	select,
-	boolean,
-	color,
-	number,
-	object,
-} from "@storybook/addon-knobs";
-import { action } from "@storybook/addon-actions";
+import { text, select, boolean, color } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
 import BaseAudio from "@basecomponents/BaseAudio";
@@ -28,7 +14,6 @@ import BaseProgressbar from "@basecomponents/BaseProgressbar";
 import BaseQrCode from "@basecomponents/BaseQrCode";
 import BaseSelect from "@basecomponents/BaseSelect";
 import BaseSpinner from "@basecomponents/BaseSpinner";
-import BaseTable from "@basecomponents/BaseTable/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
 
 storiesOf("4 Base UI Components/Base UI", module)
@@ -230,64 +215,6 @@ storiesOf("4 Base UI Components/Base UI", module)
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
 		template: '<base-progressbar :value="2" :max="3"/>',
-	}))
-	.add("Base Table", () => ({
-		data: () => ({
-			actions: tableActions,
-			backendPagination: boolean("backendPagination", false),
-			backendSorting: boolean("backendSorting", false),
-			columns: tableColumns,
-			currentPage: number("currentPage", 1),
-			data: tableData,
-			filterable: boolean("filterable", true),
-			filters: tableFilters,
-			filtersSelected: object("filtersSelected", [tableFilters[0]]),
-			paginated: boolean("paginated", true),
-			rowsPerPage: number("rowsPerPage", 5),
-			showRowSelection: boolean("showRowSelection", true),
-			selectedRows: object("selectedRows", [tableData[0]]),
-			total: number("total", 10),
-			trackBy: text("trackBy", "id"),
-		}),
-		components: { BaseTable },
-		methods: {
-			onAllRowsSelected: action("@all-rows-selected"),
-			onAllRowsOfCurrentPageSelected: action(
-				"@all-rows-of-current-page-selected"
-			),
-			onSort: action("@sort"),
-			onUpdateCurrentPage: action("@update:current-page"),
-			onUpdateFiltersSelected: action("@update:filters-selected"),
-			onUpdateRowsPerPage: action("@update:rows-per-page"),
-			onUpdateSelectedRows: action("@update:selected-rows"),
-		},
-		template: `
-			<base-table v-slot:default="slotProps"
-				:actions="actions"
-				:backend-pagination="backendPagination"
-				:backend-sorting="backendSorting"
-				:columns="columns"
-				:current-page.sync="currentPage"
-				:data="data"
-				:filterable="filterable"
-				:filters="filters"
-				:filtersSelected="filtersSelected"
-				:paginated="paginated"
-				:rows-per-page.sync="rowsPerPage"
-				:showRowSelection="showRowSelection"
-				:selectedRows="selectedRows"
-				:total="total"
-				:trackBy="trackBy"
-				@all-rows-selected="onAllRowsSelected"
-				@all-rows-of-current-page-selected="onAllRowsOfCurrentPageSelected"
-				@sort="onSort"
-				@update:current-page="onUpdateCurrentPage"
-				@update:filters-selected="onUpdateFiltersSelected"
-				@update:rows-per-page="onUpdateRowsPerPage"
-				@update:selected-rows="onUpdateSelectedRows">
-					<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
-			</base-table>
-		`,
 	}))
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
