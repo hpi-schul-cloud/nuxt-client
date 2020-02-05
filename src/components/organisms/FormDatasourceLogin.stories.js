@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 
 import FormDatasourceLogin from "./FormDatasourceLogin";
 
-storiesOf("5 Organisms", module).add("FormDatasourceLogin", () => ({
+storiesOf("6 Organisms", module).add("FormDatasourceLogin", () => ({
 	components: { FormDatasourceLogin },
 	template: `<FormDatasourceLogin>
 		<template v-slot:inputs="{ config }">
@@ -32,7 +32,7 @@ storiesOf("5 Organisms", module).add("FormDatasourceLogin", () => ({
 				v-model="config.url"
 				type="text"
 				label="URL"
-				:placeholder="'erato.webuntis.com'"
+				:placeholder="'URL der Datenquellen'"
 				class="mt--md"
 				/>
 
