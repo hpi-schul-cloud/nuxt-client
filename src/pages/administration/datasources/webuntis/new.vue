@@ -22,6 +22,7 @@
 					<base-input
 						v-model="config.username"
 						type="text"
+						required="true"
 						label="Benutzername"
 						:placeholder="'WebUntis Nutzername'"
 						class="mt--md"
@@ -33,6 +34,7 @@
 					<base-input
 						v-model="config.password"
 						type="password"
+						required="true"
 						label="Passwort"
 						:placeholder="'WebUntis Passwort'"
 						class="mt--md"
@@ -44,6 +46,7 @@
 					<base-input
 						v-model="config.url"
 						type="text"
+						required="true"
 						label="URL"
 						:placeholder="'URL der Datenquelle'"
 						class="mt--md"
