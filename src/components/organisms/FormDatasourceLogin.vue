@@ -16,8 +16,13 @@
 			</template>
 		</base-input>
 		<slot name="inputs" :config="data.config" />
-		<base-button type="submit" class="w-100 mt--lg" design="secondary" text
-			>{{ $t("components.organisms.FormDatasources.btn.connect") }}
+		<base-button type="submit" class="w-100 mt--lg" design="secondary" text>
+			<span v-if="actionType === 'create'">{{
+				$t("components.organisms.FormDatasources.btn.connect")
+			}}</span>
+			<span v-else>{{
+				$t("components.organisms.FormDatasources.btn.update")
+			}}</span>
 		</base-button>
 	</form>
 </template>
@@ -113,6 +118,9 @@ export default {
 				this.$toast.success(
 					this.$t("components.organisms.FormDatasources.success.create")
 				);
+				this.$router.push({
+					path: "/administration/datasources",
+				});
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
@@ -137,6 +145,9 @@ export default {
 				this.$toast.success(
 					this.$t("components.organisms.FormDatasources.success.patch")
 				);
+				this.$router.push({
+					path: "/administration/datasources",
+				});
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
