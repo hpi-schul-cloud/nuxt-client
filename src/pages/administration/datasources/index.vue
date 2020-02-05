@@ -7,6 +7,41 @@
 		}}</h1>
 
 		<ol v-if="datasources && datasources.length > 0" class="datasources">
+			<!-- TODO remove dummies once all datasources are added here -->
+			<li>
+				<datasource-card
+					:image="mapTypeToDatasourceImage({ config: { target: 'rss' } })"
+					title="RSS"
+					class="mb--md"
+				>
+					<template v-slot:actions>
+						<BaseButton
+							design="primary text"
+							@click="handleManageOldDatasourceClick"
+						>
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.importRedirect") }}
+						</BaseButton>
+					</template>
+				</datasource-card>
+			</li>
+			<li>
+				<datasource-card
+					:image="mapTypeToDatasourceImage({ config: { target: 'ldap' } })"
+					title="LDAP"
+					class="mb--md"
+				>
+					<template v-slot:actions>
+						<BaseButton
+							design="primary text"
+							@click="handleManageOldDatasourceClick"
+						>
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.importRedirect") }}
+						</BaseButton>
+					</template>
+				</datasource-card>
+			</li>
 			<li v-for="element in datasources" :key="element._id">
 				<!-- todo use from item the name -> title and type(use method) -> image -->
 				<datasource-card
@@ -79,43 +114,13 @@
 				</datasource-card>
 			</li>
 			<pagination
-				class="mt--md"
+				class="mt--xl-3"
 				:current-page="page"
 				:per-page="pagination.limit"
 				:total="pagination.total"
 				@update:current-page="onPageChange"
 				@update:per-page="onCurrentPageChange"
 			/>
-			<!-- TODO remove dummies once all datasources are added here -->
-			<hr />
-			<li>
-				<datasource-card
-					:image="mapTypeToDatasourceImage({ config: { target: 'rss' } })"
-					title="RSS"
-					class="mb--md"
-				>
-					<template v-slot:actions>
-						<BaseButton design="primary text">
-							<BaseIcon source="custom" icon="datasource-import" />
-							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton>
-					</template>
-				</datasource-card>
-			</li>
-			<li>
-				<datasource-card
-					:image="mapTypeToDatasourceImage({ config: { target: 'ldap' } })"
-					title="LDAP"
-					class="mb--md"
-				>
-					<template v-slot:actions>
-						<BaseButton design="primary text">
-							<BaseIcon source="custom" icon="datasource-import" />
-							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton>
-					</template>
-				</datasource-card>
-			</li>
 		</ol>
 		<template v-else>
 			<empty-state :image="imgsrc">
@@ -239,6 +244,11 @@ export default {
 			const rss = require("@assets/img/datasources/logo-rss.svg");
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.target] || "";
+		},
+		handleManageOldDatasourceClick() {
+			this.$router.push({
+				path: "/administration/school",
+			});
 		},
 		handleEdit(source) {
 			this.$router.push({
