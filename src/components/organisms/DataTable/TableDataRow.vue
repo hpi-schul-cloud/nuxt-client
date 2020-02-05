@@ -79,7 +79,8 @@ export default {
 		border-bottom: 1px solid var(--color-white);
 	}
 	&.selected {
-		background-color: var(--color-gray);
+		color: var(--color-on-table-selected);
+		background-color: var(--color-table-selected);
 		border-top: 1px solid var(--color-white);
 		border-bottom: 1px solid var(--color-white);
 	}

@@ -135,7 +135,7 @@ export default {
 					label: "Status",
 				},
 			],
-			rowsPerPage: 5,
+			rowsPerPage: 25,
 			sendIds: [],
 			sendType: "inclusive", // or exclusive
 		};
@@ -204,6 +204,7 @@ export default {
 					query: {
 						$skip,
 						$limit,
+						$sort: { state: -1 },
 						datasourceId: this.datasourceId,
 					},
 				});
