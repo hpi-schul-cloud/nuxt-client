@@ -11,7 +11,7 @@ const DatasourceActions = `<BaseButton design="primary text">
 Datenquelle hinzufügen
 </BaseButton>`;
 
-storiesOf("Molecules/DatasourceCard", module)
+storiesOf("5 Molecules/DatasourceCard", module)
 	.add("with knobs", () => ({
 		components: { DatasourceCard },
 		data: () => ({
