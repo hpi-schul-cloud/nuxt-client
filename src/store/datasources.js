@@ -4,6 +4,10 @@ import serviceTemplate from "@utils/service-template";
 
 const base = serviceTemplate("datasources");
 
+const forceNumber = (v, _v) => {
+	return Number.isInteger(v) ? v : _v;
+}
+
 const removeIdFromArray = (array, id) => {
 	const index = array.indexOf(id);
 	if (index !== -1) {
@@ -11,18 +15,22 @@ const removeIdFromArray = (array, id) => {
 	}
 };
 
-function Sleep(milliseconds) {
+const Sleep = (milliseconds) => {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-const fetchData = async (ref, { ids, successConditions, query }) => {
-	if (!Array.isArray(ids) || ids.length <= 0) {
-		return Promise.resolve();
-	}
+const solvedConditions = (successConditions) => (ressource) => {
+	let isChanged = false;
+	successConditions.forEach((condition) => {
+		Object.entries(condition).forEach(([key, value]) => {
+			if (ressource[key] === value) { isChanged = true }
+		});
+	});
+	return isChanged;
+}
 
+const selectRelatedDataBaseKeys = (successConditions) => {
 	const $select = ["_id"];
-
-	// search for related database keys
 	successConditions.forEach((condition) => {
 		Object.keys(condition).forEach((key) => {
 			if ($select.indexOf(key) === -1) {
@@ -30,11 +38,14 @@ const fetchData = async (ref, { ids, successConditions, query }) => {
 			}
 		});
 	});
+	return $select;
+}
 
-	// requested ressources
+const fetchData = async (ref, { ids, $select, query, conditionHelper }) => {
+	if (!Array.isArray(ids) || ids.length <= 0) return Promise.resolve();
+
+	// create low copy query with related ressources
 	const $or = ids.map((id) => ({ _id: id }));
-
-	// create low copy
 	const newQuery = Object.assign(query, { $select, $or });
 
 	// fetch watching ressources
@@ -46,72 +57,60 @@ const fetchData = async (ref, { ids, successConditions, query }) => {
 			},
 		})
 		.catch((err) => {
+			// should not stop if any error is throwed
 			console.error(err);
 			return { data: [], limit: 0, skip: 0, total: 0, err };
 		});
 
-	// test results is any ready
-	const changedRessources = watchingRessources.data.filter((e) => {
-		let isChanged = false;
-		Object.entries(successConditions).forEach(([key, value]) => {
-			if (e[key] === value) {
-				isChanged = true;
-				removeIdFromArray(ids, e._id);
-			}
-		});
-		return isChanged;
+	// test result if is any is ready
+	const changedRessources = watchingRessources.data.filter(conditionHelper);
+	changedRessources.forEach(({ _id }) => {
+		removeIdFromArray(ids, _id);
 	});
 
 	return Promise.resolve({
 		ids,
-		changedRessources,
+		changedRessources
 	});
 };
 
 const module = mergeDeep(base, {
 	actions: {
-		updateCallback: async function(state, payload = {}) {
+		updateCallback: async function({ commit }, payload = {}) {
 			const {
 				requestInterval,
-			//	executer,
 				watchingIds,
 				successConditions,
 				query,
 				maxIterations,
+			//	mutation,
 			} = payload;
 
-			const timeout = Number.isInteger(requestInterval)
-				? requestInterval
-				: 30000;
-			const iterations = Number.isInteger(maxIterations) ? maxIterations : 20;
+			const timeout = forceNumber(requestInterval, 30 * 1000);
+			const iterations = forceNumber(maxIterations, 60);
+			const $select = selectRelatedDataBaseKeys(successConditions);
+			const conditionHelper = solvedConditions(successConditions);
 			let memoIds = watchingIds;
 
 			for (let i = 0; i < iterations; i++) {
 				const { ids, changedRessources } = await fetchData(this, {
 					ids: memoIds,
-					successConditions,
+					$select,
+					conditionHelper,
 					query,
 				});
 				memoIds = ids;
-				// console.log(memoIds, changedRessources, executer); // TODO: remove it
-				if (changedRessources.length > 0) {
-					// TODO: executer || or add mutation directly ?
-					base.mutations.updateProgress(changedRessources);
-				}
+
+				changedRessources.forEach( ( element ) => {
+					commit('modifiedOne', element);
+				});
+
 				if (memoIds.length <= 0) {
 					return Promise.resolve();
 				}
 				await Sleep(timeout);
 			}
 		},
-	},
-	mutations: {
-		updateProgress() { // state, changedRessources
-			// state, id, status
-			// console.log("mutate", changedRessources);
-			//mysource = this.getters.get(id) einzelne datasource aus lokalem store
-			//mysource.status = status
-		},
-	},
+	}
 });
 export default module;

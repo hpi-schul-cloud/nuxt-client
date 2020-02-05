@@ -192,10 +192,6 @@ export default {
 							{ lastStatus: "Success" },
 							{ lastStatus: "Error" },
 						],
-						executer: () => { // id
-							// TODO: add mutation at this place?
-							// console.log(id);
-						},
 						query,
 					});
 					return result;
