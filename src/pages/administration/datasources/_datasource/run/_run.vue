@@ -112,9 +112,8 @@ export default {
 		},
 	},
 	created() {
-		// TODO: enable this instead of the timeout mock
-		// this.checkStatus();
-		setTimeout(() => (this.state = "Success"), 1000);
+		this.checkStatus();
+		//setTimeout(() => (this.state = "Success"), 1000);
 	},
 	methods: {
 		...mapActions("datasourceRuns", {
