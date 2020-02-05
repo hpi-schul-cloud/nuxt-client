@@ -59,16 +59,26 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.card-heading {
+	overflow: hidden;
 }
 
 .h6 {
 	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .subtitle {
 	display: flex;
 	align-items: center;
 	font-size: var(--text-xs);
+
 	.icon {
 		margin-left: var(--space-xs-3);
 	}
@@ -78,6 +88,9 @@ export default {
 	object-fit: contain;
 	margin-right: var(--space-sm);
 	border-radius: var(--radius-sm);
+}
+.card-action {
+	display: flex;
 }
 
 p {
