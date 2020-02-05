@@ -29,7 +29,7 @@
 				<datasource-card
 					:image="mapTypeToDatasourceImage({ config: { target: 'ldap' } })"
 					title="LDAP"
-					class="mb--md"
+					class="mb--xl-3"
 				>
 					<template v-slot:actions>
 						<BaseButton
