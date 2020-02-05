@@ -16,6 +16,9 @@ env:
     - GIT_SHA=$( git rev-parse HEAD )
     - DOCKERTAG="$( echo $TRAVIS_BRANCH | tr -s '[:punct:]' '-' | tr -s '[:upper:]' '[:lower:]' )_v$( jq -r '.version' package.json )_$TRAVIS_COMMIT"
 
+# do not run on develop if it is just a dependency update from dependabot to preserve resources
+if: (not branch = develop) or (branch = develop and not commit_message ~= /^Bump.*from.*to.*$/)
+
 stages:
   - test
   - name: build

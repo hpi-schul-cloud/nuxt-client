@@ -43,7 +43,7 @@ export default {
 .description {
 	margin-top: var(--space-md);
 	font-size: var(--text-sm);
-	color: var(--color-gray);
+	color: var(--color-tertiary-light);
 	text-align: center;
 }
 
