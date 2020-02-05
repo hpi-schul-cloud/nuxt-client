@@ -83,7 +83,6 @@ const module = mergeDeep(base, {
 				successConditions,
 				query,
 				maxIterations,
-			//	mutation,
 			} = payload;
 
 			const timeout = forceNumber(requestInterval, 30 * 1000);

@@ -148,8 +148,6 @@ export default {
 	},
 	created(ctx) {
 		this.find();
-
-		// TODO: dispatch action
 	},
 	methods: {
 		getActions(element) {
