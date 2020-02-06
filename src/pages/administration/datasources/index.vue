@@ -168,7 +168,7 @@ export default {
 				},
 			];
 		},
-		getAndSavePendingIdsFromResult(result) {
+		getPendingIdsFromResult(result) {
 			const pendingIds = [];
 			(result.data || []).forEach((datasource) => {
 				// TODO: use global const for Progess strings
@@ -183,9 +183,8 @@ export default {
 			this.$store
 				.dispatch("datasources/find", { query })
 				.then((result) => {
-					// start async look up
 					this.$store.dispatch("datasources/updateCallback", {
-						watchingIds: this.getAndSavePendingIdsFromResult(result),
+						watchingIds: this.getPendingIdsFromResult(result),
 						successConditions: [
 							{ lastStatus: "Success" },
 							{ lastStatus: "Error" },

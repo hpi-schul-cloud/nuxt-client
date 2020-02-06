@@ -34,3 +34,16 @@ export function indexOf(array, obj, fn) {
 
 	return -1;
 }
+
+/**
+ * Remove an element of an array. Its mutate the array with splice.
+ * @param {Array} array - array that should modified
+ * @param {*} value - value that should removed
+ */
+export const removeIdFromArray = (array, value) => {
+	const index = array.indexOf(value);
+	if (index !== -1) {
+		array.splice(index, 1);
+	}
+	return array;
+};

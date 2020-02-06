@@ -1,33 +1,29 @@
 import qs from "qs";
 import mergeDeep from "@utils/merge-deep";
 import serviceTemplate from "@utils/service-template";
+import { removeIdFromArray } from "@utils/helpers";
 
 const base = serviceTemplate("datasources");
 
 const forceNumber = (v, _v) => {
 	return Number.isInteger(v) ? v : _v;
-}
-
-const removeIdFromArray = (array, id) => {
-	const index = array.indexOf(id);
-	if (index !== -1) {
-		array.splice(index, 1);
-	}
 };
 
 const Sleep = (milliseconds) => {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
+};
 
 const solvedConditions = (successConditions) => (ressource) => {
 	let isChanged = false;
 	successConditions.forEach((condition) => {
 		Object.entries(condition).forEach(([key, value]) => {
-			if (ressource[key] === value) { isChanged = true }
+			if (ressource[key] === value) {
+				isChanged = true;
+			}
 		});
 	});
 	return isChanged;
-}
+};
 
 const selectRelatedDataBaseKeys = (successConditions) => {
 	const $select = ["_id"];
@@ -39,7 +35,7 @@ const selectRelatedDataBaseKeys = (successConditions) => {
 		});
 	});
 	return $select;
-}
+};
 
 const fetchData = async (ref, { ids, $select, query, conditionHelper }) => {
 	if (!Array.isArray(ids) || ids.length <= 0) return Promise.resolve();
@@ -70,7 +66,7 @@ const fetchData = async (ref, { ids, $select, query, conditionHelper }) => {
 
 	return Promise.resolve({
 		ids,
-		changedRessources
+		changedRessources,
 	});
 };
 
@@ -100,8 +96,8 @@ const module = mergeDeep(base, {
 				});
 				memoIds = ids;
 
-				changedRessources.forEach( ( element ) => {
-					commit('modifiedOne', element);
+				changedRessources.forEach((element) => {
+					commit("patchSingleItem", element);
 				});
 
 				if (memoIds.length <= 0) {
@@ -110,6 +106,6 @@ const module = mergeDeep(base, {
 				await Sleep(timeout);
 			}
 		},
-	}
+	},
 });
 export default module;

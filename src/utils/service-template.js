@@ -82,10 +82,11 @@ export default function(endpoint) {
 			set(state, { items }) {
 				state.list = items;
 			},
-			// can only modfied list elements that contains objects and _id
-			modifiedOne(state, patched) {
-				const index = state.list.findIndex(e => e._id === patched._id || patched.id );
-				state.list[index] = Object.assign(state.list[index], patched);
+			patchSingleItem(state, item) {
+				const index = state.list.findIndex(
+					(e) => e._id === item._id || item.id
+				);
+				state.list[index] = Object.assign(state.list[index], item);
 			},
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);
