@@ -8,7 +8,7 @@ const fetchRoutes = async () => {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 	await page.goto(
-		`${storybookUrl}/iframe.html?path=/story/others-story-list--all`
+		`${storybookUrl}/iframe.html?path=/story/7-others-story-list--all`
 	);
 	const HTML = await page.$eval("#stories", (e) => e.innerHTML);
 	await browser.close();

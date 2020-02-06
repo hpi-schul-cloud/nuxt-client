@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/vue";
 import notes from "@docs/storybook/ProgressRing.md";
 import ProgressRing from "@components/atoms/ProgressRing";
 
-storiesOf("Atoms/ProgressRing", module)
+storiesOf("3 Atoms/ProgressRing", module)
 	.addParameters({
 		notes,
 	})
