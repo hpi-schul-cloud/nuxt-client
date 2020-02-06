@@ -79,19 +79,19 @@ export default {
 					text: "Kontakt",
 				},
 				{
-					href: "https://schul-cloud.org/team",
+					to: "/team",
 					text: "Team",
 				},
 				{
-					href: "https://schul-cloud.org/about",
+					to: "/about",
 					text: "Über das Projekt",
 				},
 				{
-					href: "https://schul-cloud.org/community",
+					to: "/community",
 					text: "Mitmachen",
 				},
 				{
-					href: "https://schul-cloud.org/partner",
+					to: "/partner",
 					text: "Partner",
 				},
 				{

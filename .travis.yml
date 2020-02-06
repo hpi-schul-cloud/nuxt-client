@@ -14,7 +14,7 @@ env:
   global:
     - TZ=Europe/Berlin
     - GIT_SHA=$( git rev-parse HEAD )
-    - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" | tr -s "[:upper:]" "[:lower:]" )_v$( jq -r '.version' package.json )_$( date +"%y%m%d%H%M" )
+    - DOCKERTAG="$( echo $TRAVIS_BRANCH | tr -s '[:punct:]' '-' | tr -s '[:upper:]' '[:lower:]' )_v$( jq -r '.version' package.json )_$TRAVIS_COMMIT"
 
 stages:
   - test
@@ -41,6 +41,10 @@ jobs:
       name: "build:nuxt:open"
       env:
         - SC_THEME=open
+    - script: npm run build:nuxt
+      name: "build:nuxt:thr"
+      env:
+        - SC_THEME=thr
     - script: npm run build:storybook > /dev/null 2>&1
       name: "build:storybook"
       after_success:
@@ -57,6 +61,7 @@ jobs:
         - chmod 700 integration-test.sh
         - bash integration-test.sh
       name: "test:integration"
+      if: NOT (branch ~= /^greenkeeper\/.*$/ AND type != pull_request)
       env:
         - IT_CLIENT_HOST=nuxtclient
         - IT_CLIENT_PORT=4000

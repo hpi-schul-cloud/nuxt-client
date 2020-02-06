@@ -41,7 +41,7 @@ describe("@middleware/permission-check", () => {
 			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
 			route: getMockRoute(["PERMISSION_A"]),
 		});
-		await expect(permissionCheck(mockContext)).resolves.toBe(true);
+		expect(await permissionCheck(mockContext)).toBe(true);
 	});
 
 	it(`grants access using advanced "AND" syntax`, async () => {
@@ -52,7 +52,7 @@ describe("@middleware/permission-check", () => {
 				permissions: ["PERMISSION_A", "PERMISSION_B"],
 			}),
 		});
-		await expect(permissionCheck(mockContext)).resolves.toBe(true);
+		expect(await permissionCheck(mockContext)).toBe(true);
 	});
 
 	it(`grants access using advanced "OR" syntax`, async () => {
@@ -63,21 +63,21 @@ describe("@middleware/permission-check", () => {
 				permissions: ["PERMISSION_B"],
 			}),
 		});
-		await expect(permissionCheck(mockContext)).resolves.toBe(true);
+		expect(await permissionCheck(mockContext)).toBe(true);
 	});
 
 	it("grants Access if no permissions are required AND user exists", async () => {
 		const mockContext = getMockContext({
 			store: getMockStore({ permissions: ["PERMISSION_A"] }),
 		});
-		await expect(permissionCheck(mockContext)).resolves.toBe(true);
+		expect(await permissionCheck(mockContext)).toBe(true);
 	});
 
 	it("grants Access if no permissions are required AND user is missing", async () => {
 		const mockContext = getMockContext({
 			store: getMockStore({ user: null }),
 		});
-		await expect(permissionCheck(mockContext)).resolves.toBe(true);
+		expect(await permissionCheck(mockContext)).toBe(true);
 	});
 
 	it("throws error.401 on missing permission using simple syntax", async () => {

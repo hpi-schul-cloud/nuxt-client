@@ -1,42 +1,7 @@
 pull_request_rules:
-  - name: automatic merging when label is set
-    conditions:
-      - label!=WIP
-      - label!=waiting
-      - label=ready to merge
-      - status-success~=Travis CI
-
-      # make sure the complete matrix passed
-      - status-success~=lint
-      - -status-neutral~=lint
-      - -status-failure~=lint
-      - status-success~=test-unit
-      - -status-neutral~=test-unit
-      - -status-failure~=test-unit
-      # - status-success~=build
-      # - -status-neutral~=build
-      # - -status-failure~=build
-
-      - status-success=Mergeable
-      - status-success=codecov/project
-    actions:
-      merge:
-        method: merge
-        strict: true
-  - name: remove ready to merge when merged
-    conditions:
-      - merged
-      - label=ready to merge
-    actions:
-      label:
-        remove:
-          - ready to merge
-  - name: delete merged branches
-    conditions:
-      - merged
-      - label!=WIP
-    actions:
-      delete_head_branch: {}
+  #######################
+  # MERGE PRECONDITIONS
+  #######################
   - name: add WIP label when WIP is in title
     conditions:
       - title~=WIP
@@ -46,14 +11,80 @@ pull_request_rules:
       label:
         add:
           - WIP
-  - name: remove "ready to merge" label when pull is not approved
+  - name: remove "ready to merge" label when pull is not approved yet
     conditions:
-      - "#approved-reviews-by=0"
+      - -status-success~=pullapprove
       - label~=ready to merge
-      - -merged
     actions:
       comment:
-        message: The "ready to merge" label can only be set after one pull request approval
+        message: The "ready to merge" label can only be set on approved pull request
       label:
         remove:
           - ready to merge
+  - name: label PRs with conflicts
+    conditions:
+      - conflict
+    actions:
+      label:
+        add:
+          - has conflicts
+  - name: remove has conflicts label if conflicts got resolved
+    conditions:
+      - label~=has conflicts
+      - -conflict
+    actions:
+      label:
+        remove:
+          - has conflicts
+
+  #######################
+  # AUTO MERGING
+  #######################
+  - name: auto merge passing Greenkeeper pull requests
+    conditions:
+      - author=greenkeeper[bot]
+      - label~=greenkeeper
+      - -status-neutral~=.*
+      - -status-failure~=.*
+    actions:
+      merge:
+        method: squash
+        strict: true
+  - name: auto merge passing Dependabot pull requests
+    conditions:
+      # match dependabot[bot] and dependabot-preview[bot]
+      - author~=dependabot(-preview)?\[bot\]
+      - label~=dependencies
+      - -status-neutral~=.*
+      - -status-failure~=.*
+    actions:
+      merge:
+        method: squash
+        strict: true
+  - name: auto merge when ready to merge label is set
+    conditions:
+      - label=ready to merge
+    actions:
+      merge:
+        method: merge
+        strict: true
+
+  #######################
+  # CLEANUP AFTER MERGE
+  #######################
+  - name: remove ready to merge when merged
+    conditions:
+      - merged
+      - label=ready to merge
+    actions:
+      label:
+        add:
+          - auto_merged
+        remove:
+          - ready to merge
+  - name: delete merged branches
+    conditions:
+      - merged
+      - label!=WIP
+    actions:
+      delete_head_branch: {}

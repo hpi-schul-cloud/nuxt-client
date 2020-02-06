@@ -20,7 +20,7 @@ describe("@components/BaseDialog", () => {
 					message: testMessage,
 				},
 			});
-			expect(wrapper.text().includes(testMessage)).toBe(true);
+			expect(wrapper.text()).toContain(testMessage);
 		});
 		it("iconColor Prop should override actionDesign", async () => {
 			const testColor = "lime";
@@ -39,6 +39,9 @@ describe("@components/BaseDialog", () => {
 			expect(wrapper.find(".mock-icon").element.style.color).toBe(testColor);
 		});
 		it("icon should have by default the actionDesign prop color", async () => {
+			const designs = ["success", "danger", "primary"];
+			// Make sure all expects get executed
+			expect.assertions(designs.length);
 			const testWithDesign = async (design) => {
 				const wrapper = await mountDialog({
 					propsData: {
@@ -52,7 +55,7 @@ describe("@components/BaseDialog", () => {
 				// and css custom properties get ignored by vue-test-utils
 				expect(wrapper.vm.currentIconColor).toBe(`var(--color-${design})`);
 			};
-			return Promise.all(["success", "danger", "primary"].map(testWithDesign));
+			await Promise.all(designs.map(testWithDesign));
 		});
 		it("passes correct button designs", async () => {
 			const wrapper = await mountDialog({

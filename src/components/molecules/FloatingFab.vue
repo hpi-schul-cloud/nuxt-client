@@ -1,6 +1,11 @@
 <template>
 	<div :style="[pos]" class="fab">
-		<base-button design="hero-cta icon" v-bind="$attrs" v-on="$listeners">
+		<base-button
+			design="hero-cta icon"
+			v-bind="$attrs"
+			:aria-label="ariaLabel"
+			v-on="$listeners"
+		>
 			<base-icon source="material" :icon="icon" />
 		</base-button>
 	</div>
@@ -19,6 +24,10 @@ export default {
 		position: {
 			type: String,
 			default: "bottom-right",
+		},
+		ariaLabel: {
+			type: String,
+			required: true,
 		},
 	},
 	data() {
