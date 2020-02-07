@@ -74,6 +74,7 @@ export default {
 				return defined;
 			},
 		},
+
 		type: {
 			type: String,
 			default: "button",

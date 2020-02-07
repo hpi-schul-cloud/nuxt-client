@@ -18,13 +18,22 @@
 			class="mb--md"
 		>
 			<template v-slot:actions>
-				<BaseButton
+				<!-- <BaseButton
 					design="primary text"
 					@click="forwardCreate(provider.name.toLowerCase())"
 				>
-					<BaseIcon source="custom" icon="datasource-add" />
+					<BaseIcon source="material" icon="add" />
 					{{ $t("pages.administration.datasources.add.btnAdd") }}
-				</BaseButton>
+				</BaseButton> -->
+				<responsive-button
+					design="primary text"
+					source="material"
+					icon="add"
+					responsivedesign="primary icon text"
+					@click="forwardCreate(provider.name.toLowerCase())"
+				>
+					{{ $t("pages.administration.datasources.add.btnAdd") }}
+				</responsive-button>
 			</template>
 		</datasource-card>
 	</div>
@@ -33,11 +42,13 @@
 <script>
 import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
 import DatasourceCard from "@components/molecules/DatasourceCard";
+import ResponsiveButton from "@components/base/ResponsiveButton";
 
 export default {
 	components: {
 		BaseBreadcrumb,
 		DatasourceCard,
+		ResponsiveButton,
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
