@@ -18,13 +18,6 @@
 			class="mb--md"
 		>
 			<template v-slot:actions>
-				<!-- <BaseButton
-					design="primary text"
-					@click="forwardCreate(provider.name.toLowerCase())"
-				>
-					<BaseIcon source="material" icon="add" />
-					{{ $t("pages.administration.datasources.add.btnAdd") }}
-				</BaseButton> -->
 				<responsive-button
 					design="primary text"
 					source="material"
