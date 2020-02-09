@@ -114,7 +114,7 @@
 		"jest-serializer-vue": "^2.0.2",
 		"lint-staged": "^10.0.7",
 		"lodash": "^4.17.15",
-		"markdownlint-cli": "^0.21.0",
+		"markdownlint-cli": "^0.22.0",
 		"node-sass": "^4.13.1",
 		"npm-run-all": "^4.1.5",
 		"nuxt-babel": "^1.0.1",
