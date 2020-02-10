@@ -1,24 +1,93 @@
+import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
 
-describe("@components/6 Organisms/DataTable/DataTable", () => {
+const data = tableData(50);
+
+function getWrapper(attributes) {
+	return mount(DataTable, {
+		propsData: {
+			data: data,
+			trackBy: "id",
+			columns: tableColumns,
+			...attributes,
+		},
+	});
+}
+
+const getTableRowsContent = (wrapper) =>
+	wrapper.findAll("tbody tr").wrappers.map((rowWrapper) => {
+		return rowWrapper.findAll("td").wrappers.map((cell) => cell.text());
+	});
+
+describe("@components/organisms/DataTable/DataTable", () => {
+	console.error = () => "";
 	it(...isValidComponent(DataTable));
 
-	describe("pagination", () => {
+	describe.skip("pagination", () => {
 		it.todo("should limit data to paginated items only");
 
 		it.todo("should paginate corretly when sorting is enabled");
 	});
 
-	it.skip("Should sort the data", () => {
-		var wrapper = getWrapper();
+	describe("sort", () => {
+		const sortedFirstItem = "AAA";
+		const sortedOtherItems = "LastItem";
+		const testItems = 4;
+		const centerIndex = Math.floor(testItems / 2);
+		const flatData = tableData(testItems, (index) => ({
+			firstName: index === centerIndex ? sortedFirstItem : sortedOtherItems,
+		}));
+		const isUnsorted = (wrapper) => {
+			const renderedData = getTableRowsContent(wrapper);
+			expect(renderedData[0][0]).toContain(sortedOtherItems);
+			expect(renderedData[centerIndex][0]).toContain(sortedFirstItem);
+		};
+		const isSortedAsc = (wrapper) => {
+			const renderedData = getTableRowsContent(wrapper);
+			expect(renderedData[0][0]).toContain(sortedFirstItem);
+			expect(renderedData[1][0]).toContain(sortedOtherItems);
+		};
+		const isSortedDesc = (wrapper) => {
+			const renderedData = getTableRowsContent(wrapper);
+			expect(renderedData[renderedData.length - 1][0]).toContain(
+				sortedFirstItem
+			);
+		};
+		const getSortButton = (wrapper, text = "Vorname") =>
+			wrapper
+				.findAll(".is-sortable button")
+				.wrappers.find((w) => w.text() === text);
 
-		expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
+		it("table header clicks should toggle the sortorder", async () => {
+			const wrapper = getWrapper({
+				data: flatData,
+			});
+			const sortButton = getSortButton(wrapper);
 
-		wrapper
-			.findAll(".is-sortable")
-			.at(0)
-			.trigger("click");
+			isUnsorted(wrapper);
+			sortButton.trigger("click"); // sort asc on first click
+			isSortedAsc(wrapper);
+			sortButton.trigger("click"); // sort desc on second click
+			isSortedDesc(wrapper);
+			sortButton.trigger("click"); // sort asc on third click
+			isSortedAsc(wrapper);
+		});
 
-		expect(wrapper.find("tbody tr td").html()).toContain("Armin");
+		it("should sort data initially (asc by default)", async () => {
+			const wrapperAsc = getWrapper({
+				data: flatData,
+				sortBy: "firstName",
+			});
+			isSortedAsc(wrapperAsc);
+		});
+
+		it("should sort data initially by sortOrder", async () => {
+			const wrapperDesc = getWrapper({
+				data: flatData,
+				sortBy: "firstName",
+				sortOrder: "desc",
+			});
+			isSortedDesc(wrapperDesc);
+		});
 	});
 });

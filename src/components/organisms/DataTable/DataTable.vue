@@ -3,8 +3,8 @@
 		v-bind="attrsProxy"
 		:data="paginatedSortedData"
 		:total="sortedData.length"
-		:sort-by.sync="localSortBy"
-		:sort-order.sync="localSortOrder"
+		:sort-by.sync="sortByProxy"
+		:sort-order.sync="sortOrderProxy"
 		v-on="$listeners"
 	>
 		<!-- TODO pass through all slots -->
@@ -13,34 +13,6 @@
 <script>
 import { getValueByPath } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
-
-const sortData = (data, sortBy, sortOrder) => {
-	const sortedData = [...data].sort((first, second) => {
-		const a = getValueByPath(first, sortBy);
-		const b = getValueByPath(second, sortBy);
-		// handle undefined values
-		if (!a) {
-			return -1;
-		}
-		if (!b) {
-			return 1;
-		}
-
-		// sort numbers
-		if (!isNaN(a) && !isNaN(b)) {
-			return a - b;
-		}
-
-		// sort booleans
-		if (typeof a === "boolean" && typeof b === "boolean") {
-			return a === b ? 0 : a ? -1 : 1;
-		}
-
-		// sort strings
-		return a.localeCompare(b);
-	});
-	return sortOrder !== "desc" ? sortedData : sortedData.reverse();
-};
 
 export default {
 	components: {
@@ -52,15 +24,15 @@ export default {
 		 */
 		sortMethod: {
 			type: Function,
-			default: sortData,
+			default: undefined,
 		},
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
 	},
 	data() {
 		return {
-			localSortBy: this.sortBy,
-			localSortOrder: this.sortOrder,
+			localSortBy: undefined,
+			localSortOrder: undefined,
 		};
 	},
 	computed: {
@@ -74,10 +46,13 @@ export default {
 			// TODO should sort the data according to the selection
 			const raw = this.data;
 
-			if (!this.sortBy) {
+			if (!this.sortByProxy) {
 				return raw;
 			}
-			return this.sortMethod(raw, this.localSortBy, this.localSortOrder);
+			const sortMethod = this.sortmethod || this.sort;
+			const out = sortMethod(raw, this.sortByProxy, this.sortOrderProxy);
+
+			return out;
 		},
 		paginatedSortedData() {
 			if (!this.paginated) {
@@ -89,9 +64,26 @@ export default {
 				currentPage * rowsPerPage
 			);
 		},
+		sortByProxy: {
+			get() {
+				return this.localSortBy || this.sortBy;
+			},
+			set(to) {
+				this.localSortBy = to;
+				this.$emit("update:sortBy", to);
+			},
+		},
+		sortOrderProxy: {
+			get() {
+				return this.localSortOrder || this.sortOrder;
+			},
+			set(to) {
+				this.localSortOrder = to;
+				this.$emit("update:sortOrder", to);
+			},
+		},
 	},
 	watch: {
-		// use this complicated sync/proxy method to work even when props are not specified and synced (local first)
 		sortBy(to) {
 			if (to !== this.localSortBy) {
 				this.localSortBy = to;
@@ -102,21 +94,34 @@ export default {
 				this.localSortOrder = to;
 			}
 		},
-		localSortBy(to) {
-			if (to !== this.sortBy) {
-				/**
-				 * helper event for the sortBy .sync modifier
-				 */
-				this.$emit("update:sortBy", to);
-			}
-		},
-		localSortOrder(to) {
-			if (to !== this.sortOrder) {
-				/**
-				 * helper event for the sortOrder .sync modifier
-				 */
-				this.$emit("update:sortOrder", to);
-			}
+	},
+	methods: {
+		sort(data, sortBy, sortOrder) {
+			const sortedData = [...data].sort((first, second) => {
+				const a = getValueByPath(first, sortBy);
+				const b = getValueByPath(second, sortBy);
+				// handle undefined values
+				if (!a) {
+					return -1;
+				}
+				if (!b) {
+					return 1;
+				}
+
+				// sort numbers
+				if (!isNaN(a) && !isNaN(b)) {
+					return a - b;
+				}
+
+				// sort booleans
+				if (typeof a === "boolean" && typeof b === "boolean") {
+					return a === b ? 0 : a ? -1 : 1;
+				}
+
+				// sort strings
+				return a.localeCompare(b);
+			});
+			return sortOrder !== "desc" ? sortedData : sortedData.reverse();
 		},
 	},
 	/**
