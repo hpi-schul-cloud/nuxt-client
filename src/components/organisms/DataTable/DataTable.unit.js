@@ -89,5 +89,60 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			});
 			isSortedDesc(wrapperDesc);
 		});
+
+		describe("default sort method", () => {
+			it("can sort booleans asc", async () => {
+				const testData = [{ b: true }, { b: false }, { b: true }];
+				const result = DataTable.methods.sort(testData, "b", "asc");
+				expect(result).toStrictEqual([{ b: false }, { b: true }, { b: true }]);
+			});
+			it("can sort booleans desc", async () => {
+				const testData = [{ b: true }, { b: false }, { b: true }];
+				const result = DataTable.methods.sort(testData, "b", "desc");
+				expect(result).toStrictEqual([{ b: true }, { b: true }, { b: false }]);
+			});
+
+			it("can sort numbers asc", async () => {
+				const testData = [{ n: 7 }, { n: 2 }, { n: 9 }];
+				const result = DataTable.methods.sort(testData, "n", "asc");
+				expect(result).toStrictEqual([{ n: 2 }, { n: 7 }, { n: 9 }]);
+			});
+			it("can sort numbers desc", async () => {
+				const testData = [{ n: 7 }, { n: 2 }, { n: 9 }];
+				const result = DataTable.methods.sort(testData, "n", "desc");
+				expect(result).toStrictEqual([{ n: 9 }, { n: 7 }, { n: 2 }]);
+			});
+
+			it("can sort strings asc", async () => {
+				const testData = [
+					{ s: "Bbb" },
+					{ s: "aAA" },
+					{ s: "Aaa" },
+					{ s: "bBB" },
+				];
+				const result = DataTable.methods.sort(testData, "s", "asc");
+				expect(result).toStrictEqual([
+					{ s: "aAA" },
+					{ s: "Aaa" },
+					{ s: "bBB" },
+					{ s: "Bbb" },
+				]);
+			});
+			it("can sort strings desc", () => {
+				const testData = [
+					{ s: "Bbb" },
+					{ s: "aAA" },
+					{ s: "Aaa" },
+					{ s: "bBB" },
+				];
+				const result = DataTable.methods.sort(testData, "s", "desc");
+				expect(result).toStrictEqual([
+					{ s: "Bbb" },
+					{ s: "bBB" },
+					{ s: "Aaa" },
+					{ s: "aAA" },
+				]);
+			});
+		});
 	});
 });
