@@ -59,10 +59,7 @@ jobs:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
     # Test
-    - script:
-        - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
-        - chmod 700 integration-test.sh
-        - bash integration-test.sh
+    - script: curl "https://gist.githubusercontent.com/schul-cloud-bot/0cba8294a2faab5743eefea69f956541/raw/fetch.travis.sh" | bash
       name: "test:integration"
       if: NOT (branch ~= /^greenkeeper\/.*$/ AND type != pull_request)
       env:
