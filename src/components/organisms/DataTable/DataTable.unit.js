@@ -23,10 +23,105 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	console.error = () => "";
 	it(...isValidComponent(DataTable));
 
-	describe.skip("pagination", () => {
-		it.todo("should limit data to paginated items only");
+	describe("pagination", () => {
+		const total = 150;
+		const bigData = tableData(total);
 
-		it.todo("should paginate corretly when sorting is enabled");
+		const getNextPageButton = (wrapper) =>
+			wrapper
+				.findAll(".pagination-link")
+				.wrappers.find((w) => w.attributes("aria-label") === "Goto next page");
+		const getPrevPageButton = (wrapper) =>
+			wrapper
+				.findAll(".pagination-link")
+				.wrappers.find(
+					(w) => w.attributes("aria-label") === "Goto previous page"
+				);
+
+		const isPageValid = (wrapper, page, pageSize) => {
+			const renderedData = getTableRowsContent(wrapper);
+			expect(renderedData).toHaveLength(pageSize);
+			renderedData.forEach((row, index) => {
+				const testIndex = pageSize * (page - 1) + index;
+				expect(JSON.stringify(bigData[testIndex])).toContain(row[0]);
+			});
+		};
+
+		it("should not paginate by default", async () => {
+			const wrapper = getWrapper({
+				data: bigData,
+			});
+			expect(getTableRowsContent(wrapper)).toHaveLength(total);
+		});
+
+		it("should limit data to paginated items only", async () => {
+			const pageSize = 25;
+			const wrapper = getWrapper({
+				data: bigData,
+				paginated: true,
+				rowsPerPage: pageSize,
+			});
+			const renderedData = getTableRowsContent(wrapper);
+			expect(renderedData).toHaveLength(pageSize);
+			renderedData.forEach((row, index) => {
+				expect(JSON.stringify(bigData[index])).toContain(row[0]);
+			});
+		});
+
+		it("should show correct data on page 2", async () => {
+			const pageSize = 25;
+			const wrapper = getWrapper({
+				data: bigData,
+				paginated: true,
+				rowsPerPage: pageSize,
+				currentPage: 2,
+			});
+			isPageValid(wrapper, 2, pageSize);
+		});
+
+		it("should provide buttons to navigate pages", async () => {
+			const pageSize = 20;
+			const wrapper = getWrapper({
+				data: bigData,
+				paginated: true,
+				rowsPerPage: pageSize,
+				currentPage: 1,
+			});
+			isPageValid(wrapper, 1, pageSize);
+			getNextPageButton(wrapper).trigger("click");
+			isPageValid(wrapper, 2, pageSize);
+			getPrevPageButton(wrapper).trigger("click");
+			isPageValid(wrapper, 1, pageSize);
+		});
+
+		it("should react to parent rowsPerPage changes", async () => {
+			const orgPageSize = 20;
+			const newPageSize = 50;
+			const wrapper = getWrapper({
+				data: bigData,
+				paginated: true,
+				rowsPerPage: orgPageSize,
+				currentPage: 1,
+			});
+			isPageValid(wrapper, 1, orgPageSize);
+			wrapper.setProps({ rowsPerPage: newPageSize });
+			isPageValid(wrapper, 1, newPageSize);
+		});
+
+		it("should react to parent page changes", async () => {
+			const orgPage = 2;
+			const newPage = 3;
+			const pageSize = 24;
+			const wrapper = getWrapper({
+				data: bigData,
+				paginated: true,
+				rowsPerPage: pageSize,
+				currentPage: orgPage,
+			});
+			isPageValid(wrapper, orgPage, pageSize);
+			wrapper.setProps({ currentPage: newPage });
+			isPageValid(wrapper, newPage, pageSize);
+		});
 	});
 
 	describe("sort", () => {
@@ -90,16 +185,50 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			isSortedDesc(wrapperDesc);
 		});
 
+		it("should react to parent sortBy changes", async () => {
+			const wrapper = getWrapper({
+				data: flatData,
+			});
+			isUnsorted(wrapper);
+			wrapper.setProps({ sortBy: "firstName" });
+			isSortedAsc(wrapper);
+		});
+
+		it("should react to parent sortOrder changes", async () => {
+			const wrapper = getWrapper({
+				data: flatData,
+				sortBy: "firstName",
+				sortOrder: "desc",
+			});
+			isSortedDesc(wrapper);
+			wrapper.setProps({ sortOrder: "asc" });
+			isSortedAsc(wrapper);
+		});
+
 		describe("default sort method", () => {
+			it("can sort undefined values", async () => {
+				const testData = [
+					{ b: undefined },
+					{ b: "something" },
+					{ b: undefined },
+				];
+				const result = DataTable.methods.sort(testData, "b", "asc");
+				expect(result).toStrictEqual([
+					{ b: "something" },
+					{ b: undefined },
+					{ b: undefined },
+				]);
+			});
+
 			it("can sort booleans asc", async () => {
 				const testData = [{ b: true }, { b: false }, { b: true }];
 				const result = DataTable.methods.sort(testData, "b", "asc");
-				expect(result).toStrictEqual([{ b: false }, { b: true }, { b: true }]);
+				expect(result).toStrictEqual([{ b: true }, { b: true }, { b: false }]);
 			});
 			it("can sort booleans desc", async () => {
 				const testData = [{ b: true }, { b: false }, { b: true }];
 				const result = DataTable.methods.sort(testData, "b", "desc");
-				expect(result).toStrictEqual([{ b: true }, { b: true }, { b: false }]);
+				expect(result).toStrictEqual([{ b: false }, { b: true }, { b: true }]);
 			});
 
 			it("can sort numbers asc", async () => {

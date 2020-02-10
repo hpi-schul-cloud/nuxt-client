@@ -5,6 +5,7 @@
 		:total="sortedData.length"
 		:sort-by.sync="sortByProxy"
 		:sort-order.sync="sortOrderProxy"
+		:current-page.sync="currentPageProxy"
 		v-on="$listeners"
 	>
 		<!-- TODO pass through all slots -->
@@ -33,6 +34,8 @@ export default {
 		return {
 			localSortBy: undefined,
 			localSortOrder: undefined,
+			localCurrentPage: undefined,
+			localRowsPerPage: undefined,
 		};
 	},
 	computed: {
@@ -58,11 +61,32 @@ export default {
 			if (!this.paginated) {
 				return this.sortedData;
 			}
-			const { currentPage, rowsPerPage } = this;
+			const {
+				currentPageProxy: currentPage,
+				rowsPerPageProxy: rowsPerPage,
+			} = this;
 			return this.sortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage
 			);
+		},
+		currentPageProxy: {
+			get() {
+				return this.localCurrentPage || this.currentPage;
+			},
+			set(to) {
+				this.localCurrentPage = to;
+				this.$emit("update:currentPage", to);
+			},
+		},
+		rowsPerPageProxy: {
+			get() {
+				return this.localRowsPerPage || this.rowsPerPage;
+			},
+			set(to) {
+				this.localRowsPerPage = to;
+				this.$emit("update:rows-per-page", to);
+			},
 		},
 		sortByProxy: {
 			get() {
@@ -84,6 +108,16 @@ export default {
 		},
 	},
 	watch: {
+		currentPage(to) {
+			if (to !== this.localCurrentPage) {
+				this.localCurrentPage = to;
+			}
+		},
+		rowsPerPage(to) {
+			if (to !== this.localRowsPerPage) {
+				this.localRowsPerPage = to;
+			}
+		},
 		sortBy(to) {
 			if (to !== this.localSortBy) {
 				this.localSortBy = to;
@@ -101,15 +135,15 @@ export default {
 				const a = getValueByPath(first, sortBy);
 				const b = getValueByPath(second, sortBy);
 				// handle undefined values
-				if (!a) {
-					return -1;
-				}
-				if (!b) {
+				if (a === undefined || a === null) {
 					return 1;
+				}
+				if (b === undefined || b === null) {
+					return -1;
 				}
 
 				// sort numbers
-				if (!isNaN(a) && !isNaN(b)) {
+				if (typeof a === "number" && typeof b === "number") {
 					return a - b;
 				}
 
