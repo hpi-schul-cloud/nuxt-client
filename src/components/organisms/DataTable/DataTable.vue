@@ -20,6 +20,8 @@ export default {
 		BackendDataTable,
 	},
 	props: {
+		// all other props are inherited from the BackendDataTable
+		...BackendDataTable.props,
 		/**
 		 * (data, sortBy, sortOrder) => sortedData
 		 */
@@ -27,8 +29,6 @@ export default {
 			type: Function,
 			default: undefined,
 		},
-		// all other props are inherited from the BackendDataTable
-		...BackendDataTable.props,
 	},
 	data() {
 		return {
@@ -109,24 +109,16 @@ export default {
 	},
 	watch: {
 		currentPage(to) {
-			if (to !== this.localCurrentPage) {
-				this.localCurrentPage = to;
-			}
+			this.localCurrentPage = to;
 		},
 		rowsPerPage(to) {
-			if (to !== this.localRowsPerPage) {
-				this.localRowsPerPage = to;
-			}
+			this.localRowsPerPage = to;
 		},
 		sortBy(to) {
-			if (to !== this.localSortBy) {
-				this.localSortBy = to;
-			}
+			this.localSortBy = to;
 		},
 		sortOrder(to) {
-			if (to !== this.localSortOrder) {
-				this.localSortOrder = to;
-			}
+			this.localSortOrder = to;
 		},
 	},
 	methods: {
@@ -158,10 +150,5 @@ export default {
 			return sortOrder !== "desc" ? sortedData : sortedData.reverse();
 		},
 	},
-	/**
-	 * TODO: simplfy API of BackendDataTable a bit to hide the selectionType invert stuff
-	 * that is required if we do not know all data beforehand. We don't have this case here
-	 * so we should provide a simlified API that always includes all items.
-	 */
 };
 </script>
