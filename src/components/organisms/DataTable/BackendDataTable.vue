@@ -95,6 +95,9 @@ export default {
 			required: true,
 		},
 
+		/**
+		 * should the data be displayed paginated?
+		 */
 		paginated: Boolean,
 		/**
 		 * The total number of available rows (including not visible items from other pages)
@@ -110,6 +113,9 @@ export default {
 			type: Number,
 			default: 1,
 		},
+		/**
+		 * items per page to show
+		 */
 		rowsPerPage: {
 			type: Number,
 			default: 25,
