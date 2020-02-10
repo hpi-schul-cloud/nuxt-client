@@ -108,6 +108,20 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			isPageValid(wrapper, 1, newPageSize);
 		});
 
+		it("passes rowsPerPage changes to parent and itself", async () => {
+			const oldValue = 50;
+			const newValue = 20;
+			const wrapper = getWrapper({
+				data: bigData,
+				paginated: true,
+				rowsPerPage: oldValue,
+				currentPage: 1,
+			});
+			wrapper.vm.rowsPerPageProxy = newValue; // simulate write to variable from .sync modifier from child
+			expect(wrapper.vm.localRowsPerPage).toBe(newValue);
+			expect(wrapper.emitted("update:rows-per-page")).toStrictEqual([[20]]);
+		});
+
 		it("should react to parent page changes", async () => {
 			const orgPage = 2;
 			const newPage = 3;
