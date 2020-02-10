@@ -288,4 +288,11 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			});
 		});
 	});
+
+	describe("selection", () => {
+		it.todo("can select a value");
+		it.todo("can preselect all values");
+		it.todo("can unselect a value after selecting all");
+		it.todo("handles exclusive mode updates from BackendDataTable");
+	});
 });
