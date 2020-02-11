@@ -264,8 +264,11 @@ export default {
 		selectionKeys(to) {
 			this.onUpdateSelectionKeys(to);
 		},
-		selectedRowIds(to) {
-			this.onUpdateSelectedRowIds(to);
+		selectedRowIds: {
+			handler(to) {
+				this.onUpdateSelectedRowIds(to);
+			},
+			immediate: true,
 		},
 	},
 	methods: {
@@ -318,7 +321,6 @@ export default {
 				// nothing to change
 				return;
 			}
-
 			const newSelectionKeys = to.reduce((obj, key) => {
 				obj[key] = true;
 				return obj;
