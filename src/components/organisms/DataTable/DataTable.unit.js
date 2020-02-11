@@ -293,12 +293,13 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	});
 
 	describe("selection", () => {
-		const total = 6;
-		const selectionData = tableData(total, (index) => ({
+		const total = 10;
+		const testData = tableData(total, (index) => ({
 			id: String(index), // simplify IDs of test data for easier testing
 		}));
 
-		const getVisibleSelections = (wrapper) => {
+		const getVisibleSelections = async (wrapper) => {
+			await wrapper.vm.$nextTick();
 			const rowWrappers = wrapper.findAll("tbody tr").wrappers;
 			return rowWrappers
 				.filter((rowWrapper) => {
@@ -309,27 +310,83 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				});
 		};
 
-		const hasSelections = (wrapper, data, expectedSelectionIds) => {
-			const visibleSelections = getVisibleSelections(wrapper);
-			return expectedSelectionIds.every((expectedId) => {
-				const selectionFirstName = data.find((row) => row.id === expectedId)
-					.firstName;
-				return visibleSelections.find(
-					(selectionRow) => selectionRow[1] === selectionFirstName
-				);
-			});
+		const hasVisibleSelections = async (
+			wrapper,
+			data,
+			expectedSelectionIds
+		) => {
+			await wrapper.vm.$nextTick();
+			const visibleSelections = await getVisibleSelections(wrapper);
+			return (
+				visibleSelections.length === expectedSelectionIds.length &&
+				expectedSelectionIds.every((expectedId) => {
+					const selectionFirstName = data.find((row) => row.id === expectedId)
+						.firstName;
+					return visibleSelections.find(
+						(selectionRow) => selectionRow[1] === selectionFirstName
+					);
+				})
+			);
 		};
 
 		it("can select a value", async () => {
 			const wrapper = getWrapper({
-				data: selectionData,
+				data: testData,
 				rowsSelectable: true,
 			});
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
-			await wrapper.vm.$nextTick();
-			expect(getVisibleSelections(wrapper)).toHaveLength(1);
+			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
-				[[selectionData[0].id]],
+				[[testData[0].id]],
+			]);
+		});
+
+		it("can unselect a value", async () => {
+			const wrapper = getWrapper({
+				data: testData,
+				selection: ["0"],
+				rowsSelectable: true,
+			});
+			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
+			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			expect(wrapper.emitted("update:selection")).toStrictEqual([[[]]]);
+		});
+
+		it("can select all values on page", async () => {
+			const rowsPerPage = Math.floor(total / 2);
+			const expectedSelection = [...Array(rowsPerPage).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				paginated: true,
+				rowsPerPage,
+				rowsSelectable: true,
+			});
+			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			wrapper.find("thead tr input[type=checkbox]").trigger("click");
+			expect(
+				await hasVisibleSelections(wrapper, testData, expectedSelection)
+			).toBe(true);
+			expect(wrapper.emitted("update:selection")[0]).toStrictEqual([
+				expectedSelection,
+			]);
+		});
+
+		it("can select all values from all page", async () => {
+			const rowsPerPage = Math.floor(total / 2);
+			const expectedSelection = [...Array(total).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				paginated: true,
+				rowsPerPage,
+				rowsSelectable: true,
+			});
+			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			wrapper.find("thead tr input[type=checkbox]").trigger("click");
+			await wrapper.vm.$nextTick();
+			wrapper.find("button.select-all-rows").trigger("click");
+			expect(wrapper.emitted("update:selection")[1]).toStrictEqual([
+				expectedSelection,
 			]);
 		});
 
@@ -337,25 +394,47 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			const totalSelections = Math.floor(total / 2);
 			const selection = [...Array(totalSelections).keys()].map(String);
 			const wrapper = getWrapper({
-				data: selectionData,
+				data: testData,
 				selection,
 				rowsSelectable: true,
 			});
-			expect(getVisibleSelections(wrapper)).toHaveLength(totalSelections);
-			expect(hasSelections(wrapper, selectionData, selection)).toBe(true);
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
+			);
 		});
+
 		it("can preselect all values", async () => {
 			const totalSelections = total;
 			const selection = [...Array(totalSelections).keys()].map(String);
 			const wrapper = getWrapper({
-				data: selectionData,
+				data: testData,
 				selection,
 				rowsSelectable: true,
 			});
-			expect(getVisibleSelections(wrapper)).toHaveLength(totalSelections);
-			expect(hasSelections(wrapper, selectionData, selection)).toBe(true);
+			wrapper.emitted();
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
+			);
 		});
-		it.todo("can unselect a value after selecting all");
-		it.todo("handles exclusive mode updates from BackendDataTable");
+
+		it("can unselect a value after selecting all", async () => {
+			const selection = [...Array(total).keys()].map(String);
+			const expectedSelection = selection.slice(1); // first element unchecked
+			const wrapper = getWrapper({
+				data: testData,
+				selection,
+				rowsSelectable: true,
+				rowsPerPage: 50,
+			});
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
+			);
+			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			expect(
+				await hasVisibleSelections(wrapper, testData, expectedSelection)
+			).toBe(true);
+		});
 	});
 });
