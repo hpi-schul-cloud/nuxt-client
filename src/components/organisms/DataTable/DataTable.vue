@@ -142,8 +142,22 @@ export default {
 		selection(to) {
 			this.handleParentSelectionUpdate(to);
 		},
+		data() {
+			this.validateData();
+		},
+	},
+	created() {
+		this.validateData();
 	},
 	methods: {
+		validateData() {
+			const isValid = this.data.every(
+				(row) => typeof getValueByPath(row, this.trackBy) === "string"
+			);
+			if (!isValid) {
+				throw new Error(`provided dataset is invalid`);
+			}
+		},
 		handleParentSelectionUpdate(selection) {
 			if (selection.length === this.data.length) {
 				this.$set(this, "backendTableSelection", []);

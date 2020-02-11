@@ -295,7 +295,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	describe("selection", () => {
 		const total = 6;
 		const selectionData = tableData(total, (index) => ({
-			id: index, // simplify IDs of test data for easier testing
+			id: String(index), // simplify IDs of test data for easier testing
 		}));
 
 		const getVisibleSelections = (wrapper) => {
@@ -320,12 +320,13 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			});
 		};
 
-		it.skip("can select a value", () => {
+		it("can select a value", async () => {
 			const wrapper = getWrapper({
 				data: selectionData,
 				rowsSelectable: true,
 			});
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			await wrapper.vm.$nextTick();
 			expect(getVisibleSelections(wrapper)).toHaveLength(1);
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
 				[[selectionData[0].id]],
@@ -334,7 +335,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 
 		it("can preselect values", async () => {
 			const totalSelections = Math.floor(total / 2);
-			const selection = [...Array(totalSelections).keys()];
+			const selection = [...Array(totalSelections).keys()].map(String);
 			const wrapper = getWrapper({
 				data: selectionData,
 				selection,
@@ -345,7 +346,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 		});
 		it("can preselect all values", async () => {
 			const totalSelections = total;
-			const selection = [...Array(totalSelections).keys()];
+			const selection = [...Array(totalSelections).keys()].map(String);
 			const wrapper = getWrapper({
 				data: selectionData,
 				selection,
