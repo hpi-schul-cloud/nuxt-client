@@ -31,12 +31,7 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 			rowsPerPage: number("rowsPerPage", 5),
 
 			rowsSelectable: boolean("rowsSelectable", true),
-			selectionType: select(
-				"selectionType",
-				{ inclusive: "inclusive", exclusive: "exclusive" },
-				"inclusive"
-			),
-			selectedRowIds: array("selectedRowIds", []),
+			selection: array(selection, [randomData[0].id, randomData[1].id], ","),
 
 			actions: tableActions(randomData),
 
@@ -54,7 +49,9 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 			onUpdateSelection: action("@update:selection"),
 		},
 		template: `
-			<DataTable
+			<div>
+				{{selection}}
+				<DataTable
 				:columns="columns"
 				:data="randomData"
 				:trackBy="trackBy"
@@ -67,15 +64,14 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 				@update:rows-per-page="onUpdateRowsPerPage"
 
 				:rowsSelectable="rowsSelectable"
-				:selectionType.sync="selectionType"
-				:selectedRowIds.sync="selectedRowIds"
+				:selection.sync="selection"
 				@update:selection="onUpdateSelection"
 
 				:actions="actions"
 
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
-			/>
-		`,
+				/>
+			</div>`,
 	};
 });

@@ -1,12 +1,12 @@
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
 
-const data = tableData(50);
+const defaultData = tableData(50);
 
 function getWrapper(attributes) {
 	return mount(DataTable, {
 		propsData: {
-			data: data,
+			data: defaultData,
 			trackBy: "id",
 			columns: tableColumns,
 			...attributes,
@@ -20,7 +20,7 @@ const getTableRowsContent = (wrapper) =>
 	});
 
 describe("@components/organisms/DataTable/DataTable", () => {
-	console.error = () => "";
+	console.error = () => ""; // TODO remove
 	it(...isValidComponent(DataTable));
 
 	describe("pagination", () => {
@@ -290,7 +290,57 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	});
 
 	describe("selection", () => {
-		it.todo("can select a value");
+		const total = 6;
+		const selectionData = tableData(total, (index) => ({
+			id: index, // simplify IDs of test data for easier testing
+		}));
+
+		const getVisibleSelections = (wrapper) => {
+			const rowWrappers = wrapper.findAll("tbody tr").wrappers;
+			return rowWrappers
+				.filter((rowWrapper) => {
+					return rowWrapper.find("input[type=checkbox]").element.checked;
+				})
+				.map((rowWrapper) => {
+					return rowWrapper.findAll("td").wrappers.map((cell) => cell.text());
+				});
+		};
+
+		const hasSelections = (wrapper, data, expectedSelectionIds) => {
+			const visibleSelections = getVisibleSelections(wrapper);
+			return expectedSelectionIds.every((expectedId) => {
+				const selectionFirstName = data.find((row) => row.id === expectedId)
+					.firstName;
+				return visibleSelections.find(
+					(selectionRow) => selectionRow[1] === selectionFirstName
+				);
+			});
+		};
+
+		it.skip("can select a value", () => {
+			const wrapper = getWrapper({
+				data: selectionData,
+				rowsSelectable: true,
+			});
+			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			expect(getVisibleSelections(wrapper)).toHaveLength(1);
+			console.log(wrapper.emitted("update:selection"));
+			expect(wrapper.emitted("update:selection")).toStrictEqual([
+				[[selectionData[0].id]],
+			]);
+		});
+
+		it("can preselect values", async () => {
+			const totalSelections = Math.floor(total / 2);
+			const selection = [...Array(totalSelections).keys()];
+			const wrapper = getWrapper({
+				data: selectionData,
+				selection,
+				rowsSelectable: true,
+			});
+			expect(getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(hasSelections(wrapper, selectionData, selection)).toBe(true);
+		});
 		it.todo("can preselect all values");
 		it.todo("can unselect a value after selecting all");
 		it.todo("handles exclusive mode updates from BackendDataTable");

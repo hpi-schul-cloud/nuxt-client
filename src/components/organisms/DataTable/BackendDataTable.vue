@@ -275,10 +275,12 @@ export default {
 		selectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
 			this.$emit("update:selectionType", "exclusive");
+			this.$emit("update:selection", [], "exclusive");
 		},
 		unselectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
 			this.$emit("update:selectionType", "inclusive");
+			this.$emit("update:selection", [], "inclusive");
 		},
 		setRowSelection(row, state) {
 			const method = (newState) => (newState ? "$set" : "$delete");
