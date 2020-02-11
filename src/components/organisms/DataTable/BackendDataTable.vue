@@ -1,5 +1,3 @@
-<!-- eslint-disable max-lines -->
-<!-- TODO do not disable max-lines -->
 <template>
 	<div class="table-outer">
 		<div class="table-wrapper">

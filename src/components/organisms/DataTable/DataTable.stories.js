@@ -49,9 +49,7 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 			onUpdateSelection: action("@update:selection"),
 		},
 		template: `
-			<div>
-				{{selection}}
-				<DataTable
+			<DataTable
 				:columns="columns"
 				:data="randomData"
 				:trackBy="trackBy"
@@ -71,7 +69,6 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
-				/>
-			</div>`,
+			/>`,
 	};
 });
