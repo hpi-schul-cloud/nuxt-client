@@ -14,10 +14,12 @@ function getWrapper(attributes) {
 	});
 }
 
-const getTableRowsContent = (wrapper) =>
-	wrapper.findAll("tbody tr").wrappers.map((rowWrapper) => {
+const getTableRowsContent = async (wrapper) => {
+	await wrapper.vm.$nextTick();
+	return wrapper.findAll("tbody tr").wrappers.map((rowWrapper) => {
 		return rowWrapper.findAll("td").wrappers.map((cell) => cell.text());
 	});
+};
 
 describe("@components/organisms/DataTable/DataTable", () => {
 	console.error = () => ""; // TODO remove
@@ -38,8 +40,9 @@ describe("@components/organisms/DataTable/DataTable", () => {
 					(w) => w.attributes("aria-label") === "Goto previous page"
 				);
 
-		const isPageValid = (wrapper, page, pageSize) => {
-			const renderedData = getTableRowsContent(wrapper);
+		const isPageValid = async (wrapper, page, pageSize) => {
+			await wrapper.vm.$nextTick();
+			const renderedData = await getTableRowsContent(wrapper);
 			expect(renderedData).toHaveLength(pageSize);
 			renderedData.forEach((row, index) => {
 				const testIndex = pageSize * (page - 1) + index;
@@ -51,7 +54,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			const wrapper = getWrapper({
 				data: bigData,
 			});
-			expect(getTableRowsContent(wrapper)).toHaveLength(total);
+			expect(await getTableRowsContent(wrapper)).toHaveLength(total);
 		});
 
 		it("should limit data to paginated items only", async () => {
@@ -61,7 +64,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				paginated: true,
 				rowsPerPage: pageSize,
 			});
-			const renderedData = getTableRowsContent(wrapper);
+			const renderedData = await getTableRowsContent(wrapper);
 			expect(renderedData).toHaveLength(pageSize);
 			renderedData.forEach((row, index) => {
 				expect(JSON.stringify(bigData[index])).toContain(row[0]);
@@ -76,7 +79,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: pageSize,
 				currentPage: 2,
 			});
-			isPageValid(wrapper, 2, pageSize);
+			await isPageValid(wrapper, 2, pageSize);
 		});
 
 		it("should provide buttons to navigate pages", async () => {
@@ -87,11 +90,11 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: pageSize,
 				currentPage: 1,
 			});
-			isPageValid(wrapper, 1, pageSize);
+			await isPageValid(wrapper, 1, pageSize);
 			getNextPageButton(wrapper).trigger("click");
-			isPageValid(wrapper, 2, pageSize);
+			await isPageValid(wrapper, 2, pageSize);
 			getPrevPageButton(wrapper).trigger("click");
-			isPageValid(wrapper, 1, pageSize);
+			await isPageValid(wrapper, 1, pageSize);
 		});
 
 		it("should react to parent rowsPerPage changes", async () => {
@@ -103,9 +106,9 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: orgPageSize,
 				currentPage: 1,
 			});
-			isPageValid(wrapper, 1, orgPageSize);
+			await isPageValid(wrapper, 1, orgPageSize);
 			wrapper.setProps({ rowsPerPage: newPageSize });
-			isPageValid(wrapper, 1, newPageSize);
+			await isPageValid(wrapper, 1, newPageSize);
 		});
 
 		it("passes rowsPerPage changes to parent and itself", async () => {
@@ -132,9 +135,9 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: pageSize,
 				currentPage: orgPage,
 			});
-			isPageValid(wrapper, orgPage, pageSize);
+			await isPageValid(wrapper, orgPage, pageSize);
 			wrapper.setProps({ currentPage: newPage });
-			isPageValid(wrapper, newPage, pageSize);
+			await isPageValid(wrapper, newPage, pageSize);
 		});
 	});
 
@@ -146,18 +149,18 @@ describe("@components/organisms/DataTable/DataTable", () => {
 		const flatData = tableData(testItems, (index) => ({
 			firstName: index === centerIndex ? sortedFirstItem : sortedOtherItems,
 		}));
-		const isUnsorted = (wrapper) => {
-			const renderedData = getTableRowsContent(wrapper);
+		const isUnsorted = async (wrapper) => {
+			const renderedData = await getTableRowsContent(wrapper);
 			expect(renderedData[0][0]).toContain(sortedOtherItems);
 			expect(renderedData[centerIndex][0]).toContain(sortedFirstItem);
 		};
-		const isSortedAsc = (wrapper) => {
-			const renderedData = getTableRowsContent(wrapper);
+		const isSortedAsc = async (wrapper) => {
+			const renderedData = await getTableRowsContent(wrapper);
 			expect(renderedData[0][0]).toContain(sortedFirstItem);
 			expect(renderedData[1][0]).toContain(sortedOtherItems);
 		};
-		const isSortedDesc = (wrapper) => {
-			const renderedData = getTableRowsContent(wrapper);
+		const isSortedDesc = async (wrapper) => {
+			const renderedData = await getTableRowsContent(wrapper);
 			expect(renderedData[renderedData.length - 1][0]).toContain(
 				sortedFirstItem
 			);
@@ -173,13 +176,13 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			});
 			const sortButton = getSortButton(wrapper);
 
-			isUnsorted(wrapper);
+			await isUnsorted(wrapper);
 			sortButton.trigger("click"); // sort asc on first click
-			isSortedAsc(wrapper);
+			await isSortedAsc(wrapper);
 			sortButton.trigger("click"); // sort desc on second click
-			isSortedDesc(wrapper);
+			await isSortedDesc(wrapper);
 			sortButton.trigger("click"); // sort asc on third click
-			isSortedAsc(wrapper);
+			await isSortedAsc(wrapper);
 		});
 
 		it("should sort data initially (asc by default)", async () => {
@@ -187,7 +190,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				data: flatData,
 				sortBy: "firstName",
 			});
-			isSortedAsc(wrapperAsc);
+			await isSortedAsc(wrapperAsc);
 		});
 
 		it("should sort data initially by sortOrder", async () => {
@@ -196,16 +199,16 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				sortBy: "firstName",
 				sortOrder: "desc",
 			});
-			isSortedDesc(wrapperDesc);
+			await isSortedDesc(wrapperDesc);
 		});
 
 		it("should react to parent sortBy changes", async () => {
 			const wrapper = getWrapper({
 				data: flatData,
 			});
-			isUnsorted(wrapper);
+			await isUnsorted(wrapper);
 			wrapper.setProps({ sortBy: "firstName" });
-			isSortedAsc(wrapper);
+			await isSortedAsc(wrapper);
 		});
 
 		it("should react to parent sortOrder changes", async () => {
@@ -214,9 +217,9 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				sortBy: "firstName",
 				sortOrder: "desc",
 			});
-			isSortedDesc(wrapper);
+			await isSortedDesc(wrapper);
 			wrapper.setProps({ sortOrder: "asc" });
-			isSortedAsc(wrapper);
+			await isSortedAsc(wrapper);
 		});
 
 		describe("default sort method", () => {
@@ -324,7 +327,6 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			});
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
 			expect(getVisibleSelections(wrapper)).toHaveLength(1);
-			console.log(wrapper.emitted("update:selection"));
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
 				[[selectionData[0].id]],
 			]);
@@ -341,7 +343,17 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			expect(getVisibleSelections(wrapper)).toHaveLength(totalSelections);
 			expect(hasSelections(wrapper, selectionData, selection)).toBe(true);
 		});
-		it.todo("can preselect all values");
+		it("can preselect all values", async () => {
+			const totalSelections = total;
+			const selection = [...Array(totalSelections).keys()];
+			const wrapper = getWrapper({
+				data: selectionData,
+				selection,
+				rowsSelectable: true,
+			});
+			expect(getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(hasSelections(wrapper, selectionData, selection)).toBe(true);
+		});
 		it.todo("can unselect a value after selecting all");
 		it.todo("handles exclusive mode updates from BackendDataTable");
 	});

@@ -6,9 +6,11 @@
 		:sort-by.sync="sortByProxy"
 		:sort-order.sync="sortOrderProxy"
 		:current-page.sync="currentPageProxy"
+		:rows-per-page.sync="rowsPerPageProxy"
 		:selected-row-ids="backendTableSelection"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
+		v-on="$listeners"
 	>
 		<!-- TODO pass through all slots -->
 	</backend-data-table>
