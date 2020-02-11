@@ -31,7 +31,7 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 			rowsPerPage: number("rowsPerPage", 5),
 
 			rowsSelectable: boolean("rowsSelectable", true),
-			selection: array(selection, [randomData[0].id, randomData[1].id], ","),
+			selection: array("selection", [randomData[0].id, randomData[1].id], ","),
 
 			actions: tableActions(randomData),
 

@@ -6,7 +6,9 @@
 		:sort-by.sync="sortByProxy"
 		:sort-order.sync="sortOrderProxy"
 		:current-page.sync="currentPageProxy"
-		v-on="$listeners"
+		:selected-row-ids="backendTableSelection"
+		:selection-type="backendTableSelectionType"
+		@update:selection="handleTableSelectionUpdate"
 	>
 		<!-- TODO pass through all slots -->
 	</backend-data-table>
@@ -14,6 +16,9 @@
 <script>
 import { getValueByPath } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
+
+const isArrayIdentical = (a, b) =>
+	a.length === b.length && a.every((item) => b.includes(item));
 
 export default {
 	components: {
@@ -29,6 +34,14 @@ export default {
 			type: Function,
 			default: undefined,
 		},
+		/**
+		 * Array of RowIds (trackBy) that should be selected.
+		 * Works with the .sync modifier.
+		 */
+		selection: {
+			type: Array,
+			default: () => [],
+		},
 	},
 	data() {
 		return {
@@ -36,6 +49,8 @@ export default {
 			localSortOrder: undefined,
 			localCurrentPage: undefined,
 			localRowsPerPage: undefined,
+			backendTableSelection: this.selection,
+			backendTableSelectionType: "inclusive",
 		};
 	},
 	computed: {
@@ -46,7 +61,6 @@ export default {
 			};
 		},
 		sortedData() {
-			// TODO should sort the data according to the selection
 			const raw = this.data;
 
 			if (!this.sortByProxy) {
@@ -106,6 +120,9 @@ export default {
 				this.$emit("update:sortOrder", to);
 			},
 		},
+		dataIds() {
+			return this.data.map((row) => getValueByPath(row, this.trackBy));
+		},
 	},
 	watch: {
 		currentPage(to) {
@@ -120,8 +137,30 @@ export default {
 		sortOrder(to) {
 			this.localSortOrder = to;
 		},
+		selection(to) {
+			this.handleParentSelectionUpdate(to);
+		},
 	},
 	methods: {
+		handleParentSelectionUpdate(selection) {
+			if (selection.length === this.data.length) {
+				this.$set(this, "backendTableSelection", []);
+				this.backendTableSelectionType = "exclusive";
+			} else {
+				this.$set(this, "backendTableSelection", selection);
+				this.backendTableSelectionType = "inclusive";
+			}
+		},
+		handleTableSelectionUpdate(selection, selectionType, initiator) {
+			const newSelection = this.dataIds.filter((rowId) => {
+				return selectionType === "exclusive"
+					? !selection.includes(rowId)
+					: selection.includes(rowId);
+			});
+			if (!isArrayIdentical(newSelection, this.selection)) {
+				this.$emit("update:selection", newSelection);
+			}
+		},
 		sort(data, sortBy, sortOrder) {
 			const sortedData = [...data].sort((first, second) => {
 				const a = getValueByPath(first, sortBy);

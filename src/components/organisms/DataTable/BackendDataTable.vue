@@ -1,3 +1,5 @@
+<!-- eslint-disable max-lines -->
+<!-- TODO do not disable max-lines -->
 <template>
 	<div class="table-outer">
 		<div class="table-wrapper">
@@ -27,7 +29,7 @@
 					<component
 						:is="componentDataRow"
 						v-for="(row, rowindex) in data"
-						:key="rowindex"
+						:key="getValueByPath(row, trackBy)"
 						:selectable="rowsSelectable"
 						:rowindex="rowindex"
 						:selected="isRowSelected(row)"
@@ -190,6 +192,7 @@ export default {
 			filterOpened: {},
 			newFiltersSelected: this.filtersSelected,
 			selectionKeys: {},
+			localSelectionType: "inclusive",
 		};
 	},
 	computed: {
@@ -229,7 +232,7 @@ export default {
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
-			return this.selectionType === "inclusive"
+			return this.localSelectionType === "inclusive"
 				? selections.length
 				: this.total - selections.length;
 		},
@@ -237,7 +240,9 @@ export default {
 			get() {
 				// TODO think about moving selections outside this method
 				const selections = Object.keys(this.selectionKeys);
-				return this.selectionType === "exclusive" && selections.length === 0;
+				return (
+					this.localSelectionType === "exclusive" && selections.length === 0
+				);
 			},
 			set(state) {
 				state
@@ -249,7 +254,7 @@ export default {
 			get() {
 				const isInSelection = (row) =>
 					this.selectionKeys[getValueByPath(row, this.trackBy)];
-				return this.selectionType === "inclusive"
+				return this.localSelectionType === "inclusive"
 					? Boolean(this.data.every(isInSelection))
 					: !Boolean(this.data.some(isInSelection));
 			},
@@ -261,30 +266,73 @@ export default {
 		},
 	},
 	watch: {
+		selectionType: {
+			handler(to) {
+				this.localSelectionType = to;
+			},
+			immediate: true,
+		},
 		selectionKeys(to) {
-			this.onUpdateSelectionKeys(to);
+			// update if any value has actually changed (prevent loops, deep array comparison)
+			if (
+				JSON.stringify(Object.keys(to)) !== JSON.stringify(this.selectedRowIds)
+			) {
+				/**
+				 * toggle whenever the selection changes
+				 *
+				 * @event update:selection
+				 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
+				 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
+				 * Inclusive means all items in the passed array are selected.
+				 * Exclusive means all items not in the passed array are selected.
+				 */
+				this.$emit(
+					"update:selection",
+					Object.keys(to),
+					this.localSelectionType,
+					"onUpdateSelectionKeys"
+				);
+				/**
+				 * helper event for the selectedRowIds .sync modifier
+				 */
+				this.$emit("update:selectedRowIds", Object.keys(to));
+			}
 		},
 		selectedRowIds: {
 			handler(to) {
-				this.onUpdateSelectedRowIds(to);
+				const isArrayIdentical = (a, b) =>
+					a.length === b.length && a.every((c, i) => c === b[i]);
+				if (isArrayIdentical(to, Object.keys(this.selectionKeys))) {
+					// nothing to change
+					return;
+				}
+				const newSelectionKeys = to.reduce((obj, key) => {
+					obj[key] = true;
+					return obj;
+				}, {});
+				this.$set(this, "selectionKeys", newSelectionKeys);
+				this.$forceUpdate();
 			},
 			immediate: true,
 		},
 	},
 	methods: {
+		getValueByPath,
 		selectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
+			this.localSelectionType = "exclusive";
 			this.$emit("update:selectionType", "exclusive");
 			this.$emit("update:selection", [], "exclusive");
 		},
 		unselectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
+			this.localSelectionType = "inclusive";
 			this.$emit("update:selectionType", "inclusive");
 			this.$emit("update:selection", [], "inclusive");
 		},
 		setRowSelection(row, state) {
 			const method = (newState) => (newState ? "$set" : "$delete");
-			this[method(this.selectionType === "inclusive" ? state : !state)](
+			this[method(this.localSelectionType === "inclusive" ? state : !state)](
 				this.selectionKeys,
 				getValueByPath(row, this.trackBy),
 				true
@@ -293,54 +341,18 @@ export default {
 		isRowSelected(row) {
 			const rowId = getValueByPath(row, this.trackBy);
 			return Boolean(
-				this.selectionType === "inclusive"
+				this.localSelectionType === "inclusive"
 					? this.selectionKeys[rowId]
 					: !this.selectionKeys[rowId]
 			);
 		},
-
-		onUpdateSelectionKeys(to) {
-			/**
-			 * toggle whenever the selection changes
-			 *
-			 * @event update:selection
-			 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
-			 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
-			 * Inclusive means all items in the passed array are selected.
-			 * Exclusive means all items not in the passed array are selected.
-			 */
-			this.$emit("update:selection", Object.keys(to), this.selectionType);
-			/**
-			 * helper event for the selectedRowIds .sync modifier
-			 */
-			this.$emit("update:selectedRowIds", Object.keys(to));
-		},
-		onUpdateSelectedRowIds(to) {
-			const hasSameNumberOfAttributes =
-				to.length === Object.keys(this.selectionKeys).length;
-			const hasSameAttributes = to.every((item) => this.selectionKeys[item]);
-			if (hasSameNumberOfAttributes && hasSameAttributes) {
-				// nothing to change
-				return;
-			}
-			const newSelectionKeys = to.reduce((obj, key) => {
-				obj[key] = true;
-				return obj;
-			}, {});
-
-			this.$set(this, "selectionKeys", newSelectionKeys);
-		},
-
 		onUpdateRowsPerPage(value) {
 			this.$emit("update:current-page", 1);
 			this.$emit("update:rows-per-page", value);
 		},
-
-		getValueByPath,
-
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);
-			action.action(selections, this.selectionType);
+			action.action(selections, this.localSelectionType);
 			this.unselectAllRowsOfAllPages();
 		},
 	},
