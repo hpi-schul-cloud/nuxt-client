@@ -96,6 +96,10 @@ export default {
 				label: "50 pro Seite",
 				value: 50,
 			},
+			{
+				label: "100 pro Seite",
+				value: 100,
+			},
 		],
 	}),
 	computed: {
