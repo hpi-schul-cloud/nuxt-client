@@ -13,11 +13,11 @@ const Sleep = (milliseconds) => {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
-const solvedConditions = (successConditions) => (ressource) => {
+const solvedConditions = (successConditions) => (resource) => {
 	let isChanged = false;
 	successConditions.forEach((condition) => {
 		Object.entries(condition).forEach(([key, value]) => {
-			if (ressource[key] === value) {
+			if (resource[key] === value) {
 				isChanged = true;
 			}
 		});
@@ -77,9 +77,13 @@ const module = mergeDeep(base, {
 				requestInterval,
 				watchingIds,
 				successConditions,
-				query,
+				query = {},
 				maxIterations,
 			} = payload;
+
+			const copyQuery = { ...query };
+			copyQuery.$skip = 0;
+			delete copyQuery.$limit;
 
 			const timeout = forceNumber(requestInterval, 30 * 1000);
 			const iterations = forceNumber(maxIterations, 60);
@@ -92,7 +96,7 @@ const module = mergeDeep(base, {
 					ids: memoIds,
 					$select,
 					conditionHelper,
-					query,
+					query: copyQuery,
 				});
 				memoIds = ids;
 
@@ -107,5 +111,20 @@ const module = mergeDeep(base, {
 			}
 		},
 	},
+	getters: {
+		getPendingIdsFromResult(state) {
+			try {
+				const pendingIds = [];
+				state.list.forEach((datasource) => {
+					if (datasource.lastStatus === "Pending") {
+						pendingIds.push(datasource._id);
+					}
+				});
+				return pendingIds;
+			} catch (err) {
+				return []
+			}
+		}
+	}
 });
 export default module;

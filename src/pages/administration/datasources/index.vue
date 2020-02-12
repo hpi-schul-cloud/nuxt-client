@@ -198,6 +198,9 @@ export default {
 		...mapState("datasources", {
 			pagination: (state) => state.pagination.default,
 		}),
+		...mapGetters("datasources", {
+			watchingIds: "getPendingIdsFromResult",
+		}),
 	},
 	created(ctx) {
 		this.find();
@@ -221,16 +224,6 @@ export default {
 				},
 			];
 		},
-		getPendingIdsFromResult(result) {
-			const pendingIds = [];
-			(result.data || []).forEach((datasource) => {
-				// TODO: use global const for Progess strings
-				if (datasource.lastStatus === "Pending") {
-					pendingIds.push(datasource._id);
-				}
-			});
-			return pendingIds;
-		},
 		find() {
 			const query = {
 				$limit: this.limit,
@@ -243,14 +236,16 @@ export default {
 			this.$store
 				.dispatch("datasources/find", { query })
 				.then((result) => {
-					this.$store.dispatch("datasources/updateCallback", {
-						watchingIds: this.getPendingIdsFromResult(result),
-						successConditions: [
-							{ lastStatus: "Success" },
-							{ lastStatus: "Error" },
-						],
-						query,
-					});
+					if (this.watchingIds.length > 0) {
+						this.$store.dispatch("datasources/updateCallback", {
+							watchingIds: this.watchingIds,
+							successConditions: [
+								{ lastStatus: "Success" },
+								{ lastStatus: "Error" },
+							],
+							query,
+						});
+					}
 					return result;
 				})
 				.catch((error) => {

@@ -86,6 +86,9 @@ export default function(endpoint) {
 				const index = state.list.findIndex(
 					(e) => e._id === item._id || item.id
 				);
+				if (index === -1) {
+					console.error('patchSingleItem error: No element in state.list found.');
+				}
 				state.list[index] = Object.assign(state.list[index], item);
 			},
 			remove(state, id) {
