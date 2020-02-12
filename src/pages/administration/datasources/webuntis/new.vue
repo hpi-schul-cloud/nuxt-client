@@ -9,7 +9,15 @@
 			<h1 class="h5">{{
 				$t("pages.administration.datasources.login.heading")
 			}}</h1>
-			<p class="mb--xl">{{
+			<p v-if="this.$route.query.error" class="mb--xl warning">
+				<BaseIcon
+					source="custom"
+					icon="warning"
+					fill="var(--color-danger)"
+					class="margin"
+				/>{{ $t("pages.administration.datasources.login.error.text") }}</p
+			>
+			<p v-else class="mb--xl">{{
 				$t("pages.administration.datasources.login.text")
 			}}</p>
 
@@ -89,4 +97,14 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.warning {
+	color: var(--color-danger);
+}
+
+.margin {
+	margin-right: var(--space-xxs);
+	margin-bottom: calc(-0.3 * (var(--space-sm)));
+	font-size: var(--text-lg);
+}
 </style>
