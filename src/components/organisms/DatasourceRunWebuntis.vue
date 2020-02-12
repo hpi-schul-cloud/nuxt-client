@@ -200,7 +200,7 @@ export default {
 		find({ $limit, page }) {
 			const $skip = $limit * (page - 1);
 			try {
-				this.$store.dispatch("webuntis-metadata/find", {
+				this.$store.dispatch("webuntis-metadata/findAll", {
 					query: {
 						$skip,
 						$limit,
