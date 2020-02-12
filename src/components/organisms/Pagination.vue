@@ -101,7 +101,7 @@ export default {
 	computed: {
 		perPageSelected() {
 			return {
-				label: this.perPage > 0 ? this.perPage + " pro Seite" : "Alle anzeigen",
+				label: this.perPage + " pro Seite",
 				value: this.perPage,
 			};
 		},

@@ -80,8 +80,10 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	padding: var(--space-md);
-	color: var(--color-white);
-	background: var(--color-info-light);
+	font-size: var(--text-md);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-on-table-selected);
+	background: var(--color-table-selected);
 }
 
 .select-all-rows {
