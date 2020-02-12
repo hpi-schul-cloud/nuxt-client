@@ -69,6 +69,12 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
-			/>`,
+			>
+				<template v-slot:datacolumn-age="slotProps">
+					<span style="text-decoration: underline">
+					{{ slotProps.data }}
+					</span>
+				</template>
+			</DataTable>`,
 	};
 });
