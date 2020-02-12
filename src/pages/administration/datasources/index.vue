@@ -15,13 +15,6 @@
 					class="mb--md"
 				>
 					<template v-slot:actions>
-						<!-- <BaseButton
-							design="primary text"
-							@click="handleManageOldDatasourceClick"
-						>
-							<BaseIcon source="custom" icon="datasource-import" />
-							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton> -->
 						<responsive-button
 							design="primary text"
 							source="custom"
@@ -40,13 +33,6 @@
 					class="mb--xl-3"
 				>
 					<template v-slot:actions>
-						<!-- <BaseButton
-							design="primary text"
-							@click="handleManageOldDatasourceClick"
-						>
-							<BaseIcon source="custom" icon="datasource-import" />
-							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton> -->
 						<responsive-button
 							design="primary text"
 							source="custom"
@@ -105,10 +91,6 @@
 					</template>
 
 					<template v-slot:actions>
-						<!-- <BaseButton design="primary text">
-							<BaseIcon source="custom" icon="datasource-import" />
-							{{ $t("pages.administration.datasources.index.import") }}
-						</BaseButton> -->
 						<responsive-button
 							design="primary text"
 							source="custom"
