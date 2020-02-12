@@ -7,17 +7,21 @@
 		}"
 	>
 		<td v-if="selectable">
-			<base-input
-				v-model="selectionStatus"
-				type="checkbox"
-				:label="`Zeile ${rowindex + 1} auswählen`"
-				:label-hidden="true"
-				class="select"
-			/>
+			<div class="text-content">
+				<base-input
+					v-model="selectionStatus"
+					type="checkbox"
+					:label="`Zeile ${rowindex + 1} auswählen`"
+					:label-hidden="true"
+					class="select"
+				/>
+			</div>
 		</td>
 		<td v-for="(fieldData, index) in rowData" :key="index">
 			<slot :name="`datacolumn-${columnKeys[index]}`" :data="fieldData">
-				{{ fieldData }}
+				<div class="text-content">
+					{{ fieldData }}
+				</div>
 			</slot>
 		</td>
 	</tr>
@@ -86,9 +90,12 @@ export default {
 	}
 
 	td {
-		padding: var(--space-xs);
-		font-size: var(--text-xs);
+		padding: 0;
 		vertical-align: middle;
+		.text-content {
+			padding: var(--space-xs);
+			font-size: var(--text-xs);
+		}
 		.select {
 			margin-bottom: 0;
 		}
