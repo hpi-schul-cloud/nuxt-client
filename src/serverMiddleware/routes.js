@@ -6,7 +6,7 @@
 //const mongoId = "[a-z0-9]{24}";
 
 module.exports = [
-	// `^/administration/datasources?`,
+	`^/administration/datasources?`,
 	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,

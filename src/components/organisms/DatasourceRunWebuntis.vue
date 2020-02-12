@@ -1,17 +1,15 @@
 <template>
 	<div>
 		<template v-if="run.dryrun === true">
-			<backend-data-table
+			<data-table
 				:columns="columns"
 				:data="tableData"
 				track-by="_id"
-				:total="pagination.total"
-				:current-page.sync="currentPage"
 				:paginated="true"
-				:rows-per-page.sync="rowsPerPage"
 				:rows-selectable="true"
-				:selection-type.sync="sendType"
-				:selected-row-ids.sync="sendIds"
+				:selection.sync="selections"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
 			>
 				<template v-slot:datacolumn-state="{ data }">
 					<base-icon
@@ -46,7 +44,7 @@
 						{{ $t("components.organisms.DatasourceRunWebuntis.unknown") }}
 					</template>
 				</template>
-			</backend-data-table>
+			</data-table>
 			<form-actions>
 				<template v-slot:primary>
 					<base-button design="primary" @click="triggerRun">
@@ -87,7 +85,7 @@
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import FormActions from "@components/molecules/FormActions";
-import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+import DataTable from "@components/organisms/DataTable/DataTable";
 
 import { mapGetters } from "vuex";
 export default {
@@ -95,7 +93,7 @@ export default {
 		ModalBodyInfo,
 		ModalFooterConfirm,
 		FormActions,
-		BackendDataTable,
+		DataTable,
 	},
 	props: {
 		datasource: {
@@ -115,29 +113,33 @@ export default {
 			required: true,
 		},
 	},
-	data: function() {
+	data() {
 		return {
+			sortBy: "state",
+			sortOrder: "desc",
 			columns: [
 				{
 					field: "class",
 					label: "Name",
+					sortable: true,
 				},
 				{
 					field: "teacher",
 					label: "Lehrer",
+					sortable: true,
 				},
 				{
 					field: "room",
 					label: "Raum",
+					sortable: true,
 				},
 				{
 					field: "state",
 					label: "Status",
+					sortable: true,
 				},
 			],
-			rowsPerPage: 25,
-			sendIds: [],
-			sendType: "inclusive", // or exclusive
+			selections: [],
 		};
 	},
 	computed: {
@@ -161,53 +163,24 @@ export default {
 				};
 			});
 		},
-		currentPage: {
-			get() {
-				return this.pagination?.skip / this.pagination?.limit + 1;
-			},
-			set(to) {
-				this.find({
-					$limit: this.rowsPerPage,
-					page: to,
-				});
-			},
-		},
-		pagination() {
-			return (
-				this.$store.state["webuntis-metadata"].pagination?.default || {
-					limit: 0,
-					total: 0,
-					skip: 0,
-				}
-			);
-		},
-	},
-	watch: {
-		rowsPerPage(to) {
-			this.find({
-				$limit: to,
-				page: 1,
-			});
-		},
 	},
 	created(ctx) {
-		this.find({
-			$limit: this.rowsPerPage,
-			page: 1,
-		});
+		this.findAll();
 	},
 	methods: {
-		find({ $limit, page }) {
-			const $skip = $limit * (page - 1);
+		async findAll() {
 			try {
-				this.$store.dispatch("webuntis-metadata/findAll", {
-					query: {
-						$skip,
-						$limit,
-						$sort: { state: -1 },
-						datasourceId: this.datasourceId,
-					},
-				});
+				const { data } = await this.$store.dispatch(
+					"webuntis-metadata/findAll",
+					{
+						query: {
+							datasourceId: this.datasourceId,
+						},
+					}
+				);
+				this.selections = data
+					.filter((d) => d.state === "imported")
+					.map((d) => d._id);
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(this.$t("error.load"));
@@ -219,8 +192,8 @@ export default {
 					datasourceId: this.datasource._id,
 					dryrun: false,
 					data: {
-						datatype: this.sendType, // inclusive/exclusive
-						courseMetadataIds: this.sendIds,
+						datatype: "inclusive", // inclusive/exclusive
+						courseMetadataIds: this.selections,
 					},
 				});
 				this.$router.push({
