@@ -1,4 +1,4 @@
-<!--eslint-disable max-lines -->
+<!-- eslint-disable max-lines -->
 <template>
 	<div class="table-outer">
 		<div class="table-wrapper">
