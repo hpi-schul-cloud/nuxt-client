@@ -3,7 +3,6 @@ branches:
     - develop
     - master
     - /^(?i:release|hotfix).*$/
-    - /^greenkeeper/.*$/
 language: node_js
 node_js:
   - lts/*
@@ -61,7 +60,6 @@ jobs:
     # Test
     - script: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/master/scripts/ci/fetch.travis.sh" | bash
       name: "test:integration"
-      if: NOT (branch ~= /^greenkeeper\/.*$/ AND type != pull_request)
       env:
         - IT_CLIENT_HOST=nuxtclient
         - IT_CLIENT_PORT=4000
