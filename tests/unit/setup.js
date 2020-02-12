@@ -81,6 +81,16 @@ Object.defineProperty(window, "localStorage", {
 	})(),
 });
 
+Object.defineProperty(window, "matchMedia", {
+	value: () => {
+		return {
+			matches: false,
+			addListener: () => {},
+			removeListener: () => {},
+		};
+	},
+});
+
 const location = {
 	href: "",
 };
