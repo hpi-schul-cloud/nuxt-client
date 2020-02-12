@@ -95,7 +95,7 @@
 							design="primary text"
 							source="custom"
 							icon="datasource-import"
-							@click="handleManageOldDatasourceClick"
+							@click="triggerRun(element)"
 						>
 							{{ $t("pages.administration.datasources.index.import") }}
 						</responsive-button>
@@ -252,6 +252,22 @@ export default {
 			const rss = require("@assets/img/datasources/logo-rss.svg");
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.target] || "";
+		},
+		async triggerRun(datasource) {
+			try {
+				const run = await this.$store.dispatch("datasourceRuns/create", {
+					datasourceId: datasource._id,
+					dryrun: true,
+				});
+				this.$router.push({
+					path: `/administration/datasources/${datasource._id}/run/${run._id}`,
+				});
+			} catch (error) {
+				console.error(error, error.response);
+				this.$toast.error(
+					this.$t("pages.administration.datasources.index.trigger.error")
+				);
+			}
 		},
 		handleManageOldDatasourceClick() {
 			this.$router.push({
