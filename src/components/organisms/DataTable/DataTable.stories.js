@@ -31,26 +31,22 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 			rowsPerPage: number("rowsPerPage", 5),
 
 			rowsSelectable: boolean("rowsSelectable", true),
-			selectionType: select(
-				"selectionType",
-				{ inclusive: "inclusive", exclusive: "exclusive" },
-				"inclusive"
-			),
-			selectedRowIds: array("selectedRowIds", []),
+			selection: array("selection", [randomData[0].id, randomData[1].id], ","),
 
 			actions: tableActions(randomData),
 
-			sortBy: select("sortBy", sortabelRows, Object.keys(sortabelRows)[0]),
-			sortOrder: select("sortOrder", { asc: "asc", desc: "desc" }, "asc"),
+			sortBy: select("sortBy (optional)", sortabelRows),
+			sortOrder: select(
+				"sortOrder (optional)",
+				{ asc: "asc", desc: "desc" },
+				"asc"
+			),
 		}),
 		components: { DataTable },
 		methods: {
 			onUpdateCurrentPage: action("@update:current-page"),
 			onUpdateRowsPerPage: action("@update:rows-per-page"),
 			onUpdateSelection: action("@update:selection"),
-			onUpdateSelectionType: action("@update:selectionType"),
-			onUpdateSelectedRowIds: action("@update:selectedRowIds"),
-			onSort: action("@sort"),
 		},
 		template: `
 			<DataTable
@@ -66,18 +62,13 @@ storiesOf("6 Organisms/DataTable", module).add("DataTable", () => {
 				@update:rows-per-page="onUpdateRowsPerPage"
 
 				:rowsSelectable="rowsSelectable"
-				:selectionType.sync="selectionType"
-				:selectedRowIds.sync="selectedRowIds"
+				:selection.sync="selection"
 				@update:selection="onUpdateSelection"
-				@update:selectionType="onUpdateSelectionType"
-				@update:selectedRowIds="onUpdateSelectedRowIds"
 
 				:actions="actions"
 
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
-				@sort="onSort"
-			/>
-		`,
+			/>`,
 	};
 });

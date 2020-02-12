@@ -14,7 +14,7 @@ function getWrapper(attributes) {
 	});
 }
 
-describe("@components/6 Organisms/DataTable/BackendDataTable", () => {
+describe("@components/organisms/DataTable/BackendDataTable", () => {
 	it(...isValidComponent(BackendDataTable));
 
 	describe("rendering", () => {
