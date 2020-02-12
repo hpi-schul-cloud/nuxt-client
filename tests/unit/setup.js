@@ -11,7 +11,7 @@ import sinon from "sinon";
 // ===
 
 // https://vue-test-utils.vuejs.org/
-import vueTestUtils from "@vue/test-utils";
+import * as vueTestUtils from "@vue/test-utils";
 
 // ===
 // Configure Vue

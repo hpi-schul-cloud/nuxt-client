@@ -1,8 +1,8 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
 
-const tableData = (n) =>
-	new Array(n).fill(0).map(() => ({
+const tableData = (n, overwrite = () => ({})) =>
+	new Array(n).fill(0).map((item, index) => ({
 		id: faker.random.uuid(),
 		firstName: faker.name.firstName(),
 		lastName: faker.name.lastName(),
@@ -12,6 +12,7 @@ const tableData = (n) =>
 		age: Math.round(Math.random() * 65),
 		birthday: dayjs(faker.date.past()).format("DD-MM-YYYY"),
 		agreed: faker.random.boolean(),
+		...overwrite(index),
 	}));
 
 const tableColumns = [

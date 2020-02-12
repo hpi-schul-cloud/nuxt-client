@@ -13,7 +13,7 @@ const wait = (duration) =>
 	});
 
 const hasWrapperFocus = (wrapper) => {
-	return wrapper.element.matches(":focus");
+	return wrapper.element === document.activeElement;
 };
 
 const getWrapper = (options = {}) =>
@@ -43,16 +43,19 @@ describe("@components/CardContextMenu", () => {
 			},
 		});
 
-		expect(wrapper.findAll(".context-menu__button")).toHaveLength(
-			actions.length
-		);
+		expect(
+			wrapper.findAll(".context-menu__button:not(.context-menu__button-close)")
+		).toHaveLength(actions.length);
+		expect(wrapper.findAll(".context-menu__button-close")).toHaveLength(1);
 	});
 
 	it("Emits defined event when clicked", () => {
 		const wrapper = getWrapper();
 
 		expect.assertions(2 * actions.length);
-		const buttons = wrapper.findAll(".context-menu__button");
+		const buttons = wrapper.findAll(
+			".context-menu__button:not(.context-menu__button-close)"
+		);
 		for (let i = 0; i < buttons.length; i += 1) {
 			const button = buttons.at(i);
 			const { event } = actions.find((a) => a.text === button.text());
@@ -76,7 +79,10 @@ describe("@components/CardContextMenu", () => {
 		const wrapper = getWrapper({
 			attachToDocument: true,
 		});
-		window.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 27 }));
+		expect(wrapper.emitted("update:show")).toBeUndefined();
+		window.dispatchEvent(
+			new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 })
+		);
 		expect(wrapper.emitted("update:show")).toHaveLength(1);
 		expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
 		wrapper.destroy();
@@ -207,15 +213,21 @@ describe("@components/CardContextMenu", () => {
 			const wrapper = getWrapper();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
+
+			expect(buttons.wrappers).toHaveLength(4);
+
 			buttons.at(buttons.length - 1).element.focus();
 			await wrapper.vm.$nextTick();
 
-			for (let i = buttons.length - 2; i > 1; i -= 1) {
-				expect(hasWrapperFocus(buttons.at(i))).toBe(true);
-				expect(hasWrapperFocus(buttons.at(i - 1))).toBe(false);
-				buttons.at(i).trigger("keydown.up");
-				expect(hasWrapperFocus(buttons.at(i))).toBe(false);
-				expect(hasWrapperFocus(buttons.at(i - 1))).toBe(true);
+			for (let i = buttons.length - 1; i > 1; i -= 1) {
+				const currentButton = buttons.at(i);
+				const prevButton = buttons.at(i - 1);
+
+				expect(hasWrapperFocus(currentButton)).toBe(true);
+				expect(hasWrapperFocus(prevButton)).toBe(false);
+				currentButton.trigger("keydown.up");
+				expect(hasWrapperFocus(currentButton)).toBe(false);
+				expect(hasWrapperFocus(prevButton)).toBe(true);
 			}
 		});
 
@@ -223,12 +235,15 @@ describe("@components/CardContextMenu", () => {
 			const wrapper = getWrapper();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
-			for (let i = 1; i < buttons.length - 2; i += 1) {
-				expect(hasWrapperFocus(buttons.at(i - 1))).toBe(true);
-				expect(hasWrapperFocus(buttons.at(i))).toBe(false);
-				buttons.at(i - 1).trigger("keydown.down");
-				expect(hasWrapperFocus(buttons.at(i))).toBe(true);
-				expect(hasWrapperFocus(buttons.at(i - 1))).toBe(false);
+			// - 2 (-1 for length offset and another -1 for close button)
+			for (let i = 0; i < buttons.length - 2; i += 1) {
+				const currentButton = buttons.at(i);
+				const nextButton = buttons.at(i + 1);
+				expect(hasWrapperFocus(currentButton)).toBe(true);
+				expect(hasWrapperFocus(nextButton)).toBe(false);
+				currentButton.trigger("keydown.down");
+				expect(hasWrapperFocus(currentButton)).toBe(false);
+				expect(hasWrapperFocus(nextButton)).toBe(true);
 			}
 		});
 	});
