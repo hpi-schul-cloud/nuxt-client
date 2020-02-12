@@ -22,7 +22,6 @@
 					design="primary text"
 					source="material"
 					icon="add"
-					responsivedesign="primary icon text"
 					@click="forwardCreate(provider.name.toLowerCase())"
 				>
 					{{ $t("pages.administration.datasources.add.btnAdd") }}

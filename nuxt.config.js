@@ -101,19 +101,6 @@ module.exports = {
 		"@nuxtjs/toast",
 		"cookie-universal-nuxt",
 		"nuxt-babel",
-		[
-			"nuxt-mq",
-			{
-				// Default breakpoint for SSR
-				defaultBreakpoint: "default",
-				breakpoints: {
-					mobile: 750,
-					tablet: 991,
-					desktop: 1200,
-					large: Infinity,
-				},
-			},
-		],
 	],
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
