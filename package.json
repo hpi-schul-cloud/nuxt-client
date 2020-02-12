@@ -34,7 +34,7 @@
 		"test:unit": "cross-env NODE_ENV=test jest",
 		"test:unit:ci": "npm run test:unit -- --coverage --ci",
 		"test:unit:file": "npm run test:unit -- --bail --findRelatedTests",
-		"test:unit:watch": "npm run test:unit -- --watch --notify",
+		"test:unit:watch": "npm run test:unit -- --watch --notify --coverage",
 		"test:screenshot:jest": "cross-env NODE_ENV=test jest --config tests/screenshot/jest.config.js",
 		"test:screenshot": "start-server-and-test start:storybook http-get://localhost:4001 test:screenshot:jest",
 		"test:ci": "npm run test:unit:ci",
