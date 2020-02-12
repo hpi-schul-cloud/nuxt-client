@@ -2,10 +2,7 @@ process.env.TZ = "Europe/Berlin";
 
 module.exports = {
 	setupFiles: ["<rootDir>/tests/unit/setup", "jest-canvas-mock"],
-	setupFilesAfterEnv: [
-		"<rootDir>/tests/unit/matchers",
-		"<rootDir>/tests/unit/requireAssertions",
-	],
+	setupFilesAfterEnv: ["<rootDir>/tests/unit/matchers"],
 	testMatch: ["**/(*.)unit.js"],
 	moduleFileExtensions: ["js", "json", "vue"],
 	transform: {
