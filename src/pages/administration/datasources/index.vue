@@ -198,11 +198,12 @@ export default {
 		...mapState("datasources", {
 			pagination: (state) => state.pagination.default,
 		}),
+		...mapGetters("datasources", {
+			watchingIds: "getPendingIdsFromResult",
+		}),
 	},
 	created(ctx) {
 		this.find();
-
-		// TODO: dispatch action
 	},
 	methods: {
 		getActions(element) {
@@ -232,10 +233,25 @@ export default {
 					createdAt: 1,
 				},
 			};
-			this.$store.dispatch("datasources/find", { query }).catch((error) => {
-				console.error(error);
-				this.$toast.error(this.$t("error.load"));
-			});
+			this.$store
+				.dispatch("datasources/find", { query })
+				.then((result) => {
+					if (this.watchingIds.length > 0) {
+						this.$store.dispatch("datasources/updateCallback", {
+							watchingIds: this.watchingIds,
+							successConditions: [
+								{ lastStatus: "Success" },
+								{ lastStatus: "Error" },
+							],
+							query,
+						});
+					}
+					return result;
+				})
+				.catch((error) => {
+					console.error(error);
+					this.$toast.error(this.$t("error.load"));
+				});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
