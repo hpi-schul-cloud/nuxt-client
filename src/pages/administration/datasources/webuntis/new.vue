@@ -9,7 +9,20 @@
 			<h1 class="h5">{{
 				$t("pages.administration.datasources.login.heading")
 			}}</h1>
-			<p class="mb--xl">{{
+			<p
+				v-if="
+					(datasource || {}).lastStatus === 'Error' && this.$route.params.id
+				"
+				class="mb--xl warning"
+			>
+				<BaseIcon
+					source="custom"
+					icon="warning"
+					fill="var(--color-danger)"
+					class="margin"
+				/>{{ $t("pages.administration.datasources.login.error.text") }}</p
+			>
+			<p v-else class="mb--xl">{{
 				$t("pages.administration.datasources.login.text")
 			}}</p>
 
@@ -59,7 +72,7 @@
 <script>
 import FormDatasourceLogin from "@components/organisms/FormDatasourceLogin";
 import BaseContentContainer from "@components/base/BaseContentContainer";
-
+import { mapGetters } from "vuex";
 export default {
 	components: {
 		FormDatasourceLogin,
@@ -84,9 +97,24 @@ export default {
 			],
 		};
 	},
+	computed: {
+		...mapGetters("datasources", {
+			datasource: "current",
+		}),
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.warning {
+	color: var(--color-danger);
+}
+
+.margin {
+	margin-right: var(--space-xxs);
+	margin-bottom: calc(-0.3 * (var(--space-sm)));
+	font-size: var(--text-lg);
+}
 </style>
