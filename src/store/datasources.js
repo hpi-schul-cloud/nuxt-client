@@ -123,9 +123,9 @@ const module = mergeDeep(base, {
 				});
 				return pendingIds;
 			} catch (err) {
-				return []
+				return [];
 			}
-		}
-	}
+		},
+	},
 });
 export default module;

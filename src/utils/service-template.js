@@ -87,7 +87,9 @@ export default function(endpoint) {
 					(e) => e._id === item._id || item.id
 				);
 				if (index === -1) {
-					console.error('patchSingleItem error: No element in state.list found.');
+					console.error(
+						"patchSingleItem error: No element in state.list found."
+					);
 				}
 				state.list[index] = Object.assign(state.list[index], item);
 			},
