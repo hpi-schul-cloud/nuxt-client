@@ -93,6 +93,7 @@
 	"pages.administration.datasources.index.trigger.error": "Datenimport fehlgeschlagen.",
 	"pages.administration.datasources.login.heading": "Gib hier deine Zugangsdaten ein",
 	"pages.administration.datasources.login.text": "Bitte verwende keine privaten Zugangsdaten. Für die Einbindung der Datenquelle empfehlen wir einen Schul-Cloud spezifischen WebUntis Account zu erstellen.",
+	"pages.administration.datasources.login.error.text": "Es ist ein Fehler bei der Verbindung aufgetreten. Möglicherweise haben sich deine Zugangsdaten geändert. Bitte überprüfe deine Eingabe.",
 	"pages.administration.datasources.login.title": "Zugangsdaten",
 	"pages.administration.datasources.new.add": "Datenquelle hinzufügen",
 	"pages.administration.datasources.new.provider.addedDatasources": "Bereits hinzugefügt ({x})",

@@ -92,6 +92,16 @@
 
 					<template v-slot:actions>
 						<responsive-button
+							v-if="element.lastStatus === 'Error'"
+							design="primary text"
+							source="custom"
+							icon="datasource-import"
+							@click="handleManageErrorLogin(element)"
+						>
+							{{ $t("pages.administration.datasources.index.import") }}
+						</responsive-button>
+						<responsive-button
+							v-else
 							design="primary text"
 							source="custom"
 							icon="datasource-import"
@@ -206,11 +216,12 @@ export default {
 		...mapState("datasources", {
 			pagination: (state) => state.pagination.default,
 		}),
+		...mapGetters("datasources", {
+			watchingIds: "getPendingIdsFromResult",
+		}),
 	},
 	created(ctx) {
 		this.find();
-
-		// TODO: dispatch action
 	},
 	methods: {
 		getActions(element) {
@@ -240,10 +251,25 @@ export default {
 					createdAt: 1,
 				},
 			};
-			this.$store.dispatch("datasources/find", { query }).catch((error) => {
-				console.error(error);
-				this.$toast.error(this.$t("error.load"));
-			});
+			this.$store
+				.dispatch("datasources/find", { query })
+				.then((result) => {
+					if (this.watchingIds.length > 0) {
+						this.$store.dispatch("datasources/updateCallback", {
+							watchingIds: this.watchingIds,
+							successConditions: [
+								{ lastStatus: "Success" },
+								{ lastStatus: "Error" },
+							],
+							query,
+						});
+					}
+					return result;
+				})
+				.catch((error) => {
+					console.error(error);
+					this.$toast.error(this.$t("error.load"));
+				});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
@@ -272,6 +298,11 @@ export default {
 		handleManageOldDatasourceClick() {
 			this.$router.push({
 				path: "/administration/school",
+			});
+		},
+		handleManageErrorLogin(source) {
+			this.$router.push({
+				path: `datasources/webuntis/${source._id}/edit`,
 			});
 		},
 		handleEdit(source) {
