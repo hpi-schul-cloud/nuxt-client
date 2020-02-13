@@ -89,7 +89,19 @@
 					</template>
 
 					<template v-slot:actions>
-						<BaseButton design="primary text" @click="triggerRun(element)">
+						<BaseButton
+							v-if="element.lastStatus === 'Error'"
+							design="primary text"
+							@click="handleManageErrorLogin(element)"
+						>
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.import") }}
+						</BaseButton>
+						<BaseButton
+							v-else
+							design="primary text"
+							@click="triggerRun(element)"
+						>
 							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
 						</BaseButton>
@@ -280,6 +292,11 @@ export default {
 		handleManageOldDatasourceClick() {
 			this.$router.push({
 				path: "/administration/school",
+			});
+		},
+		handleManageErrorLogin(source) {
+			this.$router.push({
+				path: `datasources/webuntis/${source._id}/edit`,
 			});
 		},
 		handleEdit(source) {
