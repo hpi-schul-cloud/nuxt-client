@@ -9,7 +9,12 @@
 			<h1 class="h5">{{
 				$t("pages.administration.datasources.login.heading")
 			}}</h1>
-			<p v-if="this.$route.query.error" class="mb--xl warning">
+			<p
+				v-if="
+					(datasource || {}).lastStatus === 'Error' && this.$route.params.id
+				"
+				class="mb--xl warning"
+			>
 				<BaseIcon
 					source="custom"
 					icon="warning"
@@ -67,7 +72,7 @@
 <script>
 import FormDatasourceLogin from "@components/organisms/FormDatasourceLogin";
 import BaseContentContainer from "@components/base/BaseContentContainer";
-
+import { mapGetters } from "vuex";
 export default {
 	components: {
 		FormDatasourceLogin,
@@ -91,6 +96,11 @@ export default {
 				},
 			],
 		};
+	},
+	computed: {
+		...mapGetters("datasources", {
+			datasource: "current",
+		}),
 	},
 };
 </script>

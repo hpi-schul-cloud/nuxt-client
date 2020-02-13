@@ -92,7 +92,7 @@
 						<BaseButton
 							v-if="element.lastStatus === 'Error'"
 							design="primary text"
-							@click="handleManageErrorLogin"
+							@click="handleManageErrorLogin(element)"
 						>
 							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
@@ -278,9 +278,9 @@ export default {
 				path: "/administration/school",
 			});
 		},
-		handleManageErrorLogin() {
+		handleManageErrorLogin(source) {
 			this.$router.push({
-				path: "/administration/datasources/webuntis/new?error=true",
+				path: `datasources/webuntis/${source._id}/edit`,
 			});
 		},
 		handleEdit(source) {
