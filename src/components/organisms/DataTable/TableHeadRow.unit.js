@@ -1,5 +1,5 @@
 import TableHeadRow from "./TableHeadRow";
 
-describe("@components/6 Organisms/DataTable/TableHeadRow", () => {
+describe("@components/organisms/DataTable/TableHeadRow", () => {
 	it(...isValidComponent(TableHeadRow));
 });

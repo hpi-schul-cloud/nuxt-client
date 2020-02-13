@@ -96,12 +96,16 @@ export default {
 				label: "50 pro Seite",
 				value: 50,
 			},
+			{
+				label: "100 pro Seite",
+				value: 100,
+			},
 		],
 	}),
 	computed: {
 		perPageSelected() {
 			return {
-				label: this.perPage > 0 ? this.perPage + " pro Seite" : "Alle anzeigen",
+				label: this.perPage + " pro Seite",
 				value: this.perPage,
 			};
 		},
