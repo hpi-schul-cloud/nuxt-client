@@ -3,6 +3,7 @@ import qs from "qs";
 export default function(endpoint) {
 	const baseUrl = "/" + endpoint;
 	return {
+		baseUrl,
 		actions: {
 			async find({ commit }, payload = {}) {
 				const { qid = "default", query, customEndpoint } = payload;
@@ -80,6 +81,17 @@ export default function(endpoint) {
 		mutations: {
 			set(state, { items }) {
 				state.list = items;
+			},
+			patchSingleItem(state, item) {
+				const index = state.list.findIndex(
+					(e) => e._id === item._id || item.id
+				);
+				if (index === -1) {
+					console.error(
+						"patchSingleItem error: No element in state.list found."
+					);
+				}
+				state.list[index] = Object.assign(state.list[index], item);
 			},
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);
