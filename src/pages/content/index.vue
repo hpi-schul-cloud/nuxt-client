@@ -8,11 +8,13 @@
 			/>
 		</div>
 		<div class="content">
-			<searchbar
+			<searchbar-content
 				v-model.lazy="searchQuery"
 				class="content__searchbar"
-				:placeholder="$t('pages.content.index.search_for')"
+				placeholder="Lernstore durchsuchen"
 				:loading="loading"
+				:enter-key-down.sync="enterKeyDown"
+				@keyup.enter="handleEnterKey"
 			/>
 			<p class="content__total">
 				<span v-if="searchQuery.length > 0">
@@ -49,7 +51,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Searchbar from "@components/molecules/Searchbar";
+import SearchbarContent from "@components/molecules/SearchbarContent";
 import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
@@ -58,7 +60,7 @@ import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
 	components: {
-		Searchbar,
+		SearchbarContent,
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
@@ -73,6 +75,7 @@ export default {
 		return {
 			searchQuery: "",
 			backToTopScrollYLimit: 115,
+			enterKeyDown: false,
 		};
 	},
 	computed: {
@@ -147,13 +150,14 @@ export default {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
+		margin: var(--space-md) 0;
 	}
 	&__total {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
 		width: 100%;
-		color: var(--color-primary);
+		color: var(--color-gray);
 	}
 	&__no-results {
 		margin-top: var(--space-md);
