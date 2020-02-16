@@ -67,4 +67,49 @@ const tableActions = (allRows) => [
 	},
 ];
 
-export { tableData, tableColumns, tableActions };
+const tableFilters = [
+	{
+		label: "Geburtstag",
+		type: "date",
+		property: "birthday",
+		matchingType: {
+			value: "after",
+			label: "ist nach dem",
+		},
+		value: "1990-01-02",
+	},
+	{
+		label: "Alter",
+		type: "number",
+		property: "age",
+		matchingType: {
+			value: "equal",
+			label: "ist gleich",
+		},
+		value: "",
+	},
+	{
+		label: "Zustimmung",
+		type: "select",
+		property: "agreed",
+		value: [
+			{
+				checked: false,
+				value: true,
+				label: "Zustimmung vorhanden",
+			},
+		],
+	},
+	{
+		label: "Vorname",
+		type: "text",
+		property: "firstName",
+		matchingType: {
+			value: "contains",
+			label: "enthält",
+		},
+		value: "",
+	},
+];
+
+export { tableData, tableColumns, tableActions, tableFilters };

@@ -8,13 +8,14 @@ import {
 	tableData,
 	tableColumns,
 	tableActions,
+	tableFilters,
 } from "./DataTable.data-factory.js";
 
 const total = 100;
 const randomData = tableData(total);
 
 storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
-	const sortabelRows = tableColumns
+	const sortableRows = tableColumns
 		.filter((c) => c.sortable)
 		.reduce((obj, c) => {
 			obj[c.field] = c.field;
@@ -25,6 +26,8 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 			columns: tableColumns,
 			randomData,
 			trackBy: text("trackBy", "id"),
+			filterable: boolean("filterable", true),
+			filters: tableFilters,
 
 			total: total,
 			currentPage: number("currentPage", 1),
@@ -44,7 +47,7 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 
 			actions: tableActions(randomData),
 
-			sortBy: select("sortBy", sortabelRows, Object.keys(sortabelRows)[0]),
+			sortBy: select("sortBy", sortableRows, Object.keys(sortableRows)[0]),
 			sortOrder: select("sortOrder", { asc: "asc", desc: "desc" }, "asc"),
 		}),
 		components: { BackendDataTable },
@@ -60,6 +63,10 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 			<BackendDataTable
 				:columns="columns"
 				:data="randomData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)"
+
+				:filterable="filterable"
+				:filters="filters"
+
 				:trackBy="trackBy"
 
 				:total="total"

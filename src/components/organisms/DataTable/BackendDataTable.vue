@@ -3,6 +3,11 @@
 	<div class="table-outer">
 		<div class="table-wrapper">
 			<div class="toolbelt">
+				<filter-menu
+					v-if="filters.length && selectedRowIds.length < 1"
+					v-model="newFiltersSelected"
+					:filters="filters"
+				/>
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
@@ -65,9 +70,13 @@ import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
+import FilterMenu from "./FilterMenu.vue";
+import { supportedFilterTypes } from "@mixins/defaultFilters";
+import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 export default {
 	components: {
+		FilterMenu,
 		Pagination,
 		RowSelectionBar,
 	},
@@ -87,6 +96,52 @@ export default {
 		data: {
 			type: Array,
 			default: () => [],
+		},
+		filters: {
+			type: Array,
+			default: () => [],
+			validator: function(filters) {
+				return filters.every((filter) => {
+					const hasValidType =
+						!!filter.type && supportedFilterTypes.includes(filter.type);
+
+					var hasValidMatchingType = false;
+
+					if (
+						!supportedFilterMatchingTypes[filter.type] &&
+						!filter.matchingType
+					) {
+						hasValidMatchingType = true;
+					} else if (
+						supportedFilterMatchingTypes[filter.type] &&
+						filter.matchingType &&
+						supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
+					) {
+						hasValidMatchingType = true;
+					} else if (
+						filter.matchingType &&
+						filter.matchingType.implementation &&
+						filter.matchingType.value &&
+						filter.matchingType.label
+					) {
+						hasValidMatchingType = true;
+					}
+
+					const isValidSelectFilter =
+						filter.value &&
+						Array.isArray(filter.value) &&
+						filter.value.length > 0 &&
+						filter.value.every((value) => value.value && value.label);
+
+					return (
+						filter.label &&
+						(filter.property || filter.type == "fulltextSearch") &&
+						hasValidType &&
+						hasValidMatchingType &&
+						(isValidSelectFilter || filter.type !== "select")
+					);
+				});
+			},
 		},
 		/**
 		 * Defines the path to a unqiue key in the object

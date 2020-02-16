@@ -1,0 +1,163 @@
+<template>
+	<div class="filter-menu">
+		<base-select
+			close-on-select
+			label="Filter hinzufügen"
+			:multiple="true"
+			placeholder="Filter hinzufügen"
+			:options="filters"
+			option-label="label"
+			:taggable="true"
+			:tag-placeholder="`Volltextsuche`"
+			track-by="label"
+			:value="selectedFiltersWithLabels"
+			@remove="removeFilter"
+			@select="selectFilter"
+			@tag="setSearch"
+		>
+			<template v-slot:tag="slotProps">
+				<span class="multiselect__tag">
+					<span @mousedown.prevent="editFilter(slotProps.option)">
+						{{ slotProps.option.tagLabel }}
+					</span>
+					<i
+						aria-hidden="true"
+						tabindex="0"
+						class="multiselect__tag-icon"
+						@keypress.enter.prevent="removeFilter(slotProps.option)"
+						@mousedown.prevent="removeFilter(slotProps.option)"
+					></i>
+				</span>
+			</template>
+		</base-select>
+
+		<filter-modal
+			:active.sync="editFilterActive"
+			:filter-opened="filterOpened"
+			@set-filter="setFilter"
+		/>
+	</div>
+</template>
+
+<script>
+import FilterModal from "./FilterModal.vue";
+export default {
+	components: {
+		FilterModal,
+	},
+	props: {
+		filters: {
+			type: Array,
+			default: () => [],
+		},
+		value: {
+			type: Array,
+			default: () => [],
+		},
+	},
+	data() {
+		return {
+			editFilterActive: false,
+			filterOpened: {},
+			selectedFilters: this.value,
+		};
+	},
+	computed: {
+		selectedFiltersWithLabels: {
+			get: function() {
+				this.selectedFilters.forEach(filter => this.setTagLabel(filter));
+				return this.selectedFilters;
+			},
+			set: function(newValue) {
+				this.selectedFilters = newValue;
+			}
+		},
+	},
+	watch: {
+		value() {
+			this.selectedFilters = this.value;
+		},
+	},
+	methods: {
+		setSearch(searchString) {
+			const fulltextSearchQuery = this.selectedFilters.find(
+				(filter) => filter.label === "Volltextsuche"
+			);
+			if (fulltextSearchQuery) {
+				fulltextSearchQuery.value = searchString;
+				fulltextSearchQuery.tagLabel = `Volltextsuche nach: ${searchString}`;
+			} else {
+				this.setFilter({
+					label: "Volltextsuche",
+					tagLabel: `Volltextsuche nach: ${searchString}`,
+					type: "fulltextSearch",
+					value: searchString,
+				});
+			}
+			this.$emit("input", this.selectedFilters);
+		},
+		editFilter(filter) {
+			this.editFilterActive = true;
+			this.filterOpened = filter;
+			this.$emit("input", this.selectedFilters);
+		},
+		removeFilter(filter) {
+			this.selectedFilters.splice(this.selectedFilters.indexOf(filter), 1);
+			this.$emit("input", this.selectedFilters);
+		},
+		selectFilter(filter) {
+			this.$set(filter, "selected", true);
+			this.filterOpened = filter;
+			this.editFilterActive = true;
+		},
+		setTagLabel(filter) {
+			if (["number", "text"].includes(filter.type)) {
+				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${filter.value}`;
+			} else if (filter.type === "date") {
+				const dateString = (new Date(filter.value.toString())).toLocaleDateString('de-DE', { day: "2-digit", month: "2-digit", year: "numeric" });
+				filter.tagLabel = `${filter.label} ${filter.matchingType.label} ${dateString}`;
+			} else if (filter.type === "fulltextSearch") {
+				filter.tagLabel = `${filter.label} nach: ${filter.value}`;
+			} else if (filter.type === "select") {
+				filter.tagLabel = filter.label + ": ";
+				let activeOptions = filter.value.filter((f) => f.checked);
+				activeOptions = activeOptions.map((f) => f.label);
+				filter.tagLabel += activeOptions.join(", ");
+			}
+		},
+		setFilter(filterData) {
+			const isNewFilter = !this.selectedFilters.some(
+				(f) => f.label === filterData.label
+			);
+			const filter = isNewFilter
+				? JSON.parse(JSON.stringify(filterData))
+				: filterData;
+
+			this.setTagLabel(filter);
+
+			if (isNewFilter) {
+				this.selectedFilters.push(filter);
+			} else {
+				this.selectedFilters = this.selectedFilters.map((f) => {
+					if (f.label === filter.label) {
+						f.value = filter.value;
+					}
+					return f;
+				});
+			}
+			this.filterOpened = {};
+			this.editFilterActive = false;
+			this.$emit("input", this.selectedFilters);
+		},
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+.filter-menu {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	padding-bottom: var(--space-sm);
+}
+</style>
