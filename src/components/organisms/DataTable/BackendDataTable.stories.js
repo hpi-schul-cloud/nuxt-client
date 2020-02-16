@@ -57,6 +57,7 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 			onUpdateSelection: action("@update:selection"),
 			onUpdateSelectionType: action("@update:selectionType"),
 			onUpdateSelectedRowIds: action("@update:selectedRowIds"),
+			onUpdateActiveFilters: action("@update:active-filters"),
 			onSort: action("@sort"),
 		},
 		template: `
@@ -66,6 +67,7 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 
 				:filterable="filterable"
 				:filters="filters"
+				@update:active-filters="onUpdateActiveFilters"
 
 				:trackBy="trackBy"
 

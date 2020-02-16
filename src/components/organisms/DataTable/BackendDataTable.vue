@@ -5,7 +5,7 @@
 			<div class="toolbelt">
 				<filter-menu
 					v-if="filters.length && selectedRowIds.length < 1"
-					v-model="newFiltersSelected"
+					v-model="newActiveFilters"
 					:filters="filters"
 				/>
 				<row-selection-bar
@@ -97,6 +97,9 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		/**
+		 * Array of filter objects
+		 */
 		filters: {
 			type: Array,
 			default: () => [],
@@ -142,6 +145,13 @@ export default {
 					);
 				});
 			},
+		},
+		/**
+		 * Array of filter objects that should be active
+		 */
+		activeFilters: {
+			type: Array,
+			default: () => [],
 		},
 		/**
 		 * Defines the path to a unqiue key in the object
@@ -244,7 +254,7 @@ export default {
 			editFilterActive: false,
 			tableData: this.data,
 			filterOpened: {},
-			newFiltersSelected: this.filtersSelected,
+			newActiveFilters: this.activeFilters,
 			selectionKeys: {},
 			localSelectionType: "inclusive",
 		};
@@ -368,6 +378,12 @@ export default {
 				this.$forceUpdate();
 			},
 			immediate: true,
+		},
+		activeFilters() {
+			this.newActiveFilters = this.activeFilters;
+		},
+		newActiveFilters() {
+			this.$emit("update:active-filters", this.newActiveFilters);
 		},
 	},
 	methods: {
