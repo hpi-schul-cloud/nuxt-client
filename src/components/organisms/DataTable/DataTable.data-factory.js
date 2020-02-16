@@ -71,7 +71,7 @@ const tableFilters = [
 	{
 		label: "Geburtstag",
 		type: "date",
-		property: "birthday",
+		attribute: "birthday",
 		matchingType: {
 			value: "after",
 			label: "ist nach dem",
@@ -81,7 +81,7 @@ const tableFilters = [
 	{
 		label: "Alter",
 		type: "number",
-		property: "age",
+		attribute: "age",
 		matchingType: {
 			value: "equal",
 			label: "ist gleich",
@@ -91,7 +91,7 @@ const tableFilters = [
 	{
 		label: "Zustimmung",
 		type: "select",
-		property: "agreed",
+		attribute: "agreed",
 		value: [
 			{
 				checked: false,
@@ -103,7 +103,7 @@ const tableFilters = [
 	{
 		label: "Vorname",
 		type: "text",
-		property: "firstName",
+		attribute: "firstName",
 		matchingType: {
 			value: "contains",
 			label: "enthält",

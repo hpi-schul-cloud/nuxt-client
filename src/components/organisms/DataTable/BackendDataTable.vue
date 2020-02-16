@@ -135,7 +135,7 @@ export default {
 
 					return (
 						filter.label &&
-						(filter.property || filter.type == "fulltextSearch") &&
+						(filter.attribute || filter.type == "fulltextSearch") &&
 						hasValidType &&
 						hasValidMatchingType &&
 						(isValidSelectFilter || filter.type !== "select")
