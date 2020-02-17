@@ -110,6 +110,11 @@ global.mount = vueTestUtils.mount;
 // https://vue-test-utils.vuejs.org/api/#shallowmount
 global.shallowMount = vueTestUtils.shallowMount;
 
+global.wait = (duration) =>
+	new Promise((resolve) => {
+		setTimeout(resolve, duration);
+	});
+
 /*
 // A special version of `shallowMount` for view components
 global.shallowMountView = (Component, options = {}) => {
