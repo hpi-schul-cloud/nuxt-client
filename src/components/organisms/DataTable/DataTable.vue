@@ -1,12 +1,14 @@
 <template>
 	<backend-data-table
 		v-bind="attrsProxy"
-		:data="paginatedSortedData"
-		:total="sortedData.length"
+		:data="filteredSortedAndPaginatedData"
+		:total="filteredAndSortedData.length"
 		:sort-by.sync="sortByProxy"
 		:sort-order.sync="sortOrderProxy"
 		:current-page.sync="currentPageProxy"
 		:rows-per-page.sync="rowsPerPageProxy"
+		:filters.sync="filtersProxy"
+		:active-filters.sync="activeFiltersProxy"
 		:selected-row-ids="backendTableSelection"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
@@ -25,8 +27,10 @@
 	</backend-data-table>
 </template>
 <script>
-import { getValueByPath } from "@utils/helpers";
+import { getValueByPath, getNestedObjectValues } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
+import camelCase from "lodash/camelCase";
+import defaultFiltersMixin from "@mixins/defaultFilters";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
@@ -35,11 +39,12 @@ export default {
 	components: {
 		BackendDataTable,
 	},
+	mixins: [defaultFiltersMixin],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
 		/**
-		 * (data, sortBy, sortOrder) => sortedData
+		 * (data, sortBy, sortOrder) => filteredAndSortedData
 		 */
 		sortMethod: {
 			type: Function,
@@ -56,6 +61,8 @@ export default {
 	},
 	data() {
 		return {
+			localFilters: undefined,
+			localActiveFilters: undefined,
 			localSortBy: undefined,
 			localSortOrder: undefined,
 			localCurrentPage: undefined,
@@ -71,8 +78,34 @@ export default {
 				...this.$attrs,
 			};
 		},
-		sortedData() {
-			const raw = this.data;
+		filteredData() {
+			return this.data.filter((row) => {
+				return this.activeFiltersProxy.every((filter) => {
+					if (filter.type === "fulltextSearch") {
+						return getNestedObjectValues(row).some((value) =>
+							(value.toString() || "").includes(filter.value)
+						);
+					} else {
+						const functionName = camelCase(
+							`filter-${filter.type}-${(filter.matchingType || {}).value}`
+						);
+						const defaultFunctionName = camelCase(
+							`filter-${filter.type}-default`
+						);
+						const filterFunction =
+							(filter.matchingType || {}).implementation ||
+							this[functionName] ||
+							this[defaultFunctionName];
+						return filterFunction(
+							getValueByPath(row, filter.attribute),
+							filter.value
+						);
+					}
+				});
+			});
+		},
+		filteredAndSortedData() {
+			const raw = this.filteredData;
 
 			if (!this.sortByProxy) {
 				return raw;
@@ -82,18 +115,36 @@ export default {
 
 			return out;
 		},
-		paginatedSortedData() {
+		filteredSortedAndPaginatedData() {
 			if (!this.paginated) {
-				return this.sortedData;
+				return this.filteredAndSortedData;
 			}
 			const {
 				currentPageProxy: currentPage,
 				rowsPerPageProxy: rowsPerPage,
 			} = this;
-			return this.sortedData.slice(
+			return this.filteredAndSortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage
 			);
+		},
+		activeFiltersProxy: {
+			get() {
+				return this.localActiveFilters || this.activeFilters;
+			},
+			set(to) {
+				this.localActiveFilters = to;
+				this.$emit("update:activeFilters", to);
+			},
+		},
+		filtersProxy: {
+			get() {
+				return this.localFilters || this.filters;
+			},
+			set(to) {
+				this.localFilters = to;
+				this.$emit("update:filters", to);
+			},
 		},
 		currentPageProxy: {
 			get() {
@@ -136,8 +187,14 @@ export default {
 		},
 	},
 	watch: {
+		activeFilters(to) {
+			this.localActiveFilters = to;
+		},
 		currentPage(to) {
 			this.localCurrentPage = to;
+		},
+		filters(to) {
+			this.localFilters = to;
 		},
 		rowsPerPage(to) {
 			this.localRowsPerPage = to;
@@ -187,7 +244,7 @@ export default {
 			}
 		},
 		sort(data, sortBy, sortOrder) {
-			const sortedData = [...data].sort((first, second) => {
+			const filteredAndSortedData = [...data].sort((first, second) => {
 				const a = getValueByPath(first, sortBy);
 				const b = getValueByPath(second, sortBy);
 				// handle undefined values
@@ -211,7 +268,7 @@ export default {
 				// sort strings
 				return a.localeCompare(b);
 			});
-			return sortOrder !== "desc" ? sortedData : sortedData.reverse();
+			return sortOrder !== "desc" ? filteredAndSortedData : filteredAndSortedData.reverse();
 		},
 	},
 };

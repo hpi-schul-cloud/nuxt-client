@@ -1,5 +1,12 @@
 import { storiesOf } from "@storybook/vue";
-import { text, boolean, number, array, select } from "@storybook/addon-knobs";
+import {
+	text,
+	boolean,
+	number,
+	array,
+	select,
+	object,
+} from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 
 import BackendDataTable from "./BackendDataTable";
@@ -26,8 +33,8 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 			columns: tableColumns,
 			randomData,
 			trackBy: text("trackBy", "id"),
-			filterable: boolean("filterable", true),
 			filters: tableFilters,
+			activeFilters: object("activeFilters", [tableFilters[0]]),
 
 			total: total,
 			currentPage: number("currentPage", 1),
@@ -65,8 +72,8 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 				:columns="columns"
 				:data="randomData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)"
 
-				:filterable="filterable"
 				:filters="filters"
+				:activeFilters="activeFilters"
 				@update:active-filters="onUpdateActiveFilters"
 
 				:trackBy="trackBy"
