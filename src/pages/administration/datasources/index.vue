@@ -15,14 +15,14 @@
 					class="mb--md"
 				>
 					<template v-slot:actions>
-						<responsive-button
+						<responsive-icon-button
 							design="primary text"
 							source="custom"
 							icon="datasource-import"
 							@click="handleManageOldDatasourceClick"
 						>
 							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</responsive-button>
+						</responsive-icon-button>
 					</template>
 				</datasource-card>
 			</li>
@@ -33,14 +33,14 @@
 					class="mb--xl-3"
 				>
 					<template v-slot:actions>
-						<responsive-button
+						<responsive-icon-button
 							design="primary text"
 							source="custom"
 							icon="datasource-import"
 							@click="handleManageOldDatasourceClick"
 						>
 							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</responsive-button>
+						</responsive-icon-button>
 					</template>
 				</datasource-card>
 			</li>
@@ -91,7 +91,7 @@
 					</template>
 
 					<template v-slot:actions>
-						<responsive-button
+						<responsive-icon-button
 							v-if="element.lastStatus === 'Error'"
 							design="primary text"
 							source="custom"
@@ -99,8 +99,8 @@
 							@click="handleManageErrorLogin(element)"
 						>
 							{{ $t("pages.administration.datasources.index.import") }}
-						</responsive-button>
-						<responsive-button
+						</responsive-icon-button>
+						<responsive-icon-button
 							v-else
 							design="primary text"
 							source="custom"
@@ -108,7 +108,7 @@
 							@click="triggerRun(element)"
 						>
 							{{ $t("pages.administration.datasources.index.import") }}
-						</responsive-button>
+						</responsive-icon-button>
 						<span class="ctx-menu">
 							<BaseButton design="icon text" @click="menuOpen = element._id">
 								<base-icon
@@ -162,7 +162,7 @@ import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
 import Pagination from "@components/organisms/Pagination";
-import ResponsiveButton from "@components/base/ResponsiveButton";
+import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
@@ -179,7 +179,7 @@ export default {
 		EmptyState,
 		FloatingFab,
 		Pagination,
-		ResponsiveButton,
+		ResponsiveIconButton,
 	},
 	props: {
 		color: {

@@ -15,7 +15,6 @@ import BaseQrCode from "@basecomponents/BaseQrCode";
 import BaseSelect from "@basecomponents/BaseSelect";
 import BaseSpinner from "@basecomponents/BaseSpinner";
 import BaseVideo from "@basecomponents/BaseVideo";
-import ResponsiveButton from "@basecomponents/ResponsiveButton";
 
 storiesOf("4 Base UI Components/Base UI", module)
 	.addParameters({
@@ -158,17 +157,6 @@ storiesOf("4 Base UI Components/Base UI", module)
 				<h2>Other</h2>
 				<base-button design="none">none</base-button> wherever we need a plain button
 			</div>`,
-	}))
-	.add("ResponsiveButton", () => ({
-		components: { BaseButton, BaseIcon, ResponsiveButton },
-
-		template: `<responsive-button
-				        	design="primary text"
-				        	source="material"
-				        	icon="add"
-				        	responsivedesign="primary text icon">
-				   				My button
-								</responsive-button>`,
 	}))
 	.add("BaseCard", () => ({
 		components: { BaseCard },

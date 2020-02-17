@@ -1,13 +1,17 @@
 <template>
 	<div>
 		<mq-layout mq="tablet+">
-			<base-button :design="design" v-on="$listeners">
+			<base-button v-bind="{ ...$attrs, ...$props }" v-on="$listeners">
 				<base-icon :source="source" :icon="icon" />
 				<slot />
 			</base-button>
 		</mq-layout>
 		<mq-layout mq="mobile">
-			<base-button :design="icondesign" v-on="$listeners">
+			<base-button
+				:design="icondesign"
+				v-bind="{ ...$attrs, ...$props }"
+				v-on="$listeners"
+			>
 				<base-icon :source="source" :icon="icon" />
 			</base-button>
 		</mq-layout>
@@ -16,12 +20,6 @@
 <script>
 export default {
 	props: {
-		size: {
-			type: String,
-			default: "medium",
-			validator: (size) => ["small", "medium", "large"].includes(size),
-		},
-
 		design: {
 			type: String,
 			default: "",
@@ -30,33 +28,21 @@ export default {
 					"",
 					"none",
 					"text",
-					"icon",
-					"icon text",
 					"outline",
 					"primary",
 					"primary text",
-					"primary icon",
-					"primary text icon",
 					"primary outline",
 					"secondary",
 					"secondary text",
-					"secondary icon",
-					"secondary text icon",
 					"secondary outline",
 					"hero-cta",
-					"hero-cta icon",
 					"success",
 					"success text",
-					"success icon",
-					"success text icon",
 					"success outline",
 					"danger",
 					"danger text",
-					"danger icon",
-					"danger text icon",
 					"danger outline",
 					"fancy",
-					"fancy icon",
 				].includes(design);
 				if (!defined) {
 					throw new Error(`the design "${design}" is not available`);
@@ -88,4 +74,3 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped></style>
