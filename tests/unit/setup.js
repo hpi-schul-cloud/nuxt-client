@@ -157,7 +157,7 @@ global.createComponentMocks = ({
 	// https://vue-test-utils.vuejs.org/api/options.html#mocks
 	returnOptions.mocks = mocks || {};
 
-	Object.entries(stubs).forEach(([name, value]) => {
+	Object.entries(stubs || {}).forEach(([name, value]) => {
 		if (value === true && globalStubs[name]) {
 			stubs[name] = globalStubs[name]();
 		}
