@@ -18,7 +18,10 @@
 			</div>
 		</td>
 		<td v-for="(fieldData, index) in rowData" :key="index">
-			<slot :name="`datacolumn-${columnKeys[index]}`" :data="fieldData">
+			<slot
+				:name="`datacolumn-${columnKeys[index].replace(/\./g, '-')}`"
+				:data="fieldData"
+			>
 				<div class="text-content">
 					{{ fieldData }}
 				</div>
