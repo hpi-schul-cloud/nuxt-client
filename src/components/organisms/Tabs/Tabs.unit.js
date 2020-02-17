@@ -42,12 +42,14 @@ describe("@components/organisms/Tabs/Tabs", () => {
 		).toBe(false);
 	});
 
-	it("Select another tab and see if new text is shown", () => {
+	it("Select another tab and see if new text is shown", async () => {
 		const wrapper = mount(tabs);
+		await wrapper.vm.$nextTick();
 		wrapper
 			.findAll(".tab-button")
 			.at(1)
 			.trigger("click");
+		await wrapper.vm.$nextTick();
 		expect(
 			wrapper
 				.findAll(".tab-content")

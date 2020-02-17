@@ -11,12 +11,14 @@ describe("@components/BaseIcon", () => {
 		expect(wrapper.find(".icon").text()).toBe("MM");
 	});
 
-	it("it pops up when it is clicked", () => {
+	it("it pops up when it is clicked", async () => {
 		const wrapper = shallowMount(PopupIconInitials);
 
 		wrapper.find(".popup").trigger("click");
+		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".popuptext").classes()).toContain("visible");
 		wrapper.find(".popup").trigger("click");
+		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".popuptext").classes()).not.toContain("visible");
 	});
 });

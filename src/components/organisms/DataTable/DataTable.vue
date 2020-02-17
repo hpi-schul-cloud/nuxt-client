@@ -14,11 +14,6 @@
 		@update:selection="handleTableSelectionUpdate"
 		v-on="$listeners"
 	>
-		<template v-for="(cmp, name) in $slots" v-slot:[name]>
-			<slot :name="name">
-				<component :is="cmp.context" :key="name" />
-			</slot>
-		</template>
 		<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
 			<slot :name="name" v-bind="props">
 				<component :is="cmp.context" :key="name" />

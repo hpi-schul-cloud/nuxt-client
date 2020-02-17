@@ -29,14 +29,17 @@ describe("@components/BaseInputDefault", () => {
 		});
 	});
 
-	it("changing the v-model, updates the element's value", () => {
-		supportedTypes.forEach((type) => {
-			const testInput = type === "number" ? 5 : "test string";
-			const wrapper = getMock(type);
-			wrapper.setData({ content: testInput });
-			const input = wrapper.find(`input[type="${type}"]`);
-			expect(input.element.value.toString()).toBe(testInput.toString());
-		});
+	it("changing the v-model, updates the element's value", async () => {
+		await Promise.all(
+			supportedTypes.map(async (type) => {
+				const testInput = type === "number" ? 5 : "test string";
+				const wrapper = getMock(type);
+				wrapper.setData({ content: testInput });
+				await wrapper.vm.$nextTick();
+				const input = wrapper.find(`input[type="${type}"]`);
+				expect(input.element.value.toString()).toBe(testInput.toString());
+			})
+		);
 	});
 
 	it("rejects input if it is disabled", () => {
@@ -73,22 +76,29 @@ describe("@components/BaseInputDefault", () => {
 		});
 	});
 
-	it("shows its label when it contains a value", () => {
-		supportedTypes.forEach((type) => {
-			const testInput = type === "number" ? 5 : "test string";
-			const wrapperWithPlaceHolder = getMock(type, "placeholder='placeholder'");
-			const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.find(
-				BaseInputDefault
-			);
-			const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
+	it("shows its label when it contains a value", async () => {
+		await Promise.all(
+			supportedTypes.map(async (type) => {
+				const testInput = type === "number" ? 5 : "test string";
+				const wrapperWithPlaceHolder = getMock(
+					type,
+					"placeholder='placeholder'"
+				);
+				const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.find(
+					BaseInputDefault
+				);
+				const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
 
-			expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
-			expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(false);
+				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
+				expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(false);
 
-			input.setValue(testInput);
-			expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(true);
-			expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(true);
-		});
+				input.setValue(testInput);
+				await wrapperWithPlaceHolder.vm.$nextTick();
+
+				expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(true);
+				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(true);
+			})
+		);
 	});
 
 	it("shows its hint", () => {
@@ -150,6 +160,7 @@ describe("@components/BaseInputDefault", () => {
 		const pwdToggle = wrapper.find(`[data-testid="pwd-visibility-toggle"]`);
 		expect(inputField.attributes("type")).toBe("password");
 		pwdToggle.trigger("click");
+		await wrapper.vm.$nextTick();
 		expect(inputField.attributes("type")).toBe("text");
 	});
 
