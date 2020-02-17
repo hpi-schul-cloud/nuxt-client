@@ -7,11 +7,6 @@ const actions = [
 	{ event: "event3", text: "testText3" },
 ];
 
-const wait = (duration) =>
-	new Promise((resolve) => {
-		setTimeout(resolve, duration);
-	});
-
 const hasWrapperFocus = (wrapper) => {
 	return wrapper.element === document.activeElement;
 };
