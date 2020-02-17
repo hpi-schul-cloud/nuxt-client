@@ -23,7 +23,7 @@ storiesOf("5 Molecules/DatasourceCard", module)
 		<DatasourceCard :image="img" :title="title" :subtitle="subtitle">
 			<template v-slot:actions>${DatasourceActions}</template>
 		</DatasourceCard>
-	<div>`,
+	</div>`,
 	}))
 	.add("with subtitle", () => ({
 		components: { DatasourceCard },
@@ -31,18 +31,18 @@ storiesOf("5 Molecules/DatasourceCard", module)
 			img: ExampleImage,
 		}),
 		template: `<div>
-		Using Props:
-		<DatasourceCard :image="img" title="A Title" subtitle="I am a subtitle">
-			<template v-slot:actions>${DatasourceActions}</template>
-		</DatasourceCard>
-		<br/>
-		Using Slots:
-		<DatasourceCard :image="img">
-			<template v-slot:title>Datenquelle</template>
-			<template v-slot:subtitle>I am a subtitle</template>
-			<template v-slot:actions>${DatasourceActions}</template>
-		</DatasourceCard>
-	<div>`,
+			Using Props:
+			<DatasourceCard :image="img" title="A Title" subtitle="I am a subtitle">
+				<template v-slot:actions>${DatasourceActions}</template>
+			</DatasourceCard>
+			<br/>
+			Using Slots:
+			<DatasourceCard :image="img">
+				<template v-slot:title>Datenquelle</template>
+				<template v-slot:subtitle>I am a subtitle</template>
+				<template v-slot:actions>${DatasourceActions}</template>
+			</DatasourceCard>
+		</div>`,
 	}))
 	.add("without subtitle", () => ({
 		components: { DatasourceCard },
@@ -50,17 +50,17 @@ storiesOf("5 Molecules/DatasourceCard", module)
 			img: ExampleImage,
 		}),
 		template: `<div>
-		Using Props:
-		<DatasourceCard :image="img" title="A Title">
-			<template v-slot:actions>${DatasourceActions}</template>
-		</DatasourceCard>
-		<br/>
-		Using Slots:
-		<DatasourceCard :image="img">
-		<template v-slot:title>Datenquelle</template>
-			<template v-slot:actions>${DatasourceActions}</template>
-		</DatasourceCard>
-	<div>`,
+			Using Props:
+			<DatasourceCard :image="img" title="A Title">
+				<template v-slot:actions>${DatasourceActions}</template>
+			</DatasourceCard>
+			<br/>
+			Using Slots:
+			<DatasourceCard :image="img">
+			<template v-slot:title>Datenquelle</template>
+				<template v-slot:actions>${DatasourceActions}</template>
+			</DatasourceCard>
+		</div>`,
 	}))
 	.add(
 		"with context menu",
