@@ -83,6 +83,7 @@ export default {
 @import "@styles";
 
 .wrapper {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
 }
