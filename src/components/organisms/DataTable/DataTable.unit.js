@@ -437,4 +437,54 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			).toBe(true);
 		});
 	});
+
+	describe("slots", () => {
+		const smallData = tableData(1);
+		it("renders scopedSlots with data", async () => {
+			const testSlotContent = `some random slot content`;
+
+			const wrapper = mount(DataTable, {
+				propsData: {
+					data: smallData,
+					trackBy: "id",
+					columns: tableColumns,
+				},
+				scopedSlots: {
+					"datacolumn-firstName": `<p> {{props.data}} ${testSlotContent}</p>`,
+				},
+			});
+
+			// check that basic slot content gets rendered
+			expect(wrapper.html()).toContain(testSlotContent);
+
+			// check that content from props.data got rendered
+			const renderedData = await getTableRowsContent(wrapper);
+			renderedData.forEach((row, index) => {
+				expect(row[0]).toContain(smallData[index]["firstName"]);
+			});
+		});
+
+		it("renders scopedSlots with data for nested keys", async () => {
+			const testSlotContent = `some random slot content`;
+
+			const wrapper = mount(DataTable, {
+				propsData: {
+					data: smallData,
+					trackBy: "id",
+					columns: tableColumns,
+				},
+				scopedSlots: {
+					"datacolumn-address-city": `<p> {{props.data}} ${testSlotContent}</p>`,
+				},
+			});
+			// check that basic slot content gets rendered
+			expect(wrapper.html()).toContain(testSlotContent);
+
+			// check that content from props.data got rendered
+			const renderedData = await getTableRowsContent(wrapper);
+			renderedData.forEach((row, index) => {
+				expect(row[2]).toContain(smallData[index].address.city);
+			});
+		});
+	});
 });
