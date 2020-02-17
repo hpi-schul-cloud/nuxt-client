@@ -59,20 +59,24 @@ describe("@components/BaseInputCheckbox", () => {
 		expect(wrapper.vm.value).not.toContain(testValue);
 	});
 
-	it(`shows checkmark only when it is checked`, () => {
-		const wrapper = mount({
-			data: () => ({ value: false }),
-			template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
-			components: { BaseInput },
-		});
+	it(`shows checkmark only when it is checked`, async () => {
+		await Promise.all(
+			["input", "label"].map(async (clickTargetSelector) => {
+				const wrapper = mount({
+					data: () => ({ value: false }),
+					template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
+					components: { BaseInput },
+				});
 
-		["input", "label"].forEach((clickTargetSelector) => {
-			const clickTarget = wrapper.find(clickTargetSelector);
-			expect(wrapper.find(".checkmark").exists()).toBe(false);
-			clickTarget.trigger("click");
-			expect(wrapper.find(".checkmark").exists()).toBe(true);
-			clickTarget.trigger("click");
-			expect(wrapper.find(".checkmark").exists()).toBe(false);
-		});
+				const clickTarget = wrapper.find(clickTargetSelector);
+				expect(wrapper.find(".checkmark").exists()).toBe(false);
+				clickTarget.trigger("click");
+				await wrapper.vm.$nextTick();
+				expect(wrapper.find(".checkmark").exists()).toBe(true);
+				clickTarget.trigger("click");
+				await wrapper.vm.$nextTick();
+				expect(wrapper.find(".checkmark").exists()).toBe(false);
+			})
+		);
 	});
 });
