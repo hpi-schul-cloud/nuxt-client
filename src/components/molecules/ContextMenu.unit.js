@@ -201,6 +201,7 @@ describe("@components/CardContextMenu", () => {
 			buttons.at(0).element.focus();
 			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
 			buttons.at(0).trigger("keydown.up");
+			await wrapper.vm.$nextTick();
 			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
 		});
 
@@ -221,6 +222,7 @@ describe("@components/CardContextMenu", () => {
 				expect(hasWrapperFocus(currentButton)).toBe(true);
 				expect(hasWrapperFocus(prevButton)).toBe(false);
 				currentButton.trigger("keydown.up");
+				await wrapper.vm.$nextTick();
 				expect(hasWrapperFocus(currentButton)).toBe(false);
 				expect(hasWrapperFocus(prevButton)).toBe(true);
 			}
@@ -237,6 +239,7 @@ describe("@components/CardContextMenu", () => {
 				expect(hasWrapperFocus(currentButton)).toBe(true);
 				expect(hasWrapperFocus(nextButton)).toBe(false);
 				currentButton.trigger("keydown.down");
+				await wrapper.vm.$nextTick();
 				expect(hasWrapperFocus(currentButton)).toBe(false);
 				expect(hasWrapperFocus(nextButton)).toBe(true);
 			}
