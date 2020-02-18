@@ -10,7 +10,7 @@
 		:selected-row-ids="backendTableSelection"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
-		v-on="$listeners"
+		v-on="proxyListeners"
 	>
 		<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
 			<slot :name="name" v-bind="props">
@@ -25,6 +25,18 @@ import BackendDataTable from "./BackendDataTable";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
+
+const eventProxyBlacklist = [
+	"update:selection",
+	"update:current-page",
+	"update:currentPage",
+	"update:sort-by",
+	"update:sortBy",
+	"update:sort-order",
+	"update:sortOrder",
+	"update:rows-per-page",
+	"update:rowsPerPage",
+];
 
 export default {
 	components: {
@@ -65,6 +77,21 @@ export default {
 				...this.$props,
 				...this.$attrs,
 			};
+		},
+		proxyListeners() {
+			// TODO configure babel to enable Object.fromEntries()
+			// then replace this ugly reduce
+			const fromEntries = (iterable) =>
+				[...iterable].reduce((obj, [key, val]) => {
+					obj[key] = val;
+					return obj;
+				}, {});
+
+			return fromEntries(
+				Object.entries(this.$listeners).filter(
+					([key]) => !eventProxyBlacklist.includes(key)
+				)
+			);
 		},
 		sortedData() {
 			const raw = this.data;
