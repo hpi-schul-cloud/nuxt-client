@@ -133,9 +133,11 @@ export default {
 		sidebarItems() {
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
 				const hasRequiredPermission =
+					this.user &&
 					this.user.permissions &&
 					this.user.permissions.includes(item.permission);
 				const hasExcludedPermission =
+					this.user &&
 					this.user.permissions &&
 					this.user.permissions.includes(item.excludedPermission);
 
