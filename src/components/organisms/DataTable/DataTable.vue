@@ -1,36 +1,47 @@
+<!-- eslint-disable max-lines -->
 <template>
-	<backend-data-table
-		v-bind="attrsProxy"
-		:data="filteredSortedAndPaginatedData"
-		:total="filteredAndSortedData.length"
-		:sort-by.sync="sortByProxy"
-		:sort-order.sync="sortOrderProxy"
-		:current-page.sync="currentPageProxy"
-		:rows-per-page.sync="rowsPerPageProxy"
-		:filters.sync="filtersProxy"
-		:active-filters.sync="activeFiltersProxy"
-		:selected-row-ids="backendTableSelection"
-		:selection-type="backendTableSelectionType"
-		@update:selection="handleTableSelectionUpdate"
-		v-on="$listeners"
-	>
-		<template v-for="(cmp, name) in $slots" v-slot:[name]>
-			<slot :name="name">
-				<component :is="cmp.context" :key="name" />
-			</slot>
-		</template>
-		<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
-			<slot :name="name" v-bind="props">
-				<component :is="cmp.context" :key="name" />
-			</slot>
-		</template>
-	</backend-data-table>
+	<div>
+		<filter-menu
+			v-if="filters.length && selectedRowIds.length < 1"
+			v-model="activeFiltersProxy"
+			:filters="filters"
+		/>
+		<backend-data-table
+			v-bind="attrsProxy"
+			:data="filteredSortedAndPaginatedData"
+			:total="filteredAndSortedData.length"
+			:sort-by.sync="sortByProxy"
+			:sort-order.sync="sortOrderProxy"
+			:current-page.sync="currentPageProxy"
+			:rows-per-page.sync="rowsPerPageProxy"
+			:filters.sync="filtersProxy"
+			:active-filters.sync="activeFiltersProxy"
+			:selected-row-ids="backendTableSelection"
+			:selection-type="backendTableSelectionType"
+			@update:selection="handleTableSelectionUpdate"
+			v-on="$listeners"
+		>
+			<template v-for="(cmp, name) in $slots" v-slot:[name]>
+				<slot :name="name">
+					<component :is="cmp.context" :key="name" />
+				</slot>
+			</template>
+			<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
+				<slot :name="name" v-bind="props">
+					<component :is="cmp.context" :key="name" />
+				</slot>
+			</template>
+		</backend-data-table>
+	</div>
 </template>
 <script>
 import { getValueByPath, getNestedObjectValues } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
 import camelCase from "lodash/camelCase";
 import defaultFiltersMixin from "@mixins/defaultFilters";
+import FilterMenu from "./FilterMenu.vue";
+import { supportedFilterTypes } from "@mixins/defaultFilters";
+import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
@@ -38,11 +49,68 @@ const isArrayIdentical = (a, b) =>
 export default {
 	components: {
 		BackendDataTable,
+		FilterMenu
 	},
 	mixins: [defaultFiltersMixin],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
+				/**
+		 * Array of filter objects
+		 */
+		filters: {
+			type: Array,
+			default: () => [],
+			validator: function(filters) {
+				return filters.every((filter) => {
+					const hasValidType =
+						!!filter.type && supportedFilterTypes.includes(filter.type);
+
+					var hasValidMatchingType = false;
+
+					if (
+						!supportedFilterMatchingTypes[filter.type] &&
+						!filter.matchingType
+					) {
+						hasValidMatchingType = true;
+					} else if (
+						supportedFilterMatchingTypes[filter.type] &&
+						filter.matchingType &&
+						supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
+					) {
+						hasValidMatchingType = true;
+					} else if (
+						filter.matchingType &&
+						filter.matchingType.implementation &&
+						filter.matchingType.value &&
+						filter.matchingType.label
+					) {
+						hasValidMatchingType = true;
+					}
+
+					const isValidSelectFilter =
+						filter.value &&
+						Array.isArray(filter.value) &&
+						filter.value.length > 0 &&
+						filter.value.every((value) => value.value && value.label);
+
+					return (
+						filter.label &&
+						(filter.attribute || filter.type == "fulltextSearch") &&
+						hasValidType &&
+						hasValidMatchingType &&
+						(isValidSelectFilter || filter.type !== "select")
+					);
+				});
+			},
+		},
+		/**
+		 * Array of filter objects that should be active
+		 */
+		activeFilters: {
+			type: Array,
+			default: () => [],
+		},
 		/**
 		 * (data, sortBy, sortOrder) => filteredAndSortedData
 		 */
@@ -61,6 +129,7 @@ export default {
 	},
 	data() {
 		return {
+			filterOpened: {},
 			localFilters: undefined,
 			localActiveFilters: undefined,
 			localSortBy: undefined,
@@ -134,7 +203,7 @@ export default {
 			},
 			set(to) {
 				this.localActiveFilters = to;
-				this.$emit("update:activeFilters", to);
+				this.$emit("update:active-filters", to);
 			},
 		},
 		filtersProxy: {

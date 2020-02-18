@@ -3,11 +3,6 @@
 	<div class="table-outer">
 		<div class="table-wrapper">
 			<div class="toolbelt">
-				<filter-menu
-					v-if="filters.length && selectedRowIds.length < 1"
-					v-model="newActiveFilters"
-					:filters="filters"
-				/>
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
@@ -70,13 +65,9 @@ import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
-import FilterMenu from "./FilterMenu.vue";
-import { supportedFilterTypes } from "@mixins/defaultFilters";
-import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 export default {
 	components: {
-		FilterMenu,
 		Pagination,
 		RowSelectionBar,
 	},
@@ -94,62 +85,6 @@ export default {
 		 * Array of objects
 		 */
 		data: {
-			type: Array,
-			default: () => [],
-		},
-		/**
-		 * Array of filter objects
-		 */
-		filters: {
-			type: Array,
-			default: () => [],
-			validator: function(filters) {
-				return filters.every((filter) => {
-					const hasValidType =
-						!!filter.type && supportedFilterTypes.includes(filter.type);
-
-					var hasValidMatchingType = false;
-
-					if (
-						!supportedFilterMatchingTypes[filter.type] &&
-						!filter.matchingType
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						supportedFilterMatchingTypes[filter.type] &&
-						filter.matchingType &&
-						supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						filter.matchingType &&
-						filter.matchingType.implementation &&
-						filter.matchingType.value &&
-						filter.matchingType.label
-					) {
-						hasValidMatchingType = true;
-					}
-
-					const isValidSelectFilter =
-						filter.value &&
-						Array.isArray(filter.value) &&
-						filter.value.length > 0 &&
-						filter.value.every((value) => value.value && value.label);
-
-					return (
-						filter.label &&
-						(filter.attribute || filter.type == "fulltextSearch") &&
-						hasValidType &&
-						hasValidMatchingType &&
-						(isValidSelectFilter || filter.type !== "select")
-					);
-				});
-			},
-		},
-		/**
-		 * Array of filter objects that should be active
-		 */
-		activeFilters: {
 			type: Array,
 			default: () => [],
 		},
@@ -253,8 +188,6 @@ export default {
 		return {
 			editFilterActive: false,
 			tableData: this.data,
-			filterOpened: {},
-			newActiveFilters: this.activeFilters,
 			selectionKeys: {},
 			localSelectionType: "inclusive",
 		};
@@ -378,12 +311,6 @@ export default {
 				this.$forceUpdate();
 			},
 			immediate: true,
-		},
-		activeFilters() {
-			this.newActiveFilters = this.activeFilters;
-		},
-		newActiveFilters() {
-			this.$emit("update:active-filters", this.newActiveFilters);
 		},
 	},
 	methods: {
