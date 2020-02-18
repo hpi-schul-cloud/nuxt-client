@@ -26,6 +26,9 @@ import BackendDataTable from "./BackendDataTable";
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
 
+// This list defines all events that should not be proxied to the BackendDataTable.
+// This is required for events for which we override the behaviour in this component
+// and to prevent duplicate triggering in the parent component.
 const eventProxyBlacklist = [
 	"update:selection",
 	"update:current-page",
