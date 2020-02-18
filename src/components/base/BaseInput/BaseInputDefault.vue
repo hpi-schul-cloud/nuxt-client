@@ -220,7 +220,7 @@ export default {
 		.icon-before {
 			width: 24px;
 			height: 24px;
-			margin-right: var(--space-xxs);
+			margin-right: var(--space-xs);
 			/deep/ .material {
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				font-size: 1.1em;

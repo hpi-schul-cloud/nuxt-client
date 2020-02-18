@@ -1,7 +1,7 @@
 const viewPort = {
-	// HD Screen with reduced height
-	width: 1280,
-	height: 500,
+	// HD Landscape Screen (old Laptop)
+	width: 1080,
+	height: 720,
 	isLandscape: true,
 };
 

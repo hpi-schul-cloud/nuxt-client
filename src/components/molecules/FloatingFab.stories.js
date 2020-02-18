@@ -8,6 +8,11 @@ storiesOf("5 Molecules/FloatingFab", module)
 	.addParameters({
 		notes,
 	})
+	// render something for correct screenshots
+	.addDecorator(() => ({
+		template:
+			'<div style="width: 5px; height: 5px; background: #ccc;"><story/></div>',
+	}))
 	.add("default", () => ({
 		components: { FloatingFab },
 		data: () => ({

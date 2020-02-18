@@ -3,7 +3,7 @@
 		<div
 			class="image-container"
 			:style="{
-				'background-image': `url(https://${image} )`,
+				'background-image': `url(${image} )`,
 			}"
 		>
 		</div>
