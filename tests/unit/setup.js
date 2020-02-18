@@ -120,6 +120,11 @@ global.mount = vueTestUtils.mount;
 // https://vue-test-utils.vuejs.org/api/#shallowmount
 global.shallowMount = vueTestUtils.shallowMount;
 
+global.wait = (duration) =>
+	new Promise((resolve) => {
+		setTimeout(resolve, duration);
+	});
+
 /*
 // A special version of `shallowMount` for view components
 global.shallowMountView = (Component, options = {}) => {
@@ -142,6 +147,7 @@ import { i18n as i18nConfig } from "@plugins/i18n.js";
 import i18nStoreModule from "@store/i18n";
 import authStoreModule from "@store/auth";
 import { mixin as userMixin } from "@plugins/user.js";
+import globalStubs from "./stubs.js";
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
@@ -162,8 +168,15 @@ global.createComponentMocks = ({
 
 	// https://vue-test-utils.vuejs.org/api/options.html#stubs
 	returnOptions.stubs = stubs || {};
+
 	// https://vue-test-utils.vuejs.org/api/options.html#mocks
 	returnOptions.mocks = mocks || {};
+
+	Object.entries(stubs || {}).forEach(([name, value]) => {
+		if (value === true && globalStubs[name]) {
+			stubs[name] = globalStubs[name]();
+		}
+	});
 
 	// Converts a `store` option shaped like:
 	//

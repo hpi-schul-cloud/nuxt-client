@@ -14,7 +14,7 @@ describe("@components/BaseInputRadio", () => {
 		expect(wrapper.find("input[type='radio']").exists()).toBe(true);
 	});
 
-	it(`input updates v-model`, () => {
+	it(`input updates v-model`, async () => {
 		const wrapper = mount({
 			data: () => ({ value: "a" }),
 			template: `<div>
@@ -28,12 +28,14 @@ describe("@components/BaseInputRadio", () => {
 		const inputB = wrapper.find("input[value=b]");
 		expect(wrapper.vm.value).toBe("a");
 		inputB.setChecked();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.value).toBe("b");
 		inputA.setChecked();
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.value).toBe("a");
 	});
 
-	it(`v-model updates input`, () => {
+	it(`v-model updates input`, async () => {
 		const wrapper = mount({
 			data: () => ({ value: "b" }),
 			template: `<div>
@@ -45,8 +47,10 @@ describe("@components/BaseInputRadio", () => {
 
 		expect(wrapper.find("input[value=b]:checked").exists()).toBe(true);
 		wrapper.setData({ value: "a" });
+		await wrapper.vm.$nextTick();
 		expect(wrapper.find("input[value=a]:checked").exists()).toBe(true);
 		wrapper.setData({ value: "b" });
+		await wrapper.vm.$nextTick();
 		expect(wrapper.find("input[value=b]:checked").exists()).toBe(true);
 	});
 });
