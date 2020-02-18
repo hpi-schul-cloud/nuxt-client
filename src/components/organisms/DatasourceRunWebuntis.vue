@@ -169,21 +169,24 @@ export default {
 	},
 	methods: {
 		async findAll() {
+			let data;
 			try {
-				const { data } = await this.$store.dispatch(
-					"webuntis-metadata/findAll",
-					{
-						query: {
-							datasourceId: this.datasourceId,
-						},
-					}
-				);
-				this.selections = data
-					.filter((d) => d.state === "imported")
-					.map((d) => d._id);
+				({ data } = await this.$store.dispatch("webuntis-metadata/findAll", {
+					query: {
+						datasourceId: this.datasourceId,
+					},
+				}));
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(this.$t("error.load"));
+			}
+			const allItemsNew = data.every((d) => d.state === "new");
+			if (allItemsNew) {
+				this.selections = data.map((d) => d._id);
+			} else {
+				this.selections = data
+					.filter((d) => d.state === "imported")
+					.map((d) => d._id);
 			}
 		},
 		async triggerRun() {
