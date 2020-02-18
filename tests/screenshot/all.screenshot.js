@@ -37,35 +37,50 @@ it("have routes to test", () => {
 });
 
 describe("screenshots", () => {
-	jest.setTimeout(10000); // 10s
+	jest.setTimeout(15000); // in ms
 
 	stories.forEach((storyPath) => {
 		const storyName = storyPath.replace("/story/", "");
 		const [group, name] = storyName.split("--");
 
 		describe(group, () => {
-			it(name, async () => {
+			it.concurrent(name, async () => {
 				// You must open a new page for every test if you want to intercept requests
 				// https://github.com/smooth-code/jest-puppeteer/issues/147#issuecomment-431259166
-				page = await browser.newPage();
+				const localPage = await browser.newPage();
 
-				// block webpack hot reload connection
-				await page.setRequestInterception(true);
-				page.on("request", blockRequest);
+				// block webpack hot reload connection (when using npm run dev:storybook)
+				await localPage.setRequestInterception(true);
+				localPage.on("request", blockRequest);
 
-				// take screenshot of story
-				await page.goto(`${storybookUrl}/iframe.html?path=${storyPath}`, {
+				// load story
+				await localPage.goto(`${storybookUrl}/iframe.html?path=${storyPath}`, {
 					waitUntil: "networkidle0",
 				});
-				const image = await page.screenshot();
+				// hide caret in input fields
+				await localPage.addStyleTag({
+					content: `* { caret-color: transparent !important; }`,
+				});
+				// take screenshot of story
+				const image = await localPage.screenshot();
+
+				// close page to free up some memory
+				localPage.close();
 
 				// compare snapshots
 				expect(image).toMatchImageSnapshot({
+					customSnapshotIdentifier: (
+						testPath,
+						currentTestName,
+						counter = 0
+						// defaultIdentifier
+					) => `${group}-${name}_${counter + 1}`,
 					customDiffConfig: {
 						threshold: 0.1,
 					},
 					failureThresholdType: "percent",
-					failureThreshold: 0.1, // accept <x% overall diff
+					failureThreshold: 0.1, // accept <x% overall diff (0.01 is 1%, default: 0)
+					runInProcess: true, // disable child spawn for jest multithread safetiness. Otherwise images may get switched with each other.
 				});
 			});
 		});
