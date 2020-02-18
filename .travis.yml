@@ -47,7 +47,7 @@ jobs:
       name: "build:nuxt:thr"
       env:
         - SC_THEME=thr
-    - script: npm run build:storybook > /dev/null 2>&1
+    - script: npm run build:storybook
       name: "build:storybook"
       after_success:
         - npm i -g surge

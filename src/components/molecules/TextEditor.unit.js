@@ -36,6 +36,7 @@ describe("@components/BaseTextarea", () => {
 			expect.stringContaining(before)
 		);
 		wrapper.setData({ content: after });
+		await wrapper.vm.$nextTick();
 		expect(contentContainer.html()).toStrictEqual(
 			expect.not.stringContaining(before)
 		);

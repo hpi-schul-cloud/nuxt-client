@@ -13,13 +13,17 @@ const collapsible = {
 describe("@components/BaseCollapsible", () => {
 	it(...isValidComponent(BaseCollapsible));
 
-	it("pressing the label should toggle slot visibility", () => {
-		const wrapper = mount(collapsible);
+	it("pressing the label should toggle slot visibility", async () => {
+		const wrapper = mount(collapsible, {
+			...createComponentMocks({ stubs: { transition: true } }),
+		});
 
 		expect(wrapper.find("#slot-content").exists()).toBe(false);
 		wrapper.find(".collapsible").trigger("click");
+		await wrapper.vm.$nextTick();
 		expect(wrapper.find("#slot-content").exists()).toBe(true);
 		wrapper.find(".collapsible").trigger("click");
+		await wrapper.vm.$nextTick();
 		expect(wrapper.find("#slot-content").exists()).toBe(false);
 	});
 });

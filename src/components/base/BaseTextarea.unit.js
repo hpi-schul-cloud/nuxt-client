@@ -23,10 +23,11 @@ describe("@components/BaseTextarea", () => {
 		expect(wrapper.vm.content).toBe(testInput);
 	});
 
-	it("changing the v-model, updates the element's value", () => {
+	it("changing the v-model, updates the element's value", async () => {
 		const testInput = "test string";
 		const wrapper = getMock();
 		wrapper.setData({ content: testInput });
+		await wrapper.vm.$nextTick();
 		const input = wrapper.find("textarea");
 		expect(input.element.value.toString()).toBe(testInput.toString());
 	});
@@ -37,7 +38,7 @@ describe("@components/BaseTextarea", () => {
 		expect(input.attributes("rows")).toBe("4");
 	});
 
-	it("rejects carriage return when maximum row limit is reached", () => {
+	it("rejects carriage return when maximum row limit is reached", async () => {
 		const wrapper = getMock(" :maxRows='2' ");
 		const input = wrapper.find("textarea");
 
@@ -48,6 +49,7 @@ describe("@components/BaseTextarea", () => {
 		expect(spy).not.toHaveBeenCalled();
 
 		input.setValue("test \n string");
+		await wrapper.vm.$nextTick();
 		input.element.dispatchEvent(event);
 		expect(spy).toHaveBeenCalled();
 	});

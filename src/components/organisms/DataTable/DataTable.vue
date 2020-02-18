@@ -21,11 +21,6 @@
 			@update:selection="handleTableSelectionUpdate"
 			v-on="$listeners"
 		>
-			<template v-for="(cmp, name) in $slots" v-slot:[name]>
-				<slot :name="name">
-					<component :is="cmp.context" :key="name" />
-				</slot>
-			</template>
 			<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
 				<slot :name="name" v-bind="props">
 					<component :is="cmp.context" :key="name" />
@@ -49,13 +44,13 @@ const isArrayIdentical = (a, b) =>
 export default {
 	components: {
 		BackendDataTable,
-		FilterMenu
+		FilterMenu,
 	},
 	mixins: [defaultFiltersMixin],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
-				/**
+		/**
 		 * Array of filter objects
 		 */
 		filters: {
@@ -337,7 +332,9 @@ export default {
 				// sort strings
 				return a.localeCompare(b);
 			});
-			return sortOrder !== "desc" ? filteredAndSortedData : filteredAndSortedData.reverse();
+			return sortOrder !== "desc"
+				? filteredAndSortedData
+				: filteredAndSortedData.reverse();
 		},
 	},
 };
