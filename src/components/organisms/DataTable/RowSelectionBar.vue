@@ -82,8 +82,8 @@ export default {
 	padding: var(--space-md);
 	font-size: var(--text-md);
 	font-weight: var(--font-weight-normal);
-	color: var(--color-on-table-selected);
-	background: var(--color-table-selected);
+	color: var(--color-on-tertiary-light);
+	background-color: var(--color-tertiary);
 }
 
 .select-all-rows {
