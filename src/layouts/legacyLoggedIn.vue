@@ -132,10 +132,12 @@ export default {
 		},
 		sidebarItems() {
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
-				const hasRequiredPermission =
-					this.user?.permissions?.includes(item.permission);
-				const hasExcludedPermission =
-					this.user?.permissions?.includes(item.excludedPermission);
+				const hasRequiredPermission = this.user?.permissions?.includes?.(
+					item.permission
+				);
+				const hasExcludedPermission = this.user?.permissions?.includes?.(
+					item.excludedPermission
+				);
 
 				return (
 					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
