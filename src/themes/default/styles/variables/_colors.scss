@@ -79,6 +79,6 @@ $darken: 25%;
 	--color-sidebar-menu-item-active: var(--color-secondary);
 
 	/* tables */
-	--color-table-selected: color-mod(var(--color-info) tint(#{$brighten}));
+	--color-table-selected: var(--color-tertiary-light);
 	--color-on-table-selected: var(--color-on-info);
 }
