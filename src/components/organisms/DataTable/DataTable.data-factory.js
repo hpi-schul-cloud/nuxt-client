@@ -83,10 +83,10 @@ const tableFilters = [
 		type: "number",
 		attribute: "age",
 		matchingType: {
-			value: "equal",
-			label: "ist gleich",
+			value: "greater",
+			label: ">",
 		},
-		value: "",
+		value: 25,
 	},
 	{
 		label: "Zustimmung",
@@ -108,7 +108,7 @@ const tableFilters = [
 			value: "contains",
 			label: "enthält",
 		},
-		value: "",
+		value: "Ha",
 	},
 ];
 

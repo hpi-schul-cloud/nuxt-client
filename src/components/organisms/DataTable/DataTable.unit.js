@@ -1,5 +1,10 @@
-import { tableData, tableColumns } from "./DataTable.data-factory.js";
+import {
+	tableData,
+	tableColumns,
+	tableFilters,
+} from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
+import _ from "lodash";
 
 const defaultData = tableData(50);
 
@@ -289,6 +294,57 @@ describe("@components/organisms/DataTable/DataTable", () => {
 					{ s: "aAA" },
 				]);
 			});
+		});
+	});
+
+	describe("filtering", () => {
+		it("Should allow filtering based on string properties", async () => {
+			let activeFilters = tableFilters.filter(
+				(filter) => filter.type === "text"
+			);
+			let wrapper = getWrapper({ activeFilters });
+			let renderedData = await getTableRowsContent(wrapper);
+			let renderedNames = renderedData.map((row) => row[0]);
+			expect(
+				renderedNames.every((name) => _.lowerCase(name).includes("ha"))
+			).toBe(true);
+
+			activeFilters = activeFilters.map((filter) => {
+				return {
+					...filter,
+					matchingType: {
+						value: "equals",
+						label: "ist gleich",
+					},
+					value: "Hans",
+				};
+			});
+			wrapper = getWrapper({ activeFilters });
+			renderedData = await getTableRowsContent(wrapper);
+			renderedNames = renderedData.map((row) => row[0]);
+			expect(renderedNames.every((name) => _.lowerCase(name) == "hans")).toBe(
+				true
+			);
+		});
+
+		it("Should allow filtering the based on numeric properties", async () => {
+			const activeFilters = tableFilters.filter(
+				(filter) => filter.type === "number"
+			);
+			const wrapper = getWrapper({ activeFilters });
+			const renderedData = await getTableRowsContent(wrapper);
+			const renderedAges = renderedData.map((row) => row[3]);
+			expect(renderedAges.every((age) => age > 25)).toBe(true);
+		});
+
+		it("Should allow filtering the based on multiple options", async () => {
+			const activeFilters = tableFilters.filter(
+				(filter) => filter.type === "select"
+			);
+			const wrapper = getWrapper({ activeFilters });
+			const renderedData = await getTableRowsContent(wrapper);
+			const renderedValues = renderedData.map((row) => row[5]);
+			expect(renderedValues.every((value) => value === "true")).toBe(true);
 		});
 	});
 
