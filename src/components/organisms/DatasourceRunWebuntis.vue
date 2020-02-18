@@ -181,13 +181,10 @@ export default {
 				this.$toast.error(this.$t("error.load"));
 			}
 			const allItemsNew = data.every((d) => d.state === "new");
-			if (allItemsNew) {
-				this.selections = data.map((d) => d._id);
-			} else {
-				this.selections = data
-					.filter((d) => d.state === "imported")
-					.map((d) => d._id);
-			}
+			this.selections = (allItemsNew
+				? data // preselect all rows if all are new
+				: data.filter((d) => d.state === "imported")
+			).map((d) => d._id);
 		},
 		async triggerRun() {
 			try {
