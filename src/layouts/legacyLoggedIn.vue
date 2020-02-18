@@ -174,7 +174,7 @@ export default {
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
-				this.$router.push({ name: "login" });
+				this.$router.push({ path: "/" });
 			}
 			if (event === "fullscreen") {
 				this.fullscreenMode = !this.fullscreenMode;
