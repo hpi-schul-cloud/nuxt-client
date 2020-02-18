@@ -13,10 +13,9 @@ to allow for discussion before opening this PR.
 You can open a new issue at https://ticketsystem.schul-cloud.org/
 
 please use one of the following formats:
-- for issues from our ticketsystem: `[{issue id}](https://ticketsystem.schul-cloud.org/browse/{issue id})` 
-- for github issues: `#{issue id}` (#12) 
+- for issues from our ticketsystem: `[{issue id}](https://ticketsystem.schul-cloud.org/browse/{issue id})`
+- for github issues: `#{issue id}` (#12)
 -->
-
 
 ## Description
 
