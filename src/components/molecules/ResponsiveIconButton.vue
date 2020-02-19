@@ -1,9 +1,5 @@
 <template>
-	<base-button
-		:design="buttonDesign"
-		v-bind="$attrs"
-		v-on="$listeners"
-	>
+	<base-button :design="buttonDesign" v-bind="$attrs" v-on="$listeners">
 		<base-icon :source="source" :icon="icon" :fill="fill" />
 		<div :class="isMobile ? 'visually-hidden' : ''">
 			<slot />
