@@ -83,7 +83,7 @@ export default {
 	font-size: var(--text-md);
 	font-weight: var(--font-weight-normal);
 	color: var(--color-on-tertiary-light);
-	background-color: var(--color-tertiary);
+	background-color: var(--color-tertiary-light);
 }
 
 .select-all-rows {
