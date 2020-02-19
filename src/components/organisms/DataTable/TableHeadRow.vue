@@ -127,7 +127,7 @@ export default {
 		}
 		.th-wrap {
 			display: flex;
-			align-items: start;
+			align-items: center;
 			justify-content: space-between;
 			width: 100%;
 			padding: var(--space-xs);
