@@ -135,8 +135,6 @@
 		"vue-svg-loader": "0.15.0",
 		"vue-template-compiler": "^2.6.11",
 		"vuepress": "^1.3.0",
-		"vuera": "^0.2.7",
-		"webpack": "^4.41.6",
 		"yorkie": "^2.0.0"
 	},
 	"engines": {
