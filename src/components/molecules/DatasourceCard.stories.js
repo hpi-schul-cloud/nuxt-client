@@ -82,7 +82,7 @@ storiesOf("5 Molecules/DatasourceCard", module)
 							Datenquelle hinzufügen
 						</BaseButton>
 						<span style="position: relative">
-							<BaseButton design="icon text" @click="contextOpen = true">
+							<BaseButton design="text icon" @click="contextOpen = true">
 								<base-icon
 									class="footer__content-icon"
 									source="material"

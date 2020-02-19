@@ -110,7 +110,7 @@
 							{{ $t("pages.administration.datasources.index.import") }}
 						</responsive-icon-button>
 						<span class="ctx-menu">
-							<BaseButton design="icon text" @click="menuOpen = element._id">
+							<BaseButton design="text icon" @click="menuOpen = element._id">
 								<base-icon
 									class="context-menu-icon"
 									source="material"

@@ -41,7 +41,7 @@ export default {
 					"none",
 					"text",
 					"icon",
-					"icon text",
+					"text icon",
 					"outline",
 					"primary",
 					"primary text",

@@ -19,22 +19,16 @@ export default {
 			validator: (design) => {
 				const defined = [
 					"",
-					"none",
 					"text",
-					"outline",
 					"primary",
 					"primary text",
-					"primary outline",
 					"secondary",
 					"secondary text",
-					"secondary outline",
 					"hero-cta",
 					"success",
 					"success text",
-					"success outline",
 					"danger",
 					"danger text",
-					"danger outline",
 					"fancy",
 				].includes(design);
 				if (!defined) {
@@ -62,7 +56,7 @@ export default {
 
 	computed: {
 		buttonDesign() {
-			return this.isMobile ? `${this.design} icon` : this.design;
+			return this.isMobile ? `${this.design} icon`.trim() : this.design;
 		},
 		isMobile() {
 			return this.$mq === "mobile";
