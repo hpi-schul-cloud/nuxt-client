@@ -1,7 +1,7 @@
 <template>
 	<base-button
 		:design="buttonDesign"
-		v-bind="{ ...$attrs, ...$props }"
+		v-bind="$attrs"
 		v-on="$listeners"
 	>
 		<base-icon :source="source" :icon="icon" :fill="fill" />
