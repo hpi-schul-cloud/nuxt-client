@@ -200,7 +200,10 @@ export default {
 			dayjs,
 			menuOpen: false,
 			page: 1,
-			limit: localStorage.getItem("datasources_overview_limit") || 5,
+			limit:
+				localStorage.getItem(
+					"pages.administration.datasources.index.itemsPerPage"
+				) || 25,
 		};
 	},
 	computed: {
@@ -362,7 +365,10 @@ export default {
 			this.page = 1;
 			this.limit = limit;
 			// save user settings in localStorage
-			localStorage.setItem("datasources_overview_limit", limit);
+			localStorage.setItem(
+				"pages.administration.datasources.index.itemsPerPage",
+				limit
+			);
 			this.find();
 		},
 	},
