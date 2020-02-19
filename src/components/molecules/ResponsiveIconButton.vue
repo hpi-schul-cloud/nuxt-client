@@ -1,21 +1,14 @@
 <template>
-	<div>
-		<mq-layout mq="tablet+">
-			<base-button v-bind="{ ...$attrs, ...$props }" v-on="$listeners">
-				<base-icon :source="source" :icon="icon" />
-				<slot />
-			</base-button>
-		</mq-layout>
-		<mq-layout mq="mobile">
-			<base-button
-				:design="icondesign"
-				v-bind="{ ...$attrs, ...$props }"
-				v-on="$listeners"
-			>
-				<base-icon :source="source" :icon="icon" />
-			</base-button>
-		</mq-layout>
-	</div>
+	<base-button
+		:design="buttonDesign"
+		v-bind="{ ...$attrs, ...$props }"
+		v-on="$listeners"
+	>
+		<base-icon :source="source" :icon="icon" :fill="fill" />
+		<div :class="isMobile ? 'visually-hidden' : ''">
+			<slot />
+		</div>
+	</base-button>
 </template>
 <script>
 export default {
@@ -68,8 +61,11 @@ export default {
 	},
 
 	computed: {
-		icondesign() {
-			return this.design + " icon";
+		buttonDesign() {
+			return this.isMobile ? `${this.design} icon` : this.design;
+		},
+		isMobile() {
+			return this.$mq === "mobile";
 		},
 	},
 };
