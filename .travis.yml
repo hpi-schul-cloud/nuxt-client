@@ -3,7 +3,6 @@ branches:
     - develop
     - master
     - /^(?i:release|hotfix).*$/
-    - /^greenkeeper/.*$/
 language: node_js
 node_js:
   - lts/*
@@ -14,7 +13,10 @@ env:
   global:
     - TZ=Europe/Berlin
     - GIT_SHA=$( git rev-parse HEAD )
-    - DOCKERTAG=$( echo $TRAVIS_BRANCH | tr -s "[:punct:]" "-" | tr -s "[:upper:]" "[:lower:]" )_v$( jq -r '.version' package.json )_$( date +"%y%m%d%H%M" )
+    - DOCKERTAG="$( echo $TRAVIS_BRANCH | tr -s '[:punct:]' '-' | tr -s '[:upper:]' '[:lower:]' )_v$( jq -r '.version' package.json )_$TRAVIS_COMMIT"
+
+# do not run on develop if it is just a dependency update from dependabot to preserve resources
+if: (not branch = develop) or (branch = develop and not commit_message ~= /^Bump.*from.*to.*$/)
 
 stages:
   - test
@@ -45,7 +47,7 @@ jobs:
       name: "build:nuxt:thr"
       env:
         - SC_THEME=thr
-    - script: npm run build:storybook > /dev/null 2>&1
+    - script: npm run build:storybook
       name: "build:storybook"
       after_success:
         - npm i -g surge
@@ -56,12 +58,8 @@ jobs:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
     # Test
-    - script:
-        - curl https://gist.githubusercontent.com/schul-cloud-bot/a849c38804174f99ca7818782bf03c00/raw/index.sh > integration-test.sh
-        - chmod 700 integration-test.sh
-        - bash integration-test.sh
+    - script: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/master/scripts/ci/fetch.travis.sh" | bash
       name: "test:integration"
-      if: NOT (branch ~= /^greenkeeper\/.*$/ AND type != pull_request)
       env:
         - IT_CLIENT_HOST=nuxtclient
         - IT_CLIENT_PORT=4000

@@ -1,11 +1,6 @@
 import { mount } from "@vue/test-utils";
 import BaseModal from "./BaseModal";
 
-const wait = (duration) =>
-	new Promise((resolve) => {
-		setTimeout(resolve, duration);
-	});
-
 const modal = {
 	data: () => ({ active: false }),
 	template: `
@@ -20,7 +15,7 @@ const modal = {
 				</div>
 
 				<div class="modal-footer">
-					<base-button id="button" class="is-light" @click="$refs.modal.close()">
+					<base-button id="btn-close" class="is-light" @click="$refs.modal.close()">
 						OK
 					</base-button>
 				</div>
@@ -40,42 +35,52 @@ describe("@components/BaseModal", () => {
 		})
 	);
 
-	it("changing the active property should open and close the modal", () => {
+	it("changing the active property should open and close the modal", async () => {
 		const wrapper = mount(modal);
 
-		expect(wrapper.find("#button").exists()).toBe(false);
+		expect(wrapper.find("#btn-close").exists()).toBe(false);
 		wrapper.vm.active = true;
-		expect(wrapper.find("#button").exists()).toBe(true);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(true);
 	});
 
-	it("pressing the ok button should close the modal", () => {
-		const wrapper = mount(modal);
+	it("pressing the ok button should close the modal", async () => {
+		const wrapper = mount(modal, {
+			...createComponentMocks({ stubs: { transition: true } }),
+		});
 
-		expect(wrapper.find("#button").exists()).toBe(false);
+		expect(wrapper.find("#btn-close").exists()).toBe(false);
 		wrapper.vm.active = true;
-		expect(wrapper.find("#button").exists()).toBe(true);
-		wrapper.find("#button").trigger("click");
-		expect(wrapper.find("#button").exists()).toBe(false);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(true);
+		wrapper.find("#btn-close").trigger("click");
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(false);
 	});
 
-	it("pressing outside the model content should close the modal", () => {
+	it("pressing outside the model content should close the modal", async () => {
 		const wrapper = mount(modal);
 
 		wrapper.vm.active = true;
-		expect(wrapper.find("#button").exists()).toBe(true);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(true);
 		wrapper.find(".base-modal-wrapper").trigger("click");
-		expect(wrapper.find("#button").exists()).toBe(false);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(false);
 	});
 
 	it("closed modal can be reopened after clicking outside", async () => {
 		// TODO this test may can be removed, the problematic code is removed now.
 		const wrapper = mount(modal);
 		wrapper.vm.active = true;
-		expect(wrapper.find("#button").exists()).toBe(true);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(true);
 		wrapper.find(".base-modal-wrapper").trigger("click");
-		expect(wrapper.find("#button").exists()).toBe(false);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(false);
 		await wait(300);
 		wrapper.vm.active = true;
-		expect(wrapper.find("#button").exists()).toBe(true);
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(true);
 	});
 });

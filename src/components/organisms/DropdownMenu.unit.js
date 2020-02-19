@@ -20,7 +20,7 @@ describe("@components/organisms/DropdownMenu", () => {
 		expect(wrapper.find("base-button-stub").text()).toContain("Test Dropdown");
 	});
 
-	it("Check for showing content by events", () => {
+	it("Check for showing content by events", async () => {
 		const wrapper = shallowMount(DropdownMenu, {
 			propsData: {
 				title: "Test Dropdown",
@@ -30,12 +30,16 @@ describe("@components/organisms/DropdownMenu", () => {
 		const content = wrapper.find(".content");
 		expect(content.contains(".open")).toBe(false);
 		dropdown.trigger("mouseenter");
+		await wrapper.vm.$nextTick();
 		expect(content.contains(".open")).toBe(true);
 		dropdown.trigger("mouseleave");
+		await wrapper.vm.$nextTick();
 		expect(content.contains(".open")).toBe(false);
 		dropdown.trigger("focus");
+		await wrapper.vm.$nextTick();
 		expect(content.contains(".open")).toBe(true);
 		dropdown.trigger("blur");
+		await wrapper.vm.$nextTick();
 		expect(content.contains(".open")).toBe(false);
 	});
 

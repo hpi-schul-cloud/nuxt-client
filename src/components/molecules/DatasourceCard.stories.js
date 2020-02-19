@@ -1,15 +1,17 @@
 import { storiesOf } from "@storybook/vue";
 import { text } from "@storybook/addon-knobs";
+import centered from "@storybook/addon-centered/vue";
 
 import DatasourceCard from "./DatasourceCard";
-import ExampleImage from "@assets/img/datasources/logo-webuntis.png";
+import ContextMenu from "@components/molecules/ContextMenu";
+import ExampleImage from "@assets/img/datasources/logo-ldap.svg";
 
 const DatasourceActions = `<BaseButton design="primary text">
 <BaseIcon source="material" icon="add"/>
 Datenquelle hinzufügen
 </BaseButton>`;
 
-storiesOf("Molecules|DatasourceCard", module)
+storiesOf("5 Molecules/DatasourceCard", module)
 	.add("with knobs", () => ({
 		components: { DatasourceCard },
 		data: () => ({
@@ -59,4 +61,42 @@ storiesOf("Molecules|DatasourceCard", module)
 			<template v-slot:actions>${DatasourceActions}</template>
 		</DatasourceCard>
 	<div>`,
-	}));
+	}))
+	.add(
+		"with context menu",
+		() => ({
+			components: { DatasourceCard, ContextMenu },
+			data: () => ({
+				img: ExampleImage,
+				contextOpen: true,
+				actions: [
+					{ text: "Action 1", event: "event1" },
+					{ text: "Action 2", event: "event2" },
+				],
+			}),
+			template: `
+				<DatasourceCard :image="img" title="A Title" style="width: 500px">
+					<template v-slot:actions>
+						<BaseButton design="primary text">
+							<BaseIcon source="material" icon="add"/>
+							Datenquelle hinzufügen
+						</BaseButton>
+						<span style="position: relative">
+							<BaseButton design="icon text" @click="contextOpen = true">
+								<base-icon
+									class="footer__content-icon"
+									source="material"
+									icon="more_vert"
+								/>
+							</BaseButton>
+							<context-menu
+								:show.sync="contextOpen"
+								anchor="top-right"
+								:actions="actions"
+							/>
+						</span>
+					</template>
+				</DatasourceCard>`,
+		}),
+		{ decorators: [centered] }
+	);

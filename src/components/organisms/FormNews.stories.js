@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 import FormNews from "./FormNews";
 import FormActions from "@components/molecules/FormActions";
 
-storiesOf("Organisms|FormNews", module)
+storiesOf("6 Organisms/FormNews", module)
 	.add("/new", () => ({
 		components: { FormNews, FormActions },
 		template: `

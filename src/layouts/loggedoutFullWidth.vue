@@ -22,6 +22,10 @@ export default {
 		return {
 			links: [
 				{
+					title: this.$t("layouts.loggedoutFullWidth.steps"),
+					href: "/mint-ec/willkommenspaket",
+				},
+				{
 					title: this.$t("layouts.loggedoutFullWidth.project"),
 					href: "/about",
 				},
@@ -36,10 +40,6 @@ export default {
 				{
 					title: "FAQ",
 					href: "https://blog.schul-cloud.org/faq",
-				},
-				{
-					title: this.$t("layouts.loggedoutFullWidth.steps"),
-					href: "/mint-ec/willkommenspaket",
 				},
 			],
 		};

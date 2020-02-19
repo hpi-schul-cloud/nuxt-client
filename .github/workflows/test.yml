@@ -10,13 +10,6 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v1
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-nuxt-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuxt-node-
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run test:unit:ci
@@ -32,13 +25,6 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v1
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-nuxt-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuxt-node-
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run lint
@@ -47,17 +33,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-nuxt-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuxt-node-
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: build storybook
-        run: "npm run build:storybook > /dev/null 2>&1"
+        run: "npm run build:storybook"
       - name: npm run test:screenshot
         run: npm run test:screenshot
       - uses: actions/upload-artifact@v1
@@ -73,13 +52,6 @@ jobs:
   #   runs-on: ${{ matrix.platform }}
   #   steps:
   #     - uses: actions/checkout@v1
-  #     - name: Cache node modules
-  #       uses: actions/cache@v1
-  #       with:
-  #         path: ~/.npm
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-node-
   #     - name: npm ci
   #       run: npm ci --prefer-offline
   #     - name: npm run build:nuxt

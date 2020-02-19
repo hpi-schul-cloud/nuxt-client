@@ -97,15 +97,15 @@ export default {
 				value: 50,
 			},
 			{
-				label: "Alle anzeigen",
-				value: -1,
+				label: "100 pro Seite",
+				value: 100,
 			},
 		],
 	}),
 	computed: {
 		perPageSelected() {
 			return {
-				label: this.perPage > 0 ? this.perPage + " pro Seite" : "Alle anzeigen",
+				label: this.perPage + " pro Seite",
 				value: this.perPage,
 			};
 		},

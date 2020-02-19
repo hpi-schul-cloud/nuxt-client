@@ -54,7 +54,7 @@ module.exports = {
 	themeConfig: {
 		// https://vuepress.vuejs.org/default-theme-config/
 		sidebar: listFiles(baseDir),
-		logo: "/cloud-transparent.png",
+		logo: "/Logo-Bildmarke_transparent.svg",
 		lastUpdated: "Last Updated",
 		repo: "schul-cloud/nuxt-client",
 		docsDir: "/docs",

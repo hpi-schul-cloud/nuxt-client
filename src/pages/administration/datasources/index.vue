@@ -1,9 +1,47 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div>
-		<base-breadcrumb :inputs="breadcrumb" />
-		<h1 class="h3">{{ $t("pages.administration.datasources.index.title") }}</h1>
+		<base-breadcrumb :inputs="breadcrumbs" />
+		<h1 class="mb--md h3">{{
+			$t("pages.administration.datasources.index.title")
+		}}</h1>
 
 		<ol v-if="datasources && datasources.length > 0" class="datasources">
+			<!-- TODO remove dummies once all datasources are added here -->
+			<li>
+				<datasource-card
+					:image="mapTypeToDatasourceImage({ config: { target: 'rss' } })"
+					title="RSS"
+					class="mb--md"
+				>
+					<template v-slot:actions>
+						<BaseButton
+							design="primary text"
+							@click="handleManageOldDatasourceClick"
+						>
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.importRedirect") }}
+						</BaseButton>
+					</template>
+				</datasource-card>
+			</li>
+			<li>
+				<datasource-card
+					:image="mapTypeToDatasourceImage({ config: { target: 'ldap' } })"
+					title="LDAP"
+					class="mb--xl-3"
+				>
+					<template v-slot:actions>
+						<BaseButton
+							design="primary text"
+							@click="handleManageOldDatasourceClick"
+						>
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.importRedirect") }}
+						</BaseButton>
+					</template>
+				</datasource-card>
+			</li>
 			<li v-for="element in datasources" :key="element._id">
 				<!-- todo use from item the name -> title and type(use method) -> image -->
 				<datasource-card
@@ -11,17 +49,90 @@
 					:title="element.name"
 					class="mb--md"
 				>
+					<template v-slot:subtitle>
+						<template v-if="element.lastStatus === 'Success'">
+							{{
+								$t("pages.administraion.datasources.index.success", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
+							<BaseIcon
+								source="material"
+								icon="check_circle"
+								fill="var(--color-success)"
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Error'">
+							{{
+								$t("pages.administraion.datasources.index.error", {
+									relativeDate: dayjs(element.lastRun).fromNow(),
+								})
+							}}
+							<BaseIcon
+								source="custom"
+								icon="warning"
+								fill="var(--color-danger)"
+								class="text-md"
+							/>
+						</template>
+						<template v-else-if="element.lastStatus === 'Pending'">
+							{{ $t("pages.administraion.datasources.index.pending") }}
+							<base-spinner
+								:color="color"
+								size="small"
+								:style="{ 'margin-left': 'var(--space-xs-3)' }"
+							/>
+						</template>
+						<template v-else>
+							{{ $t("pages.administraion.datasources.index.empty") }}
+						</template>
+					</template>
+
 					<template v-slot:actions>
-						<BaseButton design="primary text">
+						<BaseButton
+							v-if="element.lastStatus === 'Error'"
+							design="primary text"
+							@click="handleManageErrorLogin(element)"
+						>
 							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
 						</BaseButton>
-						<!-- todo use method to return icon -> the method should return the complet icon -->
-						<!-- it exist different sketches with different styles how it should displayed, please ask ui -->
-						<!-- <BaseIcon source="custom" icon="success" :fill="green" /> -->
+						<BaseButton
+							v-else
+							design="primary text"
+							@click="triggerRun(element)"
+						>
+							<BaseIcon source="custom" icon="datasource-import" />
+							{{ $t("pages.administration.datasources.index.import") }}
+						</BaseButton>
+						<span class="ctx-menu">
+							<BaseButton design="icon text" @click="menuOpen = element._id">
+								<base-icon
+									class="context-menu-icon"
+									source="material"
+									icon="more_vert"
+								/>
+							</BaseButton>
+							<context-menu
+								:show="menuOpen === element._id"
+								anchor="top-right"
+								:actions="getActions(element)"
+								@update:show="menuOpen = false"
+								@edit="handleEdit(element)"
+								@remove="handleRemove(element)"
+							/>
+						</span>
 					</template>
 				</datasource-card>
 			</li>
+			<pagination
+				class="mt--xl-3"
+				:current-page="page"
+				:per-page="pagination.limit"
+				:total="pagination.total"
+				@update:current-page="onPageChange"
+				@update:per-page="onCurrentPageChange"
+			/>
 		</ol>
 		<template v-else>
 			<empty-state :image="imgsrc">
@@ -34,30 +145,48 @@
 		<floating-fab
 			position="bottom-right"
 			icon="add"
-			to="/administration/datasources/new"
+			to="/administration/datasources/add"
+			:aria-label="$t('pages.administration.datasources.index.create')"
 		/>
 	</div>
 </template>
 
 <script>
+import ContextMenu from "@components/molecules/ContextMenu";
+import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
+import Pagination from "@components/organisms/Pagination";
+
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
-import DatasourceCard from "@components/molecules/DatasourceCard";
-import { mapGetters } from "vuex";
+
+import { mapGetters, mapState } from "vuex";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export default {
 	components: {
+		ContextMenu,
+		DatasourceCard,
 		EmptyState,
 		FloatingFab,
-		DatasourceCard,
+		Pagination,
+	},
+	props: {
+		color: {
+			type: String,
+			default: "var(--color-primary)",
+		},
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
 	},
 	data() {
 		return {
-			breadcrumb: [
+			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
@@ -68,38 +197,179 @@ export default {
 				},
 			],
 			imgsrc: ImageEmptyState,
+			dayjs,
+			menuOpen: false,
+			page: 1,
+			limit:
+				localStorage.getItem(
+					"pages.administration.datasources.index.itemsPerPage"
+				) || 25,
 		};
 	},
 	computed: {
 		...mapGetters("datasources", {
 			datasources: "list",
 		}),
+		...mapState("datasources", {
+			pagination: (state) => state.pagination.default,
+		}),
+		...mapGetters("datasources", {
+			watchingIds: "getPendingIdsFromResult",
+		}),
 	},
 	created(ctx) {
 		this.find();
 	},
 	methods: {
-		find() {
-			this.$store.dispatch("datasources/find").catch((error) => {
-				console.error(error);
-				this.$toast.error(this.$t("error.load"));
-			});
+		getActions(element) {
+			return [
+				{
+					text: this.$t(
+						"pages.administration.datasources.index.ctxActions.edit"
+					),
+					event: "edit",
+					attributes: element,
+				},
+				{
+					text: this.$t(
+						"pages.administration.datasources.index.ctxActions.remove"
+					),
+					event: "remove",
+					attributes: element,
+				},
+			];
 		},
-		mapLastStatusIconName(item) {
-			const mapping = {
-				Success: "success",
-				Warning: "warning",
-				Error: "error",
+		find() {
+			const query = {
+				$limit: this.limit,
+				$skip: (this.page - 1) * this.limit,
+				$sort: {
+					// TODO sort for targets
+					createdAt: 1,
+				},
 			};
-			return mapping[item.lastStatus];
+			this.$store
+				.dispatch("datasources/find", { query })
+				.then((result) => {
+					if (this.watchingIds.length > 0) {
+						this.$store.dispatch("datasources/updateCallback", {
+							watchingIds: this.watchingIds,
+							successConditions: [
+								{ lastStatus: "Success" },
+								{ lastStatus: "Error" },
+							],
+							query,
+						});
+					}
+					return result;
+				})
+				.catch((error) => {
+					console.error(error);
+					this.$toast.error(this.$t("error.load"));
+				});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
 			const webuntis = require("@assets/img/datasources/logo-webuntis.png");
 			const ldap = require("@assets/img/datasources/logo-ldap.svg");
-			const rss = require("@assets/img/datasources/logo-rss.png");
+			const rss = require("@assets/img/datasources/logo-rss.svg");
 			const mapping = { webuntis, ldap, rss };
-			return mapping[item.config.type];
+			return mapping[item.config.target] || "";
+		},
+		async triggerRun(datasource) {
+			try {
+				const run = await this.$store.dispatch("datasourceRuns/create", {
+					datasourceId: datasource._id,
+					dryrun: true,
+				});
+				this.$router.push({
+					path: `/administration/datasources/${datasource._id}/run/${run._id}`,
+				});
+			} catch (error) {
+				console.error(error, error.response);
+				this.$toast.error(
+					this.$t("pages.administration.datasources.index.trigger.error")
+				);
+			}
+		},
+		handleManageOldDatasourceClick() {
+			this.$router.push({
+				path: "/administration/school",
+			});
+		},
+		handleManageErrorLogin(source) {
+			this.$router.push({
+				path: `datasources/webuntis/${source._id}/edit`,
+			});
+		},
+		handleEdit(source) {
+			this.$router.push({
+				path:
+					"datasources/" + source.config.target + "/" + source._id + "/edit",
+			});
+		},
+		async handleRemove(datasource) {
+			this.$dialog.confirm({
+				icon: "warning",
+				actionDesign: "success",
+				iconColor: "var(--color-danger)",
+				invertedDesign: true,
+				message: this.$t(
+					"pages.administration.datasources.index.remove.confirm.message",
+					{
+						name: datasource.name,
+					}
+				),
+				confirmText: this.$t(
+					"pages.administration.datasources.index.remove.confirm.btnText",
+					{
+						name: datasource.name,
+					}
+				),
+				cancelText: this.$t(
+					"components.organisms.FormNews.remove.confirm.cancel"
+				),
+				onConfirm: async () => {
+					try {
+						await this.$store.dispatch("datasources/remove", datasource._id);
+						this.$toast.success(
+							this.$t("pages.administration.datasources.index.remove.success", {
+								name: datasource.name,
+							})
+						);
+						// if last element on list -> move one page back
+						if (
+							this.page * this.limit > this.pagination.total &&
+							this.page > 1
+						) {
+							this.page--;
+						}
+						// show fully populated list
+						this.find();
+					} catch (error) {
+						console.error(error);
+						this.$toast.error(
+							this.$t("pages.administration.datasources.index.remove.error", {
+								name: datasource.name,
+							})
+						);
+					}
+				},
+			});
+		},
+		onPageChange(page) {
+			this.page = page;
+			this.find();
+		},
+		onCurrentPageChange(limit) {
+			this.page = 1;
+			this.limit = limit;
+			// save user settings in localStorage
+			localStorage.setItem(
+				"pages.administration.datasources.index.itemsPerPage",
+				limit
+			);
+			this.find();
 		},
 	},
 	head() {
@@ -115,5 +385,11 @@ export default {
 
 .datasources {
 	list-style: none;
+}
+.ctx-menu {
+	position: relative;
+}
+.context-menu-icon {
+	color: var(--color-tertiary);
 }
 </style>

@@ -1,7 +1,11 @@
 <template>
 	<section>
 		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
-			<floating-fab icon="arrow_drop_up" @click="$_backToTop" />
+			<floating-fab
+				icon="arrow_drop_up"
+				:aria-label="$t('common.actions.scrollToTop')"
+				@click="$_backToTop"
+			/>
 		</div>
 		<div class="content">
 			<searchbar

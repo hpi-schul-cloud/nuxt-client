@@ -3,7 +3,7 @@
 		<div class="card-body">
 			<img :src="image" class="image" role="presentation" />
 			<div class="card-heading">
-				<div class="card-title">
+				<div class="h6">
 					<slot name="title">
 						{{ title }}
 					</slot>
@@ -49,9 +49,9 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	height: auto;
-	padding: var(--space-xs) var(--space-lg) var(--space-xs) var(--space-xs);
+	padding: var(--space-xs);
 	border-radius: var(--radius-sm);
-	box-shadow: var(--shadow-s);
+	box-shadow: var(--shadow-xxxs);
 }
 
 .card-body {
@@ -59,21 +59,38 @@ export default {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
-.card-title {
-	font-family: var(--font-accent);
-	font-size: var(--text-lg);
+.card-heading {
+	overflow: hidden;
+}
+
+.h6 {
+	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .subtitle {
-	font-size: var(--text-sm);
+	display: flex;
+	align-items: center;
+	font-size: var(--text-xs);
+
+	.icon {
+		margin-left: var(--space-xs-3);
+	}
 }
 .image {
 	height: calc(var(--text-md) + var(--text-lg));
 	object-fit: contain;
 	margin-right: var(--space-sm);
 	border-radius: var(--radius-sm);
+}
+.card-action {
+	display: flex;
 }
 
 p {
