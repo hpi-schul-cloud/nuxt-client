@@ -1,69 +1,69 @@
-import moment from 'moment';
+import moment from "moment";
 
 export const actions = {
 	async getMonthlyUsers({ commit }) {
-		const data = await this.$axios.$get('/insights/monthlyUsers');
-		commit('setMonthlyUsers', data);
+		const data = await this.$axios.$get("/insights/monthlyUsers");
+		commit("setMonthlyUsers", data);
 	},
 	async getWeeklyUsers({ commit }) {
-		const data = await this.$axios.$get('/insights/weeklyUsers');
-		commit('setWeeklyUsers', data);
+		const data = await this.$axios.$get("/insights/weeklyUsers");
+		commit("setWeeklyUsers", data);
 	},
 	async getDau({ commit }) {
-		const data = await this.$axios.$get('/insights/dauOverMau');
-		commit('setDau', data);
+		const data = await this.$axios.$get("/insights/dauOverMau");
+		commit("setDau", data);
 	},
 	async getActivityByRole({ commit }) {
-		const data = await this.$axios.$get('/insights/roleActivity');
-		commit('setActivityByRole', data);
+		const data = await this.$axios.$get("/insights/roleActivity");
+		commit("setActivityByRole", data);
 	},
 	async getWeeklyActivity({ commit }) {
-		const data = await this.$axios.$get('/insights/weeklyActivity');
-		commit('setWeeklyActivity', data);
+		const data = await this.$axios.$get("/insights/weeklyActivity");
+		commit("setWeeklyActivity", data);
 	},
 	async getWeeklyActiveUsers({ commit }) {
-		const data = await this.$axios.$get('/insights/weeklyActiveUsers');
-		commit('setWeeklyActiveUsers', data);
+		const data = await this.$axios.$get("/insights/weeklyActiveUsers");
+		commit("setWeeklyActiveUsers", data);
 	},
 	async getUniquePageCount({ commit }) {
-		const data = await this.$axios.$get('/insights/uniquePageCount');
-		commit('setUniquePageCount', data);
+		const data = await this.$axios.$get("/insights/uniquePageCount");
+		commit("setUniquePageCount", data);
 	},
 	async getAvgPageLoaded({ commit }) {
-		const data =[
-			{ '2019-10-16T08:00:00.000': '596.5000000000000000' },
-			{ '2019-10-16T11:00:00.000': '700.5000000000000000' },
-			{ '2019-10-16T13:00:00.000': '320.5000000000000000' },
-			{ '2019-10-16T15:00:00.000': '600.5000000000000000' },
-			{ '2019-10-16T19:00:00.000': '420.5000000000000000' },
-			];
+		const data = [
+			{ "2019-10-16T08:00:00.000": "596.5000000000000000" },
+			{ "2019-10-16T11:00:00.000": "700.5000000000000000" },
+			{ "2019-10-16T13:00:00.000": "320.5000000000000000" },
+			{ "2019-10-16T15:00:00.000": "600.5000000000000000" },
+			{ "2019-10-16T19:00:00.000": "420.5000000000000000" },
+		];
 
-		commit('setAvgPageLoaded', data);
+		commit("setAvgPageLoaded", data);
 	},
 	async getAvgInteractTime({ commit }) {
-		const data =[
-			{ '2019-10-16T13:00:00.000': '320.5000000000000000' },
-			{ '2019-10-16T11:00:00.000': '700.5000000000000000' },
-			{ '2019-10-16T08:00:00.000': '596.5000000000000000' },
-			{ '2019-10-16T19:00:00.000': '420.5000000000000000' },
-			{ '2019-10-16T15:00:00.000': '600.5000000000000000' },
-			];
+		const data = [
+			{ "2019-10-16T13:00:00.000": "320.5000000000000000" },
+			{ "2019-10-16T11:00:00.000": "700.5000000000000000" },
+			{ "2019-10-16T08:00:00.000": "596.5000000000000000" },
+			{ "2019-10-16T19:00:00.000": "420.5000000000000000" },
+			{ "2019-10-16T15:00:00.000": "600.5000000000000000" },
+		];
 
-		commit('setAvgInteractTime', data);
+		commit("setAvgInteractTime", data);
 	},
-}
+};
 
 export const getters = {
-	monthlyUsers: state => state.monthlyUsers,
-	weeklyUsers: state => state.weeklyUsers,
-	dau: state => state.dau,
-	activityByRole: state => state.activityByRole,
-	weeklyActivity: state => state.weeklyActivity,
-	weeklyActiveUsers: state => state.weeklyActiveUsers,
-	uniquePageCount: state => state.uniquePageCount,
-	avgPageLoaded: state => state.avgPageLoaded,
-	avgInteractTime: state => state.avgInteractTime,
-}
+	monthlyUsers: (state) => state.monthlyUsers,
+	weeklyUsers: (state) => state.weeklyUsers,
+	dau: (state) => state.dau,
+	activityByRole: (state) => state.activityByRole,
+	weeklyActivity: (state) => state.weeklyActivity,
+	weeklyActiveUsers: (state) => state.weeklyActiveUsers,
+	uniquePageCount: (state) => state.uniquePageCount,
+	avgPageLoaded: (state) => state.avgPageLoaded,
+	avgInteractTime: (state) => state.avgInteractTime,
+};
 
 export const mutations = {
 	setMonthlyUsers(state, payload) {
@@ -77,76 +77,91 @@ export const mutations = {
 	setDau(state, payload) {
 		state.dau = payload.dauOverMau;
 	},
-	setActivityByRole (state, payload) {
+	setActivityByRole(state, payload) {
 		state.activityByRole.teachers = Number(payload.teacherData);
 		state.activityByRole.students = Number(payload.studentData);
 	},
-	setWeeklyActivity (state, payload) {
+	setWeeklyActivity(state, payload) {
 		state.weeklyActivity = payload;
 	},
-	setWeeklyActiveUsers (state, payload) {
-		const { teacherUsers, studentUsers, activeStudents, activeTeachers } = payload;
+	setWeeklyActiveUsers(state, payload) {
+		const {
+			teacherUsers,
+			studentUsers,
+			activeStudents,
+			activeTeachers,
+		} = payload;
 
-		state.weeklyActiveUsers.teachers = { inactive: Number(teacherUsers) - Number(activeTeachers), active: activeTeachers };
-		state.weeklyActiveUsers.students = { inactive: Number(studentUsers) - Number(activeStudents), active: activeStudents };
+		state.weeklyActiveUsers.teachers = {
+			inactive: Number(teacherUsers) - Number(activeTeachers),
+			active: activeTeachers,
+		};
+		state.weeklyActiveUsers.students = {
+			inactive: Number(studentUsers) - Number(activeStudents),
+			active: activeStudents,
+		};
 	},
-	setUniquePageCount (state, payload) {
-		const data = {}
+	setUniquePageCount(state, payload) {
+		const data = {};
 		for (const key in payload) {
-			data[moment(key).subtract(10, 'days').calendar()] = payload[key]
+			data[
+				moment(key)
+					.subtract(10, "days")
+					.calendar()
+			] = payload[key];
 		}
 		state.uniquePageCount = data;
 	},
-	setAvgPageLoaded (state, payload) {
-		const data = payload.map(el => {
-			const obj = {}
+	setAvgPageLoaded(state, payload) {
+		const data = payload.map((el) => {
+			const obj = {};
 			for (const key in el) {
-				obj[moment(key).format('LT')] = Number(el[key])
+				obj[moment(key).format("LT")] = Number(el[key]);
 			}
 			return obj;
-		})
+		});
 		state.avgPageLoaded = data;
 	},
-	setAvgInteractTime (state, payload) {
-		const data = payload.map(el => {
-			const obj = {}
+	setAvgInteractTime(state, payload) {
+		const data = payload.map((el) => {
+			const obj = {};
 			for (const key in el) {
-				obj[moment(key).format('LT')] = Number(el[key])
+				obj[moment(key).format("LT")] = Number(el[key]);
 			}
 			return obj;
-		})
+		});
 		state.avgInteractTime = data;
-	}
-}
+	},
+};
 
 export const state = () => {
 	return {
 		monthlyUsers: {
-			current: '',
-			last: '',
+			current: "",
+			last: "",
 		},
 		weeklyUsers: {
-			current: '',
-			last: '',
+			current: "",
+			last: "",
 		},
-		dau: '',
+		dau: "",
 		activityByRole: {
-			teachers: '',
-			students: '',
+			teachers: "",
+			students: "",
 		},
-		weeklyActivity: '',
+		weeklyActivity: "",
 		weeklyActiveUsers: {
 			teachers: {
-				inactive: '',
-				active: '',
+				inactive: "",
+				active: "",
 			},
 			students: {
-				inactive: '',
-				active: '',
+				inactive: "",
+				active: "",
 			},
 		},
 		uniquePageCount: {},
 		avgPageLoaded: {},
 		avgInteractTime: {},
-	}
-}
+	};
+};

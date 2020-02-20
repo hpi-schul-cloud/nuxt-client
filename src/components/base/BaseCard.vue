@@ -5,7 +5,7 @@
 		</header>
 		<div class="customcard-content">
 			<slot>
-				<slot name="content"/>
+				<slot name="content" />
 			</slot>
 		</div>
 		<footer class="customcard-footer">
