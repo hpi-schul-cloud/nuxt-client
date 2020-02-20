@@ -1,4 +1,8 @@
-import moment from "moment";
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar);
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export const actions = {
 	async getMonthlyUsers({ commit }) {
@@ -105,7 +109,7 @@ export const mutations = {
 		const data = {};
 		for (const key in payload) {
 			data[
-				moment(key)
+				dayjs(key)
 					.subtract(10, "days")
 					.calendar()
 			] = payload[key];
@@ -116,7 +120,7 @@ export const mutations = {
 		const data = payload.map((el) => {
 			const obj = {};
 			for (const key in el) {
-				obj[moment(key).format("LT")] = Number(el[key]);
+				obj[dayjs(key).format("LT")] = Number(el[key]);
 			}
 			return obj;
 		});
@@ -126,7 +130,7 @@ export const mutations = {
 		const data = payload.map((el) => {
 			const obj = {};
 			for (const key in el) {
-				obj[moment(key).format("LT")] = Number(el[key]);
+				obj[dayjs(key).format("LT")] = Number(el[key]);
 			}
 			return obj;
 		});
