@@ -19,6 +19,7 @@ $darken: 25%;
 	--color-gray: #aaa;
 	--color-gray-dark: #444;
 	--color-white: #fff;
+	--color-white-transparent: rgba(255, 255, 255, 0.85);
 	--color-overlay: rgba(0, 0, 0, 0.5);
 
 	/* feedback */
@@ -71,4 +72,9 @@ $darken: 25%;
 	--color-on-disabled-dark: var(--color-white);
 	--color-on-info-light: var(--color-white);
 	--color-on-info--dark: var(--color-white);
+
+	/* theme */
+	--color-sidebar-active-bg: var(--color-gray-light);
+	--color-sidebar-menu-item: var(--color-tertiary-dark);
+	--color-sidebar-menu-item-active: var(--color-secondary);
 }

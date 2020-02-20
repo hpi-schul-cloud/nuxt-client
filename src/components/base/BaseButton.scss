@@ -125,6 +125,11 @@
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1);
 
+	&:not(.is-icon) > * {
+		// removes margin from icon button
+		margin-right: var(--space-xs);
+	}
+
 	&:hover {
 		--button-background: var(--color-tertiary-dark);
 	}
@@ -158,12 +163,17 @@
 		}
 	}
 	&.is-none {
+		--button-text-color: inherit;
+
 		min-width: initial;
 		padding: 0;
 		font: inherit;
 		font-weight: initial;
 		background: transparent;
 		border: 0;
+		&:focus {
+			box-shadow: 0 0 0 3px var(--button-background);
+		}
 	}
 	// defined multiple times to seperate style from behaviour
 	/* stylelint-disable-next-line */

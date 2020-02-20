@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/vue";
 import notes from "@docs/storybook/ColorPicker.md";
 import ColorPicker from "@components/atoms/ColorPicker";
 
-storiesOf("Atoms|ColorPicker", module)
+storiesOf("3 Atoms/ColorPicker", module)
 	.addParameters({
 		notes,
 	})

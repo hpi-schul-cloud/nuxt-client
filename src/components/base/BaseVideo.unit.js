@@ -15,7 +15,7 @@ describe("@components/BaseVideo", () => {
 			sources: mockVideos,
 		});
 		mockVideos.forEach((video) => {
-			expect(wrapper.find(`[src="${video.src}"]`)).toBeTruthy();
+			expect(wrapper.find(`[src="${video.src}"]`).exists()).toBe(true);
 		});
 	});
 
@@ -34,7 +34,7 @@ describe("@components/BaseVideo", () => {
 			tracks: mockTracks,
 		});
 		mockVideos.forEach((track) => {
-			expect(wrapper.find(`[src="${track.src}"]`)).toBeTruthy();
+			expect(wrapper.find(`[src="${track.src}"]`).exists()).toBe(true);
 		});
 	});
 
@@ -43,7 +43,7 @@ describe("@components/BaseVideo", () => {
 		const wrapper = getVideoplayer({
 			sources: mockVideos,
 		});
-		expect(wrapper.contains(`video[controls]`)).toBeTruthy();
+		expect(wrapper.contains(`video[controls]`)).toBe(true);
 	});
 
 	it("can render without controls", () => {
@@ -52,6 +52,6 @@ describe("@components/BaseVideo", () => {
 			sources: mockVideos,
 			noControls: true,
 		});
-		expect(wrapper.contains("video[controls]")).toBeFalsy();
+		expect(wrapper.contains("video[controls]")).toBe(false);
 	});
 });

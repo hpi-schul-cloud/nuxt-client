@@ -8,7 +8,7 @@
 		>
 			<base-button
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
-				design="icon text"
+				design="text icon"
 				@click.native="sendEvent('expandMenu')"
 			>
 				<base-icon class="menu-icon" source="fa" icon="bars" />
@@ -16,7 +16,7 @@
 			<div class="space"></div>
 			<base-button
 				class="item fullscreen-button"
-				design="icon text"
+				design="text icon"
 				@click.native="sendEvent('fullscreen')"
 			>
 				<base-icon source="fa" icon="expand" />
@@ -54,6 +54,7 @@
 						:key="action.title"
 						v-ripple
 						class="logout-button"
+						data-testid="logout"
 						@click="sendEvent(action.event)"
 						>Abmelden</button
 					>

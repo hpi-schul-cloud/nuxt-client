@@ -1,11 +1,22 @@
+import Vue from "vue";
+import qs from "qs";
 export default function(endpoint) {
 	const baseUrl = "/" + endpoint;
 	return {
+		baseUrl,
 		actions: {
 			async find({ commit }, payload = {}) {
-				const query = payload.query || {};
-				const res = await this.$axios.$get(baseUrl, {
+				const { qid = "default", query, customEndpoint } = payload;
+				const res = await this.$axios.$get(customEndpoint || baseUrl, {
 					params: query,
+					paramsSerializer: (params) => {
+						return qs.stringify(params);
+					},
+				});
+				commit("updatePaginationForQuery", {
+					query,
+					qid,
+					res,
 				});
 				commit("set", {
 					items: res.data,
@@ -69,14 +80,18 @@ export default function(endpoint) {
 		},
 		mutations: {
 			set(state, { items }) {
-				items.forEach((item) => {
-					const existing = state.list.findIndex((e) => e._id === item._id);
-					if (existing === -1) {
-						state.list.push(item);
-					} else {
-						state.list[existing] = item;
-					}
-				});
+				state.list = items;
+			},
+			patchSingleItem(state, item) {
+				const index = state.list.findIndex(
+					(e) => e._id === item._id || item.id
+				);
+				if (index === -1) {
+					console.error(
+						"patchSingleItem error: No element in state.list found."
+					);
+				}
+				state.list[index] = Object.assign(state.list[index], item);
 			},
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);
@@ -89,10 +104,22 @@ export default function(endpoint) {
 			setCurrent(state, item) {
 				state.current = item;
 			},
+			// Stores pagination data on state.pagination based on the query identifier (qid)
+			// The qid must be manually assigned to `params.qid`
+			updatePaginationForQuery(state, { res, qid, query }) {
+				const { limit, skip, total } = res;
+				Vue.set(state.pagination, qid, {
+					limit: parseInt(limit),
+					skip: parseInt(skip),
+					total: parseInt(total),
+					query: parseInt(query),
+				});
+			},
 		},
 		state: () => ({
 			current: null,
 			list: [],
+			pagination: {},
 		}),
 	};
 }

@@ -3,14 +3,17 @@
 // using the ./proxy.js serverMiddleware
 
 // const id = "[a-z0-9]+";
-// const mongoId = "[a-z0-9]{24}";
+//const mongoId = "[a-z0-9]{24}";
 
 module.exports = [
+	`^/administration/datasources?`,
+	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
-	`^/nuxtversion/?$`,
+	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
-	// `^/news`,
-	// or: `^/news/${mongoId}/edit`,
 	`^/insights`,
+	// `^/news/${mongoId}/edit`,
+	`^/news/new`,
+	`^/nuxtversion/?$`,
 ];

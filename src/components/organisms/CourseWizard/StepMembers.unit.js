@@ -2,7 +2,7 @@ import StepMembers from "./StepMembers";
 
 const checkRendering = (wrapper) => {
 	expect(wrapper.find("p").exists()).toBe(true);
-	expect(wrapper.findAll("base-select-stub").length).toBe(2);
+	expect(wrapper.findAll("base-select-stub")).toHaveLength(2);
 };
 
 const getMockCourse = () => ({

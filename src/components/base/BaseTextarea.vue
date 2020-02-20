@@ -5,7 +5,7 @@
 		vmodel=""
 		:disabled="disabled"
 	>
-		<template slot="icon">
+		<template v-slot:icon>
 			<base-icon
 				source="custom"
 				icon="create"

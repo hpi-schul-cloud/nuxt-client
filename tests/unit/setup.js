@@ -11,7 +11,7 @@ import sinon from "sinon";
 // ===
 
 // https://vue-test-utils.vuejs.org/
-import vueTestUtils from "@vue/test-utils";
+import * as vueTestUtils from "@vue/test-utils";
 
 // ===
 // Configure Vue
@@ -51,7 +51,10 @@ function readDirRecursiveSync(dir) {
 const globalComponentFiles = readDirRecursiveSync(baseComponentDir)
 	// Only include "Base" prefixed .vue files
 	.filter((fileName) => /Base[A-Z][\w]+\.vue$/.test(fileName))
-	.map((fileName) => "./" + path.relative(baseComponentDir, fileName));
+	.map(
+		(fileName) =>
+			"./" + path.relative(baseComponentDir, fileName).replace(/\\/g, "/")
+	);
 
 mountBaseComponents(globalComponentFiles, (fileName) =>
 	require(path.join(baseComponentDir, fileName))
@@ -78,7 +81,19 @@ Object.defineProperty(window, "localStorage", {
 	})(),
 });
 
-const location = {};
+Object.defineProperty(window, "matchMedia", {
+	value: () => {
+		return {
+			matches: false,
+			addListener: () => {},
+			removeListener: () => {},
+		};
+	},
+});
+
+const location = {
+	href: "",
+};
 Object.defineProperty(window, "location", {
 	set: function(val) {
 		location.host = "domain.io";
@@ -105,6 +120,11 @@ global.mount = vueTestUtils.mount;
 // https://vue-test-utils.vuejs.org/api/#shallowmount
 global.shallowMount = vueTestUtils.shallowMount;
 
+global.wait = (duration) =>
+	new Promise((resolve) => {
+		setTimeout(resolve, duration);
+	});
+
 /*
 // A special version of `shallowMount` for view components
 global.shallowMountView = (Component, options = {}) => {
@@ -125,11 +145,17 @@ global.shallowMountView = (Component, options = {}) => {
 
 import { i18n as i18nConfig } from "@plugins/i18n.js";
 import i18nStoreModule from "@store/i18n";
+import authStoreModule from "@store/auth";
+import { mixin as userMixin } from "@plugins/user.js";
+import globalStubs from "./stubs.js";
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
+	user,
 	store,
+	$route,
+	$router,
 	router,
 	/*style,*/ mocks,
 	stubs,
@@ -142,8 +168,15 @@ global.createComponentMocks = ({
 
 	// https://vue-test-utils.vuejs.org/api/options.html#stubs
 	returnOptions.stubs = stubs || {};
+
 	// https://vue-test-utils.vuejs.org/api/options.html#mocks
 	returnOptions.mocks = mocks || {};
+
+	Object.entries(stubs || {}).forEach(([name, value]) => {
+		if (value === true && globalStubs[name]) {
+			stubs[name] = globalStubs[name]();
+		}
+	});
 
 	// Converts a `store` option shaped like:
 	//
@@ -161,11 +194,14 @@ global.createComponentMocks = ({
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	if (store || i18n) {
+	if (store || i18n || user) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
 		if (i18n) {
 			storeModules.i18n = i18nStoreModule;
+		}
+		if (user) {
+			storeModules.auth = authStoreModule;
 		}
 		returnOptions.store = new Vuex.Store({
 			modules: Object.entries(storeModules)
@@ -190,6 +226,10 @@ global.createComponentMocks = ({
 		returnOptions.i18n = i18nConfig(returnOptions.store);
 	}
 
+	if (user) {
+		localVue.mixin(userMixin);
+	}
+
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
 	if (router) {
@@ -197,6 +237,12 @@ global.createComponentMocks = ({
 		returnOptions.stubs["Nuxt"] = true;
 	}
 
+	if ($route) {
+		returnOptions.mocks.$route = $route;
+	}
+	if ($router) {
+		returnOptions.mocks.$router = $router;
+	}
 	return returnOptions;
 };
 

@@ -1,6 +1,6 @@
 <template>
 	<div v-click-outside="removePopup" class="popup">
-		<base-button class="icon-button" design="icon text" @click="popup">
+		<base-button class="icon-button" design="text icon" @click="popup">
 			<base-icon :source="source" :icon="icon" :fill="fill" />
 		</base-button>
 

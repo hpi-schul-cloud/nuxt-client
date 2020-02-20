@@ -22,14 +22,15 @@ export const actions = {
 		*/
 		const jwt = this.$cookies.get("jwt");
 		if (!jwt) {
-			throw new Error("No Accesstoken received");
+			throw new Error("Can not read jwt from cookies.");
 		}
 		const payload = jwtDecode(jwt);
 		return dispatch("populateUser", payload.userId);
 		//return res;
 	},
-	async logout(ctx) {
+	async logout({ commit }) {
 		this.$cookies.remove("jwt");
+		commit("clearAuthData");
 	},
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
@@ -86,6 +87,11 @@ export const mutations = {
 	addUserPermission(state, permission) {
 		state.user.permissions.push(permission);
 	},
+	clearAuthData(state) {
+		state.accessToken = null;
+		state.user = null;
+		state.school = null;
+	},
 };
 
 export const state = () => {
@@ -96,4 +102,11 @@ export const state = () => {
 		school: {},
 		publicPages: ["index", "login", "signup", "impressum"],
 	};
+};
+
+export default {
+	namespaced: true,
+	actions,
+	mutations,
+	state,
 };

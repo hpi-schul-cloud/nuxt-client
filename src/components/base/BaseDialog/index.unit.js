@@ -21,7 +21,9 @@ describe("@components/BaseDialog", () => {
 		const localVue = getLocalVue();
 		expect(isBaseDialog(localVue.prototype.$dialog.confirm())).toBe(true);
 	});
-	xit("should mount BaseDialog on body when Vue.$dialog.confirm() is called", () => {});
+	it.todo(
+		"should mount BaseDialog on body when Vue.$dialog.confirm() is called"
+	);
 	it("confirm passes props to BaseDialog instance", () => {
 		const localVue = getLocalVue();
 		const testProps = {

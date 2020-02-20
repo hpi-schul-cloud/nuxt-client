@@ -1,5 +1,10 @@
 <template>
-	<div v-click-outside="removePopup" class="popup" @click="popup">
+	<div
+		v-click-outside="removePopup"
+		class="popup"
+		data-testid="initials"
+		@click="popup"
+	>
 		<div class="icon">{{ initials }}</div>
 		<div class="popuptext" :class="{ visible }">
 			<div class="username">
@@ -66,12 +71,12 @@ export default {
 	color: var(--color-white);
 	cursor: pointer;
 	-webkit-user-select: None;
-	background-color: var(--color-tertiary-dark);
+	background-color: var(--color-secondary);
 	border: none;
 	border-radius: var(--radius-round);
 
 	&:hover {
-		background-color: var(--color-gray-dark);
+		background-color: var(--color-secondary-dark);
 	}
 }
 

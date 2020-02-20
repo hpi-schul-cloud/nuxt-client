@@ -1,7 +1,7 @@
 /* Legacy Client Proxy */
 const glob = require("glob");
 const path = require("path");
-const proxy = require("http-proxy-middleware");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const nuxtConfig = require("../../nuxt.config.js");
 
@@ -12,12 +12,12 @@ const proxyOptions = {
 	onError: (err, req, res) => {
 		console.error("Error occurred while trying to proxy request");
 		res.writeHead(302, {
-			Location: "/error/proxy",
+			Location: `/error/proxy?redirect=${encodeURIComponent(req.url)}`,
 		});
 		res.end();
 	},
 };
-const proxyInstance = proxy(proxyOptions);
+const proxyInstance = createProxyMiddleware(proxyOptions);
 
 // eslint-disable-next-line no-console
 console.log(

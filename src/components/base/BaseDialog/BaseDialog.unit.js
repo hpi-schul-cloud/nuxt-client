@@ -1,9 +1,10 @@
 import BaseDialog from "./BaseDialog";
 
-const mountDialog = async (options) => {
+const mountDialog = async (options = {}) => {
 	const wrapper = mount(BaseDialog, {
-		...options,
 		beforeMount() {},
+		...createComponentMocks({ stubs: { transition: true } }),
+		...options,
 	});
 	await wrapper.vm.$nextTick();
 	return wrapper;
@@ -20,14 +21,16 @@ describe("@components/BaseDialog", () => {
 					message: testMessage,
 				},
 			});
-			expect(wrapper.text().includes(testMessage)).toBe(true);
+			expect(wrapper.text()).toContain(testMessage);
 		});
 		it("iconColor Prop should override actionDesign", async () => {
 			const testColor = "lime";
 			const wrapper = await mountDialog({
-				stubs: {
-					BaseIcon: { template: "<div class='mock-icon'></div>" },
-				},
+				...createComponentMocks({
+					stubs: {
+						BaseIcon: { template: "<div class='mock-icon'></div>" },
+					},
+				}),
 				propsData: {
 					iconColor: testColor,
 					actionDesign: "danger",
@@ -36,9 +39,12 @@ describe("@components/BaseDialog", () => {
 			});
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.currentIconColor).toBe(testColor);
-			expect(wrapper.find(".mock-icon").element.style.color).toBe(testColor);
+			expect(wrapper.get(".mock-icon").element.style.color).toBe(testColor);
 		});
 		it("icon should have by default the actionDesign prop color", async () => {
+			const designs = ["success", "danger", "primary"];
+			// Make sure all expects get executed
+			expect.assertions(designs.length);
 			const testWithDesign = async (design) => {
 				const wrapper = await mountDialog({
 					propsData: {
@@ -52,7 +58,7 @@ describe("@components/BaseDialog", () => {
 				// and css custom properties get ignored by vue-test-utils
 				expect(wrapper.vm.currentIconColor).toBe(`var(--color-${design})`);
 			};
-			return Promise.all(["success", "danger", "primary"].map(testWithDesign));
+			await Promise.all(designs.map(testWithDesign));
 		});
 		it("passes correct button designs", async () => {
 			const wrapper = await mountDialog({
@@ -87,18 +93,21 @@ describe("@components/BaseDialog", () => {
 		it("should close on confirm", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.confirm();
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.isActive).toBe(false);
 			expect(wrapper.find(".modal-body").exists()).toBe(false);
 		});
 		it("should close on cancel", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.cancel();
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.isActive).toBe(false);
 			expect(wrapper.find(".modal-body").exists()).toBe(false);
 		});
 		it("should close on click outside", async () => {
 			const wrapper = await mountDialog({});
 			wrapper.vm.clickOutside();
+			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.isActive).toBe(false);
 			expect(wrapper.find(".modal-body").exists()).toBe(false);
 		});

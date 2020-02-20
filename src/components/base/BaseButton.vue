@@ -1,5 +1,11 @@
 <template>
-	<button v-if="!isLink" :class="classes" :type="type" v-on="$listeners">
+	<button
+		v-if="!isLink"
+		:class="classes"
+		:type="type"
+		:aria-label="ariaLabel"
+		v-on="$listeners"
+	>
 		<slot />
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
@@ -11,6 +17,7 @@
 		:class="classes"
 		v-bind="{ ...$props, ...$attrs }"
 		:no-styles="true"
+		:aria-label="ariaLabel"
 		v-on="$listeners"
 	>
 		<slot />
@@ -34,29 +41,29 @@ export default {
 					"none",
 					"text",
 					"icon",
-					"icon text",
+					"text icon",
 					"outline",
 					"primary",
 					"primary text",
 					"primary icon",
-					"primary icon text",
+					"primary text icon",
 					"primary outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
-					"secondary icon text",
+					"secondary text icon",
 					"secondary outline",
 					"hero-cta",
 					"hero-cta icon",
 					"success",
 					"success text",
 					"success icon",
-					"success icon text",
+					"success text icon",
 					"success outline",
 					"danger",
 					"danger text",
 					"danger icon",
-					"danger icon text",
+					"danger text icon",
 					"danger outline",
 					"fancy",
 					"fancy icon",
@@ -67,6 +74,7 @@ export default {
 				return defined;
 			},
 		},
+
 		type: {
 			type: String,
 			default: "button",
@@ -76,6 +84,10 @@ export default {
 			default: "",
 		},
 		href: {
+			type: String,
+			default: "",
+		},
+		ariaLabel: {
 			type: String,
 			default: "",
 		},

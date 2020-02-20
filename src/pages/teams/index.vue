@@ -13,23 +13,31 @@
 			<div class="grid">
 				<div v-for="(team, i) of myInvitations" :key="i" class="tile">
 					<base-card class="teams-card">
-						<div slot="header" class="card-image"></div>
-						<div class="card-content">
-							<div class="media">
-								<div class="media-content">
-									<p class="title is-4">{{ team.name }}</p>
+						<template v-slot:header>
+							<div class="card-image"></div>
+						</template>
+						<template v-slot:default>
+							<div class="card-content">
+								<div class="media">
+									<div class="media-content">
+										<p class="title is-4">{{ team.name }}</p>
+									</div>
+								</div>
+
+								<div class="content">
+									<p>{{ team.description }}</p>
 								</div>
 							</div>
-
-							<div class="content">
-								<p>{{ team.description }}</p>
+						</template>
+						<template v-slot:footer>
+							<div>
+								<div class="footer-actions">
+									<a class="link" @click="acceptInvitation(team)">
+										Akzeptieren
+									</a>
+								</div>
 							</div>
-						</div>
-						<div slot="footer">
-							<div class="footer-actions">
-								<a class="link" @click="acceptInvitation(team)">Akzeptieren</a>
-							</div>
-						</div>
+						</template>
 					</base-card>
 				</div>
 			</div>
@@ -41,30 +49,39 @@
 			<div class="grid">
 				<div v-for="(team, i) of teams" :key="i" class="tile">
 					<base-card class="teams-card">
-						<div slot="header" class="card-image"></div>
-						<div class="card-content">
-							<div class="media">
-								<div class="media-content">
-									<p class="title is-4">{{ team.name }}</p>
-									<!-- <p class="subtitle is-6">
+						<template v-slot:header>
+							<div class="card-image"></div>
+						</template>
+
+						<template v-slot:default>
+							<div class="card-content">
+								<div class="media">
+									<div class="media-content">
+										<p class="title is-4">{{ team.name }}</p>
+										<!-- <p class="subtitle is-6">
 										<span v-for="(tag, index) of data.tags" :key="index" class="tag">
 											{{ tag }}
 										</span>
 									</p> -->
+									</div>
+								</div>
+
+								<div class="content">
+									<p>{{ team.description }}</p>
 								</div>
 							</div>
+						</template>
 
-							<div class="content">
-								<p>{{ team.description }}</p>
+						<template v-slot:footer>
+							<div>
+								<div class="footer-actions">
+									<base-link
+										:to="{ name: 'teams-id', params: { id: team._id } }"
+										>Anschauen</base-link
+									>
+								</div>
 							</div>
-						</div>
-						<div slot="footer">
-							<div class="footer-actions">
-								<base-link :to="{ name: 'teams-id', params: { id: team._id } }"
-									>Anschauen</base-link
-								>
-							</div>
-						</div>
+						</template>
 					</base-card>
 				</div>
 			</div>
@@ -89,9 +106,9 @@ export default {
 	async created(ctx) {
 		this.find();
 		try {
-			this.myInvitations = (await this.$store.dispatch(
-				"teams/getMyInvitations"
-			)).data;
+			this.myInvitations = (
+				await this.$store.dispatch("teams/getMyInvitations")
+			).data;
 		} catch {
 			this.$toast.error("Fehler beim Laden der Einladungen");
 		}
@@ -139,7 +156,7 @@ export default {
 .teams-card {
 	position: relative;
 	width: 240px;
-	padding: var(--space-sm);
+	padding: var(--space-md);
 	margin: var(--space-md);
 	cursor: pointer;
 	border-radius: var(--radius-sm);

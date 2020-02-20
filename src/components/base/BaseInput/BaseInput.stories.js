@@ -10,7 +10,7 @@ const defaultTypes = supportedTypes.reduce((obj, val) => {
 	return obj;
 }, {});
 
-storiesOf("Base|Inputs/Default", module)
+storiesOf("4 Base UI Components/Inputs/Default", module)
 	.addParameters({
 		notes,
 	})
@@ -84,11 +84,13 @@ storiesOf("Base|Inputs/Default", module)
 		}),
 		template: `
 			<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint">
-				<base-icon slot="icon" :source="iconSource" :icon="icon" />
+				<template v-slot:icon>
+					<base-icon :source="iconSource" :icon="icon" />
+				</template>
 			</base-input>`,
 	}));
 
-storiesOf("Base|Inputs", module)
+storiesOf("4 Base UI Components/Inputs", module)
 	.addParameters({
 		notes,
 	})
@@ -111,6 +113,8 @@ storiesOf("Base|Inputs", module)
 		data: () => ({
 			vmodel: array("vmodel", ["a"], ", "),
 			values: array("values", ["a", "b"], ", "),
+			labels: array("labels", ["Checkbox a", "Checkbox b"], ", "),
+			labelHidden: boolean("labelHidden", false),
 		}),
 		template: `
 			<div role="group" aria-label="checkboxes">
@@ -121,7 +125,8 @@ storiesOf("Base|Inputs", module)
 					v-model="vmodel"
 					:value="value"
 					name="checkbox"
-					:label="'Checkbox - ' + value"
+					:label="labels[i]"
+					:labelHidden="labelHidden"
 				/>
 				<p> {{ vmodel.join(", ")}} </p>
 			</div>
@@ -151,6 +156,8 @@ storiesOf("Base|Inputs", module)
 		data: () => ({
 			vmodel: text("vmodel", "a"),
 			values: array("values", ["a", "b"], ", "),
+			labels: array("labels", ["Radio a", "Radio b"], ", "),
+			labelHidden: boolean("labelHidden", false),
 		}),
 		template: `
 			<div role="group" aria-label="checkboxes">
@@ -161,7 +168,8 @@ storiesOf("Base|Inputs", module)
 					v-model="vmodel"
 					:value="value"
 					name="radio"
-					:label="'Radio - ' + value"
+					:label="labels[i]"
+					:labelHidden="labelHidden"
 				/>
 				<p> {{ vmodel}} </p>
 			</div>

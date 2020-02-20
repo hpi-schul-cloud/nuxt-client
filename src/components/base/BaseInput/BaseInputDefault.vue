@@ -8,13 +8,15 @@
 			}"
 		>
 			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
-				<label
-					v-show="showLabel"
-					:class="{ label: true, info: true }"
-					:for="`input-${$uid}`"
-				>
-					{{ label }}
-				</label>
+				<transition name="fade">
+					<label
+						v-show="showLabel"
+						:class="{ label: true, info: true }"
+						:for="`input-${$uid}`"
+					>
+						{{ label }}
+					</label>
+				</transition>
 				<span v-if="!!hint" class="hint info">
 					{{ hint }}
 				</span>
@@ -28,30 +30,39 @@
 						<input
 							:id="`input-${$uid}`"
 							ref="input"
+							v-focus-on-mount="focus"
+							:aria-label="showLabel ? undefined : label"
 							v-bind="$attrs"
-							:type="type"
+							:type="appliedType"
 							:value="vmodel"
 							:disabled="disabled"
+							:class="classes"
 							@input="handleInput"
 						/>
 					</slot>
 				</div>
-				<base-icon
-					v-if="type === 'password' && !passwordVisible && !error && !success"
-					source="custom"
-					icon="invisible"
-					fill="var(--color-gray)"
-					class="icon-behind"
+				<base-button
+					v-if="type === 'password' && !error && !success"
+					design="none"
+					type="button"
+					data-testid="pwd-visibility-toggle"
 					@click="togglePasswordVisibility"
-				/>
-				<base-icon
-					v-if="type === 'password' && passwordVisible && !error && !success"
-					source="custom"
-					icon="visible"
-					fill="var(--color-gray)"
-					class="icon-behind visible"
-					@click="togglePasswordVisibility"
-				/>
+				>
+					<base-icon
+						v-if="!passwordVisible"
+						source="custom"
+						icon="invisible"
+						fill="var(--color-gray)"
+						class="icon-behind"
+					/>
+					<base-icon
+						v-else
+						source="custom"
+						icon="visible"
+						fill="var(--color-gray)"
+						class="icon-behind visible"
+					/>
+				</base-button>
 				<base-icon
 					v-if="error"
 					source="custom"
@@ -97,7 +108,7 @@ export default {
 		event: "input",
 	},
 	props: {
-		vmodel: { type: [String, Number], required: true },
+		vmodel: { type: [String, Number], default: undefined },
 		type: {
 			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
@@ -106,11 +117,14 @@ export default {
 			},
 		},
 		label: { type: String, required: true },
+		labelHidden: { type: Boolean },
 		info: { type: String, default: "" },
 		hint: { type: String, default: "" },
 		error: { type: String, default: "" },
 		success: { type: Boolean },
 		disabled: { type: Boolean },
+		classes: { type: String, default: "" },
+		focus: { type: Boolean },
 	},
 	data: function() {
 		return {
@@ -118,11 +132,17 @@ export default {
 		};
 	},
 	computed: {
+		appliedType() {
+			if (this.passwordVisible) {
+				return "text";
+			}
+			return this.type;
+		},
 		hasError() {
 			return !!this.error;
 		},
 		showLabel() {
-			return !!this.vmodel || !this.$attrs.placeholder;
+			return (!!this.vmodel || !this.$attrs.placeholder) && !this.labelHidden;
 		},
 	},
 	methods: {
@@ -134,15 +154,7 @@ export default {
 			this.$emit("input", newVal);
 		},
 		togglePasswordVisibility() {
-			if (this.type === "password") {
-				const { input } = this.$refs;
-				if (input.type === "password") {
-					input.type = "text";
-				} else if (input.type === "text") {
-					input.type = "password";
-				}
-				this.passwordVisible = !this.passwordVisible;
-			}
+			this.passwordVisible = !this.passwordVisible;
 		},
 	},
 };
@@ -196,6 +208,7 @@ export default {
 	.info-line {
 		display: flex;
 		justify-content: space-between;
+		min-height: var(--text-md);
 		margin-bottom: var(--space-xxxxs);
 
 		&:not(.label-visible) {
@@ -251,5 +264,12 @@ export default {
 
 .info.error {
 	color: var(--color-danger);
+}
+
+.fade-enter-active {
+	transition: opacity var(--duration-transition-medium);
+}
+.fade-enter {
+	opacity: 0;
 }
 </style>

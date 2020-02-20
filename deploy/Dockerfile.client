@@ -1,10 +1,11 @@
 FROM node:lts as builder
-
+RUN mkdir /app && chown -R node:node /app
 WORKDIR '/app'
 COPY ./package.json ./
 COPY ./package-lock.json ./
+USER node
 RUN npm ci
-COPY . /app
+COPY --chown=node:node . /app/
 
 RUN ["chmod", "550", "./startup.sh"]
 EXPOSE 4000

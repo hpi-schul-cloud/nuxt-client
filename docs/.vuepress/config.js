@@ -14,7 +14,7 @@ function extractName(filepath) {
 	} else {
 		name = filepath.replace(/^.*[\\\/]/, "");
 	}
-	name = name.replace(/[0-9]+/, "");
+	name = name.replace(/^[0-9]+/, "");
 	return _.startCase(name);
 }
 
@@ -54,7 +54,7 @@ module.exports = {
 	themeConfig: {
 		// https://vuepress.vuejs.org/default-theme-config/
 		sidebar: listFiles(baseDir),
-		logo: "/cloud-transparent.png",
+		logo: "/Logo-Bildmarke_transparent.svg",
 		lastUpdated: "Last Updated",
 		repo: "schul-cloud/nuxt-client",
 		docsDir: "/docs",

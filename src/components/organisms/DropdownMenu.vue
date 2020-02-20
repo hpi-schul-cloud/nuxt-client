@@ -10,10 +10,20 @@
 		@blur="open = false"
 	>
 		<div class="button">
-			<slot name="header"></slot>
+			<slot name="header">
+				<base-button size="small">{{ title }}</base-button>
+			</slot>
 		</div>
 		<div :id="`dropdown-content-${$uid}`" class="content" :class="{ open }">
-			<slot class="link" />
+			<ul>
+				<li
+					v-for="(item, index) of items"
+					:key="index"
+					@click="$emit('input', item)"
+				>
+					{{ item.label }}
+				</li>
+			</ul>
 		</div>
 	</div>
 </template>
@@ -23,6 +33,16 @@ import uidMixin from "@mixins/uid";
 
 export default {
 	mixins: [uidMixin],
+	props: {
+		title: {
+			type: String,
+			required: true,
+		},
+		items: {
+			type: Array,
+			default: () => [],
+		},
+	},
 	data() {
 		return {
 			open: false,
@@ -33,12 +53,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-
-.button {
-	padding: var(--space-sm) var(--space-md);
-	cursor: pointer;
-	border: 1px solid black;
-}
 
 .dropdown {
 	position: relative;
@@ -51,7 +65,21 @@ export default {
 	z-index: var(--layer-dropdown);
 	display: none;
 	flex-direction: column;
-	background-color: var(--color-gray-light);
+	color: var(--color-black);
+	background-color: var(--color-white);
+	box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
+		0 2px 4px -1px rgba(0, 0, 0, 0.2);
+
+	ul {
+		li {
+			padding: var(--space-sm);
+			list-style: none;
+			cursor: pointer;
+			&:hover {
+				background-color: var(--color-gray-light);
+			}
+		}
+	}
 
 	&.open {
 		display: flex;

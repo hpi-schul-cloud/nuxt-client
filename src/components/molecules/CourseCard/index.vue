@@ -99,10 +99,9 @@ export default {
 			try {
 				this.teacherName
 					? (this.cardLabel = this.teacherName)
-					: (this.cardLabel = (await this.$store.dispatch(
-							"users/getById",
-							this.teacherIds[0]
-					  )).displayName);
+					: (this.cardLabel = (
+							await this.$store.dispatch("users/getById", this.teacherIds[0])
+					  ).displayName);
 			} catch (err) {}
 		},
 	},
@@ -114,6 +113,7 @@ export default {
 
 .course-card {
 	position: relative;
+	padding: var(--space-xs);
 	padding-bottom: 0;
 	cursor: pointer;
 }

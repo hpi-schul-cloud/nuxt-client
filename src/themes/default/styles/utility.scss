@@ -11,7 +11,23 @@ body.is-noscroll {
 	overflow-y: hidden;
 }
 
-.visually-hidden {
+.d-flex {
+	display: flex;
+}
+
+.justify-content-space-between {
+	justify-content: space-between;
+}
+
+.justify-content-center {
+	justify-content: center;
+}
+
+.align-items-center {
+	align-items: center;
+}
+
+@mixin visually-hidden {
 	/* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
 	position: absolute !important;
 	top: 0;
@@ -22,6 +38,9 @@ body.is-noscroll {
 	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
 	clip: rect(1px, 1px, 1px, 1px);
 }
+.visually-hidden {
+	@include visually-hidden;
+}
 
 ::-moz-focus-inner {
 	border: 0;
@@ -30,4 +49,10 @@ body.is-noscroll {
 :focus {
 	outline: 2px solid var(--color-tertiary-light);
 	outline-offset: 3px;
+}
+
+/* width */
+
+.w-100 {
+	width: 100%;
 }

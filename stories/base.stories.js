@@ -1,5 +1,4 @@
 import { storiesOf } from "@storybook/vue";
-import { tableData, tableColumns } from "./mockData/BaseTable";
 import { text, select, boolean, color } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
@@ -15,10 +14,9 @@ import BaseProgressbar from "@basecomponents/BaseProgressbar";
 import BaseQrCode from "@basecomponents/BaseQrCode";
 import BaseSelect from "@basecomponents/BaseSelect";
 import BaseSpinner from "@basecomponents/BaseSpinner";
-import BaseTable from "@basecomponents/BaseTable";
 import BaseVideo from "@basecomponents/BaseVideo";
 
-storiesOf("Base|Base UI", module)
+storiesOf("4 Base UI Components/Base UI", module)
 	.addParameters({
 		notes,
 	})
@@ -34,11 +32,11 @@ storiesOf("Base|Base UI", module)
 					text: "text",
 					outline: "outline",
 					icon: "icon",
-					"icon text": "icon text",
+					"text icon": "text icon",
 					primary: "primary",
 					"primary text": "primary text",
 					"primary icon": "primary icon",
-					"primary icon text": "primary icon text",
+					"primary text icon": "primary text icon",
 					"primary outline": "primary outline",
 					"hero-cta": "hero-cta",
 					"hero-cta icon": "hero-cta icon",
@@ -47,17 +45,17 @@ storiesOf("Base|Base UI", module)
 					secondary: "secondary",
 					"secondary text": "secondary text",
 					"secondary icon": "secondary icon",
-					"secondary icon text": "secondary icon text",
+					"secondary text icon": "secondary text icon",
 					"secondary outline": "secondary outline",
 					success: "success",
 					"success text": "success text",
 					"success icon": "success icon",
-					"success icon text": "success icon text",
+					"success text icon": "success text icon",
 					"success outline": "success outline",
 					danger: "danger",
 					"danger text": "danger text",
 					"danger icon": "danger icon",
-					"danger icon text": "danger icon text",
+					"danger text icon": "danger text icon",
 					"danger outline": "danger outline",
 				},
 				""
@@ -88,7 +86,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="primary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="primary icon text">
+				<base-button design="primary text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
@@ -109,7 +107,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="secondary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="secondary icon text">
+				<base-button design="secondary text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -120,7 +118,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="icon text">
+				<base-button design="text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -131,7 +129,7 @@ storiesOf("Base|Base UI", module)
 				<base-button disabled design="icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button disabled design="icon text">
+				<base-button disabled design="text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -142,7 +140,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="success icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="success icon text">
+				<base-button design="success text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<br/><br/>
@@ -152,7 +150,7 @@ storiesOf("Base|Base UI", module)
 				<base-button design="danger icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
-				<base-button design="danger icon text">
+				<base-button design="danger text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 
@@ -165,54 +163,42 @@ storiesOf("Base|Base UI", module)
 		template: "<base-card>Card</base-card>",
 		methods: {},
 	}))
-	.add("Base Icon", () => ({
-		components: { BaseIcon },
-		data: () => ({
-			icon: text("icon", "home"),
-			source: select(
-				"source",
-				{ material: "material", fa: "fa", custom: "custom" },
-				"material"
-			),
-			size: text("size", "1em"),
-			color: color("color", "#f8a41b"),
-		}),
-		template: `<div>
-			<p>
-				Icon usage is simple: <base-icon :source="source" :icon="icon" :style="{'font-size': size, fill: color}"/>
-			</p>
-			<p>
-				You can als use icons from fontawesome: <base-icon source="fa" icon="solid/address-book" :style="{'font-size': size}"/>
-			</p>
-			<p>
-				The Color can be also be set using fill:
-				<base-icon source="material" icon="add" :fill="color"/>
-			</p>
-			<p>
-				Scaling works, by setting the font-size attribute:
-				<base-icon source="custom" icon="tasks" style="font-size: 2em" />
-			</p>
-		</div>`,
-	}))
 	.add("Base Select", () => ({
 		components: { BaseSelect },
 		data: () => ({
 			content: [],
 			options: [
-				{ value: 1, name: "Option 1" },
-				{ value: 2, name: "Option 2" },
-				{ value: 3, name: "Option 3" },
+				{ _id: 1, value: 1, name: "Option 1" },
+				{ _id: 2, value: 2, name: "Option 2" },
+				{ _id: 3, value: 3, name: "Option 3" },
 			],
-			optionLabel: "name",
+			closeOnSelect: boolean("closeOnSelect", false),
+			deselectLabel: text("deselectLabel", "Entfernen"),
 			label: text("label", "Label"),
+			multiple: boolean("mutiple", false),
+			optionLabel: text("optionLabel", "name"),
 			placeholder: text("placeholder", "Etwas auswählen"),
-			multiple: select("mutliple", { true: true, false: false }, false),
+			selectLabel: text("selectLabel", "Auswählen"),
+			selectedLabel: text("selectedLabel", "Aktiv"),
+			trackBy: text("trackBy", "_id"),
 		}),
 		template: `
 		<div>
 		Content: {{content}} <br/>
 		Options: {{options}} <br/>
-			<base-select v-model="content" :multiple="multiple" :options="options" :label="label" optionLabel="name" :placeholder="placeholder"/>
+			<base-select
+				v-model="content"
+				:closeOnSelect="closeOnSelect"
+				:deselectLabel="deselectLabel"
+				:label="label"
+				:multiple="multiple"
+				:options="options"
+				:optionLabel="optionLabel"
+				:placeholder="placeholder"
+				:selectLabel="selectLabel"
+				:selectedLabel="selectedLabel"
+				:trackBy="trackBy">
+			</base-select>
 		</div>`,
 		methods: {},
 	}))
@@ -229,18 +215,6 @@ storiesOf("Base|Base UI", module)
 	.add("Base Progressbar", () => ({
 		components: { BaseProgressbar },
 		template: '<base-progressbar :value="2" :max="3"/>',
-	}))
-	.add("Base Table", () => ({
-		data: () => ({
-			data: tableData,
-			columns: tableColumns,
-		}),
-		components: { BaseTable },
-		template: `
-			<base-table v-slot:default="slotProps" :data="data" :columns="columns">
-				<span>{{ slotProps.row.firstName + ' ' +  slotProps.row.lastName }}</span>
-			</base-table>
-		`,
 	}))
 	.add("Base Collapsible", () => ({
 		components: { BaseCollapsible },
