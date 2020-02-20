@@ -51,6 +51,7 @@
 						label="Passwort"
 						:placeholder="'WebUntis Passwort'"
 						class="mt--md"
+						autocomplete="new-password"
 					>
 						<template v-slot:icon>
 							<base-icon source="custom" icon="lock" />
