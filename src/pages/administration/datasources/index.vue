@@ -15,13 +15,14 @@
 					class="mb--md"
 				>
 					<template v-slot:actions>
-						<BaseButton
+						<responsive-icon-button
 							design="primary text"
+							source="custom"
+							icon="datasource-import"
 							@click="handleManageOldDatasourceClick"
 						>
-							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton>
+						</responsive-icon-button>
 					</template>
 				</datasource-card>
 			</li>
@@ -32,13 +33,14 @@
 					class="mb--xl-3"
 				>
 					<template v-slot:actions>
-						<BaseButton
+						<responsive-icon-button
 							design="primary text"
+							source="custom"
+							icon="datasource-import"
 							@click="handleManageOldDatasourceClick"
 						>
-							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton>
+						</responsive-icon-button>
 					</template>
 				</datasource-card>
 			</li>
@@ -89,30 +91,33 @@
 					</template>
 
 					<template v-slot:actions>
-						<BaseButton
+						<responsive-icon-button
 							v-if="element.lastStatus === 'Error'"
 							design="primary text"
+							source="custom"
+							icon="datasource-import"
 							@click="handleManageErrorLogin(element)"
 						>
-							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
-						</BaseButton>
-						<BaseButton
+						</responsive-icon-button>
+						<responsive-icon-button
 							v-else
 							design="primary text"
+							source="custom"
+							icon="datasource-import"
 							@click="triggerRun(element)"
 						>
-							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.import") }}
-						</BaseButton>
+						</responsive-icon-button>
 						<span class="ctx-menu">
-							<BaseButton design="icon text" @click="menuOpen = element._id">
+							<BaseButton design="text icon" @click="menuOpen = element._id">
 								<base-icon
 									class="context-menu-icon"
 									source="material"
 									icon="more_vert"
 								/>
 							</BaseButton>
+
 							<context-menu
 								:show="menuOpen === element._id"
 								anchor="top-right"
@@ -157,7 +162,7 @@ import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
 import Pagination from "@components/organisms/Pagination";
-
+import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
@@ -174,6 +179,7 @@ export default {
 		EmptyState,
 		FloatingFab,
 		Pagination,
+		ResponsiveIconButton,
 	},
 	props: {
 		color: {

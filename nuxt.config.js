@@ -115,6 +115,7 @@ module.exports = {
 	 ** Build configuration
 	 */
 	build: {
+		transpile: ["vue-echarts", "resize-detector"],
 		/*
 		 ** You can extend webpack config here
 		 */

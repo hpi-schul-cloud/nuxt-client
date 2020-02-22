@@ -1,7 +1,7 @@
 /* Legacy Client Proxy */
 const glob = require("glob");
 const path = require("path");
-const proxy = require("http-proxy-middleware");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const nuxtConfig = require("../../nuxt.config.js");
 
@@ -17,7 +17,7 @@ const proxyOptions = {
 		res.end();
 	},
 };
-const proxyInstance = proxy(proxyOptions);
+const proxyInstance = createProxyMiddleware(proxyOptions);
 
 // eslint-disable-next-line no-console
 console.log(
