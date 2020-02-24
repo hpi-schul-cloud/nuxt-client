@@ -7,7 +7,6 @@
 					ref="rowSelectionBar"
 					:actions="actions"
 					:all-rows-of-all-pages-selected.sync="allRowsOfAllPagesSelected"
-					:all-rows-of-current-page-selected="allRowsOfCurrentPageSelected"
 					:number-of-selected-items="numberOfSelectedItems"
 					:total-number-of-items="total"
 					@fire-action="fireAction"
