@@ -12,6 +12,7 @@ module.exports = [
 	`^/imprint/?`,
 	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
+	`^/insights`,
 	// `^/news/${mongoId}/edit`,
 	`^/news/new`,
 	`^/nuxtversion/?$`,
