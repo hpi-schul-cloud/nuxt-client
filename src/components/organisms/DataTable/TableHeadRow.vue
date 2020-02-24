@@ -9,6 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
+					style="color: var(--color-tertiary)"
 				/>
 			</div>
 		</th>
