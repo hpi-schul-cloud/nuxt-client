@@ -198,14 +198,7 @@ export default {
 			return this.columns.map((e) => e.field);
 		},
 		dataRowSlots() {
-			// TODO configure babel to enable Object.fromEntries()
-			// then replace this ugly reduce
-			const fromEntries = (iterable) =>
-				[...iterable].reduce((obj, [key, val]) => {
-					obj[key] = val;
-					return obj;
-				}, {});
-			return fromEntries(
+			return Object.fromEntries(
 				Object.entries(this.$scopedSlots).filter(([name]) =>
 					name.startsWith("datacolumn")
 				)
