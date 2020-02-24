@@ -1,6 +1,14 @@
 <template>
 	<div>
 		<template v-if="run.dryrun === true">
+			<p class="text-sm">
+				{{
+					$t("components.organisms.DatasourceRunWebuntis.numberOfImported", {
+						imported: importedRows,
+						total: tableData.length,
+					})
+				}}
+			</p>
 			<data-table
 				:columns="columns"
 				:data="tableData"
@@ -139,6 +147,7 @@ export default {
 					sortable: true,
 				},
 			],
+			importedRows: 0,
 			selections: [],
 		};
 	},
@@ -185,6 +194,7 @@ export default {
 				? data // preselect all rows if all are new
 				: data.filter((d) => d.state === "imported")
 			).map((d) => d._id);
+			this.importedRows = data.filter((d) => d.state === "imported").length;
 		},
 		async triggerRun() {
 			try {
