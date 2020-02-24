@@ -1,5 +1,5 @@
 <template>
-	<form v-on="$listeners" @submit.prevent="submitHandler">
+	<form autocomplete="off" v-on="$listeners" @submit.prevent="submitHandler">
 		<base-input
 			v-model="data.name"
 			name="name"
@@ -29,10 +29,6 @@
 
 <script>
 export default {
-	model: {
-		prop: "datasource",
-		event: "update datasource",
-	},
 	props: {
 		datasourceId: {
 			type: String,
