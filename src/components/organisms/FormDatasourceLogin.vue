@@ -5,9 +5,9 @@
 			name="name"
 			type="text"
 			required="true"
-			:label="$t('components.organisms.FormDatasources.input.name.label')"
+			:label="$t('components.organisms.FormDatasourcesLogin.input.name.label')"
 			:placeholder="
-				$t('components.organisms.FormDatasources.input.name.placeholder')
+				$t('components.organisms.FormDatasourcesLogin.input.name.placeholder')
 			"
 			class="mt--md"
 		>
@@ -18,10 +18,10 @@
 		<slot name="inputs" :config="data.config" />
 		<base-button type="submit" class="w-100 mt--lg" design="secondary" text>
 			<span v-if="actionType === 'create'">{{
-				$t("components.organisms.FormDatasources.btn.connect")
+				$t("components.organisms.FormDatasourcesLogin.btn.connect")
 			}}</span>
 			<span v-else>{{
-				$t("components.organisms.FormDatasources.btn.update")
+				$t("components.organisms.FormDatasourcesLogin.btn.update")
 			}}</span>
 		</base-button>
 	</form>
@@ -62,13 +62,15 @@ export default {
 		errors() {
 			const name = this.data.name
 				? undefined
-				: this.$t("components.organisms.FormDatasources.errors.missing_name");
+				: this.$t(
+						"components.organisms.FormDatasourcesLogin.errors.missing_name"
+				  );
 			//TODO: check target and config (test against json schema!?)
 			const config =
 				Object.keys(this.data.config).length !== 0
 					? undefined
 					: this.$t(
-							"components.organisms.FormDatasources.errors.missing_config"
+							"components.organisms.FormDatasourcesLogin.errors.missing_config"
 					  );
 			return {
 				name,
@@ -88,7 +90,7 @@ export default {
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormDatasources.errors.get")
+					this.$t("components.organisms.FormDatasourcesLogin.errors.get")
 				);
 			}
 		},
@@ -116,7 +118,7 @@ export default {
 					config: this.data.config,
 				});
 				this.$toast.success(
-					this.$t("components.organisms.FormDatasources.success.create")
+					this.$t("components.organisms.FormDatasourcesLogin.success.create")
 				);
 				this.$router.push({
 					path: "/administration/datasources",
@@ -124,7 +126,7 @@ export default {
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormDatasources.errors.create")
+					this.$t("components.organisms.FormDatasourcesLogin.errors.create")
 				);
 			}
 		},
@@ -143,7 +145,7 @@ export default {
 					},
 				]);
 				this.$toast.success(
-					this.$t("components.organisms.FormDatasources.success.patch")
+					this.$t("components.organisms.FormDatasourcesLogin.success.patch")
 				);
 				this.$router.push({
 					path: "/administration/datasources",
@@ -151,7 +153,7 @@ export default {
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormDatasources.errors.patch")
+					this.$t("components.organisms.FormDatasourcesLogin.errors.patch")
 				);
 			}
 		},

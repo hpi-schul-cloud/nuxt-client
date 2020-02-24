@@ -7,7 +7,7 @@
 				src="@assets/img/datasources/logo-webuntis-text.svg"
 			/>
 			<h1 class="h5">{{
-				$t("pages.administration.datasources.login.heading")
+				$t("pages.administration.datasources.webuntis.new.heading")
 			}}</h1>
 			<p
 				v-if="
@@ -20,16 +20,17 @@
 					icon="warning"
 					fill="var(--color-danger)"
 					class="margin"
-				/>{{ $t("pages.administration.datasources.login.error.text") }}</p
-			>
+				/>
+				{{ $t("pages.administration.datasources.webuntis.new.error.text") }}
+			</p>
 			<p v-else class="mb--xl">{{
-				$t("pages.administration.datasources.login.text")
+				$t("pages.administration.datasources.webuntis.new.text")
 			}}</p>
 
 			<form-datasource-login
 				type="webuntis"
 				autocomplete="off"
-				:datasource-id="this.$route.params.id"
+				:datasource-id="$route.params.id"
 			>
 				<template v-slot:inputs="{ config }">
 					<base-input
@@ -92,7 +93,7 @@ export default {
 					to: "/administration/datasources",
 				},
 				{
-					text: this.$t("pages.administration.datasources.login.title"),
+					text: this.$t("pages.administration.datasources.webuntis.new.title"),
 				},
 			],
 		};
