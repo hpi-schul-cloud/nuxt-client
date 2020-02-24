@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: ./cloud-transparent.png
+heroImage: ./Logo-Bildmarke_transparent.svg
 heroText: Schul-Cloud V2
 tagline: The next Level of Schul-Cloud, build with Nuxt
 actionText: Get Started →

@@ -165,6 +165,8 @@
 		}
 	}
 	&.is-none {
+		--button-text-color: inherit;
+
 		min-width: initial;
 		padding: 0;
 		font: inherit;

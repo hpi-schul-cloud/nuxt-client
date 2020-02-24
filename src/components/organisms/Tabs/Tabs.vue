@@ -2,8 +2,8 @@
 	<div>
 		<ul class="tabs">
 			<li
-				v-for="(tab, index) in tabs"
-				:key="index"
+				v-for="tab in tabs"
+				:key="tab.name"
 				:class="{ 'is-active': tab.isActive }"
 			>
 				<button class="tab-button" @click="selectTab(tab)">

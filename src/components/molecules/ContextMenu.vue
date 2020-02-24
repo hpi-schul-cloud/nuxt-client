@@ -35,7 +35,7 @@
 			</base-button>
 			<base-button
 				design="none"
-				class="context-menu__button-close"
+				class="context-menu__button context-menu__button-close"
 				@click="closeMenu"
 				@keydown.up="focusPrev(actions.length)"
 			>

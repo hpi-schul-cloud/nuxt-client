@@ -34,7 +34,7 @@ export default {
 	props: {
 		vmodel: {
 			type: [Array, Boolean],
-			required: true,
+			default: false,
 		},
 		value: {
 			type: String,
@@ -83,6 +83,7 @@ export default {
 @import "@styles";
 
 .wrapper {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
 }

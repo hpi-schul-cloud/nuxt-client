@@ -8,12 +8,17 @@ export default {
 			type: [Object, String],
 			default: "main",
 		},
+		size: {
+			type: String,
+			default: "medium",
+			validator: (size) => ["small", "medium", "large"].includes(size),
+		},
 	},
 	render(create_element) {
 		return create_element(
 			this.tag,
 			{
-				class: "container",
+				class: `container ${this.size}`,
 			},
 			[this.$slots.default]
 		);
@@ -25,7 +30,15 @@ export default {
 @import "@styles";
 .container {
 	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
 	margin: 0 auto;
+	&.small {
+		max-width: calc(0.5 * var(--size-content-width-max));
+	}
+	&.medium {
+		max-width: var(--size-content-width-max);
+	}
+	&.large {
+		max-width: calc(1.5 * var(--size-content-width-max));
+	}
 }
 </style>
