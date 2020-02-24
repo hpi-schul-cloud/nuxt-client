@@ -3,7 +3,11 @@
 		<div :class="[isActive ? 'input-active' : '', 'search__container']">
 			<input
 				ref="searchInput"
-				v-autowidth="{ maxWidth: '960px', minWidth: '0px', comfortZone: 40 }"
+				v-autowidth="{
+					maxWidth: '960px',
+					minWidth: '0px',
+					comfortZone: extraInputSpace,
+				}"
 				:value="value"
 				:aria-label="ariaLabel"
 				label="search-input"
@@ -15,20 +19,22 @@
 				@focus="isActive = true"
 			/>
 			<div class="search__container--icon">
-				<base-icon
-					v-if="isActive"
-					class="search-icon"
-					source="custom"
-					icon="search"
-					@click="enterKeyHandler"
-				/>
-				<base-icon
-					v-else
-					class="search-icon"
-					source="custom"
-					icon="clear"
-					@click="clearBtnHandler"
-				/>
+				<base-button v-if="isActive" design="none" @click="enterKeyHandler">
+					<base-icon
+						class="search-icon"
+						source="custom"
+						icon="search"
+						@click="enterKeyHandler"
+					/>
+				</base-button>
+				<base-button v-else design="none" @click="clearBtnHandler">
+					<base-icon
+						class="search-icon"
+						source="custom"
+						icon="clear"
+						@click="clearBtnHandler"
+					/>
+				</base-button>
 			</div>
 		</div>
 	</div>
@@ -53,6 +59,7 @@ export default {
 		return {
 			isActive: true,
 			inputValue: "",
+			extraInputSpace: 40,
 		};
 	},
 	mounted() {
@@ -67,12 +74,12 @@ export default {
 			this.inputValue = newValue;
 			this.$emit("input", this.inputValue);
 		},
-		enterKeyHandler() {
+		enterKeyHandler(...args) {
 			if (this.isActive && this.inputValue.length > 0) {
 				this.isActive = false;
 				this.inputValue = "";
 			}
-			this.$emit("enter-key-event");
+			this.$emit("keyup:enter", ...args);
 			this.$refs.searchInput.blur();
 		},
 		clearBtnHandler() {

@@ -15,7 +15,7 @@
 				"
 				placeholder="Lernstore durchsuchen"
 				:loading="loading"
-				@enter-key-event="transitionHandler"
+				@keyup:enter="transitionHandler"
 			/>
 			<transition name="fade">
 				<span v-if="!firstSearch">
@@ -119,13 +119,13 @@ export default {
 				return;
 			}
 			/**
-			FOR ALTERNATIVE IMPLEMENTATION:
-			Activate transition after 3 key presses
-
-			if (this.searchQuery.length >= 3) {
-				this.transitionHandler();
-			}
-			**/
+			 * FOR ALTERNATIVE IMPLEMENTATION:
+			 * Activate transition after 3 key presses
+			 *
+			 * if (this.searchQuery.length >= 3) {
+			 *	this.transitionHandler();
+			 * }
+			 */
 			this.$options.debounce = setInterval(() => {
 				clearInterval(this.$options.debounce);
 				this.searchContent();
