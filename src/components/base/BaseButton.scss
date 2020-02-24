@@ -125,11 +125,9 @@
 	transition: all var(--duration-transition-medium)
 		cubic-bezier(0.23, 1, 0.32, 1);
 
-	> * {
+	&:not(.is-icon) > * {
+		// removes margin from icon button
 		margin-right: var(--space-xs);
-	}
-	&:last-child {
-		margin-right: initial;
 	}
 
 	&:hover {

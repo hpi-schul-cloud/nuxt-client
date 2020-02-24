@@ -75,9 +75,16 @@ export default {
 }
 
 .subtitle {
-	display: flex;
-	align-items: center;
+	overflow: hidden;
 	font-size: var(--text-xs);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+	@include breakpoint(tablet) {
+		display: flex;
+		grid-template-areas: "secondary primary";
+		align-items: center;
+	}
 
 	.icon {
 		margin-left: var(--space-xs-3);

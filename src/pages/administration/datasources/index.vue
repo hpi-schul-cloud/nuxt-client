@@ -15,13 +15,14 @@
 					class="mb--md"
 				>
 					<template v-slot:actions>
-						<BaseButton
+						<responsive-icon-button
 							design="primary text"
+							source="custom"
+							icon="datasource-import"
 							@click="handleManageOldDatasourceClick"
 						>
-							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton>
+						</responsive-icon-button>
 					</template>
 				</datasource-card>
 			</li>
@@ -32,13 +33,14 @@
 					class="mb--xl-3"
 				>
 					<template v-slot:actions>
-						<BaseButton
+						<responsive-icon-button
 							design="primary text"
+							source="custom"
+							icon="datasource-import"
 							@click="handleManageOldDatasourceClick"
 						>
-							<BaseIcon source="custom" icon="datasource-import" />
 							{{ $t("pages.administration.datasources.index.importRedirect") }}
-						</BaseButton>
+						</responsive-icon-button>
 					</template>
 				</datasource-card>
 			</li>
@@ -89,18 +91,33 @@
 					</template>
 
 					<template v-slot:actions>
-						<BaseButton design="primary text">
-							<BaseIcon source="custom" icon="datasource-import" />
+						<responsive-icon-button
+							v-if="element.lastStatus === 'Error'"
+							design="primary text"
+							source="custom"
+							icon="datasource-import"
+							@click="handleManageErrorLogin(element)"
+						>
 							{{ $t("pages.administration.datasources.index.import") }}
-						</BaseButton>
+						</responsive-icon-button>
+						<responsive-icon-button
+							v-else
+							design="primary text"
+							source="custom"
+							icon="datasource-import"
+							@click="triggerRun(element)"
+						>
+							{{ $t("pages.administration.datasources.index.import") }}
+						</responsive-icon-button>
 						<span class="ctx-menu">
-							<BaseButton design="icon text" @click="menuOpen = element._id">
+							<BaseButton design="text icon" @click="menuOpen = element._id">
 								<base-icon
 									class="context-menu-icon"
 									source="material"
 									icon="more_vert"
 								/>
 							</BaseButton>
+
 							<context-menu
 								:show="menuOpen === element._id"
 								anchor="top-right"
@@ -145,7 +162,7 @@ import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
 import FloatingFab from "@components/molecules/FloatingFab";
 import Pagination from "@components/organisms/Pagination";
-
+import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
@@ -162,6 +179,7 @@ export default {
 		EmptyState,
 		FloatingFab,
 		Pagination,
+		ResponsiveIconButton,
 	},
 	props: {
 		color: {
@@ -188,7 +206,10 @@ export default {
 			dayjs,
 			menuOpen: false,
 			page: 1,
-			limit: localStorage.getItem("datasources_overview_limit") || 5,
+			limit:
+				localStorage.getItem(
+					"pages.administration.datasources.index.itemsPerPage"
+				) || 25,
 		};
 	},
 	computed: {
@@ -198,11 +219,12 @@ export default {
 		...mapState("datasources", {
 			pagination: (state) => state.pagination.default,
 		}),
+		...mapGetters("datasources", {
+			watchingIds: "getPendingIdsFromResult",
+		}),
 	},
 	created(ctx) {
 		this.find();
-
-		// TODO: dispatch action
 	},
 	methods: {
 		getActions(element) {
@@ -232,10 +254,25 @@ export default {
 					createdAt: 1,
 				},
 			};
-			this.$store.dispatch("datasources/find", { query }).catch((error) => {
-				console.error(error);
-				this.$toast.error(this.$t("error.load"));
-			});
+			this.$store
+				.dispatch("datasources/find", { query })
+				.then((result) => {
+					if (this.watchingIds.length > 0) {
+						this.$store.dispatch("datasources/updateCallback", {
+							watchingIds: this.watchingIds,
+							successConditions: [
+								{ lastStatus: "Success" },
+								{ lastStatus: "Error" },
+							],
+							query,
+						});
+					}
+					return result;
+				})
+				.catch((error) => {
+					console.error(error);
+					this.$toast.error(this.$t("error.load"));
+				});
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
@@ -245,9 +282,30 @@ export default {
 			const mapping = { webuntis, ldap, rss };
 			return mapping[item.config.target] || "";
 		},
+		async triggerRun(datasource) {
+			try {
+				const run = await this.$store.dispatch("datasourceRuns/create", {
+					datasourceId: datasource._id,
+					dryrun: true,
+				});
+				this.$router.push({
+					path: `/administration/datasources/${datasource._id}/run/${run._id}`,
+				});
+			} catch (error) {
+				console.error(error, error.response);
+				this.$toast.error(
+					this.$t("pages.administration.datasources.index.trigger.error")
+				);
+			}
+		},
 		handleManageOldDatasourceClick() {
 			this.$router.push({
 				path: "/administration/school",
+			});
+		},
+		handleManageErrorLogin(source) {
+			this.$router.push({
+				path: `datasources/webuntis/${source._id}/edit`,
 			});
 		},
 		handleEdit(source) {
@@ -313,7 +371,10 @@ export default {
 			this.page = 1;
 			this.limit = limit;
 			// save user settings in localStorage
-			localStorage.setItem("datasources_overview_limit", limit);
+			localStorage.setItem(
+				"pages.administration.datasources.index.itemsPerPage",
+				limit
+			);
 			this.find();
 		},
 	},

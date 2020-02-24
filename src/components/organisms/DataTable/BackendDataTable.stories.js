@@ -10,6 +10,9 @@ import {
 	tableActions,
 } from "./DataTable.data-factory.js";
 
+const total = 100;
+const randomData = tableData(total);
+
 storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 	const sortabelRows = tableColumns
 		.filter((c) => c.sortable)
@@ -17,8 +20,6 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 			obj[c.field] = c.field;
 			return obj;
 		}, {});
-	const total = 100;
-	const randomData = tableData(total);
 	return {
 		data: () => ({
 			columns: tableColumns,
@@ -36,7 +37,10 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 				{ inclusive: "inclusive", exclusive: "exclusive" },
 				"inclusive"
 			),
-			selectedRowIds: array("selectedRowIds", []),
+			selectedRowIds: array("selectedRowIds", [
+				randomData[0].id,
+				randomData[1].id,
+			]),
 
 			actions: tableActions(randomData),
 

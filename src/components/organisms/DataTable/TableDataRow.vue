@@ -7,17 +7,24 @@
 		}"
 	>
 		<td v-if="selectable">
-			<base-input
-				v-model="selectionStatus"
-				type="checkbox"
-				:label="`Zeile ${rowindex + 1} auswählen`"
-				:label-hidden="true"
-				class="select"
-			/>
+			<div class="text-content">
+				<base-input
+					v-model="selectionStatus"
+					type="checkbox"
+					:label="`Zeile ${rowindex + 1} auswählen`"
+					:label-hidden="true"
+					class="select"
+				/>
+			</div>
 		</td>
 		<td v-for="(fieldData, index) in rowData" :key="index">
-			<slot :name="`datacolumn-${columnKeys[index]}`" :data="fieldData">
-				{{ fieldData }}
+			<slot
+				:name="`datacolumn-${columnKeys[index].replace(/\./g, '-')}`"
+				:data="fieldData"
+			>
+				<div class="text-content">
+					{{ fieldData }}
+				</div>
 			</slot>
 		</td>
 	</tr>
@@ -70,15 +77,28 @@ export default {
 <style lang="scss" scoped>
 .row {
 	background-color: var(--color-white);
+	border-top: 1px solid var(--color-white);
+	border-bottom: 1px solid var(--color-white);
+
 	&.highlight {
 		background-color: var(--color-gray-light);
+		border-top: 1px solid var(--color-white);
+		border-bottom: 1px solid var(--color-white);
 	}
 	&.selected {
-		background-color: var(--color-info-light);
+		color: var(--color-on-tertiary-light);
+		background-color: var(--color-tertiary-light);
+		border-top: 1px solid var(--color-white);
+		border-bottom: 1px solid var(--color-white);
 	}
 
 	td {
-		padding: var(--space-xs);
+		padding: 0;
+		vertical-align: middle;
+		.text-content {
+			padding: var(--space-xs);
+			font-size: var(--text-xs);
+		}
 		.select {
 			margin-bottom: 0;
 		}
