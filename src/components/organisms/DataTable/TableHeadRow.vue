@@ -32,6 +32,12 @@
 					:icon="sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'"
 					source="material"
 				/>
+				<base-icon
+					v-else-if="column.sortable"
+					icon="sort"
+					source="fa"
+					fill="var(--color-gray)"
+				/>
 			</BaseButton>
 			<div v-else class="th-wrap">
 				<span>{{ column.label }}</span>
@@ -115,8 +121,7 @@ export default {
 .row {
 	font-weight: var(--font-weight-bold);
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid var(--color-gray);
-		opacity: 0.75;
+		border-bottom: calc(2 * var(--border-width)) solid var(--color-tertiary);
 		&.is-current-sort {
 			opacity: 1;
 		}
@@ -125,8 +130,8 @@ export default {
 			align-items: center;
 			justify-content: space-between;
 			width: 100%;
-			padding: var(--space-sm);
-			font-weight: var(--font-weight-bold);
+			padding: var(--space-xs);
+			font-weight: var(--font-weight-normal);
 		}
 		.select-wrap {
 			padding: var(--space-xs);

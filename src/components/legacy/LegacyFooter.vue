@@ -4,7 +4,7 @@
 			<base-grid :column-width="colWidth" :style="{ justifyItems: `center` }">
 				<div class="link-container">
 					<h2 class="h4">{{
-						$t("components.organisms.legacyFooter.contact")
+						$t("components.organisms.LegacyFooter.contact")
 					}}</h2>
 					<base-link
 						v-for="route in contacts"
@@ -40,7 +40,7 @@
 						/>
 					</base-link>
 					<h2 class="h4">{{
-						$t("components.organisms.legacyFooter.job-offer")
+						$t("components.organisms.LegacyFooter.job-offer")
 					}}</h2>
 					<p class="footer-text">
 						Du möchtest gerne Mitglied in unserem HPI
