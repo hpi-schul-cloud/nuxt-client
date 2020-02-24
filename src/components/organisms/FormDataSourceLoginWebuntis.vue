@@ -2,6 +2,7 @@
 	<div>
 		<img
 			class="mt--xl-4"
+			alt="WebUntis Logo"
 			src="@assets/img/datasources/logo-webuntis-text.svg"
 		/>
 		<p v-if="status === 'Error' && datasourceId" class="mb--xl warning">
@@ -13,9 +14,9 @@
 			/>
 			{{ $t("components.organisms.FormDataSourceLoginWebuntis.error.text") }}
 		</p>
-		<p v-else class="mb--xl">{{
-			$t("pages.administration.datasources.webuntis.new.text")
-		}}</p>
+		<p v-else class="mb--xl">
+			{{ $t("pages.administration.datasources.webuntis.new.text") }}
+		</p>
 
 		<form-datasource-login type="webuntis" :datasource-id="datasourceId">
 			<template v-slot:inputs="{ config }">
