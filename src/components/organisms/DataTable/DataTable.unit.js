@@ -438,6 +438,42 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			).toBe(true);
 		});
 
+		it("updates view if parent component selects some values", async () => {
+			const totalSelections = Math.floor(total / 2);
+			const selection = [...Array(totalSelections).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				selection: [],
+				rowsSelectable: true,
+			});
+			wrapper.setProps({
+				selection,
+			});
+			await wrapper.vm.$nextTick();
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
+			);
+		});
+
+		it("updates view if parent component selects all values", async () => {
+			const totalSelections = total;
+			const selection = [...Array(totalSelections).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				selection: [],
+				rowsSelectable: true,
+			});
+			wrapper.setProps({
+				selection,
+			});
+			await wrapper.vm.$nextTick();
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
+			);
+		});
+
 		describe("header checkbox shows", () => {
 			const getWrapperLocal = (numberOfSelections) => {
 				const selection = [...Array(numberOfSelections).keys()].map(String);
