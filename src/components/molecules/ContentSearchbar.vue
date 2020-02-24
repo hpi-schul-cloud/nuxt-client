@@ -6,6 +6,7 @@
 				v-autowidth="{ maxWidth: '960px', minWidth: '0px', comfortZone: 40 }"
 				:value="value"
 				:aria-label="ariaLabel"
+				label="search-input"
 				type="text"
 				name="search"
 				v-bind="$attrs"
