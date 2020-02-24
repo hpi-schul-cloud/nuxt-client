@@ -1,5 +1,5 @@
 <template>
-	<label class="wrapper">
+	<label :class="['wrapper', type]">
 		<input
 			ref="hiddenInput"
 			:aria-label="labelHidden ? label : undefined"
@@ -10,11 +10,12 @@
 			class="visually-hidden"
 			@change="updateVModel"
 		/>
-		<span
-			ref="icon"
-			:class="['icon', type, { 'user-is-tabbing': $userIsTabbing }]"
-		>
-			<span v-if="type === 'checkbox' && isChecked" class="checkmark" />
+		<span :class="['icon-wrapper']">
+			<base-icon
+				class="icon"
+				:source="visibleIcon.source"
+				:icon="visibleIcon.name"
+			/>
 		</span>
 		<span v-if="!labelHidden" class="label">
 			{{ label }}
@@ -22,19 +23,21 @@
 	</label>
 </template>
 <script>
-import userIsTabbingMixin from "@mixins/userIsTabbing";
+import BaseIcon from "@components/base/BaseIcon";
 export const supportedTypes = ["checkbox", "switch"];
 
 export default {
-	mixins: [userIsTabbingMixin],
+	components: {
+		BaseIcon,
+	},
 	model: {
 		prop: "vmodel",
 		event: "input",
 	},
 	props: {
 		vmodel: {
-			type: [Array, Boolean],
-			default: false,
+			type: [Array, Boolean, undefined],
+			default: undefined,
 		},
 		value: {
 			type: String,
@@ -51,22 +54,63 @@ export default {
 			type: String,
 			required: true,
 		},
-		labelHidden: {
-			type: Boolean,
-		},
+		labelHidden: Boolean,
+		showUndefinedState: Boolean,
 	},
 	computed: {
 		isChecked() {
 			return Array.isArray(this.vmodel)
 				? this.vmodel.includes(this.value)
-				: !!this.vmodel;
+				: Boolean(this.vmodel);
+		},
+		visibleIcon() {
+			switch (this.type) {
+				case "switch": {
+					return this.isChecked
+						? { name: "toggle_on", source: "material" }
+						: { name: "toggle_off", source: "material" };
+				}
+				default:
+				case "checkbox": {
+					if (this.showUndefinedState && this.vmodel === undefined) {
+						return { name: "indeterminate_check_box", source: "material" };
+					}
+					return this.isChecked
+						? { name: "check_box", source: "material" }
+						: { name: "check_box_outline_blank", source: "material" };
+				}
+			}
 		},
 	},
+	created() {
+		this.validateProps();
+	},
 	methods: {
+		// Perform more complex prop validations than is possible
+		// inside individual validator functions for each prop.
+		validateProps() {
+			if (process.env.NODE_ENV === "production") return;
+
+			if (this.showUndefinedState) {
+				if (this.type !== "checkbox") {
+					throw new Error(
+						"showUndefinedState is only allowed on type=checkbox."
+					);
+				}
+				if (Array.isArray(this.vmodel)) {
+					throw new Error(
+						"showUndefinedState is not allowed if v-model is of type Array."
+					);
+				}
+			}
+		},
 		updateVModel() {
 			let newModel = this.vmodel;
 			const isChecked = this.$refs.hiddenInput.checked;
-			if (typeof this.vmodel === "boolean") {
+			if (
+				typeof this.vmodel === "boolean" ||
+				(this.showUndefinedState && this.vmodel === undefined)
+			) {
 				newModel = isChecked;
 			} else if (isChecked && !newModel.includes(this.value)) {
 				newModel.push(this.value);
@@ -84,7 +128,8 @@ export default {
 
 .wrapper {
 	position: relative;
-	display: inline-flex;
+	display: flex;
+	flex-wrap: nowrap;
 	align-items: center;
 }
 
@@ -93,81 +138,27 @@ export default {
 	vertical-align: middle;
 }
 
-.icon {
-	position: relative;
+.icon-wrapper {
 	display: inline-block;
-}
-
-.checkbox {
-	width: var(--text-base-size);
-	height: var(--text-base-size);
-	border: var(--border-width-bold) solid var(--color-tertiary);
+	user-select: none;
 	border-radius: var(--radius-xs);
 }
 
-input:checked + .checkbox {
-	background-color: var(--color-tertiary);
+input:focus + .icon-wrapper {
+	box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-info);
 }
 
-.checkmark {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	transform: rotate(225deg);
-	&::before {
-		position: absolute;
-		width: 0;
-		height: 90%;
-		margin-top: var(--space-xs-4);
-		margin-left: var(--space-xs-3);
-		content: "";
-		background-color: var(--color-white);
-		border: 0.06em solid var(--color-white);
-		border-radius: var(--space-xs-4);
-	}
-	&::after {
-		position: absolute;
-		width: 55%;
-		height: 0;
-		margin-top: var(--space-xs-4);
-		margin-left: var(--space-xs-3);
-		content: "";
-		background-color: var(--color-white);
-		border: 0.06em solid var(--color-white);
-		border-radius: var(--space-xs-4);
-	}
-}
-
+// SWITCH
 .switch {
-	width: 1.2em;
-	height: 0.7em;
-	background-color: var(--color-tertiary);
-	transition: background-color var(--duration-transition-medium);
-
-	&::before {
-		position: absolute;
-		bottom: 0.1em;
-		left: 0.1em;
-		width: 0.5em;
-		height: 0.5em;
-		content: "";
-		background-color: var(--color-white);
-		transition: transform var(--duration-transition-medium);
+	input + .icon-wrapper {
+		// stylelint-disable
+		margin-top: -0.5em;
+		margin-bottom: -0.5em;
+		font-size: 2em;
+		// stylelint-enable
 	}
-}
-
-input:checked + .switch {
-	background-color: var(--color-tertiary);
-	&::before {
-		transform: translateX(100%);
-	}
-}
-
-input:focus + .icon {
-	outline: none;
-	&.user-is-tabbing {
-		outline: 2px solid #4d90fe;
-		outline-offset: 0.1em;
+	input:checked + .icon-wrapper {
+		color: var(--color-success);
 	}
 }
 </style>
