@@ -1,6 +1,9 @@
 <template>
 	<section class="content">
-		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
+		<div
+			v-if="scrollY > backToTopScrollYLimit && resources.data.length > 0"
+			class="content__back-to-top"
+		>
 			<floating-fab
 				icon="arrow_drop_up"
 				:aria-label="$t('common.actions.scrollToTop')"
@@ -50,6 +53,7 @@
 					/>
 				</span>
 			</transition>
+			<edusharing-footer />
 		</div>
 	</section>
 </template>
@@ -62,6 +66,7 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import FloatingFab from "@components/molecules/FloatingFab";
+import EdusharingFooter from "@components/molecules/EdusharingFooter";
 
 export default {
 	components: {
@@ -70,6 +75,7 @@ export default {
 		ContentEmptyState,
 		BaseGrid,
 		FloatingFab,
+		EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
 	layout: "loggedInFull",
@@ -160,6 +166,9 @@ export default {
 
 <style lang="scss" scoped>
 .content {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	width: 100%;
 	height: 100%;
 
