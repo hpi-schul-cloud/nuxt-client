@@ -19,6 +19,7 @@
 	"components.organisms.ContentCard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da: [hier bitte Ihre Gründe]",
 	"components.organisms.DatasourceRunWebuntis.discarded": "Verworfen",
 	"components.organisms.DatasourceRunWebuntis.import": "Daten importieren",
+	"components.organisms.DatasourceRunWebuntis.numberOfImported": "{imported}/{total} Datensätze importiert",
 	"components.organisms.DatasourceRunWebuntis.imported": "Importiert",
 	"components.organisms.DatasourceRunWebuntis.loading": "Lade Daten...",
 	"components.organisms.DatasourceRunWebuntis.unknown": "Status unbekannt",
