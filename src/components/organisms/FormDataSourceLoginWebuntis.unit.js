@@ -1,5 +1,5 @@
-import FormDataSourceLoginWebuntis from './FormDataSourceLoginWebuntis'
+import FormDataSourceLoginWebuntis from "./FormDataSourceLoginWebuntis";
 
-describe('@components/FormDataSourceLoginWebuntis', () => {
+describe("@components/FormDataSourceLoginWebuntis", () => {
 	it(...isValidComponent(FormDataSourceLoginWebuntis));
-})
+});
