@@ -3,7 +3,7 @@ import DataTable from "./DataTable";
 
 const defaultData = tableData(50);
 
-function getWrapper(attributes) {
+function getWrapper(attributes, options) {
 	return mount(DataTable, {
 		sync: false, // https://github.com/vuejs/vue-test-utils/issues/1130, https://github.com/logaretm/vee-validate/issues/1996
 		propsData: {
@@ -12,6 +12,7 @@ function getWrapper(attributes) {
 			columns: tableColumns,
 			...attributes,
 		},
+		...options,
 	});
 }
 
@@ -431,10 +432,44 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
 				true
 			);
-			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			wrapper.find("tbody tr label").trigger("click");
 			expect(
 				await hasVisibleSelections(wrapper, testData, expectedSelection)
 			).toBe(true);
+		});
+
+		describe("header checkbox shows", () => {
+			const getWrapperLocal = (numberOfSelections) => {
+				const selection = [...Array(numberOfSelections).keys()].map(String);
+				return getWrapper(
+					{
+						data: testData,
+						selection,
+						rowsSelectable: true,
+					},
+					{
+						stubs: { BaseIcon: true },
+					}
+				);
+			};
+
+			it("checked state if all values are selected", async () => {
+				const wrapper = getWrapperLocal(total);
+				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+				expect(checkboxIcon.attributes("icon")).toBe("check_box");
+			});
+
+			it("unchecked state if no values are selected", async () => {
+				const wrapper = getWrapperLocal(0);
+				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+				expect(checkboxIcon.attributes("icon")).toBe("check_box_outline_blank");
+			});
+
+			it("intermediate state if some values are selected", async () => {
+				const wrapper = getWrapperLocal(Math.round(total / 2));
+				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+				expect(checkboxIcon.attributes("icon")).toBe("indeterminate_check_box");
+			});
 		});
 	});
 
