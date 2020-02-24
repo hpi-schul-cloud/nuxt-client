@@ -141,11 +141,13 @@ export default {
 .icon-wrapper {
 	display: inline-block;
 	user-select: none;
-	border-radius: var(--radius-xs);
+	svg {
+		border-radius: var(--radius-xs);
+	}
 }
 
-input:focus + .icon-wrapper {
-	box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-info);
+input:focus + .icon-wrapper svg {
+	box-shadow: 0 0 0 3px var(--color-info);
 }
 
 // SWITCH
