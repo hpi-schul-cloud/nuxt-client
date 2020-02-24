@@ -8,6 +8,7 @@
 					label="Alle Zeilen auswählen"
 					:label-hidden="true"
 					class="select"
+					:show-undefined-state="true"
 				/>
 			</div>
 		</th>
@@ -49,10 +50,23 @@
 <script>
 import BaseButton from "@basecomponents/BaseButton";
 
+const selectionStateMap = new Map([
+	[true, "all"],
+	[undefined, "some"],
+	[false, "none"],
+	["all", true],
+	["some", undefined],
+	["none", false],
+]);
+
 export default {
 	props: {
 		allRowsSelectable: Boolean,
-		allRowsSelected: Boolean,
+		currentPageSelectionState: {
+			type: String,
+			required: true,
+			validator: (value) => ["all", "some", "none"].includes(value),
+		},
 		columns: {
 			type: Array,
 			default: () => [],
@@ -70,10 +84,13 @@ export default {
 	computed: {
 		selectionStatus: {
 			get() {
-				return this.allRowsSelected;
+				return selectionStateMap.get(this.currentPageSelectionState);
 			},
 			set(state) {
-				this.$emit("update:allRowsSelected", state);
+				this.$emit(
+					"update:currentPageSelectionState",
+					selectionStateMap.get(state)
+				);
 			},
 		},
 	},
