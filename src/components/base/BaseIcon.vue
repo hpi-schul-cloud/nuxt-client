@@ -44,7 +44,7 @@ export default {
 				}
 				if (this.source === "material") {
 					// src: https://material.io/tools/icons/?style=baseline
-					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/baseline-${this.icon}-24px.svg`);
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/round-${this.icon}-24px.svg`);
 				}
 				return icon.default;
 			} catch (error) {

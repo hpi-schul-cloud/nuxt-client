@@ -27,12 +27,13 @@ const documentBaseDir =
 	process.env.DOCUMENT_BASE_DIR ||
 	"https://s3.hidrive.strato.com/schul-cloud-hpi/";
 const theme = process.env.SC_THEME || "default";
+const documentBaseDirThemed = String(new URL(`${theme}/`, documentBaseDir));
 
 export default {
 	documentBaseDir: String(new URL(`${theme}/`, documentBaseDir)),
 	specificFiles: (baseDir) =>
 		Object.entries(specificFiles).reduce((obj, [key, value]) => {
-			const dir = baseDir || documentBaseDir;
+			const dir = baseDir || documentBaseDirThemed;
 			obj[key] = String(new URL(value, dir));
 			return obj;
 		}, {}),
