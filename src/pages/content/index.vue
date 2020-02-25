@@ -11,48 +11,54 @@
 			/>
 		</div>
 		<div class="content">
-			<content-searchbar
-				v-model.lazy="searchQuery"
-				:class="
-					!activateTransition ? 'first-search__searchbar' : 'content__searchbar'
-				"
-				placeholder="Lernstore durchsuchen"
-				:loading="loading"
-				@keyup:enter="transitionHandler"
-			/>
-			<transition name="fade">
-				<span v-if="!firstSearch">
-					<p class="content__total">
-						<span v-if="searchQuery.length > 0">
-							{{ resources.data.length }}
-							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
-						</span>
-						<span v-else>
-							{{ resources.data.length }}
-							{{ $t("pages.content.index.search_resources") }}
-						</span>
-					</p>
-					<div v-if="resources.data.length === 0" class="content__no-results">
-						<content-empty-state />
-					</div>
-					<base-grid column-width="15rem">
-						<content-card
-							v-for="resource of resources.data"
-							:id="resource._id"
-							:key="resource._id"
-							class="card"
-							:thumbnail="resource.thumbnail"
-							:title="resource.title"
-							:url="resource.url"
+			<div>
+				<content-searchbar
+					v-model.lazy="searchQuery"
+					:class="
+						!activateTransition
+							? 'first-search__searchbar'
+							: 'content__searchbar'
+					"
+					placeholder="Lernstore durchsuchen"
+					:loading="loading"
+					@keyup:enter="transitionHandler"
+				/>
+				<transition name="fade">
+					<span v-if="!firstSearch">
+						<p class="content__total">
+							<span v-if="searchQuery.length > 0">
+								{{ resources.data.length }}
+								{{ $t("pages.content.index.search_results") }} "{{
+									searchQuery
+								}}"
+							</span>
+							<span v-else>
+								{{ resources.data.length }}
+								{{ $t("pages.content.index.search_resources") }}
+							</span>
+						</p>
+						<div v-if="resources.data.length === 0" class="content__no-results">
+							<content-empty-state />
+						</div>
+						<base-grid column-width="15rem">
+							<content-card
+								v-for="resource of resources.data"
+								:id="resource._id"
+								:key="resource._id"
+								class="card"
+								:thumbnail="resource.thumbnail"
+								:title="resource.title"
+								:url="resource.url"
+							/>
+						</base-grid>
+						<base-spinner
+							v-if="loading && resources.data.length !== 0"
+							class="content__spinner"
+							color="var(--color-primary)"
 						/>
-					</base-grid>
-					<base-spinner
-						v-if="loading && resources.data.length !== 0"
-						class="content__spinner"
-						color="var(--color-primary)"
-					/>
-				</span>
-			</transition>
+					</span>
+				</transition>
+			</div>
 			<edusharing-footer />
 		</div>
 	</section>
