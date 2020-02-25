@@ -108,49 +108,6 @@ storiesOf("4 Base UI Components/Inputs", module)
 			<base-input v-for="i in [0,0,0,0,0]" :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint"/>
 		</div>`,
 	}))
-	.add("Checkbox", () => ({
-		components: { BaseInput },
-		data: () => ({
-			vmodel: array("vmodel", ["a"], ", "),
-			values: array("values", ["a", "b"], ", "),
-			labels: array("labels", ["Checkbox a", "Checkbox b"], ", "),
-			labelHidden: boolean("labelHidden", false),
-		}),
-		template: `
-			<div role="group" aria-label="checkboxes">
-				<base-input
-					v-for="(value, i) in values"
-					:key="value"
-					type="checkbox"
-					v-model="vmodel"
-					:value="value"
-					name="checkbox"
-					:label="labels[i]"
-					:labelHidden="labelHidden"
-				/>
-				<p> {{ vmodel.join(", ")}} </p>
-			</div>
-		`,
-	}))
-	.add("Switch", () => ({
-		components: { BaseInput },
-		data: () => ({
-			vmodel: boolean("vmodel", true),
-			value: text("value", "published"),
-		}),
-		template: `
-			<div>
-				<base-input
-					type="switch"
-					v-model="vmodel"
-					:value="value"
-					name="switch"
-					:label="'Checkbox - ' + value"
-				/>
-				<p> {{ vmodel}} </p>
-			</div>
-		`,
-	}))
 	.add("Radio", () => ({
 		components: { BaseInput },
 		data: () => ({
