@@ -74,19 +74,19 @@ storiesOf("4 Base UI Components/Modals", module)
 				<template v-slot:header>Plugin Einstellungen</template>
 				<template v-slot:body>
 					<div>
-						<base-input v-model="inputs.a" type="checkbox" value="a" label="Anonyme Abgabe" name="checkbox" />
+						<base-input v-model="inputs.a" type="checkbox" value="a" label="Anonyme Abgabe" name="checkbox" style="display: inline-flex" />
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 					<div>
-						<base-input v-model="inputs.b" type="checkbox" value="b" label="Schülerabgabe untereinander sichtbar" name="checkbox" />
+						<base-input v-model="inputs.b" type="checkbox" value="b" label="Schülerabgabe untereinander sichtbar" name="checkbox" style="display: inline-flex"/>
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 					<div>
-						<base-input v-model="inputs.c" type="checkbox" value="c" label="Worte" name="checkbox" />
+						<base-input v-model="inputs.c" type="checkbox" value="c" label="Worte" name="checkbox" style="display: inline-flex" />
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 					<div>
-						<base-input v-model="inputs.d" type="checkbox" value="d" label="Punkte" name="checkbox" />
+						<base-input v-model="inputs.d" type="checkbox" value="d" label="Punkte" name="checkbox" style="display: inline-flex" />
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 				</template>

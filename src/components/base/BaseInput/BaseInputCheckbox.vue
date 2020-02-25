@@ -126,7 +126,9 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.wrapper {
+label {
+	// .wrapper but to keep specifcy low we use label directly
+	// this makes it easier to overwrite styles
 	position: relative;
 	display: flex;
 	flex-wrap: nowrap;
