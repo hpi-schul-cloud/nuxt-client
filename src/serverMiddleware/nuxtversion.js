@@ -12,11 +12,8 @@ const GIT_INFO = {
 
 // overwrite info with versionfile if provided
 try {
-	const filePath = path.join(__dirname, "..", "version");
-	const versionFileLines = fs.readFileSync(filePath, "utf8").split("\n");
-	GIT_INFO.sha = getLines(versionFileLines, 0);
-	GIT_INFO.branch = getLines(versionFileLines, 1);
-	GIT_INFO.message = getLines(versionFileLines, 2, versionFileLines.length);
+	const versionFile = require("../../version");
+	Object.assign(GIT_INFO, versionFile);
 } catch (error) {
 	if (process.env.NODE_ENV === "production") {
 		console.warn("version file is missing", error);
