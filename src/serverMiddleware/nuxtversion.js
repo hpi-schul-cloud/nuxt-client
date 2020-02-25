@@ -6,7 +6,8 @@ const GIT_INFO = {
 	version: pkg.version,
 	branch: git.branch(),
 	message: git.message(),
-	commitDate: git.date(),
+	commitDate: git.date(), // deprecated, replaced with birthtime
+	birthtime: git.date(),
 };
 
 export default async function(req, res, next) {
