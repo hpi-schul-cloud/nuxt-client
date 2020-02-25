@@ -24,7 +24,10 @@
 					{{ $t("pages.content.index.search_resources") }}
 				</span>
 			</p>
-			<div v-if="resources.data.length === 0" class="content__no-results">
+			<div
+				v-if="resources.data.length === 0 && !loading"
+				class="content__no-results"
+			>
 				<content-empty-state />
 			</div>
 			<base-grid column-width="15rem">
