@@ -102,8 +102,10 @@ export default {
 			if (!this.sortByProxy) {
 				return raw;
 			}
-			const sortMethod = this.sortmethod || this.sort;
-			const out = sortMethod(raw, this.sortByProxy, this.sortOrderProxy);
+			const sortMethod = this.sortMethod || this.sort;
+			const out = sortMethod(raw, this.sortByProxy, this.sortOrderProxy, {
+				getValueByPath,
+			});
 
 			return out;
 		},
