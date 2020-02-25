@@ -10,7 +10,7 @@
 								class="content__img-checkbox"
 								@click="checkboxHandler"
 							>
-								<base-icon source="material" :icon="checkboxSelector" />
+								<base-icon source="material" :icon="checkboxIconSelector" />
 							</base-button>
 
 							<div class="content__img-background-gradient" />
@@ -33,11 +33,11 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
-						<base-button design="text icon">
+						<base-button design="text icon" @click="bookmarkHandler">
 							<base-icon
 								class="footer__content-icon"
 								source="material"
-								icon="bookmark_border"
+								:icon="bookmarkIconSelector"
 							/>
 						</base-button>
 
@@ -87,6 +87,7 @@ export default {
 		return {
 			isChecked: false,
 			menuActive: false,
+			isBookmarked: false,
 			actions: [
 				{
 					event: "copy",
@@ -123,13 +124,19 @@ export default {
 			const email = this.$t("components.molecules.ContentCard.report.email");
 			return `mailto:${email}?${querystring}`;
 		},
-		checkboxSelector() {
+		checkboxIconSelector() {
 			return this.isChecked ? "check_box" : "check_box_outline_blank";
+		},
+		bookmarkIconSelector() {
+			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 	},
 	methods: {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
+		},
+		bookmarkHandler() {
+			this.isBookmarked = !this.isBookmarked;
 		},
 		openMenu() {
 			this.menuActive = true;
