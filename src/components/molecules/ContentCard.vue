@@ -21,11 +21,7 @@
 								class="content__img-thumbnail"
 							/>
 
-							<base-icon
-								class="content__img-icon"
-								source="material"
-								icon="photo"
-							/>
+							<img class="content__img-icon" src="@assets/icons/ic_image.svg" />
 						</div>
 					</div>
 					<base-link :href="url" target="_blank" :no-style="true">
@@ -156,7 +152,10 @@ export default {
 }
 .img-container {
 	position: relative;
-	min-height: 200px;
+	height: 200px;
+	color: var(--color-white);
+	background-color: var(--color-black);
+	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .content {
 	display: flex;
@@ -185,12 +184,12 @@ export default {
 			top: 40%;
 			left: 40%;
 			z-index: var(--layer-dropdown);
-			padding: var(--space-xs);
-			font-size: var(--heading-1);
+			width: 3.5rem;
+			padding: var(--space-sm);
 			color: var(--color-gray-dark);
 			background-color: var(--color-white);
 			border-radius: var(--radius-round);
-			opacity: 0.8;
+			opacity: 0.6;
 		}
 		&-checkbox {
 			position: absolute;
