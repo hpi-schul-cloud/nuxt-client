@@ -34,6 +34,9 @@ dockerPush(){
 # BUILD SCRIPTS
 
 buildClient(){
+	# write version file
+	printf "%s\n%s\n%s" $TRAVIS_COMMIT $TRAVIS_BRANCH $TRAVIS_COMMIT_MESSAGE > ../version
+
 	docker build \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \

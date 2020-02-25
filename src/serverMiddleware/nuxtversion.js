@@ -10,6 +10,19 @@ const GIT_INFO = {
 	birthtime: git.date(),
 };
 
+// overwrite info with versionfile if provided
+try {
+	const filePath = path.join(__dirname, "..", "version");
+	const versionFileLines = fs.readFileSync(filePath, "utf8").split("\n");
+	GIT_INFO.sha = getLines(versionFileLines, 0);
+	GIT_INFO.branch = getLines(versionFileLines, 1);
+	GIT_INFO.message = getLines(versionFileLines, 2, versionFileLines.length);
+} catch (error) {
+	if (process.env.NODE_ENV === "production") {
+		console.warn("version file is missing", error);
+	}
+}
+
 export default async function(req, res, next) {
 	if (req.url === "/nuxtversion") {
 		res.setHeader("Access-Control-Allow-Origin", "*");
