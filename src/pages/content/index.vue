@@ -16,11 +16,11 @@
 			/>
 			<p class="content__total">
 				<span v-if="searchQuery.length > 0">
-					{{ resources.data.length }}
+					{{ resources.total }}
 					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
 				</span>
 				<span v-else>
-					{{ resources.data.length }}
+					{{ resources.total }}
 					{{ $t("pages.content.index.search_resources") }}
 				</span>
 			</p>
