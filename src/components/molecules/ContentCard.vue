@@ -10,7 +10,7 @@
 								class="content__img-checkbox"
 								@click="checkboxHandler"
 							>
-								<base-icon source="material" :icon="checkboxSelector" />
+								<base-icon source="material" :icon="checkboxIconSelector" />
 							</base-button>
 
 							<div class="content__img-background-gradient" />
@@ -21,11 +21,7 @@
 								class="content__img-thumbnail"
 							/>
 
-							<base-icon
-								class="content__img-icon"
-								source="material"
-								icon="photo"
-							/>
+							<img class="content__img-icon" src="@assets/icons/ic_image.svg" />
 						</div>
 					</div>
 					<base-link :href="url" target="_blank" :no-style="true">
@@ -37,11 +33,11 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
-						<base-button design="text icon">
+						<base-button design="text icon" @click="bookmarkHandler">
 							<base-icon
 								class="footer__content-icon"
 								source="material"
-								icon="bookmark_border"
+								:icon="bookmarkIconSelector"
 							/>
 						</base-button>
 
@@ -91,6 +87,7 @@ export default {
 		return {
 			isChecked: false,
 			menuActive: false,
+			isBookmarked: false,
 			actions: [
 				{
 					event: "copy",
@@ -127,13 +124,19 @@ export default {
 			const email = this.$t("components.molecules.ContentCard.report.email");
 			return `mailto:${email}?${querystring}`;
 		},
-		checkboxSelector() {
+		checkboxIconSelector() {
 			return this.isChecked ? "check_box" : "check_box_outline_blank";
+		},
+		bookmarkIconSelector() {
+			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 	},
 	methods: {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
+		},
+		bookmarkHandler() {
+			this.isBookmarked = !this.isBookmarked;
 		},
 		openMenu() {
 			this.menuActive = true;
@@ -156,7 +159,10 @@ export default {
 }
 .img-container {
 	position: relative;
-	min-height: 200px;
+	height: 200px;
+	color: var(--color-white);
+	background-color: var(--color-black);
+	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .content {
 	display: flex;
@@ -185,12 +191,12 @@ export default {
 			top: 40%;
 			left: 40%;
 			z-index: var(--layer-dropdown);
-			padding: var(--space-xs);
-			font-size: var(--heading-1);
+			width: 3.5rem;
+			padding: var(--space-sm);
 			color: var(--color-gray-dark);
 			background-color: var(--color-white);
 			border-radius: var(--radius-round);
-			opacity: 0.8;
+			opacity: 0.6;
 		}
 		&-checkbox {
 			position: absolute;

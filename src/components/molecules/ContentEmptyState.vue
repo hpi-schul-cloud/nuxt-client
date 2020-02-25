@@ -1,16 +1,17 @@
 <template>
 	<div class="empty-state-container">
-		<img
+		<!-- <img
 			class="empty-state-container__image"
 			:src="getRandomSVG"
 			alt="empty-state-img"
-		/>
-		<h3 class="empty-state-container__title">{{
-			$t("pages.content.empty_state.error.oops")
-		}}</h3>
-		<p class="empty-state-container__message">{{
-			$t("pages.content.empty_state.error.message")
-		}}</p>
+		/> -->
+		<!-- eslint-disable vue/no-v-html -->
+		<span class="empty-state-container__title" v-html="titleHtmlTemplate" />
+		<div class="empty-state-container__sub-title">{{
+			$t("pages.content.empty_state.error.subtitle")
+		}}</div>
+		<span class="empty-state-container__message" v-html="messageHtmlTemplate" />
+		<!-- eslint-enable vue/no-v-html -->
 	</div>
 </template>
 
@@ -18,20 +19,22 @@
 export default {
 	data() {
 		return {
-			emptyStateSVGs: [
-				"/empty-state/emptyStateSvg_teacher_male.svg",
-				"/empty-state/emptyStateSvg_teacher_male_hand_down.svg",
-				"/empty-state/emptyStateSvg_teacher_female_hand_raised.svg",
-				"/empty-state/emptyStateSvg_teacher_female.svg",
-			],
+			// emptyStateSVGs: [
+			// 	"/empty-state/emptyStateSvg_teacher_male.svg",
+			// 	"/empty-state/emptyStateSvg_teacher_male_hand_down.svg",
+			// 	"/empty-state/emptyStateSvg_teacher_female_hand_raised.svg",
+			// 	"/empty-state/emptyStateSvg_teacher_female.svg",
+			// ],
+			messageHtmlTemplate: this.$t("pages.content.empty_state.error.message"),
+			titleHtmlTemplate: this.$t("pages.content.empty_state.error.title"),
 		};
 	},
-	computed: {
-		getRandomSVG() {
-			const rand = Math.floor(Math.random() * this.emptyStateSVGs.length);
-			return this.emptyStateSVGs[rand];
-		},
-	},
+	// computed: {
+	// 	getRandomSVG() {
+	// 		const rand = Math.floor(Math.random() * this.emptyStateSVGs.length);
+	// 		return this.emptyStateSVGs[rand];
+	// 	},
+	// },
 };
 </script>
 
@@ -45,11 +48,18 @@ export default {
 		height: 50vh;
 		margin-top: var(--space-md);
 	}
+	&__title {
+		margin-bottom: var(--space-md);
+		font-size: var(--heading-3);
+		text-align: center;
+	}
 	&__message {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: var(--text-lg);
+		font-size: var(--text-sm);
+		text-align: center;
+	}
+	&__sub-title {
+		font-size: var(--text-md);
+		font-weight: var(--font-weight-bold);
 	}
 }
 </style>
