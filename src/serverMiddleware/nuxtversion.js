@@ -16,7 +16,7 @@ try {
 	Object.assign(GIT_INFO, versionFile);
 } catch (error) {
 	if (process.env.NODE_ENV === "production") {
-		console.warn("version file is missing", error);
+		console.warn("version file is missing\n", error);
 	}
 }
 
