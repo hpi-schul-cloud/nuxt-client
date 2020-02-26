@@ -20,20 +20,10 @@
 			/>
 			<div class="search__container--icon">
 				<base-button v-if="isActive" design="none" @click="enterKeyHandler">
-					<base-icon
-						class="search-icon"
-						source="custom"
-						icon="search"
-						@click="enterKeyHandler"
-					/>
+					<base-icon class="search-icon" source="custom" icon="search" />
 				</base-button>
 				<base-button v-else design="none" @click="clearBtnHandler">
-					<base-icon
-						class="search-icon"
-						source="custom"
-						icon="clear"
-						@click="clearBtnHandler"
-					/>
+					<base-icon class="search-icon" source="custom" icon="clear" />
 				</base-button>
 			</div>
 		</div>
@@ -77,7 +67,6 @@ export default {
 		enterKeyHandler(...args) {
 			if (this.isActive && this.inputValue.length > 0) {
 				this.isActive = false;
-				this.inputValue = "";
 			}
 			this.$emit("keyup:enter", ...args);
 			this.$refs.searchInput.blur();
