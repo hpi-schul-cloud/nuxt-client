@@ -39,6 +39,7 @@ buildClient(){
 	printf "module.exports={sha:'%s',branch:'%s',message:'%s'}" $TRAVIS_COMMIT $TRAVIS_BRANCH $TRAVIS_COMMIT_MESSAGE > ../version
 
 	docker build \
+		-t schulcloud/schulcloud-nuxt-client:$TRAVIS_BRANCH \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
 		-f Dockerfile.client \
