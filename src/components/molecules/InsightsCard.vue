@@ -13,12 +13,14 @@
 						<div class="insights-card__content-total">
 							{{ data.current }}
 						</div>
-						<div class="insights-card__content-diff">
-							<div
-								:class="data.current < data.last ? 'arrow-down' : 'arrow-up'"
-							></div>
-							{{ data.current - data.last }}
-						</div>
+						<template v-if="data && data.last">
+							<div class="insights-card__content-diff">
+								<div
+									:class="data.current < data.last ? 'arrow-down' : 'arrow-up'"
+								></div>
+								{{ data.current - data.last }}
+							</div>
+						</template>
 					</template>
 					<template v-else-if="data">
 						<div class="insights-card__content-total">

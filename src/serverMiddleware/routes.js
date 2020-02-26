@@ -10,6 +10,7 @@ module.exports = [
 	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
+	`^/statistics/?`,
 	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
 	`^/insights`,
