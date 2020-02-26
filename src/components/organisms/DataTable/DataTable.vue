@@ -82,15 +82,7 @@ export default {
 			};
 		},
 		proxyListeners() {
-			// TODO configure babel to enable Object.fromEntries()
-			// then replace this ugly reduce
-			const fromEntries = (iterable) =>
-				[...iterable].reduce((obj, [key, val]) => {
-					obj[key] = val;
-					return obj;
-				}, {});
-
-			return fromEntries(
+			return Object.fromEntries(
 				Object.entries(this.$listeners).filter(
 					([key]) => !eventProxyBlacklist.includes(key)
 				)

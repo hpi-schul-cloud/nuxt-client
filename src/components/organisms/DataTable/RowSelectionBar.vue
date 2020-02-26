@@ -61,13 +61,9 @@ export default {
 		allRowsOfAllPagesSelected: {
 			type: Boolean,
 		},
-		allRowsOfCurrentPageSelected: {
-			type: Boolean,
-		},
 	},
 	methods: {
 		closeBanner() {
-			this.$emit("update:allRowsOfCurrentPageSelected", false);
 			this.$emit("update:allRowsOfAllPagesSelected", false);
 		},
 	},

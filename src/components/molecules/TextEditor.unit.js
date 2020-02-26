@@ -129,16 +129,16 @@ describe("@components/BaseTextarea", () => {
 		});
 		const { editorUpdateHandler } = wrapper.vm;
 
-		const undoStub = sinon.stub();
-		const toastStub = sinon.stub();
+		const undoStub = jest.fn();
+		const toastStub = jest.fn();
 		wrapper.vm.$toast = {};
 		wrapper.vm.$toast.error = toastStub;
 		wrapper.vm.editor.commands.undo = undoStub;
 
 		editorUpdateHandler({ getHTML: () => invalidContent });
 
-		expect(undoStub.called).toBe(true);
-		expect(toastStub.called).toBe(true);
+		expect(undoStub.mock.calls).toHaveLength(1);
+		expect(toastStub.mock.calls).toHaveLength(1);
 		expect(wrapper.emitted("update")).toBeUndefined();
 	});
 
@@ -151,16 +151,16 @@ describe("@components/BaseTextarea", () => {
 
 		const { editorUpdateHandler } = wrapper.vm;
 
-		const undoStub = sinon.stub();
-		const toastStub = sinon.stub();
+		const undoStub = jest.fn();
+		const toastStub = jest.fn();
 		wrapper.vm.$toast = {};
 		wrapper.vm.$toast.error = toastStub;
 		wrapper.vm.editor.commands.undo = undoStub;
 
 		editorUpdateHandler({ getHTML: () => validContent });
 
-		expect(undoStub.called).toBe(false);
-		expect(toastStub.called).toBe(false);
+		expect(undoStub.mock.calls).toHaveLength(0);
+		expect(toastStub.mock.calls).toHaveLength(0);
 		expect(wrapper.emitted("update")[0][0]).toStrictEqual(validContent);
 	});
 });
