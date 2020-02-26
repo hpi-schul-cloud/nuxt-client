@@ -98,19 +98,19 @@ export default {
 			contacts: [
 				{
 					title: this.$t("pages.mint-ec.article.footer.info-mail"),
-					href: "mailto:info@schulcloud.org",
+					href: "mailto:info@schul-cloud.org",
 				},
 				{
-					title: "Support: feedback@schulcloud.org",
-					href: "mailto:feedback@schulcloud.org",
+					title: "Support: feedback@schul-cloud.org",
+					href: "mailto:feedback@schul-cloud.org",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.anbieter"),
-					href: "mailto:inhalte@schulcloud.org",
+					href: "mailto:inhalte@schul-cloud.org",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutz-mail"),
-					href: "mailto:datenschutz@schulcloud.org",
+					href: "mailto:datenschutz@schul-cloud.org",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.newsletter"),
