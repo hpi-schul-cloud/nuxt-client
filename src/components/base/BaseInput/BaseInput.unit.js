@@ -35,9 +35,9 @@ describe("@components/BaseInput", () => {
 			});
 	});
 
-	it("label of checkboxes and radio buttons can be hidden", () => {
+	it("label of checkboxes, switches and radio buttons can be hidden", () => {
 		const testLabel = "MyTestLabel";
-		["checkbox", "radio"].forEach((type, index) => {
+		["checkbox", "switch", "radio"].forEach((type, index) => {
 			const wrapper = mount({
 				data: () => ({ value: "" }),
 				template: `<base-input v-model="value" label="${testLabel}" label-hidden type="${type}" value="${index}"/>`,

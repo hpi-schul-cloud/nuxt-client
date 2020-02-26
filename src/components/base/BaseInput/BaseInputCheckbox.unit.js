@@ -62,21 +62,65 @@ describe("@components/BaseInputCheckbox", () => {
 	it(`shows checkmark only when it is checked`, async () => {
 		await Promise.all(
 			["input", "label"].map(async (clickTargetSelector) => {
-				const wrapper = mount({
-					data: () => ({ value: false }),
-					template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
-					components: { BaseInput },
-				});
+				const wrapper = mount(
+					{
+						data: () => ({ value: false }),
+						template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
+						components: { BaseInput },
+					},
+					{
+						stubs: { BaseIcon: true },
+					}
+				);
 
 				const clickTarget = wrapper.find(clickTargetSelector);
-				expect(wrapper.find(".checkmark").exists()).toBe(false);
+				const icon = wrapper.get("baseicon-stub");
+				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(wrapper.find(".checkmark").exists()).toBe(true);
+				expect(icon.attributes("icon")).toBe("check_box");
 				clickTarget.trigger("click");
 				await wrapper.vm.$nextTick();
-				expect(wrapper.find(".checkmark").exists()).toBe(false);
+				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
 			})
+		);
+	});
+
+	it(`can show indeterminated state for undefined values`, async () => {
+		const wrapper = mount(
+			{
+				data: () => ({ value: undefined }),
+				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
+				components: { BaseInput },
+			},
+			{
+				stubs: { BaseIcon: true },
+			}
+		);
+
+		const icon = wrapper.get("baseicon-stub");
+		expect(icon.attributes("icon")).toBe("indeterminate_check_box");
+	});
+
+	it(`throws an error if show-undefined-state is set on type=switch`, async () => {
+		expect(() =>
+			mount({
+				data: () => ({ value: undefined }),
+				template: `<base-input v-model="value" label="test" type="switch" name="checkbox" :show-undefined-state="true" />`,
+				components: { BaseInput },
+			})
+		).toThrow("Error: showUndefinedState is only allowed on type=checkbox.");
+	});
+
+	it(`throws an error if show-undefined-state is set when v-model is of type Array`, async () => {
+		expect(() =>
+			mount({
+				data: () => ({ value: [] }),
+				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
+				components: { BaseInput },
+			})
+		).toThrow(
+			"Error: showUndefinedState is not allowed if v-model is of type Array."
 		);
 	});
 });
