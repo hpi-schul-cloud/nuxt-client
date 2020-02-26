@@ -15,21 +15,15 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 			:numberOfSelectedItems="numberOfSelectedItems"
 			:allRowsOfAllPagesSelected.sync="allRowsOfAllPagesSelected"
 			@update:allRowsOfAllPagesSelected="onUpdateAllRowsOfAllPagesSelected"
-			:allRowsOfCurrentPageSelected.sync="allRowsOfCurrentPageSelected"
-			@update:allRowsOfCurrentPageSelected="onUpdateAllRowsOfCurrentPageSelected"
 		/>`,
 		data: () => ({
 			totalNumberOfItems: number("totalNumberOfItems", 50),
 			numberOfSelectedItems: number("numberOfSelectedItems", 5),
 			allRowsOfAllPagesSelected: false,
-			allRowsOfCurrentPageSelected: false,
 		}),
 		methods: {
 			onUpdateAllRowsOfAllPagesSelected: action(
 				"@update:allRowsOfAllPagesSelected"
-			),
-			onUpdateAllRowsOfCurrentPageSelected: action(
-				"@update:allRowsOfCurrentPageSelected"
 			),
 		},
 	})
