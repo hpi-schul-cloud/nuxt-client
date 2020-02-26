@@ -10,6 +10,16 @@ const GIT_INFO = {
 	birthtime: git.date(),
 };
 
+// overwrite info with versionfile if provided
+try {
+	const versionFile = require("../../version");
+	Object.assign(GIT_INFO, versionFile);
+} catch (error) {
+	if (process.env.NODE_ENV === "production") {
+		console.warn("version file is missing\n", error);
+	}
+}
+
 export default async function(req, res, next) {
 	if (req.url === "/nuxtversion") {
 		res.setHeader("Access-Control-Allow-Origin", "*");
