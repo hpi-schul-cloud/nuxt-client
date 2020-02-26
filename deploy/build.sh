@@ -45,6 +45,7 @@ buildClient(){
 		-f Dockerfile.client \
 		../
 
+	dockerPush "client" $TRAVIS_BRANCH
 	dockerPush "client" $DOCKERTAG
 	dockerPush "client" $GIT_SHA
 }
