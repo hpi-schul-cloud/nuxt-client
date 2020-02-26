@@ -19,7 +19,7 @@ yarn-error.log*
 
 # Build Files
 dist
-version
+version.js
 
 # Runtime data
 .nuxt
