@@ -12,7 +12,7 @@
 				fill="var(--color-danger)"
 				class="icon-margin"
 			/>
-			{{ $t("components.organisms.FormDataSourceLoginWebuntis.error.text") }}
+			{{ $t("components.organisms.FormDatasourceLoginWebuntis.error.text") }}
 		</p>
 		<p v-else class="mb--xl">
 			{{ $t("pages.administration.datasources.webuntis.new.text") }}

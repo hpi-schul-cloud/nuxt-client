@@ -23,7 +23,7 @@
 	"components.organisms.DatasourceRunWebuntis.loading": "Lade Daten...",
 	"components.organisms.DatasourceRunWebuntis.numberOfImported": "{imported}/{total} Datensätze importiert",
 	"components.organisms.DatasourceRunWebuntis.unknown": "Status unbekannt",
-	"components.organisms.FormDataSourceLoginWebuntis.error.text": "Es ist ein Fehler bei der Verbindung aufgetreten. Möglicherweise haben sich deine Zugangsdaten geändert. Bitte überprüfe deine Eingabe.",
+	"components.organisms.FormDatasourceLoginWebuntis.error.text": "Es ist ein Fehler bei der Verbindung aufgetreten. Möglicherweise haben sich deine Zugangsdaten geändert. Bitte überprüfe deine Eingabe.",
 	"components.organisms.FormDatasourcesLogin.btn.connect": "Datenquelle anlegen",
 	"components.organisms.FormDatasourcesLogin.btn.update": "Aktualisiere die Datenquelle",
 	"components.organisms.FormDatasourcesLogin.errors.create": "Es gab ein Problem beim Verbinden mit der Datenquelle",
