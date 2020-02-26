@@ -7,6 +7,9 @@
 yarn.lock
 node_modules/
 
+# Secrets
+deploy/travis_rsa
+
 # Log Files
 logs
 *.log
@@ -16,6 +19,7 @@ yarn-error.log*
 
 # Build Files
 dist
+version
 
 # Runtime data
 .nuxt
