@@ -31,6 +31,13 @@ h1,
 	}
 }
 
+h5,
+h6,
+.h5,
+.h6 {
+	font-weight: var(--font-weight-bold);
+}
+
 /* text size */
 .text-xs {
 	font-size: var(--text-xs);
