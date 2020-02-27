@@ -12,7 +12,7 @@ const GIT_INFO = {
 
 // overwrite info with versionfile if provided
 try {
-	const versionFile = require("../../version");
+	const versionFile = require("../../version.js");
 	Object.assign(GIT_INFO, versionFile);
 } catch (error) {
 	if (process.env.NODE_ENV === "production") {
