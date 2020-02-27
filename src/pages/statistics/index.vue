@@ -64,10 +64,10 @@
 		<h2 class="h2">Entwicklung über die Zeit</h2>
 
 		<tabs>
-			<single-tab name="Nutzer:Innen">
+			<single-tab name="Nutzer:Innen (global)" permission="VIEW_GLOBAL_STATS">
 				<v-chart :options="chartOptionsForAccounts" :autoresize="true" />
 			</single-tab>
-			<single-tab name="Kurse">
+			<single-tab name="Kurse (global)" permission="VIEW_GLOBAL_STATS">
 				<v-chart :options="chartOptionsForCourses" :autoresize="true" />
 			</single-tab>
 		</tabs>
