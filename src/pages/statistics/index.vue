@@ -31,6 +31,10 @@
 					<insights-card title="Teams" :data="{ current: globalCount.teams }" />
 				</BaseGrid>
 			</single-tab>
+			<single-tab name="Dateien" permission="VIEW_GLOBAL_STATS">
+				TODO: DAteien nach Typ und Filesize (Global)
+				//{"files/types":[{"_id":"image/png","total_files_per_type":4},{"_id":null,"total_files_per_type":1}],"homework":29,"teachers":2,"teams":2,"users":10,"comments":0,"files/sizes":[{"_id":{"min":null,"max":19188},"count":1},{"_id":{"min":19188,"max":728117},"count":1},{"_id":{"min":728117,"max":2252137},"count":1},{"_id":{"min":2252137,"max":2287260},"count":1},{"_id":{"min":2287260,"max":2287260},"count":1}],"classes":1,"schools":4,"files/directories":5,"submissions":26,"students":3,"lessons":10,"courses":6,"accounts":10}
+			</single-tab>
 			<single-tab
 				name="Meine Schule"
 				:selected="true"
