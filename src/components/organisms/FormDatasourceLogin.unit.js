@@ -49,12 +49,9 @@ const slotInputs = [
 ];
 
 const getMockActions = () => ({
-	get: sinon
-		.stub()
-		.withArgs(validDatasourceId)
-		.returns(validDatasourceWebuntis),
-	create: sinon.stub().resolves(true),
-	patch: sinon.stub().resolves(true),
+	get: jest.fn().mockReturnValue(Promise.resolve(validDatasourceWebuntis)),
+	create: jest.fn().mockReturnValue(Promise.resolve()),
+	patch: jest.fn().mockReturnValue(Promise.resolve()),
 });
 
 const getMocks = ({ actions = getMockActions() } = {}) =>
@@ -70,19 +67,7 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 			inputs: slotInputs,
 		},
 	});
-/*
-const getRouterPushSpy = (wrapper, expects) => {
-	return new Promise((resolve) => {
-		const routerPushSpy = sinon.stub();
-		const routerPushMock = (target) => {
-			routerPushSpy(target);
-			expects(target);
-			resolve(routerPushSpy);
-		};
-		wrapper.vm.$router = { push: routerPushMock };
-	});
-};
-*/
+
 describe("@components/FormDatasourceLogin", () => {
 	it(...isValidComponent(FormDatasourceLogin));
 
@@ -133,8 +118,8 @@ describe("@components/FormDatasourceLogin", () => {
 			nameInput.setValue("webunits Course");
 			wrapper.trigger("submit");
 			expect(wrapper.vm.actionType).toStrictEqual("create");
-			expect(actions.create.called).toBe(true);
-			expect(actions.patch.called).toBe(false);
+			expect(actions.create.mock.calls).toHaveLength(1);
+			expect(actions.patch.mock.calls).toHaveLength(0);
 		});
 
 		it("shows validation error before submiting", async () => {
@@ -147,12 +132,12 @@ describe("@components/FormDatasourceLogin", () => {
 					type: "ldap",
 				},
 			});
-			const toastStubs = { error: sinon.stub() };
+			const toastStubs = { error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 
 			wrapper.trigger("submit");
-			expect(toastStubs.error.called).toBe(true); // error toast was shown
-			expect(actions.create.called).toBe(false); // and no dispatch happend
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // error toast was shown
+			expect(actions.create.mock.calls).toHaveLength(0); // and no dispatch happend
 		});
 
 		it("shows error toast if create fails", async () => {
@@ -174,15 +159,15 @@ describe("@components/FormDatasourceLogin", () => {
 			const nameInput = wrapper.find('input[name="name"]');
 			nameInput.setValue("all courses");
 
-			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 			wrapper.trigger("submit");
-			expect(toastStubs.success.called).toBe(false); // no success message expected
+			expect(toastStubs.success.mock.calls).toHaveLength(0); // no success message expected
 			const errors = consoleError.mock.calls.map((e) => e.toString());
 			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
-			expect(toastStubs.error.called).toBe(true); // and info toast
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // and info toast
 		});
 	});
 
@@ -202,8 +187,8 @@ describe("@components/FormDatasourceLogin", () => {
 			nameInput.setValue("webunits Course");
 			expect(wrapper.vm.actionType).toStrictEqual("patch");
 			wrapper.trigger("submit");
-			expect(actions.create.called).toBe(false);
-			expect(actions.patch.called).toBe(true);
+			expect(actions.create.mock.calls).toHaveLength(0);
+			expect(actions.patch.mock.calls).toHaveLength(1);
 		});
 
 		it("shows validation error before submiting", async () => {
@@ -217,12 +202,12 @@ describe("@components/FormDatasourceLogin", () => {
 					type: "ldap",
 				},
 			});
-			const toastStubs = { error: sinon.stub() };
+			const toastStubs = { error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 
 			wrapper.trigger("submit");
-			expect(toastStubs.error.called).toBe(true);
-			expect(actions.patch.called).toBe(false);
+			expect(toastStubs.error.mock.calls).toHaveLength(1);
+			expect(actions.patch.mock.calls).toHaveLength(0);
 		});
 
 		it("shows error toast if patch fails", async () => {
@@ -245,15 +230,15 @@ describe("@components/FormDatasourceLogin", () => {
 			const nameInput = wrapper.find('input[name="name"]');
 			nameInput.setValue("all courses");
 
-			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 			wrapper.trigger("submit");
-			expect(toastStubs.success.called).toBe(false); // no success message expected
+			expect(toastStubs.success.mock.calls).toHaveLength(0); // no success message expected
 			const errors = consoleError.mock.calls.map((e) => e.toString());
 			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
-			expect(toastStubs.error.called).toBe(true); // and info toast
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // and info toast
 		});
 	});
 });

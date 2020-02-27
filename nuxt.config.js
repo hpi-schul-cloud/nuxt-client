@@ -9,8 +9,6 @@ const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
-const GIT_INFO = require("./git-info.js");
-
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
@@ -22,7 +20,6 @@ module.exports = {
 		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
 		NOT_AUTHENTICATED_REDIRECT_URL:
 			process.env.NOT_AUTHENTICATED_REDIRECT_URL || "/login",
-		GIT_INFO: JSON.stringify(GIT_INFO, null, "\t"),
 	},
 	/*
 	 ** Headers of the page
@@ -70,7 +67,10 @@ module.exports = {
 		port: process.env.PORT || DEFAULT_PORT,
 		host: process.env.HOST || DEFAULT_HOST,
 	},
-	serverMiddleware: ["@serverMiddleware/proxy"],
+	serverMiddleware: [
+		"@serverMiddleware/nuxtversion",
+		"@serverMiddleware/proxy",
+	],
 
 	router: {
 		middleware: [
