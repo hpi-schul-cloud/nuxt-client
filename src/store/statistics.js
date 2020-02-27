@@ -3,6 +3,10 @@ export const actions = {
 		const data = await this.$axios.$get("/statistics");
 		commit("setGlobalStats", data);
 	},
+	async getSchoolStats({ commit }) {
+		const data = await this.$axios.$get("/statistics?school=myschool");
+		commit("setSchoolStats", data);
+	},
 };
 
 export const mutations = {
