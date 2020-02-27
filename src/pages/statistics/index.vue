@@ -61,6 +61,15 @@
 				</BaseGrid>
 			</single-tab>
 		</tabs>
+		<h2 class="h2">Entwicklung über die Zeit</h2>
+		<tabs>
+			<single-tab name="Nutzer:Innen">
+				<v-chart :options="chartData" />
+			</single-tab>
+			<single-tab name="Kurse">
+				...
+			</single-tab>
+		</tabs>
 	</div>
 </template>
 
@@ -69,15 +78,22 @@ import { mapGetters } from "vuex";
 import InsightsCard from "@components/molecules/InsightsCard";
 import Tabs from "@components/organisms/Tabs/Tabs";
 import SingleTab from "@components/atoms/Tab";
-
-// import InsightsCharts from "~/components/molecules/InsightsCharts";
+import ECharts from "vue-echarts";
+import "echarts/lib/chart/pie";
+import "echarts/lib/chart/bar";
+import "echarts/lib/chart/line";
+import "echarts/lib/component/tooltip";
+import "echarts/lib/component/legend";
+import "echarts/lib/component/title";
+import "echarts/lib/component/dataset";
+import "echarts/lib/component/polar";
 
 export default {
 	components: {
 		InsightsCard,
 		Tabs,
 		SingleTab,
-		// InsightsCharts,
+		"v-chart": ECharts,
 	},
 	async asyncData({ store }) {
 		return Promise.all([
@@ -86,6 +102,52 @@ export default {
 		]);
 	},
 	computed: {
+		data() {
+			const data = [];
+			for (let i = 0; i <= 360; i++) {
+				const t = (i / 180) * Math.PI;
+				const r = Math.sin(2 * t) * Math.cos(2 * t);
+				data.push([r, i]);
+			}
+			return data;
+		},
+		chartData() {
+			const testData = {
+				title: {
+					text: "TEST",
+				},
+				legend: {
+					data: ["line"],
+				},
+				polar: {
+					center: ["50%", "54%"],
+				},
+				tooltip: {
+					trigger: "axis",
+					axisPointer: {
+						type: "cross",
+					},
+				},
+				angleAxis: {
+					type: "value",
+					startAngle: 0,
+				},
+				radiusAxis: {
+					min: 0,
+				},
+				series: [
+					{
+						coordinateSystem: "polar",
+						name: "line",
+						type: "line",
+						showSymbol: false,
+						data: this.data,
+					},
+				],
+				animationDuration: 2000,
+			};
+			return testData;
+		},
 		...mapGetters("statistics", {
 			globalCount: "globalCount",
 			schoolCount: "schoolCount",
