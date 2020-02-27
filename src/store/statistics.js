@@ -11,6 +11,14 @@ export const actions = {
 		const data = await this.$axios.$get("/statistics/accounts");
 		commit("setAccountStats", data);
 	},
+	async getStudentsStats({ commit }) {
+		const data = await this.$axios.$get("/statistics/students");
+		commit("setStudentsStats", data);
+	},
+	async getTeachersStats({ commit }) {
+		const data = await this.$axios.$get("/statistics/teachers");
+		commit("setTeachersStats", data);
+	},
 	async getCoursesStats({ commit }) {
 		const data = await this.$axios.$get("/statistics/courses");
 		commit("setCoursesStats", data);
@@ -27,6 +35,12 @@ export const mutations = {
 	setAccountStats(state, payload) {
 		state.accounts = payload;
 	},
+	setStudentsStats(state, payload) {
+		state.students = payload;
+	},
+	setTeachersStats(state, payload) {
+		state.teachers = payload;
+	},
 	setCoursesStats(state, payload) {
 		state.courses = payload;
 	},
@@ -36,12 +50,16 @@ export const getters = {
 	globalCount: (state) => state.global,
 	schoolCount: (state) => state.school,
 	accounts: (state) => state.accounts,
+	teachers: (state) => state.teachers,
+	students: (state) => state.students,
 	courses: (state) => state.courses,
 };
 
 export const state = () => {
 	return {
 		accounts: [],
+		teachers: [],
+		students: [],
 		courses: [],
 		global: {
 			users: 0,

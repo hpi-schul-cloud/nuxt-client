@@ -62,6 +62,7 @@
 			</single-tab>
 		</tabs>
 		<h2 class="h2">Entwicklung über die Zeit</h2>
+
 		<tabs>
 			<single-tab name="Nutzer:Innen">
 				<v-chart :options="chartOptionsForAccounts" />
@@ -98,6 +99,8 @@ export default {
 	async asyncData({ store }) {
 		return Promise.all([
 			store.dispatch("statistics/getAccountStats"),
+			store.dispatch("statistics/getStudentsStats"),
+			store.dispatch("statistics/getTeachersStats"),
 			store.dispatch("statistics/getCoursesStats"),
 			store.dispatch("statistics/getGlobalStats"),
 			store.dispatch("statistics/getSchoolStats"),
@@ -112,7 +115,28 @@ export default {
 				yAxis: {
 					type: "value",
 				},
+				legend: {
+					data: ["Lehrkräfte", "Schüler:Innen"],
+				},
+				toolbox: {
+					feature: {
+						saveAsImage: {},
+					},
+				},
 				series: [
+					{
+						data: this.teachers,
+						type: "line",
+						areaStyle: {},
+						stack: "accounts",
+					},
+					{
+						data: this.students,
+						type: "line",
+						areaStyle: {},
+						stack: "accounts",
+					},
+					,
 					{
 						data: this.accounts,
 						type: "line",
@@ -129,10 +153,16 @@ export default {
 				yAxis: {
 					type: "value",
 				},
+				toolbox: {
+					feature: {
+						saveAsImage: {},
+					},
+				},
 				series: [
 					{
 						data: this.courses,
 						type: "line",
+						areaStyle: {},
 					},
 				],
 			};
@@ -142,6 +172,8 @@ export default {
 			globalCount: "globalCount",
 			schoolCount: "schoolCount",
 			accounts: "accounts",
+			teachers: "teachers",
+			students: "students",
 			courses: "courses",
 		}),
 	},
