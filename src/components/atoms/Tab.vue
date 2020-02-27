@@ -1,6 +1,8 @@
 <template>
-	<div v-show="isActive" class="tab-content">
-		<slot></slot>
+	<div v-if="hasPermission">
+		<div v-show="isActive" class="tab-content">
+			<slot></slot>
+		</div>
 	</div>
 </template>
 
@@ -11,6 +13,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		permission: {
+			type: String,
+			default: "",
+		},
 		selected: {
 			type: Boolean,
 		},
@@ -18,10 +24,19 @@ export default {
 	data() {
 		return {
 			isActive: false,
+			hasPermission: true,
 		};
 	},
 	created() {
 		this.isActive = this.selected;
+		this.hasPermission = this.checkPermission();
+	},
+	methods: {
+		checkPermission() {
+			return (
+				!this.permission || this.$user.permissions.includes(this.permission)
+			);
+		},
 	},
 };
 </script>
