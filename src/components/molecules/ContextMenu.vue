@@ -15,8 +15,8 @@
 				class="context-menu__button"
 				role="menuitem"
 				@click="emitEvent(action.event, action.arguments)"
-				@keydown.up="focusPrev(index)"
-				@keydown.down="focusNext(index)"
+				@keydown.up.prevent="focusPrev(index)"
+				@keydown.down.prevent="focusNext(index)"
 			>
 				<base-icon
 					v-if="action.icon"
@@ -218,7 +218,7 @@ export default {
 	background-color: var(--color-white);
 	border-radius: var(--radius-sm);
 	box-shadow: var(--shadow-m);
-	:hover {
+	> :hover {
 		background-color: var(--color-gray-light);
 	}
 	&__button {
