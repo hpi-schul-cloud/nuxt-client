@@ -64,10 +64,10 @@
 		<h2 class="h2">Entwicklung über die Zeit</h2>
 		<tabs>
 			<single-tab name="Nutzer:Innen">
-				<v-chart :options="chartData" />
+				<v-chart :options="chartOptionsForAccounts" />
 			</single-tab>
 			<single-tab name="Kurse">
-				...
+				<v-chart :options="chartOptionsForCourses" />
 			</single-tab>
 		</tabs>
 	</div>
@@ -86,7 +86,6 @@ import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
 import "echarts/lib/component/title";
 import "echarts/lib/component/dataset";
-import "echarts/lib/component/polar";
 
 export default {
 	components: {
@@ -95,62 +94,55 @@ export default {
 		SingleTab,
 		"v-chart": ECharts,
 	},
+
 	async asyncData({ store }) {
 		return Promise.all([
+			store.dispatch("statistics/getAccountStats"),
+			store.dispatch("statistics/getCoursesStats"),
 			store.dispatch("statistics/getGlobalStats"),
 			store.dispatch("statistics/getSchoolStats"),
 		]);
 	},
 	computed: {
-		data() {
-			const data = [];
-			for (let i = 0; i <= 360; i++) {
-				const t = (i / 180) * Math.PI;
-				const r = Math.sin(2 * t) * Math.cos(2 * t);
-				data.push([r, i]);
-			}
-			return data;
-		},
-		chartData() {
-			const testData = {
-				title: {
-					text: "TEST",
+		chartOptionsForAccounts() {
+			const options = {
+				xAxis: {
+					type: "time",
 				},
-				legend: {
-					data: ["line"],
-				},
-				polar: {
-					center: ["50%", "54%"],
-				},
-				tooltip: {
-					trigger: "axis",
-					axisPointer: {
-						type: "cross",
-					},
-				},
-				angleAxis: {
+				yAxis: {
 					type: "value",
-					startAngle: 0,
-				},
-				radiusAxis: {
-					min: 0,
 				},
 				series: [
 					{
-						coordinateSystem: "polar",
-						name: "line",
+						data: this.accounts,
 						type: "line",
-						showSymbol: false,
-						data: this.data,
 					},
 				],
-				animationDuration: 2000,
 			};
-			return testData;
+			return options;
+		},
+		chartOptionsForCourses() {
+			const options = {
+				xAxis: {
+					type: "time",
+				},
+				yAxis: {
+					type: "value",
+				},
+				series: [
+					{
+						data: this.courses,
+						type: "line",
+					},
+				],
+			};
+			return options;
 		},
 		...mapGetters("statistics", {
 			globalCount: "globalCount",
 			schoolCount: "schoolCount",
+			accounts: "accounts",
+			courses: "courses",
 		}),
 	},
 };
