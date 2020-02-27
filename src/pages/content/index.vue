@@ -43,7 +43,7 @@
 						>
 							<content-empty-state />
 						</div>
-						<base-grid column-width="15rem">
+						<base-grid column-width="14rem">
 							<content-card
 								v-for="resource of resources.data"
 								:id="resource._id"

@@ -109,17 +109,21 @@ export default {
 			font-size: var(--heading-4);
 			text-align: center;
 			border: 0;
-			border-bottom: 3px transparent solid;
+			border-bottom: 2px transparent solid;
 			outline: none;
 
+			@include breakpoint(tablet) {
+				font-size: var(--heading-6);
+			}
+
 			&:focus {
-				border-bottom: 3px var(--color-gray-light) solid;
+				border-bottom: 2px var(--color-gray-light) solid;
 			}
 			&::placeholder {
 				color: var(--color-gray);
 			}
 			&:hover {
-				border-bottom: 3px var(--color-black) solid;
+				border-bottom: 2px var(--color-black) solid;
 			}
 		}
 
@@ -130,6 +134,10 @@ export default {
 			height: 100%;
 			font-size: var(--heading-2);
 			cursor: pointer;
+
+			@include breakpoint(tablet) {
+				font-size: var(--heading-6);
+			}
 		}
 	}
 }
