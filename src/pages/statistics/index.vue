@@ -65,10 +65,10 @@
 
 		<tabs>
 			<single-tab name="Nutzer:Innen">
-				<v-chart :options="chartOptionsForAccounts" />
+				<v-chart :options="chartOptionsForAccounts" :autoresize="true" />
 			</single-tab>
 			<single-tab name="Kurse">
-				<v-chart :options="chartOptionsForCourses" />
+				<v-chart :options="chartOptionsForCourses" :autoresize="true" />
 			</single-tab>
 		</tabs>
 	</div>
@@ -122,6 +122,7 @@ export default {
 					feature: {
 						saveAsImage: {},
 					},
+					show: true,
 				},
 				series: [
 					{
@@ -185,5 +186,8 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
+}
+.echarts {
+	width: 100%;
 }
 </style>
