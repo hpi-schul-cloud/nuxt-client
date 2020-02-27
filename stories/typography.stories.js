@@ -5,7 +5,7 @@ storiesOf("1 Design Tokens/Typography", module)
 	.addParameters({
 		notes,
 	})
-	.add("Size & Font", () => ({
+	.add("Headlines & Text", () => ({
 		components: {},
 		template: `
 			<div>
@@ -19,6 +19,18 @@ storiesOf("1 Design Tokens/Typography", module)
 				<p class="text-md">text-md / PT Sans regular</p>
 				<p class="text-sm">text-sm / PT Sans regular</p>
 				<p class="text-xs">text-xs / PT Sans regular</p>
+			</div>
+			`,
+		methods: {},
+	}))
+	.add("Line-Heights", () => ({
+		components: {},
+		template: `
+			<div>
+				<p style="line-height: var(--line-height-xl); border-top: solid 1px gray; border-bottom: solid 1px gray;">line-height-xl 2</p>
+				<p style="line-height: var(--line-height-lg); border-top: solid 1px gray; border-bottom: solid 1px gray;">line-height-lg 1.4</p>
+				<p style="line-height: var(--line-height-md); border-top: solid 1px gray; border-bottom: solid 1px gray;">line-height-md 1.2</p>
+				<p style="line-height: var(--line-height-sm); border-top: solid 1px gray; border-bottom: solid 1px gray;">line-height-sm 1.05</p>
 			</div>
 			`,
 		methods: {},

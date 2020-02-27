@@ -7,7 +7,7 @@
 		}"
 	>
 		<td v-if="selectable">
-			<div class="text-content">
+			<div class="text-content selection-column">
 				<base-input
 					v-model="selectionStatus"
 					type="checkbox"
@@ -98,6 +98,9 @@ export default {
 		.text-content {
 			padding: var(--space-xs);
 			font-size: var(--text-xs);
+		}
+		.selection-column {
+			font-size: var(--text-md);
 		}
 		.select {
 			margin-bottom: 0;
