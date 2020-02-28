@@ -32,8 +32,10 @@
 				</BaseGrid>
 			</single-tab>
 			<single-tab name="Dateien" permission="VIEW_GLOBAL_STATS">
-				TODO: DAteien nach Typ und Filesize (Global)
-				//{"files/types":[{"_id":"image/png","total_files_per_type":4},{"_id":null,"total_files_per_type":1}],"homework":29,"teachers":2,"teams":2,"users":10,"comments":0,"files/sizes":[{"_id":{"min":null,"max":19188},"count":1},{"_id":{"min":19188,"max":728117},"count":1},{"_id":{"min":728117,"max":2252137},"count":1},{"_id":{"min":2252137,"max":2287260},"count":1},{"_id":{"min":2287260,"max":2287260},"count":1}],"classes":1,"schools":4,"files/directories":5,"submissions":26,"students":3,"lessons":10,"courses":6,"accounts":10}
+				<BaseGrid column-width="20rem">
+					<v-chart :options="chartOptionsForFileSizes" :autoresize="true" />
+					<v-chart :options="chartOptionsForFileTypes" :autoresize="true" />
+				</BaseGrid>
 			</single-tab>
 			<single-tab
 				name="Meine Schule"
@@ -168,6 +170,46 @@ export default {
 						data: this.courses,
 						type: "line",
 						areaStyle: {},
+					},
+				],
+			};
+			return options;
+		},
+		chartOptionsForFileSizes() {
+			const options = {
+				title: {
+					text: "File-Sizes",
+				},
+				xAxis: {
+					type: "category",
+				},
+				yAxis: {
+					type: "value",
+				},
+				series: [
+					{
+						data: this.globalCount.files_sizes,
+						type: "bar",
+					},
+				],
+			};
+			return options;
+		},
+		chartOptionsForFileTypes() {
+			const options = {
+				title: {
+					text: "File-Types",
+				},
+				xAxis: {
+					type: "category",
+				},
+				yAxis: {
+					type: "value",
+				},
+				series: [
+					{
+						data: this.globalCount.files_types,
+						type: "bar",
 					},
 				],
 			};

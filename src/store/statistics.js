@@ -1,6 +1,16 @@
 export const actions = {
 	async getGlobalStats({ commit }) {
 		const data = await this.$axios.$get("/statistics");
+		// Handle Filesize stats data
+		data.files_sizes = data.files_sizes.map((statItem) => {
+			console.log(statItem);
+			return ["< " + statItem._id.max, statItem.count];
+		});
+		// Handle Filetype stats data
+		data.files_types = data.files_types.map((statItem) => {
+			return [statItem._id, statItem.total_files_per_type];
+		});
+		console.log(data);
 		commit("setGlobalStats", data);
 	},
 	async getSchoolStats({ commit }) {
