@@ -346,6 +346,18 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			const renderedValues = renderedData.map((row) => row[5]);
 			expect(renderedValues.every((value) => value === "true")).toBe(true);
 		});
+
+		it("updates its filters when activeFilters property is changed", () => {
+			const wrapper = getWrapper();
+
+			const activeFilters = tableFilters.filter(
+				(filter) => filter.type === "number"
+			);
+
+			expect(wrapper.vm.activeFiltersProxy).toHaveLength(0);
+			wrapper.setProps({ activeFilters });
+			expect(wrapper.vm.activeFiltersProxy).toStrictEqual(activeFilters);
+		});
 	});
 
 	describe("selection", () => {
