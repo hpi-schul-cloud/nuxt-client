@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="h3"> {{ $t("pages.administration.datasources.add.title") }}</h1>
+		<h1 class="h3"> {{ $t("pages.administration.datasources.new.title") }}</h1>
 		<datasource-card
 			v-for="provider in datasourceProvider"
 			:key="provider.name"
@@ -11,33 +11,34 @@
 				provider.count === 0
 					? ''
 					: $t(
-							'pages.administration.datasources.add.provider.addedDatasources',
+							'pages.administration.datasources.new.provider.addedDatasources',
 							{ number: provider.count }
 					  )
 			"
 			class="mb--md"
 		>
 			<template v-slot:actions>
-				<BaseButton
+				<responsive-icon-button
 					design="primary text"
+					source="material"
+					icon="add"
 					@click="forwardCreate(provider.name.toLowerCase())"
 				>
-					<BaseIcon source="custom" icon="datasource-add" />
-					{{ $t("pages.administration.datasources.add.btnAdd") }}
-				</BaseButton>
+					{{ $t("pages.administration.datasources.new.add") }}
+				</responsive-icon-button>
 			</template>
 		</datasource-card>
 	</div>
 </template>
 
 <script>
-import BaseBreadcrumb from "@components/base/BaseBreadcrumb";
 import DatasourceCard from "@components/molecules/DatasourceCard";
+import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 
 export default {
 	components: {
-		BaseBreadcrumb,
 		DatasourceCard,
+		ResponsiveIconButton,
 	},
 	meta: {
 		requiredPermissions: ["DATASOURCES_VIEW"],
@@ -55,28 +56,28 @@ export default {
 					to: "/administration/datasources",
 				},
 				{
-					text: this.$t("pages.administration.datasources.add.title"),
+					text: this.$t("pages.administration.datasources.new.title"),
 					to: "/administration/datasources/add",
 				},
 			],
 			datasourceProvider: [
 				{
 					name: this.$t(
-						"pages.administration.datasources.add.provider.WebUntis.name"
+						"pages.administration.datasources.new.provider.WebUntis.name"
 					),
 					icon: require("@assets/img/datasources/logo-webuntis.png"),
 					count: 0,
 				},
 				{
 					name: this.$t(
-						"pages.administration.datasources.add.provider.LDAP.name"
+						"pages.administration.datasources.new.provider.LDAP.name"
 					),
 					icon: require("@assets/img/datasources/logo-ldap.svg"),
 					count: 0,
 				},
 				{
 					name: this.$t(
-						"pages.administration.datasources.add.provider.RSS.name"
+						"pages.administration.datasources.new.provider.RSS.name"
 					),
 					icon: require("@assets/img/datasources/logo-rss.svg"),
 					count: 0,
@@ -115,7 +116,7 @@ export default {
 	},
 	head() {
 		return {
-			title: this.$t("pages.administration.datasources.add.title"),
+			title: this.$t("pages.administration.datasources.new.title"),
 		};
 	},
 };

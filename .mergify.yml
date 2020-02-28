@@ -44,8 +44,6 @@ pull_request_rules:
     conditions:
       - author=greenkeeper[bot]
       - label~=greenkeeper
-      - -status-neutral~=.*
-      - -status-failure~=.*
     actions:
       merge:
         method: squash
@@ -55,8 +53,6 @@ pull_request_rules:
       # match dependabot[bot] and dependabot-preview[bot]
       - author~=dependabot(-preview)?\[bot\]
       - label~=dependencies
-      - -status-neutral~=.*
-      - -status-failure~=.*
     actions:
       merge:
         method: squash

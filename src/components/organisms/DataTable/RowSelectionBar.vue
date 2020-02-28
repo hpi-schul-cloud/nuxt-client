@@ -61,13 +61,9 @@ export default {
 		allRowsOfAllPagesSelected: {
 			type: Boolean,
 		},
-		allRowsOfCurrentPageSelected: {
-			type: Boolean,
-		},
 	},
 	methods: {
 		closeBanner() {
-			this.$emit("update:allRowsOfCurrentPageSelected", false);
 			this.$emit("update:allRowsOfAllPagesSelected", false);
 		},
 	},
@@ -82,8 +78,8 @@ export default {
 	padding: var(--space-md);
 	font-size: var(--text-md);
 	font-weight: var(--font-weight-normal);
-	color: var(--color-on-table-selected);
-	background: var(--color-table-selected);
+	color: var(--color-on-tertiary-light);
+	background-color: var(--color-tertiary-light);
 }
 
 .select-all-rows {

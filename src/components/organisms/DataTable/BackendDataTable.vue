@@ -7,7 +7,6 @@
 					ref="rowSelectionBar"
 					:actions="actions"
 					:all-rows-of-all-pages-selected.sync="allRowsOfAllPagesSelected"
-					:all-rows-of-current-page-selected.sync="allRowsOfCurrentPageSelected"
 					:number-of-selected-items="numberOfSelectedItems"
 					:total-number-of-items="total"
 					@fire-action="fireAction"
@@ -18,7 +17,7 @@
 					<component
 						:is="componentHeaderRow"
 						:all-rows-selectable="rowsSelectable"
-						:all-rows-selected.sync="allRowsOfCurrentPageSelected"
+						:current-page-selection-state.sync="currentPageSelectionState"
 						:columns="columns"
 						:sort-by.sync="sortByProxy"
 						:sort-order.sync="sortOrderProxy"
@@ -197,14 +196,7 @@ export default {
 			return this.columns.map((e) => e.field);
 		},
 		dataRowSlots() {
-			// TODO configure babel to enable Object.fromEntries()
-			// then replace this ugly reduce
-			const fromEntries = (iterable) =>
-				[...iterable].reduce((obj, [key, val]) => {
-					obj[key] = val;
-					return obj;
-				}, {});
-			return fromEntries(
+			return Object.fromEntries(
 				Object.entries(this.$scopedSlots).filter(([name]) =>
 					name.startsWith("datacolumn")
 				)
@@ -247,18 +239,49 @@ export default {
 					: this.unselectAllRowsOfAllPages();
 			},
 		},
-		allRowsOfCurrentPageSelected: {
+		currentPageSelectionState: {
 			get() {
 				const isInSelection = (row) =>
 					this.selectionKeys[getValueByPath(row, this.trackBy)];
-				return this.localSelectionType === "inclusive"
-					? Boolean(this.data.every(isInSelection))
-					: !Boolean(this.data.some(isInSelection));
+
+				const allSelected =
+					this.localSelectionType === "inclusive"
+						? Boolean(this.data.every(isInSelection))
+						: !Boolean(this.data.some(isInSelection));
+				if (allSelected) {
+					return "all";
+				}
+
+				const someSelected =
+					this.localSelectionType === "inclusive"
+						? Boolean(this.data.some(isInSelection))
+						: !Boolean(this.data.every(isInSelection));
+				if (someSelected) {
+					return "some";
+				}
+
+				return "none";
 			},
 			set(state) {
+				const newState = { all: true, none: false }[state];
+				if (newState === undefined) {
+					return;
+				}
 				this.data.forEach((row) => {
-					this.setRowSelection(row, state);
+					this.setRowSelection(row, newState);
 				});
+			},
+		},
+		allRowsOfCurrentPageSelected: {
+			get() {
+				return this.currentPageSelectionState === "all";
+			},
+			set(state) {
+				if (state === true) {
+					return this.currentPageSelectionState === "all";
+				} else if (state === false) {
+					return this.currentPageSelectionState === "none";
+				}
 			},
 		},
 	},
