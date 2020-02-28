@@ -1,21 +1,14 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<div>
-		<filter-menu
-			v-if="filters.length && selectedRowIds.length < 1"
-			v-model="activeFiltersProxy"
-			:filters="filters"
-		/>
 		<backend-data-table
 			v-bind="attrsProxy"
-			:data="filteredSortedAndPaginatedData"
-			:total="filteredAndSortedData.length"
+			:data="sortedAndPaginatedData"
+			:total="sortedData.length"
 			:sort-by.sync="sortByProxy"
 			:sort-order.sync="sortOrderProxy"
 			:current-page.sync="currentPageProxy"
 			:rows-per-page.sync="rowsPerPageProxy"
-			:filters.sync="filtersProxy"
-			:active-filters.sync="activeFiltersProxy"
 			:selected-row-ids="backendTableSelection"
 			:selection-type="backendTableSelectionType"
 			@update:selection="handleTableSelectionUpdate"
@@ -30,13 +23,8 @@
 	</div>
 </template>
 <script>
-import { getValueByPath, getNestedObjectValues } from "@utils/helpers";
+import { getValueByPath } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
-import camelCase from "lodash/camelCase";
-import defaultFiltersMixin from "@mixins/defaultFilters";
-import FilterMenu from "./FilterMenu.vue";
-import { supportedFilterTypes } from "@mixins/defaultFilters";
-import { supportedFilterMatchingTypes } from "@mixins/defaultFilters";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
@@ -59,70 +47,12 @@ const eventProxyBlacklist = [
 export default {
 	components: {
 		BackendDataTable,
-		FilterMenu,
 	},
-	mixins: [defaultFiltersMixin],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
 		/**
-		 * Array of filter objects
-		 */
-		filters: {
-			type: Array,
-			default: () => [],
-			validator: function(filters) {
-				return filters.every((filter) => {
-					const hasValidType =
-						!!filter.type && supportedFilterTypes.includes(filter.type);
-
-					var hasValidMatchingType = false;
-
-					if (
-						!supportedFilterMatchingTypes[filter.type] &&
-						!filter.matchingType
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						supportedFilterMatchingTypes[filter.type] &&
-						filter.matchingType &&
-						supportedFilterMatchingTypes[filter.type][filter.matchingType.value]
-					) {
-						hasValidMatchingType = true;
-					} else if (
-						filter.matchingType &&
-						filter.matchingType.implementation &&
-						filter.matchingType.value &&
-						filter.matchingType.label
-					) {
-						hasValidMatchingType = true;
-					}
-
-					const isValidSelectFilter =
-						filter.value &&
-						Array.isArray(filter.value) &&
-						filter.value.length > 0 &&
-						filter.value.every((value) => value.value && value.label);
-
-					return (
-						filter.label &&
-						(filter.attribute || filter.type == "fulltextSearch") &&
-						hasValidType &&
-						hasValidMatchingType &&
-						(isValidSelectFilter || filter.type !== "select")
-					);
-				});
-			},
-		},
-		/**
-		 * Array of filter objects that should be active
-		 */
-		activeFilters: {
-			type: Array,
-			default: () => [],
-		},
-		/**
-		 * (data, sortBy, sortOrder) => filteredAndSortedData
+		 * (data, sortBy, sortOrder) => sortedData
 		 */
 		sortMethod: {
 			type: Function,
@@ -139,9 +69,6 @@ export default {
 	},
 	data() {
 		return {
-			filterOpened: {},
-			localFilters: undefined,
-			localActiveFilters: undefined,
 			localSortBy: undefined,
 			localSortOrder: undefined,
 			localCurrentPage: undefined,
@@ -164,34 +91,8 @@ export default {
 				)
 			);
 		},
-		filteredData() {
-			return this.data.filter((row) => {
-				return this.activeFiltersProxy.every((filter) => {
-					if (filter.type === "fulltextSearch") {
-						return getNestedObjectValues(row).some((value) =>
-							(value.toString() || "").includes(filter.value)
-						);
-					} else {
-						const functionName = camelCase(
-							`filter-${filter.type}-${(filter.matchingType || {}).value}`
-						);
-						const defaultFunctionName = camelCase(
-							`filter-${filter.type}-default`
-						);
-						const filterFunction =
-							(filter.matchingType || {}).implementation ||
-							this[functionName] ||
-							this[defaultFunctionName];
-						return filterFunction(
-							getValueByPath(row, filter.attribute),
-							filter.value
-						);
-					}
-				});
-			});
-		},
-		filteredAndSortedData() {
-			const raw = this.filteredData;
+		sortedData() {
+			const raw = this.data;
 
 			if (!this.sortByProxy) {
 				return raw;
@@ -203,36 +104,18 @@ export default {
 
 			return out;
 		},
-		filteredSortedAndPaginatedData() {
+		sortedAndPaginatedData() {
 			if (!this.paginated) {
-				return this.filteredAndSortedData;
+				return this.sortedData;
 			}
 			const {
 				currentPageProxy: currentPage,
 				rowsPerPageProxy: rowsPerPage,
 			} = this;
-			return this.filteredAndSortedData.slice(
+			return this.sortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage
 			);
-		},
-		activeFiltersProxy: {
-			get() {
-				return this.localActiveFilters || this.activeFilters;
-			},
-			set(to) {
-				this.localActiveFilters = to;
-				this.$emit("update:active-filters", to);
-			},
-		},
-		filtersProxy: {
-			get() {
-				return this.localFilters || this.filters;
-			},
-			set(to) {
-				this.localFilters = to;
-				this.$emit("update:filters", to);
-			},
 		},
 		currentPageProxy: {
 			get() {
@@ -275,14 +158,8 @@ export default {
 		},
 	},
 	watch: {
-		activeFilters(to) {
-			this.localActiveFilters = to;
-		},
 		currentPage(to) {
 			this.localCurrentPage = to;
-		},
-		filters(to) {
-			this.localFilters = to;
 		},
 		rowsPerPage(to) {
 			this.localRowsPerPage = to;
@@ -332,7 +209,7 @@ export default {
 			}
 		},
 		sort(data, sortBy, sortOrder) {
-			const filteredAndSortedData = [...data].sort((first, second) => {
+			const sortedData = [...data].sort((first, second) => {
 				const a = getValueByPath(first, sortBy);
 				const b = getValueByPath(second, sortBy);
 				// handle undefined values
@@ -357,8 +234,8 @@ export default {
 				return a.localeCompare(b);
 			});
 			return sortOrder !== "desc"
-				? filteredAndSortedData
-				: filteredAndSortedData.reverse();
+				? sortedData
+				: sortedData.reverse();
 		},
 	},
 };

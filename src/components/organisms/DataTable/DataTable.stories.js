@@ -10,6 +10,7 @@ import {
 import { action } from "@storybook/addon-actions";
 
 import DataTable from "./DataTable";
+import FilterMenuStandalone from "./FilterMenuStandalone";
 import notes from "./DataTable.md";
 
 import {
@@ -36,6 +37,7 @@ storiesOf("6 Organisms/DataTable", module)
 			data: () => ({
 				columns: tableColumns,
 				randomData,
+				filteredData: randomData,
 				trackBy: text("trackBy", "id"),
 
 				filters: tableFilters,
@@ -62,45 +64,52 @@ storiesOf("6 Organisms/DataTable", module)
 					"asc"
 				),
 			}),
-			components: { DataTable },
+			components: { DataTable, FilterMenuStandalone },
 			methods: {
 				onUpdateCurrentPage: action("@update:current-page"),
 				onUpdateRowsPerPage: action("@update:rows-per-page"),
 				onUpdateSelection: action("@update:selection"),
-				onUpdateActiveFilters: action("@update:active-filters"),
+				onUpdateFilteredData(newfilteredData) {
+					this.filteredData = newfilteredData;
+				},
 			},
 			template: `
-			<DataTable
-				:columns="columns"
-				:data="randomData"
-				:trackBy="trackBy"
+			<div>
+				<FilterMenuStandalone
+					:data="randomData"
+					:filters="filters"
+					:activeFilters="activeFilters"
+					@update:active-filters="onUpdateActiveFilters"
+					@update:filtered-data="onUpdateFilteredData"
+				/>
+				<DataTable
+					:columns="columns"
+					:data="filteredData"
+					:trackBy="trackBy"
 
-				:filters="filters"
-				:activeFilters="activeFilters"
-				@update:active-filters="onUpdateActiveFilters"
+					:total="total"
+					:current-page.sync="currentPage"
+					@update:current-page="onUpdateCurrentPage"
+					:paginated="paginated"
+					:rows-per-page.sync="rowsPerPage"
+					@update:rows-per-page="onUpdateRowsPerPage"
 
-				:total="total"
-				:current-page.sync="currentPage"
-				@update:current-page="onUpdateCurrentPage"
-				:paginated="paginated"
-				:rows-per-page.sync="rowsPerPage"
-				@update:rows-per-page="onUpdateRowsPerPage"
+						:rowsSelectable="rowsSelectable"
+						:selection.sync="selection"
+						@update:selection="onUpdateSelection"
 
-					:rowsSelectable="rowsSelectable"
-					:selection.sync="selection"
-					@update:selection="onUpdateSelection"
+						:actions="actions"
 
-					:actions="actions"
-
-					:sortBy.sync="sortBy"
-					:sortOrder.sync="sortOrder"
-				>
-					<template v-slot:datacolumn-age="slotProps">
-						<span style="text-decoration: underline">
-						{{ slotProps.data }}
-						</span>
-					</template>
-				</DataTable>
+						:sortBy.sync="sortBy"
+						:sortOrder.sync="sortOrder"
+					>
+						<template v-slot:datacolumn-age="slotProps">
+							<span style="text-decoration: underline">
+							{{ slotProps.data }}
+							</span>
+						</template>
+					</DataTable>
+				</div>
 			`,
 		};
 	});
