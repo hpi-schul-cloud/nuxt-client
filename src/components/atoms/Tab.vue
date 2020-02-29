@@ -1,9 +1,7 @@
 <template>
-	<div v-if="hasPermission">
-		<div v-show="isActive" class="tab-content">
+		<div v-show="isActive && hasPermission" class="tab-content">
 			<slot></slot>
 		</div>
-	</div>
 </template>
 
 <script>

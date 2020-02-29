@@ -6,11 +6,13 @@
 				:key="tab.name"
 				:class="{ 'is-active': tab.isActive }"
 			>
-				<div v-if="tab.hasPermission">
-					<button class="tab-button" @click="selectTab(tab)">
-						<span>{{ tab.name }}</span>
-					</button>
-				</div>
+				<button
+					v-if="tab.hasPermission"
+					class="tab-button"
+					@click="selectTab(tab)"
+				>
+					<span>{{ tab.name }}</span>
+				</button>
 			</li>
 		</ul>
 		<div class="tabs-details">
