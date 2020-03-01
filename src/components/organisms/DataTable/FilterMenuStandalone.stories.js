@@ -27,6 +27,7 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 				:query="query"
 				@update:query="onUpdateQuery"
 				@update:filtered-data="onUpdateFilteredData"
+				@update:filter-query="onUpdateFilterQuery"
 			/>`,
 			data: () => ({
 				data,
@@ -38,6 +39,7 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 			methods: {
 				onUpdateQuery: action("@update:query"),
 				onUpdateFilteredData: action("@update:filtered-data"),
+				onUpdateFilterQuery: action("@update:filter-query"),
 			},
 		};
 	}
