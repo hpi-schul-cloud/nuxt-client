@@ -1,6 +1,12 @@
 <template>
 	<div>
-		<filter-ui :filter="filters" :parser="parser" :query="query" @newQuery="setNewQuery"/>
+		<filter-ui
+			:filter="filters"
+			:active-filters.sync="activeFiltersProxy"
+			:parser="parser"
+			:query="query"
+			@newQuery="setNewQuery"
+		/>
 	</div>
 </template>
 
@@ -10,7 +16,7 @@ import { parser } from "../FilterUI";
 
 export default {
 	components: {
-		FilterUi
+		FilterUi,
 	},
 	props: {
 		data: {
@@ -18,28 +24,37 @@ export default {
 			default: () => [],
 		},
 		backendFiltering: {
-			type: Boolean
+			type: Boolean,
 		},
 		filters: {
 			type: Array,
-			required: true
+			required: true,
 		},
 		query: {
 			type: [Object, String],
 			required: true,
+		},
+		activeFilters: {
+			type: Array,
+			default: () => [],
 		},
 	},
 	data() {
 		return {
 			parser: parser.FeathersJS,
 			localQuery: undefined,
+			localActiveFilters: undefined,
 		};
 	},
 	computed: {
 		filteredData() {
-			// ToDo implement data filtering
+			// ToDo implement data filtering correctly
 			if (!this.backendFiltering) {
-
+				return this.data.filter((row) =>
+					this.activeFiltersProxy.every(
+						(filter) => row[filter.attribute] === filter.value
+					)
+				);
 			}
 			return this.data;
 		},
@@ -51,15 +66,32 @@ export default {
 				this.localQuery = to;
 				this.$emit("update:query", to);
 				if (!this.backendFiltering) {
-					this.$emit("filtered-data", this.filteredData);
+					this.$emit("update:filtered-data", this.filteredData);
+				}
+			},
+		},
+		activeFiltersProxy: {
+			get() {
+				return this.localActiveFilters || this.activeFilters;
+			},
+			set(to) {
+				this.localActiveFilters = to;
+				this.$emit("update:active-filters", to);
+				if (!this.backendFiltering) {
+					this.$emit("update:filtered-data", this.filteredData);
 				}
 			},
 		},
 	},
+	watch: {
+		activeFilters(to) {
+			this.activeFiltersProxy = to;
+		},
+	},
 	methods: {
 		setNewQuery(newQuery) {
-			this.queryProxy = newQuery
-		}
-	}
+			this.queryProxy = newQuery;
+		},
+	},
 };
 </script>

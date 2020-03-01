@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div class="filter">
 		<div class="row">
@@ -75,6 +76,10 @@ export default {
 		"consistentOrder": {type: Boolean, default: true},
 		*/
 		filter: { type: Array, required: true },
+		activeFilters: {
+			type: Array,
+			default: () => [],
+		},
 		componentSelect: {
 			type: Object,
 			default: () => DefaultSelect,
@@ -289,6 +294,25 @@ export default {
 			if (this.handleUrl) {
 				this.updateUrlQuery();
 			}
+
+			const newActiveFilters = [];
+
+			this.internalConfig.forEach((group) => {
+				const filter = group.filter.find(
+					(input) => this.values[input.id] !== undefined
+				);
+				if (!filter) {
+					return;
+				}
+				const newFilter = {
+					attribute: filter.attribute,
+					value: this.values[filter.id],
+					operator: filter.operator,
+					applyNegated: filter.applyNegated() || false,
+				};
+				newActiveFilters.push(newFilter);
+			});
+			this.$emit("update:active-filters", newActiveFilters);
 		},
 		updateUrlQuery() {
 			// keep existing non filter related query params
@@ -303,7 +327,22 @@ export default {
 			this.$_updateUrlQueryString(newQuery);
 		},
 		updateFromQuery() {
-			const parsedValues = this.parser.parser(this.internalConfig, this.query);
+			const parsedValues = [];
+
+			this.activeFilters.forEach((filter) => {
+				this.internalConfig.forEach((group) => {
+					group.filter.forEach((input) => {
+						if (filter.attribute === input.attribute) {
+							const queryValue = filter.value;
+							if (queryValue === undefined) {
+								return;
+							}
+							parsedValues[input.id] = queryValue;
+						}
+					});
+				});
+			});
+
 			this.$set(this, "values", parsedValues);
 		},
 		patchFromQuery() {

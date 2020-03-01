@@ -8,6 +8,7 @@ import {
 	tableData,
 	tableFilters,
 	tableQuery,
+	tableActiveFilters,
 } from "./DataTable.data-factory.js";
 
 storiesOf("6 Organisms/DataTable/SubComponents", module).add(
@@ -22,6 +23,7 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 				:backendFiltering="backendFiltering"
 				:data="data"
 				:filters="filters"
+				:activeFilters="activeFilters"
 				:query="query"
 				@update:query="onUpdateQuery"
 				@update:filtered-data="onUpdateFilteredData"
@@ -31,6 +33,7 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 				backendFiltering: boolean("backendFiltering", false),
 				query: object("query", tableQuery),
 				filters: object("filters", tableFilters),
+				activeFilters: object("activeFilters", tableActiveFilters),
 			}),
 			methods: {
 				onUpdateQuery: action("@update:query"),

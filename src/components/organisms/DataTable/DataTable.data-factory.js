@@ -157,4 +157,20 @@ const tableQuery = {
 	},
 };
 
-export { tableData, tableColumns, tableActions, tableFilters, tableQuery };
+const tableActiveFilters = [
+	{
+		attribute: "age",
+		operator: "<=",
+		applyNegated: true,
+		value: 10,
+	},
+];
+
+export {
+	tableData,
+	tableColumns,
+	tableActions,
+	tableFilters,
+	tableQuery,
+	tableActiveFilters,
+};
