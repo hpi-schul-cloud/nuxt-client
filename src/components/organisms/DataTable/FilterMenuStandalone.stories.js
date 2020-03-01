@@ -1,10 +1,14 @@
 import { storiesOf } from "@storybook/vue";
-import { object } from "@storybook/addon-knobs";
+import { boolean, object } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 
 import FilterMenuStandalone from "./FilterMenuStandalone";
 
-import { tableData, tableFilters } from "./DataTable.data-factory.js";
+import {
+	tableData,
+	tableFilters,
+	tableQuery,
+} from "./DataTable.data-factory.js";
 
 storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 	"FilterMenu",
@@ -15,19 +19,21 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 			components: { FilterMenuStandalone },
 			template: `
 			<FilterMenuStandalone
+				:backendFiltering="backendFiltering"
 				:data="data"
-				:filters="tableFilters"
-				:activeFilters="activeFilters"
-				@update:active-filters="onUpdateActiveFilters"
+				:filters="filters"
+				:query="query"
+				@update:query="onUpdateQuery"
 				@update:filtered-data="onUpdateFilteredData"
 			/>`,
 			data: () => ({
 				data,
-				tableFilters,
-				activeFilters: object("activeFilters", [tableFilters[0]]),
+				backendFiltering: boolean("backendFiltering", false),
+				query: object("query", tableQuery),
+				filters: object("filters", tableFilters),
 			}),
 			methods: {
-				onUpdateActiveFilters: action("@update:active-filters"),
+				onUpdateQuery: action("@update:query"),
 				onUpdateFilteredData: action("@update:filtered-data"),
 			},
 		};
