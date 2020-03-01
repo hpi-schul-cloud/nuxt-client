@@ -51,9 +51,36 @@ export default {
 			// ToDo implement data filtering correctly
 			if (!this.backendFiltering) {
 				return this.data.filter((row) =>
-					this.activeFiltersProxy.every(
-						(filter) => row[filter.attribute] === filter.value
-					)
+					this.activeFiltersProxy.every((filter) => {
+						switch (filter.operator) {
+							case "<": {
+								if (filter.applyNegated) {
+									return row[filter.attribute] >= filter.value;
+								}
+								return row[filter.attribute] < filter.value;
+							}
+							case "<=": {
+								if (filter.applyNegated) {
+									return row[filter.attribute] > filter.value;
+								}
+								return row[filter.attribute] <= filter.value;
+							}
+							case "includes": {
+								if (filter.applyNegated) {
+									return !row[filter.attribute]
+										.toString()
+										.includes(filter.value);
+								}
+								return row[filter.attribute].toString().includes(filter.value);
+							}
+							default: {
+								if (filter.applyNegated) {
+									return row[filter.attribute] !== filter.value;
+								}
+								return row[filter.attribute] === filter.value;
+							}
+						}
+					})
 				);
 			}
 			return this.data;
