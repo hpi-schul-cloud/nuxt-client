@@ -18,6 +18,7 @@ import {
 	tableColumns,
 	tableActions,
 	tableFilters,
+	tableQuery,
 } from "./DataTable.data-factory.js";
 
 storiesOf("6 Organisms/DataTable", module)
@@ -41,7 +42,7 @@ storiesOf("6 Organisms/DataTable", module)
 				trackBy: text("trackBy", "id"),
 
 				filters: tableFilters,
-				activeFilters: object("activeFilters", [tableFilters[0]]),
+				query: object("activeFilters", tableQuery),
 
 				total: total,
 				currentPage: number("currentPage", 1),
@@ -78,8 +79,7 @@ storiesOf("6 Organisms/DataTable", module)
 				<FilterMenuStandalone
 					:data="randomData"
 					:filters="filters"
-					:activeFilters="activeFilters"
-					@update:active-filters="onUpdateActiveFilters"
+					:query="query"
 					@update:filtered-data="onUpdateFilteredData"
 				/>
 				<DataTable

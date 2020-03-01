@@ -1,5 +1,6 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
+import { inputs, layouts } from "../FilterUI";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
@@ -69,47 +70,91 @@ const tableActions = (allRows) => [
 
 const tableFilters = [
 	{
-		label: "Geburtstag",
-		type: "date",
-		attribute: "birthday",
-		matchingType: {
-			value: "after",
-			label: "ist nach dem",
-		},
-		value: "1990-01-02",
-	},
-	{
-		label: "Alter",
-		type: "number",
-		attribute: "age",
-		matchingType: {
-			value: "greater",
-			label: ">",
-		},
-		value: 25,
-	},
-	{
-		label: "Zustimmung",
-		type: "select",
-		attribute: "agreed",
-		value: [
+		title: "Items per page",
+		chipTemplate: "Items per page: %1",
+		required: true,
+		layout: layouts.Default,
+		filter: [
 			{
-				checked: false,
-				value: true,
-				label: "Zustimmung vorhanden",
+				attribute: "$limit",
+				operator: "<",
+				input: inputs.Radio,
+				options: [
+					{ value: 25, label: "25" },
+					{ value: 50, label: "50" },
+					{ value: 100, label: "100" },
+				],
 			},
 		],
 	},
 	{
-		label: "Vorname",
-		type: "text",
-		attribute: "firstName",
-		matchingType: {
-			value: "contains",
-			label: "enthält",
-		},
-		value: "Ha",
+		title: "Alter <=",
+		chipTemplate: "Person ist älter als %1 Jahre",
+		layout: layouts.Default,
+		filter: [
+			{
+				attribute: "age",
+				applyNegated: true,
+				operator: "<=",
+				input: inputs.InputNumber,
+			},
+		],
+	},
+	{
+		title: "Alter = ",
+		chipTemplate: "Person ist %1 Jahre alt",
+		layout: layouts.Default,
+		filter: [
+			{
+				attribute: "age",
+				operator: "=",
+				input: inputs.InputNumber,
+			},
+		],
+	},
+	{
+		title: "Geburtstag",
+		chipTemplate: "Person hat am %1 Geburtstag",
+		filter: [
+			{
+				attribute: "birthday",
+				operator: "=",
+				input: inputs.InputText,
+			},
+		],
+	},
+	{
+		title: "Zustimmung",
+		chipTemplate: "Zustimmung: %1",
+		filter: [
+			{
+				attribute: "agreed",
+				operator: "=",
+				input: inputs.Radio,
+				options: [
+					{ value: true, label: "Zustimmung vorhanden" },
+					{ value: false, label: "Keine Zustimmung" },
+				],
+			},
+		],
+	},
+	{
+		title: "Vorname",
+		chipTemplate: "Vorname enthält %1",
+		filter: [
+			{
+				attribute: "firstName",
+				operator: "íncludes",
+				input: inputs.InputText,
+			},
+		],
 	},
 ];
 
-export { tableData, tableColumns, tableActions, tableFilters };
+const tableQuery = {
+	age: {
+		$gt: 10,
+	},
+};
+
+export { tableData, tableColumns, tableActions, tableFilters, tableQuery };
