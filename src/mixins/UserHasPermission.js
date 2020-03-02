@@ -15,14 +15,6 @@ const UserHasPermission = {
 					: [],
 		}),
 		$_hasPermission() {
-			// empty or undefined permission will return true
-			// console.log(this.permission);
-			// console.log(
-			// 	typeof this.permission === "string"
-			// 		? !this.permission ||
-			// 				this.userPermissions.includes(this.permission.toLowerCase())
-			// 		: !this.permission() || this.permission(this.userPermissions)
-			// );
 			return typeof this.permission === "string"
 				? !this.permission ||
 						this.userPermissions.includes(this.permission.toLowerCase())
