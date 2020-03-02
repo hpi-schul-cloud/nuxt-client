@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section class="content">
 		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
 			<floating-fab
 				icon="arrow_drop_up"
@@ -8,51 +8,58 @@
 			/>
 		</div>
 		<div class="content">
-			<searchbar
+			<content-searchbar
 				v-model.lazy="searchQuery"
-				class="content__searchbar"
-				:placeholder="$t('pages.content.index.search_for')"
+				:class="
+					!activateTransition ? 'first-search__searchbar' : 'content__searchbar'
+				"
+				placeholder="Lernstore durchsuchen"
 				:loading="loading"
+				@keyup:enter="transitionHandler"
 			/>
-			<p class="content__total">
-				<span v-if="searchQuery.length > 0">
-					{{ resources.total }}
-					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+			<transition name="fade">
+				<span v-if="!firstSearch">
+					<p class="content__total">
+						<span v-if="searchQuery.length > 0">
+							{{ resources.total }}
+							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+						</span>
+						<span v-else>
+							{{ resources.total }}
+							{{ $t("pages.content.index.search_resources") }}
+						</span>
+					</p>
+					<div
+						v-if="resources.data.length === 0 && !loading"
+						class="content__no-results"
+					>
+						<content-empty-state />
+					</div>
+					<base-grid column-width="15rem">
+						<content-card
+							v-for="resource of resources.data"
+							:id="resource._id"
+							:key="resource._id"
+							class="card"
+							:thumbnail="resource.thumbnail"
+							:title="resource.title"
+							:url="resource.url"
+						/>
+					</base-grid>
+					<base-spinner
+						v-if="loading && resources.data.length !== 0"
+						class="content__spinner"
+						color="var(--color-primary)"
+					/>
 				</span>
-				<span v-else>
-					{{ resources.total }}
-					{{ $t("pages.content.index.search_resources") }}
-				</span>
-			</p>
-			<div
-				v-if="resources.data.length === 0 && !loading"
-				class="content__no-results"
-			>
-				<content-empty-state />
-			</div>
-			<base-grid column-width="15rem">
-				<content-card
-					v-for="resource of resources.data"
-					:id="resource._id"
-					:key="resource._id"
-					class="card"
-					:thumbnail="resource.thumbnail"
-					:title="resource.title"
-					:url="resource.url"
-				/>
-			</base-grid>
-			<base-spinner
-				v-if="loading && resources.data.length !== 0"
-				class="content__spinner"
-				color="var(--color-primary)"
-			/>
+			</transition>
 		</div>
 	</section>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import Searchbar from "@components/molecules/Searchbar";
+import ContentSearchbar from "@components/molecules/ContentSearchbar";
 import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
@@ -61,7 +68,7 @@ import FloatingFab from "@components/molecules/FloatingFab";
 
 export default {
 	components: {
-		Searchbar,
+		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
@@ -69,13 +76,12 @@ export default {
 	},
 	mixins: [infiniteScrolling],
 	layout: "loggedInFull",
-	async asyncData({ store }) {
-		return store.dispatch("content/getResources");
-	},
 	data() {
 		return {
 			searchQuery: "",
 			backToTopScrollYLimit: 115,
+			firstSearch: true,
+			activateTransition: false,
 		};
 	},
 	computed: {
@@ -115,6 +121,14 @@ export default {
 			if (to === from) {
 				return;
 			}
+			/**
+			 * FOR ALTERNATIVE IMPLEMENTATION:
+			 * Activate transition after 3 key presses
+			 *
+			 * if (this.searchQuery.length >= 3) {
+			 *	this.transitionHandler();
+			 * }
+			 */
 			this.$options.debounce = setInterval(() => {
 				clearInterval(this.$options.debounce);
 				this.searchContent();
@@ -132,6 +146,12 @@ export default {
 		async searchContent() {
 			await this.$store.dispatch("content/getResources", this.query);
 		},
+		transitionHandler() {
+			this.activateTransition = true;
+			setTimeout(() => {
+				this.firstSearch = false;
+			}, 500);
+		},
 	},
 	head() {
 		return {
@@ -143,20 +163,22 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+	width: 100%;
+	height: 100%;
+
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
+		margin: var(--space-md) 0;
+		transition: transform 0.7s;
+		transform: scale(1) translateY(0%);
 	}
 	&__total {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
 		width: 100%;
-		color: var(--color-primary);
+		color: var(--color-gray);
 	}
 	&__no-results {
 		margin-top: var(--space-md);
@@ -164,5 +186,23 @@ export default {
 	&__spinner {
 		margin-top: var(--space-md);
 	}
+}
+
+.first-search {
+	&__searchbar {
+		width: 100%;
+		padding: var(--space-md) 0;
+		margin: var(--space-md) 0;
+		transform: scale(1.3) translateY(250%);
+	}
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity var(--duration-transition-slow);
+}
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>
