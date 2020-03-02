@@ -72,9 +72,9 @@
 		"vue-swatches": "^1.0.4"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.8.4",
+		"@babel/core": "^7.8.6",
 		"@babel/plugin-proposal-optional-chaining": "^7.8.3",
-		"@babel/preset-env": "^7.8.4",
+		"@babel/preset-env": "^7.8.6",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@schul-cloud/eslint-config": "^0.4.0",
 		"@schul-cloud/prettier-config": "^0.1.5",
@@ -105,7 +105,7 @@
 		"faker": "^4.1.0",
 		"find-cache-dir": "^3.3.0",
 		"flush-promises": "^1.0.2",
-		"http-proxy-middleware": "^1.0.0",
+		"http-proxy-middleware": "^1.0.1",
 		"http-server": "^0.12.1",
 		"hygen": "^5.0.3",
 		"imagemin-lint-staged": "^0.4.0",
