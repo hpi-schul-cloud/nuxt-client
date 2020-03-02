@@ -28,7 +28,7 @@ describe("@components/molecules/ContentSearchbar", () => {
 		expect(wrapper.vm.value).toBe(testString);
 	});
 
-	it("Emits input event on ANY keypress in input", async () => {
+	it("Emits input event on any input value change", async () => {
 		const testInput = "some test input";
 		const wrapper = mount(ContentSearchbar);
 		const input = wrapper.find('input[type="text"]');
