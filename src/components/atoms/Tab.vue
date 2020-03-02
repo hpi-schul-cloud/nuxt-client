@@ -1,19 +1,18 @@
 <template>
-		<div v-show="isActive && hasPermission" class="tab-content">
-			<slot></slot>
-		</div>
+	<div v-show="isActive && hasPermission" class="tab-content">
+		<slot></slot>
+	</div>
 </template>
 
 <script>
+import UserHasPermission from "@/mixins/UserHasPermission";
+
 export default {
+	mixins: [UserHasPermission],
 	props: {
 		name: {
 			type: String,
 			required: true,
-		},
-		permission: {
-			type: String,
-			default: "",
 		},
 		selected: {
 			type: Boolean,
@@ -27,14 +26,7 @@ export default {
 	},
 	created() {
 		this.isActive = this.selected;
-		this.hasPermission = this.checkPermission();
-	},
-	methods: {
-		checkPermission() {
-			return (
-				!this.permission || this.$user.permissions.includes(this.permission)
-			);
-		},
+		this.hasPermission = this.$_hasPermission;
 	},
 };
 </script>
