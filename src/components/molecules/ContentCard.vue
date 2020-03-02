@@ -61,7 +61,10 @@
 								/>
 							</div>
 						</div>
-						<add-content-modal :show-copy-modal.sync="copyModalActive" />
+						<add-content-modal
+							:show-copy-modal.sync="copyModalActive"
+							:contentid="id"
+						/>
 					</div>
 				</div>
 			</template>

@@ -65,6 +65,10 @@ export default {
 			type: Boolean,
 			required: true,
 		},
+		contentid: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		return {
