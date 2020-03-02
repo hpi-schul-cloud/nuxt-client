@@ -17,6 +17,15 @@ export const actions = {
 		commit("addResources", res);
 		commit("setLoading", false);
 	},
+	async getLessons({ commit }) {
+		const params = {
+			qs: {
+				courseId: "5e57da3585d0f70d3df7f23f",
+			},
+		};
+		const res = await this.$axios.$get("/lessons/", params);
+		commit("setLessons", res);
+	},
 };
 
 export const mutations = {
@@ -35,6 +44,9 @@ export const mutations = {
 	setLoading(state, type) {
 		state.loading = type;
 	},
+	setLessons(state, payload) {
+		state.lessons = payload;
+	},
 };
 
 export const state = () => ({
@@ -43,6 +55,9 @@ export const state = () => ({
 		limit: null,
 		skip: null,
 		total: null,
+	},
+	lessons: {
+		data: [],
 	},
 	loading: false,
 });

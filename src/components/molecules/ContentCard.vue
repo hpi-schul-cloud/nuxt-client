@@ -61,6 +61,7 @@
 								/>
 							</div>
 						</div>
+						<add-content-modal :show-copy-modal.sync="copyModalActive" />
 					</div>
 				</div>
 			</template>
@@ -71,11 +72,13 @@
 <script>
 import BaseLink from "@components/base/BaseLink";
 import ContextMenu from "@components/molecules/ContextMenu";
+import AddContentModal from "@components/molecules/AddContentModal";
 
 export default {
 	components: {
 		BaseLink,
 		ContextMenu,
+		AddContentModal,
 	},
 	props: {
 		id: { type: String, default: "" },
@@ -88,6 +91,7 @@ export default {
 			isChecked: false,
 			menuActive: false,
 			isBookmarked: false,
+			copyModalActive: false,
 			actions: [
 				{
 					event: "copy",
@@ -141,7 +145,10 @@ export default {
 		openMenu() {
 			this.menuActive = true;
 		},
-		handleCopy() {},
+		handleCopy() {
+			this.copyModalActive = true;
+			this.$store.dispatch("courses/find");
+		},
 		handleShare() {},
 		handleDelete() {},
 		handleReport() {},
