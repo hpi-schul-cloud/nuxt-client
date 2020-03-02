@@ -15,7 +15,9 @@
 	"prettier.configPath": ".prettierrc.js",
 	"prettier.ignorePath": ".prettierignore",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-
+	"[vue]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
 	// ===
 	// Files
 	// ===
