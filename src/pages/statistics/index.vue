@@ -1,69 +1,81 @@
 <template>
 	<div>
-		<h1 class="h1">Statistiken</h1>
+		<h1 class="h1">{{ $t("pages.statistics.title") }}</h1>
 		<tabs>
-			<single-tab name="Global" permission="VIEW_GLOBAL_STATS">
+			<single-tab
+				:name="$t('pages.statistics.tab.global')"
+				permission="VIEW_GLOBAL_STATS"
+			>
 				<BaseGrid>
 					<insights-card
-						title="Nutzer:Innen"
+						:title="$t('pages.statistics.card.users')"
 						:data="{ current: globalCount.users }"
 					/>
 					<insights-card
-						title="Kurse"
+						:title="$t('pages.statistics.card.courses')"
 						:data="{ current: globalCount.courses }"
 					/>
 					<insights-card
-						title="Schüler:Innen"
+						:title="$t('pages.statistics.card.students')"
 						:data="{ current: globalCount.students }"
 					/>
 					<insights-card
-						title="Lehrkräfte"
+						:title="$t('pages.statistics.card.teachers')"
 						:data="{ current: globalCount.teachers }"
 					/>
 					<insights-card
-						title="Themen"
+						:title="$t('pages.statistics.card.lessons')"
 						:data="{ current: globalCount.lessons }"
 					/>
 					<insights-card
-						title="Aufgaben"
+						:title="$t('pages.statistics.card.homework')"
 						:data="{ current: globalCount.homework }"
 					/>
-					<insights-card title="Teams" :data="{ current: globalCount.teams }" />
+					<insights-card
+						:title="$t('pages.statistics.card.teams')"
+						:data="{ current: globalCount.teams }"
+					/>
 				</BaseGrid>
 			</single-tab>
-			<single-tab name="Dateien" permission="VIEW_GLOBAL_STATS">
+			<single-tab
+				:name="$t('pages.statistics.tab.data')"
+				permission="VIEW_GLOBAL_STATS"
+			>
 				<BaseGrid column-width="20rem">
 					<v-chart :options="chartOptionsForFileSizes" :autoresize="true" />
 					<v-chart :options="chartOptionsForFileTypes" :autoresize="true" />
 				</BaseGrid>
 			</single-tab>
 			<single-tab
-				name="Meine Schule"
+				:name="$t('pages.statistics.tab.mySchool')"
 				:selected="true"
 				permission="VIEW_MYSCHOOL_STATS"
 			>
 				<BaseGrid>
 					<insights-card
-						title="Nutzer:Innen"
+						:title="$t('pages.statistics.card.users')"
 						:data="{ current: schoolCount.users }"
 					/>
 					<insights-card
-						title="Kurse"
+						:title="$t('pages.statistics.card.courses')"
 						:data="{ current: schoolCount.courses }"
 					/>
 					<insights-card
-						title="Schüler:Innen"
+						:title="$t('pages.statistics.card.students')"
 						:data="{ current: schoolCount.students }"
 					/>
 					<insights-card
-						title="Lehrkräfte"
+						:title="$t('pages.statistics.card.teachers')"
 						:data="{ current: schoolCount.teachers }"
 					/>
 					<insights-card
-						title="Aufgaben"
+						:title="$t('pages.statistics.card.homework')"
 						:data="{ current: schoolCount.homework }"
 					/>
-					<insights-card title="Teams" :data="{ current: schoolCount.teams }" />
+					<insights-card
+						:title="$t('pages.statistics.card.teams')"
+						:data="{ current: schoolCount.teams }"
+					/>
 				</BaseGrid>
 			</single-tab>
 		</tabs>
@@ -101,7 +113,6 @@ export default {
 		SingleTab,
 		"v-chart": ECharts,
 	},
-
 	async asyncData({ store }) {
 		return Promise.all([
 			store.dispatch("statistics/getAccountStats"),

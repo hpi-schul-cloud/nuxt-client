@@ -125,5 +125,16 @@
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
+	"pages.statistics.card.courses": "Kurse",
+	"pages.statistics.card.homework": "Aufgaben",
+	"pages.statistics.card.lessons": "Themen",
+	"pages.statistics.card.students": "Schüler:Innen",
+	"pages.statistics.card.teachers": "Lehrkräfte",
+	"pages.statistics.card.teams": "Teams",
+	"pages.statistics.card.users": "Nutzer:Innen",
+	"pages.statistics.tab.data": "Dateien",
+	"pages.statistics.tab.global": "Global",
+	"pages.statistics.tab.mySchool": "Meine Schule",
+	"pages.statistics.title": "Statistiken",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!"
 }
