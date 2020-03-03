@@ -1,6 +1,6 @@
 import { mapState } from "vuex";
 
-const UserHasPermission = {
+export default {
 	props: {
 		permission: {
 			type: [String, Function],
@@ -22,5 +22,3 @@ const UserHasPermission = {
 		},
 	},
 };
-
-export default UserHasPermission;
