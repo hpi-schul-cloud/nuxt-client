@@ -109,3 +109,22 @@ storiesOf("1 Design Tokens", module).add("Elevation", () => ({
 		</div>`,
 	methods: {},
 }));
+
+storiesOf("1 Design Tokens", module).add("Spacings", () => ({
+	components: { Elevation },
+	template: `<div>
+			<div style="width: var(--space-xs-4); height: var(--space-xs-4); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xs-3); height: var(--space-xs-3); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xs-2); height: var(--space-xs-2); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xs); height: var(--space-xs); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-sm); height: var(--space-sm); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-md); height: var(--space-md); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-lg); height: var(--space-lg); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xl); height: var(--space-xl); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xl-2); height: var(--space-xl-2); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xl-3); height: var(--space-xl-3); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xl-4); height: var(--space-xl-4); background: turquoise; margin-top: 1em;"></div>
+			<div style="width: var(--space-xl-5); height: var(--space-xl-5); background: turquoise; margin-top: 1em;"></div>
+		</div>`,
+	methods: {},
+}));
