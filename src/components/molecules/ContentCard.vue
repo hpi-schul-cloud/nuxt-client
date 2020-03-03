@@ -40,7 +40,17 @@
 								:icon="bookmarkIconSelector"
 							/>
 						</base-button>
-
+						<base-button
+							v-if="showAddAction"
+							design="text icon"
+							@click="plusHandler"
+						>
+							<base-icon
+								class="footer__content-icon"
+								source="material"
+								icon="add_box"
+							/>
+						</base-button>
 						<div class="footer__icon-container">
 							<div class="footer_more">
 								<base-button design="text icon" @click="openMenu">
@@ -63,7 +73,10 @@
 						</div>
 						<add-content-modal
 							:show-copy-modal.sync="copyModalActive"
-							:contentid="id"
+							:updatedid="id"
+							:url="url"
+							:client="client"
+							:title="title"
 						/>
 					</div>
 				</div>
@@ -88,6 +101,8 @@ export default {
 		thumbnail: { type: String, default: "" },
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
+		client: { type: String, default: "Schul-Cloud" },
+		showAddAction: { type: Boolean },
 	},
 	data() {
 		return {

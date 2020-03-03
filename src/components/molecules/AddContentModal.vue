@@ -14,7 +14,7 @@
 					class="content-modal__body--select"
 					:options="coursesOptions"
 					:show-labels="true"
-					placeholder="Waehle einen Kurs/Fach"
+					placeholder="Mathe 5b"
 					label="Wahle ein Unterrichtsthema"
 					close-on-select
 					option-label="name"
@@ -22,7 +22,6 @@
 					select-label="Auswählen"
 					selected-label="Aktiv"
 					track-by="_id"
-					@select="findLessons"
 				/>
 				<base-select
 					v-model="selectedLesson"
@@ -31,7 +30,7 @@
 					label="Wahle ein Unterrichtsthema"
 					option-label="name"
 					close-on-select
-					placeholder="asdf"
+					placeholder="Pythagoras"
 					deselect-label="Entfernen"
 					select-label="Auswählen"
 					selected-label="Aktiv"
@@ -45,7 +44,9 @@
 					<base-button design="text" @click="closeModal">
 						Abbrechen
 					</base-button>
-					<base-button disabled> Senden</base-button>
+					<base-button :disabled="!isSendEnabled" @click="addToLesson"
+						>Senden</base-button
+					>
 				</template>
 			</modal-footer>
 		</template>
@@ -61,6 +62,10 @@ export default {
 		ModalFooter,
 	},
 	props: {
+		title: { type: String, default: "" },
+		url: { type: String, default: "" },
+		client: { type: String, default: "Schul-Cloud" },
+
 		showCopyModal: {
 			type: Boolean,
 			required: true,
@@ -88,6 +93,9 @@ export default {
 				return state.lessons;
 			},
 		}),
+		isSendEnabled() {
+			return this.selectedLesson._id !== undefined;
+		},
 		coursesOptions() {
 			return this.courses
 				.filter((course) => course.isArchived !== "false")
@@ -110,6 +118,15 @@ export default {
 			);
 		},
 	},
+	watch: {
+		selectedCourse(to, from) {
+			console.log(to, from);
+			this.selectedLesson = {};
+			if (to) {
+				this.findLessons(to);
+			}
+		},
+	},
 	methods: {
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
@@ -118,8 +135,19 @@ export default {
 		closeModalOutsideClick(active) {
 			if (!active) this.closeModal();
 		},
-		async findLessons() {
-			await this.$store.dispatch("content/getLessons");
+		addToLesson() {
+			this.$store.dispatch("content/addToLesson", {
+				lessonId: this.selectedLesson._id,
+				material: {
+					title: this.title,
+					client: this.client,
+					url: this.url,
+				},
+			});
+			this.closeModal();
+		},
+		findLessons(course) {
+			this.$store.dispatch("content/getLessons", course._id);
 		},
 		clearState() {
 			this.selectedCourse = {};

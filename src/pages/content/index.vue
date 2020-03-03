@@ -44,6 +44,8 @@
 							:thumbnail="resource.thumbnail"
 							:title="resource.title"
 							:url="resource.url"
+							:show-add-action="isInline"
+							:client="resource.client"
 						/>
 					</base-grid>
 					<base-spinner
@@ -93,6 +95,9 @@ export default {
 				return state.loading;
 			},
 		}),
+		isInline() {
+			return window.location.search.includes("isCourseGroupTopic=true");
+		},
 		query() {
 			const query = {
 				$limit: 10,

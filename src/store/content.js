@@ -17,15 +17,17 @@ export const actions = {
 		commit("addResources", res);
 		commit("setLoading", false);
 	},
-	async getLessons({ commit }) {
+	async getLessons({ commit }, payload) {
 		const params = {
-			qs: {
-				courseId: "5e57da3585d0f70d3df7f23f",
-			},
+			courseId: payload,
 		};
-		const res = await this.$axios.$get("/lessons/", params);
+		const res = await this.$axios.$get("/lessons", { params });
 		commit("setLessons", res);
 	},
+
+	async addToLesson(_,payload = { material:{} }){
+		 await this.$axios.post(`/lessons/${payload.lessonId}/material`, payload.material)
+	}
 };
 
 export const mutations = {
