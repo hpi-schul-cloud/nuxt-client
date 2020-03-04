@@ -85,9 +85,6 @@ export default {
 		...mapGetters("courses", {
 			courses: "list",
 		}),
-		// ...mapGetters("content", {
-		// 	lessons: "list",
-		// }),
 		...mapState("content", {
 			lessons: (state) => {
 				return state.lessons;
@@ -98,7 +95,7 @@ export default {
 		},
 		coursesOptions() {
 			return this.courses
-				.filter((course) => course.isArchived !== "false")
+				.filter((course) => course.isArchived === false)
 				.map((course) => {
 					return {
 						_id: course._id,
@@ -120,7 +117,6 @@ export default {
 	},
 	watch: {
 		selectedCourse(to, from) {
-			console.log(to, from);
 			this.selectedLesson = {};
 			if (to) {
 				this.findLessons(to);
