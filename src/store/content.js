@@ -1,8 +1,8 @@
 export const actions = {
 	async getResources({ commit }, payload = {}) {
 		commit("setLoading", true);
-		const query = Object.assign({ $limit: 10 }, payload || {});
-		const res = await this.$axios.$get("/content/search", {
+		const query = Object.assign({ count: 10 }, payload || {});
+		const res = await this.$axios.$get("/edu-sharing", {
 			params: query,
 		});
 		commit("setResources", res);
@@ -11,7 +11,7 @@ export const actions = {
 	async addResources({ commit }, payload = {}) {
 		commit("setLoading", true);
 		const query = payload || {};
-		const res = await this.$axios.$get("/content/search", {
+		const res = await this.$axios.$get("/edu-sharing", {
 			params: query,
 		});
 		commit("addResources", res);
@@ -24,12 +24,10 @@ export const mutations = {
 		state.resources = payload;
 	},
 	addResources(state, payload) {
-		payload.data.forEach((resource) => state.resources.data.push(resource));
+		payload.nodes.forEach((resource) => state.resources.nodes.push(resource));
 		state.resources = {
 			...state.resources,
-			limit: payload.limit,
-			skip: payload.skip,
-			total: payload.total,
+			pagination: payload.pagination,
 		};
 	},
 	setLoading(state, type) {
@@ -39,10 +37,10 @@ export const mutations = {
 
 export const state = () => ({
 	resources: {
-		data: [],
-		limit: null,
-		skip: null,
-		total: null,
+		facettes: [],
+		ignored: null,
+		nodes: [],
+		pagination: {},
 	},
 	loading: false,
 });

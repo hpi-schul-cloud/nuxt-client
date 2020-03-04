@@ -16,7 +16,7 @@
 							<div class="content__img-background-gradient" />
 
 							<img
-								:src="thumbnail"
+								:src="resource.preview.url"
 								alt="content-thumbnail"
 								class="content__img-thumbnail"
 							/>
@@ -25,10 +25,10 @@
 						</div>
 					</div>
 					<base-link
-						:to="{ name: 'content-id', params: { id: id } }"
+						:to="{ name: 'content-id', params: { id: resource.name } }"
 						:no-style="true"
 					>
-						<h6 class="content__title">{{ title }}</h6>
+						<h6 class="content__title">{{ resource.name }}</h6>
 					</base-link>
 				</div>
 			</template>
@@ -81,10 +81,7 @@ export default {
 		ContextMenu,
 	},
 	props: {
-		id: { type: String, default: "" },
-		thumbnail: { type: String, default: "" },
-		title: { type: String, default: "" },
-		url: { type: String, default: "" },
+		resource: { type: Object, default: () => {} },
 	},
 	data() {
 		return {
