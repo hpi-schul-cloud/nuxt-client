@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<backend-data-table
 		v-bind="attrsProxy"
@@ -231,9 +230,7 @@ export default {
 				// sort strings
 				return a.localeCompare(b);
 			});
-			return sortOrder !== "desc"
-				? sortedData
-				: sortedData.reverse();
+			return sortOrder !== "desc" ? sortedData : sortedData.reverse();
 		},
 	},
 };
