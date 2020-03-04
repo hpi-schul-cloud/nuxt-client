@@ -24,7 +24,10 @@
 							<img class="content__img-icon" src="@assets/icons/ic_image.svg" />
 						</div>
 					</div>
-					<base-link :href="url" target="_blank" :no-style="true">
+					<base-link
+						:to="{ name: 'content-id', params: { id: id } }"
+						:no-style="true"
+					>
 						<h6 class="content__title">{{ title }}</h6>
 					</base-link>
 				</div>
