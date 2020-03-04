@@ -6,13 +6,13 @@
 					<div class="content__img">
 						<div class="img-container">
 							<base-button
+								v-if="multiSelectEnabled"
 								design="none"
 								class="content__img-checkbox"
 								@click="checkboxHandler"
 							>
 								<base-icon source="material" :icon="checkboxIconSelector" />
 							</base-button>
-
 							<div class="content__img-background-gradient" />
 
 							<img
@@ -103,6 +103,7 @@ export default {
 		url: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		showAddAction: { type: Boolean },
+		multiSelectEnabled: { type: Boolean },
 	},
 	data() {
 		return {
