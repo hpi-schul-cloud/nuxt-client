@@ -1,7 +1,7 @@
 <template>
 	<section class="content">
 		<div
-			v-if="scrollY > backToTopScrollYLimit && resources.data.length > 0"
+			v-if="scrollY > backToTopScrollYLimit && resources.nodes.length > 0"
 			class="content__back-to-top"
 		>
 			<floating-fab
@@ -24,38 +24,35 @@
 					@keyup:enter="transitionHandler"
 				/>
 				<transition name="fade">
-					<span v-if="!firstSearch">
+					<span v-if="!firstSearch" class="content__container">
 						<p class="content__total">
 							<span v-if="searchQuery.length > 0">
-								{{ resources.total }}
+								{{ resources.pagination.total }}
 								{{ $t("pages.content.index.search_results") }} "{{
 									searchQuery
 								}}"
 							</span>
 							<span v-else>
-								{{ resources.total }}
+								{{ resources.pagination.total }}
 								{{ $t("pages.content.index.search_resources") }}
 							</span>
 						</p>
 						<div
-							v-if="resources.data.length === 0 && !loading"
+							v-if="resources.nodes.length === 0 && !loading"
 							class="content__no-results"
 						>
 							<content-empty-state />
 						</div>
 						<base-grid column-width="14rem">
 							<content-card
-								v-for="resource of resources.data"
-								:id="resource._id"
-								:key="resource._id"
+								v-for="resource of resources.nodes"
+								:key="resource.ref.id"
 								class="card"
-								:thumbnail="resource.thumbnail"
-								:title="resource.title"
-								:url="resource.url"
+								:resource="resource"
 							/>
 						</base-grid>
 						<base-spinner
-							v-if="loading && resources.data.length !== 0"
+							v-if="loading && resources.nodes.length !== 0"
 							class="content__spinner"
 							color="var(--color-primary)"
 						/>
@@ -107,19 +104,18 @@ export default {
 		}),
 		query() {
 			const query = {
-				$limit: 10,
-				$skip: 0,
+				count: 10,
+				from: 0,
 			};
 			if (this.searchQuery) {
-				query["_all[$match]"] = this.searchQuery;
+				query["searchQuery"] = this.searchQuery;
 			}
 			return query;
 		},
 	},
 	watch: {
 		bottom(bottom) {
-			const { skip, total } = this.resources;
-			if (bottom && !this.loading && skip < total) {
+			if (bottom && !this.firstSearch && !this.loading) {
 				this.addContent();
 			}
 		},
@@ -152,7 +148,7 @@ export default {
 	},
 	methods: {
 		async addContent() {
-			this.query["$skip"] += this.query["$limit"];
+			this.query["from"] += this.query["count"];
 			await this.$store.dispatch("content/addResources", this.query);
 		},
 		async searchContent() {
@@ -180,7 +176,13 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	height: 100%;
-
+	&__container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+	}
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
@@ -199,7 +201,7 @@ export default {
 		margin-top: var(--space-md);
 	}
 	&__spinner {
-		margin-top: var(--space-md);
+		margin: var(--space-lg) 0;
 	}
 }
 
