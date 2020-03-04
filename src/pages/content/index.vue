@@ -1,6 +1,9 @@
 <template>
 	<section class="content">
-		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
+		<div
+			v-if="scrollY > backToTopScrollYLimit && resources.nodes.length > 0"
+			class="content__back-to-top"
+		>
 			<floating-fab
 				icon="arrow_drop_up"
 				:aria-label="$t('common.actions.scrollToTop')"
@@ -8,53 +11,55 @@
 			/>
 		</div>
 		<div class="content">
-			<content-searchbar
-				v-model.lazy="searchQuery"
-				:class="
-					!activateTransition ? 'first-search__searchbar' : 'content__searchbar'
-				"
-				placeholder="Lernstore durchsuchen"
-				:loading="loading"
-				@keyup:enter="transitionHandler"
-			/>
-			<transition name="fade">
-				<span v-if="!firstSearch">
-					<p class="content__total">
-						<span v-if="searchQuery.length > 0">
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
-						</span>
-						<span v-else>
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_resources") }}
-						</span>
-					</p>
-					<div
-						v-if="resources.data.length === 0 && !loading"
-						class="content__no-results"
-					>
-						<content-empty-state />
-					</div>
-					<base-grid column-width="15rem">
-						<content-card
-							v-for="resource of resources.data"
-							:id="resource._id"
-							:key="resource._id"
-							class="card"
-							:thumbnail="resource.thumbnail"
-							:title="resource.title"
-							:url="resource.url"
-							:show-add-action="isInline"
-							:client="resource.client"
+			<div>
+				<content-searchbar
+					v-model.lazy="searchQuery"
+					:class="
+						!activateTransition
+							? 'first-search__searchbar'
+							: 'content__searchbar'
+					"
+					placeholder="Lernstore durchsuchen"
+					:loading="loading"
+					@keyup:enter="transitionHandler"
+				/>
+				<transition name="fade">
+					<span v-if="!firstSearch" class="content__container">
+						<p class="content__total">
+							<span v-if="searchQuery.length > 0">
+								{{ resources.pagination.total }}
+								{{ $t("pages.content.index.search_results") }} "{{
+									searchQuery
+								}}"
+							</span>
+							<span v-else>
+								{{ resources.pagination.total }}
+								{{ $t("pages.content.index.search_resources") }}
+							</span>
+						</p>
+						<div
+							v-if="resources.nodes.length === 0 && !loading"
+							class="content__no-results"
+						>
+							<content-empty-state />
+						</div>
+						<base-grid column-width="14rem">
+							<content-card
+								v-for="resource of resources.nodes"
+								:key="resource.ref.id"
+								class="card"
+								:resource="resource"
+							/>
+						</base-grid>
+						<base-spinner
+							v-if="loading && resources.nodes.length !== 0"
+							class="content__spinner"
+							color="var(--color-primary)"
 						/>
-					</base-grid>
-					<base-spinner
-						v-if="loading && resources.data.length !== 0"
-						class="content__spinner"
-						color="var(--color-primary)"
-					/>
-				</span>
-			</transition>
+					</span>
+				</transition>
+			</div>
+			<edusharing-footer />
 		</div>
 	</section>
 </template>
@@ -67,6 +72,7 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import FloatingFab from "@components/molecules/FloatingFab";
+import EdusharingFooter from "@components/molecules/EdusharingFooter";
 
 export default {
 	components: {
@@ -75,6 +81,7 @@ export default {
 		ContentEmptyState,
 		BaseGrid,
 		FloatingFab,
+		EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
 	layout: "loggedInFull",
@@ -100,19 +107,18 @@ export default {
 		},
 		query() {
 			const query = {
-				$limit: 10,
-				$skip: 0,
+				count: 10,
+				from: 0,
 			};
 			if (this.searchQuery) {
-				query["_all[$match]"] = this.searchQuery;
+				query["searchQuery"] = this.searchQuery;
 			}
 			return query;
 		},
 	},
 	watch: {
 		bottom(bottom) {
-			const { skip, total } = this.resources;
-			if (bottom && !this.loading && skip < total) {
+			if (bottom && !this.firstSearch && !this.loading) {
 				this.addContent();
 			}
 		},
@@ -145,7 +151,7 @@ export default {
 	},
 	methods: {
 		async addContent() {
-			this.query["$skip"] += this.query["$limit"];
+			this.query["from"] += this.query["count"];
 			await this.$store.dispatch("content/addResources", this.query);
 		},
 		async searchContent() {
@@ -168,9 +174,18 @@ export default {
 
 <style lang="scss" scoped>
 .content {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	width: 100%;
 	height: 100%;
-
+	&__container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+	}
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
@@ -189,7 +204,7 @@ export default {
 		margin-top: var(--space-md);
 	}
 	&__spinner {
-		margin-top: var(--space-md);
+		margin: var(--space-lg) 0;
 	}
 }
 

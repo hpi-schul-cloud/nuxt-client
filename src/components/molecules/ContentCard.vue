@@ -16,7 +16,7 @@
 							<div class="content__img-background-gradient" />
 
 							<img
-								:src="thumbnail"
+								:src="resource.preview.url"
 								alt="content-thumbnail"
 								class="content__img-thumbnail"
 							/>
@@ -24,8 +24,12 @@
 							<img class="content__img-icon" src="@assets/icons/ic_image.svg" />
 						</div>
 					</div>
-					<base-link :href="url" target="_blank" :no-style="true">
-						<h6 class="content__title">{{ title }}</h6>
+					<base-link
+						:href="resource.contentUrl"
+						target="_blank"
+						:no-style="true"
+					>
+						<h6 class="content__title">{{ resource.name }}</h6>
 					</base-link>
 				</div>
 			</template>
@@ -97,13 +101,7 @@ export default {
 		AddContentModal,
 	},
 	props: {
-		id: { type: String, default: "" },
-		thumbnail: { type: String, default: "" },
-		title: { type: String, default: "" },
-		url: { type: String, default: "" },
-		client: { type: String, default: "Schul-Cloud" },
-		showAddAction: { type: Boolean },
-		multiSelectEnabled: { type: Boolean },
+		resource: { type: Object, default: () => {} },
 	},
 	data() {
 		return {

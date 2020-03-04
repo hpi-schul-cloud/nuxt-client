@@ -12,6 +12,7 @@
 	"components.molecules.ContentCardMenu.action.report": "Report",
 	"components.molecules.ContentCardMenu.action.share": "Share",
 	"components.molecules.ContextMenu.action.close": "Close context menu",
+	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.TextEditor.noLocalFiles": "",
 	"components.organisms.ContentCard.report.body": "",
