@@ -44,7 +44,7 @@ jobs:
         with:
           name: screenshot-diff
           path: tests/screenshot/__image_snapshots__/__diff_output__
-  integration-test:
+  test-integration:
     runs-on: ubuntu-latest
     steps:
       - name: test:integration
