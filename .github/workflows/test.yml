@@ -52,8 +52,11 @@ jobs:
         env:
           IT_CLIENT_HOST: nuxtclient
           IT_CLIENT_PORT: 4000
-      # - name: upload result
-      #   run: npx -p @adrianjost/report-viewer rv-upload -F **/reports/**/*.html
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: result
+          path: reports
   # build:
   #   strategy:
   #     matrix:
