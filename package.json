@@ -99,7 +99,7 @@
 		"babel-preset-vue": "^2.0.2",
 		"concurrently": "^5.1.0",
 		"core-js": "^3.6.4",
-		"cross-env": "^7.0.0",
+		"cross-env": "^7.0.1",
 		"css-loader": "^3.4.2",
 		"eslint": "^6.8.0",
 		"eslint-loader": "^3.0.3",
