@@ -44,6 +44,17 @@ jobs:
         with:
           name: screenshot-diff
           path: tests/screenshot/__image_snapshots__/__diff_output__
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: test:integration
+        run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/master/scripts/ci/fetch.travis.sh" | bash
+        env:
+          IT_CLIENT_HOST: nuxtclient
+          IT_CLIENT_PORT: 4000
+      # - name: upload result
+      #   run: npx -p @adrianjost/report-viewer rv-upload -F **/reports/**/*.html
   # build:
   #   strategy:
   #     matrix:

@@ -58,21 +58,6 @@ jobs:
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p vuepress
-    # Test
-    - script: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/master/scripts/ci/fetch.travis.sh" | bash
-      name: "test:integration"
-      env:
-        - IT_CLIENT_HOST=nuxtclient
-        - IT_CLIENT_PORT=4000
-      services:
-        - docker
-      install:
-        - echo "skipping install"
-      before_cache:
-        - mkdir -p node_modules
-      after_script:
-        - npm i -g @adrianjost/report-viewer
-        - rv-upload -F **/reports/**/*.html
 
     # Build Docker Images
     - stage: build
