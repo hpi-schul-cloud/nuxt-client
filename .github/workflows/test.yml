@@ -47,7 +47,6 @@ jobs:
   integration-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
       - name: test:integration
         run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/master/scripts/ci/fetch.travis.sh" | bash
         env:
