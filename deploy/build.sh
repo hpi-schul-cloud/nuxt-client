@@ -18,7 +18,10 @@ echo "GITSHA" $GIT_SHA
 
 # write version file
 # JS syntax is required so we can import it
+echo "version.js OLD:"
+cat ../version.js
 printf "module.exports={sha:'%s',branch:'%s',message:'%s'}" $TRAVIS_COMMIT $TRAVIS_BRANCH $TRAVIS_COMMIT_MESSAGE > ../version.js
+echo "version.js NEW:"
 cat ../version.js
 
 # ----------------
