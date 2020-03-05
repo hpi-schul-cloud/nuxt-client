@@ -16,6 +16,11 @@ echo PROJECT $PROJECT
 echo "DOCKERTAG" $DOCKERTAG
 echo "GITSHA" $GIT_SHA
 
+# write version file
+# JS syntax is required so we can import it
+printf "module.exports={sha:'%s',branch:'%s',message:'%s'}" $TRAVIS_COMMIT $TRAVIS_BRANCH $TRAVIS_COMMIT_MESSAGE > ../version.js
+cat ../version.js
+
 # ----------------
 # SCRIPTS
 # ----------------
@@ -34,10 +39,6 @@ dockerPush(){
 # BUILD SCRIPTS
 
 buildClient(){
-	# write version file
-	# JS syntax is required so we can import it
-	printf "module.exports={sha:'%s',branch:'%s',message:'%s'}" $TRAVIS_COMMIT $TRAVIS_BRANCH $TRAVIS_COMMIT_MESSAGE > ../version.js
-
 	docker build \
 		-t schulcloud/schulcloud-nuxt-client:$TRAVIS_BRANCH \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
