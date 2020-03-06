@@ -1,0 +1,23 @@
+# Was kannst Du für die Schul-Cloud tun?
+
+## Feature-Wishes machen (Vorentwickler Stufe)
+
+
+
+Natürlich kannst Du uns als aktiver der Nutzer der Schul-Cloud jederzeit Vorschläge und Anregungen unterbreiten ohne gleich mitzuentwickeln. Gehe auch hierzu auf unser
+[Support Portal](https://ticketsystem.schul-cloud.org/servicedesk/customer/portal/2/user/login?destination=portal%2F2) und stelle einen Wunsch als Anfrage. Wenn Du zum Beispiel merkst, dass Dir in der Unterrichtspraxis eine Funktion fehlt, Du aber noch einmal überprüfen möchtest, ob diese Funktionen wirklich noch nicht existiert, kannst Du hier auch im Wiki detaillierte Anleitungen zu den meisten Features finden. Neben neuen Features kannst Du uns aber natürlich auch Verbesserungen an bestehenden Features vorschlagen. (Als Verbesserung würde zum Beispiel zählen, externe Daten in den Kalender zu importieren, während es für uns als neues Feature zählen würde, wenn Du zukünftig die Schul-Cloud im Dark Mode benutzen möchtest.) Unser Product-Owner überprüft dann alle Vorschläge, die uns regelmäßig eingehen und priorisiert sie für die Entwickler. Natürlich hat die Behebung von Bugs und die Arbeit an den Kernfeatures der Schul-Cloud oft Vorrang, daher können schon einmal einige Wochen vergehen, bis dein Vorschlag als Ticket bei den Entwicklern landet. Möchtest Du aber sofort mit deinem eigenen Vorschlag loslegen haben wir bei (3) eine kleine Anleitung für dich parat.
+
+## Bugfixes 
+
+Als bester Einstieg für das Entwickeln an der Schul-Cloud eignet sich jedoch das Lösen und Finden von kleineren (visuellen) Bugs. Gerade nach neuen Releases der Schul-Cloud kann es schon einmal zu kleineren Problemen kommen. Unsere aktuellen Release-Notes findest Du dabei stets [hier](https://github.com/schul-cloud/schulcloud-server/releases). Schau hier gerne einmal nach und teste insbesondere Bereiche, die neu veröffentlichte Features betreffen. Natürlich könnte auch ein Feature der Schul-Cloud plötzlich kaputt gehen, dass Du regelmäßig nutzt oder ein Feature, das Du zum ersten Mal benutzt, erscheint Dir merkwürdig. Wie auch bei Vorschlägen findest Du eine Übersicht aller Funktionen im Support Portal und im [Confluence](https://docs.schul-cloud.org/display/SCDOK) und sonst kannst Du uns den Bug natürlich gerne im Ticketsystem melden. Hast Du dich bei uns bereits als Entwickler registriert, kannst Du den Bug natürlich auch gerne selbst lösen!
+
+## Eigene Features umsetzen
+
+Hier findest Du eine Anleitung wie du als Entwickler am einfachsten loslegen kannst. Unter [System Dashboard - Ticketsystem Schul-Cloud](https://ticketsystem.schul-cloud.org/secure/Dashboard.jspa) findest Du dabei unser Ticketsystem. Du kannst dabei auch ohne Anmeldung Tickets einsehen. Wenn Du allerdings aktiv mitarbeiten möchtest, ist es besser, wenn Du dich [hier](https://ticketsystem.schul-cloud.org/secure/ContactAdministrators!default.jspa) registrierst. Schreib uns einfach deinen Namen und deine E-Mail und wir nehmen Dich auf. 
+
+Von nun an kannst Du:
+
+a. Eigene Tickets erstellen. Wenn Du z.B Storys für neue Features erstellst, ist es natürlich trotzdem sinnvoll, wenn Du uns vorher einmal kontaktierst und wir geben dir so schnell wie möglich Feedback, ob sich dein Einsatz hier lohnt. Das sollte Werktags, nur wenige Stunden dauern, bevor wir dir eine Rückmeldung geben.
+b. Ein Ticket erstellen für eine Funktion, die Du bereits programmiert hast. Wie bei a) melde dich einfach bei uns und wir geben dir Feedback und können dich gerne einem Sprint zur Veröffentlichung hinzufügen.
+c. Tickets auswählen, die Du selbst bearbeiten möchtest. Die beste Methode wäre es Tickets/Wünsche zu bearbeiten, die unser Product Owner bereits im Kanban Board priorisiert hat. Du findest sie im Ticketsystem dann unter Storys und Du kannst sie dir selbst als Entwickler zuweisen. Wenn Dir eine Story gefällt, die zur Entwicklung freigegeben wurde und die sich Backlog befindest, kannst Du aber natürlich auch hier eine beliebige Auswahl vornehmen
+d.  eigene Module oder größere Features programmieren. Wenn ihr als Informatik-AG der sogar als Projekt für einen Kurs an der Uni ambitioniert seid, dürft ihr die Schul-Cloud natürlich auch nutzen, um ein eigenes Modul zu programmieren und die Schul-Cloud als Lernumgebung zum entwickeln nutzen. (Auch hier könnt ihr gerne unseren Support kontaktieren, wenn ihr noch Fragen habt.) Ein Beispiel für ein ganzes Modul, das Studenten entwickelt haben, wäre zum Beispiel: [GitHub - schul-cloud/gamification: A reusable microservice for gamification.](https://github.com/schul-cloud/gamification)
