@@ -87,9 +87,4 @@ export default {};
 
 <style lang="scss" scoped>
 @import "@styles";
-
-p {
-	font-size: var(--text-lg);
-	line-height: var(--line-height-lg);
-}
 </style>
