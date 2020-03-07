@@ -37,7 +37,7 @@
 		"test:unit:watch": "npm run test:unit -- --watch --notify --coverage",
 		"test:screenshot:jest": "npx jest --config tests/screenshot/jest.config.js",
 		"test:screenshot": "npx start-test start:storybook 4001 test:screenshot:jest",
-		"test:screenshot:ci": "npx start-test start:storybook 4001 \\\"npm run test:screenshot:jest -- --ci\\\"",
+		"test:screenshot:ci": "npx start-test start:storybook 4001 \"npm run test:screenshot:jest -- --ci\"",
 		"test:ci": "npx run-s test:*:ci",
 		"test": "npm run test:unit"
 	},
