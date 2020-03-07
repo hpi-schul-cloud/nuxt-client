@@ -40,6 +40,10 @@ jobs:
       - name: npm run test:screenshot
         run: npm run test:screenshot
       - uses: actions/upload-artifact@v1
+        with:
+          name: screenshot-diff
+          path: tests/screenshot/__image_snapshots__
+      - uses: actions/upload-artifact@v1
         if: failure()
         with:
           name: screenshot-diff
