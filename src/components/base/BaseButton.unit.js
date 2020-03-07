@@ -33,6 +33,17 @@ describe("@components/BaseButton", () => {
 		expect(wrapper.find("button").exists()).toBe(true);
 		expect(wrapper.find(".is-secondary").exists()).toBe(false);
 	});
+
+	it("throws an error for invalid designs", async () => {
+		expect(() => {
+			mount(BaseButton, {
+				propsData: {
+					design: "some Invalid Design",
+				},
+			});
+		}).toThrow(/the design .* is not available/);
+	});
+
 	it("Generates a primary button", () => {
 		const wrapper = mount(primaryButton);
 		expect(wrapper.find("button").exists()).toBe(true);

@@ -10,7 +10,7 @@
 		:selected-row-ids="backendTableSelection"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
-		v-on="$listeners"
+		v-on="proxyListeners"
 	>
 		<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
 			<slot :name="name" v-bind="props">
@@ -25,6 +25,21 @@ import BackendDataTable from "./BackendDataTable";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
+
+// This list defines all events that should not be proxied to the BackendDataTable.
+// This is required for events for which we override the behaviour in this component
+// and to prevent duplicate triggering in the parent component.
+const eventProxyBlacklist = [
+	"update:selection",
+	"update:current-page",
+	"update:currentPage",
+	"update:sort-by",
+	"update:sortBy",
+	"update:sort-order",
+	"update:sortOrder",
+	"update:rows-per-page",
+	"update:rowsPerPage",
+];
 
 export default {
 	components: {
@@ -66,14 +81,23 @@ export default {
 				...this.$attrs,
 			};
 		},
+		proxyListeners() {
+			return Object.fromEntries(
+				Object.entries(this.$listeners).filter(
+					([key]) => !eventProxyBlacklist.includes(key)
+				)
+			);
+		},
 		sortedData() {
 			const raw = this.data;
 
 			if (!this.sortByProxy) {
 				return raw;
 			}
-			const sortMethod = this.sortmethod || this.sort;
-			const out = sortMethod(raw, this.sortByProxy, this.sortOrderProxy);
+			const sortMethod = this.sortMethod || this.sort;
+			const out = sortMethod(raw, this.sortByProxy, this.sortOrderProxy, {
+				getValueByPath,
+			});
 
 			return out;
 		},

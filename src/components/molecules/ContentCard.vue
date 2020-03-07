@@ -37,7 +37,7 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
-						<base-button design="icon text">
+						<base-button design="text icon">
 							<base-icon
 								class="footer__content-icon"
 								source="material"
@@ -47,7 +47,7 @@
 
 						<div class="footer__icon-container">
 							<div class="footer_more">
-								<base-button design="icon text" @click="openMenu">
+								<base-button design="text icon" @click="openMenu">
 									<base-icon
 										class="footer__content-icon"
 										source="material"

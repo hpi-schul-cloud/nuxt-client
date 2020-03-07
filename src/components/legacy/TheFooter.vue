@@ -65,7 +65,7 @@ export default {
 							text: "HPI",
 						},
 						{
-							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
+							href: defaultDocuments.specificFiles(this.school?.documentBaseDir)
 								.privacyExemplary,
 							text: "Muster-Schulen",
 							target: "_blank",

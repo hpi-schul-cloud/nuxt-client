@@ -1,6 +1,6 @@
 @import "@styles";
 
-.button {
+button {
 	// typo
 	--button-font-weight: var(--font-weight-bold);
 	--button-line-height: var(--line-height-md);
@@ -122,14 +122,13 @@
 	background: var(--button-background);
 	border: 1px solid transparent;
 	border-radius: var(--radius-sm);
-	transition: all var(--duration-transition-medium)
-		cubic-bezier(0.23, 1, 0.32, 1);
+	transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+	transition-duration: var(--duration-transition-medium);
+	transition-property: background, box-shadow;
 
-	> * {
+	&:not(.is-icon) > * {
+		// removes margin from icon button
 		margin-right: var(--space-xs);
-	}
-	&:last-child {
-		margin-right: initial;
 	}
 
 	&:hover {
