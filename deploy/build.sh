@@ -38,7 +38,8 @@ dockerPush(){
 buildClient(){
 	# write version file
 	# JS syntax is required so we can import it
-	echo "module.exports={sha:'$TRAVIS_COMMIT', branch:'$TRAVIS_BRANCH', message:'$TRAVIS_COMMIT_MESSAGE'};" > ../version.js
+	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${TRAVIS_BRANCH//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
+
 	cat ../version.js
 
 	docker build \
