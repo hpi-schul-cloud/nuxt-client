@@ -90,7 +90,7 @@
 			</div>
 		</div>
 		<div class="resource__floating">
-			<floating-fab icon="arrow_drop_up" aria-label="floating button" />
+			<floating-fab icon="add" aria-label="floating button" />
 		</div>
 	</div>
 </template>
