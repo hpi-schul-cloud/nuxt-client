@@ -17,6 +17,15 @@ export const actions = {
 	},
 };
 
+const initialState = () => ({
+	resources: {
+		facettes: [],
+		ignored: null,
+		nodes: [],
+		pagination: {},
+	},
+});
+
 export const mutations = {
 	setResources(state, payload) {
 		state.resources = payload;
@@ -28,14 +37,9 @@ export const mutations = {
 			pagination: payload.pagination,
 		};
 	},
+	clearResources(state) {
+		state.resources = initialState().resources;
+	},
 };
 
-export const state = () => ({
-	resources: {
-		facettes: [],
-		ignored: null,
-		nodes: [],
-		pagination: {},
-	},
-	resource: {},
-});
+export const state = initialState();

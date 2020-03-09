@@ -126,6 +126,7 @@ export default {
 				this.$router.push({
 					query: { q: undefined },
 				});
+				this.$store.commit("content/clearResources");
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
