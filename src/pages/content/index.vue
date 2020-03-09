@@ -20,7 +20,6 @@
 							: 'content__searchbar'
 					"
 					placeholder="Lernstore durchsuchen"
-					:loading="loading"
 					@keyup:enter="transitionHandler"
 				/>
 				<transition name="fade">
@@ -38,7 +37,7 @@
 							</span>
 						</p>
 						<div
-							v-if="resources.nodes.length === 0 && !loading"
+							v-if="resources.nodes.length === 0"
 							class="content__no-results"
 						>
 							<content-empty-state />
@@ -51,11 +50,6 @@
 								:resource="resource"
 							/>
 						</base-grid>
-						<base-spinner
-							v-if="loading && resources.nodes.length !== 0"
-							class="content__spinner"
-							color="var(--color-primary)"
-						/>
 					</span>
 				</transition>
 			</div>
@@ -102,9 +96,6 @@ export default {
 			loading: (state) => {
 				return state.loading;
 			},
-			stateQuery: (state) => {
-				return state.searchQuery;
-			},
 		}),
 		query() {
 			const query = {
@@ -130,34 +121,34 @@ export default {
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
-			if (to === from) {
+			if (to === from || !to) {
+				this.firstSearch = true;
+				this.$router.push({
+					query: { q: undefined },
+				});
 				return;
 			}
-			/**
-			 * FOR ALTERNATIVE IMPLEMENTATION:
-			 * Activate transition after 3 key presses
-			 *
-			 * if (this.searchQuery.length >= 3) {
-			 *	this.transitionHandler();
-			 * }
-			 */
 			this.$options.debounce = setInterval(() => {
 				clearInterval(this.$options.debounce);
 				this.searchContent();
+				this.$router.push({
+					query: {
+						q: this.searchQuery,
+					},
+				});
 			}, 500);
 		},
 		resources() {
 			return this.resources;
 		},
 	},
-	beforeRouteEnter(to, from, next) {
-		next((vm) => {
-			if (from.name === "content-id") {
-				vm.searchQuery = vm.stateQuery;
-				vm.firstSearch = false;
-				vm.activateTransition = true;
-			}
-		});
+	mounted() {
+		const initialSearchQuery = this.$route.query.q;
+		if (initialSearchQuery) {
+			this.searchQuery = initialSearchQuery;
+			this.firstSearch = false;
+			this.activateTransition = true;
+		}
 	},
 	methods: {
 		async addContent() {
