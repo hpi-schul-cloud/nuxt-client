@@ -199,8 +199,8 @@ export default {
 		width: 100%;
 		padding: var(--space-md) 0;
 		margin: var(--space-md) 0;
-		transition: transform 0.7s;
-		transform: scale(1) translateY(0%);
+		transition: margin 0.7s;
+		transform: scale(1);
 	}
 	&__total {
 		display: flex;
@@ -224,8 +224,8 @@ export default {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
-		margin: var(--space-md) 0;
-		transform: scale(1.3) translateY(250%);
+		margin: var(--space-xl-5) var(--space-md) 0;
+		transform: scale(1.3);
 	}
 }
 

@@ -96,7 +96,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import FloatingFab from "@components/molecules/FloatingFab";
 import dayjs from "dayjs";
 
@@ -106,6 +105,11 @@ export default {
 	},
 
 	layout: "loggedInFull",
+	async asyncData({ store, params }) {
+		return {
+			resource: await store.dispatch("content/getResourceMetadata", params.id),
+		};
+	},
 	data() {
 		return {
 			dayjs,
@@ -113,11 +117,6 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("content", {
-			resource: (state) => {
-				return state.resource;
-			},
-		}),
 		bookmarkIconSelector() {
 			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},

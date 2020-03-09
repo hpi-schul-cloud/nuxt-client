@@ -29,9 +29,7 @@
 						:to="{ name: 'content-id', params: { id: resource.ref.id } }"
 						:no-style="true"
 					>
-						<h6 class="content__title" @click="setResource">{{
-							resource.name
-						}}</h6>
+						<h6 class="content__title">{{ resource.name }}</h6>
 					</base-link>
 				</div>
 			</template>
@@ -143,9 +141,6 @@ export default {
 		},
 		openMenu() {
 			this.menuActive = true;
-		},
-		setResource() {
-			this.$store.dispatch("content/setResource", this.resource);
 		},
 		handleCopy() {},
 		handleShare() {},
