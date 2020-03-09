@@ -25,10 +25,13 @@
 						</div>
 					</div>
 					<base-link
-						:to="{ name: 'content-id', params: { id: resource.name } }"
+						class="title-link"
+						:to="{ name: 'content-id', params: { id: resource.ref.id } }"
 						:no-style="true"
 					>
-						<h6 class="content__title">{{ resource.name }}</h6>
+						<h6 class="content__title" @click="setResource">{{
+							resource.name
+						}}</h6>
 					</base-link>
 				</div>
 			</template>
@@ -140,6 +143,9 @@ export default {
 		},
 		openMenu() {
 			this.menuActive = true;
+		},
+		setResource() {
+			this.$store.dispatch("content/setResource", this.resource);
 		},
 		handleCopy() {},
 		handleShare() {},
@@ -259,5 +265,9 @@ export default {
 		justify-content: flex-end;
 		width: 100%;
 	}
+}
+
+.title-link {
+	border: none;
 }
 </style>

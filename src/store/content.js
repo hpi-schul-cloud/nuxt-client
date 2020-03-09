@@ -5,6 +5,7 @@ export const actions = {
 		const res = await this.$axios.$get("/edu-sharing", {
 			params: query,
 		});
+		commit("setQuery", payload.searchQuery);
 		commit("setResources", res);
 		commit("setLoading", false);
 	},
@@ -16,6 +17,9 @@ export const actions = {
 		});
 		commit("addResources", res);
 		commit("setLoading", false);
+	},
+	setResource({ commit }, payload = {}) {
+		commit("setResource", payload);
 	},
 };
 
@@ -33,6 +37,12 @@ export const mutations = {
 	setLoading(state, type) {
 		state.loading = type;
 	},
+	setResource(state, payload) {
+		state.resource = payload;
+	},
+	setQuery(state, payload) {
+		state.searchQuery = payload;
+	},
 };
 
 export const state = () => ({
@@ -42,5 +52,7 @@ export const state = () => ({
 		nodes: [],
 		pagination: {},
 	},
+	searchQuery: "",
 	loading: false,
+	resource: {},
 });

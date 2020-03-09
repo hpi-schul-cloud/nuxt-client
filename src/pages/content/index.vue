@@ -59,7 +59,7 @@
 					</span>
 				</transition>
 			</div>
-			<edusharing-footer />
+			<edusharing-footer class="content__footer" />
 		</div>
 	</section>
 </template>
@@ -91,6 +91,7 @@ export default {
 			backToTopScrollYLimit: 115,
 			firstSearch: true,
 			activateTransition: false,
+			prevRoute: null,
 		};
 	},
 	computed: {
@@ -100,6 +101,9 @@ export default {
 			},
 			loading: (state) => {
 				return state.loading;
+			},
+			stateQuery: (state) => {
+				return state.searchQuery;
 			},
 		}),
 		query() {
@@ -146,6 +150,15 @@ export default {
 			return this.resources;
 		},
 	},
+	beforeRouteEnter(to, from, next) {
+		next((vm) => {
+			if (from.name === "content-id") {
+				vm.searchQuery = vm.stateQuery;
+				vm.firstSearch = false;
+				vm.activateTransition = true;
+			}
+		});
+	},
 	methods: {
 		async addContent() {
 			this.query["from"] += this.query["count"];
@@ -175,7 +188,6 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	height: 100%;
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -202,6 +214,9 @@ export default {
 	}
 	&__spinner {
 		margin: var(--space-lg) 0;
+	}
+	&__footer {
+		align-self: flex-end;
 	}
 }
 
