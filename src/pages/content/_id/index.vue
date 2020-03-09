@@ -23,6 +23,21 @@
 						:icon="bookmarkIconSelector"
 					/>
 				</base-button>
+
+				<div>
+					<base-button design="none">
+						<base-icon
+							class="resource__img-container--icon"
+							source="material"
+							icon="more_vert"
+						/>
+					</base-button>
+					<context-menu
+						:show.sync="menuActive"
+						anchor="bottom-right"
+						:actions="actions"
+					/>
+				</div>
 			</div>
 
 			<img :src="resource.preview.url" alt="content-preview-img" />
