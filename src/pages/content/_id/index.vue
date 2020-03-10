@@ -16,6 +16,7 @@
 					/>
 				</base-button>
 
+				<!--
 				<base-button design="none" @click="bookmarkHandler">
 					<base-icon
 						class="resource__img-container--icon"
@@ -23,6 +24,7 @@
 						:icon="bookmarkIconSelector"
 					/>
 				</base-button>
+				-->
 
 				<div>
 					<base-button design="none">

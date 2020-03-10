@@ -5,6 +5,7 @@
 				<div class="content">
 					<div class="content__img">
 						<div class="img-container">
+							<!--
 							<base-button
 								design="none"
 								class="content__img-checkbox"
@@ -12,6 +13,7 @@
 							>
 								<base-icon source="material" :icon="checkboxIconSelector" />
 							</base-button>
+							-->
 
 							<div class="content__img-background-gradient" />
 
@@ -37,6 +39,7 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
+						<!--
 						<base-button design="text icon" @click="bookmarkHandler">
 							<base-icon
 								class="footer__content-icon"
@@ -44,6 +47,7 @@
 								:icon="bookmarkIconSelector"
 							/>
 						</base-button>
+						-->
 
 						<div class="footer__icon-container">
 							<div class="footer_more">
