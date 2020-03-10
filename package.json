@@ -63,7 +63,7 @@
 		"vue": "^2.6.11",
 		"vue-echarts": "^4.0.4",
 		"vue-flatpickr-component": "^8.1.5",
-		"vue-i18n": "^8.15.4",
+		"vue-i18n": "^8.15.5",
 		"vue-loader": "^15.9.0",
 		"vue-mq": "^1.0.1",
 		"vue-multiselect": "^2.1.6",
