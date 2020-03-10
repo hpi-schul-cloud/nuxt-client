@@ -10,7 +10,7 @@ import {
 import { action } from "@storybook/addon-actions";
 
 import DataTable from "./DataTable";
-import FilterMenuStandalone from "./FilterMenuStandalone";
+import DataFilter from "./DataFilter";
 import notes from "./DataTable.md";
 
 import {
@@ -65,7 +65,7 @@ storiesOf("6 Organisms/DataTable", module)
 					"asc"
 				),
 			}),
-			components: { DataTable, FilterMenuStandalone },
+			components: { DataTable, DataFilter },
 			methods: {
 				onUpdateCurrentPage: action("@update:current-page"),
 				onUpdateRowsPerPage: action("@update:rows-per-page"),
@@ -76,7 +76,7 @@ storiesOf("6 Organisms/DataTable", module)
 			},
 			template: `
 			<div>
-				<FilterMenuStandalone
+				<DataFilter
 					:data="randomData"
 					:filters="filters"
 					:query="query"

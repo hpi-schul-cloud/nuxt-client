@@ -107,7 +107,7 @@ export default {
 				if (!this.backendFiltering) {
 					this.$emit("update:filtered-data", this.filteredData);
 				} else {
-					// ToDo: Move parser from FilterUI to FilterMenuStandalone and emit correct query
+					// ToDo: Move parser from FilterUI to DataFilter and emit correct query
 
 					const query = {};
 
