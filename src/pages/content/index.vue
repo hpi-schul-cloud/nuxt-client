@@ -1,7 +1,7 @@
 <template>
 	<section class="content">
 		<div
-			v-if="scrollY > backToTopScrollYLimit && resources.nodes.length > 0"
+			v-if="scrollY > backToTopScrollYLimit && resources.data.length > 0"
 			class="content__back-to-top"
 		>
 			<floating-fab
@@ -26,25 +26,22 @@
 					<span v-if="!firstSearch" class="content__container">
 						<p class="content__total">
 							<span v-if="searchQuery.length > 0">
-								{{ resources.pagination.total }}
+								{{ resources.total }}
 								{{ $t("pages.content.index.search_results") }} "{{
 									searchQuery
 								}}"
 							</span>
 							<span v-else>
-								{{ resources.pagination.total }}
+								{{ resources.total }}
 								{{ $t("pages.content.index.search_resources") }}
 							</span>
 						</p>
-						<div
-							v-if="resources.nodes.length === 0"
-							class="content__no-results"
-						>
+						<div v-if="resources.data.length === 0" class="content__no-results">
 							<content-empty-state />
 						</div>
 						<base-grid column-width="14rem">
 							<content-card
-								v-for="resource of resources.nodes"
+								v-for="resource of resources.data"
 								:key="resource.ref.id"
 								class="card"
 								:resource="resource"
@@ -99,8 +96,8 @@ export default {
 		}),
 		query() {
 			const query = {
-				count: 10,
-				from: 0,
+				$limit: 10,
+				$skip: 0,
 			};
 			if (this.searchQuery) {
 				query["searchQuery"] = this.searchQuery;
@@ -153,8 +150,10 @@ export default {
 	},
 	methods: {
 		async addContent() {
-			this.query["from"] += this.query["count"];
-			await this.$store.dispatch("content/addResources", this.query);
+			if (this.query.skip < this.resources.total) {
+				this.query.$skip += this.query.$limit;
+				await this.$store.dispatch("content/addResources", this.query);
+			}
 		},
 		async searchContent() {
 			await this.$store.dispatch("content/getResources", this.query);
