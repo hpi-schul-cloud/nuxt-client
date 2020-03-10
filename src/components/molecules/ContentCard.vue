@@ -51,7 +51,7 @@
 
 						<div class="footer__icon-container">
 							<div class="footer_more">
-								<base-button design="text icon" @click="openMenu">
+								<base-button design="text icon" @click="menuActive = true">
 									<base-icon
 										class="footer__content-icon"
 										source="material"
@@ -142,9 +142,6 @@ export default {
 		},
 		bookmarkHandler() {
 			this.isBookmarked = !this.isBookmarked;
-		},
-		openMenu() {
-			this.menuActive = true;
 		},
 		handleCopy() {},
 		handleShare() {},

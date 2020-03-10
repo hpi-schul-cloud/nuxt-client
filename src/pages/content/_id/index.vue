@@ -32,11 +32,12 @@
 							class="resource__img-container--icon"
 							source="material"
 							icon="more_vert"
+							@click="menuActive = !menuActive"
 						/>
 					</base-button>
 					<context-menu
 						:show.sync="menuActive"
-						anchor="bottom-right"
+						anchor="top-right"
 						:actions="actions"
 					/>
 				</div>
@@ -99,11 +100,13 @@
 
 <script>
 import FloatingFab from "@components/molecules/FloatingFab";
+import ContextMenu from "@components/molecules/ContextMenu";
 import dayjs from "dayjs";
 
 export default {
 	components: {
 		FloatingFab,
+		ContextMenu,
 	},
 
 	layout: "loggedInFull",
@@ -116,6 +119,29 @@ export default {
 		return {
 			dayjs,
 			isBookmarked: false,
+			menuActive: false,
+			actions: [
+				{
+					event: "copy",
+					text: this.$t("components.molecules.ContentCardMenu.action.copy"),
+					icon: "file_copy",
+				},
+				{
+					event: "share",
+					text: this.$t("components.molecules.ContentCardMenu.action.share"),
+					icon: "share",
+				},
+				{
+					event: "delete",
+					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
+					icon: "delete_outline",
+				},
+				{
+					event: "report",
+					text: this.$t("components.molecules.ContentCardMenu.action.report"),
+					icon: "report",
+				},
+			],
 		};
 	},
 	computed: {
