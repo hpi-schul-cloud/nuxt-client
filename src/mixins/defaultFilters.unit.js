@@ -9,127 +9,146 @@ const wrapper = mount(Component, {
 });
 
 describe("defaultFiltersMixin", () => {
-	it("can filter strings", () => {
-		expect(wrapper.vm.filterTextDefault("test", "te")).toBe(true);
-		expect(wrapper.vm.filterTextDefault("test", "a")).toBe(false);
-		expect(wrapper.vm.filterTextDefault("Test", "te")).toBe(true);
-		expect(wrapper.vm.filterTextDefault(11, 1)).toBe(true);
-		expect(wrapper.vm.filterTextDefault(11, 2)).toBe(false);
+	describe("it can filter strings", () => {
+		it.each([
+			["test", "te", true],
+			["test", "a", false],
+			["Test", "te", true],
+			[11, 1, true],
+			[11, 2, false],
+		])("'%s' contains '%s' is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterTextDefault(a, b)).toBe(expected);
+			expect(wrapper.vm.filterTextContains(a, b)).toBe(expected);
+		});
 
-		expect(wrapper.vm.filterTextContains("test", "te")).toBe(true);
-		expect(wrapper.vm.filterTextContains("test", "a")).toBe(false);
-		expect(wrapper.vm.filterTextContains("Test", "te")).toBe(true);
-		expect(wrapper.vm.filterTextContains(11, 1)).toBe(true);
-		expect(wrapper.vm.filterTextContains(11, 2)).toBe(false);
-
-		expect(wrapper.vm.filterTextEquals("test", "test")).toBe(true);
-		expect(wrapper.vm.filterTextEquals("test", "te")).toBe(false);
-		expect(wrapper.vm.filterTextEquals("Test", "test")).toBe(true);
+		it.each([
+			["test", "test", true],
+			["test", "te", false],
+			["Test", "test", true],
+		])("'%s' equals '%s' is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterTextEquals(a, b)).toBe(expected);
+		});
 	});
-	it("can filter numbers", () => {
-		expect(wrapper.vm.filterNumberDefault(1, 1)).toBe(true);
-		expect(wrapper.vm.filterNumberDefault(1, 2)).toBe(false);
-		expect(wrapper.vm.filterNumberDefault("11", "11")).toBe(true);
-		expect(wrapper.vm.filterNumberDefault("11", "12")).toBe(false);
 
-		expect(wrapper.vm.filterNumberEqual(1, 1)).toBe(true);
-		expect(wrapper.vm.filterNumberEqual(1, 2)).toBe(false);
-		expect(wrapper.vm.filterNumberEqual("11", "11")).toBe(true);
-		expect(wrapper.vm.filterNumberEqual("11", "12")).toBe(false);
+	describe("it can filter numbers", () => {
+		it.each([
+			[1, 1, true],
+			[1, 2, false],
+			["11", "11", true],
+			["11", "12", false],
+		])("%s is equal %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterNumberDefault(a, b)).toBe(expected);
+			expect(wrapper.vm.filterNumberEqual(a, b)).toBe(expected);
+		});
 
-		expect(wrapper.vm.filterNumberGreater(2, 1)).toBe(true);
-		expect(wrapper.vm.filterNumberGreater(1, 1)).toBe(false);
-		expect(wrapper.vm.filterNumberGreater(0, 1)).toBe(false);
-		expect(wrapper.vm.filterNumberGreater("2", "1")).toBe(true);
-		expect(wrapper.vm.filterNumberGreater("1", "1")).toBe(false);
-		expect(wrapper.vm.filterNumberGreater("0", "1")).toBe(false);
+		it.each([
+			[2, 1, true],
+			[1, 1, false],
+			[0, 1, false],
+			["2", "1", true],
+			["1", "1", false],
+			["0", "1", false],
+		])("%s is greater %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterNumberGreater(a, b)).toBe(expected);
+		});
 
-		expect(wrapper.vm.filterNumberGreaterEqual(2, 1)).toBe(true);
-		expect(wrapper.vm.filterNumberGreaterEqual(1, 1)).toBe(true);
-		expect(wrapper.vm.filterNumberGreaterEqual(0, 1)).toBe(false);
-		expect(wrapper.vm.filterNumberGreaterEqual("2", "1")).toBe(true);
-		expect(wrapper.vm.filterNumberGreaterEqual("1", "1")).toBe(true);
-		expect(wrapper.vm.filterNumberGreaterEqual("0", "1")).toBe(false);
+		it.each([
+			[2, 1, true],
+			[1, 1, true],
+			[0, 1, false],
+			["2", "1", true],
+			["1", "1", true],
+			["0", "1", false],
+		])("%s is greater or equal %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterNumberGreaterEqual(a, b)).toBe(expected);
+		});
 
-		expect(wrapper.vm.filterNumberLess(1, 2)).toBe(true);
-		expect(wrapper.vm.filterNumberLess(1, 1)).toBe(false);
-		expect(wrapper.vm.filterNumberLess(2, 1)).toBe(false);
-		expect(wrapper.vm.filterNumberLess("1", "2")).toBe(true);
-		expect(wrapper.vm.filterNumberLess("1", "1")).toBe(false);
-		expect(wrapper.vm.filterNumberLess("2", "1")).toBe(false);
+		it.each([
+			[1, 2, true],
+			[1, 1, false],
+			[2, 1, false],
+			["1", "2", true],
+			["1", "1", false],
+			["2", "1", false],
+		])("%s is less %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterNumberLess(a, b)).toBe(expected);
+		});
 
-		expect(wrapper.vm.filterNumberLessEqual(1, 2)).toBe(true);
-		expect(wrapper.vm.filterNumberLessEqual(1, 1)).toBe(true);
-		expect(wrapper.vm.filterNumberLessEqual(2, 1)).toBe(false);
-		expect(wrapper.vm.filterNumberLessEqual("1", "2")).toBe(true);
-		expect(wrapper.vm.filterNumberLessEqual("1", "1")).toBe(true);
-		expect(wrapper.vm.filterNumberLessEqual("2", "1")).toBe(false);
+		it.each([
+			[1, 2, true],
+			[1, 1, true],
+			[2, 1, false],
+			["1", "2", true],
+			["1", "1", true],
+			["2", "1", false],
+		])("%s is less or equal %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterNumberLessEqual(a, b)).toBe(expected);
+		});
 	});
-	it("can filter options", () => {
-		expect(
-			wrapper.vm.filterSelectDefault("test1", [
-				{ checked: true, value: "test1" },
-				{ checked: true, value: "test2" },
-			])
-		).toBe(true);
-		expect(
-			wrapper.vm.filterSelectDefault("test2", [
-				{ checked: true, value: "test1" },
-				{ checked: true, value: "test2" },
-			])
-		).toBe(true);
-		expect(
-			wrapper.vm.filterSelectDefault("test3", [
-				{ checked: true, value: "test1" },
-				{ checked: true, value: "test2" },
-			])
-		).toBe(false);
+
+	describe("it can filter options", () => {
+		it.each([
+			[
+				"test1",
+				[
+					{ checked: true, value: "test1" },
+					{ checked: true, value: "test2" },
+				],
+				true,
+			],
+			[
+				"test2",
+				[
+					{ checked: true, value: "test1" },
+					{ checked: true, value: "test2" },
+				],
+				true,
+			],
+			[
+				"test3",
+				[
+					{ checked: true, value: "test1" },
+					{ checked: true, value: "test2" },
+				],
+				false,
+			],
+		])("%s is selected in %o is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterSelectDefault(a, b)).toBe(expected);
+		});
 	});
-	it("can filter dates", () => {
-		expect(
-			wrapper.vm.filterDateDefault("2019-01-01 01:00", "2019-01-01 01:00")
-		).toBe(true);
-		expect(
-			wrapper.vm.filterDateDefault("2019-01-01 01:00", "2019-01-01 02:00")
-		).toBe(false);
-		expect(wrapper.vm.filterDateDefault("2019-01-01", "2019-01-01")).toBe(true);
-		expect(wrapper.vm.filterDateDefault("2019-01-01", "2019-01-02")).toBe(
-			false
-		);
 
-		expect(
-			wrapper.vm.filterDateEqual("2019-01-01 01:00", "2019-01-01 01:00")
-		).toBe(true);
-		expect(
-			wrapper.vm.filterDateEqual("2019-01-01 01:00", "2019-01-01 02:00")
-		).toBe(false);
-		expect(wrapper.vm.filterDateEqual("2019-01-01", "2019-01-01")).toBe(true);
-		expect(wrapper.vm.filterDateEqual("2019-01-01", "2019-01-02")).toBe(false);
+	describe("it can filter dates", () => {
+		it.each([
+			["2019-01-01 01:00", "2019-01-01 01:00", true],
+			["2019-01-01 01:00", "2019-01-01 02:00", false],
+			["2019-01-01", "2019-01-01", true],
+			["2019-01-01", "2019-01-02", false],
+		])("%s is equal to %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterDateDefault(a, b)).toBe(expected);
+			expect(wrapper.vm.filterDateEqual(a, b)).toBe(expected);
+		});
 
-		expect(
-			wrapper.vm.filterDateBefore("2019-01-01 01:00", "2019-01-01 01:00")
-		).toBe(true);
-		expect(
-			wrapper.vm.filterDateBefore("2019-01-01 01:00", "2019-01-01 02:00")
-		).toBe(true);
-		expect(wrapper.vm.filterDateBefore("2019-01-01", "2019-01-01")).toBe(true);
-		expect(wrapper.vm.filterDateBefore("2019-01-01", "2019-01-02")).toBe(true);
-		expect(
-			wrapper.vm.filterDateBefore("2019-01-01 02:00", "2019-01-01 01:00")
-		).toBe(false);
-		expect(wrapper.vm.filterDateBefore("2019-01-02", "2019-01-01")).toBe(false);
+		it.each([
+			["2019-01-01 01:00", "2019-01-01 01:00", true],
+			["2019-01-01 01:00", "2019-01-01 02:00", true],
+			["2019-01-01", "2019-01-01", true],
+			["2019-01-01", "2019-01-02", true],
+			["2019-01-01 02:00", "2019-01-01 01:00", false],
+			["2019-01-02", "2019-01-01", false],
+		])("%s is before %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterDateBefore(a, b)).toBe(expected);
+		});
 
-		expect(
-			wrapper.vm.filterDateAfter("2019-01-01 01:00", "2019-01-01 01:00")
-		).toBe(true);
-		expect(
-			wrapper.vm.filterDateAfter("2019-01-01 02:00", "2019-01-01 01:00")
-		).toBe(true);
-		expect(wrapper.vm.filterDateAfter("2019-01-01", "2019-01-01")).toBe(true);
-		expect(wrapper.vm.filterDateAfter("2019-01-02", "2019-01-01")).toBe(true);
-		expect(
-			wrapper.vm.filterDateAfter("2019-01-01 01:00", "2019-01-01 02:00")
-		).toBe(false);
-		expect(wrapper.vm.filterDateAfter("2019-01-01", "2019-01-02")).toBe(false);
+		it.each([
+			["2019-01-01 01:00", "2019-01-01 02:00", false],
+			["2019-01-01 01:00", "2019-01-01 01:00", true],
+			["2019-01-01 02:00", "2019-01-01 01:00", true],
+			["2019-01-01", "2019-01-01", true],
+			["2019-01-02", "2019-01-01", true],
+			["2019-01-01 01:00", "2019-01-01 02:00", false],
+			["2019-01-01", "2019-01-02", false],
+		])("%s is after %s is %s", (a, b, expected) => {
+			expect(wrapper.vm.filterDateAfter(a, b)).toBe(expected);
+		});
 	});
 });
