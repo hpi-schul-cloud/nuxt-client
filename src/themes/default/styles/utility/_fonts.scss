@@ -4,30 +4,32 @@
 	font-family: "PT Sans";
 	font-style: normal;
 	font-weight: 400;
-	src: url("..fonts/PT_Sans-Web-Regular.eot"); /* IE9 Compat Modes */
+	src: url("~assets/fonts/PT_Sans-Web-Regular.eot"); /* IE9 Compat Modes */
 	src: local("PT Sans"), local("PTSans-Regular"),
-		url("..fonts/PT_Sans-Web-Regular.eot?#iefix") format("embedded-opentype"),
-		/* IE6-IE8 */ url("..fonts/PT_Sans-Web-Regular.woff2") format("woff2"),
-		/* Super Modern Browsers */ url("..fonts/PT_Sans-Web-Regular.woff")
+		url("~assets/fonts/PT_Sans-Web-Regular.eot?#iefix")
+			format("embedded-opentype"),
+		/* IE6-IE8 */ url("~assets/fonts/PT_Sans-Web-Regular.woff2") format("woff2"),
+		/* Super Modern Browsers */ url("~assets/fonts/PT_Sans-Web-Regular.woff")
 			format("woff"),
-		/* Modern Browsers */ url("..fonts/PT_Sans-Web-Regular.ttf")
+		/* Modern Browsers */ url("~assets/fonts/PT_Sans-Web-Regular.ttf")
 			format("truetype"),
-		/* Safari, Android, iOS */ url("..fonts/PT_Sans-Web-Regular.svg#PTSans")
-			format("svg"); /* Legacy iOS */
+		/* Safari, Android, iOS */
+			url("~assets/fonts/PT_Sans-Web-Regular.svg#PTSans") format("svg"); /* Legacy iOS */
 }
 
 @font-face {
 	font-family: "PT Sans";
 	font-style: normal;
 	font-weight: 700;
-	src: url("..fonts/PT_Sans-Web-Bold.eot"); /* IE9 Compat Modes */
+	src: url("~assets/fonts/PT_Sans-Web-Bold.eot"); /* IE9 Compat Modes */
 	src: local("PT Sans Bold"), local("PTSans-Bold"),
-		url("..fonts/PT_Sans-Web-Bold.eot?#iefix") format("embedded-opentype"),
-		/* IE6-IE8 */ url("..fonts/PT_Sans-Web-Bold.woff2") format("woff2"),
-		/* Super Modern Browsers */ url("..fonts/PT_Sans-Web-Bold.woff")
+		url("~assets/fonts/PT_Sans-Web-Bold.eot?#iefix") format("embedded-opentype"),
+		/* IE6-IE8 */ url("~assets/fonts/PT_Sans-Web-Bold.woff2") format("woff2"),
+		/* Super Modern Browsers */ url("~assets/fonts/PT_Sans-Web-Bold.woff")
 			format("woff"),
-		/* Modern Browsers */ url("..fonts/PT_Sans-Web-Bold.ttf") format("truetype"),
-		/* Safari, Android, iOS */ url("..fonts/PT_Sans-Web-Bold.svg#PTSans")
+		/* Modern Browsers */ url("~assets/fonts/PT_Sans-Web-Bold.ttf")
+			format("truetype"),
+		/* Safari, Android, iOS */ url("~assets/fonts/PT_Sans-Web-Bold.svg#PTSans")
 			format("svg"); /* Legacy iOS */
 }
 
@@ -35,33 +37,38 @@
 	font-family: "PT Sans Narrow";
 	font-style: normal;
 	font-weight: 400;
-	src: url("fonts/PT_Sans-Narrow-Web-Regular.eot"); /* IE9 Compat Modes */
+	src: url("~assets/fonts/PT_Sans-Narrow-Web-Regular.eot"); /* IE9 Compat Modes */
 	src: local("PT Sans Narrow"), local("PTSans-Narrow"),
-		url("fonts/PT_Sans-Narrow-Web-Regular.eot?#iefix")
+		url("~assets/fonts/PT_Sans-Narrow-Web-Regular.eot?#iefix")
 			format("embedded-opentype"),
-		/* IE6-IE8 */ url("fonts/PT_Sans-Narrow-Web-Regular.woff2") format("woff2"),
-		/* Super Modern Browsers */ url("fonts/PT_Sans-Narrow-Web-Regular.woff")
-			format("woff"),
-		/* Modern Browsers */ url("fonts/PT_Sans-Narrow-Web-Regular.ttf")
+		/* IE6-IE8 */ url("~assets/fonts/PT_Sans-Narrow-Web-Regular.woff2")
+			format("woff2"),
+		/* Super Modern Browsers */
+			url("~assets/fonts/PT_Sans-Narrow-Web-Regular.woff") format("woff"),
+		/* Modern Browsers */ url("~assets/fonts/PT_Sans-Narrow-Web-Regular.ttf")
 			format("truetype"),
 		/* Safari, Android, iOS */
-			url("fonts/PT_Sans-Narrow-Web-Regular.svg#PTSansNarrow") format("svg"); /* Legacy iOS */
+			url("~assets/fonts/PT_Sans-Narrow-Web-Regular.svg#PTSansNarrow")
+			format("svg"); /* Legacy iOS */
 }
 
 @font-face {
 	font-family: "PT Sans Narrow";
 	font-style: normal;
 	font-weight: 700;
-	src: url("fonts/PT_Sans-Narrow-Web-Bold.eot"); /* IE9 Compat Modes */
+	src: url("~assets/fonts/PT_Sans-Narrow-Web-Bold.eot"); /* IE9 Compat Modes */
 	src: local("PT Sans Narrow Bold"), local("PTSans-NarrowBold"),
-		url("fonts/PT_Sans-Narrow-Web-Bold.eot?#iefix") format("embedded-opentype"),
-		/* IE6-IE8 */ url("fonts/PT_Sans-Narrow-Web-Bold.woff2") format("woff2"),
-		/* Super Modern Browsers */ url("fonts/PT_Sans-Narrow-Web-Bold.woff")
-			format("woff"),
-		/* Modern Browsers */ url("fonts/PT_Sans-Narrow-Web-Bold.ttf")
+		url("~assets/fonts/PT_Sans-Narrow-Web-Bold.eot?#iefix")
+			format("embedded-opentype"),
+		/* IE6-IE8 */ url("~assets/fonts/PT_Sans-Narrow-Web-Bold.woff2")
+			format("woff2"),
+		/* Super Modern Browsers */
+			url("~assets/fonts/PT_Sans-Narrow-Web-Bold.woff") format("woff"),
+		/* Modern Browsers */ url("~assets/fonts/PT_Sans-Narrow-Web-Bold.ttf")
 			format("truetype"),
 		/* Safari, Android, iOS */
-			url("fonts/PT_Sans-Narrow-Web-Bold.svg#PTSansNarrow") format("svg"); /* Legacy iOS */
+			url("~assets/fonts/PT_Sans-Narrow-Web-Bold.svg#PTSansNarrow")
+			format("svg"); /* Legacy iOS */
 }
 
 /* stylelint-enable */
