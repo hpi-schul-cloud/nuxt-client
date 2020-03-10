@@ -37,7 +37,6 @@ module.exports = ({ config }) => {
 	Object.assign(config.resolve.alias, alias);
 	Object.assign(config.resolve.alias, {
 		assets: path.resolve(__dirname, "../../src/assets"),
-		"~assets": path.resolve(__dirname, "../../src/assets"),
 	});
 
 	return config;
