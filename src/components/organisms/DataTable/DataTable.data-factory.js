@@ -1,6 +1,6 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
-import { inputs, layouts } from "../FilterUI";
+import { inputs, layouts } from "vue-filter-ui";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({

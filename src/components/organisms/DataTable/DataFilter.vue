@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<filter-ui
+		<vue-filter-ui
 			:filter="filters"
 			:active-filters.sync="activeFiltersProxy"
 			:parser="parser"
@@ -11,12 +11,11 @@
 </template>
 
 <script>
-import FilterUi from "../FilterUI";
-import { parser } from "../FilterUI";
+import VueFilterUi, { parser } from "vue-filter-ui";
 
 export default {
 	components: {
-		FilterUi,
+		VueFilterUi,
 	},
 	props: {
 		data: {
