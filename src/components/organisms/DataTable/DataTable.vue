@@ -1,26 +1,24 @@
 <!-- eslint-disable max-lines -->
 <template>
-	<div>
-		<backend-data-table
-			v-bind="attrsProxy"
-			:data="sortedAndPaginatedData"
-			:total="sortedData.length"
-			:sort-by.sync="sortByProxy"
-			:sort-order.sync="sortOrderProxy"
-			:current-page.sync="currentPageProxy"
-			:rows-per-page.sync="rowsPerPageProxy"
-			:selected-row-ids="backendTableSelection"
-			:selection-type="backendTableSelectionType"
-			@update:selection="handleTableSelectionUpdate"
-			v-on="proxyListeners"
-		>
-			<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
-				<slot :name="name" v-bind="props">
-					<component :is="cmp.context" :key="name" />
-				</slot>
-			</template>
-		</backend-data-table>
-	</div>
+	<backend-data-table
+		v-bind="attrsProxy"
+		:data="paginatedSortedData"
+		:total="sortedData.length"
+		:sort-by.sync="sortByProxy"
+		:sort-order.sync="sortOrderProxy"
+		:current-page.sync="currentPageProxy"
+		:rows-per-page.sync="rowsPerPageProxy"
+		:selected-row-ids="backendTableSelection"
+		:selection-type="backendTableSelectionType"
+		@update:selection="handleTableSelectionUpdate"
+		v-on="proxyListeners"
+	>
+		<template v-for="(cmp, name) in $scopedSlots" v-slot:[name]="props">
+			<slot :name="name" v-bind="props">
+				<component :is="cmp.context" :key="name" />
+			</slot>
+		</template>
+	</backend-data-table>
 </template>
 <script>
 import { getValueByPath } from "@utils/helpers";
@@ -104,7 +102,7 @@ export default {
 
 			return out;
 		},
-		sortedAndPaginatedData() {
+		paginatedSortedData() {
 			if (!this.paginated) {
 				return this.sortedData;
 			}
@@ -233,9 +231,7 @@ export default {
 				// sort strings
 				return a.localeCompare(b);
 			});
-			return sortOrder !== "desc"
-				? sortedData
-				: sortedData.reverse();
+			return sortOrder !== "desc" ? sortedData : sortedData.reverse();
 		},
 	},
 };
