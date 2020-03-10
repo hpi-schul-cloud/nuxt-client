@@ -1,4 +1,3 @@
-<!-- eslint-disable max-lines -->
 <template>
 	<backend-data-table
 		v-bind="attrsProxy"
