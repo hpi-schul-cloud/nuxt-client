@@ -7,7 +7,7 @@
 
 module.exports = [
 	`^/administration/datasources?`,
-	// `^/content/`,
+	`^/content/?`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/mint-ec/?`,
