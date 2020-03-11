@@ -194,8 +194,7 @@ export default {
 		.actions {
 			position: absolute;
 			top: calc(100% - var(--space-md));
-			right: 0;
-			margin-right: var(--space-xl);
+			right: 10%;
 		}
 	}
 }
