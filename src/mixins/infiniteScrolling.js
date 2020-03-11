@@ -23,7 +23,7 @@ const infiniteScrolling = {
 			const { scrollY } = window;
 			const visible = document.documentElement.clientHeight;
 			const pageHeight = document.documentElement.scrollHeight;
-			const bottomOfPage = visible + scrollY >= pageHeight - 2;
+			const bottomOfPage = visible + scrollY >= pageHeight - 500;
 			return bottomOfPage || pageHeight < visible;
 		},
 		$_backToTop() {

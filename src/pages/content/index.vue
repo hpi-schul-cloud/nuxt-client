@@ -50,6 +50,12 @@
 					</span>
 				</transition>
 			</div>
+			<base-spinner
+				v-if="loading"
+				class="spinner mt--xl-2"
+				color="var(--color-tertiary)"
+				size="xlarge"
+			/>
 			<edusharing-footer class="content__footer" />
 		</div>
 	</section>
@@ -150,7 +156,7 @@ export default {
 	},
 	methods: {
 		async addContent() {
-			if (this.query.skip < this.resources.total) {
+			if (this.query.$skip < this.resources.total) {
 				this.query.$skip += this.query.$limit;
 				await this.$store.dispatch("content/addResources", this.query);
 			}
@@ -207,6 +213,9 @@ export default {
 	}
 	&__footer {
 		align-self: flex-end;
+	}
+	.spinner {
+		align-self: center;
 	}
 }
 
