@@ -5,6 +5,7 @@
 				<div class="content">
 					<div class="content__img">
 						<div class="img-container">
+							<!--
 							<base-button
 								design="none"
 								class="content__img-checkbox"
@@ -12,6 +13,7 @@
 							>
 								<base-icon source="material" :icon="checkboxIconSelector" />
 							</base-button>
+							-->
 
 							<div class="content__img-background-gradient" />
 
@@ -25,8 +27,8 @@
 						</div>
 					</div>
 					<base-link
-						:href="resource.contentUrl"
-						target="_blank"
+						class="title-link"
+						:to="{ name: 'content-id', params: { id: resource.ref.id } }"
 						:no-style="true"
 					>
 						<h6 class="content__title">{{ resource.name }}</h6>
@@ -37,6 +39,7 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
+						<!--
 						<base-button design="text icon" @click="bookmarkHandler">
 							<base-icon
 								class="footer__content-icon"
@@ -44,10 +47,11 @@
 								:icon="bookmarkIconSelector"
 							/>
 						</base-button>
+						-->
 
 						<div class="footer__icon-container">
 							<div class="footer_more">
-								<base-button design="text icon" @click="openMenu">
+								<base-button design="text icon" @click="menuActive = true">
 									<base-icon
 										class="footer__content-icon"
 										source="material"
@@ -138,9 +142,6 @@ export default {
 		},
 		bookmarkHandler() {
 			this.isBookmarked = !this.isBookmarked;
-		},
-		openMenu() {
-			this.menuActive = true;
 		},
 		handleCopy() {},
 		handleShare() {},
@@ -260,5 +261,9 @@ export default {
 		justify-content: flex-end;
 		width: 100%;
 	}
+}
+
+.title-link {
+	border: none;
 }
 </style>
