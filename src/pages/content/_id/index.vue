@@ -12,6 +12,7 @@
 					<base-button design="hero-cta icon">
 						<base-icon source="material" icon="file_copy" />
 					</base-button>
+					<!--
 					<base-button design="icon outline">
 						<base-icon
 							source="material"
@@ -24,6 +25,7 @@
 						anchor="top-right"
 						:actions="actions"
 					/>
+					-->
 				</div>
 			</div>
 		</div>
@@ -67,7 +69,6 @@
 </template>
 
 <script>
-import ContextMenu from "@components/molecules/ContextMenu";
 import dayjs from "dayjs";
 
 const getMetadataAttribute = (properties, key) => {
@@ -87,10 +88,6 @@ const getType = (i18n, mimetype) => {
 };
 
 export default {
-	components: {
-		ContextMenu,
-	},
-
 	layout: "loggedInFull",
 	async asyncData({ store, params, app: { i18n } }) {
 		const resource = await store.dispatch(
