@@ -4,6 +4,8 @@
 # DECLERATIONS
 # ----------------
 
+set -e # fail with exit 1 on any error
+
 while getopts p: option
 do
 case "${option}"
@@ -36,7 +38,9 @@ dockerPush(){
 buildClient(){
 	# write version file
 	# JS syntax is required so we can import it
-	printf "module.exports={sha:'%s',branch:'%s',message:'%s'}" $TRAVIS_COMMIT $TRAVIS_BRANCH $TRAVIS_COMMIT_MESSAGE > ../version.js
+	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${TRAVIS_BRANCH//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
+
+	cat ../version.js
 
 	docker build \
 		-t schulcloud/schulcloud-nuxt-client:$TRAVIS_BRANCH \
@@ -77,7 +81,6 @@ buildVuepress(){
 # ----------------
 # MAIN SCRIPT
 # ----------------
-
 cd deploy
 
 source ./buildAndDeployFilter.sh
