@@ -1,11 +1,16 @@
 <template>
-	<base-card v-bind="$attrs">
-		<div class="content-card">
-			<template v:slot:content>
-				<div class="content">
-					<div class="content__img">
-						<div class="img-container">
-							<!--
+	<base-link
+		class="title-link"
+		:to="{ name: 'content-id', params: { id: resource.ref.id } }"
+		:no-style="true"
+	>
+		<base-card v-bind="$attrs">
+			<div class="content-card">
+				<template v:slot:content>
+					<div class="content">
+						<div class="content__img">
+							<div class="img-container">
+								<!--
 							<base-button
 								design="none"
 								class="content__img-checkbox"
@@ -15,31 +20,28 @@
 							</base-button>
 							-->
 
-							<div class="content__img-background-gradient" />
+								<div class="content__img-background-gradient" />
 
-							<img
-								:src="resource.preview.url"
-								alt="content-thumbnail"
-								class="content__img-thumbnail"
-							/>
+								<img
+									:src="resource.preview.url"
+									alt="content-thumbnail"
+									class="content__img-thumbnail"
+								/>
 
-							<img class="content__img-icon" src="@assets/icons/ic_image.svg" />
+								<img
+									class="content__img-icon"
+									src="@assets/icons/ic_image.svg"
+								/>
+							</div>
 						</div>
-					</div>
-					<base-link
-						class="title-link"
-						:to="{ name: 'content-id', params: { id: resource.ref.id } }"
-						:no-style="true"
-					>
 						<h6 class="content__title">{{ resource.name }}</h6>
-					</base-link>
-				</div>
-			</template>
-			<template v:slot:footer>
-				<div class="footer">
-					<div class="footer__separator"></div>
-					<div class="footer__content">
-						<!--
+					</div>
+				</template>
+				<template v:slot:footer>
+					<div class="footer">
+						<div class="footer__separator"></div>
+						<div class="footer__content">
+							<!--
 						<base-button design="text icon" @click="bookmarkHandler">
 							<base-icon
 								class="footer__content-icon"
@@ -49,31 +51,35 @@
 						</base-button>
 						-->
 
-						<div class="footer__icon-container">
-							<div class="footer_more">
-								<base-button design="text icon" @click="menuActive = true">
-									<base-icon
-										class="footer__content-icon"
-										source="material"
-										icon="more_vert"
+							<div class="footer__icon-container">
+								<div class="footer_more">
+									<base-button
+										design="text icon"
+										@click.prevent="menuActive = true"
+									>
+										<base-icon
+											class="footer__content-icon"
+											source="material"
+											icon="more_vert"
+										/>
+									</base-button>
+									<context-menu
+										:show.sync="menuActive"
+										anchor="bottom-right"
+										:actions="actions"
+										@copy="handleCopy"
+										@share="handleShare"
+										@delete="handleDelete"
+										@report="handleReport"
 									/>
-								</base-button>
-								<context-menu
-									:show.sync="menuActive"
-									anchor="bottom-right"
-									:actions="actions"
-									@copy="handleCopy"
-									@share="handleShare"
-									@delete="handleDelete"
-									@report="handleReport"
-								/>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</template>
-		</div>
-	</base-card>
+				</template>
+			</div>
+		</base-card>
+	</base-link>
 </template>
 
 <script>

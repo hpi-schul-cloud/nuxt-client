@@ -8,23 +8,25 @@
 				</div>
 				<h1 class="h2">{{ resource.title || resource.name }}</h1>
 
-				<div class="actions">
-					<base-button design="hero-cta icon">
-						<base-icon source="material" icon="file_copy" />
-					</base-button>
-					<base-button design="icon outline">
-						<base-icon
-							source="material"
-							icon="more_vert"
-							@click="menuActive = !menuActive"
+				<base-content-container>
+					<div class="actions">
+						<base-button design="hero-cta icon">
+							<base-icon source="material" icon="file_copy" />
+						</base-button>
+						<base-button design="icon outline">
+							<base-icon
+								source="material"
+								icon="more_vert"
+								@click="menuActive = !menuActive"
+							/>
+						</base-button>
+						<context-menu
+							:show.sync="menuActive"
+							anchor="top-right"
+							:actions="actions"
 						/>
-					</base-button>
-					<context-menu
-						:show.sync="menuActive"
-						anchor="top-right"
-						:actions="actions"
-					/>
-				</div>
+					</div>
+				</base-content-container>
 			</div>
 		</div>
 		<base-content-container size="large">

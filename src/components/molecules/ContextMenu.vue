@@ -14,7 +14,7 @@
 				design="none"
 				class="context-menu__button"
 				role="menuitem"
-				@click="emitEvent(action.event, action.arguments)"
+				@click.prevent="emitEvent(action.event, action.arguments)"
 				@keydown.up.prevent="focusPrev(index)"
 				@keydown.down.prevent="focusNext(index)"
 			>
@@ -36,7 +36,7 @@
 			<base-button
 				design="none"
 				class="context-menu__button context-menu__button-close"
-				@click="closeMenu"
+				@click.prevent="closeMenu"
 				@keydown.up="focusPrev(actions.length)"
 			>
 				<div class="context-menu__button-text no-icon">
