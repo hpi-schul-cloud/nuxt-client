@@ -75,7 +75,7 @@ export default {
 		EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
-	layout: "loggedInFull",
+	layout: "default",
 	data() {
 		return {
 			searchQuery: "",
