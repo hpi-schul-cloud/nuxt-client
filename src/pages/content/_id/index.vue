@@ -2,10 +2,10 @@
 	<div class="resource">
 		<div class="header">
 			<div class="header-content">
-				<div class="navigation" @click="goBack">
+				<base-link href="#" class="back-link" @click="goBack">
 					<base-icon source="material" icon="arrow_back" />
 					<span>{{ $t("pages.content._id.header.back-navigation") }}</span>
-				</div>
+				</base-link>
 				<h1 class="h2">{{ resource.title || resource.name }}</h1>
 				<div class="actions">
 					<base-button design="hero-cta icon">
@@ -177,15 +177,16 @@ export default {
 		box-shadow: 0 0 10px var(--color-overlay);
 	}
 
+	.back-link {
+		font-weight: var(--font-weight-bold);
+		color: var(--color-tertiary);
+		&:hover {
+			color: var(--color-tertiary-dark);
+		}
+	}
+
 	.header-content {
 		padding: 0 var(--space-xl) var(--space-md);
-
-		.navigation {
-			display: flex;
-			align-items: center;
-			font-weight: var(--font-weight-bold);
-			cursor: pointer;
-		}
 
 		.actions {
 			position: absolute;

@@ -196,9 +196,8 @@ export default {
 	&__total {
 		display: flex;
 		align-items: center;
-		justify-content: flex-end;
+		justify-content: flex-start;
 		width: 100%;
-		color: var(--color-gray);
 	}
 	&__no-results {
 		margin-top: var(--space-md);
