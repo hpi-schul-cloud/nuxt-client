@@ -2,7 +2,7 @@
 	<div class="resource">
 		<div class="header">
 			<div class="header-content">
-				<div class="navigation" @click="$router.go(-1)">
+				<div class="navigation" @click="goBack">
 					<base-icon source="material" icon="arrow_back" />
 					<span>{{ $t("pages.content._id.header.back-navigation") }}</span>
 				</div>
@@ -12,7 +12,7 @@
 					<base-button design="hero-cta icon">
 						<base-icon source="material" icon="file_copy" />
 					</base-button>
-					<base-button design="icon">
+					<base-button design="icon outline">
 						<base-icon
 							source="material"
 							icon="more_vert"
@@ -154,6 +154,9 @@ export default {
 	methods: {
 		bookmarkHandler() {
 			this.isBookmarked = !this.isBookmarked;
+		},
+		goBack() {
+			this.$router.back();
 		},
 	},
 };
