@@ -12,7 +12,7 @@
 					<base-button design="hero-cta icon">
 						<base-icon source="material" icon="file_copy" />
 					</base-button>
-					<base-button design="icon">
+					<base-button design="icon outline">
 						<base-icon
 							source="material"
 							icon="more_vert"
