@@ -7,26 +7,25 @@
 					<span>{{ $t("pages.content._id.header.back-navigation") }}</span>
 				</div>
 				<h1 class="h2">{{ resource.title || resource.name }}</h1>
-
-				<base-content-container>
-					<div class="actions">
-						<base-button design="hero-cta icon">
-							<base-icon source="material" icon="file_copy" />
-						</base-button>
-						<base-button design="icon outline">
-							<base-icon
-								source="material"
-								icon="more_vert"
-								@click="menuActive = !menuActive"
-							/>
-						</base-button>
-						<context-menu
-							:show.sync="menuActive"
-							anchor="top-right"
-							:actions="actions"
+				<div class="actions">
+					<base-button design="hero-cta icon">
+						<base-icon source="material" icon="file_copy" />
+					</base-button>
+					<!--
+					<base-button design="icon outline">
+						<base-icon
+							source="material"
+							icon="more_vert"
+							@click="menuActive = !menuActive"
 						/>
-					</div>
-				</base-content-container>
+					</base-button>
+					<context-menu
+						:show.sync="menuActive"
+						anchor="top-right"
+						:actions="actions"
+					/>
+					-->
+				</div>
 			</div>
 		</div>
 		<base-content-container size="large">
@@ -69,7 +68,6 @@
 </template>
 
 <script>
-import ContextMenu from "@components/molecules/ContextMenu";
 import dayjs from "dayjs";
 
 const getMetadataAttribute = (properties, key) => {
@@ -89,10 +87,6 @@ const getType = (i18n, mimetype) => {
 };
 
 export default {
-	components: {
-		ContextMenu,
-	},
-
 	layout: "loggedInFull",
 	async asyncData({ store, params, app: { i18n } }) {
 		const resource = await store.dispatch(
@@ -196,8 +190,7 @@ export default {
 		.actions {
 			position: absolute;
 			top: calc(100% - var(--space-md));
-			right: 0;
-			margin-right: var(--space-xl);
+			right: 10%;
 		}
 	}
 }
