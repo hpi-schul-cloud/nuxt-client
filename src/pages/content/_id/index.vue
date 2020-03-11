@@ -27,40 +27,42 @@
 				</div>
 			</div>
 		</div>
-		<div class="content" :class="description ? '' : 'no-description'">
-			<div class="metadata">
-				<div>
-					<span v-if="type">{{ type }}</span>
-					<span v-if="type && createdAt"> - </span>
-					<span v-if="createdAt">
-						{{ $t("pages.content._id.metadata.createdAt") }}
-						{{ createdAt }}
-					</span>
+		<base-content-container size="large">
+			<div class="content" :class="description ? '' : 'no-description'">
+				<div class="metadata">
+					<div>
+						<span v-if="type">{{ type }}</span>
+						<span v-if="type && createdAt"> - </span>
+						<span v-if="createdAt">
+							{{ $t("pages.content._id.metadata.createdAt") }}
+							{{ createdAt }}
+						</span>
+					</div>
+					<div>
+						<span v-if="author">
+							{{ $t("pages.content._id.metadata.author") }}:
+							{{ author }}
+						</span>
+						<span v-if="provider">
+							{{ $t("pages.content._id.metadata.provider") }}:
+							{{ provider }}
+						</span>
+					</div>
 				</div>
-				<div>
-					<span v-if="author">
-						{{ $t("pages.content._id.metadata.author") }}:
-						{{ author }}
-					</span>
-					<span v-if="provider">
-						{{ $t("pages.content._id.metadata.provider") }}:
-						{{ provider }}
-					</span>
+				<div class="preview">
+					<div
+						class="preview-background"
+						:style="{
+							backgroundImage: `url(${resource.preview.url})`,
+						}"
+					/>
+					<img :src="resource.preview.url" alt="content preview image" />
+				</div>
+				<div class="description">
+					{{ description }}
 				</div>
 			</div>
-			<div class="preview">
-				<div
-					class="preview-background"
-					:style="{
-						backgroundImage: `url(${resource.preview.url})`,
-					}"
-				/>
-				<img :src="resource.preview.url" alt="content preview image" />
-			</div>
-			<div class="description">
-				{{ description }}
-			</div>
-		</div>
+		</base-content-container>
 	</div>
 </template>
 
