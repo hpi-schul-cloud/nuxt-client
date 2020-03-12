@@ -1,69 +1,82 @@
 <template>
 	<div class="resource">
-		<div class="header">
-			<div class="header-content">
-				<base-link href="#" class="back-link" @click="goBack">
-					<base-icon source="material" icon="arrow_back" />
-					<span>{{ $t("pages.content._id.header.back-navigation") }}</span>
-				</base-link>
-				<h1 class="h2">{{ resource.title || resource.name }}</h1>
-				<div class="actions">
-					<base-button design="hero-cta icon">
-						<base-icon source="material" icon="file_copy" />
-					</base-button>
-					<!--
-					<base-button design="icon outline">
-						<base-icon
-							source="material"
-							icon="more_vert"
-							@click="menuActive = !menuActive"
-						/>
-					</base-button>
-					<context-menu
-						:show.sync="menuActive"
-						anchor="top-right"
-						:actions="actions"
+		<div class="content">
+			<div class="icons">
+				<base-button design="icon" @click="goBack">
+					<base-icon source="material" icon="close" />
+				</base-button>
+				<!--
+				<base-button design="icon" @click="bookmarkHandler">
+					<base-icon
+						class="resource__img-container--icon"
+						source="material"
+						:icon="bookmarkIconSelector"
 					/>
-					-->
-				</div>
+				</base-button>
+				-->
+			</div>
+			<div class="preview">
+				<div
+					class="preview-background"
+					:style="{
+						backgroundImage: `url(${resource.preview.url})`,
+					}"
+				/>
+				<img :src="resource.preview.url" alt="content preview image" />
 			</div>
 		</div>
-		<base-content-container size="large">
-			<div class="content" :class="description ? '' : 'no-description'">
-				<div class="metadata">
-					<div>
-						<span v-if="type">{{ type }}</span>
-						<span v-if="type && createdAt"> - </span>
-						<span v-if="createdAt">
-							{{ $t("pages.content._id.metadata.createdAt") }}
-							{{ createdAt }}
-						</span>
-					</div>
-					<div>
-						<span v-if="author">
-							{{ $t("pages.content._id.metadata.author") }}:
-							{{ author }}
-						</span>
-						<span v-if="provider">
-							{{ $t("pages.content._id.metadata.provider") }}:
-							{{ provider }}
-						</span>
-					</div>
+		<div class="sidebar">
+			<div class="actions">
+				<base-button design="text icon">
+					<base-icon source="material" icon="more_vert" />
+				</base-button>
+			</div>
+			<h1 class="h5">{{ resource.title || resource.name }}</h1>
+			<div>
+				<span v-if="author">
+					{{ author }} ({{ $t("pages.content._id.metadata.author") }})
+				</span>
+				<span v-if="provider">
+					{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
+				</span>
+			</div>
+			<div class="description">
+				{{ description }}
+			</div>
+			<div class="metadata">
+				<div v-if="createdAt || updatedAt" class="meta-container">
+					<base-icon source="custom" icon="calender" />
+
+					<span v-if="createdAt">
+						{{ $t("pages.content._id.metadata.createdAt") }}
+						{{ createdAt }}
+					</span>
+					<span v-if="updatedAt">
+						{{ $t("pages.content._id.metadata.updatedAt") }}
+						{{ updatedAt }}
+					</span>
 				</div>
-				<div class="preview">
-					<div
-						class="preview-background"
-						:style="{
-							backgroundImage: `url(${resource.preview.url})`,
-						}"
+				<div v-if="filename" class="meta-container">
+					<base-icon
+						:source="getTypeIcon(resource.mimetype).iconSource"
+						:icon="getTypeIcon(resource.mimetype).icon"
 					/>
-					<img :src="resource.preview.url" alt="content preview image" />
+					<span>
+						{{ filename }}
+					</span>
 				</div>
-				<div class="description">
-					{{ description }}
+				<div class="meta-container">
+					<base-icon source="fa" icon="file-o" />
+					<span>
+						{{ id }}
+					</span>
 				</div>
 			</div>
-		</base-content-container>
+			<base-button design="primary" class="floating-button">
+				<base-icon source="material" icon="add" />
+				{{ $t("pages.content._id.addToTopic") }}
+			</base-button>
+		</div>
 	</div>
 </template>
 
@@ -88,6 +101,7 @@ export default {
 		);
 
 		return {
+			id: params.id,
 			resource,
 		};
 	},
@@ -138,11 +152,19 @@ export default {
 				getMetadataAttribute(this.resource.properties, "cm:created")
 			);
 		},
+		updatedAt() {
+			return dayjs(
+				getMetadataAttribute(this.resource.properties, "cm:modified")
+			);
+		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
 		},
 		description() {
 			return this.resource.description;
+		},
+		filename() {
+			return this.resource.filename;
 		},
 	},
 	methods: {
@@ -158,106 +180,78 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-
-.header {
-	position: relative;
-	min-height: var(--space-xl-5);
-	margin-bottom: var(--space-md);
-	background-color: var(--color-white);
-
-	&::after {
-		position: absolute;
-		top: 10px;
-		z-index: var(--layer-behind);
-		width: 100%;
-		height: 100%;
-		content: "";
-		box-shadow: 0 0 10px var(--color-overlay);
-	}
-
-	.back-link {
-		font-weight: var(--font-weight-bold);
-		color: var(--color-tertiary);
-		&:hover {
-			color: var(--color-tertiary-dark);
-		}
-	}
-
-	.header-content {
-		padding: 0 var(--space-xl) var(--space-md);
-
-		.actions {
-			position: absolute;
-			top: calc(100% - var(--space-md));
-			right: 10%;
-		}
-	}
-}
-
-.content {
+.resource {
 	display: grid;
-	grid-template-areas: "meta" "preview" "description";
-	grid-template-rows: auto auto 1fr;
-	grid-template-columns: 1fr;
-	grid-gap: var(--space-md);
-	min-height: var(--size-content-width-min);
-	padding: 0 var(--space-xl);
+	grid-template-areas: "content" "meta";
+	grid-template-rows: auto;
+	grid-template-columns: auto;
+	min-height: 100vh;
 
 	@include breakpoint(tablet) {
-		grid-template-areas: "meta meta" "preview description";
-		grid-template-rows: auto 1fr;
-		grid-template-columns: 1fr 1fr;
+		grid-template-areas: "content meta";
+		grid-template-columns: 3fr 2fr;
 	}
 
-	&.no-description {
-		grid-template-areas: "meta" "preview";
-		grid-template-rows: auto auto;
-
-		@include breakpoint(tablet) {
-			grid-template-areas: "meta" "preview";
-			grid-template-rows: auto;
-			grid-template-columns: auto;
-		}
-	}
-
-	.metadata {
-		grid-area: meta;
-		padding: var(--space-xl) 0;
-	}
-
-	.preview {
+	.content {
 		position: relative;
-		grid-area: preview;
+		grid-area: content;
 
-		.preview-background {
+		.icons {
 			position: absolute;
 			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			z-index: var(--layer-behind);
-			filter: blur(7px);
-			background-repeat: no-repeat;
-			background-position: center;
-			background-size: cover;
-			opacity: 0.7;
+			z-index: var(--layer-dropdown);
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+			padding: var(--space-md);
 		}
 
-		img {
-			object-position: center;
-			object-fit: contain;
-			width: 100%;
+		.preview {
+			position: relative;
 			height: 100%;
-			max-height: 50vh;
 
-			@include breakpoint(tablet) {
-				max-height: auto;
+			.preview-background {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				z-index: var(--layer-behind);
+				margin: var(--radius-md);
+				filter: blur(var(--radius-md));
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: cover;
+				opacity: 0.7;
+			}
+
+			img {
+				object-position: center;
+				object-fit: contain;
+				width: 100%;
+				height: 100%;
+				min-height: 50vh;
+
+				@include breakpoint(tablet) {
+					min-height: auto;
+				}
 			}
 		}
 	}
 
-	.description {
-		grid-area: description;
+	.sidebar {
+		grid-area: meta;
+		padding: var(--space-sm) var(--space-xl);
+		background-color: var(--color-white);
+
+		.actions {
+			display: flex;
+			justify-content: flex-end;
+		}
+
+		.description {
+			margin: var(--space-xl) 0;
+		}
 	}
 }
 </style>
