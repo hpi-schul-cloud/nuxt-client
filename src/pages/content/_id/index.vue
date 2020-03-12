@@ -69,6 +69,7 @@
 
 <script>
 import dayjs from "dayjs";
+import contentMeta from "@mixins/contentMeta";
 
 const getMetadataAttribute = (properties, key) => {
 	if (Array.isArray(properties[key])) {
@@ -77,40 +78,17 @@ const getMetadataAttribute = (properties, key) => {
 	return null;
 };
 
-const getType = (i18n, mimetype) => {
-	return {
-		"text/html": i18n.t("pages.content._id.meta.html"),
-		video: i18n.t("pages.content._id.meta.video"),
-		image: i18n.t("pages.content._id.meta.image"),
-		"image/jpeg": i18n.t("pages.content._id.meta.image"),
-	}[mimetype];
-};
-
 export default {
 	layout: "loggedInFull",
-	async asyncData({ store, params, app: { i18n } }) {
+	mixins: [contentMeta],
+	async asyncData({ store, params }) {
 		const resource = await store.dispatch(
 			"content/getResourceMetadata",
 			params.id
 		);
-		const provider = getMetadataAttribute(
-			resource.properties,
-			"ccm:metadatacontributer_provider"
-		);
-		const author = getMetadataAttribute(resource.properties, "cm:creator");
-		const createdAt = dayjs(
-			getMetadataAttribute(resource.properties, "cm:created")
-		);
-		const type = getType(i18n, resource.mimetype);
-		const { description } = resource;
 
 		return {
 			resource,
-			provider,
-			author,
-			type,
-			createdAt,
-			description,
 		};
 	},
 	data() {
@@ -145,6 +123,26 @@ export default {
 	computed: {
 		bookmarkIconSelector() {
 			return this.isBookmarked ? "bookmark" : "bookmark_border";
+		},
+		provider() {
+			return getMetadataAttribute(
+				this.resource.properties,
+				"ccm:metadatacontributer_provider"
+			);
+		},
+		author() {
+			return getMetadataAttribute(this.resource.properties, "cm:creator");
+		},
+		createdAt() {
+			return dayjs(
+				getMetadataAttribute(this.resource.properties, "cm:created")
+			);
+		},
+		type() {
+			return this.getTypeI18nName(this.resource.mimetype);
+		},
+		description() {
+			return this.resource.description;
 		},
 	},
 	methods: {

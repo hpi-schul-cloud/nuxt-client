@@ -28,9 +28,10 @@
 									class="content__img-thumbnail"
 								/>
 
-								<img
+								<base-icon
+									:source="getTypeIcon(resource.mimetype).iconSource"
+									:icon="getTypeIcon(resource.mimetype).icon"
 									class="content__img-icon"
-									src="@assets/icons/ic_image.svg"
 								/>
 							</div>
 						</div>
@@ -85,12 +86,14 @@
 <script>
 import BaseLink from "@components/base/BaseLink";
 import ContextMenu from "@components/molecules/ContextMenu";
+import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {
 		BaseLink,
 		ContextMenu,
 	},
+	mixins: [contentMeta],
 	props: {
 		resource: { type: Object, default: () => {} },
 	},
@@ -199,8 +202,7 @@ export default {
 			top: 40%;
 			left: 40%;
 			z-index: var(--layer-dropdown);
-			width: 3.5rem;
-			padding: var(--space-sm);
+			font-size: var(--space-xl-3);
 			color: var(--color-gray-dark);
 			background-color: var(--color-white);
 			border-radius: var(--radius-round);
