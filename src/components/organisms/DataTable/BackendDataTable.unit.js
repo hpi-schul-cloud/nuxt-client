@@ -1,18 +1,26 @@
 import BackendDataTable from "./BackendDataTable";
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 
-const data = tableData(5);
+const defaultData = tableData(5);
 
-function getWrapper(attributes) {
+function getWrapper(attributes, options) {
 	return mount(BackendDataTable, {
 		propsData: {
-			data: data,
+			data: defaultData,
 			trackBy: "id",
 			columns: tableColumns,
 			...attributes,
 		},
+		...options,
 	});
 }
+
+const getTableRowsContent = async (wrapper) => {
+	await wrapper.vm.$nextTick();
+	return wrapper.findAll("tbody tr").wrappers.map((rowWrapper) => {
+		return rowWrapper.findAll("td").wrappers.map((cell) => cell.text());
+	});
+};
 
 describe("@components/organisms/DataTable/BackendDataTable", () => {
 	it(...isValidComponent(BackendDataTable));
@@ -21,7 +29,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 		it("Passing the columns and data should render the table. Nested properties should be possible.", () => {
 			var wrapper = getWrapper();
 
-			expect(wrapper.findAll("tbody tr")).toHaveLength(data.length);
+			expect(wrapper.findAll("tbody tr")).toHaveLength(defaultData.length);
 			expect(wrapper.find("thead tr").findAll("th")).toHaveLength(
 				tableColumns.length
 			);
@@ -29,7 +37,9 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 
 			expect(wrapper.find("thead tr th").text()).toContain("Vorname");
 
-			expect(wrapper.find("tbody tr td").text()).toContain(data[0].firstName);
+			expect(wrapper.find("tbody tr td").text()).toContain(
+				defaultData[0].firstName
+			);
 
 			expect(
 				wrapper
@@ -37,63 +47,126 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 					.findAll("td")
 					.at(2)
 					.text()
-			).toContain(data[0].address.city);
+			).toContain(defaultData[0].address.city);
 		});
-
-		it.todo("should pass slots prefixed with dataRow to tableRow component");
-		// if the trackBy key is in a subDataset { language: { key: "trackByKey"} }
-		it.todo("should render with nested trackBy key");
 	});
 
-	describe.skip("pagination", () => {
-		it.todo("should show correct number of pages if pagination is enabled");
-		it.todo("should go back to page 1 when itemsPerPage changes");
+	describe("pagination", () => {
+		const total = 100;
+		const pageSize = 25;
+		const subsetData = tableData(pageSize);
 
-		it("Should paginate correctly", () => {
-			var wrapper = mount({
-				data: () => ({
-					data: data,
-					columns: tableColumns,
-					currentPage: 1,
-					rowsPerPage: 3,
-				}),
-				template: `<BackendDataTable
-						:data="data"
-						:columns="columns"
-						:rows-per-page.sync="rowsPerPage"
-						:current-page.sync="currentPage"
-						track-by="id"
-						paginated
-					/>`,
-				components: { BackendDataTable },
+		it("should show correct pagination info of total items", async () => {
+			const currentPage = 2;
+			const wrapper = getWrapper({
+				data: subsetData,
+				total: total,
+				paginated: true,
+				rowsPerPage: pageSize,
+				currentPage: 2,
 			});
+			const paginationText = wrapper
+				.get(".pagination")
+				.text()
+				.replace(/(\s{2,}|\n)/gi, " ");
+			const expectedFrom = 1 + pageSize * (currentPage - 1);
+			const expectedTo = currentPage * pageSize;
+			const expectedTotal = total;
+			expect(paginationText).toStrictEqual(
+				expect.stringContaining(
+					`${expectedFrom} bis ${expectedTo} von ${expectedTotal}`
+				)
+			);
+		});
 
-			expect(wrapper.findAll("tbody tr")).toHaveLength(3);
-
-			wrapper
-				.findAll(".pagination-link-wrapper a")
-				.at(1)
-				.trigger("click");
-
-			expect(wrapper.findAll("tbody tr")).toHaveLength(2);
+		it("should trigger @update:current-page event on page change", async () => {
+			const wrapper = getWrapper({
+				data: subsetData,
+				total: total,
+				paginated: true,
+				rowsPerPage: pageSize,
+				currentPage: 1,
+			});
+			wrapper.find(`[aria-label="Goto next page"]`).trigger("click");
+			expect(wrapper.emitted("update:current-page")).toStrictEqual([[2]]);
 		});
 	});
 
-	describe.skip("sort", () => {
-		it("Only sortable columns should trigger sort event on click", () => {
-			var wrapper = getWrapper();
-
-			expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
-
+	describe("sort", () => {
+		const getSortButton = (wrapper, text = "Vorname") =>
 			wrapper
-				.findAll("th")
-				.at(2)
-				.trigger("click");
+				.findAll(".is-sortable button")
+				.wrappers.find((w) => w.text() === text);
 
-			expect(wrapper.find("tbody tr td").html()).toContain("Hulk");
+		it("should emit sort events on click on sortable coloumn", async () => {
+			const wrapper = getWrapper({
+				data: defaultData,
+			});
+			const sortButton = getSortButton(wrapper);
+			const otherSortButton = getSortButton(wrapper, "Stadt");
+			sortButton.trigger("click");
+			await wrapper.vm.$nextTick();
+			sortButton.trigger("click");
+			await wrapper.vm.$nextTick();
+			sortButton.trigger("click");
+			await wrapper.vm.$nextTick();
+			otherSortButton.trigger("click");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.emittedByOrder()).toStrictEqual([
+				{ args: ["firstName"], name: "update:sortBy" },
+				{ args: ["asc"], name: "update:sortOrder" },
+				{ args: ["firstName"], name: "update:sortBy" },
+				{ args: ["desc"], name: "update:sortOrder" },
+				{ args: ["firstName"], name: "update:sortBy" },
+				{ args: ["asc"], name: "update:sortOrder" },
+				{ args: ["address.city"], name: "update:sortBy" },
+				{ args: ["asc"], name: "update:sortOrder" },
+			]);
 		});
 
-		it.todo("should emit sort event on new sort input");
+		it("should update ui if sortBy prop changes", async () => {
+			const wrapper = getWrapper(
+				{
+					data: defaultData,
+					sortBy: "firstName",
+					sortOrder: "asc",
+				},
+				{
+					stubs: { BaseIcon: true },
+				}
+			);
+			let sortButtonIcon = getSortButton(wrapper, "Vorname").find(
+				"baseicon-stub"
+			);
+			expect(sortButtonIcon.attributes("icon")).toBe("arrow_upward");
+			wrapper.setProps({
+				sortBy: "address.city",
+			});
+			await wrapper.vm.$nextTick();
+			sortButtonIcon = getSortButton(wrapper, "Stadt").find("baseicon-stub");
+			expect(sortButtonIcon.attributes("icon")).toBe("arrow_upward");
+		});
+		it("should update ui if sortOrder prop changes", async () => {
+			const wrapper = getWrapper(
+				{
+					data: defaultData,
+					sortBy: "firstName",
+					sortOrder: "asc",
+				},
+				{
+					stubs: { BaseIcon: true },
+				}
+			);
+			const sortButtonIcon = getSortButton(wrapper, "Vorname").find(
+				"baseicon-stub"
+			);
+			expect(sortButtonIcon.attributes("icon")).toBe("arrow_upward");
+			wrapper.setProps({
+				sortOrder: "desc",
+			});
+			await wrapper.vm.$nextTick();
+			expect(sortButtonIcon.attributes("icon")).toBe("arrow_downward");
+		});
 	});
 
 	describe.skip("selection", () => {
@@ -106,7 +179,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			expect(wrapper.find("tbody tr").classes()).toContain("selected");
 			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
 			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
-				[data[0]],
+				[defaultData[0]],
 			]);
 
 			rowSelection.setChecked(false);
@@ -130,7 +203,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 
 			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(1);
 			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
-				data.slice(0, 2),
+				defaultData.slice(0, 2),
 			]);
 
 			expect(
@@ -138,7 +211,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			).toHaveLength(1);
 			expect(
 				wrapper.emitted()["all-rows-of-current-page-selected"][0]
-			).toStrictEqual([data.slice(0, 2)]);
+			).toStrictEqual([defaultData.slice(0, 2)]);
 
 			allRowsSelection.setChecked(false);
 			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
@@ -221,11 +294,13 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 
 			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
 			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([
-				data,
+				defaultData,
 			]);
 
 			expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
-			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([data]);
+			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([
+				defaultData,
+			]);
 		});
 
 		it("can trigger an action on selected rows", () => {
@@ -263,7 +338,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 
 			wrapper.setProps({
 				data: [
-					...data,
+					...defaultData,
 					{
 						id: "6",
 						firstName: "Test",
@@ -294,6 +369,56 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 
 			wrapper.setProps({ currentPage: 1 });
 			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+		});
+	});
+
+	describe("slots", () => {
+		const smallData = tableData(1);
+		it("renders scopedSlots with data", async () => {
+			const testSlotContent = `some random slot content`;
+
+			const wrapper = mount(BackendDataTable, {
+				propsData: {
+					data: smallData,
+					trackBy: "id",
+					columns: tableColumns,
+				},
+				scopedSlots: {
+					"datacolumn-firstName": `<p> {{props.data}} ${testSlotContent}</p>`,
+				},
+			});
+
+			// check that basic slot content gets rendered
+			expect(wrapper.html()).toContain(testSlotContent);
+
+			// check that content from props.data got rendered
+			const renderedData = await getTableRowsContent(wrapper);
+			renderedData.forEach((row, index) => {
+				expect(row[0]).toContain(smallData[index]["firstName"]);
+			});
+		});
+
+		it("renders scopedSlots with data for nested keys", async () => {
+			const testSlotContent = `some random slot content`;
+
+			const wrapper = mount(BackendDataTable, {
+				propsData: {
+					data: smallData,
+					trackBy: "id",
+					columns: tableColumns,
+				},
+				scopedSlots: {
+					"datacolumn-address-city": `<p> {{props.data}} ${testSlotContent}</p>`,
+				},
+			});
+			// check that basic slot content gets rendered
+			expect(wrapper.html()).toContain(testSlotContent);
+
+			// check that content from props.data got rendered
+			const renderedData = await getTableRowsContent(wrapper);
+			renderedData.forEach((row, index) => {
+				expect(row[2]).toContain(smallData[index].address.city);
+			});
 		});
 	});
 });
