@@ -185,6 +185,8 @@ export default {
 	},
 	data() {
 		return {
+			localSortBy: undefined,
+			localSortOrder: undefined,
 			editFilterActive: false,
 			tableData: this.data,
 			filterOpened: {},
@@ -206,17 +208,19 @@ export default {
 		},
 		sortByProxy: {
 			get() {
-				return this.sortBy;
+				return this.localSortBy || this.sortBy;
 			},
 			set(to) {
+				this.localSortBy = to;
 				this.$emit("update:sortBy", to);
 			},
 		},
 		sortOrderProxy: {
 			get() {
-				return this.sortOrder;
+				return this.localSortOrder || this.sortOrder;
 			},
 			set(to) {
+				this.localSortOrder = to;
 				this.$emit("update:sortOrder", to);
 			},
 		},
@@ -336,6 +340,12 @@ export default {
 				this.$forceUpdate();
 			},
 			immediate: true,
+		},
+		sortBy(to) {
+			this.localSortBy = to;
+		},
+		sortOrder(to) {
+			this.localSortOrder = to;
 		},
 	},
 	methods: {
