@@ -299,30 +299,25 @@ export default {
 			immediate: true,
 		},
 		selectionKeys(to) {
-			// update if any value has actually changed (prevent loops, deep array comparison)
-			if (
-				JSON.stringify(Object.keys(to)) !== JSON.stringify(this.selectedRowIds)
-			) {
-				/**
-				 * toggle whenever the selection changes
-				 *
-				 * @event update:selection
-				 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
-				 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
-				 * Inclusive means all items in the passed array are selected.
-				 * Exclusive means all items not in the passed array are selected.
-				 */
-				this.$emit(
-					"update:selection",
-					Object.keys(to),
-					this.localSelectionType,
-					"onUpdateSelectionKeys"
-				);
-				/**
-				 * helper event for the selectedRowIds .sync modifier
-				 */
-				this.$emit("update:selectedRowIds", Object.keys(to));
-			}
+			/**
+			 * toggle whenever the selection changes
+			 *
+			 * @event update:selection
+			 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
+			 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
+			 * Inclusive means all items in the passed array are selected.
+			 * Exclusive means all items not in the passed array are selected.
+			 */
+			this.$emit(
+				"update:selection",
+				Object.keys(to),
+				this.localSelectionType,
+				"onUpdateSelectionKeys"
+			);
+			/**
+			 * helper event for the selectedRowIds .sync modifier
+			 */
+			this.$emit("update:selectedRowIds", Object.keys(to));
 		},
 		selectedRowIds: {
 			handler(to) {
@@ -354,13 +349,11 @@ export default {
 			this.$set(this, "selectionKeys", {});
 			this.localSelectionType = "exclusive";
 			this.$emit("update:selectionType", "exclusive");
-			this.$emit("update:selection", [], "exclusive");
 		},
 		unselectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
 			this.localSelectionType = "inclusive";
 			this.$emit("update:selectionType", "inclusive");
-			this.$emit("update:selection", [], "inclusive");
 		},
 		setRowSelection(row, state) {
 			const method = (newState) => (newState ? "$set" : "$delete");

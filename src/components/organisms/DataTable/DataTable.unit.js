@@ -385,6 +385,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			wrapper.find("thead tr input[type=checkbox]").trigger("click");
 			await wrapper.vm.$nextTick();
 			wrapper.find("button.select-all-rows").trigger("click");
+			await wrapper.vm.$nextTick();
 			expect(wrapper.emitted("update:selection")[1]).toStrictEqual([
 				expectedSelection,
 			]);
