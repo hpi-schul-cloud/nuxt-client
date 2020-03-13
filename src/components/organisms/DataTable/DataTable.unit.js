@@ -5,7 +5,6 @@ const defaultData = tableData(50);
 
 function getWrapper(attributes, options) {
 	return mount(DataTable, {
-		sync: false, // https://github.com/vuejs/vue-test-utils/issues/1130, https://github.com/logaretm/vee-validate/issues/1996
 		propsData: {
 			data: defaultData,
 			trackBy: "id",
