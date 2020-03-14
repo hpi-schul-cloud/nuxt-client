@@ -308,12 +308,7 @@ export default {
 			 * Inclusive means all items in the passed array are selected.
 			 * Exclusive means all items not in the passed array are selected.
 			 */
-			this.$emit(
-				"update:selection",
-				Object.keys(to),
-				this.localSelectionType,
-				"onUpdateSelectionKeys"
-			);
+			this.$emit("update:selection", Object.keys(to), this.localSelectionType);
 			/**
 			 * helper event for the selectedRowIds .sync modifier
 			 */

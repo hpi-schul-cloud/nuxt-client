@@ -169,206 +169,268 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 		});
 	});
 
-	describe.skip("selection", () => {
-		it("allows to select and unselect a row", () => {
-			const wrapper = getWrapper({ showRowSelection: true });
-			const rowSelection = wrapper.find("tbody tr td input[type='checkbox']");
+	describe("selection", () => {
+		const total = 10;
+		const testData = tableData(Math.floor(total / 2), (index) => ({
+			id: String(index), // simplify IDs of test data for easier testing
+		}));
 
-			rowSelection.setChecked();
+		const getVisibleSelections = async (wrapper) => {
+			await wrapper.vm.$nextTick();
+			const rowWrappers = wrapper.findAll("tbody tr").wrappers;
+			return rowWrappers
+				.filter((rowWrapper) => {
+					return rowWrapper.find("input[type=checkbox]").element.checked;
+				})
+				.map((rowWrapper) => {
+					return rowWrapper.findAll("td").wrappers.map((cell) => cell.text());
+				});
+		};
 
-			expect(wrapper.find("tbody tr").classes()).toContain("selected");
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
-				[defaultData[0]],
-			]);
-
-			rowSelection.setChecked(false);
-
-			expect(wrapper.find("tbody tr").classes()).not.toContain("selected");
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
-		});
-		it("allows to select and unselect all rows of current page", () => {
-			const wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-			const allRowsSelection = wrapper.find(
-				"thead tr th input[type='checkbox']"
+		const hasVisibleSelections = async (
+			wrapper,
+			data,
+			expectedSelectionIds
+		) => {
+			await wrapper.vm.$nextTick();
+			const visibleSelections = await getVisibleSelections(wrapper);
+			return (
+				visibleSelections.length === expectedSelectionIds.length &&
+				expectedSelectionIds.every((expectedId) => {
+					const selectionFirstName = data.find((row) => row.id === expectedId)
+						.firstName;
+					return visibleSelections.find(
+						(selectionRow) => selectionRow[1] === selectionFirstName
+					);
+				})
 			);
+		};
 
-			allRowsSelection.setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(1);
-			expect(wrapper.emitted()["update:selected-rows"][0]).toStrictEqual([
-				defaultData.slice(0, 2),
+		it("can select a value", async () => {
+			const wrapper = getWrapper({
+				data: testData,
+				rowsSelectable: true,
+			});
+			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
+			expect(wrapper.emitted("update:selection")).toStrictEqual([
+				[[testData[0].id], "inclusive"],
 			]);
-
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"]
-			).toHaveLength(1);
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"][0]
-			).toStrictEqual([defaultData.slice(0, 2)]);
-
-			allRowsSelection.setChecked(false);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
-
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"]
-			).toHaveLength(2);
-			expect(
-				wrapper.emitted()["all-rows-of-current-page-selected"][1]
-			).toStrictEqual([[]]);
+			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
+				[[testData[0].id]],
+			]);
 		});
-		it("selecting all items on current page should toggle checkbox in header", () => {
+
+		it("can unselect a value", async () => {
 			const wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
+				data: testData,
+				selectionType: "inclusive",
+				selectedRowIds: ["0"],
+				rowsSelectable: true,
 			});
+			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
+			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			expect(wrapper.emitted("update:selection")).toStrictEqual([
+				[["0"], "inclusive"],
+				[[], "inclusive"],
+			]);
+			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
+				[["0"]],
+				[[]],
+			]);
+		});
 
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-
+		it("can select all values on page", async () => {
+			const rowsPerPage = testData.length;
+			const expectedSelection = [...Array(rowsPerPage).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				paginated: true,
+				rowsPerPage: rowsPerPage,
+				rowsSelectable: true,
+				total,
+			});
+			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			wrapper.find("thead tr input[type=checkbox]").trigger("click");
+			await wrapper.vm.$nextTick();
 			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.every((tr) => tr.classes().includes("selected"))
+				await hasVisibleSelections(wrapper, testData, expectedSelection)
 			).toBe(true);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked(false);
-			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.some((tr) => tr.classes().includes("selected"))
-			).toBe(false);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+			expect(wrapper.emitted("update:selection")[0]).toStrictEqual([
+				expectedSelection,
+				"inclusive",
+			]);
 		});
-		it("unselecting any item on a page after selecting all items should toggle checkbox in header", () => {
+
+		it("can select all values from all page", async () => {
+			const rowsPerPage = testData.length;
 			const wrapper = getWrapper({
-				showRowSelection: true,
+				data: testData,
 				paginated: true,
-				rowsPerPage: 2,
+				rowsPerPage,
+				rowsSelectable: true,
+				total,
 			});
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-
-			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.every((tr) => tr.classes().includes("selected"))
-			).toBe(true);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked(false);
-			expect(
-				wrapper
-					.findAll("tbody tr")
-					.wrappers.some((tr) => tr.classes().includes("selected"))
-			).toBe(false);
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
+			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			wrapper.find("thead tr input[type=checkbox]").trigger("click");
+			await wrapper.vm.$nextTick();
+			wrapper.find("button.select-all-rows").trigger("click");
+			await wrapper.vm.$nextTick();
+			expect(wrapper.emitted("update:selection")[1]).toStrictEqual([
+				[],
+				"exclusive",
+			]);
 		});
-		it("allows to select all rows of all pages", () => {
+
+		it("can preselect values", async () => {
+			const totalSelections = testData.length;
+			const selection = [...Array(totalSelections).keys()].map(String);
 			const wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
+				data: testData,
+				selectedRowIds: selection,
+				selectionType: "inclusive",
+				rowsSelectable: true,
 			});
-			const allRowsSelection = wrapper.find(
-				"thead tr th input[type='checkbox']"
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
 			);
-
-			allRowsSelection.setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-			const allRowsOfAllPagesSelection = wrapper.find(".select-all-rows");
-			expect(allRowsOfAllPagesSelection.exists()).toBe(true);
-			allRowsOfAllPagesSelection.trigger("click");
-
-			expect(wrapper.vm.allRowsOfAllPagesSelected).toBe(true);
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([
-				defaultData,
-			]);
-
-			expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
-			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([
-				defaultData,
-			]);
 		});
 
-		it("can trigger an action on selected rows", () => {
-			const testAction = jest.fn();
-			var wrapper = getWrapper({
-				showRowSelection: true,
-				actions: [
-					{
-						label: "Test",
-						action: testAction,
-					},
-				],
+		it("can preselect all values", async () => {
+			const totalSelections = testData.length;
+			const expectedSelection = [...Array(totalSelections).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				selectedRowIds: [],
+				selectionType: "exclusive",
+				rowsSelectable: true,
 			});
-
-			wrapper.find("thead tr th input[type='checkbox']").setChecked();
-			wrapper.find(".dropdown li").trigger("click");
-			expect(testAction).toHaveBeenCalled();
-
-			expect(wrapper.emitted()["update:selected-rows"]).toHaveLength(2);
-			expect(wrapper.emitted()["update:selected-rows"][1]).toStrictEqual([[]]);
-
-			expect(wrapper.emitted()["all-rows-selected"]).toHaveLength(1);
-			expect(wrapper.emitted()["all-rows-selected"][0]).toStrictEqual([[]]);
+			wrapper.emitted();
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(
+				await hasVisibleSelections(wrapper, testData, expectedSelection)
+			).toBe(true);
 		});
 
-		it("does not change row selection when new rows are added", () => {
-			var wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
-			});
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.setProps({
-				data: [
-					...defaultData,
-					{
-						id: "6",
-						firstName: "Test",
-						lastName: "Test",
-						address: {
-							city: "Test",
+		describe("header checkbox shows", () => {
+			describe("on inclusive selection", () => {
+				const getWrapperLocal = (numberOfSelections) => {
+					const selection = [...Array(numberOfSelections).keys()].map(String);
+					return getWrapper(
+						{
+							data: testData,
+							selectedRowIds: selection,
+							selectionType: "inclusive",
+							rowsSelectable: true,
 						},
-						age: 999,
-					},
-				],
-			});
+						{
+							stubs: { BaseIcon: true },
+						}
+					);
+				};
 
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
+				it("checked state if all values are selected", async () => {
+					const wrapper = getWrapperLocal(testData.length);
+					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+					expect(checkboxIcon.attributes("icon")).toBe("check_box");
+				});
+
+				it("unchecked state if no values are selected", async () => {
+					const wrapper = getWrapperLocal(0);
+					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+					expect(checkboxIcon.attributes("icon")).toBe(
+						"check_box_outline_blank"
+					);
+				});
+
+				it("intermediate state if some values are selected", async () => {
+					const wrapper = getWrapperLocal(Math.round(testData.length / 2));
+					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+					expect(checkboxIcon.attributes("icon")).toBe(
+						"indeterminate_check_box"
+					);
+				});
+			});
+			describe("on exclusive selection", () => {
+				const getWrapperLocal = (numberOfUnselections) => {
+					const selection = [...Array(numberOfUnselections).keys()].map(String);
+					return getWrapper(
+						{
+							data: testData,
+							selectedRowIds: selection,
+							selectionType: "exclusive",
+							rowsSelectable: true,
+						},
+						{
+							stubs: { BaseIcon: true },
+						}
+					);
+				};
+
+				it("checked state if no values are unselected", async () => {
+					const wrapper = getWrapperLocal(0);
+					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+					expect(checkboxIcon.attributes("icon")).toBe("check_box");
+				});
+
+				it("unchecked state if all values are unselected", async () => {
+					const wrapper = getWrapperLocal(testData.length);
+					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+					expect(checkboxIcon.attributes("icon")).toBe(
+						"check_box_outline_blank"
+					);
+				});
+
+				it("intermediate state if some values are unselected", async () => {
+					const wrapper = getWrapperLocal(Math.round(testData.length / 2));
+					const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+					expect(checkboxIcon.attributes("icon")).toBe(
+						"indeterminate_check_box"
+					);
+				});
+			});
 		});
 
-		it("row selection keeps saved during navigation between pages", () => {
-			var wrapper = getWrapper({
-				showRowSelection: true,
-				paginated: true,
-				rowsPerPage: 2,
+		describe("actions", () => {
+			const findButtonByText = (wrapper, text) =>
+				wrapper
+					.findAll("button")
+					.wrappers.filter((button) => button.text().includes(text))[0];
+
+			const getActionsButton = (wrapper) =>
+				findButtonByText(wrapper, "Aktionen");
+
+			it("can trigger on selected rows", async () => {
+				const totalSelections = testData.length;
+				const selection = [...Array(totalSelections).keys()].map(String);
+				const testAction = jest.fn();
+				const actionLabel = "TestAction";
+				var wrapper = getWrapper(
+					{
+						rowsSelectable: true,
+						selectedRowIds: selection,
+						selectionType: "inclusive",
+						actions: [
+							{
+								label: actionLabel,
+								action: testAction,
+							},
+						],
+					},
+					createComponentMocks({ i18n: true })
+				);
+
+				const actionsButton = getActionsButton(wrapper);
+				actionsButton.trigger("click");
+				await wrapper.vm.$nextTick();
+				const actionButton = findButtonByText(wrapper, actionLabel);
+				actionButton.trigger("click");
+				await wrapper.vm.$nextTick();
+
+				expect(testAction).toHaveBeenCalledWith(selection, "inclusive");
 			});
-
-			wrapper.findAll("tbody tr td input[type='checkbox']").setChecked();
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
-
-			wrapper.setProps({ currentPage: 2 });
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(false);
-
-			wrapper.setProps({ currentPage: 1 });
-			expect(wrapper.vm.allRowsOfCurrentPageSelected).toBe(true);
 		});
 	});
 
