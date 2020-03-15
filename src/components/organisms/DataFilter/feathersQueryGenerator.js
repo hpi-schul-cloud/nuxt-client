@@ -1,3 +1,5 @@
+import { unescape } from "lodash";
+
 /**
  * @param  {[{}]} activeFilters array of active filter rules (with the properties 'attribute', 'value' and 'operator')
  */
@@ -5,14 +7,14 @@ export const generator = (activeFilters) => {
 	const query = {};
 
 	activeFilters.forEach((filter) => {
-		switch (filter.operator) {
-			case ("<", "&lt;"): {
+		switch (unescape(filter.operator)) {
+			case "<": {
 				const key = filter.applyNegated ? "$gte" : "$lt";
 				query[filter.attribute] = {};
 				query[filter.attribute][key] = filter.value;
 				break;
 			}
-			case ("<=", "&lt;="): {
+			case "<=": {
 				const key = filter.applyNegated ? "$gt" : "$lte";
 				query[filter.attribute] = {};
 				query[filter.attribute][key] = filter.value;
