@@ -10,7 +10,7 @@ import {
 import { action } from "@storybook/addon-actions";
 
 import DataTable from "./DataTable";
-import DataFilter from "./DataFilter";
+import DataFilter from "../DataFilter/DataFilter";
 import notes from "./DataTable.md";
 
 import {
