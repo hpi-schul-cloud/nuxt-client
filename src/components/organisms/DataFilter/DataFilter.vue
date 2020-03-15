@@ -11,6 +11,7 @@
 
 <script>
 import VueFilterUi, { parser } from "vue-filter-ui";
+import feathersQueryGenerator from "./feathersQueryGenerator";
 
 export default {
 	components: {
@@ -89,44 +90,10 @@ export default {
 				if (!this.backendFiltering) {
 					this.$emit("update:filtered-data", this.filteredData);
 				} else {
-					// ToDo: Move parser from FilterUI to DataFilter and emit correct query
-
-					const query = {};
-
-					this.localActiveFilters.forEach((filter) => {
-						switch (filter.operator) {
-							case "<": {
-								const key = filter.applyNegated ? "$gte" : "$lt";
-								query[filter.attribute] = {};
-								query[filter.attribute][key] = filter.value;
-								break;
-							}
-							case "<=": {
-								const key = filter.applyNegated ? "$gt" : "$lte";
-								query[filter.attribute] = {};
-								query[filter.attribute][key] = filter.value;
-								break;
-							}
-							case "includes": {
-								const key = filter.applyNegated ? "$nin" : "$in";
-								const { value } = filter;
-								query[filter.attribute] = {};
-								query[filter.attribute][key] = Array.isArray(value)
-									? value
-									: [value];
-								break;
-							}
-							default: {
-								if (filter.applyNegated) {
-									query[filter.attribute] = { $ne: filter.value };
-								} else {
-									query[filter.attribute] = filter.value;
-								}
-							}
-						}
-					});
-
-					this.$emit("update:filter-query", query);
+					const feathersQuery = feathersQueryGenerator.generator(
+						this.activeFilters
+					);
+					this.$emit("update:filter-query", feathersQuery);
 				}
 			},
 		},
