@@ -2,10 +2,9 @@
 	<div>
 		<vue-filter-ui
 			:filter="filters"
-			:active-filters.sync="activeFiltersProxy"
 			:parser="parser"
-			:query="query"
-			@newQuery="setNewQuery"
+			:query="activeFiltersProxy"
+			@newQuery="setActiveFilters"
 		/>
 	</div>
 </template>
@@ -29,10 +28,6 @@ export default {
 			type: Array,
 			required: true,
 		},
-		query: {
-			type: [Object, String],
-			required: true,
-		},
 		activeFilters: {
 			type: Array,
 			default: () => [],
@@ -40,7 +35,7 @@ export default {
 	},
 	data() {
 		return {
-			parser: parser.FeathersJS,
+			parser: parser.Default,
 			localQuery: undefined,
 			localActiveFilters: undefined,
 		};
@@ -83,18 +78,6 @@ export default {
 				);
 			}
 			return this.data;
-		},
-		queryProxy: {
-			get() {
-				return this.localQuery || this.query;
-			},
-			set(to) {
-				this.localQuery = to;
-				this.$emit("update:query", to);
-				if (!this.backendFiltering) {
-					this.$emit("update:filtered-data", this.filteredData);
-				}
-			},
 		},
 		activeFiltersProxy: {
 			get() {
@@ -154,8 +137,8 @@ export default {
 		},
 	},
 	methods: {
-		setNewQuery(newQuery) {
-			this.queryProxy = newQuery;
+		setActiveFilters(newQuery) {
+			this.activeFiltersProxy = newQuery;
 		},
 	},
 };
