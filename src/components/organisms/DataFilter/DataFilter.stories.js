@@ -9,7 +9,7 @@ import {
 	tableFilters,
 	tableQuery,
 	tableActiveFilters,
-} from "./DataTable.data-factory.js";
+} from "@components/organisms/DataTable/DataTable.data-factory.js";
 
 storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 	"DataFilter",
