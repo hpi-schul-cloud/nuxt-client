@@ -6,116 +6,88 @@ export const supportedFilterTypes = [
 	"text",
 ];
 
-export const supportedFilterMatchingTypes = {
+const filterTextIncludes = (value, targetValue) => {
+	return (value || "")
+		.toString()
+		.toString()
+		.toLowerCase()
+		.includes(targetValue.toString().toLowerCase());
+};
+const filterTextEqual = (value, targetValue) => {
+	return (
+		(value || "").toString().toLowerCase() ===
+		targetValue.toString().toLowerCase()
+	);
+};
+const filterTextLessEqual = (value, targetValue) => {
+	return (
+		(value || "").toString().toLowerCase() <=
+		targetValue.toString().toLowerCase()
+	);
+};
+const filterTextGreater = (value, targetValue) => {
+	return (
+		(value || "").toString().toLowerCase() >
+		targetValue.toString().toLowerCase()
+	);
+};
+
+const filterNumberEqual = (value, targetValue) => {
+	return Number(value) === Number(targetValue);
+};
+const filterNumberGreater = (value, targetValue) => {
+	return Number(value) > Number(targetValue);
+};
+const filterNumberLessEqual = (value, targetValue) => {
+	return Number(value) <= Number(targetValue);
+};
+
+const filterSelect = (value, targetValue) => {
+	return targetValue.some((option) => {
+		return (
+			option.checked &&
+			option.value &&
+			option.value.toString() === (value || "").toString()
+		);
+	});
+};
+
+const filterDateDefault = (value, targetValue) => {
+	return filterDateEqual(value, targetValue);
+};
+const filterDateEqual = (value, targetValue) => {
+	return new Date(value).getTime() === new Date(targetValue).getTime();
+};
+const filterDateBefore = (value, targetValue) => {
+	return new Date(value) <= new Date(targetValue);
+};
+const filterDateAfter = (value, targetValue) => {
+	return new Date(value) >= new Date(targetValue);
+};
+
+const defaultFilters = {
 	date: {
-		equal: {
-			value: "equal",
-			label: "ist",
-		},
-		before: {
-			value: "before",
-			label: "vor dem",
-		},
-		after: {
-			value: "after",
-			label: "nach dem",
-		},
+		default: filterDateDefault,
+		equal: filterDateEqual,
+		before: filterDateBefore,
+		after: filterDateAfter,
 	},
 	number: {
-		equal: {
-			value: "equal",
-			label: "=",
-		},
-		greater: {
-			value: "greater",
-			label: ">",
-		},
-		less: {
-			value: "less",
-			label: "<",
-		},
-		greaterEqual: {
-			value: "greaterEqual",
-			label: "≥",
-		},
-		lessEqual: {
-			value: "lessEqual",
-			label: "≤",
-		},
+		default: filterNumberEqual,
+		"=": filterNumberEqual,
+		"<=": filterNumberLessEqual,
+		">": filterNumberGreater,
+	},
+	select: {
+		default: filterSelect,
 	},
 	text: {
-		equals: {
-			value: "equals",
-			label: "ist gleich",
-		},
-		contains: {
-			value: "contains",
-			label: "enthält",
-		},
+		default: filterTextIncludes,
+		"=": filterTextEqual,
+		"<=": filterTextLessEqual,
+		">": filterTextGreater,
+		includes: filterTextIncludes,
 	},
 };
 
-const defaultFiltersMixin = {
-	methods: {
-		filterTextDefault: function(value, targetValue) {
-			return this.filterTextContains(value, targetValue);
-		},
-		filterTextContains(value, targetValue) {
-			return (value || "")
-				.toString()
-				.toString()
-				.toLowerCase()
-				.includes(targetValue.toString().toLowerCase());
-		},
-		filterTextEquals(value, targetValue) {
-			return (
-				(value || "").toString().toLowerCase() ===
-				targetValue.toString().toLowerCase()
-			);
-		},
-
-		filterNumberDefault(value, targetValue) {
-			return this.filterNumberEqual(value, targetValue);
-		},
-		filterNumberEqual(value, targetValue) {
-			return Number(value) === Number(targetValue);
-		},
-		filterNumberGreater(value, targetValue) {
-			return Number(value) > Number(targetValue);
-		},
-		filterNumberLess(value, targetValue) {
-			return Number(value) < Number(targetValue);
-		},
-		filterNumberGreaterEqual(value, targetValue) {
-			return Number(value) >= Number(targetValue);
-		},
-		filterNumberLessEqual(value, targetValue) {
-			return Number(value) <= Number(targetValue);
-		},
-
-		filterSelectDefault(value, targetValue) {
-			return targetValue.some((option) => {
-				return (
-					option.checked &&
-					option.value &&
-					option.value.toString() === (value || "").toString()
-				);
-			});
-		},
-
-		filterDateDefault(value, targetValue) {
-			return this.filterDateEqual(value, targetValue);
-		},
-		filterDateEqual(value, targetValue) {
-			return new Date(value).getTime() === new Date(targetValue).getTime();
-		},
-		filterDateBefore(value, targetValue) {
-			return new Date(value) <= new Date(targetValue);
-		},
-		filterDateAfter(value, targetValue) {
-			return new Date(value) >= new Date(targetValue);
-		},
-	},
-};
-
-export default defaultFiltersMixin;
+export default defaultFilters;
