@@ -12,6 +12,8 @@
 <script>
 import VueFilterUi, { parser } from "vue-filter-ui";
 import feathersQueryGenerator from "./feathersQueryGenerator";
+import defaultFilters from "./defaultFilters";
+import { unescape } from "lodash";
 
 export default {
 	components: {
@@ -47,34 +49,14 @@ export default {
 			if (!this.backendFiltering) {
 				return this.data.filter((row) =>
 					this.activeFiltersProxy.every((filter) => {
-						switch (filter.operator) {
-							case ("<", "&lt;"): {
-								if (filter.applyNegated) {
-									return row[filter.attribute].toString() >= filter.value;
-								}
-								return row[filter.attribute].toString() < filter.value;
-							}
-							case ("<=", "&lt;="): {
-								if (filter.applyNegated) {
-									return row[filter.attribute].toString() > filter.value;
-								}
-								return row[filter.attribute].toString() <= filter.value;
-							}
-							case "includes": {
-								if (filter.applyNegated) {
-									return !row[filter.attribute]
-										.toString()
-										.includes(filter.value);
-								}
-								return row[filter.attribute].toString().includes(filter.value);
-							}
-							default: {
-								if (filter.applyNegated) {
-									return row[filter.attribute].toString() !== filter.value;
-								}
-								return row[filter.attribute].toString() === filter.value;
-							}
+						if (filter.applyNegated) {
+							return !defaultFilters["text"][
+								unescape(filter.operator) || "default"
+							](row[filter.attribute].toString(), filter.value.toString());
 						}
+						return defaultFilters["text"][
+							unescape(filter.operator) || "default"
+						](row[filter.attribute].toString(), filter.value.toString());
 					})
 				);
 			}
