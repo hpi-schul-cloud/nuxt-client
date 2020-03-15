@@ -43,22 +43,22 @@ export default {
 	},
 	computed: {
 		filteredData() {
-			// ToDo implement data filtering correctly
+			// ToDo implement filtering for other data types than strings
 			if (!this.backendFiltering) {
 				return this.data.filter((row) =>
 					this.activeFiltersProxy.every((filter) => {
 						switch (filter.operator) {
-							case "<": {
+							case ("<", "&lt;"): {
 								if (filter.applyNegated) {
-									return row[filter.attribute] >= filter.value;
+									return row[filter.attribute].toString() >= filter.value;
 								}
-								return row[filter.attribute] < filter.value;
+								return row[filter.attribute].toString() < filter.value;
 							}
-							case "<=": {
+							case ("<=", "&lt;="): {
 								if (filter.applyNegated) {
-									return row[filter.attribute] > filter.value;
+									return row[filter.attribute].toString() > filter.value;
 								}
-								return row[filter.attribute] <= filter.value;
+								return row[filter.attribute].toString() <= filter.value;
 							}
 							case "includes": {
 								if (filter.applyNegated) {
@@ -70,9 +70,9 @@ export default {
 							}
 							default: {
 								if (filter.applyNegated) {
-									return row[filter.attribute] !== filter.value;
+									return row[filter.attribute].toString() !== filter.value;
 								}
-								return row[filter.attribute] === filter.value;
+								return row[filter.attribute].toString() === filter.value;
 							}
 						}
 					})
