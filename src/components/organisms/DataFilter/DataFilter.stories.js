@@ -11,9 +11,13 @@ import {
 	tableActiveFilters,
 } from "@components/organisms/DataTable/DataTable.data-factory.js";
 
-storiesOf("6 Organisms/DataTable/SubComponents", module).add(
-	"DataFilter",
-	() => {
+import notes from "./DataFilter.md";
+
+storiesOf("6 Organisms/DataTable/SubComponents", module)
+	.addParameters({
+		notes,
+	})
+	.add("DataFilter", () => {
 		const data = tableData(10);
 
 		return {
@@ -42,5 +46,4 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 				onUpdateFilterQuery: action("@update:filter-query"),
 			},
 		};
-	}
-);
+	});
