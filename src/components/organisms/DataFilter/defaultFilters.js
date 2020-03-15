@@ -19,15 +19,15 @@ const filterTextEqual = (value, targetValue) => {
 		targetValue.toString().toLowerCase()
 	);
 };
-const filterTextLessEqual = (value, targetValue) => {
+const filterTextLess = (value, targetValue) => {
 	return (
-		(value || "").toString().toLowerCase() <=
+		(value || "").toString().toLowerCase() <
 		targetValue.toString().toLowerCase()
 	);
 };
-const filterTextGreater = (value, targetValue) => {
+const filterTextLessEqual = (value, targetValue) => {
 	return (
-		(value || "").toString().toLowerCase() >
+		(value || "").toString().toLowerCase() <=
 		targetValue.toString().toLowerCase()
 	);
 };
@@ -35,8 +35,8 @@ const filterTextGreater = (value, targetValue) => {
 const filterNumberEqual = (value, targetValue) => {
 	return Number(value) === Number(targetValue);
 };
-const filterNumberGreater = (value, targetValue) => {
-	return Number(value) > Number(targetValue);
+const filterNumberLess = (value, targetValue) => {
+	return Number(value) < Number(targetValue);
 };
 const filterNumberLessEqual = (value, targetValue) => {
 	return Number(value) <= Number(targetValue);
@@ -68,15 +68,15 @@ const filterDateAfter = (value, targetValue) => {
 const defaultFilters = {
 	date: {
 		default: filterDateDefault,
-		equal: filterDateEqual,
+		"=": filterDateEqual,
 		before: filterDateBefore,
 		after: filterDateAfter,
 	},
 	number: {
 		default: filterNumberEqual,
 		"=": filterNumberEqual,
+		"<": filterNumberLess,
 		"<=": filterNumberLessEqual,
-		">": filterNumberGreater,
 	},
 	select: {
 		default: filterSelect,
@@ -84,8 +84,8 @@ const defaultFilters = {
 	text: {
 		default: filterTextIncludes,
 		"=": filterTextEqual,
+		"<": filterTextLess,
 		"<=": filterTextLessEqual,
-		">": filterTextGreater,
 		includes: filterTextIncludes,
 	},
 };
