@@ -144,7 +144,7 @@ const tableFilters = [
 		filter: [
 			{
 				attribute: "firstName",
-				operator: "íncludes",
+				operator: "includes",
 				input: inputs.InputText,
 			},
 		],
