@@ -2,22 +2,22 @@ import FabFloating from "./FabFloating";
 
 const topRightFab = {
 	components: { FabFloating },
-	template: `<fab-floating position="top-right" aria-label="Some Label"/>`,
+	template: `<fab-floating position="top-right" />`,
 };
 
 const topLeftFab = {
 	components: { FabFloating },
-	template: `<fab-floating position="top-left" aria-label="Some Label"/>`,
+	template: `<fab-floating position="top-left" />`,
 };
 
 const bottomLeftFab = {
 	components: { FabFloating },
-	template: `<fab-floating position="bottom-left" aria-label="Some Label"/>`,
+	template: `<fab-floating position="bottom-left" />`,
 };
 
 const bottomRightFab = {
 	components: { FabFloating },
-	template: `<fab-floating position="bottom-right" aria-label="Some Label"/>`,
+	template: `<fab-floating position="bottom-right" />`,
 };
 
 describe("@components/FabFloating", () => {
