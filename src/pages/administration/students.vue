@@ -1,28 +1,64 @@
 <template>
 	<section class="section">
-		<h1>xxx</h1>
-		<div v-for="element in students" :key="element._id">
-			{{ element.firstName }}, {{ element.lastName }}
-		</div>
-		<pagination
-			class="mt--xl-3"
-			:current-page="page"
-			:per-page="pagination.limit"
+		<h1>{{ this.$store.getters["i18n/getLocale"] }}</h1>
+		<backend-data-table
+			:columns="tableColumns"
+			:data="students"
+			track-by="id"
 			:total="pagination.total"
-			@update:current-page="onPageChange"
-			@update:per-page="onCurrentPageChange"
-		/>
+			:paginated="true"
+			:current-page.sync="page"
+			:rows-per-page.sync="limit"
+			@update:current-page="onUpdateCurrentPage"
+			@update:rows-per-page="onUpdateRowsPerPage"
+		>
+			<template v-slot:datacolumn-createdAt="{ data }">
+				{{ dayjs(data).format("DD.MM.YYYY") }}
+			</template>
+			<template v-slot:datacolumn-consent-consentStatus="{ data }">
+				<span v-if="data === 'ok'">
+					<base-icon
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
+					<base-icon
+						style="position: relative; left: -12px"
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
+				</span>
+				<span v-else-if="data === 'parentsAgreed'">
+					<base-icon
+						source="material"
+						icon="check"
+						color="var(--color-warning)"
+					/>
+				</span>
+				<span v-else-if="data === 'missing'">
+					<base-icon
+						source="material"
+						icon="close"
+						color="var(--color-danger)"
+					/>
+				</span>
+			</template>
+		</backend-data-table>
 	</section>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Pagination from "@components/organisms/Pagination";
+import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+import dayjs from "dayjs";
+import "dayjs/locale/de";
+dayjs.locale("de");
 
 export default {
 	layout: "loggedInFull",
 	components: {
-		Pagination,
+		BackendDataTable,
 	},
 	data() {
 		return {
@@ -31,6 +67,29 @@ export default {
 				localStorage.getItem(
 					"pages.administration.students.index.itemsPerPage"
 				) || 10,
+			tableColumns: [
+				{
+					field: "firstName",
+					label: "Vorname",
+					sortable: true,
+				},
+				{
+					field: "lastName",
+					label: "Nachname",
+				},
+				{
+					field: "email",
+					label: "E-Mail",
+				},
+				{
+					field: "consent.consentStatus",
+					label: "Consent",
+				},
+				{
+					field: "createdAt",
+					label: "Erstellungsdatum",
+				},
+			],
 		};
 	},
 	computed: {
@@ -56,11 +115,11 @@ export default {
 				query,
 			});
 		},
-		onPageChange(page) {
+		onUpdateCurrentPage(page) {
 			this.page = page;
 			this.find();
 		},
-		onCurrentPageChange(limit) {
+		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
 			// save user settings in localStorage
@@ -70,6 +129,7 @@ export default {
 			);
 			this.find();
 		},
+		dayjs,
 	},
 };
 </script>
