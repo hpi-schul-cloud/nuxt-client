@@ -108,16 +108,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .row-selection-info {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	width: 100%;
 	padding: var(--space-md);
-	font-size: var(--text-md);
+	font-size: var(--text-sm);
 	font-weight: var(--font-weight-normal);
 	color: var(--color-on-tertiary-light);
 	background-color: var(--color-tertiary-light);
+
+		@include breakpoint(tablet) {
+			font-size: var(--text-md);
+		}
 }
+
 
 .select-all-rows {
 	text-decoration: underline;

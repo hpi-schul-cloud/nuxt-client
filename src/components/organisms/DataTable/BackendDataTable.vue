@@ -390,7 +390,6 @@ thead {
 .toolbelt {
 	display: flex;
 	align-items: center;
-	height: 55px;
 }
 .table {
 	width: 100%;
