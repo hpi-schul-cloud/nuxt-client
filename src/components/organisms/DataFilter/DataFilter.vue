@@ -12,7 +12,11 @@
 <script>
 import VueFilterUi, { parser } from "vue-filter-ui";
 import feathersQueryGenerator from "./feathersQueryGenerator";
-import defaultFilters from "./defaultFilters";
+import {
+	defaultFilters,
+	supportedFilterTypes,
+	supportedOperators,
+} from "./defaultFilters";
 import { unescape } from "lodash";
 
 export default {
@@ -49,6 +53,18 @@ export default {
 			if (!this.backendFiltering) {
 				return this.data.filter((row) =>
 					this.activeFiltersProxy.every((filter) => {
+						if (!filter.type || !supportedFilterTypes.includes(filter.type)) {
+							// comment in this line when different filter types are supported
+							// return true;
+						}
+						if (
+							filter.operator &&
+							// replace this line when other filter types than text are supported
+							// !supportedOperators[filter.type].includes(filter.operator)
+							!supportedOperators["text"].includes(filter.operator)
+						) {
+							return true;
+						}
 						if (filter.applyNegated) {
 							return !defaultFilters["text"][
 								unescape(filter.operator) || "default"

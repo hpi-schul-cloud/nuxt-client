@@ -1,10 +1,11 @@
-export const supportedFilterTypes = [
-	"date",
-	"fulltextSearch",
-	"number",
-	"select",
-	"text",
-];
+export const supportedFilterTypes = ["date", "number", "select", "text"];
+
+export const supportedOperators = {
+	date: ["=", "before", "after"],
+	number: ["=", "<", "<="],
+	select: ["="],
+	text: ["=", "<", "<="],
+};
 
 const filterTextIncludes = (value, targetValue) => {
 	return (value || "")
@@ -65,7 +66,7 @@ const filterDateAfter = (value, targetValue) => {
 	return new Date(value) >= new Date(targetValue);
 };
 
-const defaultFilters = {
+export const defaultFilters = {
 	date: {
 		default: filterDateDefault,
 		"=": filterDateEqual,
@@ -80,6 +81,7 @@ const defaultFilters = {
 	},
 	select: {
 		default: filterSelect,
+		"=": filterSelect,
 	},
 	text: {
 		default: filterTextIncludes,
@@ -89,5 +91,3 @@ const defaultFilters = {
 		includes: filterTextIncludes,
 	},
 };
-
-export default defaultFilters;

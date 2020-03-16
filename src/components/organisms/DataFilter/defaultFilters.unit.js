@@ -1,4 +1,4 @@
-import defaultFilters from "./defaultFilters";
+import { defaultFilters } from "./defaultFilters";
 
 describe("defaultFilters", () => {
 	describe("it can filter strings", () => {
