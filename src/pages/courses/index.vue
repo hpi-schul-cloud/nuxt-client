@@ -2,9 +2,12 @@
 	<div>
 		<chip-filter :value.sync="activeToggle" :options="toggleTags" />
 		<fab-floating
-			icon="add"
-			to="/courses/create"
-			:aria-label="$t('pages.courses.new.btn_new')"
+			:primary-action="{
+				icon: 'add',
+				'icon-source': 'material',
+				to: '/courses/create',
+				label: $t('pages.courses.new.btn_new'),
+			}"
 		/>
 		<courses-grid :courses="courses"></courses-grid>
 	</div>

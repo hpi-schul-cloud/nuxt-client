@@ -149,9 +149,12 @@
 
 		<fab-floating
 			position="bottom-right"
-			icon="add"
-			to="/administration/datasources/add"
-			:aria-label="$t('pages.administration.datasources.index.create')"
+			:primary-action="{
+				icon: 'add',
+				'icon-source': 'material',
+				to: '/administration/datasources/add',
+				label: $t('pages.administration.datasources.index.create'),
+			}"
 		/>
 	</div>
 </template>

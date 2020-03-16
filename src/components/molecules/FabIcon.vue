@@ -8,9 +8,10 @@
 				'expand-bottom': expandDirection === 'bottom',
 			}"
 		>
-			<button
+			<base-button
 				v-for="action in actions"
 				:key="action.icon + action.label"
+				design="none"
 				type="button"
 				class="fab small"
 				:disabled="!isOpen"
@@ -22,10 +23,12 @@
 				}"
 				:data-tooltip="action.label"
 				:aria-label="action.label"
+				:to="action.to"
+				:href="action.href"
 				@click="triggerAction(action)"
 			>
 				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
-			</button>
+			</base-button>
 		</div>
 
 		<button
@@ -65,16 +68,18 @@ const primaryActionDefault = {
 	label: "toggle action button visiblity",
 };
 
+const isActionValid = (action) =>
+	action.icon &&
+	action["icon-source"] &&
+	(action.event || action.to || action.href) &&
+	action.label;
+
 export default {
 	props: {
 		actions: {
 			type: Array,
 			default: () => [],
-			validator: (actions) =>
-				actions.every(
-					(action) =>
-						action.icon && action["icon-source"] && action.event && action.label
-				),
+			validator: (actions) => actions.every(isActionValid),
 		},
 		expandDirection: {
 			type: String,
@@ -91,9 +96,9 @@ export default {
 		},
 		primaryAction: {
 			type: Object,
-			default: () => ({ ...primaryActionDefault }),
-			validator: (action) =>
-				action.icon && action["icon-source"] && action.event && action.label,
+			default: () => ({}),
+			validator: (value) =>
+				isActionValid({ ...primaryActionDefault, ...value }),
 		},
 		showLabel: {
 			type: Boolean,

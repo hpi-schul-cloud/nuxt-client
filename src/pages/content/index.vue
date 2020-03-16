@@ -2,8 +2,11 @@
 	<section>
 		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
 			<fab-floating
-				icon="arrow_drop_up"
-				:aria-label="$t('common.actions.scrollToTop')"
+				:primary-action="{
+					icon: 'arrow_drop_up',
+					'icon-source': 'material',
+					label: $t('common.actions.scrollToTop'),
+				}"
 				@click="$_backToTop"
 			/>
 		</div>

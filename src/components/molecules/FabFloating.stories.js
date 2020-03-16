@@ -25,7 +25,6 @@ This is basically an FabIcon that get's positioned. So read the FabIcon document
 		}),
 		template: `<FabFloating
 			:position="position"
-			:icon="icon"
 			:showLabel="showLabel"
 			:actions="[
 				{
