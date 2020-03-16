@@ -12,6 +12,7 @@
 					@fire-action="fireAction"
 				/>
 			</div>
+			<div class="wrapper">
 			<table class="table">
 				<thead>
 					<component
@@ -22,6 +23,7 @@
 						:sort-by.sync="sortByProxy"
 						:sort-order.sync="sortOrderProxy"
 					/>
+
 				</thead>
 				<tbody>
 					<component
@@ -44,6 +46,7 @@
 					</component>
 				</tbody>
 			</table>
+			</div>
 		</div>
 
 		<pagination
@@ -384,7 +387,7 @@ export default {
 thead {
 	font-size: var(--text-md);
 }
-.table-wrapper {
+.wrapper {
 	overflow-x: auto;
 }
 .toolbelt {
@@ -394,6 +397,7 @@ thead {
 .table {
 	width: 100%;
 	margin-bottom: var(--space-sm);
+	overflow-x: auto;
 	border-collapse: collapse;
 }
 </style>

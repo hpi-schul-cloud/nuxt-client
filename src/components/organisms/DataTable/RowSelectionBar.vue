@@ -20,7 +20,7 @@
 			</div>
 			<div
 				v-if="actions && actions.length"
-				class="ml--md"
+				class="actions"
 				style="position: relative;"
 			>
 				<base-button size="small" @click="actionsMenuOpen = true">
@@ -126,6 +126,20 @@ export default {
 		}
 }
 
+.actions {
+	margin-top: var(--space-sm);
+
+		@include breakpoint(tablet) {
+			margin-top: 0;
+			margin-left: var(--space-md);
+		}
+
+}
+
+.d-flex.align-items-center{
+	flex-wrap: wrap;
+	margin: var(--space-sm);
+}
 
 .select-all-rows {
 	text-decoration: underline;
