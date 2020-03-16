@@ -1,36 +1,5 @@
 <template>
 	<div class="fab-wrapper">
-		<div
-			class="inner-fabs"
-			:class="{
-				expanded: isOpen,
-				'expand-top': expandDirection === 'top',
-				'expand-bottom': expandDirection === 'bottom',
-			}"
-		>
-			<base-button
-				v-for="action in actions"
-				:key="action.icon + action.label"
-				design="none"
-				type="button"
-				class="fab small"
-				:disabled="!isOpen"
-				:aria-hidden="(!isOpen).toString()"
-				:class="{
-					labeled: action.label && showLabel,
-					'label-left': labelPosition === 'left',
-					'label-right': labelPosition === 'right',
-				}"
-				:data-tooltip="action.label"
-				:aria-label="action.label"
-				:to="action.to"
-				:href="action.href"
-				@click="triggerAction(action)"
-			>
-				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
-			</base-button>
-		</div>
-
 		<base-button
 			class="fab primary"
 			design="none"
@@ -60,6 +29,38 @@
 				/>
 			</transition>
 		</base-button>
+
+		<div
+			class="inner-fabs"
+			:class="{
+				expanded: isOpen,
+				'expand-top': expandDirection === 'top',
+				'expand-bottom': expandDirection === 'bottom',
+			}"
+		>
+			<base-button
+				v-for="action in actions"
+				:key="action.icon + action.label"
+				design="none"
+				type="button"
+				class="fab small"
+				:disabled="!isOpen"
+				:tabindex="isOpen ? 0 : -1"
+				:aria-hidden="(!isOpen).toString()"
+				:class="{
+					labeled: action.label && showLabel,
+					'label-left': labelPosition === 'left',
+					'label-right': labelPosition === 'right',
+				}"
+				:data-tooltip="action.label"
+				:aria-label="action.label"
+				:to="action.to"
+				:href="action.href"
+				@click="triggerAction(action)"
+			>
+				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
+			</base-button>
+		</div>
 	</div>
 </template>
 <script>
@@ -154,15 +155,15 @@ export default {
 
 $fab-color: var(--color-primary);
 $fab-text-color: var(--color-on-primary);
-$fab-shadow: 0 3px 10px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.16);
-$fab-label-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+$fab-shadow: var(--shadow-xs);
+$fab-label-shadow: var(--shadow-xxxs);
 
 $fab-small-color: var(--color-white);
 $fab-small-text-color: var(--color-on-white);
 $fab-label-color: var(--color-overlay);
 $fab-label-text-color: var(--color-on-overlay);
 
-$fab-spacing: 50;
+$fab-spacing: 60;
 $fab-offset: 60;
 $fab-label-offset: 50px;
 
@@ -188,13 +189,9 @@ $fab-label-offset: 50px;
 	transition: all 300ms ease-in-out;
 }
 
-// .fab.primary .icon {
-// 	transition: transform 300ms ease-in-out;
-// 	will-change: transform;
-// }
-// .fab.primary.expanded .icon {
-// 	transform: rotate(135deg);
-// }
+.fab.primary {
+	z-index: var(--layer-page);
+}
 
 .fab.small {
 	width: 40px;
