@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
-			<floating-fab
+			<fab-floating
 				icon="arrow_drop_up"
 				:aria-label="$t('common.actions.scrollToTop')"
 				@click="$_backToTop"
@@ -54,7 +54,7 @@ import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 
 export default {
 	components: {
@@ -62,7 +62,7 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
-		FloatingFab,
+		FabFloating,
 	},
 	mixins: [infiniteScrolling],
 	layout: "loggedInFull",

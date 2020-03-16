@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<chip-filter :value.sync="activeToggle" :options="toggleTags" />
-		<floating-fab
+		<fab-floating
 			icon="add"
 			to="/courses/create"
 			:aria-label="$t('pages.courses.new.btn_new')"
@@ -14,14 +14,14 @@
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
 import ChipFilter from "@components/molecules/ChipFilter";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 
 export default {
 	layout: "loggedInFull",
 	components: {
 		CoursesGrid,
 		ChipFilter,
-		FloatingFab,
+		FabFloating,
 	},
 	data() {
 		return {

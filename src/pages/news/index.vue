@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<floating-fab
+		<fab-floating
 			icon="add"
 			to="/news/new"
 			:aria-label="$t('pages.news.new.title')"
@@ -19,12 +19,12 @@
 <script>
 import { mapGetters } from "vuex";
 import NewsCard from "@components/molecules/NewsCard";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 
 export default {
 	components: {
 		NewsCard,
-		FloatingFab,
+		FabFloating,
 	},
 	computed: {
 		...mapGetters("news", {

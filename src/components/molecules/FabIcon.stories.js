@@ -2,13 +2,13 @@ import { storiesOf } from "@storybook/vue";
 import { action } from "@storybook/addon-actions";
 import centered from "@storybook/addon-centered/vue";
 
-import IconFab from "./IconFab";
+import FabIcon from "./FabIcon";
 
-storiesOf("5 Molecules/IconFab", module)
+storiesOf("5 Molecules/FabIcon", module)
 	.addDecorator(centered)
 	.add("single action", () => ({
-		components: { IconFab },
-		template: `<IconFab
+		components: { FabIcon },
+		template: `<FabIcon
 			@event="onEvent"
 			:primary-action="action"
 		/>`,
@@ -25,8 +25,8 @@ storiesOf("5 Molecules/IconFab", module)
 		}),
 	}))
 	.add("multiple actions", () => ({
-		components: { IconFab },
-		template: `<IconFab
+		components: { FabIcon },
+		template: `<FabIcon
 			:primaryAction="primaryAction"
 			:actions="actions"
 			@event="onEvent"

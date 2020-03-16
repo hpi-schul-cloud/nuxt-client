@@ -147,7 +147,7 @@
 			</empty-state>
 		</template>
 
-		<floating-fab
+		<fab-floating
 			position="bottom-right"
 			icon="add"
 			to="/administration/datasources/add"
@@ -160,7 +160,7 @@
 import ContextMenu from "@components/molecules/ContextMenu";
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 import Pagination from "@components/organisms/Pagination";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
@@ -177,7 +177,7 @@ export default {
 		ContextMenu,
 		DatasourceCard,
 		EmptyState,
-		FloatingFab,
+		FabFloating,
 		Pagination,
 		ResponsiveIconButton,
 	},

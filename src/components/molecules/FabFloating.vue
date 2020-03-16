@@ -1,6 +1,6 @@
 <template>
 	<div :style="currentPosition" class="fab">
-		<icon-fab
+		<fab-icon
 			v-bind="$attrs"
 			:expand-direction="expandDirection"
 			:label-position="labelPosition"
@@ -9,10 +9,13 @@
 	</div>
 </template>
 <script>
-import IconFab from "@components/molecules/IconFab";
+/**
+ * ToDo: Should support Text-Fab
+ */
+import FabIcon from "@components/molecules/FabIcon";
 
 export default {
-	components: { IconFab },
+	components: { FabIcon },
 	props: {
 		position: {
 			type: String,
@@ -64,14 +67,10 @@ export default {
 						top: "4vh",
 					};
 				case "top-right":
-					return {
-						right: "5vw",
-						top: "4vh",
-					};
 				default:
 					return {
 						right: "5vw",
-						bottom: "4vh",
+						top: "4vh",
 					};
 			}
 		},

@@ -1,15 +1,15 @@
 import { storiesOf } from "@storybook/vue";
 
-import FloatingFab from "./FloatingFab";
+import FabFloating from "./FabFloating";
 import { boolean, select } from "@storybook/addon-knobs";
 
-storiesOf("5 Molecules/FloatingFab", module)
+storiesOf("5 Molecules/FabFloating", module)
 	.addParameters({
-		notes: `# FloatingFab
-This is basically an IconFab that get's positioned. So read the IconFab documentation for more information.`,
+		notes: `# FabFloating
+This is basically an FabIcon that get's positioned. So read the FabIcon documentation for more information.`,
 	})
 	.add("default", () => ({
-		components: { FloatingFab },
+		components: { FabFloating },
 		data: () => ({
 			position: select(
 				"Position",
@@ -23,7 +23,7 @@ This is basically an IconFab that get's positioned. So read the IconFab document
 			),
 			showLabel: boolean("showLabel", true),
 		}),
-		template: `<FloatingFab
+		template: `<FabFloating
 			:position="position"
 			:icon="icon"
 			:showLabel="showLabel"
