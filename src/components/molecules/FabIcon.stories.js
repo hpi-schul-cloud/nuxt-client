@@ -1,6 +1,7 @@
 import { storiesOf } from "@storybook/vue";
 import { action } from "@storybook/addon-actions";
 import centered from "@storybook/addon-centered/vue";
+import { boolean, select, text } from "@storybook/addon-knobs";
 
 import FabIcon from "./FabIcon";
 
@@ -27,15 +28,36 @@ storiesOf("5 Molecules/FabIcon", module)
 	.add("multiple actions", () => ({
 		components: { FabIcon },
 		template: `<FabIcon
-			:primaryAction="primaryAction"
 			:actions="actions"
+			:color="color"
+			:expandDirection="expandDirection"
+			:labelPosition="labelPosition"
+			:primaryAction="primaryAction"
+			:showLabel="showLabel"
 			@event="onEvent"
-			:showLabel="true"
 		/>`,
 		methods: {
 			onEvent: action("@event"),
 		},
 		data: () => ({
+			showLabel: boolean("showLabel", true),
+			color: text("color", "var(--color-primary)"),
+			expandDirection: select(
+				"expandDirection",
+				{
+					top: "top",
+					bottom: "bottom",
+				},
+				"top"
+			),
+			labelPosition: select(
+				"labelPosition",
+				{
+					left: "left",
+					right: "right",
+				},
+				"left"
+			),
 			primaryAction: {
 				icon: "more_vert",
 				"icon-source": "material",

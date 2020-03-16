@@ -31,13 +31,15 @@
 			</base-button>
 		</div>
 
-		<button
+		<base-button
 			class="fab primary"
+			design="none"
 			:class="{
 				expanded: isOpen,
 			}"
 			type="button"
 			:aria-label="primaryActionWithDefaults.label"
+			:style="{ 'background-color': color, color: primaryTextColor }"
 			@click="handlePrimaryAction"
 		>
 			<transition name="morph" mode="out-in">
@@ -57,7 +59,7 @@
 					source="material"
 				/>
 			</transition>
-		</button>
+		</base-button>
 	</div>
 </template>
 <script>
@@ -80,6 +82,12 @@ export default {
 			type: Array,
 			default: () => [],
 			validator: (actions) => actions.every(isActionValid),
+		},
+		color: {
+			type: String,
+			default: "var(--color-primary)",
+			validator: (value) =>
+				value.startsWith("var(--color") && value.endsWith(")"),
 		},
 		expandDirection: {
 			type: String,
@@ -110,6 +118,9 @@ export default {
 		};
 	},
 	computed: {
+		primaryTextColor() {
+			return this.color.replace("--color-", "--color-on-");
+		},
 		primaryActionWithDefaults() {
 			return {
 				...primaryActionDefault,
