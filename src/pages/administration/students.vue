@@ -81,6 +81,10 @@ export default {
 					field: "email",
 					label: "E-Mail",
 				},
+				// {
+				// 	field: "birthday",
+				// 	label: "Geburtsdatum",
+				// },
 				{
 					field: "consent.consentStatus",
 					label: "Consent",
