@@ -16,12 +16,13 @@
 				:disabled="!isOpen"
 				:aria-hidden="(!isOpen).toString()"
 				:class="{
-					labeled: action.label,
+					labeled: action.label && showLabel,
 					'label-left': labelPosition === 'left',
 					'label-right': labelPosition === 'right',
 				}"
 				:data-tooltip="action.label"
-				@click="emitEvent(action)"
+				:aria-label="action.label"
+				@click="triggerAction(action)"
 			>
 				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
 			</button>
@@ -33,36 +34,62 @@
 				expanded: isOpen,
 			}"
 			type="button"
-			@click="isOpen = !isOpen"
+			:aria-label="primaryAction.label"
+			@click="handlePrimaryAction"
 		>
-			<BaseIcon
-				class="icon"
-				:icon="primaryAction.icon"
-				:source="primaryAction['icon-source']"
-			/>
+			<transition name="morph" mode="out-in">
+				<BaseIcon
+					v-if="!isOpen"
+					key="closedLogo"
+					class="icon"
+					:icon="primaryAction.icon"
+					:source="primaryAction['icon-source']"
+				/>
+				<BaseIcon
+					v-else
+					key="expandedIcon"
+					class="icon"
+					icon="close"
+					source="material"
+				/>
+			</transition>
 		</button>
 	</div>
 </template>
 <script>
 export default {
 	props: {
-		labelPosition: {
-			type: String,
-			default: "left",
-			validator: (position) => ["left", "right"].includes(position),
+		actions: {
+			type: Array,
+			default: () => [],
+			validator: (actions) =>
+				actions.every(
+					(action) => action.icon && action["icon-source"] && action.event
+				),
 		},
 		expandDirection: {
 			type: String,
 			default: "top",
 			validator: (position) => ["top", "bottom"].includes(position),
 		},
-		actions: {
-			type: Array,
-			required: true,
-			validator: (actions) =>
-				actions.every(
-					(action) => action.icon && action["icon-source"] && action.event
-				),
+		labelPosition: {
+			type: String,
+			default: "left",
+			validator: (position) => ["left", "right"].includes(position),
+		},
+		noAutoClose: {
+			type: Boolean,
+		},
+		primaryAction: {
+			type: Object,
+			default: () => ({
+				icon: "add",
+				"icon-source": "material",
+				event: "click",
+			}),
+		},
+		showLabel: {
+			type: Boolean,
 		},
 	},
 	data() {
@@ -71,17 +98,22 @@ export default {
 		};
 	},
 	computed: {
-		primaryAction() {
-			return true
-				? {
-						icon: "add",
-						"icon-source": "material",
-				  }
-				: this.actions[0];
+		hasSubActions() {
+			return Boolean(this.actions.length);
 		},
 	},
 	methods: {
-		emitEvent(action) {
+		handlePrimaryAction() {
+			if (this.hasSubActions) {
+				this.isOpen = !this.isOpen;
+			} else {
+				this.triggerAction(this.primaryAction);
+			}
+		},
+		triggerAction(action) {
+			if (!this.noAutoClose) {
+				this.isOpen = false;
+			}
 			this.$emit(action.event, action.arguments);
 		},
 	},
@@ -125,13 +157,13 @@ $fab-label-offset: 50px;
 	transition: all 300ms ease-in-out;
 }
 
-.fab.primary .icon {
-	transition: transform 300ms ease-in-out;
-	will-change: transform;
-}
-.fab.primary.expanded .icon {
-	transform: rotate(135deg);
-}
+// .fab.primary .icon {
+// 	transition: transform 300ms ease-in-out;
+// 	will-change: transform;
+// }
+// .fab.primary.expanded .icon {
+// 	transform: rotate(135deg);
+// }
 
 .fab.small {
 	width: 40px;
@@ -202,5 +234,16 @@ $fab-label-offset: 50px;
 			}
 		}
 	}
+}
+
+.morph-enter-active,
+.morph-leave-active {
+	transition: transform var(--duration-transition-fast) ease,
+		opacity var(--duration-transition-fast) ease;
+}
+.morph-enter,
+.morph-leave-to {
+	opacity: 0;
+	transform: scaleY(0);
 }
 </style>

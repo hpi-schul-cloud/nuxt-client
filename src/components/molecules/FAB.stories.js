@@ -8,27 +8,38 @@ storiesOf("5 Molecules/FAB", module)
 	.addDecorator(centered)
 	.add("single action", () => ({
 		components: { FAB },
-		template: `<FAB :actions="actions" />`,
-		data: () => ({
-			actions: [
-				{
-					icon: "plus",
-					"icon-source": "material",
-					event: "add",
-				},
-			],
-		}),
-	}))
-	.add("multiple actions", () => ({
-		components: { FAB },
 		template: `<FAB
-			:actions="actions"
 			@event="onEvent"
+			:primary-action="action"
 		/>`,
 		methods: {
 			onEvent: action("@event"),
 		},
 		data: () => ({
+			action: {
+				icon: "edit",
+				"icon-source": "material",
+				event: "event",
+				arguments: ["all", "datatypes", "supported"],
+			},
+		}),
+	}))
+	.add("multiple actions", () => ({
+		components: { FAB },
+		template: `<FAB
+			:primaryAction="primaryAction"
+			:actions="actions"
+			@event="onEvent"
+			:showLabel="true"
+		/>`,
+		methods: {
+			onEvent: action("@event"),
+		},
+		data: () => ({
+			primaryAction: {
+				icon: "more_vert",
+				"icon-source": "material",
+			},
 			actions: [
 				{
 					label: "Cast",
