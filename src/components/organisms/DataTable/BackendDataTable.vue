@@ -12,7 +12,7 @@
 					@fire-action="fireAction"
 				/>
 			</div>
-			<div class="wrapper">
+			<div class="table-content-wrapper">
 			<table class="table">
 				<thead>
 					<component
@@ -387,7 +387,7 @@ export default {
 thead {
 	font-size: var(--text-md);
 }
-.wrapper {
+.table-content-wrapper {
 	overflow-x: auto;
 }
 .toolbelt {
@@ -397,7 +397,6 @@ thead {
 .table {
 	width: 100%;
 	margin-bottom: var(--space-sm);
-	overflow-x: auto;
 	border-collapse: collapse;
 }
 </style>
