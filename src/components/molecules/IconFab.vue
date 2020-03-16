@@ -34,16 +34,17 @@
 				expanded: isOpen,
 			}"
 			type="button"
-			:aria-label="primaryAction.label"
+			:aria-label="primaryActionWithDefaults.label"
 			@click="handlePrimaryAction"
 		>
 			<transition name="morph" mode="out-in">
+				<!-- key attributes are required for transition -->
 				<BaseIcon
 					v-if="!isOpen"
 					key="closedLogo"
 					class="icon"
-					:icon="primaryAction.icon"
-					:source="primaryAction['icon-source']"
+					:icon="primaryActionWithDefaults.icon"
+					:source="primaryActionWithDefaults['icon-source']"
 				/>
 				<BaseIcon
 					v-else
@@ -57,6 +58,13 @@
 	</div>
 </template>
 <script>
+const primaryActionDefault = {
+	icon: "add",
+	"icon-source": "material",
+	event: "click",
+	label: "toggle action button visiblity",
+};
+
 export default {
 	props: {
 		actions: {
@@ -64,7 +72,8 @@ export default {
 			default: () => [],
 			validator: (actions) =>
 				actions.every(
-					(action) => action.icon && action["icon-source"] && action.event
+					(action) =>
+						action.icon && action["icon-source"] && action.event && action.label
 				),
 		},
 		expandDirection: {
@@ -82,11 +91,9 @@ export default {
 		},
 		primaryAction: {
 			type: Object,
-			default: () => ({
-				icon: "add",
-				"icon-source": "material",
-				event: "click",
-			}),
+			default: () => ({ ...primaryActionDefault }),
+			validator: (action) =>
+				action.icon && action["icon-source"] && action.event && action.label,
 		},
 		showLabel: {
 			type: Boolean,
@@ -98,6 +105,12 @@ export default {
 		};
 	},
 	computed: {
+		primaryActionWithDefaults() {
+			return {
+				...primaryActionDefault,
+				...this.primaryAction,
+			};
+		},
 		hasSubActions() {
 			return Boolean(this.actions.length);
 		},
@@ -107,7 +120,7 @@ export default {
 			if (this.hasSubActions) {
 				this.isOpen = !this.isOpen;
 			} else {
-				this.triggerAction(this.primaryAction);
+				this.triggerAction(this.primaryActionWithDefaults);
 			}
 		},
 		triggerAction(action) {
@@ -128,6 +141,8 @@ $fab-text-color: var(--color-on-primary);
 $fab-shadow: 0 3px 10px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.16);
 $fab-label-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
 
+$fab-small-color: var(--color-white);
+$fab-small-text-color: var(--color-on-white);
 $fab-label-color: var(--color-overlay);
 $fab-label-text-color: var(--color-on-overlay);
 
@@ -169,6 +184,8 @@ $fab-label-offset: 50px;
 	width: 40px;
 	height: 40px;
 	font-size: var(--text-sm);
+	color: $fab-small-text-color;
+	background-color: $fab-small-color;
 }
 
 .inner-fabs {

@@ -1,66 +1,78 @@
 <template>
-	<div :style="[pos]" class="fab">
-		<base-button
-			design="hero-cta icon"
+	<div :style="currentPosition" class="fab">
+		<icon-fab
 			v-bind="$attrs"
-			:aria-label="ariaLabel"
+			:expand-direction="expandDirection"
+			:label-position="labelPosition"
 			v-on="$listeners"
-		>
-			<base-icon source="material" :icon="icon" />
-		</base-button>
+		/>
 	</div>
 </template>
 <script>
+import IconFab from "@components/molecules/IconFab";
+
 export default {
+	components: { IconFab },
 	props: {
-		fabActions: {
-			type: Array,
-			default: () => [],
-		},
-		icon: {
-			type: String,
-			default: "add",
-		},
 		position: {
 			type: String,
 			default: "bottom-right",
+			validator: (value) =>
+				["top-left", "bottom-left", "top-right", "bottom-right"].includes(
+					value
+				),
 		},
-		ariaLabel: {
-			type: String,
-			required: true,
+	},
+	computed: {
+		labelPosition() {
+			switch (this.position) {
+				case "top-left":
+				case "bottom-left":
+					return "right";
+				case "top-right":
+				case "bottom-right":
+				default:
+					return "left";
+			}
 		},
-	},
-	data() {
-		return {
-			pos: {},
-		};
-	},
-	created() {
-		this.setPosition();
-	},
-	methods: {
-		setPosition() {
-			this.pos = {};
+		expandDirection() {
+			switch (this.position) {
+				case "top-left":
+				case "top-right":
+					return "bottom";
+				case "bottom-right":
+				case "bottom-left":
+				default:
+					return "top";
+			}
+		},
+		currentPosition() {
 			switch (this.position) {
 				case "bottom-right":
-					this.pos.right = "5vw";
-					this.pos.bottom = "4vh";
-					break;
+					return {
+						right: "5vw",
+						bottom: "4vh",
+					};
 				case "bottom-left":
-					this.pos.left = "5vw";
-					this.pos.bottom = "4vh";
-					break;
+					return {
+						left: "5vw",
+						bottom: "4vh",
+					};
 				case "top-left":
-					this.pos.left = "5vw";
-					this.pos.top = "4vh";
-					break;
+					return {
+						left: "5vw",
+						top: "4vh",
+					};
 				case "top-right":
-					this.pos.right = "5vw";
-					this.pos.top = "4vh";
-					break;
+					return {
+						right: "5vw",
+						top: "4vh",
+					};
 				default:
-					this.pos.right = "5vw";
-					this.pos.bottom = "4vh";
+					return {
+						right: "5vw",
+						bottom: "4vh",
+					};
 			}
 		},
 	},
@@ -71,9 +83,6 @@ export default {
 @import "@styles";
 .fab {
 	position: fixed;
-	right: 5vw;
-	bottom: 4vh;
 	z-index: var(--layer-fab);
-	cursor: pointer;
 }
 </style>
