@@ -43,13 +43,11 @@ buildClient(){
 	cat ../version.js
 
 	docker build \
-		-t schulcloud/schulcloud-nuxt-client:$TRAVIS_BRANCH \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
 		-f Dockerfile.client \
 		../
 
-	dockerPush "client" $TRAVIS_BRANCH
 	dockerPush "client" $DOCKERTAG
 	dockerPush "client" $GIT_SHA
 }
