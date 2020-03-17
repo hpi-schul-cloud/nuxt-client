@@ -105,6 +105,8 @@
 	"pages.administration.datasources.webuntis.new.heading": "Gib hier deine Zugangsdaten ein",
 	"pages.administration.datasources.webuntis.new.text": "Bitte verwende keine privaten Zugangsdaten. Für die Einbindung der Datenquelle empfehlen wir einen Schul-Cloud spezifischen WebUntis Account zu erstellen.",
 	"pages.administration.datasources.webuntis.new.title": "Zugangsdaten",
+	"pages.administration.students.add": "Schüler:in anlegen",
+	"pages.administration.students.import": "Schüler:innen importieren",
 	"pages.administration.students.index.title": "Verwalte Schüler:innen",
 	"pages.administration.index.title": "Administration",
 	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",

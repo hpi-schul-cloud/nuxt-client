@@ -48,12 +48,34 @@
 				</span>
 			</template>
 		</backend-data-table>
+		<fab-floating
+			position="bottom-right"
+			:show-label="true"
+			:actions="[
+				{
+					label: $t('pages.administration.students.add'),
+					icon: 'person_add',
+					'icon-source': 'material',
+					event: 'fabActionClick',
+					arguments: 'new',
+				},
+				{
+					label: $t('pages.administration.students.import'),
+					icon: 'arrow_downward',
+					'icon-source': 'material',
+					event: 'fabActionClick',
+					arguments: 'import',
+				},
+			]"
+			@fabActionClick="onFabActionClick"
+		/>
 	</section>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+import FabFloating from "@components/molecules/FabFloating";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -62,6 +84,7 @@ export default {
 	layout: "loggedInFull",
 	components: {
 		BackendDataTable,
+		FabFloating,
 	},
 	data() {
 		return {
@@ -147,6 +170,14 @@ export default {
 			this.find();
 		},
 		dayjs,
+		onFabActionClick(arg) {
+			switch (arg) {
+				case "new":
+					return;
+				case "import":
+					return;
+			}
+		},
 	},
 };
 </script>
