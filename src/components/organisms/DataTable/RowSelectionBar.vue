@@ -1,6 +1,6 @@
 <template>
 	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
-		<div class="d-flex align-items-center">
+		<div class="d-flex align-items-center action">
 			<div v-if="allRowsOfAllPagesSelected"
 				>Alle {{ totalNumberOfItems }} ausgewählt</div
 			>
@@ -38,7 +38,7 @@
 			<base-icon
 				icon="close"
 				source="material"
-				class="ml--md mr--md"
+				class="ml--md mr--md close"
 				style="cursor: pointer"
 				@click="closeBanner"
 			/>
@@ -136,13 +136,18 @@ export default {
 
 }
 
-.d-flex.align-items-center{
+.d-flex.action{
 	flex-wrap: wrap;
 	margin: var(--space-sm);
 }
 
 .select-all-rows {
+	color: var(--color-white);
 	text-decoration: underline;
 	cursor: pointer;
+}
+
+.close{
+	color: var(--color-white);
 }
 </style>
