@@ -1,9 +1,9 @@
 <template>
 	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
 		<div class="d-flex align-items-center">
-			<div v-if="allRowsOfAllPagesSelected"
-				>Alle {{ totalNumberOfItems }} ausgewählt</div
-			>
+			<div v-if="allRowsOfAllPagesSelected">
+				Alle {{ totalNumberOfItems }} ausgewählt
+			</div>
 			<div v-else>
 				<span>{{ numberOfSelectedItems }} ausgewählt</span>
 				<span v-if="numberOfSelectedItems < totalNumberOfItems">

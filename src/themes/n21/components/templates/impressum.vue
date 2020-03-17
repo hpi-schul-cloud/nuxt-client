@@ -5,8 +5,8 @@
 			NIEDERSÄCHSISCHE BILDUNGSCLOUD – Landesinitiative n-21 Schulen in
 			Niedersachsen online e.V.
 		</h2>
-		<p
-			>Schiffgraben 27
+		<p>
+			Schiffgraben 27
 			<br />
 			30159 Hannover
 			<br />
@@ -21,8 +21,8 @@
 		</p>
 
 		<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
-		<p
-			>OStD Michael Sternberg
+		<p>
+			OStD Michael Sternberg
 			<br />
 			Inhaltlich Verantwortlich gemäß § 6 MDStV: OStD Michael Sternberg
 		</p>
@@ -30,18 +30,18 @@
 		<h2 class="h4">Redaktion</h2>
 		<p>Landesinitiative n-21 Schulen in Niedersachsen online e.V.</p>
 		<h2 class="h4">Rechtliche Hinweise</h2>
-		<p
-			>Die Niedersächsische Bildungscloud ist ein Landespilotprojekt, welches
+		<p>
+			Die Niedersächsische Bildungscloud ist ein Landespilotprojekt, welches
 			durch die Landesinitiative n-21 im Auftrag des Niedersächsischen
 			Kultusministerium und in technisch-organisatorischer Kooperation mit dem
 			Hasso-Plattner-Institut in Potsdam (<base-link
 				href="https://hpi.de"
 				target="_blank"
 				>https://hpi.de/</base-link
-			>) durchgeführt wird.</p
-		>
-		<p
-			>Die Inhalte der Niedersächsischen Bildungscloud stellen keine offiziellen
+			>) durchgeführt wird.
+		</p>
+		<p>
+			Die Inhalte der Niedersächsischen Bildungscloud stellen keine offiziellen
 			Verlautbarungen des niedersächsischen Kultusministeriums oder des HPI dar.
 			Für die veröffentlichten Inhalte sind die jeweiligen Autor/innen selbst
 			verantwortlich. Ohne vorherige schriftliche Genehmigung ist eine
@@ -51,10 +51,10 @@
 			Webseiten anderer Anbieter (einschließlich der dort verankerten Links zu
 			Dritten),insbesondere die Verantwortung für die Beachtung der Bestimmungen
 			des Jugendschutz- und Datenschutzrechts, trägt in jeder Hinsicht der
-			jeweilige Anbieter allein.</p
-		>
-		<p
-			>Die Landesinitiative n-21 überprüft und aktualisiert regelmäßig die
+			jeweilige Anbieter allein.
+		</p>
+		<p>
+			Die Landesinitiative n-21 überprüft und aktualisiert regelmäßig die
 			Inhalte seiner Websites. Trotz größtmöglicher Sorgfalt kann nicht
 			ausgeschlossen werden, dass einzelne Informationen auf den öffentlich
 			zugänglichen Seiten veraltet oder nicht mehr zutreffend sind. Daher wird
@@ -73,8 +73,8 @@
 			Weiterverwendung von Informationen und Daten ist nur nach Zustimmung durch
 			die Landesinitiative n-21 zulässig. Wir wünschen Ihnen einen informativen
 			Aufenthalt auf unseren Websites und freuen uns über Vorschläge, Wünsche
-			oder Kritik zur Niedersächsischen Bildungscloud.</p
-		>
+			oder Kritik zur Niedersächsischen Bildungscloud.
+		</p>
 	</div>
 </template>
 
