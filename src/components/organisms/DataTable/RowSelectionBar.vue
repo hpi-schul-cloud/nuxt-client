@@ -1,9 +1,9 @@
 <template>
 	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
-		<div class="d-flex align-items-center action">
-			<div v-if="allRowsOfAllPagesSelected"
-				>Alle {{ totalNumberOfItems }} ausgewählt</div
-			>
+		<div class="d-flex align-items-center content-wrapper">
+			<div v-if="allRowsOfAllPagesSelected">
+				Alle {{ totalNumberOfItems }} ausgewählt
+			</div>
 			<div v-else>
 				<span>{{ numberOfSelectedItems }} ausgewählt</span>
 				<span v-if="numberOfSelectedItems < totalNumberOfItems">
@@ -135,7 +135,7 @@ export default {
 	}
 }
 
-.d-flex.action {
+.content-wrapper {
 	flex-wrap: wrap;
 	margin: var(--space-sm);
 }

@@ -246,10 +246,10 @@
 									></base-select>
 								</div>
 								<div v-else>
-									<p
-										>Keine Schulen in
-										{{ externalInvite.teacher.federalState.name }} gefunden.</p
-									>
+									<p>
+										Keine Schulen in
+										{{ externalInvite.teacher.federalState.name }} gefunden.
+									</p>
 								</div>
 							</div>
 
@@ -272,10 +272,10 @@
 
 						<div v-if="tabs.from === 'email'">
 							<h3>Lehrer per E-Mail einladen</h3>
-							<p
-								>Gebe die E-Mail des Lehrers ein, an welchen die Einladung
-								verschickt wird.</p
-							>
+							<p>
+								Gebe die E-Mail des Lehrers ein, an welchen die Einladung
+								verschickt wird.
+							</p>
 							<base-input
 								v-model="externalInvite.teacher.email"
 								type="email"
@@ -285,10 +285,10 @@
 					</div>
 					<div v-if="tabs.who === 'expert'">
 						<h3>Externen Experten einladen</h3>
-						<p
-							>Gebe die E-Mail des Experten ein, an welchen die Einladung
-							verschickt wird.</p
-						>
+						<p>
+							Gebe die E-Mail des Experten ein, an welchen die Einladung
+							verschickt wird.
+						</p>
 						<base-input
 							v-model="externalInvite.expert.email"
 							type="email"

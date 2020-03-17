@@ -10,8 +10,7 @@
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
 			styled as a Button if you give him a href/to property
-		-->
-	</button>
+		--></button>
 	<base-link
 		v-else
 		:class="classes"
