@@ -18,11 +18,19 @@
 					)
 				</span>
 			</div>
-			<div v-if="actions && actions.length" class="ml--md">
-				<dropdown-menu
-					:items="actions"
-					title="Aktionen"
-					@input="$emit('fire-action', $event)"
+			<div
+				v-if="actions && actions.length"
+				class="ml--md"
+				style="position: relative;"
+			>
+				<base-button size="small" @click="actionsMenuOpen = true">
+					Aktionen
+				</base-button>
+				<context-menu
+					:show.sync="actionsMenuOpen"
+					anchor="top-right"
+					:actions="contextActions"
+					@action="fireAction"
 				/>
 			</div>
 		</div>
@@ -39,11 +47,11 @@
 </template>
 
 <script>
-import DropdownMenu from "@components/organisms/DropdownMenu.vue";
+import ContextMenu from "@components/molecules/ContextMenu";
 
 export default {
 	components: {
-		DropdownMenu,
+		ContextMenu,
 	},
 	props: {
 		actions: {
@@ -61,14 +69,39 @@ export default {
 		allRowsOfAllPagesSelected: {
 			type: Boolean,
 		},
-		allRowsOfCurrentPageSelected: {
-			type: Boolean,
+	},
+	data() {
+		return {
+			actionsMenuOpen: false,
+		};
+	},
+	computed: {
+		contextActions() {
+			return this.actions.map((actionCtx, index) => ({
+				text: actionCtx.label,
+				icon: actionCtx.icon,
+				"icon-source": actionCtx["icon-source"],
+				event: "action",
+				arguments: index,
+			}));
 		},
+	},
+	watch: {
+		numberOfSelectedItems(to) {
+			if (to === 0) {
+				this.actionsMenuOpen = false;
+			}
+		},
+	},
+	beforeDestroy() {
+		this.actionsMenuOpen = false;
 	},
 	methods: {
 		closeBanner() {
-			this.$emit("update:allRowsOfCurrentPageSelected", false);
 			this.$emit("update:allRowsOfAllPagesSelected", false);
+		},
+		fireAction(index) {
+			this.$emit("fire-action", this.actions[index]);
 		},
 	},
 };
@@ -82,8 +115,8 @@ export default {
 	padding: var(--space-md);
 	font-size: var(--text-md);
 	font-weight: var(--font-weight-normal);
-	color: var(--color-on-table-selected);
-	background: var(--color-table-selected);
+	color: var(--color-on-tertiary-light);
+	background-color: var(--color-tertiary-light);
 }
 
 .select-all-rows {

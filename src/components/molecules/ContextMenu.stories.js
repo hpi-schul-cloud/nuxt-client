@@ -38,7 +38,7 @@ const actionsWithoutIcon = actionsWithIcon.map((o) => {
 
 const template = `
 	<span style="position: relative;">
-		<base-button design="icon text" @click="active = true">
+		<base-button design="text icon" @click="active = true">
 			<base-icon
 				class="footer__content-icon"
 				source="material"

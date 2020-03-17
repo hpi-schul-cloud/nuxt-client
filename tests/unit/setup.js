@@ -4,7 +4,6 @@ import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
-import sinon from "sinon";
 
 // ===
 // Utility functions
@@ -81,6 +80,16 @@ Object.defineProperty(window, "localStorage", {
 	})(),
 });
 
+Object.defineProperty(window, "matchMedia", {
+	value: () => {
+		return {
+			matches: false,
+			addListener: () => {},
+			removeListener: () => {},
+		};
+	},
+});
+
 const location = {
 	href: "",
 };
@@ -100,9 +109,6 @@ Object.defineProperty(window, "location", {
 // ===
 // Global helpers
 // ===
-
-// for mocking methods - https://sinonjs.org
-global.sinon = sinon;
 
 // https://vue-test-utils.vuejs.org/api/#mount
 global.mount = vueTestUtils.mount;

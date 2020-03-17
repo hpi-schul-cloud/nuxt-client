@@ -8,6 +8,8 @@
 					label="Alle Zeilen auswählen"
 					:label-hidden="true"
 					class="select"
+					:show-undefined-state="true"
+					style="color: var(--color-tertiary)"
 				/>
 			</div>
 		</th>
@@ -32,6 +34,12 @@
 					:icon="sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'"
 					source="material"
 				/>
+				<base-icon
+					v-else-if="column.sortable"
+					icon="sort"
+					source="fa"
+					fill="var(--color-gray)"
+				/>
 			</BaseButton>
 			<div v-else class="th-wrap">
 				<span>{{ column.label }}</span>
@@ -43,10 +51,23 @@
 <script>
 import BaseButton from "@basecomponents/BaseButton";
 
+const selectionStateMap = new Map([
+	[true, "all"],
+	[undefined, "some"],
+	[false, "none"],
+	["all", true],
+	["some", undefined],
+	["none", false],
+]);
+
 export default {
 	props: {
 		allRowsSelectable: Boolean,
-		allRowsSelected: Boolean,
+		currentPageSelectionState: {
+			type: String,
+			required: true,
+			validator: (value) => ["all", "some", "none"].includes(value),
+		},
 		columns: {
 			type: Array,
 			default: () => [],
@@ -64,10 +85,13 @@ export default {
 	computed: {
 		selectionStatus: {
 			get() {
-				return this.allRowsSelected;
+				return selectionStateMap.get(this.currentPageSelectionState);
 			},
 			set(state) {
-				this.$emit("update:allRowsSelected", state);
+				this.$emit(
+					"update:currentPageSelectionState",
+					selectionStateMap.get(state)
+				);
 			},
 		},
 	},
@@ -121,7 +145,7 @@ export default {
 		}
 		.th-wrap {
 			display: flex;
-			align-items: start;
+			align-items: center;
 			justify-content: space-between;
 			width: 100%;
 			padding: var(--space-xs);

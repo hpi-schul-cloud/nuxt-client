@@ -7,6 +7,9 @@
 yarn.lock
 node_modules/
 
+# Secrets
+deploy/travis_rsa
+
 # Log Files
 logs
 *.log
@@ -16,6 +19,7 @@ yarn-error.log*
 
 # Build Files
 dist
+version.js
 
 # Runtime data
 .nuxt
@@ -26,3 +30,4 @@ jsconfig.json
 
 docker-compose.yml
 tests/screenshot/__image_snapshots__/__diff_output__/**/*
+.vscode/settings.json
