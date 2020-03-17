@@ -53,14 +53,14 @@
 			:show-label="true"
 			:actions="[
 				{
-					label: $t('pages.administration.students.add'),
+					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					event: 'fabActionClick',
 					arguments: 'new',
 				},
 				{
-					label: $t('pages.administration.students.import'),
+					label: $t('pages.administration.students.fab.import'),
 					icon: 'arrow_downward',
 					'icon-source': 'material',
 					event: 'fabActionClick',
