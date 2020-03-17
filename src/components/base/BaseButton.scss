@@ -44,6 +44,13 @@ button {
 			--button-background: var(--color-danger--dark);
 		}
 	}
+		&.is-info {
+		--button-background: var(--color-info);
+		--button-text-color: var(--color-white);
+		&:hover {
+			--button-background: var(--color-info--dark);
+		}
+	}
 	&.is-fancy {
 		--button-background: linear-gradient(
 			45deg,

@@ -50,6 +50,8 @@ export default {
 					"primary icon outline",
 					"primary text icon",
 					"primary outline",
+					"info",
+					"info outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
