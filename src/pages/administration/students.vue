@@ -56,18 +56,15 @@
 					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
-					event: 'fabActionClick',
-					arguments: 'new',
+					to: 'new',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
 					icon: 'arrow_downward',
 					'icon-source': 'material',
-					event: 'fabActionClick',
-					arguments: 'import',
+					to: 'import',
 				},
 			]"
-			@fabActionClick="onFabActionClick"
 		/>
 	</section>
 </template>
@@ -170,14 +167,6 @@ export default {
 			this.find();
 		},
 		dayjs,
-		onFabActionClick(arg) {
-			switch (arg) {
-				case "new":
-					return;
-				case "import":
-					return;
-			}
-		},
 	},
 };
 </script>
