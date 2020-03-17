@@ -79,7 +79,7 @@
 		"@schul-cloud/eslint-config": "^0.4.0",
 		"@schul-cloud/prettier-config": "^0.2.0",
 		"@schul-cloud/stylelint-config": "^0.1.5",
-		"@schul-cloud/styles": "^0.1.6",
+		"@schul-cloud/styles": "^0.1.7",
 		"@storybook/addon-a11y": "^5.3.17",
 		"@storybook/addon-actions": "^5.3.14",
 		"@storybook/addon-centered": "^5.3.17",
