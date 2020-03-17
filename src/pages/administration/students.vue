@@ -1,9 +1,9 @@
 <template>
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">{{
-			$t("pages.administration.students.index.title")
-		}}</h1>
+		<h1 class="mb--md h3">
+			{{ $t("pages.administration.students.index.title") }}
+		</h1>
 		<backend-data-table
 			:columns="tableColumns"
 			:data="students"
