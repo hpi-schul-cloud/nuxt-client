@@ -37,8 +37,9 @@
 					v-if="action.type === 'text'"
 					:key="action.title"
 					class="school-name item"
-					>{{ action.title }}</div
 				>
+					{{ action.title }}
+				</div>
 
 				<popup-icon-initials
 					v-if="action.type === 'popupWithInitials'"
@@ -56,8 +57,9 @@
 						class="logout-button"
 						data-testid="logout"
 						@click="sendEvent(action.event)"
-						>Abmelden</button
 					>
+						Abmelden
+					</button>
 				</popup-icon-initials>
 			</template>
 		</div>

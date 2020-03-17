@@ -3,9 +3,9 @@
 		<div class="footer-container">
 			<base-grid :column-width="colWidth" :style="{ justifyItems: `center` }">
 				<div class="link-container">
-					<h2 class="h4">{{
-						$t("components.molecules.MintEcFooter.chapters")
-					}}</h2>
+					<h2 class="h4">
+						{{ $t("components.molecules.MintEcFooter.chapters") }}
+					</h2>
 					<base-link
 						v-for="route in chapters"
 						:key="route.title"

@@ -21,9 +21,9 @@
 				/>
 				<transition name="fade">
 					<div v-if="data.content">
-						<p class="mt--xl-3">{{
-							$t("components.organisms.FormNews.label.planned_publish")
-						}}</p>
+						<p class="mt--xl-3">
+							{{ $t("components.organisms.FormNews.label.planned_publish") }}
+						</p>
 						<base-input
 							v-model="data.date.date"
 							type="date"
