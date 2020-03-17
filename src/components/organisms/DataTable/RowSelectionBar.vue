@@ -121,22 +121,21 @@ export default {
 	color: var(--color-on-tertiary-light);
 	background-color: var(--color-tertiary-light);
 
-		@include breakpoint(tablet) {
-			font-size: var(--text-md);
-		}
+	@include breakpoint(tablet) {
+		font-size: var(--text-md);
+	}
 }
 
 .actions {
 	margin-top: var(--space-sm);
 
-		@include breakpoint(tablet) {
-			margin-top: 0;
-			margin-left: var(--space-md);
-		}
-
+	@include breakpoint(tablet) {
+		margin-top: 0;
+		margin-left: var(--space-md);
+	}
 }
 
-.d-flex.action{
+.d-flex.action {
 	flex-wrap: wrap;
 	margin: var(--space-sm);
 }
@@ -147,7 +146,7 @@ export default {
 	cursor: pointer;
 }
 
-.close{
+.close {
 	color: var(--color-white);
 }
 </style>
