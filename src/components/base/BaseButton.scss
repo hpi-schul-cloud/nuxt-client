@@ -45,8 +45,8 @@ button {
 		}
 	}
 		&.is-info {
-		--button-background: var(--color-info);
-		--button-text-color: var(--color-white);
+			--button-background: var(--color-info);
+			--button-text-color: var(--color-white);
 		&:hover {
 			--button-background: var(--color-info--dark);
 		}
