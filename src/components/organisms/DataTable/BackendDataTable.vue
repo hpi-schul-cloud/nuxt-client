@@ -12,38 +12,40 @@
 					@fire-action="fireAction"
 				/>
 			</div>
-			<table class="table">
-				<thead>
-					<component
-						:is="componentHeaderRow"
-						:all-rows-selectable="rowsSelectable"
-						:current-page-selection-state.sync="currentPageSelectionState"
-						:columns="columns"
-						:sort-by.sync="sortByProxy"
-						:sort-order.sync="sortOrderProxy"
-					/>
-				</thead>
-				<tbody>
-					<component
-						:is="componentDataRow"
-						v-for="(row, rowindex) in data"
-						:key="getValueByPath(row, trackBy)"
-						:selectable="rowsSelectable"
-						:rowindex="rowindex"
-						:selected="isRowSelected(row)"
-						:column-keys="columnKeys"
-						:data="row"
-						@update:selected="setRowSelection(row, $event)"
-					>
-						<template
-							v-for="(cmp, name) in dataRowSlots"
-							v-slot:[name]="{ data: columnData }"
+			<div class="table-content-wrapper">
+				<table class="table">
+					<thead>
+						<component
+							:is="componentHeaderRow"
+							:all-rows-selectable="rowsSelectable"
+							:current-page-selection-state.sync="currentPageSelectionState"
+							:columns="columns"
+							:sort-by.sync="sortByProxy"
+							:sort-order.sync="sortOrderProxy"
+						/>
+					</thead>
+					<tbody>
+						<component
+							:is="componentDataRow"
+							v-for="(row, rowindex) in data"
+							:key="getValueByPath(row, trackBy)"
+							:selectable="rowsSelectable"
+							:rowindex="rowindex"
+							:selected="isRowSelected(row)"
+							:column-keys="columnKeys"
+							:data="row"
+							@update:selected="setRowSelection(row, $event)"
 						>
-							<slot :name="name" :data="columnData" />
-						</template>
-					</component>
-				</tbody>
-			</table>
+							<template
+								v-for="(cmp, name) in dataRowSlots"
+								v-slot:[name]="{ data: columnData }"
+							>
+								<slot :name="name" :data="columnData" />
+							</template>
+						</component>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 		<pagination
@@ -384,13 +386,14 @@ export default {
 thead {
 	font-size: var(--text-md);
 }
-.table-wrapper {
+.table-content-wrapper {
 	overflow-x: auto;
 }
 .toolbelt {
 	display: flex;
 	align-items: center;
-	height: 55px;
+	// min-height to prevent table jumping if toolbelt appears/disappears
+	min-height: 58px;
 }
 .table {
 	width: 100%;
