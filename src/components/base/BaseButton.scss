@@ -1,6 +1,6 @@
 @import "@styles";
 
-button {
+button:not(.is-none) {
 	// typo
 	--button-font-weight: var(--font-weight-bold);
 	--button-line-height: var(--line-height-md);
@@ -170,19 +170,6 @@ button {
 			box-shadow: none;
 		}
 	}
-	&.is-none {
-		--button-text-color: inherit;
-
-		min-width: initial;
-		padding: 0;
-		font: inherit;
-		font-weight: initial;
-		background: transparent;
-		border: 0;
-		&:focus {
-			box-shadow: 0 0 0 3px var(--button-background);
-		}
-	}
 	// defined multiple times to seperate style from behaviour
 	/* stylelint-disable-next-line */
 	&:disabled {
@@ -195,5 +182,18 @@ button {
 	box-shadow: var(--shadow-xl);
 	&:focus {
 		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-primary);
+	}
+}
+.is-none {
+	--button-text-color: inherit;
+
+	min-width: initial;
+	padding: 0;
+	font: inherit;
+	font-weight: initial;
+	background: transparent;
+	border: 0;
+	&:focus {
+		box-shadow: 0 0 0 3px inherit;
 	}
 }

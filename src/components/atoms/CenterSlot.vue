@@ -1,5 +1,5 @@
 <template>
-	<div class="content"> <slot /> </div>
+	<div class="content"><slot /></div>
 </template>
 <script>
 export default {};

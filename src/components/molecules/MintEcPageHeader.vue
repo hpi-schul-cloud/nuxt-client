@@ -15,7 +15,7 @@
 				</base-content-container>
 			</div>
 		</div>
-		<div class="overlay"> </div>
+		<div class="overlay"></div>
 	</div>
 </template>
 

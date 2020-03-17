@@ -1,0 +1,183 @@
+<template>
+	<section class="section">
+		<base-breadcrumb :inputs="breadcrumbs" />
+		<h1 class="mb--md h3">
+			{{ $t("pages.administration.students.index.title") }}
+		</h1>
+		<backend-data-table
+			:columns="tableColumns"
+			:data="students"
+			track-by="id"
+			:total="pagination.total"
+			:paginated="true"
+			:current-page.sync="page"
+			:rows-per-page.sync="limit"
+			@update:current-page="onUpdateCurrentPage"
+			@update:rows-per-page="onUpdateRowsPerPage"
+		>
+			<template v-slot:datacolumn-createdAt="{ data }">
+				{{ dayjs(data).format("DD.MM.YYYY") }}
+			</template>
+			<template v-slot:datacolumn-consent-consentStatus="{ data }">
+				<span v-if="data === 'ok'">
+					<base-icon
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
+					<base-icon
+						style="position: relative; left: -17.5px"
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
+				</span>
+				<span v-else-if="data === 'parentsAgreed'">
+					<base-icon
+						source="material"
+						icon="check"
+						color="var(--color-warning)"
+					/>
+				</span>
+				<span v-else-if="data === 'missing'">
+					<base-icon
+						source="material"
+						icon="close"
+						color="var(--color-danger)"
+					/>
+				</span>
+			</template>
+		</backend-data-table>
+		<fab-floating
+			position="bottom-right"
+			:show-label="true"
+			:actions="[
+				{
+					label: $t('pages.administration.students.add'),
+					icon: 'person_add',
+					'icon-source': 'material',
+					event: 'fabActionClick',
+					arguments: 'new',
+				},
+				{
+					label: $t('pages.administration.students.import'),
+					icon: 'arrow_downward',
+					'icon-source': 'material',
+					event: 'fabActionClick',
+					arguments: 'import',
+				},
+			]"
+			@fabActionClick="onFabActionClick"
+		/>
+	</section>
+</template>
+
+<script>
+import { mapGetters, mapState } from "vuex";
+import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+import FabFloating from "@components/molecules/FabFloating";
+import dayjs from "dayjs";
+import "dayjs/locale/de";
+dayjs.locale("de");
+
+export default {
+	layout: "loggedInFull",
+	components: {
+		BackendDataTable,
+		FabFloating,
+	},
+	data() {
+		return {
+			page: 1,
+			limit:
+				localStorage.getItem(
+					"pages.administration.students.index.itemsPerPage"
+				) || 10,
+			tableColumns: [
+				{
+					field: "firstName",
+					label: this.$t("common.labels.firstName"),
+					sortable: true,
+				},
+				{
+					field: "lastName",
+					label: this.$t("common.labels.lastName"),
+				},
+				{
+					field: "email",
+					label: this.$t("common.labels.email"),
+				},
+				// {
+				// 	field: "birthday",
+				// 	label: this.$t("common.labels.birthday"),
+				// },
+				{
+					field: "consent.consentStatus",
+					label: this.$t("common.labels.consent"),
+				},
+				{
+					field: "createdAt",
+					label: this.$t("common.labels.createdAt"),
+				},
+			],
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+					icon: { source: "fa", icon: "fas fa-cog" },
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
+				},
+			],
+		};
+	},
+	computed: {
+		...mapGetters("users", {
+			students: "list",
+		}),
+		...mapState("users", {
+			pagination: (state) =>
+				state.pagination.default || { limit: 10, total: 0 },
+		}),
+	},
+	created(ctx) {
+		this.find();
+	},
+	methods: {
+		find() {
+			const query = {
+				$limit: this.limit,
+				$skip: (this.page - 1) * this.limit,
+			};
+
+			this.$store.dispatch("users/findStudents", {
+				query,
+			});
+		},
+		onUpdateCurrentPage(page) {
+			this.page = page;
+			this.find();
+		},
+		onUpdateRowsPerPage(limit) {
+			this.page = 1;
+			this.limit = limit;
+			// save user settings in localStorage
+			localStorage.setItem(
+				"pages.administration.students.index.itemsPerPage",
+				limit
+			);
+			this.find();
+		},
+		dayjs,
+		onFabActionClick(arg) {
+			switch (arg) {
+				case "new":
+					return;
+				case "import":
+					return;
+			}
+		},
+	},
+};
+</script>
