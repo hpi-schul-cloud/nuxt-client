@@ -62,7 +62,7 @@
 					label: $t('pages.administration.students.fab.import'),
 					icon: 'arrow_downward',
 					'icon-source': 'material',
-					to: 'import',
+					href: '/administration/students/import',
 				},
 			]"
 		/>
