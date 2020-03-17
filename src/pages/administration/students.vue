@@ -1,6 +1,9 @@
 <template>
 	<section class="section">
-		<h1>{{ this.$store.getters["i18n/getLocale"] }}</h1>
+		<base-breadcrumb :inputs="breadcrumbs" />
+		<h1 class="mb--md h3">{{
+			$t("pages.administration.students.index.title")
+		}}</h1>
 		<backend-data-table
 			:columns="tableColumns"
 			:data="students"
@@ -23,7 +26,7 @@
 						color="var(--color-success)"
 					/>
 					<base-icon
-						style="position: relative; left: -12px"
+						style="position: relative; left: -17.5px"
 						source="material"
 						icon="check"
 						color="var(--color-success)"
@@ -70,28 +73,38 @@ export default {
 			tableColumns: [
 				{
 					field: "firstName",
-					label: "Vorname",
+					label: this.$t("common.labels.firstName"),
 					sortable: true,
 				},
 				{
 					field: "lastName",
-					label: "Nachname",
+					label: this.$t("common.labels.lastName"),
 				},
 				{
 					field: "email",
-					label: "E-Mail",
+					label: this.$t("common.labels.email"),
 				},
 				// {
 				// 	field: "birthday",
-				// 	label: "Geburtsdatum",
+				// 	label: this.$t("common.labels.birthday"),
 				// },
 				{
 					field: "consent.consentStatus",
-					label: "Consent",
+					label: this.$t("common.labels.consent"),
 				},
 				{
 					field: "createdAt",
-					label: "Erstellungsdatum",
+					label: this.$t("common.labels.createdAt"),
+				},
+			],
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+					icon: { source: "fa", icon: "fas fa-cog" },
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
 				},
 			],
 		};
