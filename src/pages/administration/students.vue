@@ -47,6 +47,11 @@
 					/>
 				</span>
 			</template>
+			<template v-slot:datacolumn-id="{ data }">
+				<base-button design="text icon" size="small" @click="onEditClick(data)">
+					<base-icon source="material" icon="edit" />
+				</base-button>
+			</template>
 		</backend-data-table>
 		<fab-floating
 			position="bottom-right"
@@ -85,7 +90,10 @@ export default {
 	},
 	data() {
 		return {
-			page: 1,
+			page:
+				localStorage.getItem(
+					"pages.administration.students.index.currentPage"
+				) || 1,
 			limit:
 				localStorage.getItem(
 					"pages.administration.students.index.itemsPerPage"
@@ -115,6 +123,10 @@ export default {
 				{
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
+				},
+				{
+					field: "id",
+					label: "",
 				},
 			],
 			breadcrumbs: [
@@ -154,6 +166,10 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
+			localStorage.setItem(
+				"pages.administration.students.index.currentPage",
+				page
+			);
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
@@ -167,6 +183,11 @@ export default {
 			this.find();
 		},
 		dayjs,
+		onEditClick(id) {
+			this.$router.push({
+				path: id + "/edit",
+			});
+		},
 	},
 };
 </script>
