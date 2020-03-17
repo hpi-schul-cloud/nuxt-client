@@ -34,14 +34,8 @@
 				/>
 			</div>
 		</div>
-		<base-button design="none">
-			<base-icon
-				icon="close"
-				source="material"
-				class="ml--md mr--md close"
-				style="cursor: pointer"
-				@click="closeBanner"
-			/>
+		<base-button design="icon" class="close" @click="closeBanner">
+			<base-icon icon="close" source="material" />
 		</base-button>
 	</div>
 </template>
@@ -113,17 +107,12 @@ export default {
 .row-selection-info {
 	display: flex;
 	flex-wrap: wrap;
+	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	padding: var(--space-md);
-	font-size: var(--text-sm);
-	font-weight: var(--font-weight-normal);
+	padding: var(--space-xs) var(--space-md);
 	color: var(--color-on-tertiary-light);
 	background-color: var(--color-tertiary-light);
-
-	@include breakpoint(tablet) {
-		font-size: var(--text-md);
-	}
 }
 
 .actions {
@@ -137,7 +126,7 @@ export default {
 
 .content-wrapper {
 	flex-wrap: wrap;
-	margin: var(--space-sm);
+	margin: var(--space-xs) 0;
 }
 
 .select-all-rows {

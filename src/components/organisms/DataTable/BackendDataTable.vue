@@ -392,6 +392,8 @@ thead {
 .toolbelt {
 	display: flex;
 	align-items: center;
+	// min-height to prevent table jumping if toolbelt appears/disappears
+	min-height: 58px;
 }
 .table {
 	width: 100%;
