@@ -5,12 +5,12 @@
 			:src="getRandomSVG"
 			alt="empty-state-img"
 		/>
-		<h3 class="empty-state-container__title">{{
-			$t("pages.content.empty_state.error.oops")
-		}}</h3>
-		<p class="empty-state-container__message">{{
-			$t("pages.content.empty_state.error.message")
-		}}</p>
+		<h3 class="empty-state-container__title">
+			{{ $t("pages.content.empty_state.error.oops") }}
+		</h3>
+		<p class="empty-state-container__message">
+			{{ $t("pages.content.empty_state.error.message") }}
+		</p>
 	</div>
 </template>
 

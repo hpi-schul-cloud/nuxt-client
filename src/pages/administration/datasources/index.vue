@@ -2,9 +2,9 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">{{
-			$t("pages.administration.datasources.index.title")
-		}}</h1>
+		<h1 class="mb--md h3">
+			{{ $t("pages.administration.datasources.index.title") }}
+		</h1>
 
 		<ol v-if="datasources && datasources.length > 0" class="datasources">
 			<!-- TODO remove dummies once all datasources are added here -->
