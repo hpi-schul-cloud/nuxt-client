@@ -58,7 +58,6 @@ export default {
 			type: String,
 			default: "medium",
 		},
-		/* eslint-disable vue/require-prop-types */
 		onBackDrop: {
 			type: Function,
 			default: () => {},
