@@ -2,6 +2,13 @@ import Vue from "vue";
 import qs from "qs";
 export default function(endpoint) {
 	const baseUrl = "/" + endpoint;
+	const getDefaultState = () => {
+		return {
+			current: null,
+			list: [],
+			pagination: {},
+		};
+	};
 	return {
 		baseUrl,
 		actions: {
@@ -66,6 +73,9 @@ export default function(endpoint) {
 				commit("remove", id);
 				return res;
 			},
+			resetState({ commit }) {
+				commit("reset");
+			},
 		},
 		getters: {
 			get: (state, id) => {
@@ -81,6 +91,9 @@ export default function(endpoint) {
 		mutations: {
 			set(state, { items }) {
 				state.list = items;
+			},
+			reset(state) {
+				Object.assign(state, getDefaultState());
 			},
 			patchSingleItem(state, item) {
 				const index = state.list.findIndex(
@@ -116,10 +129,6 @@ export default function(endpoint) {
 				});
 			},
 		},
-		state: () => ({
-			current: null,
-			list: [],
-			pagination: {},
-		}),
+		state: () => getDefaultState(),
 	};
 }
