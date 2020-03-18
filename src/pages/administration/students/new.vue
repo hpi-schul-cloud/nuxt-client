@@ -12,9 +12,10 @@
 				>
 				</base-input>
 				<base-input
-					v-model="unchecked"
+					v-model="userData.sendRegistration"
 					type="checkbox"
 					name="switch"
+					class="mt--xl"
 					:label="'Nach dem Hinzufügen Registrierungslink an Schüler senden'"
 				/>
 			</template>
@@ -28,12 +29,6 @@ import FormCreateUser from "@components/organisms/FormCreateUser";
 export default {
 	components: {
 		FormCreateUser,
-	},
-
-	data() {
-		return {
-			unchecked: false,
-		};
 	},
 };
 </script>

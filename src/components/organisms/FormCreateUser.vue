@@ -58,6 +58,7 @@ export default {
 				firstName: "",
 				lastName: "",
 				email: "",
+				sendRegistration: true,
 			},
 		};
 	},
@@ -95,6 +96,7 @@ export default {
 					email: this.userData.email,
 					roles: [studentsRole.id],
 					schoolId: this.$user.schoolId,
+					sendRegistration: this.userData.sendRegistration,
 				});
 
 				this.$toast.success("User erstellt");
