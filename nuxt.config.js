@@ -20,6 +20,9 @@ module.exports = {
 		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
 		NOT_AUTHENTICATED_REDIRECT_URL:
 			process.env.NOT_AUTHENTICATED_REDIRECT_URL || "/login",
+		JWT_SHOW_TIMEOUT_WARNING_SECONDS:
+			process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS || 3600,
+		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 	},
 	/*
 	 ** Headers of the page

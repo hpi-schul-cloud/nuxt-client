@@ -8,7 +8,7 @@
 			:aria-labelledby="`modal-${$uid}-title`"
 			:aria-describedby="`modal-${$uid}-body`"
 		>
-			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
+			<div class="base-modal-wrapper" @click.self="onBackDrop">
 				<div
 					class="modal-container"
 					:class="{ 'modal-container--large': size === 'large' }"
@@ -57,6 +57,12 @@ export default {
 		size: {
 			type: String,
 			default: "medium",
+		},
+		/* eslint-disable vue/require-prop-types */
+		onBackDrop: {
+			default() {
+				return () => this.close();
+			},
 		},
 	},
 	watch: {
