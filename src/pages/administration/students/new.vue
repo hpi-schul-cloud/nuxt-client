@@ -1,48 +1,29 @@
 <template>
 	<section class="section">
-		<h1>student anlegen</h1>
-		<base-button design="primary" @click="create">Speichern</base-button>
+		<h1>Schüler:in hinzufügen</h1>
+		<form-create-user>
+			<template v-slot:inputs="{ userData }">
+				<base-input
+					v-model="userData.birthday"
+					type="date"
+					:label="'Geburtstag'"
+					:placeholder="'29.3.2004'"
+					class="mt--md"
+				>
+				</base-input>
+			</template>
+		</form-create-user>
+
+		<!-- <base-button design="primary" @click="create">Speichern</base-button> -->
 	</section>
 </template>
 
 <script>
+import FormCreateUser from "@components/organisms/FormCreateUser";
+
 export default {
-	data() {
-		return {
-			user: {
-				firstName: "Miau",
-				lastName: "Katze",
-				email: "miau.katze@sc.org",
-			},
-		};
-	},
-	computed: {},
-	methods: {
-		async create() {
-			try {
-				const studentsRole = (
-					await this.$store.dispatch("roles/find", {
-						query: {
-							name: "student",
-						},
-					})
-				).data[0];
-
-				await this.$store.dispatch("users/create", {
-					firstName: this.user.firstName,
-					lastName: this.user.lastName,
-					email: this.user.email,
-					roles: [studentsRole.id],
-					schoolId: this.$user.schoolId,
-				});
-
-				this.$toast.success("User erstellt");
-
-				//this.$router.push({ name: "teams-id", params: { id: team._id } });
-			} catch (e) {
-				this.$toast.error("Fehler beim Erstellen des users");
-			}
-		},
+	components: {
+		FormCreateUser,
 	},
 };
 </script>

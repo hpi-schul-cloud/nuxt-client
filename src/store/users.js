@@ -5,9 +5,9 @@ const base = serviceTemplate("users");
 
 const module = mergeDeep(base, {
 	actions: {
-		findStudents({ dispatch }, query = {}) {
-			query.customEndpoint = "/users/admin/students";
-			return dispatch("find", query);
+		findStudents({ dispatch }, queryContext = {}) {
+			queryContext.customEndpoint = "/users/admin/students";
+			return dispatch("find", queryContext);
 		},
 		getByRole: async function(ctx, role) {
 			const queryRole = {
