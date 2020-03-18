@@ -47,8 +47,12 @@
 					/>
 				</span>
 			</template>
-			<template v-slot:datacolumn-id="{ data }">
-				<base-button design="text icon" size="small" @click="onEditClick(data)">
+			<template v-slot:datacolumn-_id="{ data }">
+				<base-button
+					design="text icon"
+					size="small"
+					:to="`/administration/students/${data}/edit`"
+				>
 					<base-icon source="material" icon="edit" />
 				</base-button>
 			</template>
@@ -125,7 +129,7 @@ export default {
 					label: this.$t("common.labels.createdAt"),
 				},
 				{
-					field: "id",
+					field: "_id",
 					label: "",
 				},
 			],
@@ -183,11 +187,6 @@ export default {
 			this.find();
 		},
 		dayjs,
-		onEditClick(id) {
-			this.$router.push({
-				path: id + "/edit",
-			});
-		},
 	},
 };
 </script>
