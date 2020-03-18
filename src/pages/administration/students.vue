@@ -95,12 +95,16 @@ export default {
 	data() {
 		return {
 			page:
-				localStorage.getItem(
-					"pages.administration.students.index.currentPage"
+				parseInt(
+					localStorage.getItem(
+						"pages.administration.students.index.currentPage"
+					)
 				) || 1,
 			limit:
-				localStorage.getItem(
-					"pages.administration.students.index.itemsPerPage"
+				parseInt(
+					localStorage.getItem(
+						"pages.administration.students.index.itemsPerPage"
+					)
 				) || 10,
 			tableColumns: [
 				{
