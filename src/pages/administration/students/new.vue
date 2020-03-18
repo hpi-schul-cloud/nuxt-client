@@ -13,8 +13,6 @@
 				</base-input>
 			</template>
 		</form-create-user>
-
-		<!-- <base-button design="primary" @click="create">Speichern</base-button> -->
 	</section>
 </template>
 

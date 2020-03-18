@@ -32,7 +32,12 @@
 		<base-button type="submit" class="w-100 mt--lg" design="secondary" text>
 			Hinzufügen
 		</base-button>
-		<base-button type="" class="w-100 mt--lg" design="text" text>
+		<base-button
+			class="w-100 mt--lg"
+			design="text"
+			text
+			@click.prevent="$router.go(-1)"
+		>
 			Abbrechen
 		</base-button>
 	</form>
@@ -75,10 +80,6 @@ export default {
 			}
 		},
 		async create() {
-			// const errors = Object.values(this.errors).filter((a) => a);
-			// if (errors.length) {
-			// 	return this.$toast.error(errors[0]);
-			// }
 			try {
 				const studentsRole = (
 					await this.$store.dispatch("roles/find", {
