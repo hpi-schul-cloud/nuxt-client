@@ -5,13 +5,17 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 		<backend-data-table
+			:actions="tableActions"
 			:columns="tableColumns"
-			:data="students"
-			track-by="id"
-			:total="pagination.total"
-			:paginated="true"
 			:current-page.sync="page"
+			:data="students"
+			:paginated="true"
 			:rows-per-page.sync="limit"
+			:rows-selectable="true"
+			:total="pagination.total"
+			track-by="id"
+			:selected-row-ids.sync="tableSelection"
+			:selection-type.sync="tableSelectionType"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
@@ -98,10 +102,11 @@ export default {
 				localStorage.getItem(
 					"pages.administration.students.index.currentPage"
 				) || 1,
-			limit:
+			limit: Number(
 				localStorage.getItem(
 					"pages.administration.students.index.itemsPerPage"
-				) || 10,
+				) || 10
+			),
 			tableColumns: [
 				{
 					field: "firstName",
@@ -133,6 +138,40 @@ export default {
 					label: "",
 				},
 			],
+			tableActions: [
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.consent"
+					),
+					icon: "check",
+					"icon-source": "material",
+					action: this.handleBulkConsent,
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.email"
+					),
+					icon: "mail_outline",
+					"icon-source": "material",
+					action: this.handleBulkEMail,
+				},
+				{
+					label: this.$t("pages.administration.students.index.tableActions.qr"),
+					"icon-source": "fa",
+					icon: "qrcode",
+					action: this.handleBulkQR,
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.delete"
+					),
+					icon: "delete_outline",
+					"icon-source": "material",
+					action: this.handleBulkDelete,
+				},
+			],
+			tableSelection: [],
+			tableSelectionType: "inclusive",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -187,6 +226,38 @@ export default {
 			this.find();
 		},
 		dayjs,
+		handleBulkConsent(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkConsent([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		handleBulkEMail(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkEMail([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		handleBulkQR(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkQR([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		handleBulkDelete(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkDelete([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
 	},
 };
 </script>
