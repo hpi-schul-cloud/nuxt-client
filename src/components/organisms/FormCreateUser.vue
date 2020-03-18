@@ -4,7 +4,7 @@
 			v-model="userData.firstName"
 			type="text"
 			required="true"
-			label="$t('common.labels.firstName')"
+			:label="$t('common.labels.firstName')"
 			:placeholder="$t('common.placeholder.firstName')"
 			class="mt--md"
 		>
@@ -13,7 +13,7 @@
 			v-model="userData.lastName"
 			type="text"
 			required="true"
-			label="$t('common.labels.lastName')"
+			:label="$t('common.labels.lastName')"
 			:placeholder="$t('common.placeholder.lastName')"
 			class="mt--md"
 		>
@@ -22,7 +22,7 @@
 			v-model="userData.email"
 			type="text"
 			required="true"
-			label="$t('common.labels.email')"
+			:label="$t('common.labels.email')"
 			:placeholder="$t('common.placeholder.email')"
 			class="mt--md"
 		>
