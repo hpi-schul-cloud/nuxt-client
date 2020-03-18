@@ -80,7 +80,8 @@ export default {
 		columns: {
 			type: Array,
 			default: () => [],
-			validator: (columns) => columns.every((column) => column.label),
+			validator: (columns) =>
+				columns.every((column) => typeof column.label === "string"),
 		},
 		/**
 		 * Array of objects
