@@ -66,7 +66,7 @@
 					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
-					href: '/administration/students/new',
+					to: '/administration/students/new',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
