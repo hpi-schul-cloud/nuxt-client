@@ -3,20 +3,17 @@ import { text, boolean } from "@storybook/addon-knobs";
 import InfoBox from "./InfoBox";
 import BaseButton from "@basecomponents/BaseButton";
 import BaseInput from "@basecomponents/BaseInput/BaseInputCheckbox";
+import * as faker from "faker";
+const content = faker.lorem.paragraph();
 
 storiesOf("5 Molecules/InfoBox", module)
-	.addParameters({
-
-	})
+	.addParameters({})
 	.add("InfoBox", () => ({
 		components: { InfoBox, BaseButton, BaseInput },
-			data: () => ({
+		data: () => ({
 			active: true,
 			header: text("header", "Einverständniserklärung"),
-			body: text(
-				"content",
-				"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-			),
+			body: content,
 			checked: true,
 			unchecked: false,
 			labelHidden: boolean("labelHidden", false),
@@ -36,5 +33,4 @@ storiesOf("5 Molecules/InfoBox", module)
 									<base-button design="info outline">Unvollständige auswählen</base-button>
 								</template>
 							</info-box>`,
-
-	}))
+	}));
