@@ -66,8 +66,8 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 			expect(wrapper.vm.active).toBe(false);
 			expect(actions.getTTL.mock.calls).toHaveLength(0);
 			expect(actions.resetJwtTimer.mock.calls).toHaveLength(1);
-			expect(toastStubs.success.mock.calls).toHaveLength(1);
 			expect(toastStubs.error.mock.calls).toHaveLength(0);
+			expect(toastStubs.success.mock.calls).toHaveLength(1);
 			expect(wrapper.vm.remainingTimeInSeconds).toBe(7200);
 		});
 		it("show retry and final error when extend secession failed", async () => {
