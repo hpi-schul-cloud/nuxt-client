@@ -4,8 +4,8 @@
 			v-model="userData.firstName"
 			type="text"
 			required="true"
-			label="Name"
-			:placeholder="'Karli'"
+			label="$t('common.labels.firstName')"
+			:placeholder="$t('common.placeholder.firstName')"
 			class="mt--md"
 		>
 		</base-input>
@@ -13,8 +13,8 @@
 			v-model="userData.lastName"
 			type="text"
 			required="true"
-			label="Nachname"
-			:placeholder="'Nachname'"
+			label="$t('common.labels.lastName')"
+			:placeholder="$t('common.placeholder.lastName')"
 			class="mt--md"
 		>
 		</base-input>
@@ -22,15 +22,15 @@
 			v-model="userData.email"
 			type="text"
 			required="true"
-			label="Email"
-			:placeholder="'Karli.Nachname@mail.de'"
+			label="$t('common.labels.email')"
+			:placeholder="$t('common.placeholder.email')"
 			class="mt--md"
 		>
 		</base-input>
 		<slot name="inputs" :userData="userData" />
 
 		<base-button type="submit" class="w-100 mt--lg" design="secondary" text>
-			Hinzufügen
+			{{ $t("common.actions.add") }}
 		</base-button>
 		<base-button
 			class="w-100 mt--lg"
@@ -38,7 +38,7 @@
 			text
 			@click.prevent="$router.go(-1)"
 		>
-			Abbrechen
+			{{ $t("common.actions.cancel") }}
 		</base-button>
 	</form>
 </template>

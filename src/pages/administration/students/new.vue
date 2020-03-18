@@ -6,8 +6,8 @@
 				<base-input
 					v-model="userData.birthday"
 					type="date"
-					:label="'Geburtstag'"
-					:placeholder="'29.3.2004'"
+					:label="$t('common.labels.birthdate')"
+					:placeholder="$t('common.placeholder.birthdate')"
 					class="mt--md"
 				>
 				</base-input>
@@ -16,7 +16,7 @@
 					type="checkbox"
 					name="switch"
 					class="mt--xl"
-					:label="'Nach dem Hinzufügen Registrierungslink an Schüler senden'"
+					:label="$t('pages.administration.students.new.checkbox.label')"
 				/>
 			</template>
 		</form-create-user>
