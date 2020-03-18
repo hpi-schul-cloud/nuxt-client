@@ -98,6 +98,7 @@ export default {
 	},
 	data() {
 		return {
+			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
 			page:
 				localStorage.getItem(
 					"pages.administration.students.index.currentPage"
@@ -226,6 +227,14 @@ export default {
 			this.find();
 		},
 		dayjs,
+		getQueryForSelection(rowIds, selectionType) {
+			return {
+				...this.currentQuery,
+				_id: {
+					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
+				},
+			};
+		},
 		handleBulkConsent(rowIds, selectionType) {
 			this.$toast.error(
 				`handleBulkConsent([${rowIds.join(
@@ -251,12 +260,37 @@ export default {
 			);
 		},
 		handleBulkDelete(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkDelete([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+			const onConfirm = () => {
+				this.$store.dispatch("users/remove", {
+					query: this.getQueryForSelection(rowIds, selectionType),
+				});
+			};
+			const onCancel = () => {
+				this.$set(this, "tableSelection", []);
+				this.tableSelectionType = "inclusive";
+			};
+			let message;
+			if (selectionType === "inclusive") {
+				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Schüler löschen möchtest?`;
+			} else {
+				if (rowIds.length) {
+					message = `Bist du sicher, dass du alle Schüler bis auf ${rowIds.length} löschen möchtest?`;
+				} else {
+					message = `Bist du sicher, dass du alle Schüler löschen möchtest?`;
+				}
+			}
+			this.$dialog.confirm({
+				message,
+				confirmText: "Schüler löschen",
+				cancelText: "Abbrechen",
+				icon: "report_problem",
+				iconSource: "material",
+				iconColor: "var(--color-danger)",
+				actionDesign: "danger",
+				onConfirm,
+				onCancel,
+				invertedDesign: true,
+			});
 		},
 	},
 };
