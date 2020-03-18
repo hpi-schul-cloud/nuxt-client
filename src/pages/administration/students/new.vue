@@ -11,6 +11,12 @@
 					class="mt--md"
 				>
 				</base-input>
+				<base-input
+					v-model="unchecked"
+					type="checkbox"
+					name="switch"
+					:label="'Nach dem Hinzufügen Registrierungslink an Schüler senden'"
+				/>
 			</template>
 		</form-create-user>
 	</section>
@@ -22,6 +28,12 @@ import FormCreateUser from "@components/organisms/FormCreateUser";
 export default {
 	components: {
 		FormCreateUser,
+	},
+
+	data() {
+		return {
+			unchecked: false,
+		};
 	},
 };
 </script>
