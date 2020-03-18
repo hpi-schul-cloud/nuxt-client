@@ -18,21 +18,19 @@
 	</base-modal>
 </template>
 <script>
-// import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import CenterSlot from "@components/atoms/CenterSlot";
 
 let timeOnStart = Date.now(); // timestamp on script load
 const showWarningOnRemainingSeconds =
-	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS;
-const deafultRemainingTimeInSeconds = process.env.JWT_TIMEOUT_SECONDS || 120;
+	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS || 3600;
+const deafultRemainingTimeInSeconds =
+	process.env.JWT_TIMEOUT_SECONDS || showWarningOnRemainingSeconds * 2;
 
 let processing = false;
 let totalRetry = 0;
-let retry = 0;
 
 export default {
 	components: {
-		// ModalBodyInfo,
 		CenterSlot,
 	},
 	data: () => {
@@ -40,6 +38,7 @@ export default {
 			active: false,
 			error: false,
 			remainingTimeInSeconds: deafultRemainingTimeInSeconds,
+			retry: 0,
 		};
 	},
 	computed: {
@@ -70,7 +69,6 @@ export default {
 	},
 	mounted() {
 		this.decRst();
-		this.showAutoLogoutModal((this.error = false));
 		// this.update();
 	},
 	methods: {
@@ -119,52 +117,46 @@ export default {
 			processing = true;
 			this.active = false;
 
-			await this.$store
-				.dispatch("accounts/resetJwtTimer")
-				.then(() => {
-					processing = false;
-					totalRetry = 0;
-					retry = 0;
-					timeOnStart = Date.now();
-					this.$toast.success(
-						this.$t("components.organisms.AutoLogoutWarning.success")
-					);
-					if (this.remainingTimeInSeconds < 60) {
-						this.decRst();
-					}
-					this.remainingTimeInSeconds = deafultRemainingTimeInSeconds;
-				})
-				.catch((err) => {
-					if (err.response && err.response.status !== 405) {
-						if (err.response && err.response.status !== 401) {
-							// retry 4 times before showing error
-							if (retry < 4) {
-								retry += 1;
-								setTimeout(() => {
-									this.extendSession();
-								}, 2 ** retry * 1000);
-							} else {
-								retry = 0;
-								if (totalRetry) {
-									this.$toast.error(
-										this.$t(
-											"components.organisms.AutoLogoutWarning.error.retry"
-										)
-									);
-								} else {
-									this.showAutoLogoutModal((this.error = true));
-								}
-								totalRetry += 1;
-							}
+			try {
+				await this.$store.dispatch("accounts/resetJwtTimer");
+				processing = false;
+				totalRetry = 0;
+				this.retry = 0;
+				timeOnStart = Date.now();
+				this.$toast.success(
+					this.$t("components.organisms.AutoLogoutWarning.success")
+				);
+				if (this.remainingTimeInSeconds < 60) {
+					this.decRst();
+				}
+				this.remainingTimeInSeconds = deafultRemainingTimeInSeconds;
+			} catch (err) {
+				if (err.response && err.response.status !== 405) {
+					if (err.response && err.response.status !== 401) {
+						// retry 4 times before showing error
+						if (this.retry < 4) {
+							this.retry += 1;
+							setTimeout(() => {
+								this.extendSession();
+							}, 2 ** retry * 1000);
 						} else {
-							this.$toast.error(
-								this.$t("components.organisms.AutoLogoutWarning.error.401")
-							);
+							this.retry = 0;
+							if (totalRetry) {
+								this.$toast.error(
+									this.$t("components.organisms.AutoLogoutWarning.error.retry")
+								);
+							} else {
+								this.showAutoLogoutModal((this.error = true));
+							}
+							totalRetry += 1;
 						}
 					} else {
-						console.warn("This feature is disabled on this instance!");
+						this.$toast.error(
+							this.$t("components.organisms.AutoLogoutWarning.error.401")
+						);
 					}
-				});
+				}
+			}
 		},
 	},
 };
