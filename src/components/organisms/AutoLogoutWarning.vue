@@ -3,7 +3,7 @@
 		<template v-slot:header></template>
 		<template v-slot:body>
 			<div class="container">
-				<img :src="getImage" class="sloth" />
+				<img :src="getImage" class="sloth" alt="Faultier" />
 				<!-- eslint-disable-next-line -->
 				<p class="sloth-text" v-html="getText" />
 			</div>
