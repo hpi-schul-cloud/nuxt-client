@@ -47,6 +47,15 @@
 					/>
 				</span>
 			</template>
+			<template v-slot:datacolumn-_id="{ data }">
+				<base-button
+					design="text icon"
+					size="small"
+					:to="`/administration/students/${data}/edit`"
+				>
+					<base-icon source="material" icon="edit" />
+				</base-button>
+			</template>
 		</backend-data-table>
 		<fab-floating
 			position="bottom-right"
@@ -85,7 +94,10 @@ export default {
 	},
 	data() {
 		return {
-			page: 1,
+			page:
+				localStorage.getItem(
+					"pages.administration.students.index.currentPage"
+				) || 1,
 			limit:
 				localStorage.getItem(
 					"pages.administration.students.index.itemsPerPage"
@@ -115,6 +127,10 @@ export default {
 				{
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
+				},
+				{
+					field: "_id",
+					label: "",
 				},
 			],
 			breadcrumbs: [
@@ -154,6 +170,10 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
+			localStorage.setItem(
+				"pages.administration.students.index.currentPage",
+				page
+			);
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
