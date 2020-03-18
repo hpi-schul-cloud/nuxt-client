@@ -47,6 +47,8 @@ const tableColumns = [
 const tableActions = (allRows) => [
 	{
 		label: "Löschen",
+		icon: "delete",
+		"icon-source": "material",
 		action: (rowIds, selectionType = "inclusive") => {
 			let selections;
 			if (selectionType === "inclusive") {

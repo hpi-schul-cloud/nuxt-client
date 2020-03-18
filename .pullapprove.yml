@@ -20,6 +20,7 @@ groups:
   nuxt-core:
     conditions:
       # not created by a bot
+      - "'schul-cloud-bot' not in author.username"
       - "'dependabot' not in author.username"
       - "'greenkeeper' not in author.username"
     reviews:

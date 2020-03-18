@@ -10,8 +10,7 @@
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
 			styled as a Button if you give him a href/to property
-		-->
-	</button>
+		--></button>
 	<base-link
 		v-else
 		:class="classes"
@@ -41,16 +40,19 @@ export default {
 					"none",
 					"text",
 					"icon",
+					"icon outline",
 					"text icon",
 					"outline",
 					"primary",
 					"primary text",
 					"primary icon",
+					"primary icon outline",
 					"primary text icon",
 					"primary outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
+					"secondary icon outline",
 					"secondary text icon",
 					"secondary outline",
 					"hero-cta",
