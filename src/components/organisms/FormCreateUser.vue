@@ -74,10 +74,6 @@ export default {
 					this.create();
 					break;
 				}
-				case "patch": {
-					this.patch();
-					break;
-				}
 			}
 		},
 		async create() {
