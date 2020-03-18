@@ -2,19 +2,15 @@
 	<base-modal :active.sync="active" :on-back-drop="extendSession">
 		<template v-slot:header></template>
 		<template v-slot:body>
-			<modal-body-info :title="getTitle">
-				<template v-slot:icon>
-					<base-icon
-						source="material"
-						icon="report_problem"
-						style="color: var(--color-danger)"
-					/>
-				</template>
-			</modal-body-info>
+			<div class="container">
+				<img :src="getImage" class="sloth" />
+				<!-- eslint-disable-next-line -->
+				<p class="sloth-text" v-html="getText" />
+			</div>
 		</template>
 		<template v-slot:footer>
 			<center-slot class="mb--md">
-				<base-button design="primary" @click="extendSession">{{
+				<base-button design="danger" @click="extendSession">{{
 					$t("components.organisms.AutoLogoutWarning.confirm")
 				}}</base-button>
 			</center-slot>
@@ -22,13 +18,13 @@
 	</base-modal>
 </template>
 <script>
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+// import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import CenterSlot from "@components/atoms/CenterSlot";
 
 let timeOnStart = Date.now(); // timestamp on script load
-const showWarningOnRemainingSeconds = 60;
-const deafultRemainingTimeInSeconds =
-	process.env.JWT_TIMEOUT_SECONDS || showWarningOnRemainingSeconds * 2;
+const showWarningOnRemainingSeconds =
+	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS;
+const deafultRemainingTimeInSeconds = process.env.JWT_TIMEOUT_SECONDS || 120;
 
 let processing = false;
 let totalRetry = 0;
@@ -36,7 +32,7 @@ let retry = 0;
 
 export default {
 	components: {
-		ModalBodyInfo,
+		// ModalBodyInfo,
 		CenterSlot,
 	},
 	data: () => {
@@ -50,12 +46,21 @@ export default {
 		remainingTimeInMinutes() {
 			return Math.floor(this.remainingTimeInSeconds / 60);
 		},
-		getTitle() {
-			if (this.error)
+		getText() {
+			if (this.error) {
 				return this.$t("components.organisms.AutoLogoutWarning.error");
-			return this.$t("components.organisms.AutoLogoutWarning.warning", {
-				remainingTime: this.remainingTimeInMinutes,
-			});
+			} else {
+				const remainingTime = this.$tc(
+					"components.organisms.AutoLogoutWarning.warning.remainingTime",
+					this.remainingTimeInMinutes,
+					{
+						remainingTime: this.remainingTimeInMinutes,
+					}
+				);
+				return this.$t("components.organisms.AutoLogoutWarning.warning", {
+					remainingTime,
+				});
+			}
 		},
 		getImage() {
 			if (this.error)
@@ -65,6 +70,7 @@ export default {
 	},
 	mounted() {
 		this.decRst();
+		this.showAutoLogoutModal((this.error = false));
 		// this.update();
 	},
 	methods: {
@@ -82,6 +88,8 @@ export default {
 						this.remainingTimeInSeconds <= showWarningOnRemainingSeconds
 					) {
 						this.showAutoLogoutModal((this.error = false));
+					} else {
+						//this.active = false;
 					}
 
 					this.decRst();
@@ -99,8 +107,8 @@ export default {
 							console.error("Update remaining session time failed!");
 						}
 					})
-					.catch((err) => {
-						console.error(err);
+					.catch(() => {
+						console.error("Update remaining session time failed!");
 					});
 			}, 1000 * 30);
 		},
@@ -127,7 +135,7 @@ export default {
 					this.remainingTimeInSeconds = deafultRemainingTimeInSeconds;
 				})
 				.catch((err) => {
-					if (err.response && err.response.status !== 408) {
+					if (err.response && err.response.status !== 405) {
 						if (err.response && err.response.status !== 401) {
 							// retry 4 times before showing error
 							if (retry < 4) {
@@ -153,6 +161,8 @@ export default {
 								this.$t("components.organisms.AutoLogoutWarning.error.401")
 							);
 						}
+					} else {
+						console.warn("This feature is disabled on this instance!");
 					}
 				});
 		},
@@ -162,4 +172,35 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.container {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+
+	.sloth {
+		display: inline-block;
+		width: 35%;
+		min-width: 150px;
+		vertical-align: top;
+
+		@include breakpoint(tablet) {
+			float: right;
+		}
+	}
+
+	.sloth-text {
+		display: inline-block;
+		width: 100%;
+		font-size: var(--text-lg);
+
+		@include breakpoint(tablet) {
+			width: 60%;
+			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+			margin-top: 4em;
+			text-align: left;
+			vertical-align: middle;
+		}
+	}
+}
 </style>
