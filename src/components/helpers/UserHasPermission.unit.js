@@ -68,8 +68,8 @@ describe("@components/helpers/UserHasPermission", () => {
 	it("view false-slot if user does not have permission", () => {
 		checkCorrectView("ADMIN", ["USER"], false);
 	});
-	it("defaults to view rejected", () => {
-		checkCorrectView(undefined, ["USER"], false);
+	it("defaults to view true-slot when permission is empty or undefined", () => {
+		checkCorrectView(undefined, ["USER"], true);
 	});
 	it("defaults to false when user has no permissions", () => {
 		checkCorrectView("ADMIN", undefined, false);
