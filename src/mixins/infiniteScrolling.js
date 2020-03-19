@@ -1,4 +1,4 @@
-const infiniteScrolling = {
+export default {
 	data() {
 		return {
 			bottom: false,
@@ -31,5 +31,3 @@ const infiniteScrolling = {
 		},
 	},
 };
-
-export default infiniteScrolling;

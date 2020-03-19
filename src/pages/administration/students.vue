@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
@@ -5,13 +6,17 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 		<backend-data-table
+			:actions="tableActions"
 			:columns="tableColumns"
-			:data="students"
-			track-by="id"
-			:total="pagination.total"
-			:paginated="true"
 			:current-page.sync="page"
+			:data="students"
+			:paginated="true"
 			:rows-per-page.sync="limit"
+			:rows-selectable="true"
+			:total="pagination.total"
+			track-by="id"
+			:selected-row-ids.sync="tableSelection"
+			:selection-type.sync="tableSelectionType"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
@@ -84,6 +89,7 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -95,6 +101,7 @@ export default {
 		FabFloating,
 		AdminTableLegend,
 	},
+	mixins: [print],
 	props: {
 		showLdapHint: {
 			type: Boolean,
@@ -102,6 +109,7 @@ export default {
 	},
 	data() {
 		return {
+			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
 			page:
 				parseInt(
 					localStorage.getItem(
@@ -145,6 +153,40 @@ export default {
 					label: "",
 				},
 			],
+			tableActions: [
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.consent"
+					),
+					icon: "check",
+					"icon-source": "material",
+					action: this.handleBulkConsent,
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.email"
+					),
+					icon: "mail_outline",
+					"icon-source": "material",
+					action: this.handleBulkEMail,
+				},
+				{
+					label: this.$t("pages.administration.students.index.tableActions.qr"),
+					"icon-source": "fa",
+					icon: "qrcode",
+					action: this.handleBulkQR,
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.delete"
+					),
+					icon: "delete_outline",
+					"icon-source": "material",
+					action: this.handleBulkDelete,
+				},
+			],
+			tableSelection: [],
+			tableSelectionType: "inclusive",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -216,6 +258,90 @@ export default {
 			this.find();
 		},
 		dayjs,
+		getQueryForSelection(rowIds, selectionType) {
+			return {
+				...this.currentQuery,
+				_id: {
+					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
+				},
+			};
+		},
+		handleBulkConsent(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkConsent([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		handleBulkEMail(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkEMail([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		async handleBulkQR(rowIds, selectionType) {
+			// TODO: request registrationsLinks fom backend
+			// route needs to be implemented!
+
+			// const users = await this.$store.dispatch("users/find", {
+			// 	qid: "qr-print",
+			// 	query: this.getQueryForSelection(rowIds, selectionType),
+			// });
+			// this.$_printQRs(
+			// 	usersWithoutConsents.map((user) => ({
+			// 		qrContent: user.registrationLink.shortLink,
+			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
+			// 		description: "Zum Registrieren bitte den Link öffnen.",
+			// 	}))
+			// );
+			this.$toast.error(
+				`handleBulkQR([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		handleBulkDelete(rowIds, selectionType) {
+			const onConfirm = async () => {
+				try {
+					await this.$store.dispatch("users/remove", {
+						query: this.getQueryForSelection(rowIds, selectionType),
+					});
+					this.$toast.success("Ausgewählte Nutzer gelöscht");
+				} catch (error) {
+					this.$toast.error("Löschen der Nutzer fehlgeschlagen");
+				}
+			};
+			const onCancel = () => {
+				this.$set(this, "tableSelection", []);
+				this.tableSelectionType = "inclusive";
+			};
+			let message;
+			if (selectionType === "inclusive") {
+				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Schüler löschen möchtest?`;
+			} else {
+				if (rowIds.length) {
+					message = `Bist du sicher, dass du alle Schüler bis auf ${rowIds.length} löschen möchtest?`;
+				} else {
+					message = `Bist du sicher, dass du alle Schüler löschen möchtest?`;
+				}
+			}
+			this.$dialog.confirm({
+				message,
+				confirmText: "Schüler löschen",
+				cancelText: "Abbrechen",
+				icon: "report_problem",
+				iconSource: "material",
+				iconColor: "var(--color-danger)",
+				actionDesign: "danger",
+				onConfirm,
+				onCancel,
+				invertedDesign: true,
+			});
+		},
 	},
 };
 </script>
