@@ -1,5 +1,5 @@
 <template>
-	<div v-if="hasPermission" class="user-has-permission">
+	<div v-if="$_hasPermission" class="user-has-permission">
 		<slot />
 		<slot name="true" />
 	</div>
@@ -9,27 +9,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+import UserHasPermission from "@/mixins/UserHasPermission";
 export default {
-	props: {
-		permission: {
-			type: [String, Function],
-			default: () => () => false,
-		},
-	},
-	computed: {
-		...mapState({
-			userPermissions: (state) =>
-				state && state.auth && state.auth.user && state.auth.user.permissions
-					? state.auth.user.permissions.map((p) => p.toLowerCase())
-					: [],
-		}),
-		hasPermission() {
-			return typeof this.permission === "string"
-				? this.userPermissions.includes(this.permission.toLowerCase())
-				: this.permission(this.userPermissions);
-		},
-	},
+	mixins: [UserHasPermission],
 };
 </script>
