@@ -1,48 +1,34 @@
 <template>
 	<div class="section">
-		<strong>{{ $t("pages.administration.students.footer.title") }}</strong>
+		<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
 		<div class="consent-icon">
-			<span>
-				<base-icon
-					source="material"
-					icon="check"
-					color="var(--color-success)"
-				/>
-				{{ $t("pages.administration.students.footer.icon.success") }}
-			</span>
-			<span>
-				<base-icon
-					source="material"
-					icon="check"
-					color="var(--color-warning)"
-				/>
-				{{ $t("pages.administration.students.footer.icon.warning") }}
-			</span>
-			<span>
-				<base-icon source="material" icon="clear" color="var(--color-danger)" />
-				{{ $t("pages.administration.students.footer.icon.danger") }}
-			</span>
+			<li v-for="icon in icons" :key="icon.icon">
+				<span>
+					<base-icon source="material" :icon="icon.icon" :color="icon.color" />
+					{{ icon.i18n }}
+				</span>
+			</li>
 		</div>
-		<span class="container">
+		<span v-if="showLdapHint" class="container">
 			<img
 				class="ldap-logo"
 				src="@assets/img/datasources/logo-ldap.svg"
 				alt="LDAP Logo"
 			/>
 			<strong>
-				{{ $t("pages.administration.students.footer.ldap") }}
+				{{ $t("components.molecules.admintablelegend.ldap") }}
 				<base-link
 					class="link-style"
 					to="/administration/helpdesk"
 					:no-styles="true"
 					traget="_blank"
 				>
-					{{ $t("pages.administration.students.footer.help") }}.
+					{{ $t("components.molecules.admintablelegend.help") }}.
 				</base-link>
 			</strong>
 		</span>
 		<p class="hint">
-			{{ $t("pages.administration.students.footer.hint") }}
+			{{ $t("components.molecules.admintablelegend.hint") }}
 		</p>
 	</div>
 </template>
@@ -50,9 +36,12 @@
 <script>
 export default {
 	props: {
-		color: {
-			type: String,
-			default: "var(--color-primary)",
+		icons: {
+			type: Array,
+			required: true,
+		},
+		showLdapHint: {
+			type: Boolean,
 		},
 	},
 };
@@ -72,6 +61,10 @@ export default {
 	justify-content: left;
 	margin-top: var(--space-sm);
 	margin-bottom: var(--space-xl);
+
+	> li {
+		list-style: none;
+	}
 }
 
 .ldap-logo {

@@ -57,7 +57,7 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<styled-footer />
+		<admin-table-legend :icons="icons" :show-ldap-hint="true" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
@@ -83,7 +83,7 @@
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
-import StyledFooter from "@components/organisms/Administration/StyledFooter";
+import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -93,7 +93,12 @@ export default {
 	components: {
 		BackendDataTable,
 		FabFloating,
-		StyledFooter,
+		AdminTableLegend,
+	},
+	props: {
+		showLdapHint: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
@@ -148,6 +153,23 @@ export default {
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
+				},
+			],
+			icons: [
+				{
+					icon: "check",
+					color: "var(--color-success)",
+					i18n: this.$t("pages.administration.students.footer.icon.success"),
+				},
+				{
+					icon: "check",
+					color: "var(--color-warning)",
+					i18n: this.$t("pages.administration.students.footer.icon.danger"),
+				},
+				{
+					icon: "clear",
+					color: "var(--color-danger)",
+					i18n: this.$t("pages.administration.students.footer.icon.warning"),
 				},
 			],
 		};
