@@ -114,6 +114,7 @@
 	"pages.administration.students.fab.add": "Schüler:in anlegen",
 	"pages.administration.students.fab.import": "Schüler:innen importieren",
 	"pages.administration.students.index.title": "Verwalte Schüler:innen",
+	"pages.administration.students.new.title": "Schüler:in hinzufügen",
 	"pages.administration.students.new.checkbox.label": "Nach dem Hinzufügen Registrierungslink an Schüler senden",
 	"pages.administration.index.title": "Administration",
 	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",

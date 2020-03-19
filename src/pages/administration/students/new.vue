@@ -1,5 +1,6 @@
 <template>
 	<section class="section">
+		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1>Schüler:in hinzufügen</h1>
 		<form-create-user>
 			<template v-slot:inputs="{ userData }">
@@ -29,6 +30,25 @@ import FormCreateUser from "@components/organisms/FormCreateUser";
 export default {
 	components: {
 		FormCreateUser,
+	},
+	data() {
+		return {
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+					icon: { source: "fa", icon: "fas fa-cog" },
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
+					to: "/administration/students",
+				},
+				{
+					text: this.$t("pages.administration.students.new.title"),
+					to: "/administration/students/new",
+				},
+			],
+		};
 	},
 };
 </script>
