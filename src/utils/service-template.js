@@ -68,9 +68,23 @@ export default function(endpoint) {
 				});
 				return res;
 			},
-			async remove({ commit }, id) {
-				const res = await this.$axios.$delete(baseUrl + "/" + id);
-				commit("remove", id);
+			async remove({ commit }, idOrPayload) {
+				let res;
+				if (typeof idOrPayload === "string") {
+					const id = idOrPayload;
+					res = await this.$axios.$delete(baseUrl + "/" + id);
+					commit("remove", idOrPayload);
+				} else {
+					const payload = idOrPayload;
+					const { query, customEndpoint } = payload;
+					res = await this.$axios.$delete(customEndpoint || baseUrl, {
+						params: query,
+						paramsSerializer: (params) => {
+							return qs.stringify(params);
+						},
+					});
+					// TODO update store with commit
+				}
 				return res;
 			},
 		},
