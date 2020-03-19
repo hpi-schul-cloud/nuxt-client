@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
@@ -86,6 +87,7 @@
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
+import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -96,6 +98,7 @@ export default {
 		BackendDataTable,
 		FabFloating,
 	},
+	mixins: [print],
 	data() {
 		return {
 			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
@@ -251,7 +254,21 @@ export default {
 				{ duration: 5000 }
 			);
 		},
-		handleBulkQR(rowIds, selectionType) {
+		async handleBulkQR(rowIds, selectionType) {
+			// TODO: request registrationsLinks fom backend
+			// route needs to be implemented!
+
+			// const users = await this.$store.dispatch("users/find", {
+			// 	qid: "qr-print",
+			// 	query: this.getQueryForSelection(rowIds, selectionType),
+			// });
+			// this.$_printQRs(
+			// 	usersWithoutConsents.map((user) => ({
+			// 		qrContent: user.registrationLink.shortLink,
+			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
+			// 		description: "Zum Registrieren bitte den Link öffnen.",
+			// 	}))
+			// );
 			this.$toast.error(
 				`handleBulkQR([${rowIds.join(
 					", "
@@ -260,10 +277,15 @@ export default {
 			);
 		},
 		handleBulkDelete(rowIds, selectionType) {
-			const onConfirm = () => {
-				this.$store.dispatch("users/remove", {
-					query: this.getQueryForSelection(rowIds, selectionType),
-				});
+			const onConfirm = async () => {
+				try {
+					await this.$store.dispatch("users/remove", {
+						query: this.getQueryForSelection(rowIds, selectionType),
+					});
+					this.$toast.success("Ausgewählte Nutzer gelöscht");
+				} catch (error) {
+					this.$toast.error("Löschen der Nutzer fehlgeschlagen");
+				}
 			};
 			const onCancel = () => {
 				this.$set(this, "tableSelection", []);
