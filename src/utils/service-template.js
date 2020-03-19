@@ -73,9 +73,6 @@ export default function(endpoint) {
 				commit("remove", id);
 				return res;
 			},
-			resetState({ commit }) {
-				commit("reset");
-			},
 		},
 		getters: {
 			get: (state, id) => {
