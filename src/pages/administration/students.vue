@@ -57,6 +57,7 @@
 				</base-button>
 			</template>
 		</backend-data-table>
+		<styled-footer />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
@@ -82,6 +83,7 @@
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
+import StyledFooter from "@components/organisms/Administration/StyledFooter";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -91,6 +93,7 @@ export default {
 	components: {
 		BackendDataTable,
 		FabFloating,
+		StyledFooter,
 	},
 	data() {
 		return {
