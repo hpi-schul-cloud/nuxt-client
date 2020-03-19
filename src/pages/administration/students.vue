@@ -47,27 +47,33 @@
 					/>
 				</span>
 			</template>
+			<template v-slot:datacolumn-_id="{ data }">
+				<base-button
+					design="text icon"
+					size="small"
+					:to="`/administration/students/${data}/edit`"
+				>
+					<base-icon source="material" icon="edit" />
+				</base-button>
+			</template>
 		</backend-data-table>
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
 				{
-					label: $t('pages.administration.students.add'),
+					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
-					event: 'fabActionClick',
-					arguments: 'new',
+					href: '/administration/students/new',
 				},
 				{
-					label: $t('pages.administration.students.import'),
+					label: $t('pages.administration.students.fab.import'),
 					icon: 'arrow_downward',
 					'icon-source': 'material',
-					event: 'fabActionClick',
-					arguments: 'import',
+					href: '/administration/students/import',
 				},
 			]"
-			@fabActionClick="onFabActionClick"
 		/>
 	</section>
 </template>
@@ -88,10 +94,17 @@ export default {
 	},
 	data() {
 		return {
-			page: 1,
+			page:
+				parseInt(
+					localStorage.getItem(
+						"pages.administration.students.index.currentPage"
+					)
+				) || 1,
 			limit:
-				localStorage.getItem(
-					"pages.administration.students.index.itemsPerPage"
+				parseInt(
+					localStorage.getItem(
+						"pages.administration.students.index.itemsPerPage"
+					)
 				) || 10,
 			tableColumns: [
 				{
@@ -118,6 +131,10 @@ export default {
 				{
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
+				},
+				{
+					field: "_id",
+					label: "",
 				},
 			],
 			breadcrumbs: [
@@ -157,6 +174,10 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
+			localStorage.setItem(
+				"pages.administration.students.index.currentPage",
+				page
+			);
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
@@ -170,14 +191,6 @@ export default {
 			this.find();
 		},
 		dayjs,
-		onFabActionClick(arg) {
-			switch (arg) {
-				case "new":
-					return;
-				case "import":
-					return;
-			}
-		},
 	},
 };
 </script>

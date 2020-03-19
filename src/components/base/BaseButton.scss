@@ -1,6 +1,7 @@
 @import "@styles";
 
-button:not(.is-none) {
+button:not(.is-none),
+a:not(.is-none) {
 	// typo
 	--button-font-weight: var(--font-weight-bold);
 	--button-line-height: var(--line-height-md);
