@@ -20,11 +20,12 @@
 <script>
 import CenterSlot from "@components/atoms/CenterSlot";
 
-let timeOnStart = Date.now(); // timestamp on script load
 const showWarningOnRemainingSeconds =
 	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS || 3600;
 const deafultRemainingTimeInSeconds =
 	process.env.JWT_TIMEOUT_SECONDS || showWarningOnRemainingSeconds * 2;
+const decRstIntervallSec = 20;
+const updateIntervallMin = 3;
 
 let processing = false;
 let totalRetry = 0;
@@ -69,46 +70,41 @@ export default {
 	},
 	mounted() {
 		this.decRst();
-		// this.update();
+		this.update();
 	},
 	methods: {
 		decRst() {
 			setTimeout(() => {
 				if (this.remainingTimeInSeconds >= 60) {
-					this.remainingTimeInSeconds = Math.max(
-						0,
-						deafultRemainingTimeInSeconds -
-							Math.floor((Date.now() - timeOnStart) / 1000)
-					);
+					this.remainingTimeInSeconds -= decRstIntervallSec;
 					if (
 						!processing &&
 						!this.active &&
 						this.remainingTimeInSeconds <= showWarningOnRemainingSeconds
 					) {
 						this.showAutoLogoutModal((this.error = false));
-					} else {
-						//this.active = false;
+					} else if (
+						this.remainingTimeInSeconds > showWarningOnRemainingSeconds
+					) {
+						this.activ = false;
 					}
-
 					this.decRst();
 				}
-			}, 1000 * 20);
+			}, 1000 * decRstIntervallSec);
 		},
 		update() {
 			setInterval(async () => {
-				await this.$store
-					.dispatch("accounts/getTTL")
-					.then((res) => {
-						if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
-							this.remainingTimeInSeconds = res.ttl;
-						} else {
-							console.error("Update remaining session time failed!");
-						}
-					})
-					.catch(() => {
+				try {
+					const res = await this.$store.dispatch("accounts/getTTL");
+					if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
+						this.remainingTimeInSeconds = res.ttl;
+					} else {
 						console.error("Update remaining session time failed!");
-					});
-			}, 1000 * 30);
+					}
+				} catch (error) {
+					console.error("Update remaining session time failed!");
+				}
+			}, 1000 * 60 * updateIntervallMin);
 		},
 		showAutoLogoutModal() {
 			this.active = true;
@@ -122,7 +118,6 @@ export default {
 				processing = false;
 				totalRetry = 0;
 				this.retry = 0;
-				timeOnStart = Date.now();
 				this.$toast.success(
 					this.$t("components.organisms.AutoLogoutWarning.success")
 				);

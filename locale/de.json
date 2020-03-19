@@ -29,7 +29,7 @@
 	"components.organisms.AutoLogoutWarning.error.retry": "Deine Sitzung konnte nicht verlängert werden!",
 	"components.organisms.AutoLogoutWarning.success": "Sitzung erfolgreich verlängert.",
 	"components.organisms.AutoLogoutWarning.warning": "Achtung: Du wirst in <span style='color: var(--color-danger)'> {remainingTime} </span> automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime": "0 Minuten | einer Minute | {remainingTime} Minuten",
+	"components.organisms.AutoLogoutWarning.warning.remainingTime": "weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"components.organisms.ContentCard.report.body": "Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email": "inhalte@schul-cloud.org",
 	"components.organisms.ContentCard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da: [hier bitte Ihre Gründe]",
