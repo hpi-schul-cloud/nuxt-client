@@ -2,6 +2,13 @@ import Vue from "vue";
 import qs from "qs";
 export default function(endpoint) {
 	const baseUrl = "/" + endpoint;
+	const getDefaultState = () => {
+		return {
+			current: null,
+			list: [],
+			pagination: {},
+		};
+	};
 	return {
 		baseUrl,
 		actions: {
@@ -96,6 +103,9 @@ export default function(endpoint) {
 			set(state, { items }) {
 				state.list = items;
 			},
+			reset(state) {
+				Object.assign(state, getDefaultState());
+			},
 			patchSingleItem(state, item) {
 				const index = state.list.findIndex(
 					(e) => e._id === item._id || item.id
@@ -130,10 +140,6 @@ export default function(endpoint) {
 				});
 			},
 		},
-		state: () => ({
-			current: null,
-			list: [],
-			pagination: {},
-		}),
+		state: () => getDefaultState(),
 	};
 }
