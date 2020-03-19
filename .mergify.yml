@@ -17,7 +17,7 @@ pull_request_rules:
     actions:
       label:
         add:
-		  - changes requested
+          - changes requested
   - name: remove "changes requested" label when pull is approved
     conditions:
       - status-success~=pullapprove
