@@ -36,6 +36,8 @@ Output Directory: `./dist/nuxt`
 | FEATURE_TEAMS_ENABLED | `false` | Enables Teams feature in sidebar |
 | FEATURE_EXTENSIONS_ENABLED | `false` | Enables Add-Ons in sidebar. Just for N21! |
 | SENTRY_DSN | `false` | If set, errors are reported to sentry. |
+| JWT_SHOW_TIMEOUT_WARNING_SECONDS | `3600` | from this remaining time on the autologout warning is displayed to the user |
+| JWT_TIMEOUT_SECONDS | `7200` | Time a inactivity user's sessions remains active |
 
 ## Storybook
 
