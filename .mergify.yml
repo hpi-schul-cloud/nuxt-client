@@ -11,6 +11,13 @@ pull_request_rules:
       label:
         add:
           - WIP
+  - name: label PRs with requested changes
+    conditions:
+      - "#changes-requested-reviews-by>0"
+    actions:
+      label:
+        add:
+          - "changes requested"
   - name: remove "ready to merge" label when pull is not approved yet
     conditions:
       - -status-success~=pullapprove
