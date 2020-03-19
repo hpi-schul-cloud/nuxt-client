@@ -63,6 +63,7 @@
 			</template>
 		</backend-data-table>
 		<fab-floating
+			v-if="!school.ldapSchoolIdentifier"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -192,6 +193,9 @@ export default {
 		};
 	},
 	computed: {
+		...mapState("auth", {
+			school: "school",
+		}),
 		...mapGetters("users", {
 			students: "list",
 		}),
