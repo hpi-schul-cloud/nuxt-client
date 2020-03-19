@@ -17,7 +17,17 @@ pull_request_rules:
     actions:
       label:
         add:
-          - "changes requested"
+		  - changes requested
+  - name: remove "changes requested" label when pull is approved
+    conditions:
+      - status-success~=pullapprove
+      - label~=changes requested
+    actions:
+      comment:
+        message: The "changes requested" label can only be set on non approved pull request
+      label:
+        remove:
+          - changes requested
   - name: remove "ready to merge" label when pull is not approved yet
     conditions:
       - -status-success~=pullapprove
