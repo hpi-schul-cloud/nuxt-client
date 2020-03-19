@@ -23,8 +23,6 @@ pull_request_rules:
       - status-success~=pullapprove
       - label~=changes requested
     actions:
-      comment:
-        message: The "changes requested" label can only be set on non approved pull request
       label:
         remove:
           - changes requested
