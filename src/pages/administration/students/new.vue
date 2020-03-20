@@ -1,7 +1,9 @@
 <template>
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1>Schüler:in hinzufügen</h1>
+		<h1 class="mb--md h3">
+			{{ $t("pages.administration.students.new.title") }}
+		</h1>
 		<form-create-user>
 			<template v-slot:inputs="{ userData }">
 				<base-input

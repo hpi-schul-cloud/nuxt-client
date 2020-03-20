@@ -38,7 +38,7 @@
 			text
 			@click.prevent="$router.go(-1)"
 		>
-			{{ $t("common.actions.cancel") }}
+			{{ $t("common.actions.back") }}
 		</base-button>
 	</form>
 </template>
@@ -95,13 +95,13 @@ export default {
 					sendRegistration: this.userData.sendRegistration,
 				});
 
-				this.$toast.success("User erstellt");
+				this.$toast.success($t("pages.administration.students.new.success"));
 				this.$router.push({
 					path: "/administration/students",
 				});
 			} catch (e) {
 				console.error(e);
-				this.$toast.error("Fehler beim Erstellen des users");
+				this.$toast.error($t("pages.administration.students.new.denied"));
 			}
 		},
 	},
