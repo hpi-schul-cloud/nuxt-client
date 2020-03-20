@@ -9,7 +9,7 @@ describe("@components/MintEcLinkContainer", () => {
 				heading: "heading",
 				image:
 					"https://headless.schul-cloud.org/content/images/2019/12/04_im-projekt-engagieren.png",
-				ic: "fas fa-paint-brush",
+				ic: "paint-brush",
 				href: "/mint-ec/schule-informieren",
 			},
 		});

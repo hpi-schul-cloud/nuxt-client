@@ -30,7 +30,7 @@ export default {
 	props: {
 		color: {
 			type: String,
-			required: true,
+			default: "var(--color-tertiary)",
 		},
 		colorGradient: {
 			type: String,
