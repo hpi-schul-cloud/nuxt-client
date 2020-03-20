@@ -3,8 +3,29 @@
 		<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
 		<div class="consent-icon">
 			<li v-for="icon in icons" :key="icon.icon">
-				<span>
-					<base-icon source="material" :icon="icon.icon" :color="icon.color" />
+				<span v-if="icon.class">
+					<base-icon
+						source="material"
+						:icon="icon.icon"
+						:color="icon.color"
+						:class="icon.class"
+					/>
+					<base-icon
+						source="material"
+						:icon="icon.icon"
+						:color="icon.color"
+						:style="icon.style"
+					/>
+					{{ icon.i18n }}
+				</span>
+
+				<span v-else>
+					<base-icon
+						source="material"
+						:icon="icon.icon"
+						:color="icon.color"
+						:style="icon.style"
+					/>
 					{{ icon.i18n }}
 				</span>
 			</li>
@@ -85,5 +106,11 @@ export default {
 .link-style {
 	color: var(--color-black);
 	text-decoration: underline;
+}
+
+.double {
+	p {
+		margin-bottom: 0;
+	}
 }
 </style>

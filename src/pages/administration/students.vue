@@ -201,16 +201,20 @@ export default {
 				{
 					icon: "check",
 					color: "var(--color-success)",
+					style: "position: relative; left: -17.5px; margin-right: -1rem",
 					i18n: this.$t("pages.administration.students.footer.icon.success"),
+					class: "double",
 				},
 				{
 					icon: "check",
 					color: "var(--color-warning)",
+					style: "margin-right: 0.5rem",
 					i18n: this.$t("pages.administration.students.footer.icon.danger"),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
+					style: "margin-right: 0.5rem",
 					i18n: this.$t("pages.administration.students.footer.icon.warning"),
 				},
 			],
