@@ -1,8 +1,8 @@
 <template>
 	<blockquote :cite="cite">
 		<slot />
-		<footer v-if="cite"
-			>&mdash;
+		<footer v-if="cite">
+			&mdash;
 			<BaseLink :href="cite">{{ srcText }}</BaseLink>
 		</footer>
 	</blockquote>

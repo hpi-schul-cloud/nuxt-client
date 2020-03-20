@@ -1,6 +1,6 @@
 import { configure, addDecorator, addParameters } from "@storybook/vue";
 
-import { withInfo } from "storybook-addon-vue-info";
+import { withInfo, setDefaults } from "storybook-addon-vue-info";
 import { withA11y } from "@storybook/addon-a11y";
 import { withKnobs } from "@storybook/addon-knobs";
 
@@ -18,6 +18,9 @@ import "@basecomponents/_globals";
 import "@styles";
 
 // Vue Docs ( storybook-addon-vue-info )
+setDefaults({
+	source: false,
+});
 addParameters({
 	info: true,
 });

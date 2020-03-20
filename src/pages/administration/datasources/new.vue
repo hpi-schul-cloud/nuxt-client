@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="h3"> {{ $t("pages.administration.datasources.new.title") }}</h1>
+		<h1 class="h3">{{ $t("pages.administration.datasources.new.title") }}</h1>
 		<datasource-card
 			v-for="provider in datasourceProvider"
 			:key="provider.name"

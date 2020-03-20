@@ -34,7 +34,7 @@ storiesOf("5 Molecules/ContentCard", module).add("default", () => ({
 			),
 			thumbnail: text(
 				"thumbnail",
-				"https://s3.xopic.de/openhpi-public/courses/5D3N8vSUVXlL95aIrsnr0s/visual_v1.jpg"
+				"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOc+R8AAjcBmvywMWoAAAAASUVORK5CYII="
 			),
 			title: text("title", "Wie designe ich meine eigene Homepage?"),
 			url: text("url", "https://open.hpi.de/courses/homepage2016"),
