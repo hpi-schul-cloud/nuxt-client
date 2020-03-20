@@ -13,7 +13,7 @@
 		</template>
 		<template v-slot:footer>
 			<center-slot class="mb--md">
-				<base-button design="danger" @click="extendSession">{{
+				<base-button design="primary" @click="extendSession">{{
 					$t("components.organisms.AutoLogoutWarning.confirm")
 				}}</base-button>
 			</center-slot>
