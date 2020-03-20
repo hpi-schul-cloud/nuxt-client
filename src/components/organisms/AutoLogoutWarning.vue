@@ -1,6 +1,5 @@
 <template>
 	<base-modal :active.sync="active" :on-back-drop="extendSession">
-		<template v-slot:header></template>
 		<template v-slot:body>
 			<div class="container">
 				<img :src="getImage" class="sloth" alt="Faultier" />
