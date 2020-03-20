@@ -2,9 +2,13 @@
 	<base-modal :active.sync="active" :on-back-drop="extendSession">
 		<template v-slot:body>
 			<div class="container">
-				<img :src="getImage" class="sloth" alt="Faultier" />
+				<img
+					:src="getImage"
+					class="sloth"
+					:alt="$t('components.organisms.AutoLogoutWarning.image.alt')"
+				/>
 				<!-- eslint-disable-next-line -->
-				<p class="sloth-text" v-html="getText" />
+				<p class="sloth-text mt--xl-4" v-html="getText" />
 			</div>
 		</template>
 		<template v-slot:footer>
@@ -21,13 +25,8 @@ import CenterSlot from "@components/atoms/CenterSlot";
 
 const showWarningOnRemainingSeconds =
 	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS || 3600;
-const deafultRemainingTimeInSeconds =
+const defaultRemainingTimeInSeconds =
 	process.env.JWT_TIMEOUT_SECONDS || showWarningOnRemainingSeconds * 2;
-const decRstIntervallSec = 20;
-const updateIntervallMin = 3;
-
-let processing = false;
-let totalRetry = 0;
 
 export default {
 	components: {
@@ -36,9 +35,13 @@ export default {
 	data: () => {
 		return {
 			active: false,
+			processing: false,
 			error: false,
-			remainingTimeInSeconds: deafultRemainingTimeInSeconds,
+			remainingTimeInSeconds: defaultRemainingTimeInSeconds,
 			retry: 0,
+			totalRetry: 0,
+			decRstIntervallSec: 20,
+			updateIntervallMin: 3,
 		};
 	},
 	computed: {
@@ -75,9 +78,9 @@ export default {
 		decRst() {
 			setTimeout(() => {
 				if (this.remainingTimeInSeconds >= 60) {
-					this.remainingTimeInSeconds -= decRstIntervallSec;
+					this.remainingTimeInSeconds -= this.decRstIntervallSec;
 					if (
-						!processing &&
+						!this.processing &&
 						!this.active &&
 						this.remainingTimeInSeconds <= showWarningOnRemainingSeconds
 					) {
@@ -89,7 +92,7 @@ export default {
 					}
 					this.decRst();
 				}
-			}, 1000 * decRstIntervallSec);
+			}, 1000 * this.decRstIntervallSec);
 		},
 		update() {
 			setInterval(async () => {
@@ -103,19 +106,19 @@ export default {
 				} catch (error) {
 					console.error("Update remaining session time failed!");
 				}
-			}, 1000 * 60 * updateIntervallMin);
+			}, 1000 * 60 * this.updateIntervallMin);
 		},
 		showAutoLogoutModal() {
 			this.active = true;
 		},
 		async extendSession() {
-			processing = true;
+			this.processing = true;
 			this.active = false;
 
 			try {
 				await this.$store.dispatch("accounts/resetJwtTimer");
-				processing = false;
-				totalRetry = 0;
+				this.processing = false;
+				this.totalRetry = 0;
 				this.retry = 0;
 				this.$toast.success(
 					this.$t("components.organisms.AutoLogoutWarning.success")
@@ -123,7 +126,7 @@ export default {
 				if (this.remainingTimeInSeconds < 60) {
 					this.decRst();
 				}
-				this.remainingTimeInSeconds = deafultRemainingTimeInSeconds;
+				this.remainingTimeInSeconds = defaultRemainingTimeInSeconds;
 			} catch (err) {
 				if (err.response && err.response.status !== 405) {
 					if (err.response && err.response.status !== 401) {
@@ -135,14 +138,14 @@ export default {
 							}, 2 ** retry * 1000);
 						} else {
 							this.retry = 0;
-							if (totalRetry) {
+							if (this.totalRetry) {
 								this.$toast.error(
 									this.$t("components.organisms.AutoLogoutWarning.error.retry")
 								);
 							} else {
 								this.showAutoLogoutModal((this.error = true));
 							}
-							totalRetry += 1;
+							this.totalRetry += 1;
 						}
 					} else {
 						this.$toast.error(
@@ -183,7 +186,6 @@ export default {
 		@include breakpoint(tablet) {
 			width: 60%;
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			margin-top: 4em;
 			text-align: left;
 			vertical-align: middle;
 		}

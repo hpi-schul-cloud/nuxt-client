@@ -58,7 +58,7 @@ export default {
 			type: String,
 			default: "medium",
 		},
-		onBackDrop: {
+		onBackdropClick: {
 			type: Function,
 			default: () => {},
 		},
@@ -74,7 +74,7 @@ export default {
 	},
 	methods: {
 		handleBackgroundClick() {
-			this.onBackDrop();
+			this.onBackdropClick();
 			this.close();
 		},
 		close() {

@@ -22,17 +22,6 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 describe("@components/organisms/AutoLogoutWarning", () => {
 	it(...isValidComponent(AutoLogoutWarning));
 
-	it("changing the active property should open and close the modal", async () => {
-		const wrapper = mount(AutoLogoutWarning, {
-			...getMocks(),
-		});
-
-		expect(wrapper.find(".sloth-text").exists()).toBe(false);
-		wrapper.vm.active = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find(".sloth-text").exists()).toBe(true);
-	});
-
 	it("changing the error property should toggle content of the modal", async () => {
 		const wrapper = mount(AutoLogoutWarning, {
 			...getMocks(),
