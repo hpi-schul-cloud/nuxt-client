@@ -11,8 +11,8 @@
 		</div>
 		<span v-if="showLdapHint" class="container">
 			<img
-				class="ldap-logo"
-				src="@assets/img/datasources/logo-ldap.svg"
+				class="sync-symbol"
+				src="@assets/icons/sync-symbol.svg"
 				alt="LDAP Logo"
 			/>
 			<strong>
@@ -67,8 +67,8 @@ export default {
 	}
 }
 
-.ldap-logo {
-	width: 3rem;
+.sync-symbol {
+	width: 2.5rem;
 	margin-right: var(--space-md);
 }
 
