@@ -95,13 +95,15 @@ export default {
 					sendRegistration: this.userData.sendRegistration,
 				});
 
-				this.$toast.success($t("pages.administration.students.new.success"));
+				this.$toast.success(
+					this.$t("pages.administration.students.new.success")
+				);
 				this.$router.push({
 					path: "/administration/students",
 				});
 			} catch (e) {
 				console.error(e);
-				this.$toast.error($t("pages.administration.students.new.denied"));
+				this.$toast.error(this.$t("pages.administration.students.new.denied"));
 			}
 		},
 	},

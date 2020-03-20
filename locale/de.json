@@ -120,7 +120,7 @@
 	"pages.administration.students.index.tableActions.delete": "Löschen",
 	"pages.administration.students.new.checkbox.label": "Registrierungslink an Schüler:in senden",
 	"pages.administration.students.new.denied": "Schüler:in konnte nicht erfolgreich hinzugefügt werden. Möglicherweise existiert die E-Mail-Adresse bereits.",
-	"pages.administration.students.new.success": "Schuüler:in erfolgreich angelegt!",
+	"pages.administration.students.new.success": "Schüler:in erfolgreich angelegt!",
 	"pages.administration.students.new.title": "Schüler:in hinzufügen",
 	"pages.administration.index.title": "Administration",
 	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",
