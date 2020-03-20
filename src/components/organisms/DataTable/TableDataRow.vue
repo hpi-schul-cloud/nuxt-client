@@ -7,7 +7,7 @@
 		}"
 	>
 		<td v-if="selectable">
-			<div class="text-content">
+			<div class="text-content selection-column">
 				<base-input
 					v-model="selectionStatus"
 					type="checkbox"
@@ -86,8 +86,8 @@ export default {
 		border-bottom: 1px solid var(--color-white);
 	}
 	&.selected {
-		color: var(--color-on-table-selected);
-		background-color: var(--color-table-selected);
+		color: var(--color-on-tertiary-light);
+		background-color: var(--color-tertiary-light);
 		border-top: 1px solid var(--color-white);
 		border-bottom: 1px solid var(--color-white);
 	}
@@ -97,7 +97,6 @@ export default {
 		vertical-align: middle;
 		.text-content {
 			padding: var(--space-xs);
-			font-size: var(--text-xs);
 		}
 		.select {
 			margin-bottom: 0;

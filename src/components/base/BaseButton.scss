@@ -1,6 +1,7 @@
 @import "@styles";
 
-.button {
+button:not(.is-none),
+a:not(.is-none) {
 	// typo
 	--button-font-weight: var(--font-weight-bold);
 	--button-line-height: var(--line-height-md);
@@ -122,14 +123,13 @@
 	background: var(--button-background);
 	border: 1px solid transparent;
 	border-radius: var(--radius-sm);
-	transition: all var(--duration-transition-medium)
-		cubic-bezier(0.23, 1, 0.32, 1);
+	transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+	transition-duration: var(--duration-transition-medium);
+	transition-property: background, box-shadow;
 
-	> * {
+	&:not(.is-icon) > * {
+		// removes margin from icon button
 		margin-right: var(--space-xs);
-	}
-	&:last-child {
-		margin-right: initial;
 	}
 
 	&:hover {
@@ -164,19 +164,6 @@
 			box-shadow: none;
 		}
 	}
-	&.is-none {
-		--button-text-color: inherit;
-
-		min-width: initial;
-		padding: 0;
-		font: inherit;
-		font-weight: initial;
-		background: transparent;
-		border: 0;
-		&:focus {
-			box-shadow: 0 0 0 3px var(--button-background);
-		}
-	}
 	// defined multiple times to seperate style from behaviour
 	/* stylelint-disable-next-line */
 	&:disabled {
@@ -189,5 +176,18 @@
 	box-shadow: var(--shadow-xl);
 	&:focus {
 		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-primary);
+	}
+}
+.is-none {
+	--button-text-color: inherit;
+
+	min-width: initial;
+	padding: 0;
+	font: inherit;
+	font-weight: initial;
+	background: transparent;
+	border: 0;
+	&:focus {
+		box-shadow: 0 0 0 3px inherit;
 	}
 }

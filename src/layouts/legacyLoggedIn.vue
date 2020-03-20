@@ -137,17 +137,16 @@ export default {
 					item.children = item.children.filter(
 						(child) =>
 							!child.permission ||
-							(this.user.permissions &&
-								this.user.permissions.includes(child.permission))
+							this.user?.permissions?.includes?.(child.permission)
 					);
 				}
 
-				const hasRequiredPermission =
-					this.user.permissions &&
-					this.user.permissions.includes(item.permission);
-				const hasExcludedPermission =
-					this.user.permissions &&
-					this.user.permissions.includes(item.excludedPermission);
+				const hasRequiredPermission = this.user?.permissions?.includes?.(
+					item.permission
+				);
+				const hasExcludedPermission = this.user?.permissions?.includes?.(
+					item.excludedPermission
+				);
 
 				return (
 					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
@@ -184,7 +183,7 @@ export default {
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
-				this.$router.push({ name: "login" });
+				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {
 				this.fullscreenMode = !this.fullscreenMode;

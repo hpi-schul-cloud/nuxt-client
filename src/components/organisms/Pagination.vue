@@ -51,7 +51,7 @@
 				</li>
 			</ul>
 		</div>
-		<div v-else> Zeige alle {{ total }} Einträge </div>
+		<div v-else>Zeige alle {{ total }} Einträge</div>
 	</nav>
 </template>
 

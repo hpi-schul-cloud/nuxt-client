@@ -1,4 +1,4 @@
-const userIsTabbingMixin = {
+export default {
 	created: function() {
 		window.addEventListener("keydown", this.$_handleFirstTab);
 		this.$userIsTabbing = false;
@@ -18,5 +18,3 @@ const userIsTabbingMixin = {
 		},
 	},
 };
-
-export default userIsTabbingMixin;

@@ -7,11 +7,13 @@
 
 module.exports = [
 	`^/administration/datasources?`,
+	// `^/administration/students/?$`,
 	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
+	`^/insights`,
 	// `^/news/${mongoId}/edit`,
 	`^/news/new`,
 	`^/nuxtversion/?$`,

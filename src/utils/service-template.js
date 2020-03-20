@@ -2,6 +2,13 @@ import Vue from "vue";
 import qs from "qs";
 export default function(endpoint) {
 	const baseUrl = "/" + endpoint;
+	const getDefaultState = () => {
+		return {
+			current: null,
+			list: [],
+			pagination: {},
+		};
+	};
 	return {
 		baseUrl,
 		actions: {
@@ -61,9 +68,23 @@ export default function(endpoint) {
 				});
 				return res;
 			},
-			async remove({ commit }, id) {
-				const res = await this.$axios.$delete(baseUrl + "/" + id);
-				commit("remove", id);
+			async remove({ commit }, idOrPayload) {
+				let res;
+				if (typeof idOrPayload === "string") {
+					const id = idOrPayload;
+					res = await this.$axios.$delete(baseUrl + "/" + id);
+					commit("remove", idOrPayload);
+				} else {
+					const payload = idOrPayload;
+					const { query, customEndpoint } = payload;
+					res = await this.$axios.$delete(customEndpoint || baseUrl, {
+						params: query,
+						paramsSerializer: (params) => {
+							return qs.stringify(params);
+						},
+					});
+					// TODO update store with commit
+				}
 				return res;
 			},
 		},
@@ -81,6 +102,9 @@ export default function(endpoint) {
 		mutations: {
 			set(state, { items }) {
 				state.list = items;
+			},
+			reset(state) {
+				Object.assign(state, getDefaultState());
 			},
 			patchSingleItem(state, item) {
 				const index = state.list.findIndex(
@@ -116,10 +140,6 @@ export default function(endpoint) {
 				});
 			},
 		},
-		state: () => ({
-			current: null,
-			list: [],
-			pagination: {},
-		}),
+		state: () => getDefaultState(),
 	};
 }

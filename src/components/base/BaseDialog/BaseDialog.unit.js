@@ -112,7 +112,7 @@ describe("@components/BaseDialog", () => {
 			expect(wrapper.find(".modal-body").exists()).toBe(false);
 		});
 		it("should call onConfirm prop on primary action click", async () => {
-			const callbackStub = sinon.stub();
+			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
 				propsData: {
 					onConfirm: callbackStub,
@@ -120,10 +120,10 @@ describe("@components/BaseDialog", () => {
 			});
 			const confirmBtn = wrapper.find(`[data-testid="btn-dialog-confirm"]`);
 			confirmBtn.trigger("click");
-			expect(callbackStub.called).toBe(true);
+			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
 		it("should call onCancel prop on secondary action click", async () => {
-			const callbackStub = sinon.stub();
+			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
 				propsData: {
 					onCancel: callbackStub,
@@ -131,10 +131,10 @@ describe("@components/BaseDialog", () => {
 			});
 			const confirmBtn = wrapper.find(`[data-testid="btn-dialog-cancel"]`);
 			confirmBtn.trigger("click");
-			expect(callbackStub.called).toBe(true);
+			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
 		it("should call onClickOutside prop on click outside", async () => {
-			const callbackStub = sinon.stub();
+			const callbackStub = jest.fn();
 			const wrapper = await mountDialog({
 				propsData: {
 					onClickOutside: callbackStub,
@@ -142,7 +142,7 @@ describe("@components/BaseDialog", () => {
 			});
 			const confirmBtn = wrapper.find(`.base-modal-wrapper`);
 			confirmBtn.trigger("click");
-			expect(callbackStub.called).toBe(true);
+			expect(callbackStub.mock.calls).toHaveLength(1);
 		});
 	});
 });

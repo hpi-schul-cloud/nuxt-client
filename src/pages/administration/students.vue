@@ -1,277 +1,321 @@
 <!-- eslint-disable max-lines -->
-
 <template>
 	<section class="section">
-		<h1>Schüler Verwaltung</h1>
-		<base-table
-			v-if="pagination"
-			:actions="actions"
-			backend-pagination
-			backend-sorting
-			:columns="columns"
-			:current-page.sync="currentPage"
+		<base-breadcrumb :inputs="breadcrumbs" />
+		<h1 class="mb--md h3">
+			{{ $t("pages.administration.students.index.title") }}
+		</h1>
+		<backend-data-table
+			:actions="tableActions"
+			:columns="tableColumns"
+			:current-page.sync="page"
 			:data="students"
-			filterable
-			:filters="filters"
-			:filters-selected.sync="filtersSelected"
-			paginated
-			:rows-per-page.sync="rowsPerPage"
-			show-row-selection
+			:paginated="true"
+			:rows-per-page.sync="limit"
+			:rows-selectable="true"
 			:total="pagination.total"
 			track-by="id"
-			@sort="onSort"
+			:selected-row-ids.sync="tableSelection"
+			:selection-type.sync="tableSelectionType"
+			@update:current-page="onUpdateCurrentPage"
+			@update:rows-per-page="onUpdateRowsPerPage"
 		>
-			<template v-slot:column="{ row, column }">
-				<span v-if="column.field === 'classes'">
-					{{ row.classes.join(", ") }}
+			<template v-slot:datacolumn-createdAt="{ data }">
+				{{ dayjs(data).format("DD.MM.YYYY") }}
+			</template>
+			<template v-slot:datacolumn-consent-consentStatus="{ data }">
+				<span v-if="data === 'ok'">
+					<base-icon
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
+					<base-icon
+						style="position: relative; left: -17.5px"
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
 				</span>
-				<span v-else-if="column.field === 'createdAt'">
-					{{ dayjs(row.createdAt).format("DD.MM.YYYY") }}
+				<span v-else-if="data === 'parentsAgreed'">
+					<base-icon
+						source="material"
+						icon="check"
+						color="var(--color-warning)"
+					/>
 				</span>
-				<div v-else-if="column.field === 'consent.consentStatus'">
-					<span v-if="row.consent.consentStatus === 'ok'">
-						<base-icon
-							source="material"
-							icon="check"
-							color="var(--color-success)"
-						/>
-						<base-icon
-							style="position: relative; left: -10px"
-							source="material"
-							icon="check"
-							color="var(--color-success)"
-						/>
-					</span>
-					<span v-else-if="row.consent.consentStatus === 'parentsAgreed'">
-						<base-icon
-							source="material"
-							icon="check"
-							color="var(--color-warning)"
-						/>
-					</span>
-					<span v-else-if="row.consent.consentStatus === 'missing'">
-						<base-icon
-							source="material"
-							icon="close"
-							color="var(--color-danger)"
-						/>
-					</span>
-				</div>
-				<span v-else>
-					{{ getValueByPath(row, column.field) }}
+				<span v-else-if="data === 'missing'">
+					<base-icon
+						source="material"
+						icon="close"
+						color="var(--color-danger)"
+					/>
 				</span>
 			</template>
-			<template v-slot:extra-column="{ row }">
-				<base-icon
-					source="material"
-					icon="delete"
-					class="cursor-pointer"
-					@click.native="deleteEntity(row._id)"
-				/>
+			<template v-slot:datacolumn-_id="{ data }">
+				<base-button
+					design="text icon"
+					size="small"
+					:to="`/administration/students/${data}/edit`"
+				>
+					<base-icon source="material" icon="edit" />
+				</base-button>
 			</template>
-		</base-table>
+		</backend-data-table>
+		<fab-floating
+			position="bottom-right"
+			:show-label="true"
+			:actions="[
+				{
+					label: $t('pages.administration.students.fab.add'),
+					icon: 'person_add',
+					'icon-source': 'material',
+					href: '/administration/students/new',
+				},
+				{
+					label: $t('pages.administration.students.fab.import'),
+					icon: 'arrow_downward',
+					'icon-source': 'material',
+					href: '/administration/students/import',
+				},
+			]"
+		/>
 	</section>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { getValueByPath } from "@utils/helpers";
+import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+import FabFloating from "@components/molecules/FabFloating";
+import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
 	layout: "loggedInFull",
+	components: {
+		BackendDataTable,
+		FabFloating,
+	},
+	mixins: [print],
 	data() {
 		return {
-			total: 0,
-			currentPage: 1,
-			rowsPerPage: 10,
-			sortField: "firstName",
-			sortOrder: "asc",
-			defaultSortOrder: "asc",
-			filtersSelected: [],
-			filters: [
-				{
-					label: "Vorname",
-					type: "text",
-					property: "firstName",
-					matchingType: {
-						value: "contains",
-						label: "enthält",
-					},
-					value: "",
-				},
-				{
-					label: "Einverständniserklärung Status",
-					type: "select",
-					property: "consent.consentStatus",
-					multiple: true,
-					value: [
-						{
-							label: "Alle Zustimmungen vorhanden",
-							value: "ok",
-							checked: false,
-						},
-						{
-							label: "Keine Einverständniserklärung vorhanden",
-							value: "missing",
-							checked: false,
-						},
-						{
-							label: "Eltern haben zugestimmt (oder Schüler ist über 16)",
-							value: "parentsAgreed",
-							checked: false,
-						},
-					],
-				},
-			],
-			columns: [
+			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
+			page:
+				parseInt(
+					localStorage.getItem(
+						"pages.administration.students.index.currentPage"
+					)
+				) || 1,
+			limit:
+				parseInt(
+					localStorage.getItem(
+						"pages.administration.students.index.itemsPerPage"
+					)
+				) || 10,
+			tableColumns: [
 				{
 					field: "firstName",
-					label: "Vorname",
+					label: this.$t("common.labels.firstName"),
 					sortable: true,
 				},
 				{
 					field: "lastName",
-					label: "Nachname",
-					sortable: true,
+					label: this.$t("common.labels.lastName"),
 				},
 				{
 					field: "email",
-					label: "E-Mail-Adresse",
-					sortable: true,
+					label: this.$t("common.labels.email"),
 				},
-				{
-					field: "classes",
-					label: "Klasse(n)",
-				},
+				// {
+				// 	field: "birthday",
+				// 	label: this.$t("common.labels.birthday"),
+				// },
 				{
 					field: "consent.consentStatus",
-					label: "Einwilligung",
+					label: this.$t("common.labels.consent"),
 				},
 				{
 					field: "createdAt",
-					label: "Erstellt am",
-					sortable: true,
+					label: this.$t("common.labels.createdAt"),
+				},
+				{
+					field: "_id",
+					label: "",
 				},
 			],
-			actions: [
+			tableActions: [
 				{
-					label: "Löschen",
-					action: this.deleteMany,
+					label: this.$t(
+						"pages.administration.students.index.tableActions.consent"
+					),
+					icon: "check",
+					"icon-source": "material",
+					action: this.handleBulkConsent,
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.email"
+					),
+					icon: "mail_outline",
+					"icon-source": "material",
+					action: this.handleBulkEMail,
+				},
+				{
+					label: this.$t("pages.administration.students.index.tableActions.qr"),
+					"icon-source": "fa",
+					icon: "qrcode",
+					action: this.handleBulkQR,
+				},
+				{
+					label: this.$t(
+						"pages.administration.students.index.tableActions.delete"
+					),
+					icon: "delete_outline",
+					"icon-source": "material",
+					action: this.handleBulkDelete,
+				},
+			],
+			tableSelection: [],
+			tableSelectionType: "inclusive",
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+					icon: { source: "fa", icon: "fas fa-cog" },
+				},
+				{
+					text: this.$t("pages.administration.students.index.title"),
 				},
 			],
 		};
 	},
 	computed: {
-		...mapState("users", {
-			pagination: (state) => state.pagination.default,
-		}),
 		...mapGetters("users", {
 			students: "list",
 		}),
+		...mapState("users", {
+			pagination: (state) =>
+				state.pagination.default || { limit: 10, total: 0 },
+		}),
 	},
-	watch: {
-		filtersSelected() {
-			this.find();
-		},
-		currentPage() {
-			this.find();
-		},
-		perPage() {
-			this.find();
-		},
-	},
-	created() {
+	created(ctx) {
 		this.find();
 	},
 	methods: {
-		dayjs,
-		getValueByPath,
 		find() {
 			const query = {
-				$skip: this.currentPage * this.perPage - this.perPage,
-				$sort: {},
+				$limit: this.limit,
+				$skip: (this.page - 1) * this.limit,
 			};
 
-			query.$limit = this.perPage;
-
-			if (this.filtersSelected && this.filtersSelected.length > 0) {
-				for (const filter of this.filtersSelected) {
-					if (filter.type === "text") {
-						if (filter.matchingType.value === "equals") {
-							query[filter.property] = filter.value;
-						} else if (filter.matchingType.value === "contains") {
-							query[filter.property] = {
-								$search: filter.value,
-							};
-						}
-					} else if (filter.type === "fulltextSearch") {
-						query.$or = [
-							{ email: { $search: filter.value } },
-							{ firstName: { $search: filter.value } },
-							{ lastName: { $search: filter.value } },
-						];
-					} else if (filter.type === "select") {
-						if (filter.multiple) {
-							let activeOptions = filter.value.filter((f) => f.checked);
-							activeOptions = activeOptions.map((f) => f.value);
-							query[filter.property] = {
-								$in: activeOptions,
-							};
-						}
-					}
-				}
-			}
-
-			if (this.sortField) {
-				query.$sort[this.sortField] = this.sortOrder === "asc" ? 1 : -1;
-			}
-
-			this.$store.dispatch("users/adminFind", {
+			this.$store.dispatch("users/findStudents", {
 				query,
 			});
 		},
-		deleteEntity(id) {
-			this.$dialog.confirm({
-				title: "User löschen",
-				message: "Möchtest du diesen User wirklich löschen?",
-				confirmText: "User löschen",
-				onConfirm: async () => {
-					try {
-						await this.$store.dispatch("users/remove", id);
-						this.$toast.success("User erfolgreich gelöscht!");
-						this.find();
-					} catch (e) {
-						this.$toast.error("Fehler beim Löschen des Users.");
-					}
-				},
-			});
-		},
-		deleteMany(rows) {
-			const ids = rows.map((r) => r._id);
-			this.$dialog.confirm({
-				title: "User löschen",
-				message: "Möchtest du diese User wirklich löschen?",
-				confirmText: "User löschen",
-				onConfirm: async () => {
-					try {
-						for (const id of ids) {
-							await this.$store.dispatch("users/remove", id);
-						}
-						this.$toast.success("Ausgewählte User erfolgreich gelöscht!");
-						this.find();
-					} catch (e) {
-						this.$toast.error("Fehler beim Löschen der User.");
-					}
-				},
-			});
-		},
-		onSort(field, order) {
-			this.sortField = field;
-			this.sortOrder = order;
+		onUpdateCurrentPage(page) {
+			this.page = page;
+			localStorage.setItem(
+				"pages.administration.students.index.currentPage",
+				page
+			);
 			this.find();
+		},
+		onUpdateRowsPerPage(limit) {
+			this.page = 1;
+			this.limit = limit;
+			// save user settings in localStorage
+			localStorage.setItem(
+				"pages.administration.students.index.itemsPerPage",
+				limit
+			);
+			this.find();
+		},
+		dayjs,
+		getQueryForSelection(rowIds, selectionType) {
+			return {
+				...this.currentQuery,
+				_id: {
+					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
+				},
+			};
+		},
+		handleBulkConsent(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkConsent([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		handleBulkEMail(rowIds, selectionType) {
+			this.$toast.error(
+				`handleBulkEMail([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		async handleBulkQR(rowIds, selectionType) {
+			// TODO: request registrationsLinks fom backend
+			// route needs to be implemented!
+
+			// const users = await this.$store.dispatch("users/find", {
+			// 	qid: "qr-print",
+			// 	query: this.getQueryForSelection(rowIds, selectionType),
+			// });
+			// this.$_printQRs(
+			// 	usersWithoutConsents.map((user) => ({
+			// 		qrContent: user.registrationLink.shortLink,
+			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
+			// 		description: "Zum Registrieren bitte den Link öffnen.",
+			// 	}))
+			// );
+			this.$toast.error(
+				`handleBulkQR([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
+		},
+		handleBulkDelete(rowIds, selectionType) {
+			const onConfirm = async () => {
+				try {
+					await this.$store.dispatch("users/remove", {
+						query: this.getQueryForSelection(rowIds, selectionType),
+					});
+					this.$toast.success("Ausgewählte Nutzer gelöscht");
+				} catch (error) {
+					this.$toast.error("Löschen der Nutzer fehlgeschlagen");
+				}
+			};
+			const onCancel = () => {
+				this.$set(this, "tableSelection", []);
+				this.tableSelectionType = "inclusive";
+			};
+			let message;
+			if (selectionType === "inclusive") {
+				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Schüler löschen möchtest?`;
+			} else {
+				if (rowIds.length) {
+					message = `Bist du sicher, dass du alle Schüler bis auf ${rowIds.length} löschen möchtest?`;
+				} else {
+					message = `Bist du sicher, dass du alle Schüler löschen möchtest?`;
+				}
+			}
+			this.$dialog.confirm({
+				message,
+				confirmText: "Schüler löschen",
+				cancelText: "Abbrechen",
+				icon: "report_problem",
+				iconSource: "material",
+				iconColor: "var(--color-danger)",
+				actionDesign: "danger",
+				onConfirm,
+				onCancel,
+				invertedDesign: true,
+			});
 		},
 	},
 };

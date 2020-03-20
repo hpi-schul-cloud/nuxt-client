@@ -3,15 +3,15 @@ import DataTable from "./DataTable";
 
 const defaultData = tableData(50);
 
-function getWrapper(attributes) {
+function getWrapper(attributes, options) {
 	return mount(DataTable, {
-		sync: false, // https://github.com/vuejs/vue-test-utils/issues/1130, https://github.com/logaretm/vee-validate/issues/1996
 		propsData: {
 			data: defaultData,
 			trackBy: "id",
 			columns: tableColumns,
 			...attributes,
 		},
+		...options,
 	});
 }
 
@@ -385,6 +385,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			wrapper.find("thead tr input[type=checkbox]").trigger("click");
 			await wrapper.vm.$nextTick();
 			wrapper.find("button.select-all-rows").trigger("click");
+			await wrapper.vm.$nextTick();
 			expect(wrapper.emitted("update:selection")[1]).toStrictEqual([
 				expectedSelection,
 			]);
@@ -431,10 +432,80 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
 				true
 			);
-			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			wrapper.find("tbody tr label").trigger("click");
 			expect(
 				await hasVisibleSelections(wrapper, testData, expectedSelection)
 			).toBe(true);
+		});
+
+		it("updates view if parent component selects some values", async () => {
+			const totalSelections = Math.floor(total / 2);
+			const selection = [...Array(totalSelections).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				selection: [],
+				rowsSelectable: true,
+			});
+			wrapper.setProps({
+				selection,
+			});
+			await wrapper.vm.$nextTick();
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
+			);
+		});
+
+		it("updates view if parent component selects all values", async () => {
+			const totalSelections = total;
+			const selection = [...Array(totalSelections).keys()].map(String);
+			const wrapper = getWrapper({
+				data: testData,
+				selection: [],
+				rowsSelectable: true,
+			});
+			wrapper.setProps({
+				selection,
+			});
+			await wrapper.vm.$nextTick();
+			expect(await getVisibleSelections(wrapper)).toHaveLength(totalSelections);
+			expect(await hasVisibleSelections(wrapper, testData, selection)).toBe(
+				true
+			);
+		});
+
+		describe("header checkbox shows", () => {
+			const getWrapperLocal = (numberOfSelections) => {
+				const selection = [...Array(numberOfSelections).keys()].map(String);
+				return getWrapper(
+					{
+						data: testData,
+						selection,
+						rowsSelectable: true,
+					},
+					{
+						stubs: { BaseIcon: true },
+					}
+				);
+			};
+
+			it("checked state if all values are selected", async () => {
+				const wrapper = getWrapperLocal(total);
+				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+				expect(checkboxIcon.attributes("icon")).toBe("check_box");
+			});
+
+			it("unchecked state if no values are selected", async () => {
+				const wrapper = getWrapperLocal(0);
+				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+				expect(checkboxIcon.attributes("icon")).toBe("check_box_outline_blank");
+			});
+
+			it("intermediate state if some values are selected", async () => {
+				const wrapper = getWrapperLocal(Math.round(total / 2));
+				const checkboxIcon = wrapper.get("thead tr baseicon-stub");
+				expect(checkboxIcon.attributes("icon")).toBe("indeterminate_check_box");
+			});
 		});
 	});
 

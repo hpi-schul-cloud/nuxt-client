@@ -12,6 +12,8 @@ module.exports = function(api) {
 				[
 					"@babel/preset-env",
 					{
+						useBuiltIns: "usage",
+						corejs: { version: 3 },
 						targets: {
 							node: "current",
 						},
@@ -23,7 +25,15 @@ module.exports = function(api) {
 	}
 
 	return {
-		presets: ["@nuxt/babel-preset-app"],
+		presets: [
+			[
+				"@nuxt/babel-preset-app",
+				{
+					useBuiltIns: "usage",
+					corejs: { version: 3 },
+				},
+			],
+		],
 		plugins: [...commonPlugins],
 	};
 };

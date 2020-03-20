@@ -1,6 +1,14 @@
 <template>
 	<div>
 		<template v-if="run.dryrun === true">
+			<p class="text-sm">
+				{{
+					$t("components.organisms.DatasourceRunWebuntis.numberOfImported", {
+						imported: importedRows,
+						total: tableData.length,
+					})
+				}}
+			</p>
 			<data-table
 				:columns="columns"
 				:data="tableData"
@@ -120,25 +128,26 @@ export default {
 			columns: [
 				{
 					field: "class",
-					label: "Name",
+					label: this.$t("common.labels.name"),
 					sortable: true,
 				},
 				{
 					field: "teacher",
-					label: "Lehrer",
+					label: this.$t("common.labels.teacher"),
 					sortable: true,
 				},
 				{
 					field: "room",
-					label: "Raum",
+					label: this.$t("common.labels.room"),
 					sortable: true,
 				},
 				{
 					field: "state",
-					label: "Status",
+					label: this.$t("common.labels.status"),
 					sortable: true,
 				},
 			],
+			importedRows: 0,
 			selections: [],
 		};
 	},
@@ -169,22 +178,23 @@ export default {
 	},
 	methods: {
 		async findAll() {
+			let data;
 			try {
-				const { data } = await this.$store.dispatch(
-					"webuntis-metadata/findAll",
-					{
-						query: {
-							datasourceId: this.datasourceId,
-						},
-					}
-				);
-				this.selections = data
-					.filter((d) => d.state === "imported")
-					.map((d) => d._id);
+				({ data } = await this.$store.dispatch("webuntis-metadata/findAll", {
+					query: {
+						datasourceId: this.datasourceId,
+					},
+				}));
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(this.$t("error.load"));
 			}
+			const allItemsNew = data.every((d) => d.state === "new");
+			this.selections = (allItemsNew
+				? data // preselect all rows if all are new
+				: data.filter((d) => d.state === "imported")
+			).map((d) => d._id);
+			this.importedRows = data.filter((d) => d.state === "imported").length;
 		},
 		async triggerRun() {
 			try {

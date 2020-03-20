@@ -5,8 +5,7 @@
 			:style="{
 				'background-image': `url(https://${image} )`,
 			}"
-		>
-		</div>
+		></div>
 		<div class="container-base">
 			<div class="container">
 				<div class="container-icon">

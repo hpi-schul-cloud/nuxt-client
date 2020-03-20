@@ -8,7 +8,7 @@
 		>
 			<base-button
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
-				design="icon text"
+				design="text icon"
 				@click.native="sendEvent('expandMenu')"
 			>
 				<base-icon class="menu-icon" source="fa" icon="bars" />
@@ -16,7 +16,7 @@
 			<div class="space"></div>
 			<base-button
 				class="item fullscreen-button"
-				design="icon text"
+				design="text icon"
 				@click.native="sendEvent('fullscreen')"
 			>
 				<base-icon source="fa" icon="expand" />
@@ -37,8 +37,9 @@
 					v-if="action.type === 'text'"
 					:key="action.title"
 					class="school-name item"
-					>{{ action.title }}</div
 				>
+					{{ action.title }}
+				</div>
 
 				<popup-icon-initials
 					v-if="action.type === 'popupWithInitials'"
@@ -56,8 +57,9 @@
 						class="logout-button"
 						data-testid="logout"
 						@click="sendEvent(action.event)"
-						>Abmelden</button
 					>
+						Abmelden
+					</button>
 				</popup-icon-initials>
 			</template>
 		</div>
