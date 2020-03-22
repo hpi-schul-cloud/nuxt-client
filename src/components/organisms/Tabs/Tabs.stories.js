@@ -10,7 +10,8 @@ storiesOf("5 Molecules/Tabs", module)
 			<Tabs>
 				<SingleTab name="Tab 1">Test</SingleTab>
 				<SingleTab name="Tab 2" :selected="true">Test2</SingleTab>
-				<SingleTab name="Tab 3">Test 3 lorum ipsum test with a long line of text</SingleTab>
+				<SingleTab name="Tab 3" permission="YOU_SHALL_NOT_PASS">This and Tab 3 should be not visible!</SingleTab>
+				<SingleTab name="Tab 4">Test 4 lorum ipsum test with a long line of text</SingleTab>
 			</Tabs>
 		`,
 		methods: {},

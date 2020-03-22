@@ -2,9 +2,9 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">{{
-			$t("pages.administration.datasources.index.title")
-		}}</h1>
+		<h1 class="mb--md h3">
+			{{ $t("pages.administration.datasources.index.title") }}
+		</h1>
 
 		<ol v-if="datasources && datasources.length > 0" class="datasources">
 			<!-- TODO remove dummies once all datasources are added here -->
@@ -147,11 +147,14 @@
 			</empty-state>
 		</template>
 
-		<floating-fab
+		<fab-floating
 			position="bottom-right"
-			icon="add"
-			to="/administration/datasources/add"
-			:aria-label="$t('pages.administration.datasources.index.create')"
+			:primary-action="{
+				icon: 'add',
+				'icon-source': 'material',
+				to: '/administration/datasources/add',
+				label: $t('pages.administration.datasources.index.create'),
+			}"
 		/>
 	</div>
 </template>
@@ -160,7 +163,7 @@
 import ContextMenu from "@components/molecules/ContextMenu";
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 import Pagination from "@components/organisms/Pagination";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/emptystate-graph.svg";
@@ -177,7 +180,7 @@ export default {
 		ContextMenu,
 		DatasourceCard,
 		EmptyState,
-		FloatingFab,
+		FabFloating,
 		Pagination,
 		ResponsiveIconButton,
 	},

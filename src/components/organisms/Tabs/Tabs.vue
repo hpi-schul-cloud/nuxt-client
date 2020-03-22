@@ -6,7 +6,11 @@
 				:key="tab.name"
 				:class="{ 'is-active': tab.isActive }"
 			>
-				<button class="tab-button" @click="selectTab(tab)">
+				<button
+					v-if="tab.hasPermission"
+					class="tab-button"
+					@click="selectTab(tab)"
+				>
 					<span>{{ tab.name }}</span>
 				</button>
 			</li>
@@ -25,7 +29,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.tabs = this.$children;
+		this.tabs = this.$children.filter((child) => child.hasPermission);
 		const hasSelection = this.tabs.some(
 			(tab) => tab && tab.$props && tab.$props.selected
 		);
