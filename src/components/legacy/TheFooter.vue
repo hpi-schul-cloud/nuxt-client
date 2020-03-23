@@ -38,6 +38,7 @@
 		<p class="bottom-line">
 			Made with
 			<span class="heart">❤</span> in Potsdam
+			| Powered by <a href="https://lokalise.com" target="_"><img src="/images/logo/lokalise_logo.svg" alt="lokalise.com"></a>
 		</p>
 	</footer>
 </template>
@@ -130,6 +131,11 @@ export default {
 
 	.heart {
 		color: var(--color-secondary);
+	}
+
+	img {
+		height: 1em;
+		vertical-align: middle;
 	}
 }
 .footer-link {
