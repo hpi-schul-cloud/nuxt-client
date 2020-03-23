@@ -199,22 +199,20 @@ export default {
 			],
 			icons: [
 				{
-					icon: "check",
+					icon: "doublecheck",
 					color: "var(--color-success)",
-					style: "position: relative; left: -17.5px; margin-right: -1rem",
+					style: "margin: -3px 3px",
 					i18n: this.$t("pages.administration.students.footer.icon.success"),
-					class: "double",
+					source: "custom",
 				},
 				{
 					icon: "check",
 					color: "var(--color-warning)",
-					style: "margin-right: 0.5rem",
 					i18n: this.$t("pages.administration.students.footer.icon.warning"),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					style: "margin-right: 0.5rem",
 					i18n: this.$t("pages.administration.students.footer.icon.danger"),
 				},
 			],
