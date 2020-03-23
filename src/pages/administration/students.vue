@@ -209,13 +209,13 @@ export default {
 					icon: "check",
 					color: "var(--color-warning)",
 					style: "margin-right: 0.5rem",
-					i18n: this.$t("pages.administration.students.footer.icon.danger"),
+					i18n: this.$t("pages.administration.students.footer.icon.warning"),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
 					style: "margin-right: 0.5rem",
-					i18n: this.$t("pages.administration.students.footer.icon.warning"),
+					i18n: this.$t("pages.administration.students.footer.icon.danger"),
 				},
 			],
 		};
