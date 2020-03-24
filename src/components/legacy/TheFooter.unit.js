@@ -26,12 +26,7 @@ describe("@components/legacy/TheFooter", () => {
 		expect(wrapper.find("span").text()).toBe(
 			"© " + new Date().getFullYear() + " " + $theme.name
 		);
-		expect(
-			wrapper
-				.findAll("base-link-stub")
-				.at(3)
-				.props("href")
-		).toBe(
+		expect(wrapper.findAll("base-link-stub").at(3).props("href")).toBe(
 			"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf"
 		);
 	});

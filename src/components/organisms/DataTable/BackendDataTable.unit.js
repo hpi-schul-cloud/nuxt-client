@@ -41,13 +41,9 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				defaultData[0].firstName
 			);
 
-			expect(
-				wrapper
-					.find("tbody tr")
-					.findAll("td")
-					.at(2)
-					.text()
-			).toContain(defaultData[0].address.city);
+			expect(wrapper.find("tbody tr").findAll("td").at(2).text()).toContain(
+				defaultData[0].address.city
+			);
 		});
 	});
 

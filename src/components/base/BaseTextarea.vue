@@ -76,11 +76,11 @@ export default {
 		},
 	},
 	computed: {
-		numberOfLines: function() {
+		numberOfLines: function () {
 			return (this.vmodel.match(/\n/g) || []).length + 1;
 		},
 	},
-	mounted: function() {
+	mounted: function () {
 		this.resize();
 	},
 	methods: {
