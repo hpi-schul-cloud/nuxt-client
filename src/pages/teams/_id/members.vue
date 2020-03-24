@@ -228,9 +228,9 @@
 							<div
 								v-if="
 									externalInvite &&
-										externalInvite.teacher &&
-										externalInvite.teacher.federalState &&
-										externalInvite.teacher.federalState._id
+									externalInvite.teacher &&
+									externalInvite.teacher.federalState &&
+									externalInvite.teacher.federalState._id
 								"
 							>
 								<div v-if="schools.length > 0">
@@ -497,7 +497,7 @@ export default {
 		},
 	},
 	watch: {
-		"externalInvite.teacher.federalState": async function() {
+		"externalInvite.teacher.federalState": async function () {
 			await this.$store.dispatch("schools/find", {
 				query: {
 					federalState: this.externalInvite.teacher.federalState._id,
@@ -505,7 +505,7 @@ export default {
 				},
 			});
 		},
-		"externalInvite.teacher.school": async function() {
+		"externalInvite.teacher.school": async function () {
 			await this.$store.dispatch("public-teachers/find", {
 				query: {
 					$limit: false,

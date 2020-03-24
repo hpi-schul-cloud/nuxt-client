@@ -167,7 +167,7 @@ export default {
 		},
 	},
 	watch: {
-		$route: function(to) {
+		$route: function (to) {
 			try {
 				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
 			} catch {
