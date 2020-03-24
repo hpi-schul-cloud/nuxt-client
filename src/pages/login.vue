@@ -7,7 +7,7 @@
 			<img
 				:src="$theme.logo.logo_image_mono"
 				alt="Schul-Cloud"
-				style="width: var(--text-lg); filter: invert(1)"
+				style="width: var(--text-lg); filter: invert(1);"
 			/>
 
 			<form @submit.prevent="onSubmit(email, password)">
