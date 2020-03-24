@@ -63,7 +63,7 @@
 		"vue": "^2.6.11",
 		"vue-echarts": "^4.0.4",
 		"vue-flatpickr-component": "^8.1.5",
-		"vue-i18n": "^8.15.5",
+		"vue-i18n": "^8.15.6",
 		"vue-loader": "^15.9.1",
 		"vue-mq": "^1.0.1",
 		"vue-multiselect": "^2.1.6",
@@ -72,8 +72,8 @@
 		"vue-swatches": "^1.0.4"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.8.7",
-		"@babel/plugin-proposal-optional-chaining": "^7.8.3",
+		"@babel/core": "^7.9.0",
+		"@babel/plugin-proposal-optional-chaining": "^7.9.0",
 		"@babel/preset-env": "^7.8.7",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@schul-cloud/eslint-config": "^0.4.0",
@@ -95,7 +95,7 @@
 		"@vuepress/plugin-pwa": "^1.4.0",
 		"babel-core": "^7.0.0-bridge.0",
 		"babel-jest": "^25.1.0",
-		"babel-loader": "^8.0.6",
+		"babel-loader": "^8.1.0",
 		"babel-plugin-dynamic-import-node": "^2.3.0",
 		"babel-preset-vue": "^2.0.2",
 		"concurrently": "^5.1.0",
