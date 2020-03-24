@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import EmptyState from "./EmptyState";
-import ExampleImage from "@assets/img/emptystate-graph.svg";
+import ExampleImage from "@assets/img/empty-state/emptystate-graph.svg";
 
 storiesOf("5 Molecules/EmptyState", module).add("default", () => ({
 	components: { EmptyState },
