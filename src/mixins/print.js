@@ -30,7 +30,7 @@ export default {
 				w.focus();
 				w.print();
 				// why is this timeout required?
-				setTimeout(function() {
+				setTimeout(function () {
 					w.close();
 				}, 500);
 			});

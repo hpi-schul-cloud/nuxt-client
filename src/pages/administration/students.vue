@@ -31,7 +31,7 @@
 						color="var(--color-success)"
 					/>
 					<base-icon
-						style="position: relative; left: -17.5px"
+						style="position: relative; left: -17.5px;"
 						source="material"
 						icon="check"
 						color="var(--color-success)"
