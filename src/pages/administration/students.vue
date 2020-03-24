@@ -203,7 +203,6 @@ export default {
 					color: "var(--color-success)",
 					style: "margin: -3px 3px",
 					i18n: this.$t("pages.administration.students.footer.icon.success"),
-					source: "custom",
 				},
 				{
 					icon: "check",

@@ -3,24 +3,18 @@
 		<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
 		<div class="consent-icon">
 			<li v-for="icon in icons" :key="icon.icon">
-				<span v-if="icon.source">
+				<span v-if="icon.style">
 					<base-icon
 						source="custom"
 						:icon="icon.icon"
 						:color="icon.color"
-						:class="icon.class"
 						:style="icon.style"
 					/>
 					{{ icon.i18n }}
 				</span>
 
 				<span v-else>
-					<base-icon
-						source="material"
-						:icon="icon.icon"
-						:color="icon.color"
-						:style="icon.style"
-					/>
+					<base-icon source="material" :icon="icon.icon" :color="icon.color" />
 					{{ icon.i18n }}
 				</span>
 			</li>
