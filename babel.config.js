@@ -1,4 +1,4 @@
-module.exports = function(api) {
+module.exports = function (api) {
 	if (api && api.cache) {
 		api.cache(true);
 	}
