@@ -9,6 +9,8 @@
 			type="button"
 			:aria-label="primaryActionWithDefaults.label"
 			:style="{ 'background-color': color, color: primaryTextColor }"
+			:to="primaryActionWithDefaults.to"
+			:href="primaryActionWithDefaults.href"
 			@click="handlePrimaryAction"
 		>
 			<transition name="morph" mode="out-in">

@@ -183,7 +183,7 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "fas fa-cog" },
+					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
