@@ -46,10 +46,14 @@
 <script>
 export default {
 	props: {
-		studentId: {
+		userId: {
 			type: String,
 			required: false,
 			default: undefined,
+		},
+		roleName: {
+			type: String,
+			required: true,
 		},
 	},
 	data() {
@@ -76,12 +80,13 @@ export default {
 				}
 			}
 		},
+
 		async create() {
 			try {
-				const studentsRole = (
+				const usersRole = (
 					await this.$store.dispatch("roles/find", {
 						query: {
-							name: "student",
+							name: this.roleName,
 						},
 					})
 				).data[0];
@@ -90,20 +95,14 @@ export default {
 					firstName: this.userData.firstName,
 					lastName: this.userData.lastName,
 					email: this.userData.email,
-					roles: [studentsRole.id],
+					roles: [usersRole.id],
 					schoolId: this.$user.schoolId,
 					sendRegistration: this.userData.sendRegistration,
 				});
-
-				this.$toast.success(
-					this.$t("pages.administration.students.new.success")
-				);
-				this.$router.push({
-					path: "/administration/students",
-				});
+				this.$emit("success");
 			} catch (e) {
 				console.error(e);
-				this.$toast.error(this.$t("pages.administration.students.new.denied"));
+				this.$emit("error");
 			}
 		},
 	},

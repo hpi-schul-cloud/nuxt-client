@@ -4,7 +4,7 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.new.title") }}
 		</h1>
-		<form-create-user>
+		<form-create-user :role-name="roleName" @success="success" @error="error">
 			<template v-slot:inputs="{ userData }">
 				<base-input
 					v-model="userData.birthday"
@@ -50,7 +50,19 @@ export default {
 					to: "/administration/students/new",
 				},
 			],
+			roleName: "student",
 		};
+	},
+	methods: {
+		error() {
+			this.$toast.error(this.$t("pages.administration.students.new.denied"));
+		},
+		success() {
+			this.$toast.success(this.$t("pages.administration.students.new.success"));
+			this.$router.push({
+				path: `/administration/students`,
+			});
+		},
 	},
 };
 </script>
