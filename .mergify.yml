@@ -13,7 +13,7 @@ pull_request_rules:
           - WIP
   - name: label PRs with requested changes
     conditions:
-      - "#changes-requested-reviews-by>0"
+      - status-failure~=pullapprove
     actions:
       label:
         add:
