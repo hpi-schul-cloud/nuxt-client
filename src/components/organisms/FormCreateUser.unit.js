@@ -1,12 +1,16 @@
 import FormCreateUser from "./FormCreateUser";
-import flushPromises from "flush-promises";
 
-const user = {
-	firstName: "Anna",
-	lastName: "Fall",
-	email: "anna.fall@mail.de",
-	sendRegistration: true,
-};
+// const user = {
+// 	firstName: "Anna",
+// 	lastName: "Fall",
+// 	email: "anna.fall@mail.de",
+// 	sendRegistration: true,
+// };
+
+// const roleObject = {
+// 	name: "student",
+// 	id: "84841848485",
+// };
 
 const slotInputs = [
 	` <base-input
@@ -28,8 +32,7 @@ const slotInputs = [
 ];
 
 const getMockActions = () => ({
-	find: jest.fn().mockReturnValue(Promise.resolve()),
-	create: jest.fn().mockReturnValue(Promise.resolve(user)),
+	create: jest.fn().mockReturnValue(Promise.resolve()),
 });
 
 const getMocks = ({ actions = getMockActions() } = {}) =>
@@ -37,10 +40,10 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 		i18n: true,
 		user: true,
 		store: {
-			roles: {
+			users: {
 				actions,
 			},
-			users: {
+			roles: {
 				actions,
 			},
 		},
@@ -50,21 +53,7 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 	});
 
 describe("@components/FormCreateUser", () => {
-	it.skip(...isValidComponent(FormCreateUser));
-
-	describe("find", () => {
-		it.skip("dispatches find action on form", async () => {
-			const actions = getMockActions();
-			const mock = getMocks({ actions });
-			const wrapper = mount(FormCreateUser, {
-				...mock,
-				propsData: {},
-			});
-
-			await flushPromises();
-			expect(wrapper.vm.userData).toStrictEqual(user);
-		});
-	});
+	it(...isValidComponent(FormCreateUser));
 
 	describe("create", () => {
 		it.skip("dispatches create action on form submit", async () => {
@@ -72,43 +61,30 @@ describe("@components/FormCreateUser", () => {
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {
 				...mock,
-				propsData: {},
-			});
-			const nameInput = wrapper.find('input[type="text"]');
-			expect(nameInput.exists()).toBe(true);
-			nameInput.setValue("Klara");
-			wrapper.trigger("submit");
-			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.actionType).toStrictEqual("create");
-			expect(actions.create.mock.calls).toHaveLength(1);
-		});
-
-		it.skip("shows error toast if create fails", async () => {
-			const errorMessage = "expected error that should be catched";
-			const mock = getMocks({
-				actions: {
-					create: () => {
-						throw new Error(errorMessage);
-					},
+				propsData: {
+					roleName: "student",
 				},
 			});
-			const wrapper = mount(FormCreateUser, {
-				...mock,
-				propsData: {},
-			});
 
-			const nameInput = wrapper.find('input[type="text"]');
-			nameInput.setValue("Klara");
+			const divArray = wrapper.findAll('input[type="text"]');
 
-			const toastStubs = { success: jest.fn(), error: jest.fn() };
-			wrapper.vm.$toast = toastStubs;
-			const consoleError = jest.spyOn(console, "error").mockImplementation();
+			const inputFirstName = divArray.at(0);
+			const inputLastName = divArray.at(1);
+			const inputEmail = divArray.at(2);
 
-			wrapper.trigger("submit");
-			expect(toastStubs.success.mock.calls).toHaveLength(0); // no success message expected
-			const errors = consoleError.mock.calls.map((e) => e.toString());
-			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
-			expect(toastStubs.error.mock.calls).toHaveLength(1); // and info toast
+			expect(inputFirstName.exists()).toBe(true);
+			inputFirstName.setValue("Klara");
+
+			expect(inputLastName.exists()).toBe(true);
+			inputLastName.setValue("Fall");
+
+			expect(inputEmail.exists()).toBe(true);
+			inputEmail.setValue("klara.fall@mail.de");
+
+			await wrapper.vm.$nextTick();
+			wrapper.vm.$emit("submit");
+			expect(wrapper.vm.actionType).toStrictEqual("create");
+			expect(actions.create.mock.calls).toHaveLength(1);
 		});
 	});
 });
