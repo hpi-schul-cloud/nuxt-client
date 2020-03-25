@@ -1,4 +1,4 @@
-export default function(dateLabels, studentsData, teachersData) {
+export default function (dateLabels, studentsData, teachersData) {
 	return {
 		color: ["#2f4554", "#b1063a"],
 		tooltip: {
