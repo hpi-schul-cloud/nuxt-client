@@ -45,9 +45,9 @@ a:not(.is-none) {
 			--button-background: var(--color-danger--dark);
 		}
 	}
-		&.is-info {
-			--button-background: var(--color-info);
-			--button-text-color: var(--color-white);
+	&.is-info {
+		--button-background: var(--color-info);
+		--button-text-color: var(--color-white);
 		&:hover {
 			--button-background: var(--color-info--dark);
 		}
