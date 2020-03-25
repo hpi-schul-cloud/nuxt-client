@@ -99,10 +99,11 @@ export default {
 					schoolId: this.$user.schoolId,
 					sendRegistration: this.userData.sendRegistration,
 				});
+
 				this.$emit("success");
 			} catch (e) {
-				console.error(e);
 				this.$emit("error");
+				console.error(e);
 			}
 		},
 	},

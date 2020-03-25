@@ -1,17 +1,5 @@
 import FormCreateUser from "./FormCreateUser";
 
-// const user = {
-// 	firstName: "Anna",
-// 	lastName: "Fall",
-// 	email: "anna.fall@mail.de",
-// 	sendRegistration: true,
-// };
-
-// const roleObject = {
-// 	name: "student",
-// 	id: "84841848485",
-// };
-
 const slotInputs = [
 	` <base-input
       slot-scope="userData"
@@ -31,8 +19,20 @@ const slotInputs = [
   />`,
 ];
 
+const validRole = {
+	data: ["student"],
+};
+
 const getMockActions = () => ({
 	create: jest.fn().mockReturnValue(Promise.resolve()),
+	find: jest.fn().mockReturnValue(Promise.resolve(validRole)),
+});
+
+const getMockActionsErrorCreate = () => ({
+	create: () => {
+		throw new Error("Duplicate Mail");
+	},
+	find: jest.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
 const getMocks = ({ actions = getMockActions() } = {}) =>
@@ -56,7 +56,7 @@ describe("@components/FormCreateUser", () => {
 	it(...isValidComponent(FormCreateUser));
 
 	describe("create", () => {
-		it.skip("dispatches create action on form submit", async () => {
+		it("dispatches create action on form submit", async () => {
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {
@@ -81,10 +81,35 @@ describe("@components/FormCreateUser", () => {
 			expect(inputEmail.exists()).toBe(true);
 			inputEmail.setValue("klara.fall@mail.de");
 
+			wrapper.trigger("submit");
+
 			await wrapper.vm.$nextTick();
-			wrapper.vm.$emit("submit");
 			expect(wrapper.vm.actionType).toStrictEqual("create");
 			expect(actions.create.mock.calls).toHaveLength(1);
+
+			await wrapper.vm.$nextTick();
+			expect(wrapper.emitted("success")).toHaveLength(1);
+		});
+
+		it("throws error on failing create", async () => {
+			const actions = getMockActionsErrorCreate();
+			const mock = getMocks({ actions });
+			const wrapper = mount(FormCreateUser, {
+				...mock,
+				propsData: {
+					roleName: "student",
+				},
+			});
+
+			wrapper.trigger("submit");
+			// await for user role resolve
+			await wrapper.vm.$nextTick();
+			// await for create resolve
+			await wrapper.vm.$nextTick();
+			// await for emit
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
 	});
 });
