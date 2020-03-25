@@ -111,5 +111,7 @@ describe("@components/FormCreateUser", () => {
 
 			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
+
+		it.todo("renders slot content");
 	});
 });
