@@ -62,30 +62,21 @@ describe("@components/organisms/CourseWizard", () => {
 		expect(wrapper.vm.currentStep).toBe(0);
 		expect(wrapper.findAll("base-button-stub")).toHaveLength(1);
 		//find button next step, click next
-		wrapper
-			.findAll("base-button-stub")
-			.at(0)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(0).vm.$emit("click");
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.currentStep).toBe(1);
 		//has buttons: "Zurück", "Überspringen", "Weiter"
 		expect(wrapper.findAll("base-button-stub")).toHaveLength(3);
 
 		//find button next step, click next
-		wrapper
-			.findAll("base-button-stub")
-			.at(2)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(2).vm.$emit("click");
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.currentStep).toBe(2);
 		//has buttons: "Zurück", "Weiter"
 		expect(wrapper.findAll("base-button-stub")).toHaveLength(2);
 
 		// //find button step back, click back
-		wrapper
-			.findAll("base-button-stub")
-			.at(0)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(0).vm.$emit("click");
 		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.currentStep).toBe(1);
 	});

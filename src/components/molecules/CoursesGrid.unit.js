@@ -32,6 +32,7 @@ describe("@components/molecules/CoursesGrid", () => {
 		const courses = [course1, course2];
 		const wrapper = shallowMount(CoursesGrid, {
 			propsData: { courses: courses },
+			...createComponentMocks({ i18n: true }),
 		});
 		expect(wrapper.findAll("course-card-stub")).toHaveLength(2);
 	});
@@ -39,6 +40,7 @@ describe("@components/molecules/CoursesGrid", () => {
 	it("generates course card grid with no courses", () => {
 		const wrapper = shallowMount(CoursesGrid, {
 			propsData: { courses: [] },
+			...createComponentMocks({ i18n: true }),
 		});
 		expect(wrapper.findAll("course-card-stub")).toHaveLength(0);
 	});

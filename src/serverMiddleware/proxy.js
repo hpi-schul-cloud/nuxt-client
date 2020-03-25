@@ -46,7 +46,7 @@ const staticFiles = glob
 
 const isStaticFile = (url) => staticFiles.includes(url);
 
-export default async function(req, res, next) {
+export default async function (req, res, next) {
 	if (process.env.FALLBACK_DISABLED === "true") {
 		return next();
 	}
