@@ -20,9 +20,10 @@ describe("@components/legacy/TheFooter", () => {
 				mocks: {
 					$theme,
 				},
+				i18n: true,
 			}),
 		});
-		expect(wrapper.findAll("base-link-stub")).toHaveLength(10);
+		expect(wrapper.findAll("base-link-stub")).toHaveLength(11);
 		expect(wrapper.find("span").text()).toBe(
 			"© " + new Date().getFullYear() + " " + $theme.name
 		);
