@@ -9,6 +9,10 @@ const module = mergeDeep(base, {
 			query.customEndpoint = "/users/admin/students";
 			return dispatch("find", query);
 		},
+		findTeachers({ dispatch }, query = {}) {
+			query.customEndpoint = "/users/admin/teachers";
+			return dispatch("find", query);
+		},
 		getByRole: async function (ctx, role) {
 			const queryRole = {
 				roles: [role._id],
