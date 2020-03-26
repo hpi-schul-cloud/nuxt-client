@@ -7,8 +7,8 @@ storiesOf("6 Organisms", module).add("FormCreateUser", () => ({
 	template: `<FormCreateUser>
                             <template v-slot:inputs="{ userData }">
                                 <base-input
-                                    v-model="userData.birthdate"
-                                    type="text"
+                                    v-model="userData.birthday"
+                                    type="date"
                                     required="true"
                                     label="Geburtstag"
                                     :placeholder="'29.3.2004'"

@@ -1,5 +1,6 @@
 {
 	"common.actions.add": "Hinzufügen",
+	"common.actions.cancel": "Abbrechen",
 	"common.actions.back": "Zurück",
 	"common.actions.discard": "Verwerfen",
 	"common.actions.remove": "Löschen",
