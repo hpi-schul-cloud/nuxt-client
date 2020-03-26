@@ -62,19 +62,19 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" :show-ldap-hint="true" />
+		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
 				{
-					i18n: $t('pages.administration.students.fab.add'),
+					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					href: '/administration/students/new',
 				},
 				{
-					i18n: $t('pages.administration.students.fab.import'),
+					label: $t('pages.administration.students.fab.import'),
 					icon: 'arrow_downward',
 					'icon-source': 'material',
 					href: '/administration/students/import',
@@ -103,7 +103,7 @@ export default {
 	},
 	mixins: [print],
 	props: {
-		showLdapHint: {
+		showExternalSyncHint: {
 			type: Boolean,
 		},
 	},
@@ -202,17 +202,17 @@ export default {
 					icon: "doublecheck",
 					color: "var(--color-success)",
 					style: "margin: -3px 3px",
-					label: this.$t("pages.administration.students.footer.icon.success"),
+					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
 					icon: "check",
 					color: "var(--color-warning)",
-					label: this.$t("pages.administration.students.footer.icon.warning"),
+					label: this.$t("pages.administration.students.legend.icon.warning"),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					label: this.$t("pages.administration.students.footer.icon.danger"),
+					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
 		};

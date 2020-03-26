@@ -19,14 +19,14 @@
 				</span>
 			</li>
 		</div>
-		<span v-if="showLdapHint" class="container">
+		<span v-if="showExternalSyncHint" class="container">
 			<img
 				class="sync-symbol"
 				src="@assets/icons/sync-symbol.svg"
-				alt="LDAP Logo"
+				role="presentation"
 			/>
 			<strong>
-				{{ $t("components.molecules.admintablelegend.ldap") }}
+				{{ $t("components.molecules.admintablelegend.externalSync") }}
 				<base-link
 					class="link-style"
 					to="/administration/helpdesk"
@@ -50,7 +50,7 @@ export default {
 			type: Array,
 			required: true,
 		},
-		showLdapHint: {
+		showExternalSyncHint: {
 			type: Boolean,
 		},
 	},
