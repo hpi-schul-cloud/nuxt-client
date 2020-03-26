@@ -79,12 +79,12 @@ export default {
 							rel: "noopener",
 						},
 					],
-					text: "Datenschutzerklärung",
+					text: this.$t("components.legacy.footer.privacy_policy"),
 				},
 				{
 					href:
 						"https://s3.hidrive.strato.com/schul-cloud-hpi/thr/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
-					text: this.$t("components.legacy.footer.imprint"),
+					text: this.$t("components.legacy.footer.terms"),
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=THR%20Schul_Cloud%20Anfrage",
