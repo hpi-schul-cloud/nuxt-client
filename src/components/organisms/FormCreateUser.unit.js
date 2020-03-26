@@ -101,7 +101,7 @@ describe("@components/FormCreateUser", () => {
 				},
 				slots: {
 					inputs: '<input value="test"/>',
-				}
+				},
 			});
 			const slot_input = wrapper.find('input[value="test"]');
 			expect(slot_input.exists()).toBe(true);
