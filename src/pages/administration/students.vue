@@ -62,6 +62,7 @@
 				</base-button>
 			</template>
 		</backend-data-table>
+		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
@@ -87,6 +88,7 @@
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
+import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
@@ -97,8 +99,14 @@ export default {
 	components: {
 		BackendDataTable,
 		FabFloating,
+		AdminTableLegend,
 	},
 	mixins: [print],
+	props: {
+		showExternalSyncHint: {
+			type: Boolean,
+		},
+	},
 	data() {
 		return {
 			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
@@ -187,6 +195,24 @@ export default {
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
+				},
+			],
+			icons: [
+				{
+					icon: "doublecheck",
+					color: "var(--color-success)",
+					style: "margin: -3px 3px",
+					label: this.$t("pages.administration.students.legend.icon.success"),
+				},
+				{
+					icon: "check",
+					color: "var(--color-warning)",
+					label: this.$t("pages.administration.students.legend.icon.warning"),
+				},
+				{
+					icon: "clear",
+					color: "var(--color-danger)",
+					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
 		};
