@@ -7,6 +7,7 @@ module.exports = {
 		"<rootDir>/tests/unit/matchers",
 		"<rootDir>/tests/unit/requireAssertions",
 	],
+	snapshotResolver: "<rootDir>/tests/unit/snapshotResolver",
 	testMatch: ["**/(*.)unit.js"],
 	moduleFileExtensions: ["js", "json", "vue"],
 	transform: {
