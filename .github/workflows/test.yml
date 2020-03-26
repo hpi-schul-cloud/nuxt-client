@@ -6,10 +6,10 @@ jobs:
   test-unit:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run test:unit:ci
@@ -21,18 +21,28 @@ jobs:
   lint:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run lint
         run: npm run lint:ci
+      - name: npm run lint:fix
+        if: failure()
+        run: npm run lint
+      - uses: stefanzweifel/git-auto-commit-action@v4.1.1
+        # only run on one of the matrix builds
+        if: failure() && matrix.os == 'ubuntu-latest'
+        with:
+          commit_message: npm run lint
   test-screenshot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: build storybook
@@ -47,11 +57,11 @@ jobs:
   # build:
   #   strategy:
   #     matrix:
-  #       platform: [ubuntu-latest, macos-latest, windows-latest]
+  #       os: [ubuntu-latest, macos-latest, windows-latest]
   #       theme: [default, brb, n21, open]
-  #   runs-on: ${{ matrix.platform }}
+  #   runs-on: ${{ matrix.os }}
   #   steps:
-  #     - uses: actions/checkout@v1
+  #     - uses: actions/checkout@v2
   #     - name: npm ci
   #       run: npm ci --prefer-offline
   #     - name: npm run build:nuxt
