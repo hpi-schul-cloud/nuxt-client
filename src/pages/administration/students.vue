@@ -68,13 +68,13 @@
 			:show-label="true"
 			:actions="[
 				{
-					label: $t('pages.administration.students.fab.add'),
+					i18n: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					href: '/administration/students/new',
 				},
 				{
-					label: $t('pages.administration.students.fab.import'),
+					i18n: $t('pages.administration.students.fab.import'),
 					icon: 'arrow_downward',
 					'icon-source': 'material',
 					href: '/administration/students/import',
@@ -202,17 +202,17 @@ export default {
 					icon: "doublecheck",
 					color: "var(--color-success)",
 					style: "margin: -3px 3px",
-					i18n: this.$t("pages.administration.students.footer.icon.success"),
+					label: this.$t("pages.administration.students.footer.icon.success"),
 				},
 				{
 					icon: "check",
 					color: "var(--color-warning)",
-					i18n: this.$t("pages.administration.students.footer.icon.warning"),
+					label: this.$t("pages.administration.students.footer.icon.warning"),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					i18n: this.$t("pages.administration.students.footer.icon.danger"),
+					label: this.$t("pages.administration.students.footer.icon.danger"),
 				},
 			],
 		};

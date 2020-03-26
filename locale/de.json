@@ -16,7 +16,7 @@
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.adminfooterlegend.title": "Legende",
 	"components.molecules.admintablelegend.hint": "Mit allen Änderungen und Einstellungen im Verwaltungsbereich bestätigen Sie, dass Sie weisungsberechtigter Schul-Administrator sind und befugt sind, Anpassungen an der Schule in der Schul-Cloud vorzunehmen. Ihr Klick gilt insofern als Weisung der Schule gegenüber dem HPI.",
-	"components.molecules.admintablelegend.ldap": "Deine Daten werden mit LDAP synchronisiert. Die manuelle Bearbeitung der Tabelle ist deshalb nicht möglich. Finde weitere Informationen im",
+	"components.molecules.admintablelegend.ldap": "Deine Daten werden mit einer externen Datenquelle synchronisiert. Die manuelle Bearbeitung der Tabelle ist deshalb nicht möglich. Finde weitere Informationen im",
 	"componente.molecules.CoursesGrid.emptystate": "Aktuell gibt es hier noch keine Kurse.",
 	"components.molecules.ContentCard.report.body": "Melden des Inhaltes mit der ID",
 	"components.molecules.ContentCard.report.email": "inhalte@schul-cloud.org",

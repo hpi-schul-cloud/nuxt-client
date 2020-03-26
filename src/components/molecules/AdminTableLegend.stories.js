@@ -11,17 +11,17 @@ storiesOf("5 Molecules/AdminTableLegend", module).add("default", () => ({
 				icon: "doublecheck",
 				color: "var(--color-success)",
 				style: "margin: -3px 3px",
-				i18n: "Alle Einverständniserklärungen vorhanden",
+				label: "Alle Einverständniserklärungen vorhanden",
 			},
 			{
 				icon: "check",
 				color: "var(--color-warning)",
-				i18n: "Eltern haben zugestimmt",
+				label: "Eltern haben zugestimmt",
 			},
 			{
 				icon: "clear",
 				color: "var(--color-danger)",
-				i18n: "Keine Einverständniserklärungen vorhanden",
+				label: "Keine Einverständniserklärungen vorhanden",
 			},
 		],
 		showLdapHint: {

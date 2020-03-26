@@ -2,7 +2,7 @@
 	<div class="section">
 		<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
 		<div class="consent-icon">
-			<li v-for="icon in icons" :key="icon.icon">
+			<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
 				<span v-if="icon.style">
 					<base-icon
 						source="custom"
@@ -10,12 +10,12 @@
 						:color="icon.color"
 						:style="icon.style"
 					/>
-					{{ icon.i18n }}
+					{{ icon.label }}
 				</span>
 
 				<span v-else>
 					<base-icon source="material" :icon="icon.icon" :color="icon.color" />
-					{{ icon.i18n }}
+					{{ icon.label }}
 				</span>
 			</li>
 		</div>
