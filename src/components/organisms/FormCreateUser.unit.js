@@ -1,24 +1,5 @@
 import FormCreateUser from "./FormCreateUser";
 
-const slotInputs = [
-	` <base-input
-      slot-scope="userData"
-      v-model="userData.birthday"
-      type="date"
-      :label="Geburtstag"
-      :placeholder="Geburtstag"
-      class="mt--md"
-    />`,
-	`<base-input
-      slot-scope="userData"
-      v-model="userData.sendRegistration"
-      type="checkbox"
-      name="switch"
-      class="mt--xl"
-      :label="Link"
-  />`,
-];
-
 const validRole = {
 	data: ["student"],
 };
@@ -46,9 +27,6 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 			roles: {
 				actions,
 			},
-		},
-		scopedSlots: {
-			inputs: slotInputs,
 		},
 	});
 
@@ -85,6 +63,7 @@ describe("@components/FormCreateUser", () => {
 
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.actionType).toStrictEqual("create");
+			await wrapper.vm.$nextTick();
 			expect(actions.create.mock.calls).toHaveLength(1);
 
 			await wrapper.vm.$nextTick();
@@ -112,6 +91,20 @@ describe("@components/FormCreateUser", () => {
 			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
 
-		it.todo("renders slot content");
+		it("renders slot content", async () => {
+			const actions = getMockActionsErrorCreate();
+			const mock = getMocks({ actions });
+			const wrapper = shallowMount(FormCreateUser, {
+				...mock,
+				propsData: {
+					roleName: "student",
+				},
+				slots: {
+					inputs: '<input label="test" value="test"/>',
+				},
+			});
+			const slot_input = wrapper.find('input[value="test"]');
+			expect(slot_input.exists()).toBe(true);
+		});
 	});
 });
