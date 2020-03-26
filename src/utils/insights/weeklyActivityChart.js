@@ -1,4 +1,4 @@
-export default function(data) {
+export default function (data) {
 	return {
 		color: ["#b1063a"],
 		legend: {},

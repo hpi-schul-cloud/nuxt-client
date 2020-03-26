@@ -31,7 +31,7 @@
 						color="var(--color-success)"
 					/>
 					<base-icon
-						style="position: relative; left: -17.5px"
+						style="position: relative; left: -17.5px;"
 						source="material"
 						icon="check"
 						color="var(--color-success)"
@@ -191,7 +191,7 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "fas fa-cog" },
+					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
