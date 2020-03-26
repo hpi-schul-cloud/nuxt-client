@@ -20,7 +20,7 @@ try {
 	}
 }
 
-export default async function(req, res, next) {
+export default async function (req, res, next) {
 	if (req.url === "/nuxtversion") {
 		res.setHeader("Access-Control-Allow-Origin", "*");
 		res.setHeader("Content-Type", "application/json; charset=utf-8");

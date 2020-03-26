@@ -73,7 +73,7 @@ const fetchData = async (ref, { ids, $select, query, conditionHelper }) => {
 
 const module = mergeDeep(base, {
 	actions: {
-		updateCallback: async function({ commit }, payload = {}) {
+		updateCallback: async function ({ commit }, payload = {}) {
 			const {
 				requestInterval,
 				watchingIds,

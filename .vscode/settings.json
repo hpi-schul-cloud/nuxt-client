@@ -41,6 +41,11 @@
 		"compose-*.dummy": "yaml"
 	},
 
+	"[yaml]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true
+	},
+
 	// ===
 	// Event Triggers
 	// ===
