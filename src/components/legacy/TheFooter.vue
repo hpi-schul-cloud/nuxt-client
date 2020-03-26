@@ -39,7 +39,7 @@
 			Made with
 			<span class="heart">❤</span> in Potsdam |
 			{{ $t("components.legacy.footer.powered_by") }}
-			<base-link href="https://lokalise.com" target="_" :no-styles="true"
+			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
 				><img
 					class="poweredby-logo"
 					src="@assets/img/lokalise_logo.svg"

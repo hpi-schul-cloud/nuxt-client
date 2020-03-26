@@ -1,6 +1,6 @@
 import TheFooter from "./TheFooter";
 
-describe.skip("@components/legacy/TheFooter", () => {
+describe("@components/legacy/TheFooter", () => {
 	it(...isValidComponent(TheFooter));
 
 	const $theme = { name: "test" };
@@ -20,6 +20,7 @@ describe.skip("@components/legacy/TheFooter", () => {
 				mocks: {
 					$theme,
 				},
+				i18n: true,
 			}),
 		});
 		expect(wrapper.findAll("base-link-stub")).toHaveLength(11);
