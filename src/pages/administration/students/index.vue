@@ -23,8 +23,8 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
 			</template>
-			<template v-slot:datacolumn-consent-consentStatus="{ data }">
-				<span v-if="data === 'ok'">
+			<template v-slot:datacolumn-consent="{ data }">
+				<span v-if="data && data.consentStatus === 'ok'">
 					<base-icon
 						source="material"
 						icon="check"
@@ -37,20 +37,21 @@
 						color="var(--color-success)"
 					/>
 				</span>
-				<span v-else-if="data === 'parentsAgreed'">
+				<span v-else-if="data && data.consentStatus === 'parentsAgreed'">
 					<base-icon
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
 				</span>
-				<span v-else-if="data === 'missing'">
+				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
+				<span v-else />
 			</template>
 			<template v-slot:datacolumn-_id="{ data }">
 				<base-button
@@ -71,7 +72,7 @@
 					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
-					href: '/administration/students/new',
+					to: '/administration/students/new',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
@@ -141,7 +142,7 @@ export default {
 				// 	label: this.$t("common.labels.birthday"),
 				// },
 				{
-					field: "consent.consentStatus",
+					field: "consent",
 					label: this.$t("common.labels.consent"),
 				},
 				{
