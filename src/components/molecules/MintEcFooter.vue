@@ -3,9 +3,9 @@
 		<div class="footer-container">
 			<base-grid :column-width="colWidth" :style="{ justifyItems: `center` }">
 				<div class="link-container">
-					<h2 class="h4">{{
-						$t("components.molecules.MintEcFooter.chapters")
-					}}</h2>
+					<h2 class="h4">
+						{{ $t("components.molecules.MintEcFooter.chapters") }}
+					</h2>
 					<base-link
 						v-for="route in chapters"
 						:key="route.title"
@@ -31,10 +31,10 @@
 						/>
 					</base-link>
 					<base-link href="https://twitter.com/mint_ec">
-						<base-icon class="icon-style" source="fa" icon="fab fa-twitter" />
+						<base-icon class="icon-style" source="fa" icon="twitter" />
 					</base-link>
 					<base-link href="https://instagram.com/mint_ec_netzwerk">
-						<base-icon class="icon-style" source="fa" icon="fab fa-instagram" />
+						<base-icon class="icon-style" source="fa" icon="instagram" />
 					</base-link>
 				</div>
 			</base-grid>

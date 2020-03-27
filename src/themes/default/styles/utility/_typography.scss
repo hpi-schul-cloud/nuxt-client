@@ -95,3 +95,17 @@ button {
 		color: var(--color-primary);
 	}
 }
+
+@include breakpoint(tablet) {
+	:root {
+		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
+	}
+}
+
+@include breakpoint(desktop) {
+	:root {
+		--text-base-size: calc(
+			1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio)
+		);
+	}
+}

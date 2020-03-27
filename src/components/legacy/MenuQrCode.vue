@@ -19,7 +19,7 @@ export default {
 		},
 	},
 	methods: {
-		openPrintMenu: function() {
+		openPrintMenu: function () {
 			const win = window.open();
 			win.document.write(this.$refs.qrcode.$el.innerHTML);
 			win.print();

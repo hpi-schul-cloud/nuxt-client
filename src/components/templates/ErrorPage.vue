@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="text-centered">
 		<img alt="PC-Reparatur" src="@assets/img/pc_repair.png" />
 
 		<h1 class="error-msg">
@@ -36,11 +36,10 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.container {
+.text-centered {
 	text-align: center;
 }
 h1.error-msg {
 	margin-bottom: var(--space-lg);
-	text-align: center;
 }
 </style>

@@ -4,7 +4,7 @@
 const _ = require("lodash");
 const customMatchers = {};
 
-customMatchers.toBeAComponent = function(options) {
+customMatchers.toBeAComponent = function (options) {
 	if (isAComponent()) {
 		return {
 			message: () =>
@@ -28,7 +28,7 @@ customMatchers.toBeAComponent = function(options) {
 	}
 };
 
-customMatchers.toBeAViewComponent = function(options, mockInstance) {
+customMatchers.toBeAViewComponent = function (options, mockInstance) {
 	if (usesALayout() && definesAPageTitleAndDescription()) {
 		return {
 			message: () =>
@@ -69,11 +69,11 @@ customMatchers.toBeAViewComponent = function(options, mockInstance) {
 	}
 };
 
-customMatchers.toBeAViewComponentUsing = function(options, mockInstance) {
+customMatchers.toBeAViewComponentUsing = function (options, mockInstance) {
 	return customMatchers.toBeAViewComponent.apply(this, [options, mockInstance]);
 };
 
-customMatchers.toBeAVuexModule = function(options) {
+customMatchers.toBeAVuexModule = function (options) {
 	if (isAVuexModule()) {
 		return {
 			message: () =>

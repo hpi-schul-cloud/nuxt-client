@@ -7,7 +7,7 @@
 		:sort-order.sync="sortOrderProxy"
 		:current-page.sync="currentPageProxy"
 		:rows-per-page.sync="rowsPerPageProxy"
-		:selected-row-ids="backendTableSelection"
+		:selected-row-ids="backendTableSelectionIds"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
 		v-on="proxyListeners"
@@ -70,7 +70,7 @@ export default {
 			localSortOrder: undefined,
 			localCurrentPage: undefined,
 			localRowsPerPage: undefined,
-			backendTableSelection: this.selection,
+			backendTableSelectionIds: this.selection,
 			backendTableSelectionType: "inclusive",
 		};
 	},
@@ -170,32 +170,18 @@ export default {
 		selection(to) {
 			this.handleParentSelectionUpdate(to);
 		},
-		data() {
-			this.validateData();
-		},
-	},
-	created() {
-		this.validateData();
 	},
 	methods: {
-		validateData() {
-			const isValid = this.data.every(
-				(row) => typeof getValueByPath(row, this.trackBy) === "string"
-			);
-			if (!isValid) {
-				throw new Error(`provided dataset is invalid`);
-			}
-		},
 		handleParentSelectionUpdate(selection) {
 			if (selection.length === this.data.length) {
-				this.$set(this, "backendTableSelection", []);
+				this.$set(this, "backendTableSelectionIds", []);
 				this.backendTableSelectionType = "exclusive";
 			} else {
-				this.$set(this, "backendTableSelection", selection);
+				this.$set(this, "backendTableSelectionIds", selection);
 				this.backendTableSelectionType = "inclusive";
 			}
 		},
-		handleTableSelectionUpdate(selection, selectionType, initiator) {
+		handleTableSelectionUpdate(selection, selectionType) {
 			const newSelection = this.dataIds.filter((rowId) => {
 				return selectionType === "exclusive"
 					? !selection.includes(rowId)

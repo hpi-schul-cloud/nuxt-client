@@ -97,10 +97,6 @@ export default {
 		vertical-align: middle;
 		.text-content {
 			padding: var(--space-xs);
-			font-size: var(--text-xs);
-		}
-		.selection-column {
-			font-size: var(--text-md);
 		}
 		.select {
 			margin-bottom: 0;

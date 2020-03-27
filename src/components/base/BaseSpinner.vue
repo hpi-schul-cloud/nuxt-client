@@ -33,7 +33,7 @@ export default {
 			},
 		},
 	},
-	data: function() {
+	data: function () {
 		return {
 			sizeToDiameter: {
 				small: 15,

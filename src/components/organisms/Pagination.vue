@@ -2,7 +2,7 @@
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
 		<base-select
 			label="Einträge pro Seite"
-			style="max-width: 150px"
+			style="max-width: 150px;"
 			close-on-select
 			:value="perPageSelected"
 			:options="perPageOptions"
@@ -51,7 +51,7 @@
 				</li>
 			</ul>
 		</div>
-		<div v-else> Zeige alle {{ total }} Einträge </div>
+		<div v-else>Zeige alle {{ total }} Einträge</div>
 	</nav>
 </template>
 

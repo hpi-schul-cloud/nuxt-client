@@ -32,6 +32,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+$default-color: var(--color-gray-dark);
+$highlight-color: var(--color-secondary);
+
 .chip {
 	display: inline-block;
 	margin: var(--space-xs) var(--space-xs) 0 0;
@@ -50,23 +54,15 @@ export default {
 		cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-button {
-	&:hover,
-	&:focus {
-		outline: 0;
-		// increase border size to increase visiblity
-		box-shadow: var(--shadow-s);
-	}
-}
 .selected {
 	color: var(--color-white);
-	background-color: var(--color-secondary);
-	border: 1px solid var(--color-secondary);
+	background-color: $highlight-color;
+	border: 1px solid $highlight-color;
 }
 .default {
-	color: var(--color-gray-dark);
+	color: $default-color;
 	background-color: var(--color-white);
-	border: 1px solid var(--color-gray);
+	border: 1px solid $default-color;
 }
 .medium {
 	padding: var(--space-xs-2) var(--space-lg);
@@ -76,5 +72,19 @@ button {
 }
 .large {
 	padding: var(--space-xs) var(--space-xl);
+}
+
+button {
+	&:hover {
+		// increase border size to increase visiblity
+		box-shadow: var(--shadow-s);
+	}
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px $default-color;
+	}
+	&.selected:focus {
+		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px $highlight-color;
+	}
 }
 </style>

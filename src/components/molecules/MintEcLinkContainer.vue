@@ -5,8 +5,7 @@
 			:style="{
 				'background-image': `url(https://${image} )`,
 			}"
-		>
-		</div>
+		></div>
 		<div class="container-base">
 			<div class="container">
 				<div class="container-icon">
@@ -25,7 +24,7 @@
 					{{ heading }}
 					<base-icon
 						source="fa"
-						icon="fas fa-chevron-right"
+						icon="chevron-right"
 						:style="{
 							'font-size': `var(--space-md)`,
 							color: `var(--color-white)`,

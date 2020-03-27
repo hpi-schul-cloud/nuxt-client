@@ -7,7 +7,7 @@ import Toasted from "vue-toasted";
 Vue.prototype.$toast = Toasted;
 Vue.use(Toasted, { duration: 3000 });
 Vue.use({
-	install: function(Vue, options) {
+	install: function (Vue, options) {
 		Vue.prototype.$toast = Vue.prototype.$toasted;
 	},
 });
