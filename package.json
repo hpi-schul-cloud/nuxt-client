@@ -41,7 +41,7 @@
 		"test": "npm run test:unit"
 	},
 	"gitHooks": {
-		"pre-commit": "cross-env PRE_COMMIT=true lint-staged"
+		"pre-commit": "npx lint-staged"
 	},
 	"dependencies": {
 		"@nuxtjs/axios": "^5.9.5",
