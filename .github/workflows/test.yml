@@ -3,7 +3,7 @@ name: Test
 on: [push]
 
 jobs:
-  test-unit:
+  unit:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -39,7 +39,7 @@ jobs:
         if: failure() && matrix.os == 'ubuntu-latest'
         with:
           commit_message: npm run lint
-  test-screenshot:
+  screenshot:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -54,7 +54,7 @@ jobs:
         with:
           name: screenshot-diff
           path: tests/screenshot/__image_snapshots__/__diff_output__
-  integration-tests:
+  integration:
     runs-on: ubuntu-latest
     steps:
       - name: execute tests
