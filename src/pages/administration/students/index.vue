@@ -26,14 +26,8 @@
 			<template v-slot:datacolumn-consent="{ data }">
 				<span v-if="data && data.consentStatus === 'ok'">
 					<base-icon
-						source="material"
-						icon="check"
-						color="var(--color-success)"
-					/>
-					<base-icon
-						style="position: relative; left: -17.5px;"
-						source="material"
-						icon="check"
+						source="custom"
+						icon="doublecheck"
 						color="var(--color-success)"
 					/>
 				</span>
