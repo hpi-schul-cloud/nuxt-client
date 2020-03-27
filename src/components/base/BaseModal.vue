@@ -73,9 +73,6 @@ export default {
 			this.$emit("onBackdropClick");
 			this.close();
 		},
-		onBackdropClick() {
-			this.$emit("onBackdropClick");
-		},
 		close() {
 			this.$emit("update:active", false);
 		},
