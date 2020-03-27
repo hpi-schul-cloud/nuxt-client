@@ -70,7 +70,7 @@ export default {
 	},
 	methods: {
 		handleBackgroundClick() {
-			this.onBackdropClick();
+			this.$emit("onBackdropClick");
 			this.close();
 		},
 		onBackdropClick() {
