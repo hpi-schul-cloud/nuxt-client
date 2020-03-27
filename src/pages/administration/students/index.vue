@@ -23,8 +23,8 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
 			</template>
-			<template v-slot:datacolumn-consent-consentStatus="{ data }">
-				<span v-if="data === 'ok'">
+			<template v-slot:datacolumn-consent="{ data }">
+				<span v-if="data && data.consentStatus === 'ok'">
 					<base-icon
 						source="material"
 						icon="check"
@@ -37,20 +37,21 @@
 						color="var(--color-success)"
 					/>
 				</span>
-				<span v-else-if="data === 'parentsAgreed'">
+				<span v-else-if="data && data.consentStatus === 'parentsAgreed'">
 					<base-icon
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
 				</span>
-				<span v-else-if="data === 'missing'">
+				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
+				<span v-else />
 			</template>
 			<template v-slot:datacolumn-_id="{ data }">
 				<base-button
@@ -62,6 +63,7 @@
 				</base-button>
 			</template>
 		</backend-data-table>
+		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
@@ -70,7 +72,7 @@
 					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
-					href: '/administration/students/new',
+					to: '/administration/students/new',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
@@ -87,6 +89,7 @@
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
+import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
@@ -97,8 +100,14 @@ export default {
 	components: {
 		BackendDataTable,
 		FabFloating,
+		AdminTableLegend,
 	},
 	mixins: [print],
+	props: {
+		showExternalSyncHint: {
+			type: Boolean,
+		},
+	},
 	data() {
 		return {
 			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
@@ -133,7 +142,7 @@ export default {
 				// 	label: this.$t("common.labels.birthday"),
 				// },
 				{
-					field: "consent.consentStatus",
+					field: "consent",
 					label: this.$t("common.labels.consent"),
 				},
 				{
@@ -187,6 +196,24 @@ export default {
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
+				},
+			],
+			icons: [
+				{
+					icon: "doublecheck",
+					color: "var(--color-success)",
+					style: "margin: -3px 3px",
+					label: this.$t("pages.administration.students.legend.icon.success"),
+				},
+				{
+					icon: "check",
+					color: "var(--color-warning)",
+					label: this.$t("pages.administration.students.legend.icon.warning"),
+				},
+				{
+					icon: "clear",
+					color: "var(--color-danger)",
+					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
 		};
