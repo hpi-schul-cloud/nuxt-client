@@ -8,7 +8,7 @@ describe("@components/organisms/DataFilter/defaultFilters", () => {
 			["Test", "te", true],
 			[11, 1, true],
 			[11, 2, false],
-		])("'%s' includes '%s' is %s", (a, b, expected) => {
+		])("%p includes %p is %s", (a, b, expected) => {
 			expect(defaultFilters["text"]["default"](a, b)).toBe(expected);
 			expect(defaultFilters["text"]["includes"](a, b)).toBe(expected);
 		});
@@ -17,7 +17,7 @@ describe("@components/organisms/DataFilter/defaultFilters", () => {
 			["test", "test", true],
 			["test", "te", false],
 			["Test", "test", true],
-		])("'%s' = '%s' is %s", (a, b, expected) => {
+		])("%p = %p is %s", (a, b, expected) => {
 			expect(defaultFilters["text"]["="](a, b)).toBe(expected);
 		});
 
@@ -25,7 +25,7 @@ describe("@components/organisms/DataFilter/defaultFilters", () => {
 			["test", "test", false],
 			["te", "test", true],
 			["Test", "test", false],
-		])("'%s' < '%s' is %s", (a, b, expected) => {
+		])("%p < %p is %s", (a, b, expected) => {
 			expect(defaultFilters["text"]["<"](a, b)).toBe(expected);
 		});
 
@@ -33,7 +33,7 @@ describe("@components/organisms/DataFilter/defaultFilters", () => {
 			["test", "test", true],
 			["test", "te", false],
 			["Test", "test", true],
-		])("'%s' <= '%s' is %s", (a, b, expected) => {
+		])("%p <= %p is %s", (a, b, expected) => {
 			expect(defaultFilters["text"]["<="](a, b)).toBe(expected);
 		});
 	});
