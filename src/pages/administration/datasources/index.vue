@@ -152,7 +152,7 @@
 			:primary-action="{
 				icon: 'add',
 				'icon-source': 'material',
-				to: '/administration/datasources/add',
+				to: '/administration/datasources/new',
 				label: $t('pages.administration.datasources.index.create'),
 			}"
 		/>
@@ -166,7 +166,7 @@ import EmptyState from "@components/molecules/EmptyState";
 import FabFloating from "@components/molecules/FabFloating";
 import Pagination from "@components/organisms/Pagination";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
-import ImageEmptyState from "@assets/img/emptystate-graph.svg";
+import ImageEmptyState from "@assets/img/empty-state/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
 import dayjs from "dayjs";
@@ -199,7 +199,7 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "fas fa-cog" },
+					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.datasources.index.title"),

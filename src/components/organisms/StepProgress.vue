@@ -32,7 +32,7 @@ export default {
 				{ name: "Four" },
 				{ name: "Five" },
 			],
-			validator: function(value) {
+			validator: function (value) {
 				const isValid = value.length <= 7;
 				if (!isValid) {
 					console.error("You shoudn't use more than 7 steps.");
@@ -46,7 +46,7 @@ export default {
 		},
 	},
 	computed: {
-		stepWidth: function() {
+		stepWidth: function () {
 			return 100 / this.steps.length + "%";
 		},
 	},

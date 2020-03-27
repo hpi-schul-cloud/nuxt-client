@@ -24,7 +24,7 @@ export default {
 		source: {
 			type: String,
 			required: true,
-			validator: function(to) {
+			validator: function (to) {
 				return ["material", "custom", "fa"].includes(to);
 			},
 		},

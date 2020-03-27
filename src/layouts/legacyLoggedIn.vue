@@ -132,6 +132,15 @@ export default {
 		},
 		sidebarItems() {
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
+				// Check permissions for all children
+				if ((item.children || []).length >= 1) {
+					item.children = item.children.filter(
+						(child) =>
+							!child.permission ||
+							this.user?.permissions?.includes?.(child.permission)
+					);
+				}
+
 				const hasRequiredPermission = this.user?.permissions?.includes?.(
 					item.permission
 				);
@@ -158,7 +167,7 @@ export default {
 		},
 	},
 	watch: {
-		$route: function(to) {
+		$route: function (to) {
 			try {
 				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
 			} catch {

@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const walkSync = function(dir, filelist, base) {
+const walkSync = function (dir, filelist, base) {
 	try {
 		const files = fs.readdirSync(dir);
 		const extension = /\.(vue)$/i;
@@ -23,7 +23,7 @@ const walkSync = function(dir, filelist, base) {
 	}
 };
 
-module.exports = function(variation) {
+module.exports = function (variation) {
 	const dirname = "./src/themes/" + variation;
 	const aliasComponents = walkSync(dirname + "/components", {}, dirname);
 	const aliasAssets = walkSync(dirname + "/assets", {}, dirname);

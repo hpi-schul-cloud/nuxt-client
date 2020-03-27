@@ -64,16 +64,16 @@ mountBaseComponents(globalComponentFiles, (fileName) =>
 // ===
 
 Object.defineProperty(window, "localStorage", {
-	value: (function() {
+	value: (function () {
 		let store = {};
 		return {
-			getItem: function(key) {
+			getItem: function (key) {
 				return store[key] || null;
 			},
-			setItem: function(key, value) {
+			setItem: function (key, value) {
 				store[key] = value.toString();
 			},
-			clear: function() {
+			clear: function () {
 				store = {};
 			},
 		};
@@ -94,14 +94,14 @@ const location = {
 	href: "",
 };
 Object.defineProperty(window, "location", {
-	set: function(val) {
+	set: function (val) {
 		location.host = "domain.io";
 		location.hostname = "domain.io";
 		location.origin = "http://domain.io";
 		location.href = "http://domain.io" + val;
 		location.pathname = val;
 	},
-	get: function() {
+	get: function () {
 		return location;
 	},
 });

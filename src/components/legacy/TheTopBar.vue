@@ -93,7 +93,7 @@ export default {
 		actions: {
 			type: Array,
 			default: () => [],
-			validator: function(value) {
+			validator: function (value) {
 				return value.every((action) => {
 					const isValid =
 						// (action.icon || action.title ||
