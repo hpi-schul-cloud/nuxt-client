@@ -21,7 +21,9 @@
 				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
 			/>
-			<autoLogoutWarning />
+			<keep-alive>
+				<autoLogoutWarning />
+			</keep-alive>
 			<slot />
 			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
@@ -170,7 +172,7 @@ export default {
 		},
 	},
 	watch: {
-		$route: function (to) {
+		$route: function(to) {
 			try {
 				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
 			} catch {
