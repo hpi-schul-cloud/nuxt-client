@@ -58,10 +58,6 @@ export default {
 			type: String,
 			default: "medium",
 		},
-		onBackdropClick: {
-			type: Function,
-			default: () => {},
-		},
 	},
 	watch: {
 		active() {
@@ -76,6 +72,9 @@ export default {
 		handleBackgroundClick() {
 			this.onBackdropClick();
 			this.close();
+		},
+		onBackdropClick() {
+			this.$emit("onBackdropClick");
 		},
 		close() {
 			this.$emit("update:active", false);

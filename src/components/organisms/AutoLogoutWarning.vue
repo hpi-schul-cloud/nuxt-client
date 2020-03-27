@@ -1,14 +1,15 @@
 <template>
-	<base-modal :active.sync="active" :on-back-drop="extendSession">
+	<base-modal :active="active" @onBackdropClick="extendSession">
 		<template v-slot:body>
 			<div class="container">
 				<img
 					:src="getImage"
 					class="sloth"
+					role="presentation"
 					:alt="$t('components.organisms.AutoLogoutWarning.image.alt')"
 				/>
 				<!-- eslint-disable-next-line -->
-				<p class="sloth-text mt--xl-4" v-html="getText" />
+				<p class="sloth-text" v-html="getText" />
 			</div>
 		</template>
 		<template v-slot:footer>
@@ -20,29 +21,20 @@
 		</template>
 	</base-modal>
 </template>
+
 <script>
 import CenterSlot from "@components/atoms/CenterSlot";
+import { mapState } from "vuex";
 
-const showWarningOnRemainingSeconds =
-	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS || 3600;
-const defaultRemainingTimeInSeconds =
-	process.env.JWT_TIMEOUT_SECONDS || showWarningOnRemainingSeconds * 2;
+const toast = {
+	error401: -1,
+	error: 0,
+	success: 1,
+};
 
 export default {
 	components: {
 		CenterSlot,
-	},
-	data: () => {
-		return {
-			active: false,
-			processing: false,
-			error: false,
-			remainingTimeInSeconds: defaultRemainingTimeInSeconds,
-			retry: 0,
-			totalRetry: 0,
-			decRstIntervallSec: 20,
-			updateIntervallMin: 3,
-		};
 	},
 	computed: {
 		remainingTimeInMinutes() {
@@ -69,91 +61,48 @@ export default {
 				return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth_error.svg";
 			return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth.svg";
 		},
+		...mapState("autoLogout", [
+			"active",
+			"error",
+			"remainingTimeInSeconds",
+			"showToast",
+		]),
 	},
-	mounted() {
-		this.decRst();
-		this.update();
+	watch: {
+		showToast(state) {
+			switch (state) {
+				case toast.success:
+					this.$toast.success(
+						this.$t("components.organisms.AutoLogoutWarning.success")
+					);
+					break;
+
+				case toast.error:
+					this.$toast.error(
+						this.$t("components.organisms.AutoLogoutWarning.error.retry")
+					);
+					break;
+
+				case toast.error401:
+					this.$toast.error(
+						this.$t("components.organisms.AutoLogoutWarning.error.401")
+					);
+					break;
+
+				default:
+					break;
+			}
+		},
+	},
+	created(ctx) {
+		this.$store.dispatch("autoLogout/init", null, { root: true });
+	},
+	beforeDestroy() {
+		//this.$store.dispatch("autoLogout/reset");
 	},
 	methods: {
-		decRst() {
-			setTimeout(() => {
-				if (this.remainingTimeInSeconds >= 60) {
-					this.remainingTimeInSeconds -= this.decRstIntervallSec;
-					if (
-						!this.processing &&
-						!this.active &&
-						this.remainingTimeInSeconds <= showWarningOnRemainingSeconds
-					) {
-						this.showAutoLogoutModal((this.error = false));
-					} else if (
-						this.remainingTimeInSeconds > showWarningOnRemainingSeconds
-					) {
-						this.activ = false;
-					}
-					this.decRst();
-				}
-			}, 1000 * this.decRstIntervallSec);
-		},
-		update() {
-			setInterval(async () => {
-				try {
-					const res = await this.$store.dispatch("accounts/getTTL");
-					if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
-						this.remainingTimeInSeconds = res.ttl;
-					} else {
-						console.error("Update remaining session time failed!");
-					}
-				} catch (error) {
-					console.error("Update remaining session time failed!");
-				}
-			}, 1000 * 60 * this.updateIntervallMin);
-		},
-		showAutoLogoutModal() {
-			this.active = true;
-		},
-		async extendSession() {
-			this.processing = true;
-			this.active = false;
-
-			try {
-				await this.$store.dispatch("accounts/resetJwtTimer");
-				this.processing = false;
-				this.totalRetry = 0;
-				this.retry = 0;
-				this.$toast.success(
-					this.$t("components.organisms.AutoLogoutWarning.success")
-				);
-				if (this.remainingTimeInSeconds < 60) {
-					this.decRst();
-				}
-				this.remainingTimeInSeconds = defaultRemainingTimeInSeconds;
-			} catch (err) {
-				if (err.response && err.response.status !== 405) {
-					if (err.response && err.response.status !== 401) {
-						// retry 4 times before showing error
-						if (this.retry < 4) {
-							this.retry += 1;
-							setTimeout(() => {
-								this.extendSession();
-							}, 2 ** retry * 1000);
-						} else {
-							this.retry = 0;
-							if (this.totalRetry) {
-								this.$toast.error(
-									this.$t("components.organisms.AutoLogoutWarning.error.retry")
-								);
-							} else {
-								this.showAutoLogoutModal((this.error = true));
-							}
-							this.totalRetry += 1;
-						}
-					} else {
-						this.$toast.error(
-							this.$t("components.organisms.AutoLogoutWarning.error.401")
-						);
-					}
-				}
-			}
+		extendSession() {
+			this.$store.dispatch("autoLogout/extendSession");
 		},
 	},
 };
@@ -185,7 +134,7 @@ export default {
 
 		@include breakpoint(tablet) {
 			width: 60%;
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+			margin-top: var(--space-xl-4);
 			text-align: left;
 			vertical-align: middle;
 		}
