@@ -121,6 +121,7 @@ export default {
 		width: 35%;
 		min-width: 150px;
 		vertical-align: top;
+		opacity: 0.9;
 
 		@include breakpoint(tablet) {
 			float: right;
