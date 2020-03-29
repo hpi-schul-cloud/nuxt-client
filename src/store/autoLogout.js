@@ -11,6 +11,8 @@ const updateIntervallMin = 2;
 let decrementer = null;
 let polling = null;
 
+let lastUpdated = null;
+
 const toast = {
 	error401: -1,
 	error: 0,
@@ -22,7 +24,8 @@ const decrementRemainingTime = (commit, state) => {
 		if (state.remainingTimeInSeconds >= 60) {
 			commit(
 				"setRemainingTimeInSeconds",
-				state.remainingTimeInSeconds - decRstIntervallSec
+				state.remainingTimeInSeconds -
+					Math.floor((Date.now() - lastUpdated) / 1000)
 			);
 			if (
 				!processing &&
@@ -93,6 +96,7 @@ export const mutations = {
 		state.error = payload.error;
 	},
 	setRemainingTimeInSeconds(state, payload) {
+		lastUpdated = Date.now();
 		state.remainingTimeInSeconds = payload;
 	},
 	showToast(state, payload) {
@@ -106,6 +110,7 @@ export const actions = {
 			decrementer = decrementRemainingTime(commit, state);
 		}
 		if (!polling) {
+			lastUpdated = Date.now();
 			polling = updateRemainingTime(commit, dispatch);
 		}
 	},
