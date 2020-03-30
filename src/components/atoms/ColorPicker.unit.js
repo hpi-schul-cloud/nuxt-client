@@ -24,7 +24,7 @@ describe("@components/atoms/ColorPicker", () => {
 		const wrapper = mount(ColorPicker, {
 			...createComponentMocks({
 				stubs: {
-					"color-picker": true, //`<input id="input"/>`,
+					"color-picker": true,
 				},
 			}),
 		});
