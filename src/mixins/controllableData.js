@@ -4,7 +4,7 @@ import { upperCaseFirstChar, toKebabCase } from "@utils/formatting";
 export const localDataPrefix = "#component";
 
 /**
- * defines a computed Property `$_controllableData${upperCaseFirstChar(prop)}` for each given prop-name.
+ * defines a computed property `$_controllableData${upperCaseFirstChar(prop)}` for each given prop-name.
  * This computed property acts like a local variable from the data attribute,
  * but can be set by the parent component using the accorrding prop with "prop-name".
  * When writing to the computed property, an event `update:${toKebabCase(prop)}` with the
