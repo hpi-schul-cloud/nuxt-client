@@ -1,14 +1,16 @@
 import FormNews from "./FormNews";
 
+const date = new Date().toISOString().split("T")[0];
+
 const validNews = {
 	title: "Hi",
 	content: "lalaland",
-	displayAt: "2019-11-05T13:07:00.000Z",
+	displayAt: `${date}T13:07:00.000Z`,
 };
 
 const timezoneOffset = new Date().getTimezoneOffset() / 60;
 const validNewsDate = {
-	date: "2019-11-05",
+	date,
 	time: `${13 - timezoneOffset}:07`, // timezone conversion
 };
 const invalidNews = {
