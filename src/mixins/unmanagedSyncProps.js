@@ -41,7 +41,7 @@ export default (props = []) => {
 			}, {});
 		},
 		computed: props.reduce((computed, prop) => {
-			computed[`${prop}Proxy`] = {
+			computed[`$_unmanagedSync${upperCaseFirstChar(prop)}`] = {
 				get() {
 					return this[`$_local${upperCaseFirstChar(prop)}`] || this[prop];
 				},

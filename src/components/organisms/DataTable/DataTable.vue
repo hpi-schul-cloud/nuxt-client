@@ -3,10 +3,10 @@
 		v-bind="attrsProxy"
 		:data="paginatedSortedData"
 		:total="sortedData.length"
-		:sort-by.sync="sortByProxy"
-		:sort-order.sync="sortOrderProxy"
-		:current-page.sync="currentPageProxy"
-		:rows-per-page.sync="rowsPerPageProxy"
+		:sort-by.sync="$_unmanagedSyncSortBy"
+		:sort-order.sync="$_unmanagedSyncSortOrder"
+		:current-page.sync="$_unmanagedSyncCurrentPage"
+		:rows-per-page.sync="$_unmanagedSyncRowsPerPage"
 		:selected-row-ids="backendTableSelectionIds"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
@@ -112,13 +112,18 @@ export default {
 		sortedData() {
 			const raw = this.data;
 
-			if (!this.sortByProxy) {
+			if (!this.$_unmanagedSyncSortBy) {
 				return raw;
 			}
 			const sortMethod = this.sortMethod || this.sort;
-			const out = sortMethod(raw, this.sortByProxy, this.sortOrderProxy, {
-				getValueByPath,
-			});
+			const out = sortMethod(
+				raw,
+				this.$_unmanagedSyncSortBy,
+				this.$_unmanagedSyncSortOrder,
+				{
+					getValueByPath,
+				}
+			);
 
 			return out;
 		},
@@ -126,9 +131,8 @@ export default {
 			if (!this.paginated) {
 				return this.sortedData;
 			}
-
-			const currentPage = this.currentPageProxy;
-			const rowsPerPage = this.rowsPerPageProxy;
+			const currentPage = this.$_unmanagedSyncCurrentPage;
+			const rowsPerPage = this.$_unmanagedSyncRowsPerPage;
 			return this.sortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage
