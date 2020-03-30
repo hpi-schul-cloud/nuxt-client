@@ -193,8 +193,6 @@ export default {
 		return {
 			editFilterActive: false,
 			tableData: this.data,
-			filterOpened: {},
-			newFiltersSelected: this.filtersSelected,
 			selectionKeys: {},
 		};
 	},
