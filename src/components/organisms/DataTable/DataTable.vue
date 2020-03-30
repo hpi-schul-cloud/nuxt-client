@@ -3,10 +3,10 @@
 		v-bind="attrsProxy"
 		:data="paginatedSortedData"
 		:total="sortedData.length"
-		:sort-by.sync="$_unmanagedSyncSortBy"
-		:sort-order.sync="$_unmanagedSyncSortOrder"
-		:current-page.sync="$_unmanagedSyncCurrentPage"
-		:rows-per-page.sync="$_unmanagedSyncRowsPerPage"
+		:sort-by.sync="$_controllableDataSortBy"
+		:sort-order.sync="$_controllableDataSortOrder"
+		:current-page.sync="$_controllableDataCurrentPage"
+		:rows-per-page.sync="$_controllableDataRowsPerPage"
 		:selected-row-ids="backendTableSelectionIds"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
@@ -23,7 +23,7 @@
 import { getValueByPath } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
 
-import unmanagedSyncPropsMixin from "@mixins/unmanagedSyncProps";
+import controllableDataMixin from "@mixins/controllableData";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
@@ -43,7 +43,7 @@ const eventProxyBlacklist = [
 	"update:rowsPerPage",
 ];
 
-const unmanagedSyncProps = {
+const controllableData = {
 	sortBy: {
 		type: String,
 		default: "",
@@ -67,12 +67,12 @@ export default {
 	components: {
 		BackendDataTable,
 	},
-	mixins: [unmanagedSyncPropsMixin(Object.keys(unmanagedSyncProps))],
+	mixins: [controllableDataMixin(Object.keys(controllableData))],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
-		// props handled by the unmanagedSyncProps mixin
-		...unmanagedSyncProps,
+		// props handled by the controllableData mixin
+		...controllableData,
 		/**
 		 * (data, sortBy, sortOrder) => sortedData
 		 */
@@ -112,14 +112,14 @@ export default {
 		sortedData() {
 			const raw = this.data;
 
-			if (!this.$_unmanagedSyncSortBy) {
+			if (!this.$_controllableDataSortBy) {
 				return raw;
 			}
 			const sortMethod = this.sortMethod || this.sort;
 			const out = sortMethod(
 				raw,
-				this.$_unmanagedSyncSortBy,
-				this.$_unmanagedSyncSortOrder,
+				this.$_controllableDataSortBy,
+				this.$_controllableDataSortOrder,
 				{
 					getValueByPath,
 				}
@@ -131,8 +131,8 @@ export default {
 			if (!this.paginated) {
 				return this.sortedData;
 			}
-			const currentPage = this.$_unmanagedSyncCurrentPage;
-			const rowsPerPage = this.$_unmanagedSyncRowsPerPage;
+			const currentPage = this.$_controllableDataCurrentPage;
+			const rowsPerPage = this.$_controllableDataRowsPerPage;
 			return this.sortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage

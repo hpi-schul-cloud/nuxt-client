@@ -1,5 +1,6 @@
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
+import { localDataPrefix } from "@mixins/controllableData";
 
 const defaultData = tableData(50);
 
@@ -120,8 +121,8 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: oldValue,
 				currentPage: 1,
 			});
-			wrapper.vm.$_unmanagedSyncRowsPerPage = newValue; // simulate write to variable from .sync modifier from child
-			expect(wrapper.vm.unmanageSyncPropLocalRowsPerPage).toBe(newValue);
+			wrapper.vm.$_controllableDataRowsPerPage = newValue; // simulate write to variable from .sync modifier from child
+			expect(wrapper.vm[`${localDataPrefix}RowsPerPage`]).toBe(newValue);
 			expect(wrapper.emitted("update:rows-per-page")).toStrictEqual([[20]]);
 		});
 
