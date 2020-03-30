@@ -120,7 +120,7 @@ export default {
 			},
 			set(to) {
 				this.localCurrentPage = to;
-				this.$emit("update:currentPage", to);
+				this.$emit("update:current-page", to);
 			},
 		},
 		rowsPerPageProxy: {
@@ -138,7 +138,7 @@ export default {
 			},
 			set(to) {
 				this.localSortBy = to;
-				this.$emit("update:sortBy", to);
+				this.$emit("update:sort-by", to);
 			},
 		},
 		sortOrderProxy: {
@@ -147,7 +147,7 @@ export default {
 			},
 			set(to) {
 				this.localSortOrder = to;
-				this.$emit("update:sortOrder", to);
+				this.$emit("update:sort-order", to);
 			},
 		},
 		dataIds() {

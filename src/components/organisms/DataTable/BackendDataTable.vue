@@ -215,7 +215,7 @@ export default {
 			},
 			set(to) {
 				this.localSortBy = to;
-				this.$emit("update:sortBy", to);
+				this.$emit("update:sort-by", to);
 			},
 		},
 		sortOrderProxy: {
@@ -224,7 +224,7 @@ export default {
 			},
 			set(to) {
 				this.localSortOrder = to;
-				this.$emit("update:sortOrder", to);
+				this.$emit("update:sort-order", to);
 			},
 		},
 		numberOfSelectedItems() {

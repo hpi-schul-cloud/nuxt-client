@@ -55,8 +55,8 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 			onUpdateSelectionType: action("@update:selectionType"),
 			onUpdateSelectedRowIds: action("@update:selectedRowIds"),
 			onSort: action("@sort"),
-			onSortBy: action("@update:sortBy"),
-			onSortOrder: action("@update:sortOrder"),
+			onSortBy: action("@update:sort-by"),
+			onSortOrder: action("@update:sort-order"),
 		},
 		template: `
 			<BackendDataTable
@@ -82,8 +82,8 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
-				@update:sortBy="onSortBy"
-				@update:sortOrder="onSortOrder"
+				@update:sort-by="onSortBy"
+				@update:sort-order="onSortOrder"
 			>
 				<template v-slot:datacolumn-age="slotProps">
 					<span style="text-decoration: underline">
