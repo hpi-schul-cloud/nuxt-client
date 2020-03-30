@@ -4,6 +4,7 @@
 			:filter="filters"
 			:parser="parser"
 			:query="activeFiltersProxy"
+			:component-modal="DataFilterModal"
 			@newQuery="setActiveFilters"
 		/>
 	</div>
@@ -18,6 +19,7 @@ import {
 	supportedOperators,
 } from "./defaultFilters";
 import { unescape } from "lodash";
+import DataFilterModal from "./DataFilterModal";
 
 export default {
 	components: {
@@ -42,6 +44,7 @@ export default {
 	},
 	data() {
 		return {
+			DataFilterModal,
 			parser: parser.Default,
 			localQuery: undefined,
 			localActiveFilters: undefined,
