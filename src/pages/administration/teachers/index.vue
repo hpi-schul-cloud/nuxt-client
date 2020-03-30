@@ -108,13 +108,13 @@ export default {
 			page:
 				parseInt(
 					localStorage.getItem(
-						"pages.administration.students.index.currentPage"
+						"pages.administration.teachers.index.currentPage"
 					)
 				) || 1,
 			limit:
 				parseInt(
 					localStorage.getItem(
-						"pages.administration.students.index.itemsPerPage"
+						"pages.administration.teachers.index.itemsPerPage"
 					)
 				) || 10,
 			breadcrumbs: [
@@ -176,10 +176,6 @@ export default {
 					field: "email",
 					label: this.$t("common.labels.email"),
 				},
-				// {
-				// 	field: "birthday",
-				// 	label: this.$t("common.labels.birthday"),
-				// },
 				{
 					field: "consent",
 					label: this.$t("common.labels.consent"),
