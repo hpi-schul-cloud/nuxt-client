@@ -1,6 +1,6 @@
 import EmptyState from "./EmptyState";
 
-describe("@components/EmptyState", () => {
+describe("@components/molecules/EmptyState", () => {
 	it(...isValidComponent(EmptyState));
 
 	it("renders its classes", () => {

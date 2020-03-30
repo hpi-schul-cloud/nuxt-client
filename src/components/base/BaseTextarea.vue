@@ -75,6 +75,10 @@ export default {
 			type: Boolean,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		numberOfLines: function () {
 			return (this.vmodel.match(/\n/g) || []).length + 1;

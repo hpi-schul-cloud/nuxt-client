@@ -6,6 +6,10 @@
 import { mapState } from "vuex";
 
 export default {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		...mapState({
 			userRoles: (state) =>

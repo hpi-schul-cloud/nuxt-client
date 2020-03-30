@@ -30,12 +30,14 @@ export default {
 			required: true,
 		},
 	},
-
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	created: function () {
 		const lastObject = this.inputs[this.inputs.length - 1];
 		delete lastObject.href && delete lastObject.to;
 	},
-
 	methods: {
 		// eslint-disable-next-line no-unused-vars
 		removeText({ text, icon, ...input }) {

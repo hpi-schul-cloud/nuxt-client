@@ -38,7 +38,7 @@ Für Visual Studio Code liegen Debug Konfigurationen Bereit (`.vscode/launch.jso
 import BaseCard from "./BaseCard";
 
 // Beschreibung, welche Komponente wir testen
-describe("@components/BaseCard", () => {
+describe("@components/base/BaseCard", () => {
 	// Allgemeiner default-test für Komponenten.
 	// Testet nur ob die Komponente valide definiert ist.
 	it("exports a valid component", () => {
@@ -68,7 +68,7 @@ Die soeben beschriebenen Tests werden so häufig verwendet, dass wir sie ausgela
 ```js{4-5}
 import BaseCard from "./BaseCard";
 
-describe("@components/BaseCard", () => {
+describe("@components/base/BaseCard", () => {
 	it(...isValidComponent(BaseCard));
 	it(...rendersSlotContent(BaseCard));
 });
@@ -81,7 +81,7 @@ Soll das `v-model` einer Komponente getestet werden, so kann die Komponente nich
 ```js{8-13}
 import BaseInput from "./BaseInput";
 
-describe("@components/BaseInput", () => {
+describe("@components/base/BaseInput", () => {
 	it("changing the element's value, updates the v-model", () => {
 		const testInput = "test string";
 		const wrapper = mount({

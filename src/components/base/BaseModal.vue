@@ -59,6 +59,10 @@ export default {
 			default: "medium",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	watch: {
 		active() {
 			if (this.active) {
