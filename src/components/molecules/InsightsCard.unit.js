@@ -1,6 +1,6 @@
 import InsightsCard from "./InsightsCard";
 
-describe("@components/InsightsCard", () => {
+describe("@components/molecules/InsightsCard", () => {
 	it(...isValidComponent(InsightsCard));
 
 	it("renders title and data props if both exist", () => {

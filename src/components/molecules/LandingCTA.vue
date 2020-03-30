@@ -18,6 +18,10 @@ export default {
 		title: { type: String, required: true },
 		ctaText: { type: String, required: true },
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 };
 </script>
 

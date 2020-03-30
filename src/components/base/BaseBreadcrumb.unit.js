@@ -1,6 +1,6 @@
 import BaseBreadcrumb from "./BaseBreadcrumb";
 
-describe("@components/BaseBreadcrumb", () => {
+describe("@components/base/BaseBreadcrumb", () => {
 	it(...isValidComponent(BaseBreadcrumb));
 
 	it("renders BaseLink for Links", () => {
