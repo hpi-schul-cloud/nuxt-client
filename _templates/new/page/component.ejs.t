@@ -2,9 +2,9 @@
 to: "src/pages<%= route %>/index.vue"
 ---
 <%
-  const fileName = route.replace(/^.*[\\\/]/, '');
+	const fileName = route.replace(/^.*[\\\/]/, '');
 %><template>
-  <div>
+	<div>
 		<p>Page: <%= route %> </p>
 	</div>
 </template>

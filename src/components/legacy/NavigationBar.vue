@@ -33,7 +33,7 @@ export default {
 			default: () => {},
 		},
 	},
-	data: function () {
+	data() {
 		return {
 			activeLink: window.location.pathname,
 		};

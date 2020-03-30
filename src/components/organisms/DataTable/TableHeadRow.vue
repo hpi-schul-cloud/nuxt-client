@@ -82,6 +82,10 @@ export default {
 			validator: (val) => ["asc", "desc"].includes(val),
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		selectionStatus: {
 			get() {

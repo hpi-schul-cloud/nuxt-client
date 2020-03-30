@@ -54,6 +54,10 @@ import { mapState } from "vuex";
 import defaultDocuments from "@utils/documents.js";
 
 export default {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
