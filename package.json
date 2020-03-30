@@ -44,7 +44,7 @@
 		"pre-commit": "npx lint-staged"
 	},
 	"dependencies": {
-		"@nuxtjs/axios": "^5.9.6",
+		"@nuxtjs/axios": "^5.9.7",
 		"@nuxtjs/sentry": "^4.0.0",
 		"@nuxtjs/toast": "^3.3.0",
 		"@tryghost/content-api": "^1.3.9",
