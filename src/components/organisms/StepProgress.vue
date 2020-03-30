@@ -45,6 +45,10 @@ export default {
 			default: 0,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		stepWidth: function () {
 			return 100 / this.steps.length + "%";

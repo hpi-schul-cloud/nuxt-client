@@ -12,6 +12,10 @@ export default {
 			default: window.location.href,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	mounted: function () {
 		this.createQrCode();
 	},

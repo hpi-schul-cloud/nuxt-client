@@ -192,8 +192,6 @@ export default {
 			localSortOrder: undefined,
 			editFilterActive: false,
 			tableData: this.data,
-			filterOpened: {},
-			newFiltersSelected: this.filtersSelected,
 			selectionKeys: {},
 			localSelectionType: "inclusive",
 		};

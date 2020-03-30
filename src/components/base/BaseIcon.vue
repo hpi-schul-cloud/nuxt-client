@@ -37,6 +37,10 @@ export default {
 			default: "currentColor",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		fillColor() {
 			switch (this.source) {

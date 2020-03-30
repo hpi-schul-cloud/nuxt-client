@@ -30,7 +30,7 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 		},
 	});
 
-describe("@components/FormCreateUser", () => {
+describe("@components/organisms/FormCreateUser", () => {
 	it(...isValidComponent(FormCreateUser));
 
 	describe("create", () => {

@@ -1,7 +1,7 @@
 import DatasourceCard from "./DatasourceCard";
 import ExampleImage from "@assets/img/datasources/logo-webuntis.png";
 
-describe("@components/DatasourceCard", () => {
+describe("@components/molecules/DatasourceCard", () => {
 	it(...isValidComponent(DatasourceCard));
 
 	it("renders text props", () => {

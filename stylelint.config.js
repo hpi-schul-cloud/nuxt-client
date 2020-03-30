@@ -9,6 +9,7 @@ module.exports = {
 	// - https://stylelint.io/user-guide/rules/
 	// - https://github.com/kristerkari/stylelint-scss#list-of-rules
 	rules: {
+		"unicode-bom": "never",
 		// enforce variable usage
 		"sh-waqar/declaration-use-variable": [
 			[
