@@ -13,6 +13,9 @@ if (blocks.indexOf('template') !== -1) {
 if (blocks.indexOf('script') !== -1) {
 %><script>
 export default {
+  data() {
+		return {};
+	},
   <% if (blocks.indexOf('template') === -1) {
   %>render(h) {
     return <div/>
