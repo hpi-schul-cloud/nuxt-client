@@ -29,7 +29,7 @@ const checkRendering = (wrapper) => {
 	expect(wrapper.findAll("base-select-stub")).toHaveLength(2);
 };
 
-describe("@components/StepData", () => {
+describe("@components/organisms/CourseWizard/StepData", () => {
 	it(...isValidComponent(StepData));
 
 	it("Check that everything is rendering", () => {

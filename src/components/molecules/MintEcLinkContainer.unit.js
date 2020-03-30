@@ -1,6 +1,6 @@
 import MintEcLinkContainer from "./MintEcLinkContainer";
 
-describe("@components/MintEcLinkContainer", () => {
+describe("@components/molecules/MintEcLinkContainer", () => {
 	it(...isValidComponent(MintEcLinkContainer));
 
 	it("renders image", () => {

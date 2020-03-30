@@ -1,5 +1,5 @@
 import FabIcon from "./FabIcon";
 
-describe("@components/FabIcon", () => {
+describe("@components/molecules/FabIcon", () => {
 	it(...isValidComponent(FabIcon));
 });
