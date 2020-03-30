@@ -15,6 +15,10 @@ export default {
 			default: "var(--space-lg)",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		col() {
 			return `grid-template-columns: repeat(auto-fill, minmax(${this.columnWidth}, 1fr));
