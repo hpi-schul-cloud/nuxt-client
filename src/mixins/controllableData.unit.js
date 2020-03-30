@@ -16,4 +16,7 @@ describe("@mixins/controllableData", () => {
 			});
 		}).toThrow(new Error("props must be an array of string"));
 	});
+	// skipped other tests, because it is already well tested implicitly in the DataTable tests
+	// but they should be added in the future
+	// TODO: write more tests
 });
