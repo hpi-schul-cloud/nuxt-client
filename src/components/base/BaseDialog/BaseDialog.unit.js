@@ -10,7 +10,7 @@ const mountDialog = async (options = {}) => {
 	return wrapper;
 };
 
-describe("@components/BaseDialog", () => {
+describe("@components/base/BaseDialog", () => {
 	it(...isValidComponent(BaseDialog));
 
 	describe("appearance", () => {

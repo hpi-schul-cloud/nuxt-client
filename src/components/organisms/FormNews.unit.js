@@ -60,7 +60,7 @@ const getRouterPushSpy = (wrapper, expects) => {
 	});
 };
 
-describe("@components/FormNews", () => {
+describe("@components/organisms/FormNews", () => {
 	it(...isValidComponent(FormNews));
 
 	it("converts date correctly", async () => {

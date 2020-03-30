@@ -1,6 +1,6 @@
 import MintEcFooter from "./MintEcFooter";
 
-describe("@components/MintEcFooter", () => {
+describe("@components/molecules/MintEcFooter", () => {
 	it(...isValidComponent(MintEcFooter));
 
 	it("chapertes get rendered", () => {
