@@ -121,7 +121,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				currentPage: 1,
 			});
 			wrapper.vm.rowsPerPageProxy = newValue; // simulate write to variable from .sync modifier from child
-			expect(wrapper.vm.localRowsPerPage).toBe(newValue);
+			expect(wrapper.vm.$_localRowsPerPage).toBe(newValue);
 			expect(wrapper.emitted("update:rows-per-page")).toStrictEqual([[20]]);
 		});
 

@@ -23,6 +23,8 @@
 import { getValueByPath } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
 
+import unmanagedSyncPropsMixin from "@mixins/unmanagedSyncProps";
+
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
 
@@ -41,13 +43,36 @@ const eventProxyBlacklist = [
 	"update:rowsPerPage",
 ];
 
+const unmanagedSyncProps = {
+	sortBy: {
+		type: String,
+		default: "",
+	},
+	sortOrder: {
+		type: String,
+		default: "asc",
+		validator: (val) => ["asc", "desc"].includes(val),
+	},
+	currentPage: {
+		type: Number,
+		default: 1,
+	},
+	rowsPerPage: {
+		type: Number,
+		default: 25,
+	},
+};
+
 export default {
 	components: {
 		BackendDataTable,
 	},
+	mixins: [unmanagedSyncPropsMixin(Object.keys(unmanagedSyncProps))],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
+		// props handled by the unmanagedSyncProps mixin
+		...unmanagedSyncProps,
 		/**
 		 * (data, sortBy, sortOrder) => sortedData
 		 */
@@ -66,10 +91,6 @@ export default {
 	},
 	data() {
 		return {
-			localSortBy: undefined,
-			localSortOrder: undefined,
-			localCurrentPage: undefined,
-			localRowsPerPage: undefined,
 			backendTableSelectionIds: this.selection,
 			backendTableSelectionType: "inclusive",
 		};
@@ -105,68 +126,19 @@ export default {
 			if (!this.paginated) {
 				return this.sortedData;
 			}
-			const {
-				currentPageProxy: currentPage,
-				rowsPerPageProxy: rowsPerPage,
-			} = this;
+
+			const currentPage = this.currentPageProxy;
+			const rowsPerPage = this.rowsPerPageProxy;
 			return this.sortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage
 			);
-		},
-		currentPageProxy: {
-			get() {
-				return this.localCurrentPage || this.currentPage;
-			},
-			set(to) {
-				this.localCurrentPage = to;
-				this.$emit("update:current-page", to);
-			},
-		},
-		rowsPerPageProxy: {
-			get() {
-				return this.localRowsPerPage || this.rowsPerPage;
-			},
-			set(to) {
-				this.localRowsPerPage = to;
-				this.$emit("update:rows-per-page", to);
-			},
-		},
-		sortByProxy: {
-			get() {
-				return this.localSortBy || this.sortBy;
-			},
-			set(to) {
-				this.localSortBy = to;
-				this.$emit("update:sort-by", to);
-			},
-		},
-		sortOrderProxy: {
-			get() {
-				return this.localSortOrder || this.sortOrder;
-			},
-			set(to) {
-				this.localSortOrder = to;
-				this.$emit("update:sort-order", to);
-			},
 		},
 		dataIds() {
 			return this.data.map((row) => getValueByPath(row, this.trackBy));
 		},
 	},
 	watch: {
-		currentPage(to) {
-			this.localCurrentPage = to;
-		},
-		rowsPerPage(to) {
-			this.localRowsPerPage = to;
-		},
-		sortBy(to) {
-			this.localSortBy = to;
-		},
-		sortOrder(to) {
-			this.localSortOrder = to;
-		},
 		selection(to) {
 			this.handleParentSelectionUpdate(to);
 		},
