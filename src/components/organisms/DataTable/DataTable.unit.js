@@ -120,8 +120,8 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: oldValue,
 				currentPage: 1,
 			});
-			wrapper.vm.rowsPerPageProxy = newValue; // simulate write to variable from .sync modifier from child
-			expect(wrapper.vm.$_localRowsPerPage).toBe(newValue);
+			wrapper.vm.$_unmanagedSyncRowsPerPage = newValue; // simulate write to variable from .sync modifier from child
+			expect(wrapper.vm.unmanageSyncPropLocalRowsPerPage).toBe(newValue);
 			expect(wrapper.emitted("update:rows-per-page")).toStrictEqual([[20]]);
 		});
 

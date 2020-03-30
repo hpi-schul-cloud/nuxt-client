@@ -16,6 +16,9 @@ const camelCaseToKebapCase = (string) => {
 		.toLowerCase();
 };
 
+// can not start with $ or _ because of Vue restrictions
+const localDataPrefix = "unmanageSyncPropLocal";
+
 /**
  * defines a computed Property `$_unmanagedSync${upperCaseFirstChar(prop)}` for each given prop.
  * This computed property acts like a local variable from the data attribute,
@@ -36,17 +39,19 @@ export default (props = []) => {
 	return {
 		data() {
 			return props.reduce((data, prop) => {
-				data[`$_local${upperCaseFirstChar(prop)}`] = undefined;
+				data[`${localDataPrefix}${upperCaseFirstChar(prop)}`] = undefined;
 				return data;
 			}, {});
 		},
 		computed: props.reduce((computed, prop) => {
 			computed[`$_unmanagedSync${upperCaseFirstChar(prop)}`] = {
 				get() {
-					return this[`$_local${upperCaseFirstChar(prop)}`] || this[prop];
+					return (
+						this[`${localDataPrefix}${upperCaseFirstChar(prop)}`] || this[prop]
+					);
 				},
 				set(to) {
-					this[`$_local${upperCaseFirstChar(prop)}`] = to;
+					this.$set(this, `${localDataPrefix}${upperCaseFirstChar(prop)}`, to);
 					this.$emit(`update:${camelCaseToKebapCase(prop)}`, to);
 				},
 			};
@@ -54,7 +59,7 @@ export default (props = []) => {
 		}, {}),
 		watch: props.reduce((watcher, prop) => {
 			watcher[prop] = function (to) {
-				this[`$_local${upperCaseFirstChar(prop)}`] = to;
+				this[`${localDataPrefix}${upperCaseFirstChar(prop)}`] = to;
 			};
 			return watcher;
 		}, {}),
