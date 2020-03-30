@@ -67,14 +67,14 @@ import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 
-import controllableDataMixin from "@mixins/controllableData";
+import controllableData from "@mixins/controllableData";
 
 export default {
 	components: {
 		Pagination,
 		RowSelectionBar,
 	},
-	mixins: [controllableDataMixin(["sortBy", "sortOrder", "selectionType"])],
+	mixins: [controllableData(["sortBy", "sortOrder", "selectionType"])],
 	props: {
 		/**
 		 * Defines the visible columns

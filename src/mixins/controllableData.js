@@ -27,16 +27,14 @@ export default (props) => {
 	return {
 		data() {
 			return props.reduce((data, prop) => {
-				data[`${localDataPrefix}${upperCaseFirstChar(prop)}`] = undefined;
+				data[`${localDataPrefix}${upperCaseFirstChar(prop)}`] = this[prop];
 				return data;
 			}, {});
 		},
 		computed: props.reduce((computed, prop) => {
 			computed[`$_controllableData${upperCaseFirstChar(prop)}`] = {
 				get() {
-					return (
-						this[`${localDataPrefix}${upperCaseFirstChar(prop)}`] || this[prop]
-					);
+					return this[`${localDataPrefix}${upperCaseFirstChar(prop)}`];
 				},
 				set(to) {
 					this.$set(this, `${localDataPrefix}${upperCaseFirstChar(prop)}`, to);
@@ -46,11 +44,8 @@ export default (props) => {
 			return computed;
 		}, {}),
 		watch: props.reduce((watcher, prop) => {
-			watcher[prop] = {
-				handler: function (to) {
-					this[`${localDataPrefix}${upperCaseFirstChar(prop)}`] = to;
-				},
-				immediate: true,
+			watcher[prop] = function (to) {
+				this[`${localDataPrefix}${upperCaseFirstChar(prop)}`] = to;
 			};
 			return watcher;
 		}, {}),

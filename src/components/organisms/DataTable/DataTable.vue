@@ -23,7 +23,7 @@
 import { getValueByPath } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
 
-import controllableDataMixin from "@mixins/controllableData";
+import controllableData from "@mixins/controllableData";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
@@ -43,7 +43,7 @@ const eventProxyBlacklist = [
 	"update:rowsPerPage",
 ];
 
-const controllableData = {
+const controllableDataProps = {
 	sortBy: {
 		type: String,
 		default: "",
@@ -67,12 +67,12 @@ export default {
 	components: {
 		BackendDataTable,
 	},
-	mixins: [controllableDataMixin(Object.keys(controllableData))],
+	mixins: [controllableData(Object.keys(controllableDataProps))],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
 		// props handled by the controllableData mixin
-		...controllableData,
+		...controllableDataProps,
 		/**
 		 * (data, sortBy, sortOrder) => sortedData
 		 */
