@@ -4,6 +4,8 @@
 
 If you want to provide a prop named `A` that will eventually be updated with an `$emit` to control some kind of behaviour of your component, but do not want to enforce that the parent sets the `.sync` modifier you need a fair amount of hacking.
 
+> "The problem is that sometimes you have a prop that you want to follow, but don't want to force the user of the component to use it. If your component now has code that needs to update this prop per event, nothing will work anymore, because the parent component will not react to these events. He does not even use the prop. If you use the here explained approach, this use-case is enabled and the rule is: if prop is there, then take it into account. If not, then everything still works." -- <cite>[Adrian Jost](https://github.com/adrianjost)</cite>
+
 Example:
 
 ```vue
