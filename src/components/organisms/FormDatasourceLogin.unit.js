@@ -68,7 +68,7 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 		},
 	});
 
-describe("@components/FormDatasourceLogin", () => {
+describe("@components/organisms/FormDatasourceLogin", () => {
 	it(...isValidComponent(FormDatasourceLogin));
 
 	it("converts date correctly", async () => {

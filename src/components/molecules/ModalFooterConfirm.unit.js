@@ -10,7 +10,7 @@ const button = {
 	components: { ModalFooterConfirm },
 };
 
-describe("@components/ModalFooterConfirm", () => {
+describe("@components/molecules/ModalFooterConfirm", () => {
 	it(
 		...isValidComponent(ModalFooterConfirm, {
 			propsData: {

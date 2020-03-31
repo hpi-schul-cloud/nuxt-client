@@ -11,7 +11,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
+};
 </script>
 
 <style lang="scss" scoped>

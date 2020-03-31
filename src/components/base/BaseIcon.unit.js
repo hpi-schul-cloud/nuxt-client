@@ -1,6 +1,6 @@
 import BaseIcon from "./BaseIcon";
 
-describe("@components/BaseIcon", () => {
+describe("@components/base/BaseIcon", () => {
 	it(...isValidComponent(BaseIcon));
 
 	it("can render fontawesome icons", () => {
