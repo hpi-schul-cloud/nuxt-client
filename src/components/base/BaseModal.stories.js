@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, color, select } from "@storybook/addon-knobs";
+import { text, color, select, boolean, number } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
 import BaseButton from "@basecomponents/BaseButton";
@@ -12,6 +12,7 @@ import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import ModalFooterBorder from "@components/molecules/ModalFooterBorder";
 import ModalFooter from "@components/molecules/ModalFooter";
 import LoadingModal from "@components/molecules/LoadingModal";
+import AutoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 
 storiesOf("4 Base UI Components/Modals", module)
 	.addParameters({
@@ -193,5 +194,23 @@ storiesOf("4 Base UI Components/Modals", module)
 				"description",
 				"Dies kann bis zu einer Minute dauern. Wir bitten um etwas Geduld…"
 			),
+		}),
+	}))
+	.add("Autologout Warning", () => ({
+		components: { AutoLogoutWarning },
+		template: `<div :class="$store.state.autoLogout" id="test">
+		<base-button @click="
+						$store.commit('autoLogout/setActive', {active: true, error });
+						$store.commit('autoLogout/setRemainingTimeInSeconds', remainingTimeInSeconds);
+		">
+			Open Modal
+		</base-button> <br />
+			(When using knobs, click "Open Modal" to apply changes)
+			<AutoLogoutWarning />
+		</div>`,
+		data: () => ({
+			active: true,
+			error: boolean("error", false),
+			remainingTimeInSeconds: number("Remaining time in seconds", 7200),
 		}),
 	}));

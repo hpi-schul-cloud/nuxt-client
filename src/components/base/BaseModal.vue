@@ -74,6 +74,7 @@ export default {
 	},
 	methods: {
 		handleBackgroundClick() {
+			this.$emit("onBackdropClick");
 			this.close();
 		},
 		close() {
