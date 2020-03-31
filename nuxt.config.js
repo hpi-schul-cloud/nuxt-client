@@ -90,6 +90,7 @@ module.exports = {
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
+		"@plugins/eventBus",
 	],
 
 	/*
