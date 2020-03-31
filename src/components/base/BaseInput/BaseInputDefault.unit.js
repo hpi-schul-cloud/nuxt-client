@@ -10,7 +10,7 @@ function getMock(type, attributes) {
 	});
 }
 
-describe("@components/BaseInputDefault", () => {
+describe("@components/base/BaseInputDefault", () => {
 	it("input has correct type", () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = getMock(type);

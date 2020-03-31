@@ -78,30 +78,32 @@ export default {
 			default: "Pro Seite",
 		},
 	},
-	data: () => ({
-		perPageOptions: [
-			{
-				label: "5 pro Seite",
-				value: 5,
-			},
-			{
-				label: "10 pro Seite",
-				value: 10,
-			},
-			{
-				label: "25 pro Seite",
-				value: 25,
-			},
-			{
-				label: "50 pro Seite",
-				value: 50,
-			},
-			{
-				label: "100 pro Seite",
-				value: 100,
-			},
-		],
-	}),
+	data() {
+		return {
+			perPageOptions: [
+				{
+					label: "5 pro Seite",
+					value: 5,
+				},
+				{
+					label: "10 pro Seite",
+					value: 10,
+				},
+				{
+					label: "25 pro Seite",
+					value: 25,
+				},
+				{
+					label: "50 pro Seite",
+					value: 50,
+				},
+				{
+					label: "100 pro Seite",
+					value: 100,
+				},
+			],
+		};
+	},
 	computed: {
 		perPageSelected() {
 			return {

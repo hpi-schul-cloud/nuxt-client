@@ -43,6 +43,10 @@ export default {
 			type: Boolean,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		attributes() {
 			return this.noControls ? this.$attrs : { controls: true, ...this.$attrs };

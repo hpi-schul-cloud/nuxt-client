@@ -19,7 +19,7 @@ function getMock(options = {}) {
 	});
 }
 
-describe("@components/BaseTextarea", () => {
+describe("@components/molecules/BaseTextarea", () => {
 	it(...isValidComponent(TextEditor));
 
 	// TODO:

@@ -57,6 +57,10 @@ export default {
 		labelHidden: Boolean,
 		showUndefinedState: Boolean,
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		isChecked() {
 			return Array.isArray(this.vmodel)
