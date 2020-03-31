@@ -3,7 +3,7 @@ name: Test
 on: [push]
 
 jobs:
-  test-unit:
+  unit:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -39,7 +39,7 @@ jobs:
         if: failure() && matrix.os == 'ubuntu-latest'
         with:
           commit_message: npm run lint
-  test-screenshot:
+  screenshot:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -54,6 +54,17 @@ jobs:
         with:
           name: screenshot-diff
           path: tests/screenshot/__image_snapshots__/__diff_output__
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: execute tests
+        run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/develop/scripts/ci/fetch.github.sh" | bash
+      - uses: actions/upload-artifact@v1
+        name: upload results
+        if: always()
+        with:
+          name: report
+          path: integration-tests/reports
   # build:
   #   strategy:
   #     matrix:
