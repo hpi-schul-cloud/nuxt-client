@@ -43,36 +43,17 @@ const eventProxyBlacklist = [
 	"update:rowsPerPage",
 ];
 
-const controllableDataProps = {
-	sortBy: {
-		type: String,
-		default: "",
-	},
-	sortOrder: {
-		type: String,
-		default: "asc",
-		validator: (val) => ["asc", "desc"].includes(val),
-	},
-	currentPage: {
-		type: Number,
-		default: 1,
-	},
-	rowsPerPage: {
-		type: Number,
-		default: 25,
-	},
-};
-
 export default {
 	components: {
 		BackendDataTable,
 	},
-	mixins: [controllableData(Object.keys(controllableDataProps))],
+	mixins: [
+		// the following props are inherited from BackendDataTable, so they are not explicitly defined again
+		controllableData(["sortBy", "sortOrder", "currentPage", "rowsPerPage"]),
+	],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
-		// props handled by the controllableData mixin
-		...controllableDataProps,
 		/**
 		 * (data, sortBy, sortOrder) => sortedData
 		 */
