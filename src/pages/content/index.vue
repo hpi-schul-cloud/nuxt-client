@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
+		<div v-if="$_scrollY > backToTopScrollYLimit" class="content__back-to-top">
 			<fab-floating
 				:primary-action="{
 					icon: 'arrow_drop_up',
@@ -99,9 +99,9 @@ export default {
 		},
 	},
 	watch: {
-		bottom(bottom) {
+		$_bottom($_bottom) {
 			const { skip, total } = this.resources;
-			if (bottom && !this.loading && skip < total) {
+			if ($_bottom && !this.loading && skip < total) {
 				this.addContent();
 			}
 		},

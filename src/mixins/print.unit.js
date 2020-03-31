@@ -1,4 +1,4 @@
-import print from "@mixins/print";
+import print from "./print";
 
 const getNewWindowMock = () => {
 	let content = "";
