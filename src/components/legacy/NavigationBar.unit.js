@@ -1,7 +1,7 @@
 import NavigationBar from "./NavigationBar";
 import BaseLink from "@components/base/BaseLink";
 
-describe("@components/NavigationBar", () => {
+describe("@components/legacy/NavigationBar", () => {
 	it(...isValidComponent(NavigationBar));
 
 	it("links get rendered", () => {

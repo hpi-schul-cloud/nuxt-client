@@ -1,7 +1,7 @@
 import BaseSelect from "./BaseSelect";
 import MultiSelect from "vue-multiselect";
 
-describe("@components/BaseSelect", () => {
+describe("@components/base/BaseSelect", () => {
 	it(...isValidComponent(BaseSelect));
 
 	it("render component", () => {

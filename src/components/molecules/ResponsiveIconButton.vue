@@ -49,7 +49,10 @@ export default {
 			default: "currentColor",
 		},
 	},
-
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		buttonDesign() {
 			return this.isMobile ? `${this.design} icon`.trim() : this.design;
