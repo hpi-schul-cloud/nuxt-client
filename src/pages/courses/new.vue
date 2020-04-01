@@ -13,6 +13,7 @@
 </template>
 
 <script>
+// TODO: page is currently broken and does not render :(
 import { mapGetters } from "vuex";
 import CourseWizard from "@components/organisms/CourseWizard";
 

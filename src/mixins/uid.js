@@ -1,9 +1,7 @@
 let uid = 0;
 
-const uidMixin = {
+export default {
 	beforeCreate() {
 		this.$uid = ++uid;
 	},
 };
-
-export default uidMixin;
