@@ -1,10 +1,11 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
-import { inputs, layouts } from "vue-filter-ui";
+import { layouts } from "vue-filter-ui";
 import InputCheckbox from "@components/organisms/DataFilter/InputCheckbox";
 import InputText from "@components/organisms/DataFilter/InputText";
 import InputDate from "@components/organisms/DataFilter/InputDate";
 import InputNumber from "@components/organisms/DataFilter/InputNumber";
+import InputRadio from "@components/organisms/DataFilter/InputRadio";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
@@ -84,7 +85,7 @@ const tableFilters = [
 			{
 				attribute: "$limit",
 				operator: "<",
-				input: inputs.Radio,
+				input: InputRadio,
 				options: [
 					{ value: 25, label: "25" },
 					{ value: 50, label: "50" },
