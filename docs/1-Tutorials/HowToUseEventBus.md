@@ -8,7 +8,7 @@ In this document you will find how to use the EventBus. But first make sure that
 
 Since these events are global, and can therefore be subscribe to by any component. We need to make sure, that we do not have event identifiers of the same name. This could otherwise cause unpredictable behavior or unexpected bugs.
 
-To ensure this, we use the following naming scheme: <br /> `eventName@component` whereby 'component' is the component that emits the event If more than one component emits an event, use: `eventName@global`
+To ensure this, we use the following naming scheme: <br /> `eventName@component` whereby 'component' is the component that emits the event. If more than one component emits an event, use: `eventName@global`
 
 ## How to emit events
 
