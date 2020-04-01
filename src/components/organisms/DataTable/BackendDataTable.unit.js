@@ -109,14 +109,14 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			otherSortButton.trigger("click");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.emittedByOrder()).toStrictEqual([
-				{ args: ["firstName"], name: "update:sortBy" },
-				{ args: ["asc"], name: "update:sortOrder" },
-				{ args: ["firstName"], name: "update:sortBy" },
-				{ args: ["desc"], name: "update:sortOrder" },
-				{ args: ["firstName"], name: "update:sortBy" },
-				{ args: ["asc"], name: "update:sortOrder" },
-				{ args: ["address.city"], name: "update:sortBy" },
-				{ args: ["asc"], name: "update:sortOrder" },
+				{ args: ["firstName"], name: "update:sort-by" },
+				{ args: ["asc"], name: "update:sort-order" },
+				{ args: ["firstName"], name: "update:sort-by" },
+				{ args: ["desc"], name: "update:sort-order" },
+				{ args: ["firstName"], name: "update:sort-by" },
+				{ args: ["asc"], name: "update:sort-order" },
+				{ args: ["address.city"], name: "update:sort-by" },
+				{ args: ["asc"], name: "update:sort-order" },
 			]);
 		});
 
