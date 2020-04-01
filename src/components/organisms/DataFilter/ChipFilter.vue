@@ -1,6 +1,6 @@
 <template>
 	<div class="chips">
-		<div
+		<button
 			v-for="chip in chips"
 			:key="chip.id"
 			tab-index="0"
@@ -26,7 +26,7 @@
 					:fill="color"
 				/>
 			</button>
-		</div>
+		</button>
 	</div>
 </template>
 
@@ -74,7 +74,7 @@ $transition: all 0.15s ease-in-out;
 	&.is-deletable {
 		padding-right: var(--space-xs);
 	}
-	&:focus &:hover {
+	&:hover {
 		color: var(--color-white);
 		background: var(--color-gray);
 	}

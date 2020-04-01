@@ -6,7 +6,7 @@
 				<base-input
 					v-model="vmodelProxy"
 					type="radio"
-					:name="option.value"
+					:name="$ui"
 					:value="option.value"
 					:label="option.label"
 				/>
@@ -16,7 +16,10 @@
 </template>
 
 <script>
+import uid from "@mixins/uid";
+
 export default {
+	mixins: [uid],
 	props: {
 		label: {
 			type: String,
