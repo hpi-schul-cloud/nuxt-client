@@ -28,7 +28,7 @@
 					<base-icon
 						source="material"
 						icon="check"
-						color="var(--color-warning)"
+						color="var(--color-success)"
 					/>
 				</span>
 				<span v-else-if="data && data.consentStatus === 'missing'">
