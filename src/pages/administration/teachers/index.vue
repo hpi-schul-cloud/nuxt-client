@@ -185,7 +185,7 @@ export default {
 			icons: [
 				{
 					icon: "check",
-					color: "var(--color-warning)",
+					color: "var(--color-success)",
 					label: this.$t("pages.administration.teachers.legend.icon.warning"),
 				},
 				{
