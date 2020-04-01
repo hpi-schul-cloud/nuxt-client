@@ -47,7 +47,7 @@
 				</span>
 				<span v-else />
 			</template>
-			<template v-slot:datacolumn-_id="{ data }">
+			<template v-if="schoolInternallyManaged" v-slot:datacolumn-_id="{ data }">
 				<base-button
 					design="text icon"
 					size="small"
@@ -57,8 +57,12 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
+		<admin-table-legend
+			:icons="icons"
+			:show-external-sync-hint="!schoolInternallyManaged"
+		/>
 		<fab-floating
+			v-if="schoolInternallyManaged"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -213,6 +217,9 @@ export default {
 		};
 	},
 	computed: {
+		...mapState("auth", {
+			school: "school",
+		}),
 		...mapGetters("users", {
 			students: "list",
 		}),
@@ -220,6 +227,9 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
+		schoolInternallyManaged() {
+			return !this.school.ldapSchoolIdentifier && !this.school.source;
+		},
 	},
 	created(ctx) {
 		this.find();
