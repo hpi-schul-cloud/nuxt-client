@@ -20,6 +20,9 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-classes="{ data }">
+				<span v-for="c in data" :key="c"> {{ c }} </span>
+			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
 			</template>
@@ -175,6 +178,10 @@ export default {
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
+				},
+				{
+					field: "classes",
+					label: this.$t("common.labels.classes"),
 				},
 				{
 					field: "consent",
