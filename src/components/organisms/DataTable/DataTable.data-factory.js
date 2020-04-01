@@ -1,6 +1,10 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
 import { inputs, layouts } from "vue-filter-ui";
+import InputCheckbox from "@components/organisms/DataFilter/InputCheckbox";
+import InputText from "@components/organisms/DataFilter/InputText";
+import InputDate from "@components/organisms/DataFilter/InputDate";
+import InputNumber from "@components/organisms/DataFilter/InputNumber";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
@@ -98,7 +102,8 @@ const tableFilters = [
 				attribute: "age",
 				applyNegated: true,
 				operator: "<=",
-				input: inputs.InputNumber,
+				input: InputNumber,
+				options: [{ placeholder: "Nach Alter filtern...", label: "Alter" }],
 			},
 		],
 	},
@@ -110,7 +115,8 @@ const tableFilters = [
 			{
 				attribute: "birthday",
 				operator: "=",
-				input: inputs.InputNumber,
+				input: InputDate,
+				options: [{ placeholder: "29.3.2004", label: "Geburtstag" }],
 			},
 		],
 	},
@@ -121,7 +127,7 @@ const tableFilters = [
 			{
 				attribute: "agreed",
 				operator: "=",
-				input: inputs.Radio,
+				input: InputCheckbox,
 				options: [
 					{ value: true, label: "Einverständniserklärung vorhanden" },
 					{ value: false, label: "Keine Einverständniserklärung" },
@@ -136,7 +142,8 @@ const tableFilters = [
 			{
 				attribute: "firstName",
 				operator: "includes",
-				input: inputs.InputText,
+				input: InputText,
+				options: [{ placeholder: "Nach Name filter...", label: "Name" }],
 			},
 		],
 	},

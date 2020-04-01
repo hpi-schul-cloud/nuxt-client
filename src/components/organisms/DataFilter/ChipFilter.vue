@@ -77,7 +77,7 @@ $transition: all 0.15s ease-in-out;
 	&:focus,
 	&:hover {
 		color: var(--color-white);
-		background: var(--color-tertiary);
+		background: var(--color-gray);
 	}
 	.btn-delete {
 		display: flex;

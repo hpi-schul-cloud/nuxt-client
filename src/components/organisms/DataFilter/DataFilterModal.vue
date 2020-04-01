@@ -8,6 +8,11 @@
 		</template>
 		<template v-slot:footer>
 			<modal-footer>
+				<template v-slot:left>
+					<base-button design="text" @click="$emit('remove')">
+						{{ labelRemove }}
+					</base-button>
+				</template>
 				<template v-slot:right>
 					<base-button design="text" @click="$emit('cancle')">
 						{{ labelCancle }}
