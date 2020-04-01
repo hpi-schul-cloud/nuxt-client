@@ -143,7 +143,7 @@ const tableFilters = [
 				attribute: "firstName",
 				operator: "includes",
 				input: InputText,
-				options: [{ placeholder: "Nach Name filter...", label: "Name" }],
+				options: [{ placeholder: "Nach Name filtern...", label: "Name" }],
 			},
 		],
 	},
