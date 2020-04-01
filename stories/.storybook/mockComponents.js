@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import "@plugins/global";
+import "@plugins/eventBus";
 
 // Toasts
 import Toasted from "vue-toasted";

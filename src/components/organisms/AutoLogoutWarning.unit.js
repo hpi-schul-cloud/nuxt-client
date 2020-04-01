@@ -38,7 +38,7 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 	};
 
 	const setShowToast = (value) => {
-		wrapper.vm.$store.state.autoLogout.showToast = value;
+		wrapper.vm.$bus.$emit("showToast@autologout", value);
 	};
 
 	beforeAll(() => {
@@ -69,6 +69,8 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(2);
 		wrapper.vm.$store.state.autoLogout.remainingTimeInSeconds = 100;
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(1);
+		wrapper.vm.$store.state.autoLogout.remainingTimeInSeconds = -999;
+		expect(wrapper.vm.remainingTimeInMinutes).toBe(0);
 	});
 
 	describe("Extend secession", () => {
@@ -85,42 +87,33 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 
-			expect(wrapper.vm.$store.state.autoLogout.showToast).toBeNull();
-
 			setShowToast(toast.success);
 			await wrapper.vm.$nextTick();
 
 			expect(toastStubs.success.mock.calls).toHaveLength(1);
 			expect(toastStubs.error.mock.calls).toHaveLength(0);
-			setShowToast(null);
 		});
 
 		it("show retry error toast on showToast change", async () => {
 			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 
-			expect(wrapper.vm.$store.state.autoLogout.showToast).toBeNull();
-
 			setShowToast(toast.error);
 			await wrapper.vm.$nextTick();
 
 			expect(toastStubs.success.mock.calls).toHaveLength(0);
 			expect(toastStubs.error.mock.calls).toHaveLength(1);
-			setShowToast(null);
 		});
 
 		it("show 401 error toast on showToast change", async () => {
 			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 
-			expect(wrapper.vm.$store.state.autoLogout.showToast).toBeNull();
-
 			setShowToast(toast.error401);
 			await wrapper.vm.$nextTick();
 
 			expect(toastStubs.success.mock.calls).toHaveLength(0);
 			expect(toastStubs.error.mock.calls).toHaveLength(1);
-			setShowToast(null);
 		});
 	});
 });

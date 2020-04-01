@@ -27,6 +27,7 @@ Vue.config.productionTip = false;
 
 import "@plugins/global";
 import { mountBaseComponents } from "@basecomponents/_globals";
+import "@plugins/eventBus";
 
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 
