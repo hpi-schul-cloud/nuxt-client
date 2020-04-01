@@ -62,21 +62,23 @@ $transition: all 0.15s ease-in-out;
 	margin-right: var(--space-sm);
 	font-size: var(--text-sm);
 	line-height: var(--line-height);
+	color: var(--color-white);
 	white-space: nowrap;
 	cursor: pointer;
-	background-color: var(--color-gray-light);
-	border: 1px var(--color-gray);
+	background-color: var(--color-tertiary);
+	border: 1px var(--color-tertiary);
 	border-radius: var(--radius-round);
 	transition: $transition;
 	&:last-of-type {
 		margin-right: 0;
 	}
 	&.is-deletable {
-		padding-right: var(--space-xs);
+		padding-right: var(--space-xs-2);
 	}
 	&:hover {
 		color: var(--color-white);
-		background: var(--color-gray);
+		background: var(--color-tertiary-dark);
+		border: 1px var(--color-tertiary-dark);
 	}
 	.btn-delete {
 		display: flex;
