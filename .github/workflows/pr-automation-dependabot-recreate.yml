@@ -2,7 +2,7 @@ name: PR Automation
 
 on:
   pull_request:
-    types: ["labeled", "synchronize"]
+    types: ["edited", "labeled", "synchronize"]
 
 jobs:
   dependabot_recreate:
