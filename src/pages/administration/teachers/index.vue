@@ -26,16 +26,9 @@
 			<template v-slot:datacolumn-consent="{ data }">
 				<span v-if="data && data.consentStatus === 'ok'">
 					<base-icon
-						source="custom"
-						icon="doublecheck"
-						color="var(--color-success)"
-					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'teachersAgreed'">
-					<base-icon
 						source="material"
 						icon="check"
-						color="var(--color-warning)"
+						color="var(--color-success)"
 					/>
 				</span>
 				<span v-else-if="data && data.consentStatus === 'missing'">
@@ -191,15 +184,9 @@ export default {
 			],
 			icons: [
 				{
-					icon: "doublecheck",
-					color: "var(--color-success)",
-					style: "margin: -3px 3px",
-					label: this.$t("pages.administration.students.legend.icon.success"),
-				},
-				{
 					icon: "check",
-					color: "var(--color-warning)",
-					label: this.$t("pages.administration.teachers.legend.icon.warning"),
+					color: "var(--color-success)",
+					label: this.$t("pages.administration.teachers.legend.icon.check"),
 				},
 				{
 					icon: "clear",
