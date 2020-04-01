@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: dependabot recreate PR
-        if: "contains(github.event.pull_request.user.login, 'dependabot') && contains(github.event.pull_request.labels.*.name, 'has conflicts')"
+        if: "contains(github.event.pull_request.user.login, 'dependabot') && github.event.pull_request.mergeable_state == 'dirty'"
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
