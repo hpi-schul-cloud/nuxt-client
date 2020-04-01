@@ -1,6 +1,6 @@
 import LegacyFooter from "./LegacyFooter";
 
-describe("@components/LegacyFooter", () => {
+describe("@components/legacy/LegacyFooter", () => {
 	it(...isValidComponent(LegacyFooter));
 
 	it("links get rendered", () => {

@@ -1,6 +1,6 @@
 import ResponsiveIconButton from "./ResponsiveIconButton";
 
-describe("@components/ResponsiveIconButton", () => {
+describe("@components/molecules/ResponsiveIconButton", () => {
 	it(...isValidComponent(ResponsiveIconButton));
 
 	it("Renders a button with an icon", () => {

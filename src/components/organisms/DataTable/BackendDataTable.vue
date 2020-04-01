@@ -156,8 +156,6 @@ export default {
 		actions: {
 			type: Array,
 			default: () => [],
-			validator: (actions) =>
-				actions.every((action) => typeof action.action === "function"),
 		},
 
 		sortBy: {

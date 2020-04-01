@@ -1,6 +1,6 @@
 import BaseContentContainer from "./BaseContentContainer";
 
-describe("@components/BaseContentContainer", () => {
+describe("@components/base/BaseContentContainer", () => {
 	it(...isValidComponent(BaseContentContainer));
 	it(...rendersSlotContent(BaseContentContainer));
 

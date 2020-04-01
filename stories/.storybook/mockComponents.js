@@ -1,4 +1,5 @@
 import Vue from "vue";
+import Vuex from "vuex";
 
 import "@plugins/global";
 
@@ -38,3 +39,5 @@ const mockComponents = {
 Object.keys(mockComponents).forEach((componentName) =>
 	mockComponent(componentName, mockComponents[componentName])
 );
+
+Vue.use(Vuex);

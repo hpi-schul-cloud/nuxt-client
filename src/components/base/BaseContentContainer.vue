@@ -14,6 +14,10 @@ export default {
 			validator: (size) => ["small", "medium", "large"].includes(size),
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	render(create_element) {
 		return create_element(
 			this.tag,

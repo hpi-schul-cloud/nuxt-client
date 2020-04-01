@@ -26,7 +26,7 @@ const getWrapper = (options = {}) =>
 		)
 	);
 
-describe("@components/CardContextMenu", () => {
+describe("@components/molecules/CardContextMenu", () => {
 	it(...isValidComponent(ContextMenu));
 
 	it("Renders all action buttons", () => {
