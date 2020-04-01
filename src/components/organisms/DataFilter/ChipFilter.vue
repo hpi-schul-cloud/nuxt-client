@@ -74,8 +74,7 @@ $transition: all 0.15s ease-in-out;
 	&.is-deletable {
 		padding-right: var(--space-xs);
 	}
-	&:focus,
-	&:hover {
+	&:focus &:hover {
 		color: var(--color-white);
 		background: var(--color-gray);
 	}
@@ -83,11 +82,12 @@ $transition: all 0.15s ease-in-out;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 20px;
-		height: 20px;
+		width: 25px;
+		height: 25px;
 		padding: var(--space-xs-4);
 		margin: 0;
 		margin-left: var(--space-sm);
+		cursor: pointer;
 		background-color: var(--color-gray-light);
 		border: none;
 		border-radius: var(--radius-round);

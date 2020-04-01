@@ -9,7 +9,7 @@
 		<template v-slot:footer>
 			<modal-footer>
 				<template v-slot:left>
-					<base-button design="text" @click="$emit('remove')">
+					<base-button class="btn-left" design="text" @click="$emit('remove')">
 						{{ labelRemove }}
 					</base-button>
 				</template>
@@ -41,3 +41,14 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@styles";
+
+.btn-left {
+	margin: 0 var(--space-md);
+
+	@include breakpoint(tablet) {
+		margin: 0;
+	}
+}
+</style>
