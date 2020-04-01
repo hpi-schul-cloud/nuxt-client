@@ -64,7 +64,7 @@ export default {
 		...mapState("autoLogout", ["active", "error", "remainingTimeInSeconds"]),
 	},
 	created(ctx) {
-		this.$store.dispatch("autoLogout/init", this.$bus, { root: true });
+		this.$store.dispatch("autoLogout/init", this.$eventBus, { root: true });
 	},
 	beforeDestroy() {
 		//underneath is only necessary in a single page application

@@ -38,7 +38,7 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 	};
 
 	const setShowToast = (value) => {
-		wrapper.vm.$bus.$emit("showToast@autologout", value);
+		wrapper.vm.$eventBus.$emit("showToast@autologout", value);
 	};
 
 	beforeAll(() => {
