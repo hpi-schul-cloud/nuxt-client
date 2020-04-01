@@ -1,19 +1,20 @@
 name: PR Automation
 
 on:
-  pull_request:
-    types: ["edited", "labeled", "synchronize"]
+  issues:
+    types: [labeled]
 
 jobs:
   dependabot_recreate:
     name: "@dependabot recreate"
-    if: contains(github.event.pull_request.user.login, 'dependabot') && contains(github.event.pull_request.labels.*.name, 'has conflicts')
     runs-on: ubuntu-latest
     steps:
-      - name: dependabot recreate PR
-        uses: unsplash/comment-on-pr@master
+      - uses: actions/checkout@v2
+        if: "contains(github.event.issue.user.login, 'dependabot') && contains(github.event.issue.labels.*.name, 'has conflicts')"
+      - name: comment dependabot recreate PR
+        if: "contains(github.event.issue.user.login, 'dependabot') && contains(github.event.issue.labels.*.name, 'has conflicts')"
+        uses: actions/github@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
         with:
-          msg: "@dependabot recreate"
-          check_for_duplicate_msg: false
+          args: comment '@dependabot recreate'
