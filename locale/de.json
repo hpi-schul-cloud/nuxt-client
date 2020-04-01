@@ -157,7 +157,7 @@
 	"pages.administration.teachers.index.tableActions.delete": "Löschen",
 	"pages.administration.teachers.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
 	"pages.administration.teachers.index.tableActions.qr": "Registrierungslinks als QR-Code ausdrucken",
-	"pages.administration.teachers.legend.icon.warning": "Alle Zustimmungen vorhanden",
+	"pages.administration.teachers.legend.icon.check": "Alle Zustimmungen vorhanden",
 	"pages.content.empty_state.error.message": "Wir konnten leider nichts finden, bitte suche erneut.",
 	"pages.content.empty_state.error.oops": "Oops",
 	"pages.content.index.search_for": "Suche nach …",
