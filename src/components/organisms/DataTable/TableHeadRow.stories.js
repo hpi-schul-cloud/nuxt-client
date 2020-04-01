@@ -20,14 +20,14 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 			template: `<table width="100%">
 				<TableHeadRow
 					:allRowsSelectable="allRowsSelectable"
-					@update:currentPageSelectionState="onUpdateCurrentPageSelectionState"
+					@update:current-page-selection-state="onUpdateCurrentPageSelectionState"
 					:currentPageSelectionState.sync="currentPageSelectionState"
 					:columns="columns"
 					:sortBy.sync="sortBy"
 					:sortOrder.sync="sortOrder"
 					@update:sort="onUpdateSort"
-					@update:sortBy="onUpdateSortBy"
-					@update:sortOrder="onUpdateSortOrder"
+					@update:sort-by="onUpdateSortBy"
+					@update:sort-order="onUpdateSortOrder"
 				/>
 			</table>`,
 			data: () => ({
@@ -47,11 +47,11 @@ storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 			}),
 			methods: {
 				onUpdateCurrentPageSelectionState: action(
-					"@update:currentPageSelectionState"
+					"@update:current-page-selection-state"
 				),
 				onUpdateSort: action("@update:sort"),
-				onUpdateSortBy: action("@update:sortBy"),
-				onUpdateSortOrder: action("@update:sortOrder"),
+				onUpdateSortBy: action("@update:sort-by"),
+				onUpdateSortOrder: action("@update:sort-order"),
 			},
 		};
 	}

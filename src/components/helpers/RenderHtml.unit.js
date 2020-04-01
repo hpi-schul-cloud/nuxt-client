@@ -1,6 +1,6 @@
 import RenderHtml from "./RenderHtml";
 
-describe("@components/RenderHtml", () => {
+describe("@components/helpers/RenderHtml", () => {
 	it(...isValidComponent(RenderHtml));
 
 	it("renders plain html", async () => {

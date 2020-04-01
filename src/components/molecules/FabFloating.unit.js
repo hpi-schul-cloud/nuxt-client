@@ -20,7 +20,7 @@ const bottomRightFab = {
 	template: `<fab-floating position="bottom-right" />`,
 };
 
-describe("@components/FabFloating", () => {
+describe("@components/molecules/FabFloating", () => {
 	it(...isValidComponent(FabFloating));
 
 	it("Renders a default fab", () => {

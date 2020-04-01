@@ -1,6 +1,6 @@
 import PopupIconInitials from "./PopupIconInitials";
 
-describe("@components/BaseIcon", () => {
+describe("@components/legacy/BaseIcon", () => {
 	it(...isValidComponent(PopupIconInitials));
 	it(...rendersSlotContent(PopupIconInitials));
 

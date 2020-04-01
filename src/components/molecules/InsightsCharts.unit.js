@@ -43,7 +43,7 @@ const testData = {
 	],
 };
 
-describe("@components/InsightsCharts", () => {
+describe("@components/molecules/InsightsCharts", () => {
 	it(...isValidComponent(InsightsCharts));
 
 	it("renders data prop if it exists", () => {

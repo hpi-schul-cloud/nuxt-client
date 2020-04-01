@@ -1,6 +1,6 @@
 import CardTab from "./CardTab";
 
-describe("@components/CardTab", () => {
+describe("@components/atoms/CardTab", () => {
 	it(...isValidComponent(CardTab));
 	it(...rendersSlotContent(CardTab));
 	it("Renders a default card tab", () => {

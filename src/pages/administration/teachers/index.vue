@@ -30,19 +30,6 @@
 						icon="check"
 						color="var(--color-success)"
 					/>
-					<base-icon
-						style="position: relative; left: -17.5px;"
-						source="material"
-						icon="check"
-						color="var(--color-success)"
-					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'parentsAgreed'">
-					<base-icon
-						source="material"
-						icon="check"
-						color="var(--color-warning)"
-					/>
 				</span>
 				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
@@ -92,23 +79,21 @@
 		/>
 	</section>
 </template>
-
 <script>
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import FabFloating from "@components/molecules/FabFloating";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import FabFloating from "@components/molecules/FabFloating";
 import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
-
 export default {
 	layout: "loggedInFull",
 	components: {
 		BackendDataTable,
-		FabFloating,
 		AdminTableLegend,
+		FabFloating,
 	},
 	mixins: [print],
 	props: {
@@ -122,7 +107,7 @@ export default {
 			page:
 				parseInt(
 					localStorage.getItem(
-						"pages.administration.students.index.currentPage"
+						"pages.administration.teachers.index.currentPage"
 					)
 				) || 1,
 			limit:
@@ -165,37 +150,10 @@ export default {
 			tableActions: [
 				{
 					label: this.$t(
-						"pages.administration.students.index.tableActions.consent"
-					),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-				},
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.email"
-					),
-					icon: "mail_outline",
-					"icon-source": "material",
-					action: this.handleBulkEMail,
-				},
-				{
-					label: this.$t("pages.administration.students.index.tableActions.qr"),
-					"icon-source": "fa",
-					icon: "qrcode",
-					action: this.handleBulkQR,
-				},
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.delete"
-					),
-					icon: "delete_outline",
-					"icon-source": "material",
-					action: this.handleBulkDelete,
-				},
+						"pages.administration.teachers.index.itemsPerPage"
+					)
+				}
 			],
-			tableSelection: [],
-			tableSelectionType: "inclusive",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -206,12 +164,13 @@ export default {
 					text: this.$t("pages.administration.teachers.index.title"),
 				},
 			],
+			tableSelection: [],
+			tableSelectionType: "inclusive",
 			icons: [
 				{
-					icon: "doublecheck",
+					icon: "check",
 					color: "var(--color-success)",
-					style: "margin: -3px 3px",
-					label: this.$t("pages.administration.students.legend.icon.success"),
+					label: this.$t("pages.administration.teachers.legend.icon.check"),
 				},
 				{
 					icon: "clear",
@@ -239,7 +198,6 @@ export default {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
 			};
-
 			this.$store.dispatch("users/findTeachers", {
 				query,
 			});
@@ -247,7 +205,7 @@ export default {
 		onUpdateCurrentPage(page) {
 			this.page = page;
 			localStorage.setItem(
-				"pages.administration.students.index.currentPage",
+				"pages.administration.teachers.index.currentPage",
 				page
 			);
 			this.find();
@@ -257,7 +215,7 @@ export default {
 			this.limit = limit;
 			// save user settings in localStorage
 			localStorage.setItem(
-				"pages.administration.students.index.itemsPerPage",
+				"pages.administration.teachers.index.itemsPerPage",
 				limit
 			);
 			this.find();
@@ -282,28 +240,6 @@ export default {
 		handleBulkEMail(rowIds, selectionType) {
 			this.$toast.error(
 				`handleBulkEMail([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
-		},
-		async handleBulkQR(rowIds, selectionType) {
-			// TODO: request registrationsLinks fom backend
-			// route needs to be implemented!
-
-			// const users = await this.$store.dispatch("users/find", {
-			// 	qid: "qr-print",
-			// 	query: this.getQueryForSelection(rowIds, selectionType),
-			// });
-			// this.$_printQRs(
-			// 	usersWithoutConsents.map((user) => ({
-			// 		qrContent: user.registrationLink.shortLink,
-			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
-			// 		description: "Zum Registrieren bitte den Link öffnen.",
-			// 	}))
-			// );
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
 					", "
 				)}], "${selectionType}") needs implementation`,
 				{ duration: 5000 }

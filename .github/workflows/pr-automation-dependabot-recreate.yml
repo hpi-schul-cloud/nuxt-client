@@ -1,0 +1,19 @@
+name: PR Automation
+
+on:
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  dependabot_recreate:
+    name: "@dependabot recreate"
+    runs-on: ubuntu-latest
+    steps:
+      - name: dependabot recreate PR
+        if: "contains(github.event.pull_request.user.login, 'dependabot') && github.event.pull_request.mergeable_state == 'dirty'"
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
+        with:
+          msg: "@dependabot recreate"
+          check_for_duplicate_msg: false

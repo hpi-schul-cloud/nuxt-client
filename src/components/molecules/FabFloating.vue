@@ -26,6 +26,10 @@ export default {
 				),
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		labelPosition() {
 			switch (this.position) {
