@@ -7,19 +7,17 @@ export default {
 	},
 	created() {
 		window.scrollTo({ top: 0, behavior: "smooth" });
-		window.addEventListener("scroll", () => {
-			this.$_bottom = this.$_bottomVisible();
-			this.$_scrollY = window.scrollY;
-		});
+		window.addEventListener("scroll", this.$_scrollEventHandler);
 	},
 	beforeDestroy() {
-		window.removeEventListener("scroll", () => {
-			this.$_bottom = this.$_bottomVisible();
-			this.$_scrollY = window.scrollY;
-		});
+		window.removeEventListener("scroll", this.$_scrollEventHandler);
 	},
 	methods: {
-		$_bottomVisible() {
+		$_scrollEventHandler() {
+			this.$_bottom = this.$_isBottomReached();
+			this.$_scrollY = window.scrollY;
+		},
+		$_isBottomReached() {
 			const { scrollY } = window;
 			const visibleHeight = document.documentElement.clientHeight;
 			const pageHeight = document.documentElement.scrollHeight;
