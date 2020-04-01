@@ -1,7 +1,7 @@
 name: PR Automation
 
 on:
-  issue:
+  issues:
     types: [labeled]
 
 jobs:
