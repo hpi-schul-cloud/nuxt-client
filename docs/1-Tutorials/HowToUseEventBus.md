@@ -65,7 +65,7 @@ In most cases you probably want to call the listener in the created hook. Additi
 
 ## How to unsubscribe from events
 
-Don't forget to unsubscribe unused listeners ;)
+Don't forget to unsubscribe unused listeners, if you attached them manually using `$on` ;)
 
 ```js
 this.$eventBus.$off("eventName");
