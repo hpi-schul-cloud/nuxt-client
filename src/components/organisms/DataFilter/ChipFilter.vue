@@ -10,7 +10,7 @@
 			}"
 			@click="$emit('open', chip.id)"
 		>
-			<span>
+			<span class="label">
 				{{ chip.label }}
 			</span>
 			<button
@@ -60,13 +60,12 @@ $transition: all 0.15s ease-in-out;
 	align-items: center;
 	padding: var(--space-xs-3) var(--space-sm);
 	margin-right: var(--space-sm);
-	font-size: var(--text-sm);
 	line-height: var(--line-height);
 	color: var(--color-white);
 	white-space: nowrap;
 	cursor: pointer;
 	background-color: var(--color-tertiary);
-	border: 1px var(--color-tertiary);
+	border: 1px solid var(--color-tertiary);
 	border-radius: var(--radius-round);
 	transition: $transition;
 	&:last-of-type {
@@ -78,7 +77,7 @@ $transition: all 0.15s ease-in-out;
 	&:hover {
 		color: var(--color-white);
 		background: var(--color-tertiary-dark);
-		border: 1px var(--color-tertiary-dark);
+		border: 1px solid var(--color-tertiary-dark);
 	}
 	.btn-delete {
 		display: flex;
@@ -99,6 +98,12 @@ $transition: all 0.15s ease-in-out;
 			background: var(--color-gray-light);
 			border-radius: var(--radius-round);
 		}
+	}
+
+	.label {
+		font-family: var(--font-primary);
+		font-size: var(--text-sm);
+		color: var(--color-white);
 	}
 }
 </style>
