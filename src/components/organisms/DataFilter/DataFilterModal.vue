@@ -9,7 +9,7 @@
 		<template v-slot:footer>
 			<modal-footer>
 				<template v-slot:right>
-					<base-button design="text" @click="$emit('cancle')">
+					<base-button design="text" @click="$emit('cancel')">
 						{{ labelCancle }}
 					</base-button>
 					<base-button design="primary" @click="$emit('apply')">

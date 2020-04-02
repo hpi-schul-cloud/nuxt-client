@@ -38,7 +38,7 @@ export default {
 	},
 	computed: {
 		remainingTimeInMinutes() {
-			return Math.floor(this.remainingTimeInSeconds / 60);
+			return Math.max(Math.floor(this.remainingTimeInSeconds / 60), 0);
 		},
 		getText() {
 			if (this.error) {
@@ -61,14 +61,19 @@ export default {
 				return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth_error.svg";
 			return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth.svg";
 		},
-		...mapState("autoLogout", [
-			"active",
-			"error",
-			"remainingTimeInSeconds",
-			"showToast",
-		]),
+		...mapState("autoLogout", ["active", "error", "remainingTimeInSeconds"]),
 	},
-	watch: {
+	created(ctx) {
+		this.$store.dispatch("autoLogout/init", this.$eventBus, { root: true });
+	},
+	beforeDestroy() {
+		//underneath is only necessary in a single page application
+		//this.$store.dispatch("autoLogout/reset");
+	},
+	methods: {
+		extendSession() {
+			this.$store.dispatch("autoLogout/extendSession");
+		},
 		showToast(state) {
 			switch (state) {
 				case toast.success:
@@ -94,15 +99,9 @@ export default {
 			}
 		},
 	},
-	created(ctx) {
-		this.$store.dispatch("autoLogout/init", null, { root: true });
-	},
-	beforeDestroy() {
-		//this.$store.dispatch("autoLogout/reset");
-	},
-	methods: {
-		extendSession() {
-			this.$store.dispatch("autoLogout/extendSession");
+	onEventBus: {
+		"showToast@autologout": function (value) {
+			this.showToast(value);
 		},
 	},
 };
