@@ -1,7 +1,7 @@
 const showWarningOnRemainingSeconds =
-	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS || 3600;
+	Number(process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS) || 3600;
 const defaultRemainingTimeInSeconds =
-	process.env.JWT_TIMEOUT_SECONDS || showWarningOnRemainingSeconds * 2;
+	Number(process.env.JWT_TIMEOUT_SECONDS) || showWarningOnRemainingSeconds * 2;
 
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
@@ -10,6 +10,7 @@ const decRstIntervallSec = 20;
 const updateIntervallMin = 2;
 let decrementer = null;
 let polling = null;
+let eventBus = null;
 
 let lastUpdated = null;
 
@@ -49,7 +50,14 @@ const updateRemainingTime = (commit, dispatch) => {
 				console.error("Update remaining session time failed!");
 			}
 		} catch (error) {
-			console.error("Update remaining session time failed!");
+			if (error.response && error.response.status === 405) {
+				console.warn(
+					"Synchronization of remaining session time will be disabled until the next reload of the page. Reason: missing configuration in server"
+				);
+				clearInterval(polling);
+			} else {
+				console.error("Update remaining session time failed!");
+			}
 		}
 	}, 1000 * 60 * updateIntervallMin);
 };
@@ -60,7 +68,7 @@ const extendSession = async (commit, state, dispatch) => {
 		processing = false;
 		totalRetry = 0;
 		retry = 0;
-		commit("showToast", toast.success);
+		eventBus.$emit("showToast@autologout", toast.success);
 		if (state.remainingTimeInSeconds < 60) {
 			decrementer = decrementRemainingTime(commit, state);
 		}
@@ -77,14 +85,14 @@ const extendSession = async (commit, state, dispatch) => {
 				} else {
 					retry = 0;
 					if (totalRetry) {
-						commit("showToast", toast.error);
+						eventBus.$emit("showToast@autologout", toast.error);
 					} else {
 						commit("setActive", { active: true, error: true });
 					}
 					totalRetry += 1;
 				}
 			} else {
-				commit("showToast", toast.error401);
+				eventBus.$emit("showToast@autologout", toast.error401);
 			}
 		}
 	}
@@ -99,17 +107,15 @@ export const mutations = {
 		lastUpdated = Date.now();
 		state.remainingTimeInSeconds = payload;
 	},
-	showToast(state, payload) {
-		state.showToast = payload;
-	},
 };
 
 export const actions = {
-	init({ commit, state, dispatch }) {
+	init({ commit, state, dispatch }, event) {
 		if (!decrementer) {
 			decrementer = decrementRemainingTime(commit, state);
 		}
 		if (!polling) {
+			eventBus = event;
 			lastUpdated = Date.now();
 			polling = updateRemainingTime(commit, dispatch);
 		}
@@ -120,7 +126,6 @@ export const actions = {
 	async extendSession({ commit, state, dispatch }) {
 		processing = true;
 		commit("setActive", { active: false, error: false });
-		commit("showToast", null);
 		extendSession(commit, state, dispatch);
 	},
 };
@@ -130,7 +135,6 @@ export const state = () => {
 		active: false,
 		error: false,
 		remainingTimeInSeconds: defaultRemainingTimeInSeconds,
-		showToast: null,
 	};
 };
 
