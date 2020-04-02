@@ -15,7 +15,7 @@
 				</template>
 				<template v-slot:right>
 					<base-button design="text" @click="$emit('cancel')">
-						{{ labelCancle }}
+						{{ labelCancel }}
 					</base-button>
 					<base-button design="primary" @click="$emit('apply')">
 						{{ labelApply }}
@@ -36,7 +36,7 @@ export default {
 	props: {
 		title: { type: String, required: true },
 		labelApply: { type: String, required: true },
-		labelCancle: { type: String, required: true },
+		labelCancel: { type: String, required: true },
 		labelRemove: { type: String, required: true },
 	},
 };
