@@ -1,7 +1,7 @@
 const showWarningOnRemainingSeconds =
-	process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS || 3600;
+	Number(process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS) || 3600;
 const defaultRemainingTimeInSeconds =
-	process.env.JWT_TIMEOUT_SECONDS || showWarningOnRemainingSeconds * 2;
+	Number(process.env.JWT_TIMEOUT_SECONDS) || showWarningOnRemainingSeconds * 2;
 
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
