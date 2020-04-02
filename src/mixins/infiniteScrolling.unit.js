@@ -50,7 +50,7 @@ describe("@mixins/infiniteScrolling", () => {
 				.mockImplementation(() => scrollHeight);
 			window.scrollY = scrollY;
 			const wrapper = getInstance();
-			expect(wrapper.vm.$_bottomVisible()).toBe(result);
+			expect(wrapper.vm.$_isBottomReached()).toBe(result);
 		}
 	);
 	it("removes window event listeners on destroy", () => {
