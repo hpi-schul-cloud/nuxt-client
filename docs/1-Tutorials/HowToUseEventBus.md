@@ -4,11 +4,6 @@ In this document you will find how to use the EventBus. But first make sure that
 
 [[toc]]
 
-<!-- ## How to name your events
-
-Events emitted over the eventBus are global, and can therefore be subscribe to by any component. We need to make sure, that we do not have event identifiers of the same name. This could otherwise cause unpredictable behavior or unexpected bugs.
-
-To ensure this, we use the following naming scheme: <br /> -->
 
 ## How to emit events
 
