@@ -1,6 +1,6 @@
 # How to use: EventBus
 
-In this document you will find how to use the EventBus. But first make sure that the EventBus is the right or better solution for your problem. In most cases, using vuex is a better approach, especially when it comes to state management.
+In this document you will find how to use the EventBus. But first make sure that the EventBus is the right or better solution for your problem. In most cases, using vuex is a better approach, especially when it comes to state management. The most common use case for the EventBus is to trigger a function in another component.
 
 [[toc]]
 
