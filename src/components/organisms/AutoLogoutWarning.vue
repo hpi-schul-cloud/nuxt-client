@@ -99,7 +99,7 @@ export default {
 			}
 		},
 	},
-	eventBus: {
+	onEventBus: {
 		"showToast@autologout": function (value) {
 			this.showToast(value);
 		},

@@ -24,11 +24,7 @@ created() {
 
 ## How to subscribe to events
 
-```js
-this.$eventBus.$on("eventName", this.doSomethingOnEvent);
-```
-
-You can use the `eventBus` option on a component to easily add event listeners (Note: Event listeners will be automatically unsubscribe on beforeDestroy hook)
+You can use the `onEventBus` option on a component to easily add event listeners (Note: Event listeners will be automatically unsubscribe on beforeDestroy hook)
 
 ```js
 methods: {
@@ -36,7 +32,7 @@ methods: {
 		...
 	},
 },
-eventBus: {
+onEventBus: {
 	"eventName": function (payload) {
 		this.doSomethingOnEvent(payload);
 	},
@@ -57,6 +53,12 @@ methods: {
 		...
 	},
 },
+```
+
+In case you need more flexibility and assign event listeners on demand, you can manually add your event listeners using:
+
+```js
+this.$eventBus.$on("eventName", this.doSomethingOnEvent);
 ```
 
 In most cases you probably want to call the listener in the created hook. Additionally, don't forget to unsubscribe unused listeners.

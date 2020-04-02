@@ -15,7 +15,7 @@ Vue.use(eventBus);
 Vue.mixin({
 	created: function () {
 		//register events
-		const events = this.$options.eventBus;
+		const events = this.$options.onEventBus;
 		eventListeners = {};
 		for (const event in events) {
 			eventListeners[event] = events[event].bind(this); //remember register listener
