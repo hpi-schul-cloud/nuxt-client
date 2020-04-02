@@ -13,7 +13,7 @@ import {
 
 import notes from "./DataFilter.md";
 
-storiesOf("6 Organisms/DataTable/SubComponents", module)
+storiesOf("6 Organisms/DataFilter", module)
 	.addParameters({
 		notes,
 	})
