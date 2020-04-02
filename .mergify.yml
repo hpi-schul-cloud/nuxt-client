@@ -51,6 +51,14 @@ pull_request_rules:
       label:
         remove:
           - has conflicts
+  - name: let @schul-cloud-bot recreate dependabot PRs with conflicts
+    conditions:
+      - author~=dependabot(-preview)?\[bot\]
+      - label~=dependencies
+      - conflict
+    actions:
+      comment:
+        message: "@schul-cloud-bot tell dependabot to recreate PR"
 
   #######################
   # AUTO MERGING
