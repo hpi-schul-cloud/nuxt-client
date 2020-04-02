@@ -71,7 +71,7 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-        strict: true
+        strict: smart
   - name: auto merge passing Dependabot pull requests
     conditions:
       # match dependabot[bot] and dependabot-preview[bot]
@@ -80,14 +80,14 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-        strict: true
+        strict: smart
   - name: auto merge when ready to merge label is set
     conditions:
       - label=ready to merge
     actions:
       merge:
         method: merge
-        strict: true
+        strict: smart
 
   #######################
   # CLEANUP AFTER MERGE
