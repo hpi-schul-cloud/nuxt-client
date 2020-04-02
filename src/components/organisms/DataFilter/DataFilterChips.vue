@@ -1,32 +1,34 @@
 <template>
 	<div class="chips">
-		<button
+		<div
 			v-for="chip in chips"
 			:key="chip.id"
-			tab-index="0"
+			role="button"
+			tabindex="0"
 			:class="{
 				chip: true,
 				'is-deletable': chip.deletable,
 			}"
 			@click="$emit('open', chip.id)"
+			@keyup.self.enter.space="$emit('open', chip.id)"
 		>
 			<span class="label">
 				{{ chip.label }}
 			</span>
-			<button
+			<base-button
 				v-if="chip.deletable"
+				design="none"
 				type="button"
 				class="btn-delete"
-				@click.stop.prevent="$emit('remove', chip.id)"
+				@click.stop="$emit('remove', chip.id)"
 			>
 				<base-icon
 					icon="close"
 					source="material"
 					style="font-size: var(--text-sm);"
-					:fill="color"
 				/>
-			</button>
-		</button>
+			</base-button>
+		</div>
 	</div>
 </template>
 
@@ -38,18 +40,15 @@ export default {
 			required: true,
 		},
 	},
-	data() {
-		return {
-			color: `var(--color-tertiary)`,
-		};
-	},
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@styles";
 
-$transition: all 0.15s ease-in-out;
+$transition: background var(--duration-transition-medium)
+	cubic-bezier(0.23, 1, 0.32, 1);
+
 .chips {
 	display: flex;
 	flex-wrap: nowrap;
@@ -68,6 +67,7 @@ $transition: all 0.15s ease-in-out;
 	border: 1px solid var(--color-tertiary);
 	border-radius: var(--radius-round);
 	transition: $transition;
+
 	&:last-of-type {
 		margin-right: 0;
 	}
@@ -76,8 +76,9 @@ $transition: all 0.15s ease-in-out;
 	}
 	&:hover {
 		color: var(--color-white);
-		background: var(--color-tertiary-dark);
-		border: 1px solid var(--color-tertiary-dark);
+		background: var(--color-tertiary);
+		outline: none;
+		box-shadow: none;
 	}
 	.btn-delete {
 		display: flex;
@@ -93,10 +94,16 @@ $transition: all 0.15s ease-in-out;
 		border: none;
 		border-radius: var(--radius-round);
 		transition: $transition;
+
 		&:hover,
 		&:focus {
-			background: var(--color-gray-light);
-			border-radius: var(--radius-round);
+			color: var(--color-white);
+			background: var(--color-tertiary-dark);
+		}
+		&:focus {
+			outline: none;
+			box-shadow: 0 0 0 3px var(--color-white),
+				0 0 0 6px var(--color-tertiary-dark);
 		}
 	}
 
