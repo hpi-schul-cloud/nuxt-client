@@ -4,7 +4,6 @@ In this document you will find how to use the EventBus. But first make sure that
 
 [[toc]]
 
-
 ## How to emit events
 
 All components have access to the global EventBus. To interact with it you can use: `$eventBus`.
