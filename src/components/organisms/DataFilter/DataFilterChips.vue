@@ -74,11 +74,10 @@ $transition: background var(--duration-transition-medium)
 	&.is-deletable {
 		padding-right: var(--space-xs-2);
 	}
-	&:hover {
-		color: var(--color-white);
-		background: var(--color-tertiary);
+	&:focus {
 		outline: none;
-		box-shadow: none;
+		box-shadow: 0 0 0 3px var(--color-white),
+			0 0 0 6px var(--color-tertiary-dark);
 	}
 	.btn-delete {
 		display: flex;
