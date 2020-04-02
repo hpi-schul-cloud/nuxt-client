@@ -4,6 +4,9 @@
 			:filter="filters"
 			:parser="parser"
 			:query="activeFiltersProxy"
+			:component-modal="DataFilterModal"
+			:component-chips="DataFilterChips"
+			:component-select="DataFilterSelect"
 			@newQuery="setActiveFilters"
 		/>
 	</div>
@@ -18,6 +21,9 @@ import {
 	supportedOperators,
 } from "./defaultFilters";
 import { unescape } from "lodash";
+import DataFilterModal from "./DataFilterModal";
+import DataFilterChips from "./DataFilterChips";
+import DataFilterSelect from "./DataFilterSelect";
 
 export default {
 	components: {
@@ -42,6 +48,9 @@ export default {
 	},
 	data() {
 		return {
+			DataFilterModal,
+			DataFilterChips,
+			DataFilterSelect,
 			parser: parser.Default,
 			localQuery: undefined,
 			localActiveFilters: undefined,
