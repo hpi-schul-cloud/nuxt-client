@@ -83,8 +83,8 @@ $transition: background var(--duration-transition-medium)
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 25px;
-		height: 25px;
+		width: 1.5em;
+		height: 1.5em;
 		padding: var(--space-xs-4);
 		margin: 0;
 		margin-left: var(--space-sm);
