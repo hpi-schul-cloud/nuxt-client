@@ -1,7 +1,7 @@
 <template>
 	<base-modal :active="true">
 		<template v-slot:header>
-			{{ title }}
+			{{ title | entities }}
 		</template>
 		<template v-slot:body>
 			<slot />
@@ -28,10 +28,17 @@
 
 <script>
 import ModalFooter from "@components/molecules/ModalFooter";
+import { XmlEntities } from "html-entities";
+const entities = new XmlEntities();
 
 export default {
 	components: {
 		ModalFooter,
+	},
+	filters: {
+		entities(value) {
+			return entities.decode(value);
+		},
 	},
 	props: {
 		title: { type: String, required: true },

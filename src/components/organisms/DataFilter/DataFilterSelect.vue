@@ -24,6 +24,8 @@
 
 <script>
 import ContextMenu from "@components/molecules/ContextMenu";
+import { XmlEntities } from "html-entities";
+const entities = new XmlEntities();
 
 export default {
 	components: {
@@ -47,7 +49,7 @@ export default {
 	computed: {
 		contextOptions() {
 			return this.options.map((option) => ({
-				text: option.title,
+				text: entities.decode(option.title),
 				event: "click",
 				arguments: option.id,
 			}));
