@@ -21,7 +21,7 @@
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
 			<template v-slot:datacolumn-classes="{ data }">
-				<span v-for="c in data" :key="c"> {{ c }} </span>
+				{{ data.join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
