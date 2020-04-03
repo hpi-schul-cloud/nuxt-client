@@ -130,8 +130,8 @@ const tableFilters = [
 				operator: "=",
 				input: InputCheckbox,
 				options: [
-					{ value: true, label: "Einverständniserklärung vorhanden" },
-					{ value: false, label: "Keine Einverständniserklärung" },
+					{ value: "true", label: "Einverständniserklärung vorhanden" },
+					{ value: "false", label: "Keine Einverständniserklärung" },
 				],
 			},
 		],

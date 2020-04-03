@@ -23,6 +23,7 @@ export default {
 		value: {
 			type: [Boolean, Array],
 			default: () => [],
+			validator: (prop) => prop.every((e) => typeof e === "string"),
 		},
 		options: {
 			type: Array,
@@ -35,6 +36,9 @@ export default {
 				return options.every((option, index) => {
 					if (!Object.prototype.hasOwnProperty.call(option, "label")) {
 						throw new Error(`option ${index} is missing a label`);
+					}
+					if (!Object.prototype.hasOwnProperty.call(option, "value")) {
+						throw new Error(`option ${index} is missing a value`);
 					}
 					return (
 						Object.prototype.hasOwnProperty.call(option, "label") &&
