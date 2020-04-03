@@ -5,9 +5,9 @@
 			v-for="option in options"
 			:key="option.label"
 			v-model="vmodelProxy"
+			type="checkbox"
 			:name="$uid"
 			:value="option.value"
-			type="checkbox"
 			:label="option.label"
 		/>
 	</fieldset>
@@ -59,3 +59,12 @@ export default {
 	},
 };
 </script>
+<style lang="scss">
+@import "@styles";
+
+fieldset {
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+</style>

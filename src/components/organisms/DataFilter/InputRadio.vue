@@ -1,17 +1,15 @@
 <template>
 	<fieldset>
 		<legend v-if="label" class="label">{{ label }}</legend>
-		<label v-for="option in options" :key="option.label" class="label">
-			<div class="wrapper">
-				<base-input
-					v-model="vmodelProxy"
-					type="radio"
-					:name="$uid"
-					:value="option.value"
-					:label="option.label"
-				/>
-			</div>
-		</label>
+		<base-input
+			v-for="option in options"
+			:key="option.label"
+			v-model="vmodelProxy"
+			type="radio"
+			:name="$uid"
+			:value="option.value"
+			:label="option.label"
+		/>
 	</fieldset>
 </template>
 
@@ -63,8 +61,9 @@ export default {
 <style lang="scss">
 @import "@styles";
 
-.wrapper {
-	padding-bottom: var(--space-xs);
-	padding-left: var(--space-sm);
+fieldset {
+	padding: 0;
+	margin: 0;
+	border: none;
 }
 </style>
