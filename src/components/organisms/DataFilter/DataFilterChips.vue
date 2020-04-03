@@ -3,6 +3,7 @@
 		<div
 			v-for="chip in chips"
 			:key="chip.id"
+			:design="outline"
 			role="button"
 			tabindex="0"
 			:class="{
@@ -12,9 +13,9 @@
 			@click="$emit('open', chip.id)"
 			@keyup.self.enter.space="$emit('open', chip.id)"
 		>
-			<span class="label">
+			<p class="label">
 				{{ chip.label }}
-			</span>
+			</p>
 			<base-button
 				v-if="chip.deletable"
 				design="none"
@@ -63,7 +64,7 @@ $transition: background var(--duration-transition-medium)
 	color: var(--color-white);
 	white-space: nowrap;
 	cursor: pointer;
-	background-color: var(--color-tertiary);
+	background-color: var(--color-white);
 	border: 1px solid var(--color-tertiary);
 	border-radius: var(--radius-round);
 	transition: $transition;
@@ -73,6 +74,9 @@ $transition: background var(--duration-transition-medium)
 	}
 	&.is-deletable {
 		padding-right: var(--space-xs-2);
+	}
+	&:hover {
+		box-shadow: 0 0 0 1px var(--color-tertiary);
 	}
 	&:focus {
 		outline: none;
@@ -88,8 +92,9 @@ $transition: background var(--duration-transition-medium)
 		padding: var(--space-xs-4);
 		margin: 0;
 		margin-left: var(--space-sm);
+		color: var(--color-white);
 		cursor: pointer;
-		background-color: var(--color-gray-light);
+		background-color: var(--color-tertiary);
 		border: none;
 		border-radius: var(--radius-round);
 		transition: $transition;
@@ -107,9 +112,10 @@ $transition: background var(--duration-transition-medium)
 	}
 
 	.label {
-		font-family: var(--font-primary);
+		margin: 0;
+		font-family: var(--font-accent);
 		font-size: var(--text-sm);
-		color: var(--color-white);
+		color: var(--color-tertiary);
 	}
 }
 </style>
