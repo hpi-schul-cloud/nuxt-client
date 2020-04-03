@@ -26,17 +26,12 @@ export default {
 			default: "",
 		},
 		value: {
-			type: [Boolean, Array],
-			validator: (prop) => prop.every((e) => typeof e === "string"),
-			default: () => [],
+			type: String,
+			default: "",
 		},
 		options: {
 			type: Array,
-			default: () => [
-				{ value: "10", label: "Radio1" },
-				{ value: "25", label: "Radio2" },
-				{ value: "100", label: "Radio3" },
-			],
+			required: true,
 			validator: (options) => {
 				return options.every((option, index) => {
 					if (!Object.prototype.hasOwnProperty.call(option, "label")) {

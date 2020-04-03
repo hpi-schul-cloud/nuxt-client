@@ -1,7 +1,7 @@
 import InputRadio from "./InputRadio";
 
 describe("@components/organisms/DataFilter/InputRadio", () => {
-	it.skip("can preselect an option", async () => {
+	it("can preselect an option", async () => {
 		const expectedValue = "25";
 		const wrapper = mount(InputRadio, {
 			propsData: {
@@ -18,7 +18,7 @@ describe("@components/organisms/DataFilter/InputRadio", () => {
 		expect(selectedOption.attributes("value")).toStrictEqual(expectedValue);
 	});
 
-	it.skip("can choose an option", async () => {
+	it("can choose an option", async () => {
 		const wrapper = mount(InputRadio, {
 			propsData: {
 				label: "Radio",
@@ -37,7 +37,7 @@ describe("@components/organisms/DataFilter/InputRadio", () => {
 		expect(wrapper.emitted("input")).toStrictEqual([[expectedValue]]);
 	});
 
-	it.skip("throws error if label in option is missing", () => {
+	it("throws error if label in option is missing", () => {
 		expect(() =>
 			mount(InputRadio, {
 				propsData: {
@@ -47,7 +47,7 @@ describe("@components/organisms/DataFilter/InputRadio", () => {
 		).toThrow(new Error(`option 0 is missing a label`));
 	});
 
-	it.skip("throws error if value in option is missing", () => {
+	it("throws error if value in option is missing", () => {
 		expect(() =>
 			mount(InputRadio, {
 				propsData: {
