@@ -47,7 +47,6 @@ export default {
 				},
 				{
 					text: this.$t("pages.administration.teachers.new.title"),
-					to: "/administration/teachers/new",
 				},
 			],
 			roleName: "teacher",
