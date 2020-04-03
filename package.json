@@ -14,7 +14,7 @@
 		"build:storybook": "build-storybook -c stories/.storybook -o dist/storybook --quiet",
 		"build": "run-s build:*",
 		"start:nuxt": "nuxt start",
-		"start:storybook": "http-server dist/storybook -p 4001 -s",
+		"start:storybook": "npx http-server dist/storybook -p 4001 -s",
 		"start": "run-p start:*",
 		"new": "hygen new",
 		"lint:eslint": "eslint",
