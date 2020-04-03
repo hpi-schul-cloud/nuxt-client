@@ -24,3 +24,6 @@ Vue.prototype.$theme = Theme;
 // Dialog
 import BaseDialog from "@/components/base/BaseDialog";
 Vue.use(BaseDialog);
+
+// EventBus
+import "./eventBus";

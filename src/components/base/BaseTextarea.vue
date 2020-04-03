@@ -75,12 +75,16 @@ export default {
 			type: Boolean,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
-		numberOfLines: function() {
+		numberOfLines: function () {
 			return (this.vmodel.match(/\n/g) || []).length + 1;
 		},
 	},
-	mounted: function() {
+	mounted: function () {
 		this.resize();
 	},
 	methods: {

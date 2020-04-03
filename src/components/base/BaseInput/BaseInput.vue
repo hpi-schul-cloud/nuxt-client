@@ -65,6 +65,10 @@ export default {
 			},
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		component() {
 			return componentDictionary[this.type];

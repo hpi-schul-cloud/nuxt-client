@@ -33,9 +33,11 @@ storiesOf("4 Base UI Components/Base UI", module)
 					outline: "outline",
 					icon: "icon",
 					"text icon": "text icon",
+					"icon outline": "icon outline",
 					primary: "primary",
 					"primary text": "primary text",
 					"primary icon": "primary icon",
+					"primary icon outline": "primary icon outline",
 					"primary text icon": "primary text icon",
 					"primary outline": "primary outline",
 					"hero-cta": "hero-cta",
@@ -45,8 +47,15 @@ storiesOf("4 Base UI Components/Base UI", module)
 					secondary: "secondary",
 					"secondary text": "secondary text",
 					"secondary icon": "secondary icon",
+					"secondary icon outline": "secondary icon outline",
 					"secondary text icon": "secondary text icon",
 					"secondary outline": "secondary outline",
+					info: "info",
+					"info text": "info text",
+					"info icon": "info icon",
+					"info icon outline": "info icon outline",
+					"info text icon": "info text icon",
+					"info outline": "info outline",
 					success: "success",
 					"success text": "success text",
 					"success icon": "success icon",
@@ -86,6 +95,9 @@ storiesOf("4 Base UI Components/Base UI", module)
 				<base-button design="primary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+				<base-button design="primary icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 				<base-button design="primary text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
@@ -107,6 +119,9 @@ storiesOf("4 Base UI Components/Base UI", module)
 				<base-button design="secondary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+				<base-button design="secondary icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 				<base-button design="secondary text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
@@ -118,9 +133,15 @@ storiesOf("4 Base UI Components/Base UI", module)
 				<base-button design="icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+				<base-button design="icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 				<base-button design="text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+
+
+
 
 				<h2>Disabled</h2>
 				<base-button disabled>Disabled</base-button>
@@ -151,6 +172,16 @@ storiesOf("4 Base UI Components/Base UI", module)
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<base-button design="danger text icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<br/><br/>
+				<base-button design="info">info</base-button>
+				<base-button design="info outline">info outline</base-button>
+				<base-button design="info text">info text</base-button>
+				<base-button design="info icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="info text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 

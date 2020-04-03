@@ -2,7 +2,7 @@ import PopupIcon from "./PopupIcon";
 
 const testProps = { source: "fa", icon: "pencil", fill: "red" };
 
-describe("@components/BaseIcon", () => {
+describe("@components/legacy/BaseIcon", () => {
 	it(...isValidComponent(PopupIcon));
 	it(...rendersSlotContent(PopupIcon, ["default"], { propsData: testProps }));
 

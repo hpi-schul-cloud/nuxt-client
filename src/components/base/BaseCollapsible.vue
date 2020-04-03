@@ -50,7 +50,7 @@ export default {
 	display: block;
 	padding: 0 var(--space-md);
 	overflow: hidden;
-	background-color: color-mod(var(--color-gray-light) tint(50%));
+	background-color: var(--color-white);
 }
 
 .fade-enter-active,

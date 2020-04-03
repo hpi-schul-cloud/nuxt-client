@@ -85,6 +85,10 @@ export default {
 			required: true,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		activityByRoleChart() {
 			const { activityByRole } = this.data;

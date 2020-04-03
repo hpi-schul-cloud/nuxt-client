@@ -1,6 +1,6 @@
 import BaseAudio from "./BaseAudio";
 
-describe("@components/BaseAudio", () => {
+describe("@components/base/BaseAudio", () => {
 	it(...isValidComponent(BaseAudio));
 	it("renders src", () => {
 		const { element } = shallowMount(BaseAudio, {

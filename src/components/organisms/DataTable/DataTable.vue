@@ -3,11 +3,11 @@
 		v-bind="attrsProxy"
 		:data="paginatedSortedData"
 		:total="sortedData.length"
-		:sort-by.sync="sortByProxy"
-		:sort-order.sync="sortOrderProxy"
-		:current-page.sync="currentPageProxy"
-		:rows-per-page.sync="rowsPerPageProxy"
-		:selected-row-ids="backendTableSelection"
+		:sort-by.sync="$_controllableDataSortBy"
+		:sort-order.sync="$_controllableDataSortOrder"
+		:current-page.sync="$_controllableDataCurrentPage"
+		:rows-per-page.sync="$_controllableDataRowsPerPage"
+		:selected-row-ids="backendTableSelectionIds"
 		:selection-type="backendTableSelectionType"
 		@update:selection="handleTableSelectionUpdate"
 		v-on="proxyListeners"
@@ -22,6 +22,8 @@
 <script>
 import { getValueByPath } from "@utils/helpers";
 import BackendDataTable from "./BackendDataTable";
+
+import controllableData from "@mixins/controllableData";
 
 const isArrayIdentical = (a, b) =>
 	a.length === b.length && a.every((item) => b.includes(item));
@@ -45,6 +47,10 @@ export default {
 	components: {
 		BackendDataTable,
 	},
+	mixins: [
+		// the following props are inherited from BackendDataTable, so they are not explicitly defined again
+		controllableData(["sortBy", "sortOrder", "currentPage", "rowsPerPage"]),
+	],
 	props: {
 		// all other props are inherited from the BackendDataTable
 		...BackendDataTable.props,
@@ -66,11 +72,7 @@ export default {
 	},
 	data() {
 		return {
-			localSortBy: undefined,
-			localSortOrder: undefined,
-			localCurrentPage: undefined,
-			localRowsPerPage: undefined,
-			backendTableSelection: this.selection,
+			backendTableSelectionIds: this.selection,
 			backendTableSelectionType: "inclusive",
 		};
 	},
@@ -91,13 +93,18 @@ export default {
 		sortedData() {
 			const raw = this.data;
 
-			if (!this.sortByProxy) {
+			if (!this.$_controllableDataSortBy) {
 				return raw;
 			}
 			const sortMethod = this.sortMethod || this.sort;
-			const out = sortMethod(raw, this.sortByProxy, this.sortOrderProxy, {
-				getValueByPath,
-			});
+			const out = sortMethod(
+				raw,
+				this.$_controllableDataSortBy,
+				this.$_controllableDataSortOrder,
+				{
+					getValueByPath,
+				}
+			);
 
 			return out;
 		},
@@ -105,97 +112,33 @@ export default {
 			if (!this.paginated) {
 				return this.sortedData;
 			}
-			const {
-				currentPageProxy: currentPage,
-				rowsPerPageProxy: rowsPerPage,
-			} = this;
+			const currentPage = this.$_controllableDataCurrentPage;
+			const rowsPerPage = this.$_controllableDataRowsPerPage;
 			return this.sortedData.slice(
 				(currentPage - 1) * rowsPerPage,
 				currentPage * rowsPerPage
 			);
-		},
-		currentPageProxy: {
-			get() {
-				return this.localCurrentPage || this.currentPage;
-			},
-			set(to) {
-				this.localCurrentPage = to;
-				this.$emit("update:currentPage", to);
-			},
-		},
-		rowsPerPageProxy: {
-			get() {
-				return this.localRowsPerPage || this.rowsPerPage;
-			},
-			set(to) {
-				this.localRowsPerPage = to;
-				this.$emit("update:rows-per-page", to);
-			},
-		},
-		sortByProxy: {
-			get() {
-				return this.localSortBy || this.sortBy;
-			},
-			set(to) {
-				this.localSortBy = to;
-				this.$emit("update:sortBy", to);
-			},
-		},
-		sortOrderProxy: {
-			get() {
-				return this.localSortOrder || this.sortOrder;
-			},
-			set(to) {
-				this.localSortOrder = to;
-				this.$emit("update:sortOrder", to);
-			},
 		},
 		dataIds() {
 			return this.data.map((row) => getValueByPath(row, this.trackBy));
 		},
 	},
 	watch: {
-		currentPage(to) {
-			this.localCurrentPage = to;
-		},
-		rowsPerPage(to) {
-			this.localRowsPerPage = to;
-		},
-		sortBy(to) {
-			this.localSortBy = to;
-		},
-		sortOrder(to) {
-			this.localSortOrder = to;
-		},
 		selection(to) {
 			this.handleParentSelectionUpdate(to);
 		},
-		data() {
-			this.validateData();
-		},
-	},
-	created() {
-		this.validateData();
 	},
 	methods: {
-		validateData() {
-			const isValid = this.data.every(
-				(row) => typeof getValueByPath(row, this.trackBy) === "string"
-			);
-			if (!isValid) {
-				throw new Error(`provided dataset is invalid`);
-			}
-		},
 		handleParentSelectionUpdate(selection) {
 			if (selection.length === this.data.length) {
-				this.$set(this, "backendTableSelection", []);
+				this.$set(this, "backendTableSelectionIds", []);
 				this.backendTableSelectionType = "exclusive";
 			} else {
-				this.$set(this, "backendTableSelection", selection);
+				this.$set(this, "backendTableSelectionIds", selection);
 				this.backendTableSelectionType = "inclusive";
 			}
 		},
-		handleTableSelectionUpdate(selection, selectionType, initiator) {
+		handleTableSelectionUpdate(selection, selectionType) {
 			const newSelection = this.dataIds.filter((rowId) => {
 				return selectionType === "exclusive"
 					? !selection.includes(rowId)

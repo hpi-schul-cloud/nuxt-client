@@ -73,7 +73,7 @@
 							<base-icon
 								source="material"
 								icon="check_circle"
-								style="color: var(--color-success)"
+								style="color: var(--color-success);"
 							/>
 						</template>
 					</modal-body-info>
@@ -128,22 +128,22 @@ export default {
 			columns: [
 				{
 					field: "class",
-					label: "Name",
+					label: this.$t("common.labels.name"),
 					sortable: true,
 				},
 				{
 					field: "teacher",
-					label: "Lehrer",
+					label: this.$t("common.labels.teacher"),
 					sortable: true,
 				},
 				{
 					field: "room",
-					label: "Raum",
+					label: this.$t("common.labels.room"),
 					sortable: true,
 				},
 				{
 					field: "state",
-					label: "Status",
+					label: this.$t("common.labels.status"),
 					sortable: true,
 				},
 			],

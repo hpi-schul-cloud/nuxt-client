@@ -17,7 +17,7 @@
 				{{ dayjs(news.displayAt).fromNow() }} von {{ news.creator.firstName }}
 				{{ news.creator.lastName }}
 			</div>
-			<h1> {{ news.title }} </h1>
+			<h1>{{ news.title }}</h1>
 
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<div v-html="news.content"></div>

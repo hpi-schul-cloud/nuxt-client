@@ -3,9 +3,11 @@ process.env.TZ = "Europe/Berlin";
 module.exports = {
 	setupFiles: ["<rootDir>/tests/unit/setup", "jest-canvas-mock"],
 	setupFilesAfterEnv: [
+		"jest-extended",
 		"<rootDir>/tests/unit/matchers",
 		"<rootDir>/tests/unit/requireAssertions",
 	],
+	snapshotResolver: "<rootDir>/tests/unit/snapshotResolver",
 	testMatch: ["**/(*.)unit.js"],
 	moduleFileExtensions: ["js", "json", "vue"],
 	transform: {
@@ -27,6 +29,7 @@ module.exports = {
 		"<rootDir>/src/serverMiddleware/**/*.js",
 		"!<rootDir>/src/serverMiddleware/routes.js",
 		// Vue Component
+		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/components/**/*.{js,vue}",
 		"!<rootDir>/src/components/**/*.stories.js",
 		"!<rootDir>/src/components/base/_globals.js",

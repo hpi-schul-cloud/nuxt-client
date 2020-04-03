@@ -14,7 +14,7 @@ const total = 100;
 const randomData = tableData(total);
 
 storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
-	const sortabelRows = tableColumns
+	const sortableRows = tableColumns
 		.filter((c) => c.sortable)
 		.reduce((obj, c) => {
 			obj[c.field] = c.field;
@@ -44,7 +44,7 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 
 			actions: tableActions(randomData),
 
-			sortBy: select("sortBy", sortabelRows, Object.keys(sortabelRows)[0]),
+			sortBy: select("sortBy", sortableRows, Object.keys(sortableRows)[0]),
 			sortOrder: select("sortOrder", { asc: "asc", desc: "desc" }, "asc"),
 		}),
 		components: { BackendDataTable },
@@ -55,11 +55,14 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 			onUpdateSelectionType: action("@update:selectionType"),
 			onUpdateSelectedRowIds: action("@update:selectedRowIds"),
 			onSort: action("@sort"),
+			onSortBy: action("@update:sort-by"),
+			onSortOrder: action("@update:sort-order"),
 		},
 		template: `
 			<BackendDataTable
 				:columns="columns"
 				:data="randomData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)"
+
 				:trackBy="trackBy"
 
 				:total="total"
@@ -80,7 +83,8 @@ storiesOf("6 Organisms/DataTable", module).add("BackendDataTable", () => {
 
 				:sortBy.sync="sortBy"
 				:sortOrder.sync="sortOrder"
-				@sort="onSort"
+				@update:sort-by="onSortBy"
+				@update:sort-order="onSortOrder"
 			>
 				<template v-slot:datacolumn-age="slotProps">
 					<span style="text-decoration: underline">

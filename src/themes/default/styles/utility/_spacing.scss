@@ -43,6 +43,10 @@
 	margin-bottom: 0;
 }
 
+.mb--xs {
+	margin-bottom: var(--space-xs);
+}
+
 .mb--sm {
 	margin-bottom: var(--space-sm);
 }

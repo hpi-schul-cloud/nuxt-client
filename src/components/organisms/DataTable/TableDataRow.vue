@@ -50,6 +50,10 @@ export default {
 			required: true,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		rowData() {
 			if (this.data === Array) {
@@ -97,10 +101,6 @@ export default {
 		vertical-align: middle;
 		.text-content {
 			padding: var(--space-xs);
-			font-size: var(--text-xs);
-		}
-		.selection-column {
-			font-size: var(--text-md);
 		}
 		.select {
 			margin-bottom: 0;

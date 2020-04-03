@@ -12,6 +12,10 @@ export default {
 			default: "background-color: #fff",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 };
 </script>
 <style lang="scss" scoped>

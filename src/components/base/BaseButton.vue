@@ -10,8 +10,7 @@
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
 			styled as a Button if you give him a href/to property
-		-->
-	</button>
+		--></button>
 	<base-link
 		v-else
 		:class="classes"
@@ -41,16 +40,25 @@ export default {
 					"none",
 					"text",
 					"icon",
+					"icon outline",
 					"text icon",
 					"outline",
 					"primary",
 					"primary text",
 					"primary icon",
+					"primary icon outline",
 					"primary text icon",
 					"primary outline",
+					"info",
+					"info text",
+					"info icon",
+					"info icon outline",
+					"info text icon",
+					"info outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
+					"secondary icon outline",
 					"secondary text icon",
 					"secondary outline",
 					"hero-cta",
@@ -91,6 +99,10 @@ export default {
 			type: String,
 			default: "",
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		isLink() {

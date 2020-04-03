@@ -88,6 +88,12 @@ Für unit-tests verwenden wir [Jest](https://jestjs.io/). Die Konfigurationsdate
 
 Um unsere Testabdeckung zu überwachen verwenden wir [codecov.io](https://codecov.io). Der aktuelle Status ist auf dem entsprechenden [Dashboard](https://codecov.io/gh/schul-cloud/nuxt-client/) einzusehen.
 
+### Screenshot Tests
+
+Each story is compared with the saved image in the repo at each push. This ensures that the components do not change accidentally. It is implemented with [Jest](https://jestjs.io/), [Puppeteer](https://github.com/puppeteer/puppeteer) and [americanexpress/jest-image-snapshot](https://github.com/americanexpress/jest-image-snapshot).
+
+To update the screenshots, comment on `@schul-cloud-bot update screenshots` on a PR that presents the changes to the component.
+
 ## Polyfills
 
 ### Postcss
