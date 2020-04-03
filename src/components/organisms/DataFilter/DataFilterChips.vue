@@ -114,7 +114,8 @@ $transition: background var(--duration-transition-medium)
 	.label {
 		margin: 0;
 		font-family: var(--font-accent);
-		font-size: var(--text-sm);
+		font-size: var(--text-md);
+		font-weight: var(--font-weight-bold);
 		color: var(--color-tertiary);
 	}
 }
