@@ -50,7 +50,7 @@ export default {
 	computed: {
 		vmodelProxy: {
 			get() {
-				return this.value || [];
+				return this.value;
 			},
 			set(to) {
 				this.$emit("input", to);
