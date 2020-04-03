@@ -152,10 +152,8 @@ export default {
 			],
 			tableActions: [
 				{
-					label: this.$t(
-						"pages.administration.teachers.index.itemsPerPage"
-					)
-				}
+					label: this.$t("pages.administration.teachers.index.itemsPerPage"),
+				},
 			],
 			breadcrumbs: [
 				{
