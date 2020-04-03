@@ -1,5 +1,5 @@
 <template>
-	<base-content-container size="small">
+	<base-content-container size="medium">
 		<base-breadcrumb
 			:inputs="[
 				{

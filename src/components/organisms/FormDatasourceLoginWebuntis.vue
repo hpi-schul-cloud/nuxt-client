@@ -21,11 +21,39 @@
 		<form-datasource-login type="webuntis" :datasource-id="datasourceId">
 			<template v-slot:inputs="{ config }">
 				<base-input
+					v-model="config.schoolname"
+					type="text"
+					required="true"
+					:label="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.schoolname.label'
+						)
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.schoolname.placeholder'
+						)
+					"
+					class="mt--md"
+				>
+					<template v-slot:icon>
+						<base-icon source="material" icon="school" />
+					</template>
+				</base-input>
+				<base-input
 					v-model="config.username"
 					type="text"
 					required="true"
-					label="Benutzername"
-					:placeholder="'WebUntis Nutzername'"
+					:label="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.username.label'
+						)
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.username.placeholder'
+						)
+					"
 					class="mt--md"
 				>
 					<template v-slot:icon>
@@ -36,8 +64,16 @@
 					v-model="config.password"
 					type="password"
 					required="true"
-					label="Passwort"
-					:placeholder="'WebUntis Passwort'"
+					:label="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.password.label'
+						)
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.password.placeholder'
+						)
+					"
 					class="mt--md"
 					autocomplete="new-password"
 				>
@@ -49,8 +85,14 @@
 					v-model="config.url"
 					type="text"
 					required="true"
-					label="URL"
-					:placeholder="'URL der Datenquelle'"
+					:label="
+						$t('components.organisms.FormDatasourceLoginWebuntis.url.label')
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.url.placeholder'
+						)
+					"
 					class="mt--md"
 				/>
 			</template>

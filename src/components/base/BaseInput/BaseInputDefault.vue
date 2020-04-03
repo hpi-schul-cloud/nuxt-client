@@ -46,22 +46,11 @@
 					design="none"
 					type="button"
 					data-testid="pwd-visibility-toggle"
+					class="icon-behind pwd-toggle"
 					@click="togglePasswordVisibility"
 				>
-					<base-icon
-						v-if="!passwordVisible"
-						source="custom"
-						icon="invisible"
-						fill="var(--color-gray)"
-						class="icon-behind"
-					/>
-					<base-icon
-						v-else
-						source="custom"
-						icon="visible"
-						fill="var(--color-gray)"
-						class="icon-behind visible"
-					/>
+					<base-icon v-if="!passwordVisible" source="custom" icon="invisible" />
+					<base-icon v-else source="custom" icon="visible" />
 				</base-button>
 				<base-icon
 					v-if="error"
@@ -218,13 +207,10 @@ export default {
 	.input-line {
 		display: flex;
 		.icon-before {
-			width: 24px;
-			height: 24px;
-			margin-right: var(--space-xxs);
-			/deep/ .material {
-				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-				font-size: 1.1em;
-			}
+			display: inline-flex;
+			align-items: center;
+			min-width: 1.25em;
+			margin-right: var(--space-xs-2);
 		}
 		.core {
 			flex: 1;
@@ -232,7 +218,7 @@ export default {
 			line-height: 0; // needed for correct spacing
 			input {
 				width: 100%;
-				margin-bottom: var(--space-xxs);
+				padding: var(--space-xs-2) 0;
 				line-height: var(--line-height-md);
 				color: var(--color-text);
 				border: none;
@@ -248,11 +234,25 @@ export default {
 			}
 		}
 		.icon-behind {
-			width: 24px;
-			height: 24px;
-			margin-left: var(--space-xs);
-			font-size: var(--text-lg);
+			display: inline-flex;
+			align-items: center;
+			min-width: 1.25em;
+			margin-left: var(--space-xs-2);
 		}
+	}
+}
+
+.pwd-toggle {
+	padding: 0 var(--space-xs-2);
+	color: var(--color-gray);
+	border-radius: var(--radius-round);
+	&:hover {
+		color: var(--color-gray-dark);
+	}
+	&:focus {
+		color: var(--color-gray-dark);
+		outline: none;
+		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-gray-dark);
 	}
 }
 

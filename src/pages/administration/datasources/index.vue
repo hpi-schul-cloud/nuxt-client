@@ -94,11 +94,11 @@
 						<responsive-icon-button
 							v-if="element.lastStatus === 'Error'"
 							design="primary text"
-							source="custom"
-							icon="datasource-import"
+							source="material"
+							icon="edit"
 							@click="handleManageErrorLogin(element)"
 						>
-							{{ $t("pages.administration.datasources.index.import") }}
+							{{ $t("pages.administration.datasources.index.edit") }}
 						</responsive-icon-button>
 						<responsive-icon-button
 							v-else
@@ -125,6 +125,7 @@
 								@update:show="menuOpen = false"
 								@edit="handleEdit(element)"
 								@remove="handleRemove(element)"
+								@import="triggerRun(element)"
 							/>
 						</span>
 					</template>
@@ -231,18 +232,34 @@ export default {
 	},
 	methods: {
 		getActions(element) {
+			const secondaryAction =
+				element.lastStatus === "Error"
+					? {
+							text: this.$t(
+								"pages.administration.datasources.index.ctxActions.import"
+							),
+							event: "import",
+							icon: "datasource-import",
+							"icon-source": "custom",
+							attributes: element,
+					  }
+					: {
+							text: this.$t(
+								"pages.administration.datasources.index.ctxActions.edit"
+							),
+							event: "edit",
+							icon: "edit",
+							"icon-source": "material",
+							attributes: element,
+					  };
 			return [
-				{
-					text: this.$t(
-						"pages.administration.datasources.index.ctxActions.edit"
-					),
-					event: "edit",
-					attributes: element,
-				},
+				secondaryAction,
 				{
 					text: this.$t(
 						"pages.administration.datasources.index.ctxActions.remove"
 					),
+					icon: "datasource-remove",
+					"icon-source": "custom",
 					event: "remove",
 					attributes: element,
 				},
@@ -320,7 +337,7 @@ export default {
 		async handleRemove(datasource) {
 			this.$dialog.confirm({
 				icon: "warning",
-				actionDesign: "success",
+				actionDesign: "danger",
 				iconColor: "var(--color-danger)",
 				invertedDesign: true,
 				message: this.$t(
