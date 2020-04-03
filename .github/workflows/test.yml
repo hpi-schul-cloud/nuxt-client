@@ -44,6 +44,9 @@ jobs:
         with:
           name: screenshots_and_diff
           path: tests/screenshot/__image_snapshots__
+      - name: failure hint
+        if: failure()
+        run: echo "if you want to update the screenshots, comment \"@schul-cloud-bot update screenshots\" on this PR."
   # build:
   #   strategy:
   #     matrix:
