@@ -72,7 +72,7 @@ const tableActions = (allRows) => [
 
 const tableFilters = [
 	{
-		title: "Items per page",
+		title: "Einträge pro Seite",
 		chipTemplate: "Items per page: %1",
 		required: true,
 		layout: layouts.Default,
@@ -103,30 +103,19 @@ const tableFilters = [
 		],
 	},
 	{
-		title: "Alter = ",
-		chipTemplate: "Person ist %1 Jahre alt",
+		title: "Geburtstag",
+		chipTemplate: "Geburtstag am %1",
 		layout: layouts.Default,
 		filter: [
 			{
-				attribute: "age",
+				attribute: "birthday",
 				operator: "=",
 				input: inputs.InputNumber,
 			},
 		],
 	},
 	{
-		title: "Geburtstag",
-		chipTemplate: "Person hat am %1 Geburtstag",
-		filter: [
-			{
-				attribute: "birthday",
-				operator: "=",
-				input: inputs.InputText,
-			},
-		],
-	},
-	{
-		title: "Zustimmung",
+		title: "Einverständniserklärung",
 		chipTemplate: "Zustimmung: %1",
 		filter: [
 			{
@@ -134,8 +123,8 @@ const tableFilters = [
 				operator: "=",
 				input: inputs.Radio,
 				options: [
-					{ value: true, label: "Zustimmung vorhanden" },
-					{ value: false, label: "Keine Zustimmung" },
+					{ value: true, label: "Einverständniserklärung vorhanden" },
+					{ value: false, label: "Keine Einverständniserklärung" },
 				],
 			},
 		],
