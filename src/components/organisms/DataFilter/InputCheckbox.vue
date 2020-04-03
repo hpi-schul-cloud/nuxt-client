@@ -1,37 +1,36 @@
 <template>
-	<div>
+	<fieldset>
 		<legend v-if="label" class="label">{{ label }}</legend>
 		<base-input
 			v-for="option in options"
 			:key="option.label"
 			v-model="vmodelProxy"
-			:name="option.label + option.value"
+			:name="$uid"
 			:value="option.value"
 			type="checkbox"
 			:label="option.label"
 		/>
-	</div>
+	</fieldset>
 </template>
 
 <script>
+import uid from "@mixins/uid";
+
 export default {
+	mixins: [uid],
 	props: {
 		label: {
 			type: String,
 			default: "",
 		},
 		value: {
-			type: [Boolean, Array],
+			type: Array,
 			default: () => [],
 			validator: (prop) => prop.every((e) => typeof e === "string"),
 		},
 		options: {
 			type: Array,
-			default: () => [
-				{ value: "A", label: "Checkbox 1" },
-				{ value: "B", label: "Checkbox 2" },
-				{ value: "C", label: "Checkbox 3" },
-			],
+			required: true,
 			validator: (options) => {
 				return options.every((option, index) => {
 					if (!Object.prototype.hasOwnProperty.call(option, "label")) {
@@ -51,7 +50,7 @@ export default {
 	computed: {
 		vmodelProxy: {
 			get() {
-				return this.value;
+				return this.value || [];
 			},
 			set(to) {
 				this.$emit("input", to);

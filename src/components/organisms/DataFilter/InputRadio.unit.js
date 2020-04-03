@@ -33,7 +33,7 @@ describe("@components/organisms/DataFilter/InputRadio", () => {
 		const options = wrapper.findAll(`input[type="radio"]`);
 		const selectedOption = options.at(0);
 		const expectedValue = selectedOption.attributes("value");
-		selectedOption.setChecked();
+		selectedOption.setChecked(true);
 		expect(wrapper.emitted("input")).toStrictEqual([[expectedValue]]);
 	});
 

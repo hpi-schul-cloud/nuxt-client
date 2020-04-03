@@ -1,18 +1,18 @@
 <template>
-	<div>
+	<fieldset>
 		<legend v-if="label" class="label">{{ label }}</legend>
 		<label v-for="option in options" :key="option.label" class="label">
 			<div class="wrapper">
 				<base-input
 					v-model="vmodelProxy"
 					type="radio"
-					:name="$ui"
+					:name="$uid"
 					:value="option.value"
 					:label="option.label"
 				/>
 			</div>
 		</label>
-	</div>
+	</fieldset>
 </template>
 
 <script>
