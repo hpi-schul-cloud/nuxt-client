@@ -1,6 +1,9 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
-import { inputs, layouts } from "vue-filter-ui";
+import { layouts } from "vue-filter-ui";
+import InputCheckbox from "@components/organisms/DataFilter/InputCheckbox";
+import InputRadio from "@components/organisms/DataFilter/InputRadio";
+import DataFilterInput from "@components/organisms/DataFilter/DataFilterInput";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
@@ -80,7 +83,7 @@ const tableFilters = [
 			{
 				attribute: "$limit",
 				operator: "<",
-				input: inputs.Radio,
+				input: InputRadio,
 				options: [
 					{ value: 25, label: "25" },
 					{ value: 50, label: "50" },
@@ -98,7 +101,12 @@ const tableFilters = [
 				attribute: "age",
 				applyNegated: true,
 				operator: "<=",
-				input: inputs.InputNumber,
+				input: DataFilterInput,
+				label: "Alter",
+				attributes: {
+					type: "number",
+					placeholder: "Nach Alter filtern...",
+				},
 			},
 		],
 	},
@@ -110,7 +118,12 @@ const tableFilters = [
 			{
 				attribute: "birthday",
 				operator: "=",
-				input: inputs.InputNumber,
+				input: DataFilterInput,
+				label: "Geburtstag",
+				attributes: {
+					type: "date",
+					placeholder: "29.3.2004",
+				},
 			},
 		],
 	},
@@ -121,10 +134,10 @@ const tableFilters = [
 			{
 				attribute: "agreed",
 				operator: "=",
-				input: inputs.Radio,
+				input: InputCheckbox,
 				options: [
-					{ value: true, label: "Einverständniserklärung vorhanden" },
-					{ value: false, label: "Keine Einverständniserklärung" },
+					{ value: "true", label: "Einverständniserklärung vorhanden" },
+					{ value: "false", label: "Keine Einverständniserklärung" },
 				],
 			},
 		],
@@ -136,7 +149,12 @@ const tableFilters = [
 			{
 				attribute: "firstName",
 				operator: "includes",
-				input: inputs.InputText,
+				input: DataFilterInput,
+				label: "Vorname",
+				attributes: {
+					type: "text",
+					placeholder: "Nach Name filtern...",
+				},
 			},
 		],
 	},
