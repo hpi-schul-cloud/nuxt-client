@@ -54,7 +54,7 @@ export default {
 	},
 	methods: {
 		error() {
-			this.$toast.error(this.$t("pages.administration.teachers.new.denied"));
+			this.$toast.error(this.$t("pages.administration.teachers.new.error"));
 		},
 		success() {
 			this.$toast.success(this.$t("pages.administration.teachers.new.success"));
