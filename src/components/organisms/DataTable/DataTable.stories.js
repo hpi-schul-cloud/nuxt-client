@@ -10,7 +10,7 @@ import {
 import { action } from "@storybook/addon-actions";
 
 import DataTable from "./DataTable";
-import DataFilter from "@omponents/organisms/DataFilter/DataFilter";
+import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import notes from "./DataTable.md";
 
 import {

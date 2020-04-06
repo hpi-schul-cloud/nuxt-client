@@ -1,14 +1,6 @@
-import defaultFiltersMixin from "@mixins/defaultFilters";
+import { defaultFilters } from "./defaultFilters";
 
-const Component = {
-	template: "<div/>",
-};
-
-const wrapper = mount(Component, {
-	mixins: [defaultFiltersMixin],
-});
-
-describe("defaultFiltersMixin", () => {
+describe("@components/organisms/DataFilter/defaultFilters", () => {
 	describe("it can filter strings", () => {
 		it.each([
 			["test", "te", true],
@@ -16,17 +8,33 @@ describe("defaultFiltersMixin", () => {
 			["Test", "te", true],
 			[11, 1, true],
 			[11, 2, false],
-		])("'%s' contains '%s' is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterTextDefault(a, b)).toBe(expected);
-			expect(wrapper.vm.filterTextContains(a, b)).toBe(expected);
+		])("%p includes %p is %s", (a, b, expected) => {
+			expect(defaultFilters["text"]["default"](a, b)).toBe(expected);
+			expect(defaultFilters["text"]["includes"](a, b)).toBe(expected);
 		});
 
 		it.each([
 			["test", "test", true],
 			["test", "te", false],
 			["Test", "test", true],
-		])("'%s' equals '%s' is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterTextEquals(a, b)).toBe(expected);
+		])("%p = %p is %s", (a, b, expected) => {
+			expect(defaultFilters["text"]["="](a, b)).toBe(expected);
+		});
+
+		it.each([
+			["test", "test", false],
+			["te", "test", true],
+			["Test", "test", false],
+		])("%p < %p is %s", (a, b, expected) => {
+			expect(defaultFilters["text"]["<"](a, b)).toBe(expected);
+		});
+
+		it.each([
+			["test", "test", true],
+			["test", "te", false],
+			["Test", "test", true],
+		])("%p <= %p is %s", (a, b, expected) => {
+			expect(defaultFilters["text"]["<="](a, b)).toBe(expected);
 		});
 	});
 
@@ -36,42 +44,20 @@ describe("defaultFiltersMixin", () => {
 			[1, 2, false],
 			["11", "11", true],
 			["11", "12", false],
-		])("%s is equal %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterNumberDefault(a, b)).toBe(expected);
-			expect(wrapper.vm.filterNumberEqual(a, b)).toBe(expected);
+		])("%s = %s is %s", (a, b, expected) => {
+			expect(defaultFilters["number"]["default"](a, b)).toBe(expected);
+			expect(defaultFilters["number"]["="](a, b)).toBe(expected);
 		});
 
 		it.each([
-			[2, 1, true],
-			[1, 1, false],
-			[0, 1, false],
-			["2", "1", true],
-			["1", "1", false],
-			["0", "1", false],
-		])("%s is greater %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterNumberGreater(a, b)).toBe(expected);
-		});
-
-		it.each([
-			[2, 1, true],
-			[1, 1, true],
-			[0, 1, false],
-			["2", "1", true],
-			["1", "1", true],
-			["0", "1", false],
-		])("%s is greater or equal %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterNumberGreaterEqual(a, b)).toBe(expected);
-		});
-
-		it.each([
-			[1, 2, true],
-			[1, 1, false],
 			[2, 1, false],
-			["1", "2", true],
-			["1", "1", false],
+			[1, 1, false],
+			[0, 1, true],
 			["2", "1", false],
-		])("%s is less %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterNumberLess(a, b)).toBe(expected);
+			["1", "1", false],
+			["0", "1", true],
+		])("%s < %s is %s", (a, b, expected) => {
+			expect(defaultFilters["number"]["<"](a, b)).toBe(expected);
 		});
 
 		it.each([
@@ -81,8 +67,8 @@ describe("defaultFiltersMixin", () => {
 			["1", "2", true],
 			["1", "1", true],
 			["2", "1", false],
-		])("%s is less or equal %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterNumberLessEqual(a, b)).toBe(expected);
+		])("%s <= %s is %s", (a, b, expected) => {
+			expect(defaultFilters["number"]["<="](a, b)).toBe(expected);
 		});
 	});
 
@@ -113,7 +99,7 @@ describe("defaultFiltersMixin", () => {
 				false,
 			],
 		])("%s is selected in %o is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterSelectDefault(a, b)).toBe(expected);
+			expect(defaultFilters["select"]["default"](a, b)).toBe(expected);
 		});
 	});
 
@@ -123,9 +109,9 @@ describe("defaultFiltersMixin", () => {
 			["2019-01-01 01:00", "2019-01-01 02:00", false],
 			["2019-01-01", "2019-01-01", true],
 			["2019-01-01", "2019-01-02", false],
-		])("%s is equal to %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterDateDefault(a, b)).toBe(expected);
-			expect(wrapper.vm.filterDateEqual(a, b)).toBe(expected);
+		])("%s = %s is %s", (a, b, expected) => {
+			expect(defaultFilters["date"]["default"](a, b)).toBe(expected);
+			expect(defaultFilters["date"]["="](a, b)).toBe(expected);
 		});
 
 		it.each([
@@ -136,7 +122,7 @@ describe("defaultFiltersMixin", () => {
 			["2019-01-01 02:00", "2019-01-01 01:00", false],
 			["2019-01-02", "2019-01-01", false],
 		])("%s is before %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterDateBefore(a, b)).toBe(expected);
+			expect(defaultFilters["date"]["before"](a, b)).toBe(expected);
 		});
 
 		it.each([
@@ -148,7 +134,7 @@ describe("defaultFiltersMixin", () => {
 			["2019-01-01 01:00", "2019-01-01 02:00", false],
 			["2019-01-01", "2019-01-02", false],
 		])("%s is after %s is %s", (a, b, expected) => {
-			expect(wrapper.vm.filterDateAfter(a, b)).toBe(expected);
+			expect(defaultFilters["date"]["after"](a, b)).toBe(expected);
 		});
 	});
 });
