@@ -10,7 +10,7 @@ import {
 import { action } from "@storybook/addon-actions";
 
 import DataTable from "./DataTable";
-import DataFilter from "./DataFilter";
+import DataFilter from "@omponents/organisms/DataFilter/DataFilter";
 import notes from "./DataTable.md";
 
 import {
@@ -18,21 +18,85 @@ import {
 	tableColumns,
 	tableActions,
 	tableFilters,
+	tableQuery,
 } from "./DataTable.data-factory.js";
+
+const total = 100;
+const randomData = tableData(total);
+
+const sortabelRows = tableColumns
+	.filter((c) => c.sortable)
+	.reduce((obj, c) => {
+		obj[c.field] = c.field;
+		return obj;
+	}, {});
 
 storiesOf("6 Organisms/DataTable", module)
 	.addParameters({
 		notes,
 	})
 	.add("DataTable", () => {
-		const sortabelRows = tableColumns
-			.filter((c) => c.sortable)
-			.reduce((obj, c) => {
-				obj[c.field] = c.field;
-				return obj;
-			}, {});
-		const total = 100;
-		const randomData = tableData(total);
+		return {
+			data: () => ({
+				columns: tableColumns,
+				randomData,
+				trackBy: text("trackBy", "id"),
+
+				total: total,
+				currentPage: number("currentPage", 1),
+				paginated: boolean("paginated", true),
+				rowsPerPage: number("rowsPerPage", 5),
+
+				rowsSelectable: boolean("rowsSelectable", true),
+				selection: array(
+					"selection",
+					[randomData[0].id, randomData[1].id],
+					","
+				),
+
+				actions: tableActions(randomData),
+
+				sortBy: select("sortBy (optional)", sortabelRows),
+				sortOrder: select(
+					"sortOrder (optional)",
+					{ asc: "asc", desc: "desc" },
+					"asc"
+				),
+			}),
+			components: { DataTable },
+			methods: {
+				onUpdateCurrentPage: action("@update:current-page"),
+				onUpdateRowsPerPage: action("@update:rows-per-page"),
+				onUpdateSelection: action("@update:selection"),
+			},
+			template: `
+				<DataTable
+					:columns="columns"
+					:data="randomData"
+					:trackBy="trackBy"
+					:total="total"
+					:current-page.sync="currentPage"
+					@update:current-page="onUpdateCurrentPage"
+					:paginated="paginated"
+					:rows-per-page.sync="rowsPerPage"
+					@update:rows-per-page="onUpdateRowsPerPage"
+					:rowsSelectable="rowsSelectable"
+					:selection.sync="selection"
+					@update:selection="onUpdateSelection"
+					:actions="actions"
+					:sortBy.sync="sortBy"
+					:sortOrder.sync="sortOrder"
+				>
+					<template v-slot:datacolumn-age="slotProps">
+						<span style="text-decoration: underline">
+						{{ slotProps.data }}
+						</span>
+					</template>
+				</DataTable>
+			`,
+		};
+	})
+	.add("DataTable with filters", () => {
 		return {
 			data: () => ({
 				columns: tableColumns,
@@ -41,7 +105,7 @@ storiesOf("6 Organisms/DataTable", module)
 				trackBy: text("trackBy", "id"),
 
 				filters: tableFilters,
-				activeFilters: object("activeFilters", [tableFilters[0]]),
+				query: object("activeFilters", tableQuery),
 
 				total: total,
 				currentPage: number("currentPage", 1),
@@ -78,9 +142,9 @@ storiesOf("6 Organisms/DataTable", module)
 				<DataFilter
 					:data="randomData"
 					:filters="filters"
-					:activeFilters="activeFilters"
-					@update:active-filters="onUpdateActiveFilters"
+					:query="query"
 					@update:filtered-data="onUpdateFilteredData"
+					class="mb--sm"
 				/>
 				<DataTable
 					:columns="columns"

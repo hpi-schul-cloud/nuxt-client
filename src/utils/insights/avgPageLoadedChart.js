@@ -1,4 +1,4 @@
-export default function(timeLabels, values) {
+export default function (timeLabels, values) {
 	return {
 		color: ["#b1063a"],
 		tooltip: {

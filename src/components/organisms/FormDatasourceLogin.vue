@@ -5,7 +5,7 @@
 			name="name"
 			type="text"
 			required="true"
-			:label="$t('components.organisms.FormDatasourcesLogin.input.name.label')"
+			:label="$t('common.labels.name')"
 			:placeholder="
 				$t('components.organisms.FormDatasourcesLogin.input.name.placeholder')
 			"

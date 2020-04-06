@@ -4,6 +4,8 @@
 # DECLERATIONS
 # ----------------
 
+set -e # fail with exit 1 on any error
+
 while getopts p: option
 do
 case "${option}"

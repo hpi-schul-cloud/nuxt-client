@@ -1,11 +1,13 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<img
-				class="hpi-logo"
-				src="@assets/img/footer-logo.png"
-				alt="Anbieterlogo"
-			/>
+			<base-link href="https://hpi.de" target="_blank" rel="noopener">
+				<img
+					class="hpi-logo"
+					src="@assets/img/footer-logo.png"
+					alt="Anbieterlogo"
+				/>
+			</base-link>
 			<span>© {{ currentYear }} {{ $theme.name }}</span>
 		</div>
 
@@ -35,7 +37,14 @@
 		</div>
 		<p class="bottom-line">
 			Made with
-			<span class="heart">❤</span> in Potsdam
+			<span class="heart">❤</span> in Potsdam |
+			{{ $t("components.legacy.footer.powered_by") }}
+			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
+				><img
+					class="poweredby-logo"
+					src="@assets/img/lokalise_logo.svg"
+					:alt="$t('components.legacy.footer.lokalise_logo_alt')"
+			/></base-link>
 		</p>
 	</footer>
 </template>
@@ -45,6 +54,10 @@ import { mapState } from "vuex";
 import defaultDocuments from "@utils/documents.js";
 
 export default {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
@@ -56,7 +69,7 @@ export default {
 			return [
 				{
 					to: "/imprint",
-					text: "Impressum",
+					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
 					innerlinks: [
@@ -72,27 +85,27 @@ export default {
 							rel: "noopener",
 						},
 					],
-					text: "Datenschutzerklärung",
+					text: this.$t("components.legacy.footer.privacy_policy"),
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
-					text: "Kontakt",
+					text: this.$t("components.legacy.footer.contact"),
 				},
 				{
 					to: "/team",
-					text: "Team",
+					text: this.$t("components.legacy.footer.team"),
 				},
 				{
 					to: "/about",
-					text: "Über das Projekt",
+					text: this.$t("components.legacy.footer.about"),
 				},
 				{
 					to: "/community",
-					text: "Mitmachen",
+					text: this.$t("components.legacy.footer.contribute"),
 				},
 				{
 					to: "/partner",
-					text: "Partner",
+					text: this.$t("components.legacy.footer.partner"),
 				},
 				{
 					href: "https://github.com/schul-cloud/",
@@ -128,6 +141,11 @@ export default {
 
 	.heart {
 		color: var(--color-secondary);
+	}
+
+	.poweredby-logo {
+		height: 1em;
+		vertical-align: middle;
 	}
 }
 .footer-link {

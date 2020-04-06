@@ -1,8 +1,8 @@
 <template>
 	<blockquote :cite="cite">
 		<slot />
-		<footer v-if="cite"
-			>&mdash;
+		<footer v-if="cite">
+			&mdash;
 			<BaseLink :href="cite">{{ srcText }}</BaseLink>
 		</footer>
 	</blockquote>
@@ -19,6 +19,10 @@ export default {
 			type: String,
 			default: "Source",
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 };
 </script>

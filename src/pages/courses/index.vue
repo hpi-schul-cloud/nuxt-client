@@ -1,12 +1,20 @@
 <template>
 	<div>
+		<base-breadcrumb :inputs="breadcrumbs" />
+		<h1 class="mb--md h3">
+			{{ $t("pages.courses.index.title") }}
+		</h1>
+
 		<chip-filter :value.sync="activeToggle" :options="toggleTags" />
-		<floating-fab
-			icon="add"
-			to="/courses/create"
-			:aria-label="$t('pages.courses.new.btn_new')"
+		<fab-floating
+			:primary-action="{
+				icon: 'add',
+				'icon-source': 'material',
+				to: '/courses/new',
+				label: $t('pages.courses.new.btn_new'),
+			}"
 		/>
-		<courses-grid :courses="courses"></courses-grid>
+		<courses-grid :courses="filteredCourses"></courses-grid>
 	</div>
 </template>
 
@@ -14,19 +22,28 @@
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
 import ChipFilter from "@components/molecules/ChipFilter";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 
 export default {
 	layout: "loggedInFull",
 	components: {
 		CoursesGrid,
 		ChipFilter,
-		FloatingFab,
+		FabFloating,
 	},
 	data() {
 		return {
-			toggleTags: ["Aktuell", "Archiviert"],
-			activeToggle: "Aktuell",
+			toggleTags: [
+				this.$t("pages.courses.index.courses.active"),
+				this.$t("pages.courses.index.courses.archived"),
+			],
+			activeToggle: this.$t("pages.courses.index.courses.active"),
+			breadcrumbs: [
+				{
+					text: this.$t("pages.courses.index.title"),
+					icon: { source: "fa", icon: "graduation-cap" },
+				},
+			],
 		};
 	},
 	computed: {
@@ -34,11 +51,11 @@ export default {
 			courses: "list",
 		}),
 		filteredCourses() {
-			if (this.activeToggle === "Aktuell") {
-				return this.courses.filter((course) => !course.isArchived);
-			} else {
-				return this.courses.filter((course) => course.isArchived);
-			}
+			return this.courses.filter((course) =>
+				this.activeToggle === this.$t("pages.courses.index.courses.active")
+					? !course.isArchived
+					: course.isArchived
+			);
 		},
 	},
 	created(ctx) {

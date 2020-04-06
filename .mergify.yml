@@ -11,6 +11,21 @@ pull_request_rules:
       label:
         add:
           - WIP
+  - name: label PRs with requested changes
+    conditions:
+      - status-failure~=pullapprove
+    actions:
+      label:
+        add:
+          - changes requested
+  - name: remove "changes requested" label when pull is approved
+    conditions:
+      - status-success~=pullapprove
+      - label~=changes requested
+    actions:
+      label:
+        remove:
+          - changes requested
   - name: remove "ready to merge" label when pull is not approved yet
     conditions:
       - -status-success~=pullapprove
@@ -36,18 +51,27 @@ pull_request_rules:
       label:
         remove:
           - has conflicts
+  - name: let @schul-cloud-bot recreate dependabot PRs with conflicts
+    conditions:
+      - author~=dependabot(-preview)?\[bot\]
+      - label~=dependencies
+      - conflict
+    actions:
+      comment:
+        message: "@schul-cloud-bot tell dependabot to recreate PR"
 
   #######################
   # AUTO MERGING
   #######################
-  - name: auto merge passing Greenkeeper pull requests
+  - name: auto merge language file updates
     conditions:
-      - author=greenkeeper[bot]
-      - label~=greenkeeper
+      - author=schul-cloud-bot
+      # PR must only contain language file changes
+      - -files~=^(?!locale\/.*\.json)
     actions:
       merge:
         method: squash
-        strict: true
+        strict: smart
   - name: auto merge passing Dependabot pull requests
     conditions:
       # match dependabot[bot] and dependabot-preview[bot]
@@ -56,14 +80,14 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-        strict: true
+        strict: smart
   - name: auto merge when ready to merge label is set
     conditions:
       - label=ready to merge
     actions:
       merge:
         method: merge
-        strict: true
+        strict: smart
 
   #######################
   # CLEANUP AFTER MERGE

@@ -16,7 +16,7 @@ const getMockCourse = () => ({
 	classIds: ["idid", "id2"],
 });
 
-describe("@components/StepMembers", () => {
+describe("@components/organisms/CourseWizard/StepMembers", () => {
 	it(...isValidComponent(StepMembers));
 	it("Check with required only and defaults", () => {
 		const wrapper = shallowMount(StepMembers, {

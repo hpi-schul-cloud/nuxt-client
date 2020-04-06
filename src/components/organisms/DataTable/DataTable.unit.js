@@ -1,11 +1,11 @@
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
+import { localDataPrefix } from "@mixins/controllableData";
 
 const defaultData = tableData(50);
 
 function getWrapper(attributes, options) {
 	return mount(DataTable, {
-		sync: false, // https://github.com/vuejs/vue-test-utils/issues/1130, https://github.com/logaretm/vee-validate/issues/1996
 		propsData: {
 			data: defaultData,
 			trackBy: "id",
@@ -121,8 +121,8 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: oldValue,
 				currentPage: 1,
 			});
-			wrapper.vm.rowsPerPageProxy = newValue; // simulate write to variable from .sync modifier from child
-			expect(wrapper.vm.localRowsPerPage).toBe(newValue);
+			wrapper.vm.$_controllableDataRowsPerPage = newValue; // simulate write to variable from .sync modifier from child
+			expect(wrapper.vm[`${localDataPrefix}RowsPerPage`]).toBe(newValue);
 			expect(wrapper.emitted("update:rows-per-page")).toStrictEqual([[20]]);
 		});
 
@@ -386,6 +386,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			wrapper.find("thead tr input[type=checkbox]").trigger("click");
 			await wrapper.vm.$nextTick();
 			wrapper.find("button.select-all-rows").trigger("click");
+			await wrapper.vm.$nextTick();
 			expect(wrapper.emitted("update:selection")[1]).toStrictEqual([
 				expectedSelection,
 			]);

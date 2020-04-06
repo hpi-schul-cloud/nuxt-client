@@ -29,12 +29,7 @@ describe("@components/organisms/Pagination", () => {
 		const currentPageAnchor = wrapper.find(".current");
 		expect(currentPageAnchor.text()).toBe("1");
 		expect(wrapper.findAll(".pagination-link-wrapper")).toHaveLength(2);
-		expect(
-			wrapper
-				.findAll(".pagination-link-wrapper")
-				.at(1)
-				.text()
-		).toBe("→");
+		expect(wrapper.findAll(".pagination-link-wrapper").at(1).text()).toBe("→");
 	});
 
 	it("does not render a next page link on last page", () => {
@@ -42,12 +37,7 @@ describe("@components/organisms/Pagination", () => {
 		const currentPageAnchor = wrapper.find(".current");
 		expect(currentPageAnchor.text()).toBe("2");
 		expect(wrapper.findAll(".pagination-link")).toHaveLength(2);
-		expect(
-			wrapper
-				.findAll(".pagination-link")
-				.at(0)
-				.text()
-		).toBe("←");
+		expect(wrapper.findAll(".pagination-link").at(0).text()).toBe("←");
 	});
 
 	it("emits update:current-page when next page link is clicked", () => {

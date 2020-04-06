@@ -54,16 +54,10 @@ describe("@components/molecules/CourseTimes", () => {
 		});
 		expect(wrapper.vm.value).toHaveLength(1);
 		// Add a time
-		wrapper
-			.findAll("base-button-stub")
-			.at(1)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(1).vm.$emit("click");
 		expect(wrapper.vm.value).toHaveLength(2);
 		// Remove a time
-		wrapper
-			.findAll("base-button-stub")
-			.at(0)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(0).vm.$emit("click");
 		expect(wrapper.vm.value).toHaveLength(1);
 	});
 

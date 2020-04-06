@@ -15,7 +15,7 @@
 				</base-content-container>
 			</div>
 		</div>
-		<div class="overlay"> </div>
+		<div class="overlay"></div>
 	</div>
 </template>
 
@@ -35,7 +35,10 @@ export default {
 			default: "",
 		},
 	},
-
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		compressed() {
 			return (

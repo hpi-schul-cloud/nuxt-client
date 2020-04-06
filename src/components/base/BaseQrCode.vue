@@ -12,11 +12,15 @@ export default {
 			default: window.location.href,
 		},
 	},
-	mounted: function() {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
+	mounted: function () {
 		this.createQrCode();
 	},
 	methods: {
-		createQrCode: function() {
+		createQrCode: function () {
 			const image = kjua({ text: this.url, render: "image" });
 			image.alt = this.url;
 			const qrbox = this.$refs.qrcode;

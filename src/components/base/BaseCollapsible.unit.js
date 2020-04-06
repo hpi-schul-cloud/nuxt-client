@@ -10,7 +10,7 @@ const collapsible = {
 	components: { BaseCollapsible },
 };
 
-describe("@components/BaseCollapsible", () => {
+describe("@components/base/BaseCollapsible", () => {
 	it(...isValidComponent(BaseCollapsible));
 
 	it("pressing the label should toggle slot visibility", async () => {

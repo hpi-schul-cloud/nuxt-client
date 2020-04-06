@@ -4,8 +4,8 @@
 		<h2 class="h4">
 			HPI Schul-Cloud - Hasso-Plattner-Institut für Digital Engineering gGmbH
 		</h2>
-		<p
-			>Prof.-Dr.-Helmert-Str. 2-3
+		<p>
+			Prof.-Dr.-Helmert-Str. 2-3
 			<br />
 			14482 Potsdam
 			<br />
@@ -21,8 +21,8 @@
 		</p>
 
 		<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
-		<p
-			>Prof. Dr. Christoph Meinel
+		<p>
+			Prof. Dr. Christoph Meinel
 			<br />
 			Registergericht: Amtsgericht Potsdam, Registernummer: HRB 12184
 			<br />
@@ -32,17 +32,17 @@
 		<h2 class="h4">Redaktion</h2>
 		<p>Hasso Plattner Institut</p>
 		<h2 class="h4">Rechtliche Hinweise</h2>
-		<p
-			>Die Thüringer Schulcloud ist ein nicht kommerzielles Pilotprojekt,
-			welches vom HPI in Kooperation mit dem ThILLM Thüringer Institut für
+		<p>
+			Die Thüringer Schulcloud ist ein nicht kommerzielles Pilotprojekt, welches
+			vom HPI in Kooperation mit dem ThILLM Thüringer Institut für
 			Lehrerfortbildung, Lehrplanentwicklung und Medien (<base-link
 				href="https://www.schulportal-thueringen.de/thillm"
 				target="_blank"
 				>https://www.schulportal-thueringen.de/thillm</base-link
 			>) durchgeführt wird.
 		</p>
-		<p
-			>Die Inhalte der Thüringer Schulcloud stellen keine offiziellen
+		<p>
+			Die Inhalte der Thüringer Schulcloud stellen keine offiziellen
 			Verlautbarungen des HPI dar. Für die Inhalte sind die jeweiligen
 			Autor/innen selbst verantwortlich. Ohne vorherige schriftliche Genehmigung
 			ist eine kommerzielle Verbreitung der über die Thüringer Schulcloud
@@ -51,10 +51,10 @@
 			Webseiten anderer Anbieter (einschließlich der dort verankerten Links zu
 			Dritten), insbesondere die Verantwortung für die Beachtung der
 			Bestimmungen des Jugendschutz- und Datenschutzrechts, trägt in jeder
-			Hinsicht der jeweilige Anbieter allein.</p
-		>
-		<p
-			>Das Hasso-Plattner-Institut (HPI) überprüft und aktualisiert regelmäßig
+			Hinsicht der jeweilige Anbieter allein.
+		</p>
+		<p>
+			Das Hasso-Plattner-Institut (HPI) überprüft und aktualisiert regelmäßig
 			die Inhalte seiner Websites. Trotz größtmöglicher Sorgfalt können wir
 			nicht ausschließen, dass einzelne Informationen auf unseren Seiten
 			veraltet oder nicht mehr zutreffend sind. Daher können wir keine Haftung
@@ -72,8 +72,8 @@
 			Die Weiterverwendung von Informationen und Daten ist nur nach unserer
 			Zustimmung zulässig. Wir wünschen Ihnen einen informativen Aufenthalt auf
 			unseren Websites und freuen uns über Vorschläge, Wünsche oder Kritik zur
-			Thüringer Schulcloud.</p
-		>
+			Thüringer Schulcloud.
+		</p>
 	</div>
 </template>
 
@@ -83,9 +83,4 @@ export default {};
 
 <style lang="scss" scoped>
 @import "@styles";
-
-p {
-	font-size: var(--text-lg);
-	line-height: var(--line-height-lg);
-}
 </style>

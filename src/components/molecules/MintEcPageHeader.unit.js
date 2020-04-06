@@ -1,7 +1,7 @@
 import MintEcPageHeader from "./MintEcPageHeader";
 import BaseContentContainer from "@components/base/BaseContentContainer";
 
-describe("@components/MintEcPageHeader", () => {
+describe("@components/molecules/MintEcPageHeader", () => {
 	it(...isValidComponent(MintEcPageHeader));
 
 	it("image exists", () => {

@@ -58,7 +58,7 @@ const base = serviceTemplate("teams");
 
 const module = mergeDeep(base, {
 	actions: {
-		acceptInvitation: async function(ctx, teamId) {
+		acceptInvitation: async function (ctx, teamId) {
 			return this.$axios.$get("/teams/extern/accept/" + teamId);
 		},
 	},

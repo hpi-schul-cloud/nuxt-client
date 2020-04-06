@@ -1,4 +1,4 @@
-export default function(data) {
+export default function (data) {
 	return {
 		color: ["#2f4554", "#b1063a"],
 		tooltip: {
