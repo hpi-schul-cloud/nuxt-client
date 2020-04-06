@@ -107,7 +107,6 @@ describe("screenshots", () => {
 					failureThresholdType: "percent",
 					failureThreshold: 0.1, // accept <x% overall diff (0.01 is 1%, default: 0)
 					runInProcess: true, // disable child spawn for jest multithread safetiness. Otherwise images may get switched with each other.
-					allowSizeMismatch: true,
 				});
 			});
 		});
