@@ -5,7 +5,6 @@
 			close-on-select
 			:value="perPageSelected"
 			:options="perPageOptions"
-			:placeholder="placeholder"
 			:allow-empty="false"
 			track-by="value"
 			option-label="label"

@@ -3,7 +3,7 @@
 		<div
 			v-for="chip in chips"
 			:key="chip.id"
-			:design="outline"
+			design="outline"
 			role="button"
 			tabindex="0"
 			:class="{
