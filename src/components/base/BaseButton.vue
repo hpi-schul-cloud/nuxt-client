@@ -1,6 +1,6 @@
 <template>
 	<button
-		v-if="!isLink && $_hasPermission"
+		v-if="!isLink"
 		:class="classes"
 		:type="type"
 		:aria-label="ariaLabel"
@@ -12,7 +12,7 @@
 			styled as a Button if you give him a href/to property
 		--></button>
 	<base-link
-		v-else-if="$_hasPermission"
+		v-else
 		:class="classes"
 		v-bind="{ ...$props, ...$attrs }"
 		:no-styles="true"
@@ -24,9 +24,7 @@
 </template>
 
 <script>
-import UserHasPermission from "@/mixins/UserHasPermission";
 export default {
-	mixins: [UserHasPermission],
 	props: {
 		size: {
 			type: String,
