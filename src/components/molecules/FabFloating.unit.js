@@ -20,16 +20,6 @@ const bottomRightFab = {
 	template: `<fab-floating position="bottom-right" />`,
 };
 
-const FabWithoutPermission = {
-	components: { FabFloating },
-	template: `<fab-floating permission="YOU_DIDNT_SAY_THE_MAGIC_WORD" />`,
-};
-
-const FabWithPermission = {
-	components: { FabFloating },
-	template: `<fab-floating permission="STUDENT_CREATE" />`,
-};
-
 describe("@components/molecules/FabFloating", () => {
 	it(...isValidComponent(FabFloating));
 
@@ -60,39 +50,5 @@ describe("@components/molecules/FabFloating", () => {
 	it("Renders a fab bottom right", () => {
 		const wrapper = mount(bottomRightFab);
 		expect(wrapper.attributes().style).toBe("right: 5vw; bottom: 4vh;");
-	});
-
-	it("Should not render a fab without permission", () => {
-		const wrapper = mount(FabWithoutPermission, {
-			...createComponentMocks({
-				store: {
-					auth: {
-						state: () => ({
-							user: {
-								permissions: ["ACCESS_SECURITY_GRID"],
-							},
-						}),
-					},
-				},
-			}),
-		});
-		expect(wrapper.find(".fab").exists()).toBe(false);
-	});
-
-	it("Should render a fab with permission", () => {
-		const wrapper = mount(FabWithPermission, {
-			...createComponentMocks({
-				store: {
-					auth: {
-						state: () => ({
-							user: {
-								permissions: ["STUDENT_CREATE"],
-							},
-						}),
-					},
-				},
-			}),
-		});
-		expect(wrapper.find(".fab").exists()).toBe(true);
 	});
 });

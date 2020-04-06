@@ -56,9 +56,9 @@
 		</backend-data-table>
 		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
 		<fab-floating
+			v-if="this.$_userHasPermission('TEACHER_CREATE')"
 			position="bottom-right"
 			:show-label="true"
-			permission="TEACHER_CREATE"
 			:actions="[
 				{
 					label: $t('pages.administration.teachers.fab.add'),
@@ -82,6 +82,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import print from "@mixins/print";
+import UserHasPermission from "@/mixins/UserHasPermission";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -92,7 +93,7 @@ export default {
 		AdminTableLegend,
 		FabFloating,
 	},
-	mixins: [print],
+	mixins: [print, UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,

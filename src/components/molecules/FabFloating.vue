@@ -1,5 +1,5 @@
 <template>
-	<div v-if="$_hasPermission" :style="currentPosition" class="fab">
+	<div :style="currentPosition" class="fab">
 		<fab-icon
 			v-bind="$attrs"
 			:expand-direction="expandDirection"
@@ -13,11 +13,9 @@
  * ToDo: Should support Text-Fab
  */
 import FabIcon from "@components/molecules/FabIcon";
-import UserHasPermission from "@/mixins/UserHasPermission";
 
 export default {
 	components: { FabIcon },
-	mixins: [UserHasPermission],
 	props: {
 		position: {
 			type: String,
