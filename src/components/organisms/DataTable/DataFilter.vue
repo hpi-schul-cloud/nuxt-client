@@ -25,7 +25,7 @@ export default {
 		filters: {
 			type: Array,
 			default: () => [],
-			validator: function(filters) {
+			validator: function (filters) {
 				return filters.every((filter) => {
 					const hasValidType =
 						!!filter.type && supportedFilterTypes.includes(filter.type);
