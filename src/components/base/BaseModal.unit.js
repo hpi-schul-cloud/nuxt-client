@@ -25,7 +25,7 @@ const modal = {
 	components: { BaseModal },
 };
 
-describe("@components/BaseModal", () => {
+describe("@components/base/BaseModal", () => {
 	it(...isValidComponent(BaseModal));
 	it(
 		...rendersSlotContent(BaseModal, ["default"], {
@@ -56,6 +56,17 @@ describe("@components/BaseModal", () => {
 		wrapper.find("#btn-close").trigger("click");
 		await wrapper.vm.$nextTick();
 		expect(wrapper.find("#btn-close").exists()).toBe(false);
+	});
+
+	it("pressing outside the model content should emit onBackdropClick event", async () => {
+		const wrapper = mount(modal);
+
+		wrapper.vm.active = true;
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find("#btn-close").exists()).toBe(true);
+		wrapper.find(".base-modal-wrapper").trigger("click");
+		await wrapper.vm.$nextTick();
+		expect(wrapper.find(BaseModal).emitted("onBackdropClick")).toHaveLength(1);
 	});
 
 	it("pressing outside the model content should close the modal", async () => {

@@ -75,6 +75,10 @@ export default {
 			default: "success",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 };
 </script>
 

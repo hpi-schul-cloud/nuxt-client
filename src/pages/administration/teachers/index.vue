@@ -3,17 +3,17 @@
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1 class="mb--md h3">
-			{{ $t("pages.administration.students.index.title") }}
+			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
 		<backend-data-table
 			:actions="tableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
-			:data="students"
+			:data="teachers"
 			:paginated="true"
+			:total="pagination.total"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
-			:total="pagination.total"
 			track-by="id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
@@ -23,97 +23,145 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
 			</template>
-			<template v-slot:datacolumn-consent-consentStatus="{ data }">
-				<span v-if="data === 'ok'">
+			<template v-slot:datacolumn-consent="{ data }">
+				<span v-if="data && data.consentStatus === 'ok'">
 					<base-icon
-						source="material"
-						icon="check"
-						color="var(--color-success)"
-					/>
-					<base-icon
-						style="position: relative; left: -17.5px;"
-						source="material"
-						icon="check"
+						source="custom"
+						icon="doublecheck"
 						color="var(--color-success)"
 					/>
 				</span>
-				<span v-else-if="data === 'parentsAgreed'">
+				<span v-else-if="data && data.consentStatus === 'teachersAgreed'">
 					<base-icon
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
 				</span>
-				<span v-else-if="data === 'missing'">
+				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
+				<span v-else />
 			</template>
+
 			<template v-slot:datacolumn-_id="{ data }">
 				<base-button
 					design="text icon"
 					size="small"
-					:to="`/administration/students/${data}/edit`"
+					:to="`/administration/teachers/${data}/edit`"
 				>
 					<base-icon source="material" icon="edit" />
 				</base-button>
 			</template>
 		</backend-data-table>
+		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
 				{
-					label: $t('pages.administration.students.fab.add'),
+					label: $t('pages.administration.teachers.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
-					href: '/administration/students/new',
+					to: '/administration/teachers/new',
 				},
 				{
-					label: $t('pages.administration.students.fab.import'),
+					label: $t('pages.administration.teachers.fab.import'),
 					icon: 'arrow_downward',
 					'icon-source': 'material',
-					href: '/administration/students/import',
+					href: '/administration/teachers/import',
 				},
 			]"
 		/>
 	</section>
 </template>
-
 <script>
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
-
 export default {
 	layout: "loggedInFull",
 	components: {
 		BackendDataTable,
+		AdminTableLegend,
 		FabFloating,
 	},
 	mixins: [print],
+	props: {
+		showExternalSyncHint: {
+			type: Boolean,
+		},
+	},
+
 	data() {
 		return {
 			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
 			page:
 				parseInt(
 					localStorage.getItem(
-						"pages.administration.students.index.currentPage"
+						"pages.administration.teachers.index.currentPage"
 					)
 				) || 1,
 			limit:
 				parseInt(
 					localStorage.getItem(
-						"pages.administration.students.index.itemsPerPage"
+						"pages.administration.teachers.index.itemsPerPage"
 					)
 				) || 10,
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+					icon: { source: "fa", icon: "cog" },
+				},
+				{
+					text: this.$t("pages.administration.teachers.index.title"),
+				},
+			],
+
+			tableActions: [
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.consent"
+					),
+					icon: "check",
+					"icon-source": "material",
+					action: this.handleBulkConsent,
+				},
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.email"
+					),
+					icon: "mail_outline",
+					"icon-source": "material",
+					action: this.handleBulkEMail,
+				},
+				{
+					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
+					"icon-source": "fa",
+					icon: "qrcode",
+					action: this.handleBulkQR,
+				},
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.delete"
+					),
+					icon: "delete_outline",
+					"icon-source": "material",
+					action: this.handleBulkDelete,
+				},
+			],
+			tableSelection: [],
+			tableSelectionType: "inclusive",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -128,12 +176,8 @@ export default {
 					field: "email",
 					label: this.$t("common.labels.email"),
 				},
-				// {
-				// 	field: "birthday",
-				// 	label: this.$t("common.labels.birthday"),
-				// },
 				{
-					field: "consent.consentStatus",
+					field: "consent",
 					label: this.$t("common.labels.consent"),
 				},
 				{
@@ -145,55 +189,29 @@ export default {
 					label: "",
 				},
 			],
-			tableActions: [
+			icons: [
 				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.consent"
-					),
+					icon: "doublecheck",
+					color: "var(--color-success)",
+					style: "margin: -3px 3px",
+					label: this.$t("pages.administration.students.legend.icon.success"),
+				},
+				{
 					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
+					color: "var(--color-warning)",
+					label: this.$t("pages.administration.teachers.legend.icon.warning"),
 				},
 				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.email"
-					),
-					icon: "mail_outline",
-					"icon-source": "material",
-					action: this.handleBulkEMail,
-				},
-				{
-					label: this.$t("pages.administration.students.index.tableActions.qr"),
-					"icon-source": "fa",
-					icon: "qrcode",
-					action: this.handleBulkQR,
-				},
-				{
-					label: this.$t(
-						"pages.administration.students.index.tableActions.delete"
-					),
-					icon: "delete_outline",
-					"icon-source": "material",
-					action: this.handleBulkDelete,
-				},
-			],
-			tableSelection: [],
-			tableSelectionType: "inclusive",
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
-					icon: { source: "fa", icon: "cog" },
-				},
-				{
-					text: this.$t("pages.administration.students.index.title"),
+					icon: "clear",
+					color: "var(--color-danger)",
+					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
 		};
 	},
 	computed: {
 		...mapGetters("users", {
-			students: "list",
+			teachers: "list",
 		}),
 		...mapState("users", {
 			pagination: (state) =>
@@ -209,15 +227,14 @@ export default {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
 			};
-
-			this.$store.dispatch("users/findStudents", {
+			this.$store.dispatch("users/findTeachers", {
 				query,
 			});
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
 			localStorage.setItem(
-				"pages.administration.students.index.currentPage",
+				"pages.administration.teachers.index.currentPage",
 				page
 			);
 			this.find();
@@ -227,7 +244,7 @@ export default {
 			this.limit = limit;
 			// save user settings in localStorage
 			localStorage.setItem(
-				"pages.administration.students.index.itemsPerPage",
+				"pages.administration.teachers.index.itemsPerPage",
 				limit
 			);
 			this.find();
@@ -257,28 +274,7 @@ export default {
 				{ duration: 5000 }
 			);
 		},
-		async handleBulkQR(rowIds, selectionType) {
-			// TODO: request registrationsLinks fom backend
-			// route needs to be implemented!
 
-			// const users = await this.$store.dispatch("users/find", {
-			// 	qid: "qr-print",
-			// 	query: this.getQueryForSelection(rowIds, selectionType),
-			// });
-			// this.$_printQRs(
-			// 	usersWithoutConsents.map((user) => ({
-			// 		qrContent: user.registrationLink.shortLink,
-			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
-			// 		description: "Zum Registrieren bitte den Link öffnen.",
-			// 	}))
-			// );
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
-		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
@@ -296,17 +292,17 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Schüler löschen möchtest?`;
+				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Lehrer:in löschen möchtest?`;
 			} else {
 				if (rowIds.length) {
-					message = `Bist du sicher, dass du alle Schüler bis auf ${rowIds.length} löschen möchtest?`;
+					message = `Bist du sicher, dass du alle Lehrer:innen bis auf ${rowIds.length} löschen möchtest?`;
 				} else {
-					message = `Bist du sicher, dass du alle Schüler löschen möchtest?`;
+					message = `Bist du sicher, dass du alle Lehrer:innen löschen möchtest?`;
 				}
 			}
 			this.$dialog.confirm({
 				message,
-				confirmText: "Schüler löschen",
+				confirmText: "Lehrer:in löschen",
 				cancelText: "Abbrechen",
 				icon: "report_problem",
 				iconSource: "material",

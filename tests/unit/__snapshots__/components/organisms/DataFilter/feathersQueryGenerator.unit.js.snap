@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "<" with applyNegated false with value 5 1`] = `
+Object {
+  "randomKey": Object {
+    "$lt": 5,
+  },
+}
+`;
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "<" with applyNegated true with value 5 1`] = `
+Object {
+  "randomKey": Object {
+    "$gte": 5,
+  },
+}
+`;
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "<=" with applyNegated false with value "def" 1`] = `
+Object {
+  "randomKey": Object {
+    "$lte": "def",
+  },
+}
+`;
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "<=" with applyNegated true with value "abc" 1`] = `
+Object {
+  "randomKey": Object {
+    "$gt": "abc",
+  },
+}
+`;
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "=" with applyNegated false with value "equal" 1`] = `
+Object {
+  "randomKey": "equal",
+}
+`;
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "=" with applyNegated true with value "unequal" 1`] = `
+Object {
+  "randomKey": Object {
+    "$ne": "unequal",
+  },
+}
+`;
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "includes" with applyNegated false with value [1, 2, 3] 1`] = `
+Object {
+  "randomKey": Object {
+    "$in": Array [
+      1,
+      2,
+      3,
+    ],
+  },
+}
+`;
+
+exports[`@components/organisms/DataFilter/feathersQueryGenerator can generate query for "includes" with applyNegated true with value [1, 2, 3] 1`] = `
+Object {
+  "randomKey": Object {
+    "$nin": Array [
+      1,
+      2,
+      3,
+    ],
+  },
+}
+`;

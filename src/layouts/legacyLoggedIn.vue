@@ -21,6 +21,9 @@
 				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
 			/>
+			<keep-alive>
+				<autoLogoutWarning />
+			</keep-alive>
 			<slot />
 			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
@@ -35,6 +38,7 @@ import TheFooter from "@components/legacy/TheFooter";
 import UserHasRole from "@components/helpers/UserHasRole";
 import DemoBanner from "@components/legacy/DemoBanner";
 import sidebarBaseItems from "../utils/sidebarBaseItems.js";
+import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning";
 
 const topbarBaseActions = [
 	{
@@ -83,6 +87,7 @@ export default {
 		TheFooter,
 		DemoBanner,
 		UserHasRole,
+		autoLogoutWarning,
 	},
 	data() {
 		return {

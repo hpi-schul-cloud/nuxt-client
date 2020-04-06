@@ -18,6 +18,10 @@ export default {
 			default: window.location.href,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	methods: {
 		openPrintMenu: function () {
 			const win = window.open();

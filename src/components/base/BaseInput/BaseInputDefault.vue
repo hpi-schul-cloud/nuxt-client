@@ -126,7 +126,7 @@ export default {
 		classes: { type: String, default: "" },
 		focus: { type: Boolean },
 	},
-	data: function () {
+	data() {
 		return {
 			passwordVisible: false,
 		};

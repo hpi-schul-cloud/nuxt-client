@@ -1,6 +1,6 @@
 import ContentEmptyState from "./ContentEmptyState";
 
-describe("@components/ContentEmptyState", () => {
+describe("@components/molecules/ContentEmptyState", () => {
 	it(...isValidComponent(ContentEmptyState));
 
 	it("Renders svg image", () => {

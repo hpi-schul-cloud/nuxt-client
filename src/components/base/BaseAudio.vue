@@ -29,6 +29,10 @@ export default {
 			// TODO validate that type is unique
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		sources() {
 			return Array.isArray(this.src) ? this.src : [this.src];
