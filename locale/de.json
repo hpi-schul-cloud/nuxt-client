@@ -57,6 +57,7 @@
 	"components.organisms.ContentCard.report.body": "Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email": "inhalte@schul-cloud.org",
 	"components.organisms.ContentCard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da: [hier bitte Ihre Gründe]",
+	"components.organisms.DataFilter.add": "Filter hinzufügen",
 	"components.organisms.DatasourceRunWebuntis.discarded": "Verworfen",
 	"components.organisms.DatasourceRunWebuntis.import": "Daten importieren",
 	"components.organisms.DatasourceRunWebuntis.imported": "Importiert",

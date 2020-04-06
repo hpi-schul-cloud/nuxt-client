@@ -91,7 +91,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import { studentFitler } from "@utils/adminFilter";
+import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
@@ -220,7 +220,7 @@ export default {
 				},
 			],
 			backendFiltering: false,
-			filters: [studentFitler],
+			filters: studentFilter,
 		};
 	},
 	computed: {

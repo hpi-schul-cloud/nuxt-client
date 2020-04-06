@@ -1,6 +1,10 @@
 <template>
 	<div>
 		<vue-filter-ui
+			:label-add="$t('components.organisms.DataFilter.add')"
+			:label-apply="$t('common.actions.add')"
+			:label-remove="$t('common.actions.remove')"
+			:label-cancel="$t('common.actions.cancel')"
 			:filter="filters"
 			:parser="parser"
 			:query="activeFiltersProxy"
