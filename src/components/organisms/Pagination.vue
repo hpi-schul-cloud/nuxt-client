@@ -9,6 +9,8 @@
 			:allow-empty="false"
 			track-by="value"
 			option-label="label"
+			label="Einträge pro Seite"
+			:label-hidden="true"
 			@select="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
@@ -25,35 +27,26 @@
 			</p>
 			<ul v-if="total > 0" class="pagination-list">
 				<li v-if="currentPage > 1" class="pagination-link-wrapper">
-					<a>
-						<base-icon
-							class="pagination-link"
-							aria-label="Goto previous page"
-							source="material"
-							icon="keyboard_arrow_left"
-							@click="previousPage"
-						>
+					<base-button
+						design="none"
+						class="pagination-link"
+						aria-label="Goto previous page"
+						@click="previousPage"
+					>
+						<base-icon source="material" icon="keyboard_arrow_left">
 						</base-icon>
-					</a>
-				</li>
-				<li class="pagination-link-wrapper">
-					<a
-						:aria-label="`Page ${currentPage}`"
-						class="pagination-link current"
-						aria-current="page"
-					></a>
+					</base-button>
 				</li>
 				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
-					<a>
-						<base-icon
-							class="pagination-link"
-							aria-label="Goto next page"
-							source="material"
-							icon="keyboard_arrow_right"
-							@click="nextPage"
-						>
+					<base-button
+						design="none"
+						class="pagination-link"
+						aria-label="Goto next page"
+						@click="nextPage"
+					>
+						<base-icon source="material" icon="keyboard_arrow_right">
 						</base-icon>
-					</a>
+					</base-button>
 				</li>
 			</ul>
 		</div>
@@ -149,11 +142,9 @@ export default {
 	list-style: none;
 }
 
-.pagination-link {
-	width: 1.8rem;
-	height: 1.7rem;
-	margin-left: var(--space-xs);
-	font-size: var(--text-md);
+.pagination-link-wrapper .pagination-link {
+	padding: var(--space-xs);
+	margin-left: var(--space-sm);
 	color: var(--color-white);
 	cursor: pointer;
 	background-color: var(--color-tertiary);
