@@ -5,6 +5,8 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
+
+		<data-filter :filters="filters" />
 		<backend-data-table
 			:actions="tableActions"
 			:columns="tableColumns"
@@ -87,7 +89,9 @@
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
+import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import { studentFitler } from "@utils/adminFilter";
 import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
@@ -96,6 +100,7 @@ dayjs.locale("de");
 export default {
 	layout: "loggedInFull",
 	components: {
+		DataFilter,
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
@@ -214,6 +219,8 @@ export default {
 					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
+			backendFiltering: false,
+			filters: [studentFitler],
 		};
 	},
 	computed: {
