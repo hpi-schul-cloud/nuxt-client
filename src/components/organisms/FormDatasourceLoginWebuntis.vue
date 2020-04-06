@@ -34,7 +34,6 @@
 							'components.organisms.FormDatasourceLoginWebuntis.schoolname.placeholder'
 						)
 					"
-					class="mt--md"
 				>
 					<template v-slot:icon>
 						<base-icon source="material" icon="school" />
@@ -54,7 +53,6 @@
 							'components.organisms.FormDatasourceLoginWebuntis.username.placeholder'
 						)
 					"
-					class="mt--md"
 				>
 					<template v-slot:icon>
 						<base-icon source="custom" icon="user" />
@@ -74,7 +72,6 @@
 							'components.organisms.FormDatasourceLoginWebuntis.password.placeholder'
 						)
 					"
-					class="mt--md"
 					autocomplete="new-password"
 				>
 					<template v-slot:icon>
@@ -93,7 +90,6 @@
 							'components.organisms.FormDatasourceLoginWebuntis.url.placeholder'
 						)
 					"
-					class="mt--md"
 				/>
 			</template>
 		</form-datasource-login>

@@ -33,11 +33,14 @@
 							v-focus-on-mount="focus"
 							:aria-label="showLabel ? undefined : label"
 							v-bind="$attrs"
+							:placeholder="placeholder"
 							:type="appliedType"
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
 							@input="handleInput"
+							@focus="hasFocus = true"
+							@blur="hasFocus = false"
 						/>
 					</slot>
 				</div>
@@ -107,6 +110,7 @@ export default {
 		},
 		label: { type: String, required: true },
 		labelHidden: { type: Boolean },
+		placeholder: { type: String, default: "" },
 		info: { type: String, default: "" },
 		hint: { type: String, default: "" },
 		error: { type: String, default: "" },
@@ -117,6 +121,7 @@ export default {
 	},
 	data() {
 		return {
+			hasFocus: false,
 			passwordVisible: false,
 		};
 	},
@@ -131,7 +136,13 @@ export default {
 			return !!this.error;
 		},
 		showLabel() {
-			return (!!this.vmodel || !this.$attrs.placeholder) && !this.labelHidden;
+			return (
+				(this.hasFocus ||
+					this.disabled ||
+					Boolean(this.vmodel) ||
+					!this.placeholder) &&
+				!this.labelHidden
+			);
 		},
 	},
 	methods: {
@@ -156,7 +167,7 @@ export default {
 	display: block;
 
 	.help {
-		padding-top: var(--space-xxxs);
+		padding-top: var(--space-xs-3);
 		visibility: hidden;
 	}
 
@@ -197,8 +208,8 @@ export default {
 	.info-line {
 		display: flex;
 		justify-content: space-between;
-		min-height: var(--text-md);
-		margin-bottom: var(--space-xxxxs);
+		min-height: 1em;
+		line-height: 100%;
 
 		&:not(.label-visible) {
 			justify-content: flex-end;
@@ -221,15 +232,13 @@ export default {
 				padding: var(--space-xs-2) 0;
 				line-height: var(--line-height-md);
 				color: var(--color-text);
+				background: transparent;
 				border: none;
 				&:focus {
 					outline: none;
 				}
 				&:disabled {
-					background-color: transparent;
-					&::placeholder {
-						color: var(--color-disabled-dark);
-					}
+					color: var(--color-disabled-dark);
 				}
 			}
 		}
@@ -244,6 +253,7 @@ export default {
 
 .pwd-toggle {
 	padding: 0 var(--space-xs-2);
+	font-size: var(--text-lg);
 	color: var(--color-gray);
 	border-radius: var(--radius-round);
 	&:hover {
