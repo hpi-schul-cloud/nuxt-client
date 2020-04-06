@@ -38,7 +38,7 @@
 					v-else-if="column.sortable"
 					icon="sort"
 					source="fa"
-					fill="var(--color-gray)"
+					style="color: var(--color-gray);"
 				/>
 			</BaseButton>
 			<div v-else class="th-wrap">
