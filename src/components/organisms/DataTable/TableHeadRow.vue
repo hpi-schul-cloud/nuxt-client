@@ -31,8 +31,8 @@
 				<span>{{ column.label }}</span>
 				<base-icon
 					v-if="sortBy === column.field"
-					:icon="sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'"
-					source="material"
+					:icon="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'"
+					source="fa"
 				/>
 				<base-icon
 					v-else-if="column.sortable"
