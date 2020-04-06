@@ -7,14 +7,6 @@
 		<form-create-user :role-name="roleName" @success="success" @error="error">
 			<template v-slot:inputs="{ userData }">
 				<base-input
-					v-model="userData.birthday"
-					type="date"
-					:label="$t('common.labels.birthdate')"
-					:placeholder="$t('common.placeholder.birthdate')"
-					class="mt--md"
-				>
-				</base-input>
-				<base-input
 					v-model="userData.sendRegistration"
 					type="checkbox"
 					name="switch"
