@@ -1,7 +1,6 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
 		<base-select
-			label="Einträge pro Seite"
 			style="max-width: 150px;"
 			close-on-select
 			:value="perPageSelected"
@@ -10,10 +9,12 @@
 			:allow-empty="false"
 			track-by="value"
 			option-label="label"
+			label="Einträge pro Seite"
+			:label-hidden="true"
 			@select="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
-			<div class="mr--md">
+			<p class="total">
 				{{ total > 0 ? currentPage * perPage - perPage + 1 : 0 }} bis
 				{{
 					perPage > total
@@ -23,31 +24,29 @@
 						: currentPage * perPage
 				}}
 				von {{ total }}
-			</div>
+			</p>
 			<ul v-if="total > 0" class="pagination-list">
 				<li v-if="currentPage > 1" class="pagination-link-wrapper">
-					<a
+					<base-button
+						design="none"
 						class="pagination-link"
 						aria-label="Goto previous page"
 						@click="previousPage"
-						>←</a
 					>
-				</li>
-				<li class="pagination-link-wrapper">
-					<a
-						:aria-label="`Page ${currentPage}`"
-						class="pagination-link current"
-						aria-current="page"
-						>{{ currentPage }}</a
-					>
+						<base-icon source="material" icon="keyboard_arrow_left">
+						</base-icon>
+					</base-button>
 				</li>
 				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
-					<a
+					<base-button
+						design="none"
 						class="pagination-link"
 						aria-label="Goto next page"
 						@click="nextPage"
-						>→</a
 					>
+						<base-icon source="material" icon="keyboard_arrow_right">
+						</base-icon>
+					</base-button>
 				</li>
 			</ul>
 		</div>
@@ -72,10 +71,6 @@ export default {
 		total: {
 			type: Number,
 			default: 0,
-		},
-		placeholder: {
-			type: String,
-			default: "Pro Seite",
 		},
 	},
 	data() {
@@ -146,15 +141,18 @@ export default {
 	padding: 0;
 	list-style: none;
 }
-.pagination-link-wrapper {
-	display: inline-block;
+
+.pagination-link-wrapper .pagination-link {
+	padding: var(--space-xs);
+	margin-left: var(--space-sm);
+	color: var(--color-white);
+	cursor: pointer;
+	background-color: var(--color-tertiary);
+	border-radius: var(--radius-sm);
 }
-.pagination-link {
-	display: inline-block;
-	padding: var(--space-sm);
-	background-color: var(--color-gray-light);
-	&:not(.current) {
-		cursor: pointer;
-	}
+
+.total {
+	margin-right: var(--space-sm);
+	margin-bottom: 0;
 }
 </style>
