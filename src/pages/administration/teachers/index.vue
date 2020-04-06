@@ -11,9 +11,9 @@
 			:current-page.sync="page"
 			:data="teachers"
 			:paginated="true"
+			:total="pagination.total"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
-			:total="pagination.total"
 			track-by="id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
@@ -43,14 +43,7 @@
 				</span>
 				<span v-else />
 			</template>
-			<template v-slot:datacolumn-classes="{ data }">
-				<div v-if="data.length">
-					<div v-for="cls in data" :key="cls">{{ cls }},</div>
-				</div>
-				<div v-else>
-					<div>-</div>
-				</div>
-			</template>
+
 			<template v-slot:datacolumn-_id="{ data }">
 				<base-button
 					design="text icon"
@@ -104,6 +97,7 @@ export default {
 			type: Boolean,
 		},
 	},
+
 	data() {
 		return {
 			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
@@ -116,9 +110,54 @@ export default {
 			limit:
 				parseInt(
 					localStorage.getItem(
-						"pages.administration.students.index.itemsPerPage"
+						"pages.administration.teachers.index.itemsPerPage"
 					)
 				) || 10,
+			breadcrumbs: [
+				{
+					text: this.$t("pages.administration.index.title"),
+					to: "/administration/",
+					icon: { source: "fa", icon: "cog" },
+				},
+				{
+					text: this.$t("pages.administration.teachers.index.title"),
+				},
+			],
+
+			tableActions: [
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.consent"
+					),
+					icon: "check",
+					"icon-source": "material",
+					action: this.handleBulkConsent,
+				},
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.email"
+					),
+					icon: "mail_outline",
+					"icon-source": "material",
+					action: this.handleBulkEMail,
+				},
+				{
+					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
+					"icon-source": "fa",
+					icon: "qrcode",
+					action: this.handleBulkQR,
+				},
+				{
+					label: this.$t(
+						"pages.administration.teachers.index.tableActions.delete"
+					),
+					icon: "delete_outline",
+					"icon-source": "material",
+					action: this.handleBulkDelete,
+				},
+			],
+			tableSelection: [],
+			tableSelectionType: "inclusive",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -150,23 +189,6 @@ export default {
 					label: "",
 				},
 			],
-			tableActions: [
-				{
-					label: this.$t("pages.administration.teachers.index.itemsPerPage"),
-				},
-			],
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
-					icon: { source: "fa", icon: "cog" },
-				},
-				{
-					text: this.$t("pages.administration.teachers.index.title"),
-				},
-			],
-			tableSelection: [],
-			tableSelectionType: "inclusive",
 			icons: [
 				{
 					icon: "check",
@@ -246,6 +268,7 @@ export default {
 				{ duration: 5000 }
 			);
 		},
+
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
