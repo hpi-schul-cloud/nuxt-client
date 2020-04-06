@@ -100,12 +100,12 @@ describe("screenshots", () => {
 						// defaultIdentifier
 					) => `${group}-${name}_${counter + 1}`,
 					customDiffConfig: {
-						// each pixel can be x% off of the baseline
+						// each pixel is allowed to be x% off from the baseline
 						threshold: 0.01, // (0.01 is 1%, default 0.01)
 					},
-					blur: 0,
+					blur: 5,
 					failureThresholdType: "percent",
-					failureThreshold: 0, // accept <x% overall diff (0.01 is 1%, default: 0)
+					failureThreshold: 0.05, // accept <x% overall diff (0.01 is 1%, default: 0)
 					runInProcess: true, // disable child spawn for jest multithread safetiness. Otherwise images may get switched with each other.
 					allowSizeMismatch: true,
 				});
