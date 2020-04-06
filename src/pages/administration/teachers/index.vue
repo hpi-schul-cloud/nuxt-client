@@ -58,6 +58,7 @@
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
+			permission="TEACHER_CREATE"
 			:actions="[
 				{
 					label: $t('pages.administration.teachers.fab.add'),

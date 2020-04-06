@@ -65,6 +65,7 @@
 			v-if="schoolInternallyManaged"
 			position="bottom-right"
 			:show-label="true"
+			permission="STUDENT_CREATE"
 			:actions="[
 				{
 					label: $t('pages.administration.students.fab.add'),
