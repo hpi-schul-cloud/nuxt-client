@@ -311,6 +311,11 @@ export default {
 			},
 			immediate: true,
 		},
+		currentPage(to, from) {
+			if (to !== from) {
+				window.scrollTo({ top: 0, behavior: "smooth" });
+			}
+		},
 	},
 	methods: {
 		getValueByPath,
