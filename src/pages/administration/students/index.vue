@@ -278,7 +278,7 @@ export default {
 		handleBulkConsent(rowIds, selectionType) {
 			bulkConsent = {
 				rowIds,
-				selectionType
+				selectionType,
 			};
 			// store push
 			this.$router.push({
