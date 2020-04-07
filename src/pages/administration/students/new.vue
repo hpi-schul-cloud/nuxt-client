@@ -33,6 +33,9 @@ export default {
 	components: {
 		FormCreateUser,
 	},
+	meta: {
+		requiredPermissions: ["STUDENT_CREATE"],
+	},
 	data() {
 		return {
 			breadcrumbs: [
