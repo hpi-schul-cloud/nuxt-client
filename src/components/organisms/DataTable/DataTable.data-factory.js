@@ -1,9 +1,9 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
 import { layouts } from "vue-filter-ui";
-import InputCheckbox from "@components/organisms/DataFilter/InputCheckbox";
-import InputRadio from "@components/organisms/DataFilter/InputRadio";
-import DataFilterInput from "@components/organisms/DataFilter/DataFilterInput";
+import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
+import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
+import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
@@ -101,7 +101,7 @@ const tableFilters = [
 				attribute: "age",
 				applyNegated: true,
 				operator: "<=",
-				input: DataFilterInput,
+				input: InputDefault,
 				label: "Alter",
 				attributes: {
 					type: "number",
@@ -118,7 +118,7 @@ const tableFilters = [
 			{
 				attribute: "birthday",
 				operator: "=",
-				input: DataFilterInput,
+				input: InputDefault,
 				label: "Geburtstag",
 				attributes: {
 					type: "date",
@@ -149,7 +149,7 @@ const tableFilters = [
 			{
 				attribute: "firstName",
 				operator: "includes",
-				input: DataFilterInput,
+				input: InputDefault,
 				label: "Vorname",
 				attributes: {
 					type: "text",

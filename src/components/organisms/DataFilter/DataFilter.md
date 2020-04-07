@@ -15,17 +15,18 @@ The `data` prop must be a flat Array of Objects with an undefined structure. You
 An array of the possible filters. As it is passed to vue-filter-ui it the property has to follow the structure of the filter-property of [vue-filter-ui](http://docs.vue-filter-ui.surge.sh/2-Configuration.html#filter).
 
 ```js
+import InputDefault from "@components/organisms/DataFilter/Inputs/Default";
+
 const filters = [
 	{
 		title: "Items per page",
 		chipTemplate: "Items per page: %1",
 		required: true,
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "$limit",
 				operator: "<",
-				input: inputs.Radio,
+				input: InputDefault,
 				options: [
 					{ value: 25, label: "25" },
 					{ value: 50, label: "50" },
