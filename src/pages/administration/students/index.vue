@@ -50,8 +50,16 @@
 				</span>
 				<span v-else />
 			</template>
-			<template v-if="schoolInternallyManaged" v-slot:datacolumn-_id="{ data }">
+			<template
+				v-if="schoolInternallyManaged"
+				v-slot:datacolumn-_id="{ data, selected, highlighted }"
+			>
 				<base-button
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
 					design="text icon"
 					size="small"
 					:to="`/administration/students/${data}/edit`"
@@ -370,3 +378,20 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+a.action-button {
+	&.row-highlighted:hover {
+		background-color: var(--color-white);
+	}
+	&.row-selected {
+		color: var(--color-white);
+		&:hover {
+			background-color: var(--color-tertiary-dark);
+			box-shadow: none;
+		}
+	}
+}
+</style>
