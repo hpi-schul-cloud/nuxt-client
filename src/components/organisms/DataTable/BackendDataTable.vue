@@ -22,6 +22,7 @@
 							:columns="columns"
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
+							@update:sort="onUpdateSort"
 						/>
 					</thead>
 					<tbody>
@@ -337,6 +338,9 @@ export default {
 					? this.selectionKeys[rowId]
 					: !this.selectionKeys[rowId]
 			);
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.$emit("update:sort", sortBy, sortOrder);
 		},
 		onUpdateRowsPerPage(value) {
 			this.$emit("update:current-page", 1);
