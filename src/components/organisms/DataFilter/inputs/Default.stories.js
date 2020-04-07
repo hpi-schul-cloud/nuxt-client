@@ -18,6 +18,7 @@ storiesOf("6 Organisms/DataFilter/Inputs", module)
 			template: `
 			<InputDefault
 				v-model="value"
+				label="Label"
 				type="text"
 				@input="onInput"
 			/>`,

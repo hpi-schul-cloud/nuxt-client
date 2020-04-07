@@ -19,6 +19,7 @@ storiesOf("6 Organisms/DataFilter/Inputs", module)
 			<div>
 				<InputRadio
 					v-model="value"
+					label="Label"
 					:options="[
 						{ value: 'A', label: 'Radio 1' },
 						{ value: 'B', label: 'Radio 2' },

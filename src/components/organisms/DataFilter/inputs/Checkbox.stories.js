@@ -19,6 +19,7 @@ storiesOf("6 Organisms/DataFilter/Inputs", module)
 			<div>
 				<InputCheckbox
 					v-model="value"
+					label="Label"
 					:options="[
 						{ value: 'A', label: 'Checkbox 1' },
 						{ value: 'B', label: 'Checkbox 2' },
