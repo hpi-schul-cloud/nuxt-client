@@ -38,9 +38,9 @@
 						>
 							<template
 								v-for="(cmp, name) in dataRowSlots"
-								v-slot:[name]="{ data: columnData }"
+								v-slot:[name]="columnProps"
 							>
-								<slot :name="name" :data="columnData" />
+								<slot :name="name" v-bind="columnProps" />
 							</template>
 						</component>
 					</tbody>
