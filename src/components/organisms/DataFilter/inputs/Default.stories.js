@@ -10,6 +10,10 @@ storiesOf("6 Organisms/DataFilter/Inputs", module)
 			# DataFilter/Inputs
 
 			additional props can be passed to the inputs using the "attributes" config key. Check [the docs](http://docs.vue-filter-ui.surge.sh/Customize/5-Input.html#interface) for more details.
+
+			## Default
+
+			same as BaseInput. Should always be used, except for radio buttons and checkboxes.
 		`,
 	})
 	.add("Default", () => {
