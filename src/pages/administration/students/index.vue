@@ -276,12 +276,14 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+			bulkConsent = {
+				rowIds,
+				selectionType
+			};
+			// store push
+			this.$router.push({
+				path: "/administration/students/consent",
+			});
 		},
 		handleBulkEMail(rowIds, selectionType) {
 			this.$toast.error(
