@@ -1,6 +1,8 @@
-// import { layouts } from "vue-filter-ui";
-
 import InputCheckbox from "@components/organisms/DataFilter/InputCheckbox";
+import DataFilterInput from "@components/organisms/DataFilter/DataFilterInput";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 
 export const studentFilter = [
 	{
@@ -33,48 +35,70 @@ export const studentFilter = [
 			},
 		],
 	},
-	// {
-	// 	title: "Vorname",
-	// 	chipTemplate: "Vorname enthält %1",
-	// 	filter: [
-	// 		{
-	// 			attribute: "firstName",
-	// 			operator: "includes",
-	// 			input: inputs.InputText,
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	title: "Nachname",
-	// 	chipTemplate: "Nachname enthält %1",
-	// 	filter: [
-	// 		{
-	// 			attribute: "lastName",
-	// 			operator: "includes",
-	// 			input: inputs.InputText,
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	title: "E-mail",
-	// 	chipTemplate: "Email enthält %1",
-	// 	filter: [
-	// 		{
-	// 			attribute: "email",
-	// 			operator: "includes",
-	// 			input: inputs.InputText,
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	title: "Erstellt am %1",
-	// 	chipTemplate: "Erstellt am %1",
-	// 	filter: [
-	// 		{
-	// 			attribute: "createdAt",
-	// 			operator: "includes",
-	// 			input: inputs.InputNumber,
-	// 		},
-	// 	],
-	// },
+	{
+		title: "Vorname",
+		chipTemplate: "Vorname enthält %1",
+		filter: [
+			{
+				attribute: "firstName",
+				operator: "includes",
+
+				label: "Vorname",
+				input: DataFilterInput,
+				attributes: {
+					type: "text",
+					placeholder: "Nach Name filtern...",
+				},
+			},
+		],
+	},
+	{
+		title: "Erstellt am",
+		chipTemplate: (filter) => {
+			return `Erstellt zwischen ${dayjs(filter[0]).format(
+				"DD.MM.YYYY"
+			)} und ${dayjs(filter[1]).format("DD.MM.YYYY")} `;
+		},
+		parser: {
+			generator: (filterGroupConfig, values) => {
+				const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
+				return {
+					createdAt: {
+						$gte: dayjs(values[filterGroupConfig.filter[0].id])
+							.utc()
+							.format(UTCFormat),
+						$lte: dayjs(values[filterGroupConfig.filter[1].id])
+							.utc()
+							.format(UTCFormat),
+					},
+				};
+			},
+			parser: (filterGroupConfig, query) => {
+				return {
+					[filterGroupConfig.filter[0].id]: query?.createdAt?.$gte,
+					[filterGroupConfig.filter[1].id]: query?.createdAt?.$lte,
+				};
+			},
+		},
+		filter: [
+			{
+				attribute: "createdAt",
+				input: DataFilterInput,
+				label: "Erstellungsdatum von",
+				attributes: {
+					type: "date",
+					placeholder: "Erstellungsdatum filtern",
+				},
+			},
+			{
+				attribute: "createdAt",
+				input: DataFilterInput,
+				label: "Erstellungsdatum bis",
+				attributes: {
+					type: "date",
+					placeholder: "Erstellungsdatum filtern",
+				},
+			},
+		],
+	},
 ];

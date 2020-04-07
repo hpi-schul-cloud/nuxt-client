@@ -18,7 +18,6 @@
 
 <script>
 import VueFilterUi, { parser } from "vue-filter-ui";
-import feathersQueryGenerator from "./feathersQueryGenerator";
 import {
 	defaultFilters,
 	supportedFilterTypes,
@@ -55,12 +54,14 @@ export default {
 			DataFilterModal,
 			DataFilterChips,
 			DataFilterSelect,
-			parser: parser.Default,
 			localQuery: undefined,
 			localActiveFilters: undefined,
 		};
 	},
 	computed: {
+		parser() {
+			return this.backendFiltering ? parser.FeathersJS : parser.Default;
+		},
 		filteredData() {
 			// ToDo implement filtering for other data types than strings
 			if (!this.backendFiltering) {
@@ -101,10 +102,7 @@ export default {
 				if (!this.backendFiltering) {
 					this.$emit("update:filtered-data", this.filteredData);
 				} else {
-					const feathersQuery = feathersQueryGenerator.generator(
-						this.activeFilters
-					);
-					this.$emit("update:filter-query", feathersQuery);
+					this.$emit("update:filter-query", to);
 				}
 			},
 		},

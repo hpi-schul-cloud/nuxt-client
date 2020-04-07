@@ -6,7 +6,11 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 
-		<data-filter :filters="filters" />
+		<data-filter
+			:filters="filters"
+			:backend-filtering="true"
+			@update:filter-query="onUpdateFilterQuery"
+		/>
 		<backend-data-table
 			:actions="tableActions"
 			:columns="tableColumns"
@@ -219,7 +223,6 @@ export default {
 					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
-			backendFiltering: false,
 			filters: studentFilter,
 		};
 	},
@@ -246,6 +249,7 @@ export default {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
+				...this.currentQuery,
 			};
 
 			this.$store.dispatch("users/findStudents", {
@@ -354,6 +358,10 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
+		},
+		onUpdateFilterQuery(query) {
+			this.currentQuery = query;
+			this.onUpdateCurrentPage(1);
 		},
 	},
 };
