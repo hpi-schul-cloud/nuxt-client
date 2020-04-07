@@ -1,5 +1,7 @@
-import * as faker from "faker";
 import dayjs from "dayjs";
+import faker from "faker/locale/en";
+// set a seed to have a consistent fake for the screenshot tests
+faker.seed(512); // any static number will do the job
 import { inputs, layouts } from "vue-filter-ui";
 
 const tableData = (n, overwrite = () => ({})) =>
