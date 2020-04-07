@@ -25,6 +25,9 @@ export default {
 	components: {
 		FormCreateUser,
 	},
+	meta: {
+		requiredPermissions: ["TEACHER_CREATE"],
+	},
 	data() {
 		return {
 			breadcrumbs: [
