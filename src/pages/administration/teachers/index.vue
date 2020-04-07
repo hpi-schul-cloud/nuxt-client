@@ -17,6 +17,9 @@
 			track-by="id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
@@ -115,6 +118,8 @@ export default {
 						"pages.administration.teachers.index.itemsPerPage"
 					)
 				) || 10,
+			sortBy: "firstName",
+			sortOrder: "asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -169,10 +174,12 @@ export default {
 				{
 					field: "lastName",
 					label: this.$t("common.labels.lastName"),
+					sortable: true,
 				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
+					sortable: true,
 				},
 				{
 					field: "classes",
@@ -185,6 +192,7 @@ export default {
 				{
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
+					sortable: true,
 				},
 				{
 					field: "_id",
@@ -222,10 +230,18 @@ export default {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
+				$sort: {
+					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
+				},
 			};
 			this.$store.dispatch("users/findTeachers", {
 				query,
 			});
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortBy = sortBy;
+			this.sortOrder = sortOrder;
+			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
