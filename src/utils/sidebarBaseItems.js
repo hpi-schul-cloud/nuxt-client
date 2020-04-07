@@ -82,7 +82,7 @@ export default [
 		title: "Verwaltung",
 		href: "/administration",
 		icon: "cogs",
-		permission: "STUDENT_CREATE",
+		permission: "STUDENT_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		children: [
 			{
