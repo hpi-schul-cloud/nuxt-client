@@ -310,3 +310,31 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+// handle style in a highlight table row
+tr.highlight {
+	/* stylelint-disable-next-line */
+	.is-text {
+		&:hover {
+			background-color: var(--color-white);
+			box-shadow: none;
+		}
+	}
+}
+
+// handle style in a selected table row
+tr.selected {
+	/* stylelint-disable-next-line */
+	.is-text {
+		color: var(--color-white);
+
+		&:hover {
+			background-color: var(--color-tertiary-dark);
+			box-shadow: none;
+		}
+	}
+}
+</style>
