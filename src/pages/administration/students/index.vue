@@ -17,6 +17,9 @@
 			track-by="id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
@@ -47,8 +50,16 @@
 				</span>
 				<span v-else />
 			</template>
-			<template v-if="schoolInternallyManaged" v-slot:datacolumn-_id="{ data }">
+			<template
+				v-if="schoolInternallyManaged"
+				v-slot:datacolumn-_id="{ data, selected, highlighted }"
+			>
 				<base-button
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
 					design="text icon"
 					size="small"
 					:to="`/administration/students/${data}/edit`"
@@ -127,6 +138,8 @@ export default {
 						"pages.administration.students.index.itemsPerPage"
 					)
 				) || 10,
+			sortBy: "firstName",
+			sortOrder: "asc",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -136,10 +149,12 @@ export default {
 				{
 					field: "lastName",
 					label: this.$t("common.labels.lastName"),
+					sortable: true,
 				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
+					sortable: true,
 				},
 				// {
 				// 	field: "birthday",
@@ -152,6 +167,7 @@ export default {
 				{
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
+					sortable: true,
 				},
 				{
 					field: "_id",
@@ -247,11 +263,19 @@ export default {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
+				$sort: {
+					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
+				},
 			};
 
 			this.$store.dispatch("users/findStudents", {
 				query,
 			});
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortBy = sortBy;
+			this.sortOrder = sortOrder;
+			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
@@ -359,3 +383,20 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+a.action-button {
+	&.row-highlighted:hover {
+		background-color: var(--color-white);
+	}
+	&.row-selected {
+		color: var(--color-white);
+		&:hover {
+			background-color: var(--color-tertiary-dark);
+			box-shadow: none;
+		}
+	}
+}
+</style>
