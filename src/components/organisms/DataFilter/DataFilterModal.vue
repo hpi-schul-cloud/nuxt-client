@@ -1,5 +1,5 @@
 <template>
-	<base-modal :active="true">
+	<base-modal :active="true" @onBackdropClick="$emit('cancel')">
 		<template v-slot:header>
 			{{ title | entities }}
 		</template>
@@ -48,14 +48,3 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped>
-@import "@styles";
-
-.btn-left {
-	margin: 0 var(--space-md);
-
-	@include breakpoint(tablet) {
-		margin: 0;
-	}
-}
-</style>

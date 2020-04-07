@@ -13,9 +13,9 @@
 			@click="$emit('open', chip.id)"
 			@keyup.self.enter.space="$emit('open', chip.id)"
 		>
-			<p class="label">
+			<span class="label">
 				{{ chip.label }}
-			</p>
+			</span>
 			<base-button
 				v-if="chip.deletable"
 				design="none"
@@ -112,7 +112,6 @@ $transition: background var(--duration-transition-medium)
 	}
 
 	.label {
-		margin: 0;
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		font-weight: var(--font-weight-bold);
