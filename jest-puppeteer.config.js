@@ -1,7 +1,7 @@
 const viewPort = {
-	// HD Landscape Screen (old Laptop)
-	width: 1280,
-	height: 720,
+	// Full-HD Landscape Screen
+	width: 1920,
+	height: 1080,
 	isLandscape: true,
 };
 
