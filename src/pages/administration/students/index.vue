@@ -65,7 +65,9 @@
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
-			v-if="schoolInternallyManaged"
+			v-if="
+				schoolInternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
+			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -92,6 +94,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import print from "@mixins/print";
+import UserHasPermission from "@/mixins/UserHasPermission";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -103,7 +106,7 @@ export default {
 		FabFloating,
 		AdminTableLegend,
 	},
-	mixins: [print],
+	mixins: [print, UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
