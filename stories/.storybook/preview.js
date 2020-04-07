@@ -18,9 +18,6 @@ import "@basecomponents/_globals";
 import "@styles";
 
 // Vue Docs ( storybook-addon-vue-info )
-setDefaults({
-	source: false,
-});
 addParameters({
 	info: true,
 });
