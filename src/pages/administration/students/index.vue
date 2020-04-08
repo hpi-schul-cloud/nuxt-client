@@ -223,7 +223,7 @@ export default {
 					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
-			filters: studentFilter,
+			filters: studentFilter(this),
 		};
 	},
 	computed: {

@@ -4,101 +4,214 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
-export const studentFilter = [
-	{
-		title: "Einverständniserklärung",
-		chipTemplate: ([filteredStatus]) => {
-			const status = filteredStatus.map((stat) => {
-				if (stat === "ok") {
-					return "vollständig";
-				} else if (stat === "parentsAgreed") {
-					return "nur Eltern haben zugestimmt";
-				} else if (stat === "missing") {
-					return "nicht vorhanden";
-				}
-			});
-			return `Zustimmung: ${status.join(" oder ")}`;
-		},
-		filter: [
-			{
-				attribute: "agreed",
-				operator: "=",
-				input: InputCheckbox,
-				options: [
-					{ value: "ok", label: "Alle Einverständniserklärungen vorhanden" },
-					{ value: "parentsAgreed", label: "Eltern haben zugestimmt" },
-					{
-						value: "missing",
-						label: "Keine Einverständniserklärungen vorhanden",
-					},
-				],
+export function studentFilter(ctx) {
+	return [
+		{
+			title: ctx.$t("utils.adminFilter.consent.title"),
+			chipTemplate: ([filteredStatus]) => {
+				const status = filteredStatus.map((stat) => {
+					if (stat === "ok") {
+						return ctx.$t("utils.adminFilter.consent.ok");
+					} else if (stat === "parentsAgreed") {
+						return ctx.$t("utils.adminFilter.consent.parentsAgreed");
+					} else if (stat === "missing") {
+						return ctx.$t("utils.adminFilter.consent.missing");
+					}
+				});
+				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
+					" " + ctx.$t("common.words.and") + " "
+				)}`;
 			},
-		],
-	},
-	{
-		title: "Vorname",
-		chipTemplate: "Vorname enthält %1",
-		filter: [
-			{
-				attribute: "firstName",
-				operator: "includes",
+			filter: [
+				{
+					attribute: "agreed",
+					operator: "=",
+					input: InputCheckbox,
+					options: [
+						{
+							value: "ok",
+							label: ctx.$t("utils.adminFilter.consent.label.ok"),
+						},
+						{
+							value: "parentsAgreed",
+							label: ctx.$t("utils.adminFilter.consent.label.parentsAgreed"),
+						},
+						{
+							value: "missing",
+							label: ctx.$t("utils.adminFilter.consent.label.missing"),
+						},
+					],
+				},
+			],
+		},
+		{
+			title: ctx.$t("common.labels.firstName"),
+			chipTemplate: `${ctx.$t("common.labels.firstName")} = %1`,
+			filter: [
+				{
+					attribute: "firstName",
+					operator: "=",
+					label: ctx.$t("common.labels.complete.firstName"),
+					input: DataFilterInput,
+					attributes: {
+						type: "text",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.complete.name"),
+					},
+				},
+			],
+		},
+		{
+			title: ctx.$t("utils.adminFilter.date.title"),
+			chipTemplate: (filter) => {
+				return `${ctx.$t("utils.adminFilter.date.created")} ${dayjs(
+					filter[0]
+				).format("DD.MM.YYYY")} ${ctx.$t("common.words.and")} ${dayjs(
+					filter[1]
+				).format("DD.MM.YYYY")} `;
+			},
+			parser: {
+				generator: (filterGroupConfig, values) => {
+					const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
+					return {
+						createdAt: {
+							$gte: dayjs(values[filterGroupConfig.filter[0].id])
+								.utc()
+								.format(UTCFormat),
+							$lte: dayjs(values[filterGroupConfig.filter[1].id])
+								.utc()
+								.format(UTCFormat),
+						},
+					};
+				},
+				parser: (filterGroupConfig, query) => {
+					return {
+						[filterGroupConfig.filter[0].id]: query?.createdAt?.$gte,
+						[filterGroupConfig.filter[1].id]: query?.createdAt?.$lte,
+					};
+				},
+			},
+			filter: [
+				{
+					attribute: "createdAt",
+					input: DataFilterInput,
+					label: ctx.$t("utils.adminFilter.date.label.from"),
+					attributes: {
+						type: "date",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.date.from"),
+					},
+				},
+				{
+					attribute: "createdAt",
+					input: DataFilterInput,
+					label: ctx.$t("utils.adminFilter.date.label.until"),
+					attributes: {
+						type: "date",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.date.until"),
+					},
+				},
+			],
+		},
+	];
+}
 
-				label: "Vorname",
-				input: DataFilterInput,
-				attributes: {
-					type: "text",
-					placeholder: "Nach Name filtern...",
-				},
+export function teacherFilter(ctx) {
+	return [
+		{
+			title: ctx.$t("utils.adminFilter.teacher.consent.title"),
+			chipTemplate: ([filteredStatus]) => {
+				const status = filteredStatus.map((stat) => {
+					if (stat === "ok") {
+						return ctx.$t("utils.adminFilter.teacher.consent.ok");
+					} else if (stat === "missing") {
+						return ctx.$t("utils.adminFilter.consent.missing");
+					}
+				});
+				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
+					" " + ctx.$t("common.words.and") + " "
+				)}`;
 			},
-		],
-	},
-	{
-		title: "Erstellt am",
-		chipTemplate: (filter) => {
-			return `Erstellt zwischen ${dayjs(filter[0]).format(
-				"DD.MM.YYYY"
-			)} und ${dayjs(filter[1]).format("DD.MM.YYYY")} `;
+			filter: [
+				{
+					attribute: "agreed",
+					operator: "=",
+					input: InputCheckbox,
+					options: [
+						{
+							value: "ok",
+							label: ctx.$t("utils.adminFilter.teacher.consent.label.ok"),
+						},
+						{
+							value: "missing",
+							label: ctx.$t("utils.adminFilter.teacher.consent.label.missing"),
+						},
+					],
+				},
+			],
 		},
-		parser: {
-			generator: (filterGroupConfig, values) => {
-				const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
-				return {
-					createdAt: {
-						$gte: dayjs(values[filterGroupConfig.filter[0].id])
-							.utc()
-							.format(UTCFormat),
-						$lte: dayjs(values[filterGroupConfig.filter[1].id])
-							.utc()
-							.format(UTCFormat),
+		{
+			title: ctx.$t("common.labels.firstName"),
+			chipTemplate: `${ctx.$t("common.labels.firstName")} = %1`,
+			filter: [
+				{
+					attribute: "firstName",
+					operator: "=",
+					label: ctx.$t("common.labels.complete.firstName"),
+					input: DataFilterInput,
+					attributes: {
+						type: "text",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.complete.name"),
 					},
-				};
-			},
-			parser: (filterGroupConfig, query) => {
-				return {
-					[filterGroupConfig.filter[0].id]: query?.createdAt?.$gte,
-					[filterGroupConfig.filter[1].id]: query?.createdAt?.$lte,
-				};
-			},
+				},
+			],
 		},
-		filter: [
-			{
-				attribute: "createdAt",
-				input: DataFilterInput,
-				label: "Erstellungsdatum von",
-				attributes: {
-					type: "date",
-					placeholder: "Erstellungsdatum filtern",
+		{
+			title: ctx.$t("utils.adminFilter.date.title"),
+			chipTemplate: (filter) => {
+				return `${ctx.$t("utils.adminFilter.date.created")} ${dayjs(
+					filter[0]
+				).format("DD.MM.YYYY")} und ${dayjs(filter[1]).format("DD.MM.YYYY")} `;
+			},
+			parser: {
+				generator: (filterGroupConfig, values) => {
+					const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
+					return {
+						createdAt: {
+							$gte: dayjs(values[filterGroupConfig.filter[0].id])
+								.utc()
+								.format(UTCFormat),
+							$lte: dayjs(values[filterGroupConfig.filter[1].id])
+								.utc()
+								.format(UTCFormat),
+						},
+					};
+				},
+				parser: (filterGroupConfig, query) => {
+					return {
+						[filterGroupConfig.filter[0].id]: query?.createdAt?.$gte,
+						[filterGroupConfig.filter[1].id]: query?.createdAt?.$lte,
+					};
 				},
 			},
-			{
-				attribute: "createdAt",
-				input: DataFilterInput,
-				label: "Erstellungsdatum bis",
-				attributes: {
-					type: "date",
-					placeholder: "Erstellungsdatum filtern",
+			filter: [
+				{
+					attribute: "createdAt",
+					input: DataFilterInput,
+					label: ctx.$t("utils.adminFilter.date.label.from"),
+					attributes: {
+						type: "date",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.date.from"),
+					},
 				},
-			},
-		],
-	},
-];
+				{
+					attribute: "createdAt",
+					input: DataFilterInput,
+					label: ctx.$t("utils.adminFilter.date.label.until"),
+					attributes: {
+						type: "date",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.date.until"),
+					},
+				},
+			],
+		},
+	];
+}

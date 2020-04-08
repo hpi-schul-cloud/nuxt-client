@@ -5,6 +5,11 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
+		<data-filter
+			:filters="filters"
+			:backend-filtering="true"
+			@update:filter-query="onUpdateFilterQuery"
+		/>
 		<backend-data-table
 			:actions="tableActions"
 			:columns="tableColumns"
@@ -80,6 +85,8 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
+import DataFilter from "@components/organisms/DataFilter/DataFilter";
+import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
@@ -87,6 +94,7 @@ dayjs.locale("de");
 export default {
 	layout: "loggedInFull",
 	components: {
+		DataFilter,
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
@@ -201,6 +209,7 @@ export default {
 					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
+			filters: teacherFilter(this),
 		};
 	},
 	computed: {
@@ -306,6 +315,10 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
+		},
+		onUpdateFilterQuery(query) {
+			this.currentQuery = query;
+			this.onUpdateCurrentPage(1);
 		},
 	},
 };
