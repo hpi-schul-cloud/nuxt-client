@@ -109,8 +109,8 @@ export function studentFilter(ctx) {
 			},
 			filter: [
 				{
-					attribute: "agreed",
-					operator: "=",
+					attribute: "consentStatus",
+					operator: "includes",
 					input: InputCheckbox,
 					options: [
 						{
@@ -153,8 +153,8 @@ export function teacherFilter(ctx) {
 			},
 			filter: [
 				{
-					attribute: "agreed",
-					operator: "=",
+					attribute: "consentStatus",
+					operator: "includes",
 					input: InputCheckbox,
 					options: [
 						{

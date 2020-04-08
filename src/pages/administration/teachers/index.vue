@@ -249,6 +249,7 @@ export default {
 				$sort: {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
+				...this.currentFilterQuery,
 			};
 			this.$store.dispatch("users/findTeachers", {
 				query,
