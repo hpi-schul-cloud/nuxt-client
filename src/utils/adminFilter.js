@@ -20,6 +20,22 @@ const getFilterFirstname = (ctx) => ({
 		},
 	],
 });
+const getFilterLastname = (ctx) => ({
+	title: ctx.$t("common.labels.lastName"),
+	chipTemplate: `${ctx.$t("common.labels.lastName")} = %1`,
+	filter: [
+		{
+			attribute: "lastName",
+			operator: "=",
+			label: ctx.$t("common.labels.complete.lastName"),
+			input: InputDefault,
+			attributes: {
+				type: "text",
+				placeholder: ctx.$t("utils.adminFilter.placeholder.complete.lastname"),
+			},
+		},
+	],
+});
 
 const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
@@ -114,6 +130,7 @@ export function studentFilter(ctx) {
 			],
 		},
 		getFilterFirstname(ctx),
+		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
 	];
 }
@@ -153,6 +170,7 @@ export function teacherFilter(ctx) {
 			],
 		},
 		getFilterFirstname(ctx),
+		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
 	];
 }
