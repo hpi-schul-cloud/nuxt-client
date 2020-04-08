@@ -5,6 +5,7 @@ const defaultData = tableData(5);
 
 function getWrapper(attributes, options) {
 	return mount(BackendDataTable, {
+		...createComponentMocks({ i18n: true }),
 		propsData: {
 			data: defaultData,
 			trackBy: "id",
@@ -440,6 +441,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			const testSlotContent = `some random slot content`;
 
 			const wrapper = mount(BackendDataTable, {
+				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
 					trackBy: "id",
@@ -464,6 +466,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			const testSlotContent = `some random slot content`;
 
 			const wrapper = mount(BackendDataTable, {
+				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
 					trackBy: "id",
