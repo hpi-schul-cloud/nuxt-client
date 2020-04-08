@@ -5,6 +5,7 @@ const defaultData = tableData(5);
 
 function getWrapper(attributes, options) {
 	return mount(BackendDataTable, {
+		...createComponentMocks({ i18n: true }),
 		propsData: {
 			data: defaultData,
 			trackBy: "id",
@@ -109,12 +110,16 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			otherSortButton.trigger("click");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.emittedByOrder()).toStrictEqual([
+				{ args: ["firstName", "asc"], name: "update:sort" },
 				{ args: ["firstName"], name: "update:sort-by" },
 				{ args: ["asc"], name: "update:sort-order" },
+				{ args: ["firstName", "desc"], name: "update:sort" },
 				{ args: ["firstName"], name: "update:sort-by" },
 				{ args: ["desc"], name: "update:sort-order" },
+				{ args: ["firstName", "asc"], name: "update:sort" },
 				{ args: ["firstName"], name: "update:sort-by" },
 				{ args: ["asc"], name: "update:sort-order" },
+				{ args: ["address.city", "asc"], name: "update:sort" },
 				{ args: ["address.city"], name: "update:sort-by" },
 				{ args: ["asc"], name: "update:sort-order" },
 			]);
@@ -436,6 +441,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			const testSlotContent = `some random slot content`;
 
 			const wrapper = mount(BackendDataTable, {
+				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
 					trackBy: "id",
@@ -460,6 +466,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			const testSlotContent = `some random slot content`;
 
 			const wrapper = mount(BackendDataTable, {
+				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
 					trackBy: "id",
