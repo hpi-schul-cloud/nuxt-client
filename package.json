@@ -75,7 +75,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.9.0",
 		"@babel/plugin-proposal-optional-chaining": "^7.9.0",
-		"@babel/preset-env": "^7.9.0",
+		"@babel/preset-env": "^7.9.5",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@schul-cloud/eslint-config": "^0.4.0",
 		"@schul-cloud/prettier-config": "^0.2.0",
@@ -101,7 +101,7 @@
 		"concurrently": "^5.1.0",
 		"core-js": "^3.6.4",
 		"cross-env": "^7.0.2",
-		"css-loader": "^3.5.0",
+		"css-loader": "^3.5.1",
 		"eslint": "^6.8.0",
 		"eslint-loader": "^4.0.0",
 		"faker": "^4.1.0",
