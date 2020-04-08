@@ -1,6 +1,5 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
-import { layouts } from "vue-filter-ui";
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
 import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
 import InputDefault from "@components/organisms/DataFilter/inputs/Default";
@@ -78,7 +77,6 @@ const tableFilters = [
 		title: "Einträge pro Seite",
 		chipTemplate: "Items per page: %1",
 		required: true,
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "$limit",
@@ -95,7 +93,6 @@ const tableFilters = [
 	{
 		title: "Alter <=",
 		chipTemplate: "Person ist älter als %1 Jahre",
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "age",
@@ -113,7 +110,6 @@ const tableFilters = [
 	{
 		title: "Geburtstag",
 		chipTemplate: "Geburtstag am %1",
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "birthday",
