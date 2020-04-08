@@ -22,6 +22,7 @@
 							:columns="columns"
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
+							@update:sort="onUpdateSort"
 						/>
 					</thead>
 					<tbody>
@@ -38,9 +39,9 @@
 						>
 							<template
 								v-for="(cmp, name) in dataRowSlots"
-								v-slot:[name]="{ data: columnData }"
+								v-slot:[name]="columnProps"
 							>
-								<slot :name="name" :data="columnData" />
+								<slot :name="name" v-bind="columnProps" />
 							</template>
 						</component>
 					</tbody>
@@ -342,6 +343,9 @@ export default {
 					? this.selectionKeys[rowId]
 					: !this.selectionKeys[rowId]
 			);
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.$emit("update:sort", sortBy, sortOrder);
 		},
 		onUpdateRowsPerPage(value) {
 			this.$emit("update:current-page", 1);

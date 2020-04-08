@@ -15,10 +15,14 @@ export default {
 					: [],
 		}),
 		$_hasPermission() {
-			return typeof this.permission === "string"
-				? !this.permission ||
-						this.userPermissions.includes(this.permission.toLowerCase())
-				: !this.permission() || this.permission(this.userPermissions);
+			return this.$_userHasPermission(this.permission);
+		},
+	},
+	methods: {
+		$_userHasPermission(permission) {
+			return typeof permission === "string"
+				? !permission || this.userPermissions.includes(permission.toLowerCase())
+				: !permission() || permission(this.userPermissions);
 		},
 	},
 };

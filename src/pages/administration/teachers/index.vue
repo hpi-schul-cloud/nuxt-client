@@ -17,11 +17,14 @@
 			track-by="id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
 			<template v-slot:datacolumn-classes="{ data }">
-				{{ data.join(", ") }}
+				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
@@ -44,8 +47,13 @@
 				<span v-else />
 			</template>
 
-			<template v-slot:datacolumn-_id="{ data }">
+			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
 				<base-button
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
 					design="text icon"
 					size="small"
 					:to="`/administration/teachers/${data}/edit`"
@@ -56,6 +64,7 @@
 		</backend-data-table>
 		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
 		<fab-floating
+			v-if="this.$_userHasPermission('TEACHER_CREATE')"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -81,6 +90,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import print from "@mixins/print";
+import UserHasPermission from "@/mixins/UserHasPermission";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
@@ -91,7 +101,7 @@ export default {
 		AdminTableLegend,
 		FabFloating,
 	},
-	mixins: [print],
+	mixins: [print, UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
@@ -113,6 +123,8 @@ export default {
 						"pages.administration.teachers.index.itemsPerPage"
 					)
 				) || 10,
+			sortBy: "firstName",
+			sortOrder: "asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -167,10 +179,12 @@ export default {
 				{
 					field: "lastName",
 					label: this.$t("common.labels.lastName"),
+					sortable: true,
 				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
+					sortable: true,
 				},
 				{
 					field: "classes",
@@ -183,6 +197,7 @@ export default {
 				{
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
+					sortable: true,
 				},
 				{
 					field: "_id",
@@ -220,10 +235,18 @@ export default {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
+				$sort: {
+					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
+				},
 			};
 			this.$store.dispatch("users/findTeachers", {
 				query,
 			});
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortBy = sortBy;
+			this.sortOrder = sortOrder;
+			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
@@ -310,3 +333,20 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+a.action-button {
+	&.row-highlighted:hover {
+		background-color: var(--color-white);
+	}
+	&.row-selected {
+		color: var(--color-white);
+		&:hover {
+			background-color: var(--color-tertiary-dark);
+			box-shadow: none;
+		}
+	}
+}
+</style>

@@ -113,12 +113,16 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			otherSortButton.trigger("click");
 			await wrapper.vm.$nextTick();
 			expect(wrapper.emittedByOrder()).toStrictEqual([
+				{ args: ["firstName", "asc"], name: "update:sort" },
 				{ args: ["firstName"], name: "update:sort-by" },
 				{ args: ["asc"], name: "update:sort-order" },
+				{ args: ["firstName", "desc"], name: "update:sort" },
 				{ args: ["firstName"], name: "update:sort-by" },
 				{ args: ["desc"], name: "update:sort-order" },
+				{ args: ["firstName", "asc"], name: "update:sort" },
 				{ args: ["firstName"], name: "update:sort-by" },
 				{ args: ["asc"], name: "update:sort-order" },
+				{ args: ["address.city", "asc"], name: "update:sort" },
 				{ args: ["address.city"], name: "update:sort-by" },
 				{ args: ["asc"], name: "update:sort-order" },
 			]);
@@ -138,13 +142,13 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			let sortButtonIcon = getSortButton(wrapper, "Vorname").find(
 				"baseicon-stub"
 			);
-			expect(sortButtonIcon.attributes("icon")).toBe("arrow_upward");
+			expect(sortButtonIcon.attributes("icon")).toBe("sort-up");
 			wrapper.setProps({
 				sortBy: "address.city",
 			});
 			await wrapper.vm.$nextTick();
 			sortButtonIcon = getSortButton(wrapper, "Stadt").find("baseicon-stub");
-			expect(sortButtonIcon.attributes("icon")).toBe("arrow_upward");
+			expect(sortButtonIcon.attributes("icon")).toBe("sort-up");
 		});
 		it("should update ui if sortOrder prop changes", async () => {
 			const wrapper = getWrapper(
@@ -160,12 +164,12 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			const sortButtonIcon = getSortButton(wrapper, "Vorname").find(
 				"baseicon-stub"
 			);
-			expect(sortButtonIcon.attributes("icon")).toBe("arrow_upward");
+			expect(sortButtonIcon.attributes("icon")).toBe("sort-up");
 			wrapper.setProps({
 				sortOrder: "desc",
 			});
 			await wrapper.vm.$nextTick();
-			expect(sortButtonIcon.attributes("icon")).toBe("arrow_downward");
+			expect(sortButtonIcon.attributes("icon")).toBe("sort-down");
 		});
 	});
 
