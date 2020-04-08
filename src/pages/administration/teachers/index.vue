@@ -120,7 +120,7 @@ export default {
 	},
 	data() {
 		return {
-			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
+			currentFilterQuery: {},
 			page:
 				parseInt(
 					localStorage.getItem(
@@ -280,7 +280,7 @@ export default {
 		dayjs,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
-				...this.currentQuery,
+				...this.currentFilterQuery,
 				_id: {
 					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
 				},
@@ -342,7 +342,7 @@ export default {
 			});
 		},
 		onUpdateFilterQuery(query) {
-			this.currentQuery = query;
+			this.currentFilterQuery = query;
 			this.onUpdateCurrentPage(1);
 		},
 	},

@@ -134,7 +134,7 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
+			currentFilterQuery: {},
 			page:
 				parseInt(
 					localStorage.getItem(
