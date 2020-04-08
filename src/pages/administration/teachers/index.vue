@@ -107,7 +107,9 @@ export default {
 			type: Boolean,
 		},
 	},
-
+	meta: {
+		requiredPermissions: ["TEACHER_LIST"],
+	},
 	data() {
 		return {
 			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work

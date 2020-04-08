@@ -120,6 +120,9 @@ export default {
 			type: Boolean,
 		},
 	},
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
+	},
 	data() {
 		return {
 			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
@@ -247,7 +250,7 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
 		schoolInternallyManaged() {
-			return !this.school.ldapSchoolIdentifier && !this.school.source;
+			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
 		},
 	},
 	created(ctx) {
