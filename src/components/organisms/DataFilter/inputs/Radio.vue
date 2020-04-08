@@ -5,7 +5,8 @@
 			v-for="option in options"
 			:key="option.label"
 			v-model="vmodelProxy"
-			type="checkbox"
+			class="input-radio"
+			type="radio"
 			:name="$uid"
 			:value="option.value"
 			:label="option.label"
@@ -24,9 +25,8 @@ export default {
 			default: "",
 		},
 		value: {
-			type: Array,
-			default: () => [],
-			validator: (prop) => prop.every((e) => typeof e === "string"),
+			type: String,
+			default: "",
 		},
 		options: {
 			type: Array,
@@ -59,12 +59,20 @@ export default {
 	},
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@styles";
 
 fieldset {
 	padding: 0;
 	margin: 0;
 	border: none;
+}
+.label {
+	margin-bottom: var(--space-xs);
+}
+.input-radio {
+	display: block;
+	margin-bottom: var(--space-xs);
+	margin-left: var(--space-sm);
 }
 </style>

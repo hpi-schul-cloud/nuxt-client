@@ -32,7 +32,7 @@ export default {
 	props: {
 		vmodel: {
 			type: String,
-			required: true,
+			default: "",
 		},
 		type: {
 			type: String,

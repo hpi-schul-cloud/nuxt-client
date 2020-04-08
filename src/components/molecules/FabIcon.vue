@@ -146,7 +146,9 @@ export default {
 			if (!this.noAutoClose) {
 				this.isOpen = false;
 			}
-			this.$emit(action.event, action.arguments);
+			if (action.event) {
+				this.$emit(action.event, action.arguments);
+			}
 		},
 	},
 };

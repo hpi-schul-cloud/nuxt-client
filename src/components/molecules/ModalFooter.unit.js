@@ -11,7 +11,7 @@ describe("@components/molecules/ModalFooter", () => {
 				right: "right",
 			},
 		});
-		expect(wrapper.find(".icon-container").text()).toBe("left");
-		expect(wrapper.find(".button-container").text()).toBe("right");
+		expect(wrapper.find(".left-container").text()).toBe("left");
+		expect(wrapper.find(".right-container").text()).toBe("right");
 	});
 });

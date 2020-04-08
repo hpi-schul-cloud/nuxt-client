@@ -8,21 +8,24 @@
 			:allow-empty="false"
 			track-by="value"
 			option-label="label"
-			label="Einträge pro Seite"
+			:label="this.$t('components.organisms.Pagination.recordsPerPage')"
 			:label-hidden="true"
 			@select="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
-				{{ total > 0 ? currentPage * perPage - perPage + 1 : 0 }} bis
 				{{
-					perPage > total
-						? total
-						: currentPage * perPage > total
-						? total
-						: currentPage * perPage
+					this.$t("components.organisms.Pagination.currentPage", {
+						start: total > 0 ? currentPage * perPage - perPage + 1 : 0,
+						end:
+							perPage > total
+								? total
+								: currentPage * perPage > total
+								? total
+								: currentPage * perPage,
+						total,
+					})
 				}}
-				von {{ total }}
 			</p>
 			<ul v-if="total > 0" class="pagination-list">
 				<li v-if="currentPage > 1" class="pagination-link-wrapper">
@@ -49,7 +52,9 @@
 				</li>
 			</ul>
 		</div>
-		<div v-else>Zeige alle {{ total }} Einträge</div>
+		<div v-else>
+			{{ $t("components.organisms.Pagination.showTotalRecords", { total }) }}
+		</div>
 	</nav>
 </template>
 
@@ -76,23 +81,23 @@ export default {
 		return {
 			perPageOptions: [
 				{
-					label: "5 pro Seite",
+					label: this.$t("components.organisms.Pagination.perPage.5"),
 					value: 5,
 				},
 				{
-					label: "10 pro Seite",
+					label: this.$t("components.organisms.Pagination.perPage.10"),
 					value: 10,
 				},
 				{
-					label: "25 pro Seite",
+					label: this.$t("components.organisms.Pagination.perPage.25"),
 					value: 25,
 				},
 				{
-					label: "50 pro Seite",
+					label: this.$t("components.organisms.Pagination.perPage.50"),
 					value: 50,
 				},
 				{
-					label: "100 pro Seite",
+					label: this.$t("components.organisms.Pagination.perPage.100"),
 					value: 100,
 				},
 			],
@@ -101,7 +106,10 @@ export default {
 	computed: {
 		perPageSelected() {
 			return {
-				label: this.perPage + " pro Seite",
+				label:
+					this.perPage +
+					" " +
+					this.$t("components.organisms.Pagination.perPage"),
 				value: this.perPage,
 			};
 		},

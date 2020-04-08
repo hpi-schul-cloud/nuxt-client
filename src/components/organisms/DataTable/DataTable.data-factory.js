@@ -1,9 +1,8 @@
 import * as faker from "faker";
 import dayjs from "dayjs";
-import { layouts } from "vue-filter-ui";
-import InputCheckbox from "@components/organisms/DataFilter/InputCheckbox";
-import InputRadio from "@components/organisms/DataFilter/InputRadio";
-import DataFilterInput from "@components/organisms/DataFilter/DataFilterInput";
+import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
+import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
+import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
@@ -78,7 +77,6 @@ const tableFilters = [
 		title: "Einträge pro Seite",
 		chipTemplate: "Items per page: %1",
 		required: true,
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "$limit",
@@ -95,13 +93,12 @@ const tableFilters = [
 	{
 		title: "Alter <=",
 		chipTemplate: "Person ist älter als %1 Jahre",
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "age",
 				applyNegated: true,
 				operator: "<=",
-				input: DataFilterInput,
+				input: InputDefault,
 				label: "Alter",
 				attributes: {
 					type: "number",
@@ -113,12 +110,11 @@ const tableFilters = [
 	{
 		title: "Geburtstag",
 		chipTemplate: "Geburtstag am %1",
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "birthday",
 				operator: "=",
-				input: DataFilterInput,
+				input: InputDefault,
 				label: "Geburtstag",
 				attributes: {
 					type: "date",
@@ -149,7 +145,7 @@ const tableFilters = [
 			{
 				attribute: "firstName",
 				operator: "includes",
-				input: DataFilterInput,
+				input: InputDefault,
 				label: "Vorname",
 				attributes: {
 					type: "text",
