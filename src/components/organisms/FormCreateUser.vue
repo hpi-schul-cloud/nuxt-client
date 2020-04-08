@@ -83,19 +83,11 @@ export default {
 
 		async create() {
 			try {
-				const usersRole = (
-					await this.$store.dispatch("roles/find", {
-						query: {
-							name: this.roleName,
-						},
-					})
-				).data[0];
-
 				await this.$store.dispatch("users/create", {
 					firstName: this.userData.firstName,
 					lastName: this.userData.lastName,
 					email: this.userData.email,
-					roles: [usersRole.id],
+					roles: [this.roleName],
 					schoolId: this.$user.schoolId,
 					sendRegistration: this.userData.sendRegistration,
 				});
