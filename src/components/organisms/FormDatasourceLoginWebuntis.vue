@@ -128,7 +128,7 @@ export default {
 }
 
 .icon-margin {
-	margin-right: var(--space-xxs);
+	margin-right: var(--space-xs-2);
 	margin-bottom: calc(-0.3 * (var(--space-sm)));
 	font-size: var(--text-lg);
 }

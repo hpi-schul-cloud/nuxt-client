@@ -170,7 +170,7 @@ export default {
 	display: block;
 
 	.help {
-		padding-top: var(--space-xxxs);
+		padding-top: var(--space-xs-3);
 		visibility: hidden;
 	}
 
@@ -212,7 +212,7 @@ export default {
 		display: flex;
 		justify-content: space-between;
 		min-height: var(--text-md);
-		margin-bottom: var(--space-xxxxs);
+		margin-bottom: var(--space-xs-4);
 
 		&:not(.label-visible) {
 			justify-content: flex-end;
@@ -223,7 +223,7 @@ export default {
 		.icon-before {
 			width: 24px;
 			height: 24px;
-			margin-right: var(--space-xxs);
+			margin-right: var(--space-xs-2);
 			/deep/ .material {
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				font-size: 1.1em;
@@ -235,7 +235,7 @@ export default {
 			line-height: 0; // needed for correct spacing
 			input {
 				width: 100%;
-				margin-bottom: var(--space-xxs);
+				margin-bottom: var(--space-xs-2);
 				line-height: var(--line-height-md);
 				color: var(--color-text);
 				border: none;

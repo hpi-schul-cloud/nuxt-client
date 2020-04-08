@@ -151,7 +151,7 @@ textarea {
 	width: 100%;
 	// needed to prevent default padding in chrome and safari
 	padding: 0;
-	margin-bottom: var(--space-xxs);
+	margin-bottom: var(--space-xs-2);
 	font-size: var(--text-md);
 	line-height: var(--line-height);
 	color: var(--color-text);
