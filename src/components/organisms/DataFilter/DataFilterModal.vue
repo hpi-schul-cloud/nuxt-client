@@ -1,16 +1,21 @@
 <template>
-	<base-modal :active="true">
+	<base-modal :active="true" @onBackdropClick="$emit('cancel')">
 		<template v-slot:header>
-			{{ title }}
+			{{ title | entities }}
 		</template>
 		<template v-slot:body>
 			<slot />
 		</template>
 		<template v-slot:footer>
 			<modal-footer>
+				<template v-slot:left>
+					<base-button class="btn-left" design="text" @click="$emit('remove')">
+						{{ labelRemove }}
+					</base-button>
+				</template>
 				<template v-slot:right>
 					<base-button design="text" @click="$emit('cancel')">
-						{{ labelCancle }}
+						{{ labelCancel }}
 					</base-button>
 					<base-button design="primary" @click="$emit('apply')">
 						{{ labelApply }}
@@ -23,15 +28,22 @@
 
 <script>
 import ModalFooter from "@components/molecules/ModalFooter";
+import { XmlEntities } from "html-entities";
+const entities = new XmlEntities();
 
 export default {
 	components: {
 		ModalFooter,
 	},
+	filters: {
+		entities(value) {
+			return entities.decode(value);
+		},
+	},
 	props: {
 		title: { type: String, required: true },
 		labelApply: { type: String, required: true },
-		labelCancle: { type: String, required: true },
+		labelCancel: { type: String, required: true },
 		labelRemove: { type: String, required: true },
 	},
 };

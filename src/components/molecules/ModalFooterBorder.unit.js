@@ -11,6 +11,6 @@ describe("@components/molecules/ModalFooterBorder", () => {
 			},
 		});
 		expect(wrapper.find(".border").exists()).toBe(true);
-		expect(wrapper.find(".button-container").text()).toBe("right");
+		expect(wrapper.find(".right-container").text()).toBe("right");
 	});
 });
