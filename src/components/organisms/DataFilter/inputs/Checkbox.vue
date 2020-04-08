@@ -5,6 +5,7 @@
 			v-for="option in options"
 			:key="option.label"
 			v-model="vmodelProxy"
+			class="input-checkbox"
 			type="checkbox"
 			:name="$uid"
 			:value="option.value"
@@ -59,12 +60,19 @@ export default {
 	},
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@styles";
 
 fieldset {
 	padding: 0;
 	margin: 0;
 	border: none;
+}
+.label {
+	margin-bottom: var(--space-xs);
+}
+.input-checkbox {
+	margin-bottom: var(--space-xs);
+	margin-left: var(--space-sm);
 }
 </style>
