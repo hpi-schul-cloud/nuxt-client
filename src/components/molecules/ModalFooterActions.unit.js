@@ -13,6 +13,6 @@ describe("@components/molecules/ModalFooterAction", () => {
 		});
 
 		expect(wrapper.find(".slot-container").text()).toBe("left");
-		expect(wrapper.find(".button-container").text()).toBe("right");
+		expect(wrapper.find(".right-container").text()).toBe("right");
 	});
 });

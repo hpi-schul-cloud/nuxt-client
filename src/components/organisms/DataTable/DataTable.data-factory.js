@@ -2,7 +2,10 @@ import dayjs from "dayjs";
 import faker from "faker/locale/en";
 // set a seed to have a consistent fake for the screenshot tests
 faker.seed(512); // any static number will do the job
-import { inputs, layouts } from "vue-filter-ui";
+
+import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
+import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
+import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
@@ -77,12 +80,11 @@ const tableFilters = [
 		title: "Einträge pro Seite",
 		chipTemplate: "Items per page: %1",
 		required: true,
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "$limit",
 				operator: "<",
-				input: inputs.Radio,
+				input: InputRadio,
 				options: [
 					{ value: 25, label: "25" },
 					{ value: 50, label: "50" },
@@ -94,25 +96,33 @@ const tableFilters = [
 	{
 		title: "Alter <=",
 		chipTemplate: "Person ist älter als %1 Jahre",
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "age",
 				applyNegated: true,
 				operator: "<=",
-				input: inputs.InputNumber,
+				input: InputDefault,
+				label: "Alter",
+				attributes: {
+					type: "number",
+					placeholder: "Nach Alter filtern...",
+				},
 			},
 		],
 	},
 	{
 		title: "Geburtstag",
 		chipTemplate: "Geburtstag am %1",
-		layout: layouts.Default,
 		filter: [
 			{
 				attribute: "birthday",
 				operator: "=",
-				input: inputs.InputNumber,
+				input: InputDefault,
+				label: "Geburtstag",
+				attributes: {
+					type: "date",
+					placeholder: "29.3.2004",
+				},
 			},
 		],
 	},
@@ -123,10 +133,10 @@ const tableFilters = [
 			{
 				attribute: "agreed",
 				operator: "=",
-				input: inputs.Radio,
+				input: InputCheckbox,
 				options: [
-					{ value: true, label: "Einverständniserklärung vorhanden" },
-					{ value: false, label: "Keine Einverständniserklärung" },
+					{ value: "true", label: "Einverständniserklärung vorhanden" },
+					{ value: "false", label: "Keine Einverständniserklärung" },
 				],
 			},
 		],
@@ -138,7 +148,12 @@ const tableFilters = [
 			{
 				attribute: "firstName",
 				operator: "includes",
-				input: inputs.InputText,
+				input: InputDefault,
+				label: "Vorname",
+				attributes: {
+					type: "text",
+					placeholder: "Nach Name filtern...",
+				},
 			},
 		],
 	},

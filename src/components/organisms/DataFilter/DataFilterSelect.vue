@@ -1,10 +1,6 @@
 <template>
-	<div
-		v-if="options.length > 0"
-		v-on-clickout="() => (visible = false)"
-		class="menu"
-	>
-		<base-button design="text" @click="visible = true">
+	<div v-if="options.length > 0" v-click-outside="hideMenu" class="menu">
+		<base-button design="text" @click="showMenu">
 			<base-icon
 				source="custom"
 				icon="filter"
@@ -27,15 +23,13 @@
 </template>
 
 <script>
-import { directive as onClickout } from "vue-clickout";
 import ContextMenu from "@components/molecules/ContextMenu";
+import { XmlEntities } from "html-entities";
+const entities = new XmlEntities();
 
 export default {
 	components: {
 		ContextMenu,
-	},
-	directives: {
-		onClickout: onClickout,
 	},
 	props: {
 		labelAdd: {
@@ -55,15 +49,21 @@ export default {
 	computed: {
 		contextOptions() {
 			return this.options.map((option) => ({
-				text: option.title,
+				text: entities.decode(option.title),
 				event: "click",
 				arguments: option.id,
 			}));
 		},
 	},
 	methods: {
-		handleClick(optionId) {
+		showMenu() {
+			this.visible = true;
+		},
+		hideMenu() {
 			this.visible = false;
+		},
+		handleClick(optionId) {
+			this.hideMenu();
 			this.$emit("openFilter", optionId);
 		},
 	},
