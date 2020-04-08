@@ -33,6 +33,7 @@
 
 <script>
 import { mapState } from "vuex";
+import defaultDocuments from "@utils/documents.js";
 
 export default {
 	computed: {
@@ -49,8 +50,19 @@ export default {
 					text: "Impressum",
 				},
 				{
-					to: "/datenschutz",
-					text: "Datenschutzerklärung",
+					innerlinks: [
+						{
+							to: "/datenschutz",
+							text: "Datenschutzerklärung NBC",
+						},
+						{
+							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
+								.privacyExemplary,
+							text: "Datenschutzerklärung:Muster-Schulen",
+							target: "_blank",
+							rel: "noopener",
+						},
+					],
 				},
 			];
 		},
