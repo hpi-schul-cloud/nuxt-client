@@ -49,11 +49,14 @@
 					design="none"
 					type="button"
 					data-testid="pwd-visibility-toggle"
-					class="icon-behind pwd-toggle"
+					class="pwd-toggle"
 					@click="togglePasswordVisibility"
 				>
-					<base-icon v-if="!passwordVisible" source="custom" icon="invisible" />
-					<base-icon v-else source="custom" icon="visible" />
+					<base-icon
+						source="custom"
+						:icon="passwordVisible ? 'visible' : 'invisible'"
+						class="icon-behind"
+					/>
 				</base-button>
 				<base-icon
 					v-if="error"
@@ -167,7 +170,7 @@ export default {
 	display: block;
 
 	.help {
-		padding-top: var(--space-xs-3);
+		padding-top: var(--space-xxxs);
 		visibility: hidden;
 	}
 
@@ -208,8 +211,8 @@ export default {
 	.info-line {
 		display: flex;
 		justify-content: space-between;
-		min-height: 1em;
-		line-height: 100%;
+		min-height: var(--text-md);
+		margin-bottom: var(--space-xxxxs);
 
 		&:not(.label-visible) {
 			justify-content: flex-end;
@@ -218,10 +221,13 @@ export default {
 	.input-line {
 		display: flex;
 		.icon-before {
-			display: inline-flex;
-			align-items: center;
-			min-width: 1.25em;
-			margin-right: var(--space-xs-2);
+			width: 24px;
+			height: 24px;
+			margin-right: var(--space-xxs);
+			/deep/ .material {
+				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+				font-size: 1.1em;
+			}
 		}
 		.core {
 			flex: 1;
@@ -229,31 +235,31 @@ export default {
 			line-height: 0; // needed for correct spacing
 			input {
 				width: 100%;
-				padding: var(--space-xs-2) 0;
+				margin-bottom: var(--space-xxs);
 				line-height: var(--line-height-md);
 				color: var(--color-text);
-				background: transparent;
 				border: none;
 				&:focus {
 					outline: none;
 				}
 				&:disabled {
-					color: var(--color-disabled-dark);
+					background-color: transparent;
+					&::placeholder {
+						color: var(--color-disabled-dark);
+					}
 				}
 			}
 		}
 		.icon-behind {
-			display: inline-flex;
-			align-items: center;
-			min-width: 1.25em;
-			margin-left: var(--space-xs-2);
+			width: 24px;
+			height: 24px;
+			margin-left: var(--space-xs);
+			font-size: var(--text-lg);
 		}
 	}
 }
 
 .pwd-toggle {
-	padding: 0 var(--space-xs-2);
-	font-size: var(--text-lg);
 	color: var(--color-gray);
 	border-radius: var(--radius-round);
 	&:hover {
