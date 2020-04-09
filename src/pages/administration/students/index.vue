@@ -346,9 +346,9 @@ export default {
 					await this.$store.dispatch("users/remove", {
 						query: this.getQueryForSelection(rowIds, selectionType),
 					});
-					this.$toast.success("Ausgewählte Nutzer gelöscht");
+					this.$toast.success(this.$t("pages.administration.remove.success"));
 				} catch (error) {
-					this.$toast.error("Löschen der Nutzer fehlgeschlagen");
+					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}
 			};
 			const onCancel = () => {
@@ -357,18 +357,29 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Schüler löschen möchtest?`;
+				message = this.$tc(
+					"pages.administration.students.index.remove.confirm.message.some",
+					rowIds.length,
+					{ number: rowIds.length }
+				);
 			} else {
 				if (rowIds.length) {
-					message = `Bist du sicher, dass du alle Schüler bis auf ${rowIds.length} löschen möchtest?`;
+					message = this.$t(
+						"pages.administration.students.index.remove.confirm.message.many",
+						{ number: rowIds.length }
+					);
 				} else {
-					message = `Bist du sicher, dass du alle Schüler löschen möchtest?`;
+					message = this.$t(
+						"pages.administration.students.index.remove.confirm.message.all"
+					);
 				}
 			}
 			this.$dialog.confirm({
 				message,
-				confirmText: "Schüler löschen",
-				cancelText: "Abbrechen",
+				confirmText: this.$t(
+					"pages.administration.students.index.remove.confirm.btnText"
+				),
+				cancelText: this.$t("common.actions.cancel"),
 				icon: "report_problem",
 				iconSource: "material",
 				iconColor: "var(--color-danger)",
