@@ -92,21 +92,18 @@ export default {
 	},
 	methods: {
 		async getAddedSourcesCount(source) {
-			await this.$store
-				.dispatch("datasources/find", {
+			try {
+				source.count = await this.$store.dispatch("datasources/find", {
 					query: {
 						$limit: 0,
 						config: {
 							target: source.name.toLowerCase(),
 						},
 					},
-				})
-				.then((res) => {
-					source.count = res.total;
-				})
-				.catch((err) => {
-					console.error(err);
 				});
+			} catch (error) {
+				console.error(err);
+			}
 		},
 		forwardCreate(name) {
 			this.$router.push({
