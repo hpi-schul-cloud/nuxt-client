@@ -15,13 +15,16 @@ storiesOf("7 Others/Misc", module)
 	})
 	.add("DropdownMenuMintEc", () => ({
 		components: { DropdownMenuMintEc, MenuLink },
+		// added border for correct screenshots
 		template: `
-			<DropdownMenuMintEc>
-				<template v-slot:header>Dropdown</template>
-				<MenuLink to="/">Link 1</MenuLink>
-				<MenuLink to="/">Link 2</MenuLink>
-				<MenuLink to="/">Link 3</MenuLink>
-			</DropdownMenuMintEc>
+			<div style="border: 1px solid #ccc; padding: 1rem;">
+				<DropdownMenuMintEc style="float: none">
+					<template v-slot:header>Dropdown</template>
+					<MenuLink to="/">Link 1</MenuLink>
+					<MenuLink to="/">Link 2</MenuLink>
+					<MenuLink to="/">Link 3</MenuLink>
+				</DropdownMenuMintEc>
+			</div>
 		`,
 	}))
 	.add("Toast", () => ({
@@ -55,12 +58,13 @@ storiesOf("7 Others/Misc", module)
 	}))
 	.add("Popup Icon with Initials", () => ({
 		components: { PopupIconInitials, MenuLink },
-		template: `<div style="text-align: right">
+		// added border for correct screenshots
+		template: `<span style="border: 1px solid #ccc; padding: 1rem;">
 			<PopupIconInitials firstname="Fritz" lastname="Schmidt">
 				<MenuLink to="/">Link 1</MenuLink>
 				<MenuLink to="/">Link 2</MenuLink>
 			</PopupIconInitials>
-		</div>`,
+		</span>`,
 	}))
 	.add("Demo Banner", () => ({
 		components: { DemoBanner },

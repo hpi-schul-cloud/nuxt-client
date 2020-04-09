@@ -25,6 +25,10 @@ const getTableRowsContent = async (wrapper) => {
 };
 
 describe("@components/organisms/DataTable/DataTable", () => {
+	beforeEach(() => {
+		jest.spyOn(window, "scrollTo").mockImplementation();
+	});
+
 	it(...isValidComponent(DataTable));
 
 	describe("pagination", () => {

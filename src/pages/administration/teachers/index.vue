@@ -5,6 +5,11 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
+		<data-filter
+			:filters="filters"
+			:backend-filtering="true"
+			@update:filter-query="onUpdateFilterQuery"
+		/>
 		<backend-data-table
 			:actions="tableActions"
 			:columns="tableColumns"
@@ -89,6 +94,8 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
+import DataFilter from "@components/organisms/DataFilter/DataFilter";
+import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import dayjs from "dayjs";
@@ -97,6 +104,7 @@ dayjs.locale("de");
 export default {
 	layout: "loggedInFull",
 	components: {
+		DataFilter,
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
@@ -112,7 +120,7 @@ export default {
 	},
 	data() {
 		return {
-			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
+			currentFilterQuery: {},
 			page:
 				parseInt(
 					localStorage.getItem(
@@ -218,6 +226,7 @@ export default {
 					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
+			filters: teacherFilter(this),
 		};
 	},
 	computed: {
@@ -240,6 +249,7 @@ export default {
 				$sort: {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
+				...this.currentFilterQuery,
 			};
 			this.$store.dispatch("users/findTeachers", {
 				query,
@@ -271,7 +281,7 @@ export default {
 		dayjs,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
-				...this.currentQuery,
+				...this.currentFilterQuery,
 				_id: {
 					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
 				},
@@ -300,9 +310,9 @@ export default {
 					await this.$store.dispatch("users/remove", {
 						query: this.getQueryForSelection(rowIds, selectionType),
 					});
-					this.$toast.success("Ausgewählte Nutzer gelöscht");
+					this.$toast.success(this.$t("pages.administration.remove.success"));
 				} catch (error) {
-					this.$toast.error("Löschen der Nutzer fehlgeschlagen");
+					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}
 			};
 			const onCancel = () => {
@@ -311,18 +321,29 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Lehrer:in löschen möchtest?`;
+				message = this.$tc(
+					"pages.administration.teachers.index.remove.confirm.message.some",
+					rowIds.length,
+					{ number: rowIds.length }
+				);
 			} else {
 				if (rowIds.length) {
-					message = `Bist du sicher, dass du alle Lehrer:innen bis auf ${rowIds.length} löschen möchtest?`;
+					message = this.$t(
+						"pages.administration.teachers.index.remove.confirm.message.many",
+						{ number: rowIds.length }
+					);
 				} else {
-					message = `Bist du sicher, dass du alle Lehrer:innen löschen möchtest?`;
+					message = this.$t(
+						"pages.administration.teachers.index.remove.confirm.message.all"
+					);
 				}
 			}
 			this.$dialog.confirm({
 				message,
-				confirmText: "Lehrer:in löschen",
-				cancelText: "Abbrechen",
+				confirmText: this.$t(
+					"pages.administration.teachers.index.remove.confirm.btnText"
+				),
+				cancelText: this.$t("common.actions.cancel"),
 				icon: "report_problem",
 				iconSource: "material",
 				iconColor: "var(--color-danger)",
@@ -331,6 +352,10 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
+		},
+		onUpdateFilterQuery(query) {
+			this.currentFilterQuery = query;
+			this.onUpdateCurrentPage(1);
 		},
 	},
 };

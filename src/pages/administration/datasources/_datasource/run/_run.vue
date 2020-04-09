@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<base-content-container tag="div" size="large">
 		<base-breadcrumb :inputs="breadcrumb" />
 		<h1>{{ datasource.name }}</h1>
 		<loading-modal
@@ -23,7 +23,7 @@
 			:run="run"
 			:run-id="$route.params.run"
 		/>
-	</div>
+	</base-content-container>
 </template>
 
 <script>
@@ -40,6 +40,7 @@ const intervalFactor = 2;
 const maxInterval = 10000;
 
 export default {
+	layout: "loggedInFull",
 	components: {
 		LoadingModal,
 	},
@@ -102,7 +103,7 @@ export default {
 		state: {
 			handler(to) {
 				if (to === "Error") {
-					// TODO maybe we can show the user some details if the backend provides them?
+					// TODO: we should show the user some details here, why the run failed
 					throw new Error(
 						this.$t("pages.administration.datasources._id.run._id.error")
 					);
@@ -113,7 +114,6 @@ export default {
 	},
 	created() {
 		this.checkStatus();
-		//setTimeout(() => (this.state = "Success"), 1000);
 	},
 	methods: {
 		...mapActions("datasourceRuns", {
