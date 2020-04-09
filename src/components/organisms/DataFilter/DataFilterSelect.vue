@@ -4,16 +4,18 @@
 			<base-icon
 				source="custom"
 				icon="filter"
-				style="font-size: var(--text-lg);"
+				style="font-size: var(--text-lg); color: var(--color-tertiary);"
 			/>
-			{{ labelAdd }}
+			<span class="filter-btn"> {{ labelAdd }} </span>
+
 			<base-icon
 				source="material"
 				icon="arrow_drop_down"
-				style="font-size: var(--text-lg);"
+				style="font-size: var(--text-lg); color: var(--color-tertiary);"
 			/>
 		</base-button>
 		<context-menu
+			class="filter-nn"
 			:show.sync="visible"
 			anchor="top-left"
 			:actions="contextOptions"
@@ -71,6 +73,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
+.filter-btn {
+	color: var(--color-tertiary);
+}
 .menu {
 	position: relative;
 }
