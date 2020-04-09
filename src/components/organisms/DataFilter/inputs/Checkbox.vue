@@ -74,5 +74,6 @@ fieldset {
 .input-checkbox {
 	margin-bottom: var(--space-xs);
 	margin-left: var(--space-sm);
+	font-family: var(--font-primary);
 }
 </style>

@@ -80,5 +80,6 @@ export default {
 }
 .menu {
 	position: relative;
+	font-family: var(--font-primary);
 }
 </style>
