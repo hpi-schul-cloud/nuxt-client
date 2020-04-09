@@ -5,6 +5,12 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
+
+		<data-filter
+			:filters="filters"
+			:backend-filtering="true"
+			@update:filter-query="onUpdateFilterQuery"
+		/>
 		<backend-data-table
 			:actions="tableActions"
 			:columns="tableColumns"
@@ -100,7 +106,9 @@
 import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
+import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import dayjs from "dayjs";
@@ -110,6 +118,7 @@ dayjs.locale("de");
 export default {
 	layout: "loggedInFull",
 	components: {
+		DataFilter,
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
@@ -125,7 +134,7 @@ export default {
 	},
 	data() {
 		return {
-			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
+			currentFilterQuery: {},
 			page:
 				parseInt(
 					localStorage.getItem(
@@ -236,6 +245,7 @@ export default {
 					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
+			filters: studentFilter(this),
 		};
 	},
 	computed: {
@@ -264,6 +274,7 @@ export default {
 				$sort: {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
+				...this.currentFilterQuery,
 			};
 
 			this.$store.dispatch("users/findStudents", {
@@ -296,7 +307,7 @@ export default {
 		dayjs,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
-				...this.currentQuery,
+				...this.currentFilterQuery,
 				_id: {
 					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
 				},
@@ -388,6 +399,10 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
+		},
+		onUpdateFilterQuery(query) {
+			this.currentFilterQuery = query;
+			this.onUpdateCurrentPage(1);
 		},
 	},
 };
