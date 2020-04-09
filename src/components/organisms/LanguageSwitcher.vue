@@ -14,12 +14,14 @@
 </template>
 <script>
 export default {
-	data: () => ({
-		languages: ["de", "en"],
-		value: "de",
-	}),
+	data() {
+		return {
+			languages: ["de", "en"],
+			value: "de",
+		};
+	},
 	methods: {
-		changeLanguage: function(lang) {
+		changeLanguage: function (lang) {
 			this.$store.commit("i18n/SET_LANG", lang);
 			this.$i18n.locale = lang;
 		},

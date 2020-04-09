@@ -9,6 +9,8 @@
 			type="button"
 			:aria-label="primaryActionWithDefaults.label"
 			:style="{ 'background-color': color, color: primaryTextColor }"
+			:to="primaryActionWithDefaults.to"
+			:href="primaryActionWithDefaults.href"
 			@click="handlePrimaryAction"
 		>
 			<transition name="morph" mode="out-in">
@@ -144,7 +146,9 @@ export default {
 			if (!this.noAutoClose) {
 				this.isOpen = false;
 			}
-			this.$emit(action.event, action.arguments);
+			if (action.event) {
+				this.$emit(action.event, action.arguments);
+			}
 		},
 	},
 };

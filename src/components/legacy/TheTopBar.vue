@@ -93,7 +93,7 @@ export default {
 		actions: {
 			type: Array,
 			default: () => [],
-			validator: function(value) {
+			validator: function (value) {
 				return value.every((action) => {
 					const isValid =
 						// (action.icon || action.title ||
@@ -116,6 +116,10 @@ export default {
 		expandedMenu: {
 			type: Boolean,
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	methods: {
 		sendEvent(eventName) {

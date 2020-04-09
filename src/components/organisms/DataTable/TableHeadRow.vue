@@ -9,7 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--color-tertiary)"
+					style="color: var(--color-tertiary);"
 				/>
 			</div>
 		</th>
@@ -31,14 +31,14 @@
 				<span>{{ column.label }}</span>
 				<base-icon
 					v-if="sortBy === column.field"
-					:icon="sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'"
-					source="material"
+					:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
+					source="fa"
 				/>
 				<base-icon
 					v-else-if="column.sortable"
 					icon="sort"
 					source="fa"
-					fill="var(--color-gray)"
+					style="color: var(--color-gray);"
 				/>
 			</BaseButton>
 			<div v-else class="th-wrap">
@@ -82,6 +82,10 @@ export default {
 			validator: (val) => ["asc", "desc"].includes(val),
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		selectionStatus: {
 			get() {
@@ -89,7 +93,7 @@ export default {
 			},
 			set(state) {
 				this.$emit(
-					"update:currentPageSelectionState",
+					"update:current-page-selection-state",
 					selectionStateMap.get(state)
 				);
 			},
@@ -119,17 +123,17 @@ export default {
 			/**
 			 * helper event for the .sync modifier
 			 *
-			 * @event update:sortBy
+			 * @event update:sort-by
 			 * @type {String} contains the field value of the selected column
 			 */
-			this.$emit("update:sortBy", column.field);
+			this.$emit("update:sort-by", column.field);
 			/**
 			 * helper event for the .sync modifier
 			 *
-			 * @event update:sortOrder
+			 * @event update:sort-order
 			 * @type {String} represent the new desired sort order ("asc" or "desc")
 			 */
-			this.$emit("update:sortOrder", newSortOrder);
+			this.$emit("update:sort-order", newSortOrder);
 		},
 	},
 };

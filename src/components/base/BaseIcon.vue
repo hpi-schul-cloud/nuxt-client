@@ -24,7 +24,7 @@ export default {
 		source: {
 			type: String,
 			required: true,
-			validator: function(to) {
+			validator: function (to) {
 				return ["material", "custom", "fa"].includes(to);
 			},
 		},
@@ -36,6 +36,10 @@ export default {
 			type: String,
 			default: "currentColor",
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		fillColor() {

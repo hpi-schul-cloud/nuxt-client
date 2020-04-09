@@ -2,9 +2,9 @@
 to: "src/layouts/<%= name %>.vue"
 ---
 <template>
-  <div class="container">
-    <Nuxt />
-  </div>
+	<div class="container">
+		<Nuxt />
+	</div>
 </template>
 
 <script>

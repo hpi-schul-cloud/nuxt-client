@@ -31,10 +31,10 @@
 						/>
 					</base-link>
 					<base-link href="https://twitter.com/mint_ec">
-						<base-icon class="icon-style" source="fa" icon="fab fa-twitter" />
+						<base-icon class="icon-style" source="fa" icon="twitter" />
 					</base-link>
 					<base-link href="https://instagram.com/mint_ec_netzwerk">
-						<base-icon class="icon-style" source="fa" icon="fab fa-instagram" />
+						<base-icon class="icon-style" source="fa" icon="instagram" />
 					</base-link>
 				</div>
 			</base-grid>
@@ -49,6 +49,10 @@ export default {
 			reqired: true,
 			default: () => {},
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		colWidth() {

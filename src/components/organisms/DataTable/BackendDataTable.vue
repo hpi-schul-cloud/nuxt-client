@@ -20,8 +20,9 @@
 							:all-rows-selectable="rowsSelectable"
 							:current-page-selection-state.sync="currentPageSelectionState"
 							:columns="columns"
-							:sort-by.sync="sortByProxy"
-							:sort-order.sync="sortOrderProxy"
+							:sort-by.sync="$_controllableDataSortBy"
+							:sort-order.sync="$_controllableDataSortOrder"
+							@update:sort="onUpdateSort"
 						/>
 					</thead>
 					<tbody>
@@ -38,9 +39,9 @@
 						>
 							<template
 								v-for="(cmp, name) in dataRowSlots"
-								v-slot:[name]="{ data: columnData }"
+								v-slot:[name]="columnProps"
 							>
-								<slot :name="name" :data="columnData" />
+								<slot :name="name" v-bind="columnProps" />
 							</template>
 						</component>
 					</tbody>
@@ -67,11 +68,14 @@ import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 
+import controllableData from "@mixins/controllableData";
+
 export default {
 	components: {
 		Pagination,
 		RowSelectionBar,
 	},
+	mixins: [controllableData(["sortBy", "sortOrder", "selectionType"])],
 	props: {
 		/**
 		 * Defines the visible columns
@@ -156,8 +160,6 @@ export default {
 		actions: {
 			type: Array,
 			default: () => [],
-			validator: (actions) =>
-				actions.every((action) => typeof action.action === "function"),
 		},
 
 		sortBy: {
@@ -188,14 +190,9 @@ export default {
 	},
 	data() {
 		return {
-			localSortBy: undefined,
-			localSortOrder: undefined,
 			editFilterActive: false,
 			tableData: this.data,
-			filterOpened: {},
-			newFiltersSelected: this.filtersSelected,
 			selectionKeys: {},
-			localSelectionType: "inclusive",
 		};
 	},
 	computed: {
@@ -209,28 +206,10 @@ export default {
 				)
 			);
 		},
-		sortByProxy: {
-			get() {
-				return this.localSortBy || this.sortBy;
-			},
-			set(to) {
-				this.localSortBy = to;
-				this.$emit("update:sortBy", to);
-			},
-		},
-		sortOrderProxy: {
-			get() {
-				return this.localSortOrder || this.sortOrder;
-			},
-			set(to) {
-				this.localSortOrder = to;
-				this.$emit("update:sortOrder", to);
-			},
-		},
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
-			return this.localSelectionType === "inclusive"
+			return this.$_controllableDataSelectionType === "inclusive"
 				? selections.length
 				: this.total - selections.length;
 		},
@@ -239,7 +218,8 @@ export default {
 				// TODO think about moving selections outside this method
 				const selections = Object.keys(this.selectionKeys);
 				return (
-					this.localSelectionType === "exclusive" && selections.length === 0
+					this.$_controllableDataSelectionType === "exclusive" &&
+					selections.length === 0
 				);
 			},
 			set(state) {
@@ -254,7 +234,7 @@ export default {
 					this.selectionKeys[getValueByPath(row, this.trackBy)];
 
 				const allSelected =
-					this.localSelectionType === "inclusive"
+					this.$_controllableDataSelectionType === "inclusive"
 						? Boolean(this.data.every(isInSelection))
 						: !Boolean(this.data.some(isInSelection));
 				if (allSelected) {
@@ -262,7 +242,7 @@ export default {
 				}
 
 				const someSelected =
-					this.localSelectionType === "inclusive"
+					this.$_controllableDataSelectionType === "inclusive"
 						? Boolean(this.data.some(isInSelection))
 						: !Boolean(this.data.every(isInSelection));
 				if (someSelected) {
@@ -295,12 +275,6 @@ export default {
 		},
 	},
 	watch: {
-		selectionType: {
-			handler(to) {
-				this.localSelectionType = to;
-			},
-			immediate: true,
-		},
 		selectionKeys(to) {
 			/**
 			 * toggle whenever the selection changes
@@ -311,7 +285,11 @@ export default {
 			 * Inclusive means all items in the passed array are selected.
 			 * Exclusive means all items not in the passed array are selected.
 			 */
-			this.$emit("update:selection", Object.keys(to), this.localSelectionType);
+			this.$emit(
+				"update:selection",
+				Object.keys(to),
+				this.$_controllableDataSelectionType
+			);
 			/**
 			 * helper event for the selectedRowIds .sync modifier
 			 */
@@ -334,40 +312,35 @@ export default {
 			},
 			immediate: true,
 		},
-		sortBy(to) {
-			this.localSortBy = to;
-		},
-		sortOrder(to) {
-			this.localSortOrder = to;
-		},
 	},
 	methods: {
 		getValueByPath,
 		selectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
-			this.localSelectionType = "exclusive";
-			this.$emit("update:selectionType", "exclusive");
+			this.$_controllableDataSelectionType = "exclusive";
 		},
 		unselectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
-			this.localSelectionType = "inclusive";
-			this.$emit("update:selectionType", "inclusive");
+			this.$_controllableDataSelectionType = "inclusive";
 		},
 		setRowSelection(row, state) {
 			const method = (newState) => (newState ? "$set" : "$delete");
-			this[method(this.localSelectionType === "inclusive" ? state : !state)](
-				this.selectionKeys,
-				getValueByPath(row, this.trackBy),
-				true
-			);
+			this[
+				method(
+					this.$_controllableDataSelectionType === "inclusive" ? state : !state
+				)
+			](this.selectionKeys, getValueByPath(row, this.trackBy), true);
 		},
 		isRowSelected(row) {
 			const rowId = getValueByPath(row, this.trackBy);
 			return Boolean(
-				this.localSelectionType === "inclusive"
+				this.$_controllableDataSelectionType === "inclusive"
 					? this.selectionKeys[rowId]
 					: !this.selectionKeys[rowId]
 			);
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.$emit("update:sort", sortBy, sortOrder);
 		},
 		onUpdateRowsPerPage(value) {
 			this.$emit("update:current-page", 1);
@@ -375,14 +348,14 @@ export default {
 		},
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);
-			action.action(selections, this.localSelectionType);
+			action.action(selections, this.$_controllableDataSelectionType);
 			this.unselectAllRowsOfAllPages();
 		},
 	},
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@styles";
 thead {
 	font-size: var(--text-md);

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import qs from "qs";
-export default function(endpoint) {
+export default function (endpoint) {
 	const baseUrl = "/" + endpoint;
 	const getDefaultState = () => {
 		return {

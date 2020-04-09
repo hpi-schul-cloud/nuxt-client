@@ -3,7 +3,7 @@
 		:class="{
 			row: true,
 			selected,
-			highlight: Boolean((rowindex + 1) % 2),
+			highlight: isHighlighted,
 		}"
 	>
 		<td v-if="selectable">
@@ -21,6 +21,8 @@
 			<slot
 				:name="`datacolumn-${columnKeys[index].replace(/\./g, '-')}`"
 				:data="fieldData"
+				:selected="selected"
+				:highlighted="isHighlighted"
 			>
 				<div class="text-content">
 					{{ fieldData }}
@@ -50,6 +52,10 @@ export default {
 			required: true,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		rowData() {
 			if (this.data === Array) {
@@ -69,6 +75,9 @@ export default {
 			set(state) {
 				this.$emit("update:selected", state);
 			},
+		},
+		isHighlighted() {
+			return Boolean((this.rowindex + 1) % 2);
 		},
 	},
 };

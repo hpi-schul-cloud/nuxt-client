@@ -1,0 +1,298 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@mixins/print $_print can print content with custom styles 1`] = `
+<html>
+
+  <head>
+    <style>
+      @page {
+        size: A4;
+        margin: 16px;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
+      }
+
+      body {
+        margin: 2rem;
+        border: 1px solid blue;
+      }
+    </style>
+  </head>
+
+  <body>some plain old content</body>
+
+</html>
+`;
+
+exports[`@mixins/print $_print can print plain content 1`] = `
+<html>
+
+  <head>
+    <style>
+      @page {
+        size: A4;
+        margin: 16px;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>some plain old content</body>
+
+</html>
+`;
+
+exports[`@mixins/print $_printQRs can handle no parameters 1`] = `
+<html>
+
+  <head>
+    <style>
+      @page {
+        size: A4;
+        margin: 16px;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
+      }
+
+      .part {
+        border: 1px solid #aaa;
+        width: 4cm;
+        float: left;
+        padding: 8px;
+        margin: 4px;
+      }
+
+      .qr-code {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      .qr-content {
+        font-size: 0.7em;
+        opacity: 0.7;
+        width: 100%;
+        word-break:
+          break-all;
+        word-break: break-word;
+        margin: 2px 0 0;
+      }
+
+      .title {
+        margin: 4px 0;
+        font-size: 1.25em;
+        font-weight: bold;
+      }
+
+      .description {
+        font-size: 1em;
+        color: #555;
+        margin: 0;
+        word-break: break-all;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+
+  <body>Keine Einträge zu drucken.</body>
+
+</html>
+`;
+
+exports[`@mixins/print $_printQRs can print items with all options 1`] = `
+<html>
+
+  <head>
+    <style>
+      @page {
+        size: A4;
+        margin: 16px;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
+      }
+
+      .part {
+        border: 1px solid #aaa;
+        width: 4cm;
+        float: left;
+        padding: 8px;
+        margin: 4px;
+      }
+
+      .qr-code {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      .qr-content {
+        font-size: 0.7em;
+        opacity: 0.7;
+        width: 100%;
+        word-break:
+          break-all;
+        word-break: break-word;
+        margin: 2px 0 0;
+      }
+
+      .title {
+        margin: 4px 0;
+        font-size: 1.25em;
+        font-weight: bold;
+      }
+
+      .description {
+        font-size: 1em;
+        color: #555;
+        margin: 0;
+        word-break: break-all;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="part">
+      <div class="image-wrapper">
+        <img class="qr-code" alt="qrContent" src="data:image/png;base64,00" width="200" height="200">
+        <div class="qr-content">qrContent</div>
+      </div>
+      <h4 class="title">title</h4>
+      <p class="description">description</p>
+    </div>
+  </body>
+
+</html>
+`;
+
+exports[`@mixins/print $_printQRs can print items with only QR content 1`] = `
+<html>
+
+  <head>
+    <style>
+      @page {
+        size: A4;
+        margin: 16px;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
+      }
+
+      .part {
+        border: 1px solid #aaa;
+        width: 4cm;
+        float: left;
+        padding: 8px;
+        margin: 4px;
+      }
+
+      .qr-code {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      .qr-content {
+        font-size: 0.7em;
+        opacity: 0.7;
+        width: 100%;
+        word-break:
+          break-all;
+        word-break: break-word;
+        margin: 2px 0 0;
+      }
+
+      .title {
+        margin: 4px 0;
+        font-size: 1.25em;
+        font-weight: bold;
+      }
+
+      .description {
+        font-size: 1em;
+        color: #555;
+        margin: 0;
+        word-break: break-all;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="part">
+      <div class="image-wrapper">
+        <img class="qr-code" alt="qrContent" src="data:image/png;base64,00" width="200" height="200">
+        <div class="qr-content">qrContent</div>
+      </div>
+
+
+    </div>
+  </body>
+
+</html>
+`;
+
+exports[`@mixins/print $_printQRs prints an error if no items to print are given 1`] = `
+<html>
+
+  <head>
+    <style>
+      @page {
+        size: A4;
+        margin: 16px;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
+      }
+
+      .part {
+        border: 1px solid #aaa;
+        width: 4cm;
+        float: left;
+        padding: 8px;
+        margin: 4px;
+      }
+
+      .qr-code {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      .qr-content {
+        font-size: 0.7em;
+        opacity: 0.7;
+        width: 100%;
+        word-break:
+          break-all;
+        word-break: break-word;
+        margin: 2px 0 0;
+      }
+
+      .title {
+        margin: 4px 0;
+        font-size: 1.25em;
+        font-weight: bold;
+      }
+
+      .description {
+        font-size: 1em;
+        color: #555;
+        margin: 0;
+        word-break: break-all;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+
+  <body>Keine Einträge zu drucken.</body>
+
+</html>
+`;

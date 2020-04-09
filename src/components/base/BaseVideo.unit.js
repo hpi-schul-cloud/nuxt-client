@@ -6,7 +6,7 @@ const getVideoplayer = (props) => {
 	});
 };
 
-describe("@components/BaseVideo", () => {
+describe("@components/base/BaseVideo", () => {
 	it(...isValidComponent(BaseVideo));
 
 	it("renders sources", () => {

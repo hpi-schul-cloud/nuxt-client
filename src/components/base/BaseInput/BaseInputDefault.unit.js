@@ -10,7 +10,7 @@ function getMock(type, attributes) {
 	});
 }
 
-describe("@components/BaseInputDefault", () => {
+describe("@components/base/BaseInputDefault", () => {
 	it("input has correct type", () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = getMock(type);
@@ -124,12 +124,7 @@ describe("@components/BaseInputDefault", () => {
 
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);
 			expect(wrapper.find(".error").exists()).toBe(true);
-			expect(
-				wrapper
-					.findAll(".error")
-					.at(1)
-					.text()
-			).toBe("error");
+			expect(wrapper.findAll(".error").at(1).text()).toBe("error");
 		});
 	});
 

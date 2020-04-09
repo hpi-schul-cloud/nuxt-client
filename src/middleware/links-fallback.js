@@ -3,7 +3,7 @@ const vueRoutes = require("@serverMiddleware/routes.js");
 const isNuxtRoute = (url) =>
 	vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));
 
-export default async function(ctx) {
+export default async function (ctx) {
 	const { route } = ctx;
 
 	if (process.env.FALLBACK_DISABLED === "true") {

@@ -19,12 +19,7 @@ describe("@components/organisms/StepProgress", () => {
 			},
 		});
 		expect(wrapper.findAll(".description")).toHaveLength(mockSteps.length);
-		expect(
-			wrapper
-				.findAll("li")
-				.at(0)
-				.classes()
-		).toContain("active");
+		expect(wrapper.findAll("li").at(0).classes()).toContain("active");
 		expect(wrapper.findAll(".active")).toHaveLength(1);
 	});
 	it("Test with the 3rd step all steps are rendered", () => {
@@ -44,18 +39,8 @@ describe("@components/organisms/StepProgress", () => {
 			},
 		});
 
-		expect(
-			wrapper
-				.findAll("li")
-				.at(0)
-				.classes()
-		).toContain("done");
-		expect(
-			wrapper
-				.findAll("li")
-				.at(step)
-				.classes()
-		).toContain("active");
+		expect(wrapper.findAll("li").at(0).classes()).toContain("done");
+		expect(wrapper.findAll("li").at(step).classes()).toContain("active");
 
 		expect(
 			wrapper

@@ -49,6 +49,12 @@ export default {
 					"primary icon outline",
 					"primary text icon",
 					"primary outline",
+					"info",
+					"info text",
+					"info icon",
+					"info icon outline",
+					"info text icon",
+					"info outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
@@ -93,6 +99,10 @@ export default {
 			type: String,
 			default: "",
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		isLink() {

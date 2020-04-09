@@ -1,10 +1,12 @@
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 import DataTable from "./DataTable";
+import { localDataPrefix } from "@mixins/controllableData";
 
 const defaultData = tableData(50);
 
 function getWrapper(attributes, options) {
 	return mount(DataTable, {
+		...createComponentMocks({ i18n: true }),
 		propsData: {
 			data: defaultData,
 			trackBy: "id",
@@ -120,8 +122,8 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				rowsPerPage: oldValue,
 				currentPage: 1,
 			});
-			wrapper.vm.rowsPerPageProxy = newValue; // simulate write to variable from .sync modifier from child
-			expect(wrapper.vm.localRowsPerPage).toBe(newValue);
+			wrapper.vm.$_controllableDataRowsPerPage = newValue; // simulate write to variable from .sync modifier from child
+			expect(wrapper.vm[`${localDataPrefix}RowsPerPage`]).toBe(newValue);
 			expect(wrapper.emitted("update:rows-per-page")).toStrictEqual([[20]]);
 		});
 
@@ -515,6 +517,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			const testSlotContent = `some random slot content`;
 
 			const wrapper = mount(DataTable, {
+				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
 					trackBy: "id",
@@ -539,6 +542,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			const testSlotContent = `some random slot content`;
 
 			const wrapper = mount(DataTable, {
+				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
 					trackBy: "id",

@@ -36,7 +36,7 @@ export default {
 		source: {
 			type: String,
 			required: true,
-			validator: function(to) {
+			validator: function (to) {
 				return ["material", "custom", "fa"].includes(to);
 			},
 		},
@@ -49,7 +49,10 @@ export default {
 			default: "currentColor",
 		},
 	},
-
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		buttonDesign() {
 			return this.isMobile ? `${this.design} icon`.trim() : this.design;
