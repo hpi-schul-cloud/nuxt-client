@@ -25,7 +25,7 @@
 				src="@assets/icons/sync-symbol.svg"
 				role="presentation"
 			/>
-			<strong>
+			<strong class="external-sync-hint">
 				{{ $t("components.molecules.admintablelegend.externalSync") }}
 				<base-link
 					class="link-style"
@@ -64,6 +64,8 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+$vertically-center: auto 0;
+
 .section {
 	margin-top: var(--space-lg);
 }
@@ -99,5 +101,9 @@ export default {
 .link-style {
 	color: var(--color-black);
 	text-decoration: underline;
+}
+
+.external-sync-hint {
+	margin: $vertically-center;
 }
 </style>
