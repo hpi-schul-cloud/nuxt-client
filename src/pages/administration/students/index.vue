@@ -93,7 +93,7 @@
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
-					icon: 'arrow_downward',
+					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/students/import',
 				},

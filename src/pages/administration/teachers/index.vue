@@ -81,7 +81,7 @@
 				},
 				{
 					label: $t('pages.administration.teachers.fab.import'),
-					icon: 'arrow_downward',
+					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/teachers/import',
 				},
