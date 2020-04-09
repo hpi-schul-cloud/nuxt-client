@@ -3,7 +3,9 @@ import { text, boolean } from "@storybook/addon-knobs";
 import InfoBox from "./InfoBox";
 import BaseButton from "@basecomponents/BaseButton";
 import BaseInput from "@basecomponents/BaseInput/BaseInputCheckbox";
-import * as faker from "faker";
+import faker from "faker/locale/en";
+// set a seed to have a consistent fake for the screenshot tests
+faker.seed(512); // any static number will do the job
 const content = faker.lorem.paragraph();
 
 storiesOf("5 Molecules/InfoBox", module)

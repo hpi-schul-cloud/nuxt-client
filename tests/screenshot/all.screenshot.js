@@ -11,6 +11,7 @@ https://github.com/smooth-code/jest-puppeteer
 const fs = require("fs");
 const { storybookUrl, routesFilePath } = require("./config");
 const ignoredStories = require("./ignoredStories");
+const sharp = require("sharp");
 
 const blockRequest = (request) => {
 	// block webpack hot reload connection
@@ -25,6 +26,24 @@ const storyNotIgnored = (storyPath) =>
 	!ignoredStories.some(
 		(regexString) => !!new RegExp(regexString).exec(storyPath)
 	);
+
+/**
+ * removes whitespace around image content
+ * @param {Buffer} imageBuffer
+ */
+const trimImage = async (imageBuffer) => {
+	const padding = 16;
+	return sharp(imageBuffer)
+		.trim(0.000000001) // default threshold: 10
+		.extend({
+			top: padding,
+			bottom: padding,
+			left: padding,
+			right: padding,
+			background: { r: 255, g: 255, b: 255, alpha: 1 },
+		})
+		.toBuffer();
+};
 
 // get stories to screenshot
 const allStories = JSON.parse(fs.readFileSync(routesFilePath));
@@ -62,13 +81,18 @@ describe("screenshots", () => {
 					content: `* { caret-color: transparent !important; }`,
 				});
 				// take screenshot of story
-				const image = await localPage.screenshot();
+				const image = await localPage.screenshot({
+					fullPage: true, // capture full page including below the fold content
+				});
 
 				// close page to free up some memory
 				localPage.close();
 
+				// crop image to content
+				const croppedImage = await trimImage(image);
+
 				// compare snapshots
-				expect(image).toMatchImageSnapshot({
+				expect(croppedImage).toMatchImageSnapshot({
 					customSnapshotIdentifier: (
 						testPath,
 						currentTestName,
@@ -76,7 +100,8 @@ describe("screenshots", () => {
 						// defaultIdentifier
 					) => `${group}-${name}_${counter + 1}`,
 					customDiffConfig: {
-						threshold: 0.1,
+						// each pixel is allowed to be x% off from the baseline
+						threshold: 0.01, // (0.01 is 1%, default 0.01)
 					},
 					failureThresholdType: "percent",
 					failureThreshold: 0.1, // accept <x% overall diff (0.01 is 1%, default: 0)

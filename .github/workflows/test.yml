@@ -48,12 +48,15 @@ jobs:
       - name: build storybook
         run: "npm run build:storybook"
       - name: npm run test:screenshot
-        run: npm run test:screenshot
+        run: npm run test:screenshot:ci
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
           name: screenshot-diff
           path: tests/screenshot/__image_snapshots__/__diff_output__
+      - name: failure hint
+        if: failure()
+        run: echo "if you want to update the screenshots, comment \"@schul-cloud-bot update screenshots\" on this PR."
   integration:
     runs-on: ubuntu-latest
     steps:
@@ -68,9 +71,8 @@ jobs:
   # build:
   #   strategy:
   #     matrix:
-  #       os: [ubuntu-latest, macos-latest, windows-latest]
-  #       theme: [default, brb, n21, open]
-  #   runs-on: ${{ matrix.os }}
+  #       theme: [default, brb, n21, open, thr]
+  #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v2
   #     - name: npm ci
