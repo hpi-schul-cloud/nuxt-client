@@ -22,7 +22,7 @@
 				</span>
 			</div>
 			<div class="input-line">
-				<div v-if="$slots.icon" class="icon-before">
+				<div v-if="$slots.icon" class="icon icon-before">
 					<slot name="icon" />
 				</div>
 				<div class="core">
@@ -44,34 +44,33 @@
 						/>
 					</slot>
 				</div>
-				<base-button
-					v-if="type === 'password' && !error && !success"
-					design="none"
-					type="button"
-					data-testid="pwd-visibility-toggle"
-					class="pwd-toggle"
-					@click="togglePasswordVisibility"
-				>
+				<div class="icon icon-behind">
+					<base-button
+						v-if="type === 'password' && !error && !success"
+						design="none"
+						type="button"
+						data-testid="pwd-visibility-toggle"
+						class="pwd-toggle"
+						@click="togglePasswordVisibility"
+					>
+						<base-icon
+							source="custom"
+							:icon="passwordVisible ? 'visible' : 'invisible'"
+						/>
+					</base-button>
 					<base-icon
+						v-if="error"
 						source="custom"
-						:icon="passwordVisible ? 'visible' : 'invisible'"
-						class="icon-behind"
+						icon="warning"
+						fill="var(--color-danger)"
 					/>
-				</base-button>
-				<base-icon
-					v-if="error"
-					source="custom"
-					icon="warning"
-					fill="var(--color-danger)"
-					class="icon-behind"
-				/>
-				<base-icon
-					v-if="success"
-					source="custom"
-					icon="success"
-					fill="var(--color-success)"
-					class="icon-behind"
-				/>
+					<base-icon
+						v-if="success"
+						source="custom"
+						icon="success"
+						fill="var(--color-success)"
+					/>
+				</div>
 			</div>
 		</div>
 		<span
@@ -210,9 +209,9 @@ export default {
 	}
 	.info-line {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		min-height: var(--text-md);
-		margin-bottom: var(--space-xs-4);
 
 		&:not(.label-visible) {
 			justify-content: flex-end;
@@ -220,13 +219,21 @@ export default {
 	}
 	.input-line {
 		display: flex;
-		.icon-before {
+		align-items: center;
+		padding-bottom: var(--space-xs-4);
+
+		.icon {
+			display: flex;
+			align-items: center;
 			width: 24px;
-			height: 24px;
-			margin-right: var(--space-xs-2);
-			/deep/ .material {
-				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-				font-size: 1.1em;
+			text-align: center;
+
+			&.icon-before {
+				margin-right: var(--space-xs-2);
+			}
+			&.icon-behind {
+				margin-left: var(--space-xs);
+				font-size: var(--text-lg);
 			}
 		}
 		.core {
@@ -235,9 +242,11 @@ export default {
 			line-height: 0; // needed for correct spacing
 			input {
 				width: 100%;
-				margin-bottom: var(--space-xs-2);
-				line-height: var(--line-height-md);
+				padding: 0;
+				margin: 0;
+				line-height: 100%;
 				color: var(--color-text);
+				background: transparent;
 				border: none;
 				&:focus {
 					outline: none;
@@ -249,12 +258,6 @@ export default {
 					}
 				}
 			}
-		}
-		.icon-behind {
-			width: 24px;
-			height: 24px;
-			margin-left: var(--space-xs);
-			font-size: var(--text-lg);
 		}
 	}
 }
