@@ -60,7 +60,7 @@
 		"kjua": "^0.6.0",
 		"material-icons-svg": "^1.0.0",
 		"nuxt": "^2.12.2",
-		"tiptap": "^1.26.8",
+		"tiptap": "^1.27.0",
 		"tiptap-extensions": "^1.28.8",
 		"vue": "^2.6.11",
 		"vue-echarts": "^4.0.4",
