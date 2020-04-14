@@ -26,7 +26,10 @@
 				role="presentation"
 			/>
 			<strong class="external-sync-hint">
-				{{ $t("components.molecules.admintablelegend.externalSync") }}
+				{{
+					($t("components.molecules.admintablelegend.externalSync",
+					{ shortName: this.$theme.short_name }))
+				}}
 				<base-link
 					class="link-style"
 					to="/administration/helpdesk"
