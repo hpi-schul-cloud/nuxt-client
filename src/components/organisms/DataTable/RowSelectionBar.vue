@@ -42,11 +42,13 @@
 
 <script>
 import ContextMenu from "@components/molecules/ContextMenu";
+import UserHasPermission from "@/mixins/UserHasPermission";
 
 export default {
 	components: {
 		ContextMenu,
 	},
+	mixins: [UserHasPermission],
 	props: {
 		actions: {
 			type: Array,
@@ -71,13 +73,18 @@ export default {
 	},
 	computed: {
 		contextActions() {
-			return this.actions.map((actionCtx, index) => ({
-				text: actionCtx.label,
-				icon: actionCtx.icon,
-				"icon-source": actionCtx["icon-source"],
-				event: "action",
-				arguments: index,
-			}));
+			return this.actions.reduce((actions, actionCtx, index) => {
+				if (this.$_userHasPermission(actionCtx.permission)) {
+					actions.push({
+						text: actionCtx.label,
+						icon: actionCtx.icon,
+						"icon-source": actionCtx["icon-source"],
+						event: "action",
+						arguments: index,
+					});
+				}
+				return actions;
+			}, []);
 		},
 	},
 	watch: {

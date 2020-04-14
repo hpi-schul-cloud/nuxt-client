@@ -20,9 +20,12 @@ export default {
 	},
 	methods: {
 		$_userHasPermission(permission) {
-			return typeof permission === "string"
-				? !permission || this.userPermissions.includes(permission.toLowerCase())
-				: !permission() || permission(this.userPermissions);
+			if (permission)
+				return typeof permission === "string"
+					? !permission ||
+							this.userPermissions.includes(permission.toLowerCase())
+					: !permission() || permission(this.userPermissions);
+			else return true;
 		},
 	},
 };

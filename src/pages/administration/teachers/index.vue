@@ -176,6 +176,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "TEACHER_DELETE",
 				},
 			],
 			tableSelection: [],
