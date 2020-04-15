@@ -166,8 +166,8 @@ export default {
 				return {
 					_id: entry._id,
 					teacher: entry.teacher,
-					class: `${entry.subject} ${entry.class}`,
-					room: entry.room,
+					class: `${entry.subject} ${entry?.classes?.join(", ")}`,
+					room: entry?.rooms?.join(", "),
 					state: entry.state,
 				};
 			});
@@ -202,7 +202,7 @@ export default {
 					datasourceId: this.datasource._id,
 					dryrun: false,
 					data: {
-						datatype: "inclusive", // inclusive/exclusive
+						type: "inclusive", // inclusive/exclusive
 						courseMetadataIds: this.selections,
 					},
 				});

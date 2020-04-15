@@ -22,7 +22,7 @@
 				</span>
 			</div>
 			<div class="input-line">
-				<div v-if="$slots.icon" class="icon-before">
+				<div v-if="$slots.icon" class="icon icon-before">
 					<slot name="icon" />
 				</div>
 				<div class="core">
@@ -33,50 +33,44 @@
 							v-focus-on-mount="focus"
 							:aria-label="showLabel ? undefined : label"
 							v-bind="$attrs"
+							:placeholder="placeholder"
 							:type="appliedType"
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
 							@input="handleInput"
+							@focus="hasFocus = true"
+							@blur="hasFocus = false"
 						/>
 					</slot>
 				</div>
-				<base-button
-					v-if="type === 'password' && !error && !success"
-					design="none"
-					type="button"
-					data-testid="pwd-visibility-toggle"
-					@click="togglePasswordVisibility"
-				>
+				<div class="icon icon-behind">
+					<base-button
+						v-if="type === 'password' && !error && !success"
+						design="none"
+						type="button"
+						data-testid="pwd-visibility-toggle"
+						class="pwd-toggle"
+						@click="togglePasswordVisibility"
+					>
+						<base-icon
+							source="custom"
+							:icon="passwordVisible ? 'visible' : 'invisible'"
+						/>
+					</base-button>
 					<base-icon
-						v-if="!passwordVisible"
+						v-if="error"
 						source="custom"
-						icon="invisible"
-						fill="var(--color-gray)"
-						class="icon-behind"
+						icon="warning"
+						fill="var(--color-danger)"
 					/>
 					<base-icon
-						v-else
+						v-if="success"
 						source="custom"
-						icon="visible"
-						fill="var(--color-gray)"
-						class="icon-behind visible"
+						icon="success"
+						fill="var(--color-success)"
 					/>
-				</base-button>
-				<base-icon
-					v-if="error"
-					source="custom"
-					icon="warning"
-					fill="var(--color-danger)"
-					class="icon-behind"
-				/>
-				<base-icon
-					v-if="success"
-					source="custom"
-					icon="success"
-					fill="var(--color-success)"
-					class="icon-behind"
-				/>
+				</div>
 			</div>
 		</div>
 		<span
@@ -118,6 +112,7 @@ export default {
 		},
 		label: { type: String, required: true },
 		labelHidden: { type: Boolean },
+		placeholder: { type: String, default: "" },
 		info: { type: String, default: "" },
 		hint: { type: String, default: "" },
 		error: { type: String, default: "" },
@@ -128,6 +123,7 @@ export default {
 	},
 	data() {
 		return {
+			hasFocus: false,
 			passwordVisible: false,
 		};
 	},
@@ -142,7 +138,13 @@ export default {
 			return !!this.error;
 		},
 		showLabel() {
-			return (!!this.vmodel || !this.$attrs.placeholder) && !this.labelHidden;
+			return (
+				(this.hasFocus ||
+					this.disabled ||
+					Boolean(this.vmodel) ||
+					!this.placeholder) &&
+				!this.labelHidden
+			);
 		},
 	},
 	methods: {
@@ -167,7 +169,7 @@ export default {
 	display: block;
 
 	.help {
-		padding-top: var(--space-xxxs);
+		padding-top: var(--space-xs-3);
 		visibility: hidden;
 	}
 
@@ -207,9 +209,9 @@ export default {
 	}
 	.info-line {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		min-height: var(--text-md);
-		margin-bottom: var(--space-xxxxs);
 
 		&:not(.label-visible) {
 			justify-content: flex-end;
@@ -217,13 +219,21 @@ export default {
 	}
 	.input-line {
 		display: flex;
-		.icon-before {
+		align-items: center;
+		padding-bottom: var(--space-xs-4);
+
+		.icon {
+			display: flex;
+			align-items: center;
 			width: 24px;
-			height: 24px;
-			margin-right: var(--space-xxs);
-			/deep/ .material {
-				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-				font-size: 1.1em;
+			text-align: center;
+
+			&.icon-before {
+				margin-right: var(--space-xs-2);
+			}
+			&.icon-behind {
+				margin-left: var(--space-xs);
+				font-size: var(--text-lg);
 			}
 		}
 		.core {
@@ -232,9 +242,11 @@ export default {
 			line-height: 0; // needed for correct spacing
 			input {
 				width: 100%;
-				margin-bottom: var(--space-xxs);
-				line-height: var(--line-height-md);
+				padding: 0;
+				margin: 0;
+				line-height: 100%;
 				color: var(--color-text);
+				background: transparent;
 				border: none;
 				&:focus {
 					outline: none;
@@ -247,12 +259,19 @@ export default {
 				}
 			}
 		}
-		.icon-behind {
-			width: 24px;
-			height: 24px;
-			margin-left: var(--space-xs);
-			font-size: var(--text-lg);
-		}
+	}
+}
+
+.pwd-toggle {
+	color: var(--color-gray);
+	border-radius: var(--radius-round);
+	&:hover {
+		color: var(--color-gray-dark);
+	}
+	&:focus {
+		color: var(--color-gray-dark);
+		outline: none;
+		box-shadow: 0 0 0 3px var(--color-white), 0 0 0 6px var(--color-gray-dark);
 	}
 }
 
