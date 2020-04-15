@@ -100,6 +100,16 @@ export default {
 					schoolId: this.$user.schoolId,
 					sendRegistration: this.userData.sendRegistration,
 				});
+				// TODO: remove the next registrationlink dispatch
+				// https://ticketsystem.schul-cloud.org/browse/SC-4008
+				await this.$store.dispatch("registrationlink/create", {
+					role: this.roleName,
+					save: true,
+					patchUser: true,
+					host: location.host,
+					schoolId: this.$user.schoolId,
+					toHash: this.userData.email,
+				});
 
 				this.$emit("success");
 			} catch (e) {
