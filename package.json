@@ -14,7 +14,7 @@
 		"build:storybook": "build-storybook -c stories/.storybook -o dist/storybook --quiet",
 		"build": "run-s build:*",
 		"start:nuxt": "nuxt start",
-		"start:storybook": "npx serve --no-clipboard --listen 4001 dist/storybook",
+		"start:storybook": "npx serve --no-clipboard --listen 4001 --config ../../serve.json dist/storybook",
 		"start": "run-p start:*",
 		"new": "hygen new",
 		"lint:eslint": "eslint",
