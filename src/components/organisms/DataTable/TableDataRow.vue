@@ -14,6 +14,7 @@
 					:label="`Zeile ${rowindex + 1} auswählen`"
 					:label-hidden="true"
 					class="select"
+					:color="selected ? 'currentColor' : undefined"
 				/>
 			</div>
 		</td>
