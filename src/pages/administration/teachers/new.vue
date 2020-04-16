@@ -4,7 +4,7 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.new.title") }}
 		</h1>
-		<form-create-user :role-name="roleName" @success="success" @error="error">
+		<form-create-user role-name="teacher" @success="success" @error="error">
 			<template v-slot:inputs="{ userData }">
 				<base-input
 					v-model="userData.sendRegistration"
@@ -44,7 +44,6 @@ export default {
 					text: this.$t("pages.administration.teachers.new.title"),
 				},
 			],
-			roleName: "teacher",
 		};
 	},
 	methods: {
