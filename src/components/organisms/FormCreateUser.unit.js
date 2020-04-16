@@ -27,13 +27,6 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 			roles: {
 				actions,
 			},
-			registrationlink: {
-				// TODO: this mock can be removed when the following ticket is implemented
-				// https://ticketsystem.schul-cloud.org/browse/SC-4008
-				actions: {
-					create: jest.fn().mockReturnValue(Promise.resolve()),
-				},
-			},
 		},
 	});
 
