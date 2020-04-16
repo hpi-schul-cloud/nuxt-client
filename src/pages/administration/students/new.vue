@@ -12,6 +12,7 @@
 					:label="$t('common.labels.birthdate')"
 					:placeholder="$t('common.placeholder.birthdate')"
 					class="mt--md"
+					data-testid="input_create-student_birthdate"
 				>
 				</base-input>
 				<base-input
@@ -20,6 +21,7 @@
 					name="switch"
 					class="mt--xl"
 					:label="$t('pages.administration.students.new.checkbox.label')"
+					data-testid="input_create-student_send-registration"
 				/>
 			</template>
 		</form-create-user>
