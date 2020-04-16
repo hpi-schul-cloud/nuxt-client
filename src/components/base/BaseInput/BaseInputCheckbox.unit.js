@@ -10,6 +10,7 @@ describe("@components/base/BaseInputCheckbox", () => {
 					name: "checkbox",
 					type,
 					vmodel: true,
+					color: `var(--color-tertiary)`,
 				},
 			});
 			expect(wrapper.find("input[type='checkbox']").exists()).toBe(true);
