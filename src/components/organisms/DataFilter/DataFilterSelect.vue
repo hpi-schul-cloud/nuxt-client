@@ -73,7 +73,6 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 .menu {
-	position: absolute;
-	top: calc(5.5 * var(--space-xl));
+	position: relative;
 }
 </style>
