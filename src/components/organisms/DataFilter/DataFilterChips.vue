@@ -88,9 +88,10 @@ $transition: background var(--duration-transition-medium)
 		justify-content: center;
 		width: 1.5em;
 		height: 1.5em;
-		padding: var(--space-xs-4);
+		padding: var(--space-xs-3);
 		margin: 0;
-		margin-left: var(--space-sm);
+		margin-right: calc(-1 * var(--space-xs-4));
+		margin-left: var(--space-xs);
 		color: var(--color-white);
 		cursor: pointer;
 		background-color: var(--color-tertiary);

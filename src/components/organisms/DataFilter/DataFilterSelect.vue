@@ -1,17 +1,10 @@
 <template>
 	<div v-if="options.length > 0" v-click-outside="hideMenu" class="menu">
 		<base-button design="text" @click="showMenu">
-			<base-icon
-				source="custom"
-				icon="filter"
-				style="font-size: var(--text-lg);"
-			/>
-			{{ labelAdd }}
-			<base-icon
-				source="material"
-				icon="arrow_drop_down"
-				style="font-size: var(--text-lg);"
-			/>
+			<base-icon source="custom" icon="filter" class="filter-icon" />
+			<span class="filter-btn"> {{ labelAdd }} </span>
+
+			<base-icon source="material" icon="arrow_drop_down" class="filter-icon" />
 		</base-button>
 		<context-menu
 			:show.sync="visible"
@@ -71,7 +64,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .menu {
 	position: relative;
+	color: var(--color-tertiary);
+}
+.filter-btn {
+	font-family: var(--font-primary);
+	color: var(--color-tertiary);
+}
+.filter-icon {
+	font-size: var(--text-lg);
 }
 </style>
