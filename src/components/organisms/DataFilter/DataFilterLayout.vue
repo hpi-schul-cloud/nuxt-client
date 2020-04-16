@@ -15,14 +15,7 @@
 </template>
 
 <style lang="scss" scoped>
-.row {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	width: 100%;
-
-	.chips {
-		margin-top: var(--space-sm);
-	}
+.row .chips {
+	margin-top: var(--space-sm);
 }
 </style>
