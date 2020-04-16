@@ -71,7 +71,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
 .menu {
-	position: relative;
+	position: absolute;
+	top: calc(5.5 * var(--space-xl));
 }
 </style>

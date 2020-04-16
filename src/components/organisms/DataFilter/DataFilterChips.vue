@@ -52,6 +52,7 @@ $transition: background var(--duration-transition-medium)
 .chips {
 	display: flex;
 	flex-wrap: nowrap;
+	margin-top: calc(1.5 * var(--space-lg));
 }
 .chip {
 	display: inline-flex;
