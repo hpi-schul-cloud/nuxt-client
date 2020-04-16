@@ -138,7 +138,6 @@ export default {
 	justify-content: center;
 	padding: var(--space-md) var(--space-md);
 	overflow: auto;
-	font-family: var(--font-primary);
 }
 
 @include breakpoint(tablet) {

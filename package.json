@@ -64,7 +64,7 @@
 		"tiptap-extensions": "^1.29.0",
 		"vue": "^2.6.11",
 		"vue-echarts": "^4.0.4",
-		"vue-filter-ui": "^0.7.0",
+		"vue-filter-ui": "^0.7.1",
 		"vue-flatpickr-component": "^8.1.5",
 		"vue-i18n": "^8.17.0",
 		"vue-loader": "^15.9.1",
