@@ -42,13 +42,11 @@
 
 <script>
 import ContextMenu from "@components/molecules/ContextMenu";
-import UserHasPermission from "@/mixins/UserHasPermission";
 
 export default {
 	components: {
 		ContextMenu,
 	},
-	mixins: [UserHasPermission],
 	props: {
 		actions: {
 			type: Array,
