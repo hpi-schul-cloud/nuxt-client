@@ -12,7 +12,7 @@
 			@update:filter-query="onUpdateFilterQuery"
 		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="getTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -262,6 +262,11 @@ export default {
 		}),
 		schoolInternallyManaged() {
 			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
+		},
+		getTableActions() {
+			return this.tableActions.filter((action) =>
+				this.$_userHasPermission(action.permission)
+			);
 		},
 	},
 	created(ctx) {
