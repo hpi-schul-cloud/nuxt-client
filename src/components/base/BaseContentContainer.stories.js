@@ -3,7 +3,7 @@ import { text } from "@storybook/addon-knobs";
 
 import BaseContentContainer from "./BaseContentContainer";
 
-storiesOf("Layouts|BaseContentContainer", module)
+storiesOf("2 Layouts/BaseContentContainer", module)
 	.add("default", () => ({
 		components: { BaseContentContainer },
 		template: `

@@ -1,11 +1,13 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<img
-				class="hpi-logo"
-				src="@assets/img/footer-logo.png"
-				alt="Anbieterlogo"
-			/>
+			<base-link href="https://hpi.de" target="_blank" rel="noopener">
+				<img
+					class="hpi-logo"
+					src="@assets/img/footer-logo.png"
+					alt="Anbieterlogo"
+				/>
+			</base-link>
 			<span>© {{ currentYear }} {{ $theme.name }}</span>
 		</div>
 
@@ -35,16 +37,26 @@
 		</div>
 		<p class="bottom-line">
 			Made with
-			<span class="heart">❤</span> in Potsdam
+			<span class="heart">❤</span> in Potsdam |
+			{{ $t("components.legacy.footer.powered_by") }}
+			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
+				><img
+					class="poweredby-logo"
+					src="@assets/img/lokalise_logo.svg"
+					:alt="$t('components.legacy.footer.lokalise_logo_alt')"
+			/></base-link>
 		</p>
 	</footer>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import defaultDocuments from "@utils/documents.js";
 
 export default {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
@@ -56,43 +68,31 @@ export default {
 			return [
 				{
 					to: "/imprint",
-					text: "Impressum",
+					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					innerlinks: [
-						{
-							to: "/datenschutz",
-							text: "HPI",
-						},
-						{
-							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
-								.privacyExemplary,
-							text: "Muster-Schulen",
-							target: "_blank",
-							rel: "noopener",
-						},
-					],
-					text: "Datenschutzerklärung",
+					to: "/datenschutz",
+					text: this.$t("components.legacy.footer.privacy_policy"),
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
-					text: "Kontakt",
+					text: this.$t("components.legacy.footer.contact"),
 				},
 				{
-					href: "https://schul-cloud.org/team",
-					text: "Team",
+					to: "/team",
+					text: this.$t("components.legacy.footer.team"),
 				},
 				{
-					href: "https://schul-cloud.org/about",
-					text: "Über das Projekt",
+					to: "/about",
+					text: this.$t("components.legacy.footer.about"),
 				},
 				{
-					href: "https://schul-cloud.org/community",
-					text: "Mitmachen",
+					to: "/community",
+					text: this.$t("components.legacy.footer.contribute"),
 				},
 				{
-					href: "https://schul-cloud.org/partner",
-					text: "Partner",
+					to: "/partner",
+					text: this.$t("components.legacy.footer.partner"),
 				},
 				{
 					href: "https://github.com/schul-cloud/",
@@ -128,6 +128,11 @@ export default {
 
 	.heart {
 		color: var(--color-secondary);
+	}
+
+	.poweredby-logo {
+		height: 1em;
+		vertical-align: middle;
 	}
 }
 .footer-link {

@@ -1,3 +1,4 @@
+@import "./utility/breakpoints";
 @import "./utility/colors";
 @import "./utility/fonts";
 @import "./utility/resets";
@@ -49,4 +50,10 @@ body.is-noscroll {
 :focus {
 	outline: 2px solid var(--color-tertiary-light);
 	outline-offset: 3px;
+}
+
+/* width */
+
+.w-100 {
+	width: 100%;
 }

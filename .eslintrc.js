@@ -29,8 +29,7 @@ module.exports = {
 				// to reduce the number of errors we disable some rules for now.
 				// But they should be removed here ASAP.
 				// https://github.com/jest-community/eslint-plugin-jest
-				"jest/no-test-return-statement": "off",
-				"jest/require-top-level-describe": "off",
+				"jest/no-try-expect": "off",
 				"jest/consistent-test-it": [
 					"error",
 					{ fn: "it", withinDescribe: "it" },

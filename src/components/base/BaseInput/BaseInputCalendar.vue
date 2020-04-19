@@ -32,7 +32,7 @@ export default {
 	props: {
 		vmodel: {
 			type: String,
-			required: true,
+			default: "",
 		},
 		type: {
 			type: String,
@@ -46,12 +46,14 @@ export default {
 		return {
 			// Get more form https://chmln.github.io/flatpickr/options/
 			configDate: {
+				allowInput: true,
 				altFormat: "d.m.Y",
 				altInput: true,
 				dateFormat: "Y-m-d",
 				locale: German,
 			},
 			configTime: {
+				allowInput: true,
 				enableTime: true,
 				noCalendar: true,
 				dateFormat: "H:i",

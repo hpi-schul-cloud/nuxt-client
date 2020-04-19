@@ -1,16 +1,22 @@
 <template>
-	<button v-if="!isLink" :class="classes" :type="type" v-on="$listeners">
+	<button
+		v-if="!isLink"
+		:class="classes"
+		:type="type"
+		:aria-label="ariaLabel"
+		v-on="$listeners"
+	>
 		<slot />
 		<!--
 			TODO: discuss if this button shoud render a BaseLink,
 			styled as a Button if you give him a href/to property
-		-->
-	</button>
+		--></button>
 	<base-link
 		v-else
 		:class="classes"
 		v-bind="{ ...$props, ...$attrs }"
 		:no-styles="true"
+		:aria-label="ariaLabel"
 		v-on="$listeners"
 	>
 		<slot />
@@ -34,29 +40,38 @@ export default {
 					"none",
 					"text",
 					"icon",
-					"icon text",
+					"icon outline",
+					"text icon",
 					"outline",
 					"primary",
 					"primary text",
 					"primary icon",
-					"primary icon text",
+					"primary icon outline",
+					"primary text icon",
 					"primary outline",
+					"info",
+					"info text",
+					"info icon",
+					"info icon outline",
+					"info text icon",
+					"info outline",
 					"secondary",
 					"secondary text",
 					"secondary icon",
-					"secondary icon text",
+					"secondary icon outline",
+					"secondary text icon",
 					"secondary outline",
 					"hero-cta",
 					"hero-cta icon",
 					"success",
 					"success text",
 					"success icon",
-					"success icon text",
+					"success text icon",
 					"success outline",
 					"danger",
 					"danger text",
 					"danger icon",
-					"danger icon text",
+					"danger text icon",
 					"danger outline",
 					"fancy",
 					"fancy icon",
@@ -67,6 +82,7 @@ export default {
 				return defined;
 			},
 		},
+
 		type: {
 			type: String,
 			default: "button",
@@ -79,6 +95,14 @@ export default {
 			type: String,
 			default: "",
 		},
+		ariaLabel: {
+			type: String,
+			default: "",
+		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		isLink() {

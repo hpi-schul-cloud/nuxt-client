@@ -6,8 +6,8 @@
 		class="input"
 		@input="$emit('update:vmodel', $event)"
 	>
-		<template v-for="(cmp, name) in $slots">
-			<slot v-slot:[name] :name="name">
+		<template v-for="(cmp, name) in $slots" v-slot:[name]>
+			<slot :name="name">
 				<component :is="cmp.context" :key="name" />
 			</slot>
 		</template>
@@ -55,7 +55,7 @@ export default {
 	props: {
 		vmodel: {
 			type: [Array, String, Number, Boolean],
-			required: true,
+			default: undefined,
 		},
 		type: {
 			type: String,
@@ -64,6 +64,10 @@ export default {
 				return supportedTypes.includes(type);
 			},
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		component() {

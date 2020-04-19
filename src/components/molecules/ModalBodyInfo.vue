@@ -3,19 +3,34 @@
 		<div class="icon">
 			<slot name="icon"></slot>
 		</div>
-		<!-- eslint-disable-next-line vue/no-v-html -->
-		<h1 class="h4" v-html="text" />
+		<h1 class="h4">
+			<slot name="title">
+				{{ title }}
+			</slot>
+		</h1>
+		<p>
+			<slot name="description">
+				{{ description }}
+			</slot>
+		</p>
 	</div>
 </template>
 
 <script>
 export default {
 	props: {
-		text: {
+		title: {
 			type: String,
 			default: "",
-			required: true,
 		},
+		description: {
+			type: String,
+			default: "",
+		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 };
 </script>

@@ -1,10 +1,12 @@
 // import must be after mock
 jest.mock("./routes.js", () => [`^/news`]);
-jest.mock("http-proxy-middleware", () => () => (req, res, next) => ({
-	type: "proxy",
-	req,
-	res,
-	next,
+jest.mock("http-proxy-middleware", () => ({
+	createProxyMiddleware: () => (req, res, next) => ({
+		type: "proxy",
+		req,
+		res,
+		next,
+	}),
 }));
 const getNextMock = () => jest.fn(() => ({ type: "next" }));
 import proxy from "./proxy";

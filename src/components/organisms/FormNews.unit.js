@@ -1,14 +1,16 @@
 import FormNews from "./FormNews";
 
+const date = new Date().toISOString().split("T")[0];
+
 const validNews = {
 	title: "Hi",
 	content: "lalaland",
-	displayAt: "2019-11-05T13:07:00.000Z",
+	displayAt: `${date}T13:07:00.000Z`,
 };
 
 const timezoneOffset = new Date().getTimezoneOffset() / 60;
 const validNewsDate = {
-	date: "2019-11-05",
+	date,
 	time: `${13 - timezoneOffset}:07`, // timezone conversion
 };
 const invalidNews = {
@@ -17,9 +19,9 @@ const invalidNews = {
 };
 
 const getMockActions = () => ({
-	create: sinon.stub().resolves(true),
-	patch: sinon.stub().resolves(true),
-	remove: sinon.stub().resolves(true),
+	create: jest.fn().mockReturnValue(Promise.resolve()),
+	patch: jest.fn().mockReturnValue(Promise.resolve()),
+	remove: jest.fn().mockReturnValue(Promise.resolve()),
 });
 
 const getMocks = ({
@@ -48,7 +50,7 @@ const getMocks = ({
 
 const getRouterPushSpy = (wrapper, expects) => {
 	return new Promise((resolve) => {
-		const routerPushSpy = sinon.stub();
+		const routerPushSpy = jest.fn();
 		const routerPushMock = (target) => {
 			routerPushSpy(target);
 			expects(target);
@@ -58,7 +60,7 @@ const getRouterPushSpy = (wrapper, expects) => {
 	});
 };
 
-describe("@components/FormNews", () => {
+describe("@components/organisms/FormNews", () => {
 	it(...isValidComponent(FormNews));
 
 	it("converts date correctly", async () => {
@@ -86,9 +88,9 @@ describe("@components/FormNews", () => {
 				},
 			});
 			wrapper.trigger("submit");
-			expect(actions.create.called).toBe(true);
-			expect(actions.patch.called).toBe(false);
-			expect(actions.remove.called).toBe(false);
+			expect(actions.create.mock.calls).toHaveLength(1);
+			expect(actions.patch.mock.calls).toHaveLength(0);
+			expect(actions.remove.mock.calls).toHaveLength(0);
 		});
 
 		it("dispatches create action with target if target query parameter exists", async () => {
@@ -116,8 +118,8 @@ describe("@components/FormNews", () => {
 				},
 			});
 			wrapper.trigger("submit");
-			expect(actions.create.called).toBe(true);
-			const { target, targetModel } = actions.create.getCall(0).args[1];
+			expect(actions.create.mock.calls).toHaveLength(1);
+			const { target, targetModel } = actions.create.mock.calls[0][1];
 			expect(target).toBe(testTarget);
 			expect(targetModel).toBe(testTargetModel);
 		});
@@ -147,8 +149,8 @@ describe("@components/FormNews", () => {
 				},
 			});
 			wrapper.trigger("submit");
-			expect(actions.create.called).toBe(true);
-			const { target, targetModel } = actions.create.getCall(0).args[1];
+			expect(actions.create.mock.calls).toHaveLength(1);
+			const { target, targetModel } = actions.create.mock.calls[0][1];
 			expect(target).toBe(testTarget);
 			expect(targetModel).toBe(testTargetModel);
 		});
@@ -163,12 +165,12 @@ describe("@components/FormNews", () => {
 					news: invalidNews,
 				},
 			});
-			const toastStubs = { error: sinon.stub() };
+			const toastStubs = { error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 
 			wrapper.trigger("submit");
-			expect(toastStubs.error.called).toBe(true); // error toast was shown
-			expect(actions.create.called).toBe(false); // and no dispatch happend
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // error toast was shown
+			expect(actions.create.mock.calls).toHaveLength(0); // and no dispatch happend
 		});
 
 		it("shows error toast if create fails", async () => {
@@ -187,15 +189,15 @@ describe("@components/FormNews", () => {
 					news: validNews,
 				},
 			});
-			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 			wrapper.trigger("submit");
-			expect(toastStubs.success.called).toBe(false); // no success message expected
+			expect(toastStubs.success.mock.calls).toHaveLength(0); // no success message expected
 			const errors = consoleError.mock.calls.map((e) => e.toString());
 			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
-			expect(toastStubs.error.called).toBe(true); // and info toast
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // and info toast
 		});
 	});
 
@@ -210,15 +212,15 @@ describe("@components/FormNews", () => {
 					news: validNews,
 				},
 			});
-			wrapper.vm.$toast = { success: sinon.stub() };
+			wrapper.vm.$toast = { success: jest.fn() };
 			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
 				expect(target.name).toBe("news-id");
 			});
 			wrapper.trigger("submit");
-			expect((await routerPushSpy).called).toBe(true);
-			expect(actions.create.called).toBe(false);
-			expect(actions.patch.called).toBe(true);
-			expect(actions.remove.called).toBe(false);
+			expect((await routerPushSpy).mock.calls).toHaveLength(1);
+			expect(actions.create.mock.calls).toHaveLength(0);
+			expect(actions.patch.mock.calls).toHaveLength(1);
+			expect(actions.remove.mock.calls).toHaveLength(0);
 		});
 
 		it("shows validation error before submiting", async () => {
@@ -231,12 +233,12 @@ describe("@components/FormNews", () => {
 					news: invalidNews,
 				},
 			});
-			const toastStubs = { error: sinon.stub() };
+			const toastStubs = { error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 
 			wrapper.trigger("submit");
-			expect(toastStubs.error.called).toBe(true); // error toast was shown
-			expect(actions.patch.called).toBe(false); // and no dispatch happend
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // error toast was shown
+			expect(actions.patch.mock.calls).toHaveLength(0); // and no dispatch happend
 		});
 
 		it("shows error toast if patch fails", async () => {
@@ -255,15 +257,15 @@ describe("@components/FormNews", () => {
 					news: validNews,
 				},
 			});
-			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
 
 			wrapper.trigger("submit");
-			expect(toastStubs.success.called).toBe(false); // no success message expected
+			expect(toastStubs.success.mock.calls).toHaveLength(0); // no success message expected
 			const errors = consoleError.mock.calls.map((e) => e.toString());
 			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
-			expect(toastStubs.error.called).toBe(true); // and info toast
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // and info toast
 		});
 	});
 
@@ -278,7 +280,7 @@ describe("@components/FormNews", () => {
 					news: validNews,
 				},
 			});
-			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
 				expect(target.name).toBe("news");
@@ -286,12 +288,12 @@ describe("@components/FormNews", () => {
 
 			await wrapper.vm.confirmRemoveHandler();
 
-			expect(actions.create.called).toBe(false);
-			expect(actions.patch.called).toBe(false);
-			expect(actions.remove.called).toBe(true);
-			expect((await routerPushSpy).called).toBe(true);
-			expect(toastStubs.error.called).toBe(false);
-			expect(toastStubs.success.called).toBe(true);
+			expect(actions.create.mock.calls).toHaveLength(0);
+			expect(actions.patch.mock.calls).toHaveLength(0);
+			expect(actions.remove.mock.calls).toHaveLength(1);
+			expect((await routerPushSpy).mock.calls).toHaveLength(1);
+			expect(toastStubs.error.mock.calls).toHaveLength(0);
+			expect(toastStubs.success.mock.calls).toHaveLength(1);
 		});
 		it("shows error toast if remove fails", async () => {
 			const errorMessage = "expected error that should be catched";
@@ -309,24 +311,24 @@ describe("@components/FormNews", () => {
 					news: validNews,
 				},
 			});
-			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
-			const routerPushSpy = sinon.stub();
+			const routerPushSpy = jest.fn();
 			wrapper.vm.$router = { push: routerPushSpy };
 			const consoleError = jest.spyOn(console, "error");
 
 			await wrapper.vm.confirmRemoveHandler();
 
-			expect(routerPushSpy.called).toBe(false); // no navigation
-			expect(toastStubs.success.called).toBe(false); // or success message
+			expect(routerPushSpy.mock.calls).toHaveLength(0); // no navigation
+			expect(toastStubs.success.mock.calls).toHaveLength(0); // or success message
 			const errors = consoleError.mock.calls.map((e) => e.toString());
 			expect(errors).toContain(`Error: ${errorMessage}`); // but error log
-			expect(toastStubs.error.called).toBe(true); // and info toast
+			expect(toastStubs.error.mock.calls).toHaveLength(1); // and info toast
 		});
 	});
 
-	describe("cancle", () => {
-		xit("triggering the cancel action from the edit page opens a confirm modal", async () => {
+	describe("cancel", () => {
+		it.skip("triggering the cancel action from the edit page opens a confirm modal", async () => {
 			const wrapper = mount(FormNews, {
 				...getMocks(),
 				propsData: {
@@ -341,9 +343,9 @@ describe("@components/FormNews", () => {
 				expect(target.name).toBe("news-id");
 			});
 			wrapper.find("#cancel").trigger("click");
-			expect((await routerPushSpy).called).toBe(true);
+			expect((await routerPushSpy).mock.calls).toHaveLength(1);
 		});
-		xit("triggering the cancel action from the new page opens a confirm modal", async () => {
+		it.skip("triggering the cancel action from the new page opens a confirm modal", async () => {
 			const overviewMock = getMocks();
 			overviewMock.mocks.$route.params = {};
 			const wrapper = mount(FormNews, {
@@ -361,7 +363,7 @@ describe("@components/FormNews", () => {
 			});
 			wrapper.find("#cancel").trigger("click");
 
-			expect((await routerPushSpy).called).toBe(true);
+			expect((await routerPushSpy).mock.calls).toHaveLength(1);
 		});
 		it("confirming cancel navigates back to article", async () => {
 			const wrapper = mount(FormNews, {
@@ -371,13 +373,13 @@ describe("@components/FormNews", () => {
 					news: validNews,
 				},
 			});
-			const toastStubs = { success: sinon.stub(), error: sinon.stub() };
+			const toastStubs = { success: jest.fn(), error: jest.fn() };
 			wrapper.vm.$toast = toastStubs;
 			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
 				expect(target.name).toBe("news-id");
 			});
 			await wrapper.vm.confirmCancelHandler();
-			expect((await routerPushSpy).called).toBe(true);
+			expect((await routerPushSpy).mock.calls).toHaveLength(1);
 		});
 	});
 });

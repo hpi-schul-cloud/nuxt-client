@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import { text, color, select } from "@storybook/addon-knobs";
+import { text, color, select, boolean, number } from "@storybook/addon-knobs";
 import notes from "@docs/storybook/base.md";
 
 import BaseButton from "@basecomponents/BaseButton";
@@ -11,8 +11,10 @@ import ModalFooterActions from "@components/molecules/ModalFooterActions";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import ModalFooterBorder from "@components/molecules/ModalFooterBorder";
 import ModalFooter from "@components/molecules/ModalFooter";
+import LoadingModal from "@components/molecules/LoadingModal";
+import AutoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 
-storiesOf("Base|Modals", module)
+storiesOf("4 Base UI Components/Modals", module)
 	.addParameters({
 		notes,
 	})
@@ -73,19 +75,19 @@ storiesOf("Base|Modals", module)
 				<template v-slot:header>Plugin Einstellungen</template>
 				<template v-slot:body>
 					<div>
-						<base-input v-model="inputs.a" type="checkbox" value="a" label="Anonyme Abgabe" name="checkbox" />
+						<base-input v-model="inputs.a" type="checkbox" value="a" label="Anonyme Abgabe" name="checkbox" style="display: inline-flex" />
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 					<div>
-						<base-input v-model="inputs.b" type="checkbox" value="b" label="Schülerabgabe untereinander sichtbar" name="checkbox" />
+						<base-input v-model="inputs.b" type="checkbox" value="b" label="Schülerabgabe untereinander sichtbar" name="checkbox" style="display: inline-flex"/>
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 					<div>
-						<base-input v-model="inputs.c" type="checkbox" value="c" label="Worte" name="checkbox" />
+						<base-input v-model="inputs.c" type="checkbox" value="c" label="Worte" name="checkbox" style="display: inline-flex" />
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 					<div>
-						<base-input v-model="inputs.d" type="checkbox" value="d" label="Punkte" name="checkbox" />
+						<base-input v-model="inputs.d" type="checkbox" value="d" label="Punkte" name="checkbox" style="display: inline-flex" />
 						<base-icon source="material" icon="info" style="color: var(--color-tertiary)"/>
 					</div>
 				</template>
@@ -135,7 +137,7 @@ storiesOf("Base|Modals", module)
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<ModalBodyInfo
-					text="Das neue Schuljahr hat soeben begonnen"
+					title="Das neue Schuljahr hat soeben begonnen"
 				>
 					<template v-slot:icon>
 						<base-icon source="material" icon="info" style="color: var(--color-success)"/>
@@ -161,10 +163,10 @@ storiesOf("Base|Modals", module)
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<ModalBodyInfo
-					text="Bist du sicher, dass du das Thema das Herz löschen möchtest?"
+					title="Bist du sicher, dass du das Thema das Herz löschen möchtest?"
 				>
 					<template v-slot:icon>
-					<base-icon slot="icon" source="material" icon="report_problem" style="color: var(--color-danger)"/>
+						<base-icon source="material" icon="report_problem" style="color: var(--color-danger)"/>
 					</template>
 				</ModalBodyInfo>
 			</template>
@@ -178,4 +180,37 @@ storiesOf("Base|Modals", module)
 			</template>
 		</base-modal>
 		</div>`,
+	}))
+	.add("Loading", () => ({
+		components: { LoadingModal },
+		template: `<div>
+		<base-button @click="active = true">Open Modal</base-button>
+			<LoadingModal :title="title" :description="description" :active.sync="active"/>
+		</div>`,
+		data: () => ({
+			active: true,
+			title: text("title", "Daten werden geladen…"),
+			description: text(
+				"description",
+				"Dies kann bis zu einer Minute dauern. Wir bitten um etwas Geduld…"
+			),
+		}),
+	}))
+	.add("Autologout Warning", () => ({
+		components: { AutoLogoutWarning },
+		template: `<div :class="$store.state.autoLogout" id="test">
+		<base-button @click="
+						$store.commit('autoLogout/setActive', {active: true, error });
+						$store.commit('autoLogout/setRemainingTimeInSeconds', remainingTimeInSeconds);
+		">
+			Open Modal
+		</base-button> <br />
+			(When using knobs, click "Open Modal" to apply changes)
+			<AutoLogoutWarning />
+		</div>`,
+		data: () => ({
+			active: true,
+			error: boolean("error", false),
+			remainingTimeInSeconds: number("Remaining time in seconds", 7200),
+		}),
 	}));

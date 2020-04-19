@@ -1,5 +1,8 @@
 /**
  * Get value of an object property/path even if it's nested
+ * @param {object} obj The Object to extract data from
+ * @param {string} path The path to the data, seperated by "." (e.g. "key1.key2")
+ * @return The value of the object at obj[key1][key2] ...
  */
 export function getValueByPath(obj, path) {
 	const value = path.split(".").reduce((o, i) => o[i], obj);
@@ -34,3 +37,16 @@ export function indexOf(array, obj, fn) {
 
 	return -1;
 }
+
+/**
+ * Remove an element of an array. Its mutate the array with splice.
+ * @param {Array} array - array that should modified
+ * @param {*} value - value that should removed
+ */
+export const removeIdFromArray = (array, value) => {
+	const index = array.indexOf(value);
+	if (index !== -1) {
+		array.splice(index, 1);
+	}
+	return array;
+};

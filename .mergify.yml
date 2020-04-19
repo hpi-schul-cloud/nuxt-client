@@ -1,42 +1,14 @@
 pull_request_rules:
-  - name: automatic merging when label is set
+  #######################
+  # MERGE PRECONDITIONS
+  #######################
+  - name: add WIP label to draft PRs
     conditions:
-      - label!=WIP
-      - label!=waiting
-      - label=ready to merge
-      - status-success~=Travis CI
-
-      # make sure the complete matrix passed
-      - status-success~=lint
-      - -status-neutral~=lint
-      - -status-failure~=lint
-      - status-success~=test-unit
-      - -status-neutral~=test-unit
-      - -status-failure~=test-unit
-      # - status-success~=build
-      # - -status-neutral~=build
-      # - -status-failure~=build
-
-      - status-success=Mergeable
-      - status-success=codecov/project
-    actions:
-      merge:
-        method: merge
-        strict: true
-  - name: remove ready to merge when merged
-    conditions:
-      - merged
-      - label=ready to merge
+      - draft
     actions:
       label:
-        remove:
-          - ready to merge
-  - name: delete merged branches
-    conditions:
-      - merged
-      - label!=WIP
-    actions:
-      delete_head_branch: {}
+        add:
+          - WIP
   - name: add WIP label when WIP is in title
     conditions:
       - title~=WIP
@@ -46,14 +18,115 @@ pull_request_rules:
       label:
         add:
           - WIP
-  - name: remove "ready to merge" label when pull is not approved
+  - name: label PRs waiting for review
     conditions:
-      - "#approved-reviews-by=0"
+      - status-neutral~=pullapprove
+    actions:
+      label:
+        add:
+          - waiting for review
+  - name: label PRs with requested changes
+    conditions:
+      - status-failure~=pullapprove
+    actions:
+      label:
+        add:
+          - changes requested
+  - name: remove "changes requested" label when pull is approved
+    conditions:
+      - status-success~=pullapprove
+      - label~=changes requested
+    actions:
+      label:
+        remove:
+          - changes requested
+  - name: label PRs waiting for another review
+    conditions:
+      - status-failure~=pullapprove
+      - -label~=changes requested
+    actions:
+      label:
+        add:
+          - waiting for review
+  - name: remove "ready to merge" label when pull is not approved yet
+    conditions:
+      - -status-success~=pullapprove
       - label~=ready to merge
-      - -merged
     actions:
       comment:
-        message: The "ready to merge" label can only be set after one pull request approval
+        message: The "ready to merge" label can only be set on approved pull request
       label:
         remove:
           - ready to merge
+  - name: label PRs with conflicts
+    conditions:
+      - conflict
+    actions:
+      label:
+        add:
+          - has conflicts
+  - name: remove has conflicts label if conflicts got resolved
+    conditions:
+      - label~=has conflicts
+      - -conflict
+    actions:
+      label:
+        remove:
+          - has conflicts
+  - name: let @schul-cloud-bot recreate dependabot PRs with conflicts
+    conditions:
+      - author~=dependabot(-preview)?\[bot\]
+      - label~=dependencies
+      - conflict
+    actions:
+      comment:
+        message: "@schul-cloud-bot tell dependabot to recreate PR"
+
+  #######################
+  # AUTO MERGING
+  #######################
+  - name: auto merge language file updates
+    conditions:
+      - author=schul-cloud-bot
+      # PR must only contain language file changes
+      - -files~=^(?!locale\/.*\.json)
+    actions:
+      merge:
+        method: squash
+        strict: smart
+  - name: auto merge passing Dependabot pull requests
+    conditions:
+      # match dependabot[bot] and dependabot-preview[bot]
+      - author~=dependabot(-preview)?\[bot\]
+      - label~=dependencies
+    actions:
+      merge:
+        method: squash
+        strict: smart
+  - name: auto merge when ready to merge label is set
+    conditions:
+      - label=ready to merge
+    actions:
+      merge:
+        method: merge
+        strict: smart
+
+  #######################
+  # CLEANUP AFTER MERGE
+  #######################
+  - name: remove ready to merge when merged
+    conditions:
+      - merged
+      - label=ready to merge
+    actions:
+      label:
+        add:
+          - auto_merged
+        remove:
+          - ready to merge
+  - name: delete merged branches
+    conditions:
+      - merged
+      - label!=WIP
+    actions:
+      delete_head_branch: {}

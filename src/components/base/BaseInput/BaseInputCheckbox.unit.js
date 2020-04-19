@@ -1,7 +1,7 @@
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInputCheckbox";
 
-describe("@components/BaseInputCheckbox", () => {
+describe("@components/base/BaseInputCheckbox", () => {
 	it(`Check if input type="checkbox" is rendered`, () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
@@ -10,6 +10,7 @@ describe("@components/BaseInputCheckbox", () => {
 					name: "checkbox",
 					type,
 					vmodel: true,
+					color: `var(--color-tertiary)`,
 				},
 			});
 			expect(wrapper.find("input[type='checkbox']").exists()).toBe(true);
@@ -59,20 +60,68 @@ describe("@components/BaseInputCheckbox", () => {
 		expect(wrapper.vm.value).not.toContain(testValue);
 	});
 
-	it(`shows checkmark only when it is checked`, () => {
-		const wrapper = mount({
-			data: () => ({ value: false }),
-			template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
-			components: { BaseInput },
-		});
+	it(`shows checkmark only when it is checked`, async () => {
+		await Promise.all(
+			["input", "label"].map(async (clickTargetSelector) => {
+				const wrapper = mount(
+					{
+						data: () => ({ value: false }),
+						template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
+						components: { BaseInput },
+					},
+					{
+						stubs: { BaseIcon: true },
+					}
+				);
 
-		["input", "label"].forEach((clickTargetSelector) => {
-			const clickTarget = wrapper.find(clickTargetSelector);
-			expect(wrapper.find(".checkmark").exists()).toBe(false);
-			clickTarget.trigger("click");
-			expect(wrapper.find(".checkmark").exists()).toBe(true);
-			clickTarget.trigger("click");
-			expect(wrapper.find(".checkmark").exists()).toBe(false);
-		});
+				const clickTarget = wrapper.find(clickTargetSelector);
+				const icon = wrapper.get("baseicon-stub");
+				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
+				clickTarget.trigger("click");
+				await wrapper.vm.$nextTick();
+				expect(icon.attributes("icon")).toBe("check_box");
+				clickTarget.trigger("click");
+				await wrapper.vm.$nextTick();
+				expect(icon.attributes("icon")).toBe("check_box_outline_blank");
+			})
+		);
+	});
+
+	it(`can show indeterminated state for undefined values`, async () => {
+		const wrapper = mount(
+			{
+				data: () => ({ value: undefined }),
+				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
+				components: { BaseInput },
+			},
+			{
+				stubs: { BaseIcon: true },
+			}
+		);
+
+		const icon = wrapper.get("baseicon-stub");
+		expect(icon.attributes("icon")).toBe("indeterminate_check_box");
+	});
+
+	it(`throws an error if show-undefined-state is set on type=switch`, async () => {
+		expect(() =>
+			mount({
+				data: () => ({ value: undefined }),
+				template: `<base-input v-model="value" label="test" type="switch" name="checkbox" :show-undefined-state="true" />`,
+				components: { BaseInput },
+			})
+		).toThrow("Error: showUndefinedState is only allowed on type=checkbox.");
+	});
+
+	it(`throws an error if show-undefined-state is set when v-model is of type Array`, async () => {
+		expect(() =>
+			mount({
+				data: () => ({ value: [] }),
+				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
+				components: { BaseInput },
+			})
+		).toThrow(
+			"Error: showUndefinedState is not allowed if v-model is of type Array."
+		);
 	});
 });

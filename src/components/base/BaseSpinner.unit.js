@@ -1,17 +1,7 @@
 import BaseSpinner from "./BaseSpinner";
 
-describe("@components/BaseSpinner", () => {
+describe("@components/base/BaseSpinner", () => {
 	it(...isValidComponent(BaseSpinner));
-
-	it("provides an aria-label", () => {
-		const { element } = shallowMount(BaseSpinner, {
-			propsData: {
-				label: "label",
-			},
-		});
-		expect(element.getAttribute("aria-label")).toStrictEqual("label");
-	});
-
 	it("can change its size", () => {
 		const wrapper = shallowMount(BaseSpinner, {
 			propsData: {

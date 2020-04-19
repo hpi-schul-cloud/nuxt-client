@@ -5,7 +5,7 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 RUN npm ci
 COPY . .
-RUN npm run build:storybook > /dev/null 2>&1
+RUN npm run build:storybook
 
 FROM nginx:alpine
 EXPOSE 80

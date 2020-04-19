@@ -4,6 +4,8 @@
 # DECLERATIONS
 # ----------------
 
+set -e # fail with exit 1 on any error
+
 while getopts p: option
 do
 case "${option}"
@@ -106,6 +108,7 @@ case "$TRAVIS_BRANCH" in
 				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_brb.dummy" "nuxt-client_brb.yml" "staging-schul-cloud"
 				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_n21.dummy" "nuxt-client_n21.yml" "staging-schul-cloud"
 				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_open.dummy" "nuxt-client_open.yml" "staging-schul-cloud"
+				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_thr.dummy" "nuxt-client_thr.yml" "staging-schul-cloud"
 			;;
 			storybook)
 				deploy "staging" "nuxt-storybook" $DOCKERTAG "staging_storybook" "compose-storybook.dummy" "nuxt-storybook.yml" "staging"

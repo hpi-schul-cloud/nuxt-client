@@ -8,7 +8,11 @@
 		:fill="fill"
 		v-on="$listeners"
 	/>
-	<i v-else :class="['icon', 'fa', `fa-${icon}`]" :style="{ color: fill }"></i>
+	<i
+		v-else
+		:class="['icon', 'fa', `fa-${icon}`]"
+		:style="{ color: fillColor }"
+	></i>
 </template>
 
 <script>
@@ -20,7 +24,7 @@ export default {
 		source: {
 			type: String,
 			required: true,
-			validator: function(to) {
+			validator: function (to) {
 				return ["material", "custom", "fa"].includes(to);
 			},
 		},
@@ -33,7 +37,19 @@ export default {
 			default: "currentColor",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
+		fillColor() {
+			switch (this.source) {
+				case "fa":
+					return "inerhit";
+				default:
+					return "currentColor";
+			}
+		},
 		svgComponent() {
 			let icon;
 			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
@@ -44,7 +60,7 @@ export default {
 				}
 				if (this.source === "material") {
 					// src: https://material.io/tools/icons/?style=baseline
-					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/baseline-${this.icon}-24px.svg`);
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/round-${this.icon}-24px.svg`);
 				}
 				return icon.default;
 			} catch (error) {
@@ -67,8 +83,10 @@ export default {
 	vertical-align: baseline;
 }
 .fa {
-	width: min-content;
-	font-size: inherit;
+	width: 1em;
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	font-size: calc(1em + 4px);
+	line-height: 100%;
 	vertical-align: middle; // should this be default?
 }
 
@@ -77,6 +95,6 @@ export default {
 	width: calc(1em + 4px);
 	height: calc(1em + 4px);
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	margin: -6px 0;
+	margin: -4px 0;
 }
 </style>

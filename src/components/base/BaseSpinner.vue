@@ -5,9 +5,6 @@
 		:width="diameter"
 		viewBox="0 0 30 30"
 		xmlns="http://www.w3.org/2000/svg"
-		:tabindex="-1"
-		role="img"
-		:aria-label="label"
 	>
 		<circle
 			class="circle"
@@ -24,10 +21,6 @@
 <script>
 export default {
 	props: {
-		label: {
-			type: String,
-			default: "Loading",
-		},
 		color: {
 			type: String,
 			default: "var(--color-tertiary)",
@@ -40,7 +33,7 @@ export default {
 			},
 		},
 	},
-	data: function() {
+	data() {
 		return {
 			sizeToDiameter: {
 				small: 15,
@@ -51,8 +44,8 @@ export default {
 			sizeToStrokeWidth: {
 				small: 2,
 				medium: 1,
-				large: 0.5,
-				xlarge: 0.25,
+				large: 1,
+				xlarge: 1,
 			},
 		};
 	},

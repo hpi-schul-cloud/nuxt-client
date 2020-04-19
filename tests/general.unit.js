@@ -1,4 +1,4 @@
-xdescribe("Timezones", () => {
+describe.skip("Timezones", () => {
 	// Not working at all under windows and GitHub Actions
 	it("tests should always run in Europe/Berlin timezone", () => {
 		expect(process.env.TZ).toBe("Europe/Berlin");

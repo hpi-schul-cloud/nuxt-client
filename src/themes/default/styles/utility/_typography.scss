@@ -25,9 +25,17 @@ body {
 
 h1,
 .h1 {
-	&:first-of-type:not(.h2):not(.h3):not(.h4):not(.h5):not(.h6) {
-		margin-top: 0;
+	&:first-of-type {
+		margin-top: var(--space-md);
+		margin-bottom: var(--space-xl);
 	}
+}
+
+h5,
+h6,
+.h5,
+.h6 {
+	font-weight: var(--font-weight-bold);
 }
 
 /* text size */
@@ -49,6 +57,7 @@ h1,
 
 p {
 	margin-bottom: var(--space-md);
+	line-height: var(--line-height-lg);
 }
 
 b,
@@ -84,5 +93,19 @@ button {
 	}
 	&:visited {
 		color: var(--color-primary);
+	}
+}
+
+@include breakpoint(tablet) {
+	:root {
+		--text-base-size: calc(1rem * var(--text-device-scale-ratio));
+	}
+}
+
+@include breakpoint(desktop) {
+	:root {
+		--text-base-size: calc(
+			1rem * var(--text-device-scale-ratio) * var(--text-device-scale-ratio)
+		);
 	}
 }

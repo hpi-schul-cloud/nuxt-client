@@ -1,9 +1,9 @@
 import TextEditor from "./TextEditor";
 
-const base64Image = `data:image/gif;base64,R0lGODdhEAAQAMwAAPj7+FmhUYjNfGuxYY
-DJdYTIeanOpT+DOTuANXi/bGOrWj6CONzv2sPjv2CmV1unU4zPgISg6DJnJ3ImTh8Mtbs00aNP1CZSGy0YqLEn47RgXW8amasW
-7XWsmmvX2iuXiwAAAAAEAAQAAAFVyAgjmRpnihqGCkpDQPbGkNUOFk6DZqgHCNGg2T4QAQBoIiRSAwBE4VA4FACKgkB5NGReAS
-FZEmxsQ0whPDi9BiACYQAInXhwOUtgCUQoORFCGt/g4QAIQA7`;
+import faker from "faker/locale/en";
+// set a seed to have a consistent fake for the screenshot tests
+faker.seed(512); // any static number will do the job
+const base64Image = faker.image.dataUri(1, 1);
 
 function getMock(options = {}) {
 	return new Promise((resolve) => {
@@ -19,16 +19,13 @@ function getMock(options = {}) {
 	});
 }
 
-describe("@components/BaseTextarea", () => {
+describe("@components/molecules/BaseTextarea", () => {
 	it(...isValidComponent(TextEditor));
 
-	/*
-	it("changing the element's value, updates the v-model", async () => {
-		// TODO
-		// currently not possible to implement because I don't know how to
-		// simulate type events on an [contenteditable] field.
-	});
-	*/
+	// TODO:
+	// currently not possible to implement because I don't know how to
+	// simulate type events on an [contenteditable] field.
+	it.todo("changing the element's value, updates the v-model");
 
 	it("changing the v-model, updates the element's value", async () => {
 		const before = `<p>before</p>`;
@@ -39,6 +36,7 @@ describe("@components/BaseTextarea", () => {
 			expect.stringContaining(before)
 		);
 		wrapper.setData({ content: after });
+		await wrapper.vm.$nextTick();
 		expect(contentContainer.html()).toStrictEqual(
 			expect.not.stringContaining(before)
 		);
@@ -48,11 +46,13 @@ describe("@components/BaseTextarea", () => {
 	});
 
 	it("showImagePrompt calls callback with src", async () => {
+		// Make sure all expects get executed
+		expect.assertions(1);
 		// only test the method itself, the button click would create `TypeError: root.getSelection is not a function`
 		const testUrl = "https://image.url";
 		jest.spyOn(window, "prompt").mockImplementation(() => testUrl);
 		const wrapper = await getMock();
-		return new Promise((resolve) => {
+		await new Promise((resolve) => {
 			wrapper.vm.$children[0].showImagePrompt((cbValue) => {
 				expect(cbValue.src).toBe(testUrl);
 				resolve();
@@ -129,16 +129,16 @@ describe("@components/BaseTextarea", () => {
 		});
 		const { editorUpdateHandler } = wrapper.vm;
 
-		const undoStub = sinon.stub();
-		const toastStub = sinon.stub();
+		const undoStub = jest.fn();
+		const toastStub = jest.fn();
 		wrapper.vm.$toast = {};
 		wrapper.vm.$toast.error = toastStub;
 		wrapper.vm.editor.commands.undo = undoStub;
 
 		editorUpdateHandler({ getHTML: () => invalidContent });
 
-		expect(undoStub.called).toBe(true);
-		expect(toastStub.called).toBe(true);
+		expect(undoStub.mock.calls).toHaveLength(1);
+		expect(toastStub.mock.calls).toHaveLength(1);
 		expect(wrapper.emitted("update")).toBeUndefined();
 	});
 
@@ -151,16 +151,16 @@ describe("@components/BaseTextarea", () => {
 
 		const { editorUpdateHandler } = wrapper.vm;
 
-		const undoStub = sinon.stub();
-		const toastStub = sinon.stub();
+		const undoStub = jest.fn();
+		const toastStub = jest.fn();
 		wrapper.vm.$toast = {};
 		wrapper.vm.$toast.error = toastStub;
 		wrapper.vm.editor.commands.undo = undoStub;
 
 		editorUpdateHandler({ getHTML: () => validContent });
 
-		expect(undoStub.called).toBe(false);
-		expect(toastStub.called).toBe(false);
+		expect(undoStub.mock.calls).toHaveLength(0);
+		expect(toastStub.mock.calls).toHaveLength(0);
 		expect(wrapper.emitted("update")[0][0]).toStrictEqual(validContent);
 	});
 });

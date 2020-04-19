@@ -5,27 +5,35 @@ const base = serviceTemplate("users");
 
 const module = mergeDeep(base, {
 	actions: {
-		adminFind({ dispatch }, payload = {}) {
-			payload.customEndpoint = "/users/admin/students";
-			return dispatch("find", payload);
+		findStudents({ dispatch }, queryContext = {}) {
+			queryContext.customEndpoint = "/users/admin/students";
+			return dispatch("find", queryContext);
 		},
-		getByRole: async function(ctx, role) {
+		findTeachers({ dispatch }, query = {}) {
+			query.customEndpoint = "/users/admin/teachers";
+			return dispatch("find", query);
+		},
+		getByRole: async function (ctx, role) {
 			const queryRole = {
 				roles: [role._id],
 			};
 
-			return (await this.dispatch("users/find", {
-				query: queryRole,
-			})).data;
+			return (
+				await this.dispatch("users/find", {
+					query: queryRole,
+				})
+			).data;
 		},
-		getById: async function(ctx, id) {
+		getById: async function (ctx, id) {
 			const queryId = {
 				_id: id,
 			};
 
-			return (await this.dispatch("users/find", {
-				query: queryId,
-			})).data[0];
+			return (
+				await this.dispatch("users/find", {
+					query: queryId,
+				})
+			).data[0];
 		},
 	},
 });

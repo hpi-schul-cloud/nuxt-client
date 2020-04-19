@@ -5,7 +5,7 @@
 		vmodel=""
 		:disabled="disabled"
 	>
-		<template slot="icon">
+		<template v-slot:icon>
 			<base-icon
 				source="custom"
 				icon="create"
@@ -75,12 +75,16 @@ export default {
 			type: Boolean,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
-		numberOfLines: function() {
+		numberOfLines: function () {
 			return (this.vmodel.match(/\n/g) || []).length + 1;
 		},
 	},
-	mounted: function() {
+	mounted: function () {
 		this.resize();
 	},
 	methods: {
@@ -141,13 +145,17 @@ export default {
 	}
 }
 
+/deep/ .top .input-line {
+	align-items: start;
+}
+
 textarea {
 	--line-height: 30px;
 
 	width: 100%;
 	// needed to prevent default padding in chrome and safari
 	padding: 0;
-	margin-bottom: var(--space-xxs);
+	margin: 0;
 	font-size: var(--text-md);
 	line-height: var(--line-height);
 	color: var(--color-text);

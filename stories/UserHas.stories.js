@@ -5,7 +5,7 @@ import notes from "@docs/storybook/UserHas.md";
 import UserHasPermission from "@components/helpers/UserHasPermission";
 import UserHasRole from "@components/helpers/UserHasRole";
 
-storiesOf("Helpers|UserHas", module)
+storiesOf("8 Helpers/UserHas", module)
 	.addParameters({
 		notes,
 	})

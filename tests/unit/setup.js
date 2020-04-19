@@ -4,14 +4,13 @@ import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
-import sinon from "sinon";
 
 // ===
 // Utility functions
 // ===
 
 // https://vue-test-utils.vuejs.org/
-import vueTestUtils from "@vue/test-utils";
+import * as vueTestUtils from "@vue/test-utils";
 
 // ===
 // Configure Vue
@@ -65,34 +64,44 @@ mountBaseComponents(globalComponentFiles, (fileName) =>
 // ===
 
 Object.defineProperty(window, "localStorage", {
-	value: (function() {
+	value: (function () {
 		let store = {};
 		return {
-			getItem: function(key) {
+			getItem: function (key) {
 				return store[key] || null;
 			},
-			setItem: function(key, value) {
+			setItem: function (key, value) {
 				store[key] = value.toString();
 			},
-			clear: function() {
+			clear: function () {
 				store = {};
 			},
 		};
 	})(),
 });
 
+Object.defineProperty(window, "matchMedia", {
+	value: () => {
+		return {
+			matches: false,
+			addListener: () => {},
+			removeListener: () => {},
+		};
+	},
+});
+
 const location = {
 	href: "",
 };
 Object.defineProperty(window, "location", {
-	set: function(val) {
+	set: function (val) {
 		location.host = "domain.io";
 		location.hostname = "domain.io";
 		location.origin = "http://domain.io";
 		location.href = "http://domain.io" + val;
 		location.pathname = val;
 	},
-	get: function() {
+	get: function () {
 		return location;
 	},
 });
@@ -101,14 +110,16 @@ Object.defineProperty(window, "location", {
 // Global helpers
 // ===
 
-// for mocking methods - https://sinonjs.org
-global.sinon = sinon;
-
 // https://vue-test-utils.vuejs.org/api/#mount
 global.mount = vueTestUtils.mount;
 
 // https://vue-test-utils.vuejs.org/api/#shallowmount
 global.shallowMount = vueTestUtils.shallowMount;
+
+global.wait = (duration) =>
+	new Promise((resolve) => {
+		setTimeout(resolve, duration);
+	});
 
 /*
 // A special version of `shallowMount` for view components
@@ -132,6 +143,7 @@ import { i18n as i18nConfig } from "@plugins/i18n.js";
 import i18nStoreModule from "@store/i18n";
 import authStoreModule from "@store/auth";
 import { mixin as userMixin } from "@plugins/user.js";
+import globalStubs from "./stubs.js";
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
@@ -152,8 +164,15 @@ global.createComponentMocks = ({
 
 	// https://vue-test-utils.vuejs.org/api/options.html#stubs
 	returnOptions.stubs = stubs || {};
+
 	// https://vue-test-utils.vuejs.org/api/options.html#mocks
 	returnOptions.mocks = mocks || {};
+
+	Object.entries(stubs || {}).forEach(([name, value]) => {
+		if (value === true && globalStubs[name]) {
+			stubs[name] = globalStubs[name]();
+		}
+	});
 
 	// Converts a `store` option shaped like:
 	//

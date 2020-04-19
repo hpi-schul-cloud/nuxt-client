@@ -10,7 +10,7 @@ const button = {
 	components: { ModalFooterConfirm },
 };
 
-describe("@components/ModalFooterConfirm", () => {
+describe("@components/molecules/ModalFooterConfirm", () => {
 	it(
 		...isValidComponent(ModalFooterConfirm, {
 			propsData: {
@@ -18,12 +18,12 @@ describe("@components/ModalFooterConfirm", () => {
 			},
 		})
 	);
-});
 
-it("pressing the ok button should close the modal", () => {
-	const wrapper = mount(button);
-	expect(wrapper.find("#confirm").exists()).toBe(true);
-	wrapper.vm.active = true;
-	expect(wrapper.find("#confirm").exists()).toBe(true);
-	wrapper.find("#confirm").trigger("click");
+	it("pressing the ok button should close the modal", () => {
+		const wrapper = mount(button);
+		expect(wrapper.find("#confirm").exists()).toBe(true);
+		wrapper.vm.active = true;
+		expect(wrapper.find("#confirm").exists()).toBe(true);
+		wrapper.find("#confirm").trigger("click");
+	});
 });

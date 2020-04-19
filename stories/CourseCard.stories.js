@@ -6,7 +6,7 @@ import notes from "@docs/storybook/courseCard.md";
 
 import { defaultCourse, courseOldDataFormat } from "./mockData/CourseCard";
 
-storiesOf("Molecules|CourseCard", module)
+storiesOf("5 Molecules/CourseCard", module)
 	.addParameters({
 		notes,
 	})

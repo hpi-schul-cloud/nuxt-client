@@ -1,6 +1,13 @@
 <template>
 	<div>
-		<floating-fab icon="add" to="/news/new" />
+		<fab-floating
+			:primary-action="{
+				icon: 'add',
+				'icon-source': 'material',
+				to: '/news/new',
+				label: $t('pages.news.new.title'),
+			}"
+		/>
 		<section v-if="news && news.length > 0" class="section">
 			<news-card
 				v-for="article of news"
@@ -15,12 +22,12 @@
 <script>
 import { mapGetters } from "vuex";
 import NewsCard from "@components/molecules/NewsCard";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 
 export default {
 	components: {
 		NewsCard,
-		FloatingFab,
+		FabFloating,
 	},
 	computed: {
 		...mapGetters("news", {

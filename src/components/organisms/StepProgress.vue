@@ -32,7 +32,7 @@ export default {
 				{ name: "Four" },
 				{ name: "Five" },
 			],
-			validator: function(value) {
+			validator: function (value) {
 				const isValid = value.length <= 7;
 				if (!isValid) {
 					console.error("You shoudn't use more than 7 steps.");
@@ -45,8 +45,12 @@ export default {
 			default: 0,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
-		stepWidth: function() {
+		stepWidth: function () {
 			return 100 / this.steps.length + "%";
 		},
 	},

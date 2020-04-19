@@ -38,7 +38,7 @@ const actionsWithoutIcon = actionsWithIcon.map((o) => {
 
 const template = `
 	<span style="position: relative;">
-		<base-button design="icon text" @click="active = true">
+		<base-button design="text icon" @click="active = true">
 			<base-icon
 				class="footer__content-icon"
 				source="material"
@@ -62,7 +62,7 @@ const anchorOptions = {
 	"bottom-right": "bottom-right",
 };
 
-storiesOf("Molecules|ContextMenu", module)
+storiesOf("5 Molecules/ContextMenu", module)
 	.addDecorator(centered)
 	.add("with icons", () => ({
 		components: { ContextMenu },

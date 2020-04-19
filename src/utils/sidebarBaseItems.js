@@ -82,7 +82,7 @@ export default [
 		title: "Verwaltung",
 		href: "/administration",
 		icon: "cogs",
-		permission: "STUDENT_CREATE",
+		permission: "STUDENT_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		children: [
 			{
@@ -144,6 +144,12 @@ export default [
 				icon: "building",
 				href: "/administration/school/",
 			},
+			// {
+			// 	title: "Datenquellen",
+			// 	icon: "database",
+			// 	permission: "DATASOURCES_VIEW",
+			// 	href: "/administration/datasources/",
+			// },
 		],
 	},
 	{

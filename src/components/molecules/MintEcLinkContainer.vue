@@ -3,10 +3,9 @@
 		<div
 			class="image-container"
 			:style="{
-				'background-image': `url(https://${image} )`,
+				'background-image': `url(${image} )`,
 			}"
-		>
-		</div>
+		></div>
 		<div class="container-base">
 			<div class="container">
 				<div class="container-icon">
@@ -25,7 +24,7 @@
 					{{ heading }}
 					<base-icon
 						source="fa"
-						icon="fas fa-chevron-right"
+						icon="chevron-right"
 						:style="{
 							'font-size': `var(--space-md)`,
 							color: `var(--color-white)`,
@@ -57,6 +56,10 @@ export default {
 			type: String,
 			default: "",
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 };
 </script>

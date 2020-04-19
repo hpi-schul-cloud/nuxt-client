@@ -1,4 +1,3 @@
-// filename = webpack.config.js
 const path = require("path");
 
 module.exports = ({ config }) => {
@@ -36,6 +35,9 @@ module.exports = ({ config }) => {
 
 	const alias = require("../../aliases.config").webpack;
 	Object.assign(config.resolve.alias, alias);
+	Object.assign(config.resolve.alias, {
+		assets: path.resolve(__dirname, "../../src/assets"),
+	});
 
 	return config;
 };

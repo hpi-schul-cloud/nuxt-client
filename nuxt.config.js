@@ -9,8 +9,6 @@ const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
-const GIT_INFO = require("./git-info.js");
-
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
@@ -20,7 +18,11 @@ module.exports = {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
 		FEATURE_EXTENSIONS_ENABLED: process.env.FEATURE_EXTENSIONS_ENABLED || false,
 		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
-		GIT_INFO: JSON.stringify(GIT_INFO, null, "\t"),
+		NOT_AUTHENTICATED_REDIRECT_URL:
+			process.env.NOT_AUTHENTICATED_REDIRECT_URL || "/login",
+		JWT_SHOW_TIMEOUT_WARNING_SECONDS:
+			process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
+		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 	},
 	/*
 	 ** Headers of the page
@@ -68,7 +70,10 @@ module.exports = {
 		port: process.env.PORT || DEFAULT_PORT,
 		host: process.env.HOST || DEFAULT_HOST,
 	},
-	serverMiddleware: ["@serverMiddleware/proxy"],
+	serverMiddleware: [
+		"@serverMiddleware/nuxtversion",
+		"@serverMiddleware/proxy",
+	],
 
 	router: {
 		middleware: [
@@ -115,6 +120,7 @@ module.exports = {
 	 ** Build configuration
 	 */
 	build: {
+		transpile: ["vue-echarts", "resize-detector"],
 		/*
 		 ** You can extend webpack config here
 		 */

@@ -1,7 +1,7 @@
 /* Legacy Client Proxy */
 const glob = require("glob");
 const path = require("path");
-const proxy = require("http-proxy-middleware");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const nuxtConfig = require("../../nuxt.config.js");
 
@@ -17,7 +17,7 @@ const proxyOptions = {
 		res.end();
 	},
 };
-const proxyInstance = proxy(proxyOptions);
+const proxyInstance = createProxyMiddleware(proxyOptions);
 
 // eslint-disable-next-line no-console
 console.log(
@@ -46,7 +46,7 @@ const staticFiles = glob
 
 const isStaticFile = (url) => staticFiles.includes(url);
 
-export default async function(req, res, next) {
+export default async function (req, res, next) {
 	if (process.env.FALLBACK_DISABLED === "true") {
 		return next();
 	}

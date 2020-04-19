@@ -3,7 +3,7 @@ import CourseWizard from "./index";
 describe("@components/organisms/CourseWizard", () => {
 	it(...isValidComponent(CourseWizard));
 
-	it("Test that only progress and data are showing.", () => {
+	it("Test that only progress and data are showing.", async () => {
 		const wrapper = shallowMount(CourseWizard, {
 			propsData: {
 				user: {
@@ -31,7 +31,7 @@ describe("@components/organisms/CourseWizard", () => {
 		).toHaveLength(1);
 	});
 
-	it("Test click next step", () => {
+	it("Test click next step", async () => {
 		const wrapper = shallowMount(CourseWizard, {
 			propsData: {
 				steps: [
@@ -62,28 +62,22 @@ describe("@components/organisms/CourseWizard", () => {
 		expect(wrapper.vm.currentStep).toBe(0);
 		expect(wrapper.findAll("base-button-stub")).toHaveLength(1);
 		//find button next step, click next
-		wrapper
-			.findAll("base-button-stub")
-			.at(0)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(0).vm.$emit("click");
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.currentStep).toBe(1);
 		//has buttons: "Zurück", "Überspringen", "Weiter"
 		expect(wrapper.findAll("base-button-stub")).toHaveLength(3);
 
 		//find button next step, click next
-		wrapper
-			.findAll("base-button-stub")
-			.at(2)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(2).vm.$emit("click");
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.currentStep).toBe(2);
 		//has buttons: "Zurück", "Weiter"
 		expect(wrapper.findAll("base-button-stub")).toHaveLength(2);
 
 		// //find button step back, click back
-		wrapper
-			.findAll("base-button-stub")
-			.at(0)
-			.vm.$emit("click");
+		wrapper.findAll("base-button-stub").at(0).vm.$emit("click");
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.currentStep).toBe(1);
 	});
 });

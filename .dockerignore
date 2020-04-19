@@ -4,4 +4,3 @@
 deploy
 node_modules
 .travis.yml*
-src/legacy-client

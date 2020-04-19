@@ -10,7 +10,7 @@ const defaultTypes = supportedTypes.reduce((obj, val) => {
 	return obj;
 }, {});
 
-storiesOf("Base|Inputs/Default", module)
+storiesOf("4 Base UI Components/Inputs/Default", module)
 	.addParameters({
 		notes,
 	})
@@ -81,14 +81,18 @@ storiesOf("Base|Inputs/Default", module)
 				"material"
 			),
 			icon: text("icon", "alarm"),
+			success: boolean("success", false),
+			error: text("error", ""),
 		}),
 		template: `
-			<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint">
-				<base-icon slot="icon" :source="iconSource" :icon="icon" />
+			<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint" :error="error" :success="success">
+				<template v-slot:icon>
+					<base-icon :source="iconSource" :icon="icon" />
+				</template>
 			</base-input>`,
 	}));
 
-storiesOf("Base|Inputs", module)
+storiesOf("4 Base UI Components/Inputs", module)
 	.addParameters({
 		notes,
 	})
@@ -105,49 +109,6 @@ storiesOf("Base|Inputs", module)
 		template: `<div style="max-width: 300px">
 			<base-input v-for="i in [0,0,0,0,0]" :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint"/>
 		</div>`,
-	}))
-	.add("Checkbox", () => ({
-		components: { BaseInput },
-		data: () => ({
-			vmodel: array("vmodel", ["a"], ", "),
-			values: array("values", ["a", "b"], ", "),
-			labels: array("labels", ["Checkbox a", "Checkbox b"], ", "),
-			labelHidden: boolean("labelHidden", false),
-		}),
-		template: `
-			<div role="group" aria-label="checkboxes">
-				<base-input
-					v-for="(value, i) in values"
-					:key="value"
-					type="checkbox"
-					v-model="vmodel"
-					:value="value"
-					name="checkbox"
-					:label="labels[i]"
-					:labelHidden="labelHidden"
-				/>
-				<p> {{ vmodel.join(", ")}} </p>
-			</div>
-		`,
-	}))
-	.add("Switch", () => ({
-		components: { BaseInput },
-		data: () => ({
-			vmodel: boolean("vmodel", true),
-			value: text("value", "published"),
-		}),
-		template: `
-			<div>
-				<base-input
-					type="switch"
-					v-model="vmodel"
-					:value="value"
-					name="switch"
-					:label="'Checkbox - ' + value"
-				/>
-				<p> {{ vmodel}} </p>
-			</div>
-		`,
 	}))
 	.add("Radio", () => ({
 		components: { BaseInput },
