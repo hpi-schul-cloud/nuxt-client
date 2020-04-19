@@ -1,3 +1,6 @@
+comment:
+  layout: files
+  require_changes: true
 coverage:
   status:
     project:
