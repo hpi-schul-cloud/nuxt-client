@@ -14,7 +14,7 @@ module.exports = [
 	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
-  `^/insights`,
+	`^/insights`,
 	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
 	// `^/news/${mongoId}/edit`,
