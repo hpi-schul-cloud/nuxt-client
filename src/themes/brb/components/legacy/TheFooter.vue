@@ -72,7 +72,7 @@ export default {
 				},
 				{
 					href: defaultDocuments.specificFiles(this.school.documentBaseDir)
-						.termsOfUseExemplary,
+						.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",

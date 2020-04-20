@@ -49,6 +49,7 @@
 
 <script>
 import { mapState } from "vuex";
+import defaultDocuments from "@utils/documents.js";
 
 export default {
 	computed: {
@@ -69,9 +70,11 @@ export default {
 					text: this.$t("components.legacy.footer.privacy_policy"),
 				},
 				{
-					href:
-						"https://s3.hidrive.strato.com/schul-cloud-hpi/thr/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+					href: defaultDocuments.specificFiles(this.school.documentBaseDir)
+						.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
+					target: "_blank",
+					rel: "noopener",
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=THR%20Schul_Cloud%20Anfrage",

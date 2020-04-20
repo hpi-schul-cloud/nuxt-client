@@ -51,6 +51,7 @@
 
 <script>
 import { mapState } from "vuex";
+import defaultDocuments from "@utils/documents.js";
 
 export default {
 	data() {
@@ -73,6 +74,13 @@ export default {
 				{
 					to: "/datenschutz",
 					text: this.$t("components.legacy.footer.privacy_policy"),
+				},
+				{
+					href: defaultDocuments.specificFiles(this.school.documentBaseDir)
+						.termsOfUseSchool,
+					text: this.$t("components.legacy.footer.terms"),
+					target: "_blank",
+					rel: "noopener",
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
