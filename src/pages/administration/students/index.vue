@@ -29,6 +29,43 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:headcolumn-consent>
+				<span>{{ $t("common.labels.registration") }}</span>
+				<base-button design="info text icon" @click="active = !active">
+					<base-icon source="material" icon="info" />
+				</base-button>
+				<info-box :active.sync="active">
+					<template v-slot:header>Registrierungen abschließen</template>
+					<template v-slot:body>
+						<div class="content">
+							{{ $t("pages.administration.students.infobox.paragraph-1") }}
+							<ul class="list">
+								<li>
+									{{ $t("pages.administration.students.infobox.li-1") }}
+								</li>
+								<li>
+									{{ $t("pages.administration.students.infobox.li-2") }}
+								</li>
+								<li>
+									{{ $t("pages.administration.students.infobox.li-3") }}
+								</li>
+							</ul>
+							{{ $t("pages.administration.students.infobox.paragraph-2") }}
+							<br />
+							<br />
+							{{ $t("pages.administration.students.infobox.paragraph-3") }}
+							<br />
+							<br />
+							<base-icon
+								source="material"
+								icon="warning"
+								color="var(--color-danger)"
+							/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
+						</div>
+					</template>
+				</info-box>
+			</template>
+			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
 			</template>
@@ -107,6 +144,7 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
+import InfoBox from "@components/molecules/InfoBox";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
@@ -118,6 +156,7 @@ dayjs.locale("de");
 export default {
 	layout: "loggedInFull",
 	components: {
+		InfoBox,
 		DataFilter,
 		BackendDataTable,
 		FabFloating,
@@ -171,7 +210,8 @@ export default {
 				// },
 				{
 					field: "consent",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
+					sortable: false,
 				},
 				{
 					field: "createdAt",
@@ -246,6 +286,7 @@ export default {
 				},
 			],
 			filters: studentFilter(this),
+			active: false,
 		};
 	},
 	computed: {
@@ -422,5 +463,14 @@ a.action-button {
 			box-shadow: none;
 		}
 	}
+}
+span {
+	font-weight: var(--font-weight-normal);
+}
+.content {
+	font-weight: var(--font-weight-normal);
+}
+.list {
+	padding: var(--space-lg);
 }
 </style>

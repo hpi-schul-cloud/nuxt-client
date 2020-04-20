@@ -13,37 +13,43 @@
 				/>
 			</div>
 		</th>
-		<th
-			v-for="(column, index) in columns"
-			:key="index"
-			:class="{
-				'is-current-sort': sortBy === column.field,
-				'is-sortable': column.sortable,
-			}"
-			cellspacing="0"
-		>
-			<BaseButton
-				v-if="column.sortable"
-				design="none"
-				class="th-wrap"
-				@click.stop="sort(column)"
+		<th v-for="(column, index) in columns" :key="index">
+			<slot
+				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
+				:label="column.label"
+				:sortable="sortable"
+				:sortBy="sortBy"
+				:sortOrder="sortOrder"
+				:class="{
+					'is-current-sort': sortBy === column.field,
+					'is-sortable': column.sortable,
+				}"
+				cellspacing="0"
 			>
-				<span>{{ column.label }}</span>
-				<base-icon
-					v-if="sortBy === column.field"
-					:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
-					source="fa"
-				/>
-				<base-icon
-					v-else-if="column.sortable"
-					icon="sort"
-					source="fa"
-					style="color: var(--color-gray);"
-				/>
-			</BaseButton>
-			<div v-else class="th-wrap">
-				<span>{{ column.label }}</span>
-			</div>
+				<BaseButton
+					v-if="column.sortable"
+					design="none"
+					class="th-wrap"
+					@click.stop="sort(column)"
+				>
+					{{ column.label }}
+					<base-icon
+						v-if="sortBy === column.field"
+						:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
+						source="fa"
+					/>
+					<base-icon
+						v-else-if="column.sortable"
+						icon="sort"
+						source="fa"
+						style="color: var(--color-gray);"
+					/>
+				</BaseButton>
+
+				<div v-else class="th-wrap">
+					<span>{{ column.label }}</span>
+				</div>
+			</slot>
 		</th>
 	</tr>
 </template>

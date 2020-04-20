@@ -23,7 +23,14 @@
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
 							@update:sort="onUpdateSort"
-						/>
+						>
+							<template
+								v-for="(cmp, name) in dataHeadSlots"
+								v-slot:[name]="columnProps"
+							>
+								<slot :name="name" v-bind="columnProps" />
+							</template>
+						</component>
 					</thead>
 					<tbody>
 						<component
@@ -206,6 +213,14 @@ export default {
 				)
 			);
 		},
+		dataHeadSlots() {
+			return Object.fromEntries(
+				Object.entries(this.$scopedSlots).filter(([name]) =>
+					name.startsWith("headcolumn")
+				)
+			);
+		},
+
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
