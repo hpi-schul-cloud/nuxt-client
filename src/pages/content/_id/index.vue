@@ -1,9 +1,11 @@
+<!-- eslint-disable max-lines -->
+
 <template>
 	<div class="resource">
 		<div class="content">
 			<div class="icons">
-				<base-button design="icon" @click="goBack">
-					<base-icon source="material" icon="close" />
+				<base-button class="icon" design="icon" @click="goBack">
+					<base-icon source="material" icon="close" class="icon-svg" />
 				</base-button>
 				<!--
 				<base-button design="icon" @click="bookmarkHandler">
@@ -16,6 +18,7 @@
 				-->
 			</div>
 			<div class="preview">
+				<div class="preview-background-color" />
 				<div
 					class="preview-background"
 					:style="{
@@ -26,50 +29,60 @@
 			</div>
 		</div>
 		<div class="sidebar">
-			<div class="actions">
-				<base-button design="text icon">
-					<base-icon source="material" icon="more_vert" />
-				</base-button>
-			</div>
-			<h1 class="h5">{{ resource.title || resource.name }}</h1>
-			<div>
-				<span v-if="author">
-					{{ author }} ({{ $t("pages.content._id.metadata.author") }})
-				</span>
-				<span v-if="provider">
-					{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
-				</span>
-			</div>
-			<div class="description">
-				{{ description }}
-			</div>
-			<div class="metadata">
-				<div v-if="createdAt || updatedAt" class="meta-container">
-					<base-icon source="custom" icon="calender" />
+			<div class="content-container">
+				<div class="actions">
+					<base-button design="text icon">
+						<base-icon source="material" icon="more_vert" />
+					</base-button>
+				</div>
+				<div class="title">{{ resource.title || resource.name }}</div>
+				<div class="author-provider">
+					<span v-if="author">
+						{{ author }} ({{ $t("pages.content._id.metadata.author") }}),
+					</span>
+					<span v-if="provider">
+						{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
+					</span>
+				</div>
+				<div class="description">
+					{{ description }}
+				</div>
+				<div class="metadata">
+					<div v-if="createdAt || updatedAt" class="meta-container">
+						<div class="meta-icon">
+							<base-icon source="custom" icon="calender" />
+						</div>
 
-					<span v-if="createdAt">
-						{{ $t("pages.content._id.metadata.createdAt") }}
-						{{ createdAt }}
-					</span>
-					<span v-if="updatedAt">
-						{{ $t("pages.content._id.metadata.updatedAt") }}
-						{{ updatedAt }}
-					</span>
-				</div>
-				<div v-if="filename" class="meta-container">
-					<base-icon
-						:source="getTypeIcon(resource.mimetype).iconSource"
-						:icon="getTypeIcon(resource.mimetype).icon"
-					/>
-					<span>
-						{{ filename }}
-					</span>
-				</div>
-				<div class="meta-container">
-					<base-icon source="fa" icon="file-o" />
-					<span>
-						{{ id }}
-					</span>
+						<div class="meta-text">
+							<div v-if="createdAt">
+								{{ $t("pages.content._id.metadata.createdAt") }}
+								{{ createdAt }}
+							</div>
+							<div v-if="updatedAt">
+								{{ $t("pages.content._id.metadata.updatedAt") }}
+								{{ updatedAt }}
+							</div>
+						</div>
+					</div>
+					<div v-if="filename" class="meta-container">
+						<div class="meta-icon">
+							<base-icon
+								:source="getTypeIcon(resource.mimetype).iconSource"
+								:icon="getTypeIcon(resource.mimetype).icon"
+							/>
+						</div>
+						<div class="meta-text">
+							{{ filename }}
+						</div>
+					</div>
+					<div class="meta-container">
+						<div class="meta-icon">
+							<base-icon source="fa" icon="file-o" />
+						</div>
+						<div class="meta-text">
+							{{ id }}
+						</div>
+					</div>
 				</div>
 			</div>
 			<base-button design="primary" class="floating-button">
@@ -182,14 +195,16 @@ export default {
 @import "@styles";
 .resource {
 	display: grid;
-	grid-template-areas: "content" "meta";
+	grid-template-areas: "content meta";
 	grid-template-rows: auto;
-	grid-template-columns: auto;
-	min-height: 100vh;
+	grid-template-columns: auto 300px;
+	min-height: 90vh;
 
-	@include breakpoint(tablet) {
-		grid-template-areas: "content meta";
-		grid-template-columns: 3fr 2fr;
+	@media (max-width: 768px) {
+		grid-template-areas:
+			"content"
+			"meta";
+		grid-template-columns: auto;
 	}
 
 	.content {
@@ -204,11 +219,36 @@ export default {
 			justify-content: space-between;
 			width: 100%;
 			padding: var(--space-md);
+
+			.icon {
+				padding: var(--space-xs-4);
+				font-size: var(--heading-4);
+				color: var(--color-white);
+				background-color: var(--color-gray-dark);
+				border-radius: var(--radius-round);
+				opacity: 0.6;
+
+				.icon-svg {
+					opacity: 1;
+				}
+			}
 		}
 
 		.preview {
 			position: relative;
 			height: 100%;
+
+			.preview-background-color {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				z-index: var(--layer-behind);
+				width: 100%;
+				height: 100%;
+				background-color: var(--color-tertiary);
+			}
 
 			.preview-background {
 				position: absolute;
@@ -216,13 +256,12 @@ export default {
 				right: 0;
 				bottom: 0;
 				left: 0;
-				z-index: var(--layer-behind);
-				margin: var(--radius-md);
-				filter: blur(var(--radius-md));
+				z-index: var(--layer-page);
+				filter: blur(0.7rem);
 				background-repeat: no-repeat;
 				background-position: center;
 				background-size: cover;
-				opacity: 0.7;
+				opacity: 0.3;
 			}
 
 			img {
@@ -240,17 +279,63 @@ export default {
 	}
 
 	.sidebar {
+		display: flex;
+		flex-direction: column;
 		grid-area: meta;
+		justify-content: space-between;
+		max-height: 100vh;
 		padding: var(--space-sm) var(--space-xl);
+		overflow-y: scroll;
 		background-color: var(--color-white);
+		box-shadow: -15px 0 17px -7px rgba(0, 0, 0, 0.75);
 
 		.actions {
 			display: flex;
 			justify-content: flex-end;
 		}
 
+		.title {
+			margin: var(--space-xl-2) 0 var(--space-sm) 0;
+			font-size: var(--heading-5);
+			font-weight: var(--font-weight-bold);
+			line-height: var(--line-height-md);
+		}
+
+		.author-provider {
+			font-size: var(--text-xs);
+			font-weight: var(--font-weight-bold);
+		}
+
 		.description {
-			margin: var(--space-xl) 0;
+			margin: var(--space-xl-2) 0;
+			font-size: var(--text-md);
+		}
+
+		.metadata {
+			display: flex;
+			flex-direction: column;
+			font-size: var(--text-xs);
+
+			.meta-container {
+				display: flex;
+				align-items: flex-start;
+				margin-bottom: var(--space-lg);
+				.meta-icon {
+					margin-right: var(--space-md);
+					font-size: var(--text-md);
+				}
+			}
+		}
+
+		.floating-button {
+			position: fixed;
+			right: 5vw;
+			bottom: 4vh;
+			z-index: var(--layer-fab);
+			padding: var(--space-xs);
+			cursor: pointer;
+			border-radius: var(--radius-md);
+			box-shadow: var(--shadow-md);
 		}
 	}
 }

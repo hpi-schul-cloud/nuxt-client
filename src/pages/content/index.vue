@@ -20,7 +20,7 @@
 							: 'content__searchbar'
 					"
 					placeholder="Lernstore durchsuchen"
-					@keyup:enter="transitionHandler"
+					@keyup:enter="enterKeyHandler"
 				/>
 				<transition name="fade">
 					<span v-if="!firstSearch" class="content__container">
@@ -36,7 +36,10 @@
 								{{ $t("pages.content.index.search_resources") }}
 							</span>
 						</p>
-						<div v-if="resources.data.length === 0" class="content__no-results">
+						<div
+							v-if="resources.data.length === 0 && !loading"
+							class="content__no-results"
+						>
 							<content-empty-state />
 						</div>
 						<base-grid column-width="14rem">
@@ -56,7 +59,7 @@
 				color="var(--color-tertiary)"
 				size="xlarge"
 			/>
-			<edusharing-footer class="content__footer" />
+			<!-- <edusharing-footer class="content__footer" /> -->
 		</div>
 	</section>
 </template>
@@ -69,7 +72,7 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import FloatingFab from "@components/molecules/FloatingFab";
-import EdusharingFooter from "@components/molecules/EdusharingFooter";
+// import EdusharingFooter from "@components/molecules/EdusharingFooter";
 
 export default {
 	components: {
@@ -78,10 +81,10 @@ export default {
 		ContentEmptyState,
 		BaseGrid,
 		FloatingFab,
-		EdusharingFooter,
+		// EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
-	layout: "default",
+	layout: "loggedInFull",
 	data() {
 		return {
 			searchQuery: "",
@@ -134,7 +137,6 @@ export default {
 			}
 			this.$options.debounce = setInterval(() => {
 				clearInterval(this.$options.debounce);
-				this.searchContent();
 				this.$router.push({
 					query: {
 						q: this.searchQuery,
@@ -164,7 +166,8 @@ export default {
 		async searchContent() {
 			await this.$store.dispatch("content/getResources", this.query);
 		},
-		transitionHandler() {
+		enterKeyHandler() {
+			this.searchContent();
 			this.activateTransition = true;
 			setTimeout(() => {
 				this.firstSearch = false;
@@ -185,6 +188,7 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
+	padding: 0 var(--space-lg);
 	&__container {
 		display: flex;
 		flex-direction: column;
