@@ -31,11 +31,18 @@
 		<div class="sidebar">
 			<div class="content-container">
 				<div class="actions">
-					<base-button design="text icon">
+					<base-button v-if="!isMobile" design="text icon">
 						<base-icon source="material" icon="more_vert" />
 					</base-button>
 				</div>
-				<div class="title">{{ resource.title || resource.name }}</div>
+				<div class="title">
+					<span>
+						{{ resource.title || resource.name }}
+					</span>
+					<base-button v-if="isMobile" design="text icon">
+						<base-icon source="material" icon="more_vert" />
+					</base-button>
+				</div>
 				<div class="author-provider">
 					<span v-if="author">
 						{{ author }} ({{ $t("pages.content._id.metadata.author") }}),
@@ -174,6 +181,9 @@ export default {
 		filename() {
 			return this.resource.filename;
 		},
+		isMobile() {
+			return this.$mq === "mobile";
+		},
 	},
 	methods: {
 		bookmarkHandler() {
@@ -264,7 +274,6 @@ export default {
 				object-fit: contain;
 				width: 100%;
 				height: 100%;
-				min-height: 50vh;
 
 				@include breakpoint(tablet) {
 					min-height: auto;
@@ -292,6 +301,7 @@ export default {
 		}
 
 		.title {
+			display: flex;
 			margin: var(--space-xl-2) 0 var(--space-sm) 0;
 			font-size: var(--heading-5);
 			font-weight: var(--font-weight-bold);
