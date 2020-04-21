@@ -288,6 +288,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		grid-area: meta;
+		align-items: center;
 		justify-content: space-between;
 		max-height: 100vh;
 		padding: var(--space-sm) var(--space-xl);
@@ -335,9 +336,8 @@ export default {
 		}
 
 		.floating-button {
-			position: fixed;
-			right: 5vw;
-			bottom: 4vh;
+			position: sticky;
+			bottom: 0;
 			z-index: var(--layer-fab);
 			padding: var(--space-xs);
 			cursor: pointer;
