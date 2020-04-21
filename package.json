@@ -98,7 +98,7 @@
 		"babel-core": "^7.0.0-bridge.0",
 		"babel-jest": "^25.4.0",
 		"babel-loader": "^8.1.0",
-		"babel-plugin-dynamic-import-node": "^2.3.0",
+		"babel-plugin-dynamic-import-node": "^2.3.3",
 		"babel-preset-vue": "^2.0.2",
 		"concurrently": "^5.1.0",
 		"core-js": "^3.6.5",
