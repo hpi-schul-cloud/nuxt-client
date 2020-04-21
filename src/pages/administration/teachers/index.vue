@@ -7,6 +7,7 @@
 		</h1>
 		<data-filter
 			:filters="filters"
+			:active-filters="currentFilterQuery"
 			:backend-filtering="true"
 			@update:filter-query="onUpdateFilterQuery"
 		/>
@@ -120,19 +121,16 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.getFilter(
+				"pages.administration.teachers.index"
+			),
+			test: this.$uiState,
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.getPagination("pages.administration.teachers.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.itemsPerPage"
-					)
-				) || 10,
+				this.$uiState.getPagination("pages.administration.teachers.index")
+					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			breadcrumbs: [
@@ -238,11 +236,15 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
 	},
+	beforeCreate() {
+		this.$uiState.init();
+	},
 	created(ctx) {
 		this.find();
 	},
 	methods: {
 		find() {
+			console.log(this.currentFilterQuery);
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -262,20 +264,26 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.teachers.index.currentPage",
-				page
-			);
+			// localStorage.setItem(
+			// 	"pages.administration.teachers.index.currentPage",
+			// 	page
+			// );
+			this.$uiState.setPagination("pages.administration.teachers.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
 			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.teachers.index.itemsPerPage",
-				limit
-			);
+			// localStorage.setItem(
+			// 	"pages.administration.teachers.index.itemsPerPage",
+			// 	limit
+			// );
+			this.$uiState.setPagination("pages.administration.teachers.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
@@ -355,6 +363,9 @@ export default {
 		},
 		onUpdateFilterQuery(query) {
 			this.currentFilterQuery = query;
+			this.$uiState.setFilter("pages.administration.teachers.index", {
+				query,
+			});
 			this.onUpdateCurrentPage(1);
 		},
 	},

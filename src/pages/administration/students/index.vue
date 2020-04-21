@@ -8,6 +8,7 @@
 
 		<data-filter
 			:filters="filters"
+			:active-filters="currentFilterQuery"
 			:backend-filtering="true"
 			@update:filter-query="onUpdateFilterQuery"
 		/>
@@ -134,19 +135,16 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.getFilter(
+				"pages.administration.students.index"
+			),
+			// currentFilterQuery: {},
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.getPagination("pages.administration.students.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.itemsPerPage"
-					)
-				) || 10,
+				this.$uiState.getPagination("pages.administration.students.index")
+					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			tableColumns: [
@@ -263,6 +261,9 @@ export default {
 			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
 		},
 	},
+	beforeCreate() {
+		this.$uiState.init();
+	},
 	created(ctx) {
 		this.find();
 	},
@@ -276,6 +277,7 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
+			console.log(query);
 
 			this.$store.dispatch("users/findStudents", {
 				query,
@@ -288,20 +290,18 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.students.index.currentPage",
-				page
-			);
+			this.$uiState.setPagination("pages.administration.students.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.students.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.setPagination("pages.administration.students.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
@@ -402,6 +402,9 @@ export default {
 		},
 		onUpdateFilterQuery(query) {
 			this.currentFilterQuery = query;
+			this.$uiState.setFilter("pages.administration.students.index", {
+				query,
+			});
 			this.onUpdateCurrentPage(1);
 		},
 	},
