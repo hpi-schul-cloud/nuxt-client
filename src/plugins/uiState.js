@@ -68,7 +68,7 @@ export default {
 		(Vue.prototype.$uiState = {
 			set,
 			get,
-			setPagination: setPagination,
+			setPagination,
 			getPagination,
 			setFilter,
 			getFilter,

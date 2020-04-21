@@ -138,7 +138,6 @@ export default {
 			currentFilterQuery: this.$uiState.getFilter(
 				"pages.administration.students.index"
 			),
-			// currentFilterQuery: {},
 			page:
 				this.$uiState.getPagination("pages.administration.students.index")
 					.page || 1,
