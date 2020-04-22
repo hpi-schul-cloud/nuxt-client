@@ -70,7 +70,7 @@ export default {
 					text: this.$t("components.legacy.footer.privacy_policy"),
 				},
 				{
-					href: defaultDocuments.specificFiles(this.school.documentBaseDir)
+					href: defaultDocuments.specificFiles()
 						.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
