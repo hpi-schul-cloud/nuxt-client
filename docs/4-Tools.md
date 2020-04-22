@@ -130,7 +130,4 @@ Accesslint prüft grundsätzliche Accessibility verstöße und weist mit Komment
 
 ### [Mergable](https://github.com/mergeability/mergeable)
 
-Mergeable nutzen wir um sicherzustellen, dass der PR einige Mindestanforderungen erfüllt. Dazu zählt beispielsweise, dass der PR Titel einem vorgegebenem Schema folgt.
-
-<!-- prettier-ignore -->
-<<< @/.github/mergeable.yml
+Mergeable nutzen wir um sicherzustellen, dass der PR einige Mindestanforderungen erfüllt. Dazu zählt beispielsweise, dass der PR Titel einem vorgegebenem Schema folgt und kein `WIP` oder `is blocked` label enthält.
