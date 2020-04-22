@@ -31,17 +31,17 @@
 		<div class="sidebar">
 			<div class="content-container">
 				<div class="actions">
-					<base-button v-if="!isMobile" design="text icon">
+					<!-- <base-button v-if="!isMobile" design="text icon">
 						<base-icon source="material" icon="more_vert" />
-					</base-button>
+					</base-button> -->
 				</div>
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
 					</span>
-					<base-button v-if="isMobile" design="text icon">
+					<!-- <base-button v-if="isMobile" design="text icon">
 						<base-icon source="material" icon="more_vert" />
-					</base-button>
+					</base-button> -->
 				</div>
 				<div class="author-provider">
 					<span v-if="author">
@@ -181,9 +181,9 @@ export default {
 		filename() {
 			return this.resource.filename;
 		},
-		isMobile() {
-			return this.$mq === "mobile" || this.$mq === "tablet";
-		},
+		// isMobile() {
+		// 	return this.$mq === "mobile" || this.$mq === "tablet";
+		// },
 	},
 	methods: {
 		bookmarkHandler() {
@@ -202,7 +202,7 @@ export default {
 	display: grid;
 	grid-template-areas: "content meta";
 	grid-template-rows: auto;
-	grid-template-columns: auto 300px;
+	grid-template-columns: auto 40%;
 	min-width: 100vw;
 	min-height: 100vh;
 	box-shadow: var(--shadow-md);
@@ -291,13 +291,13 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		max-height: 100vh;
-		padding: 0 var(--space-xl) var(--space-xl) var(--space-xl);
+		padding-bottom: var(--space-xl);
 		overflow-y: scroll;
 		background-color: var(--color-white);
-		box-shadow: -15px 0 17px -7px rgba(0, 0, 0, 0.75);
+		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
 
-		@media (max-width: 768px) {
-			min-height: 80%;
+		.content-container {
+			width: 80%;
 		}
 
 		.actions {
