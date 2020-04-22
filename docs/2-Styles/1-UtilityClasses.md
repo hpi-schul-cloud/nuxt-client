@@ -2,11 +2,6 @@
 
 [[toc]]
 
-## Colors
-
-<!-- prettier-ignore -->
-<<< @/src/themes/default/styles/utility/_colors.scss
-
 ## Spacing
 
 <!-- prettier-ignore -->

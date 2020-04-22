@@ -1,7 +1,7 @@
 /* margins */
 
-$space-size-vars: xs-4, xs-3, xs-2, xs, sm, md, lg, xl, xl-2, xl-3, xl-4, xl-5;
 $space-sizes: 0, auto;
+$space-size-vars: xs-4, xs-3, xs-2, xs, sm, md, lg, xl, xl-2, xl-3, xl-4, xl-5;
 
 @each $size in $space-sizes {
 	.mt--#{$size} {
