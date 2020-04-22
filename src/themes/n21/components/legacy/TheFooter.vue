@@ -56,8 +56,7 @@ export default {
 							text: "Datenschutzerklärung NBC",
 						},
 						{
-							href: defaultDocuments.specificFiles()
-								.privacyExemplary,
+							href: defaultDocuments.specificFiles().privacyExemplary,
 							text: "Datenschutzerklärung:Muster-Schulen",
 							target: "_blank",
 							rel: "noopener",
