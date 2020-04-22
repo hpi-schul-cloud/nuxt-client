@@ -23,10 +23,10 @@ const setPagination = (identifier, { currentPage, itemsPerPage }) => {
 	let page = currentPage,
 		limit = itemsPerPage;
 
-	if (!currentPage) {
+	if (!currentPage || !Number.isInteger(currentPage)) {
 		page = getPagination(identifier)?.page;
 	}
-	if (!itemsPerPage) {
+	if (!itemsPerPage || !Number.isInteger(itemsPerPage)) {
 		limit = getPagination(identifier)?.limit;
 	}
 

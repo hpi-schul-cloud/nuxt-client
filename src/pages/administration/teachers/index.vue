@@ -7,9 +7,8 @@
 		</h1>
 		<data-filter
 			:filters="filters"
-			:active-filters="currentFilterQuery"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
 			:actions="tableActions"
@@ -236,6 +235,22 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
 	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.getFilter("pages.administration.teachers.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.setFilter("pages.administration.teachers.index", {
+				query,
+			});
+		},
+	},
 	beforeCreate() {
 		this.$uiState.init();
 	},
@@ -264,10 +279,6 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			// localStorage.setItem(
-			// 	"pages.administration.teachers.index.currentPage",
-			// 	page
-			// );
 			this.$uiState.setPagination("pages.administration.teachers.index", {
 				currentPage: page,
 			});
@@ -276,11 +287,7 @@ export default {
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			// localStorage.setItem(
-			// 	"pages.administration.teachers.index.itemsPerPage",
-			// 	limit
-			// );
+			// save user settings in uiState
 			this.$uiState.setPagination("pages.administration.teachers.index", {
 				itemsPerPage: limit,
 			});
@@ -360,13 +367,6 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
-		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.$uiState.setFilter("pages.administration.teachers.index", {
-				query,
-			});
-			this.onUpdateCurrentPage(1);
 		},
 	},
 };

@@ -8,9 +8,8 @@
 
 		<data-filter
 			:filters="filters"
-			:active-filters="currentFilterQuery"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
 			:actions="tableActions"
@@ -260,6 +259,22 @@ export default {
 			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
 		},
 	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.getFilter("pages.administration.students.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.setFilter("pages.administration.students.index", {
+				query,
+			});
+		},
+	},
 	beforeCreate() {
 		this.$uiState.init();
 	},
@@ -398,13 +413,6 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
-		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.$uiState.setFilter("pages.administration.students.index", {
-				query,
-			});
-			this.onUpdateCurrentPage(1);
 		},
 	},
 };
