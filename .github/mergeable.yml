@@ -4,5 +4,5 @@ mergeable:
     validate:
       - do: title
         must_include:
-          regex: "(((SC|VUE|OPS)-[0-9]+|Quickfix) - .*|Bump .* from.* to .*)"
-          message: "The title must follow the schema: '(TICKET-ID|Quickfix) - [description]'."
+          regex: "(((SC|VUE|OPS)-[0-9]+|Quickfix) - .*|Bump .* from.* to .*|Hotfix ([0-9]+\.){2}[0-9]+.*)"
+          message: "The title must follow the schema: '(TICKET-ID|Quickfix) - [description]' or 'Hotfix x.y.z'."
