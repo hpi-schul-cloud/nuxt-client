@@ -30,8 +30,6 @@ groups:
     reviewers:
       teams:
         - VueCoreDevs
-    labels:
-      pending: "waiting for review"
   ###############################
   # LABEL SPECIFIC REQUESTS
   ###############################

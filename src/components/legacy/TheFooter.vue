@@ -51,7 +51,6 @@
 
 <script>
 import { mapState } from "vuex";
-import defaultDocuments from "@utils/documents.js";
 
 export default {
 	data() {
@@ -72,19 +71,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					innerlinks: [
-						{
-							to: "/datenschutz",
-							text: "HPI",
-						},
-						{
-							href: defaultDocuments.specificFiles(this.school?.documentBaseDir)
-								.privacyExemplary,
-							text: "Muster-Schulen",
-							target: "_blank",
-							rel: "noopener",
-						},
-					],
+					to: "/datenschutz",
 					text: this.$t("components.legacy.footer.privacy_policy"),
 				},
 				{

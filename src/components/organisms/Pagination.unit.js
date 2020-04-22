@@ -2,6 +2,7 @@ import Pagination from "./Pagination";
 
 function getFirstPageWrapper() {
 	return shallowMount(Pagination, {
+		...createComponentMocks({ i18n: true }),
 		propsData: {
 			perPage: 5,
 			currentPage: 1,
@@ -12,6 +13,7 @@ function getFirstPageWrapper() {
 
 function getLastPageWrapper() {
 	return shallowMount(Pagination, {
+		...createComponentMocks({ i18n: true }),
 		propsData: {
 			perPage: 5,
 			currentPage: 2,
@@ -42,6 +44,7 @@ describe("@components/organisms/Pagination", () => {
 
 	it("emits update:current-page when next page link is clicked", async () => {
 		const wrapper = mount(Pagination, {
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				perPage: 5,
 				currentPage: 1,
@@ -55,6 +58,7 @@ describe("@components/organisms/Pagination", () => {
 
 	it("emits update:current-page when previous page link is clicked", () => {
 		const wrapper = mount(Pagination, {
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				perPage: 5,
 				currentPage: 2,
@@ -68,6 +72,7 @@ describe("@components/organisms/Pagination", () => {
 
 	it("emits update:per-page when new perPage value is selected", () => {
 		const wrapper = shallowMount(Pagination, {
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				perPage: 5,
 			},

@@ -1,10 +1,10 @@
 <template>
 	<div class="footer">
 		<div class="footer-container">
-			<div class="icon-container">
+			<div class="left-container">
 				<slot name="left"></slot>
 			</div>
-			<div class="button-container">
+			<div class="right-container">
 				<slot name="right"></slot>
 			</div>
 		</div>
@@ -43,7 +43,7 @@ export default {
 	}
 }
 
-.button-container {
+.right-container {
 	display: flex;
 	justify-content: space-between;
 	padding: var(--space-sm) var(--space-md);
@@ -58,8 +58,9 @@ export default {
 	}
 }
 
-.icon-container {
+.left-container {
 	float: left;
+	padding: var(--space-sm) var(--space-md);
 
 	> *:not(:first-child) {
 		margin-left: var(--space-sm);
