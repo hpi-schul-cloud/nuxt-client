@@ -182,7 +182,7 @@ export default {
 			return this.resource.filename;
 		},
 		isMobile() {
-			return this.$mq === "mobile";
+			return this.$mq === "mobile" || this.$mq === "tablet";
 		},
 	},
 	methods: {
@@ -231,9 +231,9 @@ export default {
 				padding: var(--space-xs-4);
 				font-size: var(--heading-4);
 				color: var(--color-white);
-				background-color: var(--color-gray-dark);
+				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+				background-color: rgba(68, 68, 68, 0.6);
 				border-radius: var(--radius-round);
-				// opacity: 0.6;
 			}
 		}
 
@@ -291,10 +291,14 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 		max-height: 100vh;
-		padding: var(--space-sm) var(--space-xl);
+		padding: 0 var(--space-xl) var(--space-xl) var(--space-xl);
 		overflow-y: scroll;
 		background-color: var(--color-white);
 		box-shadow: -15px 0 17px -7px rgba(0, 0, 0, 0.75);
+
+		@media (max-width: 768px) {
+			min-height: 80%;
+		}
 
 		.actions {
 			display: flex;
@@ -303,7 +307,8 @@ export default {
 
 		.title {
 			display: flex;
-			margin: var(--space-xl-2) 0 var(--space-sm) 0;
+			justify-content: space-between;
+			margin: var(--space-lg) 0 var(--space-sm) 0;
 			font-size: var(--heading-5);
 			font-weight: var(--font-weight-bold);
 			line-height: var(--line-height-md);
