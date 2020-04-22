@@ -2,6 +2,13 @@ pull_request_rules:
   #######################
   # MERGE PRECONDITIONS
   #######################
+  - name: add WIP label to draft PRs
+    conditions:
+      - draft
+    actions:
+      label:
+        add:
+          - WIP
   - name: add WIP label when WIP is in title
     conditions:
       - title~=WIP
@@ -11,6 +18,13 @@ pull_request_rules:
       label:
         add:
           - WIP
+  - name: label PRs waiting for review
+    conditions:
+      - status-neutral~=pullapprove
+    actions:
+      label:
+        add:
+          - waiting for review
   - name: label PRs with requested changes
     conditions:
       - status-failure~=pullapprove
@@ -26,6 +40,14 @@ pull_request_rules:
       label:
         remove:
           - changes requested
+  - name: label PRs waiting for another review
+    conditions:
+      - status-failure~=pullapprove
+      - -label~=changes requested
+    actions:
+      label:
+        add:
+          - waiting for review
   - name: remove "ready to merge" label when pull is not approved yet
     conditions:
       - -status-success~=pullapprove

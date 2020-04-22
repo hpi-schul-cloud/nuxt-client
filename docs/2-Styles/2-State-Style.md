@@ -12,12 +12,12 @@ Komponente:
 
 ```javascript
 export default = {
-props: {
-  design: {
-    type: String,
-    validator: (design) => ["textbutton primary"].includes(design)
-  }
-}
+	props: {
+		design: {
+			type: String,
+			validator: (design) => ["textbutton primary"].includes(design)
+		}
+	}
 }
 ```
 
