@@ -31,6 +31,9 @@ npm run new page
 
 # Generate a new layout component with adjacent unit test
 npm run new layout
+
+# Generate a new store component
+npm run new store
 ```
 
 - [Hygen](http://www.hygen.io/)
