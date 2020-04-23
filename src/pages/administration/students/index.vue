@@ -12,7 +12,7 @@
 			@update:filter-query="onUpdateFilterQuery"
 		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -213,6 +213,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "STUDENT_DELETE",
 				},
 			],
 			tableSelection: [],
@@ -261,6 +262,11 @@ export default {
 		}),
 		schoolInternallyManaged() {
 			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
+		},
+		permissionFilteredTableActions() {
+			return this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
 		},
 	},
 	created(ctx) {

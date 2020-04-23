@@ -5,6 +5,8 @@ const specificFiles = {
 	termsOfUseExemplary:
 		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
 	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
+	termsOfUseSchool:
+		"Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
 };
 
 const globalFiles = {
