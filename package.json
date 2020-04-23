@@ -45,7 +45,7 @@
 		"pre-commit": "npx lint-staged"
 	},
 	"dependencies": {
-		"@nuxtjs/axios": "^5.10.0",
+		"@nuxtjs/axios": "^5.10.1",
 		"@nuxtjs/sentry": "^4.0.1",
 		"@nuxtjs/toast": "^3.3.0",
 		"@tryghost/content-api": "^1.4.1",
@@ -60,8 +60,8 @@
 		"kjua": "^0.6.0",
 		"material-icons-svg": "^1.0.0",
 		"nuxt": "^2.12.2",
-		"tiptap": "^1.27.0",
-		"tiptap-extensions": "^1.29.0",
+		"tiptap": "^1.27.1",
+		"tiptap-extensions": "^1.29.1",
 		"vue": "^2.6.11",
 		"vue-echarts": "^4.0.4",
 		"vue-filter-ui": "^0.8.0",
