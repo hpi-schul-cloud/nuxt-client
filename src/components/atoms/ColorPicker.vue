@@ -41,4 +41,4 @@ export default {
 };
 </script>
 
-<style src="vue-swatches/dist/vue-swatches.min.css"></style>
+<style src="vue-swatches/dist/vue-swatches.css"></style>
