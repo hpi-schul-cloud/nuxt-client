@@ -20,8 +20,8 @@ export default {
 	},
 	methods: {
 		$_userHasPermission(permission) {
-			if (!permission){
-				throw new Error("parameter permission is missing")
+			if (!permission) {
+				throw new Error("parameter permission is missing");
 			}
 			return typeof permission === "string"
 				? !permission || this.userPermissions.includes(permission.toLowerCase())

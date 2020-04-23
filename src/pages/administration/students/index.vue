@@ -265,9 +265,7 @@ export default {
 		},
 		getTableActions() {
 			return this.tableActions.filter((action) =>
-				action.permission
-					? this.$_userHasPermission(action.permission)
-					: true
+				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
 	},
