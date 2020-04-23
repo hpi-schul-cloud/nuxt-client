@@ -42,6 +42,7 @@ export default {
 				{ name: this.$t("pages.administration.students.consent.steps.finish") },
 			],
 			currentStep: 0,
+			students: this.$store.getters["bulk-consent/selectedStudents"],
 		};
 	},
 	methods: {

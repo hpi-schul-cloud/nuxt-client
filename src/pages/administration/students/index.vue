@@ -314,11 +314,11 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			bulkConsent = {
-				rowIds,
-				selectionType,
-			};
-			// store push
+			this.$store.commit("bulk-consent/setSelectedStudents", {
+				students: rowIds,
+				selectionType: selectionType
+			});
+			
 			this.$router.push({
 				path: "/administration/students/consent",
 			});
