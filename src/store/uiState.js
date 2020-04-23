@@ -20,9 +20,7 @@ export const getters = {
 		if (!key) {
 			throw new SyntaxError("Key is missing!");
 		}
-		return identifier
-			? state[key][identifier]
-			: state[key]
+		return identifier ? state[key][identifier] : state[key];
 	},
 };
 
