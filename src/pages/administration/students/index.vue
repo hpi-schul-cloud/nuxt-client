@@ -316,9 +316,9 @@ export default {
 		handleBulkConsent(rowIds, selectionType) {
 			this.$store.commit("bulk-consent/setSelectedStudents", {
 				students: rowIds,
-				selectionType: selectionType
+				selectionType: selectionType,
 			});
-			
+
 			this.$router.push({
 				path: "/administration/students/consent",
 			});
