@@ -30,9 +30,8 @@ console.log(
 console.log("PROXY TARGET:", proxyOptions.target);
 
 const vueRoutes = require("./routes.js");
-const isNuxtRoute = (url) => {
-	return vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));
-};
+const isNuxtRoute = (url) =>
+	vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));
 
 const staticFileDir = path
 	.relative(__dirname, nuxtConfig.generate.dir)

@@ -1,6 +1,6 @@
-import toasts from "./toasts";
+import toastsFromQueryString from "./toastsFromQueryString";
 
-describe("@mixins/toasts", () => {
+describe("@mixins/toastsFromQueryString", () => {
 	it.each([
 		["error", "errorMessage", undefined],
 		["success", "successMessage", 2000],
@@ -32,7 +32,7 @@ describe("@mixins/toasts", () => {
 					[type]: toastMock,
 				};
 			},
-			mixins: [toasts],
+			mixins: [toastsFromQueryString],
 		});
 		expect(toastMock).toHaveBeenCalledWith(message, {
 			duration: duration || 5000,
@@ -66,7 +66,7 @@ describe("@mixins/toasts", () => {
 						error: errorToastMock,
 					};
 				},
-				mixins: [toasts],
+				mixins: [toastsFromQueryString],
 			});
 			expect(errorToastMock).not.toHaveBeenCalled();
 		}

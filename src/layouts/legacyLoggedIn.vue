@@ -39,7 +39,7 @@ import UserHasRole from "@components/helpers/UserHasRole";
 import DemoBanner from "@components/legacy/DemoBanner";
 import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 import sidebarBaseItems from "@utils/sidebarBaseItems.js";
-import toasts from "@mixins/toasts";
+import toastsFromQueryString from "@mixins/toastsFromQueryString";
 
 const topbarBaseActions = [
 	{
@@ -90,7 +90,7 @@ export default {
 		UserHasRole,
 		autoLogoutWarning,
 	},
-	mixins: [toasts],
+	mixins: [toastsFromQueryString],
 	data() {
 		return {
 			sidebarBaseItems: sidebarBaseItems,
