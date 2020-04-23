@@ -39,14 +39,13 @@ export const mutations = {
 
 		if (identifier && state[key]) {
 			state[key][identifier] = object;
-			localStorage.setItem(localStorageKey, JSON.stringify(state));
 		} else {
 			if (key in getDefaultState())
 				throw new Error("Overwriting the default state is not permitted!");
 
 			state[key] = object;
-			localStorage.setItem(localStorageKey, JSON.stringify(state));
 		}
+		localStorage.setItem(localStorageKey, JSON.stringify(state));
 	},
 };
 
