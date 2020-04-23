@@ -14,19 +14,15 @@ export const actions = {};
 
 export const getters = {
 	getStateByKey: (state) => ({ key, identifier }) => {
-		if (initialize) {
-			if (key) {
-				if (identifier) {
-					return state[key][identifier];
-				} else {
-					return state[key];
-				}
-			} else {
-				throw new SyntaxError("Key is missing!");
-			}
-		} else {
+		if (!initialize) {
 			throw new SyntaxError("uiState not initialize");
 		}
+		if (!key) {
+			throw new SyntaxError("Key is missing!");
+		}
+		return identifier
+			? state[key][identifier]
+			: state[key]
 	},
 };
 
