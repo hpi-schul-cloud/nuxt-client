@@ -226,9 +226,6 @@ export default {
 			watchingIds: "getPendingIdsFromResult",
 		}),
 	},
-	beforeCreate() {
-		this.$uiState.init();
-	},
 	created(ctx) {
 		this.find();
 	},

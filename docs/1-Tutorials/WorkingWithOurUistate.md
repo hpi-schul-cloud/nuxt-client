@@ -4,15 +4,9 @@ In this document you will find how to use the uiState. The uiState allows the pe
 
 [[toc]]
 
-## How to initialize
+## How to access
 
-All components have access to the uiState. You can access it with: `$uiState`. To interact with it you first need to initialize the uiState in your component.
-
-```js
-beforeCreate() {
-	this.$uiState.init();
-},
-```
+All components have access to the uiState. You can access it with: `$uiState`.
 
 ## Persist pagination
 

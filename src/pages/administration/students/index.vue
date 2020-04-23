@@ -281,9 +281,6 @@ export default {
 			});
 		},
 	},
-	beforeCreate() {
-		this.$uiState.init();
-	},
 	created(ctx) {
 		this.find();
 	},

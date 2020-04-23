@@ -2,12 +2,24 @@ const localStorageKey = "uiState";
 const version = 1;
 let initialize = false;
 
+const defaultState = {
+	pagination: {},
+	filter: {},
+	version,
+};
+
 const getDefaultState = () => {
-	return {
-		pagination: {},
-		filter: {},
-		version,
-	};
+	if (localStorage.getItem(localStorageKey)) {
+		const uiState = JSON.parse(localStorage.getItem(localStorageKey));
+		if (uiState.version == version) {
+			Object.assign(defaultState, uiState);
+		} else {
+			uiState.version = version;
+		}
+	}
+	initialize = true;
+
+	return defaultState;
 };
 
 export const actions = {};
@@ -22,17 +34,6 @@ export const getters = {
 };
 
 export const mutations = {
-	initialise(state) {
-		if (localStorage.getItem(localStorageKey)) {
-			const uiState = JSON.parse(localStorage.getItem(localStorageKey));
-			if (uiState.version == version) {
-				Object.assign(state, uiState);
-			} else {
-				uiState.version = version;
-			}
-		}
-		initialize = true;
-	},
 	alterState(state, { key, identifier, object }) {
 		if (!initialize) throw new Error("uiState not initialize");
 		if (!key || !object) throw new SyntaxError("Key or/and object is missing!");
