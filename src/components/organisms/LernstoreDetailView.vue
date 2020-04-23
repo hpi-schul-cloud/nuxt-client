@@ -2,12 +2,11 @@
 
 <template>
 	<div class="resource">
-		<div class="content">
-			<div class="icons">
-				<base-button class="icon" design="icon" @click="goBack">
-					<base-icon source="material" icon="close" class="icon-svg" />
-				</base-button>
-				<!--
+		<div class="icons">
+			<base-button class="icon" design="icon" @click="goBack">
+				<base-icon source="material" icon="close" class="icon-svg" />
+			</base-button>
+			<!--
 				<base-button design="icon" @click="bookmarkHandler">
 					<base-icon
 						class="resource__img-container--icon"
@@ -16,7 +15,8 @@
 					/>
 				</base-button>
 				-->
-			</div>
+		</div>
+		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
 				<div
@@ -214,32 +214,40 @@ export default {
 		grid-template-columns: auto;
 	}
 
+	.icons {
+		position: fixed;
+		top: 0;
+		z-index: var(--layer-modal);
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		padding: var(--space-md);
+
+		.icon {
+			padding: var(--space-xs-4);
+			font-size: var(--heading-4);
+			color: var(--color-white);
+			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+			background-color: rgba(68, 68, 68, 0.6);
+			border-radius: var(--radius-round);
+		}
+	}
 	.content {
 		position: relative;
 		grid-area: content;
 
-		.icons {
-			position: absolute;
+		@media (max-width: 768px) {
+			position: sticky;
 			top: 0;
-			z-index: var(--layer-dropdown);
-			display: flex;
-			justify-content: space-between;
-			width: 100%;
-			padding: var(--space-md);
-
-			.icon {
-				padding: var(--space-xs-4);
-				font-size: var(--heading-4);
-				color: var(--color-white);
-				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-				background-color: rgba(68, 68, 68, 0.6);
-				border-radius: var(--radius-round);
-			}
 		}
 
 		.preview {
 			position: relative;
 			height: 100%;
+
+			@media (max-width: 768px) {
+				height: 80vh;
+			}
 
 			.preview-background-color {
 				position: absolute;
@@ -296,6 +304,11 @@ export default {
 		background-color: var(--color-white);
 		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
 
+		@media (max-width: 768px) {
+			max-height: none;
+			overflow: inherit;
+		}
+
 		.content-container {
 			width: 80%;
 		}
@@ -348,6 +361,10 @@ export default {
 			cursor: pointer;
 			border-radius: var(--radius-md);
 			box-shadow: var(--shadow-md);
+
+			@media (max-width: 768px) {
+				bottom: 12px;
+			}
 		}
 	}
 }
