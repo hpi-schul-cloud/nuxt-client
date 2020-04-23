@@ -30,8 +30,9 @@ console.log(
 console.log("PROXY TARGET:", proxyOptions.target);
 
 const vueRoutes = require("./routes.js");
-const isNuxtRoute = (url) =>
-	vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));
+const isNuxtRoute = (url) => {
+	return vueRoutes.some((regexString) => !!new RegExp(regexString).exec(url));
+};
 
 const staticFileDir = path
 	.relative(__dirname, nuxtConfig.generate.dir)
@@ -50,9 +51,10 @@ export default async function (req, res, next) {
 	if (process.env.FALLBACK_DISABLED === "true") {
 		return next();
 	}
+	const url = req.url.split("?")[0];
 
 	const useNuxt =
-		req.method === "GET" && (isNuxtRoute(req.url) || isStaticFile(req.url));
+		req.method === "GET" && (isNuxtRoute(url) || isStaticFile(url));
 	if (useNuxt) {
 		return next();
 	} else {
