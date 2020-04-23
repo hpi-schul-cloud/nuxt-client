@@ -50,6 +50,7 @@
 		</div>
 
 		<pagination
+			v-if="paginated"
 			class="mt--md"
 			:current-page="currentPage"
 			:total="total"
