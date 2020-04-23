@@ -31,6 +31,9 @@ npm run new page
 
 # Generate a new layout component with adjacent unit test
 npm run new layout
+
+# Generate a new store component
+npm run new store
 ```
 
 - [Hygen](http://www.hygen.io/)
@@ -124,3 +127,7 @@ Gemergte Branches werden von diesem Bot ebenfalls automatisch gelöscht.
 ### [Accesslint](https://www.accesslint.com/)
 
 Accesslint prüft grundsätzliche Accessibility verstöße und weist mit Kommentaren direkt im Pull Request darauf hin. Aktuell versteht der Bot die Vue Syntax allerding noch nicht, sodass er teils Falsche Alarme bei bspw. `:aria-label="labelVariable"` wirft, da er `:aria-label` nicht mit `aria-label` gleichsetzt. Die Hinweise sollten also eher als Hinweis für genauere Kontrolle auf Accessibility gesehen werden.
+
+### [Mergable](https://github.com/mergeability/mergeable)
+
+Mergeable nutzen wir um sicherzustellen, dass der PR einige Mindestanforderungen erfüllt. Dazu zählt beispielsweise, dass der PR Titel einem vorgegebenem Schema folgt und kein `WIP` oder `is blocked` label enthält.
