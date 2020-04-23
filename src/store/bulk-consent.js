@@ -12,6 +12,6 @@ export const mutations = {
 
 export const state = () => {
 	return {
-		selectedStudents: ["test"],
+		selectedStudents: [],
 	};
 };
