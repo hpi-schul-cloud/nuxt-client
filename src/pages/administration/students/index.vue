@@ -12,7 +12,7 @@
 			@update:filter-query="onUpdateFilterQuery"
 		/>
 		<backend-data-table
-			:actions="getTableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -263,11 +263,9 @@ export default {
 		schoolInternallyManaged() {
 			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
 		},
-		getTableActions() {
+		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
-				action.permission
-					? this.$_userHasPermission(action.permission)
-					: true
+				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
 	},

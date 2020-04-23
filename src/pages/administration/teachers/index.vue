@@ -11,7 +11,7 @@
 			@update:filter-query="onUpdateFilterQuery"
 		/>
 		<backend-data-table
-			:actions="getTableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="teachers"
@@ -238,11 +238,9 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
-		getTableActions() {
+		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
-				action.permission
-					? this.$_userHasPermission(action.permission)
-					: true
+				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
 	},
