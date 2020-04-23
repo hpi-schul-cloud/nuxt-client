@@ -1,6 +1,8 @@
 <template>
 	<color-picker
-		v-bind="{ ...$attrs, ...$props }"
+		v-bind="{ ...$attrs }"
+		:swatches="colors"
+		:value="value"
 		@input="$emit('input', $event)"
 	/>
 </template>
