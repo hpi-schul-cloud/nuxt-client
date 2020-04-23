@@ -14,15 +14,10 @@ export const actions = {};
 
 export const getters = {
 	getStateByKey: (state) => ({ key, identifier }) => {
-		if (!initialize) {
-			throw new SyntaxError("uiState not initialize");
-		}
-		if (!key) {
-			throw new SyntaxError("Key is missing!");
-		}
-		return identifier
-			? state[key][identifier]
-			: state[key]
+		if (!initialize) throw new Error("uiState not initialize");
+		if (!key) throw new SyntaxError("Key is missing!");
+
+		return identifier ? state[key][identifier] : state[key];
 	},
 };
 
@@ -39,22 +34,18 @@ export const mutations = {
 		initialize = true;
 	},
 	alterState(state, { key, identifier, object }) {
-		if (initialize) {
-			if (key && object) {
-				if (identifier && state[key]) {
-					state[key][identifier] = object;
-					localStorage.setItem(localStorageKey, JSON.stringify(state));
-				} else if (!(key in getDefaultState())) {
-					state[key] = object;
-					localStorage.setItem(localStorageKey, JSON.stringify(state));
-				} else {
-					throw new Error("Overwriting the default state is not permitted!");
-				}
-			} else {
-				throw new SyntaxError("Key or/and object is missing!");
-			}
+		if (!initialize) throw new Error("uiState not initialize");
+		if (!key || !object) throw new SyntaxError("Key or/and object is missing!");
+
+		if (identifier && state[key]) {
+			state[key][identifier] = object;
+			localStorage.setItem(localStorageKey, JSON.stringify(state));
 		} else {
-			throw new SyntaxError("uiState not initialize");
+			if (key in getDefaultState())
+				throw new Error("Overwriting the default state is not permitted!");
+
+			state[key] = object;
+			localStorage.setItem(localStorageKey, JSON.stringify(state));
 		}
 	},
 };
