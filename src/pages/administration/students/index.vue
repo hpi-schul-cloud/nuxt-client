@@ -12,7 +12,7 @@
 			@update:filter-query="onUpdateFilterQuery"
 		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -154,7 +154,6 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
-	layout: "loggedInFull",
 	components: {
 		InfoBox,
 		DataFilter,
@@ -168,9 +167,7 @@ export default {
 			type: Boolean,
 		},
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
+
 	data() {
 		return {
 			currentFilterQuery: {},
@@ -253,6 +250,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "STUDENT_DELETE",
 				},
 			],
 			tableSelection: [],
@@ -289,6 +287,11 @@ export default {
 			active: false,
 		};
 	},
+
+	layout: "loggedInFull",
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
+	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
@@ -302,6 +305,11 @@ export default {
 		}),
 		schoolInternallyManaged() {
 			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
+		},
+		permissionFilteredTableActions() {
+			return this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
 		},
 	},
 	created(ctx) {
