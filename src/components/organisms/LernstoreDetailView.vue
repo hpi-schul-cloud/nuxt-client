@@ -92,7 +92,7 @@
 					</div>
 				</div>
 			</div>
-			<base-button design="primary" class="floating-button">
+			<base-button design="hero-cta" class="floating-button">
 				<base-icon source="material" icon="add" />
 				{{ $t("pages.content._id.addToTopic") }}
 			</base-button>
@@ -202,7 +202,7 @@ export default {
 	display: grid;
 	grid-template-areas: "content meta";
 	grid-template-rows: auto;
-	grid-template-columns: auto 40%;
+	grid-template-columns: auto 30%;
 	min-width: 100vw;
 	min-height: 100vh;
 	box-shadow: var(--shadow-md);
@@ -212,6 +212,10 @@ export default {
 			"content"
 			"meta";
 		grid-template-columns: auto;
+	}
+
+	@media (min-width: 1025px) {
+		grid-template-columns: auto 40%;
 	}
 
 	.icons {
@@ -321,7 +325,7 @@ export default {
 		.title {
 			display: flex;
 			justify-content: space-between;
-			margin: var(--space-lg) 0 var(--space-sm) 0;
+			margin: var(--space-xl-2) 0 var(--space-sm) 0;
 			font-size: var(--heading-5);
 			font-weight: var(--font-weight-bold);
 			line-height: var(--line-height-md);
@@ -357,10 +361,7 @@ export default {
 			position: sticky;
 			bottom: 0;
 			z-index: var(--layer-fab);
-			padding: var(--space-xs);
-			cursor: pointer;
 			border-radius: var(--radius-md);
-			box-shadow: var(--shadow-md);
 
 			@media (max-width: 768px) {
 				bottom: 12px;
