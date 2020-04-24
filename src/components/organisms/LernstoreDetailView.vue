@@ -2,7 +2,7 @@
 
 <template>
 	<div class="resource">
-		<div class="icons">
+		<div ref="icons" class="icons">
 			<base-button class="icon" design="icon" @click="goBack">
 				<base-icon source="material" icon="close" class="icon-svg" />
 			</base-button>
@@ -28,7 +28,7 @@
 				<img :src="resource.preview.url" alt="content preview image" />
 			</div>
 		</div>
-		<div class="sidebar">
+		<div ref="sidebar" class="sidebar">
 			<div class="content-container">
 				<div class="actions">
 					<!-- <base-button v-if="!isMobile" design="text icon">
@@ -103,6 +103,7 @@
 <script>
 import dayjs from "dayjs";
 import contentMeta from "@mixins/contentMeta";
+import elementIsInTop from "@mixins/elementIsInTop";
 
 const getMetadataAttribute = (properties, key) => {
 	if (Array.isArray(properties[key])) {
@@ -113,7 +114,7 @@ const getMetadataAttribute = (properties, key) => {
 
 export default {
 	layout: "loggedInFull",
-	mixins: [contentMeta],
+	mixins: [contentMeta, elementIsInTop],
 	props: {
 		resource: {
 			type: Object,
@@ -181,9 +182,9 @@ export default {
 		filename() {
 			return this.resource.filename;
 		},
-		// isMobile() {
-		// 	return this.$mq === "mobile" || this.$mq === "tablet";
-		// },
+	},
+	mounted() {
+		this.assignElements("sidebar", "icons");
 	},
 	methods: {
 		bookmarkHandler() {
