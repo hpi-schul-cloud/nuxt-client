@@ -3,8 +3,21 @@
 <template>
 	<div class="resource">
 		<div ref="icons" class="icons">
-			<base-button class="icon" design="icon" @click="goBack">
-				<base-icon source="material" icon="close" class="icon-svg" />
+			<base-button
+				v-if="!elIsTop"
+				class="close-icon"
+				design="icon"
+				@click="goBack"
+			>
+				<base-icon source="material" icon="close" />
+			</base-button>
+			<base-button
+				v-else
+				class="close-transparent"
+				design="icon"
+				@click="goBack"
+			>
+				<base-icon source="material" icon="close" />
 			</base-button>
 			<!--
 				<base-button design="icon" @click="bookmarkHandler">
@@ -228,12 +241,22 @@ export default {
 		width: 100%;
 		padding: var(--space-md);
 
-		.icon {
+		.close-icon {
 			padding: var(--space-xs-4);
 			font-size: var(--heading-4);
 			color: var(--color-white);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			background-color: rgba(68, 68, 68, 0.6);
+			border-radius: var(--radius-round);
+			box-shadow: var(--shadow-sm);
+		}
+
+		.close-transparent {
+			padding: var(--space-xs-4);
+			font-size: var(--heading-4);
+			color: var(--color-black);
+			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+			background-color: rgba(255, 255, 255, 0);
 			border-radius: var(--radius-round);
 		}
 	}
