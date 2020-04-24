@@ -32,22 +32,22 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				{{ dayjs(data).format("DD.MM.YYYY") }}
 			</template>
-			<template v-slot:datacolumn-consent="{ data }">
-				<span v-if="data && data.consentStatus === 'ok'">
+			<template v-slot:datacolumn-consentStatus="{ data }">
+				<span v-if="data === 'ok'">
 					<base-icon
 						source="custom"
 						icon="doublecheck"
 						color="var(--color-success)"
 					/>
 				</span>
-				<span v-else-if="data && data.consentStatus === 'parentsAgreed'">
+				<span v-else-if="data === 'parentsAgreed'">
 					<base-icon
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
 				</span>
-				<span v-else-if="data && data.consentStatus === 'missing'">
+				<span v-else-if="data === 'missing'">
 					<base-icon
 						source="material"
 						icon="close"
@@ -167,7 +167,7 @@ export default {
 				// 	label: this.$t("common.labels.birthday"),
 				// },
 				{
-					field: "consent",
+					field: "consentStatus",
 					label: this.$t("common.labels.consent"),
 				},
 				{
