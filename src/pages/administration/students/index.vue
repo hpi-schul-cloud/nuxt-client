@@ -116,7 +116,6 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
-	layout: "loggedInFull",
 	components: {
 		DataFilter,
 		BackendDataTable,
@@ -129,9 +128,7 @@ export default {
 			type: Boolean,
 		},
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
+
 	data() {
 		return {
 			currentFilterQuery: this.$uiState.getFilter(
@@ -244,6 +241,11 @@ export default {
 			],
 			filters: studentFilter(this),
 		};
+	},
+
+	layout: "loggedInFull",
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
 		...mapState("auth", {
