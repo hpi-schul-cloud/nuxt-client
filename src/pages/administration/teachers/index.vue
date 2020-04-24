@@ -120,15 +120,16 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: this.$uiState.getFilter(
+			currentFilterQuery: this.$uiState.get(
+				"filter",
 				"pages.administration.teachers.index"
 			),
 			test: this.$uiState,
 			page:
-				this.$uiState.getPagination("pages.administration.teachers.index")
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
 					.page || 1,
 			limit:
-				this.$uiState.getPagination("pages.administration.teachers.index")
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
 					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
@@ -247,12 +248,12 @@ export default {
 			if (
 				JSON.stringify(query) !==
 				JSON.stringify(
-					this.$uiState.getFilter("pages.administration.teachers.index")
+					this.$uiState.get("filter", "pages.administration.teachers.index")
 				)
 			) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.$uiState.setFilter("pages.administration.teachers.index", {
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
 				query,
 			});
 		},
@@ -262,7 +263,6 @@ export default {
 	},
 	methods: {
 		find() {
-			console.log(this.currentFilterQuery);
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -282,7 +282,7 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.$uiState.setPagination("pages.administration.teachers.index", {
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
 				currentPage: page,
 			});
 			this.find();
@@ -291,7 +291,7 @@ export default {
 			this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
-			this.$uiState.setPagination("pages.administration.teachers.index", {
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
 				itemsPerPage: limit,
 			});
 			this.find();

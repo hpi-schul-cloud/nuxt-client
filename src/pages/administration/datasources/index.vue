@@ -211,8 +211,10 @@ export default {
 			menuOpen: false,
 			page: 1,
 			limit:
-				this.$uiState.getPagination("pages.administration.datasources.index")
-					.limit || 25,
+				this.$uiState.get(
+					"pagination",
+					"pages.administration.datasources.index"
+				).limit || 25,
 		};
 	},
 	computed: {

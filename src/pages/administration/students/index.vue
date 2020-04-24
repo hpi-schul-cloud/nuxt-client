@@ -134,14 +134,15 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: this.$uiState.getFilter(
+			currentFilterQuery: this.$uiState.get(
+				"filter",
 				"pages.administration.students.index"
 			),
 			page:
-				this.$uiState.getPagination("pages.administration.students.index")
+				this.$uiState.get("pagination", "pages.administration.students.index")
 					.page || 1,
 			limit:
-				this.$uiState.getPagination("pages.administration.students.index")
+				this.$uiState.get("pagination", "pages.administration.students.index")
 					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
@@ -271,12 +272,12 @@ export default {
 			if (
 				JSON.stringify(query) !==
 				JSON.stringify(
-					this.$uiState.getFilter("pages.administration.students.index")
+					this.$uiState.get("filter", "pages.administration.students.index")
 				)
 			) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.$uiState.setFilter("pages.administration.students.index", {
+			this.$uiState.set("filter", "pages.administration.students.index", {
 				query,
 			});
 		},
@@ -294,7 +295,6 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			console.log(query);
 
 			this.$store.dispatch("users/findStudents", {
 				query,
@@ -307,7 +307,7 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.$uiState.setPagination("pages.administration.students.index", {
+			this.$uiState.set("pagination", "pages.administration.students.index", {
 				currentPage: page,
 			});
 			this.find();
@@ -316,7 +316,7 @@ export default {
 			this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
-			this.$uiState.setPagination("pages.administration.students.index", {
+			this.$uiState.set("pagination", "pages.administration.students.index", {
 				itemsPerPage: limit,
 			});
 			this.find();
