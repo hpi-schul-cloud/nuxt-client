@@ -24,17 +24,48 @@
 				v-model="check"
 				type="checkbox"
 				name="switch"
-				:label="$t('pages.administration.students.consent.steps.complete.confirm')"
+				:label="
+					$t('pages.administration.students.consent.steps.complete.confirm')
+				"
 			/>
 
-			<base-button
-				design="text"
-				@click="cancel">{{ $t("common.actions.cancel") }}</base-button>
-			<base-button 
-				:disabled="!check"
-				design="secondary"
-				@click="next">{{ $t("pages.administration.students.consent.steps.complete.next") }}</base-button>
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
+			}}</base-button>
+			<base-button :disabled="!check" design="secondary" @click="next">{{
+				$t("pages.administration.students.consent.steps.complete.next")
+			}}</base-button>
 		</section>
+
+		<base-modal :active.sync="cancelWarning">
+			<template v-slot:header></template>
+			<template v-slot:body>
+				<modal-body-info
+					:title="
+						$t('pages.administration.students.consent.cancel.modal.title')
+					"
+				>
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="report_problem"
+							style="color: var(--color-danger);"
+						/>
+					</template>
+				</modal-body-info>
+				{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+			</template>
+			<template v-slot:footerRight>
+				<base-button design="danger text" @click="cancel">
+					{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
+				</base-button>
+				<base-button design="danger" @click="cancelWarning = false">
+					{{
+						$t("pages.administration.students.consent.cancel.modal.continue")
+					}}
+				</base-button>
+			</template>
+		</base-modal>
 	</section>
 </template>
 
@@ -44,12 +75,14 @@ import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 dayjs.locale("de");
 
 export default {
 	components: {
 		BackendDataTable,
 		StepProgress,
+		ModalBodyInfo,
 	},
 	meta: {
 		requiredPermissions: ["STUDENT_CREATE"],
@@ -84,6 +117,7 @@ export default {
 			],
 			currentStep: 0,
 			check: false,
+			cancelWarning: false,
 			tableColumns: [
 				{
 					field: "fullName",
@@ -113,7 +147,7 @@ export default {
 			students: "list",
 		}),
 		...mapGetters("bulk-consent", {
-			selectedStudentIds: "selectedStudents"
+			selectedStudentIds: "selectedStudents",
 		}),
 		tableData: function () {
 			const data = [];
@@ -126,7 +160,7 @@ export default {
 				}
 			}
 			return data;
-		}
+		},
 	},
 	created(ctx) {
 		this.find();
@@ -143,11 +177,10 @@ export default {
 				query,
 			});
 		},
-		next() {
-		},
+		next() {},
 		cancel() {
 			this.$store.commit("bulk-consent/setSelectedStudents", {
-				students: []
+				students: [],
 			});
 			this.$router.push({
 				path: `/administration/students`,
