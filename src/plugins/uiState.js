@@ -1,10 +1,10 @@
 let store;
 
-const set = (key, identifier, value) => {
+const set = (key, identifier, data) => {
 	store?.commit("uiState/set", {
 		key,
 		identifier,
-		object: value,
+		data,
 	});
 };
 
