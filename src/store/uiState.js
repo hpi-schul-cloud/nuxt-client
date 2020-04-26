@@ -4,13 +4,12 @@ const localStorageKey = "uiState";
 const version = 1;
 let initialize = false;
 
-const defaultState = {
-	pagination: {},
-	filter: {},
-	version,
-};
-
 const getDefaultState = () => {
+	const defaultState = {
+		pagination: {},
+		filter: {},
+		version,
+	};
 	if (localStorage.getItem(localStorageKey)) {
 		const uiState = JSON.parse(localStorage.getItem(localStorageKey));
 		if (uiState.version == version) {
