@@ -2,7 +2,6 @@ import mergeDeep from "@utils/merge-deep";
 
 const localStorageKey = "uiState";
 const version = 1;
-let initialize = false;
 
 const getDefaultState = () => {
 	const defaultState = {
@@ -10,6 +9,7 @@ const getDefaultState = () => {
 		filter: {},
 		version,
 	};
+
 	if (localStorage.getItem(localStorageKey)) {
 		const uiState = JSON.parse(localStorage.getItem(localStorageKey));
 		if (uiState.version == version) {
@@ -18,7 +18,6 @@ const getDefaultState = () => {
 			uiState.version = version;
 		}
 	}
-	initialize = true;
 
 	return defaultState;
 };
@@ -69,7 +68,6 @@ const handleFilter = (methode, value) => {
 
 export const getters = {
 	get: (state) => ({ key, identifier }) => {
-		if (!initialize) throw new Error("uiState not initialize");
 		if (!key) throw new SyntaxError("Key is missing!");
 
 		const value = identifier ? state[key][identifier] : state[key];
@@ -79,7 +77,6 @@ export const getters = {
 
 export const mutations = {
 	set(state, { key, identifier, object }) {
-		if (!initialize) throw new Error("uiState not initialize");
 		if (!key || !object) throw new SyntaxError("Key or/and object is missing!");
 
 		const value = createPattern(key, "set", object);
