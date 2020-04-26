@@ -392,9 +392,13 @@ export default {
 			this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
-			this.$uiState.setPagination("pages.administration.datasources.index", {
-				itemsPerPage: limit,
-			});
+			this.$uiState.set(
+				"pagination",
+				"pages.administration.datasources.index",
+				{
+					itemsPerPage: limit,
+				}
+			);
 			this.find();
 		},
 	},
