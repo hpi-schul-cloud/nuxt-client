@@ -49,7 +49,10 @@
 						color="var(--color-danger)"
 					/>
 				</span>
-				<span v-else-if="data && Object.keys(data).length === 0">
+				<span
+					v-else-if="data && Object.keys(data).length === 0"
+					class="text-content"
+				>
 					<base-icon
 						source="material"
 						icon="cancel"
