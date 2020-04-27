@@ -45,9 +45,19 @@
 				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
 						source="material"
-						icon="close"
+						icon="cancel"
 						color="var(--color-danger)"
 					/>
+				</span>
+				<span v-else-if="data && Object.keys(data).length === 0">
+					<base-icon
+						source="material"
+						icon="cancel"
+						color="var(--color-danger)"
+					/>
+					<span>
+						{{ $t("common.labels.registrationlink.send") }}
+					</span>
 				</span>
 				<span v-else />
 			</template>

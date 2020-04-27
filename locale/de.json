@@ -17,6 +17,7 @@
 	"common.labels.lastName": "Nachname",
 	"common.labels.name": "Name",
 	"common.labels.room": "Raum",
+	"common.labels.registrationlink.send": "Registrierungslink versandt",
 	"common.labels.status": "Status",
 	"common.labels.teacher": "Lehrer:in",
 	"common.placeholder.birthdate": "20.2.2002",
