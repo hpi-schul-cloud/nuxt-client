@@ -105,7 +105,7 @@
 		"cross-env": "^7.0.2",
 		"css-loader": "^3.5.3",
 		"eslint": "^6.8.0",
-		"eslint-loader": "^4.0.0",
+		"eslint-loader": "^4.0.2",
 		"faker": "^4.1.0",
 		"find-cache-dir": "^3.3.1",
 		"flush-promises": "^1.0.2",
