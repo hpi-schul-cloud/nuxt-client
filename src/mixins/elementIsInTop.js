@@ -36,7 +36,7 @@ const elementIsInTop = {
 	},
 	methods: {
 		isTop() {
-			this.elIsTop = this.elementOne.yLocation <= this.elementTwo.yLocation;
+			this.elIsTop = this.elementOne.yLocation < this.elementTwo.yLocation;
 		},
 		assignElements(el1, el2) {
 			this.elementOne.el = el1;

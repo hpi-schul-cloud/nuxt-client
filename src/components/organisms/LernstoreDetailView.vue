@@ -4,7 +4,7 @@
 	<div class="resource">
 		<div ref="icons" class="icons">
 			<base-button
-				v-if="!elIsTop"
+				v-if="!closeButtonStyleSelector"
 				class="close-icon"
 				design="icon"
 				@click="goBack"
@@ -12,7 +12,7 @@
 				<base-icon source="material" icon="close" />
 			</base-button>
 			<base-button
-				v-else
+				v-if="closeButtonStyleSelector"
 				class="close-transparent"
 				design="icon"
 				@click="goBack"
@@ -194,6 +194,11 @@ export default {
 		},
 		filename() {
 			return this.resource.filename;
+		},
+		closeButtonStyleSelector() {
+			return (
+				this.elIsTop && (this.$mq === "tabletPortrait" || this.$mq === "mobile")
+			);
 		},
 	},
 	mounted() {
