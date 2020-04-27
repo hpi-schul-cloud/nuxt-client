@@ -59,8 +59,8 @@
 				color="var(--color-tertiary)"
 				size="xlarge"
 			/>
-			<!-- <edusharing-footer class="content__footer" /> -->
 		</div>
+		<edusharing-footer class="content__footer" />
 	</section>
 </template>
 
@@ -72,7 +72,7 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import FloatingFab from "@components/molecules/FloatingFab";
-// import EdusharingFooter from "@components/molecules/EdusharingFooter";
+import EdusharingFooter from "@components/molecules/EdusharingFooter";
 
 export default {
 	components: {
@@ -81,7 +81,7 @@ export default {
 		ContentEmptyState,
 		BaseGrid,
 		FloatingFab,
-		// EdusharingFooter,
+		EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
 	layout: "loggedInFull",

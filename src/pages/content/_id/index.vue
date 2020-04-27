@@ -13,7 +13,7 @@ export default {
 	components: {
 		LernstoreDetailView,
 	},
-	layout: "fullScreenReview",
+	layout: "fullScreenLernstore",
 	async asyncData({ store, params }) {
 		const resource = await store.dispatch(
 			"content/getResourceMetadata",
