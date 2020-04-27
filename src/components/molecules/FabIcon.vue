@@ -63,9 +63,11 @@
 				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
 			</base-button>
 		</div>
-		<div :class="{
-			'overlay': isOpen
-		}"></div>
+		<div
+			:class="{
+				overlay: isOpen,
+			}"
+		></div>
 	</div>
 </template>
 <script>
