@@ -4,12 +4,36 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.consent.title") }}
 		</h1>
+		{{ $t("pages.administration.students.consent.info") }}
 		<div>
 			<step-progress :steps="progressSteps" :current-step="currentStep" />
 		</div>
+
 		<section v-if="currentStep === 0">
 			<h4>{{ $t("pages.administration.students.consent.steps.complete") }}</h4>
-			{{ $t("pages.administration.students.consent.info") }}
+			{{ $t("pages.administration.students.consent.steps.complete.info") }}
+			<backend-data-table
+				:columns="tableColumns"
+				:data="tableData"
+				track-by="id"
+				:paginated="false"
+			>
+				<template v-slot:datacolumn-birthday="{ data }">
+					{{ dayjs(data).format("DD.MM.YYYY") }}
+				</template>
+			</backend-data-table>
+
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
+			}}</base-button>
+			<base-button design="secondary" @click="next">{{
+				$t("pages.administration.students.consent.steps.complete.next")
+			}}</base-button>
+		</section>
+
+		<section v-if="currentStep === 1">
+			<h4>{{ $t("pages.administration.students.consent.steps.complete") }}</h4>
+			{{ $t("pages.administration.students.consent.steps.complete.info") }}
 			<backend-data-table
 				:columns="tableColumns"
 				:data="tableData"
@@ -25,7 +49,7 @@
 				type="checkbox"
 				name="switch"
 				:label="
-					$t('pages.administration.students.consent.steps.complete.confirm')
+					$t('pages.administration.students.consent.steps.register.confirm')
 				"
 			/>
 
@@ -34,6 +58,30 @@
 			}}</base-button>
 			<base-button :disabled="!check" design="secondary" @click="next">{{
 				$t("pages.administration.students.consent.steps.complete.next")
+			}}</base-button>
+		</section>
+
+		<section v-if="currentStep === 2">
+			<h4>{{ $t("pages.administration.students.consent.steps.download") }}</h4>
+			{{ $t("pages.administration.students.consent.steps.download.info") }}
+			<backend-data-table
+				:columns="tableColumns"
+				:data="tableData"
+				track-by="id"
+				:paginated="false"
+			>
+				<template v-slot:datacolumn-birthday="{ data }">
+					{{ dayjs(data).format("DD.MM.YYYY") }}
+				</template>
+			</backend-data-table>
+			<p>
+				{{
+					$t("pages.administration.students.consent.steps.download.explanation")
+				}}
+			</p>
+
+			<base-button design="secondary" @click="download">{{
+				$t("pages.administration.students.consent.steps.download.next")
 			}}</base-button>
 		</section>
 
@@ -155,7 +203,6 @@ export default {
 				if (this.selectedStudentIds.includes(this.students[key]._id)) {
 					const student = this.students[key];
 					student.password = generatePassword();
-					console.log(student);
 					data.push(student);
 				}
 			}
@@ -177,7 +224,10 @@ export default {
 				query,
 			});
 		},
-		next() {},
+		next() {
+			this.currentStep += 1;
+		},
+		download() {},
 		cancel() {
 			this.$store.commit("bulk-consent/setSelectedStudents", {
 				students: [],
