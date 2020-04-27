@@ -105,7 +105,7 @@
 					</div>
 				</div>
 			</div>
-			<base-button design="hero-cta" class="floating-button">
+			<base-button design="hero-cta" class="floating-button" size="large">
 				<base-icon source="material" icon="add" />
 				{{ $t("pages.content._id.addToTopic") }}
 			</base-button>
