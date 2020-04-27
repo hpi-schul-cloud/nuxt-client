@@ -36,7 +36,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		content: "";
-		background: var(--color-overlay);
+		background: var(--color-overlay-dark);
 		border-top-right-radius: var(--radius-sm);
 	}
 

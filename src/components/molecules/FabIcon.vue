@@ -63,6 +63,9 @@
 				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
 			</base-button>
 		</div>
+		<div :class="{
+			'overlay': isOpen
+		}"></div>
 	</div>
 </template>
 <script>
@@ -164,7 +167,7 @@ $fab-label-shadow: var(--shadow-xxxs);
 
 $fab-small-color: var(--color-white);
 $fab-small-text-color: var(--color-on-white);
-$fab-label-color: var(--color-overlay);
+$fab-label-color: var(--color-overlay-dark);
 $fab-label-text-color: var(--color-on-overlay);
 
 $fab-spacing: 60;
@@ -196,7 +199,6 @@ $fab-label-offset: 50px;
 .fab.primary {
 	z-index: var(--layer-page);
 }
-
 .fab.small {
 	width: 40px;
 	height: 40px;
@@ -279,5 +281,19 @@ $fab-label-offset: 50px;
 .morph-leave-to {
 	opacity: 0;
 	transform: scaleY(0);
+}
+.overlay {
+	--overlay-z-index: -1;
+
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: var(--overlay-z-index);
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: var(--color-overlay-light);
 }
 </style>
