@@ -96,7 +96,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 	describe("sort", () => {
 		const getSortButton = (wrapper, text = "Vorname") =>
 			wrapper
-				.findAll(".is-sortable button")
+				.findAll("button.is-sortable")
 				.wrappers.find((w) => w.text() === text);
 
 		it("should emit sort events on click on sortable coloumn", async () => {

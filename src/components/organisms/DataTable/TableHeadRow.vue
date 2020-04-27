@@ -13,21 +13,20 @@
 				/>
 			</div>
 		</th>
-		<th v-for="(column, index) in columns" :key="index">
+		<th v-for="(column, index) in columns" :key="index" cellspacing="0">
 			<slot
 				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
 				:label="column.label"
-				:sortable="sortable"
+				:sortable="column.sortable"
 				:sortBy="sortBy"
 				:sortOrder="sortOrder"
-				:class="{
-					'is-current-sort': sortBy === column.field,
-					'is-sortable': column.sortable,
-				}"
-				cellspacing="0"
 			>
 				<BaseButton
 					v-if="column.sortable"
+					:class="{
+						'is-current-sort': sortBy === column.field,
+						'is-sortable': column.sortable,
+					}"
 					design="none"
 					class="th-wrap"
 					@click.stop="sort(column)"
