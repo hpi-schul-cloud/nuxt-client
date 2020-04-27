@@ -32,17 +32,20 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				{{ dayjs(data).format("DD.MM.YYYY") }}
+				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
-				<span v-if="data && data.consentStatus === 'ok'">
+				<span v-if="data && data.consentStatus === 'ok'" class="text-content">
 					<base-icon
 						source="material"
 						icon="check"
 						color="var(--color-success)"
 					/>
 				</span>
-				<span v-else-if="data && data.consentStatus === 'missing'">
+				<span
+					v-else-if="data && data.consentStatus === 'missing'"
+					class="text-content"
+				>
 					<base-icon
 						source="material"
 						icon="close"

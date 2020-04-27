@@ -38,7 +38,7 @@
 					v-else-if="column.sortable"
 					icon="sort"
 					source="fa"
-					style="color: var(--color-gray);"
+					style="color: var(--color-black);"
 				/>
 			</BaseButton>
 			<div v-else class="th-wrap">
@@ -153,6 +153,7 @@ export default {
 			justify-content: space-between;
 			width: 100%;
 			padding: var(--space-xs);
+			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
 		}
 		.select-wrap {
