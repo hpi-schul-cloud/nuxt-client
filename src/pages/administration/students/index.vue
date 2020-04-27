@@ -36,7 +36,7 @@
 						<base-icon source="material" icon="info" />
 					</base-button>
 				</span>
-				<info-box :active.sync="active">
+				<info-box class="info-box" :active.sync="active">
 					<template v-slot:header>Registrierungen abschließen</template>
 					<template v-slot:body>
 						<div class="content">
@@ -488,5 +488,19 @@ span {
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+}
+
+.info-box {
+	position: absolute;
+	right: 0%;
+	z-index: var(--layer-dropdown);
+	min-width: 350px;
+	max-width: 50%;
+	margin-right: var(--space-sm);
+
+	@include breakpoint(tablet) {
+		min-width: 450px;
+		margin-right: var(--space-xl);
+	}
 }
 </style>

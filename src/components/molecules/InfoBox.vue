@@ -38,20 +38,10 @@ export default {
 @import "@styles";
 
 .wrapper {
-	position: absolute;
-	right: 0%;
-	z-index: var(--layer-dropdown);
-	min-width: 350px;
-	max-width: 50%;
-	margin-right: var(--space-sm);
 	color: var(--color-white);
 	background-color: var(--color-info);
 	border-radius: var(--radius-lg);
 
-	@include breakpoint(tablet) {
-		min-width: 450px;
-		margin-right: var(--space-xl);
-	}
 	h4 {
 		color: var(--color-white);
 		text-align: center;
