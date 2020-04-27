@@ -15,7 +15,7 @@ All components have access to the uiState. You can access it with: `$uiState`.
 <b>set currentPage</b>
 
 ```js
-this.$uiState.setPagination("pages.administration.students.index", {
+this.$uiState.set("pagination", "pages.administration.students.index", {
 	currentPage: 1,
 });
 ```
@@ -23,7 +23,7 @@ this.$uiState.setPagination("pages.administration.students.index", {
 <b>get currentPage</b>
 
 ```js
-this.$uiState.getPagination("pages.administration.students.index").page;
+this.$uiState.get("pagination", "pages.administration.students.index").page;
 ```
 
 ### ItemsPerPage
@@ -31,7 +31,7 @@ this.$uiState.getPagination("pages.administration.students.index").page;
 <b>set itemsPerPage</b>
 
 ```js
-this.$uiState.setPagination("pages.administration.students.index", {
+this.$uiState.set("pagination", "pages.administration.students.index", {
 	itemsPerPage: 10,
 });
 ```
@@ -39,7 +39,7 @@ this.$uiState.setPagination("pages.administration.students.index", {
 <b>get itemsPerPage</b>
 
 ```js
-this.$uiState.getPagination("pages.administration.students.index").limit;
+this.$uiState.get("pagination", "pages.administration.students.index").limit;
 ```
 
 ## Persist filter
@@ -47,7 +47,7 @@ this.$uiState.getPagination("pages.administration.students.index").limit;
 <b>set filter</b>
 
 ```js
-this.$uiState.setFilter("pages.administration.students.index", {
+this.$uiState.set("filter", "pages.administration.students.index", {
 	query,
 });
 ```
@@ -55,7 +55,7 @@ this.$uiState.setFilter("pages.administration.students.index", {
 <b>get filter</b>
 
 ```js
-this.$uiState.getFilter("pages.administration.students.index");
+this.$uiState.get("filter", "pages.administration.students.index");
 ```
 
 ## Persist other values
@@ -63,9 +63,7 @@ this.$uiState.getFilter("pages.administration.students.index");
 You can also save additional values. Note that you cannot overwrite the default keys (e.g.: filter, pagination, ...).
 
 ```js
-this.$uiState.set("yourUniqueKey", {
-	"someValue",
-});
+this.$uiState.set("yourUniqueKey", undefined, "someValue");
 ```
 
 You can regain the value with:

@@ -4,7 +4,7 @@ const set = (key, identifier, data) => {
 	store?.commit("uiState/set", {
 		key,
 		identifier,
-		data,
+		object: data,
 	});
 };
 
