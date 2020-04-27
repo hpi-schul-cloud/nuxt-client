@@ -30,10 +30,12 @@
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
 			<template v-slot:headcolumn-consent>
-				<span>{{ $t("common.labels.registration") }}</span>
-				<base-button design="info text icon" @click="active = !active">
-					<base-icon source="material" icon="info" />
-				</base-button>
+				<span class="th-slot">
+					<span>{{ $t("common.labels.registration") }}</span>
+					<base-button design="info text icon" @click="active = !active">
+						<base-icon source="material" icon="info" />
+					</base-button>
+				</span>
 				<info-box :active.sync="active">
 					<template v-slot:header>Registrierungen abschließen</template>
 					<template v-slot:body>
@@ -480,5 +482,11 @@ span {
 }
 .list {
 	padding: var(--space-lg);
+}
+.th-slot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 }
 </style>
