@@ -143,7 +143,12 @@ export default {
 .row {
 	font-weight: var(--font-weight-bold);
 	th {
+		position: sticky;
+		top: 0;
+		z-index: var(--layer-page);
+		background: white;
 		border-bottom: calc(2 * var(--border-width)) solid var(--color-tertiary);
+
 		&.is-current-sort {
 			opacity: 1;
 		}
