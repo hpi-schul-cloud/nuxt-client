@@ -135,7 +135,7 @@
 		"sharp": "^0.25.0",
 		"start-server-and-test": "^1.11.0",
 		"storybook-addon-vue-info": "^1.4.2",
-		"style-loader": "^1.1.4",
+		"style-loader": "^1.2.0",
 		"stylelint": "^13.3.3",
 		"stylelint-declaration-use-variable": "^1.7.2",
 		"vue-jest": "^3.0.5",
