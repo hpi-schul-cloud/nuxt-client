@@ -9,10 +9,10 @@
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -116,7 +116,6 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
-	layout: "loggedInFull",
 	components: {
 		DataFilter,
 		BackendDataTable,
@@ -129,24 +128,19 @@ export default {
 			type: Boolean,
 		},
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
+
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.get(
+				"filter",
+				"pages.administration.students.index"
+			),
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.get("pagination", "pages.administration.students.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.itemsPerPage"
-					)
-				) || 10,
+				this.$uiState.get("pagination", "pages.administration.students.index")
+					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			tableColumns: [
@@ -213,6 +207,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "STUDENT_DELETE",
 				},
 			],
 			tableSelection: [],
@@ -248,6 +243,11 @@ export default {
 			filters: studentFilter(this),
 		};
 	},
+
+	layout: "loggedInFull",
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
+	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
@@ -261,6 +261,27 @@ export default {
 		}),
 		schoolInternallyManaged() {
 			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
+		},
+		permissionFilteredTableActions() {
+			return this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
+		},
+	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.get("filter", "pages.administration.students.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.set("filter", "pages.administration.students.index", {
+				query,
+			});
 		},
 	},
 	created(ctx) {
@@ -288,20 +309,18 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.students.index.currentPage",
-				page
-			);
+			this.$uiState.set("pagination", "pages.administration.students.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.students.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.set("pagination", "pages.administration.students.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
@@ -401,10 +420,6 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
-		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.onUpdateCurrentPage(1);
 		},
 	},
 };

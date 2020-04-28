@@ -8,10 +8,10 @@
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="teachers"
@@ -120,19 +120,17 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.get(
+				"filter",
+				"pages.administration.teachers.index"
+			),
+			test: this.$uiState,
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.itemsPerPage"
-					)
-				) || 10,
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			breadcrumbs: [
@@ -176,6 +174,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "TEACHER_DELETE",
 				},
 			],
 			tableSelection: [],
@@ -237,6 +236,27 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
+		permissionFilteredTableActions() {
+			return this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
+		},
+	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.get("filter", "pages.administration.teachers.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
+				query,
+			});
+		},
 	},
 	created(ctx) {
 		this.find();
@@ -262,20 +282,18 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.teachers.index.currentPage",
-				page
-			);
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.teachers.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
@@ -352,10 +370,6 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
-		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.onUpdateCurrentPage(1);
 		},
 	},
 };

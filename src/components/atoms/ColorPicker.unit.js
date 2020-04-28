@@ -15,9 +15,9 @@ describe("@components/atoms/ColorPicker", () => {
 				colors: testColors,
 			},
 		});
-		expect(wrapper.get("color-picker-stub").attributes().colors).toStrictEqual(
-			testColors.join(",")
-		);
+		expect(
+			wrapper.get("color-picker-stub").attributes().swatches
+		).toStrictEqual(testColors.join(","));
 	});
 
 	it("defines default set of colors", async () => {
@@ -29,7 +29,7 @@ describe("@components/atoms/ColorPicker", () => {
 			}),
 		});
 		expect(
-			wrapper.get("color-picker-stub").attributes().colors.length
+			wrapper.get("color-picker-stub").attributes().swatches.length
 		).toBeGreaterThan(0);
 	});
 });

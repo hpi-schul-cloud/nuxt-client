@@ -13,7 +13,7 @@ mergeable:
     validate:
       - do: stale
         days: 20
-        type: pull_request, issues
+        type: pull_request
     pass:
       - do: comment
         payload:
