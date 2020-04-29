@@ -21,10 +21,10 @@
 				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
 			/>
+			<slot />
 			<keep-alive>
 				<autoLogoutWarning />
 			</keep-alive>
-			<slot />
 			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
 	</div>
