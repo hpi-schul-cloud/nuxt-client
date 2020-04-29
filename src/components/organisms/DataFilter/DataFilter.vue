@@ -47,7 +47,7 @@ export default {
 			required: true,
 		},
 		activeFilters: {
-			type: Array,
+			type: [Array, Object],
 			default: () => [],
 		},
 	},
