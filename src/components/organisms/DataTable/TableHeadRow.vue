@@ -33,6 +33,7 @@
 					v-if="sortBy === column.field"
 					:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
 					source="fa"
+					style="color: var(--color-tertiary);"
 				/>
 				<base-icon
 					v-else-if="column.sortable"
