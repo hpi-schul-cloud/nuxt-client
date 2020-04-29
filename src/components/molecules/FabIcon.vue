@@ -168,7 +168,7 @@ $fab-label-shadow: var(--shadow-xxxs);
 $fab-small-color: var(--color-white);
 $fab-small-text-color: var(--color-on-white);
 $fab-label-color: var(--color-overlay-dark);
-$fab-label-text-color: var(--color-on-overlay);
+$fab-label-text-color: var(--color-on-overlay-dark);
 
 $fab-spacing: 60;
 $fab-offset: 60;
