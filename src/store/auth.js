@@ -30,6 +30,7 @@ export const actions = {
 	},
 	async logout({ commit }) {
 		this.$cookies.remove("jwt");
+		localStorage.clear();
 		commit("clearAuthData");
 	},
 	async populateUser({ commit }) {
