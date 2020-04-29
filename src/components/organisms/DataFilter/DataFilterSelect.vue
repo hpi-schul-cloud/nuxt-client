@@ -71,7 +71,6 @@ export default {
 	color: var(--color-tertiary);
 }
 .filter-btn {
-	font-family: var(--font-accent);
 	color: var(--color-tertiary);
 }
 .filter-icon {
