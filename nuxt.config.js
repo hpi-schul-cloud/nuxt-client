@@ -48,7 +48,7 @@ module.exports = {
 			{
 				rel: "icon",
 				type: "image/png",
-				href: "/images/logo/favicon-32.png",
+				href: "/favicon.png",
 			},
 		],
 	},
