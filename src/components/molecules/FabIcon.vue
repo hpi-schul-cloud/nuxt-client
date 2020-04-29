@@ -63,9 +63,11 @@
 				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
 			</base-button>
 		</div>
-		<div :class="{
-			'overlay': isOpen
-		}"></div>
+		<div
+			:class="{
+				overlay: isOpen,
+			}"
+		></div>
 	</div>
 </template>
 <script>
@@ -283,14 +285,12 @@ $fab-label-offset: 50px;
 	transform: scaleY(0);
 }
 .overlay {
-	--overlay-z-index: -1;
-
 	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: var(--overlay-z-index);
+	z-index: var(--layer-behind);
 	display: block;
 	width: 100%;
 	height: 100%;
