@@ -35,22 +35,19 @@
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
-				<span>
-					<template v-if="data && data.consentStatus === 'ok'">
-						<base-icon
-							source="material"
-							icon="check"
-							color="var(--color-success)"
-						/>
-					</template>
-					<template v-else-if="data && data.consentStatus === 'missing'">
-						<base-icon
-							source="material"
-							icon="close"
-							color="var(--color-danger)"
-						/>
-					</template>
-					<template v-else />
+				<span class="text-content">
+					<base-icon
+						v-if="data && data.consentStatus === 'ok'"
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
+					<base-icon
+						v-else-if="data && data.consentStatus === 'missing'"
+						source="material"
+						icon="close"
+						color="var(--color-danger)"
+					/>
 				</span>
 			</template>
 
