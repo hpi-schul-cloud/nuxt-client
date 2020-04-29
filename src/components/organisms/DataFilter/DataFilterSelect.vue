@@ -70,10 +70,10 @@ export default {
 	position: relative;
 	color: var(--color-tertiary);
 }
-.filter-btn {
-	color: var(--color-tertiary);
-}
 .filter-icon {
 	font-size: var(--text-lg);
+}
+.button.is-medium.is-text {
+	color: var(--color-tertiary);
 }
 </style>
