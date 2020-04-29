@@ -63,11 +63,9 @@
 				<BaseIcon :icon="action.icon" :source="action['icon-source']" />
 			</base-button>
 		</div>
-		<div
-			:class="{
-				overlay: isOpen,
-			}"
-		></div>
+		<transition name="fade">
+			<div v-if="isOpen" class="overlay" />
+		</transition>
 	</div>
 </template>
 <script>
@@ -295,5 +293,13 @@ $fab-label-offset: 50px;
 	width: 100%;
 	height: 100%;
 	background-color: var(--color-overlay-light);
+}
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity var(--duration-transition-fast);
+}
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>
