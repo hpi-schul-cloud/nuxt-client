@@ -7,7 +7,6 @@
 			<div
 				class="state-value"
 				:style="{
-					...handleSquares,
 					'box-shadow': `var(${variable})`,
 				}"
 			></div>
