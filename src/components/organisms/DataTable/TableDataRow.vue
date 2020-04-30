@@ -112,5 +112,8 @@ export default {
 			margin-bottom: 0;
 		}
 	}
+	a.is-text {
+		color: var(--color-tertiary);
+	}
 }
 </style>
