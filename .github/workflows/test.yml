@@ -44,6 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: npm ci
+        # apt-get is to fix issue: https://github.com/puppeteer/puppeteer/issues/5704#issuecomment-618372226
         run: |
           sudo apt-get update && sudo apt-get install -y libgbm1
           npm ci --prefer-offline --no-audit
