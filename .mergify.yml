@@ -94,6 +94,9 @@ pull_request_rules:
       merge:
         method: squash
         strict: smart
+      label:
+        add:
+          - auto_merged
   - name: auto merge passing Dependabot pull requests
     conditions:
       # match dependabot[bot] and dependabot-preview[bot]
@@ -103,6 +106,9 @@ pull_request_rules:
       merge:
         method: squash
         strict: smart
+      label:
+        add:
+          - auto_merged
   - name: auto merge when ready to merge label is set
     conditions:
       - label=ready to merge
@@ -110,6 +116,9 @@ pull_request_rules:
       merge:
         method: merge
         strict: smart
+      label:
+        add:
+          - auto_merged
 
   #######################
   # CLEANUP AFTER MERGE
@@ -120,8 +129,6 @@ pull_request_rules:
       - label=ready to merge
     actions:
       label:
-        add:
-          - auto_merged
         remove:
           - ready to merge
   - name: delete merged branches
