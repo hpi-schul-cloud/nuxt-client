@@ -24,7 +24,7 @@ const getTableRowsContent = async (wrapper) => {
 	});
 };
 
-describe("@components/organisms/DataTable/DataTable", () => {
+describe.skip("@components/organisms/DataTable/DataTable", () => {
 	beforeEach(() => {
 		jest.spyOn(window, "scrollTo").mockImplementation();
 	});
