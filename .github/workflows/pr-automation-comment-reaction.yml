@@ -22,7 +22,9 @@ jobs:
           ref: ${{ steps.prcomm.outputs.BRANCH_NAME }}
       - name: install dependencies
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        run: npm ci --prefer-offline --no-audit
+        run: |
+          sudo apt-get update && sudo apt-get install -y libgbm1
+          npm ci --prefer-offline --no-audit
       - name: build storybook
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         run: "npm run build:storybook"

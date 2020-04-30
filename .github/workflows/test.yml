@@ -44,7 +44,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: npm ci
-        run: npm ci --prefer-offline --no-audit
+        run: |
+          sudo apt-get update && sudo apt-get install -y libgbm1
+          npm ci --prefer-offline --no-audit
       - name: build storybook
         run: "npm run build:storybook"
       - name: npm run test:screenshot
