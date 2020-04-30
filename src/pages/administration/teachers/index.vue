@@ -36,21 +36,18 @@
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
 				<span class="text-content">
-					<template v-if="data && data.consentStatus === 'ok'">
-						<base-icon
-							source="material"
-							icon="check"
-							color="var(--color-success)"
-						/>
-					</template>
-					<template v-else-if="data && data.consentStatus === 'missing'">
-						<base-icon
-							source="material"
-							icon="close"
-							color="var(--color-danger)"
-						/>
-					</template>
-					<template v-else />
+					<base-icon
+						v-if="data && data.consentStatus === 'ok'"
+						source="material"
+						icon="check"
+						color="var(--color-success)"
+					/>
+					<base-icon
+						v-else-if="data && data.consentStatus === 'missing'"
+						source="material"
+						icon="close"
+						color="var(--color-danger)"
+					/>
 				</span>
 			</template>
 

@@ -62,7 +62,7 @@ export default {
 	&:focus {
 		outline: none;
 
-		--button-background: var(--color-success--dark);
+		--button-background: var(--color-success-dark);
 	}
 	/* stylelint-disable */
 	// defined multiple to seperate style from behaviour
