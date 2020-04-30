@@ -113,7 +113,7 @@ export default {
 		}
 	}
 	a.is-text {
-		color: var(--color-tertiary) !important;
+		color: var(--color-tertiary);
 	}
 }
 </style>

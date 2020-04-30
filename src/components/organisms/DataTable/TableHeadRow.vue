@@ -32,15 +32,9 @@
 				<base-icon
 					v-if="sortBy === column.field"
 					:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
-					source="fa"
-					style="color: var(--color-tertiary);"
+					source="custom"
 				/>
-				<base-icon
-					v-else-if="column.sortable"
-					icon="sort"
-					source="fa"
-					style="color: var(--color-tertiary);"
-				/>
+				<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
 			</BaseButton>
 			<div v-else class="th-wrap">
 				<span>{{ column.label }}</span>
@@ -156,6 +150,10 @@ export default {
 			padding: var(--space-xs);
 			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
+			svg {
+				font-size: calc(1.5 * var(--text-lg));
+				color: var(--color-tertiary);
+			}
 		}
 		.select-wrap {
 			padding: var(--space-xs);
