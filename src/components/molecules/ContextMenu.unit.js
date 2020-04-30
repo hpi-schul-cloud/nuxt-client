@@ -158,15 +158,13 @@ describe("@components/molecules/CardContextMenu", () => {
 
 		it("should throw an error for invalid anchor positions", async () => {
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
-			try {
+			expect(() => {
 				getWrapper({
 					propsData: {
 						anchor: "top-bottom",
 					},
 				});
-			} catch (error) {
-				expect(error).toStrictEqual(new Error("anchor is not defined"));
-			}
+			}).toThrow(new Error("anchor is not defined"));
 			expect(consoleError).toHaveBeenCalledWith(
 				expect.stringMatching(
 					/^\[Vue warn\]\: Invalid prop\: custom validator check failed for prop \"anchor\"\./
