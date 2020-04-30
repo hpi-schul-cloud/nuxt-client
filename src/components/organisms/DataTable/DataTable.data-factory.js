@@ -15,7 +15,7 @@ const tableData = (n, overwrite = () => ({})) =>
 		address: {
 			city: faker.address.city(),
 		},
-		age: Math.round(Math.random() * 65),
+		age: faker.random.number(),
 		birthday: dayjs(faker.date.past()).format("DD-MM-YYYY"),
 		agreed: faker.random.boolean(),
 		...overwrite(index),
