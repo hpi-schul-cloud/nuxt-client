@@ -26,7 +26,7 @@ const getWrapper = (options = {}) =>
 		)
 	);
 
-describe("@components/molecules/CardContextMenu", () => {
+describe("@components/molecules/ContextMenu", () => {
 	it(...isValidComponent(ContextMenu));
 
 	it("Renders all action buttons", () => {
@@ -158,15 +158,13 @@ describe("@components/molecules/CardContextMenu", () => {
 
 		it("should throw an error for invalid anchor positions", async () => {
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
-			try {
+			expect(() => {
 				getWrapper({
 					propsData: {
 						anchor: "top-bottom",
 					},
 				});
-			} catch (error) {
-				expect(error).toStrictEqual(new Error("anchor is not defined"));
-			}
+			}).toThrow(new Error("anchor is not defined"));
 			expect(consoleError).toHaveBeenCalledWith(
 				expect.stringMatching(
 					/^\[Vue warn\]\: Invalid prop\: custom validator check failed for prop \"anchor\"\./
@@ -186,7 +184,7 @@ describe("@components/molecules/CardContextMenu", () => {
 		});
 
 		it("first element get's focused on mount", async () => {
-			const wrapper = getWrapper();
+			const wrapper = getWrapper({ attachToDocument: true });
 			// wait 2 times because nextTick is also used in the component itself
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
@@ -195,7 +193,7 @@ describe("@components/molecules/CardContextMenu", () => {
 		});
 
 		it("arrow up keeps focus on first element if already focused", async () => {
-			const wrapper = getWrapper();
+			const wrapper = getWrapper({ attachToDocument: true });
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			buttons.at(0).element.focus();
@@ -206,7 +204,7 @@ describe("@components/molecules/CardContextMenu", () => {
 		});
 
 		it("arrow up focuses previous button", async () => {
-			const wrapper = getWrapper();
+			const wrapper = getWrapper({ attachToDocument: true });
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 
@@ -229,7 +227,7 @@ describe("@components/molecules/CardContextMenu", () => {
 		});
 
 		it("arrow down focuses next button", async () => {
-			const wrapper = getWrapper();
+			const wrapper = getWrapper({ attachToDocument: true });
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			// - 2 (-1 for length offset and another -1 for close button)

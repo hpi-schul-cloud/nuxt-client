@@ -120,8 +120,6 @@ pull_request_rules:
       - label=ready to merge
     actions:
       label:
-        add:
-          - auto_merged
         remove:
           - ready to merge
   - name: delete merged branches
