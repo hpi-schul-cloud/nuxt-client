@@ -14,7 +14,7 @@
 			</div>
 			<div class="table-content-wrapper">
 				<table class="table">
-					<thead>
+					<thead v-if="$mq !== 'mobile'">
 						<component
 							:is="componentHeaderRow"
 							:all-rows-selectable="rowsSelectable"
