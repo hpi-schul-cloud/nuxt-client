@@ -1,11 +1,13 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<img
-				class="hpi-logo"
-				src="@assets/img/footer-logo.png"
-				alt="Anbieterlogo"
-			/>
+			<base-link href="https://hpi.de" target="_blank" rel="noopener">
+				<img
+					class="hpi-logo"
+					src="@assets/img/footer-logo.png"
+					alt="Anbieterlogo"
+				/>
+			</base-link>
 			<span>© {{ currentYear }} {{ $theme.name }}</span>
 		</div>
 

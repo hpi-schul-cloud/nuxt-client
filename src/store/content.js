@@ -1,7 +1,11 @@
 export const actions = {
 	async getResources({ commit }, payload = {}) {
 		commit("setLoading", true);
-		const query = Object.assign({ count: 10 }, payload || {});
+		const query = {
+			$limit: 10,
+			$skip: 0,
+			...payload,
+		};
 		const res = await this.$axios.$get("/edu-sharing", {
 			params: query,
 		});
@@ -10,9 +14,8 @@ export const actions = {
 	},
 	async addResources({ commit }, payload = {}) {
 		commit("setLoading", true);
-		const query = payload || {};
 		const res = await this.$axios.$get("/edu-sharing", {
-			params: query,
+			params: payload,
 		});
 		commit("addResources", res);
 		commit("setLoading", false);
@@ -25,39 +28,50 @@ export const actions = {
 		commit("setLessons", res);
 	},
 
-	async addToLesson(_,payload = { material:{} }){
-		 await this.$axios.post(`/lessons/${payload.lessonId}/material`, payload.material)
-	}
-};
-
-export const mutations = {
-	setResources(state, payload) {
-		state.resources = payload;
+	async addToLesson(_, payload = { material: {} }) {
+		await this.$axios.post(
+			`/lessons/${payload.lessonId}/material`,
+			payload.material
+		);
 	},
-	addResources(state, payload) {
-		payload.nodes.forEach((resource) => state.resources.nodes.push(resource));
-		state.resources = {
-			...state.resources,
-			pagination: payload.pagination,
-		};
-	},
-	setLoading(state, type) {
-		state.loading = type;
-	},
-	setLessons(state, payload) {
-		state.lessons = payload;
+	async getResourceMetadata(context, id) {
+		return this.$axios.$get(`/edu-sharing/${id}`);
 	},
 };
 
-export const state = () => ({
+const initialState = () => ({
 	resources: {
-		facettes: [],
-		ignored: null,
-		nodes: [],
-		pagination: {},
+		total: 0,
+		limit: 0,
+		skip: 0,
+		data: [],
 	},
 	lessons: {
 		data: [],
 	},
 	loading: false,
 });
+
+export const mutations = {
+	setResources(state, payload) {
+		state.resources = payload;
+	},
+	addResources(state, payload) {
+		payload.data.forEach((resource) => state.resources.data.push(resource));
+		state.resources = {
+			...state.resources,
+			pagination: payload.pagination,
+		};
+	},
+	clearResources(state) {
+		state.resources = initialState().resources;
+	},
+	setLoading(state, status) {
+		state.loading = status;
+	},
+	setLessons(state, payload) {
+		state.lessons = payload;
+	},
+};
+
+export const state = initialState();

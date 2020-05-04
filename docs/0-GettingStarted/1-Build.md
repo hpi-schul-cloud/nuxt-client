@@ -76,13 +76,12 @@ We are using docker for all our production deployments.
 
 #### Environment-Variables
 
-| env-variable | default | info |
-| --- | --- | --- |
-| DOCKER_ID | _undefined_ |  |
-| DOCKERFILE_VERSION | `Dockerfile` | Defines the Dockerfile-name-prefix that gets used for the deployment. The `Dockerfile.fast` option just copies the build folder from the host into the container, where the normal `Dockerfile` will do all build steps. |
-| encrypted_b7461320c5f4_iv | _undefined_ |  |
-| encrypted_b7461320c5f4_key | _undefined_ |  |
-| MY_DOCKER_PASSWORD | _undefined_ |  |
+| env-variable               | default     | info                             |
+| -------------------------- | ----------- | -------------------------------- |
+| DOCKER_ID                  | _undefined_ | used for docker CLI login        |
+| MY_DOCKER_PASSWORD         | _undefined_ | used for docker CLI login        |
+| encrypted_b7461320c5f4_iv  | _undefined_ | `used to decrypt travis_rsa.enc` |
+| encrypted_b7461320c5f4_key | _undefined_ | `used to decrypt travis_rsa.enc` |
 
 ### Pull Deployment
 

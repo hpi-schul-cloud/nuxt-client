@@ -33,9 +33,11 @@ storiesOf("4 Base UI Components/Base UI", module)
 					outline: "outline",
 					icon: "icon",
 					"text icon": "text icon",
+					"icon outline": "icon outline",
 					primary: "primary",
 					"primary text": "primary text",
 					"primary icon": "primary icon",
+					"primary icon outline": "primary icon outline",
 					"primary text icon": "primary text icon",
 					"primary outline": "primary outline",
 					"hero-cta": "hero-cta",
@@ -45,6 +47,7 @@ storiesOf("4 Base UI Components/Base UI", module)
 					secondary: "secondary",
 					"secondary text": "secondary text",
 					"secondary icon": "secondary icon",
+					"secondary icon outline": "secondary icon outline",
 					"secondary text icon": "secondary text icon",
 					"secondary outline": "secondary outline",
 					success: "success",
@@ -86,6 +89,9 @@ storiesOf("4 Base UI Components/Base UI", module)
 				<base-button design="primary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+				<base-button design="primary icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 				<base-button design="primary text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
@@ -107,6 +113,9 @@ storiesOf("4 Base UI Components/Base UI", module)
 				<base-button design="secondary icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
+				<base-button design="secondary icon outline">
+					<base-icon source="material" icon="home"/>
+				</base-button>
 				<base-button design="secondary text icon">
 					<base-icon source="material" icon="home"/>
 				</base-button>
@@ -116,6 +125,9 @@ storiesOf("4 Base UI Components/Base UI", module)
 				<base-button design="outline">outline</base-button>
 				<base-button design="text">text</base-button>
 				<base-button design="icon">
+					<base-icon source="material" icon="home"/>
+				</base-button>
+				<base-button design="icon outline">
 					<base-icon source="material" icon="home"/>
 				</base-button>
 				<base-button design="text icon">

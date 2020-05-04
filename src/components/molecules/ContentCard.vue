@@ -1,10 +1,16 @@
 <template>
-	<base-card v-bind="$attrs">
-		<div class="content-card">
-			<template v:slot:content>
-				<div class="content">
-					<div class="content__img">
-						<div class="img-container">
+	<base-link
+		class="title-link"
+		:to="{ name: 'content-id', params: { id: resource.ref.id } }"
+		:no-style="true"
+	>
+		<base-card v-bind="$attrs">
+			<div class="content-card">
+				<template v:slot:content>
+					<div class="content">
+						<div class="content__img">
+							<div class="img-container">
+								<!--
 							<base-button
 								v-if="multiSelectEnabled"
 								design="none"
@@ -13,30 +19,31 @@
 							>
 								<base-icon source="material" :icon="checkboxIconSelector" />
 							</base-button>
-							<div class="content__img-background-gradient" />
+							-->
 
-							<img
-								:src="resource.preview.url"
-								alt="content-thumbnail"
-								class="content__img-thumbnail"
-							/>
+								<div class="content__img-background-gradient" />
 
-							<img class="content__img-icon" src="@assets/icons/ic_image.svg" />
+								<img
+									:src="resource.preview.url"
+									alt="content-thumbnail"
+									class="content__img-thumbnail"
+								/>
+
+								<base-icon
+									:source="getTypeIcon(resource.mimetype).iconSource"
+									:icon="getTypeIcon(resource.mimetype).icon"
+									class="content__img-icon"
+								/>
+							</div>
 						</div>
-					</div>
-					<base-link
-						:href="resource.contentUrl"
-						target="_blank"
-						:no-style="true"
-					>
 						<h6 class="content__title">{{ resource.name }}</h6>
-					</base-link>
-				</div>
-			</template>
-			<template v:slot:footer>
-				<div class="footer">
-					<div class="footer__separator"></div>
-					<div class="footer__content">
+					</div>
+				</template>
+				<template v:slot:footer>
+					<div class="footer">
+						<div class="footer__separator"></div>
+						<div class="footer__content">
+							<!--
 						<base-button design="text icon" @click="bookmarkHandler">
 							<base-icon
 								class="footer__content-icon"
@@ -44,55 +51,50 @@
 								:icon="bookmarkIconSelector"
 							/>
 						</base-button>
-						<base-button
-							v-if="showAddAction"
-							design="text icon"
-							@click="plusHandler"
-						>
-							<base-icon
-								class="footer__content-icon"
-								source="material"
-								icon="add_box"
-							/>
-						</base-button>
-						<div class="footer__icon-container">
-							<div class="footer_more">
-								<base-button design="text icon" @click="openMenu">
-									<base-icon
-										class="footer__content-icon"
-										source="material"
-										icon="more_vert"
+						-->
+
+							<div class="footer__icon-container">
+								<div class="footer_more">
+									<base-button
+										design="text icon"
+										@click.prevent="menuActive = true"
+									>
+										<base-icon
+											class="footer__content-icon"
+											source="material"
+											icon="more_vert"
+										/>
+									</base-button>
+									<context-menu
+										:show.sync="menuActive"
+										anchor="bottom-right"
+										:actions="actions"
+										@copy="handleCopy"
+										@share="handleShare"
+										@delete="handleDelete"
+										@report="handleReport"
 									/>
-								</base-button>
-								<context-menu
-									:show.sync="menuActive"
-									anchor="bottom-right"
-									:actions="actions"
-									@copy="handleCopy"
-									@share="handleShare"
-									@delete="handleDelete"
-									@report="handleReport"
-								/>
+								</div>
 							</div>
 						</div>
 						<add-content-modal
 							:show-copy-modal.sync="copyModalActive"
-							:updatedid="id"
-							:url="url"
-							:client="client"
-							:title="title"
+							:updatedid="resource.ref.id"
+							:url="resource.contentUrl"
+							:title="resource.title"
 						/>
 					</div>
-				</div>
-			</template>
-		</div>
-	</base-card>
+				</template>
+			</div>
+		</base-card>
+	</base-link>
 </template>
 
 <script>
 import BaseLink from "@components/base/BaseLink";
 import ContextMenu from "@components/molecules/ContextMenu";
 import AddContentModal from "@components/molecules/AddContentModal";
+import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {
@@ -100,6 +102,7 @@ export default {
 		ContextMenu,
 		AddContentModal,
 	},
+	mixins: [contentMeta],
 	props: {
 		resource: { type: Object, default: () => {} },
 	},
@@ -215,8 +218,7 @@ export default {
 			top: 40%;
 			left: 40%;
 			z-index: var(--layer-dropdown);
-			width: 3.5rem;
-			padding: var(--space-sm);
+			font-size: var(--space-xl-3);
 			color: var(--color-gray-dark);
 			background-color: var(--color-white);
 			border-radius: var(--radius-round);
@@ -283,5 +285,9 @@ export default {
 		justify-content: flex-end;
 		width: 100%;
 	}
+}
+
+.title-link {
+	border: none;
 }
 </style>

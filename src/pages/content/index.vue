@@ -1,7 +1,7 @@
 <template>
 	<section class="content">
 		<div
-			v-if="scrollY > backToTopScrollYLimit && resources.nodes.length > 0"
+			v-if="scrollY > backToTopScrollYLimit && resources.data.length > 0"
 			class="content__back-to-top"
 		>
 			<floating-fab
@@ -20,47 +20,47 @@
 							: 'content__searchbar'
 					"
 					placeholder="Lernstore durchsuchen"
-					:loading="loading"
-					@keyup:enter="transitionHandler"
+					@keyup:enter="enterKeyHandler"
 				/>
 				<transition name="fade">
 					<span v-if="!firstSearch" class="content__container">
 						<p class="content__total">
 							<span v-if="searchQuery.length > 0">
-								{{ resources.pagination.total }}
+								{{ resources.total }}
 								{{ $t("pages.content.index.search_results") }} "{{
 									searchQuery
 								}}"
 							</span>
 							<span v-else>
-								{{ resources.pagination.total }}
+								{{ resources.total }}
 								{{ $t("pages.content.index.search_resources") }}
 							</span>
 						</p>
 						<div
-							v-if="resources.nodes.length === 0 && !loading"
+							v-if="resources.data.length === 0 && !loading"
 							class="content__no-results"
 						>
 							<content-empty-state />
 						</div>
 						<base-grid column-width="14rem">
 							<content-card
-								v-for="resource of resources.nodes"
+								v-for="resource of resources.data"
 								:key="resource.ref.id"
 								class="card"
 								:resource="resource"
 							/>
 						</base-grid>
-						<base-spinner
-							v-if="loading && resources.nodes.length !== 0"
-							class="content__spinner"
-							color="var(--color-primary)"
-						/>
 					</span>
 				</transition>
 			</div>
-			<edusharing-footer />
+			<base-spinner
+				v-if="loading"
+				class="spinner mt--xl-2"
+				color="var(--color-tertiary)"
+				size="xlarge"
+			/>
 		</div>
+		<edusharing-footer class="content__footer" />
 	</section>
 </template>
 
@@ -91,6 +91,7 @@ export default {
 			backToTopScrollYLimit: 115,
 			firstSearch: true,
 			activateTransition: false,
+			prevRoute: null,
 		};
 	},
 	computed: {
@@ -107,8 +108,8 @@ export default {
 		},
 		query() {
 			const query = {
-				count: 10,
-				from: 0,
+				$limit: 10,
+				$skip: 0,
 			};
 			if (this.searchQuery) {
 				query["searchQuery"] = this.searchQuery;
@@ -129,35 +130,47 @@ export default {
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
-			if (to === from) {
+			if (to === from || !to) {
+				this.firstSearch = true;
+				this.$router.push({
+					query: { q: undefined },
+				});
+				this.$store.commit("content/clearResources");
 				return;
 			}
-			/**
-			 * FOR ALTERNATIVE IMPLEMENTATION:
-			 * Activate transition after 3 key presses
-			 *
-			 * if (this.searchQuery.length >= 3) {
-			 *	this.transitionHandler();
-			 * }
-			 */
 			this.$options.debounce = setInterval(() => {
 				clearInterval(this.$options.debounce);
-				this.searchContent();
+				this.$router.push({
+					query: {
+						q: this.searchQuery,
+					},
+				});
 			}, 500);
 		},
 		resources() {
 			return this.resources;
 		},
 	},
+	mounted() {
+		const initialSearchQuery = this.$route.query.q;
+		if (initialSearchQuery) {
+			this.searchQuery = initialSearchQuery;
+			this.firstSearch = false;
+			this.activateTransition = true;
+		}
+	},
 	methods: {
 		async addContent() {
-			this.query["from"] += this.query["count"];
-			await this.$store.dispatch("content/addResources", this.query);
+			if (this.query.$skip < this.resources.total) {
+				this.query.$skip += this.query.$limit;
+				await this.$store.dispatch("content/addResources", this.query);
+			}
 		},
 		async searchContent() {
 			await this.$store.dispatch("content/getResources", this.query);
 		},
-		transitionHandler() {
+		enterKeyHandler() {
+			this.searchContent();
 			this.activateTransition = true;
 			setTimeout(() => {
 				this.firstSearch = false;
@@ -178,7 +191,7 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	height: 100%;
+	padding: 0 var(--space-lg);
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -190,15 +203,14 @@ export default {
 		width: 100%;
 		padding: var(--space-md) 0;
 		margin: var(--space-md) 0;
-		transition: transform 0.7s;
-		transform: scale(1) translateY(0%);
+		transition: margin 0.7s;
+		transform: scale(1);
 	}
 	&__total {
 		display: flex;
 		align-items: center;
-		justify-content: flex-end;
+		justify-content: flex-start;
 		width: 100%;
-		color: var(--color-gray);
 	}
 	&__no-results {
 		margin-top: var(--space-md);
@@ -206,14 +218,20 @@ export default {
 	&__spinner {
 		margin: var(--space-lg) 0;
 	}
+	&__footer {
+		align-self: flex-end;
+	}
+	.spinner {
+		align-self: center;
+	}
 }
 
 .first-search {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
-		margin: var(--space-md) 0;
-		transform: scale(1.3) translateY(250%);
+		margin: var(--space-xl-5) var(--space-md) 0;
+		transform: scale(1.3);
 	}
 }
 
