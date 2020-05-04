@@ -27,8 +27,7 @@
 						:icon="bookmarkIconSelector"
 					/>
 				</base-button>
-				-->
-		</div>
+				--></div>
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
@@ -105,16 +104,29 @@
 					</div>
 				</div>
 			</div>
-			<base-button design="hero-cta" class="floating-button" size="large">
+			<base-button
+				design="hero-cta"
+				class="floating-button"
+				size="large"
+				@click="handleCopy"
+			>
 				<base-icon source="material" icon="add" />
 				{{ $t("pages.content._id.addToTopic") }}
 			</base-button>
 		</div>
+		<add-content-modal
+			:show-copy-modal.sync="copyModalActive"
+			:updatedid="resource.ref.id"
+			:url="resource.contentUrl"
+			:title="resource.title"
+		/>
 	</div>
 </template>
 
 <script>
 import dayjs from "dayjs";
+import AddContentModal from "@components/molecules/AddContentModal";
+
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";
 
@@ -126,6 +138,9 @@ const getMetadataAttribute = (properties, key) => {
 };
 
 export default {
+	components: {
+		AddContentModal,
+	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, elementIsInTop],
 	props: {
@@ -139,6 +154,7 @@ export default {
 			dayjs,
 			isBookmarked: false,
 			menuActive: false,
+			copyModalActive: false,
 			actions: [
 				{
 					event: "copy",
@@ -210,6 +226,10 @@ export default {
 		},
 		goBack() {
 			this.$router.back();
+		},
+		handleCopy() {
+			this.copyModalActive = true;
+			this.$store.dispatch("courses/find");
 		},
 	},
 };
