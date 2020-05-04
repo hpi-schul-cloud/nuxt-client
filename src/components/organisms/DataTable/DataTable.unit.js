@@ -3,6 +3,7 @@ import DataTable from "./DataTable";
 import { localDataPrefix } from "@mixins/controllableData";
 
 const defaultData = tableData(50);
+const mobile = 750;
 
 function getWrapper(attributes, options) {
 	return mount(DataTable, {
@@ -50,7 +51,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			await wrapper.vm.$nextTick();
 			const renderedData = await getTableRowsContent(wrapper);
 			expect(renderedData).toHaveLength(pageSize);
-			if (window.length > 750) {
+			if (window.length > mobile) {
 				renderedData.forEach((row, index) => {
 					const testIndex = pageSize * (page - 1) + index;
 					expect(JSON.stringify(bigData[testIndex])).toContain(row[0]);
@@ -74,7 +75,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			});
 			const renderedData = await getTableRowsContent(wrapper);
 			expect(renderedData).toHaveLength(pageSize);
-			if (window.length > 750) {
+			if (window.length > mobile) {
 				renderedData.forEach((row, index) => {
 					expect(JSON.stringify(bigData[index])).toContain(row[0]);
 				});
@@ -151,7 +152,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	});
 
 	describe("sort", () => {
-		if (window.length > 750) {
+		if (window.length > mobile) {
 			const sortedFirstItem = "AAA";
 			const sortedOtherItems = "LastItem";
 			const testItems = 4;
@@ -304,7 +305,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	});
 
 	describe("selection", () => {
-		if (window.length > 750) {
+		if (window.length > mobile) {
 			const total = 10;
 			const testData = tableData(total, (index) => ({
 				id: String(index), // simplify IDs of test data for easier testing
@@ -535,7 +536,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	});
 
 	describe("slots", () => {
-		if (window.length > 750) {
+		if (window.length > mobile) {
 			const smallData = tableData(1);
 			it("renders scopedSlots with data", async () => {
 				const testSlotContent = `some random slot content`;

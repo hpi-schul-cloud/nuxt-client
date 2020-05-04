@@ -2,6 +2,7 @@ import BackendDataTable from "./BackendDataTable";
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
 
 const defaultData = tableData(5);
+const mobile = 750;
 
 function getWrapper(attributes, options) {
 	return mount(BackendDataTable, {
@@ -35,7 +36,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			var wrapper = getWrapper();
 
 			expect(wrapper.findAll("tbody tr")).toHaveLength(defaultData.length);
-			if (window.length > 750) {
+			if (window.length > mobile) {
 				expect(wrapper.find("thead tr").findAll(".text-content")).toHaveLength(
 					tableColumns.length
 				);
@@ -95,7 +96,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			expect(wrapper.emitted("update:current-page")).toStrictEqual([[2]]);
 		});
 	});
-	if (window.length > 750) {
+	if (window.length > mobile) {
 		describe("sort", () => {
 			const getSortButton = (wrapper, text = "Vorname") =>
 				wrapper
