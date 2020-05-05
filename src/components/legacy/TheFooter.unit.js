@@ -4,7 +4,7 @@ describe("@components/legacy/TheFooter", () => {
 	it(...isValidComponent(TheFooter));
 
 	const $theme = {
-		name: "test"
+		name: "test",
 	};
 	it("check that all links are rendered in the footer", () => {
 		const wrapper = shallowMount(TheFooter, {
@@ -13,7 +13,8 @@ describe("@components/legacy/TheFooter", () => {
 					auth: {
 						state: () => ({
 							school: {
-								documentBaseDir: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/",
+								documentBaseDir:
+									"https://s3.hidrive.strato.com/schul-cloud-hpi/default/",
 							},
 						}),
 					},
