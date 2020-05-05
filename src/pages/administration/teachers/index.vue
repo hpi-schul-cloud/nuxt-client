@@ -8,7 +8,7 @@
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
@@ -32,24 +32,23 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				{{ dayjs(data).format("DD.MM.YYYY") }}
+				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
-				<span v-if="data && data.consentStatus === 'ok'">
+				<span class="text-content">
 					<base-icon
+						v-if="data && data.consentStatus === 'ok'"
 						source="material"
 						icon="check"
 						color="var(--color-success)"
 					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
+						v-else-if="data && data.consentStatus === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
-				<span v-else />
 			</template>
 
 			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
@@ -120,19 +119,17 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.get(
+				"filter",
+				"pages.administration.teachers.index"
+			),
+			test: this.$uiState,
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.itemsPerPage"
-					)
-				) || 10,
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			breadcrumbs: [
@@ -244,6 +241,22 @@ export default {
 			);
 		},
 	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.get("filter", "pages.administration.teachers.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
+				query,
+			});
+		},
+	},
 	created(ctx) {
 		this.find();
 	},
@@ -268,20 +281,18 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.teachers.index.currentPage",
-				page
-			);
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.teachers.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
@@ -358,10 +369,6 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
-		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.onUpdateCurrentPage(1);
 		},
 	},
 };

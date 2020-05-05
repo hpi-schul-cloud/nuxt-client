@@ -211,9 +211,10 @@ export default {
 			menuOpen: false,
 			page: 1,
 			limit:
-				localStorage.getItem(
-					"pages.administration.datasources.index.itemsPerPage"
-				) || 25,
+				this.$uiState.get(
+					"pagination",
+					"pages.administration.datasources.index"
+				).limit || 25,
 		};
 	},
 	computed: {
@@ -390,10 +391,13 @@ export default {
 		onCurrentPageChange(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.datasources.index.itemsPerPage",
-				limit
+			// save user settings in uiState
+			this.$uiState.set(
+				"pagination",
+				"pages.administration.datasources.index",
+				{
+					itemsPerPage: limit,
+				}
 			);
 			this.find();
 		},

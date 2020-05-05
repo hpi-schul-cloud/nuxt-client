@@ -13,7 +13,7 @@ import proxy from "./proxy";
 
 describe("@serverMiddleware/proxy", () => {
 	it("use legacy proxy for non GET requests", async () => {
-		const req = { method: "POST" };
+		const req = { method: "POST", url: "administration/students/" };
 		const next = getNextMock();
 		const result = await proxy(req, undefined, next);
 		expect(next.mock.calls).toHaveLength(0);

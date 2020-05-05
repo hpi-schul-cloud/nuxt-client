@@ -9,7 +9,7 @@
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
@@ -30,31 +30,29 @@
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				{{ dayjs(data).format("DD.MM.YYYY") }}
+				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
-				<span v-if="data && data.consentStatus === 'ok'">
+				<span class="text-content">
 					<base-icon
+						v-if="data && data.consentStatus === 'ok'"
 						source="custom"
 						icon="doublecheck"
 						color="var(--color-success)"
 					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'parentsAgreed'">
 					<base-icon
+						v-else-if="data && data.consentStatus === 'parentsAgreed'"
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
+						v-else-if="data && data.consentStatus === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
-				<span v-else />
 			</template>
 			<template
 				v-if="schoolInternallyManaged"
@@ -116,7 +114,6 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
-	layout: "loggedInFull",
 	components: {
 		DataFilter,
 		BackendDataTable,
@@ -129,24 +126,19 @@ export default {
 			type: Boolean,
 		},
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
+
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.get(
+				"filter",
+				"pages.administration.students.index"
+			),
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.get("pagination", "pages.administration.students.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.itemsPerPage"
-					)
-				) || 10,
+				this.$uiState.get("pagination", "pages.administration.students.index")
+					.limit || 10,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			tableColumns: [
@@ -249,6 +241,11 @@ export default {
 			filters: studentFilter(this),
 		};
 	},
+
+	layout: "loggedInFull",
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
+	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
@@ -267,6 +264,22 @@ export default {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
+		},
+	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.get("filter", "pages.administration.students.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.set("filter", "pages.administration.students.index", {
+				query,
+			});
 		},
 	},
 	created(ctx) {
@@ -294,20 +307,18 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.students.index.currentPage",
-				page
-			);
+			this.$uiState.set("pagination", "pages.administration.students.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.students.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.set("pagination", "pages.administration.students.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
@@ -405,10 +416,6 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
-		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.onUpdateCurrentPage(1);
 		},
 	},
 };
