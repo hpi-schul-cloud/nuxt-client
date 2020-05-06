@@ -27,3 +27,7 @@ Vue.use(BaseDialog);
 
 // EventBus
 import "./eventBus";
+
+// uiState
+import uiState from "./uiState";
+Vue.use(uiState);

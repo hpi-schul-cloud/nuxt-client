@@ -31,23 +31,18 @@
 					class="th-wrap"
 					@click.stop="sort(column)"
 				>
-					{{ column.label }}
-					<base-icon
-						v-if="sortBy === column.field"
-						:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
-						source="fa"
-					/>
-					<base-icon
-						v-else-if="column.sortable"
-						icon="sort"
-						source="fa"
-						style="color: var(--color-gray);"
-					/>
-				</BaseButton>
-
-				<div v-else class="th-wrap">
-					<span>{{ column.label }}</span>
-				</div>
+        <span>{{ column.label }}</span>
+				<base-icon
+					v-if="sortBy === column.field"
+					:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
+					source="custom"
+				/>
+				<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
+			</BaseButton>
+			<div v-else class="th-wrap">
+				<span>{{ column.label }}</span>
+			</div>
+					
 			</slot>
 		</th>
 	</tr>
@@ -158,7 +153,12 @@ export default {
 			justify-content: space-between;
 			width: 100%;
 			padding: var(--space-xs);
+			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
+			svg {
+				font-size: calc(1.5 * var(--text-lg));
+				color: var(--color-tertiary);
+			}
 		}
 		.select-wrap {
 			padding: var(--space-xs);
