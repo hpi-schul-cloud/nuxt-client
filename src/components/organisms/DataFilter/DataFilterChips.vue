@@ -48,7 +48,7 @@ export default {
 
 $transition: background var(--duration-transition-medium)
 	cubic-bezier(0.23, 1, 0.32, 1);
-$mobile: var(--breakpoint-tablet);
+$mobile: 750px; // css variables do not work with media queries
 
 .chips {
 	display: flex;
@@ -130,7 +130,7 @@ $mobile: var(--breakpoint-tablet);
 	.chip {
 		justify-content: space-between;
 		margin-right: 0;
-		margin-bottom: var(--space-xs);
+		margin-bottom: var(--space-sm);
 		span.label {
 			overflow: hidden;
 			text-overflow: ellipsis;
