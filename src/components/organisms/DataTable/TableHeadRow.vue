@@ -31,18 +31,17 @@
 					class="th-wrap"
 					@click.stop="sort(column)"
 				>
-        <span>{{ column.label }}</span>
-				<base-icon
-					v-if="sortBy === column.field"
-					:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
-					source="custom"
-				/>
-				<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
-			</BaseButton>
-			<div v-else class="th-wrap">
-				<span>{{ column.label }}</span>
-			</div>
-					
+					<span>{{ column.label }}</span>
+					<base-icon
+						v-if="sortBy === column.field"
+						:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
+						source="custom"
+					/>
+					<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
+				</BaseButton>
+				<div v-else class="th-wrap">
+					<span>{{ column.label }}</span>
+				</div>
 			</slot>
 		</th>
 	</tr>
