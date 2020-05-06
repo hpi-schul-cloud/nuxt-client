@@ -22,7 +22,10 @@ jobs:
           ref: ${{ steps.prcomm.outputs.BRANCH_NAME }}
       - name: install dependencies
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        run: npm ci --prefer-offline --no-audit
+        # apt-get is to fix issue: https://github.com/puppeteer/puppeteer/issues/5704#issuecomment-618372226
+        run: |
+          sudo apt-get update && sudo apt-get install -y libgbm1
+          npm ci --prefer-offline --no-audit
       - name: build storybook
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         run: "npm run build:storybook"
