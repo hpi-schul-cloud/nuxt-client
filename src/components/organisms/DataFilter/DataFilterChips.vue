@@ -48,11 +48,13 @@ export default {
 
 $transition: background var(--duration-transition-medium)
 	cubic-bezier(0.23, 1, 0.32, 1);
+$mobile: var(--breakpoint-tablet);
 
 .chips {
 	display: flex;
 	flex-wrap: nowrap;
 }
+
 .chip {
 	display: inline-flex;
 	flex-wrap: nowrap;
@@ -116,6 +118,23 @@ $transition: background var(--duration-transition-medium)
 		font-size: var(--text-md);
 		font-weight: var(--font-weight-bold);
 		color: var(--color-tertiary);
+	}
+}
+
+@media (max-width: $mobile) {
+	.chips {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+	}
+	.chip {
+		justify-content: space-between;
+		margin-right: 0;
+		margin-bottom: var(--space-xs);
+		span.label {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
 }
 </style>
