@@ -1,5 +1,5 @@
 import Theme from "@theme/config";
-const env = require("../../nuxt.config")
+const env = require("../../nuxt.config");
 
 export default ({ app, store }) => {
 	const { user } = store.state.auth;
@@ -19,8 +19,8 @@ export default ({ app, store }) => {
 		sampleRate: env.SENTRY_SAMPLE_RATE,
 	});
 
-	app.use(Sentry.Handlers.requestHandler());
-}
+		app.use(Sentry.Handlers.requestHandler());
+	}
 	// eslint-disable-next-line no-console
 	console.log("sentry error logging initialized");
 };
