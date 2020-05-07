@@ -14,10 +14,10 @@ export default ({ app, store }) => {
 		}
 	});
 	if (env.SENTRY_DSN) {
-	Sentry.init({
-		dsn: env.SENTRY_DSN,
-		sampleRate: env.SENTRY_SAMPLE_RATE,
-	});
+		Sentry.init({
+			dsn: env.SENTRY_DSN,
+			sampleRate: env.SENTRY_SAMPLE_RATE,
+		});
 
 		app.use(Sentry.Handlers.requestHandler());
 	}
