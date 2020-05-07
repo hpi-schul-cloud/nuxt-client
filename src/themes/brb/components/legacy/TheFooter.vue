@@ -67,10 +67,6 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					to: "/datenschutz",
-					text: this.$t("components.legacy.footer.privacy_policy"),
-				},
-				{
 					href: defaultDocuments.specificFiles().termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
