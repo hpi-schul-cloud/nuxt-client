@@ -363,7 +363,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-thead {
+thead,
+tbody {
 	font-size: var(--text-md);
 }
 .table-content-wrapper {

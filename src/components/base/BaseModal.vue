@@ -99,7 +99,7 @@ export default {
 	display: table;
 	width: 100%;
 	height: 100%;
-	background-color: var(--color-overlay);
+	background-color: var(--color-overlay-dark);
 	transition: opacity var(--duration-transition-medium) ease;
 }
 
