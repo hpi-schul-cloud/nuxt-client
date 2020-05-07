@@ -6,7 +6,11 @@
 		</h1>
 		{{ $t("pages.administration.students.consent.info") }}
 		<div>
-			<step-progress :steps="progressSteps" :current-step="currentStep" />
+			<step-progress
+				id="progressbar"
+				:steps="progressSteps"
+				:current-step="currentStep"
+			/>
 		</div>
 
 		<section v-if="currentStep === 0">
@@ -32,8 +36,8 @@
 		</section>
 
 		<section v-if="currentStep === 1">
-			<h4>{{ $t("pages.administration.students.consent.steps.complete") }}</h4>
-			{{ $t("pages.administration.students.consent.steps.complete.info") }}
+			<h4>{{ $t("pages.administration.students.consent.steps.register") }}</h4>
+			{{ $t("pages.administration.students.consent.steps.register.info") }}
 			<backend-data-table
 				:columns="tableColumns"
 				:data="tableData"
@@ -53,11 +57,20 @@
 				"
 			/>
 
+			<p v-if="checkWarning" style="color: var(--color-danger);">
+				<base-icon source="material" icon="report_problem" />
+				{{
+					$t(
+						"pages.administration.students.consent.steps.register.confirm.warn"
+					)
+				}}
+			</p>
+
 			<base-button design="text" @click="cancelWarning = true">{{
 				$t("common.actions.cancel")
 			}}</base-button>
-			<base-button :disabled="!check" design="secondary" @click="next">{{
-				$t("pages.administration.students.consent.steps.complete.next")
+			<base-button design="secondary" @click="next">{{
+				$t("pages.administration.students.consent.steps.register.next")
 			}}</base-button>
 		</section>
 
@@ -83,6 +96,23 @@
 			<base-button design="secondary" @click="download">{{
 				$t("pages.administration.students.consent.steps.download.next")
 			}}</base-button>
+		</section>
+
+		<section v-if="currentStep === 3">
+			<base-content-container>
+				<h4 class="centered">
+					{{ $t("pages.administration.students.consent.steps.success") }}
+				</h4>
+				<img
+					class="mb--md"
+					:src="image"
+					:alt="$t('pages.administration.students.consent.steps.success.alt')"
+				/>
+
+				<base-button design="secondary outline" @click="success">{{
+					$t("pages.administration.students.consent.steps.success.back")
+				}}</base-button>
+			</base-content-container>
 		</section>
 
 		<base-modal :active.sync="cancelWarning">
@@ -124,6 +154,7 @@ import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import SafelyConnectedImage from "@assets/img/safely_connected.png";
 dayjs.locale("de");
 
 export default {
@@ -135,6 +166,7 @@ export default {
 	meta: {
 		requiredPermissions: ["STUDENT_CREATE"],
 	},
+	layout: "loggedInFull",
 	data() {
 		return {
 			breadcrumbs: [
@@ -165,6 +197,7 @@ export default {
 			],
 			currentStep: 0,
 			check: false,
+			checkWarning: false,
 			cancelWarning: false,
 			tableColumns: [
 				{
@@ -188,6 +221,7 @@ export default {
 					sortable: false,
 				},
 			],
+			image: SafelyConnectedImage,
 		};
 	},
 	computed: {
@@ -225,9 +259,22 @@ export default {
 			});
 		},
 		next() {
-			this.currentStep += 1;
+			if (this.currentStep === 1 && this.check === false) {
+				this.checkWarning = true;
+			} else {
+				if (this.currentStep === 1) {
+					this.$toast.success(
+						this.$t(
+							"pages.administration.students.consent.steps.register.success"
+						)
+					);
+				}
+				this.currentStep += 1;
+			}
 		},
-		download() {},
+		download() {
+			this.next();
+		},
 		cancel() {
 			this.$store.commit("bulk-consent/setSelectedStudents", {
 				students: [],
@@ -240,9 +287,6 @@ export default {
 			this.$toast.error(this.$t("pages.administration.students.consent.error"));
 		},
 		success() {
-			this.$toast.success(
-				this.$t("pages.administration.students.consent.success")
-			);
 			this.$router.push({
 				path: `/administration/students`,
 			});
@@ -251,3 +295,20 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+.button {
+	float: right;
+}
+
+.centered {
+	text-align: center;
+}
+
+#progressbar {
+	display: inline-block;
+	margin-top: var(--space-md);
+}
+</style>
