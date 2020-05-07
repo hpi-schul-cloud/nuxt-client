@@ -7,8 +7,6 @@ export default ({ app, store }) => {
 		scope.setLevel("warn");
 		scope.setTag("theme", Theme.name);
 		scope.setTag("domain", window.location.host);
-		scope.setTag('sha', sha);
-
 
 		// populate userdata
 		if (user && user.schoolId) {
@@ -18,8 +16,6 @@ export default ({ app, store }) => {
 	if (env.SENTRY_DSN) {
 	Sentry.init({
 		dsn: env.SENTRY_DSN,
-		environment: app.get('env'),
-		release: version,
 		sampleRate: env.SENTRY_SAMPLE_RATE,
 	});
 
