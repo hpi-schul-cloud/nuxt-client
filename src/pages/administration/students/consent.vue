@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
@@ -69,7 +70,7 @@
 			<base-button design="text" @click="cancelWarning = true">{{
 				$t("common.actions.cancel")
 			}}</base-button>
-			<base-button design="secondary" @click="next">{{
+			<base-button design="secondary" @click="register">{{
 				$t("pages.administration.students.consent.steps.register.next")
 			}}</base-button>
 		</section>
@@ -183,7 +184,6 @@ export default {
 					text: this.$t("pages.administration.students.consent.title"),
 				},
 			],
-			roleName: "student",
 			progressSteps: [
 				{
 					name: this.$t("pages.administration.students.consent.steps.complete"),
@@ -253,23 +253,38 @@ export default {
 					$in: this.selectedStudentIds,
 				},
 			};
-
 			this.$store.dispatch("users/findStudents", {
 				query,
 			});
 		},
 		next() {
-			if (this.currentStep === 1 && this.check === false) {
+			this.currentStep += 1;
+		},
+		register() {
+			if (this.check === false) {
 				this.checkWarning = true;
 			} else {
-				if (this.currentStep === 1) {
-					this.$toast.success(
-						this.$t(
-							"pages.administration.students.consent.steps.register.success"
-						)
-					);
-				}
-				this.currentStep += 1;
+				const users = this.tableData.map(s => {
+					return {
+						userId: s.id,
+						birthday: s.birthday,
+						password: s.password,
+						parent_privacyConsent: true,
+						parent_termsOfUseConsent: true,
+						privacyConsent: true,
+						termsOfUseConsent: true
+					}
+				});
+				console.log(users);
+				this.$store.dispatch("bulk-consent/register", {
+					users
+				});
+				this.$toast.success(
+					this.$t(
+						"pages.administration.students.consent.steps.register.success"
+					)
+				);
+				this.next()
 			}
 		},
 		download() {
@@ -302,11 +317,9 @@ export default {
 .button {
 	float: right;
 }
-
 .centered {
 	text-align: center;
 }
-
 #progressbar {
 	display: inline-block;
 	margin-top: var(--space-md);

@@ -1,4 +1,12 @@
-export const actions = {};
+export const actions = {
+	register: async function (users) {
+		return (
+			await this.dispatch("users/skipRegistration", {
+				dataObjects: users,
+			})
+		).data
+	},
+};
 
 export const getters = {
 	selectedStudents: (state) => state.selectedStudents,

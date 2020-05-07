@@ -41,8 +41,9 @@ export default function (endpoint) {
 				commit("setCurrent", res);
 				return res;
 			},
-			async create({ commit }, payload = {}) {
-				const res = await this.$axios.$post(baseUrl, payload);
+			async create({ commit }, params = {}) {
+				const { payload, customEndpoint } = params;
+				const res = await this.$axios.$post(customEndpoint || baseUrl, payload || params);
 				commit("set", {
 					items: Array.isArray(res) ? res : [res],
 				});
