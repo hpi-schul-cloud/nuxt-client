@@ -4,7 +4,7 @@ export const actions = {
 			await this.dispatch("users/skipRegistration", {
 				dataObjects: users,
 			})
-		).data
+		).data;
 	},
 };
 

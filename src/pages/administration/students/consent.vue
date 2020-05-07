@@ -264,7 +264,7 @@ export default {
 			if (this.check === false) {
 				this.checkWarning = true;
 			} else {
-				const users = this.tableData.map(s => {
+				const users = this.tableData.map((s) => {
 					return {
 						userId: s.id,
 						birthday: s.birthday,
@@ -272,19 +272,19 @@ export default {
 						parent_privacyConsent: true,
 						parent_termsOfUseConsent: true,
 						privacyConsent: true,
-						termsOfUseConsent: true
-					}
+						termsOfUseConsent: true,
+					};
 				});
 				console.log(users);
 				this.$store.dispatch("bulk-consent/register", {
-					users
+					users,
 				});
 				this.$toast.success(
 					this.$t(
 						"pages.administration.students.consent.steps.register.success"
 					)
 				);
-				this.next()
+				this.next();
 			}
 		},
 		download() {
