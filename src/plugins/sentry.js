@@ -1,7 +1,6 @@
 import Theme from "@theme/config";
 const env = require("../../nuxt.config");
-const { Configuration } = require('@schul-cloud/commons');
-
+const { Configuration } = require("@schul-cloud/commons");
 
 export default ({ app, store }) => {
 	const { user } = store.state.auth;
@@ -15,9 +14,9 @@ export default ({ app, store }) => {
 			scope.setTag({ schoolId: user.schoolId });
 		}
 	});
-	if (Configuration.has('SENTRY_DSN')) {
+	if (Configuration.has("SENTRY_DSN")) {
 		Sentry.init({
-			dsn: Configuration.get('SENTRY_DSN'),
+			dsn: Configuration.get("SENTRY_DSN"),
 			sampleRate: env.SENTRY_SAMPLE_RATE,
 		});
 
