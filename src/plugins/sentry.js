@@ -2,7 +2,6 @@ import Theme from "@theme/config";
 const env = require("../../nuxt.config");
 const { Configuration } = require('@schul-cloud/commons');
 
-
 export default ({ app, store }) => {
 	const { user } = store.state.auth;
 	app.$sentry.configureScope((scope) => {
