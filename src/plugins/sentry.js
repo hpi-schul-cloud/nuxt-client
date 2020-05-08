@@ -14,9 +14,9 @@ export default ({ app, store }) => {
 			scope.setTag({ schoolId: user.schoolId });
 		}
 	});
-	if (Configuration.has('SENTRY_DSN')) {
+	if (Configuration.has("SENTRY_DSN")) {
 		Sentry.init({
-			dsn: Configuration.get('SENTRY_DSN'),
+			dsn: Configuration.get("SENTRY_DSN"),
 			sampleRate: env.SENTRY_SAMPLE_RATE,
 		});
 
