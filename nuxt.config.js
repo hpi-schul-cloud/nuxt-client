@@ -24,7 +24,7 @@ module.exports = {
 			process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
 		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 		SC_THEME: process.env.SC_THEME,
-		SENTRY_SAMPLE_RATE: parseFloat(process.env.SENTRY_SAMPLE_RATE) || 1.0,
+		SENTRY_SAMPLE_RATE: process.env.SENTRY_SAMPLE_RATE ? parseFloat(process.env.SENTRY_SAMPLE_RATE) : 1.0,
 		SENTRY_DSN: process.env.SENTRY_DSN,
 	},
 	/*
