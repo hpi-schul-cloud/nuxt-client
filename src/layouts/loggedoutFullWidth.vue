@@ -3,7 +3,18 @@
 		<navigation-bar
 			:links="links"
 			:img="require('@assets/img/logo/logo-image-color.svg')"
-		/>
+		>
+			<template v-slot:actions>
+				<base-button design="secondary outline" to="/community">{{
+					$t("common.labels.register")
+				}}</base-button>
+				<base-button design="secondary" to="/login">
+					<base-icon source="fa" icon="sign-in" />
+					{{ $t("common.labels.login") }}
+				</base-button>
+			</template>
+		</navigation-bar>
+
 		<div class="container">
 			<Nuxt />
 		</div>
@@ -12,10 +23,12 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
+import BaseButton from "@components/base/BaseButton";
 
 export default {
 	components: {
 		NavigationBar,
+		BaseButton,
 	},
 
 	data() {
