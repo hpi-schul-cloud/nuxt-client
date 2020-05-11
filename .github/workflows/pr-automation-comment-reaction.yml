@@ -22,7 +22,10 @@ jobs:
           ref: ${{ steps.prcomm.outputs.BRANCH_NAME }}
       - name: install dependencies
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        run: npm ci --prefer-offline --no-audit
+        # apt-get is to fix issue: https://github.com/puppeteer/puppeteer/issues/5704#issuecomment-618372226
+        run: |
+          sudo apt-get update && sudo apt-get install -y libgbm1
+          npm ci --prefer-offline --no-audit
       - name: build storybook
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         run: "npm run build:storybook"
@@ -33,3 +36,20 @@ jobs:
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         with:
           commit_message: update screenshots
+  dependabot-recreate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: listen for PR Comments
+        uses: machine-learning-apps/actions-chatops@master
+        with:
+          TRIGGER_PHRASE: "@schul-cloud-bot tell dependabot to recreate PR"
+        env:
+          GITHUB_TOKEN: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
+        id: prcomm
+      - name: tell dependabot to recreate pr
+        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
+          issue-number: ${{ steps.prcomm.outputs.PULL_REQUEST_NUMBER }}
+          body: "@dependabot recreate"

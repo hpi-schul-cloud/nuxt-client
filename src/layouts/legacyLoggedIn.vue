@@ -21,10 +21,10 @@
 				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
 			/>
+			<slot />
 			<keep-alive>
 				<autoLogoutWarning />
 			</keep-alive>
-			<slot />
 			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
 	</div>
@@ -37,8 +37,9 @@ import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
 import UserHasRole from "@components/helpers/UserHasRole";
 import DemoBanner from "@components/legacy/DemoBanner";
-import sidebarBaseItems from "../utils/sidebarBaseItems.js";
-import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning";
+import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
+import sidebarBaseItems from "@utils/sidebarBaseItems.js";
+import toastsFromQueryString from "@mixins/toastsFromQueryString";
 
 const topbarBaseActions = [
 	{
@@ -89,6 +90,7 @@ export default {
 		UserHasRole,
 		autoLogoutWarning,
 	},
+	mixins: [toastsFromQueryString],
 	data() {
 		return {
 			sidebarBaseItems: sidebarBaseItems,

@@ -66,21 +66,10 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					innerlinks: [
-						{
-							to: "/datenschutz",
-							text:
-								this.$t("components.legacy.footer.privacy_policy") + ": HPI",
-						},
-						{
-							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
-								.privacyExemplary,
-							text:
-								this.$t("components.legacy.footer.privacy_policy") + ": Schule",
-							target: "_blank",
-							rel: "noopener",
-						},
-					],
+					href: defaultDocuments.specificFiles().termsOfUseSchool,
+					text: this.$t("components.legacy.footer.terms"),
+					target: "_blank",
+					rel: "noopener",
 				},
 				{
 					href: "https://github.com/schul-cloud/",

@@ -21,12 +21,38 @@
 		<form-datasource-login type="webuntis" :datasource-id="datasourceId">
 			<template v-slot:inputs="{ config }">
 				<base-input
+					v-model="config.schoolname"
+					type="text"
+					required="true"
+					:label="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.schoolname.label'
+						)
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.schoolname.placeholder'
+						)
+					"
+				>
+					<template v-slot:icon>
+						<base-icon source="material" icon="school" />
+					</template>
+				</base-input>
+				<base-input
 					v-model="config.username"
 					type="text"
 					required="true"
-					label="Benutzername"
-					:placeholder="'WebUntis Nutzername'"
-					class="mt--md"
+					:label="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.username.label'
+						)
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.username.placeholder'
+						)
+					"
 				>
 					<template v-slot:icon>
 						<base-icon source="custom" icon="user" />
@@ -36,9 +62,16 @@
 					v-model="config.password"
 					type="password"
 					required="true"
-					label="Passwort"
-					:placeholder="'WebUntis Passwort'"
-					class="mt--md"
+					:label="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.password.label'
+						)
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.password.placeholder'
+						)
+					"
 					autocomplete="new-password"
 				>
 					<template v-slot:icon>
@@ -49,9 +82,14 @@
 					v-model="config.url"
 					type="text"
 					required="true"
-					label="URL"
-					:placeholder="'URL der Datenquelle'"
-					class="mt--md"
+					:label="
+						$t('components.organisms.FormDatasourceLoginWebuntis.url.label')
+					"
+					:placeholder="
+						$t(
+							'components.organisms.FormDatasourceLoginWebuntis.url.placeholder'
+						)
+					"
 				/>
 			</template>
 		</form-datasource-login>
@@ -90,7 +128,7 @@ export default {
 }
 
 .icon-margin {
-	margin-right: var(--space-xxs);
+	margin-right: var(--space-xs-2);
 	margin-bottom: calc(-0.3 * (var(--space-sm)));
 	font-size: var(--text-lg);
 }

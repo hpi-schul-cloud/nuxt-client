@@ -22,6 +22,7 @@
 							:columns="columns"
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
+							@update:sort="onUpdateSort"
 						/>
 					</thead>
 					<tbody>
@@ -38,9 +39,9 @@
 						>
 							<template
 								v-for="(cmp, name) in dataRowSlots"
-								v-slot:[name]="{ data: columnData }"
+								v-slot:[name]="columnProps"
 							>
-								<slot :name="name" :data="columnData" />
+								<slot :name="name" v-bind="columnProps" />
 							</template>
 						</component>
 					</tbody>
@@ -311,6 +312,11 @@ export default {
 			},
 			immediate: true,
 		},
+		currentPage(to, from) {
+			if (to !== from) {
+				window.scrollTo({ top: 0, behavior: "smooth" });
+			}
+		},
 	},
 	methods: {
 		getValueByPath,
@@ -338,6 +344,9 @@ export default {
 					: !this.selectionKeys[rowId]
 			);
 		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.$emit("update:sort", sortBy, sortOrder);
+		},
 		onUpdateRowsPerPage(value) {
 			this.$emit("update:current-page", 1);
 			this.$emit("update:rows-per-page", value);
@@ -351,9 +360,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@styles";
-thead {
+thead,
+tbody {
 	font-size: var(--text-md);
 }
 .table-content-wrapper {

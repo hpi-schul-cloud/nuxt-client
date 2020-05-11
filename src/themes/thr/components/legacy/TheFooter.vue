@@ -66,25 +66,10 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					innerlinks: [
-						{
-							to: "/datenschutz",
-							text: "HPI",
-						},
-						{
-							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
-								.privacyExemplary,
-							text: "Muster-Schulen",
-							target: "_blank",
-							rel: "noopener",
-						},
-					],
-					text: this.$t("components.legacy.footer.privacy_policy"),
-				},
-				{
-					href:
-						"https://s3.hidrive.strato.com/schul-cloud-hpi/thr/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+					href: defaultDocuments.specificFiles().termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
+					target: "_blank",
+					rel: "noopener",
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=THR%20Schul_Cloud%20Anfrage",

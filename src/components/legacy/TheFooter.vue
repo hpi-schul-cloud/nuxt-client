@@ -72,20 +72,10 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					innerlinks: [
-						{
-							to: "/datenschutz",
-							text: "HPI",
-						},
-						{
-							href: defaultDocuments.specificFiles(this.school?.documentBaseDir)
-								.privacyExemplary,
-							text: "Muster-Schulen",
-							target: "_blank",
-							rel: "noopener",
-						},
-					],
-					text: this.$t("components.legacy.footer.privacy_policy"),
+					href: defaultDocuments.specificFiles().termsOfUseSchool,
+					text: this.$t("components.legacy.footer.privacy_policy_HPI"),
+					target: "_blank",
+					rel: "noopener",
 				},
 				{
 					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",

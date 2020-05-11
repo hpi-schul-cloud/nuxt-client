@@ -25,8 +25,11 @@
 				src="@assets/icons/sync-symbol.svg"
 				role="presentation"
 			/>
-			<strong>
-				{{ $t("components.molecules.admintablelegend.externalSync") }}
+			<strong class="external-sync-hint">
+				{{
+					($t("components.molecules.admintablelegend.externalSync",
+					{ shortName: this.$theme.short_name }))
+				}}
 				<base-link
 					class="link-style"
 					to="/administration/helpdesk"
@@ -64,6 +67,8 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+$vertically-center: auto 0;
+
 .section {
 	margin-top: var(--space-lg);
 }
@@ -99,5 +104,9 @@ export default {
 .link-style {
 	color: var(--color-black);
 	text-decoration: underline;
+}
+
+.external-sync-hint {
+	margin: $vertically-center;
 }
 </style>

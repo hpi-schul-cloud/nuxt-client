@@ -63,7 +63,7 @@ export default {
 	padding: 0;
 	color: var(--color-black);
 	text-align: center;
-	background-color: var(--color-white-transparent);
+	background-color: var(--color-overlay-light);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
 	box-shadow: var(--shadow-sm);

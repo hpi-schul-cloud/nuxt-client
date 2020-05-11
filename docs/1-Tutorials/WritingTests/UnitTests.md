@@ -65,7 +65,7 @@ describe("@components/base/BaseCard", () => {
 
 Die soeben beschriebenen Tests werden so häufig verwendet, dass wir sie ausgelagert haben. Die Nutzung ist folgendermaßen möglich:
 
-```js{4-5}
+```js {4-5}
 import BaseCard from "./BaseCard";
 
 describe("@components/base/BaseCard", () => {
@@ -78,7 +78,7 @@ describe("@components/base/BaseCard", () => {
 
 Soll das `v-model` einer Komponente getestet werden, so kann die Komponente nicht direkt gemountet werden, sondern muss per template eingebunden werden. Die Vue-Test-Utils stellen leider keine bessere Möglichkeit bereit. Das setzen der für das v-model verwendeten Prop klappt leider nicht, da der verwendete Wert nicht automatisch durch das `v-model-update-event` verändert wird.
 
-```js{8-13}
+```js {8-13}
 import BaseInput from "./BaseInput";
 
 describe("@components/base/BaseInput", () => {

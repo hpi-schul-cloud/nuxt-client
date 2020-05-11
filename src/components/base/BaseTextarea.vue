@@ -145,13 +145,17 @@ export default {
 	}
 }
 
+/deep/ .top .input-line {
+	align-items: start;
+}
+
 textarea {
 	--line-height: 30px;
 
 	width: 100%;
 	// needed to prevent default padding in chrome and safari
 	padding: 0;
-	margin-bottom: var(--space-xxs);
+	margin: 0;
 	font-size: var(--text-md);
 	line-height: var(--line-height);
 	color: var(--color-text);

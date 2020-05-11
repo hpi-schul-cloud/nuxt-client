@@ -3,7 +3,7 @@
 		:class="{
 			row: true,
 			selected,
-			highlight: Boolean((rowindex + 1) % 2),
+			highlight: isHighlighted,
 		}"
 	>
 		<td v-if="selectable">
@@ -14,6 +14,7 @@
 					:label="`Zeile ${rowindex + 1} auswählen`"
 					:label-hidden="true"
 					class="select"
+					:color="selected ? 'currentColor' : undefined"
 				/>
 			</div>
 		</td>
@@ -21,6 +22,8 @@
 			<slot
 				:name="`datacolumn-${columnKeys[index].replace(/\./g, '-')}`"
 				:data="fieldData"
+				:selected="selected"
+				:highlighted="isHighlighted"
 			>
 				<div class="text-content">
 					{{ fieldData }}
@@ -74,6 +77,9 @@ export default {
 				this.$emit("update:selected", state);
 			},
 		},
+		isHighlighted() {
+			return Boolean((this.rowindex + 1) % 2);
+		},
 	},
 };
 </script>
@@ -105,6 +111,9 @@ export default {
 		.select {
 			margin-bottom: 0;
 		}
+	}
+	a.is-text {
+		color: var(--color-tertiary);
 	}
 }
 </style>

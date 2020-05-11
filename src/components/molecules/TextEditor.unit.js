@@ -1,9 +1,9 @@
 import TextEditor from "./TextEditor";
 
-const base64Image = `data:image/gif;base64,R0lGODdhEAAQAMwAAPj7+FmhUYjNfGuxYY
-DJdYTIeanOpT+DOTuANXi/bGOrWj6CONzv2sPjv2CmV1unU4zPgISg6DJnJ3ImTh8Mtbs00aNP1CZSGy0YqLEn47RgXW8amasW
-7XWsmmvX2iuXiwAAAAAEAAQAAAFVyAgjmRpnihqGCkpDQPbGkNUOFk6DZqgHCNGg2T4QAQBoIiRSAwBE4VA4FACKgkB5NGReAS
-FZEmxsQ0whPDi9BiACYQAInXhwOUtgCUQoORFCGt/g4QAIQA7`;
+import faker from "faker/locale/en";
+// set a seed to have a consistent fake for the screenshot tests
+faker.seed(512); // any static number will do the job
+const base64Image = faker.image.dataUri(1, 1);
 
 function getMock(options = {}) {
 	return new Promise((resolve) => {

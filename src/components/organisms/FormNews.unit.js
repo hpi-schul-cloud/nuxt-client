@@ -327,7 +327,7 @@ describe("@components/organisms/FormNews", () => {
 		});
 	});
 
-	describe("cancle", () => {
+	describe("cancel", () => {
 		it.skip("triggering the cancel action from the edit page opens a confirm modal", async () => {
 			const wrapper = mount(FormNews, {
 				...getMocks(),

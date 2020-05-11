@@ -24,3 +24,10 @@ Vue.prototype.$theme = Theme;
 // Dialog
 import BaseDialog from "@/components/base/BaseDialog";
 Vue.use(BaseDialog);
+
+// EventBus
+import "./eventBus";
+
+// uiState
+import uiState from "./uiState";
+Vue.use(uiState);

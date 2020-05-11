@@ -4,7 +4,7 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.new.title") }}
 		</h1>
-		<form-create-user :role-name="roleName" @success="success" @error="error">
+		<form-create-user role-name="student" @success="success" @error="error">
 			<template v-slot:inputs="{ userData }">
 				<base-input
 					v-model="userData.birthday"
@@ -12,6 +12,7 @@
 					:label="$t('common.labels.birthdate')"
 					:placeholder="$t('common.placeholder.birthdate')"
 					class="mt--md"
+					data-testid="input_create-student_birthdate"
 				>
 				</base-input>
 				<base-input
@@ -20,6 +21,7 @@
 					name="switch"
 					class="mt--xl"
 					:label="$t('pages.administration.students.new.checkbox.label')"
+					data-testid="input_create-student_send-registration"
 				/>
 			</template>
 		</form-create-user>
@@ -33,13 +35,16 @@ export default {
 	components: {
 		FormCreateUser,
 	},
+	meta: {
+		requiredPermissions: ["STUDENT_CREATE"],
+	},
 	data() {
 		return {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "fas fa-cog" },
+					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.students.index.title"),
@@ -50,12 +55,11 @@ export default {
 					to: "/administration/students/new",
 				},
 			],
-			roleName: "student",
 		};
 	},
 	methods: {
 		error() {
-			this.$toast.error(this.$t("pages.administration.students.new.denied"));
+			this.$toast.error(this.$t("pages.administration.students.new.error"));
 		},
 		success() {
 			this.$toast.success(this.$t("pages.administration.students.new.success"));

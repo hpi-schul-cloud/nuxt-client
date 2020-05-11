@@ -1,9 +1,17 @@
 <template>
 	<div>
 		<vue-filter-ui
+			:label-add="$t('components.organisms.DataFilter.add')"
+			:label-apply="$t('common.actions.add')"
+			:label-remove="$t('common.actions.remove')"
+			:label-cancel="$t('common.actions.cancel')"
 			:filter="filters"
 			:parser="parser"
 			:query="activeFiltersProxy"
+			:component-modal="DataFilterModal"
+			:component-chips="DataFilterChips"
+			:component-select="DataFilterSelect"
+			:component-layout="DataFilterLayout"
 			@newQuery="setActiveFilters"
 		/>
 	</div>
@@ -11,13 +19,16 @@
 
 <script>
 import VueFilterUi, { parser } from "vue-filter-ui";
-import feathersQueryGenerator from "./feathersQueryGenerator";
 import {
 	defaultFilters,
 	supportedFilterTypes,
 	supportedOperators,
 } from "./defaultFilters";
 import { unescape } from "lodash";
+import DataFilterModal from "./DataFilterModal";
+import DataFilterLayout from "./DataFilterLayout";
+import DataFilterChips from "./DataFilterChips";
+import DataFilterSelect from "./DataFilterSelect";
 
 export default {
 	components: {
@@ -36,18 +47,24 @@ export default {
 			required: true,
 		},
 		activeFilters: {
-			type: Array,
+			type: [Array, Object],
 			default: () => [],
 		},
 	},
 	data() {
 		return {
-			parser: parser.Default,
+			DataFilterModal,
+			DataFilterChips,
+			DataFilterSelect,
+			DataFilterLayout,
 			localQuery: undefined,
 			localActiveFilters: undefined,
 		};
 	},
 	computed: {
+		parser() {
+			return this.backendFiltering ? parser.FeathersJS : parser.Default;
+		},
 		filteredData() {
 			// ToDo implement filtering for other data types than strings
 			if (!this.backendFiltering) {
@@ -88,10 +105,7 @@ export default {
 				if (!this.backendFiltering) {
 					this.$emit("update:filtered-data", this.filteredData);
 				} else {
-					const feathersQuery = feathersQueryGenerator.generator(
-						this.activeFilters
-					);
-					this.$emit("update:filter-query", feathersQuery);
+					this.$emit("update:filter-query", to);
 				}
 			},
 		},
@@ -108,3 +122,6 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@styles";
+</style>

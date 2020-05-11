@@ -5,8 +5,13 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
+		<data-filter
+			:filters="filters"
+			:backend-filtering="true"
+			:active-filters.sync="currentFilterQuery"
+		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="teachers"
@@ -17,39 +22,42 @@
 			track-by="id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
+			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				{{ dayjs(data).format("DD.MM.YYYY") }}
+				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
-				<span v-if="data && data.consentStatus === 'ok'">
+				<span class="text-content">
 					<base-icon
-						source="custom"
-						icon="doublecheck"
-						color="var(--color-success)"
-					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'teachersAgreed'">
-					<base-icon
+						v-if="data && data.consentStatus === 'ok'"
 						source="material"
 						icon="check"
-						color="var(--color-warning)"
+						color="var(--color-success)"
 					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
+						v-else-if="data && data.consentStatus === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
-				<span v-else />
 			</template>
 
-			<template v-slot:datacolumn-_id="{ data }">
+			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
 				<base-button
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
 					design="text icon"
 					size="small"
 					:to="`/administration/teachers/${data}/edit`"
@@ -60,6 +68,7 @@
 		</backend-data-table>
 		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
 		<fab-floating
+			v-if="this.$_userHasPermission('TEACHER_CREATE')"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -71,7 +80,7 @@
 				},
 				{
 					label: $t('pages.administration.teachers.fab.import'),
-					icon: 'arrow_downward',
+					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/teachers/import',
 				},
@@ -84,39 +93,45 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
+import DataFilter from "@components/organisms/DataFilter/DataFilter";
+import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
+import UserHasPermission from "@/mixins/UserHasPermission";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 dayjs.locale("de");
 export default {
 	layout: "loggedInFull",
 	components: {
+		DataFilter,
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
 	},
-	mixins: [print],
+	mixins: [print, UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
 		},
 	},
-
+	meta: {
+		requiredPermissions: ["TEACHER_LIST"],
+	},
 	data() {
 		return {
-			currentQuery: {}, // if filters are implemented, the current filter query needs to be in this prop, otherwise the actions will not work
+			currentFilterQuery: this.$uiState.get(
+				"filter",
+				"pages.administration.teachers.index"
+			),
+			test: this.$uiState,
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.itemsPerPage"
-					)
-				) || 10,
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.limit || 10,
+			sortBy: "firstName",
+			sortOrder: "asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -158,6 +173,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "TEACHER_DELETE",
 				},
 			],
 			tableSelection: [],
@@ -171,10 +187,16 @@ export default {
 				{
 					field: "lastName",
 					label: this.$t("common.labels.lastName"),
+					sortable: true,
 				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
+					sortable: true,
+				},
+				{
+					field: "classes",
+					label: this.$t("common.labels.classes"),
 				},
 				{
 					field: "consent",
@@ -183,6 +205,7 @@ export default {
 				{
 					field: "createdAt",
 					label: this.$t("common.labels.createdAt"),
+					sortable: true,
 				},
 				{
 					field: "_id",
@@ -191,15 +214,9 @@ export default {
 			],
 			icons: [
 				{
-					icon: "doublecheck",
-					color: "var(--color-success)",
-					style: "margin: -3px 3px",
-					label: this.$t("pages.administration.students.legend.icon.success"),
-				},
-				{
 					icon: "check",
-					color: "var(--color-warning)",
-					label: this.$t("pages.administration.teachers.legend.icon.warning"),
+					color: "var(--color-success)",
+					label: this.$t("pages.administration.teachers.legend.icon.check"),
 				},
 				{
 					icon: "clear",
@@ -207,6 +224,7 @@ export default {
 					label: this.$t("pages.administration.students.legend.icon.danger"),
 				},
 			],
+			filters: teacherFilter(this),
 		};
 	},
 	computed: {
@@ -217,6 +235,27 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
+		permissionFilteredTableActions() {
+			return this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
+		},
+	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.get("filter", "pages.administration.teachers.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
+				query,
+			});
+		},
 	},
 	created(ctx) {
 		this.find();
@@ -226,33 +265,40 @@ export default {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
+				$sort: {
+					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
+				},
+				...this.currentFilterQuery,
 			};
 			this.$store.dispatch("users/findTeachers", {
 				query,
 			});
 		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortBy = sortBy;
+			this.sortOrder = sortOrder;
+			this.onUpdateCurrentPage(1); // implicitly triggers new find
+		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.teachers.index.currentPage",
-				page
-			);
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.teachers.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
-				...this.currentQuery,
+				...this.currentFilterQuery,
 				_id: {
 					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
 				},
@@ -281,9 +327,9 @@ export default {
 					await this.$store.dispatch("users/remove", {
 						query: this.getQueryForSelection(rowIds, selectionType),
 					});
-					this.$toast.success("Ausgewählte Nutzer gelöscht");
+					this.$toast.success(this.$t("pages.administration.remove.success"));
 				} catch (error) {
-					this.$toast.error("Löschen der Nutzer fehlgeschlagen");
+					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}
 			};
 			const onCancel = () => {
@@ -292,18 +338,29 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = `Bist du sicher, dass du diese(n) ${rowIds.length} Lehrer:in löschen möchtest?`;
+				message = this.$tc(
+					"pages.administration.teachers.index.remove.confirm.message.some",
+					rowIds.length,
+					{ number: rowIds.length }
+				);
 			} else {
 				if (rowIds.length) {
-					message = `Bist du sicher, dass du alle Lehrer:innen bis auf ${rowIds.length} löschen möchtest?`;
+					message = this.$t(
+						"pages.administration.teachers.index.remove.confirm.message.many",
+						{ number: rowIds.length }
+					);
 				} else {
-					message = `Bist du sicher, dass du alle Lehrer:innen löschen möchtest?`;
+					message = this.$t(
+						"pages.administration.teachers.index.remove.confirm.message.all"
+					);
 				}
 			}
 			this.$dialog.confirm({
 				message,
-				confirmText: "Lehrer:in löschen",
-				cancelText: "Abbrechen",
+				confirmText: this.$t(
+					"pages.administration.teachers.index.remove.confirm.btnText"
+				),
+				cancelText: this.$t("common.actions.cancel"),
 				icon: "report_problem",
 				iconSource: "material",
 				iconColor: "var(--color-danger)",
@@ -316,3 +373,20 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+a.action-button {
+	&.row-highlighted:hover {
+		background-color: var(--color-white);
+	}
+	&.row-selected {
+		color: var(--color-white);
+		&:hover {
+			background-color: var(--color-tertiary-dark);
+			box-shadow: none;
+		}
+	}
+}
+</style>
