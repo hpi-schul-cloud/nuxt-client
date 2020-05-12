@@ -5,6 +5,8 @@
 	"common.actions.save": "",
 	"common.actions.scrollToTop": "Scroll up",
 	"common.labels.consent": "Consent",
+	"common.labels.consent.parents": "Parent",
+	"common.labels.consent.students": "Student",
 	"common.labels.createdAt": "Created At",
 	"common.labels.email": "Email",
 	"common.labels.firstName": "First Name",

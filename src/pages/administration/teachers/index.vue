@@ -201,6 +201,18 @@ export default {
 				{
 					field: "consent",
 					label: this.$t("common.labels.consent"),
+					secondRow: [
+						{
+							field: "parent",
+							label: this.$t("common.labels.consent.parents"),
+							sortable: true,
+						},
+						{
+							field: "student",
+							label: this.$t("common.labels.consent.students"),
+							sortable: true,
+						},
+					],
 				},
 				{
 					field: "createdAt",

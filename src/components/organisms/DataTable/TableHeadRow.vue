@@ -1,50 +1,82 @@
 <template>
-	<tr class="row">
-		<th v-if="allRowsSelectable">
-			<div class="th-wrap select-wrap">
-				<base-input
-					v-model="selectionStatus"
-					type="checkbox"
-					label="Alle Zeilen auswählen"
-					:label-hidden="true"
-					class="select"
-					:show-undefined-state="true"
-					style="color: var(--color-tertiary);"
-				/>
-			</div>
-		</th>
-		<th
-			v-for="(column, index) in columns"
-			:key="index"
-			:class="{
-				'is-current-sort': sortBy === column.field,
-				'is-sortable': column.sortable,
-			}"
-			cellspacing="0"
-		>
-			<BaseButton
-				v-if="column.sortable"
-				design="none"
-				class="th-wrap"
-				@click.stop="sort(column)"
+	<fragment>
+		<tr class="row">
+			<th v-if="allRowsSelectable">
+				<div class="th-wrap select-wrap">
+					<base-input
+						v-model="selectionStatus"
+						type="checkbox"
+						label="Alle Zeilen auswählen"
+						:label-hidden="true"
+						class="select"
+						:show-undefined-state="true"
+						style="color: var(--color-tertiary);"
+					/>
+				</div>
+			</th>
+			<th
+				v-for="(column, index) in columns"
+				:key="index"
+				:class="{
+					'is-current-sort': sortBy === column.field,
+					'is-sortable': column.sortable,
+					'has-second-row': column.secondRow,
+				}"
+				cellspacing="0"
 			>
-				<span>{{ column.label }}</span>
-				<base-icon
-					v-if="sortBy === column.field"
-					:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
-					source="custom"
-				/>
-				<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
-			</BaseButton>
-			<div v-else class="th-wrap">
-				<span>{{ column.label }}</span>
-			</div>
-		</th>
-	</tr>
+				<BaseButton
+					v-if="column.sortable"
+					design="none"
+					class="th-wrap"
+					@click.stop="sort(column)"
+				>
+					<span>{{ column.label }}</span>
+					<base-icon
+						v-if="sortBy === column.field"
+						:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
+						source="custom"
+					/>
+					<base-icon v-else-if="column.sortable" icon="sort" source="custom" />
+				</BaseButton>
+				<div v-else class="th-wrap">
+					<span>{{ column.label }}</span>
+				</div>
+				<fragment v-if="column.secondRow">
+					<div
+						v-for="(el, elIndex) in column.secondRow"
+						:key="elIndex"
+						:class="{
+							'is-current-sort': sortBy === el.field,
+							'is-sortable': el.sortable,
+						}"
+					>
+						<BaseButton
+							v-if="el.sortable"
+							design="none"
+							class="th-wrap"
+							@click.stop="sort(el)"
+						>
+							<span>{{ el.label }}</span>
+							<base-icon
+								v-if="sortBy === el.field"
+								:icon="sortOrder === 'asc' ? 'sort-up' : 'sort-down'"
+								source="custom"
+							/>
+							<base-icon v-else-if="el.sortable" icon="sort" source="custom" />
+						</BaseButton>
+						<div v-else class="th-wrap">
+							<span>{{ el.label }}</span>
+						</div>
+					</div>
+				</fragment>
+			</th>
+		</tr>
+	</fragment>
 </template>
 
 <script>
 import BaseButton from "@basecomponents/BaseButton";
+import { Fragment } from "vue-fragment";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -56,6 +88,7 @@ const selectionStateMap = new Map([
 ]);
 
 export default {
+	components: { Fragment },
 	props: {
 		allRowsSelectable: Boolean,
 		currentPageSelectionState: {
@@ -137,8 +170,10 @@ export default {
 <style lang="scss" scoped>
 .row {
 	font-weight: var(--font-weight-bold);
+	border-bottom: calc(2 * var(--border-width)) solid var(--color-tertiary);
+
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid var(--color-tertiary);
+		vertical-align: super;
 		&.is-current-sort {
 			opacity: 1;
 		}
@@ -160,6 +195,15 @@ export default {
 			.select {
 				margin-bottom: 0;
 			}
+		}
+	}
+	th.has-second-row {
+		display: grid;
+		grid-template-columns: auto auto;
+		.th-wrap {
+			grid-column: 1/3;
+			padding-top: 0;
+			padding-bottom: 0;
 		}
 	}
 }

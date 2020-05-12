@@ -11,6 +11,8 @@
 	"common.labels.complete.firstName": "Vollständiger Vorname",
 	"common.labels.complete.lastName": "Vollständiger Nachname",
 	"common.labels.consent": "Einverständnis",
+	"common.labels.consent.parents": "Eltern",
+	"common.labels.consent.students": "Schüler",
 	"common.labels.createdAt": "Erstellungsdatum",
 	"common.labels.email": "E-Mail",
 	"common.labels.firstName": "Vorname",
