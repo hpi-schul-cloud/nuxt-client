@@ -3,7 +3,9 @@ import TheFooter from "./TheFooter";
 describe("@components/legacy/TheFooter", () => {
 	it(...isValidComponent(TheFooter));
 
-	const $theme = { name: "test" };
+	const $theme = {
+		name: "test",
+	};
 	it("check that all links are rendered in the footer", () => {
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({
@@ -23,7 +25,7 @@ describe("@components/legacy/TheFooter", () => {
 				i18n: true,
 			}),
 		});
-		expect(wrapper.findAll("base-link-stub")).toHaveLength(11);
+		expect(wrapper.findAll("base-link-stub")).toHaveLength(10);
 		expect(wrapper.find("span").text()).toBe(
 			"© " + new Date().getFullYear() + " " + $theme.name
 		);
