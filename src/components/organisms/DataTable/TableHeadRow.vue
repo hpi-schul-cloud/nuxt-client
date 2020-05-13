@@ -23,9 +23,12 @@
 					'has-second-row': column.secondRow,
 				}"
 				:style="[
-						column.secondRow ? {
-						'display': 'grid',
-						'grid-template-columns': `repeat(${column.secondRow.length}, auto)`} : '',
+					column.secondRow
+						? {
+								display: 'grid',
+								'grid-template-columns': `repeat(${column.secondRow.length}, auto)`,
+						  }
+						: '',
 				]"
 				cellspacing="0"
 			>
