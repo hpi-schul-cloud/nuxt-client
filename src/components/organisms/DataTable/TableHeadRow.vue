@@ -22,6 +22,11 @@
 					'is-sortable': column.sortable,
 					'has-second-row': column.secondRow,
 				}"
+				:style="[
+						column.secondRow ? {
+						'display': 'grid',
+						'grid-template-columns': `repeat(${column.secondRow.length}, auto)`} : '',
+				]"
 				cellspacing="0"
 			>
 				<BaseButton
@@ -198,10 +203,8 @@ export default {
 		}
 	}
 	th.has-second-row {
-		display: grid;
-		grid-template-columns: auto auto;
 		.th-wrap {
-			grid-column: 1/3;
+			grid-column: -1 / 1;
 			padding-top: 0;
 			padding-bottom: 0;
 		}
