@@ -46,6 +46,10 @@ const handleFilter = (methode, value) => {
 	if (methode === "get") {
 		return value?.query || {};
 	}
+	if (methode === "set") {
+		value.overWrite = true;
+		return value;
+	}
 	return value;
 };
 
@@ -84,7 +88,7 @@ export const mutations = {
 		const value = createPattern(key, "set", object);
 
 		if (identifier && state[key]) {
-			if (key === "filter" && state[key][identifier]) {
+			if ("overWrite" in value && state[key][identifier]) {
 				state[key][identifier]["query"] = object["query"];
 			} else {
 				state[key][identifier] = mergeDeep(state[key][identifier] || {}, value);
