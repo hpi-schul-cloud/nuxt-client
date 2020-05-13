@@ -197,10 +197,12 @@ export default {
 				{
 					field: "classes",
 					label: this.$t("common.labels.classes"),
+					sortable: true,
 				},
 				{
 					field: "consent",
 					label: this.$t("common.labels.consent"),
+					sortable: true,
 				},
 				{
 					field: "createdAt",
