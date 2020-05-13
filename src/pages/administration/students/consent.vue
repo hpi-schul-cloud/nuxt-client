@@ -28,11 +28,11 @@
 				</template>
 			</backend-data-table>
 
-			<base-button design="text" @click="cancelWarning = true">{{
-				$t("common.actions.cancel")
-			}}</base-button>
 			<base-button design="secondary" @click="next">{{
 				$t("pages.administration.students.consent.steps.complete.next")
+			}}</base-button>
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
 			}}</base-button>
 		</section>
 
@@ -67,11 +67,11 @@
 				}}
 			</p>
 
-			<base-button design="text" @click="cancelWarning = true">{{
-				$t("common.actions.cancel")
-			}}</base-button>
 			<base-button design="secondary" @click="register">{{
 				$t("pages.administration.students.consent.steps.register.next")
+			}}</base-button>
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
 			}}</base-button>
 		</section>
 
@@ -264,7 +264,7 @@ export default {
 			if (this.check === false) {
 				this.checkWarning = true;
 			} else {
-				const users = this.tableData.map(s => {
+				const users = this.tableData.map((s) => {
 					return {
 						userId: s.id,
 						birthday: s.birthday,
@@ -272,19 +272,16 @@ export default {
 						parent_privacyConsent: true,
 						parent_termsOfUseConsent: true,
 						privacyConsent: true,
-						termsOfUseConsent: true
-					}
+						termsOfUseConsent: true,
+					};
 				});
-				console.log(users);
-				this.$store.dispatch("bulk-consent/register", {
-					users
-				});
+				this.$store.dispatch("bulk-consent/register", users);
 				this.$toast.success(
 					this.$t(
 						"pages.administration.students.consent.steps.register.success"
 					)
 				);
-				this.next()
+				this.next();
 			}
 		},
 		download() {
@@ -316,6 +313,7 @@ export default {
 
 .button {
 	float: right;
+	margin-left: var(--space-sm);
 }
 .centered {
 	text-align: center;

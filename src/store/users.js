@@ -13,12 +13,6 @@ const module = mergeDeep(base, {
 			query.customEndpoint = "/users/admin/teachers";
 			return dispatch("find", query);
 		},
-		skipRegistration({ dispatch }, payload = {}) {
-			const params = {};
-			params.customEndpoint = "/users/skipregistration";
-			params.payload = payload;
-			return dispatch("create", params);
-		},
 		getByRole: async function (ctx, role) {
 			const queryRole = {
 				roles: [role._id],
