@@ -33,26 +33,36 @@
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
+				<div class="consent">
 				<span class="text-content">
 					<base-icon
-						v-if="data && data.consentStatus === 'ok'"
-						source="custom"
-						icon="doublecheck"
-						color="var(--color-success)"
+							v-if="data && data.parentConsents"
+							source="material"
+							icon="check"
+							color="var(--color-success)"
 					/>
 					<base-icon
-						v-else-if="data && data.consentStatus === 'parentsAgreed'"
-						source="material"
-						icon="check"
-						color="var(--color-warning)"
-					/>
-					<base-icon
-						v-else-if="data && data.consentStatus === 'missing'"
-						source="material"
-						icon="close"
-						color="var(--color-danger)"
+							v-if="data && data.preferences && data.preferences.registrationMailSend"
+							source="custom"
+							icon="email"
+							color="var(--color-disabled-dark)"
 					/>
 				</span>
+				<span class="text-content">
+					<base-icon
+							v-if="data && data.userConsent"
+							source="material"
+							icon="check"
+							color="var(--color-disabled-dark)"
+					/>
+					<base-icon
+							v-if="data && data.preferences && data.preferences.registrationMailSend"
+							source="custom"
+							icon="email"
+							color="var(--color-disabled-dark)"
+					/>
+				</span>
+				</div>
 			</template>
 			<template
 				v-if="schoolInternallyManaged"
@@ -164,6 +174,18 @@ export default {
 				{
 					field: "consent",
 					label: this.$t("common.labels.consent"),
+					secondRow: [
+						{
+							field: "parent",
+							label: this.$t("common.labels.consent.parents"),
+							sortable: true,
+						},
+						{
+							field: "student",
+							label: this.$t("common.labels.consent.students"),
+							sortable: true,
+						},
+					],
 				},
 				{
 					field: "createdAt",
@@ -222,20 +244,20 @@ export default {
 			],
 			icons: [
 				{
-					icon: "doublecheck",
+					icon: "check",
 					color: "var(--color-success)",
-					style: "margin: -3px 3px",
 					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
 					icon: "check",
-					color: "var(--color-warning)",
-					label: this.$t("pages.administration.students.legend.icon.warning"),
+					color: "var(--color-disabled-dark)",
+					label: this.$t("pages.administration.students.legend.icon.missing"),
 				},
 				{
-					icon: "clear",
-					color: "var(--color-danger)",
-					label: this.$t("pages.administration.students.legend.icon.danger"),
+					icon: "email",
+					style: "vertical-align: text-bottom;",
+					color: "var(--color-disabled-dark)",
+					label: this.$t("pages.administration.students.legend.icon.email"),
 				},
 			],
 			filters: studentFilter(this),
@@ -436,4 +458,11 @@ a.action-button {
 		}
 	}
 }
+	div.consent {
+		display: flex;
+		justify-content: space-between;
+		span {
+			flex-basis: 50%;
+		}
+	}
 </style>
