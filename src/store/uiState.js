@@ -84,7 +84,11 @@ export const mutations = {
 		const value = createPattern(key, "set", object);
 
 		if (identifier && state[key]) {
-			state[key][identifier] = mergeDeep(state[key][identifier] || {}, value);
+			if (key === "filter" && state[key][identifier]) {
+				state[key][identifier]["query"] = object["query"];
+			} else {
+				state[key][identifier] = mergeDeep(state[key][identifier] || {}, value);
+			}
 		} else {
 			if (key in getDefaultState())
 				throw new Error("Overwriting the default state is not permitted!");
