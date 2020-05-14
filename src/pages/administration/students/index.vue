@@ -34,34 +34,42 @@
 			</template>
 			<template v-slot:datacolumn-consent="{ data }">
 				<div class="consent">
-				<span class="text-content">
-					<base-icon
+					<span class="text-content">
+						<base-icon
 							v-if="data && data.parentConsents"
 							source="material"
 							icon="check"
 							color="var(--color-success)"
-					/>
-					<base-icon
-							v-if="data && data.preferences && data.preferences.registrationMailSend"
+						/>
+						<base-icon
+							v-if="
+								data &&
+								data.preferences &&
+								data.preferences.registrationMailSend
+							"
 							source="custom"
 							icon="email"
 							color="var(--color-disabled-dark)"
-					/>
-				</span>
-				<span class="text-content">
-					<base-icon
+						/>
+					</span>
+					<span class="text-content">
+						<base-icon
 							v-if="data && data.userConsent"
 							source="material"
 							icon="check"
 							color="var(--color-disabled-dark)"
-					/>
-					<base-icon
-							v-if="data && data.preferences && data.preferences.registrationMailSend"
+						/>
+						<base-icon
+							v-if="
+								data &&
+								data.preferences &&
+								data.preferences.registrationMailSend
+							"
 							source="custom"
 							icon="email"
 							color="var(--color-disabled-dark)"
-					/>
-				</span>
+						/>
+					</span>
 				</div>
 			</template>
 			<template
@@ -458,11 +466,11 @@ a.action-button {
 		}
 	}
 }
-	div.consent {
-		display: flex;
-		justify-content: space-between;
-		span {
-			flex-basis: 50%;
-		}
+div.consent {
+	display: flex;
+	justify-content: space-between;
+	span {
+		flex-basis: 50%;
 	}
+}
 </style>
