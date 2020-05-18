@@ -126,7 +126,7 @@
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
 	"layouts.loggedoutFullWidth.join": "Mitmachen",
-	"layouts.loggedoutFullWidth.project": "Projekt",
+	"layouts.loggedoutFullWidth.project": "Über das Projekt",
 	"layouts.loggedoutFullWidth.steps": "Erste Schritte",
 	"pages.administraion.datasources.index.empty": "Noch keine Daten Importiert",
 	"pages.administraion.datasources.index.error": "Letzter Import fehlgeschlagen: {relativeDate}",

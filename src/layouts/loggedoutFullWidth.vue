@@ -35,12 +35,12 @@ export default {
 		return {
 			links: [
 				{
-					title: this.$t("layouts.loggedoutFullWidth.steps"),
-					href: "/mint-ec/willkommenspaket",
-				},
-				{
 					title: this.$t("layouts.loggedoutFullWidth.project"),
 					href: "/about",
+				},
+				{
+					title: this.$t("layouts.loggedoutFullWidth.steps"),
+					href: "/mint-ec/willkommenspaket",
 				},
 				{
 					title: this.$t("layouts.loggedoutFullWidth.join"),
