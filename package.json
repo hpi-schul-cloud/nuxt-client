@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "22.10.0",
+	"version": "23.0.0",
 	"description": "The next Level of Schul-Cloud",
 	"author": "HPI Schul-Cloud",
 	"private": true,
@@ -66,13 +66,13 @@
 		"vue-echarts": "^4.0.4",
 		"vue-filter-ui": "^0.8.0",
 		"vue-flatpickr-component": "^8.1.5",
-		"vue-i18n": "^8.17.4",
+		"vue-i18n": "^8.17.5",
 		"vue-loader": "^15.9.2",
 		"vue-mq": "^1.0.1",
 		"vue-multiselect": "^2.1.6",
 		"vue-ripple-directive": "^2.0.1",
 		"vue-router": "^3.1.6",
-		"vue-swatches": "^2.0.1"
+		"vue-swatches": "^2.0.3"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.9.6",
@@ -95,7 +95,7 @@
 		"@storybook/addons": "^5.3.18",
 		"@storybook/vue": "^5.3.18",
 		"@vue/test-utils": "^1.0.0-beta.33",
-		"@vuepress/plugin-pwa": "^1.4.1",
+		"@vuepress/plugin-pwa": "^1.5.0",
 		"babel-core": "^7.0.0-bridge.0",
 		"babel-jest": "^26.0.1",
 		"babel-loader": "^8.1.0",
@@ -130,7 +130,7 @@
 		"postcss-color-mod-function": "^3.0.3",
 		"postcss-loader": "^3.0.0",
 		"prettier": "^2.0.5",
-		"puppeteer": "^3.0.3",
+		"puppeteer": "^3.0.4",
 		"sass-loader": "^8.0.2",
 		"serve": "^11.3.0",
 		"sharp": "^0.25.0",
@@ -143,7 +143,7 @@
 		"vue-style-loader": "^4.1.2",
 		"vue-svg-loader": "0.15.0",
 		"vue-template-compiler": "^2.6.11",
-		"vuepress": "^1.4.1",
+		"vuepress": "^1.5.0",
 		"yorkie": "^2.0.0"
 	},
 	"engines": {
