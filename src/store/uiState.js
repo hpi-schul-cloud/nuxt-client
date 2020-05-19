@@ -42,16 +42,15 @@ const handlePagination = (methode, value) => {
 	return value;
 };
 
-const handleFilter = (methode, value) => {
-	if (methode === "get") {
+const handleFilter = (method, value) => {
+	if (method === "get") {
 		return value?.query || {};
 	}
-	if (methode === "set") {
-		const overWriteValue = {
-			overWrite: true,
+	if (method === "set") {
+		return {
+			overwrite: true,
 			data: value,
 		};
-		return overWriteValue;
 	}
 	return value;
 };
@@ -91,7 +90,7 @@ export const mutations = {
 		const value = createPattern(key, "set", object);
 
 		if (identifier && state[key]) {
-			if ("overWrite" in value && value.overWrite && state[key][identifier]) {
+			if ("overwrite" in value && value.overwrite && state[key][identifier]) {
 				state[key][identifier] = value.data;
 			} else {
 				state[key][identifier] = mergeDeep(state[key][identifier] || {}, value);
