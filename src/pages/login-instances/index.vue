@@ -20,7 +20,7 @@ export default {
 		return {
 			Windows: [
 				{
-					icon: "hpi-logo",
+					icon: "hpischul",
 					url: "https://open.schul-cloud.org/login",
 				},
 				{
@@ -32,7 +32,7 @@ export default {
 					url: "https://niedersachsen.cloud/login",
 				},
 				{
-					icon: "tsc2",
+					icon: "tsc",
 					url: "https://schulcloud-thueringen.de/login",
 				},
 			],
