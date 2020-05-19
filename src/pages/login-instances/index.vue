@@ -22,22 +22,18 @@ export default {
 				{
 					icon: "hpi-logo",
 					url: "https://open.schul-cloud.org/login",
-					color: "#185888",
 				},
 				{
 					icon: "brandenburg",
 					url: "https://brandenburg.schul-cloud.org/login",
-					color: "#185888",
 				},
 				{
 					icon: "nieder",
 					url: "https://niedersachsen.cloud/login",
-					color: "#185888",
 				},
 				{
 					icon: "tsc2",
 					url: "https://schulcloud-thueringen.de/login",
-					color: "#185888",
 				},
 			],
 		};
@@ -57,13 +53,10 @@ $mobile: 750px; // css variables do not work with media queries
 	flex-flow: row wrap;
 	justify-content: center;
 }
-.link-transparent {
-	color: transparent;
-}
 .boxes {
 	display: flex;
 	flex-flow: row wrap;
-	width: 400px;
+	width: 360px;
 }
 .box {
 	width: 150px;
