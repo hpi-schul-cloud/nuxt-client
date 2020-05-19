@@ -50,6 +50,8 @@
 	"components.molecules.admintablelegend.externalSync": "Die Nutzerdaten deiner Schule werden aus einer externen Quelle (LDAP, IDM o.ä.) synchronisiert. Die Bearbeitung der Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der {shortName}. Finde weitere Informationen im",
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.admintablelegend.hint": "Mit allen Änderungen und Einstellungen im Verwaltungsbereich bestätigen Sie, dass Sie weisungsberechtigter Schul-Administrator sind und befugt sind, Anpassungen an der Schule in der Schul-Cloud vorzunehmen. Ihr Klick gilt insofern als Weisung der Schule gegenüber dem HPI.",
+	"components.molecules.LoginWindows.login": "Login",
+	"components.molecules.LoginWindows.bundesland": "Welches Bundesland?",
 	"components.organisms.AutoLogoutWarning.confirm": "Sitzung verlängern",
 	"components.organisms.AutoLogoutWarning.error": "Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
 	"components.organisms.AutoLogoutWarning.error.401": "Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
