@@ -7,22 +7,21 @@
 			{{ $t("components.molecules.LoginWindows.bundesland") }}
 		</h2>
 		<div class="box-container">
-			<div class="boxes">
-				<div v-for="(window, index) in Windows" :key="index" class="box">
-					<base-link :href="window.url">
-						<base-icon source="custom" :icon="window.icon" />
-					</base-link>
-				</div>
-			</div>
+			<instance-tile :windows="windows"></instance-tile>
 		</div>
 	</div>
 </template>
 
 <script>
+import InstanceTile from "@/components/base/InstanceTile";
+
 export default {
+	components: {
+		InstanceTile,
+	},
 	data: function () {
 		return {
-			Windows: [
+			windows: [
 				{
 					icon: "default",
 					url: "https://open.schul-cloud.org/login",
@@ -59,20 +58,6 @@ export default {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-}
-.boxes {
-	display: flex;
-	flex-flow: row wrap;
-	width: 360px;
-}
-.box {
-	width: calc(3 * var(--topbar-height));
-	height: calc(3 * var(--topbar-height));
-	margin: calc(15 * var(--border-width));
-}
-.icon {
-	width: 100% !important;
-	height: 100% !important;
 }
 
 .h1.margin {
