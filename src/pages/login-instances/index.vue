@@ -1,7 +1,11 @@
 <template>
 	<div class="container">
-		<h6>{{ $t("components.molecules.LoginWindows.login") }}</h6>
-		<h1>{{ $t("components.molecules.LoginWindows.bundesland") }}</h1>
+		<h1 class="h6" :class="isMobile ? 'margin' : ''">
+			{{ $t("components.molecules.LoginWindows.login") }}
+		</h1>
+		<h2 class="h1" :class="isMobile ? 'margin' : ''">
+			{{ $t("components.molecules.LoginWindows.bundesland") }}
+		</h2>
 		<div class="box-container">
 			<div class="boxes">
 				<div v-for="(window, index) in Windows" :key="index" class="box">
@@ -20,30 +24,33 @@ export default {
 		return {
 			Windows: [
 				{
-					icon: "hpischul",
+					icon: "default",
 					url: "https://open.schul-cloud.org/login",
 				},
 				{
-					icon: "brandenburg",
+					icon: "brb",
 					url: "https://brandenburg.schul-cloud.org/login",
 				},
 				{
-					icon: "nieder",
+					icon: "n21",
 					url: "https://niedersachsen.cloud/login",
 				},
 				{
-					icon: "tsc",
+					icon: "thr",
 					url: "https://schulcloud-thueringen.de/login",
 				},
 			],
 		};
 	},
+	computed: {
+		isMobile() {
+			return this.$mq === "mobile";
+		},
+	},
 };
 </script>
 
 <style lang="scss" scoped>
-$mobile: 750px; // css variables do not work with media queries
-
 .container {
 	display: flex;
 	flex-direction: column;
@@ -59,8 +66,8 @@ $mobile: 750px; // css variables do not work with media queries
 	width: 360px;
 }
 .box {
-	width: 150px;
-	height: 150px;
+	width: calc(3 * var(--topbar-height));
+	height: calc(3 * var(--topbar-height));
 	margin: calc(15 * var(--border-width));
 }
 .icon {
@@ -68,12 +75,10 @@ $mobile: 750px; // css variables do not work with media queries
 	height: 100% !important;
 }
 
-@media (max-width: $mobile) {
-	h1:first-of-type {
-		margin-top: 0;
-	}
-	h6 {
-		margin-bottom: 0;
-	}
+.h1.margin {
+	margin-top: 0;
+}
+.h6.margin {
+	margin-bottom: 0;
 }
 </style>

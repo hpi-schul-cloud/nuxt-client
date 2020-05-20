@@ -33,6 +33,8 @@
 	"components.molecules.ContextMenu.action.close": "Close context menu",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.TextEditor.noLocalFiles": "",
+	"components.molecules.LoginWindows.login": "Login",
+	"components.molecules.LoginWindows.bundesland": "In which state would you like to log in?",
 	"components.organisms.ContentCard.report.body": "",
 	"components.organisms.ContentCard.report.email": "inhalte@schul-cloud.org",
 	"components.organisms.ContentCard.report.subject": "",
