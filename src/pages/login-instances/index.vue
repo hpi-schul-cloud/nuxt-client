@@ -68,9 +68,6 @@ export default {
 	margin-top: 0 !important;
 }
 
-.h1.margin {
-	margin-top: 0;
-}
 .h6.margin {
 	margin-bottom: 0;
 }

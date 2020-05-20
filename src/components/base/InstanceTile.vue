@@ -1,6 +1,11 @@
 <template>
 	<div class="boxes">
-		<div v-for="(window, index) in windows" :key="index" class="box">
+		<div
+			v-for="(window, index) in windows"
+			:key="index"
+			class="box"
+			:class="isMobile ? 'box-mobile' : ''"
+		>
 			<base-link :href="window.url">
 				<base-icon source="custom" :icon="window.icon" />
 			</base-link>
@@ -19,6 +24,11 @@ export default {
 	data() {
 		return {};
 	},
+	computed: {
+		isMobile() {
+			return this.$mq === "mobile";
+		},
+	},
 };
 </script>
 
@@ -33,6 +43,9 @@ export default {
 	width: calc(3 * var(--topbar-height));
 	height: calc(3 * var(--topbar-height));
 	margin: calc(15 * var(--border-width));
+}
+.box-mobile {
+	margin: calc(12 * var(--border-width));
 }
 .icon {
 	width: 100% !important;

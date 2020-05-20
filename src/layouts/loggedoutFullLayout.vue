@@ -4,7 +4,7 @@
 			:links="links"
 			:img="require('@assets/img/logo/logo-image-color.svg')"
 		/>
-		<div class="container">
+		<div :class="isMobile ? 'small-container' : 'container'">
 			<Nuxt />
 		</div>
 	</div>
@@ -17,7 +17,6 @@ export default {
 	components: {
 		NavigationBar,
 	},
-
 	data() {
 		return {
 			links: [
@@ -44,6 +43,11 @@ export default {
 			],
 		};
 	},
+	computed: {
+		isMobile() {
+			return this.$mq === "mobile";
+		},
+	},
 };
 </script>
 
@@ -52,5 +56,9 @@ export default {
 
 .container {
 	padding: var(--space-xl-3);
+}
+
+.small-container {
+	padding: var(--space-md);
 }
 </style>
