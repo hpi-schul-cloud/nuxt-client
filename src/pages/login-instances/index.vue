@@ -27,7 +27,7 @@ export default {
 		return {
 			windows: [
 				{
-					icon: "default",
+					icon: "hpi",
 					url: this.$t("components.molecules.LoginWindows.hpi_link"),
 				},
 				{
