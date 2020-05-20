@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="login-container">
 		<h1 class="h6" :class="isMobile ? 'margin' : ''">
 			{{ $t("components.molecules.LoginWindows.login") }}
 		</h1>
@@ -19,24 +19,28 @@ export default {
 	components: {
 		InstanceTile,
 	},
+	layout: "loggedoutFullLayout",
+	meta: {
+		isPublic: true,
+	},
 	data: function () {
 		return {
 			windows: [
 				{
 					icon: "default",
-					url: "https://open.schul-cloud.org/login",
+					url: this.$t("components.molecules.LoginWindows.hpi_link"),
 				},
 				{
 					icon: "brb",
-					url: "https://brandenburg.schul-cloud.org/login",
+					url: this.$t("components.molecules.LoginWindows.brb_link"),
 				},
 				{
 					icon: "n21",
-					url: "https://niedersachsen.cloud/login",
+					url: this.$t("components.molecules.LoginWindows.n21_link"),
 				},
 				{
 					icon: "thr",
-					url: "https://schulcloud-thueringen.de/login",
+					url: this.$t("components.molecules.LoginWindows.thr_link"),
 				},
 			],
 		};
@@ -50,14 +54,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.login-container {
 	display: flex;
 	flex-direction: column;
+	margin: 0;
 }
 .box-container {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
+}
+.h1 {
+	margin-top: 0 !important;
 }
 
 .h1.margin {
