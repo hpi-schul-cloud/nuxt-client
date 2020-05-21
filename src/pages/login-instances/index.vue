@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import InstanceTile from "@/components/base/InstanceTile";
+import InstanceTile from "@/components/molecules/InstanceTile";
 
 export default {
 	components: {
