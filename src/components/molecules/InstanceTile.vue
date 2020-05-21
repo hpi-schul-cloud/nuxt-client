@@ -6,9 +6,11 @@
 			class="box"
 			:class="isMobile ? 'box-mobile' : ''"
 		>
-			<base-link :href="window.url">
-				<base-icon source="custom" :icon="window.icon" />
-			</base-link>
+			<base-card>
+				<base-link :href="window.url">
+					<base-icon source="custom" :icon="window.icon" />
+				</base-link>
+			</base-card>
 		</div>
 	</div>
 </template>
@@ -43,6 +45,9 @@ export default {
 	width: calc(3 * var(--topbar-height));
 	height: calc(3 * var(--topbar-height));
 	margin: calc(15 * var(--border-width));
+}
+.card {
+	height: calc(3 * var(--topbar-height));
 }
 .box-mobile {
 	margin: calc(12 * var(--border-width));
