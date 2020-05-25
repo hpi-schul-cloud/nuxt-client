@@ -74,8 +74,11 @@ export default {
 }
 .h1 {
 	margin-top: 0 !important;
+	margin-bottom: var(--space-xl-2) !important;
 }
-
+.h6 {
+	margin-bottom: var(--space-md);
+}
 .h6.margin {
 	margin-bottom: var(--border-width-bold);
 }
