@@ -28,7 +28,12 @@
 						{{ dayjs(slotProps.data).format("DD.MM.YYYY") }}
 					</div>
 					<div v-if="!slotProps.data" class="text-content">
-						<base-input v-model="slotProps.data" type="date" label="" :placeholder="$t('common.placeholder.dateformat')"/>
+						<base-input
+							v-model="slotProps.data"
+							type="date"
+							label=""
+							:placeholder="$t('common.placeholder.dateformat')"
+						/>
 					</div>
 				</template>
 			</backend-data-table>
