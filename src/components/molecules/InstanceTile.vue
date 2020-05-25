@@ -12,8 +12,8 @@
 export default {
 	props: {
 		tile: {
-			type: Array,
-			default: Array,
+			type: Object,
+			default: Object,
 		},
 	},
 	data() {
