@@ -3,7 +3,7 @@
 		<h1 class="h6" :class="isMobile ? 'margin' : ''">
 			{{ $t("pages.loginInstances.login") }}
 		</h1>
-		<h2 class="h1" :class="isMobile ? 'margin' : ''">
+		<h2 class="h1">
 			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
 		<div class="box-container">
