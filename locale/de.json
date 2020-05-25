@@ -50,7 +50,7 @@
 	"components.molecules.admintablelegend.externalSync": "Die Nutzerdaten deiner Schule werden aus einer externen Quelle (LDAP, IDM o.ä.) synchronisiert. Die Bearbeitung der Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der {shortName}. Finde weitere Informationen im",
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.admintablelegend.hint": "Mit allen Änderungen und Einstellungen im Verwaltungsbereich bestätigen Sie, dass Sie weisungsberechtigter Schul-Administrator sind und befugt sind, Anpassungen an der Schule in der Schul-Cloud vorzunehmen. Ihr Klick gilt insofern als Weisung der Schule gegenüber dem HPI.",
-	"components.molecules.LoginWindows.login": "Login",
+	"components.molecules.LoginWindows.login": "Einloggen",
 	"components.molecules.LoginWindows.bundesland": "In welchem Bundesland möchtest du dich einloggen?",
 	"components.molecules.LoginWindows.hpi_link": "https://open.schul-cloud.org/login",
 	"components.molecules.LoginWindows.brb_link": "https://brandenburg.schul-cloud.org/login",
