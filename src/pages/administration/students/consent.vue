@@ -23,8 +23,13 @@
 				track-by="id"
 				:paginated="false"
 			>
-				<template v-slot:datacolumn-birthday="{ data }">
-					{{ dayjs(data).format("DD.MM.YYYY") }}
+				<template v-slot:datacolumn-birthday="slotProps">
+					<div v-if="slotProps.data" class="text-content">
+						{{ dayjs(slotProps.data).format("DD.MM.YYYY") }}
+					</div>
+					<div v-if="!slotProps.data" class="text-content">
+						<base-input v-model="slotProps.data" type="date" label="" :placeholder="$t('common.placeholder.dateformat')"/>
+					</div>
 				</template>
 			</backend-data-table>
 
@@ -245,6 +250,11 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		if (this.tableData.length === 0) {
+			this.$router.push({
+				path: `/administration/students`,
+			});
+		}
 	},
 	methods: {
 		find() {
@@ -321,5 +331,24 @@ export default {
 #progressbar {
 	display: inline-block;
 	margin-top: var(--space-md);
+}
+
+/deep/ .table {
+	.row {
+		height: 3rem;
+	}
+}
+
+/deep/ .calendar-input {
+	max-width: 5em;
+	margin-bottom: 0;
+	.info-line {
+		display: none;
+	}
+	.input-line {
+		.icon-behind {
+			display: none;
+		}
+	}
 }
 </style>
