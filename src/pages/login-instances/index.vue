@@ -70,7 +70,7 @@ export default {
 .boxes {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	width: 360px;
+	grid-gap: var(--space-sm);
 }
 .h1 {
 	margin-top: 0 !important;

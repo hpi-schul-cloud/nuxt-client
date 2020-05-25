@@ -209,7 +209,7 @@
 	"pages.courses.new.title": "Neuen Kurs erstellen",
 	"pages.impressum.title": "Impressum",
 	"pages.loginInstances.login": "Einloggen",
-	"pages.loginInstances.bundesland": "In welchem Bundesland möchtest du dich einloggen?",
+	"pages.loginInstances.bundesland": "Wähle dein Bundesland",
 	"pages.loginInstances.hpi_link": "https://open.schul-cloud.org/login",
 	"pages.loginInstances.brb_link": "https://brandenburg.schul-cloud.org/login",
 	"pages.loginInstances.n21_link": "https://niedersachsen.cloud/login",
