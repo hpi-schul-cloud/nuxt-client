@@ -1,11 +1,11 @@
 <template>
-		<div class="box" :class="isMobile ? 'box-mobile' : ''">
-			<base-card>
-				<base-link :href="tile.url">
-					<base-icon source="custom" :icon="tile.icon" />
-				</base-link>
-			</base-card>
-		</div>
+	<div class="box" :class="isMobile ? 'box-mobile' : ''">
+		<base-card>
+			<base-link :href="tile.url">
+				<base-icon source="custom" :icon="tile.icon" />
+			</base-link>
+		</base-card>
+	</div>
 </template>
 
 <script>
@@ -54,5 +54,4 @@ export default {
 		height: calc(2.5 * var(--topbar-height));
 	}
 }
-
 </style>
