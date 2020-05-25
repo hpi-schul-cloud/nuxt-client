@@ -8,7 +8,7 @@
 		</h2>
 		<div class="box-container">
 			<div class="boxes">
-				<div v-for="(tile,index) in tiles" :key="index">
+				<div v-for="(tile, index) in tiles" :key="index">
 					<instance-tile :tile="tile"></instance-tile>
 				</div>
 			</div>
@@ -58,7 +58,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .login-container {
 	display: flex;
 	flex-direction: column;
