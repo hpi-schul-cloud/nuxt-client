@@ -1,24 +1,17 @@
 <template>
-	<div class="boxes">
-		<div
-			v-for="(window, index) in windows"
-			:key="index"
-			class="box"
-			:class="isMobile ? 'box-mobile' : ''"
-		>
+		<div class="box" :class="isMobile ? 'box-mobile' : ''">
 			<base-card>
-				<base-link :href="window.url">
-					<base-icon source="custom" :icon="window.icon" />
+				<base-link :href="tile.url">
+					<base-icon source="custom" :icon="tile.icon" />
 				</base-link>
 			</base-card>
 		</div>
-	</div>
 </template>
 
 <script>
 export default {
 	props: {
-		windows: {
+		tile: {
 			type: Array,
 			default: Array,
 		},
@@ -36,11 +29,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-.boxes {
-	display: flex;
-	flex-flow: row wrap;
-	width: 360px;
-}
 .box {
 	width: calc(3 * var(--topbar-height));
 	height: calc(3 * var(--topbar-height));
@@ -56,4 +44,15 @@ export default {
 	width: 100% !important;
 	height: 100% !important;
 }
+
+@media only screen and (max-width: 350px) {
+	.box {
+		width: calc(2.5 * var(--topbar-height));
+		height: calc(2.5 * var(--topbar-height));
+	}
+	.card {
+		height: calc(2.5 * var(--topbar-height));
+	}
+}
+
 </style>

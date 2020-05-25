@@ -1,13 +1,17 @@
 <template>
 	<div class="login-container">
 		<h1 class="h6" :class="isMobile ? 'margin' : ''">
-			{{ $t("components.molecules.LoginWindows.login") }}
+			{{ $t("pages.loginInstances.login") }}
 		</h1>
 		<h2 class="h1" :class="isMobile ? 'margin' : ''">
-			{{ $t("components.molecules.LoginWindows.bundesland") }}
+			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
 		<div class="box-container">
-			<instance-tile :windows="windows"></instance-tile>
+			<div class="boxes">
+				<div v-for="(tile,index) in tiles" :key="index">
+					<instance-tile :tile="tile"></instance-tile>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -25,22 +29,22 @@ export default {
 	},
 	data: function () {
 		return {
-			windows: [
+			tiles: [
 				{
 					icon: "hpi",
-					url: this.$t("components.molecules.LoginWindows.hpi_link"),
+					url: this.$t("pages.loginInstances.hpi_link"),
 				},
 				{
 					icon: "brb",
-					url: this.$t("components.molecules.LoginWindows.brb_link"),
+					url: this.$t("pages.loginInstances.brb_link"),
 				},
 				{
 					icon: "n21",
-					url: this.$t("components.molecules.LoginWindows.n21_link"),
+					url: this.$t("pages.loginInstances.n21_link"),
 				},
 				{
 					icon: "thr",
-					url: this.$t("components.molecules.LoginWindows.thr_link"),
+					url: this.$t("pages.loginInstances.thr_link"),
 				},
 			],
 		};
@@ -54,6 +58,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .login-container {
 	display: flex;
 	flex-direction: column;
@@ -61,8 +66,12 @@ export default {
 }
 .box-container {
 	display: flex;
-	flex-flow: row wrap;
 	justify-content: center;
+}
+.boxes {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	width: 360px;
 }
 .h1 {
 	margin-top: 0 !important;
