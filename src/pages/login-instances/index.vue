@@ -77,6 +77,6 @@ export default {
 }
 
 .h6.margin {
-	margin-bottom: 0;
+	margin-bottom: var(--border-width-bold);
 }
 </style>
