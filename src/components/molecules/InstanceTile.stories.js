@@ -7,20 +7,14 @@ storiesOf("4 Molecules UI Components/Molecules UI/InstanceTile", module).add(
 	() => ({
 		components: { InstanceTile },
 		template: `
-		<div v-for="(tile,index) in tiles" :key="index">
 			<instance-tile :tile="tile"></instance-tile>
-		</div>`,
+		`,
 		data: () => ({
-			tiles: [
+			tile:
 				{
 					icon: "hpi",
 					url: "https://open.schul-cloud.org/login",
-				},
-				{
-					icon: "brb",
-					url: "https://brandenburg.schul-cloud.org/login",
-				},
-			],
+				}
 		}),
 	})
 );
