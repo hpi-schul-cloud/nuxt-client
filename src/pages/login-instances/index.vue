@@ -74,7 +74,8 @@ export default {
 }
 .h1 {
 	margin-top: 0 !important;
-	margin-bottom: var(--space-xl-2) !important;
+	margin-bottom: var(--space-xl-3) !important;
+	font-size:  var(--sidebar-sub-item-height);
 }
 .h6 {
 	margin-bottom: var(--space-md);
