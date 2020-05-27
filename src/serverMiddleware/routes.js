@@ -7,6 +7,7 @@
 
 module.exports = [
 	// `^/account/?`,
+	// `^/account/email/edit/?$`,
 	`^/administration/datasources?`,
 	// `^/administration/students/?$`,
 	// `^/administration/students/new/?$`,
