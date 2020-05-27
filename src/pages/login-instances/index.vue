@@ -7,7 +7,7 @@
 			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
 		<div class="box-container">
-			<div class="boxes">
+			<div class="boxes" :class="isMobile ? 'gap' : ''">
 				<div v-for="(tile, index) in tiles" :key="index">
 					<instance-tile :tile="tile"></instance-tile>
 				</div>
@@ -71,6 +71,9 @@ export default {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-gap: var(--space-lg);
+}
+.boxes.gap {
+	grid-gap: var(--space-sm);
 }
 .h1 {
 	margin-top: 0 !important;
