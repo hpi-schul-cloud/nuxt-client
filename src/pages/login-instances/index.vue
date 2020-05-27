@@ -3,7 +3,7 @@
 		<h1 class="h6" :class="isMobile ? 'margin' : ''">
 			{{ $t("pages.loginInstances.login") }}
 		</h1>
-		<h2 class="h1">
+		<h2 class="h1" :class="isMobile ? 'margin' : ''">
 			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
 		<div class="box-container">
@@ -70,15 +70,18 @@ export default {
 .boxes {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-gap: var(--space-sm);
+	grid-gap: var(--space-lg);
 }
 .h1 {
 	margin-top: 0 !important;
-	margin-bottom: var(--space-xl-3) !important;
+	margin-bottom: var(--space-xl-4) !important;
 	font-size: var(--sidebar-sub-item-height);
 }
 .h6 {
 	margin-bottom: var(--space-md);
+}
+.h1.margin {
+	margin-bottom: var(--space-xl-3) !important;
 }
 .h6.margin {
 	margin-bottom: var(--border-width-bold);
