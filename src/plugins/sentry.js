@@ -15,7 +15,7 @@ export default ({ app, store }) => {
 		}
 	});
 
-		app.use(Sentry.Handlers.requestHandler());
+	app.use(Sentry.Handlers.requestHandler());
 	// eslint-disable-next-line no-console
 	console.log("sentry error logging initialized");
-	}
+};
