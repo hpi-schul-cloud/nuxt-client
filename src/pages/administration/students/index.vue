@@ -349,6 +349,7 @@ export default {
 					this.$tc("pages.administration.sendMail.success", rowIds.length)
 				);
 			} catch (error) {
+				console.error(error);
 				this.$toast.error(
 					this.$tc("pages.administration.sendMail.error", rowIds.length)
 				);
