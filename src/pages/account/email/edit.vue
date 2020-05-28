@@ -1,23 +1,14 @@
 <template>
 	<section>
-		<form-edit-user-data>
+		<form-edit-user-data @success="success" @error="error">
 			<template v-slot:inputs="{ userData }">
 				<base-input
-					v-model="userData.Email"
+					v-model="userData.email"
 					type="email"
 					:label="$t('common.labels.email')"
 					:placeholder="$t('common.placeholder.email.update')"
 					class="mt--md"
-					data-testid=""
-				>
-				</base-input>
-				<base-input
-					v-model="userData.Email"
-					type="email"
-					:label="$t('common.labels.email')"
-					:placeholder="$t('common.placeholder.email.confirmation')"
-					class="mt--md"
-					data-testid=""
+					data-testid="jjjjjjj"
 				>
 				</base-input>
 			</template>
@@ -31,6 +22,17 @@ import FormEditUserData from "@components/organisms/FormEditUserData";
 export default {
 	components: {
 		FormEditUserData,
+	},
+	methods: {
+		error() {
+			this.$toast.error("Leider ist etwas schief gegangen");
+		},
+		success() {
+			this.$toast.success("Du hast deine..");
+			this.$router.push({
+				path: `/account/`,
+			});
+		},
 	},
 };
 </script>

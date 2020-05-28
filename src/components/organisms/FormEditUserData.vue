@@ -16,7 +16,7 @@
 				class="w-100 mt--lg"
 				design="outline"
 				text
-				data-testid="button_create-user_abort"
+				data-testid=""
 				@click.prevent="$router.go(-1)"
 			>
 				{{ $t("common.actions.cancel") }}
@@ -25,7 +25,7 @@
 				type="submit"
 				class="w-100 mt--lg"
 				design="secondary"
-				data-testid="button_create-user_submit"
+				data-testid=""
 			>
 				Email ändern
 			</base-button>
@@ -35,54 +35,46 @@
 
 <script>
 export default {
-	props: {},
+	props: {
+		userId: {
+			type: String,
+			required: false,
+			default: undefined,
+		},
+	},
 
 	data() {
 		return {
 			userData: {
+				email: "",
 				password: "",
 			},
 		};
 	},
 	computed: {
 		actionType() {
-			return "patch";
+			return "create";
 		},
 	},
 	methods: {
 		submitHandler() {
 			switch (this.actionType) {
-				case "patch": {
-					this.patch();
+				case "create": {
+					this.create();
 					break;
 				}
 			}
 		},
 
-		async patch() {
-			const errors = Object.values(this.errors).filter((a) => a);
-			if (errors.length) {
-				return this.$toast.error(errors[0]);
-			}
+		async create() {
 			try {
-				await this.$store.dispatch("user/patch", [
-					this.$route.params.id,
-					{
-						password: this.userData.password,
-					},
-				]);
-				this.$toast.success(
-					this.$t("components.organisms.FormNews.success.patch")
-				);
-				this.$router.push({
-					name: "",
-					params: { id: this.$route.params.id },
+				const x = await this.$store.dispatch("activation/emailReset", {
+					email: this.userData.email,
+					password: this.userData.password,
 				});
+				console.log(x);
 			} catch (e) {
-				console.error(e);
-				this.$toast.error(
-					this.$t("components.organisms.FormNews.errors.patch")
-				);
+				console.log(e);
 			}
 		},
 	},
