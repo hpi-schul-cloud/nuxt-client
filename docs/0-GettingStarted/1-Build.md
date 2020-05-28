@@ -39,7 +39,6 @@ Output Directory: `./dist/nuxt`
 | JWT_TIMEOUT_SECONDS | `7200` | Time a inactivity user's sessions remains active |
 | SENTRY_SAMPLE_RATE | `1.0` | percentage of Sample Rate in Sentry error |
 
-
 ## Storybook
 
 ```bash
