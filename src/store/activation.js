@@ -4,8 +4,13 @@ const base = serviceTemplate("activation");
 
 const module = mergeDeep(base, {
 	actions: {
-		emailReset: async function (ctx) {
-			return this.$axios.$post("/activation/email");
+		emailReset(ctx, payload = {}) {
+			const customEndpoint = "/activation/email";
+			return this.$axios.$post(customEndpoint, payload);
+		},
+		getActivationMail(ctx) {
+			const customEndpoint = "/activation/email";
+			return this.$axios.$get(customEndpoint);
 		},
 	},
 });
