@@ -3,7 +3,7 @@
 		<slot name="inputs" :userData="userData" />
 		<base-input
 			v-model="userData.password"
-			type="text"
+			type="password"
 			required="true"
 			:label="$t('common.labels.password')"
 			:placeholder="$t('common.placeholder.password.confirmation')"
@@ -27,7 +27,7 @@
 				design="secondary"
 				data-testid="button_create-user_submit"
 			>
-				{{ $t("common.actions.add") }}
+				Email ändern
 			</base-button>
 		</div>
 	</form>
@@ -40,10 +40,7 @@ export default {
 	data() {
 		return {
 			userData: {
-				firstName: "",
-				lastName: "",
-				email: "",
-				passwort: "",
+				password: "",
 			},
 		};
 	},
@@ -62,7 +59,32 @@ export default {
 			}
 		},
 
-		async patch() {},
+		async patch() {
+			const errors = Object.values(this.errors).filter((a) => a);
+			if (errors.length) {
+				return this.$toast.error(errors[0]);
+			}
+			try {
+				await this.$store.dispatch("user/patch", [
+					this.$route.params.id,
+					{
+						password: this.userData.password,
+					},
+				]);
+				this.$toast.success(
+					this.$t("components.organisms.FormNews.success.patch")
+				);
+				this.$router.push({
+					name: "",
+					params: { id: this.$route.params.id },
+				});
+			} catch (e) {
+				console.error(e);
+				this.$toast.error(
+					this.$t("components.organisms.FormNews.errors.patch")
+				);
+			}
+		},
 	},
 };
 </script>
