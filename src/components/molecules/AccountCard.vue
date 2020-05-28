@@ -1,25 +1,38 @@
 <template>
 	<div class="card">
-		<div class="icon">
-			<slot name="icon"></slot>
+		<div class="text">
+			<div class="icon">
+				<slot name="icon"></slot>
+			</div>
+			<div class="user-content">
+				<div class="headline">
+					<slot name="card-heading">
+						<p class="heading">{{ heading }}</p>
+					</slot>
+					<responsive-icon-button
+						design="text"
+						source="material"
+						icon="create"
+						@click="editEmail"
+					>
+						ändern
+					</responsive-icon-button>
+				</div>
+				<slot v-if="data" name="data">
+					<p>{{ data }}</p>
+				</slot>
+				<p v-else>••••••••••</p>
+			</div>
 		</div>
-		<div class="user-content">
-			<slot name="card-heading">
-				<p class="heading">{{ heading }}</p>
-			</slot>
-			<slot v-if="data" name="data">
-				<p>{{ data }}</p>
-			</slot>
-			<p v-else>••••••••••</p>
-			<base-button design="outline">
-				<base-icon source="material" icon="create" />
-				<slot />
-			</base-button>
-		</div>
+		<hr />
 	</div>
 </template>
 <script>
+import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 export default {
+	components: {
+		ResponsiveIconButton,
+	},
 	props: {
 		heading: {
 			type: String,
@@ -34,6 +47,13 @@ export default {
 		// This solely exists to appear in the coverage report
 		return {};
 	},
+	methods: {
+		editEmail() {
+			this.$router.push({
+				path: "/account/email/edit",
+			});
+		},
+	},
 };
 </script>
 
@@ -41,9 +61,13 @@ export default {
 @import "@styles";
 
 .card {
-	display: flex;
+	display: block;
 	flex-direction: row;
 	margin-bottom: var(--space-xl);
+
+	.text {
+		display: flex;
+	}
 
 	.icon {
 		margin-right: var(--space-xs);
@@ -54,6 +78,7 @@ export default {
 		flex-direction: column;
 
 		.heading {
+			float: left;
 			margin: 0;
 			font-weight: var(--font-weight-bold);
 		}
