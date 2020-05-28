@@ -1,13 +1,13 @@
 <template>
 	<div class="login-container">
-		<h1 class="h6" :class="isMobile ? 'margin' : ''">
+		<h1 class="h6" :class="{ margin: isMobile }">
 			{{ $t("pages.loginInstances.login") }}
 		</h1>
-		<h2 class="h1" :class="isMobile ? 'margin' : ''">
+		<h2 class="h1" :class="{ margin: isMobile }">
 			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
 		<div class="box-container">
-			<div class="boxes" :class="isMobile ? 'gap' : ''">
+			<div class="boxes" :class="{ gap: isMobile }">
 				<div v-for="(tile, index) in tiles" :key="index">
 					<instance-tile :tile="tile"></instance-tile>
 				</div>
