@@ -30,31 +30,30 @@
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				{{ dayjs(data).format("DD.MM.YYYY") }}
+				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
-			<template v-slot:datacolumn-consentStatus="{ data }">
-				<span v-if="data === 'ok'">
+			<template v-slot:datacolumn-consent="{ data }">
+				<span class="text-content">
 					<base-icon
+						v-if="data && data === 'ok'"
 						source="custom"
 						icon="doublecheck"
 						color="var(--color-success)"
 					/>
-				</span>
-				<span v-else-if="data === 'parentsAgreed'">
+
 					<base-icon
+						v-else-if="data && data === 'parentsAgreed'"
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
-				</span>
-				<span v-else-if="data === 'missing'">
 					<base-icon
+						v-else-if="data && data === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
-				<span v-else />
 			</template>
 			<template
 				v-if="schoolInternallyManaged"
@@ -166,6 +165,7 @@ export default {
 				{
 					field: "consentStatus",
 					label: this.$t("common.labels.consent"),
+					sortable: true,
 				},
 				{
 					field: "createdAt",

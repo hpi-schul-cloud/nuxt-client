@@ -17,6 +17,7 @@
 			>
 				{{ route.title }}
 			</base-link>
+			<slot name="actions"></slot>
 		</div>
 	</div>
 </template>
@@ -63,7 +64,7 @@ export default {
 	padding: 0;
 	color: var(--color-black);
 	text-align: center;
-	background-color: var(--color-white-transparent);
+	background-color: var(--color-overlay-light);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
 	box-shadow: var(--shadow-sm);
@@ -101,6 +102,14 @@ export default {
 	@include breakpoint(desktop) {
 		justify-content: right;
 		padding-bottom: 0;
+	}
+	> a {
+		margin-right: var(--space-sm);
+		margin-bottom: var(--space-xs);
+
+		@include breakpoint(tablet) {
+			margin-bottom: 0;
+		}
 	}
 }
 
