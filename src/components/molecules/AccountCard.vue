@@ -11,6 +11,7 @@
 				<p>{{ data }}</p>
 			</slot>
 			<p v-else>••••••••••</p>
+			<slot name="notification" />
 			<base-button design="outline">
 				<base-icon source="material" icon="create" />
 				<slot />

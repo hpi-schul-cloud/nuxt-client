@@ -20,6 +20,9 @@
 			:heading="$t('pages.account.index.user.email')"
 			:data="this.$user.email"
 		>
+			<template v-if="newEmail" v-slot:notification>
+				<p>das ist ihre akutelle Email Adresse</p>
+			</template>
 			<template v-slot:icon>
 				<base-icon
 					source="material"
@@ -29,6 +32,7 @@
 			</template>
 			{{ $t("pages.account.button.user.email") }}
 		</account-card>
+
 		<account-card :heading="$t('pages.account.index.user.password')">
 			<template v-slot:icon>
 				<base-icon
@@ -49,6 +53,11 @@ import AccountCard from "@components/molecules/AccountCard";
 export default {
 	components: {
 		AccountCard,
+	},
+	async asyncData({ store }) {
+		return {
+			newEmail: await store.dispatch("activation/getActivationMail"),
+		};
 	},
 };
 </script>

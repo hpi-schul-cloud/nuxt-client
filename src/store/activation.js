@@ -8,7 +8,7 @@ const module = mergeDeep(base, {
 			const customEndpoint = "/activation/email";
 			return this.$axios.$post(customEndpoint, payload);
 		},
-		activateMail(ctx) {
+		getActivationMail(ctx) {
 			const customEndpoint = "/activation/email";
 			return this.$axios.$get(customEndpoint);
 		},
