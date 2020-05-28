@@ -15,11 +15,6 @@ export default {
 	data() {
 		return {};
 	},
-	computed: {
-		isMobile() {
-			return this.$mq === "mobile";
-		},
-	},
 };
 </script>
 
