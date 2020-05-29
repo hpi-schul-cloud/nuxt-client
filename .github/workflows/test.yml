@@ -70,13 +70,13 @@ jobs:
         run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/develop/scripts/ci/fetch.github.sh" | bash
       - uses: actions/upload-artifact@v1
         name: upload results
-      - name: delete .netrc file
-        run: |
-          rm ~/.netrc
         if: always()
         with:
           name: report
           path: integration-tests/reports
+      - name: delete .netrc file
+        run: |
+          rm ~/.netrc
   # build:
   #   strategy:
   #     matrix:
