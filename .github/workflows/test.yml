@@ -63,9 +63,9 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     steps:
-      - name: create .netrc file
+      - name: Set git config
         run: |
-          echo -e "machine github.com\n  login ${CI_USER_TOKEN}" > ~/.netrc
+          git config --global url."https://${CI_USER_TOKEN}@github.com/".insteadOf "https://github.com/"
       - name: execute tests
         run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/develop/scripts/ci/fetch.github.sh" | bash
       - uses: actions/upload-artifact@v1
@@ -74,9 +74,9 @@ jobs:
         with:
           name: report
           path: integration-tests/reports
-      - name: delete .netrc file
+      - name: Unset git config
         run: |
-          rm ~/.netrc
+          git config --global --unset url."https://${CI_USER_TOKEN}@github.com/".insteadOf
   # build:
   #   strategy:
   #     matrix:
