@@ -26,11 +26,11 @@ export default {
 	computed: {
 		navbarItems() {
 			return this.navbarBaseItems.map((item) => {
-				if (item.title.includes('.')) {
+				if (item.title.includes(".")) {
 					item.title = this.$t(`${item.title}`);
 				}
-				return item
-			})
+				return item;
+			});
 		},
 		isMobile() {
 			return this.$mq === "mobile";
