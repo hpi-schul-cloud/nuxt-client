@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<navigation-bar
-			:links="links"
+			:links="navbarItems"
 			:img="require('@assets/img/logo/logo-image-color.svg')"
 		/>
 		<div :class="isMobile ? 'small-container' : 'container'">
@@ -12,6 +12,7 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
+import navbarBaseItems from "@utils/navbarBaseItems.js";
 
 export default {
 	components: {
@@ -19,31 +20,18 @@ export default {
 	},
 	data() {
 		return {
-			links: [
-				{
-					title: this.$t("layouts.loggedoutFullWidth.steps"),
-					href: "/mint-ec/willkommenspaket",
-				},
-				{
-					title: this.$t("layouts.loggedoutFullWidth.project"),
-					href: "/about",
-				},
-				{
-					title: this.$t("layouts.loggedoutFullWidth.join"),
-					href: "/community",
-				},
-				{
-					title: "Blog",
-					href: "https://blog.schul-cloud.org/",
-				},
-				{
-					title: "FAQ",
-					href: "https://blog.schul-cloud.org/faq",
-				},
-			],
+			navbarBaseItems: navbarBaseItems,
 		};
 	},
 	computed: {
+		navbarItems() {
+			return this.navbarBaseItems.map((item) => {
+				if (item.title.includes('.')) {
+					item.title = this.$t(`${item.title}`);
+				}
+				return item
+			})
+		},
 		isMobile() {
 			return this.$mq === "mobile";
 		},
