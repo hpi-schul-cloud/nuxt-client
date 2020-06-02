@@ -12,6 +12,7 @@ module.exports = [
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
 	// `^/content/`,
+	`^/login-instances/?`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/mint-ec/?`,
