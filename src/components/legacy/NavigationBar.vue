@@ -17,6 +17,7 @@
 			>
 				{{ route.title }}
 			</base-link>
+			<slot name="actions"></slot>
 		</div>
 	</div>
 </template>
@@ -101,6 +102,14 @@ export default {
 	@include breakpoint(desktop) {
 		justify-content: right;
 		padding-bottom: 0;
+	}
+	> a {
+		margin-right: var(--space-sm);
+		margin-bottom: var(--space-xs);
+
+		@include breakpoint(tablet) {
+			margin-bottom: 0;
+		}
 	}
 }
 
