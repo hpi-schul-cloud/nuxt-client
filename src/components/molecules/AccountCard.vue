@@ -5,7 +5,7 @@
 				<slot name="icon"></slot>
 			</div>
 			<div class="user-content">
-				<div class="headline">
+				<div>
 					<slot name="card-heading">
 						<p class="heading">{{ heading }}</p>
 					</slot>
@@ -67,24 +67,33 @@ export default {
 .card {
 	display: block;
 	flex-direction: row;
-	margin-bottom: var(--space-xl);
+	margin-bottom: var(--space-md);
 
 	.text {
 		display: flex;
-	}
 
-	.icon {
-		margin-right: var(--space-xs);
+		.icon {
+			.icon {
+				margin-top: var(--space-xs);
+				margin-right: var(--space-xs);
+			}
+		}
 	}
 
 	.user-content {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 
 		.heading {
 			float: left;
+			padding-top: var(--space-xs);
 			margin: 0;
 			font-weight: var(--font-weight-bold);
+		}
+
+		.button {
+			float: right;
 		}
 	}
 

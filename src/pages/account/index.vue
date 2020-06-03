@@ -11,7 +11,7 @@
 				<base-icon
 					source="material"
 					icon="account_circle"
-					style="font-size: var(--heading-3); color: var(--color-tertiary);"
+					style="font-size: var(--heading-3); color: var(--color-black);"
 				/>
 			</template>
 		</account-card>
@@ -35,7 +35,7 @@
 				<base-icon
 					source="material"
 					icon="mail"
-					style="font-size: var(--heading-3); color: var(--color-tertiary);"
+					style="font-size: var(--heading-3); color: var(--color-black);"
 				/>
 			</template>
 		</account-card>
@@ -45,7 +45,7 @@
 				<base-icon
 					source="material"
 					icon="lock"
-					style="font-size: var(--heading-3); color: var(--color-tertiary);"
+					style="font-size: var(--heading-3); color: var(--color-black);"
 				/>
 			</template>
 		</account-card>
