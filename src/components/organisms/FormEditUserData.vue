@@ -16,8 +16,8 @@
 		</base-input>
 		<div class="action">
 			<base-button
-				class="mt--lg"
-				design="outline"
+				class="mt--lg mr--md"
+				design="text"
 				text
 				data-testid=""
 				@click.prevent="$router.go(-1)"
@@ -89,8 +89,6 @@ export default {
 @import "@styles";
 
 .action {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+	float: right;
 }
 </style>

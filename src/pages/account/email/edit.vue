@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
-		<p>Deine aktuelle E-mail-Adresse lautet:</p>
+		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
 		<p>{{ this.$user.email }}</p>
 		<form-edit-user-data @success="success" @error="error">
 			<template v-slot:inputs="{ userData }">
