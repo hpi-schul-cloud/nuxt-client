@@ -20,7 +20,7 @@
 			:data="this.$user.email"
 		>
 			<template v-if="newEmail && newEmail.email" v-slot:new-mail>
-				<p>ist die aktuelle primäre Email Adresse</p>
+				ist die aktuelle primäre Email Adresse
 			</template>
 			<template v-if="newEmail && newEmail.email" v-slot:notification>
 				<div class="info-box">
@@ -73,6 +73,7 @@ export default {
 
 .info-box {
 	padding: var(--space-sm);
+	margin-bottom: var(--space-md);
 	font-size: var(--text-sm);
 	color: var(--color-white);
 	background-color: var(--color-info);
