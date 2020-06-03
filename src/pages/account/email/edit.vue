@@ -59,5 +59,15 @@ export default {
 			});
 		},
 	},
+	layout: "loggedout",
 };
 </script>
+<style lang="scss" scoped>
+@import "@styles";
+
+section {
+	min-width: var(--size-content-width-min);
+	max-width: var(--size-content-width-max);
+	margin: 0 auto;
+}
+</style>
