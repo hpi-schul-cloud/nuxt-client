@@ -2,7 +2,7 @@
 	<transition name="modal">
 		<div
 			v-if="active"
-			class="modal-mask"
+			:class="['modal-mask', design]"
 			role="dialog"
 			:aria-modal="active"
 			:aria-labelledby="`modal-${$uid}-title`"
@@ -10,8 +10,11 @@
 		>
 			<div class="base-modal-wrapper" @click.self="handleBackgroundClick">
 				<div
-					class="modal-container"
-					:class="{ 'modal-container--large': size === 'large' }"
+					:class="[
+						'modal-container',
+						design,
+						{ 'modal-container--large': size === 'large' },
+					]"
 				>
 					<slot>
 						<h2
@@ -58,6 +61,11 @@ export default {
 			type: String,
 			default: "medium",
 		},
+		design: {
+			type: String,
+			enum: ["", "white"],
+			default: "",
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
@@ -101,6 +109,10 @@ export default {
 	height: 100%;
 	background-color: var(--color-overlay-dark);
 	transition: opacity var(--duration-transition-medium) ease;
+
+	&.white {
+		background-color: var(--color-white);
+	}
 }
 
 .base-modal-wrapper {
@@ -127,6 +139,10 @@ export default {
 		@include breakpoint(tablet) {
 			min-height: auto;
 		}
+	}
+
+	&.white {
+		box-shadow: none;
 	}
 }
 
