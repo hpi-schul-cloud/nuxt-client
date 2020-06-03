@@ -19,12 +19,15 @@
 					</responsive-icon-button>
 				</div>
 				<slot v-if="data" name="data">
-					<p>{{ data }}</p>
+					<p>
+						{{ data }}
+						<slot name="new-mail" />
+					</p>
 				</slot>
 				<p v-else>••••••••••</p>
-				<slot name="notification" />
 			</div>
 		</div>
+		<slot name="notification" />
 		<hr />
 	</div>
 </template>
@@ -83,6 +86,11 @@ export default {
 			margin: 0;
 			font-weight: var(--font-weight-bold);
 		}
+	}
+
+	.notification {
+		background-color: var(--color-info);
+		border-radius: var(--radius-round);
 	}
 }
 </style>

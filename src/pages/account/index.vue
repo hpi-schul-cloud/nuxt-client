@@ -14,15 +14,22 @@
 					style="font-size: var(--heading-3); color: var(--color-tertiary);"
 				/>
 			</template>
-			{{ $t("pages.account.button.user.data") }}
 		</account-card>
 		<account-card
 			:heading="$t('pages.account.index.user.email')"
 			:data="this.$user.email"
 		>
+			<template v-if="newEmail && newEmail.email" v-slot:new-mail>
+				<p>ist die aktuelle primäre Email Adresse</p>
+			</template>
 			<template v-if="newEmail && newEmail.email" v-slot:notification>
-				<p>das ist ihre akutelle Email Adresse</p>
-				{{ newEmail }}
+				<div class="info-box">
+					<p>
+						Deine neue Email {{ newEmail.email }} muss noch bestätigt werden.
+						Bitte folge den Anweisungen in der Bestätigungsmail, welche an die
+						neue Adresse versand wurde.
+					</p>
+				</div>
 			</template>
 			<template v-slot:icon>
 				<base-icon
@@ -31,7 +38,6 @@
 					style="font-size: var(--heading-3); color: var(--color-tertiary);"
 				/>
 			</template>
-			{{ $t("pages.account.button.user.email") }}
 		</account-card>
 
 		<account-card :heading="$t('pages.account.index.user.password')">
@@ -42,7 +48,6 @@
 					style="font-size: var(--heading-3); color: var(--color-tertiary);"
 				/>
 			</template>
-			{{ $t("pages.account.button.user.password") }}
 		</account-card>
 	</section>
 </template>
@@ -62,3 +67,19 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@styles";
+
+.info-box {
+	padding: var(--space-sm);
+	font-size: var(--text-sm);
+	color: var(--color-white);
+	background-color: var(--color-info);
+	border-radius: var(--radius-sm);
+
+	p {
+		margin: 0;
+	}
+}
+</style>
