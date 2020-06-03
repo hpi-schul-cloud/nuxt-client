@@ -6,6 +6,7 @@
 		<account-card
 			:heading="$t('pages.account.index.user.data')"
 			:data="this.$user.firstName + ' ' + this.$user.lastName"
+			:target-path="`/account/email/edit`"
 		>
 			<template v-slot:icon>
 				<base-icon
@@ -18,6 +19,7 @@
 		<account-card
 			:heading="$t('pages.account.index.user.email')"
 			:data="this.$user.email"
+			:target-path="`/account/email/edit`"
 		>
 			<template v-if="newEmail && newEmail.email" v-slot:new-mail>
 				ist die aktuelle primäre Email Adresse
@@ -40,7 +42,10 @@
 			</template>
 		</account-card>
 
-		<account-card :heading="$t('pages.account.index.user.password')">
+		<account-card
+			:heading="$t('pages.account.index.user.password')"
+			:target-path="`/account/email/edit`"
+		>
 			<template v-slot:icon>
 				<base-icon
 					source="material"

@@ -13,7 +13,7 @@
 						design="text"
 						source="material"
 						icon="create"
-						@click="editEmail"
+						@click="editEmail({ targetPath })"
 					>
 						ändern
 					</responsive-icon-button>
@@ -46,15 +46,19 @@ export default {
 			type: String,
 			default: "",
 		},
+		targetPath: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
 	},
 	methods: {
-		editEmail() {
+		editEmail(targetPath) {
 			this.$router.push({
-				path: "/account/email/edit",
+				path: targetPath.targetPath,
 			});
 		},
 	},
