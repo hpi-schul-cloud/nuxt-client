@@ -28,7 +28,6 @@ export default {
 			this.$toast.error("Leider ist etwas schief gegangen");
 		},
 		success() {
-			this.$toast.success("Du hast deine..");
 			this.$router.push({
 				path: `/account/`,
 			});

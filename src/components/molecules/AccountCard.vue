@@ -22,6 +22,7 @@
 					<p>{{ data }}</p>
 				</slot>
 				<p v-else>••••••••••</p>
+				<slot name="notification" />
 			</div>
 		</div>
 		<hr />

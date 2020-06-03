@@ -68,13 +68,14 @@ export default {
 
 		async create() {
 			try {
-				const x = await this.$store.dispatch("activation/emailReset", {
+				await this.$store.dispatch("activation/emailReset", {
 					email: this.userData.email,
 					password: this.userData.password,
 				});
-				console.log(x);
+				this.$emit("success");
 			} catch (e) {
-				console.log(e);
+				this.$emit("error");
+				console.error(e);
 			}
 		},
 	},

@@ -20,8 +20,9 @@
 			:heading="$t('pages.account.index.user.email')"
 			:data="this.$user.email"
 		>
-			<template v-if="newEmail" v-slot:notification>
+			<template v-if="newEmail && newEmail.email" v-slot:notification>
 				<p>das ist ihre akutelle Email Adresse</p>
+				{{ newEmail }}
 			</template>
 			<template v-slot:icon>
 				<base-icon
