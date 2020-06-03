@@ -125,6 +125,8 @@
 	"error.load": "Fehler beim Laden der Daten.",
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"layouts.loggedoutFullWidth.blog": "Blog",
+	"layouts.loggedoutFullWidth.faq": "FAQ",
 	"layouts.loggedoutFullWidth.join": "Mitmachen",
 	"layouts.loggedoutFullWidth.project": "Über das Projekt",
 	"layouts.loggedoutFullWidth.steps": "Erste Schritte",

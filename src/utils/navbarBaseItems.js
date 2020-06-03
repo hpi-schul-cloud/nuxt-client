@@ -12,11 +12,11 @@ export default [
 		href: "/community",
 	},
 	{
-		title: "Blog",
+		title: "layouts.loggedoutFullWidth.blog",
 		href: "https://blog.schul-cloud.org/",
 	},
 	{
-		title: "FAQ",
+		title: "layouts.loggedoutFullWidth.faq",
 		href: "https://blog.schul-cloud.org/faq",
 	},
 ];

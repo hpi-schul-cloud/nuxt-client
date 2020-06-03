@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 
 import InstanceTile from "@components/molecules/InstanceTile";
 
-storiesOf("4 Molecules UI Components/Molecules UI/InstanceTile", module).add(
+storiesOf("5 Molecules UI Components/Molecules UI/InstanceTile", module).add(
 	"InstanceTile",
 	() => ({
 		components: { InstanceTile },
