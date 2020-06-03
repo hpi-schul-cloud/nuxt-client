@@ -51,9 +51,9 @@ describe("@components/base/BaseSelect", () => {
 				value: [],
 			},
 		});
-		expect(wrapper.findComponent(MultiSelect).attributes()["aria-label"]).toStrictEqual(
-			"label"
-		);
+		expect(
+			wrapper.findComponent(MultiSelect).attributes()["aria-label"]
+		).toStrictEqual("label");
 	});
 
 	it("uses default option label", () => {

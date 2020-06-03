@@ -89,12 +89,16 @@ describe("@components/base/BaseInputDefault", () => {
 				const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
 
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
-				expect(wrapperWithPlaceHolder.find(".label").element.style.display).toBe("none");
+				expect(
+					wrapperWithPlaceHolder.find(".label").element.style.display
+				).toBe("none");
 
 				input.setValue(testInput);
 				await wrapperWithPlaceHolder.vm.$nextTick();
 
-				expect(wrapperWithPlaceHolder.find(".label").element.style.display).toBe("");
+				expect(
+					wrapperWithPlaceHolder.find(".label").element.style.display
+				).toBe("");
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(true);
 			})
 		);

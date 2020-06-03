@@ -66,7 +66,9 @@ describe("@components/base/BaseModal", () => {
 		expect(wrapper.find("#btn-close").exists()).toBe(true);
 		wrapper.find(".base-modal-wrapper").trigger("click");
 		await wrapper.vm.$nextTick();
-		expect(wrapper.findComponent(BaseModal).emitted("onBackdropClick")).toHaveLength(1);
+		expect(
+			wrapper.findComponent(BaseModal).emitted("onBackdropClick")
+		).toHaveLength(1);
 	});
 
 	it("pressing outside the model content should close the modal", async () => {

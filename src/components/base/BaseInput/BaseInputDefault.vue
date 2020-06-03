@@ -10,7 +10,7 @@
 			<div :class="{ 'info-line': true, 'label-visible': showLabel }">
 				<transition name="fade">
 					<label
-							v-show="showLabel"
+						v-show="showLabel"
 						data-testid="mytest"
 						:class="{ label: true, info: true }"
 						:for="`input-${$uid}`"
