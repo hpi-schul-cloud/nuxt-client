@@ -10,10 +10,13 @@
 			class="mt--md"
 			data-testid="input_create-user_email"
 		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="lock" fill="var(--color-tertiary)" />
+			</template>
 		</base-input>
 		<div class="action">
 			<base-button
-				class="w-100 mt--lg"
+				class="mt--lg"
 				design="outline"
 				text
 				data-testid=""
@@ -23,7 +26,7 @@
 			</base-button>
 			<base-button
 				type="submit"
-				class="w-100 mt--lg"
+				class="mt--lg"
 				design="secondary"
 				data-testid=""
 			>
