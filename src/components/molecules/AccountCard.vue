@@ -5,7 +5,7 @@
 				<slot name="icon"></slot>
 			</div>
 			<div class="user-content">
-				<div class="headline">
+				<div>
 					<slot name="card-heading">
 						<p class="heading">{{ heading }}</p>
 					</slot>
@@ -13,7 +13,7 @@
 						design="text"
 						source="material"
 						icon="create"
-						@click="editEmail"
+						@click="editEmail({ targetPath })"
 					>
 						ändern
 					</responsive-icon-button>
@@ -46,15 +46,19 @@ export default {
 			type: String,
 			default: "",
 		},
+		targetPath: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
 	},
 	methods: {
-		editEmail() {
+		editEmail(targetPath) {
 			this.$router.push({
-				path: "/account/email/edit",
+				path: targetPath.targetPath,
 			});
 		},
 	},
@@ -67,24 +71,33 @@ export default {
 .card {
 	display: block;
 	flex-direction: row;
-	margin-bottom: var(--space-xl);
+	margin-bottom: var(--space-md);
 
 	.text {
 		display: flex;
-	}
 
-	.icon {
-		margin-right: var(--space-xs);
+		.icon {
+			.icon {
+				margin-top: var(--space-xs);
+				margin-right: var(--space-xs);
+			}
+		}
 	}
 
 	.user-content {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 
 		.heading {
 			float: left;
+			padding-top: var(--space-xs);
 			margin: 0;
 			font-weight: var(--font-weight-bold);
+		}
+
+		.button {
+			float: right;
 		}
 	}
 

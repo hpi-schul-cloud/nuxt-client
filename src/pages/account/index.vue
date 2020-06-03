@@ -6,18 +6,20 @@
 		<account-card
 			:heading="$t('pages.account.index.user.data')"
 			:data="this.$user.firstName + ' ' + this.$user.lastName"
+			:target-path="`/account/email/edit`"
 		>
 			<template v-slot:icon>
 				<base-icon
 					source="material"
 					icon="account_circle"
-					style="font-size: var(--heading-3); color: var(--color-tertiary);"
+					style="font-size: var(--heading-3); color: var(--color-black);"
 				/>
 			</template>
 		</account-card>
 		<account-card
 			:heading="$t('pages.account.index.user.email')"
 			:data="this.$user.email"
+			:target-path="`/account/email/edit`"
 		>
 			<template v-if="newEmail && newEmail.email" v-slot:new-mail>
 				ist die aktuelle primäre Email Adresse
@@ -35,17 +37,20 @@
 				<base-icon
 					source="material"
 					icon="mail"
-					style="font-size: var(--heading-3); color: var(--color-tertiary);"
+					style="font-size: var(--heading-3); color: var(--color-black);"
 				/>
 			</template>
 		</account-card>
 
-		<account-card :heading="$t('pages.account.index.user.password')">
+		<account-card
+			:heading="$t('pages.account.index.user.password')"
+			:target-path="`/account/email/edit`"
+		>
 			<template v-slot:icon>
 				<base-icon
 					source="material"
 					icon="lock"
-					style="font-size: var(--heading-3); color: var(--color-tertiary);"
+					style="font-size: var(--heading-3); color: var(--color-black);"
 				/>
 			</template>
 		</account-card>

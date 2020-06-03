@@ -10,11 +10,14 @@
 			class="mt--md"
 			data-testid="input_create-user_email"
 		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="lock" fill="var(--color-tertiary)" />
+			</template>
 		</base-input>
 		<div class="action">
 			<base-button
-				class="w-100 mt--lg"
-				design="outline"
+				class="mt--lg mr--md"
+				design="text"
 				text
 				data-testid=""
 				@click.prevent="$router.go(-1)"
@@ -23,7 +26,7 @@
 			</base-button>
 			<base-button
 				type="submit"
-				class="w-100 mt--lg"
+				class="mt--lg"
 				design="secondary"
 				data-testid=""
 			>
@@ -86,8 +89,6 @@ export default {
 @import "@styles";
 
 .action {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+	float: right;
 }
 </style>
