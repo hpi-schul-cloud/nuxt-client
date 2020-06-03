@@ -51,7 +51,7 @@ describe("@components/base/BaseSelect", () => {
 				value: [],
 			},
 		});
-		expect(wrapper.find(MultiSelect).attributes()["aria-label"]).toStrictEqual(
+		expect(wrapper.findComponent(MultiSelect).attributes()["aria-label"]).toStrictEqual(
 			"label"
 		);
 	});

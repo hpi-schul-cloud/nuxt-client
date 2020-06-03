@@ -9,13 +9,14 @@
 				</h2>
 			</div>
 		</div>
-		<step-progress :steps="steps" :current-step="currentStep" />
+		<step-progress data-testid="stepProgressTest" :steps="steps" :current-step="currentStep" />
 
 		<div class="content-wrapper">
 			<step-data
 				v-show="currentStep === 0"
 				:course.sync="course"
 				:available-teachers="teachers"
+				data-testid="stepDataTest"
 			/>
 
 			<step-members
@@ -23,9 +24,10 @@
 				:course="course"
 				:available-classes="classes"
 				:available-students="students"
+				data-testid="stepMembersTest"
 			/>
 
-			<step-done v-show="currentStep === 2" />
+			<step-done data-testid="stepDoneTest" v-show="currentStep === 2" />
 		</div>
 		<div class="step-wrapper">
 			<base-button v-if="!firststep" design="text" @click="lastStep">

@@ -1,5 +1,5 @@
 import ContextMenu from "./ContextMenu";
-import mergeDeep from "@utils/merge-deep";
+import { render, fireEvent } from '@testing-library/vue';
 
 const actions = [
 	{ event: "event1", text: "testText1" },
@@ -11,20 +11,26 @@ const hasWrapperFocus = (wrapper) => {
 	return wrapper.element === document.activeElement;
 };
 
-const getWrapper = (options = {}) =>
-	mount(
-		ContextMenu,
-		mergeDeep(
-			{
-				...createComponentMocks({ i18n: true }),
-				propsData: {
-					show: true,
-					actions,
-				},
+const getWrapper = ({ options, additionalProps } = {}) => {
+
+	return mount(ContextMenu,
+		{
+			...createComponentMocks({ i18n: true }),
+			propsData: {
+				show: true,
+				actions,
+				...additionalProps
 			},
-			options
-		)
+			...options
+		}
 	);
+};
+
+const getAttachToOptions = () => {
+	const div = document.createElement('div');
+	document.body.appendChild(div);
+	return { options: { attachTo: div } };
+};
 
 describe("@components/molecules/ContextMenu", () => {
 	it(...isValidComponent(ContextMenu));
@@ -71,9 +77,7 @@ describe("@components/molecules/ContextMenu", () => {
 	});
 
 	it("emits (update:show false) event when ESC Keys gets pressed", async () => {
-		const wrapper = getWrapper({
-			attachToDocument: true,
-		});
+		const wrapper = getWrapper(getAttachToOptions());
 		expect(wrapper.emitted("update:show")).toBeUndefined();
 		window.dispatchEvent(
 			new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 })
@@ -84,29 +88,26 @@ describe("@components/molecules/ContextMenu", () => {
 	});
 
 	describe("click outside", () => {
-		it("triggers event on click outside", async () => {
+		it("triggers event on click outside d", async () => {
 			// Mount Menu wrapper to have something to click outside
-			const wrapper = mount(
+			const emptyNode = "<!---->";
+			const wrapper = render(
 				{
 					data: () => ({ show: true, actions }),
 					template: `
-					<div>
-					<div class="outside">Outside</div>
-					<ContextMenu class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>
+					<div id="container">
+						<div data-testid="outside" class="outside">Outside</div>
+						<ContextMenu data-testid="testid" class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>	
 					</div>
 				`,
 					components: { ContextMenu },
 					...createComponentMocks({ i18n: true }),
 				},
-				{ attachToDocument: true }
 			);
-			const Menu = wrapper.find(".ctxmenu");
 			// wait because ctxmenu is not reacting to clicks outside immediatly
 			await wait(0);
-			wrapper.find(".outside").trigger("click");
-			expect(Menu.emitted("update:show")).toHaveLength(1);
-			expect(Menu.emitted("update:show")).toStrictEqual([[false]]);
-			wrapper.destroy();
+			await fireEvent.click(wrapper.getByTestId("outside"));
+			expect(wrapper.getByTestId("testid").innerHTML).toStrictEqual(emptyNode);
 		});
 
 		it("does not trigger event on click outside if noClose=true", async () => {
@@ -123,7 +124,7 @@ describe("@components/molecules/ContextMenu", () => {
 					components: { ContextMenu },
 					...createComponentMocks({ i18n: true }),
 				},
-				{ attachToDocument: true }
+				getAttachToOptions()
 			);
 			const Menu = wrapper.find(".ctxmenu");
 			// wait because ctxmenu is not reacting to clicks outside immediatly
@@ -144,9 +145,7 @@ describe("@components/molecules/ContextMenu", () => {
 			"menu gets positioned correctly by anchor attribute %s",
 			async (anchor, top, bottom, left, right) => {
 				const wrapper = getWrapper({
-					propsData: {
-						anchor,
-					},
+					additionalProps: { anchor },
 				});
 				const menuStyles = wrapper.find(".context-menu").element.style;
 				expect(menuStyles.top).toContain(top);
@@ -160,9 +159,7 @@ describe("@components/molecules/ContextMenu", () => {
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
 			expect(() => {
 				getWrapper({
-					propsData: {
-						anchor: "top-bottom",
-					},
+						additionalProps: { anchor: "top-bottom" },
 				});
 			}).toThrow(new Error("anchor is not defined"));
 			expect(consoleError).toHaveBeenCalledWith(
@@ -181,19 +178,21 @@ describe("@components/molecules/ContextMenu", () => {
 			closeButton.trigger("click");
 			expect(wrapper.emitted("update:show")).toHaveLength(1);
 			expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
+			wrapper.destroy();
 		});
 
 		it("first element get's focused on mount", async () => {
-			const wrapper = getWrapper({ attachToDocument: true });
+			const wrapper = getWrapper(getAttachToOptions());
 			// wait 2 times because nextTick is also used in the component itself
 			await wrapper.vm.$nextTick();
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
+			wrapper.destroy();
 		});
 
 		it("arrow up keeps focus on first element if already focused", async () => {
-			const wrapper = getWrapper({ attachToDocument: true });
+			const wrapper = getWrapper(getAttachToOptions());
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			buttons.at(0).element.focus();
@@ -201,10 +200,11 @@ describe("@components/molecules/ContextMenu", () => {
 			buttons.at(0).trigger("keydown.up");
 			await wrapper.vm.$nextTick();
 			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
+			wrapper.destroy();
 		});
 
 		it("arrow up focuses previous button", async () => {
-			const wrapper = getWrapper({ attachToDocument: true });
+			const wrapper = getWrapper(getAttachToOptions());
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 
@@ -224,10 +224,11 @@ describe("@components/molecules/ContextMenu", () => {
 				expect(hasWrapperFocus(currentButton)).toBe(false);
 				expect(hasWrapperFocus(prevButton)).toBe(true);
 			}
+			wrapper.destroy();
 		});
 
 		it("arrow down focuses next button", async () => {
-			const wrapper = getWrapper({ attachToDocument: true });
+			const wrapper = getWrapper(getAttachToOptions());
 			await wrapper.vm.$nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 			// - 2 (-1 for length offset and another -1 for close button)

@@ -1,10 +1,14 @@
 import CourseWizard from "./index";
+import { render } from '@testing-library/vue';
+import { toBeVisible } from '@testing-library/jest-dom/matchers'
+
+expect.extend({ toBeVisible });
 
 describe("@components/organisms/CourseWizard", () => {
 	it(...isValidComponent(CourseWizard));
 
 	it("Test that only progress and data are showing.", async () => {
-		const wrapper = shallowMount(CourseWizard, {
+		const { getByTestId } = render(CourseWizard, {
 			propsData: {
 				user: {
 					_id: "test1",
@@ -22,13 +26,13 @@ describe("@components/organisms/CourseWizard", () => {
 				},
 			},
 		});
-		expect(wrapper.find("step-progress-stub").isVisible()).toBe(true);
-		expect(wrapper.find("step-data-stub").isVisible()).toBe(true);
-		expect(wrapper.find("step-members-stub").isVisible()).toBe(false);
-		expect(wrapper.find("step-done-stub").isVisible()).toBe(false);
-		expect(
-			wrapper.find(".step-wrapper").findAll("base-button-stub")
-		).toHaveLength(1);
+		expect(getByTestId("stepProgressTest")).toBeVisible();
+		expect(getByTestId("stepDataTest")).toBeVisible();
+		expect(getByTestId("stepMembersTest")).not.toBeVisible();
+		expect(getByTestId("stepDoneTest")).not.toBeVisible();
+		// expect(
+		// 	wrapper.find(".step-wrapper").findAll("base-button-stub")
+		// ).toHaveLength(1);
 	});
 
 	it("Test click next step", async () => {

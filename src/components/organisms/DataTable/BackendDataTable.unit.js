@@ -38,7 +38,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			expect(wrapper.find("thead tr").findAll("th")).toHaveLength(
 				tableColumns.length
 			);
-			expect(wrapper.find("tbody tr").contains("td")).toBe(true);
+			expect(wrapper.find("tbody tr").find("td").exists()).toBe(true);
 
 			expect(wrapper.find("thead tr th").text()).toContain("Vorname");
 
@@ -113,20 +113,26 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			await wrapper.vm.$nextTick();
 			otherSortButton.trigger("click");
 			await wrapper.vm.$nextTick();
-			expect(wrapper.emittedByOrder()).toStrictEqual([
-				{ args: ["firstName", "asc"], name: "update:sort" },
-				{ args: ["firstName"], name: "update:sort-by" },
-				{ args: ["asc"], name: "update:sort-order" },
-				{ args: ["firstName", "desc"], name: "update:sort" },
-				{ args: ["firstName"], name: "update:sort-by" },
-				{ args: ["desc"], name: "update:sort-order" },
-				{ args: ["firstName", "asc"], name: "update:sort" },
-				{ args: ["firstName"], name: "update:sort-by" },
-				{ args: ["asc"], name: "update:sort-order" },
-				{ args: ["address.city", "asc"], name: "update:sort" },
-				{ args: ["address.city"], name: "update:sort-by" },
-				{ args: ["asc"], name: "update:sort-order" },
-			]);
+			expect(wrapper.emitted()).toMatchObject({
+				"update:sort": [
+					["firstName", "asc"],
+					["firstName", "desc"],
+					["firstName","asc"],
+					["address.city","asc"]
+				],
+				"update:sort-by": [
+					["firstName"],
+					["firstName"],
+					["firstName"],
+					["address.city"]
+				],
+				"update:sort-order": [
+					["asc"],
+					["desc"],
+					["asc"],
+					["asc"]
+				]
+			});
 		});
 
 		it("should update ui if sortBy prop changes", async () => {

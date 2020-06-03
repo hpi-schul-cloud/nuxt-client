@@ -1,4 +1,8 @@
 import TemplateTab from "./Tab";
+import { render } from '@testing-library/vue';
+import { toBeVisible } from '@testing-library/jest-dom/matchers'
+
+expect.extend({ toBeVisible });
 
 const tabContentShow = {
 	components: { TemplateTab },
@@ -14,11 +18,11 @@ describe("@components/atoms/Tab", () => {
 	it(...isValidComponent(TemplateTab));
 
 	it("Shows when active", () => {
-		const wrapper = mount(tabContentShow);
-		expect(wrapper.find(".tab-content").isVisible()).toBe(true);
+		const { getByTestId } = render(tabContentShow);
+		expect(getByTestId("tabTest")).toBeVisible();
 	});
 	it("Doesn't show when tab isn't active", () => {
-		const wrapper = mount(tabContentHide);
-		expect(wrapper.find(".tab-content").isVisible()).toBe(false);
+		const { getByTestId } = render(tabContentHide);
+		expect(getByTestId("tabTest")).not.toBeVisible();
 	});
 });

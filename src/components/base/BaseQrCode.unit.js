@@ -9,8 +9,8 @@ describe("@components/base/BaseQrCode", () => {
 	it(...isValidComponent(BaseQrCode));
 	it("Generates a qrCode image", () => {
 		const wrapper = mount(qrCode);
-		expect(wrapper.contains("div")).toBe(true);
-		expect(wrapper.contains("img")).toBe(true);
+		expect(wrapper.find("div").exists()).toBe(true);
+		expect(wrapper.find("img").exists()).toBe(true);
 	});
 	it("Sets its url as alt text", () => {
 		const wrapper = mount(qrCode);
