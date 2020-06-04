@@ -1,5 +1,5 @@
 import ContextMenu from "./ContextMenu";
-import { render, fireEvent } from '@testing-library/vue';
+import { render, fireEvent } from "@testing-library/vue";
 
 const actions = [
 	{ event: "event1", text: "testText1" },
@@ -12,22 +12,19 @@ const hasWrapperFocus = (wrapper) => {
 };
 
 const getWrapper = ({ options, additionalProps } = {}) => {
-
-	return mount(ContextMenu,
-		{
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				show: true,
-				actions,
-				...additionalProps
-			},
-			...options
-		}
-	);
+	return mount(ContextMenu, {
+		...createComponentMocks({ i18n: true }),
+		propsData: {
+			show: true,
+			actions,
+			...additionalProps,
+		},
+		...options,
+	});
 };
 
 const getAttachToOptions = () => {
-	const div = document.createElement('div');
+	const div = document.createElement("div");
 	document.body.appendChild(div);
 	return { options: { attachTo: div } };
 };
@@ -91,19 +88,17 @@ describe("@components/molecules/ContextMenu", () => {
 		it("triggers event on click outside d", async () => {
 			// Mount Menu wrapper to have something to click outside
 			const emptyNode = "<!---->";
-			const wrapper = render(
-				{
-					data: () => ({ show: true, actions }),
-					template: `
+			const wrapper = render({
+				data: () => ({ show: true, actions }),
+				template: `
 					<div id="container">
 						<div data-testid="outside" class="outside">Outside</div>
 						<ContextMenu data-testid="testid" class="ctxmenu" :actions="actions" :show.sync="show"></ContextMenu>	
 					</div>
 				`,
-					components: { ContextMenu },
-					...createComponentMocks({ i18n: true }),
-				},
-			);
+				components: { ContextMenu },
+				...createComponentMocks({ i18n: true }),
+			});
 			// wait because ctxmenu is not reacting to clicks outside immediatly
 			await wait(0);
 			await fireEvent.click(wrapper.getByTestId("outside"));
@@ -159,7 +154,7 @@ describe("@components/molecules/ContextMenu", () => {
 			const consoleError = jest.spyOn(console, "error").mockImplementation();
 			expect(() => {
 				getWrapper({
-						additionalProps: { anchor: "top-bottom" },
+					additionalProps: { anchor: "top-bottom" },
 				});
 			}).toThrow(new Error("anchor is not defined"));
 			expect(consoleError).toHaveBeenCalledWith(

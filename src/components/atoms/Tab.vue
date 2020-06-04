@@ -1,5 +1,10 @@
 <template>
-	<div v-if="hasPermission" v-show="isActive" data-testid="tabTest" class="tab-content">
+	<div
+		v-if="hasPermission"
+		v-show="isActive"
+		data-testid="tabTest"
+		class="tab-content"
+	>
 		<slot></slot>
 	</div>
 </template>

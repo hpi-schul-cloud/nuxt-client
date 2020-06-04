@@ -117,21 +117,16 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				"update:sort": [
 					["firstName", "asc"],
 					["firstName", "desc"],
-					["firstName","asc"],
-					["address.city","asc"]
+					["firstName", "asc"],
+					["address.city", "asc"],
 				],
 				"update:sort-by": [
 					["firstName"],
 					["firstName"],
 					["firstName"],
-					["address.city"]
+					["address.city"],
 				],
-				"update:sort-order": [
-					["asc"],
-					["desc"],
-					["asc"],
-					["asc"]
-				]
+				"update:sort-order": [["asc"], ["desc"], ["asc"], ["asc"]],
 			});
 		});
 
