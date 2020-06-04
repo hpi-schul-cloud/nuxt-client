@@ -1,14 +1,14 @@
 import CourseWizard from "./index";
 import { render } from "@testing-library/vue";
-import { toBeVisible } from "@testing-library/jest-dom/matchers";
+import { toBeVisible, toBeInTheDocument } from "@testing-library/jest-dom/matchers";
 
-expect.extend({ toBeVisible });
+expect.extend({ toBeVisible, toBeInTheDocument });
 
 describe("@components/organisms/CourseWizard", () => {
 	it(...isValidComponent(CourseWizard));
 
 	it("Test that only progress and data are showing.", async () => {
-		const { getByTestId } = render(CourseWizard, {
+		const { getByTestId, getByText } = render(CourseWizard, {
 			propsData: {
 				user: {
 					_id: "test1",
@@ -30,9 +30,7 @@ describe("@components/organisms/CourseWizard", () => {
 		expect(getByTestId("stepDataTest")).toBeVisible();
 		expect(getByTestId("stepMembersTest")).not.toBeVisible();
 		expect(getByTestId("stepDoneTest")).not.toBeVisible();
-		// expect(
-		// 	wrapper.find(".step-wrapper").findAll("base-button-stub")
-		// ).toHaveLength(1);
+		expect(getByText("Weiter")).toBeInTheDocument();
 	});
 
 	it("Test click next step", async () => {
