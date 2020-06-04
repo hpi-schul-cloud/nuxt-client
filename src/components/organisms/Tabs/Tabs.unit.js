@@ -3,9 +3,6 @@ import { mount } from "@vue/test-utils";
 import TemplateTabs from "./Tabs";
 import TemplateTab from "@components/atoms/Tab";
 import { render, fireEvent } from "@testing-library/vue";
-import { toBeVisible } from "@testing-library/jest-dom/matchers";
-
-expect.extend({ toBeVisible });
 
 const tabs = {
 	components: { TemplateTabs, TemplateTab },

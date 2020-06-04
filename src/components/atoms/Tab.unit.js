@@ -1,8 +1,5 @@
 import TemplateTab from "./Tab";
 import { render } from "@testing-library/vue";
-import { toBeVisible } from "@testing-library/jest-dom/matchers";
-
-expect.extend({ toBeVisible });
 
 const tabContentShow = {
 	components: { TemplateTab },

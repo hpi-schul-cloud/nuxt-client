@@ -1,11 +1,5 @@
 import CourseWizard from "./index";
 import { render } from "@testing-library/vue";
-import {
-	toBeVisible,
-	toBeInTheDocument,
-} from "@testing-library/jest-dom/matchers";
-
-expect.extend({ toBeVisible, toBeInTheDocument });
 
 describe("@components/organisms/CourseWizard", () => {
 	it(...isValidComponent(CourseWizard));

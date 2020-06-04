@@ -1,8 +1,5 @@
 import TheSidebar from "./TheSidebar";
 import { render } from "@testing-library/vue";
-import { toBeEmptyDOMElement } from "@testing-library/jest-dom/matchers";
-
-expect.extend({ toBeEmptyDOMElement });
 
 describe("@components/legacy/TheSidebar", () => {
 	it(...isValidComponent(TheSidebar));
