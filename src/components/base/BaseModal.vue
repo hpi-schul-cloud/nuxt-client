@@ -66,6 +66,9 @@ export default {
 			enum: ["", "white"],
 			default: "",
 		},
+		backgroundClickDisabled: {
+			type: Boolean,
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
@@ -82,8 +85,10 @@ export default {
 	},
 	methods: {
 		handleBackgroundClick() {
-			this.$emit("onBackdropClick");
-			this.close();
+			if (!this.backgroundClickDisabled) {
+				this.$emit("onBackdropClick");
+				this.close();
+			}
 		},
 		close() {
 			this.$emit("update:active", false);

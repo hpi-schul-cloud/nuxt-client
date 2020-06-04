@@ -1,9 +1,17 @@
 <template>
 	<section>
+		<info-modal-full-width
+			title="Eine Bestätigungsmail wurde an deine neue E-Mail Adresse gesendet. Bitte bestätige diese."
+			description=""
+			btn="OK"
+			:active="showModal"
+			@update:active="success"
+		/>
+
 		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
 		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
 		<p>{{ this.$user.email }}</p>
-		<form-edit-user-data @success="success" @error="error">
+		<form-edit-user-data @success="showModal = true" @error="error">
 			<template v-slot:inputs="{ userData }">
 				<base-input
 					v-model="userData.email"
@@ -44,10 +52,12 @@
 
 <script>
 import FormEditUserData from "@components/organisms/FormEditUserData";
+import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
 
 export default {
 	components: {
 		FormEditUserData,
+		InfoModalFullWidth,
 	},
 	data() {
 		return {
@@ -59,9 +69,9 @@ export default {
 			this.$toast.error("Leider ist etwas schief gegangen");
 		},
 		success() {
-			// this.$router.push({
-			// 	path: `/account/`,
-			// });
+			this.$router.push({
+				path: `/account/`,
+			});
 		},
 	},
 	layout: "loggedout",
