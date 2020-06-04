@@ -93,6 +93,7 @@ export default {
 	margin-bottom: var(--space-xl-3) !important;
 }
 .h6.margin {
+	margin-top: var(--space-xl) !important;
 	margin-bottom: var(--border-width-bold);
 }
 </style>
