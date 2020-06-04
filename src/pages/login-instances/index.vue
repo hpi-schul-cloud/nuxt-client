@@ -7,7 +7,7 @@
 			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
 		<div class="box-container">
-			<div class="boxes" :class="{ gap: isMobile }">
+			<div class="boxes" :class="{ mobile: isMobile }">
 				<div v-for="(tile, index) in tiles" :key="index">
 					<instance-tile :tile="tile"></instance-tile>
 				</div>
@@ -35,6 +35,10 @@ export default {
 					url: this.$t("pages.loginInstances.hpi_link"),
 				},
 				{
+					icon: "thr",
+					url: this.$t("pages.loginInstances.thr_link"),
+				},
+				{
 					icon: "brb",
 					url: this.$t("pages.loginInstances.brb_link"),
 				},
@@ -42,9 +46,10 @@ export default {
 					icon: "n21",
 					url: this.$t("pages.loginInstances.n21_link"),
 				},
+
 				{
-					icon: "thr",
-					url: this.$t("pages.loginInstances.thr_link"),
+					icon: "open_HPI",
+					url: this.$t("pages.loginInstances.open_hpi_link"),
 				},
 			],
 		};
@@ -69,10 +74,11 @@ export default {
 }
 .boxes {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
 	grid-gap: var(--space-lg);
 }
-.boxes.gap {
+.boxes.mobile {
+	grid-template-columns: 1fr 1fr;
 	grid-gap: var(--space-sm);
 }
 .h1 {
