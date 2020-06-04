@@ -1,6 +1,9 @@
 import CourseWizard from "./index";
 import { render } from "@testing-library/vue";
-import { toBeVisible, toBeInTheDocument } from "@testing-library/jest-dom/matchers";
+import {
+	toBeVisible,
+	toBeInTheDocument,
+} from "@testing-library/jest-dom/matchers";
 
 expect.extend({ toBeVisible, toBeInTheDocument });
 
