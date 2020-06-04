@@ -25,6 +25,24 @@ module.exports = {
 		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 		SC_THEME: process.env.SC_THEME,
 	},
+
+	/*
+	 ** Content Security Policy (CSP)
+	 */
+	csp: {
+		cors: {
+			type: "boolean",
+			default: true,
+			description:
+				"If enabled, default content security policy (CSP) header will be set.",
+		},
+		security_headers: {
+			type: "boolean",
+			default: true,
+			description: "If enabled, additional security header will be set.",
+		},
+	},
+
 	/*
 	 ** Headers of the page
 	 */
@@ -78,9 +96,11 @@ module.exports = {
 
 	router: {
 		middleware: [
+			"cors",
 			// "is-authenticated",
 			"links-fallback",
 			"permission-check",
+			"security-headers",
 		],
 	},
 
@@ -90,6 +110,7 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
+		"@plugins/csp",
 		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
