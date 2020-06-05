@@ -1,11 +1,12 @@
-const nuxtConfig = require("../../nuxt.config.js");
+const crypto = require("crypto");
+const nuxtConfig = require("../../../nuxt.config.js");
 const {
 	contentSecurityPolicy,
 	accessControlAllowOrigin,
-} = require("../../http-headers.js");
+} = require("../../../http-headers.config.js");
 
-if (nuxtConfig.csp.cors !== true) {
-	throw new Error("CORS missing in configuration");
+if (!nuxtConfig.csp.cors) {
+	throw new Error("cors is missing in configuration (csp)");
 }
 
 if (!nuxtConfig.csp.cors.default) {
@@ -85,7 +86,7 @@ const cspHeadersForRoute = (path, regexs, corsDefault, nonceValue) => {
 		}
 	}
 
-	console.log(`cors headers for route ${path}`, attributes);
+	console.log(`cors headers for route ${path}`, corsHeaders);
 	return attributes;
 };
 
@@ -96,16 +97,21 @@ const accessControlHeadersForRoute = (path, regexs) => {
 	return corsHeaders;
 };
 
+const getNonceValue = () => {
+	const nonceValue = crypto.randomBytes(16).toString("base64");
+	return nonceValue;
+};
+
 export default async function (req, res, next) {
 	if (nuxtConfig.csp.cors.default) {
 		try {
 			// Content-Security-Policy
 			const { corsDefault, corsSiteSpecific } = contentSecurityPolicy;
 			const corsAllowContentOrigins = cspHeadersForRoute(
-				req.path,
+				req.url,
 				corsSiteSpecific,
 				corsDefault,
-				res.locals.nonceValue
+				getNonceValue()
 			);
 			if (corsAllowContentOrigins) {
 				let cspString = "";
@@ -147,7 +153,7 @@ export default async function (req, res, next) {
 
 			// Access-Control-Allow-Origin
 			const corsAllowOrigins = accessControlHeadersForRoute(
-				req.path,
+				req.url,
 				accessControlAllowOrigin
 			);
 			if (corsAllowOrigins.length !== 0) {

@@ -1,8 +1,8 @@
-const nuxtConfig = require("../../nuxt.config.js");
-const { additionalSecurityHeader } = require("../../http-headers.js");
+const nuxtConfig = require("../../../nuxt.config.js");
+const { additionalSecurityHeader } = require("../../../http-headers.config.js");
 
-if (nuxtConfig.csp.security_headers !== true) {
-	throw new Error("security_headers missing in configuration");
+if (!nuxtConfig.csp.security_headers) {
+	throw new Error("security_headers is missing in configuration (csp)");
 }
 
 if (!nuxtConfig.csp.security_headers.default) {
@@ -13,7 +13,7 @@ if (!nuxtConfig.csp.security_headers.default) {
 }
 
 export default async function (req, res, next) {
-	if (nuxtConfig.csp.security_headers) {
+	if (nuxtConfig.csp.security_headers.default) {
 		Object.keys(additionalSecurityHeader).forEach((header) => {
 			res.setHeader(header, additionalSecurityHeader[header]);
 		});

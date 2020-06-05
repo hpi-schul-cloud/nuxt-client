@@ -90,17 +90,17 @@ module.exports = {
 		host: process.env.HOST || DEFAULT_HOST,
 	},
 	serverMiddleware: [
+		"@serverMiddleware/csp/cors",
+		"@serverMiddleware/csp/security_headers",
 		"@serverMiddleware/nuxtversion",
 		"@serverMiddleware/proxy",
 	],
 
 	router: {
 		middleware: [
-			"cors",
 			// "is-authenticated",
 			"links-fallback",
 			"permission-check",
-			"security-headers",
 		],
 	},
 
@@ -110,7 +110,6 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
-		"@plugins/csp",
 		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
