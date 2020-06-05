@@ -11,7 +11,6 @@
 				<transition name="fade">
 					<label
 						v-show="showLabel"
-						data-testid="mytest"
 						:class="{ label: true, info: true }"
 						:for="`input-${$uid}`"
 					>

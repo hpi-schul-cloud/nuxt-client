@@ -7,7 +7,6 @@
 						v-if="input.icon"
 						v-bind="input.icon"
 						class="breadcrumb-icon"
-						data-testid="base-icon-test"
 					/>
 					{{ input.text }}
 					<base-icon
@@ -15,7 +14,6 @@
 						source="material"
 						icon="keyboard_arrow_right"
 						class="arrow"
-						data-testid="base-icon-test"
 					/>
 				</component>
 			</li>
