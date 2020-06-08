@@ -31,20 +31,20 @@ export default {
 		return {
 			tiles: [
 				{
-					icon: "hpi",
-					url: this.$t("pages.loginInstances.hpi_link"),
-				},
-				{
-					icon: "thr",
-					url: this.$t("pages.loginInstances.thr_link"),
-				},
-				{
 					icon: "brb",
 					url: this.$t("pages.loginInstances.brb_link"),
 				},
 				{
 					icon: "n21",
 					url: this.$t("pages.loginInstances.n21_link"),
+				},
+				{
+					icon: "thr",
+					url: this.$t("pages.loginInstances.thr_link"),
+				},
+				{
+					icon: "hpi",
+					url: this.$t("pages.loginInstances.hpi_link"),
 				},
 				{
 					icon: "open_HPI",
