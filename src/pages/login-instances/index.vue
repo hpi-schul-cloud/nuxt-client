@@ -46,7 +46,6 @@ export default {
 					icon: "n21",
 					url: this.$t("pages.loginInstances.n21_link"),
 				},
-
 				{
 					icon: "open_HPI",
 					url: this.$t("pages.loginInstances.open_hpi_link"),
