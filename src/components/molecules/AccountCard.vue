@@ -57,10 +57,6 @@ export default {
 			default: "editable",
 		},
 	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
 	methods: {
 		editEmail(targetPath) {
 			this.$router.push({

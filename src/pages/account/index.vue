@@ -45,7 +45,7 @@
 
 		<account-card
 			:heading="$t('pages.account.index.user.password')"
-			:target-path="`/account/email/edit`"
+			:target-path="`/account/password/edit`"
 		>
 			<template v-slot:icon>
 				<base-icon
@@ -101,7 +101,12 @@ export default {
 	async asyncData({ store }) {
 		return {
 			newEmail: await store.dispatch("activation/getActivationMail"),
+			currentUser: await store.dispatch("auth/populateUser"),
 		};
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		fullName() {
@@ -114,6 +119,8 @@ export default {
 			return this.$user?.roles.some((role) => role.name === "student");
 		},
 	},
+
+	created() {},
 	methods: {
 		isNotStudent(roles) {
 			return roles.some((role) => role !== "student");
