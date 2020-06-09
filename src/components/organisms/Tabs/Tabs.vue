@@ -9,6 +9,7 @@
 				<button
 					v-if="tab.hasPermission"
 					class="tab-button"
+					data-testid="tabButtonTest"
 					@click="selectTab(tab)"
 				>
 					<span>{{ tab.name }}</span>

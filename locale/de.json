@@ -141,6 +141,8 @@
 	"pages.account.index.user.data": "Aktuelle Nutzerdaten:",
 	"pages.account.index.user.email": "Aktuelle E-Mail Adresse:",
 	"pages.account.index.user.password": "Aktuelles Passwort:",
+	"pages.account.index.user.teams": "Team Einstellungen",
+	"pages.account.index.user.thirdPartyProviders": "Drittanbieter-Logins",
 	"pages.administraion.datasources.index.empty": "Noch keine Daten Importiert",
 	"pages.administraion.datasources.index.error": "Letzter Import fehlgeschlagen: {relativeDate}",
 	"pages.administraion.datasources.index.pending": "In Arbeit",

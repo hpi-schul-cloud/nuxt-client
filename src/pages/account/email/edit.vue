@@ -74,6 +74,9 @@ export default {
 			});
 		},
 	},
+	meta: {
+		requiredPermissions: ["PASSWORD_EDIT"],
+	},
 	layout: "loggedout",
 };
 </script>

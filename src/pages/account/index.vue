@@ -5,8 +5,9 @@
 		</h1>
 		<account-card
 			:heading="$t('pages.account.index.user.data')"
-			:data="this.$user.firstName + ' ' + this.$user.lastName"
-			:target-path="`/account/email/edit`"
+			:data="fullName"
+			:target-path="`/account/name/edit`"
+			:mode="isStudent ? 'readonly' : 'editable'"
 		>
 			<template v-slot:icon>
 				<base-icon
@@ -54,21 +55,69 @@
 				/>
 			</template>
 		</account-card>
+
+		<user-has-role :role="isNotStudent">
+			<account-card
+				:heading="$t('pages.account.index.user.teams')"
+				data="Sichtbarkeit für Teameinladungen"
+				:target-path="`/account/teams`"
+			>
+				<template v-slot:icon>
+					<base-icon
+						source="material"
+						icon="people"
+						style="font-size: var(--heading-3); color: var(--color-black);"
+					/>
+				</template>
+			</account-card>
+		</user-has-role>
+
+		<account-card
+			:heading="$t('pages.account.index.user.thirdPartyProviders')"
+			data=""
+			:target-path="`/account/thirdPartyProviders`"
+		>
+			<template v-slot:icon>
+				<base-icon
+					source="material"
+					icon="vpn_key"
+					style="font-size: var(--heading-3); color: var(--color-black);"
+				/>
+			</template>
+		</account-card>
 	</section>
 </template>
 
 <script>
 import AccountCard from "@components/molecules/AccountCard";
+import UserHasRole from "@components/helpers/UserHasRole";
 // import { mapGetters } from "vuex";
 
 export default {
 	components: {
 		AccountCard,
+		UserHasRole,
 	},
 	async asyncData({ store }) {
 		return {
 			newEmail: await store.dispatch("activation/getActivationMail"),
 		};
+	},
+	computed: {
+		fullName() {
+			return `${this.$user?.firstName} ${this.$user?.lastName}`;
+		},
+		thirdPartyLogin() {
+			return this.$user?.systemId;
+		},
+		isStudent() {
+			return this.$user?.roles.some((role) => role.name === "student");
+		},
+	},
+	methods: {
+		isNotStudent(roles) {
+			return roles.some((role) => role !== "student");
+		},
 	},
 };
 </script>

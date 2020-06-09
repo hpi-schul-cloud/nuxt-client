@@ -10,6 +10,7 @@
 						<p class="heading">{{ heading }}</p>
 					</slot>
 					<responsive-icon-button
+						v-if="mode !== 'readonly'"
 						design="text"
 						source="material"
 						icon="create"
@@ -49,6 +50,11 @@ export default {
 		targetPath: {
 			type: String,
 			default: "",
+		},
+		mode: {
+			type: String,
+			enum: ["editable", "readonly"],
+			default: "editable",
 		},
 	},
 	data() {
