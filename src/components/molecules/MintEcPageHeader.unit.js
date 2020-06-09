@@ -24,7 +24,7 @@ describe("@components/molecules/MintEcPageHeader", () => {
 				heading: "heading",
 			},
 		});
-		expect(wrapper.find(BaseContentContainer).exists()).toBe(true);
+		expect(wrapper.findComponent(BaseContentContainer).exists()).toBe(true);
 		expect(wrapper.find(".custom-heading-style").exists()).toBe(true);
 		expect(wrapper.find(".teaser").exists()).toBe(true);
 	});
