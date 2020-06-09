@@ -5,8 +5,22 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.consent.title") }}
 		</h1>
-		{{ $t("pages.administration.students.consent.info") }}
-		<div>
+		<i18n path="pages.administration.students.consent.info" tag="p">
+			<template v-slot:dataProtection>
+				<a class="highlight">{{
+					$t("components.legacy.footer.privacy_policy")
+				}}</a>
+			</template>
+			<template v-slot:terms>
+				<a class="highlight">{{ $t("components.legacy.footer.terms") }}</a>
+			</template>
+			<template v-slot:handout>
+				<a class="highlight">{{
+					$t("pages.administration.students.consent.handout")
+				}}</a>
+			</template>
+		</i18n>
+		<div class="mt--lg">
 			<step-progress
 				id="progressbar"
 				:steps="progressSteps"
@@ -22,6 +36,9 @@
 				:data="tableData"
 				track-by="id"
 				:paginated="false"
+				sort-by="fullName"
+				:sort-order="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div v-if="slotProps.data" class="text-content">
@@ -29,7 +46,7 @@
 					</div>
 					<div v-if="!slotProps.data" class="text-content">
 						<base-input
-							v-model="slotProps.data"
+							v-model="birthdays[slotProps.rowindex]"
 							type="date"
 							label=""
 							:placeholder="$t('common.placeholder.dateformat')"
@@ -37,6 +54,11 @@
 					</div>
 				</template>
 			</backend-data-table>
+
+			<p v-if="birthdayWarning" style="color: var(--color-danger);">
+				<base-icon source="material" icon="report_problem" />
+				{{ $t("pages.administration.students.consent.steps.complete.warn") }}
+			</p>
 
 			<base-button design="secondary" @click="next">{{
 				$t("pages.administration.students.consent.steps.complete.next")
@@ -54,19 +76,33 @@
 				:data="tableData"
 				track-by="id"
 				:paginated="false"
+				sort-by="fullName"
+				:sort-order="sortOrder"
+				@update:sort="onUpdateSort"
 			>
-				<template v-slot:datacolumn-birthday="{ data }">
-					{{ dayjs(data).format("DD.MM.YYYY") }}
+				<template v-slot:datacolumn-birthday="slotProps">
+					<div class="text-content">
+						{{ dayjs(birthdays[slotProps.rowindex]).format("DD.MM.YYYY") }}
+					</div>
 				</template>
 			</backend-data-table>
-			<base-input
-				v-model="check"
-				type="checkbox"
-				name="switch"
-				:label="
-					$t('pages.administration.students.consent.steps.register.confirm')
-				"
-			/>
+			<div id="consent-checkbox">
+				<base-input v-model="check" type="checkbox" name="switch" label="">
+				</base-input>
+				<label>
+					<i18n
+						path="pages.administration.students.consent.steps.register.confirm"
+					>
+						<template v-slot:rulesOfConsent>
+							<a class="highlight">{{
+								$t(
+									"pages.administration.students.consent.steps.register.consent-rules"
+								)
+							}}</a>
+						</template>
+					</i18n>
+				</label>
+			</div>
 
 			<p v-if="checkWarning" style="color: var(--color-danger);">
 				<base-icon source="material" icon="report_problem" />
@@ -93,6 +129,9 @@
 				:data="tableData"
 				track-by="id"
 				:paginated="false"
+				sort-by="fullName"
+				:sort-order="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="{ data }">
 					{{ dayjs(data).format("DD.MM.YYYY") }}
@@ -207,8 +246,10 @@ export default {
 			],
 			currentStep: 0,
 			check: false,
+			birthdayWarning: false,
 			checkWarning: false,
 			cancelWarning: false,
+			sortOrder: "asc",
 			tableColumns: [
 				{
 					field: "fullName",
@@ -218,12 +259,12 @@ export default {
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
-					sortable: true,
+					sortable: false,
 				},
 				{
 					field: "birthday",
 					label: this.$t("common.labels.birthdate"),
-					sortable: true,
+					sortable: false,
 				},
 				{
 					field: "password",
@@ -246,11 +287,26 @@ export default {
 			for (const key of this.students.keys()) {
 				if (this.selectedStudentIds.includes(this.students[key]._id)) {
 					const student = this.students[key];
+					student.fullName = student.firstName + " " + student.lastName;
 					student.password = generatePassword();
 					data.push(student);
 				}
 			}
+			data.sort((a, b) => {
+				if (a.fullName > b.fullName) {
+					if (this.sortOrder === "asc") return -1;
+					else return 1;
+				} else {
+					if (this.sortOrder === "asc") return 1;
+					else return -1;
+				}
+			});
 			return data;
+		},
+		birthdays: {
+			get: function () {
+				return this.tableData.map((entry) => entry.birthday ?? "");
+			},
 		},
 	},
 	created(ctx) {
@@ -272,24 +328,39 @@ export default {
 				query,
 			});
 		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortOrder = sortOrder;
+		},
 		next() {
+			if (this.currentStep === 0) {
+				if (!this.checkBirthdays()) {
+					this.birthdayWarning = true;
+					return;
+				}
+			}
 			this.currentStep += 1;
+		},
+		checkBirthdays() {
+			for (const b of this.birthdays) {
+				if (!Date.parse(b)) return false;
+			}
+			return true;
 		},
 		register() {
 			if (this.check === false) {
 				this.checkWarning = true;
 			} else {
-				const users = this.tableData.map((s) => {
+				const users = this.tableData.map((student, index) => {
 					return {
-						userId: s.id,
-						birthday: s.birthday,
-						password: s.password,
+						userId: student._id,
+						birthday: student.birthday ?? this.birthdays[index],
+						password: student.password,
 						parent_privacyConsent: true,
 						parent_termsOfUseConsent: true,
 						privacyConsent: true,
 						termsOfUseConsent: true,
 					};
-				});
+				}, this);
 				this.$store.dispatch("bulk-consent/register", users);
 				this.$toast.success(
 					this.$t(
@@ -333,15 +404,27 @@ export default {
 .centered {
 	text-align: center;
 }
+.highlight {
+	color: var(--color-secondary);
+}
 #progressbar {
 	display: inline-block;
 	margin-top: var(--space-md);
 }
+#consent-checkbox {
+	display: flex;
+	margin-bottom: var(--space-md);
+}
 
 /deep/ .table {
+	margin-top: var(--space-lg);
 	.row {
 		height: 3rem;
 	}
+}
+
+/deep/ .toolbelt {
+	display: none;
 }
 
 /deep/ .calendar-input {
