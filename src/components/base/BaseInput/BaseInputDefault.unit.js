@@ -1,6 +1,5 @@
 import BaseInput from "./BaseInput";
-import BaseInputDefault from "./BaseInputDefault";
-import { supportedTypes } from "./BaseInputDefault";
+import BaseInputDefault, { supportedTypes } from "./BaseInputDefault";
 
 function getMock(type, attributes) {
 	return mount({
@@ -68,11 +67,11 @@ describe("@components/base/BaseInputDefault", () => {
 	it("shows its label when no placeholder is provided", () => {
 		supportedTypes.forEach((type) => {
 			const wrapperWithoutPlaceholder = getMock(type);
-			const baseInputDefaultWithoutPlaceholder = wrapperWithoutPlaceholder.find(
+			const baseInputDefaultWithoutPlaceholder = wrapperWithoutPlaceholder.findComponent(
 				BaseInputDefault
 			);
 			expect(baseInputDefaultWithoutPlaceholder.vm.showLabel).toBe(true);
-			expect(wrapperWithoutPlaceholder.find(".label").isVisible()).toBe(true);
+			expect(wrapperWithoutPlaceholder.find(".label").exists()).toBe(true);
 		});
 	});
 
@@ -84,18 +83,22 @@ describe("@components/base/BaseInputDefault", () => {
 					type,
 					"placeholder='placeholder'"
 				);
-				const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.find(
+				const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.findComponent(
 					BaseInputDefault
 				);
 				const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
 
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
-				expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(false);
+				expect(
+					wrapperWithPlaceHolder.find(".label").element.style.display
+				).toBe("none");
 
 				input.setValue(testInput);
 				await wrapperWithPlaceHolder.vm.$nextTick();
 
-				expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(true);
+				expect(
+					wrapperWithPlaceHolder.find(".label").element.style.display
+				).toBe("");
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(true);
 			})
 		);
@@ -119,7 +122,7 @@ describe("@components/base/BaseInputDefault", () => {
 				},
 				stubs: ["base-icon"],
 			});
-			const baseInputDefault = wrapper.find(BaseInputDefault);
+			const baseInputDefault = wrapper.findComponent(BaseInputDefault);
 			expect(baseInputDefault.vm.hasError).toBe(true);
 
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);
