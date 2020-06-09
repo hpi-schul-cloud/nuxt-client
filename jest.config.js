@@ -5,6 +5,7 @@ module.exports = {
 	setupFilesAfterEnv: [
 		"jest-extended",
 		"<rootDir>/tests/unit/matchers",
+		"<rootDir>/tests/unit/jestMatchers",
 		"<rootDir>/tests/unit/requireAssertions",
 	],
 	snapshotResolver: "<rootDir>/tests/unit/snapshotResolver",
