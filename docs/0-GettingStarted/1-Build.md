@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD037 -->
+
 # Build & Deployment
 
 You can build all projects at once in parallel using `npm run build`.
