@@ -1,7 +1,3 @@
-// import mergeDeep from "@utils/merge-deep";
-// import serviceTemplate from "@utils/service-template";
-
-// const base = serviceTemplate("terms-and-conditions");
 
 const module = {
 	state: () => ({ consentVersion: null }),
