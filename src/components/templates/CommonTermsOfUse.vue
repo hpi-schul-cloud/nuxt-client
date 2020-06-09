@@ -61,46 +61,11 @@
 		Nutzern*innen findet die zuvor genannte Datenverarbeitung unter der
 		nachfolgend beschriebenen datenschutzrechtlichen Verantwortlichkeit der
 		Schulen statt, die das HPI als technischen Dienstleister beauftragen.
-
-		<div v-if="consentVersion && consentVersion.schoolId">
-			<h2 class="h3">
-				B. Nutzungsbedingungen der Schule
-			</h2>
-			<a :href="'base64FileDownload/' + consentVersion.consentDataId"
-				>Link to the school's terms</a
-			>
-		</div>
-		<div>
-			<!-- {{ schoolTermsAndConditionsUrl.title }}
-			{{ schoolTermsAndConditionsUrl.schoolId }} -->
-			<button @click="doSomething">kafk</button>
-		</div>
 	</div>
 </template>
 
 <script>
-export default {
-	computed: {
-		consentVersion() {
-			return this.$store.state["terms-and-conditions"].consentVersion;
-		},
-	},
-	mounted() {
-		if (this.$user && this.$user.schoolId) {
-			this.$store.dispatch(
-				"terms-and-conditions/schoolTermsPresent",
-				this.$user.schoolId
-			);
-		}
-	},
-	methods: {
-		doSomething() {
-			console.log(this.school);
-			console.log(this.$user.schoolId);
-			this.$store.dispatch("auth/populateUser");
-		},
-	},
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
