@@ -13,6 +13,7 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
+	injectScripts: false,
 	// to make ENV variables available in components, they need to be defined here
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
@@ -30,16 +31,13 @@ module.exports = {
 	 ** Content Security Policy (CSP)
 	 */
 	csp: {
+		// If enabled, default content security policy (CSP) header will be set
 		cors: {
-			type: "boolean",
-			default: true,
-			description:
-				"If enabled, default content security policy (CSP) header will be set.",
+			enabled: true,
 		},
+		// If enabled, additional security header will be set
 		security_headers: {
-			type: "boolean",
-			default: true,
-			description: "If enabled, additional security header will be set.",
+			enabled: true,
 		},
 	},
 

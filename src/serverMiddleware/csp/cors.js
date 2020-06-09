@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+import { randomBytes } from "crypto";
 const nuxtConfig = require("../../../nuxt.config.js");
 const {
 	contentSecurityPolicy,
@@ -9,7 +9,7 @@ if (!nuxtConfig.csp.cors) {
 	throw new Error("cors is missing in configuration (csp)");
 }
 
-if (!nuxtConfig.csp.cors.default) {
+if (!nuxtConfig.csp.cors.enabled) {
 	console.log(
 		"cors env has not been defined, to enable route specific cors" +
 			" header set value to 1 and update values in config.csp.cors"
@@ -98,12 +98,12 @@ const accessControlHeadersForRoute = (path, regexs) => {
 };
 
 const getNonceValue = () => {
-	const nonceValue = crypto.randomBytes(16).toString("base64");
+	const nonceValue = randomBytes(16).toString("base64");
 	return nonceValue;
 };
 
 export default async function (req, res, next) {
-	if (nuxtConfig.csp.cors.default) {
+	if (nuxtConfig.csp.cors.enabled) {
 		try {
 			// Content-Security-Policy
 			const { corsDefault, corsSiteSpecific } = contentSecurityPolicy;
