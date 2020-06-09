@@ -1,4 +1,3 @@
-
 const module = {
 	state: () => ({ consentVersion: null }),
 	actions: {
