@@ -5,18 +5,19 @@
 			<h2 class="h3">
 				B. Nutzungsbedingungen der Schule
 			</h2>
-			<button class="btn" @click="download">
+			<base-button @click="download">
 				Download Nutzungsbedingungen
-			</button>
+			</base-button>
 		</div>
 	</div>
 </template>
 
 <script>
 import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
+import BaseButton from "@components/base/BaseButton";
 
 export default {
-	components: { CommonTermsOfUse },
+	components: { CommonTermsOfUse, BaseButton },
 	computed: {
 		consentVersion() {
 			return this.$store.state["terms-and-conditions"].consentVersion;
