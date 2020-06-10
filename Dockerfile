@@ -10,7 +10,7 @@ WORKDIR /home/node/app
 COPY ./package.json .
 COPY ./package-lock.json .
 # fix for intergrations tests
-RUN npm set unsafe-perm true && npm i && npm install --save nuxt
+RUN npm set unsafe-perm true && npm ci && npm install --save nuxt
 
 COPY . .
 #COPY ./localtime /etc/localtime
