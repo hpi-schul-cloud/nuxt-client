@@ -25,7 +25,7 @@ export const actions = {
 			throw new Error("Can not read jwt from cookies.");
 		}
 		const payload = jwtDecode(jwt);
-		return dispatch("populateUser", payload.userId);
+		return dispatch("populateUser", payload.accountId);
 		//return res;
 	},
 	async logout({ commit }) {
@@ -33,8 +33,9 @@ export const actions = {
 		localStorage.clear();
 		commit("clearAuthData");
 	},
-	async populateUser({ commit }) {
+	async populateUser({ commit }, accountId) {
 		const user = await this.$axios.$get("/me");
+		user.accountId = accountId;
 		commit("setUser", user);
 		if (user.schoolId) {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
