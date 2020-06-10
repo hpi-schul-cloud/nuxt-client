@@ -107,7 +107,6 @@
 	.logo {
 		width: 229px;
 		height: 40px;
-		margin: auto;
 	}
 
 	@media (min-width: 576px) {
@@ -128,6 +127,12 @@
 			max-width: 100%;
 		}
 
+	}
+	
+	@media (max-width: 992px) {
+		.logo-container {
+			margin: auto;
+		}
 	}
 
 	@media (min-width: 992px) {
