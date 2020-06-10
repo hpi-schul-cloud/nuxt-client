@@ -81,19 +81,20 @@
 		grid-template-columns: 1fr 1fr;
 		grid-gap: var(--space-sm);
 	}
+	.h6 {
+		margin-top: var(--space-xl-4) !important;
+		margin-bottom: var(--space-md);
+	}
 	.h1 {
 		margin-top: 0 !important;
 		margin-bottom: var(--space-xl-4) !important;
 		font-size: var(--sidebar-sub-item-height);
 	}
-	.h6 {
-		margin-bottom: var(--space-md);
+	.h6.margin {
+		margin-top: var(--space-xs) !important;
+		margin-bottom: var(--border-width-bold);
 	}
 	.h1.margin {
-		margin-bottom: var(--space-xl-3) !important;
-	}
-	.h6.margin {
-		margin-top: var(--space-xl) !important;
-		margin-bottom: var(--border-width-bold);
+		margin-bottom: var(--space-lg) !important;
 	}
 </style>

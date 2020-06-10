@@ -128,7 +128,7 @@
 		}
 
 	}
-	
+
 	@media (max-width: 992px) {
 		.logo-container {
 			margin: auto;
