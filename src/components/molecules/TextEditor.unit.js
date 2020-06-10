@@ -82,7 +82,7 @@ describe("@components/molecules/BaseTextarea", () => {
 		];
 		testInstances.forEach((wrapper) => {
 			listOptionSelectors.forEach((selector) => {
-				expect(wrapper.contains(`${selector}[disabled]`)).toBe(true);
+				expect(wrapper.find(`${selector}[disabled]`).exists()).toBe(true);
 			});
 		});
 	});
@@ -97,7 +97,7 @@ describe("@components/molecules/BaseTextarea", () => {
 			`[data-testid="editor_add_image"]`,
 		];
 		listOptionSelectors.forEach((selector) => {
-			expect(wrapper.contains(`${selector}:not([disabled])`)).toBe(true);
+			expect(wrapper.find(`${selector}:not([disabled])`).exists()).toBe(true);
 		});
 	});
 
