@@ -77,9 +77,6 @@ jobs:
         with:
           name: report
           path: integration-tests/reports
-      - name: Unset git config
-        run: |
-          git config --global --unset url."https://${CI_USER_TOKEN}@github.com/".insteadOf
   # build:
   #   strategy:
   #     matrix:
