@@ -8,7 +8,7 @@
 					type="password"
 					required="true"
 					:label="$t('common.labels.password')"
-					:placeholder="$t('common.placeholder.password.confirmation')"
+					:placeholder="$t('common.placeholder.password.current')"
 					class="mt--md"
 					data-testid="jjjjjjj"
 				>
@@ -24,8 +24,25 @@
 					v-model="formData.passwordNew"
 					type="password"
 					required="true"
-					:label="$t('common.labels.password')"
-					:placeholder="$t('common.placeholder.password.confirmation')"
+					:label="$t('common.labels.password.new')"
+					:placeholder="$t('common.placeholder.password.new')"
+					class="mt--md"
+					data-testid="jjjjjjj"
+				>
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="lock"
+							fill="var(--color-tertiary)"
+						/>
+					</template>
+				</base-input>
+				<base-input
+					v-model="formData.password_verification"
+					type="password"
+					required="true"
+					:label="$t('common.labels.password.new')"
+					:placeholder="$t('common.placeholder.password.new.confirmation')"
 					class="mt--md"
 					data-testid="jjjjjjj"
 				>
@@ -38,6 +55,7 @@
 					</template>
 				</base-input>
 			</template>
+			Passwort ändern
 		</form-edit-user-data>
 	</section>
 </template>
@@ -53,9 +71,11 @@ export default {
 			formData: {
 				password: "",
 				passwordNew: "",
+				password_verification: "",
 			},
 		};
 	},
+
 	computed: {
 		actionType() {
 			return "create";
@@ -73,10 +93,11 @@ export default {
 		async create() {
 			try {
 				await this.$store.dispatch("accounts/patch", [
-					this.$user._id,
+					this.$user.accountId,
 					{
 						password: this.formData.password,
-						passwordNew: this.formData.passWordNew,
+						passwordNew: this.formData.passwordNew,
+						password_verification: this.formData.password_verification,
 					},
 				]);
 				this.success();

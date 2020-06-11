@@ -25,6 +25,7 @@ export const actions = {
 			throw new Error("Can not read jwt from cookies.");
 		}
 		const payload = jwtDecode(jwt);
+		console.log(payload);
 		return dispatch("populateUser", payload.accountId);
 		//return res;
 	},

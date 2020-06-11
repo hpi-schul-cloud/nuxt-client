@@ -100,7 +100,7 @@ export default {
 	},
 	async asyncData({ store }) {
 		return {
-			newEmail: await store.dispatch("activation/getActivationMail"),
+			//   newEmail: await store.dispatch("activation/getActivationMail"),
 			currentUser: await store.dispatch("auth/populateUser"),
 		};
 	},
