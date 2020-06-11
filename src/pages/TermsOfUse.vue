@@ -1,38 +1,17 @@
 <template>
 	<div>
-		<common-terms-of-use />
-		<div>
-			<h2 class="h3">
-				B. Datenschutzerklärung
-			</h2>
-			<base-button
-				v-if="consentVersion && consentVersion.schoolId"
-				@click="download"
-			>
-				Download Datenschutzerklärung
-			</base-button>
-			<base-button
-				v-else
-				:href="defaultDocuments.specificFiles().privacyExemplary"
-			>
-				{{ $t("components.legacy.footer.privacy_policy_HPI") }}
-			</base-button>
-		</div>
+		<common-terms-of-use
+			:show-school-terms="!!(consentVersion && consentVersion.schoolId)"
+			@download="download"
+		/>
 	</div>
 </template>
 
 <script>
 import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
-import BaseButton from "@components/base/BaseButton";
-import defaultDocuments from "@utils/documents.js";
 
 export default {
-	components: { CommonTermsOfUse, BaseButton },
-	data() {
-		return {
-			defaultDocuments,
-		};
-	},
+	components: { CommonTermsOfUse },
 	computed: {
 		consentVersion() {
 			return this.$store.state["terms-and-conditions"].consentVersion;
@@ -49,10 +28,10 @@ export default {
 	methods: {
 		async download() {
 			const data = await this.$axios.$get(
-				`base64Files/${this.consentVersion.consentDataId}?download=true`
+				`base64Files/${this.consentVersion.consentDataId}`
 			);
 			const downloadLink = document.createElement("a");
-			downloadLink.href = data;
+			downloadLink.href = data.data;
 			downloadLink.download = "Datenschutzerklärung-der-Schule.pdf";
 			downloadLink.click();
 		},
