@@ -1,12 +1,15 @@
 <template>
 	<div>
 		<common-terms-of-use />
-		<div v-if="consentVersion && consentVersion.schoolId">
+		<div>
 			<h2 class="h3">
-				B. Nutzungsbedingungen der Schule
+				B. Datenschutzerklärung
 			</h2>
-			<base-button @click="download">
-				Download Nutzungsbedingungen
+			<base-button v-if="consentVersion && consentVersion.schoolId" @click="download">
+				Download Datenschutzerklärung
+			</base-button>
+			<base-button v-else :href="defaultDocuments.specificFiles().privacyExemplary">
+				{{ $t("components.legacy.footer.privacy_policy_HPI") }}
 			</base-button>
 		</div>
 	</div>
@@ -15,9 +18,15 @@
 <script>
 import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
 import BaseButton from "@components/base/BaseButton";
+import defaultDocuments from "@utils/documents.js";
 
 export default {
 	components: { CommonTermsOfUse, BaseButton },
+	data() {
+		return {
+			defaultDocuments,
+		}
+	},
 	computed: {
 		consentVersion() {
 			return this.$store.state["terms-and-conditions"].consentVersion;
