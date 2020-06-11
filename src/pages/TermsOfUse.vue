@@ -5,10 +5,16 @@
 			<h2 class="h3">
 				B. Datenschutzerklärung
 			</h2>
-			<base-button v-if="consentVersion && consentVersion.schoolId" @click="download">
+			<base-button
+				v-if="consentVersion && consentVersion.schoolId"
+				@click="download"
+			>
 				Download Datenschutzerklärung
 			</base-button>
-			<base-button v-else :href="defaultDocuments.specificFiles().privacyExemplary">
+			<base-button
+				v-else
+				:href="defaultDocuments.specificFiles().privacyExemplary"
+			>
 				{{ $t("components.legacy.footer.privacy_policy_HPI") }}
 			</base-button>
 		</div>
@@ -25,7 +31,7 @@ export default {
 	data() {
 		return {
 			defaultDocuments,
-		}
+		};
 	},
 	computed: {
 		consentVersion() {
