@@ -101,7 +101,7 @@ export default {
 	async asyncData({ store }) {
 		return {
 			//   newEmail: await store.dispatch("activation/getActivationMail"),
-			currentUser: await store.dispatch("auth/populateUser"),
+			//currentUser: await store.dispatch("auth/authenticate"),
 		};
 	},
 	data() {

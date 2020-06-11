@@ -95,9 +95,8 @@ export default {
 				await this.$store.dispatch("accounts/patch", [
 					this.$user.accountId,
 					{
-						password: this.formData.password,
-						passwordNew: this.formData.passwordNew,
-						password_verification: this.formData.password_verification,
+						password: this.formData.passwordNew,
+						password_verification: this.formData.password,
 					},
 				]);
 				this.success();
