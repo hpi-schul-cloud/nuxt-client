@@ -3,7 +3,10 @@
 		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
 		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
 		<p>{{ this.$user.email }}</p>
-		<form-edit-user-data @onFormSubmit="create">
+		<form-edit-user-data
+			submit-button="Email-Adresse ändern"
+			@onFormSubmit="submitHandler"
+		>
 			<template v-slot:inputs>
 				<base-input
 					v-model="userData.email"
@@ -12,6 +15,7 @@
 					:placeholder="$t('common.placeholder.email.update')"
 					class="mt--md"
 					data-testid=""
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -28,6 +32,7 @@
 					:placeholder="$t('common.placeholder.repeat.email')"
 					class="mt--md"
 					data-testid=""
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -45,6 +50,7 @@
 					:placeholder="$t('common.placeholder.password.confirmation')"
 					class="mt--md"
 					data-testid=""
+					autocomplete="new-password"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -55,7 +61,6 @@
 					</template>
 				</base-input>
 			</template>
-			Email-Adresse ändern
 		</form-edit-user-data>
 	</section>
 </template>
@@ -66,7 +71,10 @@ export default {
 	components: {
 		FormEditUserData,
 	},
-
+	meta: {
+		userNotExternallyManaged: true,
+		requiredPermissions: ["PASSWORD_EDIT"],
+	},
 	data() {
 		return {
 			userData: {
@@ -76,13 +84,6 @@ export default {
 			},
 		};
 	},
-
-	computed: {
-		actionType() {
-			return "create";
-		},
-	},
-
 	methods: {
 		error() {
 			this.$toast.error("Leider ist etwas schief gegangen");
@@ -93,7 +94,7 @@ export default {
 			});
 		},
 
-		async create() {
+		async submitHandler() {
 			try {
 				await this.$store.dispatch("activation/emailReset", {
 					email: this.userData.email,
@@ -106,9 +107,6 @@ export default {
 				this.error();
 			}
 		},
-	},
-	meta: {
-		requiredPermissions: ["PASSWORD_EDIT"],
 	},
 	layout: "loggedout",
 };

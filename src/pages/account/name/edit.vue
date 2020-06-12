@@ -2,8 +2,11 @@
 	<section>
 		<h1 class="mb--md h3">Name ändern</h1>
 		<strong>Deine aktueller Name lautet:</strong>
-		<p>{{ fullName }}</p>
-		<form-edit-user-data @onFormSubmit="create">
+		<p>{{ this.$user.fullName }}</p>
+		<form-edit-user-data
+			submit-button="Nutzerdaten ändern"
+			@onFormSubmit="submitHandler"
+		>
 			<template v-slot:inputs>
 				<base-input
 					v-model="formData.firstName"
@@ -38,7 +41,6 @@
 					</template>
 				</base-input>
 			</template>
-			Nutzerdaten ändern
 		</form-edit-user-data>
 	</section>
 </template>
@@ -49,6 +51,9 @@ export default {
 	components: {
 		FormEditUserData,
 	},
+	meta: {
+		userNotExternallyManaged: true,
+	},
 	data() {
 		return {
 			formData: {
@@ -56,14 +61,6 @@ export default {
 				lastName: "",
 			},
 		};
-	},
-	computed: {
-		fullName() {
-			return `${this.$user?.firstName} ${this.$user?.lastName}`;
-		},
-		actionType() {
-			return "create";
-		},
 	},
 	methods: {
 		error() {
@@ -74,7 +71,7 @@ export default {
 				path: `/account/`,
 			});
 		},
-		async create() {
+		async submitHandler() {
 			try {
 				await this.$store.dispatch("users/patch", [
 					this.$user._id,

@@ -1,7 +1,10 @@
 <template>
 	<section>
 		<h1 class="mb--md h3">Passwort ändern</h1>
-		<form-edit-user-data @onFormSubmit="create">
+		<form-edit-user-data
+			submit-button="Passwort ändern"
+			@onFormSubmit="submitHandler"
+		>
 			<template v-slot:inputs>
 				<base-input
 					v-model="formData.password"
@@ -11,6 +14,7 @@
 					:placeholder="$t('common.placeholder.password.current')"
 					class="mt--md"
 					data-testid="jjjjjjj"
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -28,6 +32,7 @@
 					:placeholder="$t('common.placeholder.password.new')"
 					class="mt--md"
 					data-testid="jjjjjjj"
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -45,6 +50,7 @@
 					:placeholder="$t('common.placeholder.password.new.confirmation')"
 					class="mt--md"
 					data-testid="jjjjjjj"
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -55,7 +61,6 @@
 					</template>
 				</base-input>
 			</template>
-			Passwort ändern
 		</form-edit-user-data>
 	</section>
 </template>
@@ -66,6 +71,9 @@ export default {
 	components: {
 		FormEditUserData,
 	},
+	meta: {
+		userNotExternallyManaged: true,
+	},
 	data() {
 		return {
 			formData: {
@@ -74,12 +82,6 @@ export default {
 				password_verification: "",
 			},
 		};
-	},
-
-	computed: {
-		actionType() {
-			return "create";
-		},
 	},
 	methods: {
 		error() {
@@ -90,7 +92,7 @@ export default {
 				path: `/account/`,
 			});
 		},
-		async create() {
+		async submitHandler() {
 			try {
 				await this.$store.dispatch("accounts/patch", [
 					this.$user.accountId,

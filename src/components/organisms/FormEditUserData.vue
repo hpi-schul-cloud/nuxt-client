@@ -17,7 +17,7 @@
 				design="secondary"
 				data-testid=""
 			>
-				<slot />
+				{{ submitButton }}
 			</base-button>
 		</div>
 	</form>
@@ -26,17 +26,14 @@
 <script>
 export default {
 	props: {
-		userId: {
+		submitButton: {
 			type: String,
-			required: false,
-			default: undefined,
+			required: true,
 		},
 	},
-
 	data() {
 		return {};
 	},
-
 	methods: {
 		submitHandler() {
 			this.$emit("onFormSubmit");

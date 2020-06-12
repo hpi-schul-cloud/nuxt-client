@@ -81,6 +81,7 @@ module.exports = {
 			// "is-authenticated",
 			"links-fallback",
 			"permission-check",
+			"externally-managed-check",
 		],
 	},
 
