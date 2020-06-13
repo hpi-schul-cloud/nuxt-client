@@ -19,7 +19,7 @@
 					<template v-slot:icon>
 						<base-icon
 							source="material"
-							icon="mail"
+							icon="person"
 							fill="var(--color-tertiary)"
 						/>
 					</template>
@@ -35,7 +35,7 @@
 					<template v-slot:icon>
 						<base-icon
 							source="material"
-							icon="mail"
+							icon="person"
 							fill="var(--color-tertiary)"
 						/>
 					</template>
