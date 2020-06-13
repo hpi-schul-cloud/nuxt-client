@@ -1,19 +1,6 @@
 <template>
 	<form autocomplete="off" v-on="$listeners" @submit.prevent="submitHandler">
-		<slot name="inputs" :userData="userData" />
-		<base-input
-			v-model="userData.password"
-			type="password"
-			required="true"
-			:label="$t('common.labels.password')"
-			:placeholder="$t('common.placeholder.password.confirmation')"
-			class="mt--md"
-			data-testid="input_create-user_email"
-		>
-			<template v-slot:icon>
-				<base-icon source="material" icon="lock" fill="var(--color-tertiary)" />
-			</template>
-		</base-input>
+		<slot name="inputs" />
 		<div class="action">
 			<base-button
 				class="mt--lg mr--md"
@@ -30,7 +17,7 @@
 				design="secondary"
 				data-testid=""
 			>
-				Email ändern
+				{{ submitButton }}
 			</base-button>
 		</div>
 	</form>
@@ -39,47 +26,17 @@
 <script>
 export default {
 	props: {
-		userId: {
+		submitButton: {
 			type: String,
-			required: false,
-			default: undefined,
+			required: true,
 		},
 	},
-
 	data() {
-		return {
-			userData: {
-				email: "",
-				password: "",
-			},
-		};
-	},
-	computed: {
-		actionType() {
-			return "create";
-		},
+		return {};
 	},
 	methods: {
 		submitHandler() {
-			switch (this.actionType) {
-				case "create": {
-					this.create();
-					break;
-				}
-			}
-		},
-
-		async create() {
-			try {
-				await this.$store.dispatch("activation/emailReset", {
-					email: this.userData.email,
-					password: this.userData.password,
-				});
-				this.$emit("success");
-			} catch (e) {
-				this.$emit("error");
-				console.error(e);
-			}
+			this.$emit("onFormSubmit");
 		},
 	},
 };

@@ -11,15 +11,19 @@
 		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
 		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
 		<p>{{ this.$user.email }}</p>
-		<form-edit-user-data @success="showModal = true" @error="error">
-			<template v-slot:inputs="{ userData }">
+		<form-edit-user-data
+			submit-button="Email-Adresse ändern"
+			@onFormSubmit="submitHandler"
+		>
+			<template v-slot:inputs>
 				<base-input
 					v-model="userData.email"
 					type="email"
 					:label="$t('common.labels.email')"
 					:placeholder="$t('common.placeholder.email.update')"
 					class="mt--md"
-					data-testid="jjjjjjj"
+					data-testid=""
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -35,12 +39,31 @@
 					:label="$t('common.labels.repeat.email')"
 					:placeholder="$t('common.placeholder.repeat.email')"
 					class="mt--md"
-					data-testid="jjjjjjj"
+					data-testid=""
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
 							source="material"
 							icon="mail"
+							fill="var(--color-tertiary)"
+						/>
+					</template>
+				</base-input>
+				<base-input
+					v-model="userData.password"
+					type="password"
+					required="true"
+					:label="$t('common.labels.password')"
+					:placeholder="$t('common.placeholder.password.confirmation')"
+					class="mt--md"
+					data-testid=""
+					autocomplete="new-password"
+				>
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="lock"
 							fill="var(--color-tertiary)"
 						/>
 					</template>
@@ -64,6 +87,19 @@ export default {
 			showModal: false,
 		};
 	},
+	meta: {
+		userNotExternallyManaged: true,
+		requiredPermissions: ["PASSWORD_EDIT"],
+	},
+	data() {
+		return {
+			userData: {
+				email: "",
+				repeatEmail: "",
+				password: "",
+			},
+		};
+	},
 	methods: {
 		error() {
 			this.$toast.error("Leider ist etwas schief gegangen");
@@ -73,9 +109,20 @@ export default {
 				path: `/account/`,
 			});
 		},
-	},
-	meta: {
-		requiredPermissions: ["PASSWORD_EDIT"],
+
+		async submitHandler() {
+			try {
+				await this.$store.dispatch("activation/emailReset", {
+					email: this.userData.email,
+					emailReset: this.userData.emailReset,
+					password: this.userData.password,
+				});
+				this.showModal = true;
+			} catch (e) {
+				console.log(e);
+				this.error();
+			}
+		},
 	},
 	layout: "loggedout",
 };

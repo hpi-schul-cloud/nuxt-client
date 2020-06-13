@@ -1,41 +1,61 @@
 <template>
 	<section>
-		<h1 class="mb--md h3">Name ändern</h1>
-		<strong>Deine aktueller Name lautet:</strong>
-		<p>{{ this.$user.fullName }}</p>
+		<h1 class="mb--md h3">Passwort ändern</h1>
 		<form-edit-user-data
-			submit-button="Nutzerdaten ändern"
+			submit-button="Passwort ändern"
 			@onFormSubmit="submitHandler"
 		>
 			<template v-slot:inputs>
 				<base-input
-					v-model="formData.firstName"
-					type="text"
-					label="Vorname"
-					placeholder="Vorname"
+					v-model="formData.password"
+					type="password"
+					required="true"
+					:label="$t('common.labels.password')"
+					:placeholder="$t('common.placeholder.password.current')"
 					class="mt--md"
 					data-testid="jjjjjjj"
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
 							source="material"
-							icon="person"
+							icon="lock"
 							fill="var(--color-tertiary)"
 						/>
 					</template>
 				</base-input>
 				<base-input
-					v-model="formData.lastName"
-					type="text"
-					label="Nachname"
-					placeholder="Nachname"
+					v-model="formData.passwordNew"
+					type="password"
+					required="true"
+					:label="$t('common.labels.password.new')"
+					:placeholder="$t('common.placeholder.password.new')"
 					class="mt--md"
 					data-testid="jjjjjjj"
+					autocomplete="off"
 				>
 					<template v-slot:icon>
 						<base-icon
 							source="material"
-							icon="person"
+							icon="lock"
+							fill="var(--color-tertiary)"
+						/>
+					</template>
+				</base-input>
+				<base-input
+					v-model="formData.password_verification"
+					type="password"
+					required="true"
+					:label="$t('common.labels.password.new')"
+					:placeholder="$t('common.placeholder.password.new.confirmation')"
+					class="mt--md"
+					data-testid="jjjjjjj"
+					autocomplete="off"
+				>
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="lock"
 							fill="var(--color-tertiary)"
 						/>
 					</template>
@@ -57,8 +77,9 @@ export default {
 	data() {
 		return {
 			formData: {
-				firstName: "",
-				lastName: "",
+				password: "",
+				passwordNew: "",
+				password_verification: "",
 			},
 		};
 	},
@@ -73,11 +94,11 @@ export default {
 		},
 		async submitHandler() {
 			try {
-				await this.$store.dispatch("users/patch", [
-					this.$user._id,
+				await this.$store.dispatch("accounts/patch", [
+					this.$user.accountId,
 					{
-						firstName: this.formData.firstName,
-						lastName: this.formData.lastName,
+						password: this.formData.passwordNew,
+						password_verification: this.formData.password,
 					},
 				]);
 				this.success();

@@ -5,9 +5,9 @@
 		</h1>
 		<account-card
 			:heading="$t('pages.account.index.user.data')"
-			:data="fullName"
+			:data="currentUser.fullName"
 			:target-path="`/account/name/edit`"
-			:mode="isStudent ? 'readonly' : 'editable'"
+			:readonly="isStudent || thirdPartyLogin"
 		>
 			<template v-slot:icon>
 				<base-icon
@@ -19,18 +19,25 @@
 		</account-card>
 		<account-card
 			:heading="$t('pages.account.index.user.email')"
-			:data="this.$user.email"
+			:data="currentUser.email"
 			:target-path="`/account/email/edit`"
+			:readonly="thirdPartyLogin"
 		>
-			<template v-if="newEmail && newEmail.email" v-slot:new-mail>
+			<template
+				v-if="currentUser.newEmail && currentUser.newEmail.email"
+				v-slot:new-mail
+			>
 				ist die aktuelle primäre Email Adresse
 			</template>
-			<template v-if="newEmail && newEmail.email" v-slot:notification>
+			<template
+				v-if="currentUser.newEmail && currentUser.newEmail.email"
+				v-slot:notification
+			>
 				<div class="info-box">
 					<p>
-						Deine neue Email {{ newEmail.email }} muss noch bestätigt werden.
-						Bitte folge den Anweisungen in der Bestätigungsmail, welche an die
-						neue Adresse versand wurde.
+						Deine neue Email {{ currentUser.newEmail.email }} muss noch
+						bestätigt werden. Bitte folge den Anweisungen in der
+						Bestätigungsmail, welche an die neue Adresse versand wurde.
 					</p>
 				</div>
 			</template>
@@ -45,7 +52,8 @@
 
 		<account-card
 			:heading="$t('pages.account.index.user.password')"
-			:target-path="`/account/email/edit`"
+			:target-path="`/account/password/edit`"
+			:readonly="thirdPartyLogin"
 		>
 			<template v-slot:icon>
 				<base-icon
@@ -56,21 +64,20 @@
 			</template>
 		</account-card>
 
-		<user-has-role :role="isNotStudent">
-			<account-card
-				:heading="$t('pages.account.index.user.teams')"
-				data="Sichtbarkeit für Teameinladungen"
-				:target-path="`/account/teams`"
-			>
-				<template v-slot:icon>
-					<base-icon
-						source="material"
-						icon="people"
-						style="font-size: var(--heading-3); color: var(--color-black);"
-					/>
-				</template>
-			</account-card>
-		</user-has-role>
+		<account-card
+			v-if="!isStudent"
+			:heading="$t('pages.account.index.user.teams')"
+			data="Sichtbarkeit für Teameinladungen"
+			:target-path="`/account/teams`"
+		>
+			<template v-slot:icon>
+				<base-icon
+					source="material"
+					icon="people"
+					style="font-size: var(--heading-3); color: var(--color-black);"
+				/>
+			</template>
+		</account-card>
 
 		<account-card
 			:heading="$t('pages.account.index.user.thirdPartyProviders')"
@@ -90,33 +97,44 @@
 
 <script>
 import AccountCard from "@components/molecules/AccountCard";
-import UserHasRole from "@components/helpers/UserHasRole";
 // import { mapGetters } from "vuex";
 
 export default {
 	components: {
 		AccountCard,
-		UserHasRole,
 	},
-	async asyncData({ store }) {
+	meta: {
+		requiredPermissions: ["ACCOUNT_EDIT"],
+	},
+	data() {
 		return {
-			newEmail: await store.dispatch("activation/getActivationMail"),
+			currentUser: {},
 		};
 	},
 	computed: {
-		fullName() {
-			return `${this.$user?.firstName} ${this.$user?.lastName}`;
-		},
 		thirdPartyLogin() {
-			return this.$user?.systemId;
+			return !!this.$user?.externallyManaged;
 		},
 		isStudent() {
 			return this.$user?.roles.some((role) => role.name === "student");
 		},
 	},
+	created(ctx) {
+		this.populateUser();
+	},
 	methods: {
-		isNotStudent(roles) {
-			return roles.some((role) => role !== "student");
+		async populateUser() {
+			try {
+				this.currentUser = await this.$store.dispatch(
+					"auth/populateUser",
+					this.$user?.accountId
+				);
+				this.currentUser.newEmail = await this.$store.dispatch(
+					"activation/getActivationMail"
+				);
+			} catch (error) {
+				console.error(error);
+			}
 		},
 	},
 };

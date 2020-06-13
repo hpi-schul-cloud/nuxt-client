@@ -10,11 +10,11 @@
 						<p class="heading">{{ heading }}</p>
 					</slot>
 					<responsive-icon-button
-						v-if="mode !== 'readonly'"
+						v-if="!readonly"
 						design="text"
 						source="material"
 						icon="create"
-						@click="editEmail({ targetPath })"
+						@click="goTo({ targetPath })"
 					>
 						ändern
 					</responsive-icon-button>
@@ -51,18 +51,12 @@ export default {
 			type: String,
 			default: "",
 		},
-		mode: {
-			type: String,
-			enum: ["editable", "readonly"],
-			default: "editable",
+		readonly: {
+			type: Boolean,
 		},
 	},
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
 	methods: {
-		editEmail(targetPath) {
+		goTo(targetPath) {
 			this.$router.push({
 				path: targetPath.targetPath,
 			});
