@@ -2,11 +2,17 @@
 	<section>
 		<info-modal-full-width
 			title="Eine Bestätigungsmail wurde an deine neue E-Mail Adresse gesendet. Bitte bestätige diese."
-			description=""
-			btn="OK"
 			:active="showModal"
 			@update:active="success"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon
+					source="material"
+					icon="info"
+					style="color: var(--color-info);"
+				/>
+			</template>
+		</info-modal-full-width>
 
 		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
 		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
@@ -82,11 +88,6 @@ export default {
 		FormEditUserData,
 		InfoModalFullWidth,
 	},
-	data() {
-		return {
-			showModal: false,
-		};
-	},
 	meta: {
 		userNotExternallyManaged: true,
 		requiredPermissions: ["PASSWORD_EDIT"],
@@ -98,6 +99,7 @@ export default {
 				repeatEmail: "",
 				password: "",
 			},
+			showModal: false,
 		};
 	},
 	methods: {
@@ -105,6 +107,7 @@ export default {
 			this.$toast.error("Leider ist etwas schief gegangen");
 		},
 		success() {
+			this.showModal = false;
 			this.$router.push({
 				path: `/account/`,
 			});
@@ -114,7 +117,7 @@ export default {
 			try {
 				await this.$store.dispatch("activation/emailReset", {
 					email: this.userData.email,
-					emailReset: this.userData.emailReset,
+					repeatEmail: this.userData.repeatEmail,
 					password: this.userData.password,
 				});
 				this.showModal = true;
