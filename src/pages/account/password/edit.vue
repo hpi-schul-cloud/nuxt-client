@@ -62,6 +62,12 @@
 				</base-input>
 			</template>
 		</form-edit-user-data>
+		<p class="info">
+			<base-icon source="material" icon="info" fill="var(--color-info)" />
+			Mindestens 8 Zeichen mit Groß- und Kleinschreibung, davon jeweils
+			mindestens eine Zahl und ein Sonderzeichen. Erlaubte Sonderzeichen sind:
+			!§$%&/()=?\;:,.#+*~
+		</p>
 	</section>
 </template>
 
@@ -117,5 +123,12 @@ export default {
 section {
 	max-width: calc(0.5 * var(--size-content-width-max));
 	margin: 0 auto;
+}
+
+.info {
+	margin-top: calc(2 * (var(--space-lg)));
+	font-size: var(--text-sm);
+	font-weight: var(--font-weight-weight);
+	color: var(--color-gray-dark);
 }
 </style>
