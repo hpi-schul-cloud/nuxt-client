@@ -7,15 +7,17 @@
 		</h1>
 		<i18n path="pages.administration.students.consent.info" tag="p">
 			<template v-slot:dataProtection>
-				<a class="highlight">{{
+				<a class="link" :href="fileLinks.dataProtection" target="_">{{
 					$t("components.legacy.footer.privacy_policy")
 				}}</a>
 			</template>
 			<template v-slot:terms>
-				<a class="highlight">{{ $t("components.legacy.footer.terms") }}</a>
+				<a class="link" :href="fileLinks.termsOfUse" target="_">{{
+					$t("components.legacy.footer.terms")
+				}}</a>
 			</template>
 			<template v-slot:handout>
-				<a class="highlight">{{
+				<a class="link" :href="fileLinks.analogConsent" target="_">{{
 					$t("pages.administration.students.consent.handout")
 				}}</a>
 			</template>
@@ -93,10 +95,10 @@
 					<i18n
 						path="pages.administration.students.consent.steps.register.confirm"
 					>
-						<template v-slot:rulesOfConsent>
-							<a class="highlight">{{
+						<template v-slot:analogConsent>
+							<a class="link" :href="fileLinks.analogConsent" target="_">{{
 								$t(
-									"pages.administration.students.consent.steps.register.consent-rules"
+									"pages.administration.students.consent.steps.register.analog-consent"
 								)
 							}}</a>
 						</template>
@@ -199,6 +201,7 @@
 
 <script>
 import dayjs from "dayjs";
+import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
@@ -273,6 +276,11 @@ export default {
 				},
 			],
 			image: SafelyConnectedImage,
+			fileLinks: {
+				analogConsent: defaultDocuments.specificFiles().analogConsent,
+				termsOfUse: defaultDocuments.specificFiles().termsOfUseSchool,
+				dataProtection: defaultDocuments.specificFiles().privacyExemplary,
+			},
 		};
 	},
 	computed: {
@@ -404,9 +412,6 @@ export default {
 .centered {
 	text-align: center;
 }
-.highlight {
-	color: var(--color-secondary);
-}
 #progressbar {
 	display: inline-block;
 	margin-top: var(--space-md);
@@ -415,14 +420,16 @@ export default {
 	display: flex;
 	margin-bottom: var(--space-md);
 }
-
+/deep/ .link {
+	color: var(--color-secondary);
+	text-decoration: none;
+}
 /deep/ .table {
 	margin-top: var(--space-lg);
 	.row {
 		height: 3rem;
 	}
 }
-
 /deep/ .toolbelt {
 	display: none;
 }
