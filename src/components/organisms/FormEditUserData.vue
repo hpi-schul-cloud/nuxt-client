@@ -4,7 +4,7 @@
 		<div class="action">
 			<base-button
 				class="mt--lg mr--md action-btn"
-				design="text"
+				design="outline"
 				text
 				data-testid=""
 				@click.prevent="$router.go(-1)"
