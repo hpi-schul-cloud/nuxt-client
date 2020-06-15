@@ -127,7 +127,7 @@ export default {
 			}
 		},
 	},
-	layout: "loggedout",
+	layout: "loggedoutNavbarLogo",
 };
 </script>
 <style lang="scss" scoped>
