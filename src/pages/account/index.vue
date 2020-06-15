@@ -23,21 +23,15 @@
 			:target-path="`/account/email/edit`"
 			:readonly="thirdPartyLogin"
 		>
-			<template
-				v-if="currentUser.newEmail && currentUser.newEmail.email"
-				v-slot:new-mail
-			>
+			<template v-if="!!newEmail" v-slot:new-mail>
 				ist die aktuelle primäre Email Adresse
 			</template>
-			<template
-				v-if="currentUser.newEmail && currentUser.newEmail.email"
-				v-slot:notification
-			>
+			<template v-if="!!newEmail" v-slot:notification>
 				<div class="info-box">
 					<p>
-						Deine neue Email {{ currentUser.newEmail.email }} muss noch
-						bestätigt werden. Bitte folge den Anweisungen in der
-						Bestätigungsmail, welche an die neue Adresse versand wurde.
+						Deine neue Email {{ newEmail }} muss noch bestätigt werden. Bitte
+						folge den Anweisungen in der Bestätigungsmail, welche an die neue
+						Adresse versand wurde.
 					</p>
 				</div>
 			</template>
@@ -97,7 +91,6 @@
 
 <script>
 import AccountCard from "@components/molecules/AccountCard";
-// import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -109,6 +102,7 @@ export default {
 	data() {
 		return {
 			currentUser: {},
+			unconfirmedChanges: [],
 		};
 	},
 	computed: {
@@ -117,6 +111,11 @@ export default {
 		},
 		isStudent() {
 			return this.$user?.roles.some((role) => role.name === "student");
+		},
+		newEmail() {
+			return this.unconfirmedChanges.find(
+				(change) => change.keyword === "eMailAddress"
+			)?.data;
 		},
 	},
 	created(ctx) {
@@ -129,9 +128,9 @@ export default {
 					"auth/populateUser",
 					this.$user?.accountId
 				);
-				this.currentUser.newEmail = await this.$store.dispatch(
-					"activation/getActivationMail"
-				);
+				this.unconfirmedChanges = (
+					await this.$store.dispatch("activation/find")
+				).entry;
 			} catch (error) {
 				console.error(error);
 			}

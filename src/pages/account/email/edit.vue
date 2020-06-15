@@ -1,5 +1,19 @@
 <template>
 	<section>
+		<info-modal-full-width
+			title="Eine Bestätigungsmail wurde an deine neue E-Mail Adresse gesendet. Bitte bestätige diese."
+			:active="showModal"
+			@update:active="success"
+		>
+			<template v-slot:icon>
+				<base-icon
+					source="material"
+					icon="info"
+					style="color: var(--color-info);"
+				/>
+			</template>
+		</info-modal-full-width>
+
 		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
 		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
 		<p>{{ this.$user.email }}</p>
@@ -67,9 +81,12 @@
 
 <script>
 import FormEditUserData from "@components/organisms/FormEditUserData";
+import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
+
 export default {
 	components: {
 		FormEditUserData,
+		InfoModalFullWidth,
 	},
 	meta: {
 		userNotExternallyManaged: true,
@@ -82,6 +99,7 @@ export default {
 				repeatEmail: "",
 				password: "",
 			},
+			showModal: false,
 		};
 	},
 	methods: {
@@ -89,6 +107,7 @@ export default {
 			this.$toast.error("Leider ist etwas schief gegangen");
 		},
 		success() {
+			this.showModal = false;
 			this.$router.push({
 				path: `/account/`,
 			});
@@ -98,10 +117,10 @@ export default {
 			try {
 				await this.$store.dispatch("activation/emailReset", {
 					email: this.userData.email,
-					emailReset: this.userData.emailReset,
+					repeatEmail: this.userData.repeatEmail,
 					password: this.userData.password,
 				});
-				this.success();
+				this.showModal = true;
 			} catch (e) {
 				console.log(e);
 				this.error();
