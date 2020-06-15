@@ -22,5 +22,7 @@
 
     .container {
         width: 100%;
+        padding: var(--space-xl-3);
     }
+
 </style>
