@@ -6,7 +6,7 @@
 		<h2 class="h1" :class="{ margin: isMobile }">
 			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
-		<div class="box-container">
+		<div class="box-container" :class="{ 'box-container-mobile': isMobile }">
 			<div class="boxes" :class="{ mobile: isMobile }">
 				<div v-for="(tile, index) in tiles" :key="index">
 					<instance-tile :tile="tile"></instance-tile>
@@ -69,8 +69,12 @@
 		margin: 0;
 	}
 	.box-container {
-		display: flex;
+		display: grid;
 		justify-content: center;
+		padding: 0 calc(2 * var(--sidebar-width-tablet));
+	}
+	.box-container-mobile {
+		padding: 0;
 	}
 	.boxes {
 		display: grid;
