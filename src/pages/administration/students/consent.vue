@@ -158,7 +158,7 @@
 				<img
 					class="mb--md"
 					:src="image"
-					:alt="$t('pages.administration.students.consent.steps.success.alt')"
+					:alt="$t('pages.administration.students.consent.steps.success.image.alt')"
 				/>
 
 				<base-button design="secondary outline" @click="success">{{
