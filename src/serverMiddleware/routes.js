@@ -7,11 +7,11 @@
 
 module.exports = [
 	`^/administration/datasources?`,
-	`^/administration/students/?$`,
-	`^/administration/students/new/?$`,
-	`^/administration/students/consent/?$`,
-	`^/administration/teachers/?$`,
-	`^/administration/teachers/new/?$`,
+	// `^/administration/students/?$`,
+	// `^/administration/students/new/?$`,
+	// `^/administration/students/consent/?$`,
+	// `^/administration/teachers/?$`,
+	// `^/administration/teachers/new/?$`,
 	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
