@@ -71,7 +71,7 @@
 	.box-container {
 		display: grid;
 		justify-content: center;
-		padding: 0 calc(2 * var(--sidebar-width-tablet));
+		padding: 0 calc(2.5 * var(--sidebar-width-tablet));
 	}
 	.box-container-mobile {
 		padding: 0;
