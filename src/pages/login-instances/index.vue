@@ -6,7 +6,7 @@
 		<h2 class="h1" :class="{ margin: isMobile }">
 			{{ $t("pages.loginInstances.bundesland") }}
 		</h2>
-		<div class="box-container" :class="{ 'box-container-mobile': isMobile }">
+		<div class="box-container" :class="{'box-container-mobile': isMobile, 'box-container-tablet': isTablet}">
 			<div class="boxes" :class="{ mobile: isMobile }">
 				<div v-for="(tile, index) in tiles" :key="index">
 					<instance-tile :tile="tile"></instance-tile>
@@ -57,6 +57,9 @@ export default {
 		isMobile() {
 			return this.$mq === "mobile";
 		},
+		isTablet() {
+			return this.$mq === "tablet";
+		}
 	},
 };
 </script>
@@ -72,6 +75,9 @@ export default {
 	display: grid;
 	justify-content: center;
 	padding: 0 calc(2.5 * var(--sidebar-width-tablet));
+}
+.box-container-tablet {
+	padding: 0 calc(1.5 * var(--sidebar-width-tablet));
 }
 .box-container-mobile {
 	padding: 0;
