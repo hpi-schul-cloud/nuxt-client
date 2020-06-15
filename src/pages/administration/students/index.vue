@@ -204,8 +204,8 @@ export default {
 				// },
 				{
 					field: "consent",
-					label: this.$t("common.labels.registration"),
-					sortable: false,
+					label: this.$t("common.labels.consent"),
+					sortable: true,
 				},
 				{
 					field: "createdAt",
