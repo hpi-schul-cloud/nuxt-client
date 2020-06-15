@@ -71,7 +71,7 @@ export default {
 .card {
 	display: block;
 	flex-direction: row;
-	margin-bottom: var(--space-md);
+	margin: var(--space-md) 0;
 
 	.text {
 		display: flex;
@@ -99,6 +99,10 @@ export default {
 		.button {
 			float: right;
 		}
+	}
+
+	hr {
+		margin: 0;
 	}
 
 	.notification {

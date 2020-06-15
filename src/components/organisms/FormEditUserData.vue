@@ -3,7 +3,7 @@
 		<slot name="inputs" />
 		<div class="action">
 			<base-button
-				class="mt--lg mr--md"
+				class="mt--lg mr--md action-btn"
 				design="text"
 				text
 				data-testid=""
@@ -13,7 +13,7 @@
 			</base-button>
 			<base-button
 				type="submit"
-				class="mt--lg"
+				class="mt--lg action-btn"
 				design="secondary"
 				data-testid=""
 			>
@@ -46,6 +46,11 @@ export default {
 @import "@styles";
 
 .action {
-	float: right;
+	display: flex;
+	justify-content: space-between;
+}
+
+.action-btn {
+	width: 100%;
 }
 </style>

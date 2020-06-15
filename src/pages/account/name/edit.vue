@@ -15,6 +15,7 @@
 					placeholder="Vorname"
 					class="mt--md"
 					data-testid="jjjjjjj"
+					required="true"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -31,6 +32,7 @@
 					placeholder="Nachname"
 					class="mt--md"
 					data-testid="jjjjjjj"
+					required="true"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -47,6 +49,7 @@
 
 <script>
 import FormEditUserData from "@components/organisms/FormEditUserData";
+
 export default {
 	components: {
 		FormEditUserData,
@@ -94,8 +97,7 @@ export default {
 @import "@styles";
 
 section {
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
+	max-width: calc(0.5 * var(--size-content-width-max));
 	margin: 0 auto;
 }
 </style>

@@ -9,9 +9,9 @@
 		>
 			<template v-slot:icon>
 				<base-icon
-					source="material"
-					icon="info"
-					style="color: var(--color-info);"
+					source="custom"
+					:icon="activated ? 'mail-check' : 'mail-error'"
+					style="color: var(--color-tertiary);"
 				/>
 			</template>
 		</info-modal-full-width>

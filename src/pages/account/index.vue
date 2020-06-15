@@ -66,8 +66,8 @@
 		>
 			<template v-slot:icon>
 				<base-icon
-					source="material"
-					icon="people"
+					source="fa"
+					icon="users"
 					style="font-size: var(--heading-3); color: var(--color-black);"
 				/>
 			</template>

@@ -115,8 +115,7 @@ export default {
 @import "@styles";
 
 section {
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
+	max-width: calc(0.5 * var(--size-content-width-max));
 	margin: 0 auto;
 }
 </style>

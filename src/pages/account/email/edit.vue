@@ -13,7 +13,6 @@
 				/>
 			</template>
 		</info-modal-full-width>
-
 		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
 		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
 		<p>{{ this.$user.email }}</p>
@@ -28,8 +27,9 @@
 					:label="$t('common.labels.email')"
 					:placeholder="$t('common.placeholder.email.update')"
 					class="mt--md"
-					data-testid=""
+					data-testid="userMail"
 					autocomplete="off"
+					required="true"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -45,8 +45,9 @@
 					:label="$t('common.labels.repeat.email')"
 					:placeholder="$t('common.placeholder.repeat.email')"
 					class="mt--md"
-					data-testid=""
+					data-testid="userRepeatMail"
 					autocomplete="off"
+					required="true"
 				>
 					<template v-slot:icon>
 						<base-icon
@@ -63,7 +64,7 @@
 					:label="$t('common.labels.password')"
 					:placeholder="$t('common.placeholder.password.confirmation')"
 					class="mt--md"
-					data-testid=""
+					data-testid="userPassword"
 					autocomplete="new-password"
 				>
 					<template v-slot:icon>
@@ -134,8 +135,7 @@ export default {
 @import "@styles";
 
 section {
-	min-width: var(--size-content-width-min);
-	max-width: var(--size-content-width-max);
+	max-width: calc(0.5 * var(--size-content-width-max));
 	margin: 0 auto;
 }
 </style>
