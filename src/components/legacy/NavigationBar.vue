@@ -19,7 +19,7 @@
 					{{ route.title }}
 				</base-link>
 				<base-button design="secondary outline" :class="{ li: true }">
-					<base-icon source="fa" icon="sign-in" class="icon"/>
+					<base-icon source="fa" icon="sign-in" class="icon" />
 					Login
 				</base-button>
 				<base-button design="secondary" :class="{ li: true }">
