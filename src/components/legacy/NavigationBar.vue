@@ -21,10 +21,10 @@
 				<div class="buttons-container">
 					<base-button design="secondary outline">
 						<base-icon source="fa" icon="sign-in" class="icon"/>
-						Login
+						{{ $t("common.labels.login") }}
 					</base-button>
 					<base-button design="secondary">
-						Registrieren
+						{{ $t("common.labels.register") }}
 					</base-button>
 				</div>
 				<slot name="actions"></slot>
@@ -93,7 +93,7 @@
 		flex-flow: row wrap;
 		justify-content: center;
 		padding-bottom: var(--space-xs);
-		
+
 		@include breakpoint(tablet) {
 			display: flex;
 			align-items: center;

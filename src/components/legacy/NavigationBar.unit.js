@@ -66,6 +66,7 @@ describe("@components/legacy/NavigationBar", () => {
 	it("computes right colWidth desktop, tablet", () => {
 		global.location.pathname = "/mint-ec/willkommenspaket";
 		const wrapper = mount(NavigationBar, {
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				links: [
 					{
