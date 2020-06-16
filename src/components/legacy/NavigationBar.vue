@@ -18,13 +18,15 @@
 				>
 					{{ route.title }}
 				</base-link>
-				<base-button design="secondary outline" :class="{ li: true }">
-					<base-icon source="fa" icon="sign-in" class="icon"/>
-					Login
-				</base-button>
-				<base-button design="secondary" :class="{ li: true }">
-					Registrieren
-				</base-button>
+				<div class="buttons-container">
+					<base-button design="secondary outline">
+						<base-icon source="fa" icon="sign-in" class="icon"/>
+						Login
+					</base-button>
+					<base-button design="secondary">
+						Registrieren
+					</base-button>
+				</div>
 				<slot name="actions"></slot>
 			</div>
 		</div>
@@ -84,6 +86,11 @@ export default {
 .nav-container {
 	padding: 0 calc(5 * var(--border-width));
 	margin: auto;
+}
+
+.logo-container {
+	width: calc(7 * var(--sidebar-sub-item-height));
+	height: var(--topbar-height);
 }
 
 .link-container {
