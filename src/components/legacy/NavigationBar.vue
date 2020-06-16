@@ -18,13 +18,22 @@
 				>
 					{{ route.title }}
 				</base-link>
+				<base-button design="secondary outline" :class="{ li: true }">
+					<base-icon source="fa" icon="sign-in" class="icon"/>
+					Login
+				</base-button>
+				<base-button design="secondary" :class="{ li: true }">
+					Registrieren
+				</base-button>
 				<slot name="actions"></slot>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
+import BaseButton from "../base/BaseButton";
 export default {
+	components: { BaseButton },
 	props: {
 		img: {
 			type: String,
@@ -63,6 +72,7 @@ export default {
 	flex-flow: row wrap;
 	justify-content: center;
 	width: 100%;
+	line-height: var(--line-height-lg);
 	color: var(--color-black);
 	text-align: center;
 	background-color: var(--color-overlay-light);
@@ -72,8 +82,7 @@ export default {
 }
 
 .nav-container {
-	padding-right: calc(15 * var(--border-width));
-	padding-left: calc(15 * var(--border-width));
+	padding: 0 calc(5 * var(--border-width));
 	margin: auto;
 }
 
@@ -94,6 +103,7 @@ export default {
 		padding-bottom: 0;
 	}
 	> a {
+		padding: calc(9 * var(--border-width));
 		margin-right: 0;
 		margin-bottom: var(--space-xs);
 
@@ -103,10 +113,8 @@ export default {
 	}
 }
 
-.logo-container,
-.logo {
-	width: 229px;
-	height: 40px;
+.icon {
+	font-size: var(--radius-lg);
 }
 
 @media (min-width: 576px) {
@@ -114,8 +122,9 @@ export default {
 		width: 540px;
 		max-width: 100%;
 	}
-	.link-container > a {
-		margin-right: var(--space-sm) !important;
+	.link-container > a,
+	.link-container > button {
+		margin-right: var(--space-xs);
 	}
 }
 

@@ -1,15 +1,11 @@
 export default [
 	{
-		title: "layouts.loggedoutFullWidth.steps",
-		href: "/mint-ec/willkommenspaket",
-	},
-	{
 		title: "layouts.loggedoutFullWidth.project",
 		href: "/about",
 	},
 	{
-		title: "layouts.loggedoutFullWidth.join",
-		href: "/community",
+		title: "layouts.loggedoutFullWidth.steps",
+		href: "/mint-ec/willkommenspaket",
 	},
 	{
 		title: "layouts.loggedoutFullWidth.blog",
