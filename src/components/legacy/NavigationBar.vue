@@ -62,6 +62,7 @@
 
 <style lang="scss" scoped>
 	@import "@styles";
+
 	.header {
 		position: sticky;
 		position: -webkit-sticky;
@@ -81,12 +82,30 @@
 		box-shadow: var(--shadow-sm);
 	}
 	.nav-container {
-		padding: 0 calc(5 * var(--border-width));
-		margin: auto;
+		@include breakpoint(tablet) {
+			margin: 0 calc(3.5 * var(--space-md))
+		}
+
+		@include breakpoint(desktop) {
+			padding: 0 calc(5 * var(--border-width));
+			margin: auto;
+		}
 	}
 	.logo-container {
-		width: calc(7 * var(--sidebar-sub-item-height));
-		height: var(--topbar-height);
+		@include breakpoint(tablet) {
+			height: calc(45 * var(--border-width));
+			> a > img {
+				height: var(--space-xl-2);
+			}
+		}
+
+		@include breakpoint(desktop) {
+			width: calc(7 * var(--sidebar-sub-item-height));
+			height: var(--topbar-height);
+			> a > img {
+				height: var(--topbar-height);
+			}
+		}
 	}
 	.link-container {
 		display: flex;
@@ -131,8 +150,7 @@
 
 	@media (min-width: 768px) {
 		.nav-container {
-			display: flex;
-			justify-content: space-between;
+			display: block;
 			width: 720px;
 			max-width: 100%;
 		}
@@ -146,6 +164,8 @@
 
 	@media (min-width: 992px) {
 		.nav-container {
+			display: flex;
+			justify-content: space-between;
 			width: 960px;
 			max-width: 100%;
 		}
