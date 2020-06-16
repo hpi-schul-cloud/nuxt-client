@@ -143,7 +143,7 @@ export default {
 		max-width: 100%;
 	}
 	.link-container > a,
-	.link-container > button {
+	.buttons-container > button {
 		margin-right: var(--space-xs);
 	}
 }
