@@ -11,12 +11,12 @@ storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 		img: text("img", SchulCloudLogoColor),
 		links: [
 			{
-				title: "Projekt",
+				title: "Über das Projekt",
 				href: "/about",
 			},
 			{
-				title: "Mitmachen",
-				href: "/community",
+				title: "Erste Schritte",
+				href: "/mint-ec/willkommenspaket",
 			},
 			{
 				title: "Blog",
@@ -25,10 +25,6 @@ storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 			{
 				title: "FAQ",
 				href: "https://blog.schul-cloud.org/faq",
-			},
-			{
-				title: "Onboarding",
-				href: "/mint-ec/mint-ec-willkommenspaket",
 			},
 		],
 	}),
