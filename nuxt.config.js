@@ -10,8 +10,6 @@ const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
 // CSP
-const DEFAULT_CORS_ENABLED = true;
-const DEFAULT_SECURITY_HEADERS_ENABLED = true;
 const DEFAULT_CORS_PATH = "@serverMiddleware/csp/cors";
 const DEFAULT_SECURITY_HEADERS_PATH = "@serverMiddleware/csp/security_headers";
 
@@ -38,13 +36,11 @@ module.exports = {
 	csp: {
 		// If enabled, default content security policy (CSP) header will be set
 		cors: {
-			enabled: process.env.CORS_ENABLED || DEFAULT_CORS_ENABLED,
+			enabled: process.env.CORS_ENABLED || false,
 		},
 		// If enabled, additional security header will be set
 		security_headers: {
-			enabled:
-				process.env.SECURITY_HEADERS_ENABLED ||
-				DEFAULT_SECURITY_HEADERS_ENABLED,
+			enabled: process.env.SECURITY_HEADERS_ENABLED || false,
 		},
 	},
 
