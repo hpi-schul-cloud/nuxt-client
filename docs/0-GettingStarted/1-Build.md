@@ -40,7 +40,7 @@ Output Directory: `./dist/nuxt`
 | SENTRY_DSN | `false` | If set, errors are reported to sentry. |
 | JWT_SHOW_TIMEOUT_WARNING_SECONDS | `3600` | from this remaining time on the autologout warning is displayed to the user |
 | JWT_TIMEOUT_SECONDS | `7200` | Time a inactivity user's sessions remains active |
-| MODE_LERNSTORE | `edusharing` | Enables Lernstore |
+| MODE_LERNSTORE | `edusharing` | Turn on Lernstore mode |
 | FEATURE_LERNSTORE_ENABLED | `true` | Enables Lernstore |
 
 ## Storybook
