@@ -17,6 +17,7 @@
 				/>
 			</template>
 		</account-card>
+
 		<account-card
 			:heading="$t('pages.account.index.user.email')"
 			:data="currentUser.email"
@@ -82,6 +83,13 @@
 				/>
 			</template>
 		</account-card>
+		<p v-if="thirdPartyLogin">
+			Deine Nutzerdaten werden von einem zentralen Identitätsmanagement (IDM)
+			synchronisiert. Änderungen daran können nur in dem Ausgangssystem erfolgen
+			(z.B. Schulserver), das den Daten im IDM zugrunde liegt. Bitte wende dich
+			an den lokalen Administrator deiner Schule, um Änderungen an deinen
+			Nutzerdaten vorzunehmen.
+		</p>
 	</section>
 </template>
 
