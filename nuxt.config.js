@@ -95,7 +95,7 @@ module.exports = {
 	cssSourceMap: true,
 
 	/*
-	 ** Nuxt.js (server)middelware
+	 ** Nuxt.js (server)middleware
 	 */
 	server: {
 		port: process.env.PORT || DEFAULT_PORT,
