@@ -29,6 +29,7 @@ describe("@components/legacy/NavigationBar", () => {
 				img: "@assets/img/logo/logo-image-color.svg",
 			},
 		});
+
 		expect(wrapper.props().links).toHaveLength(4);
 	});
 
@@ -57,6 +58,7 @@ describe("@components/legacy/NavigationBar", () => {
 				img: "@assets/img/logo/logo-image-color.svg",
 			},
 		});
+
 		expect(wrapper.findComponent(BaseLink).exists()).toBe(true);
 		expect(wrapper.props().img).toBe("@assets/img/logo/logo-image-color.svg");
 		expect(wrapper.find(".link-container").exists()).toBe(true);
@@ -92,6 +94,4 @@ describe("@components/legacy/NavigationBar", () => {
 
 		expect(wrapper.find(".active").exists()).toBe(true);
 	});
-
-	it.todo("setActive function sets active link accordingly");
 });
