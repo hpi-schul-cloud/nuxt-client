@@ -35,9 +35,9 @@ export default {
 		getTitle() {
 			let title;
 			if (this.activated) {
-				title = "Deine E-Mail-Adresse wurde  erfolgreich geändert.";
+				title = this.$t("pages.acctivation.index.success");
 			} else {
-				title = "Fehler bei der Validierung";
+				title = this.$t("Deine Daten konnten nicht geändert werden");
 			}
 			return title;
 		},
@@ -46,7 +46,8 @@ export default {
 			if (this.activated) {
 				description = "";
 			} else {
-				description = "Es gibt ein Problem. Bitte versuche es später erneut.";
+				description =
+					"Deine Änderungen konnten leider nicht durchgeführt werden, da der Link ungültig oder abgelaufen ist. Bitte versuche es erneut.";
 			}
 			return description;
 		},
@@ -79,4 +80,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+section {
+	// stylelint-disable
+	margin-top: 10%;
+}
 </style>

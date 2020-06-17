@@ -1,23 +1,32 @@
 <template>
 	<section>
-		<info-modal-full-width
-			title="Eine Bestätigungsmail wurde an deine neue E-Mail Adresse gesendet. Bitte bestätige diese."
-			:active="showModal"
-			@update:active="success"
-		>
-			<template v-slot:icon>
-				<base-icon
-					source="material"
-					icon="info"
-					style="color: var(--color-info);"
+		<base-modal :active="showModal">
+			<template v-slot:header></template>
+			<template v-slot:body>
+				<modal-body-info
+					:title="$t('pages.account.email.edit.confirmation.mail')"
+				>
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="info"
+							style="color: var(--color-success);"
+						/>
+					</template>
+				</modal-body-info>
+			</template>
+			<template v-slot:footer>
+				<modal-footer-confirm
+					:text="$t('common.actions.ok')"
+					@click="success"
 				/>
 			</template>
-		</info-modal-full-width>
-		<h1 class="mb--md h3">E-Mail-Adresse ändern</h1>
-		<strong>Deine aktuelle E-mail-Adresse lautet:</strong>
+		</base-modal>
+		<h1 class="mb--md h3">{{ $t("pages.account.email.edit.title") }}</h1>
+		<strong>{{ $t("pages.account.email.edit.current.mail") }}</strong>
 		<p>{{ this.$user.email }}</p>
 		<form-edit-user-data
-			submit-button="Email-Adresse ändern"
+			:submit-button="$t('pages.account.email.edit.btn')"
 			@onFormSubmit="submitHandler"
 		>
 			<template v-slot:inputs>
@@ -82,12 +91,16 @@
 
 <script>
 import FormEditUserData from "@components/organisms/FormEditUserData";
-import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
+// import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
 
 export default {
 	components: {
 		FormEditUserData,
-		InfoModalFullWidth,
+		ModalBodyInfo,
+		ModalFooterConfirm,
+		// InfoModalFullWidth,
 	},
 	meta: {
 		userNotExternallyManaged: true,

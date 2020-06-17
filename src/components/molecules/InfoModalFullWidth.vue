@@ -1,5 +1,10 @@
 <template>
-	<base-modal v-bind="$attrs" design="white" v-on="$listeners">
+	<base-modal
+		v-bind="$attrs"
+		design="white"
+		class="modal-container"
+		v-on="$listeners"
+	>
 		<template v-slot:header></template>
 		<template v-slot:body>
 			<modal-body-info :title="title" :description="description">
@@ -10,7 +15,9 @@
 		</template>
 		<template v-slot:footer>
 			<center-slot class="mb--md">
-				<base-button :design="design" @click="close">{{ btn }}</base-button>
+				<base-button class="btn" :design="design" @click="close">{{
+					btn
+				}}</base-button>
 			</center-slot>
 		</template>
 	</base-modal>
@@ -53,4 +60,18 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+.btn {
+	width: 100% !important;
+	margin-right: var(--space-md) !important;
+	margin-left: var(--space-md) !important;
+}
+
+.modal-mask {
+	position: unset !important;
+}
+
+.modal-container {
+	max-width: calc(0.6 * var(--size-content-width-max)) !important;
+}
 </style>

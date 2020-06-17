@@ -1,8 +1,8 @@
 <template>
 	<section>
-		<h1 class="mb--md h3">Passwort ändern</h1>
+		<h1 class="mb--md h3">{{ $t("pages.account.password.edit.title") }}</h1>
 		<form-edit-user-data
-			submit-button="Passwort ändern"
+			:submit-button="$t('pages.account.password.edit.title')"
 			@onFormSubmit="submitHandler"
 		>
 			<template v-slot:inputs>
@@ -64,9 +64,7 @@
 		</form-edit-user-data>
 		<p class="info">
 			<base-icon source="material" icon="info" fill="var(--color-info)" />
-			Mindestens 8 Zeichen mit Groß- und Kleinschreibung, davon jeweils
-			mindestens eine Zahl und ein Sonderzeichen. Erlaubte Sonderzeichen sind:
-			!§$%&/()=?\;:,.#+*~
+			{{ $t("pages.account.password.edit.password.info") }}
 		</p>
 	</section>
 </template>

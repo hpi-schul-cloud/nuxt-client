@@ -1,18 +1,18 @@
 <template>
 	<section>
-		<h1 class="mb--md h3">Name ändern</h1>
-		<strong>Deine aktueller Name lautet:</strong>
+		<h1 class="mb--md h3">{{ $t("pages.account.name.edit.title") }}</h1>
+		<strong>{{ $t("pages.account.name.edit.current.name") }}</strong>
 		<p>{{ this.$user.fullName }}</p>
 		<form-edit-user-data
-			submit-button="Nutzerdaten ändern"
+			:submit-button="$t('pages.account.name.edit.btn')"
 			@onFormSubmit="submitHandler"
 		>
 			<template v-slot:inputs>
 				<base-input
 					v-model="formData.firstName"
 					type="text"
-					label="Vorname"
-					placeholder="Vorname"
+					:label="$t('common.labels.firstName')"
+					:placeholder="$t('common.labels.firstName')"
 					class="mt--md"
 					data-testid="jjjjjjj"
 					required="true"
@@ -28,8 +28,8 @@
 				<base-input
 					v-model="formData.lastName"
 					type="text"
-					label="Nachname"
-					placeholder="Nachname"
+					:label="$t('common.labels.lastName')"
+					:placeholder="$t('common.labels.lastName')"
 					class="mt--md"
 					data-testid="jjjjjjj"
 					required="true"

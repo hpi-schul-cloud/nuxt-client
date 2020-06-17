@@ -24,15 +24,11 @@
 			:readonly="thirdPartyLogin"
 		>
 			<template v-if="!!newEmail" v-slot:new-mail>
-				ist die aktuelle primäre Email Adresse
+				{{ $t("pages.account.current.mail") }}
 			</template>
 			<template v-if="!!newEmail" v-slot:notification>
 				<div class="info-box">
-					<p>
-						Deine neue Email {{ newEmail }} muss noch bestätigt werden. Bitte
-						folge den Anweisungen in der Bestätigungsmail, welche an die neue
-						Adresse versand wurde.
-					</p>
+					<p>{{ $t("pages.account.index.info.mail", { newEmail }) }}</p>
 				</div>
 			</template>
 			<template v-slot:icon>
