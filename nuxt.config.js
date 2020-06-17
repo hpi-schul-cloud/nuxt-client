@@ -9,9 +9,17 @@ const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
-// CSP
-const DEFAULT_CORS_PATH = "@serverMiddleware/csp/cors";
-const DEFAULT_SECURITY_HEADERS_PATH = "@serverMiddleware/csp/security_headers";
+const serverMiddlewareList = [
+	"@serverMiddleware/nuxtversion",
+	"@serverMiddleware/proxy",
+];
+
+if (process.env.CORS_ENABLED) {
+	serverMiddlewareList.push("@serverMiddleware/csp/cors");
+}
+if (process.env.SECURITY_HEADERS_ENABLED) {
+	serverMiddlewareList.push("@serverMiddleware/csp/security_headers");
+}
 
 module.exports = {
 	mode: "spa",
@@ -86,16 +94,15 @@ module.exports = {
 	 */
 	cssSourceMap: true,
 
+	/*
+	 ** Nuxt.js (server)middelware
+	 */
 	server: {
 		port: process.env.PORT || DEFAULT_PORT,
 		host: process.env.HOST || DEFAULT_HOST,
 	},
-	serverMiddleware: [
-		process.env.CORS_PATH || DEFAULT_CORS_PATH,
-		process.env.SECURITY_HEADERS_PATH || DEFAULT_SECURITY_HEADERS_PATH,
-		"@serverMiddleware/nuxtversion",
-		"@serverMiddleware/proxy",
-	],
+
+	serverMiddleware: serverMiddlewareList,
 
 	router: {
 		middleware: [
