@@ -2,30 +2,32 @@ import NavigationBar from "./NavigationBar";
 import BaseLink from "@components/base/BaseLink";
 
 describe("@components/legacy/NavigationBar", () => {
+    const navbarLinks = [
+            {
+                title: "Über das Projekt",
+                href: "/about",
+            },
+            {
+                title: "Erste Schritte",
+                href: "/mint-ec/willkommenspaket",
+            },
+            {
+                title: "Blog",
+                href: "https://blog.schul-cloud.org/",
+            },
+            {
+                title: "FAQ",
+                href: "https://blog.schul-cloud.org/faq",
+            },
+        ];
+
 	it(...isValidComponent(NavigationBar));
 
 	it("links get rendered", () => {
 		const wrapper = mount(NavigationBar, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				links: [
-					{
-						title: "Über das Projekt",
-						href: "/about",
-					},
-					{
-						title: "Erste Schritte",
-						href: "/mint-ec/willkommenspaket",
-					},
-					{
-						title: "Blog",
-						href: "https://blog.schul-cloud.org/",
-					},
-					{
-						title: "FAQ",
-						href: "https://blog.schul-cloud.org/faq",
-					},
-				],
+				links: navbarLinks,
 				img: "@assets/img/logo/logo-image-color.svg",
 			},
 		});
@@ -37,25 +39,8 @@ describe("@components/legacy/NavigationBar", () => {
 		const wrapper = mount(NavigationBar, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				links: [
-					{
-						title: "Über das Projekt",
-						href: "/about",
-					},
-					{
-						title: "Erste Schritte",
-						href: "/mint-ec/willkommenspaket",
-					},
-					{
-						title: "Blog",
-						href: "https://blog.schul-cloud.org/",
-					},
-					{
-						title: "FAQ",
-						href: "https://blog.schul-cloud.org/faq",
-					},
-				],
-				img: "@assets/img/logo/logo-image-color.svg",
+                links: navbarLinks,
+                img: "@assets/img/logo/logo-image-color.svg",
 			},
 		});
 
@@ -70,25 +55,8 @@ describe("@components/legacy/NavigationBar", () => {
 		const wrapper = mount(NavigationBar, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				links: [
-					{
-						title: "Über das Projekt",
-						href: "/about",
-					},
-					{
-						title: "Erste Schritte",
-						href: "/mint-ec/willkommenspaket",
-					},
-					{
-						title: "Blog",
-						href: "https://blog.schul-cloud.org/",
-					},
-					{
-						title: "FAQ",
-						href: "https://blog.schul-cloud.org/faq",
-					},
-				],
-				img: "@assets/img/logo/logo-image-color.svg",
+                links: navbarLinks,
+                img: "@assets/img/logo/logo-image-color.svg",
 			},
 		});
 
