@@ -9,6 +9,12 @@ const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
+// CSP
+const DEFAULT_CORS_ENABLED = true;
+const DEFAULT_SECURITY_HEADERS_ENABLED = true;
+const DEFAULT_CORS_PATH = "@serverMiddleware/csp/cors";
+const DEFAULT_SECURITY_HEADERS_PATH = "@serverMiddleware/csp/security_headers";
+
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
@@ -32,11 +38,13 @@ module.exports = {
 	csp: {
 		// If enabled, default content security policy (CSP) header will be set
 		cors: {
-			enabled: true,
+			enabled: process.env.CORS_ENABLED || DEFAULT_CORS_ENABLED,
 		},
 		// If enabled, additional security header will be set
 		security_headers: {
-			enabled: true,
+			enabled:
+				process.env.SECURITY_HEADERS_ENABLED ||
+				DEFAULT_SECURITY_HEADERS_ENABLED,
 		},
 	},
 
@@ -87,8 +95,8 @@ module.exports = {
 		host: process.env.HOST || DEFAULT_HOST,
 	},
 	serverMiddleware: [
-		"@serverMiddleware/csp/cors",
-		"@serverMiddleware/csp/security_headers",
+		process.env.CORS_PATH || DEFAULT_CORS_PATH,
+		process.env.SECURITY_HEADERS_PATH || DEFAULT_SECURITY_HEADERS_PATH,
 		"@serverMiddleware/nuxtversion",
 		"@serverMiddleware/proxy",
 	],
