@@ -13,7 +13,12 @@
 				<base-icon
 					source="material"
 					icon="account_circle"
-					style="font-size: var(--heading-3); color: var(--color-black);"
+					style="
+						margin-top: var(--space-xs);
+						margin-right: var(--space-xs);
+						font-size: var(--heading-4);
+						color: var(--color-black);
+					"
 				/>
 			</template>
 		</account-card>
@@ -36,7 +41,12 @@
 				<base-icon
 					source="material"
 					icon="mail"
-					style="font-size: var(--heading-3); color: var(--color-black);"
+					style="
+						margin-top: var(--space-xs);
+						margin-right: var(--space-xs);
+						font-size: var(--heading-4);
+						color: var(--color-black);
+					"
 				/>
 			</template>
 		</account-card>
@@ -50,7 +60,12 @@
 				<base-icon
 					source="material"
 					icon="lock"
-					style="font-size: var(--heading-3); color: var(--color-black);"
+					style="
+						margin-top: var(--space-xs);
+						margin-right: var(--space-xs);
+						font-size: var(--heading-4);
+						color: var(--color-black);
+					"
 				/>
 			</template>
 		</account-card>
@@ -65,7 +80,12 @@
 				<base-icon
 					source="fa"
 					icon="users"
-					style="font-size: var(--heading-3); color: var(--color-black);"
+					style="
+						margin-top: var(--space-sm);
+						margin-right: var(--space-sm);
+						font-size: var(--heading-4);
+						color: var(--color-black);
+					"
 				/>
 			</template>
 		</account-card>
@@ -79,16 +99,18 @@
 				<base-icon
 					source="material"
 					icon="vpn_key"
-					style="font-size: var(--heading-3); color: var(--color-black);"
+					style="
+						margin-top: calc(0.5 * (var(--space-xs)));
+						margin-right: var(--space-xs);
+						font-size: var(--heading-4);
+						color: var(--color-black);
+					"
 				/>
 			</template>
 		</account-card>
-		<p v-if="thirdPartyLogin">
-			Deine Nutzerdaten werden von einem zentralen Identitätsmanagement (IDM)
-			synchronisiert. Änderungen daran können nur in dem Ausgangssystem erfolgen
-			(z.B. Schulserver), das den Daten im IDM zugrunde liegt. Bitte wende dich
-			an den lokalen Administrator deiner Schule, um Änderungen an deinen
-			Nutzerdaten vorzunehmen.
+		<p v-if="thirdPartyLogin" class="info">
+			<base-icon source="material" icon="info" fill="var(--color-info)" />
+			{{ $t("pages.account.index.thirdParty.info") }}
 		</p>
 	</section>
 </template>
@@ -157,5 +179,11 @@ export default {
 	p {
 		margin: 0;
 	}
+}
+.info {
+	margin-top: var(--space-lg);
+	font-size: var(--text-sm);
+	font-weight: var(--font-weight-weight);
+	color: var(--color-gray-dark);
 }
 </style>

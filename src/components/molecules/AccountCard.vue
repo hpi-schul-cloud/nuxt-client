@@ -75,13 +75,6 @@ export default {
 
 	.text {
 		display: flex;
-
-		.icon {
-			.icon {
-				margin-top: var(--space-xs);
-				margin-right: var(--space-xs);
-			}
-		}
 	}
 
 	.user-content {

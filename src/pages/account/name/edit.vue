@@ -30,8 +30,8 @@
 				<base-input
 					v-model="formData.firstName"
 					type="text"
-					:label="$t('common.labels.firstName')"
-					:placeholder="$t('common.labels.firstName')"
+					:label="$t('common.labels.firstName.new')"
+					:placeholder="$t('common.labels.firstName.new')"
 					class="mt--md"
 					data-testid="jjjjjjj"
 					required="true"
@@ -47,8 +47,8 @@
 				<base-input
 					v-model="formData.lastName"
 					type="text"
-					:label="$t('common.labels.lastName')"
-					:placeholder="$t('common.labels.lastName')"
+					:label="$t('common.labels.lastName.new')"
+					:placeholder="$t('common.labels.lastName.new')"
 					class="mt--md"
 					data-testid="jjjjjjj"
 					required="true"
