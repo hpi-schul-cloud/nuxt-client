@@ -3,19 +3,8 @@
 		<navigation-bar
 			:links="navbarItems"
 			:img="require('@assets/img/logo/logo-image-color.svg')"
-		>
-			<template v-slot:actions>
-				<base-button design="secondary outline" to="/login">
-					<base-icon source="fa" icon="sign-in" />
-					{{ $t("common.labels.login") }}
-				</base-button>
-				<base-button design="secondary" to="/community">{{
-					$t("common.labels.register")
-				}}</base-button>
-			</template>
-		</navigation-bar>
-
-		<div class="container">
+		/>
+		<div :class="isMobile ? 'small-container' : 'container'">
 			<Nuxt />
 		</div>
 	</div>
@@ -23,15 +12,12 @@
 
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
-import BaseButton from "@components/base/BaseButton";
 import navbarBaseItems from "@utils/navbarBaseItems.js";
 
 export default {
 	components: {
 		NavigationBar,
-		BaseButton,
 	},
-
 	data() {
 		return {
 			navbarBaseItems: navbarBaseItems,
@@ -46,6 +32,9 @@ export default {
 				return item;
 			});
 		},
+		isMobile() {
+			return this.$mq === "mobile";
+		},
 	},
 };
 </script>
@@ -53,7 +42,44 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.small-container {
+	padding: var(--space-md);
+}
+
 .container {
-	width: 100%;
+	padding-right: calc(15 * var(--border-width));
+	padding-left: calc(15 * var(--border-width));
+	margin: auto;
+}
+
+@media (min-width: 576px) {
+	.container {
+		width: 540px;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 768px) {
+	.container {
+		width: 720px;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 992px) {
+	.container {
+		width: 960px;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 1140px;
+		max-width: 100%;
+	}
 }
 </style>
