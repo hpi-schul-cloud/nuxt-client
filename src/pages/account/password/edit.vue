@@ -1,5 +1,26 @@
 <template>
 	<section>
+		<base-modal :active="showModal">
+			<template v-slot:body>
+				<modal-body-info
+					:title="$t('pages.account.password.edit.confirmation')"
+				>
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="info"
+							style="color: var(--color-success);"
+						/>
+					</template>
+				</modal-body-info>
+			</template>
+			<template v-slot:footer>
+				<modal-footer-confirm
+					:text="$t('common.actions.ok')"
+					@click="success"
+				/>
+			</template>
+		</base-modal>
 		<h1 class="mb--md h3">{{ $t("pages.account.password.edit.title") }}</h1>
 		<form-edit-user-data
 			:submit-button="$t('pages.account.password.edit.title')"
@@ -71,9 +92,14 @@
 
 <script>
 import FormEditUserData from "@components/organisms/FormEditUserData";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
+
 export default {
 	components: {
 		FormEditUserData,
+		ModalBodyInfo,
+		ModalFooterConfirm,
 	},
 	meta: {
 		userNotExternallyManaged: true,
@@ -85,6 +111,7 @@ export default {
 				passwordNew: "",
 				password_verification: "",
 			},
+			showModal: false,
 		};
 	},
 	methods: {
@@ -92,6 +119,7 @@ export default {
 			this.$toast.error("Leider ist etwas schief gegangen");
 		},
 		success() {
+			this.showModal = false;
 			this.$router.push({
 				path: `/account/`,
 			});
@@ -105,7 +133,7 @@ export default {
 						password_verification: this.formData.password,
 					},
 				]);
-				this.success();
+				this.showModal = true;
 			} catch (e) {
 				console.log(e);
 				this.error();

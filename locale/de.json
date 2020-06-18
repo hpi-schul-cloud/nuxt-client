@@ -145,6 +145,8 @@
 	"pages.account.button.user.password": "Passwort ändern",
 	"pages.account.email.edit.btn": "Email-Adresse ändern",
 	"pages.account.email.edit.confirmation.mail": "Eine Bestätigungsmail wurde an deine neue E-Mail-Adresse gesendet. Bitte bestätige diese.",
+	"pages.account.name.edit.confirmation": "Deine Nutzerdaten wurden erfolgreich geändert",
+	"pages.account.password.edit.confirmation": "Dein Passwort wurde erfolgreich geändert",
 	"pages.account.email.edit.current.mail": "Deine aktuelle E-mail-Adresse lautet:",
 	"pages.account.email.edit.title": "E-Mail-Adresse ändern",
 	"pages.account.index.title": "Account",

@@ -1,5 +1,24 @@
 <template>
 	<section>
+		<base-modal :active="showModal">
+			<template v-slot:body>
+				<modal-body-info :title="$t('pages.account.name.edit.confirmation')">
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="info"
+							style="color: var(--color-success);"
+						/>
+					</template>
+				</modal-body-info>
+			</template>
+			<template v-slot:footer>
+				<modal-footer-confirm
+					:text="$t('common.actions.ok')"
+					@click="success"
+				/>
+			</template>
+		</base-modal>
 		<h1 class="mb--md h3">{{ $t("pages.account.name.edit.title") }}</h1>
 		<strong>{{ $t("pages.account.name.edit.current.name") }}</strong>
 		<p>{{ this.$user.fullName }}</p>
@@ -49,10 +68,14 @@
 
 <script>
 import FormEditUserData from "@components/organisms/FormEditUserData";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 
 export default {
 	components: {
 		FormEditUserData,
+		ModalBodyInfo,
+		ModalFooterConfirm,
 	},
 	meta: {
 		userNotExternallyManaged: true,
@@ -63,6 +86,7 @@ export default {
 				firstName: "",
 				lastName: "",
 			},
+			showModal: false,
 		};
 	},
 	methods: {
@@ -70,6 +94,7 @@ export default {
 			this.$toast.error("Leider ist etwas schief gegangen");
 		},
 		success() {
+			this.showModal = false;
 			this.$router.push({
 				path: `/account/`,
 			});
@@ -83,7 +108,7 @@ export default {
 						lastName: this.formData.lastName,
 					},
 				]);
-				this.success();
+				this.showModal = true;
 			} catch (e) {
 				console.log(e);
 				this.error();
