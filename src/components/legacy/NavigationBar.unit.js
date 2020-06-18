@@ -8,11 +8,6 @@ describe("@components/legacy/NavigationBar", () => {
 			href: "/about",
 		},
 		{
-			title: "Erste Schritte",
-			href:
-				"https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
-		},
-		{
 			title: "Blog",
 			href: "https://blog.schul-cloud.org/",
 		},
@@ -33,7 +28,7 @@ describe("@components/legacy/NavigationBar", () => {
 			},
 		});
 
-		expect(wrapper.props().links).toHaveLength(4);
+		expect(wrapper.props().links).toHaveLength(3);
 	});
 
 	it("logo get rendered", () => {
