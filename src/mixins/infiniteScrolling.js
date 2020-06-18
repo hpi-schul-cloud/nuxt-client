@@ -1,4 +1,4 @@
-const infiniteScrolling = {
+export default {
 	data() {
 		return {
 			bottom: false,
@@ -7,29 +7,25 @@ const infiniteScrolling = {
 	},
 	created() {
 		window.scrollTo({ top: 0, behavior: "smooth" });
-		window.addEventListener("scroll", () => {
-			this.bottom = this.$_bottomVisible();
-			this.scrollY = window.scrollY;
-		});
+		window.addEventListener("scroll", this.$_scrollEventHandler);
 	},
 	beforeDestroy() {
-		window.removeEventListener("scroll", () => {
-			this.bottom = this.$_bottomVisible();
-			this.scrollY = window.scrollY;
-		});
+		window.removeEventListener("scroll", this.$_scrollEventHandler);
 	},
 	methods: {
-		$_bottomVisible() {
+		$_scrollEventHandler() {
+			this.bottom = this.$_isBottomReached();
+			this.scrollY = window.scrollY;
+		},
+		$_isBottomReached() {
 			const { scrollY } = window;
-			const visible = document.documentElement.clientHeight;
+			const visibleHeight = document.documentElement.clientHeight;
 			const pageHeight = document.documentElement.scrollHeight;
-			const bottomOfPage = visible + scrollY >= pageHeight;
-			return bottomOfPage || pageHeight < visible;
+			const bottomOfPage = visibleHeight + scrollY >= pageHeight;
+			return bottomOfPage || pageHeight < visibleHeight;
 		},
 		$_backToTop() {
 			window.scrollTo({ top: 0, behavior: "smooth" });
 		},
 	},
 };
-
-export default infiniteScrolling;

@@ -1,12 +1,12 @@
 <template>
-	<section class="content">
-		<div
-			v-if="scrollY > backToTopScrollYLimit && resources.data.length > 0"
-			class="content__back-to-top"
-		>
-			<floating-fab
-				icon="arrow_drop_up"
-				:aria-label="$t('common.actions.scrollToTop')"
+	<section>
+		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
+			<fab-floating
+				:primary-action="{
+					icon: 'arrow_drop_up',
+					'icon-source': 'material',
+					label: $t('common.actions.scrollToTop'),
+				}"
 				@click="$_backToTop"
 			/>
 		</div>
@@ -71,7 +71,7 @@ import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 import EdusharingFooter from "@components/molecules/EdusharingFooter";
 
 export default {
@@ -80,7 +80,7 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
-		FloatingFab,
+		FabFloating,
 		EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
@@ -119,7 +119,8 @@ export default {
 	},
 	watch: {
 		bottom(bottom) {
-			if (bottom && !this.firstSearch && !this.loading) {
+			const { skip, total } = this.resources;
+			if (bottom && !this.loading && skip < total) {
 				this.addContent();
 			}
 		},

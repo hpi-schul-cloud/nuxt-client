@@ -108,11 +108,7 @@ export const mutations = {
 	setUniquePageCount(state, payload) {
 		const data = {};
 		for (const key in payload) {
-			data[
-				dayjs(key)
-					.subtract(10, "days")
-					.calendar()
-			] = payload[key];
+			data[dayjs(key).subtract(10, "days").calendar()] = payload[key];
 		}
 		state.uniquePageCount = data;
 	},

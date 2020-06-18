@@ -7,7 +7,7 @@ function getMock(attributes) {
 	});
 }
 
-describe("@components/BaseTextarea", () => {
+describe("@components/base/BaseTextarea", () => {
 	it(...isValidComponent(BaseTextarea));
 
 	it("textarea has label", () => {

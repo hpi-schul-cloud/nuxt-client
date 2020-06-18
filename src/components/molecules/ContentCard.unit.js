@@ -1,5 +1,5 @@
 import ContentCard from "./ContentCard";
 
-describe("@components/ContentCard", () => {
+describe("@components/molecules/ContentCard", () => {
 	it(...isValidComponent(ContentCard));
 });

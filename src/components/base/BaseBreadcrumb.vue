@@ -3,7 +3,11 @@
 		<ul class="breadcrumb">
 			<li v-for="(input, index) in inputs" :key="input.text" class="link">
 				<component :is="getComponent(input)" v-bind="removeText(input)">
-					<base-icon v-if="input.icon" v-bind="input.icon" />
+					<base-icon
+						v-if="input.icon"
+						v-bind="input.icon"
+						class="breadcrumb-icon"
+					/>
 					{{ input.text }}
 					<base-icon
 						v-if="index !== inputs.length - 1"
@@ -26,12 +30,14 @@ export default {
 			required: true,
 		},
 	},
-
-	created: function() {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
+	created: function () {
 		const lastObject = this.inputs[this.inputs.length - 1];
 		delete lastObject.href && delete lastObject.to;
 	},
-
 	methods: {
 		// eslint-disable-next-line no-unused-vars
 		removeText({ text, icon, ...input }) {
@@ -48,11 +54,14 @@ export default {
 @import "@styles";
 
 .breadcrumb {
+	display: flex;
+	align-items: center;
 	padding: var(--space-sm) 0;
 	list-style: none;
 
 	.link {
-		display: inline;
+		display: inline-flex;
+		align-items: center;
 		font-family: var(--font-accent);
 		font-weight: var(--font-weight-bold);
 		color: var(--color-tertiary-dark);
@@ -63,6 +72,10 @@ export default {
 	.link + .link::before {
 		padding: var(--space-xs);
 		// Slash Symbol
+	}
+
+	.breadcrumb-icon {
+		margin-right: var(--space-xs);
 	}
 
 	.arrow {

@@ -1,7 +1,7 @@
 import BaseSelect from "./BaseSelect";
 import MultiSelect from "vue-multiselect";
 
-describe("@components/BaseSelect", () => {
+describe("@components/base/BaseSelect", () => {
 	it(...isValidComponent(BaseSelect));
 
 	it("render component", () => {
@@ -51,9 +51,9 @@ describe("@components/BaseSelect", () => {
 				value: [],
 			},
 		});
-		expect(wrapper.find(MultiSelect).attributes()["aria-label"]).toStrictEqual(
-			"label"
-		);
+		expect(
+			wrapper.findComponent(MultiSelect).attributes()["aria-label"]
+		).toStrictEqual("label");
 	});
 
 	it("uses default option label", () => {

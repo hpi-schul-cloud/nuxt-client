@@ -22,6 +22,9 @@
 				:routes="sidebarItems"
 			/>
 			<slot />
+			<keep-alive>
+				<autoLogoutWarning />
+			</keep-alive>
 			<the-footer v-if="!fullscreenMode" class="footer" />
 		</div>
 	</div>
@@ -34,7 +37,9 @@ import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
 import UserHasRole from "@components/helpers/UserHasRole";
 import DemoBanner from "@components/legacy/DemoBanner";
-import sidebarBaseItems from "../utils/sidebarBaseItems.js";
+import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
+import sidebarBaseItems from "@utils/sidebarBaseItems.js";
+import toastsFromQueryString from "@mixins/toastsFromQueryString";
 
 const topbarBaseActions = [
 	{
@@ -83,7 +88,9 @@ export default {
 		TheFooter,
 		DemoBanner,
 		UserHasRole,
+		autoLogoutWarning,
 	},
+	mixins: [toastsFromQueryString],
 	data() {
 		return {
 			sidebarBaseItems: sidebarBaseItems,
@@ -132,6 +139,15 @@ export default {
 		},
 		sidebarItems() {
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {
+				// Check permissions for all children
+				if ((item.children || []).length >= 1) {
+					item.children = item.children.filter(
+						(child) =>
+							!child.permission ||
+							this.user?.permissions?.includes?.(child.permission)
+					);
+				}
+
 				const hasRequiredPermission = this.user?.permissions?.includes?.(
 					item.permission
 				);
@@ -158,7 +174,7 @@ export default {
 		},
 	},
 	watch: {
-		$route: function(to) {
+		$route: function (to) {
 			try {
 				this.pageTitle = this.$children[2].$children[0].$metaInfo.title;
 			} catch {
@@ -174,7 +190,7 @@ export default {
 		handleTopAction(event) {
 			if (event === "logout") {
 				this.logout();
-				this.$router.push({ path: "/" });
+				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {
 				this.fullscreenMode = !this.fullscreenMode;

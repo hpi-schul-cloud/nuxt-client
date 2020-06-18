@@ -1,7 +1,7 @@
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInput";
 
-describe("@components/BaseInput", () => {
+describe("@components/base/BaseInput", () => {
 	it(...isValidComponent(BaseInput));
 
 	// BaseInput passes all given slots to it's child components
@@ -30,7 +30,7 @@ describe("@components/BaseInput", () => {
 					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
 				});
-				expect(wrapper.contains(".label")).toBe(true);
+				expect(wrapper.find(".label").exists()).toBe(true);
 				expect(wrapper.text()).toContain(testLabel);
 			});
 	});
@@ -43,7 +43,7 @@ describe("@components/BaseInput", () => {
 				template: `<base-input v-model="value" label="${testLabel}" label-hidden type="${type}" value="${index}"/>`,
 				components: { BaseInput },
 			});
-			expect(wrapper.contains(".label")).toBe(false);
+			expect(wrapper.find(".label").exists()).toBe(false);
 			expect(wrapper.find("input").attributes("aria-label")).toBe(testLabel);
 		});
 	});
@@ -69,16 +69,12 @@ describe("@components/BaseInput", () => {
 	});
 
 	it("throws an error on unsupported types", () => {
-		try {
-			const wrapper = mount({
+		expect(() => {
+			mount({
 				data: () => ({ value: "" }),
 				template: `<base-input v-model="value" label="Label" type="unsupported" name="test" />`,
 				components: { BaseInput },
 			});
-
-			expect(wrapper).toBe(false); // should fail before this
-		} catch (error) {
-			expect(true).toBe(true); // expect to run this
-		}
+		}).toThrow(Error);
 	});
 });

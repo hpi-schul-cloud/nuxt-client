@@ -15,7 +15,7 @@
 				</base-content-container>
 			</div>
 		</div>
-		<div class="overlay"> </div>
+		<div class="overlay"></div>
 	</div>
 </template>
 
@@ -35,7 +35,10 @@ export default {
 			default: "",
 		},
 	},
-
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		compressed() {
 			return (
@@ -95,7 +98,7 @@ p {
 	z-index: var(--layer-page);
 	width: 100%;
 	height: 20rem;
-	background-color: var(--color-overlay);
+	background-color: var(--color-overlay-dark);
 
 	@include breakpoint(tablet) {
 		height: 30rem;

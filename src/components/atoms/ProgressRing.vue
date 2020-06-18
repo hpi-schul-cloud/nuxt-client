@@ -39,6 +39,10 @@ export default {
 			// isComplete: false,
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		circle() {
 			return (this.percent / 100) * 100 * Math.PI + ",9999";

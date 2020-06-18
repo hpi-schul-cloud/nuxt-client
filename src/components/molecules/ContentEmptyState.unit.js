@@ -1,6 +1,6 @@
 import ContentEmptyState from "./ContentEmptyState";
 
-describe("@components/ContentEmptyState", () => {
+describe("@components/molecules/ContentEmptyState", () => {
 	it(...isValidComponent(ContentEmptyState));
 
 	// eslint-disable-next-line jest/no-commented-out-tests

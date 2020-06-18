@@ -1,6 +1,8 @@
 <template>
 	<color-picker
-		v-bind="{ ...$attrs, ...$props }"
+		v-bind="{ ...$attrs }"
+		:swatches="colors"
+		:value="value"
 		@input="$emit('input', $event)"
 	/>
 </template>
@@ -34,7 +36,11 @@ export default {
 			},
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 };
 </script>
 
-<style src="vue-swatches/dist/vue-swatches.min.css"></style>
+<style src="vue-swatches/dist/vue-swatches.css"></style>

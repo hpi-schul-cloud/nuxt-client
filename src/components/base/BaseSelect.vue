@@ -90,6 +90,10 @@ export default {
 			default: "Aktiv",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	computed: {
 		model: {
 			get() {

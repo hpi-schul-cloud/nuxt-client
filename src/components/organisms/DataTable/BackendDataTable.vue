@@ -12,38 +12,41 @@
 					@fire-action="fireAction"
 				/>
 			</div>
-			<table class="table">
-				<thead>
-					<component
-						:is="componentHeaderRow"
-						:all-rows-selectable="rowsSelectable"
-						:current-page-selection-state.sync="currentPageSelectionState"
-						:columns="columns"
-						:sort-by.sync="sortByProxy"
-						:sort-order.sync="sortOrderProxy"
-					/>
-				</thead>
-				<tbody>
-					<component
-						:is="componentDataRow"
-						v-for="(row, rowindex) in data"
-						:key="getValueByPath(row, trackBy)"
-						:selectable="rowsSelectable"
-						:rowindex="rowindex"
-						:selected="isRowSelected(row)"
-						:column-keys="columnKeys"
-						:data="row"
-						@update:selected="setRowSelection(row, $event)"
-					>
-						<template
-							v-for="(cmp, name) in dataRowSlots"
-							v-slot:[name]="{ data: columnData }"
+			<div class="table-content-wrapper">
+				<table class="table">
+					<thead>
+						<component
+							:is="componentHeaderRow"
+							:all-rows-selectable="rowsSelectable"
+							:current-page-selection-state.sync="currentPageSelectionState"
+							:columns="columns"
+							:sort-by.sync="$_controllableDataSortBy"
+							:sort-order.sync="$_controllableDataSortOrder"
+							@update:sort="onUpdateSort"
+						/>
+					</thead>
+					<tbody>
+						<component
+							:is="componentDataRow"
+							v-for="(row, rowindex) in data"
+							:key="getValueByPath(row, trackBy)"
+							:selectable="rowsSelectable"
+							:rowindex="rowindex"
+							:selected="isRowSelected(row)"
+							:column-keys="columnKeys"
+							:data="row"
+							@update:selected="setRowSelection(row, $event)"
 						>
-							<slot :name="name" :data="columnData" />
-						</template>
-					</component>
-				</tbody>
-			</table>
+							<template
+								v-for="(cmp, name) in dataRowSlots"
+								v-slot:[name]="columnProps"
+							>
+								<slot :name="name" v-bind="columnProps" />
+							</template>
+						</component>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 		<pagination
@@ -65,11 +68,14 @@ import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 
+import controllableData from "@mixins/controllableData";
+
 export default {
 	components: {
 		Pagination,
 		RowSelectionBar,
 	},
+	mixins: [controllableData(["sortBy", "sortOrder", "selectionType"])],
 	props: {
 		/**
 		 * Defines the visible columns
@@ -78,7 +84,8 @@ export default {
 		columns: {
 			type: Array,
 			default: () => [],
-			validator: (columns) => columns.every((column) => column.label),
+			validator: (columns) =>
+				columns.every((column) => typeof column.label === "string"),
 		},
 		/**
 		 * Array of objects
@@ -153,8 +160,6 @@ export default {
 		actions: {
 			type: Array,
 			default: () => [],
-			validator: (actions) =>
-				actions.every((action) => typeof action.action === "function"),
 		},
 
 		sortBy: {
@@ -187,10 +192,7 @@ export default {
 		return {
 			editFilterActive: false,
 			tableData: this.data,
-			filterOpened: {},
-			newFiltersSelected: this.filtersSelected,
 			selectionKeys: {},
-			localSelectionType: "inclusive",
 		};
 	},
 	computed: {
@@ -204,26 +206,10 @@ export default {
 				)
 			);
 		},
-		sortByProxy: {
-			get() {
-				return this.sortBy;
-			},
-			set(to) {
-				this.$emit("update:sortBy", to);
-			},
-		},
-		sortOrderProxy: {
-			get() {
-				return this.sortOrder;
-			},
-			set(to) {
-				this.$emit("update:sortOrder", to);
-			},
-		},
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
-			return this.localSelectionType === "inclusive"
+			return this.$_controllableDataSelectionType === "inclusive"
 				? selections.length
 				: this.total - selections.length;
 		},
@@ -232,7 +218,8 @@ export default {
 				// TODO think about moving selections outside this method
 				const selections = Object.keys(this.selectionKeys);
 				return (
-					this.localSelectionType === "exclusive" && selections.length === 0
+					this.$_controllableDataSelectionType === "exclusive" &&
+					selections.length === 0
 				);
 			},
 			set(state) {
@@ -247,7 +234,7 @@ export default {
 					this.selectionKeys[getValueByPath(row, this.trackBy)];
 
 				const allSelected =
-					this.localSelectionType === "inclusive"
+					this.$_controllableDataSelectionType === "inclusive"
 						? Boolean(this.data.every(isInSelection))
 						: !Boolean(this.data.some(isInSelection));
 				if (allSelected) {
@@ -255,7 +242,7 @@ export default {
 				}
 
 				const someSelected =
-					this.localSelectionType === "inclusive"
+					this.$_controllableDataSelectionType === "inclusive"
 						? Boolean(this.data.some(isInSelection))
 						: !Boolean(this.data.every(isInSelection));
 				if (someSelected) {
@@ -288,37 +275,25 @@ export default {
 		},
 	},
 	watch: {
-		selectionType: {
-			handler(to) {
-				this.localSelectionType = to;
-			},
-			immediate: true,
-		},
 		selectionKeys(to) {
-			// update if any value has actually changed (prevent loops, deep array comparison)
-			if (
-				JSON.stringify(Object.keys(to)) !== JSON.stringify(this.selectedRowIds)
-			) {
-				/**
-				 * toggle whenever the selection changes
-				 *
-				 * @event update:selection
-				 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
-				 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
-				 * Inclusive means all items in the passed array are selected.
-				 * Exclusive means all items not in the passed array are selected.
-				 */
-				this.$emit(
-					"update:selection",
-					Object.keys(to),
-					this.localSelectionType,
-					"onUpdateSelectionKeys"
-				);
-				/**
-				 * helper event for the selectedRowIds .sync modifier
-				 */
-				this.$emit("update:selectedRowIds", Object.keys(to));
-			}
+			/**
+			 * toggle whenever the selection changes
+			 *
+			 * @event update:selection
+			 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
+			 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
+			 * Inclusive means all items in the passed array are selected.
+			 * Exclusive means all items not in the passed array are selected.
+			 */
+			this.$emit(
+				"update:selection",
+				Object.keys(to),
+				this.$_controllableDataSelectionType
+			);
+			/**
+			 * helper event for the selectedRowIds .sync modifier
+			 */
+			this.$emit("update:selectedRowIds", Object.keys(to));
 		},
 		selectedRowIds: {
 			handler(to) {
@@ -337,36 +312,40 @@ export default {
 			},
 			immediate: true,
 		},
+		currentPage(to, from) {
+			if (to !== from) {
+				window.scrollTo({ top: 0, behavior: "smooth" });
+			}
+		},
 	},
 	methods: {
 		getValueByPath,
 		selectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
-			this.localSelectionType = "exclusive";
-			this.$emit("update:selectionType", "exclusive");
-			this.$emit("update:selection", [], "exclusive");
+			this.$_controllableDataSelectionType = "exclusive";
 		},
 		unselectAllRowsOfAllPages() {
 			this.$set(this, "selectionKeys", {});
-			this.localSelectionType = "inclusive";
-			this.$emit("update:selectionType", "inclusive");
-			this.$emit("update:selection", [], "inclusive");
+			this.$_controllableDataSelectionType = "inclusive";
 		},
 		setRowSelection(row, state) {
 			const method = (newState) => (newState ? "$set" : "$delete");
-			this[method(this.localSelectionType === "inclusive" ? state : !state)](
-				this.selectionKeys,
-				getValueByPath(row, this.trackBy),
-				true
-			);
+			this[
+				method(
+					this.$_controllableDataSelectionType === "inclusive" ? state : !state
+				)
+			](this.selectionKeys, getValueByPath(row, this.trackBy), true);
 		},
 		isRowSelected(row) {
 			const rowId = getValueByPath(row, this.trackBy);
 			return Boolean(
-				this.localSelectionType === "inclusive"
+				this.$_controllableDataSelectionType === "inclusive"
 					? this.selectionKeys[rowId]
 					: !this.selectionKeys[rowId]
 			);
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.$emit("update:sort", sortBy, sortOrder);
 		},
 		onUpdateRowsPerPage(value) {
 			this.$emit("update:current-page", 1);
@@ -374,25 +353,27 @@ export default {
 		},
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);
-			action.action(selections, this.localSelectionType);
+			action.action(selections, this.$_controllableDataSelectionType);
 			this.unselectAllRowsOfAllPages();
 		},
 	},
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@styles";
-thead {
+thead,
+tbody {
 	font-size: var(--text-md);
 }
-.table-wrapper {
+.table-content-wrapper {
 	overflow-x: auto;
 }
 .toolbelt {
 	display: flex;
 	align-items: center;
-	height: 55px;
+	// min-height to prevent table jumping if toolbelt appears/disappears
+	min-height: 58px;
 }
 .table {
 	width: 100%;

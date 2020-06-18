@@ -81,9 +81,11 @@ storiesOf("4 Base UI Components/Inputs/Default", module)
 				"material"
 			),
 			icon: text("icon", "alarm"),
+			success: boolean("success", false),
+			error: text("error", ""),
 		}),
 		template: `
-			<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint">
+			<base-input :type="type" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint" :error="error" :success="success">
 				<template v-slot:icon>
 					<base-icon :source="iconSource" :icon="icon" />
 				</template>

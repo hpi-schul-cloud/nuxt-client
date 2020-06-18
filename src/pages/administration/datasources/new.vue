@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="h3"> {{ $t("pages.administration.datasources.new.title") }}</h1>
+		<h1 class="h3">{{ $t("pages.administration.datasources.new.title") }}</h1>
 		<datasource-card
 			v-for="provider in datasourceProvider"
 			:key="provider.name"
@@ -49,7 +49,7 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "fas fa-cog" },
+					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.datasources.index.title"),
@@ -57,7 +57,7 @@ export default {
 				},
 				{
 					text: this.$t("pages.administration.datasources.new.title"),
-					to: "/administration/datasources/add",
+					to: "/administration/datasources/new",
 				},
 			],
 			datasourceProvider: [
@@ -92,21 +92,18 @@ export default {
 	},
 	methods: {
 		async getAddedSourcesCount(source) {
-			await this.$store
-				.dispatch("datasources/find", {
+			try {
+				source.count = await this.$store.dispatch("datasources/find", {
 					query: {
 						$limit: 0,
 						config: {
 							target: source.name.toLowerCase(),
 						},
 					},
-				})
-				.then((res) => {
-					source.count = res.total;
-				})
-				.catch((err) => {
-					console.error(err);
 				});
+			} catch (error) {
+				console.error(err);
+			}
 		},
 		forwardCreate(name) {
 			this.$router.push({

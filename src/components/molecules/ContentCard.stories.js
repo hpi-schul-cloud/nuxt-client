@@ -1,5 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import { text, array, select } from "@storybook/addon-knobs";
+import faker from "faker/locale/en";
+// set a seed to have a consistent fake for the screenshot tests
+faker.seed(512); // any static number will do the job
 
 import ContentCard from "./ContentCard";
 
@@ -32,10 +35,7 @@ storiesOf("5 Molecules/ContentCard", module).add("default", () => ({
 				],
 				","
 			),
-			thumbnail: text(
-				"thumbnail",
-				"https://s3.xopic.de/openhpi-public/courses/5D3N8vSUVXlL95aIrsnr0s/visual_v1.jpg"
-			),
+			thumbnail: text("thumbnail", faker.image.dataUri(1, 1)),
 			title: text("title", "Wie designe ich meine eigene Homepage?"),
 			url: text("url", "https://open.hpi.de/courses/homepage2016"),
 		},

@@ -7,9 +7,9 @@
 		/> -->
 		<!-- eslint-disable vue/no-v-html -->
 		<span class="empty-state-container__title" v-html="titleHtmlTemplate" />
-		<div class="empty-state-container__sub-title">{{
-			$t("pages.content.empty_state.error.subtitle")
-		}}</div>
+		<div class="empty-state-container__sub-title">
+			{{ $t("pages.content.empty_state.error.subtitle") }}
+		</div>
 		<span class="empty-state-container__message" v-html="messageHtmlTemplate" />
 		<!-- eslint-enable vue/no-v-html -->
 	</div>

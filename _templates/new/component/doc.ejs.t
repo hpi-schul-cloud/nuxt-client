@@ -1,4 +1,4 @@
 ---
-to: "<%= storynotes ? ('docs/storybook/' + type + '/' + name + '.md') : null %>"
+to: "<%= storynotes ? ('src/components/' + type + '/' + name + '.md') : null %>"
 ---
 # <%= name %>

@@ -6,7 +6,7 @@ const getVideoplayer = (props) => {
 	});
 };
 
-describe("@components/BaseVideo", () => {
+describe("@components/base/BaseVideo", () => {
 	it(...isValidComponent(BaseVideo));
 
 	it("renders sources", () => {
@@ -43,7 +43,7 @@ describe("@components/BaseVideo", () => {
 		const wrapper = getVideoplayer({
 			sources: mockVideos,
 		});
-		expect(wrapper.contains(`video[controls]`)).toBe(true);
+		expect(wrapper.find(`video[controls]`).exists()).toBe(true);
 	});
 
 	it("can render without controls", () => {
@@ -52,6 +52,6 @@ describe("@components/BaseVideo", () => {
 			sources: mockVideos,
 			noControls: true,
 		});
-		expect(wrapper.contains("video[controls]")).toBe(false);
+		expect(wrapper.find("video[controls]").exists()).toBe(false);
 	});
 });

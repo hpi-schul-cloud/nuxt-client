@@ -31,6 +31,9 @@ npm run new page
 
 # Generate a new layout component with adjacent unit test
 npm run new layout
+
+# Generate a new store component
+npm run new store
 ```
 
 - [Hygen](http://www.hygen.io/)
@@ -88,6 +91,12 @@ Für unit-tests verwenden wir [Jest](https://jestjs.io/). Die Konfigurationsdate
 
 Um unsere Testabdeckung zu überwachen verwenden wir [codecov.io](https://codecov.io). Der aktuelle Status ist auf dem entsprechenden [Dashboard](https://codecov.io/gh/schul-cloud/nuxt-client/) einzusehen.
 
+### Screenshot Tests
+
+Each story is compared with the saved image in the repo at each push. This ensures that the components do not change accidentally. It is implemented with [Jest](https://jestjs.io/), [Puppeteer](https://github.com/puppeteer/puppeteer) and [americanexpress/jest-image-snapshot](https://github.com/americanexpress/jest-image-snapshot).
+
+To update the screenshots, comment on `@schul-cloud-bot update screenshots` on a PR that presents the changes to the component.
+
 ## Polyfills
 
 ### Postcss
@@ -118,3 +127,7 @@ Gemergte Branches werden von diesem Bot ebenfalls automatisch gelöscht.
 ### [Accesslint](https://www.accesslint.com/)
 
 Accesslint prüft grundsätzliche Accessibility verstöße und weist mit Kommentaren direkt im Pull Request darauf hin. Aktuell versteht der Bot die Vue Syntax allerding noch nicht, sodass er teils Falsche Alarme bei bspw. `:aria-label="labelVariable"` wirft, da er `:aria-label` nicht mit `aria-label` gleichsetzt. Die Hinweise sollten also eher als Hinweis für genauere Kontrolle auf Accessibility gesehen werden.
+
+### [Mergable](https://github.com/mergeability/mergeable)
+
+Mergeable nutzen wir um sicherzustellen, dass der PR einige Mindestanforderungen erfüllt. Dazu zählt beispielsweise, dass der PR Titel einem vorgegebenem Schema folgt und kein `WIP` oder `is blocked` label enthält.

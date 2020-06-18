@@ -1,4 +1,5 @@
 import Vue from "vue";
+import Vuex from "vuex";
 
 import "@plugins/global";
 
@@ -7,7 +8,7 @@ import Toasted from "vue-toasted";
 Vue.prototype.$toast = Toasted;
 Vue.use(Toasted, { duration: 3000 });
 Vue.use({
-	install: function(Vue, options) {
+	install: function (Vue, options) {
 		Vue.prototype.$toast = Vue.prototype.$toasted;
 	},
 });
@@ -38,3 +39,5 @@ const mockComponents = {
 Object.keys(mockComponents).forEach((componentName) =>
 	mockComponent(componentName, mockComponents[componentName])
 );
+
+Vue.use(Vuex);

@@ -1,6 +1,6 @@
 import { configure, addDecorator, addParameters } from "@storybook/vue";
 
-import { withInfo } from "storybook-addon-vue-info";
+import { withInfo, setDefaults } from "storybook-addon-vue-info";
 import { withA11y } from "@storybook/addon-a11y";
 import { withKnobs } from "@storybook/addon-knobs";
 
@@ -21,6 +21,48 @@ import "@styles";
 addParameters({
 	info: true,
 });
+
+// Preview Backgrounds ( @storybook/addon-backgrounds )
+addParameters({
+	backgrounds: [
+		"primary",
+		"primary-light",
+		"primary-dark",
+		"secondary",
+		"secondary-light",
+		"secondary-dark",
+		"tertiary",
+		"tertiary-light",
+		"tertiary-dark",
+		"black",
+		"gray",
+		"gray-light",
+		"gray-dark",
+		"white",
+		"white-transparent",
+		"overlay-light",
+		"overlay-dark",
+		"info",
+		"info-light",
+		"info-dark",
+		"success",
+		"success-light",
+		"success-dark",
+		"warning",
+		"warning-light",
+		"warning-dark",
+		"danger",
+		"danger-light",
+		"danger-dark",
+		"disabled",
+		"disabled-dark",
+	].map((color) => ({
+		name: `--color-${color}`,
+		value: `var(--color-${color})`,
+		default: color === "white",
+	})),
+});
+
 addDecorator(withInfo);
 
 // A11y

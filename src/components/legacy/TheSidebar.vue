@@ -13,7 +13,7 @@
 			/>
 		</div>
 		<nav class="contents">
-			<ul class="list">
+			<ul data-testid="routesListTest" class="list">
 				<div
 					v-for="route in routes"
 					:key="JSON.stringify(route.to) || route.href"
@@ -86,6 +86,10 @@ export default {
 		expandedMenu: {
 			type: Boolean,
 		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 };
 </script>

@@ -1,7 +1,7 @@
 import ModalFooter from "./ModalFooter";
 import { shallowMount } from "@vue/test-utils";
 
-describe("@components/ModalFooter", () => {
+describe("@components/molecules/ModalFooter", () => {
 	it(...isValidComponent(ModalFooter));
 
 	it("Render with some slots", () => {
@@ -11,7 +11,7 @@ describe("@components/ModalFooter", () => {
 				right: "right",
 			},
 		});
-		expect(wrapper.find(".icon-container").text()).toBe("left");
-		expect(wrapper.find(".button-container").text()).toBe("right");
+		expect(wrapper.find(".left-container").text()).toBe("left");
+		expect(wrapper.find(".right-container").text()).toBe("right");
 	});
 });

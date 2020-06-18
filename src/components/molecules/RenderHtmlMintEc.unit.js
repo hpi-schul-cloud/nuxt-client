@@ -1,5 +1,5 @@
 import RenderHtmlMintEc from "./RenderHtmlMintEc";
 
-describe("@components/RenderHtmlMintEc", () => {
+describe("@components/molecules/RenderHtmlMintEc", () => {
 	it(...isValidComponent(RenderHtmlMintEc));
 });

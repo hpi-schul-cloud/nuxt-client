@@ -1,5 +1,5 @@
 # Editor Configs
-
+.idea
 # Local Developer Configs
 
 # Dependency
@@ -30,4 +30,5 @@ jsconfig.json
 
 docker-compose.yml
 tests/screenshot/__image_snapshots__/__diff_output__/**/*
-.vscode/settings.json
+.vscode/*
+.idea

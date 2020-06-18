@@ -2,9 +2,9 @@
 <template>
 	<div>
 		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">{{
-			$t("pages.administration.datasources.index.title")
-		}}</h1>
+		<h1 class="mb--md h3">
+			{{ $t("pages.administration.datasources.index.title") }}
+		</h1>
 
 		<ol v-if="datasources && datasources.length > 0" class="datasources">
 			<!-- TODO remove dummies once all datasources are added here -->
@@ -94,11 +94,11 @@
 						<responsive-icon-button
 							v-if="element.lastStatus === 'Error'"
 							design="primary text"
-							source="custom"
-							icon="datasource-import"
+							source="material"
+							icon="edit"
 							@click="handleManageErrorLogin(element)"
 						>
-							{{ $t("pages.administration.datasources.index.import") }}
+							{{ $t("pages.administration.datasources.index.edit") }}
 						</responsive-icon-button>
 						<responsive-icon-button
 							v-else
@@ -125,6 +125,7 @@
 								@update:show="menuOpen = false"
 								@edit="handleEdit(element)"
 								@remove="handleRemove(element)"
+								@import="triggerRun(element)"
 							/>
 						</span>
 					</template>
@@ -147,11 +148,14 @@
 			</empty-state>
 		</template>
 
-		<floating-fab
+		<fab-floating
 			position="bottom-right"
-			icon="add"
-			to="/administration/datasources/add"
-			:aria-label="$t('pages.administration.datasources.index.create')"
+			:primary-action="{
+				icon: 'add',
+				'icon-source': 'material',
+				to: '/administration/datasources/new',
+				label: $t('pages.administration.datasources.index.create'),
+			}"
 		/>
 	</div>
 </template>
@@ -160,10 +164,10 @@
 import ContextMenu from "@components/molecules/ContextMenu";
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import EmptyState from "@components/molecules/EmptyState";
-import FloatingFab from "@components/molecules/FloatingFab";
+import FabFloating from "@components/molecules/FabFloating";
 import Pagination from "@components/organisms/Pagination";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
-import ImageEmptyState from "@assets/img/emptystate-graph.svg";
+import ImageEmptyState from "@assets/img/empty-state/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
 import dayjs from "dayjs";
@@ -177,7 +181,7 @@ export default {
 		ContextMenu,
 		DatasourceCard,
 		EmptyState,
-		FloatingFab,
+		FabFloating,
 		Pagination,
 		ResponsiveIconButton,
 	},
@@ -196,7 +200,7 @@ export default {
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
-					icon: { source: "fa", icon: "fas fa-cog" },
+					icon: { source: "fa", icon: "cog" },
 				},
 				{
 					text: this.$t("pages.administration.datasources.index.title"),
@@ -207,9 +211,10 @@ export default {
 			menuOpen: false,
 			page: 1,
 			limit:
-				localStorage.getItem(
-					"pages.administration.datasources.index.itemsPerPage"
-				) || 25,
+				this.$uiState.get(
+					"pagination",
+					"pages.administration.datasources.index"
+				).limit || 25,
 		};
 	},
 	computed: {
@@ -228,18 +233,34 @@ export default {
 	},
 	methods: {
 		getActions(element) {
+			const secondaryAction =
+				element.lastStatus === "Error"
+					? {
+							text: this.$t(
+								"pages.administration.datasources.index.ctxActions.import"
+							),
+							event: "import",
+							icon: "datasource-import",
+							"icon-source": "custom",
+							attributes: element,
+					  }
+					: {
+							text: this.$t(
+								"pages.administration.datasources.index.ctxActions.edit"
+							),
+							event: "edit",
+							icon: "edit",
+							"icon-source": "material",
+							attributes: element,
+					  };
 			return [
-				{
-					text: this.$t(
-						"pages.administration.datasources.index.ctxActions.edit"
-					),
-					event: "edit",
-					attributes: element,
-				},
+				secondaryAction,
 				{
 					text: this.$t(
 						"pages.administration.datasources.index.ctxActions.remove"
 					),
+					icon: "datasource-remove",
+					"icon-source": "custom",
 					event: "remove",
 					attributes: element,
 				},
@@ -317,7 +338,7 @@ export default {
 		async handleRemove(datasource) {
 			this.$dialog.confirm({
 				icon: "warning",
-				actionDesign: "success",
+				actionDesign: "danger",
 				iconColor: "var(--color-danger)",
 				invertedDesign: true,
 				message: this.$t(
@@ -370,10 +391,13 @@ export default {
 		onCurrentPageChange(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.datasources.index.itemsPerPage",
-				limit
+			// save user settings in uiState
+			this.$uiState.set(
+				"pagination",
+				"pages.administration.datasources.index",
+				{
+					itemsPerPage: limit,
+				}
 			);
 			this.find();
 		},

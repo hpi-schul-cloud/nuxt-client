@@ -7,9 +7,15 @@
 
 module.exports = [
 	`^/administration/datasources?`,
-	`^/content/?`,
+	// `^/administration/students/?$`,
+	// `^/administration/students/new/?$`,
+	// `^/administration/teachers/?$`,
+	// `^/administration/teachers/new/?$`,
+	`^/login-instances/?`,
+	`^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
+	`^/termsofuse/?`,
 	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
 	`^/insights`,

@@ -1,11 +1,12 @@
 import TheSidebar from "./TheSidebar";
+import { render } from "@testing-library/vue";
 
 describe("@components/legacy/TheSidebar", () => {
 	it(...isValidComponent(TheSidebar));
 
 	it("Render with empty routes", () => {
-		const wrapper = shallowMount(TheSidebar);
-		expect(wrapper.find("ul").isEmpty()).toBe(true);
+		const { getByTestId } = render(TheSidebar);
+		expect(getByTestId("routesListTest")).toBeEmptyDOMElement();
 	});
 
 	it("Render with one route", () => {
@@ -59,11 +60,8 @@ describe("@components/legacy/TheSidebar", () => {
 		});
 		expect(wrapper.findAll("li")).toHaveLength(testRoutes.length);
 		expect(wrapper.findAll("base-icon-stub")).toHaveLength(4);
-		expect(
-			wrapper
-				.findAll("base-link-stub")
-				.at(0)
-				.text()
-		).toBe(testRoutes[0].title);
+		expect(wrapper.findAll("base-link-stub").at(0).text()).toBe(
+			testRoutes[0].title
+		);
 	});
 });

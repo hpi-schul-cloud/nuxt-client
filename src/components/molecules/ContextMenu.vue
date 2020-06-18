@@ -231,7 +231,7 @@ export default {
 
 		&-icon {
 			margin: var(--space-md) !important;
-			color: var(--color-tertiary-light);
+			color: var(--color-tertiary);
 		}
 		&-text {
 			width: max-content;

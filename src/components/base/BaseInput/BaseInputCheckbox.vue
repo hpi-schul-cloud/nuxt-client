@@ -1,5 +1,5 @@
 <template>
-	<label :class="['wrapper', type]">
+	<label :class="['wrapper', type]" :style="{ color }">
 		<input
 			ref="hiddenInput"
 			:aria-label="labelHidden ? label : undefined"
@@ -50,12 +50,20 @@ export default {
 				return supportedTypes.includes(type);
 			},
 		},
+		color: {
+			type: String,
+			default: `var(--color-tertiary)`,
+		},
 		label: {
 			type: String,
 			required: true,
 		},
 		labelHidden: Boolean,
 		showUndefinedState: Boolean,
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 	computed: {
 		isChecked() {
@@ -149,7 +157,7 @@ label {
 }
 
 input:focus + .icon-wrapper svg {
-	box-shadow: 0 0 0 3px var(--color-info);
+	box-shadow: 0 0 0 3px currentColor;
 }
 
 // SWITCH

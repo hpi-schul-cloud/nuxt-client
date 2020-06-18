@@ -1,6 +1,6 @@
 import BaseBreadcrumb from "./BaseBreadcrumb";
 
-describe("@components/BaseBreadcrumb", () => {
+describe("@components/base/BaseBreadcrumb", () => {
 	it(...isValidComponent(BaseBreadcrumb));
 
 	it("renders BaseLink for Links", () => {
@@ -46,7 +46,7 @@ describe("@components/BaseBreadcrumb", () => {
 				inputs: [internalLink, textOnly],
 			},
 		});
-		expect(wrapper.find(".fa.fa-home").isVisible()).toBe(true);
+		expect(wrapper.find(".fa.fa-home").exists()).toBe(true);
 	});
 
 	it("renders no icon if not defined", () => {

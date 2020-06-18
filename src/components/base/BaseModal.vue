@@ -59,6 +59,10 @@ export default {
 			default: "medium",
 		},
 	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
 	watch: {
 		active() {
 			if (this.active) {
@@ -70,6 +74,7 @@ export default {
 	},
 	methods: {
 		handleBackgroundClick() {
+			this.$emit("onBackdropClick");
 			this.close();
 		},
 		close() {
@@ -94,7 +99,7 @@ export default {
 	display: table;
 	width: 100%;
 	height: 100%;
-	background-color: var(--color-overlay);
+	background-color: var(--color-overlay-dark);
 	transition: opacity var(--duration-transition-medium) ease;
 }
 

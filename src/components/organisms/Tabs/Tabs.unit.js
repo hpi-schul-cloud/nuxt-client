@@ -1,6 +1,8 @@
+import Vue from "vue";
 import { mount } from "@vue/test-utils";
 import TemplateTabs from "./Tabs";
 import TemplateTab from "@components/atoms/Tab";
+import { render, fireEvent } from "@testing-library/vue";
 
 const tabs = {
 	components: { TemplateTabs, TemplateTab },
@@ -21,52 +23,18 @@ describe("@components/organisms/Tabs/Tabs", () => {
 	});
 
 	it("Test if only first tab contents is being shown", () => {
-		const wrapper = mount(tabs);
-		expect(
-			wrapper
-				.findAll(".tab-content")
-				.at(0)
-				.isVisible()
-		).toBe(true);
-		expect(
-			wrapper
-				.findAll(".tab-content")
-				.at(1)
-				.isVisible()
-		).toBe(false);
-		expect(
-			wrapper
-				.findAll(".tab-content")
-				.at(2)
-				.isVisible()
-		).toBe(false);
+		const { getAllByTestId } = render(tabs);
+		expect(getAllByTestId("tabTest")[0]).toBeVisible();
+		expect(getAllByTestId("tabTest")[1]).not.toBeVisible();
+		expect(getAllByTestId("tabTest")[2]).not.toBeVisible();
 	});
 
 	it("Select another tab and see if new text is shown", async () => {
-		const wrapper = mount(tabs);
-		await wrapper.vm.$nextTick();
-		wrapper
-			.findAll(".tab-button")
-			.at(1)
-			.trigger("click");
-		await wrapper.vm.$nextTick();
-		expect(
-			wrapper
-				.findAll(".tab-content")
-				.at(0)
-				.isVisible()
-		).toBe(false);
-		expect(
-			wrapper
-				.findAll(".tab-content")
-				.at(1)
-				.isVisible()
-		).toBe(true);
-		expect(
-			wrapper
-				.findAll(".tab-content")
-				.at(2)
-				.isVisible()
-		).toBe(false);
+		const { getAllByTestId } = render(tabs);
+		await Vue.nextTick();
+		await fireEvent.click(getAllByTestId("tabButtonTest")[1]);
+		expect(getAllByTestId("tabTest")[0]).not.toBeVisible();
+		expect(getAllByTestId("tabTest")[1]).toBeVisible();
+		expect(getAllByTestId("tabTest")[2]).not.toBeVisible();
 	});
 });

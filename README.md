@@ -2,7 +2,7 @@
 
 ## Tools
 
-[![Mergify Status](https://gh.mergify.io/badges/schul-cloud/nuxt-client.png?style=cut)](https://mergify.io) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier) <a href="https://lokalise.com/" ><img height="18px" src="https://lokalise.com/img/lokalise_logo_black.png" style="padding: 2px 8px; border: 1px solid lightgrey; border-radius: 4px;" alt="Lokalise Logo"></a>
+[![Mergify Status](https://gh.mergify.io/badges/schul-cloud/nuxt-client.png?style=cut)](https://mergify.io) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier) <a href="https://lokalise.com/" ><img height="18px" src="https://lokalise.com/img/lokalise_logo_black.png" style="padding: 2px 8px; border: 1px solid lightgrey; border-radius: 4px;" alt="Lokalise Logo"></a> [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=schul-cloud/nuxt-client)](https://dependabot.com) [![Dependency Status](https://david-dm.org/schul-cloud/nuxt-client.svg)](https://david-dm.org/schul-cloud/nuxt-client) [![Dependency Status](https://david-dm.org/schul-cloud/nuxt-client/dev-status.svg)](https://david-dm.org/schul-cloud/nuxt-client?type=dev)
 
 ## Status
 

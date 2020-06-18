@@ -14,17 +14,6 @@
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }} </span>
-					<template v-for="(innerlink, innerindex) in link.innerlinks">
-						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`">
-							-
-						</span>
-						<base-link
-							:key="innerlink.text"
-							v-bind="innerlink"
-							class="footer-link"
-							>{{ innerlink.text }}</base-link
-						>
-					</template>
 				</template>
 			</template>
 		</div>
@@ -33,7 +22,6 @@
 
 <script>
 import { mapState } from "vuex";
-import defaultDocuments from "@utils/documents.js";
 
 export default {
 	computed: {
@@ -50,19 +38,8 @@ export default {
 					text: "Impressum",
 				},
 				{
-					innerlinks: [
-						{
-							to: "/datenschutz",
-							text: "Datenschutzerklärung NBC",
-						},
-						{
-							href: defaultDocuments.specificFiles(this.school.documentBaseDir)
-								.privacyExemplary,
-							text: "Datenschutzerklärung:Muster-Schulen",
-							target: "_blank",
-							rel: "noopener",
-						},
-					],
+					to: "/termsofuse",
+					text: this.$t("components.legacy.footer.termsofuse"),
 				},
 			];
 		},

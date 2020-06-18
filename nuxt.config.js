@@ -20,6 +20,10 @@ module.exports = {
 		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
 		NOT_AUTHENTICATED_REDIRECT_URL:
 			process.env.NOT_AUTHENTICATED_REDIRECT_URL || "/login",
+		JWT_SHOW_TIMEOUT_WARNING_SECONDS:
+			process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
+		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
+		SC_THEME: process.env.SC_THEME,
 	},
 	/*
 	 ** Headers of the page
@@ -44,7 +48,7 @@ module.exports = {
 			{
 				rel: "icon",
 				type: "image/png",
-				href: "/images/logo/favicon-32.png",
+				href: "/favicon.png",
 			},
 		],
 	},

@@ -5,7 +5,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
+};
 </script>
 
 <style lang="scss" scoped>
@@ -57,7 +62,7 @@ export default {};
 	&:focus {
 		outline: none;
 
-		--button-background: var(--color-success--dark);
+		--button-background: var(--color-success-dark);
 	}
 	/* stylelint-disable */
 	// defined multiple to seperate style from behaviour

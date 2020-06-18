@@ -1,11 +1,11 @@
 <template>
-	<base-content-container size="small">
+	<base-content-container size="medium">
 		<base-breadcrumb
 			:inputs="[
 				{
 					text: this.$t('pages.administration.index.title'),
 					to: '/administration/',
-					icon: { source: 'fa', icon: 'fas fa-cog' },
+					icon: { source: 'fa', icon: 'cog' },
 				},
 				{
 					text: this.$t('pages.administration.datasources.index.title'),

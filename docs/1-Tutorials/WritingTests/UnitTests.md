@@ -4,7 +4,7 @@
 
 ## Dokumentation
 
-Für das Unit-Testing verwenden wir [jest](https://jestjs.io/docs/en/using-matchers) mit den [vue-test-utils](https://vue-test-utils.vuejs.org/guides/#getting-started).
+Für das Unit-Testing verwenden wir [jest](https://jestjs.io/docs/en/using-matchers) mit den [vue-test-utils](https://vue-test-utils.vuejs.org/guides/#getting-started) und zusätzlichen Matchern von [jest-extended](https://github.com/jest-community/jest-extended).
 
 Alle Tests liegen direkt neben den Componenten und müssen nach dem folgenden Schema benannt werden `[ComponentName].unit.js` (Bspw. `BaseCard.unit.js` für die Komponente `BaseCard.vue`).
 
@@ -38,7 +38,7 @@ Für Visual Studio Code liegen Debug Konfigurationen Bereit (`.vscode/launch.jso
 import BaseCard from "./BaseCard";
 
 // Beschreibung, welche Komponente wir testen
-describe("@components/BaseCard", () => {
+describe("@components/base/BaseCard", () => {
 	// Allgemeiner default-test für Komponenten.
 	// Testet nur ob die Komponente valide definiert ist.
 	it("exports a valid component", () => {
@@ -65,10 +65,10 @@ describe("@components/BaseCard", () => {
 
 Die soeben beschriebenen Tests werden so häufig verwendet, dass wir sie ausgelagert haben. Die Nutzung ist folgendermaßen möglich:
 
-```js{4-5}
+```js {4-5}
 import BaseCard from "./BaseCard";
 
-describe("@components/BaseCard", () => {
+describe("@components/base/BaseCard", () => {
 	it(...isValidComponent(BaseCard));
 	it(...rendersSlotContent(BaseCard));
 });
@@ -78,10 +78,10 @@ describe("@components/BaseCard", () => {
 
 Soll das `v-model` einer Komponente getestet werden, so kann die Komponente nicht direkt gemountet werden, sondern muss per template eingebunden werden. Die Vue-Test-Utils stellen leider keine bessere Möglichkeit bereit. Das setzen der für das v-model verwendeten Prop klappt leider nicht, da der verwendete Wert nicht automatisch durch das `v-model-update-event` verändert wird.
 
-```js{8-13}
+```js {8-13}
 import BaseInput from "./BaseInput";
 
-describe("@components/BaseInput", () => {
+describe("@components/base/BaseInput", () => {
 	it("changing the element's value, updates the v-model", () => {
 		const testInput = "test string";
 		const wrapper = mount({

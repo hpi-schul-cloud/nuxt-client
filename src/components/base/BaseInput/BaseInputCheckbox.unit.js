@@ -1,7 +1,7 @@
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInputCheckbox";
 
-describe("@components/BaseInputCheckbox", () => {
+describe("@components/base/BaseInputCheckbox", () => {
 	it(`Check if input type="checkbox" is rendered`, () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
@@ -10,6 +10,7 @@ describe("@components/BaseInputCheckbox", () => {
 					name: "checkbox",
 					type,
 					vmodel: true,
+					color: `var(--color-tertiary)`,
 				},
 			});
 			expect(wrapper.find("input[type='checkbox']").exists()).toBe(true);
