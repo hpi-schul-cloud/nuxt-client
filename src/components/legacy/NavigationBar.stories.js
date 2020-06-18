@@ -16,8 +16,7 @@ storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 			},
 			{
 				title: "Erste Schritte",
-				href:
-					"https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
+				href: "https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
 			},
 			{
 				title: "Blog",
