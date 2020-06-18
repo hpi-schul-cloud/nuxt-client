@@ -198,6 +198,7 @@ export default {
 	}
 }
 a.active {
+	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
 	background-color: var(--color-accent);
 	border-radius: var(--radius-sm);
