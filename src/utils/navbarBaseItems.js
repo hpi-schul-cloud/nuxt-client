@@ -5,7 +5,7 @@ export default [
 	},
 	{
 		title: "layouts.loggedoutFullWidth.steps",
-		href: "/mint-ec/willkommenspaket",
+		href: "https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
 	},
 	{
 		title: "layouts.loggedoutFullWidth.blog",
