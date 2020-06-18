@@ -1,8 +1,8 @@
 <template>
 	<div class="edusharing-footer">
-		<div class="edusharing-footer__text">{{
-			$t("components.molecules.EdusharingFooter.text")
-		}}</div>
+		<div class="edusharing-footer__text">
+			{{ $t("components.molecules.EdusharingFooter.text") }}
+		</div>
 		<img
 			class="edusharing-footer__logo"
 			src="@assets/img/edusharing/edusharing-logo.svg"
