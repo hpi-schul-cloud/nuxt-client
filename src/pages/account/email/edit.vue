@@ -33,7 +33,7 @@
 				<base-input
 					v-model="userData.email"
 					type="email"
-					:label="$t('common.labels.email')"
+					:label="$t('common.labels.repeat.email')"
 					:placeholder="$t('common.placeholder.email.update')"
 					class="mt--md"
 					data-testid="userMail"
@@ -51,7 +51,7 @@
 				<base-input
 					v-model="userData.repeatEmail"
 					type="email"
-					:label="$t('common.labels.repeat.email')"
+					:label="$t('common.labels.repeat')"
 					:placeholder="$t('common.placeholder.repeat.email')"
 					class="mt--md"
 					data-testid="userRepeatMail"

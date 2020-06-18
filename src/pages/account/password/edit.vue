@@ -46,7 +46,7 @@
 					v-model="formData.password_verification"
 					type="password"
 					required="true"
-					:label="$t('common.labels.password.new')"
+					:label="$t('common.labels.repeat')"
 					:placeholder="$t('common.placeholder.password.new.confirmation')"
 					class="mt--md"
 					data-testid="jjjjjjj"
