@@ -9,7 +9,7 @@ describe("@components/legacy/NavigationBar", () => {
 		},
 		{
 			title: "Erste Schritte",
-			href: "/mint-ec/willkommenspaket",
+			href: "https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
 		},
 		{
 			title: "Blog",
