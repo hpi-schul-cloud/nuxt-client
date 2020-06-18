@@ -24,7 +24,6 @@ export default {
 	width: inherit;
 	min-height: 100vh;
 	padding: 0 var(--space-lg);
-	overflow-x: auto;
 
 	@include breakpoint(tablet) {
 		padding: 0 var(--space-xl-3);

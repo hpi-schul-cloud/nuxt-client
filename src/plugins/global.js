@@ -31,3 +31,7 @@ import "./eventBus";
 // uiState
 import uiState from "./uiState";
 Vue.use(uiState);
+
+// Input auto resize width based on value
+import VueInputAutoWidth from "vue-input-autowidth";
+Vue.use(VueInputAutoWidth);

@@ -1,4 +1,9 @@
 <template>
+	<base-link
+		class="title-link"
+		:to="{ name: 'content-id', params: { id: resource._id } }"
+		:no-style="true"
+	>
 	<base-card v-bind="$attrs">
 		<div class="content-card">
 			<template v:slot:content>
@@ -46,8 +51,15 @@
 						</base-button>
 
 						<div class="footer__icon-container">
+							<base-button design="text icon" @click.prevent="menuActive = true" @click="openMenu">
+								<base-icon
+										class="footer__content-icon"
+										source="material"
+										icon="add_circle_outline"
+								/>
+							</base-button>
 							<div class="footer_more">
-								<base-button design="text icon" @click="openMenu">
+								<base-button design="text icon" @click.prevent="menuActive = true" @click="openMenu">
 									<base-icon
 										class="footer__content-icon"
 										source="material"
@@ -66,22 +78,34 @@
 							</div>
 						</div>
 					</div>
+						<add-content-modal
+							:show-copy-modal.sync="copyModalActive"
+							:updatedid="resource._id"
+							:url="resource.url"
+							:title="resource.title"
+						/>
 				</div>
 			</template>
 		</div>
 	</base-card>
+	</base-link>
 </template>
 
 <script>
 import BaseLink from "@components/base/BaseLink";
 import ContextMenu from "@components/molecules/ContextMenu";
+import AddContentModal from "@components/molecules/AddContentModal";
+import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {
 		BaseLink,
 		ContextMenu,
+		AddContentModal,
 	},
+	mixins: [contentMeta],
 	props: {
+		resource: { type: Object, default: () => {} },
 		id: { type: String, default: "" },
 		thumbnail: { type: String, default: "" },
 		title: { type: String, default: "" },
@@ -91,6 +115,8 @@ export default {
 		return {
 			isChecked: false,
 			menuActive: false,
+			isBookmarked: false,
+			copyModalActive: false,
 			actions: [
 				{
 					event: "copy",
@@ -127,18 +153,27 @@ export default {
 			const email = this.$t("components.molecules.ContentCard.report.email");
 			return `mailto:${email}?${querystring}`;
 		},
-		checkboxSelector() {
+		checkboxIconSelector() {
 			return this.isChecked ? "check_box" : "check_box_outline_blank";
+		},
+		bookmarkIconSelector() {
+			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 	},
 	methods: {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
 		},
+		bookmarkHandler() {
+			this.isBookmarked = !this.isBookmarked;
+		},
 		openMenu() {
 			this.menuActive = true;
 		},
-		handleCopy() {},
+		handleCopy() {
+			this.copyModalActive = true;
+			this.$store.dispatch("courses/find");
+		},
 		handleShare() {},
 		handleDelete() {},
 		handleReport() {},
@@ -156,7 +191,10 @@ export default {
 }
 .img-container {
 	position: relative;
-	min-height: 200px;
+	height: 200px;
+	color: var(--color-white);
+	background-color: var(--color-black);
+	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .content {
 	display: flex;
@@ -185,12 +223,11 @@ export default {
 			top: 40%;
 			left: 40%;
 			z-index: var(--layer-dropdown);
-			padding: var(--space-xs);
-			font-size: var(--heading-1);
+			font-size: var(--space-xl-3);
 			color: var(--color-gray-dark);
 			background-color: var(--color-white);
 			border-radius: var(--radius-round);
-			opacity: 0.8;
+			opacity: 0.6;
 		}
 		&-checkbox {
 			position: absolute;
@@ -253,5 +290,9 @@ export default {
 		justify-content: flex-end;
 		width: 100%;
 	}
+}
+
+.title-link {
+	border: none;
 }
 </style>

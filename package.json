@@ -67,6 +67,7 @@
 		"vue-filter-ui": "^0.8.0",
 		"vue-flatpickr-component": "^8.1.5",
 		"vue-i18n": "^8.17.7",
+		"vue-input-autowidth": "^1.0.9",
 		"vue-loader": "^15.9.2",
 		"vue-mq": "^1.0.1",
 		"vue-multiselect": "^2.1.6",
@@ -113,6 +114,7 @@
 		"find-cache-dir": "^3.3.1",
 		"flush-promises": "^1.0.2",
 		"http-proxy-middleware": "^1.0.4",
+		"http-server": "^0.12.1",
 		"hygen": "^5.0.3",
 		"imagemin-lint-staged": "^0.4.0",
 		"jest": "^26.0.1",
@@ -146,10 +148,17 @@
 		"vue-svg-loader": "0.15.0",
 		"vue-template-compiler": "^2.6.11",
 		"vuepress": "^1.5.0",
+		"vuera": "^0.2.7",
+		"webpack": "^4.29.6",
 		"yorkie": "^2.0.0"
 	},
 	"engines": {
 		"node": ">=12.x.x",
 		"npm": ">=6.x.x"
+	},
+	"greenkeeper": {
+		"ignore": [
+			"core-js"
+		]
 	}
 }
