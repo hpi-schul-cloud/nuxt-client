@@ -1,9 +1,12 @@
 <template>
 	<section>
-		<div v-if="$data.$_scrollY > backToTopScrollYLimit" class="content__back-to-top">
+		<div
+			v-if="$data.$_scrollY > backToTopScrollYLimit"
+			class="content__back-to-top"
+		>
 			<fab-floating
-					icon="arrow_drop_up"
-					:aria-label="$t('common.actions.scrollToTop')"
+				icon="arrow_drop_up"
+				:aria-label="$t('common.actions.scrollToTop')"
 				:primary-action="{
 					icon: 'arrow_drop_up',
 					'icon-source': 'material',
@@ -14,51 +17,49 @@
 		</div>
 		<div class="content">
 			<content-searchbar
-					v-model.lazy="searchQuery"
-					:class="
-						!activateTransition
-							? 'first-search__searchbar'
-							: 'content__searchbar'
-					"
-					placeholder="Lernstore durchsuchen"
-					@keyup:enter="transitionHandler"
+				v-model.lazy="searchQuery"
+				:class="
+					!activateTransition ? 'first-search__searchbar' : 'content__searchbar'
+				"
+				placeholder="Lernstore durchsuchen"
+				@keyup:enter="transitionHandler"
 			/>
 			<transition name="fade">
 				<span v-if="!firstSearch" class="content__container">
-			<p class="content__total">
-				<span v-if="searchQuery.length > 0">
-					{{ resources.data.length }}
-					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
-				</span>
-				<span v-else>
-					{{ resources.data.length }}
-					{{ $t("pages.content.index.search_resources") }}
-				</span>
-			</p>
-						<div
-							v-if="resources.data.length === 0 && !loading"
-							class="content__no-results"
-						>
-				<content-empty-state />
-			</div>
-						<base-grid column-width="14rem">
-				<content-card
-					v-for="resource of resources.data"
-					:id="resource._id"
-					:key="resource._id"
-					class="card"
-					:resource="resource"
-					:thumbnail="resource.thumbnail"
-					:title="resource.title"
-					:url="resource.url"
-				/>
-			</base-grid>
-			<base-spinner
-				v-if="loading && resources.data.length !== 0"
-				class="content__spinner"
-				color="var(--color-primary)"
-				size="xlarge"
-			/>
+					<p class="content__total">
+						<span v-if="searchQuery.length > 0">
+							{{ resources.data.length }}
+							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+						</span>
+						<span v-else>
+							{{ resources.data.length }}
+							{{ $t("pages.content.index.search_resources") }}
+						</span>
+					</p>
+					<div
+						v-if="resources.data.length === 0 && !loading"
+						class="content__no-results"
+					>
+						<content-empty-state />
+					</div>
+					<base-grid column-width="14rem">
+						<content-card
+							v-for="resource of resources.data"
+							:id="resource._id"
+							:key="resource._id"
+							class="card"
+							:resource="resource"
+							:thumbnail="resource.thumbnail"
+							:title="resource.title"
+							:url="resource.url"
+						/>
+					</base-grid>
+					<base-spinner
+						v-if="loading && resources.data.length !== 0"
+						class="content__spinner"
+						color="var(--color-primary)"
+						size="xlarge"
+					/>
 				</span>
 			</transition>
 		</div>
@@ -75,7 +76,6 @@ import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import FabFloating from "@components/molecules/FabFloating";
 import EdusharingFooter from "@components/molecules/EdusharingFooter";
-
 
 export default {
 	components: {
@@ -205,8 +205,8 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-	width: 100%;
-	height: 100%;
+		width: 100%;
+		height: 100%;
 	}
 	&__searchbar {
 		width: 100%;

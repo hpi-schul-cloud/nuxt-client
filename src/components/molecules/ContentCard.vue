@@ -4,90 +4,98 @@
 		:to="{ name: 'content-id', params: { id: resource._id } }"
 		:no-style="true"
 	>
-	<base-card v-bind="$attrs">
-		<div class="content-card">
-			<template v:slot:content>
-				<div class="content">
-					<div class="content__img">
-						<div class="img-container">
-							<base-button
-								design="none"
-								class="content__img-checkbox"
-								@click="checkboxHandler"
-							>
-								<base-icon source="material" :icon="checkboxSelector" />
-							</base-button>
-
-							<div class="content__img-background-gradient" />
-
-							<img
-								:src="thumbnail"
-								alt="content-thumbnail"
-								class="content__img-thumbnail"
-							/>
-
-							<base-icon
-								class="content__img-icon"
-								source="material"
-								icon="photo"
-							/>
-						</div>
-					</div>
-					<base-link :href="url" target="_blank" :no-style="true">
-						<h6 class="content__title">{{ title }}</h6>
-					</base-link>
-				</div>
-			</template>
-			<template v:slot:footer>
-				<div class="footer">
-					<div class="footer__separator"></div>
-					<div class="footer__content">
-						<base-button design="text icon">
-							<base-icon
-								class="footer__content-icon"
-								source="material"
-								icon="bookmark_border"
-							/>
-						</base-button>
-
-						<div class="footer__icon-container">
-							<base-button design="text icon" @click.prevent="menuActive = true" @click="openMenu">
-								<base-icon
-										class="footer__content-icon"
-										source="material"
-										icon="add_circle_outline"
-								/>
-							</base-button>
-							<div class="footer_more">
-								<base-button design="text icon" @click.prevent="menuActive = true" @click="openMenu">
-									<base-icon
-										class="footer__content-icon"
-										source="material"
-										icon="more_vert"
-									/>
+		<base-card v-bind="$attrs">
+			<div class="content-card">
+				<template v:slot:content>
+					<div class="content">
+						<div class="content__img">
+							<div class="img-container">
+								<base-button
+									design="none"
+									class="content__img-checkbox"
+									@click="checkboxHandler"
+								>
+									<base-icon source="material" :icon="checkboxSelector" />
 								</base-button>
-								<context-menu
-									:show.sync="menuActive"
-									anchor="bottom-right"
-									:actions="actions"
-									@copy="handleCopy"
-									@share="handleShare"
-									@delete="handleDelete"
-									@report="handleReport"
+
+								<div class="content__img-background-gradient" />
+
+								<img
+									:src="thumbnail"
+									alt="content-thumbnail"
+									class="content__img-thumbnail"
+								/>
+
+								<base-icon
+									class="content__img-icon"
+									source="material"
+									icon="photo"
 								/>
 							</div>
 						</div>
+						<base-link :href="url" target="_blank" :no-style="true">
+							<h6 class="content__title">{{ title }}</h6>
+						</base-link>
 					</div>
+				</template>
+				<template v:slot:footer>
+					<div class="footer">
+						<div class="footer__separator"></div>
+						<div class="footer__content">
+							<base-button design="text icon">
+								<base-icon
+									class="footer__content-icon"
+									source="material"
+									icon="bookmark_border"
+								/>
+							</base-button>
+
+							<div class="footer__icon-container">
+								<base-button
+									design="text icon"
+									@click.prevent="menuActive = true"
+									@click="openMenu"
+								>
+									<base-icon
+										class="footer__content-icon"
+										source="material"
+										icon="add_circle_outline"
+									/>
+								</base-button>
+								<div class="footer_more">
+									<base-button
+										design="text icon"
+										@click.prevent="menuActive = true"
+										@click="openMenu"
+									>
+										<base-icon
+											class="footer__content-icon"
+											source="material"
+											icon="more_vert"
+										/>
+									</base-button>
+									<context-menu
+										:show.sync="menuActive"
+										anchor="bottom-right"
+										:actions="actions"
+										@copy="handleCopy"
+										@share="handleShare"
+										@delete="handleDelete"
+										@report="handleReport"
+									/>
+								</div>
+							</div>
+						</div>
 						<add-content-modal
 							:show-copy-modal.sync="copyModalActive"
 							:updatedid="resource._id"
 							:url="resource.url"
 							:title="resource.title"
 						/>
-				</div>
-			</template>
-		</div>
-	</base-card>
+					</div>
+				</template>
+			</div>
+		</base-card>
 	</base-link>
 </template>
 
