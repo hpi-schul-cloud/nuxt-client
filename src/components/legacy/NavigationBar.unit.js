@@ -13,7 +13,8 @@ describe("@components/legacy/NavigationBar", () => {
 		},
 		{
 			title: "layouts.loggedoutFullWidth.steps",
-			href: "https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
+			href:
+				"https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
 		},
 		{
 			title: "FAQ",
@@ -49,5 +50,4 @@ describe("@components/legacy/NavigationBar", () => {
 		expect(wrapper.find(".link-container").exists()).toBe(true);
 		expect(wrapper.find(".buttons-container").exists()).toBe(true);
 	});
-
 });
