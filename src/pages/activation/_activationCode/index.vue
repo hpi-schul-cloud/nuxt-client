@@ -35,7 +35,7 @@ export default {
 		getTitle() {
 			let title;
 			if (this.activated) {
-				title = this.$t("pages.acctivation.index.success");
+				title = this.$t("pages.activation.index.success");
 			} else {
 				title = this.$t("Deine Daten konnten nicht geändert werden");
 			}
