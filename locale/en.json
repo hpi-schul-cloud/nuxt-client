@@ -94,6 +94,8 @@
 	"pages.courses.new.btn_new": "Create",
 	"pages.courses.new.title": "Create new course",
 	"pages.impressum.title": "Imprint",
+	"pages.loginInstances.login": "Login",
+	"pages.loginInstances.bundesland": "In which state would you like to log in?",
 	"pages.mint-ec.article.footer.anbieter": "",
 	"pages.mint-ec.article.footer.datasecurity": "",
 	"pages.mint-ec.article.footer.datenschutz": "",
