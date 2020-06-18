@@ -1,10 +1,10 @@
 import { storiesOf } from "@storybook/vue";
 import { text } from "@storybook/addon-knobs";
 
-import Searchbar from "@components/molecules/Searchbar";
+import ContentSearchbar from "@components/molecules/ContentSearchbar";
 
-storiesOf("5 Molecules/Searchbar", module).add("Searchbar", () => ({
-	components: { Searchbar },
+storiesOf("5 Molecules/ContentSearchbar", module).add("ContentSearchbar", () => ({
+	components: { ContentSearchbar },
 	data: () => ({
 		searchQuery: text("searchQuery", ""),
 		placeholder: text("placeholder", "Suche nach..."),

@@ -1,8 +1,12 @@
 export const actions = {
 	async getResources({ commit }, payload = {}) {
 		commit("setLoading", true);
-		const query = Object.assign({ $limit: 10 }, payload || {});
-		const res = await this.$axios.$get("/content/search", {
+		const query = {
+			$limit: 10,
+			$skip: 0,
+			...payload,
+		};
+		const res = await this.$axios.$get("/edu-sharing", {
 			params: query,
 		});
 		commit("setResources", res);
@@ -10,14 +14,43 @@ export const actions = {
 	},
 	async addResources({ commit }, payload = {}) {
 		commit("setLoading", true);
-		const query = payload || {};
-		const res = await this.$axios.$get("/content/search", {
-			params: query,
+		const res = await this.$axios.$get("/edu-sharing", {
+			params: payload,
 		});
 		commit("addResources", res);
 		commit("setLoading", false);
 	},
+	async getLessons({ commit }, payload) {
+		const params = {
+			courseId: payload,
+		};
+		const res = await this.$axios.$get("/lessons", { params });
+		commit("setLessons", res);
+	},
+
+	async addToLesson(_, payload = { material: {} }) {
+		await this.$axios.post(
+			`/lessons/${payload.lessonId}/material`,
+			payload.material
+		);
+	},
+	async getResourceMetadata(context, id) {
+		return this.$axios.$get(`/edu-sharing/${id}`);
+	},
 };
+
+const initialState = () => ({
+	resources: {
+		total: 0,
+		limit: 0,
+		skip: 0,
+		data: [],
+	},
+	lessons: {
+		data: [],
+	},
+	loading: false,
+});
 
 export const mutations = {
 	setResources(state, payload) {
@@ -27,22 +60,18 @@ export const mutations = {
 		payload.data.forEach((resource) => state.resources.data.push(resource));
 		state.resources = {
 			...state.resources,
-			limit: payload.limit,
-			skip: payload.skip,
-			total: payload.total,
+			pagination: payload.pagination,
 		};
 	},
-	setLoading(state, type) {
-		state.loading = type;
+	clearResources(state) {
+		state.resources = initialState().resources;
+	},
+	setLoading(state, status) {
+		state.loading = status;
+	},
+	setLessons(state, payload) {
+		state.lessons = payload;
 	},
 };
 
-export const state = () => ({
-	resources: {
-		data: [],
-		limit: null,
-		skip: null,
-		total: null,
-	},
-	loading: false,
-});
+export const state = initialState();

@@ -1,168 +1,243 @@
 <template>
-	<section>
-		<div v-if="$_scrollY > backToTopScrollYLimit" class="content__back-to-top">
-			<fab-floating
-				:primary-action="{
-					icon: 'arrow_drop_up',
-					'icon-source': 'material',
-					label: $t('common.actions.scrollToTop'),
-				}"
-				@click="$_backToTop"
+	<section class="content">
+		<div
+				v-if="scrollY > backToTopScrollYLimit && resources.data.length > 0"
+				class="content__back-to-top"
+		>
+			<floating-fab
+					icon="arrow_drop_up"
+					:aria-label="$t('common.actions.scrollToTop')"
+					@click="$_backToTop"
 			/>
 		</div>
 		<div class="content">
-			<searchbar
-				v-model.lazy="searchQuery"
-				class="content__searchbar"
-				:placeholder="$t('pages.content.index.search_for')"
-				:loading="loading"
-			/>
-			<p class="content__total">
-				<span v-if="searchQuery.length > 0">
-					{{ resources.data.length }}
-					{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
-				</span>
-				<span v-else>
-					{{ resources.data.length }}
-					{{ $t("pages.content.index.search_resources") }}
-				</span>
-			</p>
-			<div v-if="resources.data.length === 0" class="content__no-results">
-				<content-empty-state />
-			</div>
-			<base-grid column-width="15rem">
-				<content-card
-					v-for="resource of resources.data"
-					:id="resource._id"
-					:key="resource._id"
-					class="card"
-					:thumbnail="resource.thumbnail"
-					:title="resource.title"
-					:url="resource.url"
+			<div>
+				<content-searchbar
+						v-model.lazy="searchQuery"
+						:class="
+						!activateTransition
+							? 'first-search__searchbar'
+							: 'content__searchbar'
+					"
+						placeholder="Lernstore durchsuchen"
+						@keyup:enter="enterKeyHandler"
 				/>
-			</base-grid>
+				<transition name="fade">
+					<span v-if="!firstSearch" class="content__container">
+						<p class="content__total">
+							<span v-if="searchQuery.length > 0">
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_results") }} "{{
+									searchQuery
+								}}"
+							</span>
+							<span v-else>
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_resources") }}
+							</span>
+						</p>
+						<div
+								v-if="resources.data.length === 0 && !loading"
+								class="content__no-results"
+						>
+							<content-empty-state />
+						</div>
+						<base-grid column-width="14rem">
+							<content-card
+									v-for="resource of resources.data"
+									:key="resource.ref.id"
+									class="card"
+									:resource="resource"
+							/>
+						</base-grid>
+					</span>
+				</transition>
+			</div>
 			<base-spinner
-				v-if="loading && resources.data.length !== 0"
-				class="content__spinner"
-				color="var(--color-primary)"
+					v-if="loading"
+					class="spinner mt--xl-2"
+					color="var(--color-tertiary)"
+					size="xlarge"
 			/>
 		</div>
+		<edusharing-footer class="content__footer" />
 	</section>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import Searchbar from "@components/molecules/Searchbar";
-import ContentCard from "@components/molecules/ContentCard";
-import ContentEmptyState from "@components/molecules/ContentEmptyState";
-import infiniteScrolling from "@mixins/infiniteScrolling";
-import BaseGrid from "@components/base/BaseGrid";
-import FabFloating from "@components/molecules/FabFloating";
-
-export default {
-	components: {
-		Searchbar,
-		ContentCard,
-		ContentEmptyState,
-		BaseGrid,
-		FabFloating,
-	},
-	mixins: [infiniteScrolling],
-	layout: "loggedInFull",
-	async asyncData({ store }) {
-		return store.dispatch("content/getResources");
-	},
-	data() {
-		return {
-			searchQuery: "",
-			backToTopScrollYLimit: 115,
-		};
-	},
-	computed: {
-		...mapState("content", {
-			resources: (state) => {
-				return state.resources;
-			},
-			loading: (state) => {
-				return state.loading;
-			},
-		}),
-		query() {
-			const query = {
-				$limit: 10,
-				$skip: 0,
+	import { mapState } from "vuex";
+	import ContentSearchbar from "@components/molecules/ContentSearchbar";
+	import ContentCard from "@components/molecules/ContentCard";
+	import ContentEmptyState from "@components/molecules/ContentEmptyState";
+	import infiniteScrolling from "@mixins/infiniteScrolling";
+	import BaseGrid from "@components/base/BaseGrid";
+	import FloatingFab from "@components/molecules/FloatingFab";
+	import EdusharingFooter from "@components/molecules/EdusharingFooter";
+	export default {
+		components: {
+			ContentSearchbar,
+			ContentCard,
+			ContentEmptyState,
+			BaseGrid,
+			FloatingFab,
+			EdusharingFooter,
+		},
+		mixins: [infiniteScrolling],
+		layout: "loggedInFull",
+		data() {
+			return {
+				searchQuery: "",
+				backToTopScrollYLimit: 115,
+				firstSearch: true,
+				activateTransition: false,
+				prevRoute: null,
 			};
-			if (this.searchQuery) {
-				query["_all[$match]"] = this.searchQuery;
-			}
-			return query;
 		},
-	},
-	watch: {
-		$_bottom($_bottom) {
-			const { skip, total } = this.resources;
-			if ($_bottom && !this.loading && skip < total) {
-				this.addContent();
+		computed: {
+			...mapState("content", {
+				resources: (state) => {
+					return state.resources;
+				},
+				loading: (state) => {
+					return state.loading;
+				},
+			}),
+			isInline() {
+				return window.location.search.includes("isCourseGroupTopic=true");
+			},
+			query() {
+				const query = {
+					$limit: 10,
+					$skip: 0,
+				};
+				if (this.searchQuery) {
+					query["searchQuery"] = this.searchQuery;
+				}
+				return query;
+			},
+		},
+		watch: {
+			bottom(bottom) {
+				if (bottom && !this.firstSearch && !this.loading) {
+					this.addContent();
+				}
+			},
+			loading() {
+				return this.loading;
+			},
+			searchQuery(to, from) {
+				if (this.$options.debounce) {
+					clearInterval(this.$options.debounce);
+				}
+				if (to === from || !to) {
+					this.firstSearch = true;
+					this.$router.push({
+						query: { q: undefined },
+					});
+					this.$store.commit("content/clearResources");
+					return;
+				}
+				this.$options.debounce = setInterval(() => {
+					clearInterval(this.$options.debounce);
+					this.$router.push({
+						query: {
+							q: this.searchQuery,
+						},
+					});
+				}, 500);
+			},
+			resources() {
+				return this.resources;
+			},
+		},
+		mounted() {
+			const initialSearchQuery = this.$route.query.q;
+			if (initialSearchQuery) {
+				this.searchQuery = initialSearchQuery;
+				this.firstSearch = false;
+				this.activateTransition = true;
 			}
 		},
-		loading() {
-			return this.loading;
-		},
-		searchQuery(to, from) {
-			if (this.$options.debounce) {
-				clearInterval(this.$options.debounce);
-			}
-			if (to === from) {
-				return;
-			}
-			this.$options.debounce = setInterval(() => {
-				clearInterval(this.$options.debounce);
+		methods: {
+			async addContent() {
+				if (this.query.$skip < this.resources.total) {
+					this.query.$skip += this.query.$limit;
+					await this.$store.dispatch("content/addResources", this.query);
+				}
+			},
+			async searchContent() {
+				await this.$store.dispatch("content/getResources", this.query);
+			},
+			enterKeyHandler() {
 				this.searchContent();
-			}, 500);
+				this.activateTransition = true;
+				setTimeout(() => {
+					this.firstSearch = false;
+				}, 500);
+			},
 		},
-		resources() {
-			return this.resources;
+		head() {
+			return {
+				title: "LernStore",
+			};
 		},
-	},
-	methods: {
-		async addContent() {
-			this.query["$skip"] += this.query["$limit"];
-			await this.$store.dispatch("content/addResources", this.query);
-		},
-		async searchContent() {
-			await this.$store.dispatch("content/getResources", this.query);
-		},
-	},
-	head() {
-		return {
-			title: "LernStore",
-		};
-	},
-};
+	};
 </script>
 
 <style lang="scss" scoped>
-.content {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	&__searchbar {
-		width: 100%;
-		padding: var(--space-md) 0;
-	}
-	&__total {
+	.content {
 		display: flex;
-		align-items: center;
-		justify-content: flex-end;
+		flex-direction: column;
+		justify-content: space-between;
 		width: 100%;
-		color: var(--color-primary);
+		padding: 0 var(--space-lg);
+		&__container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+		}
+		&__searchbar {
+			width: 100%;
+			padding: var(--space-md) 0;
+			margin: var(--space-md) 0;
+			transition: margin 0.7s;
+			transform: scale(1);
+		}
+		&__total {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			width: 100%;
+		}
+		&__no-results {
+			margin-top: var(--space-md);
+		}
+		&__spinner {
+			margin: var(--space-lg) 0;
+		}
+		&__footer {
+			align-self: flex-end;
+		}
+		.spinner {
+			align-self: center;
+		}
 	}
-	&__no-results {
-		margin-top: var(--space-md);
+	.first-search {
+		&__searchbar {
+			width: 100%;
+			padding: var(--space-md) 0;
+			margin: var(--space-xl-5) var(--space-md) 0;
+			transform: scale(1.3);
+		}
 	}
-	&__spinner {
-		margin-top: var(--space-md);
+	.fade-enter-active,
+	.fade-leave-active {
+		transition: opacity var(--duration-transition-slow);
 	}
-}
+	.fade-enter,
+	.fade-leave-to {
+		opacity: 0;
+	}
 </style>

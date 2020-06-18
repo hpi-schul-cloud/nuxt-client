@@ -6,7 +6,7 @@
 			alt="empty-state-img"
 		/>
 		<h3 class="empty-state-container__title">
-			{{ $t("pages.content.empty_state.error.oops") }}
+			{{ $t("pages.content.empty_state.error.title") }}
 		</h3>
 		<p class="empty-state-container__message">
 			{{ $t("pages.content.empty_state.error.message") }}
