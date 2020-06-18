@@ -199,11 +199,11 @@ export default {
 }
 a.active {
 	color: var(--color-white);
-	background-color: var(--color-primary);
+	background-color: var(--color-accent);
 	border-radius: var(--radius-sm);
 	&:hover {
 		color: var(--color-white);
-		background-color: var(--color-primary);
+		background-color: var(--color-accent);
 		border-radius: var(--radius-sm);
 	}
 }

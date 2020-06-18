@@ -12,6 +12,10 @@ describe("@components/legacy/NavigationBar", () => {
 			href: "https://blog.schul-cloud.org/",
 		},
 		{
+			title: "layouts.loggedoutFullWidth.steps",
+			href: "https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
+		},
+		{
 			title: "FAQ",
 			href: "https://blog.schul-cloud.org/faq",
 		},
@@ -28,7 +32,7 @@ describe("@components/legacy/NavigationBar", () => {
 			},
 		});
 
-		expect(wrapper.props().links).toHaveLength(3);
+		expect(wrapper.props().links).toHaveLength(4);
 	});
 
 	it("logo get rendered", () => {
@@ -46,16 +50,4 @@ describe("@components/legacy/NavigationBar", () => {
 		expect(wrapper.find(".buttons-container").exists()).toBe(true);
 	});
 
-	it("computes right colWidth desktop, tablet", () => {
-		global.location.pathname = "/mint-ec/willkommenspaket";
-		const wrapper = mount(NavigationBar, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				links: navbarLinks,
-				img: "@assets/img/logo/logo-image-color.svg",
-			},
-		});
-
-		expect(wrapper.find(".active").exists()).toBe(true);
-	});
 });
