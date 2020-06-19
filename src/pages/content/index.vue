@@ -193,8 +193,8 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	min-height: 80vh;
 	width: 100%;
+	min-height: 80vh;
 	padding: 0 var(--space-lg);
 	&__container {
 		display: flex;
@@ -235,7 +235,8 @@ export default {
 		width: 100%;
 		padding: var(--space-md) 0;
 		margin: var(--space-xl-5) var(--space-md) 0;
-		/*transform: scale(1.3);*/
+
+		/* transform: scale(1.3); */
 	}
 }
 
