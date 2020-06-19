@@ -365,8 +365,8 @@ export default {
 		}
 
 		.content-container {
-			margin-top: 30px;
 			width: 80%;
+			margin-top: 30px;
 		}
 
 		.actions {
