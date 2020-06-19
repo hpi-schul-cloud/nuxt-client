@@ -1,12 +1,11 @@
 <template>
-
-		<base-card v-bind="$attrs">
-			<div class="content-card">
-				<base-link
-						class="title-link"
-						:to="{ name: 'content-id', params: { id: resource.ref.id } }"
-						:no-style="true"
-				>
+	<base-card v-bind="$attrs">
+		<div class="content-card">
+			<base-link
+				class="title-link"
+				:to="{ name: 'content-id', params: { id: resource.ref.id } }"
+				:no-style="true"
+			>
 				<template v:slot:content>
 					<div class="content">
 						<div class="content__img">
@@ -39,12 +38,12 @@
 						<h6 class="content__title">{{ resource.name }}</h6>
 					</div>
 				</template>
-				</base-link>
-				<template v:slot:footer>
-					<div class="footer">
-						<div class="footer__separator"></div>
-						<div class="footer__content">
-							<!-- Bookmark handler functionality is still missing
+			</base-link>
+			<template v:slot:footer>
+				<div class="footer">
+					<div class="footer__separator"></div>
+					<div class="footer__content">
+						<!-- Bookmark handler functionality is still missing
 						<base-button design="text icon" @click="bookmarkHandler">
 							<base-icon
 								class="footer__content-icon"
@@ -54,18 +53,15 @@
 						</base-button>
 						-->
 
-							<div class="footer__icon-container">
-								<base-button
-										design="text icon"
-										@click.prevent="handleCopy"
-								>
-									<base-icon
-											class="footer__content-icon"
-											source="material"
-											icon="add_circle_outline"
-									/>
-								</base-button>
-								<!-- Additional menu functionality is missing
+						<div class="footer__icon-container">
+							<base-button design="text icon" @click.prevent="handleCopy">
+								<base-icon
+									class="footer__content-icon"
+									source="material"
+									icon="add_circle_outline"
+								/>
+							</base-button>
+							<!-- Additional menu functionality is missing
 								<div class="footer_more">
 									<base-button
 										design="text icon"
@@ -87,25 +83,25 @@
 									/>
 								</div>
 								-->
-							</div>
 						</div>
-						<add-content-modal
-								:show-copy-modal.sync="copyModalActive"
-								:updatedid="resource.ref.id"
-								:url="resource.content.url"
-								:title="resource.title"
-						/>
 					</div>
-				</template>
-			</div>
-		</base-card>
+					<add-content-modal
+						:show-copy-modal.sync="copyModalActive"
+						:updatedid="resource.ref.id"
+						:url="resource.content.url"
+						:title="resource.title"
+					/>
+				</div>
+			</template>
+		</div>
+	</base-card>
 </template>
 
 <script>
-	import BaseLink from "@components/base/BaseLink";
-	// import ContextMenu from "@components/molecules/ContextMenu";
-	import AddContentModal from "@components/molecules/AddContentModal";
-	import contentMeta from "@mixins/contentMeta";
+import BaseLink from "@components/base/BaseLink";
+// import ContextMenu from "@components/molecules/ContextMenu";
+import AddContentModal from "@components/molecules/AddContentModal";
+import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {

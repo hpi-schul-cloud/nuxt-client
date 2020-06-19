@@ -33,7 +33,7 @@ const types = Object.freeze({
 		i18nKey: "mixins.typeMeta.types.video",
 		icon: "ic_video",
 		iconLarge: "ic_video-circle",
-		iconSource: "custom"
+		iconSource: "custom",
 	},
 	"application/pdf": {
 		i18nKey: "mixins.typeMeta.types.document",
@@ -46,7 +46,7 @@ const types = Object.freeze({
 		icon: "ic_word",
 		iconLarge: "ic_word-circle",
 		iconSource: "custom",
-	}
+	},
 });
 
 const contentMeta = {
@@ -59,7 +59,11 @@ const contentMeta = {
 		},
 		getTypeIcon(type) {
 			const options = this.getType(type);
-			return { icon: options.icon, iconLarge: options.iconLarge, iconSource: options.iconSource };
+			return {
+				icon: options.icon,
+				iconLarge: options.iconLarge,
+				iconSource: options.iconSource,
+			};
 		},
 	},
 };

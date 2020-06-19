@@ -37,7 +37,11 @@
 						backgroundImage: `url(${resource.preview.url})`,
 					}"
 				/>
-				<img :src="resource.preview.url" class="preview-img" alt="content preview image" />
+				<img
+					:src="resource.preview.url"
+					class="preview-img"
+					alt="content preview image"
+				/>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -63,6 +67,7 @@
 						{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
+				<!-- eslint-disable vue/no-v-html -->
 				<div class="description" v-html="description"></div>
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
@@ -84,8 +89,8 @@
 					<div v-if="resource.downloadUrl" class="meta-container">
 						<div class="meta-icon">
 							<base-icon
-									:source="getTypeIcon(resource.mimetype).iconSource"
-									:icon="getTypeIcon(resource.mimetype).icon"
+								:source="getTypeIcon(resource.mimetype).iconSource"
+								:icon="getTypeIcon(resource.mimetype).icon"
 							/>
 						</div>
 						<div class="meta-text">
@@ -204,11 +209,26 @@ export default {
 			return this.getTypeI18nName(this.resource.mimetype);
 		},
 		description() {
-			return this.resource.description || getMetadataAttribute(this.resource.properties, "cclom:general_description");
+			return (
+				this.resource.description ||
+				getMetadataAttribute(
+					this.resource.properties,
+					"cclom:general_description"
+				)
+			);
 		},
-		tags(){
-			const tags = getMetadataAttribute(this.resource.properties, "ccm:taxonentry");
-			return tags ? tags.split("; ").filter(w => w !== "").map(w => "#" + w).join(" ") : "Keine Tags";
+		tags() {
+			const tags = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:taxonentry"
+			);
+			return tags
+				? tags
+						.split("; ")
+						.filter((w) => w !== "")
+						.map((w) => "#" + w)
+						.join(" ")
+				: "Keine Tags";
 		},
 		filename() {
 			return this.resource.filename;
@@ -366,7 +386,7 @@ export default {
 
 		.content-container {
 			width: 80%;
-			margin-top: 30px;
+			margin-top: var(--space-md);
 		}
 
 		.actions {
