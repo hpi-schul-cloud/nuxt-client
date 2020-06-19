@@ -37,7 +37,7 @@
 						backgroundImage: `url(${resource.preview.url})`,
 					}"
 				/>
-				<img :src="resource.preview.url" alt="content preview image" />
+				<img :src="resource.preview.url" class="preview-img" alt="content preview image" />
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
@@ -48,9 +48,7 @@
 					</base-button> -->
 				</div>
 				<div class="title">
-					<span>
-						{{ resource.title || resource.name }}
-					</span>
+					<a :href="resource.content.url"> {{ resource.title || resource.name }} </a>
 					<!-- <base-button v-if="isMobile" design="text icon">
 						<base-icon source="material" icon="more_vert" />
 					</base-button> -->
@@ -63,9 +61,7 @@
 						{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
-				<div class="description">
-					{{ description }}
-				</div>
+				<div class="description" v-html="description"></div>
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
 						<div class="meta-icon">
@@ -83,15 +79,15 @@
 							</div>
 						</div>
 					</div>
-					<div v-if="filename" class="meta-container">
+					<div v-if="resource.downloadUrl" class="meta-container">
 						<div class="meta-icon">
 							<base-icon
-								:source="getTypeIcon(resource.mimetype).iconSource"
-								:icon="getTypeIcon(resource.mimetype).icon"
+									:source="getTypeIcon(resource.mimetype).iconSource"
+									:icon="getTypeIcon(resource.mimetype).icon"
 							/>
 						</div>
 						<div class="meta-text">
-							{{ filename }}
+							{{ resource.downloadUrl }}
 						</div>
 					</div>
 					<div class="meta-container">
@@ -117,7 +113,7 @@
 		<add-content-modal
 			:show-copy-modal.sync="copyModalActive"
 			:updatedid="resource.ref.id"
-			:url="resource.contentUrl"
+			:url="resource.content.url"
 			:title="resource.title"
 		/>
 	</div>
@@ -206,7 +202,7 @@ export default {
 			return this.getTypeI18nName(this.resource.mimetype);
 		},
 		description() {
-			return this.resource.description;
+			return this.resource.description || getMetadataAttribute(this.resource.properties, "cclom:general_description");
 		},
 		filename() {
 			return this.resource.filename;
@@ -351,7 +347,7 @@ export default {
 		grid-area: meta;
 		align-items: center;
 		justify-content: space-between;
-		max-height: 100vh;
+		min-height: 100vh;
 		padding-bottom: var(--space-xl);
 		overflow-y: scroll;
 		background-color: var(--color-white);
@@ -363,6 +359,7 @@ export default {
 		}
 
 		.content-container {
+			margin-top: 30px;
 			width: 80%;
 		}
 
