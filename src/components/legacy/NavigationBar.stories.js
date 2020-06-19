@@ -9,7 +9,6 @@ storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 	template: `<NavigationBar :img="img" :links="links" :buttons="true"/> `,
 	data: () => ({
 		img: text("img", SchulCloudLogoColor),
-		buttons: true,
 		links: [
 			{
 				title: "Über das Projekt",
