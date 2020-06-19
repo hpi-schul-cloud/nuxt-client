@@ -13,7 +13,7 @@
 
 The nonce attribute contains a dynamically generated value that changes each time the page is called up, and the above-mentioned items are put on a whitelist that is used in the content security policy in connection with the 'dynamic-strict' attribute thus ensuring a high level of security as to what can be used.
 
-### Enable CSP (Development)
+### Enable CSP (Environment)
 
 - CORS_ENABLED=true
 - SECURITY_HEADERS_ENABLED=true
