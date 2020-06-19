@@ -15,26 +15,26 @@
 					class="content-modal__body--select"
 					:options="coursesOptions"
 					:show-labels="true"
-					placeholder="Mathe 5b"
-					label="Wahle ein Unterrichtsthema"
+					:placeholder='$t("pages.content.placeholder.chooseACourse")'
+					:label='$t("pages.content.label.chooseACourse")'
 					close-on-select
 					option-label="name"
-					deselect-label="Entfernen"
-					select-label="Auswählen"
-					selected-label="Aktiv"
+					:deselect-label='$t("pages.content.label.deselect")'
+					:select-label='$t("pages.content.label.select")'
+					:selected-label='$t("pages.content.label.selected")'
 					track-by="_id"
 				/>
 				<base-select
 					v-model="selectedLesson"
 					class="content-modal__body--select"
 					:options="lessonsOptions"
-					label="Wahle ein Unterrichtsthema"
+					:label='$t("pages.content.label.chooseALessonTopic")'
+					:placeholder='$t("pages.content.placeholder.chooseALessonTopic")'
 					option-label="name"
 					close-on-select
-					placeholder="Pythagoras"
-					deselect-label="Entfernen"
-					select-label="Auswählen"
-					selected-label="Aktiv"
+					:deselect-label='$t("pages.content.label.deselect")'
+					:select-label='$t("pages.content.label.select")'
+					:selected-label='$t("pages.content.label.selected")'
 					track-by="_id"
 				/>
 			</div>
@@ -45,7 +45,7 @@
 					<base-button design="text" @click="closeModal">
 						Abbrechen
 					</base-button>
-					<base-button :disabled="!isSendEnabled" @click="addToLesson"
+					<base-button design="primary" :disabled="!isSendEnabled" @click="addToLesson"
 						>Hinzufügen</base-button
 					>
 				</template>
@@ -53,7 +53,7 @@
 		</template>
 	</base-modal>
 	<success-modal
-			:show-success-modal="showSuccessModal"
+			:show-success-modal.sync="showSuccessModal"
 			:msg="successMsg"
 	/>
 	</div>
@@ -142,16 +142,17 @@ export default {
 			if (!active) this.closeModal();
 		},
 		addToLesson() {
-			this.$store.dispatch("content/addToLesson", {
-				lessonId: this.selectedLesson._id,
-				material: {
-					title: this.title,
-					client: this.client,
-					url: this.url,
-				},
-			});
+				this.$store.dispatch("content/addToLesson", {
+					lessonId: this.selectedLesson._id,
+					material: {
+						title: this.title,
+						client: this.client,
+						url: this.url,
+					},
+				});
 			this.showSuccessModal = true;
 			this.closeModal();
+
 		},
 		findLessons(course) {
 			this.$store.dispatch("content/getLessons", course._id);

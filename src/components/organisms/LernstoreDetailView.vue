@@ -48,7 +48,9 @@
 					</base-button> -->
 				</div>
 				<div class="title">
-					<a :href="resource.content.url"> {{ resource.title || resource.name }} </a>
+					<span>
+						{{ resource.title || resource.name }}
+					</span>
 					<!-- <base-button v-if="isMobile" design="text icon">
 						<base-icon source="material" icon="more_vert" />
 					</base-button> -->
@@ -87,16 +89,16 @@
 							/>
 						</div>
 						<div class="meta-text">
-							{{ resource.downloadUrl }}
+							<a :href="resource.downloadUrl"> {{ resource.downloadUrl }} </a>
 						</div>
 					</div>
 					<div class="meta-container">
 						<div class="meta-icon">
-							<base-icon source="fa" icon="file-o" />
+							<base-icon source="fa" icon="tag" />
 						</div>
-						<div class="meta-text">
-							{{ resource.ref.id }}
-						</div>
+						<span class="meta-text">
+							{{ tags }}
+						</span>
 					</div>
 				</div>
 			</div>
@@ -203,6 +205,10 @@ export default {
 		},
 		description() {
 			return this.resource.description || getMetadataAttribute(this.resource.properties, "cclom:general_description");
+		},
+		tags(){
+			const tags = getMetadataAttribute(this.resource.properties, "ccm:taxonentry");
+			return tags ? tags.split("; ").filter(w => w !== "").map(w => "#" + w).join(" ") : "Keine Tags";
 		},
 		filename() {
 			return this.resource.filename;
@@ -398,7 +404,10 @@ export default {
 				margin-bottom: var(--space-lg);
 				.meta-icon {
 					margin-right: var(--space-md);
-					font-size: var(--text-md);
+					font-size: var(--text-lg);
+					.icon {
+						max-height: var(--text-lg);
+					}
 				}
 			}
 		}

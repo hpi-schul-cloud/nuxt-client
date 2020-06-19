@@ -35,7 +35,7 @@
         },
         methods: {
             closeModal() {
-                this.showSuccessModal = false;
+                this.$emit("update:show-success-modal", false);
             },
         }
     }

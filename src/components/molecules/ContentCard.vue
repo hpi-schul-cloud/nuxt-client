@@ -29,10 +29,9 @@
 									alt="content-thumbnail"
 									class="content__img-thumbnail"
 								/>
-
 								<base-icon
 									:source="getTypeIcon(resource.mimetype).iconSource"
-									:icon="getTypeIcon(resource.mimetype).icon"
+									:icon="getTypeIcon(resource.mimetype).iconLarge"
 									class="content__img-icon"
 								/>
 							</div>
@@ -226,10 +225,9 @@ export default {
 			left: 40%;
 			z-index: var(--layer-dropdown);
 			font-size: var(--space-xl-3);
-			color: var(--color-gray-dark);
-			background-color: var(--color-white);
 			border-radius: var(--radius-round);
-			opacity: 0.6;
+			box-shadow: var(--shadow-m);
+			opacity: 0.8;
 		}
 		&-checkbox {
 			position: absolute;
