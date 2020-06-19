@@ -1,4 +1,5 @@
 <template>
+	<div>
 	<base-modal
 		class="modal"
 		:active="showCopyModal"
@@ -45,20 +46,27 @@
 						Abbrechen
 					</base-button>
 					<base-button :disabled="!isSendEnabled" @click="addToLesson"
-						>Senden</base-button
+						>Hinzufügen</base-button
 					>
 				</template>
 			</modal-footer>
 		</template>
 	</base-modal>
+	<success-modal
+			:show-success-modal="showSuccessModal"
+			:msg="successMsg"
+	/>
+	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
+import SuccessModal from "@components/molecules/SuccessModal";
 
 export default {
 	components: {
+		SuccessModal,
 		ModalFooter,
 	},
 	props: {
@@ -77,8 +85,10 @@ export default {
 	},
 	data() {
 		return {
+			showSuccessModal: false,
 			selectedCourse: {},
 			selectedLesson: {},
+			successMsg: "Dein Material wurde erfolgreich hinzugefügt",
 		};
 	},
 	computed: {
@@ -140,6 +150,7 @@ export default {
 					url: this.url,
 				},
 			});
+			this.showSuccessModal = true;
 			this.closeModal();
 		},
 		findLessons(course) {
