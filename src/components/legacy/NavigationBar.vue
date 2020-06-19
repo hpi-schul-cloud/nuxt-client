@@ -18,7 +18,7 @@
 				>
 					{{ route.title }}
 				</base-link>
-				<div class="buttons-container">
+				<div v-if="buttons" class="buttons-container">
 					<base-button design="secondary outline">
 						<base-icon source="fa" icon="sign-in" class="icon" />
 						{{ $t("common.labels.login") }}
@@ -43,8 +43,12 @@ export default {
 		},
 		links: {
 			type: Array,
-			reqired: true,
 			default: () => {},
+			required: false,
+		},
+		buttons: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data() {
