@@ -28,26 +28,41 @@ export default {
 	data() {
 		return {
 			activated: false,
+			keyword: null,
 			showModal: false,
 		};
 	},
 	computed: {
 		getTitle() {
-			let title;
+			let title = "";
 			if (this.activated) {
-				title = this.$t("pages.activation.index.success");
+				switch (this.keyword) {
+					case "eMailAddress":
+						title = this.$t(
+							"pages.activation._activationCode.index.success.email"
+						);
+						break;
+
+					default:
+						break;
+				}
 			} else {
-				title = this.$t("Deine Daten konnten nicht geändert werden");
+				switch (this.keyword) {
+					default:
+						title = this.$t(
+							"pages.activation._activationCode.index.error.title"
+						);
+						break;
+				}
 			}
 			return title;
 		},
 		getDescription() {
-			let description;
-			if (this.activated) {
-				description = "";
-			} else {
-				description =
-					"Deine Änderungen konnten leider nicht durchgeführt werden, da der Link ungültig oder abgelaufen ist. Bitte versuche es erneut.";
+			let description = "";
+			if (!this.activated) {
+				description = this.$t(
+					"pages.activation._activationCode.index.error.description"
+				);
 			}
 			return description;
 		},
@@ -66,8 +81,11 @@ export default {
 		async submitHandler() {
 			const { activationCode } = this.$route.params;
 			try {
-				await this.$store.dispatch("activation/update", [activationCode]);
-				this.activated = true;
+				const res = await this.$store.dispatch("activation/update", [
+					activationCode,
+				]);
+				this.keyword = res.keyword;
+				this.activated = res.success;
 			} catch (e) {
 				console.log(e);
 			}
