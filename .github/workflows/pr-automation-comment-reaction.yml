@@ -20,6 +20,13 @@ jobs:
         with:
           token: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
           ref: ${{ steps.prcomm.outputs.BRANCH_NAME }}
+      - name: print variables
+        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+        run: echo "${USERNAME} made a triggering comment on PR# ${PR_NUMBER} for ${BRANCH_NAME}"
+        env:
+          BRANCH_NAME: ${{ steps.prcomm.outputs.BRANCH_NAME }}
+          PR_NUMBER: ${{ steps.prcomm.outputs.PULL_REQUEST_NUMBER }}
+          USERNAME: ${{ steps.prcomm.outputs.COMMENTER_USERNAME }}
       - name: install dependencies
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         # apt-get is to fix issue: https://github.com/puppeteer/puppeteer/issues/5704#issuecomment-618372226
