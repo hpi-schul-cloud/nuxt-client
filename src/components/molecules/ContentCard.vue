@@ -3,7 +3,8 @@
 		<div class="content-card">
 			<base-link
 				class="title-link"
-				:to="{ name: 'content-id', params: { id: resource.ref.id } }"
+				:to="{ name: 'content-id', params: { id: resource.ref.id }, query: {course: $route.query.course,
+						topic: $route.query.topic} }"
 				:no-style="true"
 			>
 				<template v:slot:content>
@@ -77,8 +78,6 @@ export default {
 	},
 	mixins: [contentMeta],
 	props: {
-		title: { type: String, default: "" },
-		url: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		resource: { type: Object, default: () => {} },
 	},

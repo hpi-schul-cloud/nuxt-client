@@ -70,8 +70,8 @@ export default {
 	},
 	methods: {
 		closeModal() {
-			this.$emit("update:show-success-modal", false);
-			this.$emit("close")
+			this.$emit("update:show-notification-modal", false);
+			this.$emit("close");
 		},
 	},
 };

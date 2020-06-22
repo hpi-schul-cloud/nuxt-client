@@ -118,10 +118,17 @@
 			</base-button>
 		</div>
 		<add-content-modal
-			:show-copy-modal.sync="copyModalActive"
-			:updatedid="resource.ref.id"
-			:url="resource.content.url"
-			:title="resource.title"
+				:show-copy-modal.sync="copyModalActive"
+				:updatedid="resource.ref.id"
+				:url="resource.content.url"
+				:title="resource.title"
+		/>
+		<notification-modal
+				:show-notification-modal.sync="showNotificationModal"
+				:response="$store.state.content.addToLessonResult"
+				:success-msg="$t('pages.content.notification.successMsg')"
+				:error-msg="$t('pages.content.notification.errorMsg')"
+				@close="closeWindow"
 		/>
 	</div>
 </template>
@@ -129,6 +136,7 @@
 <script>
 import dayjs from "dayjs";
 import AddContentModal from "@components/molecules/AddContentModal";
+import NotificationModal from "@components/molecules/NotificationModal";
 
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";
@@ -143,6 +151,7 @@ const getMetadataAttribute = (properties, key) => {
 export default {
 	components: {
 		AddContentModal,
+		NotificationModal
 	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, elementIsInTop],
@@ -151,10 +160,12 @@ export default {
 			type: Object,
 			default: () => {},
 		},
+		client: { type: String, default: "Schul-Cloud" },
 	},
 	data() {
 		return {
 			dayjs,
+			showNotificationModal: false,
 			isBookmarked: false,
 			menuActive: false,
 			copyModalActive: false,
@@ -249,9 +260,28 @@ export default {
 		goBack() {
 			this.$router.back();
 		},
+		closeWindow() {
+			if (window.opener && window.opener !== window) {
+				window.close();
+			}
+		},
 		handleCopy() {
-			this.copyModalActive = true;
-			this.$store.dispatch("courses/find");
+			const selectedLesson = this.$route.query.topic;
+			if (selectedLesson){
+				this.$store.dispatch("content/addToLesson", {
+					lessonId: selectedLesson,
+					material: {
+						title: this.resource.title,
+						client: this.client,
+						url: this.resource.content.url,
+					},
+				});
+				this.showNotificationModal = true;
+			}
+			else {
+				this.copyModalActive = true;
+				this.$store.dispatch("courses/find");
+			}
 		},
 	},
 };
