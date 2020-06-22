@@ -136,6 +136,17 @@ export function studentFilter(ctx) {
 }
 
 export function teacherFilter(ctx) {
+	const classesOptions = [];
+	const getClasses = async () => {
+		const teachers = await ctx.$store.dispatch("users/findTeachers");
+		teachers.data
+			.reduce((acc, teacher) => [...new Set(acc.concat(teacher.classes))], [])
+			.forEach((cl) => {
+				classesOptions.push({ value: cl, label: cl });
+			});
+	};
+	getClasses();
+
 	return [
 		{
 			title: ctx.$t("utils.adminFilter.teacher.consent.title"),
@@ -166,6 +177,22 @@ export function teacherFilter(ctx) {
 							label: ctx.$t("utils.adminFilter.teacher.consent.label.missing"),
 						},
 					],
+				},
+			],
+		},
+		{
+			title: ctx.$t("utils.adminFilter.teacher.class.title"),
+			chipTemplate: `${ctx.$t("utils.adminFilter.teacher.class.title")} = %1`,
+			filter: [
+				{
+					attribute: "classes",
+					operator: "=",
+					input: InputCheckbox,
+					options: classesOptions,
+					attributes: {
+						type: "text",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.class"),
+					},
 				},
 			],
 		},
