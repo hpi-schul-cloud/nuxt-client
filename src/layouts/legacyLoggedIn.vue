@@ -1,7 +1,7 @@
 <template>
 	<!-- default template = loggedin view -->
 	<div>
-		<div class="page" :style="style">
+		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<user-has-role :role="isDemoRole">
 					<demo-banner v-if="!fullscreenMode"></demo-banner>
@@ -172,6 +172,10 @@ export default {
 		style() {
 			return this.fullscreenMode ? "display: inherit;" : "";
 		},
+
+		isInline() {
+			return window.location.search.includes("inline=1");
+		},
 	},
 	watch: {
 		$route: function (to) {
@@ -218,6 +222,10 @@ export default {
 	max-width: 100%;
 	min-height: 100vh;
 	overflow-x: hidden;
+
+	&.inline {
+		display: inline;
+	}
 
 	@include breakpoint(tablet) {
 		grid-template-columns: var(--sidebar-width-tablet) 1fr;

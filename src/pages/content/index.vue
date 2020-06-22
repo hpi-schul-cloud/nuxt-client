@@ -105,9 +105,6 @@ export default {
 				return state.loading;
 			},
 		}),
-		isInline() {
-			return window.location.search.includes("isCourseGroupTopic=true");
-		},
 		query() {
 			const query = {
 				$limit: 10,
