@@ -45,9 +45,7 @@
 						<base-button design="text" @click="closeModal">
 							Abbrechen
 						</base-button>
-						<base-button
-							design="primary"
-							@click="addToLesson"
+						<base-button design="primary" @click="addToLesson"
 							>Hinzufügen</base-button
 						>
 					</template>
@@ -135,7 +133,7 @@ export default {
 			}
 		},
 	},
-	beforeMount: function(){
+	beforeMount: function () {
 		this.selectedCourse = this.getSelectedCourse();
 		this.selectedLesson = this.getSelectedLesson();
 	},
@@ -168,18 +166,22 @@ export default {
 		},
 		getSelectedCourse() {
 			const selectedCourseId = this.$route.query.course;
-			if (!selectedCourseId){
+			if (!selectedCourseId) {
 				return {};
 			}
-			const foundCourse = this.courses && this.courses.filter((course) => course.id === selectedCourseId);
+			const foundCourse =
+				this.courses &&
+				this.courses.filter((course) => course.id === selectedCourseId);
 			return foundCourse ? foundCourse[0] : {};
 		},
 		getSelectedLesson() {
 			const selectedLesson = this.$route.query.topic;
-			if (!selectedLesson){
+			if (!selectedLesson) {
 				return {};
 			}
-			const foundLesson = this.lessons.data && this.lessons.data.filter((lesson) => lesson.id === selectedLesson);
+			const foundLesson =
+				this.lessons.data &&
+				this.lessons.data.filter((lesson) => lesson.id === selectedLesson);
 			return foundLesson ? foundLesson[0] : {};
 		},
 	},

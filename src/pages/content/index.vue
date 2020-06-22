@@ -144,7 +144,7 @@ export default {
 					query: {
 						q: this.searchQuery,
 						course: this.$route.query.course,
-						topic: this.$route.query.topic
+						topic: this.$route.query.topic,
 					},
 				});
 			}, 500);
