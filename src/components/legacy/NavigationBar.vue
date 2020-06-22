@@ -13,19 +13,24 @@
 					:class="{ li: true, active: activeLink === route.href }"
 					:to="route.to"
 					:href="route.href"
+					:target="route.target"
 					:no-styles="true"
 					@click="setActive(idx)"
 				>
 					{{ route.title }}
 				</base-link>
 				<div class="buttons-container">
-					<base-button design="secondary outline">
-						<base-icon source="fa" icon="sign-in" class="icon" />
-						{{ $t("common.labels.login") }}
-					</base-button>
-					<base-button design="secondary">
-						{{ $t("common.labels.register") }}
-					</base-button>
+					<base-link href="/login">
+						<base-button design="secondary outline">
+							<base-icon source="fa" icon="sign-in" class="icon" />
+							{{ $t("common.labels.login") }}
+						</base-button>
+					</base-link>
+					<base-link href="/community">
+						<base-button design="secondary">
+							{{ $t("common.labels.register") }}
+						</base-button>
+					</base-link>
 				</div>
 				<slot name="actions"></slot>
 			</div>
@@ -34,8 +39,9 @@
 </template>
 <script>
 import BaseButton from "../base/BaseButton";
+import BaseLink from "../base/BaseLink";
 export default {
-	components: { BaseButton },
+	components: { BaseLink, BaseButton },
 	props: {
 		img: {
 			type: String,
