@@ -1,15 +1,11 @@
 export default [
 	{
-		title: "layouts.loggedoutFullWidth.steps",
-		href: "/mint-ec/willkommenspaket",
-	},
-	{
 		title: "layouts.loggedoutFullWidth.project",
 		href: "/about",
 	},
 	{
-		title: "layouts.loggedoutFullWidth.join",
-		href: "/community",
+		title: "layouts.loggedoutFullWidth.steps",
+		href: "https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
 	},
 	{
 		title: "layouts.loggedoutFullWidth.blog",
