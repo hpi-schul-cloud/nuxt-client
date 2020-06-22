@@ -106,7 +106,7 @@ export default {
 			},
 		}),
 		isSendEnabled() {
-			return true;//this.selectedLesson && this.selectedLesson._id !== undefined;
+			return this.selectedLesson._id !== undefined;
 		},
 		coursesOptions() {
 			return this.courses
