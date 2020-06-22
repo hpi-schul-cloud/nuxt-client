@@ -1,5 +1,7 @@
 name: PR Automation Comments
-on: issue_comment
+on:
+  issue_comment:
+    types: [created]
 
 jobs:
   update-screenshots:
