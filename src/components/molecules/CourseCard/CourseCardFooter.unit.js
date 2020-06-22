@@ -1,5 +1,4 @@
 import CourseCardFooter from "./CourseCardFooter";
-import PulsatingDot from "@components/atoms/PulsatingDot";
 
 describe("@components/molecules/CourseCardFooter", () => {
 	it(...isValidComponent(CourseCardFooter));
@@ -14,7 +13,7 @@ describe("@components/molecules/CourseCardFooter", () => {
 			},
 		});
 		expect(wrapper.classes("footer")).toBe(true);
-		expect(wrapper.find("pulsating-dot-stub").is(PulsatingDot)).toBe(true);
+		expect(wrapper.find("pulsating-dot-stub").exists()).toBe(true);
 		expect(wrapper.find(".alert-label").text()).toBe(testAlert);
 	});
 	it("Check if next course is rendering", () => {
