@@ -49,7 +49,7 @@
 		"@nuxtjs/sentry": "^4.0.3",
 		"@nuxtjs/toast": "^3.3.0",
 		"@tryghost/content-api": "^1.4.1",
-		"cookie-universal-nuxt": "^2.1.3",
+		"cookie-universal-nuxt": "^2.1.4",
 		"dayjs": "^1.8.27",
 		"echarts": "^4.7.0",
 		"font-awesome": "^4.7.0",
