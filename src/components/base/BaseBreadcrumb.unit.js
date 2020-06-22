@@ -46,7 +46,7 @@ describe("@components/base/BaseBreadcrumb", () => {
 				inputs: [internalLink, textOnly],
 			},
 		});
-		expect(wrapper.find(".fa.fa-home").isVisible()).toBe(true);
+		expect(wrapper.find(".fa.fa-home").exists()).toBe(true);
 	});
 
 	it("renders no icon if not defined", () => {
