@@ -118,17 +118,17 @@
 			</base-button>
 		</div>
 		<add-content-modal
-				:show-copy-modal.sync="copyModalActive"
-				:updatedid="resource.ref.id"
-				:url="resource.content.url"
-				:title="resource.title"
+			:show-copy-modal.sync="copyModalActive"
+			:updatedid="resource.ref.id"
+			:url="resource.content.url"
+			:title="resource.title"
 		/>
 		<notification-modal
-				:show-notification-modal.sync="showNotificationModal"
-				:response="$store.state.content.addToLessonResult"
-				:success-msg="$t('pages.content.notification.successMsg')"
-				:error-msg="$t('pages.content.notification.errorMsg')"
-				@close="closeWindow"
+			:show-notification-modal.sync="showNotificationModal"
+			:response="$store.state.content.addToLessonResult"
+			:success-msg="$t('pages.content.notification.successMsg')"
+			:error-msg="$t('pages.content.notification.errorMsg')"
+			@close="closeWindow"
 		/>
 	</div>
 </template>
@@ -151,7 +151,7 @@ const getMetadataAttribute = (properties, key) => {
 export default {
 	components: {
 		AddContentModal,
-		NotificationModal
+		NotificationModal,
 	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, elementIsInTop],
@@ -267,7 +267,7 @@ export default {
 		},
 		handleCopy() {
 			const selectedLesson = this.$route.query.topic;
-			if (selectedLesson){
+			if (selectedLesson) {
 				this.$store.dispatch("content/addToLesson", {
 					lessonId: selectedLesson,
 					material: {
@@ -277,8 +277,7 @@ export default {
 					},
 				});
 				this.showNotificationModal = true;
-			}
-			else {
+			} else {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
 			}

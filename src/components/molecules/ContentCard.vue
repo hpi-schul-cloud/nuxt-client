@@ -3,8 +3,11 @@
 		<div class="content-card">
 			<base-link
 				class="title-link"
-				:to="{ name: 'content-id', params: { id: resource.ref.id }, query: {course: $route.query.course,
-						topic: $route.query.topic} }"
+				:to="{
+					name: 'content-id',
+					params: { id: resource.ref.id },
+					query: { course: $route.query.course, topic: $route.query.topic },
+				}"
 				:no-style="true"
 			>
 				<template v:slot:content>
@@ -50,11 +53,11 @@
 						:title="resource.title"
 					/>
 					<notification-modal
-							:show-notification-modal.sync="showNotificationModal"
-							:response="$store.state.content.addToLessonResult"
-							:success-msg="$t('pages.content.notification.successMsg')"
-							:error-msg="$t('pages.content.notification.errorMsg')"
-							@close="closeNotification"
+						:show-notification-modal.sync="showNotificationModal"
+						:response="$store.state.content.addToLessonResult"
+						:success-msg="$t('pages.content.notification.successMsg')"
+						:error-msg="$t('pages.content.notification.errorMsg')"
+						@close="closeNotification"
 					/>
 				</div>
 			</template>
@@ -143,7 +146,7 @@ export default {
 		},
 		handleCopy() {
 			const selectedLesson = this.$route.query.topic;
-			if (selectedLesson){
+			if (selectedLesson) {
 				this.$store.dispatch("content/addToLesson", {
 					lessonId: selectedLesson,
 					material: {
@@ -153,8 +156,7 @@ export default {
 					},
 				});
 				this.showNotificationModal = true;
-			}
-			else {
+			} else {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
 			}

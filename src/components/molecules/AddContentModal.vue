@@ -56,11 +56,11 @@
 			</template>
 		</base-modal>
 		<notification-modal
-				:show-notification-modal.sync="showNotificationModal"
-				:response="$store.state.content.addToLessonResult"
-				:success-msg="$t('pages.content.notification.successMsg')"
-				:error-msg="$t('pages.content.notification.errorMsg')"
-				@close="showNotificationModal = false"
+			:show-notification-modal.sync="showNotificationModal"
+			:response="$store.state.content.addToLessonResult"
+			:success-msg="$t('pages.content.notification.successMsg')"
+			:error-msg="$t('pages.content.notification.errorMsg')"
+			@close="showNotificationModal = false"
 		/>
 	</div>
 </template>
@@ -164,7 +164,7 @@ export default {
 		clearState() {
 			this.selectedCourse = {};
 			this.selectedLesson = {};
-		}
+		},
 	},
 };
 </script>

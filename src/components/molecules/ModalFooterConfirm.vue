@@ -25,7 +25,7 @@ export default {
 	width: 100%;
 	background-color: var(--color-success);
 
-	&.error{
+	&.error {
 		background-color: var(--color-danger);
 	}
 
@@ -84,12 +84,12 @@ export default {
 	}
 }
 
-	.error{
-		.btn-confirm {
-			background-color: var(--color-danger);
-			&:focus {
-				--button-background: var(--color-danger-dark);
-			}
+.error {
+	.btn-confirm {
+		background-color: var(--color-danger);
+		&:focus {
+			--button-background: var(--color-danger-dark);
 		}
 	}
+}
 </style>

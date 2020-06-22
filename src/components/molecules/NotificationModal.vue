@@ -11,15 +11,19 @@
 				</template>
 				<template v-else v-slot:icon>
 					<base-icon
-							source="material"
-							icon="error"
-							style="color: var(--color-danger);"
+						source="material"
+						icon="error"
+						style="color: var(--color-danger);"
 					/>
 				</template>
 			</modal-body-info>
 		</template>
 		<template v-slot:footer>
-			<modal-footer-confirm :class="{error: !isSuccess}" text="Ok" @click="closeModal" />
+			<modal-footer-confirm
+				:class="{ error: !isSuccess }"
+				text="Ok"
+				@click="closeModal"
+			/>
 		</template>
 	</base-modal>
 </template>
@@ -40,31 +44,29 @@ export default {
 		},
 		successMsg: {
 			type: String,
-			default: ""
+			default: "",
 		},
 		errorMsg: {
 			type: String,
-			default: ""
+			default: "",
 		},
 		description: {
 			type: String,
-			default: ""
+			default: "",
 		},
 		response: {
 			type: Object,
 			default: () => ({}),
 		},
 	},
-	computed : {
+	computed: {
 		msg: {
-			get(){
+			get() {
 				return this.isSuccess ? this.successMsg : this.errorMsg;
 			},
-			set(){
-
-			}
+			set() {},
 		},
-		isSuccess(){
+		isSuccess() {
 			return this.response.status === 201;
 		},
 	},
