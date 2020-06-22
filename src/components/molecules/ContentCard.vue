@@ -10,17 +10,6 @@
 					<div class="content">
 						<div class="content__img">
 							<div class="img-container">
-								<!--
-							<base-button
-								v-if="multiSelectEnabled"
-								design="none"
-								class="content__img-checkbox"
-								@click="checkboxHandler"
-							>
-								<base-icon source="material" :icon="checkboxIconSelector" />
-							</base-button>
-							-->
-
 								<div class="content__img-background-gradient" />
 
 								<img
@@ -43,16 +32,6 @@
 				<div class="footer">
 					<div class="footer__separator"></div>
 					<div class="footer__content">
-						<!-- Bookmark handler functionality is still missing
-						<base-button design="text icon" @click="bookmarkHandler">
-							<base-icon
-								class="footer__content-icon"
-								source="material"
-								:icon="bookmarkIconSelector"
-							/>
-						</base-button>
-						-->
-
 						<div class="footer__icon-container">
 							<base-button design="text icon" @click.prevent="handleCopy">
 								<base-icon
@@ -61,28 +40,6 @@
 									icon="add_circle_outline"
 								/>
 							</base-button>
-							<!-- Additional menu functionality is missing
-								<div class="footer_more">
-									<base-button
-										design="text icon"
-										@click.prevent="menuActive = true"
-									>
-										<base-icon
-											class="footer__content-icon"
-											source="material"
-											icon="more_vert"
-										/>
-									</base-button>
-									<context-menu
-										:show.sync="menuActive"
-										anchor="bottom-right"
-										:actions="actions"
-										@share="handleShare"
-										@delete="handleDelete"
-										@report="handleReport"
-									/>
-								</div>
-								-->
 						</div>
 					</div>
 					<add-content-modal
@@ -90,6 +47,13 @@
 						:updatedid="resource.ref.id"
 						:url="resource.content.url"
 						:title="resource.title"
+					/>
+					<notification-modal
+							:show-notification-modal.sync="showNotificationModal"
+							:response="$store.state.content.addToLessonResult"
+							:success-msg="$t('pages.content.notification.successMsg')"
+							:error-msg="$t('pages.content.notification.errorMsg')"
+							@close="closeNotification"
 					/>
 				</div>
 			</template>
@@ -101,16 +65,21 @@
 import BaseLink from "@components/base/BaseLink";
 // import ContextMenu from "@components/molecules/ContextMenu";
 import AddContentModal from "@components/molecules/AddContentModal";
+import NotificationModal from "@components/molecules/NotificationModal";
 import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {
 		BaseLink,
+		NotificationModal,
 		// ContextMenu,
 		AddContentModal,
 	},
 	mixins: [contentMeta],
 	props: {
+		title: { type: String, default: "" },
+		url: { type: String, default: "" },
+		client: { type: String, default: "Schul-Cloud" },
 		resource: { type: Object, default: () => {} },
 	},
 	data() {
@@ -119,6 +88,7 @@ export default {
 			menuActive: false,
 			isBookmarked: false,
 			copyModalActive: false,
+			showNotificationModal: false,
 			actions: [
 				{
 					event: "share",
@@ -167,9 +137,28 @@ export default {
 		openMenu() {
 			this.menuActive = true;
 		},
+		closeNotification() {
+			if (window.opener && window.opener !== window) {
+				window.close();
+			}
+		},
 		handleCopy() {
-			this.copyModalActive = true;
-			this.$store.dispatch("courses/find");
+			const selectedLesson = this.$route.query.topic;
+			if (selectedLesson){
+				this.$store.dispatch("content/addToLesson", {
+					lessonId: selectedLesson,
+					material: {
+						title: this.resource.title,
+						client: this.client,
+						url: this.resource.content.url,
+					},
+				});
+				this.showNotificationModal = true;
+			}
+			else {
+				this.copyModalActive = true;
+				this.$store.dispatch("courses/find");
+			}
 		},
 		handleShare() {},
 		handleDelete() {},

@@ -28,11 +28,15 @@ export const actions = {
 		commit("setLessons", res);
 	},
 
-	async addToLesson(_, payload = { material: {} }) {
+	async addToLesson({ commit }, payload = { material: {} }) {
 		await this.$axios.post(
 			`/lessons/${payload.lessonId}/material`,
 			payload.material
-		);
+		).then((resp) => {
+			commit("addToLessonResult", resp);
+		}).catch((error) => {
+			commit("addToLessonResult", error.response);
+		});
 	},
 	async getResourceMetadata(context, id) {
 		return this.$axios.$get(`/edu-sharing/${id}`);
@@ -50,6 +54,7 @@ const initialState = () => ({
 		data: [],
 	},
 	loading: false,
+	addToLessonResult: {}
 });
 
 export const mutations = {
@@ -72,6 +77,9 @@ export const mutations = {
 	setLessons(state, payload) {
 		state.lessons = payload;
 	},
+	addToLessonResult(state, payload) {
+		state.addToLessonResult = payload;
+	}
 };
 
 export const state = initialState();

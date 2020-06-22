@@ -1,0 +1,78 @@
+<template>
+	<base-modal :active="showNotificationModal">
+		<template v-slot:body>
+			<modal-body-info :title="msg" :description="description">
+				<template v-if="isSuccess" v-slot:icon>
+					<base-icon
+						source="material"
+						icon="check_circle"
+						style="color: var(--color-success);"
+					/>
+				</template>
+				<template v-else v-slot:icon>
+					<base-icon
+							source="material"
+							icon="error"
+							style="color: var(--color-danger);"
+					/>
+				</template>
+			</modal-body-info>
+		</template>
+		<template v-slot:footer>
+			<modal-footer-confirm :class="{error: !isSuccess}" text="Ok" @click="closeModal" />
+		</template>
+	</base-modal>
+</template>
+
+<script>
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
+export default {
+	name: "NotificationModal",
+	components: {
+		ModalBodyInfo,
+		ModalFooterConfirm,
+	},
+	props: {
+		showNotificationModal: {
+			type: Boolean,
+			required: true,
+		},
+		successMsg: {
+			type: String,
+			default: ""
+		},
+		errorMsg: {
+			type: String,
+			default: ""
+		},
+		description: {
+			type: String,
+			default: ""
+		},
+		response: {
+			type: Object,
+			default: () => ({}),
+		},
+	},
+	computed : {
+		msg: {
+			get(){
+				return this.isSuccess ? this.successMsg : this.errorMsg;
+			},
+			set(){
+
+			}
+		},
+		isSuccess(){
+			return this.response.status === 201;
+		},
+	},
+	methods: {
+		closeModal() {
+			this.$emit("update:show-success-modal", false);
+			this.$emit("close")
+		},
+	},
+};
+</script>

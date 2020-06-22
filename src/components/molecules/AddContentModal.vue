@@ -47,6 +47,7 @@
 						</base-button>
 						<base-button
 							design="primary"
+							:disabled="!isSendEnabled"
 							@click="addToLesson"
 							>Hinzufügen</base-button
 						>
@@ -54,9 +55,12 @@
 				</modal-footer>
 			</template>
 		</base-modal>
-		<success-modal
-			:show-success-modal.sync="showSuccessModal"
-			:msg="successMsg"
+		<notification-modal
+				:show-notification-modal.sync="showNotificationModal"
+				:response="$store.state.content.addToLessonResult"
+				:success-msg="$t('pages.content.notification.successMsg')"
+				:error-msg="$t('pages.content.notification.errorMsg')"
+				@close="showNotificationModal = false"
 		/>
 	</div>
 </template>
@@ -64,11 +68,11 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
-import SuccessModal from "@components/molecules/SuccessModal";
+import NotificationModal from "@components/molecules/NotificationModal";
 
 export default {
 	components: {
-		SuccessModal,
+		NotificationModal,
 		ModalFooter,
 	},
 	props: {
@@ -87,10 +91,9 @@ export default {
 	},
 	data() {
 		return {
-			showSuccessModal: false,
+			showNotificationModal: false,
 			selectedCourse: {},
 			selectedLesson: {},
-			successMsg: "Dein Material wurde erfolgreich hinzugefügt",
 		};
 	},
 	computed: {
@@ -103,7 +106,7 @@ export default {
 			},
 		}),
 		isSendEnabled() {
-			return this.selectedLesson._id !== undefined;
+			return true;//this.selectedLesson && this.selectedLesson._id !== undefined;
 		},
 		coursesOptions() {
 			return this.courses
@@ -135,10 +138,6 @@ export default {
 			}
 		},
 	},
-	beforeMount: function(){
-		this.selectedCourse = this.getSelectedCourse();
-		this.selectedLesson = this.getSelectedLesson();
-	},
 	methods: {
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
@@ -149,14 +148,14 @@ export default {
 		},
 		addToLesson() {
 			this.$store.dispatch("content/addToLesson", {
-				lessonId: this.selectedLesson._id,
+				lessonId: this.selectedLesson && this.selectedLesson._id,
 				material: {
 					title: this.title,
 					client: this.client,
 					url: this.url,
 				},
 			});
-			this.showSuccessModal = true;
+			this.showNotificationModal = true;
 			this.closeModal();
 		},
 		findLessons(course) {
@@ -165,23 +164,7 @@ export default {
 		clearState() {
 			this.selectedCourse = {};
 			this.selectedLesson = {};
-		},
-		getSelectedCourse() {
-			const selectedCourseId = this.$route.query.course;
-			if (!selectedCourseId){
-				return {};
-			}
-			const foundCourse = this.courses && this.courses.filter((course) => course.id === selectedCourseId);
-			return foundCourse ? foundCourse[0] : {};
-		},
-		getSelectedLesson() {
-			const selectedLesson = this.$route.query.topic;
-			if (!selectedLesson){
-				return {};
-			}
-			const foundLesson = this.lessons.data && this.lessons.data.filter((lesson) => lesson.id === selectedLesson);
-			return foundLesson ? foundLesson[0] : {};
-		},
+		}
 	},
 };
 </script>
