@@ -47,7 +47,6 @@
 						</base-button>
 						<base-button
 							design="primary"
-							:disabled="!isSendEnabled"
 							@click="addToLesson"
 							>Hinzufügen</base-button
 						>
@@ -136,6 +135,10 @@ export default {
 			}
 		},
 	},
+	beforeMount: function(){
+		this.selectedCourse = this.getSelectedCourse();
+		this.selectedLesson = this.getSelectedLesson();
+	},
 	methods: {
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
@@ -162,6 +165,22 @@ export default {
 		clearState() {
 			this.selectedCourse = {};
 			this.selectedLesson = {};
+		},
+		getSelectedCourse() {
+			const selectedCourseId = this.$route.query.course;
+			if (!selectedCourseId){
+				return {};
+			}
+			const foundCourse = this.courses && this.courses.filter((course) => course.id === selectedCourseId);
+			return foundCourse ? foundCourse[0] : {};
+		},
+		getSelectedLesson() {
+			const selectedLesson = this.$route.query.topic;
+			if (!selectedLesson){
+				return {};
+			}
+			const foundLesson = this.lessons.data && this.lessons.data.filter((lesson) => lesson.id === selectedLesson);
+			return foundLesson ? foundLesson[0] : {};
 		},
 	},
 };

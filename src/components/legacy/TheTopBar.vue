@@ -1,5 +1,5 @@
 <template>
-	<div class="topbar">
+	<div v-if="showTopbar" class="topbar">
 		<!-- ACTIONS -->
 		<div
 			v-if="!fullscreenMode"
@@ -120,6 +120,11 @@ export default {
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
+	},
+	computed: {
+		showTopbar() {
+			return !window.location.search.includes("inline=1");
+		},
 	},
 	methods: {
 		sendEvent(eventName) {

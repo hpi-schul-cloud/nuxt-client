@@ -1,5 +1,5 @@
 <template>
-	<aside class="sidebar" :class="{ expanded: expandedMenu }">
+	<aside v-if="showSidebar" class="sidebar" :class="{ expanded: expandedMenu }">
 		<div class="top-sidebar" @click="$emit('input')">
 			<img
 				class="logo logo-full"
@@ -90,6 +90,11 @@ export default {
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
+	},
+	computed: {
+		showSidebar() {
+			return !window.location.search.includes("inline=1");
+		},
 	},
 };
 </script>
