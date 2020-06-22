@@ -2,7 +2,7 @@
 	<div class="header">
 		<div class="nav-container">
 			<div class="logo-container">
-				<base-link href="https://schul-cloud.org/">
+				<base-link :href="logoLink">
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
 				</base-link>
 			</div>
@@ -37,6 +37,11 @@ import BaseButton from "../base/BaseButton";
 export default {
 	components: { BaseButton },
 	props: {
+		logoLink: {
+			type: String,
+			default: "/",
+			required: false,
+		},
 		img: {
 			type: String,
 			required: true,

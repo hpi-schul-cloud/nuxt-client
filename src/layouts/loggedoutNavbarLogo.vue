@@ -2,6 +2,7 @@
 	<div>
 		<navigation-bar
 			:img="require('@assets/img/logo/logo-image-color.svg')"
+			:logo-link="'/dashboard'"
 			:buttons="false"
 		/>
 		<div class="container">
