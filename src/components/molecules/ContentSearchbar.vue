@@ -69,10 +69,10 @@ export default {
 			this.$emit("input", this.inputValue);
 			setTimeout((...args) => {
 				if (this.isActive && this.inputValue.length > 0) {
-				this.isActive = false;
-			}
+					this.isActive = false;
+				}
 				this.$emit("keyup:enter", ...args);
-				} , 1000);
+			}, 1000);
 		},
 		enterKeyHandler(...args) {
 			if (this.isActive && this.inputValue.length > 0) {
