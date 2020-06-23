@@ -46,7 +46,7 @@
 	},
 	"dependencies": {
 		"@nuxtjs/axios": "^5.11.0",
-		"@nuxtjs/sentry": "^4.0.3",
+		"@nuxtjs/sentry": "^4.1.2",
 		"@nuxtjs/toast": "^3.3.0",
 		"@tryghost/content-api": "^1.4.1",
 		"cookie-universal-nuxt": "^2.1.4",
