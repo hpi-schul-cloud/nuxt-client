@@ -61,10 +61,14 @@
 				</div>
 				<div class="author-provider">
 					<span v-if="author">
-						<base-link :href="author"></base-link>{{author}} ({{ $t("pages.content._id.metadata.author") }}),
+						<base-link :href="author"></base-link>{{ author }} ({{
+							$t("pages.content._id.metadata.author")
+						}}),
 					</span>
 					<span v-if="provider">
-						<base-link :href="provider"></base-link>{{provider}} ({{ $t("pages.content._id.metadata.provider") }})
+						<base-link :href="provider"></base-link>{{ provider }} ({{
+							$t("pages.content._id.metadata.provider")
+						}})
 					</span>
 				</div>
 				<!-- eslint-disable vue/no-v-html -->
@@ -102,7 +106,11 @@
 							<base-icon source="fa" icon="tag" />
 						</div>
 						<span v-for="(tag, index) in tags" :key="index" class="meta-text">
-							<base-link :href="'/content/?q=' + tag.substr(1)" class="tag-link">{{ tag }}</base-link>
+							<base-link
+								:href="'/content/?q=' + tag.substr(1)"
+								class="tag-link"
+								>{{ tag }}</base-link
+							>
 						</span>
 					</div>
 				</div>
@@ -237,10 +245,10 @@ export default {
 			);
 			if (tags) {
 				tags = tags
-						.split("; ")
-						.filter((w) => w !== "")
-						.map((w) => "#" + w)
-						.join(" ")
+					.split("; ")
+					.filter((w) => w !== "")
+					.map((w) => "#" + w)
+					.join(" ");
 			}
 			const TagsArray = tags.split(" ").sort();
 			console.log(TagsArray);
@@ -465,7 +473,7 @@ export default {
 				}
 				.tag-link {
 					margin-left: var(--space-xs);
-					color: var(--color-tertiary)
+					color: var(--color-tertiary);
 				}
 			}
 		}
