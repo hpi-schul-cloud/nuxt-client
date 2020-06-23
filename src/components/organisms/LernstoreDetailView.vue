@@ -243,7 +243,6 @@ export default {
 						.join(" ")
 			}
 			const TagsArray = tags.split(" ").sort();
-			console.log(TagsArray);
 			return tags ? TagsArray : "Keine Tags";
 		},
 		filename() {
@@ -450,7 +449,8 @@ export default {
 		.metadata {
 			display: flex;
 			flex-direction: column;
-			font-size: var(--text-xs);
+			font-size: var(--text-sm);
+			line-height: var(--line-height-lg);
 
 			.meta-container {
 				display: flex;
@@ -464,7 +464,7 @@ export default {
 					}
 				}
 				.tag-link {
-					margin-left: var(--space-xs);
+					margin-right: var(--space-xs);
 					color: var(--color-tertiary)
 				}
 			}
