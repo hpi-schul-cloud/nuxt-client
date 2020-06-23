@@ -106,9 +106,7 @@
 							<base-icon source="fa" icon="tag" />
 						</div>
 						<span v-for="(tag, index) in tags" :key="index" class="meta-text">
-							<base-link
-								:href="'/content/?q=' + tag"
-								class="tag-link"
+							<base-link :href="'/content/?q=' + tag" class="tag-link"
 								>#{{ tag }}</base-link
 							>
 						</span>
@@ -244,9 +242,7 @@ export default {
 				"ccm:taxonentry"
 			);
 			if (tags) {
-				tags = tags
-					.split("; ")
-					.filter((w) => w !== "")
+				tags = tags.split("; ").filter((w) => w !== "");
 			}
 			return tags ? tags : "Keine Tags";
 		},
