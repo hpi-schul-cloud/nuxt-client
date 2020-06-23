@@ -88,14 +88,14 @@ export default {
 			this.$refs.searchInput.focus();
 		},
 		backspaceKeyHandler(e) {
-			if ((e.keyCode === 8 || e.keyCode === 27)) {
+			if (e.keyCode === 8 || e.keyCode === 27) {
 				this.$refs.searchInput.focus();
 				this.inputValue = "";
 				this.isActive = true;
 				this.$emit("input", this.inputValue);
 			}
 		},
-	}
+	},
 };
 </script>
 
