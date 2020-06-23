@@ -253,7 +253,7 @@ export default {
 			let TagsArray = tags.split(" #");
 			TagsArray = TagsArray.map((tag) => {
 				if (tag.includes("#")) {
-					return tag
+					return tag;
 				} else {
 					return `#${tag}`;
 				}
@@ -480,8 +480,7 @@ export default {
 				}
 				.tag-link {
 					margin-right: var(--space-xs);
-					color: var(--color-tertiary)
-
+					color: var(--color-tertiary);
 				}
 			}
 		}
