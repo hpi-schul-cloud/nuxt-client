@@ -37,28 +37,14 @@
 					<div class="footer__separator"></div>
 					<div class="footer__content">
 						<div class="footer__icon-container">
-							<base-button design="text icon" @click.prevent="handleCopy">
-								<base-icon
-									class="footer__content-icon"
-									source="material"
-									icon="add_circle_outline"
-								/>
-							</base-button>
+							<add-content-button
+								:resource="resource"
+								btn-design="text icon"
+								btn-icon-class="footer__content-icon"
+								btn-icon="add_circle_outline"
+							/>
 						</div>
 					</div>
-					<add-content-modal
-						:show-copy-modal.sync="copyModalActive"
-						:updatedid="resource.ref.id"
-						:url="resource.content.url"
-						:title="resource.title"
-					/>
-					<notification-modal
-						:show-notification-modal.sync="showNotificationModal"
-						:response="$store.state.content.addToLessonResult"
-						:success-msg="$t('pages.content.notification.successMsg')"
-						:error-msg="$t('pages.content.notification.errorMsg')"
-						@close="closeNotification"
-					/>
 				</div>
 			</template>
 		</div>
@@ -68,16 +54,14 @@
 <script>
 import BaseLink from "@components/base/BaseLink";
 // import ContextMenu from "@components/molecules/ContextMenu";
-import AddContentModal from "@components/molecules/AddContentModal";
-import NotificationModal from "@components/molecules/NotificationModal";
+import AddContentButton from "@components/molecules/AddContentButton";
 import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {
 		BaseLink,
-		NotificationModal,
+		AddContentButton,
 		// ContextMenu,
-		AddContentModal,
 	},
 	mixins: [contentMeta],
 	props: {
@@ -138,28 +122,6 @@ export default {
 		},
 		openMenu() {
 			this.menuActive = true;
-		},
-		closeNotification() {
-			if (window.opener && window.opener !== window) {
-				window.close();
-			}
-		},
-		handleCopy() {
-			const selectedLesson = this.$route.query.topic;
-			if (selectedLesson) {
-				this.$store.dispatch("content/addToLesson", {
-					lessonId: selectedLesson,
-					material: {
-						title: this.resource.title,
-						client: this.client,
-						url: this.resource.content.url,
-					},
-				});
-				this.showNotificationModal = true;
-			} else {
-				this.copyModalActive = true;
-				this.$store.dispatch("courses/find");
-			}
 		},
 		handleShare() {},
 		handleDelete() {},
