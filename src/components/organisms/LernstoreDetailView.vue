@@ -107,9 +107,9 @@
 						</div>
 						<span v-for="(tag, index) in tags" :key="index" class="meta-text">
 							<base-link
-								:href="'/content/?q=' + tag.substr(1)"
+								:href="'/content/?q=' + tag"
 								class="tag-link"
-								>{{ tag }}</base-link
+								>#{{ tag }}</base-link
 							>
 						</span>
 					</div>
@@ -247,18 +247,8 @@ export default {
 				tags = tags
 					.split("; ")
 					.filter((w) => w !== "")
-					.map((w) => "#" + w)
-					.join(" ");
 			}
-			let TagsArray = tags.split(" #");
-			TagsArray = TagsArray.map((tag) => {
-				if (tag.includes("#")) {
-					return tag;
-				} else {
-					return `#${tag}`;
-				}
-			});
-			return tags ? TagsArray : "Keine Tags";
+			return tags ? tags : "Keine Tags";
 		},
 		filename() {
 			return this.resource.filename;

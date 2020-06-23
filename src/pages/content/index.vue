@@ -159,6 +159,7 @@ export default {
 			this.searchQuery = initialSearchQuery;
 			this.firstSearch = false;
 			this.activateTransition = true;
+			this.enterKeyHandler();
 		}
 	},
 	methods: {

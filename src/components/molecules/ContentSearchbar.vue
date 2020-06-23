@@ -56,6 +56,9 @@ export default {
 	mounted() {
 		window.addEventListener("keydown", this.backspaceKeyHandler);
 		this.$refs.searchInput.focus();
+		// setTimeout(() => {
+		// 	this.$emit("keyup:enter");
+		// }, 500)
 	},
 	beforeDestroy() {
 		window.removeEventListener("keydown", this.backspaceKeyHandler);
@@ -85,14 +88,14 @@ export default {
 			this.$refs.searchInput.focus();
 		},
 		backspaceKeyHandler(e) {
-			if (!this.isActive && (e.keyCode === 8 || e.keyCode === 27)) {
+			if ((e.keyCode === 8 || e.keyCode === 27)) {
 				this.$refs.searchInput.focus();
 				this.inputValue = "";
 				this.isActive = true;
 				this.$emit("input", this.inputValue);
 			}
 		},
-	},
+	}
 };
 </script>
 
