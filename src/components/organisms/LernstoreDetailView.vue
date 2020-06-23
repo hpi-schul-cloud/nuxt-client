@@ -61,10 +61,10 @@
 				</div>
 				<div class="author-provider">
 					<span v-if="author">
-						{{ author }} ({{ $t("pages.content._id.metadata.author") }}),
+						<base-link :href="author"></base-link>{{author}} ({{ $t("pages.content._id.metadata.author") }}),
 					</span>
 					<span v-if="provider">
-						{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
+						<base-link :href="provider"></base-link>{{provider}} ({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
 				<!-- eslint-disable vue/no-v-html -->
@@ -101,8 +101,8 @@
 						<div class="meta-icon">
 							<base-icon source="fa" icon="tag" />
 						</div>
-						<span class="meta-text">
-							{{ tags }}
+						<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+							<base-link :href="'/content/?q=' + tag.substr(1)" class="tag-link">{{ tag }}</base-link>
 						</span>
 					</div>
 				</div>
@@ -140,6 +140,7 @@ import NotificationModal from "@components/molecules/NotificationModal";
 
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";
+import BaseLink from "../base/BaseLink";
 
 const getMetadataAttribute = (properties, key) => {
 	if (Array.isArray(properties[key])) {
@@ -150,6 +151,7 @@ const getMetadataAttribute = (properties, key) => {
 
 export default {
 	components: {
+		BaseLink,
 		AddContentModal,
 		NotificationModal,
 	},
@@ -229,17 +231,20 @@ export default {
 			);
 		},
 		tags() {
-			const tags = getMetadataAttribute(
+			let tags = getMetadataAttribute(
 				this.resource.properties,
 				"ccm:taxonentry"
 			);
-			return tags
-				? tags
+			if (tags) {
+				tags = tags
 						.split("; ")
 						.filter((w) => w !== "")
 						.map((w) => "#" + w)
 						.join(" ")
-				: "Keine Tags";
+			}
+			const TagsArray = tags.split(" ").sort();
+			console.log(TagsArray);
+			return tags ? TagsArray : "Keine Tags";
 		},
 		filename() {
 			return this.resource.filename;
@@ -457,6 +462,10 @@ export default {
 					.icon {
 						max-height: var(--text-lg);
 					}
+				}
+				.tag-link {
+					margin-left: var(--space-xs);
+					color: var(--color-tertiary)
 				}
 			}
 		}
