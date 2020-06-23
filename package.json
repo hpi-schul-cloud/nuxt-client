@@ -46,7 +46,7 @@
 	},
 	"dependencies": {
 		"@nuxtjs/axios": "^5.11.0",
-		"@nuxtjs/sentry": "^4.0.3",
+		"@nuxtjs/sentry": "^4.1.2",
 		"@nuxtjs/toast": "^3.3.0",
 		"@tryghost/content-api": "^1.4.1",
 		"cookie-universal-nuxt": "^2.1.4",
@@ -75,7 +75,7 @@
 		"vue-swatches": "^2.1.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.9.6",
+		"@babel/core": "^7.10.2",
 		"@babel/plugin-proposal-optional-chaining": "^7.9.0",
 		"@babel/preset-env": "^7.9.6",
 		"@nuxtjs/dotenv": "^1.4.1",
