@@ -242,7 +242,16 @@ export default {
 						.map((w) => "#" + w)
 						.join(" ")
 			}
-			const TagsArray = tags.split(" ").sort();
+			console.log(tags);
+			let TagsArray = tags.split(" #");
+			TagsArray = TagsArray.map((tag) => {
+				if (tag.includes("#")) {
+					return tag
+				} else {
+					return  `#${tag}`;
+				}
+			});
+			console.log(TagsArray);
 			return tags ? TagsArray : "Keine Tags";
 		},
 		filename() {
