@@ -15,6 +15,7 @@
 				name="search"
 				v-bind="$attrs"
 				@keyup.enter="enterKeyHandler"
+				@keyup.backspace="backspaceKeyHandler"
 				@input="updateSearchString($event.target.value)"
 				@focus="isActive = true"
 			/>
@@ -63,6 +64,12 @@ export default {
 		updateSearchString(newValue) {
 			this.inputValue = newValue;
 			this.$emit("input", this.inputValue);
+			setTimeout((...args) => {
+				if (this.isActive && this.inputValue.length > 0) {
+				this.isActive = false;
+			}
+				this.$emit("keyup:enter", ...args);
+				} , 1000);
 		},
 		enterKeyHandler(...args) {
 			if (this.isActive && this.inputValue.length > 0) {
