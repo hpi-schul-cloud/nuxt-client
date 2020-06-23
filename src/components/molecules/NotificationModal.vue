@@ -54,9 +54,8 @@ export default {
 			type: String,
 			default: "",
 		},
-		response: {
-			type: Object,
-			default: () => ({}),
+		isSuccess: {
+			type: Boolean,
 		},
 	},
 	computed: {
@@ -65,9 +64,6 @@ export default {
 				return this.isSuccess ? this.successMsg : this.errorMsg;
 			},
 			set() {},
-		},
-		isSuccess() {
-			return this.response.status === 201;
 		},
 	},
 	methods: {

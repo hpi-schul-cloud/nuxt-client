@@ -17,7 +17,7 @@
 		/>
 		<notification-modal
 			:show-notification-modal.sync="showNotificationModal"
-			:response="$store.state.content.addToLessonResult"
+			:is-success="isSuccess"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"
 			@close="addResourceAndClose"
@@ -50,6 +50,14 @@ export default {
 			copyModalActive: false,
 			showNotificationModal: false,
 		};
+	},
+	computed: {
+		isSuccess() {
+			const response =
+				this.$store.state.content &&
+				this.$store.state.content.addToLessonResult;
+			return response && response.status === 201;
+		},
 	},
 	methods: {
 		addResourceAndClose() {
