@@ -242,16 +242,14 @@ export default {
 						.map((w) => "#" + w)
 						.join(" ")
 			}
-			console.log(tags);
 			let TagsArray = tags.split(" #");
 			TagsArray = TagsArray.map((tag) => {
 				if (tag.includes("#")) {
 					return tag
 				} else {
-					return  `#${tag}`;
+					return `#${tag}`;
 				}
 			});
-			console.log(TagsArray);
 			return tags ? TagsArray : "Keine Tags";
 		},
 		filename() {
