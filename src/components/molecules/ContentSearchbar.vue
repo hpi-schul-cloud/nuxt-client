@@ -56,9 +56,6 @@ export default {
 	mounted() {
 		window.addEventListener("keydown", this.backspaceKeyHandler);
 		this.$refs.searchInput.focus();
-		// setTimeout(() => {
-		// 	this.$emit("keyup:enter");
-		// }, 500)
 	},
 	beforeDestroy() {
 		window.removeEventListener("keydown", this.backspaceKeyHandler);
