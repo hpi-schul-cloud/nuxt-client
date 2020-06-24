@@ -121,8 +121,8 @@ export default {
 		},
 		isSuccess() {
 			const response =
-					this.$store.state.content &&
-					this.$store.state.content.addToLessonResult;
+				this.$store.state.content &&
+				this.$store.state.content.addToLessonResult;
 			return response && response.status === 201;
 		},
 	},
