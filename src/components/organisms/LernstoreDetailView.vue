@@ -113,36 +113,22 @@
 					</div>
 				</div>
 			</div>
-			<base-button
-				design="hero-cta"
-				class="floating-button"
-				size="large"
-				@click="handleCopy"
-			>
-				<base-icon source="material" icon="add" />
-				{{ $t("pages.content._id.addToTopic") }}
-			</base-button>
+			<add-content-button
+				:resource="resource"
+				btn-design="hero-cta"
+				btn-class="floating-button"
+				btn-size="large"
+				btn-icon-class="footer__content-icon"
+				btn-icon="add"
+				:btn-label="$t('pages.content._id.addToTopic')"
+			/>
 		</div>
-		<add-content-modal
-			:show-copy-modal.sync="copyModalActive"
-			:updatedid="resource.ref.id"
-			:url="resource.content.url"
-			:title="resource.title"
-		/>
-		<notification-modal
-			:show-notification-modal.sync="showNotificationModal"
-			:response="$store.state.content.addToLessonResult"
-			:success-msg="$t('pages.content.notification.successMsg')"
-			:error-msg="$t('pages.content.notification.errorMsg')"
-			@close="closeWindow"
-		/>
 	</div>
 </template>
 
 <script>
 import dayjs from "dayjs";
-import AddContentModal from "@components/molecules/AddContentModal";
-import NotificationModal from "@components/molecules/NotificationModal";
+import AddContentButton from "@components/molecules/AddContentButton";
 
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";
@@ -160,6 +146,7 @@ export default {
 		BaseLink,
 		AddContentModal,
 		NotificationModal,
+		AddContentButton,
 	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, elementIsInTop],
@@ -173,10 +160,8 @@ export default {
 	data() {
 		return {
 			dayjs,
-			showNotificationModal: false,
 			isBookmarked: false,
 			menuActive: false,
-			copyModalActive: false,
 			actions: [
 				{
 					event: "copy",
@@ -264,28 +249,6 @@ export default {
 		},
 		goBack() {
 			this.$router.back();
-		},
-		closeWindow() {
-			if (window.opener && window.opener !== window) {
-				window.close();
-			}
-		},
-		handleCopy() {
-			const selectedLesson = this.$route.query.topic;
-			if (selectedLesson) {
-				this.$store.dispatch("content/addToLesson", {
-					lessonId: selectedLesson,
-					material: {
-						title: this.resource.title,
-						client: this.client,
-						url: this.resource.content.url,
-					},
-				});
-				this.showNotificationModal = true;
-			} else {
-				this.copyModalActive = true;
-				this.$store.dispatch("courses/find");
-			}
 		},
 	},
 };

@@ -147,6 +147,7 @@
 		"vue-svg-loader": "0.15.0",
 		"vue-template-compiler": "^2.6.11",
 		"vuepress": "^1.5.0",
+		"vuex": "^3.4.0",
 		"yorkie": "^2.0.0"
 	},
 	"engines": {
