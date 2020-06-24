@@ -1,17 +1,5 @@
 <template>
 	<section>
-		<!-- Scroll to top is not properly designed
-		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
-			<fab-floating
-				:primary-action="{
-					icon: 'arrow_drop_up',
-					'icon-source': 'material',
-					label: $t('common.actions.scrollToTop'),
-				}"
-				@click="$_backToTop"
-			/>
-		</div>
-		-->
 		<div class="content">
 			<div>
 				<content-searchbar
@@ -73,7 +61,6 @@ import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
-// import FabFloating from "@components/molecules/FabFloating";
 import EdusharingFooter from "@components/molecules/EdusharingFooter";
 
 export default {
@@ -82,7 +69,6 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
-		// FabFloating,
 		EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
@@ -234,8 +220,6 @@ export default {
 		width: 100%;
 		padding: var(--space-md) 0;
 		margin: var(--space-xl-5) var(--space-md) 0;
-
-		/* transform: scale(1.3); */
 	}
 }
 

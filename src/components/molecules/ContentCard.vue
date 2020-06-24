@@ -53,7 +53,6 @@
 
 <script>
 import BaseLink from "@components/base/BaseLink";
-// import ContextMenu from "@components/molecules/ContextMenu";
 import AddContentButton from "@components/molecules/AddContentButton";
 import contentMeta from "@mixins/contentMeta";
 
@@ -61,7 +60,6 @@ export default {
 	components: {
 		BaseLink,
 		AddContentButton,
-		// ContextMenu,
 	},
 	mixins: [contentMeta],
 	props: {
@@ -123,9 +121,6 @@ export default {
 		openMenu() {
 			this.menuActive = true;
 		},
-		handleShare() {},
-		handleDelete() {},
-		handleReport() {},
 	},
 };
 </script>
