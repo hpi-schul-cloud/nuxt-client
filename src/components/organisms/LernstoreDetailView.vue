@@ -144,8 +144,6 @@ const getMetadataAttribute = (properties, key) => {
 export default {
 	components: {
 		BaseLink,
-		AddContentModal,
-		NotificationModal,
 		AddContentButton,
 	},
 	layout: "loggedInFull",
@@ -200,14 +198,10 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return dayjs(
-				getMetadataAttribute(this.resource.properties, "cm:created")
-			);
+			return dayjs(getMetadataAttribute(this.resource.properties, "cm:created")).format('DD.MM.YYYY');
 		},
 		updatedAt() {
-			return dayjs(
-				getMetadataAttribute(this.resource.properties, "cm:modified")
-			);
+			return dayjs(getMetadataAttribute(this.resource.properties, "cm:modified")).format('DD.MM.YYYY');
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
