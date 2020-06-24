@@ -78,7 +78,7 @@
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
 						<div class="meta-icon">
-							<base-icon source="custom" icon="calender" />
+							<base-icon source="material" icon="event" />
 						</div>
 
 						<div class="meta-text">
@@ -100,7 +100,7 @@
 							/>
 						</div>
 						<div class="meta-text">
-							<a :href="resource.downloadUrl"> {{ resource.downloadUrl }} </a>
+							<a :href="resource.downloadUrl" class="tertiary-color"> {{ resource.downloadUrl }} </a>
 						</div>
 					</div>
 					<div class="meta-container">
@@ -434,6 +434,13 @@ export default {
 				.tag-link {
 					margin-right: var(--space-xs);
 					color: var(--color-tertiary);
+				}
+				.tertiary-color {
+					color: var(--color-black);
+					text-decoration: none;
+					:hover {
+						color: var(--color-black);
+					}
 				}
 			}
 		}

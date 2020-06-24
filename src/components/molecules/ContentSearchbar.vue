@@ -113,7 +113,7 @@ export default {
 		input {
 			flex: 1;
 			padding: var(--space-sm) 0;
-			font-size: var(--heading-4);
+			font-size: var(--text-lg);
 			text-align: center;
 			border: 0;
 			border-bottom: 2px transparent solid;
@@ -121,6 +121,10 @@ export default {
 
 			@include breakpoint(tablet) {
 				font-size: var(--heading-6);
+			}
+
+			@include breakpoint(desktop) {
+				font-size: var(--heading-4);
 			}
 
 			&:focus {
@@ -139,11 +143,11 @@ export default {
 			align-items: center;
 			justify-content: center;
 			height: 100%;
-			font-size: var(--heading-2);
+			font-size: var(--heading-6);
 			cursor: pointer;
 
 			@include breakpoint(tablet) {
-				font-size: var(--heading-6);
+				font-size: var(--heading-2);
 			}
 		}
 	}
