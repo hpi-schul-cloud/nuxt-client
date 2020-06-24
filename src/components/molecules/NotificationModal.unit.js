@@ -1,4 +1,4 @@
-import Vuex from 'vuex';
+import Vuex from "vuex";
 import NotificationModal from "@components/molecules/NotificationModal";
 import { isValidComponent } from "@@/tests/unit/commonTests";
 import { createLocalVue } from "@vue/test-utils";
@@ -14,19 +14,19 @@ const testProps = {
 };
 
 describe("@components/molecules/NotificationModal", () => {
-    let actions;
-    let store;
+	let actions;
+	let store;
 
-    beforeEach(() => {
-        actions = {
-            closeModal: jest.fn(),
-            close: jest.fn()
-        }
+	beforeEach(() => {
+		actions = {
+			closeModal: jest.fn(),
+			close: jest.fn(),
+		};
 
-        store = new Vuex.Store({
-            actions
-        });
-    });
+		store = new Vuex.Store({
+			actions,
+		});
+	});
 
 	it(...isValidComponent(NotificationModal));
 
@@ -64,16 +64,17 @@ describe("@components/molecules/NotificationModal", () => {
 		expect(wrapper.find(".footer-button").classes("error")).toBe(true);
 	});
 
-	it.skip("executes close action after close", async() => {
+	it.skip("executes close action after close", async () => {
 		const wrapper = mount(NotificationModal, {
-			store, localVue,
+			store,
+			localVue,
 			propsData: { ...testProps, isSuccess: false },
 			stubs: {
 				BaseIcon: true,
 			},
 		});
-		const button = wrapper.find('.btn-confirm');
-		button.trigger('click');
+		const button = wrapper.find(".btn-confirm");
+		button.trigger("click");
 		await wrapper.vm.$nextTick();
 		//TODO: check why this doesn't work
 		expect(actions.close).toHaveBeenCalled();
