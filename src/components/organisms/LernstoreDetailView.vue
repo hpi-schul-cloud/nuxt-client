@@ -100,7 +100,9 @@
 							/>
 						</div>
 						<div class="meta-text">
-							<a :href="resource.downloadUrl" class="tertiary-color"> {{ resource.downloadUrl }} </a>
+							<a :href="resource.downloadUrl" class="tertiary-color">
+								{{ resource.downloadUrl }}
+							</a>
 						</div>
 					</div>
 					<div class="meta-container">
