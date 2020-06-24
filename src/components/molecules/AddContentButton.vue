@@ -82,7 +82,6 @@ export default {
 						url: this.resource.content.url,
 					},
 				});
-				this.showNotificationModal = true;
 			} else {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");

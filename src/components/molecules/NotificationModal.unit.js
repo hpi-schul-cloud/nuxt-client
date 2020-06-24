@@ -14,20 +14,6 @@ const testProps = {
 };
 
 describe("@components/molecules/NotificationModal", () => {
-	let actions;
-	let store;
-
-	beforeEach(() => {
-		actions = {
-			closeModal: jest.fn(),
-			close: jest.fn(),
-		};
-
-		store = new Vuex.Store({
-			actions,
-		});
-	});
-
 	it(...isValidComponent(NotificationModal));
 
 	it("success case", async () => {
@@ -64,10 +50,8 @@ describe("@components/molecules/NotificationModal", () => {
 		expect(wrapper.find(".footer-button").classes("error")).toBe(true);
 	});
 
-	it.skip("executes close action after close", async () => {
+	it("executes close action after close", async () => {
 		const wrapper = mount(NotificationModal, {
-			store,
-			localVue,
 			propsData: { ...testProps, isSuccess: false },
 			stubs: {
 				BaseIcon: true,
@@ -76,7 +60,11 @@ describe("@components/molecules/NotificationModal", () => {
 		const button = wrapper.find(".btn-confirm");
 		button.trigger("click");
 		await wrapper.vm.$nextTick();
-		//TODO: check why this doesn't work
-		expect(actions.close).toHaveBeenCalled();
+		expect(
+			wrapper.findComponent(NotificationModal).emitted("close")
+		).toHaveLength(1);
+		expect(
+			wrapper.findComponent(NotificationModal).emitted("update:show-notification-modal")
+		).toHaveLength(1);
 	});
 });
