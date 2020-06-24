@@ -6,7 +6,7 @@
 			@update:active="closeModalOutsideClick"
 		>
 			<template v-slot:header>
-				Material zu Thema hinzufügen
+				{{ $t("components.molecules.AddContentModal") }}
 			</template>
 			<template v-slot:body>
 				<div class="content-modal__body">
@@ -43,13 +43,13 @@
 				<modal-footer>
 					<template v-slot:right>
 						<base-button design="text" @click="closeModal">
-							Abbrechen
+							{{ $t("common.actions.cancel") }}
 						</base-button>
 						<base-button
 							design="primary"
 							:disabled="!isSendEnabled"
 							@click="addToLesson"
-							>Hinzufügen</base-button
+							>{{ $t("common.actions.add") }}</base-button
 						>
 					</template>
 				</modal-footer>
