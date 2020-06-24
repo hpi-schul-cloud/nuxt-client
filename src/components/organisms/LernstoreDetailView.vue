@@ -61,14 +61,16 @@
 				</div>
 				<div class="author-provider">
 					<span v-if="author">
-						<base-link :href="'/content/?q=' + author" class="content-link">{{ author }}</base-link> ({{
-							$t("pages.content._id.metadata.author")
-						}}),
+						<base-link :href="'/content/?q=' + author" class="content-link">{{
+							author
+						}}</base-link>
+						({{ $t("pages.content._id.metadata.author") }}),
 					</span>
 					<span v-if="provider">
-						<base-link :href="'/content/?q=' + provider" class="content-link">{{ provider }}</base-link> ({{
-							$t("pages.content._id.metadata.provider")
-						}})
+						<base-link :href="'/content/?q=' + provider" class="content-link">{{
+							provider
+						}}</base-link>
+						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
 				<!-- eslint-disable vue/no-v-html -->
@@ -189,17 +191,23 @@ export default {
 			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 		provider() {
-			return getMetadataAttribute(this.resource.properties, "ccm:metadatacontributer_provider")
-					.replace(/ {2,}/g, '');
+			return getMetadataAttribute(
+				this.resource.properties,
+				"ccm:metadatacontributer_provider"
+			).replace(/ {2,}/g, "");
 		},
 		author() {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return dayjs(getMetadataAttribute(this.resource.properties, "cm:created")).format('DD.MM.YYYY');
+			return dayjs(
+				getMetadataAttribute(this.resource.properties, "cm:created")
+			).format("DD.MM.YYYY");
 		},
 		updatedAt() {
-			return dayjs(getMetadataAttribute(this.resource.properties, "cm:modified")).format('DD.MM.YYYY');
+			return dayjs(
+				getMetadataAttribute(this.resource.properties, "cm:modified")
+			).format("DD.MM.YYYY");
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
@@ -395,7 +403,7 @@ export default {
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
-			.content-link{
+			.content-link {
 				color: var(--color-tertiary);
 				text-decoration: underline;
 			}
