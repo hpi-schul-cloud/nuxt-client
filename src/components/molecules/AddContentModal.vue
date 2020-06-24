@@ -57,7 +57,7 @@
 		</base-modal>
 		<notification-modal
 			:show-notification-modal.sync="showNotificationModal"
-			:response="$store.state.content.addToLessonResult"
+			:is-success="isSuccess"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"
 			@close="showNotificationModal = false"
@@ -129,6 +129,12 @@ export default {
 				})
 			);
 		},
+		isSuccess() {
+			const response =
+					this.$store.state.content &&
+					this.$store.state.content.addToLessonResult;
+			return response && response.status === 201;
+		},
 	},
 	watch: {
 		selectedCourse(to, from) {
@@ -148,7 +154,7 @@ export default {
 		},
 		addToLesson() {
 			this.$store.dispatch("content/addToLesson", {
-				lessonId: this.selectedLesson && this.selectedLesson._id,
+				lessonId: this.selectedLesson._id,
 				material: {
 					title: this.title,
 					client: this.client,

@@ -38,7 +38,7 @@ export default {
 	props: {
 		btnLabel: { type: String, default: "" },
 		btnDesign: { type: String, default: "" },
-		btnSize: { type: String, default: "" },
+		btnSize: { type: String, default: "medium" },
 		btnClass: { type: String, default: "" },
 		btnIconClass: { type: String, default: "" },
 		btnIcon: { type: String, default: "" },
