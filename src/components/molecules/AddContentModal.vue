@@ -55,24 +55,15 @@
 				</modal-footer>
 			</template>
 		</base-modal>
-		<notification-modal
-			:show-notification-modal.sync="showNotificationModal"
-			:is-success="isSuccess"
-			:success-msg="$t('pages.content.notification.successMsg')"
-			:error-msg="$t('pages.content.notification.errorMsg')"
-			@close="showNotificationModal = false"
-		/>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
-import NotificationModal from "@components/molecules/NotificationModal";
 
 export default {
 	components: {
-		NotificationModal,
 		ModalFooter,
 	},
 	props: {
@@ -91,7 +82,6 @@ export default {
 	},
 	data() {
 		return {
-			showNotificationModal: false,
 			selectedCourse: {},
 			selectedLesson: {},
 		};
@@ -147,6 +137,7 @@ export default {
 	methods: {
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
+			this.$emit("close");
 			this.clearState();
 		},
 		closeModalOutsideClick(active) {
@@ -161,7 +152,6 @@ export default {
 					url: this.url,
 				},
 			});
-			this.showNotificationModal = true;
 			this.closeModal();
 		},
 		findLessons(course) {

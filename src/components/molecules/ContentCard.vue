@@ -72,7 +72,6 @@ export default {
 			menuActive: false,
 			isBookmarked: false,
 			copyModalActive: false,
-			showNotificationModal: false,
 			actions: [
 				{
 					event: "share",

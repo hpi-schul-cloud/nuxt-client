@@ -14,6 +14,7 @@
 			:updatedid="resource.ref.id"
 			:url="resource.content.url"
 			:title="resource.title"
+			@close="showNotificationModal = true"
 		/>
 		<notification-modal
 			:show-notification-modal.sync="showNotificationModal"
