@@ -149,7 +149,7 @@
 	"pages.account.email.edit.confirmation.mail": "Eine Bestätigungsmail wurde an deine neue E-Mail-Adresse gesendet. Bitte bestätige diese.",
 	"pages.account.email.edit.current.mail": "Deine aktuelle E-mail-Adresse lautet:",
 	"pages.account.email.edit.title": "E-Mail-Adresse ändern",
-	"pages.account.index.info.mail": "Deine neue E-Mail-Adresse {newEmail} muss noch bestätigt werden. Bitte folge den Anweisungen in der Bestätigungsmail, welche an die neue Adresse versand wurde.",
+	"pages.account.index.info.mail": "Deine neue E-Mail-Adresse {newEmail} muss noch bestätigt werden. Bitte folge den Anweisungen in der Bestätigungsmail, welche an die neue Adresse versandt wurde.",
 	"pages.account.index.thirdParty.info": "Deine Nutzerdaten werden von einem zentralen Identitätsmanagement (IDM) synchronisiert. Änderungen daran können nur in dem Ausgangssystem erfolgen (z.B. Schulserver), das den Daten im IDM zugrunde liegt. Bitte wende dich an den lokalen Administrator deiner Schule, um Änderungen an deinen Nutzerdaten vorzunehmen.",
 	"pages.account.index.title": "Account",
 	"pages.account.index.user.data": "Aktuelle Nutzerdaten",
