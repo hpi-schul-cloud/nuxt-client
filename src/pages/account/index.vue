@@ -14,7 +14,7 @@
 					source="material"
 					icon="account_circle"
 					style="
-						margin-top: var(--space-xs);
+						margin-top: calc(0.3 * (var(--space-xs)));
 						margin-right: var(--space-xs);
 						font-size: var(--heading-4);
 						color: var(--color-black);
@@ -42,7 +42,7 @@
 					source="material"
 					icon="mail"
 					style="
-						margin-top: var(--space-xs);
+						margin-top: calc(0.3 * (var(--space-xs)));
 						margin-right: var(--space-xs);
 						font-size: var(--heading-4);
 						color: var(--color-black);
@@ -61,7 +61,7 @@
 					source="material"
 					icon="lock"
 					style="
-						margin-top: var(--space-xs);
+						margin-top: calc(0.1 * (var(--space-xs)));
 						margin-right: var(--space-xs);
 						font-size: var(--heading-4);
 						color: var(--color-black);
@@ -81,9 +81,9 @@
 					source="fa"
 					icon="users"
 					style="
-						margin-top: var(--space-sm);
+						margin-top: calc(0.8 * (var(--space-xs)));
 						margin-right: var(--space-sm);
-						font-size: var(--heading-4);
+						font-size: var(--heading-5);
 						color: var(--color-black);
 					"
 				/>
@@ -100,7 +100,7 @@
 					source="material"
 					icon="vpn_key"
 					style="
-						margin-top: calc(0.5 * (var(--space-xs)));
+						margin-top: calc(0.1 * (var(--space-xs)));
 						margin-right: var(--space-xs);
 						font-size: var(--heading-4);
 						color: var(--color-black);
