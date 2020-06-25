@@ -110,9 +110,6 @@ export default {
 			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 	},
-	mounted() {
-		console.log(this.$route);
-	},
 	methods: {
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
