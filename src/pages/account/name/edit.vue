@@ -91,7 +91,7 @@ export default {
 	},
 	methods: {
 		error() {
-			this.$toast.error("Leider ist etwas schief gegangen");
+			this.$toast.error(this.$t("pages.account.error.edit"));
 		},
 		success() {
 			this.showModal = false;
