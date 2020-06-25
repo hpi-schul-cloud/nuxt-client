@@ -8,6 +8,7 @@
 			:data="currentUser.fullName"
 			:target-path="`/account/name/edit`"
 			:readonly="isStudent || thirdPartyLogin"
+			data-testid="account_card_name"
 		>
 			<template v-slot:icon>
 				<base-icon
@@ -28,6 +29,7 @@
 			:data="currentUser.email"
 			:target-path="`/account/email/edit`"
 			:readonly="thirdPartyLogin"
+			data-testid="account_card_email"
 		>
 			<template v-if="!!newEmail" v-slot:new-mail>
 				{{ $t("pages.account.current.mail") }}
@@ -55,6 +57,7 @@
 			:heading="$t('pages.account.index.user.password')"
 			:target-path="`/account/password/edit`"
 			:readonly="thirdPartyLogin"
+			data-testid="account_card_password"
 		>
 			<template v-slot:icon>
 				<base-icon
