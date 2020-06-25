@@ -220,6 +220,7 @@
 	"pages.content._id.metadata.createdAt": "erstellt am",
 	"pages.content._id.metadata.provider": "Herausgeber",
 	"pages.content._id.metadata.updatedAt": "zuletzt geändert am",
+	"pages.content._id.metadata.noTags": "Keine Tags",
 	"pages.content.empty_state.error.message": "Achte darauf, dass alle Wörter richtig geschrieben sind. <br>Probiere es mit anderen Suchbegriffen.<br>Probiere es mit allgemeineren Suchbegriffen.<br>Probiere es mit weniger Suchbegriffen.<br>",
 	"pages.content.empty_state.error.oops": "Oops",
 	"pages.content.empty_state.error.subtitle": "Vorschlag:",
