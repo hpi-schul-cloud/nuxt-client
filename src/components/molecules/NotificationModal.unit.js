@@ -64,7 +64,9 @@ describe("@components/molecules/NotificationModal", () => {
 			wrapper.findComponent(NotificationModal).emitted("close")
 		).toHaveLength(1);
 		expect(
-			wrapper.findComponent(NotificationModal).emitted("update:show-notification-modal")
+			wrapper
+				.findComponent(NotificationModal)
+				.emitted("update:show-notification-modal")
 		).toHaveLength(1);
 	});
 });
