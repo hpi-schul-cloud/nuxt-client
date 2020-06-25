@@ -6,19 +6,18 @@ const mockApp = {
 	},
 };
 
-const getMockStore = ({ permissions = [], user } = {}) => {
-	const mockUser = user !== undefined ? user : { permissions };
+const getMockStore = ({ user } = {}) => {
 	return {
 		state: {
 			auth: {
-				user: mockUser,
+				user,
 			},
 		},
 	};
 };
 
-const getMockRoute = (requiredPermissions) => ({
-	meta: [{ requiredPermissions }],
+const getMockRoute = (meta) => ({
+	meta: [{ ...meta }],
 });
 
 const getMockContext = ({
@@ -36,93 +35,69 @@ describe("@middleware/externally-managed-check", () => {
 		expect(typeof externallyManagedCheck).toBe("function");
 	});
 
-	it("grants access using simple syntax", async () => {
+	it("grants Access if userNotExternallyManaged is not required AND user is not externally managed", async () => {
 		const mockContext = getMockContext({
-			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
-			route: getMockRoute(["PERMISSION_A"]),
+			store: getMockStore({ user: { externallyManaged: false } }),
+			route: getMockRoute({ userNotExternallyManaged: false }),
 		});
 		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 
-	it(`grants access using advanced "AND" syntax`, async () => {
+	it("grants Access if userNotExternallyManaged is not required AND user is externally managed", async () => {
 		const mockContext = getMockContext({
-			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
-			route: getMockRoute({
-				operator: "AND",
-				permissions: ["PERMISSION_A", "PERMISSION_B"],
-			}),
+			store: getMockStore({ user: { externallyManaged: true } }),
+			route: getMockRoute({ userNotExternallyManaged: false }),
 		});
 		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 
-	it(`grants access using advanced "OR" syntax`, async () => {
+	it("grants Access if userNotExternallyManaged is required AND user is not externally managed", async () => {
 		const mockContext = getMockContext({
-			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
-			route: getMockRoute({
-				operator: "OR",
-				permissions: ["PERMISSION_B"],
-			}),
+			store: getMockStore({ user: { externallyManaged: false } }),
+			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
 		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 
-	it("grants Access if no permissions are required AND user exists", async () => {
+	it("throws error.401 if userNotExternallyManaged is required AND user is externally managed", async () => {
 		const mockContext = getMockContext({
-			store: getMockStore({ permissions: ["PERMISSION_A"] }),
-		});
-		expect(await externallyManagedCheck(mockContext)).toBe(true);
-	});
-
-	it("grants Access if no permissions are required AND user is missing", async () => {
-		const mockContext = getMockContext({
-			store: getMockStore({ user: null }),
-		});
-		expect(await externallyManagedCheck(mockContext)).toBe(true);
-	});
-
-	it("throws error.401 on missing permission using simple syntax", async () => {
-		const mockContext = getMockContext({
-			route: getMockRoute(["MISSING_PERMISSION"]),
+			store: getMockStore({ user: { externallyManaged: true } }),
+			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
 		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
 			new Error("error.401")
 		);
 	});
 
-	it("throws error.401 on missing permission using advanced AND syntax", async () => {
+	it("grants Access if userNotExternallyManaged is not defined AND user is externally managed", async () => {
 		const mockContext = getMockContext({
-			store: getMockStore({
-				permissions: ["PERMISSION_A"],
-			}),
-			route: getMockRoute({
-				operator: "OR",
-				permissions: ["PERMISSION_B", "MISSING_PERMISSION"],
-			}),
+			store: getMockStore({ user: { externallyManaged: true } }),
 		});
-		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
-		);
+		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 
-	it("throws error.401 on missing permission using advanced OR syntax", async () => {
+	it("grants Access if userNotExternallyManaged is not defined AND user is not externally managed", async () => {
 		const mockContext = getMockContext({
-			route: getMockRoute({
-				operator: "OR",
-				permissions: ["MISSING_PERMISSION"],
-			}),
+			store: getMockStore({ user: { externallyManaged: false } }),
 		});
-		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
-			new Error("error.401")
-		);
+		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 
 	it("throws error.401 on missing user", async () => {
 		const mockContext = getMockContext({
 			store: getMockStore({ user: null }),
-			route: getMockRoute(["MISSING_PERMISSION"]),
+			route: getMockRoute({ userNotExternallyManaged: true }),
 		});
 		await expect(externallyManagedCheck(mockContext)).rejects.toThrow(
 			new Error("error.401")
 		);
+	});
+
+	it("grants Access if userNotExternallyManaged is not defined AND user is missing", async () => {
+		const mockContext = getMockContext({
+			store: getMockStore({ user: null }),
+			route: getMockRoute({ userNotExternallyManaged: false }),
+		});
+		expect(await externallyManagedCheck(mockContext)).toBe(true);
 	});
 });
