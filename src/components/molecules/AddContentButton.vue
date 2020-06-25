@@ -59,9 +59,9 @@ export default {
 				this.$store.state.content.addToLessonResult;
 			return response && response.status === 201;
 		},
-		getUrl(){
+		getUrl() {
 			return `/content/${this.resource.ref.id}`;
-		}
+		},
 	},
 	methods: {
 		addResourceAndClose() {
@@ -69,7 +69,7 @@ export default {
 				window.opener.addResource({
 					title: this.resource.title,
 					client: this.client,
-					url: `/content/${this.resource.ref.id}`
+					url: `/content/${this.resource.ref.id}`,
 				});
 				window.close();
 			}
