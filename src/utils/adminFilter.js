@@ -90,6 +90,17 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 });
 
 export function studentFilter(ctx) {
+	const classesFilteringOptions = [];
+	const getUniqueClasses = async () => {
+		const students = await ctx.$store.dispatch("users/findStudents");
+		students.data
+			.reduce((acc, student) => [...new Set(acc.concat(student.classes))], [])
+			.forEach((cl) => {
+				classesFilteringOptions.push({ value: cl, label: cl });
+			});
+	};
+	getUniqueClasses();
+
 	return [
 		{
 			title: ctx.$t("utils.adminFilter.consent.title"),
@@ -129,6 +140,22 @@ export function studentFilter(ctx) {
 				},
 			],
 		},
+		{
+			title: ctx.$t("utils.adminFilter.class.title"),
+			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			filter: [
+				{
+					attribute: "classes",
+					operator: "=",
+					input: InputCheckbox,
+					options: classesFilteringOptions,
+					attributes: {
+						type: "text",
+						placeholder: ctx.$t("utils.adminFilter.placeholder.class"),
+					},
+				},
+			],
+		},
 		getFilterFirstname(ctx),
 		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
@@ -136,16 +163,16 @@ export function studentFilter(ctx) {
 }
 
 export function teacherFilter(ctx) {
-	const classesOptions = [];
-	const getClasses = async () => {
+	const classesFilteringOptions = [];
+	const getUniqueClasses = async () => {
 		const teachers = await ctx.$store.dispatch("users/findTeachers");
 		teachers.data
 			.reduce((acc, teacher) => [...new Set(acc.concat(teacher.classes))], [])
 			.forEach((cl) => {
-				classesOptions.push({ value: cl, label: cl });
+				classesFilteringOptions.push({ value: cl, label: cl });
 			});
 	};
-	getClasses();
+	getUniqueClasses();
 
 	return [
 		{
@@ -181,14 +208,14 @@ export function teacherFilter(ctx) {
 			],
 		},
 		{
-			title: ctx.$t("utils.adminFilter.teacher.class.title"),
-			chipTemplate: `${ctx.$t("utils.adminFilter.teacher.class.title")} = %1`,
+			title: ctx.$t("utils.adminFilter.class.title"),
+			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
 			filter: [
 				{
 					attribute: "classes",
 					operator: "=",
 					input: InputCheckbox,
-					options: classesOptions,
+					options: classesFilteringOptions,
 					attributes: {
 						type: "text",
 						placeholder: ctx.$t("utils.adminFilter.placeholder.class"),
