@@ -14,6 +14,7 @@
 			:updatedid="resource.ref.id"
 			:url="resource.content.url"
 			:title="resource.title"
+			@close="showNotificationModal = true"
 		/>
 		<notification-modal
 			:show-notification-modal.sync="showNotificationModal"
@@ -38,7 +39,7 @@ export default {
 	props: {
 		btnLabel: { type: String, default: "" },
 		btnDesign: { type: String, default: "" },
-		btnSize: { type: String, default: "" },
+		btnSize: { type: String, default: "medium" },
 		btnClass: { type: String, default: "" },
 		btnIconClass: { type: String, default: "" },
 		btnIcon: { type: String, default: "" },
@@ -81,7 +82,6 @@ export default {
 						url: this.resource.content.url,
 					},
 				});
-				this.showNotificationModal = true;
 			} else {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");

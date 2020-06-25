@@ -35,6 +35,7 @@ export const actions = {
 				commit("addToLessonResult", resp);
 			})
 			.catch((error) => {
+				console.error(`addToLessonResult Error: ${error}, payload: ${payload}`);
 				commit("addToLessonResult", error.response);
 			});
 	},
