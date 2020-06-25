@@ -153,10 +153,7 @@ export default {
 	methods: {
 		async populateUser() {
 			try {
-				this.currentUser = await this.$store.dispatch(
-					"auth/populateUser",
-					this.$user?.accountId
-				);
+				this.currentUser = await this.$store.dispatch("auth/populateUser");
 				this.unconfirmedChanges = (
 					await this.$store.dispatch("activation/find")
 				).entry;
