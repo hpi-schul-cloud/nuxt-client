@@ -12,7 +12,7 @@ storiesOf("6 Organisms/LernstoreDetailView", module).add(
 					url:
 						"https://mv-repo.schul-cloud.org/edu-sharing/components/render/70eedbd1-a4e9-47ee-ac00-3848863e5295",
 				},
-                name: "Mathematische Ausdrücke sortieren",
+				name: "Mathematische Ausdrücke sortieren",
 				downloadUrl:
 					"https://mv-repo.schul-cloud.org/edu-sharing/eduservlet/download?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295",
 				preview: {
@@ -26,7 +26,9 @@ storiesOf("6 Organisms/LernstoreDetailView", module).add(
 					"cm:created": ["1580304014402"],
 					"cm:modified": ["1580304014402"],
 					"ccm:metadatacontributer_provider": ["Khan Academy"],
-                    "cclom:general_description": ["Lass uns etwas das Addieren und Subtrahieren von Variablen üben, die positive und negative Zahlen auf dem Zahlenstrahl darstellen."],
+					"cclom:general_description": [
+						"Lass uns etwas das Addieren und Subtrahieren von Variablen üben, die positive und negative Zahlen auf dem Zahlenstrahl darstellen.",
+					],
 				},
 				ref: {
 					repo: "mv-repo.schul-cloud.org",

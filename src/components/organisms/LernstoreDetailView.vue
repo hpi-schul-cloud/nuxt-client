@@ -117,7 +117,9 @@
 							</span>
 						</template>
 						<template v-if="tags.length === 0">
-							<span class="meta-text tag-link">{{ $t("pages.content._id.metadata.noTags") }}</span>
+							<span class="meta-text tag-link">{{
+								$t("pages.content._id.metadata.noTags")
+							}}</span>
 						</template>
 					</div>
 				</div>
