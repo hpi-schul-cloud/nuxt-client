@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<base-modal :active="showModal">
+		<base-modal :active="showModal" data-testid="confirmationModal">
 			<template v-slot:body>
 				<modal-body-info :title="$t('pages.account.name.edit.confirmation')">
 					<template v-slot:icon>

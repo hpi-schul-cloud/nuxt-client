@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<base-modal :active="showModal">
+		<base-modal :active="showModal" data-testid="confirmationModal">
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<modal-body-info
