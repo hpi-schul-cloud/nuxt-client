@@ -36,7 +36,7 @@
 					:label="$t('common.labels.repeat.email')"
 					:placeholder="$t('common.placeholder.email.update')"
 					class="mt--md"
-					data-testid="userMail"
+					data-testid="email_new"
 					autocomplete="off"
 					required="true"
 				>
@@ -54,7 +54,7 @@
 					:label="$t('common.labels.repeat')"
 					:placeholder="$t('common.placeholder.repeat.email')"
 					class="mt--md"
-					data-testid="userRepeatMail"
+					data-testid="email_new_repeat"
 					autocomplete="off"
 					required="true"
 				>
@@ -73,7 +73,7 @@
 					:label="$t('common.labels.password')"
 					:placeholder="$t('common.placeholder.password.confirmation')"
 					class="mt--md"
-					data-testid="userPassword"
+					data-testid="email_password"
 					autocomplete="new-password"
 				>
 					<template v-slot:icon>

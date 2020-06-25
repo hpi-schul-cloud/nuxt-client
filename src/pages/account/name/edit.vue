@@ -33,7 +33,7 @@
 					:label="$t('common.labels.firstName.new')"
 					:placeholder="$t('common.labels.firstName.new')"
 					class="mt--md"
-					data-testid="jjjjjjj"
+					data-testid="name_firstName"
 					required="true"
 				>
 					<template v-slot:icon>
@@ -50,7 +50,7 @@
 					:label="$t('common.labels.lastName.new')"
 					:placeholder="$t('common.labels.lastName.new')"
 					class="mt--md"
-					data-testid="jjjjjjj"
+					data-testid="name_lastName"
 					required="true"
 				>
 					<template v-slot:icon>

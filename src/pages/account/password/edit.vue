@@ -34,7 +34,7 @@
 					:label="$t('common.labels.password')"
 					:placeholder="$t('common.placeholder.password.current')"
 					class="mt--md"
-					data-testid="jjjjjjj"
+					data-testid="password_current"
 					autocomplete="off"
 				>
 					<template v-slot:icon>
@@ -52,7 +52,7 @@
 					:label="$t('common.labels.password.new')"
 					:placeholder="$t('common.placeholder.password.new')"
 					class="mt--md"
-					data-testid="jjjjjjj"
+					data-testid="password_new"
 					autocomplete="off"
 				>
 					<template v-slot:icon>
@@ -70,7 +70,7 @@
 					:label="$t('common.labels.repeat')"
 					:placeholder="$t('common.placeholder.password.new.confirmation')"
 					class="mt--md"
-					data-testid="jjjjjjj"
+					data-testid="password_control"
 					autocomplete="off"
 				>
 					<template v-slot:icon>
