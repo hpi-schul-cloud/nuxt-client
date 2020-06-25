@@ -109,11 +109,16 @@
 						<div class="meta-icon">
 							<base-icon source="fa" icon="tag" />
 						</div>
-						<span v-for="(tag, index) in tags" :key="index" class="meta-text">
-							<base-link :href="'/content/?q=' + tag" class="tag-link"
-								>#{{ tag }}</base-link
-							>
-						</span>
+						<template v-if="tags.length > 0">
+							<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+								<base-link :href="'/content/?q=' + tag" class="tag-link"
+									>#{{ tag }}</base-link
+								>
+							</span>
+						</template>
+						<template v-if="tags.length === 0">
+							<span class="meta-text tag-link">{{ $t("pages.content._id.metadata.noTags") }}</span>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -231,7 +236,7 @@ export default {
 			if (tags) {
 				tags = tags.split("; ").filter((w) => w !== "");
 			}
-			return tags ? tags : "Keine Tags";
+			return tags ? tags : [];
 		},
 		filename() {
 			return this.resource.filename;
