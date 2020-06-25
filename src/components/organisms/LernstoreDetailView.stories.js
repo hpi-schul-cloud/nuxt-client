@@ -8,10 +8,12 @@ storiesOf("6 Organisms/LernstoreDetailView", module).add(
 		components: { LernstoreDetailView },
 		data: () => ({
 			resource: {
-			    content: {
-			      url: "https://mv-repo.schul-cloud.org/edu-sharing/components/render/70eedbd1-a4e9-47ee-ac00-3848863e5295",
-                },
-                downloadUrl: "https://mv-repo.schul-cloud.org/edu-sharing/eduservlet/download?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295",
+				content: {
+					url:
+						"https://mv-repo.schul-cloud.org/edu-sharing/components/render/70eedbd1-a4e9-47ee-ac00-3848863e5295",
+				},
+				downloadUrl:
+					"https://mv-repo.schul-cloud.org/edu-sharing/eduservlet/download?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295",
 				preview: {
 					isIcon: false,
 					isGenerated: true,
@@ -21,8 +23,8 @@ storiesOf("6 Organisms/LernstoreDetailView", module).add(
 				properties: {
 					"cm:creator": ["admin"],
 					"cm:created": ["1580304014402"],
-                    "cm:modified" : ["1580304014402"],
-                    "ccm:metadatacontributer_provider": ["Khan Academy"],
+					"cm:modified": ["1580304014402"],
+					"ccm:metadatacontributer_provider": ["Khan Academy"],
 				},
 				ref: {
 					repo: "mv-repo.schul-cloud.org",
