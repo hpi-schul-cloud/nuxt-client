@@ -34,7 +34,9 @@ storiesOf("5 Molecules/ContentCard", module).add("default", () => ({
 				"cm:created": ["1580304014402"],
 				"cm:modified": ["1580304014402"],
 				"ccm:metadatacontributer_provider": ["Khan Academy"],
-				"cclom:general_description": ["Lass uns etwas das Addieren und Subtrahieren von Variablen üben, die positive und negative Zahlen auf dem Zahlenstrahl darstellen."],
+				"cclom:general_description": [
+					"Lass uns etwas das Addieren und Subtrahieren von Variablen üben, die positive und negative Zahlen auf dem Zahlenstrahl darstellen.",
+				],
 			},
 			ref: {
 				repo: "mv-repo.schul-cloud.org",
