@@ -121,7 +121,6 @@ export default {
 			this.menuActive = true;
 		},
 	},
-
 };
 </script>
 
