@@ -1,17 +1,13 @@
-const $route = {
-	name: "news-id",
-	params: {
-		id: "randomId",
-	},
-	query: {},
-};
 export const Resource = {
 	params: {
 		id: "95436bf3-430c-4797-bd9b-a4c897414dce",
 	},
-	query: {
-		course: $route.query.course,
-		topic: $route.query.topic,
+	$route: {
+		name: "news-id",
+		params: {
+			id: "randomId",
+		},
+		query: {},
 	},
 	ref: {
 		archived: false,
