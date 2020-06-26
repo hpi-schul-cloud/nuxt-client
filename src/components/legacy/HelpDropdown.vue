@@ -7,7 +7,11 @@
 					:icon="menuItem.icon"
 					fill="var(--color-tertiary-dark)"
 				/>
-				<base-link :href="menuItem.action" :target="menuItem.target" class="link">
+				<base-link
+					:href="menuItem.action"
+					:target="menuItem.target"
+					class="link"
+				>
 					{{ menuItem.label }}
 				</base-link>
 			</span>
