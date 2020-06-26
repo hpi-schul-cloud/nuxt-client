@@ -110,11 +110,15 @@ export default {
 			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 		query() {
-			return this.$route && { course: this.$route.query.course, topic: this.$route.query.topic }
-		}
+			return (
+				this.$route && {
+					course: this.$route.query.course,
+					topic: this.$route.query.topic,
+				}
+			);
+		},
 	},
 	methods: {
-
 		checkboxHandler() {
 			this.isChecked = !this.isChecked;
 		},
