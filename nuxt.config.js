@@ -87,7 +87,9 @@ module.exports = {
 		color: "#fff",
 	},
 
-	css: ["@/themes/" + themeName + "/styles"],
+	css: [
+		"@/themes/" + themeName + "/styles"
+	],
 
 	/*
 	 ** Global CSS
@@ -122,6 +124,7 @@ module.exports = {
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
+		"@plugins/full-calendar"
 	],
 
 	/*
