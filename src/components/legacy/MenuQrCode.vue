@@ -1,6 +1,9 @@
 <template>
 	<div>
 		<base-qr-code ref="qrcode" class="qrcode" :url="url" />
+		<div class="qr-hint-text">
+			{{ $t('components.legacy.MenuQrCode.qrHintText') }}
+		</div>
 		<base-button design="outline" class="print-button" @click="openPrintMenu">
 			<div class="print-button-content">
 				<base-icon source="fa" icon="print" class="print-icon" />
@@ -51,5 +54,9 @@ export default {
 
 .print-button-content {
 	display: flex;
+}
+
+.qr-hint-text {
+	padding: 0 var(--space-md) var(--space-md) var(--space-md);
 }
 </style>
