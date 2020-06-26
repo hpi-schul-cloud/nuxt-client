@@ -94,7 +94,7 @@
 		"@storybook/addon-viewport": "^5.3.19",
 		"@storybook/addons": "^5.3.19",
 		"@storybook/vue": "^5.3.19",
-		"@testing-library/jest-dom": "^5.10.1",
+		"@testing-library/jest-dom": "^5.11.0",
 		"@testing-library/vue": "^5.0.4",
 		"@vue/test-utils": "^1.0.3",
 		"@vuepress/plugin-pwa": "^1.5.2",
