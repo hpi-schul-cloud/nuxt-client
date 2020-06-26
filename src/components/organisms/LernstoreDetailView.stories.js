@@ -9,8 +9,8 @@ storiesOf("6 Organisms/LernstoreDetailView", module).add(
 		components: { LernstoreDetailView },
 		data: () => ({
 			resource: {
-				...Resource
-			}
+				...Resource,
+			},
 		}),
 
 		template: `<lernstore-detail-view :resource="resource"/>`,
