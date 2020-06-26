@@ -143,7 +143,7 @@ export default {
 			align-items: center;
 			justify-content: center;
 			height: 100%;
-			font-size: var(--heading-6);
+			font-size: var(--heading-4);
 			cursor: pointer;
 
 			@include breakpoint(tablet) {
