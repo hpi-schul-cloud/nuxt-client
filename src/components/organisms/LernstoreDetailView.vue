@@ -122,7 +122,7 @@
 
 <script>
 import dayjs from "dayjs";
-import AddContentButton from "@components/molecules/AddContentButton";
+import AddContentButton from "@components/organisms/AddContentButton";
 
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";

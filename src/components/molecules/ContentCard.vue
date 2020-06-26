@@ -53,7 +53,7 @@
 
 <script>
 import BaseLink from "@components/base/BaseLink";
-import AddContentButton from "@components/molecules/AddContentButton";
+import AddContentButton from "@components/organisms/AddContentButton";
 import contentMeta from "@mixins/contentMeta";
 
 export default {

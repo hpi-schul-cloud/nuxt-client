@@ -1,14 +1,14 @@
 const types = Object.freeze({
 	default: {
 		i18nKey: "mixins.typeMeta.types.default",
-		icon: "ic_image",
-		iconLarge: "ic_image-circle",
+		icon: "ic_default",
+		iconLarge: "ic_default-circle",
 		iconSource: "custom",
 	},
 	"text/html": {
 		i18nKey: "mixins.typeMeta.types.webpage",
-		icon: "ic_image",
-		iconLarge: "ic_image-circle",
+		icon: "ic_default",
+		iconLarge: "ic_default-circle",
 		iconSource: "custom",
 	},
 	"image/jpeg": {

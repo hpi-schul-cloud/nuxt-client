@@ -54,9 +54,7 @@ export default {
 	},
 	computed: {
 		isSuccess() {
-			const response =
-				this.$store.state.content &&
-				this.$store.state.content.addToLessonResult;
+			const response = this.$store.state.content.addToLessonResult;
 			return response && response.status === 201;
 		},
 		getUrl() {
