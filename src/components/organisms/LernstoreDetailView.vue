@@ -64,9 +64,10 @@
 						<base-link :href="'/content/?q=' + author" class="content-link">{{
 							author
 						}}</base-link>
-						({{ $t("pages.content._id.metadata.author") }}),
+						({{ $t("pages.content._id.metadata.author") }})
 					</span>
 					<span v-if="provider">
+						, 
 						<base-link :href="'/content/?q=' + provider" class="content-link">{{
 							provider
 						}}</base-link>
@@ -200,10 +201,12 @@ export default {
 			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 		provider() {
-			return getMetadataAttribute(
-				this.resource.properties,
-				"ccm:metadatacontributer_provider"
-			).replace(/ {2,}/g, "");
+			const provider = getMetadataAttribute(
+					this.resource.properties,
+					"ccm:metadatacontributer_provider"
+			);
+			return provider ? provider.replace(/ {2,}/g, "") : undefined
+
 		},
 		author() {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
