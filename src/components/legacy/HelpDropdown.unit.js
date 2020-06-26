@@ -6,7 +6,7 @@ const menuItems = [
 		icon: "question-circle",
 		action: "/test",
 		source: "fa",
-		target: "_self"
+		target: "_self",
 	},
 ];
 
