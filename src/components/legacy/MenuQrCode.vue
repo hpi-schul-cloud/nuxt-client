@@ -2,7 +2,7 @@
 	<div>
 		<base-qr-code ref="qrcode" class="qrcode" :url="url" />
 		<div class="qr-hint-text">
-			{{ $t('components.legacy.MenuQrCode.qrHintText') }}
+			{{ $t("components.legacy.MenuQrCode.qrHintText") }}
 		</div>
 		<base-button design="outline" class="print-button" @click="openPrintMenu">
 			<div class="print-button-content">

@@ -22,7 +22,9 @@ describe("@components/legacy/MenuQrCode", () => {
 		expect(wrapper.find(".print-button-content").text()).toBe("Drucken");
 	});
 	it("opens a print window when print button is clicked", () => {
-		const wrapper = mount(menuQrCode, { ...createComponentMocks({ i18n: true }) });
+		const wrapper = mount(menuQrCode, {
+			...createComponentMocks({ i18n: true }),
+		});
 
 		jest.spyOn(window, "open").mockImplementation(() => window);
 		jest.spyOn(window, "print").mockImplementation();
