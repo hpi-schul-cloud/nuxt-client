@@ -55,24 +55,15 @@
 				</modal-footer>
 			</template>
 		</base-modal>
-		<notification-modal
-			:show-notification-modal.sync="showNotificationModal"
-			:response="$store.state.content.addToLessonResult"
-			:success-msg="$t('pages.content.notification.successMsg')"
-			:error-msg="$t('pages.content.notification.errorMsg')"
-			@close="showNotificationModal = false"
-		/>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
-import NotificationModal from "@components/molecules/NotificationModal";
 
 export default {
 	components: {
-		NotificationModal,
 		ModalFooter,
 	},
 	props: {
@@ -91,7 +82,6 @@ export default {
 	},
 	data() {
 		return {
-			showNotificationModal: false,
 			selectedCourse: {},
 			selectedLesson: {},
 		};
@@ -129,6 +119,12 @@ export default {
 				})
 			);
 		},
+		isSuccess() {
+			const response =
+				this.$store.state.content &&
+				this.$store.state.content.addToLessonResult;
+			return response && response.status === 201;
+		},
 	},
 	watch: {
 		selectedCourse(to, from) {
@@ -148,15 +144,15 @@ export default {
 		},
 		addToLesson() {
 			this.$store.dispatch("content/addToLesson", {
-				lessonId: this.selectedLesson && this.selectedLesson._id,
+				lessonId: this.selectedLesson._id,
 				material: {
 					title: this.title,
 					client: this.client,
 					url: this.url,
 				},
 			});
-			this.showNotificationModal = true;
 			this.closeModal();
+			this.$emit("close");
 		},
 		findLessons(course) {
 			this.$store.dispatch("content/getLessons", course._id);

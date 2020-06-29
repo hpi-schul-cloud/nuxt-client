@@ -12,8 +12,9 @@
 		<add-content-modal
 			:show-copy-modal.sync="copyModalActive"
 			:updatedid="resource.ref.id"
-			:url="resource.content.url"
+			:url="getUrl"
 			:title="resource.title"
+			@close="showNotificationModal = true"
 		/>
 		<notification-modal
 			:show-notification-modal.sync="showNotificationModal"
@@ -38,7 +39,7 @@ export default {
 	props: {
 		btnLabel: { type: String, default: "" },
 		btnDesign: { type: String, default: "" },
-		btnSize: { type: String, default: "" },
+		btnSize: { type: String, default: "medium" },
 		btnClass: { type: String, default: "" },
 		btnIconClass: { type: String, default: "" },
 		btnIcon: { type: String, default: "" },
@@ -53,10 +54,11 @@ export default {
 	},
 	computed: {
 		isSuccess() {
-			const response =
-				this.$store.state.content &&
-				this.$store.state.content.addToLessonResult;
+			const response = this.$store.state.content.addToLessonResult;
 			return response && response.status === 201;
+		},
+		getUrl() {
+			return `/content/${this.resource.ref.id}`;
 		},
 	},
 	methods: {
@@ -65,7 +67,7 @@ export default {
 				window.opener.addResource({
 					title: this.resource.title,
 					client: this.client,
-					url: this.resource.content.url,
+					url: `/content/${this.resource.ref.id}`,
 				});
 				window.close();
 			}
@@ -78,7 +80,7 @@ export default {
 					material: {
 						title: this.resource.title,
 						client: this.client,
-						url: this.resource.content.url,
+						url: `/content/${this.resource.ref.id}`,
 					},
 				});
 				this.showNotificationModal = true;

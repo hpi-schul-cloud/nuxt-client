@@ -8,6 +8,7 @@
 				</user-has-role>
 
 				<the-top-bar
+					v-if="!isInline"
 					:title="pageTitle"
 					:actions="topBarActions"
 					:fullscreen-mode="fullscreenMode"
@@ -16,7 +17,7 @@
 				/>
 			</div>
 			<the-sidebar
-				v-if="!fullscreenMode"
+				v-if="!fullscreenMode && !isInline"
 				class="sidebar"
 				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
