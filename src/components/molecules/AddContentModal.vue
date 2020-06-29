@@ -110,7 +110,8 @@ export default {
 		},
 		lessonsOptions() {
 			return (
-				this.lessons && this.lessons.data &&
+				this.lessons &&
+				this.lessons.data &&
 				this.lessons.data.map((lesson) => {
 					return {
 						_id: lesson._id,
