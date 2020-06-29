@@ -137,7 +137,6 @@ export default {
 	methods: {
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
-			this.$emit("close");
 			this.clearState();
 		},
 		closeModalOutsideClick(active) {
@@ -153,6 +152,7 @@ export default {
 				},
 			});
 			this.closeModal();
+			this.$emit("close");
 		},
 		findLessons(course) {
 			this.$store.dispatch("content/getLessons", course._id);
