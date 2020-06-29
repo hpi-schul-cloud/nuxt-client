@@ -90,7 +90,7 @@ export default {
 	vertical-align: middle; // should this be default?
 }
 
-.custom{
+.custom {
 	width: 1em;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: calc(1em + 4px);
