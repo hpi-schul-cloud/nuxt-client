@@ -1,10 +1,10 @@
 <template>
 	<div class="empty-state-container">
-		<!-- <img
+		<img
 			class="empty-state-container__image"
-			:src="getRandomSVG"
+			src="@assets/img/edusharing/SC_Search-Results_Empty-State.svg"
 			alt="empty-state-img"
-		/> -->
+		/>
 		<!-- eslint-disable vue/no-v-html -->
 		<span class="empty-state-container__title" v-html="titleHtmlTemplate" />
 		<div class="empty-state-container__sub-title">
@@ -29,12 +29,6 @@ export default {
 			titleHtmlTemplate: this.$t("pages.content.empty_state.error.title"),
 		};
 	},
-	// computed: {
-	// 	getRandomSVG() {
-	// 		const rand = Math.floor(Math.random() * this.emptyStateSVGs.length);
-	// 		return this.emptyStateSVGs[rand];
-	// 	},
-	// },
 };
 </script>
 

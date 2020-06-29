@@ -15,6 +15,7 @@
 				name="search"
 				v-bind="$attrs"
 				@keyup.enter="enterKeyHandler"
+				@keyup.backspace="backspaceKeyHandler"
 				@input="updateSearchString($event.target.value)"
 				@focus="isActive = true"
 			/>
@@ -63,6 +64,12 @@ export default {
 		updateSearchString(newValue) {
 			this.inputValue = newValue;
 			this.$emit("input", this.inputValue);
+			setTimeout((...args) => {
+				if (this.isActive && this.inputValue.length > 0) {
+					this.isActive = false;
+				}
+				this.$emit("keyup:enter", ...args);
+			}, 1000);
 		},
 		enterKeyHandler(...args) {
 			if (this.isActive && this.inputValue.length > 0) {
@@ -78,7 +85,7 @@ export default {
 			this.$refs.searchInput.focus();
 		},
 		backspaceKeyHandler(e) {
-			if (!this.isActive && (e.keyCode === 8 || e.keyCode === 27)) {
+			if (e.keyCode === 8 || e.keyCode === 27) {
 				this.$refs.searchInput.focus();
 				this.inputValue = "";
 				this.isActive = true;
@@ -106,7 +113,7 @@ export default {
 		input {
 			flex: 1;
 			padding: var(--space-sm) 0;
-			font-size: var(--heading-4);
+			font-size: var(--text-lg);
 			text-align: center;
 			border: 0;
 			border-bottom: 2px transparent solid;
@@ -114,6 +121,10 @@ export default {
 
 			@include breakpoint(tablet) {
 				font-size: var(--heading-6);
+			}
+
+			@include breakpoint(desktop) {
+				font-size: var(--heading-4);
 			}
 
 			&:focus {
@@ -132,11 +143,11 @@ export default {
 			align-items: center;
 			justify-content: center;
 			height: 100%;
-			font-size: var(--heading-2);
+			font-size: var(--heading-4);
 			cursor: pointer;
 
 			@include breakpoint(tablet) {
-				font-size: var(--heading-6);
+				font-size: var(--heading-2);
 			}
 		}
 	}

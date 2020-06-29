@@ -61,10 +61,17 @@
 				</div>
 				<div class="author-provider">
 					<span v-if="author">
-						{{ author }} ({{ $t("pages.content._id.metadata.author") }}),
+						<base-link :href="'/content/?q=' + author" class="content-link">{{
+							author
+						}}</base-link>
+						({{ $t("pages.content._id.metadata.author") }})
 					</span>
 					<span v-if="provider">
-						{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
+						,
+						<base-link :href="'/content/?q=' + provider" class="content-link">{{
+							provider
+						}}</base-link>
+						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
 				<!-- eslint-disable vue/no-v-html -->
@@ -72,7 +79,7 @@
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
 						<div class="meta-icon">
-							<base-icon source="custom" icon="calender" />
+							<base-icon source="material" icon="event" />
 						</div>
 
 						<div class="meta-text">
@@ -94,16 +101,27 @@
 							/>
 						</div>
 						<div class="meta-text">
-							<a :href="resource.downloadUrl"> {{ resource.downloadUrl }} </a>
+							<a :href="resource.downloadUrl" class="tertiary-color">
+								{{ resource.downloadUrl }}
+							</a>
 						</div>
 					</div>
 					<div class="meta-container">
 						<div class="meta-icon">
 							<base-icon source="fa" icon="tag" />
 						</div>
-						<span class="meta-text">
-							{{ tags }}
-						</span>
+						<template v-if="tags.length > 0">
+							<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+								<base-link :href="'/content/?q=' + tag" class="tag-link"
+									>#{{ tag }}</base-link
+								>
+							</span>
+						</template>
+						<template v-if="tags.length === 0">
+							<span class="meta-text tag-link">{{
+								$t("pages.content._id.metadata.noTags")
+							}}</span>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -126,6 +144,7 @@ import AddContentButton from "@components/organisms/AddContentButton";
 
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";
+import BaseLink from "../base/BaseLink";
 
 const getMetadataAttribute = (properties, key) => {
 	if (Array.isArray(properties[key])) {
@@ -136,6 +155,7 @@ const getMetadataAttribute = (properties, key) => {
 
 export default {
 	components: {
+		BaseLink,
 		AddContentButton,
 	},
 	layout: "loggedInFull",
@@ -181,10 +201,11 @@ export default {
 			return this.isBookmarked ? "bookmark" : "bookmark_border";
 		},
 		provider() {
-			return getMetadataAttribute(
+			const provider = getMetadataAttribute(
 				this.resource.properties,
 				"ccm:metadatacontributer_provider"
 			);
+			return provider ? provider.replace(/ {2,}/g, "") : undefined;
 		},
 		author() {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
@@ -192,12 +213,12 @@ export default {
 		createdAt() {
 			return dayjs(
 				getMetadataAttribute(this.resource.properties, "cm:created")
-			);
+			).format("DD.MM.YYYY");
 		},
 		updatedAt() {
 			return dayjs(
 				getMetadataAttribute(this.resource.properties, "cm:modified")
-			);
+			).format("DD.MM.YYYY");
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
@@ -212,17 +233,14 @@ export default {
 			);
 		},
 		tags() {
-			const tags = getMetadataAttribute(
+			let tags = getMetadataAttribute(
 				this.resource.properties,
 				"ccm:taxonentry"
 			);
-			return tags
-				? tags
-						.split("; ")
-						.filter((w) => w !== "")
-						.map((w) => "#" + w)
-						.join(" ")
-				: "Keine Tags";
+			if (tags) {
+				tags = tags.split("; ").filter((w) => w !== "");
+			}
+			return tags ? tags : [];
 		},
 		filename() {
 			return this.resource.filename;
@@ -241,7 +259,7 @@ export default {
 			this.isBookmarked = !this.isBookmarked;
 		},
 		goBack() {
-			this.$router.back();
+			this.$router && this.$router.back();
 		},
 	},
 };
@@ -396,6 +414,10 @@ export default {
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
+			.content-link {
+				color: var(--color-tertiary);
+				text-decoration: underline;
+			}
 		}
 
 		.description {
@@ -406,7 +428,8 @@ export default {
 		.metadata {
 			display: flex;
 			flex-direction: column;
-			font-size: var(--text-xs);
+			font-size: var(--text-sm);
+			line-height: var(--line-height-lg);
 
 			.meta-container {
 				display: flex;
@@ -417,6 +440,17 @@ export default {
 					font-size: var(--text-lg);
 					.icon {
 						max-height: var(--text-lg);
+					}
+				}
+				.tag-link {
+					margin-right: var(--space-xs);
+					color: var(--color-tertiary);
+				}
+				.tertiary-color {
+					color: var(--color-black);
+					text-decoration: none;
+					:hover {
+						color: var(--color-black);
 					}
 				}
 			}
