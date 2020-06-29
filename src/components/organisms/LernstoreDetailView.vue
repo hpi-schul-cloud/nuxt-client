@@ -259,7 +259,7 @@ export default {
 			this.isBookmarked = !this.isBookmarked;
 		},
 		goBack() {
-			this.$router.back();
+			this.$router && this.$router.back();
 		},
 	},
 };

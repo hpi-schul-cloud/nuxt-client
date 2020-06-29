@@ -73,7 +73,7 @@ export default {
 			}
 		},
 		handleCopy() {
-			const selectedLesson = this.$route.query.topic;
+			const selectedLesson = this.$route && this.$route.query.topic;
 			if (selectedLesson) {
 				this.$store.dispatch("content/addToLesson", {
 					lessonId: selectedLesson,
