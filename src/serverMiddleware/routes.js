@@ -14,7 +14,7 @@ module.exports = [
 	`^/login-instances/?`,
 	// `^/content/`,
 	`^/content/`,
-    `^/calendar/`,
+	`^/calendar/`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,

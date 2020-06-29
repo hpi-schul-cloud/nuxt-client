@@ -13,6 +13,7 @@
 </template>
 <script>
 import "fullcalendar/dist/fullcalendar.css";
+import moment from "moment";
 export default {
 	layout: "loggedInFull",
 	data() {
@@ -26,13 +27,17 @@ export default {
 	},
 	methods: {
 		handleDateClick(date) {
-			var startDate = date.format("DD.MM.YYYY HH:mm");
-			console.log("formated date" + startDate);
+			console.log(date);
+			// eslint-disable-next-line no-underscore-dangle
+			const startDate = moment(date, "DD.MM.YYYY HH:mm")._d.toISOString();
+			console.log(startDate);
+			this.postCalendarData(startDate);
+			this.getCalendarData();
 		},
 		eventClick() {},
 		init() {
-			this.getCalendarData().then(() => {
-				try {
+			try {
+				this.getCalendarData().then(() => {
 					this.calendar.forEach((element) => {
 						this.events.push({
 							title: element.title,
@@ -40,10 +45,10 @@ export default {
 							end: element.end,
 						});
 					});
-				} catch (error) {
-					console.error(error);
-				}
-			});
+				});
+			} catch (error) {
+				console.error(error);
+			}
 		},
 		async getCalendarData() {
 			try {
@@ -54,7 +59,17 @@ export default {
 				console.error(error);
 			}
 		},
+		async postCalendarData(date) {
+			this.$store.dispatch("calendar/create", [
+				{
+					events: {
+						startDate: date,
+					},
+				},
+			]);
+		},
 	},
+
 	header: {
 		left: "title",
 		right: "month,agendaWeek,agendaDay prev,today,next",
