@@ -49,6 +49,10 @@ export default {
 					url: this.$t("pages.loginInstances.thr_link"),
 				},
 				{
+					icon: "mint-ec",
+					url: this.$t("pages.loginInstances.hpi_link"),
+				},
+				{
 					icon: "hpi",
 					url: this.$t("pages.loginInstances.hpi_link"),
 				},
