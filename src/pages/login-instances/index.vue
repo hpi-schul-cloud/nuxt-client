@@ -50,7 +50,7 @@ export default {
 				},
 				{
 					icon: "mint-ec",
-					url: this.$t("pages.loginInstances.hpi_link"),
+					url: this.$t("pages.loginInstances.mintec_link"),
 				},
 				{
 					icon: "hpi",
