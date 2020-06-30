@@ -93,14 +93,12 @@
 import FormEditUserData from "@components/organisms/FormEditUserData";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
-// import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
 
 export default {
 	components: {
 		FormEditUserData,
 		ModalBodyInfo,
 		ModalFooterConfirm,
-		// InfoModalFullWidth,
 	},
 	meta: {
 		userNotExternallyManaged: true,
