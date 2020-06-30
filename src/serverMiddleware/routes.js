@@ -7,7 +7,7 @@
 const activationCode = "[a-z0-9]+";
 
 module.exports = [
-	`^/account/?$`,
+	// `^/account/?$`,
 	`^/account/email/edit/?$`,
 	`^/account/name/edit/?$`,
 	`^/account/password/edit/?$`,
