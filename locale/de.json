@@ -53,6 +53,7 @@
 	"components.legacy.footer.team": "Team",
 	"components.legacy.footer.terms": "Nutzungsordnung",
 	"components.legacy.footer.termsofuse": "Nutzungsordnung und Datenschutzerklärung",
+	"components.molecules.AccountCard.action.edit": "ändern",
 	"components.molecules.ContentCard.report.body": "Melden des Inhaltes mit der ID",
 	"components.molecules.ContentCard.report.email": "inhalte@schul-cloud.org",
 	"components.molecules.ContentCard.report.subject": "Liebes Team, hiermit möchte ich den im Betreff genannten Inhalt melden, da: [hier bitte Ihre Gründe]",

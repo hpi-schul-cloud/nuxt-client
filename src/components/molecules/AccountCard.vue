@@ -16,7 +16,7 @@
 						icon="create"
 						@click="goTo({ targetPath })"
 					>
-						ändern
+						{{ $t("components.molecules.AccountCard.action.edit") }}
 					</responsive-icon-button>
 				</div>
 				<slot v-if="data" name="data">
@@ -57,9 +57,11 @@ export default {
 	},
 	methods: {
 		goTo(targetPath) {
-			this.$router.push({
-				path: targetPath.targetPath,
-			});
+			if (this.targetPath) {
+				this.$router.push({
+					path: targetPath.targetPath,
+				});
+			}
 		},
 	},
 };
