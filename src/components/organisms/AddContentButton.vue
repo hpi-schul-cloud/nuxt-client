@@ -29,7 +29,7 @@
 
 <script>
 import AddContentModal from "@components/molecules/AddContentModal";
-import NotificationModal from "@components/molecules/NotificationModal";
+import NotificationModal from "@components/base/NotificationModal";
 
 export default {
 	name: "AddContentButton",

@@ -1,7 +1,7 @@
 import { storiesOf } from "@storybook/vue";
 import { boolean } from "@storybook/addon-knobs";
 
-import NotificationModal from "@components/molecules/NotificationModal";
+import NotificationModal from "@components/base/NotificationModal";
 
 storiesOf("4 Base UI Components/Modals", module).add(
 	"NotificationModal",

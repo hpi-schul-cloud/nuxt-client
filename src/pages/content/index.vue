@@ -220,7 +220,7 @@ export default {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
-		margin: var(--space-xl-5) var(--space-md) 0;
+		margin: var(--space-xl-5) 0 0;
 	}
 }
 
