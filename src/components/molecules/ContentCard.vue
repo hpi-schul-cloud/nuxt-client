@@ -1,26 +1,19 @@
 <template>
-	<base-link
-		class="title-link"
-		:to="{ name: 'content-id', params: { id: resource.ref.id } }"
-		:no-style="true"
-	>
-		<base-card v-bind="$attrs">
-			<div class="content-card">
+	<base-card v-bind="$attrs">
+		<div class="content-card">
+			<base-link
+				class="title-link"
+				:to="{
+					name: 'content-id',
+					params: { id: resource.ref.id },
+					query: query,
+				}"
+				:no-style="true"
+			>
 				<template v:slot:content>
 					<div class="content">
 						<div class="content__img">
 							<div class="img-container">
-								<!--
-							<base-button
-								v-if="multiSelectEnabled"
-								design="none"
-								class="content__img-checkbox"
-								@click="checkboxHandler"
-							>
-								<base-icon source="material" :icon="checkboxIconSelector" />
-							</base-button>
-							-->
-
 								<div class="content__img-background-gradient" />
 
 								<img
@@ -28,10 +21,9 @@
 									alt="content-thumbnail"
 									class="content__img-thumbnail"
 								/>
-
 								<base-icon
 									:source="getTypeIcon(resource.mimetype).iconSource"
-									:icon="getTypeIcon(resource.mimetype).icon"
+									:icon="getTypeIcon(resource.mimetype).iconLarge"
 									class="content__img-icon"
 								/>
 							</div>
@@ -39,68 +31,36 @@
 						<h6 class="content__title">{{ resource.name }}</h6>
 					</div>
 				</template>
-				<template v:slot:footer>
-					<div class="footer">
-						<div class="footer__separator"></div>
-						<div class="footer__content">
-							<!--
-						<base-button design="text icon" @click="bookmarkHandler">
-							<base-icon
-								class="footer__content-icon"
-								source="material"
-								:icon="bookmarkIconSelector"
+			</base-link>
+			<template v:slot:footer>
+				<div class="footer">
+					<div class="footer__separator"></div>
+					<div class="footer__content">
+						<div class="footer__icon-container">
+							<add-content-button
+								:resource="resource"
+								:client="provider()"
+								btn-design="text icon"
+								btn-icon-class="footer__content-icon"
+								btn-icon="add_circle_outline"
 							/>
-						</base-button>
-						-->
-
-							<div class="footer__icon-container">
-								<div class="footer_more">
-									<base-button
-										design="text icon"
-										@click.prevent="menuActive = true"
-									>
-										<base-icon
-											class="footer__content-icon"
-											source="material"
-											icon="more_vert"
-										/>
-									</base-button>
-									<context-menu
-										:show.sync="menuActive"
-										anchor="bottom-right"
-										:actions="actions"
-										@copy="handleCopy"
-										@share="handleShare"
-										@delete="handleDelete"
-										@report="handleReport"
-									/>
-								</div>
-							</div>
 						</div>
-						<add-content-modal
-							:show-copy-modal.sync="copyModalActive"
-							:updatedid="resource.ref.id"
-							:url="resource.contentUrl"
-							:title="resource.title"
-						/>
 					</div>
-				</template>
-			</div>
-		</base-card>
-	</base-link>
+				</div>
+			</template>
+		</div>
+	</base-card>
 </template>
 
 <script>
 import BaseLink from "@components/base/BaseLink";
-import ContextMenu from "@components/molecules/ContextMenu";
-import AddContentModal from "@components/molecules/AddContentModal";
+import AddContentButton from "@components/organisms/AddContentButton";
 import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {
 		BaseLink,
-		ContextMenu,
-		AddContentModal,
+		AddContentButton,
 	},
 	mixins: [contentMeta],
 	props: {
@@ -109,69 +69,33 @@ export default {
 	data() {
 		return {
 			isChecked: false,
-			menuActive: false,
-			isBookmarked: false,
 			copyModalActive: false,
-			actions: [
-				{
-					event: "copy",
-					text: this.$t("components.molecules.ContentCardMenu.action.copy"),
-					icon: "file_copy",
-				},
-				{
-					event: "share",
-					text: this.$t("components.molecules.ContentCardMenu.action.share"),
-					icon: "share",
-				},
-				{
-					event: "delete",
-					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
-					icon: "delete_outline",
-				},
-				{
-					event: "report",
-					text: this.$t("components.molecules.ContentCardMenu.action.report"),
-					icon: "report",
-				},
-			],
 		};
 	},
 	computed: {
-		reportMail() {
-			const mailContent = {
-				subject: this.$t("components.molecules.ContentCard.report.subject"),
-				body: this.$t("components.molecules.ContentCard.report.body"),
-			};
-			const querystring = Object.keys(mailContent)
-				.map((key) => key + "=" + encodeURIComponent(mailContent[key]))
-				.join("&");
-			const email = this.$t("components.molecules.ContentCard.report.email");
-			return `mailto:${email}?${querystring}`;
-		},
-		checkboxIconSelector() {
-			return this.isChecked ? "check_box" : "check_box_outline_blank";
-		},
-		bookmarkIconSelector() {
-			return this.isBookmarked ? "bookmark" : "bookmark_border";
+		query() {
+			return (
+				this.$route && {
+					course: this.$route.query.course,
+					topic: this.$route.query.topic,
+				}
+			);
 		},
 	},
 	methods: {
-		checkboxHandler() {
-			this.isChecked = !this.isChecked;
+		getMetadataAttribute(properties, key) {
+			if (Array.isArray(properties[key])) {
+				return properties[key][0];
+			}
+			return null;
 		},
-		bookmarkHandler() {
-			this.isBookmarked = !this.isBookmarked;
+		provider() {
+			const provider = this.getMetadataAttribute(
+				this.resource.properties,
+				"ccm:metadatacontributer_provider"
+			);
+			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
-		openMenu() {
-			this.menuActive = true;
-		},
-		handleCopy() {
-			this.copyModalActive = true;
-			this.$store.dispatch("courses/find");
-		},
-		handleShare() {},
-		handleDelete() {},
-		handleReport() {},
 	},
 };
 </script>
@@ -219,10 +143,9 @@ export default {
 			left: 40%;
 			z-index: var(--layer-dropdown);
 			font-size: var(--space-xl-3);
-			color: var(--color-gray-dark);
-			background-color: var(--color-white);
 			border-radius: var(--radius-round);
-			opacity: 0.6;
+			box-shadow: var(--shadow-m);
+			opacity: 0.8;
 		}
 		&-checkbox {
 			position: absolute;
