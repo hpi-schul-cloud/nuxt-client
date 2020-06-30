@@ -125,15 +125,17 @@
 					</div>
 				</div>
 			</div>
-			<add-content-button
-				:resource="resource"
-				btn-design="hero-cta"
-				btn-class="floating-button"
-				btn-size="large"
-				btn-icon-class="footer__content-icon"
-				btn-icon="add"
-				:btn-label="$t('pages.content._id.addToTopic')"
-			/>
+			<div class="floating-buttons">
+				<add-content-button
+					:resource="resource"
+					btn-design="hero-cta"
+					btn-class="floating-button"
+					btn-size="large"
+					btn-icon-class="footer__content-icon"
+					btn-icon="add"
+					:btn-label="$t('pages.content._id.addToTopic')"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -431,14 +433,14 @@ export default {
 			}
 		}
 
-		.floating-button {
+		.floating-buttons {
 			position: sticky;
 			bottom: 0;
 			z-index: var(--layer-fab);
 			border-radius: var(--radius-md);
 
 			@media (max-width: 768px) {
-				bottom: 12px;
+				padding-bottom: var(--space-xl);
 			}
 		}
 	}
