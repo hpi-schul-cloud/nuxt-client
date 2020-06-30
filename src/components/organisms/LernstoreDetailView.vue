@@ -170,36 +170,9 @@ export default {
 	data() {
 		return {
 			dayjs,
-			isBookmarked: false,
-			menuActive: false,
-			actions: [
-				{
-					event: "copy",
-					text: this.$t("components.molecules.ContentCardMenu.action.copy"),
-					icon: "file_copy",
-				},
-				{
-					event: "share",
-					text: this.$t("components.molecules.ContentCardMenu.action.share"),
-					icon: "share",
-				},
-				{
-					event: "delete",
-					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
-					icon: "delete_outline",
-				},
-				{
-					event: "report",
-					text: this.$t("components.molecules.ContentCardMenu.action.report"),
-					icon: "report",
-				},
-			],
 		};
 	},
 	computed: {
-		bookmarkIconSelector() {
-			return this.isBookmarked ? "bookmark" : "bookmark_border";
-		},
 		provider() {
 			const provider = getMetadataAttribute(
 				this.resource.properties,
@@ -255,11 +228,13 @@ export default {
 		this.assignElements("sidebar", "icons");
 	},
 	methods: {
-		bookmarkHandler() {
-			this.isBookmarked = !this.isBookmarked;
-		},
 		goBack() {
-			this.$router && this.$router.back();
+			if (window.history.length > 1){
+				this.$router && this.$router.back();
+			}
+			else {
+				window.close();
+			}
 		},
 	},
 };

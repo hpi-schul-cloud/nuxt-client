@@ -13,6 +13,7 @@
 			:show-copy-modal.sync="copyModalActive"
 			:updatedid="resource.ref.id"
 			:url="getUrl"
+			:client="client"
 			:title="resource.title"
 			@close="showNotificationModal = true"
 		/>

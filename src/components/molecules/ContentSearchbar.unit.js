@@ -56,16 +56,4 @@ describe("@components/molecules/ContentSearchbar", () => {
 		expect(wrapper.vm.inputValue).toBe("");
 	});
 
-	it("Switches to active input and clears value when BACKSPACE key is pressed", async () => {
-		const wrapper = mount(ContentSearchbar);
-		const testValue = "testValue";
-		wrapper.setData({ isActive: false, inputValue: testValue });
-		expect(wrapper.vm.isActive).toBe(false);
-		expect(wrapper.vm.inputValue).toBe(testValue);
-		window.dispatchEvent(
-			new KeyboardEvent("keydown", { key: "Backspace", keyCode: 8 })
-		);
-		expect(wrapper.vm.isActive).toBe(true);
-		expect(wrapper.vm.inputValue).toBe("");
-	});
 });

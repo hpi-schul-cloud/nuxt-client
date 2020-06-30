@@ -3,7 +3,7 @@ import { boolean } from "@storybook/addon-knobs";
 
 import NotificationModal from "@components/molecules/NotificationModal";
 
-storiesOf("5 Molecules/NotificationModal", module).add(
+storiesOf("4 Base UI Components/Modals", module).add(
 	"NotificationModal",
 	() => ({
 		components: { NotificationModal },

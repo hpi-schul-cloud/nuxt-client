@@ -39,6 +39,7 @@
 						<div class="footer__icon-container">
 							<add-content-button
 								:resource="resource"
+								:client="provider()"
 								btn-design="text icon"
 								btn-icon-class="footer__content-icon"
 								btn-icon="add_circle_outline"
@@ -63,52 +64,15 @@ export default {
 	},
 	mixins: [contentMeta],
 	props: {
-		client: { type: String, default: "Schul-Cloud" },
 		resource: { type: Object, default: () => {} },
 	},
 	data() {
 		return {
 			isChecked: false,
-			menuActive: false,
-			isBookmarked: false,
 			copyModalActive: false,
-			actions: [
-				{
-					event: "share",
-					text: this.$t("components.molecules.ContentCardMenu.action.share"),
-					icon: "share",
-				},
-				{
-					event: "delete",
-					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
-					icon: "delete_outline",
-				},
-				{
-					event: "report",
-					text: this.$t("components.molecules.ContentCardMenu.action.report"),
-					icon: "report",
-				},
-			],
 		};
 	},
 	computed: {
-		reportMail() {
-			const mailContent = {
-				subject: this.$t("components.molecules.ContentCard.report.subject"),
-				body: this.$t("components.molecules.ContentCard.report.body"),
-			};
-			const querystring = Object.keys(mailContent)
-				.map((key) => key + "=" + encodeURIComponent(mailContent[key]))
-				.join("&");
-			const email = this.$t("components.molecules.ContentCard.report.email");
-			return `mailto:${email}?${querystring}`;
-		},
-		checkboxIconSelector() {
-			return this.isChecked ? "check_box" : "check_box_outline_blank";
-		},
-		bookmarkIconSelector() {
-			return this.isBookmarked ? "bookmark" : "bookmark_border";
-		},
 		query() {
 			return (
 				this.$route && {
@@ -119,14 +83,18 @@ export default {
 		},
 	},
 	methods: {
-		checkboxHandler() {
-			this.isChecked = !this.isChecked;
+		getMetadataAttribute(properties, key) {
+			if (Array.isArray(properties[key])) {
+				return properties[key][0];
+			}
+			return null;
 		},
-		bookmarkHandler() {
-			this.isBookmarked = !this.isBookmarked;
-		},
-		openMenu() {
-			this.menuActive = true;
+		provider() {
+			const provider = this.getMetadataAttribute(
+					this.resource.properties,
+					"ccm:metadatacontributer_provider"
+			);
+			return provider ? provider.replace('/n', '').trim() : "Schul-Cloud";
 		},
 	},
 };
