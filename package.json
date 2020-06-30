@@ -76,7 +76,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.10.3",
-		"@babel/plugin-proposal-optional-chaining": "^7.10.3",
+		"@babel/plugin-proposal-optional-chaining": "^7.10.4",
 		"@babel/preset-env": "^7.10.3",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@schul-cloud/eslint-config": "^1.0.0",
