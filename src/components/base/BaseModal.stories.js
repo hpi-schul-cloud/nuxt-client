@@ -146,7 +146,7 @@ storiesOf("4 Base UI Components/Modals", module)
 				</ModalBodyInfo>
 			</template>
 			<template v-slot:footer>
-				<ModalFooterConfirm text="Ok" @click="active = false"/>
+				<ModalFooterConfirm backgroundcolor="var(--color-success)" text="Ok" @click="active = false"/>
 			</template>
 		</base-modal>
 		</div>`,
