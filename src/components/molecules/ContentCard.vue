@@ -91,10 +91,10 @@ export default {
 		},
 		provider() {
 			const provider = this.getMetadataAttribute(
-					this.resource.properties,
-					"ccm:metadatacontributer_provider"
+				this.resource.properties,
+				"ccm:metadatacontributer_provider"
 			);
-			return provider ? provider.replace('/n', '').trim() : "Schul-Cloud";
+			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 	},
 };

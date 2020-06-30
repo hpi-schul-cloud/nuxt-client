@@ -55,5 +55,4 @@ describe("@components/molecules/ContentSearchbar", () => {
 		expect(wrapper.vm.isActive).toBe(true);
 		expect(wrapper.vm.inputValue).toBe("");
 	});
-
 });

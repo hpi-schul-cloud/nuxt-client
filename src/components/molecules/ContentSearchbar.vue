@@ -145,7 +145,7 @@ export default {
 			font-size: var(--heading-4);
 			cursor: pointer;
 
-			.icon{
+			.icon {
 				cursor: pointer;
 			}
 

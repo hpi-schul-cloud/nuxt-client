@@ -229,10 +229,9 @@ export default {
 	},
 	methods: {
 		goBack() {
-			if (window.history.length > 1){
+			if (window.history.length > 1) {
 				this.$router && this.$router.back();
-			}
-			else {
+			} else {
 				window.close();
 			}
 		},
