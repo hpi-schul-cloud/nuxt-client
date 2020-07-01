@@ -1,4 +1,4 @@
-import Vuex, {mapGetters} from "vuex";
+import Vuex, { mapGetters } from "vuex";
 import AddContentModal from "@components/molecules/AddContentModal";
 import { isValidComponent } from "@@/tests/unit/commonTests";
 import { createLocalVue } from "@vue/test-utils";
