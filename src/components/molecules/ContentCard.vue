@@ -18,8 +18,8 @@
 
 								<img
 									:src="resource.preview.url"
-									alt="content-thumbnail"
 									class="content__img-thumbnail"
+									:alt="$t('pages.content.card.img.alt')"
 								/>
 								<base-icon
 									:source="getTypeIcon(resource.mimetype).iconSource"
