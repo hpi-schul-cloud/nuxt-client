@@ -3,7 +3,7 @@
 		<base-modal
 			class="modal"
 			:active="showCopyModal"
-			@update:active="closeModalOutsideClick"
+			@onBackdropClick="closeModal"
 		>
 			<template v-slot:header>
 				{{ $t("components.molecules.AddContentModal") }}
@@ -139,9 +139,6 @@ export default {
 		closeModal() {
 			this.$emit("update:show-copy-modal", false);
 			this.clearState();
-		},
-		closeModalOutsideClick(active) {
-			if (!active) this.closeModal();
 		},
 		addToLesson() {
 			this.$store.dispatch("content/addToLesson", {

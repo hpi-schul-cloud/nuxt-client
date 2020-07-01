@@ -229,6 +229,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+$tabletPortraitWidth: 768px;
+
 .resource {
 	display: grid;
 	grid-template-areas: "content meta";
@@ -238,7 +241,7 @@ export default {
 	min-height: 100vh;
 	box-shadow: var(--shadow-md);
 
-	@media (max-width: 768px) {
+	@media (max-width: $tabletPortraitWidth) {
 		grid-template-areas:
 			"content"
 			"meta";
@@ -281,7 +284,7 @@ export default {
 		position: relative;
 		grid-area: content;
 
-		@media (max-width: 768px) {
+		@media (max-width: $tabletPortraitWidth) {
 			position: sticky;
 			top: 0;
 		}
@@ -290,7 +293,7 @@ export default {
 			position: relative;
 			height: 100%;
 
-			@media (max-width: 768px) {
+			@media (max-width: $tabletPortraitWidth) {
 				height: 80vh;
 			}
 
@@ -349,7 +352,7 @@ export default {
 		background-color: var(--color-white);
 		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
 
-		@media (max-width: 768px) {
+		@media (max-width: $tabletPortraitWidth) {
 			max-height: none;
 			overflow: inherit;
 		}
@@ -424,7 +427,7 @@ export default {
 			z-index: var(--layer-fab);
 			border-radius: var(--radius-md);
 
-			@media (max-width: 768px) {
+			@media (max-width: $tabletPortraitWidth) {
 				padding-bottom: var(--space-xl);
 			}
 		}
