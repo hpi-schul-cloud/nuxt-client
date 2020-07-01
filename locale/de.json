@@ -63,7 +63,7 @@
 	"components.molecules.ContentCardMenu.action.report": "Melden",
 	"components.molecules.ContentCardMenu.action.share": "Teilen",
 	"components.molecules.ContextMenu.action.close": "Kontextmenü schließen",
-    "components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
+	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.TextEditor.noLocalFiles": "Lokale Dateien werden aktuell nicht unterstützt.",
