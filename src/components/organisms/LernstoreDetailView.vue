@@ -19,7 +19,7 @@
 			>
 				<base-icon source="material" icon="close" />
 			</base-button>
-			</div>
+		</div>
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
@@ -39,8 +39,7 @@
 		</div>
 		<div ref="sidebar" class="sidebar">
 			<div class="content-container">
-				<div class="actions">
-				</div>
+				<div class="actions"></div>
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
