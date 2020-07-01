@@ -55,4 +55,9 @@ describe("@components/molecules/ContentSearchbar", () => {
 		expect(wrapper.vm.isActive).toBe(true);
 		expect(wrapper.vm.inputValue).toBe("");
 	});
+
+	it("renders search icon when input is empty", async () => {
+		const wrapper = shallowMount(ContentSearchbar);
+		expect(wrapper.find(".search-icon").attributes("icon")).toBe("search");
+	});
 });
