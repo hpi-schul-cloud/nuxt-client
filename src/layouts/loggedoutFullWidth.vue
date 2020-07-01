@@ -3,6 +3,7 @@
 		<navigation-bar
 			:links="navbarItems"
 			:img="require('@assets/img/logo/logo-image-color.svg')"
+			:buttons="true"
 		>
 			<template v-slot:actions>
 				<base-button design="secondary outline" to="/login">

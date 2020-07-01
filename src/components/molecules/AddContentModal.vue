@@ -1,72 +1,69 @@
 <template>
 	<div>
-	<base-modal
-		class="modal"
-		:active="showCopyModal"
-		@update:active="closeModalOutsideClick"
-	>
-		<template v-slot:header>
-			Material zu Thema hinzufügen
-		</template>
-		<template v-slot:body>
-			<div class="content-modal__body">
-				<base-select
-					v-model="selectedCourse"
-					class="content-modal__body--select"
-					:options="coursesOptions"
-					:show-labels="true"
-					placeholder="Mathe 5b"
-					label="Wahle ein Unterrichtsthema"
-					close-on-select
-					option-label="name"
-					deselect-label="Entfernen"
-					select-label="Auswählen"
-					selected-label="Aktiv"
-					track-by="_id"
-				/>
-				<base-select
-					v-model="selectedLesson"
-					class="content-modal__body--select"
-					:options="lessonsOptions"
-					label="Wahle ein Unterrichtsthema"
-					option-label="name"
-					close-on-select
-					placeholder="Pythagoras"
-					deselect-label="Entfernen"
-					select-label="Auswählen"
-					selected-label="Aktiv"
-					track-by="_id"
-				/>
-			</div>
-		</template>
-		<template v-slot:footer>
-			<modal-footer>
-				<template v-slot:right>
-					<base-button design="text" @click="closeModal">
-						Abbrechen
-					</base-button>
-					<base-button :disabled="!isSendEnabled" @click="addToLesson"
-						>Hinzufügen</base-button
-					>
-				</template>
-			</modal-footer>
-		</template>
-	</base-modal>
-	<success-modal
-			:show-success-modal="showSuccessModal"
-			:msg="successMsg"
-	/>
+		<base-modal
+			class="modal"
+			:active="showCopyModal"
+			@update:active="closeModalOutsideClick"
+		>
+			<template v-slot:header>
+				{{ $t("components.molecules.AddContentModal") }}
+			</template>
+			<template v-slot:body>
+				<div class="content-modal__body">
+					<base-select
+						v-model="selectedCourse"
+						class="content-modal__body--select"
+						:options="coursesOptions"
+						:show-labels="true"
+						:placeholder="$t('pages.content.placeholder.chooseACourse')"
+						:label="$t('pages.content.label.chooseACourse')"
+						close-on-select
+						option-label="name"
+						:deselect-label="$t('pages.content.label.deselect')"
+						:select-label="$t('pages.content.label.select')"
+						:selected-label="$t('pages.content.label.selected')"
+						track-by="_id"
+					/>
+					<base-select
+						v-model="selectedLesson"
+						class="content-modal__body--select"
+						:options="lessonsOptions"
+						:label="$t('pages.content.label.chooseALessonTopic')"
+						:placeholder="$t('pages.content.placeholder.chooseALessonTopic')"
+						option-label="name"
+						close-on-select
+						:deselect-label="$t('pages.content.label.deselect')"
+						:select-label="$t('pages.content.label.select')"
+						:selected-label="$t('pages.content.label.selected')"
+						track-by="_id"
+					/>
+				</div>
+			</template>
+			<template v-slot:footer>
+				<modal-footer>
+					<template v-slot:right>
+						<base-button design="text" @click="closeModal">
+							{{ $t("common.actions.cancel") }}
+						</base-button>
+						<base-button
+							design="primary"
+							:disabled="!isSendEnabled"
+							@click="addToLesson"
+							>{{ $t("common.actions.add") }}</base-button
+						>
+					</template>
+				</modal-footer>
+			</template>
+		</base-modal>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
-import SuccessModal from "@components/molecules/SuccessModal";
 
 export default {
 	components: {
-		SuccessModal,
 		ModalFooter,
 	},
 	props: {
@@ -85,10 +82,8 @@ export default {
 	},
 	data() {
 		return {
-			showSuccessModal: false,
 			selectedCourse: {},
 			selectedLesson: {},
-			successMsg: "Dein Material wurde erfolgreich hinzugefügt",
 		};
 	},
 	computed: {
@@ -115,6 +110,7 @@ export default {
 		},
 		lessonsOptions() {
 			return (
+				this.lessons &&
 				this.lessons.data &&
 				this.lessons.data.map((lesson) => {
 					return {
@@ -123,6 +119,12 @@ export default {
 					};
 				})
 			);
+		},
+		isSuccess() {
+			const response =
+				this.$store.state.content &&
+				this.$store.state.content.addToLessonResult;
+			return response && response.status === 201;
 		},
 	},
 	watch: {
@@ -150,8 +152,8 @@ export default {
 					url: this.url,
 				},
 			});
-			this.showSuccessModal = true;
 			this.closeModal();
+			this.$emit("close");
 		},
 		findLessons(course) {
 			this.$store.dispatch("content/getLessons", course._id);

@@ -1,10 +1,10 @@
 <template>
 	<div class="empty-state-container">
-		<!-- <img
+		<img
 			class="empty-state-container__image"
-			:src="getRandomSVG"
+			src="@assets/img/edusharing/SC_Search-Results_Empty-State.svg"
 			alt="empty-state-img"
-		/> -->
+		/>
 		<!-- eslint-disable vue/no-v-html -->
 		<span class="empty-state-container__title" v-html="titleHtmlTemplate" />
 		<div class="empty-state-container__sub-title">
@@ -19,22 +19,10 @@
 export default {
 	data() {
 		return {
-			// emptyStateSVGs: [
-			// 	"/empty-state/emptyStateSvg_teacher_male.svg",
-			// 	"/empty-state/emptyStateSvg_teacher_male_hand_down.svg",
-			// 	"/empty-state/emptyStateSvg_teacher_female_hand_raised.svg",
-			// 	"/empty-state/emptyStateSvg_teacher_female.svg",
-			// ],
 			messageHtmlTemplate: this.$t("pages.content.empty_state.error.message"),
 			titleHtmlTemplate: this.$t("pages.content.empty_state.error.title"),
 		};
 	},
-	// computed: {
-	// 	getRandomSVG() {
-	// 		const rand = Math.floor(Math.random() * this.emptyStateSVGs.length);
-	// 		return this.emptyStateSVGs[rand];
-	// 	},
-	// },
 };
 </script>
 

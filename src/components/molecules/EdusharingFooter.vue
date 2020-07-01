@@ -6,7 +6,7 @@
 		<img
 			class="edusharing-footer__logo"
 			src="@assets/img/edusharing/edusharing-logo.svg"
-			alt=""
+			alt="edusharing-logo"
 		/>
 	</div>
 </template>
@@ -14,12 +14,12 @@
 <style lang="scss">
 .edusharing-footer {
 	display: flex;
-	align-items: flex-end;
 	justify-content: center;
 	width: 100%;
 	margin-top: var(--space-xl);
 
 	&__text {
+		margin-top: var(--space-xl-2);
 		margin-right: var(--space-sm);
 		font-size: var(--text-sm);
 	}

@@ -2,7 +2,7 @@
 	<div class="header">
 		<div class="nav-container">
 			<div class="logo-container">
-				<base-link href="https://schul-cloud.org/">
+				<base-link :href="logoLink">
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
 				</base-link>
 			</div>
@@ -13,27 +13,53 @@
 					:class="{ li: true, active: activeLink === route.href }"
 					:to="route.to"
 					:href="route.href"
+					:target="route.target"
 					:no-styles="true"
 					@click="setActive(idx)"
 				>
 					{{ route.title }}
 				</base-link>
+				<div v-if="buttons" class="buttons-container">
+					<base-link href="/login">
+						<base-button design="secondary outline">
+							<base-icon source="fa" icon="sign-in" class="icon" />
+							{{ $t("common.labels.login") }}
+						</base-button>
+					</base-link>
+					<base-link href="/community">
+						<base-button design="secondary">
+							{{ $t("common.labels.register") }}
+						</base-button>
+					</base-link>
+				</div>
 				<slot name="actions"></slot>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
+import BaseButton from "../base/BaseButton";
+import BaseLink from "../base/BaseLink";
 export default {
+	components: { BaseLink, BaseButton },
 	props: {
+		logoLink: {
+			type: String,
+			default: "/",
+			required: false,
+		},
 		img: {
 			type: String,
 			required: true,
 		},
 		links: {
 			type: Array,
-			reqired: true,
 			default: () => {},
+			required: false,
+		},
+		buttons: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data() {
@@ -41,7 +67,6 @@ export default {
 			activeLink: window.location.pathname,
 		};
 	},
-
 	methods: {
 		setActive(idx) {
 			this.activeLink = idx;
@@ -63,6 +88,7 @@ export default {
 	flex-flow: row wrap;
 	justify-content: center;
 	width: 100%;
+	line-height: var(--line-height-lg);
 	color: var(--color-black);
 	text-align: center;
 	background-color: var(--color-overlay-light);
@@ -70,13 +96,32 @@ export default {
 	backdrop-filter: blur(5px);
 	box-shadow: var(--shadow-sm);
 }
-
 .nav-container {
-	padding-right: calc(15 * var(--border-width));
-	padding-left: calc(15 * var(--border-width));
-	margin: auto;
-}
+	@include breakpoint(tablet) {
+		margin: 0 calc(3.5 * var(--space-md));
+	}
 
+	@include breakpoint(desktop) {
+		padding: 0 calc(5 * var(--border-width));
+		margin: auto;
+	}
+}
+.logo-container {
+	@include breakpoint(tablet) {
+		height: calc(45 * var(--border-width));
+		> a > img {
+			height: var(--space-xl-2);
+		}
+	}
+
+	@include breakpoint(desktop) {
+		width: calc(7 * var(--sidebar-sub-item-height));
+		height: var(--topbar-height);
+		> a > img {
+			height: var(--topbar-height);
+		}
+	}
+}
 .link-container {
 	display: flex;
 	flex-flow: row wrap;
@@ -94,6 +139,7 @@ export default {
 		padding-bottom: 0;
 	}
 	> a {
+		padding: calc(9 * var(--border-width));
 		margin-right: 0;
 		margin-bottom: var(--space-xs);
 
@@ -102,11 +148,8 @@ export default {
 		}
 	}
 }
-
-.logo-container,
-.logo {
-	width: 229px;
-	height: 40px;
+.icon {
+	font-size: var(--radius-lg);
 }
 
 @media (min-width: 576px) {
@@ -114,15 +157,15 @@ export default {
 		width: 540px;
 		max-width: 100%;
 	}
-	.link-container > a {
-		margin-right: var(--space-sm) !important;
+	.link-container > a,
+	.buttons-container > button {
+		margin-right: var(--space-xs);
 	}
 }
 
 @media (min-width: 768px) {
 	.nav-container {
-		display: flex;
-		justify-content: space-between;
+		display: block;
 		width: 720px;
 		max-width: 100%;
 	}
@@ -136,6 +179,8 @@ export default {
 
 @media (min-width: 992px) {
 	.nav-container {
+		display: flex;
+		justify-content: space-between;
 		width: 960px;
 		max-width: 100%;
 	}
@@ -147,7 +192,6 @@ export default {
 		max-width: 100%;
 	}
 }
-
 .li {
 	align-items: center;
 	justify-content: center;
@@ -163,21 +207,19 @@ export default {
 	@include breakpoint(desktop) {
 		font-size: var(--text-md);
 	}
-
 	&:hover {
 		background-color: var(--color-gray-light);
 		border-radius: var(--radius-sm);
 	}
 }
-
 a.active {
+	font-weight: var(--font-weight-bold);
 	color: var(--color-white);
-	background-color: var(--color-primary);
+	background-color: var(--color-accent);
 	border-radius: var(--radius-sm);
-
 	&:hover {
 		color: var(--color-white);
-		background-color: var(--color-primary);
+		background-color: var(--color-accent);
 		border-radius: var(--radius-sm);
 	}
 }

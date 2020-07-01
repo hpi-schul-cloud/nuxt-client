@@ -19,15 +19,7 @@
 			>
 				<base-icon source="material" icon="close" />
 			</base-button>
-			<!--
-				<base-button design="icon" @click="bookmarkHandler">
-					<base-icon
-						class="resource__img-container--icon"
-						source="material"
-						:icon="bookmarkIconSelector"
-					/>
-				</base-button>
-				--></div>
+		</div>
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
@@ -37,35 +29,43 @@
 						backgroundImage: `url(${resource.preview.url})`,
 					}"
 				/>
-				<img :src="resource.preview.url" class="preview-img" alt="content preview image" />
+				<img
+					:src="resource.preview.url"
+					class="preview-img"
+					:alt="$t('pages.content.preview_img.alt')"
+					role="presentation"
+				/>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar">
 			<div class="content-container">
-				<div class="actions">
-					<!-- <base-button v-if="!isMobile" design="text icon">
-						<base-icon source="material" icon="more_vert" />
-					</base-button> -->
-				</div>
+				<div class="actions"></div>
 				<div class="title">
-					<a :href="resource.content.url"> {{ resource.title || resource.name }} </a>
-					<!-- <base-button v-if="isMobile" design="text icon">
-						<base-icon source="material" icon="more_vert" />
-					</base-button> -->
+					<span>
+						{{ resource.title || resource.name }}
+					</span>
 				</div>
 				<div class="author-provider">
 					<span v-if="author">
-						{{ author }} ({{ $t("pages.content._id.metadata.author") }}),
+						<base-link :href="'/content/?q=' + author" class="content-link">{{
+							author
+						}}</base-link>
+						({{ $t("pages.content._id.metadata.author") }})
 					</span>
 					<span v-if="provider">
-						{{ provider }} ({{ $t("pages.content._id.metadata.provider") }})
+						,
+						<base-link :href="'/content/?q=' + provider" class="content-link">{{
+							provider
+						}}</base-link>
+						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
+				<!-- eslint-disable vue/no-v-html -->
 				<div class="description" v-html="description"></div>
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
 						<div class="meta-icon">
-							<base-icon source="custom" icon="calender" />
+							<base-icon source="material" icon="event" />
 						</div>
 
 						<div class="meta-text">
@@ -82,49 +82,57 @@
 					<div v-if="resource.downloadUrl" class="meta-container">
 						<div class="meta-icon">
 							<base-icon
-									:source="getTypeIcon(resource.mimetype).iconSource"
-									:icon="getTypeIcon(resource.mimetype).icon"
+								:source="getTypeIcon(resource.mimetype).iconSource"
+								:icon="getTypeIcon(resource.mimetype).icon"
 							/>
 						</div>
 						<div class="meta-text">
-							{{ resource.downloadUrl }}
+							<a :href="resource.downloadUrl" class="tertiary-color">
+								{{ resource.downloadUrl }}
+							</a>
 						</div>
 					</div>
 					<div class="meta-container">
 						<div class="meta-icon">
-							<base-icon source="fa" icon="file-o" />
+							<base-icon source="fa" icon="tag" />
 						</div>
-						<div class="meta-text">
-							{{ resource.ref.id }}
-						</div>
+						<template v-if="tags.length > 0">
+							<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+								<base-link :href="'/content/?q=' + tag" class="tag-link"
+									>#{{ tag }}</base-link
+								>
+							</span>
+						</template>
+						<template v-if="tags.length === 0">
+							<span class="meta-text tag-link">{{
+								$t("pages.content._id.metadata.noTags")
+							}}</span>
+						</template>
 					</div>
 				</div>
 			</div>
-			<base-button
-				design="hero-cta"
-				class="floating-button"
-				size="large"
-				@click="handleCopy"
-			>
-				<base-icon source="material" icon="add" />
-				{{ $t("pages.content._id.addToTopic") }}
-			</base-button>
+			<div class="floating-buttons">
+				<add-content-button
+					:resource="resource"
+					btn-design="hero-cta"
+					btn-class="floating-button"
+					btn-size="large"
+					btn-icon-class="footer__content-icon"
+					btn-icon="add"
+					:btn-label="$t('pages.content._id.addToTopic')"
+				/>
+			</div>
 		</div>
-		<add-content-modal
-			:show-copy-modal.sync="copyModalActive"
-			:updatedid="resource.ref.id"
-			:url="resource.content.url"
-			:title="resource.title"
-		/>
 	</div>
 </template>
 
 <script>
 import dayjs from "dayjs";
-import AddContentModal from "@components/molecules/AddContentModal";
+import AddContentButton from "@components/organisms/AddContentButton";
 
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";
+import BaseLink from "../base/BaseLink";
 
 const getMetadataAttribute = (properties, key) => {
 	if (Array.isArray(properties[key])) {
@@ -135,7 +143,8 @@ const getMetadataAttribute = (properties, key) => {
 
 export default {
 	components: {
-		AddContentModal,
+		BaseLink,
+		AddContentButton,
 	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, elementIsInTop],
@@ -144,46 +153,20 @@ export default {
 			type: Object,
 			default: () => {},
 		},
+		client: { type: String, default: "Schul-Cloud" },
 	},
 	data() {
 		return {
 			dayjs,
-			isBookmarked: false,
-			menuActive: false,
-			copyModalActive: false,
-			actions: [
-				{
-					event: "copy",
-					text: this.$t("components.molecules.ContentCardMenu.action.copy"),
-					icon: "file_copy",
-				},
-				{
-					event: "share",
-					text: this.$t("components.molecules.ContentCardMenu.action.share"),
-					icon: "share",
-				},
-				{
-					event: "delete",
-					text: this.$t("components.molecules.ContentCardMenu.action.delete"),
-					icon: "delete_outline",
-				},
-				{
-					event: "report",
-					text: this.$t("components.molecules.ContentCardMenu.action.report"),
-					icon: "report",
-				},
-			],
 		};
 	},
 	computed: {
-		bookmarkIconSelector() {
-			return this.isBookmarked ? "bookmark" : "bookmark_border";
-		},
 		provider() {
-			return getMetadataAttribute(
+			const provider = getMetadataAttribute(
 				this.resource.properties,
 				"ccm:metadatacontributer_provider"
 			);
+			return provider ? provider.replace(/ {2,}/g, "") : undefined;
 		},
 		author() {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
@@ -191,18 +174,34 @@ export default {
 		createdAt() {
 			return dayjs(
 				getMetadataAttribute(this.resource.properties, "cm:created")
-			);
+			).format("DD.MM.YYYY");
 		},
 		updatedAt() {
 			return dayjs(
 				getMetadataAttribute(this.resource.properties, "cm:modified")
-			);
+			).format("DD.MM.YYYY");
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
 		},
 		description() {
-			return this.resource.description || getMetadataAttribute(this.resource.properties, "cclom:general_description");
+			return (
+				this.resource.description ||
+				getMetadataAttribute(
+					this.resource.properties,
+					"cclom:general_description"
+				)
+			);
+		},
+		tags() {
+			let tags = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:taxonentry"
+			);
+			if (tags) {
+				tags = tags.split("; ").filter((w) => w !== "");
+			}
+			return tags ? tags : [];
 		},
 		filename() {
 			return this.resource.filename;
@@ -217,15 +216,12 @@ export default {
 		this.assignElements("sidebar", "icons");
 	},
 	methods: {
-		bookmarkHandler() {
-			this.isBookmarked = !this.isBookmarked;
-		},
 		goBack() {
-			this.$router.back();
-		},
-		handleCopy() {
-			this.copyModalActive = true;
-			this.$store.dispatch("courses/find");
+			if (window.history.length > 1) {
+				this.$router && this.$router.back();
+			} else {
+				window.close();
+			}
 		},
 	},
 };
@@ -359,8 +355,8 @@ export default {
 		}
 
 		.content-container {
-			margin-top: 30px;
 			width: 80%;
+			margin-top: var(--space-md);
 		}
 
 		.actions {
@@ -380,6 +376,10 @@ export default {
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
+			.content-link {
+				color: var(--color-tertiary);
+				text-decoration: underline;
+			}
 		}
 
 		.description {
@@ -390,7 +390,8 @@ export default {
 		.metadata {
 			display: flex;
 			flex-direction: column;
-			font-size: var(--text-xs);
+			font-size: var(--text-sm);
+			line-height: var(--line-height-lg);
 
 			.meta-container {
 				display: flex;
@@ -398,19 +399,33 @@ export default {
 				margin-bottom: var(--space-lg);
 				.meta-icon {
 					margin-right: var(--space-md);
-					font-size: var(--text-md);
+					font-size: var(--text-lg);
+					.icon {
+						max-height: var(--text-lg);
+					}
+				}
+				.tag-link {
+					margin-right: var(--space-xs);
+					color: var(--color-tertiary);
+				}
+				.tertiary-color {
+					color: var(--color-black);
+					text-decoration: none;
+					:hover {
+						color: var(--color-black);
+					}
 				}
 			}
 		}
 
-		.floating-button {
+		.floating-buttons {
 			position: sticky;
 			bottom: 0;
 			z-index: var(--layer-fab);
 			border-radius: var(--radius-md);
 
 			@media (max-width: 768px) {
-				bottom: 12px;
+				padding-bottom: var(--space-xl);
 			}
 		}
 	}

@@ -1,17 +1,5 @@
 <template>
 	<section>
-		<!-- Scroll to top is not properly designed
-		<div v-if="scrollY > backToTopScrollYLimit" class="content__back-to-top">
-			<fab-floating
-				:primary-action="{
-					icon: 'arrow_drop_up',
-					'icon-source': 'material',
-					label: $t('common.actions.scrollToTop'),
-				}"
-				@click="$_backToTop"
-			/>
-		</div>
-		-->
 		<div class="content">
 			<div>
 				<content-searchbar
@@ -73,7 +61,6 @@ import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
-// import FabFloating from "@components/molecules/FabFloating";
 import EdusharingFooter from "@components/molecules/EdusharingFooter";
 
 export default {
@@ -82,7 +69,6 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
-		// FabFloating,
 		EdusharingFooter,
 	},
 	mixins: [infiniteScrolling],
@@ -105,9 +91,6 @@ export default {
 				return state.loading;
 			},
 		}),
-		isInline() {
-			return window.location.search.includes("isCourseGroupTopic=true");
-		},
 		query() {
 			const query = {
 				$limit: 10,
@@ -146,6 +129,8 @@ export default {
 				this.$router.push({
 					query: {
 						q: this.searchQuery,
+						course: this.$route.query.course,
+						topic: this.$route.query.topic,
 					},
 				});
 			}, 500);
@@ -160,6 +145,7 @@ export default {
 			this.searchQuery = initialSearchQuery;
 			this.firstSearch = false;
 			this.activateTransition = true;
+			this.enterKeyHandler();
 		}
 	},
 	methods: {
@@ -193,8 +179,8 @@ export default {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	min-height: 80vh;
 	width: 100%;
+	min-height: 80vh;
 	padding: 0 var(--space-lg);
 	&__container {
 		display: flex;
@@ -234,8 +220,7 @@ export default {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
-		margin: var(--space-xl-5) var(--space-md) 0;
-		/*transform: scale(1.3);*/
+		margin: var(--space-xl-5) 0 0;
 	}
 }
 
