@@ -1,9 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
-    <title>01_Icon/document type card/word</title>
-    <desc>Created with Sketch.</desc>
-    <g id="01_Icon/document-type-card/word" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M28,0 C43.463973,0 56,12.536027 56,28 C56,43.463973 43.463973,56 28,56 C12.536027,56 0,43.463973 0,28 C0,12.536027 12.536027,0 28,0 Z M31,13 L19,13 C17.335,13 16,14.35 16,16 L16,40 C16,41.665 17.335,43 19,43 L37,43 C38.665,43 40,41.665 40,40 L40,22 L31,13 Z M29.5,16 L29.5,23.5 L37,23.5 L37,40 L19,40 L19,16 L29.5,16 Z M22.225,25 L19.975,25 L23.275,38.5 L25.375,38.5 L28.075,28.315 L30.775,38.5 L32.875,38.5 L36.025,25 L33.775,25 L31.675,35.215 L28.975,25 L27.025,25 L24.325,35.215 L22.225,25 Z" id="Shape" fill="#000000"></path>
-    </g>
-</svg>
+<svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><path d="M28 0c15.464 0 28 12.536 28 28S43.464 56 28 56 0 43.464 0 28 12.536 0 28 0zm3 13H19a3 3 0 00-3 3v24c0 1.665 1.335 3 3 3h18c1.665 0 3-1.335 3-3V22l-9-9zm-1.5 3v7.5H37V40H19V16h10.5zm-7.275 9h-2.25l3.3 13.5h2.1l2.7-10.185 2.7 10.185h2.1l3.15-13.5h-2.25l-2.1 10.215L28.975 25h-1.95l-2.7 10.215L22.225 25z" fill-rule="evenodd"/></svg>
