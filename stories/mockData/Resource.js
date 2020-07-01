@@ -15,6 +15,7 @@ export const Resource = {
 		isHomeRepo: true,
 		repo: "mv-repo.schul-cloud.org",
 	},
+	mimetype: "video",
 	content: {
 		url:
 			"https://mv-repo.schul-cloud.org/edu-sharing/components/render/70eedbd1-a4e9-47ee-ac00-3848863e5295",
