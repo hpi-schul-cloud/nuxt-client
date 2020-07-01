@@ -6,7 +6,7 @@
 		<img
 			class="edusharing-footer__logo"
 			src="@assets/img/edusharing/edusharing-logo.svg"
-			alt="edusharing-logo"
+			:alt="$t('components.molecules.EdusharingFooter.img_alt')"
 		/>
 	</div>
 </template>
