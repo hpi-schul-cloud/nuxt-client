@@ -4,9 +4,16 @@
 
 // const id = "[a-z0-9]+";
 //const mongoId = "[a-z0-9]{24}";
+const activationCode = "[a-z0-9]+";
 
 module.exports = [
-	`^/administration/datasources?`,
+	// `^/account/?$`,
+	`^/account/email/edit/?$`,
+	`^/account/name/edit/?$`,
+	`^/account/password/edit/?$`,
+	`^/account/password/edit/?$`,
+	`^/activation/${activationCode}/?$`,
+	// `^/administration/datasources?`,
 	// `^/administration/students/?$`,
 	// `^/administration/students/new/?$`,
 	// `^/administration/teachers/?$`,

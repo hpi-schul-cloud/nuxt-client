@@ -58,8 +58,8 @@ export default function (endpoint) {
 				});
 				return res;
 			},
-			async update({ commit }, payload = {}) {
-				const res = await this.$axios.$update(
+			async update({ commit }, payload = []) {
+				const res = await this.$axios.$put(
 					baseUrl + "/" + payload[0],
 					payload[1]
 				);
