@@ -3,7 +3,7 @@
 		<img
 			class="empty-state-container__image"
 			src="@assets/img/edusharing/SC_Search-Results_Empty-State.svg"
-			alt="empty-state-img"
+			:alt="$t('pages.content.empty_state.error.img_alt')"
 		/>
 		<!-- eslint-disable vue/no-v-html -->
 		<span class="empty-state-container__title" v-html="titleHtmlTemplate" />
