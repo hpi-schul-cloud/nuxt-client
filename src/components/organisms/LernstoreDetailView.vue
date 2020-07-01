@@ -19,15 +19,7 @@
 			>
 				<base-icon source="material" icon="close" />
 			</base-button>
-			<!--
-				<base-button design="icon" @click="bookmarkHandler">
-					<base-icon
-						class="resource__img-container--icon"
-						source="material"
-						:icon="bookmarkIconSelector"
-					/>
-				</base-button>
-				--></div>
+			</div>
 		<div class="content">
 			<div class="preview">
 				<div class="preview-background-color" />
@@ -48,17 +40,11 @@
 		<div ref="sidebar" class="sidebar">
 			<div class="content-container">
 				<div class="actions">
-					<!-- <base-button v-if="!isMobile" design="text icon">
-						<base-icon source="material" icon="more_vert" />
-					</base-button> -->
 				</div>
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
 					</span>
-					<!-- <base-button v-if="isMobile" design="text icon">
-						<base-icon source="material" icon="more_vert" />
-					</base-button> -->
 				</div>
 				<div class="author-provider">
 					<span v-if="author">

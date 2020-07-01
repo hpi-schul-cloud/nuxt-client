@@ -6,7 +6,7 @@
 		<img
 			class="edusharing-footer__logo"
 			src="@assets/img/edusharing/edusharing-logo.svg"
-			alt=""
+			alt="edusharing-logo"
 		/>
 	</div>
 </template>
