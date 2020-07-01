@@ -19,12 +19,6 @@
 export default {
 	data() {
 		return {
-			// emptyStateSVGs: [
-			// 	"/empty-state/emptyStateSvg_teacher_male.svg",
-			// 	"/empty-state/emptyStateSvg_teacher_male_hand_down.svg",
-			// 	"/empty-state/emptyStateSvg_teacher_female_hand_raised.svg",
-			// 	"/empty-state/emptyStateSvg_teacher_female.svg",
-			// ],
 			messageHtmlTemplate: this.$t("pages.content.empty_state.error.message"),
 			titleHtmlTemplate: this.$t("pages.content.empty_state.error.title"),
 		};
