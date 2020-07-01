@@ -10,8 +10,12 @@ describe("@components/molecules/EdusharingFooter", () => {
 
 	it("Renders svg image", () => {
 		expect(wrapper.find(".edusharing-footer__logo").exists()).toBe(true);
-		expect(wrapper.find(".edusharing-footer__logo").attributes("alt")).toBe("edusharing-logo");
-		expect(wrapper.find(".edusharing-footer__logo").attributes("src")).toBe("@assets/img/edusharing/edusharing-logo.svg");
+		expect(wrapper.find(".edusharing-footer__logo").attributes("alt")).toBe(
+			"edusharing-logo"
+		);
+		expect(wrapper.find(".edusharing-footer__logo").attributes("src")).toBe(
+			"@assets/img/edusharing/edusharing-logo.svg"
+		);
 	});
 
 	it("Provides proper text", () => {

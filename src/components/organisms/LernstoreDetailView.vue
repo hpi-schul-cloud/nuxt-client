@@ -26,11 +26,11 @@
 				<div
 					class="preview-background"
 					:style="{
-						backgroundImage: `url(${resource.preview.url})`,
+						backgroundImage: `url(${backgroundImage})`,
 					}"
 				/>
 				<img
-					:src="resource.preview.url"
+					:src="backgroundImage"
 					class="preview-img"
 					:alt="$t('pages.content.preview_img.alt')"
 					role="presentation"
@@ -79,7 +79,7 @@
 							</div>
 						</div>
 					</div>
-					<div v-if="resource.downloadUrl" class="meta-container">
+					<div v-if="downloadUrl" class="meta-container">
 						<div class="meta-icon">
 							<base-icon
 								:source="getTypeIcon(resource.mimetype).iconSource"
@@ -87,8 +87,8 @@
 							/>
 						</div>
 						<div class="meta-text">
-							<a :href="resource.downloadUrl" class="tertiary-color">
-								{{ resource.downloadUrl }}
+							<a :href="downloadUrl" class="tertiary-color">
+								{{ downloadUrl }}
 							</a>
 						</div>
 					</div>
@@ -193,6 +193,18 @@ export default {
 				)
 			);
 		},
+		backgroundImage() {
+			return (
+				getMetadataAttribute(this.resource.properties, "ccm:thumbnailurl") ||
+				this.resource.preview.url
+			);
+		},
+		downloadUrl() {
+			return (
+				getMetadataAttribute(this.resource.properties, "ccm:wwwurl") ||
+				this.resource.downloadUrl
+			);
+		},
 		tags() {
 			let tags = getMetadataAttribute(
 				this.resource.properties,
@@ -230,7 +242,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-$tabletPortraitWidth: 768px;
+$tablet-portrait-width: 768px;
 
 .resource {
 	display: grid;
@@ -241,7 +253,7 @@ $tabletPortraitWidth: 768px;
 	min-height: 100vh;
 	box-shadow: var(--shadow-md);
 
-	@media (max-width: $tabletPortraitWidth) {
+	@media (max-width: $tablet-portrait-width) {
 		grid-template-areas:
 			"content"
 			"meta";
@@ -284,7 +296,7 @@ $tabletPortraitWidth: 768px;
 		position: relative;
 		grid-area: content;
 
-		@media (max-width: $tabletPortraitWidth) {
+		@media (max-width: $tablet-portrait-width) {
 			position: sticky;
 			top: 0;
 		}
@@ -293,7 +305,7 @@ $tabletPortraitWidth: 768px;
 			position: relative;
 			height: 100%;
 
-			@media (max-width: $tabletPortraitWidth) {
+			@media (max-width: $tablet-portrait-width) {
 				height: 80vh;
 			}
 
@@ -352,7 +364,7 @@ $tabletPortraitWidth: 768px;
 		background-color: var(--color-white);
 		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
 
-		@media (max-width: $tabletPortraitWidth) {
+		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
 			overflow: inherit;
 		}
@@ -427,7 +439,7 @@ $tabletPortraitWidth: 768px;
 			z-index: var(--layer-fab);
 			border-radius: var(--radius-md);
 
-			@media (max-width: $tabletPortraitWidth) {
+			@media (max-width: $tablet-portrait-width) {
 				padding-bottom: var(--space-xl);
 			}
 		}

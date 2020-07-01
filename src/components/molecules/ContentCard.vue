@@ -17,10 +17,10 @@
 								<div class="content__img-background-gradient" />
 
 								<img
-									:src="resource.preview.url"
+									:src="thumbnail()"
 									class="content__img-thumbnail"
 									:alt="$t('pages.content.card.img.alt')"
-                                    role="presentation"
+									role="presentation"
 								/>
 								<base-icon
 									:source="getTypeIcon(resource.mimetype).iconSource"
@@ -96,6 +96,14 @@ export default {
 				"ccm:metadatacontributer_provider"
 			);
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
+		},
+		thumbnail() {
+			return (
+				this.getMetadataAttribute(
+					this.resource.properties,
+					"ccm:thumbnailurl"
+				) || this.resource.preview.url
+			);
 		},
 	},
 };
