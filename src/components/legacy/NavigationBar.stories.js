@@ -6,7 +6,7 @@ import SchulCloudLogoColor from "@assets/img/logo/logo-image-color.svg";
 
 storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 	components: { NavigationBar },
-	template: `<NavigationBar :img="img" :links="links"/>`,
+	template: `<NavigationBar :img="img" :links="links" :buttons="true"/> `,
 	data: () => ({
 		img: text("img", SchulCloudLogoColor),
 		links: [
