@@ -48,6 +48,7 @@
 						<base-button
 							design="primary"
 							:disabled="!isSendEnabled"
+							data-testid="modal_submit_btn"
 							@click="addToLesson"
 							>{{ $t("common.actions.add") }}</base-button
 						>
