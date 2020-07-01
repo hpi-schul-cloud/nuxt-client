@@ -3,6 +3,7 @@
 		<navigation-bar
 			:links="navbarItems"
 			:img="require('@assets/img/logo/logo-image-color.svg')"
+			:buttons="true"
 		/>
 		<div :class="isMobile ? 'small-container' : 'container'">
 			<Nuxt />

@@ -30,6 +30,7 @@ describe("@components/legacy/NavigationBar", () => {
 			propsData: {
 				links: navbarLinks,
 				img: "@assets/img/logo/logo-image-color.svg",
+				buttons: true,
 			},
 		});
 
@@ -42,6 +43,7 @@ describe("@components/legacy/NavigationBar", () => {
 			propsData: {
 				links: navbarLinks,
 				img: "@assets/img/logo/logo-image-color.svg",
+				buttons: true,
 			},
 		});
 
