@@ -20,6 +20,10 @@ export default {
 		return {
 			events: [],
 			calendar: undefined,
+			usersTeams: undefined,
+			usersCourses: undefined,
+			jwtDecode: require("jwt-decode"),
+			currentUserId: undefined,
 		};
 	},
 	created() {
@@ -27,28 +31,52 @@ export default {
 	},
 	methods: {
 		handleDateClick(date) {
-			console.log(date);
 			// eslint-disable-next-line no-underscore-dangle
 			const startDate = moment(date, "DD.MM.YYYY HH:mm")._d.toISOString();
-			console.log(startDate);
-			this.postCalendarData(startDate);
-			this.getCalendarData();
+			const endDate = moment(startDate).add(2, "hours");
+			this.postCalendarData(startDate, endDate);
+			this.update();
 		},
-		eventClick() {},
 		init() {
+			this.currentUserId = this.jwtDecode(this.$cookies.get("jwt")).userId;
+			console.log(this.currentUserId);
+			this.update();
+			this.getUserTeams();
+			this.getUserCourses();
+		},
+		eventClick(event, jsEvent) {
+			console.log(event);
+			console.log(jsEvent);
+		},
+		update() {
 			try {
 				this.getCalendarData().then(() => {
-					this.calendar.forEach((element) => {
-						this.events.push({
-							title: element.title,
-							start: element.start,
-							end: element.end,
-						});
+					this.calendar.forEach((event) => {
+						if (this.isNewEvent(event)) {
+							this.pushEvent(event);
+						}
 					});
 				});
 			} catch (error) {
 				console.error(error);
 			}
+		},
+		isNewEvent(event) {
+			let found = false;
+			this.events.forEach((element) => {
+				if (element._id === event._id) {
+					found = true;
+				}
+			});
+			return !found;
+		},
+		pushEvent(event) {
+			this.events.push({
+				title: event.title,
+				start: event.start,
+				end: event.end,
+				_id: event._id,
+			});
 		},
 		async getCalendarData() {
 			try {
@@ -59,14 +87,30 @@ export default {
 				console.error(error);
 			}
 		},
-		async postCalendarData(date) {
-			this.$store.dispatch("calendar/create", [
-				{
-					events: {
-						startDate: date,
-					},
-				},
-			]);
+		async getUserTeams() {
+			try {
+				await this.$store.dispatch("teams/find").then((res) => {
+					this.usersTeams = res;
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		},
+		async getUserCourses() {
+			try {
+				await this.$store.dispatch("courses/find").then((res) => {
+					this.usersCourses = res;
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		},
+		async postCalendarData(startDate, endDate) {
+			this.$store.dispatch("calendar/create", {
+				startDate: startDate,
+				scopeId: this.currentUserId,
+				endDate: endDate,
+			});
 		},
 	},
 
