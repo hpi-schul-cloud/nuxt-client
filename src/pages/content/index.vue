@@ -93,7 +93,7 @@ export default {
 		}),
 		query() {
 			const query = {
-				$limit: 10,
+				$limit: 12,
 				$skip: 0,
 			};
 			if (this.searchQuery) {

@@ -2,7 +2,7 @@ export const actions = {
 	async getResources({ commit }, payload = {}) {
 		commit("setLoading", true);
 		const query = {
-			$limit: 10,
+			$limit: 12,
 			$skip: 0,
 			...payload,
 		};

@@ -21,7 +21,7 @@ export default {
 			const { scrollY } = window;
 			const visibleHeight = document.documentElement.clientHeight;
 			const pageHeight = document.documentElement.scrollHeight;
-			const bottomOfPage = visibleHeight + scrollY >= pageHeight;
+			const bottomOfPage = Math.ceil(visibleHeight + scrollY) >= pageHeight;
 			return bottomOfPage || pageHeight < visibleHeight;
 		},
 		$_backToTop() {
