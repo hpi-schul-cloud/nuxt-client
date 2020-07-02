@@ -133,7 +133,7 @@
 		"postcss-loader": "^3.0.0",
 		"prettier": "^2.0.5",
 		"puppeteer": "^3.1.0",
-		"sass-loader": "^8.0.2",
+		"sass-loader": "^9.0.0",
 		"serve": "^11.3.2",
 		"sharp": "^0.25.4",
 		"start-server-and-test": "^1.11.0",
