@@ -87,7 +87,11 @@
 							/>
 						</div>
 						<div class="meta-text">
-							<base-link :href="downloadUrl" target="_blank" class="tertiary-color">
+							<base-link
+								:href="downloadUrl"
+								target="_blank"
+								class="tertiary-color"
+							>
 								{{ downloadUrl }}
 							</base-link>
 						</div>
