@@ -1,10 +1,49 @@
 <template>
 	<div class="content">
 		<div class="route-calendar">
+			<BaseTitle>Kalender</BaseTitle>
+			<div>
+				<base-modal :active.sync="modalActive">
+					<template v-slot:header></template>
+					<template v-slot:body>
+						<modal-body-info title="Termin Hinzufügen" />
+						<base-input v-model="startDayInput" type="date" label="Start Tag" />
+						<base-input
+							v-model="startTimeInput"
+							type="time"
+							label="Start Zeit"
+						/>
+						<base-input v-model="endDayInput" type="date" label="End Tag" />
+						<base-input v-model="endTimeInput" type="time" label="End Zeit" />
+						<dropdown-menu
+							v-if="isTeamsDDVisible"
+							title="Teams"
+							:items="usersTeams"
+							@input="setScopeId"
+						/>
+						<dropdown-menu
+							v-if="isCoursesDDVisible"
+							title="Courses"
+							:items="usersCourses"
+							@input="setScopeId"
+						/>
+					</template>
+					<template v-slot:footerRight>
+						<base-button design="primary text" @click="modalActive = false">
+							Abbrechen
+						</base-button>
+						<base-button design="primary" @click="submit">
+							Hinzufügen
+						</base-button>
+					</template>
+				</base-modal>
+			</div>
 			<full-calendar
 				ref="calendar"
 				class="fullcalender"
 				:events="events"
+				:header="header"
+				:config="config"
 				@day-click="handleDateClick"
 				@event-selected="eventClick"
 			></full-calendar>
@@ -13,17 +52,39 @@
 </template>
 <script>
 import "fullcalendar/dist/fullcalendar.css";
+import DropdownMenu from "@components/organisms/DropdownMenu";
+import BaseModal from "@components/base/BaseModal";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import moment from "moment";
 export default {
 	layout: "loggedInFull",
+	components: { DropdownMenu, BaseModal, ModalBodyInfo },
 	data() {
 		return {
 			events: [],
+			modalActive: false,
 			calendar: undefined,
-			usersTeams: undefined,
-			usersCourses: undefined,
+			usersTeams: [],
+			usersCourses: [],
+			isCoursesDDVisible: false,
+			isTeamsDDVisible: false,
+			startDate: undefined,
+			endDate: undefined,
+			startDayInput: "",
+			startTimeInput: "",
+			endDayInput: "",
+			endTimeInput: "",
+			teams: "Teams",
+			courses: "Courses",
 			jwtDecode: require("jwt-decode"),
-			currentUserId: undefined,
+			currentScopeId: undefined,
+			header: {
+				left: "title",
+				right: "month,agendaWeek,agendaDay prev,today,next",
+			},
+			config: {
+				locale: "de",
+			},
 		};
 	},
 	created() {
@@ -31,52 +92,94 @@ export default {
 	},
 	methods: {
 		handleDateClick(date) {
-			// eslint-disable-next-line no-underscore-dangle
-			const startDate = moment(date, "DD.MM.YYYY HH:mm")._d.toISOString();
-			const endDate = moment(startDate).add(2, "hours");
-			this.postCalendarData(startDate, endDate);
-			this.update();
+			const startDate = moment(date);
+			const endDate = moment(startDate).add(30, "minutes");
+			this.setModalEventAndState(startDate, endDate);
+		},
+		setScopeId(input) {
+			this.currentScopeId = input._id;
 		},
 		init() {
-			this.currentUserId = this.jwtDecode(this.$cookies.get("jwt")).userId;
-			console.log(this.currentUserId);
+			// initially set ScopeID to userId
+			this.currentScopeId = this.jwtDecode(this.$cookies.get("jwt")).userId;
 			this.update();
 			this.getUserTeams();
 			this.getUserCourses();
 		},
-		eventClick(event, jsEvent) {
-			console.log(event);
-			console.log(jsEvent);
+		eventClick(event) {
+			const startDate = moment(event.start);
+			const endDate = moment(event.end);
+			this.setModalEventAndState(startDate, endDate);
+		},
+		submit() {
+			this.setTime(this.startDate, this.startTimeInput);
+			this.setTime(this.endDate, this.endTimeInput);
+			// eslint-disable-next-line no-underscore-dangle
+			console.log(this.startDate._d.toISOString());
+			// eslint-disable-next-line no-underscore-dangle
+			console.log(this.endDate._d.toISOString());
+			this.postCalendarData(
+				// eslint-disable-next-line no-underscore-dangle
+				this.startDate._d.toISOString(),
+				// eslint-disable-next-line no-underscore-dangle
+				this.endDate._d.toISOString()
+			);
+			this.update();
+			this.modalActive = false;
+		},
+		setTime(dateToSet, timeForSetting) {
+			const startTime = moment(timeForSetting, "HH:mm");
+			dateToSet.set({
+				hour: startTime.get("hour"),
+				minute: startTime.get("minute"),
+			});
+		},
+		setModalEventAndState(startDate, endDate) {
+			this.startDate = startDate;
+			this.endDate = endDate;
+			this.startDayInput = startDate.toISOString();
+			this.startTimeInput = startDate.format("HH:mm");
+			this.endDayInput = endDate.toISOString();
+			this.endTimeInput = endDate.format("HH:mm");
+			this.modalActive = true;
 		},
 		update() {
 			try {
 				this.getCalendarData().then(() => {
 					this.calendar.forEach((event) => {
-						if (this.isNewEvent(event)) {
-							this.pushEvent(event);
-						}
+						this.pushEvent(event);
 					});
 				});
 			} catch (error) {
 				console.error(error);
 			}
 		},
-		isNewEvent(event) {
+		isNewElement(elementArg, list) {
 			let found = false;
-			this.events.forEach((element) => {
-				if (element._id === event._id) {
+			list.forEach((element) => {
+				if (element._id === elementArg._id) {
 					found = true;
 				}
 			});
 			return !found;
 		},
 		pushEvent(event) {
-			this.events.push({
-				title: event.title,
-				start: event.start,
-				end: event.end,
-				_id: event._id,
-			});
+			if (this.isNewElement(event, this.events)) {
+				this.events.push({
+					title: event.title,
+					start: event.start,
+					end: event.end,
+					_id: event._id,
+				});
+			}
+		},
+		pushScope(event, list) {
+			if (this.isNewElement(event, list)) {
+				list.push({
+					_id: event._id,
+					label: event.name,
+				});
+			}
 		},
 		async getCalendarData() {
 			try {
@@ -90,7 +193,9 @@ export default {
 		async getUserTeams() {
 			try {
 				await this.$store.dispatch("teams/find").then((res) => {
-					this.usersTeams = res;
+					res.data.forEach((element) => {
+						this.pushScope(element, this.usersTeams);
+					});
 				});
 			} catch (error) {
 				console.error(error);
@@ -99,7 +204,9 @@ export default {
 		async getUserCourses() {
 			try {
 				await this.$store.dispatch("courses/find").then((res) => {
-					this.usersCourses = res;
+					res.data.forEach((element) => {
+						this.pushScope(element, this.usersCourses);
+					});
 				});
 			} catch (error) {
 				console.error(error);
@@ -108,137 +215,10 @@ export default {
 		async postCalendarData(startDate, endDate) {
 			this.$store.dispatch("calendar/create", {
 				startDate: startDate,
-				scopeId: this.currentUserId,
+				scopeId: this.currentScopeId,
 				endDate: endDate,
 			});
 		},
 	},
-
-	header: {
-		left: "title",
-		right: "month,agendaWeek,agendaDay prev,today,next",
-	},
-	locale: "de",
 };
 </script>
-
-<style lang="scss" scoped>
-.route-calendar {
-	.fullcalendar {
-		float: left;
-		width: 100%;
-
-		.fc-time-grid .fc-slats .fc-minor td {
-			border: 0px;
-		}
-
-		.fc-event {
-			border: 0px;
-			color: #646464;
-			background: #e9e9e9;
-
-			.fc-content {
-				padding: 5px;
-				color: #fff;
-				background: rgba(0, 0, 0, 0.45);
-
-				.fc-title {
-					font-weight: 600;
-				}
-			}
-
-			&.fc-event-cancelled {
-				background: #f5f5f5;
-				color: #a9a9a9;
-			}
-
-			&:not(.fc-event-cancelled):hover {
-				background: #ddd;
-			}
-
-			&.fc-time-grid-event {
-				&.fc-event-cancelled {
-					&:after {
-						color: #b10438;
-						content: attr(data-status);
-						bottom: 5px;
-						right: 10px;
-						position: absolute;
-						font-weight: 600;
-					}
-				}
-			}
-		}
-	}
-
-	.fc-state-default {
-		text-shadow: none;
-		box-shadow: none;
-		color: #292b2c;
-		background: #fff;
-		border-color: #ccc;
-	}
-
-	.fc-state-hover,
-	.fc-state-down,
-	.fc-state-active,
-	.fc-state-disabled {
-		color: #292b2c;
-		background-color: #e6e6e6;
-	}
-
-	.fc-state-hover {
-		color: #292b2c;
-		background: #e6e6e6;
-		-webkit-transition: background-position 0.1s linear;
-		-moz-transition: background-position 0.1s linear;
-		-o-transition: background-position 0.1s linear;
-		transition: none;
-	}
-
-	.fc-state-down,
-	.fc-state-active {
-		color: #292b2c;
-		background: #e6e6e6;
-		border-color: #adadad;
-	}
-
-	.fc-state-disabled {
-		cursor: default;
-		opacity: 1;
-		box-shadow: none;
-		background: #fff;
-		border-color: #ccc;
-	}
-}
-
-.create-course-event,
-.create-team-event,
-.create-videoconference {
-	label {
-		margin-left: 0.5rem;
-	}
-	.toggle {
-		height: 2rem !important;
-		width: 7rem !important;
-		.toggle-handle {
-			width: 0.3rem !important;
-			background: whitesmoke !important;
-		}
-	}
-
-	.off {
-		background: grey !important;
-		label {
-			color: whitesmoke !important;
-			padding-left: 48px !important;
-		}
-	}
-
-	.on {
-		label {
-			padding-right: 48px !important;
-		}
-	}
-}
-</style>
