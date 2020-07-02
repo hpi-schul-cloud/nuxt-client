@@ -3,16 +3,14 @@ import { boolean } from "@storybook/addon-knobs";
 
 import NotificationModal from "@components/molecules/NotificationModal";
 
-storiesOf("5 Molecules/Modals", module).add(
-	"NotificationModal",
-	() => ({
-		components: { NotificationModal },
-		data: () => ({
-			showNotificationModal: boolean("showNotificationModal", true),
-			isSuccess: boolean("Success", true),
-		}),
+storiesOf("5 Molecules/Modals", module).add("NotificationModal", () => ({
+	components: { NotificationModal },
+	data: () => ({
+		showNotificationModal: boolean("showNotificationModal", true),
+		isSuccess: boolean("Success", true),
+	}),
 
-		template: `
+	template: `
         <div>
             <base-button @click="showNotificationModal = true">
                     Open Modal
@@ -25,5 +23,4 @@ storiesOf("5 Molecules/Modals", module).add(
             @click="showNotificationModal = false"
             />
         </div>`,
-	})
-);
+}));
