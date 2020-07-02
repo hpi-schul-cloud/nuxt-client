@@ -70,18 +70,19 @@ export default {
 		},
 		addResourceAndClose() {
 			if (window.opener && window.opener !== window) {
-				window.opener.addResource({
-					title: this.resource.title,
-					client: this.client,
-					url: `/content/${this.resource.ref.id}`,
-				});
-				window.close();
+				if (window.opener.addResource){
+					window.opener.addResource({
+						title: this.resource.title,
+						client: this.client,
+						url: `/content/${this.resource.ref.id}`,
+					});
+					window.close();
+					return true;
+				}
 			}
 		},
 		addResource() {
-			if (window.opener && window.opener !== window) {
-				this.addResourceAndClose();
-			} else {
+			if (!this.addResourceAndClose()){
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
 			}
