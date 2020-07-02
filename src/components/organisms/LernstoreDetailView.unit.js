@@ -1,16 +1,9 @@
 import LernstoreDetailView from "./LernstoreDetailView";
 import { Resource } from "../../../stories/mockData/Resource";
-import Vuex from "vuex";
-import { createLocalVue } from "@vue/test-utils";
 
 const testProps = {
 	resource: Resource,
-	addToLessonResult: {
-		status: 201,
-	},
 };
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 describe("@components/molecules/LernstoreDetailView", () => {
 	const wrapper = shallowMount(LernstoreDetailView, {
