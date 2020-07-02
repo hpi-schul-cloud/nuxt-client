@@ -20,7 +20,7 @@
 									:src="thumbnail()"
 									class="content__img-thumbnail"
 									:alt="$t('pages.content.card.img.alt')"
-									role="presentation"
+									role="img"
 								/>
 								<base-icon
 									:source="getTypeIcon(resource.mimetype).iconSource"
