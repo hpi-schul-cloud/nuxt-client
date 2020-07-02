@@ -158,10 +158,9 @@ export default {
 		async searchContent() {
 			try {
 				await this.$store.dispatch("content/getResources", this.query);
-			}
-			catch (error) {
+			} catch (error) {
 				this.$toast.error(
-						this.$t("pages.content.notification.lernstoreNotAvailable")
+					this.$t("pages.content.notification.lernstoreNotAvailable")
 				);
 			}
 		},

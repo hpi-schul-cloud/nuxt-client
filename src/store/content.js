@@ -11,8 +11,7 @@ export const actions = {
 				params: query,
 			});
 			commit("setResources", res);
-		}
-		finally {
+		} finally {
 			commit("setLoading", false);
 		}
 	},
