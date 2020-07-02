@@ -75,7 +75,7 @@ export default {
 	layout: "loggedInFull",
 	data() {
 		return {
-			searchQuery: "",
+			searchQuery: null,
 			backToTopScrollYLimit: 115,
 			firstSearch: true,
 			activateTransition: false,
