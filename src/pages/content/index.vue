@@ -129,8 +129,6 @@ export default {
 				this.$router.push({
 					query: {
 						q: this.searchQuery,
-						course: this.$route.query.course,
-						topic: this.$route.query.topic,
 					},
 				});
 			}, 500);
