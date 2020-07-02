@@ -4,16 +4,10 @@
 	<div class="resource">
 		<div ref="icons" class="icons">
 			<base-button
-				v-if="!closeButtonStyleSelector"
-				class="close-icon"
-				design="icon"
-				@click="goBack"
-			>
-				<base-icon source="material" icon="close" />
-			</base-button>
-			<base-button
-				v-if="closeButtonStyleSelector"
-				class="close-transparent"
+				:class="[
+					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
+					'icon',
+				]"
 				design="icon"
 				@click="goBack"
 			>
@@ -278,22 +272,17 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			padding: var(--space-xs-4);
 			font-size: var(--heading-4);
-			color: var(--color-white);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			background-color: rgba(68, 68, 68, 0.6);
-			border-radius: var(--radius-round);
 			box-shadow: var(--shadow-sm);
 		}
 
 		.close-transparent {
-			padding: var(--space-xs-4);
 			font-size: var(--heading-4);
 			color: var(--color-black);
 			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 			background-color: rgba(255, 255, 255, 0);
-			border-radius: var(--radius-round);
 		}
 	}
 	.content {
