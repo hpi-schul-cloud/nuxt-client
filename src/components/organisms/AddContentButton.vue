@@ -79,8 +79,7 @@ export default {
 			}
 		},
 		addResource() {
-			const selectedLesson = this.$route && this.$route.query.topic;
-			if (selectedLesson) {
+			if (window.opener && window.opener !== window) {
 				this.addResourceAndClose();
 			} else {
 				this.copyModalActive = true;
