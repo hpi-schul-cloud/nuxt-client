@@ -7,8 +7,8 @@ const types = Object.freeze({
 	},
 	"text/html": {
 		i18nKey: "mixins.typeMeta.types.webpage",
-		icon: "ic_default",
-		iconLarge: "ic_default-circle",
+		icon: "ic_link",
+		iconLarge: "ic_link-circle",
 		iconSource: "custom",
 	},
 	"image/jpeg": {
