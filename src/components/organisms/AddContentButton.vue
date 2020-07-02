@@ -30,7 +30,7 @@
 <script>
 import UserHasRole from "@components/helpers/UserHasRole";
 import AddContentModal from "@components/molecules/AddContentModal";
-import NotificationModal from "@components/base/NotificationModal";
+import NotificationModal from "@components/molecules/NotificationModal";
 
 export default {
 	name: "AddContentButton",
