@@ -6,11 +6,15 @@ export const actions = {
 			$skip: 0,
 			...payload,
 		};
-		const res = await this.$axios.$get("/edu-sharing", {
-			params: query,
-		});
-		commit("setResources", res);
-		commit("setLoading", false);
+		try {
+			const res = await this.$axios.$get("/edu-sharing", {
+				params: query,
+			});
+			commit("setResources", res);
+		}
+		finally {
+			commit("setLoading", false);
+		}
 	},
 	async addResources({ commit }, payload = {}) {
 		commit("setLoading", true);

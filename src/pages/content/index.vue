@@ -156,7 +156,14 @@ export default {
 			}
 		},
 		async searchContent() {
-			await this.$store.dispatch("content/getResources", this.query);
+			try {
+				await this.$store.dispatch("content/getResources", this.query);
+			}
+			catch (error) {
+				this.$toast.error(
+						this.$t("pages.content.notification.lernstoreNotAvailable")
+				);
+			}
 		},
 		enterKeyHandler() {
 			this.searchContent();

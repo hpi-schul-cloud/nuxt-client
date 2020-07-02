@@ -276,6 +276,7 @@
 	"pages.content.index.search_results": "Suchergebnisse für",
 	"pages.content.notification.successMsg": "Material wurde erfolgreich hinzugefügt",
 	"pages.content.notification.errorMsg": "Irgendetwas ist schiefgegangen. Material konnte nicht hinzugefügt werden",
+	"pages.content.notification.lernstoreNotAvailable": "Lernstore ist nicht verfügbar",
 	"pages.content.preview_img.alt": "Bildvorschau",
 	"pages.courses.index.courses.active": "Aktuelle Kurse",
 	"pages.courses.index.courses.archived": "Archivierte Kurse",
