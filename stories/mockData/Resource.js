@@ -37,5 +37,6 @@ export const Resource = {
 		"cclom:general_description": [
 			"Lass uns etwas das Addieren und Subtrahieren von Variablen üben, die positive und negative Zahlen auf dem Zahlenstrahl darstellen.",
 		],
+		"ccm:taxonentry": ["Mathematik"],
 	},
 };
