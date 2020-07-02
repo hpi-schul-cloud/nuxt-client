@@ -70,7 +70,7 @@ export default {
 		},
 		addResourceAndClose() {
 			if (window.opener && window.opener !== window) {
-				if (window.opener.addResource){
+				if (window.opener.addResource) {
 					window.opener.addResource({
 						title: this.resource.title,
 						client: this.client,
@@ -82,7 +82,7 @@ export default {
 			}
 		},
 		addResource() {
-			if (!this.addResourceAndClose()){
+			if (!this.addResourceAndClose()) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
 			}
