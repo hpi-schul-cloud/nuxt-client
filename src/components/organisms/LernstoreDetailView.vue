@@ -109,17 +109,19 @@
 					</div>
 				</div>
 			</div>
-			<div class="floating-buttons">
-				<add-content-button
-					:resource="resource"
-					btn-design="hero-cta"
-					btn-class="floating-button"
-					btn-size="large"
-					btn-icon-class="footer__content-icon"
-					btn-icon="add"
-					:btn-label="$t('pages.content._id.addToTopic')"
-				/>
-			</div>
+			<user-has-role :role="isNotStudent">
+				<div class="floating-buttons">
+					<add-content-button
+						:resource="resource"
+						btn-design="hero-cta"
+						btn-class="floating-button"
+						btn-size="large"
+						btn-icon-class="footer__content-icon"
+						btn-icon="add"
+						:btn-label="$t('pages.content._id.addToTopic')"
+					/>
+				</div>
+			</user-has-role>
 		</div>
 	</div>
 </template>
@@ -127,6 +129,7 @@
 <script>
 import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
+import UserHasRole from "@components/helpers/UserHasRole";
 
 import contentMeta from "@mixins/contentMeta";
 import elementIsInTop from "@mixins/elementIsInTop";
@@ -143,6 +146,7 @@ export default {
 	components: {
 		BaseLink,
 		AddContentButton,
+		UserHasRole,
 	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, elementIsInTop],
@@ -152,6 +156,7 @@ export default {
 			default: () => {},
 		},
 		client: { type: String, default: "Schul-Cloud" },
+		role : { type: String, default: "" },
 	},
 	data() {
 		return {
@@ -226,6 +231,9 @@ export default {
 		this.assignElements("sidebar", "icons");
 	},
 	methods: {
+		isNotStudent(roles) {
+			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role
+		},
 		goBack() {
 			if (window.history.length > 1) {
 				this.$router && this.$router.back();
