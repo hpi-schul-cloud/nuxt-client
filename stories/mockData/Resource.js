@@ -38,6 +38,8 @@ export const Resource = {
 			"Lass uns etwas das Addieren und Subtrahieren von Variablen üben, die positive und negative Zahlen auf dem Zahlenstrahl darstellen.",
 		],
 		"ccm:taxonentry": ["Mathematik"],
-		"ccm:thumbnailurl": ["https://img.youtube.com/vi/wRBPzExOH2A/maxresdefault.jpg"]
+		"ccm:thumbnailurl": [
+			"https://img.youtube.com/vi/wRBPzExOH2A/maxresdefault.jpg",
+		],
 	},
 };
