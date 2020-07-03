@@ -448,7 +448,7 @@ $tablet-portrait-width: 768px;
 		.floating-buttons {
 			position: sticky;
 			bottom: 0;
-			z-index: var(--layer-fab);
+			z-index: var(--layer-page);
 			border-radius: var(--radius-md);
 
 			@media (max-width: $tablet-portrait-width) {

@@ -160,7 +160,7 @@ export default {
 			position: absolute;
 			top: 40%;
 			left: 40%;
-			z-index: var(--layer-dropdown);
+			z-index: var(--layer-page);
 			font-size: var(--space-xl-3);
 			border-radius: var(--radius-round);
 			box-shadow: var(--shadow-m);
@@ -170,7 +170,7 @@ export default {
 			position: absolute;
 			top: 5%;
 			left: 90%;
-			z-index: var(--layer-dropdown);
+			z-index: var(--layer-page);
 			color: var(--color-white);
 			cursor: pointer;
 		}
