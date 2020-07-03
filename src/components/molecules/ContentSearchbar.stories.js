@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import ContentSearchbar from "@components/molecules/ContentSearchbar";
 
-storiesOf("5 Molecules/ContentSearchbar", module).add(
+storiesOf("5 Molecules/Content/ContentSearchbar", module).add(
 	"ContentSearchbar",
 	() => ({
 		components: { ContentSearchbar },

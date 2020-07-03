@@ -50,7 +50,7 @@
 				size="xlarge"
 			/>
 		</div>
-		<edusharing-footer class="content__footer" />
+		<content-edu-sharing-footer class="content__footer" />
 	</section>
 </template>
 
@@ -61,7 +61,7 @@ import ContentCard from "@components/molecules/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
-import EdusharingFooter from "@components/molecules/EdusharingFooter";
+import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
 
 export default {
 	components: {
@@ -69,7 +69,7 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
-		EdusharingFooter,
+		ContentEduSharingFooter,
 	},
 	mixins: [infiniteScrolling],
 	layout: "loggedInFull",

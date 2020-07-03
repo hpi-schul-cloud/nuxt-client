@@ -1,12 +1,12 @@
-import EdusharingFooter from "./EdusharingFooter";
+import ContentEduSharingFooter from "./ContentEduSharingFooter";
 
-describe("@components/molecules/EdusharingFooter", () => {
-	const wrapper = shallowMount(EdusharingFooter, {
+describe("@components/molecules/ContentEduSharingFooter", () => {
+	const wrapper = shallowMount(ContentEduSharingFooter, {
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),
 	});
 
-	it(...isValidComponent(EdusharingFooter));
+	it(...isValidComponent(ContentEduSharingFooter));
 
 	it("Renders svg image", () => {
 		expect(wrapper.find(".edusharing-footer__logo").exists()).toBe(true);
