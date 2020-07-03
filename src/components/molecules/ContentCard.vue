@@ -129,7 +129,6 @@ export default {
 }
 .img-container {
 	position: relative;
-	height: 200px;
 	color: var(--color-white);
 	background-color: var(--color-black);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
