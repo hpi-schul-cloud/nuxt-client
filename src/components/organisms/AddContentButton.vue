@@ -4,7 +4,7 @@
 			:design="btnDesign"
 			:class="btnClass"
 			:size="btnSize"
-			@click.prevent="handleCopy"
+			@click.prevent="addResource"
 		>
 			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />
 			{{ btnLabel }}
@@ -70,27 +70,19 @@ export default {
 		},
 		addResourceAndClose() {
 			if (window.opener && window.opener !== window) {
-				window.opener.addResource({
-					title: this.resource.title,
-					client: this.client,
-					url: `/content/${this.resource.ref.id}`,
-				});
-				window.close();
-			}
-		},
-		handleCopy() {
-			const selectedLesson = this.$route && this.$route.query.topic;
-			if (selectedLesson) {
-				this.$store.dispatch("content/addToLesson", {
-					lessonId: selectedLesson,
-					material: {
+				if (window.opener.addResource) {
+					window.opener.addResource({
 						title: this.resource.title,
 						client: this.client,
 						url: `/content/${this.resource.ref.id}`,
-					},
-				});
-				this.showNotificationModal = true;
-			} else {
+					});
+					window.close();
+					return true;
+				}
+			}
+		},
+		addResource() {
+			if (!this.addResourceAndClose()) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
 			}

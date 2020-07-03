@@ -74,18 +74,18 @@ export default {
 			this.inputValue = newValue;
 			this.$emit("input", this.inputValue);
 			setTimeout((...args) => {
-				if (this.isActive && this.inputValue.length > 0) {
-					this.isActive = false;
-				}
-				this.$emit("keyup:enter", ...args);
+				this.search(...args);
 			}, 1000);
 		},
 		enterKeyHandler(...args) {
+			this.search(...args);
+			this.$refs.searchInput.blur();
+		},
+		search(...args) {
 			if (this.isActive && this.inputValue.length > 0) {
 				this.isActive = false;
 			}
 			this.$emit("keyup:enter", ...args);
-			this.$refs.searchInput.blur();
 		},
 		clearBtnHandler() {
 			this.$emit("input", "");

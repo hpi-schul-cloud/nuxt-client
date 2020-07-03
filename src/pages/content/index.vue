@@ -75,7 +75,7 @@ export default {
 	layout: "loggedInFull",
 	data() {
 		return {
-			searchQuery: null,
+			searchQuery: "",
 			backToTopScrollYLimit: 115,
 			firstSearch: true,
 			activateTransition: false,
@@ -129,8 +129,6 @@ export default {
 				this.$router.push({
 					query: {
 						q: this.searchQuery,
-						course: this.$route.query.course,
-						topic: this.$route.query.topic,
 					},
 				});
 			}, 500);
