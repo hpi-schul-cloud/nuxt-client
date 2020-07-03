@@ -33,22 +33,24 @@
 					</div>
 				</template>
 			</base-link>
-			<template v:slot:footer>
-				<div class="footer">
-					<div class="footer__separator"></div>
-					<div class="footer__content">
-						<div class="footer__icon-container">
-							<add-content-button
-								:resource="resource"
-								:client="provider()"
-								btn-design="text icon"
-								btn-icon-class="footer__content-icon"
-								btn-icon="add_circle_outline"
-							/>
+			<user-has-role :role="isNotStudent">
+				<template v:slot:footer>
+					<div class="footer">
+						<div class="footer__separator"></div>
+						<div class="footer__content">
+							<div class="footer__icon-container">
+								<add-content-button
+									:resource="resource"
+									:client="provider()"
+									btn-design="text icon"
+									btn-icon-class="footer__content-icon"
+									btn-icon="add_circle_outline"
+								/>
+							</div>
 						</div>
 					</div>
-				</div>
-			</template>
+				</template>
+			</user-has-role>
 		</div>
 	</base-card>
 </template>
@@ -56,16 +58,19 @@
 <script>
 import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
+import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
 
 export default {
 	components: {
 		BaseLink,
 		AddContentButton,
+		UserHasRole,
 	},
 	mixins: [contentMeta],
 	props: {
 		resource: { type: Object, default: () => {} },
+		role : { type: String, default: "" },
 	},
 	data() {
 		return {
@@ -84,6 +89,9 @@ export default {
 		},
 	},
 	methods: {
+		isNotStudent(roles) {
+			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role
+		},
 		getMetadataAttribute(properties, key) {
 			if (Array.isArray(properties[key])) {
 				return properties[key][0];

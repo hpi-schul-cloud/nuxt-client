@@ -1,5 +1,5 @@
 <template>
-	<user-has-role :role="isNotStudent">
+	<div>
 		<base-button
 			:design="btnDesign"
 			:class="btnClass"
@@ -24,18 +24,16 @@
 			:error-msg="$t('pages.content.notification.errorMsg')"
 			@close="addResourceAndClose"
 		/>
-	</user-has-role>
+	</div>
 </template>
 
 <script>
-import UserHasRole from "@components/helpers/UserHasRole";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 
 export default {
 	name: "AddContentButton",
 	components: {
-		UserHasRole,
 		AddContentModal,
 		NotificationModal,
 	},
@@ -65,9 +63,6 @@ export default {
 		},
 	},
 	methods: {
-		isNotStudent(roles) {
-			return roles.some((role) => !role.startsWith("student"));
-		},
 		addResourceAndClose() {
 			if (window.opener && window.opener !== window) {
 				if (window.opener.addResource) {
