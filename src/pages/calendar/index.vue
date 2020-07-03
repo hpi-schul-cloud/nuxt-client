@@ -7,6 +7,11 @@
 					<template v-slot:header></template>
 					<template v-slot:body>
 						<modal-body-info title="Termin Hinzufügen" />
+						<base-input
+							v-model="inputText"
+							type="text"
+							label="Termin Bezeichnung"
+						/>
 						<base-input v-model="startDayInput" type="date" label="Start Tag" />
 						<base-input
 							v-model="startTimeInput"
@@ -15,6 +20,17 @@
 						/>
 						<base-input v-model="endDayInput" type="date" label="End Tag" />
 						<base-input v-model="endTimeInput" type="time" label="End Zeit" />
+						<div>
+							<input-radio
+								v-model="radioValue"
+								label=""
+								:options="[
+									{ value: 'A', label: 'Teams ?' },
+									{ value: 'B', label: 'Kurse ?' },
+								]"
+								@input="onInput"
+							/>
+						</div>
 						<dropdown-menu
 							v-if="isTeamsDDVisible"
 							title="Teams"
@@ -29,7 +45,7 @@
 						/>
 					</template>
 					<template v-slot:footerRight>
-						<base-button design="primary text" @click="modalActive = false">
+						<base-button design="primary text" @click="cancelHandle">
 							Abbrechen
 						</base-button>
 						<base-button design="primary" @click="submit">
@@ -55,15 +71,17 @@ import "fullcalendar/dist/fullcalendar.css";
 import DropdownMenu from "@components/organisms/DropdownMenu";
 import BaseModal from "@components/base/BaseModal";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
 import moment from "moment";
 export default {
 	layout: "loggedInFull",
-	components: { DropdownMenu, BaseModal, ModalBodyInfo },
+	components: { DropdownMenu, BaseModal, ModalBodyInfo, InputRadio },
 	data() {
 		return {
 			events: [],
 			modalActive: false,
 			calendar: undefined,
+			currentUserId: undefined,
 			usersTeams: [],
 			usersCourses: [],
 			isCoursesDDVisible: false,
@@ -74,6 +92,8 @@ export default {
 			startTimeInput: "",
 			endDayInput: "",
 			endTimeInput: "",
+			inputText: "",
+			radioValue: undefined,
 			teams: "Teams",
 			courses: "Courses",
 			jwtDecode: require("jwt-decode"),
@@ -96,12 +116,27 @@ export default {
 			const endDate = moment(startDate).add(30, "minutes");
 			this.setModalEventAndState(startDate, endDate);
 		},
+		onInput(radioValue) {
+			//has to be improved
+			if (radioValue == "A") {
+				this.isTeamsDDVisible = true;
+				this.isCoursesDDVisible = false;
+			} else {
+				this.isTeamsDDVisible = false;
+				this.isCoursesDDVisible = true;
+			}
+		},
 		setScopeId(input) {
 			this.currentScopeId = input._id;
 		},
+		cancelHandle() {
+			this.resetScope();
+			this.modalActive = false;
+		},
 		init() {
 			// initially set ScopeID to userId
-			this.currentScopeId = this.jwtDecode(this.$cookies.get("jwt")).userId;
+			this.currentUserId = this.jwtDecode(this.$cookies.get("jwt")).userId;
+			this.currentScopeId = this.currentUserId;
 			this.update();
 			this.getUserTeams();
 			this.getUserCourses();
@@ -109,6 +144,7 @@ export default {
 		eventClick(event) {
 			const startDate = moment(event.start);
 			const endDate = moment(event.end);
+			this.inputText = event.title;
 			this.setModalEventAndState(startDate, endDate);
 		},
 		submit() {
@@ -125,7 +161,15 @@ export default {
 				this.endDate._d.toISOString()
 			);
 			this.update();
+			this.resetScope();
 			this.modalActive = false;
+		},
+		resetScope() {
+			this.inputText = "";
+			this.radioValue = "";
+			this.isTeamsDDVisible = false;
+			this.isCoursesDDVisible = false;
+			this.currentScopeId = this.currentUserId;
 		},
 		setTime(dateToSet, timeForSetting) {
 			const startTime = moment(timeForSetting, "HH:mm");
@@ -217,6 +261,7 @@ export default {
 				startDate: startDate,
 				scopeId: this.currentScopeId,
 				endDate: endDate,
+				summary: this.inputText,
 			});
 		},
 	},
