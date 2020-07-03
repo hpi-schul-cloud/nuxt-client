@@ -285,16 +285,14 @@ $tablet-portrait-width: 768px;
 
 		.close-icon {
 			font-size: var(--heading-4);
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			background-color: rgba(68, 68, 68, 0.6);
+			background-color: var(--color-gray-dark);
 			box-shadow: var(--shadow-sm);
 		}
 
 		.close-transparent {
 			font-size: var(--heading-4);
 			color: var(--color-black);
-			/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-			background-color: rgba(255, 255, 255, 0);
+			background-color: var(--color-white);
 		}
 	}
 	.content {

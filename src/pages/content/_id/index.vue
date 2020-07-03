@@ -1,5 +1,3 @@
-<!-- eslint-disable max-lines -->
-
 <template>
 	<div class="content">
 		<lernstore-detail-view :resource="resource" />
