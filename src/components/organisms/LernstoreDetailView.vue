@@ -136,7 +136,6 @@ import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 
 import contentMeta from "@mixins/contentMeta";
-import elementIsInTop from "@mixins/elementIsInTop";
 import BaseLink from "../base/BaseLink";
 
 const getMetadataAttribute = (properties, key) => {
@@ -153,7 +152,7 @@ export default {
 		UserHasRole,
 	},
 	layout: "loggedInFull",
-	mixins: [contentMeta, elementIsInTop],
+	mixins: [contentMeta],
 	props: {
 		resource: {
 			type: Object,
@@ -227,12 +226,9 @@ export default {
 		},
 		closeButtonStyleSelector() {
 			return (
-				this.elIsTop && (this.$mq === "tabletPortrait" || this.$mq === "mobile")
+				(this.$mq === "tabletPortrait" || this.$mq === "mobile")
 			);
 		},
-	},
-	mounted() {
-		this.assignElements("sidebar", "icons");
 	},
 	methods: {
 		isNotStudent(roles) {
@@ -295,6 +291,7 @@ $tablet-portrait-width: 768px;
 			font-size: var(--heading-4);
 			color: var(--color-black);
 			background-color: var(--color-white);
+			box-shadow: var(--shadow-sm);
 		}
 	}
 	.content {

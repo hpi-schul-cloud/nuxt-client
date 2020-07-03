@@ -13,8 +13,8 @@ describe("@components/molecules/LernstoreDetailView", () => {
 
 	it(...isValidComponent(LernstoreDetailView));
 
-	it("Renders close icon", () => {
-		expect(wrapper.find(".close-icon").exists()).toBe(true);
+	it("Renders close button", () => {
+		expect(wrapper.find(".close-transparent").exists()).toBe(true);
 	});
 
 	it("Renders Lernstore img", () => {
