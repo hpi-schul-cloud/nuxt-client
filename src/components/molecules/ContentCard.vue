@@ -70,7 +70,7 @@ export default {
 	mixins: [contentMeta],
 	props: {
 		resource: { type: Object, default: () => {} },
-		role : { type: String, default: "" },
+		role: { type: String, default: "" },
 	},
 	data() {
 		return {
@@ -90,7 +90,9 @@ export default {
 	},
 	methods: {
 		isNotStudent(roles) {
-			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role
+			return this.role === ""
+				? roles.some((role) => !role.startsWith("student"))
+				: this.role;
 		},
 		getMetadataAttribute(properties, key) {
 			if (Array.isArray(properties[key])) {
