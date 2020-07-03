@@ -96,7 +96,11 @@
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
-								<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+								<span
+									v-for="(tag, index) in tags"
+									:key="index"
+									class="meta-text"
+								>
 									<base-link :href="'/content/?q=' + tag" class="tag-link"
 										>#{{ tag }}</base-link
 									>
