@@ -4,6 +4,8 @@
 			:design="btnDesign"
 			:class="btnClass"
 			:size="btnSize"
+			role="button"
+			aria-label="Add"
 			@click.prevent="addResource"
 		>
 			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />
