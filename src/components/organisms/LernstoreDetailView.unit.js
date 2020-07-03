@@ -21,7 +21,7 @@ describe("@components/molecules/LernstoreDetailView", () => {
 		expect(wrapper.find(".preview").exists()).toBe(true);
 		expect(wrapper.find(".preview-img").exists()).toBe(true);
 		expect(wrapper.find(".preview-img").attributes("src")).toBe(
-			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295&amp;storeProtocol=workspace&amp;storeId=SpacesStore&amp;dontcache=1593152667345"
+			"https://img.youtube.com/vi/wRBPzExOH2A/maxresdefault.jpg"
 		);
 		expect(wrapper.find(".preview-img").attributes("alt")).toBe("Bildvorschau");
 	});

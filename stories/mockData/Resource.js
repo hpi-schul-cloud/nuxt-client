@@ -27,7 +27,7 @@ export const Resource = {
 		isIcon: false,
 		isGenerated: true,
 		url:
-			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295&amp;storeProtocol=workspace&amp;storeId=SpacesStore&amp;dontcache=1593152667345",
+			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295&amp;storeProtocol=workspace&amp;storeId=SpacesStore&amp;dontcache=1593695489846&amp;accessToken=07feffaed1c29a8d4644a4f66b5ef0d1",
 	},
 	properties: {
 		"cm:creator": ["admin"],
@@ -38,5 +38,6 @@ export const Resource = {
 			"Lass uns etwas das Addieren und Subtrahieren von Variablen üben, die positive und negative Zahlen auf dem Zahlenstrahl darstellen.",
 		],
 		"ccm:taxonentry": ["Mathematik"],
+		"ccm:thumbnailurl": ["https://img.youtube.com/vi/wRBPzExOH2A/maxresdefault.jpg"]
 	},
 };
