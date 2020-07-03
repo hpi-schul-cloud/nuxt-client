@@ -156,7 +156,7 @@ export default {
 			default: () => {},
 		},
 		client: { type: String, default: "Schul-Cloud" },
-		role : { type: String, default: "" },
+		role: { type: String, default: "" },
 	},
 	data() {
 		return {
@@ -232,7 +232,9 @@ export default {
 	},
 	methods: {
 		isNotStudent(roles) {
-			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role
+			return this.role === ""
+				? roles.some((role) => !role.startsWith("student"))
+				: this.role;
 		},
 		goBack() {
 			if (window.history.length > 1) {
