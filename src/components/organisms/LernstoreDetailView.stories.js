@@ -4,7 +4,7 @@ import { Resource } from "../../../stories/mockData/Resource";
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import { boolean } from "@storybook/addon-knobs";
 
-storiesOf("6 Organisms/LernstoreDetailView", module).add(
+storiesOf("6 Organisms/Content/LernstoreDetailView", module).add(
 	"LernstoreDetailView",
 	() => ({
 		components: { LernstoreDetailView },
