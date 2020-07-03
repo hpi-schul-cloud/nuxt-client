@@ -115,8 +115,7 @@
 					</div>
 				</div>
 			</div>
-			<user-has-role :role="isNotStudent">
-				<div class="floating-buttons">
+			<user-has-role class="floating-buttons" :role="isNotStudent">
 					<add-content-button
 						:resource="resource"
 						btn-design="hero-cta"
@@ -126,7 +125,6 @@
 						btn-icon="add"
 						:btn-label="$t('pages.content._id.addToTopic')"
 					/>
-				</div>
 			</user-has-role>
 		</div>
 	</div>

@@ -5,7 +5,7 @@
 				ref="searchInput"
 				v-autowidth="{
 					maxWidth: '960px',
-					minWidth: '0px',
+					minWidth: '300px',
 					comfortZone: extraInputSpace,
 				}"
 				:value="value"

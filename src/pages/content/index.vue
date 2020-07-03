@@ -9,7 +9,7 @@
 							? 'first-search__searchbar'
 							: 'content__searchbar'
 					"
-					placeholder="Lernstore durchsuchen"
+					:placeholder="$t('pages.content.index.search.placeholder')"
 					@keyup:enter="enterKeyHandler"
 				/>
 				<transition name="fade">
