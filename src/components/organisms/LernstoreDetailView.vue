@@ -225,9 +225,7 @@ export default {
 			return this.resource.filename;
 		},
 		closeButtonStyleSelector() {
-			return (
-				(this.$mq === "tabletPortrait" || this.$mq === "mobile")
-			);
+			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
 		},
 	},
 	methods: {
