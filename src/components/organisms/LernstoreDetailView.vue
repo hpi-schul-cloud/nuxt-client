@@ -80,7 +80,7 @@
 								:icon="getTypeIcon(resource.mimetype).icon"
 							/>
 						</div>
-						<div class="meta-text">
+						<div class="meta-text text-wrap">
 							<base-link
 								:href="downloadUrl"
 								target="_blank"
@@ -95,11 +95,13 @@
 							<base-icon source="fa" icon="tag" />
 						</div>
 						<template v-if="tags.length > 0">
-							<span v-for="(tag, index) in tags" :key="index" class="meta-text">
-								<base-link :href="'/content/?q=' + tag" class="tag-link"
-									>#{{ tag }}</base-link
-								>
-							</span>
+							<div class="text-wrap">
+								<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+									<base-link :href="'/content/?q=' + tag" class="tag-link"
+										>#{{ tag }}</base-link
+									>
+								</span>
+							</div>
 						</template>
 						<template v-if="tags.length === 0">
 							<span class="meta-text tag-link">{{
@@ -415,6 +417,11 @@ $tablet-portrait-width: 768px;
 				display: flex;
 				align-items: flex-start;
 				margin-bottom: var(--space-lg);
+				.text-wrap {
+					display: flex;
+					flex-flow: row wrap;
+					word-break: break-all;
+				}
 				.meta-icon {
 					margin-right: var(--space-md);
 					font-size: var(--text-lg);
