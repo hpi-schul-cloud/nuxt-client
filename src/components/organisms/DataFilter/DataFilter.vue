@@ -11,6 +11,7 @@
 			:component-modal="DataFilterModal"
 			:component-chips="DataFilterChips"
 			:component-select="DataFilterSelect"
+			:component-layout="DataFilterLayout"
 			@newQuery="setActiveFilters"
 		/>
 	</div>
@@ -25,6 +26,7 @@ import {
 } from "./defaultFilters";
 import { unescape } from "lodash";
 import DataFilterModal from "./DataFilterModal";
+import DataFilterLayout from "./DataFilterLayout";
 import DataFilterChips from "./DataFilterChips";
 import DataFilterSelect from "./DataFilterSelect";
 
@@ -54,6 +56,7 @@ export default {
 			DataFilterModal,
 			DataFilterChips,
 			DataFilterSelect,
+			DataFilterLayout,
 			localQuery: undefined,
 			localActiveFilters: undefined,
 		};
@@ -119,3 +122,6 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@styles";
+</style>

@@ -1,0 +1,8 @@
+version: 2
+mergeable:
+  - when: pull_request.*
+    validate:
+      - do: title
+        must_include:
+          regex: "(((SC|VUE|OPS)-[0-9]+|Quickfix) - .*|Bump .* from.* to .*)"
+          message: "The title must follow the schema: '(TICKET-ID|Quickfix) - [description]'."
