@@ -53,26 +53,31 @@ const contentMetaTypes = {
 
 describe("@mixins/contentMeta", () => {
 	it("should return valid content defaultly", () => {
-		expect(contentMeta.methods.getType('nonesence')).toStrictEqual(expect.objectContaining({
-			icon: "ic_default",
-		}));
+		expect(contentMeta.methods.getType("nonesence")).toStrictEqual(
+			expect.objectContaining({
+				icon: "ic_default",
+			})
+		);
 	});
 
 	it("should return valid icon for video", () => {
-		expect(contentMeta.methods.getTypeIcon('video')).toStrictEqual(expect.objectContaining({
-			iconLarge: "ic_video-circle",
-		}));
+		expect(contentMeta.methods.getTypeIcon("video")).toStrictEqual(
+			expect.objectContaining({
+				iconLarge: "ic_video-circle",
+			})
+		);
 	});
 
 	it("should return valid icons for all types", () => {
-		for (const metaTypeKey in contentMetaTypes){
+		for (const metaTypeKey in contentMetaTypes) {
 			const metaTypeValue = contentMetaTypes[metaTypeKey];
-			expect(contentMeta.methods.getTypeIcon(metaTypeKey)).toStrictEqual(expect.objectContaining({
-				iconLarge: metaTypeValue.iconLarge,
-				icon: metaTypeValue.icon,
-				iconSource: metaTypeValue.iconSource
-			}));
+			expect(contentMeta.methods.getTypeIcon(metaTypeKey)).toStrictEqual(
+				expect.objectContaining({
+					iconLarge: metaTypeValue.iconLarge,
+					icon: metaTypeValue.icon,
+					iconSource: metaTypeValue.iconSource,
+				})
+			);
 		}
-		
 	});
 });
