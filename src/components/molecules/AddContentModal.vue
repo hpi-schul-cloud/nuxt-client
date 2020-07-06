@@ -133,6 +133,8 @@ export default {
 			this.selectedLesson = {};
 			if (to) {
 				this.findLessons(to);
+			} else if (!to && !!from) {
+				this.$store.commit("content/clearLessons");
 			}
 		},
 	},

@@ -75,6 +75,9 @@ export const mutations = {
 	clearResources(state) {
 		state.resources = initialState().resources;
 	},
+	clearLessons(state) {
+		state.lessons = initialState().lessons;
+	},
 	setLoading(state, status) {
 		state.loading = status;
 	},
