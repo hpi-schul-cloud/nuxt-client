@@ -6,21 +6,21 @@
 					<base-icon
 						source="material"
 						icon="check_circle"
-						style="color: var(--color-success);"
+						:style="{ color: backgroundcolor }"
 					/>
 				</template>
 				<template v-else v-slot:icon>
 					<base-icon
 						source="material"
 						icon="error"
-						style="color: var(--color-danger);"
+						:style="{ color: backgroundcolor }"
 					/>
 				</template>
 			</modal-body-info>
 		</template>
 		<template v-slot:footer>
 			<modal-footer-confirm
-				:class="{ error: !isSuccess }"
+				:style="{ backgroundColor: backgroundcolor }"
 				text="Ok"
 				@click="closeModal"
 			/>
@@ -56,6 +56,12 @@ export default {
 		},
 		isSuccess: {
 			type: Boolean,
+		},
+		backgroundcolor: {
+			type: String,
+			default() {
+				return "var(--color-success)";
+			},
 		},
 	},
 	computed: {
