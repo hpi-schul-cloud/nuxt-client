@@ -30,7 +30,10 @@ describe("@components/molecules/NotificationModal", () => {
 		expect(wrapper.find("baseicon-stub").element.attributes.icon.value).toBe(
 			"check_circle"
 		);
-		expect(wrapper.find(".footer-button").classes("error")).toBe(false);
+		setTimeout(() => {
+			expect(wrapper.find(".footer-button").attributes("style"))
+				.toBe("background-color: var(--color-success)");
+		},200)
 	});
 
 	it("error case", async () => {
@@ -47,7 +50,10 @@ describe("@components/molecules/NotificationModal", () => {
 		expect(wrapper.find("baseicon-stub").element.attributes.icon.value).toBe(
 			"error"
 		);
-		expect(wrapper.find(".footer-button").classes("error")).toBe(true);
+		setTimeout(() => {
+			expect(wrapper.find(".footer-button").attributes("style"))
+				.toBe("background-color: var(--color-danger)");
+		},200)
 	});
 
 	it("executes close action after close", async () => {

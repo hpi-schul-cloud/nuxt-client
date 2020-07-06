@@ -20,7 +20,7 @@
 		</template>
 		<template v-slot:footer>
 			<modal-footer-confirm
-				:class="{ error: !isSuccess }"
+				:style="{ backgroundColor: backgroundcolor }"
 				text="Ok"
 				@click="closeModal"
 			/>
@@ -56,6 +56,12 @@ export default {
 		},
 		isSuccess: {
 			type: Boolean,
+		},
+		backgroundcolor: {
+			type: String,
+			default() {
+				return "var(--color-success)";
+			},
 		},
 	},
 	computed: {
