@@ -89,17 +89,20 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 	],
 });
 
+const getClassesNames = async (ctx, arr) => {
+	const classes = await ctx.$store.dispatch("classes/find");
+	classes.data.forEach((cl) => {
+		cl.displayName &&
+			arr.push({
+				value: cl.displayName,
+				label: cl.displayName,
+			});
+	});
+};
+
 export function studentFilter(ctx) {
 	const classesFilteringOptions = [];
-	const getUniqueClasses = async () => {
-		const students = await ctx.$store.dispatch("users/findStudents");
-		students.data
-			.reduce((acc, student) => [...new Set(acc.concat(student.classes))], [])
-			.forEach((cl) => {
-				classesFilteringOptions.push({ value: cl, label: cl });
-			});
-	};
-	getUniqueClasses();
+	getClassesNames(ctx, classesFilteringOptions);
 
 	return [
 		{
@@ -164,15 +167,7 @@ export function studentFilter(ctx) {
 
 export function teacherFilter(ctx) {
 	const classesFilteringOptions = [];
-	const getUniqueClasses = async () => {
-		const teachers = await ctx.$store.dispatch("users/findTeachers");
-		teachers.data
-			.reduce((acc, teacher) => [...new Set(acc.concat(teacher.classes))], [])
-			.forEach((cl) => {
-				classesFilteringOptions.push({ value: cl, label: cl });
-			});
-	};
-	getUniqueClasses();
+	getClassesNames(ctx, classesFilteringOptions);
 
 	return [
 		{
