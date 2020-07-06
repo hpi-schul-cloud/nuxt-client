@@ -9,6 +9,7 @@
 					'icon',
 				]"
 				design="icon"
+				aria-label="btnLabel"
 				@click="goBack"
 			>
 				<base-icon source="material" icon="close" />
@@ -27,7 +28,7 @@
 					:src="backgroundImage"
 					class="preview-img"
 					:alt="$t('pages.content.preview_img.alt')"
-					role="presentation"
+					role="img"
 				/>
 			</div>
 		</div>
@@ -225,9 +226,7 @@ export default {
 			return this.resource.filename;
 		},
 		closeButtonStyleSelector() {
-			return (
-				(this.$mq === "tabletPortrait" || this.$mq === "mobile")
-			);
+			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
 		},
 	},
 	methods: {

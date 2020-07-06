@@ -5,7 +5,9 @@
 			:class="btnClass"
 			:size="btnSize"
 			role="button"
-			aria-label="Add"
+			:aria-label="
+				btnLabel ? btnLabel : `$t('components.molecules.AddContentModal')`
+			"
 			@click.prevent="addResource"
 		>
 			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />

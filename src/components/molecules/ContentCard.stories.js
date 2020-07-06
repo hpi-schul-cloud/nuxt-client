@@ -7,7 +7,7 @@ import { Resource } from "../../../stories/mockData/Resource";
 import ContentCard from "./ContentCard";
 import { boolean } from "@storybook/addon-knobs";
 
-storiesOf("5 Molecules/Content/ContentCard", module).add("default", () => ({
+storiesOf("5 Molecules/Content/ContentCard", module).add("ContentCard", () => ({
 	components: { ContentCard },
 	data: () => ({
 		role: boolean("isAdmin/Teacher", true),
