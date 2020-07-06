@@ -13,6 +13,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+## ## [23.5.0] - 2020-06-21
+
+### Changed in 23.5.0
+
+- Upgrade to the 'new' Lern Store with a plus sign [#1054](https://github.com/schul-cloud/nuxt-client/pull/1054)
+- Personalized dataprivacy policy for admin [#1035](https://github.com/schul-cloud/nuxt-client/pull/1035)
+- Fix of unit tests in Nuxt client [#1028](https://github.com/schul-cloud/nuxt-client/pull/1028)
+
 ## ## [23.0.0] - 2020-05-19
 
 ### Changed in 23.0.0
