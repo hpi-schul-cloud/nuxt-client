@@ -2,7 +2,7 @@
 	<div class="header">
 		<div class="nav-container">
 			<div class="logo-container">
-				<base-link href="https://schul-cloud.org/">
+				<base-link :href="logoLink">
 					<img class="logo logo-full" :src="img" alt="Schulcloud Logo" />
 				</base-link>
 			</div>
@@ -19,7 +19,7 @@
 				>
 					{{ route.title }}
 				</base-link>
-				<div class="buttons-container">
+				<div v-if="buttons" class="buttons-container">
 					<base-link href="/login">
 						<base-button design="secondary outline">
 							<base-icon source="fa" icon="sign-in" class="icon" />
@@ -43,14 +43,23 @@ import BaseLink from "../base/BaseLink";
 export default {
 	components: { BaseLink, BaseButton },
 	props: {
+		logoLink: {
+			type: String,
+			default: "/",
+			required: false,
+		},
 		img: {
 			type: String,
 			required: true,
 		},
 		links: {
 			type: Array,
-			reqired: true,
 			default: () => {},
+			required: false,
+		},
+		buttons: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data() {
