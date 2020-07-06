@@ -5,7 +5,7 @@ const testProps = {
 	resource: Resource,
 };
 
-describe("@components/molecules/ContentCard", () => {
+describe("@components/organisms/ContentCard", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
 		propsData: { ...testProps },

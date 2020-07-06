@@ -57,7 +57,7 @@
 <script>
 import { mapState } from "vuex";
 import ContentSearchbar from "@components/molecules/ContentSearchbar";
-import ContentCard from "@components/molecules/ContentCard";
+import ContentCard from "@components/organisms/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
