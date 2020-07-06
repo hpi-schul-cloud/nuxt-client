@@ -4,7 +4,11 @@
 			<base-icon :source="source" :icon="icon" :fill="fill" />
 		</base-button>
 
-		<div ref="popupContent" class="popup-content" :class="{ visible, 'expand-to-left': shouldExpandToLeft }">
+		<div
+			ref="popupContent"
+			class="popup-content"
+			:class="{ visible, 'expand-to-left': shouldExpandToLeft }"
+		>
 			<slot></slot>
 		</div>
 	</div>
@@ -34,8 +38,10 @@ export default {
 			visible: false,
 		};
 	},
-	mounted () {
-		this.shouldExpandToLeft = this.$refs.popupContent.getBoundingClientRect().right > window.innerWidth + 10;
+	mounted() {
+		this.shouldExpandToLeft =
+			this.$refs.popupContent.getBoundingClientRect().right >
+			window.innerWidth + 10;
 	},
 	methods: {
 		popup() {
@@ -119,7 +125,7 @@ export default {
 	.expand-to-left::before {
 		@include breakpoint(tablet) {
 			right: calc(
-					var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
+				var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
 			);
 			left: initial;
 		}
