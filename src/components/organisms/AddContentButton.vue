@@ -4,6 +4,7 @@
 			:design="btnDesign"
 			:class="btnClass"
 			:size="btnSize"
+			data-testid="btn-add-content"
 			role="button"
 			:aria-label="
 				btnLabel ? btnLabel : `$t('components.molecules.AddContentModal')`
