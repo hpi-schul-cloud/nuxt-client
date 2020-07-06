@@ -21,7 +21,7 @@
 									class="content__img-thumbnail"
 									:alt="$t('pages.content.card.img.alt')"
 									role="img"
-								/>Cont
+								/>
 								<base-icon
 									:source="getTypeIcon(resource.mimetype).iconSource"
 									:icon="getTypeIcon(resource.mimetype).iconLarge"
