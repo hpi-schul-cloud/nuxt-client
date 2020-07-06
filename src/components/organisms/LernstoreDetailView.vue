@@ -243,6 +243,11 @@ export default {
 			}
 		},
 	},
+	head() {
+		return {
+			title: "LernStore"
+		};
+	},
 };
 </script>
 
