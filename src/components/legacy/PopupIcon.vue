@@ -4,7 +4,7 @@
 			<base-icon :source="source" :icon="icon" :fill="fill" />
 		</base-button>
 
-		<div class="popup-content" :class="{ visible, 'expand-to-left': shouldExpandToLeft }">
+		<div ref="popupContent" class="popup-content" :class="{ visible, 'expand-to-left': shouldExpandToLeft }">
 			<slot></slot>
 		</div>
 	</div>
@@ -25,16 +25,17 @@ export default {
 			type: String,
 			default: "var(--color-tertiary-dark)",
 		},
+		shouldExpandToLeft: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
 			visible: false,
 		};
 	},
-	computed: {
-		shouldExpandToLeft() {
-			return window.location.pathname === "/imprint";
-		}
+	mounted () {
+		this.shouldExpandToLeft = this.$refs.popupContent.getBoundingClientRect().right > window.innerWidth + 10;
 	},
 	methods: {
 		popup() {
@@ -43,7 +44,7 @@ export default {
 		removePopup() {
 			this.visible = false;
 		},
-	}
+	},
 };
 </script>
 
