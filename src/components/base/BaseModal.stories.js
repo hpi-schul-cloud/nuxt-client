@@ -29,13 +29,14 @@ storiesOf("4 Base UI Components/Modals", module)
 			),
 			footer: text("footer", "This is a footer"),
 			size: select("Size", { medium: "medium", large: "large" }, "medium"),
+			design: select("Design", { default: "", white: "white" }, ""),
 		}),
 		template: `
 		<div>
 		<base-button @click="active = true">
 				Open Modal
 		</base-button>
-		<base-modal :active.sync="active" :size="size">
+		<base-modal :active.sync="active" :size="size" :design="design">
 			<template v-slot:header>{{header}}</template>
 			<template v-slot:body>{{body}}
 
@@ -145,7 +146,7 @@ storiesOf("4 Base UI Components/Modals", module)
 				</ModalBodyInfo>
 			</template>
 			<template v-slot:footer>
-				<ModalFooterConfirm text="Ok" @click="active = false"/>
+				<ModalFooterConfirm backgroundcolor="var(--color-success)" text="Ok" @click="active = false"/>
 			</template>
 		</base-modal>
 		</div>`,

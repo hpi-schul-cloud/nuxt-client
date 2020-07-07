@@ -13,6 +13,10 @@ const module = mergeDeep(base, {
 			query.customEndpoint = "/users/admin/teachers";
 			return dispatch("find", query);
 		},
+		sendRegistrationLink(ctx, payload = {}) {
+			const customEndpoint = "/users/mail/registrationLink";
+			return this.$axios.$post(customEndpoint, payload);
+		},
 		getByRole: async function (ctx, role) {
 			const queryRole = {
 				roles: [role._id],
