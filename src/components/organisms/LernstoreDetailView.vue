@@ -139,12 +139,7 @@ import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
-const getMetadataAttribute = (properties, key) => {
-	if (Array.isArray(properties[key])) {
-		return properties[key][0];
-	}
-	return null;
-};
+import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
 	components: {
