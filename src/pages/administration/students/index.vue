@@ -483,7 +483,14 @@ span {
 	font-weight: var(--font-weight-normal);
 }
 .content {
+	max-height: 35vh;
+	overflow-y: scroll;
 	font-weight: var(--font-weight-normal);
+
+	@include breakpoint(tablet) {
+		max-height: initial;
+		overflow-y: initial;
+	}
 }
 .list {
 	padding: var(--space-lg);
@@ -498,13 +505,14 @@ span {
 .info-box {
 	position: absolute;
 	right: 0%;
-	z-index: var(--layer-dropdown);
-	min-width: 350px;
-	max-width: 50%;
-	margin-right: var(--space-sm);
+	z-index: calc(var(--layer-fab) + 1);
+	max-width: 100%;
+	margin-right: var(--space-lg);
+	margin-left: var(--space-lg);
 
 	@include breakpoint(tablet) {
 		min-width: 450px;
+		max-width: 50%;
 		margin-right: var(--space-xl);
 	}
 }
