@@ -7,17 +7,17 @@
 		</h1>
 		<i18n path="pages.administration.students.consent.info" tag="p">
 			<template v-slot:dataProtection>
-				<a class="link" :href="fileLinks.dataProtection" target="_">{{
+				<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
 					$t("components.legacy.footer.privacy_policy")
 				}}</a>
 			</template>
 			<template v-slot:terms>
-				<a class="link" :href="fileLinks.termsOfUse" target="_">{{
+				<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{
 					$t("components.legacy.footer.terms")
 				}}</a>
 			</template>
 			<template v-slot:handout>
-				<a class="link" :href="fileLinks.analogConsent" target="_">{{
+				<a class="link" :href="fileLinks.analogConsent" target="_blank">{{
 					$t("pages.administration.students.consent.handout")
 				}}</a>
 			</template>
