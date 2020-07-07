@@ -34,6 +34,10 @@ export default {
 	justify-content: center;
 	width: 100%;
 
+	&.error {
+		background-color: var(--color-danger);
+	}
+
 	> *:not(:first-child) {
 		margin-left: var(--space-md);
 	}
@@ -84,6 +88,15 @@ export default {
 		&:focus {
 			// increase border size to increase visiblity
 			box-shadow: 0 0 0 1px var(--button-background);
+		}
+	}
+}
+
+.error {
+	.btn-confirm {
+		background-color: var(--color-danger);
+		&:focus {
+			--button-background: var(--color-danger-dark);
 		}
 	}
 }

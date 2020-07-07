@@ -1,8 +1,8 @@
 export default {
 	data() {
 		return {
-			$_bottom: false,
-			$_scrollY: 0,
+			bottom: false,
+			scrollY: 0,
 		};
 	},
 	created() {
@@ -14,14 +14,14 @@ export default {
 	},
 	methods: {
 		$_scrollEventHandler() {
-			this.$_bottom = this.$_isBottomReached();
-			this.$_scrollY = window.scrollY;
+			this.bottom = this.$_isBottomReached();
+			this.scrollY = window.scrollY;
 		},
 		$_isBottomReached() {
 			const { scrollY } = window;
 			const visibleHeight = document.documentElement.clientHeight;
 			const pageHeight = document.documentElement.scrollHeight;
-			const bottomOfPage = visibleHeight + scrollY >= pageHeight - 2;
+			const bottomOfPage = Math.ceil(visibleHeight + scrollY) >= pageHeight;
 			return bottomOfPage || pageHeight < visibleHeight;
 		},
 		$_backToTop() {
