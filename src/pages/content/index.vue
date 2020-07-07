@@ -1,5 +1,6 @@
 <template>
 	<section>
+		<base-icon v-if="isInline" class="arrow__back" source="material" icon="arrow_back" @click="goBack" />
 		<div class="content">
 			<div>
 				<content-searchbar
@@ -63,6 +64,8 @@ import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
 
+import Theme from "@theme/config";
+
 export default {
 	components: {
 		ContentSearchbar,
@@ -100,6 +103,9 @@ export default {
 				query["searchQuery"] = this.searchQuery;
 			}
 			return query;
+		},
+		isInline() {
+			return window.location.search.includes("inline=1");
 		},
 	},
 	watch: {
@@ -169,11 +175,24 @@ export default {
 				this.firstSearch = false;
 			}, 500);
 		},
+		goBack() {
+			if (window.history.length > 1) {
+				this.$router && this.$router.back();
+			} else {
+				window.close();
+			}
+		},
 	},
 	head() {
-		return {
-			title: "LernStore",
-		};
+		if (this.isInline) {
+			return {
+				title: this.$t("pages.content.page.window.title") + Theme.name + this.$t("pages.content.page.window.title_2")
+			};
+		} else {
+			return {
+				title: "LernStore",
+			};
+		}
 	},
 };
 </script>
@@ -186,6 +205,10 @@ export default {
 	width: 100%;
 	min-height: 80vh;
 	padding: 0 var(--space-lg);
+	.arrow__back {
+		margin-top: var(--space-xs);
+		color: var(--color-tertiary);
+	}
 	&__container {
 		display: flex;
 		flex-direction: column;
