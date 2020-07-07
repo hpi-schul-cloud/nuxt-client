@@ -2,16 +2,18 @@
 	<div>
 		<common-terms-of-use
 			:show-school-terms="!!(consentVersion && consentVersion.schoolId)"
-			@download="download"
+			@download="$_downloadContent_download"
 		/>
 	</div>
 </template>
 
 <script>
-import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
+	import CommonTermsOfUse from "@theme/components/templates/CommonTermsOfUse";
+	import downloadMixin from "@mixins/downloadPrivacyStatement";
 
-export default {
+	export default {
 	components: { CommonTermsOfUse },
+		mixins: [downloadMixin],
 	computed: {
 		consentVersion() {
 			return this.$store.state["terms-and-conditions"].consentVersion;
@@ -24,17 +26,6 @@ export default {
 				this.$user.schoolId
 			);
 		}
-	},
-	methods: {
-		async download() {
-			const data = await this.$axios.$get(
-				`base64Files/${this.consentVersion.consentDataId}`
-			);
-			const downloadLink = document.createElement("a");
-			downloadLink.href = data.data;
-			downloadLink.download = "Datenschutzerklärung-der-Schule.pdf";
-			downloadLink.click();
-		},
 	},
 	meta: {
 		isPublic: true,
