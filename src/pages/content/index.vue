@@ -1,6 +1,12 @@
 <template>
 	<section>
-		<base-icon v-if="isInline" class="arrow__back" source="material" icon="arrow_back" @click="goBack" />
+		<base-icon
+			v-if="isInline"
+			class="arrow__back"
+			source="material"
+			icon="arrow_back"
+			@click="goBack"
+		/>
 		<div class="content">
 			<div>
 				<content-searchbar
@@ -186,7 +192,10 @@ export default {
 	head() {
 		if (this.isInline) {
 			return {
-				title: this.$t("pages.content.page.window.title") + Theme.name + this.$t("pages.content.page.window.title_2")
+				title:
+					this.$t("pages.content.page.window.title") +
+					Theme.name +
+					this.$t("pages.content.page.window.title_2"),
 			};
 		} else {
 			return {
