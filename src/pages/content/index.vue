@@ -182,14 +182,16 @@ export default {
 			}, 500);
 		},
 		goBack() {
-				window.close();
-			}
+			window.close();
+		},
 	},
 	head() {
 		if (this.isInline) {
 			return {
 				title:
-					this.$t("pages.content.page.window.title") + Theme.name + this.$t("pages.content.page.window.title_2"),
+					this.$t("pages.content.page.window.title") +
+					Theme.name +
+					this.$t("pages.content.page.window.title_2"),
 			};
 		} else {
 			return {
