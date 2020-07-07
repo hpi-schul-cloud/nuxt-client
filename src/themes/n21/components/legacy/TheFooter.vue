@@ -8,14 +8,20 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-						<a v-if="link.name === 'privacy'"
-						   :key="link.text"
-						   href="#documents-header"
-						   @click="$_downloadContent_download"
-						>{{ link.text }}</a>
-					<base-link v-else :key="link.text" class="footer-link" v-bind="link">{{
-						link.text
-					}}</base-link>
+					<a
+						v-if="link.name === 'privacy'"
+						:key="link.text"
+						href="#documents-header"
+						@click="$_downloadContent_download"
+						>{{ link.text }}</a
+					>
+					<base-link
+						v-else
+						:key="link.text"
+						class="footer-link"
+						v-bind="link"
+						>{{ link.text }}</base-link
+					>
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }} </span>
@@ -101,15 +107,15 @@ export default {
 				return {
 					href: "#documents-header",
 					text: this.$t(
-							"components.legacy.footer.privacy_policy_school_specific"
+						"components.legacy.footer.privacy_policy_school_specific"
 					),
 					target: "_blank",
 					rel: "noopener",
-					name: "privacy"
+					name: "privacy",
 				};
 			}
 		},
-	}
+	},
 };
 </script>
 

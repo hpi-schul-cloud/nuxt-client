@@ -8,12 +8,12 @@
 </template>
 
 <script>
-	import CommonTermsOfUse from "@theme/components/templates/CommonTermsOfUse";
-	import downloadMixin from "@mixins/downloadPrivacyStatement";
+import CommonTermsOfUse from "@theme/components/templates/CommonTermsOfUse";
+import downloadMixin from "@mixins/downloadPrivacyStatement";
 
-	export default {
+export default {
 	components: { CommonTermsOfUse },
-		mixins: [downloadMixin],
+	mixins: [downloadMixin],
 	computed: {
 		consentVersion() {
 			return this.$store.state["terms-and-conditions"].consentVersion;
