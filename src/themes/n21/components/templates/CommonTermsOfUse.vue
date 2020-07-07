@@ -1,6 +1,7 @@
 <template>
 	<div class="impressum-container">
 		<h1 class="h2">{{ $t("pages.termsofuse.title") }}</h1>
+		<p>Stand: 11.06.2020</p>
 		Liebe Besucher*innen, liebe Nutzer*innen, liebe Erziehungsberechtigte, Diese
 		Datenschutzhinweise informieren über die Verarbeitung personenbezogener
 		Daten, die beim Aufruf der Website
@@ -51,8 +52,9 @@
 		wollen dadurch eine komfortablere und individuellere Nutzung der Website
 		ermöglichen.
 		<br /><br />
-		Beim Aufruf der Website durch nicht-angemeldete Besucher*innen ist das Hasso
-		Plattner Institut (HPI), Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam,
+		Beim Aufruf der Website durch
+		<strong>nicht-angemeldete Besucher*innen</strong> ist das Hasso Plattner
+		Institut (HPI), Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam,
 		<a href="mailto:datenschutz@schul-cloud.org">datenschutz@schul-cloud.org</a>
 		für die zuvor genannten Verarbeitungsvorgänge verantwortlich. Für alle
 		Fragen zum Thema Datenschutz ist der Datenschutzbeauftragte des HPI unter
@@ -60,8 +62,8 @@
 		Datenschutzbeauftragter“). Rechtsgrundlage für die Verarbeitung sind die
 		zuvor genannten berechtigten Interessen des HPI.
 		<br /><br />
-		Bei angemeldeten Nutzern*innen findet die zuvor genannte Datenverarbeitung
-		unter der nachfolgend beschriebenen datenschutzrechtlichen
+		Bei <strong>angemeldeten Nutzern*innen</strong> findet die zuvor genannte
+		Datenverarbeitung unter der nachfolgend beschriebenen datenschutzrechtlichen
 		Verantwortlichkeit der Schulen statt, die das HPI als technischen
 		Dienstleister beauftragen.
 		<h2 id="documents-header" class="h3">
@@ -79,8 +81,11 @@
 			Link einsehen:
 			<a href="#documents-header" @click="download"
 				>Datenschutzerklärung der Schule</a
-			>. Falls deine/ Ihre Schule keine spezifische Datenschutzerklärung
-			erstellt hat, wird Ihnen eine Muster Datenschutzerklärung angezeigt.
+			>.
+			<i
+				>Falls deine/ Ihre Schule keine spezifische Datenschutzerklärung
+				erstellt hat, wird Ihnen eine Muster Datenschutzerklärung angezeigt.</i
+			>
 			<br /><br />
 			Die Nutzungsordnung der Niedersächsischen Bildungscloud kann unter
 			folgendem Link eingesehen werden:
@@ -104,7 +109,8 @@
 				>Datenschutzerklärung Muster Schule</a
 			>. <br /><br />
 			Die Nutzungsordnung der Niedersächsischen Bildungscloud kann unter
-			folgendem Link eingesehen werden:<a
+			folgendem Link eingesehen werden:
+			<a
 				:href="defaultDocuments.specificFiles().termsOfUseExemplary"
 				target="_blank"
 				>Nutzungsordnung der Niedersächsischen Bildungscloud</a
@@ -113,7 +119,7 @@
 	</div>
 </template>
 <script>
-import defaultDocuments from "@utils/documents.js";
+import defaultDocuments from "../../../../utils/documents";
 
 export default {
 	props: {
