@@ -9,6 +9,7 @@ describe("@components/legacy/MenuQrCode", () => {
 	it(...isValidComponent(MenuQrCode));
 	it("generates an qrCode with print icon button", () => {
 		const wrapper = shallowMount(MenuQrCode, {
+			...createComponentMocks({ i18n: true }),
 			propsData: { url: "testUrl" },
 		});
 
@@ -18,10 +19,12 @@ describe("@components/legacy/MenuQrCode", () => {
 		expect(wrapper.find("base-button-stub").exists()).toBe(true);
 		expect(wrapper.find("base-icon-stub").exists()).toBe(true);
 
-		expect(wrapper.text()).toBe("Drucken");
+		expect(wrapper.find(".print-button-content").text()).toBe("Drucken");
 	});
 	it("opens a print window when print button is clicked", () => {
-		const wrapper = mount(menuQrCode);
+		const wrapper = mount(menuQrCode, {
+			...createComponentMocks({ i18n: true }),
+		});
 
 		jest.spyOn(window, "open").mockImplementation(() => window);
 		jest.spyOn(window, "print").mockImplementation();

@@ -368,13 +368,21 @@ export default {
 				{ duration: 5000 }
 			);
 		},
-		handleBulkEMail(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkEMail([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+		async handleBulkEMail(rowIds, selectionType) {
+			try {
+				await this.$store.dispatch("users/sendRegistrationLink", {
+					userIds: rowIds,
+					selectionType,
+				});
+				this.$toast.success(
+					this.$tc("pages.administration.sendMail.success", rowIds.length)
+				);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+					this.$tc("pages.administration.sendMail.error", rowIds.length)
+				);
+			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			// TODO: request registrationsLinks fom backend

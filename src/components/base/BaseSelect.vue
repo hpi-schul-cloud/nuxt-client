@@ -41,8 +41,8 @@ export default {
 		 * Must match an entry of the options prop.
 		 */
 		value: {
-			type: [String, Number, Array, Object],
-			required: true,
+			type: [String, Number, Array, Object, undefined],
+			default: undefined,
 		},
 		multiple: {
 			type: Boolean,

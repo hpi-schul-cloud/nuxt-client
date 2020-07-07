@@ -1,4 +1,4 @@
-name: PR Automation
+name: PR Automation Comments
 on:
   issue_comment:
     types: [created]

@@ -3,12 +3,12 @@
 		<div class="icon">
 			<slot name="icon"></slot>
 		</div>
-		<h1 class="h4">
+		<h1 class="h4 modal-title">
 			<slot name="title">
 				{{ title }}
 			</slot>
 		</h1>
-		<p>
+		<p class="modal-description">
 			<slot name="description">
 				{{ description }}
 			</slot>
