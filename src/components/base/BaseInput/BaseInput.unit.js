@@ -30,7 +30,7 @@ describe("@components/base/BaseInput", () => {
 					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
 					components: { BaseInput },
 				});
-				expect(wrapper.contains(".label")).toBe(true);
+				expect(wrapper.find(".label").exists()).toBe(true);
 				expect(wrapper.text()).toContain(testLabel);
 			});
 	});
@@ -43,7 +43,7 @@ describe("@components/base/BaseInput", () => {
 				template: `<base-input v-model="value" label="${testLabel}" label-hidden type="${type}" value="${index}"/>`,
 				components: { BaseInput },
 			});
-			expect(wrapper.contains(".label")).toBe(false);
+			expect(wrapper.find(".label").exists()).toBe(false);
 			expect(wrapper.find("input").attributes("aria-label")).toBe(testLabel);
 		});
 	});
