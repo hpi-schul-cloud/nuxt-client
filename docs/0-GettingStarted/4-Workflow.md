@@ -54,6 +54,10 @@ Der Pull Request sollte wie der Branchname benannt werden, jedoch mit `SPACE` st
 
 Die Bescheibung des Pull Requests sollte das entsprechende Template bestmöglich ausfüllen. Alles was Visuelle Änderungen hervorruft sollte mit einem Screenshot dokumentiert werden, damit die Reviewer eine Vorstellung davon bekommen, wie das Resultat aussehen soll.
 
+### Pull Request Update Screenshots
+
+If you have modified or added components that are represented in the storybook, it is usually necessary to update the corresponding screenshots for the [Screenshot Tests](../4-Tools.md#screenshot-tests). This is also necessary when the check `Test / screenshot (push)` in your PR fails. To update the screenshots, you can simply write a comment under your PR with the following content: `@schul-cloud-bot update screenshots`. <br /> Afterwards the update process is triggered and if changes are made, the screenshots are automatically committed to your current PR. <br /> (Please note that this process may take several minutes.)
+
 ### Pull Request Review
 
 Der Review Prozess sollte erst Beginnen, wenn das WIP Label vom ersteller des Pulls entfernt wurde.
