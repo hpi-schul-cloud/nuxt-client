@@ -126,7 +126,7 @@ export default {
 			}
 			this.$options.debounce = setInterval(() => {
 				let inline = 0;
-				if (window.location.search.includes("inline=1")){
+				if (window.location.search.includes("inline=1")) {
 					inline = 1;
 				}
 				clearInterval(this.$options.debounce);
