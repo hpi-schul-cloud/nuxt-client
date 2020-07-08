@@ -174,7 +174,6 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-	position: relative;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
