@@ -12,11 +12,16 @@
 </template>
 
 <style lang="scss">
+@import "@styles";
+
 .edusharing-footer {
 	display: flex;
 	justify-content: center;
 	width: 100%;
-	margin-top: var(--space-xl);
+
+	@include breakpoint(tablet) {
+		margin-top: var(--space-xl);
+	}
 
 	&__text {
 		margin-top: var(--space-xl-2);

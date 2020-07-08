@@ -117,7 +117,12 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
+		padding-right: var(--space-sm);
 		color: var(--color-gray);
+
+		@include breakpoint(tablet) {
+			padding-right: 0;
+		}
 
 		input {
 			flex: 1;

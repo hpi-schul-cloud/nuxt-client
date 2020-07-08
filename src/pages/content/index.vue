@@ -184,7 +184,7 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	min-height: 80vh;
+	min-height: 75vh;
 	padding: 0 var(--space-lg);
 	&__container {
 		display: flex;
