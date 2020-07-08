@@ -1,12 +1,8 @@
 <template>
 	<section>
-		<base-icon
-			v-if="isInline"
-			class="arrow__back"
-			source="material"
-			icon="arrow_back"
-			@click="goBack"
-		/>
+		<base-button v-if="isInline" design="none" type="button" @click="goBack">
+			<base-icon class="arrow__back" source="material" icon="arrow_back" />
+		</base-button>
 		<div class="content">
 			<div>
 				<content-searchbar
@@ -69,11 +65,11 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
-
-import Theme from "@theme/config";
+import BaseButton from "../../components/base/BaseButton";
 
 export default {
 	components: {
+		BaseButton,
 		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
@@ -111,7 +107,7 @@ export default {
 			return query;
 		},
 		isInline() {
-			return window.location.search.includes("inline=1");
+			return !!this.$route.query.inline;
 		},
 	},
 	watch: {
@@ -186,18 +182,13 @@ export default {
 		},
 	},
 	head() {
-		if (this.isInline) {
-			return {
-				title:
-					this.$t("pages.content.page.window.title") +
-					Theme.name +
-					this.$t("pages.content.page.window.title_2"),
-			};
-		} else {
-			return {
-				title: "LernStore",
-			};
-		}
+		return this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: "LernStore" };
 	},
 };
 </script>
