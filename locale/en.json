@@ -61,6 +61,7 @@
 	"components.organisms.FormNews.success.remove": "",
 	"components.organisms.LegacyFooter.contact": "",
 	"components.organisms.LegacyFooter.job-offer": "",
+	"components.legacy.MenuQrCode.qrHintText": "Navigate other users to this site",
 	"error.400": "401 — Bad Request",
 	"error.401": "401 — Unauthorized",
 	"error.404": "404 — Not Found",
