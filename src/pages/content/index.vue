@@ -127,13 +127,13 @@ export default {
 			this.$options.debounce = setInterval(() => {
 				let inline = 0;
 				clearInterval(this.$options.debounce);
-				if (window.location.search.includes("inline=1")){
+				if (window.location.search.includes("inline=1")) {
 					inline = 1;
 				}
 				this.$router.push({
 					query: {
 						q: this.searchQuery,
-						inline: inline
+						inline: inline,
 					},
 				});
 			}, 500);
