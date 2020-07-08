@@ -173,7 +173,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .content {
 	position: relative;
 	display: flex;
