@@ -158,13 +158,14 @@ export default {
 		}
 		&-icon {
 			position: absolute;
-			top: 40%;
-			left: 40%;
+			top: 50%;
+			left: 50%;
 			z-index: var(--layer-page);
 			font-size: var(--space-xl-3);
 			border-radius: var(--radius-round);
 			box-shadow: var(--shadow-m);
 			opacity: 0.8;
+			transform: translate(-50%, -50%);
 		}
 		&-checkbox {
 			position: absolute;
