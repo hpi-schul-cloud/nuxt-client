@@ -18,6 +18,7 @@
 	display: flex;
 	justify-content: center;
 	width: 100%;
+	margin-top: var(--space-lg);
 
 	@include breakpoint(tablet) {
 		margin-top: var(--space-xl);
@@ -29,7 +30,9 @@
 		font-size: var(--text-sm);
 	}
 	&__logo {
-		width: 150px;
+		width: 100px;
+		height: 40px;
+		margin-top: calc(15 * var(--border-width));
 	}
 }
 </style>

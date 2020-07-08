@@ -3,11 +3,6 @@
 		<div :class="[isActive ? 'input-active' : '', 'search__container']">
 			<input
 				ref="searchInput"
-				v-autowidth="{
-					maxWidth: '960px',
-					minWidth: '300px',
-					comfortZone: extraInputSpace,
-				}"
 				:value="value"
 				:aria-label="ariaLabel"
 				label="search-input"
@@ -59,7 +54,6 @@ export default {
 		return {
 			isActive: true,
 			inputValue: "",
-			extraInputSpace: 40,
 		};
 	},
 	mounted() {
@@ -117,12 +111,7 @@ export default {
 	&__container {
 		display: flex;
 		align-items: center;
-		padding-right: var(--space-sm);
 		color: var(--color-gray);
-
-		@include breakpoint(tablet) {
-			padding-right: 0;
-		}
 
 		input {
 			flex: 1;
