@@ -108,12 +108,7 @@ export default {
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 		thumbnail() {
-			return (
-				this.getMetadataAttribute(
-					this.resource.properties,
-					"ccm:thumbnailurl"
-				) || this.resource.preview.url
-			);
+			return this.resource.preview.url;
 		},
 	},
 };

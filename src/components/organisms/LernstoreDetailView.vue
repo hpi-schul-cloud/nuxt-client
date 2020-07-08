@@ -201,16 +201,10 @@ export default {
 			);
 		},
 		backgroundImage() {
-			return (
-				getMetadataAttribute(this.resource.properties, "ccm:thumbnailurl") ||
-				this.resource.preview.url
-			);
+			return this.resource.preview.url;
 		},
 		downloadUrl() {
-			return (
-				getMetadataAttribute(this.resource.properties, "ccm:wwwurl") ||
-				this.resource.downloadUrl
-			);
+			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 		tags() {
 			let tags = getMetadataAttribute(

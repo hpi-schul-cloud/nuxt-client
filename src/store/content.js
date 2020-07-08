@@ -10,34 +10,10 @@ export const actions = {
 			const res = await this.$axios.$get("/edu-sharing", {
 				params: query,
 			});
-			console.log(res.meta.authorization);
-			// "JSESSIONID=34712629A98CAD0345868B0EB3F3F819; Path=/edu-sharing; Secure"
-			if (res.meta.authorization){
-				const eduCookie = res.meta.authorization;
-				const cookieParts = eduCookie.split('; ');
-				const cookieKeyValue = cookieParts[0].split('=');
-				const options = {
-					// path: '/edu-sharing',
-					// domain: 'mv-repo.schul-cloud.org',
-					secure: true,
-					// sameSite: 'lax'
-				};
-				console.log(cookieKeyValue[1]);
-				this.$cookies.set('JSESSIONID', cookieKeyValue[1], options);
-				this.$cookies.set('JSESSIONID6', cookieKeyValue[1], {
-					 	path: '/',
-						secure: true,
-					    domain: 'mv-repo.schul-cloud.org',
-						sameSite: 'none'
-				});
-
-				console.log(this.$cookies.getAll())
-			}
 
 			commit("setResources", res);
-			}
-			catch (e) {
-			console.log(e);
+		} catch (e) {
+			console.error(e);
 		} finally {
 			commit("setLoading", false);
 		}

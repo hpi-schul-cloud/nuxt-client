@@ -38,6 +38,13 @@
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 
+const getMetadataAttribute = (properties, key) => {
+	if (Array.isArray(properties[key])) {
+		return properties[key][0];
+	}
+	return null;
+};
+
 export default {
 	name: "AddContentButton",
 	components: {
@@ -66,7 +73,7 @@ export default {
 			return response && response.status === 201;
 		},
 		getUrl() {
-			return `/content/${this.resource.ref.id}`;
+			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 	},
 	methods: {
@@ -76,7 +83,7 @@ export default {
 					window.opener.addResource({
 						title: this.resource.title,
 						client: this.client,
-						url: `/content/${this.resource.ref.id}`,
+						url: this.getUrl,
 					});
 					window.close();
 					return true;
