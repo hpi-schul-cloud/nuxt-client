@@ -20,7 +20,7 @@
 					{{ route.title }}
 				</base-link>
 				<div v-if="buttons" class="buttons-container">
-					<base-link href="/login">
+					<base-link href="/loginRedirect">
 						<base-button design="secondary outline">
 							<base-icon source="fa" icon="sign-in" class="icon" />
 							{{ $t("common.labels.login") }}

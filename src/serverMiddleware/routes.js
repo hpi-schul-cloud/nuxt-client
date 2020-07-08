@@ -19,7 +19,7 @@ module.exports = [
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
 	`^/login-instances/?`,
-	// `^/content/`,
+	`^/content/?`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
