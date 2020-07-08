@@ -236,7 +236,10 @@ export default {
 				: this.role;
 		},
 		goBack() {
-			if (window.history.length > 1) {
+			if (document.referrer.includes('courses') && document.referrer.includes('add')) {
+				window.location.href = "/content/?inline=1&isCourseGroupTopic=true";
+			}
+			else if (window.history.length > 1) {
 				this.$router && this.$router.back();
 			} else {
 				window.close();
