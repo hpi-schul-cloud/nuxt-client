@@ -125,10 +125,15 @@ export default {
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
+				let inline = 0;
 				clearInterval(this.$options.debounce);
+				if (window.location.search.includes("inline=1")){
+					inline = 1;
+				}
 				this.$router.push({
 					query: {
 						q: this.searchQuery,
+						inline: inline
 					},
 				});
 			}, 500);
