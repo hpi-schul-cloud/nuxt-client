@@ -1,57 +1,51 @@
 <template>
-	<section>
-		<div class="content">
-			<div>
-				<content-searchbar
-					v-model.lazy="searchQuery"
-					:class="
-						!activateTransition
-							? 'first-search__searchbar'
-							: 'content__searchbar'
-					"
-					:placeholder="$t('pages.content.index.search.placeholder')"
-					@keyup:enter="enterKeyHandler"
-				/>
-				<transition name="fade">
-					<span v-if="!firstSearch" class="content__container">
-						<p class="content__total">
-							<span v-if="searchQuery.length > 0">
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_results") }} "{{
-									searchQuery
-								}}"
-							</span>
-							<span v-else>
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_resources") }}
-							</span>
-						</p>
-						<div
-							v-if="resources.data.length === 0 && !loading"
-							class="content__no-results"
-						>
-							<content-empty-state />
-						</div>
-						<base-grid column-width="14rem">
-							<content-card
-								v-for="resource of resources.data"
-								:key="resource.ref.id"
-								class="card"
-								:resource="resource"
-							/>
-						</base-grid>
-					</span>
-				</transition>
-			</div>
-			<base-spinner
-				v-if="loading"
-				class="spinner mt--xl-2"
-				color="var(--color-tertiary)"
-				size="xlarge"
+	<div class="content">
+		<div>
+			<content-searchbar
+				v-model.lazy="searchQuery"
+				:class="
+					!activateTransition ? 'first-search__searchbar' : 'content__searchbar'
+				"
+				:placeholder="$t('pages.content.index.search.placeholder')"
+				@keyup:enter="enterKeyHandler"
 			/>
+			<transition name="fade">
+				<span v-if="!firstSearch" class="content__container">
+					<p class="content__total">
+						<span v-if="searchQuery.length > 0">
+							{{ resources.total }}
+							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+						</span>
+						<span v-else>
+							{{ resources.total }}
+							{{ $t("pages.content.index.search_resources") }}
+						</span>
+					</p>
+					<div
+						v-if="resources.data.length === 0 && !loading"
+						class="content__no-results"
+					>
+						<content-empty-state />
+					</div>
+					<base-grid column-width="14rem">
+						<content-card
+							v-for="resource of resources.data"
+							:key="resource.ref.id"
+							class="card"
+							:resource="resource"
+						/>
+					</base-grid>
+				</span>
+			</transition>
 		</div>
+		<base-spinner
+			v-if="loading"
+			class="spinner mt--xl-2"
+			color="var(--color-tertiary)"
+			size="xlarge"
+		/>
 		<content-edu-sharing-footer class="content__footer" />
-	</section>
+	</div>
 </template>
 
 <script>
@@ -184,8 +178,10 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	min-height: 80vh;
+	height: 100%;
 	padding: 0 var(--space-lg);
+	overflow-y: hidden;
+
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -214,6 +210,7 @@ export default {
 	}
 	&__footer {
 		align-self: flex-end;
+		padding-bottom: var(--space-sm);
 	}
 	.spinner {
 		align-self: center;
@@ -224,7 +221,7 @@ export default {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
-		margin: var(--space-xl-5) 0 0;
+		margin-top: var(--space-xl-5);
 	}
 }
 
