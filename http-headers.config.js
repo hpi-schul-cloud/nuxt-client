@@ -14,7 +14,7 @@ module.exports = {
 		// Use 'strict-dynamic' 'nonce-<nonceValue>' (nonceValue auto generated) to create a whitelist
 		corsDefault: {
 			defaultSrc:
-				"'self' data: blob: wss://staging.schul-cloud.org https://api.schul-cloud.org https://scchat.schul-cloud.org https://s3.hidrive.strato.com https://libreoffice.schul-cloud.org https://docs.schul-cloud.org https://edtrio.schul-cloud.org https://etherpad.schul-cloud.org https://blog.schul-cloud.org https://sc-content-resources.schul-cloud.org https://sentry.schul-cloud.dev https://open.hpi.de https://upload.wikimedia.org https://user-images.githubusercontent.com",
+				"'self' data: blob: wss://schul-cloud.org wss://scchat.schul-cloud.org https://api.schul-cloud.org https://scchat.schul-cloud.org https://s3.hidrive.strato.com https://libreoffice.schul-cloud.org https://docs.schul-cloud.org https://edtrio.schul-cloud.org https://etherpad.schul-cloud.org https://blog.schul-cloud.org https://sc-content-resources.schul-cloud.org https://sentry.schul-cloud.dev https://open.hpi.de https://upload.wikimedia.org https://user-images.githubusercontent.com",
 			fontSrc: "'self' data:",
 			styleSrc: "'self' 'unsafe-inline'",
 			// scriptSrc: "'strict-dynamic' 'unsafe-eval' 'nonce-<nonceValue>'",
