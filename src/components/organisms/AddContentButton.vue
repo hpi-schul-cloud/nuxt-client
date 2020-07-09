@@ -67,10 +67,7 @@ export default {
 			return response && response.status === 201;
 		},
 		getUrl() {
-			return (
-				getMetadataAttribute(this.resource.properties, "ccm:wwwurl") ||
-				this.resource.downloadUrl
-			);
+			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 	},
 	methods: {
