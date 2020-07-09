@@ -122,6 +122,7 @@ export default {
 				clearInterval(this.$options.debounce);
 				this.$router.push({
 					query: {
+						...this.$route.query,
 						q: this.searchQuery,
 					},
 				});
