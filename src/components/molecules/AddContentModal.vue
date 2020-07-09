@@ -15,7 +15,6 @@
 						class="content-modal__body--select"
 						:options="coursesOptions"
 						:show-labels="true"
-						:placeholder="$t('pages.content.placeholder.chooseACourse')"
 						:label="$t('pages.content.label.chooseACourse')"
 						close-on-select
 						option-label="name"
@@ -24,19 +23,26 @@
 						:selected-label="$t('pages.content.label.selected')"
 						track-by="_id"
 					/>
-					<base-select
-						v-model="selectedLesson"
-						class="content-modal__body--select"
-						:options="lessonsOptions"
-						:label="$t('pages.content.label.chooseALessonTopic')"
-						:placeholder="$t('pages.content.placeholder.chooseALessonTopic')"
-						option-label="name"
-						close-on-select
-						:deselect-label="$t('pages.content.label.deselect')"
-						:select-label="$t('pages.content.label.select')"
-						:selected-label="$t('pages.content.label.selected')"
-						track-by="_id"
-					/>
+					<transition name="fade">
+						<base-select
+							v-if="!!(selectedCourse || {})._id"
+							v-model="selectedLesson"
+							class="content-modal__body--select"
+							:options="lessonsOptions"
+							:label="$t('pages.content.label.chooseALessonTopic')"
+							option-label="name"
+							close-on-select
+							:placeholder="
+								(lessonsOptions || []).length === 0
+									? $t('pages.content.placeholder.noLessonTopic')
+									: ''
+							"
+							:deselect-label="$t('pages.content.label.deselect')"
+							:select-label="$t('pages.content.label.select')"
+							:selected-label="$t('pages.content.label.selected')"
+							track-by="_id"
+						/>
+					</transition>
 				</div>
 			</template>
 			<template v-slot:footer>
@@ -97,7 +103,7 @@ export default {
 			},
 		}),
 		isSendEnabled() {
-			return this.selectedLesson._id !== undefined;
+			return (this.selectedLesson || {})._id !== undefined;
 		},
 		coursesOptions() {
 			return this.courses
@@ -178,5 +184,14 @@ export default {
 			margin-top: var(--space-xl);
 		}
 	}
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity var(--duration-transition-slow);
+}
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>
