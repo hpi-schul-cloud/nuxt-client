@@ -1,6 +1,12 @@
 <template>
 	<section>
-		<base-button v-if="isInline" design="text icon" type="button" class="arrow__back" @click="goBack">
+		<base-button
+			v-if="isInline"
+			design="text icon"
+			type="button"
+			class="arrow__back"
+			@click="goBack"
+		>
 			<base-icon source="material" icon="arrow_back" />
 		</base-button>
 		<div class="content">
