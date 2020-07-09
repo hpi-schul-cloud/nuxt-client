@@ -1,5 +1,5 @@
 <template>
-	<div :style="{ backgroundColor: backgroundcolor }" class="footer-button">
+	<div :style="{ backgroundColor: backgroundcolor }" class="footer-button" :class="isSuccess ? '' : 'error'">
 		<button class="btn-confirm" v-on="$listeners">
 			Ok
 		</button>
@@ -15,9 +15,11 @@ export default {
 				return "var(--color-success)";
 			},
 		},
+		isSuccess: {
+			type: Boolean,
+		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
 		return {};
 	},
 };
@@ -33,10 +35,6 @@ export default {
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-
-	&.error {
-		background-color: var(--color-danger);
-	}
 
 	> *:not(:first-child) {
 		margin-left: var(--space-md);
@@ -72,29 +70,13 @@ export default {
 
 	&:hover,
 	&:focus {
-		outline: none;
-
 		--button-background: var(--color-success-dark);
-	}
-	/* stylelint-disable */
-	// defined multiple to seperate style from behaviour
-	&.is-outline {
-		/* stylelint-enable */
-		color: var(--button-background);
-		background: var(--color-white);
-		border: 1px solid var(--button-background);
-
-		&:hover,
-		&:focus {
-			// increase border size to increase visiblity
-			box-shadow: 0 0 0 1px var(--button-background);
-		}
 	}
 }
 
 .error {
 	.btn-confirm {
-		background-color: var(--color-danger);
+		&:hover,
 		&:focus {
 			--button-background: var(--color-danger-dark);
 		}
