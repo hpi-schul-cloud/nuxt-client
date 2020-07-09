@@ -9,7 +9,7 @@ import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
-		id: faker.random.uuid(),
+		_id: faker.random.uuid(),
 		firstName: faker.name.firstName(),
 		lastName: faker.name.lastName(),
 		address: {

@@ -22,7 +22,7 @@ export default {
 .content {
 	grid-area: content;
 	width: inherit;
-	min-height: 100vh;
+	min-height: calc(100vh - var(--sidebar-item-height));
 	padding: 0 var(--space-lg);
 	overflow-x: auto;
 
