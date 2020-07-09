@@ -12,11 +12,17 @@
 </template>
 
 <style lang="scss">
+@import "@styles";
+
 .edusharing-footer {
 	display: flex;
 	justify-content: center;
 	width: 100%;
-	margin-top: var(--space-xl);
+	margin-top: var(--space-lg);
+
+	@include breakpoint(tablet) {
+		margin-top: var(--space-xl);
+	}
 
 	&__text {
 		margin-top: var(--space-xl-2);
@@ -24,7 +30,9 @@
 		font-size: var(--text-sm);
 	}
 	&__logo {
-		width: 150px;
+		width: 100px;
+		height: 40px;
+		margin-top: calc(15 * var(--border-width));
 	}
 }
 </style>
