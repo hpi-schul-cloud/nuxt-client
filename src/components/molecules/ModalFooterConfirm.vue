@@ -1,5 +1,9 @@
 <template>
-	<div :style="{ backgroundColor: backgroundcolor }" class="footer-button" :class="isSuccess ? '' : 'error'">
+	<div
+		:style="{ backgroundColor: backgroundcolor }"
+		class="footer-button"
+		:class="isSuccess ? '' : 'error'"
+	>
 		<button class="btn-confirm" v-on="$listeners">
 			Ok
 		</button>
