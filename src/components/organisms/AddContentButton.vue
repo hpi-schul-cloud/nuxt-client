@@ -37,13 +37,7 @@
 <script>
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
-
-const getMetadataAttribute = (properties, key) => {
-	if (Array.isArray(properties[key])) {
-		return properties[key][0];
-	}
-	return null;
-};
+import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
 	name: "AddContentButton",
