@@ -1,15 +1,17 @@
 <template>
 	<div>
 		<base-qr-code ref="qrcode" class="qrcode" :url="url" />
-		<div class="qr-hint-text">
-			{{ $t("components.legacy.MenuQrCode.qrHintText") }}
-		</div>
-		<base-button design="outline" class="print-button" @click="openPrintMenu">
-			<div class="print-button-content">
-				<base-icon source="fa" icon="print" class="print-icon" />
-				Drucken
+		<div v-if="print">
+			<div class="qr-hint-text">
+				{{ $t("components.legacy.MenuQrCode.qrHintText") }}
 			</div>
-		</base-button>
+			<base-button design="outline" class="print-button" @click="openPrintMenu">
+				<div class="print-button-content">
+					<base-icon source="fa" icon="print" class="print-icon" />
+					Drucken
+				</div>
+			</base-button>
+		</div>
 	</div>
 </template>
 
@@ -19,6 +21,9 @@ export default {
 		url: {
 			type: String,
 			default: window.location.href,
+		},
+		print: {
+			type: Boolean,
 		},
 	},
 	data() {

@@ -126,6 +126,14 @@
 					btn-icon="add"
 					:btn-label="$t('pages.content._id.addToTopic')"
 				/>
+				<share-content-button
+					:resource="resource"
+					btn-design="hero-cta"
+					btn-class="floating-button"
+					btn-size="large"
+					btn-icon-class="footer__content-icon"
+					:btn-label="$t('components.molecules.ShareContentModal')"
+				/>
 			</user-has-role>
 		</div>
 	</div>
@@ -134,6 +142,8 @@
 <script>
 import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
+import ShareContentButton from "@components/organisms/ShareContentButton";
+
 import UserHasRole from "@components/helpers/UserHasRole";
 
 import contentMeta from "@mixins/contentMeta";
@@ -150,6 +160,7 @@ export default {
 	components: {
 		BaseLink,
 		AddContentButton,
+		ShareContentButton,
 		UserHasRole,
 	},
 	layout: "loggedInFull",
@@ -448,6 +459,8 @@ $tablet-portrait-width: 768px;
 			position: sticky;
 			bottom: 0;
 			z-index: var(--layer-page);
+			display: flex;
+			flex-flow: row wrap;
 			border-radius: var(--radius-md);
 
 			@media (max-width: $tablet-portrait-width) {
