@@ -86,8 +86,6 @@ export default {
 			usersCourses: [],
 			isCoursesDDVisible: false,
 			isTeamsDDVisible: false,
-			startDate: undefined,
-			endDate: undefined,
 			startDayInput: "",
 			startTimeInput: "",
 			endDayInput: "",
@@ -128,6 +126,7 @@ export default {
 		},
 		setScopeId(input) {
 			this.currentScopeId = input._id;
+			console.log(input.label);
 		},
 		cancelHandle() {
 			this.resetScope();
@@ -148,18 +147,14 @@ export default {
 			this.setModalEventAndState(startDate, endDate);
 		},
 		submit() {
-			this.setTime(this.startDate, this.startTimeInput);
-			this.setTime(this.endDate, this.endTimeInput);
-			// eslint-disable-next-line no-underscore-dangle
-			console.log(this.startDate._d.toISOString());
-			// eslint-disable-next-line no-underscore-dangle
-			console.log(this.endDate._d.toISOString());
-			this.postCalendarData(
-				// eslint-disable-next-line no-underscore-dangle
-				this.startDate._d.toISOString(),
-				// eslint-disable-next-line no-underscore-dangle
-				this.endDate._d.toISOString()
+			const start = this.setTime(
+				moment.utc(this.startDayInput),
+				this.startTimeInput
 			);
+			const end = this.setTime(moment.utc(this.endDayInput), this.endTimeInput);
+			console.log(start.toISOString());
+			console.log(end.toISOString());
+			this.postCalendarData(start.toISOString(), end.toISOString());
 			this.update();
 			this.resetScope();
 			this.modalActive = false;
@@ -177,10 +172,9 @@ export default {
 				hour: startTime.get("hour"),
 				minute: startTime.get("minute"),
 			});
+			return dateToSet;
 		},
 		setModalEventAndState(startDate, endDate) {
-			this.startDate = startDate;
-			this.endDate = endDate;
 			this.startDayInput = startDate.toISOString();
 			this.startTimeInput = startDate.format("HH:mm");
 			this.endDayInput = endDate.toISOString();
@@ -249,6 +243,7 @@ export default {
 			try {
 				await this.$store.dispatch("courses/find").then((res) => {
 					res.data.forEach((element) => {
+						console.log(element);
 						this.pushScope(element, this.usersCourses);
 					});
 				});
