@@ -20,7 +20,9 @@ describe("@components/molecules/LernstoreDetailView", () => {
 	it("Renders Lernstore img", () => {
 		expect(wrapper.find(".preview").exists()).toBe(true);
 		expect(wrapper.find(".preview-img").exists()).toBe(true);
-		expect(wrapper.find(".preview-img").attributes("src")).toBe(Resource.preview.url);
+		expect(wrapper.find(".preview-img").attributes("src")).toBe(
+			Resource.preview.url
+		);
 		expect(wrapper.find(".preview-img").attributes("alt")).toBe("Bildvorschau");
 	});
 

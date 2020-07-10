@@ -18,7 +18,9 @@ describe("@components/organisms/ContentCard", () => {
 	});
 	it("Renders contentCard img", () => {
 		expect(wrapper.find(".content__img-thumbnail").exists()).toBe(true);
-		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(Resource.preview.url);
+		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
+			Resource.preview.url
+		);
 		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe(
 			"content-thumbnail"
 		);
