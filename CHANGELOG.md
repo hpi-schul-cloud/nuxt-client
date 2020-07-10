@@ -12,6 +12,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+## ## [23.5.1] - 2020-07-09
+
+- SC-5494 Changed link in navigation bar
+- SC-5529 update hpi school-cloud brand name
+
 ## ## [23.5.0] - 2020-06-21
 
 ### Changed in 23.5.0

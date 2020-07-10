@@ -81,7 +81,7 @@
 	"pages.administration.datasources.index.remove.success": "",
 	"pages.administration.datasources.index.title": "Data sources",
 	"pages.administration.datasources.login.heading": "Please continue with your login data",
-	"pages.administration.datasources.login.text": "Do not use your private accout please. For embedding datasources please create a Schul-Cloud account for Webuntis.",
+	"pages.administration.datasources.login.text": "Do not use your private accout please. For embedding datasources please create a HPI Schul-Cloud account for Webuntis.",
 	"pages.administration.datasources.new.add": "",
 	"pages.administration.datasources.new.short_title": "",
 	"pages.administration.datasources.new.title": "",

@@ -6,7 +6,7 @@ import LandingCTA from "@components/molecules/LandingCTA";
 storiesOf("5 Molecules/Onboarding", module).add("Landing CTA", () => ({
 	components: { LandingCTA },
 	data: () => ({
-		title: text("title", "Willkommen in der Schul-Cloud, Carl Cactus"),
+		title: text("title", "Willkommen in der HPI Schul-Cloud, Carl Cactus"),
 		subtitle: text(
 			"subtitle",
 			"Mit der HPI Schul-Cloud Unterricht digital gestalten"
