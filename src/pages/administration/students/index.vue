@@ -30,7 +30,7 @@
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
 			<template v-slot:datacolumn-classes="{ data }">
-				{{ data }}
+				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
