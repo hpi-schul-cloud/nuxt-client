@@ -2,7 +2,7 @@
 
 ## Generell
 
-In der Entwicklung der Schul-Cloud arbeiten wir mit einem Kanban-System. Es beruht auf Jira mit einem integrierten Kanban-Board für Entwickler. Wie auch Scrum versucht Kanban die Arbeitsabläufe von Entwicklern besser zu strukturieren, ist dabei aber deutlich flexibler. Wir streben damit innerhalb der Schul-Cloud ein Continuous Deployment an, also Kurze und regelmäßige Sprints. Dabei können wir aber auch Tickets nachträglich zu einem Release hinzufügen, um intern übersichtlicher zusammenzufassen. Die Entwicklung selbst teilt sich dabei in fünf Phasen auf:
+In der Entwicklung der HPI Schul-Cloud arbeiten wir mit einem Kanban-System. Es beruht auf Jira mit einem integrierten Kanban-Board für Entwickler. Wie auch Scrum versucht Kanban die Arbeitsabläufe von Entwicklern besser zu strukturieren, ist dabei aber deutlich flexibler. Wir streben damit innerhalb der HPI Schul-Cloud ein Continuous Deployment an, also Kurze und regelmäßige Sprints. Dabei können wir aber auch Tickets nachträglich zu einem Release hinzufügen, um intern übersichtlicher zusammenzufassen. Die Entwicklung selbst teilt sich dabei in fünf Phasen auf:
 
 Im _Backlog (1)_ finden sich alle Tickets, die noch darauf warten dem Entwicklungszyklus hinzugefügt zu werden. Normalerweise geschieht dies durch den Product Owner, aber Du kannst dich natürlich trotzdem gerne einmal durchklicken und dir gerade die Tickets mit höheren Prioritäten anschauen. Da der Ready for _Development-Stapel (2)_ oft sehr voll ist, wird der Backlog immer nur nach und nach abgearbeitet. Wenn Du als Entwickler ein Ticket beginnst, stellt Du es hier auf _Progress (3)_.
 
