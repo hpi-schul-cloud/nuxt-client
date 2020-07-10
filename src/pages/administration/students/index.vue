@@ -32,22 +32,22 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
-			<template v-slot:datacolumn-consent="{ data }">
+			<template v-slot:datacolumn-consentStatus="{ data }">
 				<span class="text-content">
 					<base-icon
-						v-if="data && data.consentStatus === 'ok'"
+						v-if="data && data === 'ok'"
 						source="custom"
 						icon="doublecheck"
 						color="var(--color-success)"
 					/>
 					<base-icon
-						v-else-if="data && data.consentStatus === 'parentsAgreed'"
-						source="material"
+						v-else-if="data && data === 'parentsAgreed'"
+						source="custom"
 						icon="check"
 						color="var(--color-warning)"
 					/>
 					<base-icon
-						v-else-if="data && data.consentStatus === 'missing'"
+						v-else-if="data && data === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
@@ -162,7 +162,7 @@ export default {
 				// 	label: this.$t("common.labels.birthday"),
 				// },
 				{
-					field: "consent",
+					field: "consentStatus",
 					label: this.$t("common.labels.consent"),
 					sortable: true,
 				},
@@ -333,11 +333,12 @@ export default {
 		},
 		handleBulkConsent(rowIds, selectionType) {
 			this.$store.commit("bulk-consent/setSelectedStudents", {
-				students: [
-					"5ebb48a88e24ee280c9b2ebd",
-					"0000d224816abba584714c9c",
-					"58b40278dac20e0645353e3a",
-				], // hardcoded for dev until fixed
+				students: this.tableSelection,
+				// [
+				// 	"5ebb48a88e24ee280c9b2ebd",
+				// 	"0000d224816abba584714c9c",
+				// 	"58b40278dac20e0645353e3a",
+				// ], // hardcoded for dev until fixed
 				selectionType: selectionType,
 			});
 
