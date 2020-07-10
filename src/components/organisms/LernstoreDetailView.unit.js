@@ -1,5 +1,5 @@
 import LernstoreDetailView from "./LernstoreDetailView";
-import { Resource } from "../../../stories/mockData/Resource";
+import { Resource } from "@@/stories/mockData/Resource";
 
 const testProps = {
 	resource: Resource,
@@ -20,9 +20,7 @@ describe("@components/molecules/LernstoreDetailView", () => {
 	it("Renders Lernstore img", () => {
 		expect(wrapper.find(".preview").exists()).toBe(true);
 		expect(wrapper.find(".preview-img").exists()).toBe(true);
-		expect(wrapper.find(".preview-img").attributes("src")).toBe(
-			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295&amp;storeProtocol=workspace&amp;storeId=SpacesStore&amp;dontcache=1593695489846"
-		);
+		expect(wrapper.find(".preview-img").attributes("src")).toBe(Resource.preview.url);
 		expect(wrapper.find(".preview-img").attributes("alt")).toBe("Bildvorschau");
 	});
 
