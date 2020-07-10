@@ -1,5 +1,5 @@
 <template>
-	<section :class="{ 'inline': isInline }">
+	<section :class="{ inline: isInline }">
 		<base-button
 			v-if="isInline"
 			design="text icon"
