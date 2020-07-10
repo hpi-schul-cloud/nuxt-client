@@ -40,19 +40,18 @@ export default {
 				},
 				{
 					title: this.$t("layouts.loggedoutFullWidth.steps"),
-					href: "/mint-ec/willkommenspaket",
-				},
-				{
-					title: this.$t("layouts.loggedoutFullWidth.join"),
-					href: "/community",
+					href: "https://blog.schul-cloud.org/erste-schritte/",
+					target: "_blank",
 				},
 				{
 					title: "Blog",
 					href: "https://blog.schul-cloud.org/",
+					target: "_blank",
 				},
 				{
 					title: "FAQ",
 					href: "https://blog.schul-cloud.org/faq",
+					target: "_blank",
 				},
 			],
 		};
