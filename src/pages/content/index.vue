@@ -1,5 +1,5 @@
 <template>
-	<section :class="{ 'inline': isInline }">
+	<section :class="{ inline: isInline }">
 		<base-button
 			v-if="isInline"
 			design="text icon"
@@ -253,7 +253,7 @@ export default {
 }
 
 .inline {
-	min-height: calc(100vh - var(--sidebar-item-height));
+	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
 }
 
 .first-search {
