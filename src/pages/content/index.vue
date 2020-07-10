@@ -1,6 +1,6 @@
 <template>
 	<div class="content" :class="{ inline: isInline }">
-	<base-button
+		<base-button
 			v-if="isInline"
 			design="text icon"
 			type="button"
