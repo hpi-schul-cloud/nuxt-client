@@ -1,5 +1,5 @@
 <template>
-	<div class="content" :class="{ inline: isInline }">
+	<section :class="{ 'content inline': isInline }">
 		<base-button
 			v-if="isInline"
 			design="text icon"
@@ -9,52 +9,58 @@
 		>
 			<base-icon source="material" icon="arrow_back" />
 		</base-button>
-		<div>
-			<content-searchbar
-				v-model.lazy="searchQuery"
-				:class="
-					!activateTransition ? 'first-search__searchbar' : 'content__searchbar'
-				"
-				:placeholder="$t('pages.content.index.search.placeholder')"
-				@keyup:enter="enterKeyHandler"
+		<div class="content" :class="{ inline: isInline }">
+			<div>
+				<content-searchbar
+					v-model.lazy="searchQuery"
+					:class="
+						!activateTransition
+							? 'first-search__searchbar'
+							: 'content__searchbar'
+					"
+					:placeholder="$t('pages.content.index.search.placeholder')"
+					@keyup:enter="enterKeyHandler"
+				/>
+				<transition name="fade">
+					<span v-if="!firstSearch" class="content__container">
+						<p class="content__total">
+							<span v-if="searchQuery.length > 0">
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_results") }} "{{
+									searchQuery
+								}}"
+							</span>
+							<span v-else>
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_resources") }}
+							</span>
+						</p>
+						<div
+							v-if="resources.data.length === 0 && !loading"
+							class="content__no-results"
+						>
+							<content-empty-state />
+						</div>
+						<base-grid column-width="14rem">
+							<content-card
+								v-for="resource of resources.data"
+								:key="resource.ref.id"
+								class="card"
+								:resource="resource"
+							/>
+						</base-grid>
+					</span>
+				</transition>
+			</div>
+			<base-spinner
+				v-if="loading"
+				class="spinner mt--xl-2"
+				color="var(--color-tertiary)"
+				size="xlarge"
 			/>
-			<transition name="fade">
-				<span v-if="!firstSearch" class="content__container">
-					<p class="content__total">
-						<span v-if="searchQuery.length > 0">
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
-						</span>
-						<span v-else>
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_resources") }}
-						</span>
-					</p>
-					<div
-						v-if="resources.data.length === 0 && !loading"
-						class="content__no-results"
-					>
-						<content-empty-state />
-					</div>
-					<base-grid column-width="14rem">
-						<content-card
-							v-for="resource of resources.data"
-							:key="resource.ref.id"
-							class="card"
-							:resource="resource"
-						/>
-					</base-grid>
-				</span>
-			</transition>
+			<content-edu-sharing-footer class="content__footer" />
 		</div>
-		<base-spinner
-			v-if="loading"
-			class="spinner mt--xl-2"
-			color="var(--color-tertiary)"
-			size="xlarge"
-		/>
-		<content-edu-sharing-footer class="content__footer" />
-	</div>
+	</section>
 </template>
 
 <script>
@@ -127,8 +133,10 @@ export default {
 			if (to === from || !to) {
 				this.firstSearch = true;
 				this.$router.push({
-					...this.$route.query,
-					query: { q: undefined },
+					query: {
+						...this.$route.query,
+						q: undefined,
+					},
 				});
 				this.$store.commit("content/clearResources");
 				return;
@@ -201,7 +209,7 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	height: 100%;
+	min-height: calc(100vh - var(--sidebar-item-height));
 	padding: 0 var(--space-lg);
 	overflow-y: hidden;
 
@@ -245,7 +253,7 @@ export default {
 }
 
 .content.inline {
-	min-height: 100vh;
+	min-height: calc(100vh - var(--sidebar-item-height));
 }
 
 .first-search {
