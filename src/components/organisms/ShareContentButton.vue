@@ -13,10 +13,7 @@
 			<base-icon source="fa" icon="share-alt" />
 			{{ btnLabel }}
 		</base-button>
-		<qr-modal
-			:show-qr-modal.sync="showQrModal"
-			@close="showQrModal = false"
-		>
+		<qr-modal :show-qr-modal.sync="showQrModal" @close="showQrModal = false">
 		</qr-modal>
 	</div>
 </template>

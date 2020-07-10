@@ -48,9 +48,9 @@ export default {
 		return {};
 	},
 	computed: {
-		getContentId () {
-			return window.location.pathname.replace('/content/', '');
-		}
+		getContentId() {
+			return window.location.pathname.replace("/content/", "");
+		},
 	},
 	methods: {
 		closeModal() {
