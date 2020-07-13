@@ -1,4 +1,4 @@
-# The next Level of Schul-Cloud
+# The next Level of HPI Schul-Cloud
 
 ## Tools
 
