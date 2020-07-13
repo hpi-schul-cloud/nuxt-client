@@ -139,12 +139,7 @@ import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
-const getMetadataAttribute = (properties, key) => {
-	if (Array.isArray(properties[key])) {
-		return properties[key][0];
-	}
-	return null;
-};
+import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
 	components: {
@@ -201,16 +196,10 @@ export default {
 			);
 		},
 		backgroundImage() {
-			return (
-				getMetadataAttribute(this.resource.properties, "ccm:thumbnailurl") ||
-				this.resource.preview.url
-			);
+			return this.resource.preview.url;
 		},
 		downloadUrl() {
-			return (
-				getMetadataAttribute(this.resource.properties, "ccm:wwwurl") ||
-				this.resource.downloadUrl
-			);
+			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 		tags() {
 			let tags = getMetadataAttribute(
