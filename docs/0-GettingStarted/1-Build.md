@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD037 -->
+
 # Build & Deployment
 
 You can build all projects at once in parallel using `npm run build`.
@@ -38,6 +40,7 @@ Output Directory: `./dist/nuxt`
 | SENTRY_DSN | `false` | If set, errors are reported to sentry. |
 | JWT_SHOW_TIMEOUT_WARNING_SECONDS | `3600` | from this remaining time on the autologout warning is displayed to the user |
 | JWT_TIMEOUT_SECONDS | `7200` | Time a inactivity user's sessions remains active |
+| MODE_LERNSTORE | `edusharing` | Enable edusharing |
 
 ## Storybook
 

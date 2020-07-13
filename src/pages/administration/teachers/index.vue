@@ -19,7 +19,7 @@
 			:total="pagination.total"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
-			track-by="id"
+			track-by="_id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
@@ -314,13 +314,20 @@ export default {
 				{ duration: 5000 }
 			);
 		},
-		handleBulkEMail(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkEMail([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+		async handleBulkEMail(rowIds, selectionType) {
+			try {
+				await this.$store.dispatch("users/sendRegistrationLink", {
+					userIds: rowIds,
+					selectionType,
+				});
+				this.$toast.success(
+					this.$tc("pages.administration.sendMail.success", rowIds.length)
+				);
+			} catch (error) {
+				this.$toast.error(
+					this.$tc("pages.administration.sendMail.error", rowIds.length)
+				);
+			}
 		},
 
 		handleBulkDelete(rowIds, selectionType) {

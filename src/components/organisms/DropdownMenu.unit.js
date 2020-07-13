@@ -28,19 +28,19 @@ describe("@components/organisms/DropdownMenu", () => {
 		});
 		const dropdown = wrapper.find(".dropdown");
 		const content = wrapper.find(".content");
-		expect(content.contains(".open")).toBe(false);
+		expect(content.find(".open").exists()).toBe(false);
 		dropdown.trigger("mouseenter");
 		await wrapper.vm.$nextTick();
-		expect(content.contains(".open")).toBe(true);
+		expect(content.find(".open").exists()).toBe(true);
 		dropdown.trigger("mouseleave");
 		await wrapper.vm.$nextTick();
-		expect(content.contains(".open")).toBe(false);
+		expect(content.find(".open").exists()).toBe(false);
 		dropdown.trigger("focus");
 		await wrapper.vm.$nextTick();
-		expect(content.contains(".open")).toBe(true);
+		expect(content.find(".open").exists()).toBe(true);
 		dropdown.trigger("blur");
 		await wrapper.vm.$nextTick();
-		expect(content.contains(".open")).toBe(false);
+		expect(content.find(".open").exists()).toBe(false);
 	});
 
 	it("shows a list of options", () => {
