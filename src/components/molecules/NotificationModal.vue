@@ -21,6 +21,7 @@
 		<template v-slot:footer>
 			<modal-footer-confirm
 				:style="{ backgroundColor: backgroundcolor }"
+				:is-success="isSuccess"
 				text="Ok"
 				@click="closeModal"
 			/>
