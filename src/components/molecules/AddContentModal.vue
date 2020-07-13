@@ -16,6 +16,7 @@
 						:options="coursesOptions"
 						:show-labels="true"
 						:label="$t('pages.content.label.chooseACourse')"
+						placeholder=""
 						close-on-select
 						option-label="name"
 						:deselect-label="$t('pages.content.label.deselect')"
