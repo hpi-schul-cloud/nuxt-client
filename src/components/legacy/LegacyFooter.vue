@@ -44,7 +44,7 @@
 					</h2>
 					<p class="footer-text">
 						Du möchtest gerne Mitglied in unserem HPI
-						<br />Schul-Cloud Team werden? Wir suchen:
+						<br />HPI Schul-Cloud Team werden? Wir suchen:
 					</p>
 					<base-link
 						class="link-style"
