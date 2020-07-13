@@ -60,6 +60,7 @@ import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
+import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
 	components: {
@@ -94,26 +95,15 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
-		getMetadataAttribute(properties, key) {
-			if (Array.isArray(properties[key])) {
-				return properties[key][0];
-			}
-			return null;
-		},
 		provider() {
-			const provider = this.getMetadataAttribute(
+			const provider = getMetadataAttribute(
 				this.resource.properties,
 				"ccm:metadatacontributer_provider"
 			);
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 		thumbnail() {
-			return (
-				this.getMetadataAttribute(
-					this.resource.properties,
-					"ccm:thumbnailurl"
-				) || this.resource.preview.url
-			);
+			return this.resource.preview.url;
 		},
 	},
 };
