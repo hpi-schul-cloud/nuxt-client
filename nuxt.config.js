@@ -36,6 +36,7 @@ module.exports = {
 			process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
 		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 		SC_THEME: process.env.SC_THEME,
+		MODE_LERNSTORE: process.env.MODE_LERNSTORE,
 	},
 
 	/*
