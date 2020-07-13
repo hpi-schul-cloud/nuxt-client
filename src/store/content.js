@@ -10,7 +10,10 @@ export const actions = {
 			const res = await this.$axios.$get("/edu-sharing", {
 				params: query,
 			});
+
 			commit("setResources", res);
+		} catch (e) {
+			console.error(e);
 		} finally {
 			commit("setLoading", false);
 		}
