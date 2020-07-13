@@ -175,7 +175,7 @@ export default {
 		},
 
 		isInline() {
-			return window.location.search.includes("inline=1");
+			return !!this.$route.query.inline;
 		},
 	},
 	watch: {
