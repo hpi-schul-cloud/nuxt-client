@@ -1,51 +1,66 @@
 <template>
-	<div class="content">
-		<div>
-			<content-searchbar
-				v-model.lazy="searchQuery"
-				:class="
-					!activateTransition ? 'first-search__searchbar' : 'content__searchbar'
-				"
-				:placeholder="$t('pages.content.index.search.placeholder')"
-				@keyup:enter="enterKeyHandler"
+	<section :class="{ inline: isInline }">
+		<base-button
+			v-if="isInline"
+			design="text icon"
+			type="button"
+			class="arrow__back"
+			@click="goBack"
+		>
+			<base-icon source="material" icon="arrow_back" />
+		</base-button>
+		<div class="content" :class="{ inline: isInline }">
+			<div>
+				<content-searchbar
+					v-model.lazy="searchQuery"
+					:class="
+						!activateTransition
+							? 'first-search__searchbar'
+							: 'content__searchbar'
+					"
+					:placeholder="$t('pages.content.index.search.placeholder')"
+					@keyup:enter="enterKeyHandler"
+				/>
+				<transition name="fade">
+					<span v-if="!firstSearch" class="content__container">
+						<p class="content__total">
+							<span v-if="searchQuery.length > 0">
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_results") }} "{{
+									searchQuery
+								}}"
+							</span>
+							<span v-else>
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_resources") }}
+							</span>
+						</p>
+						<div
+							v-if="resources.data.length === 0 && !loading"
+							class="content__no-results"
+						>
+							<content-empty-state />
+						</div>
+						<base-grid column-width="14rem">
+							<content-card
+								v-for="resource of resources.data"
+								:key="resource.ref.id"
+								class="card"
+								:resource="resource"
+							/>
+						</base-grid>
+					</span>
+				</transition>
+			</div>
+			<base-spinner
+				v-if="loading"
+				class="spinner mt--xl-2"
+				color="var(--color-tertiary)"
+				size="xlarge"
 			/>
-			<transition name="fade">
-				<span v-if="!firstSearch" class="content__container">
-					<p class="content__total">
-						<span v-if="searchQuery.length > 0">
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
-						</span>
-						<span v-else>
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_resources") }}
-						</span>
-					</p>
-					<div
-						v-if="resources.data.length === 0 && !loading"
-						class="content__no-results"
-					>
-						<content-empty-state />
-					</div>
-					<base-grid column-width="14rem">
-						<content-card
-							v-for="resource of resources.data"
-							:key="resource.ref.id"
-							class="card"
-							:resource="resource"
-						/>
-					</base-grid>
-				</span>
-			</transition>
+			<content-edu-sharing-footer class="content__footer" />
 		</div>
-		<base-spinner
-			v-if="loading"
-			class="spinner mt--xl-2"
-			color="var(--color-tertiary)"
-			size="xlarge"
-		/>
-		<content-edu-sharing-footer class="content__footer" />
-	</div>
+	</section>
 </template>
 
 <script>
@@ -56,9 +71,11 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
+import BaseButton from "../../components/base/BaseButton";
 
 export default {
 	components: {
+		BaseButton,
 		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
@@ -95,6 +112,9 @@ export default {
 			}
 			return query;
 		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
 	},
 	watch: {
 		bottom(bottom) {
@@ -113,7 +133,10 @@ export default {
 			if (to === from || !to) {
 				this.firstSearch = true;
 				this.$router.push({
-					query: { q: undefined },
+					query: {
+						...this.$route.query,
+						q: undefined,
+					},
 				});
 				this.$store.commit("content/clearResources");
 				return;
@@ -164,11 +187,18 @@ export default {
 				this.firstSearch = false;
 			}, 500);
 		},
+		goBack() {
+			window.close();
+		},
 	},
 	head() {
-		return {
-			title: "LernStore",
-		};
+		return this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: "LernStore" };
 	},
 };
 </script>
@@ -179,10 +209,14 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	height: 100%;
+	min-height: calc(100vh - var(--sidebar-item-height));
 	padding: 0 var(--space-lg);
 	overflow-y: hidden;
 
+	.arrow__back {
+		margin-top: var(--space-xs);
+		color: var(--color-tertiary);
+	}
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -216,6 +250,10 @@ export default {
 	.spinner {
 		align-self: center;
 	}
+}
+
+.inline {
+	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
 }
 
 .first-search {
