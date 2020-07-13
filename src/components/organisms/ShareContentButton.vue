@@ -1,31 +1,27 @@
 <template>
 	<div>
 		<base-button
-			:design="btnDesign"
-			:class="btnClass"
-			:size="btnSize"
-			role="button"
-			:aria-label="
-				btnLabel ? btnLabel : `${$t('components.molecules.ShareContentModal')}`
+				:design="btnDesign"
+				:class="btnClass"
+				:size="btnSize"
+				role="button"
+				:aria-label="
+				btnLabel ? btnLabel : `${$t('components.molecules.AddContentModal')}`
 			"
-			@click.prevent="addResource"
+				@click.prevent="addResource"
 		>
 			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />
 			{{ btnLabel }}
 		</base-button>
 		<share-content-modal
-			:show-copy-modal.sync="copyModalActive"
-			:updatedid="resource.ref.id"
-			:url="getUrl"
-			:client="client"
-			:title="resource.title"
-			@close="showNotificationModal = true"
+				:updatedid="resource.ref.id"
+				:url="getUrl"
 		/>
-	</div>
-</template>
+	</div></template>
 
 <script>
-import ShareContentModal from "@components/molecules/ShareContentModal";
+import ShareContentModal from "@components/organisms/ShareContentModal";
+import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
 	name: "AddContentButton",
@@ -47,6 +43,11 @@ export default {
 			copyModalActive: false,
 			showNotificationModal: false,
 		};
+	},
+	computed: {
+		getUrl() {
+			return getMetadataAttribute(this.resource.properties, "cclom:location");
+		},
 	},
 	methods: {
 		addResourceAndClose() {

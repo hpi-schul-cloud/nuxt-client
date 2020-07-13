@@ -46,6 +46,13 @@
 									btn-icon-class="footer__content-icon"
 									btn-icon="add_circle_outline"
 								/>
+								<share-content-button
+										:resource="resource"
+										:client="provider()"
+										btn-design="text icon"
+										btn-icon-class="footer__content-icon"
+										btn-icon="share"
+								/>
 							</div>
 						</div>
 					</div>
@@ -58,6 +65,7 @@
 <script>
 import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
+import ShareContentButton from "@components/organisms/ShareContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
 import { getMetadataAttribute } from "@utils/helpers";
@@ -66,6 +74,7 @@ export default {
 	components: {
 		BaseLink,
 		AddContentButton,
+		ShareContentButton,
 		UserHasRole,
 	},
 	mixins: [contentMeta],

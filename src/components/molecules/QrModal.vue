@@ -9,7 +9,7 @@
 			<p class="qr-description">
 				{{ $t("pages.content.modal.qr.alternative") }}
 			</p>
-			<menu-qr-code :print="false"></menu-qr-code>
+			<menu-qr-code :print="false" :url="url"></menu-qr-code>
 		</template>
 		<template v-slot:footer>
 			<modal-footer>
@@ -43,12 +43,14 @@ export default {
 			required: true,
 		},
 		resource: { type: Object, default: () => {} },
+		url: { type: String, default: "" },
 	},
 	data() {
 		return {};
 	},
 	computed: {
 		getContentId() {
+			console.log(this.url);
 			return window.location.pathname.replace("/content/", "");
 		},
 	},

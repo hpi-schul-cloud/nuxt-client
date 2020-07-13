@@ -13,7 +13,10 @@
 			<base-icon source="fa" icon="share-alt" />
 			{{ btnLabel }}
 		</base-button>
-		<qr-modal :show-qr-modal.sync="showQrModal" @close="showQrModal = false">
+		<qr-modal
+				:show-qr-modal.sync="showQrModal"
+				:url="url"
+				@close="showQrModal = false">
 		</qr-modal>
 	</div>
 </template>
@@ -31,6 +34,8 @@ export default {
 		btnDesign: { type: String, default: "" },
 		btnSize: { type: String, default: "medium" },
 		btnClass: { type: String, default: "" },
+		url: { type: String, default: "" },
+
 	},
 	data() {
 		return {
@@ -39,6 +44,7 @@ export default {
 	},
 	methods: {
 		openModal() {
+			console.log(this.url);
 			this.showQrModal = true;
 		},
 	},
