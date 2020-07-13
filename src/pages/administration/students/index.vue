@@ -32,7 +32,7 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
-			<template v-slot:datacolumn-consent="{ status }">
+			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
 					<base-icon
 						v-if="status === 'ok'"
