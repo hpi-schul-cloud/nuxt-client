@@ -6,7 +6,7 @@
 			:size="btnSize"
 			role="button"
 			:aria-label="
-				btnLabel ? btnLabel : `$t('components.molecules.AddContentModal')`
+				btnLabel ? btnLabel : `${$t('components.molecules.AddContentModal')}`
 			"
 			@click.prevent="addResource"
 		>
