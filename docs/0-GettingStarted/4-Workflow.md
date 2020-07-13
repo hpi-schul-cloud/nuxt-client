@@ -56,7 +56,7 @@ Die Bescheibung des Pull Requests sollte das entsprechende Template bestmöglich
 
 ### Pull Request Update Screenshots
 
-If you have modified or added components that are represented in the storybook, it is usually necessary to update the corresponding screenshots for the [Screenshot Tests](../4-Tools.md#screenshot-tests). This is also necessary when the check `Test / screenshot (push)` in your PR fails. 
+If you have modified or added components that are represented in the storybook, it is usually necessary to update the corresponding screenshots for the [Screenshot Tests](../4-Tools.md#screenshot-tests). This is also necessary when the check `Test / screenshot (push)` in your PR fails.
 
 ::: tip Attention
 
