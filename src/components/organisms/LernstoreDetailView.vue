@@ -37,12 +37,12 @@
 				<div class="actions">
 					<user-has-role :role="isNotStudent">
 						<share-content-button
-								:resource="resource"
-								btn-design="text icon"
-								btn-class="floating-button"
-								btn-icon-class="footer__content-icon"
-								btn-icon="share"
-								btn-color="var(--color-tertiary)"
+							:resource="resource"
+							btn-design="text icon"
+							btn-class="floating-button"
+							btn-icon-class="footer__content-icon"
+							btn-icon="share"
+							btn-color="var(--color-tertiary)"
 						/>
 					</user-has-role>
 				</div>
