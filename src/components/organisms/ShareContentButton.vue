@@ -15,7 +15,7 @@
 		</base-button>
 		<share-content-modal
 			:show-share-modal.sync="shareModalActive"
-			:contentid="resource.ref.id"
+			:resource="resource"
 		/>
 	</div>
 </template>

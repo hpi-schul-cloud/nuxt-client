@@ -8,7 +8,6 @@
 			{{ $t("pages.content.modal.qr.title") }}
 		</template>
 		<template v-slot:body>
-			<modal-body-info />
 			<label class="token">
 				{{ $t("pages.content.modal.qr.sub_title") }}
 			</label>
@@ -16,7 +15,7 @@
 			<p class="qr-description">
 				{{ $t("pages.content.modal.qr.description") }}
 			</p>
-			<menu-qr-code :print="false"></menu-qr-code>
+			<menu-qr-code :print="false" :url="getQrLink"></menu-qr-code>
 		</template>
 		<template v-slot:footer>
 			<modal-footer>
@@ -31,7 +30,6 @@
 </template>
 
 <script>
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooter from "@components/molecules/ModalFooter";
 import MenuQrCode from "../legacy/MenuQrCode";
 import BaseButton from "../base/BaseButton";
@@ -42,7 +40,6 @@ export default {
 	components: {
 		BaseModal,
 		BaseButton,
-		ModalBodyInfo,
 		ModalFooter,
 		MenuQrCode,
 	},
@@ -59,10 +56,11 @@ export default {
 	},
 	computed: {
 		getContentId() {
-			console.log(this.contentid);
-			// console.log(this.$route.path);
-			return this.contentid;
+			return this.resource.ref.id;
 		},
+		getQrLink() {
+			return `${window.location.origin}/${this.resource.ref.id}`
+		}
 	},
 	methods: {
 		closeModal() {
@@ -75,7 +73,10 @@ export default {
 
 <style lang="scss" scoped>
 .token {
-	margin-bottom: var(--radius-md);
+	margin-bottom: var(--radius-lg);
 	font-weight: var(--font-weight-bold);
 }
+	.qr-description {
+		margin-top: var(--radius-lg);
+	}
 </style>
