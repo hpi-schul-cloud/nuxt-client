@@ -35,14 +35,14 @@
 		<div ref="sidebar" class="sidebar">
 			<div class="content-container">
 				<div class="actions">
-						<share-content-button
-							:resource="resource"
-							btn-design="text icon"
-							btn-class="floating-button"
-							btn-icon-class="footer__content-icon"
-							btn-icon="share"
-							btn-color="var(--color-tertiary)"
-						/>
+					<share-content-button
+						:resource="resource"
+						btn-design="text icon"
+						btn-class="floating-button"
+						btn-icon-class="footer__content-icon"
+						btn-icon="share"
+						btn-color="var(--color-tertiary)"
+					/>
 				</div>
 				<div class="title">
 					<span>
