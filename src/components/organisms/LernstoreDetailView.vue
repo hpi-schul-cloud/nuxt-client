@@ -390,8 +390,8 @@ $tablet-portrait-width: 768px;
 
 			@media (max-width: $tablet-portrait-width) {
 				position: absolute;
-				top: 40px;
-				right: 20px;
+				top: var(--space-lg);
+				right: var(--space-lg);
 			}
 		}
 
