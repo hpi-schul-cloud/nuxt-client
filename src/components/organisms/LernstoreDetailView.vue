@@ -126,7 +126,7 @@
 					btn-icon="add"
 					:btn-label="$t('pages.content._id.addToTopic')"
 				/>
-				<share-content-modal
+				<share-content-button
 					:resource="resource"
 					btn-design="hero-cta"
 					btn-class="floating-button"
@@ -142,7 +142,7 @@
 <script>
 import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
-import ShareContentModal from "@components/organisms/ShareContentModal";
+import ShareContentButton from "@components/organisms/ShareContentButton";
 
 import UserHasRole from "@components/helpers/UserHasRole";
 
@@ -155,7 +155,7 @@ export default {
 	components: {
 		BaseLink,
 		AddContentButton,
-		ShareContentModal,
+		ShareContentButton,
 		UserHasRole,
 	},
 	layout: "loggedInFull",

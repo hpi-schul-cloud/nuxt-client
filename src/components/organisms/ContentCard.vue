@@ -39,19 +39,18 @@
 						<div class="footer__separator"></div>
 						<div class="footer__content">
 							<div class="footer__icon-container">
+								<share-content-button
+									:resource="resource"
+									btn-design="text icon"
+									btn-icon-class="footer__content-icon"
+									btn-icon="share"
+								/>
 								<add-content-button
 									:resource="resource"
 									:client="provider()"
 									btn-design="text icon"
 									btn-icon-class="footer__content-icon"
 									btn-icon="add_circle_outline"
-								/>
-								<share-content-button
-										:resource="resource"
-										:client="provider()"
-										btn-design="text icon"
-										btn-icon-class="footer__content-icon"
-										btn-icon="share"
 								/>
 							</div>
 						</div>
