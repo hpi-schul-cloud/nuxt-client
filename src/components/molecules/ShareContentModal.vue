@@ -8,9 +8,9 @@
 			{{ $t("pages.content.modal.qr.title") }}
 		</template>
 		<template v-slot:body>
-			<label class="token">
+			<p class="token">
 				{{ $t("pages.content.modal.qr.sub_title") }}
-			</label>
+			</p>
 			<input type="text" :value="getContentId" aria-label="input" />
 			<p class="qr-description">
 				{{ $t("pages.content.modal.qr.description") }}

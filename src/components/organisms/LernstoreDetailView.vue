@@ -378,12 +378,21 @@ $tablet-portrait-width: 768px;
 
 		.content-container {
 			width: 80%;
-			margin-top: var(--space-md);
+
+			@include breakpoint(tablet) {
+				margin-top: var(--space-md);
+			}
 		}
 
 		.actions {
 			display: flex;
 			justify-content: flex-end;
+
+			@media (max-width: $tablet-portrait-width) {
+				position: absolute;
+				top: 40px;
+				right: 20px;
+			}
 		}
 
 		.title {

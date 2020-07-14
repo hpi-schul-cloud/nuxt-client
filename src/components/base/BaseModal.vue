@@ -156,7 +156,6 @@ export default {
 	flex-direction: column;
 	flex-grow: 1;
 	flex-shrink: 1;
-	justify-content: center;
 	padding: var(--space-md) var(--space-md);
 	overflow: auto;
 }
