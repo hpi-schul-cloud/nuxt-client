@@ -13,8 +13,7 @@ describe("@components/legacy/NavigationBar", () => {
 		},
 		{
 			title: "layouts.loggedoutFullWidth.steps",
-			href:
-				"https://docs.schul-cloud.org/pages/viewpage.action?pageId=13828239",
+			href: "https://blog.schul-cloud.org/erste-schritte/",
 		},
 		{
 			title: "FAQ",
@@ -30,6 +29,7 @@ describe("@components/legacy/NavigationBar", () => {
 			propsData: {
 				links: navbarLinks,
 				img: "@assets/img/logo/logo-image-color.svg",
+				buttons: true,
 			},
 		});
 
@@ -42,6 +42,7 @@ describe("@components/legacy/NavigationBar", () => {
 			propsData: {
 				links: navbarLinks,
 				img: "@assets/img/logo/logo-image-color.svg",
+				buttons: true,
 			},
 		});
 

@@ -4,15 +4,20 @@
 
 // const id = "[a-z0-9]+";
 //const mongoId = "[a-z0-9]{24}";
-
-module.exports = [
-	`^/administration/datasources?`,
+const activationCode = "[a-z0-9]+";
+const routes = [
+	// `^/account/?$`,
+	`^/account/email/edit/?$`,
+	`^/account/name/edit/?$`,
+	`^/account/password/edit/?$`,
+	`^/account/password/edit/?$`,
+	`^/activation/${activationCode}/?$`,
+	// `^/administration/datasources?`,
 	// `^/administration/students/?$`,
 	// `^/administration/students/new/?$`,
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
 	`^/login-instances/?`,
-	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
@@ -23,3 +28,8 @@ module.exports = [
 	`^/news/new`,
 	`^/nuxtversion/?$`,
 ];
+if (process.env.MODE_LERNSTORE === "edusharing") {
+	routes.push(`^/content/?`);
+}
+
+module.exports = routes;
