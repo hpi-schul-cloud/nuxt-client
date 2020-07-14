@@ -1,21 +1,21 @@
 <template>
 	<div>
 		<base-button
-				:design="btnDesign"
-				:class="btnClass"
-				:size="btnSize"
-				role="button"
-				:aria-label="
+			:design="btnDesign"
+			:class="btnClass"
+			:size="btnSize"
+			role="button"
+			:aria-label="
 				btnLabel ? btnLabel : `${$t('components.molecules.AddContentModal')}`
 			"
-				@click.prevent="openModal"
+			@click.prevent="openModal"
 		>
 			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />
 			{{ btnLabel }}
 		</base-button>
 		<share-content-modal
-				:show-share-modal.sync="shareModalActive"
-				:contentid="resource.ref.id"
+			:show-share-modal.sync="shareModalActive"
+			:contentid="resource.ref.id"
 		/>
 	</div>
 </template>
@@ -46,7 +46,9 @@ export default {
 	computed: {
 		getUrl() {
 			console.log("getUrl metaData");
-			console.log(getMetadataAttribute(this.resource.properties, "cclom:location"));
+			console.log(
+				getMetadataAttribute(this.resource.properties, "cclom:location")
+			);
 			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 	},

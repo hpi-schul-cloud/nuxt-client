@@ -74,8 +74,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.token {
-		margin-bottom: var(--radius-md);
-		font-weight: var(--font-weight-bold);
-	}
+.token {
+	margin-bottom: var(--radius-md);
+	font-weight: var(--font-weight-bold);
+}
 </style>
