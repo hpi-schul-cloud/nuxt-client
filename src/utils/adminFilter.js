@@ -101,6 +101,8 @@ export function studentFilter(ctx) {
 						return ctx.$t("utils.adminFilter.consent.parentsAgreed");
 					} else if (stat === "missing") {
 						return ctx.$t("utils.adminFilter.consent.missing");
+					} else if (stat === "registrationLink") {
+						return ctx.$t("utils.adminFilter.consent.label.registrationLink");
 					}
 				});
 				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
@@ -114,16 +116,20 @@ export function studentFilter(ctx) {
 					input: InputCheckbox,
 					options: [
 						{
-							value: "ok",
-							label: ctx.$t("utils.adminFilter.consent.label.ok"),
+							value: "missing",
+							label: ctx.$t("utils.adminFilter.consent.label.missing"),
+						},
+						{
+							value: "registrationLink",
+							label: ctx.$t("utils.adminFilter.consent.label.registrationLink"),
 						},
 						{
 							value: "parentsAgreed",
 							label: ctx.$t("utils.adminFilter.consent.label.parentsAgreed"),
 						},
 						{
-							value: "missing",
-							label: ctx.$t("utils.adminFilter.consent.label.missing"),
+							value: "ok",
+							label: ctx.$t("utils.adminFilter.consent.label.ok"),
 						},
 					],
 				},
