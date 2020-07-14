@@ -28,7 +28,7 @@ const routes = [
 	`^/news/new`,
 	`^/nuxtversion/?$`,
 ];
-if (process.env.MODE_LERNSTORE === "edusharing") {
+if (process.env.LERNSTORE_MODE === "EDUSHARING") {
 	routes.push(`^/content/?`);
 }
 
