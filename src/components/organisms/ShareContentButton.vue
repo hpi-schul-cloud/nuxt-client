@@ -23,7 +23,6 @@
 
 <script>
 import ShareContentModal from "@components/molecules/ShareContentModal";
-import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
 	name: "AddContentButton",
@@ -44,11 +43,6 @@ export default {
 		return {
 			shareModalActive: false,
 		};
-	},
-	computed: {
-		getUrl() {
-			return getMetadataAttribute(this.resource.properties, "cclom:location");
-		},
 	},
 	methods: {
 		openModal() {

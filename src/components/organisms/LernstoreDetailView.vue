@@ -35,7 +35,6 @@
 		<div ref="sidebar" class="sidebar">
 			<div class="content-container">
 				<div class="actions">
-					<user-has-role :role="isNotStudent">
 						<share-content-button
 							:resource="resource"
 							btn-design="text icon"
@@ -44,7 +43,6 @@
 							btn-icon="share"
 							btn-color="var(--color-tertiary)"
 						/>
-					</user-has-role>
 				</div>
 				<div class="title">
 					<span>
@@ -285,7 +283,7 @@ $tablet-portrait-width: 768px;
 		z-index: var(--layer-modal);
 		display: flex;
 		justify-content: space-between;
-		width: 30%;
+		width: fit-content;
 		padding: var(--space-md);
 
 		.close-icon {
@@ -458,8 +456,6 @@ $tablet-portrait-width: 768px;
 			position: sticky;
 			bottom: 0;
 			z-index: var(--layer-page);
-			display: flex;
-			flex-flow: row wrap;
 			border-radius: var(--radius-md);
 
 			@media (max-width: $tablet-portrait-width) {

@@ -49,7 +49,6 @@ export default {
 			required: true,
 		},
 		resource: { type: Object, default: () => {} },
-		contentid: { type: String, default: "" },
 	},
 	data() {
 		return {};
