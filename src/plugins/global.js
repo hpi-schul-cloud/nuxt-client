@@ -26,9 +26,6 @@ Vue.prototype.$theme = Theme;
 import BaseDialog from "@/components/base/BaseDialog";
 Vue.use(BaseDialog);
 
-// Input auto resize width based on value
-import VueInputAutoWidth from "vue-input-autowidth";
-Vue.use(VueInputAutoWidth);
 // EventBus
 import "./eventBus";
 
