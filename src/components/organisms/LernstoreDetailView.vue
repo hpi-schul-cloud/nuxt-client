@@ -287,13 +287,11 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			font-size: var(--heading-4);
 			background-color: var(--color-gray-dark);
 			box-shadow: var(--shadow-sm);
 		}
 
 		.close-transparent {
-			font-size: var(--heading-4);
 			color: var(--color-black);
 			background-color: var(--color-white);
 			box-shadow: var(--shadow-sm);
