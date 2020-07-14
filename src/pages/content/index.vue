@@ -1,6 +1,15 @@
 <template>
-	<section>
-		<div class="content">
+	<section :class="{ inline: isInline }">
+		<base-button
+			v-if="isInline"
+			design="text icon"
+			type="button"
+			class="arrow__back"
+			@click="goBack"
+		>
+			<base-icon source="material" icon="arrow_back" />
+		</base-button>
+		<div class="content" :class="{ inline: isInline }">
 			<div>
 				<content-searchbar
 					v-model.lazy="searchQuery"
@@ -49,8 +58,8 @@
 				color="var(--color-tertiary)"
 				size="xlarge"
 			/>
+			<content-edu-sharing-footer class="content__footer" />
 		</div>
-		<content-edu-sharing-footer class="content__footer" />
 	</section>
 </template>
 
@@ -62,9 +71,11 @@ import ContentEmptyState from "@components/molecules/ContentEmptyState";
 import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
+import BaseButton from "../../components/base/BaseButton";
 
 export default {
 	components: {
+		BaseButton,
 		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
@@ -101,6 +112,9 @@ export default {
 			}
 			return query;
 		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
 	},
 	watch: {
 		bottom(bottom) {
@@ -119,7 +133,10 @@ export default {
 			if (to === from || !to) {
 				this.firstSearch = true;
 				this.$router.push({
-					query: { q: undefined },
+					query: {
+						...this.$route.query,
+						q: undefined,
+					},
 				});
 				this.$store.commit("content/clearResources");
 				return;
@@ -128,6 +145,7 @@ export default {
 				clearInterval(this.$options.debounce);
 				this.$router.push({
 					query: {
+						...this.$route.query,
 						q: this.searchQuery,
 					},
 				});
@@ -169,11 +187,18 @@ export default {
 				this.firstSearch = false;
 			}, 500);
 		},
+		goBack() {
+			window.close();
+		},
 	},
 	head() {
-		return {
-			title: "LernStore",
-		};
+		return this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: "LernStore" };
 	},
 };
 </script>
@@ -184,8 +209,14 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	min-height: 80vh;
+	min-height: calc(100vh - var(--sidebar-item-height));
 	padding: 0 var(--space-lg);
+	overflow-y: hidden;
+
+	.arrow__back {
+		margin-top: var(--space-xs);
+		color: var(--color-tertiary);
+	}
 	&__container {
 		display: flex;
 		flex-direction: column;
@@ -214,17 +245,22 @@ export default {
 	}
 	&__footer {
 		align-self: flex-end;
+		padding-bottom: var(--space-sm);
 	}
 	.spinner {
 		align-self: center;
 	}
 }
 
+.inline {
+	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
+}
+
 .first-search {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
-		margin: var(--space-xl-5) 0 0;
+		margin-top: var(--space-xl-5);
 	}
 }
 

@@ -19,7 +19,7 @@
 			:total="pagination.total"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
-			track-by="id"
+			track-by="_id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
