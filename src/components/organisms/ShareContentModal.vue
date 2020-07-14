@@ -59,8 +59,8 @@ export default {
 			return this.resource.ref.id;
 		},
 		getQrLink() {
-			return `${window.location.origin}/${this.resource.ref.id}`
-		}
+			return `${window.location.origin}/${this.resource.ref.id}`;
+		},
 	},
 	methods: {
 		closeModal() {
@@ -76,7 +76,7 @@ export default {
 	margin-bottom: var(--radius-lg);
 	font-weight: var(--font-weight-bold);
 }
-	.qr-description {
-		margin-top: var(--radius-lg);
-	}
+.qr-description {
+	margin-top: var(--radius-lg);
+}
 </style>
