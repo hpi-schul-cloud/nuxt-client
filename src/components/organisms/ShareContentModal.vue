@@ -11,7 +11,7 @@
 			<label class="token">
 				{{ $t("pages.content.modal.qr.sub_title") }}
 			</label>
-			<input type="text" :value="getContentId" />
+			<input type="text" :value="getContentId" aria-label="input" />
 			<p class="qr-description">
 				{{ $t("pages.content.modal.qr.description") }}
 			</p>
@@ -20,7 +20,7 @@
 		<template v-slot:footer>
 			<modal-footer>
 				<template v-slot:right>
-					<base-button design="text" @click="closeModal">
+					<base-button design="outline" @click="closeModal">
 						{{ $t("common.actions.close") }}
 					</base-button>
 				</template>
