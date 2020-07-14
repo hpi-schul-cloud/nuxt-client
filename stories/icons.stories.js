@@ -1,17 +1,24 @@
 import { storiesOf } from "@storybook/vue";
 
+import IconCard from "./components/IconCard";
+
 const reqSvgs = require.context("@assets/icons", true, /\.svg$/);
-let svgs = "";
+const svgs = [];
 reqSvgs.keys().forEach((filename) => {
 	const iconName = filename.replace(/^.*[\\\/]/, "").slice(0, -4);
-	svgs +=
-		"<p><base-icon source='custom' icon='" +
-		iconName +
-		"'/> " +
-		iconName +
-		"</p>";
+	svgs.push(iconName);
 });
 
 storiesOf("1 Design Tokens", module).add("Icons", () => ({
-	template: "<div>" + svgs + "</div>",
+	components: { IconCard },
+	data: () => ({
+		svgs: svgs,
+	}),
+	template: `
+	<div>
+		<div v-for="svg in svgs" :key="svg">
+			<icon-card :iconName="svg"/>
+		</div>
+	</div>
+	`,
 }));

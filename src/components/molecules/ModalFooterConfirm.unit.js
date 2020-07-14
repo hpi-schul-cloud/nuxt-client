@@ -15,6 +15,7 @@ describe("@components/molecules/ModalFooterConfirm", () => {
 		...isValidComponent(ModalFooterConfirm, {
 			propsData: {
 				active: true,
+				backgroundcolor: "var(--color-success)",
 			},
 		})
 	);
