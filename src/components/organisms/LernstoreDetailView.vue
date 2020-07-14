@@ -132,6 +132,7 @@
 					btn-class="floating-button"
 					btn-size="large"
 					btn-icon-class="footer__content-icon"
+					btn-icon="share"
 					:btn-label="$t('components.molecules.ShareContentModal')"
 				/>
 			</user-has-role>

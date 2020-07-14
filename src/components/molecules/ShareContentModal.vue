@@ -59,7 +59,7 @@ export default {
 			return this.resource.ref.id;
 		},
 		getQrLink() {
-			return `${window.location.origin}/${this.resource.ref.id}`;
+			return `${window.location.origin}/content/${this.resource.ref.id}`;
 		},
 	},
 	methods: {

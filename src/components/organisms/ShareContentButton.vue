@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="share-button">
 		<base-button
 			:design="btnDesign"
 			:class="btnClass"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ShareContentModal from "@components/organisms/ShareContentModal";
+import ShareContentModal from "@components/molecules/ShareContentModal";
 import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
@@ -45,10 +45,6 @@ export default {
 	},
 	computed: {
 		getUrl() {
-			console.log("getUrl metaData");
-			console.log(
-				getMetadataAttribute(this.resource.properties, "cclom:location")
-			);
 			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 	},
@@ -59,3 +55,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.share-button {
+	margin-left: var(--radius-md);
+}
+</style>
