@@ -4,7 +4,11 @@
 			<base-icon :source="source" :icon="icon" :fill="fill" />
 		</base-button>
 
-		<div class="popup-content" :class="{ visible }">
+		<div
+			ref="popupContent"
+			class="popup-content"
+			:class="{ visible, 'expand-to-left': shouldExpandToLeft }"
+		>
 			<slot></slot>
 		</div>
 	</div>
@@ -25,11 +29,19 @@ export default {
 			type: String,
 			default: "var(--color-tertiary-dark)",
 		},
+		shouldExpandToLeft: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
 			visible: false,
 		};
+	},
+	mounted() {
+		this.shouldExpandToLeft =
+			this.$refs.popupContent.getBoundingClientRect().right >
+			window.innerWidth + 10;
 	},
 	methods: {
 		popup() {
@@ -83,6 +95,11 @@ export default {
 		&.visible {
 			visibility: visible;
 		}
+
+		&.expand-to-left {
+			right: 0%;
+			left: initial;
+		}
 	}
 
 	.popup-content::before {
@@ -105,6 +122,15 @@ export default {
 		}
 	}
 
+	.expand-to-left::before {
+		@include breakpoint(tablet) {
+			right: calc(
+				var(--arrow-offset) - (var(--outer-arrow-size) - var(--arrow-size))
+			);
+			left: initial;
+		}
+	}
+
 	.popup-content::after {
 		position: absolute;
 		top: calc(-2 * var(--arrow-size));
@@ -118,6 +144,13 @@ export default {
 		@include breakpoint(tablet) {
 			right: initial;
 			left: var(--arrow-offset);
+		}
+	}
+
+	.expand-to-left::after {
+		@include breakpoint(tablet) {
+			right: var(--arrow-offset);
+			left: initial;
 		}
 	}
 }

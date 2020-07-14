@@ -7,7 +7,8 @@
 			<h2 class="h3">Geschafft!</h2>
 			<h3 class="h4">Was kann ich in einem Kurs machen?</h3>
 			<h4 class="h5">Themen anlegen</h4>
-			Themen sind in der Schul-Cloud der Container für dein Unterrichtsmaterial.
+			Themen sind in der HPI Schul-Cloud der Container für dein
+			Unterrichtsmaterial.
 			<h4 class="h5">Aufgaben stellen</h4>
 			Innerhalb eines Kurses/Themas kannst du Aufgaben an deine Teilnehmer
 			stellen.

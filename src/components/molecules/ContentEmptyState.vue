@@ -27,14 +27,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .empty-state-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	&__image {
-		height: 50vh;
 		margin-top: var(--space-md);
+
+		@include breakpoint(desktop-lg) {
+			height: 50vh;
+		}
 	}
 	&__title {
 		margin-bottom: var(--space-md);

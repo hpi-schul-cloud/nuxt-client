@@ -10,7 +10,10 @@ export const actions = {
 			const res = await this.$axios.$get("/edu-sharing", {
 				params: query,
 			});
+
 			commit("setResources", res);
+		} catch (e) {
+			console.error(e);
 		} finally {
 			commit("setLoading", false);
 		}
@@ -74,6 +77,9 @@ export const mutations = {
 	},
 	clearResources(state) {
 		state.resources = initialState().resources;
+	},
+	clearLessons(state) {
+		state.lessons = initialState().lessons;
 	},
 	setLoading(state, status) {
 		state.loading = status;
