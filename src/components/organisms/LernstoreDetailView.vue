@@ -34,7 +34,18 @@
 		</div>
 		<div ref="sidebar" class="sidebar">
 			<div class="content-container">
-				<div class="actions"></div>
+				<div class="actions">
+					<user-has-role :role="isNotStudent">
+						<share-content-button
+								:resource="resource"
+								btn-design="text icon"
+								btn-class="floating-button"
+								btn-icon-class="footer__content-icon"
+								btn-icon="share"
+								btn-color="var(--color-tertiary)"
+						/>
+					</user-has-role>
+				</div>
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
@@ -125,15 +136,6 @@
 					btn-icon-class="footer__content-icon"
 					btn-icon="add"
 					:btn-label="$t('pages.content._id.addToTopic')"
-				/>
-				<share-content-button
-					:resource="resource"
-					btn-design="hero-cta"
-					btn-class="floating-button"
-					btn-size="large"
-					btn-icon-class="footer__content-icon"
-					btn-icon="share"
-					:btn-label="$t('components.molecules.ShareContentModal')"
 				/>
 			</user-has-role>
 		</div>
@@ -283,7 +285,7 @@ $tablet-portrait-width: 768px;
 		z-index: var(--layer-modal);
 		display: flex;
 		justify-content: space-between;
-		width: 100%;
+		width: 30%;
 		padding: var(--space-md);
 
 		.close-icon {

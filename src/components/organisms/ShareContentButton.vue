@@ -4,6 +4,7 @@
 			:design="btnDesign"
 			:class="btnClass"
 			:size="btnSize"
+			:style="{ color: btnColor }"
 			role="button"
 			:aria-label="
 				btnLabel ? btnLabel : `${$t('components.molecules.AddContentModal')}`
@@ -34,6 +35,7 @@ export default {
 		btnDesign: { type: String, default: "" },
 		btnSize: { type: String, default: "medium" },
 		btnClass: { type: String, default: "" },
+		btnColor: { type: String, default: "" },
 		btnIconClass: { type: String, default: "" },
 		btnIcon: { type: String, default: "" },
 		resource: { type: Object, default: () => {} },
@@ -55,9 +57,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.share-button {
-	margin-left: var(--radius-md);
-}
-</style>
