@@ -11,7 +11,7 @@
 			<p class="token">
 				{{ $t("pages.content.modal.qr.sub_title") }}
 			</p>
-			<input type="text" :value="getContentId" aria-label="input" />
+			<input type="text" :value="getQrLink" aria-label="input" />
 			<p class="qr-description">
 				{{ $t("pages.content.modal.qr.description") }}
 			</p>
@@ -54,9 +54,6 @@ export default {
 		return {};
 	},
 	computed: {
-		getContentId() {
-			return this.resource.ref.id;
-		},
 		getQrLink() {
 			return `${window.location.origin}/content/${this.resource.ref.id}`;
 		},
