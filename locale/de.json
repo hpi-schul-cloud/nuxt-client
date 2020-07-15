@@ -316,7 +316,7 @@
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!",
 	"utils.test.account.mail.subject": "Kostenloses Test-konto",
-	"utils.test.account.mail.body": "Jetzt Demo-Account beantragen!\n\tMit der HPI Schul-Cloud können Sie datenschutzkonform in einem virtuellen Klassenzimmer Unterricht mit Ihren Schüler:innen gestalten.\n\tVideokonferenzen, Abgabe von Hausaufgaben, Verwendung interaktiver Tools und die sichere Recherche von Lernmaterialien sind nur einige der weiteren Vorteile der HPI Schul-Cloud.\n\tSie möchten mehr über unsere Lernumgebung wissen? Dann beantragen Sie jetzt einen 14-tägigen Testaccount.",
+	"utils.test.account.mail.body": "Jetzt Demo-Account beantragen! Mit der HPI Schul-Cloud können Sie datenschutzkonform in einem virtuellen Klassenzimmer Unterricht mit Ihren Schüler:innen gestalten. Videokonferenzen, Abgabe von Hausaufgaben, Verwendung interaktiver Tools und die sichere Recherche von Lernmaterialien sind nur einige der weiteren Vorteile der HPI Schul-Cloud. Sie möchten mehr über unsere Lernumgebung wissen? Dann beantragen Sie jetzt einen 14-tägigen Testaccount.",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
 	"utils.adminFilter.consent.label.missing": "Keine Einverständniserklärungen vorhanden",
 	"utils.adminFilter.consent.label.ok": "Alle Einverständniserklärungen vorhanden",
