@@ -280,6 +280,7 @@
 	"pages.content.notification.successMsg": "Material wurde erfolgreich hinzugefügt",
 	"pages.content.notification.errorMsg": "Irgendetwas ist schiefgegangen. Material konnte nicht hinzugefügt werden",
 	"pages.content.notification.lernstoreNotAvailable": "Lernstore ist nicht verfügbar",
+	"pages.content.page.window.title": "Thema anlegen - {instance} - Deine digitale Lernumgebung",
 	"pages.content.preview_img.alt": "Bildvorschau",
 	"pages.courses.index.courses.active": "Aktuelle Kurse",
 	"pages.courses.index.courses.archived": "Archivierte Kurse",

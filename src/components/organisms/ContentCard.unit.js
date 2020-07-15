@@ -1,5 +1,5 @@
 import ContentCard from "./ContentCard";
-import { Resource } from "../../../stories/mockData/Resource";
+import { Resource } from "@@/stories/mockData/Resource";
 
 const testProps = {
 	resource: Resource,
@@ -19,7 +19,7 @@ describe("@components/organisms/ContentCard", () => {
 	it("Renders contentCard img", () => {
 		expect(wrapper.find(".content__img-thumbnail").exists()).toBe(true);
 		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
-			"https://img.youtube.com/vi/wRBPzExOH2A/maxresdefault.jpg"
+			Resource.preview.url
 		);
 		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe(
 			"content-thumbnail"
