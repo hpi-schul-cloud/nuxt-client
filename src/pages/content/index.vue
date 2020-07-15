@@ -12,7 +12,7 @@
 		<base-link :href="mailHandler">
 			<base-button>request free test account</base-button>
 		</base-link>
-			<div class="content" :class="{ inline: isInline }">
+		<div class="content" :class="{ inline: isInline }">
 			<div>
 				<content-searchbar
 					v-model.lazy="searchQuery"
@@ -118,7 +118,9 @@ export default {
 			return query;
 		},
 		mailHandler() {
-			return `mailto:info@schul-cloud.org?subject=${this.$t('utils.test.account.mail.subject')}&body=${this.$t('utils.test.account.mail.body')}`
+			return `mailto:info@schul-cloud.org?subject=${this.$t(
+				"utils.test.account.mail.subject"
+			)}&body=${this.$t("utils.test.account.mail.body")}`;
 		},
 		isInline() {
 			return !!this.$route.query.inline;
