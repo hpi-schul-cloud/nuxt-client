@@ -1,6 +1,6 @@
 <template>
 	<legacy-logged-in>
-		<main class="content">
+		<main class="content" :class="{ inline: isInline }">
 			<Nuxt />
 		</main>
 	</legacy-logged-in>
@@ -12,6 +12,11 @@ import LegacyLoggedIn from "@layouts/legacyLoggedIn";
 export default {
 	components: {
 		LegacyLoggedIn,
+	},
+	computed: {
+		isInline() {
+			return !!this.$route.query.inline;
+		},
 	},
 };
 </script>
@@ -29,5 +34,8 @@ export default {
 	@include breakpoint(tablet) {
 		padding: 0 var(--space-xl-3);
 	}
+}
+.content.inline {
+	min-height: 100vh;
 }
 </style>
