@@ -92,7 +92,7 @@ export default {
 
 		async create() {
 			try {
-				await this.$store.dispatch("users/create", {
+				await this.$store.dispatch("users/createStudent", {
 					firstName: this.userData.firstName,
 					lastName: this.userData.lastName,
 					email: this.userData.email,

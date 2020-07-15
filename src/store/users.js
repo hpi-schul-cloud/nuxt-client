@@ -9,6 +9,10 @@ const module = mergeDeep(base, {
 			queryContext.customEndpoint = "/users/admin/students";
 			return dispatch("find", queryContext);
 		},
+		createStudent({ dispatch }, queryContext = {}) {
+			queryContext.customEndpoint = "/users/admin/students";
+			return dispatch("create", queryContext);
+		},
 		findTeachers({ dispatch }, query = {}) {
 			query.customEndpoint = "/users/admin/teachers";
 			return dispatch("find", query);
