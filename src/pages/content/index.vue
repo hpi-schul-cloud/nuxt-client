@@ -9,7 +9,10 @@
 		>
 			<base-icon source="material" icon="arrow_back" />
 		</base-button>
-		<div class="content" :class="{ inline: isInline }">
+		<base-link :href="mailHandler">
+			<base-button>request free test account</base-button>
+		</base-link>
+			<div class="content" :class="{ inline: isInline }">
 			<div>
 				<content-searchbar
 					v-model.lazy="searchQuery"
@@ -72,9 +75,11 @@ import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
 import BaseButton from "../../components/base/BaseButton";
+import BaseLink from "../../components/base/BaseLink";
 
 export default {
 	components: {
+		BaseLink,
 		BaseButton,
 		ContentSearchbar,
 		ContentCard,
@@ -111,6 +116,9 @@ export default {
 				query["searchQuery"] = this.searchQuery;
 			}
 			return query;
+		},
+		mailHandler() {
+			return `mailto:info@schul-cloud.org?subject=${this.$t('utils.test.account.mail.subject')}&body=${this.$t('utils.test.account.mail.body')}`
 		},
 		isInline() {
 			return !!this.$route.query.inline;
