@@ -486,11 +486,6 @@ span {
 	max-height: 35vh;
 	overflow-y: scroll;
 	font-weight: var(--font-weight-normal);
-
-	@include breakpoint(tablet) {
-		max-height: initial;
-		overflow-y: initial;
-	}
 }
 .list {
 	padding: var(--space-lg);
@@ -507,6 +502,7 @@ span {
 	right: 0%;
 	z-index: calc(var(--layer-fab) + 1);
 	max-width: 100%;
+	margin-top: var(--space-md);
 	margin-right: var(--space-lg);
 	margin-left: var(--space-lg);
 
@@ -515,5 +511,11 @@ span {
 		max-width: 50%;
 		margin-right: var(--space-xl);
 	}
+}
+
+button:not(.is-none):focus {
+	z-index: var(--layer-fab);
+	outline: none;
+	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
 }
 </style>
