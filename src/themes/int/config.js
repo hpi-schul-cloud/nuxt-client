@@ -1,4 +1,4 @@
 export default {
-	name: "Internationale Schul-Cloud",
-	short_name: "HPI Schul-Cloud International",
+	name: "HPI Schul-Cloud International",
+	short_name: "Internationale Schul-Cloud",
 };
