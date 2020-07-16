@@ -90,7 +90,11 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 });
 
 const getClassesNames = async (ctx, arr) => {
-	const classes = await ctx.$store.dispatch("classes/find");
+	const classes = await ctx.$store.dispatch("classes/find", {
+		query: {
+			$limit: 1000,
+		},
+	});
 	classes.data
 		.reduce((acc, kl) => [...new Set(acc.concat(kl.displayName))], [])
 		.forEach((cl) => {
