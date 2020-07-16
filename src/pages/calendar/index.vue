@@ -26,8 +26,8 @@
 								v-model="radioValue"
 								label=""
 								:options="[
-									{ value: 'A', label: 'Teams ?' },
-									{ value: 'B', label: 'Kurse ?' },
+									{ value: 'teams', label: 'Teams ?' },
+									{ value: 'courses', label: 'Kurse ?' },
 								]"
 								@input="onInput"
 							/>
@@ -128,8 +128,7 @@ export default {
 			this.setModalEventAndState(startDate, endDate, "", "");
 		},
 		onInput(radioValue) {
-			//has to be improved
-			if (radioValue == "A") {
+			if (radioValue == "teams") {
 				this.isTeamsDDVisible = true;
 				this.isCoursesDDVisible = false;
 			} else {
@@ -139,7 +138,6 @@ export default {
 		},
 		setScopeId(input) {
 			this.currentScopeId = input._id;
-			console.log(input.color);
 		},
 		cancelHandle() {
 			this.resetScope();
