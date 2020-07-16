@@ -153,10 +153,6 @@ export function studentFilter(ctx) {
 					operator: "=",
 					input: InputCheckbox,
 					options: classesFilteringOptions,
-					attributes: {
-						type: "text",
-						placeholder: ctx.$t("utils.adminFilter.placeholder.class"),
-					},
 				},
 			],
 		},
@@ -212,10 +208,6 @@ export function teacherFilter(ctx) {
 					operator: "=",
 					input: InputCheckbox,
 					options: classesFilteringOptions,
-					attributes: {
-						type: "text",
-						placeholder: ctx.$t("utils.adminFilter.placeholder.class"),
-					},
 				},
 			],
 		},
