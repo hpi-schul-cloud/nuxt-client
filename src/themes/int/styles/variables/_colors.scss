@@ -11,6 +11,6 @@
 	--color-secondary-dark: #a31139;
 	--color-accent: #74c599;
 	--color-gray-dark: #17212a;
-	--color-gray-light: color(var(--color-primary) tint(#{$brighten}));
+	--color-gray-light: color(var(--color-gray-dark) tint(#{$brighten}));
 	--color-sidebar-menu-item-active: var(--color-secondary-dark);
 }
