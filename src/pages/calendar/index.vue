@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div class="content">
 		<div class="route-calendar">
@@ -48,8 +49,18 @@
 						<base-button design="primary text" @click="cancelHandle">
 							Abbrechen
 						</base-button>
-						<base-button design="primary" @click="submit">
+						<base-button v-if="!dateEditable" design="primary" @click="submit">
 							Hinzufügen
+						</base-button>
+						<base-button
+							v-if="dateEditable"
+							design="primary"
+							@click="removeDate"
+						>
+							Löschen
+						</base-button>
+						<base-button v-if="dateEditable" design="primary" @click="saveDate">
+							Speichern
 						</base-button>
 					</template>
 				</base-modal>
@@ -79,9 +90,11 @@ export default {
 	data() {
 		return {
 			events: [],
+			dateEditable: false,
 			modalActive: false,
 			calendar: undefined,
 			currentUserId: undefined,
+			currentEventId: undefined,
 			usersTeams: [],
 			usersCourses: [],
 			isCoursesDDVisible: false,
@@ -112,7 +125,7 @@ export default {
 		handleDateClick(date) {
 			const startDate = moment(date);
 			const endDate = moment(startDate).add(30, "minutes");
-			this.setModalEventAndState(startDate, endDate);
+			this.setModalEventAndState(startDate, endDate, "", "");
 		},
 		onInput(radioValue) {
 			//has to be improved
@@ -126,11 +139,12 @@ export default {
 		},
 		setScopeId(input) {
 			this.currentScopeId = input._id;
-			console.log(input.label);
+			console.log(input.color);
 		},
 		cancelHandle() {
 			this.resetScope();
 			this.modalActive = false;
+			this.dateEditable = false;
 		},
 		init() {
 			// initially set ScopeID to userId
@@ -143,8 +157,8 @@ export default {
 		eventClick(event) {
 			const startDate = moment(event.start);
 			const endDate = moment(event.end);
-			this.inputText = event.title;
-			this.setModalEventAndState(startDate, endDate);
+			this.dateEditable = true;
+			this.setModalEventAndState(startDate, endDate, event.title, event._id);
 		},
 		submit() {
 			const start = this.setTime(
@@ -152,12 +166,32 @@ export default {
 				this.startTimeInput
 			);
 			const end = this.setTime(moment.utc(this.endDayInput), this.endTimeInput);
-			console.log(start.toISOString());
-			console.log(end.toISOString());
 			this.postCalendarData(start.toISOString(), end.toISOString());
 			this.update();
 			this.resetScope();
 			this.modalActive = false;
+			this.dateEditable = false;
+		},
+		removeDate() {
+			this.deleteDate();
+			this.removeEvent();
+			this.resetScope();
+			this.modalActive = false;
+			this.dateEditable = false;
+		},
+		saveDate() {
+			this.deleteDate();
+			this.removeEvent();
+			const start = this.setTime(
+				moment.utc(this.startDayInput),
+				this.startTimeInput
+			);
+			const end = this.setTime(moment.utc(this.endDayInput), this.endTimeInput);
+			this.postCalendarData(start.toISOString(), end.toISOString());
+			this.update();
+			this.resetScope();
+			this.modalActive = false;
+			this.dateEditable = false;
 		},
 		resetScope() {
 			this.inputText = "";
@@ -174,12 +208,22 @@ export default {
 			});
 			return dateToSet;
 		},
-		setModalEventAndState(startDate, endDate) {
+		setModalEventAndState(startDate, endDate, title, id) {
+			this.currentEventId = id;
+			this.inputText = title;
 			this.startDayInput = startDate.toISOString();
 			this.startTimeInput = startDate.format("HH:mm");
 			this.endDayInput = endDate.toISOString();
 			this.endTimeInput = endDate.format("HH:mm");
 			this.modalActive = true;
+		},
+		removeEvent() {
+			this.events.forEach((event) => {
+				if (event._id === this.currentEventId) {
+					const index = this.events.indexOf(event);
+					this.events.splice(index, 1);
+				}
+			});
 		},
 		update() {
 			try {
@@ -216,6 +260,7 @@ export default {
 				list.push({
 					_id: event._id,
 					label: event.name,
+					color: event.color,
 				});
 			}
 		},
@@ -257,6 +302,11 @@ export default {
 				scopeId: this.currentScopeId,
 				endDate: endDate,
 				summary: this.inputText,
+			});
+		},
+		async deleteDate() {
+			this.$store.dispatch("calendar/removeDate", {
+				id: this.currentEventId,
 			});
 		},
 	},

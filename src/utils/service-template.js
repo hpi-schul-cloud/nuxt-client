@@ -73,6 +73,7 @@ export default function (endpoint) {
 				if (typeof idOrPayload === "string") {
 					const id = idOrPayload;
 					res = await this.$axios.$delete(baseUrl + "/" + id);
+					console.log("test");
 					commit("remove", idOrPayload);
 				} else {
 					const payload = idOrPayload;
@@ -118,6 +119,8 @@ export default function (endpoint) {
 				state.list[index] = Object.assign(state.list[index], item);
 			},
 			remove(state, id) {
+				console.log(state);
+				console.log(id);
 				const index = state.list.findIndex((e) => e._id === id);
 				if (index === -1) {
 					console.warn(`Can't remove item with id "${id}" (Not found)`);
