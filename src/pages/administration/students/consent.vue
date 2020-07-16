@@ -36,21 +36,28 @@
 			<backend-data-table
 				:columns="tableColumns"
 				:data="tableData"
-				track-by="id"
+				track-by="_id"
 				:paginated="false"
 				sort-by="fullName"
 				:sort-order="sortOrder"
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					<div v-if="slotProps.data" class="text-content">
-						{{ dayjs(slotProps.data).format("DD.MM.YYYY") }}
-					</div>
 					<div v-if="!slotProps.data" class="text-content">
 						<base-input
-							v-model="birthdays[slotProps.rowindex]"
+							v-model="slotProps.data"
 							type="date"
 							label=""
+							class="date"
+							:placeholder="$t('common.placeholder.dateformat')"
+						/>
+					</div>
+					<div v-if="slotProps.data" class="text-content">
+						<base-input
+							v-model="slotProps.data"
+							type="date"
+							label=""
+							class="date"
 							:placeholder="$t('common.placeholder.dateformat')"
 						/>
 					</div>
@@ -315,7 +322,8 @@ export default {
 		},
 		birthdays: {
 			get: function () {
-				return this.tableData.map((entry) => entry.birthday ?? "");
+				//debugger;
+				return this.tableData.map((entry) => entry.birthday ?? dayjs("01.01.1900").format("DD.MM.YYYY") );
 			},
 		},
 	},
@@ -334,12 +342,15 @@ export default {
 					$in: this.selectedStudentIds,
 				},
 			};
-			this.$store.dispatch("users/findStudents", {
+			this.$store.dispatch("users/findStudentsforConsent", {
 				query,
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortOrder = sortOrder;
+		},
+		onChangeBirtday(id) {
+			console.log(id);
 		},
 		next() {
 			if (this.currentStep === 0) {
