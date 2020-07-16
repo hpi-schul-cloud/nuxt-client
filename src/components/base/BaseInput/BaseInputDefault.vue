@@ -186,7 +186,7 @@ export default {
 			visibility: visible;
 		}
 		.visible {
-			border-bottom: var(--border-width-bold) solid var(--color-primary);
+			fill: var(--color-primary);
 		}
 	}
 }
