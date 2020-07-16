@@ -150,9 +150,9 @@ export default {
 			// initially set ScopeID to userId
 			this.currentUserId = this.jwtDecode(this.$cookies.get("jwt")).userId;
 			this.currentScopeId = this.currentUserId;
-			this.update();
 			this.getUserTeams();
 			this.getUserCourses();
+			this.update();
 		},
 		eventClick(event) {
 			const startDate = moment(event.start);
@@ -252,8 +252,21 @@ export default {
 					start: event.start,
 					end: event.end,
 					_id: event._id,
+					color: this.checkforCourseColor(event),
 				});
 			}
+		},
+		checkforCourseColor(event) {
+			let courseColor = undefined;
+			event.relationships["scope-ids"].forEach((id) => {
+				this.usersCourses.forEach((course) => {
+					if (id === course._id && course.color != undefined) {
+						courseColor = course.color;
+					}
+				});
+			});
+			console.log(courseColor);
+			return courseColor;
 		},
 		pushScope(event, list) {
 			if (this.isNewElement(event, list)) {
