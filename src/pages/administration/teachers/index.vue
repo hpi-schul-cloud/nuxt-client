@@ -129,7 +129,7 @@ export default {
 					.page || 1,
 			limit:
 				this.$uiState.get("pagination", "pages.administration.teachers.index")
-					.limit || 10,
+					.limit || 25,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			breadcrumbs: [
