@@ -179,7 +179,7 @@ export default {
 					.page || 1,
 			limit:
 				this.$uiState.get("pagination", "pages.administration.students.index")
-					.limit || 10,
+					.limit || 25,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			tableColumns: [
