@@ -323,7 +323,9 @@ export default {
 		birthdays: {
 			get: function () {
 				//debugger;
-				return this.tableData.map((entry) => entry.birthday ?? dayjs("01.01.1900").format("DD.MM.YYYY") );
+				return this.tableData.map(
+					(entry) => entry.birthday ?? dayjs("01.01.1900").format("DD.MM.YYYY")
+				);
 			},
 		},
 	},
