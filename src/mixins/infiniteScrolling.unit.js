@@ -16,14 +16,6 @@ describe("@mixins/infiniteScrolling", () => {
 	it("can be used as a mixin", () => {
 		expect(getInstance).not.toThrow();
 	});
-	it("exposes $_bottom data variable", () => {
-		const wrapper = getInstance();
-		expect(wrapper.vm.$data.$_bottom).not.toBeUndefined();
-	});
-	it("exposes scrollY position as $_scrollY data variable", () => {
-		const wrapper = getInstance();
-		expect(wrapper.vm.$data.$_scrollY).not.toBeUndefined();
-	});
 	it("$_backToTop scroll to the top", () => {
 		const scrollToMock = jest.spyOn(window, "scrollTo");
 		const wrapper = getInstance();
@@ -76,7 +68,7 @@ describe("@mixins/infiniteScrolling", () => {
 			.mockImplementation((event, cb) => cb());
 		const wrapper = getInstance();
 
-		expect(wrapper.vm.$_bottom).toBe(true);
-		expect(wrapper.vm.$_scrollY).toBe(300);
+		expect(wrapper.vm.bottom).toBe(true);
+		expect(wrapper.vm.scrollY).toBe(300);
 	});
 });

@@ -9,6 +9,18 @@ const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
+const serverMiddlewareList = [
+	"@serverMiddleware/nuxtversion",
+	"@serverMiddleware/proxy",
+];
+
+if (process.env.CORS_ENABLED) {
+	serverMiddlewareList.push("@serverMiddleware/csp/cors");
+}
+if (process.env.SECURITY_HEADERS_ENABLED) {
+	serverMiddlewareList.push("@serverMiddleware/csp/security_headers");
+}
+
 module.exports = {
 	mode: "spa",
 	srcDir: "src/",
@@ -24,7 +36,23 @@ module.exports = {
 			process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
 		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 		SC_THEME: process.env.SC_THEME,
+		LERNSTORE_MODE: process.env.LERNSTORE_MODE,
 	},
+
+	/*
+	 ** Content Security Policy (CSP)
+	 */
+	csp: {
+		// If enabled, default content security policy (CSP) header will be set
+		cors: {
+			enabled: process.env.CORS_ENABLED || false,
+		},
+		// If enabled, additional security header will be set
+		security_headers: {
+			enabled: process.env.SECURITY_HEADERS_ENABLED || false,
+		},
+	},
+
 	/*
 	 ** Headers of the page
 	 */
@@ -67,20 +95,22 @@ module.exports = {
 	 */
 	cssSourceMap: true,
 
+	/*
+	 ** Nuxt.js (server)middleware
+	 */
 	server: {
 		port: process.env.PORT || DEFAULT_PORT,
 		host: process.env.HOST || DEFAULT_HOST,
 	},
-	serverMiddleware: [
-		"@serverMiddleware/nuxtversion",
-		"@serverMiddleware/proxy",
-	],
+
+	serverMiddleware: serverMiddlewareList,
 
 	router: {
 		middleware: [
 			// "is-authenticated",
 			"links-fallback",
 			"permission-check",
+			"externally-managed-check",
 		],
 	},
 

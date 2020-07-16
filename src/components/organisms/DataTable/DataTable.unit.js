@@ -9,7 +9,7 @@ function getWrapper(attributes, options) {
 		...createComponentMocks({ i18n: true }),
 		propsData: {
 			data: defaultData,
-			trackBy: "id",
+			trackBy: "_id",
 			columns: tableColumns,
 			...attributes,
 		},
@@ -300,7 +300,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 	describe("selection", () => {
 		const total = 10;
 		const testData = tableData(total, (index) => ({
-			id: String(index), // simplify IDs of test data for easier testing
+			_id: String(index), // simplify IDs of test data for easier testing
 		}));
 
 		const getVisibleSelections = async (wrapper) => {
@@ -325,7 +325,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			return (
 				visibleSelections.length === expectedSelectionIds.length &&
 				expectedSelectionIds.every((expectedId) => {
-					const selectionFirstName = data.find((row) => row.id === expectedId)
+					const selectionFirstName = data.find((row) => row._id === expectedId)
 						.firstName;
 					return visibleSelections.find(
 						(selectionRow) => selectionRow[1] === selectionFirstName
@@ -342,7 +342,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
-				[[testData[0].id]],
+				[[testData[0]._id]],
 			]);
 		});
 
@@ -523,7 +523,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
-					trackBy: "id",
+					trackBy: "_id",
 					columns: tableColumns,
 				},
 				scopedSlots: {
@@ -548,7 +548,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
-					trackBy: "id",
+					trackBy: "_id",
 					columns: tableColumns,
 				},
 				scopedSlots: {

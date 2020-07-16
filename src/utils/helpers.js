@@ -50,3 +50,16 @@ export const removeIdFromArray = (array, value) => {
 	}
 	return array;
 };
+
+/**
+ * Returns the value of the propertie by key
+ * @param {*} properties - properties
+ * @param {String} key - key of the propertie
+ * @returns The value of the propertie or null
+ */
+export const getMetadataAttribute = (properties, key) => {
+	if (Array.isArray(properties[key])) {
+		return properties[key][0];
+	}
+	return null;
+};
