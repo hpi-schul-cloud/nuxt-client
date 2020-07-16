@@ -91,13 +91,14 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 
 const getClassesNames = async (ctx, arr) => {
 	const classes = await ctx.$store.dispatch("classes/find");
-	classes.data.forEach((cl) => {
-		cl.displayName &&
+	classes.data
+		.reduce((acc, kl) => [...new Set(acc.concat(kl.displayName))], [])
+		.forEach((cl) => {
 			arr.push({
-				value: cl.displayName,
-				label: cl.displayName,
+				value: cl,
+				label: cl,
 			});
-	});
+		});
 };
 
 export function studentFilter(ctx) {
