@@ -180,13 +180,13 @@ export default {
 	&:focus-within,
 	&:hover:not(.disabled) {
 		.label {
-			color: var(--color-accent);
+			color: var(--color-primary);
 		}
 		.help {
 			visibility: visible;
 		}
 		.visible {
-			fill: var(--color-accent);
+			border-bottom: var(--border-width-bold) solid var(--color-primary);
 		}
 	}
 }
@@ -197,7 +197,7 @@ export default {
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom-color: var(--color-accent);
+		border-bottom: var(--border-width-bold) solid var(--color-primary);
 		outline: none;
 	}
 	&.error {
