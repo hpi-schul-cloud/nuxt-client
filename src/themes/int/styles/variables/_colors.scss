@@ -1,7 +1,7 @@
+$brighten: 90%;
+
 // extends the default theme
 :root {
-	$brighten: 10%;
-
 	/* main colors */
 	--color-primary: #064963;
 	--color-primary-light: #417491;
@@ -11,6 +11,6 @@
 	--color-secondary-dark: #a31139;
 	--color-accent: #74c599;
 	--color-gray-dark: #17212a;
-	--color-gray-light: color(var(--color-gray-dark) tint(#{$brighten}));
+	--color-gray-light: color-mod(var(--color-gray-dark) tint(#{$brighten}));
 	--color-sidebar-menu-item-active: var(--color-secondary-dark);
 }
