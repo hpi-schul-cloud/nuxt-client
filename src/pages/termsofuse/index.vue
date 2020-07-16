@@ -8,7 +8,7 @@
 </template>
 
 <script>
-	import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
+import CommonTermsOfUse from "@components/templates/CommonTermsOfUse";
 import downloadMixin from "@mixins/downloadPrivacyStatement";
 
 export default {
