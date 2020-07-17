@@ -20,8 +20,8 @@ export default {
 		image: {
 			type: String,
 			default: "@assets/img/empty-state/content-empty.svg",
-			required: false
-		}
-	}
+			required: false,
+		},
+	},
 };
 </script>

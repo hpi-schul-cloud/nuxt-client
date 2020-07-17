@@ -2,7 +2,12 @@
 	<div class="base">
 		<div class="container">
 			<div class="img-container">
-				<base-image :img-src="image" :img-alt="alt" :img-height="imageHeight" role="presentation"/>
+				<base-image
+					:img-src="image"
+					:img-alt="alt"
+					:img-height="imageHeight"
+					role="presentation"
+				/>
 			</div>
 			<h2 v-if="title" class="h4 title">{{ title }}</h2>
 			<div class="description">
@@ -29,7 +34,7 @@ export default {
 		imageHeight: {
 			type: String,
 			default: "200px",
-			required: false
+			required: false,
 		},
 		alt: {
 			type: String,
