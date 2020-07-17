@@ -2,13 +2,7 @@
 	<div class="base">
 		<div class="container">
 			<div class="img-container">
-				<img
-					:src="image"
-					role="presentation"
-					:alt="imageAlt"
-					class="image"
-					:style="{ maxHeight: imageHeight }"
-				/>
+				<base-image :img-src="image" :img-alt="alt" :img-height="imageHeight" role="presentation"/>
 			</div>
 			<h2 v-if="title" class="h4 title">{{ title }}</h2>
 			<div class="description">
@@ -18,7 +12,9 @@
 	</div>
 </template>
 <script>
+import BaseImage from "@basecomponents/BaseImage";
 export default {
+	components: { BaseImage },
 	props: {
 		title: {
 			type: String,
@@ -28,17 +24,17 @@ export default {
 		image: {
 			type: String,
 			required: false,
-			default: "@assets/img/empty-state/emptystate-graph.svg",
-		},
-		imageAlt: {
-			type: String,
-			required: false,
-			default: "",
+			default: "img/empty-state/emptystate-graph.svg",
 		},
 		imageHeight: {
 			type: String,
-			required: false,
 			default: "200px",
+			required: false
+		},
+		alt: {
+			type: String,
+			required: false,
+			default: "",
 		},
 	},
 	data() {
@@ -51,6 +47,10 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.img-container {
+	text-align: center;
+}
+
 .base {
 	display: flex;
 	justify-content: center;
@@ -58,13 +58,6 @@ export default {
 
 .container {
 	width: 60ch;
-}
-
-.img-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 }
 
 .title {

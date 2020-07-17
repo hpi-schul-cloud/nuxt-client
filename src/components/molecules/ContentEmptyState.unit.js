@@ -2,6 +2,9 @@ import ContentEmptyState from "./ContentEmptyState";
 
 describe("@components/molecules/ContentEmptyState", () => {
 	const wrapper = mount(ContentEmptyState, {
+		propsData: {
+			image: "@assets/icons/emptystate.svg",
+		},
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),
 	});
@@ -10,11 +13,7 @@ describe("@components/molecules/ContentEmptyState", () => {
 
 	// eslint-disable-next-line jest/no-commented-out-tests
 	it("Renders an image", () => {
-		console.log(wrapper.html());
 		expect(wrapper.find(".img-container").exists()).toBe(true);
-		expect(wrapper.find(".img-container img").attributes("alt")).toBe(
-			"empty-state-img"
-		);
 	});
 	it("Provides proper title", () => {
 		expect(wrapper.find(".title").exists()).toBe(true);

@@ -2,6 +2,9 @@ import ContentInitialState from "./ContentInitialState";
 
 describe("@components/molecules/ContentInitialState", () => {
 	const wrapper = mount(ContentInitialState, {
+		propsData: {
+			image: "@assets/icons/emptystate.svg",
+		},
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),
 	});
@@ -12,9 +15,6 @@ describe("@components/molecules/ContentInitialState", () => {
 	it("Renders an image", () => {
 		console.log(wrapper.html());
 		expect(wrapper.find(".img-container").exists()).toBe(true);
-		expect(wrapper.find(".img-container img").attributes("alt")).toBe(
-			"Initial state Image"
-		);
 	});
 	it("Provides proper title", () => {
 		expect(wrapper.find(".title").exists()).toBe(true);

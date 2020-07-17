@@ -1,6 +1,6 @@
 <template>
 	<empty-state
-		:image="require('@assets/img/edusharing/SC_Search-Results_Empty-State.svg')"
+		:image="image"
 		:image-alt="$t('pages.content.empty_state.error.img_alt')"
 		:title="$t('pages.content.empty_state.error.title')"
 	>
@@ -16,5 +16,12 @@ export default {
 	components: {
 		EmptyState,
 	},
+	props: {
+		image: {
+			type: String,
+			default: "@assets/img/empty-state/content-empty.svg",
+			required: false
+		}
+	}
 };
 </script>
