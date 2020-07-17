@@ -23,7 +23,9 @@ describe("@components/molecules/EmptyState", () => {
 			},
 		});
 		expect(wrapper.find("img").exists()).toBe(true);
-		expect(wrapper.find("img").attributes("src")).toBe("@assets/icons/emptystate.svg");
+		expect(wrapper.find("img").attributes("src")).toBe(
+			"@assets/icons/emptystate.svg"
+		);
 	});
 
 	it(

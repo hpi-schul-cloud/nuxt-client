@@ -1,13 +1,15 @@
 <template>
 	<div>
-		<component :is="svgComponent"
-				   v-if="showAsSvg"
-				   v-bind="$attrs"
-				   :fill="fill"
-				   :style="{ maxHeight: imgHeight }"
-				   v-on="$listeners"
+		<component
+			:is="svgComponent"
+			v-if="showAsSvg"
+			v-bind="$attrs"
+			:fill="fill"
+			:style="{ maxHeight: imgHeight }"
+			v-on="$listeners"
 		/>
-		<img v-else
+		<img
+			v-else
 			:src="imgSrc"
 			role="presentation"
 			:alt="imgAlt"
@@ -17,7 +19,6 @@
 </template>
 
 <script>
-
 export default {
 	inheritAttrs: false,
 	props: {
@@ -43,12 +44,18 @@ export default {
 		return {};
 	},
 	computed: {
-		showAsSvg(){
-			return (this.imgSrc.startsWith("@assets/img/") || this.imgSrc.startsWith("/_nuxt/src/assets"))  && this.imgSrc.endsWith(".svg");
+		showAsSvg() {
+			return (
+				(this.imgSrc.startsWith("@assets/img/") ||
+					this.imgSrc.startsWith("/_nuxt/src/assets")) &&
+				this.imgSrc.endsWith(".svg")
+			);
 		},
 		svgComponent() {
 			let img;
-			const sanitizedImgSrc = this.imgSrc.replace("@assets/img/", "").replace("/_nuxt/src/assets/", "");
+			const sanitizedImgSrc = this.imgSrc
+				.replace("@assets/img/", "")
+				.replace("/_nuxt/src/assets/", "");
 			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
 			try {
 				img = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/img/${sanitizedImgSrc}`);
@@ -64,4 +71,3 @@ export default {
 	},
 };
 </script>
-
