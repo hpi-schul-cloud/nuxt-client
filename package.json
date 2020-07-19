@@ -132,7 +132,7 @@
 		"postcss-color-mod-function": "^3.0.3",
 		"postcss-loader": "^3.0.0",
 		"prettier": "^2.0.5",
-		"puppeteer": "^5.1.0",
+		"puppeteer": "^5.2.0",
 		"sass-loader": "^9.0.2",
 		"serve": "^11.3.2",
 		"sharp": "^0.25.4",
