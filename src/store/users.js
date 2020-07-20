@@ -13,9 +13,21 @@ const module = mergeDeep(base, {
 			queryContext.customEndpoint = "/users/admin/students";
 			return dispatch("create", queryContext);
 		},
+		removeStudents({ dispatch }, queryContext = {}) {
+			queryContext.customEndpoint = "/users/admin/students";
+			return dispatch("remove", queryContext);
+		},
 		findTeachers({ dispatch }, query = {}) {
 			query.customEndpoint = "/users/admin/teachers";
 			return dispatch("find", query);
+		},
+		createTeacher({ dispatch }, queryContext = {}) {
+			queryContext.customEndpoint = "/users/admin/teachers";
+			return dispatch("create", queryContext);
+		},
+		removeTeachers({ dispatch }, queryContext = {}) {
+			queryContext.customEndpoint = "/users/admin/teachers";
+			return dispatch("remove", queryContext);
 		},
 		sendRegistrationLink(ctx, payload = {}) {
 			const customEndpoint = "/users/mail/registrationLink";
