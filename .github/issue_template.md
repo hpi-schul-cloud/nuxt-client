@@ -1,6 +1,6 @@
 ---
 name: "\U0001F41B Bug report"
-about: Report a problem encountered while using the Schul-Cloud Frontend
+about: Report a problem encountered while using the HPI Schul-Cloud Frontend
 ---
 
 <!--
