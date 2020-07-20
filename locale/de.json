@@ -18,6 +18,7 @@
 	"common.labels.firstName.new": "Neuer Vorname",
 	"common.labels.lastName": "Nachname",
 	"common.labels.lastName.new": "Neuer Nachname",
+	"common.labels.birthday": "Geburtsdatum",
 	"common.labels.login": "Login",
 	"common.labels.name": "Name",
 	"common.labels.password": "Passwort",
