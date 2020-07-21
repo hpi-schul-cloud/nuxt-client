@@ -7,6 +7,7 @@
 				<appointment-modal
 					:input-text.sync="inputText"
 					:modal-active.sync="modalActive"
+					:confirm-active="confirmActive"
 					:date-editable="dateEditable"
 					:is-teams-d-d-visible="isTeamsDDVisible"
 					:is-courses-d-d-visible="isCoursesDDVisible"
@@ -66,6 +67,7 @@ export default {
 			usersCourses: [],
 			contentTeams: {},
 			contentCourses: {},
+			confirmActive: false,
 			isCoursesDDVisible: false,
 			isTeamsDDVisible: false,
 			isSave: false,
@@ -94,6 +96,24 @@ export default {
 		this.init();
 	},
 	methods: {
+		prepareSubmit() {
+			this.confirmActive = true;
+			this.isSubmit = true;
+		},
+		prepareRemove() {
+			this.confirmActive = true;
+			this.isRemove = true;
+		},
+		prepareSave() {
+			this.confirmActive = true;
+			this.isSave = true;
+		},
+		cancelConfirm() {
+			this.isSave = false;
+			this.isRemove = false;
+			this.isSubmit = false;
+			this.confirmActive = false;
+		},
 		handleDateClick(date) {
 			const startDate = moment(date);
 			const endDate = moment(startDate).add(30, "minutes");
@@ -111,6 +131,12 @@ export default {
 		setScopeId(input) {
 			this.currentScopeId = input._id;
 		},
+		eventClick(event) {
+			const startDate = moment(event.start);
+			const endDate = moment(event.end);
+			this.dateEditable = true;
+			this.setModalEventAndState(startDate, endDate, event.title, event._id);
+		},
 		cancelHandle() {
 			this.resetScope();
 			this.modalActive = false;
@@ -124,12 +150,6 @@ export default {
 			this.getUserCourses();
 			this.update();
 		},
-		eventClick(event) {
-			const startDate = moment(event.start);
-			const endDate = moment(event.end);
-			this.dateEditable = true;
-			this.setModalEventAndState(startDate, endDate, event.title, event._id);
-		},
 		submit() {
 			const start = this.setTime(
 				moment.utc(this.startDayInput),
@@ -139,6 +159,7 @@ export default {
 			this.postCalendarData(start.toISOString(), end.toISOString());
 			this.update();
 			this.resetScope();
+			this.cancelConfirm();
 			this.modalActive = false;
 			this.dateEditable = false;
 		},
@@ -146,6 +167,7 @@ export default {
 			this.deleteDate();
 			this.removeEvent();
 			this.resetScope();
+			this.cancelConfirm();
 			this.modalActive = false;
 			this.dateEditable = false;
 			this.contentTeams = undefined;
@@ -162,6 +184,7 @@ export default {
 			this.postCalendarData(start.toISOString(), end.toISOString());
 			this.update();
 			this.resetScope();
+			this.cancelConfirm();
 			this.modalActive = false;
 			this.dateEditable = false;
 		},
