@@ -38,11 +38,11 @@
 						Du möchtest gerne Mitglied in unserem HPI
 						<br />HPI Schul-Cloud Team werden? Wir suchen:
 					</p>
-					<base-link
+					<!-- <base-link
 						class="link-style"
 						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/web-developer-mwd-im-projekt-hpi-schul-cloud.html"
 						>Web Developer</base-link
-					>
+					> -->
 					<base-link
 						class="link-style"
 						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/system-engineer-dev-ops-mw.html"
