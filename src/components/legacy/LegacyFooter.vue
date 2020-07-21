@@ -31,14 +31,6 @@
 					</base-link>
 				</div>
 				<div class="link-container">
-					<h2 class="h4">Mobile App</h2>
-					<base-link href="https://testflight.apple.com/join/7i2xN7hH">
-						<img
-							class="img-apple-badge"
-							src="https://s3.hidrive.strato.com/schul-cloud-hpi/images/google-play-badge.png"
-							alt="Apple Badge"
-						/>
-					</base-link>
 					<h2 class="h4">
 						{{ $t("components.organisms.LegacyFooter.job-offer") }}
 					</h2>
