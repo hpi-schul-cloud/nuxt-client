@@ -62,7 +62,7 @@ export default {
 }
 
 .container {
-	width:  calc(2 * var(--size-content-width-min));
+	width: calc(2 * var(--size-content-width-min));
 }
 
 .title {

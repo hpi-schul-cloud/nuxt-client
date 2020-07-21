@@ -8,7 +8,7 @@ describe("@components/molecules/ContentInitialState", () => {
 		propsData: {
 			image: "@assets/icons/emptystate.svg",
 			title: testTitle,
-			description: testDescription
+			description: testDescription,
 		},
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),
@@ -23,9 +23,7 @@ describe("@components/molecules/ContentInitialState", () => {
 	});
 	it("Provides proper title", () => {
 		expect(wrapper.find(".title").exists()).toBe(true);
-		expect(wrapper.find(".title").text()).toBe(
-			testTitle
-		);
+		expect(wrapper.find(".title").text()).toBe(testTitle);
 	});
 	it("Provides proper message", () => {
 		expect(wrapper.find(".description").exists()).toBe(true);

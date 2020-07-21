@@ -33,16 +33,16 @@ export default {
 			type: String,
 			default: null,
 			required: false,
-		}
+		},
 	},
 	computed: {
 		getTitle() {
-			return this.title || this.$t('pages.content.init_state.title');
+			return this.title || this.$t("pages.content.init_state.title");
 		},
 		getDescription() {
-			return this.description || this.$t('pages.content.init_state.message');
-		}
-	}
+			return this.description || this.$t("pages.content.init_state.message");
+		},
+	},
 };
 </script>
 <style scoped>

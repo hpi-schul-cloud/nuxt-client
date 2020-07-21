@@ -1,7 +1,6 @@
 import ContentEmptyState from "./ContentEmptyState";
 
 describe("@components/molecules/ContentEmptyState", () => {
-
 	const testTitle = "test title";
 	const testDescription = "test description";
 
@@ -9,7 +8,7 @@ describe("@components/molecules/ContentEmptyState", () => {
 		propsData: {
 			image: "@assets/icons/emptystate.svg",
 			title: testTitle,
-			description: testDescription
+			description: testDescription,
 		},
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),

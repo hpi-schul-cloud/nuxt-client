@@ -31,15 +31,17 @@ export default {
 			type: String,
 			default: null,
 			required: false,
-		}
+		},
 	},
 	computed: {
 		getTitle() {
-			return this.title || this.$t('pages.content.empty_state.error.title');
+			return this.title || this.$t("pages.content.empty_state.error.title");
 		},
 		getDescription() {
-			return this.description || this.$t('pages.content.empty_state.error.message');
-		}
-	}
+			return (
+				this.description || this.$t("pages.content.empty_state.error.message")
+			);
+		},
+	},
 };
 </script>
