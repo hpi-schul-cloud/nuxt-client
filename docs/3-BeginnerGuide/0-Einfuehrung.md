@@ -12,7 +12,7 @@ Die HPI Schul-Cloud ist kein typisches Lernmanagement-System (LMS), sondern zeic
 
 ## Die verschiedenen Instanzen
 
-Bei der Entwicklung ist zu beachten, dass Du als Entwickler primär an der Kernanwendung, der HPI Schul-Cloud selbst mitentwickelst, die als Prototyp für die HPI Schul-Cloud in einzelnen Bundesländern dient. Die länderspezifischen HPI Schul-Clouds (wie die Brandenburg HPI Schul-Cloud oder Niedersächsische Bildungscloud) sind Klone dieses Kernprojektes, das noch bis Juli 2021 laufen wird und das in Zukunft von den einzelnen Ländern selbst weiterbetrieben werden soll. Da sich bei den Klonen meistens nur wenige Details und das Design der einzeln Schul-Clouds unterscheiden, die grundlegenden Funktionen jedoch gleich bleiben, genügt es aber vollauf, wenn Du am Kernprojekt mitarbeitest und deine Änderungen werden dann automatisch auf die anderen Projekte mitübertragen.
+Bei der Entwicklung ist zu beachten, dass Du als Entwickler primär an der Kernanwendung, der HPI Schul-Cloud selbst mitentwickelst, die als Prototyp für die HPI Schul-Cloud in einzelnen Bundesländern dient. Die länderspezifischen Clouds (wie die Schul-Cloud Brandenburg oder Niedersächsische Bildungscloud) sind Klone dieses Kernprojektes, das noch bis Juli 2021 laufen wird und das in Zukunft von den einzelnen Ländern selbst weiterbetrieben werden soll. Da sich bei den Klonen meistens nur wenige Details und das Design der einzeln Clouds unterscheiden, die grundlegenden Funktionen jedoch gleich bleiben, genügt es aber vollauf, wenn Du am Kernprojekt mitarbeitest und deine Änderungen werden dann automatisch auf die anderen Projekte mitübertragen.
 
 ## Ansprechpartner
 

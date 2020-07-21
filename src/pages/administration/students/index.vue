@@ -138,7 +138,7 @@ export default {
 					.page || 1,
 			limit:
 				this.$uiState.get("pagination", "pages.administration.students.index")
-					.limit || 10,
+					.limit || 25,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			tableColumns: [
@@ -384,6 +384,7 @@ export default {
 						query: this.getQueryForSelection(rowIds, selectionType),
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
+					this.find();
 				} catch (error) {
 					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}

@@ -13,6 +13,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+## ## [23.5.2] - 2020-07-17
+
+- SC-5653 update mint-ec email addresses
+
 ## ## [23.5.1] - 2020-07-09
 
 - SC-5494 Changed link in navigation bar

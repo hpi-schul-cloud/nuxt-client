@@ -1,4 +1,4 @@
-# Was kannst Du für die Schul-Cloud tun?
+# Was kannst Du für die HPI Schul-Cloud tun?
 
 ## Feature-Wishes machen (Vorentwickler Stufe)
 
