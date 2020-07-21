@@ -1,8 +1,9 @@
 <template>
 	<div>
 		<navigation-bar
-			:links="links"
+			:links="navbarItems"
 			:img="require('@assets/img/logo/logo-image-color.svg')"
+			:buttons="true"
 		>
 			<template v-slot:actions>
 				<base-button design="secondary outline" to="/login">
@@ -24,6 +25,7 @@
 <script>
 import NavigationBar from "@components/legacy/NavigationBar";
 import BaseButton from "@components/base/BaseButton";
+import navbarBaseItems from "@utils/navbarBaseItems.js";
 
 export default {
 	components: {
@@ -33,28 +35,18 @@ export default {
 
 	data() {
 		return {
-			links: [
-				{
-					title: this.$t("layouts.loggedoutFullWidth.project"),
-					href: "/about",
-				},
-				{
-					title: this.$t("layouts.loggedoutFullWidth.steps"),
-					href: "https://blog.schul-cloud.org/erste-schritte/",
-					target: "_blank",
-				},
-				{
-					title: "Blog",
-					href: "https://blog.schul-cloud.org/",
-					target: "_blank",
-				},
-				{
-					title: "FAQ",
-					href: "https://blog.schul-cloud.org/faq",
-					target: "_blank",
-				},
-			],
+			navbarBaseItems: navbarBaseItems,
 		};
+	},
+	computed: {
+		navbarItems() {
+			return this.navbarBaseItems.map((item) => {
+				if (item.title.includes(".")) {
+					item.title = this.$t(`${item.title}`);
+				}
+				return item;
+			});
+		},
 	},
 };
 </script>
