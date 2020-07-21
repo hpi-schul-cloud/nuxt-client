@@ -1,12 +1,12 @@
 <template>
 	<empty-state
-		:image="image"
+		image="@assets/img/empty-state/content-initial.svg"
 		:alt="$t('pages.content.init_state.img_alt')"
-		:title="$t('pages.content.init_state.title')"
+		:title="getTitle"
 	>
 		<template v-slot:description>
 			<div class="initial-state-description">
-				<span v-html="$t('pages.content.init_state.message')" />
+				<span v-html="getDescription" />
 			</div>
 		</template>
 	</empty-state>
@@ -24,7 +24,25 @@ export default {
 			default: "@assets/img/empty-state/content-initial.svg",
 			required: false,
 		},
+		title: {
+			type: String,
+			default: null,
+			required: false,
+		},
+		description: {
+			type: String,
+			default: null,
+			required: false,
+		}
 	},
+	computed: {
+		getTitle() {
+			return this.title || this.$t('pages.content.init_state.title');
+		},
+		getDescription() {
+			return this.description || this.$t('pages.content.init_state.message');
+		}
+	}
 };
 </script>
 <style scoped>

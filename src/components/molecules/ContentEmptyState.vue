@@ -2,10 +2,10 @@
 	<empty-state
 		:image="image"
 		:image-alt="$t('pages.content.empty_state.error.img_alt')"
-		:title="$t('pages.content.empty_state.error.title')"
+		:title="getTitle"
 	>
 		<template v-slot:description>
-			<span v-html="$t('pages.content.empty_state.error.message')" />
+			<span v-html="getDescription" />
 		</template>
 	</empty-state>
 </template>
@@ -22,6 +22,24 @@ export default {
 			default: "@assets/img/empty-state/content-empty.svg",
 			required: false,
 		},
+		title: {
+			type: String,
+			default: null,
+			required: false,
+		},
+		description: {
+			type: String,
+			default: null,
+			required: false,
+		}
 	},
+	computed: {
+		getTitle() {
+			return this.title || this.$t('pages.content.empty_state.error.title');
+		},
+		getDescription() {
+			return this.description || this.$t('pages.content.empty_state.error.message');
+		}
+	}
 };
 </script>

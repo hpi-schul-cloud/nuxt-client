@@ -62,7 +62,7 @@ export default {
 }
 
 .container {
-	width: 60ch;
+	width:  calc(2 * var(--size-content-width-min));
 }
 
 .title {

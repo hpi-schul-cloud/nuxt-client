@@ -1,9 +1,15 @@
 import ContentEmptyState from "./ContentEmptyState";
 
 describe("@components/molecules/ContentEmptyState", () => {
+
+	const testTitle = "test title";
+	const testDescription = "test description";
+
 	const wrapper = mount(ContentEmptyState, {
 		propsData: {
 			image: "@assets/icons/emptystate.svg",
+			title: testTitle,
+			description: testDescription
 		},
 		...createComponentMocks({ i18n: true }),
 		data: () => ({}),
@@ -17,12 +23,10 @@ describe("@components/molecules/ContentEmptyState", () => {
 	});
 	it("Provides proper title", () => {
 		expect(wrapper.find(".title").exists()).toBe(true);
-		expect(wrapper.find(".title").text()).toBe("Ooops, keine Ergebnisse!");
+		expect(wrapper.find(".title").text()).toBe(testTitle);
 	});
 	it("Provides proper message", () => {
 		expect(wrapper.find(".description").exists()).toBe(true);
-		expect(wrapper.find(".description").text()).toBe(
-			"Vorschlag:Achte darauf, dass alle Wörter richtig geschrieben sind. Probiere es mit anderen Suchbegriffen.Probiere es mit allgemeineren Suchbegriffen.Probiere es mit weniger Suchbegriffen."
-		);
+		expect(wrapper.find(".description").text()).toBe(testDescription);
 	});
 });
