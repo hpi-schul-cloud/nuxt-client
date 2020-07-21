@@ -69,23 +69,58 @@
 				<base-button
 					v-if="!dateEditable"
 					design="primary"
-					@click="$emit('submit', $event)"
+					@click="$emit('prepareSubmit', $event)"
 				>
 					Hinzufügen
 				</base-button>
 				<base-button
 					v-if="dateEditable"
 					design="primary"
-					@click="$emit('removeDate', $event)"
+					@click="$emit('prepareRemove', $event)"
 				>
 					Löschen
 				</base-button>
 				<base-button
 					v-if="dateEditable"
 					design="primary"
-					@click="$emit('saveDate', $event)"
+					@click="$emit('prepareSave', $event)"
 				>
 					Speichern
+				</base-button>
+			</template>
+		</base-modal>
+		<base-modal :active.sync="confirmActive">
+			<template v-slot:header></template>
+			<template v-slot:body>
+				<modal-body-info title="Bist du sicher?"> </modal-body-info>
+			</template>
+			<template v-slot:footerRight>
+				<base-button
+					design="primary text"
+					@click="$emit('cancelConfirm', $event)"
+				>
+					Abbrechen
+				</base-button>
+				<base-button
+					v-if="isSubmit"
+					design="primary"
+					@click="$emit('submit', $event)"
+				>
+					Bestätigen
+				</base-button>
+				<base-button
+					v-if="isRemove"
+					design="primary"
+					@click="$emit('removeDate', $event)"
+				>
+					Bestätigen
+				</base-button>
+				<base-button
+					v-if="isSave"
+					design="primary"
+					@click="$emit('saveDate', $event)"
+				>
+					Bestätigen
 				</base-button>
 			</template>
 		</base-modal>
@@ -134,6 +169,18 @@ export default {
 			type: Boolean,
 		},
 		dateEditable: {
+			type: Boolean,
+		},
+		confirmActive: {
+			type: Boolean,
+		},
+		isSave: {
+			type: Boolean,
+		},
+		isRemove: {
+			type: Boolean,
+		},
+		isSubmit: {
 			type: Boolean,
 		},
 		usersTeams: {

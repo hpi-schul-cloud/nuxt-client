@@ -10,6 +10,9 @@
 					:date-editable="dateEditable"
 					:is-teams-d-d-visible="isTeamsDDVisible"
 					:is-courses-d-d-visible="isCoursesDDVisible"
+					:is-submit="isSubmit"
+					:is-save="isSave"
+					:is-remove="isRemove"
 					:radio-value="radioValue"
 					:start-day.sync="startDayInput"
 					:start-time.sync="startTimeInput"
@@ -25,6 +28,10 @@
 					@submit="submit"
 					@removeDate="removeDate"
 					@saveDate="saveDate"
+					@prepareSubmit="prepareSubmit"
+					@prepareRemove="prepareRemove"
+					@prepareSave="prepareSave"
+					@cancelConfirm="cancelConfirm"
 				></appointment-modal>
 			</div>
 			<full-calendar
@@ -61,6 +68,9 @@ export default {
 			contentCourses: {},
 			isCoursesDDVisible: false,
 			isTeamsDDVisible: false,
+			isSave: false,
+			isRemove: false,
+			isSubmit: false,
 			startDayInput: "",
 			startTimeInput: "",
 			endDayInput: "",
