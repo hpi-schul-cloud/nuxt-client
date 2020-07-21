@@ -4,70 +4,33 @@
 		<div class="route-calendar">
 			<BaseTitle>Kalender</BaseTitle>
 			<div>
-				<base-modal :active.sync="modalActive">
-					<template v-slot:header></template>
-					<template v-slot:body>
-						<modal-body-info title="Termin Hinzufügen" />
-						<base-input
-							v-model="inputText"
-							type="text"
-							label="Termin Bezeichnung"
-						/>
-						<base-input v-model="startDayInput" type="date" label="Start Tag" />
-						<base-input
-							v-model="startTimeInput"
-							type="time"
-							label="Start Zeit"
-						/>
-						<base-input v-model="endDayInput" type="date" label="End Tag" />
-						<base-input v-model="endTimeInput" type="time" label="End Zeit" />
-						<div>
-							<input-radio
-								v-model="radioValue"
-								label=""
-								:options="[
-									{ value: 'teams', label: 'Teams ?' },
-									{ value: 'courses', label: 'Kurse ?' },
-								]"
-								@input="onInput"
-							/>
-						</div>
-						<dropdown-menu
-							v-if="isTeamsDDVisible"
-							title="Teams"
-							:items="usersTeams"
-							@input="setScopeId"
-						/>
-						<dropdown-menu
-							v-if="isCoursesDDVisible"
-							title="Courses"
-							:items="usersCourses"
-							@input="setScopeId"
-						/>
-					</template>
-					<template v-slot:footerRight>
-						<base-button design="primary text" @click="cancelHandle">
-							Abbrechen
-						</base-button>
-						<base-button v-if="!dateEditable" design="primary" @click="submit">
-							Hinzufügen
-						</base-button>
-						<base-button
-							v-if="dateEditable"
-							design="primary"
-							@click="removeDate"
-						>
-							Löschen
-						</base-button>
-						<base-button v-if="dateEditable" design="primary" @click="saveDate">
-							Speichern
-						</base-button>
-					</template>
-				</base-modal>
+				<appointment-modal
+					:input-text.sync="inputText"
+					:modal-active.sync="modalActive"
+					:date-editable="dateEditable"
+					:is-teams-d-d-visible="isTeamsDDVisible"
+					:is-courses-d-d-visible="isCoursesDDVisible"
+					:radio-value="radioValue"
+					:start-day.sync="startDayInput"
+					:start-time.sync="startTimeInput"
+					:end-day.sync="endDayInput"
+					:end-time.sync="endTimeInput"
+					:users-teams="usersTeams"
+					:users-courses="usersCourses"
+					:content-courses.sync="contentCourses"
+					:content-teams.sync="contentTeams"
+					@cancel="cancelHandle"
+					@input="onInput"
+					@setScopeId="setScopeId"
+					@submit="submit"
+					@removeDate="removeDate"
+					@saveDate="saveDate"
+				></appointment-modal>
 			</div>
 			<full-calendar
 				ref="calendar"
 				class="fullcalender"
+				:editable="false"
 				:events="events"
 				:header="header"
 				:config="config"
@@ -79,14 +42,11 @@
 </template>
 <script>
 import "fullcalendar/dist/fullcalendar.css";
-import DropdownMenu from "@components/organisms/DropdownMenu";
-import BaseModal from "@components/base/BaseModal";
-import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
-import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
+import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 import moment from "moment";
 export default {
 	layout: "loggedInFull",
-	components: { DropdownMenu, BaseModal, ModalBodyInfo, InputRadio },
+	components: { AppointmentModal },
 	data() {
 		return {
 			events: [],
@@ -97,6 +57,8 @@ export default {
 			currentEventId: undefined,
 			usersTeams: [],
 			usersCourses: [],
+			contentTeams: {},
+			contentCourses: {},
 			isCoursesDDVisible: false,
 			isTeamsDDVisible: false,
 			startDayInput: "",
@@ -104,7 +66,7 @@ export default {
 			endDayInput: "",
 			endTimeInput: "",
 			inputText: "",
-			radioValue: undefined,
+			radioValue: "",
 			teams: "Teams",
 			courses: "Courses",
 			jwtDecode: require("jwt-decode"),
@@ -176,6 +138,8 @@ export default {
 			this.resetScope();
 			this.modalActive = false;
 			this.dateEditable = false;
+			this.contentTeams = undefined;
+			this.contentCourses = undefined;
 		},
 		saveDate() {
 			this.deleteDate();
@@ -263,7 +227,6 @@ export default {
 					}
 				});
 			});
-			console.log(courseColor);
 			return courseColor;
 		},
 		pushScope(event, list) {
