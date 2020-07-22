@@ -31,14 +31,6 @@
 					</base-link>
 				</div>
 				<div class="link-container">
-					<h2 class="h4">Mobile App</h2>
-					<base-link href="https://testflight.apple.com/join/7i2xN7hH">
-						<img
-							class="img-apple-badge"
-							src="https://s3.hidrive.strato.com/schul-cloud-hpi/images/google-play-badge.png"
-							alt="Apple Badge"
-						/>
-					</base-link>
 					<h2 class="h4">
 						{{ $t("components.organisms.LegacyFooter.job-offer") }}
 					</h2>
@@ -46,11 +38,6 @@
 						Du möchtest gerne Mitglied in unserem HPI
 						<br />HPI Schul-Cloud Team werden? Wir suchen:
 					</p>
-					<base-link
-						class="link-style"
-						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/web-developer-mwd-im-projekt-hpi-schul-cloud.html"
-						>Web Developer</base-link
-					>
 					<base-link
 						class="link-style"
 						href="https://hpi.de/das-hpi/organisation/jobs/aktuelle-jobs/internettechnologien/system-engineer-dev-ops-mw.html"
