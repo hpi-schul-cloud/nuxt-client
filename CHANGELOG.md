@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [23.6.0] - 2020-07-21
 
+### Changed
+
+- SC-5558 change the edusharing lernstore empty state and initial state components. Made svg images specific to the theme
+
 ### Added - 23.6.0
 
 - SC-4577 school specific privacy policy can be added by the school admin. If school specific privacy policy is exists it is shown to every school user by the registration, first login and in the footer of the page. If it was changed the privacy policy should be confirmed by every school user
