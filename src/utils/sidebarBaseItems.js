@@ -109,7 +109,7 @@ export default [
 		permission: "HELPDESK_VIEW",
 	},
 	{
-		title: "Administration",
+		title: "Verwaltung",
 		href: "/administration/",
 		icon: "cogs",
 		permission: "ADMIN_VIEW",
