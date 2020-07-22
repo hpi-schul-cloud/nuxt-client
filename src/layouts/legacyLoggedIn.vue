@@ -1,13 +1,14 @@
 <template>
 	<!-- default template = loggedin view -->
 	<div>
-		<div class="page" :style="style">
+		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<user-has-role :role="isDemoRole">
 					<demo-banner v-if="!fullscreenMode"></demo-banner>
 				</user-has-role>
 
 				<the-top-bar
+					v-if="!isInline"
 					:title="pageTitle"
 					:actions="topBarActions"
 					:fullscreen-mode="fullscreenMode"
@@ -16,7 +17,7 @@
 				/>
 			</div>
 			<the-sidebar
-				v-if="!fullscreenMode"
+				v-if="!fullscreenMode && !isInline"
 				class="sidebar"
 				:expanded-menu="expandedMenu"
 				:routes="sidebarItems"
@@ -59,6 +60,8 @@ const topbarBaseActions = [
 					label: "Hilfebereich",
 					icon: "question-circle",
 					action: "/help",
+					source: "fa",
+					target: "_self",
 				},
 				// TODO: implement intro for nuxt-client
 				// {
@@ -70,11 +73,22 @@ const topbarBaseActions = [
 					label: "Wunsch oder Problem senden",
 					icon: "pencil",
 					action: "/help?activeForm=team#contact-form",
+					source: "fa",
+					target: "_self",
 				},
 				{
 					label: "Admin deiner Schule kontaktieren",
 					icon: "comment",
 					action: "/help?activeForm=admin#contact-form",
+					source: "fa",
+					target: "_self",
+				},
+				{
+					label: "Fortbildungen",
+					icon: "fortbildung",
+					action: "https://www.lern.cloud/",
+					source: "custom",
+					target: "_blank",
 				},
 			],
 		},
@@ -172,6 +186,10 @@ export default {
 		style() {
 			return this.fullscreenMode ? "display: inherit;" : "";
 		},
+
+		isInline() {
+			return !!this.$route.query.inline;
+		},
 	},
 	watch: {
 		$route: function (to) {
@@ -218,6 +236,10 @@ export default {
 	max-width: 100%;
 	min-height: 100vh;
 	overflow-x: hidden;
+
+	&.inline {
+		display: inline;
+	}
 
 	@include breakpoint(tablet) {
 		grid-template-columns: var(--sidebar-width-tablet) 1fr;

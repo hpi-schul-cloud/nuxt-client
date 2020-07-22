@@ -6,11 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
-## Unreleased
+## [23.6.0] - 2020-07-21
+
+### Added - 23.6.0
 
 - SC-4577 school specific privacy policy can be added by the school admin. If school specific privacy policy is exists it is shown to every school user by the registration, first login and in the footer of the page. If it was changed the privacy policy should be confirmed by every school user
+- SC-2763 [#1084](https://github.com/schul-cloud/nuxt-client/pull/1084) Learnstore: use edu sharing content, implemented add material to the course feature, clickable tags, authors, providers
 
 ### Changed
+
+## ## [23.5.2] - 2020-07-17
+
+- SC-5653 update mint-ec email addresses
+
+## ## [23.5.1] - 2020-07-09
+
+- SC-5494 Changed link in navigation bar
+- SC-5529 update hpi school-cloud brand name
+
+## ## [23.5.0] - 2020-06-21
+
+### Changed in 23.5.0
+
+- Upgrade to the 'new' Lern Store with a plus sign [#1054](https://github.com/schul-cloud/nuxt-client/pull/1054)
+- Personalized dataprivacy policy for admin [#1035](https://github.com/schul-cloud/nuxt-client/pull/1035)
+- Fix of unit tests in Nuxt client [#1028](https://github.com/schul-cloud/nuxt-client/pull/1028)
 
 ## ## [23.0.0] - 2020-05-19
 
