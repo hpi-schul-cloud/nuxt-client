@@ -29,6 +29,9 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
+			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
@@ -153,14 +156,20 @@ export default {
 					sortable: true,
 				},
 				{
+					field: "birthday",
+					label: this.$t("common.labels.birthday"),
+					sortable: true,
+				},
+				{
 					field: "email",
 					label: this.$t("common.labels.email"),
 					sortable: true,
 				},
-				// {
-				// 	field: "birthday",
-				// 	label: this.$t("common.labels.birthday"),
-				// },
+				{
+					field: "classes",
+					label: this.$t("common.labels.classes"),
+					sortable: true,
+				},
 				{
 					field: "consent",
 					label: this.$t("common.labels.consent"),
