@@ -3,7 +3,7 @@ export const defaultCourse = {
 	name: "Biologie mit richtig langem namen!",
 	abbreviation: "BIO",
 	description:
-		"Dieser Kurs wurde als Beispiel für den Demo-Zugang erstellt und enthält verschiedene Themen und Inhalte aus dem Fach Biologie! Wir wollen Ihnen dadurch die Breite der Einsatzmöglichkeit der Schul-Cloud im Unterricht aufzeigen! Schauen Sie doch selbst!",
+		"Dieser Kurs wurde als Beispiel für den Demo-Zugang erstellt und enthält verschiedene Themen und Inhalte aus dem Fach Biologie! Wir wollen Ihnen dadurch die Breite der Einsatzmöglichkeit der HPI Schul-Cloud im Unterricht aufzeigen! Schauen Sie doch selbst!",
 	gradeSystem: false,
 	startDate: "2017-10-26T22:00:00.000+0000",
 	untilDate: "2018-04-29T22:00:00.000+0000",
@@ -47,7 +47,7 @@ export const courseOldDataFormat = {
 	_id: "0000dcfbfb5c7a3f00bf21abc",
 	name: "Deutsch",
 	description:
-		"Dieser Kurs wurde als Beispiel für den Demo-Zugang erstellt und enthält verschiedene Themen und Inhalte aus dem Fach Biologie! Wir wollen Ihnen dadurch die Breite der Einsatzmöglichkeit der Schul-Cloud im Unterricht aufzeigen! Schauen Sie doch selbst!",
+		"Dieser Kurs wurde als Beispiel für den Demo-Zugang erstellt und enthält verschiedene Themen und Inhalte aus dem Fach Biologie! Wir wollen Ihnen dadurch die Breite der Einsatzmöglichkeit der HPI Schul-Cloud im Unterricht aufzeigen! Schauen Sie doch selbst!",
 	gradeSystem: false,
 	startDate: "2017-10-26T22:00:00.000+0000",
 	untilDate: "2018-04-29T22:00:00.000+0000",

@@ -22,14 +22,14 @@ inform_live() {
 	# $1: Project Name (client, storybook, vuepress)
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: Schul-Cloud Nuxt-$1! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
+  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-$1! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
   fi
 }
 
 inform_staging() {
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Staging-System wurde aktualisiert: Schul-Cloud Nuxt-Client! https://staging.schul-cloud.org/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
+    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Staging-System wurde aktualisiert: HPI Schul-Cloud Nuxt-Client! https://staging.schul-cloud.org/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
   fi
 }
 
@@ -50,9 +50,11 @@ deploy(){
 	# generate new compose file
 	eval "echo \"$( cat $COMPOSE_SRC )\"" > docker-compose-$COMPOSE_TARGET
 
+	# info: we don't need the two lines for deployment because they use the false docker-compose file and overwrites the config which created by devops, this results from the fact that the wrong csp configuration is used and the environment variables are missing if they are not explicitly included in the template. (pr 1158)
+
 	# deploy new compose file
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.org:~
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $STACK_NAME
+	# scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.org:~
+	# ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $STACK_NAME
 
 	# deploy new dockerfile
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME

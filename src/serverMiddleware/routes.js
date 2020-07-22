@@ -4,16 +4,23 @@
 
 // const id = "[a-z0-9]+";
 //const mongoId = "[a-z0-9]{24}";
-
-module.exports = [
-	`^/administration/datasources?`,
+const activationCode = "[a-z0-9]+";
+const routes = [
+	// `^/account/?$`,
+	`^/account/email/edit/?$`,
+	`^/account/name/edit/?$`,
+	`^/account/password/edit/?$`,
+	`^/account/password/edit/?$`,
+	`^/activation/${activationCode}/?$`,
+	// `^/administration/datasources?`,
 	// `^/administration/students/?$`,
 	// `^/administration/students/new/?$`,
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
-	// `^/content/`,
+	`^/login-instances/?`,
 	`^/error/`,
 	`^/imprint/?`,
+	`^/termsofuse/?`,
 	`^/mint-ec/?`,
 	// `^/news/${mongoId}/?$`,
 	`^/insights`,
@@ -21,3 +28,8 @@ module.exports = [
 	`^/news/new`,
 	`^/nuxtversion/?$`,
 ];
+if (process.env.LERNSTORE_MODE === "EDUSHARING") {
+	routes.push(`^/content/?`);
+}
+
+module.exports = routes;

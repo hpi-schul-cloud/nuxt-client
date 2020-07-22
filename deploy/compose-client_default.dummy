@@ -21,6 +21,9 @@ services:
       - FEATURE_TEAMS_ENABLED=true
       # Theme and Titles
       - SC_THEME=default
+      # Content Security Policy
+      - CORS_ENABLED=true
+      - SECURITY_HEADERS_ENABLED=true
     ports:
       - \"3200:4000\"
     restart: always
