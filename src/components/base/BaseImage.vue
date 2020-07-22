@@ -19,6 +19,8 @@
 </template>
 
 <script>
+const SVG_PREFIXES = ["@assets/img/", "/_nuxt/src/assets/img/"];
+const SVG_SUFFIX = ".svg";
 export default {
 	inheritAttrs: false,
 	props: {
@@ -45,20 +47,19 @@ export default {
 	},
 	computed: {
 		showAsSvg() {
-			return (
-				(this.imgSrc.startsWith("@assets/img/") ||
-					this.imgSrc.startsWith("/_nuxt/src/assets/img/")) &&
-				this.imgSrc.endsWith(".svg")
-			);
+			return SVG_PREFIXES.filter((prefix) => {
+						return this.imgSrc.startsWith(prefix) && this.imgSrc.endsWith(SVG_SUFFIX)
+					}).length > 0;
 		},
 		svgComponent() {
 			let img;
-			const sanitizedImgSrc = this.imgSrc
-				.replace("@assets/img/", "")
-				.replace("/_nuxt/src/assets/img/", "");
+			let sanitizedImgSrc = this.imgSrc.replace(SVG_SUFFIX, "");
+			SVG_PREFIXES.forEach((prefix) =>{ sanitizedImgSrc = sanitizedImgSrc.replace(prefix, "")});
+
 			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
 			try {
-				img = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/img/${sanitizedImgSrc}`);
+				console.log(sanitizedImgSrc);
+				img = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}, {"inlineStyles": true}]}}!@assets/img/${sanitizedImgSrc}.svg`);
 				return img ? img.default : "";
 			} catch (error) {
 				console.error(
