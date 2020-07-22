@@ -89,7 +89,26 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 	],
 });
 
+const getClassesNames = async (ctx, arr) => {
+	const classes = await ctx.$store.dispatch("classes/find", {
+		query: {
+			$limit: 1000,
+		},
+	});
+	classes.data
+		.reduce((acc, kl) => [...new Set(acc.concat(kl.displayName))], [])
+		.forEach((cl) => {
+			arr.push({
+				value: cl,
+				label: cl,
+			});
+		});
+};
+
 export function studentFilter(ctx) {
+	const classesFilteringOptions = [];
+	getClassesNames(ctx, classesFilteringOptions);
+
 	return [
 		{
 			title: ctx.$t("utils.adminFilter.consent.title"),
@@ -129,6 +148,18 @@ export function studentFilter(ctx) {
 				},
 			],
 		},
+		{
+			title: ctx.$t("utils.adminFilter.class.title"),
+			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			filter: [
+				{
+					attribute: "classes",
+					operator: "=",
+					input: InputCheckbox,
+					options: classesFilteringOptions,
+				},
+			],
+		},
 		getFilterFirstname(ctx),
 		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
@@ -136,6 +167,9 @@ export function studentFilter(ctx) {
 }
 
 export function teacherFilter(ctx) {
+	const classesFilteringOptions = [];
+	getClassesNames(ctx, classesFilteringOptions);
+
 	return [
 		{
 			title: ctx.$t("utils.adminFilter.teacher.consent.title"),
@@ -166,6 +200,18 @@ export function teacherFilter(ctx) {
 							label: ctx.$t("utils.adminFilter.teacher.consent.label.missing"),
 						},
 					],
+				},
+			],
+		},
+		{
+			title: ctx.$t("utils.adminFilter.class.title"),
+			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			filter: [
+				{
+					attribute: "classes",
+					operator: "=",
+					input: InputCheckbox,
+					options: classesFilteringOptions,
 				},
 			],
 		},
