@@ -58,7 +58,6 @@ export default {
 
 			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
 			try {
-				console.log(sanitizedImgSrc);
 				img = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}, {"inlineStyles": true}]}}!@assets/img/${sanitizedImgSrc}.svg`);
 				return img ? img.default : "";
 			} catch (error) {
