@@ -131,6 +131,9 @@ export default {
 				 *
 				 * @type {object}
 				 */
+				if (this.data.date.date && !this.data.date.time) {
+					this.data.date.time = "00:00";
+				}
 				this.$emit("update:news", to);
 			},
 		},
