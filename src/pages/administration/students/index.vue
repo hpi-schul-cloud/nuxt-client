@@ -365,26 +365,14 @@ export default {
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			// TODO: request registrationsLinks fom backend
-			// route needs to be implemented!
-
-			// const users = await this.$store.dispatch("users/find", {
-			// 	qid: "qr-print",
-			// 	query: this.getQueryForSelection(rowIds, selectionType),
-			// });
-			// this.$_printQRs(
-			// 	usersWithoutConsents.map((user) => ({
-			// 		qrContent: user.registrationLink.shortLink,
-			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
-			// 		description: "Zum Registrieren bitte den Link öffnen.",
-			// 	}))
-			// );
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
+			const qrRegistrationLinks = await this.$store.dispatch(
+				"users/getQrRegistrationLinks",
+				{
+					userIds: rowIds,
+					selectionType,
+				}
 			);
+			this.$_printQRs(qrRegistrationLinks);
 		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
