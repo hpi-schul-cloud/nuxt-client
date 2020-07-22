@@ -47,14 +47,20 @@ export default {
 	},
 	computed: {
 		showAsSvg() {
-			return SVG_PREFIXES.filter((prefix) => {
-						return this.imgSrc.startsWith(prefix) && this.imgSrc.endsWith(SVG_SUFFIX)
-					}).length > 0;
+			return (
+				SVG_PREFIXES.filter((prefix) => {
+					return (
+						this.imgSrc.startsWith(prefix) && this.imgSrc.endsWith(SVG_SUFFIX)
+					);
+				}).length > 0
+			);
 		},
 		svgComponent() {
 			let img;
 			let sanitizedImgSrc = this.imgSrc.replace(SVG_SUFFIX, "");
-			SVG_PREFIXES.forEach((prefix) =>{ sanitizedImgSrc = sanitizedImgSrc.replace(prefix, "")});
+			SVG_PREFIXES.forEach((prefix) => {
+				sanitizedImgSrc = sanitizedImgSrc.replace(prefix, "");
+			});
 
 			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
 			try {
