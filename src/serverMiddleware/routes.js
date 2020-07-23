@@ -29,7 +29,8 @@ const routes = [
 	`^/nuxtversion/?$`,
 ];
 if (process.env.LERNSTORE_MODE === "EDUSHARING") {
-	routes.push(`^/content/?`);
+	// content routes except redirect (it should go to the old client, so the old content should work)
+	routes.push(`^/content/?((?!redirect).)*$`);
 }
 
 module.exports = routes;
