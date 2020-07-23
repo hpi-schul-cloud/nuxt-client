@@ -29,7 +29,7 @@
 								/>
 							</div>
 						</div>
-						<h6 class="content__title">{{ resource.name }}</h6>
+						<h6 class="content__title">{{ resource.title || resource.name }}</h6>
 					</div>
 				</template>
 			</base-link>

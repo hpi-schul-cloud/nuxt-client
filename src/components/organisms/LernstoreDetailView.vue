@@ -41,7 +41,7 @@
 					</span>
 				</div>
 				<div class="author-provider">
-					<span v-if="author">
+					<span v-if="hasAuthor">
 						<base-link :href="'/content/?q=' + author" class="content-link">{{
 							author
 						}}</base-link>
@@ -141,6 +141,8 @@ import BaseLink from "../base/BaseLink";
 
 import { getMetadataAttribute } from "@utils/helpers";
 
+const DEFAULT_AUTHOR = "admin";
+
 export default {
 	components: {
 		BaseLink,
@@ -185,6 +187,9 @@ export default {
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
+		},
+		hasAuthor() {
+			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
 		description() {
 			return (
