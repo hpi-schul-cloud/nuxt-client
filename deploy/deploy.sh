@@ -140,6 +140,7 @@ case "$TRAVIS_BRANCH" in
 				vuepress)
 					deploy "hofix$TEAM" "nuxt-vuepress" $DOCKERTAG "hofix$TEAM_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hofix$TEAM_nuxtclient"
 				;;
+			esac
 		else
 			echo "Hotfix branch name do not match requirements to deploy"
 		fi
