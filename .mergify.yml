@@ -81,7 +81,14 @@ pull_request_rules:
     actions:
       comment:
         message: "@schul-cloud-bot tell dependabot to recreate PR"
-
+  #######################
+  # AUTO UPDATE
+  #######################
+  - name: auto update when label is set
+    conditions:
+      - label=auto update
+    actions:
+      update: {}
   #######################
   # AUTO MERGING
   #######################
