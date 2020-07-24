@@ -70,7 +70,7 @@
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.TextEditor.noLocalFiles": "Lokale Dateien werden aktuell nicht unterstützt.",
 	"components.molecules.adminfooterlegend.title": "Legende",
-	"components.molecules.admintablelegend.externalSync": "Die Nutzerdaten deiner Schule werden aus einer externen Quelle (LDAP, IDM o.ä.) synchronisiert. Die Bearbeitung der Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der {shortName}. Finde weitere Informationen im",
+	"components.molecules.admintablelegend.externalSync": "Einige oder alle Nutzer:innendaten deiner Schule werden aus einer externen Quelle (LDAP, IDM, Schulportal o.ä.) synchronisiert. Die Bearbeitung dieser Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der Schul-Cloud. Das Anlegen neuer Schüler:innen oder Lehrkräfte ist ebenfalls nur im Quellsystem möglich. Finde weitere Informationen im",
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.admintablelegend.hint": "Mit allen Änderungen und Einstellungen im Verwaltungsbereich bestätigen Sie, dass Sie weisungsberechtigter Schul-Administrator sind und befugt sind, Anpassungen an der Schule in der HPI Schul-Cloud vorzunehmen. Ihr Klick gilt insofern als Weisung der Schule gegenüber dem HPI.",
 	"components.organisms.AutoLogoutWarning.confirm": "Sitzung verlängern",
