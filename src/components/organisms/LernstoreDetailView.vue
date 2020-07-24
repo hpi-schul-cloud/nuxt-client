@@ -56,7 +56,7 @@
 					</span>
 				</div>
 				<!-- eslint-disable vue/no-v-html -->
-				<div class="description" v-html="description"></div>
+				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
 						<div class="meta-icon">
@@ -82,11 +82,7 @@
 							/>
 						</div>
 						<div class="meta-text text-wrap">
-							<base-link
-								:href="downloadUrl"
-								target="_blank"
-								class="tertiary-color"
-							>
+							<base-link :href="downloadUrl" target="_blank" class="link">
 								{{ downloadUrl }}
 							</base-link>
 						</div>
@@ -102,14 +98,14 @@
 									:key="index"
 									class="meta-text"
 								>
-									<base-link :href="'/content/?q=' + tag" class="tag-link"
+									<base-link :href="'/content/?q=' + tag" class="tag link"
 										>#{{ tag }}</base-link
 									>
 								</span>
 							</div>
 						</template>
 						<template v-if="tags.length === 0">
-							<span class="meta-text tag-link">{{
+							<span class="meta-text link">{{
 								$t("pages.content._id.metadata.noTags")
 							}}</span>
 						</template>
@@ -176,10 +172,12 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return dayjs(this.resource.properties.createdAt).format("DD.MM.YYYY");
+			const dayjs1 = dayjs(this.resource.createdAt);
+			console.log(dayjs1);
+			return dayjs1.format("DD.MM.YYYY");
 		},
 		updatedAt() {
-			return dayjs(this.resource.properties.modifiedAt).format("DD.MM.YYYY");
+			return dayjs(this.resource.modifiedAt).format("DD.MM.YYYY");
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
@@ -203,12 +201,10 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 		tags() {
-			let tags = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:taxonentry"
-			);
-			if (tags) {
-				tags = tags.split("; ").filter((w) => w !== "");
+			const tagValue = this.resource.properties["cclom:general_keyword"];
+			let tags = null;
+			if (Array.isArray(tagValue)) {
+				tags = tagValue;
 			}
 			return tags ? tags : [];
 		},
@@ -297,10 +293,13 @@ $tablet-portrait-width: 768px;
 
 		.preview {
 			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			height: 100%;
 
 			@media (max-width: $tablet-portrait-width) {
-				height: 80vh;
+				height: 70vh;
 			}
 
 			.preview-background-color {
@@ -334,8 +333,6 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-page);
 				object-position: center;
 				object-fit: contain;
-				width: 100%;
-				height: 100%;
 
 				@include breakpoint(tablet) {
 					min-height: auto;
@@ -346,14 +343,13 @@ $tablet-portrait-width: 768px;
 
 	.sidebar {
 		position: relative;
-		z-index: var(--layer-dropdown);
 		display: flex;
 		flex-direction: column;
 		grid-area: meta;
 		align-items: center;
 		justify-content: space-between;
-		min-height: 100vh;
-		padding-bottom: var(--space-xl);
+		max-height: 100vh;
+		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
 		background-color: var(--color-white);
 		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
@@ -396,6 +392,12 @@ $tablet-portrait-width: 768px;
 			font-size: var(--text-md);
 		}
 
+		.text-wrap {
+			display: flex;
+			flex-flow: row wrap;
+			word-break: break-word;
+		}
+
 		.metadata {
 			display: flex;
 			flex-direction: column;
@@ -406,11 +408,6 @@ $tablet-portrait-width: 768px;
 				display: flex;
 				align-items: flex-start;
 				margin-bottom: var(--space-lg);
-				.text-wrap {
-					display: flex;
-					flex-flow: row wrap;
-					word-break: break-all;
-				}
 				.meta-icon {
 					margin-right: var(--space-md);
 					font-size: var(--text-lg);
@@ -418,7 +415,7 @@ $tablet-portrait-width: 768px;
 						max-height: var(--text-lg);
 					}
 				}
-				.tag-link {
+				.link {
 					margin-right: var(--space-xs);
 					color: var(--color-tertiary);
 				}
@@ -439,7 +436,7 @@ $tablet-portrait-width: 768px;
 			border-radius: var(--radius-md);
 
 			@media (max-width: $tablet-portrait-width) {
-				padding-bottom: var(--space-xl);
+				padding-bottom: var(--space-xs);
 			}
 		}
 	}
