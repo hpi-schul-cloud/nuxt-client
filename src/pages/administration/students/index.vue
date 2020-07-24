@@ -268,7 +268,7 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
 		schoolInternallyManaged() {
-			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
+			return !this.school.isExternal;
 		},
 		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
