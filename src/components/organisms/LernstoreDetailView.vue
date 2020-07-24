@@ -176,14 +176,10 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return dayjs(
-				getMetadataAttribute(this.resource.properties, "cm:created")
-			).format("DD.MM.YYYY");
+			return dayjs(this.resource.properties.createdAt).format("DD.MM.YYYY");
 		},
 		updatedAt() {
-			return dayjs(
-				getMetadataAttribute(this.resource.properties, "cm:modified")
-			).format("DD.MM.YYYY");
+			return dayjs(this.resource.properties.modifiedAt).format("DD.MM.YYYY");
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
