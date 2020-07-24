@@ -194,14 +194,20 @@ export default {
 					sortable: true,
 				},
 				{
+					field: "birthday",
+					label: this.$t("common.labels.birthday"),
+					sortable: true,
+				},
+				{
 					field: "email",
 					label: this.$t("common.labels.email"),
 					sortable: true,
 				},
-				// {
-				// 	field: "birthday",
-				// 	label: this.$t("common.labels.birthday"),
-				// },
+				{
+					field: "classes",
+					label: this.$t("common.labels.classes"),
+					sortable: true,
+				},
 				{
 					field: "consent",
 					label: this.$t("common.labels.consent"),
@@ -426,6 +432,7 @@ export default {
 						query: this.getQueryForSelection(rowIds, selectionType),
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
+					this.find();
 				} catch (error) {
 					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}
