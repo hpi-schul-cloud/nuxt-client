@@ -172,9 +172,7 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			const dayjs1 = dayjs(this.resource.createdAt);
-			console.log(dayjs1);
-			return dayjs1.format("DD.MM.YYYY");
+			return dayjs(this.resource.createdAt).format("DD.MM.YYYY");
 		},
 		updatedAt() {
 			return dayjs(this.resource.modifiedAt).format("DD.MM.YYYY");
