@@ -31,7 +31,7 @@ describe("@components/molecules/LernstoreDetailView", () => {
 		expect(wrapper.find(".title > span").text()).toBe(
 			"Mathematische Ausdrücke sortieren"
 		);
-		expect(wrapper.find(".tag-link").attributes("href")).toBe(
+		expect(wrapper.find(".tag").attributes("href")).toBe(
 			"/content/?q=Mathematik"
 		);
 	});
