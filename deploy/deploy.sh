@@ -50,9 +50,11 @@ deploy(){
 	# generate new compose file
 	eval "echo \"$( cat $COMPOSE_SRC )\"" > docker-compose-$COMPOSE_TARGET
 
+	# info: we don't need the two lines for deployment because they use the false docker-compose file and overwrites the config which created by devops, this results from the fact that the wrong csp configuration is used and the environment variables are missing if they are not explicitly included in the template. (pr 1158)
+
 	# deploy new compose file
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.org:~
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $STACK_NAME
+	# scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.org:~
+	# ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $STACK_NAME
 
 	# deploy new dockerfile
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
@@ -109,6 +111,7 @@ case "$TRAVIS_BRANCH" in
 				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_n21.dummy" "nuxt-client_n21.yml" "staging-schul-cloud"
 				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_open.dummy" "nuxt-client_open.yml" "staging-schul-cloud"
 				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_thr.dummy" "nuxt-client_thr.yml" "staging-schul-cloud"
+				# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_int.dummy" "nuxt-client_int.yml" "staging-schul-cloud"
 			;;
 			storybook)
 				deploy "staging" "nuxt-storybook" $DOCKERTAG "staging_storybook" "compose-storybook.dummy" "nuxt-storybook.yml" "staging"

@@ -48,6 +48,10 @@ jobs:
       name: "build:nuxt:thr"
       env:
         - SC_THEME=thr
+    - script: npm run build:nuxt
+      name: "build:nuxt:int"
+      env:
+        - SC_THEME=int
     - script: npm run build:storybook
       name: "build:storybook"
       after_success:
