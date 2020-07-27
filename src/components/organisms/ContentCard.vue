@@ -29,7 +29,9 @@
 								/>
 							</div>
 						</div>
-						<h6 class="content__title">{{ resource.name }}</h6>
+						<h6 class="content__title">
+							{{ resource.title || resource.name }}
+						</h6>
 					</div>
 				</template>
 			</base-link>
@@ -127,7 +129,6 @@ export default {
 .content {
 	display: flex;
 	flex-direction: column;
-	min-height: 300px;
 	&__img {
 		&-thumbnail {
 			width: 100%;
@@ -167,7 +168,7 @@ export default {
 		}
 	}
 	&__title {
-		min-height: 62px;
+		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
 		color: var(--color-tertiary);
 
