@@ -47,7 +47,7 @@ storiesOf("1 Design Tokens/Colors", module)
 		<Color color="#13ba98"variable="--color-sucess"/>
 		<Color color="#ffd611" variable="--color-warning"/>
 		<Color color="#ff1134" variable="--color-danger"/>
-		<Color color="#36bdfb" variable="--color-info"/>
+		<Color color="#0A7AC9" variable="--color-info"/>
 	</div>
 	`,
 	}));
@@ -74,7 +74,7 @@ storiesOf("1 Design Tokens/Colors", module)
 		<ColorOnText color="#13ba98" variable="--color-sucess" textColor="--color-on-success"/>
 		<ColorOnText color="#ffd611" variable="--color-warning" textColor="--color-on-warning"/>
 		<ColorOnText color="#ff1134" variable="--color-danger" textColor="--color-on-danger"/>
-		<ColorOnText color="#36bdfb" variable="--color-info" textColor="--color-on-info"/>
+		<ColorOnText color="#0A7AC9" variable="--color-info" textColor="--color-on-info"/>
 	</div>
 	`,
 	}));
