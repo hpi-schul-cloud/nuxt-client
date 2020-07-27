@@ -173,7 +173,7 @@ describe("@components/organisms/DataTable/DataTable", () => {
 		};
 		const getSortButton = (wrapper, text = "Vorname") =>
 			wrapper
-				.findAll(".is-sortable button")
+				.findAll("button.is-sortable")
 				.wrappers.find((w) => w.text() === text);
 
 		it("table header clicks should toggle the sortorder", async () => {
@@ -181,7 +181,6 @@ describe("@components/organisms/DataTable/DataTable", () => {
 				data: flatData,
 			});
 			const sortButton = getSortButton(wrapper);
-
 			await isUnsorted(wrapper);
 			sortButton.trigger("click"); // sort asc on first click
 			await isSortedAsc(wrapper);
