@@ -6,6 +6,7 @@
 	>
 		<template v-slot:description>
 			<div class="initial-state-description">
+				<!-- eslint-disable vue/no-v-html -->
 				<span v-html="getDescription" />
 			</div>
 		</template>

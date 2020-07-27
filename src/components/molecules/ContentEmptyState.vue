@@ -5,6 +5,7 @@
 		:title="getTitle"
 	>
 		<template v-slot:description>
+			<!-- eslint-disable vue/no-v-html -->
 			<span v-html="getDescription" />
 		</template>
 	</empty-state>
