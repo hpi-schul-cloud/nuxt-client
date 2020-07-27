@@ -93,6 +93,8 @@ export const supportedTypes = [
 	"textarea",
 	"url",
 	"number",
+	"date",
+	"time",
 ];
 
 export default {
