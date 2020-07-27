@@ -283,7 +283,7 @@ export default {
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
-			this.$uiState.set("sorting", "pages.administration.teacher.index", {
+			this.$uiState.set("sorting", "pages.administration.teachers.index", {
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
