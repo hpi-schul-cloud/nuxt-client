@@ -122,7 +122,6 @@ case "$TRAVIS_BRANCH" in
 		echo "hotfix"
 		TEAM="$(cut -d'/' -f2 <<< $TRAVIS_BRANCH)"
 		if [[ "$TEAM" -gt 0 && "$TEAM" -lt 8 ]]; then
-			buildandpush
 			deploytohotfix $TEAM
 			inform_hotfix $TEAM
 			case "$PROJECT" in
