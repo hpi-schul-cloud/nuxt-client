@@ -36,7 +36,7 @@ inform_staging() {
 inform_hotfix() {
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Hotfix-'$1'-System wurde aktualisiert: HPI Schul-Cloud Nuxt-Client! https://hotfix'$1'.schul-cloud.org/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
+    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Hotfix-'$1'-System wurde aktualisiert: HPI Schul-Cloud Nuxt-Client! https://hotfix'$1'.schul-cloud.dev/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
   fi
 }
 
@@ -50,6 +50,7 @@ deploy(){
 	COMPOSE_SRC=$5 # name of the docker-compose file which should be used as.
 	COMPOSE_TARGET=$6 # name as which the compose file should be pushed to the server (auto prefixed with "docker-compose-")
 	STACK_NAME=$7 # swarm stack name
+	TLD=${8:=org}  # If variable not set or null, set it to default.
 
 	echo "deploy " $DOCKER_IMAGE ":" $DOCKER_TAG " to " $SYSTEM " as " $DOCKER_SERVICE_NAME
 	echo "COMPOSEFILE: " $COMPOSE_SRC " => " $COMPOSE_TARGET
@@ -58,11 +59,11 @@ deploy(){
 	eval "echo \"$( cat $COMPOSE_SRC )\"" > docker-compose-$COMPOSE_TARGET
 
 	# deploy new compose file
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.org:~
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $STACK_NAME
+	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.$TLD:~
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.$TLD /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $STACK_NAME
 
 	# deploy new dockerfile
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.org /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.$TLD /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
 }
 
 # ----------------
@@ -133,17 +134,17 @@ case "$TRAVIS_BRANCH" in
 			case "$PROJECT" in
 				client)
 					# TODO deploy with themes
-					deploy "hotfix$TEAM" "nuxt-client" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-client_default.dummy" "nuxt-client_default.yml" "hotfix$TEAM_nuxtclient"
+					deploy "hotfix$TEAM" "nuxt-client" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-client_default.dummy" "nuxt-client_default.yml" "hotfix$TEAM_nuxtclient" "dev"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_brb.dummy" "nuxt-client_brb.yml" "staging-schul-cloud"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_n21.dummy" "nuxt-client_n21.yml" "staging-schul-cloud"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_open.dummy" "nuxt-client_open.yml" "staging-schul-cloud"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_thr.dummy" "nuxt-client_thr.yml" "staging-schul-cloud"
 				;;
 				storybook)
-					deploy "hotfix$TEAM" "nuxt-storybook" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-storybook.dummy" "nuxt-storybook.yml" "hotfix$TEAM_nuxtclient"
+					deploy "hotfix$TEAM" "nuxt-storybook" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-storybook.dummy" "nuxt-storybook.yml" "hotfix$TEAM_nuxtclient" "dev"
 				;;
 				vuepress)
-					deploy "hotfix$TEAM" "nuxt-vuepress" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix$TEAM_nuxtclient"
+					deploy "hotfix$TEAM" "nuxt-vuepress" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix$TEAM_nuxtclient" "dev"
 				;;
 			esac
 		else
