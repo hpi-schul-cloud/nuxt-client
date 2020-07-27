@@ -33,6 +33,13 @@ inform_staging() {
   fi
 }
 
+inform_hotfix() {
+  if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
+  then
+    curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Hotfix-'$1'-System wurde aktualisiert: HPI Schul-Cloud Nuxt-Client! https://hotfix'$1'.schul-cloud.org/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
+  fi
+}
+
 deploy(){
 	SYSTEM=$1 # [staging, test, demo]
 
@@ -122,7 +129,6 @@ case "$TRAVIS_BRANCH" in
 		echo "hotfix"
 		TEAM="$(cut -d'/' -f2 <<< $TRAVIS_BRANCH)"
 		if [[ "$TEAM" -gt 0 && "$TEAM" -lt 8 ]]; then
-			deploytohotfix $TEAM
 			inform_hotfix $TEAM
 			case "$PROJECT" in
 				client)
