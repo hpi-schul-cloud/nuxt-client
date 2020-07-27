@@ -133,17 +133,17 @@ case "$TRAVIS_BRANCH" in
 			case "$PROJECT" in
 				client)
 					# TODO deploy with themes
-					deploy "hofix$TEAM" "nuxt-client" $DOCKERTAG "hofix$TEAM_nuxtclient" "compose-client_default.dummy" "nuxt-client_default.yml" "hofix$TEAM_nuxtclient"
+					deploy "hotfix$TEAM" "nuxt-client" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-client_default.dummy" "nuxt-client_default.yml" "hotfix$TEAM_nuxtclient"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_brb.dummy" "nuxt-client_brb.yml" "staging-schul-cloud"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_n21.dummy" "nuxt-client_n21.yml" "staging-schul-cloud"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_open.dummy" "nuxt-client_open.yml" "staging-schul-cloud"
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_thr.dummy" "nuxt-client_thr.yml" "staging-schul-cloud"
 				;;
 				storybook)
-					deploy "hofix$TEAM" "nuxt-storybook" $DOCKERTAG "hofix$TEAM_nuxtclient" "compose-storybook.dummy" "nuxt-storybook.yml" "hofix$TEAM_nuxtclient"
+					deploy "hotfix$TEAM" "nuxt-storybook" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-storybook.dummy" "nuxt-storybook.yml" "hotfix$TEAM_nuxtclient"
 				;;
 				vuepress)
-					deploy "hofix$TEAM" "nuxt-vuepress" $DOCKERTAG "hofix$TEAM_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hofix$TEAM_nuxtclient"
+					deploy "hotfix$TEAM" "nuxt-vuepress" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix$TEAM_nuxtclient"
 				;;
 			esac
 		else
