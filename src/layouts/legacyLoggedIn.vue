@@ -86,7 +86,7 @@ const topbarBaseActions = [
 				{
 					label: "Fortbildungen",
 					icon: "fortbildung",
-					action: "https://www.lern.cloud/",
+					action: "https://www.lernen.cloud/",
 					source: "custom",
 					target: "_blank",
 				},
