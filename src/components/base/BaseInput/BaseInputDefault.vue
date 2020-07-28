@@ -38,6 +38,8 @@
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
+							:min="appliedType === 'date' ? '1900-01-01' : ''"
+							:max="appliedType === 'date' ? '2999-12-31' : ''"
 							@input="handleInput"
 							@focus="hasFocus = true"
 							@blur="hasFocus = false"
