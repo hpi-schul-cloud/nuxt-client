@@ -72,7 +72,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "https://github.com/schul-cloud/",
+					href: "https://github.com/hpi-schul-cloud/",
 					text: "GitHub",
 				},
 			];

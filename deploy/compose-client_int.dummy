@@ -20,11 +20,9 @@ services:
       - SENTRY_DSN=https://18a7cbf1a7ef427ebcfc38429d18ba40@sentry.schul-cloud.dev/7
       # FEATURE TOGGLES
       - FEATURE_TEAMS_ENABLED=true
+      - FEATURE_EXTENSIONS_ENABLED=true
       # Theme and Titles
-      - SC_THEME=default
-      # Content Security Policy
-      - CORS_ENABLED=true
-      - SECURITY_HEADERS_ENABLED=true
+      - SC_THEME=int
     ports:
       - \"3200:4000\"
     restart: always

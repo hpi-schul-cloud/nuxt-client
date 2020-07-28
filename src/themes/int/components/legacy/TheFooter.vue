@@ -98,7 +98,7 @@ export default {
 					text: this.$t("components.legacy.footer.partner"),
 				},
 				{
-					href: "https://github.com/hpi-schul-cloud/",
+					href: "https://github.com/schul-cloud/",
 					text: "GitHub",
 				},
 			];
@@ -130,7 +130,7 @@ export default {
 	margin-top: var(--space-xs);
 
 	.heart {
-		color: var(--color-secondary);
+		color: var(--color-primary);
 	}
 
 	.poweredby-logo {
@@ -139,15 +139,14 @@ export default {
 	}
 }
 .footer-link {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 	border: none;
 	&:focus,
 	&:hover {
-		color: var(--color-secondary-dark);
 		text-decoration: underline;
 	}
 	&:visited {
-		color: var(--color-secondary);
+		color: var(--color-primary);
 	}
 }
 </style>
