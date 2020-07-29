@@ -145,6 +145,7 @@ export default {
 			this.clearState();
 		},
 		addToLesson() {
+			this.$emit("close");
 			this.$store.dispatch("content/addToLesson", {
 				lessonId: this.selectedLesson._id,
 				material: {
@@ -155,7 +156,6 @@ export default {
 				event: this.$eventBus,
 			});
 			this.closeModal();
-			this.$emit("close");
 		},
 		findLessons(course) {
 			this.$store.dispatch("content/getLessons", course._id);
