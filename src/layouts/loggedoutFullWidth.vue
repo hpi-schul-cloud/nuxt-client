@@ -5,7 +5,6 @@
 			:img="require('@assets/img/logo/logo-image-color.svg')"
 			:buttons="true"
 		/>
-
 		<div class="container">
 			<Nuxt />
 		</div>
