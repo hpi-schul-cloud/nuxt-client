@@ -128,12 +128,6 @@ export default {
 				})
 			);
 		},
-		isSuccess() {
-			const response =
-				this.$store.state.content &&
-				this.$store.state.content.addToLessonResult;
-			return response && response.status === 201;
-		},
 	},
 	watch: {
 		selectedCourse(to, from) {
@@ -158,6 +152,7 @@ export default {
 					client: this.client,
 					url: this.url,
 				},
+				event: this.$eventBus,
 			});
 			this.closeModal();
 			this.$emit("close");

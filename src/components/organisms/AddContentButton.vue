@@ -19,13 +19,21 @@
 			:url="getUrl"
 			:client="client"
 			:title="resource.title"
-			@close="showNotificationModal = true"
+			@close="showLoadingModal = true"
+		/>
+		<loading-modal
+			:title="$t('pages.content.notification.loading')"
+			description=""
+			:btn-text="$t('common.labels.close')"
+			:active.sync="showLoadingModal"
 		/>
 		<notification-modal
-			:show-notification-modal.sync="showNotificationModal"
-			:is-success="isSuccess"
+			:show-notification-modal.sync="notificationModal.visible"
+			:is-success="notificationModal.isSuccess"
 			:backgroundcolor="
-				isSuccess ? 'var(--color-success)' : 'var(--color-danger)'
+				notificationModal.isSuccess
+					? 'var(--color-success)'
+					: 'var(--color-danger)'
 			"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"
@@ -37,6 +45,7 @@
 <script>
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
+import LoadingModal from "@components/molecules/LoadingModal";
 import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
@@ -44,6 +53,7 @@ export default {
 	components: {
 		AddContentModal,
 		NotificationModal,
+		LoadingModal,
 	},
 	props: {
 		btnLabel: { type: String, default: "" },
@@ -58,14 +68,14 @@ export default {
 	data() {
 		return {
 			copyModalActive: false,
-			showNotificationModal: false,
+			showLoadingModal: false,
+			notificationModal: {
+				visible: false,
+				isSuccess: false,
+			},
 		};
 	},
 	computed: {
-		isSuccess() {
-			const response = this.$store.state.content.addToLessonResult;
-			return response && response.status === 201;
-		},
 		getUrl() {
 			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
@@ -88,6 +98,22 @@ export default {
 			if (!this.addResourceAndClose()) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
+			}
+		},
+	},
+	onEventBus: {
+		"showModal@content": function (value) {
+			if (this.showLoadingModal) {
+				this.showLoadingModal = false;
+				this.notificationModal.visible = true;
+				switch (value) {
+					case "successModal":
+						this.notificationModal.isSuccess = true;
+						break;
+					default:
+						this.notificationModal.isSuccess = false;
+						break;
+				}
 			}
 		},
 	},
