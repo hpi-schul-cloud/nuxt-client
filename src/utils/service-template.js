@@ -73,7 +73,6 @@ export default function (endpoint) {
 				if (typeof idOrPayload === "string") {
 					const id = idOrPayload;
 					res = await this.$axios.$delete(baseUrl + "/" + id);
-					console.log("test");
 					commit("remove", idOrPayload);
 				} else {
 					const payload = idOrPayload;
