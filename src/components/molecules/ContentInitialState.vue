@@ -19,29 +19,12 @@ export default {
 	components: {
 		EmptyState,
 	},
-	props: {
-		image: {
-			type: String,
-			default: "@assets/img/empty-state/content-initial.svg",
-			required: false,
-		},
-		title: {
-			type: String,
-			default: null,
-			required: false,
-		},
-		description: {
-			type: String,
-			default: null,
-			required: false,
-		},
-	},
 	computed: {
 		getTitle() {
-			return this.title || this.$t("pages.content.init_state.title");
+			return this.$t("pages.content.init_state.title");
 		},
 		getDescription() {
-			return this.description || this.$t("pages.content.init_state.message");
+			return this.$t("pages.content.init_state.message");
 		},
 	},
 };

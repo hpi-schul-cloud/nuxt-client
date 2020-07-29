@@ -23,22 +23,18 @@ export default {
 	props: {
 		title: {
 			type: String,
-			required: false,
 			default: "",
 		},
 		image: {
 			type: String,
-			required: false,
 			default: "img/empty-state/emptystate-graph.svg",
 		},
 		imageHeight: {
 			type: String,
 			default: "200px",
-			required: false,
 		},
 		alt: {
 			type: String,
-			required: false,
 			default: "",
 		},
 	},

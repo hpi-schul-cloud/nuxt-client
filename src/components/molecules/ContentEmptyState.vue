@@ -1,6 +1,6 @@
 <template>
 	<empty-state
-		:image="image"
+		image="@assets/img/empty-state/content-empty.svg"
 		:image-alt="$t('pages.content.empty_state.error.img_alt')"
 		:title="getTitle"
 	>
@@ -17,31 +17,12 @@ export default {
 	components: {
 		EmptyState,
 	},
-	props: {
-		image: {
-			type: String,
-			default: "@assets/img/empty-state/content-empty.svg",
-			required: false,
-		},
-		title: {
-			type: String,
-			default: null,
-			required: false,
-		},
-		description: {
-			type: String,
-			default: null,
-			required: false,
-		},
-	},
 	computed: {
 		getTitle() {
-			return this.title || this.$t("pages.content.empty_state.error.title");
+			return this.$t("pages.content.empty_state.error.title");
 		},
 		getDescription() {
-			return (
-				this.description || this.$t("pages.content.empty_state.error.message")
-			);
+			return this.$t("pages.content.empty_state.error.message");
 		},
 	},
 };
