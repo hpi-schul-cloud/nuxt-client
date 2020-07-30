@@ -59,10 +59,13 @@ deploy(){
 	eval "echo \"$( cat $COMPOSE_SRC )\"" > docker-compose-$COMPOSE_TARGET
 
 	# deploy new compose file
+	echo "Attempting to copy updated Docker compose file..."
 	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa docker-compose-$COMPOSE_TARGET linux@$SYSTEM.schul-cloud.$TLD:~
+	echo "Attempting to updated Docker stack $STACK_NAME..."
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.$TLD /usr/bin/docker stack deploy -c /home/linux/docker-compose-$COMPOSE_TARGET $STACK_NAME
 
 	# deploy new dockerfile
+	echo "Attempting to update Docker service $DOCKER_SERVICE_NAME..."
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.$TLD /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
 }
 
@@ -89,11 +92,14 @@ fi
 case "$TRAVIS_BRANCH" in
 
 	master)
+		# If an event occurs on branch master call inform without deployment
+		echo "Event detected on branch master. Informing team. No deployment on master."
 		inform_live $PROJECT
 		;;
 
 	develop)
-		echo "develop"
+		# If an event occurs on branch develop deploy to test
+		echo "Event detected on branch develop. Attempting to deploy to development (test) environment..."
 		case "$PROJECT" in
 			client)
 				# deploy $SYSTEM $DOCKERFILE $DOCKERTAG $DOCKER_SERVICENAME $COMPOSE_DUMMY $COMPOSE_FILE $COMPOSE_SERVICENAME
@@ -105,10 +111,14 @@ case "$TRAVIS_BRANCH" in
 			vuepress)
 				deploy "test" "nuxt-vuepress" $DOCKERTAG "test-schul-cloud_vuepress" "compose-vuepress.dummy" "nuxt-vuepress.yml" "test-schul-cloud"
 			;;
+			*)
+				echo "$PROJECT does not match one of \"client\", \"storybook\" or \"vuepress\". Deployment will be skipped."
+			;;
 		esac
 		;;
 	release*)
-		echo "release"
+		# If an event occurs on branch release* deploy to staging
+		echo "Event detected on branch release*. Attempting to deploy to staging environment..."
 		case "$PROJECT" in
 			client)
 				# TODO deploy with themes
@@ -124,12 +134,17 @@ case "$TRAVIS_BRANCH" in
 			vuepress)
 				deploy "staging" "nuxt-vuepress" $DOCKERTAG "staging_vuepress" "compose-vuepress.dummy" "nuxt-vuepress.yml" "staging"
 			;;
+			*)
+				echo "$PROJECT does not match one of \"client\", \"storybook\" or \"vuepress\". Deployment will be skipped."
+			;;
 		esac
 		;;
 	hotfix*)
-		echo "hotfix"
+		# If an event occurs on branch hotfix* parse team id 
+		# and deploy to according hotfix environment
 		TEAM="$(cut -d'/' -f2 <<< $TRAVIS_BRANCH)"
 		if [[ "$TEAM" -gt 0 && "$TEAM" -lt 8 ]]; then
+			echo "Event detected on branch hotfix/$TEAM/... . Attempting to deploy to hotfix environment $TEAM, project $PROJECT..."
 			inform_hotfix $TEAM
 			case "$PROJECT" in
 				client)
@@ -146,10 +161,17 @@ case "$TRAVIS_BRANCH" in
 				vuepress)
 					deploy "hotfix$TEAM" "nuxt-vuepress" $DOCKERTAG "hotfix$TEAM_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix$TEAM_nuxtclient" "dev"
 				;;
+				*)
+					echo "$PROJECT does not match one of \"client\", \"storybook\" or \"vuepress\". Deployment will be skipped."
+				;;
 			esac
 		else
-			echo "Hotfix branch name do not match requirements to deploy"
+			echo "Event detected on branch hotfix*. However, branch name pattern does not match requirements to deploy. Expected hotfix/<team_number>/XX.XX.XX but got $TRAVIS_BRANCH"
 		fi
+	*)
+		# If no condition is met, nothing will be deployed.
+  		echo "Event detected which does not meet any conditions. Deployment will be skipped."
+	;;
 esac
 
 exit 0
