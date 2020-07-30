@@ -5,8 +5,7 @@
 // const id = "[a-z0-9]+";
 //const mongoId = "[a-z0-9]{24}";
 const activationCode = "[a-z0-9]+";
-
-module.exports = [
+const routes = [
 	// `^/account/?$`,
 	`^/account/email/edit/?$`,
 	`^/account/name/edit/?$`,
@@ -19,7 +18,6 @@ module.exports = [
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
 	`^/login-instances/?`,
-	// `^/content/`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
@@ -30,3 +28,11 @@ module.exports = [
 	`^/news/new`,
 	`^/nuxtversion/?$`,
 ];
+if (process.env.LERNSTORE_MODE === "EDUSHARING") {
+	const uuid =
+		"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+	routes.push(`^/content/?$`);
+	routes.push(`^/content/${uuid}/?$`);
+}
+
+module.exports = routes;
