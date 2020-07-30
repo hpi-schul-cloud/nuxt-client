@@ -48,7 +48,7 @@
 						({{ $t("pages.content._id.metadata.author") }})
 					</span>
 					<span v-if="provider">
-						,
+						<span v-if="hasAuthor">,</span>
 						<base-link :href="'/content/?q=' + provider" class="content-link">{{
 							provider
 						}}</base-link>
