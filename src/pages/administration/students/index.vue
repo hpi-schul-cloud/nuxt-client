@@ -20,7 +20,7 @@
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
 			:total="pagination.total"
-			track-by="id"
+			track-by="_id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
@@ -138,7 +138,7 @@ export default {
 					.page || 1,
 			limit:
 				this.$uiState.get("pagination", "pages.administration.students.index")
-					.limit || 10,
+					.limit || 25,
 			sortBy: "firstName",
 			sortOrder: "asc",
 			tableColumns: [
