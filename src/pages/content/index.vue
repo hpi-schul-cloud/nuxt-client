@@ -24,18 +24,19 @@
 				<transition name="fade">
 					<div class="content__container">
 						<!-- not loading -->
+						<!-- search query not empty and there are results -->
+						<p v-if="resources.data.length !== 0" class="content__total">
+							{{ resources.total }}
+							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+						</p>
 						<span v-if="!loading" class="content__container_child">
 							<!-- search query empty -->
 							<content-initial-state v-if="searchQuery.length === 0" />
-							<!-- search query not empty and there are results -->
-							<p v-else-if="resources.data.length > 0" class="content__total">
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_results") }} "{{
-									searchQuery
-								}}"
-							</p>
 							<!-- search query not empty and there are no results -->
-							<div v-else class="content__no_results">
+							<div
+								v-else-if="resources.data.length === 0"
+								class="content__no_results"
+							>
 								<content-empty-state />
 							</div>
 						</span>
