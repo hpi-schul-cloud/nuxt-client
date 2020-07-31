@@ -220,6 +220,7 @@
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
 	"pages.administration.remove.success": "Ausgewählte Nutzer gelöscht",
 	"pages.administration.sendMail.error": "Registrierungslink konnte nicht verschickt werden | Registrierungslinks konnten nicht verschickt werden",
+	"pages.administration.printQr.error": "Registrierungslinks konnte nicht generiert werden",
 	"pages.administration.sendMail.success": "Registrierungslink erfolgreich verschickt | Registrierungslinks erfolgreich verschickt",
 	"pages.administration.students.fab.add": "Schüler:in anlegen",
 	"pages.administration.students.fab.import": "Schüler:innen importieren",

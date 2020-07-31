@@ -412,14 +412,21 @@ export default {
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			const qrRegistrationLinks = await this.$store.dispatch(
-				"users/getQrRegistrationLinks",
-				{
-					userIds: rowIds,
-					selectionType,
-				}
-			);
-			this.$_printQRs(qrRegistrationLinks);
+			try {
+				const qrRegistrationLinks = await this.$store.dispatch(
+						"users/getQrRegistrationLinks",
+						{
+							userIds: rowIds,
+							selectionType,
+						}
+				);
+				this.$_printQRs(qrRegistrationLinks);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+						this.$tc("pages.administration.printQr.error", rowIds.length)
+				);
+			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
