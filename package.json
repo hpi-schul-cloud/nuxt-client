@@ -120,7 +120,7 @@
 		"jest-haste-map": "^26.1.0",
 		"jest-image-snapshot": "^4.1.0",
 		"jest-puppeteer": "^4.4.0",
-		"jest-resolve": "^26.1.0",
+		"jest-resolve": "^26.2.1",
 		"jest-serializer-vue": "^2.0.2",
 		"lint-staged": "^10.2.11",
 		"lodash": "^4.17.19",
