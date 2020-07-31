@@ -129,9 +129,13 @@ export default {
 					.page || 1,
 			limit:
 				this.$uiState.get("pagination", "pages.administration.teachers.index")
-					.limit || 10,
-			sortBy: "firstName",
-			sortOrder: "asc",
+					.limit || 25,
+			sortBy:
+				this.$uiState.get("sorting", "pages.administration.teachers.index")
+					.sortBy || "firstName",
+			sortOrder:
+				this.$uiState.get("sorting", "pages.administration.teachers.index")
+					.sortOrder || "asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -279,6 +283,10 @@ export default {
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
+			this.$uiState.set("sorting", "pages.administration.teachers.index", {
+				sortBy: this.sortBy,
+				sortOrder: this.sortOrder,
+			});
 			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
