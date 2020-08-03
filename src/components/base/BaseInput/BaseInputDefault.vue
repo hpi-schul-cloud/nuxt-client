@@ -243,7 +243,7 @@ export default {
 		.core {
 			flex: 1;
 			height: min-content;
-			line-height: 0; // needed for correct spacing
+			line-height: auto; // needed for correct spacing
 			input {
 				width: 100%;
 				padding: 0;
