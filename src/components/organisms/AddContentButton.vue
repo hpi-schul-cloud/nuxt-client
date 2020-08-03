@@ -19,13 +19,13 @@
 			:url="getUrl"
 			:client="client"
 			:title="resource.title"
-			@close="showLoadingModal = true"
+			@close="performAPICall"
 		/>
 		<loading-modal
 			:title="$t('pages.content.notification.loading')"
 			description=""
 			:btn-text="$t('common.labels.close')"
-			:active.sync="showLoadingModal"
+			:active.sync="loadingModal.visible"
 		/>
 		<notification-modal
 			:show-notification-modal.sync="notificationModal.visible"
@@ -48,6 +48,8 @@ import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
 import { getMetadataAttribute } from "@utils/helpers";
 
+let slowAPICall;
+
 export default {
 	name: "AddContentButton",
 	components: {
@@ -68,7 +70,10 @@ export default {
 	data() {
 		return {
 			copyModalActive: false,
-			showLoadingModal: false,
+			loadingModal: {
+				visible: false,
+				isLoading: false,
+			},
 			notificationModal: {
 				visible: false,
 				isSuccess: false,
@@ -100,11 +105,19 @@ export default {
 				this.$store.dispatch("courses/find");
 			}
 		},
+		performAPICall() {
+			this.loadingModal.isLoading = true;
+			slowAPICall = setTimeout(() => {
+				this.loadingModal.visible = true;
+			}, 1000);
+		},
 	},
 	onEventBus: {
 		"showModal@content": function (value) {
-			if (this.showLoadingModal) {
-				this.showLoadingModal = false;
+			if (this.loadingModal.isLoading) {
+				clearTimeout(slowAPICall);
+				this.loadingModal.visible = false;
+				this.loadingModal.isLoading = false;
 				this.notificationModal.visible = true;
 				switch (value) {
 					case "successModal":
