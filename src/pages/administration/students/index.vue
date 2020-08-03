@@ -129,6 +129,7 @@ export default {
 
 	data() {
 		return {
+			something:[],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
@@ -332,7 +333,7 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			this.$store.commit("bulk-consent/setSelectedStudents", {
+			this.$store.commit("bulkConsent/setSelectedStudents", {
 				students: this.tableSelection,
 				// [
 				// 	"5ebb48a88e24ee280c9b2ebd",

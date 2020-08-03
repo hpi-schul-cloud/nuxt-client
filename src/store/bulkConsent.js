@@ -10,6 +10,8 @@ export const actions = {
 
 export const getters = {
 	selectedStudents: (state) => state.selectedStudents,
+	selectedStudentsData: (state) => state.selectedStudentsData,
+	testState: (state) => state.testState,
 };
 
 export const mutations = {
@@ -19,11 +21,24 @@ export const mutations = {
 	setRegisteredStudents(state, payload) {
 		state.registeredStudents = payload;
 	},
+	setStudentsData(state, payload) {
+		//debugger;
+		state.selectedStudentsData = payload;
+	},
+	updateStudentData(state, payload) {
+		// TODO: this will be change the selectedStudentsData
+		state.selectedStudents = payload;
+	},
+	setTestState(state, payload) {
+		state.testState = payload;
+	},
 };
 
 export const state = () => {
 	return {
 		selectedStudents: [],
 		registeredStudents: [],
+		selectedStudentsData: [],
+		testState: "",
 	};
 };
