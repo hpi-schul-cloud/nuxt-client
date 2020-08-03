@@ -128,12 +128,6 @@ export default {
 				})
 			);
 		},
-		isSuccess() {
-			const response =
-				this.$store.state.content &&
-				this.$store.state.content.addToLessonResult;
-			return response && response.status === 201;
-		},
 	},
 	watch: {
 		selectedCourse(to, from) {
@@ -151,6 +145,7 @@ export default {
 			this.clearState();
 		},
 		addToLesson() {
+			this.$emit("close");
 			this.$store.dispatch("content/addToLesson", {
 				lessonId: this.selectedLesson._id,
 				material: {
@@ -158,9 +153,9 @@ export default {
 					client: this.client,
 					url: this.url,
 				},
+				event: this.$eventBus,
 			});
 			this.closeModal();
-			this.$emit("close");
 		},
 		findLessons(course) {
 			this.$store.dispatch("content/getLessons", course._id);
