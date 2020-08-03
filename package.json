@@ -114,7 +114,7 @@
 		"http-proxy-middleware": "^1.0.5",
 		"hygen": "^6.0.4",
 		"imagemin-lint-staged": "^0.4.0",
-		"jest": "^26.2.1",
+		"jest": "^26.2.2",
 		"jest-canvas-mock": "^2.2.0",
 		"jest-extended": "^0.11.5",
 		"jest-haste-map": "^26.1.0",
