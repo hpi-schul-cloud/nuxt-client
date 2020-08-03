@@ -71,7 +71,7 @@ export default {
 				firstName: "",
 				lastName: "",
 				email: "",
-				sendRegistration: true,
+				sendRegistration: false,
 			},
 		};
 	},
