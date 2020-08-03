@@ -2,12 +2,12 @@
 	<empty-state
 		image="@assets/img/empty-state/content-initial.svg"
 		:alt="$t('pages.content.init_state.img_alt')"
-		:title="getTitle"
+		:title="$t('pages.content.init_state.title')"
 	>
 		<template v-slot:description>
 			<div class="initial-state-description">
 				<!-- eslint-disable vue/no-v-html -->
-				<span v-html="getDescription" />
+				<span v-html="$t('pages.content.init_state.message')" />
 			</div>
 		</template>
 	</empty-state>
@@ -19,13 +19,9 @@ export default {
 	components: {
 		EmptyState,
 	},
-	computed: {
-		getTitle() {
-			return this.$t("pages.content.init_state.title");
-		},
-		getDescription() {
-			return this.$t("pages.content.init_state.message");
-		},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
 	},
 };
 </script>

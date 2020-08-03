@@ -14,7 +14,7 @@ describe("@components/molecules/ContentInitialState", () => {
 	it("Provides proper title", () => {
 		expect(wrapper.find(".title").exists()).toBe(true);
 		expect(wrapper.find(".title").text()).toBe(
-			"Willkommen im neuen Lern-Store!"
+			wrapper.vm.$i18n.t("pages.content.init_state.title")
 		);
 	});
 	it("Provides message", () => {
