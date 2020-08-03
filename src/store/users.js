@@ -12,12 +12,12 @@ const module = mergeDeep(base, {
 			return dispatch("find", queryContext);
 		},
 		findStudentsForConsent({ dispatch }, queryContext = {}) {
-			 //debugger;
+			//debugger;
 			// TODO check if students are already consented..
 			queryContext.customEndpoint = "/users/admin/students";
 			return dispatch("find", queryContext);
 		},
-		selectedStudentsData({ dispatch }, data = []){
+		selectedStudentsData({ dispatch }, data = []) {
 			return dispatch("selectedStudentsData", data);
 		},
 		findTeachers({ dispatch }, query = {}) {
