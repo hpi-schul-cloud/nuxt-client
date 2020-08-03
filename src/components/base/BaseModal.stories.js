@@ -186,7 +186,7 @@ storiesOf("4 Base UI Components/Modals", module)
 		components: { LoadingModal },
 		template: `<div>
 		<base-button @click="active = true">Open Modal</base-button>
-			<LoadingModal :title="title" :description="description" :active.sync="active"/>
+			<LoadingModal :title="title" :description="description" :btnText="btnText" :active.sync="active"/>
 		</div>`,
 		data: () => ({
 			active: true,
@@ -195,6 +195,7 @@ storiesOf("4 Base UI Components/Modals", module)
 				"description",
 				"Dies kann bis zu einer Minute dauern. Wir bitten um etwas Geduld…"
 			),
+			btnText: text("ButtonText", "Schließen"),
 		}),
 	}))
 	.add("Autologout Warning", () => ({
