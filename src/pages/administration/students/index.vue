@@ -29,6 +29,9 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
+			</template>
 			<template v-slot:headcolumn-consent>
 				<span class="th-slot">
 					<span>{{ $t("common.labels.registration") }}</span>
