@@ -32,44 +32,7 @@
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
-			<template v-slot:headcolumn-consent>
-				<span class="th-slot">
-					<span>{{ $t("common.labels.registration") }}</span>
-					<base-button design="info text icon" @click="active = !active">
-						<base-icon source="material" icon="info" />
-					</base-button>
-				</span>
-				<info-box class="info-box" :active.sync="active">
-					<template v-slot:header>Registrierungen abschließen</template>
-					<template v-slot:body>
-						<div class="content">
-							{{ $t("pages.administration.students.infobox.paragraph-1") }}
-							<ul class="list">
-								<li>
-									{{ $t("pages.administration.students.infobox.li-1") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-2") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-3") }}
-								</li>
-							</ul>
-							{{ $t("pages.administration.students.infobox.paragraph-2") }}
-							<br />
-							<br />
-							{{ $t("pages.administration.students.infobox.paragraph-3") }}
-							<br />
-							<br />
-							<base-icon
-								source="material"
-								icon="warning"
-								color="var(--color-danger)"
-							/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
-						</div>
-					</template>
-				</info-box>
-			</template>
+			<template v-slot:headcolumn-consent> </template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
@@ -147,7 +110,6 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import InfoBox from "@components/molecules/InfoBox";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
@@ -158,7 +120,6 @@ dayjs.locale("de");
 
 export default {
 	components: {
-		InfoBox,
 		DataFilter,
 		BackendDataTable,
 		FabFloating,
@@ -217,8 +178,9 @@ export default {
 				},
 				{
 					field: "consent",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
 					sortable: true,
+					infobox: true,
 				},
 				{
 					field: "createdAt",
@@ -505,43 +467,7 @@ a.action-button {
 		}
 	}
 }
-span {
-	font-weight: var(--font-weight-normal);
-}
-.content {
-	max-height: 35vh;
-	overflow-y: scroll;
-	font-weight: var(--font-weight-normal);
-}
 .list {
 	padding: var(--space-lg);
-}
-.th-slot {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-}
-
-.info-box {
-	position: absolute;
-	right: 0%;
-	z-index: calc(var(--layer-fab) + 1);
-	max-width: 100%;
-	margin-top: var(--space-md);
-	margin-right: var(--space-lg);
-	margin-left: var(--space-lg);
-
-	@include breakpoint(tablet) {
-		min-width: 450px;
-		max-width: 50%;
-		margin-right: var(--space-xl);
-	}
-}
-
-button:not(.is-none):focus {
-	z-index: var(--layer-fab);
-	outline: none;
-	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
 }
 </style>
