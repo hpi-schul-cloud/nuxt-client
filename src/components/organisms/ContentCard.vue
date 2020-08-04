@@ -152,7 +152,7 @@ export default {
 			top: 50%;
 			left: 50%;
 			z-index: var(--layer-page);
-			font-size: var(--space-xl-3);
+			font-size: var(--space-xl-3) !important;
 			border-radius: var(--radius-round);
 			box-shadow: var(--shadow-m);
 			opacity: 0.8;
