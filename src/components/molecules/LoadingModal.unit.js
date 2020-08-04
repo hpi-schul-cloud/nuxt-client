@@ -7,10 +7,12 @@ describe("@components/molecules/LoadingModal", () => {
 			propsData: {
 				title: "title",
 				description: "description",
+				btnText: "button",
 				active: true,
 			},
 		});
 		expect(wrapper.text()).toContain("title");
 		expect(wrapper.text()).toContain("description");
+		expect(wrapper.text()).toContain("button");
 	});
 });
