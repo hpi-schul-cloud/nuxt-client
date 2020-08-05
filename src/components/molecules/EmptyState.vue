@@ -2,8 +2,14 @@
 	<div class="base">
 		<div class="container">
 			<div class="img-container">
-				<img :src="image" role="presentation" class="image" />
+				<base-image
+					:img-src="image"
+					:img-alt="alt"
+					:img-height="imageHeight"
+					role="presentation"
+				/>
 			</div>
+			<h2 v-if="title" class="h4 title">{{ title }}</h2>
 			<div class="description">
 				<slot name="description" />
 			</div>
@@ -11,11 +17,25 @@
 	</div>
 </template>
 <script>
+import BaseImage from "@basecomponents/BaseImage";
 export default {
+	components: { BaseImage },
 	props: {
+		title: {
+			type: String,
+			default: "",
+		},
 		image: {
 			type: String,
-			required: true,
+			default: "img/empty-state/emptystate-graph.svg",
+		},
+		imageHeight: {
+			type: String,
+			default: "200px",
+		},
+		alt: {
+			type: String,
+			default: "",
 		},
 	},
 	data() {
@@ -28,20 +48,22 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.img-container {
+	text-align: center;
+}
+
 .base {
 	display: flex;
 	justify-content: center;
 }
 
 .container {
-	width: var(--size-content-width-min);
+	width: calc(2 * var(--size-content-width-min));
 }
 
-.img-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+.title {
+	margin-bottom: var(--space-xl-3);
+	text-align: center;
 }
 
 .description {
@@ -49,9 +71,5 @@ export default {
 	font-size: var(--text-sm);
 	color: var(--color-tertiary-light);
 	text-align: center;
-}
-
-.image {
-	width: 70%;
 }
 </style>
