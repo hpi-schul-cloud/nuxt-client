@@ -417,17 +417,17 @@ export default {
 		async handleBulkQR(rowIds, selectionType) {
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
-						"users/getQrRegistrationLinks",
-						{
-							userIds: rowIds,
-							selectionType,
-						}
+					"users/getQrRegistrationLinks",
+					{
+						userIds: rowIds,
+						selectionType,
+					}
 				);
 				this.$_printQRs(qrRegistrationLinks);
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(
-						this.$tc("pages.administration.printQr.error", rowIds.length)
+					this.$tc("pages.administration.printQr.error", rowIds.length)
 				);
 			}
 		},
