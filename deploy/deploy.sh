@@ -22,7 +22,7 @@ inform_live() {
 	# $1: Project Name (client, storybook, vuepress)
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-$1! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
+  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-'$1'! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
   fi
 }
 
