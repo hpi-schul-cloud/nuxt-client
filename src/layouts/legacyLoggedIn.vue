@@ -60,6 +60,8 @@ const topbarBaseActions = [
 					label: "Hilfebereich",
 					icon: "question-circle",
 					action: "/help",
+					source: "fa",
+					target: "_self",
 				},
 				// TODO: implement intro for nuxt-client
 				// {
@@ -71,11 +73,22 @@ const topbarBaseActions = [
 					label: "Wunsch oder Problem senden",
 					icon: "pencil",
 					action: "/help?activeForm=team#contact-form",
+					source: "fa",
+					target: "_self",
 				},
 				{
 					label: "Admin deiner Schule kontaktieren",
 					icon: "comment",
 					action: "/help?activeForm=admin#contact-form",
+					source: "fa",
+					target: "_self",
+				},
+				{
+					label: "Fortbildungen",
+					icon: "fortbildung",
+					action: "https://www.lernen.cloud/",
+					source: "custom",
+					target: "_blank",
 				},
 			],
 		},

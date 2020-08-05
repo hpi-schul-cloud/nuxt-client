@@ -6,12 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
-## Unreleased
+## [23.6.0] - 2020-07-21
 
+### Added - 23.6.0
+
+- Quickfix - change URL of 'Fortbildungen' from 'lern.cloud' to 'lernen.cloud'
 - SC-4577 school specific privacy policy can be added by the school admin. If school specific privacy policy is exists it is shown to every school user by the registration, first login and in the footer of the page. If it was changed the privacy policy should be confirmed by every school user
 - SC-2763 [#1084](https://github.com/schul-cloud/nuxt-client/pull/1084) Learnstore: use edu sharing content, implemented add material to the course feature, clickable tags, authors, providers
-
-### Changed
 
 ## ## [23.5.2] - 2020-07-17
 

@@ -90,6 +90,14 @@ export default {
 	vertical-align: middle; // should this be default?
 }
 
+.custom {
+	width: 1em;
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	font-size: calc(1em + 4px);
+	line-height: 100%;
+	vertical-align: middle; // should this be default?
+}
+
 .material {
 	// remove material icon margin
 	width: calc(1em + 4px);
