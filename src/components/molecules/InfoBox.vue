@@ -8,8 +8,9 @@
 				<slot name="body" />
 			</p>
 			<div class="actions">
-				<slot name="actions" />
-				<base-button design="info" @click.self="close">Schließen</base-button>
+				<slot name="actions">
+					<base-button design="info" @click.self="close">Schließen</base-button>
+				</slot>
 			</div>
 		</div>
 	</div>

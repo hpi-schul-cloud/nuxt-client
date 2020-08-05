@@ -28,13 +28,14 @@
 			>
 				<span v-if="column.infobox">
 					<span class="info-slot">
-						<base-button
+						<base-icon
 							class="info-button"
-							design="info text icon"
-							@click="infoBoxActive = !infoBoxActive"
-						>
-							<base-icon source="material" icon="info" />
-						</base-button>
+							source="material"
+							icon="info"
+							style="color: var(--color-info);"
+							@mouseover="infoBoxActive = true"
+							@mouseleave="infoBoxActive = false"
+						/>
 					</span>
 					<info-box class="info-box" :active.sync="infoBoxActive">
 						<template v-slot:header>Registrierungen abschließen</template>
@@ -65,6 +66,7 @@
 								/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
 							</div>
 						</template>
+						<template v-slot:actions>{{ "" }}</template>
 					</info-box>
 				</span>
 				<BaseButton
@@ -235,8 +237,6 @@ export default {
 		margin-right: var(--space-xl);
 	}
 	.content {
-		max-height: 35vh;
-		overflow-y: scroll;
 		font-weight: var(--font-weight-normal);
 	}
 	button:not(.is-none):focus {
@@ -250,7 +250,6 @@ export default {
 }
 .info-slot {
 	position: absolute;
-	top: -20%;
-	left: 56%;
+	left: 69%;
 }
 </style>
