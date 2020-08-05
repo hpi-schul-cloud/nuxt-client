@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [23.6.0] - 2020-07-21
 
+### Changed
+
+- SC-5558 change the edusharing lernstore empty state and initial state components. Made svg images specific to the theme
+
 ### Added - 23.6.0
 
 - Quickfix - change URL of 'Fortbildungen' from 'lern.cloud' to 'lernen.cloud'
