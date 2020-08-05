@@ -87,7 +87,7 @@
 	"pages.administration.datasources.new.add": "",
 	"pages.administration.datasources.new.short_title": "",
 	"pages.administration.datasources.new.title": "",
-	"pages.administration.printQr.error": "Registration links cannot be generated",
+	"pages.administration.printQr.error": "The registration links could not be generated",
 	"pages.administration.index.title": "Administration",
 	"pages.content.empty_state.error.message": "<span><p>Check if all words are spelled correctly.<br>Try out other search queries.<br>Try out more common queries.<br>Try to use a shorter query.</p></span>",
 	"pages.content.empty_state.error.title": "<span>Whoops,<br> no results!</span>",
