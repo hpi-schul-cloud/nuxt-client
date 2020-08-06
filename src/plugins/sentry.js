@@ -1,4 +1,5 @@
 import Theme from "@theme/config";
+const nuxtConfig = require("../../nuxt.config");
 
 export default ({ app, store }) => {
 	const { user } = store.state.auth;
@@ -6,7 +7,7 @@ export default ({ app, store }) => {
 		scope.setLevel("warn");
 		scope.setTag("theme", Theme.name);
 		scope.setTag("domain", window.location.host);
-		scope.setTag("sampleRate", process.env.SENTRY_SAMPLE_RATE);
+		scope.setTag("sampleRate", nuxtConfig.env.SENTRY_SAMPLE_RATE);
 
 		// populate userdata
 		if (user && user.schoolId) {
