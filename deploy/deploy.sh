@@ -22,7 +22,7 @@ inform_live() {
 	# $1: Project Name (client, storybook, vuepress)
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-$1! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
+  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-'$1'! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
   fi
 }
 
@@ -157,10 +157,10 @@ case "$TRAVIS_BRANCH" in
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_thr.dummy" "nuxt-client_thr.yml" "staging-schul-cloud"
 				;;
 				storybook)
-					deploy "hotfix${TEAM}" "nuxt-storybook" $DOCKERTAG "hotfix${TEAM}_nuxtclient" "compose-storybook.dummy" "nuxt-storybook.yml" "hotfix${TEAM}_nuxtclient" "dev"
+					deploy "hotfix${TEAM}" "nuxt-storybook" $DOCKERTAG "hotfix${TEAM}_storybook" "compose-storybook.dummy" "nuxt-storybook.yml" "hotfix${TEAM}_nuxtclient" "dev"
 				;;
 				vuepress)
-					deploy "hotfix${TEAM}" "nuxt-vuepress" $DOCKERTAG "hotfix${TEAM}_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix${TEAM}_nuxtclient" "dev"
+					deploy "hotfix${TEAM}" "nuxt-vuepress" $DOCKERTAG "hotfix${TEAM}_vuepress" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix${TEAM}_nuxtclient" "dev"
 				;;
 				*)
 					echo "$PROJECT does not match one of \"client\", \"storybook\" or \"vuepress\". Deployment will be skipped."
