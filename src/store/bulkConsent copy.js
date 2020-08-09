@@ -20,7 +20,7 @@ const module = mergeDeep(base, {
 			commit("setStudentsData", res);
 			return res;
 		},
-		updateStudents({ commit }, payload ) {
+		updateStudents({ commit }, payload) {
 			debugger;
 			commit("setStudentsData", payload);
 		},
@@ -40,7 +40,7 @@ const module = mergeDeep(base, {
 			state.registeredStudents = payload;
 		},
 		setStudentsData(state, payload) {
-		 	// debugger;
+			// debugger;
 			state.selectedStudentsData = payload;
 		},
 		updateStudentData(state, payload) {

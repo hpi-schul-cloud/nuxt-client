@@ -1,7 +1,5 @@
 <!-- eslint-disable max-lines -->
 <template>
-
-
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1 class="mb--md h3">
@@ -42,43 +40,48 @@
 				track-by="_id"
 				sort-by="fullName"
 			>
-			<template v-slot:datacolumn-birthday="slotProps">
-				<base-input-calendar v-if="(birthdayWarning && !slotProps.data)"
-					:error="inputError"
-					class="date"
-					:vmodel="slotProps.data"
-					type="date"
-					label=""
-					v-on="inputDateForDate({
-						id: filteredTableData[slotProps.rowindex]._id,
-						birthDate: slotProps.data,
-					})"
-
-				/>
-				<base-input-calendar v-else-if="(!birthdayWarning || slotProps.data)"
-					class="date"
-					:vmodel="slotProps.data"
-					type="date"
-					label=""
-					v-on="inputDateForDate({
-						id: filteredTableData[slotProps.rowindex]._id,
-						birthDate: slotProps.data,
-					})"
-
-				/>
-			</template>
-			<template v-slot:datacolumn-password="slotProps">
-				<base-input-default
-					:vmodel="slotProps.data"
-					type="text"
-					label=""
-					v-on="inputPass({
-						id: filteredTableData[slotProps.rowindex]._id,
-						password: slotProps.data,
-					})"
-				/>
-			</template>
-
+				<template v-slot:datacolumn-birthday="slotProps">
+					<base-input-calendar
+						v-if="(birthdayWarning && !slotProps.data)"
+						:error="inputError"
+						class="date"
+						:vmodel="slotProps.data"
+						type="date"
+						label=""
+						v-on="
+							inputDateForDate({
+								id: filteredTableData[slotProps.rowindex]._id,
+								birthDate: slotProps.data,
+							})
+						"
+					/>
+					<base-input-calendar
+						v-else-if="(!birthdayWarning || slotProps.data)"
+						class="date"
+						:vmodel="slotProps.data"
+						type="date"
+						label=""
+						v-on="
+							inputDateForDate({
+								id: filteredTableData[slotProps.rowindex]._id,
+								birthDate: slotProps.data,
+							})
+						"
+					/>
+				</template>
+				<template v-slot:datacolumn-password="slotProps">
+					<base-input-default
+						:vmodel="slotProps.data"
+						type="text"
+						label=""
+						v-on="
+							inputPass({
+								id: filteredTableData[slotProps.rowindex]._id,
+								password: slotProps.data,
+							})
+						"
+					/>
+				</template>
 			</backend-data-table>
 
 			<p v-if="birthdayWarning" style="color: var(--color-danger);">
@@ -92,8 +95,6 @@
 			<base-button design="text" @click="cancelWarning = true">{{
 				$t("common.actions.cancel")
 			}}</base-button>
-
-
 		</section>
 
 		<section v-if="currentStep === 1">
@@ -184,7 +185,12 @@
 						$t('pages.administration.students.consent.steps.success.image.alt')
 					"
 				/>
-				<base-button design="secondary" @click="print"><i class="fa fa-print"></i>{{this.$t("pages.administration.students.consent.print")}}</base-button>
+				<base-button design="secondary" @click="print"
+					><i class="fa fa-print"></i
+					>{{
+						this.$t("pages.administration.students.consent.print")
+					}}</base-button
+				>
 
 				<base-button design="secondary outline" @click="success">{{
 					$t("pages.administration.students.consent.steps.success.back")
@@ -225,10 +231,10 @@
 		<div hidden>
 			<div id="tableStudentsForPrint">
 				<h3 class="print-title">
-					{{this.$t("pages.administration.students.consent.print.title")}}
+					{{ this.$t("pages.administration.students.consent.print.title") }}
 				</h3>
 				<p>
-					{{printPageInfo}}
+					{{ printPageInfo }}
 				</p>
 
 				<backend-data-table
@@ -239,7 +245,6 @@
 				/>
 			</div>
 		</div>
-
 	</section>
 </template>
 
@@ -270,8 +275,7 @@ export default {
 		requiredPermissions: ["STUDENT_CREATE"],
 	},
 	layout: "loggedInFull",
-	props:{
-	},
+	props: {},
 	data() {
 		return {
 			breadcrumbs: [
@@ -350,11 +354,14 @@ export default {
 			inputError: "Missing",
 			check: false,
 			checkWarning: false,
-			printPageInfo: this.$t("pages.administration.students.consent.steps.register.print", { hostName: window.location.origin }),
+			printPageInfo: this.$t(
+				"pages.administration.students.consent.steps.register.print",
+				{ hostName: window.location.origin }
+			),
 		};
 	},
 
-	computed:{
+	computed: {
 		...mapGetters("bulkConsent", {
 			selectedStudents: "selectedStudents",
 			selectedStudentsData: "selectedStudentsData" || [],
@@ -363,8 +370,14 @@ export default {
 		filteredTableData: {
 			get() {
 				const result = this.$store.state.bulkConsent.selectedStudentsData;
-				if (result.length > 0){
-					return JSON.parse(JSON.stringify(this.$store.state.bulkConsent.selectedStudentsData.filter(student => student.consentStatus !== "ok")));
+				if (result.length > 0) {
+					return JSON.parse(
+						JSON.stringify(
+							this.$store.state.bulkConsent.selectedStudentsData.filter(
+								(student) => student.consentStatus !== "ok"
+							)
+						)
+					);
 				}
 				return [];
 			},
@@ -373,53 +386,64 @@ export default {
 	created(ctx) {
 		this.find();
 	},
-	methods:{
+	methods: {
 		find() {
 			const query = {
 				_id: {
 					$in: this.selectedStudents,
 				},
 			};
-			this.$store.dispatch("bulkConsent/findStudents", { query })
-			.then((result)=>{
-				const data = [];
-				for (const key of result.data.keys()) {
-					if (this.selectedStudents.includes(result.data[key]._id)) {
-						const student = result.data[key];
-						student.fullName = student.firstName + " " + student.lastName;
-						student.password = generatePassword();
-						if (!student.birthday){
-							student.birthday = "";
+			this.$store
+				.dispatch("bulkConsent/findStudents", { query })
+				.then((result) => {
+					const data = [];
+					for (const key of result.data.keys()) {
+						if (this.selectedStudents.includes(result.data[key]._id)) {
+							const student = result.data[key];
+							student.fullName = student.firstName + " " + student.lastName;
+							student.password = generatePassword();
+							if (!student.birthday) {
+								student.birthday = "";
+							}
+							data.push(student);
 						}
-						data.push(student);
 					}
-				}
-				this.$store.commit("bulkConsent/setStudentsData", data );
-				return data;
-			});
+					this.$store.commit("bulkConsent/setStudentsData", data);
+					return data;
+				});
 		},
 		inputDateForDate(student) {
 			return {
 				input_change: (dateData) => {
-					if (!dateData==""){
-						const newDate = dayjs(dateData).format('YYYY-MM-DDTHH:mm:ssZ')
-						const index = this.filteredTableData.findIndex(st => st._id === student.id);
+					if (!dateData == "") {
+						const newDate = dayjs(dateData).format("YYYY-MM-DDTHH:mm:ssZ");
+						const index = this.filteredTableData.findIndex(
+							(st) => st._id === student.id
+						);
 						this.filteredTableData[index].birthday = newDate;
-						this.$store.dispatch("bulkConsent/updateStudents", this.filteredTableData );
+						this.$store.dispatch(
+							"bulkConsent/updateStudents",
+							this.filteredTableData
+						);
 					}
-				}
-			}
+				},
+			};
 		},
-		inputPass: function(student){
+		inputPass: function (student) {
 			return {
-				input: (pass)=>{
-					if (!pass == ""){
-						const index = this.filteredTableData.findIndex(st => st._id === student.id);
+				input: (pass) => {
+					if (!pass == "") {
+						const index = this.filteredTableData.findIndex(
+							(st) => st._id === student.id
+						);
 						this.filteredTableData[index].password = pass;
-						this.$store.dispatch("bulkConsent/updateStudents", this.filteredTableData );
+						this.$store.dispatch(
+							"bulkConsent/updateStudents",
+							this.filteredTableData
+						);
 					}
-				}
-			}
+				},
+			};
 		},
 		next() {
 			if (this.currentStep === 0) {
@@ -431,7 +455,9 @@ export default {
 			this.currentStep += 1;
 		},
 		checkBirthdays() {
-			const checkEmptyBirtday = this.selectedStudentsData.find(element => element.birthday === "");
+			const checkEmptyBirtday = this.selectedStudentsData.find(
+				(element) => element.birthday === ""
+			);
 			if (checkEmptyBirtday) return false;
 
 			return true;
@@ -477,14 +503,21 @@ export default {
 			});
 		},
 		print() {
-			const prtHtml = document.getElementById("tableStudentsForPrint").innerHTML;
-			let stylesHtml = '';
+			const prtHtml = document.getElementById("tableStudentsForPrint")
+				.innerHTML;
+			let stylesHtml = "";
 
-			for (const node of [...document.querySelectorAll("link[rel='stylesheet'], style")]) {
+			for (const node of [
+				...document.querySelectorAll("link[rel='stylesheet'], style"),
+			]) {
 				stylesHtml += node.outerHTML;
-			};
+			}
 
-			var winPrint = window.open("", "", "left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0");
+			var winPrint = window.open(
+				"",
+				"",
+				"left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0"
+			);
 
 			winPrint.document.write(`<!DOCTYPE html>
 				<html>
@@ -494,8 +527,7 @@ export default {
 				<body>
 					${prtHtml}
 				</body>
-				</html>`
-			);
+				</html>`);
 
 			winPrint.document.close();
 			winPrint.focus();
@@ -506,7 +538,6 @@ export default {
 		},
 		dayjs,
 	},
-
 };
 </script>
 
