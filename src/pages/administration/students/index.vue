@@ -373,6 +373,7 @@ export default {
 			// 		description: "Zum Registrieren bitte den Link öffnen.",
 			// 	}))
 			// );
+
 			this.$toast.error(
 				`handleBulkQR([${rowIds.join(
 					", "

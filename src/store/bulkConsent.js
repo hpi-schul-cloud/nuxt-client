@@ -21,7 +21,6 @@ export const actions = {
 export const getters = {
 	selectedStudents: (state) => state.selectedStudents,
 	selectedStudentsData: (state) => state.selectedStudentsData,
-	testState: (state) => state.testState,
 };
 
 export const mutations = {
@@ -47,6 +46,5 @@ export const state = () => {
 		selectedStudents: [],
 		registeredStudents: [],
 		selectedStudentsData: [],
-		testState: "",
 	};
 };
