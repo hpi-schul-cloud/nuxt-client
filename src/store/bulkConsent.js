@@ -1,3 +1,4 @@
+
 export const actions = {
 	async register({ commit }, payload) {
 		const res = await this.$axios.$post("/users/skipregistration", {
@@ -5,6 +6,16 @@ export const actions = {
 		});
 		commit("setRegisteredStudents", res);
 		return res;
+	},
+	async findStudents({ commit }, query = {}) {
+		const res = await this.$axios.$get("/users", {
+			query,
+		});
+		commit("setStudentsData", res);
+		return res;
+	},
+	async updateStudents({ commit }, payload ) {
+		commit("updateStudentData", payload);
 	},
 };
 
@@ -22,12 +33,10 @@ export const mutations = {
 		state.registeredStudents = payload;
 	},
 	setStudentsData(state, payload) {
-		//debugger;
 		state.selectedStudentsData = payload;
 	},
 	updateStudentData(state, payload) {
-		// TODO: this will be change the selectedStudentsData
-		state.selectedStudents = payload;
+		state.selectedStudentsData = payload;
 	},
 	setTestState(state, payload) {
 		state.testState = payload;

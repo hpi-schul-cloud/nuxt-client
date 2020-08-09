@@ -1,5 +1,7 @@
 <!-- eslint-disable max-lines -->
 <template>
+
+
 	<section class="section">
 		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1 class="mb--md h3">
@@ -33,41 +35,49 @@
 		<section v-if="currentStep === 0">
 			<h4>{{ $t("pages.administration.students.consent.steps.complete") }}</h4>
 			{{ $t("pages.administration.students.consent.steps.complete.info") }}
+
 			<backend-data-table
 				:columns="tableColumns"
 				:data="filteredTableData"
 				track-by="_id"
-				:paginated="false"
 				sort-by="fullName"
-				:sort-order="sortOrder"
-				@update:sort="onUpdateSort"
 			>
+			<template v-slot:datacolumn-birthday="slotProps">
+				<base-input-calendar v-if="(birthdayWarning && !slotProps.data)"
+					:error="inputError"
+					class="date"
+					:vmodel="slotProps.data"
+					type="date"
+					label=""
+					v-on="inputDateForDate({
+						id: filteredTableData[slotProps.rowindex]._id,
+						birthDate: slotProps.data,
+					})"
 
-				<template v-slot:datacolumn-birthday="slotProps">
-					<base-input-calendar v-if="slotProps"
-						v-model="slotProps.data"
-						type="date"
-						label=""
-						class="date"
-						:placeholder="$t('common.placeholder.dateformat')"
-						v-on="inputDate({
-							id: filteredTableData[slotProps.rowindex]._id,
-							birthDate: slotProps.data,
-						})"
-					/>
-				</template>
+				/>
+				<base-input-calendar v-else-if="(!birthdayWarning || slotProps.data)"
+					class="date"
+					:vmodel="slotProps.data"
+					type="date"
+					label=""
+					v-on="inputDateForDate({
+						id: filteredTableData[slotProps.rowindex]._id,
+						birthDate: slotProps.data,
+					})"
 
-				<template v-slot:datacolumn-password="slotProps">
-					<base-input-default v-if="slotProps"
-						v-model.lazy="slotProps.data"
-						type="text"
-						label=""
-						v-on="inputPass({
-							id: filteredTableData[slotProps.rowindex]._id,
-							pass: slotProps.data,
-						})"
-					/>
-				</template>
+				/>
+			</template>
+			<template v-slot:datacolumn-password="slotProps">
+				<base-input-default
+					:vmodel="slotProps.data"
+					type="text"
+					label=""
+					v-on="inputPass({
+						id: filteredTableData[slotProps.rowindex]._id,
+						password: slotProps.data,
+					})"
+				/>
+			</template>
 
 			</backend-data-table>
 
@@ -82,6 +92,8 @@
 			<base-button design="text" @click="cancelWarning = true">{{
 				$t("common.actions.cancel")
 			}}</base-button>
+
+
 		</section>
 
 		<section v-if="currentStep === 1">
@@ -89,19 +101,18 @@
 			{{ $t("pages.administration.students.consent.steps.register.info") }}
 			<backend-data-table
 				:columns="tableColumns"
-				:data="selectedStudentsData"
+				:data="filteredTableData"
 				track-by="id"
 				:paginated="false"
 				sort-by="fullName"
-				:sort-order="sortOrder"
-				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(birthdays[slotProps.rowindex]).format("DD.MM.YYYY") }}
+						{{ dayjs(slotProps.data).format("DD.MM.YYYY") }}
 					</div>
 				</template>
 			</backend-data-table>
+
 			<div id="consent-checkbox">
 				<base-input v-model="check" type="checkbox" name="switch" label="">
 				</base-input>
@@ -142,12 +153,9 @@
 			{{ $t("pages.administration.students.consent.steps.download.info") }}
 			<backend-data-table
 				:columns="tableColumns"
-				:data="selectedStudentsData"
-				track-by="id"
+				:data="filteredTableData"
+				track-by="_id"
 				:paginated="false"
-				sort-by="fullName"
-				:sort-order="sortOrder"
-				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="{ data }">
 					{{ dayjs(data).format("DD.MM.YYYY") }}
@@ -160,7 +168,7 @@
 			</p>
 
 			<base-button design="secondary" @click="download">{{
-				$t("pages.administration.students.cfindStudentsForConsentonsent.steps.download.next")
+				$t("pages.administration.students.consent.steps.download.next")
 			}}</base-button>
 		</section>
 
@@ -176,6 +184,7 @@
 						$t('pages.administration.students.consent.steps.success.image.alt')
 					"
 				/>
+				<base-button design="secondary" @click="print"><i class="fa fa-print"></i>{{this.$t("pages.administration.students.consent.print")}}</base-button>
 
 				<base-button design="secondary outline" @click="success">{{
 					$t("pages.administration.students.consent.steps.success.back")
@@ -213,7 +222,23 @@
 			</template>
 		</base-modal>
 
-	<base-button design="primary" @click="printData">Print me</base-button>
+		<div hidden>
+			<div id="tableStudentsForPrint">
+				<h3 class="print-title">
+					{{this.$t("pages.administration.students.consent.print.title")}}
+				</h3>
+				<p>
+					{{printPageInfo}}
+				</p>
+
+				<backend-data-table
+					:columns="tableColumnsForPrint"
+					:data="filteredTableData"
+					track-by="_id"
+					:paginated="false"
+				/>
+			</div>
+		</div>
 
 	</section>
 </template>
@@ -226,7 +251,7 @@ import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import BaseInputCalendar from "@components/base/BaseInput/BaseInputCalendar";
-// import BaseInput from "@components/base/BaseInput/BaseInput";
+import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
@@ -239,14 +264,16 @@ export default {
 		ModalBodyInfo,
 		BaseInputCalendar,
 		BaseInputDefault,
+		BaseInput,
 	},
 	meta: {
 		requiredPermissions: ["STUDENT_CREATE"],
 	},
 	layout: "loggedInFull",
+	props:{
+	},
 	data() {
 		return {
-			tableDataForConsent: [],
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -261,28 +288,11 @@ export default {
 					text: this.$t("pages.administration.students.consent.title"),
 				},
 			],
-			progressSteps: [
-				{
-					name: this.$t("pages.administration.students.consent.steps.complete"),
-				},
-				{
-					name: this.$t("pages.administration.students.consent.steps.register"),
-				},
-				{
-					name: this.$t("pages.administration.students.consent.steps.download"),
-				},
-			],
-			currentStep: 0,
-			check: false,
-			birthdayWarning: false,
-			checkWarning: false,
-			cancelWarning: false,
-			sortOrder: "asc",
 			tableColumns: [
 				{
 					field: "fullName",
 					label: this.$t("common.labels.name"),
-					sortable: true,
+					sortable: false,
 				},
 				{
 					field: "email",
@@ -300,108 +310,116 @@ export default {
 					sortable: false,
 				},
 			],
+			tableColumnsForPrint: [
+				{
+					field: "fullName",
+					label: this.$t("common.labels.name"),
+					sortable: false,
+				},
+				{
+					field: "email",
+					label: this.$t("common.labels.email"),
+					sortable: false,
+				},
+				{
+					field: "password",
+					label: this.$t("common.labels.password"),
+					sortable: false,
+				},
+			],
 			image: SafelyConnectedImage,
 			fileLinks: {
 				analogConsent: defaultDocuments.specificFiles().analogConsent,
 				termsOfUse: defaultDocuments.specificFiles().termsOfUseSchool,
 				dataProtection: defaultDocuments.specificFiles().privacyExemplary,
 			},
-			testData: "...",
+			progressSteps: [
+				{
+					name: this.$t("pages.administration.students.consent.steps.complete"),
+				},
+				{
+					name: this.$t("pages.administration.students.consent.steps.register"),
+				},
+				{
+					name: this.$t("pages.administration.students.consent.steps.download"),
+				},
+			],
+			currentStep: 0,
+			birthdayWarning: false,
+			cancelWarning: false,
+			inputError: "Missing",
+			check: false,
+			checkWarning: false,
+			printPageInfo: this.$t("pages.administration.students.consent.steps.register.print", { hostName: window.location.origin }),
 		};
 	},
-	computed: {
-		...mapGetters("users", {
-			students: "list",
-		}),
+
+	computed:{
 		...mapGetters("bulkConsent", {
-			selectedStudentIds: "selectedStudents",
-			selectedStudentsData: "selectedStudentsData",
+			selectedStudents: "selectedStudents",
+			selectedStudentsData: "selectedStudentsData" || [],
 			testState: "testState",
 		}),
-		filteredTableData() {
-			// debugger;
-			const filteredData = this.selectedStudentsData.filter(student => student.consentStatus !== "ok");
-
-			return filteredData;
-		},
-		tableData() {
-			 // debugger;
-			// console.trace();
-			const data = [];
-			for (const key of this.students.keys()) {
-				if (this.selectedStudentIds.includes(this.students[key]._id)) {
-					const student = this.students[key];
-					student.fullName = student.firstName + " " + student.lastName;
-					student.password = generatePassword();
-					if (!student.birthday) student.birthday = "1950-07-14T00:00:00.000Z";
-					data.push(student);
-				}
-			}
-			data.sort((a, b) => {
-				if (a.fullName > b.fullName) {
-					if (this.sortOrder === "asc") return -1;
-					else return 1;
-				} else {
-					if (this.sortOrder === "asc") return 1;
-					else return -1;
-				}
-			});
-
-			return data;
-
-		},
-		birthdays: {
-			get: function () {
-				//debugger;
-				return this.filteredTableData.map((entry) => entry.birthday ?? "" );
-			},
-		},
-	},
-	watch: {
 		filteredTableData: {
-			immediate: true,
-			handler(newVal, oldVal) {
-			console.log(newVal, oldVal)
-			this.filteredTableData=newVal
+			get() {
+				const result = this.$store.state.bulkConsent.selectedStudentsData;
+				if (result.length > 0){
+					return JSON.parse(JSON.stringify(this.$store.state.bulkConsent.selectedStudentsData.filter(student => student.consentStatus !== "ok")));
+				}
+				return [];
 			},
 		},
-
 	},
 	created(ctx) {
-		// // debugger;
 		this.find();
-		const studentData = this.tableData;
-		// this.tableDataForConsent = this.tableData;
-		this.$store.commit("bulkConsent/setStudentsData", studentData );
-		if (this.filteredTableData.length === 0) {
-			this.$router.push({
-				path: `/administration/students`,
-			});
-		}
-		//this.$eventBus.$on("on-change", this.handleChange());
 	},
-	methods: {
+	methods:{
 		find() {
 			const query = {
 				_id: {
-					$in: this.selectedStudentIds,
+					$in: this.selectedStudents,
 				},
 			};
-			this.$store.dispatch("users/findStudents", { query })
+			this.$store.dispatch("bulkConsent/findStudents", { query })
 			.then((result)=>{
-				return result;
+				const data = [];
+				for (const key of result.data.keys()) {
+					if (this.selectedStudents.includes(result.data[key]._id)) {
+						const student = result.data[key];
+						student.fullName = student.firstName + " " + student.lastName;
+						student.password = generatePassword();
+						if (!student.birthday){
+							student.birthday = "";
+						}
+						data.push(student);
+					}
+				}
+				this.$store.commit("bulkConsent/setStudentsData", data );
+				return data;
 			});
 		},
-		onUpdateSort(sortBy, sortOrder) {
-			this.sortOrder = sortOrder;
+		inputDateForDate(student) {
+			return {
+				input_change: (dateData) => {
+					if (!dateData==""){
+						const newDate = dayjs(dateData).format('YYYY-MM-DDTHH:mm:ssZ')
+						const index = this.filteredTableData.findIndex(st => st._id === student.id);
+						this.filteredTableData[index].birthday = newDate;
+						this.$store.dispatch("bulkConsent/updateStudents", this.filteredTableData );
+					}
+				}
+			}
 		},
-		handleChange(e) {
-			console.log("....",e)
-		},
-		printData() {
-			this.$router.push({
-				path: "/administration/students/print-consent",
-			});
+		inputPass: function(student){
+			return {
+				input: (pass)=>{
+					if (!pass == ""){
+						const index = this.filteredTableData.findIndex(st => st._id === student.id);
+						this.filteredTableData[index].password = pass;
+						this.$store.dispatch("bulkConsent/updateStudents", this.filteredTableData );
+					}
+				}
+			}
 		},
 		next() {
 			if (this.currentStep === 0) {
@@ -413,13 +431,12 @@ export default {
 			this.currentStep += 1;
 		},
 		checkBirthdays() {
-			for (const b of this.birthdays) {
-				if (!Date.parse(b)) return false;
-			}
+			const checkEmptyBirtday = this.selectedStudentsData.find(element => element.birthday === "");
+			if (checkEmptyBirtday) return false;
+
 			return true;
 		},
 		register() {
-			debugger;
 			if (this.check === false) {
 				this.checkWarning = true;
 			} else {
@@ -446,6 +463,11 @@ export default {
 		download() {
 			this.next();
 		},
+		success() {
+			this.$router.push({
+				path: `/administration/students`,
+			});
+		},
 		cancel() {
 			this.$store.commit("bulkConsent/setSelectedStudents", {
 				students: [],
@@ -454,41 +476,37 @@ export default {
 				path: `/administration/students`,
 			});
 		},
-		error() {
-			this.$toast.error(this.$t("pages.administration.students.consent.error"));
-		},
-		success() {
-			this.$router.push({
-				path: `/administration/students`,
-			});
+		print() {
+			const prtHtml = document.getElementById("tableStudentsForPrint").innerHTML;
+			let stylesHtml = '';
+
+			for (const node of [...document.querySelectorAll("link[rel='stylesheet'], style")]) {
+				stylesHtml += node.outerHTML;
+			};
+
+			var winPrint = window.open("", "", "left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0");
+
+			winPrint.document.write(`<!DOCTYPE html>
+				<html>
+				<head>
+					${stylesHtml}
+				</head>
+				<body>
+					${prtHtml}
+				</body>
+				</html>`
+			);
+
+			winPrint.document.close();
+			winPrint.focus();
+			setTimeout(() => {
+				winPrint.print();
+				winPrint.close();
+			}, 500);
 		},
 		dayjs,
-		inputDate(student) {
-
-			return {
-				input: (dateData) => {
-					//  debugger;
-					console.log("oldDate", dateData);
-					var temp = this.filteredTableData;
-					temp.find(data => data._id === student.id).birthday = dateData;
-					this.$store.commit("bulkConsent/updateStudentData", temp );
-				}
-			}
-		},
-		inputPass: function(student){
-
-			return {
-				input: (pass)=>{
-					// console.log("pass", passData);
-					console.log("aa", student);
-					console.log("aa", pass);
-					var temp = this.filteredTableData;
-					temp.find(data => data._id === student.id).password = pass;
-					this.$store.commit("bulkConsent/updateStudentData", temp );
-				}
-			}
-		},
 	},
+
 };
 </script>
 
@@ -510,6 +528,10 @@ export default {
 	display: flex;
 	margin-bottom: var(--space-md);
 }
+.print-title {
+	color: var(--color-secondary);
+	border: none;
+}
 /deep/ .link {
 	color: var(--color-secondary);
 	text-decoration: none;
@@ -525,6 +547,19 @@ export default {
 }
 
 /deep/ .calendar-input {
+	max-width: 5em;
+	margin-bottom: 0;
+	.info-line {
+		display: none;
+	}
+	.input-line {
+		.icon-behind {
+			display: none;
+		}
+	}
+}
+
+/deep/ .base-input- {
 	max-width: 5em;
 	margin-bottom: 0;
 	.info-line {

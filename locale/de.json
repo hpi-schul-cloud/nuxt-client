@@ -245,6 +245,7 @@
 	"pages.administration.students.consent.steps.complete.next": "Daten übernehmen",
 	"pages.administration.students.consent.steps.complete.info": "Achte drauf, dass die Geburtsdaten aller Nutzer:innen vollständig sind und ergänze fehlende gegebenenfalls.",
 	"pages.administration.students.consent.steps.complete.warn": "Nicht alle Nutzer:innen haben gültige Geburtsdaten. Bitte ergänze fehlende Geburtsdaten zunächst.",
+	"pages.administration.students.consent.steps.complete.inputerror": "Geburtsdatum fehlt",
 	"pages.administration.students.consent.steps.register": "Registrierung durchführen",
 	"pages.administration.students.consent.steps.register.info": "Überprüfe, ob du das Einverständnis der aufgelisteten Schüler:innen analog per Handzettel erhalten hast, befor du die Registrierung im Namen der Nutzer:innen durchführst.",
 	"pages.administration.students.consent.steps.register.confirm": "Hiermit bestätige ich, dass ich die {analogConsent} auf dem Papierweg von den Eltern der oben genannten Schüler:innen unterschrieben erhalten habe.",
