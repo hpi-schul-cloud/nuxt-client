@@ -129,7 +129,7 @@ export default {
 
 	data() {
 		return {
-			something:[],
+			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
