@@ -1,4 +1,3 @@
-
 export const actions = {
 	async register({ commit }, payload) {
 		const res = await this.$axios.$post("/users/skipregistration", {
@@ -14,7 +13,7 @@ export const actions = {
 		commit("setStudentsData", res);
 		return res;
 	},
-	async updateStudents({ commit }, payload ) {
+	async updateStudents({ commit }, payload) {
 		commit("updateStudentData", payload);
 	},
 };
