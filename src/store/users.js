@@ -6,14 +6,10 @@ const base = serviceTemplate("users");
 const module = mergeDeep(base, {
 	actions: {
 		findStudents({ dispatch }, queryContext = {}) {
-			//debugger;
-
 			queryContext.customEndpoint = "/users/admin/students";
 			return dispatch("find", queryContext);
 		},
 		findStudentsForConsent({ dispatch }, queryContext = {}) {
-			//debugger;
-			// TODO check if students are already consented..
 			queryContext.customEndpoint = "/users/admin/students";
 			return dispatch("find", queryContext);
 		},

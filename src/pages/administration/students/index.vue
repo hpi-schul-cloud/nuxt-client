@@ -335,11 +335,6 @@ export default {
 		handleBulkConsent(rowIds, selectionType) {
 			this.$store.commit("bulkConsent/setSelectedStudents", {
 				students: this.tableSelection,
-				// [
-				// 	"5ebb48a88e24ee280c9b2ebd",
-				// 	"0000d224816abba584714c9c",
-				// 	"58b40278dac20e0645353e3a",
-				// ], // hardcoded for dev until fixed
 				selectionType: selectionType,
 			});
 
