@@ -17,6 +17,10 @@ const module = mergeDeep(base, {
 			const customEndpoint = "/users/mail/registrationLink";
 			return this.$axios.$post(customEndpoint, payload);
 		},
+		getQrRegistrationLinks(ctx, payload = {}) {
+			const customEndpoint = "/users/qrRegistrationLink";
+			return this.$axios.$post(customEndpoint, payload);
+		},
 		getByRole: async function (ctx, role) {
 			const queryRole = {
 				roles: [role._id],

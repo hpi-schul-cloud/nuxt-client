@@ -87,6 +87,7 @@
 	"pages.administration.datasources.new.add": "",
 	"pages.administration.datasources.new.short_title": "",
 	"pages.administration.datasources.new.title": "",
+	"pages.administration.printQr.error": "The registration links could not be generated",
 	"pages.administration.index.title": "Administration",
 	"pages.content.init_state.img_alt": "Initial state Image",
 	"pages.content.init_state.message": "",
