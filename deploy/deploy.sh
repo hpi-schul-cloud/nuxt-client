@@ -60,7 +60,7 @@ deploy(){
 	COMPOSE_SRC=$5 # name of the docker-compose file which should be used as.
 	COMPOSE_TARGET=$6 # name as which the compose file should be pushed to the server (auto prefixed with "docker-compose-")
 	STACK_NAME=$7 # swarm stack name
-	TLD=${8:=org}  # If variable not set or null, set it to default.
+	TLD=${8:-org}  # If variable not set or null, set it to default.
 
 	echo "deploy " $DOCKER_IMAGE ":" $DOCKER_TAG " to " $SYSTEM " as " $DOCKER_SERVICE_NAME
 	echo "COMPOSEFILE: " $COMPOSE_SRC " => " $COMPOSE_TARGET
