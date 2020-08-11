@@ -184,13 +184,13 @@ export default {
 	&:focus-within,
 	&:hover:not(.disabled) {
 		.label {
-			color: var(--color-accent);
+			color: var(--color-primary);
 		}
 		.help {
 			visibility: visible;
 		}
 		.visible {
-			fill: var(--color-accent);
+			fill: var(--color-primary);
 		}
 	}
 }
@@ -201,7 +201,7 @@ export default {
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom-color: var(--color-accent);
+		border-bottom: var(--border-width-bold) solid var(--color-primary);
 		outline: none;
 	}
 	&.error {
@@ -243,7 +243,7 @@ export default {
 		.core {
 			flex: 1;
 			height: min-content;
-			line-height: 0; // needed for correct spacing
+			line-height: auto; // needed for correct spacing
 			input {
 				width: 100%;
 				padding: 0;

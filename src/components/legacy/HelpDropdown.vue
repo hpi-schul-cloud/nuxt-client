@@ -3,11 +3,15 @@
 		<li v-for="menuItem in menuItems" :key="menuItem.label" class="menu-item">
 			<span class="core">
 				<base-icon
-					source="fa"
+					:source="menuItem.source"
 					:icon="menuItem.icon"
 					fill="var(--color-tertiary-dark)"
 				/>
-				<base-link :href="menuItem.action" target="_self" class="link">
+				<base-link
+					:href="menuItem.action"
+					:target="menuItem.target"
+					class="link"
+				>
 					{{ menuItem.label }}
 				</base-link>
 			</span>
