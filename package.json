@@ -83,7 +83,7 @@
 		"@schul-cloud/stylelint-config": "^1.0.0",
 		"@schul-cloud/styles": "^0.2.1",
 		"@storybook/addon-a11y": "^5.3.19",
-		"@storybook/addon-actions": "^5.3.19",
+		"@storybook/addon-actions": "^6.0.3",
 		"@storybook/addon-backgrounds": "^5.3.19",
 		"@storybook/addon-centered": "^5.3.19",
 		"@storybook/addon-knobs": "^5.3.19",
