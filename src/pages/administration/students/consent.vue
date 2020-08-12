@@ -365,7 +365,7 @@ export default {
 		...mapGetters("bulkConsent", {
 			selectedStudents: "selectedStudents",
 			selectedStudentsData: "selectedStudentsData" || [],
-			testState: "testState",
+			registeredStudents: "registeredStudents",
 		}),
 		filteredTableData: {
 			get() {
@@ -399,12 +399,9 @@ export default {
 					const data = [];
 					for (const key of result.data.keys()) {
 						if (this.selectedStudents.includes(result.data[key]._id)) {
-							const student = result.data[key];
+							var student = result.data[key];
 							student.fullName = student.firstName + " " + student.lastName;
 							student.password = generatePassword();
-							if (!student.birthday) {
-								student.birthday = "";
-							}
 							data.push(student);
 						}
 					}
@@ -466,10 +463,10 @@ export default {
 			if (this.check === false) {
 				this.checkWarning = true;
 			} else {
-				const users = this.filteredTableData.map((student, index) => {
+				const users = this.filteredTableData.map((student) => {
 					return {
 						userId: student._id,
-						birthday: student.birthday ?? this.birthdays[index],
+						birthday: student.birthday,
 						password: student.password,
 						parent_privacyConsent: true,
 						parent_termsOfUseConsent: true,

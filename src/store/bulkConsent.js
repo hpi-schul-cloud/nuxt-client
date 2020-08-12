@@ -3,6 +3,7 @@ export const actions = {
 		const res = await this.$axios.$post("/users/skipregistration", {
 			dataObjects: payload,
 		});
+
 		commit("setRegisteredStudents", res);
 		return res;
 	},
@@ -21,6 +22,7 @@ export const actions = {
 export const getters = {
 	selectedStudents: (state) => state.selectedStudents,
 	selectedStudentsData: (state) => state.selectedStudentsData,
+	registeredStudents: (state) => state.registeredStudents,
 };
 
 export const mutations = {
