@@ -412,7 +412,7 @@ export default {
 		inputDateForDate(student) {
 			return {
 				input_change: (dateData) => {
-					if (!dateData == "") {
+					if (dateData !== "") {
 						const newDate = dayjs(dateData).format("YYYY-MM-DDTHH:mm:ssZ");
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
@@ -429,7 +429,7 @@ export default {
 		inputPass: function (student) {
 			return {
 				input: (pass) => {
-					if (!pass == "") {
+					if (pass !== "") {
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -453,7 +453,7 @@ export default {
 		},
 		checkBirthdays() {
 			const checkEmptyBirtday = this.selectedStudentsData.find(
-				(element) => element.birthday === ""
+				(element) => (element.birthday === "" || element.birthday === null || !element.birthday)
 			);
 			if (checkEmptyBirtday) return false;
 
