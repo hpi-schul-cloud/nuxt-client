@@ -123,7 +123,7 @@ export default {
 	position: relative;
 	height: 200px;
 	color: var(--color-white);
-	background-color: var(--color-black);
+	background-color: var(--color-white);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .content {
@@ -133,7 +133,7 @@ export default {
 		&-thumbnail {
 			width: 100%;
 			height: 200px;
-			background-color: var(--color-black);
+			background-color: var(--color-white);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 			object-fit: cover;
@@ -152,7 +152,7 @@ export default {
 			top: 50%;
 			left: 50%;
 			z-index: var(--layer-page);
-			font-size: var(--space-xl-3);
+			font-size: var(--space-xl-3) !important;
 			border-radius: var(--radius-round);
 			box-shadow: var(--shadow-m);
 			opacity: 0.8;
