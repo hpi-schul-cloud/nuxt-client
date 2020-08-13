@@ -192,10 +192,14 @@
 					}}</base-button
 				>
 
-				<base-button :disabled="disableBackButton" design="secondary outline" @click="success">{{
-					$t("pages.administration.students.consent.steps.success.back")
-				}}</base-button>
-
+				<base-button
+					:disabled="disableBackButton"
+					design="secondary outline"
+					@click="success"
+					>{{
+						$t("pages.administration.students.consent.steps.success.back")
+					}}</base-button
+				>
 			</base-content-container>
 		</section>
 
