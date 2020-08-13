@@ -30,6 +30,7 @@
 					<span class="info-slot">
 						<base-button
 							class="info-button"
+							style="background-color: transparent;"
 							design="info text icon"
 							@click="infoBoxActive = !infoBoxActive"
 						>
