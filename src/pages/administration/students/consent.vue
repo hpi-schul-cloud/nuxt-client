@@ -455,7 +455,10 @@ export default {
 		},
 		checkBirthdays() {
 			const checkEmptyBirtday = this.selectedStudentsData.find(
-				(element) => (element.birthday === "" || element.birthday === null || !element.birthday)
+				(element) =>
+					element.birthday === "" ||
+					element.birthday === null ||
+					!element.birthday
 			);
 			if (checkEmptyBirtday) return false;
 
