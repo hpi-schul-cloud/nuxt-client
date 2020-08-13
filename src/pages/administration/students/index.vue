@@ -353,8 +353,10 @@ export default {
 				...this.currentFilterQuery,
 			};
 
-			this.$store.dispatch("users/findStudents", {
+			this.$store.dispatch("users/handleUsers", {
 				query,
+				action: "find",
+				userType: "students",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
@@ -434,8 +436,10 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/removeStudents", {
+					await this.$store.dispatch("users/handleUsers", {
 						query: this.getQueryForSelection(rowIds, selectionType),
+						action: "remove",
+						userType: "students",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
 					this.find();

@@ -5,7 +5,7 @@ const validRole = {
 };
 
 const getMockActions = () => ({
-	createStudent: jest.fn().mockReturnValue(Promise.resolve()),
+	handleUsers: jest.fn().mockReturnValue(Promise.resolve()),
 	find: jest.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
@@ -64,7 +64,7 @@ describe("@components/organisms/FormCreateUser", () => {
 			await wrapper.vm.$nextTick();
 			expect(wrapper.vm.actionType).toStrictEqual("create");
 			await wrapper.vm.$nextTick();
-			expect(actions.createStudent.mock.calls).toHaveLength(1);
+			expect(actions.handleUsers.mock.calls).toHaveLength(1);
 
 			await wrapper.vm.$nextTick();
 			expect(wrapper.emitted("success")).toHaveLength(1);
