@@ -6,6 +6,16 @@
 
 set -e # fail with exit 1 on any error
 
+trap 'catch $? $LINENO' EXIT
+catch() {
+  if [ "$1" != "0" ]; then
+    echo "An issue occured in line $2. Status code: $1"
+  fi
+
+  # Cleanup
+  rm -f travis_rsa
+}
+
 while getopts p: option
 do
 case "${option}"
@@ -50,7 +60,7 @@ deploy(){
 	COMPOSE_SRC=$5 # name of the docker-compose file which should be used as.
 	COMPOSE_TARGET=$6 # name as which the compose file should be pushed to the server (auto prefixed with "docker-compose-")
 	STACK_NAME=$7 # swarm stack name
-	TLD=${8:=org}  # If variable not set or null, set it to default.
+	TLD=${8:-org}  # If variable not set or null, set it to default.
 
 	echo "deploy " $DOCKER_IMAGE ":" $DOCKER_TAG " to " $SYSTEM " as " $DOCKER_SERVICE_NAME
 	echo "COMPOSEFILE: " $COMPOSE_SRC " => " $COMPOSE_TARGET
@@ -66,7 +76,7 @@ deploy(){
 
 	# deploy new dockerfile
 	echo "Attempting to update Docker service $DOCKER_SERVICE_NAME..."
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.$TLD /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa travis@$SYSTEM.schul-cloud.$TLD schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
 }
 
 # ----------------
