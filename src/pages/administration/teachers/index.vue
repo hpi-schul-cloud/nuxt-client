@@ -34,16 +34,16 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
-			<template v-slot:datacolumn-consent="{ data }">
+			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
 					<base-icon
-						v-if="data && data.consentStatus === 'ok'"
+						v-if="status === 'ok'"
 						source="material"
 						icon="check"
 						color="var(--color-success)"
 					/>
 					<base-icon
-						v-else-if="data && data.consentStatus === 'missing'"
+						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
@@ -204,7 +204,7 @@ export default {
 					sortable: true,
 				},
 				{
-					field: "consent",
+					field: "consentStatus",
 					label: this.$t("common.labels.consent"),
 					sortable: true,
 				},
@@ -344,6 +344,7 @@ export default {
 						query: this.getQueryForSelection(rowIds, selectionType),
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
+					this.find();
 				} catch (error) {
 					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}

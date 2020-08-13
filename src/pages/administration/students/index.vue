@@ -74,22 +74,23 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
-			<template v-slot:datacolumn-consent="{ data }">
+			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
 					<base-icon
-						v-if="data && data.consentStatus === 'ok'"
+						v-if="status === 'ok'"
 						source="custom"
 						icon="doublecheck"
 						color="var(--color-success)"
 					/>
+
 					<base-icon
-						v-else-if="data && data.consentStatus === 'parentsAgreed'"
+						v-else-if="status === 'parentsAgreed'"
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
 					<base-icon
-						v-else-if="data && data.consentStatus === 'missing'"
+						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
@@ -216,7 +217,7 @@ export default {
 					sortable: true,
 				},
 				{
-					field: "consent",
+					field: "consentStatus",
 					label: this.$t("common.labels.consent"),
 					sortable: true,
 				},
@@ -414,26 +415,21 @@ export default {
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			// TODO: request registrationsLinks fom backend
-			// route needs to be implemented!
-
-			// const users = await this.$store.dispatch("users/find", {
-			// 	qid: "qr-print",
-			// 	query: this.getQueryForSelection(rowIds, selectionType),
-			// });
-			// this.$_printQRs(
-			// 	usersWithoutConsents.map((user) => ({
-			// 		qrContent: user.registrationLink.shortLink,
-			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
-			// 		description: "Zum Registrieren bitte den Link öffnen.",
-			// 	}))
-			// );
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+			try {
+				const qrRegistrationLinks = await this.$store.dispatch(
+					"users/getQrRegistrationLinks",
+					{
+						userIds: rowIds,
+						selectionType,
+					}
+				);
+				this.$_printQRs(qrRegistrationLinks);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+					this.$tc("pages.administration.printQr.error", rowIds.length)
+				);
+			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {

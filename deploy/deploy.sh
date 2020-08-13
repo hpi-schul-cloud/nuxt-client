@@ -6,6 +6,16 @@
 
 set -e # fail with exit 1 on any error
 
+trap 'catch $? $LINENO' EXIT
+catch() {
+  if [ "$1" != "0" ]; then
+    echo "An issue occured in line $2. Status code: $1"
+  fi
+
+  # Cleanup
+  rm -f travis_rsa
+}
+
 while getopts p: option
 do
 case "${option}"
@@ -22,7 +32,7 @@ inform_live() {
 	# $1: Project Name (client, storybook, vuepress)
   if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
   then
-  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-$1! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
+  curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-'$1'! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
   fi
 }
 
@@ -50,7 +60,7 @@ deploy(){
 	COMPOSE_SRC=$5 # name of the docker-compose file which should be used as.
 	COMPOSE_TARGET=$6 # name as which the compose file should be pushed to the server (auto prefixed with "docker-compose-")
 	STACK_NAME=$7 # swarm stack name
-	TLD=${8:=org}  # If variable not set or null, set it to default.
+	TLD=${8:-org}  # If variable not set or null, set it to default.
 
 	echo "deploy " $DOCKER_IMAGE ":" $DOCKER_TAG " to " $SYSTEM " as " $DOCKER_SERVICE_NAME
 	echo "COMPOSEFILE: " $COMPOSE_SRC " => " $COMPOSE_TARGET
@@ -66,7 +76,7 @@ deploy(){
 
 	# deploy new dockerfile
 	echo "Attempting to update Docker service $DOCKER_SERVICE_NAME..."
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa linux@$SYSTEM.schul-cloud.$TLD /usr/bin/docker service update --force --image schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i travis_rsa travis@$SYSTEM.schul-cloud.$TLD schulcloud/schulcloud-$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_SERVICE_NAME
 }
 
 # ----------------
@@ -157,10 +167,10 @@ case "$TRAVIS_BRANCH" in
 					# deploy "staging" "nuxt-client" $DOCKERTAG "staging-schul-cloud_nuxtclient" "compose-client_thr.dummy" "nuxt-client_thr.yml" "staging-schul-cloud"
 				;;
 				storybook)
-					deploy "hotfix${TEAM}" "nuxt-storybook" $DOCKERTAG "hotfix${TEAM}_nuxtclient" "compose-storybook.dummy" "nuxt-storybook.yml" "hotfix${TEAM}_nuxtclient" "dev"
+					deploy "hotfix${TEAM}" "nuxt-storybook" $DOCKERTAG "hotfix${TEAM}_storybook" "compose-storybook.dummy" "nuxt-storybook.yml" "hotfix${TEAM}_nuxtclient" "dev"
 				;;
 				vuepress)
-					deploy "hotfix${TEAM}" "nuxt-vuepress" $DOCKERTAG "hotfix${TEAM}_nuxtclient" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix${TEAM}_nuxtclient" "dev"
+					deploy "hotfix${TEAM}" "nuxt-vuepress" $DOCKERTAG "hotfix${TEAM}_vuepress" "compose-vuepress.dummy" "nuxt-vuepress.yml" "hotfix${TEAM}_nuxtclient" "dev"
 				;;
 				*)
 					echo "$PROJECT does not match one of \"client\", \"storybook\" or \"vuepress\". Deployment will be skipped."
