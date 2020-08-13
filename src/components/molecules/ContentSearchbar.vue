@@ -36,6 +36,8 @@
 </template>
 
 <script>
+let typingTimer;
+
 export default {
 	props: {
 		value: {
@@ -64,35 +66,36 @@ export default {
 		window.removeEventListener("keydown", this.escKeyHandler);
 	},
 	methods: {
-		updateSearchString(newValue) {
-			this.inputValue = newValue;
-			this.$emit("input", this.inputValue);
-			setTimeout((...args) => {
-				this.search(...args);
-			}, 1000);
-		},
-		enterKeyHandler(...args) {
-			this.search(...args);
-			this.$refs.searchInput.blur();
-		},
-		search(...args) {
+		search() {
 			if (this.isActive && this.inputValue.length > 0) {
 				this.isActive = false;
 			}
-			this.$emit("keyup:enter", ...args);
+			this.$emit("keyup:enter");
 		},
-		clearBtnHandler() {
-			this.$emit("input", "");
+		updateSearchString(newValue) {
+			this.inputValue = newValue;
+			this.$emit("input", this.inputValue);
+			clearTimeout(typingTimer);
+			typingTimer = setTimeout(() => {
+				this.search();
+			}, 1800);
+		},
+		enterKeyHandler() {
+			this.search();
+			this.$refs.searchInput.blur();
+		},
+		clearInput() {
 			this.inputValue = "";
 			this.isActive = true;
 			this.$refs.searchInput.focus();
+			this.$emit("input", this.inputValue);
+		},
+		clearBtnHandler() {
+			this.clearInput();
 		},
 		escKeyHandler(e) {
 			if (e.keyCode === 27) {
-				this.$refs.searchInput.focus();
-				this.inputValue = "";
-				this.isActive = true;
-				this.$emit("input", this.inputValue);
+				this.clearInput();
 			}
 		},
 	},
