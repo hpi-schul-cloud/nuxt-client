@@ -192,9 +192,10 @@
 					}}</base-button
 				>
 
-				<base-button design="secondary outline" @click="success">{{
+				<base-button :disabled="disableBackButton" design="secondary outline" @click="success">{{
 					$t("pages.administration.students.consent.steps.success.back")
 				}}</base-button>
+
 			</base-content-container>
 		</section>
 
@@ -358,6 +359,7 @@ export default {
 				"pages.administration.students.consent.steps.register.print",
 				{ hostName: window.location.origin }
 			),
+			disableBackButton: true,
 		};
 	},
 
@@ -500,6 +502,7 @@ export default {
 			});
 		},
 		print() {
+			this.disableBackButton = false;
 			const prtHtml = document.getElementById("tableStudentsForPrint")
 				.innerHTML;
 			let stylesHtml = "";
