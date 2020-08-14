@@ -178,7 +178,7 @@ export default {
 					sortable: true,
 				},
 				{
-					field: "consent",
+					field: "consentStatus",
 					label: this.$t("common.labels.registration"),
 					sortable: true,
 					infobox: true,
