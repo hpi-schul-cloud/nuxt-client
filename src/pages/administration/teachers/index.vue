@@ -276,8 +276,10 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findTeachers", {
+			this.$store.dispatch("users/handleUsers", {
 				query,
+				action: "find",
+				userType: "teachers",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
@@ -309,9 +311,8 @@ export default {
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
-				_id: {
-					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
-				},
+				selectionType,
+				_ids: rowIds,
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
@@ -341,8 +342,10 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/remove", {
+					await this.$store.dispatch("users/handleUsers", {
 						query: this.getQueryForSelection(rowIds, selectionType),
+						action: "remove",
+						userType: "teachers",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
 					this.find();
