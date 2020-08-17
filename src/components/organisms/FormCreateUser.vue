@@ -92,7 +92,7 @@ export default {
 
 		async create() {
 			try {
-				await this.$store.dispatch("users/create", {
+				await this.$store.dispatch("users/handleUsers", {
 					firstName: this.userData.firstName,
 					lastName: this.userData.lastName,
 					email: this.userData.email,
@@ -100,6 +100,8 @@ export default {
 					schoolId: this.$user.schoolId,
 					sendRegistration: this.userData.sendRegistration,
 					generateRegistrationLink: true,
+					action: this.actionType,
+					userType: `${this.roleName}s`,
 				});
 				this.$emit("success");
 			} catch (e) {
