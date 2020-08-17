@@ -3,7 +3,7 @@
 		<main class="content" :class="{ inline: isInline }">
 			<Nuxt />
 		</main>
-		<messenger/>
+		<messenger />
 	</legacy-logged-in>
 </template>
 

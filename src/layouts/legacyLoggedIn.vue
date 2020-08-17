@@ -27,7 +27,7 @@
 				<autoLogoutWarning />
 			</keep-alive>
 			<the-footer v-if="!fullscreenMode" class="footer" />
-			<messenger/>
+			<messenger />
 		</div>
 	</div>
 </template>
