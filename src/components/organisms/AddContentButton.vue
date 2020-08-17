@@ -19,13 +19,21 @@
 			:url="getUrl"
 			:client="client"
 			:title="resource.title"
-			@close="showNotificationModal = true"
+			@close="performAPICall"
+		/>
+		<loading-modal
+			:title="$t('pages.content.notification.loading')"
+			description=""
+			:btn-text="$t('common.labels.close')"
+			:active.sync="loadingModal.visible"
 		/>
 		<notification-modal
-			:show-notification-modal.sync="showNotificationModal"
-			:is-success="isSuccess"
+			:show-notification-modal.sync="notificationModal.visible"
+			:is-success="notificationModal.isSuccess"
 			:backgroundcolor="
-				isSuccess ? 'var(--color-success)' : 'var(--color-danger)'
+				notificationModal.isSuccess
+					? 'var(--color-success)'
+					: 'var(--color-danger)'
 			"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"
@@ -37,12 +45,17 @@
 <script>
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
+import LoadingModal from "@components/molecules/LoadingModal";
+import { getMetadataAttribute } from "@utils/helpers";
+
+let slowAPICall;
 
 export default {
 	name: "AddContentButton",
 	components: {
 		AddContentModal,
 		NotificationModal,
+		LoadingModal,
 	},
 	props: {
 		btnLabel: { type: String, default: "" },
@@ -57,16 +70,19 @@ export default {
 	data() {
 		return {
 			copyModalActive: false,
-			showNotificationModal: false,
+			loadingModal: {
+				visible: false,
+				isLoading: false,
+			},
+			notificationModal: {
+				visible: false,
+				isSuccess: false,
+			},
 		};
 	},
 	computed: {
-		isSuccess() {
-			const response = this.$store.state.content.addToLessonResult;
-			return response && response.status === 201;
-		},
 		getUrl() {
-			return `/content/${this.resource.ref.id}`;
+			return getMetadataAttribute(this.resource.properties, "cclom:location");
 		},
 	},
 	methods: {
@@ -76,7 +92,7 @@ export default {
 					window.opener.addResource({
 						title: this.resource.title,
 						client: this.client,
-						url: `/content/${this.resource.ref.id}`,
+						url: this.getUrl,
 					});
 					window.close();
 					return true;
@@ -87,6 +103,30 @@ export default {
 			if (!this.addResourceAndClose()) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
+			}
+		},
+		performAPICall() {
+			this.loadingModal.isLoading = true;
+			slowAPICall = setTimeout(() => {
+				this.loadingModal.visible = true;
+			}, 1000);
+		},
+	},
+	onEventBus: {
+		"showModal@content": function (value) {
+			if (this.loadingModal.isLoading) {
+				clearTimeout(slowAPICall);
+				this.loadingModal.visible = false;
+				this.loadingModal.isLoading = false;
+				this.notificationModal.visible = true;
+				switch (value) {
+					case "successModal":
+						this.notificationModal.isSuccess = true;
+						break;
+					default:
+						this.notificationModal.isSuccess = false;
+						break;
+				}
 			}
 		},
 	},

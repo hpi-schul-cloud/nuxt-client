@@ -8,6 +8,7 @@ const getDefaultState = () => {
 	const defaultState = {
 		pagination: {},
 		filter: {},
+		sorting: {},
 		version,
 	};
 
@@ -68,6 +69,9 @@ const createPattern = (key, methode, value) => {
 
 		case "filter":
 			return handleFilter(methode, value);
+
+		case "sorting":
+			return value || {};
 
 		default:
 			return value;

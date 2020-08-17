@@ -34,16 +34,16 @@
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
-			<template v-slot:datacolumn-consent="{ data }">
+			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
 					<base-icon
-						v-if="data && data.consentStatus === 'ok'"
+						v-if="status === 'ok'"
 						source="material"
 						icon="check"
 						color="var(--color-success)"
 					/>
 					<base-icon
-						v-else-if="data && data.consentStatus === 'missing'"
+						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
@@ -129,9 +129,13 @@ export default {
 					.page || 1,
 			limit:
 				this.$uiState.get("pagination", "pages.administration.teachers.index")
-					.limit || 10,
-			sortBy: "firstName",
-			sortOrder: "asc",
+					.limit || 25,
+			sortBy:
+				this.$uiState.get("sorting", "pages.administration.teachers.index")
+					.sortBy || "firstName",
+			sortOrder:
+				this.$uiState.get("sorting", "pages.administration.teachers.index")
+					.sortOrder || "asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -200,7 +204,7 @@ export default {
 					sortable: true,
 				},
 				{
-					field: "consent",
+					field: "consentStatus",
 					label: this.$t("common.labels.consent"),
 					sortable: true,
 				},
@@ -279,6 +283,10 @@ export default {
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
+			this.$uiState.set("sorting", "pages.administration.teachers.index", {
+				sortBy: this.sortBy,
+				sortOrder: this.sortOrder,
+			});
 			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
@@ -337,6 +345,7 @@ export default {
 						query: this.getQueryForSelection(rowIds, selectionType),
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
+					this.find();
 				} catch (error) {
 					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}

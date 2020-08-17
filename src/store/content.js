@@ -10,7 +10,10 @@ export const actions = {
 			const res = await this.$axios.$get("/edu-sharing", {
 				params: query,
 			});
+
 			commit("setResources", res);
+		} catch (e) {
+			console.error(e);
 		} finally {
 			commit("setLoading", false);
 		}
@@ -27,20 +30,26 @@ export const actions = {
 		const params = {
 			courseId: payload,
 		};
-		const res = await this.$axios.$get("/lessons", { params });
-		commit("setLessons", res);
+		if (params.courseId) {
+			//only search if courseId is existing
+			const res = await this.$axios.$get("/lessons", { params });
+			commit("setLessons", res);
+		}
 	},
 
-	async addToLesson({ commit }, payload = { material: {} }) {
-		await this.$axios
-			.post(`/lessons/${payload.lessonId}/material`, payload.material)
-			.then((resp) => {
-				commit("addToLessonResult", resp);
-			})
-			.catch((error) => {
-				console.error(`addToLessonResult Error: ${error}, payload: ${payload}`);
-				commit("addToLessonResult", error.response);
-			});
+	async addToLesson(ctx, payload = { material: {} }) {
+		const { event } = payload;
+		if (!event) throw new SyntaxError("eventBus missing");
+		try {
+			await this.$axios.post(
+				`/lessons/${payload.lessonId}/material`,
+				payload.material
+			);
+			event.$emit("showModal@content", "successModal");
+		} catch (error) {
+			console.error("Could not add the material to lesson");
+			event.$emit("showModal@content", "errorModal");
+		}
 	},
 	async getResourceMetadata(context, id) {
 		return this.$axios.$get(`/edu-sharing/${id}`);
@@ -58,7 +67,6 @@ const initialState = () => ({
 		data: [],
 	},
 	loading: false,
-	addToLessonResult: {},
 });
 
 export const mutations = {
@@ -75,14 +83,14 @@ export const mutations = {
 	clearResources(state) {
 		state.resources = initialState().resources;
 	},
+	clearLessons(state) {
+		state.lessons = initialState().lessons;
+	},
 	setLoading(state, status) {
 		state.loading = status;
 	},
 	setLessons(state, payload) {
 		state.lessons = payload;
-	},
-	addToLessonResult(state, payload) {
-		state.addToLessonResult = payload;
 	},
 };
 

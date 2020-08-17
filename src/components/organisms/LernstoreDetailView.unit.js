@@ -1,5 +1,5 @@
 import LernstoreDetailView from "./LernstoreDetailView";
-import { Resource } from "../../../stories/mockData/Resource";
+import { Resource } from "@@/stories/mockData/Resource";
 
 const testProps = {
 	resource: Resource,
@@ -21,7 +21,7 @@ describe("@components/molecules/LernstoreDetailView", () => {
 		expect(wrapper.find(".preview").exists()).toBe(true);
 		expect(wrapper.find(".preview-img").exists()).toBe(true);
 		expect(wrapper.find(".preview-img").attributes("src")).toBe(
-			"https://img.youtube.com/vi/wRBPzExOH2A/maxresdefault.jpg"
+			Resource.preview.url
 		);
 		expect(wrapper.find(".preview-img").attributes("alt")).toBe("Bildvorschau");
 	});
@@ -31,7 +31,7 @@ describe("@components/molecules/LernstoreDetailView", () => {
 		expect(wrapper.find(".title > span").text()).toBe(
 			"Mathematische Ausdrücke sortieren"
 		);
-		expect(wrapper.find(".tag-link").attributes("href")).toBe(
+		expect(wrapper.find(".tag").attributes("href")).toBe(
 			"/content/?q=Mathematik"
 		);
 	});

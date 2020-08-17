@@ -15,8 +15,8 @@
 						class="content-modal__body--select"
 						:options="coursesOptions"
 						:show-labels="true"
-						:placeholder="$t('pages.content.placeholder.chooseACourse')"
 						:label="$t('pages.content.label.chooseACourse')"
+						placeholder=""
 						close-on-select
 						option-label="name"
 						:deselect-label="$t('pages.content.label.deselect')"
@@ -24,19 +24,26 @@
 						:selected-label="$t('pages.content.label.selected')"
 						track-by="_id"
 					/>
-					<base-select
-						v-model="selectedLesson"
-						class="content-modal__body--select"
-						:options="lessonsOptions"
-						:label="$t('pages.content.label.chooseALessonTopic')"
-						:placeholder="$t('pages.content.placeholder.chooseALessonTopic')"
-						option-label="name"
-						close-on-select
-						:deselect-label="$t('pages.content.label.deselect')"
-						:select-label="$t('pages.content.label.select')"
-						:selected-label="$t('pages.content.label.selected')"
-						track-by="_id"
-					/>
+					<transition name="fade">
+						<base-select
+							v-if="!!(selectedCourse || {})._id"
+							v-model="selectedLesson"
+							class="content-modal__body--select"
+							:options="lessonsOptions"
+							:label="$t('pages.content.label.chooseALessonTopic')"
+							option-label="name"
+							close-on-select
+							:placeholder="
+								(lessonsOptions || []).length === 0
+									? $t('pages.content.placeholder.noLessonTopic')
+									: ''
+							"
+							:deselect-label="$t('pages.content.label.deselect')"
+							:select-label="$t('pages.content.label.select')"
+							:selected-label="$t('pages.content.label.selected')"
+							track-by="_id"
+						/>
+					</transition>
 				</div>
 			</template>
 			<template v-slot:footer>
@@ -97,7 +104,7 @@ export default {
 			},
 		}),
 		isSendEnabled() {
-			return this.selectedLesson._id !== undefined;
+			return (this.selectedLesson || {})._id !== undefined;
 		},
 		coursesOptions() {
 			return this.courses
@@ -121,18 +128,14 @@ export default {
 				})
 			);
 		},
-		isSuccess() {
-			const response =
-				this.$store.state.content &&
-				this.$store.state.content.addToLessonResult;
-			return response && response.status === 201;
-		},
 	},
 	watch: {
 		selectedCourse(to, from) {
 			this.selectedLesson = {};
 			if (to) {
 				this.findLessons(to);
+			} else if (!to && !!from) {
+				this.$store.commit("content/clearLessons");
 			}
 		},
 	},
@@ -142,6 +145,7 @@ export default {
 			this.clearState();
 		},
 		addToLesson() {
+			this.$emit("close");
 			this.$store.dispatch("content/addToLesson", {
 				lessonId: this.selectedLesson._id,
 				material: {
@@ -149,9 +153,9 @@ export default {
 					client: this.client,
 					url: this.url,
 				},
+				event: this.$eventBus,
 			});
 			this.closeModal();
-			this.$emit("close");
 		},
 		findLessons(course) {
 			this.$store.dispatch("content/getLessons", course._id);
@@ -176,5 +180,14 @@ export default {
 			margin-top: var(--space-xl);
 		}
 	}
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity var(--duration-transition-slow);
+}
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>

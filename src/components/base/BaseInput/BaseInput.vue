@@ -21,9 +21,6 @@ import BaseInputDefault, {
 import BaseInputHidden, {
 	supportedTypes as hiddenInputTypes,
 } from "./BaseInputHidden";
-import BaseInputCalendar, {
-	supportedTypes as calendarInputTypes,
-} from "./BaseInputCalendar";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox";
@@ -37,9 +34,6 @@ defaultInputTypes.forEach(
 );
 hiddenInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputHidden)
-);
-calendarInputTypes.forEach(
-	(type) => (componentDictionary[type] = BaseInputCalendar)
 );
 checkboxInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputCheckbox)

@@ -29,7 +29,9 @@
 								/>
 							</div>
 						</div>
-						<h6 class="content__title">{{ resource.name }}</h6>
+						<h6 class="content__title">
+							{{ resource.title || resource.name }}
+						</h6>
 					</div>
 				</template>
 			</base-link>
@@ -60,6 +62,7 @@ import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
+import { getMetadataAttribute } from "@utils/helpers";
 
 export default {
 	components: {
@@ -94,26 +97,15 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
-		getMetadataAttribute(properties, key) {
-			if (Array.isArray(properties[key])) {
-				return properties[key][0];
-			}
-			return null;
-		},
 		provider() {
-			const provider = this.getMetadataAttribute(
+			const provider = getMetadataAttribute(
 				this.resource.properties,
 				"ccm:metadatacontributer_provider"
 			);
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 		thumbnail() {
-			return (
-				this.getMetadataAttribute(
-					this.resource.properties,
-					"ccm:thumbnailurl"
-				) || this.resource.preview.url
-			);
+			return this.resource.preview.url;
 		},
 	},
 };
@@ -131,18 +123,17 @@ export default {
 	position: relative;
 	height: 200px;
 	color: var(--color-white);
-	background-color: var(--color-black);
+	background-color: var(--color-white);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .content {
 	display: flex;
 	flex-direction: column;
-	min-height: 300px;
 	&__img {
 		&-thumbnail {
 			width: 100%;
 			height: 200px;
-			background-color: var(--color-black);
+			background-color: var(--color-white);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 			object-fit: cover;
@@ -158,13 +149,14 @@ export default {
 		}
 		&-icon {
 			position: absolute;
-			top: 40%;
-			left: 40%;
+			top: 50%;
+			left: 50%;
 			z-index: var(--layer-page);
-			font-size: var(--space-xl-3);
+			font-size: var(--space-xl-3) !important;
 			border-radius: var(--radius-round);
 			box-shadow: var(--shadow-m);
 			opacity: 0.8;
+			transform: translate(-50%, -50%);
 		}
 		&-checkbox {
 			position: absolute;
@@ -176,7 +168,7 @@ export default {
 		}
 	}
 	&__title {
-		min-height: 62px;
+		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
 		color: var(--color-tertiary);
 
