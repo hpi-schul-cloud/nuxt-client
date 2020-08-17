@@ -382,7 +382,7 @@ tbody {
 	font-size: var(--text-md);
 }
 .table-content-wrapper {
-	/* overflow-x: auto; */
+	overflow-x: auto;
 }
 .toolbelt {
 	display: flex;
