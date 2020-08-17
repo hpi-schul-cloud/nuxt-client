@@ -109,7 +109,8 @@ export default {
 		},
 
 		requestSession() {
-			return this.$axios.$post("/messengerToken", {});
+			// API call inside a component, because the component has to decide itself if it requires to fetch data.
+			return this.$store.dispatch("messenger/getMessengerToken");
 		},
 
 		async initializeMessenger() {
