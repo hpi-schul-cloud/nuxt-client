@@ -5,13 +5,10 @@ const base = serviceTemplate("users");
 
 const module = mergeDeep(base, {
 	actions: {
-		findStudents({ dispatch }, queryContext = {}) {
-			queryContext.customEndpoint = "/users/admin/students";
-			return dispatch("find", queryContext);
-		},
-		findTeachers({ dispatch }, query = {}) {
-			query.customEndpoint = "/users/admin/teachers";
-			return dispatch("find", query);
+		handleUsers({ dispatch }, queryContext = {}) {
+			const { userType, action } = queryContext;
+			queryContext.customEndpoint = `/users/admin/${userType}`;
+			return dispatch(action, queryContext);
 		},
 		sendRegistrationLink(ctx, payload = {}) {
 			const customEndpoint = "/users/mail/registrationLink";
