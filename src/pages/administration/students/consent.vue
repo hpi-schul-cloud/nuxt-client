@@ -401,22 +401,22 @@ export default {
 			};
 			try {
 				this.$store
-				.dispatch("bulkConsent/findStudents", { query })
-				.then((result) => {
-					const data = [];
-					for (const key of result.data.keys()) {
-						if (this.selectedStudents.includes(result.data[key]._id)) {
-							var student = result.data[key];
-							student.fullName = student.firstName + " " + student.lastName;
-							student.password = generatePassword();
-							data.push(student);
+					.dispatch("bulkConsent/findStudents", { query })
+					.then((result) => {
+						const data = [];
+						for (const key of result.data.keys()) {
+							if (this.selectedStudents.includes(result.data[key]._id)) {
+								var student = result.data[key];
+								student.fullName = student.firstName + " " + student.lastName;
+								student.password = generatePassword();
+								data.push(student);
+							}
 						}
-					}
-					this.$store.commit("bulkConsent/setStudentsData", data);
-					return data;
-				});
+						this.$store.commit("bulkConsent/setStudentsData", data);
+						return data;
+					});
 			} catch (error) {
-				console.log(error)
+				console.log(error);
 			}
 		},
 		inputDateForDate(student) {
