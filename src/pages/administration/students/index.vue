@@ -202,11 +202,11 @@ export default {
 					label: this.$t("common.labels.lastName"),
 					sortable: true,
 				},
-				{
-					field: "birthday",
-					label: this.$t("common.labels.birthday"),
-					sortable: true,
-				},
+				// {
+				// 	field: "birthday",
+				// 	label: this.$t("common.labels.birthday"),
+				// 	sortable: true,
+				// },
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),

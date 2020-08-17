@@ -399,7 +399,8 @@ export default {
 					$in: this.selectedStudents,
 				},
 			};
-			this.$store
+			try {
+				this.$store
 				.dispatch("bulkConsent/findStudents", { query })
 				.then((result) => {
 					const data = [];
@@ -414,6 +415,9 @@ export default {
 					this.$store.commit("bulkConsent/setStudentsData", data);
 					return data;
 				});
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		inputDateForDate(student) {
 			return {
