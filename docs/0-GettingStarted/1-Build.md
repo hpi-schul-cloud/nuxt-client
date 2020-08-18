@@ -41,6 +41,11 @@ Output Directory: `./dist/nuxt`
 | JWT_SHOW_TIMEOUT_WARNING_SECONDS | `3600` | from this remaining time on the autologout warning is displayed to the user |
 | JWT_TIMEOUT_SECONDS | `7200` | Time a inactivity user's sessions remains active |
 | LERNSTORE_MODE | `EDUSHARING` | Enable edusharing |
+| FEATURE_MATRIX_MESSENGER_ENABLED | `false` | If enabled, adds support for matrix messenger |
+| FEATURE_MESSENGER_SCHOOL_SETTINGS_VISIBLE | `false` | Only if enabled, school admins can activate the messenger in their school setting. |
+| FEATURE_MESSENGER_SCHOOL_ROOM_ENABLED | `false` | If enabled, school admins can choose to create a room for all students and teachers of the school. |
+| MATRIX_MESSENGER_EMBED_URI | _undefined_ | Where to find the messenger dependencies. |
+| MATRIX_MESSENGER_HOMESERVER_URI | _undefined_ | Where to find the messenger server. |
 
 ## Storybook
 

@@ -8,20 +8,49 @@ export default {
 		return {};
 	},
 	computed: {
+		matrixFeatureFlag() {
+			return process.env.FEATURE_MATRIX_MESSENGER_ENABLED;
+		},
 		matrixAssetDomain() {
-			// TODO: fill with ENV/Configuration value
-			return "https://embed.stomt.com";
+			return process.env.MATRIX_MESSENGER_EMBED_URI;
 		},
 		userLanguage() {
-			// TODO: fill with actual current user language
-			return "de";
+			return this.$i18n.locale;
 		},
 	},
 	mounted() {
-		// TODO: only enable messenger if feature flag FEATURE_MATRIX_MESSENGER_ENABLED is set
-		this.initializeMessenger();
+		return this.isMessengerActivatedForSchool().then((isActivated) => {
+			if (isActivated) {
+				this.loadMessengerEmbed();
+				this.initializeMessenger();
+			}
+		});
 	},
 	methods: {
+		isMessengerActivatedForSchool() {
+			if (!this.matrixFeatureFlag) {
+				return Promise.resolve(false);
+			}
+
+			const query = {
+				query: {
+					_id: this.$user.schoolId,
+				},
+			};
+			return this.$store.dispatch("schools/find", query).then((response) => {
+				const school = response.data[0];
+				return (school.features || []).includes("messenger");
+			});
+		},
+
+		loadMessengerEmbed() {
+			// load javascript
+			const riotScript = document.createElement("script");
+			riotScript.src = `${this.matrixAssetDomain}/embed.js`;
+			riotScript.type = "text/javascript";
+			document.head.appendChild(riotScript);
+		},
+
 		findMatrixUserId(session = null) {
 			if (session) {
 				return session.userId;
@@ -126,22 +155,6 @@ export default {
 
 			this.setupMessenger(session);
 		},
-
-		headScripts() {
-			// TODO: only enable messenger if feature flag FEATURE_MATRIX_MESSENGER_ENABLED is set
-			return [
-				{
-					hid: "messenger",
-					src: `${this.matrixAssetDomain}/embed.js`,
-					defer: true,
-				},
-			];
-		},
-	},
-	head() {
-		return {
-			script: this.headScripts(),
-		};
 	},
 };
 </script>
