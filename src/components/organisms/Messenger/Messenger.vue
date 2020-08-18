@@ -19,7 +19,7 @@ export default {
 		},
 	},
 	mounted() {
-		return this.isMessengerActivatedForSchool().then((isActivated) => {
+		this.isMessengerActivatedForSchool().then((isActivated) => {
 			if (isActivated) {
 				this.loadMessengerEmbed();
 				this.initializeMessenger();
