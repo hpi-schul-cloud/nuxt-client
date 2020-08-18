@@ -19,12 +19,14 @@ export default {
 		},
 	},
 	mounted() {
-		this.isMessengerActivatedForSchool().then((isActivated) => {
-			if (isActivated) {
-				this.loadMessengerEmbed();
-				this.initializeMessenger();
-			}
-		});
+		this.isMessengerActivatedForSchool()
+			.then((isActivated) => {
+				if (isActivated) {
+					this.loadMessengerEmbed();
+					this.initializeMessenger();
+				}
+			})
+			.catch(() => {});
 	},
 	methods: {
 		isMessengerActivatedForSchool() {
@@ -37,10 +39,15 @@ export default {
 					_id: this.$user.schoolId,
 				},
 			};
-			return this.$store.dispatch("schools/find", query).then((response) => {
-				const school = response.data[0];
-				return (school.features || []).includes("messenger");
-			});
+			return this.$store
+				.dispatch("schools/find", query)
+				.then((response) => {
+					const school = response.data[0];
+					return (school.features || []).includes("messenger");
+				})
+				.catch(() => {
+					return false;
+				});
 		},
 
 		loadMessengerEmbed() {
