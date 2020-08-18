@@ -9,7 +9,7 @@ export default {
 	},
 	computed: {
 		matrixFeatureFlag() {
-			return process.env.FEATURE_MATRIX_MESSENGER_ENABLED;
+			return process.env.FEATURE_MATRIX_MESSENGER_ENABLED === "true";
 		},
 		matrixAssetDomain() {
 			return process.env.MATRIX_MESSENGER_EMBED_URI;
@@ -75,10 +75,9 @@ export default {
 		},
 
 		extractServernameFromMatrixUserId(matrixUserId) {
-			if (!matrixUserId) {
-				return null;
+			if (matrixUserId) {
+				return matrixUserId.substr(matrixUserId.indexOf(":") + 1);
 			}
-			return matrixUserId.substr(matrixUserId.indexOf(":") + 1);
 		},
 
 		composeMatrixRoomId(roomType, roomId, servername) {
