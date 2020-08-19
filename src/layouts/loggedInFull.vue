@@ -3,18 +3,15 @@
 		<main class="content" :class="{ inline: isInline }">
 			<Nuxt />
 		</main>
-		<messenger />
 	</legacy-logged-in>
 </template>
 
 <script>
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
-import Messenger from "../components/organisms/Messenger/Messenger";
 
 export default {
 	components: {
 		LegacyLoggedIn,
-		Messenger,
 	},
 	computed: {
 		isInline() {
