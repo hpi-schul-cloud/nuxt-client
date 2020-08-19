@@ -10,9 +10,7 @@
 			14482 Potsdam
 			<br />
 			Email:
-			<base-link href="mailto:info@hpi-schul-cloud.de"
-				>info@hpi-schul-cloud.de</base-link
-			>
+			<base-link href="mailto:info@hpi-schul-cloud.de">info@hpi-schul-cloud.de</base-link>
 			<br />
 			Internet:
 			<base-link to="/"> https://schul-cloud.org </base-link><br />
