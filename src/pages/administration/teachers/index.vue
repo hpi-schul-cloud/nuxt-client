@@ -14,6 +14,7 @@
 		<search-bar
 			v-model="searchQuery"
 			placeholder="Search"
+			class="search-section"
 			v-on="barSearch(this)"
 		/>
 
@@ -476,5 +477,9 @@ a.action-button {
 			box-shadow: none;
 		}
 	}
+}
+.search-section {
+	margin-top: var(--space-xs);
+	margin-left: 0;
 }
 </style>

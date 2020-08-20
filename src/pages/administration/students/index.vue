@@ -15,6 +15,7 @@
 		<search-bar
 			v-model="searchQuery"
 			placeholder="Search"
+			class="search-section"
 			v-on="barSearch(this)"
 		/>
 
@@ -609,5 +610,9 @@ button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
 	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+}
+.search-section {
+	margin-top: var(--space-xs);
+	margin-left: 0;
 }
 </style>
