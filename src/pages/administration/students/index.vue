@@ -11,11 +11,14 @@
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
 		/>
+
+		<search-bar v-model="searchQuery" placeholder="Search" v-on="barSearch(this)"/>
+
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
-			:data="students"
+			:data="tableData"
 			:paginated="true"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
@@ -150,6 +153,7 @@ import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import InfoBox from "@components/molecules/InfoBox";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import SearchBar from "@components/molecules/SearchBar";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -164,6 +168,7 @@ export default {
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
+		SearchBar,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -296,6 +301,9 @@ export default {
 			],
 			filters: studentFilter(this),
 			active: false,
+			searchQuery: "",
+			takeOverTableData: false,
+			searchData: [],
 		};
 	},
 
@@ -314,6 +322,9 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
+		...mapState("search", {
+			searchResult: "searchResult",
+		}),
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
 		},
@@ -322,6 +333,12 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
+		tableData: {
+			get(){
+				if (this.takeOverTableData) return this.searchData;
+				return this.students;
+			},
+		}
 	},
 	watch: {
 		currentFilterQuery: function (query) {
@@ -485,6 +502,51 @@ export default {
 				invertedDesign: true,
 			});
 		},
+		barSearch: function() {
+			return {
+				input: async (txt) => {
+					if (this.takeOverTableData){
+						const filtered = (searchItem, arr) => {
+							const query = searchItem.toLowerCase();
+							return arr.filter(
+								item => item.firstName.toLowerCase().indexOf(query) >= 0 ||
+								item.lastName.toLowerCase().indexOf(query) >= 0 ||
+								item.email.toLowerCase().indexOf(query) >= 0
+							);
+						}
+						const temp = this.searchResult;
+						this.searchData = filtered(txt, temp);
+					}
+
+					if (txt.length > 1){
+						if (this.takeOverTableData === false){
+							// console.log("server call");
+							const role = (
+								await this.$store.dispatch("roles/find", {
+									query: {
+										name: "student",
+									},
+								})
+							).data[0];
+
+							const query = {
+								role: role,
+								searchText: txt,
+							};
+
+							Promise.resolve(this.$store.dispatch("search/getBySearch", { query }))
+								.then(res =>{
+									this.searchData = res;
+									this.takeOverTableData = true;
+								});
+						}
+					}
+					else {
+						this.takeOverTableData = false;
+					}
+				}
+			}
+		}
 	},
 };
 </script>
