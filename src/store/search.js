@@ -1,27 +1,28 @@
 export const actions = {
-	async getBySearch({ commit }, payload = {}){
+	async getBySearch({ commit }, payload = {}) {
 		const res = await this.$axios.$get("users");
 
 		const filtered = (searchItem, arr) => {
 			const query = searchItem.toLowerCase();
 			return arr.filter(
-				item => (item.firstName.toLowerCase().indexOf(query) >= 0 ||
-				item.lastName.toLowerCase().indexOf(query) >= 0 ||
-				item.email.toLowerCase().indexOf(query) >= 0 ) &&
-				item.roles.find(id => id == payload.query.role.id)
+				(item) =>
+					(item.firstName.toLowerCase().indexOf(query) >= 0 ||
+						item.lastName.toLowerCase().indexOf(query) >= 0 ||
+						item.email.toLowerCase().indexOf(query) >= 0) &&
+					item.roles.find((id) => id == payload.query.role.id)
 			);
-		}
+		};
 
 		const result = filtered(payload.query.searchText, res.data);
 
-		commit("setSearchData",  result);
+		commit("setSearchData", result);
 
 		return result;
 	},
 };
 
 export const mutations = {
-	setSearchData(state, payload){
+	setSearchData(state, payload) {
 		state.searchResult = payload;
 	},
 };

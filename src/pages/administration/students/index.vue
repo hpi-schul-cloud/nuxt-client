@@ -12,7 +12,11 @@
 			:active-filters.sync="currentFilterQuery"
 		/>
 
-		<search-bar v-model="searchQuery" placeholder="Search" v-on="barSearch(this)"/>
+		<search-bar
+			v-model="searchQuery"
+			placeholder="Search"
+			v-on="barSearch(this)"
+		/>
 
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
@@ -334,11 +338,11 @@ export default {
 			);
 		},
 		tableData: {
-			get(){
+			get() {
 				if (this.takeOverTableData) return this.searchData;
 				return this.students;
 			},
-		}
+		},
 	},
 	watch: {
 		currentFilterQuery: function (query) {
@@ -502,24 +506,25 @@ export default {
 				invertedDesign: true,
 			});
 		},
-		barSearch: function() {
+		barSearch: function () {
 			return {
 				input: async (txt) => {
-					if (this.takeOverTableData){
+					if (this.takeOverTableData) {
 						const filtered = (searchItem, arr) => {
 							const query = searchItem.toLowerCase();
 							return arr.filter(
-								item => item.firstName.toLowerCase().indexOf(query) >= 0 ||
-								item.lastName.toLowerCase().indexOf(query) >= 0 ||
-								item.email.toLowerCase().indexOf(query) >= 0
+								(item) =>
+									item.firstName.toLowerCase().indexOf(query) >= 0 ||
+									item.lastName.toLowerCase().indexOf(query) >= 0 ||
+									item.email.toLowerCase().indexOf(query) >= 0
 							);
-						}
+						};
 						const temp = this.searchResult;
 						this.searchData = filtered(txt, temp);
 					}
 
-					if (txt.length > 1){
-						if (this.takeOverTableData === false){
+					if (txt.length > 1) {
+						if (this.takeOverTableData === false) {
 							// console.log("server call");
 							const role = (
 								await this.$store.dispatch("roles/find", {
@@ -534,19 +539,19 @@ export default {
 								searchText: txt,
 							};
 
-							Promise.resolve(this.$store.dispatch("search/getBySearch", { query }))
-								.then(res =>{
-									this.searchData = res;
-									this.takeOverTableData = true;
-								});
+							Promise.resolve(
+								this.$store.dispatch("search/getBySearch", { query })
+							).then((res) => {
+								this.searchData = res;
+								this.takeOverTableData = true;
+							});
 						}
-					}
-					else {
+					} else {
 						this.takeOverTableData = false;
 					}
-				}
-			}
-		}
+				},
+			};
+		},
 	},
 };
 </script>
