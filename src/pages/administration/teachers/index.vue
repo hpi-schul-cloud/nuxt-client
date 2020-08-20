@@ -205,7 +205,7 @@ export default {
 				},
 				{
 					field: "consentStatus",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
 					sortable: true,
 				},
 				{
