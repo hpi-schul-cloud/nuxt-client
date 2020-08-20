@@ -73,6 +73,18 @@ import BaseButton from "../../components/base/BaseButton";
 import ContentInitialState from "@components/molecules/ContentInitialState";
 
 export default {
+	meta: {
+		requiredPermissions: [
+			{
+				operator: "AND",
+				permissions: ["LERNSTORE_VIEW"],
+			},
+			{
+				operator: "NOT",
+				permissions: ["LERNSTORE_HIDE"],
+			},
+		],
+	},
 	components: {
 		BaseButton,
 		ContentSearchbar,

@@ -66,6 +66,19 @@ describe("@middleware/permission-check", () => {
 		expect(await permissionCheck(mockContext)).toBe(true);
 	});
 
+	it(`grants access using advanced "NOT" syntax`, async () => {
+		const mockContext = getMockContext({
+			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
+			route: getMockRoute({
+				operator: "NOT",
+				permissions: ["PERMISSION_B"],
+			}),
+		});
+		await expect(permissionCheck(mockContext)).rejects.toThrow(
+			new Error("error.401")
+		);
+	});
+
 	it("grants Access if no permissions are required AND user exists", async () => {
 		const mockContext = getMockContext({
 			store: getMockStore({ permissions: ["PERMISSION_A"] }),

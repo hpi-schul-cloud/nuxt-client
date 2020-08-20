@@ -71,7 +71,13 @@ export default [
 		icon: "newspaper-o",
 	},
 	{ title: "Termine", href: "/calendar", icon: "table" },
-	{ title: "Lern-store", href: "/content", icon: "search" },
+	{
+		title: "Lern-store",
+		href: "/content",
+		icon: "search",
+		permission: "LERNSTORE_VIEW",
+		excludedPermission: "LERNSTORE_HIDE",
+	},
 	{
 		title: "Add-Ons",
 		href: "/addons",

@@ -11,16 +11,45 @@ export default async ({ app, store, route }) => {
 		if (!user) {
 			throw new Error(app.i18n.t("error.401"));
 		}
-		const REQUIRED_PERMISSIONS = Array.isArray(meta.requiredPermissions)
-			? meta.requiredPermissions
-			: meta.requiredPermissions.permissions;
-		const OPERATOR = Array.isArray(meta.requiredPermissions)
-			? "AND"
-			: meta.requiredPermissions.operator;
-		return OPERATOR === "AND"
-			? REQUIRED_PERMISSIONS.every(userHasPermission)
-			: REQUIRED_PERMISSIONS.some(userHasPermission);
+
+		let andPermissions = [];
+		let orPermissions = [];
+		let notPermissions = [];
+
+		const processPermissionObject = function (element) {
+			if (element.operator.toUpperCase() === "AND") {
+				andPermissions = [...andPermissions, ...element.permissions];
+			} else if (element.operator.toUpperCase() === "OR") {
+				orPermissions = [...orPermissions, ...element.permissions];
+			} else if (element.operator.toUpperCase() === "NOT") {
+				notPermissions = [...notPermissions, ...element.permissions];
+			}
+		};
+
+		if (Array.isArray(meta.requiredPermissions)) {
+			meta.requiredPermissions.forEach((element) => {
+				if (typeof element === "string") {
+					andPermissions.push(element);
+				} else {
+					processPermissionObject(element);
+				}
+			});
+		} else {
+			processPermissionObject(meta.requiredPermissions);
+		}
+
+		const hasAndPermission = andPermissions.every(userHasPermission);
+		if (
+			(andPermissions.length && !hasAndPermission) ||
+			(orPermissions.length && !orPermissions.some(userHasPermission)) ||
+			(notPermissions.length && notPermissions.some(userHasPermission))
+		) {
+			return false;
+		}
+
+		return true;
 	}, true);
+
 	if (ACCESS_ALLOWED) {
 		return true; // Access allowed
 	}

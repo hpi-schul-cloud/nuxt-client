@@ -8,6 +8,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-6239 - adds lernstore permmission
 - SC-6628 Changing backend url endpoint while analog consenting
 
 ## [24.5.0] - 2020-09-14
