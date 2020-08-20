@@ -140,6 +140,18 @@ import { getMetadataAttribute } from "@utils/helpers";
 const DEFAULT_AUTHOR = "admin";
 
 export default {
+	meta: {
+		requiredPermissions: [
+			{
+				operator: "AND",
+				permissions: ["LERNSTORE_VIEW"],
+			},
+			{
+				operator: "NOT",
+				permissions: ["LERNSTORE_HIDE"],
+			},
+		],
+	},
 	components: {
 		BaseLink,
 		AddContentButton,

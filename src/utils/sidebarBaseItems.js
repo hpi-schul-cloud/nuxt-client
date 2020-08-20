@@ -79,6 +79,8 @@ export default [
 		title: "global.sidebar.lernstore",
 		href: "/content",
 		icon: "search",
+		permission: "LERNSTORE_VIEW",
+		excludedPermission: "LERNSTORE_HIDE",
 	},
 	{
 		title: "global.sidebar.addons",
