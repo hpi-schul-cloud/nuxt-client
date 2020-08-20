@@ -66,9 +66,14 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
+		<admin-table-legend
+			:icons="icons"
+			:show-external-sync-hint="!schoolInternallyManaged"
+		/>
 		<fab-floating
-			v-if="this.$_userHasPermission('TEACHER_CREATE')"
+			v-if="
+				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
+			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -237,6 +242,9 @@ export default {
 		...mapGetters("users", {
 			teachers: "list",
 		}),
+		...mapState("auth", {
+			school: "school",
+		}),
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
@@ -245,6 +253,9 @@ export default {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
+		},
+		schoolInternallyManaged() {
+			return !this.school.isExternal;
 		},
 	},
 	watch: {
