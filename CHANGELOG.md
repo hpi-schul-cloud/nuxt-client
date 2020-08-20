@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-5558 change the edusharing lernstore empty state and initial state components. Made svg images specific to the theme
 
+- SC-6022 Change of the 'Einverständnis' column name to the 'Registrierung' in the teachers admin table.
+
 ### Added - 23.6.0
 
 - Quickfix - change URL of 'Fortbildungen' from 'lern.cloud' to 'lernen.cloud'
