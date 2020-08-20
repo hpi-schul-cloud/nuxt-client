@@ -106,6 +106,7 @@ pull_request_rules:
       # match dependabot[bot] and dependabot-preview[bot]
       - author~=dependabot(-preview)?\[bot\]
       - label~=dependencies
+      - label!=requires mauelle check
     actions:
       merge:
         method: squash
