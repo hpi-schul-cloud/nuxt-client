@@ -74,9 +74,14 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
+		<admin-table-legend
+			:icons="icons"
+			:show-external-sync-hint="!schoolInternallyManaged"
+		/>
 		<fab-floating
-			v-if="this.$_userHasPermission('TEACHER_CREATE')"
+			v-if="
+				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
+			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -215,7 +220,7 @@ export default {
 				},
 				{
 					field: "consentStatus",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
 					sortable: true,
 				},
 				{
@@ -249,6 +254,9 @@ export default {
 	computed: {
 		...mapGetters("users", {
 			teachers: "list",
+		}),
+		...mapState("auth", {
+			school: "school",
 		}),
 		...mapState("users", {
 			pagination: (state) =>
