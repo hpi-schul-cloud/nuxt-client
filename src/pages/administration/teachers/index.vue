@@ -445,12 +445,14 @@ export default {
 								searchText: txt,
 							};
 
-							Promise.resolve(
-								this.$store.dispatch("search/getBySearch", { query })
-							).then((res) => {
-								this.searchData = res;
+							await this.$store.dispatch("search/getBySearch", { query });
+
+							const searchResult = this.$store.state.search.searchResult || [];
+
+							if (searchResult.length > 0){
+								this.searchData = searchResult;
 								this.takeOverTableData = true;
-							});
+							}
 						}
 					} else {
 						this.takeOverTableData = false;
