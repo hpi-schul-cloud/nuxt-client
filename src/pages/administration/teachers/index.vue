@@ -449,7 +449,7 @@ export default {
 
 							const searchResult = this.$store.state.search.searchResult || [];
 
-							if (searchResult.length > 0){
+							if (searchResult.length > 0) {
 								this.searchData = searchResult;
 								this.takeOverTableData = true;
 							}
