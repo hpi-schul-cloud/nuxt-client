@@ -526,7 +526,6 @@ export default {
 
 					if (txt.length > 1) {
 						if (this.takeOverTableData === false) {
-							// console.log("server call");
 							const role = (
 								await this.$store.dispatch("roles/find", {
 									query: {
