@@ -6,11 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## [24.2.3] - 2020-08-19
+
+### Changed - 24.2.1
+
+- SC-6239 Changed default email domains in many different places from @schul-cloud.org to @hpi-schul-cloud.de
+- SC-6239 Changed links to blog to blog.hpi-schul-cloud.de
+
 ## [23.6.0] - 2020-07-21
 
 ### Changed
 
 - SC-5558 change the edusharing lernstore empty state and initial state components. Made svg images specific to the theme
+
+- SC-6022 Change of the 'Einverständnis' column name to the 'Registrierung' in the teachers admin table.
 
 ### Added - 23.6.0
 
