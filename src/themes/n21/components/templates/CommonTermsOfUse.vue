@@ -53,7 +53,9 @@
 		<br /><br />
 		Beim Aufruf der Website durch nicht-angemeldete Besucher*innen ist das Hasso
 		Plattner Institut (HPI), Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam,
-		<a href="mailto:datenschutz@schul-cloud.org">datenschutz@schul-cloud.org</a>
+		<a href="mailto:datenschutz@hpi-schul-cloud.de"
+			>datenschutz@hpi-schul-cloud.de</a
+		>
 		für die zuvor genannten Verarbeitungsvorgänge verantwortlich. Für alle
 		Fragen zum Thema Datenschutz ist der Datenschutzbeauftragte des HPI unter
 		den zuvor genannten Kontaktdaten erreichbar (Stichwort: „z. Hd.
