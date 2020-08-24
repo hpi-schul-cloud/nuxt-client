@@ -106,7 +106,6 @@
 				</span>
 			</template>
 			<template
-				v-if="schoolInternallyManaged"
 				v-slot:datacolumn-_id="{ data, selected, highlighted }"
 			>
 				<base-button
@@ -125,12 +124,8 @@
 		</backend-data-table>
 		<admin-table-legend
 			:icons="icons"
-			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
-			v-if="
-				schoolInternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
-			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -158,7 +153,7 @@ import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import InfoBox from "@components/molecules/InfoBox";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import SearchBar from "@components/molecules/SearchBar";
+import SearchBar from "../../../components/molecules/Searchbar.vue";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -330,9 +325,6 @@ export default {
 		...mapState("search", {
 			searchResult: "searchResult",
 		}),
-		schoolInternallyManaged() {
-			return !this.school.isExternal;
-		},
 		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true

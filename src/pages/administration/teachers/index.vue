@@ -76,12 +76,8 @@
 		</backend-data-table>
 		<admin-table-legend
 			:icons="icons"
-			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
-			v-if="
-				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
-			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -107,7 +103,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import SearchBar from "@components/molecules/SearchBar";
+import SearchBar from "../../../components/molecules/Searchbar.vue";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";

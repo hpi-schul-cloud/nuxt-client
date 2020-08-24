@@ -5,11 +5,12 @@ export const actions = {
 		const filtered = (searchItem, arr) => {
 			const query = searchItem.toLowerCase();
 			return arr.filter(
-				(item) =>
-					(item.firstName.toLowerCase().indexOf(query) >= 0 ||
+				(item) => {
+					return (item.firstName.toLowerCase().indexOf(query) >= 0 ||
 						item.lastName.toLowerCase().indexOf(query) >= 0 ||
 						item.email.toLowerCase().indexOf(query) >= 0) &&
 					item.roles.find((id) => id == payload.query.role.id)
+				}
 			);
 		};
 
