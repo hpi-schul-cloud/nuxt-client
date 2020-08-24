@@ -105,9 +105,7 @@
 					/>
 				</span>
 			</template>
-			<template
-				v-slot:datacolumn-_id="{ data, selected, highlighted }"
-			>
+			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
 				<base-button
 					:class="{
 						'action-button': true,
@@ -122,9 +120,7 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend
-			:icons="icons"
-		/>
+		<admin-table-legend :icons="icons" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"

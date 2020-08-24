@@ -74,9 +74,7 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend
-			:icons="icons"
-		/>
+		<admin-table-legend :icons="icons" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
