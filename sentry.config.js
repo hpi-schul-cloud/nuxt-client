@@ -1,9 +1,15 @@
 const pkg = require("./package");
 
+const environment = process.env.NODE_ENV || "development";
+const sampleRate = process.env.SENTRY_SAMPLE_RATE
+	? parseFloat(process.env.SENTRY_SAMPLE_RATE)
+	: 1.0;
+
 module.exports = {
 	config: {
-		// environment: "{{@root.env}}", // TODO implement & enable
 		release: pkg.version,
+		environment,
+		sampleRate,
 		beforeSend: (event) => {
 			function removeIds(url) {
 				var checkForHexRegExp = /[a-f\d]{24}/gi;

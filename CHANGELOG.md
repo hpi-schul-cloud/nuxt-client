@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- SC-4260 sampleRate added in sentry config
+
 ## [24.3.0] - 2020-08-25
 
 ## [24.2.3] - 2020-08-19
