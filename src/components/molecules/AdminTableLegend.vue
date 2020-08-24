@@ -32,7 +32,7 @@
 				}}
 				<base-link
 					class="link-style"
-					to="/administration/helpdesk"
+					to="/helpdesk"
 					:no-styles="true"
 					traget="_blank"
 				>
