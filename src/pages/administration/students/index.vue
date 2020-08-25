@@ -300,7 +300,9 @@ export default {
 			searchQuery: "",
 			takeOverTableData: false,
 			searchData: [],
-			searchBarPlaceHolder: this.$t("pages.administration.teachers.index.searchbar.placeholder"),
+			searchBarPlaceHolder: this.$t(
+				"pages.administration.teachers.index.searchbar.placeholder"
+			),
 		};
 	},
 
