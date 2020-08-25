@@ -4,17 +4,13 @@
 			<template v-slot:content>
 				<v-chart :options="activityByRoleChart" autoresize />
 			</template>
-			<template v-slot:footer>
-				LAST 30 DAYS
-			</template>
+			<template v-slot:footer> LAST 30 DAYS </template>
 		</insights-card>
 		<insights-card title="ACTIVITY">
 			<template v-slot:content>
 				<v-chart :options="weeklyActivityChart" autoresize />
 			</template>
-			<template v-slot:footer>
-				LAST 30 DAYS
-			</template>
+			<template v-slot:footer> LAST 30 DAYS </template>
 		</insights-card>
 		<insights-card title="ACTIVE USERS">
 			<template v-slot:content>
@@ -30,17 +26,13 @@
 					/>
 				</div>
 			</template>
-			<template v-slot:footer>
-				LAST 30 DAYS
-			</template>
+			<template v-slot:footer> LAST 30 DAYS </template>
 		</insights-card>
 		<insights-card title="USER EXPLORATION METRIC">
 			<template v-slot:content>
 				<v-chart :options="uniquePageCount" autoresize />
 			</template>
-			<template v-slot:footer>
-				LAST 10 DAYS
-			</template>
+			<template v-slot:footer> LAST 10 DAYS </template>
 		</insights-card>
 		<insights-card title="AVG LOAD TIME">
 			<template v-slot:content>

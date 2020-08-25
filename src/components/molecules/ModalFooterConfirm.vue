@@ -4,9 +4,7 @@
 		class="footer-button"
 		:class="isSuccess ? '' : 'error'"
 	>
-		<button class="btn-confirm" v-on="$listeners">
-			Ok
-		</button>
+		<button class="btn-confirm" v-on="$listeners">Ok</button>
 	</div>
 </template>
 
