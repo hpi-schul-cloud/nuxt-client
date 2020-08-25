@@ -8,6 +8,9 @@
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 
 export default {
+	meta: {
+		requiredPermissions: ["LERNSTORE_VIEW"],
+	},
 	components: {
 		LernstoreDetailView,
 	},
