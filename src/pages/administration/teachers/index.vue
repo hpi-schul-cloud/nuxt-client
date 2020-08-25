@@ -74,9 +74,7 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend
-			:icons="icons"
-		/>
+		<admin-table-legend :icons="icons" />
 		<fab-floating
 			position="bottom-right"
 			:show-label="true"
@@ -423,12 +421,20 @@ export default {
 					if (this.takeOverTableData) {
 						const filtered = (searchItem, arr) => {
 							const query = searchItem.toLowerCase();
-							return arr.filter(
-								(item) =>
-									item.firstName.toLowerCase().indexOf(query) >= 0 ||
-									item.lastName.toLowerCase().indexOf(query) >= 0 ||
-									item.email.toLowerCase().indexOf(query) >= 0
-							);
+							return arr.filter((item) => {
+								if (item.email) {
+									return (
+										item.firstName.toLowerCase().indexOf(query) >= 0 ||
+										item.lastName.toLowerCase().indexOf(query) >= 0 ||
+										item.email.toLowerCase().indexOf(query) >= 0
+									);
+								} else {
+									return (
+										item.firstName.toLowerCase().indexOf(query) >= 0 ||
+										item.lastName.toLowerCase().indexOf(query) >= 0
+									);
+								}
+							});
 						};
 						const temp = this.searchResult;
 						this.searchData = filtered(txt, temp);
