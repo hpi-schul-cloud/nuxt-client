@@ -13,7 +13,7 @@
 
 		<search-bar
 			v-model="searchQuery"
-			placeholder="Search"
+			:placeholder="searchBarPlaceHolder"
 			class="search-section"
 			v-on="barSearch(this)"
 		/>
@@ -243,6 +243,7 @@ export default {
 			searchQuery: "",
 			takeOverTableData: false,
 			searchData: [],
+			searchBarPlaceHolder: this.$t("pages.administration.teachers.index.searchbar.placeholder"),
 		};
 	},
 	computed: {
