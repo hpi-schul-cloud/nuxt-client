@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Unreleased
+
+## [24.3.0] - 2020-08-25
+
 ## [24.2.3] - 2020-08-19
 
 ### Changed - 24.2.1
