@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Unreleased
+
+## [24.3.0] - 2020-08-25
+
 ## [24.2.3] - 2020-08-19
 
 ### Changed - 24.2.1
@@ -14,6 +18,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6239 Changed links to blog to blog.hpi-schul-cloud.de
 
 ## [23.6.0] - 2020-07-21
+
+### Changed
+
+- SC-5558 change the edusharing lernstore empty state and initial state components. Made svg images specific to the theme
 
 ### Added - 23.6.0
 
