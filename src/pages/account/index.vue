@@ -115,9 +115,7 @@
 			<base-icon source="material" icon="info" fill="var(--color-info)" />
 			{{ $t("pages.account.index.thirdParty.info") }}
 		</p>
-    <language-switcher
-        :default-language="currentUser.defaultLanguage"
-    />
+		<language-switcher :default-language="currentUser.defaultLanguage" />
 	</section>
 </template>
 
@@ -128,7 +126,7 @@ import LanguageSwitcher from "@components/organisms/LanguageSwitcher";
 export default {
 	components: {
 		AccountCard,
-    LanguageSwitcher
+		LanguageSwitcher,
 	},
 	meta: {
 		requiredPermissions: ["ACCOUNT_EDIT"],

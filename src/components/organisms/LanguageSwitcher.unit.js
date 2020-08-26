@@ -13,7 +13,7 @@ describe("@components/organisms/LanguageSwitcher", () => {
 					"base-input": true,
 				},
 				user: true,
-				i18n: true
+				i18n: true,
 			}),
 		});
 		expect(wrapper.vm.$store.state.auth.locale).toBe("de");

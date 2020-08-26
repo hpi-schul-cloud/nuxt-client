@@ -105,7 +105,7 @@ export const mutations = {
 export const getters = {
 	getLocale(state) {
 		return state.locale;
-	}
+	},
 };
 
 export const state = () => {
@@ -115,7 +115,7 @@ export const state = () => {
 		user: {},
 		school: {},
 		publicPages: ["index", "login", "signup", "impressum"],
-		locale: "de"
+		locale: "de",
 	};
 };
 
