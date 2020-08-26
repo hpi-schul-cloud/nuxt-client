@@ -12,6 +12,7 @@
 					:title="pageTitle"
 					:actions="topBarActions"
 					:fullscreen-mode="fullscreenMode"
+          :default-language="defaultLanguage"
 					:expanded-menu="expandedMenu"
 					@action="handleTopAction"
 				/>
@@ -136,6 +137,9 @@ export default {
 		schoolName() {
 			return this.user && this.user.schoolName ? this.user.schoolName : "";
 		},
+    defaultLanguage() {
+		  return this.user?.defaultLanguage;
+    },
 		topBarActions() {
 			return this.authenticated
 				? [

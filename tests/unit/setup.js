@@ -140,7 +140,6 @@ global.shallowMountView = (Component, options = {}) => {
 */
 
 import { i18n as i18nConfig } from "@plugins/i18n.js";
-import i18nStoreModule from "@store/i18n";
 import authStoreModule from "@store/auth";
 import { mixin as userMixin } from "@plugins/user.js";
 import globalStubs from "./stubs.js";
@@ -193,9 +192,6 @@ global.createComponentMocks = ({
 	if (store || i18n || user) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
-		if (i18n) {
-			storeModules.i18n = i18nStoreModule;
-		}
 		if (user) {
 			storeModules.auth = authStoreModule;
 		}

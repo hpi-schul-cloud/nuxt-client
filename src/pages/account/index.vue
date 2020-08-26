@@ -115,15 +115,20 @@
 			<base-icon source="material" icon="info" fill="var(--color-info)" />
 			{{ $t("pages.account.index.thirdParty.info") }}
 		</p>
+    <language-switcher
+        :default-language="currentUser.defaultLanguage"
+    />
 	</section>
 </template>
 
 <script>
 import AccountCard from "@components/molecules/AccountCard";
+import LanguageSwitcher from "@components/organisms/LanguageSwitcher";
 
 export default {
 	components: {
 		AccountCard,
+    LanguageSwitcher
 	},
 	meta: {
 		requiredPermissions: ["ACCOUNT_EDIT"],

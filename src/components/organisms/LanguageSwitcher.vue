@@ -14,18 +14,24 @@
 </template>
 <script>
 export default {
+  props: {
+    defaultLanguage: {
+      type: String,
+      default: "de"
+    },
+  },
 	data() {
 		return {
 			languages: ["de", "en"],
-			value: "de",
+			value: this.defaultLanguage,
 		};
 	},
 	methods: {
 		changeLanguage: function (lang) {
-			this.$store.commit("i18n/SET_LANG", lang);
-			this.$i18n.locale = lang;
-		},
-	},
+			this.$store.commit("auth/setLocale", lang);
+      this.$i18n.locale = lang;
+    },
+	}
 };
 </script>
 
