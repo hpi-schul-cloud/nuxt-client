@@ -153,9 +153,7 @@ export default {
 			left: 50%;
 			z-index: var(--layer-page);
 			font-size: var(--space-xl-3) !important;
-			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-			border-radius: var(--radius-round);
-			box-shadow: var(--shadow-m);
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
 			opacity: 0.9;
 			transform: translate(-50%, -50%);
 		}
