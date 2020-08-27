@@ -23,7 +23,7 @@
 			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
-			:data="tableData"
+			:data="students"
 			:paginated="true"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
@@ -40,44 +40,7 @@
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
-			<template v-slot:headcolumn-consent>
-				<span class="th-slot">
-					<span>{{ $t("common.labels.registration") }}</span>
-					<base-button design="info text icon" @click="active = !active">
-						<base-icon source="material" icon="info" />
-					</base-button>
-				</span>
-				<info-box class="info-box" :active.sync="active">
-					<template v-slot:header>Registrierungen abschließen</template>
-					<template v-slot:body>
-						<div class="content">
-							{{ $t("pages.administration.students.infobox.paragraph-1") }}
-							<ul class="list">
-								<li>
-									{{ $t("pages.administration.students.infobox.li-1") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-2") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-3") }}
-								</li>
-							</ul>
-							{{ $t("pages.administration.students.infobox.paragraph-2") }}
-							<br />
-							<br />
-							{{ $t("pages.administration.students.infobox.paragraph-3") }}
-							<br />
-							<br />
-							<base-icon
-								source="material"
-								icon="warning"
-								color="var(--color-danger)"
-							/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
-						</div>
-					</template>
-				</info-box>
-			</template>
+			<template v-slot:headcolumn-consent> </template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
@@ -105,7 +68,10 @@
 					/>
 				</span>
 			</template>
-			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
+			<template
+				v-if="schoolInternallyManaged"
+				v-slot:datacolumn-_id="{ data, selected, highlighted }"
+			>
 				<base-button
 					:class="{
 						'action-button': true,
@@ -120,8 +86,14 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" />
+		<admin-table-legend
+			:icons="icons"
+			:show-external-sync-hint="!schoolInternallyManaged"
+		/>
 		<fab-floating
+			v-if="
+				schoolInternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
+			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -147,7 +119,6 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import InfoBox from "@components/molecules/InfoBox";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import SearchBar from "../../../components/molecules/Searchbar.vue";
 import { studentFilter } from "@utils/adminFilter";
@@ -159,7 +130,6 @@ dayjs.locale("de");
 
 export default {
 	components: {
-		InfoBox,
 		DataFilter,
 		BackendDataTable,
 		FabFloating,
@@ -219,8 +189,9 @@ export default {
 				},
 				{
 					field: "consentStatus",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
 					sortable: true,
+					infobox: true,
 				},
 				{
 					field: "createdAt",
@@ -298,8 +269,6 @@ export default {
 			filters: studentFilter(this),
 			active: false,
 			searchQuery: "",
-			takeOverTableData: false,
-			searchData: [],
 			searchBarPlaceHolder: this.$t(
 				"pages.administration.teachers.index.searchbar.placeholder"
 			),
@@ -321,19 +290,13 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
-		...mapState("search", {
-			searchResult: "searchResult",
-		}),
+		schoolInternallyManaged() {
+			return !this.school.isExternal;
+		},
 		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
-		},
-		tableData: {
-			get() {
-				if (this.takeOverTableData) return this.searchData;
-				return this.students;
-			},
 		},
 	},
 	watch: {
@@ -500,56 +463,16 @@ export default {
 		},
 		barSearch: function () {
 			return {
-				input: async (txt) => {
-					if (this.takeOverTableData) {
-						const filtered = (searchItem, arr) => {
-							const query = searchItem.toLowerCase();
-							return arr.filter((item) => {
-								if (item.email) {
-									return (
-										item.firstName.toLowerCase().indexOf(query) >= 0 ||
-										item.lastName.toLowerCase().indexOf(query) >= 0 ||
-										item.email.toLowerCase().indexOf(query) >= 0
-									);
-								} else {
-									return (
-										item.firstName.toLowerCase().indexOf(query) >= 0 ||
-										item.lastName.toLowerCase().indexOf(query) >= 0
-									);
-								}
-							});
-						};
-						const temp = this.searchResult;
-						this.searchData = filtered(txt, temp);
-					}
+				input: (searchText) => {
+					const query = {
+						searchQuery: searchText,
+					};
 
-					if (txt.length > 1) {
-						if (this.takeOverTableData === false) {
-							const role = (
-								await this.$store.dispatch("roles/find", {
-									query: {
-										name: "student",
-									},
-								})
-							).data[0];
-
-							const query = {
-								role: role,
-								searchText: txt,
-							};
-
-							await this.$store.dispatch("search/getBySearch", { query });
-
-							const searchResult = this.$store.state.search.searchResult || [];
-
-							if (searchResult.length > 0) {
-								this.searchData = searchResult;
-								this.takeOverTableData = true;
-							}
-						}
-					} else {
-						this.takeOverTableData = false;
-					}
+					this.$store.dispatch("users/handleUsers", {
+						query,
+						action: "find",
+						userType: "students",
+					});
 				},
 			};
 		},
@@ -612,6 +535,7 @@ button:not(.is-none):focus {
 	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
 }
 .search-section {
+	max-width: 100%;
 	margin-top: var(--space-xs);
 	margin-left: 0;
 }

@@ -22,7 +22,7 @@
 			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
-			:data="tableData"
+			:data="teachers"
 			:paginated="true"
 			:total="pagination.total"
 			:rows-per-page.sync="limit"
@@ -241,8 +241,6 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery: "",
-			takeOverTableData: false,
-			searchData: [],
 			searchBarPlaceHolder: this.$t(
 				"pages.administration.teachers.index.searchbar.placeholder"
 			),
@@ -420,56 +418,16 @@ export default {
 		},
 		barSearch: function () {
 			return {
-				input: async (txt) => {
-					if (this.takeOverTableData) {
-						const filtered = (searchItem, arr) => {
-							const query = searchItem.toLowerCase();
-							return arr.filter((item) => {
-								if (item.email) {
-									return (
-										item.firstName.toLowerCase().indexOf(query) >= 0 ||
-										item.lastName.toLowerCase().indexOf(query) >= 0 ||
-										item.email.toLowerCase().indexOf(query) >= 0
-									);
-								} else {
-									return (
-										item.firstName.toLowerCase().indexOf(query) >= 0 ||
-										item.lastName.toLowerCase().indexOf(query) >= 0
-									);
-								}
-							});
-						};
-						const temp = this.searchResult;
-						this.searchData = filtered(txt, temp);
-					}
+				input: async (searchText) => {
+					const query = {
+						searchQuery: searchText,
+					};
 
-					if (txt.length > 1) {
-						if (this.takeOverTableData === false) {
-							const role = (
-								await this.$store.dispatch("roles/find", {
-									query: {
-										name: "teacher",
-									},
-								})
-							).data[0];
-
-							const query = {
-								role: role,
-								searchText: txt,
-							};
-
-							await this.$store.dispatch("search/getBySearch", { query });
-
-							const searchResult = this.$store.state.search.searchResult || [];
-
-							if (searchResult.length > 0) {
-								this.searchData = searchResult;
-								this.takeOverTableData = true;
-							}
-						}
-					} else {
-						this.takeOverTableData = false;
-					}
+					this.$store.dispatch("users/handleUsers", {
+						query,
+						action: "find",
+						userType: "teachers",
+					});
 				},
 			};
 		},
@@ -492,7 +450,47 @@ a.action-button {
 		}
 	}
 }
+span {
+	font-weight: var(--font-weight-normal);
+}
+.content {
+	max-height: 35vh;
+	overflow-y: scroll;
+	font-weight: var(--font-weight-normal);
+}
+.list {
+	padding: var(--space-lg);
+}
+.th-slot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.info-box {
+	position: absolute;
+	right: 0%;
+	z-index: calc(var(--layer-fab) + 1);
+	max-width: 100%;
+	margin-top: var(--space-md);
+	margin-right: var(--space-lg);
+	margin-left: var(--space-lg);
+
+	@include breakpoint(tablet) {
+		min-width: 450px;
+		max-width: 50%;
+		margin-right: var(--space-xl);
+	}
+}
+
+button:not(.is-none):focus {
+	z-index: var(--layer-fab);
+	outline: none;
+	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+}
 .search-section {
+	max-width: 100%;
 	margin-top: var(--space-xs);
 	margin-left: 0;
 }
