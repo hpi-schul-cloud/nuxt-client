@@ -111,25 +111,25 @@
 				/>
 			</template>
 		</account-card>
-    <account-card
-        :heading="$t('pages.account.index.user.locale')"
-        :data="currentUser.defaultLanguage"
-        :target-path="`/account/locale/edit`"
-        data-testid="account_card_locale"
-    >
-      <template v-slot:icon>
-        <base-icon
-            source="material"
-            icon="language"
-            style="
+		<account-card
+			:heading="$t('pages.account.index.user.locale')"
+			:data="currentUser.defaultLanguage"
+			:target-path="`/account/locale/edit`"
+			data-testid="account_card_locale"
+		>
+			<template v-slot:icon>
+				<base-icon
+					source="material"
+					icon="language"
+					style="
 						margin-top: calc(0.3 * (var(--space-xs)));
 						margin-right: var(--space-xs);
 						font-size: var(--heading-4);
 						color: var(--color-black);
 					"
-        />
-      </template>
-    </account-card>
+				/>
+			</template>
+		</account-card>
 		<p v-if="thirdPartyLogin" class="info">
 			<base-icon source="material" icon="info" fill="var(--color-info)" />
 			{{ $t("pages.account.index.thirdParty.info") }}

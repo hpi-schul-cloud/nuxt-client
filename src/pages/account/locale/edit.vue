@@ -2,7 +2,7 @@
 	<section>
 		<base-modal :active="showModal" data-testid="confirmationModal">
 			<template v-slot:body>
-        <modal-body-info :title="$t('pages.account.locale.edit.confirmation')">
+				<modal-body-info :title="$t('pages.account.locale.edit.confirmation')">
 					<template v-slot:icon>
 						<base-icon
 							source="material"
@@ -20,14 +20,12 @@
 			</template>
 		</base-modal>
 		<h1 class="mb--md h3">{{ $t("pages.account.locale.edit.title") }}</h1>
-    <form-edit-user-data
+		<form-edit-user-data
 			:submit-button="$t('pages.account.locale.edit.btn')"
 			@onFormSubmit="submitHandler"
 		>
 			<template v-slot:inputs>
-        <language-switcher
-            :default-language="getDefaultLanguage()"
-        />
+				<language-switcher :default-language="getDefaultLanguage()" />
 			</template>
 		</form-edit-user-data>
 	</section>
@@ -44,23 +42,22 @@ export default {
 		FormEditUserData,
 		ModalBodyInfo,
 		ModalFooterConfirm,
-    LanguageSwitcher
+		LanguageSwitcher,
 	},
 	meta: {
 		userNotExternallyManaged: true,
 	},
 	data() {
 		return {
-      locale: "",
+			locale: "",
 			showModal: false,
 		};
 	},
-  computed: {
-  },
+	computed: {},
 	methods: {
-	  getDefaultLanguage() {
-	    return this.$user.defaultLanguage;
-    },
+		getDefaultLanguage() {
+			return this.$user.defaultLanguage;
+		},
 		error() {
 			this.$toast.error(this.$t("pages.account.error.edit"));
 		},
@@ -75,7 +72,7 @@ export default {
 				await this.$store.dispatch("users/patch", [
 					this.$user._id,
 					{
-						defaultLanguage: this.$store.getters["auth/getLocale"]
+						defaultLanguage: this.$store.getters["auth/getLocale"],
 					},
 				]);
 				this.showModal = true;
