@@ -14,15 +14,15 @@
 					{{ value }}
 				</div>
 				<base-icon
-						source="fa"
-						icon="chevron-down"
-						:style="{
-							'font-size': `var(--space-md)`,
-							color: `var(--color-black)`,
-							'margin-top': `calc( 1.5 * var(--border-width-bold))`
-						}"
-					>
-					</base-icon>
+					source="fa"
+					icon="chevron-down"
+					:style="{
+						'font-size': `var(--space-md)`,
+						color: `var(--color-black)`,
+						'margin-top': `calc( 1.5 * var(--border-width-bold))`,
+					}"
+				>
+				</base-icon>
 			</div>
 			<div id="`dropdown-content`" class="content" :class="{ open }">
 				<p

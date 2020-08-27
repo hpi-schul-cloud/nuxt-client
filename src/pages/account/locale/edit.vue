@@ -56,7 +56,7 @@ export default {
 	computed: {},
 	methods: {
 		getDefaultLanguage() {
-			return this.$user.defaultLanguage === 'de' ? 'Deutsch' : 'English';
+			return this.$user.defaultLanguage === "de" ? "Deutsch" : "English";
 		},
 		error() {
 			this.$toast.error(this.$t("pages.account.error.edit"));
