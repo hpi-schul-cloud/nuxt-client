@@ -1,6 +1,6 @@
 const pkg = require("./package");
 
-const environment = process.env.NODE_ENV || "development";
+const environment = process.env.NODE_ENV;
 const sampleRate = process.env.SENTRY_SAMPLE_RATE
 	? parseFloat(process.env.SENTRY_SAMPLE_RATE)
 	: 1.0;
