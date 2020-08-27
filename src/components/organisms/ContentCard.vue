@@ -143,7 +143,11 @@ export default {
 			z-index: var(--layer-page);
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 50%);
+			background: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0.9) 0%,
+				rgba(0, 0, 0, 0) 50%
+			);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 		}
