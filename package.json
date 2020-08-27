@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "24.2.1",
+	"version": "24.3.0",
 	"description": "The next Level of HPI Schul-Cloud",
 	"author": "HPI Schul-Cloud",
 	"private": true,
@@ -70,12 +70,12 @@
 		"vue-mq": "^1.0.1",
 		"vue-multiselect": "^2.1.6",
 		"vue-ripple-directive": "^2.0.1",
-		"vue-router": "^3.3.4",
+		"vue-router": "^3.4.0",
 		"vue-swatches": "^2.1.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.11.0",
-		"@babel/plugin-proposal-optional-chaining": "^7.10.4",
+		"@babel/plugin-proposal-optional-chaining": "^7.11.0",
 		"@babel/preset-env": "^7.10.3",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@schul-cloud/eslint-config": "^1.0.0",
@@ -117,7 +117,7 @@
 		"jest": "^26.2.2",
 		"jest-canvas-mock": "^2.2.0",
 		"jest-extended": "^0.11.5",
-		"jest-haste-map": "^26.2.2",
+		"jest-haste-map": "^26.3.0",
 		"jest-image-snapshot": "^4.1.0",
 		"jest-puppeteer": "^4.4.0",
 		"jest-resolve": "^26.2.1",

@@ -495,14 +495,6 @@ a.action-button {
 		}
 	}
 }
-span {
-	font-weight: var(--font-weight-normal);
-}
-.content {
-	max-height: 35vh;
-	overflow-y: scroll;
-	font-weight: var(--font-weight-normal);
-}
 .list {
 	padding: var(--space-lg);
 }
