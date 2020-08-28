@@ -14,10 +14,7 @@
 					<base-icon source="custom" :icon="'flag_' + value" />
 					{{ value }}
 				</div>
-				<base-icon
-						source="custom"
-						icon='sort-down'
-				></base-icon>
+				<base-icon source="custom" icon='sort-down' />
 			</div>
 			<div id="`dropdown-content`" class="content" :class="{ open }">
 				<p
