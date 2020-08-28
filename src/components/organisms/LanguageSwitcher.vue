@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<p class="current-language">{{$t ("pages.account.language.user.currentLanguage") }}</p>
 		<div
 			class="dropdown"
 			tabindex="0"
@@ -14,15 +15,9 @@
 					{{ value }}
 				</div>
 				<base-icon
-						source="fa"
-						icon="chevron-down"
-						:style="{
-							'font-size': `var(--space-md)`,
-							color: `var(--color-black)`,
-							'margin-top': `calc( 1.5 * var(--border-width-bold))`
-						}"
-					>
-					</base-icon>
+						source="custom"
+						icon='sort-down'
+				></base-icon>
 			</div>
 			<div id="`dropdown-content`" class="content" :class="{ open }">
 				<p
@@ -71,6 +66,11 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.current-language {
+	margin-bottom: var(--sidebar-sub-item-height);
+	font-weight: var(--font-weight-bold);
+}
+
 .button {
 	display: flex;
 	justify-content: space-between;
@@ -78,11 +78,7 @@ export default {
 	padding: var(--space-sm) var(--space-md);
 	color: var(--color-black);
 	cursor: pointer;
-	border: 1px solid var(--color-black);
-
-	@include breakpoint(desktop) {
-		width: 300px;
-	}
+	border-bottom: 1px solid var(--color-black);
 }
 
 .container {
@@ -99,11 +95,6 @@ export default {
 	&:focus {
 		outline: 0;
 	}
-
-	@include breakpoint(desktop) {
-		float: right;
-		width: 300px;
-	}
 }
 
 // Hidden by default
@@ -113,6 +104,7 @@ export default {
 	display: none;
 	flex-direction: column;
 	width: 100%;
+	padding: var(--space-sm) var(--space-md);
 	background-color: var(--color-gray-light);
 
 	&.open {
@@ -132,10 +124,6 @@ export default {
 		&:hover {
 			background-color: var(--color-gray-light);
 		}
-	}
-
-	@include breakpoint(desktop) {
-		max-width: 300px;
 	}
 }
 </style>

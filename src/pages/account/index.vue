@@ -113,7 +113,7 @@
 		</account-card>
 		<account-card
 			:heading="$t('pages.account.index.user.locale')"
-			:data="currentUser.defaultLanguage === 'de' ? 'Deutsch' : 'English'"
+			data="true"
 			:target-path="`/account/locale/edit`"
 			data-testid="account_card_locale"
 		>
@@ -128,6 +128,12 @@
 						color: var(--color-black);
 					"
 				/>
+			</template>
+			<template v-slot:data>
+				<p>
+					<base-icon source="custom" :icon="'flag_' + languageName" ></base-icon>
+					{{ languageName }}
+				</p>
 			</template>
 		</account-card>
 		<p v-if="thirdPartyLogin" class="info">
@@ -154,6 +160,9 @@ export default {
 		};
 	},
 	computed: {
+		languageName() {
+			return this.currentUser.defaultLanguage === 'de' ? 'Deutsch' : 'English'
+		},
 		thirdPartyLogin() {
 			return !!this.$user?.externallyManaged;
 		},
