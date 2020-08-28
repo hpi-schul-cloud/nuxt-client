@@ -141,6 +141,8 @@
 	"components.organisms.Pagination.perPage.50": "50 pro Seite",
 	"components.organisms.Pagination.recordsPerPage": "Einträge pro Seite",
 	"components.organisms.Pagination.showTotalRecords": "Zeige alle {total} Einträge",
+	"components.legacy.MenuQrCode.qrHintText": "Lotse mit dem QR-Code andere Nutzer:innen auf diese Seite",
+	"demo.components.legacy.footer.privacy_policy_HPI": "Datenschutzerklärung Testaccount",
 	"error.400": "400 – fehlerhafte Anfrage",
 	"error.401": "401 – das dürfen wir dir leider nicht zeigen",
 	"error.404": "404 – Seite nicht gefunden",
