@@ -66,9 +66,14 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
+		<admin-table-legend
+			:icons="icons"
+			:show-external-sync-hint="!schoolInternallyManaged"
+		/>
 		<fab-floating
-			v-if="this.$_userHasPermission('TEACHER_CREATE')"
+			v-if="
+				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
+			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -205,7 +210,7 @@ export default {
 				},
 				{
 					field: "consentStatus",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
 					sortable: true,
 				},
 				{
@@ -237,6 +242,9 @@ export default {
 		...mapGetters("users", {
 			teachers: "list",
 		}),
+		...mapState("auth", {
+			school: "school",
+		}),
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
@@ -245,6 +253,9 @@ export default {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
+		},
+		schoolInternallyManaged() {
+			return !this.school.isExternal;
 		},
 	},
 	watch: {
@@ -276,8 +287,10 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findTeachers", {
+			this.$store.dispatch("users/handleUsers", {
 				query,
+				action: "find",
+				userType: "teachers",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
@@ -309,9 +322,8 @@ export default {
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
-				_id: {
-					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
-				},
+				selectionType,
+				_ids: rowIds,
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
@@ -341,8 +353,10 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/remove", {
+					await this.$store.dispatch("users/handleUsers", {
 						query: this.getQueryForSelection(rowIds, selectionType),
+						action: "remove",
+						userType: "teachers",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
 					this.find();
