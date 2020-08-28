@@ -11,7 +11,11 @@
 			@click="handleClick"
 			@blur="open = false"
 		>
-			<div class="button" :class="{ 'border-top': border }" @click="border = true">
+			<div
+				class="button"
+				:class="{ 'border-top': border }"
+				@click="border = true"
+			>
 				<div class="langPlaceholder">
 					<base-icon source="custom" :icon="'flag_' + value" />
 					{{ value }}
@@ -120,7 +124,7 @@ export default {
 
 	&.open {
 		display: flex;
-		box-shadow: 1px 2px 5px 0 rgba(0,0,0,0.75);
+		box-shadow: 1px 2px 5px 0 rgba(0, 0, 0, 0.75);
 	}
 }
 </style>
