@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<p class="current-language">{{$t ("pages.account.language.user.currentLanguage") }}</p>
+		<p class="current-language">
+			{{ $t("pages.account.language.user.currentLanguage") }}
+		</p>
 		<div
 			class="dropdown"
 			tabindex="0"
@@ -14,7 +16,7 @@
 					<base-icon source="custom" :icon="'flag_' + value" />
 					{{ value }}
 				</div>
-				<base-icon source="custom" icon='sort-down' />
+				<base-icon source="custom" icon="sort-down" />
 			</div>
 			<div id="`dropdown-content`" class="content" :class="{ open }">
 				<p
