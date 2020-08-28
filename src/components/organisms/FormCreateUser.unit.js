@@ -34,7 +34,7 @@ describe("@components/organisms/FormCreateUser", () => {
 	it(...isValidComponent(FormCreateUser));
 
 	describe("create", () => {
-		it("emittes create-user event on form submit", async () => {
+		it("emits create-user event on form submit", async () => {
 			const actions = getMockActionsErrorCreate();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {

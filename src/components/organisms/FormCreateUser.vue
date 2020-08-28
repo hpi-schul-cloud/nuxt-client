@@ -16,7 +16,7 @@
 			required="true"
 			:label="$t('common.labels.lastName')"
 			:placeholder="$t('common.placeholder.lastName')"
-			class="mt--md firstname-input"
+			class="mt--md"
 			data-testid="input_create-user_lastname"
 		>
 		</base-input>
