@@ -131,7 +131,7 @@
 			</template>
 			<template v-slot:data>
 				<p>
-					<base-icon source="custom" :icon="'flag_' + languageName" ></base-icon>
+					<base-icon source="custom" :icon="'flag_' + languageName"></base-icon>
 					{{ languageName }}
 				</p>
 			</template>
@@ -161,7 +161,7 @@ export default {
 	},
 	computed: {
 		languageName() {
-			return this.currentUser.defaultLanguage === 'de' ? 'Deutsch' : 'English'
+			return this.currentUser.defaultLanguage === "de" ? "Deutsch" : "English";
 		},
 		thirdPartyLogin() {
 			return !!this.$user?.externallyManaged;
