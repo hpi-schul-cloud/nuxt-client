@@ -9,7 +9,7 @@
 			@click="handleClick"
 			@blur="open = false"
 		>
-			<div class="button">
+			<div class="button" :class="{ 'border-top': border }" @click="border = true">
 				<div class="langPlaceholder">
 					<base-icon source="custom" :icon="'flag_' + value" />
 					{{ value }}
@@ -43,6 +43,7 @@ export default {
 		return {
 			languages: ["Deutsch", "English"],
 			open: false,
+			border: false,
 			value: this.defaultLanguage,
 		};
 	},
@@ -68,22 +69,6 @@ export default {
 	font-weight: var(--font-weight-bold);
 }
 
-.button {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-	padding: var(--space-sm) var(--space-md);
-	color: var(--color-black);
-	cursor: pointer;
-	border-bottom: 1px solid var(--color-black);
-}
-
-.container {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
 .dropdown {
 	position: relative;
 	display: inline-block;
@@ -94,33 +79,46 @@ export default {
 	}
 }
 
-// Hidden by default
+.button {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	padding: var(--space-sm) var(--space-md);
+	color: var(--color-black);
+	cursor: pointer;
+	border-bottom: 1px solid var(--color-black);
+
+	&.border-top {
+		border-bottom: 1px solid var(--color-primary) !important;
+	}
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 .content {
 	position: absolute;
 	z-index: var(--layer-dropdown);
 	display: none;
 	flex-direction: column;
 	width: 100%;
-	padding: var(--space-sm) var(--space-md);
-	background-color: var(--color-gray-light);
+	cursor: pointer;
+	background-color: var(--color-white);
 
-	&.open {
-		display: flex;
-	}
-	.link {
-		display: inline-block;
-		color: var(--color-black);
-		word-break: break-word;
-		white-space: normal;
-		border-bottom: 0;
-
-		&:not(:last-child) {
-			border-bottom: 1px solid var(--color-gray);
-		}
-
+	p {
+		padding: 8px 0 8px var(--space-md);
+		margin-bottom: 0;
 		&:hover {
 			background-color: var(--color-gray-light);
 		}
+	}
+
+	&.open {
+		display: flex;
+		box-shadow: 1px 2px 5px 0 rgba(0,0,0,0.75);
 	}
 }
 </style>
