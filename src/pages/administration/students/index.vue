@@ -13,7 +13,7 @@
 		/>
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
-			:columns="filteredColumns"
+			:columns="editFilteredColumns"
 			:current-page.sync="page"
 			:data="students"
 			:paginated="true"
@@ -281,7 +281,7 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
-		filteredColumns() {
+		editFilteredColumns() {
 			// filters edit column if school is external
 			return this.school.isExternal
 				? this.tableColumns.filter((col) => col.field !== "_id")
