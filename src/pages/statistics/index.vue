@@ -78,16 +78,19 @@
 					/>
 				</BaseGrid>
 			</single-tab>
-			<single-tab
-				name="Meine Statistiken"
-				:selected="false"
-			>
+			<single-tab name="Meine Statistiken" :selected="false">
 				<div v-if="loading" class="spinner-border" role="status">
 					<span class="sr-only">Loading...</span>
 				</div>
 				<query-builder :cubejs-api="cubejsApi" :query="usersQuery">
 					<template v-slot="{ resultSet }">
-						<div v-if="resultSet && resultSet.loadResponse && resultSet.loadResponse.data">
+						<div
+							v-if="
+								resultSet &&
+								resultSet.loadResponse &&
+								resultSet.loadResponse.data
+							"
+						>
 							{{ resultSet.loadResponse.data[0]["Actor.count"] }} Actors
 						</div>
 					</template>
@@ -120,12 +123,12 @@ import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
 import "echarts/lib/component/title";
 import "echarts/lib/component/dataset";
-import cubejs from '@cubejs-client/core';
-import { QueryBuilder } from '@cubejs-client/vue';
+import cubejs from "@cubejs-client/core";
+import { QueryBuilder } from "@cubejs-client/vue";
 
 const cubejsApi = cubejs(
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTg2OTQ0ODQsImV4cCI6MTU5ODc4MDg4NH0.73_f_qFs1GuwV9nBXpmXhKJsp7Zfk2SUs321AR0B2j8",
-  { apiUrl: "http://localhost:4004/cubejs-api/v1" }
+	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTg2OTQ0ODQsImV4cCI6MTU5ODc4MDg4NH0.73_f_qFs1GuwV9nBXpmXhKJsp7Zfk2SUs321AR0B2j8",
+	{ apiUrl: "http://localhost:4004/cubejs-api/v1" }
 );
 
 export default {
@@ -140,11 +143,13 @@ export default {
 		loading: Boolean,
 		resultSet: {
 			type: Object,
-			default: () => { loadResponse: false },
+			default: () => {
+				loadResponse: false;
+			},
 		},
 	},
 	async asyncData({ store }) {
-		if (store.state.auth.user.permissions.includes('VIEW_GLOBAL_STATS')) {
+		if (store.state.auth.user.permissions.includes("VIEW_GLOBAL_STATS")) {
 			return Promise.all([
 				store.dispatch("statistics/getAccountStats"),
 				store.dispatch("statistics/getStudentsStats"),
@@ -154,16 +159,14 @@ export default {
 				store.dispatch("statistics/getSchoolStats"),
 			]);
 		}
-		if (store.state.auth.user.permissions.includes('VIEW_MYSCHOOL_STATS')) {
-			return Promise.all([
-				store.dispatch("statistics/getSchoolStats"),
-			]);
+		if (store.state.auth.user.permissions.includes("VIEW_MYSCHOOL_STATS")) {
+			return Promise.all([store.dispatch("statistics/getSchoolStats")]);
 		}
 	},
 	data() {
 		return {
 			cubejsApi,
-			usersQuery: { measures: ["Actor.count"] }
+			usersQuery: { measures: ["Actor.count"] },
 		};
 	},
 	computed: {
@@ -277,14 +280,14 @@ export default {
 			students: "students",
 			courses: "courses",
 		}),
-		values: function() {
+		values: function () {
 			if (this.loading) return [];
 			return this.resultSet.chartPivot();
 		},
-		metrics: function() {
+		metrics: function () {
 			if (this.loading) return [""];
-			return this.resultSet.seriesNames().map(x => x.key);
-		}
+			return this.resultSet.seriesNames().map((x) => x.key);
+		},
 	},
 };
 </script>
