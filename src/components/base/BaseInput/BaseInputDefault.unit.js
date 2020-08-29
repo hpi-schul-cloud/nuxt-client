@@ -1,6 +1,5 @@
 import BaseInput from "./BaseInput";
-import BaseInputDefault from "./BaseInputDefault";
-import { supportedTypes } from "./BaseInputDefault";
+import BaseInputDefault, { supportedTypes } from "./BaseInputDefault";
 
 function getMock(type, attributes) {
 	return mount({
@@ -9,6 +8,19 @@ function getMock(type, attributes) {
 		components: { BaseInput },
 	});
 }
+
+const mockInput = (type) => {
+	switch (type) {
+		case "number":
+			return 5;
+		case "time":
+			return "08:12";
+		case "date":
+			return "2020-01-01";
+		default:
+			return "test string";
+	}
+};
 
 describe("@components/base/BaseInputDefault", () => {
 	it("input has correct type", () => {
@@ -21,7 +33,7 @@ describe("@components/base/BaseInputDefault", () => {
 
 	it("changing the element's value, updates the v-model", () => {
 		supportedTypes.forEach((type) => {
-			const testInput = type === "number" ? 5 : "test string";
+			const testInput = mockInput(type);
 			const wrapper = getMock(type);
 			const input = wrapper.find(`input[type="${type}"]`);
 			input.setValue(testInput);
@@ -32,7 +44,7 @@ describe("@components/base/BaseInputDefault", () => {
 	it("changing the v-model, updates the element's value", async () => {
 		await Promise.all(
 			supportedTypes.map(async (type) => {
-				const testInput = type === "number" ? 5 : "test string";
+				const testInput = mockInput(type);
 				const wrapper = getMock(type);
 				wrapper.setData({ content: testInput });
 				await wrapper.vm.$nextTick();
@@ -44,7 +56,7 @@ describe("@components/base/BaseInputDefault", () => {
 
 	it("rejects input if it is disabled", () => {
 		supportedTypes.forEach((type) => {
-			const testInput = type === "number" ? 5 : "test string";
+			const testInput = mockInput(type);
 
 			const disabledWrapper = getMock(type, "disabled");
 			const disabledInput = disabledWrapper.find(`input[type="${type}"]`);
@@ -68,34 +80,38 @@ describe("@components/base/BaseInputDefault", () => {
 	it("shows its label when no placeholder is provided", () => {
 		supportedTypes.forEach((type) => {
 			const wrapperWithoutPlaceholder = getMock(type);
-			const baseInputDefaultWithoutPlaceholder = wrapperWithoutPlaceholder.find(
+			const baseInputDefaultWithoutPlaceholder = wrapperWithoutPlaceholder.findComponent(
 				BaseInputDefault
 			);
 			expect(baseInputDefaultWithoutPlaceholder.vm.showLabel).toBe(true);
-			expect(wrapperWithoutPlaceholder.find(".label").isVisible()).toBe(true);
+			expect(wrapperWithoutPlaceholder.find(".label").exists()).toBe(true);
 		});
 	});
 
 	it("shows its label when it contains a value", async () => {
 		await Promise.all(
 			supportedTypes.map(async (type) => {
-				const testInput = type === "number" ? 5 : "test string";
+				const testInput = mockInput(type);
 				const wrapperWithPlaceHolder = getMock(
 					type,
 					"placeholder='placeholder'"
 				);
-				const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.find(
+				const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.findComponent(
 					BaseInputDefault
 				);
 				const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
 
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
-				expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(false);
+				expect(
+					wrapperWithPlaceHolder.find(".label").element.style.display
+				).toBe("none");
 
 				input.setValue(testInput);
 				await wrapperWithPlaceHolder.vm.$nextTick();
 
-				expect(wrapperWithPlaceHolder.find(".label").isVisible()).toBe(true);
+				expect(
+					wrapperWithPlaceHolder.find(".label").element.style.display
+				).toBe("");
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(true);
 			})
 		);
@@ -119,7 +135,7 @@ describe("@components/base/BaseInputDefault", () => {
 				},
 				stubs: ["base-icon"],
 			});
-			const baseInputDefault = wrapper.find(BaseInputDefault);
+			const baseInputDefault = wrapper.findComponent(BaseInputDefault);
 			expect(baseInputDefault.vm.hasError).toBe(true);
 
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);

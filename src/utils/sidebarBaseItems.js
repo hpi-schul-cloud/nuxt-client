@@ -104,12 +104,12 @@ export default [
 	},
 	{
 		title: "Helpdesk",
-		href: "/administration/helpdesk/",
+		href: "/helpdesk/",
 		icon: "ticket",
 		permission: "HELPDESK_VIEW",
 	},
 	{
-		title: "Administration",
+		title: "Verwaltung",
 		href: "/administration/",
 		icon: "cogs",
 		permission: "ADMIN_VIEW",

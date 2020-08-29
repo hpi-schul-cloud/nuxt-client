@@ -32,7 +32,7 @@ jobs:
       - name: npm run lint
         run: npm run lint:ci
       - name: npm run lint:fix
-        if: failure()
+        if: failure() && matrix.os == 'ubuntu-latest'
         run: npm run lint
       - uses: stefanzweifel/git-auto-commit-action@v4.1.1
         # only run on one of the matrix builds
@@ -44,7 +44,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: npm ci
-        run: npm ci --prefer-offline --no-audit
+        # apt-get is to fix issue: https://github.com/puppeteer/puppeteer/issues/5704#issuecomment-618372226
+        run: |
+          sudo apt-get update && sudo apt-get install -y libgbm1
+          npm ci --prefer-offline --no-audit
       - name: build storybook
         run: "npm run build:storybook"
       - name: npm run test:screenshot
@@ -60,6 +63,12 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: run git change
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
       - name: execute tests
         run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/develop/scripts/ci/fetch.github.sh" | bash
       - uses: actions/upload-artifact@v1
@@ -71,7 +80,7 @@ jobs:
   # build:
   #   strategy:
   #     matrix:
-  #       theme: [default, brb, n21, open, thr]
+  #       theme: [default, brb, n21, open, thr, int]
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v2

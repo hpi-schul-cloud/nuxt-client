@@ -9,10 +9,10 @@
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -20,7 +20,7 @@
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
 			:total="pagination.total"
-			track-by="id"
+			track-by="_id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
@@ -29,32 +29,36 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
-			<template v-slot:datacolumn-createdAt="{ data }">
-				{{ dayjs(data).format("DD.MM.YYYY") }}
+			<template v-slot:datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
 			</template>
-			<template v-slot:datacolumn-consent="{ data }">
-				<span v-if="data && data.consentStatus === 'ok'">
+			<template v-slot:headcolumn-consent> </template>
+			<template v-slot:columnlabel-consent></template>
+			<template v-slot:datacolumn-createdAt="{ data }">
+				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
+			</template>
+			<template v-slot:datacolumn-consentStatus="{ data: status }">
+				<span class="text-content">
 					<base-icon
+						v-if="status === 'ok'"
 						source="custom"
 						icon="doublecheck"
 						color="var(--color-success)"
 					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'parentsAgreed'">
+
 					<base-icon
+						v-else-if="status === 'parentsAgreed'"
 						source="material"
 						icon="check"
 						color="var(--color-warning)"
 					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
+						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
-				<span v-else />
 			</template>
 			<template
 				v-if="schoolInternallyManaged"
@@ -116,7 +120,6 @@ import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
-	layout: "loggedInFull",
 	components: {
 		DataFilter,
 		BackendDataTable,
@@ -129,26 +132,25 @@ export default {
 			type: Boolean,
 		},
 	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
-	},
+
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.get(
+				"filter",
+				"pages.administration.students.index"
+			),
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.get("pagination", "pages.administration.students.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.students.index.itemsPerPage"
-					)
-				) || 10,
-			sortBy: "firstName",
-			sortOrder: "asc",
+				this.$uiState.get("pagination", "pages.administration.students.index")
+					.limit || 25,
+			sortBy:
+				this.$uiState.get("sorting", "pages.administration.students.index")
+					.sortBy || "firstName",
+			sortOrder:
+				this.$uiState.get("sorting", "pages.administration.students.index")
+					.sortOrder || "asc",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -161,17 +163,25 @@ export default {
 					sortable: true,
 				},
 				{
+					field: "birthday",
+					label: this.$t("common.labels.birthday"),
+					sortable: true,
+				},
+				{
 					field: "email",
 					label: this.$t("common.labels.email"),
 					sortable: true,
 				},
-				// {
-				// 	field: "birthday",
-				// 	label: this.$t("common.labels.birthday"),
-				// },
 				{
-					field: "consent",
-					label: this.$t("common.labels.consent"),
+					field: "classes",
+					label: this.$t("common.labels.classes"),
+					sortable: true,
+				},
+				{
+					field: "consentStatus",
+					label: this.$t("common.labels.registration"),
+					sortable: true,
+					infobox: true,
 				},
 				{
 					field: "createdAt",
@@ -213,6 +223,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "STUDENT_DELETE",
 				},
 			],
 			tableSelection: [],
@@ -246,7 +257,13 @@ export default {
 				},
 			],
 			filters: studentFilter(this),
+			active: false,
 		};
+	},
+
+	layout: "loggedInFull",
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
 		...mapState("auth", {
@@ -260,7 +277,28 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
 		schoolInternallyManaged() {
-			return !this.school?.ldapSchoolIdentifier && !this.school?.source;
+			return !this.school.isExternal;
+		},
+		permissionFilteredTableActions() {
+			return this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
+		},
+	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.get("filter", "pages.administration.students.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.set("filter", "pages.administration.students.index", {
+				query,
+			});
 		},
 	},
 	created(ctx) {
@@ -277,40 +315,43 @@ export default {
 				...this.currentFilterQuery,
 			};
 
-			this.$store.dispatch("users/findStudents", {
+			this.$store.dispatch("users/handleUsers", {
 				query,
+				action: "find",
+				userType: "students",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
+			this.$uiState.set("sorting", "pages.administration.students.index", {
+				sortBy: this.sortBy,
+				sortOrder: this.sortOrder,
+			});
 			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.students.index.currentPage",
-				page
-			);
+			this.$uiState.set("pagination", "pages.administration.students.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.students.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.set("pagination", "pages.administration.students.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
-				_id: {
-					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
-				},
+				selectionType,
+				_ids: rowIds,
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
@@ -321,43 +362,49 @@ export default {
 				{ duration: 5000 }
 			);
 		},
-		handleBulkEMail(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkEMail([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+		async handleBulkEMail(rowIds, selectionType) {
+			try {
+				await this.$store.dispatch("users/sendRegistrationLink", {
+					userIds: rowIds,
+					selectionType,
+				});
+				this.$toast.success(
+					this.$tc("pages.administration.sendMail.success", rowIds.length)
+				);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+					this.$tc("pages.administration.sendMail.error", rowIds.length)
+				);
+			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			// TODO: request registrationsLinks fom backend
-			// route needs to be implemented!
-
-			// const users = await this.$store.dispatch("users/find", {
-			// 	qid: "qr-print",
-			// 	query: this.getQueryForSelection(rowIds, selectionType),
-			// });
-			// this.$_printQRs(
-			// 	usersWithoutConsents.map((user) => ({
-			// 		qrContent: user.registrationLink.shortLink,
-			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
-			// 		description: "Zum Registrieren bitte den Link öffnen.",
-			// 	}))
-			// );
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+			try {
+				const qrRegistrationLinks = await this.$store.dispatch(
+					"users/getQrRegistrationLinks",
+					{
+						userIds: rowIds,
+						selectionType,
+					}
+				);
+				this.$_printQRs(qrRegistrationLinks);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+					this.$tc("pages.administration.printQr.error", rowIds.length)
+				);
+			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/remove", {
+					await this.$store.dispatch("users/handleUsers", {
 						query: this.getQueryForSelection(rowIds, selectionType),
+						action: "remove",
+						userType: "students",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
+					this.find();
 				} catch (error) {
 					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}
@@ -400,10 +447,6 @@ export default {
 				invertedDesign: true,
 			});
 		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.onUpdateCurrentPage(1);
-		},
 	},
 };
 </script>
@@ -422,5 +465,8 @@ a.action-button {
 			box-shadow: none;
 		}
 	}
+}
+.list {
+	padding: var(--space-lg);
 }
 </style>

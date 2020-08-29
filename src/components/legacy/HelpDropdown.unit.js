@@ -5,6 +5,8 @@ const menuItems = [
 		label: "Test",
 		icon: "question-circle",
 		action: "/test",
+		source: "fa",
+		target: "_self",
 	},
 ];
 
@@ -17,8 +19,8 @@ describe("@components/legacy/HelpDropdown", () => {
 			},
 		});
 
-		expect(wrapper.contains("base-link-stub")).toBe(true);
-		expect(wrapper.contains("base-icon-stub")).toBe(true);
+		expect(wrapper.find("base-link-stub").exists()).toBe(true);
+		expect(wrapper.find("base-icon-stub").exists()).toBe(true);
 		expect(wrapper.find("base-link-stub").text()).toBe(menuItems[0].label);
 	});
 });

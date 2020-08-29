@@ -3,7 +3,9 @@ import TheFooter from "./TheFooter";
 describe("@components/legacy/TheFooter", () => {
 	it(...isValidComponent(TheFooter));
 
-	const $theme = { name: "test" };
+	const $theme = {
+		name: "test",
+	};
 	it("check that all links are rendered in the footer", () => {
 		const wrapper = shallowMount(TheFooter, {
 			...createComponentMocks({

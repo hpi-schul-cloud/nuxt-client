@@ -71,7 +71,7 @@ export default {
 				firstName: "",
 				lastName: "",
 				email: "",
-				sendRegistration: true,
+				sendRegistration: false,
 			},
 		};
 	},
@@ -92,25 +92,17 @@ export default {
 
 		async create() {
 			try {
-				await this.$store.dispatch("users/create", {
+				await this.$store.dispatch("users/handleUsers", {
 					firstName: this.userData.firstName,
 					lastName: this.userData.lastName,
 					email: this.userData.email,
 					roles: [this.roleName],
 					schoolId: this.$user.schoolId,
 					sendRegistration: this.userData.sendRegistration,
+					generateRegistrationLink: true,
+					action: this.actionType,
+					userType: `${this.roleName}s`,
 				});
-				// TODO: remove the next registrationlink dispatch
-				// https://ticketsystem.schul-cloud.org/browse/SC-4008
-				await this.$store.dispatch("registrationlink/create", {
-					role: this.roleName,
-					save: true,
-					patchUser: true,
-					host: location.host,
-					schoolId: this.$user.schoolId,
-					toHash: this.userData.email,
-				});
-
 				this.$emit("success");
 			} catch (e) {
 				this.$emit("error");

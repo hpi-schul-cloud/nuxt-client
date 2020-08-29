@@ -5,13 +5,18 @@ const base = serviceTemplate("users");
 
 const module = mergeDeep(base, {
 	actions: {
-		findStudents({ dispatch }, queryContext = {}) {
-			queryContext.customEndpoint = "/users/admin/students";
-			return dispatch("find", queryContext);
+		handleUsers({ dispatch }, queryContext = {}) {
+			const { userType, action } = queryContext;
+			queryContext.customEndpoint = `/users/admin/${userType}`;
+			return dispatch(action, queryContext);
 		},
-		findTeachers({ dispatch }, query = {}) {
-			query.customEndpoint = "/users/admin/teachers";
-			return dispatch("find", query);
+		sendRegistrationLink(ctx, payload = {}) {
+			const customEndpoint = "/users/mail/registrationLink";
+			return this.$axios.$post(customEndpoint, payload);
+		},
+		getQrRegistrationLinks(ctx, payload = {}) {
+			const customEndpoint = "/users/qrRegistrationLink";
+			return this.$axios.$post(customEndpoint, payload);
 		},
 		getByRole: async function (ctx, role) {
 			const queryRole = {

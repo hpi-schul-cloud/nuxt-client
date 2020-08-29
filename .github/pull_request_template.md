@@ -1,32 +1,79 @@
-<!--
-Thank you for opening a PR! We value every contribution!
--->
-
-# Issue: [SC-](https://ticketsystem.schul-cloud.org/browse/SC-)
+# Description
 
 <!--
-What issue are you addressing?
+  This is a template to add as many information as possible to the pull request, to help reviewer and as a checklist for you. Points to remember are set in the comments, please read and keep them in mind:
 
-If an issue doesn't exist for this pull request (PR) to address, please open one
-to allow for discussion before opening this PR.
-
-You can open a new issue at https://ticketsystem.schul-cloud.org/
-
-please use one of the following formats:
-- for issues from our ticketsystem: `[{issue id}](https://ticketsystem.schul-cloud.org/browse/{issue id})`
-- for github issues: `#{issue id}` (#12)
+    - Code should be self-explanatory and share your knowledge with others
+    - Document code that is not self-explanatory
+    - Think about bugs and keep security in mind
+    - Write tests (Unit and Integration), also for error cases
+    - Main logic should hidden behind the api, never trust the client
+    - Visible changes should be discussed with the UX-Team from the begining of development; they also have to accept them at the end
+    - Keep the changelog up-to-date
+    - Leave the code cleaner than you found it. Remove unnecessary lines. Listen to the linter.
 -->
 
-## Description
+## Links to Tickets or other pull requests
 
 <!--
-Please explain what you have changed and more importan why you did so.
+Base links to copy
+- https://github.com/schul-cloud/schulcloud-server/pull/????
+- https://ticketsystem.schul-cloud.org/browse/SC-????
 -->
 
--
-
-## Screenshot
+## Changes
 
 <!--
-If you have made changes to the userinterface, please show your changes with a screenshot.
+  What will the PR change?
+  Why are the changes requiered?
+  Short notice if a ticket exists, more detailed if not
 -->
+
+## Datasecurity <sub><sup>details [on Confluence](https://docs.schul-cloud.org/x/2S3GBg)</sup></sub>
+
+<!--
+  Notice about:
+  - model changes
+  - logging of user data
+  - right changes
+  - and other user data stuff
+  If you are not sure if it is relevant, take a look at confluence or ask the data-security team.
+-->
+
+## Deployment
+
+<!--
+  Keep in mind to changes to seed data, if changes are done by migration scripts.
+  Changes to the infrastructure have to discussed with the devops
+
+  This point should includes following informations:
+  - What is required for deployment?
+  - Envirement variables like FEATURE_XY=true
+  - Migration scripts to run, other requirements
+-->
+
+## New Repos, NPM pakages or vendor scripts
+
+<!--
+  Keep in mind the stability, performance, activity and author.
+
+  Describe why it is needed.
+-->
+
+## Screenshots of UI changes
+
+<!--
+  only needed for visual changes
+
+  If visual changes exist, work together with UI/UX from beginning/ping UX with final PR
+-->
+
+## Approval for review
+
+- [ ] All points were discussed with the ticket creator, support-team or product owner. The code upholds all quality guidelines from the PR-template.
+
+> Notice: Please remove the WIP label if the PR is ready to review, otherwise nobody will review it.
+
+### Link to Definiton of Done
+
+More and detailed information on the _definition of done_ can be found [on Confluence](https://docs.schul-cloud.org/pages/viewpage.action?pageId=92831762)

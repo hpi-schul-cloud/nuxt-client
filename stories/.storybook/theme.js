@@ -8,7 +8,7 @@ const baseThemeConfig = {
 	fontCode:
 		'"Source Code Pro", "Operator Mono", "Fira Code Retina", "Fira Code", FiraCode-Retina, "Andale Mono", "Lucida Console", Consolas, Monaco, monospace',
 
-	brandTitle: "Schul-Cloud Storybook",
+	brandTitle: "HPI Schul-Cloud Storybook",
 	brandImage: SCLogo,
 };
 

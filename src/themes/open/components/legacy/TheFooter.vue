@@ -49,6 +49,7 @@
 
 <script>
 import { mapState } from "vuex";
+import defaultDocuments from "@utils/documents.js";
 
 export default {
 	computed: {
@@ -65,11 +66,13 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					to: "/datenschutz",
-					text: this.$t("components.legacy.footer.privacy_policy"),
+					href: defaultDocuments.specificFiles().termsOfUseSchool,
+					text: this.$t("components.legacy.footer.terms"),
+					target: "_blank",
+					rel: "noopener",
 				},
 				{
-					href: "https://github.com/schul-cloud/",
+					href: "https://github.com/hpi-schul-cloud/",
 					text: "GitHub",
 				},
 			];

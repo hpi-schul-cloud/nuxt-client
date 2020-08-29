@@ -8,7 +8,7 @@ function getWrapper(attributes, options) {
 		...createComponentMocks({ i18n: true }),
 		propsData: {
 			data: defaultData,
-			trackBy: "id",
+			trackBy: "_id",
 			columns: tableColumns,
 			...attributes,
 		},
@@ -38,7 +38,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			expect(wrapper.find("thead tr").findAll("th")).toHaveLength(
 				tableColumns.length
 			);
-			expect(wrapper.find("tbody tr").contains("td")).toBe(true);
+			expect(wrapper.find("tbody tr").find("td").exists()).toBe(true);
 
 			expect(wrapper.find("thead tr th").text()).toContain("Vorname");
 
@@ -96,7 +96,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 	describe("sort", () => {
 		const getSortButton = (wrapper, text = "Vorname") =>
 			wrapper
-				.findAll(".is-sortable button")
+				.findAll("button.is-sortable")
 				.wrappers.find((w) => w.text() === text);
 
 		it("should emit sort events on click on sortable coloumn", async () => {
@@ -113,20 +113,21 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			await wrapper.vm.$nextTick();
 			otherSortButton.trigger("click");
 			await wrapper.vm.$nextTick();
-			expect(wrapper.emittedByOrder()).toStrictEqual([
-				{ args: ["firstName", "asc"], name: "update:sort" },
-				{ args: ["firstName"], name: "update:sort-by" },
-				{ args: ["asc"], name: "update:sort-order" },
-				{ args: ["firstName", "desc"], name: "update:sort" },
-				{ args: ["firstName"], name: "update:sort-by" },
-				{ args: ["desc"], name: "update:sort-order" },
-				{ args: ["firstName", "asc"], name: "update:sort" },
-				{ args: ["firstName"], name: "update:sort-by" },
-				{ args: ["asc"], name: "update:sort-order" },
-				{ args: ["address.city", "asc"], name: "update:sort" },
-				{ args: ["address.city"], name: "update:sort-by" },
-				{ args: ["asc"], name: "update:sort-order" },
-			]);
+			expect(wrapper.emitted()).toMatchObject({
+				"update:sort": [
+					["firstName", "asc"],
+					["firstName", "desc"],
+					["firstName", "asc"],
+					["address.city", "asc"],
+				],
+				"update:sort-by": [
+					["firstName"],
+					["firstName"],
+					["firstName"],
+					["address.city"],
+				],
+				"update:sort-order": [["asc"], ["desc"], ["asc"], ["asc"]],
+			});
 		});
 
 		it("should update ui if sortBy prop changes", async () => {
@@ -177,7 +178,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 	describe("selection", () => {
 		const total = 10;
 		const testData = tableData(Math.floor(total / 2), (index) => ({
-			id: String(index), // simplify IDs of test data for easier testing
+			_id: String(index), // simplify IDs of test data for easier testing
 		}));
 
 		const getVisibleSelections = async (wrapper) => {
@@ -202,7 +203,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			return (
 				visibleSelections.length === expectedSelectionIds.length &&
 				expectedSelectionIds.every((expectedId) => {
-					const selectionFirstName = data.find((row) => row.id === expectedId)
+					const selectionFirstName = data.find((row) => row._id === expectedId)
 						.firstName;
 					return visibleSelections.find(
 						(selectionRow) => selectionRow[1] === selectionFirstName
@@ -219,10 +220,10 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
 			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
-				[[testData[0].id], "inclusive"],
+				[[testData[0]._id], "inclusive"],
 			]);
 			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
-				[[testData[0].id]],
+				[[testData[0]._id]],
 			]);
 		});
 
@@ -448,7 +449,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
-					trackBy: "id",
+					trackBy: "_id",
 					columns: tableColumns,
 				},
 				scopedSlots: {
@@ -473,7 +474,7 @@ describe("@components/organisms/DataTable/BackendDataTable", () => {
 				...createComponentMocks({ i18n: true }),
 				propsData: {
 					data: smallData,
-					trackBy: "id",
+					trackBy: "_id",
 					columns: tableColumns,
 				},
 				scopedSlots: {

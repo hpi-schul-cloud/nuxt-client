@@ -1,17 +1,24 @@
 import ContentEmptyState from "./ContentEmptyState";
 
 describe("@components/molecules/ContentEmptyState", () => {
+	const wrapper = mount(ContentEmptyState, {
+		...createComponentMocks({ i18n: true }),
+		data: () => ({}),
+	});
+
 	it(...isValidComponent(ContentEmptyState));
 
-	it("Renders svg image", () => {
-		const wrapper = shallowMount(ContentEmptyState, {
-			...createComponentMocks({ i18n: true }),
-			data: () => ({
-				emptyStateSVGs: ["/empty-state/emptyStateSvg_lehrer1.svg"],
-			}),
-		});
-		expect(wrapper.find(".empty-state-container__image").attributes().src).toBe(
-			"/empty-state/emptyStateSvg_lehrer1.svg"
+	// eslint-disable-next-line jest/no-commented-out-tests
+	it("Renders an image", () => {
+		expect(wrapper.find(".img-container").exists()).toBe(true);
+	});
+	it("Provides proper title", () => {
+		expect(wrapper.find(".title").exists()).toBe(true);
+		expect(wrapper.find(".title").text()).toBe(
+			wrapper.vm.$i18n.t("pages.content.empty_state.error.title")
 		);
+	});
+	it("Provides proper message", () => {
+		expect(wrapper.find(".description").exists()).toBe(true);
 	});
 });

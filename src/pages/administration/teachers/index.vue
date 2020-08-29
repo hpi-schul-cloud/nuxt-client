@@ -8,10 +8,10 @@
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
-			@update:filter-query="onUpdateFilterQuery"
+			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
-			:actions="tableActions"
+			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="teachers"
@@ -19,7 +19,7 @@
 			:total="pagination.total"
 			:rows-per-page.sync="limit"
 			:rows-selectable="true"
-			track-by="id"
+			track-by="_id"
 			:selected-row-ids.sync="tableSelection"
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
@@ -32,24 +32,23 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				{{ dayjs(data).format("DD.MM.YYYY") }}
+				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
 			</template>
-			<template v-slot:datacolumn-consent="{ data }">
-				<span v-if="data && data.consentStatus === 'ok'">
+			<template v-slot:datacolumn-consentStatus="{ data: status }">
+				<span class="text-content">
 					<base-icon
+						v-if="status === 'ok'"
 						source="material"
 						icon="check"
 						color="var(--color-success)"
 					/>
-				</span>
-				<span v-else-if="data && data.consentStatus === 'missing'">
 					<base-icon
+						v-else-if="status === 'missing'"
 						source="material"
 						icon="close"
 						color="var(--color-danger)"
 					/>
 				</span>
-				<span v-else />
 			</template>
 
 			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
@@ -67,9 +66,14 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" :show-external-sync-hint="true" />
+		<admin-table-legend
+			:icons="icons"
+			:show-external-sync-hint="!schoolInternallyManaged"
+		/>
 		<fab-floating
-			v-if="this.$_userHasPermission('TEACHER_CREATE')"
+			v-if="
+				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
+			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -120,21 +124,23 @@ export default {
 	},
 	data() {
 		return {
-			currentFilterQuery: {},
+			currentFilterQuery: this.$uiState.get(
+				"filter",
+				"pages.administration.teachers.index"
+			),
+			test: this.$uiState,
 			page:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.currentPage"
-					)
-				) || 1,
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.page || 1,
 			limit:
-				parseInt(
-					localStorage.getItem(
-						"pages.administration.teachers.index.itemsPerPage"
-					)
-				) || 10,
-			sortBy: "firstName",
-			sortOrder: "asc",
+				this.$uiState.get("pagination", "pages.administration.teachers.index")
+					.limit || 25,
+			sortBy:
+				this.$uiState.get("sorting", "pages.administration.teachers.index")
+					.sortBy || "firstName",
+			sortOrder:
+				this.$uiState.get("sorting", "pages.administration.teachers.index")
+					.sortOrder || "asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -176,6 +182,7 @@ export default {
 					icon: "delete_outline",
 					"icon-source": "material",
 					action: this.handleBulkDelete,
+					permission: "TEACHER_DELETE",
 				},
 			],
 			tableSelection: [],
@@ -199,10 +206,12 @@ export default {
 				{
 					field: "classes",
 					label: this.$t("common.labels.classes"),
+					sortable: true,
 				},
 				{
-					field: "consent",
-					label: this.$t("common.labels.consent"),
+					field: "consentStatus",
+					label: this.$t("common.labels.registration"),
+					sortable: true,
 				},
 				{
 					field: "createdAt",
@@ -233,10 +242,37 @@ export default {
 		...mapGetters("users", {
 			teachers: "list",
 		}),
+		...mapState("auth", {
+			school: "school",
+		}),
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
+		permissionFilteredTableActions() {
+			return this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
+		},
+		schoolInternallyManaged() {
+			return !this.school.isExternal;
+		},
+	},
+	watch: {
+		currentFilterQuery: function (query) {
+			this.currentFilterQuery = query;
+			if (
+				JSON.stringify(query) !==
+				JSON.stringify(
+					this.$uiState.get("filter", "pages.administration.teachers.index")
+				)
+			) {
+				this.onUpdateCurrentPage(1);
+			}
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
+				query,
+			});
+		},
 	},
 	created(ctx) {
 		this.find();
@@ -251,40 +287,43 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findTeachers", {
+			this.$store.dispatch("users/handleUsers", {
 				query,
+				action: "find",
+				userType: "teachers",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
+			this.$uiState.set("sorting", "pages.administration.teachers.index", {
+				sortBy: this.sortBy,
+				sortOrder: this.sortOrder,
+			});
 			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			localStorage.setItem(
-				"pages.administration.teachers.index.currentPage",
-				page
-			);
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				currentPage: page,
+			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			this.page = 1;
 			this.limit = limit;
-			// save user settings in localStorage
-			localStorage.setItem(
-				"pages.administration.teachers.index.itemsPerPage",
-				limit
-			);
+			// save user settings in uiState
+			this.$uiState.set("pagination", "pages.administration.teachers.index", {
+				itemsPerPage: limit,
+			});
 			this.find();
 		},
 		dayjs,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
-				_id: {
-					[selectionType === "inclusive" ? "$in" : "$nin"]: rowIds,
-				},
+				selectionType,
+				_ids: rowIds,
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
@@ -295,22 +334,32 @@ export default {
 				{ duration: 5000 }
 			);
 		},
-		handleBulkEMail(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkEMail([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+		async handleBulkEMail(rowIds, selectionType) {
+			try {
+				await this.$store.dispatch("users/sendRegistrationLink", {
+					userIds: rowIds,
+					selectionType,
+				});
+				this.$toast.success(
+					this.$tc("pages.administration.sendMail.success", rowIds.length)
+				);
+			} catch (error) {
+				this.$toast.error(
+					this.$tc("pages.administration.sendMail.error", rowIds.length)
+				);
+			}
 		},
 
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/remove", {
+					await this.$store.dispatch("users/handleUsers", {
 						query: this.getQueryForSelection(rowIds, selectionType),
+						action: "remove",
+						userType: "teachers",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
+					this.find();
 				} catch (error) {
 					this.$toast.error(this.$t("pages.administration.remove.error"));
 				}
@@ -352,10 +401,6 @@ export default {
 				onCancel,
 				invertedDesign: true,
 			});
-		},
-		onUpdateFilterQuery(query) {
-			this.currentFilterQuery = query;
-			this.onUpdateCurrentPage(1);
 		},
 	},
 };

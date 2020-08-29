@@ -1,11 +1,12 @@
 import TheSidebar from "./TheSidebar";
+import { render } from "@testing-library/vue";
 
 describe("@components/legacy/TheSidebar", () => {
 	it(...isValidComponent(TheSidebar));
 
 	it("Render with empty routes", () => {
-		const wrapper = shallowMount(TheSidebar);
-		expect(wrapper.find("ul").isEmpty()).toBe(true);
+		const { getByTestId } = render(TheSidebar);
+		expect(getByTestId("routesListTest")).toBeEmptyDOMElement();
 	});
 
 	it("Render with one route", () => {

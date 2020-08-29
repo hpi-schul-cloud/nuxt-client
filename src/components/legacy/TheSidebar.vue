@@ -13,7 +13,7 @@
 			/>
 		</div>
 		<nav class="contents">
-			<ul class="list">
+			<ul data-testid="routesListTest" class="list">
 				<div
 					v-for="route in routes"
 					:key="JSON.stringify(route.to) || route.href"
@@ -159,7 +159,6 @@ export default {
 	.logo-full {
 		@include breakpoint(desktop) {
 			display: initial;
-			padding: 10px 5px;
 		}
 	}
 
@@ -168,7 +167,6 @@ export default {
 
 		@include breakpoint(tablet) {
 			display: initial;
-			padding: 6px;
 		}
 
 		@include breakpoint(desktop) {

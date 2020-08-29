@@ -5,6 +5,7 @@ module.exports = {
 	setupFilesAfterEnv: [
 		"jest-extended",
 		"<rootDir>/tests/unit/matchers",
+		"<rootDir>/tests/unit/jestMatchers",
 		"<rootDir>/tests/unit/requireAssertions",
 	],
 	snapshotResolver: "<rootDir>/tests/unit/snapshotResolver",
@@ -24,14 +25,17 @@ module.exports = {
 	snapshotSerializers: ["jest-serializer-vue"],
 	coverageDirectory: "<rootDir>/dist/coverage",
 	collectCoverageFrom: [
-		// Nuxt extensions
-		"<rootDir>/src/middleware/**/*.js",
-		"<rootDir>/src/serverMiddleware/**/*.js",
-		"!<rootDir>/src/serverMiddleware/routes.js",
-		// Vue Component
-		"<rootDir>/src/mixins/**/*.js",
+		// Include
 		"<rootDir>/src/components/**/*.{js,vue}",
+		"<rootDir>/src/middleware/**/*.js",
+		"<rootDir>/src/mixins/**/*.js",
+		"<rootDir>/src/plugins/**/*.js",
+		"<rootDir>/src/serverMiddleware/**/*.js",
+		"<rootDir>/src/store/**/*.js",
+		"<rootDir>/src/utils/**/*.js",
+		// Exclude
 		"!<rootDir>/src/components/**/*.stories.js",
 		"!<rootDir>/src/components/base/_globals.js",
+		"!<rootDir>/src/serverMiddleware/routes.js",
 	],
 };

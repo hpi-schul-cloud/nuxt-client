@@ -42,7 +42,8 @@ export default function (endpoint) {
 				return res;
 			},
 			async create({ commit }, payload = {}) {
-				const res = await this.$axios.$post(baseUrl, payload);
+				const { customEndpoint } = payload;
+				const res = await this.$axios.$post(customEndpoint || baseUrl, payload);
 				commit("set", {
 					items: Array.isArray(res) ? res : [res],
 				});
@@ -58,8 +59,8 @@ export default function (endpoint) {
 				});
 				return res;
 			},
-			async update({ commit }, payload = {}) {
-				const res = await this.$axios.$update(
+			async update({ commit }, payload = []) {
+				const res = await this.$axios.$put(
 					baseUrl + "/" + payload[0],
 					payload[1]
 				);
