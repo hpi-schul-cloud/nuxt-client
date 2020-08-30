@@ -185,15 +185,8 @@
 						$t('pages.administration.students.consent.steps.success.image.alt')
 					"
 				/>
-				<base-button design="secondary" @click="print"
-					><i class="fa fa-print"></i
-					>{{
-						this.$t("pages.administration.students.consent.print")
-					}}</base-button
-				>
 
 				<base-button
-					:disabled="disableBackButton"
 					design="secondary outline"
 					@click="success"
 					>{{
@@ -363,15 +356,19 @@ export default {
 				"pages.administration.students.consent.steps.register.print",
 				{ hostName: window.location.origin }
 			),
-			disableBackButton: true,
 		};
 	},
-
+	meta: {
+		requiredPermissions: ["STUDENT_LIST"],
+	},
 	computed: {
 		...mapGetters("bulkConsent", {
 			selectedStudents: "selectedStudents",
 			selectedStudentsData: "selectedStudentsData" || [],
 			registeredStudents: "registeredStudents",
+		}),
+		...mapGetters("users", {
+			students: "list",
 		}),
 		filteredTableData: {
 			get() {
@@ -395,26 +392,28 @@ export default {
 	methods: {
 		find() {
 			const query = {
-				_id: {
-					$in: this.selectedStudents,
-				},
+				usersForConsent: this.selectedStudents,
 			};
+
 			try {
-				this.$store
-					.dispatch("bulkConsent/findStudents", { query })
-					.then((result) => {
-						const data = [];
-						for (const key of result.data.keys()) {
-							if (this.selectedStudents.includes(result.data[key]._id)) {
-								var student = result.data[key];
-								student.fullName = student.firstName + " " + student.lastName;
-								student.password = generatePassword();
-								data.push(student);
-							}
+				this.$store.dispatch("users/handleUsers", {
+					query,
+					action: "find",
+					userType: "students",
+				})
+				.then((result) => {
+					const data = [];
+					for (const key of result.data.keys()) {
+						if (this.selectedStudents.includes(result.data[key]._id)) {
+							var student = result.data[key];
+							student.fullName = student.firstName + " " + student.lastName;
+							student.password = generatePassword();
+							data.push(student);
 						}
-						this.$store.commit("bulkConsent/setStudentsData", data);
-						return data;
-					});
+					}
+					this.$store.commit("bulkConsent/setStudentsData", data);
+					return data;
+				});
 			} catch (error) {
 				console.log(error);
 			}
@@ -497,23 +496,6 @@ export default {
 			}
 		},
 		download() {
-			this.next();
-		},
-		success() {
-			this.$router.push({
-				path: `/administration/students`,
-			});
-		},
-		cancel() {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
-				students: [],
-			});
-			this.$router.push({
-				path: `/administration/students`,
-			});
-		},
-		print() {
-			this.disableBackButton = false;
 			const prtHtml = document.getElementById("tableStudentsForPrint")
 				.innerHTML;
 			let stylesHtml = "";
@@ -546,6 +528,20 @@ export default {
 				winPrint.print();
 				winPrint.close();
 			}, 500);
+			this.next();
+		},
+		success() {
+			this.$router.push({
+				path: `/administration/students`,
+			});
+		},
+		cancel() {
+			this.$store.commit("bulkConsent/setSelectedStudents", {
+				students: [],
+			});
+			this.$router.push({
+				path: `/administration/students`,
+			});
 		},
 		dayjs,
 	},
