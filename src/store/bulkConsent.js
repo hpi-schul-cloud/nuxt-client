@@ -8,7 +8,7 @@ export const actions = {
 		return res;
 	},
 	async findStudents({ commit }, query = {}) {
-		const res = await this.$axios.$get("/users/admin/students",{
+		const res = await this.$axios.$get("/users/admin/students", {
 			query,
 			action: "find",
 			userType: "students",
