@@ -186,13 +186,9 @@
 					"
 				/>
 
-				<base-button
-					design="secondary outline"
-					@click="success"
-					>{{
-						$t("pages.administration.students.consent.steps.success.back")
-					}}</base-button
-				>
+				<base-button design="secondary outline" @click="success">{{
+					$t("pages.administration.students.consent.steps.success.back")
+				}}</base-button>
 			</base-content-container>
 		</section>
 
@@ -396,24 +392,25 @@ export default {
 			};
 
 			try {
-				this.$store.dispatch("users/handleUsers", {
-					query,
-					action: "find",
-					userType: "students",
-				})
-				.then((result) => {
-					const data = [];
-					for (const key of result.data.keys()) {
-						if (this.selectedStudents.includes(result.data[key]._id)) {
-							var student = result.data[key];
-							student.fullName = student.firstName + " " + student.lastName;
-							student.password = generatePassword();
-							data.push(student);
+				this.$store
+					.dispatch("users/handleUsers", {
+						query,
+						action: "find",
+						userType: "students",
+					})
+					.then((result) => {
+						const data = [];
+						for (const key of result.data.keys()) {
+							if (this.selectedStudents.includes(result.data[key]._id)) {
+								var student = result.data[key];
+								student.fullName = student.firstName + " " + student.lastName;
+								student.password = generatePassword();
+								data.push(student);
+							}
 						}
-					}
-					this.$store.commit("bulkConsent/setStudentsData", data);
-					return data;
-				});
+						this.$store.commit("bulkConsent/setStudentsData", data);
+						return data;
+					});
 			} catch (error) {
 				console.log(error);
 			}
