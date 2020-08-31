@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [24.4.1] - 2020-08-31
+
+### Changed
+
+- SC-6293 - adds premission to view the Learn-Store
+
 ## [24.4.0] - 2020-08-31
 
 ## [24.3.0] - 2020-08-25
