@@ -17,6 +17,7 @@ echo PROJECT $PROJECT
 
 echo "DOCKERTAG" $DOCKERTAG
 echo "GITSHA" $GIT_SHA
+echo "Branch" $TRAVIS_BRANCH
 
 # ----------------
 # SCRIPTS
@@ -50,6 +51,13 @@ buildClient(){
 
 	dockerPush "client" $DOCKERTAG
 	dockerPush "client" $GIT_SHA
+
+	# If branch is develop, add and push additional docker tags
+	if [[ "$TRAVIS_BRANCH" = "develop" ]]
+	then
+		docker tag schulcloud/schulcloud-nuxt-client:$DOCKERTAG schulcloud/schulcloud-nuxt-client:develop_latest
+		dockerPush "client" "develop_latest"
+	fi
 }
 
 buildStorybook(){
@@ -61,6 +69,13 @@ buildStorybook(){
 
 	dockerPush "storybook" $DOCKERTAG
 	dockerPush "storybook" $GIT_SHA
+
+	# If branch is develop, add and push additional docker tags
+	if [[ "$TRAVIS_BRANCH" = "develop" ]]
+	then
+		docker tag schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG schulcloud/schulcloud-nuxt-storybook:develop_latest
+		dockerPush "storybook" "develop_latest"
+	fi
 }
 
 buildVuepress(){
@@ -74,6 +89,13 @@ buildVuepress(){
 
 	dockerPush "vuepress" $DOCKERTAG
 	dockerPush "vuepress" $GIT_SHA
+
+	# If branch is develop, add and push additional docker tags
+	if [[ "$TRAVIS_BRANCH" = "develop" ]]
+	then
+		docker tag schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG schulcloud/schulcloud-nuxt-vuepress:develop_latest
+		dockerPush "vuepress" "develop_latest"
+	fi
 }
 
 # ----------------
