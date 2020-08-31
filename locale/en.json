@@ -77,6 +77,8 @@
 	"pages.account.index.user.data": "Current User data",
 	"pages.account.index.user.email": "Current E-Mail Address",
 	"pages.account.index.user.locale": "Language Settings",
+	"pages.account.index.user.locale.longName.de": "Deutsch",
+	"pages.account.index.user.locale.longName.en": "English",
 	"pages.account.index.user.password": "Current Password",
 	"pages.account.index.user.teams": "Team Settings",
 	"pages.account.index.user.teams.placeholder": "Visibility for team invitations",

@@ -133,11 +133,11 @@
 				<p>
 					<base-icon
 						source="custom"
-						:icon="'flag_' + languageName"
+						:icon='`flag_${ $t(`pages.account.index.user.locale.longName.${languageName}`)}`'
 						class="flag-icon"
 					></base-icon>
 					<span>
-						{{ languageName }}
+						{{ $t(`pages.account.index.user.locale.longName.${languageName}`)}}
 					</span>
 				</p>
 			</template>
@@ -167,7 +167,7 @@ export default {
 	},
 	computed: {
 		languageName() {
-			return this.currentUser.defaultLanguage === "de" ? "Deutsch" : "English";
+			return this.currentUser.defaultLanguage;
 		},
 		thirdPartyLogin() {
 			return !!this.$user?.externallyManaged;

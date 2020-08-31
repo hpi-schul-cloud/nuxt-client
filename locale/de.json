@@ -172,6 +172,8 @@
 	"pages.account.index.user.data": "Aktuelle Nutzerdaten",
 	"pages.account.index.user.email": "Aktuelle E-Mail-Adresse",
 	"pages.account.index.user.locale": "Spracheinstellungen",
+	"pages.account.index.user.locale.longName.de": "Deutsch",
+	"pages.account.index.user.locale.longName.en": "English",
 	"pages.account.index.user.password": "Aktuelles Passwort",
 	"pages.account.index.user.teams": "Team Einstellungen",
 	"pages.account.index.user.teams.placeholder": "Sichtbarkeit für Teameinladungen",

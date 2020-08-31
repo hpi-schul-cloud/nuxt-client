@@ -29,13 +29,13 @@
 			<div id="`dropdown-content`" class="content" :class="{ open }">
 				<p
 					v-for="lang in languages"
-					:key="lang"
-					:value="lang"
-					:label="lang"
+					:key="lang.longName"
+					:value="lang.longName"
+					:label="lang.longName"
 					@click="changeLanguage(lang)"
 				>
-					<base-icon source="custom" :icon="'flag_' + lang" class="flag-icon" />
-					{{ lang }}
+					<base-icon source="custom" :icon="'flag_' + lang.longName" class="flag-icon" />
+					{{ lang.longName }}
 				</p>
 			</div>
 		</div>
@@ -51,7 +51,10 @@ export default {
 	},
 	data() {
 		return {
-			languages: ["Deutsch", "English"],
+			languages: [
+				{ name: "de", longName: "Deutsch" },
+				{ name: "en", longName: "English" },
+			],
 			open: false,
 			border: false,
 			value: this.defaultLanguage,
@@ -62,9 +65,8 @@ export default {
 			this.open = !this.open;
 		},
 		changeLanguage: function (lang) {
-			const language = lang.toLowerCase().substring(0, 2);
-			this.value = lang;
-			this.$store.commit("auth/setLocale", language);
+			this.value = lang.longName;
+			this.$store.commit("auth/setLocale", lang.name);
 		},
 	},
 };
