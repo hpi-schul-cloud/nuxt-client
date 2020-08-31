@@ -131,8 +131,14 @@
 			</template>
 			<template v-slot:data>
 				<p>
-					<base-icon source="custom" :icon="'flag_' + languageName"></base-icon>
-					{{ languageName }}
+					<base-icon
+						source="custom"
+						:icon="'flag_' + languageName"
+						class="flag-icon"
+					></base-icon>
+					<span>
+						{{ languageName }}
+					</span>
 				</p>
 			</template>
 		</account-card>
@@ -213,5 +219,8 @@ export default {
 	font-size: var(--text-sm);
 	font-weight: var(--font-weight-weight);
 	color: var(--color-gray-dark);
+}
+.flag-icon {
+	margin-top: calc(-4 * var(--border-width));
 }
 </style>

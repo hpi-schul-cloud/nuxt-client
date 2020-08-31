@@ -17,7 +17,7 @@
 				@click="border = true"
 			>
 				<div class="langPlaceholder">
-					<base-icon source="custom" :icon="'flag_' + value" />
+					<base-icon source="custom" :icon="'flag_' + value" class="flag-icon"/>
 					{{ value }}
 				</div>
 				<base-icon source="custom" icon="sort-down" />
@@ -30,7 +30,7 @@
 					:label="lang"
 					@click="changeLanguage(lang)"
 				>
-					<base-icon source="custom" :icon="'flag_' + lang" />
+					<base-icon source="custom" :icon="'flag_' + lang" class="flag-icon"/>
 					{{ lang }}
 				</p>
 			</div>
@@ -125,5 +125,8 @@ export default {
 		display: flex;
 		box-shadow: 1px 2px 5px 0 rgba(0, 0, 0, 0.75);
 	}
+}
+.flag-icon {
+	margin-top: calc( -4 * var(--border-width));
 }
 </style>
