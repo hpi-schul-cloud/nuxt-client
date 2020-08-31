@@ -133,11 +133,13 @@
 				<p>
 					<base-icon
 						source="custom"
-						:icon='`flag_${ $t(`pages.account.index.user.locale.longName.${languageName}`)}`'
+						:icon="`flag_${$t(
+							`pages.account.index.user.locale.longName.${languageName}`
+						)}`"
 						class="flag-icon"
 					></base-icon>
 					<span>
-						{{ $t(`pages.account.index.user.locale.longName.${languageName}`)}}
+						{{ $t(`pages.account.index.user.locale.longName.${languageName}`) }}
 					</span>
 				</p>
 			</template>
