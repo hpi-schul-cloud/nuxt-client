@@ -7,7 +7,6 @@
 				design="outline"
 				text
 				data-testid=""
-				@click="cancelHandler"
 				@click.prevent="$router.go(-1)"
 			>
 				{{ $t("common.actions.cancel") }}
@@ -36,12 +35,7 @@ export default {
 		return {};
 	},
 	methods: {
-		cancelHandler() {
-			this.$emit("onFormCancel");
-			console.log("CANCEL");
-		},
 		submitHandler() {
-			console.log("onFormSubmit");
 			this.$emit("onFormSubmit");
 		},
 	},
