@@ -113,7 +113,7 @@
 		</account-card>
 		<account-card
 			:heading="$t('pages.account.index.user.locale')"
-			data="true"
+			:data="currentUser.defaultLanguage"
 			:target-path="`/account/locale/edit`"
 			data-testid="account_card_locale"
 		>
