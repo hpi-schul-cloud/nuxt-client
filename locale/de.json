@@ -174,6 +174,7 @@
 	"pages.account.index.user.locale": "Spracheinstellungen",
 	"pages.account.index.user.password": "Aktuelles Passwort",
 	"pages.account.index.user.teams": "Team Einstellungen",
+	"pages.account.index.user.teams.placeholder": "Sichtbarkeit für Teameinladungen",
 	"pages.account.index.user.thirdPartyProviders": "Drittanbieter-Logins",
 	"pages.account.language.user.currentLanguage": "Deine aktuelle Sprache:",
 	"pages.account.locale.edit.btn": "Sprache ändern",

@@ -76,7 +76,7 @@
 		<account-card
 			v-if="!isStudent"
 			:heading="$t('pages.account.index.user.teams')"
-			data="Sichtbarkeit für Teameinladungen"
+			:data="$t('pages.account.index.user.teams.placeholder')"
 			:target-path="`/account/teams`"
 		>
 			<template v-slot:icon>

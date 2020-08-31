@@ -79,6 +79,7 @@
 	"pages.account.index.user.locale": "Language Settings",
 	"pages.account.index.user.password": "Current Password",
 	"pages.account.index.user.teams": "Team Settings",
+	"pages.account.index.user.teams.placeholder": "Visibility for team invitations",
 	"pages.account.index.user.thirdPartyProviders": "Third-Party-Logins",
 	"pages.account.language.user.currentLanguage": "Your current language:",
 	"pages.account.locale.edit.btn": "Change Language",

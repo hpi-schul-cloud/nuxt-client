@@ -61,7 +61,6 @@ export default {
 			const language = lang.toLowerCase().substring(0, 2);
 			this.value = lang;
 			this.$store.commit("auth/setLocale", language);
-			this.$i18n.locale = language;
 		},
 	},
 };
