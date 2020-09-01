@@ -34,7 +34,11 @@
 					:label="lang.longName"
 					@click="changeLanguage(lang)"
 				>
-					<base-icon source="custom" :icon="'flag_' + lang.longName" class="flag-icon" />
+					<base-icon
+						source="custom"
+						:icon="'flag_' + lang.longName"
+						class="flag-icon"
+					/>
 					{{ lang.longName }}
 				</p>
 			</div>
