@@ -5,17 +5,18 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
-		<data-filter
-			:filters="filters"
-			:backend-filtering="true"
-			:active-filters.sync="currentFilterQuery"
-		/>
 
 		<search-bar
 			v-model="searchQuery"
 			:placeholder="searchBarPlaceHolder"
 			class="search-section"
 			v-on="barSearch(this)"
+		/>
+
+		<data-filter
+			:filters="filters"
+			:backend-filtering="true"
+			:active-filters.sync="currentFilterQuery"
 		/>
 
 		<backend-data-table
@@ -274,6 +275,13 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
+			var temp = this.$uiState.get(
+				"filter",
+				"pages.administration.teacher.index"
+			);
+
+			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+
 			this.currentFilterQuery = query;
 			if (
 				JSON.stringify(query) !==
@@ -419,9 +427,13 @@ export default {
 		barSearch: function () {
 			return {
 				input: async (searchText) => {
-					const query = {
-						searchQuery: searchText,
-					};
+					this.currentFilterQuery.searchQuery = searchText;
+
+					const query = this.currentFilterQuery;
+
+					this.$uiState.set("filter", "pages.administration.teachers.index", {
+						query,
+					});
 
 					this.$store.dispatch("users/handleUsers", {
 						query,
@@ -492,6 +504,7 @@ button:not(.is-none):focus {
 .search-section {
 	max-width: 100%;
 	margin-top: var(--space-xs);
+	margin-bottom: var(--space-xs);
 	margin-left: 0;
 }
 </style>
