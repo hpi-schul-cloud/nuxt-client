@@ -6,9 +6,8 @@ Vue.use(VueI18n);
 export const i18n = (store) =>
 	new VueI18n({
 		// fallback for storybook
-		locale: store.state.auth?.locale,
+		locale: store.state.auth?.locale || "de",
 		fallbackLocale: "de",
-
 		messages: {
 			en: require("@locale/en.json"),
 			de: require("@locale/de.json"),
