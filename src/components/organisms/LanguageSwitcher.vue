@@ -61,7 +61,9 @@ export default {
 			],
 			open: false,
 			border: false,
-			value: this.$t(`pages.account.index.user.locale.longName.${this.defaultLanguage}`),
+			value: this.$t(
+				`pages.account.index.user.locale.longName.${this.defaultLanguage}`
+			),
 		};
 	},
 	methods: {
