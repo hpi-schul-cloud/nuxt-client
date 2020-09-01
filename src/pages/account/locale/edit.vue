@@ -55,8 +55,7 @@ export default {
 	computed: {},
 	methods: {
 		getDefaultLanguage() {
-			return this.$t(`pages.account.index.user.locale.longName.${this.$user.defaultLanguage}`)
-
+			return this.$user.defaultLanguage;
 		},
 		error() {
 			this.$toast.error(this.$t("pages.account.error.edit"));
