@@ -9,15 +9,12 @@ describe("@components/organisms/LanguageSwitcher", () => {
 				value: "de",
 			},
 			...createComponentMocks({
-				stubs: {
-					"base-input": true,
-				},
 				user: true,
 				i18n: true,
 			}),
 		});
 		expect(wrapper.vm.$store.state.auth.locale).toBe("de");
-		wrapper.find("base-input-stub[label=en]").trigger("click");
+		wrapper.find("p[label=English]").trigger("click");
 		expect(wrapper.vm.$store.state.auth.locale).toBe("en");
 	});
 });

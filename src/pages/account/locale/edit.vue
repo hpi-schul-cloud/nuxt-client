@@ -49,7 +49,6 @@ export default {
 	},
 	data() {
 		return {
-			locale: "",
 			showModal: false,
 		};
 	},
@@ -75,6 +74,7 @@ export default {
 						defaultLanguage: this.$store.getters["auth/getLocale"],
 					},
 				]);
+				this.$i18n.locale = this.$store.getters["auth/getLocale"];
 				this.showModal = true;
 			} catch (e) {
 				console.log(e);

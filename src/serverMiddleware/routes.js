@@ -11,6 +11,7 @@ const routes = [
 	`^/account/name/edit/?$`,
 	`^/account/password/edit/?$`,
 	`^/account/password/edit/?$`,
+	`^/account/locale/edit/?$`,
 	`^/activation/${activationCode}/?$`,
 	// `^/administration/datasources?`,
 	// `^/administration/students/?$`,
