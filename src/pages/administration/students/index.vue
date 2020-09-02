@@ -142,6 +142,7 @@ export default {
 
 	data() {
 		return {
+			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
@@ -169,11 +170,11 @@ export default {
 					label: this.$t("common.labels.lastName"),
 					sortable: true,
 				},
-				{
-					field: "birthday",
-					label: this.$t("common.labels.birthday"),
-					sortable: true,
-				},
+				// {
+				// 	field: "birthday",
+				// 	label: this.$t("common.labels.birthday"),
+				// 	sortable: true,
+				// },
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
@@ -378,12 +379,14 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+			this.$store.commit("bulkConsent/setSelectedStudents", {
+				students: this.tableSelection,
+				selectionType: selectionType,
+			});
+
+			this.$router.push({
+				path: "/administration/students/consent",
+			});
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
@@ -402,6 +405,27 @@ export default {
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
+			// TODO: request registrationsLinks fom backend
+			// route needs to be implemented!
+
+			// const users = await this.$store.dispatch("users/find", {
+			// 	qid: "qr-print",
+			// 	query: this.getQueryForSelection(rowIds, selectionType),
+			// });
+			// this.$_printQRs(
+			// 	usersWithoutConsents.map((user) => ({
+			// 		qrContent: user.registrationLink.shortLink,
+			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
+			// 		description: "Zum Registrieren bitte den Link öffnen.",
+			// 	}))
+			// );
+
+			this.$toast.error(
+				`handleBulkQR([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
