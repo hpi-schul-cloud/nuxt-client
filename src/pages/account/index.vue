@@ -35,11 +35,7 @@
 				</div>
 			</template>
 			<template v-slot:icon>
-				<base-icon
-					source="material"
-					icon="mail"
-					class="account-icon"
-				/>
+				<base-icon source="material" icon="mail" class="account-icon" />
 			</template>
 		</account-card>
 
@@ -108,11 +104,7 @@
 			data-testid="account_card_locale"
 		>
 			<template v-slot:icon>
-				<base-icon
-					source="material"
-					icon="language"
-					class="account-icon"
-				/>
+				<base-icon source="material" icon="language" class="account-icon" />
 			</template>
 			<template v-slot:data>
 				<p>
