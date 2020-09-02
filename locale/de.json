@@ -265,6 +265,7 @@
 	"pages.administration.teachers.new.error": "Lehrer:in konnte nicht erfolgreich hinzugefügt werden. Möglicherweise existiert die E-Mail-Adresse bereits.",
 	"pages.administration.teachers.new.success": "Lehrer:in erfolgreich angelegt!",
 	"pages.administration.teachers.new.title": "Lehrer:in hinzufügen",
+	"pages.administration.teachers.index.searchbar.placeholder": "Suchen",
 	"pages.content.card.img.alt": "content-thumbnail",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content.label.chooseACourse": "Wähle einen Kurs / Fach",
