@@ -360,7 +360,7 @@ export default {
 	computed: {
 		...mapGetters("bulkConsent", {
 			selectedStudents: "selectedStudents",
-			selectedStudentsData: "selectedStudentsData" || [],
+			selectedStudentsData: "selectedStudentsData",
 			registeredStudents: "registeredStudents",
 		}),
 		...mapGetters("users", {
@@ -410,6 +410,8 @@ export default {
 						}
 						this.$store.commit("bulkConsent/setStudentsData", data);
 						return data;
+					}).catch((error) => {
+						console.log(error);
 					});
 			} catch (error) {
 				console.log(error);
