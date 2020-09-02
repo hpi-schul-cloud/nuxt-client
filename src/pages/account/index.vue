@@ -14,12 +14,7 @@
 				<base-icon
 					source="material"
 					icon="account_circle"
-					style="
-						margin-top: calc(0.3 * (var(--space-xs)));
-						margin-right: var(--space-xs);
-						font-size: var(--heading-4);
-						color: var(--color-black);
-					"
+					class="account-icon"
 				/>
 			</template>
 		</account-card>
@@ -43,12 +38,7 @@
 				<base-icon
 					source="material"
 					icon="mail"
-					style="
-						margin-top: calc(0.3 * (var(--space-xs)));
-						margin-right: var(--space-xs);
-						font-size: var(--heading-4);
-						color: var(--color-black);
-					"
+					class="account-icon"
 				/>
 			</template>
 		</account-card>
@@ -121,12 +111,7 @@
 				<base-icon
 					source="material"
 					icon="language"
-					style="
-						margin-top: calc(0.3 * (var(--space-xs)));
-						margin-right: var(--space-xs);
-						font-size: var(--heading-4);
-						color: var(--color-black);
-					"
+					class="account-icon"
 				/>
 			</template>
 			<template v-slot:data>
@@ -221,6 +206,12 @@ export default {
 	font-size: var(--text-sm);
 	font-weight: var(--font-weight-weight);
 	color: var(--color-gray-dark);
+}
+.account-icon {
+	margin-top: calc(0.3 * (var(--space-xs))) !important;
+	margin-right: var(--space-xs) !important;
+	font-size: var(--heading-4);
+	color: var(--color-black);
 }
 .flag-icon {
 	margin-top: calc(-4 * var(--border-width));
