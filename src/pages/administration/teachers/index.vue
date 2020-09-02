@@ -5,11 +5,20 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
+
+		<search-bar
+			v-model="searchQuery"
+			:placeholder="searchBarPlaceHolder"
+			class="search-section"
+			v-on="barSearch(this)"
+		/>
+
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
 		/>
+
 		<backend-data-table
 			:actions="filteredActions"
 			:columns="tableColumns"
@@ -66,14 +75,8 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend
-			:icons="icons"
-			:show-external-sync-hint="!schoolInternallyManaged"
-		/>
+		<admin-table-legend :icons="icons" />
 		<fab-floating
-			v-if="
-				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
-			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -99,6 +102,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
+import SearchBar from "../../../components/molecules/Searchbar.vue";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -112,6 +116,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
+		SearchBar,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -236,6 +241,10 @@ export default {
 				},
 			],
 			filters: teacherFilter(this),
+			searchQuery: "",
+			searchBarPlaceHolder: this.$t(
+				"pages.administration.teachers.index.searchbar.placeholder"
+			),
 		};
 	},
 	computed: {
@@ -250,13 +259,19 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
+		...mapState("search", {
+			searchResult: "searchResult",
+		}),
 		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
-		schoolInternallyManaged() {
-			return !this.school.isExternal;
+		tableData: {
+			get() {
+				if (this.takeOverTableData) return this.searchData;
+				return this.teachers;
+			},
 		},
 		filteredActions() {
 			// if user has teacher role, bulkQr action gets filtered
@@ -271,6 +286,13 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
+			var temp = this.$uiState.get(
+				"filter",
+				"pages.administration.teacher.index"
+			);
+
+			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+
 			this.currentFilterQuery = query;
 			if (
 				JSON.stringify(query) !==
@@ -429,6 +451,25 @@ export default {
 				invertedDesign: true,
 			});
 		},
+		barSearch: function () {
+			return {
+				input: async (searchText) => {
+					this.currentFilterQuery.searchQuery = searchText;
+
+					const query = this.currentFilterQuery;
+
+					this.$uiState.set("filter", "pages.administration.teachers.index", {
+						query,
+					});
+
+					this.$store.dispatch("users/handleUsers", {
+						query,
+						action: "find",
+						userType: "teachers",
+					});
+				},
+			};
+		},
 	},
 };
 </script>
@@ -447,5 +488,50 @@ a.action-button {
 			box-shadow: none;
 		}
 	}
+}
+span {
+	font-weight: var(--font-weight-normal);
+}
+.content {
+	max-height: 35vh;
+	overflow-y: scroll;
+	font-weight: var(--font-weight-normal);
+}
+.list {
+	padding: var(--space-lg);
+}
+.th-slot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.info-box {
+	position: absolute;
+	right: 0%;
+	z-index: calc(var(--layer-fab) + 1);
+	max-width: 100%;
+	margin-top: var(--space-md);
+	margin-right: var(--space-lg);
+	margin-left: var(--space-lg);
+
+	@include breakpoint(tablet) {
+		min-width: 450px;
+		max-width: 50%;
+		margin-right: var(--space-xl);
+	}
+}
+
+button:not(.is-none):focus {
+	z-index: var(--layer-fab);
+	outline: none;
+	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+}
+.search-section {
+	max-width: 100%;
+	margin-top: var(--space-xs);
+	margin-bottom: var(--space-xs);
+	margin-left: 0;
 }
 </style>
