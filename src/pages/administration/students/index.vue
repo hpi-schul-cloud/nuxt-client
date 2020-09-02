@@ -21,7 +21,7 @@
 
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
-			:columns="tableColumns"
+			:columns="editFilteredColumns"
 			:current-page.sync="page"
 			:data="students"
 			:paginated="true"
@@ -68,10 +68,7 @@
 					/>
 				</span>
 			</template>
-			<template
-				v-if="schoolInternallyManaged"
-				v-slot:datacolumn-_id="{ data, selected, highlighted }"
-			>
+			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
 				<base-button
 					:class="{
 						'action-button': true,
@@ -297,6 +294,12 @@ export default {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
+		},
+		editFilteredColumns() {
+			// filters edit column if school is external
+			return this.school.isExternal
+				? this.tableColumns.filter((col) => col.field !== "_id")
+				: this.tableColumns;
 		},
 	},
 	watch: {
