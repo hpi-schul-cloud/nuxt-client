@@ -410,7 +410,8 @@ export default {
 						}
 						this.$store.commit("bulkConsent/setStudentsData", data);
 						return data;
-					}).catch((error) => {
+					})
+					.catch((error) => {
 						console.log(error);
 					});
 			} catch (error) {
