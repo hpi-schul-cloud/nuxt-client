@@ -75,8 +75,14 @@
 				</base-button>
 			</template>
 		</backend-data-table>
-		<admin-table-legend :icons="icons" />
+		<admin-table-legend
+			:icons="icons"
+			:show-external-sync-hint="!schoolInternallyManaged"
+		/>
 		<fab-floating
+			v-if="
+				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
+			"
 			position="bottom-right"
 			:show-label="true"
 			:actions="[
@@ -288,6 +294,9 @@ export default {
 			return this.school.isExternal
 				? this.tableColumns.filter((col) => col.field !== "_id")
 				: this.tableColumns;
+		},
+		schoolInternallyManaged() {
+			return !this.school.isExternal;
 		},
 	},
 	watch: {
