@@ -48,7 +48,7 @@
 <script>
 export default {
 	props: {
-		defaultLanguage: {
+		language: {
 			type: String,
 			default: "de",
 		},
@@ -62,7 +62,7 @@ export default {
 			open: false,
 			border: false,
 			value: this.$t(
-				`pages.account.index.user.locale.longName.${this.defaultLanguage}`
+				`pages.account.index.user.locale.longName.${this.language}`
 			),
 		};
 	},

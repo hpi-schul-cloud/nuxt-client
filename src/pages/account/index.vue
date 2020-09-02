@@ -113,7 +113,7 @@
 		</account-card>
 		<account-card
 			:heading="$t('pages.account.index.user.locale')"
-			:data="currentUser.defaultLanguage"
+			:data="currentUser.language"
 			:target-path="`/account/locale/edit`"
 			data-testid="account_card_locale"
 		>
@@ -169,7 +169,7 @@ export default {
 	},
 	computed: {
 		languageName() {
-			return this.currentUser.defaultLanguage;
+			return this.currentUser.language;
 		},
 		thirdPartyLogin() {
 			return !!this.$user?.externallyManaged;

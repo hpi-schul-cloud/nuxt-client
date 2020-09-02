@@ -25,7 +25,7 @@
 			@onFormSubmit="submitHandler"
 		>
 			<template v-slot:inputs>
-				<language-switcher :default-language="getDefaultLanguage()" />
+				<language-switcher :language="getLanguage()" />
 			</template>
 		</form-edit-user-data>
 	</section>
@@ -54,8 +54,8 @@ export default {
 	},
 	computed: {},
 	methods: {
-		getDefaultLanguage() {
-			return this.$user.defaultLanguage;
+		getLanguage() {
+			return this.$user.language;
 		},
 		error() {
 			this.$toast.error(this.$t("pages.account.error.edit"));
@@ -71,7 +71,7 @@ export default {
 				await this.$store.dispatch("users/patch", [
 					this.$user._id,
 					{
-						defaultLanguage: this.$store.getters["auth/getLocale"],
+						language: this.$store.getters["auth/getLocale"],
 					},
 				]);
 				this.$i18n.locale = this.$store.getters["auth/getLocale"];

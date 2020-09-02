@@ -40,8 +40,8 @@ export const actions = {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
 			commit("setSchool", school);
 		}
-		if (user.defaultLanguage) {
-			commit("setLocale", user.defaultLanguage);
+		if (user.language) {
+			commit("setLocale", user.language);
 		}
 
 		//TODO Remove once added to User permissions SC-2401
