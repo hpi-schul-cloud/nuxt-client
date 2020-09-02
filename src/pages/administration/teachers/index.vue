@@ -11,7 +11,7 @@
 			:active-filters.sync="currentFilterQuery"
 		/>
 		<backend-data-table
-			:actions="permissionFilteredTableActions"
+			:actions="filteredActions"
 			:columns="tableColumns"
 			:current-page.sync="page"
 			:data="teachers"
@@ -244,6 +244,7 @@ export default {
 		}),
 		...mapState("auth", {
 			school: "school",
+			user: "user",
 		}),
 		...mapState("users", {
 			pagination: (state) =>
@@ -256,6 +257,16 @@ export default {
 		},
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
+		},
+		filteredActions() {
+			// if user has teacher role, bulkQr action gets filtered
+			return this.user.roles.some((role) => role.name === "teacher")
+				? this.permissionFilteredTableActions.filter(
+						(action) =>
+							action.label !==
+							this.$t("pages.administration.teachers.index.tableActions.qr")
+				  )
+				: this.permissionFilteredTableActions;
 		},
 	},
 	watch: {
@@ -349,7 +360,23 @@ export default {
 				);
 			}
 		},
-
+		async handleBulkQR(rowIds, selectionType) {
+			try {
+				const qrRegistrationLinks = await this.$store.dispatch(
+					"users/getQrRegistrationLinks",
+					{
+						userIds: rowIds,
+						selectionType,
+					}
+				);
+				this.$_printQRs(qrRegistrationLinks);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+					this.$tc("pages.administration.printQr.error", rowIds.length)
+				);
+			}
+		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
