@@ -123,7 +123,7 @@ export default {
 	position: relative;
 	height: 200px;
 	color: var(--color-white);
-	background-color: var(--color-white);
+	background-color: var(--color-black);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .content {
@@ -142,8 +142,12 @@ export default {
 			position: absolute;
 			z-index: var(--layer-page);
 			width: 100%;
-			height: 50%;
-			background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+			height: 100%;
+			background: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0.9) 0%,
+				rgba(0, 0, 0, 0) 50%
+			);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 		}
@@ -153,9 +157,8 @@ export default {
 			left: 50%;
 			z-index: var(--layer-page);
 			font-size: var(--space-xl-3) !important;
-			border-radius: var(--radius-round);
-			box-shadow: var(--shadow-m);
-			opacity: 0.8;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
+			opacity: 0.9;
 			transform: translate(-50%, -50%);
 		}
 		&-checkbox {
