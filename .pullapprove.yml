@@ -30,6 +30,17 @@ groups:
     reviewers:
       teams:
         - VueCoreDevs
+  devops:
+    conditions:
+    - "'*deploy.sh' in files or '.build/*' in files or 'deploy/*' in files" # only review specific, deployment relevant files
+    reviewers:
+      teams:
+      - devops
+    reviews:
+      required: 1 # number of approvals required from this group
+      request: 2 # request review from 2 members at a time
+      request_order: shuffle # reviewers will be chosen in a random order
+      author_value: 1 # if author of pr is in team, no additional review required
   ###############################
   # LABEL SPECIFIC REQUESTS
   ###############################
