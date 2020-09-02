@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Changed
+
+- SC-6474 in admin tables, edit column key is filtered out of column data object if school is external
+
 ## [24.4.0] - 2020-08-31
 
 ## [24.3.0] - 2020-08-25
