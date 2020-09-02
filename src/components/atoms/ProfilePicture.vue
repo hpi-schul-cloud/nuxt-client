@@ -1,6 +1,12 @@
 <template>
 	<div class="profilePicture">
-		<img v-if="image" :src="image" class="borderradius" :class="size" />
+		<img
+			v-if="image"
+			:src="image"
+			class="borderradius"
+			:class="size"
+			:alt="image"
+		/>
 	</div>
 </template>
 <script>

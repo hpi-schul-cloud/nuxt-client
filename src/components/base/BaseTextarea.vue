@@ -21,6 +21,7 @@
 			:value="vmodel"
 			:rows="rows"
 			:maxlength="maxLength"
+			:label="Label"
 			:class="{
 				'with-lines': withLines,
 				disabled: disabled,
