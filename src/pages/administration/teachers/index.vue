@@ -21,7 +21,7 @@
 
 		<backend-data-table
 			:actions="filteredActions"
-			:columns="tableColumns"
+			:columns="editFilteredColumns"
 			:current-page.sync="page"
 			:data="teachers"
 			:paginated="true"
@@ -282,6 +282,12 @@ export default {
 							this.$t("pages.administration.teachers.index.tableActions.qr")
 				  )
 				: this.permissionFilteredTableActions;
+		},
+		editFilteredColumns() {
+			// filters edit column if school is external
+			return this.school.isExternal
+				? this.tableColumns.filter((col) => col.field !== "_id")
+				: this.tableColumns;
 		},
 	},
 	watch: {
