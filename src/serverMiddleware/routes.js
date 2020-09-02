@@ -15,6 +15,7 @@ const routes = [
 	// `^/administration/datasources?`,
 	// `^/administration/students/?$`,
 	// `^/administration/students/new/?$`,
+	// `^/administration/students/consent/?$`,
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
 	`^/login-instances/?`,
