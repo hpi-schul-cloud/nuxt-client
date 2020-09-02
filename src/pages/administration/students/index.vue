@@ -6,11 +6,19 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 
+		<search-bar
+			v-model="searchQuery"
+			:placeholder="searchBarPlaceHolder"
+			class="search-section"
+			v-on="barSearch(this)"
+		/>
+
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
 		/>
+
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
 			:columns="tableColumns"
@@ -112,6 +120,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import SearchBar from "../../../components/molecules/Searchbar.vue";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -125,6 +134,7 @@ export default {
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
+		SearchBar,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -258,6 +268,10 @@ export default {
 			],
 			filters: studentFilter(this),
 			active: false,
+			searchQuery: "",
+			searchBarPlaceHolder: this.$t(
+				"pages.administration.teachers.index.searchbar.placeholder"
+			),
 		};
 	},
 
@@ -287,6 +301,13 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
+			var temp = this.$uiState.get(
+				"filter",
+				"pages.administration.students.index"
+			);
+
+			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+
 			this.currentFilterQuery = query;
 			if (
 				JSON.stringify(query) !==
@@ -314,7 +335,6 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-
 			this.$store.dispatch("users/handleUsers", {
 				query,
 				action: "find",
@@ -447,6 +467,25 @@ export default {
 				invertedDesign: true,
 			});
 		},
+		barSearch: function () {
+			return {
+				input: (searchText) => {
+					this.currentFilterQuery.searchQuery = searchText;
+
+					const query = this.currentFilterQuery;
+
+					this.$uiState.set("filter", "pages.administration.students.index", {
+						query,
+					});
+
+					this.$store.dispatch("users/handleUsers", {
+						query,
+						action: "find",
+						userType: "students",
+					});
+				},
+			};
+		},
 	},
 };
 </script>
@@ -468,5 +507,39 @@ a.action-button {
 }
 .list {
 	padding: var(--space-lg);
+}
+.th-slot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.info-box {
+	position: absolute;
+	right: 0%;
+	z-index: calc(var(--layer-fab) + 1);
+	max-width: 100%;
+	margin-top: var(--space-md);
+	margin-right: var(--space-lg);
+	margin-left: var(--space-lg);
+
+	@include breakpoint(tablet) {
+		min-width: 450px;
+		max-width: 50%;
+		margin-right: var(--space-xl);
+	}
+}
+
+button:not(.is-none):focus {
+	z-index: var(--layer-fab);
+	outline: none;
+	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+}
+.search-section {
+	max-width: 100%;
+	margin-top: var(--space-xs);
+	margin-bottom: var(--space-xs);
+	margin-left: 0;
 }
 </style>
