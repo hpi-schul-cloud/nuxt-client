@@ -120,10 +120,10 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
-		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
+		"@plugins/i18n",
 	],
 
 	/*

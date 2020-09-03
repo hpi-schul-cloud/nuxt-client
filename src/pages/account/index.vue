@@ -14,12 +14,7 @@
 				<base-icon
 					source="material"
 					icon="account_circle"
-					style="
-						margin-top: calc(0.3 * (var(--space-xs)));
-						margin-right: var(--space-xs);
-						font-size: var(--heading-4);
-						color: var(--color-black);
-					"
+					class="account-icon"
 				/>
 			</template>
 		</account-card>
@@ -40,16 +35,7 @@
 				</div>
 			</template>
 			<template v-slot:icon>
-				<base-icon
-					source="material"
-					icon="mail"
-					style="
-						margin-top: calc(0.3 * (var(--space-xs)));
-						margin-right: var(--space-xs);
-						font-size: var(--heading-4);
-						color: var(--color-black);
-					"
-				/>
+				<base-icon source="material" icon="mail" class="account-icon" />
 			</template>
 		</account-card>
 
@@ -76,7 +62,7 @@
 		<account-card
 			v-if="!isStudent"
 			:heading="$t('pages.account.index.user.teams')"
-			data="Sichtbarkeit für Teameinladungen"
+			:data="$t('pages.account.index.user.teams.placeholder')"
 			:target-path="`/account/teams`"
 		>
 			<template v-slot:icon>
@@ -111,6 +97,30 @@
 				/>
 			</template>
 		</account-card>
+		<account-card
+			:heading="$t('pages.account.index.user.locale')"
+			:data="currentUser.language"
+			:target-path="`/account/locale/edit`"
+			data-testid="account_card_locale"
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="language" class="account-icon" />
+			</template>
+			<template v-slot:data>
+				<p>
+					<base-icon
+						source="custom"
+						:icon="`flag_${$t(
+							`pages.account.index.user.locale.longName.${languageName}`
+						)}`"
+						class="flag-icon"
+					></base-icon>
+					<span>
+						{{ $t(`pages.account.index.user.locale.longName.${languageName}`) }}
+					</span>
+				</p>
+			</template>
+		</account-card>
 		<p v-if="thirdPartyLogin" class="info">
 			<base-icon source="material" icon="info" fill="var(--color-info)" />
 			{{ $t("pages.account.index.thirdParty.info") }}
@@ -135,6 +145,9 @@ export default {
 		};
 	},
 	computed: {
+		languageName() {
+			return this.currentUser.language;
+		},
 		thirdPartyLogin() {
 			return !!this.$user?.externallyManaged;
 		},
@@ -185,5 +198,14 @@ export default {
 	font-size: var(--text-sm);
 	font-weight: var(--font-weight-weight);
 	color: var(--color-gray-dark);
+}
+.account-icon {
+	margin-top: calc(0.3 * (var(--space-xs))) !important;
+	margin-right: var(--space-xs) !important;
+	font-size: var(--heading-4);
+	color: var(--color-black);
+}
+.flag-icon {
+	margin-top: calc(-4 * var(--border-width));
 }
 </style>
