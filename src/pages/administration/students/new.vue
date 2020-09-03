@@ -4,10 +4,10 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.new.title") }}
 		</h1>
-		<form-create-user role-name="student" @success="success" @error="error">
-			<template v-slot:inputs="{ userData }">
+		<form-create-user @create-user="createStudent">
+			<template v-slot:inputs>
 				<base-input
-					v-model="userData.birthday"
+					v-model="birthday"
 					type="date"
 					:label="$t('common.labels.birthdate')"
 					:placeholder="$t('common.placeholder.birthdate')"
@@ -16,7 +16,7 @@
 				>
 				</base-input>
 				<base-input
-					v-model="userData.sendRegistration"
+					v-model="sendRegistration"
 					type="checkbox"
 					name="switch"
 					class="mt--xl"
@@ -40,6 +40,8 @@ export default {
 	},
 	data() {
 		return {
+			birthday: null,
+			sendRegistration: false,
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -58,14 +60,28 @@ export default {
 		};
 	},
 	methods: {
-		error() {
-			this.$toast.error(this.$t("pages.administration.students.new.error"));
-		},
-		success() {
-			this.$toast.success(this.$t("pages.administration.students.new.success"));
-			this.$router.push({
-				path: `/administration/students`,
-			});
+		createStudent(userData) {
+			this.$store
+				.dispatch("users/createStudent", {
+					firstName: userData.firstName,
+					lastName: userData.lastName,
+					email: userData.email,
+					birthday: this.birthday,
+					roles: ["student"],
+					schoolId: this.$user.schoolId,
+					sendRegistration: this.sendRegistration,
+				})
+				.then(() => {
+					this.$toast.success(
+						this.$t("pages.administration.students.new.success")
+					);
+					this.$router.push({
+						path: `/administration/students`,
+					});
+				})
+				.catch(() => {
+					this.$toast.error(this.$t("pages.administration.students.new.error"));
+				});
 		},
 	},
 };
