@@ -9,6 +9,7 @@
 	"common.labels.email": "Email",
 	"common.labels.firstName": "First Name",
 	"common.labels.lastName": "Last Name",
+	"common.labels.fullName": "Name & Last Name",
 	"common.labels.name": "Name",
 	"common.labels.room": "Room",
 	"common.labels.status": "Status",
