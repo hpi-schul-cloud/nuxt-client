@@ -31,6 +31,7 @@
 	"common.labels.room": "Raum",
 	"common.labels.status": "Status",
 	"common.labels.teacher": "Lehrer:in",
+	"common.labels.logout": "Logout",
 	"common.labels.registration": "Registrierung",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
