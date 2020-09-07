@@ -172,11 +172,11 @@ export function teacherFilter(ctx) {
 
 	return [
 		{
-			title: ctx.$t("utils.adminFilter.teacher.consent.title"),
+			title: ctx.$t("utils.adminFilter.consent.title"),
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.teacher.consent.ok");
+						return ctx.$t("utils.adminFilter.consent.ok");
 					} else if (stat === "missing") {
 						return ctx.$t("utils.adminFilter.consent.missing");
 					}
@@ -193,11 +193,11 @@ export function teacherFilter(ctx) {
 					options: [
 						{
 							value: "ok",
-							label: ctx.$t("utils.adminFilter.teacher.consent.label.ok"),
+							label: ctx.$t("utils.adminFilter.consent.label.ok"),
 						},
 						{
 							value: "missing",
-							label: ctx.$t("utils.adminFilter.teacher.consent.label.missing"),
+							label: ctx.$t("utils.adminFilter.consent.label.missing"),
 						},
 					],
 				},
