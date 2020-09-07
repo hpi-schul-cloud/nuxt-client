@@ -18,6 +18,7 @@
 			:key="index"
 			class="th-slot"
 			cellspacing="0"
+			:data-testid="column.label"
 		>
 			<slot
 				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
