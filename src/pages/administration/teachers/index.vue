@@ -247,7 +247,9 @@ export default {
 				},
 			],
 			filters: teacherFilter(this),
-			searchQuery: "",
+			searchQuery:
+				this.$uiState.get("filter", "pages.administration.students.index")
+					.searchQuery || "",
 			searchBarPlaceHolder: this.$t(
 				"pages.administration.teachers.index.searchbar.placeholder"
 			),
@@ -477,11 +479,14 @@ export default {
 						query,
 					});
 
-					this.$store.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "teachers",
-					});
+					// This setTimeout function will be removed when the double server call is corrected.
+					setTimeout(() => {
+						this.$store.dispatch("users/handleUsers", {
+							query,
+							action: "find",
+							userType: "teachers",
+						});
+					}, 300);
 				},
 			};
 		},

@@ -254,6 +254,7 @@ import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
+import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
@@ -362,6 +363,7 @@ export default {
 			selectedStudents: "selectedStudents",
 			selectedStudentsData: "selectedStudentsData",
 			registeredStudents: "registeredStudents",
+			registerError: "registerError",
 		}),
 		...mapGetters("users", {
 			students: "list",
@@ -384,6 +386,17 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		// This setTimeout function will be removed when the double server call is corrected.
+		setTimeout(() => {
+			if (this.filteredTableData.length === 0) {
+				this.$toast.error(
+					this.$t("pages.administration.students.consent.table.empty")
+				);
+				this.$router.push({
+					path: `/administration/students`,
+				});
+			}
+		}, 500);
 	},
 	methods: {
 		find() {
@@ -422,7 +435,7 @@ export default {
 			return {
 				input_change: (dateData) => {
 					if (dateData !== "") {
-						const newDate = dayjs(dateData).format("YYYY-MM-DDTHH:mm:ssZ");
+						const newDate = dayjs(dateData).format("YYYY-MM-DD");
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -477,13 +490,23 @@ export default {
 			} else {
 				const users = this.filteredTableData.map((student) => {
 					return {
-						userId: student._id,
+						_id: student._id,
 						birthday: student.birthday,
 						password: student.password,
-						parent_privacyConsent: true,
-						parent_termsOfUseConsent: true,
-						privacyConsent: true,
-						termsOfUseConsent: true,
+						consent: {
+							userConsent: {
+								form: "analog",
+								privacyConsent: true,
+								termsOfUseConsent: true,
+							},
+							parentConsents: [
+								{
+									form: "analog",
+									privacyConsent: true,
+									termsOfUseConsent: true,
+								},
+							],
+						},
 					};
 				}, this);
 				this.$store.dispatch("bulkConsent/register", users);

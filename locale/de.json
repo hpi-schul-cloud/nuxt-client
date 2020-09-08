@@ -288,6 +288,7 @@
 	"pages.administration.students.consent.cancel.modal.confirm": "Trotzdem abbrechen",
 	"pages.administration.students.consent.print": "Liste mit Zugangsdaten drucken",
 	"pages.administration.students.consent.print.title": "Einverständnis erfolgreich erklärt",
+	"pages.administration.students.consent.table.empty": "Die Liste ist leer!",
 	"pages.administration.teachers.fab.add": "Lehrer:in anlegen",
 	"pages.administration.teachers.fab.import": "Lehrer:innen importieren",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Lehrer:in löschen",
