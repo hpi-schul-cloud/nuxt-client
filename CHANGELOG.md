@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [24.4.1] - 2020-09-08
+
+- SC-6701 - changed domain for ghost (mint-ec pages)
+
 ## [24.4.0] - 2020-08-31
 
 ## [24.3.0] - 2020-08-25
