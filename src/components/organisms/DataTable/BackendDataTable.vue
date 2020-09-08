@@ -22,6 +22,7 @@
 							:columns="columns"
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
+							data-testid="table-data-head"
 							@update:sort="onUpdateSort"
 						>
 							<template
@@ -32,7 +33,7 @@
 							</template>
 						</component>
 					</thead>
-					<tbody>
+					<tbody data-testid="table-data-body">
 						<component
 							:is="componentDataRow"
 							v-for="(row, rowindex) in data"
@@ -42,6 +43,7 @@
 							:selected="isRowSelected(row)"
 							:column-keys="columnKeys"
 							:data="row"
+							data-testid="table-data-row"
 							@update:selected="setRowSelection(row, $event)"
 						>
 							<template
