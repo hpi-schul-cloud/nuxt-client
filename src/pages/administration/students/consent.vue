@@ -390,7 +390,8 @@ export default {
 		setTimeout(() => {
 			if (this.filteredTableData.length === 0) {
 				this.$toast.error(
-					this.$t("pages.administration.students.consent.table.empty"), { position: "top-center" }
+					this.$t("pages.administration.students.consent.table.empty"),
+					{ position: "top-center" }
 				);
 				this.$router.push({
 					path: `/administration/students`,
