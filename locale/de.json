@@ -265,7 +265,7 @@
 	"pages.administration.students.consent.steps.success.back": "Zurück zur Übersicht",
 	"pages.administration.students.consent.steps.success.image.alt": "Sicher Verbunden Grafik",
 	"pages.administration.students.consent.title": "Analoge Registrierung",
-	"pages.administration.students.consent.table.empty": "Die Liste ist leer!",
+	"pages.administration.students.consent.table.empty": "Alle Schüler haben bereits ihr Einverständnis gegeben.",
 	"pages.administration.students.fab.add": "Schüler:in anlegen",
 	"pages.administration.students.fab.import": "Schüler:innen importieren",
 	"pages.administration.students.index.remove.confirm.btnText": "Schüler löschen",

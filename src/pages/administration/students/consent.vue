@@ -386,11 +386,11 @@ export default {
 	},
 	created(ctx) {
 		this.find();
-		// This setTimeout function will be removed when the double server call is corrected.
+
 		setTimeout(() => {
 			if (this.filteredTableData.length === 0) {
 				this.$toast.error(
-					this.$t("pages.administration.students.consent.table.empty")
+					this.$t("pages.administration.students.consent.table.empty"), { position: "top-center" }
 				);
 				this.$router.push({
 					path: `/administration/students`,

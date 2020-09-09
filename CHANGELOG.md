@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-6474 in admin tables, edit column key is filtered out of column data object if school is external
 
+- SC-6628 Changing backend url endpoint while analog consenting
+
 ## [24.4.0] - 2020-08-31
 
 - SC-5410 language dropdown in account page for selecting user language

@@ -507,7 +507,6 @@ export default {
 						query,
 					});
 
-					// This setTimeout function will be removed when the double server call is corrected.
 					setTimeout(() => {
 						this.$store.dispatch("users/handleUsers", {
 							query,
