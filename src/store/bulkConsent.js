@@ -34,8 +34,11 @@ export const actions = {
 		commit("setStudentsData", res);
 		return res;
 	},
-	async updateStudents({ commit }, payload) {
+	updateStudents({ commit }, payload) {
 		commit("updateStudentData", payload);
+	},
+	setStudents({ commit }, payload) {
+		commit("setStudentsData", payload);
 	},
 };
 

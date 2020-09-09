@@ -41,11 +41,11 @@
 				sort-by="fullName"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					<base-input-calendar
+					<base-input-default
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
 						class="date"
-						:vmodel="slotProps.data"
+						:vmodel="dayjs(slotProps.data).format('YYYY-MM-DD')"
 						type="date"
 						label=""
 						v-on="
@@ -55,10 +55,10 @@
 							})
 						"
 					/>
-					<base-input-calendar
+					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
 						class="date"
-						:vmodel="slotProps.data"
+						:vmodel="dayjs(slotProps.data).format('YYYY-MM-DD')"
 						type="date"
 						label=""
 						v-on="
@@ -249,7 +249,7 @@ import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import BaseInputCalendar from "@components/base/BaseInput/BaseInputCalendar";
+// import BaseInputCalendar from "@components/base/BaseInput/BaseInputCalendar";
 import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
@@ -262,7 +262,7 @@ export default {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
-		BaseInputCalendar,
+		// BaseInputCalendar,
 		BaseInputDefault,
 		BaseInput,
 	},
@@ -346,7 +346,9 @@ export default {
 			currentStep: 0,
 			birthdayWarning: false,
 			cancelWarning: false,
-			inputError: "Missing",
+			inputError: this.$t(
+				"pages.administration.students.consent.input.missing"
+			),
 			check: false,
 			checkWarning: false,
 			printPageInfo: this.$t(
@@ -382,59 +384,49 @@ export default {
 				}
 				return [];
 			},
+			set() {},
 		},
 	},
 	created(ctx) {
 		this.find();
 
-		setTimeout(() => {
-			if (this.filteredTableData.length === 0) {
-				this.$toast.error(
-					this.$t("pages.administration.students.consent.table.empty"),
-					{ position: "top-center" }
-				);
-				this.$router.push({
-					path: `/administration/students`,
-				});
-			}
-		}, 500);
+		// setTimeout(() => {
+		// 	if (this.filteredTableData.length === 0) {
+		// 		this.$toast.error(
+		// 			this.$t("pages.administration.students.consent.table.empty"),
+		// 			{ position: "top-center" }
+		// 		);
+		// 		this.$router.push({
+		// 			path: `/administration/students`,
+		// 		});
+		// 	}
+		// }, 20000);
 	},
 	methods: {
-		find() {
+		async find() {
 			const query = {
 				usersForConsent: this.selectedStudents,
 			};
 
-			try {
-				this.$store
-					.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "students",
-					})
-					.then((result) => {
-						const data = [];
-						for (const key of result.data.keys()) {
-							if (this.selectedStudents.includes(result.data[key]._id)) {
-								var student = result.data[key];
-								student.fullName = student.firstName + " " + student.lastName;
-								student.password = generatePassword();
-								data.push(student);
-							}
-						}
-						this.$store.commit("bulkConsent/setStudentsData", data);
-						return data;
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-			} catch (error) {
-				console.log(error);
+			await this.$store.dispatch("users/handleUsers", {
+				query,
+				action: "find",
+				userType: "students",
+			});
+
+			if (this.students.length) {
+				const data = this.students.map((student) => {
+					student.fullName = student.firstName + " " + student.lastName;
+					student.password = generatePassword();
+					return student;
+				});
+				this.filteredTableData = data;
+				this.$store.dispatch("bulkConsent/setStudents", data);
 			}
 		},
 		inputDateForDate(student) {
 			return {
-				input_change: (dateData) => {
+				input: (dateData) => {
 					if (dateData !== "") {
 						const newDate = dayjs(dateData).format("YYYY-MM-DD");
 						const index = this.filteredTableData.findIndex(
