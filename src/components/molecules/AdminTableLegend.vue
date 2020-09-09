@@ -32,7 +32,8 @@
 				}}
 				<base-link
 					class="link-style"
-					to="/administration/helpdesk"
+					to="/"
+					href="https://docs.schul-cloud.org/x/PgBVAw"
 					:no-styles="true"
 					traget="_blank"
 				>

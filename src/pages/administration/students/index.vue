@@ -6,14 +6,22 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 
+		<search-bar
+			v-model="searchQuery"
+			:placeholder="searchBarPlaceHolder"
+			class="search-section"
+			v-on="barSearch(this)"
+		/>
+
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
 		/>
+
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
-			:columns="tableColumns"
+			:columns="editFilteredColumns"
 			:current-page.sync="page"
 			:data="students"
 			:paginated="true"
@@ -32,44 +40,7 @@
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
-			<template v-slot:headcolumn-consent>
-				<span class="th-slot">
-					<span>{{ $t("common.labels.registration") }}</span>
-					<base-button design="info text icon" @click="active = !active">
-						<base-icon source="material" icon="info" />
-					</base-button>
-				</span>
-				<info-box class="info-box" :active.sync="active">
-					<template v-slot:header>Registrierungen abschließen</template>
-					<template v-slot:body>
-						<div class="content">
-							{{ $t("pages.administration.students.infobox.paragraph-1") }}
-							<ul class="list">
-								<li>
-									{{ $t("pages.administration.students.infobox.li-1") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-2") }}
-								</li>
-								<li>
-									{{ $t("pages.administration.students.infobox.li-3") }}
-								</li>
-							</ul>
-							{{ $t("pages.administration.students.infobox.paragraph-2") }}
-							<br />
-							<br />
-							{{ $t("pages.administration.students.infobox.paragraph-3") }}
-							<br />
-							<br />
-							<base-icon
-								source="material"
-								icon="warning"
-								color="var(--color-danger)"
-							/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
-						</div>
-					</template>
-				</info-box>
-			</template>
+			<template v-slot:headcolumn-consent> </template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
 				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
@@ -97,10 +68,7 @@
 					/>
 				</span>
 			</template>
-			<template
-				v-if="schoolInternallyManaged"
-				v-slot:datacolumn-_id="{ data, selected, highlighted }"
-			>
+			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
 				<base-button
 					:class="{
 						'action-button': true,
@@ -148,8 +116,8 @@ import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import InfoBox from "@components/molecules/InfoBox";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import SearchBar from "../../../components/molecules/Searchbar.vue";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -159,11 +127,11 @@ dayjs.locale("de");
 
 export default {
 	components: {
-		InfoBox,
 		DataFilter,
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
+		SearchBar,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -174,6 +142,7 @@ export default {
 
 	data() {
 		return {
+			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
@@ -218,8 +187,9 @@ export default {
 				},
 				{
 					field: "consentStatus",
-					label: this.$t("common.labels.consent"),
+					label: this.$t("common.labels.registration"),
 					sortable: true,
+					infobox: true,
 				},
 				{
 					field: "createdAt",
@@ -296,6 +266,10 @@ export default {
 			],
 			filters: studentFilter(this),
 			active: false,
+			searchQuery: "",
+			searchBarPlaceHolder: this.$t(
+				"pages.administration.teachers.index.searchbar.placeholder"
+			),
 		};
 	},
 
@@ -322,9 +296,22 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
+		editFilteredColumns() {
+			// filters edit column if school is external
+			return this.school.isExternal
+				? this.tableColumns.filter((col) => col.field !== "_id")
+				: this.tableColumns;
+		},
 	},
 	watch: {
 		currentFilterQuery: function (query) {
+			var temp = this.$uiState.get(
+				"filter",
+				"pages.administration.students.index"
+			);
+
+			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+
 			this.currentFilterQuery = query;
 			if (
 				JSON.stringify(query) !==
@@ -352,7 +339,6 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-
 			this.$store.dispatch("users/handleUsers", {
 				query,
 				action: "find",
@@ -393,12 +379,14 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+			this.$store.commit("bulkConsent/setSelectedStudents", {
+				students: this.tableSelection,
+				selectionType: selectionType,
+			});
+
+			this.$router.push({
+				path: "/administration/students/consent",
+			});
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
@@ -417,6 +405,27 @@ export default {
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
+			// TODO: request registrationsLinks fom backend
+			// route needs to be implemented!
+
+			// const users = await this.$store.dispatch("users/find", {
+			// 	qid: "qr-print",
+			// 	query: this.getQueryForSelection(rowIds, selectionType),
+			// });
+			// this.$_printQRs(
+			// 	usersWithoutConsents.map((user) => ({
+			// 		qrContent: user.registrationLink.shortLink,
+			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
+			// 		description: "Zum Registrieren bitte den Link öffnen.",
+			// 	}))
+			// );
+
+			this.$toast.error(
+				`handleBulkQR([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
@@ -485,6 +494,25 @@ export default {
 				invertedDesign: true,
 			});
 		},
+		barSearch: function () {
+			return {
+				input: (searchText) => {
+					this.currentFilterQuery.searchQuery = searchText;
+
+					const query = this.currentFilterQuery;
+
+					this.$uiState.set("filter", "pages.administration.students.index", {
+						query,
+					});
+
+					this.$store.dispatch("users/handleUsers", {
+						query,
+						action: "find",
+						userType: "students",
+					});
+				},
+			};
+		},
 	},
 };
 </script>
@@ -503,14 +531,6 @@ a.action-button {
 			box-shadow: none;
 		}
 	}
-}
-span {
-	font-weight: var(--font-weight-normal);
-}
-.content {
-	max-height: 35vh;
-	overflow-y: scroll;
-	font-weight: var(--font-weight-normal);
 }
 .list {
 	padding: var(--space-lg);
@@ -542,5 +562,11 @@ button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
 	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+}
+.search-section {
+	max-width: 100%;
+	margin-top: var(--space-xs);
+	margin-bottom: var(--space-xs);
+	margin-left: 0;
 }
 </style>
