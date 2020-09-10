@@ -48,6 +48,7 @@
 						:vmodel="slotProps.data"
 						type="date"
 						label=""
+						:birth-date="true"
 						v-on="
 							inputDateForDate({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -61,6 +62,7 @@
 						:vmodel="slotProps.data"
 						type="date"
 						label=""
+						:birth-date="true"
 						v-on="
 							inputDateForDate({
 								id: filteredTableData[slotProps.rowindex]._id,
