@@ -79,7 +79,7 @@
 					</modal-body-info>
 				</template>
 				<template v-slot:footer>
-					<modal-footer-confirm text="Ok" @click="gotoOverview"/>
+					<modal-footer-confirm text="Ok" @click="gotoOverview" />
 				</template>
 			</base-modal>
 		</template>

@@ -1,8 +1,5 @@
 <template>
-	<div
-		class="footer-button"
-		:class="isError ? 'error' : ''"
-	>
+	<div class="footer-button" :class="isError ? 'error' : ''">
 		<button class="btn-confirm" v-on="$listeners">
 			{{ text }}
 		</button>
@@ -17,7 +14,7 @@ export default {
 		},
 		text: {
 			type: String,
-			default: "Ok"
+			default: "Ok",
 		},
 	},
 	data() {
