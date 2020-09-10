@@ -2,10 +2,10 @@
 	<div
 		:style="{ backgroundColor: backgroundcolor }"
 		class="footer-button"
-		:class="isSuccess ? '' : 'error'"
+		:class="isError ? 'error' : ''"
 	>
 		<button class="btn-confirm" v-on="$listeners">
-			Ok
+			{{ text }}
 		</button>
 	</div>
 </template>
@@ -19,8 +19,12 @@ export default {
 				return "var(--color-success)";
 			},
 		},
-		isSuccess: {
+		isError: {
 			type: Boolean,
+		},
+		text: {
+			type: String,
+			default: "Ok"
 		},
 	},
 	data() {
