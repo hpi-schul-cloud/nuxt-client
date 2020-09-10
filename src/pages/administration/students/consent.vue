@@ -45,7 +45,7 @@
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
 						class="date"
-						:vmodel="dayjs(slotProps.data).format('YYYY-MM-DD')"
+						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
 						v-on="
@@ -58,7 +58,7 @@
 					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
 						class="date"
-						:vmodel="dayjs(slotProps.data).format('YYYY-MM-DD')"
+						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
 						v-on="
@@ -244,6 +244,8 @@
 
 <script>
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
