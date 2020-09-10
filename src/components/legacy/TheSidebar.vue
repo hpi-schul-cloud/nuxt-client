@@ -43,6 +43,7 @@
 							:key="JSON.stringify(child.to) || child.href"
 							:class="{ active: $route.path.includes(child.href) }"
 							class="list-item list-sub-item"
+							:data-testId="child.title"
 						>
 							<base-link
 								class="list-content"
