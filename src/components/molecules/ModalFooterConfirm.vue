@@ -1,6 +1,5 @@
 <template>
 	<div
-		:style="{ backgroundColor: backgroundcolor }"
 		class="footer-button"
 		:class="isError ? 'error' : ''"
 	>
@@ -13,12 +12,6 @@
 <script>
 export default {
 	props: {
-		backgroundcolor: {
-			type: String,
-			default() {
-				return "var(--color-success)";
-			},
-		},
 		isError: {
 			type: Boolean,
 		},
@@ -70,7 +63,7 @@ export default {
 	font-weight: var(--button-font-weight);
 	color: var(--color-white);
 	cursor: pointer;
-	background: var(--button-background);
+	background: var(--color-success);
 	border: none;
 	border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 	transition: all var(--duration-transition-medium)
@@ -78,15 +71,17 @@ export default {
 
 	&:hover,
 	&:focus {
-		--button-background: var(--color-success-dark);
+		background: var(--color-success-dark);
 	}
 }
 
 .error {
 	.btn-confirm {
+		background: var(--color-danger);
+
 		&:hover,
 		&:focus {
-			--button-background: var(--color-danger-dark);
+			background: var(--color-danger-dark);
 		}
 	}
 }

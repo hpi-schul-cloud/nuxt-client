@@ -6,7 +6,7 @@
 //const mongoId = "[a-z0-9]{24}";
 const activationCode = "[a-z0-9]+";
 const routes = [
-	`^/account/?$`,
+	// `^/account/?$`,
 	`^/account/email/edit/?$`,
 	`^/account/name/edit/?$`,
 	`^/account/password/edit/?$`,
