@@ -30,6 +30,7 @@ describe("@components/legacy/TheTopBar", () => {
 
 	it("Render with links and buttons", () => {
 		const wrapper = shallowMount(TheTopBar, {
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				actions: mockActions,
 			},
