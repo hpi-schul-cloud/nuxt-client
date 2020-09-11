@@ -302,7 +302,7 @@
 	"pages.administration.teachers.index.tableActions.email": "Send registration links by e-mail",
 	"pages.administration.teachers.index.tableActions.qr": "Print registration links as QR Code",
 	"pages.administration.teachers.index.title": "Lehrer:innen verwalten",
-	"pages.administration.teachers.legend.icon.check": "All consents available",
+	"pages.administration.teachers.legend.icon.check": "Registration complete",
 	"pages.administration.teachers.new.checkbox.label": "Send registration link to teacher",
 	"pages.administration.teachers.new.error": "Teacher could not be added successfully. The email address may already exist.",
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
