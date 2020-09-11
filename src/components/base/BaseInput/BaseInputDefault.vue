@@ -136,8 +136,8 @@ export default {
 		return {
 			hasFocus: false,
 			passwordVisible: false,
-			minDate: dayjs().subtract(100, "y").format("YYYY-DD-MM"),
-			maxDate: dayjs().subtract(4, "y").format("YYYY-DD-MM"),
+			minDate: dayjs().subtract(100, "y").format("YYYY-MM-DD"),
+			maxDate: dayjs().subtract(4, "y").format("YYYY-MM-DD"),
 			birthDateValidationPattern:
 				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
 		};
