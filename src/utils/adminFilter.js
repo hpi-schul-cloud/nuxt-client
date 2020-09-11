@@ -138,7 +138,7 @@ export function studentFilter(ctx) {
 						},
 						{
 							value: "parentsAgreed",
-							label: ctx.$t("utils.adminFilter.consent.label.parentsAgreed"),
+							label: ctx.$t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 						},
 						{
 							value: "missing",
