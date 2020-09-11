@@ -377,7 +377,7 @@
 	"utils.adminFilter.consent": "Consent form:",
 	"utils.adminFilter.consent.label.missing": "User created",
 	"utils.adminFilter.consent.label.ok": "Registration complete",
-	"utils.adminFilter.consent.label.parentsAgreed": "Student has not approved",
+	"utils.adminFilter.consent.label.parentsAgreementMissing": "Student has not approved",
 	"utils.adminFilter.consent.missing": "not available",
 	"utils.adminFilter.consent.ok": "completely",
 	"utils.adminFilter.consent.parentsAgreed": "only parents have agreed",
