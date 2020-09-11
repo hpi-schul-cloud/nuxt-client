@@ -302,7 +302,7 @@
 	"pages.administration.teachers.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
 	"pages.administration.teachers.index.tableActions.qr": "Registrierungslinks als QR-Code ausdrucken",
 	"pages.administration.teachers.index.title": "Lehrer:innen verwalten",
-	"pages.administration.teachers.legend.icon.check": "Alle Zustimmungen vorhanden",
+	"pages.administration.teachers.legend.icon.check": "Registrierung abgeschlossen",
 	"pages.administration.teachers.new.checkbox.label": "Registrierungslink an Lehrer:in senden",
 	"pages.administration.teachers.new.error": "Lehrer:in konnte nicht erfolgreich hinzugefügt werden. Möglicherweise existiert die E-Mail-Adresse bereits.",
 	"pages.administration.teachers.new.success": "Lehrer:in erfolgreich angelegt!",
