@@ -3,7 +3,7 @@ export const actions = {
 		const registered = [];
 
 		if (Array.isArray(payload)) {
-			const promiseResult = await Promise.allSettled(
+			const promiseResult = await Promise.all(
 				payload.map((user) => {
 					registered.push(user._id);
 					this.$axios.$patch("/users/admin/students/" + user._id, user);
@@ -11,12 +11,13 @@ export const actions = {
 			);
 
 			promiseResult.map((promise) => {
-				const errors = [];
-				if (promise.status !== "fulfilled") {
-					errors.push(promise);
-				}
-				if (errors.length)
-					commit("setRegisterError", { promiseErrors: errors });
+				console.log(promise)
+				// const errors = [];
+				// if (promise.status !== "fulfilled") {
+				// 	errors.push(promise);
+				// }
+				// if (errors.length)
+				// 	commit("setRegisterError", { promiseErrors: errors });
 			});
 
 			commit("setRegisteredStudents", registered);

@@ -109,7 +109,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(slotProps.data).format("DD.MM.YYYY") }}
+						{{ dayjs(slotProps.data, 'DD.MM.YYYY').format('DD.MM.YYYY') }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -158,8 +158,8 @@
 				track-by="_id"
 				:paginated="false"
 			>
-				<template v-slot:datacolumn-birthday="{ data }">
-					{{ dayjs(data).format("DD.MM.YYYY") }}
+				<template v-slot:datacolumn-birthday="slotProps">
+						{{ dayjs(slotProps.data, 'DD.MM.YYYY').format('DD.MM.YYYY') }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -430,7 +430,8 @@ export default {
 			return {
 				input: (dateData) => {
 					if (dateData !== "") {
-						const newDate = dayjs(dateData).format("YYYY-MM-DD");
+						// debugger
+						const newDate = dayjs(dateData, 'YYYY-MM-DD').format('DD.MM.YYYY');
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -486,7 +487,7 @@ export default {
 				const users = this.filteredTableData.map((student) => {
 					return {
 						_id: student._id,
-						birthday: student.birthday,
+						birthday: dayjs(student.birthday, 'DD.MM.YYYY').format('DD.MM.YYYY'),
 						password: student.password,
 						consent: {
 							userConsent: {
