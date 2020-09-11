@@ -29,7 +29,7 @@ export default {
 	display: grid;
 	grid-gap: var(--space-md);
 	width: 100%;
-	margin: 0 calc(10 * var(--border-width-bold));  /* 20px */
+	margin: 0 calc(10 * var(--border-width-bold)); /* 20px */
 
 	@include breakpoint(tablet) {
 		grid-gap: calc(9 * var(--border-width-bold)); /* 18px */
