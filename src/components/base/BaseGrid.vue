@@ -12,7 +12,6 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
 		return {};
 	},
 	computed: {
@@ -30,15 +29,16 @@ export default {
 	display: grid;
 	grid-gap: var(--space-md);
 	width: 100%;
-	margin: 0 var(--space-lg) !important;
+	margin: 0 calc(10 * var(--border-width-bold));  /* 20px */
 
 	@include breakpoint(tablet) {
-		margin: 0 var(--space-xl) !important;
+		grid-gap: calc(9 * var(--border-width-bold)); /* 18px */
+		margin: 0 calc(18 * var(--border-width-bold)); /* 36px */
 	}
 
 	@include breakpoint(desktop) {
 		grid-gap: var(--space-lg);
-		margin: 0 var(--space-xl) !important;
+		margin: 0 calc(41 * var(--border-width)); /* 41px */
 	}
 }
 </style>
