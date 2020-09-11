@@ -109,7 +109,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(slotProps.data, 'DD.MM.YYYY').format('DD.MM.YYYY') }}
+						{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -159,7 +159,7 @@
 				:paginated="false"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-						{{ dayjs(slotProps.data, 'DD.MM.YYYY').format('DD.MM.YYYY') }}
+					{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -392,17 +392,7 @@ export default {
 	created(ctx) {
 		this.find();
 
-		// setTimeout(() => {
-		// 	if (this.filteredTableData.length === 0) {
-		// 		this.$toast.error(
-		// 			this.$t("pages.administration.students.consent.table.empty"),
-		// 			{ position: "top-center" }
-		// 		);
-		// 		this.$router.push({
-		// 			path: `/administration/students`,
-		// 		});
-		// 	}
-		// }, 20000);
+		this.checkTableData();
 	},
 	methods: {
 		async find() {
@@ -430,8 +420,7 @@ export default {
 			return {
 				input: (dateData) => {
 					if (dateData !== "") {
-						// debugger
-						const newDate = dayjs(dateData, 'YYYY-MM-DD').format('DD.MM.YYYY');
+						const newDate = dayjs(dateData, "YYYY-MM-DD").format("DD.MM.YYYY");
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -487,7 +476,9 @@ export default {
 				const users = this.filteredTableData.map((student) => {
 					return {
 						_id: student._id,
-						birthday: dayjs(student.birthday, 'DD.MM.YYYY').format('DD.MM.YYYY'),
+						birthday: dayjs(student.birthday, "DD.MM.YYYY").format(
+							"YYYY-MM-DD"
+						),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -561,6 +552,19 @@ export default {
 			this.$router.push({
 				path: `/administration/students`,
 			});
+		},
+		checkTableData() {
+			setTimeout(() => {
+				if (this.filteredTableData.length === 0) {
+					this.$toast.error(
+						this.$t("pages.administration.students.consent.table.empty"),
+						{ position: "top-center" }
+					);
+					this.$router.push({
+						path: `/administration/students`,
+					});
+				}
+			}, 2000);
 		},
 		dayjs,
 	},
