@@ -265,6 +265,8 @@
 	"pages.administration.students.consent.steps.success.back": "Back to overview",
 	"pages.administration.students.consent.steps.success.image.alt": "Securely connect graphic",
 	"pages.administration.students.consent.title": "Register analogously",
+	"pages.administration.students.consent.input.missing": "Geburtsdatum fehlt",
+	"pages.administration.students.consent.table.empty": "All users you have chosen have already been consented.",
 	"pages.administration.students.fab.add": "Create student",
 	"pages.administration.students.fab.import": "Import students",
 	"pages.administration.students.index.remove.confirm.btnText": "Delete student",
