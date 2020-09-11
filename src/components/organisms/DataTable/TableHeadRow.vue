@@ -13,7 +13,12 @@
 				/>
 			</div>
 		</th>
-		<th v-for="(column, index) in columns" :key="index" cellspacing="0">
+		<th
+			v-for="(column, index) in columns"
+			:key="index"
+			class="th-slot"
+			cellspacing="0"
+		>
 			<slot
 				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
 				:label="column.label"
@@ -21,6 +26,48 @@
 				:sortBy="sortBy"
 				:sortOrder="sortOrder"
 			>
+				<span v-if="column.infobox">
+					<span class="info-slot">
+						<base-button
+							class="info-button"
+							style="background-color: transparent;"
+							design="info text icon"
+							@click="infoBoxActive = !infoBoxActive"
+						>
+							<base-icon source="material" icon="info" style="margin: 0;" />
+						</base-button>
+					</span>
+					<info-box class="info-box" :active.sync="infoBoxActive">
+						<template v-slot:header>Registrierungen abschließen</template>
+						<template v-slot:body>
+							<div class="content">
+								{{ $t("pages.administration.students.infobox.paragraph-1") }}
+								<ul class="list">
+									<li>
+										{{ $t("pages.administration.students.infobox.li-1") }}
+									</li>
+									<li>
+										{{ $t("pages.administration.students.infobox.li-2") }}
+									</li>
+									<li>
+										{{ $t("pages.administration.students.infobox.li-3") }}
+									</li>
+								</ul>
+								{{ $t("pages.administration.students.infobox.paragraph-2") }}
+								<br />
+								<br />
+								{{ $t("pages.administration.students.infobox.paragraph-3") }}
+								<br />
+								<br />
+								<base-icon
+									source="material"
+									icon="warning"
+									color="var(--color-danger)"
+								/>{{ $t("pages.administration.students.infobox.paragraph-4") }}
+							</div>
+						</template>
+					</info-box>
+				</span>
 				<BaseButton
 					v-if="column.sortable"
 					:class="{
@@ -49,6 +96,7 @@
 
 <script>
 import BaseButton from "@basecomponents/BaseButton";
+import InfoBox from "@components/molecules/InfoBox";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -60,6 +108,9 @@ const selectionStateMap = new Map([
 ]);
 
 export default {
+	components: {
+		InfoBox,
+	},
 	props: {
 		allRowsSelectable: Boolean,
 		currentPageSelectionState: {
@@ -82,8 +133,9 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			infoBoxActive: false,
+		};
 	},
 	computed: {
 		selectionStatus: {
@@ -139,6 +191,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
+
 .row {
 	font-weight: var(--font-weight-bold);
 	th {
@@ -166,5 +220,38 @@ export default {
 			}
 		}
 	}
+}
+.info-box {
+	position: absolute;
+	right: 0%;
+	z-index: calc(var(--layer-fab) + 1);
+	max-width: 100%;
+	margin-top: var(--space-xl-2);
+	margin-right: var(--space-lg);
+	margin-left: var(--space-lg);
+
+	@include breakpoint(tablet) {
+		min-width: 450px;
+		max-width: 50%;
+		margin-right: var(--space-xl);
+	}
+	.content {
+		max-height: 35vh;
+		overflow-y: scroll;
+		font-weight: var(--font-weight-normal);
+	}
+	button:not(.is-none):focus {
+		z-index: var(--layer-fab);
+		outline: none;
+		box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+	}
+}
+.th-slot {
+	position: relative;
+}
+.info-slot {
+	position: absolute;
+	top: -20%;
+	left: 56%;
 }
 </style>

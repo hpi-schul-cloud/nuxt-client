@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
-## Unreleased
+## [24.5.0] - 2020-09-14
+
+### Changed
+
+- SC-6474 in admin tables, edit column key is filtered out of column data object if school is external
 
 ## [24.4.1] - 2020-09-08
 
