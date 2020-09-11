@@ -43,7 +43,7 @@
 							:pattern="
 								appliedType === 'date' && birthDate
 									? birthDateValidationPattern
-									: ''
+									: null
 							"
 							@input="handleInput"
 							@focus="hasFocus = true"
