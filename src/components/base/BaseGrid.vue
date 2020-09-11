@@ -10,10 +10,6 @@ export default {
 			type: String,
 			default: "15rem",
 		},
-		gridGap: {
-			type: String,
-			default: "var(--space-lg)",
-		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
@@ -21,19 +17,28 @@ export default {
 	},
 	computed: {
 		col() {
-			return `grid-template-columns: repeat(auto-fill, minmax(${this.columnWidth}, 1fr));
-				grid-gap: ${this.gridGap};
-				`;
+			return `grid-template-columns: repeat(auto-fill, minmax(${this.columnWidth}, 1fr));`;
 		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@variables";
+@import "@styles";
 
 .grid {
 	display: grid;
+	grid-gap: var(--space-md);
 	width: 100%;
+	margin: 0 var(--space-lg) !important;
+
+	@include breakpoint(tablet) {
+		margin: 0 var(--space-xl) !important;
+	}
+
+	@include breakpoint(desktop) {
+		grid-gap: var(--space-lg);
+		margin: 0 var(--space-xl) !important;
+	}
 }
 </style>
