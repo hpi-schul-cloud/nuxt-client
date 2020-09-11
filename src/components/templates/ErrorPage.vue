@@ -9,9 +9,7 @@
 			<template v-else-if="error.statusCode === 404">
 				Die Seite wurde leider nicht gefunden
 			</template>
-			<template v-else>
-				Ein Fehler ist aufgetreten
-			</template>
+			<template v-else> Ein Fehler ist aufgetreten </template>
 		</h1>
 		<slot name="action">
 			<base-button design="primary" @click="$router.go(-1)">

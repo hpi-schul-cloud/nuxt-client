@@ -11,7 +11,7 @@
 				<base-icon
 					source="custom"
 					:icon="activated ? 'mail-check' : 'mail-error'"
-					style="color: var(--color-tertiary);"
+					style="color: var(--color-tertiary)"
 				/>
 			</template>
 		</info-modal-full-width>

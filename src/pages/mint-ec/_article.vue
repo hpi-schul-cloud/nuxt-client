@@ -12,9 +12,7 @@
 			class="mb--xl"
 			:style="{ float: `right` }"
 		>
-			<template v-slot:header>
-				Downloads
-			</template>
+			<template v-slot:header> Downloads </template>
 			<menu-link
 				v-for="link in downloadLinks"
 				:key="link.name"
