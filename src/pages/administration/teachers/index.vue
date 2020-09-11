@@ -247,7 +247,9 @@ export default {
 				},
 			],
 			filters: teacherFilter(this),
-			searchQuery: "",
+			searchQuery:
+				this.$uiState.get("filter", "pages.administration.students.index")
+					.searchQuery || "",
 			searchBarPlaceHolder: this.$t(
 				"pages.administration.teachers.index.searchbar.placeholder"
 			),
@@ -477,11 +479,13 @@ export default {
 						query,
 					});
 
-					this.$store.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "teachers",
-					});
+					setTimeout(() => {
+						this.$store.dispatch("users/handleUsers", {
+							query,
+							action: "find",
+							userType: "teachers",
+						});
+					}, 300);
 				},
 			};
 		},
