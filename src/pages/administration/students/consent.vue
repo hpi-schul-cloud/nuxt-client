@@ -251,7 +251,6 @@ import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-// import BaseInputCalendar from "@components/base/BaseInput/BaseInputCalendar";
 import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
@@ -264,7 +263,6 @@ export default {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
-		// BaseInputCalendar,
 		BaseInputDefault,
 		BaseInput,
 	},
@@ -391,7 +389,8 @@ export default {
 	},
 	created(ctx) {
 		this.find();
-
+	},
+	mounted() {
 		this.checkTableData();
 	},
 	methods: {
