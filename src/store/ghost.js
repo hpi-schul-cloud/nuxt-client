@@ -2,7 +2,7 @@ import GhostContentAPI from "@tryghost/content-api";
 
 // Create API instance with site credentials
 const api = new GhostContentAPI({
-	url: "https://headless.schul-cloud.org",
+	url: "https://headless.hpi-schul-cloud.de",
 	key: "dbb2b07bb370c4264bbadebbc1",
 	version: "v2",
 });

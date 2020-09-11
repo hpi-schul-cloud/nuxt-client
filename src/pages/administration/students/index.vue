@@ -6,14 +6,22 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 
+		<search-bar
+			v-model="searchQuery"
+			:placeholder="searchBarPlaceHolder"
+			class="search-section"
+			v-on="barSearch(this)"
+		/>
+
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
 		/>
+
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
-			:columns="tableColumns"
+			:columns="editFilteredColumns"
 			:current-page.sync="page"
 			:data="students"
 			:paginated="true"
@@ -60,10 +68,7 @@
 					/>
 				</span>
 			</template>
-			<template
-				v-if="schoolInternallyManaged"
-				v-slot:datacolumn-_id="{ data, selected, highlighted }"
-			>
+			<template v-slot:datacolumn-_id="{ data, selected, highlighted }">
 				<base-button
 					:class="{
 						'action-button': true,
@@ -112,6 +117,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
+import SearchBar from "../../../components/molecules/Searchbar.vue";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -125,6 +131,7 @@ export default {
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
+		SearchBar,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -135,6 +142,7 @@ export default {
 
 	data() {
 		return {
+			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
@@ -258,6 +266,10 @@ export default {
 			],
 			filters: studentFilter(this),
 			active: false,
+			searchQuery: "",
+			searchBarPlaceHolder: this.$t(
+				"pages.administration.teachers.index.searchbar.placeholder"
+			),
 		};
 	},
 
@@ -284,9 +296,22 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
+		editFilteredColumns() {
+			// filters edit column if school is external
+			return this.school.isExternal
+				? this.tableColumns.filter((col) => col.field !== "_id")
+				: this.tableColumns;
+		},
 	},
 	watch: {
 		currentFilterQuery: function (query) {
+			var temp = this.$uiState.get(
+				"filter",
+				"pages.administration.students.index"
+			);
+
+			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+
 			this.currentFilterQuery = query;
 			if (
 				JSON.stringify(query) !==
@@ -314,7 +339,6 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-
 			this.$store.dispatch("users/handleUsers", {
 				query,
 				action: "find",
@@ -355,12 +379,14 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
+			this.$store.commit("bulkConsent/setSelectedStudents", {
+				students: this.tableSelection,
+				selectionType: selectionType,
+			});
+
+			this.$router.push({
+				path: "/administration/students/consent",
+			});
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
@@ -379,6 +405,27 @@ export default {
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
+			// TODO: request registrationsLinks fom backend
+			// route needs to be implemented!
+
+			// const users = await this.$store.dispatch("users/find", {
+			// 	qid: "qr-print",
+			// 	query: this.getQueryForSelection(rowIds, selectionType),
+			// });
+			// this.$_printQRs(
+			// 	usersWithoutConsents.map((user) => ({
+			// 		qrContent: user.registrationLink.shortLink,
+			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
+			// 		description: "Zum Registrieren bitte den Link öffnen.",
+			// 	}))
+			// );
+
+			this.$toast.error(
+				`handleBulkQR([${rowIds.join(
+					", "
+				)}], "${selectionType}") needs implementation`,
+				{ duration: 5000 }
+			);
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
@@ -447,6 +494,25 @@ export default {
 				invertedDesign: true,
 			});
 		},
+		barSearch: function () {
+			return {
+				input: (searchText) => {
+					this.currentFilterQuery.searchQuery = searchText;
+
+					const query = this.currentFilterQuery;
+
+					this.$uiState.set("filter", "pages.administration.students.index", {
+						query,
+					});
+
+					this.$store.dispatch("users/handleUsers", {
+						query,
+						action: "find",
+						userType: "students",
+					});
+				},
+			};
+		},
 	},
 };
 </script>
@@ -468,5 +534,39 @@ a.action-button {
 }
 .list {
 	padding: var(--space-lg);
+}
+.th-slot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.info-box {
+	position: absolute;
+	right: 0%;
+	z-index: calc(var(--layer-fab) + 1);
+	max-width: 100%;
+	margin-top: var(--space-md);
+	margin-right: var(--space-lg);
+	margin-left: var(--space-lg);
+
+	@include breakpoint(tablet) {
+		min-width: 450px;
+		max-width: 50%;
+		margin-right: var(--space-xl);
+	}
+}
+
+button:not(.is-none):focus {
+	z-index: var(--layer-fab);
+	outline: none;
+	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+}
+.search-section {
+	max-width: 100%;
+	margin-top: var(--space-xs);
+	margin-bottom: var(--space-xs);
+	margin-left: 0;
 }
 </style>
