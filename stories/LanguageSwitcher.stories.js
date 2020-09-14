@@ -9,13 +9,6 @@ storiesOf("7 Others/LanguageSwitcher", module)
 	})
 	.add("LanguageSwitcher", () => ({
 		components: { LanguageSwitcher },
-		template: `<div>
-		<LanguageSwitcher />
-		Current store locale: {{ this.$store.getters["i18n/getLocale"] }}
-		<br />
-		Current locale:
-		{{ this.$i18n.locale }}
-		<br />
-		{{ $t("storybook.lang") }} </div>`,
+		template: `<LanguageSwitcher />`,
 		methods: {},
 	}));

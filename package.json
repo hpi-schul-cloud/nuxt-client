@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "24.3.0",
+	"version": "24.5.0",
 	"description": "The next Level of HPI Schul-Cloud",
 	"author": "HPI Schul-Cloud",
 	"private": true,
@@ -65,6 +65,7 @@
 		"vue": "^2.6.11",
 		"vue-echarts": "^4.0.4",
 		"vue-filter-ui": "^0.8.0",
+		"vue-flatpickr-component": "^8.1.5",
 		"vue-i18n": "^8.20.0",
 		"vue-loader": "^15.9.3",
 		"vue-mq": "^1.0.1",
