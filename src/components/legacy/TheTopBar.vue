@@ -58,7 +58,7 @@
 						data-testid="logout"
 						@click="sendEvent(action.event)"
 					>
-						Abmelden
+						{{ $t("common.labels.logout") }}
 					</button>
 				</popup-icon-initials>
 			</template>

@@ -266,7 +266,9 @@ export default {
 			],
 			filters: studentFilter(this),
 			active: false,
-			searchQuery: "",
+			searchQuery:
+				this.$uiState.get("filter", "pages.administration.students.index")
+					.searchQuery || "",
 			searchBarPlaceHolder: this.$t(
 				"pages.administration.teachers.index.searchbar.placeholder"
 			),
@@ -305,7 +307,7 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			var temp = this.$uiState.get(
+			const temp = this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
 			);
@@ -505,11 +507,13 @@ export default {
 						query,
 					});
 
-					this.$store.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "students",
-					});
+					setTimeout(() => {
+						this.$store.dispatch("users/handleUsers", {
+							query,
+							action: "find",
+							userType: "students",
+						});
+					}, 300);
 				},
 			};
 		},

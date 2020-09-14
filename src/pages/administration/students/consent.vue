@@ -41,13 +41,14 @@
 				sort-by="fullName"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					<base-input-calendar
+					<base-input-default
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
 						class="date"
-						:vmodel="slotProps.data"
+						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
+						:birth-date="true"
 						v-on="
 							inputDateForDate({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -55,12 +56,13 @@
 							})
 						"
 					/>
-					<base-input-calendar
+					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
 						class="date"
-						:vmodel="slotProps.data"
+						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
+						:birth-date="true"
 						v-on="
 							inputDateForDate({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -109,7 +111,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(slotProps.data).format("DD.MM.YYYY") }}
+						{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -158,8 +160,8 @@
 				track-by="_id"
 				:paginated="false"
 			>
-				<template v-slot:datacolumn-birthday="{ data }">
-					{{ dayjs(data).format("DD.MM.YYYY") }}
+				<template v-slot:datacolumn-birthday="slotProps">
+					{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -244,16 +246,18 @@
 
 <script>
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import BaseInputCalendar from "@components/base/BaseInput/BaseInputCalendar";
 import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
+import "dayjs/locale/de";
 dayjs.locale("de");
 
 export default {
@@ -261,7 +265,6 @@ export default {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
-		BaseInputCalendar,
 		BaseInputDefault,
 		BaseInput,
 	},
@@ -345,7 +348,9 @@ export default {
 			currentStep: 0,
 			birthdayWarning: false,
 			cancelWarning: false,
-			inputError: "Missing",
+			inputError: this.$t(
+				"pages.administration.students.consent.input.missing"
+			),
 			check: false,
 			checkWarning: false,
 			printPageInfo: this.$t(
@@ -362,6 +367,7 @@ export default {
 			selectedStudents: "selectedStudents",
 			selectedStudentsData: "selectedStudentsData",
 			registeredStudents: "registeredStudents",
+			registerError: "registerError",
 		}),
 		...mapGetters("users", {
 			students: "list",
@@ -380,49 +386,42 @@ export default {
 				}
 				return [];
 			},
+			set() {},
 		},
 	},
 	created(ctx) {
 		this.find();
 	},
+	mounted() {
+		this.checkTableData();
+	},
 	methods: {
-		find() {
+		async find() {
 			const query = {
 				usersForConsent: this.selectedStudents,
 			};
 
-			try {
-				this.$store
-					.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "students",
-					})
-					.then((result) => {
-						const data = [];
-						for (const key of result.data.keys()) {
-							if (this.selectedStudents.includes(result.data[key]._id)) {
-								var student = result.data[key];
-								student.fullName = student.firstName + " " + student.lastName;
-								student.password = generatePassword();
-								data.push(student);
-							}
-						}
-						this.$store.commit("bulkConsent/setStudentsData", data);
-						return data;
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-			} catch (error) {
-				console.log(error);
+			await this.$store.dispatch("users/handleUsers", {
+				query,
+				action: "find",
+				userType: "students",
+			});
+
+			if (this.students.length) {
+				const data = this.students.map((student) => {
+					student.fullName = student.firstName + " " + student.lastName;
+					student.password = generatePassword();
+					return student;
+				});
+				this.filteredTableData = data;
+				this.$store.dispatch("bulkConsent/setStudents", data);
 			}
 		},
 		inputDateForDate(student) {
 			return {
-				input_change: (dateData) => {
+				input: (dateData) => {
 					if (dateData !== "") {
-						const newDate = dayjs(dateData).format("YYYY-MM-DDTHH:mm:ssZ");
+						const newDate = dayjs(dateData, "YYYY-MM-DD").format("DD.MM.YYYY");
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -477,13 +476,25 @@ export default {
 			} else {
 				const users = this.filteredTableData.map((student) => {
 					return {
-						userId: student._id,
-						birthday: student.birthday,
+						_id: student._id,
+						birthday: dayjs(student.birthday, "DD.MM.YYYY").format(
+							"YYYY-MM-DD"
+						),
 						password: student.password,
-						parent_privacyConsent: true,
-						parent_termsOfUseConsent: true,
-						privacyConsent: true,
-						termsOfUseConsent: true,
+						consent: {
+							userConsent: {
+								form: "analog",
+								privacyConsent: true,
+								termsOfUseConsent: true,
+							},
+							parentConsents: [
+								{
+									form: "analog",
+									privacyConsent: true,
+									termsOfUseConsent: true,
+								},
+							],
+						},
 					};
 				}, this);
 				this.$store.dispatch("bulkConsent/register", users);
@@ -542,6 +553,19 @@ export default {
 			this.$router.push({
 				path: `/administration/students`,
 			});
+		},
+		checkTableData() {
+			setTimeout(() => {
+				if (this.filteredTableData.length === 0) {
+					this.$toast.error(
+						this.$t("pages.administration.students.consent.table.empty"),
+						{ position: "top-center" }
+					);
+					this.$router.push({
+						path: `/administration/students`,
+					});
+				}
+			}, 2000);
 		},
 		dayjs,
 	},

@@ -38,8 +38,13 @@
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
-							:min="appliedType === 'date' ? '1900-01-01' : ''"
-							:max="appliedType === 'date' ? '2999-12-31' : ''"
+							:min="appliedType === 'date' && birthDate ? minDate : ''"
+							:max="appliedType === 'date' && birthDate ? maxDate : ''"
+							:pattern="
+								appliedType === 'date' && birthDate
+									? birthDateValidationPattern
+									: null
+							"
 							@input="handleInput"
 							@focus="hasFocus = true"
 							@blur="hasFocus = false"
@@ -85,6 +90,7 @@
 </template>
 <script>
 import uidMixin from "@mixins/uid";
+import dayjs from "dayjs";
 
 export const supportedTypes = [
 	"email",
@@ -124,11 +130,16 @@ export default {
 		disabled: { type: Boolean },
 		classes: { type: String, default: "" },
 		focus: { type: Boolean },
+		birthDate: { type: Boolean },
 	},
 	data() {
 		return {
 			hasFocus: false,
 			passwordVisible: false,
+			minDate: dayjs().subtract(100, "y").format("YYYY-MM-DD"),
+			maxDate: dayjs().subtract(4, "y").format("YYYY-MM-DD"),
+			birthDateValidationPattern:
+				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
 		};
 	},
 	computed: {
