@@ -13,70 +13,71 @@
 		:class="['icon', 'fa', `fa-${icon}`]"
 		:style="{ color: fillColor }"
 	></i>
-<!-- eslint-disable -->
-  <span v-else
-        class="icon"
-        v-html="require(`!!svg-inline-loader!@assets/icons/${icon}.svg`)"
-  ></span>
+	<!-- eslint-disable -->
+	<span
+		v-else
+		class="icon"
+		v-html="require(`!!svg-inline-loader!@assets/icons/${icon}.svg`)"
+	></span>
 </template>
 
 <script>
 import "font-awesome/css/font-awesome.css";
 
 export default {
-  inheritAttrs: false,
-  props: {
-    source: {
-      type: String,
-      required: true,
-      validator: function (to) {
-        return ["material", "custom", "fa"].includes(to);
-      },
-    },
-    icon: {
-      type: String,
-      default: "solid/icons",
-    },
-    fill: {
-      type: String,
-      default: "currentColor",
-    },
-  },
-  data() {
-    // This solely exists to appear in the coverage report
-    return {};
-  },
-  computed: {
-    fillColor() {
-      switch (this.source) {
-        case "fa":
-          return "inherit";
-        default:
-          return "currentColor";
-      }
-    },
-    svgComponent() {
-      let icon;
-      // the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
-      try {
-        if (this.source === "custom") {
-          // src: @assets/icons
-          icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/icons/${this.icon}.svg`);
-        }
-        if (this.source === "material") {
-          // src: https://material.io/tools/icons/?style=baseline
-          icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/round-${this.icon}-24px.svg`);
-        }
-        return icon.default;
-      } catch (error) {
-        console.error(
-            `error loading icon "${this.icon}" from "${this.source}". It might be not available or you are using the legacy Edge browser.`,
-            error
-        );
-        return undefined;
-      }
-    },
-  },
+	inheritAttrs: false,
+	props: {
+		source: {
+			type: String,
+			required: true,
+			validator: function (to) {
+				return ["material", "custom", "fa"].includes(to);
+			},
+		},
+		icon: {
+			type: String,
+			default: "solid/icons",
+		},
+		fill: {
+			type: String,
+			default: "currentColor",
+		},
+	},
+	data() {
+		// This solely exists to appear in the coverage report
+		return {};
+	},
+	computed: {
+		fillColor() {
+			switch (this.source) {
+				case "fa":
+					return "inherit";
+				default:
+					return "currentColor";
+			}
+		},
+		svgComponent() {
+			let icon;
+			// the loader config can not be stored in a variable. Webpack seems to need to precompile the loader config.
+			try {
+				if (this.source === "custom") {
+					// src: @assets/icons
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!@assets/icons/${this.icon}.svg`);
+				}
+				if (this.source === "material") {
+					// src: https://material.io/tools/icons/?style=baseline
+					icon = require(`!!vue-svg-loader?{"svgo":{"plugins":[{"removeDimensions": true }, {"removeViewBox":false}]}}!material-icons-svg/icons/round-${this.icon}-24px.svg`);
+				}
+				return icon.default;
+			} catch (error) {
+				console.error(
+					`error loading icon "${this.icon}" from "${this.source}". It might be not available or you are using the legacy Edge browser.`,
+					error
+				);
+				return undefined;
+			}
+		},
+	},
 };
 </script>
 
