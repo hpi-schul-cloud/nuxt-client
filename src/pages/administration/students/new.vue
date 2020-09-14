@@ -12,6 +12,7 @@
 					:label="$t('common.labels.birthdate')"
 					:placeholder="$t('common.placeholder.birthdate')"
 					class="mt--md"
+					:birth-date="true"
 					data-testid="input_create-student_birthdate"
 				>
 				</base-input>
