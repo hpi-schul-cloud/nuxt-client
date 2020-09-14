@@ -8,6 +8,22 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-6628 Changing backend url endpoint while analog consenting
+
+## [24.5.0] - 2020-09-14
+
+### Changed
+
+- SC-6474 in admin tables, edit column key is filtered out of column data object if school is external
+
+## [24.4.1] - 2020-09-08
+
+- SC-6701 - changed domain for ghost (mint-ec pages)
+
+## [24.4.0] - 2020-08-31
+
+- SC-5410 language dropdown in account page for selecting user language
+
 ## [24.3.0] - 2020-08-25
 
 ## [24.2.3] - 2020-08-19
