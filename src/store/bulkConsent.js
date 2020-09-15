@@ -6,7 +6,18 @@ export const actions = {
 			const promiseResult = await Promise.allSettled(
 				payload.map((user) => {
 					registered.push(user._id);
-					this.$axios.$patch("/users/admin/students/" + user._id, user);
+					this.$axios
+						.$patch("/users/admin/students/" + user._id, user)
+						.then((userData) => {
+							const accountModel = {
+								lasttriedFailedLogin: "1970-01-01T00:00:00.000Z",
+								activated: true,
+								username: userData.email,
+								password: user.password,
+								userId: user._id,
+							};
+							this.$axios.$post("/accounts/", accountModel);
+						});
 				})
 			);
 
