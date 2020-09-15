@@ -166,14 +166,6 @@ export default {
 			tableActions: [
 				{
 					label: this.$t(
-						"pages.administration.teachers.index.tableActions.consent"
-					),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-				},
-				{
-					label: this.$t(
 						"pages.administration.teachers.index.tableActions.email"
 					),
 					icon: "mail_outline",
