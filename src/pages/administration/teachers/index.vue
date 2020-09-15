@@ -6,12 +6,19 @@
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
 
-		<search-bar
+		<base-input
 			v-model="searchQuery"
-			:placeholder="searchBarPlaceHolder"
+			type="text"
+			:placeholder="
+				$t('pages.administration.teachers.index.searchbar.placeholder')
+			"
 			class="search-section"
 			v-on="barSearch(this)"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="search"
+			/></template>
+		</base-input>
 
 		<data-filter
 			:filters="filters"
@@ -108,7 +115,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import SearchBar from "../../../components/molecules/Searchbar.vue";
+import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -122,7 +129,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
-		SearchBar,
+		BaseInput,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -242,9 +249,6 @@ export default {
 			searchQuery:
 				this.$uiState.get("filter", "pages.administration.students.index")
 					.searchQuery || "",
-			searchBarPlaceHolder: this.$t(
-				"pages.administration.teachers.index.searchbar.placeholder"
-			),
 		};
 	},
 	computed: {
