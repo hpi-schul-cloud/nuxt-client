@@ -398,7 +398,7 @@ export default {
 	methods: {
 		async find() {
 			const query = {
-				usersForConsent: this.selectedStudents,
+				users: this.selectedStudents,
 			};
 
 			await this.$store.dispatch("users/handleUsers", {
