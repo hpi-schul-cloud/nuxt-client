@@ -3,6 +3,7 @@ export const actions = {
 		const registered = [];
 
 		if (Array.isArray(payload)) {
+			const errors = [];
 			const promiseResult = await Promise.allSettled(
 				payload.map((user) => {
 					registered.push(user._id);
@@ -17,12 +18,12 @@ export const actions = {
 								userId: user._id,
 							};
 							this.$axios.$post("/accounts/", accountModel);
-						});
+						})
+						.catch((error) => errors.push({ updateError: error }));
 				})
 			);
 
 			promiseResult.map((promise) => {
-				const errors = [];
 				if (promise.status !== "fulfilled") {
 					errors.push(promise);
 				}
