@@ -470,7 +470,7 @@ export default {
 
 			const query = this.currentFilterQuery;
 
-			this.$uiState.set("filter", "pages.administration.students.index", {
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
 				query,
 			});
 
