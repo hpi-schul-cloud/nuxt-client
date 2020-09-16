@@ -13,7 +13,8 @@
 				$t('pages.administration.teachers.index.searchbar.placeholder')
 			"
 			class="search-section"
-			v-on="barSearch(this)"
+			label=""
+			@update:vmodel="barSearch"
 		>
 			<template v-slot:icon>
 				<base-icon source="material" icon="search"
@@ -503,26 +504,22 @@ export default {
 				invertedDesign: true,
 			});
 		},
-		barSearch: function () {
-			return {
-				input: (searchText) => {
-					this.currentFilterQuery.searchQuery = searchText;
+		barSearch: function (searchText) {
+			this.currentFilterQuery.searchQuery = searchText;
 
-					const query = this.currentFilterQuery;
+			const query = this.currentFilterQuery;
 
-					this.$uiState.set("filter", "pages.administration.students.index", {
-						query,
-					});
+			this.$uiState.set("filter", "pages.administration.students.index", {
+				query,
+			});
 
-					setTimeout(() => {
-						this.$store.dispatch("users/handleUsers", {
-							query,
-							action: "find",
-							userType: "students",
-						});
-					}, 300);
-				},
-			};
+			setTimeout(() => {
+				this.$store.dispatch("users/handleUsers", {
+					query,
+					action: "find",
+					userType: "students",
+				});
+			}, 400);
 		},
 	},
 };
