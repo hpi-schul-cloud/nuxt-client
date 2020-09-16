@@ -46,7 +46,7 @@
 					<base-input-default
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
-						class="date"
+						class="date base-input-default"
 						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
@@ -60,7 +60,7 @@
 					/>
 					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
-						class="date"
+						class="date base-input-default"
 						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
@@ -78,6 +78,7 @@
 						:vmodel="slotProps.data"
 						type="text"
 						label=""
+						class="base-input-default"
 						v-on="
 							inputPass({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -659,12 +660,10 @@ export default {
 	}
 }
 
-/deep/ .base-input- {
-	max-width: 5em;
-	margin-bottom: 0;
-	.info-line {
-		display: none;
-	}
+/deep/ .base-input-default {
+	max-width: 10em;
+	margin-bottom: var(--space-md);
+	margin-left: var(--space-xs);
 	.input-line {
 		.icon-behind {
 			display: none;
