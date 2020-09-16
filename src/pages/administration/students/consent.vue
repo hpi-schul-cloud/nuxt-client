@@ -411,6 +411,7 @@ export default {
 				$sort: {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
+				users: this.selectedStudents,
 			};
 
 			await this.$store.dispatch("users/handleUsers", {
