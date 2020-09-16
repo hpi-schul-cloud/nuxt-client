@@ -38,7 +38,9 @@
 				:columns="tableColumns"
 				:data="filteredTableData"
 				track-by="_id"
-				sort-by="fullName"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<base-input-default
@@ -108,7 +110,9 @@
 				:data="filteredTableData"
 				track-by="id"
 				:paginated="false"
-				sort-by="fullName"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
@@ -160,6 +164,9 @@
 				:data="filteredTableData"
 				track-by="_id"
 				:paginated="false"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
@@ -294,12 +301,12 @@ export default {
 				{
 					field: "fullName",
 					label: this.$t("common.labels.name"),
-					sortable: false,
+					sortable: true,
 				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
-					sortable: false,
+					sortable: true,
 				},
 				{
 					field: "birthday",
@@ -358,6 +365,8 @@ export default {
 				"pages.administration.students.consent.steps.register.print",
 				{ hostName: window.location.origin }
 			),
+			sortBy: "fullName",
+			sortOrder: "asc",
 		};
 	},
 	meta: {
@@ -399,6 +408,10 @@ export default {
 	methods: {
 		async find() {
 			const query = {
+				usersForConsent: this.selectedStudents,
+				$sort: {
+					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
+				},
 				users: this.selectedStudents,
 			};
 
@@ -417,6 +430,11 @@ export default {
 				this.filteredTableData = data;
 				this.$store.dispatch("bulkConsent/setStudents", data);
 			}
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
+			this.sortOrder = sortOrder;
+			this.find();
 		},
 		inputDateForDate(student) {
 			return {
