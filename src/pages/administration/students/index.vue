@@ -10,7 +10,7 @@
 			v-model="searchQuery"
 			type="text"
 			:placeholder="
-				$t('pages.administration.teachers.index.searchbar.placeholder')
+				$t('pages.administration.students.index.searchbar.placeholder')
 			"
 			class="search-section"
 			label=""
