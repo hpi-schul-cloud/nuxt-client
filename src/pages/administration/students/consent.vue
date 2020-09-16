@@ -180,6 +180,9 @@
 			<base-button design="secondary" @click="download">{{
 				$t("pages.administration.students.consent.steps.download.next")
 			}}</base-button>
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
+			}}</base-button>
 		</section>
 
 		<section v-if="currentStep === 3">
@@ -217,13 +220,29 @@
 						/>
 					</template>
 				</modal-body-info>
-				{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+				<span v-if="currentStep === 2">
+					{{
+						$t(
+							"pages.administration.students.consent.cancel.modal.download.info"
+						)
+					}}
+				</span>
+				<span v-else>
+					{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+				</span>
 			</template>
 			<template v-slot:footerRight>
 				<base-button design="danger text" @click="cancel">
 					{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
 				</base-button>
-				<base-button design="danger" @click="cancelWarning = false">
+				<base-button v-if="currentStep === 2" design="danger" @click="download">
+					{{
+						$t(
+							"pages.administration.students.consent.cancel.modal.download.continue"
+						)
+					}}
+				</base-button>
+				<base-button v-else design="danger" @click="cancelWarning = false">
 					{{
 						$t("pages.administration.students.consent.cancel.modal.continue")
 					}}
@@ -557,6 +576,7 @@ export default {
 				winPrint.print();
 				winPrint.close();
 			}, 500);
+			this.cancelWarning = false;
 			this.next();
 		},
 		success() {
