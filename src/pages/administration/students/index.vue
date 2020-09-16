@@ -277,9 +277,6 @@ export default {
 			searchQuery:
 				this.$uiState.get("filter", "pages.administration.students.index")
 					.searchQuery || "",
-			searchBarPlaceHolder: this.$t(
-				"pages.administration.teachers.index.searchbar.placeholder"
-			),
 		};
 	},
 
