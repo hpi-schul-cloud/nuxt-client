@@ -1,6 +1,12 @@
 <template>
 	<div class="text-centered">
-		<base-image v-if="error.statusCode === 404" img-src="@assets/img/pageNotFound.svg" img-height="300px" fill="var(--color-primary)" role="presentation"/>
+		<base-image
+			v-if="error.statusCode === 404"
+			img-src="@assets/img/pageNotFound.svg"
+			img-height="300px"
+			fill="var(--color-primary)"
+			role="presentation"
+		/>
 		<img v-else alt="PC-Reparatur" src="@assets/img/pc_repair.png" />
 
 		<h1 class="error-msg">
