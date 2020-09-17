@@ -7,7 +7,7 @@
 			fill="var(--color-primary)"
 			role="presentation"
 		/>
-		<img v-else alt="PC-Reparatur" src="@assets/img/pc_repair.png" />
+		<img v-else role="presentation src="@assets/img/pc_repair.png" />
 
 		<h1 class="error-msg">
 			<template v-if="error.message">
