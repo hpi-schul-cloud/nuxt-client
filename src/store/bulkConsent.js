@@ -3,15 +3,27 @@ export const actions = {
 		const registered = [];
 
 		if (Array.isArray(payload)) {
+			const errors = [];
 			const promiseResult = await Promise.allSettled(
 				payload.map((user) => {
 					registered.push(user._id);
-					this.$axios.$patch("/users/admin/students/" + user._id, user);
+					this.$axios
+						.$patch("/users/admin/students/" + user._id, user)
+						.then((userData) => {
+							const accountModel = {
+								lasttriedFailedLogin: "1970-01-01T00:00:00.000Z",
+								activated: true,
+								username: userData.email,
+								password: user.password,
+								userId: user._id,
+							};
+							this.$axios.$post("/accounts/", accountModel);
+						})
+						.catch((error) => errors.push({ updateError: error }));
 				})
 			);
 
 			promiseResult.map((promise) => {
-				const errors = [];
 				if (promise.status !== "fulfilled") {
 					errors.push(promise);
 				}
