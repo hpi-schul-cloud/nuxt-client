@@ -1,6 +1,6 @@
 <template>
 	<div class="text-centered">
-		<page-not-found v-if="error.statusCode === 404"></page-not-found>
+		<base-image v-if="error.statusCode === 404" img-src="@assets/img/pageNotFound.svg" img-height="300px" fill="var(--color-primary)" role="presentation"/>
 		<img v-else alt="PC-Reparatur" src="@assets/img/pc_repair.png" />
 
 		<h1 class="error-msg">
@@ -22,9 +22,9 @@
 	</div>
 </template>
 <script>
-import PageNotFound from "@components/templates/PageNotFound";
+import BaseImage from "@basecomponents/BaseImage";
 export default {
-	components: { PageNotFound },
+	components: { BaseImage },
 	props: {
 		error: {
 			type: Object,
