@@ -39,7 +39,10 @@
 							</div>
 						</span>
 						<!-- search query not empty and there are results -->
-						<base-grid column-width="14rem">
+						<base-grid
+							column-width="14rem"
+							data-testid="lernStoreCardsContainer"
+						>
 							<content-card
 								v-for="resource of resources.data"
 								:key="resource.ref.id"
