@@ -22,9 +22,7 @@
 	</div>
 </template>
 <script>
-import BaseImage from "@basecomponents/BaseImage";
 export default {
-	components: { BaseImage },
 	props: {
 		error: {
 			type: Object,
