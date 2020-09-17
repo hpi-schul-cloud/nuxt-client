@@ -23,7 +23,10 @@
 				/>
 				<transition name="fade">
 					<div class="content__container">
-						<p v-if="resources.data.length !== 0" class="content__total">
+						<p
+							v-if="resources.data.length !== 0 && !loading"
+							class="content__total"
+						>
 							{{ resources.total }}
 							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
 						</p>
@@ -54,7 +57,7 @@
 				</transition>
 			</div>
 			<base-spinner
-				v-if="loading"
+				v-show="loading"
 				class="spinner mt--xl-2"
 				color="var(--color-tertiary)"
 				size="xlarge"
@@ -132,6 +135,7 @@ export default {
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
+
 			if (to === from || !to) {
 				this.$router.push({
 					query: {
@@ -143,6 +147,8 @@ export default {
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
+				this.$store.commit("content/clearResources");
+
 				clearInterval(this.$options.debounce);
 				this.$router.push({
 					query: {
@@ -150,7 +156,7 @@ export default {
 						q: this.searchQuery,
 					},
 				});
-			}, 500);
+			}, 200);
 		},
 		resources() {
 			return this.resources;
@@ -181,10 +187,8 @@ export default {
 			}
 		},
 		enterKeyHandler() {
-			setTimeout(() => {
-				this.searchContent();
-				this.activateTransition = true;
-			}, 500);
+			this.searchContent();
+			this.activateTransition = true;
 		},
 		goBack() {
 			window.close();
