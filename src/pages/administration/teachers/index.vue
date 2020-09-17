@@ -248,7 +248,7 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
+				this.$uiState.get("filter", "pages.administration.teachers.index")
 					.searchQuery || "",
 		};
 	},
