@@ -24,7 +24,7 @@
 				<transition name="fade">
 					<div class="content__container">
 						<p
-							v-if="resources.data.length !== 0 && !loading"
+							v-show="resources.data.length !== 0 && searchQuery.length > 1"
 							class="content__total"
 						>
 							{{ resources.total }}
@@ -43,6 +43,7 @@
 						</span>
 						<!-- search query not empty and there are results -->
 						<base-grid
+							v-if="searchQuery.length > 1"
 							column-width="14rem"
 							data-testid="lernStoreCardsContainer"
 						>
@@ -140,7 +141,7 @@ export default {
 				this.$router.push({
 					query: {
 						...this.$route.query,
-						q: undefined,
+						q: "",
 					},
 				});
 				this.$store.commit("content/clearResources");
