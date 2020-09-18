@@ -502,7 +502,7 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText;
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
 			const query = this.currentFilterQuery;
 
