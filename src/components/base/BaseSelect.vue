@@ -10,6 +10,7 @@
 			:track-by="trackBy"
 			:placeholder="placeholder"
 			class="input mb-0"
+      :data-testid="dataTestid"
 			:label="optionLabel"
 			:select-label="selectLabel"
 			:selected-label="selectedLabel"
@@ -89,6 +90,10 @@ export default {
 			type: String,
 			default: "Aktiv",
 		},
+    dataTestid: {
+      type: String,
+      default: "BaseSelect",
+    },
 	},
 	data() {
 		// This solely exists to appear in the coverage report

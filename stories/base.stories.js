@@ -212,6 +212,7 @@ storiesOf("4 Base UI Components/Base UI", module)
 			selectLabel: text("selectLabel", "Auswählen"),
 			selectedLabel: text("selectedLabel", "Aktiv"),
 			trackBy: text("trackBy", "_id"),
+			dataTestid: text("dataTestid", "dataTestid"),
 		}),
 		template: `
 		<div>
