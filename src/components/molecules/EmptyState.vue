@@ -9,7 +9,6 @@
 					role="presentation"
 				/>
 			</div>
-			<!-- eslint-disable vue/no-v-html -->
 			<h2 v-if="title" class="h4 title">{{ title }}</h2>
 			<div class="description">
 				<slot name="description" />
