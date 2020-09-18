@@ -23,7 +23,7 @@
 						:select-label="$t('pages.content.label.select')"
 						:selected-label="$t('pages.content.label.selected')"
 						track-by="_id"
-            data-testid="courseSelector"
+						data-testid="courseSelector"
 					/>
 					<transition name="fade">
 						<base-select
@@ -43,7 +43,7 @@
 							:select-label="$t('pages.content.label.select')"
 							:selected-label="$t('pages.content.label.selected')"
 							track-by="_id"
-              data-testid="topicSelector"
+							data-testid="topicSelector"
 						/>
 					</transition>
 				</div>
