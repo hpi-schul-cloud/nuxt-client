@@ -248,7 +248,7 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
+				this.$uiState.get("filter", "pages.administration.teachers.index")
 					.searchQuery || "",
 		};
 	},
@@ -466,7 +466,7 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText;
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
 			const query = this.currentFilterQuery;
 
