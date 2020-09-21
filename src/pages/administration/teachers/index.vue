@@ -373,14 +373,6 @@ export default {
 				_ids: rowIds,
 			};
 		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
-		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
 				await this.$store.dispatch("users/sendRegistrationLink", {
