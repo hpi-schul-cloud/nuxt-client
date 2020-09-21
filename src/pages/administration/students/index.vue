@@ -427,12 +427,6 @@ export default {
 			// 	}))
 			// );
 
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
