@@ -18,6 +18,7 @@
 			:key="index"
 			class="th-slot"
 			cellspacing="0"
+			:data-testid="column.label"
 		>
 			<slot
 				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
@@ -34,7 +35,7 @@
 							design="info text icon"
 							@click="infoBoxActive = !infoBoxActive"
 						>
-							<base-icon source="material" icon="info" />
+							<base-icon source="material" icon="info" style="margin: 0;" />
 						</base-button>
 					</span>
 					<info-box class="info-box" :active.sync="infoBoxActive">
