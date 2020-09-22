@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## 25.0.0
+
+- SC-6628 Changing backend url endpoint while analog consenting
+
 ## [24.5.0] - 2020-09-14
 
 ### Changed
@@ -17,6 +21,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6701 - changed domain for ghost (mint-ec pages)
 
 ## [24.4.0] - 2020-08-31
+
+- SC-5410 language dropdown in account page for selecting user language
 
 ## [24.3.0] - 2020-08-25
 
