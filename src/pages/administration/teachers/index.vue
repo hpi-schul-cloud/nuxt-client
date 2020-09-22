@@ -248,7 +248,7 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
+				this.$uiState.get("filter", "pages.administration.teachers.index")
 					.searchQuery || "",
 		};
 	},
@@ -373,14 +373,6 @@ export default {
 				_ids: rowIds,
 			};
 		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
-		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
 				await this.$store.dispatch("users/sendRegistrationLink", {
@@ -466,7 +458,7 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText;
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
 			const query = this.currentFilterQuery;
 

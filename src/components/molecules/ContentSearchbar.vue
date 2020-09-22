@@ -78,7 +78,7 @@ export default {
 			clearTimeout(typingTimer);
 			typingTimer = setTimeout(() => {
 				this.search();
-			}, 1800);
+			}, 200);
 		},
 		enterKeyHandler() {
 			this.search();
