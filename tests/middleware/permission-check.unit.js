@@ -66,7 +66,7 @@ describe("@middleware/permission-check", () => {
 		expect(await permissionCheck(mockContext)).toBe(true);
 	});
 
-	it(`grants access using advanced "NOT" syntax`, async () => {
+	it(`does not grant access using advanced "NOT" syntax`, async () => {
 		const mockContext = getMockContext({
 			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
 			route: getMockRoute({
