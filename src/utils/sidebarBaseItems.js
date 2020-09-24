@@ -73,11 +73,13 @@ export default [
 	{
 		title: "global.sidebar.calendar",
 		href: "/calendar",
-		icon: "table" },
+		icon: "table",
+	},
 	{
 		title: "global.sidebar.lernstore",
 		href: "/content",
-		icon: "search" },
+		icon: "search",
+	},
 	{
 		title: "global.sidebar.addons",
 		href: "/addons",
