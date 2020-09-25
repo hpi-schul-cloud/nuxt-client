@@ -272,6 +272,7 @@
 </template>
 
 <script>
+// file deepcode ignore ArrayMethodOnNonArray
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -380,6 +381,8 @@ export default {
 			),
 			check: false,
 			checkWarning: false,
+			tableTimeOut: null,
+			printTimeOut: null,
 			printPageInfo: this.$t(
 				"pages.administration.students.consent.steps.register.print",
 				{ hostName: window.location.origin }
@@ -421,6 +424,8 @@ export default {
 	},
 	beforeDestroy() {
 		window.removeEventListener("beforeunload", this.warningEventHandler);
+		clearTimeout(this.tableTimeOut);
+		clearTimeout(this.printTimeOut);
 	},
 	mounted() {
 		this.checkTableData();
@@ -574,7 +579,7 @@ export default {
 
 			winPrint.document.close();
 			winPrint.focus();
-			setTimeout(() => {
+			this.printTimeOut = setTimeout(() => {
 				winPrint.print();
 				winPrint.close();
 			}, 500);
@@ -595,7 +600,7 @@ export default {
 			});
 		},
 		checkTableData() {
-			setTimeout(() => {
+			this.tableTimeOut = setTimeout(() => {
 				if (this.filteredTableData.length === 0) {
 					this.$toast.error(
 						this.$t("pages.administration.students.consent.table.empty"),
