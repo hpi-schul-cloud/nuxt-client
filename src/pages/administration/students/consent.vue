@@ -420,16 +420,10 @@ export default {
 	},
 	created(ctx) {
 		this.find();
-		window.addEventListener("beforeunload", () => {
-			if (this.currentStep === 2) {
-				// Cancel the event as stated by the standard.
-				event.preventDefault();
-				// Chrome requires returnValue to be set.
-				event.returnValue = "";
-				// then show customized warning modal
-				this.cancelWarning = true;
-			}
-		});
+		window.addEventListener("beforeunload", this.warningEventHandler);
+	},
+	beforeDestroy() {
+		window.removeEventListener("beforeunload", this.warningEventHandler);
 	},
 	mounted() {
 		this.checkTableData();
@@ -617,6 +611,16 @@ export default {
 			}, 2000);
 		},
 		dayjs,
+		warningEventHandler() {
+			if (this.currentStep === 2) {
+				// Cancel the event as stated by the standard.
+				event.preventDefault();
+				// Chrome requires returnValue to be set.
+				event.returnValue = "";
+				// then show customized warning modal
+				this.cancelWarning = true;
+			}
+		},
 	},
 };
 </script>
