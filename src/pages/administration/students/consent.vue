@@ -124,7 +124,7 @@
 			<div id="consent-checkbox">
 				<base-input v-model="check" type="checkbox" name="switch" label="">
 				</base-input>
-				<label>
+				<label @click="check = !check">
 					<i18n
 						path="pages.administration.students.consent.steps.register.confirm"
 					>
@@ -420,6 +420,16 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		window.addEventListener("beforeunload", () => {
+			if (this.currentStep === 2) {
+				// Cancel the event as stated by the standard.
+				event.preventDefault();
+				// Chrome requires returnValue to be set.
+				event.returnValue = "";
+				// then show customized warning modal
+				this.cancelWarning = true;
+			}
+		});
 	},
 	mounted() {
 		this.checkTableData();
