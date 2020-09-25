@@ -41,7 +41,27 @@
 					<info-box class="info-box" :active.sync="infoBoxActive">
 						<template v-slot:header>Registrierungen abschließen</template>
 						<template v-slot:body>
-							<div class="content">
+							<div v-if="showExternalText" class="content">
+								{{
+									$t("pages.administration.students.infobox.LDAP.paragraph-1")
+								}}
+								{{
+									$t("pages.administration.students.infobox.LDAP.paragaph-2")
+								}}
+								<br />
+								<br />
+								<base-icon
+									source="material"
+									icon="warning"
+									color="var(--color-danger)"
+								/>{{
+									$t("pages.administration.students.infobox.LDAP.paragraph-3")
+								}}
+								{{
+									$t("pages.administration.students.infobox.LDAP.paragaph-4")
+								}}
+							</div>
+							<div v-else class="content">
 								{{ $t("pages.administration.students.infobox.paragraph-1") }}
 								<ul class="list">
 									<li>
@@ -131,6 +151,9 @@ export default {
 			type: String,
 			default: "asc",
 			validator: (val) => ["asc", "desc"].includes(val),
+		},
+		showExternalText: {
+			type: Boolean,
 		},
 	},
 	data() {
