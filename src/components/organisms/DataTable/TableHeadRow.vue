@@ -45,8 +45,10 @@
 								{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-1")
 								}}
+								<br />
+								<br />
 								{{
-									$t("pages.administration.students.infobox.LDAP.paragaph-2")
+									$t("pages.administration.students.infobox.LDAP.paragraph-2")
 								}}
 								<br />
 								<br />
@@ -57,9 +59,26 @@
 								/>{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-3")
 								}}
+								<br />
+								<br />
 								{{
-									$t("pages.administration.students.infobox.LDAP.paragaph-4")
+									$t("pages.administration.students.infobox.LDAP.paragraph-4")
 								}}
+								<base-link
+									class="link-style"
+									style="color: var(--color-white); text-decoration: underline;"
+									to="/"
+									href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=36700189"
+									target="_blank"
+									:no-styles="true"
+									traget="_blank"
+								>
+									{{
+										$t(
+											"pages.administration.students.infobox.LDAP.helpsection"
+										)
+									}}.
+								</base-link>
 							</div>
 							<div v-else class="content">
 								{{ $t("pages.administration.students.infobox.paragraph-1") }}
@@ -73,6 +92,20 @@
 									<li>
 										{{ $t("pages.administration.students.infobox.li-3") }}
 									</li>
+									<base-link
+										class="link-style"
+										style="
+											color: var(--color-white);
+											text-decoration: underline;
+										"
+										to="/"
+										href="https://s3.hidrive.strato.com/schul-cloud-hpi/default/Dokumente/Einwilligungserklaerung_analog.pdf"
+										target="_blank"
+										:no-styles="true"
+										traget="_blank"
+									>
+										{{ $t("pages.administration.students.infobox.more.info") }}.
+									</base-link>
 								</ul>
 								{{ $t("pages.administration.students.infobox.paragraph-2") }}
 								<br />
