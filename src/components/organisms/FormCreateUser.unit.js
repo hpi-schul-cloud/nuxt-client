@@ -35,6 +35,7 @@ describe("@components/organisms/FormCreateUser", () => {
 
 	describe("create", () => {
 		it("emits create-user event on form submit", async () => {
+			debugger;
 			const actions = getMockActionsErrorCreate();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {
@@ -50,7 +51,6 @@ describe("@components/organisms/FormCreateUser", () => {
 			const inputEmail = wrapper.find(
 				'input[data-testid="input_create-user_email"]'
 			);
-
 			expect(inputFirstName.exists()).toBe(true);
 			inputFirstName.setValue("Klara");
 
@@ -70,6 +70,7 @@ describe("@components/organisms/FormCreateUser", () => {
 		});
 
 		it("renders slot content", async () => {
+			debugger;
 			const actions = getMockActionsErrorCreate();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {

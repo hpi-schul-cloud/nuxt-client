@@ -3,6 +3,15 @@ module.exports = {
 	extends: ["@schul-cloud/eslint-config/javascriptVue"],
 	overrides: [
 		{
+			files: ["**/*.vue"],
+			rules: {
+				"max-lines": [
+					"error",
+					{ max: 400, skipBlankLines: true, skipComments: true },
+				],
+			},
+		},
+		{
 			files: ["**/*.stories.js"],
 			rules: {
 				"max-lines": [

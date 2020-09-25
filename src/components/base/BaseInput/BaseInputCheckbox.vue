@@ -9,6 +9,8 @@
 			type="checkbox"
 			class="visually-hidden"
 			@change="updateVModel"
+			@blur="$emit('blur', $event)"
+			@focus="$emit('focus', $event)"
 		/>
 		<span :class="['icon-wrapper']">
 			<base-icon

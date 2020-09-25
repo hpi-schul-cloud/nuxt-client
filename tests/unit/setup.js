@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
+import Vuelidate from "vuelidate";
 import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
@@ -221,6 +222,7 @@ global.createComponentMocks = ({
 	if (user) {
 		localVue.mixin(userMixin);
 	}
+	localVue.use(Vuelidate);
 
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
