@@ -296,7 +296,7 @@ export default {
 		BaseInput,
 	},
 	meta: {
-		requiredPermissions: ["STUDENT_CREATE"],
+		requiredPermissions: ["STUDENT_CREATE", "STUDENT_LIST"],
 	},
 	layout: "loggedInFull",
 	props: {},
@@ -387,9 +387,6 @@ export default {
 			sortBy: "fullName",
 			sortOrder: "asc",
 		};
-	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
 		...mapGetters("bulkConsent", {
