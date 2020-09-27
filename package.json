@@ -109,7 +109,7 @@
 		"css-loader": "^4.1.1",
 		"eslint": "^6.8.0",
 		"eslint-loader": "^4.0.2",
-		"faker": "^4.1.0",
+		"faker": "^5.1.0",
 		"find-cache-dir": "^3.3.1",
 		"flush-promises": "^1.0.2",
 		"http-proxy-middleware": "^1.0.5",
