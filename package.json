@@ -119,7 +119,7 @@
 		"jest-canvas-mock": "^2.2.0",
 		"jest-extended": "^0.11.5",
 		"jest-haste-map": "^26.3.0",
-		"jest-image-snapshot": "^4.1.0",
+		"jest-image-snapshot": "^4.2.0",
 		"jest-puppeteer": "^4.4.0",
 		"jest-resolve": "^26.2.1",
 		"jest-serializer-vue": "^2.0.2",
