@@ -396,7 +396,7 @@
 	"pages.news.title": "Neuigkeiten",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"storybook.lang": "Ich bin jetzt auf Deutsch!",
-	utils.adminFilter.class.title": "Klasse(n)",
+	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent": "Einverständniserklärung:",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
 	"utils.adminFilter.consent.label.ok": "Registrierung abgeschlossen",
