@@ -8,6 +8,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 25.0.0
 
+- SC-6932 added translation keys instead of hardcoded strings for sidebar items
 - SC-6628 Changing backend url endpoint while analog consenting
 
 ## [24.5.0] - 2020-09-14
