@@ -183,6 +183,8 @@ export default {
 					? item.children.some((child) => this.$route.path.includes(child.href))
 					: false;
 				item.active = isActive && !item.childActive;
+				item.title = this.$t(`${item.title}`);
+
 				return item;
 			});
 		},
