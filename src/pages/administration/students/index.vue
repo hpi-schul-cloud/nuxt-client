@@ -41,6 +41,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
+			:show-external-text="!schoolInternallyManaged"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -427,12 +428,6 @@ export default {
 			// 	}))
 			// );
 
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
@@ -502,7 +497,7 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText;
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
 			const query = this.currentFilterQuery;
 

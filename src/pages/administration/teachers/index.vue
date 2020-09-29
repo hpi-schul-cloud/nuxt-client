@@ -248,7 +248,7 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
+				this.$uiState.get("filter", "pages.administration.teachers.index")
 					.searchQuery || "",
 		};
 	},
@@ -289,8 +289,9 @@ export default {
 				: this.permissionFilteredTableActions;
 		},
 		editFilteredColumns() {
-			// filters edit column if school is external
-			return this.school.isExternal
+			// filters out edit column if school is external or if user is a teacher
+			return this.school.isExternal ||
+				this.user.roles.some((role) => role.name === "teacher")
 				? this.tableColumns.filter((col) => col.field !== "_id")
 				: this.tableColumns;
 		},
@@ -372,14 +373,6 @@ export default {
 				selectionType,
 				_ids: rowIds,
 			};
-		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
@@ -466,7 +459,7 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
-			this.currentFilterQuery.searchQuery = searchText;
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
 			const query = this.currentFilterQuery;
 
