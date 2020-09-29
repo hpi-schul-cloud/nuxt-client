@@ -41,7 +41,46 @@
 					<info-box class="info-box" :active.sync="infoBoxActive">
 						<template v-slot:header>Registrierungen abschließen</template>
 						<template v-slot:body>
-							<div class="content">
+							<div v-if="showExternalText" class="content">
+								{{
+									$t("pages.administration.students.infobox.LDAP.paragraph-1")
+								}}
+								<br />
+								<br />
+								{{
+									$t("pages.administration.students.infobox.LDAP.paragraph-2")
+								}}
+								<br />
+								<br />
+								<base-icon
+									source="material"
+									icon="warning"
+									color="var(--color-danger)"
+								/>{{
+									$t("pages.administration.students.infobox.LDAP.paragraph-3")
+								}}
+								<br />
+								<br />
+								{{
+									$t("pages.administration.students.infobox.LDAP.paragraph-4")
+								}}
+								<base-link
+									class="link-style"
+									style="color: var(--color-white); text-decoration: underline;"
+									to="/"
+									href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=36700189"
+									target="_blank"
+									:no-styles="true"
+									traget="_blank"
+								>
+									{{
+										$t(
+											"pages.administration.students.infobox.LDAP.helpsection"
+										)
+									}}.
+								</base-link>
+							</div>
+							<div v-else class="content">
 								{{ $t("pages.administration.students.infobox.paragraph-1") }}
 								<ul class="list">
 									<li>
@@ -53,6 +92,20 @@
 									<li>
 										{{ $t("pages.administration.students.infobox.li-3") }}
 									</li>
+									<base-link
+										class="link-style"
+										style="
+											color: var(--color-white);
+											text-decoration: underline;
+										"
+										to="/"
+										href="https://s3.hidrive.strato.com/schul-cloud-hpi/default/Dokumente/Einwilligungserklaerung_analog.pdf"
+										target="_blank"
+										:no-styles="true"
+										traget="_blank"
+									>
+										{{ $t("pages.administration.students.infobox.more.info") }}.
+									</base-link>
 								</ul>
 								{{ $t("pages.administration.students.infobox.paragraph-2") }}
 								<br />
@@ -131,6 +184,9 @@ export default {
 			type: String,
 			default: "asc",
 			validator: (val) => ["asc", "desc"].includes(val),
+		},
+		showExternalText: {
+			type: Boolean,
 		},
 	},
 	data() {
