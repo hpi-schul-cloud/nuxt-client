@@ -23,6 +23,7 @@
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
 							data-testid="table-data-head"
+							:show-external-text="showExternalText"
 							@update:sort="onUpdateSort"
 						>
 							<template
@@ -196,6 +197,9 @@ export default {
 		componentDataRow: {
 			type: Object,
 			default: () => TableDataRow,
+		},
+		showExternalText: {
+			type: Boolean,
 		},
 	},
 	data() {
