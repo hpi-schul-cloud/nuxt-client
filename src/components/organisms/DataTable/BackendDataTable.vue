@@ -65,6 +65,7 @@
 			:current-page="currentPage"
 			:total="total"
 			:per-page="rowsPerPage"
+			:loading="loading"
 			@update:per-page="onUpdateRowsPerPage"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
@@ -199,6 +200,9 @@ export default {
 			default: () => TableDataRow,
 		},
 		showExternalText: {
+			type: Boolean,
+		},
+		loading: {
 			type: Boolean,
 		},
 	},

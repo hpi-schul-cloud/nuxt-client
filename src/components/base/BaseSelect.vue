@@ -14,6 +14,7 @@
 			:select-label="selectLabel"
 			:selected-label="selectedLabel"
 			:deselect-label="deselectLabel"
+			:disabled="loading"
 			@select="$emit('select', $event)"
 			@input="$emit('input', $event)"
 			@tag="$emit('tag', $event)"
@@ -88,6 +89,9 @@ export default {
 		selectedLabel: {
 			type: String,
 			default: "Aktiv",
+		},
+		loading: {
+			type: Boolean,
 		},
 	},
 	data() {

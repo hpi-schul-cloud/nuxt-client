@@ -7,12 +7,14 @@ export default function (endpoint) {
 			current: null,
 			list: [],
 			pagination: {},
+			loading: false,
 		};
 	};
 	return {
 		baseUrl,
 		actions: {
 			async find({ commit }, payload = {}) {
+				commit("setLoading");
 				const { qid = "default", query, customEndpoint } = payload;
 				const res = await this.$axios.$get(customEndpoint || baseUrl, {
 					params: query,
@@ -20,6 +22,7 @@ export default function (endpoint) {
 						return qs.stringify(params);
 					},
 				});
+				commit("setLoading");
 				commit("updatePaginationForQuery", {
 					query,
 					qid,
@@ -139,6 +142,9 @@ export default function (endpoint) {
 					total: parseInt(total),
 					query: parseInt(query),
 				});
+			},
+			setLoading(state) {
+				state.loading = !state.loading;
 			},
 		},
 		state: () => getDefaultState(),

@@ -10,6 +10,7 @@
 			option-label="label"
 			:label="this.$t('components.organisms.Pagination.recordsPerPage')"
 			:label-hidden="true"
+			:loading="loading"
 			@select="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
@@ -75,6 +76,9 @@ export default {
 		total: {
 			type: Number,
 			default: 0,
+		},
+		loading: {
+			type: Boolean,
 		},
 	},
 	data() {

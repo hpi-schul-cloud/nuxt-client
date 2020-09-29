@@ -41,6 +41,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
+			:loading="loading"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -263,6 +264,7 @@ export default {
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
+			loading: "loading",
 		}),
 		...mapState("search", {
 			searchResult: "searchResult",
