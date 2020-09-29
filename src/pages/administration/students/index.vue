@@ -41,6 +41,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
+			:show-external-text="!schoolInternallyManaged"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
