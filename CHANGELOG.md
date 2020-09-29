@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## 25.0.1
+
+- SC-6932 added translation keys instead of hardcoded strings for sidebar items
+
 ## 25.0.0
 
 - SC-6628 Changing backend url endpoint while analog consenting
