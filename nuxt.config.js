@@ -76,7 +76,7 @@ module.exports = {
 			{
 				rel: "icon",
 				type: "image/png",
-				href: "/favicon.png",
+				href: `/themes/${themeName}/favicon.png`,
 			},
 		],
 	},
