@@ -83,12 +83,25 @@
 						</div>
 						<div class="meta-text">
 							<div>
-								<base-button v-if="isMerlinContent" design="outline" @click="() => { goToMerlinContent(merlinTokenReference)}">
-										<base-icon source="custom" icon="open_new_window"/>
+								<base-button
+									v-if="isMerlinContent"
+									design="outline"
+									@click="
+										() => {
+											goToMerlinContent(merlinTokenReference);
+										}
+									"
+								>
+									<base-icon source="custom" icon="open_new_window" />
 									Zum Inhalt
 								</base-button>
-								<base-button v-else design="outline" :href="downloadUrl" target="_blank"  >
-										<base-icon source="custom" icon="open_new_window"/>
+								<base-button
+									v-else
+									design="outline"
+									:href="downloadUrl"
+									target="_blank"
+								>
+									<base-icon source="custom" icon="open_new_window" />
 									Zum Inhalt
 								</base-button>
 							</div>
@@ -190,12 +203,18 @@ export default {
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
-		isMerlinContent(){
-			const source = getMetadataAttribute(this.resource.properties,'ccm:replicationsource')
-			return source.toLowerCase().includes('merlin')
+		isMerlinContent() {
+			const source = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsource"
+			);
+			return source.toLowerCase().includes("merlin");
 		},
-		merlinTokenReference(){
-			return getMetadataAttribute(this.resource.properties,'ccm:replicationsourceid')
+		merlinTokenReference() {
+			return getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsourceid"
+			);
 		},
 		description() {
 			return (
@@ -228,9 +247,11 @@ export default {
 		},
 	},
 	methods: {
-		async goToMerlinContent(merlinReference){
-			const url = await this.$axios.$get(`/edu-sharing/merlinToken/?merlinReference=${merlinReference}`);
-			window.open(url, '_blank');
+		async goToMerlinContent(merlinReference) {
+			const url = await this.$axios.$get(
+				`/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
+			);
+			window.open(url, "_blank");
 		},
 		isNotStudent(roles) {
 			return this.role === ""

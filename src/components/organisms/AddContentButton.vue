@@ -85,9 +85,16 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
 		},
 		getMerlinReference() {
-			const isMerlinContent = getMetadataAttribute(this.resource.properties, "ccm:replicationsource").includes('merlin')
-			return isMerlinContent ? getMetadataAttribute(this.resource.properties, "ccm:replicationsourceid") : null
-
+			const isMerlinContent = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsource"
+			).includes("merlin");
+			return isMerlinContent
+				? getMetadataAttribute(
+						this.resource.properties,
+						"ccm:replicationsourceid"
+				  )
+				: null;
 		},
 	},
 	methods: {
@@ -98,7 +105,7 @@ export default {
 						title: this.resource.title,
 						client: this.client,
 						url: this.getUrl,
-						merlinReference: this.getMerlinReference
+						merlinReference: this.getMerlinReference,
 					});
 					window.close();
 					return true;
