@@ -196,7 +196,7 @@ export default {
 			return this.resource.preview.url;
 		},
 		downloadUrl() {
-			return getMetadataAttribute(this.resource.properties, "cclom:location");
+			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
 		},
 		tags() {
 			const tagValue = this.resource.properties["cclom:general_keyword"];

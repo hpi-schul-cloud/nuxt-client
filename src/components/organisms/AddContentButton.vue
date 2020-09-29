@@ -82,7 +82,7 @@ export default {
 	},
 	computed: {
 		getUrl() {
-			return getMetadataAttribute(this.resource.properties, "cclom:location");
+			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
 		},
 	},
 	methods: {

@@ -22,6 +22,8 @@
 							:columns="columns"
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
+							data-testid="table-data-head"
+							:show-external-text="showExternalText"
 							@update:sort="onUpdateSort"
 						>
 							<template
@@ -32,7 +34,7 @@
 							</template>
 						</component>
 					</thead>
-					<tbody>
+					<tbody data-testid="table-data-body">
 						<component
 							:is="componentDataRow"
 							v-for="(row, rowindex) in data"
@@ -42,6 +44,7 @@
 							:selected="isRowSelected(row)"
 							:column-keys="columnKeys"
 							:data="row"
+							data-testid="table-data-row"
 							@update:selected="setRowSelection(row, $event)"
 						>
 							<template
@@ -57,6 +60,7 @@
 		</div>
 
 		<pagination
+			v-if="paginated"
 			class="mt--md"
 			:current-page="currentPage"
 			:total="total"
@@ -193,6 +197,9 @@ export default {
 		componentDataRow: {
 			type: Object,
 			default: () => TableDataRow,
+		},
+		showExternalText: {
+			type: Boolean,
 		},
 	},
 	data() {
