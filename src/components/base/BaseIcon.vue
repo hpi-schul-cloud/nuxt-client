@@ -70,10 +70,7 @@ export default {
 				}
 				return icon.default;
 			} catch (error) {
-				console.error(
-					this.$t("components.base.BaseIcon.error"),
-					error
-				);
+				console.error(this.$t("components.base.BaseIcon.error"), error);
 				return undefined;
 			}
 		},
