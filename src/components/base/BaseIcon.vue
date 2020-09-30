@@ -71,7 +71,7 @@ export default {
 				return icon.default;
 			} catch (error) {
 				console.error(
-					`error loading icon "${this.icon}" from "${this.source}". It might be not available or you are using the legacy Edge browser.`,
+					this.$t("components.base.BaseIcon.error"),
 					error
 				);
 				return undefined;
