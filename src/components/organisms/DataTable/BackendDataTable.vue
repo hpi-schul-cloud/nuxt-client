@@ -370,7 +370,6 @@ export default {
 			this.$emit("update:sort", sortBy, sortOrder);
 		},
 		onUpdateRowsPerPage(value) {
-			this.$emit("update:current-page", 1);
 			this.$emit("update:rows-per-page", value);
 		},
 		fireAction(action) {
