@@ -26,8 +26,8 @@ export default {
 	color: var(--color-danger);
 }
 .error-icon {
-	width: 2em;
-	height: 2em;
-	margin-right: var(--space-xs);
+	width: 24px;
+	height: 24px;
+	margin-right: var(--space-xs-2);
 }
 </style>
