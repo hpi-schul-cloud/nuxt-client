@@ -71,7 +71,7 @@ describe("@components/base/BaseBreadcrumb", () => {
 				inputs: [internalLink, textOnly, emptyLink],
 			},
 		});
-		const span = wrapper.find(".link:last-of-type > span");
+		const span = wrapper.find(".breadcrumb > .link:last-of-type > span");
 		expect(span.exists()).toBe(true);
 		expect(span.text()).toBe(emptyLink.text);
 	});
