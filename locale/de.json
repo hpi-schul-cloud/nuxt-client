@@ -60,6 +60,7 @@
 	"components.legacy.footer.team": "Team",
 	"components.legacy.footer.terms": "Nutzungsordnung",
 	"components.legacy.footer.termsofuse": "Nutzungsordnung und Datenschutzerklärung",
+	"components.base.BaseIcon.error": "Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.molecules.AccountCard.action.edit": "ändern",
 	"components.molecules.AddContentModal": "Hinzufügen zu",
 	"components.molecules.ContentCard.report.body": "Melden des Inhaltes mit der ID",
