@@ -22,7 +22,7 @@ export default {
 .error-message {
 	display: flex;
 	align-items: center;
-	font-size: var(--text-xs);
+	font-size: var(--text-sm);
 	color: var(--color-danger);
 }
 .error-icon {
