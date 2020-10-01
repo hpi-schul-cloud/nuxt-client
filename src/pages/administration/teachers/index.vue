@@ -5,14 +5,31 @@
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
+
+		<base-input
+			v-model="searchQuery"
+			type="text"
+			:placeholder="
+				$t('pages.administration.teachers.index.searchbar.placeholder')
+			"
+			class="search-section"
+			label=""
+			@update:vmodel="barSearch"
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="search"
+			/></template>
+		</base-input>
+
 		<data-filter
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
 		/>
+
 		<backend-data-table
-			:actions="permissionFilteredTableActions"
-			:columns="tableColumns"
+			:actions="filteredActions"
+			:columns="editFilteredColumns"
 			:current-page.sync="page"
 			:data="teachers"
 			:paginated="true"
@@ -99,6 +116,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
+import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -112,6 +130,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
+		BaseInput,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -153,14 +172,6 @@ export default {
 			],
 
 			tableActions: [
-				{
-					label: this.$t(
-						"pages.administration.teachers.index.tableActions.consent"
-					),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-				},
 				{
 					label: this.$t(
 						"pages.administration.teachers.index.tableActions.email"
@@ -236,6 +247,9 @@ export default {
 				},
 			],
 			filters: teacherFilter(this),
+			searchQuery:
+				this.$uiState.get("filter", "pages.administration.teachers.index")
+					.searchQuery || "",
 		};
 	},
 	computed: {
@@ -244,15 +258,42 @@ export default {
 		}),
 		...mapState("auth", {
 			school: "school",
+			user: "user",
 		}),
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
+		...mapState("search", {
+			searchResult: "searchResult",
+		}),
 		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
+		},
+		tableData: {
+			get() {
+				if (this.takeOverTableData) return this.searchData;
+				return this.teachers;
+			},
+		},
+		filteredActions() {
+			// if user has teacher role, bulkQr action gets filtered
+			return this.user.roles.some((role) => role.name === "teacher")
+				? this.permissionFilteredTableActions.filter(
+						(action) =>
+							action.label !==
+							this.$t("pages.administration.teachers.index.tableActions.qr")
+				  )
+				: this.permissionFilteredTableActions;
+		},
+		editFilteredColumns() {
+			// filters out edit column if school is external or if user is a teacher
+			return this.school.isExternal ||
+				this.user.roles.some((role) => role.name === "teacher")
+				? this.tableColumns.filter((col) => col.field !== "_id")
+				: this.tableColumns;
 		},
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
@@ -260,6 +301,13 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
+			var temp = this.$uiState.get(
+				"filter",
+				"pages.administration.teacher.index"
+			);
+
+			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+
 			this.currentFilterQuery = query;
 			if (
 				JSON.stringify(query) !==
@@ -326,14 +374,6 @@ export default {
 				_ids: rowIds,
 			};
 		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
-		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
 				await this.$store.dispatch("users/sendRegistrationLink", {
@@ -349,7 +389,23 @@ export default {
 				);
 			}
 		},
-
+		async handleBulkQR(rowIds, selectionType) {
+			try {
+				const qrRegistrationLinks = await this.$store.dispatch(
+					"users/getQrRegistrationLinks",
+					{
+						userIds: rowIds,
+						selectionType,
+					}
+				);
+				this.$_printQRs(qrRegistrationLinks);
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(
+					this.$tc("pages.administration.printQr.error", rowIds.length)
+				);
+			}
+		},
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
@@ -402,6 +458,23 @@ export default {
 				invertedDesign: true,
 			});
 		},
+		barSearch: function (searchText) {
+			this.currentFilterQuery.searchQuery = searchText.trim();
+
+			const query = this.currentFilterQuery;
+
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
+				query,
+			});
+
+			setTimeout(() => {
+				this.$store.dispatch("users/handleUsers", {
+					query,
+					action: "find",
+					userType: "teachers",
+				});
+			}, 400);
+		},
 	},
 };
 </script>
@@ -420,5 +493,50 @@ a.action-button {
 			box-shadow: none;
 		}
 	}
+}
+span {
+	font-weight: var(--font-weight-normal);
+}
+.content {
+	max-height: 35vh;
+	overflow-y: scroll;
+	font-weight: var(--font-weight-normal);
+}
+.list {
+	padding: var(--space-lg);
+}
+.th-slot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.info-box {
+	position: absolute;
+	right: 0%;
+	z-index: calc(var(--layer-fab) + 1);
+	max-width: 100%;
+	margin-top: var(--space-md);
+	margin-right: var(--space-lg);
+	margin-left: var(--space-lg);
+
+	@include breakpoint(tablet) {
+		min-width: 450px;
+		max-width: 50%;
+		margin-right: var(--space-xl);
+	}
+}
+
+button:not(.is-none):focus {
+	z-index: var(--layer-fab);
+	outline: none;
+	box-shadow: 0 0 0 0 var(--color-white), 0 0 0 3px var(--button-background);
+}
+.search-section {
+	max-width: 100%;
+	margin-top: var(--space-xs);
+	margin-bottom: var(--space-xs);
+	margin-left: 0;
 }
 </style>

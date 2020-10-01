@@ -30,7 +30,7 @@
 			data-testid="input_create-user_email"
 		>
 		</base-input>
-		<slot name="inputs" :userData="userData" />
+		<slot name="inputs" />
 
 		<base-button
 			type="submit"
@@ -54,60 +54,18 @@
 
 <script>
 export default {
-	props: {
-		userId: {
-			type: String,
-			required: false,
-			default: undefined,
-		},
-		roleName: {
-			type: String,
-			required: true,
-		},
-	},
 	data() {
 		return {
 			userData: {
 				firstName: "",
 				lastName: "",
 				email: "",
-				sendRegistration: false,
 			},
 		};
 	},
-	computed: {
-		actionType() {
-			return "create";
-		},
-	},
 	methods: {
 		submitHandler() {
-			switch (this.actionType) {
-				case "create": {
-					this.create();
-					break;
-				}
-			}
-		},
-
-		async create() {
-			try {
-				await this.$store.dispatch("users/handleUsers", {
-					firstName: this.userData.firstName,
-					lastName: this.userData.lastName,
-					email: this.userData.email,
-					roles: [this.roleName],
-					schoolId: this.$user.schoolId,
-					sendRegistration: this.userData.sendRegistration,
-					generateRegistrationLink: true,
-					action: this.actionType,
-					userType: `${this.roleName}s`,
-				});
-				this.$emit("success");
-			} catch (e) {
-				this.$emit("error");
-				console.error(e);
-			}
+			this.$emit("create-user", this.userData);
 		},
 	},
 };
