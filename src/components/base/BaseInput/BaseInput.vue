@@ -44,7 +44,7 @@ checkboxInputTypes.forEach(
 radioInputTypes.forEach((type) => (componentDictionary[type] = BaseInputRadio));
 export const supportedTypes = Object.keys(componentDictionary);
 
-const validationDelay = 800;
+export const validationDelay = 800;
 
 export default {
 	model: {
@@ -115,6 +115,7 @@ export default {
 			}
 
 			this.$emit("update:vmodel", event);
+			this.$emit("input", event);
 		},
 		handleBlur(event) {
 			this.validationModel && this.validationModel.$touch();

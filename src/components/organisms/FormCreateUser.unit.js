@@ -35,7 +35,6 @@ describe("@components/organisms/FormCreateUser", () => {
 
 	describe("create", () => {
 		it("emits create-user event on form submit", async () => {
-			debugger;
 			const actions = getMockActionsErrorCreate();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {
@@ -69,8 +68,34 @@ describe("@components/organisms/FormCreateUser", () => {
 			expect(eventUserData.email).toBe("klara.fall@mail.de");
 		});
 
+		it("does not emit create-user event if form is invalid", async () => {
+			const actions = getMockActionsErrorCreate();
+			const mock = getMocks({ actions });
+			const wrapper = mount(FormCreateUser, {
+				...mock,
+			});
+
+			wrapper.find("form").trigger("submit");
+
+			await wrapper.vm.$nextTick();
+			const eventUserData = wrapper.emitted();
+			expect(eventUserData["create-user"]).toBeUndefined();
+		});
+
+		it("emit trigger-validation event on form submit", async () => {
+			const actions = getMockActionsErrorCreate();
+			const mock = getMocks({ actions });
+			const wrapper = mount(FormCreateUser, {
+				...mock,
+			});
+
+			wrapper.find("form").trigger("submit");
+
+			await wrapper.vm.$nextTick();
+			expect(wrapper.emitted("trigger-validation")[0]).toHaveLength(1);
+		});
+
 		it("renders slot content", async () => {
-			debugger;
 			const actions = getMockActionsErrorCreate();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {

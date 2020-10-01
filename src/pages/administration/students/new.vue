@@ -25,22 +25,31 @@
 					data-testid="input_create-student_send-registration"
 				/>
 			</template>
+			<template v-slot:errors>
+				<error-message
+					v-if="error"
+					:message="$t('pages.administration.students.new.error')"
+				></error-message>
+			</template>
 		</form-create-user>
 	</section>
 </template>
 
 <script>
 import FormCreateUser from "@components/organisms/FormCreateUser";
+import ErrorMessage from "@components/atoms/ErrorMessage";
 
 export default {
 	components: {
 		FormCreateUser,
+		ErrorMessage,
 	},
 	meta: {
 		requiredPermissions: ["STUDENT_CREATE"],
 	},
 	data() {
 		return {
+			error: false,
 			birthday: null,
 			sendRegistration: false,
 			breadcrumbs: [
@@ -62,6 +71,7 @@ export default {
 	},
 	methods: {
 		createStudent(userData) {
+			this.error = false;
 			this.$store
 				.dispatch("users/createStudent", {
 					firstName: userData.firstName,
@@ -81,7 +91,7 @@ export default {
 					});
 				})
 				.catch(() => {
-					this.$toast.error(this.$t("pages.administration.students.new.error"));
+					this.error = true;
 				});
 		},
 	},

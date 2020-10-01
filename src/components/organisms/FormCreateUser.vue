@@ -40,6 +40,7 @@
 		</base-input>
 		<slot name="inputs" />
 
+		<slot name="errors" />
 		<base-button
 			type="submit"
 			class="w-100 mt--lg"

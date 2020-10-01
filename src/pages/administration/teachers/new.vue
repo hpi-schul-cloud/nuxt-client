@@ -14,22 +14,31 @@
 					:label="$t('pages.administration.teachers.new.checkbox.label')"
 				/>
 			</template>
+			<template v-slot:errors>
+				<error-message
+					v-if="error"
+					:message="$t('pages.administration.teachers.new.error')"
+				></error-message>
+			</template>
 		</form-create-user>
 	</section>
 </template>
 
 <script>
 import FormCreateUser from "@components/organisms/FormCreateUser";
+import ErrorMessage from "@components/atoms/ErrorMessage";
 
 export default {
 	components: {
 		FormCreateUser,
+		ErrorMessage,
 	},
 	meta: {
 		requiredPermissions: ["TEACHER_CREATE"],
 	},
 	data() {
 		return {
+			error: false,
 			sendRegistration: false,
 			breadcrumbs: [
 				{
@@ -49,6 +58,7 @@ export default {
 	},
 	methods: {
 		createTeacher(teacherData) {
+			this.error = false;
 			this.$store
 				.dispatch("users/createTeacher", {
 					firstName: teacherData.firstName,
@@ -68,7 +78,7 @@ export default {
 					});
 				})
 				.catch(() => {
-					this.$toast.error(this.$t("pages.administration.teachers.new.error"));
+					this.error = true;
 				});
 		},
 	},
