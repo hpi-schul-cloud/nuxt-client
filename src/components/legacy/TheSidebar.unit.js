@@ -18,6 +18,7 @@ describe("@components/legacy/TheSidebar", () => {
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				routes: testRoutes,
 			},
@@ -54,6 +55,7 @@ describe("@components/legacy/TheSidebar", () => {
 			},
 		];
 		const wrapper = shallowMount(TheSidebar, {
+			...createComponentMocks({ i18n: true }),
 			propsData: {
 				routes: testRoutes,
 			},
