@@ -38,13 +38,15 @@
 				:columns="tableColumns"
 				:data="filteredTableData"
 				track-by="_id"
-				sort-by="fullName"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<base-input-default
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
-						class="date"
+						class="date base-input-default"
 						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
@@ -58,7 +60,7 @@
 					/>
 					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
-						class="date"
+						class="date base-input-default"
 						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
 						label=""
@@ -76,6 +78,7 @@
 						:vmodel="slotProps.data"
 						type="text"
 						label=""
+						class="base-input-default"
 						v-on="
 							inputPass({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -107,7 +110,9 @@
 				:data="filteredTableData"
 				track-by="id"
 				:paginated="false"
-				sort-by="fullName"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
@@ -119,7 +124,7 @@
 			<div id="consent-checkbox">
 				<base-input v-model="check" type="checkbox" name="switch" label="">
 				</base-input>
-				<label>
+				<label @click="check = !check">
 					<i18n
 						path="pages.administration.students.consent.steps.register.confirm"
 					>
@@ -159,6 +164,9 @@
 				:data="filteredTableData"
 				track-by="_id"
 				:paginated="false"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
@@ -172,6 +180,9 @@
 
 			<base-button design="secondary" @click="download">{{
 				$t("pages.administration.students.consent.steps.download.next")
+			}}</base-button>
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
 			}}</base-button>
 		</section>
 
@@ -210,13 +221,29 @@
 						/>
 					</template>
 				</modal-body-info>
-				{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+				<span v-if="currentStep === 2">
+					{{
+						$t(
+							"pages.administration.students.consent.cancel.modal.download.info"
+						)
+					}}
+				</span>
+				<span v-else>
+					{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+				</span>
 			</template>
 			<template v-slot:footerRight>
 				<base-button design="danger text" @click="cancel">
 					{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
 				</base-button>
-				<base-button design="danger" @click="cancelWarning = false">
+				<base-button v-if="currentStep === 2" design="danger" @click="download">
+					{{
+						$t(
+							"pages.administration.students.consent.cancel.modal.download.continue"
+						)
+					}}
+				</base-button>
+				<base-button v-else design="danger" @click="cancelWarning = false">
 					{{
 						$t("pages.administration.students.consent.cancel.modal.continue")
 					}}
@@ -245,6 +272,7 @@
 </template>
 
 <script>
+// file deepcode ignore ArrayMethodOnNonArray
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -269,7 +297,7 @@ export default {
 		BaseInput,
 	},
 	meta: {
-		requiredPermissions: ["STUDENT_CREATE"],
+		requiredPermissions: ["STUDENT_CREATE", "STUDENT_LIST"],
 	},
 	layout: "loggedInFull",
 	props: {},
@@ -293,12 +321,12 @@ export default {
 				{
 					field: "fullName",
 					label: this.$t("common.labels.name"),
-					sortable: false,
+					sortable: true,
 				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
-					sortable: false,
+					sortable: true,
 				},
 				{
 					field: "birthday",
@@ -353,14 +381,15 @@ export default {
 			),
 			check: false,
 			checkWarning: false,
+			tableTimeOut: null,
+			printTimeOut: null,
 			printPageInfo: this.$t(
 				"pages.administration.students.consent.steps.register.print",
 				{ hostName: window.location.origin }
 			),
+			sortBy: "fullName",
+			sortOrder: "asc",
 		};
-	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
 		...mapGetters("bulkConsent", {
@@ -391,6 +420,12 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		window.addEventListener("beforeunload", this.warningEventHandler);
+	},
+	beforeDestroy() {
+		window.removeEventListener("beforeunload", this.warningEventHandler);
+		clearTimeout(this.tableTimeOut);
+		clearTimeout(this.printTimeOut);
 	},
 	mounted() {
 		this.checkTableData();
@@ -399,6 +434,10 @@ export default {
 		async find() {
 			const query = {
 				usersForConsent: this.selectedStudents,
+				$sort: {
+					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
+				},
+				users: this.selectedStudents,
 			};
 
 			await this.$store.dispatch("users/handleUsers", {
@@ -416,6 +455,11 @@ export default {
 				this.filteredTableData = data;
 				this.$store.dispatch("bulkConsent/setStudents", data);
 			}
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
+			this.sortOrder = sortOrder;
+			this.find();
 		},
 		inputDateForDate(student) {
 			return {
@@ -535,10 +579,11 @@ export default {
 
 			winPrint.document.close();
 			winPrint.focus();
-			setTimeout(() => {
+			this.printTimeOut = setTimeout(() => {
 				winPrint.print();
 				winPrint.close();
 			}, 500);
+			this.cancelWarning = false;
 			this.next();
 		},
 		success() {
@@ -555,7 +600,7 @@ export default {
 			});
 		},
 		checkTableData() {
-			setTimeout(() => {
+			this.tableTimeOut = setTimeout(() => {
 				if (this.filteredTableData.length === 0) {
 					this.$toast.error(
 						this.$t("pages.administration.students.consent.table.empty"),
@@ -568,6 +613,16 @@ export default {
 			}, 2000);
 		},
 		dayjs,
+		warningEventHandler() {
+			if (this.currentStep === 2) {
+				// Cancel the event as stated by the standard.
+				event.preventDefault();
+				// Chrome requires returnValue to be set.
+				event.returnValue = "";
+				// then show customized warning modal
+				this.cancelWarning = true;
+			}
+		},
 	},
 };
 </script>
@@ -621,12 +676,10 @@ export default {
 	}
 }
 
-/deep/ .base-input- {
-	max-width: 5em;
-	margin-bottom: 0;
-	.info-line {
-		display: none;
-	}
+/deep/ .base-input-default {
+	max-width: 10em;
+	margin-bottom: var(--space-md);
+	margin-left: var(--space-xs);
 	.input-line {
 		.icon-behind {
 			display: none;

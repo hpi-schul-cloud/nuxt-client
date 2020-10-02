@@ -6,12 +6,20 @@
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
 
-		<search-bar
+		<base-input
 			v-model="searchQuery"
-			:placeholder="searchBarPlaceHolder"
+			type="text"
+			:placeholder="
+				$t('pages.administration.teachers.index.searchbar.placeholder')
+			"
 			class="search-section"
-			v-on="barSearch(this)"
-		/>
+			label=""
+			@update:vmodel="barSearch"
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="search"
+			/></template>
+		</base-input>
 
 		<data-filter
 			:filters="filters"
@@ -108,7 +116,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import SearchBar from "../../../components/molecules/Searchbar.vue";
+import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -122,7 +130,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
-		SearchBar,
+		BaseInput,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -164,14 +172,6 @@ export default {
 			],
 
 			tableActions: [
-				{
-					label: this.$t(
-						"pages.administration.teachers.index.tableActions.consent"
-					),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-				},
 				{
 					label: this.$t(
 						"pages.administration.teachers.index.tableActions.email"
@@ -248,11 +248,8 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
+				this.$uiState.get("filter", "pages.administration.teachers.index")
 					.searchQuery || "",
-			searchBarPlaceHolder: this.$t(
-				"pages.administration.teachers.index.searchbar.placeholder"
-			),
 		};
 	},
 	computed: {
@@ -292,8 +289,9 @@ export default {
 				: this.permissionFilteredTableActions;
 		},
 		editFilteredColumns() {
-			// filters edit column if school is external
-			return this.school.isExternal
+			// filters out edit column if school is external or if user is a teacher
+			return this.school.isExternal ||
+				this.user.roles.some((role) => role.name === "teacher")
 				? this.tableColumns.filter((col) => col.field !== "_id")
 				: this.tableColumns;
 		},
@@ -360,11 +358,12 @@ export default {
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			this.page = 1;
+			// this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
 			this.$uiState.set("pagination", "pages.administration.teachers.index", {
 				itemsPerPage: limit,
+				currentPage: this.page,
 			});
 			this.find();
 		},
@@ -375,14 +374,6 @@ export default {
 				selectionType,
 				_ids: rowIds,
 			};
-		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
@@ -468,26 +459,22 @@ export default {
 				invertedDesign: true,
 			});
 		},
-		barSearch: function () {
-			return {
-				input: async (searchText) => {
-					this.currentFilterQuery.searchQuery = searchText;
+		barSearch: function (searchText) {
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
-					const query = this.currentFilterQuery;
+			const query = this.currentFilterQuery;
 
-					this.$uiState.set("filter", "pages.administration.teachers.index", {
-						query,
-					});
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
+				query,
+			});
 
-					setTimeout(() => {
-						this.$store.dispatch("users/handleUsers", {
-							query,
-							action: "find",
-							userType: "teachers",
-						});
-					}, 300);
-				},
-			};
+			setTimeout(() => {
+				this.$store.dispatch("users/handleUsers", {
+					query,
+					action: "find",
+					userType: "teachers",
+				});
+			}, 400);
 		},
 	},
 };
