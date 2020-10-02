@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Fixed
+
+- SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
+
 ## 25.0.1
 
 - SC-6932 added translation keys instead of hardcoded strings for sidebar items
