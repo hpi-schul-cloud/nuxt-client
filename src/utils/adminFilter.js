@@ -117,12 +117,12 @@ export function studentFilter(ctx) {
 					if (stat === "ok") {
 						return ctx.$t("utils.adminFilter.consent.ok");
 					} else if (stat === "parentsAgreed") {
-						return ctx.$t("utils.adminFilter.consent.parentsAgreed");
+						return ctx.$t("pages.administration.students.legend.icon.warning");
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
+				return `${ctx.$t("utils.adminFilter.register.consent")} ${status.join(
 					" " + ctx.$t("common.words.and") + " "
 				)}`;
 			},
@@ -183,7 +183,7 @@ export function teacherFilter(ctx) {
 						return ctx.$t("utils.adminFilter.consent.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
+				return `${ctx.$t("utils.adminFilter.register.consent")} ${status.join(
 					" " + ctx.$t("common.words.and") + " "
 				)}`;
 			},
