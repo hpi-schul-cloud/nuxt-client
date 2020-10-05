@@ -34,21 +34,22 @@ describe("@components/organisms/FormCreateUser", () => {
 	it(...isValidComponent(FormCreateUser));
 
 	describe("create", () => {
-		it("dispatches create action on form submit", async () => {
-			const actions = getMockActions();
+		it("emits create-user event on form submit", async () => {
+			const actions = getMockActionsErrorCreate();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormCreateUser, {
 				...mock,
-				propsData: {
-					roleName: "student",
-				},
 			});
 
-			const divArray = wrapper.findAll('input[type="text"]');
-
-			const inputFirstName = divArray.at(0);
-			const inputLastName = divArray.at(1);
-			const inputEmail = divArray.at(2);
+			const inputFirstName = wrapper.find(
+				'input[data-testid="input_create-user_firstname"]'
+			);
+			const inputLastName = wrapper.find(
+				'input[data-testid="input_create-user_lastname"]'
+			);
+			const inputEmail = wrapper.find(
+				'input[data-testid="input_create-user_email"]'
+			);
 
 			expect(inputFirstName.exists()).toBe(true);
 			inputFirstName.setValue("Klara");
@@ -59,46 +60,20 @@ describe("@components/organisms/FormCreateUser", () => {
 			expect(inputEmail.exists()).toBe(true);
 			inputEmail.setValue("klara.fall@mail.de");
 
-			wrapper.trigger("submit");
+			wrapper.find("form").trigger("submit");
 
 			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.actionType).toStrictEqual("create");
-			await wrapper.vm.$nextTick();
-			expect(actions.handleUsers.mock.calls).toHaveLength(1);
-
-			await wrapper.vm.$nextTick();
-			expect(wrapper.emitted("success")).toHaveLength(1);
-		});
-
-		it("throws error on failing create", async () => {
-			const actions = getMockActionsErrorCreate();
-			const mock = getMocks({ actions });
-			const wrapper = mount(FormCreateUser, {
-				...mock,
-				propsData: {
-					roleName: "student",
-				},
-			});
-
-			wrapper.trigger("submit");
-			// await for user role resolve
-			await wrapper.vm.$nextTick();
-			// await for create resolve
-			await wrapper.vm.$nextTick();
-			// await for emit
-			await wrapper.vm.$nextTick();
-
-			expect(wrapper.emitted("error")).toHaveLength(1);
+			const eventUserData = wrapper.emitted("create-user")[0][0];
+			expect(eventUserData.firstName).toBe("Klara");
+			expect(eventUserData.lastName).toBe("Fall");
+			expect(eventUserData.email).toBe("klara.fall@mail.de");
 		});
 
 		it("renders slot content", async () => {
 			const actions = getMockActionsErrorCreate();
 			const mock = getMocks({ actions });
-			const wrapper = shallowMount(FormCreateUser, {
+			const wrapper = mount(FormCreateUser, {
 				...mock,
-				propsData: {
-					roleName: "student",
-				},
 				slots: {
 					inputs: '<input label="test" value="test"/>',
 				},

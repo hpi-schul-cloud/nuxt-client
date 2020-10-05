@@ -76,7 +76,7 @@ module.exports = {
 			{
 				rel: "icon",
 				type: "image/png",
-				href: "/favicon.png",
+				href: `/themes/${themeName}/favicon.png`,
 			},
 		],
 	},
@@ -120,10 +120,10 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
-		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
+		"@plugins/i18n",
 	],
 
 	/*

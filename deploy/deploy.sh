@@ -113,7 +113,8 @@ case "$TRAVIS_BRANCH" in
 		case "$PROJECT" in
 			client)
 				# deploy $SYSTEM $DOCKERFILE $DOCKERTAG $DOCKER_SERVICENAME $COMPOSE_DUMMY $COMPOSE_FILE $COMPOSE_SERVICENAME
-				deploy "test" "nuxt-client" $DOCKERTAG "test-schul-cloud_nuxtclient" "compose-client_default.dummy" "nuxt-client.yml" "test-schul-cloud"
+				# ops-1109: Deployment now in sc-app-ci
+				# deploy "test" "nuxt-client" $DOCKERTAG "test-schul-cloud_nuxtclient" "compose-client_default.dummy" "nuxt-client.yml" "test-schul-cloud"
 			;;
 			storybook)
 				deploy "test" "nuxt-storybook" $DOCKERTAG "test-schul-cloud_storybook" "compose-storybook.dummy" "nuxt-storybook.yml" "test-schul-cloud"

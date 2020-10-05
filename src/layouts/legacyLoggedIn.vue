@@ -180,6 +180,7 @@ export default {
 					? item.children.some((child) => this.$route.path.includes(child.href))
 					: false;
 				item.active = isActive && !item.childActive;
+
 				return item;
 			});
 		},
@@ -232,10 +233,8 @@ export default {
 		"side footer";
 	grid-template-rows: auto 1fr auto;
 	grid-template-columns: 0 1fr;
-	width: 100%;
 	max-width: 100%;
 	min-height: 100vh;
-	overflow-x: hidden;
 
 	&.inline {
 		display: inline;
