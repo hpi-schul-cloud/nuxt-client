@@ -26,10 +26,15 @@
 				/>
 			</template>
 			<template v-slot:errors>
-				<error-message
+				<info-message
 					v-if="error"
 					:message="$t('pages.administration.students.new.error')"
-				></error-message>
+					type="error"
+				></info-message>
+				<info-message message="example error" type="error"></info-message>
+				<info-message message="example info"></info-message>
+				<info-message message="example warning" type="warning"></info-message>
+				<info-message message="example success" type="success"></info-message>
 			</template>
 		</form-create-user>
 	</section>
@@ -37,12 +42,12 @@
 
 <script>
 import FormCreateUser from "@components/organisms/FormCreateUser";
-import ErrorMessage from "@components/atoms/ErrorMessage";
+import InfoMessage from "@components/atoms/InfoMessage";
 
 export default {
 	components: {
 		FormCreateUser,
-		ErrorMessage,
+		InfoMessage,
 	},
 	meta: {
 		requiredPermissions: ["STUDENT_CREATE"],
