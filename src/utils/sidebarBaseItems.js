@@ -155,6 +155,11 @@ export default [
 		],
 	},
 	{
+		title: "global.sidebar.helpArea",
+		href: "/help",
+		icon: "question-circle",
+	},
+	{
 		title: "global.sidebar.myMaterial",
 		href: "/my-material/",
 		icon: "book",
