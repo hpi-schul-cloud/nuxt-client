@@ -36,7 +36,7 @@ export default {
 
 .info-message {
 	display: flex;
-	align-items: center;
+	align-items: top;
 	font-size: var(--text-sm);
 }
 .info-message.error {
@@ -48,9 +48,13 @@ export default {
 .info-message.warning {
 	color: var(--color-warning);
 }
+.info-message.info {
+	color: var(--color-info);
+}
 .info-message .icon {
-	width: 24px;
-	height: 24px;
+	flex: 0 0 20px;
+	width: 20px;
+	height: 20px;
 	margin-right: var(--space-xs-2);
 }
 </style>

@@ -142,7 +142,7 @@ label {
 	position: relative;
 	display: flex;
 	flex-wrap: nowrap;
-	align-items: center;
+	align-items: top;
 }
 
 .label {

@@ -67,7 +67,7 @@
 						/>
 					</base-button>
 					<base-icon
-						v-if="error"
+						v-if="hasError"
 						source="custom"
 						icon="warning"
 						fill="var(--color-danger)"
