@@ -65,7 +65,7 @@
 			:current-page="currentPage"
 			:total="total"
 			:per-page="rowsPerPage"
-			@update:per-page="onUpdateRowsPerPage"
+			@update:per-page="$emit('update:rows-per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
 	</div>
@@ -368,10 +368,6 @@ export default {
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.$emit("update:sort", sortBy, sortOrder);
-		},
-		onUpdateRowsPerPage(value) {
-			this.$emit("update:current-page", 1);
-			this.$emit("update:rows-per-page", value);
 		},
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);
