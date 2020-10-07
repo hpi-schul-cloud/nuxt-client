@@ -94,7 +94,7 @@ export default {
 						this.resource.properties,
 						"ccm:replicationsourceid"
 				  )
-				: null;
+				: "";
 		},
 	},
 	methods: {
