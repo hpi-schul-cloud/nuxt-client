@@ -50,7 +50,9 @@
 					:role="action.role"
 					class="item"
 				>
-					<a href="/account" class="account-link">Einstellungen</a>
+					<a href="/account" class="account-link">{{
+						$t("global.topbar.settings")
+					}}</a>
 					<button
 						:key="action.title"
 						v-ripple
