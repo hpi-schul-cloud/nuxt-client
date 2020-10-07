@@ -31,10 +31,6 @@
 					:message="$t('pages.administration.students.new.error')"
 					type="error"
 				></info-message>
-				<info-message message="example error" type="error"></info-message>
-				<info-message message="example info"></info-message>
-				<info-message message="example warning" type="warning"></info-message>
-				<info-message message="example success" type="success"></info-message>
 			</template>
 		</form-create-user>
 	</section>
