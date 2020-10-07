@@ -115,9 +115,7 @@ export function studentFilter(ctx) {
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return `${ctx.$t("common.labels.registration")} ${ctx.$t(
-							"utils.adminFilter.consent.ok"
-						)}`;
+						return ctx.$t("pages.administration.students.legend.icon.success");
 					} else if (stat === "parentsAgreed") {
 						return ctx.$t(
 							"utils.adminFilter.consent.label.parentsAgreementMissing"
