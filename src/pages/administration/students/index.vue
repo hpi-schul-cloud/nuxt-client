@@ -370,11 +370,12 @@ export default {
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			this.page = 1;
+			//this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
 			this.$uiState.set("pagination", "pages.administration.students.index", {
 				itemsPerPage: limit,
+				currentPage: this.page,
 			});
 			this.find();
 		},
