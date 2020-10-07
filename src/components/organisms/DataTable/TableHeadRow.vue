@@ -282,7 +282,7 @@ export default {
 	position: absolute;
 	right: 0%;
 	z-index: calc(var(--layer-fab) + 1);
-	max-width: 100%;
+	min-width: 320px;
 	margin-top: var(--space-xl-2);
 	margin-right: var(--space-lg);
 	margin-left: var(--space-lg);
