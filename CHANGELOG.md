@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Fixed
+
+- SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
+
 ## 25.0.1
 
 - SC-6932 added translation keys instead of hardcoded strings for sidebar items
@@ -14,6 +18,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-6628 Changing backend url endpoint while analog consenting
 - SC-6682 Reduces search time in lernstore
+- SC-6021 Added fallback icons to the assets directory that are rendered when no external icons are available (fix for the EdgeHTML browser)
 
 ## [24.5.0] - 2020-09-14
 
