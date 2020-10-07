@@ -66,7 +66,7 @@
 						"
 					>
 						<base-icon source="custom" icon="open_new_window" />
-						Zum Inhalt
+						{{ $t("pages.content.material.toMaterial") }}
 					</base-button>
 					<base-button
 						v-else
@@ -75,7 +75,7 @@
 						target="_blank"
 					>
 						<base-icon source="custom" icon="open_new_window" />
-						Zum Inhalt
+						{{ $t("pages.content.material.toMaterial") }}
 					</base-button>
 				</div>
 				<!-- eslint-disable vue/no-v-html -->
