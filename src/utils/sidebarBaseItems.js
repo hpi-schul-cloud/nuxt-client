@@ -5,7 +5,7 @@ export default [
 		icon: "th-large",
 	},
 	{
-		title: "global.sidebar.administrationCourses",
+		title: "global.sidebar.courses",
 		href: "/courses",
 		icon: "graduation-cap",
 	},
@@ -48,7 +48,7 @@ export default [
 				href: "/files/my/",
 			},
 			{
-				title: "global.sidebar.administrationCourses",
+				title: "global.sidebar.courses",
 				icon: "folder-open-o",
 				href: "/files/courses/",
 			},
@@ -133,7 +133,7 @@ export default [
 				href: "/administration/teachers/",
 			},
 			{
-				title: "global.sidebar.Courses",
+				title: "global.sidebar.courses",
 				icon: "graduation-cap",
 				href: "/administration/courses/",
 			},
