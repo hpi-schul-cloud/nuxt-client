@@ -115,7 +115,7 @@ export function studentFilter(ctx) {
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return `${ctx.$t("utils.adminFilter.consent.title")} ${ctx.$t(
+						return `${ctx.$t("common.labels.registration")} ${ctx.$t(
 							"utils.adminFilter.consent.ok"
 						)}`;
 					} else if (stat === "parentsAgreed") {
@@ -182,14 +182,14 @@ export function teacherFilter(ctx) {
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.consent.ok");
+						return `${ctx.$t("common.labels.registration")} ${ctx.$t(
+							"utils.adminFilter.consent.ok"
+						)}`;
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.register.consent")} ${status.join(
-					" " + ctx.$t("common.words.and") + " "
-				)}`;
+				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
 			filter: [
 				{
