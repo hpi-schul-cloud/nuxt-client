@@ -10,9 +10,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
 
-## 25.0.1
+## 25.0.2
 
 - SC-6932 added translation keys instead of hardcoded strings for sidebar items
+
+## 25.0.1
 
 ## 25.0.0
 
