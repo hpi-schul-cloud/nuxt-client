@@ -133,6 +133,7 @@ module.exports = {
 		"@plugins/user",
 		"@plugins/sentry",
 		"@plugins/i18n",
+		"@plugins/vuelidate",
 	],
 
 	/*
