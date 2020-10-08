@@ -1,4 +1,4 @@
-# How to with our backend <Badge text="WIP" type="warn"/>
+# How to communicate with our backend
 
 For communication with the backend, we use the VueJS extension Vuex which is already part of NuxtJS.
 
@@ -12,17 +12,21 @@ There are basically 3 different components of the Vuex Store. Actions, Mutations
 
 ### Nuxt Client
 
-In our nuxt client we can talk ot the API through the Vuex Services. The services are accesible from both our `pages` or `components`. But it's highly recommended to do this from the `pages` only and then pass the data to the `components`. The reason for this is that we should use the components as "stupid components" which means they shouldn't know anything about the services and API, they're just there for data input/output but should not fetch the data from themselves. A component should access the store only if the component is completly self contained.
+![Vuex Data Flow](../images/vuex.png "Vuex Data Flow")
+
+In our nuxt client we can talk to the API through the Vuex Actions. The actions are accessible from both our `pages` or `components`. But it's highly recommended to do this from the `pages` only and then pass the data to the `components`. The reason for this is that we should use the components as "stupid components" which means they shouldn't know anything about the API, they're just there for data input/output but should not fetch the data themselves. A component should access the store directly only if the component is completly self contained which is rarely the case.
 
 ### Vuex Store
 
 The Vuex store is the place where the `state` of the web application is located. Inside the `state` you can save everything that you want to be accessible from everywhere. In order to manipulate the state you have to use `actions` and `mutations`. Use `Actions` to fetch the data from the APIs. Use `mutations` to actually change the state. _`actions` should never return a value directly._ Instead after the requested data is recieved the `action` will trigger a `mutation` to save the recieved data in the `state`. In order to get the data from the state you can access the `state` directly or use `getters` which are more convenient in many cases.
 
+A more detailed documentation than this one can be found in the: [official Vuex Documentation](https://vuex.vuejs.org/guide/state.html)
+
 #### Modules
 
 However the state can get very complex because we have different models like schools, teams, courses, etc. So one giant state would be not appropriate. The solution for this problem are `modules`. A `module` is a subset of the store and has it's own `state, actions, mutations and getters`.
 
-To register a new service we just have to create a new file with the service name into the src/store folder. This will automatically create a service with its own namespace based on the filename.
+To register a new module we just have to create a new file with the module name into the src/store folder. This will automatically create a module with its own namespace based on the filename.
 
 > Don't return anything in `actions`, but trigger a mutation
 >
@@ -85,7 +89,7 @@ This paragraph shows how to use the services to make simple CRUD operations.
 ### Create
 
 ```js
-const news = await this.$store.dispatch("news/create", [
+await this.$store.dispatch("news/create", [
 	{
 		title: this.news.title,
 		content: this.news.content,
@@ -132,21 +136,73 @@ await this.$store.dispatch("news/remove", id);
 ### Find
 
 ```js
-await this.$store.dispatch("news/find", {
-	query: {
-		sort: "-createdAt",
-	},
-});
+methods: {
+	retreiveNews() {
+		await this.$store.dispatch("news/find", {
+			query: {
+				sort: "-createdAt",
+			},
+		});
+	}
+},
+computed: {
+	news() {
+		return store.state.news
+	}
+}
 ```
 
 or depending on the service you must filter with the following syntax
 
 ```js
-await this.$store.dispatch("news/find", {
-	query: {
-		$sort: {
-			createdAt: -1,
+methods: {
+	retreiveNews() {
+		await this.$store.dispatch("news/find", {
+			query: {
+				$sort: {
+					createdAt: -1,
+				},
+			},
+		});
+	}
+},
+computed: {
+	// Helper function to generate computed properties for state vars
+	...mapGetters({
+		news: 'news'
+	})
+}
+```
+
+### Bad Example
+
+Don't do it like this.
+
+```js
+const studentsRole = (
+	await store.dispatch("roles/find", {
+		query: {
+			name: "student",
 		},
-	},
-});
+	})
+).data[0];
+```
+
+```js
+this.$store
+	.dispatch("datasources/find", { query })
+	.then((result) => {
+		if (this.watchingIds.length > 0) {
+			this.$store.dispatch("datasources/updateCallback", {
+				watchingIds: this.watchingIds,
+				successConditions: [{ lastStatus: "Success" }, { lastStatus: "Error" }],
+				query,
+			});
+		}
+		return result;
+	})
+	.catch((error) => {
+		console.error(error);
+		this.$toast.error(this.$t("error.load"));
+	});
 ```
