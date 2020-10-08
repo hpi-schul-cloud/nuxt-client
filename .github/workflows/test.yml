@@ -74,6 +74,7 @@ jobs:
         env:
           ES_USER: ${{ secrets.ES_USER }}
           ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
+          ES_OAUTH_SECRET: ${{ secrets.ES_OAUTH_SECRET }}
           ES_MERLIN_USERNAME: ${{ secrets.ES_MERLIN_USERNAME }}
           ES_MERLIN_PW: ${{ secrets.ES_BERLIN_PW }}
       - uses: actions/upload-artifact@v1
