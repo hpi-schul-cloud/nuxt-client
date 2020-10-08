@@ -45,6 +45,8 @@
 	"common.placeholder.password.new": "Neues Passwort",
 	"common.placeholder.password.new.confirmation": "Neues Passwort wiederholen",
 	"common.placeholder.repeat.email": "E-Mail-Adresse wiederholen",
+	"common.validation.required": "Bitte füll dieses Feld aus",
+	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.words.and": "und",
 	"componente.molecules.CoursesGrid.emptystate": "Aktuell gibt es hier noch keine Kurse.",
 	"components.legacy.MenuQrCode.qrHintText": "Lotse mit dem QR-Code andere Nutzer:innen auf diese Seite",
