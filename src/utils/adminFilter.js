@@ -115,16 +115,16 @@ export function studentFilter(ctx) {
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.consent.ok");
+						return ctx.$t("pages.administration.students.legend.icon.success");
 					} else if (stat === "parentsAgreed") {
-						return ctx.$t("utils.adminFilter.consent.parentsAgreed");
+						return ctx.$t(
+							"utils.adminFilter.consent.label.parentsAgreementMissing"
+						);
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
-					" " + ctx.$t("common.words.and") + " "
-				)}`;
+				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
 			filter: [
 				{
@@ -134,7 +134,9 @@ export function studentFilter(ctx) {
 					options: [
 						{
 							value: "ok",
-							label: ctx.$t("utils.adminFilter.consent.label.ok"),
+							label: ctx.$t(
+								"pages.administration.students.legend.icon.success"
+							),
 						},
 						{
 							value: "parentsAgreed",
@@ -178,14 +180,14 @@ export function teacherFilter(ctx) {
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.consent.ok");
+						return `${ctx.$t("common.labels.registration")} ${ctx.$t(
+							"utils.adminFilter.consent.ok"
+						)}`;
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
-					" " + ctx.$t("common.words.and") + " "
-				)}`;
+				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
 			filter: [
 				{
@@ -195,7 +197,9 @@ export function teacherFilter(ctx) {
 					options: [
 						{
 							value: "ok",
-							label: ctx.$t("utils.adminFilter.consent.label.ok"),
+							label: ctx.$t(
+								"pages.administration.students.legend.icon.success"
+							),
 						},
 						{
 							value: "missing",
