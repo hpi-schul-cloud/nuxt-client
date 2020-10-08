@@ -71,6 +71,11 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
       - name: execute tests
         run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/develop/scripts/ci/fetch.github.sh" | bash
+        env:
+          ES_USER: ${{ secrets.ES_USER }}
+          ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
+          ES_MERLIN_USERNAME: ${{ secrets.ES_MERLIN_USERNAME }}
+          ES_MERLIN_PW: ${{ secrets.ES_BERLIN_PW }}
       - uses: actions/upload-artifact@v1
         name: upload results
         if: always()
