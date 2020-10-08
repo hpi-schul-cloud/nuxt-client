@@ -97,7 +97,7 @@ export default [
 				title: "global.sidebar.student",
 				icon: "odnoklassniki",
 				href: "/administration/students/",
-				permission: "STUDENT_LIST"
+				permission: "STUDENT_LIST",
 			},
 			{
 				title: "global.sidebar.teacher",
