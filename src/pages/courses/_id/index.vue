@@ -1,5 +1,6 @@
 <template>
 	<div v-if="course">
+		<<<<<<< HEAD
 		<base-grid>
 			<h1 class="h2" style="grid-row: 1; grid-column: 1 / -1;">
 				{{ course.name }}
@@ -55,6 +56,17 @@
 			>
 			</fab-icon>
 		</base-grid>
+		=======
+		<section class="section">
+			<!-- <base-breadcrumb :inputs="breadcrumbs" /> -->
+			<h1 class="h2">{{ course.name }}</h1>
+			<p>Amount of homeworks found: {{ homeworks.length }}</p>
+			<div v-for="(homework, index) in homeworks" :key="index">
+				{{ homework.name }}
+			</div>
+			<p>Amount of lessons found: {{ lessons.length }}</p>
+		</section>
+		>>>>>>> 44cfb8fa... some work
 	</div>
 </template>
 
