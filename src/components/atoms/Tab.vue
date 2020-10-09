@@ -12,6 +12,7 @@
 <script>
 import UserHasPermission from "@/mixins/UserHasPermission";
 export default {
+	name: "SingleTab",
 	mixins: [UserHasPermission],
 	props: {
 		name: {
@@ -20,6 +21,10 @@ export default {
 		},
 		selected: {
 			type: Boolean,
+		},
+		iconName: {
+			type: String,
+			default: "fa fa-info",
 		},
 	},
 	data() {
