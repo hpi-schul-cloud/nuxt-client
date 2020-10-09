@@ -1,7 +1,7 @@
 <template>
 	<div v-if="course">
 		<section class="section">
-			<base-breadcrumb :inputs="breadcrumbs" />
+			<!-- <base-breadcrumb :inputs="breadcrumbs" /> -->
 			<h1 class="h2">{{ course.name }}</h1>
 			<tabs>
 				<tab name="Kursinhalte" :selected="true">
