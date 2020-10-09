@@ -55,36 +55,6 @@
 			>
 			</fab-icon>
 		</base-grid>
-		<section class="section">
-			<base-breadcrumb :inputs="breadcrumbs" />
-			<h1 class="h2">{{ course.name }}</h1>
-			<tabs>
-				<tab name="Kursinhalte" :selected="true">
-					<div v-for="(content, idx) in courseContents" :key="idx">
-						{{ idx }}. {{ content.type }} {{ content.name }}
-					</div>
-					<fab-floating
-						:show-label="true"
-						:actions="[
-							{
-								label: 'Thema',
-								icon: 'create',
-							},
-							{
-								label: 'Editor-Document',
-								icon: 'create',
-							},
-							{
-								label: 'Aufgabe',
-								icon: 'create',
-							},
-						]"
-					></fab-floating>
-				</tab>
-				<tab name="Tools">Tools</tab>
-				<tab name="Groups">Groups</tab>
-			</tabs>
-		</section>
 	</div>
 </template>
 
