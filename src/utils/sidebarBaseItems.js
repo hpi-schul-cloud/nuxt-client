@@ -90,13 +90,14 @@ export default [
 		title: "global.sidebar.management",
 		href: "/administration",
 		icon: "cogs",
-		permission: "STUDENT_LIST",
+		permission: "TEACHER_LIST",
 		excludedPermission: "ADMIN_VIEW",
 		children: [
 			{
 				title: "global.sidebar.student",
 				icon: "odnoklassniki",
 				href: "/administration/students/",
+				permission: "STUDENT_LIST",
 			},
 			{
 				title: "global.sidebar.teacher",
@@ -153,6 +154,11 @@ export default [
 				href: "/administration/school/",
 			},
 		],
+	},
+	{
+		title: "global.sidebar.helpArea",
+		href: "/help",
+		icon: "question-circle",
 	},
 	{
 		title: "global.sidebar.myMaterial",
