@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Unreleased
+
+- SC-6060 Updated caniuse-lite
+
 ## Fixed
 
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
