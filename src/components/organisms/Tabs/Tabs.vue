@@ -12,7 +12,7 @@
 					<button
 						class="tab-button"
 						data-testid="tabButtonTest"
-						:alt="tab.name.split(' ').join('')"
+						:alt="tab.name"
 					>
 						<span>{{ tab.name }}</span>
 					</button>
@@ -88,7 +88,7 @@ ul.tabs {
 			.tab-button,
 			i {
 				font-weight: var(--font-weight-bold);
-				color: var(--color-black);
+				color: var(--color-gray-dark);
 				transition: var(--duration-transition-slow) ease-in-out;
 			}
 			&::after {
@@ -98,18 +98,18 @@ ul.tabs {
 				width: 100%;
 				height: 2px;
 				content: " ";
-				background: var(--color-black);
+				background: var(--color-gray-dark);
 				animation: fadeEffect var(--duration-transition-slow) ease-in-out;
 			}
 		}
 	}
 	li:hover {
+		color: var(--color-gray-dark);
 		background-color: var(--color-gray-light);
+		.tab-button {
+			font-weight: var(--font-weight-bold);
+		}
 	}
-}
-
-.tabs-details:default {
-	animation: fadeEffect var(--duration-transition-slow) ease-in-out;
 }
 
 @media (max-width: 450px) {
