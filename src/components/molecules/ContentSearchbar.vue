@@ -14,7 +14,7 @@
 				@focus="isActive = true"
 			/>
 			<div class="search__container--icon">
-				<base-button v-if="isActive" design="none" @click="enterKeyHandler">
+				<base-button v-if="value === ''" design="none">
 					<base-icon
 						class="search-icon"
 						source="custom"
