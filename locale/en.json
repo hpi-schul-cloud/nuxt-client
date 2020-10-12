@@ -338,7 +338,7 @@
 	"pages.content._id.metadata.updatedAt": "Last modified on",
 	"pages.content.card.img.alt": "Content-thumbnail",
 	"pages.content.empty_state.error.img_alt": "empty-state-image",
-	"pages.content.empty_state.error.message": "<span><p>Check if all words are spelled correctly.<br>Try out other search queries.<br>Try out more common queries.<br>Try to use a shorter query.</p></span>",
+	"pages.content.empty_state.error.message": "<span><p>The search query should contain at least 2 characters.<br>Check if all words are spelled correctly.<br>Try out other search queries.<br>Try out more common queries.<br>Try to use a shorter query.</p></span>",
 	"pages.content.empty_state.error.subtitle": "Suggestion:",
 	"pages.content.empty_state.error.title": "Whoops, no results!",
 	"pages.content.index.search.placeholder": "Search Learning store",
