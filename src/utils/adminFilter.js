@@ -49,7 +49,6 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 	parser: {
 		generator: (filterGroupConfig, values) => {
 			const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
-			console.log("Hello", values);
 			return {
 				createdAt: {
 					$gte: dayjs(values[filterGroupConfig.filter[0].id])
