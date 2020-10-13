@@ -238,12 +238,12 @@ export default {
 				{
 					icon: "check",
 					color: "var(--color-success)",
-					label: this.$t("pages.administration.teachers.legend.icon.check"),
+					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					label: this.$t("pages.administration.students.legend.icon.danger"),
+					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
 			filters: teacherFilter(this),
