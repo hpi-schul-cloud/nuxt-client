@@ -3,7 +3,7 @@
 		<template v-slot:header>
 			<div :style="{ backgroundColor: article.color }">
 				<div class="news-card__heading">
-					<h4 style="margin: 0;">{{ article.title }}</h4>
+					<h4 style="margin: 0">{{ article.title }}</h4>
 				</div>
 			</div>
 		</template>
