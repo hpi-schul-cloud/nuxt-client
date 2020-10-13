@@ -27,6 +27,7 @@
 	"common.labels.password.new": "New password",
 	"common.labels.register": "Register",
 	"common.labels.registration": "Registration",
+	"common.labels.filter.registration": "Filter: ",
 	"common.labels.repeat": "Repetition",
 	"common.labels.repeat.email": "New e-mail",
 	"common.labels.room": "Room",
