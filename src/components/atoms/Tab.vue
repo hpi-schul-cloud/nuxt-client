@@ -21,6 +21,10 @@ export default {
 		selected: {
 			type: Boolean,
 		},
+		iconName: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		return {

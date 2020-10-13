@@ -9,7 +9,7 @@ storiesOf("5 Molecules/Tabs", module)
 		template: `
 			<Tabs>
 				<SingleTab name="Lerninhalte" iconName="fa fa-book">Test</SingleTab>
-				<SingleTab name="Tab 2" :selected="true">Test2</SingleTab>
+				<SingleTab name="Tab 2" :selected="true" iconName="fa fa-info">Test2</SingleTab>
 				<SingleTab name="Tab 3" permission="YOU_SHALL_NOT_PASS">This and Tab 3 should be not visible!</SingleTab>
 				<SingleTab name="Tab 4">Test 4 lorum ipsum test with a long line of text</SingleTab>
 				<SingleTab name="" iconName="">Empty</SingleTab>
