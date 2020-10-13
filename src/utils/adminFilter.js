@@ -113,9 +113,7 @@ export function studentFilter(ctx) {
 
 	return [
 		{
-			title: `${ctx.$t("common.labels.filter.registration")} ${ctx.$t(
-				"common.labels.registration"
-			)} `,
+			title: ctx.$t("common.labels.registration"),
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
