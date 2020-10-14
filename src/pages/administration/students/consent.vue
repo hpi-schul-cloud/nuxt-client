@@ -44,7 +44,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<base-input-default
-						v-if="(birthdayWarning && !slotProps.data)"
+						v-if="birthdayWarning && !slotProps.data"
 						:error="inputError"
 						class="date base-input-default"
 						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
@@ -59,7 +59,7 @@
 						"
 					/>
 					<base-input-default
-						v-else-if="(!birthdayWarning || slotProps.data)"
+						v-else-if="!birthdayWarning || slotProps.data"
 						class="date base-input-default"
 						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
 						type="date"
@@ -89,7 +89,7 @@
 				</template>
 			</backend-data-table>
 
-			<p v-if="birthdayWarning" style="color: var(--color-danger);">
+			<p v-if="birthdayWarning" style="color: var(--color-danger)">
 				<base-icon source="material" icon="report_problem" />
 				{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 			</p>
@@ -139,7 +139,7 @@
 				</label>
 			</div>
 
-			<p v-if="checkWarning" style="color: var(--color-danger);">
+			<p v-if="checkWarning" style="color: var(--color-danger)">
 				<base-icon source="material" icon="report_problem" />
 				{{
 					$t(
@@ -217,7 +217,7 @@
 						<base-icon
 							source="material"
 							icon="report_problem"
-							style="color: var(--color-danger);"
+							style="color: var(--color-danger)"
 						/>
 					</template>
 				</modal-body-info>

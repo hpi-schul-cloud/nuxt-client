@@ -13,7 +13,7 @@ Ein minimales Beispiel sähe so aus:
 #### Template
 
 ```vue
-<template> Localized: {{ $t(fileName.identifier) }} </template>
+<template>Localized: {{ $t(fileName.identifier) }}</template>
 ```
 
 #### Script
