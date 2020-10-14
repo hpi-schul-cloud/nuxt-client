@@ -118,7 +118,7 @@ ul.tabs {
 	}
 }
 
-@media (max-width: 450px) {
+@media screen and (max-width: 450px) {
 	ul.tabs {
 		max-width: 450px;
 	}
@@ -133,7 +133,7 @@ ul.tabs {
 	}
 }
 
-@media (max-width: 1112px) and (orientation: landscape) {
+@media screen and (max-width: 1112px) and (orientation: landscape) {
 	ul.tabs {
 		max-width: 1023px;
 	}
