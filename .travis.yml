@@ -57,11 +57,11 @@ jobs:
       after_success:
         - npm i -g surge
         - bash ./deploy/pull-deploy.sh -p storybook
-    - script: npm run build:docs
-      name: "build:docs"
-      after_success:
-        - npm i -g surge
-        - bash ./deploy/pull-deploy.sh -p vuepress
+    # - script: npm run build:docs
+    #   name: "build:docs"
+    #   after_success:
+    #     - npm i -g surge
+    #     - bash ./deploy/pull-deploy.sh -p vuepress
 
     # Build Docker Images
     - stage: build
@@ -84,10 +84,10 @@ jobs:
       name: deploy:storybook
       language: generic
       script: bash ./deploy/deploy.sh -p storybook
-    - script: skip
-      name: deploy:docs
-      language: generic
-      script: bash ./deploy/deploy.sh -p vuepress
+    # - script: skip
+    #   name: deploy:docs
+    #   language: generic
+    #   script: bash ./deploy/deploy.sh -p vuepress
 
 cache: npm
 before_cache:
