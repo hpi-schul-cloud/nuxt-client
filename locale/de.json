@@ -364,6 +364,7 @@
 	"pages.content.label.deselect": "Entfernen",
 	"pages.content.label.select": "Auswählen",
 	"pages.content.label.selected": "Aktiv",
+	"pages.content.material.toMaterial": "Zum Inhalt",
 	"pages.content.notification.errorMsg": "Material konnte nicht hinzugefügt werden",
 	"pages.content.notification.lernstoreNotAvailable": "Lernstore ist nicht verfügbar",
 	"pages.content.notification.loading": "Material wird hinzugefügt",
