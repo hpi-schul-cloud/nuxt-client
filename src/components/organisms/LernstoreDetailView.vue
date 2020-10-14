@@ -55,6 +55,29 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
+				<div>
+					<base-button
+						v-if="isMerlinContent"
+						design="outline"
+						@click="
+							() => {
+								goToMerlinContent(merlinTokenReference);
+							}
+						"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+					<base-button
+						v-else
+						design="outline"
+						:href="downloadUrl"
+						target="_blank"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+				</div>
 				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
@@ -74,22 +97,9 @@
 							</div>
 						</div>
 					</div>
-					<div v-if="downloadUrl" class="meta-container">
-						<div class="meta-icon">
-							<base-icon
-								:source="getTypeIcon(resource.mimetype).iconSource"
-								:icon="getTypeIcon(resource.mimetype).icon"
-							/>
-						</div>
-						<div class="meta-text text-wrap">
-							<base-link :href="downloadUrl" target="_blank" class="link">
-								{{ downloadUrl }}
-							</base-link>
-						</div>
-					</div>
-					<div class="meta-container">
-						<div class="meta-icon">
-							<base-icon source="fa" icon="tag" />
+					<div :style="{ margin: '0px' }" class="meta-container">
+						<div>
+							<base-icon class="meta-icon" source="custom" icon="hashtag" />
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
@@ -183,6 +193,19 @@ export default {
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
+		isMerlinContent() {
+			const source = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsource"
+			);
+			return source && source.toLowerCase().includes("merlin");
+		},
+		merlinTokenReference() {
+			return getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsourceid"
+			);
+		},
 		description() {
 			return (
 				this.resource.description ||
@@ -214,6 +237,12 @@ export default {
 		},
 	},
 	methods: {
+		async goToMerlinContent(merlinReference) {
+			const url = await this.$axios.$get(
+				`/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
+			);
+			window.open(url, "_blank");
+		},
 		isNotStudent(roles) {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
