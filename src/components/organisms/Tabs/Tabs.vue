@@ -93,7 +93,7 @@ ul.tabs {
 			}
 			&::after {
 				position: absolute;
-				bottom: -0.2rem;
+				bottom: var(--space-xs-3);
 				left: 0;
 				width: 100%;
 				height: 2px;
