@@ -1,10 +1,13 @@
 <template>
 	<div v-if="course">
 		<section class="section">
-			<base-breadcrumb :inputs="breadcrumbs" />
 			<h1 class="h2">{{ course.name }}</h1>
 			<tabs>
-				<tab name="Kursinhalte" :selected="true">
+				<tab
+					:name="$t('pages.courses._id.educational_content')"
+					icon-name="fa fa-book"
+					:selected="true"
+				>
 					<div v-for="(content, idx) in courseContents" :key="idx">
 						{{ idx }}. {{ content.type }} {{ content.name }}
 					</div>
@@ -24,7 +27,8 @@
 								icon: 'create',
 							},
 						]"
-					></fab-floating>
+					>
+					</fab-floating>
 				</tab>
 				<tab name="Tools">Tools</tab>
 				<tab name="Groups">Groups</tab>
@@ -40,7 +44,7 @@ import Tab from "@components/atoms/Tab";
 import FabFloating from "@components/molecules/FabFloating";
 
 export default {
-	// layout: "loggedInFull",
+	layout: "loggedInFull",
 	components: {
 		Tabs,
 		Tab,
@@ -62,17 +66,7 @@ export default {
 			lessons.forEach((lesson) => (lesson.type = "lesson"));
 			const homeworks = store.getters["homeworks/list"];
 			homeworks.forEach((homework) => (homework.type = "homework"));
-			console.log(lessons);
 			return [...lessons, ...homeworks];
-		},
-		breadcrumbs() {
-			return [
-				{ text: "Kurse", to: { name: "courses" } },
-				{
-					text: this.course.name,
-					to: { name: "courses-id", params: { id: this.course._id } },
-				},
-			];
 		},
 	},
 	created(ctx) {
