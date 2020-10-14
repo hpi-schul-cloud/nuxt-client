@@ -50,7 +50,7 @@
 		"@nuxtjs/toast": "^3.3.1",
 		"@tryghost/content-api": "^1.4.2",
 		"cookie-universal-nuxt": "^2.1.4",
-		"dayjs": "^1.8.31",
+		"dayjs": "^1.8.33",
 		"echarts": "^4.8.0",
 		"font-awesome": "^4.7.0",
 		"git-rev-sync": "^2.0.0",
