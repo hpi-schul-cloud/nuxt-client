@@ -377,6 +377,7 @@
 	"pages.courses.index.title": "Meine Kurse",
 	"pages.courses.new.btn_new": "Erstelle neuen Kurs",
 	"pages.courses.new.title": "Neuen Kurs erstellen",
+	"pages.courses._id.educational_content": "Lerninhalte",
 	"pages.impressum.title": "Impressum",
 	"pages.loginInstances.brb_link": "https://brandenburg.schul-cloud.org/login",
 	"pages.loginInstances.bundesland": "Wähle deine Cloud",

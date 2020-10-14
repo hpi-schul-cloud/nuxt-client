@@ -365,6 +365,7 @@
 	"pages.courses.index.title": "My course",
 	"pages.courses.new.btn_new": "Create",
 	"pages.courses.new.title": "Create new course",
+	"pages.courses._id.educational_content": "Educational content",
 	"pages.impressum.title": "Imprint",
 	"pages.loginInstances.brb_link": "https://brandenburg.schul-cloud.org/login",
 	"pages.loginInstances.bundesland": "In which state would you like to log in?",
