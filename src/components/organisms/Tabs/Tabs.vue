@@ -8,7 +8,12 @@
 				@click="selectTab(tab)"
 			>
 				<div v-if="tab.hasPermission" class="li-content">
-					<i :class="tab.iconName"></i>
+					<base-icon
+						v-if="tab.iconName"
+						class="tab-icon"
+						source="custom"
+						:icon="tab.iconName"
+					/>
 					<button
 						class="tab-button"
 						data-testid="tabButtonTest"
@@ -53,12 +58,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-i {
+.tab-icon {
 	font-size: var(--text-sm);
 }
 ul.tabs {
 	display: flex;
 	justify-content: space-between;
+	max-width: 1024px;
 	padding: 0;
 	margin-bottom: var(--space-md);
 	.li-content {
@@ -86,7 +92,7 @@ ul.tabs {
 		&.is-active {
 			position: relative;
 			.tab-button,
-			i {
+			.tab-icon {
 				font-weight: var(--font-weight-bold);
 				color: var(--color-gray-dark);
 				transition: var(--duration-transition-slow) ease-in-out;
@@ -113,6 +119,9 @@ ul.tabs {
 }
 
 @media (max-width: 450px) {
+	ul.tabs {
+		max-width: 450px;
+	}
 	.tab-button span {
 		animation: fadeEffect var(--duration-transition-medium) ease-in-out;
 	}
@@ -121,6 +130,12 @@ ul.tabs {
 			display: none;
 			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
 		}
+	}
+}
+
+@media (max-width: 1112px) and (orientation: landscape) {
+	ul.tabs {
+		max-width: 1023px;
 	}
 }
 
