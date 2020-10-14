@@ -36,6 +36,6 @@ describe("@components/atoms/Tab", () => {
 				iconName: "fa fa-info",
 			},
 		});
-		expect(wrapper.props().iconName).toBe('fa fa-info');
+		expect(wrapper.props().iconName).toBe("fa fa-info");
 	});
 });
