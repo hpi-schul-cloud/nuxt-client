@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import BaseListItem from "@components/molecules/BaseListItem";
+import BaseListItem from "@components/molecules/TaskItem";
 import ExampleImage from "@assets/img/courses/draft.svg";
 import { boolean, text } from "@storybook/addon-knobs";
 

@@ -98,7 +98,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-$color-dark-gray: #616161;
+$color-dark-gray: #616161; // change to var(--color-gray-medium)
 
 .card {
 	display: flex;
@@ -111,6 +111,7 @@ $color-dark-gray: #616161;
 	border-bottom: 1px solid var(--color-gray);
 	border-radius: var(--radius-sm);
 }
+
 
 .card-body {
 	display: flex;
@@ -155,9 +156,10 @@ $color-dark-gray: #616161;
 .status {
 	align-self: center;
 	padding: var(--space-xs);
-	font-size: var(--text-xs);
-	font-style: italic;
-	line-height: var(--line-height-sm);
+  font-size: var(--text-xs);
+  font-style: italic;
+  line-height: var(--line-height-sm);
+  color: $color-dark-gray;
 }
 
 #pulsating-dot {
