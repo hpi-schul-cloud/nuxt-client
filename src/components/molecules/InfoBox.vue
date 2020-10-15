@@ -38,18 +38,18 @@ export default {
 @import "@styles";
 
 .wrapper {
-	position: relative;
-	max-width: 460px;
 	color: var(--color-white);
 	background-color: var(--color-info);
 	border-radius: var(--radius-lg);
 
 	h4 {
 		color: var(--color-white);
+		text-align: center;
 	}
 }
 .content {
 	padding: var(--space-md);
+	text-align: left;
 }
 .actions {
 	text-align: right;

@@ -16,15 +16,15 @@ storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 			},
 			{
 				title: "Erste Schritte",
-				href: "https://blog.schul-cloud.org/erste-schritte/",
+				href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
 			},
 			{
 				title: "Blog",
-				href: "https://blog.schul-cloud.org/",
+				href: "https://blog.hpi-schul-cloud.de/",
 			},
 			{
 				title: "FAQ",
-				href: "https://blog.schul-cloud.org/faq",
+				href: "https://blog.hpi-schul-cloud.de/faq",
 			},
 		],
 	}),

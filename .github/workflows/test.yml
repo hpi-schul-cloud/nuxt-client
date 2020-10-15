@@ -80,7 +80,7 @@ jobs:
   # build:
   #   strategy:
   #     matrix:
-  #       theme: [default, brb, n21, open, thr]
+  #       theme: [default, brb, n21, open, thr, int]
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v2

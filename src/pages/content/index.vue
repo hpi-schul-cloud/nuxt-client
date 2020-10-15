@@ -22,26 +22,31 @@
 					@keyup:enter="enterKeyHandler"
 				/>
 				<transition name="fade">
-					<span v-if="!firstSearch" class="content__container">
-						<p class="content__total">
-							<span v-if="searchQuery.length > 0">
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_results") }} "{{
-									searchQuery
-								}}"
-							</span>
-							<span v-else>
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_resources") }}
-							</span>
-						</p>
-						<div
-							v-if="resources.data.length === 0 && !loading"
-							class="content__no-results"
+					<div class="content__container">
+						<p
+							v-show="resources.data.length !== 0 && searchQuery.length > 1"
+							class="content__total"
 						>
-							<content-empty-state />
-						</div>
-						<base-grid column-width="14rem">
+							{{ resources.total }}
+							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+						</p>
+						<span v-if="!loading" class="content__container_child">
+							<!-- initial state, empty search -->
+							<content-initial-state v-if="searchQuery.length === 0" />
+							<!-- search query not empty and there are no results -->
+							<div
+								v-else-if="resources.data.length === 0"
+								class="content__no_results"
+							>
+								<content-empty-state />
+							</div>
+						</span>
+						<!-- search query not empty and there are results -->
+						<base-grid
+							v-if="searchQuery.length > 1"
+							column-width="14rem"
+							data-testid="lernStoreCardsContainer"
+						>
 							<content-card
 								v-for="resource of resources.data"
 								:key="resource.ref.id"
@@ -49,11 +54,11 @@
 								:resource="resource"
 							/>
 						</base-grid>
-					</span>
+					</div>
 				</transition>
 			</div>
 			<base-spinner
-				v-if="loading"
+				v-show="loading"
 				class="spinner mt--xl-2"
 				color="var(--color-tertiary)"
 				size="xlarge"
@@ -72,6 +77,7 @@ import infiniteScrolling from "@mixins/infiniteScrolling";
 import BaseGrid from "@components/base/BaseGrid";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
 import BaseButton from "../../components/base/BaseButton";
+import ContentInitialState from "@components/molecules/ContentInitialState";
 
 export default {
 	components: {
@@ -80,6 +86,7 @@ export default {
 		ContentCard,
 		ContentEmptyState,
 		BaseGrid,
+		ContentInitialState,
 		ContentEduSharingFooter,
 	},
 	mixins: [infiniteScrolling],
@@ -88,7 +95,6 @@ export default {
 		return {
 			searchQuery: "",
 			backToTopScrollYLimit: 115,
-			firstSearch: true,
 			activateTransition: false,
 			prevRoute: null,
 		};
@@ -130,18 +136,20 @@ export default {
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
+
 			if (to === from || !to) {
-				this.firstSearch = true;
 				this.$router.push({
 					query: {
 						...this.$route.query,
-						q: undefined,
+						q: "",
 					},
 				});
 				this.$store.commit("content/clearResources");
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
+				this.$store.commit("content/clearResources");
+
 				clearInterval(this.$options.debounce);
 				this.$router.push({
 					query: {
@@ -149,7 +157,7 @@ export default {
 						q: this.searchQuery,
 					},
 				});
-			}, 500);
+			}, 200);
 		},
 		resources() {
 			return this.resources;
@@ -159,7 +167,6 @@ export default {
 		const initialSearchQuery = this.$route.query.q;
 		if (initialSearchQuery) {
 			this.searchQuery = initialSearchQuery;
-			this.firstSearch = false;
 			this.activateTransition = true;
 			this.enterKeyHandler();
 		}
@@ -183,9 +190,6 @@ export default {
 		enterKeyHandler() {
 			this.searchContent();
 			this.activateTransition = true;
-			setTimeout(() => {
-				this.firstSearch = false;
-			}, 500);
 		},
 		goBack() {
 			window.close();
@@ -224,6 +228,9 @@ export default {
 		width: 100%;
 		height: 100%;
 	}
+	&__container_child {
+		width: 100%;
+	}
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
@@ -232,9 +239,6 @@ export default {
 		transform: scale(1);
 	}
 	&__total {
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
 		width: 100%;
 	}
 	&__no-results {
@@ -260,7 +264,7 @@ export default {
 	&__searchbar {
 		width: 100%;
 		padding: var(--space-md) 0;
-		margin-top: var(--space-xl-5);
+		margin-top: var(--space-xl-3);
 	}
 }
 

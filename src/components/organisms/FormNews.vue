@@ -29,12 +29,14 @@
 							type="date"
 							:label="$t('components.organisms.FormNews.label.date')"
 							data-testid="news_date"
+							placeholder="JJJJ-MM-TT"
 						/>
 						<base-input
 							v-model="data.date.time"
 							type="time"
 							:label="$t('components.organisms.FormNews.label.time')"
 							data-testid="news_time"
+							placeholder="HH:MM"
 						/>
 					</div>
 				</transition>
@@ -131,6 +133,9 @@ export default {
 				 *
 				 * @type {object}
 				 */
+				if (this.data.date.date && !this.data.date.time) {
+					this.data.date.time = "00:00";
+				}
 				this.$emit("update:news", to);
 			},
 		},

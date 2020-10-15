@@ -55,6 +55,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 						.utc()
 						.format(UTCFormat),
 					$lte: dayjs(values[filterGroupConfig.filter[1].id])
+						.add(1, "day")
 						.utc()
 						.format(UTCFormat),
 				},
@@ -111,20 +112,20 @@ export function studentFilter(ctx) {
 
 	return [
 		{
-			title: ctx.$t("utils.adminFilter.consent.title"),
+			title: ctx.$t("common.labels.registration"),
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.consent.ok");
+						return ctx.$t("pages.administration.students.legend.icon.success");
 					} else if (stat === "parentsAgreed") {
-						return ctx.$t("utils.adminFilter.consent.parentsAgreed");
+						return ctx.$t(
+							"utils.adminFilter.consent.label.parentsAgreementMissing"
+						);
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
-					" " + ctx.$t("common.words.and") + " "
-				)}`;
+				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
 			filter: [
 				{
@@ -134,11 +135,15 @@ export function studentFilter(ctx) {
 					options: [
 						{
 							value: "ok",
-							label: ctx.$t("utils.adminFilter.consent.label.ok"),
+							label: ctx.$t(
+								"pages.administration.students.legend.icon.success"
+							),
 						},
 						{
 							value: "parentsAgreed",
-							label: ctx.$t("utils.adminFilter.consent.label.parentsAgreed"),
+							label: ctx.$t(
+								"utils.adminFilter.consent.label.parentsAgreementMissing"
+							),
 						},
 						{
 							value: "missing",
@@ -172,18 +177,16 @@ export function teacherFilter(ctx) {
 
 	return [
 		{
-			title: ctx.$t("utils.adminFilter.teacher.consent.title"),
+			title: ctx.$t("utils.adminFilter.consent.title"),
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.teacher.consent.ok");
+						return ctx.$t("pages.administration.students.legend.icon.success");
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
-					" " + ctx.$t("common.words.and") + " "
-				)}`;
+				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
 			filter: [
 				{
@@ -193,11 +196,13 @@ export function teacherFilter(ctx) {
 					options: [
 						{
 							value: "ok",
-							label: ctx.$t("utils.adminFilter.teacher.consent.label.ok"),
+							label: ctx.$t(
+								"pages.administration.students.legend.icon.success"
+							),
 						},
 						{
 							value: "missing",
-							label: ctx.$t("utils.adminFilter.teacher.consent.label.missing"),
+							label: ctx.$t("utils.adminFilter.consent.label.missing"),
 						},
 					],
 				},

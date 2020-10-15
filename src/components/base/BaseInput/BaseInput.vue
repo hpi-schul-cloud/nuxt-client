@@ -2,9 +2,12 @@
 	<component
 		:is="component"
 		:vmodel="vmodel"
+		:validation-error="validationMessage"
 		v-bind="{ ...$attrs, ...$props }"
 		class="input"
-		@input="$emit('update:vmodel', $event)"
+		@input="handleInput($event)"
+		@blur="handleBlur($event)"
+		@focus="handleFocus($event)"
 	>
 		<template v-for="(cmp, name) in $slots" v-slot:[name]>
 			<slot :name="name">
@@ -21,9 +24,6 @@ import BaseInputDefault, {
 import BaseInputHidden, {
 	supportedTypes as hiddenInputTypes,
 } from "./BaseInputHidden";
-import BaseInputCalendar, {
-	supportedTypes as calendarInputTypes,
-} from "./BaseInputCalendar";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox";
@@ -38,14 +38,13 @@ defaultInputTypes.forEach(
 hiddenInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputHidden)
 );
-calendarInputTypes.forEach(
-	(type) => (componentDictionary[type] = BaseInputCalendar)
-);
 checkboxInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputCheckbox)
 );
 radioInputTypes.forEach((type) => (componentDictionary[type] = BaseInputRadio));
 export const supportedTypes = Object.keys(componentDictionary);
+
+export const validationDelay = 800;
 
 export default {
 	model: {
@@ -64,6 +63,16 @@ export default {
 				return supportedTypes.includes(type);
 			},
 		},
+		validationModel: {
+			type: Object,
+			required: false,
+			default: null,
+		},
+		validationMessages: {
+			type: Array,
+			required: false,
+			default: () => [],
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
@@ -73,6 +82,16 @@ export default {
 		component() {
 			return componentDictionary[this.type];
 		},
+		validationMessage() {
+			if (this.validationModel && this.validationModel.$dirty) {
+				for (const entry of this.validationMessages) {
+					if (!this.validationModel[entry.key]) {
+						return entry.message;
+					}
+				}
+			}
+			return "";
+		},
 	},
 	created() {
 		if (!componentDictionary[this.type]) {
@@ -81,6 +100,30 @@ export default {
 					`$attrs ${JSON.stringify(this.$attrs)}`
 			);
 		}
+	},
+	methods: {
+		handleInput(event) {
+			if (this.validationModel) {
+				this.validationModel.$reset();
+				if (this.validationModel.$futureTouch) {
+					clearTimeout(this.validationModel.$futureTouch);
+				}
+				this.validationModel.$futureTouch = setTimeout(
+					() => this.validationModel.$touch(),
+					validationDelay
+				);
+			}
+
+			this.$emit("update:vmodel", event);
+			this.$emit("input", event);
+		},
+		handleBlur(event) {
+			this.validationModel && this.validationModel.$touch();
+			this.$emit("blur", event);
+		},
+		handleFocus(event) {
+			this.$emit("focus", event);
+		},
 	},
 };
 </script>

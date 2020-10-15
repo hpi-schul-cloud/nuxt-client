@@ -24,6 +24,7 @@
 				:data="fieldData"
 				:selected="selected"
 				:highlighted="isHighlighted"
+				:rowindex="rowindex"
 			>
 				<div class="text-content">
 					{{ fieldData }}

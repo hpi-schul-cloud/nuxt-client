@@ -14,14 +14,13 @@
 				@focus="isActive = true"
 			/>
 			<div class="search__container--icon">
-				<base-button v-if="isActive" design="none" @click="enterKeyHandler">
-					<base-icon
-						class="search-icon"
-						source="custom"
-						aria-label="search"
-						icon="search"
-					/>
-				</base-button>
+				<base-icon
+					v-if="value === ''"
+					class="search-icon"
+					source="custom"
+					aria-label="search"
+					icon="search"
+				/>
 				<base-button v-else design="none" @click="clearBtnHandler">
 					<base-icon
 						class="search-icon"
@@ -36,6 +35,8 @@
 </template>
 
 <script>
+let typingTimer;
+
 export default {
 	props: {
 		value: {
@@ -64,35 +65,36 @@ export default {
 		window.removeEventListener("keydown", this.escKeyHandler);
 	},
 	methods: {
-		updateSearchString(newValue) {
-			this.inputValue = newValue;
-			this.$emit("input", this.inputValue);
-			setTimeout((...args) => {
-				this.search(...args);
-			}, 1000);
-		},
-		enterKeyHandler(...args) {
-			this.search(...args);
-			this.$refs.searchInput.blur();
-		},
-		search(...args) {
+		search() {
 			if (this.isActive && this.inputValue.length > 0) {
 				this.isActive = false;
 			}
-			this.$emit("keyup:enter", ...args);
+			this.$emit("keyup:enter");
 		},
-		clearBtnHandler() {
-			this.$emit("input", "");
+		updateSearchString(newValue) {
+			this.inputValue = newValue;
+			this.$emit("input", this.inputValue);
+			clearTimeout(typingTimer);
+			typingTimer = setTimeout(() => {
+				this.search();
+			}, 200);
+		},
+		enterKeyHandler() {
+			this.search();
+			this.$refs.searchInput.blur();
+		},
+		clearInput() {
 			this.inputValue = "";
 			this.isActive = true;
 			this.$refs.searchInput.focus();
+			this.$emit("input", this.inputValue);
+		},
+		clearBtnHandler() {
+			this.clearInput();
 		},
 		escKeyHandler(e) {
 			if (e.keyCode === 27) {
-				this.$refs.searchInput.focus();
-				this.inputValue = "";
-				this.isActive = true;
-				this.$emit("input", this.inputValue);
+				this.clearInput();
 			}
 		},
 	},
@@ -147,6 +149,7 @@ export default {
 			justify-content: center;
 			height: 100%;
 			font-size: var(--heading-4);
+			color: var(--color-black);
 			cursor: pointer;
 
 			.icon {

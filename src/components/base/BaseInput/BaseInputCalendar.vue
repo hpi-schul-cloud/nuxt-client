@@ -12,7 +12,7 @@
 			:wrap="true"
 			class="input"
 			v-on="$listeners"
-			@input="$emit('input', $event)"
+			@input="$emit('input_change', $event)"
 		/>
 	</base-input-default>
 </template>

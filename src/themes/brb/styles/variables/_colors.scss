@@ -1,6 +1,12 @@
-// extends the default theme
+$brighten: 15%;
+$darken: 25%;
+
 :root {
 	/* main colors */
 	--color-primary: #449494;
 	--color-secondary: #e4032e;
+	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
+	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
+	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
+	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
 }

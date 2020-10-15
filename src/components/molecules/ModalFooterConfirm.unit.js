@@ -4,21 +4,13 @@ import { mount } from "@vue/test-utils";
 const button = {
 	data: () => ({ active: false }),
 	template: `
-
 	        <modal-footer-confirm id="confirm" @click="active = false"/>
 	      `,
 	components: { ModalFooterConfirm },
 };
 
 describe("@components/molecules/ModalFooterConfirm", () => {
-	it(
-		...isValidComponent(ModalFooterConfirm, {
-			propsData: {
-				active: true,
-				backgroundcolor: "var(--color-success)",
-			},
-		})
-	);
+	it(...isValidComponent(ModalFooterConfirm, {}));
 
 	it("pressing the ok button should close the modal", () => {
 		const wrapper = mount(button);

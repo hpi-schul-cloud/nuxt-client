@@ -29,7 +29,9 @@
 								/>
 							</div>
 						</div>
-						<h6 class="content__title">{{ resource.name }}</h6>
+						<h6 class="content__title">
+							{{ resource.title || resource.name }}
+						</h6>
 					</div>
 				</template>
 			</base-link>
@@ -127,12 +129,11 @@ export default {
 .content {
 	display: flex;
 	flex-direction: column;
-	min-height: 300px;
 	&__img {
 		&-thumbnail {
 			width: 100%;
 			height: 200px;
-			background-color: var(--color-black);
+			background-color: var(--color-white);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 			object-fit: cover;
@@ -141,8 +142,12 @@ export default {
 			position: absolute;
 			z-index: var(--layer-page);
 			width: 100%;
-			height: 50%;
-			background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+			height: 100%;
+			background: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0.9) 0%,
+				rgba(0, 0, 0, 0) 50%
+			);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 		}
@@ -151,10 +156,9 @@ export default {
 			top: 50%;
 			left: 50%;
 			z-index: var(--layer-page);
-			font-size: var(--space-xl-3);
-			border-radius: var(--radius-round);
-			box-shadow: var(--shadow-m);
-			opacity: 0.8;
+			font-size: var(--space-xl-3) !important;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
+			opacity: 0.9;
 			transform: translate(-50%, -50%);
 		}
 		&-checkbox {
@@ -167,7 +171,7 @@ export default {
 		}
 	}
 	&__title {
-		min-height: 62px;
+		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
 		color: var(--color-tertiary);
 

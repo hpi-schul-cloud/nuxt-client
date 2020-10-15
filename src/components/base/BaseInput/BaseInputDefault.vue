@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div class="wrapper">
 		<div
@@ -38,9 +39,16 @@
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
+							:min="appliedType === 'date' && birthDate ? minDate : ''"
+							:max="appliedType === 'date' && birthDate ? maxDate : ''"
+							:pattern="
+								appliedType === 'date' && birthDate
+									? birthDateValidationPattern
+									: null
+							"
 							@input="handleInput"
-							@focus="hasFocus = true"
-							@blur="hasFocus = false"
+							@focus="handleFocus"
+							@blur="handleBlur"
 						/>
 					</slot>
 				</div>
@@ -59,7 +67,7 @@
 						/>
 					</base-button>
 					<base-icon
-						v-if="error"
+						v-if="hasError"
 						source="custom"
 						icon="warning"
 						fill="var(--color-danger)"
@@ -77,12 +85,13 @@
 			v-if="hasError || !!info"
 			:class="{ info: true, help: !hasError, error: hasError }"
 		>
-			{{ error || info }}
+			{{ error || validationError || info }}
 		</span>
 	</div>
 </template>
 <script>
 import uidMixin from "@mixins/uid";
+import dayjs from "dayjs";
 
 export const supportedTypes = [
 	"email",
@@ -93,6 +102,8 @@ export const supportedTypes = [
 	"textarea",
 	"url",
 	"number",
+	"date",
+	"time",
 ];
 
 export default {
@@ -120,11 +131,17 @@ export default {
 		disabled: { type: Boolean },
 		classes: { type: String, default: "" },
 		focus: { type: Boolean },
+		birthDate: { type: Boolean },
+		validationError: { type: String, default: "" },
 	},
 	data() {
 		return {
 			hasFocus: false,
 			passwordVisible: false,
+			minDate: dayjs().subtract(100, "y").format("YYYY-MM-DD"),
+			maxDate: dayjs().subtract(4, "y").format("YYYY-MM-DD"),
+			birthDateValidationPattern:
+				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
 		};
 	},
 	computed: {
@@ -135,7 +152,7 @@ export default {
 			return this.type;
 		},
 		hasError() {
-			return !!this.error;
+			return !!(this.error || this.validationError);
 		},
 		showLabel() {
 			return (
@@ -157,6 +174,14 @@ export default {
 		},
 		togglePasswordVisibility() {
 			this.passwordVisible = !this.passwordVisible;
+		},
+		handleFocus(event) {
+			this.hasFocus = true;
+			this.$emit("focus", event);
+		},
+		handleBlur(event) {
+			this.hasFocus = false;
+			this.$emit("blur", event);
 		},
 	},
 };
@@ -180,13 +205,13 @@ export default {
 	&:focus-within,
 	&:hover:not(.disabled) {
 		.label {
-			color: var(--color-accent);
+			color: var(--color-primary);
 		}
 		.help {
 			visibility: visible;
 		}
 		.visible {
-			fill: var(--color-accent);
+			fill: var(--color-primary);
 		}
 	}
 }
@@ -197,7 +222,7 @@ export default {
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom-color: var(--color-accent);
+		border-bottom: var(--border-width-bold) solid var(--color-primary);
 		outline: none;
 	}
 	&.error {
@@ -239,7 +264,7 @@ export default {
 		.core {
 			flex: 1;
 			height: min-content;
-			line-height: 0; // needed for correct spacing
+			line-height: auto; // needed for correct spacing
 			input {
 				width: 100%;
 				padding: 0;

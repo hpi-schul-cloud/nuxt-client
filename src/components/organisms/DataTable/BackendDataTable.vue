@@ -22,10 +22,19 @@
 							:columns="columns"
 							:sort-by.sync="$_controllableDataSortBy"
 							:sort-order.sync="$_controllableDataSortOrder"
+							data-testid="table-data-head"
+							:show-external-text="showExternalText"
 							@update:sort="onUpdateSort"
-						/>
+						>
+							<template
+								v-for="(cmp, name) in dataHeadSlots"
+								v-slot:[name]="columnProps"
+							>
+								<slot :name="name" v-bind="columnProps" />
+							</template>
+						</component>
 					</thead>
-					<tbody>
+					<tbody data-testid="table-data-body">
 						<component
 							:is="componentDataRow"
 							v-for="(row, rowindex) in data"
@@ -35,6 +44,7 @@
 							:selected="isRowSelected(row)"
 							:column-keys="columnKeys"
 							:data="row"
+							data-testid="table-data-row"
 							@update:selected="setRowSelection(row, $event)"
 						>
 							<template
@@ -50,11 +60,12 @@
 		</div>
 
 		<pagination
+			v-if="paginated"
 			class="mt--md"
 			:current-page="currentPage"
 			:total="total"
 			:per-page="rowsPerPage"
-			@update:per-page="onUpdateRowsPerPage"
+			@update:per-page="$emit('update:rows-per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
 	</div>
@@ -187,6 +198,9 @@ export default {
 			type: Object,
 			default: () => TableDataRow,
 		},
+		showExternalText: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
@@ -206,6 +220,14 @@ export default {
 				)
 			);
 		},
+		dataHeadSlots() {
+			return Object.fromEntries(
+				Object.entries(this.$scopedSlots).filter(([name]) =>
+					name.startsWith("headcolumn")
+				)
+			);
+		},
+
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
@@ -346,10 +368,6 @@ export default {
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.$emit("update:sort", sortBy, sortOrder);
-		},
-		onUpdateRowsPerPage(value) {
-			this.$emit("update:current-page", 1);
-			this.$emit("update:rows-per-page", value);
 		},
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);

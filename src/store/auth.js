@@ -40,6 +40,10 @@ export const actions = {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
 			commit("setSchool", school);
 		}
+		if (user.language) {
+			commit("setLocale", user.language);
+		}
+
 		//TODO Remove once added to User permissions SC-2401
 		if (process.env["FEATURE_EXTENSIONS_ENABLED"] === "true") {
 			commit("addUserPermission", "ADDONS_ENABLED");
@@ -82,6 +86,9 @@ export const mutations = {
 	setSchool(state, school) {
 		state.school = school;
 	},
+	setLocale(state, locale) {
+		state.locale = locale;
+	},
 	setAccessToken(state, payload) {
 		state.accessToken = payload;
 	},
@@ -95,6 +102,12 @@ export const mutations = {
 	},
 };
 
+export const getters = {
+	getLocale(state) {
+		return state.locale;
+	},
+};
+
 export const state = () => {
 	return {
 		accessToken: "",
@@ -102,12 +115,14 @@ export const state = () => {
 		user: {},
 		school: {},
 		publicPages: ["index", "login", "signup", "impressum"],
+		locale: "de",
 	};
 };
 
 export default {
 	namespaced: true,
 	actions,
+	getters,
 	mutations,
 	state,
 };

@@ -11,10 +11,12 @@ const routes = [
 	`^/account/name/edit/?$`,
 	`^/account/password/edit/?$`,
 	`^/account/password/edit/?$`,
+	`^/account/locale/edit/?$`,
 	`^/activation/${activationCode}/?$`,
 	// `^/administration/datasources?`,
 	// `^/administration/students/?$`,
 	// `^/administration/students/new/?$`,
+	// `^/administration/students/consent/?$`,
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
 	`^/login-instances/?`,
@@ -31,7 +33,10 @@ const routes = [
 	`^/nuxtversion/?$`,
 ];
 if (process.env.LERNSTORE_MODE === "EDUSHARING") {
-	routes.push(`^/content/?`);
+	const uuid =
+		"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+	routes.push(`^/content/?$`);
+	routes.push(`^/content/${uuid}/?$`);
 }
 
 module.exports = routes;
