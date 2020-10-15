@@ -29,6 +29,7 @@ const routes = [
 	// `^/news/${mongoId}/edit`,
 	`^/news/new`,
 	`^/nuxtversion/?$`,
+	// `^/courses/?$`,
 ];
 if (process.env.LERNSTORE_MODE === "EDUSHARING") {
 	const uuid =
