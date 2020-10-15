@@ -112,7 +112,6 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium)
 	border-radius: var(--radius-sm);
 }
 
-
 .card-body {
 	display: flex;
 	flex-direction: row;
@@ -156,10 +155,10 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium)
 .status {
 	align-self: center;
 	padding: var(--space-xs);
-  font-size: var(--text-xs);
-  font-style: italic;
-  line-height: var(--line-height-sm);
-  color: $color-dark-gray;
+	font-size: var(--text-xs);
+	font-style: italic;
+	line-height: var(--line-height-sm);
+	color: $color-dark-gray;
 }
 
 #pulsating-dot {
