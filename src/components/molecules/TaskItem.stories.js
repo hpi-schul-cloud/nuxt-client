@@ -3,7 +3,7 @@ import BaseListItem from "@components/molecules/TaskItem";
 import ExampleImage from "@assets/img/courses/draft.svg";
 import { boolean, text } from "@storybook/addon-knobs";
 
-storiesOf("5 Molecules/BaseListItem", module)
+storiesOf("5 Molecules/TaskItem", module)
 	.add("with knobs", () => ({
 		components: { BaseListItem },
 		data: () => ({

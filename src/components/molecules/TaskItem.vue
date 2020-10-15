@@ -32,7 +32,7 @@
 				>
 					<base-icon
 						class="footer__content-icon"
-						fill="var(--color-tertiary)"
+						fill="#455B6A"
 						source="material"
 						icon="more_vert"
 					/>
