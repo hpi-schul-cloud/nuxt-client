@@ -1,6 +1,5 @@
 require("dotenv").config();
 const pkg = require("./package");
-const webpack = require("webpack");
 
 const sentryConfig = require("./sentry.config.js");
 
@@ -181,12 +180,7 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
-		vendor: ["vue-i18n", "jquery"],
-		plugins: [
-			new webpack.ProvidePlugin({
-				$: "jquery",
-			}),
-		],
+		vendor: ["vue-i18n"],
 	},
 	generate: {
 		dir: "dist/nuxt",
