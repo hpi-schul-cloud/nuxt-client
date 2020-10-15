@@ -55,6 +55,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 						.utc()
 						.format(UTCFormat),
 					$lte: dayjs(values[filterGroupConfig.filter[1].id])
+						.add(1, "day")
 						.utc()
 						.format(UTCFormat),
 				},
@@ -111,7 +112,7 @@ export function studentFilter(ctx) {
 
 	return [
 		{
-			title: ctx.$t("utils.adminFilter.consent.title"),
+			title: ctx.$t("common.labels.registration"),
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
@@ -180,9 +181,7 @@ export function teacherFilter(ctx) {
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return `${ctx.$t("common.labels.registration")} ${ctx.$t(
-							"utils.adminFilter.consent.ok"
-						)}`;
+						return ctx.$t("pages.administration.students.legend.icon.success");
 					} else if (stat === "missing") {
 						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
