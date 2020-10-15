@@ -1,5 +1,6 @@
 require("dotenv").config();
 const pkg = require("./package");
+const webpack = require("webpack");
 
 const sentryConfig = require("./sentry.config.js");
 
@@ -97,9 +98,7 @@ module.exports = {
 		color: "#fff",
 	},
 
-	css: [
-		"@/themes/" + themeName + "/styles"
-	],
+	css: ["@/themes/" + themeName + "/styles"],
 
 	/*
 	 ** Global CSS
@@ -134,7 +133,7 @@ module.exports = {
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
-		"@plugins/full-calendar"
+		"@plugins/full-calendar",
 		"@plugins/i18n",
 		"@plugins/vuelidate",
 	],
@@ -191,7 +190,12 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
-		vendor: ["vue-i18n"],
+		vendor: ["vue-i18n", "jquery"],
+		plugins: [
+			new webpack.ProvidePlugin({
+				$: "jquery",
+			}),
+		],
 	},
 	generate: {
 		dir: "dist/nuxt",
