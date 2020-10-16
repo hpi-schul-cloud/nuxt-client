@@ -43,10 +43,11 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Dedicated Edit mode
 // [ ] Handle permissions
 // [ ] Partial Data-Loading
-// [ ] On Event Click Go To Team Or Course page if its not a personal event
+// [x] On Event Click Go To Team Or Course page if its not a personal event
 // [ ] Use Store for events
-// [ ] Locales
+// [x] Locales
 // [ ] Handling BBB Events
+// [ ] Send course or team if on create if selected
 // [ ] Courses and teams need permissions so we can filter which to display
 
 import FullCalendar from "@fullcalendar/vue";
@@ -54,8 +55,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-// import deLocale from "@fullcalendar/core/locales/de";
-// import enLocale from "@fullcalendar/core/locales/en";
+import allLocales from "@fullcalendar/core/locales-all";
 import moment from "moment";
 
 export default {
@@ -78,8 +78,8 @@ export default {
 				},
 				weekNumbers: false,
 				scrollTime: "07:00:00",
-				// locales: [enLocale, deLocale],
-				// locale: deLocale, //https://fullcalendar.io/docs/locale
+				locales: allLocales,
+				locale: this.$i18n.locale, //this.$store.getLocale(),
 			},
 			events: {},
 			dateEditable: false,
