@@ -31,6 +31,19 @@ export const actions = {
 	async logout({ commit }) {
 		this.$cookies.remove("jwt");
 		localStorage.clear();
+		// Delete matrix messenger indexedDB databases
+		if (indexedDB) {
+			// window.indexedDB.databases() is not available in all browsers
+			const databases = [
+				"logs",
+				"matrix-js-sdk:crypto",
+				"matrix-js-sdk:riot-web-sync",
+			];
+
+			for (let i = 0; i < databases.length; i += 1) {
+				indexedDB.deleteDatabase(databases[i]);
+			}
+		}
 		commit("clearAuthData");
 	},
 	async populateUser({ commit }) {
