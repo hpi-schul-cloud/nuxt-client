@@ -42,9 +42,8 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 //TODOs
 // [ ] Dedicated Edit mode
 // [ ] Handle permissions
-// [ ] Partial Data-Loading
+// [x] Partial Data-Loading
 // [x] On Event Click Go To Team Or Course page if its not a personal event
-// [ ] Use Store for events
 // [x] Locales
 // [ ] Handling BBB Events
 // [ ] Send course or team if on create if selected
