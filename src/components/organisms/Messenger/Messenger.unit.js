@@ -1,4 +1,5 @@
 import Messenger from "./Messenger";
+import { extractRoomTypeAndIdFromPath } from "./Messenger";
 
 const session = {
 	homeserverUrl: "https://matrix.domain",
@@ -137,5 +138,32 @@ describe("@components/organism/Messenger", () => {
 		expect(window.Matrix[0][1].roomId).toBe(
 			"#team_aaaabbbbccccddddeeeeffff:dummy-server-name"
 		);
+	});
+});
+
+describe("extractRoomTypeAndIdFromPath", () => {
+	it("returns correct room for course", () => {
+		const { roomType, roomId } = extractRoomTypeAndIdFromPath(
+			"/courses/1234567890abcdef01234567"
+		);
+
+		expect(roomType).toBe("course");
+		expect(roomId).toBe("1234567890abcdef01234567");
+	});
+	it("returns correct room for team", () => {
+		const { roomType, roomId } = extractRoomTypeAndIdFromPath(
+			"/teams/abcdef012345678123456789"
+		);
+
+		expect(roomType).toBe("team");
+		expect(roomId).toBe("abcdef012345678123456789");
+	});
+	it("returns null for invalid paths", () => {
+		const { roomType, roomId } = extractRoomTypeAndIdFromPath(
+			"/admin/user/abcdefghijklmn1234567890"
+		);
+
+		expect(roomType).toBeNull();
+		expect(roomId).toBeNull();
 	});
 });

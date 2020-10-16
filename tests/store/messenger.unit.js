@@ -1,4 +1,4 @@
-import { getters, actions, mutations } from "./messenger";
+import { getters, actions, mutations } from "../../src/store/messenger";
 
 describe("store/messenger", () => {
 	describe("getters", () => {

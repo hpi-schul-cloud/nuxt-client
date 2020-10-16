@@ -3,6 +3,21 @@
 </template>
 
 <script>
+export function extractRoomTypeAndIdFromPath(path) {
+	const matches = RegExp("/(course|team)s/([0-9a-f]{24})").exec(path);
+	if (matches && matches.length >= 3) {
+		return {
+			roomType: matches[1],
+			roomId: matches[2],
+		};
+	}
+
+	return {
+		roomType: null,
+		roomId: null,
+	};
+}
+
 export default {
 	data() {
 		return {};
@@ -62,20 +77,6 @@ export default {
 			riotScript.type = "text/javascript";
 			document.head.appendChild(riotScript);
 		},
-		extractRoomTypeAndIdFromPath(path) {
-			const matches = RegExp("/(course|team)s/([0-9a-f]{24})").exec(path);
-			if (matches && matches.length >= 3) {
-				return {
-					roomType: matches[1],
-					roomId: matches[2],
-				};
-			}
-
-			return {
-				roomType: null,
-				roomId: null,
-			};
-		},
 		setupMessenger() {
 			if (!this.sessionFromLocalStorage && !this.session) {
 				// get new session from Server
@@ -83,7 +84,7 @@ export default {
 				return;
 			}
 
-			const { roomType, roomId } = this.extractRoomTypeAndIdFromPath(
+			const { roomType, roomId } = extractRoomTypeAndIdFromPath(
 				window.location.pathname
 			);
 			let matrixRoomId = null;
