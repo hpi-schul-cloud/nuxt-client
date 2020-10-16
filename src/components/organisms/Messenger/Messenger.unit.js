@@ -99,29 +99,27 @@ describe("@components/organism/Messenger", () => {
 				sessionFromLocalStorage: "true",
 			}),
 		};
-
-		const wrapper = mount(Messenger, {
+		mount(Messenger, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStoresTestSpecific,
 			}),
 		});
-		await wrapper.vm.$nextTick(); // isActive
-		await wrapper.vm.$nextTick(); // getSchool
 
 		expect(window.Matrix).toBeDefined();
 		expect(window.Matrix).toHaveLength(1);
+
+		window.localStorage.removeItem("mx_hs_url");
+		window.localStorage.removeItem("mx_access_token");
+		window.localStorage.removeItem("mx_user_id");
 	});
 
 	it("init messenger from api", async () => {
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
 
-		const wrapper = mount(Messenger, {
+		mount(Messenger, {
 			...createComponentMocks({ i18n: true, store: mockStores }),
 		});
-		await wrapper.vm.$nextTick(); // isActive
-		await wrapper.vm.$nextTick(); // getSchool
-		await wrapper.vm.$nextTick(); // getSession
 
 		expect(window.Matrix).toBeDefined();
 		expect(window.Matrix).toHaveLength(1);
@@ -130,13 +128,9 @@ describe("@components/organism/Messenger", () => {
 	it("extract current room from url", async () => {
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
 		window.location.pathname = "/teams/aaaabbbbccccddddeeeeffff";
-
-		const wrapper = mount(Messenger, {
+		mount(Messenger, {
 			...createComponentMocks({ i18n: true, store: mockStores }),
 		});
-		await wrapper.vm.$nextTick(); // isActive
-		await wrapper.vm.$nextTick(); // getSchool
-		await wrapper.vm.$nextTick(); // getSession
 
 		expect(window.Matrix).toBeDefined();
 		expect(window.Matrix).toHaveLength(1);

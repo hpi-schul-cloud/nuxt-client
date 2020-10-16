@@ -35,15 +35,34 @@ describe("store/messenger", () => {
 				expect(spyCommit.mock.calls[0][0]).toBe("setMessengerToken");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(dummyReturnObject);
 			});
+			it("triggers error", async () => {
+				const dummyErrorObject = { someProperty: "dummy error message" };
+				let receivedUrl;
+				actions.$axios = {
+					$post: (url) => {
+						receivedUrl = url;
+						return Promise.reject(dummyErrorObject);
+					},
+				};
+				const spyCommit = jest.fn();
+
+				await actions.loadMessengerToken({ commit: spyCommit });
+
+				expect(receivedUrl).toBe("/messengerToken");
+				expect(spyCommit.mock.calls).toHaveLength(1);
+				expect(spyCommit.mock.calls[0][0]).toBe("setError");
+				expect(spyCommit.mock.calls[0][1]).toStrictEqual(dummyErrorObject);
+			});
 		});
 	});
 	describe("mutations", () => {
-		describe("serverName", () => {
+		describe("setMessengerToken", () => {
 			it("add session to existing state", () => {
 				const state = { oldProperty: "some value" };
 				mutations.setMessengerToken(state, { newProperty: "another value" });
 				expect(state).toStrictEqual({
 					oldProperty: "some value",
+					error: null,
 					session: { newProperty: "another value" },
 				});
 			});
@@ -52,6 +71,34 @@ describe("store/messenger", () => {
 				mutations.setMessengerToken(state, { newProperty: "another value" });
 				expect(state).toStrictEqual({
 					session: { newProperty: "another value" },
+					error: null,
+				});
+			});
+			it("clears error", () => {
+				const state = { error: "some value" };
+				mutations.setMessengerToken(state, { newProperty: "another value" });
+				expect(state).toStrictEqual({
+					session: { newProperty: "another value" },
+					error: null,
+				});
+			});
+		});
+		describe("setError", () => {
+			it("sets error in state", () => {
+				const state = { oldProperty: "some value" };
+				mutations.setError(state, { newProperty: "another value" });
+				expect(state).toStrictEqual({
+					oldProperty: "some value",
+					session: null,
+					error: { newProperty: "another value" },
+				});
+			});
+			it("removes session from state", () => {
+				const state = { session: "some value" };
+				mutations.setError(state, { newProperty: "another value" });
+				expect(state).toStrictEqual({
+					session: null,
+					error: { newProperty: "another value" },
 				});
 			});
 		});

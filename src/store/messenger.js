@@ -4,9 +4,9 @@ export const actions = {
 			const data = await this.$axios.$post("/messengerToken");
 			commit("setMessengerToken", data);
 		} catch (error) {
-			console.log(error);
+			commit("setError", error);
+			// TODO what is supposed to happen on error?
 		}
-		// TODO what is supposed to happen on error?
 	},
 };
 
@@ -24,6 +24,11 @@ export const getters = {
 export const mutations = {
 	setMessengerToken(state, payload) {
 		state.session = payload;
+		state.error = null;
+	},
+	setError(state, error) {
+		state.session = null;
+		state.error = error;
 	},
 };
 
