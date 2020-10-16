@@ -24,7 +24,8 @@
 				:content-teams.sync="contentTeams"
 				@cancel="cancelHandle"
 				@input="onInput"
-				@setScopeId="setScopeId"
+				@setCourseScopeId="setCourseScopeId"
+				@setTeamScopeId="setTeamScopeId"
 				@submit="submit"
 				@removeDate="removeDate"
 				@saveDate="saveDate"
@@ -78,9 +79,10 @@ export default {
 				eventClick: this.eventClick,
 				events: this.loadEvents,
 				headerToolbar: {
-					center: "title",
-					left: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
-					right: "prev,today,next",
+					left: "title",
+					center: "",
+					right:
+						"dayGridMonth,timeGridWeek,timeGridDay,listWeek, prev,today,next",
 				},
 				weekNumbers: false,
 				scrollTime: "07:00:00",
@@ -111,7 +113,8 @@ export default {
 			radioValue: "",
 			teams: "Teams",
 			courses: "Courses",
-			currentScopeId: undefined,
+			courseScopeId: undefined,
+			teamScopeId: undefined,
 			allNeededDataLoaded: false,
 		};
 	},
@@ -174,13 +177,19 @@ export default {
 			if (radioValue == "teams") {
 				this.isTeamsDDVisible = true;
 				this.isCoursesDDVisible = false;
-			} else {
+			} else if (radioValue == "courses") {
 				this.isTeamsDDVisible = false;
 				this.isCoursesDDVisible = true;
+			} else {
+				this.isTeamsDDVisible = false;
+				this.isCoursesDDVisible = false;
 			}
 		},
-		setScopeId(input) {
-			this.currentScopeId = input._id;
+		setCourseScopeId(input) {
+			this.courseScopeId = input._id;
+		},
+		setTeamScopeId(input) {
+			this.teamScopeId = input._id;
 		},
 		eventClick(event) {
 			const id = event.event.extendedProps._id;
@@ -211,7 +220,6 @@ export default {
 		init() {
 			// initially set ScopeID to userId
 			this.currentUserId = this.$store.currentUserId;
-			this.currentScopeId = this.currentUserId;
 		},
 		submit() {
 			const start = this.setTime(
@@ -255,7 +263,6 @@ export default {
 			this.radioValue = "";
 			this.isTeamsDDVisible = false;
 			this.isCoursesDDVisible = false;
-			this.currentScopeId = this.currentUserId;
 		},
 		setTime(dateToSet, timeForSetting) {
 			const startTime = moment(timeForSetting, "HH:mm");
@@ -338,9 +345,12 @@ export default {
 			}
 		},
 		async postCalendarData(startDate, endDate) {
+			console.log(this.currentUserId);
 			this.$store.dispatch("calendar/create", {
 				startDate: startDate,
-				scopeId: this.currentScopeId,
+				scopeId: this.currentUserId, //check this
+				courseScopeId: this.courseScopeId,
+				teamScopeId: this.teamScopeId,
 				endDate: endDate,
 				summary: this.inputText,
 			});

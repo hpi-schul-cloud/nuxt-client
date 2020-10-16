@@ -4,6 +4,34 @@
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<modal-body-info title="Termin Hinzufügen" />
+				<div>
+					<input-radio
+						:value="radioValue"
+						label=""
+						:options="[
+							{ value: 'privat', label: 'Privater Termin', selected: true },
+							{ value: 'teams', label: 'Teamtermin' },
+							{ value: 'courses', label: 'Kurstermin' },
+						]"
+						@input="$emit('input', $event)"
+					/>
+				</div>
+				<base-select
+					v-if="isTeamsDDVisible"
+					v-model="contentTeams"
+					label="Teams"
+					:close-on-select="true"
+					:options="usersTeams"
+					@input="$emit('setTeamScopeId', contentTeams)"
+				/>
+				<base-select
+					v-if="isCoursesDDVisible"
+					v-model="contentCourses"
+					label="Courses"
+					:options="usersCourses"
+					:close-on-select="true"
+					@input="$emit('setCourseScopeId', contentCourses)"
+				/>
 				<base-input
 					v-model="inputText"
 					type="text"
@@ -33,33 +61,6 @@
 					type="time"
 					label="End Zeit"
 					@update:vmodel="$emit('update:endTime', endTime)"
-				/>
-				<div>
-					<input-radio
-						:value="radioValue"
-						label=""
-						:options="[
-							{ value: 'teams', label: 'Teams ?' },
-							{ value: 'courses', label: 'Kurse ?' },
-						]"
-						@input="$emit('input', $event)"
-					/>
-				</div>
-				<base-select
-					v-if="isTeamsDDVisible"
-					v-model="contentTeams"
-					label="Teams"
-					:close-on-select="true"
-					:options="usersTeams"
-					@input="$emit('setScopeId', contentTeams)"
-				/>
-				<base-select
-					v-if="isCoursesDDVisible"
-					v-model="contentCourses"
-					label="Courses"
-					:options="usersCourses"
-					:close-on-select="true"
-					@input="$emit('setScopeId', contentCourses)"
 				/>
 			</template>
 			<template v-slot:footerRight>
