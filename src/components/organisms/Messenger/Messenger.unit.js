@@ -15,6 +15,8 @@ const mockStores = {
 			},
 		},
 		state: () => ({
+			matrixFeatureFlag: true,
+			matrixAssetDomain: "https://matrix.domain",
 			session,
 			serverName: "dummy-server-name",
 		}),
@@ -28,7 +30,6 @@ const mockStores = {
 
 describe("@components/organism/Messenger", () => {
 	beforeEach(() => {
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = undefined;
 		window.localStorage.clear();
 		window.Matrix = undefined;
 	});
@@ -40,28 +41,34 @@ describe("@components/organism/Messenger", () => {
 	it(...isValidComponent(Messenger));
 
 	it("do not initialize if feature is not set", async () => {
-		const wrapper = mount(Messenger, {
-			...createComponentMocks({ i18n: true, store: mockStores }),
+		const mockStoresTestSpecific = { ...mockStores };
+		mockStoresTestSpecific.messenger = {
+			state: () => ({}),
+		};
+
+		mount(Messenger, {
+			...createComponentMocks({ i18n: true, store: mockStoresTestSpecific }),
 		});
-		await wrapper.vm.$nextTick(); // isActive
 
 		expect(window.Matrix).toBeUndefined();
 	});
 
 	it("do not initialize if feature is not enabled for instance", async () => {
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "false";
+		const mockStoresTestSpecific = { ...mockStores };
+		mockStoresTestSpecific.messenger = {
+			state: () => ({
+				matrixFeatureFlag: false,
+			}),
+		};
 
-		const wrapper = mount(Messenger, {
-			...createComponentMocks({ i18n: true, store: mockStores }),
+		mount(Messenger, {
+			...createComponentMocks({ i18n: true, store: mockStoresTestSpecific }),
 		});
-		await wrapper.vm.$nextTick(); // isActive
 
 		expect(window.Matrix).toBeUndefined();
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = undefined;
 	});
 
 	it("do not initialize if feature is not enabled for school", async () => {
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
 		const mockStoresTestSpecific = { ...mockStores };
 		mockStoresTestSpecific.auth = {
 			state: () => ({
@@ -69,20 +76,16 @@ describe("@components/organism/Messenger", () => {
 			}),
 		};
 
-		const wrapper = mount(Messenger, {
+		mount(Messenger, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStoresTestSpecific,
 			}),
 		});
-		await wrapper.vm.$nextTick(); // isActive
-		await wrapper.vm.$nextTick(); // getSchool
-
 		expect(window.Matrix).toBeUndefined();
 	});
 
 	it("init messenger from localStorage", async () => {
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
 		window.localStorage.setItem("mx_hs_url", "domain");
 		window.localStorage.setItem("mx_access_token", "token");
 		window.localStorage.setItem("mx_user_id", "user_id");
@@ -96,6 +99,8 @@ describe("@components/organism/Messenger", () => {
 			},
 			state: () => ({
 				session,
+				matrixFeatureFlag: true,
+				matrixAssetDomain: "https://matrix.domain",
 				serverName: "dummy-server-name",
 				sessionFromLocalStorage: "true",
 			}),
@@ -116,8 +121,6 @@ describe("@components/organism/Messenger", () => {
 	});
 
 	it("init messenger from api", async () => {
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
-
 		mount(Messenger, {
 			...createComponentMocks({ i18n: true, store: mockStores }),
 		});
@@ -127,7 +130,6 @@ describe("@components/organism/Messenger", () => {
 	});
 
 	it("extract current room from url", async () => {
-		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
 		window.location.pathname = "/teams/aaaabbbbccccddddeeeeffff";
 		mount(Messenger, {
 			...createComponentMocks({ i18n: true, store: mockStores }),

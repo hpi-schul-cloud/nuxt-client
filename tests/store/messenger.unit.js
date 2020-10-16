@@ -6,6 +6,13 @@ describe("store/messenger", () => {
 			it("returns null if no session present", () => {
 				expect(getters.serverName({})).toBeNull();
 			});
+			it("returns null if no session contains invalid user", () => {
+				expect(
+					getters.serverName({
+						session: { userId: "dummy-user.dummy-server.name" },
+					})
+				).toBeNull();
+			});
 			it("returns server name", () => {
 				expect(
 					getters.serverName({

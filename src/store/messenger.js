@@ -12,7 +12,11 @@ export const actions = {
 
 export const getters = {
 	serverName: (state) => {
-		if (state.session && state.session.userId) {
+		if (
+			state.session &&
+			state.session.userId &&
+			state.session.userId.lastIndexOf(":") >= 0
+		) {
 			return state.session.userId.substr(
 				state.session.userId.lastIndexOf(":") + 1
 			);
@@ -34,6 +38,8 @@ export const mutations = {
 
 export const state = () => {
 	return {
+		matrixFeatureFlag: process.env.FEATURE_MATRIX_MESSENGER_ENABLED === "true",
+		matrixAssetDomain: process.env.MATRIX_MESSENGER_EMBED_URI,
 		session: null,
 		// session is available in local storage, the messenger will access it itself
 		sessionFromLocalStorage:

@@ -24,10 +24,10 @@ export default {
 	},
 	computed: {
 		matrixFeatureFlag() {
-			return process.env.FEATURE_MATRIX_MESSENGER_ENABLED === "true";
+			return this.$store.state.messenger.matrixFeatureFlag;
 		},
 		matrixAssetDomain() {
-			return process.env.MATRIX_MESSENGER_EMBED_URI;
+			return this.$store.state.messenger.matrixAssetDomain;
 		},
 		userLanguage() {
 			return this.$i18n.locale;
