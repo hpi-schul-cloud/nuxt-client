@@ -51,6 +51,10 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Courses and teams need permissions so we can filter which to display
 // [ ] Suport fullday events (create and view)
 // [x] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
+// [ ] Show event after creation
+// [ ] Make events draggable
+// [x] Onclick create prefill clicked values
+// [ ] Localize Modal
 
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -118,11 +122,12 @@ export default {
 		async loadEvents(info, successCallback, failureCallback) {
 			console.log(this.allNeededDataLoaded);
 			try {
-				//from=2020-10-16T09%3A00%3A00.000Z&until=
+				// from=2020-10-16T09%3A00%3A00.000Z&until=
 				const options = {
 					from: info.startStr,
 					until: info.endStr,
 				};
+				// this will happen on first load
 				if (this.allNeededDataLoaded === false) {
 					await this.getUserTeams();
 					await this.getUserCourses();
@@ -160,10 +165,9 @@ export default {
 			this.isSubmit = false;
 			this.confirmActive = false;
 		},
-		handleDateClick(date) {
-			console.log(date);
-			const startDate = moment(date);
-			const endDate = moment(startDate).add(30, "minutes");
+		handleDateClick(event) {
+			const startDate = moment(event.date);
+			const endDate = moment(startDate).add(60, "minutes");
 			this.setModalEventAndState(startDate, endDate, "", "");
 		},
 		onInput(radioValue) {
@@ -264,9 +268,9 @@ export default {
 		setModalEventAndState(startDate, endDate, title, id) {
 			this.currentEventId = id;
 			this.inputText = title;
-			this.startDayInput = startDate.toISOString();
+			this.startDayInput = startDate.toISOString().split("T")[0];
 			this.startTimeInput = startDate.format("HH:mm");
-			this.endDayInput = endDate.toISOString();
+			this.endDayInput = endDate.toISOString().split("T")[0];
 			this.endTimeInput = endDate.format("HH:mm");
 			this.modalActive = true;
 		},
