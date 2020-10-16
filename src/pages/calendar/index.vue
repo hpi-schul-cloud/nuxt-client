@@ -45,9 +45,12 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [x] Partial Data-Loading
 // [x] On Event Click Go To Team Or Course page if its not a personal event
 // [x] Locales
+// [ ] Update server API docu  (from end)
 // [ ] Handling BBB Events
 // [ ] Send course or team if on create if selected
 // [ ] Courses and teams need permissions so we can filter which to display
+// [ ] Suport fullday events (create and view)
+// [ ] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
 
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
