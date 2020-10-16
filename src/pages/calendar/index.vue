@@ -77,8 +77,8 @@ export default {
 				},
 				weekNumbers: false,
 				scrollTime: "07:00:00",
-				locales: [enLocale, deLocale],
-				locale: deLocale, //https://fullcalendar.io/docs/locale
+				// locales: [enLocale, deLocale],
+				// locale: deLocale, //https://fullcalendar.io/docs/locale
 			},
 			events: [],
 			dateEditable: false,
