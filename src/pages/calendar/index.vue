@@ -56,6 +56,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Make events draggable
 // [x] Onclick create prefill clicked values
 // [ ] Localize Modal
+// [ ] Save settings in user preferences ?
 
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -140,7 +141,7 @@ export default {
 					.dispatch("calendar/getEvents", options)
 					.then((res) => {
 						res.forEach((event) => {
-							(event.color = this.checkforCourseColor(event)),
+							(event.color = this.checkforItemColor(event)),
 								//store to internal key value store
 								this.pushEvent(event);
 						});
@@ -302,16 +303,21 @@ export default {
 				this.events[event._id] = event;
 			}
 		},
-		checkforCourseColor(event) {
-			let courseColor = undefined;
+		checkforItemColor(event) {
+			let itemColor = undefined;
 			event.relationships["scope-ids"].forEach((id) => {
 				this.usersCourses.forEach((course) => {
 					if (id === course._id && course.color != undefined) {
-						courseColor = course.color;
+						itemColor = course.color;
+					}
+				});
+				this.usersTeams.forEach((team) => {
+					if (id === team._id && team.color != undefined) {
+						itemColor = team.color;
 					}
 				});
 			});
-			return courseColor;
+			return itemColor;
 		},
 		pushScope(event, list) {
 			if (this.isNewElement(event, list)) {

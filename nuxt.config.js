@@ -94,8 +94,13 @@ module.exports = {
 	 ** Customize the progress-bar color
 	 */
 	loading: {
-		color: "#fff",
+		color: "#f0f0f0",
 	},
+	// loadingIndicator: {
+	// 	name: "wandering-cubes",
+	// 	color: "#3B8070",
+	// 	background: "white",
+	// },
 
 	css: ["@/themes/" + themeName + "/styles"],
 
