@@ -50,7 +50,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Send course or team if on create if selected
 // [ ] Courses and teams need permissions so we can filter which to display
 // [ ] Suport fullday events (create and view)
-// [ ] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
+// [x] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
 
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -108,6 +108,7 @@ export default {
 			teams: "Teams",
 			courses: "Courses",
 			currentScopeId: undefined,
+			allNeededDataLoaded: false,
 		};
 	},
 	created() {
@@ -115,13 +116,18 @@ export default {
 	},
 	methods: {
 		async loadEvents(info, successCallback, failureCallback) {
-			console.log(info);
+			console.log(this.allNeededDataLoaded);
 			try {
 				//from=2020-10-16T09%3A00%3A00.000Z&until=
 				const options = {
 					from: info.startStr,
 					until: info.endStr,
 				};
+				if (this.allNeededDataLoaded === false) {
+					await this.getUserTeams();
+					await this.getUserCourses();
+					this.allNeededDataLoaded = true;
+				}
 				await this.$store
 					.dispatch("calendar/getEvents", options)
 					.then((res) => {
@@ -202,8 +208,6 @@ export default {
 			// initially set ScopeID to userId
 			this.currentUserId = this.$store.currentUserId;
 			this.currentScopeId = this.currentUserId;
-			this.getUserTeams();
-			this.getUserCourses();
 		},
 		submit() {
 			const start = this.setTime(
