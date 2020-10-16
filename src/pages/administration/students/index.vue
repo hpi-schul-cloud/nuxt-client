@@ -265,12 +265,14 @@ export default {
 				{
 					icon: "check",
 					color: "var(--color-warning)",
-					label: this.$t("pages.administration.students.legend.icon.warning"),
+					label: this.$t(
+						"utils.adminFilter.consent.label.parentsAgreementMissing"
+					),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					label: this.$t("pages.administration.students.legend.icon.danger"),
+					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
 			filters: studentFilter(this),

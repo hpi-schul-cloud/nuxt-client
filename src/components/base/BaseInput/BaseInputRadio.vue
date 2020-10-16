@@ -9,6 +9,8 @@
 			type="radio"
 			class="visually-hidden"
 			@change="$emit('input', $event.target.value)"
+			@blur="$emit('blur', $event)"
+			@focus="$emit('focus', $event)"
 		/>
 		<span class="radio" :class="{ 'user-is-tabbing': $userIsTabbing }" />
 		<span v-if="!labelHidden" class="label">
