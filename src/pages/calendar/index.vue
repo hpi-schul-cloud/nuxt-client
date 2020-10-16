@@ -1,62 +1,85 @@
 <!-- eslint-disable max-lines -->
+
 <template>
-	<div class="content">
-		<div class="route-calendar">
-			<BaseTitle>Kalender</BaseTitle>
-			<div>
-				<appointment-modal
-					:input-text.sync="inputText"
-					:modal-active.sync="modalActive"
-					:confirm-active="confirmActive"
-					:date-editable="dateEditable"
-					:is-teams-d-d-visible="isTeamsDDVisible"
-					:is-courses-d-d-visible="isCoursesDDVisible"
-					:is-submit="isSubmit"
-					:is-save="isSave"
-					:is-remove="isRemove"
-					:radio-value="radioValue"
-					:start-day.sync="startDayInput"
-					:start-time.sync="startTimeInput"
-					:end-day.sync="endDayInput"
-					:end-time.sync="endTimeInput"
-					:users-teams="usersTeams"
-					:users-courses="usersCourses"
-					:content-courses.sync="contentCourses"
-					:content-teams.sync="contentTeams"
-					@cancel="cancelHandle"
-					@input="onInput"
-					@setScopeId="setScopeId"
-					@submit="submit"
-					@removeDate="removeDate"
-					@saveDate="saveDate"
-					@prepareSubmit="prepareSubmit"
-					@prepareRemove="prepareRemove"
-					@prepareSave="prepareSave"
-					@cancelConfirm="cancelConfirm"
-				></appointment-modal>
-			</div>
-			<full-calendar
-				ref="calendar"
-				class="fullcalender"
-				:editable="false"
-				:events="events"
-				:header="header"
-				:config="config"
-				@day-click="handleDateClick"
-				@event-selected="eventClick"
-			></full-calendar>
+	<div class="route-calendar">
+		<div>
+			<appointment-modal
+				:input-text.sync="inputText"
+				:modal-active.sync="modalActive"
+				:confirm-active="confirmActive"
+				:date-editable="dateEditable"
+				:is-teams-d-d-visible="isTeamsDDVisible"
+				:is-courses-d-d-visible="isCoursesDDVisible"
+				:is-submit="isSubmit"
+				:is-save="isSave"
+				:is-remove="isRemove"
+				:radio-value="radioValue"
+				:start-day.sync="startDayInput"
+				:start-time.sync="startTimeInput"
+				:end-day.sync="endDayInput"
+				:end-time.sync="endTimeInput"
+				:users-teams="usersTeams"
+				:users-courses="usersCourses"
+				:content-courses.sync="contentCourses"
+				:content-teams.sync="contentTeams"
+				@cancel="cancelHandle"
+				@input="onInput"
+				@setScopeId="setScopeId"
+				@submit="submit"
+				@removeDate="removeDate"
+				@saveDate="saveDate"
+				@prepareSubmit="prepareSubmit"
+				@prepareRemove="prepareRemove"
+				@prepareSave="prepareSave"
+				@cancelConfirm="cancelConfirm"
+			></appointment-modal>
 		</div>
+		<full-calendar :options="calendarOptions"></full-calendar>
 	</div>
 </template>
 <script>
-import "fullcalendar/dist/fullcalendar.css";
 import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
+//TODOs
+// [ ] Dedicated Edit mode
+// [ ] Handle permissions
+// [ ] Partial Data-Loading
+// [ ] On Event Click Go To Team Or Course page if its not a personal event
+// [ ] Use Store for events
+// [ ] Locales
+// [ ] Handling BBB Events
+
+import FullCalendar from "@fullcalendar/vue";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from "@fullcalendar/list";
+// import deLocale from "@fullcalendar/core/locales/de";
+// import enLocale from "@fullcalendar/core/locales/en";
 import moment from "moment";
+
 export default {
 	layout: "loggedInFull",
-	components: { AppointmentModal },
+	components: { AppointmentModal, FullCalendar },
 	data() {
 		return {
+			calendarOptions: {
+				plugins: [dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin],
+				initialView: "timeGridWeek",
+				editable: false,
+				nowIndicator: true,
+				dateClick: this.handleDateClick,
+				eventClick: this.eventClick,
+				events: [],
+				headerToolbar: {
+					center: "title",
+					left: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+					right: "prev,today,next",
+				},
+				weekNumbers: false,
+				scrollTime: "07:00:00",
+				locales: [enLocale, deLocale],
+				locale: deLocale, //https://fullcalendar.io/docs/locale
+			},
 			events: [],
 			dateEditable: false,
 			modalActive: false,
@@ -81,15 +104,7 @@ export default {
 			radioValue: "",
 			teams: "Teams",
 			courses: "Courses",
-			jwtDecode: require("jwt-decode"),
 			currentScopeId: undefined,
-			header: {
-				left: "title",
-				right: "month,agendaWeek,agendaDay prev,today,next",
-			},
-			config: {
-				locale: "de",
-			},
 		};
 	},
 	created() {
@@ -115,6 +130,7 @@ export default {
 			this.confirmActive = false;
 		},
 		handleDateClick(date) {
+			console.log(date);
 			const startDate = moment(date);
 			const endDate = moment(startDate).add(30, "minutes");
 			this.setModalEventAndState(startDate, endDate, "", "");
@@ -132,10 +148,18 @@ export default {
 			this.currentScopeId = input._id;
 		},
 		eventClick(event) {
-			const startDate = moment(event.start);
-			const endDate = moment(event.end);
+			console.log("clicked event");
+			console.log(event);
+			const clickedEvent = event.event;
+			const startDate = moment(clickedEvent.start);
+			const endDate = moment(clickedEvent.end);
 			this.dateEditable = true;
-			this.setModalEventAndState(startDate, endDate, event.title, event._id);
+			this.setModalEventAndState(
+				startDate,
+				endDate,
+				clickedEvent.title,
+				clickedEvent._id
+			);
 		},
 		cancelHandle() {
 			this.resetScope();
@@ -144,7 +168,7 @@ export default {
 		},
 		init() {
 			// initially set ScopeID to userId
-			this.currentUserId = this.jwtDecode(this.$cookies.get("jwt")).userId;
+			this.currentUserId = this.$store.currentUserId;
 			this.currentScopeId = this.currentUserId;
 			this.getUserTeams();
 			this.getUserCourses();
@@ -241,8 +265,9 @@ export default {
 			return !found;
 		},
 		pushEvent(event) {
+			console.log(event);
 			if (this.isNewElement(event, this.events)) {
-				this.events.push({
+				this.calendarOptions.events.push({
 					title: event.title,
 					start: event.start,
 					end: event.end,
@@ -295,7 +320,6 @@ export default {
 			try {
 				await this.$store.dispatch("courses/find").then((res) => {
 					res.data.forEach((element) => {
-						console.log(element);
 						this.pushScope(element, this.usersCourses);
 					});
 				});

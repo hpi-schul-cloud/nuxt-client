@@ -45,6 +45,11 @@
 		"pre-commit": "npx lint-staged"
 	},
 	"dependencies": {
+		"@fullcalendar/daygrid": "^5.3.2",
+		"@fullcalendar/interaction": "^5.3.1",
+		"@fullcalendar/list": "^5.3.1",
+		"@fullcalendar/timegrid": "^5.3.1",
+		"@fullcalendar/vue": "^5.3.1",
 		"@nuxtjs/axios": "^5.12.1",
 		"@nuxtjs/sentry": "^4.3.4",
 		"@nuxtjs/toast": "^3.3.1",
@@ -56,7 +61,6 @@
 		"git-rev-sync": "^2.0.0",
 		"glob": "^7.1.6",
 		"html-entities": "^1.3.1",
-		"jquery": "^3.5.1",
 		"jwt-decode": "^2.2.0",
 		"kjua": "^0.9.0",
 		"material-icons-svg": "^1.0.0",
@@ -68,7 +72,6 @@
 		"vue-echarts": "^4.0.4",
 		"vue-filter-ui": "^0.8.0",
 		"vue-flatpickr-component": "^8.1.5",
-		"vue-full-calendar": "^3.0.0",
 		"vue-i18n": "^8.20.0",
 		"vue-loader": "^15.9.3",
 		"vue-mq": "^1.0.1",
