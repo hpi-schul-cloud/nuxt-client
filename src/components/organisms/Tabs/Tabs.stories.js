@@ -8,10 +8,11 @@ storiesOf("5 Molecules/Tabs", module)
 		components: { Tabs, SingleTab },
 		template: `
 			<Tabs>
-				<SingleTab name="Tab 1">Test</SingleTab>
-				<SingleTab name="Tab 2" :selected="true">Test2</SingleTab>
+				<SingleTab name="Lerninhalte" :selected="true" iconName="lerninhalte">Test</SingleTab>
+				<SingleTab name="Gruppen" iconName="gruppen">Test2</SingleTab>
 				<SingleTab name="Tab 3" permission="YOU_SHALL_NOT_PASS">This and Tab 3 should be not visible!</SingleTab>
-				<SingleTab name="Tab 4">Test 4 lorum ipsum test with a long line of text</SingleTab>
+				<SingleTab name="Tools" iconName="tools">Test 4 lorum ipsum test with a long line of text</SingleTab>
+				<SingleTab name="'Empty'" iconName="">Empty</SingleTab>
 			</Tabs>
 		`,
 		methods: {},
