@@ -1,15 +1,28 @@
 export const actions = {
-	async getMessengerToken({ commit }) {
-		const data = await this.$axios.$post("/messengerToken");
-		commit("getMessengerToken", data);
-		return data;
+	async loadMessengerToken({ commit }) {
+		try {
+			const data = await this.$axios.$post("/messengerToken");
+			commit("setMessengerToken", data);
+		} catch (error) {
+			console.log(error);
+		}
+		// TODO what is supposed to happen on error?
 	},
 };
 
-export const getters = {};
+export const getters = {
+	serverName: (state) => {
+		if (state.session && state.session.userId) {
+			return state.session.userId.substr(
+				state.session.userId.lastIndexOf(":") + 1
+			);
+		}
+		return null;
+	},
+};
 
 export const mutations = {
-	getMessengerToken(state, payload) {
+	setMessengerToken(state, payload) {
 		state.session = payload;
 	},
 };
@@ -17,5 +30,11 @@ export const mutations = {
 export const state = () => {
 	return {
 		session: null,
+		// session is available in local storage, the messenger will access it itself
+		sessionFromLocalStorage:
+			window.localStorage &&
+			window.localStorage.getItem("mx_hs_url") &&
+			window.localStorage.getItem("mx_access_token") &&
+			window.localStorage.getItem("mx_user_id"),
 	};
 };

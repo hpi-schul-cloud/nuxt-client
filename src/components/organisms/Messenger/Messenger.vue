@@ -17,39 +17,44 @@ export default {
 		userLanguage() {
 			return this.$i18n.locale;
 		},
-	},
-	mounted() {
-		this.isMessengerActivatedForSchool()
-			.then((isActivated) => {
-				if (isActivated) {
-					this.loadMessengerEmbed();
-					this.initializeMessenger();
-				}
-			})
-			.catch(() => {});
-	},
-	methods: {
 		isMessengerActivatedForSchool() {
 			if (!this.matrixFeatureFlag) {
-				return Promise.resolve(false);
+				return false;
 			}
-
-			const query = {
-				query: {
-					_id: this.$user.schoolId,
-				},
-			};
-			return this.$store
-				.dispatch("schools/find", query)
-				.then((response) => {
-					const school = response.data[0];
-					return (school.features || []).includes("messenger");
-				})
-				.catch(() => {
-					return false;
-				});
+			const { school } = this.$store.state.auth;
+			return school && (school.features || []).includes("messenger");
 		},
-
+		session() {
+			return this.$store.state.messenger.session;
+		},
+		sessionFromLocalStorage() {
+			return this.$store.state.messenger.sessionFromLocalStorage;
+		},
+		serverName() {
+			return this.$store.state.messenger.serverName;
+		},
+	},
+	watch: {
+		// since the school is loaded by the auth service, this probably never changes
+		isMessengerActivatedForSchool(newIsActivated) {
+			if (newIsActivated) {
+				this.loadMessengerEmbed();
+				this.setupMessenger();
+			}
+		},
+		session(newSession) {
+			if (this.isMessengerActivatedForSchool && newSession) {
+				this.setupMessenger();
+			}
+		},
+	},
+	mounted() {
+		if (this.isMessengerActivatedForSchool) {
+			this.loadMessengerEmbed();
+			this.setupMessenger();
+		}
+	},
+	methods: {
 		loadMessengerEmbed() {
 			// load javascript
 			const riotScript = document.createElement("script");
@@ -57,15 +62,6 @@ export default {
 			riotScript.type = "text/javascript";
 			document.head.appendChild(riotScript);
 		},
-
-		findMatrixUserId(session = null) {
-			if (session) {
-				return session.userId;
-			}
-
-			return window.localStorage.getItem("mx_user_id");
-		},
-
 		extractRoomTypeAndIdFromPath(path) {
 			const matches = RegExp("/(course|team)s/([0-9a-f]{24})").exec(path);
 			if (matches && matches.length >= 3) {
@@ -80,33 +76,20 @@ export default {
 				roomId: null,
 			};
 		},
-
-		extractServernameFromMatrixUserId(matrixUserId) {
-			if (matrixUserId) {
-				return matrixUserId.substr(matrixUserId.indexOf(":") + 1);
-			}
-		},
-
-		composeMatrixRoomId(roomType, roomId, servername) {
-			if (!roomId || !roomType || !servername) {
-				return null;
+		setupMessenger() {
+			if (!this.sessionFromLocalStorage && !this.session) {
+				// get new session from Server
+				this.$store.dispatch("messenger/loadMessengerToken");
+				return;
 			}
 
-			// build matrix room id
-			return `#${roomType}_${roomId}:${servername}`;
-		},
-
-		setupMessenger(session) {
-			const matrixUserId = this.findMatrixUserId(session);
 			const { roomType, roomId } = this.extractRoomTypeAndIdFromPath(
 				window.location.pathname
 			);
-			const servername = this.extractServernameFromMatrixUserId(matrixUserId);
-			const matrixRoomId = this.composeMatrixRoomId(
-				roomType,
-				roomId,
-				servername
-			);
+			let matrixRoomId = null;
+			if (roomId && roomType && this.serverName) {
+				matrixRoomId = `#${roomType}_${roomId}:${this.serverName}`;
+			}
 
 			// base options
 			const options = {
@@ -123,43 +106,15 @@ export default {
 			}
 
 			// apply session
-			if (session) {
-				options.homeserverUrl = session.homeserverUrl;
-				options.userId = session.userId;
-				options.accessToken = session.accessToken;
-				options.deviceId = session.deviceId;
+			if (this.session) {
+				options.homeserverUrl = this.session.homeserverUrl;
+				options.userId = this.session.userId;
+				options.accessToken = this.session.accessToken;
+				options.deviceId = this.session.deviceId;
 			}
 
 			window.Matrix = window.Matrix || [];
 			window.Matrix.push(["setup", options]);
-		},
-
-		hasActiveSessionInLocalStorage() {
-			return (
-				window.localStorage &&
-				window.localStorage.getItem("mx_hs_url") &&
-				window.localStorage.getItem("mx_access_token") &&
-				window.localStorage.getItem("mx_user_id")
-			);
-		},
-
-		requestSession() {
-			// API call inside a component, because the component has to decide itself if it requires to fetch data.
-			return this.$store.dispatch("messenger/getMessengerToken");
-		},
-
-		async initializeMessenger() {
-			// Find Matrix Session
-			let session;
-			if (this.hasActiveSessionInLocalStorage()) {
-				// session available, the messenger will access it itself
-				session = null;
-			} else {
-				// get new session from Server
-				session = await this.requestSession();
-			}
-
-			this.setupMessenger(session);
 		},
 	},
 };

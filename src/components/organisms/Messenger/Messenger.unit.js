@@ -6,25 +6,22 @@ const session = {
 	accessToken: "aaabbbccc",
 	deviceId: "AAABBBCCC",
 };
-const school = {
-	features: ["messenger"],
-};
 const mockStores = {
 	messenger: {
 		actions: {
-			getMessengerToken() {
-				return Promise.resolve(session);
+			loadMessengerToken() {
+				return;
 			},
 		},
+		state: () => ({
+			session,
+			serverName: "dummy-server-name",
+		}),
 	},
-	schools: {
-		actions: {
-			find() {
-				return Promise.resolve({
-					data: [school],
-				});
-			},
-		},
+	auth: {
+		state: () => ({
+			school: { features: ["messenger"] },
+		}),
 	},
 };
 
@@ -33,13 +30,18 @@ describe("@components/organism/Messenger", () => {
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = undefined;
 		window.localStorage.clear();
 		window.Matrix = undefined;
-		school.features = ["messenger"];
+	});
+	afterEach(() => {
+		window.localStorage.clear();
+		window.Matrix = undefined;
 	});
 
 	it(...isValidComponent(Messenger));
 
 	it("do not initialize if feature is not set", async () => {
-		const wrapper = mount(Messenger);
+		const wrapper = mount(Messenger, {
+			...createComponentMocks({ i18n: true, store: mockStores }),
+		});
 		await wrapper.vm.$nextTick(); // isActive
 
 		expect(window.Matrix).toBeUndefined();
@@ -48,7 +50,9 @@ describe("@components/organism/Messenger", () => {
 	it("do not initialize if feature is not enabled for instance", async () => {
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "false";
 
-		const wrapper = mount(Messenger);
+		const wrapper = mount(Messenger, {
+			...createComponentMocks({ i18n: true, store: mockStores }),
+		});
 		await wrapper.vm.$nextTick(); // isActive
 
 		expect(window.Matrix).toBeUndefined();
@@ -57,10 +61,18 @@ describe("@components/organism/Messenger", () => {
 
 	it("do not initialize if feature is not enabled for school", async () => {
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
-		school.features = [];
+		const mockStoresTestSpecific = { ...mockStores };
+		mockStoresTestSpecific.auth = {
+			state: () => ({
+				school: { features: [] },
+			}),
+		};
 
 		const wrapper = mount(Messenger, {
-			...createComponentMocks({ i18n: true, user: true, store: mockStores }),
+			...createComponentMocks({
+				i18n: true,
+				store: mockStoresTestSpecific,
+			}),
 		});
 		await wrapper.vm.$nextTick(); // isActive
 		await wrapper.vm.$nextTick(); // getSchool
@@ -74,8 +86,25 @@ describe("@components/organism/Messenger", () => {
 		window.localStorage.setItem("mx_access_token", "token");
 		window.localStorage.setItem("mx_user_id", "user_id");
 
+		const mockStoresTestSpecific = { ...mockStores };
+		mockStoresTestSpecific.messenger = {
+			actions: {
+				loadMessengerToken() {
+					return;
+				},
+			},
+			state: () => ({
+				session,
+				serverName: "dummy-server-name",
+				sessionFromLocalStorage: "true",
+			}),
+		};
+
 		const wrapper = mount(Messenger, {
-			...createComponentMocks({ i18n: true, user: true, store: mockStores }),
+			...createComponentMocks({
+				i18n: true,
+				store: mockStoresTestSpecific,
+			}),
 		});
 		await wrapper.vm.$nextTick(); // isActive
 		await wrapper.vm.$nextTick(); // getSchool
@@ -88,7 +117,7 @@ describe("@components/organism/Messenger", () => {
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED = "true";
 
 		const wrapper = mount(Messenger, {
-			...createComponentMocks({ i18n: true, user: true, store: mockStores }),
+			...createComponentMocks({ i18n: true, store: mockStores }),
 		});
 		await wrapper.vm.$nextTick(); // isActive
 		await wrapper.vm.$nextTick(); // getSchool
@@ -103,7 +132,7 @@ describe("@components/organism/Messenger", () => {
 		window.location.pathname = "/teams/aaaabbbbccccddddeeeeffff";
 
 		const wrapper = mount(Messenger, {
-			...createComponentMocks({ i18n: true, user: true, store: mockStores }),
+			...createComponentMocks({ i18n: true, store: mockStores }),
 		});
 		await wrapper.vm.$nextTick(); // isActive
 		await wrapper.vm.$nextTick(); // getSchool
@@ -112,7 +141,7 @@ describe("@components/organism/Messenger", () => {
 		expect(window.Matrix).toBeDefined();
 		expect(window.Matrix).toHaveLength(1);
 		expect(window.Matrix[0][1].roomId).toBe(
-			"#team_aaaabbbbccccddddeeeeffff:matrix.domain"
+			"#team_aaaabbbbccccddddeeeeffff:dummy-server-name"
 		);
 	});
 });
