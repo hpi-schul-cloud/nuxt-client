@@ -70,7 +70,7 @@ export default {
 				nowIndicator: true,
 				dateClick: this.handleDateClick,
 				eventClick: this.eventClick,
-				events: [],
+				events: this.loadEvents,
 				headerToolbar: {
 					center: "title",
 					left: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
@@ -112,6 +112,28 @@ export default {
 		this.init();
 	},
 	methods: {
+		async loadEvents(info, successCallback, failureCallback) {
+			console.log(info);
+			try {
+				//from=2020-10-16T09%3A00%3A00.000Z&until=
+				const options = {
+					from: info.startStr,
+					until: info.endStr,
+				};
+				await this.$store
+					.dispatch("calendar/getEvents", options)
+					.then((res) => {
+						res.forEach((event) => {
+							(event.color = this.checkforCourseColor(event)),
+								//store to internal key value store
+								this.pushEvent(event);
+						});
+						successCallback(res);
+					});
+			} catch (error) {
+				failureCallback(error);
+			}
+		},
 		prepareSubmit() {
 			this.confirmActive = true;
 			this.isSubmit = true;
@@ -167,16 +189,6 @@ export default {
 					const target = "/courses/" + clickedEvent.attributes["x-sc-courseid"];
 					location.href = target;
 				}
-
-				// const startDate = moment(clickedEvent.start);
-				// const endDate = moment(clickedEvent.end);
-				// this.dateEditable = true;
-				// this.setModalEventAndState(
-				// 	startDate,
-				// 	endDate,
-				// 	clickedEvent.title,
-				// 	clickedEvent._id
-				// );
 			}
 		},
 		cancelHandle() {
@@ -190,7 +202,6 @@ export default {
 			this.currentScopeId = this.currentUserId;
 			this.getUserTeams();
 			this.getUserCourses();
-			this.update();
 		},
 		submit() {
 			const start = this.setTime(
@@ -199,7 +210,6 @@ export default {
 			);
 			const end = this.setTime(moment.utc(this.endDayInput), this.endTimeInput);
 			this.postCalendarData(start.toISOString(), end.toISOString());
-			this.update();
 			this.resetScope();
 			this.cancelConfirm();
 			this.modalActive = false;
@@ -262,17 +272,6 @@ export default {
 				}
 			});
 		},
-		update() {
-			try {
-				this.getCalendarData().then(() => {
-					this.calendar.forEach((event) => {
-						this.pushEvent(event);
-					});
-				});
-			} catch (error) {
-				console.error(error);
-			}
-		},
 		isNewElement(elementArg, list) {
 			// list is an object
 			let found = false;
@@ -284,15 +283,7 @@ export default {
 		pushEvent(event) {
 			if (this.isNewElement(event, this.events)) {
 				this.events[event._id] = event;
-				this.calendarOptions.events.push({
-					title: event.title,
-					start: event.start,
-					end: event.end,
-					_id: event._id,
-					color: this.checkforCourseColor(event),
-				});
 			}
-			//console.log(this.calendarOptions.events);
 		},
 		checkforCourseColor(event) {
 			let courseColor = undefined;
@@ -312,15 +303,6 @@ export default {
 					label: event.name,
 					color: event.color,
 				});
-			}
-		},
-		async getCalendarData() {
-			try {
-				await this.$store.dispatch("calendar/find").then((res) => {
-					this.calendar = res;
-				});
-			} catch (error) {
-				console.error(error);
 			}
 		},
 		async getUserTeams() {

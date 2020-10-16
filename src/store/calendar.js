@@ -8,6 +8,13 @@ const module = mergeDeep(base, {
 		removeDate: async function (ctx, payload) {
 			await this.$axios.$delete("/" + baseUrl + "/" + payload.id);
 		},
+		getEvents: async function (ctx, payload) {
+			console.log(payload);
+			payload.all = true;
+			const res = await this.$axios.$get("/" + baseUrl, { params: payload });
+			//do we need to commit?
+			return res;
+		},
 	},
 });
 
