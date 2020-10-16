@@ -47,6 +47,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Use Store for events
 // [ ] Locales
 // [ ] Handling BBB Events
+// [ ] Courses and teams need permissions so we can filter which to display
 
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -80,7 +81,7 @@ export default {
 				// locales: [enLocale, deLocale],
 				// locale: deLocale, //https://fullcalendar.io/docs/locale
 			},
-			events: [],
+			events: {},
 			dateEditable: false,
 			modalActive: false,
 			calendar: undefined,
@@ -148,18 +149,35 @@ export default {
 			this.currentScopeId = input._id;
 		},
 		eventClick(event) {
-			console.log("clicked event");
-			console.log(event);
-			const clickedEvent = event.event;
-			const startDate = moment(clickedEvent.start);
-			const endDate = moment(clickedEvent.end);
-			this.dateEditable = true;
-			this.setModalEventAndState(
-				startDate,
-				endDate,
-				clickedEvent.title,
-				clickedEvent._id
-			);
+			const id = event.event.extendedProps._id;
+			console.log("clicked event" + id);
+			const clickedEvent = this.events[id];
+			if (clickedEvent) {
+				console.log(clickedEvent.attributes["x-sc-featurevideoconference"]);
+				//if this is true this is a videconference
+				if (clickedEvent.attributes["x-sc-teamid"]) {
+					// go to team page
+					const target =
+						"/teams/" +
+						clickedEvent.attributes["x-sc-teamid"] +
+						"/?activeTab=events";
+					location.href = target;
+				} else if (clickedEvent.attributes["x-sc-courseid"]) {
+					// go to course page
+					const target = "/courses/" + clickedEvent.attributes["x-sc-courseid"];
+					location.href = target;
+				}
+
+				// const startDate = moment(clickedEvent.start);
+				// const endDate = moment(clickedEvent.end);
+				// this.dateEditable = true;
+				// this.setModalEventAndState(
+				// 	startDate,
+				// 	endDate,
+				// 	clickedEvent.title,
+				// 	clickedEvent._id
+				// );
+			}
 		},
 		cancelHandle() {
 			this.resetScope();
@@ -256,17 +274,16 @@ export default {
 			}
 		},
 		isNewElement(elementArg, list) {
+			// list is an object
 			let found = false;
-			list.forEach((element) => {
-				if (element._id === elementArg._id) {
-					found = true;
-				}
-			});
+			if (list[elementArg._id]) {
+				found = true;
+			}
 			return !found;
 		},
 		pushEvent(event) {
-			console.log(event);
 			if (this.isNewElement(event, this.events)) {
+				this.events[event._id] = event;
 				this.calendarOptions.events.push({
 					title: event.title,
 					start: event.start,
@@ -275,6 +292,7 @@ export default {
 					color: this.checkforCourseColor(event),
 				});
 			}
+			//console.log(this.calendarOptions.events);
 		},
 		checkforCourseColor(event) {
 			let courseColor = undefined;
