@@ -82,7 +82,7 @@ export default {
 					left: "title",
 					center: "",
 					right:
-						"dayGridMonth,timeGridWeek,timeGridDay,listWeek, prev,today,next",
+						"dayGridMonth,timeGridWeek,timeGridDay,listWeek prev,today,next",
 				},
 				weekNumbers: false,
 				scrollTime: "07:00:00",
