@@ -133,7 +133,7 @@ export default {
 		};
 	},
 	created() {
-		this.init();
+		// this.init();
 	},
 	methods: {
 		async loadEvents(info, successCallback, failureCallback) {
@@ -207,7 +207,6 @@ export default {
 		},
 		eventClick(event) {
 			const id = event.event.extendedProps._id;
-			console.log("clicked event" + id);
 			const clickedEvent = this.events[id];
 			if (clickedEvent) {
 				console.log(clickedEvent.attributes["x-sc-featurevideoconference"]);
@@ -223,6 +222,8 @@ export default {
 					// go to course page
 					const target = "/courses/" + clickedEvent.attributes["x-sc-courseid"];
 					location.href = target;
+				} else {
+					//TODO: edit mode for private events
 				}
 			}
 		},
@@ -230,10 +231,6 @@ export default {
 			this.resetScope();
 			this.modalActive = false;
 			this.dateEditable = false;
-		},
-		init() {
-			// initially set ScopeID to userId
-			this.currentUserId = this.$store.currentUserId;
 		},
 		submit() {
 			const start = this.setTime(
@@ -364,10 +361,10 @@ export default {
 			}
 		},
 		async postCalendarData(startDate, endDate) {
-			console.log(this.currentUserId);
+			const { user } = this.$store.state.auth;
 			this.$store.dispatch("calendar/create", {
 				startDate: startDate,
-				scopeId: this.currentUserId, //check this
+				scopeId: user.id, //check this
 				courseScopeId: this.courseScopeId,
 				teamScopeId: this.teamScopeId,
 				endDate: endDate,
