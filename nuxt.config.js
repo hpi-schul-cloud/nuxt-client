@@ -66,7 +66,7 @@ module.exports = {
 	 ** Headers of the page
 	 */
 	head: {
-		title: pkg.name,
+		titleTemplate: "%s",
 		meta: [
 			{
 				charset: "utf-8",
