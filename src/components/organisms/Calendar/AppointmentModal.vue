@@ -4,18 +4,20 @@
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<modal-body-info title="Termin Hinzufügen" />
-				<div>
-					<input-radio
-						:value="radioValue"
-						label=""
-						:options="[
-							{ value: 'privat', label: 'Privater Termin', selected: true },
-							{ value: 'teams', label: 'Teamtermin' },
-							{ value: 'courses', label: 'Kurstermin' },
-						]"
-						@input="$emit('input', $event)"
-					/>
-				</div>
+				<template>
+					<user-has-role role="TEACHER">
+						<input-radio
+							:value="radioValue"
+							label=""
+							:options="[
+								{ value: 'privat', label: 'Privater Termin', selected: true },
+								{ value: 'teams', label: 'Teamtermin' },
+								{ value: 'courses', label: 'Kurstermin' },
+							]"
+							@input="$emit('input', $event)"
+						/>
+					</user-has-role>
+				</template>
 				<base-select
 					v-if="isTeamsDDVisible"
 					v-model="contentTeams"
@@ -132,9 +134,10 @@ import BaseModal from "@components/base/BaseModal";
 import BaseSelect from "@components/base/BaseSelect";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import InputRadio from "@components/organisms/DataFilter/inputs/Radio";
+import UserHasRole from "@components/helpers/UserHasRole";
 
 export default {
-	components: { BaseModal, ModalBodyInfo, InputRadio, BaseSelect },
+	components: { BaseModal, ModalBodyInfo, InputRadio, BaseSelect, UserHasRole },
 	props: {
 		inputText: {
 			type: String,

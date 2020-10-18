@@ -57,7 +57,20 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [x] Onclick create prefill clicked values
 // [ ] Localize Modal
 // [ ] Save settings in user preferences ?
-
+// Create Code vom Client
+// summary: data.name,
+// 				location: res.locals.currentSchoolData.name,
+// 				description: data.description,
+// 				startDate: new Date(
+// 					new Date(data.startDate).getTime() + time.startTime,
+// 				).toISOString(),
+// 				duration: time.duration,
+// 				repeat_until: data.untilDate,
+// 				frequency: 'WEEKLY',
+// 				weekday: recurringEventsHelper.getIsoWeekdayForNumber(time.weekday),
+// 				scopeId: data._id,  //why is this doubled
+// 				courseId: data._id,
+// 				courseTimeId: time._id,
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
