@@ -44,6 +44,7 @@
 <script>
 import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 //TODOs
+// [x] Display reoccuring events
 // [ ] Dedicated Edit mode
 // [ ] Handle permissions
 // [x] Partial Data-Loading
@@ -80,6 +81,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import allLocales from "@fullcalendar/core/locales-all";
+import rrulePlugin from "@fullcalendar/rrule";
 import moment from "moment";
 
 export default {
@@ -88,7 +90,13 @@ export default {
 	data() {
 		return {
 			calendarOptions: {
-				plugins: [dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin],
+				plugins: [
+					dayGridPlugin,
+					interactionPlugin,
+					listPlugin,
+					timeGridPlugin,
+					rrulePlugin,
+				],
 				initialView: "timeGridWeek",
 				editable: false, //handle this later on a per event level base on the permission
 				nowIndicator: true,
@@ -149,18 +157,32 @@ export default {
 				};
 				// this will happen on first load
 				if (this.allNeededDataLoaded === false) {
-					console.log("load teams and courses to get colors");
 					await this.getUserTeams();
 					await this.getUserCourses();
 					this.allNeededDataLoaded = true;
 				}
+				console.log(options);
 				await this.$store
 					.dispatch("calendar/getEvents", options)
 					.then((res) => {
 						res.forEach((event) => {
-							(event.color = this.checkforItemColor(event)),
-								//store to internal key value store
-								this.pushEvent(event);
+							if (
+								event.included &&
+								event.included[0] &&
+								event.included[0].type == "rrule" &&
+								event.included[0].attributes
+							) {
+								const att = event.included[0].attributes;
+								event.rrule = {
+									dtstart: event.attributes.dtstart,
+									freq: att.freq,
+									until: att.until,
+									byweekday: [].concat(att.wkst || []), //enforce array
+								};
+							}
+							event.color = this.checkforItemColor(event);
+							//store to internal key value store
+							this.pushEvent(event);
 						});
 						successCallback(res);
 					});

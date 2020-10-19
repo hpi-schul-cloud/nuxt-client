@@ -10,7 +10,7 @@ const module = mergeDeep(base, {
 		},
 		getEvents: async function (ctx, payload) {
 			console.log(payload);
-			payload.all = true;
+			payload.all = false;
 			const res = await this.$axios.$get("/" + baseUrl, { params: payload });
 			//do we need to commit?
 			return res;
