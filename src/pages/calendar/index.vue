@@ -100,6 +100,7 @@ export default {
 				initialView: "timeGridWeek",
 				editable: false, //handle this later on a per event level base on the permission
 				nowIndicator: true,
+				timeZone: "UTC",
 				dateClick: this.handleDateClick,
 				eventClick: this.eventClick,
 				events: this.loadEvents,
@@ -148,7 +149,6 @@ export default {
 	},
 	methods: {
 		async loadEvents(info, successCallback, failureCallback) {
-			console.log(this.allNeededDataLoaded);
 			try {
 				// from=2020-10-16T09%3A00%3A00.000Z&until=
 				const options = {
@@ -161,7 +161,6 @@ export default {
 					await this.getUserCourses();
 					this.allNeededDataLoaded = true;
 				}
-				console.log(options);
 				await this.$store
 					.dispatch("calendar/getEvents", options)
 					.then((res) => {
