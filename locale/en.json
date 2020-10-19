@@ -352,6 +352,7 @@
 	"pages.content.label.deselect": "Remove",
 	"pages.content.label.select": "Select",
 	"pages.content.label.selected": "Active",
+	"pages.content.material.toMaterial": "Material",
 	"pages.content.notification.errorMsg": "Something has gone wrong. Material could not be added.",
 	"pages.content.notification.lernstoreNotAvailable": "Learning store is not available",
 	"pages.content.notification.loading": "Material is added",

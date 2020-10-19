@@ -11,11 +11,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6239 - adds lernstore permmission check
 - SC-6239 - permmission check now supports also NOT operator (besides OR, AND)
 
+## 25.2.0
+
+### Changed
+
+- SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
+
 ### Fixed
 
 - SC-7198 - fixes links in login page
 - SC-6549 - Added missing Help section in sidebar
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
+- SC-6831 Fixes search/clear icons behaviour in lernstore
 
 ## 25.0.2
 

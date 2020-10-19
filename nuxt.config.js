@@ -1,5 +1,6 @@
 require("dotenv").config();
 const pkg = require("./package");
+const webpack = require("webpack");
 
 const sentryConfig = require("./sentry.config.js");
 
@@ -37,6 +38,15 @@ module.exports = {
 		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 		SC_THEME: process.env.SC_THEME,
 		LERNSTORE_MODE: process.env.LERNSTORE_MODE,
+		FEATURE_MATRIX_MESSENGER_ENABLED:
+			process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
+		FEATURE_MESSENGER_SCHOOL_SETTINGS_VISIBLE:
+			process.env.FEATURE_MESSENGER_SCHOOL_SETTINGS_VISIBLE,
+		FEATURE_MESSENGER_SCHOOL_ROOM_ENABLED:
+			process.env.FEATURE_MESSENGER_SCHOOL_ROOM_ENABLED,
+		MATRIX_MESSENGER_EMBED_URI: process.env.MATRIX_MESSENGER_EMBED_URI,
+		MATRIX_MESSENGER_HOMESERVER_URI:
+			process.env.MATRIX_MESSENGER_HOMESERVER_URI,
 	},
 
 	/*
@@ -123,6 +133,7 @@ module.exports = {
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
+		"@plugins/full-calendar",
 		"@plugins/i18n",
 		"@plugins/vuelidate",
 	],
@@ -179,7 +190,12 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
-		vendor: ["vue-i18n"],
+		vendor: ["vue-i18n", "jquery"],
+		plugins: [
+			new webpack.ProvidePlugin({
+				$: "jquery",
+			}),
+		],
 	},
 	generate: {
 		dir: "dist/nuxt",
