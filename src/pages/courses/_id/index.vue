@@ -1,6 +1,6 @@
 <template>
 	<div v-if="course">
-		<base-grid>
+		<base-grid column-width="3.4rem">
 			<h1 class="h2" style="grid-row: 1; grid-column: 1 / -1;">
 				{{ course.name }}
 			</h1>
@@ -97,7 +97,7 @@ export default {
 					title: value.name,
 					subtitle: "Aufgabe",
 					status: "Entwurf",
-					actionNeeded: false,
+					actionNeeded: true,
 					image: TaskDraftImage,
 				};
 			});
@@ -112,7 +112,6 @@ export default {
 			});
 
 			return [...lessons, ...homeworks];
-			return [];
 		},
 		courseIsEmpty() {
 			return this.courseContents.length === 0;
