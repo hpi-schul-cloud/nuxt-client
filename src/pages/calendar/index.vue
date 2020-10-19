@@ -59,7 +59,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Make events draggable
 // [x] Onclick create prefill clicked values
 // [ ] Localize Modal
-// [ ] Fix time offset and add timezone handling
+// [x] Fix time offset and add timezone handling
 
 // Create Code vom Client
 // summary: data.name,
