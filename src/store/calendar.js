@@ -9,7 +9,6 @@ const module = mergeDeep(base, {
 			await this.$axios.$delete("/" + baseUrl + "/" + payload.id);
 		},
 		getEvents: async function (ctx, payload) {
-			console.log(payload);
 			payload.all = false;
 			const res = await this.$axios.$get("/" + baseUrl, { params: payload });
 			//do we need to commit?
