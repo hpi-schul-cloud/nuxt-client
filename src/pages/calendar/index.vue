@@ -49,7 +49,6 @@
 	</div>
 </template>
 <script>
-import "fullcalendar/dist/fullcalendar.css";
 import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 import moment from "moment";
 export default {
