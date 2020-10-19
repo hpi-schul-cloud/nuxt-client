@@ -35,7 +35,10 @@
 				@cancelConfirm="cancelConfirm"
 			></appointment-modal>
 		</div>
-		<full-calendar :options="calendarOptions"></full-calendar>
+		<full-calendar
+			ref="fullCalendar"
+			:options="calendarOptions"
+		></full-calendar>
 	</div>
 </template>
 <script>
@@ -46,17 +49,17 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [x] Partial Data-Loading
 // [x] On Event Click Go To Team Or Course page if its not a personal event
 // [x] Locales
-// [ ] Update server API docu  (from end)
 // [ ] Handling BBB Events
-// [ ] Send course or team if on create if selected
+// [x] Send course or team if on create if selected
 // [ ] Courses and teams need permissions so we can filter which to display
 // [ ] Suport fullday events (create and view)
 // [x] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
-// [ ] Show event after creation
+// [x] Show event after creation
 // [ ] Make events draggable
 // [x] Onclick create prefill clicked values
 // [ ] Localize Modal
-// [ ] Save settings in user preferences ?
+// [ ] Fix time offset and add timezone handling
+
 // Create Code vom Client
 // summary: data.name,
 // 				location: res.locals.currentSchoolData.name,
@@ -87,7 +90,7 @@ export default {
 			calendarOptions: {
 				plugins: [dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin],
 				initialView: "timeGridWeek",
-				editable: false,
+				editable: false, //handle this later on a per event level base on the permission
 				nowIndicator: true,
 				dateClick: this.handleDateClick,
 				eventClick: this.eventClick,
@@ -101,7 +104,7 @@ export default {
 				weekNumbers: false,
 				scrollTime: "07:00:00",
 				locales: allLocales,
-				locale: this.$i18n.locale, //this.$store.getLocale(),
+				locale: this.$i18n.locale,
 			},
 			events: {},
 			dateEditable: false,
@@ -146,6 +149,7 @@ export default {
 				};
 				// this will happen on first load
 				if (this.allNeededDataLoaded === false) {
+					console.log("load teams and courses to get colors");
 					await this.getUserTeams();
 					await this.getUserCourses();
 					this.allNeededDataLoaded = true;
@@ -209,7 +213,7 @@ export default {
 			const id = event.event.extendedProps._id;
 			const clickedEvent = this.events[id];
 			if (clickedEvent) {
-				console.log(clickedEvent.attributes["x-sc-featurevideoconference"]);
+				console.log(clickedEvent);
 				//if this is true this is a videconference
 				if (clickedEvent.attributes["x-sc-teamid"]) {
 					// go to team page
@@ -362,14 +366,17 @@ export default {
 		},
 		async postCalendarData(startDate, endDate) {
 			const { user } = this.$store.state.auth;
-			this.$store.dispatch("calendar/create", {
+			const event = {
 				startDate: startDate,
 				scopeId: user.id, //check this
-				courseScopeId: this.courseScopeId,
-				teamScopeId: this.teamScopeId,
+				courseId: this.courseScopeId,
+				teamId: this.teamScopeId,
 				endDate: endDate,
 				summary: this.inputText,
-			});
+			};
+			await this.$store.dispatch("calendar/create", event);
+			const calApi = this.$refs.fullCalendar.getApi();
+			calApi.refetchEvents();
 		},
 		async deleteDate() {
 			this.$store.dispatch("calendar/removeDate", {
