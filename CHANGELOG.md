@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Changed
+
+- SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
+
 ## Fixed
 
 - SC-7198 - fixes links in login page
