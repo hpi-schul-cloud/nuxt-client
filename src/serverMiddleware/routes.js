@@ -20,6 +20,7 @@ const routes = [
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
 	`^/login-instances/?`,
+	//`^/calendar/?`,
 	`^/error/`,
 	`^/imprint/?`,
 	`^/termsofuse/?`,
