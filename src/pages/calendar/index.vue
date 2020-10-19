@@ -365,16 +365,26 @@ export default {
 			}
 		},
 		async postCalendarData(startDate, endDate) {
-			const { user } = this.$store.state.auth;
 			const event = {
 				startDate: startDate,
-				scopeId: user.id, //check this
 				courseId: this.courseScopeId,
 				teamId: this.teamScopeId,
 				endDate: endDate,
 				summary: this.inputText,
 			};
-			await this.$store.dispatch("calendar/create", event);
+			if (this.courseScopeId) {
+				event.scopeID = this.courseScopeId;
+				console.log("Course ID found");
+			} else if (this.teamScopeId) {
+				event.scopeID = this.teamScopeId;
+				console.log("Team ID found");
+			} else {
+				const { user } = this.$store.state.auth;
+				event.scopeID = user.id;
+			}
+			// currently the scope id is set explicit as well
+			if (this.courseScopeId)
+				await this.$store.dispatch("calendar/create", event);
 			const calApi = this.$refs.fullCalendar.getApi();
 			calApi.refetchEvents();
 		},
