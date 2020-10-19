@@ -162,7 +162,7 @@ module.exports = {
 	 ** Build configuration
 	 */
 	build: {
-		transpile: ["vue-echarts", "resize-detector"],
+		transpile: ["vue-echarts", "resize-detector", /@fullcalendar.*/],
 		/*
 		 ** You can extend webpack config here
 		 */
