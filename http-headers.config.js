@@ -1,3 +1,20 @@
+/*
+	The matrix based messenger loads its assets (scripts, styles, fonts, images) from a specified domain.
+	After initialization the chat protocol communicates with its home server.
+	The discover domain is used in the client initialization.
+ */
+let matrixMessengerEmbed = "";
+let matrixMessengerHomeserver = "";
+let matrixMessengerDiscoverDomain = "";
+if (process.env.FEATURE_MATRIX_MESSENGER_ENABLED === "true") {
+	matrixMessengerEmbed = process.env.MATRIX_MESSENGER_EMBED_URI;
+	matrixMessengerHomeserver = process.env.MATRIX_MESSENGER_HOMESERVER_URI;
+	matrixMessengerDiscoverDomain = matrixMessengerHomeserver.replace(
+		"matrix.",
+		""
+	);
+}
+
 module.exports = {
 	// Settings for HTTP Content-Security-Policy Header
 	/*
@@ -13,12 +30,11 @@ module.exports = {
 		// Default Content-Security-Policy Header for every site
 		// Use 'strict-dynamic' 'nonce-<nonceValue>' (nonceValue auto generated) to create a whitelist
 		corsDefault: {
-			defaultSrc:
-				"'self' data: blob: wss://schul-cloud.org wss://scchat.schul-cloud.org https://api.schul-cloud.org https://scchat.schul-cloud.org https://s3.hidrive.strato.com https://libreoffice.schul-cloud.org https://docs.schul-cloud.org https://edtrio.schul-cloud.org https://etherpad.schul-cloud.org https://blog.hpi-schul-cloud.de https://sc-content-resources.schul-cloud.org https://sentry.schul-cloud.dev https://open.hpi.de https://upload.wikimedia.org https://user-images.githubusercontent.com",
-			fontSrc: "'self' data:",
-			styleSrc: "'self' 'unsafe-inline'",
+			defaultSrc: `'self' data: blob: wss://schul-cloud.org wss://scchat.schul-cloud.org https://api.schul-cloud.org https://scchat.schul-cloud.org https://s3.hidrive.strato.com https://libreoffice.schul-cloud.org https://docs.schul-cloud.org https://edtrio.schul-cloud.org https://etherpad.schul-cloud.org https://blog.hpi-schul-cloud.de https://sc-content-resources.schul-cloud.org https://sentry.schul-cloud.dev https://open.hpi.de https://upload.wikimedia.org https://user-images.githubusercontent.com ${matrixMessengerEmbed} ${matrixMessengerHomeserver} ${matrixMessengerDiscoverDomain}`,
+			fontSrc: `'self' data: ${matrixMessengerEmbed}`,
+			styleSrc: `'self' 'unsafe-inline' ${matrixMessengerEmbed}`,
 			// scriptSrc: "'strict-dynamic' 'unsafe-eval' 'nonce-<nonceValue>'",
-			scriptSrc: "'self' 'unsafe-eval' 'unsafe-inline'",
+			scriptSrc: `'self' 'unsafe-eval' 'unsafe-inline' ${matrixMessengerEmbed}`,
 			// Please activate for production
 			// upgradeInsecureRequestsSrc: 'upgrade-insecure-requests',
 			// blockAllMixedContentSrc: 'block-all-mixed-content',
