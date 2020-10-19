@@ -25,7 +25,7 @@
 					</template>
 					<template v-else>
 						<div v-for="(content, idx) in courseContents" :key="idx">
-							{{ idx }}. {{ content.type }} {{ content.name }}
+							<task-item v-bind="content"></task-item>
 						</div>
 					</template>
 				</tab>
@@ -65,6 +65,8 @@ import Tab from "@components/atoms/Tab";
 import FabIcon from "@components/molecules/FabIcon";
 import BaseGrid from "@components/base/BaseGrid";
 import EmptyState from "@components/molecules/EmptyState";
+import TaskItem from "@components/molecules/TaskItem";
+import TaskDraftImage from "@assets/img/courses/draft.svg";
 
 export default {
 	layout: "loggedInFull",
@@ -74,6 +76,7 @@ export default {
 		FabIcon,
 		BaseGrid,
 		EmptyState,
+		TaskItem,
 	},
 	computed: {
 		...mapGetters("courses", {
@@ -86,12 +89,29 @@ export default {
 			homeworks: "list",
 		}),
 		courseContents() {
-			// const store = this.$store;
-			// const lessons = store.getters["lessons/list"];
-			// lessons.forEach((lesson) => (lesson.type = "lesson"));
-			// const homeworks = store.getters["homeworks/list"];
-			// homeworks.forEach((homework) => (homework.type = "homework"));
-			// return [...lessons, ...homeworks];
+			const store = this.$store;
+			let lessons = store.getters["lessons/list"];
+			let homeworks = store.getters["homeworks/list"];
+			lessons = lessons.map((value) => {
+				return {
+					title: value.name,
+					subtitle: "Aufgabe",
+					status: "Entwurf",
+					actionNeeded: false,
+					image: TaskDraftImage,
+				};
+			});
+
+			homeworks = homeworks.map((value) => {
+				return {
+					title: value.name,
+					subtitle: "Editor-Dokument",
+					status: "Entwurf",
+					actionNeeded: false,
+				};
+			});
+
+			return [...lessons, ...homeworks];
 			return [];
 		},
 		courseIsEmpty() {
