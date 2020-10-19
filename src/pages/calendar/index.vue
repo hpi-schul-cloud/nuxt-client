@@ -395,18 +395,18 @@ export default {
 				summary: this.inputText,
 			};
 			if (this.courseScopeId) {
-				event.scopeID = this.courseScopeId;
-				console.log("Course ID found");
+				event.scopeId = this.courseScopeId;
+				// console.log("Course ID found");
 			} else if (this.teamScopeId) {
-				event.scopeID = this.teamScopeId;
-				console.log("Team ID found");
+				event.scopeId = this.teamScopeId;
+				// console.log("Team ID found");
 			} else {
 				const { user } = this.$store.state.auth;
-				event.scopeID = user.id;
+				event.scopeId = user.id;
 			}
 			// currently the scope id is set explicit as well
-			if (this.courseScopeId)
-				await this.$store.dispatch("calendar/create", event);
+
+			await this.$store.dispatch("calendar/create", event);
 			const calApi = this.$refs.fullCalendar.getApi();
 			calApi.refetchEvents();
 		},
