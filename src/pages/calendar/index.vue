@@ -47,6 +47,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [x] Display reoccuring events
 // [ ] Dedicated Edit mode
 // [ ] Handle permissions
+// [ ] Add location to modal
 // [x] Partial Data-Loading
 // [x] On Event Click Go To Team Or Course page if its not a personal event
 // [x] Locales
