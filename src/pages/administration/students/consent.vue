@@ -438,6 +438,7 @@ export default {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 				users: this.selectedStudents,
+				$limit: this.selectedStudents.length,
 			};
 
 			await this.$store.dispatch("users/handleUsers", {
