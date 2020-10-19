@@ -37,11 +37,6 @@
 				:show-label="true"
 				:actions="[
 					{
-						label: 'Thema',
-						icon: 'create',
-						iconSource: 'custom',
-					},
-					{
 						label: 'Editor-Document',
 						icon: 'create',
 						iconSource: 'custom',
