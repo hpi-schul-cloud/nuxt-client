@@ -10,11 +10,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-6060 Updated caniuse-lite
 
-## Changed
+## 25.2.0
+
+### Changed
 
 - SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
 
-## Fixed
+### Fixed
 
 - SC-7198 - fixes links in login page
 - SC-6549 - Added missing Help section in sidebar
