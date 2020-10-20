@@ -62,7 +62,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Localize Modal (marco)
 // [x] Fix time offset and add timezone handling
 // [ ] Full course event modal
-// [ ] Fix Timezone offset when creating new event
+// [x] Fix Timezone offset when creating new event
 // [ ] Implement custom View for moving dashbaord to Vue (marco)
 // [x] Fix warning (marco): vue.runtime.esm.js?2b0e:619 [Vue warn]: Avoid mutating a prop directly since the value will be overwritten whenever the parent component re-renders. Instead, use a data or computed property based on the prop's value. Prop being mutated: "inputText"
 // Create Code vom Client
@@ -185,8 +185,20 @@ export default {
 							}
 							event.color = this.checkforItemColor(event);
 							//store to internal key value store
-							//console.log(event);
-							//event.allDay = true; //for testing
+							// set fulldate property for events
+							if (event.attributes.dtstart && event.attributes.dtend) {
+								const start = moment.utc(event.attributes.dtstart);
+								const end = moment.utc(event.attributes.dtend);
+								if (
+									start.hour() == 0 &&
+									start.minute() == 0 &&
+									end.hour() == 0 &&
+									end.minutes() == 0
+								) {
+									event.allDay = true;
+								}
+							}
+
 							this.pushEvent(event);
 						});
 						successCallback(res);
