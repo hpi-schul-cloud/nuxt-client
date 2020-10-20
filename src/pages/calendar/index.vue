@@ -45,23 +45,24 @@
 import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 //TODOs
 // [x] Display reoccuring events
-// [ ] Dedicated Edit mode
+// [ ] Dedicated Edit mode (marco)
 // [ ] Handle permissions
-// [ ] Add location to modal
+// [ ] Add location to modal (marco)
 // [x] Partial Data-Loading
 // [x] On Event Click Go To Team Or Course page if its not a personal event
 // [x] Locales
 // [ ] Handling BBB Events
 // [x] Send course or team if on create if selected
-// [ ] Courses and teams need permissions so we can filter which to display
-// [ ] Suport fullday events (create and view)
+// [ ] Courses and teams need permissions so we can filter which to display (server)
+// [ ] Support fullday events (create and view) (marco) https://stackoverflow.com/questions/1716237/single-day-all-day-appointments-in-ics-files
 // [x] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
 // [x] Show event after creation
-// [ ] Make events draggable
+// [ ] Make events draggable (need more grsanular permissions first)
 // [x] Onclick create prefill clicked values
-// [ ] Localize Modal
+// [ ] Localize Modal (marco)
 // [x] Fix time offset and add timezone handling
-
+// [ ] Full course event modal
+// [x] Fix warning (marco): vue.runtime.esm.js?2b0e:619 [Vue warn]: Avoid mutating a prop directly since the value will be overwritten whenever the parent component re-renders. Instead, use a data or computed property based on the prop's value. Prop being mutated: "inputText"
 // Create Code vom Client
 // summary: data.name,
 // 				location: res.locals.currentSchoolData.name,
@@ -182,6 +183,8 @@ export default {
 							}
 							event.color = this.checkforItemColor(event);
 							//store to internal key value store
+							//console.log(event);
+							//event.allDay = true; //for testing
 							this.pushEvent(event);
 						});
 						successCallback(res);
@@ -405,7 +408,6 @@ export default {
 				event.scopeId = user.id;
 			}
 			// currently the scope id is set explicit as well
-
 			await this.$store.dispatch("calendar/create", event);
 			const calApi = this.$refs.fullCalendar.getApi();
 			calApi.refetchEvents();
