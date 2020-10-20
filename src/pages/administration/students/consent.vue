@@ -297,7 +297,7 @@ export default {
 		BaseInput,
 	},
 	meta: {
-		requiredPermissions: ["STUDENT_CREATE", "STUDENT_LIST"],
+		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
 	layout: "loggedInFull",
 	props: {},
