@@ -54,7 +54,8 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Handling BBB Events
 // [x] Send course or team if on create if selected
 // [ ] Courses and teams need permissions so we can filter which to display (server)
-// [ ] Support fullday events (create and view) (marco) https://stackoverflow.com/questions/1716237/single-day-all-day-appointments-in-ics-files
+// [x] Support fullday events (view)
+// [ ] Support fullday events (create / UX) (marco)
 // [x] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
 // [x] Show event after creation
 // [ ] Make events draggable (need more grsanular permissions first)
