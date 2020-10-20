@@ -15,7 +15,8 @@ storiesOf("5 Molecules/Tabs", module)
 			</Tabs>
 		`,
 		methods: {},
-	})).add("TabContent", () => ({
+	}))
+	.add("TabContent", () => ({
 		components: { TabContent },
 		template: `<TabContent name="Tab 1" :selected="true">Tab Content</TabContent>`,
 	}));
