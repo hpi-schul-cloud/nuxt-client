@@ -65,6 +65,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Full course event modal
 // [x] Fix Timezone offset when creating new event
 // [ ] Implement custom View for moving dashbaord to Vue (marco)
+// [ ] Buttons kleiner (marco)
 // [x] Fix warning (marco): vue.runtime.esm.js?2b0e:619 [Vue warn]: Avoid mutating a prop directly since the value will be overwritten whenever the parent component re-renders. Instead, use a data or computed property based on the prop's value. Prop being mutated: "inputText"
 // Create Code vom Client
 // summary: data.name,
