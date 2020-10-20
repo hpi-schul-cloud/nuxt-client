@@ -62,6 +62,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [ ] Localize Modal (marco)
 // [x] Fix time offset and add timezone handling
 // [ ] Full course event modal
+// [ ] Fix Timezone offset when creating new event
 // [ ] Implement custom View for moving dashbaord to Vue (marco)
 // [x] Fix warning (marco): vue.runtime.esm.js?2b0e:619 [Vue warn]: Avoid mutating a prop directly since the value will be overwritten whenever the parent component re-renders. Instead, use a data or computed property based on the prop's value. Prop being mutated: "inputText"
 // Create Code vom Client
@@ -213,7 +214,7 @@ export default {
 			this.confirmActive = false;
 		},
 		handleDateClick(event) {
-			const startDate = moment(event.date);
+			const startDate = moment.utc(event.date);
 			const endDate = moment(startDate).add(60, "minutes");
 			this.setModalEventAndState(startDate, endDate, "", "");
 		},
