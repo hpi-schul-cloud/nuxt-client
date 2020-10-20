@@ -59,6 +59,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 .tab-icon {
+	margin-right: var(--space-xs);
 	font-size: var(--text-sm);
 }
 ul.tabs {
@@ -76,14 +77,17 @@ ul.tabs {
 		justify-content: center;
 		width: 100%;
 		padding: var(--space-xs);
-		color: var(--color-gray);
+		color: var(--disabled-dark);
 		list-style: none;
 		cursor: pointer;
 		.tab-button {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: var(--text-sm);
+			font-family: PT Sans Narrow var(--font-accent);
+			font-size: var(--text-md);
+			font-weight: var(--button-font-weight);
+			line-height: var(--button-line-height);
 			cursor: pointer;
 			background: transparent;
 			border: none;
@@ -94,24 +98,23 @@ ul.tabs {
 			.tab-button,
 			.tab-icon {
 				font-weight: var(--font-weight-bold);
-				color: var(--color-gray-dark);
+				color: var(--color-tertiary);
 				transition: var(--duration-transition-slow) ease-in-out;
 			}
 			&::after {
 				position: absolute;
-				bottom: var(--space-xs-3);
+				top: calc(2.2 * (var(--space-md)));
 				left: 0;
 				width: 100%;
 				height: 2px;
 				content: " ";
-				background: var(--color-gray-dark);
+				background: var(--color-tertiary);
 				animation: fadeEffect var(--duration-transition-slow) ease-in-out;
 			}
 		}
 	}
 	li:hover {
-		color: var(--color-gray-dark);
-		background-color: var(--color-gray-light);
+		color: var(--gray-medium);
 		.tab-button {
 			font-weight: var(--font-weight-bold);
 		}
