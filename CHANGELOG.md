@@ -6,13 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
-## 25.2.0
+## Added
 
-### Changed
+- SC-7020 - added a new course TaskItem component
+
+## Changed
 
 - SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
 
-### Fixed
+## Fixed
 
 - SC-7198 - fixes links in login page
 - SC-6549 - Added missing Help section in sidebar
