@@ -47,7 +47,9 @@
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
 						class="date base-input-default"
-						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
+						:vmodel="
+							dayjs(slotProps.data, 'DD.MM.YYYY').format($t('format.date'))
+						"
 						type="date"
 						label=""
 						:birth-date="true"
@@ -61,7 +63,9 @@
 					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
 						class="date base-input-default"
-						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
+						:vmodel="
+							dayjs(slotProps.data, 'DD.MM.YYYY').format($t('format.date'))
+						"
 						type="date"
 						label=""
 						:birth-date="true"
@@ -116,7 +120,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
+						{{ dayjs(slotProps.data, "DD.MM.YYYY").format($t("format.date")) }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -169,7 +173,7 @@
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
+					{{ dayjs(slotProps.data, "DD.MM.YYYY").format($t("format.date")) }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -466,7 +470,9 @@ export default {
 			return {
 				input: (dateData) => {
 					if (dateData !== "") {
-						const newDate = dayjs(dateData, "YYYY-MM-DD").format("DD.MM.YYYY");
+						const newDate = dayjs(dateData, "YYYY-MM-DD").format(
+							$t("format.date")
+						);
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -523,7 +529,7 @@ export default {
 					return {
 						_id: student._id,
 						birthday: dayjs(student.birthday, "DD.MM.YYYY").format(
-							"YYYY-MM-DD"
+							$t("format.date")
 						),
 						password: student.password,
 						consent: {

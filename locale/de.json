@@ -155,6 +155,8 @@
 	"error.load": "Fehler beim Laden der Daten.",
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"format.date": "DD.MM.YYYY",
+	"format.time": "HH:mm",
 	"global.sidebar.addons": "Add-ons",
 	"global.sidebar.calendar": "Termine",
 	"global.sidebar.classes": "Klassen",

@@ -182,10 +182,10 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return dayjs(this.resource.createdAt).format("DD.MM.YYYY");
+			return dayjs(this.resource.createdAt).format(this.$t("format.date"));
 		},
 		updatedAt() {
-			return dayjs(this.resource.modifiedAt).format("DD.MM.YYYY");
+			return dayjs(this.resource.modifiedAt).format(this.$t("format.date"));
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);

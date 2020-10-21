@@ -49,7 +49,9 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
+				<span class="text-content">{{
+					dayjs(data).format($t("format.date"))
+				}}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">

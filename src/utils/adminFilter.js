@@ -42,9 +42,9 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 	chipTemplate: (filter) => {
 		return `${ctx.$t("utils.adminFilter.date.created")} ${dayjs(
 			filter[0]
-		).format("DD.MM.YYYY")} ${ctx.$t("common.words.and")} ${dayjs(
+		).format(ctx.$t("format.date"))} ${ctx.$t("common.words.and")} ${dayjs(
 			filter[1]
-		).format("DD.MM.YYYY")} `;
+		).format(ctx.$t("format.date"))} `;
 	},
 	parser: {
 		generator: (filterGroupConfig, values) => {
