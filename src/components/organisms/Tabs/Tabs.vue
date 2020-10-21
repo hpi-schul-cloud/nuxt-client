@@ -59,8 +59,8 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 .tab-icon {
-	margin-right: var(--space-xs);
-	font-size: var(--text-sm);
+	margin-right: var(--space-xs-3);
+	font-size: var(--text-md);
 }
 ul.tabs {
 	display: flex;
@@ -77,7 +77,9 @@ ul.tabs {
 		justify-content: center;
 		width: 100%;
 		padding: var(--space-xs);
-		color: var(--disabled-dark);
+		font-family: var(--font-accent);
+		font-size: var(--text-md);
+		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
 		.tab-button {
@@ -86,8 +88,9 @@ ul.tabs {
 			justify-content: center;
 			font-family: PT Sans Narrow var(--font-accent);
 			font-size: var(--text-md);
-			font-weight: var(--button-font-weight);
+			font-weight: var(--font-weight-bold);
 			line-height: var(--button-line-height);
+			color: var(--color-disabled-dark);
 			cursor: pointer;
 			background: transparent;
 			border: none;
@@ -95,11 +98,12 @@ ul.tabs {
 		}
 		&.is-active {
 			position: relative;
+			color: var(--color-tertiary);
 			.tab-button,
 			.tab-icon {
 				font-weight: var(--font-weight-bold);
 				color: var(--color-tertiary);
-				transition: var(--duration-transition-slow) ease-in-out;
+				transition: var(--duration-transition-medium) ease-in-out;
 			}
 			&::after {
 				position: absolute;
@@ -109,14 +113,14 @@ ul.tabs {
 				height: 2px;
 				content: " ";
 				background: var(--color-tertiary);
-				animation: fadeEffect var(--duration-transition-slow) ease-in-out;
+				animation: fadeEffect var(--duration-transition-medium) ease-in-out;
 			}
 		}
 	}
-	li:hover {
-		color: var(--gray-medium);
+	li:hover:not(.is-active) {
+		color: var(--color-gray-dark);
 		.tab-button {
-			font-weight: var(--font-weight-bold);
+			color: var(--color-gray-dark);
 		}
 	}
 }
@@ -126,6 +130,10 @@ ul.tabs {
 		max-width: 450px;
 	}
 	.tab-button span {
+		animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+	}
+	.tab-icon {
+		margin-right: var(--space-xs-4);
 		animation: fadeEffect var(--duration-transition-medium) ease-in-out;
 	}
 	li:not(.is-active) {
