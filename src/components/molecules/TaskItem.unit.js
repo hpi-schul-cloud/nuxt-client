@@ -35,7 +35,7 @@ describe("@components/molecules/TaskItem", () => {
 				title: props.title,
 			},
 		});
-		expect(wrapper.find("img").exists()).toBe(true);
+		expect(wrapper.find(".image").exists()).toBe(true);
 	});
 
 	it("renders the pulsating dot if actionNeeded is true", () => {

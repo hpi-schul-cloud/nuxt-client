@@ -1,7 +1,12 @@
 <template>
 	<div class="card">
 		<div class="card-body">
-			<img v-if="image" :src="image" class="image" role="presentation" />
+			<base-image
+				v-if="image"
+				:img-src="image"
+				class="image"
+				role="presentation"
+			/>
 			<!-- TODO: this progress ring needs to be replaced with a different progress ring that uses fractions (e.g. 9/12)-->
 			<progress-ring
 				v-else-if="progress"
@@ -53,9 +58,17 @@ import PulsatingDot from "@components/atoms/PulsatingDot";
 import BaseButton from "@basecomponents/BaseButton";
 import BaseIcon from "@basecomponents/BaseIcon";
 import ContextMenu from "@components/molecules/ContextMenu";
+import BaseImage from "@basecomponents/BaseImage";
 
 export default {
-	components: { ProgressRing, PulsatingDot, BaseButton, BaseIcon, ContextMenu },
+	components: {
+		ProgressRing,
+		PulsatingDot,
+		BaseImage,
+		BaseButton,
+		BaseIcon,
+		ContextMenu,
+	},
 	props: {
 		image: {
 			type: String,
@@ -98,7 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-$color-dark-gray: #616161; // change to var(--color-gray-medium)
+$color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles package is updated in the npm registry to 0.2.2
 
 .card {
 	display: flex;
@@ -117,6 +130,7 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium)
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	min-height: 48px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -129,11 +143,11 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium)
 .title {
 	overflow: hidden;
 	font-size: var(--text-md);
-	line-height: var(--line-height-sm);
 	text-overflow: ellipsis;
 }
 
 .subtitle {
+	margin-bottom: calc(0.5 * (var(--space-xs)));
 	overflow: hidden;
 	font-size: var(--text-xs);
 	line-height: var(--line-height-sm);

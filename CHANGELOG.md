@@ -6,8 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
-## Fixed
+## Unreleased
 
+- SC-6060 Updated caniuse-lite
+
+## Added
+
+- SC-7020 - added a new course TaskItem component
+
+## 25.2.0
+
+## Changed
+
+- SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
+
+### Fixed
+
+- SC-7339 - Fixed consent permission to STUDENT_EDIT from STUDENT_CREATE, which was not allowing teachers to access the bulkconsent action
 - SC-7198 - fixes links in login page
 - SC-6549 - Added missing Help section in sidebar
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display

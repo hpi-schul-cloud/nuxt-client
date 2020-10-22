@@ -297,7 +297,7 @@ export default {
 		BaseInput,
 	},
 	meta: {
-		requiredPermissions: ["STUDENT_CREATE", "STUDENT_LIST"],
+		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
 	layout: "loggedInFull",
 	props: {},
@@ -438,6 +438,7 @@ export default {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 				users: this.selectedStudents,
+				$limit: this.selectedStudents.length,
 			};
 
 			await this.$store.dispatch("users/handleUsers", {
