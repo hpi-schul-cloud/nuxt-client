@@ -1,10 +1,11 @@
 <template>
 	<div v-if="course">
-		<base-grid column-width="3.4rem">
-			<h1 class="h2" style="grid-row: 1; grid-column: 1 / -1;">
+		<base-grid>
+			<h1 class="h2 header">
+				<!-- TODO: Replace with HEADER component when ready -->
 				{{ course.name }}
 			</h1>
-			<tabs style="grid-row: 2; grid-column: 1 / -1;">
+			<tabs class="tabs">
 				<tab
 					:name="$t('pages.courses._id.educational_content')"
 					icon-name="lerninhalte"
@@ -18,37 +19,31 @@
 							<template v-slot:description>
 								<!-- eslint-disable vue/no-v-html -->
 								<span
+									style="display: block;"
 									v-html="$t('pages.courses._id.empty_course_description')"
 								/>
+								<base-button
+									class="add-inhalt"
+									size="medium"
+									design="floating-action-button"
+								>
+									<base-icon source="material" icon="add" />
+									Inhalt Hinzufugen
+								</base-button>
 							</template>
 						</empty-state>
 					</template>
 					<template v-else>
-						<div v-for="(content, idx) in courseContents" :key="idx">
-							<task-item v-bind="content"></task-item>
-						</div>
+						<task-item
+							v-for="(content, idx) in courseContents"
+							:key="idx"
+							v-bind="content"
+						></task-item>
 					</template>
 				</tab>
 				<tab name="Groups" icon-name="gruppen">Groups</tab>
 				<tab name="Tools" icon-name="tools">Tools</tab>
 			</tabs>
-			<fab-icon
-				style="grid-row: 2; grid-column: -1;"
-				:show-label="true"
-				:actions="[
-					{
-						label: 'Editor-Document',
-						icon: 'create',
-						iconSource: 'custom',
-					},
-					{
-						label: 'Aufgabe',
-						icon: 'create',
-						iconSource: 'custom',
-					},
-				]"
-			>
-			</fab-icon>
 		</base-grid>
 	</div>
 </template>
@@ -57,21 +52,23 @@
 import { mapGetters } from "vuex";
 import Tabs from "@components/organisms/Tabs/Tabs";
 import Tab from "@components/atoms/Tab";
-import FabIcon from "@components/molecules/FabIcon";
 import BaseGrid from "@components/base/BaseGrid";
 import EmptyState from "@components/molecules/EmptyState";
 import TaskItem from "@components/molecules/TaskItem";
 import TaskDraftImage from "@assets/img/courses/draft.svg";
+import BaseButton from "@components/base/BaseButton";
+import BaseIcon from "@components/base/BaseIcon";
 
 export default {
 	layout: "loggedInFull",
 	components: {
 		Tabs,
 		Tab,
-		FabIcon,
 		BaseGrid,
 		EmptyState,
 		TaskItem,
+		BaseButton,
+		BaseIcon,
 	},
 	computed: {
 		...mapGetters("courses", {
@@ -105,7 +102,7 @@ export default {
 					actionNeeded: false,
 				};
 			});
-
+			return [];
 			return [...lessons, ...homeworks];
 		},
 		courseIsEmpty() {
@@ -135,3 +132,13 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.tabs,
+.header {
+	grid-column: 1 / -1;
+}
+.add-inhalt {
+	margin-top: var(--space-md);
+}
+</style>
