@@ -50,7 +50,10 @@ export const actions = {
 		const user = await this.$axios.$get("/me");
 
 		const roles = await this.$axios.$get(`/roles/user/${user.id}`);
-		user.permissions = roles.reduce((acc, role) => [...new Set(acc.concat(role.permissions))], []);
+		user.permissions = roles.reduce(
+			(acc, role) => [...new Set(acc.concat(role.permissions))],
+			[]
+		);
 
 		commit("setUser", user);
 		if (user.schoolId) {
