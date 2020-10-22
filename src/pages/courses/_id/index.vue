@@ -28,7 +28,7 @@
 									design="floating-action-button"
 								>
 									<base-icon source="material" icon="add" />
-									Inhalt Hinzufugen
+									{{ $t("pages.courses._id.empty_course_add_content") }}
 								</base-button>
 							</template>
 						</empty-state>

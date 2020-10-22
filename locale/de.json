@@ -381,6 +381,7 @@
 	"pages.courses._id.educational_content": "Lerninhalte",
 	"pages.courses._id.empty_course_title": "Keine Lerninhalte vorhanden",
 	"pages.courses._id.empty_course_description": "Erstelle Themen/Überschriften, Aufgaben und Editor-Dokumente für deinen Kurs. Themen/Überschriften sind neuerdings Überschriften mit denen du deine Aufbagen und Editor-Dokumente sortieren und strukturieren kannst.",
+	"pages.courses._id.empty_course_add_content": "Inhalt Hinzufügen",
 	"pages.impressum.title": "Impressum",
 	"pages.loginInstances.brb_link": "https://brandenburg.schul-cloud.org/login",
 	"pages.loginInstances.bundesland": "Wähle deine Cloud",
