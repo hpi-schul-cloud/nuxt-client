@@ -1,6 +1,6 @@
 <template>
 	<div v-if="course">
-		<base-grid>
+		<base-grid class="no-margin">
 			<h1 class="h2 header">
 				<!-- TODO: Replace with HEADER component when ready -->
 				{{ course.name }}
@@ -34,11 +34,13 @@
 						</empty-state>
 					</template>
 					<template v-else>
-						<task-item
+						<div
 							v-for="(content, idx) in courseContents"
 							:key="idx"
-							v-bind="content"
-						></task-item>
+							class="task-item-container"
+						>
+							<task-item v-bind="content"></task-item>
+						</div>
 					</template>
 				</tab>
 				<tab name="Groups" icon-name="gruppen">Groups</tab>
@@ -60,7 +62,7 @@ import BaseButton from "@components/base/BaseButton";
 import BaseIcon from "@components/base/BaseIcon";
 
 export default {
-	layout: "loggedInFull",
+	layout: "loggedInFullNoPadding",
 	components: {
 		Tabs,
 		Tab,
@@ -102,7 +104,6 @@ export default {
 					actionNeeded: false,
 				};
 			});
-			return [];
 			return [...lessons, ...homeworks];
 		},
 		courseIsEmpty() {
@@ -134,11 +135,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@styles";
 .tabs,
 .header {
 	grid-column: 1 / -1;
 }
+
 .add-inhalt {
 	margin-top: var(--space-md);
+}
+
+.task-item-container {
+	margin: 0 var(--space-xl-5);
+
+	@media (max-width: 750px) {
+		margin: 0 var(--space-lg);
+	}
 }
 </style>
