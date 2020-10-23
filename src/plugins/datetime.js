@@ -21,6 +21,8 @@ const FORMAT = {
 	dateTime: "DD.MM.YYYY HH:mm",
 	dateLong: "dddd, DD. MMMM YYYY",
 	time: "HH:mm",
+	inputDate: "YYYY-MM-DD", // Don't change this! Format defined by HTML standards
+	inputTime: "HH:mm", // Don't change this! Format defined by HTML standards
 };
 
 /**
@@ -80,12 +82,32 @@ export const formatDate = (date) => {
 };
 
 export const inputRangeDate = (offset = 0, offsetBase = "y") => {
-	return dayjs().add(offset, offsetBase).format("YYYY-MM-DD");
+	return dayjs().add(offset, offsetBase).format(FORMAT.inputDate);
+};
+
+export const fromInputDateTime = (date, time = null) => {
+	const dateString = `${date}${time ? ` ${time}` : ""}`;
+	return dayjs.tz(dateString);
 };
 
 export const fromNow = (date) => {
-	console.log(`fromNow: ${date} = ${dayjs(date).fromNow()}`);
-	return dayjs(date).fromNow();
+	return dayjs.tz(date).fromNow();
+};
+
+export const createInputDateTime = (date) => {
+	const resultDate = dayjs(date).tz(currentTimezone);
+	return [
+		resultDate.format(FORMAT.inputDate),
+		resultDate.format(FORMAT.inputTime),
+	];
+};
+
+/**
+ * @return {dayjs} Current date based on current timezone
+ */
+export const currentDate = () => {
+	const result = dayjs.tz();
+	return result;
 };
 
 export default ({ app, store }) => {

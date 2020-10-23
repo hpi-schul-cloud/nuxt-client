@@ -48,7 +48,8 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
+import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
+
 import TextEditor from "@components/molecules/TextEditor";
 import TitleInput from "@components/molecules/TitleInput";
 
@@ -100,11 +101,10 @@ export default {
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
 			}
-			const date = dayjs(
-				`${this.data.date.date} ${this.data.date.time}`,
-				"YYYY-MM-DD HH:MM"
-			);
-			return date.toISOString();
+			return fromInputDateTime(
+				this.data.date.date,
+				this.data.date.time
+			).toISOString();
 		},
 		errors() {
 			const title = this.data.title
@@ -160,9 +160,9 @@ export default {
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				const date = dayjs(displayAt);
-				this.data.date.date = date.format("YYYY-MM-DD");
-				this.data.date.time = date.format("HH:mm");
+				[this.data.date.date, this.data.date.time] = createInputDateTime(
+					displayAt
+				);
 			}
 		},
 		async create() {
