@@ -138,7 +138,6 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 
@@ -165,11 +164,6 @@ export default {
 		},
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
-	},
-	data() {
-		return {
-			dayjs,
-		};
 	},
 	computed: {
 		provider() {
