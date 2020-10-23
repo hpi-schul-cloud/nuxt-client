@@ -62,7 +62,7 @@
 		"material-icons-svg": "^1.0.0",
 		"moment": "^2.27.0",
 		"nuxt": "^2.14.7",
-		"tiptap": "^1.29.4",
+		"tiptap": "^1.30.0",
 		"tiptap-extensions": "^1.32.1",
 		"vue": "^2.6.12",
 		"vue-echarts": "^4.0.4",
