@@ -1,9 +1,13 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import timezone from "dayjs/plugin/timezone";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/de";
+import "dayjs/locale/en";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(relativeTime);
 
 const DEFAULT_TIMEZONE = "Europe/Berlin";
 
@@ -79,8 +83,16 @@ export const inputRangeDate = (offset = 0, offsetBase = "y") => {
 	return dayjs().add(offset, offsetBase).format("YYYY-MM-DD");
 };
 
+export const fromNow = (date) => {
+	console.log(`fromNow: ${date} = ${dayjs(date).fromNow()}`);
+	return dayjs(date).fromNow();
+};
+
 export default ({ app, store }) => {
 	app.$datetime = {};
 	setDefaultTimezone(app, store);
 	setDefaultFormats(app);
+
+	const locale = store.getters["auth/getLocale"] || "de";
+	dayjs.locale(locale);
 };
