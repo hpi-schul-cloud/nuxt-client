@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-6060 Updated caniuse-lite
 
+### Changed in Unreleased
+
+- SC-5476 Renamed env vars to be consistent with old client and server
+
 ## 25.2.0
 
 ### Changed
