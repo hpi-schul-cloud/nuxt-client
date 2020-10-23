@@ -75,6 +75,10 @@ export const formatDate = (date) => {
 	return dayjs.tz(date).format(FORMAT.date);
 };
 
+export const inputRangeDate = (offset = 0, offsetBase = "y") => {
+	return dayjs().add(offset, offsetBase).format("YYYY-MM-DD");
+};
+
 export default ({ app, store }) => {
 	app.$datetime = {};
 	setDefaultTimezone(app, store);
