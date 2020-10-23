@@ -142,7 +142,7 @@
 		"sharp": "^0.25.4",
 		"start-server-and-test": "^1.11.2",
 		"storybook-addon-vue-info": "^1.4.2",
-		"style-loader": "^1.2.1",
+		"style-loader": "^2.0.0",
 		"stylelint": "^13.7.2",
 		"stylelint-declaration-use-variable": "^1.7.2",
 		"svg-inline-loader": "^0.8.2",
