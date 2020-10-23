@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import BaseListItem from "@components/molecules/TaskItem";
-import ExampleImage from "@assets/img/courses/draft.svg";
+import ExampleImage from "@assets/img/courses/task-draft.svg";
 import { boolean, text } from "@storybook/addon-knobs";
 
 storiesOf("5 Molecules/TaskItem", module)

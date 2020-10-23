@@ -34,12 +34,12 @@
 						</empty-state>
 					</template>
 					<template v-else>
-						<div
-							v-for="(content, idx) in courseContents"
-							:key="idx"
-							class="task-item-container"
-						>
-							<task-item v-bind="content"></task-item>
+						<div class="task-item-container">
+							<task-item
+								v-for="(content, idx) in courseContents"
+								:key="idx"
+								v-bind="content"
+							></task-item>
 						</div>
 					</template>
 				</tab>
@@ -57,7 +57,6 @@ import Tab from "@components/atoms/Tab";
 import BaseGrid from "@components/base/BaseGrid";
 import EmptyState from "@components/molecules/EmptyState";
 import TaskItem from "@components/molecules/TaskItem";
-import TaskDraftImage from "@assets/img/courses/draft.svg";
 import BaseButton from "@components/base/BaseButton";
 import BaseIcon from "@components/base/BaseIcon";
 
@@ -86,24 +85,32 @@ export default {
 			const store = this.$store;
 			let lessons = store.getters["lessons/list"];
 			let homeworks = store.getters["homeworks/list"];
-			lessons = lessons.map((value) => {
+
+			lessons = this.adaptCourseItemsData(lessons, (lesson) => {
 				return {
-					title: value.name,
-					subtitle: "Aufgabe",
-					status: "Entwurf",
-					actionNeeded: true,
-					image: TaskDraftImage,
+					title: lesson.name,
+					subtitle: "Editor-Document",
+					status: lesson.hidden ? "Entwurf" : "",
+					image: lesson.hidden
+						? "@assets/img/courses/document-draft.svg"
+						: "@assets/img/courses/document-new.svg",
 				};
 			});
+
+			// homeworks = this.adaptCourseItemsData(homeworks, (homework) => {
+			// 	return {
+			// 		title:
+			// 	}
+			// })
 
 			homeworks = homeworks.map((value) => {
 				return {
 					title: value.name,
-					subtitle: "Editor-Dokument",
-					status: "Entwurf",
+					subtitle: "Aufgabe",
 					actionNeeded: false,
 				};
 			});
+			// return [];
 			return [...lessons, ...homeworks];
 		},
 		courseIsEmpty() {
@@ -130,6 +137,10 @@ export default {
 				},
 			});
 		},
+		adaptCourseItemsData(courseItems, adaptionFunction) {
+			return courseItems.map(adaptionFunction);
+		},
+		prepareSubtitleForHomework() {},
 	},
 };
 </script>
@@ -146,10 +157,10 @@ export default {
 }
 
 .task-item-container {
-	margin: 0 var(--space-xl-5);
+	margin: 0 var(--space-lg);
 
-	@media (max-width: 750px) {
-		margin: 0 var(--space-lg);
+	@include breakpoint(desktop) {
+		margin: 0 var(--space-xl-5);
 	}
 }
 </style>
