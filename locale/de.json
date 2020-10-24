@@ -365,6 +365,8 @@
 	"pages.content.label.select": "Auswählen",
 	"pages.content.label.selected": "Aktiv",
 	"pages.content.material.toMaterial": "Zum Inhalt",
+	"pages.content.material.leavePageWarningMain": "Hinweis: Beim Klicken des Links verlassen Sie das Angebot der Schul-Cloud",
+	"pages.content.material.leavePageWarningFooter": "Die Nutzung dieser Angebote unterliegt gegebenenfalls anderen rechtlichen Bedingungen. Bitte schauen Sie daher in die Datenschutzerklärung des externen Anbieters!",
 	"pages.content.notification.errorMsg": "Material konnte nicht hinzugefügt werden",
 	"pages.content.notification.lernstoreNotAvailable": "Lernstore ist nicht verfügbar",
 	"pages.content.notification.loading": "Material wird hinzugefügt",
