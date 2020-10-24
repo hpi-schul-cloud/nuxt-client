@@ -352,6 +352,8 @@
 	"pages.content.label.deselect": "Remove",
 	"pages.content.label.select": "Select",
 	"pages.content.label.selected": "Active",
+	"pages.content.material.leavePageWarningMain": "Note: Clicking the link will take you away from Schul-Cloud",
+	"pages.content.material.leavePageWarningFooter": "The use of these offers may be subject to other legal conditions. Therefore, please take a look at the privacy policy of the external provider!",
 	"pages.content.material.toMaterial": "Material",
 	"pages.content.notification.errorMsg": "Something has gone wrong. Material could not be added.",
 	"pages.content.notification.lernstoreNotAvailable": "Learning store is not available",
