@@ -142,7 +142,6 @@ export default {
 			const prefix = `Aufgabe bis ${dueDate.format("DD/MM/YYYY")}`;
 			if (dueDate <= tomorrow && dueDate > now) {
 				const remainingHours = dueDate.diff(now, "hours");
-				console.log(remainingHours);
 				return `${prefix} - endet in ${remainingHours} ${
 					remainingHours === 1 ? "Stunde" : "Stunden"
 				}`;
