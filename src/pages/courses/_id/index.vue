@@ -125,7 +125,7 @@ export default {
 				title: lesson.name,
 				subtitle: "Editor-Document",
 				status: lesson.hidden ? "Entwurf" : "",
-				fill: this.course.color,
+				fill: lesson.hidden ? undefined : this.course.color,
 			};
 		},
 		adaptHomework(homework) {
