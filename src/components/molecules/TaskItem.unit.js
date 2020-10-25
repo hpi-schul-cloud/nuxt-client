@@ -31,7 +31,7 @@ describe("@components/molecules/TaskItem", () => {
 	it("renders the image properly", () => {
 		const wrapper = shallowMount(TaskItem, {
 			propsData: {
-				image: "@assets/img/courses/task-draft.svg",
+				imgSrc: "@assets/img/courses/task-draft.svg",
 				title: props.title,
 			},
 		});

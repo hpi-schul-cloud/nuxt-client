@@ -59,6 +59,7 @@ import EmptyState from "@components/molecules/EmptyState";
 import TaskItem from "@components/molecules/TaskItem";
 import BaseButton from "@components/base/BaseButton";
 import BaseIcon from "@components/base/BaseIcon";
+import moment from "moment";
 
 export default {
 	layout: "loggedInFullNoPadding",
@@ -82,35 +83,10 @@ export default {
 			homeworks: "list",
 		}),
 		courseContents() {
-			const store = this.$store;
-			let lessons = store.getters["lessons/list"];
-			let homeworks = store.getters["homeworks/list"];
-
-			lessons = this.adaptCourseItemsData(lessons, (lesson) => {
-				return {
-					title: lesson.name,
-					subtitle: "Editor-Document",
-					status: lesson.hidden ? "Entwurf" : "",
-					image: lesson.hidden
-						? "@assets/img/courses/document-draft.svg"
-						: "@assets/img/courses/document-new.svg",
-				};
-			});
-
-			// homeworks = this.adaptCourseItemsData(homeworks, (homework) => {
-			// 	return {
-			// 		title:
-			// 	}
-			// })
-
-			homeworks = homeworks.map((value) => {
-				return {
-					title: value.name,
-					subtitle: "Aufgabe",
-					actionNeeded: false,
-				};
-			});
-			// return [];
+			const [lessons, homeworks] = [
+				this.lessons.map(this.adaptLesson),
+				this.homeworks.map(this.adaptHomework),
+			];
 			return [...lessons, ...homeworks];
 		},
 		courseIsEmpty() {
@@ -137,10 +113,45 @@ export default {
 				},
 			});
 		},
-		adaptCourseItemsData(courseItems, adaptionFunction) {
-			return courseItems.map(adaptionFunction);
+		adaptCourseContent() {
+			this.lessons = this.lessons.map(this.adaptLesson);
+			this.homeworks = this.homeworks.map(this.adaptHomework);
 		},
-		prepareSubtitleForHomework() {},
+		adaptLesson(lesson) {
+			return {
+				imgSrc: lesson.hidden
+					? "@assets/img/courses/document-draft.svg"
+					: "@assets/img/courses/document-new.svg",
+				title: lesson.name,
+				subtitle: "Editor-Document",
+				status: lesson.hidden ? "Entwurf" : "",
+				fill: this.course.color,
+			};
+		},
+		adaptHomework(homework) {
+			return {
+				title: homework.name,
+				subtitle: this.prepareSubtitleForHomework(homework),
+				actionNeeded: false,
+			};
+		},
+		prepareSubtitleForHomework(homework) {
+			const now = moment();
+			const tomorrow = moment(now).add(24, "hours");
+			const dueDate = moment(new Date(homework.dueDate));
+			const prefix = `Aufgabe bis ${dueDate.format("DD/MM/YYYY")}`;
+			if (dueDate <= tomorrow && dueDate > now) {
+				const remainingHours = dueDate.diff(now, "hours");
+				console.log(remainingHours);
+				return `${prefix} - endet in ${remainingHours} ${
+					remainingHours === 1 ? "Stunde" : "Stunden"
+				}`;
+			}
+			if (dueDate <= now) {
+				return `${prefix} - Beendet`;
+			}
+			return prefix;
+		},
 	},
 };
 </script>

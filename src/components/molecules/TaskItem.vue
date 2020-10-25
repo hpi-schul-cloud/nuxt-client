@@ -2,8 +2,8 @@
 	<div class="card">
 		<div class="card-body">
 			<base-image
-				v-if="image"
-				:img-src="image"
+				v-if="$attrs.imgSrc"
+				v-bind="$attrs"
 				class="image"
 				role="presentation"
 			/>
@@ -70,10 +70,6 @@ export default {
 		ContextMenu,
 	},
 	props: {
-		image: {
-			type: String,
-			default: "",
-		},
 		title: {
 			type: String,
 			required: true,
@@ -160,6 +156,7 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	}
 }
 .image {
+	width: calc(var(--text-md) + var(--text-lg));
 	height: calc(var(--text-md) + var(--text-lg));
 	object-fit: contain;
 	margin-right: var(--space-sm);
