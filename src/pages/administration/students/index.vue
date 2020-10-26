@@ -14,6 +14,7 @@
 			"
 			class="search-section"
 			label=""
+			data-testid="searchbar"
 			@update:vmodel="barSearch"
 		>
 			<template v-slot:icon>
@@ -87,6 +88,7 @@
 					design="text icon"
 					size="small"
 					:to="`/administration/students/${data}/edit`"
+					data-testid="edit_student_button"
 				>
 					<base-icon source="material" icon="edit" />
 				</base-button>
@@ -102,18 +104,21 @@
 			"
 			position="bottom-right"
 			:show-label="true"
+			data-testid="fab_button_students_table"
 			:actions="[
 				{
 					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					to: '/administration/students/new',
+					dataTestid: 'fab_button_add_students',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
 					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/students/import',
+					dataTestid: 'fab_button_import_students',
 				},
 			]"
 		/>

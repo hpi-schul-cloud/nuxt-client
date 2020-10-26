@@ -14,6 +14,7 @@
 				design="none"
 				class="context-menu__button"
 				role="menuitem"
+				:data-testid="action.dataTestid || null"
 				@click.prevent="emitEvent(action.event, action.arguments)"
 				@keydown.up.prevent="focusPrev(index)"
 				@keydown.down.prevent="focusNext(index)"
