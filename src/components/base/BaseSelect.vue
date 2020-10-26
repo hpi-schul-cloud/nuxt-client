@@ -90,9 +90,9 @@ export default {
 			type: String,
 			default: "Aktiv",
 		},
-		dataTestid:{
+		dataTestid: {
 			type: String,
-		}
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
