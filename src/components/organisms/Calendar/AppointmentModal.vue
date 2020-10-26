@@ -53,12 +53,20 @@
 					@update:vmodel="$emit('update:startTime', startTime)"
 				/>
 				<base-input
+					v-model="fullDay"
+					type="checkbox"
+					label="Ganzer Tag"
+					@change="onChange"
+				/>
+				<base-input
+					v-if="!fullDay"
 					v-model="endDay"
 					type="date"
 					label="End Tag"
 					@update:vmodel="$emit('update:endDay', endDay)"
 				/>
 				<base-input
+					v-if="!fullDay"
 					v-model="endTime"
 					type="time"
 					label="End Zeit"
@@ -216,6 +224,18 @@ export default {
 		contentCourses: {
 			type: Object,
 			default: undefined,
+		},
+	},
+	data() {
+		return {
+			fullDay: false,
+		};
+	},
+	methods: {
+		onChange() {
+			this.fullDay = !this.fullDay;
+			this.startTime = "00:00";
+			this.endTime = "00:00";
 		},
 	},
 };
