@@ -5,6 +5,7 @@
 		<div>
 			<appointment-modal
 				:input-text.sync="inputText"
+				:place.sync="place"
 				:modal-active.sync="modalActive"
 				:confirm-active="confirmActive"
 				:date-editable="dateEditable"
@@ -47,7 +48,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [x] Display reoccuring events
 // [ ] Dedicated Edit mode (marco)
 // [ ] Handle permissions
-// [ ] Add location to modal (marco)
+// [x] Add location to modal (marco)
 // [x] Partial Data-Loading
 // [x] On Event Click Go To Team Or Course page if its not a personal event
 // [x] Locales
@@ -142,6 +143,7 @@ export default {
 			endDayInput: "",
 			endTimeInput: "",
 			inputText: "",
+			place: "",
 			radioValue: "",
 			teams: "Teams",
 			courses: "Courses",
@@ -316,6 +318,7 @@ export default {
 		},
 		resetScope() {
 			this.inputText = "";
+			this.place = "";
 			this.radioValue = "";
 			this.isTeamsDDVisible = false;
 			this.isCoursesDDVisible = false;
@@ -412,6 +415,7 @@ export default {
 				teamId: this.teamScopeId,
 				endDate: endDate,
 				summary: this.inputText,
+				place: this.place,
 			};
 			if (this.courseScopeId) {
 				event.scopeId = this.courseScopeId;

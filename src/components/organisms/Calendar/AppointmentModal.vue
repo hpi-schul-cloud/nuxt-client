@@ -64,6 +64,12 @@
 					label="End Zeit"
 					@update:vmodel="$emit('update:endTime', endTime)"
 				/>
+				<base-input
+					v-model="place"
+					type="text"
+					label="Ort"
+					@update:vmodel="$emit('update:place', place)"
+				/>
 			</template>
 			<template v-slot:footerRight>
 				<base-button design="primary text" @click="$emit('cancel', $event)">
@@ -156,6 +162,10 @@ export default {
 			default: "",
 		},
 		endTime: {
+			type: String,
+			default: "",
+		},
+		place: {
 			type: String,
 			default: "",
 		},
