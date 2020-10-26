@@ -77,6 +77,10 @@ const setDefaultTimezone = (app, store) => {
 	);
 };
 
+export const fromUTC = (date) => {
+	return dayjs(date).tz(currentTimezone);
+};
+
 export const formatDate = (date) => {
 	return dayjs.tz(date).format(FORMAT.date);
 };
