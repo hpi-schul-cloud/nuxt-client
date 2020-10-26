@@ -80,7 +80,6 @@
 						{{ $t("pages.content.material.toMaterial") }}
 					</base-button>
 					<!-- This will be replaced with Modal -->
-					<!-- process.env.SC_THEME -->
 					<div v-if="isBrandenburg" class="external-content-warning">
 						<p class="text-s external-content-title">
 							{{ $t("pages.content.material.leavePageWarningMain") }}
