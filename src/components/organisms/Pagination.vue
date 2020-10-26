@@ -83,27 +83,22 @@ export default {
 				{
 					label: this.$t("components.organisms.Pagination.perPage.5"),
 					value: 5,
-					dataTestid: 'pagination_value_5',
 				},
 				{
 					label: this.$t("components.organisms.Pagination.perPage.10"),
 					value: 10,
-					dataTestid: 'pagination_value_10',
 				},
 				{
 					label: this.$t("components.organisms.Pagination.perPage.25"),
 					value: 25,
-					dataTestid: 'pagination_value_25',
 				},
 				{
 					label: this.$t("components.organisms.Pagination.perPage.50"),
 					value: 50,
-					dataTestid: 'pagination_value_50',
 				},
 				{
 					label: this.$t("components.organisms.Pagination.perPage.100"),
 					value: 100,
-					dataTestid: 'pagination_value_100',
 				},
 			],
 		};
