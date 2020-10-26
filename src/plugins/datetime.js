@@ -2,9 +2,11 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
 
+dayjs.extend(customParseFormat);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);
@@ -79,6 +81,28 @@ const setDefaultTimezone = (app, store) => {
 
 export const fromUTC = (date) => {
 	return dayjs(date).tz(currentTimezone);
+};
+
+/**
+ * Returns formated date string based on a given date string in German format
+ * TODO: Currently the server is returning this date in German format. Please check, if this is needed or can be reverted to international date format, i.e. (DD.MM.YYYY -> YYYY-MM-DD)
+ * @param date UTC date string in german format
+ * @return {String} Date string based on current timezone
+ */
+export const formatDateFromDeUTC = (date) => {
+	if (date) {
+		const result = dayjs(date, "DD.MM.YYYY").tz(currentTimezone);
+		return result.format(FORMAT.date);
+	}
+	return null;
+};
+
+export const inputDateFromDeUTC = (date) => {
+	if (date) {
+		const result = dayjs(date, "DD.MM.YYYY").tz(currentTimezone);
+		return result.format(FORMAT.inputDate);
+	}
+	return null;
 };
 
 export const formatDate = (date) => {

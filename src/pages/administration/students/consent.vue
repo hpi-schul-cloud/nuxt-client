@@ -47,9 +47,7 @@
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
 						class="date base-input-default"
-						:vmodel="
-							dayjs(slotProps.data, 'DD.MM.YYYY').format($t('format.date'))
-						"
+						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
 						:birth-date="true"
@@ -63,9 +61,7 @@
 					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
 						class="date base-input-default"
-						:vmodel="
-							dayjs(slotProps.data, 'DD.MM.YYYY').format($t('format.date'))
-						"
+						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
 						:birth-date="true"
@@ -120,7 +116,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(slotProps.data, "DD.MM.YYYY").format($t("format.date")) }}
+						{{ inputDateFromDeUTC(slotProps.data) }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -173,7 +169,7 @@
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					{{ dayjs(slotProps.data, "DD.MM.YYYY").format($t("format.date")) }}
+					{{ inputDateFromDeUTC(slotProps.data) }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -277,9 +273,6 @@
 
 <script>
 // file deepcode ignore ArrayMethodOnNonArray
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-dayjs.extend(customParseFormat);
 import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
@@ -289,8 +282,7 @@ import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { inputDateFromDeUTC, formatDateFromDeUTC } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -470,8 +462,9 @@ export default {
 			return {
 				input: (dateData) => {
 					if (dateData !== "") {
-						const newDate = dayjs(dateData, "YYYY-MM-DD").format(
-							$t("format.date")
+						const newDate = fromInputDateTime(dateData);
+						console.log(
+							`inputDateForDate.fromInputDateTime: ${dateData} => ${newDate}`
 						);
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
@@ -528,9 +521,7 @@ export default {
 				const users = this.filteredTableData.map((student) => {
 					return {
 						_id: student._id,
-						birthday: dayjs(student.birthday, "DD.MM.YYYY").format(
-							$t("format.date")
-						),
+						birthday: formatDateFromDeUTC(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -619,7 +610,7 @@ export default {
 				}
 			}, 2000);
 		},
-		dayjs,
+		inputDateFromDeUTC,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.

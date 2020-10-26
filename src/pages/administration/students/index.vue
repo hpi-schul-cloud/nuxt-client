@@ -46,6 +46,9 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-birthday="{ data }">
+				<span class="text-content">{{ formatDateFromDeUTC(data) }}</span>
+			</template>
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
@@ -130,7 +133,7 @@ import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { fromUTC, formatDate } from "@plugins/datetime";
+import { fromUTC, formatDateFromDeUTC, formatDate } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -381,6 +384,7 @@ export default {
 		},
 		formatDate,
 		fromUTC,
+		formatDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
