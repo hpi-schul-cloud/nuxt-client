@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## [25.1.1] - 2020-10-21
+
+### Added
+
+- SC-7447 - Add warning text for links when leaving the schul-cloud platform
+
 ## 25.0.2
 
 - SC-6932 added translation keys instead of hardcoded strings for sidebar items
