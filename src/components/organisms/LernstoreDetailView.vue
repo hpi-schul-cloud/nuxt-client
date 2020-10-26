@@ -145,7 +145,7 @@ import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import { getMetadataAttribute } from "@utils/helpers";
-import { formatDate } from "@plugins/datetime";
+import { printDate } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -177,10 +177,10 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return formatDate(this.resource.createdAt);
+			return printDate(this.resource.createdAt);
 		},
 		updatedAt() {
-			return formatDate(this.resource.modifiedAt);
+			return printDate(this.resource.modifiedAt);
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);

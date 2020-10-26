@@ -1,7 +1,7 @@
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
 import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
-import { formatDate, fromInputDateTime } from "@plugins/datetime";
+import { printDate, fromInputDateTime } from "@plugins/datetime";
 
 const getFilterFirstname = (ctx) => ({
 	title: ctx.$t("common.labels.firstName"),
@@ -39,9 +39,9 @@ const getFilterLastname = (ctx) => ({
 const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
 	chipTemplate: (filter) => {
-		return `${ctx.$t("utils.adminFilter.date.created")} ${formatDate(
+		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
 			filter[0]
-		)} ${ctx.$t("common.words.and")} ${formatDate(filter[1])} `;
+		)} ${ctx.$t("common.words.and")} ${printDate(filter[1])} `;
 	},
 	parser: {
 		generator: (filterGroupConfig, values) => {

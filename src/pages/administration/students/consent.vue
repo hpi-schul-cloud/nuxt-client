@@ -282,7 +282,7 @@ import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
-import { inputDateFromDeUTC, formatDateFromDeUTC } from "@plugins/datetime";
+import { inputDateFromDeUTC, printDateFromDeUTC } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -521,7 +521,7 @@ export default {
 				const users = this.filteredTableData.map((student) => {
 					return {
 						_id: student._id,
-						birthday: formatDateFromDeUTC(student.birthday),
+						birthday: printDateFromDeUTC(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {

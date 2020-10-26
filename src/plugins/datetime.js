@@ -18,7 +18,7 @@ let schoolTimezone;
 let userTimezone;
 let userHasSchoolTimezone = true;
 
-const FORMAT = {
+const DATETIME_FORMAT = {
 	date: "DD.MM.YYYY",
 	dateTime: "DD.MM.YYYY HH:mm",
 	dateLong: "dddd, DD. MMMM YYYY",
@@ -40,12 +40,12 @@ const getUserTimezone = (app) => app.$cookies.get("USER_TIMEZONE");
  */
 const setDefaultFormats = (app) => {
 	if (app && app.i18n) {
-		FORMAT.date = app.i18n.t("format.date");
-		FORMAT.dateTime = app.i18n.t("format.dateTime");
-		FORMAT.dateLong = app.i18n.t("format.dateLong");
-		FORMAT.time = app.i18n.t("format.time");
+		DATETIME_FORMAT.date = app.i18n.t("format.date");
+		DATETIME_FORMAT.dateTime = app.i18n.t("format.dateTime");
+		DATETIME_FORMAT.dateLong = app.i18n.t("format.dateLong");
+		DATETIME_FORMAT.time = app.i18n.t("format.time");
 	}
-	return FORMAT;
+	return DATETIME_FORMAT;
 };
 
 /**
@@ -89,10 +89,10 @@ export const fromUTC = (date) => {
  * @param date UTC date string in german format
  * @return {String} Date string based on current timezone
  */
-export const formatDateFromDeUTC = (date) => {
+export const printDateFromDeUTC = (date) => {
 	if (date) {
 		const result = dayjs(date, "DD.MM.YYYY").tz(currentTimezone);
-		return result.format(FORMAT.date);
+		return result.format(DATETIME_FORMAT.date);
 	}
 	return null;
 };
@@ -100,17 +100,17 @@ export const formatDateFromDeUTC = (date) => {
 export const inputDateFromDeUTC = (date) => {
 	if (date) {
 		const result = dayjs(date, "DD.MM.YYYY").tz(currentTimezone);
-		return result.format(FORMAT.inputDate);
+		return result.format(DATETIME_FORMAT.inputDate);
 	}
 	return null;
 };
 
-export const formatDate = (date) => {
-	return dayjs.tz(date).format(FORMAT.date);
+export const printDate = (date) => {
+	return dayjs.tz(date).format(DATETIME_FORMAT.date);
 };
 
 export const inputRangeDate = (offset = 0, offsetBase = "y") => {
-	return dayjs().add(offset, offsetBase).format(FORMAT.inputDate);
+	return dayjs().add(offset, offsetBase).format(DATETIME_FORMAT.inputDate);
 };
 
 export const fromInputDateTime = (date, time = null) => {
@@ -125,8 +125,8 @@ export const fromNow = (date) => {
 export const createInputDateTime = (date) => {
 	const resultDate = dayjs(date).tz(currentTimezone);
 	return [
-		resultDate.format(FORMAT.inputDate),
-		resultDate.format(FORMAT.inputTime),
+		resultDate.format(DATETIME_FORMAT.inputDate),
+		resultDate.format(DATETIME_FORMAT.inputTime),
 	];
 };
 
