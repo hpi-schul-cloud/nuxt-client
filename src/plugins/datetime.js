@@ -68,10 +68,13 @@ const setDefaultTimezone = (app, store) => {
 	app.$datetime.userTimezone = userTimezone;
 	app.$datetime.userHasSchoolTimezone = userHasSchoolTimezone;
 
+	// eslint-disable-next-line no-console
 	console.log(
 		`datetime: instance timezone "${app.$datetime.currentTimezone} (${app.$datetime.currentTimezoneOffset})"`
 	);
+	// eslint-disable-next-line no-console
 	console.log(`datetime: user timezone "${app.$datetime.userTimezone}"`);
+	// eslint-disable-next-line no-console
 	console.log(
 		`datetime: same timezone "${JSON.stringify(
 			app.$datetime.userHasSchoolTimezone
