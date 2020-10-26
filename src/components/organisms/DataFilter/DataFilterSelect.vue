@@ -1,6 +1,10 @@
 <template>
 	<div v-if="options.length > 0" v-click-outside="hideMenu" class="menu">
-		<base-button design="text" @click="showMenu">
+		<base-button
+			design="text"
+			data-testid="add_filter_button"
+			@click="showMenu"
+		>
 			<base-icon source="custom" icon="filter" class="filter-icon" />
 			<span class="filter-btn"> {{ labelAdd }} </span>
 
@@ -45,6 +49,7 @@ export default {
 				text: entities.decode(option.title),
 				event: "click",
 				arguments: option.id,
+				dataTestid: option.dataTestid,
 			}));
 		},
 	},
