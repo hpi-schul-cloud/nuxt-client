@@ -79,6 +79,11 @@ const setDefaultTimezone = (app, store) => {
 	);
 };
 
+/**
+ * Returns formated date string based on a given UTC date string
+ * @param {String} date
+ * @return {dayjs} Date object based on current timezone
+ */
 export const fromUTC = (date) => {
 	return dayjs(date).tz(currentTimezone);
 };
@@ -86,8 +91,8 @@ export const fromUTC = (date) => {
 /**
  * Returns formated date string based on a given date string in German format
  * TODO: Currently the server is returning this date in German format. Please check, if this is needed or can be reverted to international date format, i.e. (DD.MM.YYYY -> YYYY-MM-DD)
- * @param date UTC date string in german format
- * @return {String} Date string based on current timezone
+ * @param {String} date UTC date string in german format
+ * @return {String} Date string based on current timezone using locale date formating
  */
 export const printDateFromDeUTC = (date) => {
 	if (date) {
@@ -97,6 +102,12 @@ export const printDateFromDeUTC = (date) => {
 	return null;
 };
 
+/**
+ * Returns formated date string based on a given date string in German format
+ * TODO: Currently the server is returning this date in German format. Please check, if this is needed or can be reverted to international date format, i.e. (DD.MM.YYYY -> YYYY-MM-DD)
+ * @param {String} date DE formated date string based on UTC
+ * @return {String} Date string based on current timezone for usage in input field (YYYY-MM-DD)
+ */
 export const inputDateFromDeUTC = (date) => {
 	if (date) {
 		const result = dayjs(date, "DD.MM.YYYY").tz(currentTimezone);
@@ -105,23 +116,50 @@ export const inputDateFromDeUTC = (date) => {
 	return null;
 };
 
+/**
+ * Returns formated date string based on a given date
+ * @param {String} date
+ * @return {String} Date string based on current timezone using locale date formating
+ */
 export const printDate = (date) => {
 	return dayjs.tz(date).format(DATETIME_FORMAT.date);
 };
 
+/**
+ * Returns formated based on current date and given offset
+ * @param {Number} offset Offset as number
+ * @param {String} offsetBase Base of offset, e.g. (y)ear, (d)days, (m)inutes...
+ * @return {String} Date string based on current timezone using locale date formating
+ */
 export const inputRangeDate = (offset = 0, offsetBase = "y") => {
 	return dayjs().add(offset, offsetBase).format(DATETIME_FORMAT.inputDate);
 };
 
+/**
+ * Returns date by given input date and time (optional)
+ * @param {String} date
+ * @param {String} time
+ * @return {dayjs} Date object based on current timezone
+ */
 export const fromInputDateTime = (date, time = null) => {
 	const dateString = `${date}${time ? ` ${time}` : ""}`;
 	return dayjs.tz(dateString);
 };
 
+/**
+ * Returns date difference to current local time
+ * @param {String} date
+ * @return {String} Date difference based on current timezone
+ */
 export const fromNow = (date) => {
 	return dayjs.tz(date).fromNow();
 };
 
+/**
+ * Returns array of date and time for usage in inputs
+ * @param {String} date UTC date string
+ * @return {Array} Array of date and time for usage in inputs
+ */
 export const createInputDateTime = (date) => {
 	const resultDate = dayjs(date).tz(currentTimezone);
 	return [
