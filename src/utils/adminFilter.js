@@ -7,6 +7,7 @@ dayjs.extend(utc);
 const getFilterFirstname = (ctx) => ({
 	title: ctx.$t("common.labels.firstName"),
 	chipTemplate: `${ctx.$t("common.labels.firstName")} = %1`,
+	dataTestid: "filter_firstname",
 	filter: [
 		{
 			attribute: "firstName",
@@ -23,6 +24,7 @@ const getFilterFirstname = (ctx) => ({
 const getFilterLastname = (ctx) => ({
 	title: ctx.$t("common.labels.lastName"),
 	chipTemplate: `${ctx.$t("common.labels.lastName")} = %1`,
+	dataTestid: "filter_lastname",
 	filter: [
 		{
 			attribute: "lastName",
@@ -46,6 +48,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 			filter[1]
 		).format("DD.MM.YYYY")} `;
 	},
+	dataTestid: "filter_creationDate",
 	parser: {
 		generator: (filterGroupConfig, values) => {
 			const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
@@ -127,6 +130,7 @@ export function studentFilter(ctx) {
 				});
 				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
+			dataTestid: "filter_registration",
 			filter: [
 				{
 					attribute: "consentStatus",
@@ -156,6 +160,7 @@ export function studentFilter(ctx) {
 		{
 			title: ctx.$t("utils.adminFilter.class.title"),
 			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			dataTestid: "filter_classes",
 			filter: [
 				{
 					attribute: "classes",
@@ -188,6 +193,7 @@ export function teacherFilter(ctx) {
 				});
 				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
+			dataTestid: "filter_registration",
 			filter: [
 				{
 					attribute: "consentStatus",
@@ -211,6 +217,7 @@ export function teacherFilter(ctx) {
 		{
 			title: ctx.$t("utils.adminFilter.class.title"),
 			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			dataTestid: "filter_classes",
 			filter: [
 				{
 					attribute: "classes",
