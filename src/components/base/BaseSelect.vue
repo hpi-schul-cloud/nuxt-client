@@ -14,6 +14,7 @@
 			:select-label="selectLabel"
 			:selected-label="selectedLabel"
 			:deselect-label="deselectLabel"
+			:data-testid="dataTestid"
 			@select="$emit('select', $event)"
 			@input="$emit('input', $event)"
 			@tag="$emit('tag', $event)"
@@ -89,6 +90,9 @@ export default {
 			type: String,
 			default: "Aktiv",
 		},
+		dataTestid:{
+			type: String,
+		}
 	},
 	data() {
 		// This solely exists to appear in the coverage report
