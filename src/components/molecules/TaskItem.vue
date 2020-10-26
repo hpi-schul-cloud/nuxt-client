@@ -156,7 +156,7 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	}
 }
 .image {
-  width: calc(var(--text-md) + var(--text-lg));
+	width: calc(var(--text-md) + var(--text-lg));
 	height: calc(var(--text-md) + var(--text-lg));
 	object-fit: contain;
 	margin-right: var(--space-sm);
@@ -184,5 +184,4 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 .card-action {
 	display: flex;
 }
-
 </style>
