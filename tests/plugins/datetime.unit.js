@@ -12,7 +12,6 @@ import {
 } from "@plugins/datetime";
 
 setDefaultTimezone("America/New_York");
-// setDefaultTimezone("Europe/Berlin");
 
 describe("@plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
@@ -23,6 +22,12 @@ describe("@plugins/datetime", () => {
 	const dateFormat = datetime.format("YYYY-MM-DD");
 	const time = datetime.format("HH:mm");
 
+	it("currentDate", () => {
+		// to avoid diffrence in milliseconds slice was used
+		const currentNow = now.toISOString().slice(0,-5);
+		expect(currentNow).toBe(new Date().toISOString().slice(0,-5));
+	});
+
 	it("fromUTC", () => {
 		const date = fromUTC(dateString);
 		expect(date.toISOString()).toBe(dateString);
@@ -31,6 +36,8 @@ describe("@plugins/datetime", () => {
 	it("printDateFromDeUTC", () => {
 		const result = printDateFromDeUTC(dateUTC);
 		expect(result).toBe(dateLocal);
+		expect(printDateFromDeUTC(null)).toBeNull();
+		expect(printDateFromDeUTC('')).toBeNull();
 	});
 
 	it("inputDateFromDeUTC", () => {
