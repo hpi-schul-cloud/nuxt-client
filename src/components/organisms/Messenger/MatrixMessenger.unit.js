@@ -1,5 +1,5 @@
-import Messenger from "./Messenger";
-import { extractRoomTypeAndIdFromPath } from "./Messenger";
+import Messenger from "./MatrixMessenger";
+import { extractRoomTypeAndIdFromPath } from "./MatrixMessenger";
 
 const session = {
 	homeserverUrl: "https://matrix.domain",
