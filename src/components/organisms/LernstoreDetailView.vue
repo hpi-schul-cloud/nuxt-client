@@ -80,7 +80,7 @@
 						{{ $t("pages.content.material.toMaterial") }}
 					</base-button>
 					<!-- This will be replaced with Modal -->
-					<div class="external-content-warning">
+					<div v-if="isBrandenburg" class="external-content-warning">
 						<p class="text-s external-content-title">
 							{{ $t("pages.content.material.leavePageWarningMain") }}
 						</p>
@@ -228,6 +228,9 @@ export default {
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
+		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
 		},
 		downloadUrl() {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
