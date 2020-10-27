@@ -11,6 +11,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - SC-6293 - restricts Lern-Store access by permission
+- SC-6708 - added data-testids to the students table in administration page
+- SC-6709 - added data-testids to the teachers table in administration page
 
 ### Fixed
 
