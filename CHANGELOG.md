@@ -8,7 +8,21 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- SC-6293 - restricts Lern-Store access by permission
+- SC-6708 - added data-testids to the students table in administration page
+- SC-6709 - added data-testids to the teachers table in administration page
+
+### Fixed
+
+- SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
+
+### Changed
+
+- SC-7447 Add warning text for links when leaving the schul-cloud platform
 - SC-6060 Updated caniuse-lite
+- SC-3788 Renamed Messenger component to meet naming convention
 
 ## 25.2.0
 
