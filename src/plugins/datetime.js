@@ -175,8 +175,7 @@ export const createInputDateTime = (date) => {
  * @return {dayjs} Current date based on current timezone
  */
 export const currentDate = () => {
-	const result = dayjs.tz();
-	return result;
+	return dayjs.tz();
 };
 
 export default ({ app, store }) => {
