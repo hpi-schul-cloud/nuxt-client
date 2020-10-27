@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="test">
 		<ul class="tabs" alt="tabs">
 			<li
 				v-for="tab in tabs"
@@ -64,10 +64,11 @@ export default {
 }
 ul.tabs {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	max-width: 1024px;
 	padding: 0;
 	margin-bottom: var(--space-md);
+	// border-bottom: 2px solid var(--color-gray-light);
 	.li-content {
 		display: inline-flex;
 		align-items: center;
@@ -103,38 +104,54 @@ ul.tabs {
 			.tab-icon {
 				font-weight: var(--font-weight-bold);
 				color: var(--color-tertiary);
-				transition: var(--duration-transition-medium) ease-in-out;
+				transition: var(--duration-transition-medium) ease-in;
 			}
 			&::after {
 				position: absolute;
-				top: calc(2.2 * (var(--space-md)));
+				top: calc(2.45 * (var(--space-md)));
 				left: 0;
 				width: 100%;
 				height: 2px;
 				content: " ";
 				background: var(--color-tertiary);
-				animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+				box-shadow: 0 0 1px 0 var(--color-tertiary);
+				animation: fadeEffect var(--duration-transition-medium) ease-in;
+			}
+		}
+		&:hover:not(.is-active) {
+			color: var(--color-gray-dark);
+			.tab-button {
+				color: var(--color-gray-dark);
 			}
 		}
 	}
-	li:hover:not(.is-active) {
-		color: var(--color-gray-dark);
-		.tab-button {
-			color: var(--color-gray-dark);
-		}
+	&::after {
+		position: absolute;
+		top: calc(4.45 * (var(--space-md)));
+		z-index: var(--layer-behind);
+		width: 84vw;
+		height: 2px;
+		content: " ";
+		background: var(--color-gray-light);
+		box-shadow: 0 0 1px 0 var(--color-gray-light);
 	}
 }
 
-@media screen and (max-width: 450px) {
+@media (max-width: 568px) {
 	ul.tabs {
 		max-width: 450px;
 	}
-	.tab-button span {
-		animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+	.tab-button {
+		&.span {
+			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+		}
 	}
 	.tab-icon {
 		margin-right: var(--space-xs-4);
 		animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+	}
+	ul.tabs li.is-active::after {
+		top: calc(2.3 * (var(--space-md)));
 	}
 	li:not(.is-active) {
 		span {
@@ -144,7 +161,7 @@ ul.tabs {
 	}
 }
 
-@media screen and (max-width: 1112px) and (orientation: landscape) {
+@media (max-width: 1112px) and (orientation: landscape) {
 	ul.tabs {
 		max-width: 1023px;
 	}
