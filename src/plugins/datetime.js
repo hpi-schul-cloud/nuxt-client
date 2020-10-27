@@ -47,6 +47,11 @@ const setDefaultFormats = (app) => {
 	return DATETIME_FORMAT;
 };
 
+export const setDefaultTimezone = (defaultTimezone) => {
+	dayjs.tz.setDefault(defaultTimezone);
+	currentTimezone = defaultTimezone;
+};
+
 /**
  * Sets default timezone from request (user timezone). If user timezone differs from the school timezone, then
  * school timezone will be set as default
@@ -54,13 +59,13 @@ const setDefaultFormats = (app) => {
  * @param store
  * sets default timezone
  */
-const setDefaultTimezone = (app, store) => {
+const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.auth?.school?.timezone;
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
 	currentTimezone = schoolTimezone || DEFAULT_TIMEZONE;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
 
-	dayjs.tz.setDefault(currentTimezone);
+	setDefaultTimezone(currentTimezone);
 
 	app.$datetime.currentTimezone = currentTimezone;
 	app.$datetime.currentTimezoneOffset = getUtcOffset();
@@ -179,7 +184,7 @@ export const currentDate = () => {
 
 export default ({ app, store }) => {
 	app.$datetime = {};
-	setDefaultTimezone(app, store);
+	initDefaultTimezone(app, store);
 	setDefaultFormats(app);
 
 	const locale = store.getters["auth/getLocale"] || "de";
