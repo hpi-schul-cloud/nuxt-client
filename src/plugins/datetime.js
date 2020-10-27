@@ -71,7 +71,6 @@ const initDefaultTimezone = (app, store) => {
 	app.$datetime.currentTimezoneOffset = getUtcOffset();
 	app.$datetime.userTimezone = userTimezone;
 	app.$datetime.userHasSchoolTimezone = userHasSchoolTimezone;
-	
 };
 
 /**
