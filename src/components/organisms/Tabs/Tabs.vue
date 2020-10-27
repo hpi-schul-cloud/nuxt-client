@@ -129,7 +129,7 @@ ul.tabs {
 		position: absolute;
 		top: calc(4.45 * (var(--space-md)));
 		z-index: var(--layer-behind);
-		width: 84vw;
+		width: 100vw;
 		height: 2px;
 		content: " ";
 		background: var(--color-gray-light);
