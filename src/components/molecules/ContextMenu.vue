@@ -120,6 +120,12 @@ export default {
 						right: 0,
 						"transform-origin": "bottom right",
 					};
+				case "top-right-bottom-placed":
+					return {
+						right: 0,
+						top: 100 + "%",
+						"transform-origin": "top right",
+					};
 				default:
 					throw new Error("anchor is not defined");
 			}
