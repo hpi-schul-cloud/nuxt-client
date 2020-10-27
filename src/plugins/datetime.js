@@ -4,7 +4,6 @@ import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/de";
-import "dayjs/locale/en";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
