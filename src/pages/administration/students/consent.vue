@@ -463,9 +463,6 @@ export default {
 				input: (dateData) => {
 					if (dateData !== "") {
 						const newDate = fromInputDateTime(dateData);
-						console.log(
-							`inputDateForDate.fromInputDateTime: ${dateData} => ${newDate}`
-						);
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
