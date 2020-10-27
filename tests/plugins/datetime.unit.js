@@ -9,18 +9,29 @@ import {
 	printDateFromDeUTC,
 	fromUTC,
 	setDefaultTimezone,
+	getUtcOffset,
 } from "@plugins/datetime";
+import datetime from "@plugins/datetime";
 
-setDefaultTimezone("America/New_York");
+const TEST_DATETIME_TIMEZONE = "America/New_York";
+const TEST_USER_TIMEZONE = "Europe/Berlin";
+
+setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
 describe("@plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
 	const dateUTC = fromUTC(dateString).utc().format("DD.MM.YYYY");
-	const dateLocal = fromUTC(dateString).format("DD.MM.YYYY");
+	const dateLocal = fromUTC(dateString);
+	const dateLocalString = dateLocal.format("DD.MM.YYYY");
 	const now = currentDate();
-	const datetime = fromUTC(dateString);
-	const dateFormat = datetime.format("YYYY-MM-DD");
-	const time = datetime.format("HH:mm");
+	const dateFormat = dateLocal.format("YYYY-MM-DD");
+	const time = dateLocal.format("HH:mm");
+	const utcOffset = "-04:00";
+
+	it("getUtcOffset", () => {
+		const result = getUtcOffset();
+		expect(result).toBe(utcOffset);
+	});
 
 	it("currentDate", () => {
 		// to avoid diffrence in milliseconds slice was used
@@ -35,15 +46,15 @@ describe("@plugins/datetime", () => {
 
 	it("printDateFromDeUTC", () => {
 		const result = printDateFromDeUTC(dateUTC);
-		expect(result).toBe(dateLocal);
+		expect(result).toBe(dateLocalString);
 		expect(printDateFromDeUTC(null)).toBeNull();
 		expect(printDateFromDeUTC("")).toBeNull();
 	});
 
 	it("inputDateFromDeUTC", () => {
-		const dateLocalYear = fromUTC(dateString).format("YYYY-MM-DD");
+		const dateLocalStringYear = fromUTC(dateString).format("YYYY-MM-DD");
 		const result = inputDateFromDeUTC(dateUTC);
-		expect(result).toBe(dateLocalYear);
+		expect(result).toBe(dateLocalStringYear);
 	});
 
 	it("printDate", () => {
@@ -70,5 +81,34 @@ describe("@plugins/datetime", () => {
 		const [resultDate, resultTime] = createInputDateTime(dateString);
 		expect(resultDate).toStrictEqual(dateFormat);
 		expect(resultTime).toStrictEqual(time);
+	});
+
+	const mockApp = {
+		$cookies: {
+			get: () => {
+				return TEST_USER_TIMEZONE;
+			},
+		},
+	};
+
+	const mockStore = {
+		state: { auth: { school: { timezone: TEST_DATETIME_TIMEZONE } } },
+		getters: {
+			"auth/getLocale": () => {
+				return "de";
+			},
+		},
+	};
+
+	it("setDefaultFormats", () => {
+		datetime({ app: mockApp, store: mockStore });
+
+		const result = {
+			currentTimezone: TEST_DATETIME_TIMEZONE,
+			currentTimezoneOffset: utcOffset,
+			userTimezone: TEST_USER_TIMEZONE,
+			userHasSchoolTimezone: false,
+		};
+		expect(mockApp.$datetime).toStrictEqual(result);
 	});
 });
