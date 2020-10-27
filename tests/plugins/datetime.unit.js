@@ -16,6 +16,12 @@ setDefaultTimezone("America/New_York");
 
 describe("@plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
+	const dateUTC = fromUTC(dateString).utc().format("DD.MM.YYYY");
+	const dateLocal = fromUTC(dateString).format("DD.MM.YYYY");
+	const now = currentDate();
+	const datetime = fromUTC(dateString);
+	const dateFormat = datetime.format("YYYY-MM-DD");
+	const time = datetime.format("HH:mm");
 
 	it("fromUTC", () => {
 		const date = fromUTC(dateString);
@@ -23,51 +29,39 @@ describe("@plugins/datetime", () => {
 	});
 
 	it("printDateFromDeUTC", () => {
-		const dateUTC = fromUTC(dateString).utc().format("DD.MM.YYYY");
-		const dateLocal = fromUTC(dateString).format("DD.MM.YYYY");
 		const result = printDateFromDeUTC(dateUTC);
 		expect(result).toBe(dateLocal);
 	});
 
 	it("inputDateFromDeUTC", () => {
-		const dateUTC = fromUTC(dateString).utc().format("DD.MM.YYYY");
-		const dateLocal = fromUTC(dateString).format("YYYY-MM-DD");
+		const dateLocalYear = fromUTC(dateString).format("YYYY-MM-DD");
 		const result = inputDateFromDeUTC(dateUTC);
-		expect(result).toBe(dateLocal);
+		expect(result).toBe(dateLocalYear);
 	});
 
 	it("printDate", () => {
-		const now = currentDate();
 		const result = printDate(now.format("YYYY-MM-DD HH:mm"));
 		expect(result).toBe(now.format("DD.MM.YYYY"));
 	});
 
 	it("inputRangeDate", () => {
-		const now = currentDate();
 		const result = inputRangeDate(10, "y");
 		expect(result).toBe(now.clone().add(10, "years").format("YYYY-MM-DD"));
 	});
 
 	it("fromNow", () => {
-		const now = currentDate();
 		const result = fromNow(now.clone().add(7, "days"));
 		expect(result).toBe("in 7 days");
 	});
 
 	it("fromInputDateTime", () => {
-		const datetime = fromUTC(dateString);
-		const date = datetime.format("YYYY-MM-DD");
-		const time = datetime.format("HH:mm");
-		const result = fromInputDateTime(date, time);
+		const result = fromInputDateTime(dateFormat, time);
 		expect(result.toISOString()).toStrictEqual(dateString);
 	});
 
 	it("createInputDateTime", () => {
-		const datetime = fromUTC(dateString);
-		const date = datetime.format("YYYY-MM-DD");
-		const time = datetime.format("HH:mm");
 		const [resultDate, resultTime] = createInputDateTime(dateString);
-		expect(resultDate).toStrictEqual(date);
+		expect(resultDate).toStrictEqual(dateFormat);
 		expect(resultTime).toStrictEqual(time);
 	});
 });
