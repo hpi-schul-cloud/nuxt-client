@@ -24,8 +24,8 @@ describe("@plugins/datetime", () => {
 
 	it("currentDate", () => {
 		// to avoid diffrence in milliseconds slice was used
-		const currentNow = now.toISOString().slice(0,-5);
-		expect(currentNow).toBe(new Date().toISOString().slice(0,-5));
+		const currentNow = now.toISOString().slice(0, -5);
+		expect(currentNow).toBe(new Date().toISOString().slice(0, -5));
 	});
 
 	it("fromUTC", () => {
@@ -37,7 +37,7 @@ describe("@plugins/datetime", () => {
 		const result = printDateFromDeUTC(dateUTC);
 		expect(result).toBe(dateLocal);
 		expect(printDateFromDeUTC(null)).toBeNull();
-		expect(printDateFromDeUTC('')).toBeNull();
+		expect(printDateFromDeUTC("")).toBeNull();
 	});
 
 	it("inputDateFromDeUTC", () => {
