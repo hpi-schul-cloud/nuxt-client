@@ -87,6 +87,16 @@
 							</base-link>
 						</div>
 					</div>
+					<!-- This will be replaced with Modal -->
+					<div v-if="isBrandenburg" class="external-content-warning">
+						<p class="text-s external-content-title">
+							{{ $t("pages.content.material.leavePageWarningMain") }}
+						</p>
+						<p class="text-xs">
+							{{ $t("pages.content.material.leavePageWarningFooter") }}
+						</p>
+					</div>
+
 					<div class="meta-container">
 						<div class="meta-icon">
 							<base-icon source="fa" icon="tag" />
@@ -131,14 +141,10 @@
 import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
-
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
-
 import { getMetadataAttribute } from "@utils/helpers";
-
 const DEFAULT_AUTHOR = "admin";
-
 export default {
 	components: {
 		BaseLink,
@@ -194,6 +200,9 @@ export default {
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
+		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
 		},
 		downloadUrl() {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
@@ -268,12 +277,10 @@ $tablet-portrait-width: 768px;
 		justify-content: space-between;
 		width: 100%;
 		padding: var(--space-md);
-
 		.close-icon {
 			background-color: var(--color-gray-dark);
 			box-shadow: var(--shadow-sm);
 		}
-
 		.close-transparent {
 			color: var(--color-black);
 			background-color: var(--color-white);
@@ -288,7 +295,6 @@ $tablet-portrait-width: 768px;
 			position: sticky;
 			top: 0;
 		}
-
 		.preview {
 			position: relative;
 			display: flex;
@@ -299,7 +305,6 @@ $tablet-portrait-width: 768px;
 			@media (max-width: $tablet-portrait-width) {
 				height: 70vh;
 			}
-
 			.preview-background-color {
 				position: absolute;
 				top: 0;
@@ -311,7 +316,6 @@ $tablet-portrait-width: 768px;
 				height: 100%;
 				background-color: var(--color-tertiary);
 			}
-
 			.preview-background {
 				position: absolute;
 				top: 0;
@@ -325,7 +329,6 @@ $tablet-portrait-width: 768px;
 				background-size: cover;
 				opacity: 0.3;
 			}
-
 			img {
 				position: absolute;
 				z-index: var(--layer-page);
@@ -338,7 +341,6 @@ $tablet-portrait-width: 768px;
 			}
 		}
 	}
-
 	.sidebar {
 		position: relative;
 		display: flex;
@@ -356,17 +358,24 @@ $tablet-portrait-width: 768px;
 			max-height: none;
 			overflow: inherit;
 		}
-
 		.content-container {
 			width: 80%;
 			margin-top: var(--space-md);
 		}
-
+		.external-content-warning {
+			color: var(--color-danger);
+			.external-content-title {
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
+		}
+		.content-button {
+			width: 100%;
+		}
 		.actions {
 			display: flex;
 			justify-content: flex-end;
 		}
-
 		.title {
 			display: flex;
 			justify-content: space-between;
@@ -375,7 +384,6 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 			line-height: var(--line-height-md);
 		}
-
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
@@ -384,24 +392,20 @@ $tablet-portrait-width: 768px;
 				text-decoration: underline;
 			}
 		}
-
 		.description {
 			margin: var(--space-xl-2) 0;
 			font-size: var(--text-md);
 		}
-
 		.text-wrap {
 			display: flex;
 			flex-flow: row wrap;
 			word-break: break-word;
 		}
-
 		.metadata {
 			display: flex;
 			flex-direction: column;
 			font-size: var(--text-sm);
 			line-height: var(--line-height-lg);
-
 			.meta-container {
 				display: flex;
 				align-items: flex-start;
@@ -426,7 +430,6 @@ $tablet-portrait-width: 768px;
 				}
 			}
 		}
-
 		.floating-buttons {
 			position: sticky;
 			bottom: 0;
