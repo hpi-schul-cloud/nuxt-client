@@ -17,7 +17,7 @@ let schoolTimezone;
 let userTimezone;
 let userHasSchoolTimezone = true;
 
-const DATETIME_FORMAT = {
+export const DATETIME_FORMAT = {
 	date: "DD.MM.YYYY",
 	dateTime: "DD.MM.YYYY HH:mm",
 	dateLong: "dddd, DD. MMMM YYYY",
@@ -37,7 +37,7 @@ const getUserTimezone = (app) => app.$cookies.get("USER_TIMEZONE");
  * Sets date, date time format using locale information
  * @param app
  */
-const setDefaultFormats = (app) => {
+export const setDefaultFormats = (app) => {
 	if (app && app.i18n) {
 		DATETIME_FORMAT.date = app.i18n.t("format.date");
 		DATETIME_FORMAT.dateTime = app.i18n.t("format.dateTime");
