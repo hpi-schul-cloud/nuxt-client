@@ -77,7 +77,16 @@
 						<base-icon source="custom" icon="open_new_window" />
 						{{ $t("pages.content.material.toMaterial") }}
 					</base-button>
-				</div>
+          <!-- This will be replaced with Modal -->
+          <div v-if="isBrandenburg" class="external-content-warning">
+            <p class="text-s external-content-title">
+              {{ $t("pages.content.material.leavePageWarningMain") }}
+            </p>
+            <p class="text-xs">
+              {{ $t("pages.content.material.leavePageWarningFooter") }}
+            </p>
+          </div>
+        </div>
 				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
@@ -217,6 +226,9 @@ export default {
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
+		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
 		},
 		downloadUrl() {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
@@ -390,7 +402,16 @@ $tablet-portrait-width: 768px;
 			width: 80%;
 			margin-top: var(--space-md);
 		}
-
+		.external-content-warning {
+			color: var(--color-danger);
+			.external-content-title {
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
+		}
+		.content-button {
+			width: 100%;
+		}
 		.actions {
 			display: flex;
 			justify-content: flex-end;

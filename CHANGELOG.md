@@ -19,6 +19,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
 - SC-6831 Fixes search/clear icons behaviour in lernstore
 
+## [25.1.1] - 2020-10-21
+
+### Added
+
+- SC-7447 - Add warning text for links when leaving the schul-cloud platform
+
 ## 25.0.2
 
 - SC-6932 added translation keys instead of hardcoded strings for sidebar items
