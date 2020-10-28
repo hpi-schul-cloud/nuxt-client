@@ -72,9 +72,13 @@ export default {
 			type: String,
 			default: "bottom-right",
 			validator: (value) =>
-				["bottom-left", "bottom-right", "top-left", "top-right"].includes(
-					value
-				),
+				[
+					"bottom-left",
+					"bottom-right",
+					"top-left",
+					"top-right",
+					"top-right-bottom-placed",
+				].includes(value),
 		},
 		/**
 		 * defines the text, icon and event for each menu item

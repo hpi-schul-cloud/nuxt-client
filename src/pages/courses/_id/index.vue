@@ -2,15 +2,19 @@
 	<div v-if="course">
 		<section class="section">
 			<base-breadcrumb :inputs="breadcrumbs" />
-			<h1 class="h2">{{ course.name }}</h1>
+			<course-header title="Mathe"></course-header>
 		</section>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import CourseHeader from "@components/molecules/CourseHeader";
 
 export default {
+	components: {
+		CourseHeader,
+	},
 	async asyncData({ store, params }) {
 		return {
 			lessons: await store.dispatch("lessons/find", {

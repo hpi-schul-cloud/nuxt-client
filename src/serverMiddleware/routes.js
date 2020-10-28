@@ -7,6 +7,7 @@
 const activationCode = "[a-z0-9]+";
 const routes = [
 	// `^/account/?$`,
+	`^/courses/?`,
 	`^/account/email/edit/?$`,
 	`^/account/name/edit/?$`,
 	`^/account/password/edit/?$`,
