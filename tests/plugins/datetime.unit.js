@@ -7,7 +7,6 @@ import {
 	inputRangeDate,
 	inputDateFromDeUTC,
 	printDateFromDeUTC,
-	fromUTC,
 	setDefaultTimezone,
 	getUtcOffset,
 	setDefaultFormats,
@@ -80,11 +79,6 @@ describe("@plugins/datetime", () => {
 		// to avoid diffrence in milliseconds slice was used
 		const result = currentDate().toISOString().slice(0, -5);
 		expect(result).toBe(new Date().toISOString().slice(0, -5));
-	});
-
-	it("fromUTC", () => {
-		const date = fromUTC(dateString);
-		expect(date.toISOString()).toBe(dateString);
 	});
 
 	it("printDateFromDeUTC", () => {

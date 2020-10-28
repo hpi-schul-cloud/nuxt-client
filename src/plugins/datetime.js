@@ -84,8 +84,8 @@ const initDefaultTimezone = (app, store) => {
  * @param {String} date
  * @return {dayjs} Date object based on current timezone
  */
-export const fromUTC = (date) => {
-	return dayjs(date).tz(currentTimezone);
+const fromUTC = (date) => {
+	return dayjs(date).tz();
 };
 
 /**
@@ -96,7 +96,7 @@ export const fromUTC = (date) => {
  */
 export const printDateFromDeUTC = (date) => {
 	if (date) {
-		const result = dayjs(date, "DD.MM.YYYY").tz(currentTimezone);
+		const result = dayjs(date, "DD.MM.YYYY").tz();
 		return result.format(DATETIME_FORMAT.date);
 	}
 	return null;
@@ -110,7 +110,7 @@ export const printDateFromDeUTC = (date) => {
  */
 export const inputDateFromDeUTC = (date) => {
 	if (date) {
-		const result = dayjs(date, "DD.MM.YYYY").tz(currentTimezone);
+		const result = dayjs(date, "DD.MM.YYYY").tz();
 		return result.format(DATETIME_FORMAT.inputDate);
 	}
 	return null;
@@ -122,7 +122,7 @@ export const inputDateFromDeUTC = (date) => {
  * @return {String} Date string based on current timezone using locale date formating
  */
 export const printDate = (date) => {
-	return dayjs.tz(date).format(DATETIME_FORMAT.date);
+	return fromUTC(date).format(DATETIME_FORMAT.date);
 };
 
 /**
@@ -152,7 +152,7 @@ export const fromInputDateTime = (date, time = null) => {
  * @return {String} Date difference based on current timezone
  */
 export const fromNow = (date) => {
-	return dayjs.tz(date).fromNow();
+	return fromUTC(date).fromNow();
 };
 
 /**
@@ -161,7 +161,7 @@ export const fromNow = (date) => {
  * @return {Array} Array of date and time for usage in inputs
  */
 export const createInputDateTime = (date) => {
-	const resultDate = dayjs(date).tz(currentTimezone);
+	const resultDate = dayjs(date).tz();
 	return [
 		resultDate.format(DATETIME_FORMAT.inputDate),
 		resultDate.format(DATETIME_FORMAT.inputTime),

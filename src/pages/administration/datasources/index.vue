@@ -55,7 +55,7 @@
 						<template v-if="element.lastStatus === 'Success'">
 							{{
 								$t("pages.administraion.datasources.index.success", {
-									relativeDate: fromNow(fromUTC(element.lastRun)),
+									relativeDate: fromNow(element.lastRun),
 								})
 							}}
 							<BaseIcon
@@ -67,7 +67,7 @@
 						<template v-else-if="element.lastStatus === 'Error'">
 							{{
 								$t("pages.administraion.datasources.index.error", {
-									relativeDate: fromNow(fromUTC(element.lastRun)),
+									relativeDate: fromNow(element.lastRun),
 								})
 							}}
 							<BaseIcon
@@ -170,7 +170,7 @@ import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/empty-state/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
-import { fromUTC, fromNow } from "@plugins/datetime";
+import { fromNow } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -203,7 +203,6 @@ export default {
 				},
 			],
 			imgsrc: ImageEmptyState,
-			fromUTC,
 			fromNow,
 			menuOpen: false,
 			page: 1,

@@ -56,7 +56,7 @@
 			<template v-slot:headcolumn-consent> </template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ printDate(fromUTC(data)) }}</span>
+				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -138,7 +138,7 @@ import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { fromUTC, printDateFromDeUTC, printDate } from "@plugins/datetime";
+import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -388,7 +388,6 @@ export default {
 			this.find();
 		},
 		printDate,
-		fromUTC,
 		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {

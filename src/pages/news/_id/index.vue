@@ -14,7 +14,7 @@
 				]"
 			/>
 			<div class="text-sm">
-				{{ fromNow(fromUTC(news.displayAt)) }} von {{ news.creator.firstName }}
+				{{ fromNow(news.displayAt) }} von {{ news.creator.firstName }}
 				{{ news.creator.lastName }}
 			</div>
 			<h1>{{ news.title }}</h1>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { fromUTC, fromNow } from "@plugins/datetime";
+import { fromNow } from "@plugins/datetime";
 
 export default {
 	validate({ params }) {
@@ -43,7 +43,6 @@ export default {
 	},
 	data() {
 		return {
-			fromUTC,
 			fromNow,
 		};
 	},

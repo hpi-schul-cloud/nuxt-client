@@ -50,7 +50,7 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ printDate(fromUTC(data)) }}</span>
+				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -125,7 +125,7 @@ import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { fromUTC, printDate } from "@plugins/datetime";
+import { printDate } from "@plugins/datetime";
 export default {
 	layout: "loggedInFull",
 	components: {
@@ -371,7 +371,6 @@ export default {
 			this.find();
 		},
 		printDate,
-		fromUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
