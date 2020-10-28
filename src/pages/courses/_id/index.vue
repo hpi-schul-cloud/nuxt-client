@@ -1,6 +1,6 @@
 <template>
 	<div v-if="course">
-		<base-grid class="no-margin">
+		<base-grid column-width="4rem" class="no-margin">
 			<h1 class="h2 header">
 				<!-- TODO: Replace with HEADER component when ready -->
 				{{ course.name }}
