@@ -77,16 +77,16 @@
 						<base-icon source="custom" icon="open_new_window" />
 						{{ $t("pages.content.material.toMaterial") }}
 					</base-button>
-          <!-- This will be replaced with Modal -->
-          <div v-if="isBrandenburg" class="external-content-warning">
-            <p class="text-s external-content-title">
-              {{ $t("pages.content.material.leavePageWarningMain") }}
-            </p>
-            <p class="text-xs">
-              {{ $t("pages.content.material.leavePageWarningFooter") }}
-            </p>
-          </div>
-        </div>
+					<!-- This will be replaced with Modal -->
+					<div v-if="isBrandenburg" class="external-content-warning">
+						<p class="text-s external-content-title">
+							{{ $t("pages.content.material.leavePageWarningMain") }}
+						</p>
+						<p class="text-xs">
+							{{ $t("pages.content.material.leavePageWarningFooter") }}
+						</p>
+					</div>
+				</div>
 				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
