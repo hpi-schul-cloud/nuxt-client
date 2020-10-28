@@ -1,5 +1,5 @@
 <template>
-	<div class="test">
+	<div>
 		<ul class="tabs" alt="tabs">
 			<li
 				v-for="tab in tabs"
@@ -68,7 +68,6 @@ ul.tabs {
 	max-width: 1024px;
 	padding: 0;
 	margin-bottom: var(--space-md);
-	// border-bottom: 2px solid var(--color-gray-light);
 	.li-content {
 		display: inline-flex;
 		align-items: center;
