@@ -8,6 +8,8 @@ storiesOf("Base/BaseHeader", module)
 		template: `<BaseHeader :title=title :source=source :icon=icon />`,
 		data: () => ({
 			title: text("title", "Mathe"),
+			source: text("source", "material"),
+			icon: text("icon", "more_vert"),
 		}),
 	}))
 	.add("With some actions", () => ({
