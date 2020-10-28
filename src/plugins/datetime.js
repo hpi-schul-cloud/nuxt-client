@@ -29,7 +29,13 @@ export const DATETIME_FORMAT = {
 /**
  * @return {String} UTC offset as string based on current timezone, e.g +01:00
  */
-export const getUtcOffset = () => dayjs.tz().format("Z");
+export const getUtcOffset = () => {
+	const offset = dayjs.tz().utcOffset();
+	const prefix = offset >= 0 ? "+" : "-";
+	const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
+	const minutes = String(Math.abs(offset) % 60).padStart(2, "0");
+	return `${prefix}${hours}:${minutes}`;
+};
 
 const getUserTimezone = (app) => app.$cookies.get("USER_TIMEZONE");
 
