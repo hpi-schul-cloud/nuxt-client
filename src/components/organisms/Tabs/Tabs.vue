@@ -128,7 +128,7 @@ ul.tabs {
 		position: absolute;
 		top: calc(4.45 * (var(--space-md)));
 		z-index: var(--layer-behind);
-		width: 100vw;
+		width: var(--content-max-width-vw);
 		height: 2px;
 		content: " ";
 		background: var(--color-gray-light);
@@ -136,7 +136,7 @@ ul.tabs {
 	}
 }
 
-@media (max-width: 568px) {
+@media (max-width: var(--breakpoint-mobile)) {
 	ul.tabs {
 		max-width: 450px;
 	}
@@ -160,7 +160,7 @@ ul.tabs {
 	}
 }
 
-@media (max-width: 1112px) and (orientation: landscape) {
+@media (max-width: var(--breakpoint-tablet-landscape)) and (orientation: landscape) {
 	ul.tabs {
 		max-width: 1023px;
 	}
