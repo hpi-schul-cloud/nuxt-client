@@ -26,8 +26,9 @@ dayjs.extend(timezone);
 dayjs.extend(relativeTime);
 
 const TEST_DATETIME_TIMEZONE = "America/New_York";
-const TEST_USER_TIMEZONE = "Europe/Berlin";
 const TEST_DATETIME_OFFSET = "-04:00";
+const TEST_USER_TIMEZONE = "Europe/Berlin";
+const TEST_USER_OFFSET = "+01:00";
 const TEST_CURRENT_LOCALE = "en";
 
 const translations = {
@@ -106,8 +107,14 @@ describe("@plugins/datetime", () => {
 	});
 
 	it("inputRangeDate", () => {
-		const result = inputRangeDate(10, "y");
-		expect(result).toBe(dateNow.clone().add(10, "years").format("YYYY-MM-DD"));
+		const result1 = inputRangeDate(10, "y");
+		expect(result1).toBe(dateNow.clone().add(10, "years").format("YYYY-MM-DD"));
+
+		const result2 = inputRangeDate(5);
+		expect(result2).toBe(dateNow.clone().add(5, "years").format("YYYY-MM-DD"));
+
+		const result3 = inputRangeDate();
+		expect(result3).toBe(dateNow.clone().format("YYYY-MM-DD"));
 	});
 
 	it("fromNow", () => {
@@ -116,8 +123,12 @@ describe("@plugins/datetime", () => {
 	});
 
 	it("fromInputDateTime", () => {
-		const result = fromInputDateTime(dateFormat, time);
-		expect(result.toISOString()).toStrictEqual(dateString);
+		const result1 = fromInputDateTime(dateFormat, time);
+		expect(result1.format()).toStrictEqual(dateLocal.format());
+
+		const expectDate = dayjs.tz(dateFormat, TEST_DATETIME_TIMEZONE);
+		const result2 = fromInputDateTime(dateFormat);
+		expect(result2.format()).toStrictEqual(expectDate.format());
 	});
 
 	it("createInputDateTime", () => {
@@ -128,9 +139,11 @@ describe("@plugins/datetime", () => {
 
 	const mockApp = {
 		$cookies: {
-			get: () => {
-				return TEST_USER_TIMEZONE;
-			},
+			get: jest
+				.fn()
+				.mockReturnValueOnce(null)
+				.mockReturnValueOnce(TEST_USER_TIMEZONE)
+				.mockReturnValue(TEST_DATETIME_TIMEZONE),
 		},
 		$datetime: {
 			currentTimezone: TEST_USER_TIMEZONE,
@@ -151,14 +164,44 @@ describe("@plugins/datetime", () => {
 
 	it("init", () => {
 		datetime({ app: mockApp, store: mockStore });
+		expect(mockApp.$datetime).toStrictEqual({
+			currentTimezone: TEST_DATETIME_TIMEZONE,
+			currentTimezoneOffset: TEST_DATETIME_OFFSET,
+			userTimezone: undefined,
+			userHasSchoolTimezone: false,
+		});
 
-		const result = {
+		datetime({ app: mockApp, store: mockStore });
+		expect(mockApp.$datetime).toStrictEqual({
 			currentTimezone: TEST_DATETIME_TIMEZONE,
 			currentTimezoneOffset: TEST_DATETIME_OFFSET,
 			userTimezone: TEST_USER_TIMEZONE,
 			userHasSchoolTimezone: false,
-		};
-		expect(mockApp.$datetime).toStrictEqual(result);
+		});
+
+		datetime({ app: mockApp, store: mockStore });
+		expect(mockApp.$datetime).toStrictEqual({
+			currentTimezone: TEST_DATETIME_TIMEZONE,
+			currentTimezoneOffset: TEST_DATETIME_OFFSET,
+			userTimezone: TEST_DATETIME_TIMEZONE,
+			userHasSchoolTimezone: true,
+		});
+
+		datetime({ app: mockApp, store: { ...mockStore, getters: {} } });
+		expect(mockApp.$datetime).toStrictEqual({
+			currentTimezone: TEST_DATETIME_TIMEZONE,
+			currentTimezoneOffset: TEST_DATETIME_OFFSET,
+			userTimezone: TEST_DATETIME_TIMEZONE,
+			userHasSchoolTimezone: true,
+		});
+
+		datetime({ app: mockApp, store: { ...mockStore, state: {} } });
+		expect(mockApp.$datetime).toStrictEqual({
+			currentTimezone: TEST_USER_TIMEZONE,
+			currentTimezoneOffset: TEST_USER_OFFSET,
+			userTimezone: TEST_DATETIME_TIMEZONE,
+			userHasSchoolTimezone: true,
+		});
 	});
 
 	it("setDefaultFormats", () => {
