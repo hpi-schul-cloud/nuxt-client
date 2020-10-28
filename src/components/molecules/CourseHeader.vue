@@ -4,15 +4,18 @@
 		anchor="top-right-bottom-placed"
 		source="material"
 		icon="more_vert"
+		v-on="$listeners"
 	>
-		<div class="next-lesson-container">
-			<base-icon source="custom" icon="clock"></base-icon>
-			<span>{{ nextLessonDate }}</span>
+		<div class="subtitle-container">
+			<div class="next-lesson-container">
+				<base-icon source="custom" icon="clock"></base-icon>
+				{{ nextLessonDate }}
+			</div>
+			<base-link :href="redirectUrl" class="course-files-link">
+				<base-icon source="material" icon="folder"></base-icon>
+				{{ $t("components.molecules.courseheader.coursedata") }}
+			</base-link>
 		</div>
-		<base-link :href="redirectUrl" class="course-files-link">
-			<base-icon source="material" icon="folder"></base-icon>
-			Kursdateien
-		</base-link>
 	</base-header>
 </template>
 <script>
@@ -29,7 +32,7 @@ export default {
 	props: {
 		nextLessonDate: {
 			type: String,
-			default: () => "Some date",
+			required: true,
 		},
 		courseId: {
 			type: String,
@@ -50,12 +53,17 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.subtitle-container {
+	display: flex;
+	align-items: center;
+}
+
 .next-lesson-container {
-	display: inline-block;
+	display: flex;
+	align-items: center;
 	margin-right: var(--space-lg);
 	font-weight: var(--font-weight-bold);
 	color: var(--color-tertiary-light);
-	text-align: center;
 }
 
 .course-files-link {

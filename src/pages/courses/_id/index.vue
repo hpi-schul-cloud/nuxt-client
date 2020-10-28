@@ -2,7 +2,7 @@
 	<div v-if="course">
 		<section class="section">
 			<base-breadcrumb :inputs="breadcrumbs" />
-			<course-header title="Mathe"></course-header>
+			<course-header title="Mathe" :actions="actions"></course-header>
 		</section>
 	</div>
 </template>
@@ -32,6 +32,17 @@ export default {
 					courseId: params.id,
 				},
 			}),
+		};
+	},
+	data() {
+		return {
+			actions: [
+				{
+					text: "add",
+					event: "add",
+					icon: "add",
+				},
+			],
 		};
 	},
 	computed: {
