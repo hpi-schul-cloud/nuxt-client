@@ -58,7 +58,6 @@ export default {
 	created(ctx) {
 		this.getCourse(this.$route.params.id);
 	},
-
 	methods: {
 		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
