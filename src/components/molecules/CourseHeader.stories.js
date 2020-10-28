@@ -1,11 +1,9 @@
 import { storiesOf } from "@storybook/vue";
 
-
 import CourseHeader from "./CourseHeader";
 
-storiesOf("Molecules/CourseHeader", module)
-	.add("default", () => ({
-		components: { CourseHeader },
-		template: `<CourseHeader />`,
-		data: () => ({}),
-	}));
+storiesOf("Molecules/CourseHeader", module).add("default", () => ({
+	components: { CourseHeader },
+	template: `<CourseHeader nextLessonDate="some awesome date" title="Mathe"/>`,
+	data: () => ({}),
+}));

@@ -1,44 +1,48 @@
 <template>
 	<base-header
 		v-bind="$attrs"
-		:actions="actions"
 		anchor="top-right-bottom-placed"
 		source="material"
 		icon="more_vert"
 	>
 		<div class="next-lesson-container">
 			<base-icon source="custom" icon="clock"></base-icon>
-			some date
+			<span>{{ nextLessonDate }}</span>
 		</div>
-		<base-button design="text">
+		<base-link :href="redirectUrl" class="course-files-link">
 			<base-icon source="material" icon="folder"></base-icon>
 			Kursdateien
-		</base-button>
+		</base-link>
 	</base-header>
 </template>
 <script>
 import BaseHeader from "@components/base/BaseHeader";
-import BaseButton from "@components/base/BaseButton";
+import BaseLink from "@components/base/BaseLink";
 import BaseIcon from "@components/base/BaseIcon";
 
 export default {
 	components: {
 		BaseHeader,
-		BaseButton,
+		BaseLink,
 		BaseIcon,
 	},
 	props: {
 		nextLessonDate: {
 			type: String,
-			required: true,
+			default: () => "Some date",
 		},
-		courseDataLink: {
+		courseId: {
 			type: String,
 			required: true,
 		},
 	},
 	data() {
 		return {};
+	},
+	computed: {
+		redirectUrl() {
+			return `/files/courses/${this.courseId}`;
+		},
 	},
 };
 </script>
@@ -47,7 +51,19 @@ export default {
 @import "@styles";
 
 .next-lesson-container {
-	display: flex;
-	align-items: center;
+	display: inline-block;
+	margin-right: var(--space-lg);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-tertiary-light);
+	text-align: center;
+}
+
+.course-files-link {
+	font-weight: var(--font-weight-bold);
+	color: var(--color-tertiary-light) !important;
+
+	&:hover {
+		color: var(--color-tertiary-dark) !important;
+	}
 }
 </style>
