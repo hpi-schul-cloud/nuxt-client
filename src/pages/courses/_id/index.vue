@@ -30,7 +30,9 @@ export default {
 			}),
 		};
 	},
-	data() { return {};},
+	data() {
+		return {};
+	},
 	computed: {
 		...mapGetters("courses", {
 			course: "current",
