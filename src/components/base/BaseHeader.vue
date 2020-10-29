@@ -2,7 +2,7 @@
 	<div>
 		<div class="header-container">
 			<div class="header-top">
-				<span class="header-title">{{ title }}</span>
+				<h1 class="h2">{{ title }}</h1>
 				<span v-if="hasActions" class="ctx-menu">
 					<base-button
 						aria-label="Open up course context menu"
@@ -60,6 +60,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
+h1:first-of-type {
+	margin: 0;
+}
+
 .header-container {
 	margin-top: var(--space-xl-2);
 	margin-bottom: var(--space-xl);
@@ -67,6 +72,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		margin-bottom: var(--space-sm);
 		.header-title {
 			font-size: var(--heading-2);
 		}

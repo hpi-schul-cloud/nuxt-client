@@ -62,13 +62,15 @@ export default {
 	display: flex;
 	align-items: center;
 	margin-right: var(--space-lg);
+	font-family: var(--font-accent);
 	font-weight: var(--font-weight-bold);
-	color: var(--color-tertiary-light);
+	color: var(--color-tertiary);
 }
 
 .course-files-link {
+	font-family: var(--font-accent);
 	font-weight: var(--font-weight-bold);
-	color: var(--color-tertiary-light) !important;
+	color: var(--color-tertiary) !important;
 
 	&:hover {
 		color: var(--color-tertiary-dark) !important;
