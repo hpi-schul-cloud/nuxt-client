@@ -4,10 +4,19 @@
 			<div class="header-top">
 				<span class="header-title">{{ title }}</span>
 				<span v-if="hasActions" class="ctx-menu">
-					<base-button design="text icon" @click="triggerContextMenu">
+					<base-button
+						aria-label="Open up course context menu"
+						design="text icon"
+						@click="active = !active"
+					>
 						<base-icon v-bind="$attrs" />
 					</base-button>
-					<context-menu :show.sync="active" v-bind="$attrs" v-on="$listeners" />
+					<context-menu
+						:show.sync="active"
+						v-bind="$attrs"
+						:actions="actions"
+						v-on="$listeners"
+					/>
 				</span>
 			</div>
 			<slot />
@@ -31,6 +40,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		actions: {
+			type: Array,
+			default: () => [],
+		},
 	},
 	data() {
 		return {
@@ -39,12 +52,7 @@ export default {
 	},
 	computed: {
 		hasActions() {
-			return this.$attrs.hasOwnProperty("actions");
-		},
-	},
-	methods: {
-		triggerContextMenu() {
-			this.active = !this.active;
+			return this.actions.length !== 0;
 		},
 	},
 };

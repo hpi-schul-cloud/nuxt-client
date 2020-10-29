@@ -49,7 +49,7 @@ describe("@components/base/BaseHeader", () => {
 		expect(wrapper.find(".ctx-menu").exists()).toBe(false);
 	});
 
-	it("clicking on menu button open up context menu", async () => {
+	it("clicking on menu button opens up context menu", async () => {
 		const wrapper = mount(BaseHeader, {
 			propsData: {
 				title: title,

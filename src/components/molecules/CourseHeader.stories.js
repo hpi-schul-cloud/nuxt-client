@@ -11,7 +11,7 @@ const actions = [
 	},
 ];
 
-storiesOf("Molecules/CourseHeader", module).add("default", () => ({
+storiesOf("5 Molecules/CourseHeader", module).add("default", () => ({
 	components: { CourseHeader },
 	template: `<CourseHeader :nextLessonDate="nextLessonDate" :title="title" :actions="actions" :courseId="courseId" />`,
 	data: () => ({

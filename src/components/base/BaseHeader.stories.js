@@ -2,7 +2,7 @@ import { storiesOf } from "@storybook/vue";
 import { text } from "@storybook/addon-knobs";
 import BaseHeader from "./BaseHeader";
 
-storiesOf("Base/BaseHeader", module)
+storiesOf("4 Base UI Components/BaseHeader", module)
 	.add("Without context menu actions", () => ({
 		components: { BaseHeader },
 		template: `<BaseHeader :title=title :source=source :icon=icon />`,
