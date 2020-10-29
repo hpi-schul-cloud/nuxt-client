@@ -13,6 +13,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6293 - restricts Lern-Store access by permission
 - SC-6708 - added data-testids to the students table in administration page
 - SC-6709 - added data-testids to the teachers table in administration page
+- OPS-1508 - added limits for cpu and ram to the docker compose files
 
 ### Fixed
 
