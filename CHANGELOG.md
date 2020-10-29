@@ -23,9 +23,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6060 Updated caniuse-lite
 - SC-3788 Renamed Messenger component to meet naming convention
 
+## Added
+
+- SC-7020 - added a new course TaskItem component
+
 ## 25.2.0
 
-### Changed
+## Changed
 
 - SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
 
