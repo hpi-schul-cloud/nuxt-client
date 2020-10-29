@@ -60,6 +60,7 @@ const anchorOptions = {
 	"bottom-left": "bottom-left",
 	"top-right": "top-right",
 	"bottom-right": "bottom-right",
+	"top-right-bottom-placed": "top-right-bottom-placed",
 };
 
 storiesOf("5 Molecules/ContextMenu", module)
