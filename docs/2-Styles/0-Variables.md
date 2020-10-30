@@ -14,34 +14,34 @@ p {
 
 :::
 
-All style variables are imported from the npm package [@schul-cloud/styles](https://github.com/schul-cloud/styles)
+All style variables are imported from the npm package [@schul-cloud/styles](https://github.com/hpi-schul-cloud/styles)
 
 ## Colors
 
-[Colors](https://github.com/schul-cloud/styles/tree/master/src/css/default/variables/_colors.scss)
+[Colors](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_colors.scss)
 
 ## Durations
 
-[Durations](https://github.com/schul-cloud/styles/tree/master/src/css/default/variables/_durations.scss)
+[Durations](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_durations.scss)
 
 ## Layers
 
 used for `z-index`.
 
-[Layers](https://github.com/schul-cloud/styles/tree/master/src/css/default/variables/_layers.scss)
+[Layers](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_layers.scss)
 
 ## Shadows
 
-[Shadows](https://github.com/schul-cloud/styles/tree/master/src/css/default/variables/_shadows.scss)
+[Shadows](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_shadows.scss)
 
 ## Sizes
 
-[Sizes](https://github.com/schul-cloud/styles/tree/master/src/css/default/variables/_sizes.scss)
+[Sizes](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_sizes.scss)
 
 ## Spacing
 
-[Spacings](https://github.com/schul-cloud/styles/tree/master/src/css/default/variables/_spacing.scss)
+[Spacings](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_spacing.scss)
 
 ## Typography
 
-[Typography](https://github.com/schul-cloud/styles/tree/master/src/css/default/variables/_typography.scss)
+[Typography](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_typography.scss)
