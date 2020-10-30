@@ -18,7 +18,7 @@ Please read the following Code Styleguides before you start contributing:
 
 ## Setup
 
-At first, you need to have the [legacy-client](https://github.com/schul-cloud/schulcloud-client) and [schulcloud-server](https://github.com/schul-cloud/schulcloud-server) set up and running. Or you need to adjust the enviroment variables `LEGACY_CLIENT_URL` and `API_URL`. You can find [more details here](1-Build.md#nuxt-client). If you have any problems, check our [FAQ Section](../5-FAQ.md).
+At first, you need to have the [legacy-client](https://github.com/hpi-schul-cloud/schulcloud-client) and [schulcloud-server](https://github.com/hpi-schul-cloud/schulcloud-server) set up and running. Or you need to adjust the enviroment variables `LEGACY_CLIENT_URL` and `API_URL`. You can find [more details here](1-Build.md#nuxt-client). If you have any problems, check our [FAQ Section](../5-FAQ.md).
 
 Let's continue with the setup of this project:
 
@@ -39,7 +39,7 @@ npm i
 npm run dev
 ```
 
-You can find all commands inside the [package.json](https://github.com/schul-cloud/nuxt-client/blob/develop/package.json) under the `scripts` section.
+You can find all commands inside the [package.json](https://github.com/hpi-schul-cloud/nuxt-client/blob/develop/package.json) under the `scripts` section.
 
 ### Nuxt
 
