@@ -30,7 +30,7 @@ Output Directory: `./dist/nuxt`
 | NODE_ENV | _undefined_ | Possible Values: `development`, `production` |
 | HOST | `localhost` | HOST where the project should be served |
 | PORT | `4000` | PORT where the project should be served |
-| API_URL | `http://localhost:3030` | URL to [schulcloud-server](https://github.com/schul-cloud/schulcloud-server) |
+| API_URL | `http://localhost:3030` | URL to [schulcloud-server](https://github.com/hpi-schul-cloud/schulcloud-server) |
 | LEGACY_CLIENT_URL | `http://localhost:3100` | URL to proxy legacy requests to. Required unless `FALLBACK_DISABLED=true`. |
 | SC_THEME | `default` | Each theme has a seperate folder. See [theming](../2-Styles/3-Theming.md) for more details. |
 | FALLBACK_DISABLED | `false` | disables the legacy client and serves only vue pages. |
@@ -104,4 +104,4 @@ We also have a script do deploy every pull request to an test system and comment
 | SURGE_SUBDOMAIN | `nuxt.schul-cloud` | subdomain for the deployed systems `docs.${TRAVIS_PULL_REQUEST}.${SURGE_SUBDOMAIN}.surge.sh` |
 | SURGE_LOGIN | _undefined_ | [Travis Docs](https://docs.travis-ci.com/user/deployment/surge/#environment-variables) |
 | SURGE_TOKEN | _undefined_ | [Travis Docs](https://docs.travis-ci.com/user/deployment/surge/#environment-variables) |
-| GITHUB_TOKEN | _undefined_ | Github Access Tokens can be generated [here](https://github.com/settings/tokens). The Token must have the permission `public_repo - Access public repositories`. We also have a [Bot Account](https://github.com/schul-cloud-bot) for that purpose. |
+| GITHUB_TOKEN | _undefined_ | Github Access Tokens can be generated [here](https://github.com/settings/tokens). The Token must have the permission `public_repo - Access public repositories`. We also have a [Bot Account](https://github.com/hpi-schul-cloud-bot) for that purpose. |

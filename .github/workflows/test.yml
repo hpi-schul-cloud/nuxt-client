@@ -60,7 +60,7 @@ jobs:
       - name: failure hint
         if: failure()
         run: echo "if you want to update the screenshots, comment \"@schul-cloud-bot update screenshots\" on this PR."
-  integration:
+  end-to-end-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -70,13 +70,13 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
       - name: execute tests
-        run: curl "https://raw.githubusercontent.com/schul-cloud/integration-tests/develop/scripts/ci/fetch.github.sh" | bash
+        run: curl "https://raw.githubusercontent.com/hpi-schul-cloud/end-to-end-tests/develop/scripts/ci/fetch.github.sh" | bash
       - uses: actions/upload-artifact@v1
         name: upload results
         if: always()
         with:
           name: report
-          path: integration-tests/reports
+          path: end-to-end-tests/reports
   # build:
   #   strategy:
   #     matrix:
