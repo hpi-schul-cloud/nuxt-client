@@ -8,7 +8,7 @@ Hier ist der interne Workflow zur Komponenten und Pages Entwicklung im Nuxt-Clie
 
 Für Inhaltliche Dinge sollen stets Tickets im [Jira (unserem Ticketsystem)](https://ticketsystem.schul-cloud.org/secure/RapidBoard.jspa?rapidView=23) erstellt werden.
 
-Für Dinge die das Setup des Repos betreffen (Linter Regeln, neue Tools usw.) benutzen wir aktuell [Github Issues](https://github.com/schul-cloud/nuxt-client/issues), da Tools wie Greenkeeper hier sowieso solche Issues erstellen und dadurch eine Klare Trennung zwischen Inhaltlichen Todos und Organisatorischem geschaffen wird.
+Für Dinge die das Setup des Repos betreffen (Linter Regeln, neue Tools usw.) benutzen wir aktuell [Github Issues](https://github.com/hpi-schul-cloud/nuxt-client/issues), da Tools wie Greenkeeper hier sowieso solche Issues erstellen und dadurch eine Klare Trennung zwischen Inhaltlichen Todos und Organisatorischem geschaffen wird.
 
 ### Ticket Ready?
 
