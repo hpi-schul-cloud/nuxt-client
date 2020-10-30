@@ -60,7 +60,7 @@ jobs:
       - name: failure hint
         if: failure()
         run: echo "if you want to update the screenshots, comment \"@schul-cloud-bot update screenshots\" on this PR."
-  end-to-end:
+  end-to-end-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
