@@ -20,14 +20,17 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
-- SC-7447 Add warning text for links when leaving the schul-cloud platform.
 - SC-6060 Updated caniuse-lite
 - SC-3788 Renamed Messenger component to meet naming convention
 - IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
 
+## Added
+
+- SC-7020 - added a new course TaskItem component
+
 ## 25.2.0
 
-### Changed
+## Changed
 
 - SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
 
@@ -38,6 +41,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6549 - Added missing Help section in sidebar
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
 - SC-6831 Fixes search/clear icons behaviour in lernstore
+
+## [25.1.1] - 2020-10-21
+
+### Added
+
+- SC-7447 - Add warning text for links when leaving the schul-cloud platform
 
 ## 25.0.2
 

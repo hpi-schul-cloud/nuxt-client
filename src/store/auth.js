@@ -49,13 +49,11 @@ export const actions = {
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
 
-		// This is needed by learn store, but the service is currently blocked by the firewall
-		// TODO uncomment this code when the service is secured and accessible through the firewall
-		// const roles = await this.$axios.$get(`/roles/user/${user.id}`);
-		// user.permissions = roles.reduce(
-		// 	(acc, role) => [...new Set(acc.concat(role.permissions))],
-		// 	[]
-		// );
+		const roles = await this.$axios.$get(`/roles/user/${user.id}`);
+		user.permissions = roles.reduce(
+			(acc, role) => [...new Set(acc.concat(role.permissions))],
+			[]
+		);
 
 		commit("setUser", user);
 		if (user.schoolId) {
