@@ -59,6 +59,7 @@
 					<base-button
 						v-if="isMerlinContent"
 						design="outline"
+						class="content-button"
 						@click="
 							() => {
 								goToMerlinContent(merlinTokenReference);
@@ -72,11 +73,21 @@
 						v-else
 						design="outline"
 						:href="downloadUrl"
+						class="content-button"
 						target="_blank"
 					>
 						<base-icon source="custom" icon="open_new_window" />
 						{{ $t("pages.content.material.toMaterial") }}
 					</base-button>
+					<!-- This will be replaced with Modal -->
+					<div v-if="isBrandenburg" class="external-content-warning">
+						<p class="text-s external-content-title">
+							{{ $t("pages.content.material.leavePageWarningMain") }}
+						</p>
+						<p class="text-xs">
+							{{ $t("pages.content.material.leavePageWarningFooter") }}
+						</p>
+					</div>
 				</div>
 				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
@@ -217,6 +228,9 @@ export default {
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
+		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
 		},
 		downloadUrl() {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
@@ -389,6 +403,19 @@ $tablet-portrait-width: 768px;
 		.content-container {
 			width: 80%;
 			margin-top: var(--space-md);
+		}
+
+		.external-content-warning {
+			color: var(--color-danger);
+
+			.external-content-title {
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
+		}
+
+		.content-button {
+			width: 100%;
 		}
 
 		.actions {

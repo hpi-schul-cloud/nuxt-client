@@ -14,6 +14,7 @@
 				design="none"
 				class="context-menu__button"
 				role="menuitem"
+				:data-testid="action.dataTestid || null"
 				@click.prevent="emitEvent(action.event, action.arguments)"
 				@keydown.up.prevent="focusPrev(index)"
 				@keydown.down.prevent="focusNext(index)"
@@ -71,9 +72,13 @@ export default {
 			type: String,
 			default: "bottom-right",
 			validator: (value) =>
-				["bottom-left", "bottom-right", "top-left", "top-right"].includes(
-					value
-				),
+				[
+					"bottom-left",
+					"bottom-right",
+					"top-left",
+					"top-right",
+					"top-right-bottom-placed",
+				].includes(value),
 		},
 		/**
 		 * defines the text, icon and event for each menu item
@@ -118,6 +123,12 @@ export default {
 						bottom: 0,
 						right: 0,
 						"transform-origin": "bottom right",
+					};
+				case "top-right-bottom-placed":
+					return {
+						right: 0,
+						top: 100 + "%",
+						"transform-origin": "top right",
 					};
 				default:
 					throw new Error("anchor is not defined");

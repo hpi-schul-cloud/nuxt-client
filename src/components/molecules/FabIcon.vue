@@ -58,6 +58,7 @@
 				:aria-label="action.label"
 				:to="action.to"
 				:href="action.href"
+				:data-testid="action.dataTestid"
 				@click="triggerAction(action)"
 			>
 				<BaseIcon :icon="action.icon" :source="action['icon-source']" />

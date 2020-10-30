@@ -1,13 +1,13 @@
 import { storiesOf } from "@storybook/vue";
-import BaseListItem from "@components/molecules/TaskItem";
-import ExampleImage from "@assets/img/courses/task-draft.svg";
+import TaskItem from "@components/molecules/TaskItem";
+import ExampleImage from "@assets/img/courses/draft.svg";
 import { boolean, text } from "@storybook/addon-knobs";
 
 storiesOf("5 Molecules/TaskItem", module)
 	.add("with knobs", () => ({
-		components: { BaseListItem },
+		components: { TaskItem },
 		data: () => ({
-			image: ExampleImage,
+			imgSrc: ExampleImage,
 			title: text("title", "Das Nervensystem"),
 			subtitle: text("subtitle", "Editor-Dokument"),
 			status: text("status", "Entwurf"),
@@ -19,14 +19,14 @@ storiesOf("5 Molecules/TaskItem", module)
 			contextOpen: false,
 		}),
 		template: `<div>
-		<BaseListItem :image="image" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
-		</BaseListItem>
+		<TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+		</TaskItem>
 	</div>`,
 	}))
 	.add("with image (triple)", () => ({
-		components: { BaseListItem },
+		components: { TaskItem },
 		data: () => ({
-			image: ExampleImage,
+			imgSrc: ExampleImage,
 			title: "Das Nervensystem",
 			subtitle: "Editor-Dokument",
 			status: "Entwurf",
@@ -36,18 +36,18 @@ storiesOf("5 Molecules/TaskItem", module)
 			],
 		}),
 		template: `<div>
-		<BaseListItem :image="image" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
-		</BaseListItem>
-        <BaseListItem :image="image" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
-        </BaseListItem>
-        <BaseListItem :image="image" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
-        </BaseListItem>
+		<TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+		</TaskItem>
+        <TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+        </TaskItem>
+        <TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+        </TaskItem>
 	</div>`,
 	}))
 	.add("with pulsating dot", () => ({
-		components: { BaseListItem },
+		components: { TaskItem },
 		data: () => ({
-			image: ExampleImage,
+			imgSrc: ExampleImage,
 			title: "Das Nervensystem",
 			subtitle: "Editor-Dokument",
 			status: "Entwurf",
@@ -58,7 +58,7 @@ storiesOf("5 Molecules/TaskItem", module)
 			],
 		}),
 		template: `<div>
-    <BaseListItem :image="image" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
-    </BaseListItem>
+    <TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+    </TaskItem>
     </div>`,
 	}));

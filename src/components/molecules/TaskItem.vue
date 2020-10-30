@@ -126,7 +126,7 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 48px;
+	min-height: 3rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -183,9 +183,5 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 
 .card-action {
 	display: flex;
-}
-
-p {
-	margin: 0;
 }
 </style>

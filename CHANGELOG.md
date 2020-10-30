@@ -8,7 +8,20 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- SC-6293 - restricts Lern-Store access by permission
+- SC-6708 - added data-testids to the students table in administration page
+- SC-6709 - added data-testids to the teachers table in administration page
+
+### Fixed
+
+- SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
+
+### Changed
+
 - SC-6060 Updated caniuse-lite
+- SC-3788 Renamed Messenger component to meet naming convention
 
 ## Added
 
@@ -27,6 +40,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6549 - Added missing Help section in sidebar
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
 - SC-6831 Fixes search/clear icons behaviour in lernstore
+
+## [25.1.1] - 2020-10-21
+
+### Added
+
+- SC-7447 - Add warning text for links when leaving the schul-cloud platform
 
 ## 25.0.2
 
