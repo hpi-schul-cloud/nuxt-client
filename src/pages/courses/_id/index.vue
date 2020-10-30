@@ -1,10 +1,13 @@
 <template>
 	<div v-if="course">
 		<base-grid column-width="4rem" class="no-margin">
-			<h1 class="h2 header">
-				<!-- TODO: Replace with HEADER component when ready -->
-				{{ course.name }}
-			</h1>
+			<course-header
+				class="header"
+				:title="course.name"
+				:next-lesson-date="nextLessonDate"
+				:actions="actions"
+				:course-id="$route.params.id"
+			></course-header>
 			<tabs class="tabs">
 				<tab
 					:name="$t('pages.courses._id.educational_content')"
@@ -59,6 +62,7 @@ import EmptyState from "@components/molecules/EmptyState";
 import TaskItem from "@components/molecules/TaskItem";
 import BaseButton from "@components/base/BaseButton";
 import BaseIcon from "@components/base/BaseIcon";
+import CourseHeader from "@components/molecules/CourseHeader";
 import moment from "moment";
 
 export default {
@@ -71,6 +75,39 @@ export default {
 		TaskItem,
 		BaseButton,
 		BaseIcon,
+		CourseHeader,
+	},
+	data() {
+		return {
+			nextLessonDate: "12.10.2020 14:30",
+			actions: [
+				{
+					text: "Bearbeiten",
+					event: "edit",
+					icon: "create",
+				},
+				{
+					text: "Einladen",
+					event: "invite",
+					icon: "mail_outline",
+				},
+				{
+					text: "Teilen",
+					event: "share",
+					icon: "share",
+				},
+				{
+					text: "Duplizieren",
+					event: "duplicate",
+					icon: "file_copy",
+				},
+				{
+					text: "Löschen",
+					event: "delete",
+					icon: "delete",
+				},
+			],
+		};
 	},
 	computed: {
 		...mapGetters("courses", {
