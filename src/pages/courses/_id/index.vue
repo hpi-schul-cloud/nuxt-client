@@ -55,6 +55,9 @@
 
 <script>
 import { mapGetters } from "vuex";
+import moment from "moment";
+import { min } from "lodash";
+
 import Tabs from "@components/organisms/Tabs/Tabs";
 import Tab from "@components/atoms/Tab";
 import BaseGrid from "@components/base/BaseGrid";
@@ -63,7 +66,6 @@ import TaskItem from "@components/molecules/TaskItem";
 import BaseButton from "@components/base/BaseButton";
 import BaseIcon from "@components/base/BaseIcon";
 import CourseHeader from "@components/molecules/CourseHeader";
-import moment from "moment";
 
 export default {
 	layout: "loggedInFullNoPadding",
@@ -79,30 +81,29 @@ export default {
 	},
 	data() {
 		return {
-			nextLessonDate: "12.10.2020 14:30",
 			actions: [
 				{
-					text: "Bearbeiten",
+					text: this.$t("pages.courses._id.course_option.edit"),
 					event: "edit",
 					icon: "create",
 				},
 				{
-					text: "Einladen",
+					text: this.$t("pages.courses._id.course_option.invite"),
 					event: "invite",
 					icon: "mail_outline",
 				},
 				{
-					text: "Teilen",
+					text: this.$t("pages.courses._id.course_option.share"),
 					event: "share",
 					icon: "share",
 				},
 				{
-					text: "Duplizieren",
+					text: this.$t("pages.courses._id.course_option.duplicate"),
 					event: "duplicate",
 					icon: "file_copy",
 				},
 				{
-					text: "Löschen",
+					text: this.$t("pages.courses._id.course_option.delete"),
 					event: "delete",
 					icon: "delete",
 				},
@@ -128,6 +129,23 @@ export default {
 		},
 		courseIsEmpty() {
 			return this.courseContents.length === 0;
+		},
+		nextLessonDate() {
+			if ((this.course.times || []).length <= 0) return;
+			const mappedTimes = this.course.times.map((lessonTime) => {
+				let weekDayIdentifier = lessonTime.weekday + 1;
+				if (moment().day() > weekDayIdentifier) weekDayIdentifier += 7;
+				const date = moment()
+					.day(weekDayIdentifier)
+					.hours(0)
+					.minutes(0)
+					.seconds(0)
+					.milliseconds(lessonTime.startTime);
+				if (date.isBefore()) return;
+				return date;
+			});
+			const minDate = min(mappedTimes);
+			return moment(minDate).format("DD.MM.YYYY HH:mm");
 		},
 	},
 	created(ctx) {
