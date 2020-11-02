@@ -1,18 +1,27 @@
 import FormNews from "./FormNews";
+import {
+	currentDate,
+	createInputDateTime,
+	fromInputDateTime,
+} from "@plugins/datetime";
 
-const date = new Date().toISOString().split("T")[0];
+const now = currentDate().set("minute", 0).set("second", 0);
+
+const testDate = fromInputDateTime(now);
+
+const [date, time] = createInputDateTime(testDate.utc());
 
 const validNews = {
 	title: "Hi",
 	content: "lalaland",
-	displayAt: `${date}T13:07:00.000Z`,
+	displayAt: `${testDate.toISOString()}`,
 };
 
-const timezoneOffset = new Date().getTimezoneOffset() / 60;
 const validNewsDate = {
 	date,
-	time: `${13 - timezoneOffset}:07`, // timezone conversion
+	time,
 };
+
 const invalidNews = {
 	title: "", // no title
 	content: "", // and no content
