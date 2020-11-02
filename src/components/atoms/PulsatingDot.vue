@@ -1,12 +1,18 @@
 <template>
 	<div class="ring-container">
-		<div class="ringring"></div>
-		<div class="circle"></div>
+		<div class="ringring" :style="{ 'border-color': color }"></div>
+		<div class="circle" :style="{ 'background-color': color }"></div>
 	</div>
 </template>
 
 <script>
 export default {
+	props: {
+		color: {
+			type: String,
+			default: "var(--color-danger)",
+		},
+	},
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};
@@ -30,7 +36,6 @@ export default {
 	position: absolute;
 	width: 0.5em;
 	height: 0.5em;
-	background-color: var(--color-danger);
 	border-radius: var(--radius-round);
 }
 
@@ -38,7 +43,7 @@ export default {
 	align-self: center;
 	width: 1em;
 	height: 1em;
-	border: 1px solid var(--color-danger);
+	border: 1px solid;
 	border-radius: var(--radius-round);
 	opacity: 0;
 	animation: pulsate var(--duration-transition-slow) ease-out;
