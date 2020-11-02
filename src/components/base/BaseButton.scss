@@ -70,9 +70,6 @@ a:not(.is-none) {
 			);
 		}
 	}
-	&.is-floating-action-button {
-		--button-background: #ea8500; // TODO: add this to styles repository after deployment is fixed
-	}
 	&.is-icon {
 		--button-padding: var(--space-xs);
 

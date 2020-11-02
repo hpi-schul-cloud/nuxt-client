@@ -1,5 +1,6 @@
 <template>
 	<div v-if="course">
+		<base-breadcrumb :inputs="breadcrumbs" />
 		<base-grid column-width="4rem" class="no-margin">
 			<course-header
 				class="header"
@@ -147,6 +148,15 @@ export default {
 			const minDate = min(mappedTimes);
 			return moment(minDate).format("DD.MM.YYYY HH:mm");
 		},
+		breadcrumbs() {
+			return [
+				{ text: "Kurse", to: { name: "courses" } },
+				{
+					text: this.course.name,
+					to: { name: "courses-id", params: { id: this.course._id } },
+				},
+			];
+		},
 	},
 	created(ctx) {
 		this.getCourse(this.$route.params.id);
@@ -178,8 +188,10 @@ export default {
 					? "@assets/img/courses/document-draft.svg"
 					: "@assets/img/courses/document-new.svg",
 				title: lesson.name,
-				subtitle: "Editor-Document",
-				status: lesson.hidden ? "Entwurf" : "",
+				subtitle: this.$t("pages.courses._id.lesson"),
+				status: lesson.hidden
+					? this.$t("pages.courses._id.course_content_draft")
+					: "",
 				fill: lesson.hidden ? undefined : this.course.color,
 			};
 		},
@@ -187,6 +199,9 @@ export default {
 			return {
 				title: homework.name,
 				subtitle: this.prepareSubtitleForHomework(homework),
+				status: homework.private
+					? this.$t("pages.courses._id.course_content_draft")
+					: "",
 				actionNeeded: false,
 			};
 		},
@@ -194,15 +209,21 @@ export default {
 			const now = moment();
 			const tomorrow = moment(now).add(24, "hours");
 			const dueDate = moment(new Date(homework.dueDate));
-			const prefix = `Aufgabe bis ${dueDate.format("DD/MM/YYYY")}`;
+			const prefix = `${this.$t(
+				"pages.courses._id.homework.until"
+			)} ${dueDate.format("DD/MM/YYYY")}`;
 			if (dueDate <= tomorrow && dueDate > now) {
 				const remainingHours = dueDate.diff(now, "hours");
-				return `${prefix} - endet in ${remainingHours} ${
-					remainingHours === 1 ? "Stunde" : "Stunden"
+				return `${prefix} - ${this.$t(
+					"pages.courses._id.homework.remaining"
+				)} ${remainingHours} ${
+					remainingHours === 1
+						? this.$t("pages.courses._id.homework.hour")
+						: this.$t("pages.courses._id.homework.hours")
 				}`;
 			}
 			if (dueDate <= now) {
-				return `${prefix} - Beendet`;
+				return `${prefix} - ${this.$t("pages.courses._id.homework.ended")}`;
 			}
 			return prefix;
 		},
@@ -212,9 +233,17 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-.tabs,
+.tabs {
+	grid-column: 1 / -1;
+}
+
 .header {
 	grid-column: 1 / -1;
+	margin: 0 var(--space-lg);
+
+	@include breakpoint(desktop) {
+		margin: 0 var(--space-xl-5);
+	}
 }
 
 .add-inhalt {
