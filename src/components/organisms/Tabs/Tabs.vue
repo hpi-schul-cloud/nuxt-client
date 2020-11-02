@@ -59,13 +59,13 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 .tab-icon {
-	margin-right: var(--space-xs-3);
-	font-size: var(--text-md);
+	margin-right: var(--space-xs-4);
+	animation: fadeEffect var(--duration-transition-medium) ease-in-out;
 }
 ul.tabs {
 	display: flex;
 	justify-content: center;
-	max-width: 1024px;
+	max-width: 450px;
 	padding: 0;
 	margin-bottom: var(--space-md);
 	.li-content {
@@ -96,6 +96,9 @@ ul.tabs {
 			border: none;
 			outline: none;
 		}
+		&.span {
+			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+		}
 		&.is-active {
 			position: relative;
 			color: var(--color-tertiary);
@@ -117,6 +120,12 @@ ul.tabs {
 				animation: fadeEffect var(--duration-transition-medium) ease-in;
 			}
 		}
+		&:not(.is-active) {
+			span {
+				display: none;
+				animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+			}
+		}
 		&:hover:not(.is-active) {
 			color: var(--color-gray-dark);
 			.tab-button {
@@ -128,7 +137,7 @@ ul.tabs {
 		position: absolute;
 		top: calc(4.45 * (var(--space-md)));
 		z-index: var(--layer-behind);
-		width: var(--content-max-width-vw);
+		width: 100vw;
 		height: 2px;
 		content: " ";
 		background: var(--color-gray-light);
@@ -136,33 +145,17 @@ ul.tabs {
 	}
 }
 
-@media (max-width: var(--breakpoint-mobile)) {
+@media screen and (min-width: 834px) and (max-width: 1400px) {
 	ul.tabs {
-		max-width: 450px;
-	}
-	.tab-button {
-		&.span {
-			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+		max-width: 1023px;
+		li:not(.is-active) span {
+			display: block;
+			animation: none;
 		}
 	}
 	.tab-icon {
-		margin-right: var(--space-xs-4);
-		animation: fadeEffect var(--duration-transition-medium) ease-in-out;
-	}
-	ul.tabs li.is-active::after {
-		top: calc(2.3 * (var(--space-md)));
-	}
-	li:not(.is-active) {
-		span {
-			display: none;
-			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
-		}
-	}
-}
-
-@media (max-width: var(--breakpoint-tablet-landscape)) and (orientation: landscape) {
-	ul.tabs {
-		max-width: 1023px;
+		margin-right: var(--space-xs-3);
+		font-size: var(--text-md);
 	}
 }
 
