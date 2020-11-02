@@ -1,8 +1,7 @@
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
 import InputDefault from "@components/organisms/DataFilter/inputs/Default";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
+
+import { printDate, fromInputDateTime } from "@plugins/datetime";
 
 const getFilterFirstname = (ctx) => ({
 	title: ctx.$t("common.labels.firstName"),
@@ -42,25 +41,22 @@ const getFilterLastname = (ctx) => ({
 const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
 	chipTemplate: (filter) => {
-		return `${ctx.$t("utils.adminFilter.date.created")} ${dayjs(
+		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
 			filter[0]
-		).format("DD.MM.YYYY")} ${ctx.$t("common.words.and")} ${dayjs(
-			filter[1]
-		).format("DD.MM.YYYY")} `;
+		)} ${ctx.$t("common.words.and")} ${printDate(filter[1])} `;
 	},
 	dataTestid: "filter_creationDate",
 	parser: {
 		generator: (filterGroupConfig, values) => {
-			const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
 			return {
 				createdAt: {
-					$gte: dayjs(values[filterGroupConfig.filter[0].id])
+					$gte: fromInputDateTime(values[filterGroupConfig.filter[0].id])
 						.utc()
-						.format(UTCFormat),
-					$lte: dayjs(values[filterGroupConfig.filter[1].id])
+						.toISOString(),
+					$lte: fromInputDateTime(values[filterGroupConfig.filter[1].id])
 						.add(1, "day")
 						.utc()
-						.format(UTCFormat),
+						.toISOString(),
 				},
 			};
 		},
