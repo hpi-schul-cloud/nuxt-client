@@ -9,12 +9,7 @@
 		<div class="subtitle-container">
 			<div class="next-lesson-container">
 				<base-icon source="custom" icon="clock"></base-icon>
-				<template v-if="nextLessonDate">
-					{{ nextLessonDate }}
-				</template>
-				<template v-else>
-					{{ this.$t("pages.courses._id.header.no_lesson_date") }}
-				</template>
+				{{ nextLessonDate }}
 			</div>
 			<base-link :href="redirectUrl" class="course-files-link">
 				<base-icon source="material" icon="folder"></base-icon>
@@ -37,7 +32,9 @@ export default {
 	props: {
 		nextLessonDate: {
 			type: String,
-			required: true,
+			default: function () {
+				return this.$t("pages.courses._id.header.noLessonDate");
+			},
 		},
 		courseId: {
 			type: String,

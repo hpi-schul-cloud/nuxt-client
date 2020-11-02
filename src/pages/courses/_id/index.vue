@@ -1,6 +1,5 @@
 <template>
 	<div v-if="course">
-		<base-breadcrumb :inputs="breadcrumbs" />
 		<base-grid column-width="4rem" class="no-margin">
 			<course-header
 				class="header"
@@ -11,28 +10,26 @@
 			></course-header>
 			<tabs class="tabs">
 				<tab
-					:name="$t('pages.courses._id.educational_content')"
+					:name="$t('pages.courses._id.educationalContent')"
 					icon-name="lerninhalte"
 					:selected="true"
 				>
 					<template v-if="courseIsEmpty">
 						<empty-state
 							image="@assets/img/empty-state/course-empty-state.svg"
-							:title="$t('pages.courses._id.empty_course_title')"
+							:title="$t('pages.courses._id.emptyCourseTitle')"
 						>
 							<template v-slot:description>
-								<!-- eslint-disable vue/no-v-html -->
-								<span
-									style="display: block;"
-									v-html="$t('pages.courses._id.empty_course_description')"
-								/>
+								<span style="display: block;">
+									{{ $t("pages.courses._id.emptyCourseDescription") }}</span
+								>
 								<base-button
 									class="add-inhalt"
 									size="medium"
 									design="floating-action-button"
 								>
 									<base-icon source="material" icon="add" />
-									{{ $t("pages.courses._id.empty_course_add_content") }}
+									{{ $t("pages.courses._id.addContent") }}
 								</base-button>
 							</template>
 						</empty-state>
@@ -84,27 +81,27 @@ export default {
 		return {
 			actions: [
 				{
-					text: this.$t("pages.courses._id.course_option.edit"),
+					text: this.$t("pages.courses._id.courseOption.edit"),
 					event: "edit",
 					icon: "create",
 				},
 				{
-					text: this.$t("pages.courses._id.course_option.invite"),
+					text: this.$t("pages.courses._id.courseOption.invite"),
 					event: "invite",
 					icon: "mail_outline",
 				},
 				{
-					text: this.$t("pages.courses._id.course_option.share"),
+					text: this.$t("pages.courses._id.courseOption.share"),
 					event: "share",
 					icon: "share",
 				},
 				{
-					text: this.$t("pages.courses._id.course_option.duplicate"),
+					text: this.$t("pages.courses._id.courseOption.duplicate"),
 					event: "duplicate",
 					icon: "file_copy",
 				},
 				{
-					text: this.$t("pages.courses._id.course_option.delete"),
+					text: this.$t("pages.courses._id.courseOption.delete"),
 					event: "delete",
 					icon: "delete",
 				},
@@ -123,8 +120,8 @@ export default {
 		}),
 		courseContents() {
 			const [lessons, homeworks] = [
-				this.lessons.map(this.adaptLesson),
-				this.homeworks.map(this.adaptHomework),
+				this.lessons.map(this.adaptLessonDataToTaskItemProperties),
+				this.homeworks.map(this.adaptHomeworkDataToTaskItemProperties),
 			];
 			return [...lessons, ...homeworks];
 		},
@@ -148,15 +145,6 @@ export default {
 			const minDate = min(mappedTimes);
 			return moment(minDate).format("DD.MM.YYYY HH:mm");
 		},
-		breadcrumbs() {
-			return [
-				{ text: "Kurse", to: { name: "courses" } },
-				{
-					text: this.course.name,
-					to: { name: "courses-id", params: { id: this.course._id } },
-				},
-			];
-		},
 	},
 	created(ctx) {
 		this.getCourse(this.$route.params.id);
@@ -178,11 +166,7 @@ export default {
 				},
 			});
 		},
-		adaptCourseContent() {
-			this.lessons = this.lessons.map(this.adaptLesson);
-			this.homeworks = this.homeworks.map(this.adaptHomework);
-		},
-		adaptLesson(lesson) {
+		adaptLessonDataToTaskItemProperties(lesson) {
 			return {
 				imgSrc: lesson.hidden
 					? "@assets/img/courses/document-draft.svg"
@@ -190,22 +174,22 @@ export default {
 				title: lesson.name,
 				subtitle: this.$t("pages.courses._id.lesson"),
 				status: lesson.hidden
-					? this.$t("pages.courses._id.course_content_draft")
+					? this.$t("pages.courses._id.courseContentDraft")
 					: "",
 				fill: lesson.hidden ? undefined : this.course.color,
 			};
 		},
-		adaptHomework(homework) {
+		adaptHomeworkDataToTaskItemProperties(homework) {
 			return {
 				title: homework.name,
-				subtitle: this.prepareSubtitleForHomework(homework),
+				subtitle: this.formatSubtitleForHomework(homework),
 				status: homework.private
-					? this.$t("pages.courses._id.course_content_draft")
+					? this.$t("pages.courses._id.courseContentDraft")
 					: "",
 				actionNeeded: false,
 			};
 		},
-		prepareSubtitleForHomework(homework) {
+		formatSubtitleForHomework(homework) {
 			const now = moment();
 			const tomorrow = moment(now).add(24, "hours");
 			const dueDate = moment(new Date(homework.dueDate));
