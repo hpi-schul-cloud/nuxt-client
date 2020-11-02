@@ -135,6 +135,7 @@ module.exports = {
 		"@plugins/sentry",
 		"@plugins/full-calendar",
 		"@plugins/i18n",
+		"@plugins/datetime",
 		"@plugins/vuelidate",
 	],
 
