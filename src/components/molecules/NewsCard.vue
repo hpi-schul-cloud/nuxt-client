@@ -9,7 +9,7 @@
 		</template>
 		<template v-slot:default>
 			<div class="news-card__content">
-				<span>{{ dayjs(article.createdAt).fromNow() }}</span>
+				<span>{{ fromNow(article.createdAt) }}</span>
 				<div class="mt--md">
 					<BaseLink :to="{ name: 'news-id', params: { id: article._id } }">
 						Weiterlesen
@@ -21,11 +21,7 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { fromNow } from "@plugins/datetime";
 
 export default {
 	props: {
@@ -38,7 +34,7 @@ export default {
 	},
 	data() {
 		return {
-			dayjs,
+			fromNow,
 		};
 	},
 };
