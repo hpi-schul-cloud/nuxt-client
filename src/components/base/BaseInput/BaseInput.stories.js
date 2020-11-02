@@ -156,13 +156,25 @@ storiesOf("4 Base UI Components/Inputs", module)
 	.add("Date", () => ({
 		components: { BaseInput },
 		data: () => ({
-			vmodel: text("Value", "31.12.2019"),
+			vmodel: text("Value", "2019-12-31"),
 			label: text("Label", "Label"),
 			placeholder: text("Placeholder", "Placeholder"),
 			info: text("info", "Info"),
 			hint: text("hint", "Hint"),
 		}),
 		template: `<base-input type="date" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint"/>`,
+	}))
+	.add("Birthdate", () => ({
+		components: { BaseInput },
+		data: () => ({
+			vmodel: text("Value", "2019-12-31"),
+			label: text("Label", "Label"),
+			placeholder: text("Placeholder", "Placeholder"),
+			info: text("info", "Info"),
+			hint: text("hint", "Hint"),
+			birthDate: true,
+		}),
+		template: `<base-input type="date" v-model="vmodel" :label="label" :placeholder="placeholder" :info="info" :hint="hint" :birthDate="birthDate"/>`,
 	}))
 	.add("Time", () => ({
 		components: { BaseInput },

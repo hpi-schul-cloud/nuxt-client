@@ -47,13 +47,16 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-birthday="{ data }">
+				<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
+			</template>
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:headcolumn-consent> </template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
+				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -135,9 +138,7 @@ import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import dayjs from "dayjs";
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -386,7 +387,8 @@ export default {
 			});
 			this.find();
 		},
-		dayjs,
+		printDate,
+		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
