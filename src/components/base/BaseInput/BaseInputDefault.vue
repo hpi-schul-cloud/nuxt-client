@@ -90,8 +90,9 @@
 	</div>
 </template>
 <script>
+import { inputRangeDate } from "@plugins/datetime";
+
 import uidMixin from "@mixins/uid";
-import dayjs from "dayjs";
 
 export const supportedTypes = [
 	"email",
@@ -138,8 +139,8 @@ export default {
 		return {
 			hasFocus: false,
 			passwordVisible: false,
-			minDate: dayjs().subtract(100, "y").format("YYYY-MM-DD"),
-			maxDate: dayjs().subtract(4, "y").format("YYYY-MM-DD"),
+			minDate: inputRangeDate(-100, "y"),
+			maxDate: inputRangeDate(-4, "y"),
 			birthDateValidationPattern:
 				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
 		};
