@@ -1,6 +1,6 @@
 <template>
 	<legacy-logged-in>
-		<main class="content" :class="{ inline: isInline }">
+		<main class="content" id="main-content" :class="{ inline: isInline }">
 			<Nuxt />
 		</main>
 	</legacy-logged-in>

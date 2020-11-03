@@ -181,12 +181,16 @@ export default {
 		},
 		adaptHomeworkDataToTaskItemProperties(homework) {
 			return {
+				imgSrc: homework.private
+					? "@assets/img/courses/task-draft.svg"
+					: "@assets/img/courses/task-new.svg",
 				title: homework.name,
 				subtitle: this.formatSubtitleForHomework(homework),
 				status: homework.private
 					? this.$t("pages.courses._id.courseContentDraft")
 					: "",
 				actionNeeded: false,
+				fill: homework.private ? undefined : this.course.color,
 			};
 		},
 		formatSubtitleForHomework(homework) {

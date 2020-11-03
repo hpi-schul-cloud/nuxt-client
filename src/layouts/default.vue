@@ -1,6 +1,6 @@
 <template>
 	<legacy-logged-in>
-		<base-content-container tag="main" class="content">
+		<base-content-container tag="main" class="content" id="main-content">
 			<Nuxt />
 		</base-content-container>
 	</legacy-logged-in>
