@@ -9,6 +9,7 @@ import {
 	printDateFromDeUTC,
 	setDefaultTimezone,
 	getUtcOffset,
+	calculateUTC,
 	setDefaultFormats,
 	DATETIME_FORMAT,
 } from "@plugins/datetime";
@@ -25,9 +26,7 @@ dayjs.extend(timezone);
 dayjs.extend(relativeTime);
 
 const TEST_DATETIME_TIMEZONE = "America/New_York";
-const TEST_DATETIME_OFFSET = "-04:00";
 const TEST_USER_TIMEZONE = "Europe/Berlin";
-const TEST_USER_OFFSET = "+01:00";
 const TEST_CURRENT_LOCALE = "en";
 
 const translations = {
@@ -37,6 +36,11 @@ const translations = {
 
 const defaultFormats = {
 	...DATETIME_FORMAT,
+};
+
+const getUTCOffsetForTimezone = (tz) => {
+	const expectedOffsetMin = dayjs().tz(tz).utcOffset();
+	return calculateUTC(expectedOffsetMin);
 };
 
 const localizedFormats = {
@@ -72,7 +76,7 @@ describe("@plugins/datetime", () => {
 
 	it("getUtcOffset", () => {
 		const result = getUtcOffset();
-		expect(result).toBe(TEST_DATETIME_OFFSET);
+		expect(result).toBe(getUTCOffsetForTimezone(TEST_DATETIME_TIMEZONE));
 	});
 
 	it("currentDate", () => {
@@ -95,9 +99,9 @@ describe("@plugins/datetime", () => {
 		expect(inputDateFromDeUTC("")).toBeNull();
 	});
 
-	it("printDate", () => {
-		const result = printDate(dateNow.format("YYYY-MM-DD HH:mm"));
-		expect(result).toBe(dateNow.format("DD.MM.YYYY"));
+		it("printDate", () => {
+		const result = printDate(dateLocal.format("YYYY-MM-DD HH:mm"));
+		expect(result).toBe(dateLocal.format("DD.MM.YYYY"));
 	});
 
 	it("inputRangeDate", () => {
@@ -160,7 +164,7 @@ describe("@plugins/datetime", () => {
 		datetime({ app: mockApp, store: mockStore });
 		expect(mockApp.$datetime).toStrictEqual({
 			currentTimezone: TEST_DATETIME_TIMEZONE,
-			currentTimezoneOffset: TEST_DATETIME_OFFSET,
+			currentTimezoneOffset: getUTCOffsetForTimezone(TEST_DATETIME_TIMEZONE),
 			userTimezone: undefined,
 			userHasSchoolTimezone: false,
 		});
@@ -168,7 +172,7 @@ describe("@plugins/datetime", () => {
 		datetime({ app: mockApp, store: mockStore });
 		expect(mockApp.$datetime).toStrictEqual({
 			currentTimezone: TEST_DATETIME_TIMEZONE,
-			currentTimezoneOffset: TEST_DATETIME_OFFSET,
+			currentTimezoneOffset: getUTCOffsetForTimezone(TEST_DATETIME_TIMEZONE),
 			userTimezone: TEST_USER_TIMEZONE,
 			userHasSchoolTimezone: false,
 		});
@@ -176,7 +180,7 @@ describe("@plugins/datetime", () => {
 		datetime({ app: mockApp, store: mockStore });
 		expect(mockApp.$datetime).toStrictEqual({
 			currentTimezone: TEST_DATETIME_TIMEZONE,
-			currentTimezoneOffset: TEST_DATETIME_OFFSET,
+			currentTimezoneOffset: getUTCOffsetForTimezone(TEST_DATETIME_TIMEZONE),
 			userTimezone: TEST_DATETIME_TIMEZONE,
 			userHasSchoolTimezone: true,
 		});
@@ -184,7 +188,7 @@ describe("@plugins/datetime", () => {
 		datetime({ app: mockApp, store: { ...mockStore, getters: {} } });
 		expect(mockApp.$datetime).toStrictEqual({
 			currentTimezone: TEST_DATETIME_TIMEZONE,
-			currentTimezoneOffset: TEST_DATETIME_OFFSET,
+			currentTimezoneOffset: getUTCOffsetForTimezone(TEST_DATETIME_TIMEZONE),
 			userTimezone: TEST_DATETIME_TIMEZONE,
 			userHasSchoolTimezone: true,
 		});
@@ -192,7 +196,7 @@ describe("@plugins/datetime", () => {
 		datetime({ app: mockApp, store: { ...mockStore, state: {} } });
 		expect(mockApp.$datetime).toStrictEqual({
 			currentTimezone: TEST_USER_TIMEZONE,
-			currentTimezoneOffset: TEST_USER_OFFSET,
+			currentTimezoneOffset: getUTCOffsetForTimezone(TEST_USER_TIMEZONE),
 			userTimezone: TEST_DATETIME_TIMEZONE,
 			userHasSchoolTimezone: true,
 		});
