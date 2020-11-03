@@ -6,20 +6,15 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 
-		<base-input
-			v-model="searchQuery"
+		<searchbar
+			value="currentFilterQuery.searchQuery"
 			type="text"
 			:placeholder="
 				$t('pages.administration.students.index.searchbar.placeholder')
 			"
 			class="search-section"
-			label=""
-			@update:vmodel="barSearch"
-		>
-			<template v-slot:icon>
-				<base-icon source="material" icon="search"
-			/></template>
-		</base-input>
+			@input="updateSearchQuery"
+		/>
 
 		<data-filter
 			:filters="filters"
@@ -126,7 +121,7 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import BaseInput from "../../../components/base/BaseInput/BaseInput";
+import Searchbar from "@/components/molecules/Searchbar";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -140,7 +135,7 @@ export default {
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
-		BaseInput,
+		Searchbar,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -277,9 +272,6 @@ export default {
 			],
 			filters: studentFilter(this),
 			active: false,
-			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
-					.searchQuery || "",
 		};
 	},
 
@@ -499,22 +491,8 @@ export default {
 				invertedDesign: true,
 			});
 		},
-		barSearch: function (searchText) {
+		updateSearchQuery: function (searchText) {
 			this.currentFilterQuery.searchQuery = searchText.trim();
-
-			const query = this.currentFilterQuery;
-
-			this.$uiState.set("filter", "pages.administration.students.index", {
-				query,
-			});
-
-			setTimeout(() => {
-				this.$store.dispatch("users/handleUsers", {
-					query,
-					action: "find",
-					userType: "students",
-				});
-			}, 400);
 		},
 	},
 };

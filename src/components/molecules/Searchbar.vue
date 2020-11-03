@@ -2,8 +2,7 @@
 	<div :class="{ 'live-search': true, active: isActive }">
 		<div class="search-container">
 			<base-spinner v-if="loading" />
-			<base-icon v-else class="search-icon" source="custom" icon="search" />
-			<input
+			<base-input
 				ref="searchStringInput"
 				:value="value"
 				:aria-label="ariaLabel"
@@ -11,10 +10,14 @@
 				class="search"
 				name="search"
 				v-bind="$attrs"
-				@input="updateSearchString($event.target.value)"
+				@input="updateSearchString($event)"
 				@focus="isActive = true"
 				@blur="isActive = false"
-			/>
+			>
+				<template v-slot:icon>
+					<base-icon source="material" icon="search" />
+				</template>
+			</base-input>
 			<transition name="fade">
 				<!-- shouldn't this be baseButton -->
 				<base-button
@@ -22,7 +25,7 @@
 					design="icon"
 					type="button"
 					class="clear-btn"
-					@click="updateSearchString('')"
+					@click="emit('')"
 				>
 					<base-icon source="custom" icon="clear" />
 				</base-button>
@@ -45,14 +48,24 @@ export default {
 		loading: {
 			type: Boolean,
 		},
+		delay: {
+			type: Number,
+			default: 400,
+		},
 	},
 	data() {
 		return {
 			isActive: false,
+			timeout: null,
 		};
 	},
 	methods: {
 		updateSearchString(newValue) {
+			if (this.delay && this.delay === 0) this.emit(newValue);
+			if (this.timeout) clearTimeout(this.timeout);
+			this.timeout = setTimeout(() => this.emit(newValue), this.delay);
+		},
+		emit(newValue) {
 			this.$emit("input", newValue);
 		},
 	},
@@ -64,7 +77,6 @@ export default {
 
 .live-search {
 	position: relative;
-	width: 100%;
 	max-width: var(--size-content-width-max);
 	margin: 0 auto;
 
@@ -72,18 +84,10 @@ export default {
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
-		width: 100%;
 		padding: 0 var(--space-md);
-		color: var(--color-black);
-		background: var(--color-gray-light);
-		border-radius: var(--radius-round);
 
 		input {
-			flex: 1;
-			padding: var(--space-md) var(--space-xs);
-			padding: var(--space-xs);
-			font-size: var(--text-md);
-			background: transparent;
+			flex: 10;
 			border: 0;
 			outline: none;
 		}
