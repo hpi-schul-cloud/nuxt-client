@@ -99,7 +99,7 @@ describe("@plugins/datetime", () => {
 		expect(inputDateFromDeUTC("")).toBeNull();
 	});
 
-		it("printDate", () => {
+	it("printDate", () => {
 		const result = printDate(dateLocal.format("YYYY-MM-DD HH:mm"));
 		expect(result).toBe(dateLocal.format("DD.MM.YYYY"));
 	});

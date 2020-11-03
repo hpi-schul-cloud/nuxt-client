@@ -36,7 +36,7 @@ export const calculateUTC = (offsetMin) => {
 	const hours = String(Math.floor(Math.abs(offsetMin) / 60)).padStart(2, "0");
 	const minutes = String(Math.abs(offsetMin) % 60).padStart(2, "0");
 	return `${prefix}${hours}:${minutes}`;
-}
+};
 
 /**
  * @return {String} UTC offset as string based on current timezone, e.g +01:00
