@@ -70,7 +70,7 @@ export default {
 ul.tabs {
 	display: flex;
 	justify-content: center;
-	max-width: 450px;
+	max-width: 28rem;
 	padding: 0;
 	margin-bottom: var(--space-md);
 	.li-content {
@@ -154,7 +154,7 @@ ul.tabs {
 	}
 
 	@include breakpoint(tablet) {
-		max-width: 1023px;
+		max-width: 64rem;
 	}
 }
 
