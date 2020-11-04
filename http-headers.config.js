@@ -8,7 +8,7 @@ let matrixMessengerHomeserver = "";
 let matrixMessengerDiscoverDomain = "";
 if (process.env.FEATURE_MATRIX_MESSENGER_ENABLED === "true") {
 	matrixMessengerEmbed = process.env.MATRIX_MESSENGER__EMBED_URI;
-	matrixMessengerHomeserver = process.env.MATRIX_MESSENGER__HOMESERVER_URI;
+	matrixMessengerHomeserver = process.env.MATRIX_MESSENGER__URI;
 	matrixMessengerDiscoverDomain = matrixMessengerHomeserver.replace(
 		"matrix.",
 		""
