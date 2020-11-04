@@ -61,6 +61,11 @@ export default {
 .tab-icon {
 	margin-right: var(--space-xs-4);
 	animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+
+	@include breakpoint(tablet) {
+		margin-right: var(--space-xs-3);
+		font-size: var(--text-md);
+	}
 }
 ul.tabs {
 	display: flex;
@@ -123,7 +128,10 @@ ul.tabs {
 		&:not(.is-active) {
 			span {
 				display: none;
-				animation: fadeEffect var(--duration-transition-medium) ease-in-out;
+
+				@include breakpoint(tablet) {
+					display: block;
+				}
 			}
 		}
 		&:hover:not(.is-active) {
@@ -136,6 +144,7 @@ ul.tabs {
 	&::after {
 		position: absolute;
 		top: calc(4.45 * (var(--space-md)));
+		left: calc(2 * (var(--space-md)));
 		z-index: var(--layer-behind);
 		width: 100vw;
 		height: 2px;
@@ -143,19 +152,9 @@ ul.tabs {
 		background: var(--color-gray-light);
 		box-shadow: 0 0 1px 0 var(--color-gray-light);
 	}
-}
 
-@media screen and (min-width: 834px) and (max-width: 1400px) {
-	ul.tabs {
+	@include breakpoint(tablet) {
 		max-width: 1023px;
-		li:not(.is-active) span {
-			display: block;
-			animation: none;
-		}
-	}
-	.tab-icon {
-		margin-right: var(--space-xs-3);
-		font-size: var(--text-md);
 	}
 }
 
