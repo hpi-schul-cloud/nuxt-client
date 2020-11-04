@@ -54,7 +54,7 @@ export default {
 		calculateColor() {
 			if (this.nextLessonDate) {
 				return {
-					color: "var(--color-tertiary);",
+					color: "var(--color-tertiary)",
 				};
 			}
 			return {
