@@ -1,8 +1,6 @@
 <template>
 	<base-modal :active="true" @onBackdropClick="$emit('cancel')">
-		<template v-slot:header>
-			{{ title | entities }}
-		</template>
+		<template v-slot:header> Filter: {{ title | entities }} </template>
 		<template v-slot:body>
 			<slot />
 		</template>

@@ -1,11 +1,40 @@
 export const actions = {
 	async register({ commit }, payload) {
-		const res = await this.$axios.$post("/users/skipregistration", {
-			dataObjects: payload,
-		});
+		const registered = [];
 
-		commit("setRegisteredStudents", res);
-		return res;
+		if (Array.isArray(payload)) {
+			const errors = [];
+			const promiseResult = await Promise.allSettled(
+				payload.map((user) => {
+					registered.push(user._id);
+					this.$axios
+						.$patch("/users/admin/students/" + user._id, user)
+						.then((userData) => {
+							const accountModel = {
+								lasttriedFailedLogin: "1970-01-01T00:00:00.000Z",
+								activated: true,
+								username: userData.email,
+								password: user.password,
+								userId: user._id,
+							};
+							this.$axios.$post("/accounts/", accountModel);
+						})
+						.catch((error) => errors.push({ updateError: error }));
+				})
+			);
+
+			promiseResult.map((promise) => {
+				if (promise.status !== "fulfilled") {
+					errors.push(promise);
+				}
+				if (errors.length)
+					commit("setRegisterError", { promiseErrors: errors });
+			});
+
+			commit("setRegisteredStudents", registered);
+		} else {
+			commit("setRegisterError", { mapError: true });
+		}
 	},
 	async findStudents({ commit }, query = {}) {
 		const res = await this.$axios.$get("/users/admin/students", {
@@ -17,8 +46,11 @@ export const actions = {
 		commit("setStudentsData", res);
 		return res;
 	},
-	async updateStudents({ commit }, payload) {
+	updateStudents({ commit }, payload) {
 		commit("updateStudentData", payload);
+	},
+	setStudents({ commit }, payload) {
+		commit("setStudentsData", payload);
 	},
 };
 
@@ -26,6 +58,7 @@ export const getters = {
 	selectedStudents: (state) => state.selectedStudents,
 	selectedStudentsData: (state) => state.selectedStudentsData,
 	registeredStudents: (state) => state.registeredStudents,
+	registerError: (state) => state.registerError,
 };
 
 export const mutations = {
@@ -41,8 +74,8 @@ export const mutations = {
 	updateStudentData(state, payload) {
 		state.selectedStudentsData = payload;
 	},
-	setTestState(state, payload) {
-		state.testState = payload;
+	setRegisterError(state, payload) {
+		state.registerError = payload;
 	},
 };
 
@@ -51,5 +84,6 @@ export const state = () => {
 		selectedStudents: [],
 		registeredStudents: [],
 		selectedStudentsData: [],
+		registerError: {},
 	};
 };

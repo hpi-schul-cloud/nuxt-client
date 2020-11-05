@@ -6,12 +6,21 @@
 			{{ $t("pages.administration.students.index.title") }}
 		</h1>
 
-		<search-bar
+		<base-input
 			v-model="searchQuery"
-			:placeholder="searchBarPlaceHolder"
+			type="text"
+			:placeholder="
+				$t('pages.administration.students.index.searchbar.placeholder')
+			"
 			class="search-section"
-			v-on="barSearch(this)"
-		/>
+			label=""
+			data-testid="searchbar"
+			@update:vmodel="barSearch"
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="search"
+			/></template>
+		</base-input>
 
 		<data-filter
 			:filters="filters"
@@ -33,17 +42,21 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
+			:show-external-text="!schoolInternallyManaged"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-birthday="{ data }">
+				<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
+			</template>
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:headcolumn-consent> </template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
+				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -78,6 +91,7 @@
 					design="text icon"
 					size="small"
 					:to="`/administration/students/${data}/edit`"
+					data-testid="edit_student_button"
 				>
 					<base-icon source="material" icon="edit" />
 				</base-button>
@@ -93,18 +107,21 @@
 			"
 			position="bottom-right"
 			:show-label="true"
+			data-testid="fab_button_students_table"
 			:actions="[
 				{
 					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					to: '/administration/students/new',
+					dataTestid: 'fab_button_add_students',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
 					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/students/import',
+					dataTestid: 'fab_button_import_students',
 				},
 			]"
 		/>
@@ -117,13 +134,11 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import SearchBar from "../../../components/molecules/Searchbar.vue";
+import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import dayjs from "dayjs";
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -131,7 +146,7 @@ export default {
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
-		SearchBar,
+		BaseInput,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -170,11 +185,11 @@ export default {
 					label: this.$t("common.labels.lastName"),
 					sortable: true,
 				},
-				// {
-				// 	field: "birthday",
-				// 	label: this.$t("common.labels.birthday"),
-				// 	sortable: true,
-				// },
+				{
+					field: "birthday",
+					label: this.$t("common.labels.birthday"),
+					sortable: true,
+				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
@@ -256,20 +271,21 @@ export default {
 				{
 					icon: "check",
 					color: "var(--color-warning)",
-					label: this.$t("pages.administration.students.legend.icon.warning"),
+					label: this.$t(
+						"utils.adminFilter.consent.label.parentsAgreementMissing"
+					),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					label: this.$t("pages.administration.students.legend.icon.danger"),
+					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
 			filters: studentFilter(this),
 			active: false,
-			searchQuery: "",
-			searchBarPlaceHolder: this.$t(
-				"pages.administration.teachers.index.searchbar.placeholder"
-			),
+			searchQuery:
+				this.$uiState.get("filter", "pages.administration.students.index")
+					.searchQuery || "",
 		};
 	},
 
@@ -305,7 +321,7 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			var temp = this.$uiState.get(
+			const temp = this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
 			);
@@ -362,15 +378,17 @@ export default {
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			this.page = 1;
+			//this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
 			this.$uiState.set("pagination", "pages.administration.students.index", {
 				itemsPerPage: limit,
+				currentPage: this.page,
 			});
 			this.find();
 		},
-		dayjs,
+		printDate,
+		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
@@ -420,12 +438,6 @@ export default {
 			// 	}))
 			// );
 
-			this.$toast.error(
-				`handleBulkQR([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
@@ -494,24 +506,22 @@ export default {
 				invertedDesign: true,
 			});
 		},
-		barSearch: function () {
-			return {
-				input: (searchText) => {
-					this.currentFilterQuery.searchQuery = searchText;
+		barSearch: function (searchText) {
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
-					const query = this.currentFilterQuery;
+			const query = this.currentFilterQuery;
 
-					this.$uiState.set("filter", "pages.administration.students.index", {
-						query,
-					});
+			this.$uiState.set("filter", "pages.administration.students.index", {
+				query,
+			});
 
-					this.$store.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "students",
-					});
-				},
-			};
+			setTimeout(() => {
+				this.$store.dispatch("users/handleUsers", {
+					query,
+					action: "find",
+					userType: "students",
+				});
+			}, 400);
 		},
 	},
 };

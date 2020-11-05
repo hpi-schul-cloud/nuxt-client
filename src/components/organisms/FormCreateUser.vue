@@ -1,37 +1,46 @@
 <template>
-	<form autocomplete="off" v-on="$listeners" @submit.prevent="submitHandler">
+	<form
+		autocomplete="off"
+		novalidate
+		v-on="$listeners"
+		@submit.prevent="submitHandler"
+	>
 		<base-input
 			v-model="userData.firstName"
 			type="text"
-			required="true"
 			:label="$t('common.labels.firstName')"
 			:placeholder="$t('common.placeholder.firstName')"
 			class="mt--md"
 			data-testid="input_create-user_firstname"
+			:validation-messages="nameValidationMessages"
+			:validation-model="$v.userData.firstName"
 		>
 		</base-input>
 		<base-input
 			v-model="userData.lastName"
 			type="text"
-			required="true"
 			:label="$t('common.labels.lastName')"
 			:placeholder="$t('common.placeholder.lastName')"
 			class="mt--md"
 			data-testid="input_create-user_lastname"
+			:validation-messages="nameValidationMessages"
+			:validation-model="$v.userData.lastName"
 		>
 		</base-input>
 		<base-input
 			v-model="userData.email"
 			type="text"
-			required="true"
 			:label="$t('common.labels.email')"
 			:placeholder="$t('common.placeholder.email')"
 			class="mt--md"
 			data-testid="input_create-user_email"
+			:validation-messages="emailValidationMessages"
+			:validation-model="$v.userData.email"
 		>
 		</base-input>
-		<slot name="inputs" :userData="userData" />
+		<slot name="inputs" />
 
+		<slot name="errors" />
 		<base-button
 			type="submit"
 			class="w-100 mt--lg"
@@ -53,61 +62,40 @@
 </template>
 
 <script>
+import { email, required } from "vuelidate/lib/validators";
+
 export default {
-	props: {
-		userId: {
-			type: String,
-			required: false,
-			default: undefined,
-		},
-		roleName: {
-			type: String,
-			required: true,
-		},
-	},
 	data() {
 		return {
+			dataParam: "zuoi",
 			userData: {
 				firstName: "",
 				lastName: "",
 				email: "",
-				sendRegistration: false,
 			},
+			nameValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+			emailValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+				{ key: "email", message: this.$t("common.validation.email") },
+			],
 		};
-	},
-	computed: {
-		actionType() {
-			return "create";
-		},
 	},
 	methods: {
 		submitHandler() {
-			switch (this.actionType) {
-				case "create": {
-					this.create();
-					break;
-				}
+			this.$v.$touch();
+			this.$emit("trigger-validation", this.$v);
+			if (!this.$v.$invalid) {
+				this.$emit("create-user", this.userData);
 			}
 		},
-
-		async create() {
-			try {
-				await this.$store.dispatch("users/handleUsers", {
-					firstName: this.userData.firstName,
-					lastName: this.userData.lastName,
-					email: this.userData.email,
-					roles: [this.roleName],
-					schoolId: this.$user.schoolId,
-					sendRegistration: this.userData.sendRegistration,
-					generateRegistrationLink: true,
-					action: this.actionType,
-					userType: `${this.roleName}s`,
-				});
-				this.$emit("success");
-			} catch (e) {
-				this.$emit("error");
-				console.error(e);
-			}
+	},
+	validations: {
+		userData: {
+			firstName: { required },
+			lastName: { required },
+			email: { required, email },
 		},
 	},
 };

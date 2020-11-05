@@ -38,16 +38,19 @@
 				:columns="tableColumns"
 				:data="filteredTableData"
 				track-by="_id"
-				sort-by="fullName"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					<base-input-calendar
+					<base-input-default
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
-						class="date"
-						:vmodel="slotProps.data"
+						class="date base-input-default"
+						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
+						:birth-date="true"
 						v-on="
 							inputDateForDate({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -55,12 +58,13 @@
 							})
 						"
 					/>
-					<base-input-calendar
+					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
-						class="date"
-						:vmodel="slotProps.data"
+						class="date base-input-default"
+						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
+						:birth-date="true"
 						v-on="
 							inputDateForDate({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -74,6 +78,7 @@
 						:vmodel="slotProps.data"
 						type="text"
 						label=""
+						class="base-input-default"
 						v-on="
 							inputPass({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -105,11 +110,13 @@
 				:data="filteredTableData"
 				track-by="id"
 				:paginated="false"
-				sort-by="fullName"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(slotProps.data).format("DD.MM.YYYY") }}
+						{{ inputDateFromDeUTC(slotProps.data) }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -117,7 +124,7 @@
 			<div id="consent-checkbox">
 				<base-input v-model="check" type="checkbox" name="switch" label="">
 				</base-input>
-				<label>
+				<label @click="check = !check">
 					<i18n
 						path="pages.administration.students.consent.steps.register.confirm"
 					>
@@ -157,9 +164,12 @@
 				:data="filteredTableData"
 				track-by="_id"
 				:paginated="false"
+				:sort-by.sync="sortBy"
+				:sort-order.sync="sortOrder"
+				@update:sort="onUpdateSort"
 			>
-				<template v-slot:datacolumn-birthday="{ data }">
-					{{ dayjs(data).format("DD.MM.YYYY") }}
+				<template v-slot:datacolumn-birthday="slotProps">
+					{{ inputDateFromDeUTC(slotProps.data) }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -170,6 +180,9 @@
 
 			<base-button design="secondary" @click="download">{{
 				$t("pages.administration.students.consent.steps.download.next")
+			}}</base-button>
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
 			}}</base-button>
 		</section>
 
@@ -208,13 +221,29 @@
 						/>
 					</template>
 				</modal-body-info>
-				{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+				<span v-if="currentStep === 2">
+					{{
+						$t(
+							"pages.administration.students.consent.cancel.modal.download.info"
+						)
+					}}
+				</span>
+				<span v-else>
+					{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+				</span>
 			</template>
 			<template v-slot:footerRight>
 				<base-button design="danger text" @click="cancel">
 					{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
 				</base-button>
-				<base-button design="danger" @click="cancelWarning = false">
+				<base-button v-if="currentStep === 2" design="danger" @click="download">
+					{{
+						$t(
+							"pages.administration.students.consent.cancel.modal.download.continue"
+						)
+					}}
+				</base-button>
+				<base-button v-else design="danger" @click="cancelWarning = false">
 					{{
 						$t("pages.administration.students.consent.cancel.modal.continue")
 					}}
@@ -243,30 +272,28 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
+// file deepcode ignore ArrayMethodOnNonArray
 import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import BaseInputCalendar from "@components/base/BaseInput/BaseInputCalendar";
 import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
-dayjs.locale("de");
+import { inputDateFromDeUTC, printDateFromDeUTC } from "@plugins/datetime";
 
 export default {
 	components: {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
-		BaseInputCalendar,
 		BaseInputDefault,
 		BaseInput,
 	},
 	meta: {
-		requiredPermissions: ["STUDENT_CREATE"],
+		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
 	layout: "loggedInFull",
 	props: {},
@@ -290,12 +317,12 @@ export default {
 				{
 					field: "fullName",
 					label: this.$t("common.labels.name"),
-					sortable: false,
+					sortable: true,
 				},
 				{
 					field: "email",
 					label: this.$t("common.labels.email"),
-					sortable: false,
+					sortable: true,
 				},
 				{
 					field: "birthday",
@@ -345,23 +372,27 @@ export default {
 			currentStep: 0,
 			birthdayWarning: false,
 			cancelWarning: false,
-			inputError: "Missing",
+			inputError: this.$t(
+				"pages.administration.students.consent.input.missing"
+			),
 			check: false,
 			checkWarning: false,
+			tableTimeOut: null,
+			printTimeOut: null,
 			printPageInfo: this.$t(
 				"pages.administration.students.consent.steps.register.print",
 				{ hostName: window.location.origin }
 			),
+			sortBy: "fullName",
+			sortOrder: "asc",
 		};
-	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
 		...mapGetters("bulkConsent", {
 			selectedStudents: "selectedStudents",
 			selectedStudentsData: "selectedStudentsData",
 			registeredStudents: "registeredStudents",
+			registerError: "registerError",
 		}),
 		...mapGetters("users", {
 			students: "list",
@@ -380,49 +411,58 @@ export default {
 				}
 				return [];
 			},
+			set() {},
 		},
 	},
 	created(ctx) {
 		this.find();
+		window.addEventListener("beforeunload", this.warningEventHandler);
+	},
+	beforeDestroy() {
+		window.removeEventListener("beforeunload", this.warningEventHandler);
+		clearTimeout(this.tableTimeOut);
+		clearTimeout(this.printTimeOut);
+	},
+	mounted() {
+		this.checkTableData();
 	},
 	methods: {
-		find() {
+		async find() {
 			const query = {
 				usersForConsent: this.selectedStudents,
+				$sort: {
+					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
+				},
+				users: this.selectedStudents,
+				$limit: this.selectedStudents.length,
 			};
 
-			try {
-				this.$store
-					.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "students",
-					})
-					.then((result) => {
-						const data = [];
-						for (const key of result.data.keys()) {
-							if (this.selectedStudents.includes(result.data[key]._id)) {
-								var student = result.data[key];
-								student.fullName = student.firstName + " " + student.lastName;
-								student.password = generatePassword();
-								data.push(student);
-							}
-						}
-						this.$store.commit("bulkConsent/setStudentsData", data);
-						return data;
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-			} catch (error) {
-				console.log(error);
+			await this.$store.dispatch("users/handleUsers", {
+				query,
+				action: "find",
+				userType: "students",
+			});
+
+			if (this.students.length) {
+				const data = this.students.map((student) => {
+					student.fullName = student.firstName + " " + student.lastName;
+					student.password = generatePassword();
+					return student;
+				});
+				this.filteredTableData = data;
+				this.$store.dispatch("bulkConsent/setStudents", data);
 			}
+		},
+		onUpdateSort(sortBy, sortOrder) {
+			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
+			this.sortOrder = sortOrder;
+			this.find();
 		},
 		inputDateForDate(student) {
 			return {
-				input_change: (dateData) => {
+				input: (dateData) => {
 					if (dateData !== "") {
-						const newDate = dayjs(dateData).format("YYYY-MM-DDTHH:mm:ssZ");
+						const newDate = fromInputDateTime(dateData);
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -477,13 +517,23 @@ export default {
 			} else {
 				const users = this.filteredTableData.map((student) => {
 					return {
-						userId: student._id,
-						birthday: student.birthday,
+						_id: student._id,
+						birthday: printDateFromDeUTC(student.birthday),
 						password: student.password,
-						parent_privacyConsent: true,
-						parent_termsOfUseConsent: true,
-						privacyConsent: true,
-						termsOfUseConsent: true,
+						consent: {
+							userConsent: {
+								form: "analog",
+								privacyConsent: true,
+								termsOfUseConsent: true,
+							},
+							parentConsents: [
+								{
+									form: "analog",
+									privacyConsent: true,
+									termsOfUseConsent: true,
+								},
+							],
+						},
 					};
 				}, this);
 				this.$store.dispatch("bulkConsent/register", users);
@@ -524,10 +574,11 @@ export default {
 
 			winPrint.document.close();
 			winPrint.focus();
-			setTimeout(() => {
+			this.printTimeOut = setTimeout(() => {
 				winPrint.print();
 				winPrint.close();
 			}, 500);
+			this.cancelWarning = false;
 			this.next();
 		},
 		success() {
@@ -543,7 +594,30 @@ export default {
 				path: `/administration/students`,
 			});
 		},
-		dayjs,
+		checkTableData() {
+			this.tableTimeOut = setTimeout(() => {
+				if (this.filteredTableData.length === 0) {
+					this.$toast.error(
+						this.$t("pages.administration.students.consent.table.empty"),
+						{ position: "top-center" }
+					);
+					this.$router.push({
+						path: `/administration/students`,
+					});
+				}
+			}, 2000);
+		},
+		inputDateFromDeUTC,
+		warningEventHandler() {
+			if (this.currentStep === 2) {
+				// Cancel the event as stated by the standard.
+				event.preventDefault();
+				// Chrome requires returnValue to be set.
+				event.returnValue = "";
+				// then show customized warning modal
+				this.cancelWarning = true;
+			}
+		},
 	},
 };
 </script>
@@ -597,12 +671,10 @@ export default {
 	}
 }
 
-/deep/ .base-input- {
-	max-width: 5em;
-	margin-bottom: 0;
-	.info-line {
-		display: none;
-	}
+/deep/ .base-input-default {
+	max-width: 10em;
+	margin-bottom: var(--space-md);
+	margin-left: var(--space-xs);
 	.input-line {
 		.icon-behind {
 			display: none;

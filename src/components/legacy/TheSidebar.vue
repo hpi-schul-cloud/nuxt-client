@@ -34,7 +34,7 @@
 								"
 								class="icon"
 							/>
-							<span class="title">{{ route.title }}</span>
+							<span class="title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
 					<ul v-if="route.active || route.childActive">
@@ -43,6 +43,7 @@
 							:key="JSON.stringify(child.to) || child.href"
 							:class="{ active: $route.path.includes(child.href) }"
 							class="list-item list-sub-item"
+							:data-testId="child.title"
 						>
 							<base-link
 								class="list-content"
@@ -61,7 +62,7 @@
 									"
 									class="icon"
 								/>
-								<span class="title">{{ child.title }}</span>
+								<span class="title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
 					</ul>

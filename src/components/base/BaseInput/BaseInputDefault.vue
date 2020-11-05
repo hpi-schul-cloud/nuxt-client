@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div class="wrapper">
 		<div
@@ -38,11 +39,16 @@
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
-							:min="appliedType === 'date' ? '1900-01-01' : ''"
-							:max="appliedType === 'date' ? '2999-12-31' : ''"
+							:min="appliedType === 'date' && birthDate ? minDate : ''"
+							:max="appliedType === 'date' && birthDate ? maxDate : ''"
+							:pattern="
+								appliedType === 'date' && birthDate
+									? birthDateValidationPattern
+									: null
+							"
 							@input="handleInput"
-							@focus="hasFocus = true"
-							@blur="hasFocus = false"
+							@focus="handleFocus"
+							@blur="handleBlur"
 						/>
 					</slot>
 				</div>
@@ -61,7 +67,7 @@
 						/>
 					</base-button>
 					<base-icon
-						v-if="error"
+						v-if="hasError"
 						source="custom"
 						icon="warning"
 						fill="var(--color-danger)"
@@ -79,11 +85,13 @@
 			v-if="hasError || !!info"
 			:class="{ info: true, help: !hasError, error: hasError }"
 		>
-			{{ error || info }}
+			{{ error || validationError || info }}
 		</span>
 	</div>
 </template>
 <script>
+import { inputRangeDate } from "@plugins/datetime";
+
 import uidMixin from "@mixins/uid";
 
 export const supportedTypes = [
@@ -124,11 +132,17 @@ export default {
 		disabled: { type: Boolean },
 		classes: { type: String, default: "" },
 		focus: { type: Boolean },
+		birthDate: { type: Boolean },
+		validationError: { type: String, default: "" },
 	},
 	data() {
 		return {
 			hasFocus: false,
 			passwordVisible: false,
+			minDate: inputRangeDate(-100, "y"),
+			maxDate: inputRangeDate(-4, "y"),
+			birthDateValidationPattern:
+				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
 		};
 	},
 	computed: {
@@ -139,7 +153,7 @@ export default {
 			return this.type;
 		},
 		hasError() {
-			return !!this.error;
+			return !!(this.error || this.validationError);
 		},
 		showLabel() {
 			return (
@@ -161,6 +175,14 @@ export default {
 		},
 		togglePasswordVisibility() {
 			this.passwordVisible = !this.passwordVisible;
+		},
+		handleFocus(event) {
+			this.hasFocus = true;
+			this.$emit("focus", event);
+		},
+		handleBlur(event) {
+			this.hasFocus = false;
+			this.$emit("blur", event);
 		},
 	},
 };

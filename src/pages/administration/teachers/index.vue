@@ -6,12 +6,21 @@
 			{{ $t("pages.administration.teachers.index.title") }}
 		</h1>
 
-		<search-bar
+		<base-input
 			v-model="searchQuery"
-			:placeholder="searchBarPlaceHolder"
+			type="text"
+			:placeholder="
+				$t('pages.administration.teachers.index.searchbar.placeholder')
+			"
 			class="search-section"
-			v-on="barSearch(this)"
-		/>
+			label=""
+			data-testid="searchbar"
+			@update:vmodel="barSearch"
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="search"
+			/></template>
+		</base-input>
 
 		<data-filter
 			:filters="filters"
@@ -41,7 +50,7 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
+				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -70,6 +79,7 @@
 					design="text icon"
 					size="small"
 					:to="`/administration/teachers/${data}/edit`"
+					data-testid="edit_teacher_button"
 				>
 					<base-icon source="material" icon="edit" />
 				</base-button>
@@ -85,18 +95,21 @@
 			"
 			position="bottom-right"
 			:show-label="true"
+			data-testid="fab_button_teachers_table"
 			:actions="[
 				{
 					label: $t('pages.administration.teachers.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					to: '/administration/teachers/new',
+					dataTestid: 'fab_button_add_teachers',
 				},
 				{
 					label: $t('pages.administration.teachers.fab.import'),
 					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/teachers/import',
+					dataTestid: 'fab_button_import_teachers',
 				},
 			]"
 		/>
@@ -108,13 +121,11 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import SearchBar from "../../../components/molecules/Searchbar.vue";
+import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import dayjs from "dayjs";
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { printDate } from "@plugins/datetime";
 export default {
 	layout: "loggedInFull",
 	components: {
@@ -122,7 +133,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
-		SearchBar,
+		BaseInput,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -164,14 +175,6 @@ export default {
 			],
 
 			tableActions: [
-				{
-					label: this.$t(
-						"pages.administration.teachers.index.tableActions.consent"
-					),
-					icon: "check",
-					"icon-source": "material",
-					action: this.handleBulkConsent,
-				},
 				{
 					label: this.$t(
 						"pages.administration.teachers.index.tableActions.email"
@@ -238,19 +241,18 @@ export default {
 				{
 					icon: "check",
 					color: "var(--color-success)",
-					label: this.$t("pages.administration.teachers.legend.icon.check"),
+					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					label: this.$t("pages.administration.students.legend.icon.danger"),
+					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
 			filters: teacherFilter(this),
-			searchQuery: "",
-			searchBarPlaceHolder: this.$t(
-				"pages.administration.teachers.index.searchbar.placeholder"
-			),
+			searchQuery:
+				this.$uiState.get("filter", "pages.administration.teachers.index")
+					.searchQuery || "",
 		};
 	},
 	computed: {
@@ -290,8 +292,9 @@ export default {
 				: this.permissionFilteredTableActions;
 		},
 		editFilteredColumns() {
-			// filters edit column if school is external
-			return this.school.isExternal
+			// filters out edit column if school is external or if user is a teacher
+			return this.school.isExternal ||
+				this.user.roles.some((role) => role.name === "teacher")
 				? this.tableColumns.filter((col) => col.field !== "_id")
 				: this.tableColumns;
 		},
@@ -358,29 +361,22 @@ export default {
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			this.page = 1;
+			// this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
 			this.$uiState.set("pagination", "pages.administration.teachers.index", {
 				itemsPerPage: limit,
+				currentPage: this.page,
 			});
 			this.find();
 		},
-		dayjs,
+		printDate,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
 				selectionType,
 				_ids: rowIds,
 			};
-		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$toast.error(
-				`handleBulkConsent([${rowIds.join(
-					", "
-				)}], "${selectionType}") needs implementation`,
-				{ duration: 5000 }
-			);
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
@@ -466,24 +462,22 @@ export default {
 				invertedDesign: true,
 			});
 		},
-		barSearch: function () {
-			return {
-				input: async (searchText) => {
-					this.currentFilterQuery.searchQuery = searchText;
+		barSearch: function (searchText) {
+			this.currentFilterQuery.searchQuery = searchText.trim();
 
-					const query = this.currentFilterQuery;
+			const query = this.currentFilterQuery;
 
-					this.$uiState.set("filter", "pages.administration.teachers.index", {
-						query,
-					});
+			this.$uiState.set("filter", "pages.administration.teachers.index", {
+				query,
+			});
 
-					this.$store.dispatch("users/handleUsers", {
-						query,
-						action: "find",
-						userType: "teachers",
-					});
-				},
-			};
+			setTimeout(() => {
+				this.$store.dispatch("users/handleUsers", {
+					query,
+					action: "find",
+					userType: "teachers",
+				});
+			}, 400);
 		},
 	},
 };

@@ -1,12 +1,12 @@
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
 import InputDefault from "@components/organisms/DataFilter/inputs/Default";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
+
+import { printDate, fromInputDateTime } from "@plugins/datetime";
 
 const getFilterFirstname = (ctx) => ({
 	title: ctx.$t("common.labels.firstName"),
 	chipTemplate: `${ctx.$t("common.labels.firstName")} = %1`,
+	dataTestid: "filter_firstname",
 	filter: [
 		{
 			attribute: "firstName",
@@ -23,6 +23,7 @@ const getFilterFirstname = (ctx) => ({
 const getFilterLastname = (ctx) => ({
 	title: ctx.$t("common.labels.lastName"),
 	chipTemplate: `${ctx.$t("common.labels.lastName")} = %1`,
+	dataTestid: "filter_lastname",
 	filter: [
 		{
 			attribute: "lastName",
@@ -40,23 +41,22 @@ const getFilterLastname = (ctx) => ({
 const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
 	chipTemplate: (filter) => {
-		return `${ctx.$t("utils.adminFilter.date.created")} ${dayjs(
+		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
 			filter[0]
-		).format("DD.MM.YYYY")} ${ctx.$t("common.words.and")} ${dayjs(
-			filter[1]
-		).format("DD.MM.YYYY")} `;
+		)} ${ctx.$t("common.words.and")} ${printDate(filter[1])} `;
 	},
+	dataTestid: "filter_creationDate",
 	parser: {
 		generator: (filterGroupConfig, values) => {
-			const UTCFormat = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
 			return {
 				createdAt: {
-					$gte: dayjs(values[filterGroupConfig.filter[0].id])
+					$gte: fromInputDateTime(values[filterGroupConfig.filter[0].id])
 						.utc()
-						.format(UTCFormat),
-					$lte: dayjs(values[filterGroupConfig.filter[1].id])
+						.toISOString(),
+					$lte: fromInputDateTime(values[filterGroupConfig.filter[1].id])
+						.add(1, "day")
 						.utc()
-						.format(UTCFormat),
+						.toISOString(),
 				},
 			};
 		},
@@ -111,21 +111,22 @@ export function studentFilter(ctx) {
 
 	return [
 		{
-			title: ctx.$t("utils.adminFilter.consent.title"),
+			title: ctx.$t("common.labels.registration"),
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.consent.ok");
+						return ctx.$t("pages.administration.students.legend.icon.success");
 					} else if (stat === "parentsAgreed") {
-						return ctx.$t("utils.adminFilter.consent.parentsAgreed");
+						return ctx.$t(
+							"utils.adminFilter.consent.label.parentsAgreementMissing"
+						);
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
-					" " + ctx.$t("common.words.and") + " "
-				)}`;
+				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
+			dataTestid: "filter_registration",
 			filter: [
 				{
 					attribute: "consentStatus",
@@ -134,11 +135,15 @@ export function studentFilter(ctx) {
 					options: [
 						{
 							value: "ok",
-							label: ctx.$t("utils.adminFilter.consent.label.ok"),
+							label: ctx.$t(
+								"pages.administration.students.legend.icon.success"
+							),
 						},
 						{
 							value: "parentsAgreed",
-							label: ctx.$t("utils.adminFilter.consent.label.parentsAgreed"),
+							label: ctx.$t(
+								"utils.adminFilter.consent.label.parentsAgreementMissing"
+							),
 						},
 						{
 							value: "missing",
@@ -151,6 +156,7 @@ export function studentFilter(ctx) {
 		{
 			title: ctx.$t("utils.adminFilter.class.title"),
 			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			dataTestid: "filter_classes",
 			filter: [
 				{
 					attribute: "classes",
@@ -172,19 +178,18 @@ export function teacherFilter(ctx) {
 
 	return [
 		{
-			title: ctx.$t("utils.adminFilter.teacher.consent.title"),
+			title: ctx.$t("utils.adminFilter.consent.title"),
 			chipTemplate: ([filteredStatus]) => {
 				const status = filteredStatus.map((stat) => {
 					if (stat === "ok") {
-						return ctx.$t("utils.adminFilter.teacher.consent.ok");
+						return ctx.$t("pages.administration.students.legend.icon.success");
 					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.missing");
+						return ctx.$t("utils.adminFilter.consent.label.missing");
 					}
 				});
-				return `${ctx.$t("utils.adminFilter.consent")} ${status.join(
-					" " + ctx.$t("common.words.and") + " "
-				)}`;
+				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
 			},
+			dataTestid: "filter_registration",
 			filter: [
 				{
 					attribute: "consentStatus",
@@ -193,11 +198,13 @@ export function teacherFilter(ctx) {
 					options: [
 						{
 							value: "ok",
-							label: ctx.$t("utils.adminFilter.teacher.consent.label.ok"),
+							label: ctx.$t(
+								"pages.administration.students.legend.icon.success"
+							),
 						},
 						{
 							value: "missing",
-							label: ctx.$t("utils.adminFilter.teacher.consent.label.missing"),
+							label: ctx.$t("utils.adminFilter.consent.label.missing"),
 						},
 					],
 				},
@@ -206,6 +213,7 @@ export function teacherFilter(ctx) {
 		{
 			title: ctx.$t("utils.adminFilter.class.title"),
 			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
+			dataTestid: "filter_classes",
 			filter: [
 				{
 					attribute: "classes",

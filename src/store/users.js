@@ -10,6 +10,14 @@ const module = mergeDeep(base, {
 			queryContext.customEndpoint = `/users/admin/${userType}`;
 			return dispatch(action, queryContext);
 		},
+		createTeacher(ctx, teacherData) {
+			const customEndpoint = "/users/admin/teachers";
+			return this.$axios.$post(customEndpoint, teacherData);
+		},
+		createStudent(ctx, studentData) {
+			const customEndpoint = "/users/admin/students";
+			return this.$axios.$post(customEndpoint, studentData);
+		},
 		sendRegistrationLink(ctx, payload = {}) {
 			const customEndpoint = "/users/mail/registrationLink";
 			return this.$axios.$post(customEndpoint, payload);
