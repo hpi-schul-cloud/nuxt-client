@@ -28,6 +28,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-7020 - added a new course TaskItem component
 
+### Changed in Unreleased
+
+- SC-5476 Renamed env vars to be consistent with old client and server
+
 ## 25.2.0
 
 ## Changed
