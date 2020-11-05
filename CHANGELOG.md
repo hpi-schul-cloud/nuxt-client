@@ -16,7 +16,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - OPS-1297 - added Changelog github action
 - OPS-1508 - added limits for cpu and ram to the docker compose files
 
-
 ### Fixed
 
 - SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
