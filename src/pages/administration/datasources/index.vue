@@ -55,7 +55,7 @@
 						<template v-if="element.lastStatus === 'Success'">
 							{{
 								$t("pages.administraion.datasources.index.success", {
-									relativeDate: dayjs(element.lastRun).fromNow(),
+									relativeDate: fromNow(element.lastRun),
 								})
 							}}
 							<BaseIcon
@@ -67,7 +67,7 @@
 						<template v-else-if="element.lastStatus === 'Error'">
 							{{
 								$t("pages.administraion.datasources.index.error", {
-									relativeDate: dayjs(element.lastRun).fromNow(),
+									relativeDate: fromNow(element.lastRun),
 								})
 							}}
 							<BaseIcon
@@ -170,11 +170,7 @@ import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/empty-state/emptystate-graph.svg";
 
 import { mapGetters, mapState } from "vuex";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { fromNow } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -207,7 +203,7 @@ export default {
 				},
 			],
 			imgsrc: ImageEmptyState,
-			dayjs,
+			fromNow,
 			menuOpen: false,
 			page: 1,
 			limit:

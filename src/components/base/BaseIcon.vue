@@ -1,7 +1,7 @@
 <template>
 	<component
 		:is="svgComponent"
-		v-if="source !== 'fa'"
+		v-if="source !== 'fa' && svgComponent"
 		ref="icon"
 		:class="['icon', source]"
 		v-bind="$attrs"
@@ -9,10 +9,16 @@
 		v-on="$listeners"
 	/>
 	<i
-		v-else
+		v-else-if="source === 'fa'"
 		:class="['icon', 'fa', `fa-${icon}`]"
 		:style="{ color: fillColor }"
 	></i>
+	<!-- eslint-disable -->
+	<span
+		v-else
+		class="icon"
+		v-html="require(`!!svg-inline-loader!@assets/icons/${icon}.svg`)"
+	></span>
 </template>
 
 <script>
@@ -45,7 +51,7 @@ export default {
 		fillColor() {
 			switch (this.source) {
 				case "fa":
-					return "inerhit";
+					return "inherit";
 				default:
 					return "currentColor";
 			}
@@ -64,10 +70,7 @@ export default {
 				}
 				return icon.default;
 			} catch (error) {
-				console.error(
-					`error loading icon "${this.icon}" from "${this.source}". It might be not available.`,
-					error
-				);
+				console.error(this.$t("components.base.BaseIcon.error"), error);
 				return undefined;
 			}
 		},
