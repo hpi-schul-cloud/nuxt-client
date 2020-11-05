@@ -47,7 +47,7 @@
 						v-if="(birthdayWarning && !slotProps.data)"
 						:error="inputError"
 						class="date base-input-default"
-						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
+						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
 						:birth-date="true"
@@ -61,7 +61,7 @@
 					<base-input-default
 						v-else-if="(!birthdayWarning || slotProps.data)"
 						class="date base-input-default"
-						:vmodel="dayjs(slotProps.data, 'DD.MM.YYYY').format('YYYY-MM-DD')"
+						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
 						:birth-date="true"
@@ -116,7 +116,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
+						{{ inputDateFromDeUTC(slotProps.data) }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -124,7 +124,7 @@
 			<div id="consent-checkbox">
 				<base-input v-model="check" type="checkbox" name="switch" label="">
 				</base-input>
-				<label>
+				<label @click="check = !check">
 					<i18n
 						path="pages.administration.students.consent.steps.register.confirm"
 					>
@@ -169,7 +169,7 @@
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					{{ dayjs(slotProps.data, "DD.MM.YYYY").format("DD.MM.YYYY") }}
+					{{ inputDateFromDeUTC(slotProps.data) }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -272,9 +272,7 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-dayjs.extend(customParseFormat);
+// file deepcode ignore ArrayMethodOnNonArray
 import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
@@ -284,8 +282,7 @@ import BaseInput from "@components/base/BaseInput/BaseInput";
 import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { inputDateFromDeUTC, printDateFromDeUTC } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -296,7 +293,7 @@ export default {
 		BaseInput,
 	},
 	meta: {
-		requiredPermissions: ["STUDENT_CREATE"],
+		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
 	layout: "loggedInFull",
 	props: {},
@@ -380,6 +377,8 @@ export default {
 			),
 			check: false,
 			checkWarning: false,
+			tableTimeOut: null,
+			printTimeOut: null,
 			printPageInfo: this.$t(
 				"pages.administration.students.consent.steps.register.print",
 				{ hostName: window.location.origin }
@@ -387,9 +386,6 @@ export default {
 			sortBy: "fullName",
 			sortOrder: "asc",
 		};
-	},
-	meta: {
-		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
 		...mapGetters("bulkConsent", {
@@ -420,6 +416,12 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		window.addEventListener("beforeunload", this.warningEventHandler);
+	},
+	beforeDestroy() {
+		window.removeEventListener("beforeunload", this.warningEventHandler);
+		clearTimeout(this.tableTimeOut);
+		clearTimeout(this.printTimeOut);
 	},
 	mounted() {
 		this.checkTableData();
@@ -432,6 +434,7 @@ export default {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 				users: this.selectedStudents,
+				$limit: this.selectedStudents.length,
 			};
 
 			await this.$store.dispatch("users/handleUsers", {
@@ -459,7 +462,7 @@ export default {
 			return {
 				input: (dateData) => {
 					if (dateData !== "") {
-						const newDate = dayjs(dateData, "YYYY-MM-DD").format("DD.MM.YYYY");
+						const newDate = fromInputDateTime(dateData);
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -515,9 +518,7 @@ export default {
 				const users = this.filteredTableData.map((student) => {
 					return {
 						_id: student._id,
-						birthday: dayjs(student.birthday, "DD.MM.YYYY").format(
-							"YYYY-MM-DD"
-						),
+						birthday: printDateFromDeUTC(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -573,7 +574,7 @@ export default {
 
 			winPrint.document.close();
 			winPrint.focus();
-			setTimeout(() => {
+			this.printTimeOut = setTimeout(() => {
 				winPrint.print();
 				winPrint.close();
 			}, 500);
@@ -594,7 +595,7 @@ export default {
 			});
 		},
 		checkTableData() {
-			setTimeout(() => {
+			this.tableTimeOut = setTimeout(() => {
 				if (this.filteredTableData.length === 0) {
 					this.$toast.error(
 						this.$t("pages.administration.students.consent.table.empty"),
@@ -606,7 +607,17 @@ export default {
 				}
 			}, 2000);
 		},
-		dayjs,
+		inputDateFromDeUTC,
+		warningEventHandler() {
+			if (this.currentStep === 2) {
+				// Cancel the event as stated by the standard.
+				event.preventDefault();
+				// Chrome requires returnValue to be set.
+				event.returnValue = "";
+				// then show customized warning modal
+				this.cancelWarning = true;
+			}
+		},
 	},
 };
 </script>

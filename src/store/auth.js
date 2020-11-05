@@ -31,10 +31,30 @@ export const actions = {
 	async logout({ commit }) {
 		this.$cookies.remove("jwt");
 		localStorage.clear();
+		// Delete matrix messenger indexedDB databases
+		if (indexedDB) {
+			// window.indexedDB.databases() is not available in all browsers
+			const databases = [
+				"logs",
+				"matrix-js-sdk:crypto",
+				"matrix-js-sdk:riot-web-sync",
+			];
+
+			for (let i = 0; i < databases.length; i += 1) {
+				indexedDB.deleteDatabase(databases[i]);
+			}
+		}
 		commit("clearAuthData");
 	},
 	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
+
+		const roles = await this.$axios.$get(`/roles/user/${user.id}`);
+		user.permissions = roles.reduce(
+			(acc, role) => [...new Set(acc.concat(role.permissions))],
+			[]
+		);
+
 		commit("setUser", user);
 		if (user.schoolId) {
 			const school = await this.$axios.$get(`/schools/${user.schoolId}`);

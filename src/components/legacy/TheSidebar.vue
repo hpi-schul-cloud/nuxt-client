@@ -34,7 +34,7 @@
 								"
 								class="icon"
 							/>
-							<span class="title">{{ route.title }}</span>
+							<span class="title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
 					<ul v-if="route.active || route.childActive">
@@ -62,7 +62,7 @@
 									"
 									class="icon"
 								/>
-								<span class="title">{{ child.title }}</span>
+								<span class="title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
 					</ul>

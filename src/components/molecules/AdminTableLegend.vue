@@ -20,11 +20,6 @@
 			</li>
 		</div>
 		<span v-if="showExternalSyncHint" class="container">
-			<img
-				class="sync-symbol"
-				src="@assets/icons/sync-symbol.svg"
-				role="presentation"
-			/>
 			<strong class="external-sync-hint">
 				{{
 					($t("components.molecules.admintablelegend.externalSync",
@@ -34,6 +29,7 @@
 					class="link-style"
 					to="/"
 					href="https://docs.schul-cloud.org/x/PgBVAw"
+					target="_blank"
 					:no-styles="true"
 					traget="_blank"
 				>

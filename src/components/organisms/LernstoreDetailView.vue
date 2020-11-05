@@ -55,6 +55,40 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
+				<div>
+					<base-button
+						v-if="isMerlinContent"
+						design="outline"
+						class="content-button"
+						@click="
+							() => {
+								goToMerlinContent(merlinTokenReference);
+							}
+						"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+					<base-button
+						v-else
+						design="outline"
+						:href="downloadUrl"
+						class="content-button"
+						target="_blank"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+					<!-- This will be replaced with Modal -->
+					<div v-if="isBrandenburg" class="external-content-warning">
+						<p class="text-s external-content-title">
+							{{ $t("pages.content.material.leavePageWarningMain") }}
+						</p>
+						<p class="text-xs">
+							{{ $t("pages.content.material.leavePageWarningFooter") }}
+						</p>
+					</div>
+				</div>
 				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
@@ -74,22 +108,9 @@
 							</div>
 						</div>
 					</div>
-					<div v-if="downloadUrl" class="meta-container">
-						<div class="meta-icon">
-							<base-icon
-								:source="getTypeIcon(resource.mimetype).iconSource"
-								:icon="getTypeIcon(resource.mimetype).icon"
-							/>
-						</div>
-						<div class="meta-text text-wrap">
-							<base-link :href="downloadUrl" target="_blank" class="link">
-								{{ downloadUrl }}
-							</base-link>
-						</div>
-					</div>
-					<div class="meta-container">
-						<div class="meta-icon">
-							<base-icon source="fa" icon="tag" />
+					<div :style="{ margin: '0px' }" class="meta-container">
+						<div>
+							<base-icon class="meta-icon" source="custom" icon="hashtag" />
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
@@ -128,7 +149,6 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 
@@ -136,6 +156,7 @@ import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import { getMetadataAttribute } from "@utils/helpers";
+import { printDate } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -155,11 +176,6 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
-	data() {
-		return {
-			dayjs,
-		};
-	},
 	computed: {
 		provider() {
 			const provider = getMetadataAttribute(
@@ -172,16 +188,29 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return dayjs(this.resource.createdAt).format("DD.MM.YYYY");
+			return printDate(this.resource.createdAt);
 		},
 		updatedAt() {
-			return dayjs(this.resource.modifiedAt).format("DD.MM.YYYY");
+			return printDate(this.resource.modifiedAt);
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
 		},
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
+		},
+		isMerlinContent() {
+			const source = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsource"
+			);
+			return source && source.toLowerCase().includes("merlin");
+		},
+		merlinTokenReference() {
+			return getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsourceid"
+			);
 		},
 		description() {
 			return (
@@ -194,6 +223,9 @@ export default {
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
+		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
 		},
 		downloadUrl() {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
@@ -214,6 +246,12 @@ export default {
 		},
 	},
 	methods: {
+		async goToMerlinContent(merlinReference) {
+			const url = await this.$axios.$get(
+				`/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
+			);
+			window.open(url, "_blank");
+		},
 		isNotStudent(roles) {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
@@ -360,6 +398,19 @@ $tablet-portrait-width: 768px;
 		.content-container {
 			width: 80%;
 			margin-top: var(--space-md);
+		}
+
+		.external-content-warning {
+			color: var(--color-danger);
+
+			.external-content-title {
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
+		}
+
+		.content-button {
+			width: 100%;
 		}
 
 		.actions {
