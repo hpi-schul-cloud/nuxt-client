@@ -54,6 +54,7 @@
 <script>
 import { mapGetters } from "vuex";
 import moment from "moment";
+import { currentDate, fromUTC, printDateTime } from "@plugins/datetime";
 import { min } from "lodash";
 
 import Tabs from "@components/organisms/Tabs/Tabs";
@@ -131,19 +132,14 @@ export default {
 		nextLessonDate() {
 			if ((this.course.times || []).length <= 0) return;
 			const mappedTimes = this.course.times.map((lessonTime) => {
-				let weekDayIdentifier = lessonTime.weekday + 1;
-				if (moment().day() > weekDayIdentifier) weekDayIdentifier += 7;
-				const date = moment()
-					.day(weekDayIdentifier)
-					.hours(0)
-					.minutes(0)
-					.seconds(0)
-					.milliseconds(lessonTime.startTime);
-				if (date.isBefore()) return;
-				return date;
+				const now = currentDate();
+				const utcLessonTime = this.createUTCDateFromLessonTime(lessonTime);
+				const timezoneLessonTime = fromUTC(utcLessonTime.toISOString());
+				if (timezoneLessonTime.isBefore(now)) return;
+				return timezoneLessonTime;
 			});
 			const minDate = min(mappedTimes);
-			return moment(minDate).format("DD.MM.YYYY HH:mm");
+			return printDateTime(minDate);
 		},
 	},
 	created(ctx) {
@@ -214,6 +210,18 @@ export default {
 				return `${prefix} - ${this.$t("pages.courses._id.homework.ended")}`;
 			}
 			return prefix;
+		},
+		createUTCDateFromLessonTime(lessonTime) {
+			const now = new Date();
+			const nowDay = now.getDay();
+			const nowDate = now.getDate();
+			if (lessonTime.weekday < nowDay) {
+				now.setDate(nowDate + nowDay + lessonTime.weekday - 1);
+			} else {
+				now.setDate(nowDate + Math.abs(nowDay - lessonTime.weekday));
+			}
+			now.setUTCHours(0, 0, 0, lessonTime.startTime);
+			return now;
 		},
 	},
 };

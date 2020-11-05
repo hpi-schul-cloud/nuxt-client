@@ -93,7 +93,7 @@ const initDefaultTimezone = (app, store) => {
  * @param {String} date
  * @return {dayjs} Date object based on current timezone
  */
-const fromUTC = (date) => {
+export const fromUTC = (date) => {
 	return dayjs(date).tz();
 };
 
@@ -132,6 +132,15 @@ export const inputDateFromDeUTC = (date) => {
  */
 export const printDate = (date) => {
 	return fromUTC(date).format(DATETIME_FORMAT.date);
+};
+
+/**
+ * Returns formated date string based on a given dayjs object
+ * @param {String} date
+ * @return {String} Date string based on current timezone using locale date formating
+ */
+export const printDateTime = (date) => {
+	return date.format(DATETIME_FORMAT.dateTime);
 };
 
 /**
