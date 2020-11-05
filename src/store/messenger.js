@@ -39,7 +39,7 @@ export const mutations = {
 export const state = () => {
 	return {
 		matrixFeatureFlag: process.env.FEATURE_MATRIX_MESSENGER_ENABLED === "true",
-		matrixAssetDomain: process.env.MATRIX_MESSENGER_EMBED_URI,
+		matrixAssetDomain: process.env.MATRIX_MESSENGER__EMBED_URI,
 		session: null,
 		// session is available in local storage, the messenger will access it itself
 		sessionFromLocalStorage:
