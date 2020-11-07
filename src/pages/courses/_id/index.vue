@@ -53,8 +53,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import moment from "moment";
-import { currentDate, fromUTC, printDateTime } from "@plugins/datetime";
+import {
+	currentDate,
+	fromUTC,
+	printDateTime,
+	printDateSlashed,
+} from "@plugins/datetime";
 import { min } from "lodash";
 
 import Tabs from "@components/organisms/Tabs/Tabs";
@@ -190,14 +194,17 @@ export default {
 			};
 		},
 		formatSubtitleForHomework(homework) {
-			const now = moment();
-			const tomorrow = moment(now).add(24, "hours");
-			const dueDate = moment(new Date(homework.dueDate));
+			// const now = moment();
+			// const tomorrow = moment(now).add(24, "hours");
+			// const dueDate = moment(new Date(homework.dueDate));
+			const now = currentDate();
+			const tomorrow = now.add(1, "d");
+			const dueDate = fromUTC(homework.dueDate);
 			const prefix = `${this.$t(
 				"pages.courses._id.homework.until"
-			)} ${dueDate.format("DD/MM/YYYY")}`;
+			)} ${printDateSlashed(dueDate)}`;
 			if (dueDate <= tomorrow && dueDate > now) {
-				const remainingHours = dueDate.diff(now, "hours");
+				const remainingHours = dueDate.diff(now, "h");
 				return `${prefix} - ${this.$t(
 					"pages.courses._id.homework.remaining"
 				)} ${remainingHours} ${
