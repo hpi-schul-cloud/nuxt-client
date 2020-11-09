@@ -7,17 +7,4 @@ export default function ({ $axios, store }) {
 				"Bearer " + store.state.auth.accessToken;
 		}
 	});
-
-	// $axios.onError((err) => {
-	// 	if (!err.response) {
-	// 		error({ statusCode: null, message: "Network failure" });
-	// 	}
-	// 	const code = parseInt(err.response.data.code);
-	// 	if (errorPageCodes.includes(code)) {
-	// 		error({
-	// 			statusCode: err.response.data.code,
-	// 			message: err.response.data.message,
-	// 		});
-	// 	}
-	// });
 }
