@@ -25,21 +25,24 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.firstname')"
 			placeholder="givenName"
-		/>
+		>
+		</base-input>
 		<base-input
 			v-model="familyName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.lastname')"
 			placeholder="sn"
-		/>
+		>
+		</base-input>
 		<base-input
 			v-model="email"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.email')"
 			placeholder="mail"
-		/>
+		>
+		</base-input>
 		<base-input
 			v-model="uid"
 			type="text"
@@ -47,7 +50,8 @@
 			placeholder="uid"
 			:label="$t('pages.administration.ldap.users.uid.title')"
 			:info="$t('pages.administration.ldap.users.uid.info')"
-		/>
+		>
+		</base-input>
 		<base-input
 			v-model="uuid"
 			type="text"
@@ -55,7 +59,8 @@
 			placeholder="uuid"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
 			:info="$t('pages.administration.ldap.users.uuid.info')"
-		/>
+		>
+		</base-input>
 	</div>
 </template>
 <script>

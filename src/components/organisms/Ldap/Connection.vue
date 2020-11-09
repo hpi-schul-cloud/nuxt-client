@@ -20,7 +20,8 @@
 			:label="$t('pages.administration.ldap.connection.basis.pfad')"
 			:placeholder="$t('pages.administration.ldap.connection.basis.pfad')"
 			:info="$t('pages.administration.ldap.connection.basis.pfad.info')"
-		/>
+		>
+		</base-input>
 		<base-input
 			v-model="searchUser"
 			type="text"
@@ -28,7 +29,8 @@
 			:label="$t('pages.administration.ldap.connection.search.user')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user')"
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
-		/>
+		>
+		</base-input>
 		<base-input
 			v-model="searchUserPassword"
 			type="password"
@@ -37,7 +39,8 @@
 			:placeholder="
 				$t('pages.administration.ldap.connection.search.user.password')
 			"
-		/>
+		>
+		</base-input>
 	</div>
 </template>
 <script>

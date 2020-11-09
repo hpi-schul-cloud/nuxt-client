@@ -7,7 +7,8 @@
 			v-model="unchecked"
 			type="switch"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
-		/>
+		>
+		</base-input>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.pfad.info") }}
 		</p>
@@ -29,14 +30,16 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
 			placeholder="description"
-		/>
+		>
+		</base-input>
 		<base-input
 			v-model="participantAttribute"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
 			placeholder="member"
-		/>
+		>
+		</base-input>
 	</div>
 </template>
 <script>
