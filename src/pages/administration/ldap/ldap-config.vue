@@ -5,7 +5,7 @@
 			Manage Schools
 		</h1>
 
-		<roles :errors="errors" :ldapdata="mockData" :data="mockData" />
+		<roles :errors="errors" :data="mockData" />
 	</section>
 </template>
 
@@ -16,11 +16,6 @@ import Roles from "@components/organisms/Ldap/Roles.vue";
 export default {
 	components: {
 		Roles,
-	},
-	props: {
-		someProps: {
-			type: Boolean,
-		},
 	},
 	data() {
 		return {
