@@ -3,10 +3,14 @@
 		<h3 class="title-class">
 			{{ $t("pages.administration.ldap.classes.title") }}
 		</h3>
-		<p>
-			{{ $t("pages.administration.ldap.classes.subtitle") }}
+		<base-input
+			v-model="unchecked"
+			type="switch"
+			:label="$t('pages.administration.ldap.classes.sctivate.import')"
+		/>
+		<p class="title-class">
+			{{ $t("pages.administration.ldap.classes.pfad.info") }}
 		</p>
-
 		<base-input
 			v-model="classPfad"
 			type="text"
@@ -16,26 +20,22 @@
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
 		>
 		</base-input>
+		<p class="title-class">
+			{{ $t("pages.administration.ldap.users.hint") }}
+		</p>
 		<base-input
-			v-model="noticeName"
+			v-model="nameAttribute"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
-			:placeholder="$t('pages.administration.ldap.classes.notice.title')"
+			placeholder="description"
 		/>
 		<base-input
-			v-model="domainName"
+			v-model="participantAttribute"
 			type="text"
 			class="mt--xl"
-			:label="$t('pages.administration.ldap.classes.domain.title')"
-			:placeholder="$t('pages.administration.ldap.classes.domain.title')"
-		/>
-		<base-input
-			v-model="userName"
-			type="text"
-			class="mt--xl"
-			:label="$t('pages.administration.ldap.classes.user.title')"
-			:placeholder="$t('pages.administration.ldap.classes.user.title')"
+			:label="$t('pages.administration.ldap.classes.participant.title')"
+			placeholder="member"
 		/>
 	</div>
 </template>
@@ -43,10 +43,10 @@
 export default {
 	data() {
 		return {
-			noticeName: null,
+			unchecked: null,
 			classPfad: null,
-			domainName: null,
-			userName: null,
+			nameAttribute: null,
+			participantAttribute: null,
 		};
 	},
 };
@@ -56,6 +56,7 @@ export default {
 @import "@styles";
 
 .title-class {
+	margin-top: var(--space-xl-2);
 	margin-bottom: var(--space-xl-2);
 }
 </style>
