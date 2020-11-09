@@ -432,18 +432,23 @@
 	"utils.adminFilter.placeholder.complete.name": "Nach vollständigem Vornamen filtern...",
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
+
+	"pages.administration.ldap.title": "Konfiguration Nutzer-Sync & Login durch LDAP",
+	"pages.administration.ldap.subtitle.one": "Jegliche Änderungen an der folgenden Konfiguration kann zur Folge haben, dass der Login für Sie und alle Nutzer Ihrer Schule nicht mehr funktioniert. Daher nehmen Sie nur Änderungen vor, wenn Ihnen die Konsequenzen bewusst sind. Einige Bereiche sind nur lesbar.",
+	"pages.administration.ldap.subtitle.two": "Konfiguration Nutzer-Sync & Login durch LDAP Jegliche Änderungen an der folgenden Konfiguration kann zur Folge haben, dass der Login für Sie und alle Nutzer Ihrer Schule nicht mehr funktioniert. Daher nehmen Sie nur Änderungen vor, wenn Ihnen die Konsequenzen bewusst sind. Einige Bereiche sind nur lesbar. Nach der Verifizierung können Sie sich die ausgelesenen Inhalte in der Vorschau ansehen. Gestrichene Inhalte werden nicht übernommen, da bei dem Nutzer der Vorname, der Nachname und/oder die E-Mail-Adresse nicht im LDAP verfügbar sind.",
+	"pages.administration.ldap.subtitle.helping.link": "Weitere Informationen findest du in unserem Hilfebereich zur LDAP-Konfiguration.",
+
 	"pages.administration.ldap.classes.title": "Klassen (optional)",
 	"pages.administration.ldap.classes.sctivate.import": "Klassen import aktivieren",
 	"pages.administration.ldap.classes.subtitle": "Geben Sie das Klassenattribut an, in dem die folgenden Informationen in Ihrem LDAP verfügbar sind.",
 	"pages.administration.ldap.classes.pfad.title": "Klassen-Pfad(e)",
-	"pages.administration.ldap.classes.pfad.info": "Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
+	"pages.administration.ldap.classes.pfad.info": "Relativer Pfad vom Basis-Pfad",
 	"pages.administration.ldap.classes.notice.title": "Attribut Anzeigename",
 	"pages.administration.ldap.classes.participant.title": "Attribut Teilnehmer",
-
+	"pages.administration.ldap.classes.pfad.subtitle": "Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
 	"pages.administration.ldap.users.title": "Nutzer",
 	"pages.administration.ldap.users.title.info": "In dem folgend Eingabefeld musst du festlegen, wo wir Nutzer finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
 	"pages.administration.ldap.users.pfad.title": "Nutzer-Pfad(e)",
-	"pages.administration.ldap.users.pfad.info": "Relativer Pfad vom root-Pfad zu dem LDAP-Knoten con dem alle Nutzer erreichbar sind. Mit der Trennung durch zwei Semikolons (;;) können auch mehrere relative Pfade zu LDAP-Nutzern angegeben werden.",
 	"pages.administration.ldap.users.pfad.firstname": "Attributwert Vorname",
 	"pages.administration.ldap.users.pfad.lastname": "Attributwert Nachname",
 	"pages.administration.ldap.users.pfad.email": "Attributwert E-Mail",
@@ -460,5 +465,16 @@
 	"pages.administration.ldap.connection.basis.pfad.info": "Alle Nutzer und Klassen müssen unterhalb desBasispfads erreichbar sein.",
 	"pages.administration.ldap.connection.search.user": "Such-Nutzer",
 	"pages.administration.ldap.connection.search.user.info": "Vollständige Nutzer-DN inkl. Root-Pfad des Nutzers der Zugriff auf alle Nutzerinformationen hat.",
-	"pages.administration.ldap.connection.search.user.password": "Password Such-Nutzer"
+	"pages.administration.ldap.connection.search.user.password": "Password Such-Nutzer",
+
+	"pages.administration.ldapEdit.roles.headLines.title": "Nutzer-Rollen",
+	"pages.administration.ldapEdit.roles.headLines.sectionDescription": "Im Folgenden, müssen die gefundenen Nutzer den vordefinierten Rollen der $longname zugeordnet werden.",
+	"pages.administration.ldapEdit.roles.labels.radio.ldapGroup": "LDAP-Gruppe",
+	"pages.administration.ldapEdit.roles.labels.radio.userAttribute": "Nutzer-Attribut",
+	"pages.administration.ldapEdit.roles.labels.radio.description": "Ist die Nutzerrolle im Nutzerattribut textuell gespeichert oder gibt es eine LDAP-Gruppe für die jeweiligen Nutzerrollen?",
+	"pages.administration.ldapEdit.roles.labels.member": "memberOf",
+	"pages.administration.ldapEdit.roles.labels.student": "Attributwert Schüler:in",
+	"pages.administration.ldapEdit.roles.labels.teacher": "Attributwert Lehrer:in",
+	"pages.administration.ldapEdit.roles.labels.admin": "Attributwert Admin",
+	"pages.administration.ldapEdit.roles.labels.noSchoolCloud": "Attributwert Nutzer:innen ignorieren"
 }

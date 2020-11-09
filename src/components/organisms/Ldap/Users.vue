@@ -13,7 +13,7 @@
 			class="mt--xl"
 			label="$t('pages.administration.ldap.users.pfad.title')"
 			:placeholder="$t('pages.administration.ldap.users.pfad.title')"
-			:info="$t('pages.administration.ldap.users.pfad.info')"
+			:info="$t('pages.administration.ldap.classes.pfad.info')"
 		>
 		</base-input>
 		<p class="pfad-hint">

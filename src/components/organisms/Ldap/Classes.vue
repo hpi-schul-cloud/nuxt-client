@@ -10,7 +10,7 @@
 		>
 		</base-input>
 		<p class="title-class">
-			{{ $t("pages.administration.ldap.classes.pfad.info") }}
+			{{ $t("pages.administration.ldap.classes.pfad.subtitle") }}
 		</p>
 		<base-input
 			v-model="classPfad"
