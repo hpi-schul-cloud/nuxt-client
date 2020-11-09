@@ -7,6 +7,7 @@ export default function (endpoint) {
 			current: null,
 			list: [],
 			pagination: {},
+			serverError: null,
 		};
 	};
 	return {
@@ -99,6 +100,9 @@ export default function (endpoint) {
 			list: (state) => {
 				return state.list;
 			},
+			serverError: (state) => {
+				return state.serverError;
+			},
 		},
 		mutations: {
 			set(state, { items }) {
@@ -106,6 +110,9 @@ export default function (endpoint) {
 			},
 			reset(state) {
 				Object.assign(state, getDefaultState());
+			},
+			resetServerError(state) {
+				state.serverError = null;
 			},
 			patchSingleItem(state, item) {
 				const index = state.list.findIndex(
@@ -117,6 +124,9 @@ export default function (endpoint) {
 					);
 				}
 				state.list[index] = Object.assign(state.list[index], item);
+			},
+			setServerError(state, { data: { code, message } }) {
+				state.serverError = { code, message };
 			},
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);

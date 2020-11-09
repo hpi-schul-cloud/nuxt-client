@@ -27,7 +27,7 @@
 			</template>
 			<template v-slot:errors>
 				<info-message
-					v-if="error"
+					v-if="serverError"
 					:message="$t('pages.administration.students.new.error')"
 					type="error"
 				></info-message>
@@ -39,6 +39,8 @@
 <script>
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
+
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -70,30 +72,34 @@ export default {
 			],
 		};
 	},
+	computed: {
+		...mapGetters("users", {
+			serverError: "serverError",
+		}),
+	},
+	created() {
+		this.$store.commit("users/resetServerError");
+	},
 	methods: {
-		createStudent(userData) {
-			this.error = false;
-			this.$store
-				.dispatch("users/createStudent", {
-					firstName: userData.firstName,
-					lastName: userData.lastName,
-					email: userData.email,
-					birthday: this.birthday,
-					roles: ["student"],
-					schoolId: this.$user.schoolId,
-					sendRegistration: this.sendRegistration,
-				})
-				.then(() => {
-					this.$toast.success(
-						this.$t("pages.administration.students.new.success")
-					);
-					this.$router.push({
-						path: `/administration/students`,
-					});
-				})
-				.catch(() => {
-					this.error = true;
+		async createStudent(userData) {
+			await this.$store.dispatch("users/createStudent", {
+				firstName: userData.firstName,
+				lastName: userData.lastName,
+				email: userData.email,
+				birthday: this.birthday,
+				roles: ["student"],
+				schoolId: this.$user.schoolId,
+				sendRegistration: this.sendRegistration,
+			});
+
+			if (!this.serverError) {
+				this.$toast.success(
+					this.$t("pages.administration.students.new.success")
+				);
+				this.$router.push({
+					path: `/administration/students`,
 				});
+			}
 		},
 	},
 };
