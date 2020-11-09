@@ -130,6 +130,7 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
+		"@plugins/servercall",
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",

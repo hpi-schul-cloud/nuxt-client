@@ -12,6 +12,20 @@ export default function (endpoint) {
 	};
 	return {
 		baseUrl,
+		serverCallWrapper: (ctx) => async (
+			axiosCall,
+			serverEndpoint,
+			params,
+			saveError = false
+		) => {
+			try {
+				const result = await axiosCall(serverEndpoint, params);
+				if (saveError) ctx.commit("resetServerError");
+				return result;
+			} catch (error) {
+				if (saveError) ctx.commit("setServerError", error.response);
+			}
+		},
 		actions: {
 			async find({ commit }, payload = {}) {
 				const { qid = "default", query, customEndpoint } = payload;
@@ -125,8 +139,8 @@ export default function (endpoint) {
 				}
 				state.list[index] = Object.assign(state.list[index], item);
 			},
-			setServerError(state, { data: { code, message } }) {
-				state.serverError = { code, message };
+			setServerError(state, { statusCode, message }) {
+				state.serverError = { statusCode, message };
 			},
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);
