@@ -5,12 +5,7 @@
 			Manage Schools
 		</h1>
 
-		<roles
-			:errors="errors"
-			:ldapdata="mockData"
-			:vmodel="mockData"
-			@inputvalue="updateModel"
-		/>
+		<roles :errors="errors" :ldapdata="mockData" :data="mockData" />
 	</section>
 </template>
 
@@ -48,10 +43,24 @@ export default {
 				secondErr: "secondError",
 			},
 			mockData: {
+				member: "0",
 				student: "1",
 				teacher: "2",
 				admin: "3",
 				noSchoolCloud: "4",
+
+				alias: "5",
+				type: [
+					{ value: "value_1", label: "select #1" },
+					{ value: "value_2", label: "select #2" },
+				],
+				url: "https://",
+				rootPath: "root path info",
+				searchUser: "pass",
+				roleType: [
+					{ value: "value_1", label: "select #1" },
+					{ value: "value_2", label: "select #2" },
+				],
 			},
 		};
 	},
@@ -65,8 +74,8 @@ export default {
 	created(ctx) {},
 	methods: {
 		// updateModel(e, model) {
-		// console.log("config page e", e);
-		// console.log("config page model", model);
+		// 	console.log("config page e", e);
+		// 	console.log("config page model", model);
 		// },
 	},
 };
