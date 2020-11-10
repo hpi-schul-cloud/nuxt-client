@@ -51,7 +51,7 @@
 		"@tryghost/content-api": "^1.4.9",
 		"cookie-universal-nuxt": "^2.1.4",
 		"dayjs": "^1.9.5",
-		"echarts": "^4.8.0",
+		"echarts": "^4.9.0",
 		"font-awesome": "^4.7.0",
 		"git-rev-sync": "^3.0.1",
 		"glob": "^7.1.6",
