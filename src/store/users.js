@@ -18,7 +18,7 @@ const module = mergeDeep(base, {
 			const customEndpoint = "/users/admin/students";
 			await this.$serverCall(
 				ctx,
-				this.$axios.$post.bind(this.$axios),
+				this.$axios.$post,
 				customEndpoint,
 				studentData
 			);

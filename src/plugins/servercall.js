@@ -1,12 +1,12 @@
 const errorPageCodes = [404, 500];
-const serverCallWrapper = (error) => async (
+const serverCallWrapper = (error, $axios) => async (
 	ctx,
 	axiosCall,
 	serverEndpoint,
 	params
 ) => {
 	try {
-		const result = await axiosCall(serverEndpoint, params);
+		const result = await axiosCall.bind($axios)(serverEndpoint, params);
 		ctx.commit("resetServerError");
 		return result;
 	} catch (err) {
@@ -26,6 +26,6 @@ const serverCallWrapper = (error) => async (
 	}
 };
 
-export default ({ error }, inject) => {
-	inject("serverCall", serverCallWrapper(error));
+export default ({ error, $axios }, inject) => {
+	inject("serverCall", serverCallWrapper(error, $axios));
 };
