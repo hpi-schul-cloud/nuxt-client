@@ -4,12 +4,15 @@ import Vuex from "vuex";
 // import all store modules automatically
 const modules = {};
 const req = require.context("@store", true, /.js$/);
-req.keys().forEach((filename) => {
-	const moduleName = filename.replace(/^.*[\\\/]/, "").replace(/\.js$/, "");
-	const module = req(filename).default || {};
-	module.namespaced = true;
-	modules[moduleName] = module;
-});
+req
+	.keys()
+	.filter((filename) => !filename.match(/^.*\.unit\.js/))
+	.forEach((filename) => {
+		const moduleName = filename.replace(/^.*[\\\/]/, "").replace(/\.js$/, "");
+		const module = req(filename).default || {};
+		module.namespaced = true;
+		modules[moduleName] = module;
+	});
 
 const createStore = () => {
 	return new Vuex.Store({
