@@ -4,9 +4,10 @@
 			{{ $t("pages.administration.ldap.classes.title") }}
 		</h3>
 		<base-input
-			v-model="ldapData.unchecked"
+			v-model="unchecked"
 			type="switch"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
+			@change="handleChange"
 		>
 		</base-input>
 		<p class="title-class">
@@ -14,6 +15,7 @@
 		</p>
 		<base-input
 			v-model="ldapData.classPfad"
+			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.pfad.title')"
@@ -26,6 +28,7 @@
 		</p>
 		<base-input
 			v-model="ldapData.nameAttribute"
+			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
@@ -34,6 +37,7 @@
 		</base-input>
 		<base-input
 			v-model="ldapData.participantAttribute"
+			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
@@ -67,7 +71,7 @@ export default {
 	},
 	data() {
 		return {
-			unchecked: null,
+			unchecked: false,
 			classPfad: null,
 			nameAttribute: null,
 			participantAttribute: null,
@@ -85,6 +89,11 @@ export default {
 	},
 	created() {
 		this.ldapData = this.data;
+	},
+	methods: {
+		handleChange: () => {
+			this.unchecked = !this.unchecked;
+		},
 	},
 };
 </script>
