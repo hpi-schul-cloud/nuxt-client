@@ -4,7 +4,7 @@
 			{{ $t("pages.administration.ldap.classes.title") }}
 		</h3>
 		<base-input
-			v-model="unchecked"
+			v-model="ldapData.unchecked"
 			type="switch"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
 		>
@@ -13,7 +13,7 @@
 			{{ $t("pages.administration.ldap.classes.pfad.subtitle") }}
 		</p>
 		<base-input
-			v-model="classPfad"
+			v-model="ldapData.classPfad"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.pfad.title')"
@@ -25,7 +25,7 @@
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
-			v-model="nameAttribute"
+			v-model="ldapData.nameAttribute"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
@@ -33,7 +33,7 @@
 		>
 		</base-input>
 		<base-input
-			v-model="participantAttribute"
+			v-model="ldapData.participantAttribute"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
@@ -42,15 +42,49 @@
 		</base-input>
 	</div>
 </template>
+
 <script>
+import BaseInput from "@components/base/BaseInput/BaseInput.vue";
+import { required } from "vuelidate/lib/validators";
 export default {
+	components: {
+		BaseInput,
+	},
+	props: {
+		errors: {
+			type: Object,
+			default() {
+				return {};
+			},
+		},
+		data: {
+			type: Object,
+			default() {
+				return {};
+			},
+			required,
+		},
+	},
 	data() {
 		return {
 			unchecked: null,
 			classPfad: null,
 			nameAttribute: null,
 			participantAttribute: null,
+			validationMessages: [{ key: "required", message: "should not be blank" }],
+			ldapData: {},
 		};
+	},
+	validations: {
+		vmodel: {
+			unchecked: { required },
+			classPfad: { required },
+			nameAttribute: { required },
+			participantAttribute: { required },
+		},
+	},
+	created() {
+		this.ldapData = this.data;
 	},
 };
 </script>

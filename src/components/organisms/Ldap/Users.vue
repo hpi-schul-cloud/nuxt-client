@@ -8,10 +8,10 @@
 		</p>
 
 		<base-input
-			v-model="userPfad"
+			v-model="ldapData.userPfad"
 			type="text"
 			class="mt--xl"
-			label="$t('pages.administration.ldap.users.pfad.title')"
+			:label="$t('pages.administration.ldap.users.pfad.title')"
 			:placeholder="$t('pages.administration.ldap.users.pfad.title')"
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
 		>
@@ -20,7 +20,7 @@
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
-			v-model="firstName"
+			v-model="ldapData.firstName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.firstname')"
@@ -28,7 +28,7 @@
 		>
 		</base-input>
 		<base-input
-			v-model="familyName"
+			v-model="ldapData.familyName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.lastname')"
@@ -36,7 +36,7 @@
 		>
 		</base-input>
 		<base-input
-			v-model="email"
+			v-model="ldapData.email"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.email')"
@@ -44,7 +44,7 @@
 		>
 		</base-input>
 		<base-input
-			v-model="uid"
+			v-model="ldapData.uid"
 			type="text"
 			class="mt--xl"
 			placeholder="uid"
@@ -53,7 +53,7 @@
 		>
 		</base-input>
 		<base-input
-			v-model="uuid"
+			v-model="ldapData.uuid"
 			type="text"
 			class="mt--xl"
 			placeholder="uuid"
@@ -63,8 +63,29 @@
 		</base-input>
 	</div>
 </template>
+
 <script>
+import BaseInput from "@components/base/BaseInput/BaseInput.vue";
+import { required } from "vuelidate/lib/validators";
 export default {
+	components: {
+		BaseInput,
+	},
+	props: {
+		errors: {
+			type: Object,
+			default() {
+				return {};
+			},
+		},
+		data: {
+			type: Object,
+			default() {
+				return {};
+			},
+			required,
+		},
+	},
 	data() {
 		return {
 			userPfad: null,
@@ -74,7 +95,23 @@ export default {
 			domainName: null,
 			uid: null,
 			uuid: null,
+			validationMessages: [{ key: "required", message: "should not be blank" }],
+			ldapData: {},
 		};
+	},
+	validations: {
+		vmodel: {
+			userPfad: { required },
+			firstName: { required },
+			familyName: { required },
+			email: { required },
+			domainName: { required },
+			uid: { required },
+			uuid: { required },
+		},
+	},
+	created() {
+		this.ldapData = this.data;
 	},
 };
 </script>

@@ -11,13 +11,23 @@
 		<p class="subtitle-text">
 			{{ $t("pages.administration.ldap.subtitle.two") }}
 		</p>
-		<p class="subtitle-text">
-			{{ $t("pages.administration.ldap.subtitle.helping.link") }}
-		</p>
-		<connection :errors="errors" />
-		<users :errors="errors" />
-		<roles :errors="errors" :ldapdata="mockData" :data="mockData" />
-		<classes :errors="errors" />
+		{{ $t("pages.administration.ldap.subtitle.help") }}
+		<base-link
+			class="link-style"
+			to="/"
+			href="https://docs.schul-cloud.org/x/PgBVAw"
+			target="_blank"
+			:no-styles="true"
+			traget="_blank"
+		>
+			{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
+		</base-link>
+		<div class="form-container">
+			<connection :errors="errors" />
+			<users :errors="errors" />
+			<roles :errors="errors" :ldapdata="mockData" :data="mockData" />
+			<classes :errors="errors" />
+		</div>
 	</section>
 </template>
 
@@ -100,7 +110,19 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
+.link-style {
+	color: var(--color-primary);
+	text-decoration: none;
+}
 .subtitle-text {
 	margin-bottom: var(--space-xl);
+}
+
+.form-container {
+	margin: 0;
+
+	@include breakpoint(tablet) {
+		margin: 0 var(--space-xl-5);
+	}
 }
 </style>
