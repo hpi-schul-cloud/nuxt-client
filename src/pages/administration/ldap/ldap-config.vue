@@ -42,7 +42,7 @@ export default {
 				student: "1",
 				teacher: "2",
 				admin: "3",
-				noSchoolCloud: "4",
+				user: "4",
 
 				alias: "5",
 				type: [
