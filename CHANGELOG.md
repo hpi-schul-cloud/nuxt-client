@@ -14,6 +14,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6708 - added data-testids to the students table in administration page
 - SC-6709 - added data-testids to the teachers table in administration page
 - SC-7629 - created Roles component to the ldap page
+- OPS-1508 - added limits for cpu and ram to the docker compose files
 
 ### Fixed
 
@@ -28,6 +29,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ## Added
 
 - SC-7020 - added a new course TaskItem component
+
+### Changed in Unreleased
+
+- SC-5476 Renamed env vars to be consistent with old client and server
 
 ## 25.2.0
 
