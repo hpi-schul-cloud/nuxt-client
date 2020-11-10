@@ -333,6 +333,8 @@
 	"pages.administration.teachers.new.error": "Teacher could not be added successfully. The email address may already exist.",
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
 	"pages.administration.teachers.new.title": "Add teacher",
+	"pages.administration.ldap.index.title": "Schools",
+	"pages.administration.ldapEdit.headLines.title": "Configuration User-Sync & Login through LDAP",
 	"pages.administration.ldapEdit.roles.headLines.title": "User Roles",
 	"pages.administration.ldapEdit.roles.headLines.sectionDescription": "In the following, the found users must be assigned to the predefined $longname roles.",
 	"pages.administration.ldapEdit.roles.labels.radio.ldapGroup": "LDAP Group",
