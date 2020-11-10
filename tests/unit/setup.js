@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
+import { RouterLinkStub } from "@vue/test-utils";
 
 // ===
 // Utility functions
@@ -177,6 +178,7 @@ global.createComponentMocks = ({
 			stubs[name] = globalStubs[name]();
 		}
 	});
+	returnOptions.stubs.NuxtLink = RouterLinkStub;
 
 	// Converts a `store` option shaped like:
 	//
