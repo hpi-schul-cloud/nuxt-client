@@ -61,7 +61,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [x] Show event after creation
 // [ ] Make events draggable (need more grsanular permissions first)
 // [x] Onclick create prefill clicked values
-// [ ] Localize Modal (marco)
+// [x] Localize Modal (marco)
 // [x] Fix time offset and add timezone handling
 // [ ] Full course event modal
 // [x] Fix Timezone offset when creating new event
@@ -271,6 +271,7 @@ export default {
 					location.href = target;
 				} else {
 					//TODO: edit mode for private events
+					this.modalActive = true;
 				}
 			}
 		},

@@ -3,7 +3,14 @@
 		<base-modal :active.sync="modalActive">
 			<template v-slot:header></template>
 			<template v-slot:body>
-				<modal-body-info title="Termin Hinzufügen" />
+				<modal-body-info
+					v-if="!editMode"
+					:title="$t('components.organisms.Calendar.addAppointment')"
+				/>
+				<modal-body-info
+					v-if="editMode"
+					:title="$t('components.organisms.Calendar.changeAppointment')"
+				/>
 				<template>
 					<user-has-role role="TEACHER">
 						<input-radio
@@ -37,45 +44,45 @@
 				<base-input
 					v-model="inputText"
 					type="text"
-					label="Termin Bezeichnung"
+					:label="$t('components.organisms.Calendar.inputText')"
 					@update:vmodel="$emit('update:inputText', inputText)"
 				/>
 				<base-input
 					v-model="startDay"
 					type="date"
-					label="Start Tag"
+					:label="$t('components.organisms.Calendar.startDay')"
 					@update:vmodel="$emit('update:startDay', startDay)"
 				/>
 				<base-input
 					v-model="startTime"
 					type="time"
-					label="Start Zeit"
+					:label="$t('components.organisms.Calendar.startTime')"
 					@update:vmodel="$emit('update:startTime', startTime)"
 				/>
 				<base-input
 					v-model="fullDay"
 					type="checkbox"
-					label="Ganzer Tag"
+					:label="$t('components.organisms.Calendar.fullDay')"
 					@change="onChange"
 				/>
 				<base-input
 					v-if="!fullDay"
 					v-model="endDay"
 					type="date"
-					label="End Tag"
+					:label="$t('components.organisms.Calendar.endDay')"
 					@update:vmodel="$emit('update:endDay', endDay)"
 				/>
 				<base-input
 					v-if="!fullDay"
 					v-model="endTime"
 					type="time"
-					label="End Zeit"
+					:label="$t('components.organisms.Calendar.endTime')"
 					@update:vmodel="$emit('update:endTime', endTime)"
 				/>
 				<base-input
 					v-model="place"
 					type="text"
-					label="Ort"
+					:label="$t('components.organisms.Calendar.place')"
 					@update:vmodel="$emit('update:place', place)"
 				/>
 			</template>
@@ -109,7 +116,10 @@
 		<base-modal :active.sync="confirmActive">
 			<template v-slot:header></template>
 			<template v-slot:body>
-				<modal-body-info title="Bist du sicher?"> </modal-body-info>
+				<modal-body-info
+					:title="$t('components.organisms.Calendar.confirmation')"
+				>
+				</modal-body-info>
 			</template>
 			<template v-slot:footerRight>
 				<base-button
@@ -203,6 +213,9 @@ export default {
 			type: Boolean,
 		},
 		isSubmit: {
+			type: Boolean,
+		},
+		editMode: {
 			type: Boolean,
 		},
 		usersTeams: {
