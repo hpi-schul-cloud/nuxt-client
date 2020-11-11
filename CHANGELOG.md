@@ -6,10 +6,64 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Unreleased
+
+### Added
+
+- SC-6293 - restricts Lern-Store access by permission
+- SC-6708 - added data-testids to the students table in administration page
+- SC-6709 - added data-testids to the teachers table in administration page
+- OPS-1508 - added limits for cpu and ram to the docker compose files
+
+### Fixed
+
+- SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
+
+### Changed
+
+- SC-6060 Updated caniuse-lite
+- SC-3788 Renamed Messenger component to meet naming convention
+- IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
+
+## Added
+
+- SC-7020 - added a new course TaskItem component
+
+### Changed in Unreleased
+
+- SC-5476 Renamed env vars to be consistent with old client and server
+
+## 25.2.0
+
+## Changed
+
+- SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
+
+### Fixed
+
+- SC-7339 - Fixed consent permission to STUDENT_EDIT from STUDENT_CREATE, which was not allowing teachers to access the bulkconsent action
+- SC-7198 - fixes links in login page
+- SC-6549 - Added missing Help section in sidebar
+- SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
+- SC-6831 Fixes search/clear icons behaviour in lernstore
+
+## [25.1.1] - 2020-10-21
+
+### Added
+
+- SC-7447 - Add warning text for links when leaving the schul-cloud platform
+
+## 25.0.2
+
+- SC-6932 added translation keys instead of hardcoded strings for sidebar items
+
+## 25.0.1
+
 ## 25.0.0
 
 - SC-6628 Changing backend url endpoint while analog consenting
 - SC-6682 Reduces search time in lernstore
+- SC-6021 Added fallback icons to the assets directory that are rendered when no external icons are available (fix for the EdgeHTML browser)
 
 ## [24.5.0] - 2020-09-14
 

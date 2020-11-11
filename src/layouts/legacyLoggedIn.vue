@@ -27,6 +27,7 @@
 				<autoLogoutWarning />
 			</keep-alive>
 			<the-footer v-if="!fullscreenMode" class="footer" />
+			<matrix-messenger />
 		</div>
 	</div>
 </template>
@@ -41,6 +42,7 @@ import DemoBanner from "@components/legacy/DemoBanner";
 import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
+import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 
 const topbarBaseActions = [
 	{
@@ -103,6 +105,7 @@ export default {
 		DemoBanner,
 		UserHasRole,
 		autoLogoutWarning,
+		MatrixMessenger,
 	},
 	mixins: [toastsFromQueryString],
 	data() {
@@ -180,6 +183,7 @@ export default {
 					? item.children.some((child) => this.$route.path.includes(child.href))
 					: false;
 				item.active = isActive && !item.childActive;
+
 				return item;
 			});
 		},

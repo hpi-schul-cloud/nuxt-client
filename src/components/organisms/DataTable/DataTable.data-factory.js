@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { printDate } from "@plugins/datetime";
 import faker from "faker/locale/en";
 // set a seed to have a consistent fake for the screenshot tests
 faker.seed(512); // any static number will do the job
@@ -16,7 +16,7 @@ const tableData = (n, overwrite = () => ({})) =>
 			city: faker.address.city(),
 		},
 		age: faker.random.number(),
-		birthday: dayjs(faker.date.past()).format("DD-MM-YYYY"),
+		birthday: printDate(faker.date.past()),
 		agreed: faker.random.boolean(),
 		...overwrite(index),
 	}));

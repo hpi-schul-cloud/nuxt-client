@@ -1,9 +1,11 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
+import Vuelidate from "vuelidate";
 import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
+import { RouterLinkStub } from "@vue/test-utils";
 
 // ===
 // Utility functions
@@ -29,6 +31,7 @@ import "@plugins/global";
 import { mountBaseComponents } from "@basecomponents/_globals";
 
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
+Vue.use(Vuelidate);
 
 function readDirRecursiveSync(dir) {
 	const results = [];
@@ -72,6 +75,9 @@ Object.defineProperty(window, "localStorage", {
 			},
 			setItem: function (key, value) {
 				store[key] = value.toString();
+			},
+			removeItem: function (key) {
+				delete store[key];
 			},
 			clear: function () {
 				store = {};
@@ -172,6 +178,7 @@ global.createComponentMocks = ({
 			stubs[name] = globalStubs[name]();
 		}
 	});
+	returnOptions.stubs.NuxtLink = RouterLinkStub;
 
 	// Converts a `store` option shaped like:
 	//
@@ -221,6 +228,7 @@ global.createComponentMocks = ({
 	if (user) {
 		localVue.mixin(userMixin);
 	}
+	localVue.use(Vuelidate);
 
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
