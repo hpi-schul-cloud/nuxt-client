@@ -5,7 +5,7 @@
 			{{ this.$t("pages.administration.ldapEdit.headLines.title") }}
 		</h1>
 
-		<roles-section :data="ldapConfigData" @inputChange="updateLdapData" />
+		<roles-section v-model="ldapConfigData" data-testid="ldapRolesSection" />
 	</section>
 </template>
 
@@ -30,11 +30,11 @@ export default {
 				},
 			],
 			ldapConfigData: {
-				member: "",
-				student: "",
-				teacher: "",
-				admin: "",
-				user: "",
+				member: "description",
+				student: "cn=schueler,ou=rolle",
+				teacher: "cn=lehrer,ou=rolle",
+				admin: "cn=admin,ou=rolle",
+				user: "cn=ehemalige,ou=rolle",
 			},
 		};
 	},
@@ -42,13 +42,6 @@ export default {
 		...mapState("auth", {
 			school: "school",
 		}),
-	},
-	watch: {},
-	created(ctx) {},
-	methods: {
-		updateLdapData(key, value) {
-			this.ldapConfigData[key] = value;
-		},
 	},
 };
 </script>

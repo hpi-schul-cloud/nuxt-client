@@ -7,7 +7,7 @@ storiesOf("6 Organisms/Ldap Page/Ldap Roles Section", module).add(
 	() => {
 		return {
 			components: { LdapRolesSection },
-			template: `<ldap-roles-section :data="ldapConfigData" />`,
+			template: `<ldap-roles-section v-model="ldapConfigData" />`,
 			data: () => ({
 				ldapConfigData: {
 					member: "description",

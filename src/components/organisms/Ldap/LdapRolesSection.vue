@@ -20,6 +20,7 @@
 				name="group"
 				style="margin-right: var(--space-sm);"
 				value="ldap_group"
+				class="ldapRadio"
 			/>
 			<base-input
 				v-model="ldapGroupOption"
@@ -31,6 +32,7 @@
 				"
 				name="group"
 				value="user_attribute"
+				class="ldapRadio"
 			/>
 			<p class="text-sm" style="margin-top: var(--space-xs);">
 				{{
@@ -41,7 +43,7 @@
 			</p>
 		</div>
 		<base-input
-			v-model="ldapData.member"
+			:vmodel="value.member"
 			:disabled="ldapGroupOption === 'ldap_group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
@@ -49,10 +51,12 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
 			style="margin-bottom: var(--space-xl);"
-			@input="handleChange('member', $event)"
+			data-testid="ldapDataMember"
+			class="ldapRolesMember"
+			@update:vmodel="$emit('input', { ...value, member: $event })"
 		/>
 		<base-input
-			v-model="ldapData.student"
+			:vmodel="value.student"
 			type="text"
 			v-bind="$attrs"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.student')"
@@ -60,72 +64,57 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.student')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.student')"
-			@input="handleChange('student', $event)"
+			data-testid="ldapDataStudent"
+			class="ldapDataStudent"
+			@update:vmodel="$emit('input', { ...value, student: $event })"
 		/>
 		<base-input
-			ref="teacher"
-			v-model="ldapData.teacher"
+			:vmodel="value.teacher"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.teacher')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.teacher')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.teacher')"
-			@input="handleChange('teacher', $event)"
+			data-testid="ldapDataTeacher"
+			class="ldapDataTeacher"
+			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		/>
 		<base-input
-			v-model="ldapData.admin"
+			:vmodel="value.admin"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.admin')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.admin')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.admin')"
-			@input="handleChange('admin', $event)"
+			data-testid="ldapDataAdmin"
+			class="ldapDataAdmin"
+			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		/>
 		<base-input
-			v-model="ldapData.user"
+			:vmodel="value.user"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.user')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.user')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
-			@input="handleChange('user', $event)"
+			data-testid="ldapDataUser"
+			class="ldapDataUser"
+			@update:vmodel="$emit('input', { ...value, user: $event })"
 		/>
 	</div>
 </template>
 
 <script>
 export default {
-	props: {
-		data: {
-			type: Object,
-			default() {
-				return {};
-			},
-		},
-	},
+	// eslint-disable-next-line vue/require-prop-types
+	props: ["value"],
 	data() {
 		return {
 			ldapGroupOption: "ldap_group",
 		};
-	},
-	computed: {
-		ldapData() {
-			return {
-				member: this.data.member || "",
-				student: this.data.student || "",
-				teacher: this.data.teacher || "",
-				admin: this.data.admin || "",
-				user: this.data.user || "",
-			};
-		},
-	},
-	methods: {
-		handleChange(key, value) {
-			this.$emit("inputChange", key, value);
-		},
 	},
 };
 </script>
