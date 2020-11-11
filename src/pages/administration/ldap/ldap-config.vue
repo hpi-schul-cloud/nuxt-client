@@ -5,13 +5,13 @@
 			{{ this.$t("pages.administration.ldapEdit.headLines.title") }}
 		</h1>
 
-		<roles-section :errors="errors" :data="fetchedData" />
+		<roles-section :data="ldapConfigData" @inputChange="updateLdapData" />
 	</section>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import RolesSection from "@components/organisms/Ldap/RolesSection.vue";
+import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 
 export default {
 	components: {
@@ -19,8 +19,6 @@ export default {
 	},
 	data() {
 		return {
-			firstName: "",
-			lastName: "",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -31,20 +29,15 @@ export default {
 					text: this.$t("pages.administration.ldap.index.title"),
 				},
 			],
-			errors: {
-				firstErr: "firstError",
-				secondErr: "secondError",
-			},
-			fetchedData: {
-				member: "description",
-				student: "cn=schueler,ou=rolle",
-				teacher: "cn=lehrer,ou=rolle",
-				admin: "cn=admin,ou=rolle",
-				user: "cn=ehemalige,ou=rolle",
+			ldapConfigData: {
+				member: "",
+				student: "",
+				teacher: "",
+				admin: "",
+				user: "",
 			},
 		};
 	},
-	layout: "loggedInFull",
 	computed: {
 		...mapState("auth", {
 			school: "school",
@@ -52,7 +45,11 @@ export default {
 	},
 	watch: {},
 	created(ctx) {},
-	methods: {},
+	methods: {
+		updateLdapData(key, value) {
+			this.ldapConfigData[key] = value;
+		},
+	},
 };
 </script>
 

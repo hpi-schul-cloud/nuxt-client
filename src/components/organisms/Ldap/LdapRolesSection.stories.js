@@ -1,15 +1,15 @@
 import { storiesOf } from "@storybook/vue";
 
-import RolesSection from "./RolesSection";
+import LdapRolesSection from "./LdapRolesSection";
 
-storiesOf("6 Organisms/Ldap Page/RolesSection", module).add(
-	"RolesSection",
+storiesOf("6 Organisms/Ldap Page/Ldap Roles Section", module).add(
+	"LdapRolesSection",
 	() => {
 		return {
-			components: { RolesSection },
-			template: `<roles-section :data="fetchedData" />`,
+			components: { LdapRolesSection },
+			template: `<ldap-roles-section :data="ldapConfigData" />`,
 			data: () => ({
-				fetchedData: {
+				ldapConfigData: {
 					member: "description",
 					student: "cn=schueler,ou=rolle",
 					teacher: "cn=lehrer,ou=rolle",
