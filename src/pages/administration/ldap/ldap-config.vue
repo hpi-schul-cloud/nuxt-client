@@ -5,7 +5,20 @@
 			{{ this.$t("pages.administration.ldapEdit.headLines.title") }}
 		</h1>
 
-		<roles-section :data="ldapConfigData" @inputChange="updateLdapData" />
+		<roles-section
+			:data="ldapConfigData"
+			:validate="sendValidation"
+			@update:errors="updateValidationData"
+			@inputChange="updateLdapData"
+		/>
+		<base-button
+			type="submit"
+			class="w-20 mt--lg"
+			data-testid="button_create-user_submit"
+			@click="validateHandler"
+		>
+			validate
+		</base-button>
 	</section>
 </template>
 
@@ -36,6 +49,8 @@ export default {
 				admin: "",
 				user: "",
 			},
+			validationData: {},
+			sendValidation: false,
 		};
 	},
 	computed: {
@@ -48,6 +63,12 @@ export default {
 	methods: {
 		updateLdapData(key, value) {
 			this.ldapConfigData[key] = value;
+		},
+		validateHandler() {
+			this.sendValidation = !this.sendValidation;
+		},
+		updateValidationData(v, section) {
+			this.validationData[section] = v;
 		},
 	},
 };

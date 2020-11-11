@@ -108,7 +108,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { ldapPathRegex } from "@utils/ldapValidationRegex";
+import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
 
 export default {
 	props: {
@@ -118,6 +118,9 @@ export default {
 				return {};
 			},
 		},
+		validate: {
+			type: Boolean,
+		},
 	},
 	data() {
 		return {
@@ -126,7 +129,10 @@ export default {
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
 			rolesValidationMessages: [
-				{ key: "ldapPathRegex", message: "plase match ldap path" },
+				{
+					key: "ldapPathValidationRegex",
+					message: "Please match LDAP path format",
+				},
 			],
 		};
 	},
@@ -141,6 +147,12 @@ export default {
 			};
 		},
 	},
+	watch: {
+		validate: function () {
+			this.$v.$touch();
+			this.$emit("update:errors", this.$v.$invalid, "roles");
+		},
+	},
 	methods: {
 		handleChange(key, value) {
 			this.$emit("inputChange", key, value);
@@ -151,17 +163,15 @@ export default {
 			return {
 				data: {
 					member: { required },
-					student: { ldapPathRegex },
-					teacher: { ldapPathRegex },
-					admin: { ldapPathRegex },
-					user: { ldapPathRegex },
+					student: { ldapPathValidationRegex },
+					teacher: { ldapPathValidationRegex },
+					admin: { ldapPathValidationRegex },
+					user: { ldapPathValidationRegex },
 				},
 			};
 		} else
 			return {
-				data: {
-					member: { required },
-				},
+				data: {},
 			};
 	},
 };
