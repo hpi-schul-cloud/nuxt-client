@@ -7,10 +7,11 @@
 
 		<roles-section
 			:data="ldapConfigData"
-			:validate="sendValidation"
+			:validate="triggerValidation"
 			@update:errors="updateValidationData"
 			@inputChange="updateLdapData"
 		/>
+		<!-- Place holder button to test input validation -->
 		<base-button
 			type="submit"
 			class="w-20 mt--lg"
@@ -50,7 +51,7 @@ export default {
 				user: "",
 			},
 			validationData: {},
-			sendValidation: false,
+			triggerValidation: false,
 		};
 	},
 	computed: {
@@ -65,7 +66,7 @@ export default {
 			this.ldapConfigData[key] = value;
 		},
 		validateHandler() {
-			this.sendValidation = !this.sendValidation;
+			this.triggerValidation = !this.triggerValidation;
 		},
 		updateValidationData(v, section) {
 			this.validationData[section] = v;
