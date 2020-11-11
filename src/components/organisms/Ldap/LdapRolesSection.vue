@@ -169,10 +169,10 @@ export default {
 					user: { ldapPathValidationRegex },
 				},
 			};
-		} else
-			return {
-				data: {},
-			};
+		}
+		return {
+			data: {},
+		};
 	},
 };
 </script>
