@@ -49,6 +49,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
 			style="margin-bottom: var(--space-xl);"
+			:validation-model="$v.data.member"
+			:validation-messages="memberValidationMessages"
 			@input="handleChange('member', $event)"
 		/>
 		<base-input
@@ -60,6 +62,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.student')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.student')"
+			:validation-model="$v.data.student"
+			:validation-messages="rolesValidationMessages"
 			@input="handleChange('student', $event)"
 		/>
 		<base-input
@@ -71,6 +75,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.teacher')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.teacher')"
+			:validation-model="$v.data.teacher"
+			:validation-messages="rolesValidationMessages"
 			@input="handleChange('teacher', $event)"
 		/>
 		<base-input
@@ -81,6 +87,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.admin')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.admin')"
+			:validation-model="$v.data.admin"
+			:validation-messages="rolesValidationMessages"
 			@input="handleChange('admin', $event)"
 		/>
 		<base-input
@@ -91,12 +99,17 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.user')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
+			:validation-model="$v.data.user"
+			:validation-messages="rolesValidationMessages"
 			@input="handleChange('user', $event)"
 		/>
 	</div>
 </template>
 
 <script>
+import { required } from "vuelidate/lib/validators";
+import { ldapPathRegex } from "@utils/ldapValidationRegex";
+
 export default {
 	props: {
 		data: {
@@ -109,6 +122,12 @@ export default {
 	data() {
 		return {
 			ldapGroupOption: "ldap_group",
+			memberValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+			rolesValidationMessages: [
+				{ key: "ldapPathRegex", message: "plase match ldap path" },
+			],
 		};
 	},
 	computed: {
@@ -126,6 +145,24 @@ export default {
 		handleChange(key, value) {
 			this.$emit("inputChange", key, value);
 		},
+	},
+	validations() {
+		if (this.ldapGroupOption !== "ldap_group") {
+			return {
+				data: {
+					member: { required },
+					student: { ldapPathRegex },
+					teacher: { ldapPathRegex },
+					admin: { ldapPathRegex },
+					user: { ldapPathRegex },
+				},
+			};
+		} else
+			return {
+				data: {
+					member: { required },
+				},
+			};
 	},
 };
 </script>
