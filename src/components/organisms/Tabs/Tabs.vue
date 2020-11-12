@@ -71,7 +71,7 @@ export default {
 ul.tabs {
 	display: flex;
 	justify-content: center;
-	max-width: 28rem;
+	max-width: 30rem;
 	padding: 0;
 	margin-bottom: var(--space-md);
 	box-shadow: inset 0 -3px 0 var(--color-gray-light);
@@ -89,9 +89,6 @@ ul.tabs {
 		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
-		&:last-child {
-			pointer-events: none;
-		}
 		.tab-button {
 			display: flex;
 			align-items: center;
