@@ -30,6 +30,7 @@ export default {
 				},
 			],
 			ldapConfigData: {
+				groupOption: "ldap_group",
 				member: "",
 				student: "",
 				teacher: "",

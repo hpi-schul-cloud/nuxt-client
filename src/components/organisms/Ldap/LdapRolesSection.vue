@@ -12,7 +12,7 @@
 		</p>
 		<div role="group" class="section-sub-header">
 			<base-input
-				v-model="ldapGroupOption"
+				:vmodel="value.groupOption"
 				type="radio"
 				:label="
 					this.$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
@@ -20,10 +20,10 @@
 				name="group"
 				style="margin-right: var(--space-sm);"
 				value="ldap_group"
-				class="ldapRadio"
+				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			/>
 			<base-input
-				v-model="ldapGroupOption"
+				:vmodel="value.groupOption"
 				type="radio"
 				:label="
 					this.$t(
@@ -32,7 +32,7 @@
 				"
 				name="group"
 				value="user_attribute"
-				class="ldapRadio"
+				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			/>
 			<p class="text-sm" style="margin-top: var(--space-xs);">
 				{{
@@ -44,7 +44,7 @@
 		</div>
 		<base-input
 			:vmodel="value.member"
-			:disabled="ldapGroupOption === 'ldap_group'"
+			:disabled="value.groupOption === 'ldap_group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
 			:placeholder="

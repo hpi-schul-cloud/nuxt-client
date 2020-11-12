@@ -3,6 +3,7 @@ import LdapRolesSection from "./LdapRolesSection";
 
 describe("@components/organisms/LdapRolesSection", () => {
 	const ldapConfigData = {
+		groupOption: "ldap_group",
 		member: "description",
 		student: "cn=schueler,ou=rolle",
 		teacher: "cn=lehrer,ou=rolle",
