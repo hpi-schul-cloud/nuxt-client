@@ -81,25 +81,25 @@ export default {
 		this.$store.commit("users/resetServerError");
 	},
 	methods: {
-		async createStudent(userData) {
-			await this.$store.dispatch("users/createStudent", {
-				firstName: userData.firstName,
-				lastName: userData.lastName,
-				email: userData.email,
-				birthday: this.birthday,
-				roles: ["student"],
-				schoolId: this.$user.schoolId,
-				sendRegistration: this.sendRegistration,
-			});
-
-			if (!this.serverError) {
-				this.$toast.success(
-					this.$t("pages.administration.students.new.success")
-				);
-				this.$router.push({
-					path: `/administration/students`,
+		createStudent(userData) {
+			this.$store
+				.dispatch("users/createStudent", {
+					firstName: userData.firstName,
+					lastName: userData.lastName,
+					email: userData.email,
+					birthday: this.birthday,
+					roles: ["student"],
+					schoolId: this.$user.schoolId,
+					sendRegistration: this.sendRegistration,
+				})
+				.then(() => {
+					this.$toast.success(
+						this.$t("pages.administration.students.new.success")
+					);
+					this.$router.push({
+						path: `/administration/students`,
+					});
 				});
-			}
 		},
 	},
 };

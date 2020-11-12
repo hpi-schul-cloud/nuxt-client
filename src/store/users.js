@@ -14,14 +14,9 @@ const module = mergeDeep(base, {
 			const customEndpoint = "/users/admin/teachers";
 			return this.$axios.$post(customEndpoint, teacherData);
 		},
-		async createStudent(ctx, studentData) {
+		createStudent(ctx, studentData) {
 			const customEndpoint = "/users/admin/students";
-			await this.$serverCall(
-				ctx,
-				this.$axios.$post,
-				customEndpoint,
-				studentData
-			);
+			this.$serverCall(ctx, this.$axios.$post, customEndpoint, studentData);
 		},
 		sendRegistrationLink(ctx, payload = {}) {
 			const customEndpoint = "/users/mail/registrationLink";

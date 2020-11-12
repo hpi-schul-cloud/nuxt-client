@@ -6,8 +6,8 @@ const serverCallWrapper = (error, $axios) => async (
 	params
 ) => {
 	try {
-		const result = await axiosCall.bind($axios)(serverEndpoint, params);
 		ctx.commit("resetServerError");
+		const result = await axiosCall.bind($axios)(serverEndpoint, params);
 		return result;
 	} catch (err) {
 		const serverError = { statusCode: null, message: null };
@@ -23,6 +23,7 @@ const serverCallWrapper = (error, $axios) => async (
 			}
 		}
 		ctx.commit("setServerError", serverError);
+		throw err;
 	}
 };
 

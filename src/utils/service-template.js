@@ -12,20 +12,6 @@ export default function (endpoint) {
 	};
 	return {
 		baseUrl,
-		serverCallWrapper: (ctx) => async (
-			axiosCall,
-			serverEndpoint,
-			params,
-			saveError = false
-		) => {
-			try {
-				const result = await axiosCall(serverEndpoint, params);
-				if (saveError) ctx.commit("resetServerError");
-				return result;
-			} catch (error) {
-				if (saveError) ctx.commit("setServerError", error.response);
-			}
-		},
 		actions: {
 			async find({ commit }, payload = {}) {
 				const { qid = "default", query, customEndpoint } = payload;
