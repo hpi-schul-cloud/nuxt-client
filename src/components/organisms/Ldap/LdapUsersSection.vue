@@ -8,110 +8,68 @@
 		</p>
 
 		<base-input
-			v-model="ldapData.userPfad"
+			:vmodel="value.userPfad"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.title')"
 			:placeholder="$t('pages.administration.ldap.users.pfad.title')"
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, userPfad: $event })"
+		/>
 		<p class="pfad-hint">
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
-			v-model="ldapData.firstName"
+			:vmodel="value.firstName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.firstname')"
 			placeholder="givenName"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, firstName: $event })"
+		/>
 		<base-input
-			v-model="ldapData.familyName"
+			:vmodel="value.familyName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.lastname')"
 			placeholder="sn"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, familyName: $event })"
+		/>
 		<base-input
-			v-model="ldapData.email"
+			:vmodel="value.email"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.email')"
 			placeholder="mail"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, email: $event })"
+		/>
 		<base-input
-			v-model="ldapData.uid"
+			:vmodel="value.uid"
 			type="text"
 			class="mt--xl"
 			placeholder="uid"
 			:label="$t('pages.administration.ldap.users.uid.title')"
 			:info="$t('pages.administration.ldap.users.uid.info')"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, uid: $event })"
+		/>
 		<base-input
-			v-model="ldapData.uuid"
+			:vmodel="value.uuid"
 			type="text"
 			class="mt--xl"
 			placeholder="uuid"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
 			:info="$t('pages.administration.ldap.users.uuid.info')"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, uuid: $event })"
+		/>
 	</div>
 </template>
 
 <script>
-import BaseInput from "@components/base/BaseInput/BaseInput.vue";
-import { required } from "vuelidate/lib/validators";
 export default {
-	components: {
-		BaseInput,
-	},
-	props: {
-		errors: {
-			type: Object,
-			default() {
-				return {};
-			},
-		},
-		data: {
-			type: Object,
-			default() {
-				return {};
-			},
-			required,
-		},
-	},
+	// eslint-disable-next-line vue/require-prop-types
+	props: ["value"],
 	data() {
-		return {
-			userPfad: null,
-			firstName: null,
-			familyName: null,
-			email: null,
-			domainName: null,
-			uid: null,
-			uuid: null,
-			validationMessages: [{ key: "required", message: "should not be blank" }],
-			ldapData: {},
-		};
-	},
-	validations: {
-		vmodel: {
-			userPfad: { required },
-			firstName: { required },
-			familyName: { required },
-			email: { required },
-			domainName: { required },
-			uid: { required },
-			uuid: { required },
-		},
-	},
-	created() {
-		this.ldapData = this.data;
+		return {};
 	},
 };
 </script>

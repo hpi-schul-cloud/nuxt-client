@@ -7,93 +7,55 @@
 			v-model="unchecked"
 			type="switch"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
-			@change="handleChange"
 		>
 		</base-input>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.pfad.subtitle") }}
 		</p>
 		<base-input
-			v-model="ldapData.classPfad"
+			:vmodel="value.classPfad"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.pfad.title')"
 			:placeholder="$t('pages.administration.ldap.classes.pfad.title')"
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, classPfad: $event })"
+		/>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
-			v-model="ldapData.nameAttribute"
+			:vmodel="value.nameAttribute"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
 			placeholder="description"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
+		/>
 		<base-input
-			v-model="ldapData.participantAttribute"
+			:vmodel="value.participantAttribute"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
 			placeholder="member"
-		>
-		</base-input>
+			@update:vmodel="
+				$emit('input', { ...value, participantAttribute: $event })
+			"
+		/>
 	</div>
 </template>
 
 <script>
-import BaseInput from "@components/base/BaseInput/BaseInput.vue";
-import { required } from "vuelidate/lib/validators";
 export default {
-	components: {
-		BaseInput,
-	},
-	props: {
-		errors: {
-			type: Object,
-			default() {
-				return {};
-			},
-		},
-		data: {
-			type: Object,
-			default() {
-				return {};
-			},
-			required,
-		},
-	},
+	// eslint-disable-next-line vue/require-prop-types
+	props: ["value"],
 	data() {
 		return {
 			unchecked: false,
-			classPfad: null,
-			nameAttribute: null,
-			participantAttribute: null,
-			validationMessages: [{ key: "required", message: "should not be blank" }],
-			ldapData: {},
 		};
-	},
-	validations: {
-		vmodel: {
-			unchecked: { required },
-			classPfad: { required },
-			nameAttribute: { required },
-			participantAttribute: { required },
-		},
-	},
-	created() {
-		this.ldapData = this.data;
-	},
-	methods: {
-		handleChange: () => {
-			this.unchecked = !this.unchecked;
-		},
 	},
 };
 </script>

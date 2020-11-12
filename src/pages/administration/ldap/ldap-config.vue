@@ -23,36 +23,29 @@
 			{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
 		</base-link>
 		<div class="form-container">
-			<connection :errors="errors" />
-			<users :errors="errors" />
-			<roles :errors="errors" :ldapdata="mockData" :data="mockData" />
-			<classes :errors="errors" />
+			<connection-section
+				v-model="ldapConfigData"
+				data-testid="ldapConnectionSection"
+			/>
+			<users-section v-model="ldapConfigData" />
+			<classes-section v-model="ldapConfigData" />
 		</div>
 	</section>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import Connection from "@components/organisms/Ldap/Connection.vue";
-import Users from "@components/organisms/Ldap/Users.vue";
-import Roles from "@components/organisms/Ldap/Roles.vue";
-import Classes from "@components/organisms/Ldap/Classes.vue";
+import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
+import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
+import ClassesSection from "@components/organisms/Ldap/LdapClassesSection.vue";
 export default {
 	components: {
-		Connection,
-		Users,
-		Roles,
-		Classes,
-	},
-	props: {
-		someProps: {
-			type: Boolean,
-		},
+		ConnectionSection,
+		UsersSection,
+		ClassesSection,
 	},
 	data() {
 		return {
-			firstName: "",
-			lastName: "",
 			breadcrumbs: [
 				{
 					// text: this.$t("pages.administration.index.title"),
@@ -65,28 +58,30 @@ export default {
 					text: "Schools",
 				},
 			],
-			errors: {
-				firstErr: "firstError",
-				secondErr: "secondError",
-			},
-			mockData: {
-				member: "0",
-				student: "1",
-				teacher: "2",
-				admin: "3",
-				noSchoolCloud: "4",
-				alias: "5",
-				type: [
-					{ value: "value_1", label: "select #1" },
-					{ value: "value_2", label: "select #2" },
-				],
+			ldapConfigData: {
+				// Roles Section Data
+				member: "description",
+				student: "cn=schueler,ou=rolle",
+				teacher: "cn=lehrer,ou=rolle",
+				admin: "cn=admin,ou=rolle",
+				user: "cn=ehemalige,ou=rolle",
+				// Connection Section Data
 				url: "https://",
 				rootPath: "root path info",
+				basisPfad: "basisPfad",
 				searchUser: "pass",
-				roleType: [
-					{ value: "value_1", label: "select #1" },
-					{ value: "value_2", label: "select #2" },
-				],
+				searchUserPassword: "***",
+				// Classes Section Data
+				classPfad: "classPfad",
+				nameAttribute: "nameAttribute",
+				participantAttribute: "participantAttribute",
+				// Users Sections Data
+				userPfad: "userPfad",
+				firstName: "firstName",
+				familyName: "familyName",
+				email: "email",
+				uid: "uid",
+				uuid: "uuid",
 			},
 		};
 	},
@@ -95,14 +90,6 @@ export default {
 		...mapState("auth", {
 			school: "school",
 		}),
-	},
-	watch: {},
-	created(ctx) {},
-	methods: {
-		// updateModel(e, model) {
-		// 	console.log("config page e", e);
-		// 	console.log("config page model", model);
-		// },
 	},
 };
 </script>

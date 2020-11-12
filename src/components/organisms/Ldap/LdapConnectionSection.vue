@@ -5,90 +5,50 @@
 		</h3>
 
 		<base-input
-			v-model="ldapData.serverUrl"
+			:vmodel="value.url"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.server.url')"
 			:placeholder="$t('pages.administration.ldap.connection.server.url')"
 			:info="$t('pages.administration.ldap.connection.server.info')"
-			:validation-messages="validationMessages"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, url: $event })"
+		/>
 		<base-input
-			v-model="ldapData.basisPfad"
+			:vmodel="value.basisPfad"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.basis.pfad')"
 			:placeholder="$t('pages.administration.ldap.connection.basis.pfad')"
 			:info="$t('pages.administration.ldap.connection.basis.pfad.info')"
-			:validation-messages="validationMessages"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, basisPfad: $event })"
+		/>
 		<base-input
-			v-model="ldapData.searchUser"
+			:vmodel="value.searchUser"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user')"
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
-			:validation-messages="validationMessages"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
+		/>
 		<base-input
-			v-model="ldapData.searchUserPassword"
+			:vmodel="value.searchUserPassword"
 			type="password"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user.password')"
 			:placeholder="
 				$t('pages.administration.ldap.connection.search.user.password')
 			"
-			:validation-messages="validationMessages"
-		>
-		</base-input>
+			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
+		/>
 	</div>
 </template>
 <script>
-import BaseInput from "@components/base/BaseInput/BaseInput.vue";
-import { required } from "vuelidate/lib/validators";
 export default {
-	components: {
-		BaseInput,
-	},
-	props: {
-		errors: {
-			type: Object,
-			default() {
-				return {};
-			},
-		},
-		data: {
-			type: Object,
-			default() {
-				return {};
-			},
-			required,
-		},
-	},
+	// eslint-disable-next-line vue/require-prop-types
+	props: ["value"],
 	data() {
-		return {
-			serverUrl: null,
-			basisPfad: null,
-			searchUser: null,
-			searchUserPassword: null,
-			validationMessages: [{ key: "required", message: "should not be blank" }],
-			ldapData: {},
-		};
-	},
-	validations: {
-		vmodel: {
-			serverUrl: { required },
-			basisPfad: { required },
-			searchUser: { required },
-			searchUserPassword: { required },
-		},
-	},
-	created() {
-		this.ldapData = this.data;
+		return {};
 	},
 };
 </script>
