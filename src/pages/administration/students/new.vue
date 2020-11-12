@@ -27,7 +27,7 @@
 			</template>
 			<template v-slot:errors>
 				<info-message
-					v-if="serverError"
+					v-if="businessError"
 					:message="$t('pages.administration.students.new.error')"
 					type="error"
 				></info-message>
@@ -52,7 +52,6 @@ export default {
 	},
 	data() {
 		return {
-			error: false,
 			birthday: null,
 			sendRegistration: false,
 			breadcrumbs: [
@@ -74,11 +73,11 @@ export default {
 	},
 	computed: {
 		...mapGetters("users", {
-			serverError: "serverError",
+			businessError: "businessError",
 		}),
 	},
 	created() {
-		this.$store.commit("users/resetServerError");
+		this.$store.commit("users/resetBusinessError");
 	},
 	methods: {
 		createStudent(userData) {
@@ -99,7 +98,8 @@ export default {
 					this.$router.push({
 						path: `/administration/students`,
 					});
-				});
+				})
+				.catch(() => {});
 		},
 	},
 };

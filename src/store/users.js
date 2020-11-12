@@ -15,8 +15,14 @@ const module = mergeDeep(base, {
 			return this.$axios.$post(customEndpoint, teacherData);
 		},
 		createStudent(ctx, studentData) {
+			ctx.commit("resetBusinessError");
 			const customEndpoint = "/users/admin/students";
-			this.$serverCall(ctx, this.$axios.$post, customEndpoint, studentData);
+			return this.$axios.$post(customEndpoint, studentData).catch((error) => {
+				if (!this.getters["error/isPresent"]) {
+					ctx.commit("setBusinessError", error.response.data);
+				}
+				throw error;
+			});
 		},
 		sendRegistrationLink(ctx, payload = {}) {
 			const customEndpoint = "/users/mail/registrationLink";
