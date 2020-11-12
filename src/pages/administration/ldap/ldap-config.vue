@@ -27,8 +27,11 @@
 				v-model="ldapConfigData"
 				data-testid="ldapConnectionSection"
 			/>
-			<users-section v-model="ldapConfigData" />
-			<classes-section v-model="ldapConfigData" />
+			<users-section v-model="ldapConfigData" data-testid="ldapUsersSection" />
+			<classes-section
+				v-model="ldapConfigData"
+				data-testid="ldapClassesSection"
+			/>
 		</div>
 	</section>
 </template>
@@ -60,11 +63,12 @@ export default {
 			],
 			ldapConfigData: {
 				// Roles Section Data
-				member: "description",
-				student: "cn=schueler,ou=rolle",
-				teacher: "cn=lehrer,ou=rolle",
-				admin: "cn=admin,ou=rolle",
-				user: "cn=ehemalige,ou=rolle",
+				groupOption: "ldap_group",
+				member: "",
+				student: "",
+				teacher: "",
+				admin: "",
+				user: "",
 				// Connection Section Data
 				url: "",
 				rootPath: "",

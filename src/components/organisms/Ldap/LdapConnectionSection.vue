@@ -5,6 +5,7 @@
 		</h3>
 
 		<base-input
+			data-testid="ldapDataConnectionUrl"
 			:vmodel="value.url"
 			type="text"
 			class="mt--xl"
@@ -14,6 +15,7 @@
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataConnectionBasisPfad"
 			:vmodel="value.basisPfad"
 			type="text"
 			class="mt--xl"
@@ -23,6 +25,7 @@
 			@update:vmodel="$emit('input', { ...value, basisPfad: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataConnectionSearchUser"
 			:vmodel="value.searchUser"
 			type="text"
 			class="mt--xl"
@@ -32,6 +35,7 @@
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataConnectionSearchUserPassword"
 			:vmodel="value.searchUserPassword"
 			type="password"
 			class="mt--xl"

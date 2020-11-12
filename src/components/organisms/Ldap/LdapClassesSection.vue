@@ -13,10 +13,12 @@
 			{{ $t("pages.administration.ldap.classes.pfad.subtitle") }}
 		</p>
 		<base-input
+			data-testid="ldapDataClassesPfad"
 			:vmodel="value.classPfad"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
+			label=""
 			:placeholder="$t('pages.administration.ldap.classes.pfad.title')"
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
 			@update:vmodel="$emit('input', { ...value, classPfad: $event })"
@@ -25,6 +27,7 @@
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
+			data-testid="ldapDataClassesNameAttribute"
 			:vmodel="value.nameAttribute"
 			:disabled="unchecked === false"
 			type="text"
@@ -33,6 +36,7 @@
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataClassesNameparticipantAttribute"
 			:vmodel="value.participantAttribute"
 			:disabled="unchecked === false"
 			type="text"
