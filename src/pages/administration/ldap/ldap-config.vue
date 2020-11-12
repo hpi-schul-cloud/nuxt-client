@@ -30,11 +30,11 @@ export default {
 				},
 			],
 			ldapConfigData: {
-				member: "description",
-				student: "cn=schueler,ou=rolle",
-				teacher: "cn=lehrer,ou=rolle",
-				admin: "cn=admin,ou=rolle",
-				user: "cn=ehemalige,ou=rolle",
+				member: "",
+				student: "",
+				teacher: "",
+				admin: "",
+				user: "",
 			},
 		};
 	},

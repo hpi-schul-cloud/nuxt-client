@@ -20,10 +20,20 @@ describe("@components/organisms/LdapRolesSection", () => {
 		});
 
 		expect(wrapper.find(".section-sub-header").exists()).toBe(true);
-		expect(wrapper.find(".ldapRolesMember").exists()).toBe(true);
-		expect(wrapper.find(".ldapDataStudent").exists()).toBe(true);
-		expect(wrapper.find(".ldapDataTeacher").exists()).toBe(true);
-		expect(wrapper.find(".ldapDataAdmin").exists()).toBe(true);
-		expect(wrapper.find(".ldapDataUser").exists()).toBe(true);
+		expect(wrapper.findComponent({ ref: "ldapDataRolesMember" }).exists()).toBe(
+			true
+		);
+		expect(
+			wrapper.findComponent({ ref: "ldapDataRolesStudent" }).exists()
+		).toBe(true);
+		expect(
+			wrapper.findComponent({ ref: "ldapDataRolesTeacher" }).exists()
+		).toBe(true);
+		expect(wrapper.findComponent({ ref: "ldapDataRolesAdmin" }).exists()).toBe(
+			true
+		);
+		expect(wrapper.findComponent({ ref: "ldapDataRolesUser" }).exists()).toBe(
+			true
+		);
 	});
 });

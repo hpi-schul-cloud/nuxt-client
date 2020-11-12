@@ -43,6 +43,7 @@
 			</p>
 		</div>
 		<base-input
+			ref="ldapDataRolesMember"
 			:vmodel="value.member"
 			:disabled="ldapGroupOption === 'ldap_group'"
 			type="text"
@@ -51,11 +52,11 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
 			style="margin-bottom: var(--space-xl);"
-			data-testid="ldapDataMember"
-			class="ldapRolesMember"
+			data-testid="ldapDataRolesMember"
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		/>
 		<base-input
+			ref="ldapDataRolesStudent"
 			:vmodel="value.student"
 			type="text"
 			v-bind="$attrs"
@@ -64,11 +65,11 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.student')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.student')"
-			data-testid="ldapDataStudent"
-			class="ldapDataStudent"
+			data-testid="ldapDataRolesStudent"
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		/>
 		<base-input
+			ref="ldapDataRolesTeacher"
 			:vmodel="value.teacher"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.teacher')"
@@ -76,11 +77,11 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.teacher')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.teacher')"
-			data-testid="ldapDataTeacher"
-			class="ldapDataTeacher"
+			data-testid="ldapDataRolesTeacher"
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		/>
 		<base-input
+			ref="ldapDataRolesAdmin"
 			:vmodel="value.admin"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.admin')"
@@ -88,11 +89,11 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.admin')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.admin')"
-			data-testid="ldapDataAdmin"
-			class="ldapDataAdmin"
+			data-testid="ldapDataRolesAdmin"
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		/>
 		<base-input
+			ref="ldapDataRolesUser"
 			:vmodel="value.user"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.user')"
@@ -100,8 +101,7 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.user')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
-			data-testid="ldapDataUser"
-			class="ldapDataUser"
+			data-testid="ldapDataRolesUser"
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		/>
 	</div>
