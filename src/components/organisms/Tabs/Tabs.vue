@@ -71,7 +71,7 @@ export default {
 ul.tabs {
 	display: flex;
 	justify-content: center;
-	max-width: 30rem;
+	max-width: 34rem;
 	padding: 0;
 	margin-bottom: var(--space-md);
 	box-shadow: inset 0 -3px 0 var(--color-gray-light);
