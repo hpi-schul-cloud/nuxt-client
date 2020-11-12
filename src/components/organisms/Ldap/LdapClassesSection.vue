@@ -17,7 +17,6 @@
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
-			:label="$t('pages.administration.ldap.classes.pfad.title')"
 			:placeholder="$t('pages.administration.ldap.classes.pfad.title')"
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
 			@update:vmodel="$emit('input', { ...value, classPfad: $event })"
@@ -31,7 +30,6 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
-			placeholder="description"
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		/>
 		<base-input
@@ -40,7 +38,6 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
-			placeholder="member"
 			@update:vmodel="
 				$emit('input', { ...value, participantAttribute: $event })
 			"

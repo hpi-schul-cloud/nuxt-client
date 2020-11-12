@@ -24,7 +24,6 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.firstname')"
-			placeholder="givenName"
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
 		/>
 		<base-input
@@ -32,7 +31,6 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.lastname')"
-			placeholder="sn"
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
 		/>
 		<base-input
@@ -40,14 +38,12 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.email')"
-			placeholder="mail"
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		/>
 		<base-input
 			:vmodel="value.uid"
 			type="text"
 			class="mt--xl"
-			placeholder="uid"
 			:label="$t('pages.administration.ldap.users.uid.title')"
 			:info="$t('pages.administration.ldap.users.uid.info')"
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
@@ -56,7 +52,6 @@
 			:vmodel="value.uuid"
 			type="text"
 			class="mt--xl"
-			placeholder="uuid"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
 			:info="$t('pages.administration.ldap.users.uuid.info')"
 			@update:vmodel="$emit('input', { ...value, uuid: $event })"
