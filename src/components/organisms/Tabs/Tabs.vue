@@ -67,12 +67,14 @@ export default {
 		font-size: var(--text-md);
 	}
 }
+
 ul.tabs {
 	display: flex;
 	justify-content: center;
 	max-width: 28rem;
 	padding: 0;
 	margin-bottom: var(--space-md);
+	box-shadow: inset 0 -3px 0 var(--color-gray-light);
 	.li-content {
 		display: inline-flex;
 		align-items: center;
@@ -80,13 +82,16 @@ ul.tabs {
 	li {
 		display: inline-flex;
 		justify-content: center;
-		width: 100%;
+		width: 100vw;
 		padding: var(--space-xs);
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
+		&:last-child {
+			pointer-events: none;
+		}
 		.tab-button {
 			display: flex;
 			align-items: center;
@@ -115,14 +120,22 @@ ul.tabs {
 			}
 			&::after {
 				position: absolute;
-				top: calc(2.45 * (var(--space-md)));
+				top: calc(2.1 * (var(--space-md)));
 				left: 0;
 				width: 100%;
-				height: 2px;
+				height: 3px;
 				content: " ";
 				background: var(--color-tertiary);
 				box-shadow: 0 0 1px 0 var(--color-tertiary);
 				animation: fadeEffect var(--duration-transition-medium) ease-in;
+
+				@include breakpoint(tablet) {
+					top: calc(2.25 * (var(--space-md)));
+				}
+
+				@include breakpoint(desktop) {
+					top: calc(2.45 * (var(--space-md)));
+				}
 			}
 		}
 		&:not(.is-active) {
@@ -141,20 +154,13 @@ ul.tabs {
 			}
 		}
 	}
-	&::after {
-		position: absolute;
-		top: calc(4.45 * (var(--space-md)));
-		left: calc(2 * (var(--space-md)));
-		z-index: var(--layer-behind);
-		width: 100vw;
-		height: 2px;
-		content: " ";
-		background: var(--color-gray-light);
-		box-shadow: 0 0 1px 0 var(--color-gray-light);
-	}
 
 	@include breakpoint(tablet) {
 		max-width: 64rem;
+	}
+
+	@include breakpoint(desktop) {
+		max-width: 100vw;
 	}
 }
 
