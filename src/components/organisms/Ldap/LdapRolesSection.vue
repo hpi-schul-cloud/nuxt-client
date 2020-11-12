@@ -20,6 +20,7 @@
 				name="group"
 				style="margin-right: var(--space-sm);"
 				value="ldap_group"
+				class="ldapRadio"
 			/>
 			<base-input
 				v-model="ldapGroupOption"
@@ -31,6 +32,7 @@
 				"
 				name="group"
 				value="user_attribute"
+				class="ldapRadio"
 			/>
 			<p class="text-sm" style="margin-top: var(--space-xs);">
 				{{
@@ -41,7 +43,8 @@
 			</p>
 		</div>
 		<base-input
-			v-model="ldapData.member"
+			ref="ldapDataRolesMember"
+			:vmodel="value.member"
 			:disabled="ldapGroupOption === 'ldap_group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
@@ -49,12 +52,14 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
 			style="margin-bottom: var(--space-xl);"
-			:validation-model="$v.data.member"
+			:validation-model="$v.value.member"
 			:validation-messages="memberValidationMessages"
-			@input="handleChange('member', $event)"
+			data-testid="ldapDataRolesMember"
+			@update:vmodel="$emit('input', { ...value, member: $event })"
 		/>
 		<base-input
-			v-model="ldapData.student"
+			ref="ldapDataRolesStudent"
+			:vmodel="value.student"
 			type="text"
 			v-bind="$attrs"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.student')"
@@ -62,46 +67,52 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.student')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.student')"
-			:validation-model="$v.data.student"
+			:validation-model="$v.value.student"
 			:validation-messages="rolesValidationMessages"
-			@input="handleChange('student', $event)"
+			data-testid="ldapDataRolesStudent"
+			@update:vmodel="$emit('input', { ...value, student: $event })"
 		/>
 		<base-input
-			ref="teacher"
-			v-model="ldapData.teacher"
+			ref="ldapDataRolesTeacher"
+			:vmodel="value.teacher"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.teacher')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.teacher')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.teacher')"
-			:validation-model="$v.data.teacher"
+			:validation-model="$v.value.teacher"
 			:validation-messages="rolesValidationMessages"
-			@input="handleChange('teacher', $event)"
+			data-testid="ldapDataRolesTeacher"
+			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		/>
 		<base-input
-			v-model="ldapData.admin"
+			ref="ldapDataRolesAdmin"
+			:vmodel="value.admin"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.admin')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.admin')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.admin')"
-			:validation-model="$v.data.admin"
+			:validation-model="$v.value.admin"
 			:validation-messages="rolesValidationMessages"
-			@input="handleChange('admin', $event)"
+			data-testid="ldapDataRolesAdmin"
+			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		/>
 		<base-input
-			v-model="ldapData.user"
+			ref="ldapDataRolesUser"
+			:vmodel="value.user"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.user')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.user')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
-			:validation-model="$v.data.user"
+			:validation-model="$v.value.user"
 			:validation-messages="rolesValidationMessages"
-			@input="handleChange('user', $event)"
+			data-testid="ldapDataRolesUser"
+			@update:vmodel="$emit('input', { ...value, user: $event })"
 		/>
 	</div>
 </template>
@@ -112,7 +123,7 @@ import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
 
 export default {
 	props: {
-		data: {
+		value: {
 			type: Object,
 			default() {
 				return {};
@@ -136,32 +147,16 @@ export default {
 			],
 		};
 	},
-	computed: {
-		ldapData() {
-			return {
-				member: this.data.member || "",
-				student: this.data.student || "",
-				teacher: this.data.teacher || "",
-				admin: this.data.admin || "",
-				user: this.data.user || "",
-			};
-		},
-	},
 	watch: {
 		validate: function () {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "roles");
 		},
 	},
-	methods: {
-		handleChange(key, value) {
-			this.$emit("inputChange", key, value);
-		},
-	},
 	validations() {
 		if (this.ldapGroupOption !== "ldap_group") {
 			return {
-				data: {
+				value: {
 					member: { required },
 					student: { ldapPathValidationRegex },
 					teacher: { ldapPathValidationRegex },
@@ -171,7 +166,7 @@ export default {
 			};
 		}
 		return {
-			data: {},
+			value: {},
 		};
 	},
 };

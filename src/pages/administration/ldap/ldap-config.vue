@@ -6,10 +6,10 @@
 		</h1>
 
 		<roles-section
-			:data="ldapConfigData"
+			v-model="ldapConfigData"
 			:validate="triggerValidation"
+			data-testid="ldapRolesSection"
 			@update:errors="updateValidationData"
-			@inputChange="updateLdapData"
 		/>
 		<!-- Place holder button to test input validation -->
 		<base-button
@@ -59,12 +59,7 @@ export default {
 			school: "school",
 		}),
 	},
-	watch: {},
-	created(ctx) {},
 	methods: {
-		updateLdapData(key, value) {
-			this.ldapConfigData[key] = value;
-		},
 		validateHandler() {
 			this.triggerValidation = !this.triggerValidation;
 		},
