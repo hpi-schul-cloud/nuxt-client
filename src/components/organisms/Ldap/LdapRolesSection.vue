@@ -43,7 +43,6 @@
 			</p>
 		</div>
 		<base-input
-			ref="ldapDataRolesMember"
 			:vmodel="value.member"
 			:disabled="ldapGroupOption === 'ldap_group'"
 			type="text"
@@ -56,7 +55,6 @@
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesStudent"
 			:vmodel="value.student"
 			type="text"
 			v-bind="$attrs"
@@ -69,7 +67,6 @@
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesTeacher"
 			:vmodel="value.teacher"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.teacher')"
@@ -81,7 +78,6 @@
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesAdmin"
 			:vmodel="value.admin"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.admin')"
@@ -93,7 +89,6 @@
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesUser"
 			:vmodel="value.user"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.user')"
