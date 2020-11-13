@@ -25,19 +25,21 @@
 		<div class="form-container">
 			<connection-section
 				v-model="ldapConfigData"
-				data-testid="ldapConnectionSection"
-			/>
-			<users-section v-model="ldapConfigData" />
-			<classes-section
-				v-model="ldapConfigData"
 				:validate="triggerValidation"
-				data-testid="ldapClassesSection"
+				data-testid="ldapConnectionSection"
 				@update:errors="updateValidationData"
 			/>
+			<users-section v-model="ldapConfigData" />
 			<roles-section
 				v-model="ldapConfigData"
 				:validate="triggerValidation"
 				data-testid="ldapRolesSection"
+				@update:errors="updateValidationData"
+			/>
+			<classes-section
+				v-model="ldapConfigData"
+				:validate="triggerValidation"
+				data-testid="ldapClassesSection"
 				@update:errors="updateValidationData"
 			/>
 		</div>
@@ -89,7 +91,6 @@ export default {
 				user: "",
 				// Connection Section Data
 				url: "",
-				rootPath: "",
 				basisPfad: "",
 				searchUser: "",
 				searchUserPassword: "",
