@@ -114,7 +114,7 @@ export default {
 				uid: "",
 				uuid: "",
 			},
-			validationData: {},
+			isInvalidData: {},
 			triggerValidation: false,
 		};
 	},
@@ -128,7 +128,7 @@ export default {
 			this.triggerValidation = !this.triggerValidation;
 		},
 		updateValidationData(v, section) {
-			this.validationData[section] = v;
+			this.isInvalidData[section] = v;
 		},
 	},
 };
