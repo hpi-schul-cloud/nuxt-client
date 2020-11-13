@@ -157,19 +157,19 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 }
 .image {
 	width: calc(var(--text-md) + var(--text-lg));
-  min-width: 2rem;
-  height: calc(var(--text-md) + var(--text-lg));
-  object-fit: contain;
-  margin-right: var(--space-sm);
-  border-radius: var(--radius-sm);
+	min-width: 2rem;
+	height: calc(var(--text-md) + var(--text-lg));
+	object-fit: contain;
+	margin-right: var(--space-sm);
+	border-radius: var(--radius-sm);
 
-  @include breakpoint(tablet) {
-    min-width: 2.75rem;
-  }
+	@include breakpoint(tablet) {
+		min-width: 2.75rem;
+	}
 
-  @include breakpoint(desktop) {
-    min-width: 3.43rem;
-  }
+	@include breakpoint(desktop) {
+		min-width: 3.43rem;
+	}
 }
 
 .status {
