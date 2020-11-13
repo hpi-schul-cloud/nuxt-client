@@ -28,7 +28,12 @@
 				data-testid="ldapConnectionSection"
 			/>
 			<users-section v-model="ldapConfigData" />
-			<classes-section v-model="ldapConfigData" />
+			<classes-section
+				v-model="ldapConfigData"
+				:validate="triggerValidation"
+				data-testid="ldapClassesSection"
+				@update:errors="updateValidationData"
+			/>
 			<roles-section
 				v-model="ldapConfigData"
 				:validate="triggerValidation"
@@ -43,7 +48,7 @@
 			data-testid="button_create-user_submit"
 			@click="validateHandler"
 		>
-			validate
+			Validate
 		</base-button>
 	</section>
 </template>
