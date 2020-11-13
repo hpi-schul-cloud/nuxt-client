@@ -36,12 +36,16 @@ describe("@components/organisms/LdapRolesSection", () => {
 		expect(wrapper.find("[data-testid=ldapDataRolesUser]").exists()).toBe(true);
 	});
 
-	it("loads the validator", () => {
+	it("loads the validator", async () => {
 		const wrapper = mount(LdapRolesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				value: ldapConfigData,
 			},
+		});
+		// validations are only active when groupOption !== ldap_group
+		await wrapper.setProps({
+			value: { ...ldapConfigData, groupOption: "not LDAP_group" },
 		});
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
@@ -53,7 +57,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 				value: ldapConfigData,
 			},
 		});
-
+		// validations are only active when groupOption !== ldap_group
 		await wrapper.setProps({
 			value: { ...ldapConfigData, groupOption: "not LDAP_group" },
 		});
@@ -69,7 +73,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 				value: ldapConfigData,
 			},
 		});
-
+		// validations are only active when groupOption !== ldap_group
 		await wrapper.setProps({
 			value: {
 				groupOption: "not ldap group",
@@ -92,7 +96,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 				value: ldapConfigData,
 			},
 		});
-
+		// validations are only active when groupOption !== ldap_group
 		await wrapper.setProps({
 			value: { ...ldapConfigData, groupOption: "not LDAP_group" },
 		});
