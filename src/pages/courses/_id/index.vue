@@ -194,9 +194,6 @@ export default {
 			};
 		},
 		formatSubtitleForHomework(homework) {
-			// const now = moment();
-			// const tomorrow = moment(now).add(24, "hours");
-			// const dueDate = moment(new Date(homework.dueDate));
 			const now = currentDate();
 			const tomorrow = now.add(1, "d");
 			const dueDate = fromUTC(homework.dueDate);
