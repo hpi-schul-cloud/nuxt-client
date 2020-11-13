@@ -171,7 +171,7 @@ export default {
 
 <style lang="scss" scoped>
 .modal {
-	width: 300px;
+	width: 100%;
 }
 .content-modal {
 	&__body {
