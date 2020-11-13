@@ -11,6 +11,8 @@
 			:label="$t('pages.administration.ldap.connection.server.url')"
 			:placeholder="$t('pages.administration.ldap.connection.server.url')"
 			:info="$t('pages.administration.ldap.connection.server.info')"
+			:validation-model="$v.value.url"
+			:validation-messages="urlValidationMessages"
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		/>
 		<base-input
@@ -20,6 +22,8 @@
 			:label="$t('pages.administration.ldap.connection.basis.pfad')"
 			:placeholder="$t('pages.administration.ldap.connection.basis.pfad')"
 			:info="$t('pages.administration.ldap.connection.basis.pfad.info')"
+			:validation-model="$v.value.basisPfad"
+			:validation-messages="pathSearchValidationMessages"
 			@update:vmodel="$emit('input', { ...value, basisPfad: $event })"
 		/>
 		<base-input
@@ -29,6 +33,8 @@
 			:label="$t('pages.administration.ldap.connection.search.user')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user')"
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
+			:validation-model="$v.value.searchUser"
+			:validation-messages="pathSearchValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		/>
 		<base-input
@@ -39,16 +45,67 @@
 			:placeholder="
 				$t('pages.administration.ldap.connection.search.user.password')
 			"
+			:validation-model="$v.value.searchUserPassword"
+			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
 		/>
 	</div>
 </template>
 <script>
+import { required } from "vuelidate/lib/validators";
+import {
+	ldapPathValidationRegex,
+	urlProtocolValidationRegex,
+} from "@utils/ldapValidationRegex";
+
 export default {
-	// eslint-disable-next-line vue/require-prop-types
-	props: ["value"],
+	props: {
+		value: {
+			type: Object,
+			default() {
+				return {};
+			},
+		},
+		validate: {
+			type: Boolean,
+		},
+	},
 	data() {
-		return {};
+		return {
+			pathSearchValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+				{
+					key: "ldapPathValidationRegex",
+					message: "Please match LDAP path format",
+				},
+			],
+			urlValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+				{
+					key: "urlProtocolValidationRegex",
+					message: "Please match a valid URL format",
+				},
+			],
+			passwordValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+		};
+	},
+	watch: {
+		validate: function () {
+			this.$v.$touch();
+			this.$emit("update:errors", this.$v.$invalid, "roles");
+		},
+	},
+	validations() {
+		return {
+			value: {
+				url: { required, urlProtocolValidationRegex },
+				basisPfad: { required, ldapPathValidationRegex },
+				searchUser: { required, ldapPathValidationRegex },
+				searchUserPassword: { required },
+			},
+		};
 	},
 };
 </script>
