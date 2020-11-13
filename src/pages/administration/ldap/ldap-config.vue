@@ -81,6 +81,7 @@ export default {
 			],
 			ldapConfigData: {
 				// Roles Section Data
+				groupOption: "ldap_group",
 				member: "",
 				student: "",
 				teacher: "",

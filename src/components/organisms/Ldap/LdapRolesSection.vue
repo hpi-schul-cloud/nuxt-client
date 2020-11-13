@@ -12,7 +12,7 @@
 		</p>
 		<div role="group" class="section-sub-header">
 			<base-input
-				v-model="ldapGroupOption"
+				:vmodel="value.groupOption"
 				type="radio"
 				:label="
 					this.$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
@@ -20,10 +20,10 @@
 				name="group"
 				style="margin-right: var(--space-sm);"
 				value="ldap_group"
-				class="ldapRadio"
+				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			/>
 			<base-input
-				v-model="ldapGroupOption"
+				:vmodel="value.groupOption"
 				type="radio"
 				:label="
 					this.$t(
@@ -32,7 +32,7 @@
 				"
 				name="group"
 				value="user_attribute"
-				class="ldapRadio"
+				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			/>
 			<p class="text-sm" style="margin-top: var(--space-xs);">
 				{{
@@ -43,9 +43,8 @@
 			</p>
 		</div>
 		<base-input
-			ref="ldapDataRolesMember"
 			:vmodel="value.member"
-			:disabled="ldapGroupOption === 'ldap_group'"
+			:disabled="value.groupOption === 'ldap_group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
 			:placeholder="
@@ -58,7 +57,6 @@
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesStudent"
 			:vmodel="value.student"
 			type="text"
 			v-bind="$attrs"
@@ -73,7 +71,6 @@
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesTeacher"
 			:vmodel="value.teacher"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.teacher')"
@@ -87,7 +84,6 @@
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesAdmin"
 			:vmodel="value.admin"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.admin')"
@@ -101,7 +97,6 @@
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		/>
 		<base-input
-			ref="ldapDataRolesUser"
 			:vmodel="value.user"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.user')"
@@ -154,7 +149,7 @@ export default {
 		},
 	},
 	validations() {
-		if (this.ldapGroupOption !== "ldap_group") {
+		if (this.groupOption !== "ldap_group") {
 			return {
 				value: {
 					member: { required },
