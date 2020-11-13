@@ -3,7 +3,7 @@
 		<h1 class="mb--md h4">
 			{{ this.$t("pages.administration.ldapEdit.roles.headLines.title") }}
 		</h1>
-		<p>
+		<p class="description-section">
 			{{
 				this.$t(
 					"pages.administration.ldapEdit.roles.headLines.sectionDescription"
@@ -130,7 +130,6 @@ export default {
 	},
 	data() {
 		return {
-			ldapGroupOption: "ldap_group",
 			memberValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
@@ -149,7 +148,7 @@ export default {
 		},
 	},
 	validations() {
-		if (this.groupOption !== "ldap_group") {
+		if (this.value.groupOption !== "ldap_group") {
 			return {
 				value: {
 					member: { required },
@@ -169,7 +168,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .section-sub-header {
 	margin-bottom: var(--space-xs);
+}
+
+.description-section {
+	margin-bottom: var(--space-xl);
 }
 </style>

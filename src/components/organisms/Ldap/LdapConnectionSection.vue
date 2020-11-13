@@ -5,6 +5,7 @@
 		</h3>
 
 		<base-input
+			data-testid="ldapDataConnectionUrl"
 			:vmodel="value.url"
 			type="text"
 			class="mt--xl"
@@ -16,6 +17,7 @@
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataConnectionBasisPfad"
 			:vmodel="value.basisPfad"
 			type="text"
 			class="mt--xl"
@@ -27,6 +29,7 @@
 			@update:vmodel="$emit('input', { ...value, basisPfad: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataConnectionSearchUser"
 			:vmodel="value.searchUser"
 			type="text"
 			class="mt--xl"
@@ -38,6 +41,7 @@
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataConnectionSearchUserPassword"
 			:vmodel="value.searchUserPassword"
 			type="password"
 			class="mt--xl"
@@ -55,7 +59,7 @@
 import { required } from "vuelidate/lib/validators";
 import {
 	ldapPathValidationRegex,
-	urlProtocolValidationRegex,
+	urlValidationRegex,
 } from "@utils/ldapValidationRegex";
 
 export default {
@@ -82,7 +86,7 @@ export default {
 			urlValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
-					key: "urlProtocolValidationRegex",
+					key: "urlValidationRegex",
 					message: "Please match a valid URL format",
 				},
 			],
@@ -94,13 +98,13 @@ export default {
 	watch: {
 		validate: function () {
 			this.$v.$touch();
-			this.$emit("update:errors", this.$v.$invalid, "roles");
+			this.$emit("update:errors", this.$v.$invalid, "connection");
 		},
 	},
 	validations() {
 		return {
 			value: {
-				url: { required, urlProtocolValidationRegex },
+				url: { required, urlValidationRegex },
 				basisPfad: { required, ldapPathValidationRegex },
 				searchUser: { required, ldapPathValidationRegex },
 				searchUserPassword: { required },

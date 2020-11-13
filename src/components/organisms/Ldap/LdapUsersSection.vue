@@ -8,6 +8,7 @@
 		</p>
 
 		<base-input
+			data-testid="ldapDataUsersUserPfad"
 			:vmodel="value.userPfad"
 			type="text"
 			class="mt--xl"
@@ -23,6 +24,7 @@
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
+			data-testid="ldapDataUsersFirstName"
 			:vmodel="value.firstName"
 			type="text"
 			class="mt--xl"
@@ -33,6 +35,7 @@
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataUsersFamilyName"
 			:vmodel="value.familyName"
 			type="text"
 			class="mt--xl"
@@ -43,16 +46,18 @@
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataUsersEmail"
 			:vmodel="value.email"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.email')"
 			:validation-model="$v.value.email"
-			:validation-messages="usersValidationMessage"
+			:validation-messages="emailValidationMessages"
 			datatest-id="ldapDataUsersEmail"
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataUsersUid"
 			:vmodel="value.uid"
 			type="text"
 			class="mt--xl"
@@ -64,6 +69,7 @@
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataUsersUuid"
 			:vmodel="value.uuid"
 			type="text"
 			class="mt--xl"
@@ -78,11 +84,10 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required, email } from "vuelidate/lib/validators";
 import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
 
 export default {
-	// eslint-disable-next-line vue/require-prop-types
 	props: {
 		value: {
 			type: Object,
@@ -106,13 +111,16 @@ export default {
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
+			emailValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+				{ key: "email", message: this.$t("common.validation.email") },
+			],
 		};
 	},
 	watch: {
 		validate: function () {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "users");
-			console.log(this.$v);
 		},
 	},
 	validations() {
@@ -121,7 +129,7 @@ export default {
 				userPfad: { required, ldapPathValidationRegex },
 				firstName: { required },
 				familyName: { required },
-				email: { required },
+				email: { required, email },
 				uid: { required },
 				uuid: { required },
 			},

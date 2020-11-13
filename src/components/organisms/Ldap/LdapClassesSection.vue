@@ -14,6 +14,7 @@
 			{{ $t("pages.administration.ldap.classes.pfad.subtitle") }}
 		</p>
 		<base-input
+			data-testid="ldapDataClassesPfad"
 			:vmodel="value.classPfad"
 			:disabled="unchecked === false"
 			type="text"
@@ -29,6 +30,7 @@
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
+			data-testid="ldapDataClassesNameAttribute"
 			:vmodel="value.nameAttribute"
 			:disabled="unchecked === false"
 			type="text"
@@ -40,6 +42,7 @@
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		/>
 		<base-input
+			data-testid="ldapDataClassesNameparticipantAttribute"
 			:vmodel="value.participantAttribute"
 			:disabled="unchecked === false"
 			type="text"
@@ -91,7 +94,6 @@ export default {
 		validate: function () {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "classes");
-			console.log(this.$v);
 		},
 	},
 	validations() {
