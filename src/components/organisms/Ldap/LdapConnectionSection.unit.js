@@ -42,7 +42,6 @@ describe("@components/organisms/LdapConnectionSection", () => {
 				value: ldapConfigData,
 			},
 		});
-		console.log(wrapper.vm.$v.$invalid);
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
 
