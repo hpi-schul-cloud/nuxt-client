@@ -80,14 +80,14 @@ export default {
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
 					key: "ldapPathValidationRegex",
-					message: "Please match LDAP path format",
+					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 			],
 			urlValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{
 					key: "urlValidationRegex",
-					message: "Please match a valid URL format",
+					message: this.$t("pages.administration.ldapEdit.validation.url"),
 				},
 			],
 			passwordValidationMessages: [

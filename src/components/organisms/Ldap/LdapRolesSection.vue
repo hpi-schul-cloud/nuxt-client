@@ -136,7 +136,7 @@ export default {
 			rolesValidationMessages: [
 				{
 					key: "ldapPathValidationRegex",
-					message: "Please match LDAP path format",
+					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 			],
 		};

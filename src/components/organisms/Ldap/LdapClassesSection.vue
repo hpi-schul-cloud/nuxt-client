@@ -85,7 +85,7 @@ export default {
 			classPfadValidationMessage: [
 				{
 					key: "ldapPathValidationRegex",
-					message: "Please match LDAP path format",
+					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
 			],

@@ -486,5 +486,7 @@
 	"pages.administration.ldapEdit.roles.info.student": "Bsp.: cn=schueler,ou=rollen,o=schule,dc=de",
 	"pages.administration.ldapEdit.roles.info.teacher": "Bsp.: cn=lehrer,ou=rollen,o=schule,dc=de",
 	"pages.administration.ldapEdit.roles.info.admin": "Bsp.: cn=admin,ou=rollen,o=schule,dc=de",
-	"pages.administration.ldapEdit.roles.info.user": "Bsp.: cn=ehemalige,ou=rollen,o=schule,dc=de"
+	"pages.administration.ldapEdit.roles.info.user": "Bsp.: cn=ehemalige,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.validation.path": "Bitte verwenden Sie das LDAP Pfad Format",
+	"pages.administration.ldapEdit.validation.url": "Bitte verwenden Sie ein valides URL Format"
 }
