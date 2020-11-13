@@ -19,6 +19,7 @@ const routes = [
 	// `^/administration/students/consent/?$`,
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
+	// `^/administration/ldap/ldap-config/?$`,
 	`^/login-instances/?`,
 	//`^/calendar/?`,
 	`^/error/`,
