@@ -27,7 +27,12 @@
 				v-model="ldapConfigData"
 				data-testid="ldapConnectionSection"
 			/>
-			<users-section v-model="ldapConfigData" />
+			<users-section
+				v-model="ldapConfigData"
+				:validate="triggerValidation"
+				data-testid="ldapUsersSection"
+				@update:errors="updateValidationData"
+			/>
 			<classes-section
 				v-model="ldapConfigData"
 				:validate="triggerValidation"

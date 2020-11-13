@@ -14,6 +14,9 @@
 			:label="$t('pages.administration.ldap.users.pfad.title')"
 			:placeholder="$t('pages.administration.ldap.users.pfad.title')"
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
+			:validation-model="$v.value.userPfad"
+			:validation-messages="userPfadValidationMessage"
+			datatest-id="ldapDataUsersUserPfad"
 			@update:vmodel="$emit('input', { ...value, userPfad: $event })"
 		/>
 		<p class="pfad-hint">
@@ -24,6 +27,9 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.firstname')"
+			:validation-model="$v.value.firstName"
+			:validation-messages="usersValidationMessage"
+			datatest-id="ldapDataUsersFirstName"
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
 		/>
 		<base-input
@@ -31,6 +37,9 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.lastname')"
+			:validation-model="$v.value.familyName"
+			:validation-messages="usersValidationMessage"
+			datatest-id="ldapDataUsersFamilyName"
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
 		/>
 		<base-input
@@ -38,6 +47,9 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.pfad.email')"
+			:validation-model="$v.value.email"
+			:validation-messages="usersValidationMessage"
+			datatest-id="ldapDataUsersEmail"
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		/>
 		<base-input
@@ -46,6 +58,9 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uid.title')"
 			:info="$t('pages.administration.ldap.users.uid.info')"
+			:validation-model="$v.value.uid"
+			:validation-messages="usersValidationMessage"
+			datatest-id="ldapDataUsersUid"
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
 		/>
 		<base-input
@@ -54,17 +69,63 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
 			:info="$t('pages.administration.ldap.users.uuid.info')"
+			:validation-model="$v.value.uuid"
+			:validation-messages="usersValidationMessage"
+			datatest-id="ldapDataUsersUuid"
 			@update:vmodel="$emit('input', { ...value, uuid: $event })"
 		/>
 	</div>
 </template>
 
 <script>
+import { required } from "vuelidate/lib/validators";
+import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
+
 export default {
 	// eslint-disable-next-line vue/require-prop-types
-	props: ["value"],
+	props: {
+		value: {
+			type: Object,
+			default() {
+				return {};
+			},
+		},
+		validate: {
+			type: Boolean,
+		},
+	},
 	data() {
-		return {};
+		return {
+			usersValidationMessage: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+			userPfadValidationMessage: [
+				{
+					key: "ldapPathValidationRegex",
+					message: "Please match LDAP path format",
+				},
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+		};
+	},
+	watch: {
+		validate: function () {
+			this.$v.$touch();
+			this.$emit("update:errors", this.$v.$invalid, "users");
+			console.log(this.$v);
+		},
+	},
+	validations() {
+		return {
+			value: {
+				userPfad: { required, ldapPathValidationRegex },
+				firstName: { required },
+				familyName: { required },
+				email: { required },
+				uid: { required },
+				uuid: { required },
+			},
+		};
 	},
 };
 </script>
