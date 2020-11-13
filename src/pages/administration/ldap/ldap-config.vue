@@ -31,6 +31,7 @@
 				data-testid="ldapConnectionSection"
 			/>
 			<users-section v-model="ldapConfigData" data-testid="ldapUsersSection" />
+			<roles-section v-model="ldapConfigData" data-testid="ldapRolesSection" />
 			<classes-section
 				v-model="ldapConfigData"
 				data-testid="ldapClassesSection"
@@ -44,28 +45,27 @@ import { mapState } from "vuex";
 import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
 import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@components/organisms/Ldap/LdapClassesSection.vue";
+import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 export default {
 	components: {
 		ConnectionSection,
 		UsersSection,
+		RolesSection,
 		ClassesSection,
 	},
 	data() {
 		return {
 			breadcrumbs: [
 				{
-					// text: this.$t("pages.administration.index.title"),
-					text: "Administration",
+					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
 					icon: { source: "fa", icon: "cog" },
 				},
 				{
-					// text: this.$t("pages.administration.students.index.title"),
-					text: "Schools",
+					text: this.$t("pages.administration.ldap.index.title"),
 				},
 			],
 			ldapConfigData: {
-				// Roles Section Data
 				groupOption: "ldap_group",
 				member: "",
 				student: "",
@@ -92,7 +92,6 @@ export default {
 			},
 		};
 	},
-	layout: "loggedInFull",
 	computed: {
 		...mapState("auth", {
 			school: "school",

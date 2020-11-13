@@ -467,14 +467,27 @@
 	"pages.administration.ldap.connection.search.user.info": "Vollständige Nutzer-DN inkl. Root-Pfad des Nutzers der Zugriff auf alle Nutzerinformationen hat.",
 	"pages.administration.ldap.connection.search.user.password": "Password Such-Nutzer",
 
+	"pages.administration.ldapEdit.headLines.title": "Konfiguration Nutzer-Sync & Login durch LDAP",
+	"pages.administration.ldap.index.title": "Schulen",
 	"pages.administration.ldapEdit.roles.headLines.title": "Nutzer-Rollen",
 	"pages.administration.ldapEdit.roles.headLines.sectionDescription": "Im Folgenden, müssen die gefundenen Nutzer den vordefinierten Rollen der $longname zugeordnet werden.",
 	"pages.administration.ldapEdit.roles.labels.radio.ldapGroup": "LDAP-Gruppe",
 	"pages.administration.ldapEdit.roles.labels.radio.userAttribute": "Nutzer-Attribut",
 	"pages.administration.ldapEdit.roles.labels.radio.description": "Ist die Nutzerrolle im Nutzerattribut textuell gespeichert oder gibt es eine LDAP-Gruppe für die jeweiligen Nutzerrollen?",
-	"pages.administration.ldapEdit.roles.labels.member": "memberOf",
+	"pages.administration.ldapEdit.roles.labels.admin": "Attributwert Admin",
+	"pages.administration.ldapEdit.roles.labels.noSchoolCloud": "Attributwert Nutzer:innen ignorieren",
+	"pages.administration.ldapEdit.roles.labels.member": "Rollen-Attribut",
+
 	"pages.administration.ldapEdit.roles.labels.student": "Attributwert Schüler:in",
 	"pages.administration.ldapEdit.roles.labels.teacher": "Attributwert Lehrer:in",
-	"pages.administration.ldapEdit.roles.labels.admin": "Attributwert Admin",
-	"pages.administration.ldapEdit.roles.labels.noSchoolCloud": "Attributwert Nutzer:innen ignorieren"
+	"pages.administration.ldapEdit.roles.labels.user": "Attributwert Nutzer:innen ignorieren",
+	"pages.administration.ldapEdit.roles.placeholder.member": "memberOf",
+	"pages.administration.ldapEdit.roles.placeholder.student": "Attributwert Schüler:in",
+	"pages.administration.ldapEdit.roles.placeholder.teacher": "Attributwert Lehrer:in",
+	"pages.administration.ldapEdit.roles.placeholder.admin": "Attributwert Admin",
+	"pages.administration.ldapEdit.roles.placeholder.user": "Attributwert Nutzer:innen ignorieren",
+	"pages.administration.ldapEdit.roles.info.student": "Bsp.: cn=schueler,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.roles.info.teacher": "Bsp.: cn=lehrer,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.roles.info.admin": "Bsp.: cn=admin,ou=rollen,o=schule,dc=de",
+	"pages.administration.ldapEdit.roles.info.user": "Bsp.: cn=ehemalige,ou=rollen,o=schule,dc=de"
 }
