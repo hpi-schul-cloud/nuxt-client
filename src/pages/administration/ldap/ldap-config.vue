@@ -51,15 +51,6 @@
 				@update:errors="updateValidationData"
 			/>
 		</div>
-		<!-- Place holder button to test input validation -->
-		<base-button
-			type="submit"
-			class="w-20 mt--lg"
-			data-testid="button_create-user_submit"
-			@click="validateHandler"
-		>
-			Validate
-		</base-button>
 	</section>
 </template>
 
