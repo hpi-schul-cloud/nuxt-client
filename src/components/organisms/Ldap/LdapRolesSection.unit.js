@@ -46,7 +46,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
 
-	it("invalid validation is false when input values are valid", async () => {
+	it("invalid validation is false when valid values are sent thorugh props", async () => {
 		const wrapper = mount(LdapRolesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
@@ -60,6 +60,29 @@ describe("@components/organisms/LdapRolesSection", () => {
 		await wrapper.vm.$v.$touch();
 		// default props values are valid so expect this assertion to succeed
 		expect(wrapper.vm.$v.$invalid).toBe(false);
+	});
+
+	it("invalid validation is true when invalid values are sent thorugh props", async () => {
+		const wrapper = mount(LdapRolesSection, {
+			...createComponentMocks({ i18n: true }),
+			propsData: {
+				value: ldapConfigData,
+			},
+		});
+
+		await wrapper.setProps({
+			value: {
+				groupOption: "not ldap group",
+				member: "",
+				student: "invalid",
+				teacher: "invalid",
+				admin: "invalid",
+				user: "invalid",
+			},
+		});
+
+		await wrapper.vm.$v.$touch();
+		expect(wrapper.vm.$v.$invalid).toBe(true);
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
