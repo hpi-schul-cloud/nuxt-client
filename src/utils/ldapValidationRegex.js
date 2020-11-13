@@ -7,5 +7,5 @@ export const ldapPathValidationRegex = helpers.regex(
 
 export const urlProtocolValidationRegex = helpers.regex(
 	"alpha",
-	/^^ldaps:\/\//
+	/^ldaps:\/\/[\w\.-]+\.[a-z]+(:\d+)?$/
 );
