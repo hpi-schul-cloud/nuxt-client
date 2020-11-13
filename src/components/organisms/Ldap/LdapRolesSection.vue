@@ -3,7 +3,7 @@
 		<h1 class="mb--md h4">
 			{{ this.$t("pages.administration.ldapEdit.roles.headLines.title") }}
 		</h1>
-		<p>
+		<p class="description-section">
 			{{
 				this.$t(
 					"pages.administration.ldapEdit.roles.headLines.sectionDescription"
@@ -116,7 +116,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
+
 .section-sub-header {
 	margin-bottom: var(--space-xs);
+}
+
+.description-section {
+	margin-bottom: var(--space-xl);
 }
 </style>
