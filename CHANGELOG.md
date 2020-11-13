@@ -19,6 +19,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
+- SC-7557 - fixes lernstore modal width
 
 ### Changed
 
