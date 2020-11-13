@@ -11,17 +11,20 @@
 		<p class="subtitle-text">
 			{{ $t("pages.administration.ldap.subtitle.two") }}
 		</p>
-		{{ $t("pages.administration.ldap.subtitle.help") }}
-		<base-link
-			class="link-style"
-			to="/"
-			href="https://docs.schul-cloud.org/x/PgBVAw"
-			target="_blank"
-			:no-styles="true"
-			traget="_blank"
-		>
-			{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
-		</base-link>
+		<div class="help-section">
+			{{ $t("pages.administration.ldap.subtitle.help") }}
+			<base-link
+				class="link-style"
+				to="/"
+				href="https://docs.schul-cloud.org/x/PgBVAw"
+				target="_blank"
+				:no-styles="true"
+				traget="_blank"
+			>
+				{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
+			</base-link>
+		</div>
+
 		<div class="form-container">
 			<connection-section
 				v-model="ldapConfigData"
@@ -109,11 +112,15 @@ export default {
 	margin-bottom: var(--space-xl);
 }
 
+.help-section {
+	margin-bottom: var(--space-xl-4);
+}
+
 .form-container {
 	margin: 0;
 
 	@include breakpoint(tablet) {
-		margin: 0 var(--space-xl-5);
+		margin: 0 var(--space-xl-4);
 	}
 }
 </style>
