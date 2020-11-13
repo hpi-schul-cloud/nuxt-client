@@ -89,7 +89,7 @@
 		"@schul-cloud/styles": "^0.2.1",
 		"@storybook/addon-a11y": "^5.3.19",
 		"@storybook/addon-actions": "^6.0.28",
-		"@storybook/addon-backgrounds": "^5.3.19",
+		"@storybook/addon-backgrounds": "^6.0.28",
 		"@storybook/addon-centered": "^5.3.19",
 		"@storybook/addon-knobs": "^6.0.28",
 		"@storybook/addon-notes": "^5.3.21",
