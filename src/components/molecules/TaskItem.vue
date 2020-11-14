@@ -29,7 +29,7 @@
 				id="pulsating-dot"
 				color="var(--color-secondary)"
 			/>
-			<span style="position: relative;">
+			<span style="position: relative">
 				<base-button
 					design="text icon"
 					aria-label="menu"
