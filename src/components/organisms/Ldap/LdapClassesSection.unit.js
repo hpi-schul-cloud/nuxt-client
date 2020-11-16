@@ -42,7 +42,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
 
-	it("invalid validation is false when valid values are sent thorugh props", async () => {
+	it("invalid validation is false when valid values are sent through props", async () => {
 		const wrapper = mount(LdapClassesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
@@ -51,38 +51,39 @@ describe("@components/organisms/LdapClassesSection", () => {
 		});
 		// validations are only active when unchecked === true
 		await wrapper.setData({ unchecked: true });
-
-		await wrapper.vm.$v.$touch();
 		// default props values are valid so expect this assertion to succeed
 		expect(wrapper.vm.$v.$invalid).toBe(false);
 	});
 
-	it("invalid validation is true when invalid values are sent thorugh props", async () => {
+	it("invalid validation is true when invalid values are sent through props", async () => {
 		const wrapper = mount(LdapClassesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				value: ldapConfigData,
+				value: {
+					classPfad: "invalid",
+					nameAttribute: "",
+					participantAttribute: "",
+				},
 			},
 		});
-		// validations are only active when unchecked === true
 		await wrapper.setData({ unchecked: true });
-		await wrapper.setProps({
-			value: {
-				classPfad: "invalid",
-				nameAttribute: "",
-				participantAttribute: "",
-			},
-		});
-
-		await wrapper.vm.$v.$touch();
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
+		const ldapConfigDataTestSpecific = { ...ldapConfigData };
 		const wrapper = mount(LdapClassesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				value: ldapConfigData,
+				value: ldapConfigDataTestSpecific,
+			},
+			listeners: {
+				input: (event) => {
+					ldapConfigDataTestSpecific.classPfad = event.classPfad;
+					ldapConfigDataTestSpecific.nameAttribute = event.nameAttribute;
+					ldapConfigDataTestSpecific.participantAttribute =
+						event.participantAttribute;
+				},
 			},
 		});
 		// validations are only active when unchecked === true
@@ -91,13 +92,16 @@ describe("@components/organisms/LdapClassesSection", () => {
 		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPfad]");
 		expect(inputPath.exists()).toBe(true);
 
-		// inputPath.setValue("");
-		// expect(inputPath.element.value).toBe("");
+		inputPath.setValue("");
+		inputPath.trigger("blur"); // without this the error is not displayed
 
-		// temporary fix for validation model not updating
-		wrapper.vm.$v.value.classPfad.$model = "";
-
+		expect(inputPath.element.value).toBe("");
 		expect(wrapper.vm.$v.$invalid).toBe(true);
+		await wrapper.vm.$nextTick();
+		const errorMessageComponent = wrapper.find(
+			"div[data-testid='ldapDataClassesPfad'] .info.error"
+		);
+		expect(errorMessageComponent.exists()).toBeTrue();
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
