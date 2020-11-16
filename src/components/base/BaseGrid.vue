@@ -41,4 +41,8 @@ export default {
 		margin: 0 calc(41 * var(--border-width)); /* 41px */
 	}
 }
+
+.grid.no-margin {
+	margin: 0;
+}
 </style>
