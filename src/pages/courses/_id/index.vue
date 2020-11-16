@@ -20,7 +20,7 @@
 							:title="$t('pages.courses._id.emptyCourseTitle')"
 						>
 							<template v-slot:description>
-								<span style="display: block;">
+								<span style="display: block">
 									{{ $t("pages.courses._id.emptyCourseDescription") }}</span
 								>
 								<base-button
