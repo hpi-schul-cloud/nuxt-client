@@ -434,7 +434,7 @@
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"pages.administration.ldap.title": "Konfiguration Nutzer-Sync & Login durch LDAP",
 	"pages.administration.ldap.subtitle.one": "Jegliche Änderungen an der folgenden Konfiguration kann zur Folge haben, dass der Login für Sie und alle Nutzer Ihrer Schule nicht mehr funktioniert. Daher nehmen Sie nur Änderungen vor, wenn Ihnen die Konsequenzen bewusst sind. Einige Bereiche sind nur lesbar.",
-	"pages.administration.ldap.subtitle.two": "Konfiguration Nutzer-Sync & Login durch LDAP Jegliche Änderungen an der folgenden Konfiguration kann zur Folge haben, dass der Login für Sie und alle Nutzer Ihrer Schule nicht mehr funktioniert. Daher nehmen Sie nur Änderungen vor, wenn Ihnen die Konsequenzen bewusst sind. Einige Bereiche sind nur lesbar. Nach der Verifizierung können Sie sich die ausgelesenen Inhalte in der Vorschau ansehen. Gestrichene Inhalte werden nicht übernommen, da bei dem Nutzer der Vorname, der Nachname und/oder die E-Mail-Adresse nicht im LDAP verfügbar sind.",
+	"pages.administration.ldap.subtitle.two": "Nach der Verifizierung können Sie sich die ausgelesenen Inhalte in der Vorschau ansehen. Gestrichene Inhalte werden nicht übernommen, da bei dem Nutzer der Vorname, der Nachname und/oder die E-Mail-Adresse nicht im LDAP verfügbar sind.",
 	"pages.administration.ldap.subtitle.help": "Weitere Informationen findest du in unserem ",
 	"pages.administration.ldap.subtitle.helping.link": "Hilfebereich zur LDAP-Konfiguration",
 	"pages.administration.ldap.classes.title": "Klassen (optional)",
