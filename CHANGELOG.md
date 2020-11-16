@@ -16,6 +16,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6709 - added data-testids to the teachers table in administration page
 - SC-7629 - created Roles component to the ldap page
 - OPS-1508 - added limits for cpu and ram to the docker compose files
+- SC-7489 - added input validation to the ldap config components
 
 ### Fixed
 
