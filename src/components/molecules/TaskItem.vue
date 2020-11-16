@@ -166,10 +166,6 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	@include breakpoint(tablet) {
 		min-width: 2.75rem;
 	}
-
-	@include breakpoint(desktop) {
-		min-width: 3.43rem;
-	}
 }
 
 .status {
