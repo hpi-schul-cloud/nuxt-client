@@ -1,8 +1,8 @@
 <template>
 	<legacy-logged-in>
-		<base-content-container id="main-content" tag="main" class="content">
+		<main id="main-content" class="content" :class="{ inline: isInline }">
 			<Nuxt />
-		</base-content-container>
+		</main>
 	</legacy-logged-in>
 </template>
 
@@ -13,6 +13,11 @@ export default {
 	components: {
 		LegacyLoggedIn,
 	},
+	computed: {
+		isInline() {
+			return !!this.$route.query.inline;
+		},
+	},
 };
 </script>
 
@@ -22,11 +27,10 @@ export default {
 .content {
 	grid-area: content;
 	width: inherit;
+	min-height: calc(100vh - var(--sidebar-item-height));
+	overflow-x: auto;
+}
+.content.inline {
 	min-height: 100vh;
-	padding: 0 var(--space-lg);
-
-	@include breakpoint(tablet) {
-		padding: 0 var(--space-xl-3);
-	}
 }
 </style>
