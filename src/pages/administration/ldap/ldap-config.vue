@@ -68,6 +68,9 @@ export default {
 		UsersSection,
 		ClassesSection,
 	},
+	meta: {
+		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
+	},
 	data() {
 		return {
 			breadcrumbs: [
