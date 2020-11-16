@@ -10,14 +10,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-7488 - added 3 components in the organisms/ldap for the ldap-config form
 - SC-6293 - restricts Lern-Store access by permission
 - SC-6708 - added data-testids to the students table in administration page
 - SC-6709 - added data-testids to the teachers table in administration page
+- SC-7629 - created Roles component to the ldap page
 - OPS-1508 - added limits for cpu and ram to the docker compose files
+- SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission to check to ldap config page
 
 ### Fixed
 
 - SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
+- SC-7557 - fixes lernstore modal width
 
 ### Changed
 
