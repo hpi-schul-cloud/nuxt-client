@@ -135,7 +135,7 @@
 		"nuxt-babel": "^1.0.1",
 		"postcss-color-mod-function": "^3.0.3",
 		"postcss-loader": "^4.0.4",
-		"prettier": "^2.0.5",
+		"prettier": "^2.1.2",
 		"puppeteer": "^5.2.1",
 		"sass-loader": "^10.1.0",
 		"serve": "^11.3.2",
