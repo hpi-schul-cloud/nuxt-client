@@ -53,12 +53,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-	currentDate,
-	fromUTC,
-	printDateTime,
-	printDateSlashed,
-} from "@plugins/datetime";
+import { currentDate, fromUTC, printDateFromDayJs } from "@plugins/datetime";
 import { min } from "lodash";
 
 import Tabs from "@components/organisms/Tabs/Tabs";
@@ -199,7 +194,7 @@ export default {
 			const dueDate = fromUTC(homework.dueDate);
 			const prefix = `${this.$t(
 				"pages.courses._id.homework.until"
-			)} ${printDateSlashed(dueDate)}`;
+			)} ${printDateFromDayJs(dueDate)}`;
 			if (dueDate <= tomorrow && dueDate > now) {
 				const remainingHours = dueDate.diff(now, "h");
 				return `${prefix} - ${this.$t(

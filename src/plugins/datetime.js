@@ -19,7 +19,6 @@ let userHasSchoolTimezone = true;
 
 export const DATETIME_FORMAT = {
 	date: "DD.MM.YYYY",
-	dateSlashed: "DD/MM/YYYY",
 	dateTime: "DD.MM.YYYY HH:mm",
 	dateLong: "dddd, DD. MMMM YYYY",
 	time: "HH:mm",
@@ -149,8 +148,8 @@ export const printDateTime = (date) => {
  * @param {String} date
  * @return {String} Date string based on current timezone using locale date formating slashed
  */
-export const printDateSlashed = (date) => {
-	return date.format(DATETIME_FORMAT.dateSlashed);
+export const printDateFromDayJs = (date) => {
+	return date.format(DATETIME_FORMAT.date);
 };
 
 /**
