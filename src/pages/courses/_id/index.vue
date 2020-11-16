@@ -53,7 +53,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { currentDate, fromUTC, printDateFromDayJs } from "@plugins/datetime";
+import {
+	currentDate,
+	fromUTC,
+	printDateFromDayJs,
+	printDateTime,
+} from "@plugins/datetime";
 import { min } from "lodash";
 
 import Tabs from "@components/organisms/Tabs/Tabs";
