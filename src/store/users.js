@@ -18,10 +18,7 @@ const module = mergeDeep(base, {
 			ctx.commit("resetBusinessError");
 			const customEndpoint = "/users/admin/students";
 			return this.$axios.$post(customEndpoint, studentData).catch((error) => {
-				if (!this.getters["error/isPresent"]) {
-					ctx.commit("setBusinessError", error.response.data);
-				}
-				throw error;
+				ctx.commit("setBusinessError", error.response.data);
 			});
 		},
 		sendRegistrationLink(ctx, payload = {}) {

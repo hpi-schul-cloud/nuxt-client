@@ -98,8 +98,7 @@ export default {
 					this.$router.push({
 						path: `/administration/students`,
 					});
-				})
-				.catch(() => {});
+				});
 		},
 	},
 };
