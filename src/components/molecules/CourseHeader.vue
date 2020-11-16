@@ -7,9 +7,14 @@
 		v-on="$listeners"
 	>
 		<div class="subtitle-container">
-			<div class="next-lesson-container">
-				<base-icon source="custom" icon="clock"></base-icon>
-				{{ nextLessonDate }}
+			<div class="next-lesson-container" :style="calculateColor">
+				<base-icon class="clock-icon" source="custom" icon="clock"></base-icon>
+				<template v-if="nextLessonDate">
+					{{ nextLessonDate }}
+				</template>
+				<template v-else>
+					{{ $t("pages.courses._id.header.noLessonDate") }}
+				</template>
 			</div>
 			<base-link :href="redirectUrl" class="course-files-link">
 				<base-icon source="material" icon="folder"></base-icon>
@@ -32,7 +37,7 @@ export default {
 	props: {
 		nextLessonDate: {
 			type: String,
-			required: true,
+			default: () => undefined,
 		},
 		courseId: {
 			type: String,
@@ -46,6 +51,16 @@ export default {
 		redirectUrl() {
 			return `/files/courses/${this.courseId}`;
 		},
+		calculateColor() {
+			if (this.nextLessonDate) {
+				return {
+					color: "var(--color-tertiary)",
+				};
+			}
+			return {
+				color: "var(--color-disabled-dark)",
+			};
+		},
 	},
 };
 </script>
@@ -58,13 +73,16 @@ export default {
 	align-items: center;
 }
 
+.clock-icon {
+	margin-right: var(--space-xs-3);
+}
+
 .next-lesson-container {
 	display: flex;
 	align-items: center;
 	margin-right: var(--space-lg);
 	font-family: var(--font-accent);
 	font-weight: var(--font-weight-bold);
-	color: var(--color-tertiary);
 }
 
 .course-files-link {

@@ -25,7 +25,7 @@
 				<base-icon
 					icon="close"
 					source="material"
-					style="font-size: var(--text-sm);"
+					style="font-size: var(--text-sm)"
 				/>
 			</base-button>
 		</div>
