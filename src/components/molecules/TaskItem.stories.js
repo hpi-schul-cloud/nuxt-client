@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import TaskItem from "@components/molecules/TaskItem";
-import ExampleImage from "@assets/img/courses/draft.svg";
+import ExampleImage from "@assets/img/courses/task-draft.svg";
 import { boolean, text } from "@storybook/addon-knobs";
 
 storiesOf("5 Molecules/TaskItem", module)
@@ -19,7 +19,7 @@ storiesOf("5 Molecules/TaskItem", module)
 			contextOpen: false,
 		}),
 		template: `<div>
-		<TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">	
+		<TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
 		</TaskItem>
 	</div>`,
 	}))

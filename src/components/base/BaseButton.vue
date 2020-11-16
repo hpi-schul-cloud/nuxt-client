@@ -75,6 +75,7 @@ export default {
 					"danger outline",
 					"fancy",
 					"fancy icon",
+					"floating-action-button",
 				].includes(design);
 				if (!defined) {
 					throw new Error(`the design "${design}" is not available`);
