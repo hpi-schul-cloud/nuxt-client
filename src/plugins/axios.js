@@ -24,6 +24,11 @@ export default function ({ $axios, store, error }) {
 			unrecoverableError.statusCode = !err.response
 				? null
 				: err.response.data.code;
+			if (!err.response) {
+				err.response = {
+					data: unrecoverableError,
+				};
+			}
 			store.commit("error/set", unrecoverableError);
 			error(unrecoverableError);
 		}
