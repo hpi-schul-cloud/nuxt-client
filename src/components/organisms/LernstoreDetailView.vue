@@ -55,6 +55,38 @@
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
+				<div>
+					<base-button
+						v-if="isMerlinContent"
+						design="outline"
+						@click="
+							() => {
+								goToMerlinContent(merlinTokenReference);
+							}
+						"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+					<base-button
+						v-else
+						design="outline"
+						:href="downloadUrl"
+						target="_blank"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+					<!-- This will be replaced with Modal -->
+					<div v-if="isBrandenburg" class="external-content-warning">
+						<p class="text-s external-content-title">
+							{{ $t("pages.content.material.leavePageWarningMain") }}
+						</p>
+						<p class="text-xs">
+							{{ $t("pages.content.material.leavePageWarningFooter") }}
+						</p>
+					</div>
+				</div>
 				<!-- eslint-disable vue/no-v-html -->
 				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
@@ -74,32 +106,9 @@
 							</div>
 						</div>
 					</div>
-					<div v-if="downloadUrl" class="meta-container">
-						<div class="meta-icon">
-							<base-icon
-								:source="getTypeIcon(resource.mimetype).iconSource"
-								:icon="getTypeIcon(resource.mimetype).icon"
-							/>
-						</div>
-						<div class="meta-text text-wrap">
-							<base-link :href="downloadUrl" target="_blank" class="link">
-								{{ downloadUrl }}
-							</base-link>
-						</div>
-					</div>
-					<!-- This will be replaced with Modal -->
-					<div v-if="isBrandenburg" class="external-content-warning">
-						<p class="text-s external-content-title">
-							{{ $t("pages.content.material.leavePageWarningMain") }}
-						</p>
-						<p class="text-xs">
-							{{ $t("pages.content.material.leavePageWarningFooter") }}
-						</p>
-					</div>
-
-					<div class="meta-container">
-						<div class="meta-icon">
-							<base-icon source="fa" icon="tag" />
+					<div :style="{ margin: '0px' }" class="meta-container">
+						<div>
+							<base-icon class="meta-icon" source="custom" icon="hashtag" />
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
@@ -141,10 +150,14 @@
 import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
+
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
+
 import { getMetadataAttribute } from "@utils/helpers";
+
 const DEFAULT_AUTHOR = "admin";
+
 export default {
 	components: {
 		BaseLink,
@@ -189,6 +202,19 @@ export default {
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
+		isMerlinContent() {
+			const source = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsource"
+			);
+			return source && source.toLowerCase().includes("merlin");
+		},
+		merlinTokenReference() {
+			return getMetadataAttribute(
+				this.resource.properties,
+				"ccm:replicationsourceid"
+			);
+		},
 		description() {
 			return (
 				this.resource.description ||
@@ -223,6 +249,12 @@ export default {
 		},
 	},
 	methods: {
+		async goToMerlinContent(merlinReference) {
+			const url = await this.$axios.$get(
+				`/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
+			);
+			window.open(url, "_blank");
+		},
 		isNotStudent(roles) {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
@@ -277,10 +309,12 @@ $tablet-portrait-width: 768px;
 		justify-content: space-between;
 		width: 100%;
 		padding: var(--space-md);
+
 		.close-icon {
 			background-color: var(--color-gray-dark);
 			box-shadow: var(--shadow-sm);
 		}
+
 		.close-transparent {
 			color: var(--color-black);
 			background-color: var(--color-white);
@@ -295,6 +329,7 @@ $tablet-portrait-width: 768px;
 			position: sticky;
 			top: 0;
 		}
+
 		.preview {
 			position: relative;
 			display: flex;
@@ -305,6 +340,7 @@ $tablet-portrait-width: 768px;
 			@media (max-width: $tablet-portrait-width) {
 				height: 70vh;
 			}
+
 			.preview-background-color {
 				position: absolute;
 				top: 0;
@@ -316,6 +352,7 @@ $tablet-portrait-width: 768px;
 				height: 100%;
 				background-color: var(--color-tertiary);
 			}
+
 			.preview-background {
 				position: absolute;
 				top: 0;
@@ -329,6 +366,7 @@ $tablet-portrait-width: 768px;
 				background-size: cover;
 				opacity: 0.3;
 			}
+
 			img {
 				position: absolute;
 				z-index: var(--layer-page);
@@ -341,6 +379,7 @@ $tablet-portrait-width: 768px;
 			}
 		}
 	}
+
 	.sidebar {
 		position: relative;
 		display: flex;
@@ -358,6 +397,7 @@ $tablet-portrait-width: 768px;
 			max-height: none;
 			overflow: inherit;
 		}
+
 		.content-container {
 			width: 80%;
 			margin-top: var(--space-md);
@@ -376,6 +416,7 @@ $tablet-portrait-width: 768px;
 			display: flex;
 			justify-content: flex-end;
 		}
+
 		.title {
 			display: flex;
 			justify-content: space-between;
@@ -384,6 +425,7 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 			line-height: var(--line-height-md);
 		}
+
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
@@ -392,20 +434,24 @@ $tablet-portrait-width: 768px;
 				text-decoration: underline;
 			}
 		}
+
 		.description {
 			margin: var(--space-xl-2) 0;
 			font-size: var(--text-md);
 		}
+
 		.text-wrap {
 			display: flex;
 			flex-flow: row wrap;
 			word-break: break-word;
 		}
+
 		.metadata {
 			display: flex;
 			flex-direction: column;
 			font-size: var(--text-sm);
 			line-height: var(--line-height-lg);
+
 			.meta-container {
 				display: flex;
 				align-items: flex-start;
@@ -430,6 +476,7 @@ $tablet-portrait-width: 768px;
 				}
 			}
 		}
+
 		.floating-buttons {
 			position: sticky;
 			bottom: 0;

@@ -14,14 +14,13 @@
 				@focus="isActive = true"
 			/>
 			<div class="search__container--icon">
-				<base-button v-if="isActive" design="none" @click="enterKeyHandler">
-					<base-icon
-						class="search-icon"
-						source="custom"
-						aria-label="search"
-						icon="search"
-					/>
-				</base-button>
+				<base-icon
+					v-if="value === ''"
+					class="search-icon"
+					source="custom"
+					aria-label="search"
+					icon="search"
+				/>
 				<base-button v-else design="none" @click="clearBtnHandler">
 					<base-icon
 						class="search-icon"
@@ -150,6 +149,7 @@ export default {
 			justify-content: center;
 			height: 100%;
 			font-size: var(--heading-4);
+			color: var(--color-black);
 			cursor: pointer;
 
 			.icon {

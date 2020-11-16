@@ -41,6 +41,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
+			:show-external-text="!schoolInternallyManaged"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -264,12 +265,14 @@ export default {
 				{
 					icon: "check",
 					color: "var(--color-warning)",
-					label: this.$t("pages.administration.students.legend.icon.warning"),
+					label: this.$t(
+						"utils.adminFilter.consent.label.parentsAgreementMissing"
+					),
 				},
 				{
 					icon: "clear",
 					color: "var(--color-danger)",
-					label: this.$t("pages.administration.students.legend.icon.danger"),
+					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
 			filters: studentFilter(this),
@@ -369,11 +372,12 @@ export default {
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			this.page = 1;
+			//this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
 			this.$uiState.set("pagination", "pages.administration.students.index", {
 				itemsPerPage: limit,
+				currentPage: this.page,
 			});
 			this.find();
 		},

@@ -152,6 +152,7 @@ export default {
 					title: this.title,
 					client: this.client,
 					url: this.url,
+					merlinReference: this.$parent.getMerlinReference,
 				},
 				event: this.$eventBus,
 			});

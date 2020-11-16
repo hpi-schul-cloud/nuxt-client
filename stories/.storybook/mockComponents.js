@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import Vuelidate from "vuelidate";
 
 import "@plugins/global";
 
@@ -41,3 +42,4 @@ Object.keys(mockComponents).forEach((componentName) =>
 );
 
 Vue.use(Vuex);
+Vue.use(Vuelidate);
