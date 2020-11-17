@@ -17,7 +17,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 			},
 		});
 
-		expect(wrapper.find("[data-testid=ldapDataClassesPfad]").exists()).toBe(
+		expect(wrapper.find("[data-testid=ldapDataClassesPath]").exists()).toBe(
 			true
 		);
 		expect(
@@ -89,7 +89,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 		// validations are only active when unchecked === true
 		await wrapper.setData({ unchecked: true });
 
-		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPfad]");
+		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPath]");
 		expect(inputPath.exists()).toBe(true);
 
 		inputPath.setValue("");
@@ -99,7 +99,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataClassesPfad'] .info.error"
+			"div[data-testid='ldapDataClassesPath'] .info.error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});
@@ -147,12 +147,12 @@ describe("@components/organisms/LdapClassesSection", () => {
 		await wrapper.setData({ unchecked: true });
 
 		let errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataClassesPfad'] .info.error"
+			"div[data-testid='ldapDataClassesPath'] .info.error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalse();
 
-		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPfad]");
+		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPath]");
 		expect(inputPath.exists()).toBe(true);
 		expect(inputPath.element.value).toBe(ldapConfigDataTestSpecific.classPath);
 
@@ -160,7 +160,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 
 		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataClassesPfad'] .info.error"
+			"div[data-testid='ldapDataClassesPath'] .info.error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});

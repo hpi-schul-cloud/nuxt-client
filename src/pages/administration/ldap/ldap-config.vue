@@ -93,7 +93,7 @@ export default {
 				user: "",
 				// Connection Section Data
 				url: "",
-				basisPfad: "",
+				basisPath: "",
 				searchUser: "",
 				searchUserPassword: "",
 				// Classes Section Data
@@ -101,7 +101,7 @@ export default {
 				nameAttribute: "",
 				participantAttribute: "",
 				// Users Sections Data
-				userPfad: "",
+				userPath: "",
 				firstName: "",
 				familyName: "",
 				email: "",

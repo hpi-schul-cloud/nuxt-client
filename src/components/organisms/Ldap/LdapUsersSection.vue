@@ -8,19 +8,19 @@
 		</p>
 
 		<base-input
-			data-testid="ldapDataUsersUserPfad"
-			:vmodel="value.userPfad"
+			data-testid="ldapDataUsersUserPath"
+			:vmodel="value.userPath"
 			type="text"
 			class="mt--xl"
-			:label="$t('pages.administration.ldap.users.pfad.title')"
-			:placeholder="$t('pages.administration.ldap.users.pfad.title')"
-			:info="$t('pages.administration.ldap.classes.pfad.info')"
-			:validation-model="$v.value.userPfad"
-			:validation-messages="userPfadValidationMessage"
-			datatest-id="ldapDataUsersUserPfad"
-			@update:vmodel="$emit('input', { ...value, userPfad: $event })"
+			:label="$t('pages.administration.ldap.users.path.title')"
+			:placeholder="$t('pages.administration.ldap.users.path.title')"
+			:info="$t('pages.administration.ldap.classes.path.info')"
+			:validation-model="$v.value.userPath"
+			:validation-messages="userPathValidationMessage"
+			datatest-id="ldapDataUsersUserPath"
+			@update:vmodel="$emit('input', { ...value, userPath: $event })"
 		/>
-		<p class="pfad-hint">
+		<p class="path-hint">
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
 		<base-input
@@ -28,7 +28,7 @@
 			:vmodel="value.firstName"
 			type="text"
 			class="mt--xl"
-			:label="$t('pages.administration.ldap.users.pfad.firstname')"
+			:label="$t('pages.administration.ldap.users.path.firstname')"
 			:validation-model="$v.value.firstName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
@@ -39,7 +39,7 @@
 			:vmodel="value.familyName"
 			type="text"
 			class="mt--xl"
-			:label="$t('pages.administration.ldap.users.pfad.lastname')"
+			:label="$t('pages.administration.ldap.users.path.lastname')"
 			:validation-model="$v.value.familyName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
@@ -50,7 +50,7 @@
 			:vmodel="value.email"
 			type="text"
 			class="mt--xl"
-			:label="$t('pages.administration.ldap.users.pfad.email')"
+			:label="$t('pages.administration.ldap.users.path.email')"
 			:validation-model="$v.value.email"
 			:validation-messages="emailValidationMessages"
 			datatest-id="ldapDataUsersEmail"
@@ -104,7 +104,7 @@ export default {
 			usersValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
-			userPfadValidationMessage: [
+			userPathValidationMessage: [
 				{
 					key: "ldapPathValidationRegex",
 					message: this.$t("pages.administration.ldapEdit.validation.path"),
@@ -126,7 +126,7 @@ export default {
 	validations() {
 		return {
 			value: {
-				userPfad: { required, ldapPathValidationRegex },
+				userPath: { required, ldapPathValidationRegex },
 				firstName: { required },
 				familyName: { required },
 				email: { required, email },
@@ -141,7 +141,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.pfad-hint {
+.path-hint {
 	margin-top: var(--space-xl-3);
 	margin-bottom: var(--space-xl-2);
 }

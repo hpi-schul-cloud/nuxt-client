@@ -3,7 +3,7 @@ import LdapUsersSection from "./LdapUsersSection";
 
 describe("@components/organisms/LdapUsersSection", () => {
 	const ldapConfigData = {
-		userPfad: "user=path;;user=p",
+		userPath: "user=path;;user=p",
 		firstName: "givenName",
 		familyName: "sn",
 		email: "mail@de.de",
@@ -20,7 +20,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 			},
 		});
 
-		expect(wrapper.find("[data-testid=ldapDataUsersUserPfad]").exists()).toBe(
+		expect(wrapper.find("[data-testid=ldapDataUsersUserPath]").exists()).toBe(
 			true
 		);
 		expect(wrapper.find("[data-testid=ldapDataUsersFirstName]").exists()).toBe(
@@ -62,7 +62,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				value: {
-					userPfad: "invalid",
+					userPath: "invalid",
 					firstName: "",
 					familyName: "",
 					email: "",
@@ -85,7 +85,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 			},
 			listeners: {
 				input: (event) => {
-					ldapConfigDataTestSpecific.userPfad = event.userPfad;
+					ldapConfigDataTestSpecific.userPath = event.userPath;
 					ldapConfigDataTestSpecific.firstName = event.firstName;
 					ldapConfigDataTestSpecific.familyName = event.familyName;
 					ldapConfigDataTestSpecific.email = event.email;
@@ -133,7 +133,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 
 	it("invalid error message is displayed only after the blur event, even if originally invalid props were passed through", async () => {
 		const ldapConfigDataTestSpecific = {
-			userPfad: "invalid",
+			userPath: "invalid",
 			firstName: "",
 			familyName: "",
 			email: "",
@@ -147,7 +147,7 @@ describe("@components/organisms/LdapUsersSection", () => {
 			},
 			listeners: {
 				input: (event) => {
-					ldapConfigDataTestSpecific.userPfad = event.userPfad;
+					ldapConfigDataTestSpecific.userPath = event.userPath;
 					ldapConfigDataTestSpecific.firstName = event.firstName;
 					ldapConfigDataTestSpecific.familyName = event.familyName;
 					ldapConfigDataTestSpecific.email = event.email;

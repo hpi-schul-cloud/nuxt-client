@@ -11,17 +11,17 @@
 		>
 		</base-input>
 		<p class="title-class">
-			{{ $t("pages.administration.ldap.classes.pfad.subtitle") }}
+			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>
 		<base-input
-			data-testid="ldapDataClassesPfad"
+			data-testid="ldapDataClassesPath"
 			:vmodel="value.classPath"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
-			:placeholder="$t('pages.administration.ldap.classes.pfad.title')"
-			:label="$t('pages.administration.ldap.classes.pfad.title')"
-			:info="$t('pages.administration.ldap.classes.pfad.info')"
+			:placeholder="$t('pages.administration.ldap.classes.path.title')"
+			:label="$t('pages.administration.ldap.classes.path.title')"
+			:info="$t('pages.administration.ldap.classes.path.info')"
 			:validation-model="$v.value.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"

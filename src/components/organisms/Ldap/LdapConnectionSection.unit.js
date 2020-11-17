@@ -5,7 +5,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 	const ldapConfigData = {
 		url: "ldaps://url.u",
 		rootPath: "cn=schueler,ou=rolle",
-		basisPfad: "cn=schueler,ou=rolle",
+		basisPath: "cn=schueler,ou=rolle",
 		searchUser: "cn=schueler,ou=rolle",
 		searchUserPassword: "pass",
 	};
@@ -23,7 +23,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 			true
 		);
 		expect(
-			wrapper.find("[data-testid=ldapDataConnectionBasisPfad]").exists()
+			wrapper.find("[data-testid=ldapDataConnectionBasisPath]").exists()
 		).toBe(true);
 		expect(
 			wrapper.find("[data-testid=ldapDataConnectionSearchUser]").exists()
@@ -45,7 +45,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
 
-	it("invalid validation is false when valid values are sent thorugh props", async () => {
+	it("invalid validation is false when valid values are sent through props", async () => {
 		const wrapper = mount(LdapConnectionSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
@@ -56,14 +56,14 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		expect(wrapper.vm.$v.$invalid).toBe(false);
 	});
 
-	it("invalid validation is true when invalid values are sent thorugh props", async () => {
+	it("invalid validation is true when invalid values are sent through props", async () => {
 		const wrapper = mount(LdapConnectionSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				value: {
 					url: "invalid",
 					rootPath: "invalid",
-					basisPfad: "invalid",
+					basisPath: "invalid",
 					searchUser: "invalid",
 					searchUserPassword: "",
 				},
@@ -85,7 +85,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 				input: (event) => {
 					ldapConfigDataTestSpecific.url = event.url;
 					ldapConfigDataTestSpecific.rootPath = event.rootPath;
-					ldapConfigDataTestSpecific.basisPfad = event.basisPfad;
+					ldapConfigDataTestSpecific.basisPath = event.basisPath;
 					ldapConfigDataTestSpecific.searchUser = event.searchUser;
 					ldapConfigDataTestSpecific.searchUserPassword =
 						event.searchUserPassword;
@@ -131,7 +131,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		const ldapConfigDataTestSpecific = {
 			url: "invalid",
 			rootPath: "invalid",
-			basisPfad: "invalid",
+			basisPath: "invalid",
 			searchUser: "invalid",
 			searchUserPassword: "",
 		};
@@ -144,7 +144,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 				input: (event) => {
 					ldapConfigDataTestSpecific.url = event.url;
 					ldapConfigDataTestSpecific.rootPath = event.rootPath;
-					ldapConfigDataTestSpecific.basisPfad = event.basisPfad;
+					ldapConfigDataTestSpecific.basisPath = event.basisPath;
 					ldapConfigDataTestSpecific.searchUser = event.searchUser;
 					ldapConfigDataTestSpecific.searchUserPassword =
 						event.searchUserPassword;
