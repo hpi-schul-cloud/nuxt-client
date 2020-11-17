@@ -10,6 +10,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- SC-7804 Renamed BaseDialog/index
+- Adjusted github actions to use end-to-end-tests instead of integration
+
+## 25.2.0
+
+### Changed
+
 - SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
 
 ### Fixed
