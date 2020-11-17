@@ -13,9 +13,7 @@
 			<template v-if="error.message">
 				{{ error.message }}
 			</template>
-			<template v-else>
-				Ein Fehler ist aufgetreten
-			</template>
+			<template v-else> Ein Fehler ist aufgetreten </template>
 		</h1>
 		<slot name="action">
 			<base-button design="primary" @click="$router.go(-1)">
