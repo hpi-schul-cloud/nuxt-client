@@ -9,7 +9,7 @@ import { helpers } from "vuelidate/lib/validators";
  *  and finally
  *  ldapPathValidationRegex = (?#nameComponent)(?:,(?#nameComponent))*
  *
- *  It matches the following format: [string or number]=[string or number][, or ;;][string or number]=[string or number]
+ *  It matches the following format: nameComponent[, or ;;]nameComponent
  */
 export const ldapPathValidationRegex = helpers.regex(
 	"alpha",
