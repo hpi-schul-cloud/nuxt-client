@@ -45,7 +45,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
 
-	it("invalid validation is false when valid values are sent through props", async () => {
+	it("invalid validation is false when valid values are sent thorugh props", async () => {
 		const wrapper = mount(LdapConnectionSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
@@ -56,7 +56,7 @@ describe("@components/organisms/LdapConnectionSection", () => {
 		expect(wrapper.vm.$v.$invalid).toBe(false);
 	});
 
-	it("invalid validation is true when invalid values are sent through props", async () => {
+	it("invalid validation is true when invalid values are sent thorugh props", async () => {
 		const wrapper = mount(LdapConnectionSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
