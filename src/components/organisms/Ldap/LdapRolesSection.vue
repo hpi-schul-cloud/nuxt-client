@@ -51,6 +51,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
 			style="margin-bottom: var(--space-xl)"
+			:validation-model="$v.value.member"
+			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		/>
@@ -63,6 +65,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.student')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.student')"
+			:validation-model="$v.value.student"
+			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesStudent"
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		/>
@@ -74,6 +78,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.teacher')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.teacher')"
+			:validation-model="$v.value.teacher"
+			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesTeacher"
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		/>
@@ -85,6 +91,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.admin')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.admin')"
+			:validation-model="$v.value.admin"
+			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesAdmin"
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		/>
@@ -96,6 +104,8 @@
 				this.$t('pages.administration.ldapEdit.roles.placeholder.user')
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
+			:validation-model="$v.value.user"
+			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesUser"
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		/>
@@ -103,12 +113,54 @@
 </template>
 
 <script>
+import { required } from "vuelidate/lib/validators";
+import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
+
 export default {
-	// eslint-disable-next-line vue/require-prop-types
-	props: ["value"],
+	props: {
+		value: {
+			type: Object,
+			default() {
+				return {};
+			},
+		},
+		validate: {
+			type: Boolean,
+		},
+	},
 	data() {
 		return {
-			ldapGroupOption: "ldap_group",
+			memberValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+			rolesValidationMessages: [
+				{
+					key: "ldapPathValidationRegex",
+					message: this.$t("pages.administration.ldapEdit.validation.path"),
+				},
+			],
+		};
+	},
+	watch: {
+		validate: function () {
+			this.$v.$touch();
+			this.$emit("update:errors", this.$v.$invalid, "roles");
+		},
+	},
+	validations() {
+		if (this.value.groupOption !== "ldap_group") {
+			return {
+				value: {
+					member: { required },
+					student: { ldapPathValidationRegex },
+					teacher: { ldapPathValidationRegex },
+					admin: { ldapPathValidationRegex },
+					user: { ldapPathValidationRegex },
+				},
+			};
+		}
+		return {
+			value: {},
 		};
 	},
 };

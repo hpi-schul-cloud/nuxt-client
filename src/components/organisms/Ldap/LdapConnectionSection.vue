@@ -12,17 +12,21 @@
 			:label="$t('pages.administration.ldap.connection.server.url')"
 			:placeholder="$t('pages.administration.ldap.connection.server.url')"
 			:info="$t('pages.administration.ldap.connection.server.info')"
+			:validation-model="$v.value.url"
+			:validation-messages="urlValidationMessages"
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		/>
 		<base-input
-			data-testid="ldapDataConnectionBasisPfad"
-			:vmodel="value.basisPfad"
+			data-testid="ldapDataConnectionBasisPath"
+			:vmodel="value.basisPath"
 			type="text"
 			class="mt--xl"
-			:label="$t('pages.administration.ldap.connection.basis.pfad')"
-			:placeholder="$t('pages.administration.ldap.connection.basis.pfad')"
-			:info="$t('pages.administration.ldap.connection.basis.pfad.info')"
-			@update:vmodel="$emit('input', { ...value, basisPfad: $event })"
+			:label="$t('pages.administration.ldap.connection.basis.path')"
+			:placeholder="$t('pages.administration.ldap.connection.basis.path')"
+			:info="$t('pages.administration.ldap.connection.basis.path.info')"
+			:validation-model="$v.value.basisPath"
+			:validation-messages="pathSearchValidationMessages"
+			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
 		/>
 		<base-input
 			data-testid="ldapDataConnectionSearchUser"
@@ -32,6 +36,8 @@
 			:label="$t('pages.administration.ldap.connection.search.user')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user')"
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
+			:validation-model="$v.value.searchUser"
+			:validation-messages="pathSearchValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		/>
 		<base-input
@@ -43,16 +49,67 @@
 			:placeholder="
 				$t('pages.administration.ldap.connection.search.user.password')
 			"
+			:validation-model="$v.value.searchUserPassword"
+			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
 		/>
 	</div>
 </template>
 <script>
+import { required } from "vuelidate/lib/validators";
+import {
+	ldapPathValidationRegex,
+	urlValidationRegex,
+} from "@utils/ldapValidationRegex";
+
 export default {
-	// eslint-disable-next-line vue/require-prop-types
-	props: ["value"],
+	props: {
+		value: {
+			type: Object,
+			default() {
+				return {};
+			},
+		},
+		validate: {
+			type: Boolean,
+		},
+	},
 	data() {
-		return {};
+		return {
+			pathSearchValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+				{
+					key: "ldapPathValidationRegex",
+					message: this.$t("pages.administration.ldapEdit.validation.path"),
+				},
+			],
+			urlValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+				{
+					key: "urlValidationRegex",
+					message: this.$t("pages.administration.ldapEdit.validation.url"),
+				},
+			],
+			passwordValidationMessages: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+		};
+	},
+	watch: {
+		validate: function () {
+			this.$v.$touch();
+			this.$emit("update:errors", this.$v.$invalid, "connection");
+		},
+	},
+	validations() {
+		return {
+			value: {
+				url: { required, urlValidationRegex },
+				basisPath: { required, ldapPathValidationRegex },
+				searchUser: { required, ldapPathValidationRegex },
+				searchUserPassword: { required },
+			},
+		};
 	},
 };
 </script>
