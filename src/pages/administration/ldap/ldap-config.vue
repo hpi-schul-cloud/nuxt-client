@@ -28,13 +28,27 @@
 		<div class="form-container">
 			<connection-section
 				v-model="ldapConfigData"
+				:validate="triggerValidation"
 				data-testid="ldapConnectionSection"
+				@update:errors="updateValidationData"
 			/>
-			<users-section v-model="ldapConfigData" data-testid="ldapUsersSection" />
-			<roles-section v-model="ldapConfigData" data-testid="ldapRolesSection" />
+			<users-section
+				v-model="ldapConfigData"
+				:validate="triggerValidation"
+				data-testid="ldapUsersSection"
+				@update:errors="updateValidationData"
+			/>
+			<roles-section
+				v-model="ldapConfigData"
+				:validate="triggerValidation"
+				data-testid="ldapRolesSection"
+				@update:errors="updateValidationData"
+			/>
 			<classes-section
 				v-model="ldapConfigData"
+				:validate="triggerValidation"
 				data-testid="ldapClassesSection"
+				@update:errors="updateValidationData"
 			/>
 		</div>
 	</section>
@@ -42,15 +56,16 @@
 
 <script>
 import { mapState } from "vuex";
+import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
 import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@components/organisms/Ldap/LdapClassesSection.vue";
-import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
+
 export default {
 	components: {
+		RolesSection,
 		ConnectionSection,
 		UsersSection,
-		RolesSection,
 		ClassesSection,
 	},
 	meta: {
@@ -69,6 +84,7 @@ export default {
 				},
 			],
 			ldapConfigData: {
+				// Roles Section Data
 				groupOption: "ldap_group",
 				member: "",
 				student: "",
@@ -77,28 +93,37 @@ export default {
 				user: "",
 				// Connection Section Data
 				url: "",
-				rootPath: "",
-				basisPfad: "",
+				basisPath: "",
 				searchUser: "",
 				searchUserPassword: "",
 				// Classes Section Data
-				classPfad: "",
-				nameAttribute: "description",
-				participantAttribute: "member",
+				classPath: "",
+				nameAttribute: "",
+				participantAttribute: "",
 				// Users Sections Data
-				userPfad: "",
-				firstName: "givenName",
-				familyName: "sn",
-				email: "mail",
-				uid: "uid",
-				uuid: "uuid",
+				userPath: "",
+				firstName: "",
+				familyName: "",
+				email: "",
+				uid: "",
+				uuid: "",
 			},
+			isInvalidData: {},
+			triggerValidation: false,
 		};
 	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
 		}),
+	},
+	methods: {
+		validateHandler() {
+			this.triggerValidation = !this.triggerValidation;
+		},
+		updateValidationData(v, section) {
+			this.isInvalidData[section] = v;
+		},
 	},
 };
 </script>
