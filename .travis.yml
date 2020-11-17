@@ -3,6 +3,8 @@ branches:
     - develop
     - master
     - /^(?i:release|hotfix).*$/
+    # naming convention feature/<JIRA-Ticket ID>-<Jira_Summary>
+    - /^(feature\/[A-Z]+-[0-9]+-[a-zA-Z_]+)$/
 language: node_js
 node_js:
   - lts/*
@@ -13,6 +15,7 @@ env:
   global:
     - TZ=Europe/Berlin
     - GIT_SHA=$( git rev-parse HEAD )
+    # DOCKERTAG for feature branches will be overwritten in build.sh
     - DOCKERTAG="$( echo $TRAVIS_BRANCH | tr -s '[:punct:]' '-' | tr -s '[:upper:]' '[:lower:]' )_v$( jq -r '.version' package.json )_$TRAVIS_COMMIT"
 
 # do not run on develop if it is just a dependency update from dependabot to preserve resources
@@ -22,7 +25,7 @@ if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not typ
 stages:
   - test
   - name: build
-    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix|feature).*$/)
   - name: deploy
     if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
 

@@ -15,6 +15,19 @@ esac
 done
 echo PROJECT $PROJECT
 
+# If branch is feature rewrite docker tag
+if [[ "$TRAVIS_BRANCH" = feature* ]]
+then
+	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
+	JIRA_TICKET_ID=${TRAVIS_BRANCH/#feature\//}
+	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
+	# export DOCKERTAG=naming convention feature-<Jira id>-latest
+	export DOCKERTAG=$( echo "feature-"$JIRA_TICKET_ID"-latest")
+fi
+
 echo "DOCKERTAG" $DOCKERTAG
 echo "GITSHA" $GIT_SHA
 echo "Branch" $TRAVIS_BRANCH
@@ -49,14 +62,18 @@ buildClient(){
 		-f Dockerfile.client \
 		../
 
-	dockerPush "client" $DOCKERTAG
-	dockerPush "client" $GIT_SHA
-
 	# If branch is develop, add and push additional docker tags
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-client:$DOCKERTAG schulcloud/schulcloud-nuxt-client:develop_latest
 		dockerPush "client" "develop_latest"
+	elif [[ "$TRAVIS_BRANCH" = feature* ]]
+	# If branch is feature, add and push additional docker tags
+	then
+		dockerPush schulcloud/schulcloud-nuxt-client:$DOCKERTAG
+	else
+		dockerPush "client" $DOCKERTAG
+		dockerPush "client" $GIT_SHA
 	fi
 }
 
@@ -67,14 +84,18 @@ buildStorybook(){
 		-f Dockerfile.storybook \
 		../
 
-	dockerPush "storybook" $DOCKERTAG
-	dockerPush "storybook" $GIT_SHA
-
 	# If branch is develop, add and push additional docker tags
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG schulcloud/schulcloud-nuxt-storybook:develop_latest
 		dockerPush "storybook" "develop_latest"
+	elif [[ "$TRAVIS_BRANCH" = feature* ]]
+	# If branch is feature, add and push additional docker tags
+	then
+		dockerPush schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG
+	else
+		dockerPush "storybook" $DOCKERTAG
+		dockerPush "storybook" $GIT_SHA
 	fi
 }
 
@@ -87,14 +108,18 @@ buildVuepress(){
 		--build-arg ALGOLIA_API_KEY \
 		../
 
-	dockerPush "vuepress" $DOCKERTAG
-	dockerPush "vuepress" $GIT_SHA
-
 	# If branch is develop, add and push additional docker tags
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG schulcloud/schulcloud-nuxt-vuepress:develop_latest
 		dockerPush "vuepress" "develop_latest"
+	# If branch is feature, add and push additional docker tags
+	elif [[ "$TRAVIS_BRANCH" = feature* ]]
+	then
+		dockerPush chulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG
+	else
+		dockerPush "vuepress" $DOCKERTAG
+		dockerPush "vuepress" $GIT_SHA
 	fi
 }
 
