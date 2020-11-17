@@ -3,7 +3,7 @@ import LdapClassesSection from "./LdapClassesSection";
 
 describe("@components/organisms/LdapClassesSection", () => {
 	const ldapConfigData = {
-		classPfad: "class=path",
+		classPath: "class=path",
 		nameAttribute: "description",
 		participantAttribute: "member",
 	};
@@ -60,7 +60,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				value: {
-					classPfad: "invalid",
+					classPath: "invalid",
 					nameAttribute: "",
 					participantAttribute: "",
 				},
@@ -79,7 +79,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 			},
 			listeners: {
 				input: (event) => {
-					ldapConfigDataTestSpecific.classPfad = event.classPfad;
+					ldapConfigDataTestSpecific.classPath = event.classPath;
 					ldapConfigDataTestSpecific.nameAttribute = event.nameAttribute;
 					ldapConfigDataTestSpecific.participantAttribute =
 						event.participantAttribute;
@@ -121,5 +121,47 @@ describe("@components/organisms/LdapClassesSection", () => {
 
 		await wrapper.vm.$nextTick();
 		expect(wrapper.emitted("update:errors")[0]).toHaveLength(2);
+	});
+
+	it("invalid error message is displayed only after the blur event, even if originally invalid props were passed through", async () => {
+		const ldapConfigDataTestSpecific = {
+			classPath: "invalid",
+			nameAttribute: "",
+			participantAttribute: "",
+		};
+		const wrapper = mount(LdapClassesSection, {
+			...createComponentMocks({ i18n: true }),
+			propsData: {
+				value: ldapConfigDataTestSpecific,
+			},
+			listeners: {
+				input: (event) => {
+					ldapConfigDataTestSpecific.classPath = event.classPath;
+					ldapConfigDataTestSpecific.nameAttribute = event.nameAttribute;
+					ldapConfigDataTestSpecific.participantAttribute =
+						event.participantAttribute;
+				},
+			},
+		});
+		// validations are only active when unchecked === true
+		await wrapper.setData({ unchecked: true });
+
+		let errorMessageComponent = wrapper.find(
+			"div[data-testid='ldapDataClassesPfad'] .info.error"
+		);
+		expect(wrapper.vm.$v.$invalid).toBe(true);
+		expect(errorMessageComponent.exists()).toBeFalse();
+
+		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPfad]");
+		expect(inputPath.exists()).toBe(true);
+		expect(inputPath.element.value).toBe(ldapConfigDataTestSpecific.classPath);
+
+		inputPath.trigger("blur"); // without this the error is not displayed
+
+		await wrapper.vm.$nextTick();
+		errorMessageComponent = wrapper.find(
+			"div[data-testid='ldapDataClassesPfad'] .info.error"
+		);
+		expect(errorMessageComponent.exists()).toBeTrue();
 	});
 });

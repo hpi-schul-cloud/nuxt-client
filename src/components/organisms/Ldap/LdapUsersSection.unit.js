@@ -46,60 +46,70 @@ describe("@components/organisms/LdapUsersSection", () => {
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
 
-	it("invalid validation is false when valid values are sent thorugh props", async () => {
+	it("invalid validation is false when valid values are sent through props", async () => {
 		const wrapper = mount(LdapUsersSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				value: ldapConfigData,
 			},
 		});
-
-		await wrapper.vm.$v.$touch();
 		// default props values are valid so expect this assertion to succeed
 		expect(wrapper.vm.$v.$invalid).toBe(false);
 	});
 
-	it("invalid validation is true when invalid values are sent thorugh props", async () => {
+	it("invalid validation is true when invalid values are sent through props", async () => {
 		const wrapper = mount(LdapUsersSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				value: ldapConfigData,
+				value: {
+					userPfad: "invalid",
+					firstName: "",
+					familyName: "",
+					email: "",
+					uid: "",
+					uuid: "",
+				},
 			},
 		});
-
-		await wrapper.setProps({
-			value: {
-				userPfad: "invalid",
-				firstName: "",
-				familyName: "",
-				email: "",
-				uid: "",
-				uuid: "",
-			},
-		});
-
-		await wrapper.vm.$v.$touch();
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
+		const ldapConfigDataTestSpecific = {
+			...ldapConfigData,
+		};
 		const wrapper = mount(LdapUsersSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				value: ldapConfigData,
+				value: ldapConfigDataTestSpecific,
+			},
+			listeners: {
+				input: (event) => {
+					ldapConfigDataTestSpecific.userPfad = event.userPfad;
+					ldapConfigDataTestSpecific.firstName = event.firstName;
+					ldapConfigDataTestSpecific.familyName = event.familyName;
+					ldapConfigDataTestSpecific.email = event.email;
+					ldapConfigDataTestSpecific.uid = event.uid;
+					ldapConfigDataTestSpecific.uuid = event.uuid;
+				},
 			},
 		});
 
-		const inputPath = wrapper.find("input[data-testid=ldapDataUsersUserPfad]");
-		expect(inputPath.exists()).toBe(true);
+		const inputFirstName = wrapper.find(
+			"input[data-testid=ldapDataUsersFirstName]"
+		);
+		expect(inputFirstName.exists()).toBe(true);
 
-		// inputPath.setValue("");
-		// expect(inputPath.element.value).toBe("");
+		inputFirstName.setValue("");
+		inputFirstName.trigger("blur");
 
-		// temporary fix for validation model not updating
-		wrapper.vm.$v.value.userPfad.$model = "";
-
+		expect(inputFirstName.element.value).toBe("");
 		expect(wrapper.vm.$v.$invalid).toBe(true);
+		await wrapper.vm.$nextTick();
+		const errorMessageComponent = wrapper.find(
+			"div[data-testid='ldapDataUsersFirstName'] .info.error"
+		);
+		expect(errorMessageComponent.exists()).toBeTrue();
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
@@ -119,5 +129,54 @@ describe("@components/organisms/LdapUsersSection", () => {
 
 		await wrapper.vm.$nextTick();
 		expect(wrapper.emitted("update:errors")[0]).toHaveLength(2);
+	});
+
+	it("invalid error message is displayed only after the blur event, even if originally invalid props were passed through", async () => {
+		const ldapConfigDataTestSpecific = {
+			userPfad: "invalid",
+			firstName: "",
+			familyName: "",
+			email: "",
+			uid: "",
+			uuid: "",
+		};
+		const wrapper = mount(LdapUsersSection, {
+			...createComponentMocks({ i18n: true }),
+			propsData: {
+				value: ldapConfigDataTestSpecific,
+			},
+			listeners: {
+				input: (event) => {
+					ldapConfigDataTestSpecific.userPfad = event.userPfad;
+					ldapConfigDataTestSpecific.firstName = event.firstName;
+					ldapConfigDataTestSpecific.familyName = event.familyName;
+					ldapConfigDataTestSpecific.email = event.email;
+					ldapConfigDataTestSpecific.uid = event.uid;
+					ldapConfigDataTestSpecific.uuid = event.uuid;
+				},
+			},
+		});
+
+		let errorMessageComponent = wrapper.find(
+			"div[data-testid='ldapDataUsersFirstName'] .info.error"
+		);
+		expect(wrapper.vm.$v.$invalid).toBe(true);
+		expect(errorMessageComponent.exists()).toBeFalse();
+
+		const inputFirstName = wrapper.find(
+			"input[data-testid=ldapDataUsersFirstName]"
+		);
+		expect(inputFirstName.exists()).toBe(true);
+		expect(inputFirstName.element.value).toBe(
+			ldapConfigDataTestSpecific.firstName
+		);
+
+		inputFirstName.trigger("blur"); // without this the error is not displayed
+
+		await wrapper.vm.$nextTick();
+		errorMessageComponent = wrapper.find(
+			"div[data-testid='ldapDataUsersFirstName'] .info.error"
+		);
+		expect(errorMessageComponent.exists()).toBeTrue();
 	});
 });

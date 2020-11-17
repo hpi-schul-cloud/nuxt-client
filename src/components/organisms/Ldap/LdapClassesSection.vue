@@ -15,17 +15,17 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesPfad"
-			:vmodel="value.classPfad"
+			:vmodel="value.classPath"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
 			:placeholder="$t('pages.administration.ldap.classes.pfad.title')"
 			:label="$t('pages.administration.ldap.classes.pfad.title')"
 			:info="$t('pages.administration.ldap.classes.pfad.info')"
-			:validation-model="$v.value.classPfad"
-			:validation-messages="classPfadValidationMessage"
-			datatest-id="ldapDataClassesClassPfad"
-			@update:vmodel="$emit('input', { ...value, classPfad: $event })"
+			:validation-model="$v.value.classPath"
+			:validation-messages="classPathValidationMessage"
+			datatest-id="ldapDataClassesclassPath"
+			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		/>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.users.hint") }}
@@ -82,7 +82,7 @@ export default {
 			classesValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
-			classPfadValidationMessage: [
+			classPathValidationMessage: [
 				{
 					key: "ldapPathValidationRegex",
 					message: this.$t("pages.administration.ldapEdit.validation.path"),
@@ -101,7 +101,7 @@ export default {
 		if (this.unchecked === true) {
 			return {
 				value: {
-					classPfad: { required, ldapPathValidationRegex },
+					classPath: { required, ldapPathValidationRegex },
 					nameAttribute: { required },
 					participantAttribute: { required },
 				},

@@ -97,7 +97,7 @@ export default {
 				searchUser: "",
 				searchUserPassword: "",
 				// Classes Section Data
-				classPfad: "",
+				classPath: "",
 				nameAttribute: "",
 				participantAttribute: "",
 				// Users Sections Data
