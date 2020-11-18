@@ -27,7 +27,7 @@
 			</template>
 			<template v-slot:errors>
 				<info-message
-					v-if="error"
+					v-if="businessError"
 					:message="$t('pages.administration.students.new.error')"
 					type="error"
 				></info-message>
@@ -40,6 +40,8 @@
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
 
+import { mapGetters } from "vuex";
+
 export default {
 	components: {
 		FormCreateUser,
@@ -50,7 +52,6 @@ export default {
 	},
 	data() {
 		return {
-			error: false,
 			birthday: null,
 			sendRegistration: false,
 			breadcrumbs: [
@@ -70,30 +71,26 @@ export default {
 			],
 		};
 	},
+	computed: {
+		...mapGetters("users", {
+			businessError: "businessError",
+		}),
+	},
+	created() {
+		this.$store.commit("users/resetBusinessError");
+	},
 	methods: {
 		createStudent(userData) {
-			this.error = false;
-			this.$store
-				.dispatch("users/createStudent", {
-					firstName: userData.firstName,
-					lastName: userData.lastName,
-					email: userData.email,
-					birthday: this.birthday,
-					roles: ["student"],
-					schoolId: this.$user.schoolId,
-					sendRegistration: this.sendRegistration,
-				})
-				.then(() => {
-					this.$toast.success(
-						this.$t("pages.administration.students.new.success")
-					);
-					this.$router.push({
-						path: `/administration/students`,
-					});
-				})
-				.catch(() => {
-					this.error = true;
-				});
+			this.$store.dispatch("users/createStudent", {
+				firstName: userData.firstName,
+				lastName: userData.lastName,
+				email: userData.email,
+				birthday: this.birthday,
+				roles: ["student"],
+				schoolId: this.$user.schoolId,
+				sendRegistration: this.sendRegistration,
+				successMessage: this.$t("pages.administration.students.new.success"),
+			});
 		},
 	},
 };
