@@ -51,6 +51,16 @@
 				@update:errors="updateValidationData"
 			/>
 		</div>
+		<div class="buttons-container">
+			<!-- Placeholder butttons until design decision is made -->
+			<base-button design="primary outline" class="ml--sm">Cancel</base-button>
+			<base-button design="primary" class="ml--sm" @click="validateHandler"
+				>Verify</base-button
+			>
+			<base-button :disabled="isInvalid" design="primary outline" class="ml--sm"
+				>Save Changes</base-button
+			>
+		</div>
 	</section>
 </template>
 
@@ -108,7 +118,12 @@ export default {
 				uid: "",
 				uuid: "",
 			},
-			isInvalidData: {},
+			isInvalidData: {
+				roles: true,
+				connection: true,
+				classes: true,
+				users: true,
+			},
 			triggerValidation: false,
 		};
 	},
@@ -116,6 +131,16 @@ export default {
 		...mapState("auth", {
 			school: "school",
 		}),
+		isInvalid() {
+			if (
+				!Object.keys(this.isInvalidData).some(
+					(section) => this.isInvalidData[section] === true
+				)
+			) {
+				return false;
+			}
+			return true;
+		},
 	},
 	methods: {
 		validateHandler() {
@@ -149,5 +174,10 @@ export default {
 	@include breakpoint(tablet) {
 		margin: 0 var(--space-xl-4);
 	}
+}
+.buttons-container {
+	display: flex;
+	justify-content: flex-end;
+	margin: var(--space-xl-4) 0 var(--space-xl-4) 0;
 }
 </style>

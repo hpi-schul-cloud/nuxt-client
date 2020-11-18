@@ -96,6 +96,9 @@ export default {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "classes");
 		},
+		// unchecked: function () {
+		// 	this.$emit("update:errors", this.$v.$invalid, "classes");
+		// },
 	},
 	validations() {
 		if (this.unchecked === true) {
