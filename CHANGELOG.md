@@ -17,6 +17,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7629 - created Roles component to the ldap page
 - OPS-1508 - added limits for cpu and ram to the docker compose files
 - SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission to check to ldap config page
+- SC-6043 - Prepare a concept for a general error handling in nuxt-client
 
 ### Fixed
 
