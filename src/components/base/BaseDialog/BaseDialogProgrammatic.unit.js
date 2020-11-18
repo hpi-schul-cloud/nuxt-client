@@ -1,5 +1,5 @@
 import { createLocalVue } from "@vue/test-utils";
-import BaseDialogPlugin from "./";
+import BaseDialogPlugin from "./BaseDialogProgrammatic";
 
 const isBaseDialog = (component) => {
 	return component.$el.getAttribute("data-testid") === "dialog";
