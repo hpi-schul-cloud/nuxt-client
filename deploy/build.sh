@@ -71,6 +71,7 @@ buildClient(){
 	# If branch is feature, add and push additional docker tags
 	then
 		dockerPush schulcloud/schulcloud-nuxt-client:$DOCKERTAG
+		dockerPush schulcloud/schulcloud-nuxt-client:$GIT_SHA
 	else
 		dockerPush "client" $DOCKERTAG
 		dockerPush "client" $GIT_SHA
@@ -93,6 +94,7 @@ buildStorybook(){
 	# If branch is feature, add and push additional docker tags
 	then
 		dockerPush schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG
+		dockerPush schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
 	else
 		dockerPush "storybook" $DOCKERTAG
 		dockerPush "storybook" $GIT_SHA
@@ -116,7 +118,8 @@ buildVuepress(){
 	# If branch is feature, add and push additional docker tags
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	then
-		dockerPush chulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG
+		dockerPush schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG
+		dockerPush schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
 	else
 		dockerPush "vuepress" $DOCKERTAG
 		dockerPush "vuepress" $GIT_SHA
