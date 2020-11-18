@@ -97,7 +97,7 @@
 		"@storybook/addon-storysource": "^6.0.28",
 		"@storybook/addon-viewport": "^6.0.28",
 		"@storybook/addons": "^6.0.28",
-		"@storybook/vue": "^5.3.19",
+		"@storybook/vue": "^6.0.28",
 		"@testing-library/jest-dom": "^5.11.6",
 		"@testing-library/vue": "^5.2.0",
 		"@vue/test-utils": "^1.1.1",
