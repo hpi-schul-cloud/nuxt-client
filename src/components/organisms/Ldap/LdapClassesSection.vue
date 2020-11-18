@@ -6,22 +6,26 @@
 		<base-input
 			v-model="unchecked"
 			type="switch"
+			datatest-id="ldapDataClassesCheckbox"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
 		>
 		</base-input>
 		<p class="title-class">
-			{{ $t("pages.administration.ldap.classes.pfad.subtitle") }}
+			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>
 		<base-input
-			data-testid="ldapDataClassesPfad"
-			:vmodel="value.classPfad"
+			data-testid="ldapDataClassesPath"
+			:vmodel="value.classPath"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
-			label=""
-			:placeholder="$t('pages.administration.ldap.classes.pfad.title')"
-			:info="$t('pages.administration.ldap.classes.pfad.info')"
-			@update:vmodel="$emit('input', { ...value, classPfad: $event })"
+			:placeholder="$t('pages.administration.ldap.classes.path.title')"
+			:label="$t('pages.administration.ldap.classes.path.title')"
+			:info="$t('pages.administration.ldap.classes.path.info')"
+			:validation-model="$v.value.classPath"
+			:validation-messages="classPathValidationMessage"
+			datatest-id="ldapDataClassesclassPath"
+			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		/>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.users.hint") }}
@@ -33,6 +37,9 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
+			:validation-model="$v.value.nameAttribute"
+			:validation-messages="classesValidationMessage"
+			datatest-id="ldapDataClassesNameAttribute"
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		/>
 		<base-input
@@ -42,6 +49,9 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
+			:validation-model="$v.value.nameAttribute"
+			:validation-messages="classesValidationMessage"
+			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:vmodel="
 				$emit('input', { ...value, participantAttribute: $event })
 			"
@@ -50,12 +60,55 @@
 </template>
 
 <script>
+import { required } from "vuelidate/lib/validators";
+import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
+
 export default {
 	// eslint-disable-next-line vue/require-prop-types
-	props: ["value"],
+	props: {
+		value: {
+			type: Object,
+			default() {
+				return {};
+			},
+		},
+		validate: {
+			type: Boolean,
+		},
+	},
 	data() {
 		return {
 			unchecked: false,
+			classesValidationMessage: [
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+			classPathValidationMessage: [
+				{
+					key: "ldapPathValidationRegex",
+					message: this.$t("pages.administration.ldapEdit.validation.path"),
+				},
+				{ key: "required", message: this.$t("common.validation.required") },
+			],
+		};
+	},
+	watch: {
+		validate: function () {
+			this.$v.$touch();
+			this.$emit("update:errors", this.$v.$invalid, "classes");
+		},
+	},
+	validations() {
+		if (this.unchecked === true) {
+			return {
+				value: {
+					classPath: { required, ldapPathValidationRegex },
+					nameAttribute: { required },
+					participantAttribute: { required },
+				},
+			};
+		}
+		return {
+			value: {},
 		};
 	},
 };
