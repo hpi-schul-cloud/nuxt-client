@@ -1,7 +1,7 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
 		<base-select
-			style="max-width: 150px;"
+			style="max-width: 150px"
 			close-on-select
 			:value="perPageSelected"
 			:options="perPageOptions"

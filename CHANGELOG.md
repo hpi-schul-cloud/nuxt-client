@@ -10,14 +10,21 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-7488 - added 3 components in the organisms/ldap for the ldap-config form
 - SC-6293 - restricts Lern-Store access by permission
 - SC-6708 - added data-testids to the students table in administration page
 - SC-6709 - added data-testids to the teachers table in administration page
+- SC-7629 - created Roles component to the ldap page
 - OPS-1508 - added limits for cpu and ram to the docker compose files
+- SC-7489 - added input validation to the ldap config components
+- SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission check to ldap config page
+- SC-6043 - Prepare a concept for a general error handling in nuxt-client
 
 ### Fixed
 
+- SC-7845 - fixed the changelog github action
 - SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
+- SC-7557 - fixes lernstore modal width
 
 ### Changed
 
@@ -33,9 +40,16 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-5476 Renamed env vars to be consistent with old client and server
 
-## 25.2.0
+## 25.2.1
 
 ## Changed
+
+- SC-7804 Renamed BaseDialog/index
+- Adjusted github actions to use end-to-end-tests instead of integration
+
+## 25.2.0
+
+### Changed
 
 - SC-7381 - Changed the consent get request limit to the lenght of selectedStudents
 

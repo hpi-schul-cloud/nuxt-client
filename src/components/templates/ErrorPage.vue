@@ -13,12 +13,7 @@
 			<template v-if="error.message">
 				{{ error.message }}
 			</template>
-			<template v-else-if="error.statusCode === 404">
-				Die Seite wurde leider nicht gefunden
-			</template>
-			<template v-else>
-				Ein Fehler ist aufgetreten
-			</template>
+			<template v-else> Ein Fehler ist aufgetreten </template>
 		</h1>
 		<slot name="action">
 			<base-button design="primary" @click="$router.go(-1)">
@@ -32,9 +27,7 @@ export default {
 	props: {
 		error: {
 			type: Object,
-			default: () => ({
-				statusCode: 404,
-			}),
+			required: true,
 		},
 	},
 	data() {

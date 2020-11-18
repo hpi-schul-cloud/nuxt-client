@@ -29,7 +29,7 @@
 				id="pulsating-dot"
 				color="var(--color-secondary)"
 			/>
-			<span style="position: relative;">
+			<span style="position: relative">
 				<base-button
 					design="text icon"
 					aria-label="menu"
@@ -157,10 +157,15 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 }
 .image {
 	width: calc(var(--text-md) + var(--text-lg));
+	min-width: 2rem;
 	height: calc(var(--text-md) + var(--text-lg));
 	object-fit: contain;
 	margin-right: var(--space-sm);
 	border-radius: var(--radius-sm);
+
+	@include breakpoint(tablet) {
+		min-width: 2.75rem;
+	}
 }
 
 .status {
