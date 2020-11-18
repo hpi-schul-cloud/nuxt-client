@@ -23,7 +23,7 @@ import Theme from "@theme/config";
 Vue.prototype.$theme = Theme;
 
 // Dialog
-import BaseDialog from "@/components/base/BaseDialog";
+import BaseDialog from "@/components/base/BaseDialog/BaseDialogProgrammatic";
 Vue.use(BaseDialog);
 
 // EventBus
