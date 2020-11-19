@@ -223,7 +223,7 @@ export default {
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom: var(--border-width-bold) solid var(--color-primary);
+		border-bottom: var(--border-width) solid var(--color-primary);
 		outline: none;
 	}
 	&.error {
