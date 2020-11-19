@@ -23,7 +23,7 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM | tr -s "[:upper:]" "[:lower:]" )"-"$JIRA_TICKET_ID
+	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
 	export DOCKERTAG=$( echo "feature-"$JIRA_TICKET_ID"-latest")
 fi
@@ -70,8 +70,7 @@ buildClient(){
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	# If branch is feature, add and push additional docker tags
 	then
-		dockerPush schulcloud/schulcloud-nuxt-client:$DOCKERTAG
-		dockerPush schulcloud/schulcloud-nuxt-client:$GIT_SHA
+		dockerPush "client" $DOCKERTAG
 	else
 		dockerPush "client" $DOCKERTAG
 		dockerPush "client" $GIT_SHA
@@ -93,8 +92,7 @@ buildStorybook(){
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	# If branch is feature, add and push additional docker tags
 	then
-		dockerPush schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG
-		dockerPush schulcloud/schulcloud-nuxt-storybook:$GIT_SHA
+		dockerPush "storybook" $DOCKERTAG
 	else
 		dockerPush "storybook" $DOCKERTAG
 		dockerPush "storybook" $GIT_SHA
@@ -118,8 +116,7 @@ buildVuepress(){
 	# If branch is feature, add and push additional docker tags
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	then
-		dockerPush schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG
-		dockerPush schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA
+		dockerpush "vuepress" $DOCKERTAG
 	else
 		dockerPush "vuepress" $DOCKERTAG
 		dockerPush "vuepress" $GIT_SHA
