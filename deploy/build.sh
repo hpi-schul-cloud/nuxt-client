@@ -116,7 +116,7 @@ buildVuepress(){
 	# If branch is feature, add and push additional docker tags
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	then
-		dockerpush "vuepress" $DOCKERTAG
+		dockerPush "vuepress" $DOCKERTAG
 	else
 		dockerPush "vuepress" $DOCKERTAG
 		dockerPush "vuepress" $GIT_SHA
