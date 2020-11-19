@@ -23,7 +23,7 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
+	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM | tr -s "[:upper:]" "[:lower:]" )"-"$JIRA_TICKET_ID
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
 	export DOCKERTAG=$( echo "feature-"$JIRA_TICKET_ID"-latest")
 fi
