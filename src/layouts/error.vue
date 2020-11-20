@@ -14,9 +14,7 @@ export default {
 	props: {
 		error: {
 			type: Object,
-			default: () => ({
-				statusCode: 404,
-			}),
+			required: true,
 		},
 	},
 };
