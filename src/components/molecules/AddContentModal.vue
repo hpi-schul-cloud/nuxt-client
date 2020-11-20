@@ -1,13 +1,7 @@
 <template>
 	<div>
-		<base-modal
-			class="modal"
-			:active="showCopyModal"
-			@onBackdropClick="closeModal"
-		>
-			<template v-slot:header>
-				{{ $t("components.molecules.AddContentModal") }}
-			</template>
+		<base-modal class="modal" :active="showCopyModal" @onBackdropClick="closeModal">
+			<template v-slot:header>{{ $t("components.molecules.AddContentModal") }}</template>
 			<template v-slot:body>
 				<div class="content-modal__body">
 					<base-select
@@ -16,13 +10,14 @@
 						:options="coursesOptions"
 						:show-labels="true"
 						:label="$t('pages.content.label.chooseACourse')"
-						placeholder=""
+						placeholder
 						close-on-select
 						option-label="name"
 						:deselect-label="$t('pages.content.label.deselect')"
 						:select-label="$t('pages.content.label.select')"
 						:selected-label="$t('pages.content.label.selected')"
 						track-by="_id"
+						data-testid="topicSelector"
 					/>
 					<transition name="fade">
 						<base-select
@@ -42,6 +37,7 @@
 							:select-label="$t('pages.content.label.select')"
 							:selected-label="$t('pages.content.label.selected')"
 							track-by="_id"
+							data-testid="courseSelector"
 						/>
 					</transition>
 				</div>
@@ -49,16 +45,13 @@
 			<template v-slot:footer>
 				<modal-footer>
 					<template v-slot:right>
-						<base-button design="text" @click="closeModal">
-							{{ $t("common.actions.cancel") }}
-						</base-button>
+						<base-button design="text" @click="closeModal">{{ $t("common.actions.cancel") }}</base-button>
 						<base-button
 							design="primary"
 							:disabled="!isSendEnabled"
 							data-testid="modal_submit_btn"
 							@click="addToLesson"
-							>{{ $t("common.actions.add") }}</base-button
-						>
+						>{{ $t("common.actions.add") }}</base-button>
 					</template>
 				</modal-footer>
 			</template>
