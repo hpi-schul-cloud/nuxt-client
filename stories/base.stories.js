@@ -21,7 +21,10 @@ storiesOf("4 Base UI Components/Base UI", module)
 		notes,
 	})
 	.add("BaseButton", () => ({
-		components: { BaseButton, BaseIcon },
+		components: {
+			BaseButton,
+			BaseIcon,
+		},
 		data: () => ({
 			text: text("Text", "Action"),
 			design: select(
@@ -71,7 +74,11 @@ storiesOf("4 Base UI Components/Base UI", module)
 			),
 			size: select(
 				"Size",
-				{ small: "small", medium: "medium", large: "large" },
+				{
+					small: "small",
+					medium: "medium",
+					large: "large",
+				},
 				"medium"
 			),
 			disabled: boolean("disabled", false),
@@ -190,18 +197,34 @@ storiesOf("4 Base UI Components/Base UI", module)
 			</div>`,
 	}))
 	.add("BaseCard", () => ({
-		components: { BaseCard },
+		components: {
+			BaseCard,
+		},
 		template: "<base-card>Card</base-card>",
 		methods: {},
 	}))
 	.add("Base Select", () => ({
-		components: { BaseSelect },
+		components: {
+			BaseSelect,
+		},
 		data: () => ({
 			content: [],
 			options: [
-				{ _id: 1, value: 1, name: "Option 1" },
-				{ _id: 2, value: 2, name: "Option 2" },
-				{ _id: 3, value: 3, name: "Option 3" },
+				{
+					_id: 1,
+					value: 1,
+					name: "Option 1",
+				},
+				{
+					_id: 2,
+					value: 2,
+					name: "Option 2",
+				},
+				{
+					_id: 3,
+					value: 3,
+					name: "Option 3",
+				},
 			],
 			closeOnSelect: boolean("closeOnSelect", false),
 			deselectLabel: text("deselectLabel", "Entfernen"),
@@ -212,6 +235,7 @@ storiesOf("4 Base UI Components/Base UI", module)
 			selectLabel: text("selectLabel", "Auswählen"),
 			selectedLabel: text("selectedLabel", "Aktiv"),
 			trackBy: text("trackBy", "_id"),
+			dataTestid: text("dataTestid", "dataTestid"),
 		}),
 		template: `
 		<div>
@@ -234,7 +258,9 @@ storiesOf("4 Base UI Components/Base UI", module)
 		methods: {},
 	}))
 	.add("Base Link", () => ({
-		components: { BaseLink },
+		components: {
+			BaseLink,
+		},
 		template: `
 			<div>
 				<base-link href="https://schul-cloud.org">external Link to https://schul-cloud.org</base-link>
@@ -244,23 +270,32 @@ storiesOf("4 Base UI Components/Base UI", module)
 		methods: {},
 	}))
 	.add("Base Progressbar", () => ({
-		components: { BaseProgressbar },
+		components: {
+			BaseProgressbar,
+		},
 		template: '<base-progressbar :value="2" :max="3"/>',
 	}))
 	.add("Base Collapsible", () => ({
-		components: { BaseCollapsible },
+		components: {
+			BaseCollapsible,
+		},
 		template: `<base-collapsible label="Test">
 			<p>Some collapsible content. Click the button to toggle between showing and hiding the collapsible content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 		</base-collapsible>`,
 	}))
 	.add("Base Breadcrumb", () => ({
-		components: { BaseBreadcrumb },
+		components: {
+			BaseBreadcrumb,
+		},
 		data: () => ({
 			inputs: [
 				{
 					text: "Kurse",
 					to: "",
-					icon: { source: "material", icon: "school" },
+					icon: {
+						source: "material",
+						icon: "school",
+					},
 				},
 				{
 					text: "Biologie",
@@ -279,11 +314,15 @@ storiesOf("4 Base UI Components/Base UI", module)
 		},
 	}))
 	.add("Base Audio", () => ({
-		components: { BaseAudio },
+		components: {
+			BaseAudio,
+		},
 		template: `<base-audio src="https://podcast.hpi.de/media/2019-03-05_neuland_ep05.mp3"></base-audio>`,
 	}))
 	.add("Base Video", () => ({
-		components: { BaseVideo },
+		components: {
+			BaseVideo,
+		},
 		data: () => ({
 			poster: text(
 				"poster",
@@ -309,14 +348,18 @@ storiesOf("4 Base UI Components/Base UI", module)
 			/>`,
 	}))
 	.add("Base QrCode", () => ({
-		components: { BaseQrCode },
+		components: {
+			BaseQrCode,
+		},
 		data: () => ({
 			url: text("Url", "http://www.schul-cloud.org"),
 		}),
 		template: `<base-qr-code :url="url"/>`,
 	}))
 	.add("BaseBlockquote", () => ({
-		components: { BaseBlockquote },
+		components: {
+			BaseBlockquote,
+		},
 		data: () => ({
 			cite: text("cite", "http://www.worldwildlife.org/who/index.html"),
 			quote: text(
@@ -332,13 +375,20 @@ storiesOf("4 Base UI Components/Base UI", module)
 		`,
 	}))
 	.add("BaseSpinner", () => ({
-		components: { BaseSpinner },
+		components: {
+			BaseSpinner,
+		},
 		data: () => ({
 			label: text("label", "Loading"),
 			color: color("color", "var(--color-tertiary)"),
 			size: select(
 				"size",
-				{ small: "small", medium: "medium", large: "large", xlarge: "xlarge" },
+				{
+					small: "small",
+					medium: "medium",
+					large: "large",
+					xlarge: "xlarge",
+				},
 				"medium"
 			),
 		}),
