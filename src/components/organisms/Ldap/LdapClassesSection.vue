@@ -9,6 +9,9 @@
 			datatest-id="ldapDataClassesCheckbox"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
 		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="edit" />
+			</template>
 		</base-input>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
@@ -26,7 +29,11 @@
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="edit" />
+			</template>
+		</base-input>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
@@ -41,7 +48,11 @@
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="edit" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataClassesNameparticipantAttribute"
 			:vmodel="value.participantAttribute"
@@ -55,7 +66,11 @@
 			@update:vmodel="
 				$emit('input', { ...value, participantAttribute: $event })
 			"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="gruppen" />
+			</template>
+		</base-input>
 	</div>
 </template>
 
