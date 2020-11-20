@@ -1,7 +1,13 @@
 <template>
 	<div>
-		<base-modal class="modal" :active="showCopyModal" @onBackdropClick="closeModal">
-			<template v-slot:header>{{ $t("components.molecules.AddContentModal") }}</template>
+		<base-modal
+			class="modal"
+			:active="showCopyModal"
+			@onBackdropClick="closeModal"
+		>
+			<template v-slot:header>{{
+				$t("components.molecules.AddContentModal")
+			}}</template>
 			<template v-slot:body>
 				<div class="content-modal__body">
 					<base-select
@@ -45,13 +51,16 @@
 			<template v-slot:footer>
 				<modal-footer>
 					<template v-slot:right>
-						<base-button design="text" @click="closeModal">{{ $t("common.actions.cancel") }}</base-button>
+						<base-button design="text" @click="closeModal">{{
+							$t("common.actions.cancel")
+						}}</base-button>
 						<base-button
 							design="primary"
 							:disabled="!isSendEnabled"
 							data-testid="modal_submit_btn"
 							@click="addToLesson"
-						>{{ $t("common.actions.add") }}</base-button>
+							>{{ $t("common.actions.add") }}</base-button
+						>
 					</template>
 				</modal-footer>
 			</template>

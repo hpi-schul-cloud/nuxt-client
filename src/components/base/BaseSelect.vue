@@ -91,9 +91,9 @@ export default {
 			default: "Aktiv",
 		},
 		dataTestid: {
- 			type: String,
- 			default: "BaseSelect",
- 		},
+			type: String,
+			default: "BaseSelect",
+		},
 	},
 	data() {
 		// This solely exists to appear in the coverage report
