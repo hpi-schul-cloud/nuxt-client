@@ -1,5 +1,5 @@
 <template>
-	<base-input-default v-bind="$attrs" :type="false" vmodel="" :label="label">
+	<base-input-default v-bind="$attrs" :type="false" vmodel :label="label">
 		<multi-select
 			:aria-label="label"
 			:value="value"
@@ -10,6 +10,7 @@
 			:track-by="trackBy"
 			:placeholder="placeholder"
 			class="input mb-0"
+			:data-testid="dataTestid"
 			:label="optionLabel"
 			:select-label="selectLabel"
 			:selected-label="selectedLabel"
@@ -88,6 +89,10 @@ export default {
 		selectedLabel: {
 			type: String,
 			default: "Aktiv",
+		},
+		dataTestid: {
+			type: String,
+			default: "BaseSelect",
 		},
 	},
 	data() {
