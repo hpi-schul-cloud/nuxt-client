@@ -87,7 +87,7 @@
 		"@schul-cloud/prettier-config": "^1.0.0",
 		"@schul-cloud/stylelint-config": "^1.0.0",
 		"@schul-cloud/styles": "^0.2.1",
-		"@storybook/addon-a11y": "^6.0.28",
+		"@storybook/addon-a11y": "^6.1.1",
 		"@storybook/addon-actions": "^6.0.28",
 		"@storybook/addon-backgrounds": "^6.0.28",
 		"@storybook/addon-centered": "^5.3.21",
