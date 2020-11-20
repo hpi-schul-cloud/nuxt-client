@@ -15,7 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6708 - added data-testids to the students table in administration page
 - SC-6709 - added data-testids to the teachers table in administration page
 - SC-7629 - created Roles component to the ldap page
-- OPS-1508 - added limits for cpu and ram to the docker compose files
+- OPS-1508 - added limits for cpu and ram to the docker compose files ( 05.11.2020 )
 - SC-7489 - added input validation to the ldap config components
 - SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission check to ldap config page
 - SC-6043 - Prepare a concept for a general error handling in nuxt-client
@@ -31,6 +31,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6060 Updated caniuse-lite
 - SC-3788 Renamed Messenger component to meet naming convention
 - IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
+- OPS-1508 Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
 ## Added
 
