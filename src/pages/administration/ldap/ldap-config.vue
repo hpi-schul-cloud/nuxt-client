@@ -117,7 +117,6 @@ export default {
 				nameAttribute: "description",
 				participantAttribute: "member",
 			},
-			// forntend input verification
 			isInvalidData: {
 				connection: null,
 				users: null,
@@ -145,7 +144,7 @@ export default {
 		},
 	},
 	methods: {
-		async validateHandler() {
+		validateHandler() {
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}

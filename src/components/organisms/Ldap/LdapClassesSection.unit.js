@@ -86,7 +86,6 @@ describe("@components/organisms/LdapClassesSection", () => {
 				},
 			},
 		});
-		debugger;
 		// validations are only active when unchecked === true
 		await wrapper.setData({ unchecked: true });
 
@@ -95,7 +94,6 @@ describe("@components/organisms/LdapClassesSection", () => {
 
 		inputPath.setValue("");
 		inputPath.trigger("blur"); // without this the error is not displayed
-		// await wrapper.vm.$nextTick();
 
 		expect(inputPath.element.value).toBe("");
 		expect(wrapper.vm.$v.$invalid).toBe(true);
