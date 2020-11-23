@@ -59,12 +59,12 @@ export const actions = {
 			);
 			if (!verification.ok) {
 				verification.errors.forEach((err) => {
-					// plaveholders for translations
+					// placeholders for translations
 					this.$toast.error(err);
 				});
 				return;
 			}
-			// plaveholders for translations
+			// placeholders for translations
 			this.$toast.success("The verification was succesfull");
 			commit("setSystemVerificationData", verification);
 

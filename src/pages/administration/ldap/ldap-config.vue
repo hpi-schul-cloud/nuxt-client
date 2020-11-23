@@ -156,7 +156,10 @@ export default {
 						this.ldapConfigData,
 						this.school._id
 					);
+					clearInterval(this.$options.debounce);
+					return;
 				}
+				this.$toast.error("The data you entered is invalid");
 				clearInterval(this.$options.debounce);
 			}, 500);
 		},
