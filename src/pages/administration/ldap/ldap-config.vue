@@ -52,13 +52,12 @@
 			/>
 		</div>
 		<div class="buttons-container">
-			<!-- Placeholder butttons until design decision is made -->
-			<base-button design="primary outline" class="ml--sm">Cancel</base-button>
-			<base-button design="primary" class="ml--sm" @click="validateHandler"
-				>Verify</base-button
+			<!-- placeholder for translations -->
+			<base-button design="secondary text" class="ml--sm"
+				>Eingaben zurücksetzen</base-button
 			>
-			<base-button :disabled="isInvalid" design="primary outline" class="ml--sm"
-				>Save Changes</base-button
+			<base-button design="secondary" class="ml--sm" @click="validateHandler"
+				>Eingaben prüfen</base-button
 			>
 		</div>
 	</section>
@@ -94,35 +93,36 @@ export default {
 				},
 			],
 			ldapConfigData: {
+				// Connection Section Data
+				url: "ldaps://ldap.schul-cloud.org",
+				basisPath: "dc=schul-cloud,dc=org",
+				searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
+				searchUserPassword: "Naivi4Ahghee",
+				// Users Sections Data
+				userPath: "ou=users",
+				firstName: "givenName",
+				familyName: "sn",
+				email: "qweqwe@de.de",
+				uid: "uidNumber",
+				uuid: "uid",
 				// Roles Section Data
 				groupOption: "ldap_group",
-				member: "",
-				student: "",
-				teacher: "",
-				admin: "",
-				user: "",
-				// Connection Section Data
-				url: "",
-				basisPath: "",
-				searchUser: "",
-				searchUserPassword: "",
+				member: "description",
+				student: "cn=student,ou=roles,ou=groups,dc=schul-cloud,dc=org",
+				teacher: "cn=teacher,ou=roles,ou=groups,dc=schul-cloud,dc=org",
+				admin: "cn=admin,ou=roles,ou=groups,dc=schul-cloud,dc=org",
+				user: "no-sc",
 				// Classes Section Data
-				classPath: "",
-				nameAttribute: "",
-				participantAttribute: "",
-				// Users Sections Data
-				userPath: "",
-				firstName: "",
-				familyName: "",
-				email: "",
-				uid: "",
-				uuid: "",
+				classPath: "ou=classes,ou=groups",
+				nameAttribute: "description",
+				participantAttribute: "member",
 			},
+			// forntend input verification
 			isInvalidData: {
-				roles: true,
-				connection: true,
-				classes: true,
-				users: true,
+				connection: null,
+				users: null,
+				roles: null,
+				classes: null,
 			},
 			triggerValidation: false,
 		};
@@ -134,7 +134,9 @@ export default {
 		isInvalid() {
 			if (
 				!Object.keys(this.isInvalidData).some(
-					(section) => this.isInvalidData[section] === true
+					(section) =>
+						this.isInvalidData[section] === true ||
+						this.isInvalidData[section] === null
 				)
 			) {
 				return false;
@@ -143,9 +145,35 @@ export default {
 		},
 	},
 	methods: {
-		validateHandler() {
+		async validateHandler() {
+			if (this.$options.debounce) {
+				clearInterval(this.$options.debounce);
+			}
 			this.triggerValidation = !this.triggerValidation;
+			this.$options.debounce = setInterval(async () => {
+				if (!this.isInvalid) {
+					const verification = await this.$axios.$post(
+						"/ldap-config?verifyOnly=true",
+						ldapConfigData
+					);
+					if (!verification.ok) {
+						verification.errors.forEach((err) => {
+							// plaveholders for translations
+							this.$toast.error(err);
+						});
+						clearInterval(this.$options.debounce);
+						return;
+					}
+					// plaveholders for translations
+					this.$toast.success("The verification was succesfull");
+					this.$router.push({
+						path: `/administration/ldap/ldap-save?id=${this.school._id}`,
+					});
+				}
+				clearInterval(this.$options.debounce);
+			}, 500);
 		},
+
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;
 		},
@@ -179,5 +207,9 @@ export default {
 	display: flex;
 	justify-content: flex-end;
 	margin: var(--space-xl-4) 0 var(--space-xl-4) 0;
+
+	@include breakpoint(tablet) {
+		margin: var(--space-xl-4);
+	}
 }
 </style>
