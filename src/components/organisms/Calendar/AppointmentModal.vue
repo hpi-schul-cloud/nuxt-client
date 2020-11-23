@@ -244,11 +244,22 @@ export default {
 			fullDay: false,
 		};
 	},
+	computed: {
+		changeEditMode: {
+			get: function () {
+				return this.editMode;
+			},
+			set: function (newValue) {
+				this.$emit("update:editMode", newValue);
+			},
+		},
+	},
 	methods: {
 		onChange() {
+			//console.log(this.startTime);
 			this.fullDay = !this.fullDay;
-			this.startTime = "00:00";
-			this.endTime = "00:00";
+			//this.startTime.value = new Date("00:00").toDateString();
+			//this.endTime.value = new Date("00:00").toDateString();
 		},
 	},
 };

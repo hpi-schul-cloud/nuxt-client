@@ -4,6 +4,7 @@
 	<div class="route-calendar">
 		<div>
 			<appointment-modal
+				ref="modalComponent"
 				:input-text.sync="inputText"
 				:place.sync="place"
 				:modal-active.sync="modalActive"
@@ -271,7 +272,9 @@ export default {
 					location.href = target;
 				} else {
 					//TODO: edit mode for private events
-					this.modalActive = true;
+					this.$refs.modalComponent.editMode = true;
+					this.$refs.modalComponent.modalActive = true;
+					//this.$refs.modalComponent.inputText = clickedEvent.attributes["summary"];
 				}
 			}
 		},
