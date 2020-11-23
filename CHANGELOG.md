@@ -8,7 +8,46 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- SC-7488 - added 3 components in the organisms/ldap for the ldap-config form
+- SC-6293 - restricts Lern-Store access by permission
+- SC-6708 - added data-testids to the students table in administration page
+- SC-6709 - added data-testids to the teachers table in administration page
+- SC-7629 - created Roles component to the ldap page
+- OPS-1508 - added limits for cpu and ram to the docker compose files
+- SC-7489 - added input validation to the ldap config components
+- SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission check to ldap config page
+- SC-6043 - Prepare a concept for a general error handling in nuxt-client
+- SC-5473 - Add selectors for lernstore test automation
+
+### Fixed
+
+- SC-7845 - fixed the changelog github action
+- SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
+- SC-7557 - fixes lernstore modal width
+
+### Changed
+
 - SC-6060 Updated caniuse-lite
+- SC-3788 Renamed Messenger component to meet naming convention
+- IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
+- SC-7796 - Input fields border-width change on hovering
+
+## Added
+
+- SC-7020 - added a new course TaskItem component
+
+### Changed in Unreleased
+
+- SC-5476 Renamed env vars to be consistent with old client and server
+
+## 25.2.1
+
+## Changed
+
+- SC-7804 Renamed BaseDialog/index
+- Adjusted github actions to use end-to-end-tests instead of integration
 
 ## 25.2.0
 
@@ -23,6 +62,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6549 - Added missing Help section in sidebar
 - SC-6357: Fixed the bouble loading issue in admin tables when changing the number of elements to display
 - SC-6831 Fixes search/clear icons behaviour in lernstore
+
+## [25.1.1] - 2020-10-21
+
+### Added
+
+- SC-7447 - Add warning text for links when leaving the schul-cloud platform
 
 ## 25.0.2
 

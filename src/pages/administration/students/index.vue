@@ -14,6 +14,7 @@
 			"
 			class="search-section"
 			label=""
+			data-testid="searchbar"
 			@update:vmodel="barSearch"
 		>
 			<template v-slot:icon>
@@ -46,13 +47,16 @@
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
+			<template v-slot:datacolumn-birthday="{ data }">
+				<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
+			</template>
 			<template v-slot:datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:headcolumn-consent> </template>
 			<template v-slot:columnlabel-consent></template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
+				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -87,6 +91,7 @@
 					design="text icon"
 					size="small"
 					:to="`/administration/students/${data}/edit`"
+					data-testid="edit_student_button"
 				>
 					<base-icon source="material" icon="edit" />
 				</base-button>
@@ -102,18 +107,21 @@
 			"
 			position="bottom-right"
 			:show-label="true"
+			data-testid="fab_button_students_table"
 			:actions="[
 				{
 					label: $t('pages.administration.students.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					to: '/administration/students/new',
+					dataTestid: 'fab_button_add_students',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
 					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/students/import',
+					dataTestid: 'fab_button_import_students',
 				},
 			]"
 		/>
@@ -130,9 +138,7 @@ import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import dayjs from "dayjs";
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 
 export default {
 	components: {
@@ -381,7 +387,8 @@ export default {
 			});
 			this.find();
 		},
-		dayjs,
+		printDate,
+		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,

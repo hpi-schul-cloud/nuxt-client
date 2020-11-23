@@ -14,9 +14,21 @@ const module = mergeDeep(base, {
 			const customEndpoint = "/users/admin/teachers";
 			return this.$axios.$post(customEndpoint, teacherData);
 		},
-		createStudent(ctx, studentData) {
+		createStudent(ctx, payload) {
+			ctx.commit("resetBusinessError");
 			const customEndpoint = "/users/admin/students";
-			return this.$axios.$post(customEndpoint, studentData);
+			const { successMessage, ...studentData } = payload;
+			return this.$axios
+				.$post(customEndpoint, studentData)
+				.then(() => {
+					this.$toast.success(successMessage);
+					this.$router.push({
+						path: `/administration/students`,
+					});
+				})
+				.catch((error) => {
+					ctx.commit("setBusinessError", error.response.data);
+				});
 		},
 		sendRegistrationLink(ctx, payload = {}) {
 			const customEndpoint = "/users/mail/registrationLink";

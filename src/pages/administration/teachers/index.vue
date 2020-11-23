@@ -14,6 +14,7 @@
 			"
 			class="search-section"
 			label=""
+			data-testid="searchbar"
 			@update:vmodel="barSearch"
 		>
 			<template v-slot:icon>
@@ -49,7 +50,7 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template v-slot:datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ dayjs(data).format("DD.MM.YYYY") }}</span>
+				<span class="text-content">{{ printDate(data) }}</span>
 			</template>
 			<template v-slot:datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -78,6 +79,7 @@
 					design="text icon"
 					size="small"
 					:to="`/administration/teachers/${data}/edit`"
+					data-testid="edit_teacher_button"
 				>
 					<base-icon source="material" icon="edit" />
 				</base-button>
@@ -93,18 +95,21 @@
 			"
 			position="bottom-right"
 			:show-label="true"
+			data-testid="fab_button_teachers_table"
 			:actions="[
 				{
 					label: $t('pages.administration.teachers.fab.add'),
 					icon: 'person_add',
 					'icon-source': 'material',
 					to: '/administration/teachers/new',
+					dataTestid: 'fab_button_add_teachers',
 				},
 				{
 					label: $t('pages.administration.teachers.fab.import'),
 					icon: 'backup',
 					'icon-source': 'material',
 					href: '/administration/teachers/import',
+					dataTestid: 'fab_button_import_teachers',
 				},
 			]"
 		/>
@@ -120,9 +125,7 @@ import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import dayjs from "dayjs";
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { printDate } from "@plugins/datetime";
 export default {
 	layout: "loggedInFull",
 	components: {
@@ -367,7 +370,7 @@ export default {
 			});
 			this.find();
 		},
-		dayjs,
+		printDate,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,

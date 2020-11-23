@@ -81,6 +81,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="bottom-line" style="border-color: transparent" />
 		<span
 			v-if="hasError || !!info"
 			:class="{ info: true, help: !hasError, error: hasError }"
@@ -90,8 +91,9 @@
 	</div>
 </template>
 <script>
+import { inputRangeDate } from "@plugins/datetime";
+
 import uidMixin from "@mixins/uid";
-import dayjs from "dayjs";
 
 export const supportedTypes = [
 	"email",
@@ -138,8 +140,8 @@ export default {
 		return {
 			hasFocus: false,
 			passwordVisible: false,
-			minDate: dayjs().subtract(100, "y").format("YYYY-MM-DD"),
-			maxDate: dayjs().subtract(4, "y").format("YYYY-MM-DD"),
+			minDate: inputRangeDate(-100, "y"),
+			maxDate: inputRangeDate(-4, "y"),
 			birthDateValidationPattern:
 				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
 		};
@@ -216,6 +218,10 @@ export default {
 	}
 }
 
+.bottom-line {
+	border-bottom: var(--border-width-bold) solid;
+}
+
 .top {
 	width: 100%;
 	border-bottom: var(--border-width) solid var(--color-black);
@@ -224,6 +230,9 @@ export default {
 	&:hover:not(.disabled) {
 		border-bottom: var(--border-width-bold) solid var(--color-primary);
 		outline: none;
+		~ .bottom-line {
+			border-bottom: var(--border-width) solid;
+		}
 	}
 	&.error {
 		border-bottom-color: var(--color-danger);
