@@ -32,6 +32,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6060 Updated caniuse-lite
 - SC-3788 Renamed Messenger component to meet naming convention
 - IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
+- SC-7796 - Input fields border-width change on hovering
 
 ## Added
 
