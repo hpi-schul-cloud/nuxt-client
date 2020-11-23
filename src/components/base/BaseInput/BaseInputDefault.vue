@@ -81,7 +81,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="bottom-line" style="border-color: transparent;" />
+		<div class="bottom-line" style="border-color: transparent" />
 		<span
 			v-if="hasError || !!info"
 			:class="{ info: true, help: !hasError, error: hasError }"
