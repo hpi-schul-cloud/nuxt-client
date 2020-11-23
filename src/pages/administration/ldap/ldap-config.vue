@@ -151,29 +151,11 @@ export default {
 			this.triggerValidation = !this.triggerValidation;
 			this.$options.debounce = setInterval(async () => {
 				if (!this.isInvalid) {
-					try {
-						const verification = await this.$axios.$post(
-							"/ldap-config?verifyOnly=true",
-							this.ldapConfigData
-						);
-						if (!verification.ok) {
-							verification.errors.forEach((err) => {
-								// plaveholders for translations
-								this.$toast.error(err);
-							});
-							clearInterval(this.$options.debounce);
-							return;
-						}
-						// plaveholders for translations
-						this.$toast.success("The verification was succesfull");
-
-						// disabled until page implementation
-						// this.$router.push({
-						// 	path: `/administration/ldap/ldap-save?id=${this.school._id}`,
-						// });
-					} catch (error) {
-						this.$toast.error(error);
-					}
+					this.$store.dispatch(
+						"ldap-config/verifyData",
+						this.ldapConfigData,
+						this.school._id
+					);
 				}
 				clearInterval(this.$options.debounce);
 			}, 500);
