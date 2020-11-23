@@ -167,9 +167,11 @@ export default {
 						}
 						// plaveholders for translations
 						this.$toast.success("The verification was succesfull");
-						this.$router.push({
-							path: `/administration/ldap/ldap-save?id=${this.school._id}`,
-						});
+
+						// disabled until page implementation
+						// this.$router.push({
+						// 	path: `/administration/ldap/ldap-save?id=${this.school._id}`,
+						// });
 					} catch (error) {
 						this.$toast.error(error);
 					}
@@ -177,7 +179,6 @@ export default {
 				clearInterval(this.$options.debounce);
 			}, 500);
 		},
-
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;
 		},
