@@ -19,6 +19,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7489 - added input validation to the ldap config components
 - SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission check to ldap config page
 - SC-6043 - Prepare a concept for a general error handling in nuxt-client
+- SC-5473 - Add selectors for lernstore test automation
 
 ### Fixed
 
@@ -31,6 +32,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6060 Updated caniuse-lite
 - SC-3788 Renamed Messenger component to meet naming convention
 - IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
+- SC-7796 - Input fields border-width change on hovering
 
 ## Added
 
