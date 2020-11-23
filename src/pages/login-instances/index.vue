@@ -74,8 +74,8 @@ export default {
 	head() {
 		return {
 			title: "HPI Schul-Cloud",
-		}
-	}
+		};
+	},
 };
 </script>
 
