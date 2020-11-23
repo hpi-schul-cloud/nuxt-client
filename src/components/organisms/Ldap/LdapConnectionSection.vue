@@ -17,7 +17,7 @@
 			@update:vmodel="$emit('input', { ...value, url: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="server" />
+				<base-icon source="custom" icon="server" />
 			</template>
 		</base-input>
 		<base-input
@@ -49,7 +49,7 @@
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="user" />
+				<base-icon source="custom" icon="user" />
 			</template>
 		</base-input>
 		<base-input

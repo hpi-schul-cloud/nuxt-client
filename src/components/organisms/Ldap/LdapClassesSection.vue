@@ -50,7 +50,7 @@
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="custom" icon="class" />
 			</template>
 		</base-input>
 		<base-input
@@ -68,7 +68,7 @@
 			"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="gruppen" />
+				<base-icon source="custom" icon="gruppen" />
 			</template>
 		</base-input>
 	</div>

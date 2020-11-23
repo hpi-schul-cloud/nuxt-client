@@ -22,9 +22,6 @@
 				value="ldap_group"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
-				<template v-slot:icon>
-					<base-icon source="material" icon="user" />
-				</template>
 			</base-input>
 			<base-input
 				:vmodel="value.groupOption"
@@ -38,9 +35,6 @@
 				value="user_attribute"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
-				<template v-slot:icon>
-					<base-icon source="material" icon="edit" />
-				</template>
 			</base-input>
 			<p class="text-sm" style="margin-top: var(--space-xs)">
 				{{
@@ -83,7 +77,7 @@
 			@update:vmodel="$emit('input', { ...value, student: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="custom" icon="student" />
 			</template>
 		</base-input>
 		<base-input
