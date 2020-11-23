@@ -81,6 +81,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="bottom-line" style="border-color: transparent" />
 		<span
 			v-if="hasError || !!info"
 			:class="{ info: true, help: !hasError, error: hasError }"
@@ -217,6 +218,10 @@ export default {
 	}
 }
 
+.bottom-line {
+	border-bottom: var(--border-width-bold) solid;
+}
+
 .top {
 	width: 100%;
 	border-bottom: var(--border-width) solid var(--color-black);
@@ -225,6 +230,9 @@ export default {
 	&:hover:not(.disabled) {
 		border-bottom: var(--border-width-bold) solid var(--color-primary);
 		outline: none;
+		~ .bottom-line {
+			border-bottom: var(--border-width) solid;
+		}
 	}
 	&.error {
 		border-bottom-color: var(--color-danger);
