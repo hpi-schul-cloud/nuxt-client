@@ -1,9 +1,7 @@
 <template>
 	<section class="section">
 		<base-button @click="backButtonHandler">Züruck</base-button>
-		<h1 class="h3">
-			Folgende Datensätze stehen zur Synchronization bereit
-		</h1>
+		<h1 class="h3">Folgende Datensätze stehen zur Synchronization bereit</h1>
 		<div>
 			<div>
 				<span></span>
@@ -31,9 +29,7 @@
 			richtig zugeordnet haben.
 		</p>
 
-		<p class="subtitle-text">
-			Beispeil Nutzer:innen
-		</p>
+		<p class="subtitle-text">Beispeil Nutzer:innen</p>
 		<div>
 			<span
 				v-for="(row, index) in Object.entries(systemData.users.sample)"
@@ -43,9 +39,7 @@
 			</span>
 		</div>
 
-		<p class="subtitle-text">
-			Beispiel Klasse
-		</p>
+		<p class="subtitle-text">Beispiel Klasse</p>
 		<div>
 			<span
 				v-for="(row, index) in Object.entries(systemData.classes.sample)"
