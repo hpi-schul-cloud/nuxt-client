@@ -28,7 +28,7 @@
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		/>
 		<p class="title-class">
-			{{ $t("pages.administration.ldap.users.hint") }}
+			{{ $t("pages.administration.ldap.classes.hint") }}
 		</p>
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
