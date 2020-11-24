@@ -23,6 +23,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- SC-7845 - fixed header tab name on login-instances page
 - SC-7845 - fixed the changelog github action
 - SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
 - SC-7557 - fixes lernstore modal width
