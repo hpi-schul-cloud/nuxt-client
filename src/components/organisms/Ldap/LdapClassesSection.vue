@@ -32,7 +32,7 @@
 			</template>
 		</base-input>
 		<p class="title-class">
-			{{ $t("pages.administration.ldap.users.hint") }}
+			{{ $t("pages.administration.ldap.classes.hint") }}
 		</p>
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
