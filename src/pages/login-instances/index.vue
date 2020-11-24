@@ -71,6 +71,11 @@ export default {
 			return this.$mq === "tablet";
 		},
 	},
+	head() {
+		return {
+			title: "HPI Schul-Cloud",
+		};
+	},
 };
 </script>
 
