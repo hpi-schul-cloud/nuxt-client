@@ -52,7 +52,7 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.email')"
 			:validation-model="$v.value.email"
-			:validation-messages="emailValidationMessages"
+			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		/>
@@ -110,10 +110,6 @@ export default {
 					message: this.$t("pages.administration.ldapEdit.validation.path"),
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
-			],
-			emailValidationMessages: [
-				{ key: "required", message: this.$t("common.validation.required") },
-				{ key: "email", message: this.$t("common.validation.email") },
 			],
 		};
 	},
