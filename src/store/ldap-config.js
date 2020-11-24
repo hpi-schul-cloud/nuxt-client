@@ -79,11 +79,33 @@ export const actions = {
 			});
 		} catch (error) {
 			this.$toast.error(error);
-			console.log(error);
 		}
 	},
-	// async submitData({ commit }, patload) {
-	// }
+	async submitData({ commit }, payload) {
+		try {
+			const submssion = await this.$axios.$post(
+				"/ldap-config?verifyOnly=false",
+				payload
+			);
+			if (!submssion.ok) {
+				verification.errors.forEach((err) => {
+					// placeholders for translations
+					this.$toast.error(err.message);
+				});
+				this.$router.push({
+					path: `/administration/ldap/config`,
+				});
+				return;
+			}
+			this.$toast.success("The submission was succesfull");
+			commit("setDataSubmission", payload);
+			this.$router.push({
+				path: `/administration/school`,
+			});
+		} catch (error) {
+			this.$toast.error(error);
+		}
+	},
 };
 
 export const getters = {};
@@ -94,11 +116,15 @@ export const mutations = {
 	setSystemVerificationData(state, payload) {
 		state.systemVerificationData = payload;
 	},
+	setDataSubmission(state, payload) {
+		state.dataSubmission = payload;
+	},
 };
 
 export const state = () => {
 	return {
 		systemData: null,
 		systemVerificationData: null,
+		dataSubmission: null,
 	};
 };

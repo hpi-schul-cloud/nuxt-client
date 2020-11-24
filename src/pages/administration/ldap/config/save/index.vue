@@ -56,7 +56,9 @@
 		</div>
 		<div>
 			<base-button @click="backButtonHandler">Züruck</base-button>
-			<base-button>Synchronization aktivieren</base-button>
+			<base-button @click="submitButtonHandler"
+				>Synchronization aktivieren</base-button
+			>
 		</div>
 	</section>
 </template>
@@ -83,6 +85,9 @@ export default {
 	methods: {
 		backButtonHandler() {
 			this.$router.push("/administration/ldap/config");
+		},
+		submitButtonHandler() {
+			this.$store.dispatch("ldap-config/submitData", this.systemData);
 		},
 	},
 };
