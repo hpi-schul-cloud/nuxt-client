@@ -79,7 +79,7 @@
 		"vuelidate": "^0.7.6"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.12.3",
+		"@babel/core": "^7.12.8",
 		"@babel/plugin-proposal-optional-chaining": "^7.12.1",
 		"@babel/preset-env": "^7.12.1",
 		"@nuxtjs/dotenv": "^1.4.1",
