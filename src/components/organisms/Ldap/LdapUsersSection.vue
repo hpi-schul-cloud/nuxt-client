@@ -21,7 +21,7 @@
 			@update:vmodel="$emit('input', { ...value, userPath: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="custom" icon="account_tree" />
 			</template>
 		</base-input>
 		<p class="path-hint">
@@ -69,7 +69,7 @@
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="material" icon="email" />
 			</template>
 		</base-input>
 		<base-input

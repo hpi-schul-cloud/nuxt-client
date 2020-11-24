@@ -9,9 +9,6 @@
 			datatest-id="ldapDataClassesCheckbox"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
 		>
-			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
-			</template>
 		</base-input>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
@@ -31,7 +28,7 @@
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="custom" icon="account_tree" />
 			</template>
 		</base-input>
 		<p class="title-class">

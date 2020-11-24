@@ -59,7 +59,7 @@
 			@update:vmodel="$emit('input', { ...value, member: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="material" icon="person" />
 			</template>
 		</base-input>
 		<base-input
@@ -94,7 +94,7 @@
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="custom" icon="teacher" />
 			</template>
 		</base-input>
 		<base-input
@@ -111,7 +111,7 @@
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="custom" icon="admin_panel_settings" />
 			</template>
 		</base-input>
 		<base-input
@@ -128,7 +128,7 @@
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		>
 			<template v-slot:icon>
-				<base-icon source="material" icon="edit" />
+				<base-icon source="custom" icon="person_ignore" />
 			</template>
 		</base-input>
 	</div>
