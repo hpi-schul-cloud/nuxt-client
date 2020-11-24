@@ -27,25 +27,25 @@
 
 		<div class="form-container">
 			<connection-section
-				v-model="ldapConfigData"
+				v-model="systemData"
 				:validate="triggerValidation"
 				data-testid="ldapConnectionSection"
 				@update:errors="updateValidationData"
 			/>
 			<users-section
-				v-model="ldapConfigData"
+				v-model="systemData"
 				:validate="triggerValidation"
 				data-testid="ldapUsersSection"
 				@update:errors="updateValidationData"
 			/>
 			<roles-section
-				v-model="ldapConfigData"
+				v-model="systemData"
 				:validate="triggerValidation"
 				data-testid="ldapRolesSection"
 				@update:errors="updateValidationData"
 			/>
 			<classes-section
-				v-model="ldapConfigData"
+				v-model="systemData"
 				:validate="triggerValidation"
 				data-testid="ldapClassesSection"
 				@update:errors="updateValidationData"
@@ -92,31 +92,6 @@ export default {
 					text: this.$t("pages.administration.ldap.index.title"),
 				},
 			],
-			ldapConfigData: {
-				// Connection Section Data
-				url: "ldaps://ldap.schul-cloud.org",
-				basisPath: "dc=schul-cloud,dc=org",
-				searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
-				searchUserPassword: "Naivi4Ahghee",
-				// Users Sections Data
-				userPath: "ou=users",
-				firstName: "givenName",
-				familyName: "sn",
-				email: "mail",
-				uid: "uidNumber",
-				uuid: "uid",
-				// Roles Section Data
-				groupOption: "ldap_group",
-				member: "description",
-				student: "cn=student,ou=roles,ou=groups,dc=schul-cloud,dc=org",
-				teacher: "cn=teacher,ou=roles,ou=groups,dc=schul-cloud,dc=org",
-				admin: "cn=admin,ou=roles,ou=groups,dc=schul-cloud,dc=org",
-				user: "no-sc",
-				// Classes Section Data
-				classPath: "ou=classes,ou=groups",
-				nameAttribute: "description",
-				participantAttribute: "member",
-			},
 			isInvalidData: {
 				connection: null,
 				users: null,
@@ -142,6 +117,17 @@ export default {
 			}
 			return true;
 		},
+		systemData: {
+			get() {
+				return this.$store.getters["ldap-config/systemDataGetter"];
+			},
+			set(value) {
+				this.$store.commit("ldap-config/updateSystemData", value);
+			},
+		},
+	},
+	created() {
+		this.$store.dispatch("ldap-config/getData");
 	},
 	methods: {
 		validateHandler() {
@@ -151,7 +137,7 @@ export default {
 			this.triggerValidation = !this.triggerValidation;
 			this.$options.debounce = setInterval(async () => {
 				if (!this.isInvalid) {
-					this.$store.dispatch("ldap-config/verifyData", this.ldapConfigData);
+					this.$store.dispatch("ldap-config/verifyData", this.systemData);
 					clearInterval(this.$options.debounce);
 					return;
 				}
