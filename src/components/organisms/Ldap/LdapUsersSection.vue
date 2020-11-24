@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { required, email } from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
 
 export default {
@@ -129,7 +129,7 @@ export default {
 				userPath: { required, ldapPathValidationRegex },
 				firstName: { required },
 				familyName: { required },
-				email: { required, email },
+				email: { required },
 				uid: { required },
 				uuid: { required },
 			},

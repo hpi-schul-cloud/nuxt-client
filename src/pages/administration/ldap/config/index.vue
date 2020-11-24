@@ -94,28 +94,28 @@ export default {
 			],
 			ldapConfigData: {
 				// Connection Section Data
-				url: "",
-				basisPath: "",
-				searchUser: "",
-				searchUserPassword: "",
+				url: "ldaps://ldap.schul-cloud.org",
+				basisPath: "dc=schul-cloud,dc=org",
+				searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
+				searchUserPassword: "Naivi4Ahghee",
 				// Users Sections Data
-				userPath: "",
-				firstName: "",
-				familyName: "",
-				email: "",
-				uid: "",
-				uuid: "",
+				userPath: "ou=users",
+				firstName: "givenName",
+				familyName: "sn",
+				email: "mail",
+				uid: "uidNumber",
+				uuid: "uid",
 				// Roles Section Data
-				groupOption: "",
-				member: "",
-				student: "",
-				teacher: "",
-				admin: "",
-				user: "",
+				groupOption: "ldap_group",
+				member: "description",
+				student: "cn=student,ou=roles,ou=groups,dc=schul-cloud,dc=org",
+				teacher: "cn=teacher,ou=roles,ou=groups,dc=schul-cloud,dc=org",
+				admin: "cn=admin,ou=roles,ou=groups,dc=schul-cloud,dc=org",
+				user: "no-sc",
 				// Classes Section Data
-				classPath: "",
-				nameAttribute: "",
-				participantAttribute: "",
+				classPath: "ou=classes,ou=groups",
+				nameAttribute: "description",
+				participantAttribute: "member",
 			},
 			isInvalidData: {
 				connection: null,
@@ -151,11 +151,7 @@ export default {
 			this.triggerValidation = !this.triggerValidation;
 			this.$options.debounce = setInterval(async () => {
 				if (!this.isInvalid) {
-					this.$store.dispatch(
-						"ldap-config/verifyData",
-						this.ldapConfigData,
-						this.school._id
-					);
+					this.$store.dispatch("ldap-config/verifyData", this.ldapConfigData);
 					clearInterval(this.$options.debounce);
 					return;
 				}

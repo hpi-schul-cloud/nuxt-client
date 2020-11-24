@@ -1,4 +1,6 @@
 export const actions = {
+	// async getData({commit}) {
+	// },
 	async verifyData({ commit }, payload) {
 		const {
 			url,
@@ -27,11 +29,13 @@ export const actions = {
 			rootPath: basisPath,
 			searchUser,
 			searchUserPassword,
+			// provider: "general",
 			providerOptions: {
 				userPathAdditions: userPath,
 				classPathAdditions: classPath,
 				roleType: groupOption,
 				userAttributeNameMapping: {
+					// dn: "dn",
 					givenName: firstName,
 					sn: familyName,
 					uuid,
@@ -46,6 +50,7 @@ export const actions = {
 					roleNoSc: user,
 				},
 				classAttributeNameMapping: {
+					// dn: "dn",
 					description: nameAttribute,
 					uniqueMember: participantAttribute,
 				},
@@ -57,10 +62,11 @@ export const actions = {
 				"/ldap-config?verifyOnly=true",
 				data
 			);
+			console.log(verification);
 			if (!verification.ok) {
 				verification.errors.forEach((err) => {
 					// placeholders for translations
-					this.$toast.error(err);
+					this.$toast.error(err.message);
 				});
 				return;
 			}
@@ -68,19 +74,23 @@ export const actions = {
 			this.$toast.success("The verification was succesfull");
 			commit("setSystemVerificationData", verification);
 
-			// disabled until page implementation
-			// this.$router.push({
-			// 	path: `/administration/ldap/ldap-save?id=${id}`,
-			// });
+			this.$router.push({
+				path: `/administration/ldap/config/save`,
+			});
 		} catch (error) {
 			this.$toast.error(error);
+			console.log(error);
 		}
 	},
+	// async submitData({ commit }, patload) {
+	// }
 };
 
 export const getters = {};
 
 export const mutations = {
+	// setSystemData(sata, payload) {
+	// },
 	setSystemVerificationData(state, payload) {
 		state.systemVerificationData = payload;
 	},
@@ -88,6 +98,7 @@ export const mutations = {
 
 export const state = () => {
 	return {
+		systemData: null,
 		systemVerificationData: null,
 	};
 };
