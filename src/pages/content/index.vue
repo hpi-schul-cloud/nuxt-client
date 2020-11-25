@@ -28,7 +28,9 @@
 							class="content__total"
 						>
 							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{ searchQueryResult }}"
+							{{ $t("pages.content.index.search_results") }} "{{
+								searchQueryResult
+							}}"
 						</p>
 						<span v-if="!loading" class="content__container_child">
 							<!-- initial state, empty search -->
