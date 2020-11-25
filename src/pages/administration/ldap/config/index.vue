@@ -53,7 +53,10 @@
 		</div>
 		<div class="buttons-container">
 			<!-- placeholder for translations -->
-			<base-button design="secondary text" class="ml--sm"
+			<base-button
+				design="secondary text"
+				class="ml--sm"
+				@click="clearInputsHandler"
 				>Eingaben zurücksetzen</base-button
 			>
 			<base-button design="secondary" class="ml--sm" @click="validateHandler"
@@ -119,10 +122,10 @@ export default {
 		},
 		systemData: {
 			get() {
-				return (
-					this.$store.getters["ldap-config/tempDataGetter"] ||
-					this.$store.getters["ldap-config/systemDataGetter"]
-				);
+				const tempData = this.$store.getters["ldap-config/tempDataGetter"];
+				return Object.keys(tempData).length > 0
+					? tempData
+					: this.$store.getters["ldap-config/systemDataGetter"];
 			},
 			set(value) {
 				this.$store.commit("ldap-config/updateSystemData", value);
@@ -150,6 +153,9 @@ export default {
 		},
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;
+		},
+		clearInputsHandler() {
+			this.$store.commit("ldap-config/clearData");
 		},
 	},
 };

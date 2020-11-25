@@ -186,6 +186,12 @@ export const mutations = {
 	setTempData(state, payload) {
 		state.temp = payload;
 	},
+	clearData(state) {
+		state.temp = state.systemData;
+		Object.keys(state.temp).forEach((key) => {
+			if (key !== "groupOption") state.temp[key] = "";
+		});
+	},
 };
 
 export const state = () => {
@@ -193,6 +199,6 @@ export const state = () => {
 		systemData: null,
 		systemVerificationData: null,
 		dataSubmission: {},
-		temp: null,
+		temp: {},
 	};
 };
