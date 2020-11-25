@@ -108,7 +108,6 @@ export const actions = {
 	async verifyData({ commit }, payload) {
 		try {
 			const data = formatData(payload, "verify");
-			console.log(data);
 			const verification = await this.$axios.$post(
 				"/ldap-config?verifyOnly=true",
 				data
@@ -122,6 +121,7 @@ export const actions = {
 			}
 			// placeholders for translations
 			this.$toast.success("The verification was succesfull");
+			commit("setTempData", payload);
 			commit("setSystemVerificationData", verification);
 
 			this.$router.push({
@@ -164,6 +164,9 @@ export const getters = {
 	systemDataGetter: (state) => {
 		return state.systemData;
 	},
+	tempDataGetter: (state) => {
+		return state.temp;
+	},
 };
 
 export const mutations = {
@@ -177,9 +180,12 @@ export const mutations = {
 		state.dataSubmission = payload;
 	},
 	updateSystemData(state, payload) {
-		state.systemData = {
+		state.temp = {
 			...payload,
 		};
+	},
+	setTempData(state, payload) {
+		state.temp = payload;
 	},
 };
 
@@ -188,5 +194,6 @@ export const state = () => {
 		systemData: null,
 		systemVerificationData: null,
 		dataSubmission: null,
+		temp: null,
 	};
 };

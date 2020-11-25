@@ -119,7 +119,10 @@ export default {
 		},
 		systemData: {
 			get() {
-				return this.$store.getters["ldap-config/systemDataGetter"];
+				return (
+					this.$store.getters["ldap-config/tempDataGetter"] ||
+					this.$store.getters["ldap-config/systemDataGetter"]
+				);
 			},
 			set(value) {
 				this.$store.commit("ldap-config/updateSystemData", value);
