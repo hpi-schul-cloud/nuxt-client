@@ -133,7 +133,9 @@ export default {
 		},
 	},
 	created() {
-		this.$store.dispatch("ldap-config/getData");
+		// disabled until the link is activated on the legacy client
+		// const { id } = this.$route.query;
+		this.$store.dispatch("ldap-config/getData", "5fbe706f85087b1144262dd2");
 	},
 	methods: {
 		validateHandler() {
