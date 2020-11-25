@@ -136,39 +136,10 @@ export const actions = {
 	},
 	async submitData({ commit }, payload) {
 		try {
-			// const submission = await this.$axios.$post(
-			// 	"/ldap-config?verifyOnly=false",
-			// 	payload
-			// );
-
-			//mock data for styling
-			const submission = {
-				ok: true,
-				users: {
-					total: 8,
-					admin: 2,
-					teacher: 2,
-					student: 4,
-					sample: {
-						email: "alice.daniel@schul-cloud.org",
-						firstName: "Alice",
-						lastName: "Daniel",
-						roles: ["student"],
-						ldapDn: "uid=alice.daniel,ou=users,dc=schul-cloud,dc=org",
-						ldapUUID: "MTIwMQ==",
-						ldapUID: "alice.daniel",
-						modifyTimestamp: "20190802121825Z",
-					},
-				},
-				classes: {
-					total: 3,
-					sample: {
-						className: "Klassen",
-						ldapDn: "ou=classes,ou=groups,dc=schul-cloud,dc=org",
-						modifyTimestamp: "20190712131016Z",
-					},
-				},
-			};
+			const submission = await this.$axios.$post(
+				"/ldap-config?verifyOnly=false",
+				payload
+			);
 			if (!submission.ok) {
 				verification.errors.forEach((err) => {
 					// placeholders for translations

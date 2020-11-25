@@ -59,18 +59,53 @@
 
 <script>
 import BaseButton from "@/components/base/BaseButton.vue";
-import { mapState } from "vuex";
+// temporarily disabled for styling
+// import { mapState } from "vuex";
 
 export default {
 	components: { BaseButton },
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
-	computed: {
-		...mapState("ldap-config", {
-			systemData: "systemVerificationData",
-		}),
+	data() {
+		return {
+			// mock for styling
+			systemData: {
+				ok: true,
+				users: {
+					total: 8,
+					admin: 2,
+					teacher: 2,
+					student: 4,
+					sample: {
+						email: "alice.daniel@schul-cloud.org",
+						firstName: "Alice",
+						lastName: "Daniel",
+						roles: ["student"],
+						ldapDn: "uid=alice.daniel,ou=users,dc=schul-cloud,dc=org",
+						ldapUUID: "MTIwMQ==",
+						ldapUID: "alice.daniel",
+						modifyTimestamp: "20190802121825Z",
+					},
+				},
+				classes: {
+					total: 3,
+					sample: {
+						className: "Klassen",
+						ldapDn: "ou=classes,ou=groups,dc=schul-cloud,dc=org",
+						modifyTimestamp: "20190712131016Z",
+					},
+				},
+			},
+		};
 	},
+	// temporarily disabled for styling
+
+	// computed: {
+	// 	...mapState("ldap-config", {
+	// 		systemData: "systemVerificationData",
+	// 	}),
+	// },
 	created() {
 		if (!this.systemData) {
 			this.$router.push("/administration/ldap/config");
