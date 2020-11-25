@@ -15,7 +15,7 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesPath"
-			:vmodel="value.classPath"
+			:vmodel="classPathValue"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
@@ -91,14 +91,22 @@ export default {
 			],
 		};
 	},
+	computed: {
+		classPathValue() {
+			if (this.unchecked === false) {
+				return "";
+			}
+			return this.value.classPath;
+		},
+	},
 	watch: {
 		validate: function () {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "classes");
 		},
-		// unchecked: function () {
-		// 	this.$emit("update:errors", this.$v.$invalid, "classes");
-		// },
+		unchecked: function () {
+			this.$emit("update:errors", this.$v.$invalid, "classes");
+		},
 	},
 	validations() {
 		if (this.unchecked === true) {

@@ -54,7 +54,7 @@
 				>Synchronization aktivieren</base-button
 			>
 		</div>
-		<base-modal :active.sync="submitted.ok" background-click-disabled="true">
+		<base-modal :active.sync="submitted.ok" :background-click-disabled="true">
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<modal-body-info
@@ -64,7 +64,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
