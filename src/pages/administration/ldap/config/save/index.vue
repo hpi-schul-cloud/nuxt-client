@@ -54,58 +54,50 @@
 				>Synchronization aktivieren</base-button
 			>
 		</div>
+		<base-modal :active.sync="submitted.ok" background-click-disabled="true">
+			<template v-slot:header></template>
+			<template v-slot:body>
+				<modal-body-info
+					title="Deine Konfiguration ist gespeichert Die Synchronisation kann bis zu einigen Stunden andauern."
+				>
+					<template v-slot:icon>
+						<base-icon
+							source="material"
+							icon="check_circle"
+							style="color: var(--color-success);"
+						/>
+					</template>
+				</modal-body-info>
+			</template>
+			<template v-slot:footer>
+				<modal-footer-confirm
+					backgroundcolor="var(--color-success)"
+					text="Ok"
+					@click="okButtonHandler"
+				/>
+			</template>
+		</base-modal>
 	</section>
 </template>
 
 <script>
 import BaseButton from "@/components/base/BaseButton.vue";
-// temporarily disabled for styling
-// import { mapState } from "vuex";
+import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
+import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
+import { mapState } from "vuex";
 
 export default {
-	components: { BaseButton },
+	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm },
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
-	data() {
-		return {
-			// mock for styling
-			systemData: {
-				ok: true,
-				users: {
-					total: 8,
-					admin: 2,
-					teacher: 2,
-					student: 4,
-					sample: {
-						email: "alice.daniel@schul-cloud.org",
-						firstName: "Alice",
-						lastName: "Daniel",
-						roles: ["student"],
-						ldapDn: "uid=alice.daniel,ou=users,dc=schul-cloud,dc=org",
-						ldapUUID: "MTIwMQ==",
-						ldapUID: "alice.daniel",
-						modifyTimestamp: "20190802121825Z",
-					},
-				},
-				classes: {
-					total: 3,
-					sample: {
-						className: "Klassen",
-						ldapDn: "ou=classes,ou=groups,dc=schul-cloud,dc=org",
-						modifyTimestamp: "20190712131016Z",
-					},
-				},
-			},
-		};
+	computed: {
+		...mapState("ldap-config", {
+			systemData: "systemVerificationData",
+			tempData: "temp",
+			submitted: "dataSubmission",
+		}),
 	},
-	// temporarily disabled for styling
-
-	// computed: {
-	// 	...mapState("ldap-config", {
-	// 		systemData: "systemVerificationData",
-	// 	}),
-	// },
 	created() {
 		if (!this.systemData) {
 			this.$router.push("/administration/ldap/config");
@@ -116,7 +108,12 @@ export default {
 			this.$router.push("/administration/ldap/config");
 		},
 		submitButtonHandler() {
-			this.$store.dispatch("ldap-config/submitData", this.systemData);
+			this.$store.dispatch("ldap-config/submitData", this.tempData);
+		},
+		okButtonHandler() {
+			this.$router.push({
+				path: `/administration/school`,
+			});
 		},
 	},
 };

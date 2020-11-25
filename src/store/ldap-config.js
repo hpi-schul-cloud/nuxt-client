@@ -5,13 +5,13 @@ const formatData = (data = {}, action) => {
 			rootPath: data.basisPath,
 			searchUser: data.searchUser,
 			searchUserPassword: data.searchUserPassword,
-			// provider: "general",
+			provider: "general",
 			providerOptions: {
 				userPathAdditions: data.userPath,
 				classPathAdditions: data.classPath,
 				roleType: data.groupOption,
 				userAttributeNameMapping: {
-					// dn: "dn",
+					dn: "dn",
 					givenName: data.firstName,
 					sn: data.familyName,
 					uuid: data.uuid,
@@ -26,7 +26,7 @@ const formatData = (data = {}, action) => {
 					roleNoSc: data.user,
 				},
 				classAttributeNameMapping: {
-					// dn: "dn",
+					dn: "dn",
 					description: data.nameAttribute,
 					uniqueMember: data.participantAttribute,
 				},
@@ -136,9 +136,10 @@ export const actions = {
 	},
 	async submitData({ commit }, payload) {
 		try {
+			const data = formatData(payload, "verify");
 			const submission = await this.$axios.$post(
 				"/ldap-config?verifyOnly=false",
-				payload
+				data
 			);
 			if (!submission.ok) {
 				verification.errors.forEach((err) => {
@@ -150,11 +151,7 @@ export const actions = {
 				});
 				return;
 			}
-			this.$toast.success("The submission was succesfull");
-			commit("setDataSubmission", payload);
-			this.$router.push({
-				path: `/administration/school`,
-			});
+			commit("setDataSubmission", submission);
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -195,7 +192,7 @@ export const state = () => {
 	return {
 		systemData: null,
 		systemVerificationData: null,
-		dataSubmission: null,
+		dataSubmission: {},
 		temp: null,
 	};
 };
