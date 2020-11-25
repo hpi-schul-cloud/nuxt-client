@@ -60,6 +60,33 @@ const formatData = (data = {}, action) => {
 	};
 };
 
+const errorHandler = (error) => {
+	const errorMessages = [];
+
+	error.forEach((err) => {
+		switch (err.type) {
+			case "WRONG_CREDENTIALS":
+				errorMessages.push(
+					this.$t("pages.administration.ldap.errors.credentials")
+				);
+				break;
+			case "CONNECTION_ERROR":
+				errorMessages.push(err.message);
+				break;
+			case "WRONG_SEARCH_PATH":
+				errorMessages.push(this.$t("pages.administration.ldap.errors.path"));
+				break;
+			case "INVALID_CONFIGURATION_OBJECT":
+				errorMessages.push(
+					this.$t("pages.administration.ldap.errors.configuration")
+				);
+				break;
+		}
+	});
+
+	return errorMessages;
+};
+
 export const actions = {
 	async getData({ commit }, id) {
 		try {
@@ -78,14 +105,12 @@ export const actions = {
 				data
 			);
 			if (!verification.ok) {
-				verification.errors.forEach((err) => {
-					// placeholders for translations
-					this.$toast.error(err.message);
+				errorHandler(verification.errors).forEach((message) => {
+					this.$toast.error(message);
 				});
 				return;
 			}
-			// placeholders for translations
-			this.$toast.success("The verification was succesfull");
+			this.$toast.success(this.$t("pages.administration.ldap.index.verified"));
 			commit("setTempData", payload);
 			commit("setSystemVerificationData", verification);
 
@@ -105,9 +130,8 @@ export const actions = {
 				data
 			);
 			if (!submission.ok) {
-				verification.errors.forEach((err) => {
-					// placeholders for translations
-					this.$toast.error(err.message);
+				errorHandler(submission.errors).forEach((message) => {
+					this.$toast.error(message);
 				});
 				this.$router.push({
 					path: `/administration/ldap/config`,

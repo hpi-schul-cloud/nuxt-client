@@ -52,16 +52,17 @@
 			/>
 		</div>
 		<div class="buttons-container">
-			<!-- placeholder for translations -->
 			<base-button
 				design="secondary text"
 				class="ml--sm"
 				@click="clearInputsHandler"
-				>Eingaben zurücksetzen</base-button
+				>{{
+					this.$t("pages.administration.ldap.index.buttons.reset")
+				}}</base-button
 			>
-			<base-button design="secondary" class="ml--sm" @click="validateHandler"
-				>Eingaben prüfen</base-button
-			>
+			<base-button design="secondary" class="ml--sm" @click="validateHandler">{{
+				this.$t("pages.administration.ldap.index.buttons.verify")
+			}}</base-button>
 		</div>
 	</section>
 </template>
@@ -149,7 +150,7 @@ export default {
 					clearInterval(this.$options.debounce);
 					return;
 				}
-				this.$toast.error("The data you entered is invalid");
+				this.$toast.error(this.$t("common.validation.invalid"));
 				clearInterval(this.$options.debounce);
 			}, 500);
 		},
