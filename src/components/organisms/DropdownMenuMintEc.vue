@@ -14,7 +14,7 @@
 				<slot name="header"></slot>
 				<base-icon
 					source="fa"
-					icon="chevron-down"
+					icon="chevron-up"
 					:style="{
 						'font-size': `var(--space-md)`,
 						color: `var(--color-white)`,

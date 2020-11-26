@@ -1,17 +1,15 @@
 const formatData = (data = {}, action) => {
-	if (action === "verify") {
+	if (action === "verify" || action === "submit") {
 		return {
 			url: data.url,
 			rootPath: data.basisPath,
 			searchUser: data.searchUser,
 			searchUserPassword: data.searchUserPassword,
-			// provider: "general",
 			providerOptions: {
 				userPathAdditions: data.userPath,
 				classPathAdditions: data.classPath,
 				roleType: data.groupOption,
 				userAttributeNameMapping: {
-					// dn: "dn",
 					givenName: data.firstName,
 					sn: data.familyName,
 					uuid: data.uuid,
@@ -26,7 +24,6 @@ const formatData = (data = {}, action) => {
 					roleNoSc: data.user,
 				},
 				classAttributeNameMapping: {
-					// dn: "dn",
 					description: data.nameAttribute,
 					uniqueMember: data.participantAttribute,
 				},
@@ -64,44 +61,10 @@ const formatData = (data = {}, action) => {
 };
 
 export const actions = {
-	async getData({ commit }) {
+	async getData({ commit }, id) {
 		try {
-			// const data = await this.$axios.get("/ldap-config");
-
-			// temporary mock data awaiting server implementation
-			const data = formatData({
-				url: "ldaps://ldap.schul-cloud.org",
-				rootPath: "dc=schul-cloud,dc=org",
-				searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
-				searchUserPassword: "Naivi4Ahghee",
-				provider: "general",
-				providerOptions: {
-					userPathAdditions: "ou=users",
-					classPathAdditions: "ou=classes,ou=groups",
-					roleType: "ldap_group",
-					userAttributeNameMapping: {
-						givenName: "givenName",
-						sn: "sn",
-						dn: "dn",
-						uuid: "uidNumber",
-						uid: "uid",
-						mail: "mail",
-						role: "description",
-					},
-					roleAttributeNameMapping: {
-						roleStudent: "cn=student,ou=roles,ou=groups,dc=schul-cloud,dc=org",
-						roleTeacher: "cn=teacher,ou=roles,ou=groups,dc=schul-cloud,dc=org",
-						roleAdmin: "cn=admin,ou=roles,ou=groups,dc=schul-cloud,dc=org",
-						roleNoSc: "no-sc",
-					},
-					classAttributeNameMapping: {
-						description: "description",
-						dn: "dn",
-						uniqueMember: "member",
-					},
-				},
-			});
-			commit("setSystemData", data);
+			const { data } = await this.$axios.get(`/ldap-config/${id}`);
+			commit("setSystemData", formatData(data));
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -114,21 +77,8 @@ export const actions = {
 				"/ldap-config?verifyOnly=true",
 				data
 			);
-			if (!verification.ok) {
-				verification.errors.forEach((err) => {
-					// placeholders for translations
-					this.$toast.error(err.message);
-				});
-				return;
-			}
-			// placeholders for translations
-			this.$toast.success("The verification was succesfull");
 			commit("setTempData", payload);
 			commit("setSystemVerificationData", verification);
-
-			this.$router.push({
-				path: `/administration/ldap/config/save`,
-			});
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -136,25 +86,12 @@ export const actions = {
 	},
 	async submitData({ commit }, payload) {
 		try {
+			const data = formatData(payload, "submit");
 			const submission = await this.$axios.$post(
 				"/ldap-config?verifyOnly=false",
-				payload
+				data
 			);
-			if (!submission.ok) {
-				verification.errors.forEach((err) => {
-					// placeholders for translations
-					this.$toast.error(err.message);
-				});
-				this.$router.push({
-					path: `/administration/ldap/config`,
-				});
-				return;
-			}
-			this.$toast.success("The submission was succesfull");
-			commit("setDataSubmission", payload);
-			this.$router.push({
-				path: `/administration/school`,
-			});
+			commit("setDataSubmission", submission);
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -189,13 +126,19 @@ export const mutations = {
 	setTempData(state, payload) {
 		state.temp = payload;
 	},
+	clearData(state) {
+		state.temp = state.systemData;
+		Object.keys(state.temp).forEach((key) => {
+			if (key !== "groupOption") state.temp[key] = "";
+		});
+	},
 };
 
 export const state = () => {
 	return {
-		systemData: null,
-		systemVerificationData: null,
-		dataSubmission: null,
-		temp: null,
+		systemData: {},
+		systemVerificationData: {},
+		dataSubmission: {},
+		temp: {},
 	};
 };

@@ -15,7 +15,7 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesPath"
-			:vmodel="value.classPath"
+			:vmodel="classPathValue"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
@@ -26,9 +26,13 @@
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
 			@update:vmodel="$emit('input', { ...value, classPath: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="account_tree" />
+			</template>
+		</base-input>
 		<p class="title-class">
-			{{ $t("pages.administration.ldap.users.hint") }}
+			{{ $t("pages.administration.ldap.classes.hint") }}
 		</p>
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
@@ -41,7 +45,11 @@
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
 			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="class" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataClassesNameparticipantAttribute"
 			:vmodel="value.participantAttribute"
@@ -55,7 +63,11 @@
 			@update:vmodel="
 				$emit('input', { ...value, participantAttribute: $event })
 			"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="gruppen" />
+			</template>
+		</base-input>
 	</div>
 </template>
 
@@ -91,14 +103,22 @@ export default {
 			],
 		};
 	},
+	computed: {
+		classPathValue() {
+			if (this.unchecked === false) {
+				return "";
+			}
+			return this.value.classPath;
+		},
+	},
 	watch: {
 		validate: function () {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "classes");
 		},
-		// unchecked: function () {
-		// 	this.$emit("update:errors", this.$v.$invalid, "classes");
-		// },
+		unchecked: function () {
+			this.$emit("update:errors", this.$v.$invalid, "classes");
+		},
 	},
 	validations() {
 		if (this.unchecked === true) {

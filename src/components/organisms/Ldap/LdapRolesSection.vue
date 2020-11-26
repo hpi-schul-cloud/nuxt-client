@@ -21,7 +21,8 @@
 				style="margin-right: var(--space-sm)"
 				value="ldap_group"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
-			/>
+			>
+			</base-input>
 			<base-input
 				:vmodel="value.groupOption"
 				type="radio"
@@ -33,7 +34,8 @@
 				name="group"
 				value="user_attribute"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
-			/>
+			>
+			</base-input>
 			<p class="text-sm" style="margin-top: var(--space-xs)">
 				{{
 					this.$t(
@@ -43,7 +45,7 @@
 			</p>
 		</div>
 		<base-input
-			:vmodel="value.member"
+			:vmodel="memberInputValue"
 			:disabled="value.groupOption === 'ldap_group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
@@ -55,7 +57,11 @@
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
 			@update:vmodel="$emit('input', { ...value, member: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="person" />
+			</template>
+		</base-input>
 		<base-input
 			:vmodel="value.student"
 			type="text"
@@ -69,7 +75,11 @@
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesStudent"
 			@update:vmodel="$emit('input', { ...value, student: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="student" />
+			</template>
+		</base-input>
 		<base-input
 			:vmodel="value.teacher"
 			type="text"
@@ -82,7 +92,11 @@
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesTeacher"
 			@update:vmodel="$emit('input', { ...value, teacher: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="teacher" />
+			</template>
+		</base-input>
 		<base-input
 			:vmodel="value.admin"
 			type="text"
@@ -95,7 +109,11 @@
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesAdmin"
 			@update:vmodel="$emit('input', { ...value, admin: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="admin_panel_settings" />
+			</template>
+		</base-input>
 		<base-input
 			:vmodel="value.user"
 			type="text"
@@ -105,10 +123,14 @@
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
 			:validation-model="$v.value.user"
-			:validation-messages="rolesValidationMessages"
+			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesUser"
 			@update:vmodel="$emit('input', { ...value, user: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="person_ignore" />
+			</template>
+		</base-input>
 	</div>
 </template>
 
@@ -145,6 +167,12 @@ export default {
 		groupOption() {
 			return this.value.groupOption;
 		},
+		memberInputValue() {
+			if (this.value.groupOption === "ldap_group") {
+				return "";
+			}
+			return this.value.member;
+		},
 	},
 	watch: {
 		validate: function () {
@@ -163,7 +191,7 @@ export default {
 					student: { ldapPathValidationRegex },
 					teacher: { ldapPathValidationRegex },
 					admin: { ldapPathValidationRegex },
-					user: { ldapPathValidationRegex },
+					user: { required },
 				},
 			};
 		}

@@ -52,19 +52,24 @@
 			/>
 		</div>
 		<div class="buttons-container">
-			<!-- placeholder for translations -->
-			<base-button design="secondary text" class="ml--sm"
-				>Eingaben zurücksetzen</base-button
+			<base-button
+				design="secondary text"
+				class="ml--sm"
+				@click="clearInputsHandler"
+				>{{
+					this.$t("pages.administration.ldap.index.buttons.reset")
+				}}</base-button
 			>
-			<base-button design="secondary" class="ml--sm" @click="validateHandler"
-				>Eingaben prüfen</base-button
-			>
+			<base-button design="secondary" class="ml--sm" @click="validateHandler">{{
+				this.$t("pages.administration.ldap.index.buttons.verify")
+			}}</base-button>
 		</div>
 	</section>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import errorHandling from "@mixins/ldapErrorHandling";
 import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
 import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
@@ -77,6 +82,7 @@ export default {
 		UsersSection,
 		ClassesSection,
 	},
+	mixins: [errorHandling],
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
@@ -102,8 +108,8 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("auth", {
-			school: "school",
+		...mapState("ldap-config", {
+			systemVerificationData: "systemVerificationData",
 		}),
 		isInvalid() {
 			if (
@@ -119,18 +125,28 @@ export default {
 		},
 		systemData: {
 			get() {
-				return (
-					this.$store.getters["ldap-config/tempDataGetter"] ||
-					this.$store.getters["ldap-config/systemDataGetter"]
-				);
+				const tempData = this.$store.getters["ldap-config/tempDataGetter"];
+				return Object.keys(tempData).length > 0
+					? tempData
+					: this.$store.getters["ldap-config/systemDataGetter"];
 			},
 			set(value) {
-				this.$store.commit("ldap-config/updateSystemData", value);
+				if (this.$options.debounce) {
+					clearInterval(this.$options.debounce);
+				}
+				this.$options.debounce = setInterval(() => {
+					this.$store.commit("ldap-config/updateSystemData", value);
+
+					clearInterval(this.$options.debounce);
+				}, 200);
 			},
 		},
 	},
 	created() {
-		this.$store.dispatch("ldap-config/getData");
+		// disabled until the link is activated on the legacy client
+		// const { id } = this.$route.query;
+		// for review and testing purposes, set id to any local database systemID
+		this.$store.dispatch("ldap-config/getData", "5fbf6a53bc9038acfc181717");
 	},
 	methods: {
 		validateHandler() {
@@ -138,18 +154,40 @@ export default {
 				clearInterval(this.$options.debounce);
 			}
 			this.triggerValidation = !this.triggerValidation;
-			this.$options.debounce = setInterval(async () => {
+
+			this.$options.debounce = setInterval(() => {
 				if (!this.isInvalid) {
 					this.$store.dispatch("ldap-config/verifyData", this.systemData);
+
+					if (!this.systemVerificationData.ok) {
+						this.errorHandler(this.systemVerificationData.errors).forEach(
+							(message) => {
+								this.$toast.error(message);
+							}
+						);
+						clearInterval(this.$options.debounce);
+						return;
+					}
+
+					this.$toast.success(
+						this.$t("pages.administration.ldap.index.verified")
+					);
+					this.$router.push({
+						path: `/administration/ldap/config/save`,
+					});
 					clearInterval(this.$options.debounce);
 					return;
 				}
-				this.$toast.error("The data you entered is invalid");
+
+				this.$toast.error(this.$t("common.validation.invalid"));
 				clearInterval(this.$options.debounce);
 			}, 500);
 		},
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;
+		},
+		clearInputsHandler() {
+			this.$store.commit("ldap-config/clearData");
 		},
 	},
 };
