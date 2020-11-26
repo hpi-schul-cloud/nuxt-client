@@ -17,6 +17,9 @@
 	"common.labels.createdAt": "Erstellungsdatum",
 	"common.labels.email": "E-Mail",
 	"common.labels.firstName": "Vorname",
+	"common.labels.student": "Schüler:innen",
+	"common.labels.admin": "Admin(s)",
+	"common.labels.teacher.plural": "Lehrer:innen",
 	"common.labels.firstName.new": "Neuer Vorname",
 	"common.labels.fullName": "Vorname & Nachname",
 	"common.labels.lastName": "Nachname",
@@ -513,5 +516,10 @@
 	"pages.administration.ldapEdit.roles.info.admin": "Bsp.: cn=admin,ou=rollen,o=schule,dc=de",
 	"pages.administration.ldapEdit.roles.info.user": "Bsp.: cn=ehemalige,ou=rollen,o=schule,dc=de",
 	"pages.administration.ldapEdit.validation.path": "Bitte verwenden Sie das LDAP Pfad Format",
-	"pages.administration.ldapEdit.validation.url": "Bitte verwenden Sie ein valides URL Format"
+	"pages.administration.ldapEdit.validation.url": "Bitte verwenden Sie ein valides URL Format",
+	"pages.administration.ldap.save.title": "Folgende Datensätze stehen zur Synchronization bereit",
+	"pages.administration.ldap.save.subtitle": "Im Folgenden kannst du an Beispielen überprüfen, ob wir die Attribute richtig zugeordnet haben.",
+	"pages.administration.ldap.save.example.user": "Beispiel Nutzer:innen",
+	"pages.administration.ldap.save.example.class": "Beispiel Klasse",
+	"pages.administration.ldap.save.example.synchronize": "Synchronization aktivieren"
 }
