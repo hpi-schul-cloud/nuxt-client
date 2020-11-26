@@ -15,7 +15,11 @@
 			:validation-model="$v.value.url"
 			:validation-messages="urlValidationMessages"
 			@update:vmodel="$emit('input', { ...value, url: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="dns" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionBasisPath"
 			:vmodel="value.basisPath"
@@ -27,7 +31,11 @@
 			:validation-model="$v.value.basisPath"
 			:validation-messages="pathSearchValidationMessages"
 			@update:vmodel="$emit('input', { ...value, basisPath: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="account_tree" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUser"
 			:vmodel="value.searchUser"
@@ -39,7 +47,11 @@
 			:validation-model="$v.value.searchUser"
 			:validation-messages="pathSearchValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUser: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="user" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUserPassword"
 			:vmodel="value.searchUserPassword"
@@ -52,7 +64,10 @@
 			:validation-model="$v.value.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
 			@update:vmodel="$emit('input', { ...value, searchUserPassword: $event })"
-		/>
+			><template v-slot:icon>
+				<base-icon source="material" icon="lock" />
+			</template>
+		</base-input>
 	</div>
 </template>
 <script>
