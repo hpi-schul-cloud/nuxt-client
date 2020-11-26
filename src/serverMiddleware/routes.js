@@ -22,7 +22,7 @@ const routes = [
 	`^/administration/teachers/?$`,
 	`^/administration/teachers/new/?$`,
 	`^/administration/ldap/config/?$`,
-	`^/administration/ldap/config/save/?$`,
+	`^/administration/ldap/config/activate/?$`,
 	`^/login-instances/?`,
 	//`^/calendar/?`,
 	`^/error/`,

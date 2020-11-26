@@ -173,7 +173,7 @@ export default {
 						this.$t("pages.administration.ldap.index.verified")
 					);
 					this.$router.push({
-						path: `/administration/ldap/config/save`,
+						path: `/administration/ldap/config/activate`,
 					});
 					clearInterval(this.$options.debounce);
 					return;
