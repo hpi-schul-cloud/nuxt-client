@@ -18,8 +18,8 @@
 					this.$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
 				"
 				name="group"
-				style="margin-right: var(--space-sm)"
-				value="ldap_group"
+				style="margin-right: var(--space-sm);"
+				value="group"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
 			</base-input>
@@ -36,7 +36,7 @@
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
 			</base-input>
-			<p class="text-sm" style="margin-top: var(--space-xs)">
+			<p class="text-sm" style="margin-top: var(--space-xs);">
 				{{
 					this.$t(
 						"pages.administration.ldapEdit.roles.labels.radio.description"
@@ -46,13 +46,13 @@
 		</div>
 		<base-input
 			:vmodel="memberInputValue"
-			:disabled="value.groupOption === 'ldap_group'"
+			:disabled="value.groupOption === 'group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
-			style="margin-bottom: var(--space-xl)"
+			style="margin-bottom: var(--space-xl);"
 			:validation-model="$v.value.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
@@ -168,7 +168,7 @@ export default {
 			return this.value.groupOption;
 		},
 		memberInputValue() {
-			if (this.value.groupOption === "ldap_group") {
+			if (this.value.groupOption === "group") {
 				return "";
 			}
 			return this.value.member;
@@ -184,7 +184,7 @@ export default {
 		},
 	},
 	validations() {
-		if (this.value.groupOption !== "ldap_group") {
+		if (this.value.groupOption !== "group") {
 			return {
 				value: {
 					member: { required },
