@@ -126,7 +126,7 @@ export default {
 		systemData: {
 			get() {
 				const tempData = this.$store.getters["ldap-config/tempDataGetter"];
-				return Object.keys(tempData).length > 0
+				return Object.keys(tempData).length
 					? tempData
 					: this.$store.getters["ldap-config/systemDataGetter"];
 			},
