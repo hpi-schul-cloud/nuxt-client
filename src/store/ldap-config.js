@@ -1,42 +1,11 @@
-const formatData = (data = {}, action) => {
-	if (action === "verify" || action === "submit") {
-		return {
-			url: data.url,
-			rootPath: data.basisPath,
-			searchUser: data.searchUser,
-			searchUserPassword: data.searchUserPassword,
-			providerOptions: {
-				userPathAdditions: data.userPath,
-				classPathAdditions: data.classPath,
-				roleType: data.groupOption,
-				userAttributeNameMapping: {
-					givenName: data.firstName,
-					sn: data.familyName,
-					uuid: data.uuid,
-					uid: data.uid,
-					mail: data.email,
-					role: data.member,
-				},
-				roleAttributeNameMapping: {
-					roleStudent: data.student,
-					roleTeacher: data.teacher,
-					roleAdmin: data.admin,
-					roleNoSc: data.user,
-				},
-				classAttributeNameMapping: {
-					description: data.nameAttribute,
-					uniqueMember: data.participantAttribute,
-				},
-			},
-		};
-	}
-
+const formatServerData = (data) => {
 	const { providerOptions } = data;
 	const {
 		userAttributeNameMapping,
 		roleAttributeNameMapping,
 		classAttributeNameMapping,
 	} = providerOptions;
+
 	return {
 		url: data.url,
 		basisPath: data.rootPath,
@@ -60,11 +29,43 @@ const formatData = (data = {}, action) => {
 	};
 };
 
+const formatClientData = (data) => {
+	return {
+		url: data.url,
+		rootPath: data.basisPath,
+		searchUser: data.searchUser,
+		searchUserPassword: data.searchUserPassword,
+		providerOptions: {
+			userPathAdditions: data.userPath,
+			classPathAdditions: data.classPath,
+			roleType: data.groupOption,
+			userAttributeNameMapping: {
+				givenName: data.firstName,
+				sn: data.familyName,
+				uuid: data.uuid,
+				uid: data.uid,
+				mail: data.email,
+				role: data.member,
+			},
+			roleAttributeNameMapping: {
+				roleStudent: data.student,
+				roleTeacher: data.teacher,
+				roleAdmin: data.admin,
+				roleNoSc: data.user,
+			},
+			classAttributeNameMapping: {
+				description: data.nameAttribute,
+				uniqueMember: data.participantAttribute,
+			},
+		},
+	};
+};
+
 export const actions = {
 	async getData({ commit }, id) {
 		try {
 			const { data } = await this.$axios.get(`/ldap-config/${id}`);
-			commit("setSystemData", formatData(data));
+			commit("setSystemData", formatServerData(data));
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -72,7 +73,7 @@ export const actions = {
 	},
 	async verifyData({ commit }, payload) {
 		try {
-			const data = formatData(payload, "verify");
+			const data = formatClientData(payload, "verify");
 			const verification = await this.$axios.$post(
 				"/ldap-config?verifyOnly=true",
 				data
@@ -86,7 +87,7 @@ export const actions = {
 	},
 	async submitData({ commit }, payload) {
 		try {
-			const data = formatData(payload, "submit");
+			const data = formatClientData(payload, "submit");
 			const submission = await this.$axios.$post(
 				"/ldap-config?verifyOnly=false",
 				data
