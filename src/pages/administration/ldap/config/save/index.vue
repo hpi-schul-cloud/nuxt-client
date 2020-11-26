@@ -85,7 +85,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -114,9 +114,40 @@ export default {
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
+	data() {
+		return {
+			systemData: {
+				ok: true,
+				users: {
+					total: 8,
+					admin: 2,
+					teacher: 2,
+					student: 4,
+					sample: {
+						email: "alice.daniel@schul-cloud.org",
+						firstName: "Alice",
+						lastName: "Daniel",
+						roles: ["student"],
+						ldapDn: "uid=alice.daniel,ou=users,dc=schul-cloud,dc=org",
+						ldapUUID: "MTIwMQ==",
+						ldapUID: "alice.daniel",
+						modifyTimestamp: "20190802121825Z",
+					},
+				},
+				classes: {
+					total: 3,
+					sample: {
+						className: "Klassen",
+						ldapDn: "ou=classes,ou=groups,dc=schul-cloud,dc=org",
+						modifyTimestamp: "20190712131016Z",
+					},
+				},
+			},
+		};
+	},
 	computed: {
 		...mapState("ldap-config", {
-			systemData: "systemVerificationData",
+			// systemData: "systemVerificationData",
 			tempData: "temp",
 			submitted: "dataSubmission",
 		}),
