@@ -64,7 +64,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -81,13 +81,15 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import errorHandling from "@mixins/ldapErrorHandling";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
-import { mapState } from "vuex";
 
 export default {
 	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm },
+	mixins: [errorHandling],
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
@@ -107,8 +109,17 @@ export default {
 		backButtonHandler() {
 			this.$router.push("/administration/ldap/config");
 		},
-		submitButtonHandler() {
-			this.$store.dispatch("ldap-config/submitData", this.tempData);
+		async submitButtonHandler() {
+			await this.$store.dispatch("ldap-config/submitData", this.tempData);
+			if (!this.submitted.ok) {
+				this.errorHandler(this.submitted.errors).forEach((message) => {
+					this.$toast.error(message);
+				});
+				this.$router.push({
+					path: `/administration/ldap/config`,
+				});
+				return;
+			}
 		},
 		okButtonHandler() {
 			this.$router.push({

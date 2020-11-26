@@ -18,7 +18,7 @@
 					this.$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
 				"
 				name="group"
-				style="margin-right: var(--space-sm)"
+				style="margin-right: var(--space-sm);"
 				value="ldap_group"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
@@ -36,7 +36,7 @@
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
 			</base-input>
-			<p class="text-sm" style="margin-top: var(--space-xs)">
+			<p class="text-sm" style="margin-top: var(--space-xs);">
 				{{
 					this.$t(
 						"pages.administration.ldapEdit.roles.labels.radio.description"
@@ -52,7 +52,7 @@
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
-			style="margin-bottom: var(--space-xl)"
+			style="margin-bottom: var(--space-xl);"
 			:validation-model="$v.value.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
@@ -123,7 +123,7 @@
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
 			:validation-model="$v.value.user"
-			:validation-messages="rolesValidationMessages"
+			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesUser"
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		>
@@ -191,7 +191,7 @@ export default {
 					student: { ldapPathValidationRegex },
 					teacher: { ldapPathValidationRegex },
 					admin: { ldapPathValidationRegex },
-					user: { ldapPathValidationRegex },
+					user: { required },
 				},
 			};
 		}
