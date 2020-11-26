@@ -57,7 +57,7 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
-			:validation-model="$v.value.nameAttribute"
+			:validation-model="$v.value.participantAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:vmodel="
