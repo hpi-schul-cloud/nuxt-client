@@ -19,7 +19,11 @@
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
 			@update:vmodel="$emit('input', { ...value, userPath: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="account_tree" />
+			</template>
+		</base-input>
 		<p class="path-hint">
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
@@ -33,7 +37,11 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
 			@update:vmodel="$emit('input', { ...value, firstName: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="user" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataUsersFamilyName"
 			:vmodel="value.familyName"
@@ -44,7 +52,11 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
 			@update:vmodel="$emit('input', { ...value, familyName: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="user" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataUsersEmail"
 			:vmodel="value.email"
@@ -55,7 +67,11 @@
 			:validation-messages="emailValidationMessages"
 			datatest-id="ldapDataUsersEmail"
 			@update:vmodel="$emit('input', { ...value, email: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="material" icon="email" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUid"
 			:vmodel="value.uid"
@@ -67,7 +83,11 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
 			@update:vmodel="$emit('input', { ...value, uid: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="uid" />
+			</template>
+		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUuid"
 			:vmodel="value.uuid"
@@ -79,7 +99,11 @@
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
 			@update:vmodel="$emit('input', { ...value, uuid: $event })"
-		/>
+		>
+			<template v-slot:icon>
+				<base-icon source="custom" icon="uuid" />
+			</template>
+		</base-input>
 	</div>
 </template>
 
