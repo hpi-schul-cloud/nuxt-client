@@ -40,7 +40,12 @@
 					v-for="(row, index) in Object.entries(systemData.users.sample)"
 					:key="index"
 				>
-					<div>{{ row[0] }}{{ row[0] === "roles" ? row[1][0] : row[1] }}</div>
+					<table>
+						<tr>
+							<td>{{ row[0] }}</td>
+							<td>{{ row[0] === "roles" ? row[1][0] : row[1] }}</td>
+						</tr>
+					</table>
 				</span>
 			</div>
 
@@ -52,7 +57,12 @@
 					v-for="(row, index) in Object.entries(systemData.classes.sample)"
 					:key="index"
 				>
-					<div>{{ row[0] }}{{ row[1] }}</div>
+					<table>
+						<tr>
+							<td>{{ row[0] }}</td>
+							<td>{{ row[0] === "roles" ? row[1][0] : row[1] }}</td>
+						</tr>
+					</table>
 				</span>
 			</div>
 		</section>
