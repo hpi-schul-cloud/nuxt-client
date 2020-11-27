@@ -28,7 +28,9 @@
 							class="content__total"
 						>
 							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+							{{ $t("pages.content.index.search_results") }} "{{
+								searchQueryResult
+							}}"
 						</p>
 						<span v-if="!loading" class="content__container_child">
 							<!-- initial state, empty search -->
@@ -97,6 +99,7 @@ export default {
 	data() {
 		return {
 			searchQuery: "",
+			searchQueryResult: "",
 			backToTopScrollYLimit: 115,
 			activateTransition: false,
 			prevRoute: null,
@@ -152,6 +155,7 @@ export default {
 			}
 			this.$options.debounce = setInterval(() => {
 				this.$store.commit("content/clearResources");
+				this.searchQueryResult = this.searchQuery;
 
 				clearInterval(this.$options.debounce);
 				this.$router.push({
