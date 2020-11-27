@@ -19,7 +19,7 @@
 				"
 				name="group"
 				style="margin-right: var(--space-sm)"
-				value="ldap_group"
+				value="group"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
 			</base-input>
@@ -45,8 +45,8 @@
 			</p>
 		</div>
 		<base-input
-			:vmodel="value.member"
-			:disabled="value.groupOption === 'ldap_group'"
+			:vmodel="memberInputValue"
+			:disabled="value.groupOption === 'group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
 			:placeholder="
@@ -123,7 +123,7 @@
 			"
 			:info="this.$t('pages.administration.ldapEdit.roles.info.user')"
 			:validation-model="$v.value.user"
-			:validation-messages="rolesValidationMessages"
+			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesUser"
 			@update:vmodel="$emit('input', { ...value, user: $event })"
 		>
@@ -163,21 +163,35 @@ export default {
 			],
 		};
 	},
+	computed: {
+		groupOption() {
+			return this.value.groupOption;
+		},
+		memberInputValue() {
+			if (this.value.groupOption === "group") {
+				return "";
+			}
+			return this.value.member;
+		},
+	},
 	watch: {
 		validate: function () {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "roles");
 		},
+		groupOption: function () {
+			this.$emit("update:errors", this.$v.$invalid, "roles");
+		},
 	},
 	validations() {
-		if (this.value.groupOption !== "ldap_group") {
+		if (this.value.groupOption !== "group") {
 			return {
 				value: {
 					member: { required },
 					student: { ldapPathValidationRegex },
 					teacher: { ldapPathValidationRegex },
 					admin: { ldapPathValidationRegex },
-					user: { ldapPathValidationRegex },
+					user: { required },
 				},
 			};
 		}

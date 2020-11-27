@@ -15,7 +15,7 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesPath"
-			:vmodel="value.classPath"
+			:vmodel="classPathValue"
 			:disabled="unchecked === false"
 			type="text"
 			class="mt--xl"
@@ -57,7 +57,7 @@
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
-			:validation-model="$v.value.nameAttribute"
+			:validation-model="$v.value.participantAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:vmodel="
@@ -103,9 +103,20 @@ export default {
 			],
 		};
 	},
+	computed: {
+		classPathValue() {
+			if (this.unchecked === false) {
+				return "";
+			}
+			return this.value.classPath;
+		},
+	},
 	watch: {
 		validate: function () {
 			this.$v.$touch();
+			this.$emit("update:errors", this.$v.$invalid, "classes");
+		},
+		unchecked: function () {
 			this.$emit("update:errors", this.$v.$invalid, "classes");
 		},
 	},
