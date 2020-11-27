@@ -73,7 +73,7 @@ export const actions = {
 	},
 	async verifyData({ commit }, payload) {
 		try {
-			const data = formatClientData(payload, "verify");
+			const data = formatClientData(payload);
 			const verification = await this.$axios.$post(
 				"/ldap-config?verifyOnly=true",
 				data
@@ -87,7 +87,7 @@ export const actions = {
 	},
 	async submitData({ commit }, payload) {
 		try {
-			const data = formatClientData(payload, "submit");
+			const data = formatClientData(payload);
 			const submission = await this.$axios.$post(
 				"/ldap-config?verifyOnly=false",
 				data
