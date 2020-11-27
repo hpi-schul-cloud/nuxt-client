@@ -523,5 +523,13 @@
 	"pages.administration.ldap.save.example.class": "Beispiel Klasse",
 	"pages.administration.ldap.save.example.synchronize": "Synchronization aktivieren",
 	"pages.administration.ldap.activate.message": "Deine Konfiguration ist gespeichert Die Synchronisation kann bis zu einigen Stunden andauern.",
-	"pages.administration.ldap.activate.ok": "Ok"
+	"pages.administration.ldap.activate.ok": "Ok",
+	"pages.administration.ldap.activate.email": "E-mail",
+	"pages.administration.ldap.activate.firstName": "Vorname",
+	"pages.administration.ldap.activate.lastName": "Name",
+	"pages.administration.ldap.activate.roles": "Rolle",
+	"pages.administration.ldap.activate.dN": "Domain-Name",
+	"pages.administration.ldap.activate.uuid": "UUID",
+	"pages.administration.ldap.activate.uid": "UID",
+	"pages.administration.ldap.activate.className": "Name"
 }

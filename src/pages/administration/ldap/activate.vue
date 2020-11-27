@@ -8,22 +8,22 @@
 			<h1 class="h4">{{ $t("pages.administration.ldap.save.title") }}</h1>
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="edit" />
+					<base-icon source="material" icon="student" />
 					<span>{{ verified.users.student }}</span>
 					<span>{{ $t("common.labels.student") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="edit" />
+					<base-icon source="material" icon="teacher" />
 					<span>{{ verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="edit" />
+					<base-icon source="material" icon="admin_panel_settings" />
 					<span>{{ verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="edit" />
+					<base-icon source="material" icon="class" />
 					<span>{{ verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -38,14 +38,12 @@
 			<div>
 				<table>
 					<tr
-						v-for="(row, index) in Object.entries(verified.users.sample)"
+						v-for="(row, index) in Object.entries(formattedUserVerifiedData)"
 						:key="index"
 						class="table-row"
 					>
 						<td>{{ row[0] }}</td>
-						<td>
-							{{ row[0] === "roles" ? row[1][0] : row[1] }}
-						</td>
+						<td>{{ row[1] }}</td>
 					</tr>
 				</table>
 			</div>
@@ -56,11 +54,11 @@
 			<div>
 				<table>
 					<tr
-						v-for="(row, index) in Object.entries(verified.classes.sample)"
+						v-for="(row, index) in Object.entries(formattedClassesVerifiedData)"
 						:key="index"
 					>
 						<td>{{ row[0] }}</td>
-						<td>{{ row[0] === "roles" ? row[1][0] : row[1] }}</td>
+						<td>{{ row[1] }}</td>
 					</tr>
 				</table>
 			</div>
@@ -84,7 +82,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -119,6 +117,63 @@ export default {
 			temp: "temp",
 			submitted: "submitted",
 		}),
+		formattedUserVerifiedData() {
+			const data = {};
+			const { sample } = this.verified.users;
+			Object.keys(sample).forEach((key) => {
+				switch (key) {
+					case "email":
+						data[this.$t("pages.administration.ldap.activate.email")] =
+							sample.email;
+						break;
+					case "firstName":
+						data[this.$t("pages.administration.ldap.activate.firstName")] =
+							sample.firstName;
+						break;
+					case "lastName":
+						data[this.$t("pages.administration.ldap.activate.lastName")] =
+							sample.lastName;
+						break;
+					case "ldapDn":
+						data[this.$t("pages.administration.ldap.activate.dN")] =
+							sample.ldapDn;
+						break;
+					case "ldapUID":
+						data[this.$t("pages.administration.ldap.activate.uuid")] =
+							sample.ldapUID;
+						break;
+					case "ldapUUID":
+						data[this.$t("pages.administration.ldap.activate.uid")] =
+							sample.ldapUUID;
+						break;
+					case "roles":
+						data[this.$t("pages.administration.ldap.activate.roles")] =
+							sample.roles[0];
+					default:
+						break;
+				}
+			});
+			return data;
+		},
+		formattedClassesVerifiedData() {
+			const data = {};
+			const { sample } = this.verified.classes;
+			Object.keys(sample).forEach((key) => {
+				switch (key) {
+					case "className":
+						data[this.$t("pages.administration.ldap.activate.className")] =
+							sample.className;
+						break;
+					case "ldapDn":
+						data[this.$t("pages.administration.ldap.activate.dN")] =
+							sample.ldapDn;
+						break;
+					default:
+						break;
+				}
+			});
+			return data;
+		},
 	},
 	created() {
 		if (!Object.keys(this.verified).length) {
