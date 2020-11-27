@@ -119,13 +119,13 @@ export const mutations = {
 	setSubmitted(state, payload) {
 		state.submitted = payload;
 	},
+	setTemp(state, payload) {
+		state.temp = payload;
+	},
 	updateData(state, payload) {
 		state.temp = {
 			...payload,
 		};
-	},
-	setTemp(state, payload) {
-		state.temp = payload;
 	},
 	clearData(state) {
 		state.temp = state.data;
