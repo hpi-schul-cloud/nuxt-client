@@ -1,6 +1,10 @@
 <template>
 	<section>
-		<base-button design="text" @click="backButtonHandler">
+		<base-button
+			design="text"
+			data-testid="ldapBackButton"
+			@click="backButtonHandler"
+		>
 			<base-icon source="material" icon="keyboard_arrow_left" />
 			{{ $t("common.actions.back") }}
 		</base-button>
@@ -36,7 +40,7 @@
 				{{ $t("pages.administration.ldap.save.example.user") }}
 			</p>
 			<div>
-				<table>
+				<table data-testid="ldapUsersActivateTable">
 					<tr
 						v-for="(row, index) in Object.entries(formattedUserVerifiedData)"
 						:key="index"
@@ -52,7 +56,7 @@
 				{{ $t("pages.administration.ldap.save.example.class") }}
 			</p>
 			<div>
-				<table>
+				<table data-testid="ldapClassesActivateTable">
 					<tr
 						v-for="(row, index) in Object.entries(formattedClassesVerifiedData)"
 						:key="index"
@@ -64,13 +68,22 @@
 			</div>
 		</section>
 		<div class="bottom-buttons">
-			<base-button design="text" @click="backButtonHandler">
+			<base-button
+				design="text"
+				data-testid="ldapBackButton"
+				@click="backButtonHandler"
+			>
 				<base-icon source="material" icon="keyboard_arrow_left" />
 				{{ $t("common.actions.back") }}
 			</base-button>
-			<base-button design="secondary" @click="submitButtonHandler">{{
-				$t("pages.administration.ldap.save.example.synchronize")
-			}}</base-button>
+			<base-button
+				design="secondary"
+				data-testid="ldapSubmitButton"
+				@click="submitButtonHandler"
+				>{{
+					$t("pages.administration.ldap.save.example.synchronize")
+				}}</base-button
+			>
 		</div>
 		<base-modal :active.sync="submitted.ok" :background-click-disabled="true">
 			<template v-slot:header></template>
@@ -82,7 +95,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -91,6 +104,7 @@
 				<modal-footer-confirm
 					backgroundcolor="var(--color-success)"
 					:text="$t('pages.administration.ldap.activate.ok')"
+					data-testid="ldapOkButton"
 					@click="okButtonHandler"
 				/>
 			</template>

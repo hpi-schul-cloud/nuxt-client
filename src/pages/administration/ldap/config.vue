@@ -52,12 +52,24 @@
 			/>
 		</div>
 		<div class="buttons-container">
-			<base-button design="text" class="ml--sm" @click="clearInputsHandler">{{
-				this.$t("pages.administration.ldap.index.buttons.reset")
-			}}</base-button>
-			<base-button design="secondary" class="ml--sm" @click="validateHandler">{{
-				this.$t("pages.administration.ldap.index.buttons.verify")
-			}}</base-button>
+			<base-button
+				design="text"
+				class="ml--sm"
+				data-testid="ldapResetInputsButton"
+				@click="clearInputsHandler"
+				>{{
+					this.$t("pages.administration.ldap.index.buttons.reset")
+				}}</base-button
+			>
+			<base-button
+				design="secondary"
+				class="ml--sm"
+				data-testid="ldapVerifyButton"
+				@click="validateHandler"
+				>{{
+					this.$t("pages.administration.ldap.index.buttons.verify")
+				}}</base-button
+			>
 		</div>
 	</section>
 </template>
