@@ -96,7 +96,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 		inputPath.trigger("blur"); // without this the error is not displayed
 
 		expect(inputPath.element.value).toBe("");
-		// disabled until bug is found
+		// disabled until behaviour is figured out
 		// expect(wrapper.vm.$v.$invalid).toBe(true);
 		// await wrapper.vm.$nextTick();
 		// const errorMessageComponent = wrapper.find(

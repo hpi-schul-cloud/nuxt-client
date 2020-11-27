@@ -75,7 +75,7 @@ describe("store/ldap-config", () => {
 			});
 		});
 		describe("clearData", () => {
-			it("updates temp values correctly", async () => {
+			it("clears temp values correctly", async () => {
 				const clearDataState = {
 					...state,
 					temp: { testTempKey: "tempValue" },
