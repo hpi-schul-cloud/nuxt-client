@@ -36,34 +36,33 @@
 				{{ $t("pages.administration.ldap.save.example.user") }}
 			</p>
 			<div>
-				<span
-					v-for="(row, index) in Object.entries(systemData.users.sample)"
-					:key="index"
-				>
-					<table>
-						<tr>
-							<td>{{ row[0] }}</td>
-							<td>{{ row[0] === "roles" ? row[1][0] : row[1] }}</td>
-						</tr>
-					</table>
-				</span>
+				<table>
+					<tr
+						v-for="(row, index) in Object.entries(systemData.users.sample)"
+						:key="index"
+						class="table-row"
+					>
+						<td>{{ row[0] }}</td>
+						<td>
+							{{ row[0] === "roles" ? row[1][0] : row[1] }}
+						</td>
+					</tr>
+				</table>
 			</div>
 
 			<p class="category-title">
 				{{ $t("pages.administration.ldap.save.example.class") }}
 			</p>
 			<div>
-				<span
-					v-for="(row, index) in Object.entries(systemData.classes.sample)"
-					:key="index"
-				>
-					<table>
-						<tr>
-							<td>{{ row[0] }}</td>
-							<td>{{ row[0] === "roles" ? row[1][0] : row[1] }}</td>
-						</tr>
-					</table>
-				</span>
+				<table>
+					<tr
+						v-for="(row, index) in Object.entries(systemData.classes.sample)"
+						:key="index"
+					>
+						<td>{{ row[0] }}</td>
+						<td>{{ row[0] === "roles" ? row[1][0] : row[1] }}</td>
+					</tr>
+				</table>
 			</div>
 		</section>
 		<div class="bottom-buttons">
@@ -194,6 +193,9 @@ export default {
 .bottom-buttons {
 	display: flex;
 	justify-content: space-between;
+	margin-top: var(--space-xl-4);
+	margin-right: var(--space-xl);
+	margin-left: var(--space-lg);
 }
 .icon-text {
 	display: flex;
@@ -208,7 +210,20 @@ export default {
 	white-space: nowrap;
 }
 .category-title {
-	margin: var(--space-xl) 0;
+	margin: var(--space-lg) 0;
 	font-weight: var(--font-weight-bold);
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+td {
+	min-width: 200px;
+	padding: var(--space-sm);
+	margin-bottom: var(--space-md);
+	white-space: normal;
+}
+tr:nth-child(odd) {
+	background: #ebeef0;
 }
 </style>
