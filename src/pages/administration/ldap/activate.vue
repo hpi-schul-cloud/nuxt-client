@@ -9,22 +9,22 @@
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="edit" />
-					<span>{{ systemData.users.student }}</span>
+					<span>{{ verified.users.student }}</span>
 					<span>{{ $t("common.labels.student") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="edit" />
-					<span>{{ systemData.users.teacher }}</span>
+					<span>{{ verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="edit" />
-					<span>{{ systemData.users.admin }}</span>
+					<span>{{ verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="edit" />
-					<span>{{ systemData.classes.total }}</span>
+					<span>{{ verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
 			</div>
@@ -38,7 +38,7 @@
 			<div>
 				<table>
 					<tr
-						v-for="(row, index) in Object.entries(systemData.users.sample)"
+						v-for="(row, index) in Object.entries(verified.users.sample)"
 						:key="index"
 						class="table-row"
 					>
@@ -56,7 +56,7 @@
 			<div>
 				<table>
 					<tr
-						v-for="(row, index) in Object.entries(systemData.classes.sample)"
+						v-for="(row, index) in Object.entries(verified.classes.sample)"
 						:key="index"
 					>
 						<td>{{ row[0] }}</td>
@@ -115,13 +115,13 @@ export default {
 	},
 	computed: {
 		...mapState("ldap-config", {
-			systemData: "systemVerificationData",
-			tempData: "temp",
-			submitted: "dataSubmission",
+			verified: "verified",
+			temp: "temp",
+			submitted: "submitted",
 		}),
 	},
 	created() {
-		if (!Object.keys(this.systemData).length) {
+		if (!Object.keys(this.verified).length) {
 			this.$router.push("/administration/ldap/config");
 		}
 	},
@@ -130,7 +130,7 @@ export default {
 			this.$router.push("/administration/ldap/config");
 		},
 		async submitButtonHandler() {
-			await this.$store.dispatch("ldap-config/submitData", this.tempData);
+			await this.$store.dispatch("ldap-config/submitData", this.temp);
 			if (!this.submitted.ok) {
 				this.errorHandler(this.submitted.errors).forEach((message) => {
 					this.$toast.error(message);

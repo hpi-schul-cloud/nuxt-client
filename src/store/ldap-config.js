@@ -65,7 +65,7 @@ export const actions = {
 	async getData({ commit }, id) {
 		try {
 			const { data } = await this.$axios.get(`/ldap-config/${id}`);
-			commit("setSystemData", formatServerData(data));
+			commit("setData", formatServerData(data));
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -78,8 +78,8 @@ export const actions = {
 				"/ldap-config?verifyOnly=true",
 				data
 			);
-			commit("setTempData", payload);
-			commit("setSystemVerificationData", verification);
+			commit("setTemp", payload);
+			commit("setVerified", verification);
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -92,7 +92,7 @@ export const actions = {
 				"/ldap-config?verifyOnly=false",
 				data
 			);
-			commit("setDataSubmission", submission);
+			commit("setSubmitted", submission);
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -101,34 +101,34 @@ export const actions = {
 };
 
 export const getters = {
-	systemDataGetter: (state) => {
-		return state.systemData;
+	dataGetter: (state) => {
+		return state.data;
 	},
-	tempDataGetter: (state) => {
+	tempGetter: (state) => {
 		return state.temp;
 	},
 };
 
 export const mutations = {
-	setSystemData(state, payload) {
-		state.systemData = payload;
+	setData(state, payload) {
+		state.data = payload;
 	},
-	setSystemVerificationData(state, payload) {
-		state.systemVerificationData = payload;
+	setVerified(state, payload) {
+		state.verified = payload;
 	},
-	setDataSubmission(state, payload) {
-		state.dataSubmission = payload;
+	setSubmitted(state, payload) {
+		state.submitted = payload;
 	},
-	updateSystemData(state, payload) {
+	updateData(state, payload) {
 		state.temp = {
 			...payload,
 		};
 	},
-	setTempData(state, payload) {
+	setTemp(state, payload) {
 		state.temp = payload;
 	},
 	clearData(state) {
-		state.temp = state.systemData;
+		state.temp = state.data;
 		Object.keys(state.temp).forEach((key) => {
 			if (key !== "groupOption") state.temp[key] = "";
 		});
@@ -137,9 +137,9 @@ export const mutations = {
 
 export const state = () => {
 	return {
-		systemData: {},
-		systemVerificationData: {},
-		dataSubmission: {},
+		data: {},
+		verified: {},
+		submitted: {},
 		temp: {},
 	};
 };

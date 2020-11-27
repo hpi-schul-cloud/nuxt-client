@@ -109,7 +109,7 @@ export default {
 	},
 	computed: {
 		...mapState("ldap-config", {
-			systemVerificationData: "systemVerificationData",
+			verified: "verified",
 		}),
 		isInvalid() {
 			if (
@@ -125,17 +125,17 @@ export default {
 		},
 		systemData: {
 			get() {
-				const tempData = this.$store.getters["ldap-config/tempDataGetter"];
+				const tempData = this.$store.getters["ldap-config/tempGetter"];
 				return Object.keys(tempData).length
 					? tempData
-					: this.$store.getters["ldap-config/systemDataGetter"];
+					: this.$store.getters["ldap-config/dataGetter"];
 			},
 			set(value) {
 				if (this.$options.debounce) {
 					clearInterval(this.$options.debounce);
 				}
 				this.$options.debounce = setInterval(() => {
-					this.$store.commit("ldap-config/updateSystemData", value);
+					this.$store.commit("ldap-config/updateData", value);
 
 					clearInterval(this.$options.debounce);
 				}, 200);
@@ -159,12 +159,10 @@ export default {
 				if (!this.isInvalid) {
 					this.$store.dispatch("ldap-config/verifyData", this.systemData);
 
-					if (!this.systemVerificationData.ok) {
-						this.errorHandler(this.systemVerificationData.errors).forEach(
-							(message) => {
-								this.$toast.error(message);
-							}
-						);
+					if (!this.verified.ok) {
+						this.errorHandler(this.verified.errors).forEach((message) => {
+							this.$toast.error(message);
+						});
 						clearInterval(this.$options.debounce);
 						return;
 					}
