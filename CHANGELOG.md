@@ -28,6 +28,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7845 - fixed the changelog github action
 - SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
 - SC-7557 - fixes lernstore modal width
+- SC-7492 - Fixes unstable search results label
 
 ### Changed
 
