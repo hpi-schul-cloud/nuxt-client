@@ -18,13 +18,13 @@ echo PROJECT $PROJECT
 # [OPS-1664] Enhance all branches with Tag latest
 if [[ "$TRAVIS_BRANCH" == "master" ]]
 then
-	export DOCKERTAG=master-v$( jq -r '.version' package.json )-latest
+	export DOCKERTAG=master_v$( jq -r '.version' package.json )_latest
 elif [[ "$TRAVIS_BRANCH" == "develop" ]]
 then
 	export DOCKERTAG=develop-latest
 elif [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
 then
-	export DOCKERTAG=release-v$( jq -r '.version' package.json )-latest
+	export DOCKERTAG=release_v$( jq -r '.version' package.json )_latest
 elif [[ "$TRAVIS_BRANCH" =~ ^hotfix\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
@@ -32,9 +32,9 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
+	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"_"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
-	export DOCKERTAG=$( echo "hotfix-"$JIRA_TICKET_ID"-latest")
+	export DOCKERTAG=$( echo "hotfix_"$JIRA_TICKET_ID"_latest")
 elif [[ "$TRAVIS_BRANCH" =~ ^feature\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
@@ -42,9 +42,9 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
+	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"_"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
-	export DOCKERTAG=$( echo "feature-"$JIRA_TICKET_ID"-latest")
+	export DOCKERTAG=$( echo "feature_"$JIRA_TICKET_ID"_latest")
 else
 	# Check for naming convention <branch>/<JIRA-Ticket ID>-<Jira_Summary>
 	# OPS-1664
@@ -90,7 +90,7 @@ buildClient(){
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-client:$DOCKERTAG schulcloud/schulcloud-nuxt-client:develop_latest
-		dockerPush "client" "develop-latest"
+		dockerPush "client" "develop_latest"
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	# If branch is feature, add and push additional docker tags
 	then
@@ -112,7 +112,7 @@ buildStorybook(){
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG schulcloud/schulcloud-nuxt-storybook:develop_latest
-		dockerPush "storybook" "develop-latest"
+		dockerPush "storybook" "develop_latest"
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	# If branch is feature, add and push additional docker tags
 	then
@@ -136,7 +136,7 @@ buildVuepress(){
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG schulcloud/schulcloud-nuxt-vuepress:develop_latest
-		dockerPush "vuepress" "develop-latest"
+		dockerPush "vuepress" "develop_latest"
 	# If branch is feature, add and push additional docker tags
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	then
