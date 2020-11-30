@@ -27,7 +27,7 @@
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<base-icon source="material" icon="class" />
+					<base-icon source="custom" icon="class" />
 					<span>{{ verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -95,7 +95,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -223,7 +223,7 @@ export default {
 @import "@styles";
 
 .subtitle-text {
-	margin: var(--space-xl) 0;
+	margin-top: var(--space-xl);
 }
 .section {
 	margin: var(--space-xl-2);
@@ -248,7 +248,7 @@ export default {
 	white-space: nowrap;
 }
 .category-title {
-	margin: var(--space-lg) 0;
+	margin: var(--space-xl-2) 0 var(--space-lg) 0;
 	font-weight: var(--font-weight-bold);
 }
 table {
