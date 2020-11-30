@@ -15,17 +15,41 @@ esac
 done
 echo PROJECT $PROJECT
 
-# If branch is feature rewrite docker tag
-if [[ "$TRAVIS_BRANCH" = feature* ]]
+# [OPS-1664] Enhance all branches with Tag latest
+if [[ "$TRAVIS_BRANCH" == "master" ]]
+then
+	export DOCKERTAG=master-v$( jq -r '.version' package.json )-latest
+elif [[ "$TRAVIS_BRANCH" == "develop" ]]
+then
+	export DOCKERTAG=develop-latest
+elif [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
+then
+	export DOCKERTAG=release-v$( jq -r '.version' package.json )-latest
+elif [[ "$TRAVIS_BRANCH" =~ ^hotfix\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
+then
+	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
+	JIRA_TICKET_ID=${TRAVIS_BRANCH/#hotfix\//}
+	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
+	# export DOCKERTAG=naming convention feature-<Jira id>-latest
+	export DOCKERTAG=$( echo "hotfix-"$JIRA_TICKET_ID"-latest")
+elif [[ "$TRAVIS_BRANCH" =~ ^feature\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
 	JIRA_TICKET_ID=${TRAVIS_BRANCH/#feature\//}
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
+	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
 	export DOCKERTAG=$( echo "feature-"$JIRA_TICKET_ID"-latest")
+else
+	# Check for naming convention <branch>/<JIRA-Ticket ID>-<Jira_Summary>
+	# OPS-1664
+	echo -e "Event detected. However, branch name pattern does not match requirements to deploy. Expected <branch>/<JIRA-Ticket ID>-<Jira_Summary> but got $TRAVIS_BRANCH"
+	exit 0
 fi
 
 echo "DOCKERTAG" $DOCKERTAG
@@ -66,7 +90,7 @@ buildClient(){
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-client:$DOCKERTAG schulcloud/schulcloud-nuxt-client:develop_latest
-		dockerPush "client" "develop_latest"
+		dockerPush "client" "develop-latest"
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	# If branch is feature, add and push additional docker tags
 	then
@@ -88,7 +112,7 @@ buildStorybook(){
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG schulcloud/schulcloud-nuxt-storybook:develop_latest
-		dockerPush "storybook" "develop_latest"
+		dockerPush "storybook" "develop-latest"
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	# If branch is feature, add and push additional docker tags
 	then
@@ -112,7 +136,7 @@ buildVuepress(){
 	if [[ "$TRAVIS_BRANCH" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG schulcloud/schulcloud-nuxt-vuepress:develop_latest
-		dockerPush "vuepress" "develop_latest"
+		dockerPush "vuepress" "develop-latest"
 	# If branch is feature, add and push additional docker tags
 	elif [[ "$TRAVIS_BRANCH" = feature* ]]
 	then
