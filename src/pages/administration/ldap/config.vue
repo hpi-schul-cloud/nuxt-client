@@ -150,10 +150,9 @@ export default {
 		},
 	},
 	created() {
-		// disabled until the link is activated on the legacy client
-		// const { id } = this.$route.query;
-		// for review and testing purposes, set id to any local database systemID
-		this.$store.dispatch("ldap-config/getData", "5fbf6a53bc9038acfc181717");
+		const { id } = this.$route.query;
+
+		if (id) this.$store.dispatch("ldap-config/getData", id);
 	},
 	methods: {
 		validateHandler() {
