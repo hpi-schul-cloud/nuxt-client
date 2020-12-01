@@ -13,22 +13,22 @@
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="student" />
-					<span>{{ verified.users.student }}</span>
+					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.student") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="teacher" />
-					<span>{{ verified.users.teacher }}</span>
+					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="admin_panel_settings" />
-					<span>{{ verified.users.admin }}</span>
+					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="custom" icon="class" />
-					<span>{{ verified.classes.total }}</span>
+					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
 			</div>
@@ -85,7 +85,11 @@
 				}}</base-button
 			>
 		</div>
-		<base-modal :active.sync="submitted.ok" :background-click-disabled="true">
+		<base-modal
+			:active.sync="submitted.ok"
+			:background-click-disabled="true"
+			data-testid="confirmModal"
+		>
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<modal-body-info
@@ -95,7 +99,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -133,59 +137,63 @@ export default {
 		}),
 		formattedUserVerifiedData() {
 			const data = {};
-			const { sample } = this.verified.users;
-			Object.keys(sample).forEach((key) => {
-				switch (key) {
-					case "email":
-						data[this.$t("pages.administration.ldap.activate.email")] =
-							sample.email;
-						break;
-					case "firstName":
-						data[this.$t("pages.administration.ldap.activate.firstName")] =
-							sample.firstName;
-						break;
-					case "lastName":
-						data[this.$t("pages.administration.ldap.activate.lastName")] =
-							sample.lastName;
-						break;
-					case "ldapDn":
-						data[this.$t("pages.administration.ldap.activate.dN")] =
-							sample.ldapDn;
-						break;
-					case "ldapUID":
-						data[this.$t("pages.administration.ldap.activate.uuid")] =
-							sample.ldapUID;
-						break;
-					case "ldapUUID":
-						data[this.$t("pages.administration.ldap.activate.uid")] =
-							sample.ldapUUID;
-						break;
-					case "roles":
-						data[this.$t("pages.administration.ldap.activate.roles")] =
-							sample.roles[0];
-					default:
-						break;
-				}
-			});
+			if (this.verified.users) {
+				const { sample } = this.verified.users;
+				Object.keys(sample).forEach((key) => {
+					switch (key) {
+						case "email":
+							data[this.$t("pages.administration.ldap.activate.email")] =
+								sample.email;
+							break;
+						case "firstName":
+							data[this.$t("pages.administration.ldap.activate.firstName")] =
+								sample.firstName;
+							break;
+						case "lastName":
+							data[this.$t("pages.administration.ldap.activate.lastName")] =
+								sample.lastName;
+							break;
+						case "ldapDn":
+							data[this.$t("pages.administration.ldap.activate.dN")] =
+								sample.ldapDn;
+							break;
+						case "ldapUID":
+							data[this.$t("pages.administration.ldap.activate.uuid")] =
+								sample.ldapUID;
+							break;
+						case "ldapUUID":
+							data[this.$t("pages.administration.ldap.activate.uid")] =
+								sample.ldapUUID;
+							break;
+						case "roles":
+							data[this.$t("pages.administration.ldap.activate.roles")] =
+								sample.roles[0];
+						default:
+							break;
+					}
+				});
+			}
 			return data;
 		},
 		formattedClassesVerifiedData() {
 			const data = {};
-			const { sample } = this.verified.classes;
-			Object.keys(sample).forEach((key) => {
-				switch (key) {
-					case "className":
-						data[this.$t("pages.administration.ldap.activate.className")] =
-							sample.className;
-						break;
-					case "ldapDn":
-						data[this.$t("pages.administration.ldap.activate.dN")] =
-							sample.ldapDn;
-						break;
-					default:
-						break;
-				}
-			});
+			if (this.verified.classes) {
+				const { sample } = this.verified.classes;
+				Object.keys(sample).forEach((key) => {
+					switch (key) {
+						case "className":
+							data[this.$t("pages.administration.ldap.activate.className")] =
+								sample.className;
+							break;
+						case "ldapDn":
+							data[this.$t("pages.administration.ldap.activate.dN")] =
+								sample.ldapDn;
+							break;
+						default:
+							break;
+					}
+				});
+			}
 			return data;
 		},
 	},
