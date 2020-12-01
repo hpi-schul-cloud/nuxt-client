@@ -18,13 +18,13 @@ echo PROJECT $PROJECT
 # [OPS-1664] Enhance all branches with Tag latest
 if [[ "$TRAVIS_BRANCH" == "master" ]]
 then
-	export DOCKERTAG=master_v$( jq -r '.version' package.json )_latest
+	export DOCKERTAG=master_V$( jq -r '.version' package.json )_latest
 elif [[ "$TRAVIS_BRANCH" == "develop" ]]
 then
 	export DOCKERTAG=develop-latest
 elif [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
 then
-	export DOCKERTAG=release_v$( jq -r '.version' package.json )_latest
+	export DOCKERTAG=release_V$( jq -r '.version' package.json )_latest
 elif [[ "$TRAVIS_BRANCH" =~ ^hotfix\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
@@ -32,7 +32,7 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
+	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
 	export DOCKERTAG=$( echo "hotfix_"$JIRA_TICKET_ID"_latest")
 elif [[ "$TRAVIS_BRANCH" =~ ^feature\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
@@ -42,7 +42,7 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$( echo $JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID | tr -s "[:upper:]" "[:lower:]" )
+	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
 	export DOCKERTAG=$( echo "feature_"$JIRA_TICKET_ID"_latest")
 else
