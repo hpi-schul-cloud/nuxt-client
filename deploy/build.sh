@@ -18,13 +18,13 @@ echo PROJECT $PROJECT
 # [OPS-1664] Enhance all branches with Tag latest
 if [[ "$TRAVIS_BRANCH" == "master" ]]
 then
-	export DOCKERTAG=master_V$( jq -r '.version' package.json )_latest
+	export DOCKERTAG=master_v$( jq -r '.version' package.json )_latest
 elif [[ "$TRAVIS_BRANCH" == "develop" ]]
 then
 	export DOCKERTAG=develop-latest
 elif [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
 then
-	export DOCKERTAG=release_V$( jq -r '.version' package.json )_latest
+	export DOCKERTAG=release_v$( jq -r '.version' package.json )_latest
 elif [[ "$TRAVIS_BRANCH" =~ ^hotfix\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
