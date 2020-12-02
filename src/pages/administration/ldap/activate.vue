@@ -13,22 +13,22 @@
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="student" />
-					<span>{{ verified.users.student }}</span>
+					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.student") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="teacher" />
-					<span>{{ verified.users.teacher }}</span>
+					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="admin_panel_settings" />
-					<span>{{ verified.users.admin }}</span>
+					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<base-icon source="custom" icon="class" />
-					<span>{{ verified.classes.total }}</span>
+					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
 			</div>
@@ -41,13 +41,34 @@
 			</p>
 			<div>
 				<table data-testid="ldapUsersActivateTable">
-					<tr
-						v-for="(row, index) in Object.entries(formattedUserVerifiedData)"
-						:key="index"
-						class="table-row"
-					>
-						<td>{{ row[0] }}</td>
-						<td>{{ row[1] }}</td>
+					<tr v-if="verified.users && verified.users.sample.roles">
+						<td>{{ $t("pages.administration.ldap.activate.roles") }}</td>
+						<td>{{ verified.users && verified.users.sample.roles[0] }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.lastName">
+						<td>{{ $t("pages.administration.ldap.activate.lastName") }}</td>
+						<td>{{ verified.users && verified.users.sample.lastName }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.firstName">
+						<td>{{ $t("pages.administration.ldap.activate.firstName") }}</td>
+						<td>{{ verified.users && verified.users.sample.firstName }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.email">
+						<td>{{ $t("pages.administration.ldap.activate.email") }}</td>
+						<td>{{ verified.users && verified.users.sample.email }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.ldapUID">
+						<td>{{ $t("pages.administration.ldap.activate.uid") }}</td>
+						<td>{{ verified.users && verified.users.sample.ldapUID }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.ldapUUID">
+						<td>{{ $t("pages.administration.ldap.activate.uuid") }}</td>
+						<td>{{ verified.users && verified.users.sample.ldapUUID }}</td>
 					</tr>
 				</table>
 			</div>
@@ -57,16 +78,24 @@
 			</p>
 			<div>
 				<table data-testid="ldapClassesActivateTable">
-					<tr
-						v-for="(row, index) in Object.entries(formattedClassesVerifiedData)"
-						:key="index"
-					>
-						<td>{{ row[0] }}</td>
-						<td>{{ row[1] }}</td>
+					<tr v-if="verified.classes && verified.classes.sample.className">
+						<td>{{ $t("pages.administration.ldap.activate.className") }}</td>
+						<td>{{ verified.classes && verified.classes.sample.className }}</td>
+					</tr>
+					<tr v-if="verified.classes && verified.classes.sample.ldapDn">
+						<td>{{ $t("pages.administration.ldap.activate.dN") }}</td>
+						<td>{{ verified.classes && verified.classes.sample.ldapDn }}</td>
 					</tr>
 				</table>
 			</div>
 		</section>
+		<div
+			v-for="(error, index) in activationErrors"
+			:key="index"
+			class="errors-container"
+		>
+			<info-message :message="error" type="error" />
+		</div>
 		<div class="bottom-buttons">
 			<base-button
 				design="text"
@@ -85,7 +114,11 @@
 				}}</base-button
 			>
 		</div>
-		<base-modal :active.sync="submitted.ok" :background-click-disabled="true">
+		<base-modal
+			:active.sync="submitted.ok"
+			:background-click-disabled="true"
+			data-testid="confirmModal"
+		>
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<modal-body-info
@@ -114,14 +147,14 @@
 
 <script>
 import { mapState } from "vuex";
-import errorHandling from "@mixins/ldapErrorHandling";
+import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
+import InfoMessage from "@components/atoms/InfoMessage";
 
 export default {
-	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm },
-	mixins: [errorHandling],
+	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm, InfoMessage },
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
@@ -131,62 +164,8 @@ export default {
 			temp: "temp",
 			submitted: "submitted",
 		}),
-		formattedUserVerifiedData() {
-			const data = {};
-			const { sample } = this.verified.users;
-			Object.keys(sample).forEach((key) => {
-				switch (key) {
-					case "email":
-						data[this.$t("pages.administration.ldap.activate.email")] =
-							sample.email;
-						break;
-					case "firstName":
-						data[this.$t("pages.administration.ldap.activate.firstName")] =
-							sample.firstName;
-						break;
-					case "lastName":
-						data[this.$t("pages.administration.ldap.activate.lastName")] =
-							sample.lastName;
-						break;
-					case "ldapDn":
-						data[this.$t("pages.administration.ldap.activate.dN")] =
-							sample.ldapDn;
-						break;
-					case "ldapUID":
-						data[this.$t("pages.administration.ldap.activate.uuid")] =
-							sample.ldapUID;
-						break;
-					case "ldapUUID":
-						data[this.$t("pages.administration.ldap.activate.uid")] =
-							sample.ldapUUID;
-						break;
-					case "roles":
-						data[this.$t("pages.administration.ldap.activate.roles")] =
-							sample.roles[0];
-					default:
-						break;
-				}
-			});
-			return data;
-		},
-		formattedClassesVerifiedData() {
-			const data = {};
-			const { sample } = this.verified.classes;
-			Object.keys(sample).forEach((key) => {
-				switch (key) {
-					case "className":
-						data[this.$t("pages.administration.ldap.activate.className")] =
-							sample.className;
-						break;
-					case "ldapDn":
-						data[this.$t("pages.administration.ldap.activate.dN")] =
-							sample.ldapDn;
-						break;
-					default:
-						break;
-				}
-			});
-			return data;
+		activationErrors() {
+			return ldapErrorHandler(this.submitted.errors, this);
 		},
 	},
 	created() {
@@ -200,15 +179,6 @@ export default {
 		},
 		async submitButtonHandler() {
 			await this.$store.dispatch("ldap-config/submitData", this.temp);
-			if (!this.submitted.ok) {
-				this.errorHandler(this.submitted.errors).forEach((message) => {
-					this.$toast.error(message);
-				});
-				this.$router.push({
-					path: `/administration/ldap/config`,
-				});
-				return;
-			}
 		},
 		okButtonHandler() {
 			this.$router.push({
@@ -231,7 +201,7 @@ export default {
 .bottom-buttons {
 	display: flex;
 	justify-content: space-between;
-	margin-top: var(--space-xl-4);
+	margin-top: var(--space-xl);
 	margin-right: var(--space-xl);
 	margin-left: var(--space-lg);
 }
@@ -263,5 +233,11 @@ td {
 }
 tr:nth-child(odd) {
 	background: #ebeef0;
+}
+.errors-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	margin: var(--space-xl-2);
 }
 </style>

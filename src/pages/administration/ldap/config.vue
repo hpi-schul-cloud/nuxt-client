@@ -51,6 +51,16 @@
 				@update:errors="updateValidationData"
 			/>
 		</div>
+		<div class="errors-container">
+			<info-message
+				v-if="validationError"
+				:message="validationError"
+				type="error"
+			/>
+			<span v-for="(error, index) in verificationErrors" :key="index">
+				<info-message :message="error" type="error" />
+			</span>
+		</div>
 		<div class="buttons-container">
 			<base-button
 				design="text"
@@ -76,11 +86,12 @@
 
 <script>
 import { mapState } from "vuex";
-import errorHandling from "@mixins/ldapErrorHandling";
+import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
 import UsersSection from "@components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@components/organisms/Ldap/LdapClassesSection.vue";
+import InfoMessage from "@components/atoms/InfoMessage";
 
 export default {
 	components: {
@@ -88,8 +99,8 @@ export default {
 		ConnectionSection,
 		UsersSection,
 		ClassesSection,
+		InfoMessage,
 	},
-	mixins: [errorHandling],
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
@@ -112,6 +123,7 @@ export default {
 				classes: null,
 			},
 			triggerValidation: false,
+			validationError: "",
 		};
 	},
 	computed: {
@@ -148,6 +160,9 @@ export default {
 				}, 200);
 			},
 		},
+		verificationErrors() {
+			return ldapErrorHandler(this.verified.errors, this);
+		},
 	},
 	created() {
 		const { id } = this.$route.query;
@@ -160,15 +175,13 @@ export default {
 				clearInterval(this.$options.debounce);
 			}
 			this.triggerValidation = !this.triggerValidation;
+			this.validationError = "";
 
 			this.$options.debounce = setInterval(() => {
 				if (!this.isInvalid) {
 					this.$store.dispatch("ldap-config/verifyData", this.systemData);
 
 					if (!this.verified.ok) {
-						this.errorHandler(this.verified.errors).forEach((message) => {
-							this.$toast.error(message);
-						});
 						clearInterval(this.$options.debounce);
 						return;
 					}
@@ -183,7 +196,7 @@ export default {
 					return;
 				}
 
-				this.$toast.error(this.$t("common.validation.invalid"));
+				this.validationError = this.$t("common.validation.invalid");
 				clearInterval(this.$options.debounce);
 			}, 500);
 		},
@@ -222,10 +235,20 @@ export default {
 .buttons-container {
 	display: flex;
 	justify-content: flex-end;
-	margin: var(--space-xl-4) 0 var(--space-xl-4) 0;
+	margin: var(--space-xl) 0 var(--space-xl-4) 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-4);
+		margin: var(--space-xl-2);
+	}
+}
+.errors-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	margin: var(--space-xl-2) 0;
+
+	@include breakpoint(tablet) {
+		margin: var(--space-xl-2) var(--space-xl-4);
 	}
 }
 </style>

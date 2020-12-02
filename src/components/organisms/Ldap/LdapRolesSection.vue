@@ -12,7 +12,7 @@
 		</p>
 		<div role="group" class="section-sub-header">
 			<base-input
-				:vmodel="value.groupOption"
+				:vmodel="groupOption"
 				type="radio"
 				:label="
 					this.$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
@@ -24,7 +24,7 @@
 			>
 			</base-input>
 			<base-input
-				:vmodel="value.groupOption"
+				:vmodel="groupOption"
 				type="radio"
 				:label="
 					this.$t(
@@ -46,7 +46,7 @@
 		</div>
 		<base-input
 			:vmodel="memberInputValue"
-			:disabled="value.groupOption === 'group'"
+			:disabled="groupOption === 'group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
 			:placeholder="
@@ -165,7 +165,7 @@ export default {
 	},
 	computed: {
 		groupOption() {
-			return this.value.groupOption;
+			return this.value.groupOption || "group";
 		},
 		memberInputValue() {
 			if (this.value.groupOption === "group") {
