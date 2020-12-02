@@ -67,6 +67,13 @@
 				</table>
 			</div>
 		</section>
+		<div
+			v-for="(error, index) in activationErrors"
+			:key="index"
+			class="errors-container"
+		>
+			<info-message :message="error" type="error" />
+		</div>
 		<div class="bottom-buttons">
 			<base-button
 				design="text"
@@ -118,14 +125,14 @@
 
 <script>
 import { mapState } from "vuex";
-import errorHandling from "@mixins/ldapErrorHandling";
+import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
+import InfoMessage from "@components/atoms/InfoMessage";
 
 export default {
-	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm },
-	mixins: [errorHandling],
+	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm, InfoMessage },
 	meta: {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
@@ -196,6 +203,9 @@ export default {
 			}
 			return data;
 		},
+		activationErrors() {
+			return ldapErrorHandler(this.submitted.errors, this);
+		},
 	},
 	created() {
 		if (!Object.keys(this.verified).length) {
@@ -208,15 +218,6 @@ export default {
 		},
 		async submitButtonHandler() {
 			await this.$store.dispatch("ldap-config/submitData", this.temp);
-			if (!this.submitted.ok) {
-				this.errorHandler(this.submitted.errors).forEach((message) => {
-					this.$toast.error(message);
-				});
-				this.$router.push({
-					path: `/administration/ldap/config`,
-				});
-				return;
-			}
 		},
 		okButtonHandler() {
 			this.$router.push({
@@ -239,7 +240,7 @@ export default {
 .bottom-buttons {
 	display: flex;
 	justify-content: space-between;
-	margin-top: var(--space-xl-4);
+	margin-top: var(--space-xl);
 	margin-right: var(--space-xl);
 	margin-left: var(--space-lg);
 }
@@ -271,5 +272,11 @@ td {
 }
 tr:nth-child(odd) {
 	background: #ebeef0;
+}
+.errors-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	margin: var(--space-xl-2);
 }
 </style>

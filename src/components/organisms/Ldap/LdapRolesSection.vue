@@ -12,19 +12,19 @@
 		</p>
 		<div role="group" class="section-sub-header">
 			<base-input
-				:vmodel="value.groupOption"
+				:vmodel="groupOption"
 				type="radio"
 				:label="
 					this.$t('pages.administration.ldapEdit.roles.labels.radio.ldapGroup')
 				"
 				name="group"
-				style="margin-right: var(--space-sm)"
+				style="margin-right: var(--space-sm);"
 				value="group"
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
 			</base-input>
 			<base-input
-				:vmodel="value.groupOption"
+				:vmodel="groupOption"
 				type="radio"
 				:label="
 					this.$t(
@@ -36,7 +36,7 @@
 				@update:vmodel="$emit('input', { ...value, groupOption: $event })"
 			>
 			</base-input>
-			<p class="text-sm" style="margin-top: var(--space-xs)">
+			<p class="text-sm" style="margin-top: var(--space-xs);">
 				{{
 					this.$t(
 						"pages.administration.ldapEdit.roles.labels.radio.description"
@@ -46,13 +46,13 @@
 		</div>
 		<base-input
 			:vmodel="memberInputValue"
-			:disabled="value.groupOption === 'group'"
+			:disabled="groupOption === 'group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
 			:placeholder="
 				this.$t('pages.administration.ldapEdit.roles.placeholder.member')
 			"
-			style="margin-bottom: var(--space-xl)"
+			style="margin-bottom: var(--space-xl);"
 			:validation-model="$v.value.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
@@ -165,7 +165,7 @@ export default {
 	},
 	computed: {
 		groupOption() {
-			return this.value.groupOption;
+			return this.value.groupOption || "group";
 		},
 		memberInputValue() {
 			if (this.value.groupOption === "group") {
