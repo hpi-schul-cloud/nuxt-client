@@ -37,7 +37,7 @@
 			</base-link>
 			<user-has-role :role="isNotStudent">
 				<template v:slot:footer>
-					<div class="footer">
+					<div v-show="!isCollection()" class="footer">
 						<div class="footer__separator"></div>
 						<div class="footer__content">
 							<div class="footer__icon-container">
@@ -96,6 +96,13 @@ export default {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
+		},
+		isCollection() {
+			const type = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:hpi_lom_general_aggregationlevel"
+			);
+			return type === "2";
 		},
 		provider() {
 			const provider = getMetadataAttribute(
