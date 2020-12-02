@@ -41,13 +41,34 @@
 			</p>
 			<div>
 				<table data-testid="ldapUsersActivateTable">
-					<tr
-						v-for="(row, index) in Object.entries(formattedUserVerifiedData)"
-						:key="index"
-						class="table-row"
-					>
-						<td>{{ row[0] }}</td>
-						<td>{{ row[1] }}</td>
+					<tr v-if="verified.users && verified.users.sample.roles">
+						<td>{{ $t("pages.administration.ldap.activate.roles") }}</td>
+						<td>{{ verified.users && verified.users.sample.roles[0] }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.lastName">
+						<td>{{ $t("pages.administration.ldap.activate.lastName") }}</td>
+						<td>{{ verified.users && verified.users.sample.lastName }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.firstName">
+						<td>{{ $t("pages.administration.ldap.activate.firstName") }}</td>
+						<td>{{ verified.users && verified.users.sample.firstName }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.email">
+						<td>{{ $t("pages.administration.ldap.activate.email") }}</td>
+						<td>{{ verified.users && verified.users.sample.email }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.ldapUID">
+						<td>{{ $t("pages.administration.ldap.activate.uid") }}</td>
+						<td>{{ verified.users && verified.users.sample.ldapUID }}</td>
+					</tr>
+
+					<tr v-if="verified.users && verified.users.sample.ldapUUID">
+						<td>{{ $t("pages.administration.ldap.activate.uuid") }}</td>
+						<td>{{ verified.users && verified.users.sample.ldapUUID }}</td>
 					</tr>
 				</table>
 			</div>
@@ -57,12 +78,13 @@
 			</p>
 			<div>
 				<table data-testid="ldapClassesActivateTable">
-					<tr
-						v-for="(row, index) in Object.entries(formattedClassesVerifiedData)"
-						:key="index"
-					>
-						<td>{{ row[0] }}</td>
-						<td>{{ row[1] }}</td>
+					<tr v-if="verified.classes && verified.classes.sample.className">
+						<td>{{ $t("pages.administration.ldap.activate.className") }}</td>
+						<td>{{ verified.classes && verified.classes.sample.className }}</td>
+					</tr>
+					<tr v-if="verified.classes && verified.classes.sample.ldapDn">
+						<td>{{ $t("pages.administration.ldap.activate.dN") }}</td>
+						<td>{{ verified.classes && verified.classes.sample.ldapDn }}</td>
 					</tr>
 				</table>
 			</div>
@@ -106,7 +128,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -142,67 +164,6 @@ export default {
 			temp: "temp",
 			submitted: "submitted",
 		}),
-		formattedUserVerifiedData() {
-			const data = {};
-			if (this.verified.users) {
-				const { sample } = this.verified.users;
-				Object.keys(sample).forEach((key) => {
-					switch (key) {
-						case "email":
-							data[this.$t("pages.administration.ldap.activate.email")] =
-								sample.email;
-							break;
-						case "firstName":
-							data[this.$t("pages.administration.ldap.activate.firstName")] =
-								sample.firstName;
-							break;
-						case "lastName":
-							data[this.$t("pages.administration.ldap.activate.lastName")] =
-								sample.lastName;
-							break;
-						case "ldapDn":
-							data[this.$t("pages.administration.ldap.activate.dN")] =
-								sample.ldapDn;
-							break;
-						case "ldapUID":
-							data[this.$t("pages.administration.ldap.activate.uuid")] =
-								sample.ldapUID;
-							break;
-						case "ldapUUID":
-							data[this.$t("pages.administration.ldap.activate.uid")] =
-								sample.ldapUUID;
-							break;
-						case "roles":
-							data[this.$t("pages.administration.ldap.activate.roles")] =
-								sample.roles[0];
-						default:
-							break;
-					}
-				});
-			}
-			return data;
-		},
-		formattedClassesVerifiedData() {
-			const data = {};
-			if (this.verified.classes) {
-				const { sample } = this.verified.classes;
-				Object.keys(sample).forEach((key) => {
-					switch (key) {
-						case "className":
-							data[this.$t("pages.administration.ldap.activate.className")] =
-								sample.className;
-							break;
-						case "ldapDn":
-							data[this.$t("pages.administration.ldap.activate.dN")] =
-								sample.ldapDn;
-							break;
-						default:
-							break;
-					}
-				});
-			}
-			return data;
-		},
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
 		},
