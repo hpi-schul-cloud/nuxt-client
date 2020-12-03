@@ -98,6 +98,19 @@ export const actions = {
 			this.$toast.error(error);
 		}
 	},
+	async patchData({ commit }, payload, systemId) {
+		try {
+			const data = formatClientData(payload);
+			const submission = await this.$axios.$patch(
+				`/ldap-config/${systemId}?verifyOnly=false`,
+				data
+			);
+			commit("setSubmitted", submission);
+		} catch (error) {
+			console.log(error);
+			this.$toast.error(error);
+		}
+	},
 };
 
 export const getters = {

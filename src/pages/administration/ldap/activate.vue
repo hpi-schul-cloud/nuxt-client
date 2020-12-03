@@ -163,6 +163,7 @@ export default {
 			verified: "verified",
 			temp: "temp",
 			submitted: "submitted",
+			data: "data",
 		}),
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
