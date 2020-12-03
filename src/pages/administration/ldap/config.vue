@@ -205,9 +205,15 @@ export default {
 					this.$toast.success(
 						this.$t("pages.administration.ldap.index.verified")
 					);
-					this.$router.push({
-						path: `/administration/ldap/activate?id=${this.$route.query.id}`,
-					});
+					if (systemId) {
+						this.$router.push({
+							path: `/administration/ldap/activate?id=${systemId}`,
+						});
+					} else {
+						this.$router.push({
+							path: "/administration/ldap/activate",
+						});
+					}
 					clearInterval(this.$options.debounce);
 					return;
 				}

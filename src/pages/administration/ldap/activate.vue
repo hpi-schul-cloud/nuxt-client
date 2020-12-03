@@ -196,11 +196,10 @@ export default {
 			}
 
 			if (id) {
-				await this.$store.dispatch(
-					"ldap-config/patchData",
-					temporaryConfigData,
-					id
-				);
+				await this.$store.dispatch("ldap-config/patchData", {
+					systemData: temporaryConfigData,
+					systemId: id,
+				});
 			} else {
 				await this.$store.dispatch(
 					"ldap-config/submitData",

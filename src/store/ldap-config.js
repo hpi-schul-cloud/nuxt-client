@@ -108,7 +108,7 @@ export const actions = {
 		try {
 			const data = formatClientData(payload);
 			const submission = await this.$axios.$post(
-				"/ldap-config?verifyOnly=false",
+				"/ldap-config?verifyOnly=false&activate=true",
 				data
 			);
 			commit("setSubmitted", submission);
@@ -117,11 +117,11 @@ export const actions = {
 			this.$toast.error(error);
 		}
 	},
-	async patchData({ commit }, payload, systemId) {
+	async patchData({ commit }, { systemData, systemId }) {
 		try {
-			const data = formatClientData(payload);
+			const data = formatClientData(systemData);
 			const submission = await this.$axios.$patch(
-				`/ldap-config/${systemId}?verifyOnly=false`,
+				`/ldap-config/${systemId}?verifyOnly=false&activate=true`,
 				data
 			);
 			commit("setSubmitted", submission);
