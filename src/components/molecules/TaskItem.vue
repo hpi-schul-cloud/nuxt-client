@@ -29,7 +29,7 @@
 				id="pulsating-dot"
 				color="var(--color-secondary)"
 			/>
-			<span style="position: relative">
+			<span style="position: relative;">
 				<base-button
 					design="text icon"
 					aria-label="menu"
@@ -126,7 +126,7 @@ $color-dark-gray: var(--color-gray-medium);
 	height: auto;
 	border-bottom: 1px solid var(--color-gray);
 	&:focus-within {
-		border: 3px solid var(--color-gray-light);
+		border: 2px solid var(--color-tertiary);
 	}
 }
 
