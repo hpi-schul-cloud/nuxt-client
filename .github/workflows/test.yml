@@ -180,11 +180,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: output-build-files
+      - name: chnage npm repo
+        run: npm config set prefix=$HOME/.node_modules && export PATH=$HOME/node/bin:$PATH
       - name: install surge --global
-        run:
-          npm config set prefix=$HOME/.node_modules
-          export PATH=$HOME/node/bin:$PATH
-          npm i -g surge
+        run: npm i -g surge
       - name: deploy storybook on surge
         run: ./deploy/pull-deploy.sh -p storybook
         shell: bash
