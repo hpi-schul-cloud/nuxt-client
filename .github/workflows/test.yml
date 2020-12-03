@@ -1,8 +1,41 @@
-name: Test
+name: Test and deploy
 
 on: [push]
 
 jobs:
+  test_build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: build:nuxt:default
+        run: npm run build:nuxt
+      - name: build:nuxt:n21
+        run: npm run build:nuxt
+        env:
+          SC_THEME: n21
+      - name: build:nuxt:thr
+        run: npm run build:nuxt
+        env:
+          SC_THEME: thr
+      - name: build:nuxt:int
+        run: npm run build:nuxt
+        env:
+          SC_THEME: int
+      - name: build:nuxt:open
+        run: npm run build:nuxt
+        env:
+          SC_THEME: open
+      - name: build:nuxt:brb
+        run: npm run build:nuxt
+        env:
+          SC_THEME: brb
+      - name: build:storybook
+        run: npm run build:storybook
+      - name: build:docs
+        run: npm run build:docs
   unit:
     strategy:
       matrix:
