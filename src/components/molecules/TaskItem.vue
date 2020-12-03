@@ -1,26 +1,26 @@
 <template>
 	<li class="card">
-    <base-link :href="url" :no-styles="true" class="card-body">
-				<base-image
-					v-if="$attrs.imgSrc"
-					v-bind="$attrs"
-					class="image"
-					role="presentation"
-				/>
-				<!-- TODO: this progress ring needs to be replaced with a different progress ring that uses fractions (e.g. 9/12)-->
-				<progress-ring
-					v-else-if="progress"
-					id="progress-ring"
-					:percent="progress"
-				/>
-				<div class="card-heading">
-					<p class="subtitle">
-						{{ subtitle }}
-					</p>
-					<h2 class="title">
-						{{ title }}
-					</h2>
-				</div>
+		<base-link :href="url" :no-styles="true" class="card-body">
+			<base-image
+				v-if="$attrs.imgSrc"
+				v-bind="$attrs"
+				class="image"
+				role="presentation"
+			/>
+			<!-- TODO: this progress ring needs to be replaced with a different progress ring that uses fractions (e.g. 9/12)-->
+			<progress-ring
+				v-else-if="progress"
+				id="progress-ring"
+				:percent="progress"
+			/>
+			<div class="card-heading">
+				<p class="subtitle">
+					{{ subtitle }}
+				</p>
+				<h2 class="title">
+					{{ title }}
+				</h2>
+			</div>
 		</base-link>
 		<div class="card-action">
 			<span class="status">{{ status }}</span>
@@ -29,26 +29,26 @@
 				id="pulsating-dot"
 				color="var(--color-secondary)"
 			/>
-				<span style="position: relative">
-					<base-button
-						design="text icon"
-						aria-label="menu"
-						:aria-expanded="contextOpen"
-						@click="contextOpen = true"
-					>
-						<base-icon
-							class="footer__content-icon"
-							fill="#455B6A"
-							source="material"
-							icon="more_vert"
-						/>
-					</base-button>
-					<context-menu
-						:show.sync="contextOpen"
-						anchor="top-right"
-						:actions="actions"
+			<span style="position: relative">
+				<base-button
+					design="text icon"
+					aria-label="menu"
+					:aria-expanded="contextOpen"
+					@click="contextOpen = true"
+				>
+					<base-icon
+						class="footer__content-icon"
+						fill="#455B6A"
+						source="material"
+						icon="more_vert"
 					/>
-				</span>
+				</base-button>
+				<context-menu
+					:show.sync="contextOpen"
+					anchor="top-right"
+					:actions="actions"
+				/>
+			</span>
 		</div>
 	</li>
 </template>
@@ -64,7 +64,7 @@ import BaseLink from "@basecomponents/BaseLink";
 
 export default {
 	components: {
-    BaseLink,
+		BaseLink,
 		ProgressRing,
 		PulsatingDot,
 		BaseImage,
@@ -125,30 +125,30 @@ $color-dark-gray: var(--color-gray-medium);
 	width: 100%;
 	height: auto;
 	border-bottom: 1px solid var(--color-gray);
-  &:focus-within {
-    outline: 2px solid var(--color-gray-light);
-   }
+	&:focus-within {
+		outline: 2px solid var(--color-gray-light);
+	}
 }
 
 .card-body {
 	display: flex;
-  flex-basis: 95%;
+	flex-basis: 95%;
 	flex-direction: row;
-  align-items: center;
-  min-height: 3rem;
-  padding: var(--space-md);
-  overflow: hidden;
-  color: inherit;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  &:focus {
-    outline: none;
-  }
+	align-items: center;
+	min-height: 3rem;
+	padding: var(--space-md);
+	overflow: hidden;
+	color: inherit;
+	text-decoration: none;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	&:focus {
+		outline: none;
+	}
 }
 
 .card-heading {
-  overflow: hidden;
+	overflow: hidden;
 	h2 {
 		margin: 0;
 	}
@@ -206,5 +206,4 @@ $color-dark-gray: var(--color-gray-medium);
 .card-action {
 	display: flex;
 }
-
 </style>
