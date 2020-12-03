@@ -1,7 +1,7 @@
 <template>
 	<div class="info-message" :class="type">
 		<base-icon source="custom" :icon="icon" class="icon"></base-icon>
-		<div lcass="message">{{ message }}</div>
+		<div class="message">{{ message }}</div>
 	</div>
 </template>
 <script>

@@ -59,6 +59,7 @@
 					<base-button
 						v-if="isMerlinContent"
 						design="outline"
+						class="content-button"
 						@click="
 							() => {
 								goToMerlinContent(merlinTokenReference);
@@ -72,6 +73,7 @@
 						v-else
 						design="outline"
 						:href="downloadUrl"
+						class="content-button"
 						target="_blank"
 					>
 						<base-icon source="custom" icon="open_new_window" />
@@ -147,7 +149,6 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 
@@ -155,6 +156,7 @@ import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
 import { getMetadataAttribute } from "@utils/helpers";
+import { printDate } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -174,11 +176,6 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
-	data() {
-		return {
-			dayjs,
-		};
-	},
 	computed: {
 		provider() {
 			const provider = getMetadataAttribute(
@@ -191,10 +188,10 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "cm:creator");
 		},
 		createdAt() {
-			return dayjs(this.resource.createdAt).format("DD.MM.YYYY");
+			return printDate(this.resource.createdAt);
 		},
 		updatedAt() {
-			return dayjs(this.resource.modifiedAt).format("DD.MM.YYYY");
+			return printDate(this.resource.modifiedAt);
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
@@ -402,16 +399,20 @@ $tablet-portrait-width: 768px;
 			width: 80%;
 			margin-top: var(--space-md);
 		}
+
 		.external-content-warning {
 			color: var(--color-danger);
+
 			.external-content-title {
 				margin-top: var(--space-md);
 				font-weight: var(--font-weight-bold);
 			}
 		}
+
 		.content-button {
 			width: 100%;
 		}
+
 		.actions {
 			display: flex;
 			justify-content: flex-end;

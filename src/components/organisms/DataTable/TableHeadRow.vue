@@ -9,7 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--color-tertiary);"
+					style="color: var(--color-tertiary)"
 				/>
 			</div>
 		</th>
@@ -31,11 +31,11 @@
 					<span class="info-slot">
 						<base-button
 							class="info-button"
-							style="background-color: transparent;"
+							style="background-color: transparent"
 							design="info text icon"
 							@click="infoBoxActive = !infoBoxActive"
 						>
-							<base-icon source="material" icon="info" style="margin: 0;" />
+							<base-icon source="material" icon="info" style="margin: 0" />
 						</base-button>
 					</span>
 					<info-box class="info-box" :active.sync="infoBoxActive">
@@ -66,7 +66,7 @@
 								}}
 								<base-link
 									class="link-style"
-									style="color: var(--color-white); text-decoration: underline;"
+									style="color: var(--color-white); text-decoration: underline"
 									to="/"
 									href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=36700189"
 									target="_blank"
