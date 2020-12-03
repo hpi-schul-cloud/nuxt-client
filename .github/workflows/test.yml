@@ -10,6 +10,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
+      - name: install dependencies
+        run: npm ci
       - name: build:nuxt:default
         run: npm run build:nuxt
       - name: build:nuxt:n21
