@@ -148,10 +148,20 @@
 <script>
 import { mapState } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
+import { unchangedPassword } from "@utils/ldapConstants";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import InfoMessage from "@components/atoms/InfoMessage";
+
+const redirectToConfigPage = (page) => {
+	const { id } = page.$route.query;
+	if (id) {
+		page.$router.push(`/administration/ldap/config?id=${id}`);
+	} else {
+		page.$router.push("/administration/ldap/config");
+	}
+};
 
 export default {
 	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm, InfoMessage },
@@ -170,15 +180,32 @@ export default {
 	},
 	created() {
 		if (!Object.keys(this.verified).length) {
-			this.$router.push("/administration/ldap/config");
+			redirectToConfigPage(this);
 		}
 	},
 	methods: {
 		backButtonHandler() {
-			this.$router.push("/administration/ldap/config");
+			redirectToConfigPage(this);
 		},
 		async submitButtonHandler() {
-			await this.$store.dispatch("ldap-config/submitData", this.temp);
+			const { id } = this.$route.query;
+			const temporaryConfigData = { ...this.temp };
+
+			if (temporaryConfigData.searchUserPassword === unchangedPassword) {
+				delete temporaryConfigData.searchUserPassword;
+			}
+
+			if (id) {
+				await this.$store.dispatch("ldap-config/patchData", {
+					systemData: temporaryConfigData,
+					systemId: id,
+				});
+			} else {
+				await this.$store.dispatch(
+					"ldap-config/submitData",
+					temporaryConfigData
+				);
+			}
 		},
 		okButtonHandler() {
 			this.$router.push({

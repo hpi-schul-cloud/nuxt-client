@@ -1,5 +1,6 @@
 /* eslint-disable jest/no-focused-tests */
 import { getters, mutations, actions } from "../../src/store/ldap-config";
+import { unchangedPassword } from "../utils/ldapConstants";
 
 const serverMockData = {
 	providerOptions: {
@@ -39,7 +40,7 @@ const clientMockData = {
 	url: "ldaps://ldap.schul-cloud.org",
 	basisPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
-	searchUserPassword: undefined,
+	searchUserPassword: unchangedPassword,
 	userPath: "ou=users",
 	firstName: "givenName",
 	familyName: "sn",
@@ -156,7 +157,7 @@ describe("store/ldap-config", () => {
 				};
 				const spyCommit = jest.fn();
 				await actions.submitData({ commit: spyCommit }, clientMockData);
-				expect(receivedUrl).toBe("/ldap-config?verifyOnly=false");
+				expect(receivedUrl).toBe("/ldap-config?verifyOnly=false&activate=true");
 				expect(spyCommit.mock.calls).toHaveLength(1);
 				expect(spyCommit.mock.calls[0][0]).toBe("setSubmitted");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);

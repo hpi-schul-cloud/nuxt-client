@@ -1,11 +1,12 @@
 import { default as ldapConfig } from "./config.vue";
+import { unchangedPassword } from "../../../utils/ldapConstants";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
 
 const mockInputData = {
 	url: "ldaps://ldap.schul-cloud.org",
 	basisPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
-	searchUserPassword: undefined,
+	searchUserPassword: unchangedPassword,
 	userPath: "ou=users",
 	firstName: "givenName",
 	familyName: "sn",

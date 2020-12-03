@@ -4,7 +4,7 @@
 			{{ $t("pages.administration.ldap.classes.title") }}
 		</h3>
 		<base-input
-			v-model="unchecked"
+			v-model="checked"
 			type="switch"
 			datatest-id="ldapDataClassesCheckbox"
 			:label="$t('pages.administration.ldap.classes.sctivate.import')"
@@ -16,7 +16,7 @@
 		<base-input
 			data-testid="ldapDataClassesPath"
 			:vmodel="classPathValue"
-			:disabled="unchecked === false"
+			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:placeholder="$t('pages.administration.ldap.classes.path.title')"
@@ -37,7 +37,7 @@
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
 			:vmodel="value.nameAttribute"
-			:disabled="unchecked === false"
+			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
@@ -53,7 +53,7 @@
 		<base-input
 			data-testid="ldapDataClassesNameparticipantAttribute"
 			:vmodel="value.participantAttribute"
-			:disabled="unchecked === false"
+			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
@@ -73,7 +73,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
+import { ldapPathValidationRegex } from "@utils/ldapConstants";
 
 export default {
 	// eslint-disable-next-line vue/require-prop-types
@@ -90,7 +90,7 @@ export default {
 	},
 	data() {
 		return {
-			unchecked: false,
+			checked: false,
 			classesValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
@@ -105,9 +105,12 @@ export default {
 	},
 	computed: {
 		classPathValue() {
-			if (this.unchecked === false) {
+			if (this.checked === false) {
 				return "";
 			}
+			return this.value.classPath;
+		},
+		classPathChanged() {
 			return this.value.classPath;
 		},
 	},
@@ -116,12 +119,15 @@ export default {
 			this.$v.$touch();
 			this.$emit("update:errors", this.$v.$invalid, "classes");
 		},
-		unchecked: function () {
+		checked: function () {
 			this.$emit("update:errors", this.$v.$invalid, "classes");
+		},
+		classPathChanged: function () {
+			this.checked = !!this.value.classPath;
 		},
 	},
 	validations() {
-		if (this.unchecked === true) {
+		if (this.checked === true) {
 			return {
 				value: {
 					classPath: { required, ldapPathValidationRegex },

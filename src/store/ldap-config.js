@@ -1,3 +1,5 @@
+import { unchangedPassword } from "../utils/ldapConstants";
+
 const formatServerData = (data) => {
 	const { providerOptions } = data;
 	const {
@@ -10,7 +12,7 @@ const formatServerData = (data) => {
 		url: data.url,
 		basisPath: data.rootPath,
 		searchUser: data.searchUser,
-		searchUserPassword: data.searchUserPassword,
+		searchUserPassword: unchangedPassword,
 		userPath: providerOptions.userPathAdditions,
 		firstName: userAttributeNameMapping.givenName,
 		familyName: userAttributeNameMapping.sn,
@@ -85,11 +87,41 @@ export const actions = {
 			this.$toast.error(error);
 		}
 	},
+	async verifyExisting({ commit }, { systemId, systemData }) {
+		try {
+			const data = formatClientData(systemData);
+			const verification = await this.$axios.$patch(
+				`/ldap-config/${systemId}?verifyOnly=true`,
+				data
+			);
+			if (!systemData.searchUserPassword) {
+				systemData.searchUserPassword = unchangedPassword;
+			}
+			commit("setTemp", systemData);
+			commit("setVerified", verification);
+		} catch (error) {
+			console.log(error);
+			this.$toast.error(error);
+		}
+	},
 	async submitData({ commit }, payload) {
 		try {
 			const data = formatClientData(payload);
 			const submission = await this.$axios.$post(
-				"/ldap-config?verifyOnly=false",
+				"/ldap-config?verifyOnly=false&activate=true",
+				data
+			);
+			commit("setSubmitted", submission);
+		} catch (error) {
+			console.log(error);
+			this.$toast.error(error);
+		}
+	},
+	async patchData({ commit }, { systemData, systemId }) {
+		try {
+			const data = formatClientData(systemData);
+			const submission = await this.$axios.$patch(
+				`/ldap-config/${systemId}?verifyOnly=false&activate=true`,
 				data
 			);
 			commit("setSubmitted", submission);

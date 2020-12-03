@@ -177,9 +177,25 @@ export default {
 			this.triggerValidation = !this.triggerValidation;
 			this.validationError = "";
 
-			this.$options.debounce = setInterval(() => {
+			const systemId = this.$route.query.id;
+
+			this.$options.debounce = setInterval(async () => {
 				if (!this.isInvalid) {
-					this.$store.dispatch("ldap-config/verifyData", this.systemData);
+					if (systemId) {
+						const systemData = {
+							...this.systemData,
+							searchUserPassword: undefined,
+						};
+						await this.$store.dispatch("ldap-config/verifyExisting", {
+							systemData,
+							systemId,
+						});
+					} else {
+						await this.$store.dispatch(
+							"ldap-config/verifyData",
+							this.systemData
+						);
+					}
 
 					if (!this.verified.ok) {
 						clearInterval(this.$options.debounce);
@@ -189,9 +205,15 @@ export default {
 					this.$toast.success(
 						this.$t("pages.administration.ldap.index.verified")
 					);
-					this.$router.push({
-						path: `/administration/ldap/activate`,
-					});
+					if (systemId) {
+						this.$router.push({
+							path: `/administration/ldap/activate?id=${systemId}`,
+						});
+					} else {
+						this.$router.push({
+							path: "/administration/ldap/activate",
+						});
+					}
 					clearInterval(this.$options.debounce);
 					return;
 				}

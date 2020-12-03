@@ -27,6 +27,11 @@ const mockResponseData = {
 		},
 	},
 };
+const $route = {
+	query: {
+		id: "mockId",
+	},
+};
 
 describe("ldap/activate", () => {
 	const routerPushStub = jest.fn();
@@ -42,7 +47,7 @@ describe("ldap/activate", () => {
 		},
 		"ldap-config": {
 			actions: {
-				submitData: submitStub,
+				patchData: submitStub,
 			},
 			state: () => ({
 				verified: mockResponseData,
@@ -64,6 +69,7 @@ describe("ldap/activate", () => {
 				i18n: true,
 				store: customMockStore,
 				$router: { push: routerPushStub },
+				$route,
 			}),
 		});
 		expect(routerPushStub).toHaveBeenCalled();
@@ -75,6 +81,7 @@ describe("ldap/activate", () => {
 				i18n: true,
 				store: mockStore,
 				$router: { push: routerPushStub },
+				$route,
 			}),
 		});
 		const backBtn = wrapper.find(`[data-testid="ldapBackButton"]`);
@@ -90,6 +97,7 @@ describe("ldap/activate", () => {
 				i18n: true,
 				store: mockStore,
 				$router: { push: routerPushStub },
+				$route,
 			}),
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
@@ -99,7 +107,7 @@ describe("ldap/activate", () => {
 		expect(submitStub).toHaveBeenCalled();
 	});
 
-	it(" should push to router if submitted.ok is false it", async () => {
+	it(" should push to router if submitted.ok is false", async () => {
 		const customMockStore = { ...mockStore };
 		customMockStore["ldap-config"].state = () => ({
 			verified: mockResponseData,
