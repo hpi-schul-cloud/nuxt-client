@@ -125,9 +125,9 @@ $color-dark-gray: var(--color-gray-medium);
 	width: 100%;
 	height: auto;
 	border-bottom: 1px solid var(--color-gray);
-  &:focus-within {
-    border: 3px solid var(--color-gray-light);
-   }
+	&:focus-within {
+		border: 3px solid var(--color-gray-light);
+	}
 }
 
 .card-body {

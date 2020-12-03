@@ -14,10 +14,7 @@
 						source="custom"
 						:icon="tab.iconName"
 					/>
-					<base-button
-						class="tab-button"
-						data-testid="tabButtonTest"
-					>
+					<base-button class="tab-button" data-testid="tabButtonTest">
 						<span>{{ tab.name }}</span>
 					</base-button>
 				</div>
@@ -32,8 +29,8 @@
 <script>
 import BaseButton from "@basecomponents/BaseButton";
 export default {
-  components: { BaseButton },
-  data() {
+	components: { BaseButton },
+	data() {
 		return {
 			tabs: [],
 		};
@@ -90,9 +87,9 @@ ul.tabs {
 		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
-    &:focus-within {
-      border: 3px solid var(--color-gray-light);
-    }
+		&:focus-within {
+			border: 3px solid var(--color-gray-light);
+		}
 		.tab-button {
 			display: flex;
 			align-items: center;
@@ -106,7 +103,7 @@ ul.tabs {
 			background: transparent;
 			border: none;
 			outline: none !important;
-      box-shadow: none !important;
+			box-shadow: none !important;
 		}
 		&.span {
 			animation: fadeEffect var(--duration-transition-medium) ease-in-out;

@@ -23,11 +23,7 @@
 								<span style="display: block">
 									{{ $t("pages.courses._id.emptyCourseDescription") }}</span
 								>
-								<base-button
-									class="add-inhalt"
-									size="medium"
-									design="primary"
-								>
+								<base-button class="add-inhalt" size="medium" design="primary">
 									<base-icon source="material" icon="add" />
 									{{ $t("pages.courses._id.addContent") }}
 								</base-button>
@@ -128,7 +124,7 @@ export default {
 				this.lessons.map(this.adaptLessonDataToTaskItemProperties),
 				this.homeworks.map(this.adaptHomeworkDataToTaskItemProperties),
 			];
-      return [...lessons, ...homeworks];
+			return [...lessons, ...homeworks];
 		},
 		courseIsEmpty() {
 			return this.courseContents.length === 0;
@@ -177,7 +173,7 @@ export default {
 					? this.$t("pages.courses._id.courseContentDraft")
 					: "",
 				fill: lesson.hidden ? undefined : this.course.color,
-        url: `${this.course.id}/topics/${lesson._id}`
+				url: `${this.course.id}/topics/${lesson._id}`,
 			};
 		},
 		adaptHomeworkDataToTaskItemProperties(homework) {
@@ -192,8 +188,8 @@ export default {
 					: "",
 				actionNeeded: false,
 				fill: homework.private ? undefined : this.course.color,
-        url: `/homework/${homework._id}`
-      };
+				url: `/homework/${homework._id}`,
+			};
 		},
 		formatSubtitleForHomework(homework) {
 			const now = currentDate();
@@ -253,14 +249,14 @@ export default {
 }
 
 .task-item-container {
-  margin: 0 var(--space-xs);
+	margin: 0 var(--space-xs);
 
 	@include breakpoint(tablet) {
 		margin: 0 var(--space-lg);
 	}
 
-  @include breakpoint(desktop) {
-    margin: 0 var(--space-xl-5);
-  }
+	@include breakpoint(desktop) {
+		margin: 0 var(--space-xl-5);
+	}
 }
 </style>
