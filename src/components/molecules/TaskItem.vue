@@ -1,55 +1,56 @@
 <template>
-	<div class="card">
-		<div class="card-body">
-			<base-image
-				v-if="$attrs.imgSrc"
-				v-bind="$attrs"
-				class="image"
-				role="presentation"
-			/>
-			<!-- TODO: this progress ring needs to be replaced with a different progress ring that uses fractions (e.g. 9/12)-->
-			<progress-ring
-				v-else-if="progress"
-				id="progress-ring"
-				:percent="progress"
-			/>
-			<div class="card-heading">
-				<div class="subtitle">
-					{{ subtitle }}
+	<li class="card">
+    <base-link :href="url" :no-styles="true" class="card-body">
+				<base-image
+					v-if="$attrs.imgSrc"
+					v-bind="$attrs"
+					class="image"
+					role="presentation"
+				/>
+				<!-- TODO: this progress ring needs to be replaced with a different progress ring that uses fractions (e.g. 9/12)-->
+				<progress-ring
+					v-else-if="progress"
+					id="progress-ring"
+					:percent="progress"
+				/>
+				<div class="card-heading">
+					<p class="subtitle">
+						{{ subtitle }}
+					</p>
+					<h2 class="title">
+						{{ title }}
+					</h2>
 				</div>
-				<div class="title">
-					{{ title }}
-				</div>
-			</div>
-		</div>
+		</base-link>
 		<div class="card-action">
-			<div class="status">{{ status }}</div>
+			<span class="status">{{ status }}</span>
 			<pulsating-dot
 				v-if="actionNeeded"
 				id="pulsating-dot"
 				color="var(--color-secondary)"
 			/>
-			<span style="position: relative">
-				<base-button
-					design="text icon"
-					aria-label="menu"
-					@click="contextOpen = true"
-				>
-					<base-icon
-						class="footer__content-icon"
-						fill="#455B6A"
-						source="material"
-						icon="more_vert"
+				<span style="position: relative">
+					<base-button
+						design="text icon"
+						aria-label="menu"
+						:aria-expanded="contextOpen"
+						@click="contextOpen = true"
+					>
+						<base-icon
+							class="footer__content-icon"
+							fill="#455B6A"
+							source="material"
+							icon="more_vert"
+						/>
+					</base-button>
+					<context-menu
+						:show.sync="contextOpen"
+						anchor="top-right"
+						:actions="actions"
 					/>
-				</base-button>
-				<context-menu
-					:show.sync="contextOpen"
-					anchor="top-right"
-					:actions="actions"
-				/>
-			</span>
+				</span>
 		</div>
-	</div>
+	</li>
 </template>
 
 <script>
@@ -59,9 +60,11 @@ import BaseButton from "@basecomponents/BaseButton";
 import BaseIcon from "@basecomponents/BaseIcon";
 import ContextMenu from "@components/molecules/ContextMenu";
 import BaseImage from "@basecomponents/BaseImage";
+import BaseLink from "@basecomponents/BaseLink";
 
 export default {
 	components: {
+    BaseLink,
 		ProgressRing,
 		PulsatingDot,
 		BaseImage,
@@ -70,6 +73,11 @@ export default {
 		ContextMenu,
 	},
 	props: {
+		url: {
+			type: String,
+			required: true,
+			default: "/",
+		},
 		title: {
 			type: String,
 			required: true,
@@ -107,7 +115,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-$color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles package is updated in the npm registry to 0.2.2
+$color-dark-gray: var(--color-gray-medium);
 
 .card {
 	display: flex;
@@ -116,24 +124,34 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	justify-content: space-between;
 	width: 100%;
 	height: auto;
-	padding: var(--space-md);
 	border-bottom: 1px solid var(--color-gray);
-	border-radius: var(--radius-sm);
+  &:focus-within {
+    outline: 2px solid var(--color-gray-light);
+   }
 }
 
 .card-body {
 	display: flex;
+  flex-basis: 95%;
 	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	min-height: 3rem;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  align-items: center;
+  min-height: 3rem;
+  padding: var(--space-md);
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &:focus {
+    outline: none;
+  }
 }
 
 .card-heading {
-	overflow: hidden;
+  overflow: hidden;
+	h2 {
+		margin: 0;
+	}
 }
 
 .title {
@@ -150,7 +168,6 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	color: $color-dark-gray;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-
 	.icon {
 		margin-left: var(--space-xs-3);
 	}
@@ -189,4 +206,5 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 .card-action {
 	display: flex;
 }
+
 </style>

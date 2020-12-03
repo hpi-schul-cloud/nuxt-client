@@ -1,6 +1,7 @@
 import TaskItem from "@components/molecules/TaskItem";
 
 const props = {
+	url: "courses/1234567",
 	title: "A new task",
 	subtitle: "Task type",
 	status: "Draft",
@@ -21,6 +22,7 @@ describe("@components/molecules/TaskItem", () => {
 				title: props.title,
 				subtitle: props.subtitle,
 				status: props.status,
+				url: props.url,
 			},
 		});
 		expect(wrapper.text()).toContain(props.title);
@@ -33,6 +35,7 @@ describe("@components/molecules/TaskItem", () => {
 			propsData: {
 				imgSrc: "@assets/img/courses/draft.svg",
 				title: props.title,
+				url: props.url,
 			},
 		});
 		expect(wrapper.find(".image").exists()).toBe(true);
@@ -43,6 +46,7 @@ describe("@components/molecules/TaskItem", () => {
 			propsData: {
 				title: props.title,
 				actionNeeded: props.actionNeeded,
+				url: props.url,
 			},
 		});
 		expect(wrapper.find("#pulsating-dot").exists()).toBe(true);
