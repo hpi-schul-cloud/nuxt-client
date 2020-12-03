@@ -87,6 +87,23 @@ export const actions = {
 			this.$toast.error(error);
 		}
 	},
+	async verifyExisting({ commit }, { systemId, systemData }) {
+		try {
+			const data = formatClientData(systemData);
+			const verification = await this.$axios.$patch(
+				`/ldap-config/${systemId}?verifyOnly=true`,
+				data
+			);
+			if (!systemData.searchUserPassword) {
+				systemData.searchUserPassword = unchangedPassword;
+			}
+			commit("setTemp", systemData);
+			commit("setVerified", verification);
+		} catch (error) {
+			console.log(error);
+			this.$toast.error(error);
+		}
+	},
 	async submitData({ commit }, payload) {
 		try {
 			const data = formatClientData(payload);

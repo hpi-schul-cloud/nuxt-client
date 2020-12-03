@@ -69,6 +69,7 @@ describe("ldap/activate", () => {
 				i18n: true,
 				store: customMockStore,
 				$router: { push: routerPushStub },
+				$route,
 			}),
 		});
 		expect(routerPushStub).toHaveBeenCalled();
@@ -80,6 +81,7 @@ describe("ldap/activate", () => {
 				i18n: true,
 				store: mockStore,
 				$router: { push: routerPushStub },
+				$route,
 			}),
 		});
 		const backBtn = wrapper.find(`[data-testid="ldapBackButton"]`);

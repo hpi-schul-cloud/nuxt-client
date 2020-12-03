@@ -128,7 +128,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success);"
+							style="color: var(--color-success)"
 						/>
 					</template>
 				</modal-body-info>
@@ -154,6 +154,15 @@ import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import InfoMessage from "@components/atoms/InfoMessage";
 
+const redirectToConfigPage = (page) => {
+	const { id } = page.$route.query;
+	if (id) {
+		page.$router.push(`/administration/ldap/config?id=${id}`);
+	} else {
+		page.$router.push("/administration/ldap/config");
+	}
+};
+
 export default {
 	components: { BaseButton, ModalBodyInfo, ModalFooterConfirm, InfoMessage },
 	meta: {
@@ -171,12 +180,12 @@ export default {
 	},
 	created() {
 		if (!Object.keys(this.verified).length) {
-			this.$router.push("/administration/ldap/config");
+			redirectToConfigPage(this);
 		}
 	},
 	methods: {
 		backButtonHandler() {
-			this.$router.push("/administration/ldap/config");
+			redirectToConfigPage(this);
 		},
 		async submitButtonHandler() {
 			const { id } = this.$route.query;

@@ -90,7 +90,7 @@ export default {
 	},
 	data() {
 		return {
-			checked: !!this.value.classPath,
+			checked: false,
 			classesValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
@@ -110,6 +110,9 @@ export default {
 			}
 			return this.value.classPath;
 		},
+		classPathChanged() {
+			return this.value.classPath;
+		},
 	},
 	watch: {
 		validate: function () {
@@ -118,6 +121,9 @@ export default {
 		},
 		checked: function () {
 			this.$emit("update:errors", this.$v.$invalid, "classes");
+		},
+		classPathChanged: function () {
+			this.checked = !!this.value.classPath;
 		},
 	},
 	validations() {
