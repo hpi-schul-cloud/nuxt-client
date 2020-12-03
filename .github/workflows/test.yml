@@ -1,5 +1,6 @@
 name: Test and deploy
-
+env:
+  cache-name: nuxt-node-modules
 on: [push]
 
 jobs:
@@ -9,11 +10,47 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - uses: actions/checkout@v2
       - name: install dependencies
         run: npm ci
       - name: build:nuxt:default
         run: npm run build:nuxt
+      - name: build:storybook
+        run: npm run build:storybook
+      - name: build:docs
+        run: npm run build:docs
+      - name: Upload builded files
+        uses: actions/upload-artifact@v1
+        with:
+          name: output-build-files
+          path: ./dist
+  test_build_instances:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        run: npm ci
       - name: build:nuxt:n21
         run: npm run build:nuxt
         env:
@@ -34,16 +71,21 @@ jobs:
         run: npm run build:nuxt
         env:
           SC_THEME: brb
-      - name: build:storybook
-        run: npm run build:storybook
-      - name: build:docs
-        run: npm run build:docs
   unit:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - uses: actions/checkout@v2
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
@@ -59,6 +101,15 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
@@ -77,6 +128,15 @@ jobs:
   screenshot:
     runs-on: ubuntu-latest
     steps:
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - uses: actions/checkout@v2
       - name: npm ci
         # apt-get is to fix issue: https://github.com/puppeteer/puppeteer/issues/5704#issuecomment-618372226
@@ -112,6 +172,22 @@ jobs:
         with:
           name: report
           path: end-to-end-tests/reports
+  deploy_storybook_and_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download nuxt builded files
+        uses: actions/download-artifact@v2
+        with:
+          name: output-build-files
+      - name: install surge --global
+        run: npm i -g surge
+      - name: deploy storybook on surge
+        run: ./deploy/pull-deploy.sh -p storybook
+        shell: bash
+      - name: deploy docs on surge
+        run: ./deploy/pull-deploy.sh -p vuepress
+        shell: bash
+
   # build:
   #   strategy:
   #     matrix:
