@@ -190,7 +190,7 @@ export default {
 						this.$t("pages.administration.ldap.index.verified")
 					);
 					this.$router.push({
-						path: `/administration/ldap/activate`,
+						path: `/administration/ldap/activate?id=${this.$route.query.id}`,
 					});
 					clearInterval(this.$options.debounce);
 					return;

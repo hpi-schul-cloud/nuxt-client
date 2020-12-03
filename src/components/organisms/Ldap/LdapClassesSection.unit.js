@@ -37,8 +37,8 @@ describe("@components/organisms/LdapClassesSection", () => {
 				value: ldapConfigData,
 			},
 		});
-		// validations are only active when unchecked === true
-		await wrapper.setData({ unchecked: true });
+		// validations are only active when checked === true
+		await wrapper.setData({ checked: true });
 		expect(wrapper.vm.$v).not.toBeUndefined();
 	});
 
@@ -49,8 +49,8 @@ describe("@components/organisms/LdapClassesSection", () => {
 				value: ldapConfigData,
 			},
 		});
-		// validations are only active when unchecked === true
-		await wrapper.setData({ unchecked: true });
+		// validations are only active when checked === true
+		await wrapper.setData({ checked: true });
 		// default props values are valid so expect this assertion to succeed
 		expect(wrapper.vm.$v.$invalid).toBe(false);
 	});
@@ -66,7 +66,7 @@ describe("@components/organisms/LdapClassesSection", () => {
 				},
 			},
 		});
-		await wrapper.setData({ unchecked: true });
+		await wrapper.setData({ checked: true });
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 	});
 
@@ -86,8 +86,8 @@ describe("@components/organisms/LdapClassesSection", () => {
 				},
 			},
 		});
-		// validations are only active when unchecked === true
-		await wrapper.setData({ unchecked: true });
+		// validations are only active when checked === true
+		await wrapper.setData({ checked: true });
 
 		const inputPath = wrapper.find("input[data-testid=ldapDataClassesPath]");
 		expect(inputPath.exists()).toBe(true);
@@ -144,8 +144,8 @@ describe("@components/organisms/LdapClassesSection", () => {
 				},
 			},
 		});
-		// validations are only active when unchecked === true
-		await wrapper.setData({ unchecked: true });
+		// validations are only active when checked === true
+		await wrapper.setData({ checked: true });
 
 		let errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataClassesPath'] .info.error"

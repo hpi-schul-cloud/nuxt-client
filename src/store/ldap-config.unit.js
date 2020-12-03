@@ -1,5 +1,6 @@
 /* eslint-disable jest/no-focused-tests */
 import { getters, mutations, actions } from "../../src/store/ldap-config";
+import { unchangedPassword } from "../utils/ldapConstants";
 
 const serverMockData = {
 	providerOptions: {
@@ -39,7 +40,7 @@ const clientMockData = {
 	url: "ldaps://ldap.schul-cloud.org",
 	basisPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
-	searchUserPassword: undefined,
+	searchUserPassword: unchangedPassword,
 	userPath: "ou=users",
 	firstName: "givenName",
 	familyName: "sn",

@@ -128,7 +128,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
@@ -148,6 +148,7 @@
 <script>
 import { mapState } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
+import { unchangedPassword } from "@utils/ldapConstants";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
@@ -163,7 +164,6 @@ export default {
 			verified: "verified",
 			temp: "temp",
 			submitted: "submitted",
-			data: "data",
 		}),
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
@@ -179,7 +179,25 @@ export default {
 			this.$router.push("/administration/ldap/config");
 		},
 		async submitButtonHandler() {
-			await this.$store.dispatch("ldap-config/submitData", this.temp);
+			const { id } = this.$route.query;
+			const temporaryConfigData = { ...this.temp };
+
+			if (temporaryConfigData.searchUserPassword === unchangedPassword) {
+				delete temporaryConfigData.searchUserPassword;
+			}
+
+			if (id) {
+				await this.$store.dispatch(
+					"ldap-config/patchData",
+					temporaryConfigData,
+					id
+				);
+			} else {
+				await this.$store.dispatch(
+					"ldap-config/submitData",
+					temporaryConfigData
+				);
+			}
 		},
 		okButtonHandler() {
 			this.$router.push({

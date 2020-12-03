@@ -1,3 +1,5 @@
+import { unchangedPassword } from "../utils/ldapConstants";
+
 const formatServerData = (data) => {
 	const { providerOptions } = data;
 	const {
@@ -10,7 +12,7 @@ const formatServerData = (data) => {
 		url: data.url,
 		basisPath: data.rootPath,
 		searchUser: data.searchUser,
-		searchUserPassword: data.searchUserPassword,
+		searchUserPassword: unchangedPassword,
 		userPath: providerOptions.userPathAdditions,
 		firstName: userAttributeNameMapping.givenName,
 		familyName: userAttributeNameMapping.sn,
