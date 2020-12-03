@@ -14,13 +14,12 @@
 						source="custom"
 						:icon="tab.iconName"
 					/>
-					<button
+					<base-button
 						class="tab-button"
 						data-testid="tabButtonTest"
-						:alt="tab.name"
 					>
 						<span>{{ tab.name }}</span>
-					</button>
+					</base-button>
 				</div>
 			</li>
 		</ul>
@@ -31,8 +30,10 @@
 </template>
 
 <script>
+import BaseButton from "@basecomponents/BaseButton";
 export default {
-	data() {
+  components: { BaseButton },
+  data() {
 		return {
 			tabs: [],
 		};
@@ -89,6 +90,9 @@ ul.tabs {
 		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
+    &:focus-within {
+      border: 3px solid var(--color-gray-light);
+    }
 		.tab-button {
 			display: flex;
 			align-items: center;
@@ -101,7 +105,8 @@ ul.tabs {
 			cursor: pointer;
 			background: transparent;
 			border: none;
-			outline: none;
+			outline: none !important;
+      box-shadow: none !important;
 		}
 		&.span {
 			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
@@ -117,7 +122,7 @@ ul.tabs {
 			}
 			&::after {
 				position: absolute;
-				top: calc(2.1 * (var(--space-md)));
+				top: calc(2.85 * (var(--space-md)));
 				left: 0;
 				width: 100%;
 				height: 3px;
@@ -127,7 +132,7 @@ ul.tabs {
 				animation: fadeEffect var(--duration-transition-medium) ease-in;
 
 				@include breakpoint(tablet) {
-					top: calc(2.25 * (var(--space-md)));
+					top: calc(3 * (var(--space-md)));
 				}
 
 				@include breakpoint(desktop) {
