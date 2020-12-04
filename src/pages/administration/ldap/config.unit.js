@@ -1,12 +1,10 @@
 import { default as ldapConfig } from "./config.vue";
-import { unchangedPassword } from "../../../utils/ldapConstants";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
 
 const mockInputData = {
 	url: "ldaps://ldap.schul-cloud.org",
 	basisPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
-	searchUserPassword: unchangedPassword,
 	userPath: "ou=users",
 	firstName: "givenName",
 	familyName: "sn",
@@ -23,11 +21,9 @@ const mockInputData = {
 	nameAttribute: "description",
 	participantAttribute: "member",
 };
-
 describe("ldap/config", () => {
 	const getDataStub = jest.fn();
 	const verifyDataStub = jest.fn();
-	const clearDataStub = jest.fn();
 
 	const mockStore = {
 		auth: {
@@ -42,16 +38,8 @@ describe("ldap/config", () => {
 				getData: getDataStub,
 				verifyData: verifyDataStub,
 			},
-			getters: {
-				dataGetter: () => {},
-				tempGetter: () => mockInputData,
-			},
-			mutations: {
-				updateData: () => {},
-				clearData: clearDataStub,
-			},
 			state: () => ({
-				data: {},
+				data: { mockInputData },
 				verified: {},
 				submitted: {},
 				temp: {},
@@ -70,6 +58,13 @@ describe("ldap/config", () => {
 		const wrapper = mount(ldapConfig, {
 			...createComponentMocks({
 				i18n: true,
+				data() {
+					return {
+						systemData: {
+							mockInputData,
+						},
+					};
+				},
 				store: mockStore,
 				$route,
 			}),
@@ -83,12 +78,26 @@ describe("ldap/config", () => {
 		const wrapper = mount(ldapConfig, {
 			...createComponentMocks({
 				i18n: true,
+				data() {
+					return {
+						systemData: {
+							// default input values
+							member: "memberOf",
+							groupOption: "group",
+						},
+					};
+				},
 				store: mockStore,
 				$route,
 			}),
 		});
 		mock$objects(wrapper);
 		await wrapper.setData({
+			systemData: {
+				// default input values
+				member: "memberOf",
+				groupOption: "group",
+			},
 			isInvalidData: {
 				connection: false,
 				users: false,
@@ -104,22 +113,5 @@ describe("ldap/config", () => {
 
 		await wrapper.vm.$nextTick();
 		expect(getDataStub).toHaveBeenCalled();
-	});
-
-	it("should call 'clearData' action when clearData button is clicked", async () => {
-		const wrapper = mount(ldapConfig, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-				$route,
-			}),
-		});
-		const clearBtn = wrapper.find(`[data-testid="ldapResetInputsButton"]`);
-		expect(clearBtn.exists()).toBe(true);
-
-		clearBtn.trigger("click");
-
-		await wrapper.vm.$nextTick();
-		expect(clearDataStub).toHaveBeenCalled();
 	});
 });

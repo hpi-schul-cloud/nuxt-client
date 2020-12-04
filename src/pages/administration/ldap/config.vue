@@ -124,11 +124,18 @@ export default {
 			},
 			triggerValidation: false,
 			validationError: "",
+			systemData: {
+				// default input values
+				member: "memberOf",
+				groupOption: "group",
+			},
 		};
 	},
 	computed: {
 		...mapState("ldap-config", {
+			data: "data",
 			verified: "verified",
+			temp: "temp",
 		}),
 		isInvalid() {
 			if (
@@ -142,24 +149,6 @@ export default {
 			}
 			return true;
 		},
-		systemData: {
-			get() {
-				const tempData = this.$store.getters["ldap-config/tempGetter"];
-				return Object.keys(tempData).length
-					? tempData
-					: this.$store.getters["ldap-config/dataGetter"];
-			},
-			set(value) {
-				if (this.$options.debounce) {
-					clearInterval(this.$options.debounce);
-				}
-				this.$options.debounce = setInterval(() => {
-					this.$store.commit("ldap-config/updateData", value);
-
-					clearInterval(this.$options.debounce);
-				}, 200);
-			},
-		},
 		verificationErrors() {
 			return ldapErrorHandler(this.verified.errors, this);
 		},
@@ -167,7 +156,12 @@ export default {
 	created() {
 		const { id } = this.$route.query;
 
-		if (id) this.$store.dispatch("ldap-config/getData", id);
+		if (Object.keys(this.temp).length) {
+			this.systemData = { ...this.temp };
+		} else if (id) {
+			this.$store.dispatch("ldap-config/getData", id);
+			this.systemData = { ...this.data };
+		}
 	},
 	methods: {
 		validateHandler() {
@@ -200,22 +194,22 @@ export default {
 					if (!this.verified.ok) {
 						clearInterval(this.$options.debounce);
 						return;
-					}
-
-					this.$toast.success(
-						this.$t("pages.administration.ldap.index.verified")
-					);
-					if (systemId) {
-						this.$router.push({
-							path: `/administration/ldap/activate?id=${systemId}`,
-						});
 					} else {
-						this.$router.push({
-							path: "/administration/ldap/activate",
-						});
+						this.$toast.success(
+							this.$t("pages.administration.ldap.index.verified")
+						);
+						if (systemId) {
+							this.$router.push({
+								path: `/administration/ldap/activate?id=${systemId}`,
+							});
+						} else {
+							this.$router.push({
+								path: "/administration/ldap/activate",
+							});
+						}
+						clearInterval(this.$options.debounce);
+						return;
 					}
-					clearInterval(this.$options.debounce);
-					return;
 				}
 
 				this.validationError = this.$t("common.validation.invalid");
@@ -226,7 +220,11 @@ export default {
 			this.isInvalidData[section] = v;
 		},
 		clearInputsHandler() {
-			this.$store.commit("ldap-config/clearData");
+			this.systemData = {
+				// default input values
+				member: "memberOf",
+				groupOption: "group",
+			};
 		},
 	},
 };

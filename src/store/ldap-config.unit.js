@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-focused-tests */
-import { getters, mutations, actions } from "../../src/store/ldap-config";
+import { mutations, actions } from "../../src/store/ldap-config";
 import { unchangedPassword } from "../utils/ldapConstants";
 
 const serverMockData = {
@@ -74,22 +74,6 @@ const state = {
 };
 
 describe("store/ldap-config", () => {
-	describe("getters", () => {
-		describe("dataGetter", () => {
-			it("it returns data state", () => {
-				expect(getters.dataGetter(state)).toStrictEqual({
-					testDataKey: "dataTest",
-				});
-			});
-		});
-		describe("tempGetter", () => {
-			it("it returns data state", () => {
-				expect(getters.tempGetter(state)).toStrictEqual({
-					testTempKey: "tempTest",
-				});
-			});
-		});
-	});
 	describe("actions", () => {
 		describe.only("getData", () => {
 			it("it commits setData mutation", async () => {
@@ -194,34 +178,6 @@ describe("store/ldap-config", () => {
 				mutations.setTemp(state, { testTempKey: "newTempValue" });
 				expect(state.temp).toStrictEqual({
 					testTempKey: "newTempValue",
-				});
-			});
-		});
-		describe("updateData", () => {
-			it("updates temp values correctly", async () => {
-				mutations.updateData(state, { testTempKey: "updatedTempValue" });
-				expect(state.temp).toStrictEqual({
-					testTempKey: "updatedTempValue",
-				});
-			});
-		});
-		describe("clearData", () => {
-			it("clears temp values correctly", async () => {
-				const clearDataState = {
-					...state,
-					temp: { testTempKey: "tempValue" },
-					data: { testDataKey: "dataValue" },
-				};
-				expect(clearDataState.temp).toStrictEqual({
-					testTempKey: "tempValue",
-				});
-				expect(clearDataState.data).toStrictEqual({
-					testDataKey: "dataValue",
-				});
-
-				mutations.clearData(clearDataState);
-				expect(clearDataState.temp).toStrictEqual({
-					testDataKey: "",
 				});
 			});
 		});
