@@ -1,22 +1,22 @@
 <template>
     <div>
-        <base-button @click="showModal = true">
+        <base-button @click="showDeleteModal = true">
             Open Modal
         </base-button>
         <base-modal
-            :active.sync="showModal"
+            :active.sync="showDeleteModal"
             @onBackdropClick="closeModal"
         >
             <template v-slot:header></template>
             <template v-slot:body>
-                <modal-body-info :title="title" :description="description">
+                <modal-body-info :title="$t('pages.courses._id.modal.title')" :description="$t('pages.courses._id.modal.description')">
                     <template v-slot:icon>
                         <base-icon source="material" icon="report_problem" style="color: var(--color-danger)"/>
                     </template>
                 </modal-body-info>
             </template>
             <template v-slot:footerRight>
-                <base-button design="text" @click="showModal = false">
+                <base-button design="text" @click="showDeleteModal = false">
                     {{ $t("common.actions.cancel") }}
                 </base-button>
                 <base-button class="delete-btn" @click="confirmDelete">
@@ -41,19 +41,15 @@
             BaseIcon,
             BaseButton,
         },
-        props: {
-            title: { type: String, default: "Willst du die Aufgabe wirklich löschen?" },
-            description: { type: String, default: "Der Kursinhalt wird unwiederruflich gelöscht" },
-        },
         data() {
             return {
-                showModal: false,
+                showDeleteModal: false,
             };
         },
         methods: {
             closeModal() {
-                this.$emit("update:show-modal", false);
-                this.showModal = false;
+                this.$emit("update:show-delete-modal", false);
+                this.showDeleteModal = false;
             },
             confirmDelete() {
                 this.$emit("close");

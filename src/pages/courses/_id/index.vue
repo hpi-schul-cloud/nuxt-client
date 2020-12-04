@@ -35,6 +35,7 @@
 							<task-item
 								v-for="(content, idx) in courseContents"
 								:key="idx"
+								:actions="actions"
 								v-bind="content"
 							></task-item>
 						</ol>
