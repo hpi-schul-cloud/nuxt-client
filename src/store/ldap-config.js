@@ -132,15 +132,6 @@ export const actions = {
 	},
 };
 
-export const getters = {
-	dataGetter: (state) => {
-		return state.data;
-	},
-	tempGetter: (state) => {
-		return state.temp;
-	},
-};
-
 export const mutations = {
 	setData(state, payload) {
 		state.data = payload;
