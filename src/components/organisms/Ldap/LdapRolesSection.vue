@@ -45,7 +45,7 @@
 			</p>
 		</div>
 		<base-input
-			:vmodel="memberInputValue"
+			:vmodel="value.member"
 			:disabled="groupOption === 'group'"
 			type="text"
 			:label="this.$t('pages.administration.ldapEdit.roles.labels.member')"
@@ -163,13 +163,7 @@ export default {
 	},
 	computed: {
 		groupOption() {
-			return this.value.groupOption || "group";
-		},
-		memberInputValue() {
-			if (this.value.groupOption === "group") {
-				return "";
-			}
-			return this.value.member;
+			return this.value.groupOption || "undefined";
 		},
 	},
 	watch: {

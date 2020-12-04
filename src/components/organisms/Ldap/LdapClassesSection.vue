@@ -126,6 +126,9 @@ export default {
 			this.checked = !!this.value.classPath;
 		},
 	},
+	beforeMount() {
+		if (this.value.classPath) this.checked = true;
+	},
 	validations() {
 		if (this.checked === true) {
 			return {
