@@ -14,6 +14,8 @@ import ModalFooter from "@components/molecules/ModalFooter";
 import LoadingModal from "@components/molecules/LoadingModal";
 import AutoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 
+import DeleteModal from "@components/molecules/DeleteModal";
+
 storiesOf("4 Base UI Components/Modals", module)
 	.addParameters({
 		notes,
@@ -181,6 +183,10 @@ storiesOf("4 Base UI Components/Modals", module)
 			</template>
 		</base-modal>
 		</div>`,
+	}))
+	.add("Delete Dialog", () => ({
+		components: { DeleteModal },
+		template: `<delete-modal></delete-modal>`
 	}))
 	.add("Loading", () => ({
 		components: { LoadingModal },

@@ -402,6 +402,8 @@
 	"pages.courses._id.homework.remaining": "endet in",
 	"pages.courses._id.homework.until": "Aufgabe bis",
 	"pages.courses._id.lesson": "Editor-Dokument",
+	"pages.courses._id.modal.description": "Der Kursinhalt wird unwiederruflich gelöscht",
+	"pages.courses._id.modal.title": "Willst du die Aufgabe wirklich löschen?",
 	"pages.impressum.title": "Impressum",
 	"pages.loginInstances.brb_link": "https://brandenburg.schul-cloud.org/login",
 	"pages.loginInstances.bundesland": "Wähle deine Cloud",
