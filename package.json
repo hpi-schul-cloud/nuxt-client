@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "25.2.1",
+	"version": "25.3.0",
 	"description": "The next Level of HPI Schul-Cloud",
 	"author": "HPI Schul-Cloud",
 	"private": true,
@@ -104,7 +104,7 @@
 		"@vuepress/plugin-pwa": "^1.7.1",
 		"babel-core": "^7.0.0-bridge.0",
 		"babel-jest": "^26.6.3",
-		"babel-loader": "^8.2.1",
+		"babel-loader": "^8.2.2",
 		"babel-plugin-dynamic-import-node": "^2.3.3",
 		"babel-preset-vue": "^2.0.2",
 		"concurrently": "^5.3.0",
