@@ -186,7 +186,7 @@ storiesOf("4 Base UI Components/Modals", module)
 	}))
 	.add("Delete Dialog", () => ({
 		components: { DeleteModal },
-		template: `<delete-modal></delete-modal>`
+		template: `<delete-modal></delete-modal>`,
 	}))
 	.add("Loading", () => ({
 		components: { LoadingModal },
