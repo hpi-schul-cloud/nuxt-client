@@ -75,7 +75,7 @@ const state = {
 
 describe("store/ldap-config", () => {
 	describe("actions", () => {
-		describe.only("getData", () => {
+		describe("getData", () => {
 			it("it commits setData mutation", async () => {
 				const requestData = {
 					data: {
@@ -97,7 +97,7 @@ describe("store/ldap-config", () => {
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
 			});
 		});
-		describe.only("verifyData", () => {
+		describe("verifyData", () => {
 			it("it commits setTemp mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
@@ -130,7 +130,7 @@ describe("store/ldap-config", () => {
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
 			});
 		});
-		describe.only("submitData", () => {
+		describe("submitData", () => {
 			it("it commits setSubmitted mutation", async () => {
 				let receivedUrl;
 				actions.$axios = {
