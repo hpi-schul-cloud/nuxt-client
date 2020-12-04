@@ -36,6 +36,7 @@ const $route = {
 describe("ldap/activate", () => {
 	const routerPushStub = jest.fn();
 	const submitStub = jest.fn();
+	const patchStub = jest.fn();
 
 	const mockStore = {
 		auth: {
@@ -47,7 +48,8 @@ describe("ldap/activate", () => {
 		},
 		"ldap-config": {
 			actions: {
-				patchData: submitStub,
+				submitData: submitStub,
+				patchData: patchStub,
 			},
 			state: () => ({
 				verified: mockResponseData,
@@ -91,7 +93,23 @@ describe("ldap/activate", () => {
 		expect(routerPushStub).toHaveBeenCalled();
 	});
 
-	it("should call 'submitData' action when submit button is clicked", async () => {
+	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {
+		const wrapper = mount(ldapActivate, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+				$router: { push: routerPushStub },
+				$route: { query: {} },
+			}),
+		});
+		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
+		expect(submitBtn.exists()).toBe(true);
+		submitBtn.trigger("click");
+
+		expect(submitStub).toHaveBeenCalled();
+	});
+
+	it("should call 'patchData' action when submit button is clicked and this.$route.query.id is defined", async () => {
 		const wrapper = mount(ldapActivate, {
 			...createComponentMocks({
 				i18n: true,
@@ -104,7 +122,7 @@ describe("ldap/activate", () => {
 		expect(submitBtn.exists()).toBe(true);
 		submitBtn.trigger("click");
 
-		expect(submitStub).toHaveBeenCalled();
+		expect(patchStub).toHaveBeenCalled();
 	});
 
 	it(" should push to router if submitted.ok is false", async () => {
@@ -157,5 +175,30 @@ describe("ldap/activate", () => {
 		confirmBtn.trigger("click");
 
 		expect(routerPushStub).toHaveBeenCalled();
+	});
+
+	it("should render 'infoMessage' component if 'submitted' has an errors key", async () => {
+		const customMockStore = { ...mockStore };
+		customMockStore["ldap-config"].state = () => ({
+			verified: mockResponseData,
+			submitted: {
+				...mockResponseData,
+				ok: false,
+				errors: [{ type: "CONNECTION_ERROR", message: "testError" }],
+			},
+		});
+		const wrapper = mount(ldapActivate, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+				$router: { push: routerPushStub },
+			}),
+		});
+		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
+		expect(submitBtn.exists()).toBe(true);
+		submitBtn.trigger("click");
+
+		const infoMessage = wrapper.find(`[data-testid="errorInfoMessage"]`);
+		expect(infoMessage.exists()).toBe(true);
 	});
 });

@@ -94,7 +94,11 @@
 			:key="index"
 			class="errors-container"
 		>
-			<info-message :message="error" type="error" />
+			<info-message
+				data-testid="errorInfoMessage"
+				:message="error"
+				type="error"
+			/>
 		</div>
 		<div class="bottom-buttons">
 			<base-button
@@ -128,7 +132,7 @@
 						<base-icon
 							source="material"
 							icon="check_circle"
-							style="color: var(--color-success)"
+							style="color: var(--color-success);"
 						/>
 					</template>
 				</modal-body-info>
