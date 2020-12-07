@@ -42,6 +42,7 @@
 					@input="$emit('setCourseScopeId', contentCourses)"
 				/>
 				<base-input
+					ref="inputText"
 					v-model="inputText"
 					type="text"
 					:label="$t('components.organisms.Calendar.inputText')"
@@ -63,7 +64,7 @@
 					v-model="fullDay"
 					type="checkbox"
 					:label="$t('components.organisms.Calendar.fullDay')"
-					@change="onChange"
+					@update:vmodel="changeToFullDay"
 				/>
 				<base-input
 					v-if="!fullDay"
@@ -255,11 +256,9 @@ export default {
 		},
 	},
 	methods: {
-		onChange() {
-			//console.log(this.startTime);
-			this.fullDay = !this.fullDay;
-			//this.startTime.value = new Date("00:00").toDateString();
-			//this.endTime.value = new Date("00:00").toDateString();
+		changeToFullDay() {
+			this.$emit("update:startTime", "00:00");
+			this.$emit("update:endTime", "00:00");
 		},
 	},
 };

@@ -57,7 +57,7 @@ import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 // [x] Send course or team if on create if selected
 // [ ] Courses and teams need permissions so we can filter which to display (server)
 // [x] Support fullday events (view)
-// [ ] Support fullday events (create / UX) (marco)
+// [x] Support fullday events (create / UX) (marco)
 // [x] Fix race condition when events are loaded before courses and teams are fetched (makes coloring break)
 // [x] Show event after creation
 // [ ] Make events draggable (need more grsanular permissions first)
