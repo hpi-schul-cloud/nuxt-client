@@ -47,6 +47,7 @@
 					:show.sync="contextOpen"
 					anchor="top-right"
 					:actions="actions"
+					v-on="$listeners"
 				/>
 			</span>
 		</div>

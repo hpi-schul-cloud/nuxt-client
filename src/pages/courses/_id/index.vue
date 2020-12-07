@@ -37,7 +37,9 @@
 								:key="idx"
 								:actions="actions"
 								v-bind="content"
+								@delete="EventDeleteModal"
 							></task-item>
+							<delete-modal :show-delete-modal.sync="showDeleteModal"></delete-modal>
 						</ol>
 					</template>
 				</tab>
@@ -66,10 +68,12 @@ import TaskItem from "@components/molecules/TaskItem";
 import BaseButton from "@components/base/BaseButton";
 import BaseIcon from "@components/base/BaseIcon";
 import CourseHeader from "@components/molecules/CourseHeader";
+import DeleteModal from "../../../components/molecules/DeleteModal";
 
 export default {
 	layout: "loggedInFullNoPadding",
 	components: {
+		DeleteModal,
 		Tabs,
 		Tab,
 		BaseGrid,
@@ -81,6 +85,7 @@ export default {
 	},
 	data() {
 		return {
+			showDeleteModal: false,
 			actions: [
 				{
 					text: this.$t("pages.courses._id.courseOption.edit"),
@@ -148,6 +153,9 @@ export default {
 		this.getCourseContent(this.$route.params.id);
 	},
 	methods: {
+		EventDeleteModal() {
+			this.showDeleteModal = true;
+		},
 		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
 		},

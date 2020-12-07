@@ -68,7 +68,7 @@ export default {
 	},
 	head() {
 		return {
-			title: "Kurse",
+			title: this.$t("global.sidebar.courses"),
 		};
 	},
 };

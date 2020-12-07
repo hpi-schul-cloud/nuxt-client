@@ -1,6 +1,4 @@
 <template>
-	<div>
-		<base-button @click="showDeleteModal = true"> Open Modal </base-button>
 		<base-modal :active.sync="showDeleteModal" @onBackdropClick="closeModal">
 			<template v-slot:header></template>
 			<template v-slot:body>
@@ -18,7 +16,7 @@
 				</modal-body-info>
 			</template>
 			<template v-slot:footerRight>
-				<base-button design="text" @click="showDeleteModal = false">
+				<base-button design="text" @click="closeModal">
 					{{ $t("common.actions.cancel") }}
 				</base-button>
 				<base-button class="delete-btn" @click="confirmDelete">
@@ -27,7 +25,6 @@
 				</base-button>
 			</template>
 		</base-modal>
-	</div>
 </template>
 
 <script>
@@ -43,15 +40,14 @@ export default {
 		BaseIcon,
 		BaseButton,
 	},
-	data() {
-		return {
-			showDeleteModal: false,
-		};
+	props: {
+		showDeleteModal: {
+			type: Boolean,
+		}
 	},
 	methods: {
 		closeModal() {
-			this.$emit("update:show-delete-modal", false);
-			this.showDeleteModal = false;
+			this.showDeleteModal = false
 		},
 		confirmDelete() {
 			this.$emit("close");
