@@ -88,7 +88,7 @@ ul.tabs {
 		list-style: none;
 		cursor: pointer;
 		&:focus-within {
-			border: 3px solid var(--color-gray-light);
+			border: 3px solid var(--color-tertiary);
 		}
 		.tab-button {
 			display: flex;
