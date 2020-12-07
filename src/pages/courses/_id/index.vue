@@ -157,7 +157,7 @@ export default {
 	},
 	methods: {
 		EventEdit(url) {
-			this.$router.push({ path: `${url}/edit` })
+			this.$router.push({ path: `${url}/edit` });
 		},
 		EventDeleteModal() {
 			this.showDeleteModal = true;
