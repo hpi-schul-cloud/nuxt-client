@@ -29,7 +29,7 @@
 				id="pulsating-dot"
 				color="var(--color-secondary)"
 			/>
-			<span style="position: relative">
+			<span style="position: relative;">
 				<base-button
 					design="text icon"
 					aria-label="menu"
@@ -157,7 +157,9 @@ $color-dark-gray: var(--color-gray-medium);
 
 .title {
 	overflow: hidden;
+	font-family: var(--font-primary);
 	font-size: var(--text-md);
+	line-height: var(--line-height-sm);
 	text-overflow: ellipsis;
 }
 
