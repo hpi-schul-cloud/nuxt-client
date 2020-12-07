@@ -133,7 +133,7 @@ ul.tabs {
 				}
 
 				@include breakpoint(desktop) {
-					top: calc(2.45 * (var(--space-md)));
+					top: calc(3.2 * (var(--space-md)));
 				}
 			}
 		}
