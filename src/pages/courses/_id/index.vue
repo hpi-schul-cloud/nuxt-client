@@ -39,7 +39,9 @@
 								v-bind="content"
 								@delete="EventDeleteModal"
 							></task-item>
-							<delete-modal :show-delete-modal.sync="showDeleteModal"></delete-modal>
+							<delete-modal
+								:show-delete-modal.sync="showDeleteModal"
+							></delete-modal>
 						</ol>
 					</template>
 				</tab>
