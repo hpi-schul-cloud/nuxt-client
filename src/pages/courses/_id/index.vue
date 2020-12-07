@@ -37,6 +37,7 @@
 								:key="idx"
 								:actions="actions"
 								v-bind="content"
+								@edit="EventEdit(content.url)"
 								@delete="EventDeleteModal"
 							></task-item>
 							<delete-modal
@@ -155,6 +156,9 @@ export default {
 		this.getCourseContent(this.$route.params.id);
 	},
 	methods: {
+		EventEdit(url) {
+			this.$router.push({ path: `${url}/edit` })
+		},
 		EventDeleteModal() {
 			this.showDeleteModal = true;
 		},
