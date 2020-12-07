@@ -7,7 +7,8 @@
 				:next-lesson-date="nextLessonDate"
 				:actions="actions"
 				:course-id="$route.params.id"
-			></course-header>
+                @edit="CourseEdit"
+            ></course-header>
 			<tabs class="tabs">
 				<tab
 					:name="$t('pages.courses._id.educationalContent')"
@@ -156,6 +157,9 @@ export default {
 		this.getCourseContent(this.$route.params.id);
 	},
 	methods: {
+        CourseEdit() {
+            this.$router.push({ path: `${this.$route.path}/edit` });
+        },
 		EventEdit(url) {
 			this.$router.push({ path: `${url}/edit` });
 		},
