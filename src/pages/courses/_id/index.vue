@@ -43,7 +43,6 @@
 							></task-item>
 							<delete-modal
 								:show-delete-modal.sync="showDeleteModal"
-								@close="showDeleteModal = false"
 							></delete-modal>
 						</ol>
 					</template>
