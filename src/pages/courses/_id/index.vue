@@ -7,7 +7,7 @@
 				:next-lesson-date="nextLessonDate"
 				:actions="actions"
 				:course-id="$route.params.id"
-				@edit="CourseEdit"
+				@edit="courseEdit"
 			></course-header>
 			<tabs class="tabs">
 				<tab
@@ -38,11 +38,12 @@
 								:key="idx"
 								:actions="actions"
 								v-bind="content"
-								@edit="EventEdit(content.url)"
-								@delete="EventDeleteModal"
+								@edit="eventEdit(content.url)"
+								@delete="eventDeleteModal"
 							></task-item>
 							<delete-modal
 								:show-delete-modal.sync="showDeleteModal"
+								@close="showDeleteModal = false"
 							></delete-modal>
 						</ol>
 					</template>
@@ -157,13 +158,13 @@ export default {
 		this.getCourseContent(this.$route.params.id);
 	},
 	methods: {
-		CourseEdit() {
+		courseEdit() {
 			this.$router.push({ path: `${this.$route.path}/edit` });
 		},
-		EventEdit(url) {
+		eventEdit(url) {
 			this.$router.push({ path: `${url}/edit` });
 		},
-		EventDeleteModal() {
+		eventDeleteModal() {
 			this.showDeleteModal = true;
 		},
 		getCourse(id) {

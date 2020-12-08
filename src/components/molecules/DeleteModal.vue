@@ -47,10 +47,9 @@ export default {
 	},
 	methods: {
 		closeModal() {
-			this.showDeleteModal = false;
+			this.$emit("close");
 		},
 		confirmDelete() {
-			this.$emit("close");
 			// logic here
 			this.closeModal();
 		},
