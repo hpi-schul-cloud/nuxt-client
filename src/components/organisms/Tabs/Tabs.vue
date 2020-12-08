@@ -77,7 +77,7 @@ ul.tabs {
 		display: flex;
 		width: calc(100vw / 3);
 		padding: var(--space-xs);
-        margin-bottom: var(--space-sm);
+		margin-bottom: var(--space-sm);
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		color: var(--color-disabled-dark);
@@ -92,7 +92,7 @@ ul.tabs {
 			.tab-button {
 				display: flex;
 				align-items: center;
-                justify-content: flex-start;
+				justify-content: flex-start;
 				font-family: PT Sans Narrow var(--font-accent);
 				font-size: var(--text-md);
 				font-weight: var(--font-weight-bold);
@@ -156,7 +156,7 @@ ul.tabs {
 				color: var(--color-gray-dark);
 			}
 		}
-		
+
 		@include breakpoint(tablet) {
 			display: inline-flex;
 			justify-content: center;
