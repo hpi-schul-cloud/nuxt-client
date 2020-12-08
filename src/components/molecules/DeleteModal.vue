@@ -64,7 +64,7 @@ export default {
 		},
 		async confirmDelete() {
 			const url = this.itemToDelete;
-			if (this.itemToDelete.includes("topic")) {
+			if (url.includes("topic")) {
 				try {
 					await this.$axios.$delete(`courses/${url}`);
 					// text to change
@@ -77,7 +77,7 @@ export default {
 						this.$t("components.organisms.FormNews.errors.remove")
 					);
 				}
-			} else if (this.itemToDelete.includes("homework")) {
+			} else if (url.includes("homework")) {
 				try {
 					await this.$axios.$delete(url);
 					// text to change
