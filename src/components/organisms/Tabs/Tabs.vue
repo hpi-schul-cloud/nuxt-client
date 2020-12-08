@@ -14,9 +14,9 @@
 						source="custom"
 						:icon="tab.iconName"
 					/>
-					<base-button class="tab-button" data-testid="tabButtonTest">
+					<button class="tab-button" data-testid="tabButtonTest">
 						<span>{{ tab.name }}</span>
-					</base-button>
+					</button>
 				</div>
 			</li>
 		</ul>
@@ -27,9 +27,8 @@
 </template>
 
 <script>
-import BaseButton from "@basecomponents/BaseButton";
 export default {
-	components: { BaseButton },
+	components: {},
 	data() {
 		return {
 			tabs: [],
@@ -68,20 +67,17 @@ export default {
 
 ul.tabs {
 	display: flex;
-	justify-content: center;
-	max-width: 34rem;
+	justify-content: flex-start;
+	max-width: 64rem;
 	padding: 0;
 	margin-bottom: var(--space-md);
 	box-shadow: inset 0 -3px 0 var(--color-gray-light);
-	.li-content {
-		display: inline-flex;
-		align-items: center;
-	}
+
 	li {
-		display: inline-flex;
-		justify-content: center;
-		width: 100vw;
+		display: flex;
+		width: calc(100vw / 3);
 		padding: var(--space-xs);
+        margin-bottom: var(--space-sm);
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		color: var(--color-disabled-dark);
@@ -90,20 +86,28 @@ ul.tabs {
 		&:focus-within {
 			border: 3px solid var(--color-tertiary);
 		}
-		.tab-button {
-			display: flex;
+		.li-content {
+			display: inline-flex;
 			align-items: center;
-			justify-content: center;
-			font-family: PT Sans Narrow var(--font-accent);
-			font-size: var(--text-md);
-			font-weight: var(--font-weight-bold);
-			line-height: var(--button-line-height);
-			color: var(--color-disabled-dark);
-			cursor: pointer;
-			background: transparent;
-			border: none;
-			outline: none !important;
-			box-shadow: none !important;
+			.tab-button {
+				display: flex;
+				align-items: center;
+                justify-content: flex-start;
+				font-family: PT Sans Narrow var(--font-accent);
+				font-size: var(--text-md);
+				font-weight: var(--font-weight-bold);
+				line-height: var(--button-line-height);
+				color: var(--color-disabled-dark);
+				cursor: pointer;
+				background: transparent;
+				border: none;
+				outline: none !important;
+				box-shadow: none !important;
+
+				@include breakpoint(tablet) {
+					justify-content: center;
+				}
+			}
 		}
 		&.span {
 			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
@@ -152,10 +156,16 @@ ul.tabs {
 				color: var(--color-gray-dark);
 			}
 		}
+		
+		@include breakpoint(tablet) {
+			display: inline-flex;
+			justify-content: center;
+			width: 100vw;
+		}
 	}
 
 	@include breakpoint(tablet) {
-		max-width: 64rem;
+		justify-content: center;
 	}
 
 	@include breakpoint(desktop) {
