@@ -1,6 +1,7 @@
 import TaskItem from "@components/molecules/TaskItem";
 
 const props = {
+	id: "0000000ddddd",
 	url: "courses/1234567",
 	title: "A new task",
 	subtitle: "Task type",
@@ -19,6 +20,7 @@ describe("@components/molecules/TaskItem", () => {
 	it("renders text props", () => {
 		const wrapper = shallowMount(TaskItem, {
 			propsData: {
+				id: props.id,
 				title: props.title,
 				subtitle: props.subtitle,
 				status: props.status,
@@ -33,6 +35,7 @@ describe("@components/molecules/TaskItem", () => {
 	it("renders the image properly", () => {
 		const wrapper = shallowMount(TaskItem, {
 			propsData: {
+				id: props.id,
 				imgSrc: "@assets/img/courses/draft.svg",
 				title: props.title,
 				url: props.url,
@@ -44,6 +47,7 @@ describe("@components/molecules/TaskItem", () => {
 	it("renders the pulsating dot if actionNeeded is true", () => {
 		const wrapper = shallowMount(TaskItem, {
 			propsData: {
+				id: props.id,
 				title: props.title,
 				actionNeeded: props.actionNeeded,
 				url: props.url,
