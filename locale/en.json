@@ -22,6 +22,7 @@
 	"common.labels.lastName": "Last Name",
 	"common.labels.lastName.new": "New last name",
 	"common.labels.login": "Login",
+	"common.labels.logout": "Logout",
 	"common.labels.name": "Name",
 	"common.labels.password": "Password",
 	"common.labels.password.new": "New password",
