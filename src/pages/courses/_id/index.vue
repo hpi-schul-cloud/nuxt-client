@@ -183,6 +183,7 @@ export default {
 		},
 		adaptLessonDataToTaskItemProperties(lesson) {
 			return {
+				id: lesson._id,
 				imgSrc: lesson.hidden
 					? "@assets/img/courses/document-draft.svg"
 					: "@assets/img/courses/document-new.svg",
@@ -192,11 +193,12 @@ export default {
 					? this.$t("pages.courses._id.courseContentDraft")
 					: "",
 				fill: lesson.hidden ? undefined : this.course.color,
-				url: `${this.course.id}/topics/${lesson._id}`,
+				url: `/courses/${this.course.id}/topics/${lesson._id}`,
 			};
 		},
 		adaptHomeworkDataToTaskItemProperties(homework) {
 			return {
+				id: homework._id,
 				imgSrc: homework.private
 					? "@assets/img/courses/task-draft.svg"
 					: "@assets/img/courses/task-new.svg",

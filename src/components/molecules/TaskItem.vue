@@ -1,6 +1,6 @@
 <template>
 	<li class="card">
-		<base-link :href="url" :no-styles="true" class="card-body">
+		<base-link :id="'id-' + id" :href="url" :no-styles="true" class="card-body">
 			<base-image
 				v-if="$attrs.imgSrc"
 				v-bind="$attrs"
@@ -74,6 +74,10 @@ export default {
 		ContextMenu,
 	},
 	props: {
+		id: {
+			type: String,
+			required: true,
+		},
 		url: {
 			type: String,
 			required: true,
