@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import {
 	currentDate,
 	fromUTC,
@@ -161,6 +161,9 @@ export default {
 		this.getCourseContent(this.$route.params.id);
 	},
 	methods: {
+		...mapActions("courses", {
+			deleteCourseItem: "removeCourseItem",
+		}),
 		createActionsForCourseItem(courseItem) {
 			const actionsTemplate = JSON.parse(JSON.stringify([...this.actions]));
 			const indexOfDeleteEvent = actionsTemplate.findIndex(
@@ -189,8 +192,8 @@ export default {
 			this.toDelete = deletionData;
 			this.showDeleteModal = true;
 		},
-		handleCourseItemDeletion() {
-			console.log("Hanlding course item deletion with data: ", this.toDelete);
+		async handleCourseItemDeletion() {
+			await this.deleteCourseItem(this.toDelete);
 		},
 		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
