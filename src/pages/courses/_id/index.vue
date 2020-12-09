@@ -123,18 +123,18 @@ export default {
 					icon: "delete",
 				},
 			],
-      taskActions: [
-        {
-          text: this.$t("pages.courses._id.courseOption.edit"),
-          event: "edit",
-          icon: "create",
-        },
-        {
-          text: this.$t("pages.courses._id.courseOption.delete"),
-          event: "delete",
-          icon: "delete",
-        },
-      ],
+			taskActions: [
+				{
+					text: this.$t("pages.courses._id.courseOption.edit"),
+					event: "edit",
+					icon: "create",
+				},
+				{
+					text: this.$t("pages.courses._id.courseOption.delete"),
+					event: "delete",
+					icon: "delete",
+				},
+			],
 		};
 	},
 	computed: {
