@@ -131,7 +131,8 @@ $color-dark-gray: var(--color-gray-medium);
 	height: auto;
 	border-bottom: 1px solid var(--color-gray);
 	&:focus-within {
-		border: 2px solid var(--color-tertiary);
+    outline: 2px solid var(--color-tertiary);
+    outline-offset: 3px;
 	}
 }
 
