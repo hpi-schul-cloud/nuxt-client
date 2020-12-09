@@ -85,7 +85,7 @@ ul.tabs {
 		cursor: pointer;
 		&:focus-within {
 			outline: 2px solid var(--color-tertiary);
-      outline-offset: 3px;
+			outline-offset: 3px;
 		}
 		.li-content {
 			display: inline-flex;
