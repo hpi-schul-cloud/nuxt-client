@@ -5,13 +5,13 @@
 				class="header"
 				:title="course.name"
 				:next-lesson-date="nextLessonDate"
-				:actions="actions"
+				:actions="courseActions"
 				:course-id="$route.params.id"
 				@edit="courseEdit"
 			></course-header>
 			<tabs class="tabs">
 				<tab
-					:name="$t('pages.courses._id.educationalContent')"
+					:name="$t('pages.courses._id.tab.educationalContent')"
 					icon-name="lerninhalte"
 					:selected="true"
 				>
@@ -49,8 +49,12 @@
 						</ol>
 					</template>
 				</tab>
-				<tab name="Groups" icon-name="gruppen">Groups</tab>
-				<tab name="Tools" icon-name="tools">Tools</tab>
+				<tab name="Groups" icon-name="gruppen">{{
+					$t("pages.courses._id.tab.groups")
+				}}</tab>
+				<tab name="Tools" icon-name="tools">{{
+					$t("pages.courses._id.tab.tools")
+				}}</tab>
 			</tabs>
 		</base-grid>
 	</div>
@@ -94,7 +98,7 @@ export default {
 			showDeleteModal: false,
 			toDelete: "",
 			confirmationText: "",
-			actions: [
+			courseActions: [
 				{
 					text: this.$t("pages.courses._id.courseOption.edit"),
 					event: "edit",
@@ -114,6 +118,18 @@ export default {
 					text: this.$t("pages.courses._id.courseOption.duplicate"),
 					event: "duplicate",
 					icon: "file_copy",
+				},
+				{
+					text: this.$t("pages.courses._id.courseOption.delete"),
+					event: "delete",
+					icon: "delete",
+				},
+			],
+			taskActions: [
+				{
+					text: this.$t("pages.courses._id.courseOption.edit"),
+					event: "edit",
+					icon: "create",
 				},
 				{
 					text: this.$t("pages.courses._id.courseOption.delete"),
@@ -165,7 +181,7 @@ export default {
 			deleteCourseItem: "removeCourseItem",
 		}),
 		createActionsForCourseItem(courseItem) {
-			const actionsTemplate = JSON.parse(JSON.stringify([...this.actions]));
+			const actionsTemplate = JSON.parse(JSON.stringify([...this.taskActions]));
 			const indexOfDeleteEvent = actionsTemplate.findIndex(
 				(action) => action.event === "delete"
 			);
