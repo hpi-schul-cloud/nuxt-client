@@ -39,10 +39,11 @@
 								:actions="actions"
 								v-bind="content"
 								@edit="eventEdit(content.url)"
-								@delete="eventDeleteModal"
+								@delete="eventDeleteModal(content.url)"
 							></task-item>
 							<delete-modal
 								:show-delete-modal.sync="showDeleteModal"
+								:item-to-delete="toDelete"
 							></delete-modal>
 						</ol>
 					</template>
@@ -90,6 +91,7 @@ export default {
 	data() {
 		return {
 			showDeleteModal: false,
+			toDelete: "",
 			actions: [
 				{
 					text: this.$t("pages.courses._id.courseOption.edit"),
@@ -163,7 +165,8 @@ export default {
 		eventEdit(url) {
 			this.$router.push({ path: `${url}/edit` });
 		},
-		eventDeleteModal() {
+		eventDeleteModal(contentUrl) {
+			this.toDelete = contentUrl;
 			this.showDeleteModal = true;
 		},
 		getCourse(id) {
