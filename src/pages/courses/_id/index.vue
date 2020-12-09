@@ -5,13 +5,13 @@
 				class="header"
 				:title="course.name"
 				:next-lesson-date="nextLessonDate"
-				:actions="actions"
+				:actions="courseActions"
 				:course-id="$route.params.id"
 				@edit="courseEdit"
 			></course-header>
 			<tabs class="tabs">
 				<tab
-					:name="$t('pages.courses._id.educationalContent')"
+					:name="$t('pages.courses._id.tab.educationalContent')"
 					icon-name="lerninhalte"
 					:selected="true"
 				>
@@ -36,7 +36,7 @@
 							<task-item
 								v-for="(content, idx) in courseContents"
 								:key="idx"
-								:actions="actions"
+								:actions="taskActions"
 								v-bind="content"
 								@edit="eventEdit(content.url)"
 								@delete="eventDeleteModal(content.url)"
@@ -48,8 +48,12 @@
 						</ol>
 					</template>
 				</tab>
-				<tab name="Groups" icon-name="gruppen">Groups</tab>
-				<tab name="Tools" icon-name="tools">Tools</tab>
+				<tab name="Groups" icon-name="gruppen">{{
+					$t("pages.courses._id.tab.groups")
+				}}</tab>
+				<tab name="Tools" icon-name="tools">{{
+					$t("pages.courses._id.tab.tools")
+				}}</tab>
 			</tabs>
 		</base-grid>
 	</div>
@@ -92,7 +96,7 @@ export default {
 		return {
 			showDeleteModal: false,
 			toDelete: "",
-			actions: [
+			courseActions: [
 				{
 					text: this.$t("pages.courses._id.courseOption.edit"),
 					event: "edit",
@@ -119,6 +123,18 @@ export default {
 					icon: "delete",
 				},
 			],
+      taskActions: [
+        {
+          text: this.$t("pages.courses._id.courseOption.edit"),
+          event: "edit",
+          icon: "create",
+        },
+        {
+          text: this.$t("pages.courses._id.courseOption.delete"),
+          event: "delete",
+          icon: "delete",
+        },
+      ],
 		};
 	},
 	computed: {
