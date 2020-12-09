@@ -1,7 +1,7 @@
 import TaskItem from "@components/molecules/TaskItem";
 
 const props = {
-	id: '0000000ddddd',
+	id: "0000000ddddd",
 	url: "courses/1234567",
 	title: "A new task",
 	subtitle: "Task type",
