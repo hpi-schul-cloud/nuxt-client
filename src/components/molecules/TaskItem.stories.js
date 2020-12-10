@@ -8,8 +8,8 @@ storiesOf("5 Molecules/TaskItem", module)
 	.add("with knobs and delete modal", () => ({
 		components: { TaskItem, DeleteModal },
 		data: () => ({
-			id: '11111',
-			url: text("url",'#'),
+			id: "11111",
+			url: text("url", "#"),
 			showDeleteModal: false,
 			imgSrc: ExampleImage,
 			title: text("title", "Das Nervensystem"),
@@ -39,7 +39,7 @@ storiesOf("5 Molecules/TaskItem", module)
 	.add("with image (triple)", () => ({
 		components: { TaskItem },
 		data: () => ({
-			url: '#',
+			url: "#",
 			imgSrc: ExampleImage,
 			title: "Das Nervensystem",
 			subtitle: "Editor-Dokument",
@@ -62,7 +62,7 @@ storiesOf("5 Molecules/TaskItem", module)
 	.add("with pulsating dot", () => ({
 		components: { TaskItem },
 		data: () => ({
-			url: '#',
+			url: "#",
 			imgSrc: ExampleImage,
 			title: "Das Nervensystem",
 			subtitle: "Editor-Dokument",
