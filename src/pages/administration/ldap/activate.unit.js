@@ -52,30 +52,13 @@ describe("ldap/activate", () => {
 				patchData: patchStub,
 			},
 			state: () => ({
-				verified: mockResponseData,
-				submitted: mockResponseData,
+				verified: { ...mockResponseData },
+				submitted: { ...mockResponseData },
 			}),
 		},
 	};
 
 	it(...isValidComponent(ldapActivate));
-
-	it("should redirect if no verified data", async () => {
-		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].state = () => ({
-			verified: {},
-			submitted: mockResponseData,
-		});
-		mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: customMockStore,
-				$router: { push: routerPushStub },
-				$route,
-			}),
-		});
-		expect(routerPushStub).toHaveBeenCalled();
-	});
 
 	it("should push to router when clicking the back button", async () => {
 		const wrapper = mount(ldapActivate, {
@@ -89,6 +72,7 @@ describe("ldap/activate", () => {
 		const backBtn = wrapper.find(`[data-testid="ldapBackButton"]`);
 		expect(backBtn.exists()).toBe(true);
 		backBtn.trigger("click");
+		await wrapper.vm.$nextTick();
 
 		expect(routerPushStub).toHaveBeenCalled();
 	});
@@ -105,6 +89,7 @@ describe("ldap/activate", () => {
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		submitBtn.trigger("click");
+		await wrapper.vm.$nextTick();
 
 		expect(submitStub).toHaveBeenCalled();
 	});
@@ -121,6 +106,7 @@ describe("ldap/activate", () => {
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		submitBtn.trigger("click");
+		await wrapper.vm.$nextTick();
 
 		expect(patchStub).toHaveBeenCalled();
 	});
@@ -141,6 +127,7 @@ describe("ldap/activate", () => {
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		submitBtn.trigger("click");
+		await wrapper.vm.$nextTick();
 
 		expect(routerPushStub).toHaveBeenCalled();
 	});
@@ -173,6 +160,7 @@ describe("ldap/activate", () => {
 		const confirmBtn = wrapper.find(`[data-testid="ldapOkButton"]`);
 		expect(confirmBtn.exists()).toBe(true);
 		confirmBtn.trigger("click");
+		await wrapper.vm.$nextTick();
 
 		expect(routerPushStub).toHaveBeenCalled();
 	});
@@ -197,6 +185,7 @@ describe("ldap/activate", () => {
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		submitBtn.trigger("click");
+		await wrapper.vm.$nextTick();
 
 		const infoMessage = wrapper.find(`[data-testid="errorInfoMessage"]`);
 		expect(infoMessage.exists()).toBe(true);
