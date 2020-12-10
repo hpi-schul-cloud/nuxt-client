@@ -153,13 +153,13 @@ export default {
 			return ldapErrorHandler(this.verified.errors, this);
 		},
 	},
-	created() {
+	async created() {
 		const { id } = this.$route.query;
 
 		if (Object.keys(this.temp).length) {
 			this.systemData = { ...this.temp };
 		} else if (id) {
-			this.$store.dispatch("ldap-config/getData", id);
+			await this.$store.dispatch("ldap-config/getData", id);
 			this.systemData = { ...this.data };
 		}
 	},
