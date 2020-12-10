@@ -3,7 +3,7 @@ import LdapRolesSection from "./LdapRolesSection";
 
 describe("@components/organisms/LdapRolesSection", () => {
 	const ldapConfigData = {
-		groupOption: "ldap_group",
+		groupOption: "group",
 		member: "description",
 		student: "cn=schueler,ou=rolle",
 		teacher: "cn=lehrer,ou=rolle",
@@ -40,8 +40,8 @@ describe("@components/organisms/LdapRolesSection", () => {
 		const wrapper = mount(LdapRolesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				// validations are only active when groupOption !== ldap_group
-				value: { ...ldapConfigData, groupOption: "not LDAP_group" },
+				// validations are only active when groupOption !== group
+				value: { ...ldapConfigData, groupOption: "not group" },
 			},
 		});
 		expect(wrapper.vm.$v).not.toBeUndefined();
@@ -51,8 +51,8 @@ describe("@components/organisms/LdapRolesSection", () => {
 		const wrapper = mount(LdapRolesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				// validations are only active when groupOption !== ldap_group
-				value: { ...ldapConfigData, groupOption: "not LDAP_group" },
+				// validations are only active when groupOption !== group
+				value: { ...ldapConfigData, groupOption: "not group" },
 			},
 		});
 		// default props values are valid so expect this assertion to succeed
@@ -64,7 +64,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				value: {
-					// validations are only active when groupOption !== ldap_group
+					// validations are only active when groupOption !== group
 					groupOption: "not ldap group",
 					member: "",
 					student: "invalid",
@@ -80,7 +80,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 	it("invalid validation is true when any of the input values are invalid", async () => {
 		const ldapConfigDataTestSpecific = {
 			...ldapConfigData,
-			// validations are only active when groupOption !== ldap_group
+			// validations are only active when groupOption !== group
 			groupOption: "not ldap group",
 		};
 		const wrapper = mount(LdapRolesSection, {
@@ -135,7 +135,7 @@ describe("@components/organisms/LdapRolesSection", () => {
 
 	it("invalid error message is displayed only after the blur event, even if originally invalid props were passed through", async () => {
 		const ldapConfigDataTestSpecific = {
-			// validations are only active when groupOption !== ldap_group
+			// validations are only active when groupOption !== group
 			groupOption: "not ldap group",
 			member: "",
 			student: "invalid",
