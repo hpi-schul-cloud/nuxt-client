@@ -131,18 +131,18 @@ describe("courses/new", () => {
 				store: customMockStore,
 				$route: mockRoute,
 				$router: true,
-				data() {
-					return {
-						actions: [
-							{
-								text: "edit",
-								event: "edit",
-								icon: "create",
-							},
-						],
-					};
-				},
 			}),
+			data() {
+				return {
+					actions: [
+						{
+							text: "edit",
+							event: "edit",
+							icon: "create",
+						},
+					],
+				};
+			},
 		});
 		mock$objects(wrapper);
 		await wrapper.find(".card-action button").trigger("click");
@@ -174,18 +174,18 @@ describe("courses/new", () => {
 				store: customMockStore,
 				$route: mockRoute,
 				$router: true,
-				data() {
-					return {
-						actions: [
-							{
-								text: "delete",
-								event: "delete",
-								icon: "delete",
-							},
-						],
-					};
-				},
 			}),
+			data() {
+				return {
+					taskActions: [
+						{
+							text: "edit",
+							event: "edit",
+							icon: "create",
+						},
+					],
+				};
+			},
 		});
 		mock$objects(wrapper);
 		await wrapper.find(".card-action button").trigger("click");
