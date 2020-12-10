@@ -185,10 +185,12 @@ export default {
 			const indexOfDeleteEvent = actionsTemplate.findIndex(
 				(action) => action.event === "delete"
 			);
-			actionsTemplate[indexOfDeleteEvent].arguments = {
-				type: courseItem.type,
-				id: courseItem.id,
-			};
+			if (indexOfDeleteEvent >= 0) {
+				actionsTemplate[indexOfDeleteEvent].arguments = {
+					type: courseItem.type,
+					id: courseItem.id,
+				};
+			}
 			return actionsTemplate;
 		},
 		courseEdit() {

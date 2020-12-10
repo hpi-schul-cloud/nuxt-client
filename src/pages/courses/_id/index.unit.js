@@ -136,7 +136,7 @@ describe("courses/new", () => {
 			}),
 			data() {
 				return {
-					actions: [
+					taskActions: [
 						{
 							text: "edit",
 							event: "edit",
@@ -207,7 +207,6 @@ describe("courses/new", () => {
 				_id: "0000dcfbfb5c7a3f00bf21ab",
 			},
 			dueDate: "2300-06-28T13:00:00.000Z",
-			type: "homework",
 		};
 		const customMockStore = { ...mockStore };
 		customMockStore.homeworks.getters.list = () => [testHomework];
@@ -257,7 +256,6 @@ describe("courses/new", () => {
 				_id: "0000dcfbfb5c7a3f00bf21ab",
 			},
 			dueDate: "2300-06-28T13:00:00.000Z",
-			type: "homework",
 		};
 		const customMockStore = { ...mockStore };
 		customMockStore.homeworks.getters.list = () => [testHomework];
@@ -290,11 +288,11 @@ describe("courses/new", () => {
 		await deleteButton.trigger("click");
 
 		// then
-		expect(customMockStore.courses.actions.removeCourseItem).toBeCalledWith(
+		expect(customMockStore.courses.actions.removeCourseItem).toHaveBeenCalledWith(
 			expect.any(Object),
 			expect.objectContaining({
 				id: testHomework._id,
-				type: testHomework.type,
+				type: "homework",
 			})
 		);
 	});
@@ -309,7 +307,6 @@ describe("courses/new", () => {
 				_id: "0000dcfbfb5c7a3f00bf21ab",
 			},
 			dueDate: "2300-06-28T13:00:00.000Z",
-			type: "homework",
 		};
 		const customMockStore = { ...mockStore };
 		customMockStore.homeworks.getters.list = () => [testHomework];
