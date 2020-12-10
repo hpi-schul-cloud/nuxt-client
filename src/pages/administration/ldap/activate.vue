@@ -36,57 +36,61 @@
 				{{ $t("pages.administration.ldap.save.subtitle") }}
 			</p>
 
-			<p class="category-title">
-				{{ $t("pages.administration.ldap.save.example.user") }}
-			</p>
-			<div>
-				<table data-testid="ldapUsersActivateTable">
-					<tr v-if="verified.users && verified.users.sample.roles">
-						<td>{{ $t("pages.administration.ldap.activate.roles") }}</td>
-						<td>{{ verified.users && verified.users.sample.roles[0] }}</td>
-					</tr>
+			<div v-if="verified.users.sample">
+				<p class="category-title">
+					{{ $t("pages.administration.ldap.save.example.user") }}
+				</p>
+				<div>
+					<table data-testid="ldapUsersActivateTable">
+						<tr v-if="verified.users.sample.roles">
+							<td>{{ $t("pages.administration.ldap.activate.roles") }}</td>
+							<td>{{ verified.users.sample.roles[0] }}</td>
+						</tr>
 
-					<tr v-if="verified.users && verified.users.sample.lastName">
-						<td>{{ $t("pages.administration.ldap.activate.lastName") }}</td>
-						<td>{{ verified.users && verified.users.sample.lastName }}</td>
-					</tr>
+						<tr v-if="verified.users.sample.lastName">
+							<td>{{ $t("pages.administration.ldap.activate.lastName") }}</td>
+							<td>{{ verified.users.sample.lastName }}</td>
+						</tr>
 
-					<tr v-if="verified.users && verified.users.sample.firstName">
-						<td>{{ $t("pages.administration.ldap.activate.firstName") }}</td>
-						<td>{{ verified.users && verified.users.sample.firstName }}</td>
-					</tr>
+						<tr v-if="verified.users.sample.firstName">
+							<td>{{ $t("pages.administration.ldap.activate.firstName") }}</td>
+							<td>{{ verified.users.sample.firstName }}</td>
+						</tr>
 
-					<tr v-if="verified.users && verified.users.sample.email">
-						<td>{{ $t("pages.administration.ldap.activate.email") }}</td>
-						<td>{{ verified.users && verified.users.sample.email }}</td>
-					</tr>
+						<tr v-if="verified.users.sample.email">
+							<td>{{ $t("pages.administration.ldap.activate.email") }}</td>
+							<td>{{ verified.users.sample.email }}</td>
+						</tr>
 
-					<tr v-if="verified.users && verified.users.sample.ldapUID">
-						<td>{{ $t("pages.administration.ldap.activate.uid") }}</td>
-						<td>{{ verified.users && verified.users.sample.ldapUID }}</td>
-					</tr>
+						<tr v-if="verified.users.sample.ldapUID">
+							<td>{{ $t("pages.administration.ldap.activate.uid") }}</td>
+							<td>{{ verified.users.sample.ldapUID }}</td>
+						</tr>
 
-					<tr v-if="verified.users && verified.users.sample.ldapUUID">
-						<td>{{ $t("pages.administration.ldap.activate.uuid") }}</td>
-						<td>{{ verified.users && verified.users.sample.ldapUUID }}</td>
-					</tr>
-				</table>
+						<tr v-if="verified.users.sample.ldapUUID">
+							<td>{{ $t("pages.administration.ldap.activate.uuid") }}</td>
+							<td>{{ verified.users.sample.ldapUUID }}</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 
-			<p class="category-title">
-				{{ $t("pages.administration.ldap.save.example.class") }}
-			</p>
-			<div>
-				<table data-testid="ldapClassesActivateTable">
-					<tr v-if="verified.classes && verified.classes.sample.className">
-						<td>{{ $t("pages.administration.ldap.activate.className") }}</td>
-						<td>{{ verified.classes && verified.classes.sample.className }}</td>
-					</tr>
-					<tr v-if="verified.classes && verified.classes.sample.ldapDn">
-						<td>{{ $t("pages.administration.ldap.activate.dN") }}</td>
-						<td>{{ verified.classes && verified.classes.sample.ldapDn }}</td>
-					</tr>
-				</table>
+			<div v-if="verified.classes.sample">
+				<p class="category-title">
+					{{ $t("pages.administration.ldap.save.example.class") }}
+				</p>
+				<div>
+					<table data-testid="ldapClassesActivateTable">
+						<tr v-if="verified.classes.sample.className">
+							<td>{{ $t("pages.administration.ldap.activate.className") }}</td>
+							<td>{{ verified.classes.sample.className }}</td>
+						</tr>
+						<tr v-if="verified.classes.sample.ldapDn">
+							<td>{{ $t("pages.administration.ldap.activate.dN") }}</td>
+							<td>{{ verified.classes.sample.ldapDn }}</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</section>
 		<div
