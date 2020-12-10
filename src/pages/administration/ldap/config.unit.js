@@ -67,13 +67,21 @@ describe("ldap/config", () => {
 	});
 
 	it("should set 'systemData' as 'data' if $route.query.id is defined", async () => {
+		const customMockStore = { ...mockStore };
+		customMockStore["ldap-config"].state = () => ({
+			data: { ...mockInputData },
+			temp: {},
+			verified: {},
+			submitted: {},
+		});
 		const wrapper = mount(ldapConfig, {
 			...createComponentMocks({
 				i18n: true,
-				store: mockStore,
+				store: customMockStore,
 				$route,
 			}),
 		});
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.systemData).toStrictEqual(mockInputData);
 		getDataStub.mockClear();
 	});
@@ -209,6 +217,7 @@ describe("ldap/config", () => {
 				$route,
 			}),
 		});
+		await wrapper.vm.$nextTick();
 		expect(Object.keys(wrapper.vm.systemData)).toHaveLength(
 			Object.keys(mockInputData).length
 		);
