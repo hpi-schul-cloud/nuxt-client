@@ -20,3 +20,5 @@ export const urlValidationRegex = helpers.regex(
 	"alpha",
 	/^ldaps:\/\/[\w\.-]+\.[a-z]+(:\d+)?$/
 );
+
+export const unchangedPassword = "🐱‍👤[unchanged]**";
