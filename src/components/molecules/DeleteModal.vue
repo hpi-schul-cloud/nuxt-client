@@ -3,11 +3,7 @@
 		<template v-slot:header></template>
 		<template v-slot:body>
 			<modal-body-info
-				:title="
-					isTopic
-						? $t('pages.courses._id.modal.title.topic')
-						: $t('pages.courses._id.modal.title.homework')
-				"
+				:title="confirmationText"
 				:description="$t('pages.courses._id.modal.description')"
 			>
 				<template v-slot:icon>
@@ -45,7 +41,7 @@ export default {
 		BaseButton,
 	},
 	props: {
-		itemToDelete: {
+		confirmationText: {
 			type: String,
 			required: true,
 		},
@@ -53,44 +49,12 @@ export default {
 			type: Boolean,
 		},
 	},
-	computed: {
-		isTopic() {
-			return this.itemToDelete.includes("topic");
-		},
-	},
 	methods: {
 		closeModal() {
 			this.$emit("update:show-delete-modal", false);
 		},
-		async confirmDelete() {
-			const url = this.itemToDelete;
-			if (url.includes("topic")) {
-				try {
-					await this.$axios.$delete(`courses/${url}`);
-					// text to change
-					this.$toast.success(
-						this.$t("components.organisms.FormNews.success.remove")
-					);
-				} catch (e) {
-					// text to change
-					this.$toast.error(
-						this.$t("components.organisms.FormNews.errors.remove")
-					);
-				}
-			} else if (url.includes("homework")) {
-				try {
-					await this.$axios.$delete(url);
-					// text to change
-					this.$toast.success(
-						this.$t("components.organisms.FormNews.success.remove")
-					);
-				} catch (e) {
-					// text to change
-					this.$toast.error(
-						this.$t("components.organisms.FormNews.errors.remove")
-					);
-				}
-			}
+		confirmDelete() {
+			this.$emit("delete");
 			this.closeModal();
 		},
 	},

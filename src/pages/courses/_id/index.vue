@@ -5,13 +5,13 @@
 				class="header"
 				:title="course.name"
 				:next-lesson-date="nextLessonDate"
-				:actions="actions"
+				:actions="courseActions"
 				:course-id="$route.params.id"
 				@edit="courseEdit"
 			></course-header>
 			<tabs class="tabs">
 				<tab
-					:name="$t('pages.courses._id.educationalContent')"
+					:name="$t('pages.courses._id.tab.educationalContent')"
 					icon-name="lerninhalte"
 					:selected="true"
 				>
@@ -36,27 +36,32 @@
 							<task-item
 								v-for="(content, idx) in courseContents"
 								:key="idx"
-								:actions="actions"
+								:actions="createActionsForCourseItem(content)"
 								v-bind="content"
 								@edit="eventEdit(content.url)"
-								@delete="eventDeleteModal(content.url)"
+								@delete="eventDeleteModal"
 							></task-item>
 							<delete-modal
 								:show-delete-modal.sync="showDeleteModal"
-								:item-to-delete="toDelete"
+								:confirmation-text="confirmationText"
+								@delete="handleCourseItemDeletion"
 							></delete-modal>
 						</ol>
 					</template>
 				</tab>
-				<tab name="Groups" icon-name="gruppen">Groups</tab>
-				<tab name="Tools" icon-name="tools">Tools</tab>
+				<tab name="Groups" icon-name="gruppen">{{
+					$t("pages.courses._id.tab.groups")
+				}}</tab>
+				<tab name="Tools" icon-name="tools">{{
+					$t("pages.courses._id.tab.tools")
+				}}</tab>
 			</tabs>
 		</base-grid>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import {
 	currentDate,
 	fromUTC,
@@ -92,7 +97,8 @@ export default {
 		return {
 			showDeleteModal: false,
 			toDelete: "",
-			actions: [
+			confirmationText: "",
+			courseActions: [
 				{
 					text: this.$t("pages.courses._id.courseOption.edit"),
 					event: "edit",
@@ -112,6 +118,18 @@ export default {
 					text: this.$t("pages.courses._id.courseOption.duplicate"),
 					event: "duplicate",
 					icon: "file_copy",
+				},
+				{
+					text: this.$t("pages.courses._id.courseOption.delete"),
+					event: "delete",
+					icon: "delete",
+				},
+			],
+			taskActions: [
+				{
+					text: this.$t("pages.courses._id.courseOption.edit"),
+					event: "edit",
+					icon: "create",
 				},
 				{
 					text: this.$t("pages.courses._id.courseOption.delete"),
@@ -159,15 +177,39 @@ export default {
 		this.getCourseContent(this.$route.params.id);
 	},
 	methods: {
+		...mapActions("courses", {
+			deleteCourseItem: "removeCourseItem",
+		}),
+		createActionsForCourseItem(courseItem) {
+			const actionsTemplate = JSON.parse(JSON.stringify([...this.taskActions]));
+			const indexOfDeleteEvent = actionsTemplate.findIndex(
+				(action) => action.event === "delete"
+			);
+			actionsTemplate[indexOfDeleteEvent].arguments = {
+				type: courseItem.type,
+				id: courseItem.id,
+			};
+			return actionsTemplate;
+		},
 		courseEdit() {
 			this.$router.push({ path: `${this.$route.path}/edit` });
 		},
 		eventEdit(url) {
 			this.$router.push({ path: `${url}/edit` });
 		},
-		eventDeleteModal(contentUrl) {
-			this.toDelete = contentUrl;
+		eventDeleteModal(deletionData) {
+			if (deletionData.type === "homework") {
+				this.confirmationText = this.$t(
+					"pages.courses._id.modal.title.homework"
+				);
+			} else {
+				this.confirmationText = this.$t("pages.courses._id.modal.title.topic");
+			}
+			this.toDelete = deletionData;
 			this.showDeleteModal = true;
+		},
+		async handleCourseItemDeletion() {
+			await this.deleteCourseItem(this.toDelete);
 		},
 		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
@@ -197,6 +239,7 @@ export default {
 					: "",
 				fill: lesson.hidden ? undefined : this.course.color,
 				url: `/courses/${this.course.id}/topics/${lesson._id}`,
+				type: "lesson",
 			};
 		},
 		adaptHomeworkDataToTaskItemProperties(homework) {
@@ -213,6 +256,7 @@ export default {
 				actionNeeded: false,
 				fill: homework.private ? undefined : this.course.color,
 				url: `/homework/${homework._id}`,
+				type: "homework",
 			};
 		},
 		formatSubtitleForHomework(homework) {
