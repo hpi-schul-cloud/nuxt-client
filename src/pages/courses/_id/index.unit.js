@@ -288,7 +288,9 @@ describe("courses/new", () => {
 		await deleteButton.trigger("click");
 
 		// then
-		expect(customMockStore.courses.actions.removeCourseItem).toHaveBeenCalledWith(
+		expect(
+			customMockStore.courses.actions.removeCourseItem
+		).toHaveBeenCalledWith(
 			expect.any(Object),
 			expect.objectContaining({
 				id: testHomework._id,
