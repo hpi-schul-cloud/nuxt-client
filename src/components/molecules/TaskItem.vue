@@ -1,6 +1,13 @@
 <template>
-	<li class="card">
-		<base-link :id="'id-' + id" :href="url" :no-styles="true" class="card-body">
+	<li :id="'card-' + id" class="card">
+		<base-link
+			:id="'id-' + id"
+			:href="url"
+			:no-styles="true"
+			class="card-body"
+			@keyup="addFocusRingToParent($event)"
+			@blur="removeFocusRingFromParent($event)"
+		>
 			<base-image
 				v-if="$attrs.imgSrc"
 				v-bind="$attrs"
@@ -115,6 +122,16 @@ export default {
 			contextOpen: false,
 		};
 	},
+	methods: {
+		addFocusRingToParent() {
+			const card = document.getElementById(`card-${this.id}`);
+			card.classList.add("focus");
+		},
+		removeFocusRingFromParent() {
+			const card = document.getElementById(`card-${this.id}`);
+			card.classList.remove("focus");
+		},
+	},
 };
 </script>
 
@@ -130,10 +147,6 @@ $color-dark-gray: var(--color-gray-medium);
 	width: 100%;
 	height: auto;
 	border-bottom: 1px solid var(--color-gray);
-	&:focus-within {
-		outline: 2px solid var(--color-tertiary);
-		outline-offset: 3px;
-	}
 }
 
 .card-body {
@@ -213,5 +226,10 @@ $color-dark-gray: var(--color-gray-medium);
 
 .card-action {
 	display: flex;
+}
+
+.focus {
+	outline: 2px solid var(--color-tertiary);
+	outline-offset: 3px;
 }
 </style>

@@ -8,6 +8,8 @@ storiesOf("5 Molecules/TaskItem", module)
 	.add("with knobs and delete modal", () => ({
 		components: { TaskItem, DeleteModal },
 		data: () => ({
+			id: '11111',
+			url: text("url",'#'),
 			showDeleteModal: false,
 			imgSrc: ExampleImage,
 			title: text("title", "Das Nervensystem"),
@@ -24,7 +26,7 @@ storiesOf("5 Molecules/TaskItem", module)
 		template: `
 			<div>
 			<TaskItem
-				@delete="showDeleteModal = true"
+				@delete="showDeleteModal = true" :id="id" :url="url"
 				:imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded"
 				:actions="actions">
 			</TaskItem>
@@ -37,6 +39,7 @@ storiesOf("5 Molecules/TaskItem", module)
 	.add("with image (triple)", () => ({
 		components: { TaskItem },
 		data: () => ({
+			url: '#',
 			imgSrc: ExampleImage,
 			title: "Das Nervensystem",
 			subtitle: "Editor-Dokument",
@@ -48,17 +51,18 @@ storiesOf("5 Molecules/TaskItem", module)
 			],
 		}),
 		template: `<div>
-		<TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+		<TaskItem id="1" :url="url" :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
 		</TaskItem>
-        <TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+        <TaskItem id="2" :url="url" :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
         </TaskItem>
-        <TaskItem :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
+        <TaskItem id="3" :url="url" :imgSrc="imgSrc" :title="title" :subtitle="subtitle" :status="status" :action-needed="actionNeeded" :actions="actions">
         </TaskItem>
 	</div>`,
 	}))
 	.add("with pulsating dot", () => ({
 		components: { TaskItem },
 		data: () => ({
+			url: '#',
 			imgSrc: ExampleImage,
 			title: "Das Nervensystem",
 			subtitle: "Editor-Dokument",
