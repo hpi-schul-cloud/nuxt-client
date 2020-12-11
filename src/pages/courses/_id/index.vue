@@ -49,10 +49,10 @@
 						</ol>
 					</template>
 				</tab>
-				<tab name="Groups" icon-name="gruppen">{{
+				<tab :name="$t('pages.courses._id.tab.groups')" icon-name="gruppen">{{
 					$t("pages.courses._id.tab.groups")
 				}}</tab>
-				<tab name="Tools" icon-name="tools">{{
+				<tab :name="$t('pages.courses._id.tab.tools')" icon-name="tools">{{
 					$t("pages.courses._id.tab.tools")
 				}}</tab>
 			</tabs>
