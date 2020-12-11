@@ -64,7 +64,7 @@
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.email')"
 			:validation-model="$v.value.email"
-			:validation-messages="emailValidationMessages"
+			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
 			@update:vmodel="$emit('input', { ...value, email: $event })"
 		>
@@ -108,8 +108,8 @@
 </template>
 
 <script>
-import { required, email } from "vuelidate/lib/validators";
-import { ldapPathValidationRegex } from "@utils/ldapValidationRegex";
+import { required } from "vuelidate/lib/validators";
+import { ldapPathValidationRegex } from "@utils/ldapConstants";
 
 export default {
 	props: {
@@ -135,10 +135,6 @@ export default {
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
-			emailValidationMessages: [
-				{ key: "required", message: this.$t("common.validation.required") },
-				{ key: "email", message: this.$t("common.validation.email") },
-			],
 		};
 	},
 	watch: {
@@ -153,7 +149,7 @@ export default {
 				userPath: { required, ldapPathValidationRegex },
 				firstName: { required },
 				familyName: { required },
-				email: { required, email },
+				email: { required },
 				uid: { required },
 				uuid: { required },
 			},
