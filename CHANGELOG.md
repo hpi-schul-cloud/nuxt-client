@@ -25,6 +25,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- SC-8169 - fixed ldap classes section data being sent when toggle is off
 - SC-8158 - fixed ldap config initial data load and conditional rendering in activate page
 - SC-7845 - fixed header tab name on login-instances page
 - SC-7845 - fixed the changelog github action
