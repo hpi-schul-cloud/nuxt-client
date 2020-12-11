@@ -49,6 +49,7 @@
 				:validate="triggerValidation"
 				data-testid="ldapClassesSection"
 				@update:errors="updateValidationData"
+				@update:inputs="clearClassesSectionData"
 			/>
 		</div>
 		<div class="errors-container">
@@ -224,6 +225,14 @@ export default {
 				// default input values
 				member: "memberOf",
 				groupOption: "group",
+			};
+		},
+		clearClassesSectionData() {
+			this.systemData = {
+				...this.systemData,
+				classPath: undefined,
+				nameAttribute: undefined,
+				participantAttribute: undefined,
 			};
 		},
 	},
