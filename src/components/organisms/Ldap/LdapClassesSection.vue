@@ -121,6 +121,7 @@ export default {
 		},
 		checked: function () {
 			this.$emit("update:errors", this.$v.$invalid, "classes");
+			if (this.checked === false) this.$emit("update:inputs");
 		},
 		classPathChanged: function () {
 			this.checked = !!this.value.classPath;
