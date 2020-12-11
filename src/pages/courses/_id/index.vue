@@ -205,7 +205,9 @@ export default {
 					"pages.courses._id.modal.title.homework"
 				);
 			} else {
-				this.confirmationText = this.$t("pages.courses._id.modal.title.topic");
+				this.confirmationText = this.$t(
+					"pages.courses._id.modal.title.editorDocument"
+				);
 			}
 			this.toDelete = deletionData;
 			this.showDeleteModal = true;
