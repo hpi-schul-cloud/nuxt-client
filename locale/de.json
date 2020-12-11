@@ -522,7 +522,7 @@
 	"pages.administration.ldap.save.example.user": "Beispiel Nutzer:innen",
 	"pages.administration.ldap.save.example.class": "Beispiel Klasse",
 	"pages.administration.ldap.save.example.synchronize": "Synchronization aktivieren",
-	"pages.administration.ldap.activate.message": "Deine Konfiguration ist gespeichert Die Synchronisation kann bis zu einigen Stunden andauern.",
+	"pages.administration.ldap.activate.message": "Deine Konfiguration ist gespeichert. Die Synchronisation kann bis zu einigen Stunden andauern.",
 	"pages.administration.ldap.activate.ok": "Ok",
 	"pages.administration.ldap.activate.email": "E-mail",
 	"pages.administration.ldap.activate.firstName": "Vorname",
