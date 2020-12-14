@@ -434,7 +434,7 @@
 	"pages.courses._id.modal.description": "The course content will be irrevocably deleted",
 	"pages.courses._id.modal.title.homework": "Do you really want to delete the task?",
 	"pages.courses._id.modal.title.editorDocument": "Do you really want to delete the topic?",
-	"pages.courses._id.tab.educationalContent": "",
+	"pages.courses._id.tab.educationalContent": "Content",
 	"pages.courses._id.tab.groups": "Groups",
 	"pages.courses._id.tab.tools": "Tools",
 	"pages.impressum.title": "Imprint",
