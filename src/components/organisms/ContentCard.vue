@@ -62,7 +62,7 @@ import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
-import { getMetadataAttribute } from "@utils/helpers";
+import { getProvider, isCollectionHelper } from "@utils/helpers";
 
 export default {
 	components: {
@@ -74,6 +74,7 @@ export default {
 	props: {
 		resource: { type: Object, default: () => {} },
 		role: { type: String, default: "" },
+		inline: { type: Boolean, required: false },
 	},
 	data() {
 		return {
@@ -83,10 +84,17 @@ export default {
 	},
 	computed: {
 		query() {
+			const queryObject = {
+				course: this.$route.query.course,
+				topic: this.$route.query.topic,
+				isCollection: this.isCollection(),
+			};
+			if (this.inline) {
+				Object.assign(queryObject, { inline: 1 });
+			}
 			return (
 				this.$route && {
-					course: this.$route.query.course,
-					topic: this.$route.query.topic,
+					...queryObject,
 				}
 			);
 		},
@@ -98,17 +106,10 @@ export default {
 				: this.role;
 		},
 		isCollection() {
-			const type = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:hpi_lom_general_aggregationlevel"
-			);
-			return type === "2";
+			return isCollectionHelper(this.resource.properties);
 		},
 		provider() {
-			const provider = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:metadatacontributer_provider"
-			);
+			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 		thumbnail() {

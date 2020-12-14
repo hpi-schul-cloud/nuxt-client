@@ -1,13 +1,22 @@
 import ContentCard from "./ContentCard";
 import { Resource } from "@@/stories/mockData/Resource";
+import VueRouter from "vue-router";
+import { createLocalVue } from "@vue/test-utils";
 
 const testProps = {
 	resource: Resource,
 };
 
+const localVue = createLocalVue();
+localVue.use(VueRouter);
+
+const router = new VueRouter();
+
 describe("@components/organisms/ContentCard", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
+		router,
+		localVue,
 		propsData: { ...testProps },
 	});
 
