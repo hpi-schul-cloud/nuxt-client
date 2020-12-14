@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 - SC-6825 - change collapsable icon
 - SC-7488 - added 3 components in the organisms/ldap for the ldap-config form
 - SC-6293 - restricts Lern-Store access by permission
