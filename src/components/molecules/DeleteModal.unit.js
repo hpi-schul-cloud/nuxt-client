@@ -32,8 +32,8 @@ describe("@components/molecules/DeleteModal", () => {
 	});
 
 	it("close Modal on 'Delete' button", async () => {
-		const cancelBtn = wrapper.find(".right-container > .delete-btn");
-		await cancelBtn.trigger("click");
+		const deleteBtn = wrapper.find(".right-container > .delete-btn");
+		await deleteBtn.trigger("click");
 		expect(wrapper.emitted("update:show-delete-modal")).toHaveLength(2);
 	});
 });

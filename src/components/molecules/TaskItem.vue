@@ -1,5 +1,5 @@
 <template>
-	<li :id="'card-' + id" class="card">
+	<li :id="'card-' + id" class="card" :class="{ focus: hasFocus}">
 		<base-link
 			:id="'id-' + id"
 			:href="url"
@@ -120,16 +120,15 @@ export default {
 	data: function () {
 		return {
 			contextOpen: false,
+			hasFocus: false,
 		};
 	},
 	methods: {
 		addFocusRingToParent() {
-			const card = document.getElementById(`card-${this.id}`);
-			card.classList.add("focus");
+			this.hasFocus = true;
 		},
 		removeFocusRingFromParent() {
-			const card = document.getElementById(`card-${this.id}`);
-			card.classList.remove("focus");
+			this.hasFocus = false;
 		},
 	},
 };
