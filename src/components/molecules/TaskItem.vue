@@ -1,5 +1,5 @@
 <template>
-	<li :id="'card-' + id" class="card" :class="{ focus: hasFocus}">
+	<li :id="'card-' + id" class="card" :class="{ focus: hasFocus }">
 		<base-link
 			:id="'id-' + id"
 			:href="url"
