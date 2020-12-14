@@ -2,6 +2,7 @@ import { default as CoursePage } from "./index";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import EmptyState from "@components/molecules/EmptyState";
 import DeleteModal from "@components/molecules/DeleteModal";
+import TaskItem from "@components/molecules/TaskItem";
 
 describe("courses/new", () => {
 	let mockStore;
@@ -103,12 +104,12 @@ describe("courses/new", () => {
 				$route: mockRoute,
 			}),
 		});
-		const homeworkLink = wrapper.find(`a#id-${homeworkId}`);
-		const lessonLink = wrapper.find(`a#id-${lessonId}`);
-
+		const links = wrapper.findAllComponents(TaskItem);
+		const lessonLink = links.at(0).findComponent({ ref: "taskItemLink" });
+		const homeworkLink = links.at(1).findComponent({ ref: "taskItemLink" });
 		// then
-		expect(homeworkLink.attributes().href).toStrictEqual(expectedHomeworkUrl);
 		expect(lessonLink.attributes().href).toStrictEqual(expectedTopicUrl);
+		expect(homeworkLink.attributes().href).toStrictEqual(expectedHomeworkUrl);
 	});
 
 	it("should redirect to the proper edit page when the edit button of the topic is clicked", async () => {

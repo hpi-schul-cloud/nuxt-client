@@ -1,12 +1,12 @@
 <template>
-	<li :id="'card-' + id" class="card" :class="{ focus: hasFocus }">
+	<li :class="{ card: 'card', focus: hasFocus }">
 		<base-link
-			:id="'id-' + id"
+			ref="taskItemLink"
 			:href="url"
 			:no-styles="true"
 			class="card-body"
-			@keyup="addFocusRingToParent($event)"
-			@blur="removeFocusRingFromParent($event)"
+			@keyup="hasFocus = true"
+			@blur="hasFocus = false"
 		>
 			<base-image
 				v-if="$attrs.imgSrc"
@@ -122,14 +122,6 @@ export default {
 			contextOpen: false,
 			hasFocus: false,
 		};
-	},
-	methods: {
-		addFocusRingToParent() {
-			this.hasFocus = true;
-		},
-		removeFocusRingFromParent() {
-			this.hasFocus = false;
-		},
 	},
 };
 </script>
