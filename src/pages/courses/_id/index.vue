@@ -49,10 +49,10 @@
 						</ol>
 					</template>
 				</tab>
-				<tab name="Groups" icon-name="gruppen">{{
+				<tab :name="$t('pages.courses._id.tab.groups')" icon-name="gruppen">{{
 					$t("pages.courses._id.tab.groups")
 				}}</tab>
-				<tab name="Tools" icon-name="tools">{{
+				<tab :name="$t('pages.courses._id.tab.tools')" icon-name="tools">{{
 					$t("pages.courses._id.tab.tools")
 				}}</tab>
 			</tabs>
@@ -185,10 +185,12 @@ export default {
 			const indexOfDeleteEvent = actionsTemplate.findIndex(
 				(action) => action.event === "delete"
 			);
-			actionsTemplate[indexOfDeleteEvent].arguments = {
-				type: courseItem.type,
-				id: courseItem.id,
-			};
+			if (indexOfDeleteEvent >= 0) {
+				actionsTemplate[indexOfDeleteEvent].arguments = {
+					type: courseItem.type,
+					id: courseItem.id,
+				};
+			}
 			return actionsTemplate;
 		},
 		courseEdit() {
@@ -203,7 +205,9 @@ export default {
 					"pages.courses._id.modal.title.homework"
 				);
 			} else {
-				this.confirmationText = this.$t("pages.courses._id.modal.title.topic");
+				this.confirmationText = this.$t(
+					"pages.courses._id.modal.title.editorDocument"
+				);
 			}
 			this.toDelete = deletionData;
 			this.showDeleteModal = true;

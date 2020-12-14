@@ -1,6 +1,7 @@
 import { default as CoursePage } from "./index";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import EmptyState from "@components/molecules/EmptyState";
+import DeleteModal from "@components/molecules/DeleteModal";
 
 describe("courses/new", () => {
 	let mockStore;
@@ -19,6 +20,7 @@ describe("courses/new", () => {
 			courses: {
 				actions: {
 					get: jest.fn(),
+					removeCourseItem: jest.fn(),
 				},
 				getters: {
 					current: () => {
@@ -134,7 +136,7 @@ describe("courses/new", () => {
 			}),
 			data() {
 				return {
-					actions: [
+					taskActions: [
 						{
 							text: "edit",
 							event: "edit",
@@ -159,7 +161,7 @@ describe("courses/new", () => {
 		customMockStore.homeworks.getters.list = () => [
 			{
 				private: true,
-				name: "testLesson1",
+				name: "testHomework1",
 				_id: "59cce3f6c6abf042248e888d",
 				courseId: {
 					_id: "0000dcfbfb5c7a3f00bf21ab",
@@ -195,8 +197,150 @@ describe("courses/new", () => {
 			expectedHomeworkEditPath
 		);
 	});
+	it("should open a delete modal when the delete button of the task is clicked", async () => {
+		// given
+		const testHomework = {
+			private: true,
+			name: "testHomework1",
+			_id: "59cce3f6c6abf042248e888d",
+			courseId: {
+				_id: "0000dcfbfb5c7a3f00bf21ab",
+			},
+			dueDate: "2300-06-28T13:00:00.000Z",
+		};
+		const customMockStore = { ...mockStore };
+		customMockStore.homeworks.getters.list = () => [testHomework];
 
-	it.todo(
-		"should open a delete modal when the delete button of the task is clicked"
-	);
+		const wrapper = mount(CoursePage, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+				$route: mockRoute,
+			}),
+			data() {
+				return {
+					taskActions: [
+						{
+							text: "delete",
+							event: "delete",
+							icon: "delete",
+						},
+					],
+				};
+			},
+		});
+
+		mock$objects(wrapper);
+
+		// when/then
+		const deleteModalWrapper = wrapper.findComponent(DeleteModal);
+		expect(deleteModalWrapper.exists()).toBeTrue();
+		let deleteButton = deleteModalWrapper.find(".delete-btn");
+		expect(deleteButton.exists()).toBeFalse();
+
+		await wrapper.find(".card-action button").trigger("click");
+		await wrapper.find(".context-menu__button").trigger("click");
+
+		deleteButton = deleteModalWrapper.find(".delete-btn");
+		expect(deleteButton.exists()).toBeTrue();
+		expect(deleteButton.isVisible()).toBeTrue();
+	});
+
+	it("should call removeCourseItem when user confirms deletion in delete modal", async () => {
+		// given
+		const testHomework = {
+			private: true,
+			name: "testHomework1",
+			_id: "59cce3f6c6abf042248e888d",
+			courseId: {
+				_id: "0000dcfbfb5c7a3f00bf21ab",
+			},
+			dueDate: "2300-06-28T13:00:00.000Z",
+		};
+		const customMockStore = { ...mockStore };
+		customMockStore.homeworks.getters.list = () => [testHomework];
+
+		const wrapper = mount(CoursePage, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+				$route: mockRoute,
+			}),
+			data() {
+				return {
+					taskActions: [
+						{
+							text: "delete",
+							event: "delete",
+							icon: "delete",
+						},
+					],
+				};
+			},
+		});
+		mock$objects(wrapper);
+
+		// when
+		const deleteModalWrapper = wrapper.findComponent(DeleteModal);
+		await wrapper.find(".card-action button").trigger("click");
+		await wrapper.find(".context-menu__button").trigger("click");
+		const deleteButton = deleteModalWrapper.find(".delete-btn");
+		await deleteButton.trigger("click");
+
+		// then
+		expect(
+			customMockStore.courses.actions.removeCourseItem
+		).toHaveBeenCalledWith(
+			expect.any(Object),
+			expect.objectContaining({
+				id: testHomework._id,
+				type: "homework",
+			})
+		);
+	});
+
+	it("deleteModal should close when user confirms deletion", async () => {
+		// given
+		const testHomework = {
+			private: true,
+			name: "testHomework1",
+			_id: "59cce3f6c6abf042248e888d",
+			courseId: {
+				_id: "0000dcfbfb5c7a3f00bf21ab",
+			},
+			dueDate: "2300-06-28T13:00:00.000Z",
+		};
+		const customMockStore = { ...mockStore };
+		customMockStore.homeworks.getters.list = () => [testHomework];
+
+		const wrapper = mount(CoursePage, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+				$route: mockRoute,
+			}),
+			data() {
+				return {
+					taskActions: [
+						{
+							text: "delete",
+							event: "delete",
+							icon: "delete",
+						},
+					],
+				};
+			},
+		});
+		mock$objects(wrapper);
+
+		// when
+		const deleteModalWrapper = wrapper.findComponent(DeleteModal);
+		await wrapper.find(".card-action button").trigger("click");
+		await wrapper.find(".context-menu__button").trigger("click");
+		const deleteButton = deleteModalWrapper.find(".delete-btn");
+		await deleteButton.trigger("click");
+
+		// then
+		expect(deleteButton.exists()).toBeFalse();
+	});
 });
