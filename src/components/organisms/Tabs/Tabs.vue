@@ -10,17 +10,17 @@
 				@focusout="removeFocusRing($event)"
 			>
 				<div v-if="tab.hasPermission" class="li-content">
-					<base-icon
-						v-if="tab.iconName"
-						class="tab-icon"
-						source="custom"
-						:icon="tab.iconName"
-					/>
 					<base-button
 						id="tab-button"
 						class="tab-button"
 						data-testid="tabButtonTest"
 					>
+            <base-icon
+                v-if="tab.iconName"
+                class="tab-icon"
+                source="custom"
+                :icon="tab.iconName"
+            />
 						<span>{{ tab.name }}</span>
 					</base-button>
 				</div>
