@@ -15,12 +15,12 @@
 						class="tab-button"
 						data-testid="tabButtonTest"
 					>
-            <base-icon
-                v-if="tab.iconName"
-                class="tab-icon"
-                source="custom"
-                :icon="tab.iconName"
-            />
+						<base-icon
+							v-if="tab.iconName"
+							class="tab-icon"
+							source="custom"
+							:icon="tab.iconName"
+						/>
 						<span>{{ tab.name }}</span>
 					</base-button>
 				</div>
