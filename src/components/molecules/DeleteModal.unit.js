@@ -27,15 +27,13 @@ describe("@components/molecules/DeleteModal", () => {
 
 	it("close Modal on 'Cancel' button", async () => {
 		const cancelBtn = wrapper.find(".right-container > .button");
-		cancelBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await cancelBtn.trigger("click");
 		expect(wrapper.emitted("update:show-delete-modal")).toHaveLength(1);
 	});
 
 	it("close Modal on 'Delete' button", async () => {
 		const cancelBtn = wrapper.find(".right-container > .delete-btn");
-		cancelBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await cancelBtn.trigger("click");
 		expect(wrapper.emitted("update:show-delete-modal")).toHaveLength(2);
 	});
 });
