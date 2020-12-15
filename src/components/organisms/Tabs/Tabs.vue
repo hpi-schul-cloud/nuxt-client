@@ -1,26 +1,28 @@
 <template>
 	<div>
-		<ul class="tabs" alt="tabs">
+		<ul class="tabs">
 			<li
 				v-for="tab in tabs"
 				:key="tab.name"
 				:class="{ 'is-active': tab.isActive }"
 				@click="selectTab(tab)"
+				@keyup="addFocusRing($event)"
+				@focusout="removeFocusRing($event)"
 			>
 				<div v-if="tab.hasPermission" class="li-content">
-					<base-icon
-						v-if="tab.iconName"
-						class="tab-icon"
-						source="custom"
-						:icon="tab.iconName"
-					/>
-					<button
+					<base-button
+						id="tab-button"
 						class="tab-button"
 						data-testid="tabButtonTest"
-						:alt="tab.name"
 					>
+						<base-icon
+							v-if="tab.iconName"
+							class="tab-icon"
+							source="custom"
+							:icon="tab.iconName"
+						/>
 						<span>{{ tab.name }}</span>
-					</button>
+					</base-button>
 				</div>
 			</li>
 		</ul>
@@ -31,7 +33,9 @@
 </template>
 
 <script>
+import BaseButton from "@basecomponents/BaseButton";
 export default {
+	components: { BaseButton },
 	data() {
 		return {
 			tabs: [],
@@ -52,6 +56,14 @@ export default {
 				tab.isActive = tab.name === selectedTab.name;
 			});
 		},
+		addFocusRing(e) {
+			const tab = e.currentTarget;
+			tab.classList.add("focus");
+		},
+		removeFocusRing(e) {
+			const tab = e.currentTarget;
+			tab.classList.remove("focus");
+		},
 	},
 };
 </script>
@@ -70,38 +82,43 @@ export default {
 
 ul.tabs {
 	display: flex;
-	justify-content: center;
-	max-width: 34rem;
+	justify-content: flex-start;
+	max-width: 64rem;
 	padding: 0;
 	margin-bottom: var(--space-md);
 	box-shadow: inset 0 -3px 0 var(--color-gray-light);
-	.li-content {
-		display: inline-flex;
-		align-items: center;
-	}
+
 	li {
-		display: inline-flex;
-		justify-content: center;
-		width: 100vw;
+		display: flex;
+		width: calc(100vw / 3);
 		padding: var(--space-xs);
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
-		.tab-button {
-			display: flex;
+		.li-content {
+			display: inline-flex;
 			align-items: center;
-			justify-content: center;
-			font-family: PT Sans Narrow var(--font-accent);
-			font-size: var(--text-md);
-			font-weight: var(--font-weight-bold);
-			line-height: var(--button-line-height);
-			color: var(--color-disabled-dark);
-			cursor: pointer;
-			background: transparent;
-			border: none;
-			outline: none;
+			.tab-button {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				font-family: PT Sans Narrow var(--font-accent);
+				font-size: var(--text-md);
+				font-weight: var(--font-weight-bold);
+				line-height: var(--button-line-height);
+				color: var(--color-disabled-dark);
+				cursor: pointer;
+				background: transparent;
+				border: none;
+				outline: none !important;
+				box-shadow: none !important;
+
+				@include breakpoint(tablet) {
+					justify-content: center;
+				}
+			}
 		}
 		&.span {
 			animation: fadeEffect var(--duration-transition-medium) ease-in-out;
@@ -117,7 +134,7 @@ ul.tabs {
 			}
 			&::after {
 				position: absolute;
-				top: calc(2.1 * (var(--space-md)));
+				top: calc(2.85 * (var(--space-md)));
 				left: 0;
 				width: 100%;
 				height: 3px;
@@ -127,11 +144,11 @@ ul.tabs {
 				animation: fadeEffect var(--duration-transition-medium) ease-in;
 
 				@include breakpoint(tablet) {
-					top: calc(2.25 * (var(--space-md)));
+					top: calc(3 * (var(--space-md)));
 				}
 
 				@include breakpoint(desktop) {
-					top: calc(2.45 * (var(--space-md)));
+					top: calc(3.15 * (var(--space-md)));
 				}
 			}
 		}
@@ -150,10 +167,16 @@ ul.tabs {
 				color: var(--color-gray-dark);
 			}
 		}
+
+		@include breakpoint(tablet) {
+			display: inline-flex;
+			justify-content: center;
+			width: 100vw;
+		}
 	}
 
 	@include breakpoint(tablet) {
-		max-width: 64rem;
+		justify-content: center;
 	}
 
 	@include breakpoint(desktop) {
@@ -168,5 +191,9 @@ ul.tabs {
 	to {
 		opacity: 1;
 	}
+}
+.focus {
+	outline: 2px solid var(--color-tertiary);
+	outline-offset: 3px;
 }
 </style>
