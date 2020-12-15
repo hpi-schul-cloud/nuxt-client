@@ -14,7 +14,7 @@ p {
 
 :::
 
-All style variables are imported from the npm package [@schul-cloud/styles](https://github.com/hpi-schul-cloud/styles)
+All style variables are imported from the npm package [@hpi-schul-cloud/styles](https://github.com/hpi-schul-cloud/styles)
 
 ## Colors
 
