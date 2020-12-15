@@ -67,7 +67,7 @@ h1:first-of-type {
 
 .header-container {
 	margin-top: var(--space-xl-2);
-	margin-bottom: var(--space-xl);
+	margin-bottom: var(--space-md);
 	.header-top {
 		display: flex;
 		align-items: center;

@@ -5,7 +5,7 @@
 // const id = "[a-z0-9]+";
 //const mongoId = "[a-z0-9]{24}";
 const activationCode = "[a-z0-9]+";
-// const courseId = activationCode;
+// const courseId = "[a-f0-9]{24}";
 const routes = [
 	// `^/account/?$`,
 	// `^/courses/${courseId}/?$`,
