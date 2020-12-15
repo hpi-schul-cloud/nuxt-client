@@ -46,5 +46,12 @@ export default {
 	justify-content: center;
 	min-height: 220px;
 	text-align: center;
+
+	.modal-title {
+		margin: 0;
+	}
+	.modal-description {
+		margin-top: var(--space-md);
+	}
 }
 </style>
