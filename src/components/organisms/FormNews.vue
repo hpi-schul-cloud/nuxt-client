@@ -117,14 +117,10 @@ export default Vue.extend({
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
 				? undefined
-				: this.$t(
-						"components.organisms.FormNews.errors.missing_title"
-				  ).toString();
+				: this.$ts("components.organisms.FormNews.errors.missing_title");
 			const content = this.data.content
 				? undefined
-				: this.$t(
-						"components.organisms.FormNews.errors.missing_content"
-				  ).toString();
+				: this.$ts("components.organisms.FormNews.errors.missing_content");
 			return {
 				title,
 				content,
@@ -193,13 +189,13 @@ export default Vue.extend({
 						this.$route.query.targetmodel || this.$route.query.context,
 				});
 				this.$toast.success(
-					this.$t("components.organisms.FormNews.success.create").toString()
+					this.$ts("components.organisms.FormNews.success.create")
 				);
 				this.$router.push({ name: "news-id", params: { id: news._id } });
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormNews.errors.create").toString()
+					this.$ts("components.organisms.FormNews.errors.create")
 				);
 			}
 		},
@@ -218,7 +214,7 @@ export default Vue.extend({
 					},
 				]);
 				this.$toast.success(
-					this.$t("components.organisms.FormNews.success.patch").toString()
+					this.$ts("components.organisms.FormNews.success.patch")
 				);
 				this.$router.push({
 					name: "news-id",
@@ -227,7 +223,7 @@ export default Vue.extend({
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormNews.errors.patch").toString()
+					this.$ts("components.organisms.FormNews.errors.patch")
 				);
 			}
 		},
@@ -253,13 +249,13 @@ export default Vue.extend({
 			try {
 				await this.$store.dispatch("news/remove", this.$route.params.id);
 				this.$toast.success(
-					this.$t("components.organisms.FormNews.success.remove").toString()
+					this.$ts("components.organisms.FormNews.success.remove")
 				);
 				this.$router.push({ name: "news" });
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormNews.errors.remove").toString()
+					this.$ts("components.organisms.FormNews.errors.remove")
 				);
 			}
 		},
