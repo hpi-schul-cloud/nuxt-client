@@ -1,6 +1,13 @@
 <template>
-	<div class="card">
-		<div class="card-body">
+	<li :class="{ card: 'card', focus: hasFocus }">
+		<base-link
+			ref="taskItemLink"
+			:href="url"
+			:no-styles="true"
+			class="card-body"
+			@keyup="hasFocus = true"
+			@blur="hasFocus = false"
+		>
 			<base-image
 				v-if="$attrs.imgSrc"
 				v-bind="$attrs"
@@ -14,16 +21,16 @@
 				:percent="progress"
 			/>
 			<div class="card-heading">
-				<div class="subtitle">
+				<p class="subtitle">
 					{{ subtitle }}
-				</div>
-				<div class="title">
+				</p>
+				<h2 class="title">
 					{{ title }}
-				</div>
+				</h2>
 			</div>
-		</div>
+		</base-link>
 		<div class="card-action">
-			<div class="status">{{ status }}</div>
+			<span class="status">{{ status }}</span>
 			<pulsating-dot
 				v-if="actionNeeded"
 				id="pulsating-dot"
@@ -33,6 +40,7 @@
 				<base-button
 					design="text icon"
 					aria-label="menu"
+					:aria-expanded="contextOpen"
 					@click="contextOpen = true"
 				>
 					<base-icon
@@ -46,10 +54,11 @@
 					:show.sync="contextOpen"
 					anchor="top-right"
 					:actions="actions"
+					v-on="$listeners"
 				/>
 			</span>
 		</div>
-	</div>
+	</li>
 </template>
 
 <script>
@@ -59,9 +68,11 @@ import BaseButton from "@basecomponents/BaseButton";
 import BaseIcon from "@basecomponents/BaseIcon";
 import ContextMenu from "@components/molecules/ContextMenu";
 import BaseImage from "@basecomponents/BaseImage";
+import BaseLink from "@basecomponents/BaseLink";
 
 export default {
 	components: {
+		BaseLink,
 		ProgressRing,
 		PulsatingDot,
 		BaseImage,
@@ -70,6 +81,15 @@ export default {
 		ContextMenu,
 	},
 	props: {
+		id: {
+			type: String,
+			required: true,
+		},
+		url: {
+			type: String,
+			required: true,
+			default: "/",
+		},
 		title: {
 			type: String,
 			required: true,
@@ -100,6 +120,7 @@ export default {
 	data: function () {
 		return {
 			contextOpen: false,
+			hasFocus: false,
 		};
 	},
 };
@@ -107,7 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-$color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles package is updated in the npm registry to 0.2.2
+$color-dark-gray: var(--color-gray-medium);
 
 .card {
 	display: flex;
@@ -116,29 +137,38 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	justify-content: space-between;
 	width: 100%;
 	height: auto;
-	padding: var(--space-md);
 	border-bottom: 1px solid var(--color-gray);
-	border-radius: var(--radius-sm);
 }
 
 .card-body {
 	display: flex;
+	flex-basis: 95%;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
 	min-height: 3rem;
+	padding: var(--space-md);
 	overflow: hidden;
+	color: inherit;
+	text-decoration: none;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	&:focus {
+		outline: none;
+	}
 }
 
 .card-heading {
 	overflow: hidden;
+	h2 {
+		margin: 0;
+	}
 }
 
 .title {
 	overflow: hidden;
+	font-family: var(--font-primary);
 	font-size: var(--text-md);
+	line-height: var(--line-height-sm);
 	text-overflow: ellipsis;
 }
 
@@ -150,7 +180,6 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 	color: $color-dark-gray;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-
 	.icon {
 		margin-left: var(--space-xs-3);
 	}
@@ -188,5 +217,10 @@ $color-dark-gray: #616161; // change to var(--color-gray-medium) once the Styles
 
 .card-action {
 	display: flex;
+}
+
+.focus {
+	outline: 2px solid var(--color-tertiary);
+	outline-offset: 3px;
 }
 </style>
