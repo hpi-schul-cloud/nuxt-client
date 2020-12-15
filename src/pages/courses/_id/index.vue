@@ -5,12 +5,13 @@
 				class="header"
 				:title="course.name"
 				:next-lesson-date="nextLessonDate"
-				:actions="actions"
+				:actions="courseActions"
 				:course-id="$route.params.id"
+				@edit="courseEdit"
 			></course-header>
 			<tabs class="tabs">
 				<tab
-					:name="$t('pages.courses._id.educationalContent')"
+					:name="$t('pages.courses._id.tab.educationalContent')"
 					icon-name="lerninhalte"
 					:selected="true"
 				>
@@ -23,11 +24,7 @@
 								<span style="display: block">
 									{{ $t("pages.courses._id.emptyCourseDescription") }}</span
 								>
-								<base-button
-									class="add-inhalt"
-									size="medium"
-									design="floating-action-button"
-								>
+								<base-button class="add-inhalt" size="medium" design="primary">
 									<base-icon source="material" icon="add" />
 									{{ $t("pages.courses._id.addContent") }}
 								</base-button>
@@ -35,24 +32,36 @@
 						</empty-state>
 					</template>
 					<template v-else>
-						<div class="task-item-container">
+						<ol class="task-item-container">
 							<task-item
 								v-for="(content, idx) in courseContents"
 								:key="idx"
+								:actions="createActionsForCourseItem(content)"
 								v-bind="content"
+								@edit="eventEdit(content.url)"
+								@delete="eventDeleteModal"
 							></task-item>
-						</div>
+							<delete-modal
+								:show-delete-modal.sync="showDeleteModal"
+								:confirmation-text="confirmationText"
+								@delete="handleCourseItemDeletion"
+							></delete-modal>
+						</ol>
 					</template>
 				</tab>
-				<tab name="Groups" icon-name="gruppen">Groups</tab>
-				<tab name="Tools" icon-name="tools">Tools</tab>
+				<tab :name="$t('pages.courses._id.tab.groups')" icon-name="gruppen">{{
+					$t("pages.courses._id.tab.groups")
+				}}</tab>
+				<tab :name="$t('pages.courses._id.tab.tools')" icon-name="tools">{{
+					$t("pages.courses._id.tab.tools")
+				}}</tab>
 			</tabs>
 		</base-grid>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import {
 	currentDate,
 	fromUTC,
@@ -69,10 +78,12 @@ import TaskItem from "@components/molecules/TaskItem";
 import BaseButton from "@components/base/BaseButton";
 import BaseIcon from "@components/base/BaseIcon";
 import CourseHeader from "@components/molecules/CourseHeader";
+import DeleteModal from "../../../components/molecules/DeleteModal";
 
 export default {
 	layout: "loggedInFullNoPadding",
 	components: {
+		DeleteModal,
 		Tabs,
 		Tab,
 		BaseGrid,
@@ -84,7 +95,10 @@ export default {
 	},
 	data() {
 		return {
-			actions: [
+			showDeleteModal: false,
+			toDelete: "",
+			confirmationText: "",
+			courseActions: [
 				{
 					text: this.$t("pages.courses._id.courseOption.edit"),
 					event: "edit",
@@ -104,6 +118,18 @@ export default {
 					text: this.$t("pages.courses._id.courseOption.duplicate"),
 					event: "duplicate",
 					icon: "file_copy",
+				},
+				{
+					text: this.$t("pages.courses._id.courseOption.delete"),
+					event: "delete",
+					icon: "delete",
+				},
+			],
+			taskActions: [
+				{
+					text: this.$t("pages.courses._id.courseOption.edit"),
+					event: "edit",
+					icon: "create",
 				},
 				{
 					text: this.$t("pages.courses._id.courseOption.delete"),
@@ -151,6 +177,44 @@ export default {
 		this.getCourseContent(this.$route.params.id);
 	},
 	methods: {
+		...mapActions("courses", {
+			deleteCourseItem: "removeCourseItem",
+		}),
+		createActionsForCourseItem(courseItem) {
+			const actionsTemplate = JSON.parse(JSON.stringify([...this.taskActions]));
+			const indexOfDeleteEvent = actionsTemplate.findIndex(
+				(action) => action.event === "delete"
+			);
+			if (indexOfDeleteEvent >= 0) {
+				actionsTemplate[indexOfDeleteEvent].arguments = {
+					type: courseItem.type,
+					id: courseItem.id,
+				};
+			}
+			return actionsTemplate;
+		},
+		courseEdit() {
+			this.$router.push({ path: `${this.$route.path}/edit` });
+		},
+		eventEdit(url) {
+			this.$router.push({ path: `${url}/edit` });
+		},
+		eventDeleteModal(deletionData) {
+			if (deletionData.type === "homework") {
+				this.confirmationText = this.$t(
+					"pages.courses._id.modal.title.homework"
+				);
+			} else {
+				this.confirmationText = this.$t(
+					"pages.courses._id.modal.title.editorDocument"
+				);
+			}
+			this.toDelete = deletionData;
+			this.showDeleteModal = true;
+		},
+		async handleCourseItemDeletion() {
+			await this.deleteCourseItem(this.toDelete);
+		},
 		getCourse(id) {
 			this.$store.dispatch("courses/get", id);
 		},
@@ -168,6 +232,7 @@ export default {
 		},
 		adaptLessonDataToTaskItemProperties(lesson) {
 			return {
+				id: lesson._id,
 				imgSrc: lesson.hidden
 					? "@assets/img/courses/document-draft.svg"
 					: "@assets/img/courses/document-new.svg",
@@ -177,10 +242,13 @@ export default {
 					? this.$t("pages.courses._id.courseContentDraft")
 					: "",
 				fill: lesson.hidden ? undefined : this.course.color,
+				url: `/courses/${this.course.id}/topics/${lesson._id}`,
+				type: "lesson",
 			};
 		},
 		adaptHomeworkDataToTaskItemProperties(homework) {
 			return {
+				id: homework._id,
 				imgSrc: homework.private
 					? "@assets/img/courses/task-draft.svg"
 					: "@assets/img/courses/task-new.svg",
@@ -191,6 +259,8 @@ export default {
 					: "",
 				actionNeeded: false,
 				fill: homework.private ? undefined : this.course.color,
+				url: `/homework/${homework._id}`,
+				type: "homework",
 			};
 		},
 		formatSubtitleForHomework(homework) {
@@ -251,7 +321,11 @@ export default {
 }
 
 .task-item-container {
-	margin: 0 var(--space-lg);
+	margin: 0 var(--space-xs);
+
+	@include breakpoint(tablet) {
+		margin: 0 var(--space-lg);
+	}
 
 	@include breakpoint(desktop) {
 		margin: 0 var(--space-xl-5);
