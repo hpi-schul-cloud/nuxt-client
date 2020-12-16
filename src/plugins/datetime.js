@@ -126,6 +126,19 @@ export const inputDateFromDeUTC = (date) => {
 };
 
 /**
+ * Returns formated date string based on a given date string in Backend format
+ * @param {String} date formatted date string from input fields (YYYY-MM-DD)
+ * @return {String} Date string based on current timezone for Backend format (DD.MM.YYYY)
+ */
+export const inputDateFormat = (date) => {
+	if (date) {
+		const result = dayjs(date, DATETIME_FORMAT.inputDate).tz();
+		return result.format("DD.MM.YYYY");
+	}
+	return null;
+};
+
+/**
  * Returns formated date string based on a given date
  * @param {String} date
  * @return {String} Date string based on current timezone using locale date formating
