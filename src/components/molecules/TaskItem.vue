@@ -1,6 +1,13 @@
 <template>
-	<li class="card">
-		<base-link :id="'id-' + id" :href="url" :no-styles="true" class="card-body">
+	<li :class="{ card: 'card', focus: hasFocus }">
+		<base-link
+			ref="taskItemLink"
+			:href="url"
+			:no-styles="true"
+			class="card-body"
+			@keyup="hasFocus = true"
+			@blur="hasFocus = false"
+		>
 			<base-image
 				v-if="$attrs.imgSrc"
 				v-bind="$attrs"
@@ -113,6 +120,7 @@ export default {
 	data: function () {
 		return {
 			contextOpen: false,
+			hasFocus: false,
 		};
 	},
 };
@@ -130,10 +138,6 @@ $color-dark-gray: var(--color-gray-medium);
 	width: 100%;
 	height: auto;
 	border-bottom: 1px solid var(--color-gray);
-	&:focus-within {
-		outline: 2px solid var(--color-tertiary);
-		outline-offset: 3px;
-	}
 }
 
 .card-body {
@@ -213,5 +217,10 @@ $color-dark-gray: var(--color-gray-medium);
 
 .card-action {
 	display: flex;
+}
+
+.focus {
+	outline: 2px solid var(--color-tertiary);
+	outline-offset: 3px;
 }
 </style>

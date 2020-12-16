@@ -1,22 +1,28 @@
 <template>
 	<div>
-		<ul class="tabs" alt="tabs">
+		<ul class="tabs">
 			<li
 				v-for="tab in tabs"
 				:key="tab.name"
 				:class="{ 'is-active': tab.isActive }"
 				@click="selectTab(tab)"
+				@keyup="addFocusRing($event)"
+				@focusout="removeFocusRing($event)"
 			>
 				<div v-if="tab.hasPermission" class="li-content">
-					<base-icon
-						v-if="tab.iconName"
-						class="tab-icon"
-						source="custom"
-						:icon="tab.iconName"
-					/>
-					<button class="tab-button" data-testid="tabButtonTest">
+					<base-button
+						id="tab-button"
+						class="tab-button"
+						data-testid="tabButtonTest"
+					>
+						<base-icon
+							v-if="tab.iconName"
+							class="tab-icon"
+							source="custom"
+							:icon="tab.iconName"
+						/>
 						<span>{{ tab.name }}</span>
-					</button>
+					</base-button>
 				</div>
 			</li>
 		</ul>
@@ -27,8 +33,9 @@
 </template>
 
 <script>
+import BaseButton from "@basecomponents/BaseButton";
 export default {
-	components: {},
+	components: { BaseButton },
 	data() {
 		return {
 			tabs: [],
@@ -48,6 +55,14 @@ export default {
 			this.tabs.forEach((tab) => {
 				tab.isActive = tab.name === selectedTab.name;
 			});
+		},
+		addFocusRing(e) {
+			const tab = e.currentTarget;
+			tab.classList.add("focus");
+		},
+		removeFocusRing(e) {
+			const tab = e.currentTarget;
+			tab.classList.remove("focus");
 		},
 	},
 };
@@ -77,16 +92,11 @@ ul.tabs {
 		display: flex;
 		width: calc(100vw / 3);
 		padding: var(--space-xs);
-		margin-bottom: var(--space-sm);
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		color: var(--color-disabled-dark);
 		list-style: none;
 		cursor: pointer;
-		&:focus-within {
-			outline: 2px solid var(--color-tertiary);
-			outline-offset: 3px;
-		}
 		.li-content {
 			display: inline-flex;
 			align-items: center;
@@ -138,7 +148,7 @@ ul.tabs {
 				}
 
 				@include breakpoint(desktop) {
-					top: calc(3.2 * (var(--space-md)));
+					top: calc(3.15 * (var(--space-md)));
 				}
 			}
 		}
@@ -181,5 +191,9 @@ ul.tabs {
 	to {
 		opacity: 1;
 	}
+}
+.focus {
+	outline: 2px solid var(--color-tertiary);
+	outline-offset: 3px;
 }
 </style>

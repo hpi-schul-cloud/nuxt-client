@@ -75,7 +75,7 @@ import { required } from "vuelidate/lib/validators";
 import {
 	ldapPathValidationRegex,
 	urlValidationRegex,
-} from "@utils/ldapValidationRegex";
+} from "@utils/ldapConstants";
 
 export default {
 	props: {
