@@ -43,10 +43,10 @@
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					<base-input-default
+					<base-input
 						v-if="birthdayWarning && !slotProps.data"
 						:error="inputError"
-						class="date base-input-default"
+						class="date base-input"
 						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
@@ -58,9 +58,9 @@
 							})
 						"
 					/>
-					<base-input-default
+					<base-input
 						v-else-if="!birthdayWarning || slotProps.data"
-						class="date base-input-default"
+						class="date base-input"
 						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
@@ -74,11 +74,11 @@
 					/>
 				</template>
 				<template v-slot:datacolumn-password="slotProps">
-					<base-input-default
+					<base-input
 						:vmodel="slotProps.data"
 						type="text"
 						label=""
-						class="base-input-default"
+						class="base-input"
 						v-on="
 							inputPass({
 								id: filteredTableData[slotProps.rowindex]._id,
@@ -116,7 +116,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<div class="text-content">
-						{{ inputDateFromDeUTC(slotProps.data) }}
+						{{ printDateFromDeUTC(slotProps.data) }}
 					</div>
 				</template>
 			</backend-data-table>
@@ -169,7 +169,7 @@
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
-					{{ inputDateFromDeUTC(slotProps.data) }}
+					{{ printDateFromDeUTC(slotProps.data) }}
 				</template>
 			</backend-data-table>
 			<p>
@@ -279,17 +279,19 @@ import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import BaseInput from "@components/base/BaseInput/BaseInput";
-import BaseInputDefault from "@components/base/BaseInput/BaseInputDefault";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
-import { inputDateFromDeUTC, printDateFromDeUTC } from "@plugins/datetime";
+import {
+	inputDateFromDeUTC,
+	inputDateFormat,
+	printDateFromDeUTC,
+} from "@plugins/datetime";
 
 export default {
 	components: {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
-		BaseInputDefault,
 		BaseInput,
 	},
 	meta: {
@@ -414,8 +416,8 @@ export default {
 			set() {},
 		},
 	},
-	created(ctx) {
-		this.find();
+	async created(ctx) {
+		await this.find();
 		window.addEventListener("beforeunload", this.warningEventHandler);
 	},
 	beforeDestroy() {
@@ -429,7 +431,6 @@ export default {
 	methods: {
 		async find() {
 			const query = {
-				usersForConsent: this.selectedStudents,
 				$sort: {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
@@ -462,7 +463,7 @@ export default {
 			return {
 				input: (dateData) => {
 					if (dateData !== "") {
-						const newDate = fromInputDateTime(dateData);
+						const newDate = inputDateFormat(dateData);
 						const index = this.filteredTableData.findIndex(
 							(st) => st._id === student.id
 						);
@@ -518,7 +519,7 @@ export default {
 				const users = this.filteredTableData.map((student) => {
 					return {
 						_id: student._id,
-						birthday: printDateFromDeUTC(student.birthday),
+						birthday: inputDateFromDeUTC(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -608,6 +609,8 @@ export default {
 			}, 2000);
 		},
 		inputDateFromDeUTC,
+		inputDateFormat,
+		printDateFromDeUTC,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.
@@ -671,7 +674,7 @@ export default {
 	}
 }
 
-/deep/ .base-input-default {
+/deep/ .base-input {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);
