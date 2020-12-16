@@ -11,7 +11,6 @@ export const actions = {
 						.$patch("/users/admin/students/" + user._id, user)
 						.then((userData) => {
 							const accountModel = {
-								lasttriedFailedLogin: "1970-01-01T00:00:00.000Z",
 								activated: true,
 								username: userData.email,
 								password: user.password,
@@ -35,16 +34,6 @@ export const actions = {
 		} else {
 			commit("setRegisterError", { mapError: true });
 		}
-	},
-	async findStudents({ commit }, query = {}) {
-		const res = await this.$axios.$get("/users/admin/students", {
-			query,
-			action: "find",
-			userType: "students",
-		});
-
-		commit("setStudentsData", res);
-		return res;
 	},
 	updateStudents({ commit }, payload) {
 		commit("updateStudentData", payload);
