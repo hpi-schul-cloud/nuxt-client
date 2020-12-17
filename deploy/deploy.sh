@@ -1,10 +1,11 @@
-#! /bin/bash
+#!/bin/bash
 
 # ----------------
 # DECLERATIONS
 # ----------------
 
 set -e # fail with exit 1 on any error
+export BRANCH_NAME=$1
 
 trap 'catch $? $LINENO' EXIT
 catch() {
@@ -30,24 +31,15 @@ done
 
 inform_live() {
 	# $1: Project Name (client, storybook, vuepress)
-  if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
-  then
   curl -X POST -H 'Content-Type: application/json' --data '{"text":":rocket: Die Produktivsysteme können aktualisiert werden: HPI Schul-Cloud Nuxt-'$1'! Dockertag: '$DOCKERTAG'"}' $WEBHOOK_URL_CHAT
-  fi
 }
 
 inform_staging() {
-  if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
-  then
     curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Staging-System wurde aktualisiert: HPI Schul-Cloud Nuxt-Client! https://staging.schul-cloud.org/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
-  fi
 }
 
 inform_hotfix() {
-  if [[ "$TRAVIS_EVENT_TYPE" != "cron" ]]
-  then
     curl -X POST -H 'Content-Type: application/json' --data '{"text":":boom: Das Hotfix-'$1'-System wurde aktualisiert: HPI Schul-Cloud Nuxt-Client! https://hotfix'$1'.schul-cloud.dev/nuxtversion (Dockertag: '$DOCKERTAG')"}' $WEBHOOK_URL_CHAT
-  fi
 }
 
 deploy(){
@@ -99,7 +91,7 @@ then
 fi
 
 
-case "$TRAVIS_BRANCH" in
+case "$BRANCH_NAME" in
 
 	master)
 		# If an event occurs on branch master call inform without deployment
@@ -152,9 +144,9 @@ case "$TRAVIS_BRANCH" in
 		esac
 		;;
 	hotfix*)
-		# If an event occurs on branch hotfix* parse team id 
+		# If an event occurs on branch hotfix* parse team id
 		# and deploy to according hotfix environment
-		TEAM="$(cut -d'/' -f2 <<< $TRAVIS_BRANCH)"
+		TEAM="$(cut -d'/' -f2 <<< $BRANCH_NAME)"
 		if [[ "$TEAM" -gt 0 && "$TEAM" -lt 8 ]]; then
 			echo "Event detected on branch hotfix/$TEAM/... . Attempting to deploy to hotfix environment $TEAM, project $PROJECT..."
 			inform_hotfix $TEAM
@@ -178,7 +170,7 @@ case "$TRAVIS_BRANCH" in
 				;;
 			esac
 		else
-			echo "Event detected on branch hotfix*. However, branch name pattern does not match requirements to deploy. Expected hotfix/<team_number>/XX.XX.XX but got $TRAVIS_BRANCH"
+			echo "Event detected on branch hotfix*. However, branch name pattern does not match requirements to deploy. Expected hotfix/<team_number>/XX.XX.XX but got $BRANCH_NAME"
 		fi
 		;;
 	*)

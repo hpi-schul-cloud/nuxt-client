@@ -5,6 +5,7 @@
 # ----------------
 
 set -e # fail with exit 1 on any error
+export BRANCH_NAME=$1
 
 while getopts p: option
 do
@@ -17,7 +18,7 @@ echo PROJECT $PROJECT
 
 echo "DOCKERTAG" $DOCKERTAG
 echo "GITSHA" $GIT_SHA
-echo "Branch" $TRAVIS_BRANCH
+echo "Branch" $BRANCH_NAME
 
 # ----------------
 # SCRIPTS
@@ -39,7 +40,7 @@ dockerPush(){
 buildClient(){
 	# write version file
 	# JS syntax is required so we can import it
-	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${TRAVIS_BRANCH//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
+	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${BRANCH_NAME//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
 
 	cat ../version.js
 
@@ -53,7 +54,7 @@ buildClient(){
 	dockerPush "client" $GIT_SHA
 
 	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
+	if [[ "$BRANCH_NAME" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-client:$DOCKERTAG schulcloud/schulcloud-nuxt-client:develop_latest
 		dockerPush "client" "develop_latest"
@@ -71,7 +72,7 @@ buildStorybook(){
 	dockerPush "storybook" $GIT_SHA
 
 	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
+	if [[ "$BRANCH_NAME" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG schulcloud/schulcloud-nuxt-storybook:develop_latest
 		dockerPush "storybook" "develop_latest"
@@ -91,7 +92,7 @@ buildVuepress(){
 	dockerPush "vuepress" $GIT_SHA
 
 	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
+	if [[ "$BRANCH_NAME" = "develop" ]]
 	then
 		docker tag schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG schulcloud/schulcloud-nuxt-vuepress:develop_latest
 		dockerPush "vuepress" "develop_latest"
