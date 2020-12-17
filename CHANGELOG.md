@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-6825 - change collapsable icon
 - SC-7488 - added 3 components in the organisms/ldap for the ldap-config form
 - SC-6293 - restricts Lern-Store access by permission
 - SC-6708 - added data-testids to the students table in administration page
@@ -19,18 +20,22 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7489 - added input validation to the ldap config components
 - SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission check to ldap config page
 - SC-6043 - Prepare a concept for a general error handling in nuxt-client
+- SC-5473 - Add selectors for lernstore test automation
 
 ### Fixed
 
+- SC-7845 - fixed header tab name on login-instances page
 - SC-7845 - fixed the changelog github action
 - SC-6293 - loads full permissions for user, e.g. school permission too, not just the ones on his role
 - SC-7557 - fixes lernstore modal width
+- SC-7492 - Fixes unstable search results label
 
 ### Changed
 
 - SC-6060 Updated caniuse-lite
 - SC-3788 Renamed Messenger component to meet naming convention
 - IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
+- SC-7796 - Input fields border-width change on hovering
 
 ## Added
 
