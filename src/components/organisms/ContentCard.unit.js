@@ -1,13 +1,22 @@
 import ContentCard from "./ContentCard";
 import { Resource } from "@@/stories/mockData/Resource";
+import VueRouter from "vue-router";
+import { createLocalVue } from "@vue/test-utils";
 
 const testProps = {
 	resource: Resource,
 };
 
+const localVue = createLocalVue();
+localVue.use(VueRouter);
+
+const router = new VueRouter();
+
 describe("@components/organisms/ContentCard", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
+		router,
+		localVue,
 		propsData: { ...testProps },
 	});
 
@@ -40,7 +49,7 @@ describe("@components/organisms/ContentCard", () => {
 			"Mathematische Ausdrücke sortieren"
 		);
 	});
-	it("Renders footer of content Card", () => {
+	it("Renders footer of content Card for single elements", () => {
 		expect(wrapper.find(".footer").exists()).toBe(true);
 		expect(wrapper.find(".footer__icon-container").exists()).toBe(true);
 	});
