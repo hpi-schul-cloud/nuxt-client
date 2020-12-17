@@ -7,6 +7,11 @@ import { Resource } from "../../../stories/mockData/Resource";
 import ContentCard from "./ContentCard";
 import { boolean } from "@storybook/addon-knobs";
 
+import { addDecorator } from "@storybook/vue";
+import StoryRouter from "storybook-vue-router";
+
+addDecorator(StoryRouter());
+
 storiesOf("6 Organisms/Content/ContentCard", module).add("ContentCard", () => ({
 	components: { ContentCard },
 	data: () => ({
