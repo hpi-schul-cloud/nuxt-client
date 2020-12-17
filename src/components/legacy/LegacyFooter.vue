@@ -1,7 +1,7 @@
 <template>
 	<div class="section">
 		<div class="footer-container">
-			<base-grid :column-width="colWidth" :style="{ justifyItems: `center` }">
+			<base-grid :column-width="colWidth" :style="{ justifyItems: `left` }">
 				<div class="link-container">
 					<h2 class="h4">
 						{{ $t("components.organisms.LegacyFooter.contact") }}
