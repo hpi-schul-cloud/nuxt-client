@@ -99,9 +99,7 @@ export default {
 			try {
 				this.teacherName
 					? (this.cardLabel = this.teacherName)
-					: (this.cardLabel = (
-							await this.$store.dispatch("users/getById", this.teacherIds[0])
-					  ).displayName);
+					: (this.cardLabel = "");
 			} catch (err) {}
 		},
 	},

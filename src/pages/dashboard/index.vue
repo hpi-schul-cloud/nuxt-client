@@ -1,10 +1,16 @@
 <template>
 	<div>
-		<h1 class="mb--md h3">
-			{{ $t("pages.dashboard.index.title") }}
-		</h1>
-
 		<courses-grid :courses="filteredCourses"></courses-grid>
+
+		<section>
+			<user-has-role :role="STUDENT">
+				Homework Stats Student
+			</user-has-role>
+			<user-has-role :role="TEACHER">
+				Homework Stats Teacher
+			</user-has-role>
+		</section>
+
 		<section v-if="news && news.length > 0" class="section">
 			<news-card
 				v-for="article of news"
@@ -20,11 +26,13 @@
 import { mapGetters } from "vuex";
 import CoursesGrid from "@components/molecules/CoursesGrid";
 import NewsCard from "@components/molecules/NewsCard";
+import UserHasRole from "@components/helpers/UserHasRole";
 export default {
 	layout: "loggedInFull",
 	components: {
 		CoursesGrid,
 		NewsCard,
+		UserHasRole,
 	},
 	data() {
 		return {
