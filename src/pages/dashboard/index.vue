@@ -3,12 +3,8 @@
 		<courses-grid :courses="filteredCourses"></courses-grid>
 
 		<section>
-			<user-has-role :role="STUDENT">
-				Homework Stats Student
-			</user-has-role>
-			<user-has-role :role="TEACHER">
-				Homework Stats Teacher
-			</user-has-role>
+			<user-has-role :role="STUDENT"> Homework Stats Student </user-has-role>
+			<user-has-role :role="TEACHER"> Homework Stats Teacher </user-has-role>
 		</section>
 
 		<section v-if="news && news.length > 0" class="section">
