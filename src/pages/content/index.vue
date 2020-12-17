@@ -53,6 +53,7 @@
 								v-for="resource of resources.data"
 								:key="resource.ref.id"
 								class="card"
+								:inline="isInline"
 								:resource="resource"
 							/>
 						</base-grid>
