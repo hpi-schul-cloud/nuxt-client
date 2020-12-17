@@ -37,7 +37,7 @@
 			</base-link>
 			<user-has-role :role="isNotStudent">
 				<template v:slot:footer>
-					<div class="footer">
+					<div v-show="!isCollection()" class="footer">
 						<div class="footer__separator"></div>
 						<div class="footer__content">
 							<div class="footer__icon-container">
@@ -62,7 +62,7 @@ import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
-import { getMetadataAttribute } from "@utils/helpers";
+import { getProvider, isCollectionHelper } from "@utils/helpers";
 
 export default {
 	components: {
@@ -74,6 +74,7 @@ export default {
 	props: {
 		resource: { type: Object, default: () => {} },
 		role: { type: String, default: "" },
+		inline: { type: Boolean, required: false },
 	},
 	data() {
 		return {
@@ -83,10 +84,17 @@ export default {
 	},
 	computed: {
 		query() {
+			const queryObject = {
+				course: this.$route.query.course,
+				topic: this.$route.query.topic,
+				isCollection: this.isCollection(),
+			};
+			if (this.inline) {
+				Object.assign(queryObject, { inline: 1 });
+			}
 			return (
 				this.$route && {
-					course: this.$route.query.course,
-					topic: this.$route.query.topic,
+					...queryObject,
 				}
 			);
 		},
@@ -97,11 +105,11 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
+		isCollection() {
+			return isCollectionHelper(this.resource.properties);
+		},
 		provider() {
-			const provider = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:metadatacontributer_provider"
-			);
+			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 		thumbnail() {
