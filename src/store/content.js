@@ -26,6 +26,36 @@ export const actions = {
 		commit("addResources", res);
 		commit("setLoading", false);
 	},
+
+	async getElements({ commit }, payload = {}) {
+		commit("setLoading", true);
+		const query = {
+			$limit: 12,
+			$skip: 0,
+			...payload,
+		};
+		try {
+			const res = await this.$axios.$get("/edu-sharing", {
+				params: query,
+			});
+
+			commit("setElements", res);
+		} catch (e) {
+			console.error(e);
+		} finally {
+			commit("setLoading", false);
+		}
+	},
+
+	async addElements({ commit }, payload = {}) {
+		commit("setLoading", true);
+		const res = await this.$axios.$get("/edu-sharing", {
+			params: payload,
+		});
+		commit("addElements", res);
+		commit("setLoading", false);
+	},
+
 	async getLessons({ commit }, payload) {
 		const params = {
 			courseId: payload,
@@ -63,6 +93,12 @@ const initialState = () => ({
 		skip: 0,
 		data: [],
 	},
+	elements: {
+		total: 0,
+		limit: 0,
+		skip: 0,
+		data: [],
+	},
 	lessons: {
 		data: [],
 	},
@@ -80,8 +116,21 @@ export const mutations = {
 			pagination: payload.pagination,
 		};
 	},
+	setElements(state, payload) {
+		state.elements = payload;
+	},
+	addElements(state, payload) {
+		payload.data.forEach((element) => state.elements.data.push(element));
+		state.elements = {
+			...state.elements,
+			pagination: payload.pagination,
+		};
+	},
 	clearResources(state) {
 		state.resources = initialState().resources;
+	},
+	clearElements(state) {
+		state.elements = initialState().elements;
 	},
 	clearLessons(state) {
 		state.lessons = initialState().lessons;
