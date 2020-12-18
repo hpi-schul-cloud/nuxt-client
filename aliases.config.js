@@ -56,33 +56,37 @@ for (const alias in aliases) {
 		  ];
 }
 
-const jsconfigTemplate = require("./jsconfig.template") || {};
-const jsconfigPath = path.resolve(__dirname, "jsconfig.json");
+createConfigFile("./jsconfig.template", "jsconfig.json");
+createConfigFile("./tsconfig.template", "tsconfig.json");
 
-fs.writeFile(
-	jsconfigPath,
-	prettier.format(
-		JSON.stringify({
-			...jsconfigTemplate,
-			compilerOptions: {
-				...(jsconfigTemplate.compilerOptions || {}),
-				paths: module.exports.jsconfig,
-			},
-		}),
-		{
-			...require("./.prettierrc"),
-			parser: "json",
+function createConfigFile(templateFilePath, configFilePath) {
+	const template = require(templateFilePath) || {};
+	const filePath = resolveSrc(configFilePath);
+	fs.writeFile(
+		filePath,
+		prettier.format(
+			JSON.stringify({
+				...template,
+				compilerOptions: {
+					...(template.compilerOptions || {}),
+					paths: module.exports.jsconfig,
+				},
+			}),
+			{
+				...require("./.prettierrc"),
+				parser: "json",
+			}
+		),
+		(error) => {
+			if (error) {
+				console.error(
+					`Error while creating ${configFilePath} from aliases.config.js.`
+				);
+				throw error;
+			}
 		}
-	),
-	(error) => {
-		if (error) {
-			console.error(
-				"Error while creating jsconfig.json from aliases.config.js."
-			);
-			throw error;
-		}
-	}
-);
+	);
+}
 
 function resolveSrc(_path) {
 	return path.resolve(__dirname, _path);
