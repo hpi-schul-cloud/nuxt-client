@@ -26,6 +26,7 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
+	buildModules: ["@nuxt/typescript-build"],
 	// to make ENV variables available in components, they need to be defined here
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
