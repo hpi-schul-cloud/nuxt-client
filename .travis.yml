@@ -2,7 +2,7 @@ branches:
   only:
     - develop
     - master
-    - /^(?i:release|hotfix).*$/
+    - /^(?i:release|hotfix|master_).*$/
 language: node_js
 node_js:
   - lts/*

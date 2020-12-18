@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## 25.3.1
+
+### Changed
+
+- travis yml that it work for different versions of masters
+
 ## 25.3.0
 
 ### Added
