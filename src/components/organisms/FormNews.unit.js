@@ -70,8 +70,6 @@ const getRouterPushSpy = (wrapper, expects) => {
 };
 
 describe("@components/organisms/FormNews", () => {
-	it(...isValidComponent(FormNews));
-
 	it("converts date correctly", async () => {
 		const wrapper = mount(FormNews, {
 			...getMocks(),
