@@ -1,8 +1,4 @@
 {
-	// ===
-	// Spacing
-	// ===
-
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
 	"editor.trimAutoWhitespace": true,
@@ -18,35 +14,25 @@
 	"[vue]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
-	// ===
-	// Files
-	// ===
 
 	"files.exclude": {
 		"**/*.log": true,
 		"**/*.log*": true,
 		"**/coverage": true
 	},
-
 	"search.exclude": {
 		"**/node_modules": true,
 		".git/*": true,
 		".nuxt/*": true
 	},
-
 	"files.associations": {
 		"Dockerfile.*": "dockerfile",
 		"compose-*.dummy": "yaml"
 	},
-
 	"[yaml]": {
 		"editor.tabSize": 2,
 		"editor.insertSpaces": true
 	},
-
-	// ===
-	// Event Triggers
-	// ===
 
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
@@ -61,10 +47,6 @@
 	],
 	"trailing-spaces.trimOnSave": true,
 
-	// ===
-	// HTML
-	// ===
-
 	"html.format.enable": false,
 	"vetur.validation.template": false,
 	"emmet.triggerExpansionOnTab": true,
@@ -73,20 +55,11 @@
 	},
 	"vetur.format.defaultFormatter.html": "none",
 
-	// ===
-	// JS(ON)
-	// ===
-
 	"jest.autoEnable": false,
 	"jest.enableCodeLens": false,
 	"javascript.format.enable": false,
 	"json.format.enable": false,
-	"vetur.validation.script": false,
 	"vetur.format.defaultFormatter.js": "none",
-
-	// ===
-	// CSS
-	// ===
 
 	"stylelint.enable": true,
 	"css.validate": false,
@@ -96,24 +69,14 @@
 	"vetur.format.defaultFormatter.postcss": "none",
 	"vetur.format.defaultFormatter.scss": "none",
 
-	// ===
-	// MARKDOWN
-	// ===
-
 	"markdownlint.ignore": ["src/legacy-client/**/*.md"],
 	"[markdown]": {
 		"editor.wordWrap": "wordWrapColumn",
 		"editor.wordWrapColumn": 80
 	},
 
-	// ===
-	// EDITOR SETTINGS
-	// ===
 	"npm.packageManager": "npm",
 	"editor.suggest.localityBonus": true,
 
-	// ===
-	// TODO HIGHLIGHT
-	// ===
 	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"]
 }
