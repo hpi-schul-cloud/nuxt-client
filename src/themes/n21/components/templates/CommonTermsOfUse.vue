@@ -51,16 +51,16 @@
 		wollen dadurch eine komfortablere und individuellere Nutzung der Website
 		ermöglichen.
 		<br /><br />
-		Beim Aufruf der Website durch nicht-angemeldete Besucher*innen ist das Hasso
-		Plattner Institut (HPI), Prof.-Dr.-Helmert-Str. 2-3, 14482 Potsdam,
-		<a href="mailto:datenschutz@hpi-schul-cloud.de"
-			>datenschutz@hpi-schul-cloud.de</a
-		>
+		Beim Aufruf der Website bevor eine Anmeldung durch registrierte Nutzer in
+		die NBC stattfindet, ist die Landesinitiative n-21: Schulen in Niedersachsen
+		online, ansässig im Schiffgraben 27, in 30159 Hannover, elektronisch
+		erreichbar unter
+		<a href="mailto:nbc-datenschutz@netz-21.de">nbc-datenschutz@netz-21.de</a>
 		für die zuvor genannten Verarbeitungsvorgänge verantwortlich. Für alle
-		Fragen zum Thema Datenschutz ist der Datenschutzbeauftragte des HPI unter
-		den zuvor genannten Kontaktdaten erreichbar (Stichwort: „z. Hd.
-		Datenschutzbeauftragter“). Rechtsgrundlage für die Verarbeitung sind die
-		zuvor genannten berechtigten Interessen des HPI.
+		Fragen zum Thema Datenschutz ist der Datenschutzbeauftragte der
+		Landesinitiative n-21 unter den zuvor genannten Kontaktdaten erreichbar
+		(Stichwort: "z. Hd. Datenschutzbeauftragter"). Die benannte Verarbeitung
+		dient dem berechtigten Interessen der Landesinitiative n-21.
 		<br /><br />
 		Bei angemeldeten Nutzern*innen findet die zuvor genannte Datenverarbeitung
 		unter der nachfolgend beschriebenen datenschutzrechtlichen
