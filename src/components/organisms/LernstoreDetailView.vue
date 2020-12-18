@@ -155,7 +155,13 @@ import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
-import { getMetadataAttribute } from "@utils/helpers";
+import {
+	getMetadataAttribute,
+	getProvider,
+	getDescription,
+	getTags,
+	getAuthor,
+} from "@utils/helpers";
 import { printDate } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
@@ -178,14 +184,11 @@ export default {
 	},
 	computed: {
 		provider() {
-			const provider = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:metadatacontributer_provider"
-			);
+			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
 		},
 		author() {
-			return getMetadataAttribute(this.resource.properties, "cm:creator");
+			return getAuthor(this.resource.properties);
 		},
 		createdAt() {
 			return printDate(this.resource.createdAt);
@@ -213,12 +216,9 @@ export default {
 			);
 		},
 		description() {
-			return (
-				this.resource.description ||
-				getMetadataAttribute(
-					this.resource.properties,
-					"cclom:general_description"
-				)
+			return getDescription(
+				this.resource.description,
+				this.resource.properties
 			);
 		},
 		backgroundImage() {
@@ -231,12 +231,7 @@ export default {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
 		},
 		tags() {
-			const tagValue = this.resource.properties["cclom:general_keyword"];
-			let tags = null;
-			if (Array.isArray(tagValue)) {
-				tags = tagValue;
-			}
-			return tags ? tags : [];
+			return getTags(this.resource.properties);
 		},
 		filename() {
 			return this.resource.filename;
