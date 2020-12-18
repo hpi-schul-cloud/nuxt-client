@@ -81,7 +81,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.12.3",
 		"@babel/plugin-proposal-optional-chaining": "^7.12.1",
-		"@babel/preset-env": "^7.12.1",
+		"@babel/preset-env": "^7.12.11",
 		"@nuxt/types": "^2.14.9",
 		"@nuxt/typescript-build": "^2.0.3",
 		"@nuxtjs/dotenv": "^1.4.1",
