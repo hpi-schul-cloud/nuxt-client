@@ -19,3 +19,11 @@ export default ({ app, store }) => {
 	// This way we can use it in middleware and pages asyncData/fetch
 	app.i18n = i18n(store);
 };
+
+Vue.prototype.$ts = function (key) {
+	const result = this.$t(key);
+	if (typeof result !== "string") {
+		throw new Error("Translation Result is not a string");
+	}
+	return result;
+};
