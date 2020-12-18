@@ -1,6 +1,9 @@
 module.exports = {
 	root: true,
 	extends: ["@schul-cloud/eslint-config/javascriptVue"],
+	rules: {
+		"vue/require-direct-export": "off",
+	},
 	overrides: [
 		{
 			files: ["**/*.vue"],
