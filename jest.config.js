@@ -10,8 +10,9 @@ module.exports = {
 	],
 	snapshotResolver: "<rootDir>/tests/unit/snapshotResolver",
 	testMatch: ["**/(*.)unit.js"],
-	moduleFileExtensions: ["js", "json", "vue"],
+	moduleFileExtensions: ["ts", "js", "json", "vue"],
 	transform: {
+		"^.+\\.ts$": "ts-jest",
 		".*\\.(vue)$": "vue-jest",
 		"^.+\\.js$": "babel-jest",
 	},
