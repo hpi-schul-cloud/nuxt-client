@@ -108,7 +108,13 @@ export default {
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutz-mail"),
-					href: "mailto:datenschutz@hpi-schul-cloud.de",
+					href: "mailto:datenschutz-fragen@hpi-schul-cloud.de",
+				},
+				{
+					title: this.$t(
+						"pages.mint-ec.article.footer.datenschutzbeauftragter"
+					),
+					href: "mailto:datenschutzbeauftragter@hpi-schul-cloud.de",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.newsletter"),
