@@ -17,24 +17,28 @@ localVue.use(Vuex);
 const router = new VueRouter();
 
 describe("@components/organisms/LernstoreCollectionDetailView", () => {
-	const wrapper = shallowMount(LernstoreCollectionDetailView, {
-		...createComponentMocks({ i18n: true }),
-		router,
-		localVue,
-		propsData: { ...testProps },
-		computed: {
-			loading: () => jest.fn(),
-			elements: () => jest.fn(),
-		},
-		state: {
-			loading: true,
-			elements: {},
-		},
-		mocks: {
-			$toast: {
-				error: jest.fn(),
+	let wrapper;
+
+	beforeEach(() => {
+		wrapper = shallowMount(LernstoreCollectionDetailView, {
+			...createComponentMocks({ i18n: true }),
+			router,
+			localVue,
+			propsData: { ...testProps },
+			computed: {
+				loading: () => jest.fn(),
+				elements: () => jest.fn(),
 			},
-		},
+			state: {
+				loading: true,
+				elements: {},
+			},
+			mocks: {
+				$toast: {
+					error: jest.fn(),
+				},
+			},
+		});
 	});
 
 	it(...isValidComponent(LernstoreCollectionDetailView));
