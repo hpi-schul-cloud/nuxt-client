@@ -142,7 +142,7 @@
 		"puppeteer": "^5.2.1",
 		"sass-loader": "^10.1.0",
 		"serve": "^11.3.2",
-		"sharp": "^0.26.3",
+		"sharp": "^0.27.0",
 		"start-server-and-test": "^1.11.5",
 		"storybook-addon-vue-info": "^1.4.2",
 		"storybook-vue-router": "^1.0.7",
