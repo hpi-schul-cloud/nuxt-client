@@ -8,6 +8,7 @@
 				:input-text.sync="inputText"
 				:place.sync="place"
 				:modal-active.sync="modalActive"
+				:edit-mode.sync="editMode"
 				:confirm-active="confirmActive"
 				:date-editable="dateEditable"
 				:is-teams-d-d-visible="isTeamsDDVisible"
@@ -126,6 +127,7 @@ export default {
 			events: {},
 			dateEditable: false,
 			modalActive: false,
+			editMode: false,
 			calendar: undefined,
 			currentUserId: undefined,
 			currentEventId: undefined,
@@ -272,8 +274,8 @@ export default {
 					location.href = target;
 				} else {
 					//TODO: edit mode for private events
-					this.$refs.modalComponent.editMode = true;
-					this.$refs.modalComponent.modalActive = true;
+					this.editMode = true;
+					this.modalActive = true;
 					//this.$refs.modalComponent.inputText = clickedEvent.attributes["summary"];
 				}
 			}
@@ -281,6 +283,7 @@ export default {
 		cancelHandle() {
 			this.resetScope();
 			this.modalActive = false;
+			this.editMode = false;
 			this.dateEditable = false;
 		},
 		submit() {
@@ -293,6 +296,7 @@ export default {
 			this.resetScope();
 			this.cancelConfirm();
 			this.modalActive = false;
+			this.editMode = false;
 			this.dateEditable = false;
 		},
 		removeDate() {
@@ -301,6 +305,7 @@ export default {
 			this.resetScope();
 			this.cancelConfirm();
 			this.modalActive = false;
+			this.editMode = false;
 			this.dateEditable = false;
 			this.contentTeams = undefined;
 			this.contentCourses = undefined;
@@ -318,6 +323,7 @@ export default {
 			this.resetScope();
 			this.cancelConfirm();
 			this.modalActive = false;
+			this.editMode = false;
 			this.dateEditable = false;
 		},
 		resetScope() {

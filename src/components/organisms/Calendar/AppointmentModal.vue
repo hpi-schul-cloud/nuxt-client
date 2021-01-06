@@ -1,3 +1,5 @@
+<!-- eslint-disable max-lines -->
+
 <template>
 	<div ref="appointmentModal" data-testid="appointmentModal">
 		<base-modal :active.sync="modalActive">
@@ -42,23 +44,22 @@
 					@input="$emit('setCourseScopeId', contentCourses)"
 				/>
 				<base-input
-					ref="inputText"
-					v-model="inputText"
+					v-model="inputTextLocal"
 					type="text"
+					:placeholder="
+						$t('components.organisms.Calendar.inputTextPlaceholder')
+					"
 					:label="$t('components.organisms.Calendar.inputText')"
-					@update:vmodel="$emit('update:inputText', inputText)"
 				/>
 				<base-input
-					v-model="startDay"
+					v-model="startDayLocal"
 					type="date"
 					:label="$t('components.organisms.Calendar.startDay')"
-					@update:vmodel="$emit('update:startDay', startDay)"
 				/>
 				<base-input
-					v-model="startTime"
+					v-model="startTimeLocal"
 					type="time"
 					:label="$t('components.organisms.Calendar.startTime')"
-					@update:vmodel="$emit('update:startTime', startTime)"
 				/>
 				<base-input
 					v-model="fullDay"
@@ -68,27 +69,29 @@
 				/>
 				<base-input
 					v-if="!fullDay"
-					v-model="endDay"
+					v-model="endDayLocal"
 					type="date"
 					:label="$t('components.organisms.Calendar.endDay')"
-					@update:vmodel="$emit('update:endDay', endDay)"
 				/>
 				<base-input
 					v-if="!fullDay"
-					v-model="endTime"
+					v-model="endTimeLocal"
 					type="time"
 					:label="$t('components.organisms.Calendar.endTime')"
-					@update:vmodel="$emit('update:endTime', endTime)"
 				/>
 				<base-input
-					v-model="place"
+					v-model="placeLocal"
 					type="text"
 					:label="$t('components.organisms.Calendar.place')"
-					@update:vmodel="$emit('update:place', place)"
+					:placeholder="$t('components.organisms.Calendar.placePlaceholder')"
 				/>
 			</template>
 			<template v-slot:footerRight>
-				<base-button design="primary text" @click="$emit('cancel', $event)">
+				<base-button
+					id="button"
+					design="primary text"
+					@click="$emit('cancel', $event)"
+				>
 					Abbrechen
 				</base-button>
 				<base-button
@@ -124,6 +127,7 @@
 			</template>
 			<template v-slot:footerRight>
 				<base-button
+					id="button"
 					design="primary text"
 					@click="$emit('cancelConfirm', $event)"
 				>
@@ -240,18 +244,66 @@ export default {
 			default: undefined,
 		},
 	},
-	data() {
+	data: function () {
 		return {
 			fullDay: false,
 		};
 	},
 	computed: {
-		changeEditMode: {
+		editModeLocal: {
 			get: function () {
 				return this.editMode;
 			},
-			set: function (newValue) {
-				this.$emit("update:editMode", newValue);
+			set: function (value) {
+				this.$emit("update:editMode", value);
+			},
+		},
+		inputTextLocal: {
+			get: function () {
+				return this.inputText;
+			},
+			set: function (value) {
+				this.$emit("update:inputText", value);
+			},
+		},
+		startDayLocal: {
+			get: function () {
+				return this.startDay;
+			},
+			set: function (value) {
+				this.$emit("update:startDay", value);
+			},
+		},
+		startTimeLocal: {
+			get: function () {
+				return this.startTime;
+			},
+			set: function (value) {
+				this.$emit("update:startTime", value);
+			},
+		},
+		endDayLocal: {
+			get: function () {
+				return this.endDay;
+			},
+			set: function (value) {
+				this.$emit("update:endDay", value);
+			},
+		},
+		endTimeLocal: {
+			get: function () {
+				return this.endTime;
+			},
+			set: function (value) {
+				this.$emit("update:endTime", value);
+			},
+		},
+		placeLocal: {
+			get: function () {
+				return this.place;
+			},
+			set: function (value) {
+				this.$emit("update:place", value);
 			},
 		},
 	},
