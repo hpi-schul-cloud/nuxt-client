@@ -27,14 +27,14 @@
 									:icon="getTypeIcon(resource.mimetype).iconLarge"
 									class="content__img-icon"
 								/-->
-                <div v-show="isCollection()" class="card-tag">
-                  <span>{{ $t('pages.content.card.collection') }}</span>
-                  <base-icon
-                      :source="getTypeIcon('text/directory').iconSource"
-                      :icon="getTypeIcon('text/directory').icon"
-                      class="content__text-icon"
-                  />
-                </div>
+								<div v-show="isCollection()" class="card-tag">
+									<span>{{ $t("pages.content.card.collection") }}</span>
+									<base-icon
+										:source="getTypeIcon('text/directory').iconSource"
+										:icon="getTypeIcon('text/directory').icon"
+										class="content__text-icon"
+									/>
+								</div>
 							</div>
 						</div>
 						<h6 class="content__title">
@@ -131,18 +131,18 @@ export default {
 @import "@utils/multiline-ellipsis.scss";
 
 .card-tag {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: var(--layer-page);
-  padding: var(--space-xs);
-  margin: var(--space-sm);
-  font-size: var(--text-xs);
-  color: var(--color-black);
-  background: var(--color-white);
-  filter: drop-shadow(0 2px 4px black);
-  border-radius: var(--radius-xs);
-  opacity: 0.9;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: var(--layer-page);
+	padding: var(--space-xs);
+	margin: var(--space-sm);
+	font-size: var(--text-xs);
+	color: var(--color-black);
+	background: var(--color-white);
+	filter: drop-shadow(0 2px 4px black);
+	border-radius: var(--radius-xs);
+	opacity: 0.9;
 }
 .content-card {
 	display: flex;

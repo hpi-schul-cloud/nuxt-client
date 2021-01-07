@@ -42,7 +42,6 @@ describe("@components/organisms/ContentCard", () => {
 	});
 });
 
-
 describe("@components/organisms/ContentCard Collection", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
@@ -78,9 +77,7 @@ describe("@components/organisms/ContentCard Collection", () => {
 
 	it("Renders title of content Card", () => {
 		expect(wrapper.find(".content__title").exists()).toBe(true);
-		expect(wrapper.find(".content__title").text()).toBe(
-			"heimische Singvögel"
-		);
+		expect(wrapper.find(".content__title").text()).toBe("heimische Singvögel");
 	});
 	it("Renders footer of content Card for single elements", () => {
 		expect(wrapper.find(".footer").exists()).toBe(true);

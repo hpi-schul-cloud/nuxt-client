@@ -52,7 +52,7 @@ const types = Object.freeze({
 		icon: "ic_collection",
 		iconLarge: "ic_collection-circle",
 		iconSource: "custom",
-	}
+	},
 });
 
 const contentMeta = {

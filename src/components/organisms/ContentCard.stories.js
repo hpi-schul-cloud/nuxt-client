@@ -24,15 +24,16 @@ storiesOf("6 Organisms/Content/ContentCard", module).add("ContentCard", () => ({
 	template: `<content-card :resource="resource" :role="role" style="max-width: 30ch"/>`,
 }));
 
-
-
-storiesOf("6 Organisms/Content/ContentCard", module).add("CollectionCard", () => ({
-	components: { ContentCard },
-	data: () => ({
-		role: boolean("isAdmin/Teacher", true),
-		resource: {
-			...Collection,
-		},
-	}),
-	template: `<content-card :resource="resource" :role="role" style="max-width: 30ch"/>`,
-}));
+storiesOf("6 Organisms/Content/ContentCard", module).add(
+	"CollectionCard",
+	() => ({
+		components: { ContentCard },
+		data: () => ({
+			role: boolean("isAdmin/Teacher", true),
+			resource: {
+				...Collection,
+			},
+		}),
+		template: `<content-card :resource="resource" :role="role" style="max-width: 30ch"/>`,
+	})
+);
