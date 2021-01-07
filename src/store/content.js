@@ -1,34 +1,43 @@
+import hash from "object-hash";
+
 export const actions = {
 	async getResources({ commit }, payload = {}) {
-		commit("setLoading", true);
+		commit("incLoading");
 		const query = {
 			$limit: 12,
 			$skip: 0,
 			...payload,
 		};
+		const queryHash = hash(query);
+		commit("setLastQuery", queryHash);
 		try {
 			const res = await this.$axios.$get("/edu-sharing", {
 				params: query,
 			});
 
-			commit("setResources", res);
+			commit("setResources", { hash: queryHash, result: res });
 		} catch (e) {
 			console.error(e);
 		} finally {
-			commit("setLoading", false);
+			commit("decLoading");
 		}
 	},
 	async addResources({ commit }, payload = {}) {
-		commit("setLoading", true);
-		const res = await this.$axios.$get("/edu-sharing", {
-			params: payload,
-		});
-		commit("addResources", res);
-		commit("setLoading", false);
+		commit("incLoading");
+		try {
+			const res = await this.$axios.$get("/edu-sharing", {
+				params: payload,
+			});
+			commit("addResources", res);
+		} catch (e) {
+			console.error("Error: ", e);
+		} finally {
+			commit("decLoading");
+		}
 	},
 
 	async getElements({ commit }, payload = {}) {
-		commit("setLoading", true);
+		commit("incLoading");
 		const query = {
 			$limit: 12,
 			$skip: 0,
@@ -43,17 +52,22 @@ export const actions = {
 		} catch (e) {
 			console.error(e);
 		} finally {
-			commit("setLoading", false);
+			commit("decLoading");
 		}
 	},
 
 	async addElements({ commit }, payload = {}) {
-		commit("setLoading", true);
-		const res = await this.$axios.$get("/edu-sharing", {
-			params: payload,
-		});
-		commit("addElements", res);
-		commit("setLoading", false);
+		commit("incLoading");
+		try {
+			const res = await this.$axios.$get("/edu-sharing", {
+				params: payload,
+			});
+			commit("addElements", res);
+		} catch (e) {
+			console.error("Error: ", e);
+		} finally {
+			commit("decLoading");
+		}
 	},
 
 	async getLessons({ commit }, payload) {
@@ -102,12 +116,14 @@ const initialState = () => ({
 	lessons: {
 		data: [],
 	},
+	loadingCounter: 0,
 	loading: false,
+	lastQuery: "",
 });
 
 export const mutations = {
 	setResources(state, payload) {
-		state.resources = payload;
+		if (state.lastQuery === payload.hash) state.resources = payload.result;
 	},
 	addResources(state, payload) {
 		payload.data.forEach((resource) => state.resources.data.push(resource));
@@ -135,8 +151,20 @@ export const mutations = {
 	clearLessons(state) {
 		state.lessons = initialState().lessons;
 	},
-	setLoading(state, status) {
-		state.loading = status;
+	setLastQuery(state, payload) {
+		state.lastQuery = payload;
+	},
+	incLoading(state) {
+		if (state.loadingCounter === 0) {
+			state.loading = true;
+		}
+		state.loadingCounter += 1;
+	},
+	decLoading(state) {
+		state.loadingCounter -= 1;
+		if (state.loadingCounter === 0) {
+			state.loading = false;
+		}
 	},
 	setLessons(state, payload) {
 		state.lessons = payload;

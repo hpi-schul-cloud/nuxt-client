@@ -62,6 +62,7 @@
 		"material-icons-svg": "^1.0.0",
 		"moment": "^2.29.1",
 		"nuxt": "^2.14.7",
+		"object-hash": "^2.1.1",
 		"tiptap": "^1.30.0",
 		"tiptap-extensions": "^1.33.2",
 		"vue": "^2.6.12",
