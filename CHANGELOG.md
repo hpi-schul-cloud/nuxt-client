@@ -8,7 +8,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
-
 ### Added
 
 - SC-7762 - added collection icon for Lern-Store card
