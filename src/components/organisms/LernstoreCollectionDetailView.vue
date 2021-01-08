@@ -183,6 +183,8 @@ export default {
 			);
 		},
 		query() {
+			// Clears the previous collection elements before rendering the new ones
+			this.$store.commit("content/clearElements");
 			return {
 				$limit: 12,
 				$skip: 0,
