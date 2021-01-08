@@ -8,9 +8,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+
 ### Added
 
 - SC-7762 - added collection icon for Lern-Store card
+
+### Changed
+
+- SC-8356 - authenticate docker hub requests
 
 ## 25.3.0
 
