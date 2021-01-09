@@ -4,6 +4,7 @@ import faker from "faker/locale/en";
 faker.seed(512); // any static number will do the job
 
 import { Resource } from "../../../stories/mockData/Resource";
+import { Collection } from "../../../stories/mockData/Collection";
 import ContentCard from "./ContentCard";
 import { boolean } from "@storybook/addon-knobs";
 
@@ -22,3 +23,17 @@ storiesOf("6 Organisms/Content/ContentCard", module).add("ContentCard", () => ({
 	}),
 	template: `<content-card :resource="resource" :role="role" style="max-width: 30ch"/>`,
 }));
+
+storiesOf("6 Organisms/Content/ContentCard", module).add(
+	"CollectionCard",
+	() => ({
+		components: { ContentCard },
+		data: () => ({
+			role: boolean("isAdmin/Teacher", true),
+			resource: {
+				...Collection,
+			},
+		}),
+		template: `<content-card :resource="resource" :role="role" style="max-width: 30ch"/>`,
+	})
+);
