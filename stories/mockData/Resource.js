@@ -27,7 +27,7 @@ export const Resource = {
 		isIcon: false,
 		isGenerated: true,
 		url:
-			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=70eedbd1-a4e9-47ee-ac00-3848863e5295&amp;storeProtocol=workspace&amp;storeId=SpacesStore&amp;dontcache=1593695489846",
+			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&amp;storeProtocol=workspace&amp;storeId=SpacesStore&amp;dontcache=1593695489846",
 	},
 	properties: {
 		"cm:creator": ["admin"],
