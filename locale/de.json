@@ -368,6 +368,7 @@
 	"pages.content.index.search_results": "Suchergebnisse für",
 	"pages.content.init_state.img_alt": "Initial state Image",
 	"pages.content.init_state.message": "Ab sofort findest du hier hochwertige Inhalte von unserem Partner WirLernenOnline und noch viel mehr.<br><br><b>Bald verfügbar:</b> <ul style='list-style-position: inside'> <li> Durch die Anbindung von <b>Antares Content Access</b> ermöglichen wir die leichte Einbindung tausender lizensierter Inhalte direkt in der HPI Schul-Cloud </li> \n <li>Exclusive <b>Inhalte für einzelne Bundesländer</b> durch die Erschließung der Inhalte verschiedener Landesmedienzentren<br> </li> </ul>",
+	"pages.content.init_state.messageTH": "Ab sofort sind hier Inhalte aus dem öffentlichen Bereich der Mediothek des Thüringer Schulportals zu finden.<br><br><b>Bald verfügbar:</b> <ul style='list-style-position: inside'> <li> Inhalte und Funktionalitäten des Lernstores werden in den nächsten Wochen erweitert.<br> </li> </ul>",
 	"pages.content.init_state.title": "Willkommen im neuen Lern-Store!",
 	"pages.content.label.chooseACourse": "Wähle einen Kurs / Fach",
 	"pages.content.label.chooseALessonTopic": "Wähle ein Unterrichtsthema",
