@@ -76,6 +76,7 @@
 					<transition name="fade">
 						<div class="content__container">
 							<base-grid
+								v-if="elements.data && elements.data.length"
 								column-width="14rem"
 								class="cards"
 								data-testid="lernStoreCardsContainer"

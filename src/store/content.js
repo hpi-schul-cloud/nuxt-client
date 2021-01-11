@@ -135,11 +135,7 @@ export const mutations = {
 		};
 	},
 	setElements(state, payload) {
-		if (state.lastQuery === payload.hash) {
-			state.elements = payload.result || [];
-		} else {
-			state.elements = [];
-		}
+		if (state.lastQuery === payload.hash) state.elements = payload.result;
 	},
 	addElements(state, payload) {
 		payload.data.forEach((element) => state.elements.data.push(element));
