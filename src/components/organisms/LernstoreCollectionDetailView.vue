@@ -136,7 +136,7 @@ export default {
 	computed: {
 		...mapState("content", {
 			elements: (state) => {
-				return state.elements || [];
+				return state.elements;
 			},
 			loading: (state) => {
 				return state.loading;
