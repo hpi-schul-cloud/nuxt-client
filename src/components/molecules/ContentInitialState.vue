@@ -7,7 +7,10 @@
 		<template v-slot:description>
 			<div class="initial-state-description">
 				<!-- eslint-disable vue/no-v-html -->
-				<span v-if="isThuringen" v-html="$t('pages.content.init_state.messageTH')"/>
+				<span
+					v-if="isThuringen"
+					v-html="$t('pages.content.init_state.messageTH')"
+				/>
 				<span v-else v-html="$t('pages.content.init_state.message')" />
 			</div>
 		</template>
@@ -24,11 +27,11 @@ export default {
 		// This solely exists to appear in the coverage report
 		return {};
 	},
-  computed: {
-    isThuringen() {
-      return process.env.SC_THEME === "thr";
-    },
-  }
+	computed: {
+		isThuringen() {
+			return process.env.SC_THEME === "thr";
+		},
+	},
 };
 </script>
 <style scoped>
