@@ -43,12 +43,14 @@ export const actions = {
 			$skip: 0,
 			...payload,
 		};
+		const queryHash = hash(query);
+		commit("setLastQuery", queryHash);
 		try {
 			const res = await this.$axios.$get("/edu-sharing", {
 				params: query,
 			});
 
-			commit("setElements", res);
+			commit("setElements", { hash: queryHash, result: res });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -133,7 +135,7 @@ export const mutations = {
 		};
 	},
 	setElements(state, payload) {
-		state.elements = payload;
+		if (state.lastQuery === payload.hash) state.elements = payload.result;
 	},
 	addElements(state, payload) {
 		payload.data.forEach((element) => state.elements.data.push(element));
