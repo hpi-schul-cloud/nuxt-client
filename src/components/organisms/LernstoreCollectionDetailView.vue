@@ -155,9 +155,6 @@ export default {
 		updatedAt() {
 			return printDate(this.resource.modifiedAt);
 		},
-		type() {
-			return this.getTypeI18nName(this.resource.mimetype);
-		},
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
@@ -169,12 +166,6 @@ export default {
 		},
 		tags() {
 			return getTags(this.resource.properties);
-		},
-		filename() {
-			return this.resource.filename;
-		},
-		closeButtonStyleSelector() {
-			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
 		},
 		collectionUUID() {
 			return getMetadataAttribute(
