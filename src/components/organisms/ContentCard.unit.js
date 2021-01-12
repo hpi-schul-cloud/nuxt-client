@@ -1,17 +1,31 @@
 import ContentCard from "./ContentCard";
 import { Resource } from "@@/stories/mockData/Resource";
+import VueRouter from "vue-router";
+import { createLocalVue } from "@vue/test-utils";
 
 const testProps = {
 	resource: Resource,
 };
 
+const localVue = createLocalVue();
+localVue.use(VueRouter);
+
+const router = new VueRouter();
+
 describe("@components/organisms/ContentCard", () => {
 	const wrapper = shallowMount(ContentCard, {
 		...createComponentMocks({ i18n: true }),
+		router,
+		localVue,
 		propsData: { ...testProps },
 	});
 
 	it(...isValidComponent(ContentCard));
+
+	it("Sets inline attribute to query when the prop is set to true", () => {
+		wrapper.setProps({ inline: true });
+		expect(wrapper.vm.query).toMatchObject({ inline: 1 });
+	});
 
 	it("Renders head of contentCard as a link", () => {
 		expect(wrapper.find(".title-link").exists()).toBe(true);
@@ -40,7 +54,7 @@ describe("@components/organisms/ContentCard", () => {
 			"Mathematische Ausdrücke sortieren"
 		);
 	});
-	it("Renders footer of content Card", () => {
+	it("Renders footer of content Card for single elements", () => {
 		expect(wrapper.find(".footer").exists()).toBe(true);
 		expect(wrapper.find(".footer__icon-container").exists()).toBe(true);
 	});

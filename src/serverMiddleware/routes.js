@@ -5,7 +5,7 @@
 // const id = "[a-z0-9]+";
 //const mongoId = "[a-z0-9]{24}";
 const activationCode = "[a-z0-9]+";
-// const courseId = activationCode;
+// const courseId = "[a-f0-9]{24}";
 const routes = [
 	// `^/account/?$`,
 	// `^/courses/${courseId}/?$`,
@@ -21,7 +21,8 @@ const routes = [
 	// `^/administration/students/consent/?$`,
 	// `^/administration/teachers/?$`,
 	// `^/administration/teachers/new/?$`,
-	// `^/administration/ldap/ldap-config/?$`,
+	`^/administration/ldap/config/?$`,
+	`^/administration/ldap/activate/?$`,
 	`^/login-instances/?`,
 	//`^/calendar/?`,
 	`^/error/`,
