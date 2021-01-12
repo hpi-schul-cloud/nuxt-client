@@ -18,6 +18,11 @@ describe("@components/organisms/ContentCard", () => {
 
 	it(...isValidComponent(ContentCard));
 
+	it("Sets inline attribute to query when the prop is set to true", () => {
+		wrapper.setProps({ inline: true });
+		expect(wrapper.vm.query).toMatchObject({ inline: 1 });
+	});
+
 	it("Renders head of contentCard as a link", () => {
 		expect(wrapper.find(".title-link").exists()).toBe(true);
 	});
