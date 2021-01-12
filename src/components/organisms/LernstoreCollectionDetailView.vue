@@ -76,6 +76,7 @@
 					<transition name="fade">
 						<div class="content__container">
 							<base-grid
+								v-if="elements.data && elements.data.length"
 								column-width="14rem"
 								class="cards"
 								data-testid="lernStoreCardsContainer"
@@ -202,6 +203,9 @@ export default {
 	methods: {
 		async searchElements() {
 			try {
+				// Clears the previous collection elements before rendering the new ones
+				this.$store.commit("content/clearElements");
+
 				await this.$store.dispatch("content/getElements", this.query);
 			} catch (error) {
 				this.$toast.error(
