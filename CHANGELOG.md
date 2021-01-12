@@ -16,7 +16,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-8356 - authenticate docker hub requests
 
-25.5.0
+  25.5.0
 
 ## Changed
 
