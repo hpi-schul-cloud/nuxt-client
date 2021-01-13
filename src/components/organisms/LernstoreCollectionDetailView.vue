@@ -1,118 +1,120 @@
 <!-- eslint-disable max-lines -->
 
 <template>
-	<div class="resource" >
-    <base-link
-        design="none"
-        type="button"
-        class="arrow__back"
-        :to=" {
-              name: 'content',
-              query: { q: this.$route.query.q, inline: this.$route.query.inline },
-            }"
-    >
-      <base-icon source="material" icon="navigate_before" />
-      {{ $t('pages.content.index.backToOverview') }}
-    </base-link>
-    <div class="content" :class="{ inline: isInline }">
-      <div>
-			  <div class="content__container">
-				<h3>
-					{{ resource.title || resource.name }}
-				</h3>
-				<div class="author-provider">
-					<span v-if="hasAuthor">
-						<base-link :href="'/content/?q=' + author" class="content-link">{{
-							author
-						}}</base-link>
-						({{ $t("pages.content._id.metadata.author") }})
-					</span>
-					<span v-if="provider">
-						<span v-if="hasAuthor">,</span>
-						<base-link :href="'/content/?q=' + provider" class="content-link">{{
-							provider
-						}}</base-link>
-						({{ $t("pages.content._id.metadata.provider") }})
-					</span>
-				</div>
-				<!-- eslint-disable vue/no-v-html -->
-				<div
-					v-if="description"
-					class="description text-wrap"
-					v-html="description"
-				></div>
-				<div class="metadata">
-					<div v-if="createdAt || updatedAt" class="meta-container">
-						<div class="meta-icon">
-							<base-icon source="material" icon="event" />
-						</div>
-
-						<div class="meta-text">
-							<div v-if="createdAt">
-								{{ $t("pages.content._id.metadata.createdAt") }}
-								{{ createdAt }}
-							</div>
-							<div v-if="updatedAt">
-								{{ $t("pages.content._id.metadata.updatedAt") }}
-								{{ updatedAt }}
-							</div>
-						</div>
-					</div>
-					<div :style="{ margin: '0px' }" class="meta-container">
-						<div>
-							<base-icon class="meta-icon" source="custom" icon="hashtag" />
-						</div>
-						<template v-if="tags.length > 0">
-							<div class="text-wrap">
-								<span
-									v-for="(tag, index) in tags"
-									:key="index"
-									class="meta-text"
-								>
-									<base-link :href="'/content/?q=' + tag" class="tag link"
-										>#{{ tag }}</base-link
-									>
-								</span>
-							</div>
-						</template>
-						<template v-if="tags.length === 0">
-							<span class="meta-text link">{{
-								$t("pages.content._id.metadata.noTags")
-							}}</span>
-						</template>
-					</div>
-				</div>
-				<div class="element-cards">
-					<h4 class="h4">
-						{{ $t("pages.content._id.collection.selectElements") }}
-					</h4>
-					<transition name="fade">
-						<div class="content__container">
-							<base-grid
-								v-if="elements.data && elements.data.length"
-								column-width="14rem"
-								class="cards"
-								data-testid="lernStoreCardsContainer"
+	<div class="resource">
+		<base-link
+			design="none"
+			type="button"
+			class="arrow__back"
+			:to="{
+				name: 'content',
+				query: { q: this.$route.query.q, inline: this.$route.query.inline },
+			}"
+		>
+			<base-icon source="material" icon="navigate_before" />
+			{{ $t("pages.content.index.backToOverview") }}
+		</base-link>
+		<div class="content" :class="{ inline: isInline }">
+			<div>
+				<div class="content__container">
+					<h3>
+						{{ resource.title || resource.name }}
+					</h3>
+					<div class="author-provider">
+						<span v-if="hasAuthor">
+							<base-link :href="'/content/?q=' + author" class="content-link">{{
+								author
+							}}</base-link>
+							({{ $t("pages.content._id.metadata.author") }})
+						</span>
+						<span v-if="provider">
+							<span v-if="hasAuthor">,</span>
+							<base-link
+								:href="'/content/?q=' + provider"
+								class="content-link"
+								>{{ provider }}</base-link
 							>
-								<content-card
-									v-for="(element, i) of elements.data"
-									:key="i"
-									:resource="element"
-								/>
-							</base-grid>
+							({{ $t("pages.content._id.metadata.provider") }})
+						</span>
+					</div>
+					<!-- eslint-disable vue/no-v-html -->
+					<div
+						v-if="description"
+						class="description text-wrap"
+						v-html="description"
+					></div>
+					<div class="metadata">
+						<div v-if="createdAt || updatedAt" class="meta-container">
+							<div class="meta-icon">
+								<base-icon source="material" icon="event" />
+							</div>
+
+							<div class="meta-text">
+								<div v-if="createdAt">
+									{{ $t("pages.content._id.metadata.createdAt") }}
+									{{ createdAt }}
+								</div>
+								<div v-if="updatedAt">
+									{{ $t("pages.content._id.metadata.updatedAt") }}
+									{{ updatedAt }}
+								</div>
+							</div>
 						</div>
-					</transition>
+						<div :style="{ margin: '0px' }" class="meta-container">
+							<div>
+								<base-icon class="meta-icon" source="custom" icon="hashtag" />
+							</div>
+							<template v-if="tags.length > 0">
+								<div class="text-wrap">
+									<span
+										v-for="(tag, index) in tags"
+										:key="index"
+										class="meta-text"
+									>
+										<base-link :href="'/content/?q=' + tag" class="tag link"
+											>#{{ tag }}</base-link
+										>
+									</span>
+								</div>
+							</template>
+							<template v-if="tags.length === 0">
+								<span class="meta-text link">{{
+									$t("pages.content._id.metadata.noTags")
+								}}</span>
+							</template>
+						</div>
+					</div>
+					<div class="element-cards">
+						<h4 class="h4">
+							{{ $t("pages.content._id.collection.selectElements") }}
+						</h4>
+						<transition name="fade">
+							<div class="content__container">
+								<base-grid
+									v-if="elements.data && elements.data.length"
+									column-width="14rem"
+									class="cards"
+									data-testid="lernStoreCardsContainer"
+								>
+									<content-card
+										v-for="(element, i) of elements.data"
+										:key="i"
+										:resource="element"
+									/>
+								</base-grid>
+							</div>
+						</transition>
+					</div>
+					<base-spinner
+						v-show="loading"
+						class="spinner mt--xl-2"
+						color="var(--color-tertiary)"
+						size="xlarge"
+					/>
 				</div>
-				<base-spinner
-					v-show="loading"
-					class="spinner mt--xl-2"
-					color="var(--color-tertiary)"
-					size="xlarge"
-				/>
 			</div>
-      </div>
-      <content-edu-sharing-footer class="content__footer" />
-    </div>
+			<content-edu-sharing-footer class="content__footer" />
+		</div>
 	</div>
 </template>
 
@@ -140,8 +142,8 @@ export default {
 	components: {
 		BaseLink,
 		ContentCard,
-    ContentEduSharingFooter,
-  },
+		ContentEduSharingFooter,
+	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, infiniteScrolling],
 	props: {
@@ -197,14 +199,14 @@ export default {
 				$skip: 0,
 				collection: this.collectionUUID,
 			};
-      if (this.isInline) {
-        query.inline = 1;
-      }
-      return query;
+			if (this.isInline) {
+				query.inline = 1;
+			}
+			return query;
 		},
-    isInline() {
-      return !!this.$route.query.inline;
-    },
+		isInline() {
+			return !!this.$route.query.inline;
+		},
 	},
 	watch: {
 		elements() {
@@ -247,17 +249,17 @@ export default {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
-		}
+		},
 	},
-  head() {
-    return this.isInline
-        ? {
-          title: this.$t("pages.content.page.window.title", {
-            instance: this.$theme.name,
-          }),
-        }
-        : { title: this.$t('global.sidebar.lernstore') };
-  },
+	head() {
+		return this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: this.$t("global.sidebar.lernstore") };
+	},
 };
 </script>
 
@@ -266,29 +268,29 @@ export default {
 
 $tablet-portrait-width: 768px;
 .arrow__back {
-  margin-top: var(--space-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-tertiary);
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
+	margin-top: var(--space-xs);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-tertiary);
+	text-decoration: none;
+	cursor: pointer;
+	border: none;
 }
 .arrow__back:visited {
-  color: var(--color-tertiary);
+	color: var(--color-tertiary);
 }
 
 .resource {
 	width: 100%;
 	min-height: calc(100vh - var(--sidebar-item-height));
-  margin-top: var(--space-xs);
+	margin-top: var(--space-xs);
 
 	.content {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
-    padding: 0 var(--space-lg);
-    overflow-y: hidden;
+		padding: 0 var(--space-lg);
+		overflow-y: hidden;
 
 		.content-container {
 			width: 100%;

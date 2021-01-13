@@ -1,9 +1,6 @@
 <template>
-		<lernstore-collection-detail-view
-			v-if="isCollection"
-			:resource="resource"
-		/>
-		<lernstore-detail-view v-else :resource="resource" />
+	<lernstore-collection-detail-view v-if="isCollection" :resource="resource" />
+	<lernstore-detail-view v-else :resource="resource" />
 </template>
 
 <script>
@@ -38,4 +35,3 @@ export default {
 	},
 };
 </script>
-
