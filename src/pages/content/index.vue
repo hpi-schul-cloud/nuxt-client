@@ -1,14 +1,14 @@
 <template>
 	<section :class="{ inline: isInline }">
 		<base-button
-			v-if="isInline"
-			design="text icon"
-			type="button"
+      v-if="isInline"
+      design="none"
 			class="arrow__back"
 			@click="goBack"
 		>
-			<base-icon source="material" icon="arrow_back" />
-		</base-button>
+      <base-icon source="material" icon="navigate_before" />
+      {{ $t('pages.content.index.backToCourse') }}
+    </base-button>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
 				<content-searchbar
@@ -87,7 +87,7 @@ export default {
 		requiredPermissions: ["LERNSTORE_VIEW"],
 	},
 	components: {
-		BaseButton,
+    BaseButton,
 		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
@@ -210,7 +210,7 @@ export default {
 						instance: this.$theme.name,
 					}),
 			  }
-			: { title: "LernStore" };
+			: { title: this.$t('global.sidebar.lernstore') };
 	},
 };
 </script>
@@ -227,8 +227,10 @@ export default {
 
 	.arrow__back {
 		margin-top: var(--space-xs);
+    font-weight: var(--font-weight-bold);
 		color: var(--color-tertiary);
-	}
+    cursor: pointer;
+  }
 	&__container {
 		display: flex;
 		flex-direction: column;

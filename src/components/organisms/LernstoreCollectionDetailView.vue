@@ -1,9 +1,22 @@
 <!-- eslint-disable max-lines -->
 
 <template>
-	<div class="resource">
-		<div class="content">
-			<div class="content-container">
+	<div class="resource" >
+    <base-link
+        design="none"
+        type="button"
+        class="arrow__back"
+        :to=" {
+              name: 'content',
+              query: { q: this.$route.query.q, inline: this.$route.query.inline },
+            }"
+    >
+      <base-icon source="material" icon="navigate_before" />
+      {{ $t('pages.content.index.backToOverview') }}
+    </base-link>
+    <div class="content" :class="{ inline: isInline }">
+      <div>
+			  <div class="content__container">
 				<h3>
 					{{ resource.title || resource.name }}
 				</h3>
@@ -97,13 +110,16 @@
 					size="xlarge"
 				/>
 			</div>
-		</div>
+      </div>
+      <content-edu-sharing-footer class="content__footer" />
+    </div>
 	</div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import ContentCard from "@components/organisms/ContentCard";
+import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
 
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
@@ -124,7 +140,8 @@ export default {
 	components: {
 		BaseLink,
 		ContentCard,
-	},
+    ContentEduSharingFooter,
+  },
 	layout: "loggedInFull",
 	mixins: [contentMeta, infiniteScrolling],
 	props: {
@@ -175,12 +192,19 @@ export default {
 			);
 		},
 		query() {
-			return {
-				$limit: 12,
+			const query = {
+				$limit: 24,
 				$skip: 0,
 				collection: this.collectionUUID,
 			};
+      if (this.isInline) {
+        query.inline = 1;
+      }
+      return query;
 		},
+    isInline() {
+      return !!this.$route.query.inline;
+    },
 	},
 	watch: {
 		elements() {
@@ -223,20 +247,17 @@ export default {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
-		},
-		goBack() {
-			if (window.history.length > 1) {
-				this.$router && this.$router.back();
-			} else {
-				window.close();
-			}
-		},
+		}
 	},
-	head() {
-		return {
-			title: "LernStore",
-		};
-	},
+  head() {
+    return this.isInline
+        ? {
+          title: this.$t("pages.content.page.window.title", {
+            instance: this.$theme.name,
+          }),
+        }
+        : { title: this.$t('global.sidebar.lernstore') };
+  },
 };
 </script>
 
@@ -244,21 +265,30 @@ export default {
 @import "@styles";
 
 $tablet-portrait-width: 768px;
+.arrow__back {
+  margin-top: var(--space-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-tertiary);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+.arrow__back:visited {
+  color: var(--color-tertiary);
+}
 
 .resource {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
 	width: 100%;
 	min-height: calc(100vh - var(--sidebar-item-height));
-	padding: 0 var(--space-lg);
+  margin-top: var(--space-xs);
 
 	.content {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
-		overflow-y: hidden;
+    padding: 0 var(--space-lg);
+    overflow-y: hidden;
 
 		.content-container {
 			width: 100%;
@@ -351,8 +381,6 @@ $tablet-portrait-width: 768px;
 	}
 
 	.element-cards {
-		margin: var(--space-lg) var(--space-xs);
-
 		.content__container {
 			margin-top: var(--space-lg);
 		}

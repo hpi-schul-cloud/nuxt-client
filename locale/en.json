@@ -382,6 +382,8 @@
 	"pages.content._id.metadata.provider": "Publisher",
 	"pages.content._id.metadata.updatedAt": "Last modified on",
 	"pages.content._id.collection.selectElements": "Select the items you want to add to the topic",
+	"pages.content.index.backToCourse": "Back to the Course",
+	"pages.content.index.backToOverview": "Back to Overview",
 	"pages.content.card.collection": "Collection",
 	"pages.content.card.img.alt": "Content-thumbnail",
 	"pages.content.empty_state.error.img_alt": "empty-state-image",
