@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $SERVICE_NAME
+  labels:
+    app: $SERVICE_NAME
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: $SERVICE_NAME
+  template:
+    metadata:
+      name: $SERVICE_NAME
+      labels:
+        app: $SERVICE_NAME
+        tier: web
+    spec:
+      containers:
+        - name: $SERVICE_NAME
+          image: $BUILD_IMAGE
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: $SERVICE_NAME-environment-variables
+          ports:
+            - name: web
+              containerPort: 4000
+          livenessProbe:
+            httpGet:
+              path: /nuxtversion
+              port: 4000
+            initialDelaySeconds: 60
+            timeoutSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /nuxtversion
+              port: 4000
+            initialDelaySeconds: 5
+            timeoutSeconds: 3

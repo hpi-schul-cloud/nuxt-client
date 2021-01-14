@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: $SERVICE_NAME-environment-variables
+data:
+  THIS_SERVICE: $SERVICE_NAME
+  BRANCH: $NAMESPACE
+  # HOSTNAME=519a5e91ba8e
+  API_URL: http://schulcloud-server #https://api.staging.hpi-schul-cloud.org
+  CORS_ENABLED: false #true
+  SECURITY_HEADERS_ENABLED: false #true
+  FEATURE_EXTENSIONS_ENABLED: true
+  FEATURE_LERNSTORE_ENABLED: false #true
+  FEATURE_MATRIX_MESSENGER_ENABLED: true
+  FEATURE_MORGAN_LOG_ENABLED: false
+  FEATURE_TEAMS_ENABLED: true
+  LEGACY_CLIENT_URL: http://schulcloud-client #http://client:3100
+  LERNSTORE_MODE: EDUSHARING
+  LOG_LEVEL: info
+  #MATRIX_MESSENGER__DISCOVER_URI: https://staging.messenger.schule
+  #MATRIX_MESSENGER__EMBED_URI: https://embed.staging.messenger.schule
+  #MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: false
+  #MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true
+  #MATRIX_MESSENGER__STUDENT_ROOM_CREATION: false
+  #MATRIX_MESSENGER__URI: https://matrix.staging.messenger.schule
+  NODE_ENV: production
+  #SC_THEME: n21
+  #SENTRY_DSN=https://6254905471a54f6196b11b7db7aec193@sentry.hpi-schul-cloud.org/4
+  #SENTRY_SAMPLE_RATE=1.0
+  TZ=Europe/Berlin
