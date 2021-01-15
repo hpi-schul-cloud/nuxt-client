@@ -21,7 +21,7 @@ const SECURITY_HEADERS_ENABLED = convertToBoolean(process.env.SECURITY_HEADERS_E
 if (CORS_ENABLED) {
 	serverMiddlewareList.push("@serverMiddleware/csp/cors");
 }
-if (process.env.SECURITY_HEADERS_ENABLED) {
+if (SECURITY_HEADERS_ENABLED) {
 	serverMiddlewareList.push("@serverMiddleware/csp/security_headers");
 }
 

@@ -6,7 +6,7 @@ data:
   THIS_SERVICE: $SERVICE_NAME
   BRANCH: $NAMESPACE
   # HOSTNAME=519a5e91ba8e
-  API_URL: http://schulcloud-server #https://api.staging.hpi-schul-cloud.org
+  API_URL: http://api-$HOSTNAME #must fix later #https://api.staging.hpi-schul-cloud.org
   CORS_ENABLED: "false" #true
   SECURITY_HEADERS_ENABLED: "false" #true
   FEATURE_EXTENSIONS_ENABLED: "true"
