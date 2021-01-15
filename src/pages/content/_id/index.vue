@@ -1,11 +1,6 @@
 <template>
-	<div class="content">
-		<lernstore-collection-detail-view
-			v-if="isCollection"
-			:resource="resource"
-		/>
-		<lernstore-detail-view v-else :resource="resource" />
-	</div>
+	<lernstore-collection-detail-view v-if="isCollection" :resource="resource" />
+	<lernstore-detail-view v-else :resource="resource" />
 </template>
 
 <script>
@@ -40,11 +35,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-</style>
