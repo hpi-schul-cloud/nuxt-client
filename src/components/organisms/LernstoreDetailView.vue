@@ -239,6 +239,9 @@ export default {
 		closeButtonStyleSelector() {
 			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
 		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
 	},
 	methods: {
 		async goToMerlinContent(merlinReference) {
@@ -261,9 +264,13 @@ export default {
 		},
 	},
 	head() {
-		return {
-			title: "Lern-Store",
-		};
+		return this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: this.$t("global.sidebar.lernstore") };
 	},
 };
 </script>
