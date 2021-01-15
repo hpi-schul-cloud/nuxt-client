@@ -96,6 +96,7 @@ export default {
 				course: this.$route.query.course,
 				topic: this.$route.query.topic,
 				isCollection: this.isCollection(),
+				q: this.$route.query.q,
 			};
 			if (this.inline) {
 				Object.assign(queryObject, { inline: 1 });
