@@ -5,7 +5,6 @@ const webpack = require("webpack");
 const sentryConfig = require("./sentry.config.js");
 
 const themeName = process.env.SC_THEME || "default";
-const API_URL = process.env.API_URL || "http://localhost:3030";
 const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
@@ -15,12 +14,18 @@ const serverMiddlewareList = [
 	"@serverMiddleware/proxy",
 ];
 
-if (process.env.CORS_ENABLED) {
+const convertToBoolean = (str) => (str === 'true');
+const CORS_ENABLED = convertToBoolean(process.env.CORS_ENABLED);
+const SECURITY_HEADERS_ENABLED = convertToBoolean(process.env.SECURITY_HEADERS_ENABLED);
+
+if (CORS_ENABLED) {
 	serverMiddlewareList.push("@serverMiddleware/csp/cors");
 }
 if (process.env.SECURITY_HEADERS_ENABLED) {
 	serverMiddlewareList.push("@serverMiddleware/csp/security_headers");
 }
+
+console.log(process.env);
 
 module.exports = {
 	mode: "spa",
@@ -49,18 +54,24 @@ module.exports = {
 		MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 		MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 	},
-
+	// https://nuxtjs.org/docs/2.x/directory-structure/nuxt-config#runtimeconfig
+	// https://axios.nuxtjs.org/options/
+	publicRuntimeConfig: {
+		axios: {
+			baseURL: process.env.API_URL,
+		},
+	},
 	/*
 	 ** Content Security Policy (CSP)
 	 */
 	csp: {
 		// If enabled, default content security policy (CSP) header will be set
 		cors: {
-			enabled: process.env.CORS_ENABLED || false,
+			enabled: CORS_ENABLED,
 		},
 		// If enabled, additional security header will be set
 		security_headers: {
-			enabled: process.env.SECURITY_HEADERS_ENABLED || false,
+			enabled: SECURITY_HEADERS_ENABLED,
 		},
 	},
 
@@ -152,9 +163,10 @@ module.exports = {
 		"cookie-universal-nuxt",
 		"nuxt-babel",
 	],
+	// use as fallback for development
 	axios: {
 		// See https://github.com/nuxt-community/axios-module#options
-		baseURL: API_URL,
+		baseURL: process.env.API_URL || "http://localhost:3030",
 	},
 	sentry: sentryConfig,
 	toast: {
