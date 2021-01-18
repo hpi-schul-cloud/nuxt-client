@@ -6,11 +6,11 @@
 			<template v-slot:header></template>
 			<template v-slot:body>
 				<modal-body-info
-					v-if="!editMode"
+					v-if="!dateEditable"
 					:title="$t('components.organisms.Calendar.addAppointment')"
 				/>
 				<modal-body-info
-					v-if="editMode"
+					v-if="dateEditable"
 					:title="$t('components.organisms.Calendar.changeAppointment')"
 				/>
 				<template>
@@ -220,9 +220,6 @@ export default {
 		isSubmit: {
 			type: Boolean,
 		},
-		editMode: {
-			type: Boolean,
-		},
 		usersTeams: {
 			type: Array,
 			default: () => {
@@ -250,12 +247,12 @@ export default {
 		};
 	},
 	computed: {
-		editModeLocal: {
+		dateEditableLocal: {
 			get: function () {
-				return this.editMode;
+				return this.dateEditable;
 			},
 			set: function (value) {
-				this.$emit("update:editMode", value);
+				this.$emit("update:dateEditable", value);
 			},
 		},
 		inputTextLocal: {

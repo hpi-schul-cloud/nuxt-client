@@ -8,9 +8,8 @@
 				:input-text.sync="inputText"
 				:place.sync="place"
 				:modal-active.sync="modalActive"
-				:edit-mode.sync="editMode"
 				:confirm-active="confirmActive"
-				:date-editable="dateEditable"
+				:date-editable.sync="dateEditable"
 				:is-teams-d-d-visible="isTeamsDDVisible"
 				:is-courses-d-d-visible="isCoursesDDVisible"
 				:is-submit="isSubmit"
@@ -127,7 +126,6 @@ export default {
 			events: {},
 			dateEditable: false,
 			modalActive: false,
-			editMode: false,
 			calendar: undefined,
 			currentUserId: undefined,
 			currentEventId: undefined,
@@ -274,7 +272,7 @@ export default {
 					location.href = target;
 				} else {
 					//TODO: edit mode for private events
-					this.editMode = true;
+					this.dateEditable = true;
 					this.modalActive = true;
 					//this.$refs.modalComponent.inputText = clickedEvent.attributes["summary"];
 				}
@@ -283,7 +281,6 @@ export default {
 		cancelHandle() {
 			this.resetScope();
 			this.modalActive = false;
-			this.editMode = false;
 			this.dateEditable = false;
 		},
 		submit() {
@@ -296,7 +293,6 @@ export default {
 			this.resetScope();
 			this.cancelConfirm();
 			this.modalActive = false;
-			this.editMode = false;
 			this.dateEditable = false;
 		},
 		removeDate() {
@@ -305,7 +301,6 @@ export default {
 			this.resetScope();
 			this.cancelConfirm();
 			this.modalActive = false;
-			this.editMode = false;
 			this.dateEditable = false;
 			this.contentTeams = undefined;
 			this.contentCourses = undefined;
@@ -319,11 +314,10 @@ export default {
 			);
 			const end = this.setTime(moment.utc(this.endDayInput), this.endTimeInput);
 			this.postCalendarData(start.toISOString(), end.toISOString());
-			this.update();
+			//this.update();
 			this.resetScope();
 			this.cancelConfirm();
 			this.modalActive = false;
-			this.editMode = false;
 			this.dateEditable = false;
 		},
 		resetScope() {
@@ -351,7 +345,14 @@ export default {
 			this.modalActive = true;
 		},
 		removeEvent() {
-			this.events.forEach((event) => {
+			/*this.events.forEach((event) => {
+				if (event._id === this.currentEventId) {
+					const index = this.events.indexOf(event);
+					this.events.splice(index, 1);
+				}
+			});*/
+			console.log(this.events);
+			Array.prototype.forEach.call(this.events, (event) => {
 				if (event._id === this.currentEventId) {
 					const index = this.events.indexOf(event);
 					this.events.splice(index, 1);
@@ -439,6 +440,7 @@ export default {
 			}
 			// currently the scope id is set explicit as well
 			await this.$store.dispatch("calendar/create", event);
+
 			const calApi = this.$refs.fullCalendar.getApi();
 			calApi.refetchEvents();
 		},
