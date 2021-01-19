@@ -195,10 +195,13 @@ export default {
 				);
 			}
 		},
-		enterKeyHandler() {
-			this.searchContent();
-			this.activateTransition = true;
-		},
+    enterKeyHandler() {
+      clearTimeout(this.$options.debounce2)
+      this.$options.debounce2 = setTimeout(() => {
+        this.searchContent();
+        this.activateTransition = true;
+      }, 500);
+    },
 		goBack() {
 			window.close();
 		},
