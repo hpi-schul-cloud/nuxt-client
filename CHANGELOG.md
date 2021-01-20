@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## 25.5.6
+
+### Fixed
+
+- SC-8410 Verify LDAP config only once per click
+
 ## 25.5.1
 
 ### Changed
