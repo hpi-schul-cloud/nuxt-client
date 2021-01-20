@@ -196,8 +196,10 @@ export default {
 			}
 		},
 		enterKeyHandler() {
-			clearTimeout(this.$options.debounce2);
-			this.$options.debounce2 = setTimeout(() => {
+			if (this.$options.debounceTyping) {
+				clearTimeout(this.$options.debounceTyping);
+			}
+			this.$options.debounceTyping = setTimeout(() => {
 				this.searchContent();
 				this.activateTransition = true;
 			}, 500);
