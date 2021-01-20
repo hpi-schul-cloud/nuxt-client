@@ -17,9 +17,15 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-8356 - authenticate docker hub requests
 
-  25.5.0
+## 25.5.1
 
-## Changed
+### Changed
+
+- SC-8454 - adds a delay in Lern-Store search, to reduce load on Edu-Sharing
+
+## 25.5.0
+
+### Changed
 
 - SC-8381 - change welcome text on Lern-Store
 - SC-8094 - improves unit testing for Lern-Store collections
