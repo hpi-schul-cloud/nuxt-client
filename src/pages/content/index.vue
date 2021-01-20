@@ -196,8 +196,13 @@ export default {
 			}
 		},
 		enterKeyHandler() {
-			this.searchContent();
-			this.activateTransition = true;
+			if (this.$options.debounceTyping) {
+				clearTimeout(this.$options.debounceTyping);
+			}
+			this.$options.debounceTyping = setTimeout(() => {
+				this.searchContent();
+				this.activateTransition = true;
+			}, 500);
 		},
 		goBack() {
 			window.close();
