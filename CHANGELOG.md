@@ -6,9 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
-25.5.0
+## 25.5.1
 
-## Changed
+### Changed
+
+- SC-8454 - adds a delay in Lern-Store search, to reduce load on Edu-Sharing
+
+## 25.5.0
+
+### Changed
 
 - SC-8381 - change welcome text on Lern-Store
 - SC-8094 - improves unit testing for Lern-Store collections
