@@ -17,7 +17,10 @@ export default {
 		LernstoreCollectionDetailView,
 	},
 	layout({ store, query }) {
-		return String(query.isCollection) == "true" ? "loggedInFull" : "plain";
+		return String(query.isCollection) === "true" &&
+			store.state.content.collectionsFeatureFlag === true
+			? "loggedInFull"
+			: "plain";
 	},
 	async asyncData({ store, params }) {
 		const resource = await store.dispatch(
@@ -25,7 +28,9 @@ export default {
 			params.id
 		);
 
-		const isCollection = isCollectionHelper(resource.properties);
+		const isCollection =
+			store.state.content.collectionsFeatureFlag === true &&
+			isCollectionHelper(resource.properties);
 
 		return {
 			isCollection,
