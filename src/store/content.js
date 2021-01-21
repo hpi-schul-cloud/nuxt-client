@@ -121,7 +121,7 @@ const initialState = () => ({
 	loadingCounter: 0,
 	loading: false,
 	lastQuery: "",
-	collectionsFeatureFlag: process.env.FEATURE_ES_COLLECTIONS_ENABLED,
+	collectionsFeatureFlag: process.env.FEATURE_ES_COLLECTIONS_ENABLED === "true",
 });
 
 export const mutations = {

@@ -18,7 +18,7 @@ export default {
 	},
 	layout({ store, query }) {
 		return String(query.isCollection) === "true" &&
-			store.state.content.collectionsFeatureFlag === "true"
+			store.state.content.collectionsFeatureFlag === true
 			? "loggedInFull"
 			: "plain";
 	},
@@ -29,7 +29,7 @@ export default {
 		);
 
 		const isCollection =
-			store.state.content.collectionsFeatureFlag === "true" &&
+			store.state.content.collectionsFeatureFlag === true &&
 			isCollectionHelper(resource.properties);
 
 		return {
