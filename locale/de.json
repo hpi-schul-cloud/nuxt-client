@@ -352,7 +352,7 @@
 	"pages.administration.teachers.new.title": "Lehrer:in hinzufügen",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content._id.metadata.author": "Autor",
-	"pages.content._id.metadata.createdAt": "erstellt am",
+	"pages.content._id.metadata.createdAt": "abgerufen am",
 	"pages.content._id.metadata.noTags": "Keine Tags",
 	"pages.content._id.metadata.provider": "Herausgeber",
 	"pages.content._id.metadata.updatedAt": "zuletzt geändert am",
