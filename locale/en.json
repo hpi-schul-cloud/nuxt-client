@@ -377,7 +377,7 @@
 	"pages.administration.ldapEdit.validation.url": "Please match a valid URL format",
 	"pages.content._id.addToTopic": "To be added to",
 	"pages.content._id.metadata.author": "Author",
-	"pages.content._id.metadata.createdAt": "Created on",
+	"pages.content._id.metadata.createdAt": "requested at",
 	"pages.content._id.metadata.noTags": "No tags",
 	"pages.content._id.metadata.provider": "Publisher",
 	"pages.content._id.metadata.updatedAt": "Last modified on",
