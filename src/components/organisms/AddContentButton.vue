@@ -8,6 +8,7 @@
 			:aria-label="
 				btnLabel ? btnLabel : `$t('components.molecules.AddContentModal')`
 			"
+			:disabled="disabled"
 			@click.prevent="addResource"
 		>
 			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />
@@ -66,6 +67,7 @@ export default {
 		btnIcon: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		resource: { type: Object, default: () => {} },
+		disabled: { type: Boolean },
 	},
 	data() {
 		return {
@@ -145,3 +147,8 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+.wide-button {
+	width: 100%;
+}
+</style>

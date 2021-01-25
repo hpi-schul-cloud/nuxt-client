@@ -1,11 +1,12 @@
 <template>
-	<div class="content">
-		<lernstore-detail-view :resource="resource" />
-	</div>
+	<lernstore-collection-detail-view v-if="isCollection" :resource="resource" />
+	<lernstore-detail-view v-else :resource="resource" />
 </template>
 
 <script>
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
+import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
+import { isCollectionHelper } from "@utils/helpers";
 
 export default {
 	meta: {
@@ -13,26 +14,29 @@ export default {
 	},
 	components: {
 		LernstoreDetailView,
+		LernstoreCollectionDetailView,
 	},
-	layout: "plain",
+	layout({ store, query }) {
+		return String(query.isCollection) === "true" &&
+			store.state.content.collectionsFeatureFlag === true
+			? "loggedInFull"
+			: "plain";
+	},
 	async asyncData({ store, params }) {
 		const resource = await store.dispatch(
 			"content/getResourceMetadata",
 			params.id
 		);
 
+		const isCollection =
+			store.state.content.collectionsFeatureFlag === true &&
+			isCollectionHelper(resource.properties);
+
 		return {
+			isCollection,
 			id: params.id,
 			resource,
 		};
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-</style>
