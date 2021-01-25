@@ -14,6 +14,16 @@
 					<div class="content">
 						<div class="content__img">
 							<div class="img-container">
+								<span v-show="isSelectable()" @click.stop="linkHandler">
+									<base-input
+										v-model="isChecked"
+										type="checkbox"
+										:label="resource.title"
+										:label-hidden="true"
+										class="select"
+										style="margin-bottom: 0; color: var(--color-white)"
+									/>
+								</span>
 								<div class="content__img-background-gradient" />
 
 								<img
@@ -83,6 +93,7 @@ export default {
 		resource: { type: Object, default: () => {} },
 		role: { type: String, default: "" },
 		inline: { type: Boolean, required: false },
+		selectable: { type: Boolean },
 	},
 	data() {
 		return {
@@ -124,6 +135,13 @@ export default {
 		thumbnail() {
 			return this.resource.preview.url;
 		},
+		isSelectable() {
+			return this.selectable;
+		},
+		linkHandler(event) {
+			event.stopPropagation();
+			this.$emit("isSelected", event.target.checked);
+		},
 	},
 };
 </script>
@@ -157,6 +175,21 @@ export default {
 	background-color: var(--color-black);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
+
+.img-container > span {
+	position: absolute;
+	right: 0;
+	margin-top: var(--space-xs);
+	margin-right: var(--space-xs);
+	background-color: var(--color-tertiary-dark);
+	border-radius: var(--radius-round);
+	opacity: 0.7;
+	// stylelint-disable
+	z-index: 10;
+	padding: 6px 4px 2px;
+	// stylelint-enable
+}
+
 .content {
 	display: flex;
 	flex-direction: column;

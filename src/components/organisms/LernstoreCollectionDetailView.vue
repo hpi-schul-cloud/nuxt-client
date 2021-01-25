@@ -15,99 +15,119 @@
 			{{ $t("pages.content.index.backToOverview") }}
 		</base-link>
 		<div class="content">
-			<div class="content-container">
-				<h3>
-					{{ resource.title || resource.name }}
-				</h3>
-				<div class="author-provider">
-					<span v-if="hasAuthor">
-						<base-link :href="'/content/?q=' + author" class="content-link">{{
-							author
-						}}</base-link>
-						({{ $t("pages.content._id.metadata.author") }})
-					</span>
-					<span v-if="provider">
-						<span v-if="hasAuthor">,</span>
-						<base-link :href="'/content/?q=' + provider" class="content-link">{{
-							provider
-						}}</base-link>
-						({{ $t("pages.content._id.metadata.provider") }})
-					</span>
-				</div>
-				<!-- eslint-disable vue/no-v-html -->
-				<div
-					v-if="description"
-					class="description text-wrap"
-					v-html="description"
-				></div>
-				<div class="metadata">
-					<div v-if="createdAt || updatedAt" class="meta-container">
-						<div class="meta-icon">
-							<base-icon source="material" icon="event" />
-						</div>
-
-						<div class="meta-text">
-							<div v-if="createdAt">
-								{{ $t("pages.content._id.metadata.createdAt") }}
-								{{ createdAt }}
-							</div>
-							<div v-if="updatedAt">
-								{{ $t("pages.content._id.metadata.updatedAt") }}
-								{{ updatedAt }}
-							</div>
-						</div>
-					</div>
-					<div :style="{ margin: '0px' }" class="meta-container">
-						<div>
-							<base-icon class="meta-icon" source="custom" icon="hashtag" />
-						</div>
-						<template v-if="tags.length > 0">
-							<div class="text-wrap">
-								<span
-									v-for="(tag, index) in tags"
-									:key="index"
-									class="meta-text"
-								>
-									<base-link :href="'/content/?q=' + tag" class="tag link"
-										>#{{ tag }}</base-link
-									>
-								</span>
-							</div>
-						</template>
-						<template v-if="tags.length === 0">
-							<span class="meta-text link">{{
-								$t("pages.content._id.metadata.noTags")
-							}}</span>
-						</template>
-					</div>
-				</div>
-				<div class="element-cards">
-					<h4 class="h4">
-						{{ $t("pages.content._id.collection.selectElements") }}
-					</h4>
-					<transition name="fade">
-						<div class="content__container">
-							<base-grid
-								v-if="elements.data && elements.data.length"
-								column-width="14rem"
-								class="cards"
-								data-testid="lernStoreCardsContainer"
+			<div class="wrapper">
+				<div class="content-container">
+					<h3>
+						{{ resource.title || resource.name }}
+					</h3>
+					<div class="author-provider">
+						<span v-if="hasAuthor">
+							<base-link :href="'/content/?q=' + author" class="content-link">{{
+								author
+							}}</base-link>
+							({{ $t("pages.content._id.metadata.author") }})
+						</span>
+						<span v-if="provider">
+							<span v-if="hasAuthor">,</span>
+							<base-link
+								:href="'/content/?q=' + provider"
+								class="content-link"
+								>{{ provider }}</base-link
 							>
-								<content-card
-									v-for="(element, i) of elements.data"
-									:key="i"
-									:resource="element"
-								/>
-							</base-grid>
+							({{ $t("pages.content._id.metadata.provider") }})
+						</span>
+					</div>
+					<!-- eslint-disable vue/no-v-html -->
+					<div
+						v-if="description"
+						class="description text-wrap"
+						v-html="description"
+					></div>
+					<div class="metadata">
+						<div v-if="createdAt || updatedAt" class="meta-container">
+							<div class="meta-icon">
+								<base-icon source="material" icon="event" />
+							</div>
+
+							<div class="meta-text">
+								<div v-if="createdAt">
+									{{ $t("pages.content._id.metadata.createdAt") }}
+									{{ createdAt }}
+								</div>
+								<div v-if="updatedAt">
+									{{ $t("pages.content._id.metadata.updatedAt") }}
+									{{ updatedAt }}
+								</div>
+							</div>
 						</div>
-					</transition>
+						<div :style="{ margin: '0px' }" class="meta-container">
+							<div>
+								<base-icon class="meta-icon" source="custom" icon="hashtag" />
+							</div>
+							<template v-if="tags.length > 0">
+								<div class="text-wrap">
+									<span
+										v-for="(tag, index) in tags"
+										:key="index"
+										class="meta-text"
+									>
+										<base-link :href="'/content/?q=' + tag" class="tag link"
+											>#{{ tag }}</base-link
+										>
+									</span>
+								</div>
+							</template>
+							<template v-if="tags.length === 0">
+								<span class="meta-text link">{{
+									$t("pages.content._id.metadata.noTags")
+								}}</span>
+							</template>
+						</div>
+					</div>
+					<div class="element-cards">
+						<h4 class="h4">
+							{{ $t("pages.content._id.collection.selectElements") }}
+						</h4>
+						<transition name="fade">
+							<div class="content__container">
+								<base-grid
+									v-if="elements.data && elements.data.length"
+									column-width="14rem"
+									class="cards"
+									data-testid="lernStoreCardsContainer"
+								>
+									<content-card
+										v-for="(element, i) of elements.data"
+										:key="i"
+										:selectable="true"
+										:resource="element"
+										@isSelected="isSelectedItem"
+									/>
+									{{ isSelectedItem }}
+								</base-grid>
+							</div>
+						</transition>
+					</div>
+					<base-spinner
+						v-show="loading"
+						class="spinner mt--xl-2"
+						color="var(--color-tertiary)"
+						size="xlarge"
+					/>
 				</div>
-				<base-spinner
-					v-show="loading"
-					class="spinner mt--xl-2"
-					color="var(--color-tertiary)"
-					size="xlarge"
-				/>
+				<div class="buttons">
+					<user-has-role class="floating-buttons" :role="isNotStudent">
+						<add-content-button
+							:resource="resource"
+							btn-design="hero-cta"
+							btn-class="floating-button wide-button"
+							btn-size="large"
+							btn-icon-class="footer__content-icon"
+							btn-icon="add"
+							:btn-label="$t('pages.content._id.addToTopic')"
+						/>
+					</user-has-role>
+				</div>
 			</div>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>
@@ -116,8 +136,10 @@
 
 <script>
 import { mapState } from "vuex";
+import AddContentButton from "@components/organisms/AddContentButton";
 import ContentCard from "@components/organisms/ContentCard";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
+import UserHasRole from "@components/helpers/UserHasRole";
 
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
@@ -136,9 +158,11 @@ const DEFAULT_AUTHOR = "admin";
 
 export default {
 	components: {
+		AddContentButton,
 		BaseLink,
 		ContentCard,
 		ContentEduSharingFooter,
+		UserHasRole,
 	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, infiniteScrolling],
@@ -148,6 +172,11 @@ export default {
 			default: () => {},
 		},
 		role: { type: String, default: "" },
+	},
+	data() {
+		return {
+			checkedMaterials: [],
+		};
 	},
 	computed: {
 		...mapState("content", {
@@ -246,6 +275,10 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
+
+		isSelectedItem(val) {
+			console.log("is selected?", val);
+		},
 	},
 	head() {
 		return this.isInline
@@ -289,6 +322,13 @@ $tablet-portrait-width: 768px;
 		padding: 0 var(--space-lg);
 		overflow-y: hidden;
 
+		.wrapper {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			grid-auto-rows: minmax(200px, auto);
+			column-gap: 10px;
+		}
+
 		.content-container {
 			width: 100%;
 			margin-top: var(--space-md);
@@ -316,14 +356,21 @@ $tablet-portrait-width: 768px;
 			// stylelint-enable
 		}
 
-		.content-button {
-			width: 100%;
-			margin-bottom: var(--space-md);
-		}
-
 		.actions {
 			display: flex;
 			justify-content: flex-end;
+		}
+
+		.floating-buttons {
+			position: sticky;
+			top: 0;
+			bottom: 0;
+			z-index: var(--layer-page);
+			border-radius: var(--radius-md);
+
+			@media (max-width: $tablet-portrait-width) {
+				padding-bottom: var(--space-xs);
+			}
 		}
 
 		.author-provider {
