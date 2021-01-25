@@ -10,15 +10,24 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-8390 - added Lern-Store collections flag
+- SC-8328 - added back button in Lern-Store
 - SC-7762 - added collection icon for Lern-Store card
 
 ### Changed
 
 - SC-8356 - authenticate docker hub requests
+- SC-8433 - update text in Lern-Store
 
-  25.5.0
+## 25.5.1
 
-## Changed
+### Changed
+
+- SC-8454 - adds a delay in Lern-Store search, to reduce load on Edu-Sharing
+
+## 25.5.0
+
+### Changed
 
 - SC-8381 - change welcome text on Lern-Store
 - SC-8094 - improves unit testing for Lern-Store collections
