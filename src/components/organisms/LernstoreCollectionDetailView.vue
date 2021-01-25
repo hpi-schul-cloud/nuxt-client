@@ -2,6 +2,18 @@
 
 <template>
 	<div class="resource">
+		<base-link
+			design="none"
+			type="button"
+			class="arrow__back"
+			:to="{
+				name: 'content',
+				query: { q: this.$route.query.q, inline: this.$route.query.inline },
+			}"
+		>
+			<base-icon source="material" icon="navigate_before" />
+			{{ $t("pages.content.index.backToOverview") }}
+		</base-link>
 		<div class="content">
 			<div class="content-container">
 				<h3>
@@ -76,6 +88,7 @@
 					<transition name="fade">
 						<div class="content__container">
 							<base-grid
+								v-if="elements.data && elements.data.length"
 								column-width="14rem"
 								class="cards"
 								data-testid="lernStoreCardsContainer"
@@ -96,6 +109,7 @@
 					size="xlarge"
 				/>
 			</div>
+			<content-edu-sharing-footer class="content__footer" />
 		</div>
 	</div>
 </template>
@@ -103,6 +117,7 @@
 <script>
 import { mapState } from "vuex";
 import ContentCard from "@components/organisms/ContentCard";
+import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
 
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
@@ -123,6 +138,7 @@ export default {
 	components: {
 		BaseLink,
 		ContentCard,
+		ContentEduSharingFooter,
 	},
 	layout: "loggedInFull",
 	mixins: [contentMeta, infiniteScrolling],
@@ -155,9 +171,6 @@ export default {
 		updatedAt() {
 			return printDate(this.resource.modifiedAt);
 		},
-		type() {
-			return this.getTypeI18nName(this.resource.mimetype);
-		},
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
@@ -170,12 +183,6 @@ export default {
 		tags() {
 			return getTags(this.resource.properties);
 		},
-		filename() {
-			return this.resource.filename;
-		},
-		closeButtonStyleSelector() {
-			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
-		},
 		collectionUUID() {
 			return getMetadataAttribute(
 				this.resource.properties,
@@ -183,11 +190,18 @@ export default {
 			);
 		},
 		query() {
-			return {
-				$limit: 12,
+			const query = {
+				$limit: 24,
 				$skip: 0,
 				collection: this.collectionUUID,
 			};
+			if (this.isInline) {
+				query.inline = 1;
+			}
+			return query;
+		},
+		isInline() {
+			return !!this.$route.query.inline;
 		},
 	},
 	watch: {
@@ -211,6 +225,9 @@ export default {
 	methods: {
 		async searchElements() {
 			try {
+				// Clears the previous collection elements before rendering the new ones
+				this.$store.commit("content/clearElements");
+
 				await this.$store.dispatch("content/getElements", this.query);
 			} catch (error) {
 				this.$toast.error(
@@ -229,18 +246,15 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
-		goBack() {
-			if (window.history.length > 1) {
-				this.$router && this.$router.back();
-			} else {
-				window.close();
-			}
-		},
 	},
 	head() {
-		return {
-			title: "LernStore",
-		};
+		return this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: this.$t("global.sidebar.lernstore") };
 	},
 };
 </script>
@@ -251,18 +265,28 @@ export default {
 $tablet-portrait-width: 768px;
 
 .resource {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
 	width: 100%;
 	min-height: calc(100vh - var(--sidebar-item-height));
-	padding: 0 var(--space-lg);
+	margin-top: var(--space-xs);
+
+	.arrow__back {
+		margin-top: var(--space-xs);
+		font-weight: var(--font-weight-bold);
+		color: var(--color-tertiary);
+		text-decoration: none;
+		cursor: pointer;
+		border: none;
+		&:visited {
+			color: var(--color-tertiary);
+		}
+	}
 
 	.content {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
+		padding: 0 var(--space-lg);
 		overflow-y: hidden;
 
 		.content-container {
@@ -356,8 +380,6 @@ $tablet-portrait-width: 768px;
 	}
 
 	.element-cards {
-		margin: var(--space-lg) var(--space-xs);
-
 		.content__container {
 			margin-top: var(--space-lg);
 		}
