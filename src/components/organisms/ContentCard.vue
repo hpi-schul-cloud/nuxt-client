@@ -22,11 +22,19 @@
 									:alt="$t('pages.content.card.img.alt')"
 									role="img"
 								/>
-								<base-icon
+								<!--base-icon v-show="!isCollection()"
 									:source="getTypeIcon(resource.mimetype).iconSource"
 									:icon="getTypeIcon(resource.mimetype).iconLarge"
 									class="content__img-icon"
-								/>
+								/-->
+								<div v-show="isCollection()" class="card-tag">
+									<span>{{ $t("pages.content.card.collection") }}</span>
+									<base-icon
+										:source="getTypeIcon('text/directory').iconSource"
+										:icon="getTypeIcon('text/directory').icon"
+										class="content__text-icon"
+									/>
+								</div>
 							</div>
 						</div>
 						<h6 class="content__title">
@@ -37,7 +45,7 @@
 			</base-link>
 			<user-has-role :role="isNotStudent">
 				<template v:slot:footer>
-					<div class="footer">
+					<div v-show="!isCollection()" class="footer">
 						<div class="footer__separator"></div>
 						<div class="footer__content">
 							<div class="footer__icon-container">
@@ -62,7 +70,7 @@ import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
-import { getMetadataAttribute } from "@utils/helpers";
+import { getProvider, isCollectionHelper } from "@utils/helpers";
 
 export default {
 	components: {
@@ -74,6 +82,7 @@ export default {
 	props: {
 		resource: { type: Object, default: () => {} },
 		role: { type: String, default: "" },
+		inline: { type: Boolean, required: false },
 	},
 	data() {
 		return {
@@ -83,10 +92,18 @@ export default {
 	},
 	computed: {
 		query() {
+			const queryObject = {
+				course: this.$route.query.course,
+				topic: this.$route.query.topic,
+				isCollection: this.isCollection(),
+				q: this.$route.query.q,
+			};
+			if (this.inline) {
+				Object.assign(queryObject, { inline: 1 });
+			}
 			return (
 				this.$route && {
-					course: this.$route.query.course,
-					topic: this.$route.query.topic,
+					...queryObject,
 				}
 			);
 		},
@@ -97,11 +114,11 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
+		isCollection() {
+			return isCollectionHelper(this.resource.properties);
+		},
 		provider() {
-			const provider = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:metadatacontributer_provider"
-			);
+			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 		thumbnail() {
@@ -114,6 +131,20 @@ export default {
 <style lang="scss" scoped>
 @import "@utils/multiline-ellipsis.scss";
 
+.card-tag {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: var(--layer-page);
+	padding: var(--space-xs);
+	margin: var(--space-sm);
+	font-size: var(--text-xs);
+	color: var(--color-black);
+	background: var(--color-white);
+	filter: drop-shadow(0 2px 4px black);
+	border-radius: var(--radius-xs);
+	opacity: 0.9;
+}
 .content-card {
 	display: flex;
 	flex-direction: column;
