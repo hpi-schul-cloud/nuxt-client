@@ -400,6 +400,7 @@ export default {
 					{
 						userIds: rowIds,
 						selectionType,
+						roleName: "teacher",
 					}
 				);
 
