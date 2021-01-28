@@ -10,12 +10,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-8390 - added Lern-Store collections flag
 - SC-8328 - added back button in Lern-Store
 - SC-7762 - added collection icon for Lern-Store card
 
 ### Changed
 
 - SC-8356 - authenticate docker hub requests
+- SC-8433 - update text in Lern-Store
 
 ## 25.5.1
 
