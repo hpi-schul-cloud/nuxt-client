@@ -267,6 +267,7 @@
 	"pages.administration.datasources.webuntis.new.title": "Zugangsdaten",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.printQr.error": "Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
+	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
 	"pages.administration.remove.success": "Augewählte(r) Nutzer gelöscht",
 	"pages.administration.sendMail.error": "Registrierungslink(s) konnte(n) nicht erfolgreich verschickt werden",
