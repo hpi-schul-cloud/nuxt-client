@@ -409,7 +409,6 @@ export default {
 					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
 				}
 			} catch (error) {
-				console.error(error);
 				this.$toast.error(
 					this.$tc("pages.administration.printQr.error", rowIds.length)
 				);
