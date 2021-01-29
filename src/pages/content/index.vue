@@ -2,12 +2,12 @@
 	<section :class="{ inline: isInline }">
 		<base-button
 			v-if="isInline"
-			design="text icon"
-			type="button"
+			design="none"
 			class="arrow__back"
 			@click="goBack"
 		>
-			<base-icon source="material" icon="arrow_back" />
+			<base-icon source="material" icon="navigate_before" />
+			{{ $t("pages.content.index.backToCourse") }}
 		</base-button>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
@@ -215,7 +215,7 @@ export default {
 						instance: this.$theme.name,
 					}),
 			  }
-			: { title: "LernStore" };
+			: { title: this.$t("global.sidebar.lernstore") };
 	},
 };
 </script>
@@ -232,7 +232,9 @@ export default {
 
 	.arrow__back {
 		margin-top: var(--space-xs);
+		font-weight: var(--font-weight-bold);
 		color: var(--color-tertiary);
+		cursor: pointer;
 	}
 	&__container {
 		display: flex;
