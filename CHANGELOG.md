@@ -75,6 +75,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Added
 
+- SC-8514 - QR Code generation fails
 - SC-7020 - added a new course TaskItem component
 
 ### Changed in Unreleased

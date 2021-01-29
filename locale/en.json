@@ -262,6 +262,7 @@
 	"pages.administration.datasources.webuntis.new.title": "Access data",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.printQr.error": "The registration links could not be generated",
+	"pages.administration.printQr.emptyUser": "The selected user(s) have already been registered",
 	"pages.administration.remove.error": "Failed to delete users",
 	"pages.administration.remove.success": "Selected users deleted",
 	"pages.administration.sendMail.error": "Registration link could not be sent | Registration links could not be sent",

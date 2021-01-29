@@ -400,11 +400,16 @@ export default {
 					{
 						userIds: rowIds,
 						selectionType,
+						roleName: "teacher",
 					}
 				);
-				this.$_printQRs(qrRegistrationLinks);
+
+				if (qrRegistrationLinks.length) {
+					this.$_printQRs(qrRegistrationLinks);
+				} else {
+					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
+				}
 			} catch (error) {
-				console.error(error);
 				this.$toast.error(
 					this.$tc("pages.administration.printQr.error", rowIds.length)
 				);
