@@ -14,7 +14,7 @@ data:
   FEATURE_MATRIX_MESSENGER_ENABLED: "true"
   FEATURE_MORGAN_LOG_ENABLED: "false"
   FEATURE_TEAMS_ENABLED: "true"
-  LEGACY_CLIENT_URL: https://schulcloud-client #http://client:3100
+  LEGACY_CLIENT_URL: http://schulcloud-client #http://client:3100
   LERNSTORE_MODE: EDUSHARING
   LOG_LEVEL: info
   #MATRIX_MESSENGER__DISCOVER_URI: https://staging.messenger.schule
