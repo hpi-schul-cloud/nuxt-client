@@ -47,8 +47,10 @@
 <script>
 import AppointmentModal from "@components/organisms/Calendar/AppointmentModal";
 //TODOs
+// [ ] location is not posted to calender
+// [ ] Timezone is wrong(time from changed)
 // [x] Display reoccuring events
-// [ ] Dedicated Edit mode (marco)
+// [x] Dedicated Edit mode (marco)
 // [ ] Handle permissions
 // [x] Add location to modal (marco)
 // [x] Partial Data-Loading
