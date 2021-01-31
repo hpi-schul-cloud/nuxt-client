@@ -18,6 +18,7 @@
 				:radio-value="radioValue"
 				:start-day.sync="startDayInput"
 				:start-time.sync="startTimeInput"
+				:full-day.sync="fullDay"
 				:end-day.sync="endDayInput"
 				:end-time.sync="endTimeInput"
 				:users-teams="usersTeams"
@@ -141,6 +142,7 @@ export default {
 			isSubmit: false,
 			startDayInput: "",
 			startTimeInput: "",
+			fullDay: false,
 			endDayInput: "",
 			endTimeInput: "",
 			inputText: "",
@@ -272,16 +274,17 @@ export default {
 					location.href = target;
 				} else {
 					//TODO: edit mode for private events
-					var start = moment.utc(clickedEvent.attributes["dtstart"]).toDate();
-					var end = moment.utc(clickedEvent.attributes["dtend"]).toDate();
 					this.dateEditable = true;
-					this.modalActive = true;
-					this.inputText = clickedEvent["title"];
-					this.startDayInput = start.toISOString().split("T")[0];
-					this.endDayInput = end.toISOString().split("T")[0];
-					this.startTimeInput = moment(start).format("HH:mm");
-					this.endTimeInput = moment(end).format("HH:mm");
-					//this.place = clickedEvent["title"];
+					var startDate = moment
+						.utc(clickedEvent.attributes["dtstart"])
+						.toDate();
+					var endDate = moment.utc(clickedEvent.attributes["dtend"]).toDate();
+					this.setModalEventAndState(
+						startDate,
+						endDate,
+						clickedEvent["title"],
+						id
+					);
 				}
 			}
 		},
@@ -329,6 +332,11 @@ export default {
 		},
 		resetScope() {
 			this.inputText = "";
+			this.startDayInput = "";
+			this.startTimeInput = "";
+			this.fullDay = false;
+			this.endDayInput = "";
+			this.endTimeInput = "";
 			this.place = "";
 			this.radioValue = "";
 			this.isTeamsDDVisible = false;
@@ -346,9 +354,9 @@ export default {
 			this.currentEventId = id;
 			this.inputText = title;
 			this.startDayInput = startDate.toISOString().split("T")[0];
-			this.startTimeInput = startDate.format("HH:mm");
+			this.startTimeInput = moment(startDate).format("HH:mm");
 			this.endDayInput = endDate.toISOString().split("T")[0];
-			this.endTimeInput = endDate.format("HH:mm");
+			this.endTimeInput = moment(endDate).format("HH:mm");
 			this.modalActive = true;
 		},
 		removeEvent() {

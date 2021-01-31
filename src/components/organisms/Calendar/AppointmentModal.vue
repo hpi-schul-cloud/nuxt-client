@@ -52,6 +52,13 @@
 					:label="$t('components.organisms.Calendar.inputText')"
 				/>
 				<base-input
+					v-if="!(startTime === '00:00' && endTime === '00:00')"
+					v-model="fullDayLocal"
+					type="checkbox"
+					:label="$t('components.organisms.Calendar.fullDay')"
+					@update:vmodel="changeFullDay"
+				/>
+				<base-input
 					v-model="startDayLocal"
 					type="date"
 					:label="$t('components.organisms.Calendar.startDay')"
@@ -62,19 +69,11 @@
 					:label="$t('components.organisms.Calendar.startTime')"
 				/>
 				<base-input
-					v-model="fullDay"
-					type="checkbox"
-					:label="$t('components.organisms.Calendar.fullDay')"
-					@update:vmodel="changeToFullDay"
-				/>
-				<base-input
-					v-if="!fullDay"
 					v-model="endDayLocal"
 					type="date"
 					:label="$t('components.organisms.Calendar.endDay')"
 				/>
 				<base-input
-					v-if="!fullDay"
 					v-model="endTimeLocal"
 					type="time"
 					:label="$t('components.organisms.Calendar.endTime')"
@@ -180,6 +179,9 @@ export default {
 			type: String,
 			default: "",
 		},
+		fullDay: {
+			type: Boolean,
+		},
 		endDay: {
 			type: String,
 			default: "",
@@ -241,11 +243,11 @@ export default {
 			default: undefined,
 		},
 	},
-	data: function () {
+	/* data: function () {
 		return {
 			fullDay: false,
 		};
-	},
+	},*/
 	computed: {
 		dateEditableLocal: {
 			get: function () {
@@ -279,6 +281,14 @@ export default {
 				this.$emit("update:startTime", value);
 			},
 		},
+		fullDayLocal: {
+			get: function () {
+				return this.fullDay;
+			},
+			set: function (value) {
+				this.$emit("update:fullDay", value);
+			},
+		},
 		endDayLocal: {
 			get: function () {
 				return this.endDay;
@@ -305,7 +315,7 @@ export default {
 		},
 	},
 	methods: {
-		changeToFullDay() {
+		changeFullDay() {
 			this.$emit("update:startTime", "00:00");
 			this.$emit("update:endTime", "00:00");
 		},
