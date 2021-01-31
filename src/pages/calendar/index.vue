@@ -272,9 +272,16 @@ export default {
 					location.href = target;
 				} else {
 					//TODO: edit mode for private events
+					var start = moment.utc(clickedEvent.attributes["dtstart"]).toDate();
+					var end = moment.utc(clickedEvent.attributes["dtend"]).toDate();
 					this.dateEditable = true;
 					this.modalActive = true;
-					//this.$refs.modalComponent.inputText = clickedEvent.attributes["summary"];
+					this.inputText = clickedEvent["title"];
+					this.startDayInput = start.toISOString().split("T")[0];
+					this.endDayInput = end.toISOString().split("T")[0];
+					this.startTimeInput = moment(start).format("HH:mm");
+					this.endTimeInput = moment(end).format("HH:mm");
+					//this.place = clickedEvent["title"];
 				}
 			}
 		},
