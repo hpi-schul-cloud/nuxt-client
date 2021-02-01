@@ -423,32 +423,22 @@ export default {
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			// TODO: request registrationsLinks fom backend
-			// route needs to be implemented!
-
-			// const users = await this.$store.dispatch("users/find", {
-			// 	qid: "qr-print",
-			// 	query: this.getQueryForSelection(rowIds, selectionType),
-			// });
-			// this.$_printQRs(
-			// 	usersWithoutConsents.map((user) => ({
-			// 		qrContent: user.registrationLink.shortLink,
-			// 		title: user.fullName || `${user.firstName} ${user.lastName}`,
-			// 		description: "Zum Registrieren bitte den Link öffnen.",
-			// 	}))
-			// );
-
 			try {
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
 					{
 						userIds: rowIds,
 						selectionType,
+						roleName: "student",
 					}
 				);
-				this.$_printQRs(qrRegistrationLinks);
+
+				if (qrRegistrationLinks.length) {
+					this.$_printQRs(qrRegistrationLinks);
+				} else {
+					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
+				}
 			} catch (error) {
-				console.error(error);
 				this.$toast.error(
 					this.$tc("pages.administration.printQr.error", rowIds.length)
 				);

@@ -2,12 +2,12 @@
 	<section :class="{ inline: isInline }">
 		<base-button
 			v-if="isInline"
-			design="text icon"
-			type="button"
+			design="none"
 			class="arrow__back"
 			@click="goBack"
 		>
-			<base-icon source="material" icon="arrow_back" />
+			<base-icon source="material" icon="navigate_before" />
+			{{ $t("pages.content.index.backToCourse") }}
 		</base-button>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
@@ -28,7 +28,9 @@
 							class="content__total"
 						>
 							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{ searchQuery }}"
+							{{ $t("pages.content.index.search_results") }} "{{
+								searchQueryResult
+							}}"
 						</p>
 						<span v-if="!loading" class="content__container_child">
 							<!-- initial state, empty search -->
@@ -51,6 +53,7 @@
 								v-for="resource of resources.data"
 								:key="resource.ref.id"
 								class="card"
+								:inline="isInline"
 								:resource="resource"
 							/>
 						</base-grid>
@@ -97,6 +100,7 @@ export default {
 	data() {
 		return {
 			searchQuery: "",
+			searchQueryResult: "",
 			backToTopScrollYLimit: 115,
 			activateTransition: false,
 			prevRoute: null,
@@ -152,6 +156,7 @@ export default {
 			}
 			this.$options.debounce = setInterval(() => {
 				this.$store.commit("content/clearResources");
+				this.searchQueryResult = this.searchQuery;
 
 				clearInterval(this.$options.debounce);
 				this.$router.push({
@@ -191,8 +196,13 @@ export default {
 			}
 		},
 		enterKeyHandler() {
-			this.searchContent();
-			this.activateTransition = true;
+			if (this.$options.debounceTyping) {
+				clearTimeout(this.$options.debounceTyping);
+			}
+			this.$options.debounceTyping = setTimeout(() => {
+				this.searchContent();
+				this.activateTransition = true;
+			}, 500);
 		},
 		goBack() {
 			window.close();
@@ -205,7 +215,7 @@ export default {
 						instance: this.$theme.name,
 					}),
 			  }
-			: { title: "LernStore" };
+			: { title: this.$t("global.sidebar.lernstore") };
 	},
 };
 </script>
@@ -222,7 +232,9 @@ export default {
 
 	.arrow__back {
 		margin-top: var(--space-xs);
+		font-weight: var(--font-weight-bold);
 		color: var(--color-tertiary);
+		cursor: pointer;
 	}
 	&__container {
 		display: flex;
