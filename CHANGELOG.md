@@ -74,7 +74,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - IMP-160 Adjusted test.yml and related documentation after the repo integration-tests was renamed to end-to-end-tests
 - SC-7796 - Input fields border-width change on hovering
 
-
 ## Added
 
 - SC-8514 - QR Code generation fails
