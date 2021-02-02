@@ -65,6 +65,7 @@
 									btn-design="text icon"
 									btn-icon-class="footer__content-icon"
 									btn-icon="add_circle_outline"
+									:multiple="false"
 								/>
 							</div>
 						</div>
@@ -138,9 +139,12 @@ export default {
 		isSelectable() {
 			return this.selectable;
 		},
-		linkHandler(event) {
-			event.stopPropagation();
-			this.$emit("isSelected", event.target.checked);
+		linkHandler() {
+			if (!this.isChecked) {
+				this.$store.dispatch("content/selectElement", this.resource.ref.id);
+			} else {
+				this.$store.dispatch("content/unselectElement", this.resource.ref.id);
+			}
 		},
 	},
 };
@@ -181,11 +185,12 @@ export default {
 	right: 0;
 	margin-top: var(--space-xs);
 	margin-right: var(--space-xs);
-	background-color: var(--color-tertiary-dark);
+	background-color: var(--color-tertiary);
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
-	z-index: 10;
+	/*z-index: 10;*/
+	z-index: calc(var(--layer-page) + 1);
 	padding: 6px 4px 2px;
 	// stylelint-enable
 }

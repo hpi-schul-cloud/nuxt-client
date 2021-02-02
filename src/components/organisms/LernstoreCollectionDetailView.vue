@@ -101,9 +101,7 @@
 										:key="i"
 										:selectable="true"
 										:resource="element"
-										@isSelected="isSelectedItem"
 									/>
-									{{ isSelectedItem }}
 								</base-grid>
 							</div>
 						</transition>
@@ -118,13 +116,15 @@
 				<div class="buttons">
 					<user-has-role class="floating-buttons" :role="isNotStudent">
 						<add-content-button
-							:resource="resource"
+							:resource="{}"
 							btn-design="hero-cta"
 							btn-class="floating-button wide-button"
 							btn-size="large"
 							btn-icon-class="footer__content-icon"
-							btn-icon="add"
-							:btn-label="$t('pages.content._id.addToTopic')"
+							btn-icon="add_circle_outline"
+							:btn-label="btnLabel"
+							:disabled="!(selected > 0)"
+							:multiple="true"
 						/>
 					</user-has-role>
 				</div>
@@ -176,12 +176,16 @@ export default {
 	data() {
 		return {
 			checkedMaterials: [],
+			btnLabel: `${this.$t("pages.content._id.addToTopic")}`,
 		};
 	},
 	computed: {
 		...mapState("content", {
 			elements: (state) => {
 				return state.elements;
+			},
+			selected: (state) => {
+				return state.selected;
 			},
 			loading: (state) => {
 				return state.loading;
@@ -234,6 +238,15 @@ export default {
 		},
 	},
 	watch: {
+		selected(selectedElements) {
+			let counterLabel = "";
+			if (selectedElements > 0) {
+				counterLabel = ` (${selectedElements})`;
+			}
+			this.btnLabel = `${this.$t(
+				"pages.content._id.addToTopic"
+			)}${counterLabel}`;
+		},
 		elements() {
 			return this.elements;
 		},
@@ -275,10 +288,6 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
-
-		isSelectedItem(val) {
-			console.log("is selected?", val);
-		},
 	},
 	head() {
 		return this.isInline
@@ -292,6 +301,11 @@ export default {
 };
 </script>
 
+<style>
+#main-content.content {
+	overflow-x: inherit;
+}
+</style>
 <style lang="scss" scoped>
 @import "@styles";
 
@@ -320,16 +334,36 @@ $tablet-portrait-width: 768px;
 		justify-content: space-between;
 		width: 100%;
 		padding: 0 var(--space-lg);
-		overflow-y: hidden;
 
 		.wrapper {
 			display: grid;
-			grid-template-columns: 2fr 1fr;
-			grid-auto-rows: minmax(200px, auto);
-			column-gap: 10px;
+			grid-template-areas: "cards buttons";
+			grid-template-columns: 4fr 1fr;
+			// grid-auto-rows: minmax(200px, auto);
+			column-gap: 20px;
+
+			.buttons {
+				grid-area: buttons;
+        max-width: 350px;
+				margin-top: var(--space-md);
+
+				.floating-buttons {
+					position: -webkit-sticky;
+					position: sticky;
+					top: var(--space-xl);
+					z-index: var(--layer-fab);
+					margin-top: var(--space-xl);
+					border-radius: var(--radius-md);
+
+					@media (max-width: $tablet-portrait-width) {
+						padding-bottom: var(--space-xs);
+					}
+				}
+			}
 		}
 
 		.content-container {
+			grid-area: cards;
 			width: 100%;
 			margin-top: var(--space-md);
 			margin-bottom: var(--space-lg);
@@ -359,18 +393,6 @@ $tablet-portrait-width: 768px;
 		.actions {
 			display: flex;
 			justify-content: flex-end;
-		}
-
-		.floating-buttons {
-			position: sticky;
-			top: 0;
-			bottom: 0;
-			z-index: var(--layer-page);
-			border-radius: var(--radius-md);
-
-			@media (max-width: $tablet-portrait-width) {
-				padding-bottom: var(--space-xs);
-			}
 		}
 
 		.author-provider {
