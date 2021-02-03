@@ -275,7 +275,6 @@ export default {
 					const target = "/courses/" + clickedEvent.attributes["x-sc-courseid"];
 					location.href = target;
 				} else {
-					//TODO: edit mode for private events
 					this.dateEditable = true;
 					var startDate = moment
 						.utc(clickedEvent.attributes["dtstart"])
@@ -356,9 +355,9 @@ export default {
 			this.currentEventId = id;
 			this.inputText = title;
 			this.startDayInput = startDate.toISOString().split("T")[0];
-			this.startTimeInput = moment(startDate).format("HH:mm");
+			this.startTimeInput = moment(startDate).utc().format("HH:mm");
 			this.endDayInput = endDate.toISOString().split("T")[0];
-			this.endTimeInput = moment(endDate).format("HH:mm");
+			this.endTimeInput = moment(endDate).utc().format("HH:mm");
 			this.modalActive = true;
 		},
 		removeEvent() {
@@ -368,7 +367,6 @@ export default {
 					this.events.splice(index, 1);
 				}
 			});*/
-			console.log(this.events);
 			Array.prototype.forEach.call(this.events, (event) => {
 				if (event._id === this.currentEventId) {
 					const index = this.events.indexOf(event);
