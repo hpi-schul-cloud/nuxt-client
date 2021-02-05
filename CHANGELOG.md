@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## 25.5.2
+
+### Fixed
+
+- SC-8577 - fixes the LDAP config roles section validation to not require it when user attribute is toggled
+
 ## 25.5.1
 
 ### Changed
