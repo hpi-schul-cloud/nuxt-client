@@ -418,10 +418,9 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/handleUsers", {
-						query: this.getQueryForSelection(rowIds, selectionType),
-						action: "remove",
-						userType: "teachers",
+					await this.$store.dispatch("users/deleteUsers", {
+						ids: rowIds,
+						userType: "teacher",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
 					this.find();

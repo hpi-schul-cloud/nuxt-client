@@ -10,6 +10,15 @@ const module = mergeDeep(base, {
 			queryContext.customEndpoint = `/users/admin/${userType}`;
 			return dispatch(action, queryContext);
 		},
+		async deleteUsers({ commit }, payload) {
+			const { ids, userType } = payload;
+			await Promise.all(
+				ids.map(async (id) => {
+					await this.$axios.$delete(`/users/v2/admin/${userType}/${id}`);
+					commit("remove", id);
+				})
+			);
+		},
 		createTeacher(ctx, teacherData) {
 			const customEndpoint = "/users/admin/teachers";
 			return this.$axios.$post(customEndpoint, teacherData);
