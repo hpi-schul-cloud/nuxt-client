@@ -20,6 +20,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8433 - update text in Lern-Store
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
+## 25.5.2
+
+### Fixed
+
+- SC-8577 - fixes the LDAP config roles section validation to not require it when user attribute is toggled
+
 ## 25.5.1
 
 ### Changed
