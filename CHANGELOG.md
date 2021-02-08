@@ -19,6 +19,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8356 - authenticate docker hub requests
 - SC-8433 - update text in Lern-Store
 
+## 25.5.2
+
+### Fixed
+
+- SC-8577 - fixes the LDAP config roles section validation to not require it when user attribute is toggled
+
 ## 25.5.1
 
 ### Changed
