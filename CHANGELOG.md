@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 25.6.0 - 09-02-21
+
 ### Added
 
 - SC-8390 - added Lern-Store collections flag
