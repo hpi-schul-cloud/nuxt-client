@@ -344,7 +344,7 @@ $tablet-portrait-width: 768px;
 
 			.buttons {
 				grid-area: buttons;
-        max-width: 350px;
+				max-width: 350px;
 				margin-top: var(--space-md);
 
 				.floating-buttons {

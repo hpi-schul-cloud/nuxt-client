@@ -143,7 +143,7 @@ label {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: top;
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .label {
