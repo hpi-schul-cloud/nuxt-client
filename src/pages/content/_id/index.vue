@@ -1,11 +1,6 @@
 <template>
-	<div class="content">
-		<lernstore-collection-detail-view
-			v-if="isCollection"
-			:resource="resource"
-		/>
-		<lernstore-detail-view v-else :resource="resource" />
-	</div>
+	<lernstore-collection-detail-view v-if="isCollection" :resource="resource" />
+	<lernstore-detail-view v-else :resource="resource" />
 </template>
 
 <script>
@@ -22,7 +17,10 @@ export default {
 		LernstoreCollectionDetailView,
 	},
 	layout({ store, query }) {
-		return String(query.isCollection) == "true" ? "loggedInFull" : "plain";
+		return String(query.isCollection) === "true" &&
+			store.state.content.collectionsFeatureFlag === true
+			? "loggedInFull"
+			: "plain";
 	},
 	async asyncData({ store, params }) {
 		const resource = await store.dispatch(
@@ -30,7 +28,9 @@ export default {
 			params.id
 		);
 
-		const isCollection = isCollectionHelper(resource.properties);
+		const isCollection =
+			store.state.content.collectionsFeatureFlag === true &&
+			isCollectionHelper(resource.properties);
 
 		return {
 			isCollection,
@@ -40,11 +40,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-</style>

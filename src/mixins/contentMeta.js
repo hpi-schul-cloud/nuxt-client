@@ -47,6 +47,12 @@ const types = Object.freeze({
 		iconLarge: "ic_word-circle",
 		iconSource: "custom",
 	},
+	"text/directory": {
+		i18nKey: "mixins.typeMeta.types.document",
+		icon: "ic_collection",
+		iconLarge: "ic_collection-circle",
+		iconSource: "custom",
+	},
 });
 
 const contentMeta = {

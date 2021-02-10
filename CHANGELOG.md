@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
+## Unreleased
+
+## 25.6.0 - 09-02-21
+
+### Added
+
+- SC-8390 - added Lern-Store collections flag
+- SC-8328 - added back button in Lern-Store
+- SC-7762 - added collection icon for Lern-Store card
+
+### Changed
+
+- SC-8356 - authenticate docker hub requests
+- SC-8433 - update text in Lern-Store
+
 ## 25.5.2
 
 ### Fixed
@@ -29,7 +44,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
-- SC-7824 - Set proper email address and label for data privacy
+- SC-7824 - Set proper email address and label for data privacy, common terms of use
 - SC-7023 - Implement the editor and task item on the course page
 - SC-7543 - added validate page to the LDAP configuration feature
 - SC-6825 - change collapsable icon
@@ -49,6 +64,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- SC-8323 - Fixed clearing of collection view when applying new queries
+- SC-7686 - Fixed naming convention for Lern-Store
 - SC-8169 - fixed ldap classes section data being sent when toggle is off
 - SC-8158 - fixed ldap config initial data load and conditional rendering in activate page
 - SC-7845 - fixed header tab name on login-instances page
@@ -66,6 +83,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Added
 
+- SC-8514 - QR Code generation fails
 - SC-7020 - added a new course TaskItem component
 
 ### Changed in Unreleased
