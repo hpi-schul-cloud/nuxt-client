@@ -11,6 +11,15 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - SC-8156 - added Spanish as an available language
+
+### Changed
+
+- OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
+
+## 25.6.0 - 09-02-21
+
+### Added
+
 - SC-8390 - added Lern-Store collections flag
 - SC-8328 - added back button in Lern-Store
 - SC-7762 - added collection icon for Lern-Store card
@@ -19,7 +28,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-8356 - authenticate docker hub requests
 - SC-8433 - update text in Lern-Store
-- OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
 ## 25.5.2
 
