@@ -239,10 +239,8 @@ export default {
 	},
 	watch: {
 		selected(selectedElements) {
-			let counterLabel = "";
-			if (selectedElements > 0) {
-				counterLabel = ` (${selectedElements})`;
-			}
+			const counterLabel = selectedElements > 0 ? ` (${selectedElements})` : "";
+
 			this.btnLabel = `${this.$t(
 				"pages.content._id.addToTopic"
 			)}${counterLabel}`;
