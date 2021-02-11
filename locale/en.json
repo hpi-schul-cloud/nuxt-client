@@ -271,7 +271,7 @@
 	"pages.administration.ldap.activate.email": "E-mail",
 	"pages.administration.ldap.activate.firstName": "First Name",
 	"pages.administration.ldap.activate.lastName": "Last Name",
-	"pages.administration.ldap.activate.message": "Your configuration has been saved. The synchronization can last up to several hours.",
+	"pages.administration.ldap.activate.message": "",
 	"pages.administration.ldap.activate.ok": "Ok",
 	"pages.administration.ldap.activate.roles": "Roles",
 	"pages.administration.ldap.activate.uid": "UID",
