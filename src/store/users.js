@@ -72,4 +72,4 @@ const module = mergeDeep(base, {
 	},
 });
 
-export default module;
+export const { state, getters, mutations, actions } = module;
