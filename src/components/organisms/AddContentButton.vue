@@ -16,7 +16,8 @@
 		</base-button>
 		<add-content-modal
 			:show-copy-modal.sync="copyModalActive"
-			:url="url"
+      :updatedid="resource.properties['ccm:replicationsourceuuid'][0]"
+      :url="url"
 			:client="client"
 			:title="title"
 			:merlin-reference="merlinReference"
