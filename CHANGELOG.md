@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - SC-8164 - apply deletion concept to the deletion of students and teachers
+- SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
 
 ### Changed
