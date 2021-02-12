@@ -73,25 +73,25 @@ export const actions = {
 			this.$toast.error(error);
 		}
 	},
-	async verifyData({ commit }, payload) {
+	async verifyData({ commit }, { systemData, verifyFullSync }) {
 		try {
-			const data = formatClientData(payload);
+			const data = formatClientData(systemData);
 			const verification = await this.$axios.$post(
-				"/ldap-config?verifyOnly=true",
+				`/ldap-config?verifyOnly=true&verifyFullSync=${verifyFullSync}`,
 				data
 			);
-			commit("setTemp", payload);
+			commit("setTemp", systemData);
 			commit("setVerified", verification);
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
 		}
 	},
-	async verifyExisting({ commit }, { systemId, systemData }) {
+	async verifyExisting({ commit }, { systemId, systemData, verifyFullSync }) {
 		try {
 			const data = formatClientData(systemData);
 			const verification = await this.$axios.$patch(
-				`/ldap-config/${systemId}?verifyOnly=true`,
+				`/ldap-config/${systemId}?verifyOnly=true&verifyFullSync=${verifyFullSync}`,
 				data
 			);
 			if (!systemData.searchUserPassword) {

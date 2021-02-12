@@ -107,8 +107,13 @@ describe("store/ldap-config", () => {
 					},
 				};
 				const spyCommit = jest.fn();
-				await actions.verifyData({ commit: spyCommit }, clientMockData);
-				expect(receivedUrl).toBe("/ldap-config?verifyOnly=true");
+				await actions.verifyData(
+					{ commit: spyCommit },
+					{ systemData: clientMockData, verifyFullSync: false }
+				);
+				expect(receivedUrl).toBe(
+					"/ldap-config?verifyOnly=true&verifyFullSync=false"
+				);
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[0][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
@@ -123,8 +128,33 @@ describe("store/ldap-config", () => {
 					},
 				};
 				const spyCommit = jest.fn();
-				await actions.verifyData({ commit: spyCommit }, clientMockData);
-				expect(receivedUrl).toBe("/ldap-config?verifyOnly=true");
+				await actions.verifyData(
+					{ commit: spyCommit },
+					{ systemData: clientMockData, verifyFullSync: false }
+				);
+				expect(receivedUrl).toBe(
+					"/ldap-config?verifyOnly=true&verifyFullSync=false"
+				);
+				expect(spyCommit.mock.calls).toHaveLength(2);
+				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+			});
+			it("it trigger full sync for verification", async () => {
+				let receivedUrl;
+				actions.$axios = {
+					$post: (url) => {
+						receivedUrl = url;
+						return Promise.resolve(clientMockData);
+					},
+				};
+				const spyCommit = jest.fn();
+				await actions.verifyData(
+					{ commit: spyCommit },
+					{ systemData: clientMockData, verifyFullSync: true }
+				);
+				expect(receivedUrl).toBe(
+					"/ldap-config?verifyOnly=true&verifyFullSync=true"
+				);
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
@@ -142,9 +172,15 @@ describe("store/ldap-config", () => {
 				const spyCommit = jest.fn();
 				await actions.verifyExisting(
 					{ commit: spyCommit },
-					{ systemId: "systemId", systemData: clientMockData }
+					{
+						systemId: "systemId",
+						systemData: clientMockData,
+						verifyFullSync: true,
+					}
 				);
-				expect(receivedUrl).toBe("/ldap-config/systemId?verifyOnly=true");
+				expect(receivedUrl).toBe(
+					"/ldap-config/systemId?verifyOnly=true&verifyFullSync=true"
+				);
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[0][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
@@ -161,9 +197,15 @@ describe("store/ldap-config", () => {
 				const spyCommit = jest.fn();
 				await actions.verifyExisting(
 					{ commit: spyCommit },
-					{ systemId: "systemId", systemData: clientMockData }
+					{
+						systemId: "systemId",
+						systemData: clientMockData,
+						verifyFullSync: true,
+					}
 				);
-				expect(receivedUrl).toBe("/ldap-config/systemId?verifyOnly=true");
+				expect(receivedUrl).toBe(
+					"/ldap-config/systemId?verifyOnly=true&verifyFullSync=true"
+				);
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);

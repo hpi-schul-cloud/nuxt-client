@@ -51,6 +51,14 @@
 				@update:errors="updateValidationData"
 				@update:inputs="clearClassesSectionData"
 			/>
+			<div class="mt--xl-3">
+				<base-input
+					v-model="verifyPartialSync"
+					type="checkbox"
+					name="verifyPartialSync"
+					:label="$t('pages.administration.ldap.verifyPartialSync')"
+				/>
+			</div>
 		</div>
 		<div class="errors-container">
 			<info-message
@@ -86,6 +94,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { mapState } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
@@ -130,6 +139,7 @@ export default {
 				member: "memberOf",
 				groupOption: "group",
 			},
+			verifyPartialSync: true,
 		};
 	},
 	computed: {
@@ -166,15 +176,12 @@ export default {
 	},
 	methods: {
 		validateHandler() {
-			if (this.$options.debounce) {
-				clearInterval(this.$options.debounce);
-			}
 			this.triggerValidation = !this.triggerValidation;
 			this.validationError = "";
 
 			const systemId = this.$route.query.id;
 
-			this.$options.debounce = setInterval(async () => {
+			Vue.nextTick(async () => {
 				if (!this.isInvalid) {
 					if (systemId) {
 						const systemData = {
@@ -184,16 +191,16 @@ export default {
 						await this.$store.dispatch("ldap-config/verifyExisting", {
 							systemData,
 							systemId,
+							verifyFullSync: !this.verifyPartialSync,
 						});
 					} else {
-						await this.$store.dispatch(
-							"ldap-config/verifyData",
-							this.systemData
-						);
+						await this.$store.dispatch("ldap-config/verifyData", {
+							systemData: this.systemData,
+							verifyFullSync: !this.verifyPartialSync,
+						});
 					}
 
 					if (!this.verified.ok) {
-						clearInterval(this.$options.debounce);
 						return;
 					} else {
 						this.$toast.success(
@@ -208,14 +215,12 @@ export default {
 								path: "/administration/ldap/activate",
 							});
 						}
-						clearInterval(this.$options.debounce);
 						return;
 					}
 				}
 
 				this.validationError = this.$t("common.validation.invalid");
-				clearInterval(this.$options.debounce);
-			}, 500);
+			});
 		},
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;
@@ -267,7 +272,7 @@ export default {
 	margin: var(--space-xl) 0 var(--space-xl-4) 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-2);
+		margin: var(--space-xl-2) var(--space-xl-4);
 	}
 }
 .errors-container {
