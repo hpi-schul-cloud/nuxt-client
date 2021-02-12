@@ -171,7 +171,7 @@ export default {
 
 			const systemId = this.$route.query.id;
 
-			setTimeout(async () => {
+			this.$nextTick(async () => {
 				if (!this.isInvalid) {
 					if (systemId) {
 						const systemData = {
@@ -209,7 +209,7 @@ export default {
 				}
 
 				this.validationError = this.$t("common.validation.invalid");
-			}, 0);
+			});
 		},
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;
