@@ -16,10 +16,11 @@
 		</base-button>
 		<add-content-modal
 			:show-copy-modal.sync="copyModalActive"
-			:updatedid="resource.ref.id"
-			:url="getUrl"
+			:url="url"
 			:client="client"
-			:title="resource.title"
+			:title="title"
+			:merlin-reference="merlinReference"
+			:items="selectedElements"
 			@close="performAPICall"
 		/>
 		<loading-modal
@@ -44,10 +45,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
-import { getMetadataAttribute } from "@utils/helpers";
+import { getTitle, getMerlinReference, getUrl } from "@utils/helpers";
 
 let slowAPICall;
 
@@ -68,6 +70,7 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		resource: { type: Object, default: () => {} },
 		disabled: { type: Boolean },
+		multiple: { type: Boolean },
 	},
 	data() {
 		return {
@@ -80,35 +83,67 @@ export default {
 				visible: false,
 				isSuccess: false,
 			},
+			selectedElements: [],
 		};
 	},
 	computed: {
-		getUrl() {
-			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
+		...mapState("content", {
+			elements: (state) => {
+				return state.elements;
+			},
+			selected: (state) => {
+				return state.selected;
+			},
+		}),
+		title() {
+			return getTitle(this.resource);
 		},
-		getMerlinReference() {
-			const isMerlinContent = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:replicationsource"
-			).includes("merlin");
-			return isMerlinContent
-				? getMetadataAttribute(
-						this.resource.properties,
-						"ccm:replicationsourceid"
-				  )
-				: "";
+		url() {
+			return getUrl(this.resource);
+		},
+		merlinReference() {
+			return getMerlinReference(this.resource);
+		},
+	},
+	watch: {
+		selected() {
+			if (this.multiple) {
+				const selectedElements = this.elements.data.filter(
+					(element) => element.stateSelected === true
+				);
+
+				this.selectedElements = selectedElements.map((element) => {
+					return {
+						url: getUrl(element),
+						title: getTitle(element),
+						client: this.client,
+						merlinReference: getMerlinReference(element),
+					};
+				});
+			}
 		},
 	},
 	methods: {
 		addResourceAndClose() {
 			if (window.opener && window.opener !== window) {
 				if (window.opener.addResource) {
-					window.opener.addResource({
-						title: this.resource.title,
-						client: this.client,
-						url: this.getUrl,
-						merlinReference: this.getMerlinReference,
-					});
+					if (this.selectedElements.length > 0) {
+						this.selectedElements.forEach((element) => {
+							window.opener.addResource({
+								title: element.title,
+								client: element.client,
+								url: element.url,
+								merlinReference: element.merlinReference,
+							});
+						});
+					} else {
+						window.opener.addResource({
+							title: this.title,
+							client: this.client,
+							url: this.url,
+							merlinReference: this.merlinReference,
+						});
+					}
 					window.close();
 					return true;
 				}
