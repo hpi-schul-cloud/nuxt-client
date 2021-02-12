@@ -57,7 +57,7 @@
 				</div>
 				<div>
 					<base-button
-						v-if="isMerlinContent"
+						v-if="isMerlin"
 						design="outline"
 						class="content-button"
 						@click="
@@ -140,8 +140,9 @@
 					btn-class="floating-button"
 					btn-size="large"
 					btn-icon-class="footer__content-icon"
-					btn-icon="add"
+					btn-icon="add_circle_outline"
 					:btn-label="$t('pages.content._id.addToTopic')"
+					:multiple="false"
 				/>
 			</user-has-role>
 		</div>
@@ -161,6 +162,8 @@ import {
 	getDescription,
 	getTags,
 	getAuthor,
+	getMerlinReference,
+	isMerlinContent,
 } from "@utils/helpers";
 import { printDate } from "@plugins/datetime";
 
@@ -202,18 +205,11 @@ export default {
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
-		isMerlinContent() {
-			const source = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:replicationsource"
-			);
-			return source && source.toLowerCase().includes("merlin");
+		isMerlin() {
+			return isMerlinContent(this.resource);
 		},
 		merlinTokenReference() {
-			return getMetadataAttribute(
-				this.resource.properties,
-				"ccm:replicationsourceid"
-			);
+			return getMerlinReference(this.resource);
 		},
 		description() {
 			return getDescription(

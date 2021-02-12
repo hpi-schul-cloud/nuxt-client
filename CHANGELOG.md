@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
 
 ### Changed
