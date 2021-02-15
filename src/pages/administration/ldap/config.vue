@@ -166,15 +166,12 @@ export default {
 	},
 	methods: {
 		validateHandler() {
-			if (this.$options.debounce) {
-				clearInterval(this.$options.debounce);
-			}
 			this.triggerValidation = !this.triggerValidation;
 			this.validationError = "";
 
 			const systemId = this.$route.query.id;
 
-			this.$options.debounce = setInterval(async () => {
+			this.$nextTick(async () => {
 				if (!this.isInvalid) {
 					if (systemId) {
 						const systemData = {
@@ -193,7 +190,6 @@ export default {
 					}
 
 					if (!this.verified.ok) {
-						clearInterval(this.$options.debounce);
 						return;
 					} else {
 						this.$toast.success(
@@ -208,14 +204,12 @@ export default {
 								path: "/administration/ldap/activate",
 							});
 						}
-						clearInterval(this.$options.debounce);
 						return;
 					}
 				}
 
 				this.validationError = this.$t("common.validation.invalid");
-				clearInterval(this.$options.debounce);
-			}, 500);
+			});
 		},
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;

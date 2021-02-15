@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 25.6.1
+
+### Fixed
+
+- SC-8576 - fixed the several requests issue in the LDAP config
+
 ## 25.6.0 - 09-02-21
 
 ### Added
