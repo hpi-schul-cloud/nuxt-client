@@ -158,6 +158,8 @@ global.createComponentMocks = ({
 	$route,
 	$router,
 	router,
+	uiState,
+	dialog,
 	/*style,*/ mocks,
 	stubs,
 }) => {
@@ -229,6 +231,31 @@ global.createComponentMocks = ({
 		localVue.mixin(userMixin);
 	}
 	localVue.use(Vuelidate);
+
+	// Set uiState like:
+	// {
+	// 		get: (key, identifier) => {},
+	// 		set: (key, identifier) => {},
+	// }
+	if (uiState) {
+		localVue.use({
+			install: (Vue) => {
+				Vue.prototype.$uiState = uiState;
+			},
+		});
+	}
+
+	// Set (confirmation) dialog like:
+	// {
+	//		confirm: (params) => {}
+	// }
+	if (dialog) {
+		localVue.use({
+			install: (Vue) => {
+				Vue.prototype.$dialog = dialog;
+			},
+		});
+	}
 
 	// If using `router: true`, we'll automatically stub out
 	// components from Vue Router.
