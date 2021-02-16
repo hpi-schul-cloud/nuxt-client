@@ -18,6 +18,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
+## 26.0.0
+
 ## 25.6.0 - 09-02-21
 
 ### Added
