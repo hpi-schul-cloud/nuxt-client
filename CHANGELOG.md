@@ -14,6 +14,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-8613 - Added checkbox to ldap config to select to load all users during verification
 
+## 25.6.1
+
+### Fixed
+
+- SC-8576 - fixed the several requests issue in the LDAP config
+
 ## 25.6.0 - 09-02-21
 
 ### Added
