@@ -94,7 +94,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import { mapState } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
@@ -139,7 +138,7 @@ export default {
 				member: "memberOf",
 				groupOption: "group",
 			},
-			verifyPartialSync: true,
+			verifyPartialSync: false,
 		};
 	},
 	computed: {
@@ -181,7 +180,7 @@ export default {
 
 			const systemId = this.$route.query.id;
 
-			Vue.nextTick(async () => {
+			this.$nextTick(async () => {
 				if (!this.isInvalid) {
 					if (systemId) {
 						const systemData = {

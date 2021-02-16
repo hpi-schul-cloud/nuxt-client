@@ -117,7 +117,10 @@ describe("store/ldap-config", () => {
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[0][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual({
+					...clientMockData,
+					verifyFullSync: false,
+				});
 			});
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
@@ -137,7 +140,10 @@ describe("store/ldap-config", () => {
 				);
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual({
+					...clientMockData,
+					verifyFullSync: false,
+				});
 			});
 			it("it trigger full sync for verification", async () => {
 				let receivedUrl;
@@ -157,7 +163,10 @@ describe("store/ldap-config", () => {
 				);
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual({
+					...clientMockData,
+					verifyFullSync: true,
+				});
 			});
 		});
 		describe("verifyExisting", () => {
@@ -184,7 +193,10 @@ describe("store/ldap-config", () => {
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[0][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual({
+					...clientMockData,
+					verifyFullSync: true,
+				});
 			});
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
@@ -208,7 +220,10 @@ describe("store/ldap-config", () => {
 				);
 				expect(spyCommit.mock.calls).toHaveLength(2);
 				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual({
+					...clientMockData,
+					verifyFullSync: true,
+				});
 			});
 		});
 		describe("submitData", () => {

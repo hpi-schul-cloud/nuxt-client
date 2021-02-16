@@ -81,7 +81,7 @@ export const actions = {
 				data
 			);
 			commit("setTemp", systemData);
-			commit("setVerified", verification);
+			commit("setVerified", { ...verification, verifyFullSync });
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
@@ -98,7 +98,7 @@ export const actions = {
 				systemData.searchUserPassword = unchangedPassword;
 			}
 			commit("setTemp", systemData);
-			commit("setVerified", verification);
+			commit("setVerified", { ...verification, verifyFullSync });
 		} catch (error) {
 			console.log(error);
 			this.$toast.error(error);
