@@ -511,6 +511,7 @@
 	"pages.administration.ldap.errors.credentials": "Falsche Anmeldeinformationen für Such-Nutzer",
 	"pages.administration.ldap.errors.path": "Falscher Such- oder Basispfad",
 	"pages.administration.ldap.errors.configuration": "Ungültiges Konfigurationsobjekt",
+	"pages.administration.ldap.verifyPartialSync": "Um die Erreichbarkeit der LDAP Daten zu überprüfen werden im Testlauf nur 100 Einträge abgerufen. Dies reduziert die Ladezeit und wird bei großen Nutzerzahlen empfohlen.",
 	"pages.administration.ldapEdit.roles.headLines.title": "Nutzer-Rollen",
 	"pages.administration.ldapEdit.roles.headLines.sectionDescription": "Im Folgenden, müssen die gefundenen Nutzer den vordefinierten Rollen der $longname zugeordnet werden.",
 	"pages.administration.ldapEdit.roles.labels.radio.ldapGroup": "LDAP-Gruppe",

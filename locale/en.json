@@ -354,6 +354,7 @@
 	"pages.administration.ldap.activate.uuid": "UUID",
 	"pages.administration.ldap.activate.uid": "UID",
 	"pages.administration.ldap.activate.className": "Name",
+	"pages.administration.ldap.verifyPartialSync": "To verify the connection to LDAP only 100 records will be loaded during the connection test. This reduces loading time and is recommended for large amounts of users.",
 	"pages.administration.ldapEdit.headLines.title": "Configuration User-Sync & Login through LDAP",
 	"pages.administration.ldapEdit.roles.headLines.title": "User Roles",
 	"pages.administration.ldapEdit.roles.headLines.sectionDescription": "In the following, the found users must be assigned to the predefined $longname roles.",

@@ -10,7 +10,7 @@
 		</base-button>
 		<section class="section">
 			<h1 class="h4">{{ $t("pages.administration.ldap.save.title") }}</h1>
-			<div class="icon-text">
+			<div v-if="verified.verifyFullSync" class="icon-text">
 				<div class="icon-text-unit">
 					<base-icon source="material" icon="student" />
 					<span>{{ verified.users && verified.users.student }}</span>
