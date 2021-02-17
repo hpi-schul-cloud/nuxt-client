@@ -51,14 +51,6 @@
 				@update:errors="updateValidationData"
 				@update:inputs="clearClassesSectionData"
 			/>
-			<div class="mt--xl-3">
-				<base-input
-					v-model="verifyPartialSync"
-					type="checkbox"
-					name="verifyPartialSync"
-					:label="$t('pages.administration.ldap.verifyPartialSync')"
-				/>
-			</div>
 		</div>
 		<div class="errors-container">
 			<info-message
@@ -138,7 +130,6 @@ export default {
 				member: "memberOf",
 				groupOption: "group",
 			},
-			verifyPartialSync: false,
 		};
 	},
 	computed: {
@@ -190,13 +181,12 @@ export default {
 						await this.$store.dispatch("ldap-config/verifyExisting", {
 							systemData,
 							systemId,
-							verifyFullSync: !this.verifyPartialSync,
 						});
 					} else {
-						await this.$store.dispatch("ldap-config/verifyData", {
-							systemData: this.systemData,
-							verifyFullSync: !this.verifyPartialSync,
-						});
+						await this.$store.dispatch(
+							"ldap-config/verifyData",
+							this.systemData
+						);
 					}
 
 					if (!this.verified.ok) {
