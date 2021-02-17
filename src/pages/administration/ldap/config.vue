@@ -261,7 +261,7 @@ export default {
 	margin: var(--space-xl) 0 var(--space-xl-4) 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-2);
+		margin: var(--space-xl-2) var(--space-xl-4);
 	}
 }
 .errors-container {
