@@ -19,12 +19,15 @@ echo PROJECT $PROJECT
 if [[ "$TRAVIS_BRANCH" == "master" ]]
 then
 	export DOCKERTAG=master_v$( jq -r '.version' package.json )_latest
+	export DOCKERTAG_SHA=master_v$( jq -r '.version' package.json )_$GIT_SHA
 elif [[ "$TRAVIS_BRANCH" == "develop" ]]
 then
-	export DOCKERTAG=develop-latest
+	export DOCKERTAG="develop_latest"
+	export DOCKERTAG_SHA="develop_$GIT_SHA"
 elif [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
 then
 	export DOCKERTAG=release_v$( jq -r '.version' package.json )_latest
+	export DOCKERTAG_SHA=release_v$( jq -r '.version' package.json )_$GIT_SHA
 elif [[ "$TRAVIS_BRANCH" =~ ^hotfix\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
@@ -35,6 +38,7 @@ then
 	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
 	export DOCKERTAG="hotfix_${JIRA_TICKET_ID}_latest"
+	export DOCKERTAG_SHA="hotfix_${JIRA_TICKET_ID}_$GIT_SHA"
 elif [[ "$TRAVIS_BRANCH" =~ ^feature\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
@@ -45,14 +49,16 @@ then
 	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
 	export DOCKERTAG="feature_${JIRA_TICKET_ID}_latest"
+	export DOCKERTAG_SHA="feature_${JIRA_TICKET_ID}_$GIT_SHA"
 else
 	# Check for naming convention <branch>/<JIRA-Ticket ID>-<Jira_Summary>
 	# OPS-1664
-	echo -e "Event detected. However, branch name pattern does not match requirements to deploy. Expected <branch>/<JIRA-Ticket ID>-<Jira_Summary> but got $TRAVIS_BRANCH"
+	echo -e "Event detected. However, branch name pattern does not match requirements to build an push. Expected <branch>/<JIRA-Ticket ID>-<Jira_Summary> but got $TRAVIS_BRANCH"
 	exit 0
 fi
 
 echo "DOCKERTAG" $DOCKERTAG
+echo "DOCKERTAG_SHA" $DOCKERTAG_SHA
 echo "GITSHA" $GIT_SHA
 echo "Branch" $TRAVIS_BRANCH
 
@@ -82,7 +88,7 @@ buildClient(){
 
 	docker build \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
+		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA \
 		-f Dockerfile.client \
 		../
 
@@ -97,14 +103,14 @@ buildClient(){
 		dockerPush "client" $DOCKERTAG
 	else
 		dockerPush "client" $DOCKERTAG
-		dockerPush "client" $GIT_SHA
+		dockerPush "client" $DOCKERTAG_SHA
 	fi
 }
 
 buildStorybook(){
 	docker build \
 		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA \
+		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG_SHA \
 		-f Dockerfile.storybook \
 		../
 
@@ -119,14 +125,14 @@ buildStorybook(){
 		dockerPush "storybook" $DOCKERTAG
 	else
 		dockerPush "storybook" $DOCKERTAG
-		dockerPush "storybook" $GIT_SHA
+		dockerPush "storybook" $DOCKERTAG_SHA
 	fi
 }
 
 buildVuepress(){
 	docker build \
 		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA \
+		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG_SHA \
 		-f Dockerfile.vuepress \
 		--build-arg ALGOLIA_NAME \
 		--build-arg ALGOLIA_API_KEY \
@@ -143,7 +149,7 @@ buildVuepress(){
 		dockerPush "vuepress" $DOCKERTAG
 	else
 		dockerPush "vuepress" $DOCKERTAG
-		dockerPush "vuepress" $GIT_SHA
+		dockerPush "vuepress" $DOCKERTAG_SHA
 	fi
 }
 
