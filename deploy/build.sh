@@ -35,10 +35,10 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
+	JIRA_TICKET_ID="$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID"
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
-	export DOCKERTAG="hotfix_${JIRA_TICKET_ID}_latest"
-	export DOCKERTAG_SHA="hotfix_${JIRA_TICKET_ID}_$GIT_SHA"
+	export DOCKERTAG=hotfix_"${JIRA_TICKET_ID}"_latest
+	export DOCKERTAG_SHA=hotfix_"${JIRA_TICKET_ID}"_"$GIT_SHA"
 elif [[ "$TRAVIS_BRANCH" =~ ^feature\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
@@ -46,10 +46,10 @@ then
 	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
 	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
-	JIRA_TICKET_ID=$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID
+	JIRA_TICKET_ID="$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID"
 	# export DOCKERTAG=naming convention feature-<Jira id>-latest
-	export DOCKERTAG="feature_${JIRA_TICKET_ID}_latest"
-	export DOCKERTAG_SHA="feature_${JIRA_TICKET_ID}_$GIT_SHA"
+	export DOCKERTAG=feature_"${JIRA_TICKET_ID}"_latest
+	export DOCKERTAG_SHA=feature_"${JIRA_TICKET_ID}"_"$GIT_SHA"
 else
 	# Check for naming convention <branch>/<JIRA-Ticket ID>-<Jira_Summary>
 	# OPS-1664
@@ -92,19 +92,8 @@ buildClient(){
 		-f Dockerfile.client \
 		../
 
-	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
-	then
-		docker tag schulcloud/schulcloud-nuxt-client:$DOCKERTAG schulcloud/schulcloud-nuxt-client:develop_latest
-		dockerPush "client" "develop_latest"
-	elif [[ "$TRAVIS_BRANCH" = feature* ]]
-	# If branch is feature, add and push additional docker tags
-	then
-		dockerPush "client" $DOCKERTAG
-	else
-		dockerPush "client" $DOCKERTAG
-		dockerPush "client" $DOCKERTAG_SHA
-	fi
+	dockerPush "client" $DOCKERTAG
+	dockerPush "client" $DOCKERTAG_SHA
 }
 
 buildStorybook(){
@@ -114,19 +103,8 @@ buildStorybook(){
 		-f Dockerfile.storybook \
 		../
 
-	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
-	then
-		docker tag schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG schulcloud/schulcloud-nuxt-storybook:develop_latest
-		dockerPush "storybook" "develop_latest"
-	elif [[ "$TRAVIS_BRANCH" = feature* ]]
-	# If branch is feature, add and push additional docker tags
-	then
-		dockerPush "storybook" $DOCKERTAG
-	else
-		dockerPush "storybook" $DOCKERTAG
-		dockerPush "storybook" $DOCKERTAG_SHA
-	fi
+	dockerPush "storybook" $DOCKERTAG
+	dockerPush "storybook" $DOCKERTAG_SHA
 }
 
 buildVuepress(){
@@ -138,19 +116,8 @@ buildVuepress(){
 		--build-arg ALGOLIA_API_KEY \
 		../
 
-	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
-	then
-		docker tag schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG schulcloud/schulcloud-nuxt-vuepress:develop_latest
-		dockerPush "vuepress" "develop_latest"
-	# If branch is feature, add and push additional docker tags
-	elif [[ "$TRAVIS_BRANCH" = feature* ]]
-	then
-		dockerPush "vuepress" $DOCKERTAG
-	else
-		dockerPush "vuepress" $DOCKERTAG
-		dockerPush "vuepress" $DOCKERTAG_SHA
-	fi
+	dockerPush "vuepress" $DOCKERTAG
+	dockerPush "vuepress" $DOCKERTAG_SHA
 }
 
 # ----------------
