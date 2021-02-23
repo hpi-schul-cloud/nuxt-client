@@ -108,7 +108,7 @@
 							</div>
 						</div>
 					</div>
-					<div :style="{ margin: '0px' }" class="meta-container">
+					<div class="meta-container">
 						<div>
 							<base-icon class="meta-icon" source="custom" icon="hashtag" />
 						</div>
@@ -130,6 +130,19 @@
 								$t("pages.content._id.metadata.noTags")
 							}}</span>
 						</template>
+					</div>
+					<div v-show="collectionLink !== ''" class="meta-container">
+						<div class="meta-icon">
+							<base-icon source="material" icon="ic_collection" />
+						</div>
+						<base-link
+							design="none"
+							type="button"
+							class="meta-text link"
+							:to="collectionLink"
+						>
+							<span>{{ $t("pages.content.card.collection") }}</span>
+						</base-link>
 					</div>
 				</div>
 			</div>
@@ -237,6 +250,26 @@ export default {
 		},
 		isInline() {
 			return !!this.$route.query.inline;
+		},
+		collectionLink() {
+			let relation = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:hpi_lom_relation"
+			);
+			if (relation) {
+				relation = JSON.parse(relation.replace(/\'/g, '"'));
+				if (relation.kind === "ispartof") {
+					return {
+						name: "content-id",
+						params: { id: relation.resource.identifier[0] },
+						query: {
+							isCollection: true,
+							q: this.$route.query.q,
+						},
+					};
+				}
+			}
+			return "";
 		},
 	},
 	methods: {

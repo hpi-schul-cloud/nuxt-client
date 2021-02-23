@@ -5,7 +5,7 @@
 				class="title-link"
 				:to="{
 					name: 'content-id',
-					params: { id: resource.ref.id },
+					params: { id: resource.properties['ccm:replicationsourceuuid'][0] },
 					query: query,
 				}"
 				:no-style="true"
