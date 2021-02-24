@@ -16,7 +16,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
-- SC-7944 - changes field for Lern-Store content id and adds a link to collection
+- SC-7944 - changes ids for Lern-Store content and adds a link back to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
 ## 26.0.0

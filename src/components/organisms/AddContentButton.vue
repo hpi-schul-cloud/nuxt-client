@@ -16,7 +16,7 @@
 		</base-button>
 		<add-content-modal
 			:show-copy-modal.sync="copyModalActive"
-			:updatedid="resource.properties['ccm:replicationsourceuuid'][0]"
+			:updatedid="itemId"
 			:url="url"
 			:client="client"
 			:title="title"
@@ -50,7 +50,12 @@ import { mapState } from "vuex";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
-import { getTitle, getMerlinReference, getUrl } from "@utils/helpers";
+import {
+	getTitle,
+	getMerlinReference,
+	getUrl,
+	getMetadataAttribute,
+} from "@utils/helpers";
 
 let slowAPICall;
 
@@ -96,6 +101,14 @@ export default {
 				return state.selected;
 			},
 		}),
+		itemId() {
+			return this.resource && this.resource.properties
+				? getMetadataAttribute(
+						this.resource.properties,
+						"ccm:replicationsourceuuid"
+				  )
+				: null;
+		},
 		title() {
 			return getTitle(this.resource);
 		},
