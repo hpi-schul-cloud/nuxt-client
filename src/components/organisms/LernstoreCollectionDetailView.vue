@@ -199,10 +199,10 @@ export default {
 			return getAuthor(this.resource.properties);
 		},
 		createdAt() {
-			return printDateFromTimestamp(this.resource.properties['cm:created'][0]);
+			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
 		},
 		updatedAt() {
-			return printDateFromTimestamp(this.resource.properties['cm:modified'][0]);
+			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
 		},
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;

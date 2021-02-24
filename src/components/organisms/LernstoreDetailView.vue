@@ -206,12 +206,12 @@ export default {
 		author() {
 			return getAuthor(this.resource.properties);
 		},
-    createdAt() {
-      return printDateFromTimestamp(this.resource.properties['cm:created'][0]);
-    },
-    updatedAt() {
-      return printDateFromTimestamp(this.resource.properties['cm:modified'][0]);
-    },
+		createdAt() {
+			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
+		},
+		updatedAt() {
+			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
+		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
 		},
