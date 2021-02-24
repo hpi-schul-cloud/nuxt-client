@@ -16,7 +16,7 @@ const routes = [
 	`^/account/locale/edit/?$`,
 	`^/activation/${activationCode}/?$`,
 	// `^/administration/datasources?`,
-	// `^/administration/students/?$`,
+	`^/administration/students/?$`,
 	// `^/administration/students/new/?$`,
 	// `^/administration/students/consent/?$`,
 	// `^/administration/teachers/?$`,
