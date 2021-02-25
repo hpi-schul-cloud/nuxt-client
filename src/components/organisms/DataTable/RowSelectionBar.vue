@@ -6,7 +6,7 @@
 			</div>
 			<div v-else>
 				<span>{{ numberOfSelectedItems }} ausgewählt</span>
-				<span v-if="numberOfSelectedItems < totalNumberOfItems">
+				<!-- <span v-if="numberOfSelectedItems < totalNumberOfItems">
 					(oder
 					<base-button
 						design="none"
@@ -16,7 +16,7 @@
 						alle {{ totalNumberOfItems }} auswählen
 					</base-button>
 					)
-				</span>
+				</span> -->
 			</div>
 			<div
 				v-if="actions && actions.length"
