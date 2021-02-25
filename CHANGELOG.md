@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.0.0
 
+### Removed
+
+- SC-8681 - removed NAT consent column and legend for external schools
+
 ## 25.6.0 - 09-02-21
 
 ### Added
