@@ -13,6 +13,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Removed
 
 - SC-8681 - removed NAT consent column and legend for external schools
+- SC-8702 - disabled the select all button in NAT
 
 ## 25.6.0 - 09-02-21
 
