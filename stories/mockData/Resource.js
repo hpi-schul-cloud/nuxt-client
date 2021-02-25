@@ -105,6 +105,7 @@ export const Resource = {
 		],
 		"ccm:replicationsourceid": ["26138"],
 		"ccm:replicationsource": ["LEIFI Physik"],
+		"ccm:replicationsourceuuid": ["3b1a6547-9ae1-5663-9fad-ae76b472d056"],
 		"ccm:metadatacontributer_provider": [
 			"\n                LEIFI Physik\n            ",
 		],
