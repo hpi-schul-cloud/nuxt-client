@@ -292,7 +292,7 @@ export default {
 				: this.permissionFilteredTableActions;
 		},
 		editFilteredColumns() {
-			// filters out edit column if school is external or if user is a teacher
+			// filters out edit/consent column if school is external or if user is a teacher
 			return this.school.isExternal ||
 				this.user.roles.some((role) => role.name === "teacher")
 				? this.tableColumns.filter(
