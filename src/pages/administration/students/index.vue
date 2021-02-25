@@ -1,7 +1,13 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<section class="section">
-		<progress-modal :active="isDeleting" :percent="deletedPercent" title="Benutzer werden gelöscht" description="Bitte warten..." data-testid="progress-modal" />
+		<progress-modal
+			:active="isDeleting"
+			:percent="deletedPercent"
+			:title="$t('pages.administration.students.index.remove.progress.title')"
+			:description="$t('pages.administration.students.index.remove.progress.description')"
+			data-testid="progress-modal"
+		/>
 		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.students.index.title") }}
