@@ -5,7 +5,9 @@
 			:active="isDeleting"
 			:percent="deletedPercent"
 			:title="$t('pages.administration.students.index.remove.progress.title')"
-			:description="$t('pages.administration.students.index.remove.progress.description')"
+			:description="
+				$t('pages.administration.students.index.remove.progress.description')
+			"
 			data-testid="progress-modal"
 		/>
 		<base-breadcrumb :inputs="breadcrumbs" />
