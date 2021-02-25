@@ -427,7 +427,7 @@
 	"pages.administration.teachers.index.tableActions.delete": "Delete",
 	"pages.administration.teachers.index.tableActions.email": "Send registration links by e-mail",
 	"pages.administration.teachers.index.tableActions.qr": "Print registration links as QR Code",
-	"pages.administration.teachers.index.title": "Lehrer:innen verwalten",
+	"pages.administration.teachers.index.title": "Manage teachers",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.new.checkbox.label": "Send registration link to teacher",
