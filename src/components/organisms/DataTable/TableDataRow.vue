@@ -107,7 +107,10 @@ export default {
 		padding: 0;
 		vertical-align: middle;
 		.text-content {
+			max-width: 200px;
 			padding: var(--space-xs);
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 		.select {
 			margin-bottom: 0;
