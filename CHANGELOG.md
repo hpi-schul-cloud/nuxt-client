@@ -17,6 +17,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- SC-7944 - changes ids for Lern-Store content and adds a link back to collection
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
