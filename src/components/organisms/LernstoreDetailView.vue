@@ -178,7 +178,7 @@ import {
 	getMerlinReference,
 	isMerlinContent,
 } from "@utils/helpers";
-import { printDate } from "@plugins/datetime";
+import { printDateFromTimestamp } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -207,10 +207,10 @@ export default {
 			return getAuthor(this.resource.properties);
 		},
 		createdAt() {
-			return printDate(this.resource.createdAt);
+			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
 		},
 		updatedAt() {
-			return printDate(this.resource.modifiedAt);
+			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
