@@ -44,6 +44,12 @@ describe("teachers/index", () => {
 			},
 			state: () => ({
 				pagination: {},
+				progress: {
+					delete: {
+						active: false,
+						percent: 0,
+					},
+				},
 			}),
 		},
 		classes: {

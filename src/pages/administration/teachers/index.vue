@@ -1,6 +1,15 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<section class="section">
+		<progress-modal
+			:active="isDeleting"
+			:percent="deletedPercent"
+			:title="$t('pages.administration.teachers.index.remove.progress.title')"
+			:description="
+				$t('pages.administration.teachers.index.remove.progress.description')
+			"
+			data-testid="progress-modal"
+		/>
 		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
@@ -126,6 +135,8 @@ import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@plugins/datetime";
+import ProgressModal from "@components/molecules/ProgressModal";
+
 export default {
 	layout: "loggedInFull",
 	components: {
@@ -134,6 +145,7 @@ export default {
 		AdminTableLegend,
 		FabFloating,
 		BaseInput,
+		ProgressModal,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -266,6 +278,8 @@ export default {
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
+			isDeleting: (state) => state.progress.delete.active,
+			deletedPercent: (state) => state.progress.delete.percent,
 		}),
 		...mapState("search", {
 			searchResult: "searchResult",
