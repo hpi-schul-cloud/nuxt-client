@@ -24,7 +24,7 @@ if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not typ
 
 stages:
   - name: test
-    if: NOT (branch = /^(?i:feature).*$/)
+    if: not (branch ~= /^(?i:feature).*$/)
   - name: build
     if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix|feature).*$/)
   - name: deploy
