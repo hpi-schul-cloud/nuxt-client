@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8681 - removed NAT consent column and legend for external schools
 - SC-8702 - disabled the select all button in NAT
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
+- SC-8724 - removed registration filter from teachers' table
 
 ## 25.6.0 - 09-02-21
 

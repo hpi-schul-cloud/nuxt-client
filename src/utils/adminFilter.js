@@ -177,39 +177,39 @@ export function teacherFilter(ctx) {
 	getClassesNames(ctx, classesFilteringOptions);
 
 	return [
-		{
-			title: ctx.$t("utils.adminFilter.consent.title"),
-			chipTemplate: ([filteredStatus]) => {
-				const status = filteredStatus.map((stat) => {
-					if (stat === "ok") {
-						return ctx.$t("pages.administration.students.legend.icon.success");
-					} else if (stat === "missing") {
-						return ctx.$t("utils.adminFilter.consent.label.missing");
-					}
-				});
-				return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
-			},
-			dataTestid: "filter_registration",
-			filter: [
-				{
-					attribute: "consentStatus",
-					operator: "includes",
-					input: InputCheckbox,
-					options: [
-						{
-							value: "ok",
-							label: ctx.$t(
-								"pages.administration.students.legend.icon.success"
-							),
-						},
-						{
-							value: "missing",
-							label: ctx.$t("utils.adminFilter.consent.label.missing"),
-						},
-					],
-				},
-			],
-		},
+		// {
+		// 	title: ctx.$t("utils.adminFilter.consent.title"),
+		// 	chipTemplate: ([filteredStatus]) => {
+		// 		const status = filteredStatus.map((stat) => {
+		// 			if (stat === "ok") {
+		// 				return ctx.$t("pages.administration.students.legend.icon.success");
+		// 			} else if (stat === "missing") {
+		// 				return ctx.$t("utils.adminFilter.consent.label.missing");
+		// 			}
+		// 		});
+		// 		return ` ${status.join(" " + ctx.$t("common.words.and") + " ")}`;
+		// 	},
+		// 	dataTestid: "filter_registration",
+		// 	filter: [
+		// 		{
+		// 			attribute: "consentStatus",
+		// 			operator: "includes",
+		// 			input: InputCheckbox,
+		// 			options: [
+		// 				{
+		// 					value: "ok",
+		// 					label: ctx.$t(
+		// 						"pages.administration.students.legend.icon.success"
+		// 					),
+		// 				},
+		// 				{
+		// 					value: "missing",
+		// 					label: ctx.$t("utils.adminFilter.consent.label.missing"),
+		// 				},
+		// 			],
+		// 		},
+		// 	],
+		// },
 		{
 			title: ctx.$t("utils.adminFilter.class.title"),
 			chipTemplate: `${ctx.$t("utils.adminFilter.class.title")} = %1`,
