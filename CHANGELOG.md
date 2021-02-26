@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.0.0
 
+### Fixed
+
+- SC-8554 - fixed the QR code generation with double role
+
 ### Removed
 
 - SC-8681 - removed NAT consent column and legend for external schools
