@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.0.0
 
+### Fixed
+
+- SC-8719 - fixed pagination not setting currentPage to 1
+
 ### Removed
 
 - SC-8681 - removed NAT consent column and legend for external schools
