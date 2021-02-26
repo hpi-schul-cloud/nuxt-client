@@ -113,12 +113,6 @@ export default [
 		],
 	},
 	{
-		title: "global.sidebar.helpDesk",
-		href: "/helpdesk/",
-		icon: "ticket",
-		permission: "HELPDESK_VIEW",
-	},
-	{
 		title: "global.sidebar.management",
 		href: "/administration/",
 		icon: "cogs",
