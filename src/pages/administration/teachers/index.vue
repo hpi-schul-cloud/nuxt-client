@@ -10,13 +10,6 @@
 			"
 			data-testid="progress-modal"
 		/>
-		<progress-modal
-			:active="isDeleting"
-			:percent="deletedPercent"
-			title="Benutzer werden gelöscht"
-			description="Bitte warten..."
-			data-testid="progress-modal"
-		/>
 		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}

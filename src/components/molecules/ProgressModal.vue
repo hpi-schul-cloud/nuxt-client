@@ -13,10 +13,6 @@ export default {
 		ModalBodyInfo,
 	},
 	props: {
-		color: {
-			type: String,
-			default: "var(--color-primary)",
-		},
 		title: {
 			type: String,
 			required: true,
