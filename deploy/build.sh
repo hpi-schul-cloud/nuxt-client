@@ -17,9 +17,9 @@ echo PROJECT $PROJECT
 
 # [OPS-1664] Enhance all branches with Tag latest
 
-echo pwd
+echo $( bash pwd)
 
-VERSION="$(jq -r '.version' ../package.json )"
+VERSION="$(jq -r '.version' ./package.json )"
 echo VERSION:"$VERSION"
 
 if [[ "$TRAVIS_BRANCH" == "master" ]]
