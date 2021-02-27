@@ -17,6 +17,8 @@ echo PROJECT $PROJECT
 
 # [OPS-1664] Enhance all branches with Tag latest
 
+echo pwd
+
 VERSION="$(jq -r '.version' ../package.json )"
 echo VERSION:"$VERSION"
 
