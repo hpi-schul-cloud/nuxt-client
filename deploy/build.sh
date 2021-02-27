@@ -16,18 +16,22 @@ done
 echo PROJECT $PROJECT
 
 # [OPS-1664] Enhance all branches with Tag latest
+
+VERSION="$(jq -r '.version' ../package.json )"
+echo VERSION:"$VERSION"
+
 if [[ "$TRAVIS_BRANCH" == "master" ]]
 then
-	export DOCKERTAG=master_v$( jq -r '.version' package.json )_latest
-	export DOCKERTAG_SHA=master_v$( jq -r '.version' package.json )_$GIT_SHA
+	export DOCKERTAG=master_v"$VERSION"_latest
+	export DOCKERTAG_SHA=master_v"$VERSION"_"$GIT_SHA"
 elif [[ "$TRAVIS_BRANCH" == "develop" ]]
 then
 	export DOCKERTAG="develop_latest"
 	export DOCKERTAG_SHA="develop_$GIT_SHA"
 elif [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
 then
-	export DOCKERTAG=release_v$( jq -r '.version' package.json )_latest
-	export DOCKERTAG_SHA=release_v$( jq -r '.version' package.json )_$GIT_SHA
+	export DOCKERTAG=release_v"$VERSION"_latest
+	export DOCKERTAG_SHA=release_v"$VERSION"_$GIT_SHA
 elif [[ "$TRAVIS_BRANCH" =~ ^hotfix\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
 then
 	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
@@ -146,9 +150,8 @@ fi
 
 # trigger sc-app-ci to deploy release to staging
 
-VERSION="$(jq -r '.version' package.json )"
 echo "deploy release to staging $TRAVIS_BRANCH"
-echo "VERSION=$VERSION"
+# just testing
 VERSION="26.0.0"
 echo "VERSION"=$VERSION
 
