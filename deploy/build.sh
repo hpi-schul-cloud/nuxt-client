@@ -162,7 +162,7 @@ VERSION=$( echo $VERSION | tr -s "[:punct:]" "-" )
 
 curl -X POST https://api.github.com/repos/hpi-schul-cloud/sc-app-ci/dispatches \
 -H 'Accept: application/vnd.github.everest-preview+json' \
--u $GITHUB_TOKEN \
+-u $CI_TRIGGER_TOKEN \
 --data '{"event_type": "Trigger_from_sc_nuxt", "client_payload": { "GIT_BRANCH": "'"$TRAVIS_BRANCH"'", "TRIGGER_REPOSITORY": "sc-nuxt", "VERSION": "'"$VERSION"'" }}'
 
 exit 0
