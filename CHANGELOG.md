@@ -14,6 +14,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-8719 - fixed pagination not setting currentPage to 1
 
+### Added
+
+- SC-8720 - add ellipsis to NAT rows
+
+
 ### Removed
 
 - SC-8681 - removed NAT consent column and legend for external schools
