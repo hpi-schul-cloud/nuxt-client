@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.0.0
 
+### Fixed
+
+- SC-8719 - fixed pagination not setting currentPage to 1
+
 ### Added
 
 - SC-8720 - add ellipsis to NAT rows
