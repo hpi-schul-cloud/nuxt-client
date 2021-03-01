@@ -4,10 +4,10 @@ describe("store/users", () => {
 	describe("actions", () => {
 		describe("deleteUsers", () => {
 			it("triggers commit", async () => {
-				const receivedUrls = [];
+				const receivedRequests = [];
 				actions.$axios = {
-					$delete: async (url) => {
-						receivedUrls.push(url);
+					$delete: async (url, { params }) => {
+						receivedRequests.push({ url, params });
 					},
 				};
 				const spyCommit = jest.fn();
@@ -18,15 +18,18 @@ describe("store/users", () => {
 
 				await actions.deleteUsers({ commit: spyCommit }, payload);
 
-				expect(receivedUrls[0]).toBe(
-					`/users/v2/admin/${payload.userType}/${payload.ids[0]}`
+				expect(receivedRequests).toHaveLength(1);
+				expect(receivedRequests[0]).toMatchObject({
+					url: `/users/v2/admin/${payload.userType}`,
+					params: { ids: payload.ids },
+				});
+
+				const removeCommits = spyCommit.mock.calls.filter(
+					(c) => c[0] === "remove"
 				);
-				expect(receivedUrls[1]).toBe(
-					`/users/v2/admin/${payload.userType}/${payload.ids[1]}`
-				);
-				expect(spyCommit.mock.calls).toHaveLength(2);
-				expect(spyCommit.mock.calls[0][1]).toStrictEqual(payload.ids[0]);
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(payload.ids[1]);
+				expect(removeCommits).toHaveLength(2);
+				expect(removeCommits[0][1]).toStrictEqual(payload.ids[0]);
+				expect(removeCommits[1][1]).toStrictEqual(payload.ids[1]);
 			});
 		});
 	});
