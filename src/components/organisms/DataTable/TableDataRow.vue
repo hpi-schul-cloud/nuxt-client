@@ -111,6 +111,7 @@ export default {
 			padding: var(--space-xs);
 			overflow: hidden;
 			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 		.select {
 			margin-bottom: 0;
