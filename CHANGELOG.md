@@ -24,6 +24,20 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.0.0
 
+### Fixed
+
+- SC-8719 - fixed pagination not setting currentPage to 1
+
+### Added
+
+- SC-8720 - add ellipsis to NAT rows
+
+### Removed
+
+- SC-8681 - removed NAT consent column and legend for external schools
+- SC-8702 - disabled the select all button in NAT
+- SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
+
 ## 25.6.0 - 09-02-21
 
 ### Added

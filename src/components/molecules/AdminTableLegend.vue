@@ -1,6 +1,8 @@
 <template>
 	<div class="section">
-		<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
+		<strong v-if="icons">{{
+			$t("components.molecules.adminfooterlegend.title")
+		}}</strong>
 		<div class="consent-icon">
 			<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
 				<span v-if="icon.style">

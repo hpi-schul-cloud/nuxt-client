@@ -107,7 +107,7 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="icons"
+			:icons="schoolInternallyManaged && icons"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -326,9 +326,11 @@ export default {
 			);
 		},
 		editFilteredColumns() {
-			// filters edit column if school is external
+			// filters edit/consent column if school is external
 			return this.school.isExternal
-				? this.tableColumns.filter((col) => col.field !== "_id")
+				? this.tableColumns.filter(
+						(col) => col.field !== "_id" && col.field !== "consentStatus"
+				  )
 				: this.tableColumns;
 		},
 	},

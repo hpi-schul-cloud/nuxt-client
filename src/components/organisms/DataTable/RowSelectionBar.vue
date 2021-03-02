@@ -22,7 +22,7 @@
 						{{ $t("pages.administration.select") }}
 					</base-button>
 					)
-				</span>
+				</span> -->
 			</div>
 			<div
 				v-if="actions && actions.length"
