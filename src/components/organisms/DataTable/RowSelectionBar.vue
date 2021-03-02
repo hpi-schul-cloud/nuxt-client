@@ -23,6 +23,7 @@
 					</base-button>
 					)
 				</span>
+				-->
 			</div>
 			<div
 				v-if="actions && actions.length"
