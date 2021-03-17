@@ -1,6 +1,9 @@
 name: Test
 
-on: [push]
+#on: [push]
+on:
+  pull_request:
+    types: [ labeled ]
 
 jobs:
   unit:
@@ -61,6 +64,7 @@ jobs:
         if: failure()
         run: echo "if you want to update the screenshots, comment \"@schul-cloud-bot update screenshots\" on this PR."
   end-to-end-tests:
+    if: contains( github.event.pull_request.labels.*.name, 'run-e2e-tests')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -70,11 +74,13 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
       - name: execute tests
-        if: contains( github.event.pull_request.labels.*.name, 'run-e2e-tests')
         env:
           DOCKER_ID: ${{ secrets.DOCKER_ID }}
           MY_DOCKER_PASSWORD: ${{ secrets.MY_DOCKER_PASSWORD }}
         run: curl "https://raw.githubusercontent.com/hpi-schul-cloud/end-to-end-tests/develop/scripts/ci/fetch.github.sh" | bash
+      - name: failure hint
+        if: failure()
+        run: echo "if you want to run e2e tests, add label \"run-e2e-tests\" on this PR."
       - uses: actions/upload-artifact@v1
         name: upload results
         if: always()
