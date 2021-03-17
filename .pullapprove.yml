@@ -7,9 +7,6 @@ pullapprove_conditions:
   - condition: "'- [ ]' not in body"
     unmet_status: failure
     explanation: 'Please finish all the required checklist tasks'
-  - condition: "'run-e2e-tests' in labels"
-    unmet_status: pending
-    explanation: "e2e tests have not run. Trigger by adding label run-e2e-test."
   # not tested yet
   # - condition: "'*lint*' in statuses.succeeded"
   #   unmet_status: failure
