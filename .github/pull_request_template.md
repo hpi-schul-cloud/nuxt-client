@@ -25,7 +25,7 @@ Base links to copy
 
 <!--
   What will the PR change?
-  Why are the changes requiered?
+  Why are the changes required?
   Short notice if a ticket exists, more detailed if not
 -->
 
