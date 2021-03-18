@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   end-to-end-tests:
-    if: contains( github.event.push.labels.*.name, 'run-e2e-tests')
+    if: ${{ github.event.pull_request.draft == false || contains( github.event.push.labels.*.name, 'run-e2e-tests') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
