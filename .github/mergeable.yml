@@ -13,7 +13,7 @@ mergeable:
         must_include:
           regex: "(run-e2e-tests)"
           message: "The e2e tests must run. Add label run-e2e-tests to trigger them."
-      - do: body
+      - do: description
         must_exclude:
           regex: "(\[ \])"
           message: "Checklist before merge: are all checkboxes checked?"
