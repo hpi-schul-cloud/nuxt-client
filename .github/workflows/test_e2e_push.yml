@@ -31,7 +31,6 @@ jobs:
         with:
           name: report
           path: end-to-end-tests/reports
-
   end-to-end-hint:
     if: "!contains( github.event.pull_request.labels.*.name, 'run-e2e-tests')"
     runs-on: ubuntu-latest
