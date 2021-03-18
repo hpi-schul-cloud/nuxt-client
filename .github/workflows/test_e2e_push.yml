@@ -12,7 +12,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: '["run-e2e-tests"]'
-      - name: See result of label test
+      - name: skip if draft or run-e2e-test label missing
         run: echo "${{ steps.check_pr_labels.outputs.result }}"
       - uses: actions/checkout@v2
       - name: run git change
@@ -33,22 +33,3 @@ jobs:
         with:
           name: report
           path: end-to-end-tests/reports
-  end-to-end-hint:
-    if: "!contains( github.event.pull_request.labels.*.name, 'run-e2e-tests')"
-    runs-on: ubuntu-latest
-    steps:
-      - name: run e2e hint
-        run: echo "if you want to run e2e tests, add label \"run-e2e-tests\" on this Pull Request."
-  # build:
-  #   strategy:
-  #     matrix:
-  #       theme: [default, brb, n21, open, thr, int]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: npm ci
-  #       run: npm ci --prefer-offline
-  #     - name: npm run build:nuxt
-  #       run: npm run build:nuxt
-  #       env:
-  #         SC_THEME: ${{ matrix.theme }}
