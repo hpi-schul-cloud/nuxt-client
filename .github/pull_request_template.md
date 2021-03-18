@@ -1,24 +1,31 @@
-# Description
+# Short Summary
+
+<!-- write a short explanation of what this Pull Request does -->
 
 <!--
-  This is a template to add as many information as possible to the pull request, to help reviewer and as a checklist for you. Points to remember are set in the comments, please read and keep them in mind:
+  This is a template to add as much information as possible to the pull request, to help reviewers and as a checklist for you.
+  Please feel out all possible sections.
 
-    - Code should be self-explanatory and share your knowledge with others
-    - Document code that is not self-explanatory
-    - Think about bugs and keep security in mind
-    - Write tests (Unit and Integration), also for error cases
-    - Main logic should hidden behind the api, never trust the client
-    - Visible changes should be discussed with the UX-Team from the begining of development; they also have to accept them at the end
-    - Keep the changelog up-to-date
-    - Leave the code cleaner than you found it. Remove unnecessary lines. Listen to the linter.
+  Quality guidelines:
+    - Code should be self-explanatory; Document code that is not self-explanatory
+    - Code respects SOLID principles, DRY, YAGNI, KISS
+    - Think about potential bugs this Pull Request might introduce
+    - Keep security in mind
+    - Write tests (Unit and Integration), including for error cases. Don't decrease coverage
+    - Business logic should be implemented in the API; never trust the client
+    - UI changes should be discussed & agreed with the UX-Team before staring
+    - Keep the CHANGELOG up-to-date
+    - Boyscout rule: leave the code in a better state than you found it. Remove unnecessary lines. Listen to the linter.
 -->
 
-## Links to Tickets or other pull requests
+## Links to Tickets and related Pull-Requests
 
 <!--
 Base links to copy
-- https://github.com/schul-cloud/schulcloud-server/pull/????
-- https://ticketsystem.schul-cloud.org/browse/SC-????
+- https://ticketsystem.hpi-schul-cloud.org/browse/SC-????
+- https://github.com/hpi-schul-cloud/schulcloud-server/pull/????
+- https://github.com/hpi-schul-cloud/end-to-end-tests/pull/????
+- https://github.com/hpi-schul-cloud/schulcloud-client/pull/????
 -->
 
 ## Changes
@@ -26,17 +33,17 @@ Base links to copy
 <!--
   What will the PR change?
   Why are the changes required?
-  Short notice if a ticket exists, more detailed if not
+  Link to documentation / tickets if exists, or provide more details here if not.
 -->
 
-## Datasecurity <sub><sup>details [on Confluence](https://docs.schul-cloud.org/x/2S3GBg)</sup></sub>
+## Data-security <sub><sup>details [on Confluence](https://docs.hpi-schul-cloud.org/x/2S3GBg)</sup></sub>
 
 <!--
-  Notice about:
-  - model changes
-  - logging of user data
-  - right changes
-  - and other user data stuff
+  Please note here about:
+  - any data model changes
+  - any changes about logging of user data
+  - any changes about permissions
+  - user input, authentication and other user data related things
   If you are not sure if it is relevant, take a look at confluence or ask the data-security team.
 -->
 
@@ -44,36 +51,33 @@ Base links to copy
 
 <!--
   Keep in mind to changes to seed data, if changes are done by migration scripts.
-  Changes to the infrastructure have to discussed with the devops
+  Changes to the infrastructure have to discussed with the devops.
+  This information should be shown also in corresponding ticket, and collected on deployment release ticket.
 
-  This point should includes following informations:
-  - What is required for deployment?
-  - Envirement variables like FEATURE_XY=true
-  - Migration scripts to run, other requirements
+  This point should includes following information:
+  - What else is required for deployment?
+  - Environment variables like FEATURE_XY=true
+  - Are there any migration scripts to be run?
+  - other requirements
 -->
 
 ## New Repos, NPM pakages or vendor scripts
 
 <!--
   Keep in mind the stability, performance, activity and author.
-
   Describe why it is needed.
 -->
 
 ## Screenshots of UI changes
 
 <!--
-  only needed for visual changes
-
-  If visual changes exist, work together with UI/UX from beginning/ping UX with final PR
+  For UI changes, insert screenshots here. Has this been reviewed / with UX team?
 -->
 
-## Approval for review
+## Checklist before merging
 
-- [ ] All points were discussed with the ticket creator, support-team or product owner. The code upholds all quality guidelines from the PR-template.
+- [ ] Reviewer: The code upholds all quality guidelines from the PR-template
+- [ ] QA: The code has been manually tested (if applicable, and by another person)
+- [ ] PO: The code does what was requested in ticket, and any deviation was agreed with Product-Owner / ticket author / support-team
 
-> Notice: Please remove the WIP label if the PR is ready to review, otherwise nobody will review it.
-
-### Link to Definiton of Done
-
-More and detailed information on the _definition of done_ can be found [on Confluence](https://docs.schul-cloud.org/pages/viewpage.action?pageId=92831762)
+> Notice: Please convert this Pull-Request to a Draft, or add the WIP label, until it is ready to be reviewed

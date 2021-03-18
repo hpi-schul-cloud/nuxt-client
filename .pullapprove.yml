@@ -1,20 +1,5 @@
 version: 3
 
-pullapprove_conditions:
-  - condition: "'WIP' not in labels"
-    unmet_status: pending
-    explanation: "Work in progress"
-  - condition: "'- [ ]' not in body"
-    unmet_status: failure
-    explanation: 'Please finish all the required checklist tasks'
-  # not tested yet
-  # - condition: "'*lint*' in statuses.succeeded"
-  #   unmet_status: failure
-  #   explanation: "Linter must pass before review starts"
-  # - condition: "'*test*' in statuses.succeeded"
-  #   unmet_status: failure
-  #   explanation: "Linter must pass before review starts"
-
 groups:
   ###############################
   # GENERAL REQUEST FOR REVIEW
