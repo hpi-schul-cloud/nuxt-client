@@ -12,6 +12,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: '["run-e2e-tests"]'
+      - name: See result of label test
+        run: echo "${{ steps.check_pr_labels.outputs.result }}"
       - uses: actions/checkout@v2
       - name: run git change
         if: ${{ steps.check_pr_labels.outputs.result }}
