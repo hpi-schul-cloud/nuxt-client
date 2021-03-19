@@ -68,9 +68,9 @@ This point should includes following information:
 
 ## Screenshots of UI changes
 
-<!-- 
-- For UI changes, insert screenshots here. 
-- Has it been reviewed by a UX colleague? 
+<!--
+- For UI changes, insert screenshots here.
+- Has it been reviewed by a UX colleague?
 -->
 
 ## Checklist before merging
