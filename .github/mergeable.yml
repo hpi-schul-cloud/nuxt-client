@@ -15,7 +15,7 @@ mergeable:
         no_empty:
           enabled: true
         must_exclude:
-          regex: "\[?\s\]"
+          regex: "\\[?\\s\\]"
           message: "All checkboxes from PR description must be checked."
   - when: schedule.repository
     validate:
