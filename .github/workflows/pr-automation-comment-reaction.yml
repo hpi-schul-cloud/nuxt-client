@@ -59,7 +59,8 @@ jobs:
       - name: listen for PR Comments
         uses: machine-learning-apps/actions-chatops@master
         with:
-          TRIGGER_PHRASE: "@schul-cloud-bot run e2e"
+          TRIGGER_PHRASE: "@schul-cloud-bot e2e"
+          INDICATOR_LABEL: 'run-e2e-tests'
         env:
           GITHUB_TOKEN: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
         id: prcomm
