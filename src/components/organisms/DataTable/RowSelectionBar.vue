@@ -27,7 +27,7 @@
 			<div
 				v-if="actions && actions.length"
 				class="actions"
-				style="position: relative;"
+				style="position: relative"
 			>
 				<base-button size="small" @click="actionsMenuOpen = true">
 					{{ $t("pages.administration.actions") }}
