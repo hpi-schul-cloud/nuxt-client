@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.0.1 - 2021-03-22
+
+### Added
+
+- SC-8156 - introduce Spanish
+
 ## 26.0.0
 
 ### Fixed
@@ -30,7 +36,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-8576 - fixed the several requests issue in the LDAP config
 
-## 25.6.0 - 09-02-21
+## 25.6.0 - 2021-02-21
 
 ### Added
 
