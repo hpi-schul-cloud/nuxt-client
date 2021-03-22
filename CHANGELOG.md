@@ -40,6 +40,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-8156 - added Spanish as an available language
 - SC-8390 - added Lern-Store collections flag
 - SC-8328 - added back button in Lern-Store
 - SC-7762 - added collection icon for Lern-Store card
