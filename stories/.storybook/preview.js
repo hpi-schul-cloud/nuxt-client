@@ -24,7 +24,7 @@ import "@styles";
 // Preview Backgrounds ( @storybook/addon-backgrounds )
 addParameters({
 	backgrounds: {
-		default: "--color-primary",
+		default: "--color-white",
 		values: [
 			"primary",
 			"primary-light",
