@@ -1,7 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import { select } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import centered from "@storybook/addon-centered/vue";
 
 import ContextMenu from "./ContextMenu";
 
@@ -64,7 +63,7 @@ const anchorOptions = {
 };
 
 storiesOf("5 Molecules/ContextMenu", module)
-	.addDecorator(centered)
+	.addParameters({ layout: "centered" })
 	.add("with icons", () => ({
 		components: { ContextMenu },
 		template,

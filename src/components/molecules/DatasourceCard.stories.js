@@ -1,6 +1,5 @@
 import { storiesOf } from "@storybook/vue";
 import { text } from "@storybook/addon-knobs";
-import centered from "@storybook/addon-centered/vue";
 
 import DatasourceCard from "./DatasourceCard";
 import ContextMenu from "@components/molecules/ContextMenu";
@@ -98,5 +97,5 @@ storiesOf("5 Molecules/DatasourceCard", module)
 					</template>
 				</DatasourceCard>`,
 		}),
-		{ decorators: [centered] }
+		{ layout: "centered" }
 	);
