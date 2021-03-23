@@ -9,7 +9,9 @@ export default {
 	props: {
 		tile: {
 			type: Object,
-			default: Object,
+			default: () => {
+				Object;
+			},
 		},
 	},
 	data() {
