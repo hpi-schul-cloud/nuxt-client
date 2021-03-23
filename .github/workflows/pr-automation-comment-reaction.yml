@@ -64,9 +64,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SC_BOT_GITHUB_TOKEN }}
         id: prcomm
+      - uses: actions/checkout@v2
       - name: run git change
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        uses: actions/checkout@v2
         run: |
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
