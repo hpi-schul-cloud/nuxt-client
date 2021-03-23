@@ -4,7 +4,34 @@ import { action } from "@storybook/addon-actions";
 
 import TableHeadRow from "./TableHeadRow";
 
-import { tableColumns } from "./DataTable.data-factory.js";
+const tableColumns = [
+	{
+		field: "firstName",
+		label: "Vorname",
+		sortable: true,
+	},
+	{
+		field: "lastName",
+		label: "Nachname",
+	},
+	{
+		field: "address.city",
+		label: "Stadt",
+		sortable: true,
+	},
+	{
+		field: "age",
+		label: "Alter",
+	},
+	{
+		field: "birthday",
+		label: "Geburtstag",
+	},
+	{
+		field: "agreed",
+		label: "Zustimmung",
+	},
+];
 
 storiesOf("6 Organisms/DataTable/SubComponents", module).add(
 	"TableHeadRow",
