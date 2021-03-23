@@ -150,6 +150,7 @@
 		"svg-inline-loader": "^0.8.2",
 		"ts-jest": "^26.4.4",
 		"ts-loader": "^6.2.2",
+		"vue-docgen-api": "^4.36.1",
 		"vue-jest": "^3.0.7",
 		"vue-style-loader": "^4.1.2",
 		"vue-svg-loader": "0.15.0",
