@@ -1,6 +1,5 @@
 import { configure, addDecorator, addParameters } from "@storybook/vue";
 
-import { withInfo, setDefaults } from "storybook-addon-vue-info";
 import { withA11y } from "@storybook/addon-a11y";
 import { withKnobs } from "@storybook/addon-knobs";
 
@@ -18,9 +17,9 @@ import "@basecomponents/_globals";
 import "@styles";
 
 // Vue Docs ( storybook-addon-vue-info )
-addParameters({
-	info: true,
-});
+//addParameters({
+//	info: true,
+//});
 
 // Preview Backgrounds ( @storybook/addon-backgrounds )
 addParameters({
@@ -62,8 +61,6 @@ addParameters({
 		default: color === "white",
 	})),
 });
-
-addDecorator(withInfo);
 
 // A11y
 addDecorator(withA11y);
