@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.0.3 - 2021-03-24
+
+### Changed
+
+- SC-8822 - change phone number in imprint
+
 ## 26.0.1 - 2021-03-22
 
 ### Added
