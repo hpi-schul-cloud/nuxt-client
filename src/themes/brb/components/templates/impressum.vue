@@ -17,7 +17,7 @@
 			Internet:
 			<base-link to="/">https://schul-cloud.org</base-link>
 			<br />
-			Telefon: +49 (0)331 / 5509-0
+			{{ $t("pages.impressum.hpiPhoneNumber") }}
 			<br />
 			Telefax: +49 (0)331 / 5509-129
 		</p>
