@@ -4,6 +4,14 @@ import serviceTemplate from "@utils/service-template";
 const base = serviceTemplate("users");
 const baseState = base.state();
 
+const deleteEmptyParams = (object) => {
+	for (const key of Object.keys(object)) {
+		if (object[key] === '') {
+		  delete object[key];
+		}
+	}
+}
+
 const module = mergeDeep(base, {
 	state: () =>
 		mergeDeep(baseState, {
@@ -31,6 +39,7 @@ const module = mergeDeep(base, {
 		handleUsers({ dispatch }, queryContext = {}) {
 			const { userType, action } = queryContext;
 			queryContext.customEndpoint = `/users/admin/${userType}`;
+			deleteEmptyParams(queryContext.query);
 			return dispatch(action, queryContext);
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
