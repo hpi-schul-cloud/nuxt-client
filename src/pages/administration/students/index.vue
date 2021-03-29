@@ -377,7 +377,7 @@ export default {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 				...this.currentFilterQuery,
-			}
+			};
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
