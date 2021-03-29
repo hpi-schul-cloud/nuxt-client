@@ -486,6 +486,10 @@ export default {
 			});
 		},
 		barSearch: function (searchText) {
+			if (this.$options.debounce) {
+				clearInterval(this.$options.debounce);
+			}
+
 			this.currentFilterQuery.searchQuery = searchText.trim();
 
 			const query = this.getQuery();
@@ -494,7 +498,8 @@ export default {
 				query,
 			});
 
-			setTimeout(() => {
+			this.$options.debounce = setInterval(() => {
+				clearInterval(this.$options.debounce);
 				this.$store.dispatch("users/handleUsers", {
 					query,
 					action: "find",
