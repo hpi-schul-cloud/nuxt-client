@@ -346,19 +346,22 @@ export default {
 	},
 	methods: {
 		find() {
-			const query = {
+			const query = this.getQuery();
+			this.$store.dispatch("users/handleUsers", {
+				query,
+				action: "find",
+				userType: "teachers",
+			});
+		},
+		getQuery() {
+			return {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
 				$sort: {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 				...this.currentFilterQuery,
-			};
-			this.$store.dispatch("users/handleUsers", {
-				query,
-				action: "find",
-				userType: "teachers",
-			});
+			}
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
@@ -485,7 +488,7 @@ export default {
 		barSearch: function (searchText) {
 			this.currentFilterQuery.searchQuery = searchText.trim();
 
-			const query = this.currentFilterQuery;
+			const query = this.getQuery();
 
 			this.$uiState.set("filter", "pages.administration.teachers.index", {
 				query,
