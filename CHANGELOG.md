@@ -8,11 +8,36 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.1.0
+
+## 26.0.4 - 2021-03-24
+
+### Changed
+
+- SC-8822 - add availability to phone number in imprint
+
+## 26.0.3 - 2021-03-24
+
+### Changed
+
+- SC-8822 - change phone number in imprint
+
+## 26.0.1 - 2021-03-22
+
+### Added
+
+- SC-8156 - introduce Spanish
+
 ## 26.0.0
 
 ### Fixed
 
 - SC-8554 - fixed the QR code generation with double role
+- SC-8719 - fixed pagination not setting currentPage to 1
+
+### Added
+
+- SC-8720 - add ellipsis to NAT rows
 
 ### Removed
 
@@ -20,7 +45,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8702 - disabled the select all button in NAT
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 
-## 25.6.0 - 09-02-21
+## 25.6.1
+
+### Fixed
+
+- SC-8576 - fixed the several requests issue in the LDAP config
+
+## 25.6.0 - 2021-02-21
 
 ### Added
 
