@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.0.5 - 2021-03-29
+
+### Changed
+
+- SC-8837 - activate ldap config pages again
+
 ## 26.0.4 - 2021-03-24
 
 ### Changed
