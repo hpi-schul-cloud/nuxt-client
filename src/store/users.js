@@ -6,11 +6,11 @@ const baseState = base.state();
 
 const deleteEmptyParams = (object) => {
 	for (const key of Object.keys(object)) {
-		if (object[key] === '') {
-		  delete object[key];
+		if (object[key] === "") {
+			delete object[key];
 		}
 	}
-}
+};
 
 const module = mergeDeep(base, {
 	state: () =>
