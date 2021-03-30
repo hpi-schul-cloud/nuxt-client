@@ -559,8 +559,6 @@
 	"utils.adminFilter.placeholder.class": "Nach Klasse filtern…",
 	"utils.adminFilter.placeholder.complete.lastname": "Nach vollständigem Nachnamen filtern...",
 	"utils.adminFilter.placeholder.complete.name": "Nach vollständigem Vornamen filtern...",
-	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
-	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"pages.administration.ldap.title": "Konfiguration Nutzer-Sync & Login durch LDAP",
 	"pages.administration.ldap.subtitle.one": "Jegliche Änderungen an der folgenden Konfiguration kann zur Folge haben, dass der Login für dich und alle Nutzer deiner Schule nicht mehr funktioniert. Daher nimm nur Änderungen vor, wenn dir die Konsequenzen bewusst sind. Einige Bereiche sind nur lesbar.",
 	"pages.administration.ldap.subtitle.two": "Nach der Verifizierung kannst du dir die ausgelesenen Inhalte in der Vorschau ansehen. Nutzer, denen im Verzeichnis eines der benötigten Attribute fehlt, werden nicht synchronisiert.",
