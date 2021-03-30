@@ -13,21 +13,26 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 	dataTestid: "filter_creationDate",
 	parser: {
 		generator: (filterGroupConfig, values) => {
-			return {
-				createdAt: {
-					$gte: fromInputDateTime(
-						values[filterGroupConfig.filter[0].id] || currentDate()
-					)
-						.utc()
-						.toISOString(),
-					$lte: fromInputDateTime(
-						values[filterGroupConfig.filter[1].id] || currentDate()
-					)
-						.add(1, "day")
-						.utc()
-						.toISOString(),
-				},
-			};
+			try {
+				return {
+					createdAt: {
+						$gte: fromInputDateTime(
+							values[filterGroupConfig.filter[0].id] || currentDate()
+						)
+							.utc()
+							.toISOString(),
+						$lte: fromInputDateTime(
+							values[filterGroupConfig.filter[1].id] || currentDate()
+						)
+							.add(1, "day")
+							.utc()
+							.toISOString(),
+					},
+				};
+			} catch (error) {
+				console.warn(error);
+				return;
+			}
 		},
 		parser: (filterGroupConfig, query) => {
 			return {
@@ -43,7 +48,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 			label: ctx.$t("utils.adminFilter.date.label.from"),
 			attributes: {
 				type: "date",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.date.from"),
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
 			},
 		},
 		{
@@ -52,7 +57,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 			label: ctx.$t("utils.adminFilter.date.label.until"),
 			attributes: {
 				type: "date",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.date.until"),
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
 			},
 		},
 	],
