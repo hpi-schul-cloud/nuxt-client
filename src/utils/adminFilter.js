@@ -131,8 +131,6 @@ export function studentFilter(ctx) {
 				},
 			],
 		},
-		// getFilterFirstname(ctx),
-		// getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
 	];
 }
