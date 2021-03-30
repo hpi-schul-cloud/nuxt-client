@@ -283,7 +283,7 @@ export default {
 		},
 		filteredActions() {
 			// if user has teacher role, bulkQr action gets filtered
-			return this.user.roles.some((role) => role.name === "teacher")
+			return !this.user.roles.some((role) => role.name === "administrator")
 				? this.permissionFilteredTableActions.filter(
 						(action) =>
 							action.label !==

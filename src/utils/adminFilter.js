@@ -3,41 +3,6 @@ import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
 import { printDate, fromInputDateTime, currentDate } from "@plugins/datetime";
 
-const getFilterFirstname = (ctx) => ({
-	title: ctx.$t("common.labels.firstName"),
-	chipTemplate: `${ctx.$t("common.labels.firstName")} = %1`,
-	dataTestid: "filter_firstname",
-	filter: [
-		{
-			attribute: "firstName",
-			operator: "=",
-			label: ctx.$t("common.labels.complete.firstName"),
-			input: InputDefault,
-			attributes: {
-				type: "text",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.complete.name"),
-			},
-		},
-	],
-});
-const getFilterLastname = (ctx) => ({
-	title: ctx.$t("common.labels.lastName"),
-	chipTemplate: `${ctx.$t("common.labels.lastName")} = %1`,
-	dataTestid: "filter_lastname",
-	filter: [
-		{
-			attribute: "lastName",
-			operator: "=",
-			label: ctx.$t("common.labels.complete.lastName"),
-			input: InputDefault,
-			attributes: {
-				type: "text",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.complete.lastname"),
-			},
-		},
-	],
-});
-
 const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
 	chipTemplate: (filter) => {
@@ -170,8 +135,6 @@ export function studentFilter(ctx) {
 				},
 			],
 		},
-		getFilterFirstname(ctx),
-		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
 	];
 }
@@ -227,8 +190,6 @@ export function teacherFilter(ctx) {
 				},
 			],
 		},
-		getFilterFirstname(ctx),
-		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
 	];
 }
