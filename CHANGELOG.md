@@ -13,6 +13,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - SC-8518 - fixed layout issues of checkbox
+### Removed
+
+- SC-8708 - removed firstname and lastname filters in NAT
 
 ## 26.0.4 - 2021-03-24
 
@@ -36,6 +39,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- SC-8554 - fixed the QR code generation with double role
 - SC-8719 - fixed pagination not setting currentPage to 1
 
 ### Added
