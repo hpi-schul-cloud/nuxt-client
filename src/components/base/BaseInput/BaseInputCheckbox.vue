@@ -146,7 +146,7 @@ label {
 }
 
 .label {
-	margin: -12px var(--space-xs-2) 0 var(--space-xs-2);
+	margin: 0 var(--space-xs-2) 0 var(--space-xs-2);
 	vertical-align: middle;
 }
 
