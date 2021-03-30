@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.1.0
 
+### Removed
+
+- SC-8708 - removed firstname and lastname filters in NAT
+
 ## 26.0.4 - 2021-03-24
 
 ### Changed
