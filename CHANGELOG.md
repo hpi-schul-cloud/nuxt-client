@@ -32,6 +32,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- SC-8554 - fixed the QR code generation with double role
 - SC-8719 - fixed pagination not setting currentPage to 1
 
 ### Added
