@@ -179,5 +179,4 @@ input:focus + .icon-wrapper svg {
 		margin: -12px var(--space-xs-2) 0 var(--space-xs-2);
 	}
 }
-
 </style>
