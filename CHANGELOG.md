@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.1.0
 
+### Fixed
+
+- SC-8518 - fixed layout issues of checkbox
+
 ## 26.0.4 - 2021-03-24
 
 ### Changed
