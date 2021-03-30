@@ -43,6 +43,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 			label: ctx.$t("utils.adminFilter.date.label.from"),
 			attributes: {
 				type: "date",
+				placeholder: ctx.$t("utils.adminFilter.placeholder.date.from"),
 			},
 		},
 		{
@@ -51,6 +52,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 			label: ctx.$t("utils.adminFilter.date.label.until"),
 			attributes: {
 				type: "date",
+				placeholder: ctx.$t("utils.adminFilter.placeholder.date.until"),
 			},
 		},
 	],

@@ -551,5 +551,7 @@
 	"utils.adminFilter.date.title": "Fecha de creación",
 	"utils.adminFilter.placeholder.class": "Filtrar por clase...",
 	"utils.adminFilter.placeholder.complete.lastname": "Filtra por el apellido completo...",
-	"utils.adminFilter.placeholder.complete.name": "Filtrar por nombre completo..."
+	"utils.adminFilter.placeholder.complete.name": "Filtrar por nombre completo...",
+	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
+	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020"
 }
