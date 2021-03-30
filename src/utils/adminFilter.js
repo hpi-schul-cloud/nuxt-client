@@ -1,7 +1,7 @@
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
 import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
-import { printDate, fromInputDateTime } from "@plugins/datetime";
+import { printDate, fromInputDateTime, currentDate } from "@plugins/datetime";
 
 const getFilterFirstname = (ctx) => ({
 	title: ctx.$t("common.labels.firstName"),
@@ -50,10 +50,14 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 		generator: (filterGroupConfig, values) => {
 			return {
 				createdAt: {
-					$gte: fromInputDateTime(values[filterGroupConfig.filter[0].id])
+					$gte: fromInputDateTime(
+						values[filterGroupConfig.filter[0].id] || currentDate()
+					)
 						.utc()
 						.toISOString(),
-					$lte: fromInputDateTime(values[filterGroupConfig.filter[1].id])
+					$lte: fromInputDateTime(
+						values[filterGroupConfig.filter[1].id] || currentDate()
+					)
 						.add(1, "day")
 						.utc()
 						.toISOString(),
