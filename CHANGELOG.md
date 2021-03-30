@@ -13,7 +13,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - SC-8518 - fixed layout issues of checkbox
-- SC-8519 - Admin Table Bugfix - Set current date for filter, without input
+- SC-8519 - Admin Table Bugfix - Set current date for filter, without input; Error handling parsing dates
 
 ### Removed
 
