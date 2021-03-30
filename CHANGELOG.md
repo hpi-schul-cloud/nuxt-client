@@ -13,6 +13,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - SC-8518 - fixed layout issues of checkbox
+
 ### Removed
 
 - SC-8708 - removed firstname and lastname filters in NAT
