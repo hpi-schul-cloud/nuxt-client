@@ -22,6 +22,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
+### Fixed
+
+- SC-8851 - Fix usage of query parameters in NAT
+
 ## 26.1.0
 
 ## 26.0.4 - 2021-03-24
