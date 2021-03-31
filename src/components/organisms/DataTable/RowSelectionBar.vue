@@ -9,9 +9,9 @@
 			<div v-else>
 				<span
 					>{{ numberOfSelectedItems }}
-					{{ $t("pages.administration.selected") }}</span
-				>
-				<span v-if="numberOfSelectedItems < totalNumberOfItems">
+					{{ $t("pages.administration.selected") }}
+				</span>
+				<!-- <span v-if="numberOfSelectedItems < totalNumberOfItems">
 					({{ $t("pages.administration.or") }}
 					<base-button
 						design="none"
@@ -23,6 +23,7 @@
 					</base-button>
 					)
 				</span>
+				-->
 			</div>
 			<div
 				v-if="actions && actions.length"
