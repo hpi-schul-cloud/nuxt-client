@@ -239,6 +239,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		padding-right: var(--space-md) !important;
+		cursor: pointer;
 
 		&-icon {
 			margin: var(--space-md) !important;
