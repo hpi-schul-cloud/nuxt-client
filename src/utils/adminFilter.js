@@ -7,8 +7,8 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
 	chipTemplate: (filter) => {
 		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
-			filter[0]
-		)} ${ctx.$t("common.words.and")} ${printDate(filter[1])} `;
+			filter[0] || currentDate()
+		)} ${ctx.$t("common.words.and")} ${printDate(filter[1] || currentDate())} `;
 	},
 	dataTestid: "filter_creationDate",
 	parser: {
@@ -24,7 +24,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 						$lte: fromInputDateTime(
 							values[filterGroupConfig.filter[1].id] || currentDate()
 						)
-							.add(1, "day")
+							.endOf("day")
 							.utc()
 							.toISOString(),
 					},
