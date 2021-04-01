@@ -167,6 +167,7 @@
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
 	"format.date": "DD.MM.YYYY",
+	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.time": "HH:mm",
