@@ -294,7 +294,7 @@ export default {
 		editFilteredColumns() {
 			// filters out edit/consent column if school is external or if user is a teacher
 			return this.school.isExternal ||
-				this.user.roles.some((role) => role.name === "teacher")
+				!this.user.roles.some((role) => role.name === "administrator")
 				? this.tableColumns.filter(
 						(col) => col.field !== "_id" && col.field !== "consentStatus"
 				  )

@@ -13,6 +13,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - SC-8518 - fixed layout issues of checkbox
+- SC-8881 - fixed double roles user (admin, teacher) not being able to edit other teachers
 
 ### Removed
 
