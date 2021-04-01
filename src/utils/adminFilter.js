@@ -25,13 +25,13 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 							values[filterGroupConfig.filter[0].id] || defaultFilterFromDate
 						)
 							.utc()
-							.toISOString(),
+							.format(),
 						$lte: fromInputDateTime(
 							values[filterGroupConfig.filter[1].id] || defaultFilterToDate
 						)
 							.endOf("day")
 							.utc()
-							.toISOString(),
+							.format(),
 					},
 				};
 			} catch (error) {
