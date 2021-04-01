@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.0.5 - 2021-04-01
+
+### Fixed
+
+- SC-8837 - fix datetime timezone issues
+
 ## 26.0.4 - 2021-03-24
 
 ### Changed
