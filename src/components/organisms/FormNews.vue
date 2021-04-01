@@ -112,7 +112,7 @@ export default Vue.extend({
 				this.data.date.date,
 				this.data.date.time
 			);
-			return a.toISOString();
+			return a.utc().format();
 		},
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
