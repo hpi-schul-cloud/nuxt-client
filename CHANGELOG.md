@@ -100,6 +100,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 - SC-7824 - Set proper email address and label for data privacy, common terms of use
 - SC-7023 - Implement the editor and task item on the course page
 - SC-7543 - added validate page to the LDAP configuration feature
