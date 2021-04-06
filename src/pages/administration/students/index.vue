@@ -212,6 +212,7 @@ export default {
 					sortable: true,
 				},
 				{
+					// edit column
 					field: "_id",
 					label: "",
 				},
@@ -316,6 +317,7 @@ export default {
 			// filters out edit/consent column if school is external
 			if (this.school.isExternal) {
 				return this.tableColumns.filter(
+					//_id field sets the edit column
 					(col) => col.field !== "_id" && col.field !== "consentStatus"
 				);
 			}
