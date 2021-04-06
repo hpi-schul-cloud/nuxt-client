@@ -301,7 +301,7 @@ export default {
 				!this.user.roles.some((role) => role.name === "administrator")
 			) {
 				return this.tableColumns.filter(
-					// _id field set edit column
+					// _id field sets the edit column
 					(col) => col.field !== "_id" && col.field !== "consentStatus"
 				);
 			}
