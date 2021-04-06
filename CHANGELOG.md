@@ -20,6 +20,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-8708 - removed firstname and lastname filters in NAT
 
+## 26.0.6 - 2021-04-06
+
+### Changed
+
+- SC-8837 - activate ldap config pages again
+
+## 26.0.5 - 2021-04-01
+
+### Fixed
+
+- SC-8837 - fix datetime timezone issues
+
 ## 26.0.4 - 2021-03-24
 
 ### Changed
