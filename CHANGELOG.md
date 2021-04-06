@@ -23,6 +23,26 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
+## 26.1.0
+
+## 26.0.4 - 2021-03-24
+
+### Changed
+
+- SC-8822 - add availability to phone number in imprint
+
+## 26.0.3 - 2021-03-24
+
+### Changed
+
+- SC-8822 - change phone number in imprint
+
+## 26.0.1 - 2021-03-22
+
+### Added
+
+- SC-8156 - introduce Spanish
+
 ## 26.0.0
 
 ### Fixed
@@ -39,7 +59,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8702 - disabled the select all button in NAT
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 
-## 25.6.0 - 09-02-21
+## 25.6.1
+
+### Fixed
+
+- SC-8576 - fixed the several requests issue in the LDAP config
+
+## 25.6.0 - 2021-02-21
 
 ### Added
 
