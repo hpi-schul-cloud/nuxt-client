@@ -30,7 +30,7 @@
 
 		<backend-data-table
 			:actions="permissionFilteredTableActions"
-			:columns="editFilteredColumns"
+			:columns="filteredColumns"
 			:current-page.sync="page"
 			:data="students"
 			:paginated="true"
@@ -312,13 +312,15 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 		},
-		editFilteredColumns() {
-			// filters edit/consent column if school is external
-			return this.school.isExternal
-				? this.tableColumns.filter(
-						(col) => col.field !== "_id" && col.field !== "consentStatus"
-				  )
-				: this.tableColumns;
+		filteredColumns() {
+			// filters out edit/consent column if school is external
+			if (this.school.isExternal) {
+				return this.tableColumns.filter(
+					(col) => col.field !== "_id" && col.field !== "consentStatus"
+				);
+			}
+
+			return this.tableColumns;
 		},
 	},
 	watch: {

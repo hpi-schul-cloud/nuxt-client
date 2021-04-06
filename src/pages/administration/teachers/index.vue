@@ -30,7 +30,7 @@
 
 		<backend-data-table
 			:actions="filteredActions"
-			:columns="editFilteredColumns"
+			:columns="filteredColumns"
 			:current-page.sync="page"
 			:data="teachers"
 			:paginated="true"
@@ -282,23 +282,29 @@ export default {
 			},
 		},
 		filteredActions() {
-			// if user has teacher role, bulkQr action gets filtered
-			return !this.user.roles.some((role) => role.name === "administrator")
-				? this.permissionFilteredTableActions.filter(
-						(action) =>
-							action.label !==
-							this.$t("pages.administration.teachers.index.tableActions.qr")
-				  )
-				: this.permissionFilteredTableActions;
+			// filters out the QR bulk action is user is not an admin
+			if (!this.user.roles.some((role) => role.name === "administrator")) {
+				return this.permissionFilteredTableActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.teachers.index.tableActions.qr")
+				);
+			}
+
+			return this.permissionFilteredTableActions;
 		},
-		editFilteredColumns() {
-			// filters out edit/consent column if school is external or if user is a teacher
-			return this.school.isExternal ||
+		filteredColumns() {
+			// filters out edit/consent column if school is external or if user is not an admin
+			if (
+				this.school.isExternal ||
 				!this.user.roles.some((role) => role.name === "administrator")
-				? this.tableColumns.filter(
-						(col) => col.field !== "_id" && col.field !== "consentStatus"
-				  )
-				: this.tableColumns;
+			) {
+				return this.tableColumns.filter(
+					(col) => col.field !== "_id" && col.field !== "consentStatus"
+				);
+			}
+
+			return this.tableColumns;
 		},
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
