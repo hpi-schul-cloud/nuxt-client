@@ -16,28 +16,49 @@ const CTX_MOCK = {
 	},
 };
 
-const MyStudentFilter = studentFilter(CTX_MOCK);
-const MyGetFilterDateCreatedFromTo = MyStudentFilter[2];
+const filter = studentFilter(CTX_MOCK);
+const filterDateCreatedFromTo = filter[2];
 
-const DATE_VALUES_MOCK_EMPTY = {
-	"input-2-0": "",
-	"input-2-1": "",
-};
-
-const FILTER_GROUP_CONFIG_MOCK = {
-	filter: [
-		{
-			id: "input-2-0",
-		},
-		{
-			id: "input-2-1",
-		},
-	],
+const MOCK_DATA = {
+	filterGroupConfig: {
+		filter: [{ id: "input-2-0" }, { id: "input-2-1" }],
+	},
+	emptyDates: {
+		"input-2-0": "",
+		"input-2-1": "",
+	},
+	dateValues: {
+		"input-2-0": "2021-04-01",
+		"input-2-1": "2021-05-01",
+	},
+	firstDateEmpty: {
+		"input-2-0": "",
+		"input-2-1": "2021-03-01",
+	},
+	secondDateEmpty: {
+		"input-2-0": "2021-02-01",
+		"input-2-1": "",
+	},
 };
 
 describe("@utils/adminFilter", () => {
 	describe("getFilterDateCreatedFromTo", () => {
-		it.todo("returns UTC date values for input values");
+		it("returns UTC date values for input values", () => {
+			const expected_gte_date = dayjs.tz("2021-04-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2021-05-01")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.dateValues
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
 
 		it("returns filter default value if no input", () => {
 			const expected_gte_date = dayjs.tz("1900-01-01").utc().format();
@@ -47,9 +68,43 @@ describe("@utils/adminFilter", () => {
 				.utc()
 				.format();
 
-			const { createdAt } = MyGetFilterDateCreatedFromTo.parser.generator(
-				FILTER_GROUP_CONFIG_MOCK,
-				DATE_VALUES_MOCK_EMPTY
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.emptyDates
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter second date value is empty", () => {
+			const expected_gte_date = dayjs.tz("2021-02-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2099-12-31")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.secondDateEmpty
+			);
+
+			expect(createdAt.$gte).toBe(expected_gte_date);
+			expect(createdAt.$lte).toBe(expected_lte_date);
+		});
+
+		it("returns filter first date value is empty", () => {
+			const expected_gte_date = dayjs.tz("1900-01-01").utc().format();
+			const expected_lte_date = dayjs
+				.tz("2021-03-01")
+				.endOf("day")
+				.utc()
+				.format();
+
+			const { createdAt } = filterDateCreatedFromTo.parser.generator(
+				MOCK_DATA.filterGroupConfig,
+				MOCK_DATA.firstDateEmpty
 			);
 
 			expect(createdAt.$gte).toBe(expected_gte_date);
