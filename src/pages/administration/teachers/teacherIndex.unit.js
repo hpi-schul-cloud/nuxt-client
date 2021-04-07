@@ -1,6 +1,6 @@
-import { default as StudentPage } from "./index.vue";
+import { default as TeacherPage } from "./index.vue";
 
-describe("students/index", () => {
+describe("Teacher/index", () => {
 	let mockStore;
 
 	beforeEach(() => {
@@ -13,7 +13,7 @@ describe("students/index", () => {
 								name: "administrator",
 							},
 						],
-						permissions: ["STUDENT_CREATE"],
+						permissions: ["TEACHER_CREATE"],
 					},
 					school: {
 						isExternal: false,
@@ -46,10 +46,10 @@ describe("students/index", () => {
 		};
 	});
 
-	it(...isValidComponent(StudentPage));
+	it(...isValidComponent(TeacherPage));
 
-	it("should render the fab-floating component if user has SUDENT_CREATE permission", async () => {
-		const wrapper = mount(StudentPage, {
+	it("should render the fab-floating component if user has TEACHER_CREATE permission", async () => {
+		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
@@ -57,12 +57,12 @@ describe("students/index", () => {
 		});
 
 		const fabComponent = wrapper.find(
-			`[data-testid="fab_button_students_table"]`
+			`[data-testid="fab_button_teachers_table"]`
 		);
 		expect(fabComponent.exists()).toBe(true);
 	});
 
-	it("should not render the fab-floating component if user does not have SUDENT_CREATE permission", async () => {
+	it("should not render the fab-floating component if user does not have TEACHER_CREATE permission", async () => {
 		const customMockStore = { ...mockStore };
 		customMockStore.auth.state = () => ({
 			user: {
@@ -76,7 +76,7 @@ describe("students/index", () => {
 				isExternal: false,
 			},
 		});
-		const wrapper = mount(StudentPage, {
+		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
@@ -84,20 +84,8 @@ describe("students/index", () => {
 		});
 
 		const fabComponent = wrapper.find(
-			`[data-testid="fab_button_students_table"]`
+			`[data-testid="fab_button_teachers_table"]`
 		);
 		expect(fabComponent.exists()).toBe(false);
-	});
-
-	it("should render the Legend component icons if the school NOT managed externally", async () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-
-		const legendComponent = wrapper.find(`.consent-icon`);
-		expect(legendComponent.exists()).toBe(true);
 	});
 });
