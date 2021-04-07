@@ -33,7 +33,7 @@ describe("students/index", () => {
 							limit: 25,
 							skip: 0,
 							total: 2,
-							query: "__vue_devtool_nan__",
+							query: "",
 						},
 					},
 				}),
