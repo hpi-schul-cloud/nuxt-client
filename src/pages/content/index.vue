@@ -51,7 +51,7 @@
 						>
 							<content-card
 								v-for="resource of resources.data"
-								:key="resource.ref.id"
+								:key="resource.properties['ccm:replicationsourceuuid'][0]"
 								class="card"
 								:inline="isInline"
 								:resource="resource"
