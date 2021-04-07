@@ -55,7 +55,6 @@ describe("students/index", () => {
 				store: mockStore,
 			}),
 		});
-
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
 		);
@@ -79,7 +78,7 @@ describe("students/index", () => {
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
-				store: mockStore,
+				store: customMockStore,
 			}),
 		});
 
@@ -87,5 +86,72 @@ describe("students/index", () => {
 			`[data-testid="fab_button_students_table"]`
 		);
 		expect(fabComponent.exists()).toBe(false);
+	});
+
+	it("should not render the fab-floating component if isExternal is true", async () => {
+		const customMockStore = { ...mockStore };
+		customMockStore.auth.state = () => ({
+			user: {
+				roles: [
+					{
+						name: "administrator",
+						permissions: ["STUDENT_CREATE"],
+					},
+				],
+			},
+			school: {
+				isExternal: true,
+			},
+		});
+
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+			}),
+		});
+		const fabComponent = wrapper.find(
+			`[data-testid="fab_button_students_table"]`
+		);
+		expect(fabComponent.exists()).toBe(false);
+	});
+
+	it("should render the adminTableLegend component when school is external", async () => {
+		const customMockStore = { ...mockStore };
+		customMockStore.auth.state = () => ({
+			user: {
+				roles: [
+					{
+						name: "administrator",
+						permissions: ["STUDENT_CREATE"],
+					},
+				],
+			},
+			school: {
+				isExternal: true,
+			},
+		});
+
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+			}),
+		});
+		const externalHint = wrapper.find(".external-sync-hint");
+
+		expect(externalHint.exists()).toBe(true);
+	});
+
+	it("should not render the adminTableLegend component when school is not external", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const externalHint = wrapper.find(".external-sync-hint");
+
+		expect(externalHint.exists()).toBe(false);
 	});
 });

@@ -50,7 +50,7 @@
 export default {
 	props: {
 		icons: {
-			type: Array,
+			type: [Array, Boolean],
 			required: true,
 		},
 		showExternalSyncHint: {
