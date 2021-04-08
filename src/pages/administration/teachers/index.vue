@@ -1,6 +1,15 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<section class="section">
+		<progress-modal
+			:active="isDeleting"
+			:percent="deletedPercent"
+			:title="$t('pages.administration.teachers.index.remove.progress.title')"
+			:description="
+				$t('pages.administration.teachers.index.remove.progress.description')
+			"
+			data-testid="progress-modal"
+		/>
 		<base-breadcrumb :inputs="breadcrumbs" />
 		<h1 class="mb--md h3">
 			{{ $t("pages.administration.teachers.index.title") }}
@@ -86,7 +95,7 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="icons"
+			:icons="schoolInternallyManaged && icons"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -126,6 +135,8 @@ import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@plugins/datetime";
+import ProgressModal from "@components/molecules/ProgressModal";
+
 export default {
 	layout: "loggedInFull",
 	components: {
@@ -134,6 +145,7 @@ export default {
 		AdminTableLegend,
 		FabFloating,
 		BaseInput,
+		ProgressModal,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -266,6 +278,8 @@ export default {
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
+			isDeleting: (state) => state.progress.delete.active,
+			deletedPercent: (state) => state.progress.delete.percent,
 		}),
 		...mapState("search", {
 			searchResult: "searchResult",
@@ -292,10 +306,12 @@ export default {
 				: this.permissionFilteredTableActions;
 		},
 		editFilteredColumns() {
-			// filters out edit column if school is external or if user is a teacher
+			// filters out edit/consent column if school is external or if user is a teacher
 			return this.school.isExternal ||
 				this.user.roles.some((role) => role.name === "teacher")
-				? this.tableColumns.filter((col) => col.field !== "_id")
+				? this.tableColumns.filter(
+						(col) => col.field !== "_id" && col.field !== "consentStatus"
+				  )
 				: this.tableColumns;
 		},
 		schoolInternallyManaged() {
@@ -400,11 +416,16 @@ export default {
 					{
 						userIds: rowIds,
 						selectionType,
+						roleName: "teacher",
 					}
 				);
-				this.$_printQRs(qrRegistrationLinks);
+
+				if (qrRegistrationLinks.length) {
+					this.$_printQRs(qrRegistrationLinks);
+				} else {
+					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
+				}
 			} catch (error) {
-				console.error(error);
 				this.$toast.error(
 					this.$tc("pages.administration.printQr.error", rowIds.length)
 				);
@@ -413,10 +434,9 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/handleUsers", {
-						query: this.getQueryForSelection(rowIds, selectionType),
-						action: "remove",
-						userType: "teachers",
+					await this.$store.dispatch("users/deleteUsers", {
+						ids: rowIds,
+						userType: "teacher",
 					});
 					this.$toast.success(this.$t("pages.administration.remove.success"));
 					this.find();

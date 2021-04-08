@@ -40,8 +40,8 @@ describe("@components/organisms/LdapRolesSection", () => {
 		const wrapper = mount(LdapRolesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				// validations are only active when groupOption !== group
-				value: { ...ldapConfigData, groupOption: "not group" },
+				// validations are only active when groupOption === group
+				value: { ...ldapConfigData, groupOption: "group" },
 			},
 		});
 		expect(wrapper.vm.$v).not.toBeUndefined();
@@ -51,8 +51,8 @@ describe("@components/organisms/LdapRolesSection", () => {
 		const wrapper = mount(LdapRolesSection, {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
-				// validations are only active when groupOption !== group
-				value: { ...ldapConfigData, groupOption: "not group" },
+				// validations are only active when groupOption === group
+				value: { ...ldapConfigData, groupOption: "group" },
 			},
 		});
 		// default props values are valid so expect this assertion to succeed
@@ -64,8 +64,8 @@ describe("@components/organisms/LdapRolesSection", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				value: {
-					// validations are only active when groupOption !== group
-					groupOption: "not ldap group",
+					// validations are only active when groupOption === group
+					groupOption: "group",
 					member: "",
 					student: "invalid",
 					teacher: "invalid",
@@ -80,8 +80,8 @@ describe("@components/organisms/LdapRolesSection", () => {
 	it("invalid validation is true when any of the input values are invalid", async () => {
 		const ldapConfigDataTestSpecific = {
 			...ldapConfigData,
-			// validations are only active when groupOption !== group
-			groupOption: "not ldap group",
+			// validations are only active when groupOption === group
+			groupOption: "group",
 		};
 		const wrapper = mount(LdapRolesSection, {
 			...createComponentMocks({ i18n: true }),
@@ -99,17 +99,19 @@ describe("@components/organisms/LdapRolesSection", () => {
 			},
 		});
 
-		const inputMember = wrapper.find("input[data-testid=ldapDataRolesMember]");
-		expect(inputMember.exists()).toBe(true);
+		const inputStudent = wrapper.find(
+			"input[data-testid=ldapDataRolesStudent]"
+		);
+		expect(inputStudent.exists()).toBe(true);
 
-		inputMember.setValue("");
-		inputMember.trigger("blur");
+		inputStudent.setValue("not valid");
+		inputStudent.trigger("blur");
 
-		expect(inputMember.element.value).toBe("");
+		expect(inputStudent.element.value).toBe("not valid");
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataRolesMember'] .info.error"
+			"div[data-testid='ldapDataRolesStudent'] .info.error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});
@@ -135,8 +137,8 @@ describe("@components/organisms/LdapRolesSection", () => {
 
 	it("invalid error message is displayed only after the blur event, even if originally invalid props were passed through", async () => {
 		const ldapConfigDataTestSpecific = {
-			// validations are only active when groupOption !== group
-			groupOption: "not ldap group",
+			// validations are only active when groupOption === group
+			groupOption: "group",
 			member: "",
 			student: "invalid",
 			teacher: "invalid",
@@ -160,20 +162,20 @@ describe("@components/organisms/LdapRolesSection", () => {
 		});
 
 		let errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataRolesMember'] .info.error"
+			"div[data-testid='ldapDataRolesStudent'] .info.error"
 		);
 		expect(wrapper.vm.$v.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalse();
 
-		const inputMember = wrapper.find("input[data-testid=ldapDataRolesMember]");
+		const inputMember = wrapper.find("input[data-testid=ldapDataRolesStudent]");
 		expect(inputMember.exists()).toBe(true);
-		expect(inputMember.element.value).toBe(ldapConfigDataTestSpecific.member);
+		expect(inputMember.element.value).toBe(ldapConfigDataTestSpecific.student);
 
 		inputMember.trigger("blur"); // without this the error is not displayed
 
 		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataRolesMember'] .info.error"
+			"div[data-testid='ldapDataRolesStudent'] .info.error"
 		);
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});
