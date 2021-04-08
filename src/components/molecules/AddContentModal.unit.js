@@ -6,11 +6,31 @@ const testProps = {
 	resource: {
 		title: "Test title",
 		url: "test url",
-		ref: {
-			id: "test id",
-		},
+		client: "test client",
 	},
 	contentId: "Test content",
+	items: [],
+};
+const testPropsMultiple = {
+	showCopyModal: true,
+	resource: {
+		title: "",
+		url: "",
+		client: "",
+	},
+	contentId: "Test content",
+	items: [
+		{
+			title: "Test title1",
+			url: "test url1",
+			client: "test client2",
+		},
+		{
+			title: "Test title2",
+			url: "test url2",
+			client: "test client2",
+		},
+	],
 };
 
 const courseOptions = [
@@ -114,6 +134,20 @@ describe("@components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(addToLesson.mock.calls).toHaveLength(1);
+		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
+		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
+	});
+
+	it("submit modal action multiple items", async () => {
+		const wrapper = getWrapper(testPropsMultiple);
+		wrapper.setData({
+			selectedLesson: lessonsMock[0],
+		});
+		expect(wrapper.vm.isSendEnabled).toBe(true);
+		await wrapper.vm.$nextTick();
+		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
+		await submitBtn.trigger("click");
+		expect(addToLesson.mock.calls).toHaveLength(2);
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
 	});
