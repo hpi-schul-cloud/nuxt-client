@@ -57,7 +57,7 @@
 				</div>
 				<div>
 					<base-button
-						v-if="isMerlinContent"
+						v-if="isMerlin"
 						design="outline"
 						class="content-button"
 						@click="
@@ -108,7 +108,7 @@
 							</div>
 						</div>
 					</div>
-					<div :style="{ margin: '0px' }" class="meta-container">
+					<div class="meta-container">
 						<div>
 							<base-icon class="meta-icon" source="custom" icon="hashtag" />
 						</div>
@@ -131,6 +131,19 @@
 							}}</span>
 						</template>
 					</div>
+					<div v-show="collectionLink !== ''" class="meta-container">
+						<div class="meta-icon">
+							<base-icon source="material" icon="ic_collection" />
+						</div>
+						<base-link
+							design="none"
+							type="button"
+							class="meta-text link"
+							:to="collectionLink"
+						>
+							<span>{{ $t("pages.content.card.collection") }}</span>
+						</base-link>
+					</div>
 				</div>
 			</div>
 			<user-has-role class="floating-buttons" :role="isNotStudent">
@@ -140,8 +153,9 @@
 					btn-class="floating-button"
 					btn-size="large"
 					btn-icon-class="footer__content-icon"
-					btn-icon="add"
+					btn-icon="add_circle_outline"
 					:btn-label="$t('pages.content._id.addToTopic')"
+					:multiple="false"
 				/>
 			</user-has-role>
 		</div>
@@ -161,8 +175,10 @@ import {
 	getDescription,
 	getTags,
 	getAuthor,
+	getMerlinReference,
+	isMerlinContent,
 } from "@utils/helpers";
-import { printDate } from "@plugins/datetime";
+import { printDateFromTimestamp } from "@plugins/datetime";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -191,10 +207,10 @@ export default {
 			return getAuthor(this.resource.properties);
 		},
 		createdAt() {
-			return printDate(this.resource.createdAt);
+			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
 		},
 		updatedAt() {
-			return printDate(this.resource.modifiedAt);
+			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
@@ -202,18 +218,11 @@ export default {
 		hasAuthor() {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
-		isMerlinContent() {
-			const source = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:replicationsource"
-			);
-			return source && source.toLowerCase().includes("merlin");
+		isMerlin() {
+			return isMerlinContent(this.resource);
 		},
 		merlinTokenReference() {
-			return getMetadataAttribute(
-				this.resource.properties,
-				"ccm:replicationsourceid"
-			);
+			return getMerlinReference(this.resource);
 		},
 		description() {
 			return getDescription(
@@ -241,6 +250,26 @@ export default {
 		},
 		isInline() {
 			return !!this.$route.query.inline;
+		},
+		collectionLink() {
+			let relation = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:hpi_lom_relation"
+			);
+			if (relation) {
+				relation = JSON.parse(relation.replace(/\'/g, '"'));
+				if (relation.kind === "ispartof") {
+					return {
+						name: "content-id",
+						params: { id: relation.resource.identifier[0] },
+						query: {
+							isCollection: true,
+							q: this.$route.query.q,
+						},
+					};
+				}
+			}
+			return "";
 		},
 	},
 	methods: {
