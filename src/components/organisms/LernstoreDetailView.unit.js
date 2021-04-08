@@ -28,11 +28,9 @@ describe("@components/molecules/LernstoreDetailView", () => {
 
 	it("Renders sidebar with data", () => {
 		expect(wrapper.find(".sidebar").exists()).toBe(true);
-		expect(wrapper.find(".title > span").text()).toBe(
-			"Mathematische Ausdrücke sortieren"
-		);
+		expect(wrapper.find(".title > span").text()).toBe("Technik der Dotierung");
 		expect(wrapper.find(".tag").attributes("href")).toBe(
-			"/content/?q=Mathematik"
+			"/content/?q=Elektronik; Einführung in die Elektronik; ; Grundwissen"
 		);
 	});
 });

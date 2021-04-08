@@ -80,6 +80,8 @@ export default {
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
+		merlinReference: { type: String, default: "" },
+		items: { type: Array, default: () => [] },
 
 		showCopyModal: {
 			type: Boolean,
@@ -148,16 +150,29 @@ export default {
 		},
 		addToLesson() {
 			this.$emit("close");
-			this.$store.dispatch("content/addToLesson", {
+			const payload = {
 				lessonId: this.selectedLesson._id,
-				material: {
+				event: this.$eventBus,
+				material: [],
+			};
+			if (this.items.length > 0) {
+				this.items.forEach((element) => {
+					payload.material.push({
+						title: element.title,
+						client: element.client,
+						url: element.url,
+						merlinReference: element.merlinReference,
+					});
+				});
+			} else {
+				payload.material = {
 					title: this.title,
 					client: this.client,
 					url: this.url,
-					merlinReference: this.$parent.getMerlinReference,
-				},
-				event: this.$eventBus,
-			});
+					merlinReference: this.merlinReference,
+				};
+			}
+			this.$store.dispatch("content/addToLesson", payload);
 			this.closeModal();
 		},
 		findLessons(course) {
