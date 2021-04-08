@@ -314,15 +314,23 @@ export default {
 			);
 		},
 		filteredColumns() {
-			// filters out edit/consent column if school is external
+			let editedColumns = this.tableColumns;
+			// filters out edit column if school is external
 			if (this.school.isExternal) {
-				return this.tableColumns.filter(
+				editedColumns = this.tableColumns.filter(
 					//_id field sets the edit column
-					(col) => col.field !== "_id" && col.field !== "consentStatus"
+					(col) => col.field !== "_id"
 				);
 			}
 
-			return this.tableColumns;
+			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
+			if (!process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"]) {
+				editedColumns = editedColumns.filter(
+					(col) => col.field !== "consentStatus"
+				);
+			}
+
+			return editedColumns;
 		},
 	},
 	watch: {

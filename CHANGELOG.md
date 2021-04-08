@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.1.0
 
+### Added
+
+- SC-8681 - added ADMIN_TABLES_DISPLAY_CONSENT_COLUMN as an environment variable to display/hide the NAT consent column
+
 ### Fixed
 
 - SC-8518 - fixed layout issues of checkbox
