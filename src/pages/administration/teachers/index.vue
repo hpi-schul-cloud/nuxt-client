@@ -271,9 +271,6 @@ export default {
 		...mapState("search", {
 			searchResult: "searchResult",
 		}),
-		...mapState("federal-states", {
-			federalState: "federalState",
-		}),
 		permissionFilteredTableActions() {
 			return this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
@@ -299,7 +296,6 @@ export default {
 		},
 		filteredColumns() {
 			let editedColumns = this.tableColumns;
-			const states = ["NI", "TH"];
 			// filters out edit column if school is external or if user is not an admin
 			if (
 				this.school.isExternal ||
@@ -311,13 +307,11 @@ export default {
 				);
 			}
 
-			// filters out the consent column if the school is from any of the states and is not external
-			if (states.some((state) => this.federalState.abbreviation == state)) {
-				if (!this.school.isExternal) {
-					editedColumns = editedColumns.filter(
-						(col) => col.field !== "consentStatus"
-					);
-				}
+			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
+			if (!process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"]) {
+				editedColumns = editedColumns.filter(
+					(col) => col.field !== "consentStatus"
+				);
 			}
 
 			return editedColumns;
@@ -351,9 +345,6 @@ export default {
 	},
 	created(ctx) {
 		this.find();
-		if (this.school.federalState) {
-			this.getFederalStateData();
-		}
 	},
 	methods: {
 		find() {
@@ -510,10 +501,6 @@ export default {
 					userType: "teachers",
 				});
 			}, 400);
-		},
-		getFederalStateData() {
-			const federalStateId = this.school.federalState;
-			this.$store.dispatch(`federal-states/find`, { _id: federalStateId });
 		},
 	},
 };
