@@ -64,8 +64,8 @@ setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
 describe("@plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
-	const dateUTC = dayjs(dateString);
-	const dateLocal = dayjs(dateString).tz(TEST_DATETIME_TIMEZONE);
+	const dateUTC = dayjs.tz(dateString, "UTC");
+	const dateLocal = dayjs.tz(dateString, TEST_DATETIME_TIMEZONE);
 	const dateNow = dayjs().tz(TEST_DATETIME_TIMEZONE);
 
 	const dateUTCString = dateUTC.format("DD.MM.YYYY");
