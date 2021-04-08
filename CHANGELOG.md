@@ -10,6 +10,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.1.0
 
+### Added
+
+- SC-8681 - added a functionality that checks for the federal state of the school and whether is external or not to filter out the consent column
+
 ### Fixed
 
 - SC-8518 - fixed layout issues of checkbox
