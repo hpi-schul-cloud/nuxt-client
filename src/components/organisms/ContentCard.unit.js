@@ -38,7 +38,7 @@ describe("@components/organisms/ContentCard", () => {
 	it("Renders title of content Card", () => {
 		expect(wrapper.find(".content__title").exists()).toBe(true);
 		expect(wrapper.find(".content__title").text()).toBe(
-			"Mathematische Ausdrücke sortieren"
+			"Technik der Dotierung"
 		);
 	});
 	it("Renders footer of content Card for single elements", () => {
@@ -79,7 +79,6 @@ describe("@components/organisms/ContentCard Collection", () => {
 			"ic_collection"
 		);
 	});
-
 	it("Renders title of content Card", () => {
 		expect(wrapper.find(".content__title").exists()).toBe(true);
 		expect(wrapper.find(".content__title").text()).toBe("heimische Singvögel");
