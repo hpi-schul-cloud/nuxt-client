@@ -176,7 +176,7 @@ export default {
 		},
 	},
 	validations() {
-		if (this.groupOption !== "group") {
+		if (this.groupOption === "group") {
 			return {
 				value: {
 					member: { required },
