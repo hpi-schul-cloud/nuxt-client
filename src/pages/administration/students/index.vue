@@ -327,12 +327,13 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const temp = this.$uiState.get(
+			const uiState = this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
 			);
 
-			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+			if (uiState && uiState.searchQuery)
+				query.searchQuery = uiState.searchQuery;
 
 			this.currentFilterQuery = query;
 			if (
