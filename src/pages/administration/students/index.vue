@@ -350,6 +350,7 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		this.getFederalStateData();
 	},
 	methods: {
 		find() {
@@ -518,6 +519,10 @@ export default {
 					userType: "students",
 				});
 			}, 400);
+		},
+		getFederalStateData() {
+			const federalStateId = this.school.federalState;
+			this.$store.dispatch(`federal-states/find`, { _id: federalStateId });
 		},
 	},
 };
