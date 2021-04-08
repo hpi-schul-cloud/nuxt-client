@@ -11,6 +11,7 @@ export const i18n = (store) =>
 		messages: {
 			en: require("@locale/en.json"),
 			de: require("@locale/de.json"),
+			es: require("@locale/es.json"),
 		},
 	});
 
