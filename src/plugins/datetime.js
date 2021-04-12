@@ -94,7 +94,7 @@ const initDefaultTimezone = (app, store) => {
  * @return {dayjs} Date object based on current timezone
  */
 export const fromUTC = (date) => {
-	return dayjs(date).tz();
+	return dayjs.tz(date, "UTC");
 };
 
 /**
@@ -105,7 +105,7 @@ export const fromUTC = (date) => {
  */
 export const printDateFromDeUTC = (date) => {
 	if (date) {
-		const result = dayjs(date, "DD.MM.YYYY").tz();
+		const result = dayjs.tz(date, "DD.MM.YYYY", "UTC");
 		return result.format(DATETIME_FORMAT.date);
 	}
 	return null;
@@ -119,7 +119,7 @@ export const printDateFromDeUTC = (date) => {
  */
 export const inputDateFromDeUTC = (date) => {
 	if (date) {
-		const result = dayjs(date, "DD.MM.YYYY").tz();
+		const result = dayjs.tz(date, "DD.MM.YYYY", "UTC");
 		return result.format(DATETIME_FORMAT.inputDate);
 	}
 	return null;
@@ -149,7 +149,7 @@ export const printDate = (date) => {
 
 /**
  * Returns formated date string based on a given dayjs object
- * @param {String} date
+ * @param {datejs} date
  * @return {String} Date string based on current timezone using locale date formating
  */
 export const printDateTime = (date) => {
@@ -158,11 +158,20 @@ export const printDateTime = (date) => {
 
 /**
  * Returns formated date string based on a given dayjs object
- * @param {String} date
+ * @param {datejs} date
  * @return {String} Date string based on current timezone using locale date formating slashed
  */
 export const printDateFromDayJs = (date) => {
 	return date.format(DATETIME_FORMAT.date);
+};
+
+/**
+ * Returns formated date string based on a given timestamp
+ * @param {String|Integer} timestamp
+ * @return {String} Date string based on current timezone using locale date formating slashed
+ */
+export const printDateFromTimestamp = (timestamp) => {
+	return dayjs(parseInt(timestamp)).format(DATETIME_FORMAT.date);
 };
 
 /**
@@ -201,7 +210,7 @@ export const fromNow = (date) => {
  * @return {Array} Array of date and time for usage in inputs
  */
 export const createInputDateTime = (date) => {
-	const resultDate = dayjs(date).tz();
+	const resultDate = dayjs.tz(date, "UTC");
 	return [
 		resultDate.format(DATETIME_FORMAT.inputDate),
 		resultDate.format(DATETIME_FORMAT.inputTime),
