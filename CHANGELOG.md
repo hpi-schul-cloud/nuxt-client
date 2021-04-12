@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- QF/Pull Request Workflow - moved Dependabot config in repository
 - SC-8250 - connect UI for bulk delete
 - SC-8164 - apply deletion concept to the deletion of students and teachers
 - SC-7937 - added Lern-Store collections multi-select
