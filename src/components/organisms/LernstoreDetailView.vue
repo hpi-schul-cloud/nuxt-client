@@ -41,22 +41,56 @@
 					</span>
 				</div>
 				<div class="author-provider">
-					<span v-if="author">
+					<span v-if="hasAuthor">
 						<base-link :href="'/content/?q=' + author" class="content-link">{{
 							author
 						}}</base-link>
 						({{ $t("pages.content._id.metadata.author") }})
 					</span>
 					<span v-if="provider">
-						,
+						<span v-if="hasAuthor">,</span>
 						<base-link :href="'/content/?q=' + provider" class="content-link">{{
 							provider
 						}}</base-link>
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
+				<div>
+					<base-button
+						v-if="isMerlin"
+						design="outline"
+						class="content-button"
+						@click="
+							() => {
+								goToMerlinContent(merlinTokenReference);
+							}
+						"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+					<base-button
+						v-else
+						design="outline"
+						:href="downloadUrl"
+						class="content-button"
+						target="_blank"
+					>
+						<base-icon source="custom" icon="open_new_window" />
+						{{ $t("pages.content.material.toMaterial") }}
+					</base-button>
+					<!-- This will be replaced with Modal -->
+					<div v-if="isBrandenburg" class="external-content-warning">
+						<p class="text-s external-content-title">
+							{{ $t("pages.content.material.leavePageWarningMain") }}
+						</p>
+						<p class="text-xs">
+							{{ $t("pages.content.material.leavePageWarningFooter") }}
+						</p>
+					</div>
+				</div>
 				<!-- eslint-disable vue/no-v-html -->
-				<div class="description" v-html="description"></div>
+				<div class="description text-wrap" v-html="description"></div>
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
 						<div class="meta-icon">
@@ -74,26 +108,9 @@
 							</div>
 						</div>
 					</div>
-					<div v-if="downloadUrl" class="meta-container">
-						<div class="meta-icon">
-							<base-icon
-								:source="getTypeIcon(resource.mimetype).iconSource"
-								:icon="getTypeIcon(resource.mimetype).icon"
-							/>
-						</div>
-						<div class="meta-text text-wrap">
-							<base-link
-								:href="downloadUrl"
-								target="_blank"
-								class="tertiary-color"
-							>
-								{{ downloadUrl }}
-							</base-link>
-						</div>
-					</div>
 					<div class="meta-container">
-						<div class="meta-icon">
-							<base-icon source="fa" icon="tag" />
+						<div>
+							<base-icon class="meta-icon" source="custom" icon="hashtag" />
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
@@ -102,17 +119,30 @@
 									:key="index"
 									class="meta-text"
 								>
-									<base-link :href="'/content/?q=' + tag" class="tag-link"
+									<base-link :href="'/content/?q=' + tag" class="tag link"
 										>#{{ tag }}</base-link
 									>
 								</span>
 							</div>
 						</template>
 						<template v-if="tags.length === 0">
-							<span class="meta-text tag-link">{{
+							<span class="meta-text link">{{
 								$t("pages.content._id.metadata.noTags")
 							}}</span>
 						</template>
+					</div>
+					<div v-show="collectionLink !== ''" class="meta-container">
+						<div class="meta-icon">
+							<base-icon source="material" icon="ic_collection" />
+						</div>
+						<base-link
+							design="none"
+							type="button"
+							class="meta-text link"
+							:to="collectionLink"
+						>
+							<span>{{ $t("pages.content.card.collection") }}</span>
+						</base-link>
 					</div>
 				</div>
 			</div>
@@ -123,8 +153,9 @@
 					btn-class="floating-button"
 					btn-size="large"
 					btn-icon-class="footer__content-icon"
-					btn-icon="add"
+					btn-icon="add_circle_outline"
 					:btn-label="$t('pages.content._id.addToTopic')"
+					:multiple="false"
 				/>
 			</user-has-role>
 		</div>
@@ -132,14 +163,24 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 
 import contentMeta from "@mixins/contentMeta";
 import BaseLink from "../base/BaseLink";
 
-import { getMetadataAttribute } from "@utils/helpers";
+import {
+	getMetadataAttribute,
+	getProvider,
+	getDescription,
+	getTags,
+	getAuthor,
+	getMerlinReference,
+	isMerlinContent,
+} from "@utils/helpers";
+import { printDateFromTimestamp } from "@plugins/datetime";
+
+const DEFAULT_AUTHOR = "admin";
 
 export default {
 	components: {
@@ -157,59 +198,49 @@ export default {
 		client: { type: String, default: "Schul-Cloud" },
 		role: { type: String, default: "" },
 	},
-	data() {
-		return {
-			dayjs,
-		};
-	},
 	computed: {
 		provider() {
-			const provider = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:metadatacontributer_provider"
-			);
+			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
 		},
 		author() {
-			return getMetadataAttribute(this.resource.properties, "cm:creator");
+			return getAuthor(this.resource.properties);
 		},
 		createdAt() {
-			return dayjs(
-				getMetadataAttribute(this.resource.properties, "cm:created")
-			).format("DD.MM.YYYY");
+			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
 		},
 		updatedAt() {
-			return dayjs(
-				getMetadataAttribute(this.resource.properties, "cm:modified")
-			).format("DD.MM.YYYY");
+			return printDateFromTimestamp(this.resource.properties["cm:modified"][0]);
 		},
 		type() {
 			return this.getTypeI18nName(this.resource.mimetype);
 		},
+		hasAuthor() {
+			return this.author && this.author !== DEFAULT_AUTHOR;
+		},
+		isMerlin() {
+			return isMerlinContent(this.resource);
+		},
+		merlinTokenReference() {
+			return getMerlinReference(this.resource);
+		},
 		description() {
-			return (
-				this.resource.description ||
-				getMetadataAttribute(
-					this.resource.properties,
-					"cclom:general_description"
-				)
+			return getDescription(
+				this.resource.description,
+				this.resource.properties
 			);
 		},
 		backgroundImage() {
 			return this.resource.preview.url;
 		},
+		isBrandenburg() {
+			return process.env.SC_THEME === "brb";
+		},
 		downloadUrl() {
-			return getMetadataAttribute(this.resource.properties, "cclom:location");
+			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
 		},
 		tags() {
-			let tags = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:taxonentry"
-			);
-			if (tags) {
-				tags = tags.split("; ").filter((w) => w !== "");
-			}
-			return tags ? tags : [];
+			return getTags(this.resource.properties);
 		},
 		filename() {
 			return this.resource.filename;
@@ -217,8 +248,37 @@ export default {
 		closeButtonStyleSelector() {
 			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
 		},
+		isInline() {
+			return !!this.$route.query.inline;
+		},
+		collectionLink() {
+			let relation = getMetadataAttribute(
+				this.resource.properties,
+				"ccm:hpi_lom_relation"
+			);
+			if (relation) {
+				relation = JSON.parse(relation.replace(/\'/g, '"'));
+				if (relation.kind === "ispartof") {
+					return {
+						name: "content-id",
+						params: { id: relation.resource.identifier[0] },
+						query: {
+							isCollection: true,
+							q: this.$route.query.q,
+						},
+					};
+				}
+			}
+			return "";
+		},
 	},
 	methods: {
+		async goToMerlinContent(merlinReference) {
+			const url = await this.$axios.$get(
+				`/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
+			);
+			window.open(url, "_blank");
+		},
 		isNotStudent(roles) {
 			return this.role === ""
 				? roles.some((role) => !role.startsWith("student"))
@@ -233,9 +293,13 @@ export default {
 		},
 	},
 	head() {
-		return {
-			title: "LernStore",
-		};
+		return this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+			  }
+			: { title: this.$t("global.sidebar.lernstore") };
 	},
 };
 </script>
@@ -296,10 +360,13 @@ $tablet-portrait-width: 768px;
 
 		.preview {
 			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			height: 100%;
 
 			@media (max-width: $tablet-portrait-width) {
-				height: 80vh;
+				height: 70vh;
 			}
 
 			.preview-background-color {
@@ -333,8 +400,6 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-page);
 				object-position: center;
 				object-fit: contain;
-				width: 100%;
-				height: 100%;
 
 				@include breakpoint(tablet) {
 					min-height: auto;
@@ -345,14 +410,13 @@ $tablet-portrait-width: 768px;
 
 	.sidebar {
 		position: relative;
-		z-index: var(--layer-dropdown);
 		display: flex;
 		flex-direction: column;
 		grid-area: meta;
 		align-items: center;
 		justify-content: space-between;
-		min-height: 100vh;
-		padding-bottom: var(--space-xl);
+		max-height: 100vh;
+		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
 		background-color: var(--color-white);
 		box-shadow: -8px 0 17px -7px rgba(0, 0, 0, 0.75);
@@ -365,6 +429,19 @@ $tablet-portrait-width: 768px;
 		.content-container {
 			width: 80%;
 			margin-top: var(--space-md);
+		}
+
+		.external-content-warning {
+			color: var(--color-danger);
+
+			.external-content-title {
+				margin-top: var(--space-md);
+				font-weight: var(--font-weight-bold);
+			}
+		}
+
+		.content-button {
+			width: 100%;
 		}
 
 		.actions {
@@ -395,6 +472,12 @@ $tablet-portrait-width: 768px;
 			font-size: var(--text-md);
 		}
 
+		.text-wrap {
+			display: flex;
+			flex-flow: row wrap;
+			word-break: break-word;
+		}
+
 		.metadata {
 			display: flex;
 			flex-direction: column;
@@ -405,11 +488,6 @@ $tablet-portrait-width: 768px;
 				display: flex;
 				align-items: flex-start;
 				margin-bottom: var(--space-lg);
-				.text-wrap {
-					display: flex;
-					flex-flow: row wrap;
-					word-break: break-all;
-				}
 				.meta-icon {
 					margin-right: var(--space-md);
 					font-size: var(--text-lg);
@@ -417,7 +495,7 @@ $tablet-portrait-width: 768px;
 						max-height: var(--text-lg);
 					}
 				}
-				.tag-link {
+				.link {
 					margin-right: var(--space-xs);
 					color: var(--color-tertiary);
 				}
@@ -438,7 +516,7 @@ $tablet-portrait-width: 768px;
 			border-radius: var(--radius-md);
 
 			@media (max-width: $tablet-portrait-width) {
-				padding-bottom: var(--space-xl);
+				padding-bottom: var(--space-xs);
 			}
 		}
 	}

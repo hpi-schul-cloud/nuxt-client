@@ -1,3 +1,4 @@
+<!-- eslint-disable max-lines -->
 <template>
 	<div class="wrapper">
 		<div
@@ -38,9 +39,16 @@
 							:value="vmodel"
 							:disabled="disabled"
 							:class="classes"
+							:min="appliedType === 'date' && birthDate ? minDate : ''"
+							:max="appliedType === 'date' && birthDate ? maxDate : ''"
+							:pattern="
+								appliedType === 'date' && birthDate
+									? birthDateValidationPattern
+									: null
+							"
 							@input="handleInput"
-							@focus="hasFocus = true"
-							@blur="hasFocus = false"
+							@focus="handleFocus"
+							@blur="handleBlur"
 						/>
 					</slot>
 				</div>
@@ -59,7 +67,7 @@
 						/>
 					</base-button>
 					<base-icon
-						v-if="error"
+						v-if="hasError"
 						source="custom"
 						icon="warning"
 						fill="var(--color-danger)"
@@ -73,15 +81,18 @@
 				</div>
 			</div>
 		</div>
+		<div class="bottom-line" style="border-color: transparent" />
 		<span
 			v-if="hasError || !!info"
 			:class="{ info: true, help: !hasError, error: hasError }"
 		>
-			{{ error || info }}
+			{{ error || validationError || info }}
 		</span>
 	</div>
 </template>
 <script>
+import { inputRangeDate } from "@plugins/datetime";
+
 import uidMixin from "@mixins/uid";
 
 export const supportedTypes = [
@@ -93,6 +104,8 @@ export const supportedTypes = [
 	"textarea",
 	"url",
 	"number",
+	"date",
+	"time",
 ];
 
 export default {
@@ -120,11 +133,17 @@ export default {
 		disabled: { type: Boolean },
 		classes: { type: String, default: "" },
 		focus: { type: Boolean },
+		birthDate: { type: Boolean },
+		validationError: { type: String, default: "" },
 	},
 	data() {
 		return {
 			hasFocus: false,
 			passwordVisible: false,
+			minDate: inputRangeDate(-100, "y"),
+			maxDate: inputRangeDate(-4, "y"),
+			birthDateValidationPattern:
+				"(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})",
 		};
 	},
 	computed: {
@@ -135,7 +154,7 @@ export default {
 			return this.type;
 		},
 		hasError() {
-			return !!this.error;
+			return !!(this.error || this.validationError);
 		},
 		showLabel() {
 			return (
@@ -157,6 +176,14 @@ export default {
 		},
 		togglePasswordVisibility() {
 			this.passwordVisible = !this.passwordVisible;
+		},
+		handleFocus(event) {
+			this.hasFocus = true;
+			this.$emit("focus", event);
+		},
+		handleBlur(event) {
+			this.hasFocus = false;
+			this.$emit("blur", event);
 		},
 	},
 };
@@ -180,15 +207,19 @@ export default {
 	&:focus-within,
 	&:hover:not(.disabled) {
 		.label {
-			color: var(--color-accent);
+			color: var(--color-primary);
 		}
 		.help {
 			visibility: visible;
 		}
 		.visible {
-			fill: var(--color-accent);
+			fill: var(--color-primary);
 		}
 	}
+}
+
+.bottom-line {
+	border-bottom: var(--border-width-bold) solid;
 }
 
 .top {
@@ -197,8 +228,11 @@ export default {
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom-color: var(--color-accent);
+		border-bottom: var(--border-width-bold) solid var(--color-primary);
 		outline: none;
+		~ .bottom-line {
+			border-bottom: var(--border-width) solid;
+		}
 	}
 	&.error {
 		border-bottom-color: var(--color-danger);
@@ -239,7 +273,7 @@ export default {
 		.core {
 			flex: 1;
 			height: min-content;
-			line-height: 0; // needed for correct spacing
+			line-height: auto; // needed for correct spacing
 			input {
 				width: 100%;
 				padding: 0;

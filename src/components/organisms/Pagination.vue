@@ -1,7 +1,7 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
 		<base-select
-			style="max-width: 150px;"
+			style="max-width: 150px"
 			close-on-select
 			:value="perPageSelected"
 			:options="perPageOptions"
@@ -120,6 +120,7 @@ export default {
 	methods: {
 		setPagination(val) {
 			this.$emit("update:per-page", val.value);
+			this.$emit("update:current-page", 1);
 		},
 		previousPage() {
 			this.$emit("update:current-page", this.currentPage - 1);

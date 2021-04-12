@@ -29,28 +29,32 @@
 							type="date"
 							:label="$t('components.organisms.FormNews.label.date')"
 							data-testid="news_date"
+							placeholder="JJJJ-MM-TT"
 						/>
 						<base-input
 							v-model="data.date.time"
 							type="time"
 							:label="$t('components.organisms.FormNews.label.time')"
 							data-testid="news_time"
+							placeholder="HH:MM"
 						/>
 					</div>
 				</transition>
 				<!-- @slot Add your action buttons here, predefined actions are `#actions="{ remove, cancel }"` -->
-				<slot name="actions" :remove="remove" :cancel="cancel"> </slot>
+				<slot name="actions" :remove="remove" :cancel="cancel" />
 			</div>
 		</transition>
 	</form>
 </template>
 
-<script>
-import dayjs from "dayjs";
-import TextEditor from "@components/molecules/TextEditor";
-import TitleInput from "@components/molecules/TitleInput";
+<script lang="ts">
+import Vue from "vue";
+import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
 
-export default {
+import TextEditor from "@components/molecules/TextEditor.vue";
+import TitleInput from "@components/molecules/TitleInput.vue";
+
+export default Vue.extend({
 	components: {
 		TextEditor,
 		TitleInput,
@@ -81,7 +85,13 @@ export default {
 			validator: (v) => ["create", "patch"].includes(v),
 		},
 	},
-	data() {
+	data(): {
+		data: {
+			title: string;
+			content: string;
+			date: { date: string; time: string };
+		};
+	} {
 		return {
 			data: {
 				title: "",
@@ -94,23 +104,23 @@ export default {
 		};
 	},
 	computed: {
-		publishDate() {
+		publishDate(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
 			}
-			const date = dayjs(
-				`${this.data.date.date} ${this.data.date.time}`,
-				"YYYY-MM-DD HH:MM"
+			const a: any = fromInputDateTime(
+				this.data.date.date,
+				this.data.date.time
 			);
-			return date.toISOString();
+			return a.utc().format();
 		},
-		errors() {
+		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
 				? undefined
-				: this.$t("components.organisms.FormNews.errors.missing_title");
+				: this.$ts("components.organisms.FormNews.errors.missing_title");
 			const content = this.data.content
 				? undefined
-				: this.$t("components.organisms.FormNews.errors.missing_content");
+				: this.$ts("components.organisms.FormNews.errors.missing_content");
 			return {
 				title,
 				content,
@@ -131,6 +141,9 @@ export default {
 				 *
 				 * @type {object}
 				 */
+				if (this.data.date.date && !this.data.date.time) {
+					this.data.date.time = "00:00";
+				}
 				this.$emit("update:news", to);
 			},
 		},
@@ -151,18 +164,18 @@ export default {
 				}
 			}
 		},
-		updateFromParent({ title, content, displayAt }) {
+		updateFromParent({ title, content, displayAt }: any) {
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				const date = dayjs(displayAt);
-				this.data.date.date = date.format("YYYY-MM-DD");
-				this.data.date.time = date.format("HH:mm");
+				[this.data.date.date, this.data.date.time] = createInputDateTime(
+					displayAt
+				);
 			}
 		},
 		async create() {
 			const errors = Object.values(this.errors).filter((a) => a);
-			if (errors.length) {
+			if (errors.length && errors[0]) {
 				return this.$toast.error(errors[0]);
 			}
 			try {
@@ -176,19 +189,19 @@ export default {
 						this.$route.query.targetmodel || this.$route.query.context,
 				});
 				this.$toast.success(
-					this.$t("components.organisms.FormNews.success.create")
+					this.$ts("components.organisms.FormNews.success.create")
 				);
 				this.$router.push({ name: "news-id", params: { id: news._id } });
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormNews.errors.create")
+					this.$ts("components.organisms.FormNews.errors.create")
 				);
 			}
 		},
 		async patch() {
 			const errors = Object.values(this.errors).filter((a) => a);
-			if (errors.length) {
+			if (errors.length && errors[0]) {
 				return this.$toast.error(errors[0]);
 			}
 			try {
@@ -201,7 +214,7 @@ export default {
 					},
 				]);
 				this.$toast.success(
-					this.$t("components.organisms.FormNews.success.patch")
+					this.$ts("components.organisms.FormNews.success.patch")
 				);
 				this.$router.push({
 					name: "news-id",
@@ -210,7 +223,7 @@ export default {
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormNews.errors.patch")
+					this.$ts("components.organisms.FormNews.errors.patch")
 				);
 			}
 		},
@@ -236,13 +249,13 @@ export default {
 			try {
 				await this.$store.dispatch("news/remove", this.$route.params.id);
 				this.$toast.success(
-					this.$t("components.organisms.FormNews.success.remove")
+					this.$ts("components.organisms.FormNews.success.remove")
 				);
 				this.$router.push({ name: "news" });
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
-					this.$t("components.organisms.FormNews.errors.remove")
+					this.$ts("components.organisms.FormNews.errors.remove")
 				);
 			}
 		},
@@ -276,7 +289,7 @@ export default {
 			this.$router.push(cancelTarget);
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

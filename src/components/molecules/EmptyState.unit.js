@@ -16,13 +16,16 @@ describe("@components/molecules/EmptyState", () => {
 	});
 
 	it("renders image", () => {
-		const wrapper = shallowMount(EmptyState, {
+		const wrapper = mount(EmptyState, {
 			propsData: {
 				image: "@assets/icons/emptystate.svg",
 				alt: "Alt Text",
 			},
 		});
-		expect(wrapper.find("img").classes("image")).toBe(true);
+		expect(wrapper.find("img").exists()).toBe(true);
+		expect(wrapper.find("img").attributes("src")).toBe(
+			"@assets/icons/emptystate.svg"
+		);
 	});
 
 	it(

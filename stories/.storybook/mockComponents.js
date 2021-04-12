@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import Vuelidate from "vuelidate";
 
 import "@plugins/global";
 
@@ -14,7 +15,7 @@ Vue.use({
 });
 
 // Dialog
-import BaseDialog from "@basecomponents/BaseDialog";
+import BaseDialog from "@basecomponents/BaseDialog/BaseDialogProgrammatic";
 Vue.use(BaseDialog);
 
 // Nuxt Components
@@ -41,3 +42,4 @@ Object.keys(mockComponents).forEach((componentName) =>
 );
 
 Vue.use(Vuex);
+Vue.use(Vuelidate);

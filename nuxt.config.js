@@ -1,5 +1,6 @@
 require("dotenv").config();
 const pkg = require("./package");
+const webpack = require("webpack");
 
 const sentryConfig = require("./sentry.config.js");
 
@@ -25,6 +26,7 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
+	buildModules: ["@nuxt/typescript-build"],
 	// to make ENV variables available in components, they need to be defined here
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
@@ -37,6 +39,17 @@ module.exports = {
 		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 		SC_THEME: process.env.SC_THEME,
 		LERNSTORE_MODE: process.env.LERNSTORE_MODE,
+		FEATURE_ES_COLLECTIONS_ENABLED:
+			process.env.FEATURE_ES_COLLECTIONS_ENABLED || false,
+		FEATURE_MATRIX_MESSENGER_ENABLED:
+			process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
+		FEATURE_MESSENGER__SCHOOL_ROOM_ENABLED:
+			process.env.FEATURE_MESSENGER__SCHOOL_ROOM_ENABLED,
+		FEATURE_MESSENGER__SCHOOL_SETTINGS_VISIBLE:
+			process.env.FEATURE_MESSENGER__SCHOOL_SETTINGS_VISIBLE,
+		MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
+		MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
+		MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 	},
 
 	/*
@@ -76,7 +89,7 @@ module.exports = {
 			{
 				rel: "icon",
 				type: "image/png",
-				href: "/favicon.png",
+				href: `/themes/${themeName}/favicon.png`,
 			},
 		],
 	},
@@ -120,10 +133,13 @@ module.exports = {
 	plugins: [
 		"@plugins/global",
 		"@plugins/axios",
-		"@plugins/i18n",
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
+		"@plugins/full-calendar",
+		"@plugins/i18n",
+		"@plugins/datetime",
+		"@plugins/vuelidate",
 	],
 
 	/*
@@ -178,7 +194,12 @@ module.exports = {
 			},
 		},
 		extractCSS: true,
-		vendor: ["vue-i18n"],
+		vendor: ["vue-i18n", "jquery"],
+		plugins: [
+			new webpack.ProvidePlugin({
+				$: "jquery",
+			}),
+		],
 	},
 	generate: {
 		dir: "dist/nuxt",

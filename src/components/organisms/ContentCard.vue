@@ -5,7 +5,7 @@
 				class="title-link"
 				:to="{
 					name: 'content-id',
-					params: { id: resource.ref.id },
+					params: { id: resource.properties['ccm:replicationsourceuuid'][0] },
 					query: query,
 				}"
 				:no-style="true"
@@ -14,6 +14,16 @@
 					<div class="content">
 						<div class="content__img">
 							<div class="img-container">
+								<span v-show="isSelectable()" @click.stop="linkHandler">
+									<base-input
+										v-model="isChecked"
+										type="checkbox"
+										:label="resource.title"
+										:label-hidden="true"
+										class="select"
+										style="margin-bottom: 0; color: var(--color-white)"
+									/>
+								</span>
 								<div class="content__img-background-gradient" />
 
 								<img
@@ -22,20 +32,30 @@
 									:alt="$t('pages.content.card.img.alt')"
 									role="img"
 								/>
-								<base-icon
+								<!--base-icon v-show="!isCollection()"
 									:source="getTypeIcon(resource.mimetype).iconSource"
 									:icon="getTypeIcon(resource.mimetype).iconLarge"
 									class="content__img-icon"
-								/>
+								/-->
+								<div v-show="isCollection()" class="card-tag">
+									<span>{{ $t("pages.content.card.collection") }}</span>
+									<base-icon
+										:source="getTypeIcon('text/directory').iconSource"
+										:icon="getTypeIcon('text/directory').icon"
+										class="content__text-icon"
+									/>
+								</div>
 							</div>
 						</div>
-						<h6 class="content__title">{{ resource.name }}</h6>
+						<h6 class="content__title">
+							{{ resource.title || resource.name }}
+						</h6>
 					</div>
 				</template>
 			</base-link>
 			<user-has-role :role="isNotStudent">
 				<template v:slot:footer>
-					<div class="footer">
+					<div v-show="!isCollection()" class="footer">
 						<div class="footer__separator"></div>
 						<div class="footer__content">
 							<div class="footer__icon-container">
@@ -45,6 +65,7 @@
 									btn-design="text icon"
 									btn-icon-class="footer__content-icon"
 									btn-icon="add_circle_outline"
+									:multiple="false"
 								/>
 							</div>
 						</div>
@@ -60,7 +81,7 @@ import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 import contentMeta from "@mixins/contentMeta";
-import { getMetadataAttribute } from "@utils/helpers";
+import { getProvider, isCollectionHelper } from "@utils/helpers";
 
 export default {
 	components: {
@@ -72,6 +93,8 @@ export default {
 	props: {
 		resource: { type: Object, default: () => {} },
 		role: { type: String, default: "" },
+		inline: { type: Boolean, required: false },
+		selectable: { type: Boolean },
 	},
 	data() {
 		return {
@@ -81,10 +104,18 @@ export default {
 	},
 	computed: {
 		query() {
+			const queryObject = {
+				course: this.$route.query.course,
+				topic: this.$route.query.topic,
+				isCollection: this.isCollection(),
+				q: this.$route.query.q,
+			};
+			if (this.inline) {
+				Object.assign(queryObject, { inline: 1 });
+			}
 			return (
 				this.$route && {
-					course: this.$route.query.course,
-					topic: this.$route.query.topic,
+					...queryObject,
 				}
 			);
 		},
@@ -95,15 +126,25 @@ export default {
 				? roles.some((role) => !role.startsWith("student"))
 				: this.role;
 		},
+		isCollection() {
+			return isCollectionHelper(this.resource.properties);
+		},
 		provider() {
-			const provider = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:metadatacontributer_provider"
-			);
+			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace("/n", "").trim() : "Schul-Cloud";
 		},
 		thumbnail() {
 			return this.resource.preview.url;
+		},
+		isSelectable() {
+			return this.selectable;
+		},
+		linkHandler() {
+			if (!this.isChecked) {
+				this.$store.dispatch("content/selectElement", this.resource.ref.id);
+			} else {
+				this.$store.dispatch("content/unselectElement", this.resource.ref.id);
+			}
 		},
 	},
 };
@@ -112,6 +153,20 @@ export default {
 <style lang="scss" scoped>
 @import "@utils/multiline-ellipsis.scss";
 
+.card-tag {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: var(--layer-page);
+	padding: var(--space-xs);
+	margin: var(--space-sm);
+	font-size: var(--text-xs);
+	color: var(--color-black);
+	background: var(--color-white);
+	filter: drop-shadow(0 2px 4px black);
+	border-radius: var(--radius-xs);
+	opacity: 0.9;
+}
 .content-card {
 	display: flex;
 	flex-direction: column;
@@ -124,15 +179,30 @@ export default {
 	background-color: var(--color-black);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
+
+.img-container > span {
+	position: absolute;
+	right: 0;
+	margin-top: var(--space-xs);
+	margin-right: var(--space-xs);
+	background-color: var(--color-tertiary);
+	border-radius: var(--radius-round);
+	opacity: 0.7;
+	// stylelint-disable
+	/*z-index: 10;*/
+	z-index: calc(var(--layer-page) + 1);
+	padding: 6px 4px 2px;
+	// stylelint-enable
+}
+
 .content {
 	display: flex;
 	flex-direction: column;
-	min-height: 300px;
 	&__img {
 		&-thumbnail {
 			width: 100%;
 			height: 200px;
-			background-color: var(--color-black);
+			background-color: var(--color-white);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 			object-fit: cover;
@@ -141,8 +211,12 @@ export default {
 			position: absolute;
 			z-index: var(--layer-page);
 			width: 100%;
-			height: 50%;
-			background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+			height: 100%;
+			background: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0.9) 0%,
+				rgba(0, 0, 0, 0) 50%
+			);
 			border-radius: var(--radius-md) var(--radius-md) 0 0;
 			opacity: 0.8;
 		}
@@ -151,10 +225,9 @@ export default {
 			top: 50%;
 			left: 50%;
 			z-index: var(--layer-page);
-			font-size: var(--space-xl-3);
-			border-radius: var(--radius-round);
-			box-shadow: var(--shadow-m);
-			opacity: 0.8;
+			font-size: var(--space-xl-3) !important;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 1));
+			opacity: 0.9;
 			transform: translate(-50%, -50%);
 		}
 		&-checkbox {
@@ -167,7 +240,7 @@ export default {
 		}
 	}
 	&__title {
-		min-height: 62px;
+		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
 		color: var(--color-tertiary);
 

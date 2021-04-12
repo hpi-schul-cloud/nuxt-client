@@ -64,6 +64,10 @@ export default {
 @import "@styles";
 
 fieldset {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	max-height: 70vh;
 	padding: 0;
 	margin: 0;
 	border: none;

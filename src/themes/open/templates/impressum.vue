@@ -11,11 +11,13 @@
 			14482 Potsdam
 			<br />
 			Email:
-			<base-link href="info@schul-cloud.org">info@schul-cloud.org</base-link>
+			<base-link href="info@hpi-schul-cloud.de"
+				>info@hpi-schul-cloud.de</base-link
+			>
 			<br />
 			Internet:
 			<base-link to="/">https://schul-cloud.org</base-link><br />
-			Telefon: +49 (0)331 / 5509-0
+			{{ $t("pages.impressum.hpiPhoneNumber") }}
 			<br />
 			Telefax: +49 (0)331 / 5509-129
 		</p>

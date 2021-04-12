@@ -98,7 +98,7 @@ export default {
 					text: this.$t("components.legacy.footer.partner"),
 				},
 				{
-					href: "https://github.com/schul-cloud/",
+					href: "https://github.com/hpi-schul-cloud/",
 					text: "GitHub",
 				},
 			];

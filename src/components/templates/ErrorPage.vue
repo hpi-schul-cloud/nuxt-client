@@ -1,17 +1,19 @@
 <template>
 	<div class="text-centered">
-		<img alt="PC-Reparatur" src="@assets/img/pc_repair.png" />
+		<base-image
+			v-if="error.statusCode === 404"
+			img-src="@assets/img/pageNotFound.svg"
+			img-height="300px"
+			fill="var(--color-primary)"
+			role="presentation"
+		/>
+		<img v-else role="presentation" alt="" src="@assets/img/pc_repair.png" />
 
 		<h1 class="error-msg">
 			<template v-if="error.message">
 				{{ error.message }}
 			</template>
-			<template v-else-if="error.statusCode === 404">
-				Die Seite wurde leider nicht gefunden
-			</template>
-			<template v-else>
-				Ein Fehler ist aufgetreten
-			</template>
+			<template v-else> Ein Fehler ist aufgetreten </template>
 		</h1>
 		<slot name="action">
 			<base-button design="primary" @click="$router.go(-1)">
@@ -25,9 +27,7 @@ export default {
 	props: {
 		error: {
 			type: Object,
-			default: () => ({
-				statusCode: 404,
-			}),
+			required: true,
 		},
 	},
 	data() {

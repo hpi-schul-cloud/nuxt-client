@@ -5,17 +5,17 @@ export default [
 	},
 	{
 		title: "layouts.loggedoutFullWidth.steps",
-		href: "https://blog.schul-cloud.org/erste-schritte/",
+		href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
 		target: "_blank",
 	},
 	{
 		title: "layouts.loggedoutFullWidth.blog",
-		href: "https://blog.schul-cloud.org/",
+		href: "https://blog.hpi-schul-cloud.de/",
 		target: "_blank",
 	},
 	{
 		title: "layouts.loggedoutFullWidth.faq",
-		href: "https://blog.schul-cloud.org/faq",
+		href: "https://blog.hpi-schul-cloud.de/faq",
 		target: "_blank",
 	},
 ];

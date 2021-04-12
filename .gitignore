@@ -1,5 +1,6 @@
 # Editor Configs
 .idea
+.dccache
 # Local Developer Configs
 
 # Dependency
@@ -25,6 +26,7 @@ version.js
 .nuxt
 .env
 jsconfig.json
+tsconfig.json
 **/.DS_Store
 **/.tmp*
 

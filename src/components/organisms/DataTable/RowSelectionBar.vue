@@ -2,29 +2,36 @@
 	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
 		<div class="d-flex align-items-center content-wrapper">
 			<div v-if="allRowsOfAllPagesSelected">
-				Alle {{ totalNumberOfItems }} ausgewählt
+				{{ $t("pages.administration.all") }}
+				{{ totalNumberOfItems }}
+				{{ $t("pages.administration.selected") }}
 			</div>
 			<div v-else>
-				<span>{{ numberOfSelectedItems }} ausgewählt</span>
-				<span v-if="numberOfSelectedItems < totalNumberOfItems">
-					(oder
+				<span
+					>{{ numberOfSelectedItems }}
+					{{ $t("pages.administration.selected") }}
+				</span>
+				<!-- <span v-if="numberOfSelectedItems < totalNumberOfItems">
+					({{ $t("pages.administration.or") }}
 					<base-button
 						design="none"
 						class="select-all-rows"
 						@click="$emit('update:allRowsOfAllPagesSelected', true)"
 					>
-						alle {{ totalNumberOfItems }} auswählen
+						{{ $t("pages.administration.all") }} {{ totalNumberOfItems }}
+						{{ $t("pages.administration.select") }}
 					</base-button>
 					)
 				</span>
+				-->
 			</div>
 			<div
 				v-if="actions && actions.length"
 				class="actions"
-				style="position: relative;"
+				style="position: relative"
 			>
 				<base-button size="small" @click="actionsMenuOpen = true">
-					Aktionen
+					{{ $t("pages.administration.actions") }}
 				</base-button>
 				<context-menu
 					:show.sync="actionsMenuOpen"

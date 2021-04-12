@@ -21,6 +21,10 @@ export default {
 		selected: {
 			type: Boolean,
 		},
+		iconName: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		return {
@@ -31,6 +35,7 @@ export default {
 	created() {
 		this.isActive = this.selected;
 		this.hasPermission = this.$_hasPermission;
+		this.iconName = this.iconName;
 	},
 };
 </script>

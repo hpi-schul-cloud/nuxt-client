@@ -14,7 +14,7 @@
 				]"
 			/>
 			<div class="text-sm">
-				{{ dayjs(news.displayAt).fromNow() }} von {{ news.creator.firstName }}
+				{{ fromNow(news.displayAt) }} von {{ news.creator.firstName }}
 				{{ news.creator.lastName }}
 			</div>
 			<h1>{{ news.title }}</h1>
@@ -30,11 +30,7 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
-import "dayjs/locale/de";
-dayjs.locale("de");
+import { fromNow } from "@plugins/datetime";
 
 export default {
 	validate({ params }) {
@@ -47,7 +43,7 @@ export default {
 	},
 	data() {
 		return {
-			dayjs,
+			fromNow,
 		};
 	},
 	head() {

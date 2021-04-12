@@ -9,9 +9,9 @@
 		</template>
 		<template v-slot:footer>
 			<center-slot class="mb--md">
-				<base-button design="primary" @click="$emit('update:active', false)"
-					>Abbrechen</base-button
-				>
+				<base-button design="primary" @click="$emit('update:active', false)">
+					{{ btnText }}
+				</base-button>
 			</center-slot>
 		</template>
 	</base-modal>
@@ -36,6 +36,12 @@ export default {
 		description: {
 			type: String,
 			required: true,
+		},
+		btnText: {
+			type: String,
+			default: function () {
+				return this.$t("common.actions.cancel");
+			},
 		},
 	},
 	data() {

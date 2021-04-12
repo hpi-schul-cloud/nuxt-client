@@ -1,5 +1,7 @@
 @import "@styles";
 
+$floating-action-button-color: #ea8500; // TODO: add this to styles repository after deployment is fixed
+
 button:not(.is-none),
 a:not(.is-none) {
 	// typo
@@ -70,6 +72,9 @@ a:not(.is-none) {
 			);
 		}
 	}
+	&.is-floating-action-button {
+		--button-background: #{$floating-action-button-color};
+	}
 	&.is-icon {
 		--button-padding: var(--space-xs);
 
@@ -117,7 +122,6 @@ a:not(.is-none) {
 	flex-wrap: nowrap;
 	align-items: center;
 	justify-content: center;
-	min-width: var(--space-xl-5);
 	padding: var(--button-padding);
 	font-family: var(--font-accent);
 	font-size: var(--text-md);

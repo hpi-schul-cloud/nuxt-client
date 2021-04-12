@@ -1,9 +1,11 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
+import Vuelidate from "vuelidate";
 import Vuex from "vuex";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
+import { RouterLinkStub } from "@vue/test-utils";
 
 // ===
 // Utility functions
@@ -29,6 +31,7 @@ import "@plugins/global";
 import { mountBaseComponents } from "@basecomponents/_globals";
 
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
+Vue.use(Vuelidate);
 
 function readDirRecursiveSync(dir) {
 	const results = [];
@@ -72,6 +75,9 @@ Object.defineProperty(window, "localStorage", {
 			},
 			setItem: function (key, value) {
 				store[key] = value.toString();
+			},
+			removeItem: function (key) {
+				delete store[key];
 			},
 			clear: function () {
 				store = {};
@@ -140,7 +146,6 @@ global.shallowMountView = (Component, options = {}) => {
 */
 
 import { i18n as i18nConfig } from "@plugins/i18n.js";
-import i18nStoreModule from "@store/i18n";
 import authStoreModule from "@store/auth";
 import { mixin as userMixin } from "@plugins/user.js";
 import globalStubs from "./stubs.js";
@@ -153,6 +158,8 @@ global.createComponentMocks = ({
 	$route,
 	$router,
 	router,
+	uiState,
+	dialog,
 	/*style,*/ mocks,
 	stubs,
 }) => {
@@ -173,6 +180,7 @@ global.createComponentMocks = ({
 			stubs[name] = globalStubs[name]();
 		}
 	});
+	returnOptions.stubs.NuxtLink = RouterLinkStub;
 
 	// Converts a `store` option shaped like:
 	//
@@ -193,9 +201,6 @@ global.createComponentMocks = ({
 	if (store || i18n || user) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
-		if (i18n) {
-			storeModules.i18n = i18nStoreModule;
-		}
 		if (user) {
 			storeModules.auth = authStoreModule;
 		}
@@ -224,6 +229,32 @@ global.createComponentMocks = ({
 
 	if (user) {
 		localVue.mixin(userMixin);
+	}
+	localVue.use(Vuelidate);
+
+	// Set uiState like:
+	// {
+	// 		get: (key, identifier) => {},
+	// 		set: (key, identifier) => {},
+	// }
+	if (uiState) {
+		localVue.use({
+			install: (Vue) => {
+				Vue.prototype.$uiState = uiState;
+			},
+		});
+	}
+
+	// Set (confirmation) dialog like:
+	// {
+	//		confirm: (params) => {}
+	// }
+	if (dialog) {
+		localVue.use({
+			install: (Vue) => {
+				Vue.prototype.$dialog = dialog;
+			},
+		});
 	}
 
 	// If using `router: true`, we'll automatically stub out

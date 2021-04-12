@@ -52,7 +52,7 @@ export const removeIdFromArray = (array, value) => {
 };
 
 /**
- * Returns the value of the propertie by key
+ * Returns the value of the property by key
  * @param {*} properties - properties
  * @param {String} key - key of the propertie
  * @returns The value of the propertie or null
@@ -62,4 +62,62 @@ export const getMetadataAttribute = (properties, key) => {
 		return properties[key][0];
 	}
 	return null;
+};
+
+export const isCollectionHelper = (properties) => {
+	const type = getMetadataAttribute(
+		properties,
+		"ccm:hpi_lom_general_aggregationlevel"
+	);
+	return type === "2";
+};
+
+export const getProvider = (properties) => {
+	return getMetadataAttribute(properties, "ccm:metadatacontributer_provider");
+};
+
+export const getDescription = (description, properties) => {
+	return (
+		description || getMetadataAttribute(properties, "cclom:general_description")
+	);
+};
+
+export const getAuthor = (properties) => {
+	return getMetadataAttribute(properties, "cm:creator");
+};
+
+export const getTags = (properties) => {
+	const tagValue = properties["cclom:general_keyword"];
+	let tags = null;
+	if (Array.isArray(tagValue)) {
+		tags = tagValue;
+	}
+	return tags ? tags : [];
+};
+
+export const getTitle = (resource) => {
+	return resource.title ? resource.title : "";
+};
+
+export const getUrl = (resource) => {
+	if (resource.properties && resource.properties["ccm:wwwurl"]) {
+		return getMetadataAttribute(resource.properties, "ccm:wwwurl");
+	}
+	return null;
+};
+
+export const isMerlinContent = (resource) => {
+	return (
+		resource.properties &&
+		getMetadataAttribute(resource.properties, "ccm:replicationsource").includes(
+			"merlin"
+		)
+	);
+};
+
+export const getMerlinReference = (resource) => {
+	if (resource.properties && isMerlinContent(resource)) {
+		return getMetadataAttribute(resource.properties, "ccm:replicationsourceid");
+	}
+	return "";
 };

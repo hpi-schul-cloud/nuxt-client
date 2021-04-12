@@ -7,6 +7,7 @@ export default function (endpoint) {
 			current: null,
 			list: [],
 			pagination: {},
+			businessError: null,
 		};
 	};
 	return {
@@ -42,7 +43,8 @@ export default function (endpoint) {
 				return res;
 			},
 			async create({ commit }, payload = {}) {
-				const res = await this.$axios.$post(baseUrl, payload);
+				const { customEndpoint } = payload;
+				const res = await this.$axios.$post(customEndpoint || baseUrl, payload);
 				commit("set", {
 					items: Array.isArray(res) ? res : [res],
 				});
@@ -98,6 +100,9 @@ export default function (endpoint) {
 			list: (state) => {
 				return state.list;
 			},
+			businessError: (state) => {
+				return state.businessError;
+			},
 		},
 		mutations: {
 			set(state, { items }) {
@@ -105,6 +110,9 @@ export default function (endpoint) {
 			},
 			reset(state) {
 				Object.assign(state, getDefaultState());
+			},
+			resetBusinessError(state) {
+				state.businessError = null;
 			},
 			patchSingleItem(state, item) {
 				const index = state.list.findIndex(
@@ -116,6 +124,9 @@ export default function (endpoint) {
 					);
 				}
 				state.list[index] = Object.assign(state.list[index], item);
+			},
+			setBusinessError(state, { statusCode, message }) {
+				state.businessError = { statusCode, message };
 			},
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);

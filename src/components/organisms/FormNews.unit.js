@@ -1,18 +1,28 @@
 import FormNews from "./FormNews";
+import {
+	currentDate,
+	createInputDateTime,
+	fromInputDateTime,
+} from "@plugins/datetime";
+import dayjs from "dayjs";
 
-const date = new Date().toISOString().split("T")[0];
+const now = currentDate().set("minute", 0).set("second", 0);
+
+const testDate = fromInputDateTime(now);
+
+const [date, time] = createInputDateTime(testDate.utc());
 
 const validNews = {
 	title: "Hi",
 	content: "lalaland",
-	displayAt: `${date}T13:07:00.000Z`,
+	displayAt: `${testDate.toISOString()}`,
 };
 
-const timezoneOffset = new Date().getTimezoneOffset() / 60;
 const validNewsDate = {
 	date,
-	time: `${13 - timezoneOffset}:07`, // timezone conversion
+	time,
 };
+
 const invalidNews = {
 	title: "", // no title
 	content: "", // and no content
@@ -61,8 +71,6 @@ const getRouterPushSpy = (wrapper, expects) => {
 };
 
 describe("@components/organisms/FormNews", () => {
-	it(...isValidComponent(FormNews));
-
 	it("converts date correctly", async () => {
 		const wrapper = mount(FormNews, {
 			...getMocks(),
@@ -73,7 +81,10 @@ describe("@components/organisms/FormNews", () => {
 		});
 		expect(wrapper.vm.data.date.date).toStrictEqual(validNewsDate.date);
 		expect(wrapper.vm.data.date.time).toStrictEqual(validNewsDate.time);
-		expect(wrapper.vm.publishDate).toStrictEqual(validNews.displayAt);
+
+		const expectedPublishDate = dayjs.tz(validNews.displayAt).utc().format();
+
+		expect(wrapper.vm.publishDate).toStrictEqual(expectedPublishDate);
 	});
 
 	describe("create", () => {

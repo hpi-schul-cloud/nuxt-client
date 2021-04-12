@@ -12,9 +12,7 @@
 			class="mb--xl"
 			:style="{ float: `right` }"
 		>
-			<template v-slot:header>
-				Downloads
-			</template>
+			<template v-slot:header> Downloads </template>
 			<menu-link
 				v-for="link in downloadLinks"
 				:key="link.name"
@@ -98,19 +96,25 @@ export default {
 			contacts: [
 				{
 					title: this.$t("pages.mint-ec.article.footer.info-mail"),
-					href: "mailto:info@schul-cloud.org",
+					href: "mailto:info@hpi-schul-cloud.de",
 				},
 				{
-					title: "Support: feedback@schul-cloud.org",
-					href: "mailto:feedback@schul-cloud.org",
+					title: "Support: feedback@hpi-schul-cloud.de",
+					href: "mailto:feedback@hpi-schul-cloud.de",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.anbieter"),
-					href: "mailto:inhalte@schul-cloud.org",
+					href: "mailto:inhalte@hpi-schul-cloud.de",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutz-mail"),
-					href: "mailto:datenschutz@schul-cloud.org",
+					href: "mailto:datenschutz-fragen@hpi-schul-cloud.de",
+				},
+				{
+					title: this.$t(
+						"pages.mint-ec.article.footer.datenschutzbeauftragter"
+					),
+					href: "mailto:datenschutzbeauftragter@hpi-schul-cloud.de",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.newsletter"),

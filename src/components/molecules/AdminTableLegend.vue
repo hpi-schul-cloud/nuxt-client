@@ -1,6 +1,8 @@
 <template>
 	<div class="section">
-		<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
+		<strong v-if="icons">{{
+			$t("components.molecules.adminfooterlegend.title")
+		}}</strong>
 		<div class="consent-icon">
 			<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
 				<span v-if="icon.style">
@@ -20,19 +22,17 @@
 			</li>
 		</div>
 		<span v-if="showExternalSyncHint" class="container">
-			<img
-				class="sync-symbol"
-				src="@assets/icons/sync-symbol.svg"
-				role="presentation"
-			/>
 			<strong class="external-sync-hint">
 				{{
-					($t("components.molecules.admintablelegend.externalSync",
-					{ shortName: this.$theme.short_name }))
+					$t("components.molecules.admintablelegend.externalSync", {
+						shortName: this.$theme.short_name,
+					})
 				}}
 				<base-link
 					class="link-style"
-					to="/administration/helpdesk"
+					to="/"
+					href="https://docs.schul-cloud.org/x/PgBVAw"
+					target="_blank"
 					:no-styles="true"
 					traget="_blank"
 				>

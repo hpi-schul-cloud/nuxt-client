@@ -9,15 +9,15 @@ describe("@components/legacy/NavigationBar", () => {
 		},
 		{
 			title: "Blog",
-			href: "https://blog.schul-cloud.org/",
+			href: "https://blog.hpi-schul-cloud.de/",
 		},
 		{
 			title: "layouts.loggedoutFullWidth.steps",
-			href: "https://blog.schul-cloud.org/erste-schritte/",
+			href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
 		},
 		{
 			title: "FAQ",
-			href: "https://blog.schul-cloud.org/faq",
+			href: "https://blog.hpi-schul-cloud.de/faq",
 		},
 	];
 

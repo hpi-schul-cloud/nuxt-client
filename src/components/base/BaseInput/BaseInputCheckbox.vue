@@ -9,6 +9,8 @@
 			type="checkbox"
 			class="visually-hidden"
 			@change="updateVModel"
+			@blur="$emit('blur', $event)"
+			@focus="$emit('focus', $event)"
 		/>
 		<span :class="['icon-wrapper']">
 			<base-icon
@@ -140,11 +142,12 @@ label {
 	position: relative;
 	display: flex;
 	flex-wrap: nowrap;
-	align-items: center;
+	align-items: top;
+	cursor: pointer;
 }
 
 .label {
-	margin: 0 var(--space-xs-2);
+	margin: -12px var(--space-xs-2) 0 var(--space-xs-2);
 	vertical-align: middle;
 }
 

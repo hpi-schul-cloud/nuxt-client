@@ -8,6 +8,7 @@
 			:aria-label="
 				btnLabel ? btnLabel : `$t('components.molecules.AddContentModal')`
 			"
+			:disabled="disabled"
 			@click.prevent="addResource"
 		>
 			<base-icon :class="btnIconClass" source="material" :icon="btnIcon" />
@@ -15,17 +16,27 @@
 		</base-button>
 		<add-content-modal
 			:show-copy-modal.sync="copyModalActive"
-			:updatedid="resource.ref.id"
-			:url="getUrl"
+			:updatedid="itemId"
+			:url="url"
 			:client="client"
-			:title="resource.title"
-			@close="showNotificationModal = true"
+			:title="title"
+			:merlin-reference="merlinReference"
+			:items="selectedElements"
+			@close="performAPICall"
+		/>
+		<loading-modal
+			:title="$t('pages.content.notification.loading')"
+			description=""
+			:btn-text="$t('common.labels.close')"
+			:active.sync="loadingModal.visible"
 		/>
 		<notification-modal
-			:show-notification-modal.sync="showNotificationModal"
-			:is-success="isSuccess"
+			:show-notification-modal.sync="notificationModal.visible"
+			:is-success="notificationModal.isSuccess"
 			:backgroundcolor="
-				isSuccess ? 'var(--color-success)' : 'var(--color-danger)'
+				notificationModal.isSuccess
+					? 'var(--color-success)'
+					: 'var(--color-danger)'
 			"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"
@@ -35,15 +46,25 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
-import { getMetadataAttribute } from "@utils/helpers";
+import LoadingModal from "@components/molecules/LoadingModal";
+import {
+	getTitle,
+	getMerlinReference,
+	getUrl,
+	getMetadataAttribute,
+} from "@utils/helpers";
+
+let slowAPICall;
 
 export default {
 	name: "AddContentButton",
 	components: {
 		AddContentModal,
 		NotificationModal,
+		LoadingModal,
 	},
 	props: {
 		btnLabel: { type: String, default: "" },
@@ -54,31 +75,89 @@ export default {
 		btnIcon: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
 		resource: { type: Object, default: () => {} },
+		disabled: { type: Boolean },
+		multiple: { type: Boolean },
 	},
 	data() {
 		return {
 			copyModalActive: false,
-			showNotificationModal: false,
+			loadingModal: {
+				visible: false,
+				isLoading: false,
+			},
+			notificationModal: {
+				visible: false,
+				isSuccess: false,
+			},
+			selectedElements: [],
 		};
 	},
 	computed: {
-		isSuccess() {
-			const response = this.$store.state.content.addToLessonResult;
-			return response && response.status === 201;
+		...mapState("content", {
+			elements: (state) => {
+				return state.elements;
+			},
+			selected: (state) => {
+				return state.selected;
+			},
+		}),
+		itemId() {
+			return this.resource && this.resource.properties
+				? getMetadataAttribute(
+						this.resource.properties,
+						"ccm:replicationsourceuuid"
+				  )
+				: null;
 		},
-		getUrl() {
-			return getMetadataAttribute(this.resource.properties, "cclom:location");
+		title() {
+			return getTitle(this.resource);
+		},
+		url() {
+			return getUrl(this.resource);
+		},
+		merlinReference() {
+			return getMerlinReference(this.resource);
+		},
+	},
+	watch: {
+		selected() {
+			if (this.multiple) {
+				const selectedElements = this.elements.data.filter(
+					(element) => element.stateSelected === true
+				);
+
+				this.selectedElements = selectedElements.map((element) => {
+					return {
+						url: getUrl(element),
+						title: getTitle(element),
+						client: this.client,
+						merlinReference: getMerlinReference(element),
+					};
+				});
+			}
 		},
 	},
 	methods: {
 		addResourceAndClose() {
 			if (window.opener && window.opener !== window) {
 				if (window.opener.addResource) {
-					window.opener.addResource({
-						title: this.resource.title,
-						client: this.client,
-						url: this.getUrl,
-					});
+					if (this.selectedElements.length > 0) {
+						this.selectedElements.forEach((element) => {
+							window.opener.addResource({
+								title: element.title,
+								client: element.client,
+								url: element.url,
+								merlinReference: element.merlinReference,
+							});
+						});
+					} else {
+						window.opener.addResource({
+							title: this.title,
+							client: this.client,
+							url: this.url,
+							merlinReference: this.merlinReference,
+						});
+					}
 					window.close();
 					return true;
 				}
@@ -90,6 +169,35 @@ export default {
 				this.$store.dispatch("courses/find");
 			}
 		},
+		performAPICall() {
+			this.loadingModal.isLoading = true;
+			slowAPICall = setTimeout(() => {
+				this.loadingModal.visible = true;
+			}, 1000);
+		},
+	},
+	onEventBus: {
+		"showModal@content": function (value) {
+			if (this.loadingModal.isLoading) {
+				clearTimeout(slowAPICall);
+				this.loadingModal.visible = false;
+				this.loadingModal.isLoading = false;
+				this.notificationModal.visible = true;
+				switch (value) {
+					case "successModal":
+						this.notificationModal.isSuccess = true;
+						break;
+					default:
+						this.notificationModal.isSuccess = false;
+						break;
+				}
+			}
+		},
 	},
 };
 </script>
+<style lang="scss" scoped>
+.wide-button {
+	width: 100%;
+}
+</style>
