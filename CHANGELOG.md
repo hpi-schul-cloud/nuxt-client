@@ -20,6 +20,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8881 - fixed double roles user (admin, teacher) not being able to edit other teachers
 - SC-8519 - Admin Table Bugfix - Set current date for filter, without input; Error handling parsing dates
 - SC-8878 - Fixing invalid date on filter chips, setting default filter start and end day to 1900-01-01 and 2099-12-31
+- SC-8910 - fixed delete action being available when school is external
 
 ### Removed
 

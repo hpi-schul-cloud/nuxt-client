@@ -271,11 +271,6 @@ export default {
 		...mapState("search", {
 			searchResult: "searchResult",
 		}),
-		permissionFilteredTableActions() {
-			return this.tableActions.filter((action) =>
-				action.permission ? this.$_userHasPermission(action.permission) : true
-			);
-		},
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;
@@ -283,16 +278,32 @@ export default {
 			},
 		},
 		filteredActions() {
+			let editedActions = this.tableActions;
+
+			// filter actions by permissions
+			editedActions = this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
+
 			// filters out the QR bulk action is user is not an admin
 			if (!this.user.roles.some((role) => role.name === "administrator")) {
-				return this.permissionFilteredTableActions.filter(
+				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
 						this.$t("pages.administration.teachers.index.tableActions.qr")
 				);
 			}
 
-			return this.permissionFilteredTableActions;
+			// filter the delete action if school is external
+			if (this.school.isExternal) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.teachers.index.tableActions.delete")
+				);
+			}
+
+			return editedActions;
 		},
 		filteredColumns() {
 			let editedColumns = this.tableColumns;

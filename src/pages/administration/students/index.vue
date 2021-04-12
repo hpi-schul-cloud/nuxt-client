@@ -29,7 +29,7 @@
 		/>
 
 		<backend-data-table
-			:actions="permissionFilteredTableActions"
+			:actions="filteredActions"
 			:columns="filteredColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -308,10 +308,24 @@ export default {
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
 		},
-		permissionFilteredTableActions() {
-			return this.tableActions.filter((action) =>
+		filteredActions() {
+			let editedActions = this.tableActions;
+
+			// filter actions by permissions
+			editedActions = this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
+
+			// filter the delete action if school is external
+			if (this.school.isExternal) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.students.index.tableActions.delete")
+				);
+			}
+
+			return editedActions;
 		},
 		filteredColumns() {
 			let editedColumns = this.tableColumns;
