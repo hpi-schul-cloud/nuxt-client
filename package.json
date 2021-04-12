@@ -150,7 +150,7 @@
 		"stylelint": "^13.8.0",
 		"stylelint-declaration-use-variable": "^1.7.2",
 		"svg-inline-loader": "^0.8.2",
-		"ts-jest": "^26.4.4",
+		"ts-jest": "^26.5.4",
 		"vue-jest": "^3.0.7",
 		"vue-style-loader": "^4.1.2",
 		"vue-svg-loader": "0.15.0",
