@@ -318,8 +318,11 @@ export default {
 				);
 			}
 
-			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
-			if (!process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"]) {
+			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled and school is not external
+			if (
+				!process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] &&
+				this.schoolInternallyManaged
+			) {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
