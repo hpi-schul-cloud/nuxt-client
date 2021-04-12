@@ -1,6 +1,22 @@
 import { default as StudentPage } from "./index.vue";
 
+const mockData = [
+	{
+		firstName: "Marla",
+		lastName: "Mathe",
+		email: "schueler@schul-cloud.org",
+		birthday: "01.01.2000",
+	},
+	{
+		firstName: "Waldemar",
+		lastName: "Wunderlich",
+		birthday: "01.01.1989",
+		email: "waldemar.wunderlich@schul-cloud.org",
+	},
+];
+
 describe("students/index", () => {
+	const handleUsersStub = jest.fn();
 	let mockStore;
 
 	beforeEach(() => {
@@ -22,12 +38,13 @@ describe("students/index", () => {
 			},
 			users: {
 				actions: {
-					handleUsers: jest.fn(),
+					handleUsers: handleUsersStub,
 				},
 				getters: {
-					list: () => [],
+					list: () => mockData,
 				},
 				state: () => ({
+					list: mockData,
 					pagination: {
 						default: {
 							limit: 25,
@@ -47,6 +64,27 @@ describe("students/index", () => {
 	});
 
 	it(...isValidComponent(StudentPage));
+
+	it("should dispatch the 'handleUsers action on load'", async () => {
+		mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		expect(handleUsersStub).toHaveBeenCalled();
+	});
+
+	it("should display the same number of elements as in the mockData object", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const table = wrapper.find(`[data-testid="students_table"]`);
+		expect(table.vm.data).toHaveLength(mockData.length);
+	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", async () => {
 		const wrapper = mount(StudentPage, {

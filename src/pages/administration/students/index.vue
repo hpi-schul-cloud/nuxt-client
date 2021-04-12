@@ -43,6 +43,7 @@
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
 			:show-external-text="!schoolInternallyManaged"
+			data-testid="students_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -154,7 +155,6 @@ export default {
 			type: Boolean,
 		},
 	},
-
 	data() {
 		return {
 			something: [],
