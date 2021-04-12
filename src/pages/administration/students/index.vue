@@ -543,6 +543,11 @@ export default {
 			}, 400);
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("global.sidebar.student")} - ${this.$theme.short_name}`,
+		};
+	},
 };
 </script>
 

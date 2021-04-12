@@ -400,7 +400,9 @@ export default {
 	},
 	head() {
 		return {
-			title: this.$t("pages.administration.datasources.index.title"),
+			title: `${this.$t("pages.administration.datasources.index.title")} - ${
+				this.$theme.short_name
+			}`,
 		};
 	},
 };

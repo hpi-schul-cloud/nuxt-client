@@ -221,6 +221,13 @@ export default {
 			});
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.ldap.save.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
+	},
 };
 </script>
 
