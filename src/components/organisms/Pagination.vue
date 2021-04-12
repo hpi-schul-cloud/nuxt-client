@@ -120,6 +120,7 @@ export default {
 	methods: {
 		setPagination(val) {
 			this.$emit("update:per-page", val.value);
+			this.$emit("update:current-page", 1);
 		},
 		previousPage() {
 			this.$emit("update:current-page", this.currentPage - 1);
