@@ -5,7 +5,7 @@
 			:src="image"
 			class="borderradius"
 			:class="size"
-			alt="profilbild"
+			:alt="$t('components.atoms.ProfilePicture')"
 		/>
 	</div>
 </template>
