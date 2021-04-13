@@ -26,6 +26,7 @@
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
+			data-testid="data_filter"
 		/>
 
 		<backend-data-table

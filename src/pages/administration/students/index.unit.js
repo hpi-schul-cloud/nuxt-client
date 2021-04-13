@@ -238,4 +238,26 @@ describe("students/index", () => {
 
 		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
 	});
+
+	it("should table filter options call uiState after passing props", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+
+		await jest.runAllTimers();
+
+		mockStore.uiState.mutations.set.mockClear();
+
+		const filterComponent = wrapper.find(`[data-testid="data_filter"]`);
+		expect(filterComponent.exists()).toBe(true);
+
+		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
+
+		await jest.runAllTimers();
+
+		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
+	});
 });
