@@ -10,16 +10,101 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-8250 - connect UI for bulk delete
+- SC-8164 - apply deletion concept to the deletion of students and teachers
+- SC-7937 - added Lern-Store collections multi-select
+- SC-8156 - added Spanish as an available language
+
+### Changed
+
+- QF/Pull Request Workflow - adds checkbox for manual test, more checks, splits tests
+- SC-7944 - changes ids for Lern-Store content and adds a link back to collection
+- SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
+- SC-7944 - changes field for Lern-Store content id and adds a link to collection
+- OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
+
+## 26.1.0
+
+## 26.0.6 - 2021-04-06
+
+### Changed
+
+- SC-8837 - activate ldap config pages again
+
+## 26.0.5 - 2021-04-01
+
+### Fixed
+
+- SC-8837 - fix datetime timezone issues
+
+## 26.0.4 - 2021-03-24
+
+### Changed
+
+- SC-8822 - add availability to phone number in imprint
+
+## 26.0.3 - 2021-03-24
+
+### Changed
+
+- SC-8822 - change phone number in imprint
+
+## 26.0.1 - 2021-03-22
+
+### Added
+
+- SC-8156 - introduce Spanish
+
+## 26.0.0
+
+### Fixed
+
+- SC-8719 - fixed pagination not setting currentPage to 1
+
+### Added
+
+- SC-8720 - add ellipsis to NAT rows
+
+### Removed
+
+- SC-8681 - removed NAT consent column and legend for external schools
+- SC-8702 - disabled the select all button in NAT
+- SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
+
+## 25.6.1
+
+### Fixed
+
+- SC-8576 - fixed the several requests issue in the LDAP config
+
+## 25.6.0 - 2021-02-21
+
+### Added
+
+- SC-8390 - added Lern-Store collections flag
 - SC-8328 - added back button in Lern-Store
 - SC-7762 - added collection icon for Lern-Store card
 
 ### Changed
 
 - SC-8356 - authenticate docker hub requests
+- SC-8433 - update text in Lern-Store
 
-  25.5.0
+## 25.5.2
 
-## Changed
+### Fixed
+
+- SC-8577 - fixes the LDAP config roles section validation to not require it when user attribute is toggled
+
+## 25.5.1
+
+### Changed
+
+- SC-8454 - adds a delay in Lern-Store search, to reduce load on Edu-Sharing
+
+## 25.5.0
+
+### Changed
 
 - SC-8381 - change welcome text on Lern-Store
 - SC-8094 - improves unit testing for Lern-Store collections
@@ -37,7 +122,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6708 - added data-testids to the students table in administration page
 - SC-6709 - added data-testids to the teachers table in administration page
 - SC-7629 - created Roles component to the ldap page
-- OPS-1508 - added limits for cpu and ram to the docker compose files
+- OPS-1508 - added limits for cpu and ram to the docker compose files ( 05.11.2020 )
 - SC-7489 - added input validation to the ldap config components
 - SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission check to ldap config page
 - SC-6043 - Prepare a concept for a general error handling in nuxt-client
@@ -67,6 +152,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Added
 
+- SC-8514 - QR Code generation fails
 - SC-7020 - added a new course TaskItem component
 
 ### Changed in Unreleased
