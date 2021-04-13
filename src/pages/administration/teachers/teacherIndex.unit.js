@@ -16,6 +16,8 @@ const mockData = [
 ];
 
 describe("Teacher/index", () => {
+	const routerPushStub = jest.fn();
+
 	let mockStore;
 
 	beforeEach(() => {
@@ -90,6 +92,18 @@ describe("Teacher/index", () => {
 		});
 		const table = wrapper.find(`[data-testid="teachers_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
+	});
+
+	it("breadcrumb's link should have the same 'to' location as the page's breadcrumbs data object", async () => {
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+				$router: { push: routerPushStub },
+			}),
+		});
+		const link = wrapper.find("a");
+		expect(link.vm.to).toStrictEqual(wrapper.vm.breadcrumbs[0].to);
 	});
 
 	it("should render the fab-floating component if user has TEACHER_CREATE permission", async () => {
@@ -223,5 +237,27 @@ describe("Teacher/index", () => {
 		await jest.runAllTimers();
 
 		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+	});
+
+	it("should table filter options call uiState after passing props", async () => {
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+
+		await jest.runAllTimers();
+
+		mockStore.uiState.mutations.set.mockClear();
+
+		const filterComponent = wrapper.find(`[data-testid="data_filter"]`);
+		expect(filterComponent.exists()).toBe(true);
+
+		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
+
+		await jest.runAllTimers();
+
+		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 	});
 });
