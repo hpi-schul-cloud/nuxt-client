@@ -20,6 +20,8 @@ describe("students/index", () => {
 	let mockStore;
 
 	beforeEach(() => {
+		jest.useFakeTimers();
+
 		mockStore = {
 			auth: {
 				state: () => ({
@@ -58,6 +60,9 @@ describe("students/index", () => {
 			uiState: {
 				getters: {
 					get: () => () => ({ page: 1 }),
+				},
+				mutations: {
+					set: jest.fn(),
 				},
 			},
 		};
@@ -191,5 +196,28 @@ describe("students/index", () => {
 		const externalHint = wrapper.find(".external-sync-hint");
 
 		expect(externalHint.exists()).toBe(false);
+	});
+
+	it("should call barSearch method when searchbar component's value change", async () => {
+		//const barSearch = jest.fn();
+		//StudentPage.methods.barSearch = barSearch;
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
+		expect(searchBarInput.exists()).toBe(true);
+
+		//TODO: explain that
+		// expect(mockStore.users.actions.handleUsers.mock.calls).toHaveLength(1);
+
+		//searchBarInput.vm.$emit("update:vmodel", "abc");
+		searchBarInput.setValue("abc");
+		expect(mockStore.uiState.mutations.set.mock.calls).toHaveLength(1);
+		await jest.runAllTimers();
+		//TODO: explain that
+		// expect(mockStore.users.actions.handleUsers.mock.calls).toHaveLength(3);
 	});
 });

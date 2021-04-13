@@ -167,4 +167,28 @@ describe("Teacher/index", () => {
 		const externalHint = wrapper.find(`.external-sync-hint`);
 		expect(externalHint.exists()).toBe(false);
 	});
+
+	it("should call barSearch method when searchbar component's value change", async () => {
+		const barSearch = jest.fn();
+		TeacherPage.methods.barSearch = barSearch;
+		// TeacherPage.methods.barSearch = () => {
+		// 	console.log("mock reached");
+		// 	// barSearch();
+		// };
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+
+		// console.log(wrapper.html());
+		const searchBarInput = wrapper.find(`[data-testid="searchbar"]`);
+		expect(searchBarInput.exists()).toBe(true);
+		// console.log(searchBarInput.html());
+		// searchBarInput.vmodel = "abc";
+		searchBarInput.vm.$emit("update:vmodel", "abc");
+
+		expect(barSearch).toHaveBeenCalled();
+	});
 });
