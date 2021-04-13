@@ -1,6 +1,4 @@
-name: Test and deploy
-env:
-  cache-name: nuxt-node-modules
+name: Test code
 on: [push]
 
 jobs:
@@ -74,7 +72,7 @@ jobs:
   unit:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -98,7 +96,7 @@ jobs:
   lint:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -227,7 +225,6 @@ jobs:
         run: ./deploy/deploy.sh -p storybook
       - name: docs
         run: ./deploy/deploy.sh -p vuepress
-
   # build:
   #   strategy:
   #     matrix:
