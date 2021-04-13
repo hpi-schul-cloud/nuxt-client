@@ -514,6 +514,11 @@ export default {
 			}, 400);
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("global.sidebar.teacher")} - ${this.$theme.short_name}`,
+		};
+	},
 };
 </script>
 
