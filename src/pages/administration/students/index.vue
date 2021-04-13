@@ -545,7 +545,9 @@ export default {
 	},
 	head() {
 		return {
-			title: `${this.$t("pages.administration.students.index.title")} - ${this.$theme.short_name}`,
+			title: `${this.$t("pages.administration.students.index.title")} - ${
+				this.$theme.short_name
+			}`,
 		};
 	},
 };
