@@ -1,23 +1,26 @@
 import { default as TeacherPage } from "./index.vue";
 
+const mockData = [
+	{
+		firstName: "Marla",
+		lastName: "Mathe",
+		email: "schueler@schul-cloud.org",
+		birthday: "01.01.2000",
+	},
+	{
+		firstName: "Waldemar",
+		lastName: "Wunderlich",
+		birthday: "01.01.1989",
+		email: "waldemar.wunderlich@schul-cloud.org",
+	},
+];
+
 describe("Teacher/index", () => {
 	let mockStore;
 
-	// const teacherData = [
-	// 	{
-	// 		_id: "0000d231816abba584714c9e",
-	// 		firstName: "Cord",
-	// 		lastName: "Carl",
-	// 		email: "lehrer@schul-cloud.org",
-	// 		createdAt: "2017-01-01T00:06:37.148Z",
-	// 		birthday: "01.01.1977",
-	// 		preferences: {},
-	// 		consentStatus: "missing",
-	// 		classes: [],
-	// 	},
-	// ];
-
 	beforeEach(() => {
+		jest.useFakeTimers();
+
 		mockStore = {
 			auth: {
 				state: () => ({
@@ -39,9 +42,10 @@ describe("Teacher/index", () => {
 					handleUsers: jest.fn(),
 				},
 				getters: {
-					list: () => [],
+					list: () => mockData,
 				},
 				state: () => ({
+					list: mockData,
 					pagination: {
 						default: {
 							limit: 25,
@@ -56,11 +60,37 @@ describe("Teacher/index", () => {
 				getters: {
 					get: () => () => ({ page: 1 }),
 				},
+				mutations: {
+					set: jest.fn(),
+				},
 			},
 		};
 	});
 
 	it(...isValidComponent(TeacherPage));
+
+	it("should dispatch the 'handleUsers action on load'", async () => {
+		mockStore.users.actions.handleUsers.mockClear();
+
+		mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+	});
+
+	it("should display the same number of elements as in the mockData object", async () => {
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const table = wrapper.find(`[data-testid="teachers_table"]`);
+		expect(table.vm.data).toHaveLength(mockData.length);
+	});
 
 	it("should render the fab-floating component if user has TEACHER_CREATE permission", async () => {
 		const wrapper = mount(TeacherPage, {
@@ -169,12 +199,6 @@ describe("Teacher/index", () => {
 	});
 
 	it("should call barSearch method when searchbar component's value change", async () => {
-		const barSearch = jest.fn();
-		TeacherPage.methods.barSearch = barSearch;
-		// TeacherPage.methods.barSearch = () => {
-		// 	console.log("mock reached");
-		// 	// barSearch();
-		// };
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -182,13 +206,22 @@ describe("Teacher/index", () => {
 			}),
 		});
 
-		// console.log(wrapper.html());
-		const searchBarInput = wrapper.find(`[data-testid="searchbar"]`);
-		expect(searchBarInput.exists()).toBe(true);
-		// console.log(searchBarInput.html());
-		// searchBarInput.vmodel = "abc";
-		searchBarInput.vm.$emit("update:vmodel", "abc");
+		// run all existing timers
+		await jest.runAllTimers();
+		// reset the mock call stack
+		mockStore.users.actions.handleUsers.mockClear();
+		mockStore.uiState.mutations.set.mockClear();
 
-		expect(barSearch).toHaveBeenCalled();
+		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
+		expect(searchBarInput.exists()).toBe(true);
+
+		searchBarInput.setValue("abc");
+
+		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
+
+		//run new timer from updating the value
+		await jest.runAllTimers();
+
+		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
 	});
 });
