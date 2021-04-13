@@ -16,7 +16,6 @@ const mockData = [
 ];
 
 describe("students/index", () => {
-	const handleUsersStub = jest.fn();
 	let mockStore;
 
 	beforeEach(() => {
@@ -40,7 +39,7 @@ describe("students/index", () => {
 			},
 			users: {
 				actions: {
-					handleUsers: handleUsersStub,
+					handleUsers: jest.fn(),
 				},
 				getters: {
 					list: () => mockData,
@@ -71,13 +70,15 @@ describe("students/index", () => {
 	it(...isValidComponent(StudentPage));
 
 	it("should dispatch the 'handleUsers action on load'", async () => {
+		mockStore.users.actions.handleUsers.mockClear();
+
 		mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
 			}),
 		});
-		expect(handleUsersStub).toHaveBeenCalled();
+		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
 	});
 
 	it("should display the same number of elements as in the mockData object", async () => {
@@ -199,25 +200,29 @@ describe("students/index", () => {
 	});
 
 	it("should call barSearch method when searchbar component's value change", async () => {
-		//const barSearch = jest.fn();
-		//StudentPage.methods.barSearch = barSearch;
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
 			}),
 		});
+
+		//run all existing timers
+		await jest.runAllTimers();
+		//reset the mock call stack
+		mockStore.users.actions.handleUsers.mockClear();
+		mockStore.uiState.mutations.set.mockClear();
+
 		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
 		expect(searchBarInput.exists()).toBe(true);
 
-		//TODO: explain that
-		// expect(mockStore.users.actions.handleUsers.mock.calls).toHaveLength(1);
-
-		//searchBarInput.vm.$emit("update:vmodel", "abc");
 		searchBarInput.setValue("abc");
-		expect(mockStore.uiState.mutations.set.mock.calls).toHaveLength(1);
+
+		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
+
+		//run new timer from updating the value
 		await jest.runAllTimers();
-		//TODO: explain that
-		// expect(mockStore.users.actions.handleUsers.mock.calls).toHaveLength(3);
+
+		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
 	});
 });
