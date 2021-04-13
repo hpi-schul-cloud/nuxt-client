@@ -195,7 +195,6 @@ describe("students/index", () => {
 			}),
 		});
 		const externalHint = wrapper.find(".external-sync-hint");
-
 		expect(externalHint.exists()).toBe(false);
 	});
 
