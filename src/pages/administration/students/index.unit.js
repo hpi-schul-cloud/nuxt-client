@@ -17,6 +17,8 @@ const mockData = [
 
 describe("students/index", () => {
 	const handleUsersStub = jest.fn();
+	const routerPushStub = jest.fn();
+
 	let mockStore;
 
 	beforeEach(() => {
@@ -89,6 +91,18 @@ describe("students/index", () => {
 		});
 		const table = wrapper.find(`[data-testid="students_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
+	});
+
+	it("breadcrumb's link should have the same 'to' location as the page's breadcrumbs data object", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+				$router: { push: routerPushStub },
+			}),
+		});
+		const link = wrapper.find("a");
+		expect(link.vm.to).toStrictEqual(wrapper.vm.breadcrumbs[0].to);
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", async () => {
