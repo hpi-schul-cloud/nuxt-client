@@ -12,7 +12,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
-- SC-8916 - added page titles to some administration pages
+- SC-8916 - set page titles to some administration pages
 - SC-8681 - added ADMIN_TABLES_DISPLAY_CONSENT_COLUMN as an environment variable to display/hide the NAT consent column
 
 ### Fixed

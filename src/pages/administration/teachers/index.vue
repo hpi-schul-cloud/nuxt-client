@@ -516,7 +516,9 @@ export default {
 	},
 	head() {
 		return {
-			title: `${this.$t("global.sidebar.teacher")} - ${this.$theme.short_name}`,
+			title: `${this.$t("pages.administration.teachers.index.title")} - ${
+				this.$theme.short_name
+			}`,
 		};
 	},
 };
