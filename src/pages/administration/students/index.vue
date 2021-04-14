@@ -30,7 +30,7 @@
 		/>
 
 		<backend-data-table
-			:actions="permissionFilteredTableActions"
+			:actions="filteredActions"
 			:columns="filteredColumns"
 			:current-page.sync="page"
 			:data="students"
@@ -307,31 +307,54 @@ export default {
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
 		},
-		permissionFilteredTableActions() {
-			return this.tableActions.filter((action) =>
+		filteredActions() {
+			let editedActions = this.tableActions;
+
+			// filter actions by permissions
+			editedActions = this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
-		},
-		filteredColumns() {
-			// filters out edit/consent column if school is external
+
+			// filter the delete action if school is external
 			if (this.school.isExternal) {
-				return this.tableColumns.filter(
-					//_id field sets the edit column
-					(col) => col.field !== "_id" && col.field !== "consentStatus"
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.students.index.tableActions.delete")
 				);
 			}
 
-			return this.tableColumns;
+			return editedActions;
+		},
+		filteredColumns() {
+			let editedColumns = this.tableColumns;
+			// filters out edit column if school is external
+			if (this.school.isExternal) {
+				editedColumns = this.tableColumns.filter(
+					//_id field sets the edit column
+					(col) => col.field !== "_id"
+				);
+			}
+
+			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
+			if (!process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"]) {
+				editedColumns = editedColumns.filter(
+					(col) => col.field !== "consentStatus"
+				);
+			}
+
+			return editedColumns;
 		},
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const temp = this.$uiState.get(
+			const uiState = this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
 			);
 
-			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+			if (uiState && uiState.searchQuery)
+				query.searchQuery = uiState.searchQuery;
 
 			this.currentFilterQuery = query;
 			if (
@@ -518,6 +541,13 @@ export default {
 				});
 			}, 400);
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.students.index.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>

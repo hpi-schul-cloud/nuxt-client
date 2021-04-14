@@ -1,14 +1,19 @@
 import InputCheckbox from "@components/organisms/DataFilter/inputs/Checkbox";
 import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
-import { printDate, fromInputDateTime, currentDate } from "@plugins/datetime";
+import { printDate, fromInputDateTime } from "@plugins/datetime";
+
+const defaultFilterFromDate = "1900-01-01";
+const defaultFilterToDate = "2099-12-31";
 
 const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
 	chipTemplate: (filter) => {
 		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
-			filter[0]
-		)} ${ctx.$t("common.words.and")} ${printDate(filter[1])} `;
+			filter[0] || defaultFilterFromDate
+		)} ${ctx.$t("common.words.and")} ${printDate(
+			filter[1] || defaultFilterToDate
+		)} `;
 	},
 	dataTestid: "filter_creationDate",
 	parser: {
@@ -17,16 +22,16 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 				return {
 					createdAt: {
 						$gte: fromInputDateTime(
-							values[filterGroupConfig.filter[0].id] || currentDate()
+							values[filterGroupConfig.filter[0].id] || defaultFilterFromDate
 						)
 							.utc()
-							.toISOString(),
+							.format(),
 						$lte: fromInputDateTime(
-							values[filterGroupConfig.filter[1].id] || currentDate()
+							values[filterGroupConfig.filter[1].id] || defaultFilterToDate
 						)
-							.add(1, "day")
+							.endOf("day")
 							.utc()
-							.toISOString(),
+							.format(),
 					},
 				};
 			} catch (error) {
