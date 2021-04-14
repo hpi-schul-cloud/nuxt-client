@@ -100,7 +100,7 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged && icons"
+			:icons="schoolInternallyManaged ? icons : []"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
