@@ -1,5 +1,5 @@
 <template>
-	<div class="section">
+	<div class="admin-table-legend section">
 		<strong v-if="icons">{{
 			$t("components.molecules.adminfooterlegend.title")
 		}}</strong>
@@ -50,7 +50,7 @@
 export default {
 	props: {
 		icons: {
-			type: Array,
+			type: [Array],
 			required: true,
 		},
 		showExternalSyncHint: {

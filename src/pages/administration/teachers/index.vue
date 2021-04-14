@@ -26,6 +26,7 @@
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
+			data-testid="data_filter"
 		/>
 
 		<backend-data-table
@@ -42,6 +43,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
+			data-testid="teachers_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -86,7 +88,7 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged && icons"
+			:icons="schoolInternallyManaged ? icons : []"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -121,7 +123,6 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -133,7 +134,6 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
-		BaseInput,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
