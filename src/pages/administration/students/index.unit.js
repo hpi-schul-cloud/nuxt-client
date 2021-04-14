@@ -2,6 +2,7 @@ import { default as StudentPage } from "./index.vue";
 
 const mockData = [
 	{
+		_id: "id",
 		firstName: "Marla",
 		lastName: "Mathe",
 		email: "schueler@schul-cloud.org",
@@ -24,6 +25,11 @@ describe("students/index", () => {
 		jest.useFakeTimers();
 
 		mockStore = {
+			classes: {
+				actions: {
+					find: jest.fn(),
+				},
+			},
 			auth: {
 				state: () => ({
 					user: {
@@ -32,7 +38,7 @@ describe("students/index", () => {
 								name: "administrator",
 							},
 						],
-						permissions: ["STUDENT_CREATE"],
+						permissions: ["STUDENT_CREATE", "STUDENT_DELETE"],
 					},
 					school: {
 						isExternal: false,
@@ -81,6 +87,48 @@ describe("students/index", () => {
 			}),
 		});
 		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+	});
+
+	it("should emit the 'delete' action when deleting a user", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		// user row exists
+		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		expect(dataRow.exists()).toBe(true);
+		// user row checkbox is clicked
+		const checkBox = dataRow.find(".select");
+		expect(checkBox.exists()).toBe(true);
+		await checkBox.trigger("click");
+		await jest.runAllTimers();
+		// user is selected
+		expect(dataRow.vm.selected).toBe(true);
+
+		// selection row component is rendered
+		const selectionBar = wrapper.find(".row-selection-info");
+		expect(selectionBar.exists()).toBe(true);
+
+		// contextMenu is rendered
+		const openContextButton = wrapper.find(".context-menu-open");
+		expect(openContextButton.exists()).toBe(true);
+		// contextMenu is clicked
+		await openContextButton.trigger("click");
+		await jest.runAllTimers();
+
+		// delete button action is rendered in contextMenu
+		const deleteActionButton = wrapper.find(`[data-testid="delete_action"]`);
+		expect(deleteActionButton.exists()).toBe(true);
+		// delete button is clicked
+		await deleteActionButton.trigger("click");
+		await jest.runAllTimers();
+
+		// delete action is emitted
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
+			"delete_action"
+		);
 	});
 
 	it("should display the same number of elements as in the mockData object", async () => {

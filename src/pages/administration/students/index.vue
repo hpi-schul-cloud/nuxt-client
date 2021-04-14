@@ -247,6 +247,7 @@ export default {
 					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "STUDENT_DELETE",
+					dataTestId: "delete_action",
 				},
 			],
 			tableSelection: [],
