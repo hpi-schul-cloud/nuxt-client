@@ -228,6 +228,53 @@ describe("Teacher/index", () => {
 		expect(table.vm.data).toHaveLength(mockData.length);
 	});
 
+	it("should display the edit button if school is not external", async () => {
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+		expect(editBtn.exists()).toBe(true);
+	});
+
+	it("should not display the edit button if school is external", async () => {
+		const customMockStore = { ...mockStore };
+		customMockStore.auth.state = () => ({
+			user: {
+				roles: [
+					{
+						name: "administrator",
+					},
+				],
+			},
+			school: {
+				isExternal: true,
+			},
+		});
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+			}),
+		});
+		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+		expect(editBtn.exists()).toBe(false);
+	});
+
+	it("editBtn's to property should have the expected URL", async () => {
+		const expectedURL = "/administration/teachers/id/edit";
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+		expect(editBtn.vm.to).toStrictEqual(expectedURL);
+	});
+
 	it("breadcrumb's link should have the same 'to' location as the page's breadcrumbs data object", async () => {
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
