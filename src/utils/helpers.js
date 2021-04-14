@@ -94,3 +94,30 @@ export const getTags = (properties) => {
 	}
 	return tags ? tags : [];
 };
+
+export const getTitle = (resource) => {
+	return resource.title ? resource.title : "";
+};
+
+export const getUrl = (resource) => {
+	if (resource.properties && resource.properties["ccm:wwwurl"]) {
+		return getMetadataAttribute(resource.properties, "ccm:wwwurl");
+	}
+	return null;
+};
+
+export const isMerlinContent = (resource) => {
+	return (
+		resource.properties &&
+		getMetadataAttribute(resource.properties, "ccm:replicationsource").includes(
+			"merlin"
+		)
+	);
+};
+
+export const getMerlinReference = (resource) => {
+	if (resource.properties && isMerlinContent(resource)) {
+		return getMetadataAttribute(resource.properties, "ccm:replicationsourceid");
+	}
+	return "";
+};
