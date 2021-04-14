@@ -232,6 +232,7 @@ export default {
 					icon: "mail_outline",
 					"icon-source": "material",
 					action: this.handleBulkEMail,
+					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.students.index.tableActions.qr"),
