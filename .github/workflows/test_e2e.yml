@@ -17,7 +17,7 @@ jobs:
           DOCKER_ID: ${{ secrets.DOCKER_ID }}
           MY_DOCKER_PASSWORD: ${{ secrets.MY_DOCKER_PASSWORD }}
         run: curl "https://raw.githubusercontent.com/hpi-schul-cloud/end-to-end-tests/develop/scripts/ci/fetch.github.sh" | bash
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         name: upload results
         if: always()
         with:
