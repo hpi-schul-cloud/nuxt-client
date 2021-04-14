@@ -1,6 +1,12 @@
 import hash from "object-hash";
 
 export const actions = {
+	selectElement({ commit }, refId) {
+		commit("selectElement", { id: refId, value: true });
+	},
+	unselectElement({ commit }, refId) {
+		commit("selectElement", { id: refId, value: false });
+	},
 	async getResources({ commit }, payload = {}) {
 		commit("incLoading");
 		const query = {
@@ -93,10 +99,10 @@ export const actions = {
 			);
 			event.$emit("showModal@content", "successModal");
 		} catch (error) {
-			console.error("Could not add the material to lesson");
 			event.$emit("showModal@content", "errorModal");
 		}
 	},
+
 	async getResourceMetadata(context, id) {
 		return this.$axios.$get(`/edu-sharing/${id}`);
 	},
@@ -115,6 +121,7 @@ const initialState = () => ({
 		skip: 0,
 		data: [],
 	},
+	selected: 0,
 	lessons: {
 		data: [],
 	},
@@ -125,6 +132,17 @@ const initialState = () => ({
 });
 
 export const mutations = {
+	selectElement(state, payload) {
+		for (let i = 0; i < state.elements.data.length; i++) {
+			if (state.elements.data[i].ref.id === payload.id) {
+				state.elements.data[i]["stateSelected"] = payload.value;
+				break;
+			}
+		}
+		state.selected = state.elements.data.filter(
+			(element) => element.stateSelected === true
+		).length;
+	},
 	setResources(state, payload) {
 		if (state.lastQuery === payload.hash) state.resources = payload.result;
 	},
@@ -147,9 +165,11 @@ export const mutations = {
 	},
 	clearResources(state) {
 		state.resources = initialState().resources;
+		state.selected = initialState().selected;
 	},
 	clearElements(state) {
 		state.elements = initialState().elements;
+		state.selected = initialState().selected;
 	},
 	clearLessons(state) {
 		state.lessons = initialState().lessons;
