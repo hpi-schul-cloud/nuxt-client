@@ -175,6 +175,48 @@ describe("Teacher/index", () => {
 		);
 	});
 
+	it("should emit the 'qr_code' action when the action button is clicked", async () => {
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		// user row exists
+		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		expect(dataRow.exists()).toBe(true);
+		// user row checkbox is clicked
+		const checkBox = dataRow.find(".select");
+		expect(checkBox.exists()).toBe(true);
+		await checkBox.trigger("click");
+		await jest.runAllTimers();
+		// user is selected
+		expect(dataRow.vm.selected).toBe(true);
+
+		// selection row component is rendered
+		const selectionBar = wrapper.find(".row-selection-info");
+		expect(selectionBar.exists()).toBe(true);
+
+		// contextMenu is rendered
+		const openContextButton = wrapper.find(".context-menu-open");
+		expect(openContextButton.exists()).toBe(true);
+		// contextMenu is clicked
+		await openContextButton.trigger("click");
+		await jest.runAllTimers();
+
+		// qr_code button action is rendered in contextMenu
+		const registrationButton = wrapper.find(`[data-testid="qr_code"]`);
+		expect(registrationButton.exists()).toBe(true);
+		// qr_code button is clicked
+		await registrationButton.trigger("click");
+		await jest.runAllTimers();
+
+		// qr_code action is emitted
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
+			"qr_code"
+		);
+	});
+
 	it("should display the same number of elements as in the mockData object", async () => {
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({

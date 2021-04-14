@@ -189,6 +189,7 @@ export default {
 					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
+					dataTestId: "qr_code",
 				},
 				{
 					label: this.$t(
