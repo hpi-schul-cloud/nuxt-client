@@ -16,7 +16,7 @@ jobs:
         run: "npm run build:storybook"
       - name: npm run test:screenshot
         run: npm run test:screenshot:ci
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: screenshot-diff
