@@ -20,7 +20,10 @@ describe("@components/organisms/ContentCard", () => {
 
 	it("Sets inline attribute to query when the prop is set to true", () => {
 		wrapper.setProps({ inline: true });
-		expect(wrapper.vm.query).toMatchObject({ inline: 1 });
+		wrapper.vm.$nextTick(() => {
+			expect(wrapper.vm.inline).toBe(true);
+			expect(wrapper.vm.query).toMatchObject({ inline: 1 });
+		});
 	});
 
 	it("Renders head of contentCard as a link", () => {
