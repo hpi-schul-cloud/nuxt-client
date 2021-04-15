@@ -53,6 +53,7 @@
 	"common.validation.required": "Por favor, rellene este campo",
 	"common.words.and": "y",
 	"componente.molecules.CoursesGrid.emptystate": "Actualmente no hay cursos aquí.",
+	"components.atoms.ProfilePicture": "foto del perfil",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.legacy.footer.about": "Acerca del proyecto",
 	"components.legacy.footer.contact": "Contacto",
