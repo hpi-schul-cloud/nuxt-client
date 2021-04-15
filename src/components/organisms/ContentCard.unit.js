@@ -20,7 +20,10 @@ describe("@components/organisms/ContentCard", () => {
 
 	it("Sets inline attribute to query when the prop is set to true", () => {
 		wrapper.setProps({ inline: true });
-		expect(wrapper.vm.query).toMatchObject({ inline: 1 });
+		wrapper.vm.$nextTick(() => {
+			expect(wrapper.vm.inline).toBe(true);
+			expect(wrapper.vm.query).toMatchObject({ inline: 1 });
+		});
 	});
 
 	it("Renders head of contentCard as a link", () => {
@@ -38,7 +41,7 @@ describe("@components/organisms/ContentCard", () => {
 	it("Renders title of content Card", () => {
 		expect(wrapper.find(".content__title").exists()).toBe(true);
 		expect(wrapper.find(".content__title").text()).toBe(
-			"Mathematische Ausdrücke sortieren"
+			"Technik der Dotierung"
 		);
 	});
 	it("Renders footer of content Card for single elements", () => {
@@ -79,7 +82,6 @@ describe("@components/organisms/ContentCard Collection", () => {
 			"ic_collection"
 		);
 	});
-
 	it("Renders title of content Card", () => {
 		expect(wrapper.find(".content__title").exists()).toBe(true);
 		expect(wrapper.find(".content__title").text()).toBe("heimische Singvögel");
