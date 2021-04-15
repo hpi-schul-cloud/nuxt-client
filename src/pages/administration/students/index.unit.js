@@ -23,6 +23,7 @@ describe("students/index", () => {
 
 	beforeEach(() => {
 		jest.useFakeTimers();
+		jest.clearAllMocks();
 
 		mockStore = {
 			classes: {
@@ -48,6 +49,8 @@ describe("students/index", () => {
 			users: {
 				actions: {
 					handleUsers: jest.fn(),
+					getQrRegistrationLinks: jest.fn(),
+					sendRegistrationLink: jest.fn(),
 				},
 				getters: {
 					list: () => mockData,
@@ -132,6 +135,8 @@ describe("students/index", () => {
 	});
 
 	it("should emit the 'registration_link' action when the action button is clicked", async () => {
+		mockStore.users.actions.sendRegistrationLink.mockClear();
+
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -145,7 +150,6 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
-		await jest.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -158,7 +162,6 @@ describe("students/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		await jest.runAllTimers();
 
 		// registration_link button action is rendered in contextMenu
 		const registrationButton = wrapper.find(
@@ -167,15 +170,19 @@ describe("students/index", () => {
 		expect(registrationButton.exists()).toBe(true);
 		// registration_link button is clicked
 		await registrationButton.trigger("click");
-		await jest.runAllTimers();
 
 		// registration_link action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
 			"registration_link"
 		);
+
+		// store action is called
+		expect(mockStore.users.actions.sendRegistrationLink).toHaveBeenCalled();
 	});
 
 	it("should emit the 'qr_code' action when the action button is clicked", async () => {
+		mockStore.users.actions.getQrRegistrationLinks.mockClear();
+
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -189,7 +196,6 @@ describe("students/index", () => {
 		const checkBox = dataRow.find(".select");
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
-		await jest.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -202,19 +208,21 @@ describe("students/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		await jest.runAllTimers();
 
 		// qr_code button action is rendered in contextMenu
 		const registrationButton = wrapper.find(`[data-testid="qr_code"]`);
 		expect(registrationButton.exists()).toBe(true);
+
 		// qr_code button is clicked
 		await registrationButton.trigger("click");
-		await jest.runAllTimers();
 
 		// qr_code action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
 			"qr_code"
 		);
+
+		// store action is called
+		expect(mockStore.users.actions.getQrRegistrationLinks).toHaveBeenCalled();
 	});
 
 	it("should display the same number of elements as in the mockData object", async () => {
@@ -428,8 +436,6 @@ describe("students/index", () => {
 			}),
 		});
 
-		await jest.runAllTimers();
-
 		mockStore.uiState.mutations.set.mockClear();
 
 		const filterComponent = wrapper.find(`[data-testid="data_filter"]`);
@@ -437,7 +443,7 @@ describe("students/index", () => {
 
 		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
 
-		await jest.runAllTimers();
+		await wrapper.vm.$nextTick();
 
 		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 	});
