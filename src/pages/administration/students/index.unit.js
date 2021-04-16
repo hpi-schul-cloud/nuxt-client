@@ -2,6 +2,7 @@ import { default as StudentPage } from "./index.vue";
 
 const mockData = [
 	{
+		_id: "id",
 		firstName: "Marla",
 		lastName: "Mathe",
 		email: "schueler@schul-cloud.org",
@@ -22,8 +23,14 @@ describe("students/index", () => {
 
 	beforeEach(() => {
 		jest.useFakeTimers();
+		jest.clearAllMocks();
 
 		mockStore = {
+			classes: {
+				actions: {
+					find: jest.fn(),
+				},
+			},
 			auth: {
 				state: () => ({
 					user: {
@@ -32,7 +39,7 @@ describe("students/index", () => {
 								name: "administrator",
 							},
 						],
-						permissions: ["STUDENT_CREATE"],
+						permissions: ["STUDENT_CREATE", "STUDENT_DELETE"],
 					},
 					school: {
 						isExternal: false,
@@ -42,6 +49,8 @@ describe("students/index", () => {
 			users: {
 				actions: {
 					handleUsers: jest.fn(),
+					getQrRegistrationLinks: jest.fn(),
+					sendRegistrationLink: jest.fn(),
 				},
 				getters: {
 					list: () => mockData,
@@ -72,8 +81,6 @@ describe("students/index", () => {
 	it(...isValidComponent(StudentPage));
 
 	it("should dispatch the 'handleUsers action on load'", async () => {
-		mockStore.users.actions.handleUsers.mockClear();
-
 		mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -81,6 +88,135 @@ describe("students/index", () => {
 			}),
 		});
 		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+	});
+
+	it("should emit the 'delete' action when deleting a user", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		// user row exists
+		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		expect(dataRow.exists()).toBe(true);
+		// user row checkbox is clicked
+		const checkBox = dataRow.find(".select");
+		expect(checkBox.exists()).toBe(true);
+		await checkBox.trigger("click");
+		await jest.runAllTimers();
+		// user is selected
+		expect(dataRow.vm.selected).toBe(true);
+
+		// selection row component is rendered
+		const selectionBar = wrapper.find(".row-selection-info");
+		expect(selectionBar.exists()).toBe(true);
+
+		// contextMenu is rendered
+		const openContextButton = wrapper.find(".context-menu-open");
+		expect(openContextButton.exists()).toBe(true);
+		// contextMenu is clicked
+		await openContextButton.trigger("click");
+		await jest.runAllTimers();
+
+		// delete button action is rendered in contextMenu
+		const deleteActionButton = wrapper.find(`[data-testid="delete_action"]`);
+		expect(deleteActionButton.exists()).toBe(true);
+		// delete button is clicked
+		await deleteActionButton.trigger("click");
+		await jest.runAllTimers();
+
+		// delete action is emitted
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
+			"delete_action"
+		);
+	});
+
+	it("should emit the 'registration_link' action when the action button is clicked", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		// user row exists
+		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		expect(dataRow.exists()).toBe(true);
+		// user row checkbox is clicked
+		const checkBox = dataRow.find(".select");
+		expect(checkBox.exists()).toBe(true);
+		await checkBox.trigger("click");
+		// user is selected
+		expect(dataRow.vm.selected).toBe(true);
+
+		// selection row component is rendered
+		const selectionBar = wrapper.find(".row-selection-info");
+		expect(selectionBar.exists()).toBe(true);
+
+		// contextMenu is rendered
+		const openContextButton = wrapper.find(".context-menu-open");
+		expect(openContextButton.exists()).toBe(true);
+		// contextMenu is clicked
+		await openContextButton.trigger("click");
+
+		// registration_link button action is rendered in contextMenu
+		const registrationButton = wrapper.find(
+			`[data-testid="registration_link"]`
+		);
+		expect(registrationButton.exists()).toBe(true);
+		// registration_link button is clicked
+		await registrationButton.trigger("click");
+
+		// registration_link action is emitted
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
+			"registration_link"
+		);
+
+		// store action is called
+		expect(mockStore.users.actions.sendRegistrationLink).toHaveBeenCalled();
+	});
+
+	it("should emit the 'qr_code' action when the action button is clicked", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		// user row exists
+		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		expect(dataRow.exists()).toBe(true);
+		// user row checkbox is clicked
+		const checkBox = dataRow.find(".select");
+		expect(checkBox.exists()).toBe(true);
+		await checkBox.trigger("click");
+		// user is selected
+		expect(dataRow.vm.selected).toBe(true);
+
+		// selection row component is rendered
+		const selectionBar = wrapper.find(".row-selection-info");
+		expect(selectionBar.exists()).toBe(true);
+
+		// contextMenu is rendered
+		const openContextButton = wrapper.find(".context-menu-open");
+		expect(openContextButton.exists()).toBe(true);
+		// contextMenu is clicked
+		await openContextButton.trigger("click");
+
+		// qr_code button action is rendered in contextMenu
+		const registrationButton = wrapper.find(`[data-testid="qr_code"]`);
+		expect(registrationButton.exists()).toBe(true);
+
+		// qr_code button is clicked
+		await registrationButton.trigger("click");
+
+		// qr_code action is emitted
+		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
+			"qr_code"
+		);
+
+		// store action is called
+		expect(mockStore.users.actions.getQrRegistrationLinks).toHaveBeenCalled();
 	});
 
 	it("should display the same number of elements as in the mockData object", async () => {
@@ -92,6 +228,53 @@ describe("students/index", () => {
 		});
 		const table = wrapper.find(`[data-testid="students_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
+	});
+
+	it("should display the edit button if school is not external", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
+		expect(editBtn.exists()).toBe(true);
+	});
+
+	it("should not display the edit button if school is external", async () => {
+		const customMockStore = { ...mockStore };
+		customMockStore.auth.state = () => ({
+			user: {
+				roles: [
+					{
+						name: "administrator",
+					},
+				],
+			},
+			school: {
+				isExternal: true,
+			},
+		});
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: customMockStore,
+			}),
+		});
+		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
+		expect(editBtn.exists()).toBe(false);
+	});
+
+	it("editBtn's to property should have the expected URL", async () => {
+		const expectedURL = "/administration/students/id/edit";
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
+		expect(editBtn.vm.to).toStrictEqual(expectedURL);
 	});
 
 	it("breadcrumb's link should have the same 'to' location as the page's breadcrumbs data object", async () => {
@@ -247,8 +430,6 @@ describe("students/index", () => {
 			}),
 		});
 
-		await jest.runAllTimers();
-
 		mockStore.uiState.mutations.set.mockClear();
 
 		const filterComponent = wrapper.find(`[data-testid="data_filter"]`);
@@ -256,7 +437,7 @@ describe("students/index", () => {
 
 		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
 
-		await jest.runAllTimers();
+		await wrapper.vm.$nextTick();
 
 		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
 	});

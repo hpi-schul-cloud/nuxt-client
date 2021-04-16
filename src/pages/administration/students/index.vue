@@ -232,12 +232,14 @@ export default {
 					icon: "mail_outline",
 					"icon-source": "material",
 					action: this.handleBulkEMail,
+					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.students.index.tableActions.qr"),
 					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
+					dataTestId: "qr_code",
 				},
 				{
 					label: this.$t(
@@ -247,6 +249,7 @@ export default {
 					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "STUDENT_DELETE",
+					dataTestId: "delete_action",
 				},
 			],
 			tableSelection: [],
