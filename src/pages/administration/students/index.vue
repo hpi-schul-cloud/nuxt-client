@@ -340,7 +340,7 @@ export default {
 			}
 
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
-			if (process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === 'false') {
+			if (process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false") {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
