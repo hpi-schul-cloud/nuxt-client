@@ -81,8 +81,6 @@ describe("students/index", () => {
 	it(...isValidComponent(StudentPage));
 
 	it("should dispatch the 'handleUsers action on load'", async () => {
-		mockStore.users.actions.handleUsers.mockClear();
-
 		mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -135,8 +133,6 @@ describe("students/index", () => {
 	});
 
 	it("should emit the 'registration_link' action when the action button is clicked", async () => {
-		mockStore.users.actions.sendRegistrationLink.mockClear();
-
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -181,8 +177,6 @@ describe("students/index", () => {
 	});
 
 	it("should emit the 'qr_code' action when the action button is clicked", async () => {
-		mockStore.users.actions.getQrRegistrationLinks.mockClear();
-
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
