@@ -1,6 +1,6 @@
 <template>
 	<div class="admin-table-legend section">
-		<strong v-if="icons">{{
+		<strong v-if="icons.length > 0">{{
 			$t("components.molecules.adminfooterlegend.title")
 		}}</strong>
 		<div class="consent-icon">

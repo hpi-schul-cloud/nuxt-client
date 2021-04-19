@@ -18,11 +18,15 @@ const mockData = [
 
 describe("Teacher/index", () => {
 	const routerPushStub = jest.fn();
+	const OLD_ENV = process.env;
 
 	let mockStore;
 
 	beforeEach(() => {
 		jest.useFakeTimers();
+
+		jest.resetModules(); // reset module registry to avoid conflicts
+		process.env = { ...OLD_ENV }; // make a copy
 
 		mockStore = {
 			classes: {
@@ -73,6 +77,10 @@ describe("Teacher/index", () => {
 				},
 			},
 		};
+	});
+
+	afterAll(() => {
+		process.env = OLD_ENV; // restore old environment
 	});
 
 	it(...isValidComponent(TeacherPage));
@@ -440,5 +448,55 @@ describe("Teacher/index", () => {
 		await jest.runAllTimers();
 
 		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
+	});
+
+	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("true");
+		expect(
+			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
+		).toBe(true);
+	});
+
+	it("should not display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is false", async () => {
+		process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN = "false";
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("false");
+		expect(
+			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
+		).toBe(false);
+	});
+
+	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("true");
+		expect(wrapper.vm.dynamicIcons).not.toHaveLength(0);
+	});
+
+	it("should not display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is false", async () => {
+		process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN = "false";
+		const wrapper = mount(TeacherPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+			}),
+		});
+		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("false");
+		expect(wrapper.vm.dynamicIcons).toHaveLength(0);
 	});
 });

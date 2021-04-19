@@ -88,7 +88,7 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged ? icons : []"
+			:icons="dynamicIcons"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -322,7 +322,7 @@ export default {
 			}
 
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
-			if (!process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"]) {
+			if (process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false") {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
@@ -332,6 +332,15 @@ export default {
 		},
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
+		},
+		dynamicIcons() {
+			if (
+				!this.schoolInternallyManaged ||
+				process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
+			) {
+				return [];
+			}
+			return this.icons;
 		},
 	},
 	watch: {

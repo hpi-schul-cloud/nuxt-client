@@ -100,7 +100,7 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged ? icons : []"
+			:icons="dynamicIcons"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -347,6 +347,15 @@ export default {
 			}
 
 			return editedColumns;
+		},
+		dynamicIcons() {
+			if (
+				!this.schoolInternallyManaged ||
+				process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
+			) {
+				return [];
+			}
+			return this.icons;
 		},
 	},
 	watch: {
