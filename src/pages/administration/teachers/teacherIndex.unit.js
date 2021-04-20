@@ -463,20 +463,6 @@ describe("Teacher/index", () => {
 		).toBe(true);
 	});
 
-	it("should not display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is false", async () => {
-		process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN = "false";
-		const wrapper = mount(TeacherPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("false");
-		expect(
-			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
-		).toBe(false);
-	});
-
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -487,18 +473,5 @@ describe("Teacher/index", () => {
 		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("true");
 		const icons = wrapper.find(`[data-testid="legend-icons"]`);
 		expect(icons.exists()).toBe(true);
-	});
-
-	it("should not display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is false", async () => {
-		process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN = "false";
-		const wrapper = mount(TeacherPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("false");
-		const icons = wrapper.find(`[data-testid="legend-icons"]`);
-		expect(icons.exists()).toBe(false);
 	});
 });
