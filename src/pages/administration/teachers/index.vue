@@ -88,7 +88,8 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged ? icons : []"
+			:icons="icons"
+			:show-icons="showConsent"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -271,14 +272,19 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
-		...mapState("search", {
-			searchResult: "searchResult",
-		}),
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;
 				return this.teachers;
 			},
+		},
+		schoolInternallyManaged() {
+			return !this.school.isExternal;
+		},
+		showConsent() {
+			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
+				? false
+				: true;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -298,7 +304,7 @@ export default {
 			}
 
 			// filter the delete action if school is external
-			if (this.school.isExternal) {
+			if (!this.schoolInternallyManaged) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -312,26 +318,23 @@ export default {
 			let editedColumns = this.tableColumns;
 			// filters out edit column if school is external or if user is not an admin
 			if (
-				this.school.isExternal ||
+				!this.schoolInternallyManaged ||
 				!this.user.roles.some((role) => role.name === "administrator")
 			) {
-				return this.tableColumns.filter(
+				editedColumns = this.tableColumns.filter(
 					// _id field sets the edit column
 					(col) => col.field !== "_id"
 				);
 			}
 
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
-			if (!process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"]) {
+			if (!this.showConsent) {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
 			}
 
 			return editedColumns;
-		},
-		schoolInternallyManaged() {
-			return !this.school.isExternal;
 		},
 	},
 	watch: {

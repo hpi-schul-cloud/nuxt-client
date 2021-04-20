@@ -100,7 +100,8 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged ? icons : []"
+			:icons="icons"
+			:show-icons="showConsent"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -310,6 +311,11 @@ export default {
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
 		},
+		showConsent() {
+			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
+				? false
+				: true;
+		},
 		filteredActions() {
 			let editedActions = this.tableActions;
 
@@ -319,7 +325,7 @@ export default {
 			);
 
 			// filter the delete action if school is external
-			if (this.school.isExternal) {
+			if (!this.schoolInternallyManaged) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -332,7 +338,7 @@ export default {
 		filteredColumns() {
 			let editedColumns = this.tableColumns;
 			// filters out edit column if school is external
-			if (this.school.isExternal) {
+			if (!this.schoolInternallyManaged) {
 				editedColumns = this.tableColumns.filter(
 					//_id field sets the edit column
 					(col) => col.field !== "_id"
@@ -340,7 +346,7 @@ export default {
 			}
 
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
-			if (process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false") {
+			if (!this.showConsent) {
 				editedColumns = editedColumns.filter(
 					(col) => col.field !== "consentStatus"
 				);
