@@ -485,7 +485,8 @@ describe("Teacher/index", () => {
 			}),
 		});
 		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("true");
-		expect(wrapper.vm.dynamicIcons).not.toHaveLength(0);
+		const icons = wrapper.find(`[data-testid="legend-icons"]`);
+		expect(icons.exists()).toBe(true);
 	});
 
 	it("should not display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is false", async () => {
@@ -497,6 +498,7 @@ describe("Teacher/index", () => {
 			}),
 		});
 		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("false");
-		expect(wrapper.vm.dynamicIcons).toHaveLength(0);
+		const icons = wrapper.find(`[data-testid="legend-icons"]`);
+		expect(icons.exists()).toBe(false);
 	});
 });

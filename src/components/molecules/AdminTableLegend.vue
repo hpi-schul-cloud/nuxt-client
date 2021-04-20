@@ -1,26 +1,31 @@
 <template>
 	<div class="admin-table-legend section">
-		<strong v-if="icons.length > 0">{{
-			$t("components.molecules.adminfooterlegend.title")
-		}}</strong>
-		<div class="consent-icon">
-			<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
-				<span v-if="icon.style">
-					<base-icon
-						source="custom"
-						:icon="icon.icon"
-						:color="icon.color"
-						:style="icon.style"
-					/>
-					{{ icon.label }}
-				</span>
+		<span v-if="showIcons" data-testid="legend-icons">
+			<strong>{{ $t("components.molecules.adminfooterlegend.title") }}</strong>
+			<div class="consent-icon">
+				<li v-for="icon in icons" :key="icon.icon" class="mb--xs">
+					<span v-if="icon.style">
+						<base-icon
+							source="custom"
+							:icon="icon.icon"
+							:color="icon.color"
+							:style="icon.style"
+						/>
+						{{ icon.label }}
+					</span>
 
-				<span v-else>
-					<base-icon source="material" :icon="icon.icon" :color="icon.color" />
-					{{ icon.label }}
-				</span>
-			</li>
-		</div>
+					<span v-else>
+						<base-icon
+							source="material"
+							:icon="icon.icon"
+							:color="icon.color"
+						/>
+						{{ icon.label }}
+					</span>
+				</li>
+			</div>
+		</span>
+
 		<span v-if="showExternalSyncHint" class="container">
 			<strong class="external-sync-hint">
 				{{
@@ -50,11 +55,15 @@
 export default {
 	props: {
 		icons: {
-			type: [Array],
+			type: Array,
 			required: true,
 		},
 		showExternalSyncHint: {
 			type: Boolean,
+		},
+		showIcons: {
+			type: Boolean,
+			required: true,
 		},
 	},
 	data() {
