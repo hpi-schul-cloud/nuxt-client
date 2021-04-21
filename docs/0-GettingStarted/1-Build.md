@@ -90,8 +90,8 @@ We are using docker for all our production deployments.
 | -------------------------- | ----------- | -------------------------------- |
 | DOCKER_ID                  | _undefined_ | used for docker CLI login        |
 | MY_DOCKER_PASSWORD         | _undefined_ | used for docker CLI login        |
-| encrypted_b7461320c5f4_iv  | _undefined_ | `used to decrypt travis_rsa.enc` |
-| encrypted_b7461320c5f4_key | _undefined_ | `used to decrypt travis_rsa.enc` |
+| encrypted_\*_iv            | _undefined_ | `used to decrypt travis_rsa.enc` |
+| encrypted_\*_key           | _undefined_ | `used to decrypt travis_rsa.enc` |
 
 ### Pull Deployment
 
