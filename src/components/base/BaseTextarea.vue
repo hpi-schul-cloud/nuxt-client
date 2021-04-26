@@ -145,7 +145,7 @@ export default {
 	}
 }
 
-.top .input-line {
+/deep/ .top .input-line {
 	align-items: start;
 }
 

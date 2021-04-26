@@ -654,21 +654,21 @@ export default {
 	color: var(--color-secondary);
 	border: none;
 }
-.link {
+/deep/ .link {
 	color: var(--color-secondary);
 	text-decoration: none;
 }
-.table {
+/deep/ .table {
 	margin-top: var(--space-lg);
 	.row {
 		height: 3rem;
 	}
 }
-.toolbelt {
+/deep/ .toolbelt {
 	display: none;
 }
 
-.calendar-input {
+/deep/ .calendar-input {
 	max-width: 5em;
 	margin-bottom: 0;
 	.info-line {
@@ -681,7 +681,7 @@ export default {
 	}
 }
 
-.base-input {
+/deep/ .base-input {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);
