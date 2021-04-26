@@ -230,21 +230,5 @@ export default {
 }
 .editor__content {
 	outline: none;
-
-	/deep/ [contenteditable="true"] {
-		padding: var(--space-lg);
-		outline: none;
-		&:focus {
-			border-bottom: 1px solid var(--color-secondary);
-		}
-	}
-
-	/deep/ *.is-empty:first-child::before {
-		float: left;
-		height: 0;
-		color: var(--color-gray);
-		pointer-events: none;
-		content: attr(data-empty-text);
-	}
 }
 </style>
