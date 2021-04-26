@@ -1,4 +1,5 @@
 process.env.TZ = "Europe/Berlin";
+process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN = "true";
 
 module.exports = {
 	setupFiles: ["<rootDir>/tests/unit/setup", "jest-canvas-mock"],
