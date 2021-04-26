@@ -172,46 +172,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@styles";
-/deep/ {
-	.base-content {
-		padding: var(--space-sm);
-		margin-top: var(--space-xs);
-	}
-
-	h2 {
-		font-size: var(--heading-4);
-		font-weight: var(--font-weight-normal);
-		color: var(--color-secondary);
-	}
-
-	h3 {
-		font-size: var(--heading-5);
-		color: var(--color-secondary);
-	}
-
-	ul {
-		margin-top: var(--space-md);
-		line-height: var(--line-height-lg);
-	}
-
-	blockquote {
-		padding-left: var(--space-md);
-		border-left: 2px solid var(--color-secondary);
-	}
-
-	li {
-		@extend .ml--xl;
-
-		font-style: italic;
-		color: var(--color-black);
-	}
-
-	a {
-		@extend .default-link;
-
-		&:hover {
-			color: var(--color-primary-dark);
-		}
-	}
-}
 </style>
