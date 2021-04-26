@@ -26,11 +26,12 @@
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
+			data-testid="data_filter"
 		/>
 
 		<backend-data-table
 			:actions="filteredActions"
-			:columns="editFilteredColumns"
+			:columns="filteredColumns"
 			:current-page.sync="page"
 			:data="teachers"
 			:paginated="true"
@@ -42,6 +43,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
+			data-testid="teachers_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -86,7 +88,8 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged && icons"
+			:icons="icons"
+			:show-icons="showConsent"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -121,7 +124,6 @@ import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
-import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { teacherFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -133,7 +135,6 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
-		BaseInput,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -182,12 +183,14 @@ export default {
 					icon: "mail_outline",
 					"icon-source": "material",
 					action: this.handleBulkEMail,
+					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
 					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
+					dataTestId: "qr_code",
 				},
 				{
 					label: this.$t(
@@ -197,6 +200,7 @@ export default {
 					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "TEACHER_DELETE",
+					dataTestId: "delete_action",
 				},
 			],
 			tableSelection: [],
@@ -233,6 +237,7 @@ export default {
 					sortable: true,
 				},
 				{
+					// edit column
 					field: "_id",
 					label: "",
 				},
@@ -267,41 +272,69 @@ export default {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 		}),
-		...mapState("search", {
-			searchResult: "searchResult",
-		}),
-		permissionFilteredTableActions() {
-			return this.tableActions.filter((action) =>
-				action.permission ? this.$_userHasPermission(action.permission) : true
-			);
-		},
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;
 				return this.teachers;
 			},
 		},
-		filteredActions() {
-			// if user has teacher role, bulkQr action gets filtered
-			return this.user.roles.some((role) => role.name === "teacher")
-				? this.permissionFilteredTableActions.filter(
-						(action) =>
-							action.label !==
-							this.$t("pages.administration.teachers.index.tableActions.qr")
-				  )
-				: this.permissionFilteredTableActions;
-		},
-		editFilteredColumns() {
-			// filters out edit/consent column if school is external or if user is a teacher
-			return this.school.isExternal ||
-				this.user.roles.some((role) => role.name === "teacher")
-				? this.tableColumns.filter(
-						(col) => col.field !== "_id" && col.field !== "consentStatus"
-				  )
-				: this.tableColumns;
-		},
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
+		},
+		showConsent() {
+			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
+				? false
+				: true;
+		},
+		filteredActions() {
+			let editedActions = this.tableActions;
+
+			// filter actions by permissions
+			editedActions = this.tableActions.filter((action) =>
+				action.permission ? this.$_userHasPermission(action.permission) : true
+			);
+
+			// filters out the QR bulk action is user is not an admin
+			if (!this.user.roles.some((role) => role.name === "administrator")) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.teachers.index.tableActions.qr")
+				);
+			}
+
+			// filter the delete action if school is external
+			if (!this.schoolInternallyManaged) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.teachers.index.tableActions.delete")
+				);
+			}
+
+			return editedActions;
+		},
+		filteredColumns() {
+			let editedColumns = this.tableColumns;
+			// filters out edit column if school is external or if user is not an admin
+			if (
+				!this.schoolInternallyManaged ||
+				!this.user.roles.some((role) => role.name === "administrator")
+			) {
+				editedColumns = this.tableColumns.filter(
+					// _id field sets the edit column
+					(col) => col.field !== "_id"
+				);
+			}
+
+			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
+			if (!this.showConsent) {
+				editedColumns = editedColumns.filter(
+					(col) => col.field !== "consentStatus"
+				);
+			}
+
+			return editedColumns;
 		},
 	},
 	watch: {
@@ -486,6 +519,13 @@ export default {
 				});
 			}, 400);
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.teachers.index.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>

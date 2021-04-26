@@ -14,7 +14,7 @@
 				design="none"
 				class="context-menu__button"
 				role="menuitem"
-				:data-testid="action.dataTestid || null"
+				:data-testid="action.dataTestId || null"
 				@click.prevent="emitEvent(action.event, action.arguments)"
 				@keydown.up.prevent="focusPrev(index)"
 				@keydown.down.prevent="focusNext(index)"
@@ -239,6 +239,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		padding-right: var(--space-md) !important;
+		cursor: pointer;
 
 		&-icon {
 			margin: var(--space-md) !important;
