@@ -189,8 +189,10 @@ module.exports = {
 			}
 		},
 		loaders: {
-			sassOptions: {
-				indentedSyntax: true, // optional
+			sass: {
+				sassOptions: {
+					indentedSyntax: true, // optional
+				},
 			},
 		},
 		postcss: {
