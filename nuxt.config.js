@@ -142,6 +142,7 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
+		"@plugins/vuetify",
 	],
 
 	/*
@@ -188,6 +189,11 @@ module.exports = {
 					},
 				});
 			}
+		},
+		loaders: {
+			sassOptions: {
+				indentedSyntax: true, // optional
+			},
 		},
 		postcss: {
 			plugins: [require("postcss-color-mod-function")()],
