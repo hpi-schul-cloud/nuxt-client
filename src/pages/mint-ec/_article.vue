@@ -172,7 +172,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@styles";
-/deep/ {
+::v-deep {
 	.base-content {
 		padding: var(--space-sm);
 		margin-top: var(--space-xs);
