@@ -19,8 +19,8 @@ Once a theme other than `default` is used, the index.scss of the regarding theme
 themeName/index.scss:
 
 ```css
-@import "@styles-default/variables.scss";
-@import "@styles-default/utility.scss";
+@import "@styles-base/variables.scss";
+@import "@styles-base/utility.scss";
 @import "./variables";
 ```
 
@@ -72,7 +72,7 @@ The below alias object is auto-extended by the `variation.js` script, for all th
 	"@static": "src/themes/open/static",
 	"@theme": "src/themes/open",
 	"@styles": "src/themes/open/styles/index.scss",
-	"@styles-default": "src/themes/default/styles",
+	"@styles-base": "src/themes/default/styles",
 	"@variables": "src/themes/open/styles/variables.scss"
 }
 ```
