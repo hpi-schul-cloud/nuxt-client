@@ -25,7 +25,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## 26.1.0
 
-
 ### Added
 
 - SC-8916 - set page titles to some administration pages
