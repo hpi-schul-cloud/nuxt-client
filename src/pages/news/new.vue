@@ -12,9 +12,7 @@
 			]"
 		/>
 		<h1 :aria-label="$t('pages.news.new.title')"></h1>
-		<v-app>
-			<v-btn color="primary">asdfasdf</v-btn>
-		</v-app>
+		<v-btn color="primary">asdfasdf</v-btn>
 		<form-news #actions="{ cancel }" action="create">
 			<form-actions>
 				<template #primary>
@@ -39,14 +37,13 @@
 <script>
 import FormNews from "@components/organisms/FormNews";
 import FormActions from "@components/molecules/FormActions";
-import { VBtn, VApp } from "vuetify/lib";
+import { VBtn } from "vuetify/lib";
 
 export default {
 	components: {
 		FormNews,
 		FormActions,
 		VBtn,
-		VApp,
 	},
 	meta: {
 		requiredPermissions: ["NEWS_CREATE"],
