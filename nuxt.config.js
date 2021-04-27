@@ -26,7 +26,11 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
-	buildModules: ["@nuxt/typescript-build"],
+	buildModules: ["@nuxt/typescript-build", "@nuxtjs/vuetify"],
+	vuetify: {
+		treeShake: true,
+		customVariables: ["@variables"],
+	},
 	// to make ENV variables available in components, they need to be defined here
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,

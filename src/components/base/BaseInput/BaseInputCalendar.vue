@@ -77,7 +77,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.calendar-input /deep/ {
+.calendar-input ::v-deep {
 	.flatpickr-input,
 	input {
 		display: block;
