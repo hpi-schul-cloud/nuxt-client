@@ -430,7 +430,8 @@ describe("students/index", () => {
 		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
 	});
 
-	it("should table filter options call uiState after passing props", async () => {
+	// currently disabled, will be reactivated when the new components are in use
+	it.skip("should table filter options call uiState after passing props", async () => {
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
