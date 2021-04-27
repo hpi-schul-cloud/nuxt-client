@@ -10,13 +10,10 @@
 
 <script>
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
-import { VApp, VMain } from "vuetify/lib";
 
 export default {
 	components: {
 		LegacyLoggedIn,
-		VApp,
-		VMain,
 	},
 };
 </script>

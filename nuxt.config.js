@@ -26,7 +26,11 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
-	buildModules: ["@nuxt/typescript-build"],
+	buildModules: ["@nuxt/typescript-build", "@nuxtjs/vuetify"],
+	vuetify: {
+		treeShake: true,
+		customVariables: ["@variables"],
+	},
 	// to make ENV variables available in components, they need to be defined here
 	env: {
 		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
@@ -142,7 +146,6 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
-		"@plugins/vuetify",
 	],
 
 	/*
@@ -189,13 +192,6 @@ module.exports = {
 					},
 				});
 			}
-		},
-		loaders: {
-			sass: {
-				sassOptions: {
-					indentedSyntax: true, // optional
-				},
-			},
 		},
 		postcss: {
 			plugins: [require("postcss-color-mod-function")()],

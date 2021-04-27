@@ -35,31 +35,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-	VContainer,
-	VCol,
-	VCard,
-	VCardTitle,
-	VCardSubtitle,
-	VCardActions,
-	VBtn,
-	VSpacer,
-	VRow,
-} from "vuetify/lib";
 import { fromNow } from "@plugins/datetime";
 
 export default {
-	components: {
-		VContainer,
-		VCol,
-		VCard,
-		VCardTitle,
-		VCardSubtitle,
-		VCardActions,
-		VBtn,
-		VSpacer,
-		VRow,
-	},
+	components: {},
 	layout: "defaultVuetify",
 	data() {
 		return {
