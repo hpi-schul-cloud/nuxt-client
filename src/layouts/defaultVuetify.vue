@@ -2,9 +2,7 @@
 	<legacy-logged-in>
 		<v-app class="content">
 			<v-main>
-				<v-container>
-					<Nuxt />
-				</v-container>
+				<Nuxt />
 			</v-main>
 		</v-app>
 	</legacy-logged-in>
@@ -12,14 +10,13 @@
 
 <script>
 import LegacyLoggedIn from "@layouts/legacyLoggedIn";
-import { VApp, VMain, VContainer } from "vuetify/lib";
+import { VApp, VMain } from "vuetify/lib";
 
 export default {
 	components: {
 		LegacyLoggedIn,
 		VApp,
 		VMain,
-		VContainer,
 	},
 };
 </script>
