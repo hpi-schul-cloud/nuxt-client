@@ -29,6 +29,7 @@ export default {
 		NewsCard,
 		FabFloating,
 	},
+	layout: "defaultVuetify",
 	computed: {
 		...mapGetters("news", {
 			news: "list",
