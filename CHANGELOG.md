@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.1.1
+
+### Fixed
+
+- Fixed conflicting screenshots
+
 ## 26.1.0 - 2021-04-27
 
 ### Added
