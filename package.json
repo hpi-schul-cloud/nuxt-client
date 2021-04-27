@@ -76,8 +76,7 @@
 		"vue-ripple-directive": "^2.0.1",
 		"vue-router": "^3.4.9",
 		"vue-swatches": "^2.1.0",
-		"vuelidate": "^0.7.6",
-		"vuetify": "^2.4.11"
+		"vuelidate": "^0.7.6"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.13.15",
