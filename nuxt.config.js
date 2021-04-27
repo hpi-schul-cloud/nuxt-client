@@ -216,7 +216,8 @@ module.exports = {
 		dir: "dist/nuxt",
 	},
 	vuetify: {
-		customVariables: ["@/themes/" + themeName + "/styles/variables"],
+		customVariables: ["@variables"],
 		treeShake: true,
+		theme: { dark: true },
 	},
 };
