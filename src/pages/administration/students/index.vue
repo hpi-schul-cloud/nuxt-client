@@ -315,6 +315,9 @@ export default {
 		...mapGetters("users", {
 			students: "list",
 		}),
+		// ...mapGetters("server-env", {
+		// 	env: "getEnv",
+		// }),
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
@@ -325,6 +328,11 @@ export default {
 			return !this.school.isExternal;
 		},
 		showConsent() {
+			// const env = this.$store.state["server-env"].env
+			// 	.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+
+			// return env;
+
 			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
 				? false
 				: true;
@@ -394,6 +402,7 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		// this.$store.dispatch("server-env/get");
 	},
 	methods: {
 		find() {

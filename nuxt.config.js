@@ -50,8 +50,8 @@ module.exports = {
 		MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 		MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 		MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
-		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN:
-			process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN || true,
+		// ADMIN_TABLES_DISPLAY_CONSENT_COLUMN:
+		// 	process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN || true,
 	},
 
 	/*
@@ -142,6 +142,7 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
+		"@plugins/serverEnv",
 	],
 
 	/*
