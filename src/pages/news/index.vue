@@ -3,9 +3,11 @@
 		<v-row>
 			<v-col>
 				<v-btn large color="primary" to="/news/new">
-					<base-icon source="material" icon="add" />
+					<v-icon left> fa-plus </v-icon>
 					{{ $t("pages.news.index.new") }}
 				</v-btn>
+				<v-icon> fa-plus </v-icon>
+				<v-icon> {{ iconMdiAccount }} </v-icon>
 			</v-col>
 		</v-row>
 		<v-row>
@@ -36,6 +38,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
+import { mdiAccount } from "@mdi/js";
 
 export default {
 	components: {},
@@ -43,6 +46,7 @@ export default {
 	data() {
 		return {
 			fromNow,
+			iconMdiAccount: mdiAccount,
 		};
 	},
 	computed: {
@@ -52,6 +56,7 @@ export default {
 	},
 	created(ctx) {
 		this.find();
+		console.log(this.$vuetify.icons);
 	},
 	methods: {
 		find() {
