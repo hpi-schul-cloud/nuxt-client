@@ -217,7 +217,7 @@ module.exports = {
 	},
 	vuetify: {
 		customVariables: ["@variables"],
-		treeShake: process.env.NODE_ENV === "production",
+		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
 		options: {
 			customProperties: true,
