@@ -56,7 +56,6 @@ export default {
 	},
 	created(ctx) {
 		this.find();
-		console.log(this.$vuetify.icons);
 	},
 	methods: {
 		find() {
