@@ -2,6 +2,11 @@
 	<v-container>
 		<v-row>
 			<v-col>
+				<h1>{{ $t("pages.news.title") }}</h1>
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col>
 				<v-btn large color="primary" to="/news/new">
 					<v-icon left> fa-plus </v-icon>
 					{{ $t("pages.news.index.new") }}
