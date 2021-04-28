@@ -215,6 +215,7 @@ module.exports = {
 	},
 	vuetify: {
 		customVariables: ["@variables"],
+		defaultAssets: false,
 		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
 		options: {
