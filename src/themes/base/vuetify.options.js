@@ -9,5 +9,7 @@ export default {
 			},
 		},
 	},
-	iconfont: "fa4",
+	icons: {
+		iconfont: "fa4",
+	},
 };
