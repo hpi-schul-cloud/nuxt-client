@@ -2,3 +2,10 @@
 
 $body-font-family: "PT Sans";
 $heading-font-family: "PT Sans Narrow";
+
+// v-btn
+$btn-text-transform: none;
+$btn-font-weight: 700;
+.v-btn {
+	font-family: $heading-font-family;
+}
