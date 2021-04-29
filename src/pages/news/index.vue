@@ -2,7 +2,7 @@
 	<v-container>
 		<v-row>
 			<v-col>
-				<h1>{{ $t("pages.news.title") }}</h1>
+				<h1 class="text-h1">{{ $t("pages.news.title") }}</h1>
 				<p>Lorem Ipsum, normaler Text.</p>
 			</v-col>
 		</v-row>

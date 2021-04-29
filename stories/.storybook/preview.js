@@ -93,6 +93,18 @@ addDecorator(() => ({
 	template: "<story/>",
 }));
 
+// add vuetify support
+import Vuetify from "vuetify/lib";
+import options from "../../src/themes/default/vuetify.options.js";
+import { VApp } from "vuetify/lib";
+
+Vue.use(Vuetify);
+addDecorator(() => ({
+	components: { VApp },
+	vuetify: new Vuetify(options),
+	template: "<v-app><story/></v-app>",
+}));
+
 // automatically import all files ending in *.stories.js
 const reqStories = require.context("../", true, /\.stories\.js$/);
 const reqComponentStories = require.context(
