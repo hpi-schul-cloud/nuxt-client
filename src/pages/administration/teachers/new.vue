@@ -83,5 +83,12 @@ export default {
 				});
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.teachers.new.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
+	},
 };
 </script>

@@ -622,6 +622,13 @@ export default {
 			}
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.students.consent.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
+	},
 };
 </script>
 

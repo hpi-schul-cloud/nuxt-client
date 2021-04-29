@@ -113,7 +113,9 @@ export default {
 	},
 	head() {
 		return {
-			title: this.$t("pages.administration.datasources.new.title"),
+			title: `${this.$t("pages.administration.datasources.new.title")} - ${
+				this.$theme.short_name
+			}`,
 		};
 	},
 };

@@ -23,7 +23,34 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 
-## 26.1.0
+### Fixed
+
+- Fixed further conflicting screenshots
+
+## 26.1.1
+
+### Fixed
+
+- Fixed conflicting screenshots
+
+## 26.1.0 - 2021-04-27
+
+### Added
+
+- SC-8916 - set page titles to some administration pages
+- SC-8681 - added ADMIN_TABLES_DISPLAY_CONSENT_COLUMN environment variable to display/hide the NAT consent column and the legend
+
+### Fixed
+
+- SC-8518 - fixed layout issues of checkbox
+- SC-8881 - fixed double roles user (admin, teacher) not being able to edit other teachers
+- SC-8519 - Admin Table Bugfix - Set current date for filter, without input; Error handling parsing dates
+- SC-8878 - Fixing invalid date on filter chips, setting default filter start and end day to 1900-01-01 and 2099-12-31
+- SC-8910 - fixed delete action being available when school is external
+
+### Removed
+
+- SC-8708 - removed firstname and lastname filters in NAT
 
 ## 26.0.6 - 2021-04-06
 
@@ -59,6 +86,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- SC-8554 - fixed the QR code generation with double role
 - SC-8719 - fixed pagination not setting currentPage to 1
 
 ### Added
