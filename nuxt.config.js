@@ -151,6 +151,7 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
+		"@plugins/iconfonts",
 	],
 
 	/*
@@ -217,6 +218,7 @@ module.exports = {
 	},
 	vuetify: {
 		customVariables: ["@variables"],
+		defaultAssets: false,
 		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
 		options: {

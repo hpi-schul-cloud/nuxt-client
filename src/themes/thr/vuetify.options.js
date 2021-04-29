@@ -1,4 +1,7 @@
-export default {
+import base from "@@/src/themes/base/vuetify.options.js";
+import { merge } from "lodash";
+
+const custom = {
 	theme: {
 		dark: false,
 		themes: {
@@ -10,3 +13,5 @@ export default {
 		},
 	},
 };
+
+export default merge(custom, base);
