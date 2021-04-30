@@ -1,7 +1,7 @@
 export const actions = {
 	async get({ commit }) {
 		try {
-			const env = await this.$axios.$get("/config/v2");
+			const env = await this.$axios.$get("/config/app/public");
 			commit("setEnv", env);
 		} catch (error) {
 			commit("setError", error);

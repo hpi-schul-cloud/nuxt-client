@@ -142,6 +142,7 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
+		"@plugins/nuxtClientInit",
 	],
 
 	/*
