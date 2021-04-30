@@ -1,28 +1,38 @@
 <template>
 	<v-container>
-    <!-- <base-breadcrumb :inputs="breadcrumbs" /> -->
-    <v-breadcrumbs :items="breadcrumbItems" :large="true">
-      <template v-slot:item="{ item }">
-        <v-breadcrumbs-item
-          :href="item.href"
-          :disabled="item.disabled"
-          class="text-lg"
-        >
-          {{ item.text }}
-        </v-breadcrumbs-item>
-      </template>
-      <template v-slot:divider>
-        <v-icon> {{ iconMdiChevronRight }} </v-icon>
-      </template>
-    </v-breadcrumbs>
+		<!-- <base-breadcrumb :inputs="breadcrumbs" /> -->
+		<v-breadcrumbs :items="breadcrumbItems" :large="true">
+			<template v-slot:item="{ item }">
+				<v-breadcrumbs-item
+					:href="item.href"
+					:disabled="item.disabled"
+					class="text-lg"
+				>
+					{{ item.text }}
+				</v-breadcrumbs-item>
+			</template>
+			<template v-slot:divider>
+				<v-icon> {{ iconMdiChevronRight }} </v-icon>
+			</template>
+		</v-breadcrumbs>
 		<v-row>
 			<v-col>
-				<h1 class="text-h3">{{ $t("pages.administration.school.index.title") }}</h1>
-				<h2 class="text-h4">{{ $t("pages.administration.school.schoolYear") }} 2020/21</h2>
-        <p>{{ $t("pages.administration.school.longText.provideStudentsAndTheirParents") }}</p>
+				<h1 class="text-h3">
+					{{ $t("pages.administration.school.index.title") }}
+				</h1>
+				<h2 class="text-h4">
+					{{ $t("pages.administration.school.schoolYear") }} 2020/21
+				</h2>
+				<p>
+					{{
+						$t(
+							"pages.administration.school.longText.provideStudentsAndTheirParents"
+						)
+					}}
+				</p>
 			</v-col>
 		</v-row>
-    <v-divider></v-divider>
+		<v-divider></v-divider>
 		<v-row>
 			<v-col>
 				<v-btn large color="primary" to="/news/new">
@@ -68,29 +78,29 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-      breadcrumbItems: [
+			breadcrumbItems: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
-        {
+				{
 					text: this.$t("pages.administration.school.index.title"),
-          disabled: true
+					disabled: true,
 				},
-      ],
-      breadcrumbs: [
+			],
+			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					to: "/administration/",
 					icon: { source: "fa", icon: "cog" },
 				},
-        {
+				{
 					text: this.$t("pages.administration.school.index.title"),
 				},
-      ],
+			],
 			fromNow,
 			iconMdiAccount: mdiAccount,
-      iconMdiChevronRight: mdiChevronRight,
+			iconMdiChevronRight: mdiChevronRight,
 		};
 	},
 	computed: {
