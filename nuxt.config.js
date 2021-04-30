@@ -5,7 +5,6 @@ const webpack = require("webpack");
 const sentryConfig = require("./sentry.config.js");
 
 const themeName = process.env.SC_THEME || "default";
-const API_URL = process.env.API_URL || "http://localhost:3030";
 const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
 	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
@@ -43,15 +42,17 @@ module.exports = {
 			process.env.FEATURE_ES_COLLECTIONS_ENABLED || false,
 		FEATURE_MATRIX_MESSENGER_ENABLED:
 			process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
-		FEATURE_MESSENGER__SCHOOL_ROOM_ENABLED:
-			process.env.FEATURE_MESSENGER__SCHOOL_ROOM_ENABLED,
-		FEATURE_MESSENGER__SCHOOL_SETTINGS_VISIBLE:
-			process.env.FEATURE_MESSENGER__SCHOOL_SETTINGS_VISIBLE,
 		MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 		MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 		MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN:
 			process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN || true,
+	},
+
+	publicRuntimeConfig: {
+		axios: {
+			browserBaseURL: process.env.API_URL || "http://localhost:3030",
+		},
 	},
 
 	/*
@@ -157,10 +158,6 @@ module.exports = {
 		"cookie-universal-nuxt",
 		"nuxt-babel",
 	],
-	axios: {
-		// See https://github.com/nuxt-community/axios-module#options
-		baseURL: API_URL,
-	},
 	sentry: sentryConfig,
 	toast: {
 		duration: 3000,
