@@ -180,6 +180,7 @@ export default {
 		async findAll() {
 			let data;
 			try {
+				// TODO wrong use of store
 				({ data } = await this.$store.dispatch("webuntis-metadata/findAll", {
 					query: {
 						datasourceId: this.datasourceId,
@@ -198,6 +199,7 @@ export default {
 		},
 		async triggerRun() {
 			try {
+				// TODO wrong use of store
 				const run = await this.$store.dispatch("datasourceRuns/create", {
 					datasourceId: this.datasource._id,
 					dryrun: false,

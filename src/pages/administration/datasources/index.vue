@@ -271,6 +271,7 @@ export default {
 					createdAt: 1,
 				},
 			};
+			// TODO wrong use of store
 			this.$store
 				.dispatch("datasources/find", { query })
 				.then((result) => {
@@ -301,6 +302,7 @@ export default {
 		},
 		async triggerRun(datasource) {
 			try {
+				// TODO wrong use of store
 				const run = await this.$store.dispatch("datasourceRuns/create", {
 					datasourceId: datasource._id,
 					dryrun: true,
@@ -354,6 +356,7 @@ export default {
 				),
 				onConfirm: async () => {
 					try {
+						// TODO wrong use of store (not so bad)
 						await this.$store.dispatch("datasources/remove", datasource._id);
 						this.$toast.success(
 							this.$t("pages.administration.datasources.index.remove.success", {

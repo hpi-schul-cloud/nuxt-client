@@ -67,6 +67,7 @@ export default {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
 	async asyncData({ store, params }) {
+		// TODO wrong use of store (not so bad)
 		return {
 			news: await store.dispatch("news/get", params.id),
 		};

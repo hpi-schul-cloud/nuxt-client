@@ -50,6 +50,7 @@ export default {
 	},
 	async asyncData({ store, params, error, app: { i18n } }) {
 		try {
+			// TODO wrong use of store
 			const page = await store.dispatch("ghost/getSinglePage", params.article);
 			return { page: page };
 		} catch (e) {

@@ -81,6 +81,7 @@ export default {
 		async submitHandler() {
 			const { activationCode } = this.$route.params;
 			try {
+				// TODO wrong use of store
 				const res = await this.$store.dispatch("activation/update", [
 					activationCode,
 				]);

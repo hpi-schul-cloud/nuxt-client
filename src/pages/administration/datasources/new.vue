@@ -93,6 +93,7 @@ export default {
 	methods: {
 		async getAddedSourcesCount(source) {
 			try {
+				// TODO wrong use of store
 				source.count = await this.$store.dispatch("datasources/find", {
 					query: {
 						$limit: 0,

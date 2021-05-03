@@ -69,6 +69,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 });
 
 const getClassesNames = async (ctx, arr) => {
+	// TODO wrong use of store (not so bad)
 	const classes = await ctx.$store.dispatch("classes/find", {
 		query: {
 			$limit: 1000,
