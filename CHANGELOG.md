@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- SC-9003; SC-9017 - removes calls to /roles/user/{userID} and /schools endpoint, which are now part of /me endpoint
 - SC-8250 - connect UI for bulk delete
 - SC-8164 - apply deletion concept to the deletion of students and teachers
 - SC-7937 - added Lern-Store collections multi-select
