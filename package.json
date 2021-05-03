@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "26.1.0",
+	"version": "26.1.1",
 	"description": "The next Level of HPI Schul-Cloud",
 	"author": "HPI Schul-Cloud",
 	"private": true,
@@ -91,7 +91,6 @@
 		"@hpi-schul-cloud/styles": "^0.2.4",
 		"@storybook/addon-a11y": "^6.2.7",
 		"@storybook/addon-actions": "^6.2.7",
-		"@storybook/addon-backgrounds": "^6.2.5",
 		"@storybook/addon-centered": "^5.3.21",
 		"@storybook/addon-knobs": "^6.1.1",
 		"@storybook/addon-notes": "^5.3.21",
