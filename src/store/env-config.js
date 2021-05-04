@@ -3,7 +3,7 @@ export const actions = {
 		try {
 			const env = await this.$axios.$get("/config/app/public");
 			commit("setEnv", env);
-			dispatch("autoLogout/init");
+			dispatch("autoLogout/init", {}, { root: true });
 		} catch (error) {
 			commit("setError", error);
 		}
