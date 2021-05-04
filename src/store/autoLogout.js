@@ -1,7 +1,7 @@
-const showWarningOnRemainingSeconds =
-	Number(process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS) || 3600;
-const defaultRemainingTimeInSeconds =
-	Number(process.env.JWT_TIMEOUT_SECONDS) || showWarningOnRemainingSeconds * 2;
+// const showWarningOnRemainingSeconds =
+// 	Number(process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS) || 3600;
+// const defaultRemainingTimeInSeconds =
+// 	Number(process.env.JWT_TIMEOUT_SECONDS) || showWarningOnRemainingSeconds * 2;
 
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
@@ -31,7 +31,7 @@ const decrementRemainingTime = (commit, state) => {
 			if (
 				!processing &&
 				!state.active &&
-				state.remainingTimeInSeconds <= showWarningOnRemainingSeconds
+				state.remainingTimeInSeconds <= state.showWarningOnRemainingSeconds
 			) {
 				commit("setActive", { active: true, error: false });
 			}
@@ -107,10 +107,23 @@ export const mutations = {
 		lastUpdated = Date.now();
 		state.remainingTimeInSeconds = payload;
 	},
+	init(
+		state,
+		{ showWarningOnRemainingSeconds, defaultRemainingTimeInSeconds }
+	) {
+		state.showWarningOnRemainingSeconds = showWarningOnRemainingSeconds;
+		state.defaultRemainingTimeInSeconds = defaultRemainingTimeInSeconds;
+	},
 };
 
 export const actions = {
-	init({ commit, state, dispatch }, event) {
+	init({ commit, state, dispatch, rootState }, event) {
+		commit("init", {
+			showWarningOnRemainingSeconds:
+				rootState["env-config"].showWarningOnRemainingSeconds,
+			defaultRemainingTimeInSeconds:
+				rootState["env-config"].defaultRemainingTimeInSeconds,
+		});
 		if (!decrementer) {
 			decrementer = decrementRemainingTime(commit, state);
 		}
@@ -119,9 +132,6 @@ export const actions = {
 			lastUpdated = Date.now();
 			polling = updateRemainingTime(commit, dispatch);
 		}
-	},
-	reset() {
-		this.remainingTimeInSeconds = defaultRemainingTimeInSeconds;
 	},
 	async extendSession({ commit, state, dispatch }) {
 		processing = true;
@@ -134,7 +144,9 @@ export const state = () => {
 	return {
 		active: false,
 		error: false,
-		remainingTimeInSeconds: defaultRemainingTimeInSeconds,
+		remainingTimeInSeconds: 3600,
+		showWarningOnRemainingSeconds: 3600,
+		defaultRemainingTimeInSeconds: 3600 * 2,
 	};
 };
 

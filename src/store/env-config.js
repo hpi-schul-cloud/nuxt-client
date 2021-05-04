@@ -1,8 +1,9 @@
 export const actions = {
-	async get({ commit }) {
+	async get({ commit, dispatch }) {
 		try {
 			const env = await this.$axios.$get("/config/app/public");
 			commit("setEnv", env);
+			dispatch("autoLogout/init");
 		} catch (error) {
 			commit("setError", error);
 		}
