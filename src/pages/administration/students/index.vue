@@ -321,13 +321,14 @@ export default {
 			isDeleting: (state) => state.progress.delete.active,
 			deletedPercent: (state) => state.progress.delete.percent,
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
 		},
 		showConsent() {
-			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
-				? false
-				: true;
+			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
