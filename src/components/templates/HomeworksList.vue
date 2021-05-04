@@ -44,7 +44,13 @@ export default {
 	},
 	methods: {
 		find() {
-			this.$store.dispatch("homeworks/find");
+			this.$store.dispatch("homeworks/find", {
+				query: {
+					$sort: {
+						dueDate: -1,
+					},
+				},
+			});
 		},
 	},
 };
