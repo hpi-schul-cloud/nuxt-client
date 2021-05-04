@@ -6,8 +6,13 @@
 					<img :src="taskImage" />
 				</v-list-item-avatar>
 				<v-list-item-content>
-					<v-list-item-subtitle> Kursname </v-list-item-subtitle>
-					<v-list-item-title v-text="homework.name"></v-list-item-title>
+					<v-list-item-subtitle class="text-wrap">
+						Kursname
+					</v-list-item-subtitle>
+					<v-list-item-title
+						class="text-wrap"
+						v-text="homework.name"
+					></v-list-item-title>
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-badge dot inline></v-badge>
