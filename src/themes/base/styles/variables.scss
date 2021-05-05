@@ -2,7 +2,10 @@
 
 $body-font-family: "PT Sans";
 $heading-font-family: "PT Sans Narrow";
+$text-base-size: 8px;
 $button-font-size: 1rem;
+
+
 
 // v-btn
 $btn-text-transform: none;
@@ -15,4 +18,8 @@ $btn-font-weight: 700;
 	&.v-size--x-large {
 		font-size: $button-font-size;
 	}
+}
+
+.body {
+	font-size: $text-base-size;
 }

@@ -1,7 +1,7 @@
 <template>
-	<v-container>
+	<v-container class="px-13">
     <!-- <base-breadcrumb :inputs="breadcrumbs" /> -->
-    <v-breadcrumbs :items="breadcrumbItems" :large="true">
+    <v-breadcrumbs :items="breadcrumbItems" :large="true" :nuxt="true" class="px-0">
       <template v-slot:item="{ item }">
         <v-breadcrumbs-item
           :href="item.href"
@@ -22,37 +22,219 @@
         <p>{{ $t("pages.administration.school.longText.provideStudentsAndTheirParents") }}</p>
 			</v-col>
 		</v-row>
-    <v-divider></v-divider>
+    <v-divider class="mt-13"></v-divider>
 		<v-row>
 			<v-col>
-				<v-btn large color="primary" to="/news/new">
-					<v-icon left> fa-plus </v-icon>
-					{{ $t("pages.news.index.new") }}
-				</v-btn>
-				<v-icon> fa-plus </v-icon>
-				<v-icon> {{ iconMdiAccount }} </v-icon>
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-col
-				v-for="article of news"
-				:key="article._id"
-				class="d-flex child-flex"
-			>
-				<v-card :to="{ name: 'news-id', params: { id: article._id } }">
-					<v-card-title>{{ article.title }} </v-card-title>
-					<v-card-subtitle> {{ fromNow(article.createdAt) }} </v-card-subtitle>
-					<v-card-actions>
-						<v-spacer />
-						<v-btn
-							color="primary"
-							text
-							:to="{ name: 'news-id', params: { id: article._id } }"
-						>
-							{{ $t("common.labels.readmore") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
+				<h2 class="text-h4">Allgemeine Einstellungen</h2>
+				<v-form>
+					<v-row>
+						<v-col cols="6">
+							<v-text-field
+								v-model="schoolName"
+								label="Name der Schule"
+								outlined
+								dense
+							></v-text-field>
+							<span class="text-h6">Schulnummer</span>
+							<v-text-field
+								v-model="schoolNumber"
+								outlined
+								dense
+								hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
+								persistent-hint
+							></v-text-field>
+							<v-select
+								v-model="schoolCounty"
+								:items="counties"
+								outlined
+								dense
+								label="Bitte wählen Sie den Kreis, zu dem die Schule gehört"
+								hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
+								persistent-hint
+							></v-select>
+							<v-row>
+								<v-col class="d-flex">
+									<v-file-input
+										v-model="schoolLogo"
+										label="Schullogo hochladen"
+										outlined
+										dense
+										chips
+										prepend-icon=""
+									></v-file-input>
+									<span class="pl-5 text-h6">Keine Datei ausgewählt</span>
+								</v-col>
+							</v-row>
+							<h2 class="my-0 text-h6">Zeitzone</h2>
+							<p class="body-1 mb-7">{{ this.$cookies.get("USER_TIMEZONE") }}</p>
+							<v-select
+								v-model="schoolLanguage"
+								:items="languages"
+								outlined
+								dense
+								label="Sprache"
+							></v-select>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="8">
+							<h2 class="text-h6 mt-0">Datenschutzeinstellungen</h2>
+							<v-checkbox v-model="checkbox" hide-details="auto" class="mb-2">
+								<template v-slot:label>
+									<div>
+										Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren							
+									</div>
+								</template>
+							</v-checkbox>
+							<p class="body-2">
+								Die Aktivierung dieser Option hat datenschutzrechtlich eine hohe Schwelle. Um die Sichtbarkeit aller Schüler:innen der Schule für jede Lehrkraft zu aktivieren, ist es erforderlich, dass jede/r Schüler:in wirksam in diese Datenverarbeitung eingewilligt hat.
+							</p>
+							<v-checkbox v-model="checkbox" hide-details="auto">
+								<template v-slot:label>
+									<div>
+										Lern-Store für Schüler:innen
+									</div>
+								</template>
+							</v-checkbox>
+							<p class="body-2">
+								Wenn diese Option nicht aktiviert ist, können die Schüler:innen nicht auf den Lern-Store zugreifen.
+							</p>
+							<v-checkbox v-model="checkbox" hide-details="auto">
+								<template v-slot:label>
+									<div>
+										Matrix Messenger aktivieren
+									</div>
+								</template>
+							</v-checkbox>
+							<p class="body-2">
+								Ist der Matrix Messenger aktiviert, können alle Lehrkräfte dieser Schule Chaträume, private Unterhaltungen oder kurs- und teaminterne Gruppendiskussionen starten. Schüler:innen haben dort anfangs nur Leserechte, können aber über die Kurs- und Teameinstellungen auch Schreibrechte zugewiesen bekommen. Mehr Informationen dazu findest du im <a href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243" target="_blank">Hilfeartikel zum Messenger</a>
+							</p>
+							<v-checkbox v-model="checkbox" hide-details="auto">
+								<template v-slot:label>
+									<div>
+										Chatfunktion aktivieren
+									</div>
+								</template>
+							</v-checkbox>
+							<p class="body-2">
+								Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team sowie Lehrkräfte in ihren Kursen die Chatfunktion gezielt freischalten.
+							</p>
+							<v-checkbox v-model="checkbox" hide-details="auto">
+								<template v-slot:label>
+									<div>
+										Videokonferenzen fzur Kurse und Teams aktivieren
+									</div>
+								</template>
+							</v-checkbox>
+							<p class="body-2">
+								Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool hinzufügen und dann von dort aus Videokonferenzen für alle Kursteilnehmer:innen starten. Team-Admins können die Videokonferenzfunktion im jeweiligen Team aktivieren. Team-Leiter:innen und Team-Admins können dann Videokonferenzen zu Terminen hinzufügen und starten.
+							</p>
+							<v-responsive width="74%" class="mt-8">
+								<v-select
+									v-model="schoolCloudStorage"
+									:items="cloudStorages"
+									outlined
+									dense
+									label="Cloud-Storage-Anbieter"
+								></v-select>
+							</v-responsive>
+							<v-btn color="primary">Allgemeine Einstellungen speichern</v-btn>
+							<h2 class="text-h6 mb-0">Genutzter Datei-Speicherplatz in der Cloud</h2>
+							<p class="body-1">Derzeit bezieht Ihre Schule 0 B.</p>
+						</v-col>
+					</v-row>
+				</v-form>
+				<v-divider class="mt-13"></v-divider>
+				<h2 class="text-h4">Datenschuzerklärung</h2>
+				<v-simple-table>
+					<template v-slot:default>
+						<thead>
+							<tr>
+								<th class="text-left">
+									Titel
+								</th>
+								<th class="text-left">
+									Beschreibung
+								</th>
+								<th class="text-left">
+									Hochgeladen am
+								</th>
+								<th class="text-left">
+									Link
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								v-for="item in dataProtectionPolicies"
+								:key="item.name"
+							>
+								<td>{{ item.title }}</td>
+								<td>{{ item.description }}</td>
+								<td>{{ item.uploaded_on }}</td>
+								<td>{{ item.link }}</td>
+							</tr>
+						</tbody>
+					</template>
+				</v-simple-table>
+				<v-btn color="primary">Datenschutzerklärung hinzufügen</v-btn>
+				<v-divider class="mt-13"></v-divider>
+				<h2 class="text-h4">Authentifizierung</h2>
+				<v-simple-table>
+					<template v-slot:default>
+						<thead>
+							<tr>
+								<th class="text-left">
+									Alias
+								</th>
+								<th class="text-left">
+									Typ
+								</th>
+								<th class="text-left">
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								v-for="item in dataProtectionPolicies"
+								:key="item.name"
+							>
+								<td>{{ item.title }}</td>
+								<td>{{ item.description }}</td>
+								<td>{{ item.link }}</td>
+							</tr>
+						</tbody>
+					</template>
+				</v-simple-table>
+				<v-btn color="primary">System hinzufügen</v-btn>
+				<h2 class="text-h4 mt-13">RSS-Feeds</h2>
+				<v-simple-table>
+					<template v-slot:default>
+						<thead>
+							<tr>
+								<th class="text-left">
+									Alias
+								</th>
+								<th class="text-left">
+									Typ
+								</th>
+								<th class="text-left">
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								v-for="item in dataProtectionPolicies"
+								:key="item.name"
+							>
+								<td>{{ item.title }}</td>
+								<td>{{ item.description }}</td>
+								<td>{{ item.link }}</td>
+							</tr>
+						</tbody>
+					</template>
+				</v-simple-table>
+				<v-btn color="primary">RSS-Feed hinzufügen</v-btn>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -60,7 +242,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { fromNow } from "@plugins/datetime";
 import { mdiAccount, mdiChevronRight } from "@mdi/js";
 
 export default {
@@ -68,6 +249,32 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
+			schoolName: "",
+			schoolNumber: "",
+			schoolCounty: "",
+			counties: [
+				"Mainz", "Speyer", "Berlin"
+			],
+			languages: [
+				"Deutsch", "Englisch", "Spanisch"
+			],
+			cloudStorages: [
+				"HPI Schul-Cloud"
+			],
+			dataProtectionPolicies: [
+				{
+					title: "Datenschutzerklärung 1",
+					description: "bla bla bla",
+					uploaded_on: new Date(),
+					link: "asdasdasd"
+				},
+				{
+					title: "Datenschutzerklärung 2",
+					description: "bla bla bla",
+					uploaded_on: new Date(),
+					link: "asdasdasd"
+				},
+			],
       breadcrumbItems: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -78,17 +285,6 @@ export default {
           disabled: true
 				},
       ],
-      breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
-					icon: { source: "fa", icon: "cog" },
-				},
-        {
-					text: this.$t("pages.administration.school.index.title"),
-				},
-      ],
-			fromNow,
 			iconMdiAccount: mdiAccount,
       iconMdiChevronRight: mdiChevronRight,
 		};
