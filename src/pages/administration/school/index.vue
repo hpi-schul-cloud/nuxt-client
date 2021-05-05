@@ -17,9 +17,19 @@
     </v-breadcrumbs>
 		<v-row>
 			<v-col>
-				<h1 class="text-h3">{{ $t("pages.administration.school.index.title") }}</h1>
-				<h2 class="text-h4">{{ $t("pages.administration.school.schoolYear") }} 2020/21</h2>
-        <p>{{ $t("pages.administration.school.longText.provideStudentsAndTheirParents") }}</p>
+				<h1 class="text-h3">
+					{{ $t("pages.administration.school.index.title") }}
+				</h1>
+				<h2 class="text-h4">
+					{{ $t("pages.administration.school.schoolYear") }} 2020/21
+				</h2>
+				<p>
+					{{
+						$t(
+							"pages.administration.school.longText.provideStudentsAndTheirParents"
+						)
+					}}
+				</p>
 			</v-col>
 		</v-row>
     <v-divider class="mt-13"></v-divider>
@@ -280,13 +290,13 @@ export default {
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
-        {
+				{
 					text: this.$t("pages.administration.school.index.title"),
-          disabled: true
+					disabled: true,
 				},
-      ],
+			],
 			iconMdiAccount: mdiAccount,
-      iconMdiChevronRight: mdiChevronRight,
+			iconMdiChevronRight: mdiChevronRight,
 		};
 	},
 	computed: {
