@@ -1,21 +1,24 @@
 <template>
-	<v-container class="px-13">
-    <!-- <base-breadcrumb :inputs="breadcrumbs" /> -->
-    <v-breadcrumbs :items="breadcrumbItems" :large="true" :nuxt="true" class="px-0">
-      <template v-slot:item="{ item }">
-        <v-breadcrumbs-item
-          :href="item.href"
-          :disabled="item.disabled"
-          class="text-lg"
-        >
-          {{ item.text }}
-        </v-breadcrumbs-item>
-      </template>
-      <template v-slot:divider>
-        <v-icon> {{ iconMdiChevronRight }} </v-icon>
-      </template>
-    </v-breadcrumbs>
-		<v-row>
+	<v-container class="py-0 px-13">
+    <v-row>
+			<v-col>
+				<v-breadcrumbs :items="breadcrumbItems" :large="true" :nuxt="true" class="px-0 py-0">
+					<template v-slot:item="{ item }">
+						<v-breadcrumbs-item
+							:href="item.href"
+							:disabled="item.disabled"
+							class="text-h6 font-weight-bold"
+						>
+							{{ item.text }}
+						</v-breadcrumbs-item>
+					</template>
+					<template v-slot:divider>
+						<v-icon> {{ iconMdiChevronRight }} </v-icon>
+					</template>
+				</v-breadcrumbs>
+			</v-col>
+		</v-row>
+		<v-row class="mt-0">
 			<v-col>
 				<h1 class="text-h3">
 					{{ $t("pages.administration.school.index.title") }}
@@ -35,60 +38,77 @@
     <v-divider class="mt-13"></v-divider>
 		<v-row>
 			<v-col>
-				<h2 class="text-h4">Allgemeine Einstellungen</h2>
+				<h2 class="text-h4 mt-10 mb-8">Allgemeine Einstellungen</h2>
 				<v-form>
 					<v-row>
-						<v-col cols="6">
-							<v-text-field
-								v-model="schoolName"
-								label="Name der Schule"
-								outlined
-								dense
-							></v-text-field>
-							<span class="text-h6">Schulnummer</span>
-							<v-text-field
-								v-model="schoolNumber"
-								outlined
-								dense
-								hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
-								persistent-hint
-							></v-text-field>
-							<v-select
-								v-model="schoolCounty"
-								:items="counties"
-								outlined
-								dense
-								label="Bitte wählen Sie den Kreis, zu dem die Schule gehört"
-								hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
-								persistent-hint
-							></v-select>
+						<v-col>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model="schoolName"
+										label="Name der Schule"
+										dense
+									></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model="schoolNumber"
+										label="Schulnummer"
+										dense
+										hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
+										persistent-hint
+									></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-select
+										v-model="schoolCounty"
+										:items="counties"
+										dense
+										label="Bitte wählen Sie den Kreis, zu dem die Schule gehört"
+										hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
+										persistent-hint
+									></v-select>
+								</v-col>
+							</v-row>
 							<v-row>
 								<v-col class="d-flex">
 									<v-file-input
 										v-model="schoolLogo"
 										label="Schullogo hochladen"
-										outlined
 										dense
-										chips
 										prepend-icon=""
 									></v-file-input>
-									<span class="pl-5 text-h6">Keine Datei ausgewählt</span>
 								</v-col>
 							</v-row>
-							<h2 class="my-0 text-h6">Zeitzone</h2>
-							<p class="body-1 mb-7">{{ this.$cookies.get("USER_TIMEZONE") }}</p>
-							<v-select
-								v-model="schoolLanguage"
-								:items="languages"
-								outlined
-								dense
-								label="Sprache"
-							></v-select>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model="schoolTimezone"
+										label="Zeitzone"
+										dense
+										readonly
+									></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-select
+										v-model="schoolLanguage"
+										:items="languages"
+										dense
+										label="Sprache"
+									></v-select>
+								</v-col>
+							</v-row>
 						</v-col>
 					</v-row>
 					<v-row>
-						<v-col cols="8">
-							<h2 class="text-h6 mt-0">Datenschutzeinstellungen</h2>
+						<v-col>
+							<h3 class="text-h6 mt-0">Datenschutzeinstellungen</h3>
 							<v-checkbox v-model="checkbox" hide-details="auto" class="mb-2">
 								<template v-slot:label>
 									<div>
@@ -148,14 +168,14 @@
 									label="Cloud-Storage-Anbieter"
 								></v-select>
 							</v-responsive>
-							<v-btn color="primary">Allgemeine Einstellungen speichern</v-btn>
+							<v-btn color="primary" depressed>Allgemeine Einstellungen speichern</v-btn>
 							<h2 class="text-h6 mb-0">Genutzter Datei-Speicherplatz in der Cloud</h2>
 							<p class="body-1">Derzeit bezieht Ihre Schule 0 B.</p>
 						</v-col>
 					</v-row>
 				</v-form>
 				<v-divider class="mt-13"></v-divider>
-				<h2 class="text-h4">Datenschuzerklärung</h2>
+				<h2 class="text-h4">Datenschutzerklärung</h2>
 				<v-simple-table>
 					<template v-slot:default>
 						<thead>
@@ -187,7 +207,7 @@
 						</tbody>
 					</template>
 				</v-simple-table>
-				<v-btn color="primary">Datenschutzerklärung hinzufügen</v-btn>
+				<v-btn color="primary" depressed>Datenschutzerklärung hinzufügen</v-btn>
 				<v-divider class="mt-13"></v-divider>
 				<h2 class="text-h4">Authentifizierung</h2>
 				<v-simple-table>
@@ -216,7 +236,7 @@
 						</tbody>
 					</template>
 				</v-simple-table>
-				<v-btn color="primary">System hinzufügen</v-btn>
+				<v-btn color="primary" depressed>System hinzufügen</v-btn>
 				<h2 class="text-h4 mt-13">RSS-Feeds</h2>
 				<v-simple-table>
 					<template v-slot:default>
@@ -244,7 +264,7 @@
 						</tbody>
 					</template>
 				</v-simple-table>
-				<v-btn color="primary">RSS-Feed hinzufügen</v-btn>
+				<v-btn color="primary" depressed>RSS-Feed hinzufügen</v-btn>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -262,6 +282,8 @@ export default {
 			schoolName: "",
 			schoolNumber: "",
 			schoolCounty: "",
+			schoolTimezone: `${this.$cookies.get('USER_TIMEZONE')}`,
+			schoolStudentVisibility: false,
 			counties: [
 				"Mainz", "Speyer", "Berlin"
 			],
