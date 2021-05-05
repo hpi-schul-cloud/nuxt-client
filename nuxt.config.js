@@ -54,20 +54,9 @@ module.exports = {
 		axios: {
 			browserBaseURL: process.env.API_URL || "http://localhost:3030",
 		},
-	},
-
-	/*
-	 ** Content Security Policy (CSP)
-	 */
-	csp: {
-		// If enabled, default content security policy (CSP) header will be set
-		cors: {
-			enabled: process.env.CORS_ENABLED || false,
-		},
-		// If enabled, additional security header will be set
-		security_headers: {
-			enabled: process.env.SECURITY_HEADERS_ENABLED || false,
-		},
+		// env vars needed at runtime for server middleware:
+		// CORS_ENABLED: process.env.CORS_ENABLED || false,
+		// SECURITY_HEADERS_ENABLED: process.env.SECURITY_HEADERS_ENABLED || false,
 	},
 
 	/*
