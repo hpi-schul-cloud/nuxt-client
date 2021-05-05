@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid>
+	<v-container>
 		<h1 class="text-h4">{{ $t("pages.dashboard.title") }}</h1>
 		<p>Lorem Ipsum, normaler Text.</p>
 		<homeworks-list />
