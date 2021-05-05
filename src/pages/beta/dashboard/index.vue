@@ -12,6 +12,20 @@ import HomeworksList from "@components/templates/HomeworksList";
 export default {
 	components: { HomeworksList },
 	layout: "defaultVuetify",
+	created() {
+		this.find();
+	},
+	methods: {
+		find() {
+			this.$store.dispatch("homeworks/find", {
+				query: {
+					$sort: {
+						dueDate: -1,
+					},
+				},
+			});
+		},
+	},
 	head() {
 		return {
 			title: this.$t("pages.homeworks.title"),

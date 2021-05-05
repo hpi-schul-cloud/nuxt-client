@@ -44,19 +44,5 @@ export default {
 			homeworks: "list",
 		}),
 	},
-	created(ctx) {
-		this.find();
-	},
-	methods: {
-		find() {
-			this.$store.dispatch("homeworks/find", {
-				query: {
-					$sort: {
-						dueDate: -1,
-					},
-				},
-			});
-		},
-	},
 };
 </script>
