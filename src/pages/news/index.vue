@@ -2,8 +2,12 @@
 	<v-container>
 		<v-row>
 			<v-col>
-				<h1 class="text-h1">{{ $t("pages.news.title") }}</h1>
+				<h1 class="text-h2">{{ $t("pages.news.title") }}</h1>
 				<p>Lorem Ipsum, normaler Text.</p>
+				<p>
+					Some icons: <v-icon> fa-plus </v-icon>
+					<v-icon> {{ iconMdiAccount }} </v-icon>
+				</p>
 			</v-col>
 		</v-row>
 		<v-row>
@@ -12,8 +16,6 @@
 					<v-icon left> fa-plus </v-icon>
 					{{ $t("pages.news.index.new") }}
 				</v-btn>
-				<v-icon> fa-plus </v-icon>
-				<v-icon> {{ iconMdiAccount }} </v-icon>
 			</v-col>
 		</v-row>
 		<v-row>
