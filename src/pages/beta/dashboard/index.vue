@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import HomeworksList from "@components/templates/HomeworksList";
+import HomeworksList from "@components/organisms/HomeworksList";
 
 export default {
 	components: { HomeworksList },
