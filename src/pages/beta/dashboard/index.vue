@@ -1,7 +1,7 @@
 <template>
 	<v-container>
-		<h1 class="h4">{{ $t("pages.dashboard.title") }}</h1>
-		<h2 class="h5">Subheader</h2>
+		<h1 class="h4">{{ $t("pages.homeworks.title") }}</h1>
+		<h2 class="h5">{{ $t("pages.homeworks.subtitle") }}</h2>
 		<homeworks-list />
 	</v-container>
 </template>
