@@ -15,9 +15,12 @@
 					</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
-					<v-badge dot inline></v-badge>
+					<v-badge v-if="false" color="error" dot inline></v-badge>
+					<v-spacer />
 					<v-list-item-action-text
-						v-text="'Fällig ' + fromNow(homework.dueDate)"
+						v-text="
+							$t('pages.homeworks.labels.due') + fromNow(homework.dueDate)
+						"
 					/>
 				</v-list-item-action>
 			</v-list-item>
@@ -29,7 +32,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
-import taskImage from "@assets/img/courses/task-draft.svg";
+import taskImage from "@assets/img/courses/task-new.svg";
 
 export default {
 	components: {},

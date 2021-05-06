@@ -1,30 +1,24 @@
 <template>
-	<v-container>
-		<h1 class="text-h4">{{ $t("pages.dashboard.title") }}</h1>
-		<p>Lorem Ipsum, normaler Text.</p>
+	<v-container class="v-container">
+		<h1 class="h4">{{ $t("pages.homeworks.title") }}</h1>
 		<homeworks-list />
 	</v-container>
 </template>
 
 <script>
-import HomeworksList from "@components/templates/HomeworksList";
+import HomeworksList from "@components/organisms/HomeworksList";
 
 export default {
 	components: { HomeworksList },
 	layout: "defaultVuetify",
 	created() {
-		this.find();
-	},
-	methods: {
-		find() {
-			this.$store.dispatch("homeworks/find", {
-				query: {
-					$sort: {
-						dueDate: -1,
-					},
+		this.$store.dispatch("homeworks/find", {
+			query: {
+				$sort: {
+					dueDate: -1,
 				},
-			});
-		},
+			},
+		});
 	},
 	head() {
 		return {
@@ -33,3 +27,11 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@variables";
+
+.v-container {
+	max-width: var(--size-content-width-max);
+}
+</style>
