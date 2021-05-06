@@ -15,7 +15,7 @@
 					></v-list-item-title>
 				</v-list-item-content>
 				<v-list-item-action>
-					<v-badge dot inline></v-badge>
+					<v-badge color="error" dot inline></v-badge>
 					<v-list-item-action-text
 						v-text="$t('pages.homeworks.due') + fromNow(homework.dueDate)"
 					/>
