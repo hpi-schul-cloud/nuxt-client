@@ -1,5 +1,5 @@
 <template>
-	<v-list class="mx-auto" width="1024px" subheader two-line>
+	<v-list subheader two-line>
 		<template v-for="(homework, index) of homeworks">
 			<v-list-item :key="homework._id" :href="'/homework/' + homework._id">
 				<v-list-item-avatar>
@@ -15,7 +15,7 @@
 					</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
-					<v-badge v-if="false" color="error" dot inline></v-badge>
+					<v-badge color="error" dot inline></v-badge>
 					<v-spacer />
 					<v-list-item-action-text
 						v-text="
