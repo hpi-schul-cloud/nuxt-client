@@ -6,8 +6,7 @@ const module = {
 	getters: {
 		getNewHomeworks: state => {
 			// TODO: filter only unread homeworks
-			console.log(state);
-			return "New homeworks";
+			return state;
 		},
 		
 		getOpenHomeworks: state => {
