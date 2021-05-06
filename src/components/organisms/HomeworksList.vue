@@ -15,7 +15,7 @@
 					</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
-					<v-badge color="error" dot inline></v-badge>
+					<v-badge v-if="false" color="error" dot inline></v-badge>
 					<v-spacer />
 					<v-list-item-action-text
 						v-text="
