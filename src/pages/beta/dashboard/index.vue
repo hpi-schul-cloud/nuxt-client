@@ -1,7 +1,6 @@
 <template>
-	<v-container>
+	<v-container class="v-container">
 		<h1 class="h4">{{ $t("pages.homeworks.title") }}</h1>
-		<h2 class="h5">{{ $t("pages.homeworks.subtitle") }}</h2>
 		<homeworks-list />
 	</v-container>
 </template>
@@ -28,3 +27,11 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@variables";
+
+.v-container {
+	max-width: var(--size-content-width-max);
+}
+</style>
