@@ -1,7 +1,7 @@
 <template>
 	<v-container>
-		<h1 class="text-h4">{{ $t("pages.dashboard.title") }}</h1>
-		<p>Lorem Ipsum, normaler Text.</p>
+		<h1 class="h4">{{ $t("pages.dashboard.title") }}</h1>
+		<h2 class="h5">Subheader</h2>
 		<homeworks-list />
 	</v-container>
 </template>

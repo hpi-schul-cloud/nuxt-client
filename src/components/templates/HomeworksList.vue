@@ -29,7 +29,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
-import taskImage from "@assets/img/courses/task-draft.svg";
+import taskImage from "@assets/img/courses/task-new.svg";
 
 export default {
 	components: {},
