@@ -4,7 +4,13 @@ mergeable:
     validate:
       - do: label
         must_exclude:
-          regex: "(WIP|is blocked)"
+          regex: "(WIP|is blocked|do-not-merge)"
+      - do: description
+        no_empty:
+          enabled: true
+        must_exclude:
+          regex: "\\[?\\s\\]"
+          message: "All checkboxes from PR description must be checked."
   - when: schedule.repository
     validate:
       - do: stale

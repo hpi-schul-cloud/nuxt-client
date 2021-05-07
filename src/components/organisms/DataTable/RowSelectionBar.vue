@@ -30,7 +30,11 @@
 				class="actions"
 				style="position: relative"
 			>
-				<base-button size="small" @click="actionsMenuOpen = true">
+				<base-button
+					class="context-menu-open"
+					size="small"
+					@click="actionsMenuOpen = true"
+				>
 					{{ $t("pages.administration.actions") }}
 				</base-button>
 				<context-menu
@@ -84,6 +88,7 @@ export default {
 				"icon-source": actionCtx["icon-source"],
 				event: "action",
 				arguments: index,
+				dataTestId: actionCtx.dataTestId || null,
 			}));
 		},
 	},
