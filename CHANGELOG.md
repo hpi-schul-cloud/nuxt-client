@@ -14,6 +14,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8164 - apply deletion concept to the deletion of students and teachers
 - SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 
 ### Changed
 
@@ -141,11 +142,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
-- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 - SC-7824 - Set proper email address and label for data privacy, common terms of use
 - SC-7023 - Implement the editor and task item on the course page
 - SC-7543 - added validate page to the LDAP configuration feature
-- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 - SC-6825 - change collapsable icon
 - SC-7488 - added 3 components in the organisms/ldap for the ldap-config form
 - SC-6293 - restricts Lern-Store access by permission
