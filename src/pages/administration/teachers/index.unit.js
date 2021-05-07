@@ -92,6 +92,14 @@ describe("teachers/index", () => {
 					set: jest.fn(),
 				},
 			},
+			"env-config": {
+				state: () => ({
+					env: {
+						ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+					},
+					error: {},
+				}),
+			},
 		};
 	});
 
@@ -539,7 +547,9 @@ describe("teachers/index", () => {
 				store: mockStore,
 			}),
 		});
-		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("true");
+		expect(
+			mockStore["env-config"].state().env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
+		).toBe(true);
 		expect(
 			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
 		).toBe(true);
@@ -552,7 +562,9 @@ describe("teachers/index", () => {
 				store: mockStore,
 			}),
 		});
-		expect(process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe("true");
+		expect(
+			mockStore["env-config"].state().env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
+		).toBe(true);
 		const icons = wrapper.find(`[data-testid="legend-icons"]`);
 		expect(icons.exists()).toBe(true);
 	});
