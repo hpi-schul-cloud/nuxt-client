@@ -90,6 +90,14 @@ describe("students/index", () => {
 					set: jest.fn(),
 				},
 			},
+			"env-config": {
+				state: () => ({
+					env: {
+						ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+					},
+					error: {},
+				}),
+			},
 		};
 	});
 
