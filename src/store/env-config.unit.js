@@ -12,8 +12,9 @@ describe("store/env-config", () => {
 				},
 			};
 			const spyCommit = jest.fn();
+			const spyDispatch = jest.fn();
 
-			await actions.get({ commit: spyCommit });
+			await actions.get({ commit: spyCommit, dispatch: spyDispatch });
 
 			expect(receivedUrl).toBe("/config/app/public");
 			expect(spyCommit.mock.calls).toHaveLength(1);
