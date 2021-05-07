@@ -1,8 +1,13 @@
 <template>
 	<v-container class="py-0 px-13">
-    <v-row>
+		<v-row>
 			<v-col>
-				<v-breadcrumbs :items="breadcrumbItems" :large="true" :nuxt="true" class="px-0 py-0">
+				<v-breadcrumbs
+					:items="breadcrumbItems"
+					:large="true"
+					:nuxt="true"
+					class="px-0 py-0"
+				>
 					<template v-slot:item="{ item }">
 						<v-breadcrumbs-item
 							:href="item.href"
@@ -35,7 +40,7 @@
 				</p>
 			</v-col>
 		</v-row>
-    <v-divider class="mt-13"></v-divider>
+		<v-divider class="mt-13"></v-divider>
 		<v-row>
 			<v-col>
 				<h2 class="text-h4 mt-10 mb-8">Allgemeine Einstellungen</h2>
@@ -112,52 +117,66 @@
 							<v-checkbox v-model="checkbox" hide-details="auto" class="mb-2">
 								<template v-slot:label>
 									<div>
-										Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren							
+										Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren
 									</div>
 								</template>
 							</v-checkbox>
 							<p class="body-2">
-								Die Aktivierung dieser Option hat datenschutzrechtlich eine hohe Schwelle. Um die Sichtbarkeit aller Schüler:innen der Schule für jede Lehrkraft zu aktivieren, ist es erforderlich, dass jede/r Schüler:in wirksam in diese Datenverarbeitung eingewilligt hat.
+								Die Aktivierung dieser Option hat datenschutzrechtlich eine hohe
+								Schwelle. Um die Sichtbarkeit aller Schüler:innen der Schule für
+								jede Lehrkraft zu aktivieren, ist es erforderlich, dass jede/r
+								Schüler:in wirksam in diese Datenverarbeitung eingewilligt hat.
 							</p>
 							<v-checkbox v-model="checkbox" hide-details="auto">
 								<template v-slot:label>
-									<div>
-										Lern-Store für Schüler:innen
-									</div>
+									<div>Lern-Store für Schüler:innen</div>
 								</template>
 							</v-checkbox>
 							<p class="body-2">
-								Wenn diese Option nicht aktiviert ist, können die Schüler:innen nicht auf den Lern-Store zugreifen.
+								Wenn diese Option nicht aktiviert ist, können die Schüler:innen
+								nicht auf den Lern-Store zugreifen.
 							</p>
 							<v-checkbox v-model="checkbox" hide-details="auto">
 								<template v-slot:label>
-									<div>
-										Matrix Messenger aktivieren
-									</div>
+									<div>Matrix Messenger aktivieren</div>
 								</template>
 							</v-checkbox>
 							<p class="body-2">
-								Ist der Matrix Messenger aktiviert, können alle Lehrkräfte dieser Schule Chaträume, private Unterhaltungen oder kurs- und teaminterne Gruppendiskussionen starten. Schüler:innen haben dort anfangs nur Leserechte, können aber über die Kurs- und Teameinstellungen auch Schreibrechte zugewiesen bekommen. Mehr Informationen dazu findest du im <a href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243" target="_blank">Hilfeartikel zum Messenger</a>
+								Ist der Matrix Messenger aktiviert, können alle Lehrkräfte
+								dieser Schule Chaträume, private Unterhaltungen oder kurs- und
+								teaminterne Gruppendiskussionen starten. Schüler:innen haben
+								dort anfangs nur Leserechte, können aber über die Kurs- und
+								Teameinstellungen auch Schreibrechte zugewiesen bekommen. Mehr
+								Informationen dazu findest du im
+								<a
+									href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243"
+									target="_blank"
+									>Hilfeartikel zum Messenger</a
+								>
 							</p>
 							<v-checkbox v-model="checkbox" hide-details="auto">
 								<template v-slot:label>
-									<div>
-										Chatfunktion aktivieren
-									</div>
+									<div>Chatfunktion aktivieren</div>
 								</template>
 							</v-checkbox>
 							<p class="body-2">
-								Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team sowie Lehrkräfte in ihren Kursen die Chatfunktion gezielt freischalten.
+								Sind Chats an deiner Schule aktiviert, können Team-Admins im
+								jeweiligen Team sowie Lehrkräfte in ihren Kursen die
+								Chatfunktion gezielt freischalten.
 							</p>
 							<v-checkbox v-model="checkbox" hide-details="auto">
 								<template v-slot:label>
-									<div>
-										Videokonferenzen fzur Kurse und Teams aktivieren
-									</div>
+									<div>Videokonferenzen fzur Kurse und Teams aktivieren</div>
 								</template>
 							</v-checkbox>
 							<p class="body-2">
-								Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool hinzufügen und dann von dort aus Videokonferenzen für alle Kursteilnehmer:innen starten. Team-Admins können die Videokonferenzfunktion im jeweiligen Team aktivieren. Team-Leiter:innen und Team-Admins können dann Videokonferenzen zu Terminen hinzufügen und starten.
+								Sind Videokonferenzen an deiner Schule aktiviert, können
+								Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool
+								hinzufügen und dann von dort aus Videokonferenzen für alle
+								Kursteilnehmer:innen starten. Team-Admins können die
+								Videokonferenzfunktion im jeweiligen Team aktivieren.
+								Team-Leiter:innen und Team-Admins können dann Videokonferenzen
+								zu Terminen hinzufügen und starten.
 							</p>
 							<v-responsive width="74%" class="mt-8">
 								<v-select
@@ -168,8 +187,12 @@
 									label="Cloud-Storage-Anbieter"
 								></v-select>
 							</v-responsive>
-							<v-btn color="primary" depressed>Allgemeine Einstellungen speichern</v-btn>
-							<h2 class="text-h6 mb-0">Genutzter Datei-Speicherplatz in der Cloud</h2>
+							<v-btn color="primary" depressed
+								>Allgemeine Einstellungen speichern</v-btn
+							>
+							<h2 class="text-h6 mb-0">
+								Genutzter Datei-Speicherplatz in der Cloud
+							</h2>
 							<p class="body-1">Derzeit bezieht Ihre Schule 0 B.</p>
 						</v-col>
 					</v-row>
@@ -180,25 +203,14 @@
 					<template v-slot:default>
 						<thead>
 							<tr>
-								<th class="text-left">
-									Titel
-								</th>
-								<th class="text-left">
-									Beschreibung
-								</th>
-								<th class="text-left">
-									Hochgeladen am
-								</th>
-								<th class="text-left">
-									Link
-								</th>
+								<th class="text-left">Titel</th>
+								<th class="text-left">Beschreibung</th>
+								<th class="text-left">Hochgeladen am</th>
+								<th class="text-left">Link</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								v-for="item in dataProtectionPolicies"
-								:key="item.name"
-							>
+							<tr v-for="item in dataProtectionPolicies" :key="item.name">
 								<td>{{ item.title }}</td>
 								<td>{{ item.description }}</td>
 								<td>{{ item.uploaded_on }}</td>
@@ -214,21 +226,13 @@
 					<template v-slot:default>
 						<thead>
 							<tr>
-								<th class="text-left">
-									Alias
-								</th>
-								<th class="text-left">
-									Typ
-								</th>
-								<th class="text-left">
-								</th>
+								<th class="text-left">Alias</th>
+								<th class="text-left">Typ</th>
+								<th class="text-left"></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								v-for="item in dataProtectionPolicies"
-								:key="item.name"
-							>
+							<tr v-for="item in dataProtectionPolicies" :key="item.name">
 								<td>{{ item.title }}</td>
 								<td>{{ item.description }}</td>
 								<td>{{ item.link }}</td>
@@ -242,21 +246,13 @@
 					<template v-slot:default>
 						<thead>
 							<tr>
-								<th class="text-left">
-									Alias
-								</th>
-								<th class="text-left">
-									Typ
-								</th>
-								<th class="text-left">
-								</th>
+								<th class="text-left">Alias</th>
+								<th class="text-left">Typ</th>
+								<th class="text-left"></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								v-for="item in dataProtectionPolicies"
-								:key="item.name"
-							>
+							<tr v-for="item in dataProtectionPolicies" :key="item.name">
 								<td>{{ item.title }}</td>
 								<td>{{ item.description }}</td>
 								<td>{{ item.link }}</td>
@@ -282,32 +278,26 @@ export default {
 			schoolName: "",
 			schoolNumber: "",
 			schoolCounty: "",
-			schoolTimezone: `${this.$cookies.get('USER_TIMEZONE')}`,
+			schoolTimezone: `${this.$cookies.get("USER_TIMEZONE")}`,
 			schoolStudentVisibility: false,
-			counties: [
-				"Mainz", "Speyer", "Berlin"
-			],
-			languages: [
-				"Deutsch", "Englisch", "Spanisch"
-			],
-			cloudStorages: [
-				"HPI Schul-Cloud"
-			],
+			counties: ["Mainz", "Speyer", "Berlin"],
+			languages: ["Deutsch", "Englisch", "Spanisch"],
+			cloudStorages: ["HPI Schul-Cloud"],
 			dataProtectionPolicies: [
 				{
 					title: "Datenschutzerklärung 1",
 					description: "bla bla bla",
 					uploaded_on: new Date(),
-					link: "asdasdasd"
+					link: "asdasdasd",
 				},
 				{
 					title: "Datenschutzerklärung 2",
 					description: "bla bla bla",
 					uploaded_on: new Date(),
-					link: "asdasdasd"
+					link: "asdasdasd",
 				},
 			],
-      breadcrumbItems: [
+			breadcrumbItems: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
