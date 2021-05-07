@@ -2,7 +2,7 @@
 	<legacy-logged-in>
 		<v-app class="content">
 			<v-main>
-				<v-container class='d-flex justify-center'>
+				<v-container class="d-flex justify-center">
 					<v-responsive>
 						<Nuxt />
 					</v-responsive>
