@@ -5,9 +5,8 @@ const isNuxtRoute = (url) =>
 
 export default async function (ctx) {
 	const { route } = ctx;
-	const { FALLBACK_DISABLED } = ctx.store.state["env-config"].env;
 
-	if (FALLBACK_DISABLED) {
+	if (process.env.FALLBACK_DISABLED === "true") {
 		return true;
 	}
 
