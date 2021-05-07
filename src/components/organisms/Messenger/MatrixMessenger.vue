@@ -64,6 +64,12 @@ export default {
 		},
 	},
 	mounted() {
+		if (
+			this.$config.FEATURE_MATRIX_MESSENGER_ENABLED === "true" ||
+			this.$config.FEATURE_MATRIX_MESSENGER_ENABLED === true
+		) {
+			this.$store.dispatch("messenger/init");
+		}
 		if (this.isMessengerActivatedForSchool) {
 			this.loadMessengerEmbed();
 			this.setupMessenger();

@@ -162,6 +162,7 @@ global.createComponentMocks = ({
 	dialog,
 	/*style,*/ mocks,
 	stubs,
+	$config,
 }) => {
 	// Use a local version of Vue, to avoid polluting the global
 	// Vue and thereby affecting other tests.
@@ -269,6 +270,11 @@ global.createComponentMocks = ({
 	}
 	if ($router) {
 		returnOptions.mocks.$router = $router;
+	}
+	if ($config) {
+		returnOptions.mocks.$config = $config;
+	} else {
+		returnOptions.mocks.$config = {};
 	}
 	return returnOptions;
 };
