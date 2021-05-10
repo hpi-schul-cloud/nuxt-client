@@ -22,7 +22,7 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it(...isValidComponent(HomeworksList));
 
-	it("Renders complete homework items list", async () => {
+	it("Should render complete homework items list", async () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks(
 				{
@@ -38,4 +38,6 @@ describe("@components/organisms/HomeworksList", () => {
 			homeworks.length
 		);
 	});
+
+	it.todo("Should link list item links to homework/<id> page");
 });
