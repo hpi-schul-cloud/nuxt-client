@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
 - SC-9004 - Sync env variables between backend and frontend
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 
 ### Changed
 

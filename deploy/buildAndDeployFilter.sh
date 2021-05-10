@@ -7,7 +7,7 @@ buildAndDeployFilter () {
 		exit 0
 	fi
 
-	if ! [[ $TRAVIS_BRANCH = master || $TRAVIS_BRANCH = develop || $TRAVIS_BRANCH = release* || $TRAVIS_BRANCH = hotfix* ]]
+	if ! [[ $TRAVIS_BRANCH = master || $TRAVIS_BRANCH = develop || $TRAVIS_BRANCH = release* || $TRAVIS_BRANCH = hotfix* || $TRAVIS_BRANCH = feature* ]]
 	then
 		echo "Branch $TRAVIS_BRANCH is not supposed to be build/deployed.".
 		exit 0
