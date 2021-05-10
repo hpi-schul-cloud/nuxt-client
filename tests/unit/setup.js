@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueI18n from "vue-i18n";
 import Vuelidate from "vuelidate";
 import Vuex from "vuex";
+import Vuetify from "vuetify";
 import fs from "fs";
 import path from "path";
 import commonTest from "./commonTests.js";
@@ -153,6 +154,7 @@ import globalStubs from "./stubs.js";
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
+	vuetify,
 	user,
 	store,
 	$route,
@@ -196,7 +198,7 @@ global.createComponentMocks = ({
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	if (store || i18n || user) {
+	if (store || i18n || user || vuetify) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
 		if (user) {
@@ -224,6 +226,9 @@ global.createComponentMocks = ({
 		localVue.use(VueI18n);
 		returnOptions.i18n = i18nConfig(returnOptions.store);
 	}
+
+	//Set 'vuetify: true' for testing with vuetify components
+	if (vuetify) Vue.use(Vuetify);
 
 	if (user) {
 		localVue.mixin(userMixin);
