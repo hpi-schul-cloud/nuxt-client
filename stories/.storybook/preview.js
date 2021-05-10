@@ -94,13 +94,12 @@ addDecorator(() => ({
 }));
 
 // add vuetify support
-import Vuetify from "vuetify/lib";
+import Vuetify from "vuetify"; // loads all components
+import "vuetify/dist/vuetify.min.css"; // all the css for components
 import options from "../../src/themes/default/vuetify.options.js";
-import { VApp } from "vuetify/lib";
 
 Vue.use(Vuetify);
 addDecorator(() => ({
-	components: { VApp },
 	vuetify: new Vuetify(options),
 	template: "<story/>",
 }));
