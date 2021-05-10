@@ -1,5 +1,6 @@
 <template>
 	<v-list subheader two-line>
+		<v-subheader>{{ $t("pages.homeworks.subtitleOpen") }}</v-subheader>
 		<template v-for="(homework, index) of homeworks">
 			<v-list-item :key="homework._id" :href="'/homework/' + homework._id">
 				<v-list-item-avatar>
@@ -10,8 +11,8 @@
 						class="text-wrap"
 						v-text="homework.name"
 					></v-list-item-title>
-					<v-list-item-subtitle v-if="homework.courseId" class="text-wrap">
-					 {{ homework.courseId.name }}
+					<v-list-item-subtitle class="text-wrap">
+						{{ homework.courseName }}
 					</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
@@ -19,7 +20,7 @@
 					<v-spacer />
 					<v-list-item-action-text
 						v-text="
-							$t('pages.homeworks.labels.due') + fromNow(homework.dueDate)
+							$t('pages.homeworks.labels.due') + fromNow(homework.duedate)
 						"
 					/>
 				</v-list-item-action>

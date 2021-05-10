@@ -12,13 +12,7 @@ export default {
 	components: { HomeworksList },
 	layout: "defaultVuetify",
 	created() {
-		this.$store.dispatch("homeworks/find", {
-			query: {
-				$sort: {
-					dueDate: -1,
-				},
-			},
-		});
+		this.$store.dispatch("homeworks/findAllHomeworks");
 	},
 	head() {
 		return {
