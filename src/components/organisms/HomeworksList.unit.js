@@ -22,7 +22,7 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it(...isValidComponent(HomeworksList));
 
-	it("Should render complete homework items list", async () => {
+	it("Should render complete homework items list", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks(
 				{
@@ -39,5 +39,21 @@ describe("@components/organisms/HomeworksList", () => {
 		);
 	});
 
-	it.todo("Should link list item links to homework/<id> page");
+	it("Should link list item links to homework/<id> page", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+					store: mockStore,
+				},
+				vuetify
+			),
+		});
+
+		const firstLink = wrapper.find("a");
+
+		expect(firstLink.exists()).toBe(true);
+		expect(firstLink.attributes().href).toBe(`/homework/${homeworks[0]._id}`);
+	});
 });
