@@ -12,14 +12,9 @@ const DEFAULT_HOST =
 const serverMiddlewareList = [
 	"@serverMiddleware/nuxtversion",
 	"@serverMiddleware/proxy",
+	"@serverMiddleware/csp/cors",
+	"@serverMiddleware/csp/security_headers",
 ];
-
-if (process.env.CORS_ENABLED) {
-	serverMiddlewareList.push("@serverMiddleware/csp/cors");
-}
-if (process.env.SECURITY_HEADERS_ENABLED) {
-	serverMiddlewareList.push("@serverMiddleware/csp/security_headers");
-}
 
 module.exports = {
 	mode: "spa",

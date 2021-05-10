@@ -13,11 +13,15 @@ describe("@plugins/authenticate", () => {
 				},
 			},
 			store: {
-				dispatch: () => {
+				dispatch: (eventName) => {
+					if (eventName === "env-config/get") return;
 					// simulate store throwing error
 					throw new Error("Can not read jwt from cookies.");
 				},
 				commit: () => {},
+				state: {
+					"env-config": { env: {} },
+				},
 			},
 		};
 		authenticate(mockContext);
@@ -37,6 +41,7 @@ describe("@plugins/authenticate", () => {
 			},
 			store: {
 				dispatch: (service) => {
+					if (eventName === "env-config/get") return;
 					if (service === "auth/logout") {
 						calls += 1;
 					}
@@ -64,6 +69,7 @@ describe("@plugins/authenticate", () => {
 			},
 			store: {
 				dispatch: () => {
+					if (eventName === "env-config/get") return;
 					calls += action === "auth/logout" ? 1 : 0;
 				},
 			},
