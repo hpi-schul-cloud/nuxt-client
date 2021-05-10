@@ -4,7 +4,7 @@ const base = serviceTemplate("homework");
 
 const module = {
 	actions: {
-		findAllHomeworks: async function ({ commit }) {
+		getHomeworksDashboard: async function ({ commit }) {
 			const res = await this.$axios.$get("/v3/task/dashboard/");
 			commit("set", {
 				items: res,

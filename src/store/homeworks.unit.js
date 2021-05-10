@@ -2,7 +2,7 @@ import storeModule from "./homeworks";
 
 describe("store/homeworks", () => {
 	describe("actions", () => {
-		describe("findAllHomeworks", () => {
+		describe("getHomeworksDashboard", () => {
 			it("should call the right endpoint", async () => {
 				const receivedRequests = [];
 				const spyCommit = jest.fn();
@@ -14,7 +14,7 @@ describe("store/homeworks", () => {
 					},
 				};
 
-				await storeModule.actions.findAllHomeworks(ctxMock);
+				await storeModule.actions.getHomeworksDashboard(ctxMock);
 				expect(spyCommit.mock.calls).toHaveLength(1);
 				expect(spyCommit.mock.calls[0][0]).toBe("set");
 				expect(receivedRequests[0].url).toStrictEqual("/v3/task/dashboard/");
