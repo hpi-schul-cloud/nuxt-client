@@ -40,6 +40,8 @@ module.exports = {
 		// CORS_ENABLED: process.env.CORS_ENABLED || false,
 		// SECURITY_HEADERS_ENABLED: process.env.SECURITY_HEADERS_ENABLED || false,
 		// LERNSTORE_MODE: process.env.LERNSTORE_MODE,
+		// LEGACY_CLIENT_URL
+		// PROXY_LOG_LEVEL
 	},
 
 	/*

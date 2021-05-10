@@ -1,4 +1,4 @@
-const { additionalSecurityHeader } = require("./http-headers.config.js");
+const { additionalSecurityHeader } = require("../../../http-headers.config.js");
 
 const SECURITY_HEADERS_ENABLED =
 	process.env.SECURITY_HEADERS_ENABLED === "true";
