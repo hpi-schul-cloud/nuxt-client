@@ -11,7 +11,7 @@
 						v-text="homework.name"
 					></v-list-item-title>
 					<v-list-item-subtitle v-if="homework.courseId" class="text-wrap">
-					 {{ homework.courseId.name }}
+						{{ homework.courseId.name }}
 					</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>

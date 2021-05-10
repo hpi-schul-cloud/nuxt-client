@@ -4,31 +4,31 @@ const base = serviceTemplate("homework");
 
 const module = {
 	getters: {
-		getNewHomeworks: state => {
+		getNewHomeworks: (state) => {
 			// TODO: filter only unread homeworks
 			return state;
 		},
-		
-		getOpenHomeworks: state => {
+
+		getOpenHomeworks: (state) => {
 			// TODO: filter only open homeworks
 			return state;
 		},
 
-		getHomeworksWithoutDue: state => {
+		getHomeworksWithoutDue: (state) => {
 			// TODO: filter only homeworks without due date
-			return state; 
+			return state;
 		},
 
-		getOverDueHomeworks: state => {
+		getOverDueHomeworks: (state) => {
 			// TODO: filter homeworks that are over due
 			return state;
 		},
 
-		getRatedHomeworks: state => {
+		getRatedHomeworks: (state) => {
 			// TODO: filter only rated homeworks
 			return state;
-		}
-	}
-}
+		},
+	},
+};
 
 export default merge(module, base);
