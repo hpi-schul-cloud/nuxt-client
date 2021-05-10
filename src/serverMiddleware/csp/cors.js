@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 const {
 	contentSecurityPolicy,
 	accessControlAllowOrigin,
-} = require("./http-headers.config.js");
+} = require("../../../http-headers.config.js");
 
 const CORS_ENABLED = process.env.CORS_ENABLED === "true";
 
