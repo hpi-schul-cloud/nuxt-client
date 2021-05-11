@@ -109,6 +109,7 @@ module.exports = {
 	 ** Plugins to load before mounting the App
 	 */
 	plugins: [
+		"@plugins/configInit",
 		"@plugins/global",
 		"@plugins/axios",
 		"@plugins/authenticate",
@@ -118,7 +119,6 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
-		"@plugins/configInit",
 	],
 
 	/*
