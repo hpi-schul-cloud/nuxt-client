@@ -12,7 +12,7 @@ export default {
 	components: { HomeworksList },
 	layout: "defaultVuetify",
 	created() {
-		this.$store.dispatch("homeworks/findAllHomeworks");
+		this.$store.dispatch("homeworks/getHomeworksDashboard");
 	},
 	head() {
 		return {
