@@ -17,10 +17,15 @@
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
+						v-if="homework.duedate"
 						v-text="
 							$t('pages.homeworks.labels.due') +
 							localeDateTime(homework.duedate)
 						"
+					/>
+					<v-list-item-action-text
+						v-else
+						v-text="$t('pages.homeworks.labels.noDueDate')"
 					/>
 					<v-spacer />
 					<v-badge v-if="false" color="error" dot inline></v-badge>
