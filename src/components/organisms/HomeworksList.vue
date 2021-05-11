@@ -7,22 +7,22 @@
 					<img :src="taskImage" role="presentation" />
 				</v-list-item-avatar>
 				<v-list-item-content>
+					<v-list-item-subtitle class="text-wrap">
+						{{ homework.courseName }}
+					</v-list-item-subtitle>
 					<v-list-item-title
 						class="text-wrap"
 						v-text="homework.name"
 					></v-list-item-title>
-					<v-list-item-subtitle class="text-wrap">
-						{{ homework.courseName }}
-					</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
-					<v-badge v-if="false" color="error" dot inline></v-badge>
-					<v-spacer />
 					<v-list-item-action-text
 						v-text="
 							$t('pages.homeworks.labels.due') + fromNow(homework.duedate)
 						"
 					/>
+					<v-spacer />
+					<v-badge v-if="false" color="error" dot inline></v-badge>
 				</v-list-item-action>
 			</v-list-item>
 			<v-divider v-if="index < homeworks.length - 1" :key="index"></v-divider>
