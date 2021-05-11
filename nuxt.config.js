@@ -7,7 +7,7 @@ const sentryConfig = require("./sentry.config.js");
 const themeName = process.env.SC_THEME || "default";
 const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
-	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"; // NODE_ENV=production for all travis build
 
 const serverMiddlewareList = [
 	"@serverMiddleware/nuxtversion",
@@ -24,6 +24,7 @@ module.exports = {
 	// to make ENV variables available in components, they need to be defined here
 	env: {
 		SC_THEME: process.env.SC_THEME,
+		// NODE_ENV=production for all travis build
 	},
 
 	publicRuntimeConfig: {
@@ -90,8 +91,8 @@ module.exports = {
 	 ** Nuxt.js (server)middleware
 	 */
 	server: {
-		port: process.env.PORT || DEFAULT_PORT,
-		host: process.env.HOST || DEFAULT_HOST,
+		port: DEFAULT_PORT,
+		host: DEFAULT_HOST,
 	},
 
 	serverMiddleware: serverMiddlewareList,
