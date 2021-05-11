@@ -18,7 +18,8 @@
 				<v-list-item-action>
 					<v-list-item-action-text
 						v-text="
-							$t('pages.homeworks.labels.due') + fromNow(homework.duedate)
+							$t('pages.homeworks.labels.due') +
+							localeDateTime(homework.duedate)
 						"
 					/>
 					<v-spacer />
@@ -34,6 +35,7 @@
 import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
 import taskImage from "@assets/img/courses/task-new.svg";
+import { printDateTimeFromStringUTC } from "@plugins/datetime";
 
 export default {
 	components: {},
@@ -47,6 +49,11 @@ export default {
 		...mapGetters("homeworks", {
 			homeworks: "list",
 		}),
+	},
+	methods: {
+		localeDateTime(duedate) {
+			return printDateTimeFromStringUTC(duedate);
+		},
 	},
 };
 </script>
