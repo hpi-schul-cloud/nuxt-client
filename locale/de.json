@@ -516,6 +516,7 @@
 	"pages.courses._id.tab.tools": "Tools",
 	"pages.homeworks.title": "Aufgaben",
 	"pages.homeworks.labels.due": "Fällig ",
+	"pages.homeworks.emptyState": "Es gibt noch keine offenen Aufgaben.",
 	"pages.homeworks.subtitleOpen": "Offene Aufgaben",
 	"pages.impressum.hpiPhoneNumber": "Telefon: +49 (0)331 / 2318 2920 (erreichbar Mo.-Fr. 13-14 Uhr)",
 	"pages.impressum.title": "Impressum",
