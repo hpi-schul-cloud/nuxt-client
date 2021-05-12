@@ -381,14 +381,4 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
-/* stylelint-disable */
-thead {
-	background-color: #eee;
-}
-
-td {
-	padding-top: 16px !important;
-	padding-bottom: 16px !important;
-}
-/* stylelint-enable */
 </style>
