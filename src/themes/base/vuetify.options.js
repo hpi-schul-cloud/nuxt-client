@@ -12,4 +12,8 @@ export default {
 	icons: {
 		iconfont: "fa4",
 	},
+	// possible in vuetify 3
+	/* global: {
+		ripple: false,
+	}, */
 };
