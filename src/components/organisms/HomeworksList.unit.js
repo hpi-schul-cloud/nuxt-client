@@ -56,4 +56,31 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(firstLink.exists()).toBe(true);
 		expect(firstLink.attributes().href).toBe(`/homework/${homeworks[0]._id}`);
 	});
+
+	it("Should render empty state, if there are no homeworks", () => {
+		const mockStoreEmpty = {
+			homeworks: {
+				getters: {
+					list: () => []
+				},
+				state: () => ({
+					list: homeworks,
+				}),
+			},
+		};
+
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+					store: mockStoreEmpty,
+				},
+				vuetify
+			),
+		});
+
+		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+		expect(wrapper.findAllComponents({ name: "VList" }).exists()).toBe(false)
+	});
 });

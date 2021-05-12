@@ -1,5 +1,5 @@
 <template>
-	<v-list subheader two-line>
+	<v-list v-if="homeworks.length > 0" subheader two-line>
 		<v-subheader>{{ $t("pages.homeworks.subtitleOpen") }}</v-subheader>
 		<template v-for="(homework, index) of homeworks">
 			<v-list-item :key="homework._id" :href="'/homework/' + homework._id">
