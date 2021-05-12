@@ -1,10 +1,6 @@
 <template>
 	<v-container>
-		<v-breadcrumbs
-			:items="breadcrumbItems"
-			:nuxt="true"
-			class="ml-4 px-0 py-0"
-		>
+		<v-breadcrumbs :items="breadcrumbItems" :nuxt="true" class="ml-4 px-0 py-0">
 			<template v-slot:item="{ item }">
 				<v-breadcrumbs-item
 					:href="item.href"
@@ -18,7 +14,7 @@
 				<v-icon> {{ iconMdiChevronRight }} </v-icon>
 			</template>
 		</v-breadcrumbs>
-		<v-container class='d-flex justify-center'>
+		<v-container class="d-flex justify-center">
 			<v-responsive>
 				<v-row class="mt-0">
 					<v-col>
@@ -123,10 +119,11 @@
 												class="ml-1"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Die Aktivierung dieser Option hat datenschutzrechtlich eine hohe
-												Schwelle. Um die Sichtbarkeit aller Schüler:innen der Schule für
-												jede Lehrkraft zu aktivieren, ist es erforderlich, dass jede/r
-												Schüler:in wirksam in diese Datenverarbeitung eingewilligt hat.
+												Die Aktivierung dieser Option hat datenschutzrechtlich
+												eine hohe Schwelle. Um die Sichtbarkeit aller
+												Schüler:innen der Schule für jede Lehrkraft zu
+												aktivieren, ist es erforderlich, dass jede/r Schüler:in
+												wirksam in diese Datenverarbeitung eingewilligt hat.
 											</p>
 										</v-col>
 									</v-row>
@@ -142,10 +139,11 @@
 												class="ml-1 mt-0"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Wenn diese Option nicht aktiviert ist, können die Schüler:innen nicht auf den Lern-Store zugreifen.
+												Wenn diese Option nicht aktiviert ist, können die
+												Schüler:innen nicht auf den Lern-Store zugreifen.
 											</p>
 										</v-col>
-									</v-row>	
+									</v-row>
 									<v-row>
 										<v-col>
 											<v-switch
@@ -158,7 +156,13 @@
 												class="ml-1 mt-0"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Ist der Matrix Messenger aktiviert, können alle Lehrkräfte dieser Schule Chaträume, private Unterhaltungen oder kurs- und teaminterne Gruppendiskussionen starten. Schüler:innen haben dort anfangs nur Leserechte, können aber über die Kurs- und Teameinstellungen auch Schreibrechte zugewiesen bekommen. Mehr Informationen dazu findest du im
+												Ist der Matrix Messenger aktiviert, können alle
+												Lehrkräfte dieser Schule Chaträume, private
+												Unterhaltungen oder kurs- und teaminterne
+												Gruppendiskussionen starten. Schüler:innen haben dort
+												anfangs nur Leserechte, können aber über die Kurs- und
+												Teameinstellungen auch Schreibrechte zugewiesen
+												bekommen. Mehr Informationen dazu findest du im
 												<a
 													href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243"
 													target="_blank"
@@ -180,10 +184,12 @@
 												class="ml-1 mt-0"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team sowie Lehrkräfte in ihren Kursen die Chatfunktion gezielt freischalten.
+												Sind Chats an deiner Schule aktiviert, können
+												Team-Admins im jeweiligen Team sowie Lehrkräfte in ihren
+												Kursen die Chatfunktion gezielt freischalten.
 											</p>
 										</v-col>
-									</v-row>	
+									</v-row>
 									<v-row>
 										<v-col>
 											<v-switch
@@ -196,7 +202,14 @@
 												class="ml-1 mt-0"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool hinzufügen und dann von dort aus Videokonferenzen für alle Kursteilnehmer:innen starten. Team-Admins können die	Videokonferenzfunktion im jeweiligen Team aktivieren. Team-Leiter:innen und Team-Admins können dann Videokonferenzen zu Terminen hinzufügen und starten.
+												Sind Videokonferenzen an deiner Schule aktiviert, können
+												Lehrkräfte ihrem Kurs im Bereich Tools das
+												Videokonferenz-Tool hinzufügen und dann von dort aus
+												Videokonferenzen für alle Kursteilnehmer:innen starten.
+												Team-Admins können die Videokonferenzfunktion im
+												jeweiligen Team aktivieren. Team-Leiter:innen und
+												Team-Admins können dann Videokonferenzen zu Terminen
+												hinzufügen und starten.
 											</p>
 										</v-col>
 									</v-row>
@@ -244,7 +257,9 @@
 								</tbody>
 							</template>
 						</v-simple-table>
-						<v-btn color="primary" depressed>Datenschutzerklärung hinzufügen</v-btn>
+						<v-btn color="primary" depressed
+							>Datenschutzerklärung hinzufügen</v-btn
+						>
 						<v-divider class="mt-13"></v-divider>
 						<h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
@@ -288,7 +303,7 @@
 						<v-btn color="primary" depressed>RSS-Feed hinzufügen</v-btn>
 					</v-col>
 				</v-row>
-				</v-responsive>
+			</v-responsive>
 		</v-container>
 	</v-container>
 </template>
