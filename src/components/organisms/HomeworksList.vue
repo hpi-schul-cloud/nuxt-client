@@ -39,8 +39,8 @@ export default {
 	props: {
 		homeworks: {
 			type: Array,
-			default: () => []
-		}
+			default: () => [],
+		},
 	},
 	data() {
 		return {

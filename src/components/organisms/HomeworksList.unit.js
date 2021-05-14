@@ -3,7 +3,6 @@ import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
-
 	let vuetify;
 
 	beforeEach(() => {
@@ -22,7 +21,7 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks		
+				homeworks: homeworks,
 			},
 		});
 
@@ -41,8 +40,8 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks		
-			}
+				homeworks: homeworks,
+			},
 		});
 
 		const firstLink = wrapper.find("a");

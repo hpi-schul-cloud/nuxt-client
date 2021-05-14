@@ -1,7 +1,7 @@
 <template>
 	<v-container class="v-container">
-		<h1 class="h4" >{{ $t("pages.homeworks.title") }}</h1>
-		<homeworks-list :homeworks="homeworks"/>
+		<h1 class="h4">{{ $t("pages.homeworks.title") }}</h1>
+		<homeworks-list :homeworks="homeworks" />
 	</v-container>
 </template>
 

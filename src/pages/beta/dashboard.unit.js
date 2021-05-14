@@ -14,7 +14,7 @@ describe("Homeworks/dashboard", () => {
 			}),
 			actions: {
 				getHomeworksDashboard,
-			}
+			},
 		},
 	};
 
