@@ -36,14 +36,16 @@
 				<v-divider class="mt-13"></v-divider>
 				<v-row>
 					<v-col>
-						<h2 class="text-h4 mt-10 mb-8">Allgemeine Einstellungen</h2>
+						<h2 class="text-h4 mt-10 mb-8">
+							{{ this.school }} Allgemeine Einstellungen
+						</h2>
 						<v-form>
 							<v-row>
 								<v-col>
 									<v-row>
 										<v-col>
 											<v-text-field
-												v-model="schoolName"
+												v-model="school.name"
 												label="Name der Schule"
 												dense
 											></v-text-field>
@@ -194,7 +196,7 @@
 										<v-col>
 											<v-switch
 												v-model="schoolVideoConference"
-												label="Videokonferenzen fzur Kurse und Teams aktivieren"
+												label="Videokonferenzen für Kurse und Teams aktivieren"
 												inset
 												flat
 												dense
@@ -309,7 +311,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 import { mdiAccount, mdiChevronRight } from "@mdi/js";
 
 export default {
@@ -317,18 +319,19 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			switch1: true,
-			schoolName: "",
-			schoolNumber: "",
-			schoolLogo: "",
-			schoolCounty: "",
-			schoolTimezone: `${this.$cookies.get("USER_TIMEZONE")}`, // doesn't work in chrome??
-			schoolLanguage: "",
-			schoolStudentVisibility: false,
-			schoolLernStore: false,
-			schoolMatrixMessenger: false,
-			schoolChatFunction: true,
-			schoolVideoConference: true,
+			localSchool: {
+				name: "",
+				schoolNumber: "",
+				schoolLogo: "",
+				schoolCounty: "",
+				schoolTimezone: `${this.$cookies.get("USER_TIMEZONE")}`, // doesn't work in chrome??
+				schoolLanguage: "",
+				schoolStudentVisibility: false,
+				schoolLernStore: false,
+				schoolMatrixMessenger: false,
+				schoolChatFunction: true,
+				schoolVideoConference: true,
+			},
 			counties: ["Mainz", "Speyer", "Berlin"],
 			languages: ["Deutsch", "Englisch", "Spanisch"],
 			cloudStorages: ["HPI Schul-Cloud"],
@@ -361,22 +364,19 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("news", {
-			news: "list",
+		...mapState("auth", {
+			school: "school",
+			user: "user",
 		}),
 	},
-	created(ctx) {
-		this.find();
+	watch: {
+		school(updatedSchool) {
+			this.localSchool = updatedSchool;
+		},
 	},
 	methods: {
-		find() {
-			this.$store.dispatch("news/find", {
-				query: {
-					$sort: {
-						createdAt: -1,
-					},
-				},
-			});
+		save() {
+			this.$store.dispatch("schools/patch", this.localSchool);
 		},
 	},
 	head() {
