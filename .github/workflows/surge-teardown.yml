@@ -4,8 +4,10 @@ on:
     # * is a special character in YAML so you have to quote this string
     - cron: "0 4 */7 * *"
   push:
-    branches: 
+    branches:
       - develop
+      - master
+      - feature/odyssey
 jobs:
   surge-teardown:
     runs-on: ubuntu-latest
