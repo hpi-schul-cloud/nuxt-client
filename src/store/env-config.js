@@ -5,6 +5,7 @@ export const actions = {
 			commit("setEnv", env);
 			dispatch("autoLogout/init", {}, { root: true });
 			dispatch("content/init", {}, { root: true });
+			dispatch("filePaths/init", {}, { root: true });
 		} catch (error) {
 			commit("setError", error);
 		}

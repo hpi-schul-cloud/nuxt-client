@@ -49,7 +49,6 @@
 
 <script>
 import { mapState } from "vuex";
-import defaultDocuments from "@utils/documents.js";
 
 export default {
 	computed: {
@@ -66,7 +65,8 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: defaultDocuments.specificFiles().termsOfUseSchool,
+					href: this.$store.getters["filePaths/getSpecificFiles"]
+						.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",

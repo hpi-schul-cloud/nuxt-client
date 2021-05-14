@@ -51,7 +51,6 @@
 
 <script>
 import { mapState } from "vuex";
-import defaultDocuments from "@utils/documents.js";
 
 export default {
 	data() {
@@ -72,7 +71,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: defaultDocuments.specificFiles().privacy,
+					href: this.$store.getters["filePaths/getSpecificFiles"].privacy,
 					text: this.$t("demo.components.legacy.footer.privacy_policy_HPI"),
 					target: "_blank",
 					rel: "noopener",
