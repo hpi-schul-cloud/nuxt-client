@@ -3,16 +3,6 @@ import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
-	const mockStore = {
-		homeworks: {
-			getters: {
-				list: () => homeworks,
-			},
-			state: () => ({
-				list: homeworks,
-			}),
-		},
-	};
 
 	let vuetify;
 
@@ -28,10 +18,12 @@ describe("@components/organisms/HomeworksList", () => {
 				{
 					i18n: true,
 					vuetify: true,
-					store: mockStore,
 				},
 				vuetify
 			),
+			propsData: {
+				homeworks: homeworks		
+			},
 		});
 
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(
@@ -45,10 +37,12 @@ describe("@components/organisms/HomeworksList", () => {
 				{
 					i18n: true,
 					vuetify: true,
-					store: mockStore,
 				},
 				vuetify
 			),
+			propsData: {
+				homeworks: homeworks		
+			}
 		});
 
 		const firstLink = wrapper.find("a");

@@ -31,22 +31,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
 import taskImage from "@assets/img/courses/task-new.svg";
 
 export default {
 	components: {},
+	props: {
+		homeworks: {
+			type: Array,
+			default: () => []
+		}
+	},
 	data() {
 		return {
 			fromNow,
 			taskImage: taskImage,
 		};
-	},
-	computed: {
-		...mapGetters("homeworks", {
-			homeworks: "list",
-		}),
 	},
 	methods: {
 		homeworkHref: (id) => {
