@@ -1,5 +1,7 @@
 import dashboard from "./dashboard";
 import { homeworks } from "@@/stories/mockData/Homeworks";
+import TasksEmptyState from "@components/molecules/TasksEmptyState";
+import HomeworksList from "@components/organisms/HomeworksList";
 import Vuetify from "vuetify";
 
 describe("Homeworks/dashboard", () => {
@@ -7,10 +9,10 @@ describe("Homeworks/dashboard", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				list: () => homeworks,
+				list: () => homeworks
 			},
 			state: () => ({
-				list: homeworks,
+				list: homeworks
 			}),
 			actions: {
 				getHomeworksDashboard,
@@ -42,7 +44,7 @@ describe("Homeworks/dashboard", () => {
 		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
 	});
 
-	it("Should render homeworks list component", () => {
+	it("Should render homeworks list component, if there are homeworks", () => {
 		const wrapper = mount(dashboard, {
 			...createComponentMocks(
 				{
@@ -54,7 +56,38 @@ describe("Homeworks/dashboard", () => {
 			),
 		});
 
-		expect(wrapper.findAllComponents({ name: "VList" }).exists()).toBe(true);
+		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
+		expect(wrapper.findComponent(TasksEmptyState).exists()).toBe(false);
+	});
+
+	it("Should render empty state, if there are no homeworks", () => {
+		const mockStoreEmpty = {
+			homeworks: {
+				getters: {
+					list: () => [],
+				},
+				state: () => ({
+					list: homeworks,
+				}),
+				actions: {
+					getHomeworksDashboard,
+				}
+			},
+		};
+
+		const wrapper = mount(dashboard, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+					store: mockStoreEmpty,
+				},
+				vuetify
+			),
+		});
+
+		expect(wrapper.findComponent(HomeworksList).exists()).toBe(false);
+		expect(wrapper.findComponent(TasksEmptyState).exists()).toBe(true);
 	});
 
 	it("Should should trigger a store action", async () => {

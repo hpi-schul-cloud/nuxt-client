@@ -1,6 +1,5 @@
 import Vuetify from "vuetify";
 import TasksEmptyState from "./TasksEmptyState";
-import BaseImage from "@basecomponents/BaseImage";
 
 describe("@components/organisms/HomeworksList", () => {
 
@@ -12,7 +11,7 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it(...isValidComponent(TasksEmptyState));
 
-	it("Should render a Base Image component", () => {
+	it("Should receive props", () => {
 		const wrapper = mount(TasksEmptyState, {
 			...createComponentMocks(
 				{
@@ -20,14 +19,10 @@ describe("@components/organisms/HomeworksList", () => {
 					vuetify: true,
 				},
 				vuetify
-			),
-			propsData: {
-				imageSrc: "@assets/img/empty-state/Task_Empty_State.svg",
-				message: "Es gibt keine offenen Aufgaben",
-				submessage: "Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!"
-			}
+			)
 		});
-		expect(wrapper.findComponent(BaseImage).exists()).toBe(true);
+
+		expect(wrapper.props().image).toBeDefined();
 	});
 
 });

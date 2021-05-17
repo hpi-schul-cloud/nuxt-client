@@ -11,6 +11,23 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it(...isValidComponent(HomeworksList));
 
+	it("Should have default homeworks props", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+				},
+				vuetify
+			),
+			propsData: {
+				homeworks: undefined		
+			},
+		});
+
+		expect(wrapper.props().homeworks).toBeDefined();
+	});
+
 	it("Should render complete homework items list", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks(
@@ -21,7 +38,7 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks,
+				homeworks		
 			},
 		});
 
@@ -57,8 +74,8 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks,
-			},
+				homeworks		
+			}
 		});
 
 		const firstLink = wrapper.find("a");
