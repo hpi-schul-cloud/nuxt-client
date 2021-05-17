@@ -210,7 +210,7 @@ export default {
 					}
 				}
 
-				--sidebar-item-padding: 20px;
+				--sidebar-item-padding: 19px;
 				--sidebar-font-size: 16px;
 
 				.list-content {
