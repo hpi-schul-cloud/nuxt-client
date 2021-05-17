@@ -16,6 +16,12 @@ export default [
 		permission: "TEAMS_ENABLED",
 	},
 	{
+		title: "global.sidebar.tasks.tasksOpen",
+		href: "/tasks/open",
+		icon: "list-ol",
+		permission: "Task_Dashboard_View_v3",
+	},
+	{
 		title: "global.sidebar.tasks",
 		href: "/homework",
 		icon: "tasks",

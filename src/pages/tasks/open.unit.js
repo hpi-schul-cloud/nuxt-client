@@ -1,4 +1,4 @@
-import dashboard from "./dashboard";
+import dashboard from "./open";
 import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
