@@ -2,7 +2,7 @@
     <v-container class="v-container">
 		<v-img
 			max-height="400px"
-			src="@assets/img/empty-state/Task_Empty_State.svg"
+			:src="image"
 			fill="var(--color-primary)"
 			role="presentation"
 		></v-img>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
 
 export default {
 	components: {},
@@ -18,7 +19,7 @@ export default {
 	props: {
 		image: {
 			type: String,
-			default: () => "@assets/img/empty-state/Task_Empty_State.svg",
+			default: () => tasksEmptyState,
 		},
 		title: {
 			type: String,
