@@ -30,6 +30,23 @@ describe("@components/organisms/HomeworksList", () => {
 		);
 	});
 
+	it("Should render an empty list", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+				},
+				vuetify
+			),
+			propsData: {
+				homeworks: [],
+			},
+		});
+
+		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+	});
+
 	it("Should link list item links to homework/<id> page", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks(
