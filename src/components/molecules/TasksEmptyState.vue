@@ -6,7 +6,7 @@
 			fill="var(--color-primary)"
 			role="presentation"
 		></v-img>
-		<h2 class="h4 title">{{ title }}<br>{{ subtitle }}</h2>
+		<h2 class="h4 centered">{{ title }}<br>{{ subtitle }}</h2>
     </v-container>
 </template>
 
@@ -36,8 +36,8 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.title {
-	text-align: center;
+.centered {
+	text-align: -webkit-center;
 }
 
 </style>
