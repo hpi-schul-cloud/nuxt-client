@@ -43,7 +43,7 @@ const mockGlobalFiles = {
 describe("store/filePaths", () => {
 	describe("actions", () => {
 		describe("init", () => {
-			it("it commits all 3 mutations", async () => {
+			it("commits all 3 mutations", async () => {
 				const spyCommit = jest.fn();
 				await actions.init(
 					{ commit: spyCommit, rootState },
@@ -53,6 +53,26 @@ describe("store/filePaths", () => {
 				expect(spyCommit.mock.calls[0][0]).toBe("setDocumentBaseDir");
 				expect(spyCommit.mock.calls[1][0]).toBe("setSpecificFiles");
 				expect(spyCommit.mock.calls[2][0]).toBe("setGlobalFiles");
+			});
+			it("sets baseDir to DOCUMENT_BASE_DIR if it is defined", async () => {
+				const spyCommit = jest.fn();
+				const mockURL = "https://other-url.com/";
+				rootState["env-config"].env.DOCUMENT_BASE_DIR = mockURL;
+				await actions.init(
+					{ commit: spyCommit, rootState },
+					{ baseDir, theme }
+				);
+				expect(spyCommit.mock.calls[0][1].baseDir).toBe(mockURL);
+			});
+			it("sets theme to SC_THEME if it is defined", async () => {
+				const spyCommit = jest.fn();
+				const mockTheme = "testTheme";
+				process.env.SC_THEME = mockTheme;
+				await actions.init(
+					{ commit: spyCommit, rootState },
+					{ baseDir, theme }
+				);
+				expect(spyCommit.mock.calls[0][1].theme).toBe(mockTheme);
 			});
 		});
 	});
