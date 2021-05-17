@@ -150,11 +150,13 @@ import { i18n as i18nConfig } from "@plugins/i18n.js";
 import authStoreModule from "@store/auth";
 import { mixin as userMixin } from "@plugins/user.js";
 import globalStubs from "./stubs.js";
+import VueMeta from "vue-meta";
 
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
 	vuetify,
+	vueMeta,
 	user,
 	store,
 	$route,
@@ -198,7 +200,7 @@ global.createComponentMocks = ({
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	if (store || i18n || user || vuetify) {
+	if (store || i18n || user || vuetify || vueMeta) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
 		if (user) {
@@ -229,6 +231,9 @@ global.createComponentMocks = ({
 
 	//Set 'vuetify: true' for testing with vuetify components
 	if (vuetify) Vue.use(Vuetify);
+
+	//Set 'vueMeta: true' for accessing nuxt page meta infos
+	if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
 
 	if (user) {
 		localVue.mixin(userMixin);

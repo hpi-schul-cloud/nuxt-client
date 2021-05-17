@@ -14,7 +14,7 @@ describe("Homeworks/dashboard", () => {
 			}),
 			actions: {
 				getHomeworksDashboard,
-			}
+			},
 		},
 	};
 
@@ -25,6 +25,22 @@ describe("Homeworks/dashboard", () => {
 	});
 
 	it(...isValidComponent(dashboard));
+
+	it("has correct page title set in <head>", () => {
+		const wrapper = shallowMount(dashboard, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+					store: mockStore,
+					vueMeta: true,
+				},
+				vuetify
+			),
+		});
+
+		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
+	});
 
 	it("Should render homeworks list component", () => {
 		const wrapper = mount(dashboard, {
@@ -41,7 +57,22 @@ describe("Homeworks/dashboard", () => {
 		expect(wrapper.findAllComponents({ name: "VList" }).exists()).toBe(true);
 	});
 
-	it.todo("Should show a custom page title");
+	it("Should should trigger a store action", async () => {
+		mockStore.homeworks.actions.getHomeworksDashboard.mockClear();
 
-	it.todo("Should should trigger a store action");
+		shallowMount(dashboard, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+					store: mockStore,
+				},
+				vuetify
+			),
+		});
+
+		expect(
+			mockStore.homeworks.actions.getHomeworksDashboard
+		).toHaveBeenCalled();
+	});
 });

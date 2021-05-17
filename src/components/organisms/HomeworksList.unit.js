@@ -3,7 +3,6 @@ import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
-
 	let vuetify;
 
 	beforeEach(() => {
@@ -22,13 +21,30 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks		
+				homeworks: homeworks,
 			},
 		});
 
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(
 			homeworks.length
 		);
+	});
+
+	it("Should render an empty list", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+				},
+				vuetify
+			),
+			propsData: {
+				homeworks: [],
+			},
+		});
+
+		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
 	it("Should link list item links to homework/<id> page", () => {
@@ -41,8 +57,8 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks		
-			}
+				homeworks: homeworks,
+			},
 		});
 
 		const firstLink = wrapper.find("a");
