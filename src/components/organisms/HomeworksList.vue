@@ -48,11 +48,6 @@ export default {
 		};
 	},
 	methods: {
-		homeworkHref: (id) => {
-			return "/homework/" + id;
-		},
-	},
-	methods: {
 		computedDueDateLabel(duedate) {
 			if (duedate) {
 				return new Date(duedate) >= new Date()
@@ -62,6 +57,9 @@ export default {
 			} else {
 				return this.$t("pages.homeworks.labels.noDueDate");
 			}
+		},
+		homeworkHref: (id) => {
+			return "/homework/" + id;
 		},
 	},
 };
