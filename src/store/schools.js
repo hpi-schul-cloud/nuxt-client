@@ -1,12 +1,10 @@
-
-
 // instead of using servicetemplate, do it yourself, cause the servicetemplate antipatterns
 // an messenger store orientieren
 // falls ts compiled wird, probieren in ts zu schreiben
 const module = {
 	actions: {
 		async update({ commit }, payload) {
-			console.log(payload)
+			console.log(payload);
 			commit("requestSuccessful", false);
 			try {
 				const data = await this.$axios.$post("/school");
@@ -28,14 +26,14 @@ const module = {
 		},
 		setError(state, error) {
 			state.error = error;
-		}
+		},
 	},
 	state() {
 		return {
 			school: {},
 			requestSuccessful: false,
-			error: null
+			error: null,
 		};
-	}
+	},
 };
 export default module;
