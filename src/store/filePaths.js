@@ -79,7 +79,7 @@ export const getters = {
 		return state.specificFiles;
 	},
 	getGlobalFiles(state) {
-		return state.getGlobalFiles;
+		return state.globalFiles;
 	},
 };
 
