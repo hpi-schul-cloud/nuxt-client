@@ -2,7 +2,6 @@ import Vuetify from "vuetify";
 import TasksEmptyState from "./TasksEmptyState";
 
 describe("@components/organisms/HomeworksList", () => {
-
 	let vuetify;
 
 	beforeEach(() => {
@@ -19,13 +18,13 @@ describe("@components/organisms/HomeworksList", () => {
 					vuetify: true,
 				},
 				vuetify
-			)
+			),
 		});
 
 		expect(wrapper.props().image).toBeDefined();
 		expect(wrapper.props().title).toBeDefined();
 		expect(wrapper.props().subtitle).toBeDefined();
-		
+
 		const title = "Test title";
 		const subtitle = "Test subtitle";
 		const image = "@assets/img/empty-state/Task_Empty_State.svg";
@@ -37,5 +36,4 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(wrapper.props().subtitle).toBe(subtitle);
 		expect(wrapper.props().image).toBe(image);
 	});
-
 });

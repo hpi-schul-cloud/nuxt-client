@@ -1,13 +1,13 @@
 <template>
-    <v-container class="v-container">
+	<v-container class="v-container">
 		<v-img
 			max-height="400px"
 			:src="image"
 			fill="var(--color-primary)"
 			role="presentation"
 		></v-img>
-		<h2 class="h4 centered">{{ title }}<br>{{ subtitle }}</h2>
-    </v-container>
+		<h2 class="h4 centered">{{ title }}<br />{{ subtitle }}</h2>
+	</v-container>
 </template>
 
 <script>
@@ -28,7 +28,7 @@ export default {
 		subtitle: {
 			type: String,
 			default: () => "",
-		}
+		},
 	},
 };
 </script>
@@ -39,5 +39,4 @@ export default {
 .centered {
 	text-align: -webkit-center;
 }
-
 </style>
