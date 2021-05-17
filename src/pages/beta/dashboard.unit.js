@@ -9,10 +9,10 @@ describe("Homeworks/dashboard", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				list: () => homeworks
+				list: () => homeworks,
 			},
 			state: () => ({
-				list: homeworks
+				list: homeworks,
 			}),
 			actions: {
 				getHomeworksDashboard,
@@ -71,7 +71,7 @@ describe("Homeworks/dashboard", () => {
 				}),
 				actions: {
 					getHomeworksDashboard,
-				}
+				},
 			},
 		};
 

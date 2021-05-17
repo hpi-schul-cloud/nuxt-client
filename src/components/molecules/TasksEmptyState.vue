@@ -30,7 +30,7 @@ export default {
 		subtitle: {
 			type: String,
 			default: () => "",
-		}
+		},
 	},
 	data: () => ({
 		imgHeight: "400px"
@@ -38,11 +38,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "@styles";
-
-.centered {
-	text-align: -webkit-center;
-}
-
-</style>

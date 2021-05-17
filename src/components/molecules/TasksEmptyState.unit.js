@@ -37,5 +37,4 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(wrapper.props().subtitle).toBe(subtitle);
 		expect(wrapper.props().image).toBe(image);
 	});
-
 });

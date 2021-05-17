@@ -21,7 +21,7 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: undefined		
+				homeworks: undefined,
 			},
 		});
 
@@ -38,7 +38,7 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks		
+				homeworks,
 			},
 		});
 
@@ -74,8 +74,8 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks		
-			}
+				homeworks,
+			},
 		});
 
 		const firstLink = wrapper.find("a");

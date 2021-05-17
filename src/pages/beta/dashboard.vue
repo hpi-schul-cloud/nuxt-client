@@ -4,6 +4,7 @@
 		<homeworks-list v-if="homeworks.length > 0" :homeworks="homeworks"/>
 		<tasks-empty-state 
 			v-if="homeworks.length === 0" 
+			:image="image"
 			:title="$t('pages.homeworks.emptyState.title')" 
 			:subtitle="$t('pages.homeworks.emptyState.subtitle')" 
 		/>
