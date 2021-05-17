@@ -3,17 +3,6 @@ import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
-	const mockStore = {
-		homeworks: {
-			getters: {
-				list: () => homeworks,
-			},
-			state: () => ({
-				list: homeworks,
-			}),
-		},
-	};
-
 	let vuetify;
 
 	beforeEach(() => {
@@ -22,16 +11,18 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it(...isValidComponent(HomeworksList));
 
-	it("Should render complete homework items list", async () => {
+	it("Should render complete homework items list", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks(
 				{
 					i18n: true,
 					vuetify: true,
-					store: mockStore,
 				},
 				vuetify
 			),
+			propsData: {
+				homeworks: homeworks,
+			},
 		});
 
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(
@@ -39,5 +30,23 @@ describe("@components/organisms/HomeworksList", () => {
 		);
 	});
 
-	it.todo("Should link list item links to homework/<id> page");
+	it("Should link list item links to homework/<id> page", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+				},
+				vuetify
+			),
+			propsData: {
+				homeworks: homeworks,
+			},
+		});
+
+		const firstLink = wrapper.find("a");
+
+		expect(firstLink.exists()).toBe(true);
+		expect(firstLink.attributes().href).toBe(`/homework/${homeworks[0]._id}`);
+	});
 });

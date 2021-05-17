@@ -2,7 +2,7 @@
 	<v-list subheader two-line>
 		<v-subheader>{{ $t("pages.homeworks.subtitleOpen") }}</v-subheader>
 		<template v-for="(homework, index) of homeworks">
-			<v-list-item :key="homework._id" :href="'/homework/' + homework._id">
+			<v-list-item :key="homework._id" :href="homeworkHref(homework._id)">
 				<v-list-item-avatar>
 					<img :src="taskImage" role="presentation" />
 				</v-list-item-avatar>
@@ -29,23 +29,28 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
 import taskImage from "@assets/img/courses/task-new.svg";
 import { printDateTimeFromStringUTC } from "@plugins/datetime";
 
 export default {
 	components: {},
+	props: {
+		homeworks: {
+			type: Array,
+			default: () => [],
+		},
+	},
 	data() {
 		return {
 			fromNow,
 			taskImage: taskImage,
 		};
 	},
-	computed: {
-		...mapGetters("homeworks", {
-			homeworks: "list",
-		}),
+	methods: {
+		homeworkHref: (id) => {
+			return "/homework/" + id;
+		},
 	},
 	methods: {
 		computedDueDateLabel(duedate) {
