@@ -35,11 +35,6 @@ export default [
 				icon: "archive",
 				href: "/homework/archive/",
 			},
-			{
-				title: "global.sidebar.tasks.openTasks",
-				icon: "archive",
-				href: "/beta/dashboard/",
-			},
 		],
 	},
 	{
