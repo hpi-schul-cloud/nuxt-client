@@ -1,20 +1,22 @@
 <template>
     <v-container class="v-container">
-		<v-img
-			max-height="400px"
-			:src="image"
+		<base-image
+			:img-src="image"
+			:img-height="imgHeight"
 			fill="var(--color-primary)"
 			role="presentation"
-		></v-img>
-		<h2 class="h4 centered">{{ title }}<br>{{ subtitle }}</h2>
+		/>
+		<h2 class="h4 text-center mt-8">{{ title }}</h2>
+		<h3 class="h4 text-center mt-3">{{ subtitle }}</h3>
     </v-container>
 </template>
 
 <script>
 import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
+import BaseImage from "@basecomponents/BaseImage";
 
 export default {
-	components: {},
+	components: { BaseImage },
 	layout: "defaultVuetify",
 	props: {
 		image: {
@@ -30,6 +32,9 @@ export default {
 			default: () => "",
 		}
 	},
+	data: () => ({
+		imgHeight: "400px"
+	}),
 };
 </script>
 
