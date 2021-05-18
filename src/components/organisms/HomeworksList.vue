@@ -28,7 +28,7 @@
 	</v-list>
 </template>
 
-<script>
+<script lang="ts">
 import { fromNow } from "@plugins/datetime";
 import taskImage from "@assets/img/courses/task-new.svg";
 import { printDateTimeFromStringUTC } from "@plugins/datetime";
@@ -48,7 +48,7 @@ export default {
 		};
 	},
 	methods: {
-		computedDueDateLabel(duedate) {
+		computedDueDateLabel(duedate: string) {
 			if (duedate) {
 				return new Date(duedate) >= new Date()
 					? this.$t("pages.homeworks.labels.due") +
@@ -58,7 +58,7 @@ export default {
 				return this.$t("pages.homeworks.labels.noDueDate");
 			}
 		},
-		homeworkHref: (id) => {
+		homeworkHref: (id: string) => {
 			return "/homework/" + id;
 		},
 	},
