@@ -1,40 +1,54 @@
 import Vuetify from "vuetify";
 import TasksEmptyState from "./TasksEmptyState";
+import BaseImage from "@basecomponents/BaseImage";
 
-describe("@components/organisms/HomeworksList", () => {
+let vuetify;
+let wrapper; 
+const title = "Test title";
+const subtitle = "Test subtitle";
+const image = "@assets/img/empty-state/Task_Empty_State.svg";
 
-	let vuetify;
+describe("@components/molecules/TasksEmptyState", () => {
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
-	});
-
-	it(...isValidComponent(TasksEmptyState));
-
-	it("Should receive props", () => {
-		const wrapper = mount(TasksEmptyState, {
+	
+		wrapper = mount(TasksEmptyState, {
 			...createComponentMocks(
 				{
 					i18n: true,
 					vuetify: true,
 				},
 				vuetify
-			)
+			),
+			propsData: {
+				image,
+				title,
+				subtitle
+			}
 		});
+	});
+	
+	afterEach(() => {
+		wrapper.destroy();
+	});
 
-		expect(wrapper.props().image).toBeDefined();
-		expect(wrapper.props().title).toBeDefined();
-		expect(wrapper.props().subtitle).toBeDefined();
-		
-		const title = "Test title";
-		const subtitle = "Test subtitle";
-		const image = "@assets/img/empty-state/Task_Empty_State.svg";
+	it(...isValidComponent(TasksEmptyState));
 
-		wrapper.setProps({ image });
-		wrapper.setProps({ title });
-		wrapper.setProps({ subtitle });
+	it("can receive props", () => {
 		expect(wrapper.props().title).toBe(title);
 		expect(wrapper.props().subtitle).toBe(subtitle);
 		expect(wrapper.props().image).toBe(image);
+	});
+
+	it("should render Base Image component", () => {
+		expect(wrapper.findComponent(BaseImage).exists()).toBe(true);
+	});
+
+	it("should render a title and a subtitle", () => {
+		const h2 = wrapper.find("h2");
+		const h3 = wrapper.find("h3");
+		expect(h2.text()).toBe(title);
+		expect(h3.text()).toBe(subtitle);
 	});
 });
