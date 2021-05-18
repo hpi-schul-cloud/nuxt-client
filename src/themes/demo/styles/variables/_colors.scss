@@ -24,7 +24,7 @@ $darken: 25%;
 	--color-overlay-light: rgb(255, 255, 255, 0.5);
 
 	/* feedback */
-	--color-info: #0A7AC9;
+	--color-info: #0a7ac9;
 	--color-info-light: color-mod(var(--color-info) tint(#{$brighten}));
 	--color-info-dark: color-mod(var(--color-info) shade(#{$darken}));
 	--color-success: #13ba98;
