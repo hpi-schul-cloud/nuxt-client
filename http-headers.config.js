@@ -31,7 +31,7 @@ module.exports = {
 			fontSrc: `'self' data: ${matrixMessengerEmbed}`,
 			styleSrc: `'self' ${matrixMessengerEmbed}`,
 			// scriptSrc: "'strict-dynamic' 'unsafe-eval' 'nonce-<nonceValue>'",
-			scriptSrc: `'self' 'unsafe-eval' ${matrixMessengerEmbed}`,
+			scriptSrc: `'self' 'unsafe-eval' 'unsafe-inline' ${matrixMessengerEmbed}`,
 			// Please activate for production
 			// upgradeInsecureRequestsSrc: 'upgrade-insecure-requests',
 			// blockAllMixedContentSrc: 'block-all-mixed-content',
