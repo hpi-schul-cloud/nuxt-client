@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.1.2
+
+### Fixed
+
+- SC-9063 - Removed "unsafe-inline" from script-src in CSP
+
 ## 26.1.1
 
 ### Fixed
