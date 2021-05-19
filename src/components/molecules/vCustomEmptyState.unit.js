@@ -1,19 +1,20 @@
 import Vuetify from "vuetify";
-import TasksEmptyState from "./TasksEmptyState";
+import vCustomEmptyState from "./vCustomEmptyState";
 import BaseImage from "@basecomponents/BaseImage";
 
 let vuetify;
 let wrapper; 
+
 const title = "Test title";
 const subtitle = "Test subtitle";
 const image = "@assets/img/empty-state/Task_Empty_State.svg";
 
-describe("@components/molecules/TasksEmptyState", () => {
+describe("@components/molecules/vCustomEmptyState", () => {
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
 	
-		wrapper = mount(TasksEmptyState, {
+		wrapper = mount(vCustomEmptyState, {
 			...createComponentMocks(
 				{
 					i18n: true,
@@ -23,8 +24,7 @@ describe("@components/molecules/TasksEmptyState", () => {
 			),
 			propsData: {
 				image,
-				title,
-				subtitle
+				title
 			}
 		});
 	});
@@ -33,22 +33,26 @@ describe("@components/molecules/TasksEmptyState", () => {
 		wrapper.destroy();
 	});
 
-	it(...isValidComponent(TasksEmptyState));
-
-	it("can receive props", () => {
-		expect(wrapper.props().title).toBe(title);
-		expect(wrapper.props().subtitle).toBe(subtitle);
-		expect(wrapper.props().image).toBe(image);
-	});
+	it(...isValidComponent(vCustomEmptyState));
 
 	it("should render Base Image component", () => {
 		expect(wrapper.findComponent(BaseImage).exists()).toBe(true);
 	});
 
-	it("should render a title and a subtitle", () => {
+	it("should render a title", () => {
 		const h2 = wrapper.find("h2");
-		const h3 = wrapper.find("h3");
 		expect(h2.text()).toBe(title);
-		expect(h3.text()).toBe(subtitle);
+	});
+
+	it("should render subtitle, if it is passed as props", async () => {
+		const h3 = wrapper.find("h3");
+		expect(h3.exists()).toBe(false);
+
+		wrapper.setProps({ subtitle });
+		await wrapper.vm.$nextTick();
+		
+		const newH3 = wrapper.find("h3");
+		expect(newH3.exists()).toBe(true);
+		expect(newH3.text()).toBe(subtitle);
 	});
 });

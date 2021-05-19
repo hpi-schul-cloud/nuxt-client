@@ -1,5 +1,5 @@
 <template>
-    <v-container class="v-container">
+    <v-container>
 		<base-image
 			:img-src="image"
 			:img-height="imgHeight"
@@ -7,12 +7,11 @@
 			role="presentation"
 		/>
 		<h2 class="h4 text-center mt-8">{{ title }}</h2>
-		<h3 class="h4 text-center mt-3">{{ subtitle }}</h3>
+		<h3 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h3>
     </v-container>
 </template>
 
 <script>
-import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
 import BaseImage from "@basecomponents/BaseImage";
 
 export default {
@@ -21,19 +20,20 @@ export default {
 	props: {
 		image: {
 			type: String,
-			default: () => tasksEmptyState,
+			required: true
 		},
 		title: {
 			type: String,
-			default: () => "",
+			required: true
 		},
 		subtitle: {
 			type: String,
+			required: false,
 			default: () => "",
 		},
 	},
 	data: () => ({
-		imgHeight: "400px"
+		imgHeight: "300px"
 	}),
 };
 </script>

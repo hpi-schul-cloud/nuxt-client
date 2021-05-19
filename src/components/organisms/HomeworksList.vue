@@ -39,7 +39,8 @@ export default {
 	props: {
 		homeworks: {
 			type: Array,
-			default: () => [],
+			required: false,
+			default: () => []
 		},
 	},
 	data() {

@@ -1,6 +1,6 @@
 import dashboard from "./dashboard";
 import { homeworks } from "@@/stories/mockData/Homeworks";
-import TasksEmptyState from "@components/molecules/TasksEmptyState";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import HomeworksList from "@components/organisms/HomeworksList";
 import Vuetify from "vuetify";
 
@@ -57,7 +57,7 @@ describe("Homeworks/dashboard", () => {
 		});
 
 		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
-		expect(wrapper.findComponent(TasksEmptyState).exists()).toBe(false);
+		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(false);
 	});
 
 	it("Should render empty state, if there are no homeworks", () => {
@@ -87,7 +87,7 @@ describe("Homeworks/dashboard", () => {
 		});
 
 		expect(wrapper.findComponent(HomeworksList).exists()).toBe(false);
-		expect(wrapper.findComponent(TasksEmptyState).exists()).toBe(true);
+		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
 	});
 
 	it("Should should trigger a store action", async () => {
