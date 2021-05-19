@@ -56,8 +56,7 @@ export default {
 					this.$t("pages.homeworks.labels.due") +
 					printDateTimeFromStringUTC(duedate)
 				);
-
-			return this.$t("pages.homeworks.labels.overdue");
+			else return this.$t("pages.homeworks.labels.overdue");
 		},
 		homeworkHref: (id: string) => {
 			return "/homework/" + id;
