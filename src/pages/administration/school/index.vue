@@ -22,7 +22,7 @@
 							{{ $t("pages.administration.school.index.title") }}
 						</h1>
 						<h2 class="text-h4">
-							{{ $t("pages.administration.school.schoolYear") }} 2020/21
+							{{ $t("pages.administration.school.schoolYear") }} {{ school.years.activeYear.name }}
 						</h2>
 						<p>
 							{{
@@ -37,7 +37,7 @@
 				<v-row>
 					<v-col>
 						<h2 class="text-h4 mt-10 mb-8">
-							{{ this.school }} Allgemeine Einstellungen
+							Allgemeine Einstellungen
 						</h2>
 						<v-form>
 							<v-row>
