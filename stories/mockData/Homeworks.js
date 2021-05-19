@@ -55,4 +55,11 @@ export const homeworks = [
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
 	},
+	{
+		id: "59cce4171113d1132c98dc08",
+		_id: "59cce4171113d1132c98dc08",
+		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
+		courseName: "Mathe",
+		createdAt: "2017-07-28T11:58:46.601Z",
+	},
 ];
