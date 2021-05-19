@@ -175,7 +175,7 @@
 	"global.sidebar.overview": "Dashboard",
 	"global.sidebar.school": "School",
 	"global.sidebar.student": "Student",
-	"global.sidebar.tasks": "All Tasks",
+	"global.sidebar.allTasks": "All Tasks",
 	"global.sidebar.tasks.archive": "Archive",
 	"global.sidebar.tasks.assignedTasks": "Assigned tasks",
 	"global.sidebar.tasks.tasksDrafts": "Drafts",

@@ -180,7 +180,7 @@
 	"global.sidebar.overview": "Panel",
 	"global.sidebar.school": "Escuela",
 	"global.sidebar.student": "Estudiante",
-	"global.sidebar.tasks": "Todas Tareas",
+	"global.sidebar.allTasks": "Todas Tareas",
 	"global.sidebar.tasks.archive": "Archivo",
 	"global.sidebar.tasks.assignedTasks": "Tareas asignadas",
 	"global.sidebar.tasks.tasksDrafts": "Borradores",

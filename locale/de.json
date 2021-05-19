@@ -187,7 +187,7 @@
 	"global.sidebar.overview": "Übersicht",
 	"global.sidebar.school": "Schule",
 	"global.sidebar.student": "Schüler:innen",
-	"global.sidebar.tasks": "Alle Aufgaben",
+	"global.sidebar.allTasks": "Alle Aufgaben",
 	"global.sidebar.tasks.archive": "Archiv",
 	"global.sidebar.tasks.assignedTasks": "Gestellte Aufgaben",
 	"global.sidebar.tasks.tasksDrafts": "Drafts",

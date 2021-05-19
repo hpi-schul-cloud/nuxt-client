@@ -22,7 +22,7 @@ export default [
 		permission: "Task_Dashboard_View_v3",
 	},
 	{
-		title: "global.sidebar.tasks",
+		title: "global.sidebar.allTasks",
 		href: "/homework",
 		icon: "tasks",
 		children: [
