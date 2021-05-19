@@ -22,7 +22,8 @@
 							{{ $t("pages.administration.school.index.title") }}
 						</h1>
 						<h2 class="text-h4">
-							{{ $t("pages.administration.school.schoolYear") }} {{ school.years.activeYear.name }}
+							{{ $t("pages.administration.school.schoolYear") }}
+							{{ school.years.activeYear.name }}
 						</h2>
 						<p>
 							{{
@@ -36,9 +37,7 @@
 				<v-divider class="mt-13"></v-divider>
 				<v-row>
 					<v-col>
-						<h2 class="text-h4 mt-10 mb-8">
-							Allgemeine Einstellungen
-						</h2>
+						<h2 class="text-h4 mt-10 mb-8">Allgemeine Einstellungen</h2>
 						<v-form>
 							<v-row>
 								<v-col>
