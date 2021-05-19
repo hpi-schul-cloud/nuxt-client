@@ -39,11 +39,9 @@ describe("@components/organisms/HomeworksList", () => {
 				},
 				vuetify
 			),
-			propsData: {
-				homeworks: [],
-			},
 		});
 
+		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 

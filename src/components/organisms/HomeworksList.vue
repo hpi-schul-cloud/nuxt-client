@@ -49,14 +49,15 @@ export default {
 	},
 	methods: {
 		computedDueDateLabel(duedate: string) {
-			if (duedate) {
-				return new Date(duedate) >= new Date()
-					? this.$t("pages.homeworks.labels.due") +
-							printDateTimeFromStringUTC(duedate)
-					: this.$t("pages.homeworks.labels.overdue");
-			} else {
-				return this.$t("pages.homeworks.labels.noDueDate");
-			}
+			if (!duedate) return this.$t("pages.homeworks.labels.noDueDate");
+
+			if (new Date(duedate) >= new Date())
+				return (
+					this.$t("pages.homeworks.labels.due") +
+					printDateTimeFromStringUTC(duedate)
+				);
+
+			return this.$t("pages.homeworks.labels.overdue");
 		},
 		homeworkHref: (id: string) => {
 			return "/homework/" + id;
