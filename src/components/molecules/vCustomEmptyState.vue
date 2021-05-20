@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+	<v-container>
 		<base-image
 			:img-src="image"
 			:img-height="imgHeight"
@@ -20,11 +20,11 @@ export default {
 	props: {
 		image: {
 			type: String,
-			required: true
+			required: true,
 		},
 		title: {
 			type: String,
-			required: true
+			required: true,
 		},
 		subtitle: {
 			type: String,
@@ -33,8 +33,7 @@ export default {
 		},
 	},
 	data: () => ({
-		imgHeight: "300px"
+		imgHeight: "300px",
 	}),
 };
 </script>
-
