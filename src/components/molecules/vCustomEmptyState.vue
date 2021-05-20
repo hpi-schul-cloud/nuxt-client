@@ -31,9 +31,11 @@ export default {
 			required: false,
 			default: () => "",
 		},
+		imgHeight: {
+			type: String,
+			required: false,
+			default: () => "300px"
+		}
 	},
-	data: () => ({
-		imgHeight: "300px",
-	}),
 };
 </script>
