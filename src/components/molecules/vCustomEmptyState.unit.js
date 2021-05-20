@@ -49,7 +49,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 
 		wrapper.setProps({ subtitle });
 		await wrapper.vm.$nextTick();
-		
+
 		const newH2 = wrapper.find("h2");
 		expect(newH2.exists()).toBe(true);
 		expect(newH2.text()).toBe(subtitle);

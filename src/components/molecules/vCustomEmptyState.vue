@@ -8,7 +8,7 @@
 		/>
 		<h1 class="h4 text-center mt-8">{{ title }}</h1>
 		<h2 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h2>
-    </v-container>
+	</v-container>
 </template>
 
 <script>
@@ -34,8 +34,8 @@ export default {
 		imgHeight: {
 			type: String,
 			required: false,
-			default: () => "300px"
-		}
+			default: () => "300px",
+		},
 	},
 };
 </script>
