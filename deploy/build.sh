@@ -156,7 +156,7 @@ if [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
 then
 	echo "deploy release to staging $TRAVIS_BRANCH with $VERSION."
 	echo "deployment version is set as github secret GITHUB NEXT_RELEASE"
-	echo" and checked in sc-app-deploy workflow Deploy_release_to_staging.yml"
+	echo "and checked in sc-app-deploy workflow Deploy_release_to_staging.yml"
 
 	# mask DOT for payload
 	VERSION=$( echo $VERSION | tr -s "[:punct:]" "-" )
