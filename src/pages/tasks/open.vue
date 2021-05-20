@@ -21,6 +21,7 @@ import { mapGetters } from "vuex";
 
 export default {
 	components: { HomeworksList, vCustomEmptyState },
+	layout: "defaultVuetify",
 	data() {
 		return {
 			image: tasksEmptyState,

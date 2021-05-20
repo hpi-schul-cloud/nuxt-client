@@ -35,6 +35,7 @@ import { printDateTimeFromStringUTC } from "@plugins/datetime";
 
 export default {
 	components: {},
+	layout: "defaultVuetify",
 	props: {
 		homeworks: {
 			type: Array,
