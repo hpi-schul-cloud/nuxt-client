@@ -3,17 +3,16 @@ import vCustomEmptyState from "./vCustomEmptyState";
 import BaseImage from "@basecomponents/BaseImage";
 
 let vuetify;
-let wrapper; 
+let wrapper;
 
 const title = "Test title";
 const subtitle = "Test subtitle";
 const image = "@assets/img/empty-state/Task_Empty_State.svg";
 
 describe("@components/molecules/vCustomEmptyState", () => {
-
 	beforeEach(() => {
 		vuetify = new Vuetify();
-	
+
 		wrapper = mount(vCustomEmptyState, {
 			...createComponentMocks(
 				{
@@ -24,11 +23,11 @@ describe("@components/molecules/vCustomEmptyState", () => {
 			),
 			propsData: {
 				image,
-				title
-			}
+				title,
+			},
 		});
 	});
-	
+
 	afterEach(() => {
 		wrapper.destroy();
 	});
@@ -50,7 +49,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 
 		wrapper.setProps({ subtitle });
 		await wrapper.vm.$nextTick();
-		
+
 		const newH3 = wrapper.find("h3");
 		expect(newH3.exists()).toBe(true);
 		expect(newH3.text()).toBe(subtitle);

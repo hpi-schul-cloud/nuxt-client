@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+	<v-container>
 		<base-image
 			:img-src="image"
 			:img-height="imgHeight"
@@ -8,7 +8,7 @@
 		/>
 		<h2 class="h4 text-center mt-8">{{ title }}</h2>
 		<h3 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h3>
-    </v-container>
+	</v-container>
 </template>
 
 <script>
@@ -20,11 +20,11 @@ export default {
 	props: {
 		image: {
 			type: String,
-			required: true
+			required: true,
 		},
 		title: {
 			type: String,
-			required: true
+			required: true,
 		},
 		subtitle: {
 			type: String,
@@ -33,8 +33,7 @@ export default {
 		},
 	},
 	data: () => ({
-		imgHeight: "300px"
+		imgHeight: "300px",
 	}),
 };
 </script>
-

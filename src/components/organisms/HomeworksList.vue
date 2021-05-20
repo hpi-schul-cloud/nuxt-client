@@ -40,7 +40,7 @@ export default {
 		homeworks: {
 			type: Array,
 			required: false,
-			default: () => []
+			default: () => [],
 		},
 	},
 	data() {
