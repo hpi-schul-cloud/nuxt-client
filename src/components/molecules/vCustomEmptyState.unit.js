@@ -40,19 +40,19 @@ describe("@components/molecules/vCustomEmptyState", () => {
 	});
 
 	it("should render a title", () => {
-		const h2 = wrapper.find("h2");
-		expect(h2.text()).toBe(title);
+		const h1 = wrapper.find("h1");
+		expect(h1.text()).toBe(title);
 	});
 
 	it("should render subtitle, if it is passed as props", async () => {
-		const h3 = wrapper.find("h3");
-		expect(h3.exists()).toBe(false);
+		const h2 = wrapper.find("h2");
+		expect(h2.exists()).toBe(false);
 
 		wrapper.setProps({ subtitle });
 		await wrapper.vm.$nextTick();
 		
-		const newH3 = wrapper.find("h3");
-		expect(newH3.exists()).toBe(true);
-		expect(newH3.text()).toBe(subtitle);
+		const newH2 = wrapper.find("h2");
+		expect(newH2.exists()).toBe(true);
+		expect(newH2.text()).toBe(subtitle);
 	});
 });

@@ -6,8 +6,8 @@
 			fill="var(--color-primary)"
 			role="presentation"
 		/>
-		<h2 class="h4 text-center mt-8">{{ title }}</h2>
-		<h3 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h3>
+		<h1 class="h4 text-center mt-8">{{ title }}</h1>
+		<h2 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h2>
     </v-container>
 </template>
 
