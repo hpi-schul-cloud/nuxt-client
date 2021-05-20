@@ -110,6 +110,7 @@ module.exports = {
 	 ** Plugins to load before mounting the App
 	 */
 	plugins: [
+		// configInit need to be first so that the env vars are available for following plugins
 		"@plugins/configInit",
 		"@plugins/global",
 		"@plugins/axios",

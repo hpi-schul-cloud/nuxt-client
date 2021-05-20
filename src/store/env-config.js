@@ -1,7 +1,19 @@
+export const requiredVars = {
+	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
+	JWT_TIMEOUT_SECONDS: 7200,
+};
+
 export const actions = {
 	async get({ commit, dispatch }) {
 		try {
 			const env = await this.$axios.$get("/config/app/public");
+			Object.entries(requiredVars).forEach(([key]) => {
+				if (env[key] == null) {
+					console.error(`Missing configuration by server for key ${key}`);
+				}
+			});
+
 			commit("setEnv", env);
 			dispatch("autoLogout/init", {}, { root: true });
 			dispatch("content/init", {}, { root: true });
@@ -14,7 +26,7 @@ export const actions = {
 
 export const mutations = {
 	setEnv(state, payload) {
-		state.env = payload;
+		state.env = { ...requiredVars, ...payload };
 	},
 	setError(state, error) {
 		state.error = error;
@@ -29,7 +41,7 @@ export const getters = {
 
 export const state = () => {
 	return {
-		env: {},
+		env: requiredVars,
 		error: {},
 	};
 };
