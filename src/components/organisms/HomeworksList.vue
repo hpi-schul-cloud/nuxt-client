@@ -32,7 +32,7 @@
 
 <script>
 import { fromNow } from "@plugins/datetime";
-import taskImage from "@assets/img/courses/task-new.svg";
+import taskIconSvg from "@assets/img/courses/task-new.svg";
 
 export default {
 	components: {},
@@ -46,7 +46,7 @@ export default {
 	data() {
 		return {
 			fromNow,
-			taskImage,
+			taskIconSvg,
 		};
 	},
 	methods: {
