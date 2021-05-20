@@ -80,6 +80,7 @@ export default {
 	methods: {
 		async get(id) {
 			try {
+				// TODO wrong use of store
 				this.data = JSON.parse(
 					JSON.stringify(await this.$store.dispatch("datasources/get", id))
 				);
@@ -108,6 +109,7 @@ export default {
 				return this.$toast.error(errors[0]);
 			}
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("datasources/create", {
 					name: this.data.name,
 					schoolId: this.$user.schoolId,
@@ -132,6 +134,7 @@ export default {
 				return this.$toast.error(errors[0]);
 			}
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("datasources/patch", [
 					this.datasourceId,
 					{

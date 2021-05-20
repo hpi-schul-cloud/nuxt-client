@@ -438,6 +438,7 @@ export default {
 				$limit: this.selectedStudents.length,
 			};
 
+			// TODO wrong use of store (not so bad)
 			await this.$store.dispatch("users/handleUsers", {
 				query,
 				action: "find",

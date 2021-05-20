@@ -23,6 +23,7 @@ export default {
 			: "plain";
 	},
 	async asyncData({ store, params }) {
+		// TODO wrong use of store
 		const resource = await store.dispatch(
 			"content/getResourceMetadata",
 			params.id
