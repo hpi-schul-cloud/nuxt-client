@@ -17,9 +17,7 @@
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
-						v-text="
-							$t('pages.homeworks.labels.due') + fromNow(homework.duedate)
-						"
+						v-text="computedDueDateLabel(homework.duedate)"
 					/>
 					<v-spacer />
 					<v-badge v-if="false" color="error" dot inline></v-badge>
@@ -33,6 +31,7 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
+import { printDateTimeFromStringUTC } from "@plugins/datetime";
 
 export default {
 	components: {},
@@ -50,6 +49,16 @@ export default {
 		};
 	},
 	methods: {
+		computedDueDateLabel(duedate) {
+			if (!duedate) return this.$t("pages.homeworks.labels.noDueDate");
+
+			if (new Date(duedate) >= new Date())
+				return (
+					this.$t("pages.homeworks.labels.due") +
+					printDateTimeFromStringUTC(duedate)
+				);
+			else return this.$t("pages.homeworks.labels.overdue");
+		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;
 		},
