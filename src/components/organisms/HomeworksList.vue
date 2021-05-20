@@ -4,7 +4,7 @@
 		<template v-for="(homework, index) of homeworks">
 			<v-list-item :key="homework._id" :href="homeworkHref(homework._id)">
 				<v-list-item-avatar>
-					<img :src="taskImage" role="presentation" />
+					<img :src="taskIconSvg" role="presentation" />
 				</v-list-item-avatar>
 				<v-list-item-content>
 					<v-list-item-subtitle class="text-wrap">
