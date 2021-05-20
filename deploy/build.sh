@@ -163,7 +163,7 @@ then
 
 	curl -X POST https://api.github.com/repos/hpi-schul-cloud/sc-app-ci/dispatches \
 	-H 'Accept: application/vnd.github.everest-preview+json' \
-	-u $CI_TRIGGER_TOKEN \
+	-u $GITHUB_TOKEN \
 	--data '{"event_type": "Trigger_from_sc_nuxt", "client_payload": { "GIT_BRANCH": "'"$TRAVIS_BRANCH"'", "TRIGGER_REPOSITORY": "sc-nuxt", "VERSION": "'"$VERSION"'" }}'
 fi
 
