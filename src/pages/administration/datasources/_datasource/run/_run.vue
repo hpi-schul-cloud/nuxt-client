@@ -45,6 +45,7 @@ export default {
 		LoadingModal,
 	},
 	async asyncData({ store, params, app: { i18n } }) {
+		// TODO wrong use of store
 		const datasource = await store.dispatch(
 			"datasources/get",
 			params.datasource

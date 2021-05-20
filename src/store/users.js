@@ -43,6 +43,7 @@ const module = mergeDeep(base, {
 				roles: [role._id],
 			};
 
+			// TODO wrong use of store
 			return (
 				await this.dispatch("users/find", {
 					query: queryRole,
@@ -54,6 +55,7 @@ const module = mergeDeep(base, {
 				_id: id,
 			};
 
+			// TODO wrong use of store
 			return (
 				await this.dispatch("users/find", {
 					query: queryId,
