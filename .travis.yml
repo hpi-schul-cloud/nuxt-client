@@ -21,16 +21,18 @@ env:
 # "not type = pull_request" is required to keep it running on PRs
 if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not type = pull_request)
 
+# TODO: The stages and build files must completly new sorted, at the moment it do not solve what we need.
 stages:
-  - test
+  - name: test_themes
+    if: type = push && not (/^(feature/).*$/)
   - build
   - name: deploy
-    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
+    if: type = push && (branch = master || branch = develop || branch ~= /^(release|hotfix).*$/)
 
 jobs:
   include:
     # Build
-    - stage: test
+    - stage: test_themes
       script: npm run build:nuxt
       name: "build:nuxt:default"
     - script: npm run build:nuxt
