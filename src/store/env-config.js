@@ -4,8 +4,10 @@ export const requiredVars = {
 	JWT_TIMEOUT_SECONDS: 7200,
 };
 
+const retryLimit = 10;
+
 export const actions = {
-	async get({ commit, dispatch }) {
+	async get({ commit, dispatch, state }) {
 		try {
 			const env = await this.$axios.$get("/config/app/public");
 			Object.entries(requiredVars).forEach(([key]) => {
@@ -15,12 +17,19 @@ export const actions = {
 			});
 
 			commit("setEnv", env);
-			dispatch("autoLogout/init", {}, { root: true });
-			dispatch("content/init", {}, { root: true });
-			dispatch("filePaths/init", {}, { root: true });
 		} catch (error) {
 			commit("setError", error);
+			console.error(`Configuration could not be loaded from the server`);
+			if (state.loadingErrorCount < retryLimit) {
+				commit("increaseLoadingErrorCount");
+				setTimeout(() => {
+					dispatch("get", {});
+				}, 500);
+			}
 		}
+		dispatch("autoLogout/init", {}, { root: true });
+		dispatch("content/init", {}, { root: true });
+		dispatch("filePaths/init", {}, { root: true });
 	},
 };
 
@@ -30,6 +39,9 @@ export const mutations = {
 	},
 	setError(state, error) {
 		state.error = error;
+	},
+	increaseLoadingErrorCount(state) {
+		state.loadingErrorCount += 1;
 	},
 };
 
@@ -43,6 +55,7 @@ export const state = () => {
 	return {
 		env: requiredVars,
 		error: {},
+		loadingErrorCount: 0,
 	};
 };
 

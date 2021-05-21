@@ -1,5 +1,6 @@
 import { state, actions, mutations, requiredVars } from "./env-config";
 
+jest.useFakeTimers();
 describe("store/env-config", () => {
 	let consoleErrorSpy;
 	beforeEach(() => {
@@ -42,6 +43,49 @@ describe("store/env-config", () => {
 			await actions.get({ commit: spyCommit, dispatch: spyDispatch });
 
 			expect(consoleErrorSpy.mock.calls).toHaveLength(2);
+		});
+
+		it("retries on error", async () => {
+			actions.$axios = {
+				$get: () => {
+					return Promise.reject();
+				},
+			};
+			const spyCommit = jest.fn();
+			const spyDispatch = jest.fn();
+
+			await actions.get({
+				commit: spyCommit,
+				dispatch: spyDispatch,
+				state: { loadingErrorCount: 0 },
+			});
+			jest.runOnlyPendingTimers();
+
+			expect(spyDispatch.mock.calls[0][0]).toStrictEqual("autoLogout/init");
+			expect(spyDispatch.mock.calls[1][0]).toStrictEqual("content/init");
+			expect(spyDispatch.mock.calls[2][0]).toStrictEqual("filePaths/init");
+			expect(spyDispatch.mock.calls[3][0]).toStrictEqual("get");
+		});
+
+		it("does not retry on error after 10th time", async () => {
+			actions.$axios = {
+				$get: () => {
+					return Promise.reject();
+				},
+			};
+			const spyCommit = jest.fn();
+			const spyDispatch = jest.fn();
+
+			await actions.get({
+				commit: spyCommit,
+				dispatch: spyDispatch,
+				state: { loadingErrorCount: 10 },
+			});
+
+			expect(spyDispatch.mock.calls).toHaveLength(3);
+			expect(spyDispatch.mock.calls[0][0]).toStrictEqual("autoLogout/init");
+			expect(spyDispatch.mock.calls[1][0]).toStrictEqual("content/init");
+			expect(spyDispatch.mock.calls[2][0]).toStrictEqual("filePaths/init");
 		});
 	});
 
