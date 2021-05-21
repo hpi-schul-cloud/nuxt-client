@@ -204,11 +204,13 @@ export default {
 			}
 
 			if (id) {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("ldap-config/patchData", {
 					systemData: temporaryConfigData,
 					systemId: id,
 				});
 			} else {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch(
 					"ldap-config/submitData",
 					temporaryConfigData

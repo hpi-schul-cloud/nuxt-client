@@ -60,6 +60,7 @@ export default {
 	methods: {
 		createTeacher(teacherData) {
 			this.error = false;
+			// TODO wrong use of store (not so bad)
 			this.$store
 				.dispatch("users/createTeacher", {
 					firstName: teacherData.firstName,

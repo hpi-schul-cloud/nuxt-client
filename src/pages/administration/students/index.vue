@@ -459,6 +459,7 @@ export default {
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("users/sendRegistrationLink", {
 					userIds: rowIds,
 					selectionType,
@@ -475,6 +476,7 @@ export default {
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
+				// TODO wrong use of store
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
 					{
@@ -498,6 +500,7 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
+					// TODO wrong use of store (not so bad)
 					await this.$store.dispatch("users/deleteUsers", {
 						ids: rowIds,
 						userType: "student",
