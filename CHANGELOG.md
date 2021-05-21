@@ -20,6 +20,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - QF/Pull Request Workflow - adds checkbox for manual test, more checks, splits tests
+- SC-9065 - integrates styles repository into nuxt client
 - SC-7944 - changes ids for Lern-Store content and adds a link back to collection
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
@@ -28,6 +29,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - Fixed further conflicting screenshots
+
+### Removed
+
+- Removed pages 'account', 'course', 'calendar' and components exclusively used by these pages
 
 ## 26.1.1
 
