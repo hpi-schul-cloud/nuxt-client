@@ -25,7 +25,7 @@ stages:
   - name: test
     if: not (branch ~= /^(?i:feature).*$/)
   - name: build
-    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix|feature).*$/)
+    if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix|feature).*$/) || $TRAVIS_COMMIT_MESSAGE == *"trigger build"*
   - name: deploy
     if: type = push && (branch = master || branch = develop || branch ~= /^(?i:release|hotfix).*$/)
 
