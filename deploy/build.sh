@@ -91,9 +91,9 @@ buildClient(){
 	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${TRAVIS_BRANCH//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
 
 	cat ../version.js
-	SC_THEME_LIST=['default', 'brb', 'n21', 'open', 'thr', 'int' ];
+	SC_THEME_LIST=('default' 'brb' 'n21' 'open' 'thr' 'int' )
 
-	for THEME in SC_THEME_LIST
+	for THEME in "${SC_THEME_LIST [@]}"
 	do
 		export SC_THEME="$THEME"
 		docker build \
