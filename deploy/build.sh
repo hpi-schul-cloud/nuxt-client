@@ -91,15 +91,21 @@ buildClient(){
 	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${TRAVIS_BRANCH//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
 
 	cat ../version.js
+	SC_THEME_LIST=['default', 'brb', 'n21', 'open', 'thr', 'int' ];
 
-	docker build \
+	for THEME in SC_THEME_LIST
+	do
+		export SC_THEME="$THEME"
+		docker build \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA \
 		-f Dockerfile.client \
 		../
 
-	dockerPush "client" $DOCKERTAG
-	dockerPush "client" $DOCKERTAG_SHA
+		dockerPush "client" $DOCKERTAG
+		dockerPush "client" $DOCKERTAG_SHA
+	done
+
 }
 
 buildStorybook(){
