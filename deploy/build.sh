@@ -93,19 +93,19 @@ buildClient(){
 	cat ../version.js
 	SC_THEME_LIST=('default' 'brb' 'n21' 'open' 'thr' 'int' )
 
+	# !!!first build then push all to validate if all builds are fine!!!
 	for THEME in "${SC_THEME_LIST [@]}"
 	do
 		export SC_THEME="$THEME"
 		docker build \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA \
+		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG"-"$THEME \
+		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA"-"$THEME \
 		-f Dockerfile.client \
 		../
 
-		dockerPush "client" $DOCKERTAG
-		dockerPush "client" $DOCKERTAG_SHA
+		dockerPush "client" $DOCKERTAG"-"$THEME
+		dockerPush "client" $DOCKERTAG_SHA"-"$THEME
 	done
-
 }
 
 buildStorybook(){
