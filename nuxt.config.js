@@ -216,7 +216,7 @@ module.exports = {
 		dir: "dist/nuxt",
 	},
 	vuetify: {
-		customVariables: ["@variables"],
+		customVariables: ["@styles-base/vuetify-custom.scss"],
 		defaultAssets: false,
 		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
