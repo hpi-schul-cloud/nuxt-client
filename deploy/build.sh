@@ -86,14 +86,16 @@ dockerPush(){
 # BUILD SCRIPTS
 
 buildClient(){
+	# TODO: default should named sc and mapped to default
+	SC_THEME_LIST=('default' 'brb' 'n21' 'open' 'thr' 'int' )
 	# write version file
 	# JS syntax is required so we can import it
 	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${TRAVIS_BRANCH//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
 
 	cat ../version.js
-	SC_THEME_LIST=('default' 'brb' 'n21' 'open' 'thr' 'int' )
 
-	# !!!first build then push all to validate if all builds are fine!!!
+	IMAGE_NAME_LIST=()
+	# first build images to validate if all works, push it after
 	for THEME in "${SC_THEME_LIST [@]}"
 	do
 		export SC_THEME="$THEME"
@@ -102,9 +104,13 @@ buildClient(){
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA"-"$THEME \
 		-f Dockerfile.client \
 		../
+		IMAGE_NAME_LIST+=($DOCKERTAG"-"$THEME)
+		IMAGE_NAME_LIST+=($DOCKERTAG_SHA"-"$THEME)
+	done
 
-		dockerPush "client" $DOCKERTAG"-"$THEME
-		dockerPush "client" $DOCKERTAG_SHA"-"$THEME
+	for IMAGE in "${IMAGE_NAME_LIST [@]}"
+	do
+		dockerPush "client" $IMAGE
 	done
 }
 

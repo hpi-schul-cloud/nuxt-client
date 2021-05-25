@@ -24,8 +24,8 @@ if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not typ
 # TODO: The stages and build files must completly new sorted, at the moment it do not solve what we need.
 stages:
   - name: test_themes
-    if: type = push && not (/^(feature/).*$/)
-  - build
+    if: type = push && (/^(feature/).*$/)
+  - build_and_push # TODO: build should normally execute if it is needed but then we do not need test_themes
   - name: deploy
     if: type = push && (branch = master || branch = develop || branch ~= /^(release|hotfix).*$/)
 
@@ -67,7 +67,7 @@ jobs:
         - bash ./deploy/pull-deploy.sh -p vuepress
 
     # Build Docker Images
-    - stage: build
+    - stage: build_and_push
       name: build:nuxt
       language: generic
       script: bash ./deploy/build.sh -p client
