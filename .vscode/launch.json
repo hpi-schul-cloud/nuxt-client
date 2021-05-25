@@ -6,12 +6,7 @@
 			"request": "launch",
 			"name": "Test (unit) All",
 			"program": "${workspaceFolder}/node_modules/.bin/jest",
-			"args": [
-				"test",
-				"${fileBasenameNoExtension}",
-				"--runInBand",
-				"--no-cache"
-			],
+			"args": ["--runInBand"],
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen",
 			"disableOptimisticBPs": true,
