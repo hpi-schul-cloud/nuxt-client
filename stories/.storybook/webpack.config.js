@@ -21,7 +21,7 @@ module.exports = ({ config }) => {
 				{
 					loader: "sass-loader",
 					options: {
-						additionalData: "@import '@variables'",
+						additionalData: "@import '@styles-base/vuetify-custom.scss'",
 					},
 				},
 			],
