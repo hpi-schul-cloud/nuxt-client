@@ -1,4 +1,11 @@
-@import "~@hpi-schul-cloud/styles/build/css/default/variables";
+@import "./variables/breakpoints";
+@import "./variables/colors";
+@import "./variables/durations";
+@import "./variables/layers";
+@import "./variables/shadows";
+@import "./variables/sizes";
+@import "./variables/spacing";
+@import "./variables/typography";
 
 $body-font-family: var(--font-primary);
 $heading-font-family: var(--font-accent);
