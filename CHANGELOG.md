@@ -8,10 +8,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
-### Fixed
-
-- Fixed further conflicting screenshots
-
 ### Removed
 
 - Removed pages 'account', 'course', 'calendar' and components exclusively used by these pages
