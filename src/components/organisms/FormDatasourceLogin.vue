@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
 	props: {
 		datasourceId: {
@@ -52,6 +54,9 @@ export default {
 		};
 	},
 	computed: {
+		...mapState("datasources", {
+			sourceData: "current",
+		}),
 		actionType() {
 			return this.datasourceId ? "patch" : "create";
 		},
@@ -80,10 +85,11 @@ export default {
 	methods: {
 		async get(id) {
 			try {
-				// TODO wrong use of store
-				this.data = JSON.parse(
-					JSON.stringify(await this.$store.dispatch("datasources/get", id))
-				);
+				console.log(this.data, this.sourceData);
+				await this.$store.dispatch("datasources/get", id);
+
+				this.data = this.sourceData;
+				console.log(this.data, this.sourceData);
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
