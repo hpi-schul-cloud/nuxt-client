@@ -2,6 +2,7 @@ const module = {
 	state() {
 		return {
 			federalStates: [],
+			currentFederalState: {},
 			requestSuccessful: false,
 			error: null,
 		};
@@ -14,10 +15,24 @@ const module = {
 				const response = await this.$axios.$get("/federalStates");
 
 				commit("setFederalStates", response.data);
-				commit("requestSuccessful", true);
+				commit("setRequestSuccessful", true);
 			} catch (error) {
 				commit("setError", error);
-				commit("requestSuccessful", false);
+				commit("setRequestSuccessful", false);
+				// TODO what is supposed to happen on error?
+			}
+		},
+		async fetchCurrentFederalState({ commit }, id) {
+			commit("requestSuccessful", false);
+
+			try {
+				const response = await this.$axios.$get(`/federalStates/${id}`);
+
+				commit("setCurrentFederalState", response);
+				commit("setRequestSuccessful", true);
+			} catch (error) {
+				commit("setError", error);
+				commit("setRequestSuccessful", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
@@ -26,8 +41,11 @@ const module = {
 		setFederalStates: (state, federalStates) => {
 			state.federalStates = federalStates;
 		},
-		setRequestSuccessful(state, saved) {
-			saved.requestSuccessful = true;
+		setCurrentFederalState: (state, currentFederalState) => {
+			state.currentFederalState = currentFederalState;
+		},
+		setRequestSuccessful(state, successful) {
+			state.requestSuccessful = successful;
 		},
 		setError(state, error) {
 			state.error = error;

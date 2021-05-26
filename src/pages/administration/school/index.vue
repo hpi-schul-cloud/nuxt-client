@@ -65,7 +65,7 @@
 										<v-col>
 											<v-select
 												v-model="localSchool.county"
-												:items="federalStates"
+												:items="federalState.counties"
 												item-text="name"
 												item-value="id"
 												return-object
@@ -79,7 +79,7 @@
 									<v-row>
 										<v-col class="d-flex">
 											<v-file-input
-												v-model="localSchool.schoolLogo"
+												v-model="localSchool.schoolLogoUrl"
 												label="Schullogo hochladen"
 												dense
 												prepend-icon=""
@@ -253,11 +253,11 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="item in dataProtectionPolicies" :key="item.name">
+									<tr v-for="item in dataProtectionPolicies" :key="item._id">
 										<td>{{ item.title }}</td>
-										<td>{{ item.description }}</td>
-										<td>{{ item.uploaded_on }}</td>
-										<td>{{ item.link }}</td>
+										<td>{{ item.consentText }}</td>
+										<td>{{ printDate(item.publishedAt) }}</td>
+										<td>{{ item.consentDataId }}</td>
 									</tr>
 								</tbody>
 							</template>
@@ -307,7 +307,12 @@
 						</v-simple-table>
 						<v-btn color="primary" depressed>RSS-Feed hinzufügen</v-btn>
 						{{ console.log("hi hi", school) }}
-						{{ console.log("hi hi hi hi", localSchool) }}
+						{{
+							console.log(
+								"hi hi hi hi",
+								JSON.parse(JSON.stringify(localSchool.dataProtectionPolicies))
+							)
+						}}
 					</v-col>
 				</v-row>
 			</v-responsive>
@@ -318,6 +323,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import { mdiChevronRight } from "@mdi/js";
+import { printDate } from "@plugins/datetime";
 
 export default {
 	components: {},
@@ -325,35 +331,22 @@ export default {
 	data() {
 		return {
 			localSchool: {
-				name: "", // school.name
-				schoolNumber: "", // no idea
-				schoolLogo: "", // no idea
-				county: {}, // school.county // counties == federalStates? Brandenburg an der Havel vs. Brandenburg
-				timezone: `${this.$cookies.get("USER_TIMEZONE")}`,
-				language: "", // from user locale?
-				studentVisibility: false, // permissions.teacher.STUDENT_LIST?
-				lernStore: false, // no idea
-				matrixMessenger: false, // school.features?
-				chatFunction: false, // school.features?
-				videoConference: false, // no idea
+				name: "",
+				schoolNumber: "",
+				schoolLogoUrl: "",
+				county: {},
+				timezone: "",
+				language: "",
+				studentVisibility: false,
+				lernStore: false,
+				matrixMessenger: false,
+				chatFunction: false,
+				videoConference: false,
+				fileStorageType: "",
+				dataProtectionPolicies: [],
 			},
-			languages: ["Deutsch", "Englisch", "Spanisch"], // no idea
-			cloudStorages: ["HPI Schul-Cloud"], // fileStorageType?
-			dataProtectionPolicies: [
-				// no idea
-				{
-					title: "Datenschutzerklärung 1",
-					description: "bla bla bla",
-					uploaded_on: new Date(),
-					link: "asdasdasd",
-				},
-				{
-					title: "Datenschutzerklärung 2",
-					description: "bla bla bla",
-					uploaded_on: new Date(),
-					link: "asdasdasd",
-				},
-			],
+			languages: ["Deutsch", "Englisch", "Spanisch"], // hard coded
+			cloudStorages: ["HPI Schul-Cloud"], // fileStorageType -> awsS3 = HPI Schul-Cloud
 			breadcrumbItems: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -374,7 +367,12 @@ export default {
 			locale: "locale",
 		}),
 		...mapState("federal-states", {
-			federalStates: "federalStates",
+			federalState: "currentFederalState",
+		}),
+		...mapState("schools", {
+			studentVisibility: "studentVisibility",
+			lernStoreVisibility: "lernStoreVisibility",
+			dataProtectionPolicies: "dataProtectionPolicies",
 		}),
 		console: () => console, // delete when done
 	},
@@ -384,19 +382,42 @@ export default {
 		},
 	}, */
 	created() {
+		this.fetchCurrentFederalState(this.school.federalState);
+		this.fetchStudentVisibility().then(() => {
+			this.localSchool.studentVisibility = this.studentVisibility;
+		});
+		this.fetchLernStoreVisibility().then(() => {
+			this.localSchool.lernStore = this.lernStoreVisibility;
+		});
+		this.fetchDataProtectionPolicies().then(
+			() =>
+				(this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies)
+		);
+
 		this.localSchool.name = this.school.name;
-		this.localSchool.county = this.school.county;
-		this.localSchool.language = this.locale;
-		this.localSchool.studentVisibility = this.school.permissions.teacher.STUDENT_LIST;
+		this.localSchool.schoolNumber = this.school.officialSchoolNumber;
+		this.localSchool.county = this.school.county; // show in select, disable select
+		this.localSchool.schoolLogoUrl = this.school.logo_dataUrl;
+		this.localSchool.timezone = this.school.timezone || "Europe/Berlin"; // show but don't set intance default (in a hint)
+		this.localSchool.language = this.school.language || this.locale; // show but don't set instance default (in a hint)
 		this.localSchool.chatFunction = this.school.features.includes("rocketChat");
 		this.localSchool.matrixMessenger = this.school.features.includes(
 			"messenger"
 		);
-
-		this.fetchFederalStates();
+		this.localSchool.matrixMessenger = this.school.features.includes(
+			"videoconference"
+		);
+		this.localSchool.fileStorageType = this.school.fileStorageType;
 	},
 	methods: {
-		...mapActions("federal-states", ["fetchFederalStates"]),
+		printDate,
+		...mapActions("federal-states", ["fetchCurrentFederalState"]),
+		...mapActions("schools", [
+			"fetchStudentVisibility",
+			"fetchLernStoreVisibility",
+			"fetchDataProtectionPolicies",
+		]),
+
 		/* save() {
 			this.$store.dispatch("schools/patch", this.localSchool);
 		}, */
