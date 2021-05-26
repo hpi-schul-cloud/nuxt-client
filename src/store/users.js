@@ -88,26 +88,6 @@ const module = mergeDeep(base, {
 			const links = await this.$axios.$post(customEndpoint, payload);
 			commit("setQrLinks", links);
 		},
-		getByRole: async function (ctx, role) {
-			const queryRole = {
-				roles: [role._id],
-			};
-
-			const user = await this.dispatch("users/find", {
-				query: queryRole,
-			});
-			commit("setCurrent", user);
-		},
-		getById: async function (ctx, id) {
-			const queryId = {
-				_id: id,
-			};
-
-			const user = await this.dispatch("users/find", {
-				query: queryId,
-			});
-			commit("setCurrent", user);
-		},
 	},
 });
 
