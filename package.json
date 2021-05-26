@@ -82,7 +82,6 @@
 		"@babel/core": "^7.13.15",
 		"@babel/plugin-proposal-optional-chaining": "^7.13.12",
 		"@babel/preset-env": "^7.13.15",
-		"@hpi-schul-cloud/styles": "^0.2.4",
 		"@nuxt/types": "^2.15.4",
 		"@nuxt/typescript-build": "^2.0.4",
 		"@nuxtjs/dotenv": "^1.4.1",
