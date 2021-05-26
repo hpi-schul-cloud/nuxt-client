@@ -5,7 +5,7 @@
 			:img="require('@assets/img/logo/logo-image-color.svg')"
 			:buttons="true"
 		/>
-		<div :class="isMobile ? 'small-container' : 'container'">
+		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<Nuxt />
 		</div>
 	</div>
@@ -43,39 +43,39 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.small-container {
+.small-wrapper {
 	padding: var(--space-md);
 }
 
-.container {
+.wrapper {
 	padding-right: calc(15 * var(--border-width));
 	padding-left: calc(15 * var(--border-width));
 	margin: auto;
 }
 
 @media (min-width: 576px) {
-	.container {
+	.wrapper {
 		width: 540px;
 		max-width: 100%;
 	}
 }
 
 @media (min-width: 768px) {
-	.container {
+	.wrapper {
 		width: 720px;
 		max-width: 100%;
 	}
 }
 
 @media (min-width: 992px) {
-	.container {
+	.wrapper {
 		width: 960px;
 		max-width: 100%;
 	}
 }
 
 @media (min-width: 1200px) {
-	.container {
+	.wrapper {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
