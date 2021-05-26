@@ -102,7 +102,7 @@ Vue.use(Vuetify);
 addDecorator(() => ({
 	components: { VApp },
 	vuetify: new Vuetify(options),
-	template: "<v-app><story/></v-app>",
+	template: "<story/>",
 }));
 
 // automatically import all files ending in *.stories.js
