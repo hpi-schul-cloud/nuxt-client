@@ -1,5 +1,5 @@
 <template>
-	<tr class="row">
+	<tr class="table__row">
 		<th v-if="allRowsSelectable">
 			<div class="th-wrap select-wrap">
 				<base-input
@@ -250,7 +250,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.row {
+.table__row {
 	font-weight: var(--font-weight-bold);
 	th {
 		border-bottom: calc(2 * var(--border-width)) solid var(--color-tertiary);
