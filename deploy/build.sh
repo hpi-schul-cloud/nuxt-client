@@ -106,7 +106,7 @@ buildClient(){
 	dockerPush "client" $DOCKERTAG_SHA
 
 	# theme based repos
-	for THEME in "${SC_THEME_LIST [@]}"
+	for THEME in "${SC_THEME_LIST[@]}"
 	do
 		export SC_THEME="$THEME"
 		docker build \
