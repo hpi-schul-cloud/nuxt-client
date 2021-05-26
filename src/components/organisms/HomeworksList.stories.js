@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/vue";
 import HomeworksList from "@components/organisms/HomeworksList";
 import { homeworks } from "@@/stories/mockData/Homeworks";
 
-storiesOf("6 Organisms/Homeworks/HomeworksList", module).add(
+storiesOf("0 Vuetify/Homeworks/HomeworksList", module).add(
 	"HomeworksList",
 	() => ({
 		components: {
@@ -13,6 +13,6 @@ storiesOf("6 Organisms/Homeworks/HomeworksList", module).add(
 			homeworks,
 		}),
 
-		template: `<homeworks-list :homeworks="homeworks"/>`,
+		template: `<v-app><homeworks-list :homeworks="homeworks"/></v-app>`,
 	})
 );

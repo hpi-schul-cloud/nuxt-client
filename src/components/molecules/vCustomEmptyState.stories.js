@@ -17,5 +17,5 @@ storiesOf("0 Vuetify/EmptyState", module).add("vCustomEmptyState", () => ({
 		subtitle: text("subtitle", subtitle),
 		imgHeight,
 	}),
-	template: `<v-custom-empty-state :image="image" :title="title" :subtitle="subtitle"/>`,
+	template: `<v-app><v-custom-empty-state :image="image" :title="title" :subtitle="subtitle"/><v-app>`,
 }));
