@@ -44,7 +44,7 @@
 									<v-row>
 										<v-col>
 											<v-text-field
-												v-model="school.name"
+												v-model="localSchool.name"
 												label="Name der Schule"
 												dense
 											></v-text-field>
@@ -53,7 +53,7 @@
 									<v-row>
 										<v-col>
 											<v-text-field
-												v-model="schoolNumber"
+												v-model="localSchool.schoolNumber"
 												label="Schulnummer"
 												dense
 												hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
@@ -64,8 +64,11 @@
 									<v-row>
 										<v-col>
 											<v-select
-												v-model="schoolCounty"
-												:items="counties"
+												v-model="localSchool.county"
+												:items="federalStates"
+												item-text="name"
+												item-value="id"
+												return-object
 												dense
 												label="Bitte wählen Sie den Kreis, zu dem die Schule gehört"
 												hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
@@ -76,7 +79,7 @@
 									<v-row>
 										<v-col class="d-flex">
 											<v-file-input
-												v-model="schoolLogo"
+												v-model="localSchool.schoolLogo"
 												label="Schullogo hochladen"
 												dense
 												prepend-icon=""
@@ -86,17 +89,18 @@
 									<v-row>
 										<v-col>
 											<v-text-field
-												v-model="schoolTimezone"
+												v-model="localSchool.timezone"
 												label="Zeitzone"
 												dense
 												readonly
+												disabled
 											></v-text-field>
 										</v-col>
 									</v-row>
 									<v-row>
 										<v-col>
 											<v-select
-												v-model="schoolLanguage"
+												v-model="localSchool.language"
 												:items="languages"
 												dense
 												label="Sprache"
@@ -111,7 +115,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="schoolStudentVisibility"
+												v-model="localSchool.studentVisibility"
 												label="Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren"
 												inset
 												flat
@@ -131,7 +135,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="schoolLernStore"
+												v-model="localSchool.lernStore"
 												label="Lern-Store für Schüler:innen"
 												inset
 												flat
@@ -148,7 +152,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="schoolMatrixMessenger"
+												v-model="localSchool.matrixMessenger"
 												label="Matrix Messenger aktivieren"
 												inset
 												flat
@@ -176,7 +180,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="schoolChatFunction"
+												v-model="localSchool.chatFunction"
 												label="Chatfunktion aktivieren"
 												inset
 												flat
@@ -194,7 +198,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="schoolVideoConference"
+												v-model="localSchool.videoConference"
 												label="Videokonferenzen für Kurse und Teams aktivieren"
 												inset
 												flat
@@ -302,6 +306,8 @@
 							</template>
 						</v-simple-table>
 						<v-btn color="primary" depressed>RSS-Feed hinzufügen</v-btn>
+						{{ console.log("hi hi", school) }}
+						{{ console.log("hi hi hi hi", localSchool) }}
 					</v-col>
 				</v-row>
 			</v-responsive>
@@ -310,8 +316,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { mdiAccount, mdiChevronRight } from "@mdi/js";
+import { mapState, mapActions } from "vuex";
+import { mdiChevronRight } from "@mdi/js";
 
 export default {
 	components: {},
@@ -319,22 +325,22 @@ export default {
 	data() {
 		return {
 			localSchool: {
-				name: "",
-				schoolNumber: "",
-				schoolLogo: "",
-				schoolCounty: "",
-				schoolTimezone: `${this.$cookies.get("USER_TIMEZONE")}`, // doesn't work in chrome??
-				schoolLanguage: "",
-				schoolStudentVisibility: false,
-				schoolLernStore: false,
-				schoolMatrixMessenger: false,
-				schoolChatFunction: true,
-				schoolVideoConference: true,
+				name: "", // school.name
+				schoolNumber: "", // no idea
+				schoolLogo: "", // no idea
+				county: {}, // school.county // counties == federalStates? Brandenburg an der Havel vs. Brandenburg
+				timezone: `${this.$cookies.get("USER_TIMEZONE")}`,
+				language: "", // from user locale?
+				studentVisibility: false, // permissions.teacher.STUDENT_LIST?
+				lernStore: false, // no idea
+				matrixMessenger: false, // school.features?
+				chatFunction: false, // school.features?
+				videoConference: false, // no idea
 			},
-			counties: ["Mainz", "Speyer", "Berlin"],
-			languages: ["Deutsch", "Englisch", "Spanisch"],
-			cloudStorages: ["HPI Schul-Cloud"],
+			languages: ["Deutsch", "Englisch", "Spanisch"], // no idea
+			cloudStorages: ["HPI Schul-Cloud"], // fileStorageType?
 			dataProtectionPolicies: [
+				// no idea
 				{
 					title: "Datenschutzerklärung 1",
 					description: "bla bla bla",
@@ -358,7 +364,6 @@ export default {
 					disabled: true,
 				},
 			],
-			iconMdiAccount: mdiAccount,
 			iconMdiChevronRight: mdiChevronRight,
 		};
 	},
@@ -366,17 +371,35 @@ export default {
 		...mapState("auth", {
 			school: "school",
 			user: "user",
+			locale: "locale",
 		}),
+		...mapState("federal-states", {
+			federalStates: "federalStates",
+		}),
+		console: () => console, // delete when done
 	},
-	watch: {
+	/* watch: {
 		school(updatedSchool) {
 			this.localSchool = updatedSchool;
 		},
+	}, */
+	created() {
+		this.localSchool.name = this.school.name;
+		this.localSchool.county = this.school.county;
+		this.localSchool.language = this.locale;
+		this.localSchool.studentVisibility = this.school.permissions.teacher.STUDENT_LIST;
+		this.localSchool.chatFunction = this.school.features.includes("rocketChat");
+		this.localSchool.matrixMessenger = this.school.features.includes(
+			"messenger"
+		);
+
+		this.fetchFederalStates();
 	},
 	methods: {
-		save() {
+		...mapActions("federal-states", ["fetchFederalStates"]),
+		/* save() {
 			this.$store.dispatch("schools/patch", this.localSchool);
-		},
+		}, */
 	},
 	head() {
 		return {

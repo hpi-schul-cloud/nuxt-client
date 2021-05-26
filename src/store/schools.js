@@ -2,6 +2,13 @@
 // an messenger store orientieren
 // falls ts compiled wird, probieren in ts zu schreiben
 const module = {
+	state() {
+		return {
+			school: {},
+			requestSuccessful: false,
+			error: null,
+		};
+	},
 	actions: {
 		async update({ commit }, payload) {
 			console.log(payload);
@@ -27,13 +34,6 @@ const module = {
 		setError(state, error) {
 			state.error = error;
 		},
-	},
-	state() {
-		return {
-			school: {},
-			requestSuccessful: false,
-			error: null,
-		};
 	},
 };
 export default module;
