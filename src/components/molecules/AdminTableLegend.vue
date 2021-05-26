@@ -26,7 +26,7 @@
 			</div>
 		</span>
 
-		<span v-if="showExternalSyncHint" class="container">
+		<span v-if="showExternalSyncHint" class="wrapper">
 			<strong class="external-sync-hint">
 				{{
 					$t("components.molecules.admintablelegend.externalSync", {
@@ -100,7 +100,7 @@ $vertically-center: auto 0;
 	margin-right: var(--space-md);
 }
 
-.container {
+.wrapper {
 	display: flex;
 	justify-content: left;
 }
