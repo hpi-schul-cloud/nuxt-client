@@ -21,7 +21,7 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks,
+				homeworks,
 			},
 		});
 
@@ -55,7 +55,7 @@ describe("@components/organisms/HomeworksList", () => {
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks,
+				homeworks,
 			},
 		});
 

@@ -509,6 +509,8 @@
 	"pages.courses.new.title": "Crear nuevo curso",
 	"pages.homeworks.title": "Tareas",
 	"pages.homeworks.labels.due": "Hasta ",
+	"pages.homeworks.emptyState.title": "No hay tareas abiertas",
+	"pages.homeworks.emptyState.subtitle": "Has hecho todas tus tareas. ¡Disfruta de tu tiempo libre!",
 	"pages.homeworks.labels.noDueDate": "Sin fecha de entrega",
 	"pages.homeworks.labels.overdue": "Demasiado tarde",
 	"pages.homeworks.subtitleOpen": "Tareas Abiertas",
