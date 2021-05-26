@@ -110,8 +110,8 @@ buildClient(){
 	do
 		export SC_THEME="$THEME"
 		docker build \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA \
+		-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG \
+		-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG_SHA \
 		-f Dockerfile.client \
 		../
 
