@@ -661,7 +661,7 @@ export default {
 }
 ::v-deep .table {
 	margin-top: var(--space-lg);
-	.row {
+	.table__row {
 		height: 3rem;
 	}
 }
