@@ -32,7 +32,9 @@ describe("store/users", () => {
 		describe("createTeacher", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
-				const ctxMock = {};
+				const ctxMock = {
+					commit: () => {},
+				};
 				const teacherDataMock = {
 					firstName: "Marla",
 					lastName: "Mathe",
@@ -73,7 +75,9 @@ describe("store/users", () => {
 		describe("getQrRegistrationLinks", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
-				const ctxMock = {};
+				const ctxMock = {
+					commit: () => {},
+				};
 				const payloadMock = {
 					someProperty: "some value",
 				};

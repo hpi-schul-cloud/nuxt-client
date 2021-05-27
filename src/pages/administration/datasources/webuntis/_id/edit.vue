@@ -34,8 +34,8 @@ export default {
 	},
 	async asyncData({ store, params, app: { i18n } }) {
 		const datasourceId = params.id;
-		// TODO wrong use of store
-		const datasource = await store.dispatch("datasources/get", datasourceId);
+		await store.dispatch("datasources/get", datasourceId);
+		const datasource = store.state["datasources"].current;
 		if (!datasource) {
 			throw new Error(
 				i18n.t(
