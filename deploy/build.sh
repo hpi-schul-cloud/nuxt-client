@@ -125,7 +125,13 @@ buildClient(){
 	for THEME in "${SC_THEME_LIST[@]}"
 	do
 		export SC_THEME="$THEME"
-		dockerBuild "client"$THEME $DOCKERTAG $DOCKERTAG_SHA
+		dockerLogin
+
+		docker build \
+			-t schulcloud/schulcloud-nuxt-$1:$DOCKERTAG \
+			-t schulcloud/schulcloud-nuxt-$1:$DOCKERTAG_SHA \
+			-f Dockerfile.client \
+			../
 		dockerPush "client-"$THEME $DOCKERTAG $DOCKERTAG_SHA
 	done
 }
