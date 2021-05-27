@@ -320,6 +320,7 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 			isDeleting: (state) => state.progress.delete.active,
 			deletedPercent: (state) => state.progress.delete.percent,
+			qrLinks: "qrLinks",
 		}),
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
@@ -475,18 +476,13 @@ export default {
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
-				// TODO wrong use of store
-				const qrRegistrationLinks = await this.$store.dispatch(
-					"users/getQrRegistrationLinks",
-					{
-						userIds: rowIds,
-						selectionType,
-						roleName: "student",
-					}
-				);
-
-				if (qrRegistrationLinks.length) {
-					this.$_printQRs(qrRegistrationLinks);
+				await this.$store.dispatch("users/getQrRegistrationLinks", {
+					userIds: rowIds,
+					selectionType,
+					roleName: "student",
+				});
+				if (this.qrLinks.length) {
+					this.$_printQRs(this.qrLinks);
 				} else {
 					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
 				}
