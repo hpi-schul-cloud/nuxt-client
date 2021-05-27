@@ -23,8 +23,7 @@ if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not typ
 
 # TODO: The stages and build files must completly new sorted, at the moment it do not solve what we need.
 stages:
-  - name: test_themes
-    if: type = push && (/^(feature/).*$/)
+  - build_documentation
   - build_and_push # TODO: build should normally execute if it is needed but then we do not need test_themes
   - name: deploy
     if: type = push && (branch = master || branch = develop || branch ~= /^(release|hotfix).*$/)
@@ -32,29 +31,7 @@ stages:
 jobs:
   include:
     # Build
-    - stage: test_themes
-      script: npm run build:nuxt
-      name: "build:nuxt:default"
-    - script: npm run build:nuxt
-      name: "build:nuxt:brb"
-      env:
-        - SC_THEME=brb
-    - script: npm run build:nuxt
-      name: "build:nuxt:n21"
-      env:
-        - SC_THEME=n21
-    - script: npm run build:nuxt
-      name: "build:nuxt:open"
-      env:
-        - SC_THEME=open
-    - script: npm run build:nuxt
-      name: "build:nuxt:thr"
-      env:
-        - SC_THEME=thr
-    - script: npm run build:nuxt
-      name: "build:nuxt:int"
-      env:
-        - SC_THEME=int
+    - stage: build_documentation
     - script: npm run build:storybook
       name: "build:storybook"
       after_success:
