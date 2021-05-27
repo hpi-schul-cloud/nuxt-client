@@ -147,7 +147,6 @@ module.exports = {
 		"@plugins/authenticate",
 		"@plugins/user",
 		"@plugins/sentry",
-		"@plugins/full-calendar",
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
@@ -217,7 +216,7 @@ module.exports = {
 		dir: "dist/nuxt",
 	},
 	vuetify: {
-		customVariables: ["@variables"],
+		customVariables: ["@styles-base/vuetify-custom.scss"],
 		defaultAssets: false,
 		treeShake: true,
 		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",

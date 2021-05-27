@@ -16,7 +16,6 @@ import BaseImage from "@basecomponents/BaseImage";
 
 export default {
 	components: { BaseImage },
-	layout: "defaultVuetify",
 	props: {
 		image: {
 			type: String,

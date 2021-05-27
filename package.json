@@ -1,6 +1,6 @@
 {
 	"name": "schulcloud-nuxt",
-	"version": "26.1.1",
+	"version": "26.1.2",
 	"description": "The next Level of HPI Schul-Cloud",
 	"author": "HPI Schul-Cloud",
 	"private": true,
@@ -69,7 +69,6 @@
 		"vue-echarts": "^4.0.4",
 		"vue-filter-ui": "^0.8.0",
 		"vue-flatpickr-component": "^8.1.6",
-		"vue-full-calendar": "^3.0.0",
 		"vue-i18n": "^8.22.1",
 		"vue-loader": "^15.9.5",
 		"vue-mq": "^1.0.1",
@@ -83,7 +82,6 @@
 		"@babel/core": "^7.13.15",
 		"@babel/plugin-proposal-optional-chaining": "^7.13.12",
 		"@babel/preset-env": "^7.13.15",
-		"@hpi-schul-cloud/styles": "^0.2.4",
 		"@nuxt/types": "^2.15.4",
 		"@nuxt/typescript-build": "^2.0.4",
 		"@nuxtjs/dotenv": "^1.4.1",

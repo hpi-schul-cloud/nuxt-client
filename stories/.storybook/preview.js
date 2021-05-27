@@ -101,7 +101,7 @@ import options from "../../src/themes/default/vuetify.options.js";
 Vue.use(Vuetify);
 addDecorator(() => ({
 	vuetify: new Vuetify(options),
-	template: "<v-app><story/></v-app>",
+	template: "<story/>",
 }));
 
 // automatically import all files ending in *.stories.js

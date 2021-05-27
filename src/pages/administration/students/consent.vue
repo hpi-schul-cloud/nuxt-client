@@ -438,6 +438,7 @@ export default {
 				$limit: this.selectedStudents.length,
 			};
 
+			// TODO wrong use of store (not so bad)
 			await this.$store.dispatch("users/handleUsers", {
 				query,
 				action: "find",
@@ -660,7 +661,7 @@ export default {
 }
 ::v-deep .table {
 	margin-top: var(--space-lg);
-	.row {
+	.table__row {
 		height: 3rem;
 	}
 }

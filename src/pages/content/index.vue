@@ -183,11 +183,13 @@ export default {
 		async addContent() {
 			if (this.query.$skip < this.resources.total) {
 				this.query.$skip += this.query.$limit;
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("content/addResources", this.query);
 			}
 		},
 		async searchContent() {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("content/getResources", this.query);
 			} catch (error) {
 				this.$toast.error(
