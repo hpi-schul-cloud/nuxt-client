@@ -13,6 +13,7 @@ const module = mergeDeep(base, {
 					percent: 0,
 				},
 			},
+			qrLinks: [],
 		}),
 	mutations: {
 		startProgress(state, { action }) {
@@ -26,12 +27,15 @@ const module = mergeDeep(base, {
 		updateProgress(state, { action, percent }) {
 			state.progress[action].percent = percent;
 		},
+		setQrLinks(state, payload) {
+			state.qrLinks = payload;
+		},
 	},
 	actions: {
 		handleUsers({ dispatch }, queryContext = {}) {
 			const { userType, action } = queryContext;
 			queryContext.customEndpoint = `/users/admin/${userType}`;
-			return dispatch(action, queryContext);
+			dispatch(action, queryContext);
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {
@@ -55,57 +59,34 @@ const module = mergeDeep(base, {
 				commit("stopProgress", { action: "delete" });
 			}
 		},
-		createTeacher(ctx, teacherData) {
+		async createTeacher({ commit }, teacherData) {
 			const customEndpoint = "/users/admin/teachers";
-			return this.$axios.$post(customEndpoint, teacherData);
+			const teacher = await this.$axios.$post(customEndpoint, teacherData);
+			commit("setCurrent", teacher);
 		},
-		createStudent(ctx, payload) {
-			ctx.commit("resetBusinessError");
+		async createStudent({ commit }, payload) {
+			commit("resetBusinessError");
 			const customEndpoint = "/users/admin/students";
 			const { successMessage, ...studentData } = payload;
-			return this.$axios
-				.$post(customEndpoint, studentData)
-				.then(() => {
-					this.$toast.success(successMessage);
-					this.$router.push({
-						path: `/administration/students`,
-					});
-				})
-				.catch((error) => {
-					ctx.commit("setBusinessError", error.response.data);
+			try {
+				const student = await this.$axios.$post(customEndpoint, studentData);
+				this.$toast.success(successMessage);
+				this.$router.push({
+					path: `/administration/students`,
 				});
+				commit("setCurrent", student);
+			} catch (error) {
+				commit("setBusinessError", error.response.data);
+			}
 		},
-		sendRegistrationLink(ctx, payload = {}) {
+		async sendRegistrationLink(ctx, payload = {}) {
 			const customEndpoint = "/users/mail/registrationLink";
-			return this.$axios.$post(customEndpoint, payload);
+			await this.$axios.$post(customEndpoint, payload);
 		},
-		getQrRegistrationLinks(ctx, payload = {}) {
+		async getQrRegistrationLinks({ commit }, payload = {}) {
 			const customEndpoint = "/users/qrRegistrationLink";
-			return this.$axios.$post(customEndpoint, payload);
-		},
-		getByRole: async function (ctx, role) {
-			const queryRole = {
-				roles: [role._id],
-			};
-
-			// TODO wrong use of store
-			return (
-				await this.dispatch("users/find", {
-					query: queryRole,
-				})
-			).data;
-		},
-		getById: async function (ctx, id) {
-			const queryId = {
-				_id: id,
-			};
-
-			// TODO wrong use of store
-			return (
-				await this.dispatch("users/find", {
-					query: queryId,
-				})
-			).data[0];
+			const links = await this.$axios.$post(customEndpoint, payload);
+			commit("setQrLinks", links);
 		},
 	},
 });
