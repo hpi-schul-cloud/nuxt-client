@@ -128,8 +128,8 @@ buildClient(){
 		dockerLogin
 
 		docker build \
-			-t schulcloud/schulcloud-nuxt-$THEME:$DOCKERTAG \
-			-t schulcloud/schulcloud-nuxt-$THEME:$DOCKERTAG_SHA \
+			-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG \
+			-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG_SHA \
 			-f Dockerfile.client \
 			../
 		dockerPush "client-"$THEME $DOCKERTAG $DOCKERTAG_SHA
