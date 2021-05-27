@@ -9,26 +9,52 @@ const api = new GhostContentAPI({
 
 const module = {
 	actions: {
-		async getSinglePost(postSlug) {
-			return await api.posts.read({
+		async getSinglePost({ commit }, postSlug) {
+			const post = await api.posts.read({
 				slug: postSlug,
 			});
+			commit("setCurrentPost", post);
 		},
-		async getPosts() {
-			return await api.posts.browse({
+		async getPosts({ commit }) {
+			const posts = await api.posts.browse({
 				limit: "all",
 			});
+			commit("setPosts", posts);
 		},
-		async getSinglePage(ctx, pageSlug) {
-			return await api.pages.read({
+		async getSinglePage({ commit }, pageSlug) {
+			const page = await api.pages.read({
 				slug: pageSlug,
 			});
+			commit("setCurrentPage", page);
 		},
-		async getPages() {
-			return await api.pages.browse({
+		async getPages({ commit }) {
+			const pages = await api.pages.browse({
 				limit: "all",
 			});
+			commit("setPages", pages);
 		},
+	},
+	mutations: {
+		setPosts(state, payload) {
+			state.posts = payload;
+		},
+		setCurrentPost(state, payload) {
+			state.currentPost = payload;
+		},
+		setPages(state, payload) {
+			state.pages = payload;
+		},
+		setCurrentPage(state, payload) {
+			state.currentPage = payload;
+		},
+	},
+	state: () => {
+		return {
+			posts: [],
+			currentPost: {},
+			pages: [],
+			currentPage: {},
+		};
 	},
 };
 

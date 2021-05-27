@@ -20,6 +20,7 @@
 
 <script>
 import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
+import { mapState } from "vuex";
 
 export default {
 	components: {
@@ -33,6 +34,9 @@ export default {
 		};
 	},
 	computed: {
+		...mapState("activation", {
+			data: "list",
+		}),
 		getTitle() {
 			let title = "";
 			if (this.activated) {
@@ -81,12 +85,9 @@ export default {
 		async submitHandler() {
 			const { activationCode } = this.$route.params;
 			try {
-				// TODO wrong use of store
-				const res = await this.$store.dispatch("activation/update", [
-					activationCode,
-				]);
-				this.keyword = res.keyword;
-				this.activated = res.success;
+				await this.$store.dispatch("activation/update", [activationCode]);
+				this.keyword = this.data[0].keyword;
+				this.activated = this.data[0].success;
 			} catch (e) {
 				console.log(e);
 			}
