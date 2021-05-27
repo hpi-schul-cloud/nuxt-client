@@ -74,7 +74,7 @@ echo "Branch" $TRAVIS_BRANCH
 
 dockerLogin(){
 	# Log in to the docker CLI
-	echo -e "login to dockerhub.."
+	echo "login to dockerhub.."
 	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 }
 
@@ -87,10 +87,10 @@ dockerPush(){
 
 	# Push Images
 	docker push schulcloud/schulcloud-nuxt-$1:$2
-	echo -e "schulcloud/schulcloud-nuxt-$1:$2"
+	echo "schulcloud/schulcloud-nuxt-$1:$2"
 
 	docker push schulcloud/schulcloud-nuxt-$1:$2
-	echo -e "schulcloud/schulcloud-nuxt-$1:$3"
+	echo "schulcloud/schulcloud-nuxt-$1:$3"
 }
 
 dockerBuild(){
