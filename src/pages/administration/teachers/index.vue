@@ -285,6 +285,7 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 			isDeleting: (state) => state.progress.delete.active,
 			deletedPercent: (state) => state.progress.delete.percent,
+			qrLinks: "qrLinks",
 		}),
 		...mapState("env-config", {
 			env: "env",
@@ -446,18 +447,13 @@ export default {
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
-				// TODO wrong use of store
-				const qrRegistrationLinks = await this.$store.dispatch(
-					"users/getQrRegistrationLinks",
-					{
-						userIds: rowIds,
-						selectionType,
-						roleName: "teacher",
-					}
-				);
-
-				if (qrRegistrationLinks.length) {
-					this.$_printQRs(qrRegistrationLinks);
+				await this.$store.dispatch("users/getQrRegistrationLinks", {
+					userIds: rowIds,
+					selectionType,
+					roleName: "teacher",
+				});
+				if (this.qrLinks.length) {
+					this.$_printQRs(this.qrLinks);
 				} else {
 					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
 				}
