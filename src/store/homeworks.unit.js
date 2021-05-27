@@ -2,10 +2,9 @@ import storeModule from "./homeworks";
 
 describe("store/homeworks", () => {
 	describe("actions", () => {
-
 		const spyCommit = jest.fn();
 		const ctxMock = { commit: spyCommit };
-		
+
 		describe("getHomeworksDashboard", () => {
 			it("should call the right endpoint", async () => {
 				const receivedRequests = [];
