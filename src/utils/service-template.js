@@ -8,6 +8,7 @@ export default function (endpoint) {
 			list: [],
 			pagination: {},
 			businessError: null,
+			loading: {},
 		};
 	};
 	return {
@@ -103,6 +104,9 @@ export default function (endpoint) {
 			businessError: (state) => {
 				return state.businessError;
 			},
+			loading: (state) => {
+				return state.loading;
+			},
 		},
 		mutations: {
 			set(state, { items }) {
@@ -149,6 +153,11 @@ export default function (endpoint) {
 					total: parseInt(total),
 					query: parseInt(query),
 				});
+			},
+			setLoading(state, payload) {
+				const key = Object.keys(payload)[0];
+				const status = payload[key];
+				Vue.set(state.loading, key, status);
 			},
 		},
 		state: () => getDefaultState(),

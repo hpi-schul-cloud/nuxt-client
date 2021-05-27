@@ -3,6 +3,58 @@ import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
+	const getHomeworksDashboard = jest.fn();
+	const mockStore = {
+		homeworks: {
+			getters: {
+				list: () => homeworks,
+				loading: () => ({ homeworks: false }),
+			},
+			state: () => ({
+				list: homeworks,
+				loading: {
+					homeworks: false,
+				},
+			}),
+			actions: {
+				getHomeworksDashboard,
+			},
+		},
+	};
+	const mockStoreEmpty = {
+		homeworks: {
+			getters: {
+				list: () => [],
+				loading: () => ({ homeworks: false }),
+			},
+			state: () => ({
+				list: [],
+				loading: {
+					homeworks: false,
+				},
+			}),
+			actions: {
+				getHomeworksDashboard,
+			},
+		},
+	};
+	const mockStoreLoading = {
+		homeworks: {
+			getters: {
+				list: () => [],
+				loading: () => ({ homeworks: true }),
+			},
+			state: () => ({
+				list: [],
+				loading: {
+					homeworks: true,
+				},
+			}),
+			actions: {
+				getHomeworksDashboard,
+			},
+		},
+	};
 	let vuetify;
 
 	beforeEach(() => {
@@ -17,6 +69,7 @@ describe("@components/organisms/HomeworksList", () => {
 				{
 					i18n: true,
 					vuetify: true,
+					store: mockStore,
 				},
 				vuetify
 			),
@@ -36,11 +89,13 @@ describe("@components/organisms/HomeworksList", () => {
 				{
 					i18n: true,
 					vuetify: true,
+					store: mockStoreEmpty,
 				},
 				vuetify
 			),
 		});
 
+		// expect(wrapper.findComponent(vCustomLoadingState).exists()).toBe(false);
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
@@ -51,6 +106,7 @@ describe("@components/organisms/HomeworksList", () => {
 				{
 					i18n: true,
 					vuetify: true,
+					store: mockStore,
 				},
 				vuetify
 			),
@@ -71,11 +127,12 @@ describe("@components/organisms/HomeworksList", () => {
 				{
 					i18n: true,
 					vuetify: true,
+					store: mockStore,
 				},
 				vuetify
 			),
 			propsData: {
-				homeworks: homeworks,
+				homeworks,
 			},
 		});
 
@@ -93,5 +150,28 @@ describe("@components/organisms/HomeworksList", () => {
 				expect(dateLabel.text()).toContain("Fällig");
 			else expect(dateLabel.text()).toBe("Zu spät");
 		});
+	});
+
+	it("Should render loading state while fetching homeworks", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks(
+				{
+					i18n: true,
+					vuetify: true,
+					store: mockStoreLoading,
+				},
+				vuetify
+			),
+			propsData: {
+				homeworks: [],
+			},
+		});
+
+		expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(true);
+		expect(
+			wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
+		).toBe(true);
+		expect(wrapper.props("homeworks")).toStrictEqual([]);
+		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 });

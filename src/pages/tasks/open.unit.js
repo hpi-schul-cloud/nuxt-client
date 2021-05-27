@@ -10,9 +10,13 @@ describe("Homeworks/dashboard", () => {
 		homeworks: {
 			getters: {
 				list: () => homeworks,
+				loading: () => ({ homeworks: false }),
 			},
 			state: () => ({
 				list: homeworks,
+				loading: {
+					homeworks: false,
+				},
 			}),
 			actions: {
 				getHomeworksDashboard,
@@ -65,6 +69,7 @@ describe("Homeworks/dashboard", () => {
 			homeworks: {
 				getters: {
 					list: () => [],
+					loading: () => ({ homeworks: false }),
 				},
 				state: () => ({
 					list: homeworks,
@@ -74,7 +79,6 @@ describe("Homeworks/dashboard", () => {
 				},
 			},
 		};
-
 		const wrapper = mount(dashboard, {
 			...createComponentMocks(
 				{
@@ -86,7 +90,6 @@ describe("Homeworks/dashboard", () => {
 			),
 		});
 
-		expect(wrapper.findComponent(HomeworksList).exists()).toBe(false);
 		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
 	});
 

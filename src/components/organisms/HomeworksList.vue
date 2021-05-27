@@ -1,7 +1,27 @@
 <template>
 	<v-list subheader two-line>
-		<v-subheader>{{ $t("pages.homeworks.subtitleOpen") }}</v-subheader>
-		<template v-for="(homework, index) of homeworks">
+		<v-skeleton-loader
+			v-if="loading.homeworks"
+			:type="'text'"
+			:max-width="'20%'"
+		/>
+
+		<template v-else>
+			<v-subheader v-if="homeworks.length > 0">
+				{{ $t("pages.homeworks.subtitleOpen") }}
+			</v-subheader>
+		</template>
+
+		<template v-if="loading.homeworks">
+			<v-skeleton-loader
+				v-for="homework of 7"
+				ref="skeleton"
+				:key="homework"
+				:type="'list-item-avatar-two-line'"
+			/>
+		</template>
+
+		<template v-for="(homework, index) of homeworks" v-else>
 			<v-list-item :key="homework._id" :href="homeworkHref(homework._id)">
 				<v-list-item-avatar>
 					<img :src="taskIconSvg" role="presentation" />
@@ -32,10 +52,10 @@
 import { fromNow } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
 import { printDateTimeFromStringUTC } from "@plugins/datetime";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {},
-	layout: "defaultVuetify",
 	props: {
 		homeworks: {
 			type: Array,
@@ -49,6 +69,12 @@ export default {
 			taskIconSvg,
 		};
 	},
+	computed: {
+		...mapGetters("homeworks", {
+			loading: "loading",
+		}),
+	},
+
 	methods: {
 		computedDueDateLabel(duedate) {
 			if (!duedate) return this.$t("pages.homeworks.labels.noDueDate");
