@@ -116,7 +116,7 @@ buildClient(){
 
 	cat ../version.js
 
-	# fallback for old logic
+	# backwards compability for old logic
 	export SC_THEME='default'
 	dockerBuild "client" $DOCKERTAG $DOCKERTAG_SHA
 	dockerPush "client" $DOCKERTAG $DOCKERTAG_SHA
