@@ -23,8 +23,8 @@ if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not typ
 
 # TODO: The stages and build files must completly new sorted, at the moment it do not solve what we need.
 stages:
-  - deploy_documentation
   - build_and_push # TODO: build should normally execute if it is needed but then we do not need test_themes
+  - deploy_documentation
   - name: deploy
     if: type = push && (branch = master || branch = develop || branch ~= /^(release|hotfix).*$/)
 
