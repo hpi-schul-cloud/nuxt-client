@@ -94,6 +94,8 @@ buildClient(){
 
 	cat ../version.js
 
+	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
 	# fallback for old logic
 	export SC_THEME='default'
 		docker build \
