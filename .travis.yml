@@ -23,7 +23,7 @@ if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not typ
 
 # TODO: The stages and build files must completly new sorted, at the moment it do not solve what we need.
 stages:
-  - build_documentation
+  - deploy_documentation
   - build_and_push # TODO: build should normally execute if it is needed but then we do not need test_themes
   - name: deploy
     if: type = push && (branch = master || branch = develop || branch ~= /^(release|hotfix).*$/)
@@ -31,7 +31,7 @@ stages:
 jobs:
   include:
     # Build
-    - stage: build_documentation
+    - stage: deploy_documentation
     - script: npm run build:storybook
       name: "build:storybook"
       after_success:
