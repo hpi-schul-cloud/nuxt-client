@@ -10,7 +10,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Removed
 
-- # Removed pages 'account', 'course', 'calendar' and components exclusively used by these pages
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
+
+### Added
+
+- SC-9004 - Sync env variables between backend and frontend
 
 ## 26.1.2
 

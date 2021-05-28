@@ -6,22 +6,16 @@ const webpack = require("webpack");
 const sentryConfig = require("./sentry.config.js");
 
 const themeName = process.env.SC_THEME || "default";
-const API_URL = process.env.API_URL || "http://localhost:3030";
 const DEFAULT_PORT = 4000;
 const DEFAULT_HOST =
-	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+	process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"; // NODE_ENV=production for all travis build
 
 const serverMiddlewareList = [
 	"@serverMiddleware/nuxtversion",
 	"@serverMiddleware/proxy",
+	"@serverMiddleware/csp/cors",
+	"@serverMiddleware/csp/security_headers",
 ];
-
-if (process.env.CORS_ENABLED) {
-	serverMiddlewareList.push("@serverMiddleware/csp/cors");
-}
-if (process.env.SECURITY_HEADERS_ENABLED) {
-	serverMiddlewareList.push("@serverMiddleware/csp/security_headers");
-}
 
 module.exports = {
 	mode: "spa",
@@ -38,43 +32,26 @@ module.exports = {
 	],
 	// to make ENV variables available in components, they need to be defined here
 	env: {
-		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
-		FEATURE_EXTENSIONS_ENABLED: process.env.FEATURE_EXTENSIONS_ENABLED || false,
-		FEATURE_TEAMS_ENABLED: process.env.FEATURE_TEAMS_ENABLED || false,
-		NOT_AUTHENTICATED_REDIRECT_URL:
-			process.env.NOT_AUTHENTICATED_REDIRECT_URL || "/login",
-		JWT_SHOW_TIMEOUT_WARNING_SECONDS:
-			process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
-		JWT_TIMEOUT_SECONDS: process.env.JWT_TIMEOUT_SECONDS,
 		SC_THEME: process.env.SC_THEME,
-		LERNSTORE_MODE: process.env.LERNSTORE_MODE,
-		FEATURE_ES_COLLECTIONS_ENABLED:
-			process.env.FEATURE_ES_COLLECTIONS_ENABLED || false,
+		// NODE_ENV=production for all travis build
+	},
+
+	publicRuntimeConfig: {
+		FALLBACK_DISABLED: process.env.FALLBACK_DISABLED || false,
+		axios: {
+			browserBaseURL: process.env.API_URL || "http://localhost:3030",
+		},
 		FEATURE_MATRIX_MESSENGER_ENABLED:
 			process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
-		FEATURE_MESSENGER__SCHOOL_ROOM_ENABLED:
-			process.env.FEATURE_MESSENGER__SCHOOL_ROOM_ENABLED,
-		FEATURE_MESSENGER__SCHOOL_SETTINGS_VISIBLE:
-			process.env.FEATURE_MESSENGER__SCHOOL_SETTINGS_VISIBLE,
 		MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 		MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 		MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
-		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN:
-			process.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN || true,
-	},
-
-	/*
-	 ** Content Security Policy (CSP)
-	 */
-	csp: {
-		// If enabled, default content security policy (CSP) header will be set
-		cors: {
-			enabled: process.env.CORS_ENABLED || false,
-		},
-		// If enabled, additional security header will be set
-		security_headers: {
-			enabled: process.env.SECURITY_HEADERS_ENABLED || false,
-		},
+		// env vars needed at runtime for server middleware:
+		// CORS_ENABLED: process.env.CORS_ENABLED || false,
+		// SECURITY_HEADERS_ENABLED: process.env.SECURITY_HEADERS_ENABLED || false,
+		// LERNSTORE_MODE: process.env.LERNSTORE_MODE,
+		// LEGACY_CLIENT_URL
+		// PROXY_LOG_LEVEL
 	},
 
 	/*
@@ -123,8 +100,8 @@ module.exports = {
 	 ** Nuxt.js (server)middleware
 	 */
 	server: {
-		port: process.env.PORT || DEFAULT_PORT,
-		host: process.env.HOST || DEFAULT_HOST,
+		port: DEFAULT_PORT,
+		host: DEFAULT_HOST,
 	},
 
 	serverMiddleware: serverMiddlewareList,
@@ -142,6 +119,8 @@ module.exports = {
 	 ** Plugins to load before mounting the App
 	 */
 	plugins: [
+		// configInit need to be first so that the env vars are available for following plugins
+		"@plugins/configInit",
 		"@plugins/global",
 		"@plugins/axios",
 		"@plugins/authenticate",
@@ -165,10 +144,6 @@ module.exports = {
 		"cookie-universal-nuxt",
 		"nuxt-babel",
 	],
-	axios: {
-		// See https://github.com/nuxt-community/axios-module#options
-		baseURL: API_URL,
-	},
 	sentry: sentryConfig,
 	toast: {
 		duration: 3000,
