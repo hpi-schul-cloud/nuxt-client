@@ -1,10 +1,10 @@
 <template>
 	<v-list subheader two-line>
-		<v-subheader v-if="homeworks.length > 0">
+		<v-subheader v-if="isListFilled">
 			{{ $t("pages.homeworks.subtitleOpen") }}
 		</v-subheader>
 
-		<template v-if="loading.homeworks">
+		<template v-if="loading">
 			<h1>
 				<v-skeleton-loader :type="'text'" :max-width="'30%'" />
 			</h1>
@@ -68,6 +68,9 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			loading: "loading",
+			isListEmpty: "isListEmpty",
+			isListFilled: "isListFilled",
+			businessError: "businessError",
 		}),
 	},
 

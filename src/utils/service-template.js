@@ -8,7 +8,7 @@ export default function (endpoint) {
 			list: [],
 			pagination: {},
 			businessError: null,
-			loading: {},
+			loading: false,
 		};
 	};
 	return {
@@ -154,10 +154,8 @@ export default function (endpoint) {
 					query: parseInt(query),
 				});
 			},
-			setLoading(state, payload) {
-				const key = Object.keys(payload)[0];
-				const status = payload[key];
-				Vue.set(state.loading, key, status);
+			setLoading(state, status) {
+				state.loading = status;
 			},
 		},
 		state: () => getDefaultState(),

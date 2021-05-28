@@ -10,7 +10,9 @@ describe("Homeworks/dashboard", () => {
 		homeworks: {
 			getters: {
 				list: () => homeworks,
-				loading: () => ({ homeworks: false }),
+				loading: () => false,
+				isListEmpty: () => false,
+				isListFilled: () => true,
 			},
 			state: () => ({
 				list: homeworks,
@@ -69,10 +71,12 @@ describe("Homeworks/dashboard", () => {
 			homeworks: {
 				getters: {
 					list: () => [],
-					loading: () => ({ homeworks: false }),
+					loading: () => false,
+					isListEmpty: () => true,
+					isListFilled: () => false,
 				},
 				state: () => ({
-					list: homeworks,
+					list: [],
 				}),
 				actions: {
 					getHomeworksDashboard,

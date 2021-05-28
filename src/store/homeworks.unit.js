@@ -21,6 +21,43 @@ describe("store/homeworks", () => {
 				expect(receivedRequests[0].url).toStrictEqual("/v3/task/dashboard/");
 			});
 
+			it("should set business error and reset loading on fail", async () => {
+				const mockAxiosError = new Error();
+				mockAxiosError.response = {
+					data: {
+						error: "error",
+						message: "error message",
+						statusCode: 404,
+					},
+				};
+
+				storeModule.actions.$axios = {
+					$get: async () => {
+						throw mockAxiosError;
+					},
+				};
+
+				spyCommit.mockClear();
+				await storeModule.actions.getHomeworksDashboard(ctxMock);
+
+				const storeCalls = spyCommit.mock.calls;
+				const firstCall = storeCalls[0];
+				const secondCall = storeCalls[1];
+				const thirdCall = storeCalls[2];
+
+				expect(firstCall[0]).toBe("setLoading");
+				expect(secondCall[0]).toBe("setBusinessError");
+				expect(thirdCall[0]).toBe("setLoading");
+
+				const firstCommit = firstCall[1];
+				const secondCommit = secondCall[1];
+				const thirdCommit = thirdCall[1];
+
+				expect(firstCommit).toBe(true);
+				expect(secondCommit).toBe(mockAxiosError.response.data);
+				expect(thirdCommit).toBe(false);
+			});
+
 			it("should set loading state when fetching homeworks", async () => {
 				const receivedRequests = [];
 
@@ -29,7 +66,7 @@ describe("store/homeworks", () => {
 						receivedRequests.push({ url, params });
 					},
 				};
-
+				spyCommit.mockClear();
 				await storeModule.actions.getHomeworksDashboard(ctxMock);
 
 				const storeCalls = spyCommit.mock.calls;
@@ -39,10 +76,10 @@ describe("store/homeworks", () => {
 				expect(firstCall[0]).toBe("setLoading");
 				expect(thirdCall[0]).toBe("setLoading");
 
-				const firstStatus = firstCall[1].homeworks;
-				const secondStatus = thirdCall[1].homeworks;
-				expect(firstStatus).toBe(true);
-				expect(secondStatus).toBe(false);
+				const firstCommit = firstCall[1];
+				const secondCommit = thirdCall[1];
+				expect(firstCommit).toBe(true);
+				expect(secondCommit).toBe(false);
 			});
 		});
 	});

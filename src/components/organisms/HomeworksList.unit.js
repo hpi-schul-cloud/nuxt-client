@@ -3,56 +3,46 @@ import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
-	const getHomeworksDashboard = jest.fn();
 	const mockStore = {
 		homeworks: {
 			getters: {
 				list: () => homeworks,
-				loading: () => ({ homeworks: false }),
+				loading: () => false,
+				isListEmpty: () => false,
+				isListFilled: () => true,
 			},
 			state: () => ({
 				list: homeworks,
-				loading: {
-					homeworks: false,
-				},
+				loading: false,
 			}),
-			actions: {
-				getHomeworksDashboard,
-			},
 		},
 	};
 	const mockStoreEmpty = {
 		homeworks: {
 			getters: {
 				list: () => [],
-				loading: () => ({ homeworks: false }),
+				loading: () => false,
+				isListEmpty: () => true,
+				isListFilled: () => false,
 			},
 			state: () => ({
 				list: [],
-				loading: {
-					homeworks: false,
-				},
+				loading: false,
 			}),
-			actions: {
-				getHomeworksDashboard,
-			},
 		},
 	};
 	const mockStoreLoading = {
 		homeworks: {
 			getters: {
 				list: () => [],
-				loading: () => ({ homeworks: true }),
+				loading: () => true,
+				isListEmpty: () => false,
+				isListFilled: () => false,
 			},
 			state: () => ({
 				list: [],
-				loading: {
-					homeworks: true,
-				},
+				loading: true,
 			}),
-			actions: {
-				getHomeworksDashboard,
-			},
 		},
 	};
 	let vuetify;
@@ -95,7 +85,6 @@ describe("@components/organisms/HomeworksList", () => {
 			),
 		});
 
-		// expect(wrapper.findComponent(vCustomLoadingState).exists()).toBe(false);
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});

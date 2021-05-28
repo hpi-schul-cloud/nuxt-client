@@ -1,11 +1,11 @@
 <template>
 	<v-container class="v-container">
-		<h1 v-if="homeworks.length > 0" class="h4">
+		<h1 v-if="isListFilled" class="h4">
 			{{ $t("pages.homeworks.title") }}
 		</h1>
 		<homeworks-list :homeworks="homeworks" />
 		<v-custom-empty-state
-			v-if="homeworks.length === 0 && !loading.homeworks"
+			v-if="isListEmpty"
 			:image="image"
 			:title="$t('pages.homeworks.emptyState.title')"
 			:subtitle="$t('pages.homeworks.emptyState.subtitle')"
@@ -31,9 +31,9 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			homeworks: "list",
-		}),
-		...mapGetters("homeworks", {
 			loading: "loading",
+			isListEmpty: "isListEmpty",
+			isListFilled: "isListFilled",
 		}),
 	},
 	mounted() {
