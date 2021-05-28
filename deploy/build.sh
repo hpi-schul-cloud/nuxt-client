@@ -72,48 +72,77 @@ echo "Branch" $TRAVIS_BRANCH
 # SCRIPTS
 # ----------------
 
+dockerLogin(){
+	# Log in to the docker CLI
+	echo "login to dockerhub.."
+	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+}
+
 dockerPush(){
 	# $1: Project Name (client, storybook, vuepress)
-	# $2: docker tag to use
+	# $2: DOCKERTAG
+	# $3: DOCKERTAG_SHA
 
-	# Log in to the docker CLI
-	echo "$MY_DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+	dockerLogin
 
-	# Push Image
+	# Push Images
 	docker push schulcloud/schulcloud-nuxt-$1:$2
+	echo "schulcloud/schulcloud-nuxt-$1:$2"
+
+	docker push schulcloud/schulcloud-nuxt-$1:$2
+	echo "schulcloud/schulcloud-nuxt-$1:$3"
+}
+
+dockerBuild(){
+	# $1: Project Name (client, storybook, vuepress)
+	# $2: DOCKERTAG
+	# $3: DOCKERTAG_SHA
+	dockerLogin
+
+	docker build \
+		-t schulcloud/schulcloud-nuxt-$1:$2 \
+		-t schulcloud/schulcloud-nuxt-$1:$3 \
+		-f Dockerfile.$1 \
+		../
 }
 
 # BUILD SCRIPTS
 
 buildClient(){
+	SC_THEME_LIST=('default' 'brb' 'n21' 'open' 'thr' 'int')
 	# write version file
 	# JS syntax is required so we can import it
 	printf "module.exports = {\n  sha: \`%s\`,\n  branch: \`%s\`,\n  message: \`%s\`\n}" $TRAVIS_COMMIT "${TRAVIS_BRANCH//\`/\\\`}" "${TRAVIS_COMMIT_MESSAGE//\`/\\\`}" > ../version.js
 
 	cat ../version.js
 
-	docker build \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA \
-		-f Dockerfile.client \
-		../
+	# backwards compability for old logic
+	export SC_THEME='default'
+	dockerBuild "client" $DOCKERTAG $DOCKERTAG_SHA
+	dockerPush "client" $DOCKERTAG $DOCKERTAG_SHA
 
-	dockerPush "client" $DOCKERTAG
-	dockerPush "client" $DOCKERTAG_SHA
+	# theme based repos
+	for THEME in "${SC_THEME_LIST[@]}"
+	do
+		export SC_THEME="$THEME"
+		dockerLogin
+
+		docker build \
+			-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG \
+			-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG_SHA \
+			-f Dockerfile.client \
+			../
+		dockerPush "client-"$THEME $DOCKERTAG $DOCKERTAG_SHA
+	done
 }
 
 buildStorybook(){
-	docker build \
-		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG_SHA \
-		-f Dockerfile.storybook \
-		../
-
-	dockerPush "storybook" $DOCKERTAG
-	dockerPush "storybook" $DOCKERTAG_SHA
+	dockerBuild "storybook" $DOCKERTAG $DOCKERTAG_SHA
+	dockerPush "storybook" $DOCKERTAG $DOCKERTAG_SHA
 }
 
 buildVuepress(){
+	dockerLogin
 	docker build \
 		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG \
 		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG_SHA \
@@ -122,8 +151,7 @@ buildVuepress(){
 		--build-arg ALGOLIA_API_KEY \
 		../
 
-	dockerPush "vuepress" $DOCKERTAG
-	dockerPush "vuepress" $DOCKERTAG_SHA
+	dockerPush "vuepress" $DOCKERTAG $DOCKERTAG_SHA
 }
 
 # ----------------
