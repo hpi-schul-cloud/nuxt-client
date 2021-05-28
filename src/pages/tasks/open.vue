@@ -9,6 +9,7 @@
 			:image="image"
 			:title="$t('pages.homeworks.emptyState.title')"
 			:subtitle="$t('pages.homeworks.emptyState.subtitle')"
+			class="mt-16"
 		/>
 	</v-container>
 </template>
