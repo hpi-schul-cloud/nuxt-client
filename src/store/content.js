@@ -100,6 +100,12 @@ export const actions = {
 	async getResourceMetadata(context, id) {
 		return this.$axios.$get(`/edu-sharing/${id}`);
 	},
+	init({ commit, rootState }) {
+		commit("init", {
+			collectionsFeatureFlag:
+				rootState["env-config"].env.FEATURE_ES_COLLECTIONS_ENABLED,
+		});
+	},
 };
 
 const initialState = () => ({
@@ -121,7 +127,7 @@ const initialState = () => ({
 	loadingCounter: 0,
 	loading: false,
 	lastQuery: "",
-	collectionsFeatureFlag: process.env.FEATURE_ES_COLLECTIONS_ENABLED === "true",
+	collectionsFeatureFlag: null,
 });
 
 export const mutations = {
@@ -171,6 +177,9 @@ export const mutations = {
 	},
 	setLessons(state, payload) {
 		state.lessons = payload;
+	},
+	init(state, { collectionsFeatureFlag }) {
+		state.collectionsFeatureFlag = collectionsFeatureFlag;
 	},
 };
 
