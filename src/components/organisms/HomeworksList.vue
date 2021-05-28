@@ -70,7 +70,6 @@ export default {
 			loading: "loading",
 			isListEmpty: "isListEmpty",
 			isListFilled: "isListFilled",
-			businessError: "businessError",
 		}),
 	},
 
