@@ -1,18 +1,14 @@
 <template>
 	<v-list subheader two-line>
-		<v-skeleton-loader
-			v-if="loading.homeworks"
-			:type="'text'"
-			:max-width="'20%'"
-		/>
-
-		<template v-else>
-			<v-subheader v-if="homeworks.length > 0">
-				{{ $t("pages.homeworks.subtitleOpen") }}
-			</v-subheader>
-		</template>
+		<v-subheader v-if="homeworks.length > 0">
+			{{ $t("pages.homeworks.subtitleOpen") }}
+		</v-subheader>
 
 		<template v-if="loading.homeworks">
+			<h1>
+				<v-skeleton-loader :type="'text'" :max-width="'30%'" />
+			</h1>
+			<v-skeleton-loader :type="'text'" :max-width="'15%'" />
 			<v-skeleton-loader
 				v-for="homework of 7"
 				ref="skeleton"

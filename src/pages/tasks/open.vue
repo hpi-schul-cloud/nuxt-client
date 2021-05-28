@@ -1,15 +1,8 @@
 <template>
 	<v-container class="v-container">
-		<h1 v-if="loading.homeworks">
-			<v-skeleton-loader :type="'text'" :max-width="'30%'" />
+		<h1 v-if="homeworks.length > 0" class="h4">
+			{{ $t("pages.homeworks.title") }}
 		</h1>
-
-		<template v-else>
-			<h1 v-if="homeworks.length > 0" class="h4">
-				{{ $t("pages.homeworks.title") }}
-			</h1>
-		</template>
-
 		<homeworks-list :homeworks="homeworks" />
 		<v-custom-empty-state
 			v-if="homeworks.length === 0 && !loading.homeworks"
