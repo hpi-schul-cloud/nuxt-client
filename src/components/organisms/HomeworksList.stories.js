@@ -19,7 +19,6 @@ storiesOf("0 Vuetify/Homeworks/HomeworksList", module)
 			HomeworksList,
 		},
 		template: `<v-app>
-						<v-container max-width="'50%'">
 						<h1>
 							<v-skeleton-loader :type="'text'" :max-width="'30%'" />
 						</h1>
@@ -30,6 +29,5 @@ storiesOf("0 Vuetify/Homeworks/HomeworksList", module)
 							:key="homework"
 							:type="'list-item-avatar-two-line'"
 						/>
-						</v-container>
 					</v-app>`,
 	}));
