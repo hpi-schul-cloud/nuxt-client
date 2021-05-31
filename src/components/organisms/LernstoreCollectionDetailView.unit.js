@@ -28,10 +28,12 @@ describe("@components/organisms/LernstoreCollectionDetailView", () => {
 			computed: {
 				loading: () => jest.fn(),
 				elements: () => jest.fn(),
+				selected: () => jest.fn(),
 			},
 			state: {
 				loading: true,
 				elements: {},
+				selected: [],
 			},
 			mocks: {
 				$toast: {

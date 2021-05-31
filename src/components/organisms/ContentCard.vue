@@ -5,7 +5,7 @@
 				class="title-link"
 				:to="{
 					name: 'content-id',
-					params: { id: resource.ref.id },
+					params: { id: resource.properties['ccm:replicationsourceuuid'][0] },
 					query: query,
 				}"
 				:no-style="true"
@@ -14,6 +14,16 @@
 					<div class="content">
 						<div class="content__img">
 							<div class="img-container">
+								<span v-show="isSelectable()" @click.stop="linkHandler">
+									<base-input
+										v-model="isChecked"
+										type="checkbox"
+										:label="resource.title"
+										:label-hidden="true"
+										class="select"
+										style="margin-bottom: 0; color: var(--color-white)"
+									/>
+								</span>
 								<div class="content__img-background-gradient" />
 
 								<img
@@ -55,6 +65,7 @@
 									btn-design="text icon"
 									btn-icon-class="footer__content-icon"
 									btn-icon="add_circle_outline"
+									:multiple="false"
 								/>
 							</div>
 						</div>
@@ -83,6 +94,7 @@ export default {
 		resource: { type: Object, default: () => {} },
 		role: { type: String, default: "" },
 		inline: { type: Boolean, required: false },
+		selectable: { type: Boolean },
 	},
 	data() {
 		return {
@@ -124,6 +136,16 @@ export default {
 		thumbnail() {
 			return this.resource.preview.url;
 		},
+		isSelectable() {
+			return this.selectable;
+		},
+		linkHandler() {
+			if (!this.isChecked) {
+				this.$store.dispatch("content/selectElement", this.resource.ref.id);
+			} else {
+				this.$store.dispatch("content/unselectElement", this.resource.ref.id);
+			}
+		},
 	},
 };
 </script>
@@ -157,6 +179,22 @@ export default {
 	background-color: var(--color-black);
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
+
+.img-container > span {
+	position: absolute;
+	right: 0;
+	margin-top: var(--space-xs);
+	margin-right: var(--space-xs);
+	background-color: var(--color-tertiary);
+	border-radius: var(--radius-round);
+	opacity: 0.7;
+	// stylelint-disable
+	/*z-index: 10;*/
+	z-index: calc(var(--layer-page) + 1);
+	padding: 6px 4px 2px;
+	// stylelint-enable
+}
+
 .content {
 	display: flex;
 	flex-direction: column;

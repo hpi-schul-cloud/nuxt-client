@@ -15,7 +15,56 @@ esac
 done
 echo PROJECT $PROJECT
 
+# [OPS-1664] Enhance all branches with Tag latest
+
+echo $( bash pwd)
+
+VERSION="$(jq -r '.version' ./package.json )"
+echo VERSION:"$VERSION"
+
+if [[ "$TRAVIS_BRANCH" == "master" ]]
+then
+	export DOCKERTAG=master_v"$VERSION"_latest
+	export DOCKERTAG_SHA=master_v"$VERSION"_"$GIT_SHA"
+elif [[ "$TRAVIS_BRANCH" == "develop" ]]
+then
+	export DOCKERTAG="develop_latest"
+	export DOCKERTAG_SHA="develop_$GIT_SHA"
+elif [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
+then
+	export DOCKERTAG=release_v"$VERSION"_latest
+	export DOCKERTAG_SHA=release_v"$VERSION"_$GIT_SHA
+elif [[ "$TRAVIS_BRANCH" =~ ^hotfix\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
+then
+	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
+	JIRA_TICKET_ID=${TRAVIS_BRANCH/#hotfix\//}
+	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID="$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID"
+	# export DOCKERTAG=naming convention feature-<Jira id>-latest
+	export DOCKERTAG=hotfix_"${JIRA_TICKET_ID}"_latest
+	export DOCKERTAG_SHA=hotfix_"${JIRA_TICKET_ID}"_"$GIT_SHA"
+elif [[ "$TRAVIS_BRANCH" =~ ^feature\/[A-Z]+-[0-9]+-[a-zA-Z_]+$ ]]
+then
+	# extract JIRA_TICKET_ID from TRAVIS_BRANCH
+	JIRA_TICKET_ID=${TRAVIS_BRANCH/#feature\//}
+	JIRA_TICKET_TEAM=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/#$JIRA_TICKET_TEAM"-"/}
+	JIRA_TICKET_ID=${JIRA_TICKET_ID/%-*/}
+	JIRA_TICKET_ID="$JIRA_TICKET_TEAM"-"$JIRA_TICKET_ID"
+	# export DOCKERTAG=naming convention feature-<Jira id>-latest
+	export DOCKERTAG=feature_"${JIRA_TICKET_ID}"_latest
+	export DOCKERTAG_SHA=feature_"${JIRA_TICKET_ID}"_"$GIT_SHA"
+else
+	# Check for naming convention <branch>/<JIRA-Ticket ID>-<Jira_Summary>
+	# OPS-1664
+	echo -e "Event detected. However, branch name pattern does not match requirements to build an push. Expected <branch>/<JIRA-Ticket ID>-<Jira_Summary> but got $TRAVIS_BRANCH"
+	exit 0
+fi
+
 echo "DOCKERTAG" $DOCKERTAG
+echo "DOCKERTAG_SHA" $DOCKERTAG_SHA
 echo "GITSHA" $GIT_SHA
 echo "Branch" $TRAVIS_BRANCH
 
@@ -45,57 +94,36 @@ buildClient(){
 
 	docker build \
 		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-client:$GIT_SHA \
+		-t schulcloud/schulcloud-nuxt-client:$DOCKERTAG_SHA \
 		-f Dockerfile.client \
 		../
 
 	dockerPush "client" $DOCKERTAG
-	dockerPush "client" $GIT_SHA
-
-	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
-	then
-		docker tag schulcloud/schulcloud-nuxt-client:$DOCKERTAG schulcloud/schulcloud-nuxt-client:develop_latest
-		dockerPush "client" "develop_latest"
-	fi
+	dockerPush "client" $DOCKERTAG_SHA
 }
 
 buildStorybook(){
 	docker build \
 		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-storybook:$GIT_SHA \
+		-t schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG_SHA \
 		-f Dockerfile.storybook \
 		../
 
 	dockerPush "storybook" $DOCKERTAG
-	dockerPush "storybook" $GIT_SHA
-
-	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
-	then
-		docker tag schulcloud/schulcloud-nuxt-storybook:$DOCKERTAG schulcloud/schulcloud-nuxt-storybook:develop_latest
-		dockerPush "storybook" "develop_latest"
-	fi
+	dockerPush "storybook" $DOCKERTAG_SHA
 }
 
 buildVuepress(){
 	docker build \
 		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG \
-		-t schulcloud/schulcloud-nuxt-vuepress:$GIT_SHA \
+		-t schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG_SHA \
 		-f Dockerfile.vuepress \
 		--build-arg ALGOLIA_NAME \
 		--build-arg ALGOLIA_API_KEY \
 		../
 
 	dockerPush "vuepress" $DOCKERTAG
-	dockerPush "vuepress" $GIT_SHA
-
-	# If branch is develop, add and push additional docker tags
-	if [[ "$TRAVIS_BRANCH" = "develop" ]]
-	then
-		docker tag schulcloud/schulcloud-nuxt-vuepress:$DOCKERTAG schulcloud/schulcloud-nuxt-vuepress:develop_latest
-		dockerPush "vuepress" "develop_latest"
-	fi
+	dockerPush "vuepress" $DOCKERTAG_SHA
 }
 
 # ----------------
@@ -120,6 +148,23 @@ then
 else
   echo "Nothing to build defined"
 	exit 1
+fi
+
+# trigger sc-app-ci to deploy release to staging
+
+if [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
+then
+	echo "deploy release to staging $TRAVIS_BRANCH with $VERSION."
+	echo "deployment version is set as github secret GITHUB NEXT_RELEASE"
+	echo "and checked in sc-app-deploy workflow Deploy_release_to_staging.yml"
+
+	# mask DOT for payload
+	VERSION=$( echo $VERSION | tr -s "[:punct:]" "-" )
+
+	curl -X POST https://api.github.com/repos/hpi-schul-cloud/sc-app-ci/dispatches \
+	-H 'Accept: application/vnd.github.everest-preview+json' \
+	-u $GITHUB_TOKEN \
+	--data '{"event_type": "Trigger_from_sc_nuxt", "client_payload": { "GIT_BRANCH": "'"$TRAVIS_BRANCH"'", "TRIGGER_REPOSITORY": "sc-nuxt", "VERSION": "'"$VERSION"'" }}'
 fi
 
 exit 0

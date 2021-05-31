@@ -149,7 +149,7 @@ export const printDate = (date) => {
 
 /**
  * Returns formated date string based on a given dayjs object
- * @param {String} date
+ * @param {datejs} date
  * @return {String} Date string based on current timezone using locale date formating
  */
 export const printDateTime = (date) => {
@@ -158,11 +158,20 @@ export const printDateTime = (date) => {
 
 /**
  * Returns formated date string based on a given dayjs object
- * @param {String} date
+ * @param {datejs} date
  * @return {String} Date string based on current timezone using locale date formating slashed
  */
 export const printDateFromDayJs = (date) => {
 	return date.format(DATETIME_FORMAT.date);
+};
+
+/**
+ * Returns formated date string based on a given timestamp
+ * @param {String|Integer} timestamp
+ * @return {String} Date string based on current timezone using locale date formating slashed
+ */
+export const printDateFromTimestamp = (timestamp) => {
+	return dayjs(parseInt(timestamp)).format(DATETIME_FORMAT.date);
 };
 
 /**
