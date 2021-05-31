@@ -10,11 +10,11 @@ services:
         condition: any
       resources:
         limits:
-          cpus: '1'
-          memory: 1536M
+          cpus: '2'
+          memory: 4096M
         reservations:
-          cpus: '0.25'
-          memory: 128M
+          cpus: '1'
+          memory: 4096M
     depends_on:
       - client
       - server

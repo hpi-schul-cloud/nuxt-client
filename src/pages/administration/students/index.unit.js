@@ -1,8 +1,9 @@
 import { default as StudentPage } from "./index.vue";
+import mock$objects from "../../../../tests/test-utils/pageStubs";
 
 const mockData = [
 	{
-		_id: "id",
+		_id: "0000d231816abba584714c9e",
 		firstName: "Marla",
 		lastName: "Mathe",
 		email: "schueler@schul-cloud.org",
@@ -18,6 +19,7 @@ const mockData = [
 
 describe("students/index", () => {
 	const routerPushStub = jest.fn();
+	const deleteUsersStub = jest.fn();
 	const OLD_ENV = process.env;
 
 	let mockStore;
@@ -32,7 +34,9 @@ describe("students/index", () => {
 		mockStore = {
 			classes: {
 				actions: {
-					find: jest.fn(),
+					find: () => {
+						return { data: [] };
+					},
 				},
 			},
 			auth: {
@@ -53,6 +57,7 @@ describe("students/index", () => {
 			users: {
 				actions: {
 					handleUsers: jest.fn(),
+					deleteUsers: deleteUsersStub,
 					getQrRegistrationLinks: jest.fn(),
 					sendRegistrationLink: jest.fn(),
 				},
@@ -67,6 +72,12 @@ describe("students/index", () => {
 							skip: 0,
 							total: 2,
 							query: "",
+						},
+					},
+					progress: {
+						delete: {
+							active: false,
+							percent: 0,
 						},
 					},
 				}),
@@ -90,11 +101,75 @@ describe("students/index", () => {
 		};
 	});
 
+	const mockUiState = {
+		// eslint-disable-next-line no-unused-vars
+		get: (key, identifier) => {
+			const state = {
+				pagination: {},
+				sorting: {},
+				filter: {},
+			};
+			return state[key];
+		},
+		// eslint-disable-next-line no-unused-vars
+		set: (key, identifier) => {},
+	};
+
+	// always confirm
+	const mockDialog = {
+		confirm: (params) => {
+			params.onConfirm();
+		},
+	};
+
 	afterAll(() => {
 		process.env = OLD_ENV; // restore old environment
 	});
 
 	it(...isValidComponent(StudentPage));
+
+	it("should call 'deleteUsers' action", async () => {
+		const wrapper = mount(StudentPage, {
+			...createComponentMocks({
+				i18n: true,
+				store: mockStore,
+				uiState: mockUiState,
+				dialog: mockDialog,
+			}),
+		});
+		mock$objects(wrapper);
+
+		await wrapper.vm.$nextTick();
+
+		const userRows = wrapper.findAll('[data-testid="table-data-row"]');
+		expect(userRows).toHaveLength(2);
+
+		// select first entry
+		const checkbox = userRows
+			.at(0)
+			.find('.selection-column input[type="checkbox"]');
+		checkbox.setChecked();
+
+		// open actions menu
+		await wrapper.vm.$nextTick();
+		const actionsBtn = wrapper.find(
+			".row-selection-info .actions button:first-child"
+		);
+		actionsBtn.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		// click delete menu button
+		const deleteBtn = wrapper
+			.findAll(".row-selection-info .context-menu button")
+			.at(3);
+		deleteBtn.trigger("click");
+
+		expect(deleteUsersStub.mock.calls).toHaveLength(1);
+		expect(deleteUsersStub.mock.calls[0][1]).toStrictEqual({
+			ids: [mockData[0]._id],
+			userType: "student",
+		});
+	});
 
 	it("should dispatch the 'handleUsers action on load'", async () => {
 		mount(StudentPage, {
@@ -282,7 +357,8 @@ describe("students/index", () => {
 	});
 
 	it("editBtn's to property should have the expected URL", async () => {
-		const expectedURL = "/administration/students/id/edit";
+		const expectedURL =
+			"/administration/students/0000d231816abba584714c9e/edit";
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,

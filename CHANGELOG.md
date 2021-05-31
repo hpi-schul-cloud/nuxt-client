@@ -20,6 +20,28 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-9004 - Change ci build
 
+## 26.2.0
+
+### Added
+
+- SC-8250 - connect UI for bulk delete
+- SC-8164 - apply deletion concept to the deletion of students and teachers
+- SC-7937 - added Lern-Store collections multi-select
+- SC-8156 - added Spanish as an available language
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
+
+### Changed
+
+- QF/Pull Request Workflow - adds checkbox for manual test, more checks, splits tests
+- SC-7944 - changes ids for Lern-Store content and adds a link back to collection
+- SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
+- SC-7944 - changes field for Lern-Store content id and adds a link to collection
+- OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
+
+### Fixed
+
+- Fixed further conflicting screenshots
+
 ## 26.1.2
 
 ### Fixed
@@ -149,7 +171,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-6708 - added data-testids to the students table in administration page
 - SC-6709 - added data-testids to the teachers table in administration page
 - SC-7629 - created Roles component to the ldap page
-- OPS-1508 - added limits for cpu and ram to the docker compose files
+- OPS-1508 - added limits for cpu and ram to the docker compose files ( 05.11.2020 )
 - SC-7489 - added input validation to the ldap config components
 - SC-7798 - added ADMIN_VIEW and SCHOOL_EDIT permission check to ldap config page
 - SC-6043 - Prepare a concept for a general error handling in nuxt-client
