@@ -15,7 +15,7 @@ jobs:
       - name: Update package version
         run: npm --no-git-tag-version version ${{steps.substring.outputs.value}}
       - name: Commit
-        uses: stefanzweifel/git-auto-commit-action@v4.3.0
+        uses: stefanzweifel/git-auto-commit-action@v4.11.0
         with:
           commit_message: "change package version"
       - name: push changes
