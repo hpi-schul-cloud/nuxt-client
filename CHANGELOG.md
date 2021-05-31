@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - SC-9004 - Sync env variables between backend and frontend
+- SC-9023 - Add open homework overview
 
 ### Changed
 
