@@ -320,13 +320,14 @@ export default {
 			qrLinks: "qrLinks",
 			students: "list",
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
 		},
 		showConsent() {
-			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
-				? false
-				: true;
+			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;

@@ -107,6 +107,12 @@ export const actions = {
 		const metadata = await this.$axios.$get(`/edu-sharing/${id}`);
 		commit("setCurrentResource", metadata);
 	},
+	init({ commit, rootState }) {
+		commit("init", {
+			collectionsFeatureFlag:
+				rootState["env-config"].env.FEATURE_ES_COLLECTIONS_ENABLED,
+		});
+	},
 };
 
 const initialState = () => ({

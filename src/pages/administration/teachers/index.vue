@@ -285,6 +285,9 @@ export default {
 			qrLinks: "qrLinks",
 			teachers: "list",
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;
@@ -295,9 +298,7 @@ export default {
 			return !this.school.isExternal;
 		},
 		showConsent() {
-			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
-				? false
-				: true;
+			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
