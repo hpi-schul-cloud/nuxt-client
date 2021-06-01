@@ -94,7 +94,6 @@ export default function (endpoint) {
 						},
 					});
 					commit("setStatus", "success");
-					// TODO update store with commit
 				}
 			},
 		},
