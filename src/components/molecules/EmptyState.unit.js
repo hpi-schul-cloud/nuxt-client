@@ -11,7 +11,7 @@ describe("@components/molecules/EmptyState", () => {
 			},
 		});
 		expect(wrapper.find(".base").exists()).toBe(true);
-		expect(wrapper.find(".container").exists()).toBe(true);
+		expect(wrapper.find(".wrapper").exists()).toBe(true);
 		expect(wrapper.find(".img-container").exists()).toBe(true);
 	});
 

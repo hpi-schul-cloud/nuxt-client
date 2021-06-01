@@ -10,7 +10,7 @@
 		@blur="open = false"
 	>
 		<div class="button">
-			<div class="container">
+			<div class="wrapper">
 				<slot name="header"></slot>
 				<base-icon
 					source="fa"
@@ -23,7 +23,11 @@
 				</base-icon>
 			</div>
 		</div>
-		<div :id="`dropdown-content-${$uid}`" class="content" :class="{ open }">
+		<div
+			:id="`dropdown-content-${$uid}`"
+			class="dropdown__content"
+			:class="{ open }"
+		>
 			<slot class="link" />
 		</div>
 	</div>
@@ -58,7 +62,7 @@ export default {
 	}
 }
 
-.container {
+.wrapper {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -80,7 +84,7 @@ export default {
 }
 
 // Hidden by default
-.content {
+.dropdown__content {
 	position: absolute;
 	z-index: var(--layer-dropdown);
 	display: none;

@@ -1,11 +1,9 @@
-const nuxtConfig = require("../../../nuxt.config.js");
 const { additionalSecurityHeader } = require("../../../http-headers.config.js");
 
-if (!nuxtConfig.csp.security_headers) {
-	throw new Error("security_headers is missing in configuration (csp)");
-}
+const SECURITY_HEADERS_ENABLED =
+	process.env.SECURITY_HEADERS_ENABLED === "true";
 
-if (!nuxtConfig.csp.security_headers.enabled) {
+if (!SECURITY_HEADERS_ENABLED) {
 	console.log(
 		"security_headers env has not been defined, to enable" +
 			" security header set value to 1 and update in config.csp.security_headers"
@@ -13,7 +11,7 @@ if (!nuxtConfig.csp.security_headers.enabled) {
 }
 
 export default async function (req, res, next) {
-	if (nuxtConfig.csp.security_headers.enabled) {
+	if (SECURITY_HEADERS_ENABLED) {
 		Object.keys(additionalSecurityHeader).forEach((header) => {
 			res.setHeader(header, additionalSecurityHeader[header]);
 		});

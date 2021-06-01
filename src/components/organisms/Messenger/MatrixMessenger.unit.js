@@ -13,6 +13,9 @@ const mockStores = {
 			loadMessengerToken() {
 				return;
 			},
+			init() {
+				return;
+			},
 		},
 		state: () => ({
 			matrixFeatureFlag: true,
@@ -28,7 +31,7 @@ const mockStores = {
 	},
 };
 
-describe("@components/organism/Messenger", () => {
+describe("MatrixMessenger.unit", () => {
 	beforeEach(() => {
 		window.localStorage.clear();
 		window.Matrix = undefined;
@@ -47,7 +50,13 @@ describe("@components/organism/Messenger", () => {
 		};
 
 		mount(Messenger, {
-			...createComponentMocks({ i18n: true, store: mockStoresTestSpecific }),
+			...createComponentMocks({
+				i18n: true,
+				store: mockStoresTestSpecific,
+				$config: {
+					FEATURE_MATRIX_MESSENGER_ENABLED: null,
+				},
+			}),
 		});
 
 		expect(window.Matrix).toBeUndefined();
@@ -62,7 +71,13 @@ describe("@components/organism/Messenger", () => {
 		};
 
 		mount(Messenger, {
-			...createComponentMocks({ i18n: true, store: mockStoresTestSpecific }),
+			...createComponentMocks({
+				i18n: true,
+				store: mockStoresTestSpecific,
+				$config: {
+					FEATURE_MATRIX_MESSENGER_ENABLED: false,
+				},
+			}),
 		});
 
 		expect(window.Matrix).toBeUndefined();
@@ -80,6 +95,9 @@ describe("@components/organism/Messenger", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStoresTestSpecific,
+				$config: {
+					FEATURE_MATRIX_MESSENGER_ENABLED: true,
+				},
 			}),
 		});
 		expect(window.Matrix).toBeUndefined();
@@ -96,6 +114,9 @@ describe("@components/organism/Messenger", () => {
 				loadMessengerToken() {
 					return;
 				},
+				init() {
+					return;
+				},
 			},
 			state: () => ({
 				session,
@@ -109,6 +130,9 @@ describe("@components/organism/Messenger", () => {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStoresTestSpecific,
+				$config: {
+					FEATURE_MATRIX_MESSENGER_ENABLED: true,
+				},
 			}),
 		});
 
@@ -122,7 +146,13 @@ describe("@components/organism/Messenger", () => {
 
 	it("init messenger from api", async () => {
 		mount(Messenger, {
-			...createComponentMocks({ i18n: true, store: mockStores }),
+			...createComponentMocks({
+				i18n: true,
+				store: mockStores,
+				$config: {
+					FEATURE_MATRIX_MESSENGER_ENABLED: true,
+				},
+			}),
 		});
 
 		expect(window.Matrix).toBeDefined();
@@ -132,7 +162,13 @@ describe("@components/organism/Messenger", () => {
 	it("extract current room from url", async () => {
 		window.location.pathname = "/teams/aaaabbbbccccddddeeeeffff";
 		mount(Messenger, {
-			...createComponentMocks({ i18n: true, store: mockStores }),
+			...createComponentMocks({
+				i18n: true,
+				store: mockStores,
+				$config: {
+					FEATURE_MATRIX_MESSENGER_ENABLED: true,
+				},
+			}),
 		});
 
 		expect(window.Matrix).toBeDefined();
