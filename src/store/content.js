@@ -103,8 +103,9 @@ export const actions = {
 		}
 	},
 
-	async getResourceMetadata(context, id) {
-		return this.$axios.$get(`/edu-sharing/${id}`);
+	async getResourceMetadata({ commit }, id) {
+		const metadata = await this.$axios.$get(`/edu-sharing/${id}`);
+		commit("setCurrentResource", metadata);
 	},
 };
 
@@ -129,6 +130,7 @@ const initialState = () => ({
 	loading: false,
 	lastQuery: "",
 	collectionsFeatureFlag: process.env.FEATURE_ES_COLLECTIONS_ENABLED === "true",
+	currentResource: {},
 });
 
 export const mutations = {
@@ -191,6 +193,9 @@ export const mutations = {
 	},
 	setLessons(state, payload) {
 		state.lessons = payload;
+	},
+	setCurrentResource(state, payload) {
+		state.currentResource = payload;
 	},
 };
 

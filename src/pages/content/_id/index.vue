@@ -7,7 +7,6 @@
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
 import { isCollectionHelper } from "@utils/helpers";
-
 export default {
 	meta: {
 		requiredPermissions: ["LERNSTORE_VIEW"],
@@ -23,11 +22,9 @@ export default {
 			: "plain";
 	},
 	async asyncData({ store, params }) {
-		// TODO wrong use of store
-		const resource = await store.dispatch(
-			"content/getResourceMetadata",
-			params.id
-		);
+		await store.dispatch("content/getResourceMetadata", params.id);
+
+		const resource = store.state["content"].currentResource;
 
 		const isCollection =
 			store.state.content.collectionsFeatureFlag === true &&
