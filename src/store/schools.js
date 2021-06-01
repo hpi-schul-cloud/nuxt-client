@@ -3,7 +3,7 @@ const module = {
 		return {
 			studentVisibility: false,
 			lernStoreVisibility: false,
-			dataProtectionPolicies: [],
+			fileStorageTotal: 0,
 			setRequestSuccessful: false,
 			error: null,
 		};
@@ -40,18 +40,12 @@ const module = {
 				// TODO what is supposed to happen on error?
 			}
 		},
-		async fetchDataProtectionPolicies({ commit }, schoolId) {
+		async fetchFileStorageTotal({ commit }) {
 			commit("setRequestSuccessful", false);
-
+			
 			try {
-				const response = await this.$axios.$get("/consentVersions", {
-					params: {
-						schoolId,
-						consentTypes: "privacy",
-					},
-				});
-
-				commit("setDataProtectionPolicies", response.data);
+				const fileStorageTotal = await this.$axios.$get("/fileStorage/total");
+				commit("setFileStorageTotal", fileStorageTotal);
 				commit("setRequestSuccessful", true);
 			} catch (error) {
 				commit("setError", error);
@@ -60,11 +54,12 @@ const module = {
 			}
 		},
 		async update({ commit }, payload) {
-			console.log(payload);
+			console.log("payload", payload);
 			commit("setRequestSuccessful", false);
 			try {
-				const data = await this.$axios.$post("/school");
-				commit("set", data);
+				const data = await this.$axios.$patch(`/schools/${payload.id}`, payload);
+				console.log("data", data);
+				commit("setSchool", data);
 				commit("setRequestSuccessful", true);
 			} catch (error) {
 				commit("setError", error);
@@ -83,8 +78,11 @@ const module = {
 		setDataProtectionPolicies(state, dataProtectionPolicies) {
 			state.dataProtectionPolicies = dataProtectionPolicies;
 		},
-		set(state, updatedStage) {
-			state.school = updatedStage;
+		setFileStorageTotal(state, fileStorageTotal) {
+			state.fileStorageTotal = fileStorageTotal;
+		},
+		setSchool(state, updatedSchool) {
+			state.school = updatedSchool;
 		},
 		setRequestSuccessful(state) {
 			state.setRequestSuccessful = true;

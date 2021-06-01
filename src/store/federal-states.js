@@ -9,7 +9,7 @@ const module = {
 	},
 	actions: {
 		async fetchFederalStates({ commit }) {
-			commit("requestSuccessful", false);
+			commit("setRequestSuccessful", false);
 
 			try {
 				const response = await this.$axios.$get("/federalStates");
@@ -23,7 +23,7 @@ const module = {
 			}
 		},
 		async fetchCurrentFederalState({ commit }, id) {
-			commit("requestSuccessful", false);
+			commit("setRequestSuccessful", false);
 
 			try {
 				const response = await this.$axios.$get(`/federalStates/${id}`);

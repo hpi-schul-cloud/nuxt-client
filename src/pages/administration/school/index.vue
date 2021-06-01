@@ -53,9 +53,10 @@
 									<v-row>
 										<v-col>
 											<v-text-field
-												v-model="localSchool.schoolNumber"
+												v-model="localSchool.officialSchoolNumber"
 												label="Schulnummer"
 												dense
+												:disabled="school.officialSchoolNumber ? true : false"
 												hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
 												persistent-hint
 											></v-text-field>
@@ -65,12 +66,13 @@
 										<v-col>
 											<v-select
 												v-model="localSchool.county"
+												label="Bitte wählen Sie den Kreis, zu dem die Schule gehört"
 												:items="federalState.counties"
 												item-text="name"
-												item-value="id"
+												item-value="_id"
 												return-object
 												dense
-												label="Bitte wählen Sie den Kreis, zu dem die Schule gehört"
+												:disabled="localSchool.county ? true : false"
 												hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
 												persistent-hint
 											></v-select>
@@ -79,11 +81,12 @@
 									<v-row>
 										<v-col class="d-flex">
 											<v-file-input
-												v-model="localSchool.schoolLogoUrl"
+												v-model="localSchool.logo"
 												label="Schullogo hochladen"
 												dense
 												prepend-icon=""
 											></v-file-input>
+											<input type="hidden" :value="localSchool.logo" />
 										</v-col>
 									</v-row>
 									<v-row>
@@ -92,8 +95,9 @@
 												v-model="localSchool.timezone"
 												label="Zeitzone"
 												dense
-												readonly
 												disabled
+												hint="Um die Zeitzone für die Schule zu ändern, wenden Sie sich bitte an einen Admin."
+												persistent-hint
 											></v-text-field>
 										</v-col>
 									</v-row>
@@ -101,9 +105,13 @@
 										<v-col>
 											<v-select
 												v-model="localSchool.language"
-												:items="languages"
-												dense
 												label="Sprache"
+												:items="languages"
+												item-text="name"
+												item-value="abbreveation"
+												dense
+												hint="Ist keine Sprache für die Schule gesetzt, wird die Sprache der Instanz (Deutsch) angewandt."
+												persistent-hint
 											></v-select>
 										</v-col>
 									</v-row>
@@ -222,21 +230,26 @@
 										<v-col>
 											<v-responsive width="74%" class="my-8">
 												<v-select
-													v-model="schoolCloudStorage"
-													:items="cloudStorages"
+													v-model="localSchool.fileStorageType"
+													:items="fileStorageTypes"
+													item-text="name"
+													item-value="type"
 													dense
 													label="Cloud-Storage-Anbieter"
 												></v-select>
 											</v-responsive>
 										</v-col>
 									</v-row>
-									<v-btn color="primary" depressed>
+									<v-btn color="primary" depressed @click="save">
 										Allgemeine Einstellungen speichern
 									</v-btn>
 									<h2 class="text-h6 mb-0">
 										Genutzter Datei-Speicherplatz in der Cloud
 									</h2>
-									<p class="body-1">Derzeit bezieht Ihre Schule 0 B.</p>
+									<p class="body-1">
+										Derzeit bezieht Ihre Schule
+										{{ localSchool.fileStorageTotal }} B.
+									</p>
 								</v-col>
 							</v-row>
 						</v-form>
@@ -287,32 +300,41 @@
 						</v-simple-table>
 						<v-btn color="primary" depressed>System hinzufügen</v-btn>
 						<h2 class="text-h4 mt-13">RSS-Feeds</h2>
-						<v-simple-table>
+						<v-simple-table v-if="localSchool.rssFeeds">
 							<template v-slot:default>
 								<thead>
 									<tr>
-										<th class="text-left">Alias</th>
-										<th class="text-left">Typ</th>
+										<th class="text-left">URL</th>
+										<th class="text-left">Kurzbeschreibung</th>
+										<th class="text-left">Status</th>
 										<th class="text-left"></th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="item in dataProtectionPolicies" :key="item.name">
-										<td>{{ item.title }}</td>
+									<tr v-for="item in localSchool.rssFeeds" :key="item.name">
+										<td>{{ item.url }}</td>
 										<td>{{ item.description }}</td>
-										<td>{{ item.link }}</td>
+										<td>
+											{{
+												item.status === "pending"
+													? "In der Warteschlange"
+													: item.status === "success"
+													? "Erfolgreich?"
+													: "Fehler?"
+											}}
+										</td>
+										<td>
+											<v-btn icon block
+												><v-icon> {{ iconMdiTrashCanOutline }} </v-icon></v-btn
+											>
+										</td>
 									</tr>
 								</tbody>
 							</template>
 						</v-simple-table>
+						<p v-else>Es sind noch keine RSS-Feeds hinterlegt.</p>
 						<v-btn color="primary" depressed>RSS-Feed hinzufügen</v-btn>
-						{{ console.log("hi hi", school) }}
-						{{
-							console.log(
-								"hi hi hi hi",
-								JSON.parse(JSON.stringify(localSchool.dataProtectionPolicies))
-							)
-						}}
+						{{ console.log(school, localSchool) }}
 					</v-col>
 				</v-row>
 			</v-responsive>
@@ -322,8 +344,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { mdiChevronRight } from "@mdi/js";
+import { mdiChevronRight, mdiTrashCanOutline } from "@mdi/js";
 import { printDate } from "@plugins/datetime";
+import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 
 export default {
 	components: {},
@@ -332,8 +355,8 @@ export default {
 		return {
 			localSchool: {
 				name: "",
-				schoolNumber: "",
-				schoolLogoUrl: "",
+				officialSchoolNumber: "",
+				logo: "",
 				county: {},
 				timezone: "",
 				language: "",
@@ -343,10 +366,17 @@ export default {
 				chatFunction: false,
 				videoConference: false,
 				fileStorageType: "",
+				fileStorageTotal: 0,
 				dataProtectionPolicies: [],
+				rssFeeds: [],
 			},
-			languages: ["Deutsch", "Englisch", "Spanisch"], // hard coded
-			cloudStorages: ["HPI Schul-Cloud"], // fileStorageType -> awsS3 = HPI Schul-Cloud
+			languages: [
+				{ name: "System-Default (Deutsch)", abbreveation: "sys" },
+				{ name: "Deutsch", abbreveation: "de" },
+				{ name: "Englisch", abbreveation: "en" },
+				{ name: "Spanisch", abbreveation: "es" },
+			],
+			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 			breadcrumbItems: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -358,26 +388,34 @@ export default {
 				},
 			],
 			iconMdiChevronRight: mdiChevronRight,
+			iconMdiTrashCanOutline: mdiTrashCanOutline,
 		};
 	},
 	computed: {
 		...mapState("auth", {
 			school: "school",
 			user: "user",
-			locale: "locale",
-		}),
-		...mapState("federal-states", {
-			federalState: "currentFederalState",
+			// locale: "locale",
 		}),
 		...mapState("schools", {
 			studentVisibility: "studentVisibility",
 			lernStoreVisibility: "lernStoreVisibility",
-			dataProtectionPolicies: "dataProtectionPolicies",
+			fileStorageTotal: "fileStorageTotal",
+		}),
+		...mapState("federal-states", {
+			federalState: "currentFederalState",
+		}),
+		...mapState("consent-versions", {
+			dataProtectionPolicies: "consentVersions",
+		}),
+		...mapState("systems", {
+			systems: "systems",
 		}),
 		console: () => console, // delete when done
 	},
 	/* watch: {
 		school(updatedSchool) {
+			console.log("hello");
 			this.localSchool = updatedSchool;
 		},
 	}, */
@@ -389,17 +427,25 @@ export default {
 		this.fetchLernStoreVisibility().then(() => {
 			this.localSchool.lernStore = this.lernStoreVisibility;
 		});
-		this.fetchDataProtectionPolicies().then(
+		this.fetchConsentVersions({
+			schoolId: this.school.id,
+			consentTypes: "privacy",
+		}).then(
 			() =>
 				(this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies)
 		);
+		this.fetchFileStorageTotal();
+
+		/* this.fetchSetOfSystems(this.school.systems).then(() => {
+			console.log("blub", JSON.parse(JSON.stringify(this.systems)));
+		}); */
 
 		this.localSchool.name = this.school.name;
-		this.localSchool.schoolNumber = this.school.officialSchoolNumber;
-		this.localSchool.county = this.school.county; // show in select, disable select
-		this.localSchool.schoolLogoUrl = this.school.logo_dataUrl;
-		this.localSchool.timezone = this.school.timezone || "Europe/Berlin"; // show but don't set intance default (in a hint)
-		this.localSchool.language = this.school.language || this.locale; // show but don't set instance default (in a hint)
+		this.localSchool.officialSchoolNumber = this.school.officialSchoolNumber;
+		this.localSchool.county = this.school.county;
+		this.localSchool.logo = dataUrlToFile(this.school.logo_dataUrl);
+		this.localSchool.timezone = this.school.timezone || "Europe/Berlin";
+		this.localSchool.language = this.school.language;
 		this.localSchool.chatFunction = this.school.features.includes("rocketChat");
 		this.localSchool.matrixMessenger = this.school.features.includes(
 			"messenger"
@@ -408,19 +454,42 @@ export default {
 			"videoconference"
 		);
 		this.localSchool.fileStorageType = this.school.fileStorageType;
+		this.localSchool.rssFeeds = this.school.rssFeeds;
 	},
 	methods: {
 		printDate,
+		toBase64,
+		dataUrlToFile,
 		...mapActions("federal-states", ["fetchCurrentFederalState"]),
 		...mapActions("schools", [
 			"fetchStudentVisibility",
 			"fetchLernStoreVisibility",
-			"fetchDataProtectionPolicies",
+			"fetchFileStorageTotal",
+			"update",
 		]),
-
-		/* save() {
-			this.$store.dispatch("schools/patch", this.localSchool);
-		}, */
+		...mapActions("consent-versions", ["fetchConsentVersions"]),
+		...mapActions("systems", ["fetchSetOfSystems"]),
+		save() {
+			const updatedSchool = {
+				id: this.school.id,
+				name: this.localSchool.name,
+				language: this.localSchool.language,
+				fileStorageType: this.localSchool.fileStorageType,
+				rssFeeds: this.localSchool.rssFeeds,
+				logo_dataUrl: toBase64(this.localSchool.logo),
+			};
+			if (
+				!this.school.officialSchoolNumber &&
+				this.localSchool.officialSchoolNumber
+			) {
+				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
+			}
+			if (!this.school.county && this.localSchool.county._id) {
+				updatedSchool.county = this.localSchool.county._id;
+			}
+			console.log("updated", updatedSchool);
+			this.update(updatedSchool);
+		},
 	},
 	head() {
 		return {
