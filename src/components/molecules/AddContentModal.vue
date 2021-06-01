@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
 
 export default {
@@ -99,7 +99,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("courses", {
+		...mapState("courses", {
 			courses: "list",
 		}),
 		...mapState("content", {

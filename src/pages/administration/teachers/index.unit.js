@@ -63,9 +63,6 @@ describe("teachers/index", () => {
 					handleUsers: jest.fn(),
 					deleteUsers: deleteUsersStub,
 				},
-				getters: {
-					list: () => mockData,
-				},
 				state: () => ({
 					list: mockData,
 					pagination: {

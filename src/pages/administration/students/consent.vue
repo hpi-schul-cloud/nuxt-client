@@ -275,7 +275,7 @@
 // file deepcode ignore ArrayMethodOnNonArray
 import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import BaseInput from "@components/base/BaseInput/BaseInput";
@@ -390,13 +390,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("bulkConsent", {
+		...mapState("bulkConsent", {
 			selectedStudents: "selectedStudents",
 			selectedStudentsData: "selectedStudentsData",
 			registeredStudents: "registeredStudents",
 			registerError: "registerError",
 		}),
-		...mapGetters("users", {
+		...mapState("users", {
 			students: "list",
 		}),
 		filteredTableData: {

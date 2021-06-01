@@ -40,7 +40,7 @@
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
 
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
 	components: {
@@ -72,7 +72,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("users", {
+		...mapState("users", {
 			businessError: "businessError",
 		}),
 	},

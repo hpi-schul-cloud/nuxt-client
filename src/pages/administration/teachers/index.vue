@@ -128,7 +128,7 @@
 	</section>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
@@ -273,9 +273,6 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("users", {
-			teachers: "list",
-		}),
 		...mapState("auth", {
 			school: "school",
 			user: "user",
@@ -286,6 +283,7 @@ export default {
 			isDeleting: (state) => state.progress.delete.active,
 			deletedPercent: (state) => state.progress.delete.percent,
 			qrLinks: "qrLinks",
+			teachers: "list",
 		}),
 		tableData: {
 			get() {

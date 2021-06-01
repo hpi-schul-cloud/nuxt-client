@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 import NewsCard from "@components/molecules/NewsCard";
 import FabFloating from "@components/molecules/FabFloating";
 
@@ -30,7 +30,7 @@ export default {
 		FabFloating,
 	},
 	computed: {
-		...mapGetters("news", {
+		...mapState("news", {
 			news: "list",
 		}),
 	},
