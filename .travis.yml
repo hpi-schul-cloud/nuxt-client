@@ -24,8 +24,6 @@ if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not typ
 stages:
   - build_and_push # TODO: build should normally execute if it is needed but then we do not need test_themes
   - deploy_documentation
-  - name: deploy
-    if: type = push && (branch = master || branch = develop || branch ~= /^(release|hotfix).*$/)
 
 jobs:
   include:
