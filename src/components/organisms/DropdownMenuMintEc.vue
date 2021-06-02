@@ -23,7 +23,11 @@
 				</base-icon>
 			</div>
 		</div>
-		<div :id="`dropdown-content-${$uid}`" class="content" :class="{ open }">
+		<div
+			:id="`dropdown-content-${$uid}`"
+			class="dropdown__content"
+			:class="{ open }"
+		>
 			<slot class="link" />
 		</div>
 	</div>
@@ -80,7 +84,7 @@ export default {
 }
 
 // Hidden by default
-.content {
+.dropdown__content {
 	position: absolute;
 	z-index: var(--layer-dropdown);
 	display: none;
