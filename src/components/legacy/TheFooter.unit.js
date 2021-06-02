@@ -1,5 +1,20 @@
 import TheFooter from "./TheFooter";
 
+const specificFilesMock = {
+	privacyExemplary:
+		"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+	privacy:
+		"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
+	termsOfUseExemplary:
+		"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
+	termsOfUse:
+		"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
+	termsOfUseSchool:
+		"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+	analogConsent:
+		"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Dokumente/Einwilligungserklaerung_analog.pdf",
+};
+
 describe("@components/legacy/TheFooter", () => {
 	it(...isValidComponent(TheFooter));
 
@@ -17,6 +32,11 @@ describe("@components/legacy/TheFooter", () => {
 									"https://s3.hidrive.strato.com/schul-cloud-hpi/default/",
 							},
 						}),
+					},
+					filePaths: {
+						getters: {
+							getSpecificFiles: () => specificFilesMock,
+						},
 					},
 				},
 				mocks: {
