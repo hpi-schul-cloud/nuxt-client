@@ -31,7 +31,7 @@ export default function (endpoint) {
 				commit("set", {
 					items: res.data,
 				});
-				commit("setStatus", "success");
+				commit("setStatus", "completed");
 			},
 			async get({ commit }, payload = {}) {
 				let id;
@@ -43,7 +43,7 @@ export default function (endpoint) {
 				commit("setStatus", "pending");
 				const res = await this.$axios.$get(baseUrl + "/" + id);
 				commit("setCurrent", res);
-				commit("setStatus", "success");
+				commit("setStatus", "completed");
 			},
 			async create({ commit }, payload = {}) {
 				const { customEndpoint } = payload;
@@ -52,7 +52,7 @@ export default function (endpoint) {
 				commit("set", {
 					items: Array.isArray(res) ? res : [res],
 				});
-				commit("setStatus", "success");
+				commit("setStatus", "completed");
 			},
 			async patch({ commit }, payload = []) {
 				commit("setStatus", "pending");
@@ -63,7 +63,7 @@ export default function (endpoint) {
 				commit("set", {
 					items: [res],
 				});
-				commit("setStatus", "success");
+				commit("setStatus", "completed");
 			},
 			async update({ commit }, payload = []) {
 				commit("setStatus", "pending");
@@ -74,7 +74,7 @@ export default function (endpoint) {
 				commit("set", {
 					items: [res],
 				});
-				commit("setStatus", "success");
+				commit("setStatus", "completed");
 			},
 			async remove({ commit }, idOrPayload) {
 				if (typeof idOrPayload === "string") {
@@ -82,7 +82,7 @@ export default function (endpoint) {
 					commit("setStatus", "pending");
 					await this.$axios.$delete(baseUrl + "/" + id);
 					commit("remove", idOrPayload);
-					commit("setStatus", "success");
+					commit("setStatus", "completed");
 				} else {
 					const payload = idOrPayload;
 					const { query, customEndpoint } = payload;
@@ -93,7 +93,7 @@ export default function (endpoint) {
 							return qs.stringify(params);
 						},
 					});
-					commit("setStatus", "success");
+					commit("setStatus", "completed");
 				}
 			},
 		},

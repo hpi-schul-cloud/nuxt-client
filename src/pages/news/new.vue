@@ -19,6 +19,7 @@
 						design="primary"
 						type="submit"
 						data-testid="btn_news_submit"
+						:disabled="status === 'pending'"
 					>
 						<base-icon source="material" icon="check" />
 						{{ $t("pages.news.new.create") }}
@@ -37,6 +38,8 @@
 import FormNews from "@components/organisms/FormNews";
 import FormActions from "@components/molecules/FormActions";
 
+import { mapState } from "vuex";
+
 export default {
 	components: {
 		FormNews,
@@ -44,6 +47,11 @@ export default {
 	},
 	meta: {
 		requiredPermissions: ["NEWS_CREATE"],
+	},
+	computed: {
+		...mapState("news", {
+			status: "status",
+		}),
 	},
 	head() {
 		return {
