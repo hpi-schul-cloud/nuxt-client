@@ -184,14 +184,14 @@ if [[ "$TRAVIS_BRANCH" =~ ^"release"* ]]
 then
 	echo "deploy release to staging $TRAVIS_BRANCH with $VERSION."
 	echo "deployment version is set as github secret GITHUB NEXT_RELEASE"
-	echo" and checked in sc-app-deploy workflow Deploy_release_to_staging.yml"
+	echo "and checked in sc-app-deploy workflow Deploy_release_to_staging.yml"
 
 	# mask DOT for payload
 	VERSION=$( echo $VERSION | tr -s "[:punct:]" "-" )
 
 	curl -X POST https://api.github.com/repos/hpi-schul-cloud/sc-app-ci/dispatches \
 	-H 'Accept: application/vnd.github.everest-preview+json' \
-	-u $CI_TRIGGER_TOKEN \
+	-u $GITHUB_TOKEN \
 	--data '{"event_type": "Trigger_from_sc_nuxt", "client_payload": { "GIT_BRANCH": "'"$TRAVIS_BRANCH"'", "TRIGGER_REPOSITORY": "sc-nuxt", "VERSION": "'"$VERSION"'" }}'
 fi
 
