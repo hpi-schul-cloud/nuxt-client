@@ -1,18 +1,13 @@
 const micromatch = require("micromatch");
 
 module.exports = {
-	"*.js": [
-		"npm run lint:eslint --fix",
-		"npm run lint:prettier --write",
-		"npm run test:unit:file",
-	],
+	"*.js": ["npm run lint:eslint --fix", "npm run lint:prettier --write"],
 	"{!(package)*.json}": ["npm run lint:prettier --parser json"],
 	"package.json": ["npm run lint:prettier --write"],
 	"*.vue": [
 		"npm run lint:eslint --fix",
 		"npm run lint:stylelint --fix",
 		"npm run lint:prettier --write",
-		"npm run test:unit:file",
 	],
 	"*.scss": ["npm run lint:stylelint --fix", "npm run lint:prettier --write"],
 	"*.md": ["npm run lint:markdownlint", "npm run lint:prettier --write"],
