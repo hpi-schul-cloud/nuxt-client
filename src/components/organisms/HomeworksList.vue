@@ -86,6 +86,7 @@ export default {
 						printDateTimeFromStringUTC(dueDate);
 		},
 		hintdueDate(dueDateString) {
+			if (!dueDateString) return "";
 			const dueDate = new Date(fromUTC(dueDateString));
 			const current = new Date();
 			const currentPlusOneDay = new Date();
