@@ -110,7 +110,7 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(firstLink.attributes().href).toBe(`/homework/${homeworks[0]._id}`);
 	});
 
-	it("Should display due date label according to due date", () => {
+	it("Should display due date labels according to due date", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks(
 				{
@@ -125,19 +125,39 @@ describe("@components/organisms/HomeworksList", () => {
 			},
 		});
 
-		const dateLabels = wrapper.findAll(".v-list-item__action-text");
+		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
+		expect(dueDateLabels).toHaveLength(homeworks.length);
 
-		dateLabels.wrappers.forEach((dateLabel, index) => {
+		dueDateLabels.wrappers.forEach((dateLabel, index) => {
 			expect(dateLabel.exists()).toBe(true);
-
 			if (
 				homeworks[index].duedate === null ||
 				typeof homeworks[index].duedate === "undefined"
 			)
 				expect(dateLabel.text()).toBe("Kein Abgabedatum");
-			else if (new Date(homeworks[index].duedate) >= new Date())
-				expect(dateLabel.text()).toContain("Fällig");
-			else expect(dateLabel.text()).toBe("Zu spät");
+			else expect(dateLabel.text()).toContain("Abgabe am");
+		});
+
+		const dueDateHintLabels = wrapper.findAll(
+			"[data-test-id='dueDateHintLabel']"
+		);
+		expect(dueDateHintLabels).toHaveLength(homeworks.length);
+
+		dueDateHintLabels.wrappers.forEach((dateHintLabel, index) => {
+			expect(dateHintLabel.exists()).toBe(true);
+			const current = new Date();
+			const currentPlusOneDay = new Date();
+			currentPlusOneDay.setDate(currentPlusOneDay.getDate() + 1);
+
+			if (
+				new Date(homeworks[index].duedate) < currentPlusOneDay &&
+				new Date(homeworks[index].duedate) > current
+			)
+				//TODO: this case is never reached with the test data
+				expect(dateHintLabel.text()).toBe("DueSoon");
+			else if (new Date(homeworks[index].duedate) < current)
+				expect(dateHintLabel.text()).toContain("Verpasst");
+			else expect(dateHintLabel.text()).toContain("");
 		});
 	});
 

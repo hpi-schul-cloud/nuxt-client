@@ -33,9 +33,14 @@
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
+						data-test-id="dueDateLabel"
 						v-text="computedDueDateLabel(homework.duedate)"
 					/>
 					<v-spacer />
+					<v-list-item-action-text
+						data-test-id="dueDateHintLabel"
+						v-text="hintdueDate(homework.duedate)"
+					/>
 					<v-badge v-if="false" color="error" dot inline></v-badge>
 				</v-list-item-action>
 			</v-list-item>
@@ -47,7 +52,7 @@
 <script>
 import { fromNow } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
-import { printDateTimeFromStringUTC } from "@plugins/datetime";
+import { fromUTC, printDateTimeFromStringUTC } from "@plugins/datetime";
 import { mapGetters } from "vuex";
 
 export default {
@@ -74,15 +79,26 @@ export default {
 	},
 
 	methods: {
-		computedDueDateLabel(duedate) {
-			if (!duedate) return this.$t("pages.homeworks.labels.noDueDate");
+		computedDueDateLabel(dueDate) {
+			return !dueDate
+				? this.$t("pages.homeworks.labels.noDueDate")
+				: this.$t("pages.homeworks.labels.due") +
+						printDateTimeFromStringUTC(dueDate);
+		},
+		hintdueDate(dueDateString) {
+			const dueDate = new Date(fromUTC(dueDateString));
+			const current = new Date();
+			const currentPlusOneDay = new Date();
+			currentPlusOneDay.setDate(currentPlusOneDay.getDate() + 1);
 
-			if (new Date(duedate) >= new Date())
-				return (
-					this.$t("pages.homeworks.labels.due") +
-					printDateTimeFromStringUTC(duedate)
-				);
-			else return this.$t("pages.homeworks.labels.overdue");
+			if (dueDate < currentPlusOneDay && dueDate >= current) {
+				const timeDiffHours = (dueDate - current) / 1000 / 3600;
+				if (Math.round(timeDiffHours) > 0)
+					return "Abgabe in " + Math.round(timeDiffHours) + "h";
+				else return "Abgabe in " + Math.round(timeDiffHours * 60) + " Minuten";
+			} else if (dueDate < current)
+				return this.$t("pages.homeworks.labels.overdue");
+			else return "";
 		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;

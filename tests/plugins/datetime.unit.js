@@ -71,7 +71,9 @@ describe("@plugins/datetime", () => {
 
 	const dateUTCString = dateUTC.format("DD.MM.YYYY");
 	const dateLocalString = dateLocal.format("DD.MM.YYYY");
-	const dateTimeLocalString = dateLocal.format("DD.MM.YYYY HH:mm");
+	const dateTimeLocalString = dateUTC
+		.tz(TEST_DATETIME_TIMEZONE)
+		.format("DD.MM.YYYY HH:mm");
 
 	const dateFormat = dateLocal.format("YYYY-MM-DD");
 	const time = dateLocal.format("HH:mm");
