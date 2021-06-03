@@ -16,16 +16,9 @@ env:
     # DOCKERTAG for feature branches will be overwritten in build.sh
     - DOCKERTAG="$( echo $TRAVIS_BRANCH | tr -s '[:punct:]' '-' | tr -s '[:upper:]' '[:lower:]' )_v$( jq -r '.version' package.json )_$TRAVIS_COMMIT"
 
-# do not run on develop if it is just a dependency update from dependabot to preserve resources
-# "not type = pull_request" is required to keep it running on PRs
-if: not (branch = develop and commit_message ~= /^Bump.*from.*to.*$/ and not type = pull_request)
-
-# TODO: The stages and build files must completly new sorted, at the moment it do not solve what we need.
 stages:
-  - build_and_push # TODO: build should normally execute if it is needed but then we do not need test_themes
+  - build_and_push
   - deploy_documentation
-  - name: deploy
-    if: type = push && (branch = master || branch = develop || branch ~= /^(release|hotfix).*$/)
 
 jobs:
   include:
