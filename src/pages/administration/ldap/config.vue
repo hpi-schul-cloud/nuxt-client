@@ -76,6 +76,7 @@
 				design="secondary"
 				class="ml--sm"
 				data-testid="ldapVerifyButton"
+				:disabled="status === 'pending'"
 				@click="validateHandler"
 				>{{
 					this.$t("pages.administration.ldap.index.buttons.verify")
@@ -137,6 +138,7 @@ export default {
 			data: "data",
 			verified: "verified",
 			temp: "temp",
+			status: "status",
 		}),
 		isInvalid() {
 			if (
