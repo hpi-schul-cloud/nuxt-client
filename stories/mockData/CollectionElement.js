@@ -2,26 +2,26 @@ export const CollectionElement = {
 	remote: null,
 	content: {
 		url:
-			"https://mv-repo.schul-cloud.org/edu-sharing/components/render/311a8e89-6352-4050-968a-026e465a3b99",
+			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/components/render/311a8e89-6352-4050-968a-026e465a3b99",
 		hash: null,
 		version: "1.0",
 	},
 	license: {
 		icon:
-			"https://mv-repo.schul-cloud.org/edu-sharing/ccimages/licenses/copyright-free.svg",
+			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/ccimages/licenses/copyright-free.svg",
 		url: null,
 	},
 	isDirectory: false,
 	commentCount: 0,
 	rating: null,
 	ref: {
-		repo: "mv-repo.schul-cloud.org",
+		repo: "mv-repo.hpi-schul-cloud.de",
 		id: "311a8e89-6352-4050-968a-026e465a3b99",
 		archived: false,
 		isHomeRepo: true,
 	},
 	parent: {
-		repo: "mv-repo.schul-cloud.org",
+		repo: "mv-repo.hpi-schul-cloud.de",
 		id: "9bdf97e0-be67-4c7e-a435-08ff25723dc4",
 		archived: false,
 		isHomeRepo: true,
@@ -81,7 +81,7 @@ export const CollectionElement = {
 		"CCPublish",
 	],
 	downloadUrl:
-		"https://mv-repo.schul-cloud.org/edu-sharing/eduservlet/download?nodeId=311a8e89-6352-4050-968a-0521465a3b99",
+		"https://mv-repo.hpi-schul-cloud.de/edu-sharing/eduservlet/download?nodeId=311a8e89-6352-4050-968a-0521465a3b99",
 	properties: {
 		"ccm:replicationsourcehash": ["-2176748420977789431"],
 		"ccm:original": ["311a8e89-6352-4050-968a-026e465a3b99"],
@@ -90,7 +90,7 @@ export const CollectionElement = {
 		"virtual:commentcount": ["0"],
 		"cclom:version": ["1.0"],
 		"virtual:licenseicon": [
-			"https://mv-repo.schul-cloud.org/edu-sharing/ccimages/licenses/copyright-free.svg",
+			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/ccimages/licenses/copyright-free.svg",
 		],
 		"virtual:usagecount": ["0"],
 		"ccm:objecttype": ["MATERIAL"],
@@ -118,7 +118,7 @@ export const CollectionElement = {
 		"cm:creator": ["admin"],
 		"cm:autoVersion": ["false"],
 		"virtual:permalink": [
-			"https://mv-repo.schul-cloud.org/edu-sharing/components/render/311a8e89-6352-4050-968a-0521465a3b99/1.0",
+			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/components/render/311a8e89-6352-4050-968a-0521465a3b99/1.0",
 		],
 		"cm:versionLabel": ["1.0"],
 		"cm:versionable": ["true"],
@@ -145,7 +145,7 @@ export const CollectionElement = {
 		"ccm:ph_invited": ["GROUP_Thuringia-public"],
 		"ccm:ph_users": ["admin"],
 		"ccm:ph_history": [
-			'{"notifyUser":"admin","notifyAction":"PERMISSION_ADD","user":{"username":"admin","authorityName":"admin","authorityType":"USER"},"created":"Jan 6, 2021 5:58:36 PM","acl":{"inherited":true,"aces":[{"authority":"GROUP_Thuringia-public","permission":"CCPublish","accessStatus":"acepted","authorityType":"GROUP","group":{"name":"GROUP_Thuringia-public","repositoryId":"mv-repo.schul-cloud.org","nodeId":"a99c6b4a-5065-4ec3-8ea4-0470d8a7da89","editable":true,"authorityName":"GROUP_Thuringia-public","authorityType":"GROUP"},"id":0,"isInherited":false,"isEdited":false},{"authority":"GROUP_Thuringia-public","permission":"Consumer","accessStatus":"acepted","authorityType":"GROUP","group":{"name":"GROUP_Thuringia-public","repositoryId":"mv-repo.schul-cloud.org","nodeId":"a99c6b4a-5065-4ec3-8ea4-0470d8a7da89","editable":true,"authorityName":"GROUP_Thuringia-public","authorityType":"GROUP"},"id":0,"isInherited":false,"isEdited":false}]}}',
+			'{"notifyUser":"admin","notifyAction":"PERMISSION_ADD","user":{"username":"admin","authorityName":"admin","authorityType":"USER"},"created":"Jan 6, 2021 5:58:36 PM","acl":{"inherited":true,"aces":[{"authority":"GROUP_Thuringia-public","permission":"CCPublish","accessStatus":"acepted","authorityType":"GROUP","group":{"name":"GROUP_Thuringia-public","repositoryId":"mv-repo.hpi-schul-cloud.de","nodeId":"a99c6b4a-5065-4ec3-8ea4-0470d8a7da89","editable":true,"authorityName":"GROUP_Thuringia-public","authorityType":"GROUP"},"id":0,"isInherited":false,"isEdited":false},{"authority":"GROUP_Thuringia-public","permission":"Consumer","accessStatus":"acepted","authorityType":"GROUP","group":{"name":"GROUP_Thuringia-public","repositoryId":"mv-repo.hpi-schul-cloud.de","nodeId":"a99c6b4a-5065-4ec3-8ea4-0470d8a7da89","editable":true,"authorityName":"GROUP_Thuringia-public","authorityType":"GROUP"},"id":0,"isInherited":false,"isEdited":false}]}}',
 		],
 		"cm:initialVersion": ["false"],
 		"cclom:general_keyword": [
@@ -167,12 +167,12 @@ export const CollectionElement = {
 		isGenerated: false,
 		type: "TYPE_USERDEFINED",
 		url:
-			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
+			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
 		width: null,
 		height: null,
 	},
 	iconURL:
-		"https://mv-repo.schul-cloud.org/edu-sharing/themes/default/images/common/mime-types/svg/link.svg",
+		"https://mv-repo.hpi-schul-cloud.de/edu-sharing/themes/default/images/common/mime-types/svg/link.svg",
 	collection: null,
 	owner: {
 		profile: null,

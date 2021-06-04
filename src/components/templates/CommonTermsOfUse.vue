@@ -4,10 +4,10 @@
 		Liebe Besucher*innen, liebe Nutzer*innen, liebe Erziehungsberechtigte, Diese
 		Datenschutzhinweise informieren über die Verarbeitung personenbezogener
 		Daten, die beim Aufruf der Website
-		<a href="https://schul-cloud.org">https://schul-cloud.org</a> von jedem
-		Besucher automatisch durch das HPI erhoben werden (Buchstabe A) sowie über
-		die Verarbeitung von Daten, die im Auftrag der teilnehmenden Schulen bei
-		Nutzung der HPI Schul-Cloud erhoben werden (Buchstabe B).<br />
+		<a href="https://hpi-schul-cloud.de">https://hpi-schul-cloud.de</a> von
+		jedem Besucher automatisch durch das HPI erhoben werden (Buchstabe A) sowie
+		über die Verarbeitung von Daten, die im Auftrag der teilnehmenden Schulen
+		bei Nutzung der HPI Schul-Cloud erhoben werden (Buchstabe B).<br />
 		Die HPI Schul-Cloud schafft die technische Grundlage dafür, dass Lehrende
 		und Schüler*innen in jedem Unterrichtsfach moderne digitale Lehr- und
 		Lerninhalte nutzen können. Weitere Informationen zum Projekt stehen unter:
@@ -26,16 +26,16 @@
 			A. Datenverarbeitung durch das HPI beim Aufruf der Website
 		</h2>
 		Bei jedem Aufruf der Website
-		<a href="https://schul-cloud.org">https://schul-cloud.org</a> werden durch
-		den Browser automatisch Zugriffsdaten übermittelt, um den Besuch der Website
-		zu ermöglichen. Die Zugriffsdaten umfassen insbesondere die IP-Adresse des
-		anfragenden Geräts, das Datum und die Uhrzeit der Anfrage, die Adresse der
-		aufgerufenen Website und der anfragenden Website sowie Angaben über den
-		verwendeten Browser und das Betriebssystem. Die Verarbeitung dieser
-		Zugriffsdaten ist erforderlich, um den Besuch der Website zu ermöglichen und
-		die dauerhafte Funktionsfähigkeit und Sicherheit der Systeme des HPI zu
-		gewährleisten. Diese Zugriffsdaten werden für 14 Tage gespeichert und nach
-		anschließender Anonymisierung archiviert.<br />
+		<a href="https://hpi-schul-cloud.de">https://hpi-schul-cloud.de</a> werden
+		durch den Browser automatisch Zugriffsdaten übermittelt, um den Besuch der
+		Website zu ermöglichen. Die Zugriffsdaten umfassen insbesondere die
+		IP-Adresse des anfragenden Geräts, das Datum und die Uhrzeit der Anfrage,
+		die Adresse der aufgerufenen Website und der anfragenden Website sowie
+		Angaben über den verwendeten Browser und das Betriebssystem. Die
+		Verarbeitung dieser Zugriffsdaten ist erforderlich, um den Besuch der
+		Website zu ermöglichen und die dauerhafte Funktionsfähigkeit und Sicherheit
+		der Systeme des HPI zu gewährleisten. Diese Zugriffsdaten werden für 14 Tage
+		gespeichert und nach anschließender Anonymisierung archiviert.<br />
 
 		Die Website nutzt zudem eigene Cookies, d.h. kleine Dateien, die auf den
 		Geräten der Besucher*innen gespeichert werden und Informationen für den

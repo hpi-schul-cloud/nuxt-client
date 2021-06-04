@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.2.1
+
+### Changed
+
+- SC-9114 - project naming
+
 ## 26.2.0
 
 ### Added
