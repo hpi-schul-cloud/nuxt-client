@@ -24,8 +24,8 @@ const module = {
 		async fetchConsentVersionFile({ commit }, consentDataId) {
 			commit("setRequestSuccessful", false);
 			try {
-				const response = await this.$axios.$get(`/base64/${consentDataId}`)
-				console.log(response)
+				const response = await this.$axios.$get(`/base64/${consentDataId}`);
+				console.log(response);
 				commit("setConsentVersions", response.data);
 				commit("setRequestSuccessful", true);
 			} catch (error) {
@@ -33,7 +33,7 @@ const module = {
 				commit("setRequestSuccessful", false);
 				// TODO what is supposed to happen on error?
 			}
-		}
+		},
 	},
 	mutations: {
 		setConsentVersions(state, consentVersions) {

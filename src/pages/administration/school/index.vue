@@ -530,7 +530,7 @@ export default {
 	},
 	methods: {
 		removeRssFeed(rssFeedId) {
-			console.log(rssFeedId)
+			console.log(rssFeedId);
 		},
 		async fetchDataPolicyFile(policy) {
 			try {
