@@ -160,7 +160,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="localSchool.matrixMessenger"
+												v-model="localSchool.features.messenger"
 												label="Matrix Messenger aktivieren"
 												inset
 												flat
@@ -188,7 +188,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="localSchool.chatFunction"
+												v-model="localSchool.features.rocketChat"
 												label="Chatfunktion aktivieren"
 												inset
 												flat
@@ -206,7 +206,7 @@
 									<v-row>
 										<v-col>
 											<v-switch
-												v-model="localSchool.videoConference"
+												v-model="localSchool.features.videoconference"
 												label="Videokonferenzen für Kurse und Teams aktivieren"
 												inset
 												flat
@@ -223,6 +223,48 @@
 												jeweiligen Team aktivieren. Team-Leiter:innen und
 												Team-Admins können dann Videokonferenzen zu Terminen
 												hinzufügen und starten.
+											</p>
+										</v-col>
+									</v-row>
+									<v-row>
+										<v-col>
+											<v-switch
+												v-model="localSchool.features.messengerSchoolRoom"
+												label="Chatraum für Ankündigungen an die gesamte Schule anlegen"
+												inset
+												flat
+												dense
+												:ripple="false"
+												class="ml-1 mt-0"
+											></v-switch>
+											<p class="body-2 mb-0">
+												Der Ankündigungs-Chatraum ermöglicht Schul-Admins,
+												Nachrichten an die gesamte Schule zu senden.
+												Schüler:innen haben in diesem Raum nur Lesezugriff,
+												sehen sich aber gegenseitig und können so private Chats
+												starten.
+											</p>
+										</v-col>
+									</v-row>
+									<v-row>
+										<v-col>
+											<v-switch
+												v-model="
+													localSchool.features.messengerStudentRoomCreate
+												"
+												label="Schüler:innen dürfen eigene Chat-Räume anlegen"
+												inset
+												flat
+												dense
+												:ripple="false"
+												class="ml-1 mt-0"
+											></v-switch>
+											<p class="body-2 mb-0">
+												Ist diese Funktion aktiviert, dürfen Schüler:innen
+												Chaträume, private Unterhaltungen und kurs- und
+												teaminterne Gruppendiskussionen starten. Diese Räume
+												sind für Lehrkräfte nicht einzusehen, wenn diese nicht
+												explizit eingeladen werden.
 											</p>
 										</v-col>
 									</v-row>
@@ -266,11 +308,21 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="item in dataProtectionPolicies" :key="item._id">
+									<tr
+										v-for="item in localSchool.dataProtectionPolicies"
+										:key="item._id"
+									>
+										{{
+											console.log(item)
+										}}
 										<td>{{ item.title }}</td>
+										<td>{{ item.file }}</td>
+
 										<td>{{ item.consentText }}</td>
 										<td>{{ printDate(item.publishedAt) }}</td>
-										<td>{{ item.consentDataId }}</td>
+										<td>
+											<a :href="item.file" :download="item.file">link</a>
+										</td>
 									</tr>
 								</tbody>
 							</template>
@@ -293,7 +345,7 @@
 									<tr v-for="item in dataProtectionPolicies" :key="item.name">
 										<td>{{ item.title }}</td>
 										<td>{{ item.description }}</td>
-										<td>{{ item.link }}</td>
+										<td>{{ item.consentDataId }}</td>
 									</tr>
 								</tbody>
 							</template>
@@ -324,7 +376,7 @@
 											}}
 										</td>
 										<td>
-											<v-btn icon block
+											<v-btn icon block @click="removeRssFeed(item.id)"
 												><v-icon> {{ iconMdiTrashCanOutline }} </v-icon></v-btn
 											>
 										</td>
@@ -356,15 +408,20 @@ export default {
 			localSchool: {
 				name: "",
 				officialSchoolNumber: "",
-				logo: "",
+				logo: null,
 				county: {},
 				timezone: "",
 				language: "",
+				features: {
+					rocketChat: false,
+					messenger: false,
+					messengerSchoolRoom: false,
+					messengerStudentRoomCreate: false,
+					videoconference: false,
+				},
+				permissions: [],
 				studentVisibility: false,
 				lernStore: false,
-				matrixMessenger: false,
-				chatFunction: false,
-				videoConference: false,
 				fileStorageType: "",
 				fileStorageTotal: 0,
 				dataProtectionPolicies: [],
@@ -419,7 +476,7 @@ export default {
 			this.localSchool = updatedSchool;
 		},
 	}, */
-	created() {
+	async created() {
 		this.fetchCurrentFederalState(this.school.federalState);
 		this.fetchStudentVisibility().then(() => {
 			this.localSchool.studentVisibility = this.studentVisibility;
@@ -430,10 +487,31 @@ export default {
 		this.fetchConsentVersions({
 			schoolId: this.school.id,
 			consentTypes: "privacy",
-		}).then(
-			() =>
-				(this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies)
-		);
+			$sort: {
+				publishedAt: -1,
+			},
+		}).then(async () => {
+			this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies;
+			this.addPdfDataToPolicyObject(this.localSchool.dataProtectionPolicies); //.then(
+			//(updatedPolicies) => console.log(updatedPolicies)
+			//(this.localSchool.dataProtectionPolicies = updatedPolicies)
+			//	);
+			/* this.localSchool.dataProtectionPolicies = await this.addPdfDataToPolicyObject(
+				this.dataProtectionPolicies
+			);
+			console.log(this.localSchool); */
+
+			/* this.localSchool.dataProtectionPolicies = await this.localSchool.dataProtectionPolicies.map(
+				async (policy) => {
+					if (!policy.consentDataId) return;
+					const pdf = await this.$axios.$get(
+						`/base64Files/${policy.consentDataId}`
+					);
+					//policy.file = { link: pdf.data, name: pdf.filename };
+					return { ...policy, link: pdf.data, name: pdf.filename };
+				}
+			); */
+		});
 		this.fetchFileStorageTotal();
 
 		/* this.fetchSetOfSystems(this.school.systems).then(() => {
@@ -443,20 +521,39 @@ export default {
 		this.localSchool.name = this.school.name;
 		this.localSchool.officialSchoolNumber = this.school.officialSchoolNumber;
 		this.localSchool.county = this.school.county;
-		this.localSchool.logo = dataUrlToFile(this.school.logo_dataUrl);
+		this.localSchool.logo = await dataUrlToFile(this.school.logo_dataUrl);
 		this.localSchool.timezone = this.school.timezone || "Europe/Berlin";
 		this.localSchool.language = this.school.language;
-		this.localSchool.chatFunction = this.school.features.includes("rocketChat");
-		this.localSchool.matrixMessenger = this.school.features.includes(
-			"messenger"
-		);
-		this.localSchool.matrixMessenger = this.school.features.includes(
-			"videoconference"
-		);
+		this.setFeatures();
 		this.localSchool.fileStorageType = this.school.fileStorageType;
 		this.localSchool.rssFeeds = this.school.rssFeeds;
 	},
 	methods: {
+		removeRssFeed(rssFeedId) {
+			console.log(rssFeedId)
+		},
+		async fetchDataPolicyFile(policy) {
+			try {
+				const pdf = await this.$axios.$get(
+					`/base64Files/${policy.consentDataId}`
+				);
+				return { link: pdf.data, name: pdf.filename };
+			} catch (error) {
+				console.log(error);
+				// TODO handle error properly
+			}
+		},
+		async addPdfDataToPolicyObject(policies) {
+			for await (const policy of policies) {
+				const pdf = await this.fetchDataPolicyFile(policy);
+				policy.file = pdf;
+			}
+			/* return Promise.all(
+				policies.map(
+					(policy) => (policy.file = this.fetchDataPolicyFile(policy))
+				)
+			); */
+		},
 		printDate,
 		toBase64,
 		dataUrlToFile,
@@ -476,7 +573,7 @@ export default {
 				language: this.localSchool.language,
 				fileStorageType: this.localSchool.fileStorageType,
 				rssFeeds: this.localSchool.rssFeeds,
-				logo_dataUrl: toBase64(this.localSchool.logo),
+				features: this.createFeaturesArray(),
 			};
 			if (
 				!this.school.officialSchoolNumber &&
@@ -487,8 +584,25 @@ export default {
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;
 			}
+			if (this.localSchool.logo) {
+				toBase64(this.localSchool.logo)
+					.then((dataUrl) => (updatedSchool.logo_dataUrl = dataUrl))
+					.catch((err) => console.log(err));
+			}
 			console.log("updated", updatedSchool);
 			this.update(updatedSchool);
+		},
+		setFeatures() {
+			for (let i = 0; i < this.school.features.length; i++) {
+				this.localSchool.features[this.school.features[i]] = true;
+			}
+		},
+		createFeaturesArray() {
+			const features = [];
+			for (const featureName in this.localSchool.features) {
+				if (this.localSchool.features[featureName]) features.push(featureName);
+			}
+			return features;
 		},
 	},
 	head() {

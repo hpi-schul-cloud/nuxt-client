@@ -59,7 +59,7 @@ const module = {
 			try {
 				const data = await this.$axios.$patch(`/schools/${payload.id}`, payload);
 				console.log("data", data);
-				commit("setSchool", data);
+				commit("setSchool", data); // should we be committing here and then basically have two schools in store?
 				commit("setRequestSuccessful", true);
 			} catch (error) {
 				commit("setError", error);
