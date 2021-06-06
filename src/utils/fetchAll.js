@@ -1,45 +1,58 @@
-const requestHelper = (axios, url) => async (query) => {
-	return axios.$get(url, {
-		params: query,
-		paramsSerializer: (params) => {
-			return qs.stringify(params);
-		},
-	});
-};
+import qs from "qs";
 
-const cleanupQuery = (query = {}) => {
+export const INVALID_URL_MESSAGE = "Invalid url or uri input";
+
+export const paramsSerializer = (params = {}) => qs.stringify(params);
+
+export const cleanupQuery = (query = {}) => {
+	if (query === null) {
+		return {};
+	}
+	delete query.limit;
+	delete query.skip;
 	delete query.$limit;
 	delete query.$skip;
 	return query;
 };
 
-const isPaginated = (response) => {
-	return response.total && response.limit && Array.isArray(response.data);
-};
+export const isPositiveNumber = (n) => typeof n === "number" && n >= 0;
+
+export const isPaginated = (r = {}) =>
+	r !== null &&
+	isPositiveNumber(r.total) &&
+	isPositiveNumber(r.limit) &&
+	Array.isArray(r.data);
 
 // TODO: test at url or uri
-const validUrl = (url) => {
-	return typeof url === "string";
-};
+export const isValidUrl = (url) => typeof url === "string";
 
-export async function fetchAll(axios, url, query = {}) {
-	if (!validUrl) {
-		throw new Error("Invalid url or uri input");
+export const requestHelper = (axios, url) => async (query) =>
+	axios.$get(url, {
+		params: query,
+		paramsSerializer,
+	});
+
+export const fetchAll = async (axios, url, query = {}) => {
+	if (!isValidUrl(url)) {
+		throw new Error(INVALID_URL_MESSAGE);
 	}
 	const request = requestHelper(axios, url);
-	const cleanQuery = cleanupQuery(query);
+	const internalQuery = cleanupQuery(query);
 
-	const firstResponse = await request(cleanQuery);
+	const firstResponse = await request(internalQuery);
 	if (!isPaginated(firstResponse)) {
 		return firstResponse;
 	}
 
+	// use default limit TODO: switch to max without first callback, to keep logic simple?
 	const { total, limit, data } = firstResponse;
-	const totalData = [...data];
-
-	for (let skip = totalData.length; skip + limit < total; skip += limit) {
-		cleanQuery.skip = skip;
-		const response = await request(cleanQuery);
+	let totalData = data;
+	internalQuery.skip = 0;
+	while (totalData.length < total) {
+		internalQuery.skip += limit;
+		// backward compatibility for feather-mongoose services
+		internalQuery.$skip = internalQuery.skip;
+		const response = await request(internalQuery);
 		totalData = [...totalData, ...response.data];
 	}
 
@@ -49,4 +62,5 @@ export async function fetchAll(axios, url, query = {}) {
 		skip: 0,
 		limit,
 	};
-}
+};
+export default fetchAll;
