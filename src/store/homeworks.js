@@ -27,12 +27,12 @@ const module = {
 		},
 		getOpenHomeworks: (state) => {
 			return state.list.filter((homework) => {
-				return new Date(homework.duedate) > new Date();
+				return !homework.duedate || new Date(homework.duedate) > new Date();
 			});
 		},
 		getOverDueHomeworks: (state) => {
 			return state.list.filter((homework) => {
-				return new Date(homework.duedate) < new Date();
+				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
 		getOpenHomeworksSortedByDueDate: (state, getters) => {

@@ -29,9 +29,14 @@
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
-						class="subtitle-2"
+						class="subtitle-2 hidden-xs-only"
 						data-test-id="dueDateLabel"
 						v-text="computedDueDateLabel(homework.duedate)"
+					/>
+					<v-list-item-action-text
+						class="subtitle-2 hidden-sm-and-up"
+						data-test-id="dueDateLabel"
+						v-text="computedDueDateLabelSM(homework.duedate)"
 					/>
 					<v-spacer />
 					<v-chip
@@ -62,7 +67,7 @@
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
 import { mdiTimerSand, mdiBlockHelper } from "@mdi/js";
-import { printDateTimeFromStringUTC } from "@plugins/datetime";
+import { printDate, printDateTimeFromStringUTC } from "@plugins/datetime";
 import { mapGetters } from "vuex";
 
 export default {
@@ -101,6 +106,11 @@ export default {
 				: this.$t("pages.homeworks.labels.due") +
 						printDateTimeFromStringUTC(dueDate);
 		},
+		computedDueDateLabelSM(dueDate) {
+			return !dueDate
+				? this.$t("pages.homeworks.labels.noDueDate")
+				: this.$t("pages.homeworks.labels.due") + printDate(dueDate);
+		},
 		isCloseToDueDate(dueDate) {
 			const timeDiff = fromNowToFuture(dueDate, "hours");
 			if (timeDiff === null) {
@@ -108,7 +118,7 @@ export default {
 			} else return timeDiff <= 24;
 		},
 		isOverDue(dueDate) {
-			return new Date(dueDate) < new Date();
+			return dueDate && new Date(dueDate) < new Date();
 		},
 		hintDueDate(dueDate) {
 			const diffHrs = fromNowToFuture(dueDate, "hours");

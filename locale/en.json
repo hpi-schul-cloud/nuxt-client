@@ -506,7 +506,7 @@
 	"pages.homeworks.labels.due": "Due ",
 	"pages.homeworks.emptyState.title": "There are no open tasks.",
 	"pages.homeworks.emptyState.subtitle": "You have completed all tasks. Enjoy your free time!",
-	"pages.homeworks.labels.hintDueTime": "Submission in ",
+	"pages.homeworks.labels.hintDueTime": "in ",
 	"pages.homeworks.labels.hintMinutes": "minute | minutes",
 	"pages.homeworks.labels.hintHours": "h",
 	"pages.homeworks.labels.noDueDate": "No submission date",

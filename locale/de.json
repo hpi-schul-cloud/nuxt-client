@@ -513,7 +513,7 @@
 	"pages.homeworks.labels.due": "Abgabe ",
 	"pages.homeworks.emptyState.title": "Es gibt keine offenen Aufgaben.",
 	"pages.homeworks.emptyState.subtitle": "Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!",
-	"pages.homeworks.labels.hintDueTime": "Abgabe in ",
+	"pages.homeworks.labels.hintDueTime": "in ",
 	"pages.homeworks.labels.hintMinutes": "Minute | Minuten",
 	"pages.homeworks.labels.hintHours": "h",
 	"pages.homeworks.labels.noDueDate": "Kein Abgabedatum",
