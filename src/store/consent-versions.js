@@ -26,7 +26,6 @@ const module = {
 								const fileData = await this.$axios.$get(
 									`/base64Files/${consentVersion.consentDataId}`
 								);
-								console.log(fileData, "sdsfsdf")
 								return { ...consentVersion, fileData };
 							}
 						})

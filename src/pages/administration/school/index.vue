@@ -304,7 +304,7 @@
 										<th class="text-left">Titel</th>
 										<th class="text-left">Beschreibung</th>
 										<th class="text-left">Hochgeladen am</th>
-										<th class="text-left">Link</th>
+										<th class="text-left">Download</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -316,7 +316,11 @@
 										<td>{{ item.consentText }}</td>
 										<td>{{ printDate(item.publishedAt) }}</td>
 										<td>
-											<a :href="item.fileData.data" :download="item.fileData.filename">link</a>
+											<a class="d-flex justify-center"
+												:href="item.fileData.data"
+												:download="item.fileData.filename"
+												><v-icon> {{ iconMdiDownload }} </v-icon></a
+											>
 										</td>
 									</tr>
 								</tbody>
@@ -371,7 +375,7 @@
 											}}
 										</td>
 										<td>
-											<v-btn icon block @click="removeRssFeed(item.id)"
+											<v-btn icon @click="removeRssFeed(item.id)"
 												><v-icon> {{ iconMdiTrashCanOutline }} </v-icon></v-btn
 											>
 										</td>
@@ -391,7 +395,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { mdiChevronRight, mdiTrashCanOutline } from "@mdi/js";
+import { mdiChevronRight, mdiTrashCanOutline, mdiDownload } from "@mdi/js";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 
@@ -441,6 +445,7 @@ export default {
 			],
 			iconMdiChevronRight: mdiChevronRight,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
+			iconMdiDownload: mdiDownload,
 		};
 	},
 	computed: {
