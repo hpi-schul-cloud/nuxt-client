@@ -123,8 +123,17 @@ export const mutations = {
 };
 
 export const getters = {
-	getLocale(state) {
-		return state.locale;
+	locale(state, _getters, rootState) {
+		if (state.locale) {
+			return state.locale;
+		}
+		if (state.school && state.school.language) {
+			return state.school.language;
+		}
+		if (rootState["env-config"].env.I18N__DEFAULT_LANGUAGE) {
+			return rootState["env-config"].env.I18N__DEFAULT_LANGUAGE;
+		}
+		return "de";
 	},
 };
 

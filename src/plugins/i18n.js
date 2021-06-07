@@ -4,13 +4,7 @@ import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 
 export const i18n = (store) => {
-	let locale = "de";
-	if (store?.state["env-config"]?.env.I18N__DEFAULT_LANGUAGE) {
-		locale = store?.state["env-config"]?.env.I18N__DEFAULT_LANGUAGE;
-	}
-	if (store?.state?.auth?.locale) {
-		locale = store?.state?.auth?.locale;
-	}
+	const locale = store.getters["auth/locale"] || "de"; // 'de' fallback for unit tests
 
 	let fallbackLocale = "de";
 	if (store?.state["env-config"]?.env.I18N__FALLBACK_LANGUAGE) {
