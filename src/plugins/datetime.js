@@ -214,6 +214,21 @@ export const fromNow = (date) => {
 };
 
 /**
+ * Returns future date difference to current local time
+ * @param {String} date
+ * @param {String} unit
+ * @return {Number} Future date difference based on the unit and current timezone
+ */
+export const fromNowToFuture = (date, unit) => {
+	const input = dayjs.tz(date, "UTC");
+	const today = currentDate();
+	if (today.isBefore(input)) {
+		const diff = input.diff(today, unit);
+		return diff;
+	} else return null;
+};
+
+/**
  * Returns array of date and time for usage in inputs
  * @param {String} date UTC date string
  * @return {Array} Array of date and time for usage in inputs

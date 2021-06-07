@@ -3,7 +3,14 @@
 		<h1 v-if="isListFilled" class="h4">
 			{{ $t("pages.homeworks.title") }}
 		</h1>
-		<homeworks-list :homeworks="homeworks" />
+		<homeworks-list
+			:homeworks="openHomeworksSortedByDueDate"
+			:title="$t('pages.homeworks.subtitleOpen')"
+		/>
+		<homeworks-list
+			:homeworks="overDueHomeworks"
+			:title="$t('pages.homeworks.subtitleOverDue')"
+		/>
 		<v-custom-empty-state
 			v-if="isListEmpty"
 			:image="image"
@@ -34,6 +41,8 @@ export default {
 			loading: "loading",
 			isListEmpty: "isListEmpty",
 			isListFilled: "isListFilled",
+			openHomeworksSortedByDueDate: "getOpenHomeworksSortedByDueDate",
+			overDueHomeworks: "getOverDueHomeworks",
 		}),
 	},
 	mounted() {

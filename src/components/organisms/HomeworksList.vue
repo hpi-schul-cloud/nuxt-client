@@ -1,7 +1,7 @@
 <template>
 	<v-list subheader two-line>
 		<v-subheader v-if="isListFilled">
-			{{ $t("pages.homeworks.subtitleOpen") }}
+			{{ title }}
 		</v-subheader>
 
 		<template v-if="loading">
@@ -38,9 +38,16 @@
 					/>
 					<v-spacer />
 					<v-list-item-action-text
+						v-if="isCloseToDueDate(homework.duedate)"
 						data-test-id="dueDateHintLabel"
-						v-text="hintdueDate(homework.duedate)"
+						v-text="hintDueDate(homework.duedate)"
 					/>
+					<v-list-item-action-text
+						v-else-if="isOverDue(homework.duedate)"
+						data-test-id="overDueDateLabel"
+						v-text="$t('pages.homeworks.labels.overdue')"
+					/>
+
 					<v-badge v-if="false" color="error" dot inline></v-badge>
 				</v-list-item-action>
 			</v-list-item>
@@ -50,9 +57,9 @@
 </template>
 
 <script>
-import { fromNow } from "@plugins/datetime";
+import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
-import { fromUTC, printDateTimeFromStringUTC } from "@plugins/datetime";
+import { printDateTimeFromStringUTC } from "@plugins/datetime";
 import { mapGetters } from "vuex";
 
 export default {
@@ -62,6 +69,11 @@ export default {
 			type: Array,
 			required: false,
 			default: () => [],
+		},
+		title: {
+			type: String,
+			required: false,
+			default: null,
 		},
 	},
 	data() {
@@ -77,7 +89,6 @@ export default {
 			isListFilled: "isListFilled",
 		}),
 	},
-
 	methods: {
 		computedDueDateLabel(dueDate) {
 			return !dueDate
@@ -85,21 +96,23 @@ export default {
 				: this.$t("pages.homeworks.labels.due") +
 						printDateTimeFromStringUTC(dueDate);
 		},
-		hintdueDate(dueDateString) {
-			if (!dueDateString) return "";
-			const dueDate = new Date(fromUTC(dueDateString));
-			const current = new Date();
-			const currentPlusOneDay = new Date();
-			currentPlusOneDay.setDate(currentPlusOneDay.getDate() + 1);
-
-			if (dueDate < currentPlusOneDay && dueDate >= current) {
-				const timeDiffHours = (dueDate - current) / 1000 / 3600;
-				if (Math.round(timeDiffHours) > 0)
-					return "Abgabe in " + Math.round(timeDiffHours) + "h";
-				else return "Abgabe in " + Math.round(timeDiffHours * 60) + " Minuten";
-			} else if (dueDate < current)
-				return this.$t("pages.homeworks.labels.overdue");
-			else return "";
+		isCloseToDueDate(dueDate) {
+			const timeDiff = fromNowToFuture(dueDate, "hours");
+			if (timeDiff === null) {
+				return false;
+			} else return timeDiff <= 24;
+		},
+		isOverDue(dueDate) {
+			return new Date(dueDate) < new Date();
+		},
+		hintDueDate(dueDateString) {
+			const diffHrs = fromNowToFuture(dueDateString, "hours");
+			if (diffHrs === 0) {
+				const diffMins = fromNowToFuture(dueDateString, "minutes");
+				return `Abgabe in ${diffMins} Minuten`;
+			} else {
+				return `Abgabe in ${diffHrs}h`;
+			}
 		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;
