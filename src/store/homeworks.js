@@ -7,7 +7,6 @@ const module = {
 		getHomeworksDashboard: async function ({ commit }) {
 			commit("setLoading", true);
 			try {
-				// const res = await this.$axios.$get("/v3/task/dashboard/");
 				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
 					items: data,

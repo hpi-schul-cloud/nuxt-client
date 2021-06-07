@@ -120,6 +120,7 @@ describe("@utils/fetchAll", () => {
 			expect(isPositiveNumber("1")).toBe(false);
 			expect(isPositiveNumber({})).toBe(false);
 			expect(isPositiveNumber([])).toBe(false);
+			expect(isPositiveNumber(-1)).toBe(false);
 
 			expect(isPositiveNumber(0)).toBe(true);
 			expect(isPositiveNumber(1)).toBe(true);
