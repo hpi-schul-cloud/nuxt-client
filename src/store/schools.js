@@ -42,7 +42,7 @@ const module = {
 		},
 		async fetchFileStorageTotal({ commit }) {
 			commit("setRequestSuccessful", false);
-			
+
 			try {
 				const fileStorageTotal = await this.$axios.$get("/fileStorage/total");
 				commit("setFileStorageTotal", fileStorageTotal);
@@ -57,7 +57,10 @@ const module = {
 			console.log("payload", payload);
 			commit("setRequestSuccessful", false);
 			try {
-				const data = await this.$axios.$patch(`/schools/${payload.id}`, payload);
+				const data = await this.$axios.$patch(
+					`/schools/${payload.id}`,
+					payload
+				);
 				console.log("data", data);
 				commit("setSchool", data); // should we be committing here and then basically have two schools in store?
 				commit("setRequestSuccessful", true);

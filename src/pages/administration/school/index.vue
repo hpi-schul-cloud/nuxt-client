@@ -312,16 +312,11 @@
 										v-for="item in localSchool.dataProtectionPolicies"
 										:key="item._id"
 									>
-										{{
-											console.log(item)
-										}}
 										<td>{{ item.title }}</td>
-										<td>{{ item.file }}</td>
-
 										<td>{{ item.consentText }}</td>
 										<td>{{ printDate(item.publishedAt) }}</td>
 										<td>
-											<a :href="item.file" :download="item.file">link</a>
+											<a :href="item.fileData.data" :download="item.fileData.filename">link</a>
 										</td>
 									</tr>
 								</tbody>
@@ -419,7 +414,7 @@ export default {
 					messengerStudentRoomCreate: false,
 					videoconference: false,
 				},
-				permissions: [],
+				permissions: [], // which route do I have to talk to here?
 				studentVisibility: false,
 				lernStore: false,
 				fileStorageType: "",
@@ -485,32 +480,16 @@ export default {
 			this.localSchool.lernStore = this.lernStoreVisibility;
 		});
 		this.fetchConsentVersions({
-			schoolId: this.school.id,
-			consentTypes: "privacy",
-			$sort: {
-				publishedAt: -1,
+			queryParams: {
+				schoolId: this.school.id,
+				consentTypes: "privacy",
+				$sort: {
+					publishedAt: -1,
+				},
 			},
-		}).then(async () => {
+			withFile: true,
+		}).then(() => {
 			this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies;
-			this.addPdfDataToPolicyObject(this.localSchool.dataProtectionPolicies); //.then(
-			//(updatedPolicies) => console.log(updatedPolicies)
-			//(this.localSchool.dataProtectionPolicies = updatedPolicies)
-			//	);
-			/* this.localSchool.dataProtectionPolicies = await this.addPdfDataToPolicyObject(
-				this.dataProtectionPolicies
-			);
-			console.log(this.localSchool); */
-
-			/* this.localSchool.dataProtectionPolicies = await this.localSchool.dataProtectionPolicies.map(
-				async (policy) => {
-					if (!policy.consentDataId) return;
-					const pdf = await this.$axios.$get(
-						`/base64Files/${policy.consentDataId}`
-					);
-					//policy.file = { link: pdf.data, name: pdf.filename };
-					return { ...policy, link: pdf.data, name: pdf.filename };
-				}
-			); */
 		});
 		this.fetchFileStorageTotal();
 
@@ -521,7 +500,10 @@ export default {
 		this.localSchool.name = this.school.name;
 		this.localSchool.officialSchoolNumber = this.school.officialSchoolNumber;
 		this.localSchool.county = this.school.county;
-		this.localSchool.logo = await dataUrlToFile(this.school.logo_dataUrl);
+		this.localSchool.logo = await dataUrlToFile(
+			this.school.logo_dataUrl,
+			"logo"
+		);
 		this.localSchool.timezone = this.school.timezone || "Europe/Berlin";
 		this.localSchool.language = this.school.language;
 		this.setFeatures();
@@ -530,29 +512,16 @@ export default {
 	},
 	methods: {
 		removeRssFeed(rssFeedId) {
-			console.log(rssFeedId)
+			const updatedRssFeedList = this.localSchool.rssFeeds.filter(
+				(rssFeed) => rssFeed.id !== rssFeedId
+			);
+			this.update({ id: this.school.id, rssFeeds: updatedRssFeedList });
 		},
-		async fetchDataPolicyFile(policy) {
-			try {
-				const pdf = await this.$axios.$get(
-					`/base64Files/${policy.consentDataId}`
-				);
-				return { link: pdf.data, name: pdf.filename };
-			} catch (error) {
-				console.log(error);
-				// TODO handle error properly
-			}
-		},
-		async addPdfDataToPolicyObject(policies) {
-			for await (const policy of policies) {
-				const pdf = await this.fetchDataPolicyFile(policy);
-				policy.file = pdf;
-			}
-			/* return Promise.all(
-				policies.map(
-					(policy) => (policy.file = this.fetchDataPolicyFile(policy))
-				)
-			); */
+		addRssFeed(rssFeedId) {
+			const updatedRssFeedList = this.localSchool.rssFeeds.filter(
+				(rssFeed) => rssFeed.id !== rssFeedId
+			);
+			this.update({ id: this.school.id, rssFeeds: updatedRssFeedList });
 		},
 		printDate,
 		toBase64,
@@ -563,10 +532,11 @@ export default {
 			"fetchLernStoreVisibility",
 			"fetchFileStorageTotal",
 			"update",
+			"deleteRssFeed",
 		]),
 		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		...mapActions("systems", ["fetchSetOfSystems"]),
-		save() {
+		async save() {
 			const updatedSchool = {
 				id: this.school.id,
 				name: this.localSchool.name,
@@ -585,9 +555,9 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 			if (this.localSchool.logo) {
-				toBase64(this.localSchool.logo)
-					.then((dataUrl) => (updatedSchool.logo_dataUrl = dataUrl))
-					.catch((err) => console.log(err));
+				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo);
+			} else {
+				updatedSchool.logo_dataUrl = "";
 			}
 			console.log("updated", updatedSchool);
 			this.update(updatedSchool);
