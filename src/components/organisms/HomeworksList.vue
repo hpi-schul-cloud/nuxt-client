@@ -5,12 +5,9 @@
 		</v-subheader>
 
 		<template v-if="loading">
-			<h1>
-				<v-skeleton-loader :type="'text'" :max-width="'30%'" />
-			</h1>
 			<v-skeleton-loader :type="'text'" :max-width="'15%'" />
 			<v-skeleton-loader
-				v-for="homework of 7"
+				v-for="homework of 4"
 				ref="skeleton"
 				:key="homework"
 				:type="'list-item-avatar-two-line'"
@@ -105,13 +102,17 @@ export default {
 		isOverDue(dueDate) {
 			return new Date(dueDate) < new Date();
 		},
-		hintDueDate(dueDateString) {
-			const diffHrs = fromNowToFuture(dueDateString, "hours");
+		hintDueDate(dueDate) {
+			const diffHrs = fromNowToFuture(dueDate, "hours");
 			if (diffHrs === 0) {
-				const diffMins = fromNowToFuture(dueDateString, "minutes");
-				return `Abgabe in ${diffMins} Minuten`;
+				const diffMins = fromNowToFuture(dueDate, "minutes");
+				return `${this.$t(
+					"pages.homeworks.labels.hintDueTime"
+				)} ${diffMins} ${this.$t("pages.homeworks.labels.hintMinutes")}`;
 			} else {
-				return `Abgabe in ${diffHrs}h`;
+				return `${this.$t(
+					"pages.homeworks.labels.hintDueTime"
+				)} ${diffHrs}${this.$t("pages.homeworks.labels.hintHours")}`;
 			}
 		},
 		homeworkHref: (id) => {
