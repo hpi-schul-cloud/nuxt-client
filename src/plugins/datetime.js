@@ -20,7 +20,7 @@ let userHasSchoolTimezone = true;
 export const DATETIME_FORMAT = {
 	date: "DD.MM.YYYY",
 	dateTime: "DD.MM.YYYY HH:mm",
-	dateTimeYY: "DD.MM.YY",
+	dateTimeYY: "DD.MM.YY HH:mm",
 	dateLong: "dddd, DD. MMMM YYYY",
 	time: "HH:mm",
 	inputDate: "YYYY-MM-DD", // Don't change this! Format defined by HTML standards
