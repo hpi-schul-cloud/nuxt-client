@@ -3,7 +3,6 @@
 		<v-subheader v-if="isListFilled">
 			{{ title }}
 		</v-subheader>
-
 		<template v-if="loading">
 			<h1>
 				<v-skeleton-loader :type="'text'" :max-width="'30%'" />
@@ -19,7 +18,7 @@
 
 		<template v-for="(homework, index) of homeworks" v-else>
 			<v-list-item :key="homework._id" :href="homeworkHref(homework._id)">
-				<v-list-item-avatar>
+				<v-list-item-avatar class="hidden-xs-only">
 					<img :src="taskIconSvg" role="presentation" />
 				</v-list-item-avatar>
 				<v-list-item-content>
@@ -33,22 +32,28 @@
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
+						class="subtitle-2"
 						data-test-id="dueDateLabel"
 						v-text="computedDueDateLabel(homework.duedate)"
 					/>
 					<v-spacer />
-					<v-list-item-action-text
+					<v-chip
 						v-if="isCloseToDueDate(homework.duedate)"
-						data-test-id="dueDateHintLabel"
-						v-text="hintDueDate(homework.duedate)"
-					/>
-					<v-list-item-action-text
+						color="orange lighten-3"
+						small
+					>
+						<v-icon left small> $hourglassBottomBlack </v-icon>
+						{{ hintDueDate(homework.duedate) }}
+					</v-chip>
+					<v-chip
 						v-else-if="isOverDue(homework.duedate)"
-						data-test-id="overDueDateLabel"
-						v-text="$t('pages.homeworks.labels.overdue')"
-					/>
-
-					<v-badge v-if="false" color="error" dot inline></v-badge>
+						color="error lighten-5"
+						text-color="black"
+						small
+					>
+						<v-icon left small> $hourglassDisabled </v-icon>
+						{{ $t("pages.homeworks.labels.overdue") }}
+					</v-chip>
 				</v-list-item-action>
 			</v-list-item>
 			<v-divider v-if="index < homeworks.length - 1" :key="index"></v-divider>
@@ -59,6 +64,7 @@
 <script>
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
+import { mdiTimerSand, mdiBlockHelper } from "@mdi/js";
 import { printDateTimeFromStringUTC } from "@plugins/datetime";
 import { mapGetters } from "vuex";
 
@@ -80,6 +86,8 @@ export default {
 		return {
 			fromNow,
 			taskIconSvg,
+			mdiTimerSand,
+			mdiBlockHelper,
 		};
 	},
 	computed: {

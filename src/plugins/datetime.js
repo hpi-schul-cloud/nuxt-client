@@ -20,6 +20,7 @@ let userHasSchoolTimezone = true;
 export const DATETIME_FORMAT = {
 	date: "DD.MM.YYYY",
 	dateTime: "DD.MM.YYYY HH:mm",
+	dateTimeYY: "DD.MM.YY",
 	dateLong: "dddd, DD. MMMM YYYY",
 	time: "HH:mm",
 	inputDate: "YYYY-MM-DD", // Don't change this! Format defined by HTML standards
@@ -162,7 +163,7 @@ export const printDateTime = (date) => {
  * @return {String} Date string based on current timezone using locale date formating
  */
 export const printDateTimeFromStringUTC = (date) => {
-	return dayjs(date).tz().format(DATETIME_FORMAT.dateTime);
+	return dayjs(date).tz().format(DATETIME_FORMAT.dateTimeYY);
 };
 
 /**

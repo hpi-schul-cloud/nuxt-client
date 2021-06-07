@@ -71,9 +71,9 @@ describe("@plugins/datetime", () => {
 
 	const dateUTCString = dateUTC.format("DD.MM.YYYY");
 	const dateLocalString = dateLocal.format("DD.MM.YYYY");
-	const dateTimeLocalString = dateUTC
+	const dateTimeLocalStringYY = dateUTC
 		.tz(TEST_DATETIME_TIMEZONE)
-		.format("DD.MM.YYYY HH:mm");
+		.format("DD.MM.YY HH:mm");
 
 	const dateFormat = dateLocal.format("YYYY-MM-DD");
 	const time = dateLocal.format("HH:mm");
@@ -98,7 +98,7 @@ describe("@plugins/datetime", () => {
 
 	it("printDateTimeFromStringUTC", () => {
 		const result = printDateTimeFromStringUTC(dateString);
-		expect(result).toBe(dateTimeLocalString);
+		expect(result).toBe(dateTimeLocalStringYY);
 		expect(printDateTimeFromStringUTC(null)).toBe("Invalid Date");
 	});
 
