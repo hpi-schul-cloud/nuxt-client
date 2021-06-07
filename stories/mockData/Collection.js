@@ -172,7 +172,7 @@ export const Collection = {
 		isIcon: false,
 		isGenerated: true,
 		url:
-			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
+			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
 		width: null,
 		height: null,
 	},

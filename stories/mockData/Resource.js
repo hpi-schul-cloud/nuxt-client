@@ -7,20 +7,20 @@ export const Resource = {
 	},
 	license: {
 		icon:
-			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/ccimages/licenses/none.svg",
+			"https://mv-repo.schul-cloud.org/edu-sharing/ccimages/licenses/none.svg",
 		url: null,
 	},
 	isDirectory: false,
 	commentCount: 0,
 	rating: null,
 	ref: {
-		repo: "mv-repo.hpi-schul-cloud.de",
+		repo: "mv-repo.schul-cloud.org",
 		id: "7f35e810-9a63-4e18-9331-b1bf4ab5fa06",
 		archived: false,
 		isHomeRepo: true,
 	},
 	parent: {
-		repo: "mv-repo.hpi-schul-cloud.de",
+		repo: "mv-repo.schul-cloud.org",
 		id: null,
 		archived: false,
 		isHomeRepo: true,
@@ -155,17 +155,17 @@ export const Resource = {
 		isGenerated: true,
 		type: "TYPE_EXTERNAL",
 		url:
-			"https://mv-repo.hpi-schul-cloud.de/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
+			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
 		width: null,
 		height: null,
 	},
 	iconURL:
-		"https://mv-repo.hpi-schul-cloud.de/edu-sharing/themes/default/images/common/mime-types/svg/file-script.svg",
+		"https://mv-repo.schul-cloud.org/edu-sharing/themes/default/images/common/mime-types/svg/file-script.svg",
 	collection: null,
 	owner: {
 		profile: null,
 		firstName: "Administrator",
 		lastName: "Edu-Sharing",
-		mailbox: "admin@mv-repo.hpi-schul-cloud.de",
+		mailbox: "admin@mv-repo.schul-cloud.org",
 	},
 };
