@@ -81,13 +81,13 @@ describe("@utils/fetchAll", () => {
 	describe("private helpers", () => {
 		// requestHelper is tested with fetchAll
 
-		it("INVALID_URL_MESSAGE constant should not changed", () => {
+		it("INVALID_URL_MESSAGE constant should not be changed", () => {
 			// TODO: globel defined error types and codes are missing
 			expect(INVALID_URL_MESSAGE).toStrictEqual("Invalid url or uri input");
 		});
 
 		// TODO: only string at the moment
-		it("isValidUrl ", () => {
+		it("isValidUrl", () => {
 			expect(isValidUrl(123)).toBe(false);
 			expect(isValidUrl({ url: "http://localhost:3030/endpoint" })).toBe(false);
 
@@ -166,18 +166,18 @@ describe("@utils/fetchAll", () => {
 			);
 		});
 
-		it("works for ressources that are lower then pagination total", async () => {
+		it("works for ressources that are lower than pagination total", async () => {
 			const ressources2 = [{ id: 0 }, { id: 1 }];
 			const response = await fetchAll(axiosHelper(ressources2), "");
 			expect(response).toStrictEqual(ressources2);
 		});
 
-		it("works for pagianted ressources that are need multiple iterations to fetch all", async () => {
+		it("works for pagianted ressources that need multiple iterations to fetch all", async () => {
 			const response = await fetchAll(axiosHelper(), "");
 			expect(response).toStrictEqual(ressources);
 		});
 
-		it("work without passing query", async () => {
+		it("works without passing a query", async () => {
 			const response = await fetchAll(axiosHelper(), "");
 			expect(response).toHaveLength(10);
 		});
