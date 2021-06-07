@@ -1,6 +1,6 @@
 import qs from "qs";
 
-export const INVALID_URL_MESSAGE = "Invalid url or uri input";
+export const INVALID_URI_MESSAGE = "Invalid uri input";
 
 export const paramsSerializer = (params = {}) => qs.stringify(params);
 
@@ -23,8 +23,8 @@ export const isPaginated = (r = {}) =>
 	isPositiveNumber(r.limit) &&
 	Array.isArray(r.data);
 
-// TODO: test at url or uri
-export const isValidUrl = (url) => typeof url === "string";
+export const isValidUri = (uri) =>
+	typeof uri === "string" && uri.charAt(0) === "/";
 
 export const requestHelper = (axios, url) => async (query) =>
 	axios.$get(url, {
@@ -34,16 +34,16 @@ export const requestHelper = (axios, url) => async (query) =>
 
 /**
  * Fetch all ressources from paginated endpoints and solve the pagination limits.
- * @param {*} axios - this.axios instance
- * @param {*} url - the url or uri of the endpoint
+ * @param {AxiosInstance} axios - this.axios instance
+ * @param {URI} uri - the uri of the endpoint /task /task/overview
  * @param {Object} query - a query as object, it cleanup all $skip, $limit, limit, skip
  * @returns {Array} - of ressources
  */
-export const fetchAll = async (axios, url, query = {}) => {
-	if (!isValidUrl(url)) {
-		throw new Error(INVALID_URL_MESSAGE);
+export const fetchAll = async (axios, uri, query = {}) => {
+	if (!isValidUri(uri)) {
+		throw new Error(INVALID_URI_MESSAGE);
 	}
-	const request = requestHelper(axios, url);
+	const request = requestHelper(axios, uri);
 	const internalQuery = cleanupQuery(query);
 
 	const firstResponse = await request(internalQuery);

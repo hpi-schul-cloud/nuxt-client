@@ -1,7 +1,7 @@
 import {
 	fetchAll,
-	INVALID_URL_MESSAGE,
-	isValidUrl,
+	INVALID_URI_MESSAGE,
+	isValidUri,
 	paramsSerializer,
 	isPaginated,
 	cleanupQuery,
@@ -66,7 +66,7 @@ describe("@utils/fetchAll", () => {
 
 		it.each([
 			["fetchAll", fetchAll],
-			["isValidUrl", isValidUrl],
+			["isValidUri", isValidUri],
 			["paramsSerializer", paramsSerializer],
 			["isPaginated", isPaginated],
 			["cleanupQuery", cleanupQuery],
@@ -81,22 +81,22 @@ describe("@utils/fetchAll", () => {
 	describe("private helpers", () => {
 		// requestHelper is tested with fetchAll
 
-		it("INVALID_URL_MESSAGE constant should not be changed", () => {
+		it("INVALID_URI_MESSAGE constant should not be changed", () => {
 			// TODO: globel defined error types and codes are missing
-			expect(INVALID_URL_MESSAGE).toStrictEqual("Invalid url or uri input");
+			expect(INVALID_URI_MESSAGE).toStrictEqual("Invalid uri input");
 		});
 
 		// TODO: only string at the moment
-		it("isValidUrl", () => {
-			expect(isValidUrl(123)).toBe(false);
-			expect(isValidUrl({ url: "http://localhost:3030/endpoint" })).toBe(false);
-
-			expect(isValidUrl("http://localhost:3030/endpoint")).toBe(true);
+		it("isValidUri", () => {
+			expect(isValidUri(123)).toBe(false);
+			expect(isValidUri({ url: "http://localhost:3030/endpoint" })).toBe(false);
+			expect(isValidUri("http://localhost:3030/endpoint")).toBe(false);
 			expect(
-				isValidUrl("http://localhost:3030/endpoint?key1=123&key2=text")
-			).toBe(true);
-			expect(isValidUrl("/endpoint")).toBe(true);
-			expect(isValidUrl("/endpoint?key=1&key=text")).toBe(true);
+				isValidUri("http://localhost:3030/endpoint?key1=123&key2=text")
+			).toBe(false);
+
+			expect(isValidUri("/endpoint")).toBe(true);
+			expect(isValidUri("/endpoint?key=1&key=text")).toBe(true);
 		});
 
 		it("paramsSerializer", () => {
@@ -156,35 +156,35 @@ describe("@utils/fetchAll", () => {
 
 	describe("fetchAll", () => {
 		it("work for not paginated endpoints", async () => {
-			const response = await fetchAll(axiosHelperWithoutPagination(), "");
+			const response = await fetchAll(axiosHelperWithoutPagination(), "/");
 			expect(response).toHaveLength(10);
 		});
 
 		it("should throw error from server up to called instance", async () => {
-			await expect(fetchAll(axiosHelperThrowError(), "")).rejects.toThrow(
+			await expect(fetchAll(axiosHelperThrowError(), "/")).rejects.toThrow(
 				mockAxiosError
 			);
 		});
 
 		it("works for ressources that are lower than pagination total", async () => {
 			const ressources2 = [{ id: 0 }, { id: 1 }];
-			const response = await fetchAll(axiosHelper(ressources2), "");
+			const response = await fetchAll(axiosHelper(ressources2), "/");
 			expect(response).toStrictEqual(ressources2);
 		});
 
 		it("works for pagianted ressources that need multiple iterations to fetch all", async () => {
-			const response = await fetchAll(axiosHelper(), "");
+			const response = await fetchAll(axiosHelper(), "/");
 			expect(response).toStrictEqual(ressources);
 		});
 
 		it("works without passing a query", async () => {
-			const response = await fetchAll(axiosHelper(), "");
+			const response = await fetchAll(axiosHelper(), "/");
 			expect(response).toHaveLength(10);
 		});
 
 		it("throw error if invalid url or uri", async () => {
 			await expect(fetchAll(axiosHelper(), 132)).rejects.toThrow(
-				new Error(INVALID_URL_MESSAGE)
+				new Error(INVALID_URI_MESSAGE)
 			);
 		});
 	});

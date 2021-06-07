@@ -13,6 +13,7 @@ const module = {
 				});
 				commit("setLoading", false);
 			} catch (error) {
+				// TODO: extract response.data to businessError format and add a business Error
 				commit("setBusinessError", error.response.data);
 				commit("setLoading", false);
 			}
