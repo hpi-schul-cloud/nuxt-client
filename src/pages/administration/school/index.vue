@@ -316,7 +316,8 @@
 										<td>{{ item.consentText }}</td>
 										<td>{{ printDate(item.publishedAt) }}</td>
 										<td>
-											<a class="d-flex justify-center"
+											<a
+												class="d-flex justify-center"
 												:href="item.fileData.data"
 												:download="item.fileData.filename"
 												><v-icon> {{ iconMdiDownload }} </v-icon></a

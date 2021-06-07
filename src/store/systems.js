@@ -22,7 +22,7 @@ const module = {
 				const requests = systemIds.map((systemId) =>
 					this.$axios.$get(`systems/${systemId}`)
 				);
-				const response = await Promise.all(requests)
+				const response = await Promise.all(requests);
 				console.log("bsldka", response);
 
 				commit("setDataProtectionPolicies", response.data);
