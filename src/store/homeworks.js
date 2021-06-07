@@ -1,5 +1,5 @@
 import { merge } from "lodash";
-import serviceTemplate from "@utils/service-template";
+import { serviceTemplate, fetchAll } from "@utils";
 const base = serviceTemplate("homework");
 
 const module = {
@@ -7,12 +7,13 @@ const module = {
 		getHomeworksDashboard: async function ({ commit }) {
 			commit("setLoading", true);
 			try {
-				const res = await this.$axios.$get("/v3/task/dashboard/");
+				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
-					items: res,
+					items: data,
 				});
 				commit("setLoading", false);
 			} catch (error) {
+				// TODO: extract response.data to businessError format and add a business Error
 				commit("setBusinessError", error.response.data);
 				commit("setLoading", false);
 			}
