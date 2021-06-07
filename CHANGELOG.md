@@ -20,6 +20,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - SC-9004 - Change ci build
+## 26.2.1
+
+### Changed
+
+- SC-9114 - project naming
 
 ## 26.2.0
 
