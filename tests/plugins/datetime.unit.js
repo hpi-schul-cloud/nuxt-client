@@ -3,6 +3,7 @@ import {
 	currentDate,
 	fromInputDateTime,
 	fromNow,
+	fromNowToFuture,
 	createInputDateTime,
 	inputRangeDate,
 	inputDateFromDeUTC,
@@ -128,6 +129,15 @@ describe("@plugins/datetime", () => {
 	it("fromNow", () => {
 		const result = fromNow(dateNow.clone().add(7, "days"));
 		expect(result).toBe("in 7 days");
+	});
+
+	it("fromNowToFuture", () => {
+		const past = dateUTC.toISOString();
+		const future = dateNow.add(230, "minute").toISOString();
+		const result1 = fromNowToFuture(past, "days");
+		const result2 = fromNowToFuture(future, "hours");
+		expect(result1).toBeNull();
+		expect(result2).toBe(3);
 	});
 
 	it("fromInputDateTime", () => {
