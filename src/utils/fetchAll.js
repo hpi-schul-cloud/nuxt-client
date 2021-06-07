@@ -32,6 +32,13 @@ export const requestHelper = (axios, url) => async (query) =>
 		paramsSerializer,
 	});
 
+/**
+ * Fetch all ressources from paginated endpoints and solve the pagination limits.
+ * @param {*} axios - this.axios instance
+ * @param {*} url - the url or uri of the endpoint
+ * @param {Object} query - a query as object, it cleanup all $skip, $limit, limit, skip
+ * @returns {Array} - of ressources
+ */
 export const fetchAll = async (axios, url, query = {}) => {
 	if (!isValidUrl(url)) {
 		throw new Error(INVALID_URL_MESSAGE);
@@ -44,7 +51,7 @@ export const fetchAll = async (axios, url, query = {}) => {
 		return firstResponse;
 	}
 
-	// use default limit TODO: switch to max without first callback, to keep logic simple?
+	// use default limit
 	const { total, limit, data } = firstResponse;
 	let totalData = data;
 	internalQuery.skip = 0;
@@ -56,11 +63,6 @@ export const fetchAll = async (axios, url, query = {}) => {
 		totalData = [...totalData, ...response.data];
 	}
 
-	return {
-		data: totalData,
-		total,
-		skip: 0,
-		limit,
-	};
+	return totalData;
 };
 export default fetchAll;

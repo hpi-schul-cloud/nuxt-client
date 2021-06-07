@@ -165,28 +165,20 @@ describe("@utils/fetchAll", () => {
 			);
 		});
 
-		it("return paginated result", async () => {
-			const response = await fetchAll(axiosHelper(), "");
-			expect(response).toHaveProperty("total");
-			expect(response).toHaveProperty("data");
-			expect(response).toHaveProperty("skip");
-			expect(response).toHaveProperty("limit");
-		});
-
 		it("works for ressources that are lower then pagination total", async () => {
 			const ressources2 = [{ id: 0 }, { id: 1 }];
 			const response = await fetchAll(axiosHelper(ressources2), "");
-			expect(response.data).toStrictEqual(ressources2);
+			expect(response).toStrictEqual(ressources2);
 		});
 
 		it("works for pagianted ressources that are need multiple iterations to fetch all", async () => {
 			const response = await fetchAll(axiosHelper(), "");
-			expect(response.data).toStrictEqual(ressources);
+			expect(response).toStrictEqual(ressources);
 		});
 
 		it("work without passing query", async () => {
 			const response = await fetchAll(axiosHelper(), "");
-			expect(response.data).toHaveLength(10);
+			expect(response).toHaveLength(10);
 		});
 
 		it("throw error if invalid url or uri", async () => {

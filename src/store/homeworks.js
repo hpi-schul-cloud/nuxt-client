@@ -8,9 +8,9 @@ const module = {
 			commit("setLoading", true);
 			try {
 				// const res = await this.$axios.$get("/v3/task/dashboard/");
-				const res = await fetchAll(this.$axios, "/v3/task/dashboard/");
+				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
-					items: res.data,
+					items: data,
 				});
 				commit("setLoading", false);
 			} catch (error) {
