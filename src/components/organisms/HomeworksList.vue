@@ -116,7 +116,10 @@ export default {
 				const diffMins = fromNowToFuture(dueDate, "minutes");
 				return `${this.$t(
 					"pages.homeworks.labels.hintDueTime"
-				)} ${diffMins} ${this.$t("pages.homeworks.labels.hintMinutes")}`;
+				)} ${diffMins} ${this.$tc(
+					"pages.homeworks.labels.hintMinutes",
+					diffMins
+				)}`;
 			} else {
 				return `${this.$t(
 					"pages.homeworks.labels.hintDueTime"
