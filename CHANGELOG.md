@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.2.2 - 2021-06-07
+
+### Fixed
+
+- npm run audit fix
+
 ## 26.2.0
 
 ### Added
