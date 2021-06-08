@@ -34,6 +34,7 @@ const module = mergeDeep(base, {
 	actions: {
 		handleUsers({ dispatch }, queryContext = {}) {
 			const { userType, action } = queryContext;
+			// bad practice. The component should not determine the action's endpoint
 			queryContext.customEndpoint = `/users/admin/${userType}`;
 			dispatch(action, queryContext);
 		},
@@ -60,16 +61,16 @@ const module = mergeDeep(base, {
 			}
 		},
 		async createTeacher({ commit }, teacherData) {
-			const customEndpoint = "/users/admin/teachers";
-			const teacher = await this.$axios.$post(customEndpoint, teacherData);
+			const teacherEndpoint = "/users/admin/teachers";
+			const teacher = await this.$axios.$post(teacherEndpoint, teacherData);
 			commit("setCurrent", teacher);
 		},
 		async createStudent({ commit }, payload) {
 			commit("resetBusinessError");
-			const customEndpoint = "/users/admin/students";
+			const studentEndpoint = "/users/admin/students";
 			const { successMessage, ...studentData } = payload;
 			try {
-				const student = await this.$axios.$post(customEndpoint, studentData);
+				const student = await this.$axios.$post(studentEndpoint, studentData);
 				this.$toast.success(successMessage);
 				this.$router.push({
 					path: `/administration/students`,
@@ -80,12 +81,12 @@ const module = mergeDeep(base, {
 			}
 		},
 		async sendRegistrationLink(ctx, payload = {}) {
-			const customEndpoint = "/users/mail/registrationLink";
+			registrationLinkEndpoint = "/users/mail/registrationLink";
 			await this.$axios.$post(customEndpoint, payload);
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
-			const customEndpoint = "/users/qrRegistrationLink";
-			const links = await this.$axios.$post(customEndpoint, payload);
+			const registrationQrEndpoint = "/users/qrRegistrationLink";
+			const links = await this.$axios.$post(registrationQrEndpoint, payload);
 			commit("setQrLinks", links);
 		},
 	},

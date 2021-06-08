@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
+
 ## 26.2.0
 
 ### Added
