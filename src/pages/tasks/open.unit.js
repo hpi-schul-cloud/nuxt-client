@@ -38,15 +38,13 @@ describe("Homeworks/dashboard", () => {
 
 	it("has correct page title set in <head>", () => {
 		const wrapper = shallowMount(dashboard, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-					vueMeta: true,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+				vueMeta: true,
+			}),
+			vuetify,
 		});
 
 		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
@@ -54,14 +52,12 @@ describe("Homeworks/dashboard", () => {
 
 	it("Should render homeworks list component, if there are homeworks", () => {
 		const wrapper = mount(dashboard, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 		});
 
 		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
@@ -88,14 +84,12 @@ describe("Homeworks/dashboard", () => {
 			},
 		};
 		const wrapper = mount(dashboard, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStoreEmpty,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreEmpty,
+			}),
+			vuetify,
 		});
 
 		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
@@ -105,14 +99,12 @@ describe("Homeworks/dashboard", () => {
 		mockStore.homeworks.actions.getHomeworksDashboard.mockClear();
 
 		shallowMount(dashboard, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 		});
 
 		expect(
