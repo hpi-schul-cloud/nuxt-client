@@ -50,14 +50,18 @@ const localizedFormats = {
 	de: {
 		...defaultFormats,
 		date: translations["de"]["format.date"],
+		dateYY: translations["de"]["format.dateYY"],
 		dateTime: translations["de"]["format.dateTime"],
+		dateTimeYY: translations["de"]["format.dateTimeYY"],
 		dateLong: translations["de"]["format.dateLong"],
 		time: translations["de"]["format.time"],
 	},
 	en: {
 		...defaultFormats,
 		date: translations["en"]["format.date"],
+		dateYY: translations["en"]["format.dateYY"],
 		dateTime: translations["en"]["format.dateTime"],
+		dateTimeYY: translations["en"]["format.dateTimeYY"],
 		dateLong: translations["en"]["format.dateLong"],
 		time: translations["en"]["format.time"],
 	},

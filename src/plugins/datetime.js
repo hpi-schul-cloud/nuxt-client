@@ -57,7 +57,9 @@ const getUserTimezone = (app) => app.$cookies.get("USER_TIMEZONE");
 export const setDefaultFormats = (app) => {
 	if (app && app.i18n) {
 		DATETIME_FORMAT.date = app.i18n.t("format.date");
+		DATETIME_FORMAT.dateYY = app.i18n.t("format.dateYY");
 		DATETIME_FORMAT.dateTime = app.i18n.t("format.dateTime");
+		DATETIME_FORMAT.dateTimeYY = app.i18n.t("format.dateTimeYY");
 		DATETIME_FORMAT.dateLong = app.i18n.t("format.dateLong");
 		DATETIME_FORMAT.time = app.i18n.t("format.time");
 	}
