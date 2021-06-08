@@ -45,6 +45,15 @@ export const mutations = {
 	},
 };
 
+export const getters = {
+	fallbackLanguage: (state) => {
+		return state.env.I18N__FALLBACK_LANGUAGE || "de";
+	},
+	defaultTimezone: (state) => {
+		return state.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin";
+	},
+};
+
 export const state = () => {
 	return {
 		env: requiredVars,
@@ -56,5 +65,6 @@ export const state = () => {
 export default {
 	actions,
 	mutations,
+	getters,
 	state,
 };

@@ -77,10 +77,7 @@ export const setDefaultTimezone = (defaultTimezone) => {
  */
 const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.auth?.school?.timezone;
-	instanceTimezone =
-		store?.state["env-config"] &&
-		store?.state["env-config"].env &&
-		store?.state["env-config"].I18N__DEFAULT_TIMEZONE;
+	instanceTimezone = store?.getters["env-config/defaultTimezone"];
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
 	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
