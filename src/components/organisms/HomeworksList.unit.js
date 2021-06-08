@@ -128,16 +128,16 @@ describe("@components/organisms/HomeworksList", () => {
 		});
 	});
 
-	it("Should render hint label, if homework is closed to due date", () => {
+	it("Should render hint label, if homework is close to due date", () => {
 		const current = new Date();
 		current.setHours(current.getHours() + 1);
-		const closeTuDueDate = current.toISOString();
+		const closeToDueDate = current.toISOString();
 
 		const homeworkCloseToDueDate = {
 			id: "59cce2c61113d1132c98dc02",
 			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
-			duedate: closeTuDueDate,
+			duedate: closeToDueDate,
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
 		};

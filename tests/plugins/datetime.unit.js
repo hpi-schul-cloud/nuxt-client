@@ -8,6 +8,7 @@ import {
 	inputRangeDate,
 	inputDateFromDeUTC,
 	printDateFromDeUTC,
+	printDateFromStringUTC,
 	printDateTimeFromStringUTC,
 	setDefaultTimezone,
 	getUtcOffset,
@@ -72,6 +73,9 @@ describe("@plugins/datetime", () => {
 
 	const dateUTCString = dateUTC.format("DD.MM.YYYY");
 	const dateLocalString = dateLocal.format("DD.MM.YYYY");
+	const dateLocalStringYY = dateUTC
+		.tz(TEST_DATETIME_TIMEZONE)
+		.format("DD.MM.YY");
 	const dateTimeLocalStringYY = dateUTC
 		.tz(TEST_DATETIME_TIMEZONE)
 		.format("DD.MM.YY HH:mm");
@@ -95,6 +99,12 @@ describe("@plugins/datetime", () => {
 		expect(result).toBe(dateLocalString);
 		expect(printDateFromDeUTC(null)).toBeNull();
 		expect(printDateFromDeUTC("")).toBeNull();
+	});
+
+	it("printDateFromStringUTC", () => {
+		const result = printDateFromStringUTC(dateString);
+		expect(result).toBe(dateLocalStringYY);
+		expect(printDateFromStringUTC(null)).toBe("Invalid Date");
 	});
 
 	it("printDateTimeFromStringUTC", () => {
