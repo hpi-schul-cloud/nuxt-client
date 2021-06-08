@@ -516,7 +516,7 @@
 	"pages.homeworks.labels.due": "Hasta ",
 	"pages.homeworks.emptyState.title": "No hay tareas abiertas",
 	"pages.homeworks.emptyState.subtitle": "Has hecho todas tus tareas. ¡Disfruta de tu tiempo libre!",
-	"pages.homeworks.labels.hintDueTime": "En ",
+	"pages.homeworks.labels.hintDueTime": "en ",
 	"pages.homeworks.labels.hintMinutes": "minuto | minutos",
 	"pages.homeworks.labels.hintMinShort": "min",
 	"pages.homeworks.labels.hintHoursShort": "h",
