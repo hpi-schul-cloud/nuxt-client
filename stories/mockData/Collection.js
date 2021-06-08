@@ -177,7 +177,7 @@ export const Collection = {
 		height: null,
 	},
 	iconURL:
-		"http://content.schul-cloud.dev/edu-sharing/themes/default/images/common/mime-types/svg/link.svg",
+		"http://content.hpi-schul-cloud.de/edu-sharing/themes/default/images/common/mime-types/svg/link.svg",
 	collection: null,
 	owner: {
 		profile: null,
