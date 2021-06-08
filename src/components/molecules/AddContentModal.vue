@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
 
 export default {
@@ -102,10 +102,8 @@ export default {
 		...mapGetters("courses", {
 			courses: "list",
 		}),
-		...mapState("content", {
-			lessons: (state) => {
-				return state.lessons;
-			},
+		...mapGetters("content", {
+			lessons: "getLessons",
 		}),
 		isSendEnabled() {
 			return (this.selectedLesson || {})._id !== undefined;

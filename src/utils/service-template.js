@@ -103,6 +103,9 @@ export default function (endpoint) {
 			businessError: (state) => {
 				return state.businessError;
 			},
+			pagination: (state) => {
+				return state.pagination;
+			},
 		},
 		mutations: {
 			set(state, { items }) {

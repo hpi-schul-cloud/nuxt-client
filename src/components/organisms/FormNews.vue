@@ -50,7 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
@@ -105,7 +105,7 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-		...mapState("news", {
+		...mapGetters("news", {
 			createdNews: "list",
 		}),
 		publishDate(): string | undefined {

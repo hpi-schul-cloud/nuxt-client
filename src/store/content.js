@@ -137,6 +137,21 @@ const initialState = () => ({
 	collectionsFeatureFlag: null,
 });
 
+export const getters = {
+	getLessons(state) {
+		return state.lessons;
+	},
+	getElements(state) {
+		return state.elements;
+	},
+	getSelected(state) {
+		return state.selected;
+	},
+	getLoading(state) {
+		return state.loading;
+	},
+};
+
 export const mutations = {
 	selectElement(state, payload) {
 		for (let i = 0; i < state.elements.data.length; i++) {

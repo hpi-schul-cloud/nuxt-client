@@ -71,6 +71,9 @@ const mockStore = {
 				data: lessonsMock,
 			},
 		},
+		getters: {
+			getLessons: () => ({ data: lessonsMock }),
+		},
 	},
 };
 

@@ -126,6 +126,9 @@ export const getters = {
 	getLocale(state) {
 		return state.locale;
 	},
+	getSchool(state) {
+		return state.school;
+	},
 };
 
 export const state = () => {
