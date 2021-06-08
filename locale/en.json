@@ -514,6 +514,7 @@
 	"pages.homeworks.labels.noDueDate": "No submission date",
 	"pages.homeworks.labels.overdue": "Missed",
 	"pages.homeworks.subtitleOpen": "Open Tasks",
+	"pages.homeworks.subtitleOverDue": "Missed Tasks",
 	"pages.courses.index.courses.active": "Current courses",
 	"pages.courses.index.courses.archived": "Archived courses",
 	"pages.courses.index.title": "My course",
