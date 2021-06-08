@@ -46,7 +46,7 @@ export const actions = {
 		}
 		commit("clearAuthData");
 	},
-	async populateUser({ commit }) {
+	async populateUser({ commit, rootState }) {
 		const user = await this.$axios.$get("/me");
 		commit("setUser", user);
 
@@ -59,10 +59,10 @@ export const actions = {
 		}
 
 		//TODO Remove once added to User permissions SC-2401
-		if (process.env["FEATURE_EXTENSIONS_ENABLED"] === "true") {
+		if (rootState["env-config"].env.FEATURE_EXTENSIONS_ENABLED) {
 			commit("addUserPermission", "ADDONS_ENABLED");
 		}
-		if (process.env["FEATURE_TEAMS_ENABLED"] === "true") {
+		if (rootState["env-config"].env.FEATURE_TEAMS_ENABLED) {
 			commit("addUserPermission", "TEAMS_ENABLED");
 		}
 		return user;

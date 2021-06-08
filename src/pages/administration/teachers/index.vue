@@ -285,6 +285,10 @@ export default {
 				state.pagination.default || { limit: 10, total: 0 },
 			isDeleting: (state) => state.progress.delete.active,
 			deletedPercent: (state) => state.progress.delete.percent,
+			qrLinks: "qrLinks",
+		}),
+		...mapState("env-config", {
+			env: "env",
 		}),
 		tableData: {
 			get() {
@@ -296,9 +300,7 @@ export default {
 			return !this.school.isExternal;
 		},
 		showConsent() {
-			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
-				? false
-				: true;
+			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -429,6 +431,7 @@ export default {
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("users/sendRegistrationLink", {
 					userIds: rowIds,
 					selectionType,
@@ -444,17 +447,13 @@ export default {
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
-				const qrRegistrationLinks = await this.$store.dispatch(
-					"users/getQrRegistrationLinks",
-					{
-						userIds: rowIds,
-						selectionType,
-						roleName: "teacher",
-					}
-				);
-
-				if (qrRegistrationLinks.length) {
-					this.$_printQRs(qrRegistrationLinks);
+				await this.$store.dispatch("users/getQrRegistrationLinks", {
+					userIds: rowIds,
+					selectionType,
+					roleName: "teacher",
+				});
+				if (this.qrLinks.length) {
+					this.$_printQRs(this.qrLinks);
 				} else {
 					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
 				}
@@ -467,6 +466,7 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
+					// TODO wrong use of store (not so bad)
 					await this.$store.dispatch("users/deleteUsers", {
 						ids: rowIds,
 						userType: "teacher",

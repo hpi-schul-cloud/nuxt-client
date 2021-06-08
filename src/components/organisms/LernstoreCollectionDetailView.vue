@@ -267,7 +267,7 @@ export default {
 			try {
 				// Clears the previous collection elements before rendering the new ones
 				this.$store.commit("content/clearElements");
-
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("content/getElements", this.query);
 			} catch (error) {
 				this.$toast.error(
@@ -278,6 +278,7 @@ export default {
 		async addElements() {
 			if (this.query.$skip < this.elements.total) {
 				this.query.$skip += this.query.$limit;
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("content/addElements", this.query);
 			}
 		},

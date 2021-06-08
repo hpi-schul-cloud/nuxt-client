@@ -273,7 +273,6 @@
 
 <script>
 // file deepcode ignore ArrayMethodOnNonArray
-import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
@@ -356,9 +355,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent: defaultDocuments.specificFiles().analogConsent,
-				termsOfUse: defaultDocuments.specificFiles().termsOfUseSchool,
-				dataProtection: defaultDocuments.specificFiles().privacyExemplary,
+				analogConsent: this.$store.getters["filePaths/getSpecificFiles"]
+					.analogConsent,
+				termsOfUse: this.$store.getters["filePaths/getSpecificFiles"]
+					.termsOfUseSchool,
+				dataProtection: this.$store.getters["filePaths/getSpecificFiles"]
+					.privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -438,6 +440,7 @@ export default {
 				$limit: this.selectedStudents.length,
 			};
 
+			// TODO wrong use of store (not so bad)
 			await this.$store.dispatch("users/handleUsers", {
 				query,
 				action: "find",

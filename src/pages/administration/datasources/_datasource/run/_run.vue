@@ -45,10 +45,8 @@ export default {
 		LoadingModal,
 	},
 	async asyncData({ store, params, app: { i18n } }) {
-		const datasource = await store.dispatch(
-			"datasources/get",
-			params.datasource
-		);
+		await store.dispatch("datasources/get", params.datasource);
+		const datasource = store.state["datasources"].current;
 		if (!datasource?.config?.target) {
 			throw new Error(
 				i18n.t(

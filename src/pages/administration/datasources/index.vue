@@ -223,6 +223,9 @@ export default {
 		...mapGetters("datasources", {
 			watchingIds: "getPendingIdsFromResult",
 		}),
+		...mapState("datasourceRuns", {
+			datasourceRun: "list",
+		}),
 	},
 	created(ctx) {
 		this.find();
@@ -262,7 +265,7 @@ export default {
 				},
 			];
 		},
-		find() {
+		async find() {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -271,25 +274,22 @@ export default {
 					createdAt: 1,
 				},
 			};
-			this.$store
-				.dispatch("datasources/find", { query })
-				.then((result) => {
-					if (this.watchingIds.length > 0) {
-						this.$store.dispatch("datasources/updateCallback", {
-							watchingIds: this.watchingIds,
-							successConditions: [
-								{ lastStatus: "Success" },
-								{ lastStatus: "Error" },
-							],
-							query,
-						});
-					}
-					return result;
-				})
-				.catch((error) => {
-					console.error(error);
-					this.$toast.error(this.$t("error.load"));
-				});
+			try {
+				await this.$store.dispatch("datasources/find", { query });
+				if (this.watchingIds.length > 0) {
+					this.$store.dispatch("datasources/updateCallback", {
+						watchingIds: this.watchingIds,
+						successConditions: [
+							{ lastStatus: "Success" },
+							{ lastStatus: "Error" },
+						],
+						query,
+					});
+				}
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(this.$t("error.load"));
+			}
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
@@ -301,12 +301,12 @@ export default {
 		},
 		async triggerRun(datasource) {
 			try {
-				const run = await this.$store.dispatch("datasourceRuns/create", {
+				await this.$store.dispatch("datasourceRuns/create", {
 					datasourceId: datasource._id,
 					dryrun: true,
 				});
 				this.$router.push({
-					path: `/administration/datasources/${datasource._id}/run/${run._id}`,
+					path: `/administration/datasources/${datasource._id}/run/${this.datasourceRun[0]._id}`,
 				});
 			} catch (error) {
 				console.error(error, error.response);
@@ -354,6 +354,7 @@ export default {
 				),
 				onConfirm: async () => {
 					try {
+						// TODO wrong use of store (not so bad)
 						await this.$store.dispatch("datasources/remove", datasource._id);
 						this.$toast.success(
 							this.$t("pages.administration.datasources.index.remove.success", {

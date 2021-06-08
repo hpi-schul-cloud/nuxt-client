@@ -50,8 +50,8 @@ export default {
 	},
 	async asyncData({ store, params, error, app: { i18n } }) {
 		try {
-			const page = await store.dispatch("ghost/getSinglePage", params.article);
-			return { page: page };
+			await store.dispatch("ghost/getSinglePage", params.article);
+			return { page: store.state["ghost"].currentPage };
 		} catch (e) {
 			error({
 				statusCode: 404,

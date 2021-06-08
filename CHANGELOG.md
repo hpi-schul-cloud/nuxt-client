@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.2.0
+
 ### Added
 
 - SC-9003; SC-9017 - removes calls to /roles/user/{userID} and /schools endpoint, which are now part of /me endpoint
@@ -15,18 +17,27 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8164 - apply deletion concept to the deletion of students and teachers
 - SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
+- SC-9004 - Sync env variables between backend and frontend
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 
 ### Changed
 
 - QF/Pull Request Workflow - adds checkbox for manual test, more checks, splits tests
+- SC-9065 - integrates styles repository into nuxt client
 - SC-7944 - changes ids for Lern-Store content and adds a link back to collection
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
+- SC-9004 - Change ci build
+- SC-9077 - refactored store actions returning data
 
 ### Fixed
 
 - Fixed further conflicting screenshots
+
+### Removed
+
+- Removed pages 'account', 'course', 'calendar' and components exclusively used by these pages
 
 ## 26.1.1
 
