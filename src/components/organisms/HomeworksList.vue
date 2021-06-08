@@ -29,13 +29,14 @@
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
-						class="subtitle-2 hidden-xs-only"
-						v-text="computedDueDateLabel(homework.duedate)"
-					/>
-					<v-list-item-action-text
-						class="subtitle-2 hidden-sm-and-up"
+						class="subtitle-2"
 						data-test-id="dueDateLabel"
-						v-text="computedDueDateLabel(homework.duedate, (shorten = true))"
+						v-text="
+							computedDueDateLabel(
+								homework.duedate,
+								(shorten = $vuetify.breakpoint.xsOnly)
+							)
+						"
 					/>
 					<v-spacer />
 					<v-chip
@@ -45,12 +46,12 @@
 						data-test-id="dueDateHintLabel"
 					>
 						<v-icon left small> $hourglassBottomBlack </v-icon>
-						<span class="hidden-xs-only">{{
-							hintDueDate(homework.duedate)
-						}}</span>
-						<span class="hidden-sm-and-up">{{
-							hintDueDate(homework.duedate, (shorten = true))
-						}}</span>
+						{{
+							hintDueDate(
+								homework.duedate,
+								(shorten = $vuetify.breakpoint.xsOnly)
+							)
+						}}
 					</v-chip>
 					<v-chip
 						v-else-if="isOverDue(homework.duedate)"
