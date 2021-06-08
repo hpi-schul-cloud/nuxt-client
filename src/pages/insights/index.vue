@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import InsightsCard from "@components/molecules/InsightsCard";
 import InsightsCharts from "~/components/molecules/InsightsCharts";
 
@@ -42,7 +42,7 @@ export default {
 		]);
 	},
 	computed: {
-		...mapState("insights", {
+		...mapGetters("insights", {
 			monthlyUsers: "monthlyUsers",
 			weeklyUsers: "weeklyUsers",
 			dau: "dau",

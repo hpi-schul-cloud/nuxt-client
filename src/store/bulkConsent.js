@@ -43,6 +43,13 @@ export const actions = {
 	},
 };
 
+export const getters = {
+	selectedStudents: (state) => state.selectedStudents,
+	selectedStudentsData: (state) => state.selectedStudentsData,
+	registeredStudents: (state) => state.registeredStudents,
+	registerError: (state) => state.registerError,
+};
+
 export const mutations = {
 	setSelectedStudents(state, payload) {
 		state.selectedStudents = payload.students;

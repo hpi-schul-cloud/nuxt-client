@@ -16,6 +16,9 @@ describe("students/new", () => {
 				createStudent: createStudentStub,
 				businessError: jest.fn(),
 			},
+			getters: {
+				businessError: jest.fn(),
+			},
 			mutations: {
 				resetBusinessError: jest.fn(),
 			},

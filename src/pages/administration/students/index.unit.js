@@ -61,6 +61,9 @@ describe("students/index", () => {
 					getQrRegistrationLinks: jest.fn(),
 					sendRegistrationLink: jest.fn(),
 				},
+				getters: {
+					list: () => mockData,
+				},
 				state: () => ({
 					list: mockData,
 					pagination: {

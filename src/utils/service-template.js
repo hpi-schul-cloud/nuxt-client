@@ -101,6 +101,15 @@ export default function (endpoint) {
 			get: (state, id) => {
 				return state.list.find((item) => item._id === id);
 			},
+			current: (state) => {
+				return state.current;
+			},
+			list: (state) => {
+				return state.list;
+			},
+			businessError: (state) => {
+				return state.businessError;
+			},
 		},
 		mutations: {
 			set(state, { items }) {

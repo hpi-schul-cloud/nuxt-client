@@ -214,9 +214,11 @@ export default {
 		};
 	},
 	computed: {
+		...mapGetters("datasources", {
+			datasources: "list",
+		}),
 		...mapState("datasources", {
 			pagination: (state) => state.pagination.default,
-			datasources: "list",
 		}),
 		...mapGetters("datasources", {
 			watchingIds: "getPendingIdsFromResult",

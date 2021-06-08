@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
@@ -312,13 +312,15 @@ export default {
 		...mapState("auth", {
 			school: "school",
 		}),
+		...mapGetters("users", {
+			students: "list",
+		}),
 		...mapState("users", {
 			pagination: (state) =>
 				state.pagination.default || { limit: 10, total: 0 },
 			isDeleting: (state) => state.progress.delete.active,
 			deletedPercent: (state) => state.progress.delete.percent,
 			qrLinks: "qrLinks",
-			students: "list",
 		}),
 		...mapState("env-config", {
 			env: "env",
