@@ -24,7 +24,7 @@ export default {
 	async asyncData({ store, params }) {
 		await store.dispatch("content/getResourceMetadata", params.id);
 
-		const resource = store.state["content"].currentResource;
+		const resource = store.getters["content/getCurrentResource"];
 
 		const isCollection =
 			store.state.content.collectionsFeatureFlag === true &&

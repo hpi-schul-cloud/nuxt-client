@@ -38,7 +38,7 @@
 import FormNews from "@components/organisms/FormNews";
 import FormActions from "@components/molecules/FormActions";
 
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -49,7 +49,7 @@ export default {
 		requiredPermissions: ["NEWS_CREATE"],
 	},
 	computed: {
-		...mapState("news", {
+		...mapGetters("news", {
 			status: "status",
 		}),
 	},

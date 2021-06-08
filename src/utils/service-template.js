@@ -110,6 +110,9 @@ export default function (endpoint) {
 			businessError: (state) => {
 				return state.businessError;
 			},
+			status: (state) => {
+				return state.status;
+			},
 		},
 		mutations: {
 			set(state, { items }) {

@@ -102,7 +102,6 @@ export const actions = {
 			event.$emit("showModal@content", "errorModal");
 		}
 	},
-
 	async getResourceMetadata({ commit }, id) {
 		const metadata = await this.$axios.$get(`/edu-sharing/${id}`);
 		commit("setCurrentResource", metadata);
@@ -135,9 +134,21 @@ const initialState = () => ({
 	loadingCounter: 0,
 	loading: false,
 	lastQuery: "",
-	collectionsFeatureFlag: process.env.FEATURE_ES_COLLECTIONS_ENABLED === "true",
+	collectionsFeatureFlag: null,
 	currentResource: {},
 });
+
+export const getters = {
+	getResources: (state) => {
+		return state.resources;
+	},
+	getLoading: (state) => {
+		return state.loading;
+	},
+	getCurrentResource: (state) => {
+		return state.currentResource;
+	},
+};
 
 export const mutations = {
 	selectElement(state, payload) {
@@ -199,6 +210,9 @@ export const mutations = {
 	},
 	setLessons(state, payload) {
 		state.lessons = payload;
+	},
+	init(state, { collectionsFeatureFlag }) {
+		state.collectionsFeatureFlag = collectionsFeatureFlag;
 	},
 	setCurrentResource(state, payload) {
 		state.currentResource = payload;
