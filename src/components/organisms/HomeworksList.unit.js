@@ -35,14 +35,12 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it("Should render complete homework items list", () => {
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 			propsData: {
 				homeworks,
 			},
@@ -72,14 +70,12 @@ describe("@components/organisms/HomeworksList", () => {
 		};
 
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStoreEmpty,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreEmpty,
+			}),
+			vuetify,
 		});
 
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
@@ -88,14 +84,12 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it("Should link list item links to homework/<id> page", () => {
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 			propsData: {
 				homeworks,
 			},
@@ -109,14 +103,12 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it("Should display due date labels according to due date", () => {
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 			propsData: {
 				homeworks,
 			},
@@ -177,14 +169,12 @@ describe("@components/organisms/HomeworksList", () => {
 		});
 
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStoreCloseToDueDate,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreCloseToDueDate,
+			}),
+			vuetify,
 			propsData: {
 				homeworks: extendedHomeworks,
 			},
@@ -199,14 +189,12 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it("Should render overdue label, if homework is overdue ", () => {
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 			propsData: {
 				homeworks,
 			},
@@ -235,14 +223,12 @@ describe("@components/organisms/HomeworksList", () => {
 			},
 		};
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStoreLoading,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreLoading,
+			}),
+			vuetify,
 			propsData: {
 				homeworks: [],
 			},
