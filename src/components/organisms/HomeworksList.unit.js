@@ -132,7 +132,7 @@ describe("@components/organisms/HomeworksList", () => {
 				typeof homeworks[index].duedate === "undefined"
 			)
 				expect(dateLabel.text()).toBe("Kein Abgabedatum");
-			else expect(dateLabel.text()).toContain("Abgabe am");
+			else expect(dateLabel.text()).toContain("Abgabe ");
 		});
 	});
 
@@ -197,7 +197,7 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(dueDateHintLabels).toHaveLength(homeworksCloseToDueDate.length);
 	});
 
-	it("Should render overdue label, if homework is overdue", () => {
+	it("Should render overdue label, if homework is overdue ", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks(
 				{
@@ -217,7 +217,7 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(overDueLabels).toHaveLength(overDueHomeworks.length);
 	});
 
-	it("Should render loading state while fetching homeworks", () => {
+	it("Should render loading state while fetching homework", () => {
 		const mockStoreLoading = {
 			homeworks: {
 				getters: {

@@ -30,7 +30,6 @@
 				<v-list-item-action>
 					<v-list-item-action-text
 						class="subtitle-2 hidden-xs-only"
-						data-test-id="dueDateLabel"
 						v-text="computedDueDateLabel(homework.duedate)"
 					/>
 					<v-list-item-action-text
@@ -43,6 +42,7 @@
 						v-if="isCloseToDueDate(homework.duedate)"
 						color="orange lighten-3"
 						small
+						data-test-id="dueDateHintLabel"
 					>
 						<v-icon left small> $hourglassBottomBlack </v-icon>
 						{{ hintDueDate(homework.duedate) }}
@@ -52,6 +52,7 @@
 						color="error lighten-5"
 						text-color="black"
 						small
+						data-test-id="overDueDateLabel"
 					>
 						<v-icon left small> $hourglassDisabled </v-icon>
 						{{ $t("pages.homeworks.labels.overdue") }}
