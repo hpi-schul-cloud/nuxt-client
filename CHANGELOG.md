@@ -30,7 +30,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 - SC-9004 - Change ci build
 - SC-9077 - refactored store actions returning data
-- SC-9090 - removed redundant getters and refactored the service-template
 
 ### Fixed
 
