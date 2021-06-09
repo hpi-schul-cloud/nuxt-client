@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nuxtclient-deployment
+  namespace: {{ NAMESPACE }}
+  labels:
+    app: nuxtclient
+spec:
+  replicas: {{ NUXTCLIENT_REPLICAS|default("2", true) }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      #maxUnavailable: 1
+  revisionHistoryLimit: 4
+  paused: false
+  selector:
+    matchLabels:
+      app: nuxtclient
+  template:
+    metadata:
+      labels:
+        app: nuxtclient
+      annotations:
+    spec:
+      securityContext:  
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
+      containers:
+      - name: nuxtclient
+        image: {{ NUXTCLIENT_IMAGE_NAME }}:{{ APP_IMAGE_TAG }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: nuxtclient
+          containerPort: 4000
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: nuxtclient-configmap
+        volumeMounts:
+        - mountPath: /app/http-headers.config.js
+          subPath: http-headers.js
+          name: http-headers
+        readinessProbe:
+          httpGet:
+            path: /nuxtversion
+            port: 4000
+          timeoutSeconds: 4
+          failureThreshold: 3
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /nuxtversion
+            port: 4000
+          timeoutSeconds: 4
+          failureThreshold: 3
+          periodSeconds: 15
+        startupProbe:
+          httpGet:
+            path: /nuxtversion
+            port: 4000
+          timeoutSeconds: 4
+          failureThreshold: 60
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: "2000m"
+            memory: "4Gi"
+          requests:
+            cpu: "1000m"
+            memory: "4Gi"
+      volumes:
+      - name: http-headers
+        configMap:
+          name: nuxtclient-configmap-files
+          items:
+          - key: http-headers.js
+            path: http-headers.js
+
