@@ -1,9 +1,21 @@
 <template>
 	<v-container class="v-container">
-		<h1 v-if="isListFilled" class="h4">
-			{{ $t("pages.homeworks.title") }}
+		<h1 v-if="loading">
+			<v-skeleton-loader :type="'text'" :max-width="'30%'" />
 		</h1>
-		<homeworks-list :homeworks="homeworks" />
+		<template v-else>
+			<h1 v-if="isListFilled" class="h4">
+				{{ $t("pages.homeworks.title") }}
+			</h1>
+		</template>
+		<homeworks-list
+			:homeworks="openHomeworksSortedByDueDate"
+			:title="$t('pages.homeworks.subtitleOpen')"
+		/>
+		<homeworks-list
+			:homeworks="overDueHomeworks"
+			:title="$t('pages.homeworks.subtitleOverDue')"
+		/>
 		<v-custom-empty-state
 			v-if="isListEmpty"
 			:image="image"
@@ -34,6 +46,8 @@ export default {
 			loading: "loading",
 			isListEmpty: "isListEmpty",
 			isListFilled: "isListFilled",
+			openHomeworksSortedByDueDate: "getOpenHomeworksSortedByDueDate",
+			overDueHomeworks: "getOverDueHomeworks",
 		}),
 	},
 	mounted() {

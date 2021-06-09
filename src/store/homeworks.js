@@ -26,6 +26,22 @@ const module = {
 		isListFilled: (state) => {
 			return state.loading === false && state.list.length > 0;
 		},
+		getOpenHomeworks: (state) => {
+			return state.list.filter((homework) => {
+				return !homework.duedate || new Date(homework.duedate) > new Date();
+			});
+		},
+		getOverDueHomeworks: (state) => {
+			return state.list.filter((homework) => {
+				return homework.duedate && new Date(homework.duedate) < new Date();
+			});
+		},
+		getOpenHomeworksSortedByDueDate: (state, getters) => {
+			const openHomeworks = Array.from(getters.getOpenHomeworks);
+			return openHomeworks.sort((firstHomework, lastHomework) => {
+				return new Date(firstHomework.duedate) - new Date(lastHomework.duedate);
+			});
+		},
 	},
 };
 

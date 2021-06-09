@@ -1,3 +1,6 @@
+import hourglassBottomBlack from "@assets/icons/hourglass-bottom-black.vue";
+import hourglassDisabled from "@assets/icons/hourglass-disabled.vue";
+
 export default {
 	theme: {
 		themes: {
@@ -11,5 +14,13 @@ export default {
 	},
 	icons: {
 		iconfont: "fa4",
+		values: {
+			hourglassBottomBlack: {
+				component: hourglassBottomBlack,
+			},
+			hourglassDisabled: {
+				component: hourglassDisabled,
+			},
+		},
 	},
 };

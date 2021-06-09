@@ -1,6 +1,11 @@
 import HomeworksList from "./HomeworksList";
-import { homeworks } from "@@/stories/mockData/Homeworks";
+import {
+	homeworks,
+	overDueHomeworks,
+	openHomeworksSortedByDueDate,
+} from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
+import { fromNowToFuture } from "@plugins/datetime";
 
 describe("@components/organisms/HomeworksList", () => {
 	const mockStore = {
@@ -10,6 +15,8 @@ describe("@components/organisms/HomeworksList", () => {
 				loading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
+				openHomeworksSortedByDueDate: () => openHomeworksSortedByDueDate,
+				overDueHomeworks: () => overDueHomeworks,
 			},
 			state: () => ({
 				list: homeworks,
@@ -17,34 +24,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 		},
 	};
-	const mockStoreEmpty = {
-		homeworks: {
-			getters: {
-				list: () => [],
-				loading: () => false,
-				isListEmpty: () => true,
-				isListFilled: () => false,
-			},
-			state: () => ({
-				list: [],
-				loading: false,
-			}),
-		},
-	};
-	const mockStoreLoading = {
-		homeworks: {
-			getters: {
-				list: () => [],
-				loading: () => true,
-				isListEmpty: () => false,
-				isListFilled: () => false,
-			},
-			state: () => ({
-				list: [],
-				loading: true,
-			}),
-		},
-	};
+
 	let vuetify;
 
 	beforeEach(() => {
@@ -55,14 +35,12 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it("Should render complete homework items list", () => {
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 			propsData: {
 				homeworks,
 			},
@@ -73,16 +51,31 @@ describe("@components/organisms/HomeworksList", () => {
 		);
 	});
 
-	it("Should render an empty list", () => {
-		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStoreEmpty,
+	it("Should render an empty list, if there are no homeworks", () => {
+		const mockStoreEmpty = {
+			homeworks: {
+				getters: {
+					list: () => [],
+					loading: () => false,
+					isListEmpty: () => true,
+					isListFilled: () => false,
+					openHomeworksSortedByDueDate: () => [],
+					overDueHomeworks: () => [],
 				},
-				vuetify
-			),
+				state: () => ({
+					list: [],
+					loading: false,
+				}),
+			},
+		};
+
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreEmpty,
+			}),
+			vuetify,
 		});
 
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
@@ -91,14 +84,12 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it("Should link list item links to homework/<id> page", () => {
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 			propsData: {
 				homeworks,
 			},
@@ -110,47 +101,134 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(firstLink.attributes().href).toBe(`/homework/${homeworks[0]._id}`);
 	});
 
-	it("Should display due date label according to due date", () => {
+	it("Should display due date labels according to due date", () => {
 		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				},
-				vuetify
-			),
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
 			propsData: {
 				homeworks,
 			},
 		});
 
-		const dateLabels = wrapper.findAll(".v-list-item__action-text");
+		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
+		expect(dueDateLabels).toHaveLength(homeworks.length);
 
-		dateLabels.wrappers.forEach((dateLabel, index) => {
+		dueDateLabels.wrappers.forEach((dateLabel, index) => {
 			expect(dateLabel.exists()).toBe(true);
-
 			if (
 				homeworks[index].duedate === null ||
 				typeof homeworks[index].duedate === "undefined"
 			)
 				expect(dateLabel.text()).toBe("Kein Abgabedatum");
-			else if (new Date(homeworks[index].duedate) >= new Date())
-				expect(dateLabel.text()).toContain("Fällig");
-			else expect(dateLabel.text()).toBe("Zu spät");
+			else expect(dateLabel.text()).toContain("Abgabe ");
 		});
 	});
 
-	it("Should render loading state while fetching homeworks", () => {
-		const wrapper = mount(HomeworksList, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-					store: mockStoreLoading,
+	it("Should render hint label, if homework is close to due date", () => {
+		const current = new Date();
+		current.setHours(current.getHours() + 1);
+		const closeToDueDate = current.toISOString();
+
+		const homeworkCloseToDueDate = {
+			id: "59cce2c61113d1132c98dc02",
+			_id: "59cce2c61113d1132c98dc02",
+			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
+			duedate: closeToDueDate,
+			courseName: "Mathe",
+			createdAt: "2017-09-28T11:49:39.924Z",
+		};
+		const extendedHomeworks = openHomeworksSortedByDueDate.concat(
+			homeworkCloseToDueDate
+		);
+		const mockStoreCloseToDueDate = {
+			homeworks: {
+				getters: {
+					list: () => homeworks,
+					loading: () => false,
+					isListEmpty: () => false,
+					isListFilled: () => true,
+					openHomeworksSortedByDueDate: () => extendedHomeworks,
+					overDueHomeworks: () => overDueHomeworks,
 				},
-				vuetify
-			),
+				state: () => ({
+					list: homeworks,
+					loading: false,
+				}),
+			},
+		};
+
+		const homeworksCloseToDueDate = extendedHomeworks.filter((homework) => {
+			const timeDiff = fromNowToFuture(homework.duedate, "hours");
+			if (timeDiff === null) {
+				return false;
+			} else return timeDiff <= 24;
+		});
+
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreCloseToDueDate,
+			}),
+			vuetify,
+			propsData: {
+				homeworks: extendedHomeworks,
+			},
+		});
+
+		const dueDateHintLabels = wrapper.findAll(
+			"[data-test-id='dueDateHintLabel']"
+		);
+
+		expect(dueDateHintLabels).toHaveLength(homeworksCloseToDueDate.length);
+	});
+
+	it("Should render overdue label, if homework is overdue ", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
+			propsData: {
+				homeworks,
+			},
+		});
+
+		const overDueLabels = wrapper.findAll("[data-test-id='overDueDateLabel']");
+
+		expect(overDueLabels).toHaveLength(overDueHomeworks.length);
+	});
+
+	it("Should render loading state while fetching homework", () => {
+		const mockStoreLoading = {
+			homeworks: {
+				getters: {
+					list: () => [],
+					loading: () => true,
+					isListEmpty: () => false,
+					isListFilled: () => false,
+					openHomeworksSortedByDueDate: () => [],
+					overDueHomeworks: () => [],
+				},
+				state: () => ({
+					list: [],
+					loading: true,
+				}),
+			},
+		};
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreLoading,
+			}),
+			vuetify,
 			propsData: {
 				homeworks: [],
 			},

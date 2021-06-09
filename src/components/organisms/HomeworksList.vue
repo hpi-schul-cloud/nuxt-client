@@ -1,16 +1,12 @@
 <template>
 	<v-list subheader two-line>
 		<v-subheader v-if="isListFilled">
-			{{ $t("pages.homeworks.subtitleOpen") }}
+			{{ title }}
 		</v-subheader>
-
 		<template v-if="loading">
-			<h1>
-				<v-skeleton-loader :type="'text'" :max-width="'30%'" />
-			</h1>
 			<v-skeleton-loader :type="'text'" :max-width="'15%'" />
 			<v-skeleton-loader
-				v-for="homework of 7"
+				v-for="homework of 4"
 				ref="skeleton"
 				:key="homework"
 				:type="'list-item-avatar-two-line'"
@@ -19,7 +15,7 @@
 
 		<template v-for="(homework, index) of homeworks" v-else>
 			<v-list-item :key="homework._id" :href="homeworkHref(homework._id)">
-				<v-list-item-avatar>
+				<v-list-item-avatar class="hidden-xs-only">
 					<img :src="taskIconSvg" role="presentation" />
 				</v-list-item-avatar>
 				<v-list-item-content>
@@ -33,10 +29,40 @@
 				</v-list-item-content>
 				<v-list-item-action>
 					<v-list-item-action-text
-						v-text="computedDueDateLabel(homework.duedate)"
+						class="subtitle-2"
+						data-test-id="dueDateLabel"
+						v-text="
+							computedDueDateLabel(
+								homework.duedate,
+								(shorten = $vuetify.breakpoint.xsOnly)
+							)
+						"
 					/>
 					<v-spacer />
-					<v-badge v-if="false" color="error" dot inline></v-badge>
+					<v-chip
+						v-if="isCloseToDueDate(homework.duedate)"
+						color="orange lighten-3"
+						small
+						data-test-id="dueDateHintLabel"
+					>
+						<v-icon left small> $hourglassBottomBlack </v-icon>
+						{{
+							hintDueDate(
+								homework.duedate,
+								(shorten = $vuetify.breakpoint.xsOnly)
+							)
+						}}
+					</v-chip>
+					<v-chip
+						v-else-if="isOverDue(homework.duedate)"
+						color="error lighten-5"
+						text-color="black"
+						small
+						data-test-id="overDueDateLabel"
+					>
+						<v-icon left small> $hourglassDisabled </v-icon>
+						{{ $t("pages.homeworks.labels.overdue") }}
+					</v-chip>
 				</v-list-item-action>
 			</v-list-item>
 			<v-divider v-if="index < homeworks.length - 1" :key="index"></v-divider>
@@ -45,9 +71,12 @@
 </template>
 
 <script>
-import { fromNow } from "@plugins/datetime";
+import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
-import { printDateTimeFromStringUTC } from "@plugins/datetime";
+import {
+	printDateFromStringUTC,
+	printDateTimeFromStringUTC,
+} from "@plugins/datetime";
 import { mapGetters } from "vuex";
 
 export default {
@@ -57,6 +86,11 @@ export default {
 			type: Array,
 			required: false,
 			default: () => [],
+		},
+		title: {
+			type: String,
+			required: false,
+			default: null,
 		},
 	},
 	data() {
@@ -72,17 +106,51 @@ export default {
 			isListFilled: "isListFilled",
 		}),
 	},
-
 	methods: {
-		computedDueDateLabel(duedate) {
-			if (!duedate) return this.$t("pages.homeworks.labels.noDueDate");
-
-			if (new Date(duedate) >= new Date())
+		computedDueDateLabel(dueDate, shorten = false) {
+			if (!dueDate) {
+				return this.$t("pages.homeworks.labels.noDueDate");
+			} else if (shorten) {
 				return (
 					this.$t("pages.homeworks.labels.due") +
-					printDateTimeFromStringUTC(duedate)
+					printDateFromStringUTC(dueDate)
 				);
-			else return this.$t("pages.homeworks.labels.overdue");
+			} else {
+				return (
+					this.$t("pages.homeworks.labels.due") +
+					printDateTimeFromStringUTC(dueDate)
+				);
+			}
+		},
+		isCloseToDueDate(dueDate) {
+			const timeDiff = fromNowToFuture(dueDate, "hours");
+			if (timeDiff === null) {
+				return false;
+			} else return timeDiff <= 24;
+		},
+		isOverDue(dueDate) {
+			return dueDate && new Date(dueDate) < new Date();
+		},
+		hintDueDate(dueDate, shorten = false) {
+			const diffHrs = fromNowToFuture(dueDate, "hours");
+			if (diffHrs === 0) {
+				const diffMins = fromNowToFuture(dueDate, "minutes");
+
+				const label = shorten
+					? this.$t("pages.homeworks.labels.hintMinShort")
+					: this.$tc("pages.homeworks.labels.hintMinutes", diffMins);
+
+				return `${this.$t(
+					"pages.homeworks.labels.hintDueTime"
+				)} ${diffMins} ${label}`;
+			} else {
+				const label = shorten
+					? this.$t("pages.homeworks.labels.hintHoursShort")
+					: this.$tc("pages.homeworks.labels.hintHours", diffHrs);
+				return `${this.$t(
+					"pages.homeworks.labels.hintDueTime"
+				)} ${diffHrs} ${label}`;
+			}
 		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;
