@@ -30,6 +30,21 @@ export const getters = {
 		}
 		return null;
 	},
+	getMatrixFeatureFlg(state) {
+		return state.matrixFeatureFlag;
+	},
+	getMatrixAssetDomain(state) {
+		return state.matrixAssetDomain;
+	},
+	getSession(state) {
+		return state.session;
+	},
+	getSessionFromLocalStorage(state) {
+		return state.sessionFromLocalStorage;
+	},
+	getServerName(state) {
+		return state.serverName;
+	},
 };
 
 export const mutations = {
