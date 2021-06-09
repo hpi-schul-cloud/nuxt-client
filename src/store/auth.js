@@ -132,6 +132,9 @@ export const getters = {
 	getUser(state) {
 		return state.user;
 	},
+	getAccessToken(state) {
+		return state.accessToken;
+	},
 };
 
 export const state = () => {

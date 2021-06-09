@@ -3,9 +3,9 @@ const unrecoverableErrorCodes = [401, 404, 500];
 export default function ({ $axios, store, error }) {
 	$axios.onRequest((config) => {
 		store.commit("error/reset");
-		if (store.state.auth.accessToken) {
+		if (store.getters["auth/getAccessToken"]) {
 			config.headers.common["Authorization"] =
-				"Bearer " + store.state.auth.accessToken;
+				"Bearer " + store.getters["auth/getAccessToken"];
 		}
 	});
 
