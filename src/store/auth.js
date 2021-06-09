@@ -129,6 +129,9 @@ export const getters = {
 	getSchool(state) {
 		return state.school;
 	},
+	getUser(state) {
+		return state.user;
+	},
 };
 
 export const state = () => {
