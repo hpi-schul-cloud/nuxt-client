@@ -150,6 +150,9 @@ export const getters = {
 	getLoading(state) {
 		return state.loading;
 	},
+	getResources(state) {
+		return state.resources;
+	},
 };
 
 export const mutations = {
