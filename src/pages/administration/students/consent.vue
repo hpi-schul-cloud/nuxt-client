@@ -403,13 +403,12 @@ export default {
 		}),
 		filteredTableData: {
 			get() {
-				const result = this.$store.state.bulkConsent.selectedStudentsData;
+				const result = this.$store.getters["bulkConsent/selectedStudentsData"];
+
 				if (result.length > 0) {
 					return JSON.parse(
 						JSON.stringify(
-							this.$store.state.bulkConsent.selectedStudentsData.filter(
-								(student) => student.consentStatus !== "ok"
-							)
+							result.filter((student) => student.consentStatus !== "ok")
 						)
 					);
 				}

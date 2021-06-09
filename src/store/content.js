@@ -153,6 +153,9 @@ export const getters = {
 	getResources(state) {
 		return state.resources;
 	},
+	getCollectionsFeatureFlag(state) {
+		return state.collectionsFeatureFlag;
+	},
 };
 
 export const mutations = {
