@@ -37,8 +37,8 @@ const module = mergeDeep(base, {
 		setQrLinks(state, payload) {
 			state.qrLinks = payload;
 		},
-		setConsentList(state, payload) {
-			state.consentList = payload;
+		setConsentList(state, { data }) {
+			state.consentList = data;
 		},
 	},
 	actions: {
@@ -54,7 +54,7 @@ const module = mergeDeep(base, {
 					return qs.stringify(params);
 				},
 			});
-			commit("setConsentList", res.data);
+			commit("setConsentList", res);
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {

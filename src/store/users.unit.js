@@ -1,4 +1,4 @@
-import { actions, mutations } from "./users";
+import { actions, mutations, getters } from "./users";
 
 describe("store/users", () => {
 	describe("actions", () => {
@@ -183,6 +183,35 @@ describe("store/users", () => {
 				expect(removeCommits[1][1]).toStrictEqual(payload.ids[1]);
 			});
 		});
+		describe("findConsentUsers", () => {
+			it("calls the backend and triggers commit", async () => {
+				const receivedRequests = [];
+				const spyCommit = jest.fn();
+				const ctxMock = {
+					commit: spyCommit,
+				};
+				const queryMock = {
+					$sort: {
+						fullName: 1,
+					},
+					users: ["60c212946cad8d5058e1e0b3", "60c2124c6cad8d5058e1dae7"],
+					$limit: 2,
+				};
+
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+					},
+				};
+
+				await actions.findConsentUsers(ctxMock, queryMock);
+				expect(receivedRequests[0].url).toStrictEqual("/users/admin/students");
+
+				const setConsentCommit = spyCommit.mock.calls;
+				expect(setConsentCommit).toHaveLength(1);
+				expect(setConsentCommit[0][0]).toStrictEqual("setConsentList");
+			});
+		});
 	});
 	describe("mutations", () => {
 		describe("remove", () => {
@@ -194,6 +223,25 @@ describe("store/users", () => {
 				};
 				mutations.remove(state, id1);
 				expect(state.list).toStrictEqual([{ _id: id2 }]);
+			});
+		});
+		describe("setConsentList", () => {
+			it("sets data in consentList state object", () => {
+				const user = { id: "5f2987e020834114b8efd6f1", name: "mockName" };
+				const payload = { data: user };
+				const state = { consentList: [] };
+				mutations.setConsentList(state, payload);
+				expect(state.consentList).toStrictEqual(user);
+			});
+		});
+	});
+	describe("getters", () => {
+		describe("getConsentList", () => {
+			it("gets consentList object from the state", () => {
+				const user = { id: "5f2987e020834114b8efd6f1", name: "mockName" };
+				const state = { consentList: user };
+				const retrievedState = getters.getConsentList(state);
+				expect(state.consentList).toStrictEqual(retrievedState);
 			});
 		});
 	});
