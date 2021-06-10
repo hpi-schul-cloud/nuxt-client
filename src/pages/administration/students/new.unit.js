@@ -5,11 +5,11 @@ describe("students/new", () => {
 	const createStudentStub = jest.fn();
 	const mockStore = {
 		auth: {
-			state: () => ({
-				user: {
+			getters: {
+				getUser: () => ({
 					permissions: ["STUDENT_CREATE"],
-				},
-			}),
+				}),
+			},
 		},
 		users: {
 			actions: {
