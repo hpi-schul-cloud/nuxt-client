@@ -439,12 +439,7 @@ export default {
 				users: this.selectedStudents,
 				$limit: this.selectedStudents.length,
 			};
-			// TODO wrong use of store (not so bad)
-			// await this.$store.dispatch("users/handleUsers", {
-			// 	query,
-			// 	action: "find",
-			// 	userType: "students",
-			// });
+
 			await this.$store.dispatch("users/findConsentUsers", query);
 
 			if (this.students.length) {
