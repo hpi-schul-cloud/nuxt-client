@@ -399,7 +399,7 @@ export default {
 			registerError: "registerError",
 		}),
 		...mapGetters("users", {
-			students: "list",
+			students: "getConsentList",
 		}),
 		filteredTableData: {
 			get() {
@@ -439,13 +439,13 @@ export default {
 				users: this.selectedStudents,
 				$limit: this.selectedStudents.length,
 			};
-
 			// TODO wrong use of store (not so bad)
-			await this.$store.dispatch("users/handleUsers", {
-				query,
-				action: "find",
-				userType: "students",
-			});
+			// await this.$store.dispatch("users/handleUsers", {
+			// 	query,
+			// 	action: "find",
+			// 	userType: "students",
+			// });
+			await this.$store.dispatch("users/findConsentUsers", query);
 
 			if (this.students.length) {
 				const data = this.students.map((student) => {

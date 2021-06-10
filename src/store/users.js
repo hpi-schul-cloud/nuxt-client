@@ -1,5 +1,6 @@
 import mergeDeep from "@utils/merge-deep";
 import serviceTemplate from "@utils/service-template";
+import qs from "qs";
 
 const base = serviceTemplate("users");
 const baseState = base.state();
@@ -14,7 +15,13 @@ const module = mergeDeep(base, {
 				},
 			},
 			qrLinks: [],
+			consentList: [],
 		}),
+	getters: {
+		getConsentList(state) {
+			return state.consentList;
+		},
+	},
 	mutations: {
 		startProgress(state, { action }) {
 			state.progress[action].active = true;
@@ -30,12 +37,24 @@ const module = mergeDeep(base, {
 		setQrLinks(state, payload) {
 			state.qrLinks = payload;
 		},
+		setConsentList(state, payload) {
+			state.consentList = payload;
+		},
 	},
 	actions: {
 		handleUsers({ dispatch }, queryContext = {}) {
 			const { userType, action } = queryContext;
 			queryContext.customEndpoint = `/users/admin/${userType}`;
 			dispatch(action, queryContext);
+		},
+		async findConsentUsers({ commit }, query) {
+			const res = await this.$axios.$get(`/users/admin/students`, {
+				params: query,
+				paramsSerializer: (params) => {
+					return qs.stringify(params);
+				},
+			});
+			commit("setConsentList", res.data);
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {

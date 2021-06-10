@@ -33,6 +33,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - Fixed further conflicting screenshots
+- SC-9131 fixed the consent table loading the wrong list of users
 
 ### Removed
 
