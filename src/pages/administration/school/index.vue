@@ -352,56 +352,79 @@
 						</v-simple-table>
 						<v-btn color="primary" depressed>System hinzufügen</v-btn>
 						<h2 class="text-h4 mt-13">RSS-Feeds</h2>
-						<v-simple-table v-if="localSchool.rssFeeds">
-							<template v-slot:default>
-								<thead>
-									<tr>
-										<th class="text-left">URL</th>
-										<th class="text-left">Kurzbeschreibung</th>
-										<th class="text-left">Status</th>
-										<th class="text-left"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr v-for="item in localSchool.rssFeeds" :key="item.name">
-										<td>{{ item.url }}</td>
-										<td>{{ item.description }}</td>
-										<td>
-											{{
-												item.status === "pending"
-													? "In der Warteschlange"
-													: item.status === "success"
-													? "Erfolgreich?"
-													: "Fehler?"
-											}}
-										</td>
-										<td>
-											<v-btn icon @click="removeRssFeed(item.id)"
-												><v-icon> {{ iconMdiTrashCanOutline }} </v-icon></v-btn
-											>
-										</td>
-									</tr>
-								</tbody>
+						<v-list
+							v-if="localSchool.rssFeeds && localSchool.rssFeeds.length"
+						>
+							<template>
+								<v-card
+									v-for="rssFeed in localSchool.rssFeeds"
+									:key="rssFeed.id"
+									class="my-2"
+									outlined
+								>
+									<v-list-item>
+										<v-list-item-icon>
+											<v-icon>{{ iconMdiRss }}</v-icon>
+										</v-list-item-icon>
+										<v-list-item-content>
+											<v-list-item-title
+												class="text-wrap"
+												v-text="rssFeed.url"
+											></v-list-item-title>
+											<v-list-item-subtitle class="text-wrap">
+												{{ rssFeed.description }}
+											</v-list-item-subtitle>
+										</v-list-item-content>
+										<v-list-item-action class="d-flex flex-row align-center">
+											<v-chip small class="mr-5">
+												{{
+													rssFeed.status === "pending"
+														? "In der Warteschlange"
+														: rssFeed.status === "success"
+														? "Erfolgreich?"
+														: "Fehler?"
+												}}
+											</v-chip>
+											<v-btn icon @click="removeRssFeed(rssFeed.id)">
+												<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
+											</v-btn>
+										</v-list-item-action>
+									</v-list-item>
+								</v-card>
 							</template>
-						</v-simple-table>
+						</v-list>
 						<p v-else>Es sind noch keine RSS-Feeds hinterlegt.</p>
-						<v-btn color="primary" depressed>RSS-Feed hinzufügen</v-btn>
+						<v-btn
+							color="primary"
+							depressed
+							@click.stop="$refs.dialog.isOpen = true"
+							>RSS-Feed hinzufügen</v-btn
+						>
 						{{ console.log(school, localSchool) }}
 					</v-col>
 				</v-row>
 			</v-responsive>
 		</v-container>
+		<rss-form-dialog ref="dialog"></rss-form-dialog>
 	</v-container>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { mdiChevronRight, mdiTrashCanOutline, mdiDownload } from "@mdi/js";
+import {
+	mdiChevronRight,
+	mdiTrashCanOutline,
+	mdiDownload,
+	mdiRss,
+} from "@mdi/js";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
+import RssFormDialog from "@components/organisms/administration/RssFormDialog";
 
 export default {
-	components: {},
+	components: {
+		RssFormDialog,
+	},
 	layout: "defaultVuetify",
 	data() {
 		return {
@@ -444,9 +467,14 @@ export default {
 					disabled: true,
 				},
 			],
+			dialog: {
+				title: "",
+				content: "",
+			},
 			iconMdiChevronRight: mdiChevronRight,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiDownload: mdiDownload,
+			iconMdiRss: mdiRss,
 		};
 	},
 	computed: {
@@ -523,11 +551,12 @@ export default {
 			);
 			this.update({ id: this.school.id, rssFeeds: updatedRssFeedList });
 		},
-		addRssFeed(rssFeedId) {
-			const updatedRssFeedList = this.localSchool.rssFeeds.filter(
-				(rssFeed) => rssFeed.id !== rssFeedId
-			);
-			this.update({ id: this.school.id, rssFeeds: updatedRssFeedList });
+
+		setRssFeedDialogContent() {
+			console.log("hi", this);
+			this.dialog.title = "RSS-Feed hinzufügen";
+			this.dialog.content =
+				"<v-form><v-row><v-col><v-text-field v-model='localSchool.name' label='Name der Schule' dense></v-text-field></v-col></v-row></v-form>";
 		},
 		printDate,
 		toBase64,

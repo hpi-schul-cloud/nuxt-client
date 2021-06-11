@@ -4,7 +4,7 @@ const module = {
 			studentVisibility: false,
 			lernStoreVisibility: false,
 			fileStorageTotal: 0,
-			setRequestSuccessful: false,
+			requestSuccessful: false,
 			error: null,
 		};
 	},
@@ -62,7 +62,7 @@ const module = {
 					payload
 				);
 				console.log("data", data);
-				commit("setSchool", data); // should we be committing here and then basically have two schools in store?
+				commit("setSchool", data); // should we be setting school in auth instead?
 				commit("setRequestSuccessful", true);
 			} catch (error) {
 				commit("setError", error);
@@ -87,8 +87,8 @@ const module = {
 		setSchool(state, updatedSchool) {
 			state.school = updatedSchool;
 		},
-		setRequestSuccessful(state) {
-			state.setRequestSuccessful = true;
+		setRequestSuccessful(state, successful) {
+			state.requestSuccessful = successful;
 		},
 		setError(state, error) {
 			state.error = error;
