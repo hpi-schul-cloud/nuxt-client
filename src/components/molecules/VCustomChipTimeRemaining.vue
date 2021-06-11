@@ -22,16 +22,19 @@
 
 <script>
 import { fromNowToFuture } from "@plugins/datetime";
+import dayjs from "dayjs";
 
 export default {
 	props: {
 		type: {
 			type: String,
 			required: true,
+			validator: (value) => ["warning", "overdue"].includes(value),
 		},
 		dueDate: {
 			type: String,
 			required: true,
+			validator: (value) => dayjs(value).isValid(),
 		},
 		shortenUnit: {
 			type: Boolean,
