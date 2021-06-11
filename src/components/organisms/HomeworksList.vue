@@ -39,30 +39,18 @@
 						"
 					/>
 					<v-spacer />
-					<v-chip
+					<v-custom-chip-time-remaining
 						v-if="isCloseToDueDate(homework.duedate)"
-						color="orange lighten-3"
-						small
-						data-test-id="dueDateHintLabel"
-					>
-						<v-icon left small> $hourglassBottomBlack </v-icon>
-						{{
-							hintDueDate(
-								homework.duedate,
-								(shorten = $vuetify.breakpoint.xsOnly)
-							)
-						}}
-					</v-chip>
-					<v-chip
+						type="warning"
+						:due-date="homework.duedate"
+						:shorten-date="$vuetify.breakpoint.xsOnly"
+					/>
+					<v-custom-chip-time-remaining
 						v-else-if="isOverDue(homework.duedate)"
-						color="error lighten-5"
-						text-color="black"
-						small
-						data-test-id="overDueDateLabel"
-					>
-						<v-icon left small> $hourglassDisabled </v-icon>
-						{{ $t("pages.homeworks.labels.overdue") }}
-					</v-chip>
+						type="overdue"
+						:due-date="homework.duedate"
+						:shorten-date="$vuetify.breakpoint.xsOnly"
+					/>
 				</v-list-item-action>
 			</v-list-item>
 			<v-divider v-if="index < homeworks.length - 1" :key="index"></v-divider>
@@ -71,6 +59,7 @@
 </template>
 
 <script>
+import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
 import {
@@ -80,7 +69,7 @@ import {
 import { mapGetters } from "vuex";
 
 export default {
-	components: {},
+	components: { VCustomChipTimeRemaining },
 	props: {
 		homeworks: {
 			type: Array,
@@ -130,27 +119,6 @@ export default {
 		},
 		isOverDue(dueDate) {
 			return dueDate && new Date(dueDate) < new Date();
-		},
-		hintDueDate(dueDate, shorten = false) {
-			const diffHrs = fromNowToFuture(dueDate, "hours");
-			if (diffHrs === 0) {
-				const diffMins = fromNowToFuture(dueDate, "minutes");
-
-				const label = shorten
-					? this.$t("pages.homeworks.labels.hintMinShort")
-					: this.$tc("pages.homeworks.labels.hintMinutes", diffMins);
-
-				return `${this.$t(
-					"pages.homeworks.labels.hintDueTime"
-				)} ${diffMins} ${label}`;
-			} else {
-				const label = shorten
-					? this.$t("pages.homeworks.labels.hintHoursShort")
-					: this.$tc("pages.homeworks.labels.hintHours", diffHrs);
-				return `${this.$t(
-					"pages.homeworks.labels.hintDueTime"
-				)} ${diffHrs} ${label}`;
-			}
 		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;
