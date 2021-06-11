@@ -352,9 +352,7 @@
 						</v-simple-table>
 						<v-btn color="primary" depressed>System hinzufügen</v-btn>
 						<h2 class="text-h4 mt-13">RSS-Feeds</h2>
-						<v-list
-							v-if="localSchool.rssFeeds && localSchool.rssFeeds.length"
-						>
+						<v-list v-if="localSchool.rssFeeds && localSchool.rssFeeds.length">
 							<template>
 								<v-card
 									v-for="rssFeed in localSchool.rssFeeds"

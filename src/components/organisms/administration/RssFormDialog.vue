@@ -65,7 +65,7 @@ export default {
 				id: this.school.id,
 				rssFeeds: updatedRssFeedList,
 			}).then(() => {
-				if (this.requestSuccessful) this.isOpen = false
+				if (this.requestSuccessful) this.isOpen = false;
 			});
 		},
 	},
