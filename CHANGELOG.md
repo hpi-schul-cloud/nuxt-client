@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.4.0
+
 ### Removed
 
 - pages 'account', 'course', 'calendar' and components exclusively used by these pages
