@@ -95,4 +95,15 @@ describe("@components/molecules/vCustomEmptyState", () => {
 		label = wrapper.vm.hintDueDate(dueDate.toISOString(), true);
 		expect(label).toContain("2 h");
 	});
+
+	it("accepts valid type props", () => {
+		const validTypes = ["warning", "overdue"];
+		const { validator } = VCustomChipTimeRemaining.props.type;
+
+		validTypes.forEach((type) => {
+			expect(validator(type)).toBe(true);
+		});
+
+		expect(validator("wrong type")).toBe(false);
+	});
 });
