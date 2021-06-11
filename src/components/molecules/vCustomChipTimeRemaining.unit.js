@@ -106,4 +106,18 @@ describe("@components/molecules/vCustomEmptyState", () => {
 
 		expect(validator("wrong type")).toBe(false);
 	});
+
+	it("accepts valid dueDate props", () => {
+		const validDueDates = [
+			"2021-06-11T14:00:00.000Z",
+			"2021-06-07T09:30:00.000Z",
+		];
+		const { validator } = VCustomChipTimeRemaining.props.dueDate;
+
+		validDueDates.forEach((dueDate) => {
+			expect(validator(dueDate)).toBe(true);
+		});
+
+		expect(validator("wrong due date")).toBe(false);
+	});
 });
