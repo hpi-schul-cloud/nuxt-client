@@ -1,3 +1,9 @@
+import {
+	homeworks,
+	openHomeworks,
+	openHomeworksSortedByDueDate,
+	overDueHomeworks,
+} from "@@/stories/mockData/Homeworks";
 import storeModule from "./homeworks";
 
 describe("store/homeworks", () => {
@@ -80,6 +86,53 @@ describe("store/homeworks", () => {
 				const secondCommit = thirdCall[1];
 				expect(firstCommit).toBe(true);
 				expect(secondCommit).toBe(false);
+			});
+		});
+	});
+
+	describe("getters", () => {
+		const state = {
+			list: homeworks,
+			loading: false,
+		};
+		const { getters } = storeModule;
+
+		it("'isListEmpty' returns true, if it's loaded and there are no homeworks", () => {
+			expect(getters.isListEmpty(state)).toBe(false);
+		});
+
+		it("'isListFilled' returns true, if it's loaded and there are homeworks", () => {
+			expect(getters.isListFilled(state)).toBe(true);
+		});
+
+		it("'getOpenHomeworks' returns homeworks before due date", () => {
+			expect(getters.getOpenHomeworks(state)).toHaveLength(
+				openHomeworks.length
+			);
+		});
+
+		it("'getOverDueHomeworks' returns homeworks after due date", () => {
+			expect(getters.getOverDueHomeworks(state)).toHaveLength(
+				overDueHomeworks.length
+			);
+		});
+
+		it("'getOpenHomeworksSortedByDueDate' returns open homeworks sorted by due date", () => {
+			const openHomeworksGetter = {
+				getOpenHomeworks: () => openHomeworks,
+			};
+
+			const getterOpenHomeworksSortedByDueDate = [
+				...getters.getOpenHomeworksSortedByDueDate(state, openHomeworksGetter),
+			];
+			expect(getterOpenHomeworksSortedByDueDate.pop()).toBeUndefined();
+
+			getterOpenHomeworksSortedByDueDate.forEach((homework, i) => {
+				if (homework.duedate) {
+					expect(homework[i].duedate).toBe(
+						openHomeworksSortedByDueDate[i].duedate
+					);
+				}
 			});
 		});
 	});
