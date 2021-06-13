@@ -352,9 +352,7 @@
 						</v-simple-table>
 						<v-btn color="primary" depressed>System hinzufügen</v-btn>
 						<h2 class="text-h4 mt-13">RSS-Feeds</h2>
-						<v-list
-							v-if="localSchool.rssFeeds && localSchool.rssFeeds.length"
-						>
+						<v-list v-if="localSchool.rssFeeds && localSchool.rssFeeds.length">
 							<template>
 								<v-card
 									v-for="rssFeed in localSchool.rssFeeds"
@@ -376,7 +374,11 @@
 											</v-list-item-subtitle>
 										</v-list-item-content>
 										<v-list-item-action class="d-flex flex-row align-center">
-											<v-chip small class="mr-5">
+											<v-chip
+												small
+												class="mr-5"
+												:color="rssFeedStatusColor(rssFeed.status)"
+											>
 												{{
 													rssFeed.status === "pending"
 														? "In der Warteschlange"
@@ -467,10 +469,6 @@ export default {
 					disabled: true,
 				},
 			],
-			dialog: {
-				title: "",
-				content: "",
-			},
 			iconMdiChevronRight: mdiChevronRight,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiDownload: mdiDownload,
@@ -551,12 +549,12 @@ export default {
 			);
 			this.update({ id: this.school.id, rssFeeds: updatedRssFeedList });
 		},
-
-		setRssFeedDialogContent() {
-			console.log("hi", this);
-			this.dialog.title = "RSS-Feed hinzufügen";
-			this.dialog.content =
-				"<v-form><v-row><v-col><v-text-field v-model='localSchool.name' label='Name der Schule' dense></v-text-field></v-col></v-row></v-form>";
+		rssFeedStatusColor(rssFeedStatus) {
+			return rssFeedStatus === "pending"
+				? "orange lighten-3"
+				: rssFeedStatus === "success"
+				? "green lighten-3"
+				: "error lighten-3";
 		},
 		printDate,
 		toBase64,
