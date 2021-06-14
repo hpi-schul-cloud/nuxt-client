@@ -2,7 +2,7 @@ import HomeworksList from "./HomeworksList";
 import {
 	homeworks,
 	overDueHomeworks,
-	openHomeworksSortedByDueDate,
+	openHomeworks,
 } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 import { fromNowToFuture } from "@plugins/datetime";
@@ -15,7 +15,7 @@ describe("@components/organisms/HomeworksList", () => {
 				loading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
-				openHomeworksSortedByDueDate: () => openHomeworksSortedByDueDate,
+				openHomeworks: () => openHomeworks,
 				overDueHomeworks: () => overDueHomeworks,
 			},
 			state: () => ({
@@ -59,7 +59,7 @@ describe("@components/organisms/HomeworksList", () => {
 					loading: () => false,
 					isListEmpty: () => true,
 					isListFilled: () => false,
-					openHomeworksSortedByDueDate: () => [],
+					openHomeworks: () => [],
 					overDueHomeworks: () => [],
 				},
 				state: () => ({
@@ -141,9 +141,7 @@ describe("@components/organisms/HomeworksList", () => {
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
 		};
-		const extendedHomeworks = openHomeworksSortedByDueDate.concat(
-			homeworkCloseToDueDate
-		);
+		const extendedHomeworks = openHomeworks.concat(homeworkCloseToDueDate);
 		const mockStoreCloseToDueDate = {
 			homeworks: {
 				getters: {
@@ -151,7 +149,7 @@ describe("@components/organisms/HomeworksList", () => {
 					loading: () => false,
 					isListEmpty: () => false,
 					isListFilled: () => true,
-					openHomeworksSortedByDueDate: () => extendedHomeworks,
+					openHomeworks: () => openHomeworks,
 					overDueHomeworks: () => overDueHomeworks,
 				},
 				state: () => ({
@@ -213,7 +211,7 @@ describe("@components/organisms/HomeworksList", () => {
 					loading: () => true,
 					isListEmpty: () => false,
 					isListFilled: () => false,
-					openHomeworksSortedByDueDate: () => [],
+					openHomeworks: () => [],
 					overDueHomeworks: () => [],
 				},
 				state: () => ({
