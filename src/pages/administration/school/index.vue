@@ -383,8 +383,8 @@
 													rssFeed.status === "pending"
 														? "In der Warteschlange"
 														: rssFeed.status === "success"
-														? "Erfolgreich?"
-														: "Fehler?"
+														? "Aktiv"
+														: "Fehler beim Abrufen"
 												}}
 											</v-chip>
 											<v-btn icon @click="removeRssFeed(rssFeed.id)">
