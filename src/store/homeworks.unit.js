@@ -2,6 +2,8 @@ import {
 	homeworks,
 	openHomeworks,
 	openHomeworksSortedByDueDate,
+	openHomeworksWithDueDate,
+	openHomeworksWithoutDueDate,
 	overDueHomeworks,
 } from "@@/stories/mockData/Homeworks";
 import storeModule from "./homeworks";
@@ -105,9 +107,9 @@ describe("store/homeworks", () => {
 			expect(getters.isListFilled(state)).toBe(true);
 		});
 
-		it("'getOpenHomeworks' returns homeworks before due date", () => {
-			expect(getters.getOpenHomeworks(state)).toHaveLength(
-				openHomeworks.length
+		it("'getOpenHomeworksWithDueDate' returns homeworks before due date", () => {
+			expect(getters.getOpenHomeworksWithDueDate(state)).toHaveLength(
+				openHomeworksWithDueDate.length
 			);
 		});
 
@@ -117,22 +119,40 @@ describe("store/homeworks", () => {
 			);
 		});
 
-		it("'getOpenHomeworksSortedByDueDate' returns open homeworks sorted by due date", () => {
-			const openHomeworksGetter = {
-				getOpenHomeworks: () => openHomeworks,
+		it("'getOpenHomeworksWithoutDueDate' returns open homeworks without due date", () => {
+			expect(getters.getOpenHomeworksWithoutDueDate(state)).toHaveLength(
+				openHomeworksWithoutDueDate.length
+			);
+		});
+
+		it("'getOpenHomeworksSortedByDueDate' returns open homeworks with due date sorted by due date", () => {
+			const mockGetter = {
+				getOpenHomeworksWithDueDate: openHomeworksWithDueDate,
 			};
 
-			const getterOpenHomeworksSortedByDueDate = [
-				...getters.getOpenHomeworksSortedByDueDate(state, openHomeworksGetter),
-			];
-			expect(getterOpenHomeworksSortedByDueDate.pop()).toBeUndefined();
+			const getterOpenHomeworksSortedByDueDate =
+				getters.getOpenHomeworksSortedByDueDate(state, mockGetter);
+
+			expect(getterOpenHomeworksSortedByDueDate).toHaveLength(
+				openHomeworksSortedByDueDate.length
+			);
 
 			getterOpenHomeworksSortedByDueDate.forEach((homework, i) => {
-				if (homework.duedate) {
-					expect(homework[i].duedate).toBe(
-						openHomeworksSortedByDueDate[i].duedate
-					);
-				}
+				expect(homework.duedate).toBe(openHomeworksSortedByDueDate[i].duedate);
+			});
+		});
+
+		it("'getOpenHomeworks' returns homeworks sorted by due date and homeworks with no due date in the right order", () => {
+			const mockGetter = {
+				getOpenHomeworksSortedByDueDate: openHomeworksSortedByDueDate,
+				getOpenHomeworksWithoutDueDate: openHomeworksWithoutDueDate,
+			};
+
+			const getterOpenHomeworks = getters.getOpenHomeworks(state, mockGetter);
+			expect(getterOpenHomeworks).toHaveLength(openHomeworks.length);
+
+			getterOpenHomeworks.forEach((homework, i) => {
+				expect(homework.duedate).toBe(openHomeworks[i].duedate);
 			});
 		});
 	});

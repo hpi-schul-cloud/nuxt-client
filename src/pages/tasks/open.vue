@@ -9,7 +9,7 @@
 			</h1>
 		</template>
 		<homeworks-list
-			:homeworks="openHomeworksSortedByDueDate"
+			:homeworks="openHomeworks"
 			:title="$t('pages.homeworks.subtitleOpen')"
 		/>
 		<homeworks-list
@@ -46,7 +46,7 @@ export default {
 			loading: "loading",
 			isListEmpty: "isListEmpty",
 			isListFilled: "isListFilled",
-			openHomeworksSortedByDueDate: "getOpenHomeworksSortedByDueDate",
+			openHomeworks: "getOpenHomeworks",
 			overDueHomeworks: "getOverDueHomeworks",
 		}),
 	},
