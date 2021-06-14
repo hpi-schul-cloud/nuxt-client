@@ -64,7 +64,7 @@ export default {
 			const errors = [];
 			if (!this.$v.url.$dirty) return errors;
 			!this.$v.url.required && errors.push("Url is required");
-			!this.$v.url.email && errors.push("Must be valid url");
+			!this.$v.url.url && errors.push("Must be valid url");
 			return errors;
 		},
 	},

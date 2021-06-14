@@ -27,6 +27,8 @@ const module = {
 									`/base64Files/${consentVersion.consentDataId}`
 								);
 								return { ...consentVersion, fileData };
+							} else {
+								return consentVersion
 							}
 						})
 					);

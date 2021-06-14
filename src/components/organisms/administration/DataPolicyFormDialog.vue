@@ -19,12 +19,13 @@
 					</v-row>
 					<v-row>
 						<v-col>
-							<v-text-area
+							<v-textarea
 								v-model="description"
+								name="input-7-1"
 								label="Beschreibung"
 								dense
 								required
-							></v-text-area>
+							></v-textarea>
 						</v-col>
 					</v-row>
 					<v-row>
@@ -40,7 +41,7 @@
 					</v-row>
 					<v-row>
 						<v-col>
-							<h5>Wichtig:</h5>
+							<h2 class="text-h6">Wichtig:</h2>
 							<p>Wenn eine neue Datenschutzerklärung hochgeladen wird, wird sie allen Nutzer:innen aus dieser Schule zur Zustimmung gegeben.</p>
 						</v-col>
 					</v-row>
@@ -58,28 +59,29 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
-import { required, url } from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 
 export default {
 	mixins: [validationMixin],
 	validations: {
-		url: { required, url },
+		description: { required },
 	},
 	data() {
 		return {
 			isOpen: false,
-			url: "",
+			title: "Datenschutzerklärung der Schule",
 			description: "",
+			file: null,
 		};
 	},
 	computed: {
 		...mapState("auth", { school: "school" }),
 		...mapState("schools", { requestSuccessful: "requestSuccessful" }),
-		urlErrors() {
+		descriptionErrors() {
 			const errors = [];
-			if (!this.$v.url.$dirty) return errors;
+			if (!this.$v.description.$dirty) return errors;
 			!this.$v.url.required && errors.push("Url is required");
-			!this.$v.url.email && errors.push("Must be valid url");
+
 			return errors;
 		},
 	},
@@ -87,8 +89,9 @@ export default {
 		...mapActions("schools", ["update"]),
 		submit() {
 			this.$v.$touch();
+			console.log("hi")
 
-			if (!this.$v.$invalid) {
+			/* if (!this.$v.$invalid) {
 				const { rssFeeds } = this.school;
 				const newRssFeed = { url: this.url, description: this.description };
 				const updatedRssFeedList = [...rssFeeds, newRssFeed];
@@ -104,7 +107,7 @@ export default {
 						// TODO - show error InfoMessage
 					}
 				});
-			}
+			} */
 		},
 		cancel() {
 			this.$v.$reset();

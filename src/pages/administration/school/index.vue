@@ -297,41 +297,53 @@
 						</v-form>
 						<v-divider class="mt-13"></v-divider>
 						<h2 class="text-h4">Datenschutzerklärung</h2>
-						<v-simple-table>
-							<template v-slot:default>
-								<thead>
-									<tr>
-										<th class="text-left">Titel</th>
-										<th class="text-left">Beschreibung</th>
-										<th class="text-left">Hochgeladen am</th>
-										<th class="text-left">Download</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr
-										v-for="item in localSchool.dataProtectionPolicies"
-										:key="item._id"
+						<v-list
+							v-if="
+								localSchool.dataProtectionPolicies &&
+								localSchool.dataProtectionPolicies.length
+							"
+						>
+							<template
+								v-for="(policy, index) of localSchool.dataProtectionPolicies"
+							>
+								<v-list-item :key="policy.consentDataId" two-line>
+									<v-list-item-icon size="24">
+										<v-icon>{{ iconMdiFileDocumentOutline }}</v-icon>
+									</v-list-item-icon>
+									<v-list-item-content>
+										<v-list-item-title class="text-wrap mb-1"
+											>{{ policy.title }} vom
+											{{ printDate(policy.publishedAt) }}</v-list-item-title
+										>
+										<v-list-item-subtitle class="text-wrap">
+											{{ policy.consentText }}
+										</v-list-item-subtitle>
+									</v-list-item-content>
+									<v-list-item-action
+										v-if="policy.fileData"
+										class="align-self-start"
 									>
-										<td>{{ item.title }}</td>
-										<td>{{ item.consentText }}</td>
-										<td>{{ printDate(item.publishedAt) }}</td>
-										<td>
-											<a
-												class="d-flex justify-center"
-												:href="item.fileData.data"
-												:download="item.fileData.filename"
-												><v-icon> {{ iconMdiDownload }} </v-icon></a
-											>
-										</td>
-									</tr>
-								</tbody>
+										<a
+											:href="policy.fileData.data"
+											:download="policy.fileData.filename"
+											><v-icon> {{ iconMdiDownload }} </v-icon></a
+										>
+									</v-list-item-action>
+								</v-list-item>
+								<v-divider
+									v-if="index < localSchool.dataProtectionPolicies.length - 1"
+									:key="index"
+								></v-divider>
 							</template>
-						</v-simple-table>
-						<v-btn color="primary" depressed
+						</v-list>
+						<v-btn
+							color="primary"
+							depressed
+							@click.stop="$refs.policyDialog.isOpen = true"
 							>Datenschutzerklärung hinzufügen</v-btn
 						>
 						<v-divider class="mt-13"></v-divider>
-						<h2 class="text-h4">Authentifizierung</h2>
+						<!-- <h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
 							<template v-slot:default>
 								<thead>
@@ -350,56 +362,54 @@
 								</tbody>
 							</template>
 						</v-simple-table>
-						<v-btn color="primary" depressed>System hinzufügen</v-btn>
+						<v-btn color="primary" depressed>System hinzufügen</v-btn> -->
 						<h2 class="text-h4 mt-13">RSS-Feeds</h2>
 						<v-list v-if="localSchool.rssFeeds && localSchool.rssFeeds.length">
-							<template>
-								<v-card
-									v-for="rssFeed in localSchool.rssFeeds"
-									:key="rssFeed.id"
-									class="my-2"
-									outlined
-								>
-									<v-list-item>
-										<v-list-item-icon>
-											<v-icon>{{ iconMdiRss }}</v-icon>
-										</v-list-item-icon>
-										<v-list-item-content>
-											<v-list-item-title
-												class="text-wrap"
-												v-text="rssFeed.url"
-											></v-list-item-title>
-											<v-list-item-subtitle class="text-wrap">
-												{{ rssFeed.description }}
-											</v-list-item-subtitle>
-										</v-list-item-content>
-										<v-list-item-action class="d-flex flex-row align-center">
-											<v-chip
-												small
-												class="mr-5"
-												:color="rssFeedStatusColor(rssFeed.status)"
-											>
-												{{
-													rssFeed.status === "pending"
-														? "In der Warteschlange"
-														: rssFeed.status === "success"
-														? "Aktiv"
-														: "Fehler beim Abrufen"
-												}}
-											</v-chip>
-											<v-btn icon @click="removeRssFeed(rssFeed.id)">
-												<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
-											</v-btn>
-										</v-list-item-action>
-									</v-list-item>
-								</v-card>
+							<template v-for="(rssFeed, index) of localSchool.rssFeeds">
+								<v-list-item :key="rssFeed.id" two-line>
+									<v-list-item-icon>
+										<v-icon>{{ iconMdiRss }}</v-icon>
+									</v-list-item-icon>
+									<v-list-item-content>
+										<v-list-item-title
+											class="text-wrap mb-1"
+											v-text="rssFeed.url"
+										></v-list-item-title>
+										<v-list-item-subtitle class="text-wrap">
+											{{ rssFeed.description }}
+										</v-list-item-subtitle>
+									</v-list-item-content>
+									<v-list-item-action class="d-flex flex-row align-start">
+										<v-chip
+											small
+											class="mr-2 mt-2"
+											:color="rssFeedStatusColor(rssFeed.status)"
+											text-color="black"
+										>
+											{{
+												rssFeed.status === "pending"
+													? "In der Warteschlange"
+													: rssFeed.status === "success"
+													? "Aktiv"
+													: "Fehler beim Abrufen"
+											}}
+										</v-chip>
+										<v-btn icon @click="removeRssFeed(rssFeed.id)">
+											<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
+										</v-btn>
+									</v-list-item-action>
+								</v-list-item>
+								<v-divider
+									v-if="index < localSchool.rssFeeds.length - 1"
+									:key="index"
+								></v-divider>
 							</template>
 						</v-list>
 						<p v-else>Es sind noch keine RSS-Feeds hinterlegt.</p>
 						<v-btn
 							color="primary"
 							depressed
-							@click.stop="$refs.dialog.isOpen = true"
+							@click.stop="$refs.rssDialog.isOpen = true"
 							>RSS-Feed hinzufügen</v-btn
 						>
 						{{ console.log(school, localSchool) }}
@@ -407,7 +417,8 @@
 				</v-row>
 			</v-responsive>
 		</v-container>
-		<rss-form-dialog ref="dialog"></rss-form-dialog>
+		<rss-form-dialog ref="rssDialog"></rss-form-dialog>
+		<data-policy-form-dialog ref="policyDialog"></data-policy-form-dialog>
 	</v-container>
 </template>
 
@@ -418,14 +429,17 @@ import {
 	mdiTrashCanOutline,
 	mdiDownload,
 	mdiRss,
+	mdiFileDocumentOutline,
 } from "@mdi/js";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import RssFormDialog from "@components/organisms/administration/RssFormDialog";
+import DataPolicyFormDialog from "@components/organisms/administration/DataPolicyFormDialog";
 
 export default {
 	components: {
 		RssFormDialog,
+		DataPolicyFormDialog,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -473,6 +487,7 @@ export default {
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiDownload: mdiDownload,
 			iconMdiRss: mdiRss,
+			iconMdiFileDocumentOutline: mdiFileDocumentOutline,
 		};
 	},
 	computed: {
@@ -522,6 +537,7 @@ export default {
 			withFile: true,
 		}).then(() => {
 			this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies;
+			console.log("hi", this.dataProtectionPolicies);
 		});
 		this.fetchFileStorageTotal();
 
@@ -554,7 +570,7 @@ export default {
 				? "orange lighten-3"
 				: rssFeedStatus === "success"
 				? "green lighten-3"
-				: "error lighten-3";
+				: "error lighten-5";
 		},
 		printDate,
 		toBase64,
