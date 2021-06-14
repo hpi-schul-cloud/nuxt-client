@@ -81,8 +81,8 @@ const module = mergeDeep(base, {
 			}
 		},
 		async sendRegistrationLink(ctx, payload = {}) {
-			registrationLinkEndpoint = "/users/mail/registrationLink";
-			await this.$axios.$post(customEndpoint, payload);
+			const registrationLinkEndpoint = "/users/mail/registrationLink";
+			await this.$axios.$post(registrationLinkEndpoint, payload);
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
 			const registrationQrEndpoint = "/users/qrRegistrationLink";
