@@ -1,6 +1,6 @@
 <template>
 	<v-list subheader two-line>
-		<v-subheader v-if="isListFilled">
+		<v-subheader v-if="isListFilled()">
 			{{ title }}
 		</v-subheader>
 		<template v-if="loading">
@@ -91,8 +91,6 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			loading: "loading",
-			isListEmpty: "isListEmpty",
-			isListFilled: "isListFilled",
 		}),
 	},
 	methods: {
@@ -116,6 +114,9 @@ export default {
 			if (timeDiff === null) {
 				return false;
 			} else return timeDiff <= 24;
+		},
+		isListFilled() {
+			return this.loading === false && this.homeworks.length > 0;
 		},
 		isOverDue(dueDate) {
 			return dueDate && new Date(dueDate) < new Date();
