@@ -1,7 +1,6 @@
 import {
 	homeworks,
 	openHomeworks,
-	openHomeworksSortedByDueDate,
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
 	overDueHomeworks,
@@ -125,32 +124,13 @@ describe("store/homeworks", () => {
 			);
 		});
 
-		it("'getOpenHomeworksSortedByDueDate' returns open homeworks with due date sorted by due date", () => {
+		it("'getOpenHomeworks' returns open homeworks in the right order", () => {
 			const mockGetter = {
 				getOpenHomeworksWithDueDate: openHomeworksWithDueDate,
-			};
-
-			const getterOpenHomeworksSortedByDueDate =
-				getters.getOpenHomeworksSortedByDueDate(state, mockGetter);
-
-			expect(getterOpenHomeworksSortedByDueDate).toHaveLength(
-				openHomeworksSortedByDueDate.length
-			);
-
-			getterOpenHomeworksSortedByDueDate.forEach((homework, i) => {
-				expect(homework.duedate).toBe(openHomeworksSortedByDueDate[i].duedate);
-			});
-		});
-
-		it("'getOpenHomeworks' returns homeworks sorted by due date and homeworks with no due date in the right order", () => {
-			const mockGetter = {
-				getOpenHomeworksSortedByDueDate: openHomeworksSortedByDueDate,
 				getOpenHomeworksWithoutDueDate: openHomeworksWithoutDueDate,
 			};
-
 			const getterOpenHomeworks = getters.getOpenHomeworks(state, mockGetter);
 			expect(getterOpenHomeworks).toHaveLength(openHomeworks.length);
-
 			getterOpenHomeworks.forEach((homework, i) => {
 				expect(homework.duedate).toBe(openHomeworks[i].duedate);
 			});

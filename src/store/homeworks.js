@@ -41,22 +41,14 @@ const module = {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
-		getOpenHomeworksSortedByDueDate: (state, getters) => {
+		getOpenHomeworks: (state, getters) => {
 			const openHomeworksWithDueDate = Array.from(
 				getters.getOpenHomeworksWithDueDate
-			);
-			return openHomeworksWithDueDate.sort((firstHomework, lastHomework) => {
-				return new Date(firstHomework.duedate) - new Date(lastHomework.duedate);
-			});
-		},
-		getOpenHomeworks: (state, getters) => {
-			const openHomeworksSortedByDueDate = Array.from(
-				getters.getOpenHomeworksSortedByDueDate
 			);
 			const openHomeworksWithoutDueDate = Array.from(
 				getters.getOpenHomeworksWithoutDueDate
 			);
-			return openHomeworksSortedByDueDate.concat(openHomeworksWithoutDueDate);
+			return openHomeworksWithDueDate.concat(openHomeworksWithoutDueDate);
 		},
 	},
 };
