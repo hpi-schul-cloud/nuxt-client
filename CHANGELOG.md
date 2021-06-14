@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9093 - Load default language and timezone from server
+
 ## 26.2.0
 
 ### Added
