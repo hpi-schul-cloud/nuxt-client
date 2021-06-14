@@ -1,7 +1,8 @@
 import {
 	homeworks,
 	openHomeworks,
-	openHomeworksSortedByDueDate,
+	openHomeworksWithDueDate,
+	openHomeworksWithoutDueDate,
 	overDueHomeworks,
 } from "@@/stories/mockData/Homeworks";
 import storeModule from "./homeworks";
@@ -105,9 +106,9 @@ describe("store/homeworks", () => {
 			expect(getters.isListFilled(state)).toBe(true);
 		});
 
-		it("'getOpenHomeworks' returns homeworks before due date", () => {
-			expect(getters.getOpenHomeworks(state)).toHaveLength(
-				openHomeworks.length
+		it("'getOpenHomeworksWithDueDate' returns homeworks before due date", () => {
+			expect(getters.getOpenHomeworksWithDueDate(state)).toHaveLength(
+				openHomeworksWithDueDate.length
 			);
 		});
 
@@ -117,22 +118,21 @@ describe("store/homeworks", () => {
 			);
 		});
 
-		it("'getOpenHomeworksSortedByDueDate' returns open homeworks sorted by due date", () => {
-			const openHomeworksGetter = {
-				getOpenHomeworks: () => openHomeworks,
+		it("'getOpenHomeworksWithoutDueDate' returns open homeworks without due date", () => {
+			expect(getters.getOpenHomeworksWithoutDueDate(state)).toHaveLength(
+				openHomeworksWithoutDueDate.length
+			);
+		});
+
+		it("'getOpenHomeworks' returns open homeworks in the right order", () => {
+			const mockGetter = {
+				getOpenHomeworksWithDueDate: openHomeworksWithDueDate,
+				getOpenHomeworksWithoutDueDate: openHomeworksWithoutDueDate,
 			};
-
-			const getterOpenHomeworksSortedByDueDate = [
-				...getters.getOpenHomeworksSortedByDueDate(state, openHomeworksGetter),
-			];
-			expect(getterOpenHomeworksSortedByDueDate.pop()).toBeUndefined();
-
-			getterOpenHomeworksSortedByDueDate.forEach((homework, i) => {
-				if (homework.duedate) {
-					expect(homework[i].duedate).toBe(
-						openHomeworksSortedByDueDate[i].duedate
-					);
-				}
+			const getterOpenHomeworks = getters.getOpenHomeworks(state, mockGetter);
+			expect(getterOpenHomeworks).toHaveLength(openHomeworks.length);
+			getterOpenHomeworks.forEach((homework, i) => {
+				expect(homework.duedate).toBe(openHomeworks[i].duedate);
 			});
 		});
 	});

@@ -26,9 +26,14 @@ const module = {
 		isListFilled: (state) => {
 			return state.loading === false && state.list.length > 0;
 		},
-		getOpenHomeworks: (state) => {
+		getOpenHomeworksWithDueDate: (state) => {
 			return state.list.filter((homework) => {
-				return !homework.duedate || new Date(homework.duedate) > new Date();
+				return homework.duedate && new Date(homework.duedate) > new Date();
+			});
+		},
+		getOpenHomeworksWithoutDueDate: (state) => {
+			return state.list.filter((homework) => {
+				return !homework.duedate;
 			});
 		},
 		getOverDueHomeworks: (state) => {
@@ -36,11 +41,14 @@ const module = {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
-		getOpenHomeworksSortedByDueDate: (state, getters) => {
-			const openHomeworks = Array.from(getters.getOpenHomeworks);
-			return openHomeworks.sort((firstHomework, lastHomework) => {
-				return new Date(firstHomework.duedate) - new Date(lastHomework.duedate);
-			});
+		getOpenHomeworks: (state, getters) => {
+			const openHomeworksWithDueDate = Array.from(
+				getters.getOpenHomeworksWithDueDate
+			);
+			const openHomeworksWithoutDueDate = Array.from(
+				getters.getOpenHomeworksWithoutDueDate
+			);
+			return openHomeworksWithDueDate.concat(openHomeworksWithoutDueDate);
 		},
 	},
 };

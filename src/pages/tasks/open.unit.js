@@ -1,5 +1,9 @@
 import dashboard from "./open";
-import { homeworks, overDueHomeworks } from "@@/stories/mockData/Homeworks";
+import {
+	homeworks,
+	overDueHomeworks,
+	openHomeworks,
+} from "@@/stories/mockData/Homeworks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import HomeworksList from "@components/organisms/HomeworksList";
 import Vuetify from "vuetify";
@@ -13,7 +17,7 @@ describe("Homeworks/dashboard", () => {
 				loading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
-				getOpenHomeworksSortedByDueDate: () => [],
+				getOpenHomeworks: () => openHomeworks,
 				getOverDueHomeworks: () => overDueHomeworks,
 			},
 			state: () => ({
@@ -72,7 +76,7 @@ describe("Homeworks/dashboard", () => {
 					loading: () => false,
 					isListEmpty: () => true,
 					isListFilled: () => false,
-					getOpenHomeworksSortedByDueDate: () => [],
+					getOpenHomeworks: () => [],
 					getOverDueHomeworks: () => overDueHomeworks,
 				},
 				state: () => ({
