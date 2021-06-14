@@ -39,7 +39,6 @@ export const actions = {
 		commit("updateStudentData", payload);
 	},
 	setStudents({ commit }, payload) {
-		console.trace();
 		commit("setStudentsData", payload);
 	},
 };

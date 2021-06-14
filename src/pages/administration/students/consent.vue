@@ -27,6 +27,7 @@
 				id="progressbar"
 				:steps="progressSteps"
 				:current-step="currentStep"
+				data-testid="step_progress"
 			/>
 		</div>
 
@@ -40,6 +41,7 @@
 				track-by="_id"
 				:sort-by.sync="sortBy"
 				:sort-order.sync="sortOrder"
+				data-testid="consent_table_1"
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
@@ -50,6 +52,7 @@
 						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
+						data-testid="birthday-input"
 						:birth-date="true"
 						@input="
 							inputDate({
@@ -64,6 +67,7 @@
 						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
+						data-testid="birthday-input"
 						:birth-date="true"
 						@input="
 							inputDate({
@@ -73,11 +77,13 @@
 						"
 					/>
 				</template>
+				<!-- TODO:  -->
 				<template v-slot:datacolumn-password="slotProps">
 					<base-input
-						:vmodel="slotProps.data"
+						v-model="slotProps.data"
 						type="text"
 						label=""
+						data-testid="password-input"
 						class="base-input"
 						@input="
 							inputPass({
@@ -89,7 +95,11 @@
 				</template>
 			</backend-data-table>
 
-			<p v-if="birthdayWarning" style="color: var(--color-danger)">
+			<p
+				v-if="birthdayWarning"
+				data-testid="error-text"
+				style="color: var(--color-danger)"
+			>
 				<base-icon source="material" icon="report_problem" />
 				{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 			</p>
@@ -97,9 +107,12 @@
 			<base-button design="secondary" @click="next">{{
 				$t("pages.administration.students.consent.steps.complete.next")
 			}}</base-button>
-			<base-button design="text" @click="cancelWarning = true">{{
-				$t("common.actions.cancel")
-			}}</base-button>
+			<base-button
+				design="text"
+				data-testid="button-next"
+				@click="cancelWarning = true"
+				>{{ $t("common.actions.cancel") }}</base-button
+			>
 		</section>
 
 		<section v-if="currentStep === 1">
@@ -112,6 +125,7 @@
 				:paginated="false"
 				:sort-by.sync="sortBy"
 				:sort-order.sync="sortOrder"
+				data-testid="consent_table_2"
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
@@ -417,10 +431,9 @@ export default {
 				users: this.selectedStudents,
 				$limit: this.selectedStudents.length,
 			};
-			// if (this.selectedStudents.length)
 			await this.$store.dispatch("users/findConsentUsers", query);
 
-			if (this.students.length) {
+			if (this.students && this.students.length) {
 				const data = this.students
 					.filter((student) => student.consentStatus !== "ok")
 					.map((student) => {
@@ -546,12 +559,19 @@ export default {
 			});
 		},
 		checkTableData() {
+			if (this.selectedStudents.length === 0) {
+				this.$router.push({
+					path: `/administration/students`,
+				});
+			}
+
 			this.tableTimeOut = setTimeout(() => {
 				if (this.tableData.length === 0) {
 					this.$toast.error(
 						this.$t("pages.administration.students.consent.table.empty"),
 						{ position: "top-center" }
 					);
+
 					this.$router.push({
 						path: `/administration/students`,
 					});
