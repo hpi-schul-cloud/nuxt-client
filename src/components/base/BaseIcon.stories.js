@@ -20,7 +20,7 @@ storiesOf("4 Base UI Components/Base UI", module).add("Base Icon", () => ({
 				Icon usage is simple: <base-icon :source="source" :icon="icon" :style="{'font-size': size, fill: color}"/>
 			</p>
 			<p>
-				You can als use icons from fontawesome: <base-icon source="fa" icon="solid/address-book" :style="{'font-size': size}"/>
+				You can als use icons from fontawesome: <base-icon source="fa" icon="address-book" :style="{'font-size': size}"/>
 			</p>
 			<p>
 				The Color can be also be set using fill:

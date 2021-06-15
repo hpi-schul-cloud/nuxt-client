@@ -29,7 +29,7 @@ const serverMockData = {
 		roleType: "group",
 		schoolName: "Paul-Gerhardt-Gymnasium",
 	},
-	url: "ldaps://ldap.schul-cloud.org",
+	url: "ldaps://ldap.hpi-schul-cloud.de",
 	rootPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
 	provider: "general",
@@ -37,7 +37,7 @@ const serverMockData = {
 };
 
 const clientMockData = {
-	url: "ldaps://ldap.schul-cloud.org",
+	url: "ldaps://ldap.hpi-schul-cloud.de",
 	basisPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
 	searchUserPassword: unchangedPassword,

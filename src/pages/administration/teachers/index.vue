@@ -290,6 +290,9 @@ export default {
 		...mapState("env-config", {
 			env: "env",
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;

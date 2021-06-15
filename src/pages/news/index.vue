@@ -1,33 +1,61 @@
 <template>
-	<div>
-		<fab-floating
-			:primary-action="{
-				icon: 'add',
-				'icon-source': 'material',
-				to: '/news/new',
-				label: $t('pages.news.new.title'),
-			}"
-		/>
-		<section v-if="news && news.length > 0" class="section">
-			<news-card
+	<v-container>
+		<v-row>
+			<v-col>
+				<h1 class="text-h2">{{ $t("pages.news.title") }}</h1>
+				<p>Lorem Ipsum, normaler Text.</p>
+				<p>
+					Some icons: <v-icon> fa-plus </v-icon>
+					<v-icon> {{ iconMdiAccount }} </v-icon>
+				</p>
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col>
+				<v-btn large color="primary" to="/news/new">
+					<v-icon left> fa-plus </v-icon>
+					{{ $t("pages.news.index.new") }}
+				</v-btn>
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col
 				v-for="article of news"
 				:key="article._id"
-				:article="article"
-				class="mb--md"
-			/>
-		</section>
-	</div>
+				class="d-flex child-flex"
+			>
+				<v-card :to="{ name: 'news-id', params: { id: article._id } }">
+					<v-card-title>{{ article.title }} </v-card-title>
+					<v-card-subtitle> {{ fromNow(article.createdAt) }} </v-card-subtitle>
+					<v-card-actions>
+						<v-spacer />
+						<v-btn
+							color="primary"
+							text
+							:to="{ name: 'news-id', params: { id: article._id } }"
+						>
+							{{ $t("common.labels.readmore") }}
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import NewsCard from "@components/molecules/NewsCard";
-import FabFloating from "@components/molecules/FabFloating";
+import { fromNow } from "@plugins/datetime";
+import { mdiAccount } from "@mdi/js";
 
 export default {
-	components: {
-		NewsCard,
-		FabFloating,
+	components: {},
+	layout: "defaultVuetify",
+	data() {
+		return {
+			fromNow,
+			iconMdiAccount: mdiAccount,
+		};
 	},
 	computed: {
 		...mapGetters("news", {

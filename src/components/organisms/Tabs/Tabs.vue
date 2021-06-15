@@ -104,7 +104,7 @@ ul.tabs {
 				display: flex;
 				align-items: center;
 				justify-content: flex-start;
-				font-family: PT Sans Narrow var(--font-accent);
+				font-family: var(--font-accent);
 				font-size: var(--text-md);
 				font-weight: var(--font-weight-bold);
 				line-height: var(--button-line-height);

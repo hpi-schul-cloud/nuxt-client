@@ -118,10 +118,10 @@ export default {
 	},
 	data() {
 		return {
-			privacyLink: this.$store.getters["filePaths/getSpecificFiles"]
-				.privacyExemplary,
-			termsOfUseLink: this.$store.getters["filePaths/getSpecificFiles"]
-				.termsOfUseExemplary,
+			privacyLink:
+				this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
+			termsOfUseLink:
+				this.$store.getters["filePaths/getSpecificFiles"].termsOfUseExemplary,
 		};
 	},
 	methods: {

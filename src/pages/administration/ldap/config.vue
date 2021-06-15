@@ -16,7 +16,7 @@
 			<base-link
 				class="link-style"
 				to="/"
-				href="https://docs.schul-cloud.org/x/PgBVAw"
+				href="https://docs.hpi-schul-cloud.org/x/PgBVAw"
 				target="_blank"
 				:no-styles="true"
 				traget="_blank"

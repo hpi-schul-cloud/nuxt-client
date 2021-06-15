@@ -9,15 +9,15 @@ import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
 const tableData = (n, overwrite = () => ({})) =>
 	new Array(n).fill(0).map((item, index) => ({
-		_id: faker.random.uuid(),
+		_id: faker.datatype.uuid(),
 		firstName: faker.name.firstName(),
 		lastName: faker.name.lastName(),
 		address: {
 			city: faker.address.city(),
 		},
-		age: faker.random.number(),
+		age: faker.datatype.number(),
 		birthday: printDate(faker.date.past()),
-		agreed: faker.random.boolean(),
+		agreed: faker.datatype.boolean(),
 		...overwrite(index),
 	}));
 

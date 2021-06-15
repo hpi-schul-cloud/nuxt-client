@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<div class="hero-image" :style="compressed">
 			<div
-				class="container"
+				class="content-wrapper"
 				:style="{
 					width: `100%`,
 					float: `right`,
@@ -75,7 +75,7 @@ export default {
 		height: 30rem;
 	}
 }
-.container {
+.content-wrapper {
 	position: relative;
 	z-index: var(--layer-fab);
 
