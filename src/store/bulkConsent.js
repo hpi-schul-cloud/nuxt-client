@@ -43,8 +43,6 @@ export const actions = {
 	},
 };
 
-export const getters = {};
-
 export const mutations = {
 	setSelectedStudents(state, payload) {
 		state.selectedStudents = payload.students;
@@ -59,10 +57,10 @@ export const mutations = {
 		const index = state.selectedStudentsData.findIndex(
 			(st) => st._id === payload.id
 		);
-		if (payload.field === "birthDate")
+
+		if (payload.birthDate)
 			state.selectedStudentsData[index].birthday = payload.birthDate;
-		if (payload.field === "pass")
-			state.selectedStudentsData[index].password = payload.pass;
+		if (payload.pass) state.selectedStudentsData[index].password = payload.pass;
 	},
 	setRegisterError(state, payload) {
 		state.registerError = payload;

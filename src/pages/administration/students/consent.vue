@@ -451,11 +451,9 @@ export default {
 			this.find();
 		},
 		inputDate(student) {
-			student.field = "birthDate";
 			this.$store.dispatch("bulkConsent/updateStudent", student);
 		},
 		inputPass(student) {
-			student.field = "pass";
 			this.$store.dispatch("bulkConsent/updateStudent", student);
 		},
 		next() {
