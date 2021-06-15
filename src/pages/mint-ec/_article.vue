@@ -72,13 +72,11 @@ export default {
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.datenschutzerklärung"),
-					href:
-						"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+					href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.nutzungsordnung"),
-					href:
-						"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
+					href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Willkommensordner/Datenschutz/Nutzungsordnung-HPI-Schule-Schueler.pdf",
 				},
 				{
 					title: "Team",
@@ -118,8 +116,7 @@ export default {
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.newsletter"),
-					href:
-						"https://hpi.de/open-campus/registrierung/hpi-schul-cloud-newsletter/",
+					href: "https://hpi.de/open-campus/registrierung/hpi-schul-cloud-newsletter/",
 				},
 			],
 			chapters: [
@@ -172,7 +169,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@styles";
-/deep/ {
+::v-deep {
 	.base-content {
 		padding: var(--space-sm);
 		margin-top: var(--space-xs);

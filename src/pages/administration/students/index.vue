@@ -322,6 +322,9 @@ export default {
 		...mapGetters("env-config", {
 			env: "getEnv",
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		schoolInternallyManaged() {
 			return this.school && !this.school.isExternal;
 		},

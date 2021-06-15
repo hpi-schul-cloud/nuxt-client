@@ -1,7 +1,7 @@
 <template>
 	<base-modal :active="active" @onBackdropClick="extendSession">
 		<template v-slot:body>
-			<div class="container">
+			<div class="wrapper">
 				<img
 					:src="getImage"
 					class="sloth"
@@ -114,7 +114,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.container {
+.wrapper {
 	width: 100%;
 	height: 100%;
 	text-align: center;

@@ -231,7 +231,7 @@ export default {
 .editor__content {
 	outline: none;
 
-	/deep/ [contenteditable="true"] {
+	::v-deep [contenteditable="true"] {
 		padding: var(--space-lg);
 		outline: none;
 		&:focus {
@@ -239,7 +239,7 @@ export default {
 		}
 	}
 
-	/deep/ *.is-empty:first-child::before {
+	::v-deep *.is-empty:first-child::before {
 		float: left;
 		height: 0;
 		color: var(--color-gray);

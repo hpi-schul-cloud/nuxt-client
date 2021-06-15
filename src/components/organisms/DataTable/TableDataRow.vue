@@ -1,7 +1,7 @@
 <template>
 	<tr
 		:class="{
-			row: true,
+			table__row: true,
 			selected,
 			highlight: isHighlighted,
 		}"
@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.row {
+.table__row {
 	background-color: var(--color-white);
 	border-top: 1px solid var(--color-white);
 	border-bottom: 1px solid var(--color-white);

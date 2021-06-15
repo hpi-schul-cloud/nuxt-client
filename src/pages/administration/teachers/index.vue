@@ -287,6 +287,9 @@ export default {
 		...mapGetters("env-config", {
 			env: "getEnv",
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;

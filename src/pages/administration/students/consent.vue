@@ -355,12 +355,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent: this.$store.getters["filePaths/getSpecificFiles"]
-					.analogConsent,
-				termsOfUse: this.$store.getters["filePaths/getSpecificFiles"]
-					.termsOfUseSchool,
-				dataProtection: this.$store.getters["filePaths/getSpecificFiles"]
-					.privacyExemplary,
+				analogConsent:
+					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
+				termsOfUse:
+					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
+				dataProtection:
+					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -549,8 +549,9 @@ export default {
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById("tableStudentsForPrint")
-				.innerHTML;
+			const prtHtml = document.getElementById(
+				"tableStudentsForPrint"
+			).innerHTML;
 			let stylesHtml = "";
 
 			for (const node of [
@@ -656,21 +657,21 @@ export default {
 	color: var(--color-secondary);
 	border: none;
 }
-/deep/ .link {
+::v-deep .link {
 	color: var(--color-secondary);
 	text-decoration: none;
 }
-/deep/ .table {
+::v-deep .table {
 	margin-top: var(--space-lg);
-	.row {
+	.table__row {
 		height: 3rem;
 	}
 }
-/deep/ .toolbelt {
+::v-deep .toolbelt {
 	display: none;
 }
 
-/deep/ .calendar-input {
+::v-deep .calendar-input {
 	max-width: 5em;
 	margin-bottom: 0;
 	.info-line {
@@ -683,7 +684,7 @@ export default {
 	}
 }
 
-/deep/ .base-input {
+::v-deep .base-input {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);
