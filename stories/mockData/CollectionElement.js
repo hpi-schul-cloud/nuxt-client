@@ -1,14 +1,12 @@
 export const CollectionElement = {
 	remote: null,
 	content: {
-		url:
-			"https://mv-repo.schul-cloud.org/edu-sharing/components/render/311a8e89-6352-4050-968a-026e465a3b99",
+		url: "https://mv-repo.schul-cloud.org/edu-sharing/components/render/311a8e89-6352-4050-968a-026e465a3b99",
 		hash: null,
 		version: "1.0",
 	},
 	license: {
-		icon:
-			"https://mv-repo.schul-cloud.org/edu-sharing/ccimages/licenses/copyright-free.svg",
+		icon: "https://mv-repo.schul-cloud.org/edu-sharing/ccimages/licenses/copyright-free.svg",
 		url: null,
 	},
 	isDirectory: false,
@@ -166,8 +164,7 @@ export const CollectionElement = {
 		isIcon: false,
 		isGenerated: false,
 		type: "TYPE_USERDEFINED",
-		url:
-			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
+		url: "https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
 		width: null,
 		height: null,
 	},

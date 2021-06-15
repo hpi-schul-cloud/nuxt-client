@@ -1,4 +1,21 @@
 /*
+=================================================================
+ __          __              _
+ \ \        / /             (_)
+  \ \  /\  / /_ _ _ __ _ __  _ _ __   __ _
+   \ \/  \/ / _` | '__| '_ \| | '_ \ / _` |
+    \  /\  / (_| | |  | | | | | | | | (_| |
+     \/  \/ \__,_|_|  |_| |_|_|_| |_|\__, |
+                                      __/ |
+                                     |___/
+==================================================================
+
+This file is replaced by the production build!!!
+Changes will not have any effect in production.
+Do not move this file or the path will be wrong in production!
+*/
+
+/*
 	The matrix based messenger loads its assets (scripts, styles, fonts, images) from a specified domain.
 	After initialization the chat protocol communicates with its home server.
 	The discover domain is used in the client initialization.

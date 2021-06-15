@@ -18,6 +18,13 @@ describe("@plugins/authenticate", () => {
 					throw new Error("Can not read jwt from cookies.");
 				},
 				commit: () => {},
+				state: {
+					"env-config": {
+						env: {
+							NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+						},
+					},
+				},
 			},
 		};
 		authenticate(mockContext);
@@ -64,6 +71,7 @@ describe("@plugins/authenticate", () => {
 			},
 			store: {
 				dispatch: () => {
+					if (eventName === "env-config/get") return;
 					calls += action === "auth/logout" ? 1 : 0;
 				},
 			},
