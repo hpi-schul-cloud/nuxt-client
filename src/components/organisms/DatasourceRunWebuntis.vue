@@ -192,9 +192,10 @@ export default {
 				this.$toast.error(this.$t("error.load"));
 			}
 			const allItemsNew = this.webuntisMetadata.every((d) => d.state === "new");
-			this.selections = (allItemsNew
-				? this.webuntisMetadata // preselect all rows if all are new
-				: this.webuntisMetadata.filter((d) => d.state === "imported")
+			this.selections = (
+				allItemsNew
+					? this.webuntisMetadata // preselect all rows if all are new
+					: this.webuntisMetadata.filter((d) => d.state === "imported")
 			).map((d) => d._id);
 			this.importedRows = this.webuntisMetadata.filter(
 				(d) => d.state === "imported"
