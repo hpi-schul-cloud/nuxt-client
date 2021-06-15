@@ -1,4 +1,5 @@
 import hash from "object-hash";
+import { isCollectionHelper } from "@utils/helpers";
 
 export const actions = {
 	selectElement({ commit }, refId) {
@@ -103,8 +104,10 @@ export const actions = {
 		}
 	},
 	async getResourceMetadata({ commit }, id) {
+		commit("setStatus", "pending");
 		const metadata = await this.$axios.$get(`/edu-sharing/${id}`);
 		commit("setCurrentResource", metadata);
+		commit("setStatus", "completed");
 	},
 	init({ commit, rootState }) {
 		commit("init", {
@@ -136,6 +139,7 @@ const initialState = () => ({
 	lastQuery: "",
 	collectionsFeatureFlag: null,
 	currentResource: {},
+	status: null,
 });
 
 export const getters = {
@@ -147,6 +151,18 @@ export const getters = {
 	},
 	getCurrentResource: (state) => {
 		return state.currentResource;
+	},
+	getCollectionsFeatureFlag: (state) => {
+		return state.collectionsFeatureFlag;
+	},
+	getStatus: (state) => {
+		return state.status;
+	},
+	isCollection: (state) => {
+		return (
+			state.collectionsFeatureFlag === true &&
+			isCollectionHelper(state.currentResource.properties)
+		);
 	},
 };
 
@@ -216,6 +232,9 @@ export const mutations = {
 	},
 	setCurrentResource(state, payload) {
 		state.currentResource = payload;
+	},
+	setStatus(state, payload) {
+		state.status = payload;
 	},
 };
 
