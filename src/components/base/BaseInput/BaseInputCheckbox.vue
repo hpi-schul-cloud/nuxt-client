@@ -147,7 +147,7 @@ label {
 }
 
 .label {
-	margin: -12px var(--space-xs-2) 0 var(--space-xs-2);
+	margin: 0 var(--space-xs-2) 0 var(--space-xs-2);
 	vertical-align: middle;
 }
 
@@ -174,6 +174,10 @@ input:focus + .icon-wrapper svg {
 	}
 	input:checked + .icon-wrapper {
 		color: var(--color-success);
+	}
+
+	.label {
+		margin: -12px var(--space-xs-2) 0 var(--space-xs-2);
 	}
 }
 </style>

@@ -60,6 +60,7 @@ export default {
 	methods: {
 		createTeacher(teacherData) {
 			this.error = false;
+			// TODO wrong use of store (not so bad)
 			this.$store
 				.dispatch("users/createTeacher", {
 					firstName: teacherData.firstName,
@@ -82,6 +83,13 @@ export default {
 					this.error = true;
 				});
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.teachers.new.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>

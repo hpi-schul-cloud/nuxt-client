@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="wrapper">
 		<ul class="progressbar">
 			<li
 				v-for="(s, index) in steps"
@@ -59,7 +59,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.container {
+.wrapper {
 	position: relative;
 	width: 100%;
 }

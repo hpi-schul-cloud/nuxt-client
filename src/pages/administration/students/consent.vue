@@ -273,7 +273,6 @@
 
 <script>
 // file deepcode ignore ArrayMethodOnNonArray
-import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
@@ -356,9 +355,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent: defaultDocuments.specificFiles().analogConsent,
-				termsOfUse: defaultDocuments.specificFiles().termsOfUseSchool,
-				dataProtection: defaultDocuments.specificFiles().privacyExemplary,
+				analogConsent:
+					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
+				termsOfUse:
+					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
+				dataProtection:
+					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -438,6 +440,7 @@ export default {
 				$limit: this.selectedStudents.length,
 			};
 
+			// TODO wrong use of store (not so bad)
 			await this.$store.dispatch("users/handleUsers", {
 				query,
 				action: "find",
@@ -547,8 +550,9 @@ export default {
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById("tableStudentsForPrint")
-				.innerHTML;
+			const prtHtml = document.getElementById(
+				"tableStudentsForPrint"
+			).innerHTML;
 			let stylesHtml = "";
 
 			for (const node of [
@@ -622,6 +626,13 @@ export default {
 			}
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.students.consent.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
+	},
 };
 </script>
 
@@ -647,21 +658,21 @@ export default {
 	color: var(--color-secondary);
 	border: none;
 }
-/deep/ .link {
+::v-deep .link {
 	color: var(--color-secondary);
 	text-decoration: none;
 }
-/deep/ .table {
+::v-deep .table {
 	margin-top: var(--space-lg);
-	.row {
+	.table__row {
 		height: 3rem;
 	}
 }
-/deep/ .toolbelt {
+::v-deep .toolbelt {
 	display: none;
 }
 
-/deep/ .calendar-input {
+::v-deep .calendar-input {
 	max-width: 5em;
 	margin-bottom: 0;
 	.info-line {
@@ -674,7 +685,7 @@ export default {
 	}
 }
 
-/deep/ .base-input {
+::v-deep .base-input {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);

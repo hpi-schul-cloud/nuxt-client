@@ -31,11 +31,11 @@ export default {
 		};
 	},
 	methods: {
-		submitHandler(){
+		submitHandler() {
 			// validate this.formData...
 			await this.$store.dispatch("user/create", this.formData);
-		}
-	}
+		},
+	},
 };
 </script>
 ```

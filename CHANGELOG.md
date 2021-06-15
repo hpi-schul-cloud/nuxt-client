@@ -8,22 +8,83 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.4.0
+
+### Removed
+
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
+
+### Added
+
+- SC-9004 - Sync env variables between backend and frontend
+- SC-9023 - Add open homework overview
+
+### Changed
+
+- SC-9004 - Change ci build
+
+## 26.2.1
+
+### Changed
+
+- SC-9114 - project naming
+
+## 26.2.0
+
 ### Added
 
 - SC-8250 - connect UI for bulk delete
 - SC-8164 - apply deletion concept to the deletion of students and teachers
 - SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
+- SC-9004 - Sync env variables between backend and frontend
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 
 ### Changed
 
 - QF/Pull Request Workflow - adds checkbox for manual test, more checks, splits tests
+- SC-9065 - integrates styles repository into nuxt client
 - SC-7944 - changes ids for Lern-Store content and adds a link back to collection
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
+- SC-9004 - Change ci build
+- SC-9077 - refactored store actions returning data
 
-## 26.1.0
+### Fixed
+
+- Fixed further conflicting screenshots
+
+## 26.1.2
+
+### Fixed
+
+- SC-9063 - Removed "unsafe-inline" from script-src in CSP
+
+## 26.1.1
+
+### Fixed
+
+- Fixed conflicting screenshots
+
+## 26.1.0 - 2021-04-27
+
+### Added
+
+- SC-8916 - set page titles to some administration pages
+- SC-8681 - added ADMIN_TABLES_DISPLAY_CONSENT_COLUMN environment variable to display/hide the NAT consent column and the legend
+
+### Fixed
+
+- SC-8518 - fixed layout issues of checkbox
+- SC-8881 - fixed double roles user (admin, teacher) not being able to edit other teachers
+- SC-8519 - Admin Table Bugfix - Set current date for filter, without input; Error handling parsing dates
+- SC-8878 - Fixing invalid date on filter chips, setting default filter start and end day to 1900-01-01 and 2099-12-31
+- SC-8910 - fixed delete action being available when school is external
+
+### Removed
+
+- SC-8708 - removed firstname and lastname filters in NAT
 
 ## 26.0.6 - 2021-04-06
 
@@ -59,6 +120,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- SC-8554 - fixed the QR code generation with double role
 - SC-8719 - fixed pagination not setting currentPage to 1
 
 ### Added

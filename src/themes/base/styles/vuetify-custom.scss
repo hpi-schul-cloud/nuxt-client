@@ -1,0 +1,16 @@
+$body-font-family: "PT Sans";
+$heading-font-family: "PT Sans Narrow";
+$button-font-size: 1rem;
+
+// v-btn
+$btn-text-transform: none;
+$btn-font-weight: 700;
+.v-btn {
+	font-family: $heading-font-family;
+	&.v-size--small,
+	&.v-size--default,
+	&.v-size--large,
+	&.v-size--x-large {
+		font-size: $button-font-size;
+	}
+}

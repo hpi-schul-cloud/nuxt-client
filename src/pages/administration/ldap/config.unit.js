@@ -1,7 +1,7 @@
 import { default as ldapConfig } from "./config.vue";
 
 const mockInputData = {
-	url: "ldaps://ldap.schul-cloud.org",
+	url: "ldaps://ldap.hpi-schul-cloud.de",
 	basisPath: "dc=schul-cloud,dc=org",
 	searchUser: "cn=ldapadmin,dc=schul-cloud,dc=org",
 	userPath: "ou=users",

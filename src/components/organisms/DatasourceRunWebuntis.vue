@@ -95,7 +95,7 @@ import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import FormActions from "@components/molecules/FormActions";
 import DataTable from "@components/organisms/DataTable/DataTable";
 
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
 	components: {
 		ModalBodyInfo,
@@ -152,8 +152,11 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("webuntis-metadata", {
+		...mapState("webuntis-metadata", {
 			webuntisMetadata: "list",
+		}),
+		...mapState("datasourceRuns", {
+			runData: "list",
 		}),
 		tableDataObject() {
 			return this.tableData.reduce((obj, row) => {
@@ -178,27 +181,29 @@ export default {
 	},
 	methods: {
 		async findAll() {
-			let data;
 			try {
-				({ data } = await this.$store.dispatch("webuntis-metadata/findAll", {
+				await this.$store.dispatch("webuntis-metadata/findAll", {
 					query: {
 						datasourceId: this.datasourceId,
 					},
-				}));
+				});
 			} catch (error) {
 				console.error(error);
 				this.$toast.error(this.$t("error.load"));
 			}
-			const allItemsNew = data.every((d) => d.state === "new");
-			this.selections = (allItemsNew
-				? data // preselect all rows if all are new
-				: data.filter((d) => d.state === "imported")
+			const allItemsNew = this.webuntisMetadata.every((d) => d.state === "new");
+			this.selections = (
+				allItemsNew
+					? this.webuntisMetadata // preselect all rows if all are new
+					: this.webuntisMetadata.filter((d) => d.state === "imported")
 			).map((d) => d._id);
-			this.importedRows = data.filter((d) => d.state === "imported").length;
+			this.importedRows = this.webuntisMetadata.filter(
+				(d) => d.state === "imported"
+			).length;
 		},
 		async triggerRun() {
 			try {
-				const run = await this.$store.dispatch("datasourceRuns/create", {
+				await this.$store.dispatch("datasourceRuns/create", {
 					datasourceId: this.datasource._id,
 					dryrun: false,
 					data: {
@@ -207,7 +212,7 @@ export default {
 					},
 				});
 				this.$router.push({
-					path: `/administration/datasources/${this.datasource._id}/run/${run._id}`,
+					path: `/administration/datasources/${this.datasource._id}/run/${this.runData[0]._id}`,
 				});
 			} catch (error) {
 				console.error(error, error.response);
