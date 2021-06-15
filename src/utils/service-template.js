@@ -8,6 +8,7 @@ export default function (endpoint) {
 			list: [],
 			pagination: {},
 			businessError: null,
+			loading: false,
 		};
 	};
 	return {
@@ -102,6 +103,9 @@ export default function (endpoint) {
 			businessError: (state) => {
 				return state.businessError;
 			},
+			loading: (state) => {
+				return state.loading;
+			},
 		},
 		mutations: {
 			set(state, { items }) {
@@ -148,6 +152,9 @@ export default function (endpoint) {
 					total: parseInt(total),
 					query: parseInt(query),
 				});
+			},
+			setLoading(state, status) {
+				state.loading = status;
 			},
 		},
 		state: () => getDefaultState(),

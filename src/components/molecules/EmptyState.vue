@@ -1,6 +1,6 @@
 <template>
 	<div class="base">
-		<div class="container">
+		<div class="wrapper">
 			<div class="img-container">
 				<base-image
 					:img-src="image"
@@ -57,7 +57,7 @@ export default {
 	justify-content: center;
 }
 
-.container {
+.wrapper {
 	width: calc(2 * var(--size-content-width-min));
 }
 

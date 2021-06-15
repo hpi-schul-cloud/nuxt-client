@@ -7,7 +7,7 @@
 			}"
 		></div>
 		<div class="container-base">
-			<div class="container">
+			<div class="wrapper">
 				<div class="container-icon">
 					<base-icon
 						source="fa"
@@ -92,7 +92,7 @@ export default {
 	box-shadow: var(--shadow-sm);
 }
 
-.container {
+.wrapper {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
