@@ -173,9 +173,8 @@ export default Vue.extend({
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				[this.data.date.date, this.data.date.time] = createInputDateTime(
-					displayAt
-				);
+				[this.data.date.date, this.data.date.time] =
+					createInputDateTime(displayAt);
 			}
 		},
 		async create() {
