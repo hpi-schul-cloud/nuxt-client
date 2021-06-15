@@ -89,8 +89,6 @@ module.exports = {
 		color: "#fff",
 	},
 
-	css: ["@/themes/" + themeName + "/styles"],
-
 	/*
 	 ** Global CSS
 	 */

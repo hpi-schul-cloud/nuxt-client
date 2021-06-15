@@ -325,6 +325,9 @@ export default {
 		...mapState("env-config", {
 			env: "env",
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		schoolInternallyManaged() {
 			return !this.school.isExternal;
 		},

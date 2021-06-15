@@ -16,7 +16,7 @@
 			>
 			<br />
 			Internet:
-			<base-link to="/">https://schul-cloud.org</base-link><br />
+			<base-link to="/">https://hpi-schul-cloud.de</base-link><br />
 			{{ $t("pages.impressum.hpiPhoneNumber") }}
 			<br />
 			Telefax: +49 (0)331 / 5509-129

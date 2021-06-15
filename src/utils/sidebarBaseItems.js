@@ -19,7 +19,14 @@ export default [
 		testId: "Teams",
 	},
 	{
-		title: "global.sidebar.tasks",
+		title: "global.sidebar.tasks.tasksOpen",
+		href: "/tasks/open",
+		icon: "list-ol",
+		permission: "Task_Dashboard_View_v3",
+		testId: "Offene Aufgaben",
+	},
+	{
+		title: "global.sidebar.allTasks",
 		href: "/homework",
 		icon: "tasks",
 		testId: "Aufgaben",
