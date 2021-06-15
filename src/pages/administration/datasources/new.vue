@@ -88,7 +88,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("datasources", {
-			datasources: "list",
+			datasources: "getList",
 		}),
 	},
 	created() {

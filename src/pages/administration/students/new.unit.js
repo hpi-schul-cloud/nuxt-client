@@ -17,7 +17,7 @@ describe("students/new", () => {
 				businessError: jest.fn(),
 			},
 			getters: {
-				businessError: jest.fn(),
+				getBusinessError: jest.fn(),
 			},
 			mutations: {
 				resetBusinessError: jest.fn(),

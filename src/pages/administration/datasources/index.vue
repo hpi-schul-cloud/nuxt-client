@@ -215,12 +215,12 @@ export default {
 	},
 	computed: {
 		...mapGetters("datasources", {
-			datasources: "list",
-			pagination: "pagination",
+			datasources: "getList",
+			pagination: "getPagination",
 			watchingIds: "getPendingIdsFromResult",
 		}),
 		...mapGetters("datasourceRuns", {
-			datasourceRun: "list",
+			datasourceRun: "getList",
 		}),
 	},
 	created(ctx) {

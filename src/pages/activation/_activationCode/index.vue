@@ -35,7 +35,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("activation", {
-			data: "list",
+			data: "getList",
 		}),
 		getTitle() {
 			let title = "";

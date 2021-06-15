@@ -55,7 +55,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("datasources", {
-			sourceData: "current",
+			sourceData: "getCurrent",
 		}),
 		actionType() {
 			return this.datasourceId ? "patch" : "create";

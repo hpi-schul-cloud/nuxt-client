@@ -100,7 +100,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("courses", {
-			courses: "list",
+			courses: "getList",
 		}),
 		...mapGetters("content", {
 			lessons: "getLessons",

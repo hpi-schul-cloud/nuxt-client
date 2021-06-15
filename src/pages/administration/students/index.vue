@@ -313,7 +313,7 @@ export default {
 			school: "getSchool",
 		}),
 		...mapGetters("users", {
-			students: "list",
+			students: "getList",
 			pagination: "getPagination",
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
@@ -321,9 +321,6 @@ export default {
 		}),
 		...mapGetters("env-config", {
 			env: "getEnv",
-		}),
-		...mapState("env-config", {
-			env: "env",
 		}),
 		schoolInternallyManaged() {
 			return this.school && !this.school.isExternal;

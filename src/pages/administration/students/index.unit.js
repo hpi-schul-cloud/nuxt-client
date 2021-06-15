@@ -62,7 +62,7 @@ describe("students/index", () => {
 					sendRegistrationLink: jest.fn(),
 				},
 				getters: {
-					list: () => mockData,
+					getList: () => mockData,
 					getPagination: () => ({
 						limit: 25,
 						skip: 0,

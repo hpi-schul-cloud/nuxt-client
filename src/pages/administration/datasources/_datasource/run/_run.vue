@@ -46,7 +46,7 @@ export default {
 	},
 	async asyncData({ store, params, app: { i18n } }) {
 		await store.dispatch("datasources/get", params.datasource);
-		const datasource = store.getters["datasources/current"];
+		const datasource = store.getters["datasources/getCurrent"];
 		if (!datasource?.config?.target) {
 			throw new Error(
 				i18n.t(

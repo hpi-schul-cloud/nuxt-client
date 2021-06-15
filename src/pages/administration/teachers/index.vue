@@ -278,7 +278,7 @@ export default {
 			user: "getUser",
 		}),
 		...mapGetters("users", {
-			teachers: "list",
+			teachers: "getList",
 			pagination: "getPagination",
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
@@ -286,9 +286,6 @@ export default {
 		}),
 		...mapGetters("env-config", {
 			env: "getEnv",
-		}),
-		...mapState("env-config", {
-			env: "env",
 		}),
 		tableData: {
 			get() {

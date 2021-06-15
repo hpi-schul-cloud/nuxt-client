@@ -355,12 +355,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent:
-					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
-				termsOfUse:
-					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
-				dataProtection:
-					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
+				analogConsent: this.$store.getters["filePaths/getSpecificFiles"]
+					.analogConsent,
+				termsOfUse: this.$store.getters["filePaths/getSpecificFiles"]
+					.termsOfUseSchool,
+				dataProtection: this.$store.getters["filePaths/getSpecificFiles"]
+					.privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -393,17 +393,19 @@ export default {
 	},
 	computed: {
 		...mapGetters("bulkConsent", {
-			selectedStudents: "selectedStudents",
-			selectedStudentsData: "selectedStudentsData",
-			registeredStudents: "registeredStudents",
-			registerError: "registerError",
+			selectedStudents: "getSelectedStudents",
+			selectedStudentsData: "getSelectedStudentsData",
+			registeredStudents: "getRegisteredStudents",
+			registerError: "getRegisterError",
 		}),
 		...mapGetters("users", {
-			students: "list",
+			students: "getList",
 		}),
 		filteredTableData: {
 			get() {
-				const result = this.$store.getters["bulkConsent/selectedStudentsData"];
+				const result = this.$store.getters[
+					"bulkConsent/getSelectedStudentsData"
+				];
 
 				if (result.length > 0) {
 					return JSON.parse(
@@ -549,9 +551,8 @@ export default {
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById(
-				"tableStudentsForPrint"
-			).innerHTML;
+			const prtHtml = document.getElementById("tableStudentsForPrint")
+				.innerHTML;
 			let stylesHtml = "";
 
 			for (const node of [

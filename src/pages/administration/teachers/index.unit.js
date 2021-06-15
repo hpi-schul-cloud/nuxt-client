@@ -75,7 +75,7 @@ describe("teachers/index", () => {
 					deleteUsers: deleteUsersStub,
 				},
 				getters: {
-					list: () => mockData,
+					getList: () => mockData,
 					getPagination: () => ({
 						limit: 25,
 						skip: 0,
