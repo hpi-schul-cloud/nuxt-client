@@ -6,7 +6,7 @@ describe("@components/base/BaseLink", () => {
 		...rendersSlotContent(BaseLink, ["default"], {
 			...createComponentMocks({ router: true }),
 			propsData: {
-				href: "https://schul-cloud.org",
+				href: "https://hpi-schul-cloud.de",
 			},
 		})
 	);
@@ -30,10 +30,10 @@ describe("@components/base/BaseLink", () => {
 	it("renders a-tag for external links", () => {
 		const { element } = shallowMount(BaseLink, {
 			propsData: {
-				href: "https://schul-cloud.org",
+				href: "https://hpi-schul-cloud.de",
 			},
 		});
-		expect(element.outerHTML).toContain("https://schul-cloud.org");
+		expect(element.outerHTML).toContain("https://hpi-schul-cloud.de");
 		expect(element.tagName).toStrictEqual("A");
 	});
 
@@ -79,7 +79,7 @@ describe("@components/base/BaseLink", () => {
 		shallowMount(BaseLink, {
 			...createComponentMocks({ router: true }),
 			propsData: {
-				href: "http://schul-cloud.org",
+				href: "http://hpi-schul-cloud.de",
 			},
 		});
 		expect(consoleWarn).toHaveBeenCalledWith(

@@ -12,7 +12,7 @@ storiesOf("5 Molecules UI Components/Molecules UI/InstanceTile", module).add(
 		data: () => ({
 			tile: {
 				icon: "hpi",
-				url: "https://open.schul-cloud.org/login",
+				url: "https://open.hpi-schul-cloud.de/login",
 			},
 		}),
 	})

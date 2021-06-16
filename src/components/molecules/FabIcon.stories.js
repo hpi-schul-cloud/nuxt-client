@@ -81,7 +81,7 @@ storiesOf("5 Molecules/FabIcon", module)
 					label: "Locate",
 					icon: "add_location",
 					"icon-source": "material",
-					href: "https://schul-cloud.org",
+					href: "https://hpi-schul-cloud.de",
 					arguments: "locate",
 				},
 			],

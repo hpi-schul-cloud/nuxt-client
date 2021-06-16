@@ -10,7 +10,7 @@
 		@blur="open = false"
 	>
 		<div class="button">
-			<div class="container">
+			<div class="wrapper">
 				<slot name="header"></slot>
 				<base-icon
 					source="fa"
@@ -62,7 +62,7 @@ export default {
 	}
 }
 
-.container {
+.wrapper {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
