@@ -1,6 +1,12 @@
 FROM node:lts as builder
+
+ARG SC_THEME=default
+
 RUN mkdir /app && chown -R node:node /app
 WORKDIR '/app'
+
+ENV SC_THEME ${SC_THEME}
+
 COPY ./package.json ./
 COPY ./package-lock.json ./
 USER node
