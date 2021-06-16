@@ -8,10 +8,8 @@ const mockApp = {
 
 const getMockStore = ({ user } = {}) => {
 	return {
-		state: {
-			auth: {
-				user,
-			},
+		getters: {
+			"auth/getUser": user,
 		},
 	};
 };

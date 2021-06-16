@@ -45,6 +45,12 @@ export const mutations = {
 	},
 };
 
+export const getters = {
+	getEnv(state) {
+		return state.env;
+	},
+};
+
 export const state = () => {
 	return {
 		env: requiredVars,
@@ -57,4 +63,5 @@ export default {
 	actions,
 	mutations,
 	state,
+	getters,
 };

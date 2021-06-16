@@ -13,6 +13,12 @@ const state = {
 	showToast: null,
 };
 
+const getters = {
+	getActive: () => state.active,
+	getError: () => state.error,
+	getRemainingTimeInSeconds: () => state.remainingTimeInSeconds,
+};
+
 const getMockActions = () => ({
 	init: jest.fn().mockReturnValue(Promise.resolve()),
 	extendSession: jest.fn().mockReturnValue(Promise.resolve()),
@@ -25,6 +31,7 @@ const getMocks = ({ actions = getMockActions() } = {}) =>
 			autoLogout: {
 				actions,
 				state,
+				getters,
 			},
 		},
 	});

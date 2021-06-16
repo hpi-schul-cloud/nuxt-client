@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
@@ -93,13 +93,9 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("content", {
-			elements: (state) => {
-				return state.elements;
-			},
-			selected: (state) => {
-				return state.selected;
-			},
+		...mapGetters("content", {
+			elements: "getElements",
+			selected: "getSelected",
 		}),
 		itemId() {
 			return this.resource && this.resource.properties

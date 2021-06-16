@@ -89,7 +89,7 @@ dockerPush(){
 	docker push schulcloud/schulcloud-nuxt-$1:$2
 	echo "schulcloud/schulcloud-nuxt-$1:$2"
 
-	docker push schulcloud/schulcloud-nuxt-$1:$2
+	docker push schulcloud/schulcloud-nuxt-$1:$3
 	echo "schulcloud/schulcloud-nuxt-$1:$3"
 }
 
@@ -127,7 +127,7 @@ buildClient(){
 		export SC_THEME="$THEME"
 		dockerLogin
 
-		docker build \
+		docker build --build-arg SC_THEME \
 			-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG \
 			-t schulcloud/schulcloud-nuxt-client-$THEME:$DOCKERTAG_SHA \
 			-f Dockerfile.client \
