@@ -126,6 +126,15 @@ export const getters = {
 	getLocale(state) {
 		return state.locale;
 	},
+	getSchool(state) {
+		return state.school;
+	},
+	getUser(state) {
+		return state.user;
+	},
+	getAccessToken(state) {
+		return state.accessToken;
+	},
 };
 
 export const state = () => {

@@ -95,7 +95,7 @@ import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import FormActions from "@components/molecules/FormActions";
 import DataTable from "@components/organisms/DataTable/DataTable";
 
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
 	components: {
 		ModalBodyInfo,
@@ -152,11 +152,11 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("webuntis-metadata", {
-			webuntisMetadata: "list",
+		...mapGetters("webuntis-metadata", {
+			webuntisMetadata: "getList",
 		}),
-		...mapState("datasourceRuns", {
-			runData: "list",
+		...mapGetters("datasourceRuns", {
+			runData: "getList",
 		}),
 		tableDataObject() {
 			return this.tableData.reduce((obj, row) => {

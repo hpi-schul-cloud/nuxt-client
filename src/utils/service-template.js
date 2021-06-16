@@ -98,20 +98,20 @@ export default function (endpoint) {
 			},
 		},
 		getters: {
-			get: (state, id) => {
-				return state.list.find((item) => item._id === id);
-			},
-			current: (state) => {
+			getCurrent: (state) => {
 				return state.current;
 			},
-			list: (state) => {
+			getList: (state) => {
 				return state.list;
 			},
-			businessError: (state) => {
+			getBusinessError: (state) => {
 				return state.businessError;
 			},
-			status: (state) => {
-				return state.status;
+			getPagination: (state) => {
+				return state.pagination;
+			},
+			getStatus: (state) => {
+				return state.loading;
 			},
 		},
 		mutations: {

@@ -34,7 +34,7 @@
 <script>
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -87,8 +87,8 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("datasources", {
-			datasources: "list",
+		...mapGetters("datasources", {
+			datasources: "getList",
 		}),
 	},
 	created() {

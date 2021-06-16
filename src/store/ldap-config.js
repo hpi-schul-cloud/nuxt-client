@@ -171,6 +171,24 @@ export const mutations = {
 	},
 };
 
+export const getters = {
+	getData: (state) => {
+		return state.data;
+	},
+	getVerified: (state) => {
+		return state.verified;
+	},
+	getSubmitted: (state) => {
+		return state.submitted;
+	},
+	getTemp: (state) => {
+		return state.temp;
+	},
+	getStatus: (state) => {
+		return state.status;
+	},
+};
+
 export const state = () => {
 	return {
 		data: {},
