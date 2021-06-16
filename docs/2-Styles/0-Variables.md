@@ -14,34 +14,41 @@ p {
 
 :::
 
-All style variables are imported from the npm package [@hpi-schul-cloud/styles](https://github.com/hpi-schul-cloud/styles)
+All base style variables are set in src/themes/base/styles/variables
 
 ## Colors
 
-[Colors](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_colors.scss)
+<!-- prettier-ignore -->
+<<< @/src/themes/base/styles/variables/_colors.scss
 
 ## Durations
 
-[Durations](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_durations.scss)
+<!-- prettier-ignore -->
+<<< @/src/themes/base/styles/variables/_durations.scss
 
 ## Layers
 
 used for `z-index`.
 
-[Layers](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_layers.scss)
+<!-- prettier-ignore -->
+<<< @/src/themes/base/styles/variables/_layers.scss
 
 ## Shadows
 
-[Shadows](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_shadows.scss)
+<!-- prettier-ignore -->
+<<< @/src/themes/base/styles/variables/_shadows.scss
 
 ## Sizes
 
-[Sizes](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_sizes.scss)
+<!-- prettier-ignore -->
+<<< @/src/themes/base/styles/variables/_sizes.scss
 
 ## Spacing
 
-[Spacings](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_spacing.scss)
+<!-- prettier-ignore -->
+<<< @/src/themes/base/styles/variables/_spacing.scss
 
 ## Typography
 
-[Typography](https://github.com/hpi-schul-cloud/styles/tree/master/src/css/default/variables/_typography.scss)
+<!-- prettier-ignore -->
+<<< @/src/themes/base/styles/variables/_typography.scss

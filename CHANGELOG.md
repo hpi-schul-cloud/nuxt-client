@@ -8,6 +8,27 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.4.0
+
+### Removed
+
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
+
+### Added
+
+- SC-9004 - Sync env variables between backend and frontend
+- SC-9023 - Add open homework overview
+
+### Changed
+
+- SC-9004 - Change ci build
+
+## 26.2.1
+
+### Changed
+
+- SC-9114 - project naming
+
 ## 26.2.0
 
 ### Added
@@ -35,9 +56,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - Fixed further conflicting screenshots
 - SC-9131 fixed the consent table loading the wrong list of users
 
-### Removed
+## 26.1.2
 
-- Removed pages 'account', 'course', 'calendar' and components exclusively used by these pages
+### Fixed
+
+- SC-9063 - Removed "unsafe-inline" from script-src in CSP
 
 ## 26.1.1
 

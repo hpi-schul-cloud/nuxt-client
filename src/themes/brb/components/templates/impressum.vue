@@ -15,7 +15,7 @@
 			>
 			<br />
 			Internet:
-			<base-link to="/">https://schul-cloud.org</base-link>
+			<base-link to="/">https://hpi-schul-cloud.de</base-link>
 			<br />
 			{{ $t("pages.impressum.hpiPhoneNumber") }}
 			<br />

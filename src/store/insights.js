@@ -89,12 +89,8 @@ export const mutations = {
 		state.weeklyActivity = payload;
 	},
 	setWeeklyActiveUsers(state, payload) {
-		const {
-			teacherUsers,
-			studentUsers,
-			activeStudents,
-			activeTeachers,
-		} = payload;
+		const { teacherUsers, studentUsers, activeStudents, activeTeachers } =
+			payload;
 
 		state.weeklyActiveUsers.teachers = {
 			inactive: Number(teacherUsers) - Number(activeTeachers),

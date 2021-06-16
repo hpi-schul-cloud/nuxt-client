@@ -5,7 +5,7 @@
 			:img="require('@assets/img/logo/logo-image-color.svg')"
 			:buttons="true"
 		/>
-		<div class="container">
+		<div class="nuxt-container">
 			<Nuxt />
 		</div>
 	</div>
@@ -41,7 +41,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.container {
+.nuxt-container {
 	width: 100%;
 }
 </style>
