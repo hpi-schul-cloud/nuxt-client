@@ -11,8 +11,8 @@ describe("@components/organisms/HomeworksList", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				list: () => homeworks,
-				loading: () => false,
+				getList: () => homeworks,
+				getLoading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				openHomeworks: () => openHomeworks,
@@ -55,8 +55,8 @@ describe("@components/organisms/HomeworksList", () => {
 		const mockStoreEmpty = {
 			homeworks: {
 				getters: {
-					list: () => [],
-					loading: () => false,
+					getList: () => [],
+					getLoading: () => false,
 					isListEmpty: () => true,
 					isListFilled: () => false,
 					openHomeworks: () => [],
@@ -145,8 +145,8 @@ describe("@components/organisms/HomeworksList", () => {
 		const mockStoreCloseToDueDate = {
 			homeworks: {
 				getters: {
-					list: () => homeworks,
-					loading: () => false,
+					getList: () => homeworks,
+					getLoading: () => false,
 					isListEmpty: () => false,
 					isListFilled: () => true,
 					openHomeworks: () => openHomeworks,
@@ -207,8 +207,8 @@ describe("@components/organisms/HomeworksList", () => {
 		const mockStoreLoading = {
 			homeworks: {
 				getters: {
-					list: () => [],
-					loading: () => true,
+					getList: () => [],
+					getLoading: () => true,
 					isListEmpty: () => false,
 					isListFilled: () => false,
 					openHomeworks: () => [],

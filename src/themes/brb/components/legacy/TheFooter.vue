@@ -49,12 +49,12 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	computed: {
-		...mapState("auth", {
-			school: "school",
+		...mapGetters("auth", {
+			school: "getSchool",
 		}),
 		currentYear() {
 			return new Date().getFullYear();

@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
@@ -134,11 +134,11 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("ldap-config", {
-			data: "data",
-			verified: "verified",
-			temp: "temp",
-			status: "status",
+		...mapGetters("ldap-config", {
+			data: "getData",
+			verified: "getVerified",
+			temp: "getTemp",
+			status: "getStatus",
 		}),
 		isInvalid() {
 			if (

@@ -58,7 +58,7 @@ const addToLesson = jest.fn().mockReturnValue(Promise.resolve());
 const mockStore = {
 	courses: {
 		getters: {
-			list: () => courseOptions,
+			getList: () => courseOptions,
 		},
 	},
 	content: {
@@ -70,6 +70,9 @@ const mockStore = {
 			lessons: {
 				data: lessonsMock,
 			},
+		},
+		getters: {
+			getLessons: () => ({ data: lessonsMock }),
 		},
 	},
 };

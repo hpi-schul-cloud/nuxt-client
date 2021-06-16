@@ -53,6 +53,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 - SC-9004 - Change ci build
 - SC-9077 - refactored store actions returning data
+- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
 
 ### Fixed
 

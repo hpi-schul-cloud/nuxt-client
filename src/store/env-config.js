@@ -52,6 +52,9 @@ export const getters = {
 	},
 	getDefaultTimezone: (state) => {
 		return state.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin";
+  },
+	getEnv(state) {
+		return state.env;
 	},
 };
 
@@ -68,4 +71,5 @@ export default {
 	mutations,
 	getters,
 	state,
+	getters,
 };

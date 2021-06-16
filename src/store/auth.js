@@ -135,6 +135,15 @@ export const getters = {
 		}
 		return "de";
 	},
+	getSchool(state) {
+		return state.school;
+	},
+	getUser(state) {
+		return state.user;
+	},
+	getAccessToken(state) {
+		return state.accessToken;
+	},
 };
 
 export const state = () => {
