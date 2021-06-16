@@ -48,16 +48,9 @@ const specificFilesMock = {
 };
 
 describe("students/consent", () => {
-	// const routerPush = jest.fn();
-
 	let mockStore;
 
 	beforeEach(() => {
-		jest.useFakeTimers();
-		jest.clearAllMocks();
-
-		jest.resetModules(); // reset module registry to avoid conflicts
-
 		mockStore = {
 			bulkConsent: {
 				actions: {
@@ -168,7 +161,6 @@ describe("students/consent", () => {
 		input.trigger("change");
 
 		expect(input.exists()).toBe(true);
-
 		expect(mockStore.bulkConsent.actions.updateStudent).toHaveBeenCalled();
 	});
 
@@ -185,7 +177,6 @@ describe("students/consent", () => {
 		input.trigger("change");
 
 		expect(input.exists()).toBe(true);
-
 		expect(mockStore.bulkConsent.actions.updateStudent).toHaveBeenCalled();
 	});
 
@@ -253,7 +244,6 @@ describe("students/consent", () => {
 			}),
 		});
 
-		//mockData[0].birthday = "10.10.2010";
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
 
 		nextButton.trigger("click");
@@ -281,8 +271,8 @@ describe("students/consent", () => {
 
 		nextButton_2.trigger("click");
 		await wrapper.vm.$nextTick();
-		const confirmError = wrapper.find(`[data-testid="confirm-error"]`);
 
+		const confirmError = wrapper.find(`[data-testid="confirm-error"]`);
 		expect(confirmError.exists()).toBe(true);
 	});
 });
