@@ -89,7 +89,7 @@ dockerPush(){
 	docker push schulcloud/schulcloud-nuxt-$1:$2
 	echo "schulcloud/schulcloud-nuxt-$1:$2"
 
-	docker push schulcloud/schulcloud-nuxt-$1:$2
+	docker push schulcloud/schulcloud-nuxt-$1:$3
 	echo "schulcloud/schulcloud-nuxt-$1:$3"
 }
 
