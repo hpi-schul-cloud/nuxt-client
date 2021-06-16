@@ -91,7 +91,7 @@ import { i18n } from "@plugins/i18n";
 addDecorator(() => ({
 	i18n: i18n({
 		getters: {
-			"auth/locale": () => "de",
+			"auth/locale": "de",
 		},
 	}),
 	template: "<story/>",
