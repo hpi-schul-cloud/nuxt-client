@@ -18,6 +18,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
 - SC-9122 - changed getters logic in components to the store
 
+## [26.4.2] - 2021-06-16
+
+### Changed
+
+- rename permission TASK_DASHBOARD_VIEW_V3
+
+## 26.4.1
+
+### Changed
+
+- SC-9144 - fixed build with env SC_THEME
+
 ## 26.4.0
 
 ### Removed
