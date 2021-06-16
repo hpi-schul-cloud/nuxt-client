@@ -46,23 +46,7 @@
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<base-input
-						v-if="birthdayWarning && !slotProps.data"
-						:error="inputError"
-						class="date base-input"
-						:vmodel="inputDateFromDeUTC(slotProps.data)"
-						type="date"
-						label=""
-						data-testid="birthday-input"
-						:birth-date="true"
-						@input="
-							inputDate({
-								id: tableData[slotProps.rowindex]._id,
-								birthDate: inputDateFormat($event),
-							})
-						"
-					/>
-					<base-input
-						v-else-if="!birthdayWarning || slotProps.data"
+						:error="birthdayWarning && !slotProps.data ? inputError : null"
 						class="date base-input"
 						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
@@ -80,7 +64,7 @@
 				<!-- TODO:  -->
 				<template v-slot:datacolumn-password="slotProps">
 					<base-input
-						v-model="slotProps.data"
+						:vmodel="slotProps.data"
 						type="text"
 						label=""
 						data-testid="password-input"
@@ -380,12 +364,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent:
-					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
-				termsOfUse:
-					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
-				dataProtection:
-					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
+				analogConsent: this.$store.getters["filePaths/getSpecificFiles"]
+					.analogConsent,
+				termsOfUse: this.$store.getters["filePaths/getSpecificFiles"]
+					.termsOfUseSchool,
+				dataProtection: this.$store.getters["filePaths/getSpecificFiles"]
+					.privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -414,8 +398,10 @@ export default {
 			),
 			sortBy: "fullName",
 			sortOrder: "asc",
-			tableData: this.$store.state.bulkConsent.selectedStudentsData || [],
-			selectedStudents: this.$store.state.bulkConsent.selectedStudents || [],
+			tableData:
+				this.$store.getters["bulkConsent/getSelectedStudentsData"] || [],
+			selectedStudents:
+				this.$store.getters["bulkConsent/getSelectedStudents"] || [],
 		};
 	},
 	computed: {
@@ -521,9 +507,8 @@ export default {
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById(
-				"tableStudentsForPrint"
-			).innerHTML;
+			const prtHtml = document.getElementById("tableStudentsForPrint")
+				.innerHTML;
 			let stylesHtml = "";
 
 			for (const node of [

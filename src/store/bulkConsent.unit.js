@@ -1,4 +1,4 @@
-import { actions, mutations } from "./bulkConsent";
+import { actions, mutations, getters } from "./bulkConsent";
 
 const consentDataMock = {
 	_id: "60c220d9d03a60006502f137",
@@ -160,6 +160,26 @@ describe("store/bulkConsent", () => {
 				expect(state.selectedStudentsData[0].password).toStrictEqual(
 					passData.pass
 				);
+			});
+		});
+	});
+	describe("getters", () => {
+		describe("getSelectedStudents", () => {
+			it("gets selectedStudents array from the state", () => {
+				const userIds = [
+					"5f2987e020834114b8efd6f1",
+					"5f2987e020834114b8efd6f2",
+				];
+				const state = { selectedStudents: userIds };
+				const retrievedState = getters.getSelectedStudents(state);
+				expect(state.selectedStudents).toStrictEqual(retrievedState);
+			});
+		});
+		describe("selectedStudentsData", () => {
+			it("gets selectedStudentsData array from the state", () => {
+				const state = { selectedStudentsData: consentDataMock };
+				const retrievedState = getters.getSelectedStudentsData(state);
+				expect(state.selectedStudentsData).toStrictEqual(retrievedState);
 			});
 		});
 	});
