@@ -1,11 +1,15 @@
 <template>
-	<v-dialog v-model="isOpen" max-width="600">
+	<v-dialog
+		v-model="isOpen"
+		max-width="550"
+		@click:outside="$emit('dialog-closed')"
+	>
 		<v-card ripple="false">
 			<v-card-title>
 				<h2 class="text-h4">Datenschutzerklärung hinzufügen</h2>
 			</v-card-title>
 			<v-divider></v-divider>
-			<v-card-text class="pa-6">
+			<v-card-text class="py-10 d-flex justify-center">
 				<v-form>
 					<v-row>
 						<v-col>
@@ -25,6 +29,9 @@
 								label="Beschreibung"
 								dense
 								required
+								:error-messages="descriptionErrors"
+								@input="$v.description.$touch"
+								@blur="$v.description.$touch"
 							></v-textarea>
 						</v-col>
 					</v-row>
@@ -41,8 +48,13 @@
 					</v-row>
 					<v-row>
 						<v-col>
-							<h2 class="text-h6">Wichtig:</h2>
-							<p>Wenn eine neue Datenschutzerklärung hochgeladen wird, wird sie allen Nutzer:innen aus dieser Schule zur Zustimmung gegeben.</p>
+							<v-sheet class="px-4 py-1" color="orange lighten-4" rounded>
+								<h2 class="text-h6">Wichtig:</h2>
+								<p>
+									Wenn eine neue Datenschutzerklärung hochgeladen wird, wird sie
+									allen Nutzer:innen aus dieser Schule zur Zustimmung gegeben.
+								</p>
+							</v-sheet>
 						</v-col>
 					</v-row>
 				</v-form>
@@ -66,9 +78,14 @@ export default {
 	validations: {
 		description: { required },
 	},
+	props: {
+		isOpen: {
+			type: Boolean,
+			required: true,
+		},
+	},
 	data() {
 		return {
-			isOpen: false,
 			title: "Datenschutzerklärung der Schule",
 			description: "",
 			file: null,
@@ -76,27 +93,33 @@ export default {
 	},
 	computed: {
 		...mapState("auth", { school: "school" }),
-		...mapState("schools", { requestSuccessful: "requestSuccessful" }),
+		...mapState("consent-versions", { requestSuccessful: "requestSuccessful" }),
 		descriptionErrors() {
 			const errors = [];
 			if (!this.$v.description.$dirty) return errors;
-			!this.$v.url.required && errors.push("Url is required");
+			!this.$v.description.required && errors.push("Description is required");
 
 			return errors;
 		},
 	},
 	methods: {
-		...mapActions("schools", ["update"]),
+		...mapActions("consent-versions", ["addConsentVersion"]),
 		submit() {
 			this.$v.$touch();
-			console.log("hi")
+			console.log("hi");
 
-			/* if (!this.$v.$invalid) {
-				const { rssFeeds } = this.school;
-				const newRssFeed = { url: this.url, description: this.description };
-				const updatedRssFeedList = [...rssFeeds, newRssFeed];
+			if (!this.$v.$invalid) {
+				const newConsentVersion = {
+					schoolId: this.school.id,
+					title: this.title,
+					consentText: this.description,
+					consentTypes: ["privacy"],
+					//consentDataId? post to base64files? get id and save here?
+				};
 
-				this.update({
+				console.log(newConsentVersion);
+				this.addConsentVersion(newConsentVersion);
+				/* this.update({
 					id: this.school.id,
 					rssFeeds: updatedRssFeedList,
 				}).then(() => {
@@ -106,12 +129,17 @@ export default {
 					} else {
 						// TODO - show error InfoMessage
 					}
-				});
-			} */
+				}); */
+			}
 		},
 		cancel() {
+			this.clear();
+			this.$emit("dialog-closed"); // can this be named the same for all dialogs?
+		},
+		clear() {
 			this.$v.$reset();
-			this.isOpen = false;
+			this.description = "";
+			this.file = null;
 		},
 	},
 };
@@ -119,11 +147,10 @@ export default {
 
 <style scoped>
 h2 {
-	width: 100%;
 	margin-top: var(--space-sm);
 }
 
 form {
-	width: 60%;
+	width: 80%;
 }
 </style>

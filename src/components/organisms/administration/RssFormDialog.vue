@@ -1,11 +1,15 @@
 <template>
-	<v-dialog v-model="isOpen" max-width="600">
+	<v-dialog
+		v-model="isOpen"
+		max-width="480"
+		@click:outside="$emit('dialog-closed')"
+	>
 		<v-card ripple="false">
 			<v-card-title>
 				<h2 class="text-h4">RSS-Feed hinzufügen</h2>
 			</v-card-title>
 			<v-divider></v-divider>
-			<v-card-text class="pa-6">
+			<v-card-text class="pa-6 d-flex justify-center">
 				<v-form>
 					<v-row>
 						<v-col>
@@ -50,9 +54,14 @@ export default {
 	validations: {
 		url: { required, url },
 	},
+	props: {
+		isOpen: {
+			type: Boolean,
+			required: true,
+		},
+	},
 	data() {
 		return {
-			isOpen: false,
 			url: "",
 			description: "",
 		};
@@ -84,7 +93,7 @@ export default {
 				}).then(() => {
 					if (this.requestSuccessful) {
 						this.$v.$reset();
-						this.isOpen = false;
+						this.$emit("dialog-closed");
 					} else {
 						// TODO - show error InfoMessage
 					}
@@ -92,8 +101,13 @@ export default {
 			}
 		},
 		cancel() {
+			this.clear();
+			this.$emit("dialog-closed");
+		},
+		clear() {
 			this.$v.$reset();
-			this.isOpen = false;
+			this.url = "";
+			this.description = "";
 		},
 	},
 };
@@ -101,11 +115,10 @@ export default {
 
 <style scoped>
 h2 {
-	width: 100%;
 	margin-top: var(--space-sm);
 }
 
 form {
-	width: 60%;
+	width: 80%;
 }
 </style>

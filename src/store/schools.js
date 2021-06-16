@@ -1,6 +1,7 @@
 const module = {
 	state() {
 		return {
+			school: {},
 			studentVisibility: false,
 			lernStoreVisibility: false,
 			fileStorageTotal: 0,
@@ -8,6 +9,7 @@ const module = {
 			error: null,
 		};
 	},
+	// school hier fetchen und speichern, über /schools/user.id wie im auth store (rootState)
 	actions: {
 		async fetchStudentVisibility({ commit }) {
 			commit("setRequestSuccessful", false);

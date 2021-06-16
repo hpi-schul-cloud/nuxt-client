@@ -41,6 +41,23 @@ const module = {
 				// TODO what is supposed to happen on error?
 			}
 		},
+		async addConsentVersion({ commit }, payload) {
+			commit("setRequestSuccessful", false);
+			console.log(payload)
+			try {
+				const data = await this.$axios.$post(
+					'/consentVersions',
+					payload
+				);
+				console.log("data", data);
+				//commit("setSchool", data);
+				commit("setRequestSuccessful", true);
+			} catch (error) {
+				commit("setError", error);
+				commit("setRequestSuccessful", false);
+				// TODO what is supposed to happen on error?
+			}
+		}
 	},
 	mutations: {
 		setConsentVersions(state, consentVersions) {

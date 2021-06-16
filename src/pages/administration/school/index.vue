@@ -339,7 +339,7 @@
 						<v-btn
 							color="primary"
 							depressed
-							@click.stop="$refs.policyDialog.isOpen = true"
+							@click.stop="dialogs.policyDialogIsOpen = true"
 							>Datenschutzerklärung hinzufügen</v-btn
 						>
 						<v-divider class="mt-13"></v-divider>
@@ -409,7 +409,7 @@
 						<v-btn
 							color="primary"
 							depressed
-							@click.stop="$refs.rssDialog.isOpen = true"
+							@click.stop="dialogs.rssDialogIsOpen = true"
 							>RSS-Feed hinzufügen</v-btn
 						>
 						{{ console.log(school, localSchool) }}
@@ -417,8 +417,8 @@
 				</v-row>
 			</v-responsive>
 		</v-container>
-		<rss-form-dialog ref="rssDialog"></rss-form-dialog>
-		<data-policy-form-dialog ref="policyDialog"></data-policy-form-dialog>
+		<rss-form-dialog :is-open="dialogs.rssDialogIsOpen" @dialog-closed="dialogs.rssDialogIsOpen = false"></rss-form-dialog>
+		<data-policy-form-dialog :is-open="dialogs.policyDialogIsOpen" @dialog-closed="dialogs.policyDialogIsOpen = false"></data-policy-form-dialog>
 	</v-container>
 </template>
 
@@ -483,6 +483,10 @@ export default {
 					disabled: true,
 				},
 			],
+			dialogs: {
+				rssDialogIsOpen: false,
+				policyDialogIsOpen: false,
+			},
 			iconMdiChevronRight: mdiChevronRight,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiDownload: mdiDownload,
