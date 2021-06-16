@@ -4,9 +4,9 @@ import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 
 export const i18n = (store) => {
-	const locale = store.getters["auth/locale"] || "de"; // 'de' fallback for unit tests
+	const locale = store.getters["auth/getLocale"] || "de"; // 'de' fallback for unit tests
 
-	const fallbackLocale = store?.getters["env-config/fallbackLanguage"];
+	const fallbackLocale = store?.getters["env-config/getFallbackLanguage"];
 
 	return new VueI18n({
 		// fallback for storybook

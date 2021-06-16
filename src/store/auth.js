@@ -123,7 +123,7 @@ export const mutations = {
 };
 
 export const getters = {
-	locale(state, _getters, rootState) {
+	getLocale(state, _getters, rootState) {
 		if (state.locale) {
 			return state.locale;
 		}

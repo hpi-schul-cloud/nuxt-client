@@ -188,7 +188,7 @@ describe("@plugins/datetime", () => {
 	const mockStore = {
 		state: { auth: { school: { timezone: TEST_DATETIME_TIMEZONE } } },
 		getters: {
-			"auth/locale": () => {
+			"auth/getLocale": () => {
 				return TEST_CURRENT_LOCALE;
 			},
 		},

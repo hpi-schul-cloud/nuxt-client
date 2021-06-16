@@ -6,8 +6,8 @@ describe("i18n plugin", () => {
 			app: {},
 			store: {
 				getters: {
-					"auth/locale": "fi",
-					"env-config/fallbackLanguage": "da",
+					"auth/getLocale": "fi",
+					"env-config/getFallbackLanguage": "da",
 				},
 			},
 		};

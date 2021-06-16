@@ -81,7 +81,7 @@ export const setDefaultTimezone = (defaultTimezone) => {
  */
 const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.auth?.school?.timezone;
-	instanceTimezone = store?.getters["env-config/defaultTimezone"];
+	instanceTimezone = store?.getters["env-config/getDefaultTimezone"];
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
 	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
@@ -268,6 +268,6 @@ export default ({ app, store }) => {
 	initDefaultTimezone(app, store);
 	setDefaultFormats(app);
 
-	const locale = store.getters["auth/locale"] || "de";
+	const locale = store.getters["auth/getLocale"] || "de";
 	dayjs.locale(locale);
 };

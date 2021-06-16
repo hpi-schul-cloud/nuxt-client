@@ -47,10 +47,10 @@ export const mutations = {
 };
 
 export const getters = {
-	fallbackLanguage: (state) => {
+	getFallbackLanguage: (state) => {
 		return state.env.I18N__FALLBACK_LANGUAGE || "de";
 	},
-	defaultTimezone: (state) => {
+	getDefaultTimezone: (state) => {
 		return state.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin";
 	},
 };
