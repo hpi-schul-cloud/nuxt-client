@@ -116,6 +116,7 @@
 			<base-button
 				design="secondary"
 				data-testid="ldapSubmitButton"
+				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
 				>{{
 					$t("pages.administration.ldap.save.example.synchronize")
@@ -181,6 +182,7 @@ export default {
 			verified: "verified",
 			temp: "temp",
 			submitted: "submitted",
+			status: "status",
 		}),
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
