@@ -107,6 +107,7 @@ export default Vue.extend({
 	computed: {
 		...mapGetters("news", {
 			createdNews: "getList",
+			status: "getStatus",
 		}),
 		publishDate(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
@@ -191,13 +192,15 @@ export default Vue.extend({
 					targetModel:
 						this.$route.query.targetmodel || this.$route.query.context,
 				});
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.create")
-				);
-				this.$router.push({
-					name: "news-id",
-					params: { id: this.createdNews[0]._id },
-				});
+				if (this.status === "completed") {
+					this.$toast.success(
+						this.$ts("components.organisms.FormNews.success.create")
+					);
+					this.$router.push({
+						name: "news-id",
+						params: { id: this.createdNews[0]._id },
+					});
+				}
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
