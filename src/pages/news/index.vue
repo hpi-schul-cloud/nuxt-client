@@ -59,7 +59,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("news", {
-			news: "list",
+			news: "getList",
 		}),
 	},
 	created(ctx) {

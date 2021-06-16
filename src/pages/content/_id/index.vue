@@ -28,7 +28,7 @@ export default {
 	},
 	layout({ store, query }) {
 		return String(query.isCollection) === "true" &&
-			store.state.content.collectionsFeatureFlag === true
+			store.getters["content/getCollectionsFeatureFlag"] === true
 			? "loggedInFull"
 			: "plain";
 	},

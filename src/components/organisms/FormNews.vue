@@ -106,8 +106,8 @@ export default Vue.extend({
 	},
 	computed: {
 		...mapGetters("news", {
-			createdNews: "list",
-			status: "status",
+			createdNews: "getList",
+			status: "getStatus",
 		}),
 		publishDate(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {

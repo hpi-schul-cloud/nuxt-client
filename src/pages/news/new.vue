@@ -50,7 +50,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("news", {
-			status: "status",
+			status: "getStatus",
 		}),
 	},
 	head() {
