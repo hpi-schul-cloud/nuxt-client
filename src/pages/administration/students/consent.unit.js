@@ -101,6 +101,10 @@ describe("students/consent", () => {
 		};
 	});
 
+	afterEach(() => {
+		mockData[0].birthday = null;
+	});
+
 	it(...isValidComponent(ConsentPage));
 
 	it("should dispatch the users findConsentUsers action on load", async () => {
@@ -202,5 +206,83 @@ describe("students/consent", () => {
 
 		const inputValidationText = wrapper.find(`[data-testid="error-text"]`);
 		expect(inputValidationText.exists()).toBe(true);
+	});
+
+	it("next button 'click' event should set 'currentStep' value to '1' ", async () => {
+		const wrapper = mount(ConsentPage, {
+			...createComponentMocks({
+				store: mockStore,
+				i18n: true,
+			}),
+		});
+
+		mockData[0].birthday = "10.10.2010";
+
+		const progress = wrapper.find(`[data-testid="step_progress"]`);
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+
+		nextButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		expect(progress.props().currentStep).toBe(1);
+	});
+
+	it("second-step-table should appear after next button clicked", async () => {
+		const wrapper = mount(ConsentPage, {
+			...createComponentMocks({
+				store: mockStore,
+				i18n: true,
+			}),
+		});
+
+		mockData[0].birthday = "10.10.2010";
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+
+		nextButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		const table = wrapper.find(`[data-testid="consent_table_2"]`);
+		expect(table.exists()).toBe(true);
+	});
+
+	it("second-step-table shouldn’t appear if data is not completed", async () => {
+		const wrapper = mount(ConsentPage, {
+			...createComponentMocks({
+				store: mockStore,
+				i18n: true,
+			}),
+		});
+
+		//mockData[0].birthday = "10.10.2010";
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+
+		nextButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		const table = wrapper.find(`[data-testid="consent_table_2"]`);
+		expect(table.exists()).toBe(false);
+	});
+
+	it("should not progress next step if checkBox is not checked", async () => {
+		const wrapper = mount(ConsentPage, {
+			...createComponentMocks({
+				store: mockStore,
+				i18n: true,
+			}),
+		});
+
+		mockData[0].birthday = "10.10.2010";
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+
+		nextButton.trigger("click");
+		await wrapper.vm.$nextTick();
+
+		const nextButton_2 = wrapper.find(`[data-testid="button-next-2"]`);
+
+		nextButton_2.trigger("click");
+		await wrapper.vm.$nextTick();
+		const confirmError = wrapper.find(`[data-testid="confirm-error"]`);
+
+		expect(confirmError.exists()).toBe(true);
 	});
 });

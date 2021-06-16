@@ -104,15 +104,12 @@
 				{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 			</p>
 
-			<base-button design="secondary" @click="next">{{
+			<base-button design="secondary" data-testid="button-next" @click="next">{{
 				$t("pages.administration.students.consent.steps.complete.next")
 			}}</base-button>
-			<base-button
-				design="text"
-				data-testid="button-next"
-				@click="cancelWarning = true"
-				>{{ $t("common.actions.cancel") }}</base-button
-			>
+			<base-button design="text" @click="cancelWarning = true">{{
+				$t("common.actions.cancel")
+			}}</base-button>
 		</section>
 
 		<section v-if="currentStep === 1">
@@ -136,7 +133,13 @@
 			</backend-data-table>
 
 			<div id="consent-checkbox">
-				<base-input v-model="check" type="checkbox" name="switch" label="">
+				<base-input
+					v-model="check"
+					type="checkbox"
+					name="switch"
+					label=""
+					data-testid="check-confirm"
+				>
 				</base-input>
 				<label @click="check = !check">
 					<i18n
@@ -153,7 +156,11 @@
 				</label>
 			</div>
 
-			<p v-if="checkWarning" style="color: var(--color-danger)">
+			<p
+				v-if="checkWarning"
+				style="color: var(--color-danger)"
+				data-testid="confirm-error"
+			>
 				<base-icon source="material" icon="report_problem" />
 				{{
 					$t(
@@ -162,9 +169,14 @@
 				}}
 			</p>
 
-			<base-button design="secondary" @click="register">{{
-				$t("pages.administration.students.consent.steps.register.next")
-			}}</base-button>
+			<base-button
+				design="secondary"
+				data-testid="button-next-2"
+				@click="register"
+				>{{
+					$t("pages.administration.students.consent.steps.register.next")
+				}}</base-button
+			>
 			<base-button design="text" @click="cancelWarning = true">{{
 				$t("common.actions.cancel")
 			}}</base-button>
@@ -180,6 +192,7 @@
 				:paginated="false"
 				:sort-by.sync="sortBy"
 				:sort-order.sync="sortOrder"
+				data-testid="consent_table_3"
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
