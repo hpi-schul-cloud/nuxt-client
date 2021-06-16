@@ -11,10 +11,12 @@
 		<homeworks-list
 			:homeworks="openHomeworks"
 			:title="$t('pages.homeworks.subtitleOpen')"
+			type="student"
 		/>
 		<homeworks-list
 			:homeworks="overDueHomeworks"
 			:title="$t('pages.homeworks.subtitleOverDue')"
+			type="student"
 		/>
 		<v-custom-empty-state
 			v-if="isListEmpty"
