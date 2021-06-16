@@ -143,17 +143,26 @@ const initialState = () => ({
 });
 
 export const getters = {
-	getResources: (state) => {
+	getLessons(state) {
+		return state.lessons;
+	},
+	getElements(state) {
+		return state.elements;
+	},
+	getSelected(state) {
+		return state.selected;
+	},
+	getLoading(state) {
+		return state.loading;
+	},
+	getResources(state) {
 		return state.resources;
 	},
-	getLoading: (state) => {
-		return state.loading;
+	getCollectionsFeatureFlag(state) {
+		return state.collectionsFeatureFlag;
 	},
 	getCurrentResource: (state) => {
 		return state.currentResource;
-	},
-	getCollectionsFeatureFlag: (state) => {
-		return state.collectionsFeatureFlag;
 	},
 	getStatus: (state) => {
 		return state.status;

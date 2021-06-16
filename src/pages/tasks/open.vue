@@ -42,8 +42,8 @@ export default {
 	},
 	computed: {
 		...mapGetters("homeworks", {
-			homeworks: "list",
-			loading: "loading",
+			homeworks: "getList",
+			loading: "getLoading",
 			isListEmpty: "isListEmpty",
 			isListFilled: "isListFilled",
 			openHomeworks: "getOpenHomeworks",

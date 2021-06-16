@@ -1,5 +1,5 @@
 export default async ({ app, store, route }) => {
-	const { user } = store.state.auth;
+	const user = store.getters["auth/getUser"];
 
 	const userExternallyManaged = !!user?.externallyManaged;
 

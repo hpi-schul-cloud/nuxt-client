@@ -48,6 +48,11 @@ const module = {
 			state.currentPage = payload;
 		},
 	},
+	getters: {
+		getCurrentPage(state) {
+			return state.currentPage;
+		},
+	},
 	state: () => {
 		return {
 			posts: [],
