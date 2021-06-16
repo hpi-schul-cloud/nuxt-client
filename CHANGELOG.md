@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Fixed
+
+- SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page
+
 ## [26.4.2] - 2021-06-16
 
 ### Changed
@@ -68,7 +72,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - Fixed further conflicting screenshots
-- SC-9131 fixed the consent table loading the wrong list of users
 
 ## 26.1.2
 
