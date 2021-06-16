@@ -80,7 +80,6 @@ describe("@components/organisms/HomeworksList", () => {
 				type: "student",
 			},
 		});
-		console.log(wrapper.html());
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});

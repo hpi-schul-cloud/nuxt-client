@@ -525,6 +525,7 @@
 	"components.molecules.VCustomChipTimeRemaining.hintHours": "hora | horas",
 	"pages.homeworks.labels.noDueDate": "Sin fecha de entrega",
 	"pages.homeworks.labels.overdue": "Perdido",
+	"pages.homeworks.subtitleAssigned": "Tareas asignadas",
 	"pages.homeworks.subtitleOpen": "Tareas Abiertas",
 	"pages.homeworks.subtitleOverDue": "Tareas Perdidas",
 	"pages.impressum.hpiPhoneNumber": "número de teléfono: +49 (0)331 / 2318 2920 (disponible de lunes a viernes, de 13 a 14 horas)",

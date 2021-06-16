@@ -521,6 +521,7 @@
 	"components.molecules.VCustomChipTimeRemaining.hintHours": "Stunde | Stunden",
 	"pages.homeworks.labels.noDueDate": "Kein Abgabedatum",
 	"pages.homeworks.labels.overdue": "Verpasst",
+	"pages.homeworks.subtitleAssigned": "Gestellte Aufgaben",
 	"pages.homeworks.subtitleOpen": "Offene Aufgaben",
 	"pages.homeworks.subtitleOverDue": "Verpasste Aufgaben",
 	"pages.courses.index.courses.active": "Aktuelle Kurse",

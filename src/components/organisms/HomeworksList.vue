@@ -19,6 +19,11 @@
 				:key="index"
 				:homework="homework"
 			/>
+			<v-homework-item-teacher
+				v-if="type === 'teacher'"
+				:key="index"
+				:homework="homework"
+			/>
 			<v-divider
 				v-if="index < homeworks.length - 1"
 				:key="`divider-${index}`"
@@ -29,10 +34,11 @@
 
 <script>
 import VHomeworkItemStudent from "@components/molecules/vHomeworkItemStudent";
+import VHomeworkItemTeacher from "@components/molecules/vHomeworkItemTeacher";
 import { mapGetters } from "vuex";
 
 export default {
-	components: { VHomeworkItemStudent },
+	components: { VHomeworkItemStudent, VHomeworkItemTeacher },
 	props: {
 		homeworks: {
 			type: Array,

@@ -24,6 +24,7 @@ const routes = [
 	`^/administration/ldap/config/?$`,
 	`^/administration/ldap/activate/?$`,
 	`^/tasks/open`,
+	`^/tasks/asked`,
 	`^/login-instances/?`,
 	//`^/calendar/?`,
 	`^/error/`,
