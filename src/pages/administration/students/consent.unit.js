@@ -60,14 +60,19 @@ describe("students/consent", () => {
 				},
 				getters: {
 					students: () => mockData,
-				},
-				state: () => ({
-					list: mockData,
-					selectedStudentsData: mockData,
-					selectedStudents: [
+					getSelectedStudentsData: () => mockData,
+					getSelectedStudents: () => [
 						"60c220e2d03a60006502f272",
 						"60c220f4d03a60006502f500",
 					],
+				},
+				state: () => ({
+					list: mockData,
+					// selectedStudentsData: mockData,
+					// selectedStudents: [
+					// 	"60c220e2d03a60006502f272",
+					// 	"60c220f4d03a60006502f500",
+					// ],
 				}),
 
 				mutations: {

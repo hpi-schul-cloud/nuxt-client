@@ -17,11 +17,6 @@ const module = mergeDeep(base, {
 			qrLinks: [],
 			consentList: [],
 		}),
-	getters: {
-		getConsentList(state) {
-			return state.consentList;
-		},
-	},
 	mutations: {
 		startProgress(state, { action }) {
 			state.progress[action].active = true;
@@ -53,6 +48,9 @@ const module = mergeDeep(base, {
 		},
 		getQrLinks(state) {
 			return state.qrLinks;
+		},
+		getConsentList(state) {
+			return state.consentList;
 		},
 	},
 	actions: {
