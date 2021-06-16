@@ -67,6 +67,11 @@ describe("teachers/index", () => {
 						],
 						permissions: ["TEACHER_CREATE", "TEACHER_DELETE"],
 					}),
+					getUserPermissions: () => [
+						"teacher_create",
+						"teacher_list",
+						"teacher_delete",
+					],
 				},
 			},
 			users: {
@@ -354,6 +359,11 @@ describe("teachers/index", () => {
 					},
 				],
 			}),
+			getUserPermissions: () => [
+				"teacher_create",
+				"teacher_list",
+				"teacher_delete",
+			],
 		};
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -416,6 +426,7 @@ describe("teachers/index", () => {
 				],
 				permissions: ["TEACHER_DELETE"],
 			}),
+			getUserPermissions: () => ["teacher_delete"],
 		};
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -430,19 +441,18 @@ describe("teachers/index", () => {
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.state = () => ({
-			user: {
+		customMockStore.auth.getters = {
+			getSchool: () => ({ isExternal: true }),
+			getUser: () => ({
 				roles: [
 					{
 						name: "administrator",
-						permissions: ["TEACHERCREATE"],
 					},
 				],
-			},
-			school: {
-				isExternal: true,
-			},
-		});
+				permissions: [],
+			}),
+			getUserPermissions: () => [],
+		};
 
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -468,6 +478,11 @@ describe("teachers/index", () => {
 				],
 				permissions: ["TEACHER_DELETE"],
 			}),
+			getUserPermissions: () => [
+				"teacher_create",
+				"teacher_list",
+				"teacher_delete",
+			],
 		};
 
 		const wrapper = mount(TeacherPage, {

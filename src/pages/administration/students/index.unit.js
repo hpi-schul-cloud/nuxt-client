@@ -52,6 +52,11 @@ describe("students/index", () => {
 				}),
 				getters: {
 					getSchool: () => ({ isExternal: false }),
+					getUserPermissions: () => [
+						"student_create",
+						"student_list",
+						"student_delete",
+					],
 				},
 			},
 			users: {
@@ -342,6 +347,11 @@ describe("students/index", () => {
 		});
 		customMockStore.auth.getters = {
 			getSchool: () => ({ isExternal: true }),
+			getUserPermissions: () => [
+				"student_create",
+				"student_list",
+				"student_delete",
+			],
 		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
@@ -405,6 +415,10 @@ describe("students/index", () => {
 				isExternal: false,
 			},
 		});
+		customMockStore.auth.getters = {
+			getSchool: () => ({ isExternal: true }),
+			getUserPermissions: () => ["student_list", "student_delete"],
+		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -434,6 +448,15 @@ describe("students/index", () => {
 			},
 		});
 
+		customMockStore.auth.getters = {
+			getSchool: () => ({ isExternal: true }),
+			getUserPermissions: () => [
+				"student_create",
+				"student_list",
+				"student_delete",
+			],
+		};
+
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -460,6 +483,11 @@ describe("students/index", () => {
 		});
 		customMockStore.auth.getters = {
 			getSchool: () => ({ isExternal: true }),
+			getUserPermissions: () => [
+				"student_create",
+				"student_list",
+				"student_delete",
+			],
 		};
 
 		const wrapper = mount(StudentPage, {

@@ -8,6 +8,16 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- SC-9090 - implemented a loading state in the service-template
+
+### Changed
+
+- SC-9077 - refactored store actions returning data
+- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
+- SC-9122 - changed getters logic in components to the store
+
 ## 26.4.0
 
 ### Removed
@@ -39,7 +49,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8156 - added Spanish as an available language
 - SC-9004 - Sync env variables between backend and frontend
 - OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
-- SC-9090 - implemented a loading state in the service-template
 
 ### Changed
 
@@ -50,8 +59,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 - SC-9004 - Change ci build
-- SC-9077 - refactored store actions returning data
-- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
 
 ### Fixed
 
