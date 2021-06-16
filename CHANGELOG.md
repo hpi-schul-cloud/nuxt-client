@@ -8,6 +8,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.4.2
+
+### Changed
+
+- rename permission TASK_DASHBOARD_VIEW_V3
+
+## 26.4.1
+
+### Changed
+
+- SC-9144 - fixed build with env SC_THEME
+
 ## 26.4.0
 
 ### Removed
