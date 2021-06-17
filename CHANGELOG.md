@@ -10,6 +10,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-9093 - Load default language and timezone from server
 
+## [26.4.2] - 2021-06-16
+
+### Changed
+
+- rename permission TASK_DASHBOARD_VIEW_V3
+
+## 26.4.1
+
+### Changed
+
+- SC-9144 - fixed build with env SC_THEME
+
 ## 26.4.0
 
 ### Removed
