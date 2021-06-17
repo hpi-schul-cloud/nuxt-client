@@ -31,6 +31,20 @@ const module = mergeDeep(base, {
 			state.qrLinks = payload;
 		},
 	},
+	getters: {
+		getPagination(state) {
+			return state.pagination.default || { limit: 10, total: 0 };
+		},
+		getActive(state) {
+			return state.progress.delete.active;
+		},
+		getPercent(state) {
+			return state.progress.delete.percent;
+		},
+		getQrLinks(state) {
+			return state.qrLinks;
+		},
+	},
 	actions: {
 		handleUsers({ dispatch }, queryContext = {}) {
 			const { userType, action } = queryContext;

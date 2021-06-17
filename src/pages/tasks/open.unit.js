@@ -13,8 +13,8 @@ describe("Homeworks/dashboard", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				list: () => homeworks,
-				loading: () => false,
+				getList: () => homeworks,
+				getLoading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getOpenHomeworks: () => openHomeworks,
@@ -72,8 +72,8 @@ describe("Homeworks/dashboard", () => {
 		const mockStoreEmpty = {
 			homeworks: {
 				getters: {
-					list: () => [],
-					loading: () => false,
+					getList: () => [],
+					getLoading: () => false,
 					isListEmpty: () => true,
 					isListFilled: () => false,
 					getOpenHomeworks: () => [],

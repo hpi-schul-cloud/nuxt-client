@@ -136,6 +136,18 @@ export const actions = {
 	},
 };
 
+export const getters = {
+	getActive(state) {
+		return state.active;
+	},
+	getError(state) {
+		return state.error;
+	},
+	getRemainingTimeInSeconds(state) {
+		return state.remainingTimeInSeconds;
+	},
+};
+
 export const state = () => {
 	return {
 		active: false,
@@ -149,6 +161,7 @@ export const state = () => {
 export default {
 	mutations,
 	actions,
+	getters,
 	state,
 	namespaced: true,
 };
