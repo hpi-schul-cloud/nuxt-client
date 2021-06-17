@@ -61,7 +61,7 @@ export default {
 			}
 		},
 		homeworkGradingHref: (id) => {
-			return "/homework/" + id + "#activetabid=submissions";
+			return `/homework/${id}#activetabid=submissions`;
 		},
 	},
 };
