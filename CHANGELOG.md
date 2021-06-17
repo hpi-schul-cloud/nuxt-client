@@ -8,6 +8,27 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.4.0
+
+### Removed
+
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
+
+### Added
+
+- SC-9004 - Sync env variables between backend and frontend
+- SC-9023 - Add open homework overview
+
+### Changed
+
+- SC-9004 - Change ci build
+
+## 26.2.1
+
+### Changed
+
+- SC-9114 - project naming
+
 ## 26.2.0
 
 ### Added
@@ -18,6 +39,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8156 - added Spanish as an available language
 - SC-9004 - Sync env variables between backend and frontend
 - OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
+- SC-9090 - implemented a loading state in the service-template
 
 ### Changed
 
@@ -29,14 +51,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 - SC-9004 - Change ci build
 - SC-9077 - refactored store actions returning data
+- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
 
 ### Fixed
 
 - Fixed further conflicting screenshots
 
-### Removed
+## 26.1.2
+
+### Fixed
 
 - pages 'account', 'course', 'calendar' and components exclusively used by these pages
+- SC-9063 - Removed "unsafe-inline" from script-src in CSP
 
 ## 26.1.1
 

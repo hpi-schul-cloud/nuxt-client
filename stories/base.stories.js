@@ -263,7 +263,7 @@ storiesOf("4 Base UI Components/Base UI", module)
 		},
 		template: `
 			<div>
-				<base-link href="https://schul-cloud.org">external Link to https://schul-cloud.org</base-link>
+				<base-link href="https://hpi-schul-cloud.de">external Link to https://hpi-schul-cloud.de</base-link>
 				<base-link to="/news">Internal Link to /news</base-link>
 				<base-link name="news">Internal Link with name "news"</base-link>
 			</div>`,
@@ -299,11 +299,11 @@ storiesOf("4 Base UI Components/Base UI", module)
 				},
 				{
 					text: "Biologie",
-					href: "http://schul-cloud.org",
+					href: "http://hpi-schul-cloud.de",
 				},
 				{
 					text: "Thema - das Nervensystem",
-					href: "https://schul-cloud.org",
+					href: "https://hpi-schul-cloud.de",
 				},
 			],
 		}),
@@ -352,7 +352,7 @@ storiesOf("4 Base UI Components/Base UI", module)
 			BaseQrCode,
 		},
 		data: () => ({
-			url: text("Url", "http://www.schul-cloud.org"),
+			url: text("Url", "http://www.hpi-schul-cloud.de"),
 		}),
 		template: `<base-qr-code :url="url"/>`,
 	}))

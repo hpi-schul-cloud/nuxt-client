@@ -9,12 +9,12 @@ describe("@components/molecules/MintEcPageHeader", () => {
 			propsData: {
 				heading: "heading",
 				image:
-					"https://headless.schul-cloud.org/content/images/2019/12/04_im-projekt-engagieren.png",
+					"https://headless.hpi-schul-cloud.de/content/images/2019/12/04_im-projekt-engagieren.png",
 			},
 		});
 		expect(wrapper.find(".hero-image").exists()).toBe(true);
 		expect(wrapper.props("image")).toBe(
-			"https://headless.schul-cloud.org/content/images/2019/12/04_im-projekt-engagieren.png"
+			"https://headless.hpi-schul-cloud.de/content/images/2019/12/04_im-projekt-engagieren.png"
 		);
 	});
 

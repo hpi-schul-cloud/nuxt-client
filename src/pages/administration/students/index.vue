@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
@@ -309,27 +309,24 @@ export default {
 		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
-		...mapState("auth", {
-			school: "school",
+		...mapGetters("auth", {
+			school: "getSchool",
 		}),
 		...mapGetters("users", {
-			students: "list",
+			students: "getList",
+			pagination: "getPagination",
+			isDeleting: "getActive",
+			deletedPercent: "getPercent",
+			qrLinks: "getQrLinks",
 		}),
-		...mapState("users", {
-			pagination: (state) =>
-				state.pagination.default || { limit: 10, total: 0 },
-			isDeleting: (state) => state.progress.delete.active,
-			deletedPercent: (state) => state.progress.delete.percent,
-			qrLinks: "qrLinks",
-		}),
-		...mapState("env-config", {
-			env: "env",
+		...mapGetters("env-config", {
+			env: "getEnv",
 		}),
 		schoolInternallyManaged() {
-			return !this.school.isExternal;
+			return this.school && !this.school.isExternal;
 		},
 		showConsent() {
-			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;

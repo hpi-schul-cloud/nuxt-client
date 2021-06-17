@@ -17,17 +17,20 @@ const mockStores = {
 				return;
 			},
 		},
-		state: () => ({
-			matrixFeatureFlag: true,
-			matrixAssetDomain: "https://matrix.domain",
-			session,
-			serverName: "dummy-server-name",
-		}),
+		getters: {
+			getMatrixFeatureFlg: () => true,
+			getMatrixAssetDomain: () => "https://matrix.domain",
+			getSession: () => session,
+			getServerName: () => "dummy-server-name",
+		},
 	},
 	auth: {
 		state: () => ({
 			school: { features: ["messenger"] },
 		}),
+		getters: {
+			getSchool: () => ({ features: ["messenger"] }),
+		},
 	},
 };
 
@@ -118,13 +121,12 @@ describe("MatrixMessenger.unit", () => {
 					return;
 				},
 			},
-			state: () => ({
-				session,
-				matrixFeatureFlag: true,
-				matrixAssetDomain: "https://matrix.domain",
-				serverName: "dummy-server-name",
-				sessionFromLocalStorage: "true",
-			}),
+			getters: {
+				getMatrixFeatureFlg: () => true,
+				getMatrixAssetDomain: () => "https://matrix.domain",
+				getSession: () => session,
+				getServerName: () => "dummy-server-name",
+			},
 		};
 		mount(Messenger, {
 			...createComponentMocks({

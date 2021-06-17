@@ -4,7 +4,6 @@
 @import "./utility/resets";
 @import "./utility/spacing";
 @import "./utility/typography";
-@import "./utility/overrides";
 
 body.is-noscroll {
 	position: fixed;
@@ -13,7 +12,6 @@ body.is-noscroll {
 	overflow-y: hidden;
 }
 
-// should we get rid of these, now that we have vuetify?
 .d-flex {
 	display: flex;
 }

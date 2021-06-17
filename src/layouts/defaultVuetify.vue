@@ -20,7 +20,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-@import "@variables";
 
 .content {
 	grid-area: content;

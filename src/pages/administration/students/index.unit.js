@@ -49,10 +49,10 @@ describe("students/index", () => {
 						],
 						permissions: ["STUDENT_CREATE", "STUDENT_DELETE"],
 					},
-					school: {
-						isExternal: false,
-					},
 				}),
+				getters: {
+					getSchool: () => ({ isExternal: false }),
+				},
 			},
 			users: {
 				actions: {
@@ -62,25 +62,17 @@ describe("students/index", () => {
 					sendRegistrationLink: jest.fn(),
 				},
 				getters: {
-					list: () => mockData,
+					getList: () => mockData,
+					getPagination: () => ({
+						limit: 25,
+						skip: 0,
+						total: 2,
+						query: "",
+					}),
+					getActive: () => false,
+					getPercent: () => 0,
+					getQrLinks: () => [],
 				},
-				state: () => ({
-					list: mockData,
-					pagination: {
-						default: {
-							limit: 25,
-							skip: 0,
-							total: 2,
-							query: "",
-						},
-					},
-					progress: {
-						delete: {
-							active: false,
-							percent: 0,
-						},
-					},
-				}),
 			},
 			uiState: {
 				getters: {
@@ -97,6 +89,11 @@ describe("students/index", () => {
 					},
 					error: {},
 				}),
+				getters: {
+					getEnv: () => ({
+						ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+					}),
+				},
 			},
 		};
 	});
@@ -333,7 +330,7 @@ describe("students/index", () => {
 	});
 
 	it("should not display the edit button if school is external", async () => {
-		const customMockStore = { ...mockStore };
+		const customMockStore = mockStore;
 		customMockStore.auth.state = () => ({
 			user: {
 				roles: [
@@ -342,10 +339,10 @@ describe("students/index", () => {
 					},
 				],
 			},
-			school: {
-				isExternal: true,
-			},
 		});
+		customMockStore.auth.getters = {
+			getSchool: () => ({ isExternal: true }),
+		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -450,7 +447,7 @@ describe("students/index", () => {
 	});
 
 	it("should render the adminTableLegend component when school is external", async () => {
-		const customMockStore = { ...mockStore };
+		const customMockStore = mockStore;
 		customMockStore.auth.state = () => ({
 			user: {
 				roles: [
@@ -460,10 +457,10 @@ describe("students/index", () => {
 					},
 				],
 			},
-			school: {
-				isExternal: true,
-			},
 		});
+		customMockStore.auth.getters = {
+			getSchool: () => ({ isExternal: true }),
+		};
 
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({

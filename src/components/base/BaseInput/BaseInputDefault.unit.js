@@ -80,9 +80,8 @@ describe("@components/base/BaseInputDefault", () => {
 	it("shows its label when no placeholder is provided", () => {
 		supportedTypes.forEach((type) => {
 			const wrapperWithoutPlaceholder = getMock(type);
-			const baseInputDefaultWithoutPlaceholder = wrapperWithoutPlaceholder.findComponent(
-				BaseInputDefault
-			);
+			const baseInputDefaultWithoutPlaceholder =
+				wrapperWithoutPlaceholder.findComponent(BaseInputDefault);
 			expect(baseInputDefaultWithoutPlaceholder.vm.showLabel).toBe(true);
 			expect(wrapperWithoutPlaceholder.find(".label").exists()).toBe(true);
 		});
@@ -96,9 +95,8 @@ describe("@components/base/BaseInputDefault", () => {
 					type,
 					"placeholder='placeholder'"
 				);
-				const baseInputDefaultWithPlaceholder = wrapperWithPlaceHolder.findComponent(
-					BaseInputDefault
-				);
+				const baseInputDefaultWithPlaceholder =
+					wrapperWithPlaceHolder.findComponent(BaseInputDefault);
 				const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
 
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);

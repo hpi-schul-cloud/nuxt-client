@@ -11,8 +11,8 @@ export const actions = {
 	init(context) {
 		context.commit("init", {
 			MATRIX_MESSENGER__EMBED_URI: this.$config.MATRIX_MESSENGER__EMBED_URI,
-			FEATURE_MATRIX_MESSENGER_ENABLED: this.$config
-				.FEATURE_MATRIX_MESSENGER_ENABLED,
+			FEATURE_MATRIX_MESSENGER_ENABLED:
+				this.$config.FEATURE_MATRIX_MESSENGER_ENABLED,
 		});
 	},
 };
@@ -29,6 +29,21 @@ export const getters = {
 			);
 		}
 		return null;
+	},
+	getMatrixFeatureFlg(state) {
+		return state.matrixFeatureFlag;
+	},
+	getMatrixAssetDomain(state) {
+		return state.matrixAssetDomain;
+	},
+	getSession(state) {
+		return state.session;
+	},
+	getSessionFromLocalStorage(state) {
+		return state.sessionFromLocalStorage;
+	},
+	getServerName(state) {
+		return state.serverName;
 	},
 };
 

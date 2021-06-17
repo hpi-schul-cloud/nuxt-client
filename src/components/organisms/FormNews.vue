@@ -50,7 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
@@ -105,8 +105,9 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-		...mapState("news", {
-			createdNews: "list",
+		...mapGetters("news", {
+			createdNews: "getList",
+			status: "getStatus",
 		}),
 		publishDate(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
@@ -172,9 +173,8 @@ export default Vue.extend({
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				[this.data.date.date, this.data.date.time] = createInputDateTime(
-					displayAt
-				);
+				[this.data.date.date, this.data.date.time] =
+					createInputDateTime(displayAt);
 			}
 		},
 		async create() {
@@ -192,13 +192,15 @@ export default Vue.extend({
 					targetModel:
 						this.$route.query.targetmodel || this.$route.query.context,
 				});
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.create")
-				);
-				this.$router.push({
-					name: "news-id",
-					params: { id: this.createdNews[0]._id },
-				});
+				if (this.status === "completed") {
+					this.$toast.success(
+						this.$ts("components.organisms.FormNews.success.create")
+					);
+					this.$router.push({
+						name: "news-id",
+						params: { id: this.createdNews[0]._id },
+					});
+				}
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(

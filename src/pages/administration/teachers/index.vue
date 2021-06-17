@@ -128,7 +128,7 @@
 	</section>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
@@ -273,22 +273,19 @@ export default {
 		};
 	},
 	computed: {
+		...mapGetters("auth", {
+			school: "getSchool",
+			user: "getUser",
+		}),
 		...mapGetters("users", {
-			teachers: "list",
+			teachers: "getList",
+			pagination: "getPagination",
+			isDeleting: "getActive",
+			deletedPercent: "getPercent",
+			qrLinks: "getQrLinks",
 		}),
-		...mapState("auth", {
-			school: "school",
-			user: "user",
-		}),
-		...mapState("users", {
-			pagination: (state) =>
-				state.pagination.default || { limit: 10, total: 0 },
-			isDeleting: (state) => state.progress.delete.active,
-			deletedPercent: (state) => state.progress.delete.percent,
-			qrLinks: "qrLinks",
-		}),
-		...mapState("env-config", {
-			env: "env",
+		...mapGetters("env-config", {
+			env: "getEnv",
 		}),
 		tableData: {
 			get() {
@@ -297,10 +294,10 @@ export default {
 			},
 		},
 		schoolInternallyManaged() {
-			return !this.school.isExternal;
+			return this.school && !this.school.isExternal;
 		},
 		showConsent() {
-			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;

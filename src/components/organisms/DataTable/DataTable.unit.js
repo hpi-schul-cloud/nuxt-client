@@ -326,8 +326,9 @@ describe("@components/organisms/DataTable/DataTable", () => {
 			return (
 				visibleSelections.length === expectedSelectionIds.length &&
 				expectedSelectionIds.every((expectedId) => {
-					const selectionFirstName = data.find((row) => row._id === expectedId)
-						.firstName;
+					const selectionFirstName = data.find(
+						(row) => row._id === expectedId
+					).firstName;
 					return visibleSelections.find(
 						(selectionRow) => selectionRow[1] === selectionFirstName
 					);

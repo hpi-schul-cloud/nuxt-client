@@ -44,10 +44,10 @@ export const actions = {
 };
 
 export const getters = {
-	selectedStudents: (state) => state.selectedStudents,
-	selectedStudentsData: (state) => state.selectedStudentsData,
-	registeredStudents: (state) => state.registeredStudents,
-	registerError: (state) => state.registerError,
+	getSelectedStudents: (state) => state.selectedStudents,
+	getSelectedStudentsData: (state) => state.selectedStudentsData,
+	getRegisteredStudents: (state) => state.registeredStudents,
+	getRegisterError: (state) => state.registerError,
 };
 
 export const mutations = {
