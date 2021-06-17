@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9093 - Load default language and timezone from server
+
 ### Added
 
 - SC-9090 - implemented a loading state in the service-template
