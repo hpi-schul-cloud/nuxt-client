@@ -23,7 +23,7 @@
 				</i18n>
 			</v-list-item-subtitle>
 		</v-list-item-content>
-		<v-list-item-action class="hidden-xs-only">
+		<v-list-item-action class="hidden-xs-only ml-4">
 			<v-list-item-subtitle>{{
 				$t("components.molecules.VHomeworkItemTeacher.submitted")
 			}}</v-list-item-subtitle>
