@@ -1,3 +1,9 @@
+/*
+	Mockdata for homeworks dashboards
+	This data is also used for unit tests, to ensure that the store works properly.
+	Do not tamper with this data.
+*/
+
 export const homeworks = [
 	{
 		id: "59cce4c3c6abf042248e888e",
