@@ -32,6 +32,17 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it(...isValidComponent(HomeworksList));
 
+	it("accepts only student and teacher as type prop", () => {
+		const validTypes = ["student", "teacher"];
+		const { validator } = HomeworksList.props.type;
+
+		validTypes.forEach((type) => {
+			expect(validator(type)).toBe(true);
+		});
+
+		expect(validator("wrong type")).toBe(false);
+	});
+
 	it("Should render complete homework items list", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks({

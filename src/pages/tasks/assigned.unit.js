@@ -1,4 +1,4 @@
-import dashboard from "./asked";
+import dashboard from "./assigned";
 import { homeworks, openHomeworks } from "@@/stories/mockData/Homeworks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import HomeworksList from "@components/organisms/HomeworksList";

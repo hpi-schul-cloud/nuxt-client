@@ -13,17 +13,22 @@
 			/>
 		</template>
 
-		<template v-for="(homework, index) of homeworks" v-else>
-			<v-homework-item-student
-				v-if="type === 'student'"
-				:key="index"
-				:homework="homework"
+		<template
+			v-for="(homework, index) of homeworks"
+			v-else-if="type === 'student'"
+		>
+			<v-homework-item-student :key="index" :homework="homework" />
+			<v-divider
+				v-if="index < homeworks.length - 1"
+				:key="`divider-${index}`"
 			/>
-			<v-homework-item-teacher
-				v-if="type === 'teacher'"
-				:key="index"
-				:homework="homework"
-			/>
+		</template>
+
+		<template
+			v-for="(homework, index) of homeworks"
+			v-else-if="type === 'teacher'"
+		>
+			<v-homework-item-teacher :key="index" :homework="homework" />
 			<v-divider
 				v-if="index < homeworks.length - 1"
 				:key="`divider-${index}`"
