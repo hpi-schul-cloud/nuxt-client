@@ -9,6 +9,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ## Unreleased
 
 - SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
+- SC-9093 - Load default language and timezone from server
 
 ## [26.4.2] - 2021-06-16
 
