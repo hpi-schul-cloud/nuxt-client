@@ -14,6 +14,7 @@ const DEFAULT_TIMEZONE = "Europe/Berlin";
 
 let currentTimezone;
 let schoolTimezone;
+let instanceTimezone;
 let userTimezone;
 let userHasSchoolTimezone = true;
 
@@ -80,8 +81,9 @@ export const setDefaultTimezone = (defaultTimezone) => {
  */
 const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.auth?.school?.timezone;
+	instanceTimezone = store?.getters["env-config/getDefaultTimezone"];
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
-	currentTimezone = schoolTimezone || DEFAULT_TIMEZONE;
+	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
 
 	setDefaultTimezone(currentTimezone);
