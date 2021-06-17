@@ -4,6 +4,7 @@ import {
 	openHomeworksWithoutDueDate,
 	overDueHomeworks,
 	openHomeworksWithDueDate,
+	invalidHomeworks,
 } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
@@ -152,5 +153,18 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(
 			wrapper.vm.computedDueDateLabel(openHomeworksWithDueDate[0].duedate, true)
 		).toBe("Abgabe 11.06.00");
+	});
+
+	it("accepts valid homework props", () => {
+		const { validator } = vHomeworkItemStudent.props.homework;
+		const validHomeworks = Array.from(homeworks);
+
+		validHomeworks.forEach((homework) => {
+			expect(validator(homework)).toBe(true);
+		});
+
+		invalidHomeworks.forEach((homework) => {
+			expect(validator(homework)).toBe(false);
+		});
 	});
 });

@@ -49,12 +49,16 @@ import {
 	printDateTimeFromStringUTC,
 } from "@plugins/datetime";
 
+const homeworkRequiredKeys = ["_id", "courseName", "createdAt", "id", "name"];
+
 export default {
 	components: { VCustomChipTimeRemaining },
 	props: {
 		homework: {
 			type: Object,
 			required: true,
+			validator: (homework) =>
+				homeworkRequiredKeys.every((key) => key in homework),
 		},
 	},
 	data() {
