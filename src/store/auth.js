@@ -160,6 +160,9 @@ export const getters = {
 			? state.user.permissions.map((p) => p.toLowerCase())
 			: [];
 	},
+	userIsExternallyManaged(state) {
+		return !!state.user.externallyManaged;
+	},
 };
 
 export const state = () => {
