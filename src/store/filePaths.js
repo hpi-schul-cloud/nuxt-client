@@ -32,7 +32,7 @@ export const actions = {
 			const baseDir =
 				rootState["env-config"].env.DOCUMENT_BASE_DIR ||
 				"https://s3.hidrive.strato.com/schul-cloud-hpi/";
-			const theme = process.env.SC_THEME || "default";
+			const theme = rootState["env-config"].env.SC_THEME;
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
 			commit("setDocumentBaseDir", { baseDir, theme });
