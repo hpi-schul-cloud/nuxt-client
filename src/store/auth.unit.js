@@ -33,7 +33,7 @@ describe("store/auth", () => {
 					},
 				};
 
-				const locale = getters.locale(mockState, {}, mockRootState);
+				const locale = getters.getLocale(mockState, {}, mockRootState);
 				expect(locale).toBe("ko");
 			});
 
@@ -54,7 +54,7 @@ describe("store/auth", () => {
 					},
 				};
 
-				const locale = getters.locale(mockState, {}, mockRootState);
+				const locale = getters.getLocale(mockState, {}, mockRootState);
 				expect(locale).toBe("fi");
 			});
 
@@ -69,7 +69,7 @@ describe("store/auth", () => {
 					},
 				};
 
-				const locale = getters.locale(mockState, {}, mockRootState);
+				const locale = getters.getLocale(mockState, {}, mockRootState);
 				expect(locale).toBe("da");
 			});
 
@@ -84,7 +84,7 @@ describe("store/auth", () => {
 					},
 				};
 
-				const locale = getters.locale(mockState, {}, mockRootState);
+				const locale = getters.getLocale(mockState, {}, mockRootState);
 				expect(locale).toBe("de");
 			});
 		});
