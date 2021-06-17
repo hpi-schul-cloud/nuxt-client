@@ -15,17 +15,29 @@
 				}}
 			</v-list-item-subtitle>
 			<v-list-item-title class="text-wrap" v-text="homework.name" />
-			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap"
-				>3 von 26 abgegeben, 2 bewertet</v-list-item-subtitle
-			>
+			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
+				<i18n path="components.molecules.VHomeworkItemTeacher.status">
+					<template #submitted>{{ homework.status.submitted }}</template>
+					<template #max>{{ homework.status.maxSubmissions }}</template>
+					<template #graded>{{ homework.status.graded }}</template>
+				</i18n>
+			</v-list-item-subtitle>
 		</v-list-item-content>
 		<v-list-item-action class="hidden-xs-only">
-			<v-list-item-subtitle>Abgegeben</v-list-item-subtitle>
-			<v-list-item-title>1/10</v-list-item-title>
+			<v-list-item-subtitle>{{
+				$t("components.molecules.VHomeworkItemTeacher.submitted")
+			}}</v-list-item-subtitle>
+			<v-list-item-title
+				>{{ homework.status.submitted }}/{{
+					homework.status.maxSubmissions
+				}}</v-list-item-title
+			>
 		</v-list-item-action>
 		<v-list-item-action class="hidden-xs-only">
-			<v-list-item-subtitle>Bewertet</v-list-item-subtitle>
-			<v-list-item-title>0</v-list-item-title>
+			<v-list-item-subtitle>{{
+				$t("components.molecules.VHomeworkItemTeacher.graded")
+			}}</v-list-item-subtitle>
+			<v-list-item-title>{{ homework.status.graded }}</v-list-item-title>
 		</v-list-item-action>
 	</v-list-item>
 </template>
