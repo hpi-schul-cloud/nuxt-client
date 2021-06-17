@@ -132,4 +132,18 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
+
+	it("should accept valid type props", () => {
+		const { validator } = HomeworksList.props.type;
+		const validTypes = ["student", "teacher"];
+		const invalidTypes = ["invalid", "type"];
+
+		validTypes.forEach((type) => {
+			expect(validator(type)).toBe(true);
+		});
+
+		invalidTypes.forEach((type) => {
+			expect(validator(type)).toBe(false);
+		});
+	});
 });
