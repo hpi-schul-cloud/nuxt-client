@@ -1,8 +1,12 @@
+import qs from "qs";
 import mergeDeep from "@utils/merge-deep";
 import serviceTemplate from "@utils/service-template";
 
 const base = serviceTemplate("users");
 const baseState = base.state();
+
+const teacherEndpoint = "/users/admin/teachers";
+const studentEndpoint = "/users/admin/students";
 
 const module = mergeDeep(base, {
 	state: () =>
@@ -46,11 +50,43 @@ const module = mergeDeep(base, {
 		},
 	},
 	actions: {
-		handleUsers({ dispatch }, queryContext = {}) {
-			const { userType, action } = queryContext;
-			// bad practice. The component should not determine the action's endpoint
-			queryContext.customEndpoint = `/users/admin/${userType}`;
-			dispatch(action, queryContext);
+		async findStudents({ commit }, payload = {}) {
+			const { qid = "default", query } = payload;
+			commit("setStatus", "pending");
+			const res = await this.$axios.$get(studentEndpoint, {
+				params: query,
+				paramsSerializer: (params) => {
+					return qs.stringify(params);
+				},
+			});
+			commit("updatePaginationForQuery", {
+				query,
+				qid,
+				res,
+			});
+			commit("set", {
+				items: res.data,
+			});
+			commit("setStatus", "completed");
+		},
+		async findTeachers({ commit }, payload = {}) {
+			const { qid = "default", query } = payload;
+			commit("setStatus", "pending");
+			const res = await this.$axios.$get(teacherEndpoint, {
+				params: query,
+				paramsSerializer: (params) => {
+					return qs.stringify(params);
+				},
+			});
+			commit("updatePaginationForQuery", {
+				query,
+				qid,
+				res,
+			});
+			commit("set", {
+				items: res.data,
+			});
+			commit("setStatus", "completed");
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {
@@ -75,13 +111,11 @@ const module = mergeDeep(base, {
 			}
 		},
 		async createTeacher({ commit }, teacherData) {
-			const teacherEndpoint = "/users/admin/teachers";
 			const teacher = await this.$axios.$post(teacherEndpoint, teacherData);
 			commit("setCurrent", teacher);
 		},
 		async createStudent({ commit }, payload) {
 			commit("resetBusinessError");
-			const studentEndpoint = "/users/admin/students";
 			const { successMessage, ...studentData } = payload;
 			try {
 				const student = await this.$axios.$post(studentEndpoint, studentData);
