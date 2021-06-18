@@ -355,12 +355,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent: this.$store.getters["filePaths/getSpecificFiles"]
-					.analogConsent,
-				termsOfUse: this.$store.getters["filePaths/getSpecificFiles"]
-					.termsOfUseSchool,
-				dataProtection: this.$store.getters["filePaths/getSpecificFiles"]
-					.privacyExemplary,
+				analogConsent:
+					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
+				termsOfUse:
+					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
+				dataProtection:
+					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -498,8 +498,9 @@ export default {
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById("tableStudentsForPrint")
-				.innerHTML;
+			const prtHtml = document.getElementById(
+				"tableStudentsForPrint"
+			).innerHTML;
 			let stylesHtml = "";
 
 			for (const node of [
