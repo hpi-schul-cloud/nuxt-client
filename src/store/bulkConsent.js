@@ -63,9 +63,12 @@ export const mutations = {
 			(st) => st._id === payload.id
 		);
 
-		if (payload.birthDate)
+		if (index !== -1 && payload.birthDate) {
 			state.selectedStudentsData[index].birthday = payload.birthDate;
-		if (payload.pass) state.selectedStudentsData[index].password = payload.pass;
+		}
+		if (index !== -1 && payload.pass) {
+			state.selectedStudentsData[index].password = payload.pass;
+		}
 	},
 	setRegisterError(state, payload) {
 		state.registerError = payload;

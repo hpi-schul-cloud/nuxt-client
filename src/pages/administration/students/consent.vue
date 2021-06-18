@@ -61,7 +61,6 @@
 						"
 					/>
 				</template>
-				<!-- TODO:  -->
 				<template v-slot:datacolumn-password="slotProps">
 					<base-input
 						:vmodel="slotProps.data"
@@ -79,11 +78,7 @@
 				</template>
 			</backend-data-table>
 
-			<p
-				v-if="birthdayWarning"
-				data-testid="error-text"
-				style="color: var(--color-danger)"
-			>
+			<p v-if="birthdayWarning" class="warning" data-testid="error-text">
 				<base-icon source="material" icon="report_problem" />
 				{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 			</p>
@@ -140,11 +135,7 @@
 				</label>
 			</div>
 
-			<p
-				v-if="checkWarning"
-				style="color: var(--color-danger)"
-				data-testid="confirm-error"
-			>
+			<p v-if="checkWarning" class="warning" data-testid="confirm-error">
 				<base-icon source="material" icon="report_problem" />
 				{{
 					$t(
@@ -226,9 +217,9 @@
 				>
 					<template v-slot:icon>
 						<base-icon
+							class="warning"
 							source="material"
 							icon="report_problem"
-							style="color: var(--color-danger)"
 						/>
 					</template>
 				</modal-body-info>
@@ -364,12 +355,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent:
-					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
-				termsOfUse:
-					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
-				dataProtection:
-					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
+				analogConsent: this.$store.getters["filePaths/getSpecificFiles"]
+					.analogConsent,
+				termsOfUse: this.$store.getters["filePaths/getSpecificFiles"]
+					.termsOfUseSchool,
+				dataProtection: this.$store.getters["filePaths/getSpecificFiles"]
+					.privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -507,9 +498,8 @@ export default {
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById(
-				"tableStudentsForPrint"
-			).innerHTML;
+			const prtHtml = document.getElementById("tableStudentsForPrint")
+				.innerHTML;
 			let stylesHtml = "";
 
 			for (const node of [
@@ -621,6 +611,9 @@ export default {
 .print-title {
 	color: var(--color-secondary);
 	border: none;
+}
+.warning {
+	color: var(--color-danger);
 }
 ::v-deep .link {
 	color: var(--color-secondary);
