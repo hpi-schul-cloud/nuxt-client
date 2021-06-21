@@ -138,14 +138,20 @@ export default {
 			if (window.opener && window.opener !== window) {
 				if (window.opener.addResource) {
 					if (this.selectedElements.length > 0) {
-					  const elements = await Promise.all(this.selectedElements.map(async element => {
-					    return {
-                title: element.title,
-                client: element.client,
-                url: element.merlinReference ? await this.$axios.$get(`/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`) : element.url,
-                merlinReference: element.merlinReference,
-              }
-            }));
+						const elements = await Promise.all(
+							this.selectedElements.map(async (element) => {
+								return {
+									title: element.title,
+									client: element.client,
+									url: element.merlinReference
+										? await this.$axios.$get(
+												`/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`
+										  )
+										: element.url,
+									merlinReference: element.merlinReference,
+								};
+							})
+						);
 						elements.forEach((element) => {
 							window.opener.addResource(element);
 						});
@@ -153,7 +159,11 @@ export default {
 						window.opener.addResource({
 							title: this.title,
 							client: this.client,
-							url: this.merlinReference ? await this.$axios.$get(`/edu-sharing/merlinToken/?merlinReference=${this.merlinReference}`) : this.url,
+							url: this.merlinReference
+								? await this.$axios.$get(
+										`/edu-sharing/merlinToken/?merlinReference=${this.merlinReference}`
+								  )
+								: this.url,
 							merlinReference: this.merlinReference,
 						});
 					}
