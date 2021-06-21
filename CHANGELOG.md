@@ -8,6 +8,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- SC-9090 - implemented a loading state in the service-template
+
+### Changed
+
+- SC-9077 - refactored store actions returning data
+- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
+
+### Fixed
+
+- SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page
 - SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
 - SC-9093 - Load default language and timezone from server
 
