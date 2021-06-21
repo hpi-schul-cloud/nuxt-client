@@ -18,6 +18,7 @@ const module = mergeDeep(base, {
 				},
 			},
 			qrLinks: [],
+			consentList: [],
 		}),
 	mutations: {
 		startProgress(state, { action }) {
@@ -34,6 +35,9 @@ const module = mergeDeep(base, {
 		setQrLinks(state, payload) {
 			state.qrLinks = payload;
 		},
+		setConsentList(state, { data }) {
+			state.consentList = data;
+		},
 	},
 	getters: {
 		getPagination(state) {
@@ -47,6 +51,9 @@ const module = mergeDeep(base, {
 		},
 		getQrLinks(state) {
 			return state.qrLinks;
+		},
+		getConsentList(state) {
+			return state.consentList;
 		},
 	},
 	actions: {
@@ -87,6 +94,15 @@ const module = mergeDeep(base, {
 				items: res.data,
 			});
 			commit("setStatus", "completed");
+		},
+		async findConsentUsers({ commit }, query) {
+			const res = await this.$axios.$get(`/users/admin/students`, {
+				params: query,
+				paramsSerializer: (params) => {
+					return qs.stringify(params);
+				},
+			});
+			commit("setConsentList", res);
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {
