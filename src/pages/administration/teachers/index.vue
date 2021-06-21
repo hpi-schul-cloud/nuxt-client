@@ -99,11 +99,11 @@
 		<admin-table-legend
 			:icons="icons"
 			:show-icons="showConsent"
-			:show-external-sync-hint="!schoolInternallyManaged"
+			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
 		<fab-floating
 			v-if="
-				schoolInternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
+				!schoolIsExternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
 			"
 			position="bottom-right"
 			:show-label="true"
@@ -274,8 +274,8 @@ export default {
 	},
 	computed: {
 		...mapGetters("auth", {
-			school: "getSchool",
 			user: "getUser",
+			schoolIsExternallyManaged: "schoolIsExternallyManaged",
 		}),
 		...mapGetters("users", {
 			teachers: "getList",
@@ -292,9 +292,6 @@ export default {
 				if (this.takeOverTableData) return this.searchData;
 				return this.teachers;
 			},
-		},
-		schoolInternallyManaged() {
-			return this.school && !this.school.isExternal;
 		},
 		showConsent() {
 			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
@@ -317,7 +314,7 @@ export default {
 			}
 
 			// filter the delete action if school is external
-			if (!this.schoolInternallyManaged) {
+			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -331,7 +328,7 @@ export default {
 			let editedColumns = this.tableColumns;
 			// filters out edit column if school is external or if user is not an admin
 			if (
-				!this.schoolInternallyManaged ||
+				this.schoolIsExternallyManaged ||
 				!this.user.roles.some((role) => role.name === "administrator")
 			) {
 				editedColumns = this.tableColumns.filter(
