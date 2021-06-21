@@ -85,7 +85,7 @@ export default {
 			if (!this.$v.$invalid) {
 				const { rssFeeds } = this.school;
 				const newRssFeed = { url: this.url, description: this.description };
-				const updatedRssFeedList = [...rssFeeds, newRssFeed];
+				const updatedRssFeedList = rssFeeds ? [...rssFeeds, newRssFeed] : [newRssFeed];
 
 				this.update({
 					id: this.school.id,

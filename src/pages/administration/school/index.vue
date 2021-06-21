@@ -297,46 +297,48 @@
 						</v-form>
 						<v-divider class="mt-13"></v-divider>
 						<h2 class="text-h4">Datenschutzerklärung</h2>
-						<v-list
+						<template
 							v-if="
 								localSchool.dataProtectionPolicies &&
 								localSchool.dataProtectionPolicies.length
 							"
 						>
-							<template
-								v-for="(policy, index) of localSchool.dataProtectionPolicies"
-							>
-								<v-list-item :key="policy.consentDataId" two-line>
-									<v-list-item-icon size="24">
-										<v-icon>{{ iconMdiFileDocumentOutline }}</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title class="text-wrap mb-1"
-											>{{ policy.title }} vom
-											{{ printDate(policy.publishedAt) }}</v-list-item-title
-										>
-										<v-list-item-subtitle class="text-wrap">
-											{{ policy.consentText }}
-										</v-list-item-subtitle>
-									</v-list-item-content>
-									<v-list-item-action
-										v-if="policy.fileData"
-										class="align-self-start"
-									>
-										<a
-											:href="policy.fileData.data"
-											:download="policy.fileData.filename"
-											><v-icon> {{ iconMdiDownload }} </v-icon></a
-										>
-									</v-list-item-action>
-								</v-list-item>
-								<v-divider
-									v-if="index < localSchool.dataProtectionPolicies.length - 1"
-									:key="index"
-								></v-divider>
-							</template>
-						</v-list>
+							<v-expansion-panels accordion flat>
+								<v-expansion-panel
+									v-for="policy of localSchool.dataProtectionPolicies"
+									:key="policy.consentDataId"
+									class="py-2 panel"
+								>
+									<v-expansion-panel-header>
+										{{ policy.title }} vom
+										{{ printDateTimeFromStringUTC(policy.publishedAt) }}
+									</v-expansion-panel-header>
+									<v-expansion-panel-content>
+										<v-row>
+											<v-col>
+												{{ policy.consentText }}
+											</v-col>
+										</v-row>
+										<v-row v-if="policy.fileData">
+											<v-col>
+												<v-btn
+													depressed
+													color="primary"
+													outlined
+													:href="policy.fileData.data"
+													:download="policy.fileData.filename"
+												>
+													<v-icon class="mr-2"> {{ iconMdiDownload }} </v-icon>
+													PDF herunterladen
+												</v-btn>
+											</v-col>
+										</v-row>
+									</v-expansion-panel-content>
+								</v-expansion-panel>
+							</v-expansion-panels>
+						</template>
 						<v-btn
+							class="mt-6"
 							color="primary"
 							depressed
 							@click.stop="dialogs.policyDialogIsOpen = true"
@@ -407,6 +409,7 @@
 						</v-list>
 						<p v-else>Es sind noch keine RSS-Feeds hinterlegt.</p>
 						<v-btn
+							class="mt-2"
 							color="primary"
 							depressed
 							@click.stop="dialogs.rssDialogIsOpen = true"
@@ -417,8 +420,14 @@
 				</v-row>
 			</v-responsive>
 		</v-container>
-		<rss-form-dialog :is-open="dialogs.rssDialogIsOpen" @dialog-closed="dialogs.rssDialogIsOpen = false"></rss-form-dialog>
-		<data-policy-form-dialog :is-open="dialogs.policyDialogIsOpen" @dialog-closed="dialogs.policyDialogIsOpen = false"></data-policy-form-dialog>
+		<rss-form-dialog
+			:is-open="dialogs.rssDialogIsOpen"
+			@dialog-closed="dialogs.rssDialogIsOpen = false"
+		></rss-form-dialog>
+		<data-policy-form-dialog
+			:is-open="dialogs.policyDialogIsOpen"
+			@dialog-closed="dialogs.policyDialogIsOpen = false"
+		></data-policy-form-dialog>
 	</v-container>
 </template>
 
@@ -431,7 +440,7 @@ import {
 	mdiRss,
 	mdiFileDocumentOutline,
 } from "@mdi/js";
-import { printDate } from "@plugins/datetime";
+import { printDate, printDateTimeFromStringUTC } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import RssFormDialog from "@components/organisms/administration/RssFormDialog";
 import DataPolicyFormDialog from "@components/organisms/administration/DataPolicyFormDialog";
@@ -514,7 +523,7 @@ export default {
 		...mapState("systems", {
 			systems: "systems",
 		}),
-		console: () => console, // delete when done
+		console: () => console, // TODO - delete when done
 	},
 	/* watch: {
 		school(updatedSchool) {
@@ -531,17 +540,11 @@ export default {
 			this.localSchool.lernStore = this.lernStoreVisibility;
 		});
 		this.fetchConsentVersions({
-			queryParams: {
-				schoolId: this.school.id,
-				consentTypes: "privacy",
-				$sort: {
-					publishedAt: -1,
-				},
-			},
+			schoolId: this.school.id,
+			consentTypes: "privacy",
 			withFile: true,
 		}).then(() => {
 			this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies;
-			console.log("hi", this.dataProtectionPolicies);
 		});
 		this.fetchFileStorageTotal();
 
@@ -577,6 +580,7 @@ export default {
 				: "error lighten-5";
 		},
 		printDate,
+		printDateTimeFromStringUTC,
 		toBase64,
 		dataUrlToFile,
 		...mapActions("federal-states", ["fetchCurrentFederalState"]),
@@ -643,5 +647,13 @@ export default {
 
 .v-responsive {
 	max-width: var(--size-content-width-max);
+}
+
+.panel {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12); // TODO - find vuetify name for this
+}
+
+.relative {
+	position: relative;
 }
 </style>

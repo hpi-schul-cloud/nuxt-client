@@ -7,16 +7,26 @@ const module = {
 		};
 	},
 	actions: {
-		async fetchConsentVersions({ commit }, params) {
+		// TODO - get file on button click
+		async fetchConsentVersions(
+			{ commit },
+			{ schoolId, consentTypes, withFile }
+		) {
 			commit("setRequestSuccessful", false);
 			try {
 				const response = await this.$axios.$get("/consentVersions", {
-					params: params.queryParams,
+					params: {
+						schoolId,
+						consentTypes,
+						$limit: 100,
+						"$sort[publishedAt]": -1, // -> https://docs.feathersjs.com/api/databases/querying.html#sort
+					},
 				});
+
 				commit("setConsentVersions", response.data);
 				commit("setRequestSuccessful", true);
 
-				if (!params.withFile) {
+				if (!withFile) {
 					commit("setConsentVersions", response.data);
 					commit("setRequestSuccessful", true);
 				} else {
@@ -28,7 +38,7 @@ const module = {
 								);
 								return { ...consentVersion, fileData };
 							} else {
-								return consentVersion
+								return consentVersion;
 							}
 						})
 					);
@@ -41,30 +51,27 @@ const module = {
 				// TODO what is supposed to happen on error?
 			}
 		},
-		async addConsentVersion({ commit }, payload) {
+		async addConsentVersion({ commit, state }, payload) {
 			commit("setRequestSuccessful", false);
-			console.log(payload)
+
 			try {
-				const data = await this.$axios.$post(
-					'/consentVersions',
-					payload
-				);
-				console.log("data", data);
-				//commit("setSchool", data);
+				const data = await this.$axios.$post("/consentVersions", payload);
+
+				commit("setConsentVersions", [...state.consentVersions, data]);
 				commit("setRequestSuccessful", true);
 			} catch (error) {
 				commit("setError", error);
 				commit("setRequestSuccessful", false);
 				// TODO what is supposed to happen on error?
 			}
-		}
+		},
 	},
 	mutations: {
 		setConsentVersions(state, consentVersions) {
 			state.consentVersions = consentVersions;
 		},
-		setRequestSuccessful(state) {
-			state.setRequestSuccessful = true;
+		setRequestSuccessful(state, successful) {
+			state.requestSuccessful = successful;
 		},
 		setError(state, error) {
 			state.error = error;

@@ -72,6 +72,8 @@
 import { mapState, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import { currentDate } from "@plugins/datetime";
+import { toBase64 } from "@utils/fileHelper.ts";
 
 export default {
 	mixins: [validationMixin],
@@ -103,10 +105,11 @@ export default {
 		},
 	},
 	methods: {
+		currentDate,
+		toBase64,
 		...mapActions("consent-versions", ["addConsentVersion"]),
-		submit() {
+		async submit() {
 			this.$v.$touch();
-			console.log("hi");
 
 			if (!this.$v.$invalid) {
 				const newConsentVersion = {
@@ -114,22 +117,21 @@ export default {
 					title: this.title,
 					consentText: this.description,
 					consentTypes: ["privacy"],
-					//consentDataId? post to base64files? get id and save here?
+					publishedAt: currentDate(),
 				};
 
-				console.log(newConsentVersion);
-				this.addConsentVersion(newConsentVersion);
-				/* this.update({
-					id: this.school.id,
-					rssFeeds: updatedRssFeedList,
-				}).then(() => {
+				if (this.file) {
+					newConsentVersion.consentData = await toBase64(this.file);
+				}
+
+				this.addConsentVersion(newConsentVersion).then(() => {
 					if (this.requestSuccessful) {
 						this.$v.$reset();
-						this.isOpen = false;
+						this.$emit("dialog-closed");
 					} else {
 						// TODO - show error InfoMessage
 					}
-				}); */
+				});
 			}
 		},
 		cancel() {
