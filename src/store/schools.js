@@ -11,6 +11,14 @@ const module = {
 	},
 	// school hier fetchen und speichern, über /schools/user.id wie im auth store (rootState)
 	actions: {
+		async fetchSchool({ commit, rootState }) {
+			if (rootState.auth?.user?.schoolId) {
+				const school = await this.$axios.$get(
+					`/schools/${rootState.auth.user.schoolId}`
+				);
+				commit("setSchool", school);
+			}
+		},
 		async fetchStudentVisibility({ commit }) {
 			commit("setRequestSuccessful", false);
 
@@ -74,6 +82,9 @@ const module = {
 		},
 	},
 	mutations: {
+		setSchool(state, updatedSchool) {
+			state.school = updatedSchool;
+		},
 		setStudentVisibility(state, studentVisibility) {
 			state.studentVisibility = studentVisibility;
 		},
@@ -86,14 +97,34 @@ const module = {
 		setFileStorageTotal(state, fileStorageTotal) {
 			state.fileStorageTotal = fileStorageTotal;
 		},
-		setSchool(state, updatedSchool) {
-			state.school = updatedSchool;
-		},
 		setRequestSuccessful(state, successful) {
 			state.requestSuccessful = successful;
 		},
 		setError(state, error) {
 			state.error = error;
+		},
+	},
+	getters: {
+		getSchool(state) {
+			return state.school;
+		},
+		getStudentVisibility(state) {
+			return state.studentVisibility;
+		},
+		getLernStoreVisibility(state) {
+			return state.lernStoreVisibility;
+		},
+		getDataProtectionPolicies(state) {
+			return state.dataProtectionPolicies;
+		},
+		getFileStorageTotal(state) {
+			return state.fileStorageTotal;
+		},
+		getRequestSuccessful(state) {
+			return state.requestSuccessful;
+		},
+		getError(state) {
+			return state.error;
 		},
 	},
 };

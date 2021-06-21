@@ -77,5 +77,16 @@ const module = {
 			state.error = error;
 		},
 	},
+	getters: {
+		getConsentVersions(state) {
+			return state.consentVersions;
+		},
+		getRequestSuccessful(state) {
+			return state.requestSuccessful;
+		},
+		getError(state) {
+			return state.error;
+		},
+	},
 };
 export default module;

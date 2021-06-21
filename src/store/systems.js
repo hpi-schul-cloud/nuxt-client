@@ -45,5 +45,16 @@ const module = {
 			state.error = error;
 		},
 	},
+	getters: {
+		getSystems(state) {
+			return state.systems;
+		},
+		getRequestSuccessful(state) {
+			return state.setRequestSuccessful;
+		},
+		getError(state) {
+			return state.error;
+		},
+	},
 };
 export default module;
