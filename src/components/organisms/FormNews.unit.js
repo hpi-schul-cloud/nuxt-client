@@ -4,6 +4,7 @@ import {
 	createInputDateTime,
 	fromInputDateTime,
 } from "@plugins/datetime";
+import dayjs from "dayjs";
 
 const now = currentDate().set("minute", 0).set("second", 0);
 
@@ -80,7 +81,10 @@ describe("@components/organisms/FormNews", () => {
 		});
 		expect(wrapper.vm.data.date.date).toStrictEqual(validNewsDate.date);
 		expect(wrapper.vm.data.date.time).toStrictEqual(validNewsDate.time);
-		expect(wrapper.vm.publishDate).toStrictEqual(validNews.displayAt);
+
+		const expectedPublishDate = dayjs.tz(validNews.displayAt).utc().format();
+
+		expect(wrapper.vm.publishDate).toStrictEqual(expectedPublishDate);
 	});
 
 	describe("create", () => {

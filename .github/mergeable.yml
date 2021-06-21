@@ -2,13 +2,15 @@ version: 2
 mergeable:
   - when: pull_request.*
     validate:
-      - do: title
-        must_include:
-          regex: "(((SC|VUE|OPS)-[0-9]+|Quickfix) - .*|Bump .* from.* to .*|Hotfix ([0-9]+\\.){2}[0-9]+.*)"
-          message: "The title must follow the schema: '(TICKET-ID|Quickfix) - [description]' or 'Hotfix 0.0.0'."
       - do: label
         must_exclude:
-          regex: "(WIP|is blocked)"
+          regex: "(WIP|is blocked|do-not-merge)"
+      - do: description
+        no_empty:
+          enabled: true
+        must_exclude:
+          regex: "\\[?\\s\\]"
+          message: "All checkboxes from PR description must be checked."
   - when: schedule.repository
     validate:
       - do: stale

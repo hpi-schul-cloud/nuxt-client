@@ -50,6 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
+import { mapGetters } from "vuex";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
@@ -104,6 +105,10 @@ export default Vue.extend({
 		};
 	},
 	computed: {
+		...mapGetters("news", {
+			createdNews: "getList",
+			status: "getStatus",
+		}),
 		publishDate(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
@@ -112,7 +117,7 @@ export default Vue.extend({
 				this.data.date.date,
 				this.data.date.time
 			);
-			return a.toISOString();
+			return a.utc().format();
 		},
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
@@ -168,9 +173,8 @@ export default Vue.extend({
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				[this.data.date.date, this.data.date.time] = createInputDateTime(
-					displayAt
-				);
+				[this.data.date.date, this.data.date.time] =
+					createInputDateTime(displayAt);
 			}
 		},
 		async create() {
@@ -179,7 +183,7 @@ export default Vue.extend({
 				return this.$toast.error(errors[0]);
 			}
 			try {
-				const news = await this.$store.dispatch("news/create", {
+				await this.$store.dispatch("news/create", {
 					title: this.data.title,
 					content: this.data.content,
 					displayAt: this.publishDate,
@@ -188,10 +192,15 @@ export default Vue.extend({
 					targetModel:
 						this.$route.query.targetmodel || this.$route.query.context,
 				});
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.create")
-				);
-				this.$router.push({ name: "news-id", params: { id: news._id } });
+				if (this.status === "completed") {
+					this.$toast.success(
+						this.$ts("components.organisms.FormNews.success.create")
+					);
+					this.$router.push({
+						name: "news-id",
+						params: { id: this.createdNews[0]._id },
+					});
+				}
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
@@ -205,6 +214,7 @@ export default Vue.extend({
 				return this.$toast.error(errors[0]);
 			}
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("news/patch", [
 					this.$route.params.id,
 					{
@@ -247,6 +257,7 @@ export default Vue.extend({
 		},
 		async confirmRemoveHandler() {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("news/remove", this.$route.params.id);
 				this.$toast.success(
 					this.$ts("components.organisms.FormNews.success.remove")

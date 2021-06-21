@@ -8,6 +8,13 @@ export const actions = {
 			// TODO what is supposed to happen on error?
 		}
 	},
+	init(context) {
+		context.commit("init", {
+			MATRIX_MESSENGER__EMBED_URI: this.$config.MATRIX_MESSENGER__EMBED_URI,
+			FEATURE_MATRIX_MESSENGER_ENABLED:
+				this.$config.FEATURE_MATRIX_MESSENGER_ENABLED,
+		});
+	},
 };
 
 export const getters = {
@@ -23,6 +30,21 @@ export const getters = {
 		}
 		return null;
 	},
+	getMatrixFeatureFlg(state) {
+		return state.matrixFeatureFlag;
+	},
+	getMatrixAssetDomain(state) {
+		return state.matrixAssetDomain;
+	},
+	getSession(state) {
+		return state.session;
+	},
+	getSessionFromLocalStorage(state) {
+		return state.sessionFromLocalStorage;
+	},
+	getServerName(state) {
+		return state.serverName;
+	},
 };
 
 export const mutations = {
@@ -34,12 +56,17 @@ export const mutations = {
 		state.session = null;
 		state.error = error;
 	},
+	init(
+		state,
+		{ MATRIX_MESSENGER__EMBED_URI, FEATURE_MATRIX_MESSENGER_ENABLED }
+	) {
+		state.matrixAssetDomain = MATRIX_MESSENGER__EMBED_URI;
+		state.matrixFeatureFlag = FEATURE_MATRIX_MESSENGER_ENABLED;
+	},
 };
 
 export const state = () => {
 	return {
-		matrixFeatureFlag: process.env.FEATURE_MATRIX_MESSENGER_ENABLED === "true",
-		matrixAssetDomain: process.env.MATRIX_MESSENGER__EMBED_URI,
 		session: null,
 		// session is available in local storage, the messenger will access it itself
 		sessionFromLocalStorage:

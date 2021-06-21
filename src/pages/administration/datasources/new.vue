@@ -34,6 +34,7 @@
 <script>
 import DatasourceCard from "@components/molecules/DatasourceCard";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -85,6 +86,11 @@ export default {
 			],
 		};
 	},
+	computed: {
+		...mapGetters("datasources", {
+			datasources: "getList",
+		}),
+	},
 	created() {
 		this.datasourceProvider.map((source) => {
 			this.getAddedSourcesCount(source);
@@ -93,7 +99,7 @@ export default {
 	methods: {
 		async getAddedSourcesCount(source) {
 			try {
-				source.count = await this.$store.dispatch("datasources/find", {
+				await this.$store.dispatch("datasources/find", {
 					query: {
 						$limit: 0,
 						config: {
@@ -101,6 +107,7 @@ export default {
 						},
 					},
 				});
+				source.count = this.datasources;
 			} catch (error) {
 				console.error(err);
 			}
@@ -113,7 +120,9 @@ export default {
 	},
 	head() {
 		return {
-			title: this.$t("pages.administration.datasources.new.title"),
+			title: `${this.$t("pages.administration.datasources.new.title")} - ${
+				this.$theme.short_name
+			}`,
 		};
 	},
 };

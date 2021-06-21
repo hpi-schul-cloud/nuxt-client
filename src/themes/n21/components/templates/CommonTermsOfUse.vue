@@ -86,9 +86,7 @@
 			<br /><br />
 			Die Nutzungsordnung der Niedersächsischen Bildungscloud kann unter
 			folgendem Link eingesehen werden:
-			<a
-				:href="defaultDocuments.specificFiles().termsOfUseExemplary"
-				target="_blank"
+			<a :href="termsOfUseLink" target="_blank"
 				>Nutzungsordnung der Niedersächsischen Bildungscloud</a
 			>.
 		</div>
@@ -100,23 +98,17 @@
 			<br /><br />
 			Eine Muster Datenschutzerklärung für unsere Schulen können Sie unter
 			folgendem Link einsehen:
-			<a
-				:href="defaultDocuments.specificFiles().privacyExemplary"
-				target="_blank"
+			<a :href="privacyLink" target="_blank"
 				>Datenschutzerklärung Muster Schule</a
 			>. <br /><br />
 			Die Nutzungsordnung der Niedersächsischen Bildungscloud kann unter
-			folgendem Link eingesehen werden:<a
-				:href="defaultDocuments.specificFiles().termsOfUseExemplary"
-				target="_blank"
+			folgendem Link eingesehen werden:<a :href="termsOfUseLink" target="_blank"
 				>Nutzungsordnung der Niedersächsischen Bildungscloud</a
 			>.
 		</div>
 	</div>
 </template>
 <script>
-import defaultDocuments from "@utils/documents.js";
-
 export default {
 	props: {
 		showSchoolTerms: {
@@ -126,7 +118,10 @@ export default {
 	},
 	data() {
 		return {
-			defaultDocuments,
+			privacyLink:
+				this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
+			termsOfUseLink:
+				this.$store.getters["filePaths/getSpecificFiles"].termsOfUseExemplary,
 		};
 	},
 	methods: {

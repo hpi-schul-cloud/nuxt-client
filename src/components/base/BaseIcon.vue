@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import "font-awesome/css/font-awesome.css";
+import "font-awesome/css/font-awesome.min.css";
 
 export default {
 	inheritAttrs: false,

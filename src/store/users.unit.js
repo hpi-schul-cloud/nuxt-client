@@ -2,6 +2,180 @@ import { actions, mutations } from "./users";
 
 describe("store/users", () => {
 	describe("actions", () => {
+		describe("findStudents", () => {
+			it("calls backend and sets state correctly", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: jest.fn(),
+				};
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+						return { data: "dummy response" };
+					},
+				};
+
+				await actions.findStudents(ctxMock);
+				expect(ctxMock.commit.mock.calls).toHaveLength(4);
+				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
+					"updatePaginationForQuery"
+				);
+				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
+				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
+			});
+		});
+		describe("findTeachers", () => {
+			it("calls backend and sets state correctly", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: jest.fn(),
+				};
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+						return { data: "dummy response" };
+					},
+				};
+
+				await actions.findTeachers(ctxMock);
+				expect(ctxMock.commit.mock.calls).toHaveLength(4);
+				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
+					"updatePaginationForQuery"
+				);
+				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
+				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
+			});
+		});
+		describe("createTeacher", () => {
+			it("should call backend", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: () => {},
+				};
+				const teacherDataMock = {
+					firstName: "Marla",
+					lastName: "Mathe",
+				};
+
+				actions.$axios = {
+					$post: async (url, params) => {
+						receivedRequests.push({ url, params });
+					},
+				};
+
+				await actions.createTeacher(ctxMock, teacherDataMock);
+				expect(receivedRequests[0].url).toStrictEqual("/users/admin/teachers");
+				expect(receivedRequests[0].params).toStrictEqual(teacherDataMock);
+			});
+		});
+		describe("sendRegistrationLink", () => {
+			it("should call backend", async () => {
+				const receivedRequests = [];
+				const ctxMock = {};
+				const payloadMock = {
+					someProperty: "some value",
+				};
+
+				actions.$axios = {
+					$post: async (url, params) => {
+						receivedRequests.push({ url, params });
+					},
+				};
+
+				await actions.sendRegistrationLink(ctxMock, payloadMock);
+				expect(receivedRequests[0].url).toStrictEqual(
+					"/users/mail/registrationLink"
+				);
+				expect(receivedRequests[0].params).toStrictEqual(payloadMock);
+			});
+		});
+		describe("getQrRegistrationLinks", () => {
+			it("should call backend", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: () => {},
+				};
+				const payloadMock = {
+					someProperty: "some value",
+				};
+
+				actions.$axios = {
+					$post: async (url, params) => {
+						receivedRequests.push({ url, params });
+					},
+				};
+
+				await actions.getQrRegistrationLinks(ctxMock, payloadMock);
+				expect(receivedRequests[0].url).toStrictEqual(
+					"/users/qrRegistrationLink"
+				);
+				expect(receivedRequests[0].params).toStrictEqual(payloadMock);
+			});
+		});
+		describe("createStudent", () => {
+			it("should call backend", async () => {
+				const receivedRequests = [];
+				const spyCommit = jest.fn();
+				const ctxMock = { commit: spyCommit };
+				const studentData = {
+					firstName: "Marla",
+					lastName: "Mathe",
+				};
+				const payloadMock = {
+					...studentData,
+					successMessage: "display this if post was successful",
+				};
+
+				actions.$axios = {
+					$post: async (url, params) => {
+						receivedRequests.push({ url, params });
+					},
+				};
+				actions.$toast = {
+					success: jest.fn(),
+				};
+				actions.$router = {
+					push: jest.fn(),
+				};
+
+				await actions.createStudent(ctxMock, payloadMock);
+				expect(receivedRequests[0].url).toStrictEqual("/users/admin/students");
+				expect(receivedRequests[0].params).toStrictEqual(studentData);
+			});
+
+			it("should handle backend error", async () => {
+				const spyCommit = jest.fn();
+				const ctxMock = { commit: spyCommit };
+				const studentData = {
+					firstName: "Marla",
+					lastName: "Mathe",
+				};
+				const payloadMock = {
+					...studentData,
+					successMessage: "display this if post was successful",
+				};
+
+				const errorMock = { response: { data: "dummy error message" } };
+
+				actions.$axios = {
+					$post: async () => {
+						throw { response: { data: "dummy error message" } };
+					},
+				};
+
+				await actions.createStudent(ctxMock, payloadMock);
+				expect(spyCommit.mock.calls[1][0]).toStrictEqual("setBusinessError");
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual(
+					errorMock.response.data
+				);
+			});
+		});
 		describe("deleteUsers", () => {
 			it("triggers commit", async () => {
 				const receivedRequests = [];

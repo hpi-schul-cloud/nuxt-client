@@ -273,7 +273,6 @@
 
 <script>
 // file deepcode ignore ArrayMethodOnNonArray
-import defaultDocuments from "@utils/documents.js";
 import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
@@ -356,9 +355,12 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent: defaultDocuments.specificFiles().analogConsent,
-				termsOfUse: defaultDocuments.specificFiles().termsOfUseSchool,
-				dataProtection: defaultDocuments.specificFiles().privacyExemplary,
+				analogConsent:
+					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
+				termsOfUse:
+					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
+				dataProtection:
+					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
 			},
 			progressSteps: [
 				{
@@ -391,23 +393,23 @@ export default {
 	},
 	computed: {
 		...mapGetters("bulkConsent", {
-			selectedStudents: "selectedStudents",
-			selectedStudentsData: "selectedStudentsData",
-			registeredStudents: "registeredStudents",
-			registerError: "registerError",
+			selectedStudents: "getSelectedStudents",
+			selectedStudentsData: "getSelectedStudentsData",
+			registeredStudents: "getRegisteredStudents",
+			registerError: "getRegisterError",
 		}),
 		...mapGetters("users", {
-			students: "list",
+			students: "getList",
 		}),
 		filteredTableData: {
 			get() {
-				const result = this.$store.state.bulkConsent.selectedStudentsData;
+				const result =
+					this.$store.getters["bulkConsent/getSelectedStudentsData"];
+
 				if (result.length > 0) {
 					return JSON.parse(
 						JSON.stringify(
-							this.$store.state.bulkConsent.selectedStudentsData.filter(
-								(student) => student.consentStatus !== "ok"
-							)
+							result.filter((student) => student.consentStatus !== "ok")
 						)
 					);
 				}
@@ -438,10 +440,9 @@ export default {
 				$limit: this.selectedStudents.length,
 			};
 
-			await this.$store.dispatch("users/handleUsers", {
+			// TODO wrong use of store (not so bad)
+			await this.$store.dispatch("users/findStudents", {
 				query,
-				action: "find",
-				userType: "students",
 			});
 
 			if (this.students.length) {
@@ -547,8 +548,9 @@ export default {
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById("tableStudentsForPrint")
-				.innerHTML;
+			const prtHtml = document.getElementById(
+				"tableStudentsForPrint"
+			).innerHTML;
 			let stylesHtml = "";
 
 			for (const node of [
@@ -622,6 +624,13 @@ export default {
 			}
 		},
 	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.students.consent.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
+	},
 };
 </script>
 
@@ -647,21 +656,21 @@ export default {
 	color: var(--color-secondary);
 	border: none;
 }
-/deep/ .link {
+::v-deep .link {
 	color: var(--color-secondary);
 	text-decoration: none;
 }
-/deep/ .table {
+::v-deep .table {
 	margin-top: var(--space-lg);
-	.row {
+	.table__row {
 		height: 3rem;
 	}
 }
-/deep/ .toolbelt {
+::v-deep .toolbelt {
 	display: none;
 }
 
-/deep/ .calendar-input {
+::v-deep .calendar-input {
 	max-width: 5em;
 	margin-bottom: 0;
 	.info-line {
@@ -674,7 +683,7 @@ export default {
 	}
 }
 
-/deep/ .base-input {
+::v-deep .base-input {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);

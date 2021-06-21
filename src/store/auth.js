@@ -46,7 +46,7 @@ export const actions = {
 		}
 		commit("clearAuthData");
 	},
-	async populateUser({ commit }) {
+	async populateUser({ commit, rootState }) {
 		const user = await this.$axios.$get("/me");
 
 		const roles = await this.$axios.$get(`/roles/user/${user.id}`);
@@ -65,10 +65,10 @@ export const actions = {
 		}
 
 		//TODO Remove once added to User permissions SC-2401
-		if (process.env["FEATURE_EXTENSIONS_ENABLED"] === "true") {
+		if (rootState["env-config"].env.FEATURE_EXTENSIONS_ENABLED) {
 			commit("addUserPermission", "ADDONS_ENABLED");
 		}
-		if (process.env["FEATURE_TEAMS_ENABLED"] === "true") {
+		if (rootState["env-config"].env.FEATURE_TEAMS_ENABLED) {
 			commit("addUserPermission", "TEAMS_ENABLED");
 		}
 		return user;
@@ -123,8 +123,26 @@ export const mutations = {
 };
 
 export const getters = {
-	getLocale(state) {
-		return state.locale;
+	getLocale(state, _getters, rootState) {
+		if (state.locale) {
+			return state.locale;
+		}
+		if (state.school && state.school.language) {
+			return state.school.language;
+		}
+		if (rootState["env-config"].env.I18N__DEFAULT_LANGUAGE) {
+			return rootState["env-config"].env.I18N__DEFAULT_LANGUAGE;
+		}
+		return "de";
+	},
+	getSchool(state) {
+		return state.school;
+	},
+	getUser(state) {
+		return state.user;
+	},
+	getAccessToken(state) {
+		return state.accessToken;
 	},
 };
 

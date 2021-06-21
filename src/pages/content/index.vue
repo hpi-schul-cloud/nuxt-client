@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import ContentSearchbar from "@components/molecules/ContentSearchbar";
 import ContentCard from "@components/organisms/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
@@ -107,13 +107,9 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("content", {
-			resources: (state) => {
-				return state.resources;
-			},
-			loading: (state) => {
-				return state.loading;
-			},
+		...mapGetters("content", {
+			resources: "getResources",
+			loading: "getLoading",
 		}),
 		query() {
 			const query = {
@@ -183,11 +179,13 @@ export default {
 		async addContent() {
 			if (this.query.$skip < this.resources.total) {
 				this.query.$skip += this.query.$limit;
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("content/addResources", this.query);
 			}
 		},
 		async searchContent() {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("content/getResources", this.query);
 			} catch (error) {
 				this.$toast.error(

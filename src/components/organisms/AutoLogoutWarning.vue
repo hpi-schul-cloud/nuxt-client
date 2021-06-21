@@ -1,7 +1,7 @@
 <template>
 	<base-modal :active="active" @onBackdropClick="extendSession">
 		<template v-slot:body>
-			<div class="container">
+			<div class="wrapper">
 				<img
 					:src="getImage"
 					class="sloth"
@@ -24,7 +24,7 @@
 
 <script>
 import CenterSlot from "@components/atoms/CenterSlot";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 const toast = {
 	error401: -1,
@@ -61,7 +61,11 @@ export default {
 				return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth_error.svg";
 			return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth.svg";
 		},
-		...mapState("autoLogout", ["active", "error", "remainingTimeInSeconds"]),
+		...mapGetters("autoLogout", {
+			active: "getActive",
+			error: "getError",
+			remainingTimeInSeconds: "getRemainingTimeInSeconds",
+		}),
 	},
 	created(ctx) {
 		this.$store.dispatch("autoLogout/init", this.$eventBus, { root: true });
@@ -110,7 +114,7 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.container {
+.wrapper {
 	width: 100%;
 	height: 100%;
 	text-align: center;

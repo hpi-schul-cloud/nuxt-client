@@ -89,7 +89,22 @@ addDecorator(() => ({
 // add i18n support
 import { i18n } from "@plugins/i18n";
 addDecorator(() => ({
-	i18n: i18n(),
+	i18n: i18n({
+		getters: {
+			"auth/getLocale": "de",
+		},
+	}),
+	template: "<story/>",
+}));
+
+// add vuetify support
+import Vuetify from "vuetify"; // loads all components
+import "vuetify/dist/vuetify.min.css"; // all the css for components
+import options from "../../src/themes/default/vuetify.options.js";
+
+Vue.use(Vuetify);
+addDecorator(() => ({
+	vuetify: new Vuetify(options),
 	template: "<story/>",
 }));
 

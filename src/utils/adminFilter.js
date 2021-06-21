@@ -3,62 +3,41 @@ import InputDefault from "@components/organisms/DataFilter/inputs/Default";
 
 import { printDate, fromInputDateTime } from "@plugins/datetime";
 
-const getFilterFirstname = (ctx) => ({
-	title: ctx.$t("common.labels.firstName"),
-	chipTemplate: `${ctx.$t("common.labels.firstName")} = %1`,
-	dataTestid: "filter_firstname",
-	filter: [
-		{
-			attribute: "firstName",
-			operator: "=",
-			label: ctx.$t("common.labels.complete.firstName"),
-			input: InputDefault,
-			attributes: {
-				type: "text",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.complete.name"),
-			},
-		},
-	],
-});
-const getFilterLastname = (ctx) => ({
-	title: ctx.$t("common.labels.lastName"),
-	chipTemplate: `${ctx.$t("common.labels.lastName")} = %1`,
-	dataTestid: "filter_lastname",
-	filter: [
-		{
-			attribute: "lastName",
-			operator: "=",
-			label: ctx.$t("common.labels.complete.lastName"),
-			input: InputDefault,
-			attributes: {
-				type: "text",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.complete.lastname"),
-			},
-		},
-	],
-});
+const defaultFilterFromDate = "1900-01-01";
+const defaultFilterToDate = "2099-12-31";
 
 const getFilterDateCreatedFromTo = (ctx) => ({
 	title: ctx.$t("utils.adminFilter.date.title"),
 	chipTemplate: (filter) => {
 		return `${ctx.$t("utils.adminFilter.date.created")} ${printDate(
-			filter[0]
-		)} ${ctx.$t("common.words.and")} ${printDate(filter[1])} `;
+			filter[0] || defaultFilterFromDate
+		)} ${ctx.$t("common.words.and")} ${printDate(
+			filter[1] || defaultFilterToDate
+		)} `;
 	},
 	dataTestid: "filter_creationDate",
 	parser: {
 		generator: (filterGroupConfig, values) => {
-			return {
-				createdAt: {
-					$gte: fromInputDateTime(values[filterGroupConfig.filter[0].id])
-						.utc()
-						.toISOString(),
-					$lte: fromInputDateTime(values[filterGroupConfig.filter[1].id])
-						.add(1, "day")
-						.utc()
-						.toISOString(),
-				},
-			};
+			try {
+				return {
+					createdAt: {
+						$gte: fromInputDateTime(
+							values[filterGroupConfig.filter[0].id] || defaultFilterFromDate
+						)
+							.utc()
+							.format(),
+						$lte: fromInputDateTime(
+							values[filterGroupConfig.filter[1].id] || defaultFilterToDate
+						)
+							.endOf("day")
+							.utc()
+							.format(),
+					},
+				};
+			} catch (error) {
+				console.warn(error);
+				return;
+			}
 		},
 		parser: (filterGroupConfig, query) => {
 			return {
@@ -74,7 +53,7 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 			label: ctx.$t("utils.adminFilter.date.label.from"),
 			attributes: {
 				type: "date",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.date.from"),
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
 			},
 		},
 		{
@@ -83,19 +62,20 @@ const getFilterDateCreatedFromTo = (ctx) => ({
 			label: ctx.$t("utils.adminFilter.date.label.until"),
 			attributes: {
 				type: "date",
-				placeholder: ctx.$t("utils.adminFilter.placeholder.date.until"),
+				placeholder: ctx.$t("format.dateUTC"), //placeholder for browsers which do not support input type=date
 			},
 		},
 	],
 });
 
 const getClassesNames = async (ctx, arr) => {
-	const classes = await ctx.$store.dispatch("classes/find", {
+	await ctx.$store.dispatch("classes/find", {
 		query: {
 			$limit: 1000,
 		},
 	});
-	classes.data
+	const classes = ctx.$store.state["classes"].list;
+	classes
 		.reduce((acc, kl) => [...new Set(acc.concat(kl.displayName))], [])
 		.forEach((cl) => {
 			arr.push({
@@ -166,8 +146,6 @@ export function studentFilter(ctx) {
 				},
 			],
 		},
-		getFilterFirstname(ctx),
-		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
 	];
 }
@@ -223,8 +201,6 @@ export function teacherFilter(ctx) {
 				},
 			],
 		},
-		getFilterFirstname(ctx),
-		getFilterLastname(ctx),
 		getFilterDateCreatedFromTo(ctx),
 	];
 }

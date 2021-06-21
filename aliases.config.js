@@ -26,7 +26,7 @@ const aliases = {
 	"@static": `src/themes/${themeName}/static`,
 	"@theme": `src/themes/${themeName}`,
 	"@styles": `src/themes/${themeName}/styles/index.scss`,
-	"@styles-default": `src/themes/default/styles`,
+	"@styles-base": `src/themes/base/styles`,
 	"@variables": `src/themes/${themeName}/styles/variables.scss`,
 };
 

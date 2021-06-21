@@ -280,6 +280,7 @@ export default {
 				margin: 0;
 				line-height: 100%;
 				color: var(--color-text);
+				cursor: text;
 				background: transparent;
 				border: none;
 				&:focus {

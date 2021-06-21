@@ -14,12 +14,15 @@ const DEFAULT_TIMEZONE = "Europe/Berlin";
 
 let currentTimezone;
 let schoolTimezone;
+let instanceTimezone;
 let userTimezone;
 let userHasSchoolTimezone = true;
 
 export const DATETIME_FORMAT = {
 	date: "DD.MM.YYYY",
+	dateYY: "DD.MM.YY",
 	dateTime: "DD.MM.YYYY HH:mm",
+	dateTimeYY: "DD.MM.YY HH:mm",
 	dateLong: "dddd, DD. MMMM YYYY",
 	time: "HH:mm",
 	inputDate: "YYYY-MM-DD", // Don't change this! Format defined by HTML standards
@@ -55,7 +58,9 @@ const getUserTimezone = (app) => app.$cookies.get("USER_TIMEZONE");
 export const setDefaultFormats = (app) => {
 	if (app && app.i18n) {
 		DATETIME_FORMAT.date = app.i18n.t("format.date");
+		DATETIME_FORMAT.dateYY = app.i18n.t("format.dateYY");
 		DATETIME_FORMAT.dateTime = app.i18n.t("format.dateTime");
+		DATETIME_FORMAT.dateTimeYY = app.i18n.t("format.dateTimeYY");
 		DATETIME_FORMAT.dateLong = app.i18n.t("format.dateLong");
 		DATETIME_FORMAT.time = app.i18n.t("format.time");
 	}
@@ -76,8 +81,9 @@ export const setDefaultTimezone = (defaultTimezone) => {
  */
 const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.auth?.school?.timezone;
+	instanceTimezone = store?.getters["env-config/getDefaultTimezone"];
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
-	currentTimezone = schoolTimezone || DEFAULT_TIMEZONE;
+	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
 
 	setDefaultTimezone(currentTimezone);
@@ -94,7 +100,7 @@ const initDefaultTimezone = (app, store) => {
  * @return {dayjs} Date object based on current timezone
  */
 export const fromUTC = (date) => {
-	return dayjs(date).tz();
+	return dayjs.tz(date, "UTC");
 };
 
 /**
@@ -105,7 +111,7 @@ export const fromUTC = (date) => {
  */
 export const printDateFromDeUTC = (date) => {
 	if (date) {
-		const result = dayjs(date, "DD.MM.YYYY").tz();
+		const result = dayjs.tz(date, "DD.MM.YYYY", "UTC");
 		return result.format(DATETIME_FORMAT.date);
 	}
 	return null;
@@ -119,7 +125,7 @@ export const printDateFromDeUTC = (date) => {
  */
 export const inputDateFromDeUTC = (date) => {
 	if (date) {
-		const result = dayjs(date, "DD.MM.YYYY").tz();
+		const result = dayjs.tz(date, "DD.MM.YYYY", "UTC");
 		return result.format(DATETIME_FORMAT.inputDate);
 	}
 	return null;
@@ -149,6 +155,15 @@ export const printDate = (date) => {
 
 /**
  * Returns formated date string based on a given dayjs object
+ * @param {String} Date string based on UTC (unformatted)
+ * @return {String} Date string based on current timezone using locale date formating
+ */
+export const printDateFromStringUTC = (date) => {
+	return dayjs(date).tz().format(DATETIME_FORMAT.dateYY);
+};
+
+/**
+ * Returns formated date string based on a given dayjs object
  * @param {datejs} date
  * @return {String} Date string based on current timezone using locale date formating
  */
@@ -158,7 +173,16 @@ export const printDateTime = (date) => {
 
 /**
  * Returns formated date string based on a given dayjs object
- * @param {datejs} date
+ * @param {String} Date string based on UTC (unformatted)
+ * @return {String} Date string based on current timezone using locale date formating
+ */
+export const printDateTimeFromStringUTC = (date) => {
+	return dayjs(date).tz().format(DATETIME_FORMAT.dateTimeYY);
+};
+
+/**
+ * Returns formated date string based on a given dayjs object
+ * @param {String} date
  * @return {String} Date string based on current timezone using locale date formating slashed
  */
 export const printDateFromDayJs = (date) => {
@@ -205,12 +229,27 @@ export const fromNow = (date) => {
 };
 
 /**
+ * Returns future date difference to current local time
+ * @param {String} date
+ * @param {String} unit
+ * @return {Number} Future date difference based on the unit and current timezone
+ */
+export const fromNowToFuture = (date, unit) => {
+	const input = dayjs.tz(date, "UTC");
+	const today = currentDate();
+	if (today.isBefore(input)) {
+		const diff = input.diff(today, unit);
+		return diff;
+	} else return null;
+};
+
+/**
  * Returns array of date and time for usage in inputs
  * @param {String} date UTC date string
  * @return {Array} Array of date and time for usage in inputs
  */
 export const createInputDateTime = (date) => {
-	const resultDate = dayjs(date).tz();
+	const resultDate = dayjs.tz(date, "UTC");
 	return [
 		resultDate.format(DATETIME_FORMAT.inputDate),
 		resultDate.format(DATETIME_FORMAT.inputTime),

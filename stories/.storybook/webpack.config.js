@@ -13,6 +13,21 @@ module.exports = ({ config }) => {
 			include: path.resolve(__dirname, "../../"),
 		},
 		{
+			test: /\.sass$/,
+			loaders: [
+				"style-loader",
+				"css-loader",
+				"postcss-loader",
+				{
+					loader: "sass-loader",
+					options: {
+						additionalData: "@import '@styles-base/vuetify-custom.scss'",
+					},
+				},
+			],
+			include: path.resolve(__dirname, "../../"),
+		},
+		{
 			test: /\.(png|jpg|gif)$/,
 			use: [
 				{

@@ -16,7 +16,7 @@
 			<base-link
 				class="link-style"
 				to="/"
-				href="https://docs.schul-cloud.org/x/PgBVAw"
+				href="https://docs.hpi-schul-cloud.org/x/PgBVAw"
 				target="_blank"
 				:no-styles="true"
 				traget="_blank"
@@ -76,6 +76,7 @@
 				design="secondary"
 				class="ml--sm"
 				data-testid="ldapVerifyButton"
+				:disabled="status === 'pending'"
 				@click="validateHandler"
 				>{{
 					this.$t("pages.administration.ldap.index.buttons.verify")
@@ -86,7 +87,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import RolesSection from "@components/organisms/Ldap/LdapRolesSection.vue";
 import ConnectionSection from "@components/organisms/Ldap/LdapConnectionSection.vue";
@@ -133,10 +134,11 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("ldap-config", {
-			data: "data",
-			verified: "verified",
-			temp: "temp",
+		...mapGetters("ldap-config", {
+			data: "getData",
+			verified: "getVerified",
+			temp: "getTemp",
+			status: "getStatus",
 		}),
 		isInvalid() {
 			if (
@@ -160,32 +162,32 @@ export default {
 		if (Object.keys(this.temp).length) {
 			this.systemData = { ...this.temp };
 		} else if (id) {
+			// TODO wrong use of store (not so bad)
 			await this.$store.dispatch("ldap-config/getData", id);
 			this.systemData = { ...this.data };
 		}
 	},
 	methods: {
 		validateHandler() {
-			if (this.$options.debounce) {
-				clearInterval(this.$options.debounce);
-			}
 			this.triggerValidation = !this.triggerValidation;
 			this.validationError = "";
 
 			const systemId = this.$route.query.id;
 
-			this.$options.debounce = setInterval(async () => {
+			this.$nextTick(async () => {
 				if (!this.isInvalid) {
 					if (systemId) {
 						const systemData = {
 							...this.systemData,
 							searchUserPassword: undefined,
 						};
+						// TODO wrong use of store (not so bad)
 						await this.$store.dispatch("ldap-config/verifyExisting", {
 							systemData,
 							systemId,
 						});
 					} else {
+						// TODO wrong use of store (not so bad)
 						await this.$store.dispatch(
 							"ldap-config/verifyData",
 							this.systemData
@@ -193,7 +195,6 @@ export default {
 					}
 
 					if (!this.verified.ok) {
-						clearInterval(this.$options.debounce);
 						return;
 					} else {
 						this.$toast.success(
@@ -208,14 +209,12 @@ export default {
 								path: "/administration/ldap/activate",
 							});
 						}
-						clearInterval(this.$options.debounce);
 						return;
 					}
 				}
 
 				this.validationError = this.$t("common.validation.invalid");
-				clearInterval(this.$options.debounce);
-			}, 500);
+			});
 		},
 		updateValidationData(v, section) {
 			this.isInvalidData[section] = v;
@@ -235,6 +234,13 @@ export default {
 				participantAttribute: undefined,
 			};
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.ldap.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>
@@ -267,7 +273,7 @@ export default {
 	margin: var(--space-xl) 0 var(--space-xl-4) 0;
 
 	@include breakpoint(tablet) {
-		margin: var(--space-xl-2);
+		margin: var(--space-xl-2) var(--space-xl-4);
 	}
 }
 .errors-container {

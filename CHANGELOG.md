@@ -8,24 +8,136 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
+- SC-9093 - Load default language and timezone from server
+
+## [26.4.2] - 2021-06-16
+
+### Changed
+
+- rename permission TASK_DASHBOARD_VIEW_V3
+
+## 26.4.1
+
+### Changed
+
+- SC-9144 - fixed build with env SC_THEME
+
+## 26.4.0
+
+### Removed
+
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
+
+### Added
+
+- SC-9004 - Sync env variables between backend and frontend
+- SC-9023 - Add open homework overview
+
+### Changed
+
+- SC-9004 - Change ci build
+
+## 26.2.1
+
+### Changed
+
+- SC-9114 - project naming
+
+## 26.2.0
+
 ### Added
 
 - SC-8250 - connect UI for bulk delete
 - SC-8164 - apply deletion concept to the deletion of students and teachers
 - SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
+- SC-9004 - Sync env variables between backend and frontend
+- OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
+- SC-9090 - implemented a loading state in the service-template
 
 ### Changed
 
+- QF/Pull Request Workflow - adds checkbox for manual test, more checks, splits tests
+- SC-9065 - integrates styles repository into nuxt client
 - SC-7944 - changes ids for Lern-Store content and adds a link back to collection
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
+- SC-9004 - Change ci build
+- SC-9077 - refactored store actions returning data
+- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
+
+### Fixed
+
+- Fixed further conflicting screenshots
+
+## 26.1.2
+
+### Fixed
+
+- SC-9063 - Removed "unsafe-inline" from script-src in CSP
+
+## 26.1.1
+
+### Fixed
+
+- Fixed conflicting screenshots
+
+## 26.1.0 - 2021-04-27
+
+### Added
+
+- SC-8916 - set page titles to some administration pages
+- SC-8681 - added ADMIN_TABLES_DISPLAY_CONSENT_COLUMN environment variable to display/hide the NAT consent column and the legend
+
+### Fixed
+
+- SC-8518 - fixed layout issues of checkbox
+- SC-8881 - fixed double roles user (admin, teacher) not being able to edit other teachers
+- SC-8519 - Admin Table Bugfix - Set current date for filter, without input; Error handling parsing dates
+- SC-8878 - Fixing invalid date on filter chips, setting default filter start and end day to 1900-01-01 and 2099-12-31
+- SC-8910 - fixed delete action being available when school is external
+
+### Removed
+
+- SC-8708 - removed firstname and lastname filters in NAT
+
+## 26.0.6 - 2021-04-06
+
+### Changed
+
+- SC-8837 - activate ldap config pages again
+
+## 26.0.5 - 2021-04-01
+
+### Fixed
+
+- SC-8837 - fix datetime timezone issues
+
+## 26.0.4 - 2021-03-24
+
+### Changed
+
+- SC-8822 - add availability to phone number in imprint
+
+## 26.0.3 - 2021-03-24
+
+### Changed
+
+- SC-8822 - change phone number in imprint
+
+## 26.0.1 - 2021-03-22
+
+### Added
+
+- SC-8156 - introduce Spanish
 
 ## 26.0.0
 
 ### Fixed
 
+- SC-8554 - fixed the QR code generation with double role
 - SC-8719 - fixed pagination not setting currentPage to 1
 
 ### Added
@@ -38,7 +150,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8702 - disabled the select all button in NAT
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 
-## 25.6.0 - 09-02-21
+## 25.6.1
+
+### Fixed
+
+- SC-8576 - fixed the several requests issue in the LDAP config
+
+## 25.6.0 - 2021-02-21
 
 ### Added
 

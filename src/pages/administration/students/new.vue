@@ -73,7 +73,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("users", {
-			businessError: "businessError",
+			businessError: "getBusinessError",
 		}),
 	},
 	created() {
@@ -92,6 +92,13 @@ export default {
 				successMessage: this.$t("pages.administration.students.new.success"),
 			});
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.students.new.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>

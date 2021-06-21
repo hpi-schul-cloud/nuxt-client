@@ -18,7 +18,11 @@
 					v-for="route in routes"
 					:key="JSON.stringify(route.to) || route.href"
 				>
-					<li class="list-item" :class="{ active: route.active }">
+					<li
+						class="list-item"
+						:class="{ active: route.active }"
+						:data-testId="route.testId"
+					>
 						<base-link
 							class="list-content"
 							:to="route.to"
@@ -43,7 +47,7 @@
 							:key="JSON.stringify(child.to) || child.href"
 							:class="{ active: $route.path.includes(child.href) }"
 							class="list-item list-sub-item"
-							:data-testId="child.title"
+							:data-testId="child.testId"
 						>
 							<base-link
 								class="list-content"
@@ -210,26 +214,23 @@ export default {
 					}
 				}
 
-				--sidebar-item-padding: 20px;
-				--sidebar-font-size: 16px;
-
 				.list-content {
 					display: flex;
 					align-items: center;
 					height: 100%;
-					padding: 0 var(--sidebar-item-padding) 5px;
-					font-size: var(--sidebar-font-size);
+					padding: 0 20px;
+					font-size: 16px;
 					line-height: 100%;
 					color: var(--color-sidebar-menu-item);
 					border-bottom: none;
 
 					.icon {
 						width: 25px;
+						margin-right: 20px;
 						font-size: 20px;
 					}
 
 					.title {
-						padding: 0 var(--sidebar-item-padding);
 						text-transform: uppercase;
 
 						@include breakpoint(tablet) {

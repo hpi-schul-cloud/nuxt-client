@@ -116,6 +116,7 @@
 			<base-button
 				design="secondary"
 				data-testid="ldapSubmitButton"
+				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
 				>{{
 					$t("pages.administration.ldap.save.example.synchronize")
@@ -154,7 +155,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import { unchangedPassword } from "@utils/ldapConstants";
 import BaseButton from "@/components/base/BaseButton.vue";
@@ -177,10 +178,11 @@ export default {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
 	computed: {
-		...mapState("ldap-config", {
-			verified: "verified",
-			temp: "temp",
-			submitted: "submitted",
+		...mapGetters("ldap-config", {
+			verified: "getVerified",
+			temp: "getTemp",
+			submitted: "getSubmitted",
+			status: "getStatus",
 		}),
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);
@@ -204,11 +206,13 @@ export default {
 			}
 
 			if (id) {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("ldap-config/patchData", {
 					systemData: temporaryConfigData,
 					systemId: id,
 				});
 			} else {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch(
 					"ldap-config/submitData",
 					temporaryConfigData
@@ -220,6 +224,13 @@ export default {
 				path: `/administration/school`,
 			});
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.ldap.save.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>

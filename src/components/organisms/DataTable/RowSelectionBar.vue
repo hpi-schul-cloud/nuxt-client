@@ -9,9 +9,9 @@
 			<div v-else>
 				<span
 					>{{ numberOfSelectedItems }}
-					{{ $t("pages.administration.selected") }}</span
-				>
-				<span v-if="numberOfSelectedItems < totalNumberOfItems">
+					{{ $t("pages.administration.selected") }}
+				</span>
+				<!-- <span v-if="numberOfSelectedItems < totalNumberOfItems">
 					({{ $t("pages.administration.or") }}
 					<base-button
 						design="none"
@@ -30,7 +30,11 @@
 				class="actions"
 				style="position: relative"
 			>
-				<base-button size="small" @click="actionsMenuOpen = true">
+				<base-button
+					class="context-menu-open"
+					size="small"
+					@click="actionsMenuOpen = true"
+				>
 					{{ $t("pages.administration.actions") }}
 				</base-button>
 				<context-menu
@@ -84,6 +88,7 @@ export default {
 				"icon-source": actionCtx["icon-source"],
 				event: "action",
 				arguments: index,
+				dataTestId: actionCtx.dataTestId || null,
 			}));
 		},
 	},

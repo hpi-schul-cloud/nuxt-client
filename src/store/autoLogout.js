@@ -1,8 +1,3 @@
-const showWarningOnRemainingSeconds =
-	Number(process.env.JWT_SHOW_TIMEOUT_WARNING_SECONDS) || 3600;
-const defaultRemainingTimeInSeconds =
-	Number(process.env.JWT_TIMEOUT_SECONDS) || showWarningOnRemainingSeconds * 2;
-
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
 let totalRetry = 0;
@@ -31,7 +26,7 @@ const decrementRemainingTime = (commit, state) => {
 			if (
 				!processing &&
 				!state.active &&
-				state.remainingTimeInSeconds <= showWarningOnRemainingSeconds
+				state.remainingTimeInSeconds <= state.showWarningOnRemainingSeconds
 			) {
 				commit("setActive", { active: true, error: false });
 			}
@@ -107,10 +102,24 @@ export const mutations = {
 		lastUpdated = Date.now();
 		state.remainingTimeInSeconds = payload;
 	},
+	init(
+		state,
+		{ showWarningOnRemainingSeconds, defaultRemainingTimeInSeconds }
+	) {
+		state.showWarningOnRemainingSeconds = showWarningOnRemainingSeconds || 3600;
+		state.defaultRemainingTimeInSeconds =
+			defaultRemainingTimeInSeconds || 3600 * 2;
+	},
 };
 
 export const actions = {
-	init({ commit, state, dispatch }, event) {
+	init({ commit, state, dispatch, rootState }, event) {
+		commit("init", {
+			showWarningOnRemainingSeconds:
+				rootState["env-config"].env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
+			defaultRemainingTimeInSeconds:
+				rootState["env-config"].env.JWT_TIMEOUT_SECONDS,
+		});
 		if (!decrementer) {
 			decrementer = decrementRemainingTime(commit, state);
 		}
@@ -120,9 +129,6 @@ export const actions = {
 			polling = updateRemainingTime(commit, dispatch);
 		}
 	},
-	reset() {
-		this.remainingTimeInSeconds = defaultRemainingTimeInSeconds;
-	},
 	async extendSession({ commit, state, dispatch }) {
 		processing = true;
 		commit("setActive", { active: false, error: false });
@@ -130,17 +136,32 @@ export const actions = {
 	},
 };
 
+export const getters = {
+	getActive(state) {
+		return state.active;
+	},
+	getError(state) {
+		return state.error;
+	},
+	getRemainingTimeInSeconds(state) {
+		return state.remainingTimeInSeconds;
+	},
+};
+
 export const state = () => {
 	return {
 		active: false,
 		error: false,
-		remainingTimeInSeconds: defaultRemainingTimeInSeconds,
+		remainingTimeInSeconds: 3600 * 2,
+		showWarningOnRemainingSeconds: 3600,
+		defaultRemainingTimeInSeconds: 3600 * 2,
 	};
 };
 
 export default {
 	mutations,
 	actions,
+	getters,
 	state,
 	namespaced: true,
 };

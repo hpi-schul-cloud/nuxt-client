@@ -3,10 +3,13 @@ import {
 	currentDate,
 	fromInputDateTime,
 	fromNow,
+	fromNowToFuture,
 	createInputDateTime,
 	inputRangeDate,
 	inputDateFromDeUTC,
 	printDateFromDeUTC,
+	printDateFromStringUTC,
+	printDateTimeFromStringUTC,
 	setDefaultTimezone,
 	getUtcOffset,
 	calculateUTC,
@@ -47,14 +50,18 @@ const localizedFormats = {
 	de: {
 		...defaultFormats,
 		date: translations["de"]["format.date"],
+		dateYY: translations["de"]["format.dateYY"],
 		dateTime: translations["de"]["format.dateTime"],
+		dateTimeYY: translations["de"]["format.dateTimeYY"],
 		dateLong: translations["de"]["format.dateLong"],
 		time: translations["de"]["format.time"],
 	},
 	en: {
 		...defaultFormats,
 		date: translations["en"]["format.date"],
+		dateYY: translations["en"]["format.dateYY"],
 		dateTime: translations["en"]["format.dateTime"],
+		dateTimeYY: translations["en"]["format.dateTimeYY"],
 		dateLong: translations["en"]["format.dateLong"],
 		time: translations["en"]["format.time"],
 	},
@@ -64,12 +71,18 @@ setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
 describe("@plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
-	const dateUTC = dayjs(dateString);
-	const dateLocal = dayjs(dateString).tz(TEST_DATETIME_TIMEZONE);
+	const dateUTC = dayjs.tz(dateString, "UTC");
+	const dateLocal = dayjs.tz(dateString, TEST_DATETIME_TIMEZONE);
 	const dateNow = dayjs().tz(TEST_DATETIME_TIMEZONE);
 
 	const dateUTCString = dateUTC.format("DD.MM.YYYY");
 	const dateLocalString = dateLocal.format("DD.MM.YYYY");
+	const dateLocalStringYY = dateUTC
+		.tz(TEST_DATETIME_TIMEZONE)
+		.format("DD.MM.YY");
+	const dateTimeLocalStringYY = dateUTC
+		.tz(TEST_DATETIME_TIMEZONE)
+		.format("DD.MM.YY HH:mm");
 
 	const dateFormat = dateLocal.format("YYYY-MM-DD");
 	const time = dateLocal.format("HH:mm");
@@ -90,6 +103,18 @@ describe("@plugins/datetime", () => {
 		expect(result).toBe(dateLocalString);
 		expect(printDateFromDeUTC(null)).toBeNull();
 		expect(printDateFromDeUTC("")).toBeNull();
+	});
+
+	it("printDateFromStringUTC", () => {
+		const result = printDateFromStringUTC(dateString);
+		expect(result).toBe(dateLocalStringYY);
+		expect(printDateFromStringUTC(null)).toBe("Invalid Date");
+	});
+
+	it("printDateTimeFromStringUTC", () => {
+		const result = printDateTimeFromStringUTC(dateString);
+		expect(result).toBe(dateTimeLocalStringYY);
+		expect(printDateTimeFromStringUTC(null)).toBe("Invalid Date");
 	});
 
 	it("inputDateFromDeUTC", () => {
@@ -118,6 +143,15 @@ describe("@plugins/datetime", () => {
 	it("fromNow", () => {
 		const result = fromNow(dateNow.clone().add(7, "days"));
 		expect(result).toBe("in 7 days");
+	});
+
+	it("fromNowToFuture", () => {
+		const past = dateUTC.toISOString();
+		const future = dateNow.add(230, "minute").toISOString();
+		const result1 = fromNowToFuture(past, "days");
+		const result2 = fromNowToFuture(future, "hours");
+		expect(result1).toBeNull();
+		expect(result2).toBe(3);
 	});
 
 	it("fromInputDateTime", () => {

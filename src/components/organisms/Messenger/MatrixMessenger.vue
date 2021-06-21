@@ -24,10 +24,10 @@ export default {
 	},
 	computed: {
 		matrixFeatureFlag() {
-			return this.$store.state.messenger.matrixFeatureFlag;
+			return this.$store.getters["messenger/getMatrixFeatureFlg"];
 		},
 		matrixAssetDomain() {
-			return this.$store.state.messenger.matrixAssetDomain;
+			return this.$store.getters["messenger/getMatrixAssetDomain"];
 		},
 		userLanguage() {
 			return this.$i18n.locale;
@@ -36,17 +36,17 @@ export default {
 			if (!this.matrixFeatureFlag) {
 				return false;
 			}
-			const { school } = this.$store.state.auth;
+			const school = this.$store.getters["auth/getSchool"];
 			return school && (school.features || []).includes("messenger");
 		},
 		session() {
-			return this.$store.state.messenger.session;
+			return this.$store.getters["messenger/getSession"];
 		},
 		sessionFromLocalStorage() {
-			return this.$store.state.messenger.sessionFromLocalStorage;
+			return this.$store.getters["messenger/getSessionFromLocalStorage"];
 		},
 		serverName() {
-			return this.$store.state.messenger.serverName;
+			return this.$store.getters["messenger/getServerName"];
 		},
 	},
 	watch: {
@@ -64,6 +64,12 @@ export default {
 		},
 	},
 	mounted() {
+		if (
+			this.$config.FEATURE_MATRIX_MESSENGER_ENABLED === "true" ||
+			this.$config.FEATURE_MATRIX_MESSENGER_ENABLED === true
+		) {
+			this.$store.dispatch("messenger/init");
+		}
 		if (this.isMessengerActivatedForSchool) {
 			this.loadMessengerEmbed();
 			this.setupMessenger();

@@ -50,8 +50,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import defaultDocuments from "@utils/documents.js";
+import { mapGetters } from "vuex";
 
 export default {
 	data() {
@@ -59,8 +58,8 @@ export default {
 		return {};
 	},
 	computed: {
-		...mapState("auth", {
-			school: "school",
+		...mapGetters("auth", {
+			school: "getSchool",
 		}),
 		currentYear() {
 			return new Date().getFullYear();
@@ -72,7 +71,8 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: defaultDocuments.specificFiles().termsOfUseSchool,
+					href: this.$store.getters["filePaths/getSpecificFiles"]
+						.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.privacy_policy_HPI"),
 					target: "_blank",
 					rel: "noopener",

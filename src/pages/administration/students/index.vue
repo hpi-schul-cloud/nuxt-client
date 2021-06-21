@@ -35,11 +35,12 @@
 			:filters="filters"
 			:backend-filtering="true"
 			:active-filters.sync="currentFilterQuery"
+			data-testid="data_filter"
 		/>
 
 		<backend-data-table
-			:actions="permissionFilteredTableActions"
-			:columns="editFilteredColumns"
+			:actions="filteredActions"
+			:columns="filteredColumns"
 			:current-page.sync="page"
 			:data="students"
 			:paginated="true"
@@ -52,6 +53,7 @@
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
 			:show-external-text="!schoolInternallyManaged"
+			data-testid="students_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -107,7 +109,8 @@
 			</template>
 		</backend-data-table>
 		<admin-table-legend
-			:icons="schoolInternallyManaged && icons"
+			:icons="icons"
+			:show-icons="showConsent"
 			:show-external-sync-hint="!schoolInternallyManaged"
 		/>
 		<fab-floating
@@ -138,12 +141,11 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
-import BaseInput from "../../../components/base/BaseInput/BaseInput";
 import { studentFilter } from "@utils/adminFilter";
 import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
@@ -156,7 +158,6 @@ export default {
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
-		BaseInput,
 		ProgressModal,
 	},
 	mixins: [print, UserHasPermission],
@@ -165,7 +166,6 @@ export default {
 			type: Boolean,
 		},
 	},
-
 	data() {
 		return {
 			something: [],
@@ -223,6 +223,7 @@ export default {
 					sortable: true,
 				},
 				{
+					// edit column
 					field: "_id",
 					label: "",
 				},
@@ -243,12 +244,14 @@ export default {
 					icon: "mail_outline",
 					"icon-source": "material",
 					action: this.handleBulkEMail,
+					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.students.index.tableActions.qr"),
 					"icon-source": "fa",
 					icon: "qrcode",
 					action: this.handleBulkQR,
+					dataTestId: "qr_code",
 				},
 				{
 					label: this.$t(
@@ -258,6 +261,7 @@ export default {
 					"icon-source": "material",
 					action: this.handleBulkDelete,
 					permission: "STUDENT_DELETE",
+					dataTestId: "delete_action",
 				},
 			],
 			tableSelection: [],
@@ -305,43 +309,73 @@ export default {
 		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
-		...mapState("auth", {
-			school: "school",
+		...mapGetters("auth", {
+			school: "getSchool",
 		}),
 		...mapGetters("users", {
-			students: "list",
+			students: "getList",
+			pagination: "getPagination",
+			isDeleting: "getActive",
+			deletedPercent: "getPercent",
+			qrLinks: "getQrLinks",
 		}),
-		...mapState("users", {
-			pagination: (state) =>
-				state.pagination.default || { limit: 10, total: 0 },
-			isDeleting: (state) => state.progress.delete.active,
-			deletedPercent: (state) => state.progress.delete.percent,
+		...mapGetters("env-config", {
+			env: "getEnv",
 		}),
 		schoolInternallyManaged() {
-			return !this.school.isExternal;
+			return this.school && !this.school.isExternal;
 		},
-		permissionFilteredTableActions() {
-			return this.tableActions.filter((action) =>
+		showConsent() {
+			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+		},
+		filteredActions() {
+			let editedActions = this.tableActions;
+
+			// filter actions by permissions
+			editedActions = this.tableActions.filter((action) =>
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
+
+			// filter the delete action if school is external
+			if (!this.schoolInternallyManaged) {
+				editedActions = editedActions.filter(
+					(action) =>
+						action.label !==
+						this.$t("pages.administration.students.index.tableActions.delete")
+				);
+			}
+
+			return editedActions;
 		},
-		editFilteredColumns() {
-			// filters edit/consent column if school is external
-			return this.school.isExternal
-				? this.tableColumns.filter(
-						(col) => col.field !== "_id" && col.field !== "consentStatus"
-				  )
-				: this.tableColumns;
+		filteredColumns() {
+			let editedColumns = this.tableColumns;
+			// filters out edit column if school is external
+			if (!this.schoolInternallyManaged) {
+				editedColumns = this.tableColumns.filter(
+					//_id field sets the edit column
+					(col) => col.field !== "_id"
+				);
+			}
+
+			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
+			if (!this.showConsent) {
+				editedColumns = editedColumns.filter(
+					(col) => col.field !== "consentStatus"
+				);
+			}
+
+			return editedColumns;
 		},
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const temp = this.$uiState.get(
+			const uiState = this.$uiState.get(
 				"filter",
 				"pages.administration.students.index"
 			);
 
-			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+			if (uiState && uiState.searchQuery)
+				query.searchQuery = uiState.searchQuery;
 
 			this.currentFilterQuery = query;
 			if (
@@ -370,10 +404,8 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/handleUsers", {
+			this.$store.dispatch("users/findStudents", {
 				query,
-				action: "find",
-				userType: "students",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
@@ -423,6 +455,7 @@ export default {
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("users/sendRegistrationLink", {
 					userIds: rowIds,
 					selectionType,
@@ -439,17 +472,13 @@ export default {
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
-				const qrRegistrationLinks = await this.$store.dispatch(
-					"users/getQrRegistrationLinks",
-					{
-						userIds: rowIds,
-						selectionType,
-						roleName: "student",
-					}
-				);
-
-				if (qrRegistrationLinks.length) {
-					this.$_printQRs(qrRegistrationLinks);
+				await this.$store.dispatch("users/getQrRegistrationLinks", {
+					userIds: rowIds,
+					selectionType,
+					roleName: "student",
+				});
+				if (this.qrLinks.length) {
+					this.$_printQRs(this.qrLinks);
 				} else {
 					this.$toast.info(this.$tc("pages.administration.printQr.emptyUser"));
 				}
@@ -462,6 +491,7 @@ export default {
 		handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
+					// TODO wrong use of store (not so bad)
 					await this.$store.dispatch("users/deleteUsers", {
 						ids: rowIds,
 						userType: "student",
@@ -520,13 +550,19 @@ export default {
 			});
 
 			setTimeout(() => {
-				this.$store.dispatch("users/handleUsers", {
+				this.$store.dispatch("users/findStudents", {
 					query,
 					action: "find",
-					userType: "students",
 				});
 			}, 400);
 		},
+	},
+	head() {
+		return {
+			title: `${this.$t("pages.administration.students.index.title")} - ${
+				this.$theme.short_name
+			}`,
+		};
 	},
 };
 </script>
