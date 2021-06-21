@@ -1,32 +1,55 @@
-import { actions, mutations } from "./users";
+import { actions, mutations, getters } from "./users";
 
 describe("store/users", () => {
 	describe("actions", () => {
-		describe("handleUsers", () => {
-			const spyDispatch = jest.fn();
-
-			it("should dispatch correct action", async () => {
-				const query = {
-					$limit: 25,
-					$skip: 0,
+		describe("findStudents", () => {
+			it("calls backend and sets state correctly", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: jest.fn(),
 				};
-				const queryContent = {
-					query,
-					action: "find",
-					userType: "students",
-				};
-
-				const expectedPayload = {
-					...queryContent,
-					customEndpoint: "/users/admin/students",
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+						return { data: "dummy response" };
+					},
 				};
 
-				actions.handleUsers({ dispatch: spyDispatch }, queryContent);
-
-				expect(spyDispatch).toHaveBeenCalledWith(
-					queryContent.action,
-					expectedPayload
+				await actions.findStudents(ctxMock);
+				expect(ctxMock.commit.mock.calls).toHaveLength(4);
+				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
+					"updatePaginationForQuery"
 				);
+				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
+				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
+			});
+		});
+		describe("findTeachers", () => {
+			it("calls backend and sets state correctly", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: jest.fn(),
+				};
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+						return { data: "dummy response" };
+					},
+				};
+
+				await actions.findTeachers(ctxMock);
+				expect(ctxMock.commit.mock.calls).toHaveLength(4);
+				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
+					"updatePaginationForQuery"
+				);
+				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
+				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
 			});
 		});
 		describe("createTeacher", () => {
@@ -183,6 +206,35 @@ describe("store/users", () => {
 				expect(removeCommits[1][1]).toStrictEqual(payload.ids[1]);
 			});
 		});
+		describe("findConsentUsers", () => {
+			it("calls the backend and triggers commit", async () => {
+				const receivedRequests = [];
+				const spyCommit = jest.fn();
+				const ctxMock = {
+					commit: spyCommit,
+				};
+				const queryMock = {
+					$sort: {
+						fullName: 1,
+					},
+					users: ["60c212946cad8d5058e1e0b3", "60c2124c6cad8d5058e1dae7"],
+					$limit: 2,
+				};
+
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+					},
+				};
+
+				await actions.findConsentUsers(ctxMock, queryMock);
+				expect(receivedRequests[0].url).toStrictEqual("/users/admin/students");
+
+				const setConsentCommit = spyCommit.mock.calls;
+				expect(setConsentCommit).toHaveLength(1);
+				expect(setConsentCommit[0][0]).toStrictEqual("setConsentList");
+			});
+		});
 	});
 	describe("mutations", () => {
 		describe("remove", () => {
@@ -194,6 +246,25 @@ describe("store/users", () => {
 				};
 				mutations.remove(state, id1);
 				expect(state.list).toStrictEqual([{ _id: id2 }]);
+			});
+		});
+		describe("setConsentList", () => {
+			it("sets data in consentList state object", () => {
+				const user = { id: "5f2987e020834114b8efd6f1", name: "mockName" };
+				const payload = { data: user };
+				const state = { consentList: [] };
+				mutations.setConsentList(state, payload);
+				expect(state.consentList).toStrictEqual(user);
+			});
+		});
+	});
+	describe("getters", () => {
+		describe("getConsentList", () => {
+			it("gets consentList object from the state", () => {
+				const user = { id: "5f2987e020834114b8efd6f1", name: "mockName" };
+				const state = { consentList: user };
+				const retrievedState = getters.getConsentList(state);
+				expect(state.consentList).toStrictEqual(retrievedState);
 			});
 		});
 	});

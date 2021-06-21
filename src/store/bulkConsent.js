@@ -35,7 +35,7 @@ export const actions = {
 			commit("setRegisterError", { mapError: true });
 		}
 	},
-	updateStudents({ commit }, payload) {
+	updateStudent({ commit }, payload) {
 		commit("updateStudentData", payload);
 	},
 	setStudents({ commit }, payload) {
@@ -44,10 +44,8 @@ export const actions = {
 };
 
 export const getters = {
-	getSelectedStudents: (state) => state.selectedStudents,
 	getSelectedStudentsData: (state) => state.selectedStudentsData,
-	getRegisteredStudents: (state) => state.registeredStudents,
-	getRegisterError: (state) => state.registerError,
+	getSelectedStudents: (state) => state.selectedStudents,
 };
 
 export const mutations = {
@@ -61,7 +59,16 @@ export const mutations = {
 		state.selectedStudentsData = payload;
 	},
 	updateStudentData(state, payload) {
-		state.selectedStudentsData = payload;
+		const index = state.selectedStudentsData.findIndex(
+			(st) => st._id === payload.id
+		);
+
+		if (index !== -1 && payload.birthDate) {
+			state.selectedStudentsData[index].birthday = payload.birthDate;
+		}
+		if (index !== -1 && payload.pass) {
+			state.selectedStudentsData[index].password = payload.pass;
+		}
 	},
 	setRegisterError(state, payload) {
 		state.registerError = payload;

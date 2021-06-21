@@ -383,10 +383,8 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/handleUsers", {
+			this.$store.dispatch("users/findTeachers", {
 				query,
-				action: "find",
-				userType: "teachers",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
@@ -519,10 +517,8 @@ export default {
 			});
 
 			setTimeout(() => {
-				this.$store.dispatch("users/handleUsers", {
+				this.$store.dispatch("users/findTeachers", {
 					query,
-					action: "find",
-					userType: "teachers",
 				});
 			}, 400);
 		},
