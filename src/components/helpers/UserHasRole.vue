@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	props: {
@@ -23,11 +23,8 @@ export default {
 		return {};
 	},
 	computed: {
-		...mapState({
-			userRoles: (state) =>
-				state && state.auth && state.auth.user && state.auth.user.roles
-					? state.auth.user.roles.map((r) => r.name.toLowerCase())
-					: [],
+		...mapGetters("auth", {
+			userRoles: "getUserRoles",
 		}),
 		hasRole() {
 			return typeof this.role === "string"

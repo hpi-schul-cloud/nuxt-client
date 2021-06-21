@@ -52,7 +52,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
-			:show-external-text="!schoolInternallyManaged"
+			:show-external-text="schoolIsExternallyManaged"
 			data-testid="students_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
@@ -111,11 +111,11 @@
 		<admin-table-legend
 			:icons="icons"
 			:show-icons="showConsent"
-			:show-external-sync-hint="!schoolInternallyManaged"
+			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
 		<fab-floating
 			v-if="
-				schoolInternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
+				!schoolIsExternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
 			"
 			position="bottom-right"
 			:show-label="true"
@@ -310,7 +310,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("auth", {
-			school: "getSchool",
+			schoolIsExternallyManaged: "schoolIsExternallyManaged",
 		}),
 		...mapGetters("users", {
 			students: "getList",
@@ -322,9 +322,6 @@ export default {
 		...mapGetters("env-config", {
 			env: "getEnv",
 		}),
-		schoolInternallyManaged() {
-			return this.school && !this.school.isExternal;
-		},
 		showConsent() {
 			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
@@ -337,7 +334,7 @@ export default {
 			);
 
 			// filter the delete action if school is external
-			if (!this.schoolInternallyManaged) {
+			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -350,7 +347,7 @@ export default {
 		filteredColumns() {
 			let editedColumns = this.tableColumns;
 			// filters out edit column if school is external
-			if (!this.schoolInternallyManaged) {
+			if (this.schoolIsExternallyManaged) {
 				editedColumns = this.tableColumns.filter(
 					//_id field sets the edit column
 					(col) => col.field !== "_id"

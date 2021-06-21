@@ -1,7 +1,7 @@
 export default async ({ app, store, route }) => {
 	const user = store.getters["auth/getUser"];
 
-	const userExternallyManaged = !!user?.externallyManaged;
+	const userExternallyManaged = store.getters["auth/userIsExternallyManaged"];
 
 	const ACCESS_ALLOWED = route.meta.reduce((allowed, meta) => {
 		if (!allowed || !meta.userNotExternallyManaged) {
