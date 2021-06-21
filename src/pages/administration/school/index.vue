@@ -304,31 +304,40 @@
 							"
 						>
 							<v-expansion-panels accordion flat>
-								<v-expansion-panel
-									v-for="policy of localSchool.dataProtectionPolicies"
-									:key="policy.consentDataId"
-									class="py-2 panel"
-								>
+								<v-expansion-panel class="py-2 panel">
 									<v-expansion-panel-header>
-										{{ policy.title }} vom
-										{{ printDateTimeFromStringUTC(policy.publishedAt) }}
+										{{ localSchool.dataProtectionPolicies[0].title }} vom
+										{{
+											printDateTimeFromStringUTC(
+												localSchool.dataProtectionPolicies[0].publishedAt
+											)
+										}}
 									</v-expansion-panel-header>
 									<v-expansion-panel-content>
 										<v-row>
 											<v-col>
-												{{ policy.consentText }}
+												{{ localSchool.dataProtectionPolicies[0].consentText }}
 											</v-col>
 										</v-row>
-										<v-row v-if="policy.fileData">
+										<v-row
+											v-if="localSchool.dataProtectionPolicies[0].fileData"
+										>
 											<v-col>
 												<v-btn
 													depressed
 													color="primary"
 													outlined
-													:href="policy.fileData.data"
-													:download="policy.fileData.filename"
+													:href="
+														localSchool.dataProtectionPolicies[0].fileData.data
+													"
+													:download="
+														localSchool.dataProtectionPolicies[0].fileData
+															.filename
+													"
 												>
-													<v-icon class="mr-2"> {{ iconMdiDownload }} </v-icon>
+													<v-icon class="mr-2">
+														{{ iconMdiDownload }}
+													</v-icon>
 													PDF herunterladen
 												</v-btn>
 											</v-col>
@@ -336,14 +345,60 @@
 									</v-expansion-panel-content>
 								</v-expansion-panel>
 							</v-expansion-panels>
-						</template>
-						<v-btn
-							class="mt-6"
+							<v-btn
+							class="my-8"
 							color="primary"
 							depressed
 							@click.stop="dialogs.policyDialogIsOpen = true"
 							>Datenschutzerklärung hinzufügen</v-btn
 						>
+							<v-list-group class="ml-n4 pr-2">
+								<template v-slot:activator>
+									<v-list-item-title
+										>Ältere Datenschutzerklärungen</v-list-item-title
+									>
+								</template>
+								<v-expansion-panels accordion flat class="ml-4 pr-2">
+									<v-list-item
+										v-for="policy of localSchool.dataProtectionPolicies.slice(1)"
+										:key="policy.consentDataId"
+										class="px-0"
+										:ripple="false"
+									>
+										<v-expansion-panel class="py-2 panel">
+											<v-expansion-panel-header>
+												{{ policy.title }} vom
+												{{ printDateTimeFromStringUTC(policy.publishedAt) }}
+											</v-expansion-panel-header>
+											<v-expansion-panel-content>
+												<v-row>
+													<v-col>
+														{{ policy.consentText }}
+													</v-col>
+												</v-row>
+												<v-row v-if="policy.fileData">
+													<v-col>
+														<v-btn
+															depressed
+															color="primary"
+															outlined
+															:href="policy.fileData.data"
+															:download="policy.fileData.filename"
+														>
+															<v-icon class="mr-2">
+																{{ iconMdiDownload }}
+															</v-icon>
+															PDF herunterladen
+														</v-btn>
+													</v-col>
+												</v-row>
+											</v-expansion-panel-content>
+										</v-expansion-panel>
+									</v-list-item>
+								</v-expansion-panels>
+							</v-list-group>
+						</template>
+						
 						<v-divider class="mt-13"></v-divider>
 						<!-- <h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
@@ -467,7 +522,7 @@ export default {
 					messengerStudentRoomCreate: false,
 					videoconference: false,
 				},
-				permissions: [], // which route do I have to talk to here?
+				permissions: [], // TODO - which route do I have to talk to here?
 				studentVisibility: false,
 				lernStore: false,
 				fileStorageType: "",
