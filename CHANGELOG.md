@@ -22,6 +22,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page
 - SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
 - SC-9093 - Load default language and timezone from server
+- SC-9160 - fixed user not being redirected to news page overview when creating a new entry
 
 ## [26.4.2] - 2021-06-16
 

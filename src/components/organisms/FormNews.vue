@@ -192,15 +192,14 @@ export default Vue.extend({
 					targetModel:
 						this.$route.query.targetmodel || this.$route.query.context,
 				});
-				if (this.status === "completed") {
-					this.$toast.success(
-						this.$ts("components.organisms.FormNews.success.create")
-					);
-					this.$router.push({
-						name: "news-id",
-						params: { id: this.createdNews[0]._id },
-					});
-				}
+
+				this.$toast.success(
+					this.$ts("components.organisms.FormNews.success.create")
+				);
+				this.$router.push({
+					name: "news-id",
+					params: { id: this.createdNews[0]._id },
+				});
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
