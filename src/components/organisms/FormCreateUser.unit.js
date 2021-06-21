@@ -5,7 +5,7 @@ const validRole = {
 };
 
 const getMockActions = () => ({
-	handleUsers: jest.fn().mockReturnValue(Promise.resolve()),
+	findStudents: jest.fn().mockReturnValue(Promise.resolve()),
 	find: jest.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 

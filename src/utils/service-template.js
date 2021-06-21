@@ -15,9 +15,9 @@ export default function (endpoint) {
 		baseUrl,
 		actions: {
 			async find({ commit }, payload = {}) {
-				const { qid = "default", query, customEndpoint } = payload;
+				const { qid = "default", query } = payload;
 				commit("setStatus", "pending");
-				const res = await this.$axios.$get(customEndpoint || baseUrl, {
+				const res = await this.$axios.$get(baseUrl, {
 					params: query,
 					paramsSerializer: (params) => {
 						return qs.stringify(params);
@@ -46,9 +46,8 @@ export default function (endpoint) {
 				commit("setStatus", "completed");
 			},
 			async create({ commit }, payload = {}) {
-				const { customEndpoint } = payload;
 				commit("setStatus", "pending");
-				const res = await this.$axios.$post(customEndpoint || baseUrl, payload);
+				const res = await this.$axios.$post(baseUrl, payload);
 				commit("set", {
 					items: Array.isArray(res) ? res : [res],
 				});
@@ -85,9 +84,9 @@ export default function (endpoint) {
 					commit("setStatus", "completed");
 				} else {
 					const payload = idOrPayload;
-					const { query, customEndpoint } = payload;
+					const { query } = payload;
 					commit("setStatus", "pending");
-					await this.$axios.$delete(customEndpoint || baseUrl, {
+					res = await this.$axios.$delete(baseUrl, {
 						params: query,
 						paramsSerializer: (params) => {
 							return qs.stringify(params);
