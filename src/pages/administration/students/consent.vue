@@ -27,6 +27,7 @@
 				id="progressbar"
 				:steps="progressSteps"
 				:current-step="currentStep"
+				data-testid="step_progress"
 			/>
 		</div>
 
@@ -36,39 +37,26 @@
 
 			<backend-data-table
 				:columns="tableColumns"
-				:data="filteredTableData"
+				:data="tableData"
 				track-by="_id"
 				:sort-by.sync="sortBy"
 				:sort-order.sync="sortOrder"
+				data-testid="consent_table_1"
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
 					<base-input
-						v-if="birthdayWarning && !slotProps.data"
-						:error="inputError"
+						:error="birthdayWarning && !slotProps.data ? inputError : null"
 						class="date base-input"
 						:vmodel="inputDateFromDeUTC(slotProps.data)"
 						type="date"
 						label=""
+						data-testid="birthday-input"
 						:birth-date="true"
-						v-on="
-							inputDateForDate({
-								id: filteredTableData[slotProps.rowindex]._id,
-								birthDate: slotProps.data,
-							})
-						"
-					/>
-					<base-input
-						v-else-if="!birthdayWarning || slotProps.data"
-						class="date base-input"
-						:vmodel="inputDateFromDeUTC(slotProps.data)"
-						type="date"
-						label=""
-						:birth-date="true"
-						v-on="
-							inputDateForDate({
-								id: filteredTableData[slotProps.rowindex]._id,
-								birthDate: slotProps.data,
+						@input="
+							inputDate({
+								id: tableData[slotProps.rowindex]._id,
+								birthDate: inputDateFormat($event),
 							})
 						"
 					/>
@@ -78,23 +66,24 @@
 						:vmodel="slotProps.data"
 						type="text"
 						label=""
+						data-testid="password-input"
 						class="base-input"
-						v-on="
+						@input="
 							inputPass({
-								id: filteredTableData[slotProps.rowindex]._id,
-								password: slotProps.data,
+								id: tableData[slotProps.rowindex]._id,
+								pass: $event,
 							})
 						"
 					/>
 				</template>
 			</backend-data-table>
 
-			<p v-if="birthdayWarning" style="color: var(--color-danger)">
+			<p v-if="birthdayWarning" class="warning" data-testid="error-text">
 				<base-icon source="material" icon="report_problem" />
 				{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 			</p>
 
-			<base-button design="secondary" @click="next">{{
+			<base-button design="secondary" data-testid="button-next" @click="next">{{
 				$t("pages.administration.students.consent.steps.complete.next")
 			}}</base-button>
 			<base-button design="text" @click="cancelWarning = true">{{
@@ -107,11 +96,12 @@
 			{{ $t("pages.administration.students.consent.steps.register.info") }}
 			<backend-data-table
 				:columns="tableColumns"
-				:data="filteredTableData"
+				:data="tableData"
 				track-by="id"
 				:paginated="false"
 				:sort-by.sync="sortBy"
 				:sort-order.sync="sortOrder"
+				data-testid="consent_table_2"
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
@@ -122,7 +112,13 @@
 			</backend-data-table>
 
 			<div id="consent-checkbox">
-				<base-input v-model="check" type="checkbox" name="switch" label="">
+				<base-input
+					v-model="check"
+					type="checkbox"
+					name="switch"
+					label=""
+					data-testid="check-confirm"
+				>
 				</base-input>
 				<label @click="check = !check">
 					<i18n
@@ -139,7 +135,7 @@
 				</label>
 			</div>
 
-			<p v-if="checkWarning" style="color: var(--color-danger)">
+			<p v-if="checkWarning" class="warning" data-testid="confirm-error">
 				<base-icon source="material" icon="report_problem" />
 				{{
 					$t(
@@ -148,9 +144,14 @@
 				}}
 			</p>
 
-			<base-button design="secondary" @click="register">{{
-				$t("pages.administration.students.consent.steps.register.next")
-			}}</base-button>
+			<base-button
+				design="secondary"
+				data-testid="button-next-2"
+				@click="register"
+				>{{
+					$t("pages.administration.students.consent.steps.register.next")
+				}}</base-button
+			>
 			<base-button design="text" @click="cancelWarning = true">{{
 				$t("common.actions.cancel")
 			}}</base-button>
@@ -161,11 +162,12 @@
 			{{ $t("pages.administration.students.consent.steps.download.info") }}
 			<backend-data-table
 				:columns="tableColumns"
-				:data="filteredTableData"
+				:data="tableData"
 				track-by="_id"
 				:paginated="false"
 				:sort-by.sync="sortBy"
 				:sort-order.sync="sortOrder"
+				data-testid="consent_table_3"
 				@update:sort="onUpdateSort"
 			>
 				<template v-slot:datacolumn-birthday="slotProps">
@@ -215,9 +217,9 @@
 				>
 					<template v-slot:icon>
 						<base-icon
+							class="warning"
 							source="material"
 							icon="report_problem"
-							style="color: var(--color-danger)"
 						/>
 					</template>
 				</modal-body-info>
@@ -262,7 +264,7 @@
 
 				<backend-data-table
 					:columns="tableColumnsForPrint"
-					:data="filteredTableData"
+					:data="tableData"
 					track-by="_id"
 					:paginated="false"
 				/>
@@ -277,7 +279,6 @@ import generatePassword from "@mixins/generatePassword";
 import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import BaseInput from "@components/base/BaseInput/BaseInput";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@assets/img/safely_connected.png";
 import {
@@ -291,7 +292,6 @@ export default {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
-		BaseInput,
 	},
 	meta: {
 		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
@@ -389,34 +389,16 @@ export default {
 			),
 			sortBy: "fullName",
 			sortOrder: "asc",
+			tableData:
+				this.$store.getters["bulkConsent/getSelectedStudentsData"] || [],
+			selectedStudents:
+				this.$store.getters["bulkConsent/getSelectedStudents"] || [],
 		};
 	},
 	computed: {
-		...mapGetters("bulkConsent", {
-			selectedStudents: "getSelectedStudents",
-			selectedStudentsData: "getSelectedStudentsData",
-			registeredStudents: "getRegisteredStudents",
-			registerError: "getRegisterError",
-		}),
 		...mapGetters("users", {
-			students: "getList",
+			students: "getConsentList",
 		}),
-		filteredTableData: {
-			get() {
-				const result =
-					this.$store.getters["bulkConsent/getSelectedStudentsData"];
-
-				if (result.length > 0) {
-					return JSON.parse(
-						JSON.stringify(
-							result.filter((student) => student.consentStatus !== "ok")
-						)
-					);
-				}
-				return [];
-			},
-			set() {},
-		},
 	},
 	async created(ctx) {
 		await this.find();
@@ -439,21 +421,17 @@ export default {
 				users: this.selectedStudents,
 				$limit: this.selectedStudents.length,
 			};
+			await this.$store.dispatch("users/findConsentUsers", query);
 
-			// TODO wrong use of store (not so bad)
-			await this.$store.dispatch("users/handleUsers", {
-				query,
-				action: "find",
-				userType: "students",
-			});
-
-			if (this.students.length) {
-				const data = this.students.map((student) => {
-					student.fullName = student.firstName + " " + student.lastName;
-					student.password = generatePassword();
-					return student;
-				});
-				this.filteredTableData = data;
+			if (this.students && this.students.length) {
+				const data = this.students
+					.filter((student) => student.consentStatus !== "ok")
+					.map((student) => {
+						student.fullName = student.firstName + " " + student.lastName;
+						student.password = generatePassword();
+						return student;
+					});
+				this.tableData = data;
 				this.$store.dispatch("bulkConsent/setStudents", data);
 			}
 		},
@@ -462,38 +440,11 @@ export default {
 			this.sortOrder = sortOrder;
 			this.find();
 		},
-		inputDateForDate(student) {
-			return {
-				input: (dateData) => {
-					if (dateData !== "") {
-						const newDate = inputDateFormat(dateData);
-						const index = this.filteredTableData.findIndex(
-							(st) => st._id === student.id
-						);
-						this.filteredTableData[index].birthday = newDate;
-						this.$store.dispatch(
-							"bulkConsent/updateStudents",
-							this.filteredTableData
-						);
-					}
-				},
-			};
+		inputDate(student) {
+			this.$store.dispatch("bulkConsent/updateStudent", student);
 		},
-		inputPass: function (student) {
-			return {
-				input: (pass) => {
-					if (pass !== "") {
-						const index = this.filteredTableData.findIndex(
-							(st) => st._id === student.id
-						);
-						this.filteredTableData[index].password = pass;
-						this.$store.dispatch(
-							"bulkConsent/updateStudents",
-							this.filteredTableData
-						);
-					}
-				},
-			};
+		inputPass(student) {
+			this.$store.dispatch("bulkConsent/updateStudent", student);
 		},
 		next() {
 			if (this.currentStep === 0) {
@@ -505,21 +456,18 @@ export default {
 			this.currentStep += 1;
 		},
 		checkBirthdays() {
-			const checkEmptyBirtday = this.selectedStudentsData.find(
+			return !this.tableData.some(
 				(element) =>
 					element.birthday === "" ||
 					element.birthday === null ||
 					!element.birthday
 			);
-			if (checkEmptyBirtday) return false;
-
-			return true;
 		},
 		register() {
 			if (this.check === false) {
 				this.checkWarning = true;
 			} else {
-				const users = this.filteredTableData.map((student) => {
+				const users = this.tableData.map((student) => {
 					return {
 						_id: student._id,
 						birthday: inputDateFromDeUTC(student.birthday),
@@ -600,12 +548,19 @@ export default {
 			});
 		},
 		checkTableData() {
+			if (this.selectedStudents.length === 0) {
+				this.$router.push({
+					path: `/administration/students`,
+				});
+			}
+
 			this.tableTimeOut = setTimeout(() => {
-				if (this.filteredTableData.length === 0) {
+				if (this.tableData.length === 0) {
 					this.$toast.error(
 						this.$t("pages.administration.students.consent.table.empty"),
 						{ position: "top-center" }
 					);
+
 					this.$router.push({
 						path: `/administration/students`,
 					});
@@ -657,6 +612,9 @@ export default {
 .print-title {
 	color: var(--color-secondary);
 	border: none;
+}
+.warning {
+	color: var(--color-danger);
 }
 ::v-deep .link {
 	color: var(--color-secondary);

@@ -1,8 +1,12 @@
+import qs from "qs";
 import mergeDeep from "@utils/merge-deep";
 import serviceTemplate from "@utils/service-template";
 
 const base = serviceTemplate("users");
 const baseState = base.state();
+
+const teacherEndpoint = "/users/admin/teachers";
+const studentEndpoint = "/users/admin/students";
 
 const module = mergeDeep(base, {
 	state: () =>
@@ -14,6 +18,7 @@ const module = mergeDeep(base, {
 				},
 			},
 			qrLinks: [],
+			consentList: [],
 		}),
 	mutations: {
 		startProgress(state, { action }) {
@@ -30,6 +35,9 @@ const module = mergeDeep(base, {
 		setQrLinks(state, payload) {
 			state.qrLinks = payload;
 		},
+		setConsentList(state, { data }) {
+			state.consentList = data;
+		},
 	},
 	getters: {
 		getPagination(state) {
@@ -44,12 +52,57 @@ const module = mergeDeep(base, {
 		getQrLinks(state) {
 			return state.qrLinks;
 		},
+		getConsentList(state) {
+			return state.consentList;
+		},
 	},
 	actions: {
-		handleUsers({ dispatch }, queryContext = {}) {
-			const { userType, action } = queryContext;
-			queryContext.customEndpoint = `/users/admin/${userType}`;
-			dispatch(action, queryContext);
+		async findStudents({ commit }, payload = {}) {
+			const { qid = "default", query } = payload;
+			commit("setStatus", "pending");
+			const res = await this.$axios.$get(studentEndpoint, {
+				params: query,
+				paramsSerializer: (params) => {
+					return qs.stringify(params);
+				},
+			});
+			commit("updatePaginationForQuery", {
+				query,
+				qid,
+				res,
+			});
+			commit("set", {
+				items: res.data,
+			});
+			commit("setStatus", "completed");
+		},
+		async findTeachers({ commit }, payload = {}) {
+			const { qid = "default", query } = payload;
+			commit("setStatus", "pending");
+			const res = await this.$axios.$get(teacherEndpoint, {
+				params: query,
+				paramsSerializer: (params) => {
+					return qs.stringify(params);
+				},
+			});
+			commit("updatePaginationForQuery", {
+				query,
+				qid,
+				res,
+			});
+			commit("set", {
+				items: res.data,
+			});
+			commit("setStatus", "completed");
+		},
+		async findConsentUsers({ commit }, query) {
+			const res = await this.$axios.$get(`/users/admin/students`, {
+				params: query,
+				paramsSerializer: (params) => {
+					return qs.stringify(params);
+				},
+			});
+			commit("setConsentList", res);
 		},
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {
@@ -74,16 +127,14 @@ const module = mergeDeep(base, {
 			}
 		},
 		async createTeacher({ commit }, teacherData) {
-			const customEndpoint = "/users/admin/teachers";
-			const teacher = await this.$axios.$post(customEndpoint, teacherData);
+			const teacher = await this.$axios.$post(teacherEndpoint, teacherData);
 			commit("setCurrent", teacher);
 		},
 		async createStudent({ commit }, payload) {
 			commit("resetBusinessError");
-			const customEndpoint = "/users/admin/students";
 			const { successMessage, ...studentData } = payload;
 			try {
-				const student = await this.$axios.$post(customEndpoint, studentData);
+				const student = await this.$axios.$post(studentEndpoint, studentData);
 				this.$toast.success(successMessage);
 				this.$router.push({
 					path: `/administration/students`,
@@ -94,12 +145,12 @@ const module = mergeDeep(base, {
 			}
 		},
 		async sendRegistrationLink(ctx, payload = {}) {
-			const customEndpoint = "/users/mail/registrationLink";
-			await this.$axios.$post(customEndpoint, payload);
+			const registrationLinkEndpoint = "/users/mail/registrationLink";
+			await this.$axios.$post(registrationLinkEndpoint, payload);
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
-			const customEndpoint = "/users/qrRegistrationLink";
-			const links = await this.$axios.$post(customEndpoint, payload);
+			const registrationQrEndpoint = "/users/qrRegistrationLink";
+			const links = await this.$axios.$post(registrationQrEndpoint, payload);
 			commit("setQrLinks", links);
 		},
 	},
