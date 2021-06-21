@@ -76,7 +76,7 @@ describe("teachers/index", () => {
 			},
 			users: {
 				actions: {
-					handleUsers: jest.fn(),
+					findTeachers: jest.fn(),
 					deleteUsers: deleteUsersStub,
 				},
 				getters: {
@@ -186,8 +186,8 @@ describe("teachers/index", () => {
 		});
 	});
 
-	it("should dispatch the 'handleUsers action on load'", async () => {
-		mockStore.users.actions.handleUsers.mockClear();
+	it("should dispatch the 'findTeachers' action on load'", async () => {
+		mockStore.users.actions.findTeachers.mockClear();
 
 		mount(TeacherPage, {
 			...createComponentMocks({
@@ -195,7 +195,7 @@ describe("teachers/index", () => {
 				store: mockStore,
 			}),
 		});
-		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+		expect(mockStore.users.actions.findTeachers).toHaveBeenCalled();
 	});
 
 	it("should emit the 'delete' action when deleting a user", async () => {
@@ -519,7 +519,7 @@ describe("teachers/index", () => {
 		// run all existing timers
 		await jest.runAllTimers();
 		// reset the mock call stack
-		mockStore.users.actions.handleUsers.mockClear();
+		mockStore.users.actions.findTeachers.mockClear();
 		mockStore.uiState.mutations.set.mockClear();
 
 		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
@@ -532,7 +532,7 @@ describe("teachers/index", () => {
 		//run new timer from updating the value
 		await jest.runAllTimers();
 
-		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+		expect(mockStore.users.actions.findTeachers).toHaveBeenCalled();
 	});
 
 	// currently disabled, will be reactivated when the new components are in use

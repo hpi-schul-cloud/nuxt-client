@@ -441,10 +441,8 @@ export default {
 			};
 
 			// TODO wrong use of store (not so bad)
-			await this.$store.dispatch("users/handleUsers", {
+			await this.$store.dispatch("users/findStudents", {
 				query,
-				action: "find",
-				userType: "students",
 			});
 
 			if (this.students.length) {
