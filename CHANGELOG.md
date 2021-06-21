@@ -9,6 +9,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ## Unreleased
 
 - SC-9093 - Load default language and timezone from server
+- SC-9158 - fixed launch cofig to debug a single test
 
 ## [26.4.2] - 2021-06-16
 
