@@ -42,13 +42,9 @@ const module = {
 			});
 		},
 		getOpenHomeworks: (state, getters) => {
-			const openHomeworksWithDueDate = Array.from(
-				getters.getOpenHomeworksWithDueDate
-			);
-			const openHomeworksWithoutDueDate = Array.from(
+			return getters.getOpenHomeworksWithDueDate.concat(
 				getters.getOpenHomeworksWithoutDueDate
 			);
-			return openHomeworksWithDueDate.concat(openHomeworksWithoutDueDate);
 		},
 	},
 };

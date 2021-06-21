@@ -188,6 +188,7 @@
 	"global.sidebar.tasks.assignedTasks": "Tareas asignadas",
 	"global.sidebar.tasks.tasksDrafts": "Borradores",
 	"global.sidebar.tasks.tasksOpen": "Tareas Abiertas",
+	"global.sidebar.tasksUngraded": "Sin auditar",
 	"global.sidebar.teacher": "Profesor",
 	"global.sidebar.teams": "Equipos",
 	"global.topbar.settings": "Configuración",

@@ -188,6 +188,7 @@
 	"global.sidebar.tasks.assignedTasks": "Assigned tasks",
 	"global.sidebar.tasks.tasksDrafts": "Drafts",
 	"global.sidebar.tasks.tasksOpen": "Open Tasks",
+	"global.sidebar.tasksUngraded": "Unchecked",
 	"global.sidebar.teacher": "Teacher",
 	"global.sidebar.teams": "Teams",
 	"global.topbar.settings": "Settings",
