@@ -346,12 +346,12 @@
 								</v-expansion-panel>
 							</v-expansion-panels>
 							<v-btn
-							class="my-8"
-							color="primary"
-							depressed
-							@click.stop="dialogs.policyDialogIsOpen = true"
-							>Datenschutzerklärung hinzufügen</v-btn
-						>
+								class="my-8"
+								color="primary"
+								depressed
+								@click.stop="dialogs.policyDialogIsOpen = true"
+								>Datenschutzerklärung hinzufügen</v-btn
+							>
 							<v-list-group class="ml-n4 pr-2">
 								<template v-slot:activator>
 									<v-list-item-title
@@ -360,7 +360,9 @@
 								</template>
 								<v-expansion-panels accordion flat class="ml-4 pr-2">
 									<v-list-item
-										v-for="policy of localSchool.dataProtectionPolicies.slice(1)"
+										v-for="policy of localSchool.dataProtectionPolicies.slice(
+											1
+										)"
 										:key="policy.consentDataId"
 										class="px-0"
 										:ripple="false"
@@ -398,7 +400,7 @@
 								</v-expansion-panels>
 							</v-list-group>
 						</template>
-						
+
 						<v-divider class="mt-13"></v-divider>
 						<!-- <h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
