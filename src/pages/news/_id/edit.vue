@@ -1,6 +1,5 @@
 <template>
-  <news-edit-view :current="current" >
-  </news-edit-view>
+	<news-edit-view :current="current"> </news-edit-view>
 </template>
 
 <script>
@@ -9,15 +8,15 @@ import { mapGetters } from "vuex";
 
 export default {
 	components: {
-    NewsEditView,
+		NewsEditView,
 	},
 	async asyncData({ store, params }) {
-    store.dispatch("news/get", params.id);
+		store.dispatch("news/get", params.id);
 	},
-  computed: {
-    ...mapGetters("news", {
-      current: "getCurrent",
-    }),
-  }
+	computed: {
+		...mapGetters("news", {
+			current: "getCurrent",
+		}),
+	},
 };
 </script>
