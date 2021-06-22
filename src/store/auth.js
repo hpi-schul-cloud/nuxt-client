@@ -144,6 +144,28 @@ export const getters = {
 	getAccessToken(state) {
 		return state.accessToken;
 	},
+	getUserRoles(state) {
+		return state.user.roles
+			? state.user.roles.map((r) => r.name.toLowerCase())
+			: [];
+	},
+	getUserRolesDisplayName(state) {
+		return state.user.roles ? state.user.roles.map((r) => r.displayName) : [];
+	},
+	getAuthenticated(state) {
+		return state.accessToken || false;
+	},
+	getUserPermissions(state) {
+		return state.user.permissions
+			? state.user.permissions.map((p) => p.toLowerCase())
+			: [];
+	},
+	userIsExternallyManaged(state) {
+		return !!state.user.externallyManaged;
+	},
+	schoolIsExternallyManaged(state) {
+		return state.school.isExternal;
+	},
 };
 
 export const state = () => {
