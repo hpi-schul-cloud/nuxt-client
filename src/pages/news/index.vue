@@ -21,10 +21,10 @@
 		<v-row>
 			<v-col
 				v-for="article of news"
-				:key="article._id"
+				:key="article.id"
 				class="d-flex child-flex"
 			>
-				<v-card :to="{ name: 'news-id', params: { id: article._id } }">
+				<v-card :to="{ name: 'news-id', params: { id: article.id } }">
 					<v-card-title>{{ article.title }} </v-card-title>
 					<v-card-subtitle> {{ fromNow(article.createdAt) }} </v-card-subtitle>
 					<v-card-actions>
@@ -32,7 +32,7 @@
 						<v-btn
 							color="primary"
 							text
-							:to="{ name: 'news-id', params: { id: article._id } }"
+							:to="{ name: 'news-id', params: { id: article.id } }"
 						>
 							{{ $t("common.labels.readmore") }}
 						</v-btn>
