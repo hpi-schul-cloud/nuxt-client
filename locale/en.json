@@ -127,6 +127,7 @@
 	"components.organisms.FormNews.editor.placeholder": "Once upon a time...",
 	"components.organisms.FormNews.errors.create": "Error during creation.",
 	"components.organisms.FormNews.errors.missing_content": "Your article is empty. ;)",
+	"components.organisms.FormNews.errors.missing_date": "Please enter the publication date.",
 	"components.organisms.FormNews.errors.missing_title": "Every article must have a title.",
 	"components.organisms.FormNews.errors.patch": "Error while updating.",
 	"components.organisms.FormNews.errors.remove": "Error during deletion.",

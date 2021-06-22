@@ -127,6 +127,7 @@
 	"components.organisms.FormNews.editor.placeholder": "Érase una vez...",
 	"components.organisms.FormNews.errors.create": "Error durante la creación.",
 	"components.organisms.FormNews.errors.missing_content": "Tu artículo está vacío. ;)",
+	"components.organisms.FormNews.errors.missing_date": "Please enter the publication date.",
 	"components.organisms.FormNews.errors.missing_title": "Cada artículo debe tener un título.",
 	"components.organisms.FormNews.errors.patch": "Error al actualizar.",
 	"components.organisms.FormNews.errors.remove": "Error durante la eliminación.",

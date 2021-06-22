@@ -30,6 +30,7 @@
 							:label="$t('components.organisms.FormNews.label.date')"
 							data-testid="news_date"
 							placeholder="JJJJ-MM-TT"
+              :error="errors.content"
 						/>
 						<base-input
 							v-model="data.date.time"
@@ -119,16 +120,20 @@ export default Vue.extend({
 			);
 			return a.utc().format();
 		},
-		errors(): { title: string | undefined; content: string | undefined } {
+		errors(): { title: string | undefined; content: string | undefined; date: string | undefined } {
 			const title = this.data.title
 				? undefined
 				: this.$ts("components.organisms.FormNews.errors.missing_title");
 			const content = this.data.content
 				? undefined
 				: this.$ts("components.organisms.FormNews.errors.missing_content");
+			const date = this.data.date.date
+        ? undefined
+          : this.$ts("components.organisms.FormNews.errors.missing_date")
 			return {
 				title,
 				content,
+        date,
 			};
 		},
 	},
@@ -177,29 +182,38 @@ export default Vue.extend({
 					createInputDateTime(displayAt);
 			}
 		},
+    getNewsTarget(query: any, schoolId: string) {
+      if (query.target && query.targetmodel ){
+        return { targetId: query.target, targetModel: query.targetmodel };
+      } else if (query.context && query.contextId ) {
+        return { targetId: query.contextId, targetModel: query.context };
+      } else {
+        return { targetId: schoolId, targetModel: 'schools' };
+      }
+    },
 		async create() {
 			const errors = Object.values(this.errors).filter((a) => a);
 			if (errors.length && errors[0]) {
 				return this.$toast.error(errors[0]);
 			}
 			try {
+			  const newsTarget = this.getNewsTarget(this.$route.query, this.$user.schoolId);
 				await this.$store.dispatch("news/create", {
 					title: this.data.title,
 					content: this.data.content,
 					displayAt: this.publishDate,
 					schoolId: this.$user.schoolId,
-					target: this.$route.query.target || this.$route.query.contextId,
-					targetModel:
-						this.$route.query.targetmodel || this.$route.query.context,
+					targetId: newsTarget.targetId,
+					targetModel: newsTarget.targetModel,
 				});
 				if (this.status === "completed") {
 					this.$toast.success(
 						this.$ts("components.organisms.FormNews.success.create")
 					);
-					this.$router.push({
-						name: "news-id",
-						params: { id: this.createdNews[0]._id },
-					});
+					await this.$router.push({
+            name: "news-id",
+            params: { id: this.createdNews[0].id },
+          });
 				}
 			} catch (e) {
 				console.error(e);

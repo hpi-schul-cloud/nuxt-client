@@ -8,6 +8,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9159 - Redirect the routes for news for the new v3 API
 - SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
 - SC-9093 - Load default language and timezone from server
 

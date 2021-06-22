@@ -128,6 +128,7 @@
 	"components.organisms.FormNews.editor.placeholder": "Es war einmal …",
 	"components.organisms.FormNews.errors.create": "Fehler beim Erstellen.",
 	"components.organisms.FormNews.errors.missing_content": "Deinem Artikel fehlt es an Inhalt. ;)",
+	"components.organisms.FormNews.errors.missing_date": "Bitte gebe Publikationsdatum ein.",
 	"components.organisms.FormNews.errors.missing_title": "Jeder Artikel braucht einen Titel.",
 	"components.organisms.FormNews.errors.patch": "Fehler beim Aktualisieren.",
 	"components.organisms.FormNews.errors.remove": "Fehler beim Löschen.",
