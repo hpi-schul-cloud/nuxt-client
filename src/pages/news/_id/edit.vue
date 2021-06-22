@@ -68,16 +68,16 @@ export default {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
 	async asyncData({ store, params }) {
-    store.dispatch("news/get", params.id);
+		store.dispatch("news/get", params.id);
 	},
 	meta: {
 		requiredPermissions: ["NEWS_EDIT"],
 	},
-  computed: {
-    ...mapGetters("news", {
-      current: "getCurrent",
-    }),
-  },
+	computed: {
+		...mapGetters("news", {
+			current: "getCurrent",
+		}),
+	},
 	head() {
 		const hasTitle = (this.news || {}).title;
 		return {
