@@ -160,9 +160,6 @@ export const getters = {
 	userIsExternallyManaged(state) {
 		return !!state.user.externallyManaged;
 	},
-	schoolIsExternallyManaged(state) {
-		return state.school.isExternal;
-	},
 };
 
 export const state = () => {

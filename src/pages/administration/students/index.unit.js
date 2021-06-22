@@ -57,6 +57,10 @@ describe("students/index", () => {
 						"student_list",
 						"student_delete",
 					],
+				},
+			},
+			schools: {
+				getters: {
 					schoolIsExternallyManaged: () => false,
 				},
 			},
@@ -337,12 +341,7 @@ describe("students/index", () => {
 
 	it("should not display the edit button if school is external", async () => {
 		const customMockStore = mockStore;
-		customMockStore.auth.getters = {
-			getUserPermissions: () => [
-				"student_create",
-				"student_list",
-				"student_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 		const wrapper = mount(StudentPage, {
@@ -393,11 +392,10 @@ describe("students/index", () => {
 		expect(fabComponent.exists()).toBe(true);
 	});
 
-	it("should not render the fab-floating component if user does not have SUDENT_CREATE permission", async () => {
+	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", async () => {
 		const customMockStore = { ...mockStore };
 		customMockStore.auth.getters = {
 			getUserPermissions: () => ["student_list", "student_delete"],
-			schoolIsExternallyManaged: () => true,
 		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
@@ -414,12 +412,7 @@ describe("students/index", () => {
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.getters = {
-			getUserPermissions: () => [
-				"student_create",
-				"student_list",
-				"student_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 
@@ -437,12 +430,7 @@ describe("students/index", () => {
 
 	it("should render the adminTableLegend component when school is external", async () => {
 		const customMockStore = mockStore;
-		customMockStore.auth.getters = {
-			getUserPermissions: () => [
-				"student_create",
-				"student_list",
-				"student_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 

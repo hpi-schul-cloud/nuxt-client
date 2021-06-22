@@ -126,6 +126,9 @@ const module = {
 		getError(state) {
 			return state.error;
 		},
+		schoolIsExternallyManaged(state) {
+			return state.school.isExternal;
+		},
 	},
 };
 export default module;
