@@ -1,5 +1,6 @@
 <template>
-	<div v-if="news">
+  <div>
+	<div v-if="current">
 		<section class="section">
 			<base-breadcrumb
 				:inputs="[
@@ -8,44 +9,49 @@
 						text: 'News',
 					},
 					{
-						to: { name: 'news-id', params: { id: news._id } },
-						text: news.title,
+						to: { name: 'news-id', params: { id: current._id } },
+						text: current.title,
 					},
 				]"
 			/>
 			<div class="text-sm">
-				{{ fromNow(news.displayAt) }} von {{ news.creator.firstName }}
-				{{ news.creator.lastName }}
+				{{ fromNow(current.displayAt) }} von {{ current.creator.firstName }}
+				{{ current.creator.lastName }}
 			</div>
-			<h1>{{ news.title }}</h1>
+			<h1>{{ current.title }}</h1>
 
 			<!-- eslint-disable-next-line vue/no-v-html -->
-			<div v-html="news.content"></div>
+			<div v-html="current.content"></div>
 			<base-button :to="{ name: 'news-id-edit' }">
 				<base-icon source="material" icon="edit" />
 				{{ $t("pages.news._id.index.edit") }}
 			</base-button>
 		</section>
 	</div>
+  </div>
 </template>
 
 <script>
 import { fromNow } from "@plugins/datetime";
+import { mapGetters } from "vuex";
 
 export default {
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
 	async asyncData({ store, params }) {
-		return {
-			news: await store.dispatch("news/get", params.id),
-		};
+      store.dispatch("news/get", params.id);
 	},
-	data() {
-		return {
-			fromNow,
-		};
-	},
+  data() {
+    return {
+      fromNow,
+    };
+  },
+  computed: {
+    ...mapGetters("news", {
+      current: "getCurrent",
+    }),
+  },
 	head() {
 		return {
 			title: (this.news || {}).title || "News",
