@@ -10,6 +10,7 @@ const getMockStore = ({ user } = {}) => {
 	return {
 		getters: {
 			"auth/getUser": user,
+			"auth/userIsExternallyManaged": user?.externallyManaged,
 		},
 	};
 };

@@ -1,4 +1,4 @@
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	props: {
@@ -8,11 +8,8 @@ export default {
 		},
 	},
 	computed: {
-		...mapState({
-			userPermissions: (state) =>
-				state && state.auth && state.auth.user && state.auth.user.permissions
-					? state.auth.user.permissions.map((p) => p.toLowerCase())
-					: [],
+		...mapGetters("auth", {
+			userPermissions: "getUserPermissions",
 		}),
 		$_hasPermission() {
 			return this.$_userHasPermission(this.permission);

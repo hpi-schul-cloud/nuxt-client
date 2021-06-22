@@ -487,7 +487,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import {
 	mdiChevronRight,
 	mdiTrashCanOutline,
@@ -559,24 +559,24 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("auth", {
-			school: "school",
-			user: "user",
-			// locale: "locale",
+		// TODO mapState -> mapGetters
+		...mapGetters("auth", {
+			user: "getUser",
 		}),
-		...mapState("schools", {
-			studentVisibility: "studentVisibility",
-			lernStoreVisibility: "lernStoreVisibility",
-			fileStorageTotal: "fileStorageTotal",
+		...mapGetters("schools", {
+			school: "getSchool",
+			studentVisibility: "getStudentVisibility",
+			lernStoreVisibility: "getLernStoreVisibility",
+			fileStorageTotal: "getFileStorageTotal",
 		}),
-		...mapState("federal-states", {
-			federalState: "currentFederalState",
+		...mapGetters("federal-states", {
+			federalState: "getCurrentFederalState",
 		}),
-		...mapState("consent-versions", {
-			dataProtectionPolicies: "consentVersions",
+		...mapGetters("consent-versions", {
+			dataProtectionPolicies: "getConsentVersions",
 		}),
-		...mapState("systems", {
-			systems: "systems",
+		...mapGetters("systems", {
+			systems: "getSystems",
 		}),
 		console: () => console, // TODO - delete when done
 	},
@@ -661,7 +661,8 @@ export default {
 				!this.school.officialSchoolNumber &&
 				this.localSchool.officialSchoolNumber
 			) {
-				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
+				updatedSchool.officialSchoolNumber =
+					this.localSchool.officialSchoolNumber;
 			}
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;

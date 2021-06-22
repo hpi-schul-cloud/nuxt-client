@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, url } from "vuelidate/lib/validators";
 
@@ -67,8 +67,10 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("auth", { school: "school" }),
-		...mapState("schools", { requestSuccessful: "requestSuccessful" }),
+		...mapGetters("schools", {
+			school: "getSchool",
+			requestSuccessful: "getRequestSuccessful",
+		}),
 		urlErrors() {
 			const errors = [];
 			if (!this.$v.url.$dirty) return errors;
@@ -85,7 +87,9 @@ export default {
 			if (!this.$v.$invalid) {
 				const { rssFeeds } = this.school;
 				const newRssFeed = { url: this.url, description: this.description };
-				const updatedRssFeedList = rssFeeds ? [...rssFeeds, newRssFeed] : [newRssFeed];
+				const updatedRssFeedList = rssFeeds
+					? [...rssFeeds, newRssFeed]
+					: [newRssFeed];
 
 				this.update({
 					id: this.school.id,

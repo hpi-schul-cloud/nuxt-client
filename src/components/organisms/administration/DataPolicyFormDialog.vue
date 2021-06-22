@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { currentDate } from "@plugins/datetime";
@@ -94,8 +94,10 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("auth", { school: "school" }),
-		...mapState("consent-versions", { requestSuccessful: "requestSuccessful" }),
+		...mapGetters("schools", { school: "getSchool" }),
+		...mapGetters("consent-versions", {
+			requestSuccessful: "getRequestSuccessful",
+		}),
 		descriptionErrors() {
 			const errors = [];
 			if (!this.$v.description.$dirty) return errors;

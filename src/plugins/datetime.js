@@ -80,7 +80,7 @@ export const setDefaultTimezone = (defaultTimezone) => {
  * sets default timezone
  */
 const initDefaultTimezone = (app, store) => {
-	schoolTimezone = store?.state?.auth?.school?.timezone;
+	schoolTimezone = store?.state?.schools?.school?.timezone;
 	instanceTimezone = store?.getters["env-config/getDefaultTimezone"];
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
 	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;

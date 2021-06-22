@@ -51,6 +51,20 @@ const module = {
 			state.error = error;
 		},
 	},
+	getters: {
+		getFederalStates: (state) => {
+			return state.federalStates;
+		},
+		getCurrentFederalState: (state) => {
+			return state.currentFederalState;
+		},
+		getRequestSuccessful(state) {
+			return state.requestSuccessful;
+		},
+		getError(state) {
+			return state.error;
+		},
+	},
 };
 
 export default module;

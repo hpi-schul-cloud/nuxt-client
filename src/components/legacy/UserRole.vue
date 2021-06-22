@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	data() {
@@ -11,11 +11,8 @@ export default {
 		return {};
 	},
 	computed: {
-		...mapState({
-			userRoles: (state) =>
-				state && state.auth && state.auth.user && state.auth.user.roles
-					? state.auth.user.roles.map((r) => r.displayName)
-					: [],
+		...mapGetters("auth", {
+			userRoles: "getUserRolesDisplayName",
 		}),
 		role() {
 			return this.userRoles ? this.userRoles[0] : "";

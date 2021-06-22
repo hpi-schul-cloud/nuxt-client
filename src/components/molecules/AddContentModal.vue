@@ -100,23 +100,13 @@ export default {
 	},
 	computed: {
 		...mapGetters("courses", {
-			courses: "getList",
+			coursesOptions: "getCoursesOptions",
 		}),
 		...mapGetters("content", {
 			lessons: "getLessons",
 		}),
 		isSendEnabled() {
 			return (this.selectedLesson || {})._id !== undefined;
-		},
-		coursesOptions() {
-			return this.courses
-				.filter((course) => course.isArchived === false)
-				.map((course) => {
-					return {
-						_id: course._id,
-						name: course.name,
-					};
-				});
 		},
 		lessonsOptions() {
 			return (

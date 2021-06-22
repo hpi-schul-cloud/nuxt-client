@@ -52,6 +52,16 @@ describe("students/index", () => {
 				}),
 				getters: {
 					getSchool: () => ({ isExternal: false }),
+					getUserPermissions: () => [
+						"student_create",
+						"student_list",
+						"student_delete",
+					],
+				},
+			},
+			schools: {
+				getters: {
+					schoolIsExternallyManaged: () => false,
 				},
 			},
 			users: {
@@ -331,17 +341,8 @@ describe("students/index", () => {
 
 	it("should not display the edit button if school is external", async () => {
 		const customMockStore = mockStore;
-		customMockStore.auth.state = () => ({
-			user: {
-				roles: [
-					{
-						name: "administrator",
-					},
-				],
-			},
-		});
-		customMockStore.auth.getters = {
-			getSchool: () => ({ isExternal: true }),
+		customMockStore.schools.getters = {
+			schoolIsExternallyManaged: () => true,
 		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
@@ -391,20 +392,11 @@ describe("students/index", () => {
 		expect(fabComponent.exists()).toBe(true);
 	});
 
-	it("should not render the fab-floating component if user does not have SUDENT_CREATE permission", async () => {
+	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.state = () => ({
-			user: {
-				roles: [
-					{
-						name: "administrator",
-					},
-				],
-			},
-			school: {
-				isExternal: false,
-			},
-		});
+		customMockStore.auth.getters = {
+			getUserPermissions: () => ["student_list", "student_delete"],
+		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -420,19 +412,9 @@ describe("students/index", () => {
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.state = () => ({
-			user: {
-				roles: [
-					{
-						name: "administrator",
-						permissions: ["STUDENT_CREATE"],
-					},
-				],
-			},
-			school: {
-				isExternal: true,
-			},
-		});
+		customMockStore.schools.getters = {
+			schoolIsExternallyManaged: () => true,
+		};
 
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
@@ -448,18 +430,8 @@ describe("students/index", () => {
 
 	it("should render the adminTableLegend component when school is external", async () => {
 		const customMockStore = mockStore;
-		customMockStore.auth.state = () => ({
-			user: {
-				roles: [
-					{
-						name: "administrator",
-						permissions: ["STUDENT_CREATE"],
-					},
-				],
-			},
-		});
-		customMockStore.auth.getters = {
-			getSchool: () => ({ isExternal: true }),
+		customMockStore.schools.getters = {
+			schoolIsExternallyManaged: () => true,
 		};
 
 		const wrapper = mount(StudentPage, {

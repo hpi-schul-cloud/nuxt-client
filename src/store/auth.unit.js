@@ -44,7 +44,8 @@ describe("store/auth", () => {
 					},
 				};
 				const mockRootState = {
-					auth: {
+					auth: {},
+					schools: {
 						school: {
 							language: "fi",
 						},
@@ -61,7 +62,8 @@ describe("store/auth", () => {
 			it("returns the instance language", () => {
 				const mockState = {};
 				const mockRootState = {
-					auth: {
+					auth: {},
+					schools: {
 						school: {},
 					},
 					"env-config": {
@@ -76,7 +78,8 @@ describe("store/auth", () => {
 			it("returns the default language", () => {
 				const mockState = {};
 				const mockRootState = {
-					auth: {
+					auth: {},
+					schools: {
 						school: {},
 					},
 					"env-config": {
