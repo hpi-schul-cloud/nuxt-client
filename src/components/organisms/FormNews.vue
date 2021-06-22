@@ -30,7 +30,7 @@
 							:label="$t('components.organisms.FormNews.label.date')"
 							data-testid="news_date"
 							placeholder="JJJJ-MM-TT"
-              :error="errors.content"
+							:error="errors.content"
 						/>
 						<base-input
 							v-model="data.date.time"
@@ -120,7 +120,11 @@ export default Vue.extend({
 			);
 			return a.utc().format();
 		},
-		errors(): { title: string | undefined; content: string | undefined; date: string | undefined } {
+		errors(): {
+			title: string | undefined;
+			content: string | undefined;
+			date: string | undefined;
+		} {
 			const title = this.data.title
 				? undefined
 				: this.$ts("components.organisms.FormNews.errors.missing_title");
@@ -128,12 +132,12 @@ export default Vue.extend({
 				? undefined
 				: this.$ts("components.organisms.FormNews.errors.missing_content");
 			const date = this.data.date.date
-        ? undefined
-          : this.$ts("components.organisms.FormNews.errors.missing_date")
+				? undefined
+				: this.$ts("components.organisms.FormNews.errors.missing_date");
 			return {
 				title,
 				content,
-        date,
+				date,
 			};
 		},
 	},
@@ -182,22 +186,25 @@ export default Vue.extend({
 					createInputDateTime(displayAt);
 			}
 		},
-    getNewsTarget(query: any, schoolId: string) {
-      if (query.target && query.targetmodel ){
-        return { targetId: query.target, targetModel: query.targetmodel };
-      } else if (query.context && query.contextId ) {
-        return { targetId: query.contextId, targetModel: query.context };
-      } else {
-        return { targetId: schoolId, targetModel: 'schools' };
-      }
-    },
+		getNewsTarget(query: any, schoolId: string) {
+			if (query.target && query.targetmodel) {
+				return { targetId: query.target, targetModel: query.targetmodel };
+			} else if (query.context && query.contextId) {
+				return { targetId: query.contextId, targetModel: query.context };
+			} else {
+				return { targetId: schoolId, targetModel: "schools" };
+			}
+		},
 		async create() {
 			const errors = Object.values(this.errors).filter((a) => a);
 			if (errors.length && errors[0]) {
 				return this.$toast.error(errors[0]);
 			}
 			try {
-			  const newsTarget = this.getNewsTarget(this.$route.query, this.$user.schoolId);
+				const newsTarget = this.getNewsTarget(
+					this.$route.query,
+					this.$user.schoolId
+				);
 				await this.$store.dispatch("news/create", {
 					title: this.data.title,
 					content: this.data.content,
@@ -211,9 +218,9 @@ export default Vue.extend({
 						this.$ts("components.organisms.FormNews.success.create")
 					);
 					await this.$router.push({
-            name: "news-id",
-            params: { id: this.createdNews[0].id },
-          });
+						name: "news-id",
+						params: { id: this.createdNews[0].id },
+					});
 				}
 			} catch (e) {
 				console.error(e);
