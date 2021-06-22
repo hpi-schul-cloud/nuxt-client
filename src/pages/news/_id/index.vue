@@ -6,10 +6,10 @@
 					:inputs="[
 						{
 							to: { name: 'news' },
-							text: 'News',
+							text: $t('pages.news.title'),
 						},
 						{
-							to: { name: 'news-id', params: { id: current._id } },
+							to: { name: 'news-id', params: { id: current.id } },
 							text: current.title,
 						},
 					]"
