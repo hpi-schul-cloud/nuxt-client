@@ -20,8 +20,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
-- SC-9131 fixing password changing on student consent page
-- SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page
+- SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page and feature of password changing is fixed
 - SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
 - SC-9093 - Load default language and timezone from server
 
