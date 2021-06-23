@@ -58,7 +58,15 @@ const addToLesson = jest.fn().mockReturnValue(Promise.resolve());
 const mockStore = {
 	courses: {
 		getters: {
-			getList: () => courseOptions,
+			getCoursesOptions: () =>
+				courseOptions
+					.filter((course) => course.isArchived === false)
+					.map((course) => {
+						return {
+							_id: course._id,
+							name: course.name,
+						};
+					}),
 		},
 	},
 	content: {

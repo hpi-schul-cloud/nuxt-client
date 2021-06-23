@@ -28,6 +28,9 @@ const checkCorrectView = (
 							permissions: storePermissions,
 						},
 					}),
+					getters: {
+						getUserPermissions: () => storePermissions,
+					},
 				},
 			},
 		}),
@@ -49,6 +52,9 @@ const checkCorrectView = (
 							permissions: storePermissions,
 						},
 					}),
+					getters: {
+						getUserPermissions: () => storePermissions,
+					},
 				},
 			},
 		}),
@@ -63,15 +69,15 @@ const checkCorrectView = (
 describe("@components/helpers/UserHasPermission", () => {
 	it(...isValidComponent(UserHasPermission));
 	it("view true-slot if user has permission", () => {
-		checkCorrectView("ADMIN", ["ADMIN"], true);
+		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have permission", () => {
-		checkCorrectView("ADMIN", ["USER"], false);
+		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view true-slot when permission is empty or undefined", () => {
-		checkCorrectView(undefined, ["USER"], true);
+		checkCorrectView(undefined, ["user"], true);
 	});
 	it("defaults to false when user has no permissions", () => {
-		checkCorrectView("ADMIN", undefined, false);
+		checkCorrectView("ADMIN", [], false);
 	});
 });
