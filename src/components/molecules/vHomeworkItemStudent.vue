@@ -1,5 +1,5 @@
 <template>
-	<v-list-item :key="homework._id" :href="homeworkHref(homework._id)">
+	<v-list-item :key="homework.id" :href="homeworkHref(homework.id)">
 		<v-list-item-avatar class="hidden-xs-only">
 			<img :src="taskIconSvg" role="presentation" />
 		</v-list-item-avatar>
@@ -49,7 +49,7 @@ import {
 	printDateTimeFromStringUTC,
 } from "@plugins/datetime";
 
-const homeworkRequiredKeys = ["_id", "courseName", "createdAt", "id", "name"];
+const homeworkRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
 	components: { VCustomChipTimeRemaining },

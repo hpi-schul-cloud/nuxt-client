@@ -1,5 +1,5 @@
 <template>
-	<v-list-item :key="homework._id" :href="homeworkGradingHref(homework._id)">
+	<v-list-item :key="homework.id" :href="homeworkGradingHref(homework.id)">
 		<v-list-item-avatar>
 			<img :src="taskIconSvg" role="presentation" />
 		</v-list-item-avatar>

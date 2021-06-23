@@ -8,7 +8,7 @@ import {
 } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
-describe("@components/organisms/HomeworksList", () => {
+describe("@components/molecules/vHomeworkItemStudent", () => {
 	let vuetify;
 
 	beforeEach(() => {

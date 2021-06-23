@@ -26,10 +26,11 @@ export default [
 		testId: "Offene Aufgaben",
 	},
 	{
-		title: "global.sidebar.tasks.tasksUngraded",
+		title: "global.sidebar.tasks.tasksCurrent",
 		href: "/tasks/assigned",
 		icon: "tasks",
-		testId: "Ungeprüfte Aufgaben",
+		permission: "TEACHER_LIST",
+		testId: "Aktuelle Aufgaben",
 	},
 	{
 		title: "global.sidebar.allTasks",

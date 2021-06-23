@@ -1,11 +1,8 @@
 import vHomeworkItemTeacher from "./vHomeworkItemTeacher";
-import {
-	homeworks,
-	openHomeworksWithoutDueDate,
-} from "@@/stories/mockData/Homeworks";
+import { homeworksTeacher } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
-describe("@components/organisms/HomeworksList", () => {
+describe("@components/molecules/vHomeworkItemTeacher", () => {
 	let vuetify;
 
 	beforeEach(() => {
@@ -22,7 +19,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				homework: homeworks[0],
+				homework: homeworksTeacher[0],
 			},
 		});
 
@@ -30,7 +27,7 @@ describe("@components/organisms/HomeworksList", () => {
 
 		expect(firstLink.exists()).toBe(true);
 		expect(firstLink.attributes().href).toBe(
-			`/homework/${homeworks[0]._id}#activetabid=submissions`
+			`/homework/${homeworksTeacher[0].id}#activetabid=submissions`
 		);
 	});
 
@@ -42,7 +39,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				homework: homeworks[0],
+				homework: homeworksTeacher[0],
 			},
 		});
 
@@ -59,7 +56,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				homework: openHomeworksWithoutDueDate[0],
+				homework: homeworksTeacher[7],
 			},
 		});
 
