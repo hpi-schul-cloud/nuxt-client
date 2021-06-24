@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [26.4.3] - 2021-06-24
+
+### Changed
+
+- OPS-2467 - changes build pipeline to github actions 
+
 ## 26.4.2
 
 ### Changed
