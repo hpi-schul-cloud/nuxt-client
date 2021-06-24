@@ -286,6 +286,9 @@ export default {
 			isDeleting: (state) => state.progress.delete.active,
 			deletedPercent: (state) => state.progress.delete.percent,
 		}),
+		...mapState("env-config", {
+			env: "env",
+		}),
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;
@@ -296,9 +299,7 @@ export default {
 			return !this.school.isExternal;
 		},
 		showConsent() {
-			return process.env["ADMIN_TABLES_DISPLAY_CONSENT_COLUMN"] === "false"
-				? false
-				: true;
+			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -429,6 +430,7 @@ export default {
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("users/sendRegistrationLink", {
 					userIds: rowIds,
 					selectionType,
@@ -444,6 +446,7 @@ export default {
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
+				// TODO wrong use of store
 				const qrRegistrationLinks = await this.$store.dispatch(
 					"users/getQrRegistrationLinks",
 					{

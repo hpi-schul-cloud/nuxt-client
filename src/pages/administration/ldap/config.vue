@@ -16,7 +16,7 @@
 			<base-link
 				class="link-style"
 				to="/"
-				href="https://docs.schul-cloud.org/x/PgBVAw"
+				href="https://docs.hpi-schul-cloud.org/x/PgBVAw"
 				target="_blank"
 				:no-styles="true"
 				traget="_blank"
@@ -160,6 +160,7 @@ export default {
 		if (Object.keys(this.temp).length) {
 			this.systemData = { ...this.temp };
 		} else if (id) {
+			// TODO wrong use of store (not so bad)
 			await this.$store.dispatch("ldap-config/getData", id);
 			this.systemData = { ...this.data };
 		}
@@ -178,11 +179,13 @@ export default {
 							...this.systemData,
 							searchUserPassword: undefined,
 						};
+						// TODO wrong use of store (not so bad)
 						await this.$store.dispatch("ldap-config/verifyExisting", {
 							systemData,
 							systemId,
 						});
 					} else {
+						// TODO wrong use of store (not so bad)
 						await this.$store.dispatch(
 							"ldap-config/verifyData",
 							this.systemData

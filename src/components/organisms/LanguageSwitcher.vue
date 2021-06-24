@@ -26,7 +26,7 @@
 				</div>
 				<base-icon source="custom" icon="sort-down" />
 			</div>
-			<div id="`dropdown-content`" class="content" :class="{ open }">
+			<div id="`dropdown-content`" class="wrapper" :class="{ open }">
 				<p
 					v-for="lang in languages"
 					:key="lang.longName"
@@ -110,13 +110,7 @@ export default {
 	}
 }
 
-.container {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.content {
+.wrapper {
 	position: absolute;
 	z-index: var(--layer-dropdown);
 	display: none;

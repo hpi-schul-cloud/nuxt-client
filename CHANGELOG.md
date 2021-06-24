@@ -8,6 +8,39 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## 26.4.2
+
+### Changed
+
+- rename permission TASK_DASHBOARD_VIEW_V3
+
+## 26.4.1
+
+### Changed
+
+- SC-9144 - fixed build with env SC_THEME
+
+## 26.4.0
+
+### Removed
+
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
+
+### Added
+
+- SC-9004 - Sync env variables between backend and frontend
+- SC-9023 - Add open homework overview
+
+### Changed
+
+- SC-9004 - Change ci build
+
+## 26.2.1
+
+### Changed
+
+- SC-9114 - project naming
+
 ## 26.2.0
 
 ### Added

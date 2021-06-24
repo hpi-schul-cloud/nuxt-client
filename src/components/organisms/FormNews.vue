@@ -168,9 +168,8 @@ export default Vue.extend({
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				[this.data.date.date, this.data.date.time] = createInputDateTime(
-					displayAt
-				);
+				[this.data.date.date, this.data.date.time] =
+					createInputDateTime(displayAt);
 			}
 		},
 		async create() {
@@ -179,6 +178,7 @@ export default Vue.extend({
 				return this.$toast.error(errors[0]);
 			}
 			try {
+				// TODO wrong use of store
 				const news = await this.$store.dispatch("news/create", {
 					title: this.data.title,
 					content: this.data.content,
@@ -205,6 +205,7 @@ export default Vue.extend({
 				return this.$toast.error(errors[0]);
 			}
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("news/patch", [
 					this.$route.params.id,
 					{
@@ -247,6 +248,7 @@ export default Vue.extend({
 		},
 		async confirmRemoveHandler() {
 			try {
+				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("news/remove", this.$route.params.id);
 				this.$toast.success(
 					this.$ts("components.organisms.FormNews.success.remove")

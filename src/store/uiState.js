@@ -79,12 +79,14 @@ const createPattern = (key, methode, value) => {
 };
 
 export const getters = {
-	get: (state) => ({ key, identifier }) => {
-		if (!key) throw new SyntaxError("Key is missing!");
+	get:
+		(state) =>
+		({ key, identifier }) => {
+			if (!key) throw new SyntaxError("Key is missing!");
 
-		const value = identifier ? state[key][identifier] : state[key];
-		return createPattern(key, "get", value);
-	},
+			const value = identifier ? state[key][identifier] : state[key];
+			return createPattern(key, "get", value);
+		},
 };
 
 export const mutations = {
