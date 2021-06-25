@@ -8,7 +8,7 @@
 						text: $t('pages.news.title'),
 					},
 					{
-						to: { name: 'news-id', params: { id: $route.params.id } },
+						to: { name: newsPath, params: { id: $route.params.id } },
 						text: current.title,
 					},
 					{
@@ -63,12 +63,13 @@ export default {
 		FormNews,
 		FormActions,
 	},
-	props: {
-		current: {
-			type: Object,
-			required: true,
-		},
-	},
+  props: {
+    newsPath: {
+      type: String,
+      default: 'news-id'
+    },
+		current: { type: Object, default: () => {} },
+},
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
