@@ -5,6 +5,14 @@ export const requiredVars = {
 	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
 };
 
+export const configsFromEnvironmentVars = {
+	FEATURE_MATRIX_MESSENGER_ENABLED:
+		process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
+	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
+	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
+	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
+};
+
 const retryLimit = 10;
 
 export const actions = {
@@ -17,7 +25,7 @@ export const actions = {
 				}
 			});
 
-			commit("setEnv", env);
+			commit("setEnv", { ...configsFromEnvironmentVars, ...env });
 		} catch (error) {
 			commit("setError", error);
 			console.error(`Configuration could not be loaded from the server`);
@@ -55,6 +63,15 @@ export const getters = {
 	},
 	getEnv(state) {
 		return state.env;
+	},
+	getMatrixConfig: (state) => {
+		return {
+			enabled: state.env.FEATURE_MATRIX_MESSENGER_ENABLED,
+			schoolSettingsVisible:
+				state.env.MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE,
+			studentRoomCreation: state.env.MATRIX_MESSENGER__STUDENT_ROOM_CREATION,
+			schoolRoomEnabled: state.env.MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED,
+		};
 	},
 };
 

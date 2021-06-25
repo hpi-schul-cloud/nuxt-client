@@ -157,34 +157,83 @@
 											</p>
 										</v-col>
 									</v-row>
-									<v-row>
-										<v-col>
-											<v-switch
-												v-model="localSchool.features.messenger"
-												label="Matrix Messenger aktivieren"
-												inset
-												flat
-												dense
-												:ripple="false"
-												class="ml-1 mt-0"
-											></v-switch>
-											<p class="body-2 mb-0">
-												Ist der Matrix Messenger aktiviert, können alle
-												Lehrkräfte dieser Schule Chaträume, private
-												Unterhaltungen oder kurs- und teaminterne
-												Gruppendiskussionen starten. Schüler:innen haben dort
-												anfangs nur Leserechte, können aber über die Kurs- und
-												Teameinstellungen auch Schreibrechte zugewiesen
-												bekommen. Mehr Informationen dazu findest du im
-												<a
-													href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243"
-													target="_blank"
-												>
-													Hilfeartikel zum Messenger
-												</a>
-											</p>
-										</v-col>
-									</v-row>
+									<span
+										v-if="
+											matrixMessengerConfig.enabled &&
+											matrixMessengerConfig.schoolSettingsVisible
+										"
+									>
+										<v-row>
+											<v-col>
+												<v-switch
+													v-model="localSchool.features.messenger"
+													label="Matrix Messenger aktivieren"
+													inset
+													flat
+													dense
+													:ripple="false"
+													class="ml-1 mt-0"
+												></v-switch>
+												<p class="body-2 mb-0">
+													Ist der Matrix Messenger aktiviert, können alle
+													Lehrkräfte dieser Schule Chaträume, private
+													Unterhaltungen oder kurs- und teaminterne
+													Gruppendiskussionen starten. Schüler:innen haben dort
+													anfangs nur Leserechte, können aber über die Kurs- und
+													Teameinstellungen auch Schreibrechte zugewiesen
+													bekommen. Mehr Informationen dazu findest du im
+													<a
+														href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243"
+														target="_blank"
+													>
+														Hilfeartikel zum Messenger
+													</a>
+												</p>
+											</v-col>
+										</v-row>
+										<v-row v-if="matrixMessengerConfig.schoolRoomEnabled">
+											<v-col>
+												<v-switch
+													v-model="localSchool.features.messengerSchoolRoom"
+													label="Chatraum für Ankündigungen an die gesamte Schule anlegen"
+													inset
+													flat
+													dense
+													:ripple="false"
+													class="ml-1 mt-0"
+												></v-switch>
+												<p class="body-2 mb-0">
+													Der Ankündigungs-Chatraum ermöglicht Schul-Admins,
+													Nachrichten an die gesamte Schule zu senden.
+													Schüler:innen haben in diesem Raum nur Lesezugriff,
+													sehen sich aber gegenseitig und können so private
+													Chats starten.
+												</p>
+											</v-col>
+										</v-row>
+										<v-row v-if="matrixMessengerConfig.studentRoomCreation">
+											<v-col>
+												<v-switch
+													v-model="
+														localSchool.features.messengerStudentRoomCreate
+													"
+													label="Schüler:innen dürfen eigene Chat-Räume anlegen"
+													inset
+													flat
+													dense
+													:ripple="false"
+													class="ml-1 mt-0"
+												></v-switch>
+												<p class="body-2 mb-0">
+													Ist diese Funktion aktiviert, dürfen Schüler:innen
+													Chaträume, private Unterhaltungen und kurs- und
+													teaminterne Gruppendiskussionen starten. Diese Räume
+													sind für Lehrkräfte nicht einzusehen, wenn diese nicht
+													explizit eingeladen werden.
+												</p>
+											</v-col>
+										</v-row>
+									</span>
 									<v-row>
 										<v-col>
 											<v-switch
@@ -223,48 +272,6 @@
 												jeweiligen Team aktivieren. Team-Leiter:innen und
 												Team-Admins können dann Videokonferenzen zu Terminen
 												hinzufügen und starten.
-											</p>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<v-switch
-												v-model="localSchool.features.messengerSchoolRoom"
-												label="Chatraum für Ankündigungen an die gesamte Schule anlegen"
-												inset
-												flat
-												dense
-												:ripple="false"
-												class="ml-1 mt-0"
-											></v-switch>
-											<p class="body-2 mb-0">
-												Der Ankündigungs-Chatraum ermöglicht Schul-Admins,
-												Nachrichten an die gesamte Schule zu senden.
-												Schüler:innen haben in diesem Raum nur Lesezugriff,
-												sehen sich aber gegenseitig und können so private Chats
-												starten.
-											</p>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<v-switch
-												v-model="
-													localSchool.features.messengerStudentRoomCreate
-												"
-												label="Schüler:innen dürfen eigene Chat-Räume anlegen"
-												inset
-												flat
-												dense
-												:ripple="false"
-												class="ml-1 mt-0"
-											></v-switch>
-											<p class="body-2 mb-0">
-												Ist diese Funktion aktiviert, dürfen Schüler:innen
-												Chaträume, private Unterhaltungen und kurs- und
-												teaminterne Gruppendiskussionen starten. Diese Räume
-												sind für Lehrkräfte nicht einzusehen, wenn diese nicht
-												explizit eingeladen werden.
 											</p>
 										</v-col>
 									</v-row>
@@ -561,7 +568,6 @@ export default {
 		};
 	},
 	computed: {
-		// TODO mapState -> mapGetters
 		...mapGetters("auth", {
 			user: "getUser",
 		}),
@@ -579,6 +585,9 @@ export default {
 		}),
 		...mapGetters("systems", {
 			systems: "getSystems",
+		}),
+		...mapGetters("env-config", {
+			matrixMessengerConfig: "getMatrixConfig",
 		}),
 		console: () => console, // TODO - delete when done
 	},
@@ -678,8 +687,10 @@ export default {
 			this.update(updatedSchool);
 		},
 		setFeatures() {
-			for (let i = 0; i < this.school.features.length; i++) {
-				this.localSchool.features[this.school.features[i]] = true;
+			if (this.school && this.school.features) {
+				for (let i = 0; i < this.school.features.length; i++) {
+					this.localSchool.features[this.school.features[i]] = true;
+				}
 			}
 		},
 		createFeaturesArray() {
