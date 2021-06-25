@@ -12,7 +12,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
-- OPS-2467 - changes build pipeline to github actions 
+- OPS-2467 - changes build pipeline to github actions
 
 ## 26.4.2
 
