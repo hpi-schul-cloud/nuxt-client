@@ -26,7 +26,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9093 - Load default language and timezone from server
 - SC-9160 - fixed getStatus getter in service-template
 
-## [26.4.2] - 2021-06-16
+## [26.4.3] - 2021-06-24
+
+### Changed
+
+- OPS-2467 - changes build pipeline to github actions
 
 ### Changed
 
