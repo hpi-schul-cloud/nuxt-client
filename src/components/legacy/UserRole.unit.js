@@ -13,6 +13,9 @@ const checkRole = (expectedContent, storeRoles) => {
 							roles: storeRoles,
 						},
 					}),
+					getters: {
+						getUserRolesDisplayName: () => storeRoles,
+					},
 				},
 			},
 		}),
