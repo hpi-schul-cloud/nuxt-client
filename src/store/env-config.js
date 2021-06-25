@@ -11,6 +11,7 @@ export const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
+	LERNSTORE_MODE: process.env.LERNSTORE_MODE,
 };
 
 const retryLimit = 10;
@@ -73,6 +74,14 @@ export const getters = {
 			schoolRoomEnabled: state.env.MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED,
 		};
 	},
+	getAdminToggleStudentLernstoreViewEnabled: (state) =>
+		state.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
+		state.env.LERNSTORE_MODE === "EDUSHARING",
+	getAdminToggleStudentVisibilityEnabled: (state) =>
+		state.env.FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED,
+	getVideoConferenceEnabled: (state) =>
+		state.env.FEATURE_VIDEOCONFERENCE_ENABLED,
+	getSchoolPolicyEnabled: (state) => state.env.FEATURE_SCHOOL_POLICY_ENABLED,
 };
 
 export const state = () => {

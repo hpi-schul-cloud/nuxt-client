@@ -117,7 +117,7 @@
 									</v-row>
 								</v-col>
 							</v-row>
-							<v-row>
+							<v-row v-if="toggleStudentVisibilityEnabled">
 								<v-col>
 									<h3 class="text-h6 mt-0">Datenschutzeinstellungen</h3>
 									<v-row>
@@ -140,7 +140,7 @@
 											</p>
 										</v-col>
 									</v-row>
-									<v-row>
+									<v-row v-if="toggleStudentLernstoreViewEnabled">
 										<v-col>
 											<v-switch
 												v-model="localSchool.lernStore"
@@ -252,7 +252,7 @@
 											</p>
 										</v-col>
 									</v-row>
-									<v-row>
+									<v-row v-if="videoConferenceEnabled">
 										<v-col>
 											<v-switch
 												v-model="localSchool.features.videoconference"
@@ -303,9 +303,12 @@
 							</v-row>
 						</v-form>
 						<v-divider class="mt-13"></v-divider>
-						<h2 class="text-h4">Datenschutzerklärung</h2>
+						<h2 v-if="schoolPolicyEnabled" class="text-h4">
+							Datenschutzerklärung
+						</h2>
 						<template
 							v-if="
+								schoolPolicyEnabled &&
 								localSchool.dataProtectionPolicies &&
 								localSchool.dataProtectionPolicies.length
 							"
@@ -588,6 +591,11 @@ export default {
 		}),
 		...mapGetters("env-config", {
 			matrixMessengerConfig: "getMatrixConfig",
+			toggleStudentLernstoreViewEnabled:
+				"getAdminToggleStudentLernstoreViewEnabled",
+			toggleStudentVisibilityEnabled: "getAdminToggleStudentVisibilityEnabled",
+			schoolPolicyEnabled: "getSchoolPolicyEnabled",
+			videoConferenceEnabled: "getVideoConferenceEnabled",
 		}),
 		console: () => console, // TODO - delete when done
 	},
