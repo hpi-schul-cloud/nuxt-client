@@ -274,9 +274,6 @@
 </template>
 
 <script>
-// file deepcode ignore ArrayMethodOnNonArray
-import generatePassword from "@mixins/generatePassword";
-import { mapGetters } from "vuex";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
@@ -297,7 +294,6 @@ export default {
 		requiredPermissions: ["STUDENT_EDIT", "STUDENT_LIST"],
 	},
 	layout: "loggedInFull",
-	props: {},
 	data() {
 		return {
 			breadcrumbs: [
@@ -389,18 +385,10 @@ export default {
 			),
 			sortBy: "fullName",
 			sortOrder: "asc",
-			tableData:
-				this.$store.getters["bulkConsent/getSelectedStudentsData"] || [],
-			selectedStudents:
-				this.$store.getters["bulkConsent/getSelectedStudents"] || [],
+			tableData: [],
 		};
 	},
-	computed: {
-		...mapGetters("users", {
-			students: "getConsentList",
-		}),
-	},
-	async created(ctx) {
+	async created() {
 		await this.find();
 		window.addEventListener("beforeunload", this.warningEventHandler);
 	},
@@ -418,22 +406,11 @@ export default {
 				$sort: {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
-				users: this.selectedStudents,
-				$limit: this.selectedStudents.length,
 			};
-			await this.$store.dispatch("users/findConsentUsers", query);
+			await this.$store.dispatch("bulkConsent/findConsentUsers", query);
 
-			if (this.students && this.students.length) {
-				const data = this.students
-					.filter((student) => student.consentStatus !== "ok")
-					.map((student) => {
-						student.fullName = student.firstName + " " + student.lastName;
-						student.password = generatePassword();
-						return student;
-					});
-				this.tableData = data;
-				this.$store.dispatch("bulkConsent/setStudents", data);
-			}
+			this.tableData =
+				this.$store.getters["bulkConsent/getSelectedStudentsData"];
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
@@ -548,12 +525,6 @@ export default {
 			});
 		},
 		checkTableData() {
-			if (this.selectedStudents.length === 0) {
-				this.$router.push({
-					path: `/administration/students`,
-				});
-			}
-
 			this.tableTimeOut = setTimeout(() => {
 				if (this.tableData.length === 0) {
 					this.$toast.error(
