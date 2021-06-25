@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
@@ -117,9 +117,9 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("auth", {
-			authenticated: (state) => state.accessToken || false,
-			user: (state) => state.user,
+		...mapGetters("auth", {
+			user: "getUser",
+			authenticated: "getAuthenticated",
 		}),
 		firstName() {
 			return this.user && this.user.firstName
