@@ -7,7 +7,7 @@ on:
       - main
       - master
 
-jobs
+jobs:
   build_and_push_nuxt:
     runs-on: ubuntu-latest
     strategy:
