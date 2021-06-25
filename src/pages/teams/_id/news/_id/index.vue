@@ -7,7 +7,7 @@ import NewsDetailView from "@components/organisms/NewsDetailView";
 import { mapGetters } from "vuex";
 
 export default {
-  components: {
+	components: {
 		NewsDetailView,
 	},
 	async asyncData({ store, params }) {
@@ -18,6 +18,5 @@ export default {
 			current: "getCurrent",
 		}),
 	},
-
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <div>
-	  <news-edit-view :current="current" news-path="news-id"> </news-edit-view>
-  </div>
+	<div>
+		<news-edit-view :current="current" news-path="news-id"> </news-edit-view>
+	</div>
 </template>
 
 <script>

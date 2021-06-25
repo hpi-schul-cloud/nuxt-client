@@ -63,13 +63,13 @@ export default {
 		FormNews,
 		FormActions,
 	},
-  props: {
-    newsPath: {
-      type: String,
-      default: 'news-id'
-    },
+	props: {
+		newsPath: {
+			type: String,
+			default: "news-id",
+		},
 		current: { type: Object, default: () => {} },
-},
+	},
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
