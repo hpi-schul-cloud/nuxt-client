@@ -45,8 +45,12 @@
 			</v-card-text>
 			<v-card-actions class="pb-3">
 				<v-spacer></v-spacer>
-				<v-btn depressed outlined @click="cancel">{{ this.$t("common.actions.cancel") }}</v-btn>
-				<v-btn color="primary" depressed @click="submit">{{ this.$t("common.actions.add") }}</v-btn>
+				<v-btn depressed outlined @click="cancel">{{
+					this.$t("common.actions.cancel")
+				}}</v-btn>
+				<v-btn color="primary" depressed @click="submit">{{
+					this.$t("common.actions.add")
+				}}</v-btn>
 			</v-card-actions>
 		</v-card>
 	</v-dialog>
@@ -83,7 +87,8 @@ export default {
 			const errors = [];
 			if (!this.$v.url.$dirty) return errors;
 
-			!this.$v.url.required && errors.push(this.$t("common.validation.required"));
+			!this.$v.url.required &&
+				errors.push(this.$t("common.validation.required"));
 			!this.$v.url.url && errors.push(this.$t("common.validation.url"));
 			return errors;
 		},

@@ -12,7 +12,9 @@
 				<v-btn depressed outlined @click="$emit('dialog-closed')">
 					{{ this.$t("common.actions.cancel") }}
 				</v-btn>
-				<v-btn color="primary" depressed @click="submit">{{ this.$t("common.actions.confirm") }}</v-btn>
+				<v-btn color="primary" depressed @click="submit">{{
+					this.$t("common.actions.confirm")
+				}}</v-btn>
 			</v-card-actions>
 		</v-card>
 	</v-dialog>
