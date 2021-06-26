@@ -23,7 +23,7 @@
 						</h1>
 						<h2 class="text-h4">
 							{{ $t("pages.administration.school.schoolYear") }}
-							{{ school.years.activeYear.name }}
+							{{ school.currentYear.name }}
 						</h2>
 						<p>
 							{{
@@ -346,12 +346,12 @@
 								</v-expansion-panel>
 							</v-expansion-panels>
 							<v-btn
-							class="my-8"
-							color="primary"
-							depressed
-							@click.stop="dialogs.policyDialogIsOpen = true"
-							>Datenschutzerklärung hinzufügen</v-btn
-						>
+								class="my-8"
+								color="primary"
+								depressed
+								@click.stop="dialogs.policyDialogIsOpen = true"
+								>Datenschutzerklärung hinzufügen</v-btn
+							>
 							<v-list-group class="ml-n4 pr-2">
 								<template v-slot:activator>
 									<v-list-item-title
@@ -360,7 +360,9 @@
 								</template>
 								<v-expansion-panels accordion flat class="ml-4 pr-2">
 									<v-list-item
-										v-for="policy of localSchool.dataProtectionPolicies.slice(1)"
+										v-for="policy of localSchool.dataProtectionPolicies.slice(
+											1
+										)"
 										:key="policy.consentDataId"
 										class="px-0"
 										:ripple="false"
@@ -398,7 +400,7 @@
 								</v-expansion-panels>
 							</v-list-group>
 						</template>
-						
+
 						<v-divider class="mt-13"></v-divider>
 						<!-- <h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
@@ -445,13 +447,19 @@
 										>
 											{{
 												rssFeed.status === "pending"
-													? "In der Warteschlange"
+													? this.$t(
+															"pages.administration.school.rssFeeds.status.inQueue"
+													  )
 													: rssFeed.status === "success"
-													? "Aktiv"
-													: "Fehler beim Abrufen"
+													? this.$t(
+															"pages.administration.school.rssFeeds.status.active"
+													  )
+													: this.$t(
+															"pages.administration.school.rssFeeds.status.error"
+													  )
 											}}
 										</v-chip>
-										<v-btn icon @click="removeRssFeed(rssFeed.id)">
+										<v-btn icon @click="openConfirmRssDelete(rssFeed.id)">
 											<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
 										</v-btn>
 									</v-list-item-action>
@@ -462,13 +470,19 @@
 								></v-divider>
 							</template>
 						</v-list>
-						<p v-else>Es sind noch keine RSS-Feeds hinterlegt.</p>
+						<p v-else>
+							{{
+								this.$t("pages.administration.school.rssFeeds.noRssFeedsYet")
+							}}
+						</p>
 						<v-btn
 							class="mt-2"
 							color="primary"
 							depressed
 							@click.stop="dialogs.rssDialogIsOpen = true"
-							>RSS-Feed hinzufügen</v-btn
+							>{{
+								this.$t("pages.administration.school.rssFeeds.addRssFeed")
+							}}</v-btn
 						>
 						{{ console.log(school, localSchool) }}
 					</v-col>
@@ -483,6 +497,23 @@
 			:is-open="dialogs.policyDialogIsOpen"
 			@dialog-closed="dialogs.policyDialogIsOpen = false"
 		></data-policy-form-dialog>
+		<vuetify-dialog
+			:is-open="dialogs.rssConfirmDeleteDialog.isOpen"
+			:size="350"
+			:submit="() => removeRssFeed(dialogs.rssConfirmDeleteDialog.rssFeedId)"
+			@dialog-closed="dialogs.rssConfirmDeleteDialog.isOpen = false"
+		>
+			<h2 slot="title" class="text-h4 my-2">
+				{{ this.$t("pages.administration.school.rssFeeds.deleteRssFeed") }}
+			</h2>
+			<template slot="dialogContent">
+				<p class="body-1 mt-2">
+					{{
+						this.$t("pages.administration.school.rssFeeds.confirmDeleteText")
+					}}
+				</p>
+			</template>
+		</vuetify-dialog>
 	</v-container>
 </template>
 
@@ -499,11 +530,13 @@ import { printDate, printDateTimeFromStringUTC } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import RssFormDialog from "@components/organisms/administration/RssFormDialog";
 import DataPolicyFormDialog from "@components/organisms/administration/DataPolicyFormDialog";
+import VuetifyDialog from "@components/vuetify/organisms/VuetifyDialog";
 
 export default {
 	components: {
 		RssFormDialog,
 		DataPolicyFormDialog,
+		VuetifyDialog,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -550,6 +583,10 @@ export default {
 			dialogs: {
 				rssDialogIsOpen: false,
 				policyDialogIsOpen: false,
+				rssConfirmDeleteDialog: {
+					isOpen: false,
+					rssFeedId: undefined,
+				},
 			},
 			iconMdiChevronRight: mdiChevronRight,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
@@ -621,19 +658,6 @@ export default {
 		this.localSchool.rssFeeds = this.school.rssFeeds;
 	},
 	methods: {
-		removeRssFeed(rssFeedId) {
-			const updatedRssFeedList = this.localSchool.rssFeeds.filter(
-				(rssFeed) => rssFeed.id !== rssFeedId
-			);
-			this.update({ id: this.school.id, rssFeeds: updatedRssFeedList });
-		},
-		rssFeedStatusColor(rssFeedStatus) {
-			return rssFeedStatus === "pending"
-				? "orange lighten-3"
-				: rssFeedStatus === "success"
-				? "green lighten-3"
-				: "error lighten-5";
-		},
 		printDate,
 		printDateTimeFromStringUTC,
 		toBase64,
@@ -644,7 +668,6 @@ export default {
 			"fetchLernStoreVisibility",
 			"fetchFileStorageTotal",
 			"update",
-			"deleteRssFeed",
 		]),
 		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		...mapActions("systems", ["fetchSetOfSystems"]),
@@ -661,8 +684,7 @@ export default {
 				!this.school.officialSchoolNumber &&
 				this.localSchool.officialSchoolNumber
 			) {
-				updatedSchool.officialSchoolNumber =
-					this.localSchool.officialSchoolNumber;
+				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
 			}
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;
@@ -686,6 +708,31 @@ export default {
 				if (this.localSchool.features[featureName]) features.push(featureName);
 			}
 			return features;
+		},
+		openConfirmRssDelete(rssFeedId) {
+			this.dialogs.rssConfirmDeleteDialog = {
+				isOpen: true,
+				rssFeedId,
+			};
+		},
+		removeRssFeed(rssFeedId) {
+			const updatedRssFeedList = this.localSchool.rssFeeds.filter(
+				(rssFeed) => rssFeed.id !== rssFeedId
+			);
+			this.update({
+				id: this.school.id,
+				rssFeeds: updatedRssFeedList,
+			})
+				.then(() => (this.dialogs.rssConfirmDeleteDialog.isOpen = false))
+				.catch((err) => console.log(err)); // TODO - handle error
+		},
+		// TODO - should this be a computed property?
+		rssFeedStatusColor(rssFeedStatus) {
+			return rssFeedStatus === "pending"
+				? "orange lighten-3"
+				: rssFeedStatus === "success"
+				? "green lighten-3"
+				: "error lighten-5";
 		},
 	},
 	head() {
