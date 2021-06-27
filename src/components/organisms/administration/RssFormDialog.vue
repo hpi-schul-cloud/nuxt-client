@@ -6,7 +6,9 @@
 	>
 		<v-card ripple="false">
 			<v-card-title>
-				<h2 class="text-h4">RSS-Feed hinzufügen</h2>
+				<h2 class="text-h4">
+					{{ this.$t("pages.administration.school.rssFeeds.addRssFeed") }}
+				</h2>
 			</v-card-title>
 			<v-divider></v-divider>
 			<v-card-text class="pa-6 d-flex justify-center">
@@ -15,7 +17,9 @@
 						<v-col>
 							<v-text-field
 								v-model="url"
-								label="URL des RSS-Feeds"
+								:label="
+									this.$t('pages.administration.school.rssFeeds.form.url')
+								"
 								dense
 								required
 								:error-messages="urlErrors"
@@ -28,7 +32,11 @@
 						<v-col>
 							<v-text-field
 								v-model="description"
-								label="Kurzbeschreibung (optional)"
+								:label="
+									this.$t(
+										'pages.administration.school.rssFeeds.form.briefDescription'
+									)
+								"
 								dense
 							></v-text-field>
 						</v-col>
@@ -37,8 +45,12 @@
 			</v-card-text>
 			<v-card-actions class="pb-3">
 				<v-spacer></v-spacer>
-				<v-btn depressed outlined @click="cancel">Abbrechen</v-btn>
-				<v-btn color="primary" depressed @click="submit">Hinzufügen</v-btn>
+				<v-btn depressed outlined @click="cancel">{{
+					this.$t("common.actions.cancel")
+				}}</v-btn>
+				<v-btn color="primary" depressed @click="submit">{{
+					this.$t("common.actions.add")
+				}}</v-btn>
 			</v-card-actions>
 		</v-card>
 	</v-dialog>
@@ -74,8 +86,10 @@ export default {
 		urlErrors() {
 			const errors = [];
 			if (!this.$v.url.$dirty) return errors;
-			!this.$v.url.required && errors.push("Url is required");
-			!this.$v.url.url && errors.push("Must be valid url");
+
+			!this.$v.url.required &&
+				errors.push(this.$t("common.validation.required"));
+			!this.$v.url.url && errors.push(this.$t("common.validation.url"));
 			return errors;
 		},
 	},

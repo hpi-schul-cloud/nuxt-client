@@ -9,14 +9,23 @@ const module = {
 			error: null,
 		};
 	},
-	// school hier fetchen und speichern, über /schools/user.id wie im auth store (rootState)
 	actions: {
-		async fetchSchool({ commit, rootState }) {
+		async fetchSchool({ commit, rootState, dispatch }) {
+			commit("setRequestSuccessful", false);
+
 			if (rootState.auth?.user?.schoolId) {
-				const school = await this.$axios.$get(
-					`/schools/${rootState.auth.user.schoolId}`
-				);
-				commit("setSchool", school);
+				try {
+					const school = await this.$axios.$get(
+						`/schools/${rootState.auth.user.schoolId}`
+					);
+					commit("setSchool", school);
+					dispatch("schools/fetchCurrentYear", {}, { root: true });
+					commit("setRequestSuccessful", true);
+				} catch (error) {
+					commit("setError", error);
+					commit("setRequestSuccessful", false);
+					// TODO what is supposed to happen on error?
+				}
 			}
 		},
 		async fetchStudentVisibility({ commit }) {
@@ -63,6 +72,22 @@ const module = {
 				// TODO what is supposed to happen on error?
 			}
 		},
+		async fetchCurrentYear({ commit, rootState }) {
+			commit("setRequestSuccessful", false);
+
+			try {
+				const currentYear = await this.$axios.$get(
+					`/years/${rootState.schools.school.currentYear}`
+				);
+
+				commit("setCurrentYear", currentYear);
+				commit("setRequestSuccessful", true);
+			} catch (error) {
+				commit("setError", error);
+				commit("setRequestSuccessful", false);
+				// TODO what is supposed to happen on error?
+			}
+		},
 		async update({ commit }, payload) {
 			console.log("payload", payload);
 			commit("setRequestSuccessful", false);
@@ -97,6 +122,9 @@ const module = {
 		setFileStorageTotal(state, fileStorageTotal) {
 			state.fileStorageTotal = fileStorageTotal;
 		},
+		setCurrentYear(state, currentYear) {
+			state.school = { ...state.school, currentYear };
+		},
 		setRequestSuccessful(state, successful) {
 			state.requestSuccessful = successful;
 		},
@@ -119,6 +147,9 @@ const module = {
 		},
 		getFileStorageTotal(state) {
 			return state.fileStorageTotal;
+		},
+		getCurrentYear(state) {
+			return state.school.currentYear;
 		},
 		getRequestSuccessful(state) {
 			return state.requestSuccessful;
