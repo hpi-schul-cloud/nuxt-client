@@ -8,20 +8,20 @@ const module = {
 		};
 	},
 	actions: {
-		async fetchFederalStates({ commit }) {
-			commit("setRequestSuccessful", false);
+		// async fetchFederalStates({ commit }) {
+		// 	commit("setRequestSuccessful", false);
 
-			try {
-				const response = await this.$axios.$get("/federalStates");
+		// 	try {
+		// 		const response = await this.$axios.$get("/federalStates");
 
-				commit("setFederalStates", response.data);
-				commit("setRequestSuccessful", true);
-			} catch (error) {
-				commit("setError", error);
-				commit("setRequestSuccessful", false);
-				// TODO what is supposed to happen on error?
-			}
-		},
+		// 		commit("setFederalStates", response.data);
+		// 		commit("setRequestSuccessful", true);
+		// 	} catch (error) {
+		// 		commit("setError", error);
+		// 		commit("setRequestSuccessful", false);
+		// 		// TODO what is supposed to happen on error?
+		// 	}
+		// },
 		async fetchCurrentFederalState({ commit }, id) {
 			commit("setRequestSuccessful", false);
 
@@ -38,9 +38,9 @@ const module = {
 		},
 	},
 	mutations: {
-		setFederalStates: (state, federalStates) => {
-			state.federalStates = federalStates;
-		},
+		// setFederalStates: (state, federalStates) => {
+		// 	state.federalStates = federalStates;
+		// },
 		setCurrentFederalState: (state, currentFederalState) => {
 			state.currentFederalState = currentFederalState;
 		},
@@ -52,9 +52,9 @@ const module = {
 		},
 	},
 	getters: {
-		getFederalStates: (state) => {
-			return state.federalStates;
-		},
+		// getFederalStates: (state) => {
+		// 	return state.federalStates;
+		// },
 		getCurrentFederalState: (state) => {
 			return state.currentFederalState;
 		},
