@@ -7,7 +7,9 @@
 # modified files
 README.md
 
-
 # deleted files
 .gitignore
 .npmignore
+git_push.sh
+package.json
+tsconfig.json
