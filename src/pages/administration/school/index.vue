@@ -441,16 +441,13 @@
 			:is-open="dialogs.policyDialogIsOpen"
 			@dialog-closed="dialogs.policyDialogIsOpen = false"
 		></data-policy-form-dialog>
+		{{ console.log(school, localSchool) }}
 	</v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import {
-	mdiChevronRight,
-	mdiDownload,
-	mdiFileDocumentOutline,
-} from "@mdi/js";
+import { mdiChevronRight, mdiDownload, mdiFileDocumentOutline } from "@mdi/js";
 import { printDate, printDateTimeFromStringUTC } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import RssFeeds from "@components/organisms/administration/RssFeeds";

@@ -5,13 +5,13 @@ const module = {
 			studentVisibility: false,
 			lernStoreVisibility: false,
 			fileStorageTotal: 0,
-			requestSuccessful: false,
+			loading: false,
 			error: null,
 		};
 	},
 	actions: {
 		async fetchSchool({ commit, rootState, dispatch }) {
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 
 			if (rootState.auth?.user?.schoolId) {
 				try {
@@ -20,88 +20,85 @@ const module = {
 					);
 					commit("setSchool", school);
 					dispatch("schools/fetchCurrentYear", {}, { root: true });
-					commit("setRequestSuccessful", true);
+					commit("setLoading", false);
 				} catch (error) {
 					commit("setError", error);
-					commit("setRequestSuccessful", false);
+					commit("setLoading", false);
 					// TODO what is supposed to happen on error?
 				}
 			}
 		},
 		async fetchStudentVisibility({ commit }) {
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 
 			try {
 				const studentVisibility = await this.$axios.$get(
 					`/school/teacher/studentvisibility`
 				);
-
 				commit("setStudentVisibility", studentVisibility.isEnabled);
-				commit("setRequestSuccessful", true);
+				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
 		async fetchLernStoreVisibility({ commit }) {
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 
 			try {
 				const lernStoreVisibility = await this.$axios.$get(
 					`/school/student/studentlernstorevisibility`
 				);
 				commit("setLernStoreVisibility", lernStoreVisibility.isEnabled);
-				commit("setRequestSuccessful", true);
+				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
 		async fetchFileStorageTotal({ commit }) {
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 
 			try {
 				const fileStorageTotal = await this.$axios.$get("/fileStorage/total");
 				commit("setFileStorageTotal", fileStorageTotal);
-				commit("setRequestSuccessful", true);
+				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
 		async fetchCurrentYear({ commit, rootState }) {
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 
 			try {
 				const currentYear = await this.$axios.$get(
 					`/years/${rootState.schools.school.currentYear}`
 				);
-
 				commit("setCurrentYear", currentYear);
-				commit("setRequestSuccessful", true);
+				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
 		async update({ commit }, payload) {
-			console.log("payload", payload);
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 			try {
 				const data = await this.$axios.$patch(
 					`/schools/${payload.id}`,
 					payload
 				);
 				console.log("data", data);
-				commit("setSchool", data); // should we be setting school in auth instead?
-				commit("setRequestSuccessful", true);
+				commit("setSchool", data);
+				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
@@ -125,8 +122,8 @@ const module = {
 		setCurrentYear(state, currentYear) {
 			state.school = { ...state.school, currentYear };
 		},
-		setRequestSuccessful(state, successful) {
-			state.requestSuccessful = successful;
+		setLoading(state, loading) {
+			state.loading = loading;
 		},
 		setError(state, error) {
 			state.error = error;
@@ -151,8 +148,8 @@ const module = {
 		getCurrentYear(state) {
 			return state.school.currentYear;
 		},
-		getRequestSuccessful(state) {
-			return state.requestSuccessful;
+		getLoading(state) {
+			return state.loading;
 		},
 		getError(state) {
 			return state.error;

@@ -1,7 +1,13 @@
 <template>
 	<v-container>
 		<h2 class="text-h4 mt-13">RSS-Feeds</h2>
-		<v-list v-if="rssFeeds && rssFeeds.length">
+		<template v-if="loading">
+			<v-skeleton-loader
+				:key="rssFeed"
+				:type="'list-item-avatar-three-line'"
+			/>
+		</template>
+		<v-list v-else-if="rssFeeds && rssFeeds.length">
 			<template v-for="(rssFeed, index) of rssFeeds">
 				<v-list-item :key="rssFeed.id" two-line>
 					<v-list-item-icon>
@@ -87,6 +93,7 @@ export default {
 	computed: {
 		...mapGetters("schools", {
 			school: "getSchool",
+			loading: "getLoading",
 		}),
 		rssFeeds() {
 			return this.school.rssFeeds;
