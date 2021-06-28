@@ -18,7 +18,7 @@ storiesOf("0 Vuetify/Homeworks/HomeworksList", module)
 			HomeworksList,
 		},
 		template: `<v-app>
-						<v-skeleton-loader :type="'text'" :max-width="'15%'" />
+						<v-skeleton-loader type="text" :max-width="'15%'" />
 						<v-skeleton-loader
 							v-for="homework of 7"
 							ref="skeleton"

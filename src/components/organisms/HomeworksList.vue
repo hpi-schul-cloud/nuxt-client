@@ -4,7 +4,7 @@
 			{{ title }}
 		</v-subheader>
 		<template v-if="loading">
-			<v-skeleton-loader :type="'text'" :max-width="'15%'" />
+			<v-skeleton-loader type="text" :max-width="'15%'" />
 			<v-skeleton-loader
 				v-for="homework of 4"
 				ref="skeleton"

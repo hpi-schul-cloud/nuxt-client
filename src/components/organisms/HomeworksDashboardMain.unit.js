@@ -5,6 +5,10 @@ import {
 	homeworks,
 	overDueHomeworks,
 	homeworksTeacher,
+	overDueHomeworksTeacher,
+	courses,
+	dueDateHomeworksTeacher,
+	noDueDateHomeworksTeacher,
 } from "@@/stories/mockData/Homeworks";
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
@@ -32,6 +36,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				isListFilled: () => true,
 				getOpenHomeworks: () => homeworksTeacher,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
+				getCourses: () => courses,
+				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
+				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -47,6 +54,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				isListFilled: () => false,
 				getOpenHomeworks: () => [],
 				getOverDueHomeworks: () => [],
+				getCourses: () => [],
+				getOpenHomeworksWithDueDate: () => [],
+				getOpenHomeworksWithoutDueDate: () => [],
 			},
 			actions: {
 				getHomeworksDashboard,

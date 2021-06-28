@@ -10,16 +10,8 @@ export default {
 	layout: "defaultVuetify",
 	head() {
 		return {
-			title: this.$t("pages.homeworks.title"),
+			title: this.$t("pages.homeworks.teacher.title"),
 		};
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@variables";
-
-.v-container {
-	max-width: var(--size-content-width-max);
-}
-</style>

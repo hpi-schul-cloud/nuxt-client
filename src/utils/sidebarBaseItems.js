@@ -30,6 +30,7 @@ export default [
 		title: "global.sidebar.tasks.tasksCurrent",
 		href: "/tasks/assigned",
 		icon: "tasks",
+		source: "custom",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
 		testId: "Aktuelle Aufgaben",
 	},

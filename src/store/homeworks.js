@@ -1,8 +1,14 @@
-import { merge } from "lodash";
+import mergeDeep from "@utils/merge-deep";
 import { serviceTemplate, fetchAll } from "@utils";
 const base = serviceTemplate("homework");
 
-const module = {
+const baseState = base.state();
+
+const module = mergeDeep(base, {
+	state: () =>
+		mergeDeep(baseState, {
+			courseFilter: [],
+		}),
 	actions: {
 		getHomeworksDashboard: async function ({ commit }) {
 			commit("setLoading", true);
@@ -18,6 +24,14 @@ const module = {
 				commit("setLoading", false);
 			}
 		},
+		updateFilter: function ({ commit }, courses) {
+			commit("setFilter", courses);
+		},
+	},
+	mutations: {
+		setFilter(state, payload) {
+			state.courseFilter = payload;
+		},
 	},
 	getters: {
 		isListEmpty: (state) => {
@@ -26,18 +40,35 @@ const module = {
 		isListFilled: (state) => {
 			return state.loading === false && state.list.length > 0;
 		},
-		getOpenHomeworksWithDueDate: (state) => {
+		getCourses: (state) => {
+			const courses = new Set(
+				state.list.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getHomeworks: (state, getters) => {
+			return state.courseFilter.length > 0
+				? getters.getFilteredHomeworks
+				: state.list;
+		},
+		getFilteredHomeworks: (state) => {
+			const courses = state.courseFilter;
 			return state.list.filter((homework) => {
+				return courses.includes(homework.courseName);
+			});
+		},
+		getOpenHomeworksWithDueDate: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) > new Date();
 			});
 		},
-		getOpenHomeworksWithoutDueDate: (state) => {
-			return state.list.filter((homework) => {
+		getOpenHomeworksWithoutDueDate: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return !homework.duedate;
 			});
 		},
-		getOverDueHomeworks: (state) => {
-			return state.list.filter((homework) => {
+		getOverDueHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
@@ -47,6 +78,6 @@ const module = {
 			);
 		},
 	},
-};
+});
 
-export default merge(module, base);
+export default module;

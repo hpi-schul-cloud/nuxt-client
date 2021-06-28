@@ -1,11 +1,11 @@
 <template>
 	<v-container class="v-container">
 		<h1 v-if="loading">
-			<v-skeleton-loader :type="'text'" :max-width="'30%'" />
+			<v-skeleton-loader type="text" :max-width="'30%'" />
 		</h1>
 		<template v-else>
 			<h1 v-if="isListFilled" class="h4">
-				{{ $t("pages.homeworks.title") }}
+				{{ getTitle() }}
 			</h1>
 		</template>
 		<homeworks-dashboard-student v-if="isStudent()" />
@@ -59,6 +59,11 @@ export default {
 		isStudent: function () {
 			return this.role === "student";
 		},
+		getTitle: function () {
+			return this.role === "student"
+				? this.$t("pages.homeworks.student.title")
+				: this.$t("pages.homeworks.teacher.title");
+		},
 		getEmptyStateTitle: function () {
 			return this.isStudent()
 				? this.$t("pages.homeworks.student.emptyState.title")
@@ -72,3 +77,10 @@ export default {
 	},
 };
 </script>
+<style lang="scss" scoped>
+@import "@variables";
+
+.v-container {
+	max-width: var(--size-content-width-max);
+}
+</style>

@@ -7,7 +7,7 @@
 		/>
 		<homeworks-list
 			:homeworks="overDueHomeworks"
-			:title="$t('pages.homeworks.subtitleOverDue')"
+			:title="$t('pages.homeworks.student.subtitleOverDue')"
 			:type="'student'"
 		/>
 	</section>
