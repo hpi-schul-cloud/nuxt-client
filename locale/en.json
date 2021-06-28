@@ -4,6 +4,7 @@
 	"common.actions.cancel": "Cancel",
 	"common.actions.discard": "Discard",
 	"common.actions.ok": "OK",
+	"common.actions.confirm": "Confirm",
 	"common.actions.remove": "Remove",
 	"common.actions.save": "Save",
 	"common.actions.scrollToTop": "Scroll up",

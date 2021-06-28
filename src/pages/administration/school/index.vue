@@ -409,9 +409,9 @@
 									</v-list-item>
 								</v-expansion-panels>
 							</v-list-group>
+							<v-divider class="mt-13"></v-divider>
 						</template>
 
-						<v-divider class="mt-13"></v-divider>
 						<!-- <h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
 							<template v-slot:default>
@@ -432,98 +432,15 @@
 							</template>
 						</v-simple-table>
 						<v-btn color="primary" depressed>System hinzufügen</v-btn> -->
-						<h2 class="text-h4 mt-13">RSS-Feeds</h2>
-						<v-list v-if="localSchool.rssFeeds && localSchool.rssFeeds.length">
-							<template v-for="(rssFeed, index) of localSchool.rssFeeds">
-								<v-list-item :key="rssFeed.id" two-line>
-									<v-list-item-icon>
-										<v-icon>{{ iconMdiRss }}</v-icon>
-									</v-list-item-icon>
-									<v-list-item-content>
-										<v-list-item-title
-											class="text-wrap mb-1"
-											v-text="rssFeed.url"
-										></v-list-item-title>
-										<v-list-item-subtitle class="text-wrap">
-											{{ rssFeed.description }}
-										</v-list-item-subtitle>
-									</v-list-item-content>
-									<v-list-item-action class="d-flex flex-row align-start">
-										<v-chip
-											small
-											class="mr-2 mt-2"
-											:color="rssFeedStatusColor(rssFeed.status)"
-											text-color="black"
-										>
-											{{
-												rssFeed.status === "pending"
-													? $t(
-															"pages.administration.school.index.rssFeeds.status.inQueue"
-													  )
-													: rssFeed.status === "success"
-													? $t(
-															"pages.administration.school.index.rssFeeds.status.active"
-													  )
-													: $t(
-															"pages.administration.school.index.rssFeeds.status.error"
-													  )
-											}}
-										</v-chip>
-										<v-btn icon @click="openConfirmRssDelete(rssFeed.id)">
-											<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
-										</v-btn>
-									</v-list-item-action>
-								</v-list-item>
-								<v-divider
-									v-if="index < localSchool.rssFeeds.length - 1"
-									:key="index"
-								></v-divider>
-							</template>
-						</v-list>
-						<p v-else>
-							{{
-								$t("pages.administration.school.index.rssFeeds.noRssFeedsYet")
-							}}
-						</p>
-						<v-btn
-							class="mt-2"
-							color="primary"
-							depressed
-							@click.stop="dialogs.rssDialogIsOpen = true"
-							>{{
-								$t("pages.administration.school.index.rssFeeds.addRssFeed")
-							}}</v-btn
-						>
-						{{ console.log(school, localSchool) }}
+						<rss-feeds></rss-feeds>
 					</v-col>
 				</v-row>
 			</v-responsive>
 		</v-container>
-		<rss-form-dialog
-			:is-open="dialogs.rssDialogIsOpen"
-			@dialog-closed="dialogs.rssDialogIsOpen = false"
-		></rss-form-dialog>
 		<data-policy-form-dialog
 			:is-open="dialogs.policyDialogIsOpen"
 			@dialog-closed="dialogs.policyDialogIsOpen = false"
 		></data-policy-form-dialog>
-		<vuetify-dialog
-			:is-open="dialogs.rssConfirmDeleteDialog.isOpen"
-			:size="350"
-			:submit="() => removeRssFeed(dialogs.rssConfirmDeleteDialog.rssFeedId)"
-			@dialog-closed="dialogs.rssConfirmDeleteDialog.isOpen = false"
-		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{ $t("pages.administration.school.index.rssFeeds.deleteRssFeed") }}
-			</h2>
-			<template slot="dialogContent">
-				<p class="body-1 mt-2">
-					{{
-						$t("pages.administration.school.index.rssFeeds.confirmDeleteText")
-					}}
-				</p>
-			</template>
-		</vuetify-dialog>
 	</v-container>
 </template>
 
@@ -531,22 +448,18 @@
 import { mapGetters, mapActions } from "vuex";
 import {
 	mdiChevronRight,
-	mdiTrashCanOutline,
 	mdiDownload,
-	mdiRss,
 	mdiFileDocumentOutline,
 } from "@mdi/js";
 import { printDate, printDateTimeFromStringUTC } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
-import RssFormDialog from "@components/organisms/administration/RssFormDialog";
+import RssFeeds from "@components/organisms/administration/RssFeeds";
 import DataPolicyFormDialog from "@components/organisms/administration/DataPolicyFormDialog";
-import VuetifyDialog from "@components/vuetify/organisms/VuetifyDialog";
 
 export default {
 	components: {
-		RssFormDialog,
+		RssFeeds,
 		DataPolicyFormDialog,
-		VuetifyDialog,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -599,9 +512,7 @@ export default {
 				},
 			},
 			iconMdiChevronRight: mdiChevronRight,
-			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiDownload: mdiDownload,
-			iconMdiRss: mdiRss,
 			iconMdiFileDocumentOutline: mdiFileDocumentOutline,
 		};
 	},
@@ -702,8 +613,7 @@ export default {
 				!this.school.officialSchoolNumber &&
 				this.localSchool.officialSchoolNumber
 			) {
-				updatedSchool.officialSchoolNumber =
-					this.localSchool.officialSchoolNumber;
+				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
 			}
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;
@@ -729,31 +639,6 @@ export default {
 				if (this.localSchool.features[featureName]) features.push(featureName);
 			}
 			return features;
-		},
-		openConfirmRssDelete(rssFeedId) {
-			this.dialogs.rssConfirmDeleteDialog = {
-				isOpen: true,
-				rssFeedId,
-			};
-		},
-		removeRssFeed(rssFeedId) {
-			const updatedRssFeedList = this.localSchool.rssFeeds.filter(
-				(rssFeed) => rssFeed.id !== rssFeedId
-			);
-			this.update({
-				id: this.school.id,
-				rssFeeds: updatedRssFeedList,
-			})
-				.then(() => (this.dialogs.rssConfirmDeleteDialog.isOpen = false))
-				.catch((err) => console.log(err)); // TODO - handle error
-		},
-		// TODO - should this be a computed property?
-		rssFeedStatusColor(rssFeedStatus) {
-			return rssFeedStatus === "pending"
-				? "orange lighten-3"
-				: rssFeedStatus === "success"
-				? "green lighten-3"
-				: "error lighten-5";
 		},
 	},
 	head() {
