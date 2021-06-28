@@ -119,24 +119,16 @@ export default Vue.extend({
 			);
 			return a.utc().format();
 		},
-		errors(): {
-			title: string | undefined;
-			content: string | undefined;
-			date: string | undefined;
-		} {
+		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
 				? undefined
 				: this.$ts("components.organisms.FormNews.errors.missing_title");
 			const content = this.data.content
 				? undefined
 				: this.$ts("components.organisms.FormNews.errors.missing_content");
-			const date = this.data.date.date
-				? undefined
-				: this.$ts("components.organisms.FormNews.errors.missing_date");
 			return {
 				title,
 				content,
-				date,
 			};
 		},
 	},
