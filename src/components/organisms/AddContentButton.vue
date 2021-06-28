@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
@@ -93,13 +93,9 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("content", {
-			elements: (state) => {
-				return state.elements;
-			},
-			selected: (state) => {
-				return state.selected;
-			},
+		...mapGetters("content", {
+			elements: "getElements",
+			selected: "getSelected",
 		}),
 		itemId() {
 			return this.resource && this.resource.properties
@@ -138,33 +134,41 @@ export default {
 		},
 	},
 	methods: {
-		addResourceAndClose() {
+		async addResourceAndClose() {
+			const getElementInfo = async (element) => {
+				return {
+					title: element.title,
+					client: element.client,
+					url: element.merlinReference
+						? await this.$axios.$get(
+								`/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`
+						  )
+						: element.url,
+					merlinReference: element.merlinReference,
+				};
+			};
+
 			if (window.opener && window.opener !== window) {
 				if (window.opener.addResource) {
 					if (this.selectedElements.length > 0) {
-						this.selectedElements.forEach((element) => {
-							window.opener.addResource({
-								title: element.title,
-								client: element.client,
-								url: element.url,
-								merlinReference: element.merlinReference,
-							});
+						const elements = await Promise.all(
+							this.selectedElements.map(async (element) => {
+								return await getElementInfo(element);
+							})
+						);
+						elements.forEach((element) => {
+							window.opener.addResource(element);
 						});
 					} else {
-						window.opener.addResource({
-							title: this.title,
-							client: this.client,
-							url: this.url,
-							merlinReference: this.merlinReference,
-						});
+						window.opener.addResource(await getElementInfo(this));
 					}
 					window.close();
 					return true;
 				}
 			}
 		},
-		addResource() {
-			if (!this.addResourceAndClose()) {
+		async addResource() {
+			if (!(await this.addResourceAndClose())) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
 			}

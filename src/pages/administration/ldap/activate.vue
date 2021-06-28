@@ -116,6 +116,7 @@
 			<base-button
 				design="secondary"
 				data-testid="ldapSubmitButton"
+				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
 				>{{
 					$t("pages.administration.ldap.save.example.synchronize")
@@ -154,7 +155,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@utils/ldapErrorHandling";
 import { unchangedPassword } from "@utils/ldapConstants";
 import BaseButton from "@/components/base/BaseButton.vue";
@@ -177,10 +178,11 @@ export default {
 		requiredPermissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
 	},
 	computed: {
-		...mapState("ldap-config", {
-			verified: "verified",
-			temp: "temp",
-			submitted: "submitted",
+		...mapGetters("ldap-config", {
+			verified: "getVerified",
+			temp: "getTemp",
+			submitted: "getSubmitted",
+			status: "getStatus",
 		}),
 		activationErrors() {
 			return ldapErrorHandler(this.submitted.errors, this);

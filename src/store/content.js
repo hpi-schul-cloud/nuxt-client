@@ -1,4 +1,5 @@
 import hash from "object-hash";
+import { isCollectionHelper } from "@utils/helpers";
 
 export const actions = {
 	selectElement({ commit }, refId) {
@@ -102,9 +103,11 @@ export const actions = {
 			event.$emit("showModal@content", "errorModal");
 		}
 	},
-
-	async getResourceMetadata(context, id) {
-		return this.$axios.$get(`/edu-sharing/${id}`);
+	async getResourceMetadata({ commit }, id) {
+		commit("setStatus", "pending");
+		const metadata = await this.$axios.$get(`/edu-sharing/${id}`);
+		commit("setCurrentResource", metadata);
+		commit("setStatus", "completed");
 	},
 	init({ commit, rootState }) {
 		commit("init", {
@@ -135,7 +138,42 @@ const initialState = () => ({
 	loading: false,
 	lastQuery: "",
 	collectionsFeatureFlag: null,
+	currentResource: {},
+	status: null,
 });
+
+export const getters = {
+	getLessons(state) {
+		return state.lessons;
+	},
+	getElements(state) {
+		return state.elements;
+	},
+	getSelected(state) {
+		return state.selected;
+	},
+	getLoading(state) {
+		return state.loading;
+	},
+	getResources(state) {
+		return state.resources;
+	},
+	getCollectionsFeatureFlag(state) {
+		return state.collectionsFeatureFlag;
+	},
+	getCurrentResource: (state) => {
+		return state.currentResource;
+	},
+	getStatus: (state) => {
+		return state.status;
+	},
+	isCollection: (state) => {
+		return (
+			state.collectionsFeatureFlag === true &&
+			isCollectionHelper(state.currentResource.properties)
+		);
+	},
+};
 
 export const mutations = {
 	selectElement(state, payload) {
@@ -200,6 +238,12 @@ export const mutations = {
 	},
 	init(state, { collectionsFeatureFlag }) {
 		state.collectionsFeatureFlag = collectionsFeatureFlag;
+	},
+	setCurrentResource(state, payload) {
+		state.currentResource = payload;
+	},
+	setStatus(state, payload) {
+		state.status = payload;
 	},
 };
 

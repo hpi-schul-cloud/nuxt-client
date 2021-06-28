@@ -2,11 +2,14 @@ import { state, actions, mutations, requiredVars } from "./env-config";
 
 jest.useFakeTimers();
 describe("store/env-config", () => {
+	let consoleWarnSpy;
 	let consoleErrorSpy;
 	beforeEach(() => {
+		consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
 		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 	});
 	afterEach(() => {
+		consoleWarnSpy.mockRestore();
 		consoleErrorSpy.mockRestore();
 	});
 
@@ -42,7 +45,7 @@ describe("store/env-config", () => {
 
 			await actions.get({ commit: spyCommit, dispatch: spyDispatch });
 
-			expect(consoleErrorSpy.mock.calls).toHaveLength(2);
+			expect(consoleWarnSpy.mock.calls).toHaveLength(3);
 		});
 
 		it("retries on error", async () => {

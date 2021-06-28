@@ -38,6 +38,13 @@ describe("ldap/config", () => {
 				verifyData: verifyDataStub,
 				verifyExisting: verifyDataStub,
 			},
+			getters: {
+				getData: () => mockInputData,
+				getVerified: () => ({}),
+				getSubmitted: () => ({}),
+				getTemp: () => ({}),
+				getStatus: () => null,
+			},
 			state: () => ({
 				data: mockInputData,
 				verified: {},
@@ -88,14 +95,15 @@ describe("ldap/config", () => {
 
 	it("should not call 'getData' action if 'temp' is defined", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].state = () => ({
-			data: mockInputData,
-			temp: {
+		customMockStore["ldap-config"].getters = {
+			getData: () => mockInputData,
+			getVerified: () => ({}),
+			getSubmitted: () => ({}),
+			getTemp: () => ({
 				testKey: "test",
-			},
-			verified: {},
-			submitted: {},
-		});
+			}),
+			getStatus: () => null,
+		};
 		mount(ldapConfig, {
 			...createComponentMocks({
 				i18n: true,
@@ -196,12 +204,13 @@ describe("ldap/config", () => {
 
 	it("should clear 'systemData' values if clearInputs button is clicked", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].state = () => ({
-			data: { ...mockInputData },
-			temp: {},
-			verified: {},
-			submitted: {},
-		});
+		customMockStore["ldap-config"].getters = {
+			getData: () => ({ ...mockInputData }),
+			getVerified: () => ({}),
+			getSubmitted: () => ({}),
+			getTemp: () => ({}),
+			getStatus: () => null,
+		};
 		const wrapper = mount(ldapConfig, {
 			...createComponentMocks({
 				i18n: true,

@@ -92,9 +92,9 @@ describe("store/ldap-config", () => {
 				const spyCommit = jest.fn();
 				await actions.getData({ commit: spyCommit }, "id");
 				expect(receivedUrl).toBe("/ldap-config/id");
-				expect(spyCommit.mock.calls).toHaveLength(1);
-				expect(spyCommit.mock.calls[0][0]).toBe("setData");
-				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls).toHaveLength(3);
+				expect(spyCommit.mock.calls[1][0]).toBe("setData");
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
 			});
 		});
 		describe("verifyData", () => {
@@ -109,10 +109,10 @@ describe("store/ldap-config", () => {
 				const spyCommit = jest.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe("/ldap-config?verifyOnly=true");
-				expect(spyCommit.mock.calls).toHaveLength(2);
-				expect(spyCommit.mock.calls[0][0]).toBe("setTemp");
-				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls).toHaveLength(4);
+				expect(spyCommit.mock.calls[1][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls[2][1]).toStrictEqual(clientMockData);
 			});
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
@@ -125,9 +125,9 @@ describe("store/ldap-config", () => {
 				const spyCommit = jest.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe("/ldap-config?verifyOnly=true");
-				expect(spyCommit.mock.calls).toHaveLength(2);
-				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls).toHaveLength(4);
+				expect(spyCommit.mock.calls[2][0]).toBe("setVerified");
+				expect(spyCommit.mock.calls[2][1]).toStrictEqual(clientMockData);
 			});
 		});
 		describe("verifyExisting", () => {
@@ -145,10 +145,10 @@ describe("store/ldap-config", () => {
 					{ systemId: "systemId", systemData: clientMockData }
 				);
 				expect(receivedUrl).toBe("/ldap-config/systemId?verifyOnly=true");
-				expect(spyCommit.mock.calls).toHaveLength(2);
-				expect(spyCommit.mock.calls[0][0]).toBe("setTemp");
-				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls).toHaveLength(4);
+				expect(spyCommit.mock.calls[1][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls[2][1]).toStrictEqual(clientMockData);
 			});
 			it("it commits setVerified mutation", async () => {
 				let receivedUrl;
@@ -164,9 +164,9 @@ describe("store/ldap-config", () => {
 					{ systemId: "systemId", systemData: clientMockData }
 				);
 				expect(receivedUrl).toBe("/ldap-config/systemId?verifyOnly=true");
-				expect(spyCommit.mock.calls).toHaveLength(2);
-				expect(spyCommit.mock.calls[1][0]).toBe("setVerified");
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls).toHaveLength(4);
+				expect(spyCommit.mock.calls[2][0]).toBe("setVerified");
+				expect(spyCommit.mock.calls[2][1]).toStrictEqual(clientMockData);
 			});
 		});
 		describe("submitData", () => {
@@ -181,9 +181,9 @@ describe("store/ldap-config", () => {
 				const spyCommit = jest.fn();
 				await actions.submitData({ commit: spyCommit }, clientMockData);
 				expect(receivedUrl).toBe("/ldap-config?verifyOnly=false&activate=true");
-				expect(spyCommit.mock.calls).toHaveLength(1);
-				expect(spyCommit.mock.calls[0][0]).toBe("setSubmitted");
-				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls).toHaveLength(3);
+				expect(spyCommit.mock.calls[1][0]).toBe("setSubmitted");
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
 			});
 		});
 		describe("patchData", () => {
@@ -203,9 +203,9 @@ describe("store/ldap-config", () => {
 				expect(receivedUrl).toBe(
 					"/ldap-config/systemId?verifyOnly=false&activate=true"
 				);
-				expect(spyCommit.mock.calls).toHaveLength(1);
-				expect(spyCommit.mock.calls[0][0]).toBe("setSubmitted");
-				expect(spyCommit.mock.calls[0][1]).toStrictEqual(clientMockData);
+				expect(spyCommit.mock.calls).toHaveLength(3);
+				expect(spyCommit.mock.calls[1][0]).toBe("setSubmitted");
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
 			});
 		});
 	});

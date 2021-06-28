@@ -8,6 +8,40 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- SC-9090 - implemented a loading state in the service-template
+
+### Changed
+
+- SC-8448 - resolves Merlin URL before passing to legacy client
+- SC-9077 - refactored store actions returning data
+- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
+- SC-9122 - changed getters logic from components to the store
+
+### Fixed
+
+- SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page and feature of password changing is fixed
+- SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
+- SC-9093 - Load default language and timezone from server
+- SC-9160 - fixed getStatus getter in service-template
+
+## [26.4.3] - 2021-06-24
+
+### Changed
+
+- OPS-2467 - changes build pipeline to github actions
+
+### Changed
+
+- rename permission TASK_DASHBOARD_VIEW_V3
+
+## 26.4.1
+
+### Changed
+
+- SC-9144 - fixed build with env SC_THEME
+
 ## 26.4.0
 
 ### Removed
@@ -49,7 +83,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
 - SC-9004 - Change ci build
-- SC-9077 - refactored store actions returning data
 
 ### Fixed
 
