@@ -22,14 +22,14 @@ export default [
 		title: "global.sidebar.tasks.tasksOpen",
 		href: "/tasks/open",
 		icon: "tasks",
-		permission: "Task_Dashboard_View_v3",
+		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Offene Aufgaben",
 	},
 	{
 		title: "global.sidebar.tasks.tasksCurrent",
 		href: "/tasks/assigned",
 		icon: "tasks",
-		permission: "TEACHER_LIST",
+		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
 		testId: "Aktuelle Aufgaben",
 	},
 	{
