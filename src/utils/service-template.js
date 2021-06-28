@@ -110,7 +110,7 @@ export default function (endpoint) {
 				return state.pagination;
 			},
 			getStatus: (state) => {
-				return state.loading;
+				return state.status;
 			},
 		},
 		mutations: {
