@@ -11,7 +11,7 @@ storiesOf("0 Vuetify/Homeworks/HomeworksList", module)
 			homeworks,
 		}),
 
-		template: `<v-app><homeworks-list :homeworks="homeworks"/></v-app>`,
+		template: `<v-app><homeworks-list :homeworks="homeworks" type="student"/></v-app>`,
 	}))
 	.add("HomeworksListLoading", () => ({
 		components: {
