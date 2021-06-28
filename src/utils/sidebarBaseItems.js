@@ -22,7 +22,8 @@ export default [
 		title: "global.sidebar.tasks.tasksOpen",
 		href: "/tasks/open",
 		icon: "tasks",
-		permission: "Task_Dashboard_View_v3",
+		source: "custom",
+		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Offene Aufgaben",
 	},
 	{
