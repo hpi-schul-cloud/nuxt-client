@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import vHomeworkItemTeacher from "@components/molecules/vHomeworkItemTeacher";
 import {
-	homeworks,
-	openHomeworksWithoutDueDate,
+	homeworksTeacher,
+	overDueHomeworksTeacher,
 } from "@@/stories/mockData/Homeworks";
 
 storiesOf("0 Vuetify/Molecules", module).add("vHomeworkItemTeacher", () => ({
@@ -10,8 +10,8 @@ storiesOf("0 Vuetify/Molecules", module).add("vHomeworkItemTeacher", () => ({
 		vHomeworkItemTeacher,
 	},
 	data: () => ({
-		homework: homeworks[0],
-		withoutDue: openHomeworksWithoutDueDate[0],
+		homework: homeworksTeacher[0],
+		withoutDue: overDueHomeworksTeacher[0],
 	}),
 	template: `
 		<v-app>
