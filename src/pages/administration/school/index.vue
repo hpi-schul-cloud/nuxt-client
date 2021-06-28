@@ -22,13 +22,13 @@
 							{{ $t("pages.administration.school.index.title") }}
 						</h1>
 						<h2 class="text-h4">
-							{{ $t("pages.administration.school.schoolYear") }}
+							{{ $t("common.words.schoolYear") }}
 							{{ school.currentYear.name }}
 						</h2>
 						<p>
 							{{
 								$t(
-									"pages.administration.school.longText.provideStudentsAndTheirParents"
+									"pages.administration.school.index.longText.provideStudentsAndTheirParents"
 								)
 							}}
 						</p>
@@ -457,15 +457,15 @@
 										>
 											{{
 												rssFeed.status === "pending"
-													? this.$t(
-															"pages.administration.school.rssFeeds.status.inQueue"
+													? $t(
+															"pages.administration.school.index.rssFeeds.status.inQueue"
 													  )
 													: rssFeed.status === "success"
-													? this.$t(
-															"pages.administration.school.rssFeeds.status.active"
+													? $t(
+															"pages.administration.school.index.rssFeeds.status.active"
 													  )
-													: this.$t(
-															"pages.administration.school.rssFeeds.status.error"
+													: $t(
+															"pages.administration.school.index.rssFeeds.status.error"
 													  )
 											}}
 										</v-chip>
@@ -482,7 +482,7 @@
 						</v-list>
 						<p v-else>
 							{{
-								this.$t("pages.administration.school.rssFeeds.noRssFeedsYet")
+								$t("pages.administration.school.index.rssFeeds.noRssFeedsYet")
 							}}
 						</p>
 						<v-btn
@@ -491,7 +491,7 @@
 							depressed
 							@click.stop="dialogs.rssDialogIsOpen = true"
 							>{{
-								this.$t("pages.administration.school.rssFeeds.addRssFeed")
+								$t("pages.administration.school.index.rssFeeds.addRssFeed")
 							}}</v-btn
 						>
 						{{ console.log(school, localSchool) }}
@@ -514,12 +514,12 @@
 			@dialog-closed="dialogs.rssConfirmDeleteDialog.isOpen = false"
 		>
 			<h2 slot="title" class="text-h4 my-2">
-				{{ this.$t("pages.administration.school.rssFeeds.deleteRssFeed") }}
+				{{ $t("pages.administration.school.index.rssFeeds.deleteRssFeed") }}
 			</h2>
 			<template slot="dialogContent">
 				<p class="body-1 mt-2">
 					{{
-						this.$t("pages.administration.school.rssFeeds.confirmDeleteText")
+						$t("pages.administration.school.index.rssFeeds.confirmDeleteText")
 					}}
 				</p>
 			</template>
@@ -634,6 +634,7 @@ export default {
 		}),
 		console: () => console, // TODO - delete when done
 	},
+	// TODO - watch for school changes
 	/* watch: {
 		school(updatedSchool) {
 			console.log("hello");

@@ -7,7 +7,7 @@
 		<v-card ripple="false">
 			<v-card-title>
 				<h2 class="text-h4">
-					{{ this.$t("pages.administration.school.rssFeeds.addRssFeed") }}
+					{{ this.$t("pages.administration.school.index.rssFeeds.addRssFeed") }}
 				</h2>
 			</v-card-title>
 			<v-divider></v-divider>
@@ -18,7 +18,7 @@
 							<v-text-field
 								v-model="url"
 								:label="
-									this.$t('pages.administration.school.rssFeeds.form.url')
+									this.$t('pages.administration.school.index.rssFeeds.form.url')
 								"
 								dense
 								required
@@ -34,7 +34,7 @@
 								v-model="description"
 								:label="
 									this.$t(
-										'pages.administration.school.rssFeeds.form.briefDescription'
+										'pages.administration.school.index.rssFeeds.form.briefDescription'
 									)
 								"
 								dense
