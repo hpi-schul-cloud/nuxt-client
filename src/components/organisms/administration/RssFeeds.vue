@@ -2,10 +2,7 @@
 	<v-container>
 		<h2 class="text-h4 mt-13">RSS-Feeds</h2>
 		<template v-if="loading">
-			<v-skeleton-loader
-				:key="rssFeed"
-				:type="'list-item-avatar-three-line'"
-			/>
+			<v-skeleton-loader :key="rssFeed" :type="'list-item-avatar-three-line'" />
 		</template>
 		<v-list v-else-if="rssFeeds && rssFeeds.length">
 			<template v-for="(rssFeed, index) of rssFeeds">
@@ -23,7 +20,9 @@
 						</v-list-item-subtitle>
 					</v-list-item-content>
 					<v-list-item-action class="d-flex flex-row align-start">
-						<rss-feed-status :rss-feed-status="rssFeed.status"></rss-feed-status>
+						<rss-feed-status
+							:rss-feed-status="rssFeed.status"
+						></rss-feed-status>
 						<v-btn icon @click="openConfirmRssDelete(rssFeed.id)">
 							<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
 						</v-btn>

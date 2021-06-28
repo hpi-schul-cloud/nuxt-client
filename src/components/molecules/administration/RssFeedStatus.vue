@@ -17,13 +17,13 @@
 
 <script>
 export default {
-  props: {
-    rssFeedStatus: {
-      type: String,
-      required: true,
-    }
-  },
-  methods: {
+	props: {
+		rssFeedStatus: {
+			type: String,
+			required: true,
+		},
+	},
+	methods: {
 		rssFeedStatusColor(rssFeedStatus) {
 			return rssFeedStatus === "pending"
 				? "orange lighten-3"
@@ -31,6 +31,6 @@ export default {
 				? "green lighten-3"
 				: "error lighten-5";
 		},
-  }
+	},
 };
 </script>
