@@ -1,3 +1,6 @@
+import generatePassword from "@mixins/generatePassword";
+import qs from "qs";
+
 export const actions = {
 	async register({ commit }, payload) {
 		const registered = [];
@@ -35,6 +38,31 @@ export const actions = {
 			commit("setRegisterError", { mapError: true });
 		}
 	},
+
+	async findConsentUsers({ commit, state }, query) {
+		query.users = state.selectedStudents;
+		const response = await this.$axios.$get(`/users/admin/students`, {
+			params: query,
+			paramsSerializer: (params) => {
+				return qs.stringify(params);
+			},
+		});
+
+		if (!response.data) {
+			commit("setStudentsData", []);
+			return;
+		}
+
+		const data = response.data
+			.filter((item) => item.consentStatus !== "ok")
+			.map((student) => {
+				student.fullName = student.firstName + " " + student.lastName;
+				student.password = generatePassword();
+				return student;
+			});
+		commit("setStudentsData", data);
+	},
+
 	updateStudent({ commit }, payload) {
 		commit("updateStudentData", payload);
 	},

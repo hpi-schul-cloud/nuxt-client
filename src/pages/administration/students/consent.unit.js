@@ -57,23 +57,15 @@ describe("students/consent", () => {
 					register: jest.fn(),
 					updateStudent: jest.fn(),
 					setStudents: jest.fn(),
+					findConsentUsers: jest.fn(),
 				},
 				getters: {
-					students: () => mockData,
 					getSelectedStudentsData: () => mockData,
 					getSelectedStudents: () => [
 						"60c220e2d03a60006502f272",
 						"60c220f4d03a60006502f500",
 					],
 				},
-				state: () => ({
-					list: mockData,
-					// selectedStudentsData: mockData,
-					// selectedStudents: [
-					// 	"60c220e2d03a60006502f272",
-					// 	"60c220f4d03a60006502f500",
-					// ],
-				}),
 
 				mutations: {
 					setSelectedStudents: jest.fn(),
@@ -81,14 +73,6 @@ describe("students/consent", () => {
 					setStudentsData: jest.fn(),
 					updateStudentData: jest.fn(),
 					setRegisterError: jest.fn(),
-				},
-			},
-			users: {
-				actions: {
-					findConsentUsers: jest.fn(),
-				},
-				getters: {
-					getConsentList: jest.fn(),
 				},
 			},
 			filePaths: {
@@ -113,7 +97,7 @@ describe("students/consent", () => {
 			}),
 		});
 
-		expect(mockStore.users.actions.findConsentUsers).toHaveBeenCalled();
+		expect(mockStore.bulkConsent.actions.findConsentUsers).toHaveBeenCalled();
 	});
 
 	it("should display StepProgress component", async () => {
@@ -138,6 +122,8 @@ describe("students/consent", () => {
 		});
 
 		const table = wrapper.find(`[data-testid="consent_table_1"]`);
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(table.vm.data).toHaveLength(mockData.length);
 	});
 
@@ -150,6 +136,8 @@ describe("students/consent", () => {
 		});
 
 		const table = wrapper.find(`[data-testid="consent_table_1"]`);
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		expect(table.props().data).toBe(mockData);
 	});
 
@@ -161,6 +149,8 @@ describe("students/consent", () => {
 			}),
 		});
 
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const input = wrapper.find(`input[data-testid="password-input"]`);
 		input.setValue("abc");
 		input.trigger("change");
@@ -177,6 +167,8 @@ describe("students/consent", () => {
 			}),
 		});
 
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const input = wrapper.find(`input[data-testid="birthday-input"]`);
 		input.setValue("2017-10-10");
 		input.trigger("change");
@@ -193,6 +185,8 @@ describe("students/consent", () => {
 			}),
 		});
 
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		wrapper.setData({ birthdayWarning: true });
 
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
@@ -231,6 +225,8 @@ describe("students/consent", () => {
 			}),
 		});
 
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		mockData[0].birthday = "10.10.2010";
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
 
@@ -249,6 +245,8 @@ describe("students/consent", () => {
 			}),
 		});
 
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
 
 		nextButton.trigger("click");
