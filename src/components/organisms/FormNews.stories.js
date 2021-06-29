@@ -3,10 +3,8 @@ import { action } from "@storybook/addon-actions";
 
 import FormNews from "./FormNews";
 import FormActions from "@components/molecules/FormActions";
-import NewsDetailView from "@components/organisms/NewsDetailView";
-import NewsEditView from "@components/organisms/NewsEditView";
 
-storiesOf("6 Organisms/News", module)
+storiesOf("6 Organisms/FormNews", module)
 	.add("/new", () => ({
 		components: { FormNews, FormActions },
 		template: `
@@ -27,38 +25,30 @@ storiesOf("6 Organisms/News", module)
 		},
 	}))
 	.add("/edit", () => ({
-		components: { NewsEditView },
-		data: () => ({
-			current: {
-				id: "some_id",
-				title: "test news",
-				content:
-					"<div><h1>this is my news content</h1><p>News content</p></div>",
-				creator: {
-					firstName: "Test",
-					lastName: "User",
-				},
-				displayAt: "2021-03-02",
+		components: { FormNews, FormActions },
+		template: `
+	<form-news #actions="{ remove, cancel }" action="patch" @update:news="onNewsChange">
+	<form-actions>
+	<template v-slot:secondary>
+		<base-button
+			design="danger text"
+			type="button"
+			@click.prevent="remove"
+		>
+			{{ $t("common.actions.remove") }}
+		</base-button>
+	</template>
+	<template v-slot:primary>
+		<base-button design="primary" type="submit">
+			{{ $t("common.actions.save") }}
+		</base-button>
+		<base-button design="text" @click.prevent="cancel">
+			{{ $t("common.actions.cancel") }}
+		</base-button>
+	</template>
+</form-actions>
+	</form-news>`,
+		methods: {
+			onNewsChange: action("@update:news"),
 			},
-		}),
-
-		template: `<news-edit-view :current="current"/>`,
-	}))
-	.add("/details", () => ({
-		components: { NewsDetailView },
-		data: () => ({
-			current: {
-				id: "some_id",
-				title: "test news",
-				content:
-					"<div><h1>this is my news content</h1><p>News content</p></div>",
-				creator: {
-					firstName: "Test",
-					lastName: "User",
-				},
-				displayAt: "2021-03-02",
-			},
-		}),
-
-		template: `<news-detail-view :current="current"/>`,
 	}));
