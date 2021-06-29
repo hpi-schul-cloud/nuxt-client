@@ -6,11 +6,13 @@
 	>
 		<v-card ripple="false">
 			<v-card-title>
-				<h2 class="text-h4">{{
-					$t(
-						"pages.administration.school.index.schoolPolicies.addPrivacyPolicy"
-					)
-				}}</h2>
+				<h2 class="text-h4">
+					{{
+						$t(
+							"pages.administration.school.index.schoolPolicies.addPrivacyPolicy"
+						)
+					}}
+				</h2>
 			</v-card-title>
 			<v-divider></v-divider>
 			<v-card-text class="py-10 d-flex justify-center">
@@ -43,7 +45,11 @@
 						<v-col>
 							<v-file-input
 								v-model="file"
-								:label="$t('pages.administration.school.index.schoolPolicies.uploadPDF')"
+								:label="
+									$t(
+										'pages.administration.school.index.schoolPolicies.uploadPDF'
+									)
+								"
 								dense
 								prepend-icon=""
 								accept=".pdf"
@@ -53,9 +59,19 @@
 					<v-row>
 						<v-col>
 							<v-sheet class="px-4 py-1" color="orange lighten-4" rounded>
-								<h2 class="text-h6">{{ $t("pages.administration.school.index.schoolPolicies.important")}}</h2>
+								<h2 class="text-h6">
+									{{
+										$t(
+											"pages.administration.school.index.schoolPolicies.important"
+										)
+									}}
+								</h2>
 								<p>
-									{{ $t("pages.administration.school.index.schoolPolicies.longText.whenANewPrivacyPolicyUpdated")}}
+									{{
+										$t(
+											"pages.administration.school.index.schoolPolicies.longText.whenANewPrivacyPolicyUpdated"
+										)
+									}}
 								</p>
 							</v-sheet>
 						</v-col>
@@ -95,7 +111,9 @@ export default {
 	},
 	data() {
 		return {
-			title: this.$t("pages.administration.school.index.schoolPolicies.privacyPolicyTitle"),
+			title: this.$t(
+				"pages.administration.school.index.schoolPolicies.privacyPolicyTitle"
+			),
 			description: "",
 			file: null,
 		};
@@ -108,7 +126,8 @@ export default {
 		descriptionErrors() {
 			const errors = [];
 			if (!this.$v.description.$dirty) return errors;
-			!this.$v.description.required && errors.push(this.$t("common.validation.required"));
+			!this.$v.description.required &&
+				errors.push(this.$t("common.validation.required"));
 
 			return errors;
 		},
