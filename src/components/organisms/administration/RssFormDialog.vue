@@ -7,7 +7,7 @@
 		<v-card ripple="false">
 			<v-card-title>
 				<h2 class="text-h4">
-					{{ this.$t("pages.administration.school.index.rssFeeds.addRssFeed") }}
+					{{ $t("pages.administration.school.index.rssFeeds.addRssFeed") }}
 				</h2>
 			</v-card-title>
 			<v-divider></v-divider>
@@ -18,7 +18,7 @@
 							<v-text-field
 								v-model="url"
 								:label="
-									this.$t('pages.administration.school.index.rssFeeds.form.url')
+									$t('pages.administration.school.index.rssFeeds.form.url')
 								"
 								dense
 								required
@@ -33,7 +33,7 @@
 							<v-text-field
 								v-model="description"
 								:label="
-									this.$t(
+									$t(
 										'pages.administration.school.index.rssFeeds.form.briefDescription'
 									)
 								"
@@ -46,10 +46,10 @@
 			<v-card-actions class="pb-3">
 				<v-spacer></v-spacer>
 				<v-btn depressed outlined @click="cancel">{{
-					this.$t("common.actions.cancel")
+					$t("common.actions.cancel")
 				}}</v-btn>
 				<v-btn color="primary" depressed @click="submit">{{
-					this.$t("common.actions.add")
+					$t("common.actions.add")
 				}}</v-btn>
 			</v-card-actions>
 		</v-card>
@@ -131,7 +131,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 h2 {
 	margin-top: var(--space-sm);
 }

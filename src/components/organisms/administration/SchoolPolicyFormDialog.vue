@@ -6,7 +6,11 @@
 	>
 		<v-card ripple="false">
 			<v-card-title>
-				<h2 class="text-h4">Datenschutzerklärung hinzufügen</h2>
+				<h2 class="text-h4">{{
+					$t(
+						"pages.administration.school.index.schoolPolicies.addPrivacyPolicy"
+					)
+				}}</h2>
 			</v-card-title>
 			<v-divider></v-divider>
 			<v-card-text class="py-10 d-flex justify-center">
@@ -15,7 +19,7 @@
 						<v-col>
 							<v-text-field
 								v-model="title"
-								label="Titel"
+								:label="$t('common.labels.title')"
 								dense
 								disabled
 							></v-text-field>
@@ -26,7 +30,7 @@
 							<v-textarea
 								v-model="description"
 								name="input-7-1"
-								label="Beschreibung"
+								:label="$t('common.labels.description')"
 								dense
 								required
 								:error-messages="descriptionErrors"
@@ -39,7 +43,7 @@
 						<v-col>
 							<v-file-input
 								v-model="file"
-								label="Datei hochladen (nur PDF, max. 4MB)"
+								:label="$t('pages.administration.school.index.schoolPolicies.uploadPDF')"
 								dense
 								prepend-icon=""
 								accept=".pdf"
@@ -49,10 +53,9 @@
 					<v-row>
 						<v-col>
 							<v-sheet class="px-4 py-1" color="orange lighten-4" rounded>
-								<h2 class="text-h6">Wichtig:</h2>
+								<h2 class="text-h6">{{ $t("pages.administration.school.index.schoolPolicies.important")}}</h2>
 								<p>
-									Wenn eine neue Datenschutzerklärung hochgeladen wird, wird sie
-									allen Nutzer:innen aus dieser Schule zur Zustimmung gegeben.
+									{{ $t("pages.administration.school.index.schoolPolicies.longText.whenANewPrivacyPolicyUpdated")}}
 								</p>
 							</v-sheet>
 						</v-col>
@@ -61,8 +64,12 @@
 			</v-card-text>
 			<v-card-actions class="pb-3">
 				<v-spacer></v-spacer>
-				<v-btn depressed outlined @click="cancel">Abbrechen</v-btn>
-				<v-btn color="primary" depressed @click="submit">Hinzufügen</v-btn>
+				<v-btn depressed outlined @click="cancel">{{
+					$t("common.actions.cancel")
+				}}</v-btn>
+				<v-btn color="primary" depressed @click="submit">{{
+					$t("common.actions.add")
+				}}</v-btn>
 			</v-card-actions>
 		</v-card>
 	</v-dialog>
@@ -88,7 +95,7 @@ export default {
 	},
 	data() {
 		return {
-			title: "Datenschutzerklärung der Schule",
+			title: this.$t("pages.administration.school.index.schoolPolicies.privacyPolicyTitle"),
 			description: "",
 			file: null,
 		};
@@ -101,7 +108,7 @@ export default {
 		descriptionErrors() {
 			const errors = [];
 			if (!this.$v.description.$dirty) return errors;
-			!this.$v.description.required && errors.push("Description is required");
+			!this.$v.description.required && errors.push(this.$t("common.validation.required"));
 
 			return errors;
 		},
@@ -138,7 +145,7 @@ export default {
 		},
 		cancel() {
 			this.clear();
-			this.$emit("dialog-closed"); // can this be named the same for all dialogs?
+			this.$emit("dialog-closed");
 		},
 		clear() {
 			this.$v.$reset();
@@ -149,7 +156,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 h2 {
 	margin-top: var(--space-sm);
 }

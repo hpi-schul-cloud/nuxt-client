@@ -23,7 +23,9 @@
 						<v-icon class="mr-2">
 							{{ iconMdiDownload }}
 						</v-icon>
-						PDF herunterladen
+						{{
+							$t("pages.administration.school.index.schoolPolicies.downloadPDF")
+						}}
 					</v-btn>
 				</v-col>
 			</v-row>

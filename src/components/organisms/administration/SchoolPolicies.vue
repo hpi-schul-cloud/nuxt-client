@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<h2 class="text-h4">Datenschutzerklärung</h2>
+		<h2 class="text-h4">{{ $t("common.words.privacyPolicy") }}</h2>
 		<template v-if="schoolPolicies && schoolPolicies.length">
 			<v-expansion-panels accordion flat>
 				<school-policy-expansion-panel
@@ -12,11 +12,17 @@
 				color="primary"
 				depressed
 				@click.stop="addSchoolPolicyDialogIsOpen = true"
-				>Datenschutzerklärung hinzufügen</v-btn
+				>{{
+					$t(
+						"pages.administration.school.index.schoolPolicies.addPrivacyPolicy"
+					)
+				}}</v-btn
 			>
 			<v-list-group class="ml-n4 pr-2" :ripple="false">
 				<template v-slot:activator>
-					<v-list-item-title>Ältere Datenschutzerklärungen</v-list-item-title>
+					<v-list-item-title>{{
+						$t("pages.administration.school.index.schoolPolicies.olderPolicies")
+					}}</v-list-item-title>
 				</template>
 				<v-expansion-panels accordion flat class="ml-4 pr-2">
 					<v-list-item
