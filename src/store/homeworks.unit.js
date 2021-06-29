@@ -95,7 +95,7 @@ describe("store/homeworks", () => {
 		});
 
 		describe("updateFilter", () => {
-			it("should set courseFilter in the store", async () => {
+			it("should trigger mutation in the store", async () => {
 				spyCommit.mockClear();
 				await storeModule.actions.updateFilter(
 					{

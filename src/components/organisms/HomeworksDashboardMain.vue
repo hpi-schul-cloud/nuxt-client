@@ -8,6 +8,20 @@
 				{{ getTitle() }}
 			</h1>
 		</template>
+		<v-container>
+			<v-autocomplete
+				v-if="isListFilled"
+				v-model="selectedCourses"
+				:items="availableCourses"
+				small-chips
+				deletable-chips
+				:label="$t('pages.homeworks.labels.filter')"
+				multiple
+				clearable
+				:menu-props="{ closeOnContentClick: true }"
+				@change="filterByCourse"
+			/>
+		</v-container>
 		<homeworks-dashboard-student v-if="isStudent()" />
 		<homeworks-dashboard-teacher v-else />
 		<v-custom-empty-state
@@ -43,6 +57,7 @@ export default {
 	data() {
 		return {
 			image: tasksEmptyState,
+			selectedCourses: [],
 		};
 	},
 	computed: {
@@ -50,6 +65,7 @@ export default {
 			loading: "loading",
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
+			availableCourses: "getCourses",
 		}),
 	},
 	mounted() {
@@ -73,6 +89,9 @@ export default {
 			return this.isStudent()
 				? this.$t("pages.homeworks.student.emptyState.subtitle")
 				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
+		},
+		filterByCourse() {
+			this.$store.dispatch("homeworks/updateFilter", this.selectedCourses);
 		},
 	},
 };
