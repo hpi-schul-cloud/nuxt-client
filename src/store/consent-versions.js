@@ -2,7 +2,7 @@ const module = {
 	state() {
 		return {
 			consentVersions: [],
-			setRequestSuccessful: false,
+			loading: false,
 			error: null,
 		};
 	},
@@ -12,7 +12,7 @@ const module = {
 			{ commit },
 			{ schoolId, consentTypes, withFile }
 		) {
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 			try {
 				const response = await this.$axios.$get("/consentVersions", {
 					params: {
@@ -23,12 +23,9 @@ const module = {
 					},
 				});
 
-				commit("setConsentVersions", response.data);
-				commit("setRequestSuccessful", true);
-
 				if (!withFile) {
 					commit("setConsentVersions", response.data);
-					commit("setRequestSuccessful", true);
+					commit("setLoading", false);
 				} else {
 					const consentVersions = await Promise.all(
 						response.data.map(async (consentVersion) => {
@@ -43,16 +40,16 @@ const module = {
 						})
 					);
 					commit("setConsentVersions", consentVersions);
-					commit("setRequestSuccessful", true);
+					commit("setLoading", false);
 				}
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
 		async addConsentVersion({ commit, state }, payload) {
-			commit("setRequestSuccessful", false);
+			commit("setLoading", true);
 
 			try {
 				const data = await this.$axios.$post("/consentVersions", payload);
@@ -60,10 +57,10 @@ const module = {
 				newConsentVersionsArray.unshift(data);
 
 				commit("setConsentVersions", newConsentVersionsArray);
-				commit("setRequestSuccessful", true);
+				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
@@ -72,8 +69,8 @@ const module = {
 		setConsentVersions(state, consentVersions) {
 			state.consentVersions = consentVersions;
 		},
-		setRequestSuccessful(state, successful) {
-			state.requestSuccessful = successful;
+		setLoading(state, loading) {
+			state.loading = loading;
 		},
 		setError(state, error) {
 			state.error = error;
@@ -83,8 +80,8 @@ const module = {
 		getConsentVersions(state) {
 			return state.consentVersions;
 		},
-		getRequestSuccessful(state) {
-			return state.requestSuccessful;
+		getLoading(state) {
+			return state.loading;
 		},
 		getError(state) {
 			return state.error;

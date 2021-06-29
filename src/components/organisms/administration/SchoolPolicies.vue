@@ -2,7 +2,10 @@
 	<v-container>
 		<h2 class="text-h4">{{ $t("common.words.privacyPolicy") }}</h2>
 		<template v-if="schoolPolicies && schoolPolicies.length">
-			<v-expansion-panels accordion flat>
+			<template v-if="loading">
+				<v-skeleton-loader :type="'list-item-two-line'" />
+			</template>
+			<v-expansion-panels v-else accordion flat>
 				<school-policy-expansion-panel
 					:policy="schoolPolicies[0]"
 				></school-policy-expansion-panel>
@@ -18,17 +21,21 @@
 					)
 				}}</v-btn
 			>
-			<v-list-group class="ml-n4 pr-2" :ripple="false">
+			<v-list-group
+				v-if="schoolPolicies.length > 1 && !loading"
+				:ripple="false"
+				class="px-2"
+			>
 				<template v-slot:activator>
 					<v-list-item-title>{{
 						$t("pages.administration.school.index.schoolPolicies.olderPolicies")
 					}}</v-list-item-title>
 				</template>
-				<v-expansion-panels accordion flat class="ml-4 pr-2">
+				<v-expansion-panels accordion flat>
 					<v-list-item
 						v-for="policy of schoolPolicies.slice(1)"
 						:key="policy.consentDataId"
-						class="px-0"
+						class="px-0 mx-n2"
 						:ripple="false"
 					>
 						<school-policy-expansion-panel
@@ -66,6 +73,7 @@ export default {
 		}),
 		...mapGetters("consent-versions", {
 			schoolPolicies: "getConsentVersions",
+			loading: "getLoading",
 		}),
 	},
 	created() {
