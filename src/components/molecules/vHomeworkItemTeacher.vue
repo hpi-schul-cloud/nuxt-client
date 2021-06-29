@@ -47,12 +47,22 @@ import taskIconSvg from "@assets/img/courses/task-new.svg";
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
+const homeworkRequiredKeys = [
+	"courseName",
+	"createdAt",
+	"id",
+	"name",
+	"status",
+];
+
 export default {
 	components: {},
 	props: {
 		homework: {
 			type: Object,
 			required: true,
+			validator: (homework) =>
+				homeworkRequiredKeys.every((key) => key in homework),
 		},
 	},
 	data() {

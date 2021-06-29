@@ -1,5 +1,5 @@
 import vHomeworkItemTeacher from "./vHomeworkItemTeacher";
-import { homeworksTeacher } from "@@/stories/mockData/Homeworks";
+import { homeworksTeacher, homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/molecules/vHomeworkItemTeacher", () => {
@@ -63,5 +63,18 @@ describe("@components/molecules/vHomeworkItemTeacher", () => {
 		expect(wrapper.find(".v-list-item__subtitle").text()).toBe(
 			"Mathe – Kein Abgabedatum"
 		);
+	});
+
+	it("accepts valid homework props", () => {
+		const { validator } = vHomeworkItemTeacher.props.homework;
+		const validHomeworks = homeworksTeacher;
+
+		validHomeworks.forEach((homework) => {
+			expect(validator(homework)).toBe(true);
+		});
+
+		homeworks.forEach((homework) => {
+			expect(validator(homework)).toBe(false);
+		});
 	});
 });

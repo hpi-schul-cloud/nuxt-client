@@ -157,7 +157,7 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 
 	it("accepts valid homework props", () => {
 		const { validator } = vHomeworkItemStudent.props.homework;
-		const validHomeworks = Array.from(homeworks);
+		const validHomeworks = homeworks;
 
 		validHomeworks.forEach((homework) => {
 			expect(validator(homework)).toBe(true);
