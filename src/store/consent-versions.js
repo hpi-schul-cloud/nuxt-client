@@ -56,8 +56,10 @@ const module = {
 
 			try {
 				const data = await this.$axios.$post("/consentVersions", payload);
+				const newConsentVersionsArray = [...state.consentVersions];
+				newConsentVersionsArray.unshift(data);
 
-				commit("setConsentVersions", [...state.consentVersions, data]);
+				commit("setConsentVersions", newConsentVersionsArray);
 				commit("setRequestSuccessful", true);
 			} catch (error) {
 				commit("setError", error);

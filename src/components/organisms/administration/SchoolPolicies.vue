@@ -1,0 +1,76 @@
+<template>
+	<v-container>
+		<h2 class="text-h4">Datenschutzerklärung</h2>
+		<template v-if="schoolPolicies && schoolPolicies.length">
+			<v-expansion-panels accordion flat>
+				<school-policy-expansion-panel
+					:policy="schoolPolicies[0]"
+				></school-policy-expansion-panel>
+			</v-expansion-panels>
+			<v-btn
+				class="my-8"
+				color="primary"
+				depressed
+				@click.stop="addSchoolPolicyDialogIsOpen = true"
+				>Datenschutzerklärung hinzufügen</v-btn
+			>
+			<v-list-group class="ml-n4 pr-2" :ripple="false">
+				<template v-slot:activator>
+					<v-list-item-title>Ältere Datenschutzerklärungen</v-list-item-title>
+				</template>
+				<v-expansion-panels accordion flat class="ml-4 pr-2">
+					<v-list-item
+						v-for="policy of schoolPolicies.slice(1)"
+						:key="policy.consentDataId"
+						class="px-0"
+						:ripple="false"
+					>
+						<school-policy-expansion-panel
+							:policy="policy"
+						></school-policy-expansion-panel>
+					</v-list-item>
+				</v-expansion-panels>
+			</v-list-group>
+		</template>
+		<school-policy-form-dialog
+			:is-open="addSchoolPolicyDialogIsOpen"
+			@dialog-closed="addSchoolPolicyDialogIsOpen = false"
+		></school-policy-form-dialog>
+	</v-container>
+</template>
+
+<script>
+import { mapGetters, mapActions } from "vuex";
+import SchoolPolicyFormDialog from "@components/organisms/administration/SchoolPolicyFormDialog";
+import SchoolPolicyExpansionPanel from "@components/molecules/administration/SchoolPolicyExpansionPanel";
+
+export default {
+	components: {
+		SchoolPolicyFormDialog,
+		SchoolPolicyExpansionPanel,
+	},
+	data() {
+		return {
+			addSchoolPolicyDialogIsOpen: false,
+		};
+	},
+	computed: {
+		...mapGetters("schools", {
+			school: "getSchool",
+		}),
+		...mapGetters("consent-versions", {
+			schoolPolicies: "getConsentVersions",
+		}),
+	},
+	created() {
+		this.fetchConsentVersions({
+			schoolId: this.school.id,
+			consentTypes: "privacy",
+			withFile: true,
+		});
+	},
+	methods: {
+		...mapActions("consent-versions", ["fetchConsentVersions"]),
+	},
+};
+</script>

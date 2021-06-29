@@ -2,7 +2,7 @@
 	<v-container>
 		<h2 class="text-h4 mt-13">RSS-Feeds</h2>
 		<template v-if="loading">
-			<v-skeleton-loader :key="rssFeed" :type="'list-item-avatar-three-line'" />
+			<v-skeleton-loader :type="'list-item-avatar-three-line'" />
 		</template>
 		<v-list v-else-if="rssFeeds && rssFeeds.length">
 			<template v-for="(rssFeed, index) of rssFeeds">

@@ -303,115 +303,7 @@
 							</v-row>
 						</v-form>
 						<v-divider class="mt-13"></v-divider>
-						<h2 v-if="schoolPolicyEnabled" class="text-h4">
-							Datenschutzerklärung
-						</h2>
-						<template
-							v-if="
-								schoolPolicyEnabled &&
-								localSchool.dataProtectionPolicies &&
-								localSchool.dataProtectionPolicies.length
-							"
-						>
-							<v-expansion-panels accordion flat>
-								<v-expansion-panel class="py-2 panel">
-									<v-expansion-panel-header>
-										{{ localSchool.dataProtectionPolicies[0].title }} vom
-										{{
-											printDateTimeFromStringUTC(
-												localSchool.dataProtectionPolicies[0].publishedAt
-											)
-										}}
-									</v-expansion-panel-header>
-									<v-expansion-panel-content>
-										<v-row>
-											<v-col>
-												{{ localSchool.dataProtectionPolicies[0].consentText }}
-											</v-col>
-										</v-row>
-										<v-row
-											v-if="localSchool.dataProtectionPolicies[0].fileData"
-										>
-											<v-col>
-												<v-btn
-													depressed
-													color="primary"
-													outlined
-													:href="
-														localSchool.dataProtectionPolicies[0].fileData.data
-													"
-													:download="
-														localSchool.dataProtectionPolicies[0].fileData
-															.filename
-													"
-												>
-													<v-icon class="mr-2">
-														{{ iconMdiDownload }}
-													</v-icon>
-													PDF herunterladen
-												</v-btn>
-											</v-col>
-										</v-row>
-									</v-expansion-panel-content>
-								</v-expansion-panel>
-							</v-expansion-panels>
-							<v-btn
-								class="my-8"
-								color="primary"
-								depressed
-								@click.stop="dialogs.policyDialogIsOpen = true"
-								>Datenschutzerklärung hinzufügen</v-btn
-							>
-							<v-list-group class="ml-n4 pr-2">
-								<template v-slot:activator>
-									<v-list-item-title
-										>Ältere Datenschutzerklärungen</v-list-item-title
-									>
-								</template>
-								<v-expansion-panels accordion flat class="ml-4 pr-2">
-									<v-list-item
-										v-for="policy of localSchool.dataProtectionPolicies.slice(
-											1
-										)"
-										:key="policy.consentDataId"
-										class="px-0"
-										:ripple="false"
-									>
-										<v-expansion-panel class="py-2 panel">
-											<v-expansion-panel-header>
-												{{ policy.title }} vom
-												{{ printDateTimeFromStringUTC(policy.publishedAt) }}
-											</v-expansion-panel-header>
-											<v-expansion-panel-content>
-												<v-row>
-													<v-col>
-														{{ policy.consentText }}
-													</v-col>
-												</v-row>
-												<v-row v-if="policy.fileData">
-													<v-col>
-														<v-btn
-															depressed
-															color="primary"
-															outlined
-															:href="policy.fileData.data"
-															:download="policy.fileData.filename"
-														>
-															<v-icon class="mr-2">
-																{{ iconMdiDownload }}
-															</v-icon>
-															PDF herunterladen
-														</v-btn>
-													</v-col>
-												</v-row>
-											</v-expansion-panel-content>
-										</v-expansion-panel>
-									</v-list-item>
-								</v-expansion-panels>
-							</v-list-group>
-							<v-divider class="mt-13"></v-divider>
-						</template>
-
+						<school-policies v-if="schoolPolicyEnabled"></school-policies>
 						<!-- <h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
 							<template v-slot:default>
@@ -437,28 +329,25 @@
 				</v-row>
 			</v-responsive>
 		</v-container>
-		<data-policy-form-dialog
-			:is-open="dialogs.policyDialogIsOpen"
-			@dialog-closed="dialogs.policyDialogIsOpen = false"
-		></data-policy-form-dialog>
+
 		{{ console.log(school, localSchool) }}
 	</v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { mdiChevronRight, mdiDownload, mdiFileDocumentOutline } from "@mdi/js";
-import { printDate, printDateTimeFromStringUTC } from "@plugins/datetime";
+import { mdiChevronRight } from "@mdi/js";
+import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import RssFeeds from "@components/organisms/administration/RssFeeds";
-import DataPolicyFormDialog from "@components/organisms/administration/DataPolicyFormDialog";
+import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 
 export default {
+	layout: "defaultVuetify",
 	components: {
 		RssFeeds,
-		DataPolicyFormDialog,
+		SchoolPolicies,
 	},
-	layout: "defaultVuetify",
 	data() {
 		return {
 			localSchool: {
@@ -500,17 +389,7 @@ export default {
 					disabled: true,
 				},
 			],
-			dialogs: {
-				rssDialogIsOpen: false,
-				policyDialogIsOpen: false,
-				rssConfirmDeleteDialog: {
-					isOpen: false,
-					rssFeedId: undefined,
-				},
-			},
 			iconMdiChevronRight: mdiChevronRight,
-			iconMdiDownload: mdiDownload,
-			iconMdiFileDocumentOutline: mdiFileDocumentOutline,
 		};
 	},
 	computed: {
@@ -525,9 +404,6 @@ export default {
 		}),
 		...mapGetters("federal-states", {
 			federalState: "getCurrentFederalState",
-		}),
-		...mapGetters("consent-versions", {
-			dataProtectionPolicies: "getConsentVersions",
 		}),
 		...mapGetters("systems", {
 			systems: "getSystems",
@@ -557,13 +433,7 @@ export default {
 		this.fetchLernStoreVisibility().then(() => {
 			this.localSchool.lernStore = this.lernStoreVisibility;
 		});
-		this.fetchConsentVersions({
-			schoolId: this.school.id,
-			consentTypes: "privacy",
-			withFile: true,
-		}).then(() => {
-			this.localSchool.dataProtectionPolicies = this.dataProtectionPolicies;
-		});
+
 		this.fetchFileStorageTotal();
 
 		/* this.fetchSetOfSystems(this.school.systems).then(() => {
@@ -585,7 +455,6 @@ export default {
 	},
 	methods: {
 		printDate,
-		printDateTimeFromStringUTC,
 		toBase64,
 		dataUrlToFile,
 		...mapActions("federal-states", ["fetchCurrentFederalState"]),
@@ -595,7 +464,6 @@ export default {
 			"fetchFileStorageTotal",
 			"update",
 		]),
-		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		...mapActions("systems", ["fetchSetOfSystems"]),
 		async save() {
 			const updatedSchool = {
@@ -610,8 +478,7 @@ export default {
 				!this.school.officialSchoolNumber &&
 				this.localSchool.officialSchoolNumber
 			) {
-				updatedSchool.officialSchoolNumber =
-					this.localSchool.officialSchoolNumber;
+				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
 			}
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;
@@ -654,10 +521,6 @@ export default {
 
 .v-responsive {
 	max-width: var(--size-content-width-max);
-}
-
-.panel {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.12); // TODO - find vuetify name for this
 }
 
 .relative {
