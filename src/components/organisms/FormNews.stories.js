@@ -50,5 +50,5 @@ storiesOf("6 Organisms/FormNews", module)
 	</form-news>`,
 		methods: {
 			onNewsChange: action("@update:news"),
-			},
+		},
 	}));
