@@ -1,5 +1,5 @@
 <template>
-	<v-container class="homework-dashboard-teacher">
+	<section class="homework-dashboard-teacher">
 		<homeworks-list
 			:homeworks="overDueHomeworks"
 			:title="$t('pages.homeworks.teacher.subtitleOverDue')"
@@ -15,7 +15,7 @@
 			:title="$t('pages.homeworks.teacher.subtitleNoDue')"
 			type="teacher"
 		/>
-	</v-container>
+	</section>
 </template>
 
 <script>

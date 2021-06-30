@@ -8,7 +8,7 @@
 				{{ getTitle() }}
 			</h1>
 		</template>
-		<v-container>
+		<section>
 			<v-autocomplete
 				v-if="isListFilled"
 				v-model="selectedCourses"
@@ -22,7 +22,7 @@
 				:menu-props="{ closeOnContentClick: true }"
 				@change="filterByCourse"
 			/>
-		</v-container>
+		</section>
 		<homeworks-dashboard-student v-if="isStudent()" />
 		<homeworks-dashboard-teacher v-else />
 		<v-custom-empty-state
