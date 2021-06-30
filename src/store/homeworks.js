@@ -52,7 +52,7 @@ const module = mergeDeep(base, {
 				: state.list;
 		},
 		getFilteredHomeworks: (state) => {
-			const courses = state.courseFilter;
+			const coursesToFilter = state.courseFilter;
 			return state.list.filter((homework) => {
 				return courses.includes(homework.courseName);
 			});
