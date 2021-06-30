@@ -54,7 +54,7 @@ const module = mergeDeep(base, {
 		getFilteredHomeworks: (state) => {
 			const coursesToFilter = state.courseFilter;
 			return state.list.filter((homework) => {
-				return courses.includes(homework.courseName);
+				return coursesToFilter.includes(homework.courseName);
 			});
 		},
 		getOpenHomeworksWithDueDate: (state, getters) => {
