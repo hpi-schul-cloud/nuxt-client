@@ -37,7 +37,9 @@
 				<v-divider class="mt-13"></v-divider>
 				<v-row>
 					<v-col>
-						<h2 class="text-h4 mt-10 mb-8">Allgemeine Einstellungen</h2>
+						<h2 class="text-h4 mt-10 mb-8">
+							{{ $t("pages.administration.school.index.generalSettings") }}
+						</h2>
 						<v-form>
 							<v-row>
 								<v-col>
@@ -45,7 +47,11 @@
 										<v-col>
 											<v-text-field
 												v-model="localSchool.name"
-												label="Name der Schule"
+												:label="
+													$t(
+														'pages.administration.school.index.generalSettings.labels.nameOfSchool'
+													)
+												"
 												dense
 											></v-text-field>
 										</v-col>
@@ -54,10 +60,18 @@
 										<v-col>
 											<v-text-field
 												v-model="localSchool.officialSchoolNumber"
-												label="Schulnummer"
+												:label="
+													$t(
+														'pages.administration.school.index.generalSettings.labels.schoolNumber'
+													)
+												"
 												dense
 												:disabled="school.officialSchoolNumber ? true : false"
-												hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
+												:hint="
+													$t(
+														'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
+													)
+												"
 												persistent-hint
 											></v-text-field>
 										</v-col>
@@ -66,14 +80,22 @@
 										<v-col>
 											<v-select
 												v-model="localSchool.county"
-												label="Bitte wählen Sie den Kreis, zu dem die Schule gehört"
+												:label="
+													$t(
+														'pages.administration.school.index.generalSettings.labels.chooseACounty'
+													)
+												"
 												:items="federalState.counties"
 												item-text="name"
 												item-value="_id"
 												return-object
 												dense
 												:disabled="localSchool.county ? true : false"
-												hint="Kann nur einmal gesetzt werden und wird danach deaktiviert!"
+												:hint="
+													$t(
+														'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
+													)
+												"
 												persistent-hint
 											></v-select>
 										</v-col>
@@ -82,7 +104,11 @@
 										<v-col class="d-flex">
 											<v-file-input
 												v-model="localSchool.logo"
-												label="Schullogo hochladen"
+												:label="
+													$t(
+														'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
+													)
+												"
 												dense
 												prepend-icon=""
 											></v-file-input>
@@ -93,10 +119,18 @@
 										<v-col>
 											<v-text-field
 												v-model="localSchool.timezone"
-												label="Zeitzone"
+												:label="
+													$t(
+														'pages.administration.school.index.generalSettings.labels.timezone'
+													)
+												"
 												dense
 												disabled
-												hint="Um die Zeitzone für die Schule zu ändern, wenden Sie sich bitte an einen Admin."
+												:hint="
+													$t(
+														'pages.administration.school.index.generalSettings.timezoneHint'
+													)
+												"
 												persistent-hint
 											></v-text-field>
 										</v-col>
@@ -105,26 +139,42 @@
 										<v-col>
 											<v-select
 												v-model="localSchool.language"
-												label="Sprache"
+												:label="
+													$t(
+														'pages.administration.school.index.generalSettings.labels.language'
+													)
+												"
 												:items="languages"
 												item-text="name"
 												item-value="abbreveation"
 												dense
-												hint="Ist keine Sprache für die Schule gesetzt, wird die Sprache der Instanz (Deutsch) angewandt."
+												:hint="
+													$t(
+														'pages.administration.school.index.generalSettings.languageHint'
+													)
+												"
 												persistent-hint
 											></v-select>
 										</v-col>
 									</v-row>
 								</v-col>
 							</v-row>
-							<v-row v-if="toggleStudentVisibilityEnabled">
+							<v-row>
 								<v-col>
-									<h3 class="text-h6 mt-0">Datenschutzeinstellungen</h3>
-									<v-row>
+									<h3 class="text-h6 mt-0">
+										{{
+											$t("pages.administration.school.index.privacySettings")
+										}}
+									</h3>
+									<v-row v-if="toggleStudentVisibilityEnabled">
 										<v-col>
 											<v-switch
 												v-model="localSchool.studentVisibility"
-												label="Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren"
+												:label="
+													$t(
+														'pages.administration.school.index.privacySettings.labels.studentVisibility'
+													)
+												"
 												inset
 												flat
 												dense
@@ -132,11 +182,11 @@
 												class="ml-1"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Die Aktivierung dieser Option hat datenschutzrechtlich
-												eine hohe Schwelle. Um die Sichtbarkeit aller
-												Schüler:innen der Schule für jede Lehrkraft zu
-												aktivieren, ist es erforderlich, dass jede/r Schüler:in
-												wirksam in diese Datenverarbeitung eingewilligt hat.
+												{{
+													$t(
+														"pages.administration.school.index.privacySettings.longText.studentVisibility"
+													)
+												}}
 											</p>
 										</v-col>
 									</v-row>
@@ -144,7 +194,11 @@
 										<v-col>
 											<v-switch
 												v-model="localSchool.lernStore"
-												label="Lern-Store für Schüler:innen"
+												:label="
+													$t(
+														'pages.administration.school.index.privacySettings.labels.lernStore'
+													)
+												"
 												inset
 												flat
 												dense
@@ -152,8 +206,11 @@
 												class="ml-1 mt-0"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Wenn diese Option nicht aktiviert ist, können die
-												Schüler:innen nicht auf den Lern-Store zugreifen.
+												{{
+													$t(
+														"pages.administration.school.index.privacySettings.longText.lernStore"
+													)
+												}}
 											</p>
 										</v-col>
 									</v-row>
@@ -167,7 +224,11 @@
 											<v-col>
 												<v-switch
 													v-model="localSchool.features.messenger"
-													label="Matrix Messenger aktivieren"
+													:label="
+														$t(
+															'pages.administration.school.index.privacySettings.labels.matrixMessenger'
+														)
+													"
 													inset
 													flat
 													dense
@@ -175,18 +236,20 @@
 													class="ml-1 mt-0"
 												></v-switch>
 												<p class="body-2 mb-0">
-													Ist der Matrix Messenger aktiviert, können alle
-													Lehrkräfte dieser Schule Chaträume, private
-													Unterhaltungen oder kurs- und teaminterne
-													Gruppendiskussionen starten. Schüler:innen haben dort
-													anfangs nur Leserechte, können aber über die Kurs- und
-													Teameinstellungen auch Schreibrechte zugewiesen
-													bekommen. Mehr Informationen dazu findest du im
+													{{
+														$t(
+															"pages.administration.school.index.privacySettings.longText.matrixMessenger"
+														)
+													}}
 													<a
 														href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243"
 														target="_blank"
 													>
-														Hilfeartikel zum Messenger
+														{{
+															$t(
+																"pages.administration.school.index.privacySettings.link.messengerHelpPage"
+															)
+														}}
 													</a>
 												</p>
 											</v-col>
@@ -195,7 +258,11 @@
 											<v-col>
 												<v-switch
 													v-model="localSchool.features.messengerSchoolRoom"
-													label="Chatraum für Ankündigungen an die gesamte Schule anlegen"
+													:label="
+														$t(
+															'pages.administration.school.index.privacySettings.labels.messengerSchoolRoom'
+														)
+													"
 													inset
 													flat
 													dense
@@ -203,11 +270,11 @@
 													class="ml-1 mt-0"
 												></v-switch>
 												<p class="body-2 mb-0">
-													Der Ankündigungs-Chatraum ermöglicht Schul-Admins,
-													Nachrichten an die gesamte Schule zu senden.
-													Schüler:innen haben in diesem Raum nur Lesezugriff,
-													sehen sich aber gegenseitig und können so private
-													Chats starten.
+													{{
+														$t(
+															"pages.administration.school.index.privacySettings.longText.messengerSchoolRoom"
+														)
+													}}
 												</p>
 											</v-col>
 										</v-row>
@@ -217,7 +284,11 @@
 													v-model="
 														localSchool.features.messengerStudentRoomCreate
 													"
-													label="Schüler:innen dürfen eigene Chat-Räume anlegen"
+													:label="
+														$t(
+															'pages.administration.school.index.privacySettings.labels.messengerStudentRooms'
+														)
+													"
 													inset
 													flat
 													dense
@@ -225,11 +296,11 @@
 													class="ml-1 mt-0"
 												></v-switch>
 												<p class="body-2 mb-0">
-													Ist diese Funktion aktiviert, dürfen Schüler:innen
-													Chaträume, private Unterhaltungen und kurs- und
-													teaminterne Gruppendiskussionen starten. Diese Räume
-													sind für Lehrkräfte nicht einzusehen, wenn diese nicht
-													explizit eingeladen werden.
+													{{
+														$t(
+															"pages.administration.school.index.privacySettings.longText.messengerStudentRooms"
+														)
+													}}
 												</p>
 											</v-col>
 										</v-row>
@@ -238,7 +309,11 @@
 										<v-col>
 											<v-switch
 												v-model="localSchool.features.rocketChat"
-												label="Chatfunktion aktivieren"
+												:label="
+													$t(
+														'pages.administration.school.index.privacySettings.labels.chatFunction'
+													)
+												"
 												inset
 												flat
 												dense
@@ -246,9 +321,11 @@
 												class="ml-1 mt-0"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Sind Chats an deiner Schule aktiviert, können
-												Team-Admins im jeweiligen Team sowie Lehrkräfte in ihren
-												Kursen die Chatfunktion gezielt freischalten.
+												{{
+													$t(
+														"pages.administration.school.index.privacySettings.longText.chatFunction"
+													)
+												}}
 											</p>
 										</v-col>
 									</v-row>
@@ -256,7 +333,11 @@
 										<v-col>
 											<v-switch
 												v-model="localSchool.features.videoconference"
-												label="Videokonferenzen für Kurse und Teams aktivieren"
+												:label="
+													$t(
+														'pages.administration.school.index.privacySettings.labels.videoConference'
+													)
+												"
 												inset
 												flat
 												dense
@@ -264,20 +345,17 @@
 												class="ml-1 mt-0"
 											></v-switch>
 											<p class="body-2 mb-0">
-												Sind Videokonferenzen an deiner Schule aktiviert, können
-												Lehrkräfte ihrem Kurs im Bereich Tools das
-												Videokonferenz-Tool hinzufügen und dann von dort aus
-												Videokonferenzen für alle Kursteilnehmer:innen starten.
-												Team-Admins können die Videokonferenzfunktion im
-												jeweiligen Team aktivieren. Team-Leiter:innen und
-												Team-Admins können dann Videokonferenzen zu Terminen
-												hinzufügen und starten.
+												{{
+													$t(
+														"pages.administration.school.index.privacySettings.longText.videoConference"
+													)
+												}}
 											</p>
 										</v-col>
 									</v-row>
 									<v-row>
 										<v-col>
-											<v-responsive width="74%" class="my-8">
+											<v-responsive class="my-8">
 												<v-select
 													v-model="localSchool.fileStorageType"
 													:items="fileStorageTypes"
@@ -290,13 +368,23 @@
 										</v-col>
 									</v-row>
 									<v-btn color="primary" depressed @click="save">
-										Allgemeine Einstellungen speichern
+										{{
+											$t(
+												"pages.administration.school.index.generalSettings.save"
+											)
+										}}
 									</v-btn>
 									<h2 class="text-h6 mb-0">
-										Genutzter Datei-Speicherplatz in der Cloud
+										{{
+											$t("pages.administration.school.index.usedFileStorage")
+										}}
 									</h2>
 									<p class="body-1">
-										Derzeit bezieht Ihre Schule
+										{{
+											$t(
+												"pages.administration.school.index.schoolIsCurrentlyDrawing"
+											)
+										}}
 										{{ localSchool.fileStorageTotal }} B.
 									</p>
 								</v-col>
