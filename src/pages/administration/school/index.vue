@@ -1,19 +1,6 @@
 <template>
 	<v-container>
-		<v-breadcrumbs :items="breadcrumbItems" :nuxt="true" class="ml-4 px-0 py-0">
-			<template v-slot:item="{ item }">
-				<v-breadcrumbs-item
-					:href="item.href"
-					:disabled="item.disabled"
-					class="text-h6 font-weight-bold"
-				>
-					{{ item.text }}
-				</v-breadcrumbs-item>
-			</template>
-			<template v-slot:divider>
-				<v-icon> {{ iconMdiChevronRight }} </v-icon>
-			</template>
-		</v-breadcrumbs>
+		<vuetify-breadcrumbs :breadcrumbs="breadcrumbs"></vuetify-breadcrumbs>
 		<v-container class="d-flex justify-center">
 			<v-responsive>
 				<v-row class="mt-0">
@@ -417,24 +404,24 @@
 				</v-row>
 			</v-responsive>
 		</v-container>
-
 		{{ console.log(school, localSchool) }}
 	</v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { mdiChevronRight } from "@mdi/js";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import RssFeeds from "@components/organisms/administration/RssFeeds";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
+import VuetifyBreadcrumbs from "@components/molecules/VuetifyBreadcrumbs";
 
 export default {
 	layout: "defaultVuetify",
 	components: {
 		RssFeeds,
 		SchoolPolicies,
+		VuetifyBreadcrumbs,
 	},
 	data() {
 		return {
@@ -467,7 +454,7 @@ export default {
 				{ name: "Spanisch", abbreveation: "es" },
 			],
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
-			breadcrumbItems: [
+			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
 					href: "/administration/",
@@ -477,7 +464,6 @@ export default {
 					disabled: true,
 				},
 			],
-			iconMdiChevronRight: mdiChevronRight,
 		};
 	},
 	computed: {

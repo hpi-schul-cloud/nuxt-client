@@ -69,7 +69,7 @@
 import { mapGetters, mapActions } from "vuex";
 import { mdiRss, mdiTrashCanOutline } from "@mdi/js";
 import RssFormDialog from "@components/organisms/administration/RssFormDialog";
-import VuetifyDialog from "@components/vuetify/organisms/VuetifyDialog";
+import VuetifyDialog from "@components/organisms/VuetifyDialog";
 import RssFeedStatus from "@components/molecules/administration/RssFeedStatus";
 
 export default {
