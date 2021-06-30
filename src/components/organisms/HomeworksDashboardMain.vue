@@ -16,6 +16,7 @@
 				small-chips
 				deletable-chips
 				:label="$t('pages.homeworks.labels.filter')"
+				:no-data-text="$t('pages.homeworks.labels.noCoursesAvailable')"
 				multiple
 				clearable
 				:menu-props="{ closeOnContentClick: true }"
