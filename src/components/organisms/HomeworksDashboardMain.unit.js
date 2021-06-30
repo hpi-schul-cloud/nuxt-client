@@ -13,7 +13,7 @@ import {
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
 	const getHomeworksDashboard = jest.fn();
-	const updateFilter = jest.fn();
+	const setFilter = jest.fn();
 	const mockStoreStudent = {
 		homeworks: {
 			getters: {
@@ -26,7 +26,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			},
 			actions: {
 				getHomeworksDashboard,
-				updateFilter,
+			},
+			mutations: {
+				setFilter,
 			},
 		},
 	};

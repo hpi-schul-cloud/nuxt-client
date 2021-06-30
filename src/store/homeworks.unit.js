@@ -93,23 +93,6 @@ describe("store/homeworks", () => {
 				expect(secondCommit).toBe(false);
 			});
 		});
-
-		describe("updateFilter", () => {
-			it("should trigger mutation in the store", async () => {
-				spyCommit.mockClear();
-				await storeModule.actions.updateFilter(
-					{
-						commit: spyCommit,
-					},
-					coursesTeacher
-				);
-
-				const call = spyCommit.mock.calls[0][0];
-				expect(call).toBe("setFilter");
-				const commit = spyCommit.mock.calls[0][1];
-				expect(commit).toStrictEqual(coursesTeacher);
-			});
-		});
 	});
 
 	describe("mutations", () => {

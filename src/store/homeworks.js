@@ -1,12 +1,11 @@
-import mergeDeep from "@utils/merge-deep";
+import { merge } from "lodash";
 import { serviceTemplate, fetchAll } from "@utils";
 const base = serviceTemplate("homework");
-
 const baseState = base.state();
 
-const module = mergeDeep(base, {
+const module = merge(base, {
 	state: () =>
-		mergeDeep(baseState, {
+		merge(baseState, {
 			courseFilter: [],
 		}),
 	actions: {
@@ -23,9 +22,6 @@ const module = mergeDeep(base, {
 				commit("setBusinessError", error.response.data);
 				commit("setLoading", false);
 			}
-		},
-		updateFilter: function ({ commit }, courses) {
-			commit("setFilter", courses);
 		},
 	},
 	mutations: {
@@ -52,9 +48,9 @@ const module = mergeDeep(base, {
 				: state.list;
 		},
 		getFilteredHomeworks: (state) => {
-			const courses = state.courseFilter;
+			const coursesToFilter = state.courseFilter;
 			return state.list.filter((homework) => {
-				return courses.includes(homework.courseName);
+				return coursesToFilter.includes(homework.courseName);
 			});
 		},
 		getOpenHomeworksWithDueDate: (state, getters) => {

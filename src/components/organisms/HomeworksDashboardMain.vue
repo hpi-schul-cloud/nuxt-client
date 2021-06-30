@@ -91,7 +91,7 @@ export default {
 				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
 		},
 		filterByCourse() {
-			this.$store.dispatch("homeworks/updateFilter", this.selectedCourses);
+			this.$store.commit("homeworks/setFilter", this.selectedCourses);
 		},
 	},
 };
