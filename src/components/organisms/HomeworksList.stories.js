@@ -1,9 +1,9 @@
 import { storiesOf } from "@storybook/vue";
 import HomeworksList from "@components/organisms/HomeworksList";
-import { homeworks } from "@@/stories/mockData/Homeworks";
+import { homeworks, homeworksTeacher } from "@@/stories/mockData/Homeworks";
 
 storiesOf("0 Vuetify/Homeworks/HomeworksList", module)
-	.add("HomeworksList", () => ({
+	.add("HomeworksList Student", () => ({
 		components: {
 			HomeworksList,
 		},
@@ -11,7 +11,25 @@ storiesOf("0 Vuetify/Homeworks/HomeworksList", module)
 			homeworks,
 		}),
 
-		template: `<v-app><homeworks-list :homeworks="homeworks" type="student"/></v-app>`,
+		template: `
+		<v-app>
+			<h1 class="h4">Task Overview for Students</h1>
+			<homeworks-list :homeworks="homeworks" type="student"/>
+		</v-app>`,
+	}))
+	.add("HomeworksList Teacher", () => ({
+		components: {
+			HomeworksList,
+		},
+		data: () => ({
+			homeworks: homeworksTeacher,
+		}),
+
+		template: `
+		<v-app>
+			<h1 class="h4">Task Overview for Teachers</h1>
+			<homeworks-list :homeworks="homeworks" type="teacher"/>
+		</v-app>`,
 	}))
 	.add("HomeworksListLoading", () => ({
 		components: {
