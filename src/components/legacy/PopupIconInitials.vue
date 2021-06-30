@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-click-outside="removePopup"
+		v-outside-click="removePopup"
 		class="popup"
 		data-testid="initials"
 		@click="popup"
