@@ -43,9 +43,7 @@ describe("@components/molecules/vHomeworkItemTeacher", () => {
 			},
 		});
 
-		expect(wrapper.find(".v-list-item__subtitle").text()).toBe(
-			"Mathe – Abgabe 11.06.00"
-		);
+		expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
 	});
 
 	it("Should render subtitle with course name and no due date for homeworks without due date", () => {
@@ -60,9 +58,7 @@ describe("@components/molecules/vHomeworkItemTeacher", () => {
 			},
 		});
 
-		expect(wrapper.find(".v-list-item__subtitle").text()).toBe(
-			"Mathe – Kein Abgabedatum"
-		);
+		expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
 	});
 
 	it("accepts valid homework props", () => {
