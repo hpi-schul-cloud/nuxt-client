@@ -50,7 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
-import { mapGetters } from "vuex";
+import NewsModule from "@/store/news";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
@@ -105,10 +105,12 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-		...mapGetters("news", {
-			createdNews: "getList",
-			status: "getStatus",
-		}),
+		createdNews() {
+			return NewsModule.getCreatedNews;
+		},
+		status(): string {
+			return NewsModule.getStatus;
+		},
 		publishDate(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
@@ -155,6 +157,7 @@ export default Vue.extend({
 	},
 	created() {
 		this.updateFromParent(this.news);
+		NewsModule.findNews();
 	},
 	methods: {
 		submitHandler() {
@@ -183,7 +186,7 @@ export default Vue.extend({
 				return this.$toast.error(errors[0]);
 			}
 			try {
-				await this.$store.dispatch("news/create", {
+				await NewsModule.createNews({
 					title: this.data.title,
 					content: this.data.content,
 					displayAt: this.publishDate,
@@ -198,7 +201,7 @@ export default Vue.extend({
 					);
 					this.$router.push({
 						name: "news-id",
-						params: { id: this.createdNews[0]._id },
+						params: { id: this.createdNews._id },
 					});
 				}
 			} catch (e) {
@@ -214,8 +217,7 @@ export default Vue.extend({
 				return this.$toast.error(errors[0]);
 			}
 			try {
-				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("news/patch", [
+				await NewsModule.patchNews([
 					this.$route.params.id,
 					{
 						title: this.data.title,
