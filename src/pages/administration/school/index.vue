@@ -144,6 +144,37 @@
 											></v-select>
 										</v-col>
 									</v-row>
+									<v-row>
+										<v-col>
+											<v-select
+												v-model="localSchool.fileStorageType"
+												:items="fileStorageTypes"
+												item-text="name"
+												item-value="type"
+												dense
+												label="Cloud-Storage-Anbieter"
+											></v-select>
+										</v-col>
+									</v-row>
+									<v-row>
+										<v-col>
+											<h4 class="subtitle-1 font-weight-bold my-0">
+												{{
+													$t(
+														"pages.administration.school.index.usedFileStorage"
+													)
+												}}
+											</h4>
+											<p class="body-1">
+												{{
+													$t(
+														"pages.administration.school.index.schoolIsCurrentlyDrawing"
+													)
+												}}
+												{{ localSchool.fileStorageTotal }} B.
+											</p>
+										</v-col>
+									</v-row>
 								</v-col>
 							</v-row>
 							<v-row>
@@ -292,7 +323,7 @@
 											</v-col>
 										</v-row>
 									</span>
-									<v-row>
+									<v-row v-if="rocketChatEnabled">
 										<v-col>
 											<v-switch
 												v-model="localSchool.features.rocketChat"
@@ -340,20 +371,6 @@
 											</p>
 										</v-col>
 									</v-row>
-									<v-row>
-										<v-col>
-											<v-responsive class="my-8">
-												<v-select
-													v-model="localSchool.fileStorageType"
-													:items="fileStorageTypes"
-													item-text="name"
-													item-value="type"
-													dense
-													label="Cloud-Storage-Anbieter"
-												></v-select>
-											</v-responsive>
-										</v-col>
-									</v-row>
 									<v-btn color="primary" depressed @click="save">
 										{{
 											$t(
@@ -361,23 +378,9 @@
 											)
 										}}
 									</v-btn>
-									<h2 class="text-h6 mb-0">
-										{{
-											$t("pages.administration.school.index.usedFileStorage")
-										}}
-									</h2>
-									<p class="body-1">
-										{{
-											$t(
-												"pages.administration.school.index.schoolIsCurrentlyDrawing"
-											)
-										}}
-										{{ localSchool.fileStorageTotal }} B.
-									</p>
 								</v-col>
 							</v-row>
 						</v-form>
-						<v-divider class="mt-13"></v-divider>
 						<school-policies v-if="schoolPolicyEnabled"></school-policies>
 						<!-- <h2 class="text-h4">Authentifizierung</h2>
 						<v-simple-table>
@@ -489,6 +492,7 @@ export default {
 			toggleStudentVisibilityEnabled: "getAdminToggleStudentVisibilityEnabled",
 			schoolPolicyEnabled: "getSchoolPolicyEnabled",
 			videoConferenceEnabled: "getVideoConferenceEnabled",
+			rocketChatEnabled: "getRocketChatEnabled",
 		}),
 		console: () => console, // TODO - delete when done
 	},
