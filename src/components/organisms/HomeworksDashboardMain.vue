@@ -19,6 +19,8 @@
 				:no-data-text="$t('pages.homeworks.labels.noCoursesAvailable')"
 				multiple
 				clearable
+				solo
+				rounded
 				:menu-props="{ closeOnContentClick: false }"
 				@change="filterByCourse"
 			/>
