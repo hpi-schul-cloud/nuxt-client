@@ -516,7 +516,7 @@
 	"pages.courses.index.title": "Mi curso",
 	"pages.courses.new.btn_new": "Crear",
 	"pages.courses.new.title": "Crear nuevo curso",
-	"pages.homeworks.student.title": "Tareas",
+	"pages.homeworks.student.title": "Tareas Abiertas",
 	"pages.homeworks.teacher.title": "Tareas actuales",
 	"pages.homeworks.student.emptyState.title": "No hay tareas abiertas.",
 	"pages.homeworks.student.emptyState.subtitle": "Has hecho todas tus tareas. ¡Disfruta de tu tiempo libre!",

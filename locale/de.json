@@ -511,7 +511,7 @@
 	"pages.courses._id.tab.educationalContent": "Lerninhalte",
 	"pages.courses._id.tab.groups": "Gruppen",
 	"pages.courses._id.tab.tools": "Tools",
-	"pages.homeworks.student.title": "Aufgaben",
+	"pages.homeworks.student.title": "Offene Aufgaben",
 	"pages.homeworks.teacher.title": "Aktuelle Aufgaben",
 	"pages.homeworks.student.emptyState.title": "Es gibt keine offenen Aufgaben.",
 	"pages.homeworks.student.emptyState.subtitle": "Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!",
