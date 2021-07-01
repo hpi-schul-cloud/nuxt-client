@@ -3,7 +3,7 @@
 // using the ./proxy.js serverMiddleware
 
 // const id = "[a-z0-9]+";
-//const mongoId = "[a-z0-9]{24}";
+// const mongoId = "[a-z0-9]{24}";
 const activationCode = "[a-z0-9]+";
 // const courseId = "[a-f0-9]{24}";
 const routes = [
@@ -30,10 +30,11 @@ const routes = [
 	`^/imprint/?`,
 	`^/termsofuse/?`,
 	`^/mint-ec/?`,
-	// `^/news/${mongoId}/?$`,
 	`^/insights`,
-	// `^/news/${mongoId}/edit`,
+	//`^/news`,
 	`^/news/new`,
+	//`^/news/${mongoId}/?$`,
+	//`^/news/${mongoId}/edit`,
 	`^/nuxtversion/?$`,
 	// `^/courses/?$`,
 ];
