@@ -81,7 +81,7 @@ export default {
 	computed: {
 		...mapGetters("schools", {
 			school: "getSchool",
-			requestSuccessful: "getRequestSuccessful",
+			error: "getError",
 		}),
 		urlErrors() {
 			const errors = [];
@@ -109,11 +109,11 @@ export default {
 					id: this.school.id,
 					rssFeeds: updatedRssFeedList,
 				}).then(() => {
-					if (this.requestSuccessful) {
+					if (this.error) {
+						// TODO - show error InfoMessage
+					} else {
 						this.$v.$reset();
 						this.$emit("dialog-closed");
-					} else {
-						// TODO - show error InfoMessage
 					}
 				});
 			}

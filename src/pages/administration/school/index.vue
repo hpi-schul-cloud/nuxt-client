@@ -442,13 +442,10 @@ export default {
 					messengerStudentRoomCreate: false,
 					videoconference: false,
 				},
-				permissions: [], // TODO - which route do I have to talk to here?
 				studentVisibility: false,
 				lernStore: false,
 				fileStorageType: "",
 				fileStorageTotal: 0,
-				dataProtectionPolicies: [],
-				rssFeeds: [],
 			},
 			languages: [
 				{ name: "System-Default (Deutsch)", abbreveation: "sys" },
@@ -475,8 +472,6 @@ export default {
 		}),
 		...mapGetters("schools", {
 			school: "getSchool",
-			studentVisibility: "getStudentVisibility",
-			lernStoreVisibility: "getLernStoreVisibility",
 			fileStorageTotal: "getFileStorageTotal",
 		}),
 		...mapGetters("federal-states", {
@@ -505,13 +500,6 @@ export default {
 	}, */
 	async created() {
 		this.fetchCurrentFederalState(this.school.federalState);
-		this.fetchStudentVisibility().then(() => {
-			this.localSchool.studentVisibility = this.studentVisibility;
-		});
-		this.fetchLernStoreVisibility().then(() => {
-			this.localSchool.lernStore = this.lernStoreVisibility;
-		});
-
 		this.fetchFileStorageTotal();
 
 		/* this.fetchSetOfSystems(this.school.systems).then(() => {
@@ -529,7 +517,8 @@ export default {
 		this.localSchool.language = this.school.language;
 		this.setFeatures();
 		this.localSchool.fileStorageType = this.school.fileStorageType;
-		this.localSchool.rssFeeds = this.school.rssFeeds;
+		this.localSchool.studentVisibility = this.school.permissions.teacher.STUDENT_LIST;
+		this.localSchool.lernStore = this.school.permissions.student.LERNSTORE_VIEW;
 	},
 	methods: {
 		printDate,
@@ -537,8 +526,6 @@ export default {
 		dataUrlToFile,
 		...mapActions("federal-states", ["fetchCurrentFederalState"]),
 		...mapActions("schools", [
-			"fetchStudentVisibility",
-			"fetchLernStoreVisibility",
 			"fetchFileStorageTotal",
 			"update",
 		]),
@@ -549,7 +536,6 @@ export default {
 				name: this.localSchool.name,
 				language: this.localSchool.language,
 				fileStorageType: this.localSchool.fileStorageType,
-				rssFeeds: this.localSchool.rssFeeds,
 				features: this.createFeaturesArray(),
 			};
 			if (
@@ -566,6 +552,10 @@ export default {
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}
+			updatedSchool.permissions = {
+				teacher: { STUDENT_LIST: this.localSchool.studentVisibility },
+				student: { LERNSTORE_VIEW: this.localSchool.lernStore },
+			};
 			console.log("updated", updatedSchool);
 			this.update(updatedSchool);
 		},
