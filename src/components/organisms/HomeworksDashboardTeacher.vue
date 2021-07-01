@@ -7,7 +7,7 @@
 		/>
 		<homeworks-list
 			:homeworks="dueDateHomeworks"
-			:title="$t('pages.homeworks.subtitleAssigned')"
+			:title="$t('pages.homeworks.teacher.subtitleAssigned')"
 			type="teacher"
 		/>
 		<homeworks-list
