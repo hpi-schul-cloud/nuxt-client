@@ -259,8 +259,7 @@ export default Vue.extend({
 		},
 		async confirmRemoveHandler() {
 			try {
-				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("news/remove", this.$route.params.id);
+				await NewsModule.removeNews(this.$route.params.id);
 				this.$toast.success(
 					this.$ts("components.organisms.FormNews.success.remove")
 				);

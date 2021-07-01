@@ -166,6 +166,18 @@ class NewsModule extends VuexModule {
 			this.setBusinessError(error);
 		}
 	}
+
+	@Action
+	async removeNews(id: string) {
+		try {
+			this.setStatus("pending");
+			const res = await $axios.$delete(`/news/${id}`);
+			this.setCurrent(res);
+			this.setStatus("completed");
+		} catch (error) {
+			this.setBusinessError(error);
+		}
+	}
 }
 
 export default getModule(NewsModule);
