@@ -4,17 +4,16 @@
 			<img :src="taskIconSvg" role="presentation" />
 		</v-list-item-avatar>
 		<v-list-item-content>
-			<v-list-item-subtitle class="text-wrap">
+			<v-list-item-subtitle class="d-inline-flex">
+				<span class="text-truncate">{{ homework.courseName }}</span>
 				{{
-					homework.courseName +
-					" – " +
-					computedDueDateLabel(
+					`&nbsp;– ${computedDueDateLabel(
 						homework.duedate,
 						(shorten = $vuetify.breakpoint.xsOnly)
-					)
+					)}`
 				}}
 			</v-list-item-subtitle>
-			<v-list-item-title class="text-wrap" v-text="homework.name" />
+			<v-list-item-title v-text="homework.name" />
 			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
 				<i18n path="components.molecules.VHomeworkItemTeacher.status">
 					<template #submitted>{{ homework.status.submitted }}</template>
@@ -47,12 +46,22 @@ import taskIconSvg from "@assets/img/courses/task-new.svg";
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
+const homeworkRequiredKeys = [
+	"courseName",
+	"createdAt",
+	"id",
+	"name",
+	"status",
+];
+
 export default {
 	components: {},
 	props: {
 		homework: {
 			type: Object,
 			required: true,
+			validator: (homework) =>
+				homeworkRequiredKeys.every((key) => key in homework),
 		},
 	},
 	data() {

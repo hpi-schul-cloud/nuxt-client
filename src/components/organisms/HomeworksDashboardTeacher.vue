@@ -1,8 +1,18 @@
 <template>
 	<section class="homework-dashboard-teacher">
 		<homeworks-list
-			:homeworks="openHomeworks"
-			:title="$t('pages.homeworks.subtitleAssigned')"
+			:homeworks="overDueHomeworks"
+			:title="$t('pages.homeworks.teacher.subtitleOverDue')"
+			type="teacher"
+		/>
+		<homeworks-list
+			:homeworks="dueDateHomeworks"
+			:title="$t('pages.homeworks.teacher.subtitleAssigned')"
+			type="teacher"
+		/>
+		<homeworks-list
+			:homeworks="noDueDateHomeworks"
+			:title="$t('pages.homeworks.teacher.subtitleNoDue')"
 			type="teacher"
 		/>
 	</section>
@@ -16,7 +26,9 @@ export default {
 	components: { HomeworksList },
 	computed: {
 		...mapGetters("homeworks", {
-			openHomeworks: "getOpenHomeworks",
+			dueDateHomeworks: "getOpenHomeworksWithDueDate",
+			overDueHomeworks: "getOverDueHomeworks",
+			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
 		}),
 	},
 };

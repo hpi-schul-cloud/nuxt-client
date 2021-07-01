@@ -5,21 +5,30 @@ import {
 	homeworks,
 	overDueHomeworks,
 	homeworksTeacher,
+	overDueHomeworksTeacher,
+	courses,
+	dueDateHomeworksTeacher,
+	noDueDateHomeworksTeacher,
 } from "@@/stories/mockData/Homeworks";
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
 	const getHomeworksDashboard = jest.fn();
+	const setFilter = jest.fn();
 	const mockStoreStudent = {
 		homeworks: {
 			getters: {
 				loading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
+				getCourses: () => courses,
 				getOpenHomeworks: () => homeworks,
 				getOverDueHomeworks: () => overDueHomeworks,
 			},
 			actions: {
 				getHomeworksDashboard,
+			},
+			mutations: {
+				setFilter,
 			},
 		},
 	};
@@ -32,6 +41,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				isListFilled: () => true,
 				getOpenHomeworks: () => homeworksTeacher,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
+				getCourses: () => courses,
+				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
+				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -47,6 +59,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				isListFilled: () => false,
 				getOpenHomeworks: () => [],
 				getOverDueHomeworks: () => [],
+				getCourses: () => [],
+				getOpenHomeworksWithDueDate: () => [],
+				getOpenHomeworksWithoutDueDate: () => [],
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -178,5 +193,45 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		invalidRoles.forEach((role) => {
 			expect(validator(role)).toBe(false);
 		});
+	});
+
+	it("Should render v-autocomplete component", () => {
+		const wrapper = mount(HomeworksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreTeacher,
+			}),
+			vuetify,
+			propsData: {
+				role: "teacher",
+			},
+		});
+
+		const autocompleteEl = wrapper.find(".v-autocomplete");
+		expect(autocompleteEl.exists()).toBe(true);
+	});
+
+	it("Should call 'filterByCourse' method with v-autocomplete on change", async () => {
+		const mockMethod = jest.spyOn(
+			HomeworksDashboardMain.methods,
+			"filterByCourse"
+		);
+		const wrapper = await mount(HomeworksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreStudent,
+			}),
+			vuetify,
+			propsData: {
+				role: "student",
+			},
+		});
+
+		const autocompleteEl = wrapper.find(".v-autocomplete");
+		await autocompleteEl.vm.$emit("change");
+
+		expect(mockMethod).toHaveBeenCalled();
 	});
 });

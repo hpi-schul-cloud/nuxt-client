@@ -4,13 +4,10 @@
 			<img :src="taskIconSvg" role="presentation" />
 		</v-list-item-avatar>
 		<v-list-item-content>
-			<v-list-item-subtitle class="text-wrap">
+			<v-list-item-subtitle>
 				{{ homework.courseName }}
 			</v-list-item-subtitle>
-			<v-list-item-title
-				class="text-wrap"
-				v-text="homework.name"
-			></v-list-item-title>
+			<v-list-item-title v-text="homework.name" />
 		</v-list-item-content>
 		<v-list-item-action>
 			<v-list-item-action-text

@@ -43,7 +43,7 @@ describe("Homeworks/assigned", () => {
 			}),
 			vuetify,
 		});
-
-		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
+		const title = wrapper.vm.$i18n.t("pages.homeworks.teacher.title");
+		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 });

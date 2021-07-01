@@ -48,7 +48,7 @@ describe("Homeworks/open", () => {
 			}),
 			vuetify,
 		});
-
-		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
+		const title = wrapper.vm.$i18n.t("pages.homeworks.student.title");
+		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 });

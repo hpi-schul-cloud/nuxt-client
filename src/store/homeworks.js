@@ -1,8 +1,13 @@
 import { merge } from "lodash";
 import { serviceTemplate, fetchAll } from "@utils";
 const base = serviceTemplate("homework");
+const baseState = base.state();
 
-const module = {
+const module = merge(base, {
+	state: () =>
+		merge(baseState, {
+			courseFilter: [],
+		}),
 	actions: {
 		getHomeworksDashboard: async function ({ commit }) {
 			commit("setLoading", true);
@@ -19,6 +24,11 @@ const module = {
 			}
 		},
 	},
+	mutations: {
+		setFilter(state, payload) {
+			state.courseFilter = payload;
+		},
+	},
 	getters: {
 		isListEmpty: (state) => {
 			return state.loading === false && state.list.length === 0;
@@ -26,18 +36,35 @@ const module = {
 		isListFilled: (state) => {
 			return state.loading === false && state.list.length > 0;
 		},
-		getOpenHomeworksWithDueDate: (state) => {
+		getCourses: (state) => {
+			const courses = new Set(
+				state.list.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getHomeworks: (state, getters) => {
+			return state.courseFilter.length > 0
+				? getters.getFilteredHomeworks
+				: state.list;
+		},
+		getFilteredHomeworks: (state) => {
+			const coursesToFilter = state.courseFilter;
 			return state.list.filter((homework) => {
+				return coursesToFilter.includes(homework.courseName);
+			});
+		},
+		getOpenHomeworksWithDueDate: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) > new Date();
 			});
 		},
-		getOpenHomeworksWithoutDueDate: (state) => {
-			return state.list.filter((homework) => {
+		getOpenHomeworksWithoutDueDate: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return !homework.duedate;
 			});
 		},
-		getOverDueHomeworks: (state) => {
-			return state.list.filter((homework) => {
+		getOverDueHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
@@ -47,6 +74,6 @@ const module = {
 			);
 		},
 	},
-};
+});
 
-export default merge(module, base);
+export default module;

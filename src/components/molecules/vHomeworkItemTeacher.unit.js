@@ -1,5 +1,5 @@
 import vHomeworkItemTeacher from "./vHomeworkItemTeacher";
-import { homeworksTeacher } from "@@/stories/mockData/Homeworks";
+import { homeworksTeacher, homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/molecules/vHomeworkItemTeacher", () => {
@@ -43,9 +43,7 @@ describe("@components/molecules/vHomeworkItemTeacher", () => {
 			},
 		});
 
-		expect(wrapper.find(".v-list-item__subtitle").text()).toBe(
-			"Mathe – Abgabe 11.06.00"
-		);
+		expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
 	});
 
 	it("Should render subtitle with course name and no due date for homeworks without due date", () => {
@@ -60,8 +58,19 @@ describe("@components/molecules/vHomeworkItemTeacher", () => {
 			},
 		});
 
-		expect(wrapper.find(".v-list-item__subtitle").text()).toBe(
-			"Mathe – Kein Abgabedatum"
-		);
+		expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
+	});
+
+	it("accepts valid homework props", () => {
+		const { validator } = vHomeworkItemTeacher.props.homework;
+		const validHomeworks = homeworksTeacher;
+
+		validHomeworks.forEach((homework) => {
+			expect(validator(homework)).toBe(true);
+		});
+
+		homeworks.forEach((homework) => {
+			expect(validator(homework)).toBe(false);
+		});
 	});
 });
