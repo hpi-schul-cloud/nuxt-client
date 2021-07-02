@@ -491,7 +491,7 @@
 	"pages.administration.school.index.rssFeeds.status.inQueue": "In der Warteschlange",
 	"pages.administration.school.index.rssFeeds.status.error": "Fehler beim Abrufen",
 	"pages.administration.school.index.schoolPolicies.privacyPolicyTitle": "Datenschutzerklärung der Schule",
-	"pages.administration.school.index.schoolPolicies.addPrivacyPolicy": "Datenschutzerklärung hinzufügen",	
+	"pages.administration.school.index.schoolPolicies.addPrivacyPolicy": "Datenschutzerklärung hinzufügen",
 	"pages.administration.school.index.schoolPolicies.olderPolicies": "Ältere Datenschutzerklärungen",
 	"pages.administration.school.index.schoolPolicies.downloadPDF": "PDF herunterladen",
 	"pages.administration.school.index.schoolPolicies.uploadPDF": "Datei hochladen (nur PDF, max 4MB)",
