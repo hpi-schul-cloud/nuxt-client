@@ -2,8 +2,6 @@ const module = {
 	state() {
 		return {
 			school: {},
-			studentVisibility: false,
-			lernStoreVisibility: false,
 			fileStorageTotal: 0,
 			loading: false,
 			error: null,
@@ -19,43 +17,13 @@ const module = {
 						`/schools/${rootState.auth.user.schoolId}`
 					);
 					commit("setSchool", school);
-					dispatch("schools/fetchCurrentYear", {}, { root: true });
+					await dispatch("schools/fetchCurrentYear", {}, { root: true });
 					commit("setLoading", false);
 				} catch (error) {
 					commit("setError", error);
 					commit("setLoading", false);
 					// TODO what is supposed to happen on error?
 				}
-			}
-		},
-		async fetchStudentVisibility({ commit }) {
-			commit("setLoading", true);
-
-			try {
-				const studentVisibility = await this.$axios.$get(
-					`/school/teacher/studentvisibility`
-				);
-				commit("setStudentVisibility", studentVisibility.isEnabled);
-				commit("setLoading", false);
-			} catch (error) {
-				commit("setError", error);
-				commit("setLoading", false);
-				// TODO what is supposed to happen on error?
-			}
-		},
-		async fetchLernStoreVisibility({ commit }) {
-			commit("setLoading", true);
-
-			try {
-				const lernStoreVisibility = await this.$axios.$get(
-					`/school/student/studentlernstorevisibility`
-				);
-				commit("setLernStoreVisibility", lernStoreVisibility.isEnabled);
-				commit("setLoading", false);
-			} catch (error) {
-				commit("setError", error);
-				commit("setLoading", false);
-				// TODO what is supposed to happen on error?
 			}
 		},
 		async fetchFileStorageTotal({ commit }) {
@@ -107,15 +75,6 @@ const module = {
 		setSchool(state, updatedSchool) {
 			state.school = updatedSchool;
 		},
-		setStudentVisibility(state, studentVisibility) {
-			state.studentVisibility = studentVisibility;
-		},
-		setLernStoreVisibility(state, lernStoreVisibility) {
-			state.lernStoreVisibility = lernStoreVisibility;
-		},
-		setDataProtectionPolicies(state, dataProtectionPolicies) {
-			state.dataProtectionPolicies = dataProtectionPolicies;
-		},
 		setFileStorageTotal(state, fileStorageTotal) {
 			state.fileStorageTotal = fileStorageTotal;
 		},
@@ -132,15 +91,6 @@ const module = {
 	getters: {
 		getSchool(state) {
 			return state.school;
-		},
-		getStudentVisibility(state) {
-			return state.studentVisibility;
-		},
-		getLernStoreVisibility(state) {
-			return state.lernStoreVisibility;
-		},
-		getDataProtectionPolicies(state) {
-			return state.dataProtectionPolicies;
 		},
 		getFileStorageTotal(state) {
 			return state.fileStorageTotal;

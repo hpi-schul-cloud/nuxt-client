@@ -177,209 +177,26 @@
 									</v-row>
 								</v-col>
 							</v-row>
-							<v-row>
-								<v-col>
-									<h3 class="text-h6 mt-0">
-										{{
-											$t("pages.administration.school.index.privacySettings")
-										}}
-									</h3>
-									<v-row v-if="toggleStudentVisibilityEnabled">
-										<v-col>
-											<v-switch
-												v-model="localSchool.studentVisibility"
-												:label="
-													$t(
-														'pages.administration.school.index.privacySettings.labels.studentVisibility'
-													)
-												"
-												inset
-												flat
-												dense
-												:ripple="false"
-												class="ml-1"
-											></v-switch>
-											<p class="body-2 mb-0">
-												{{
-													$t(
-														"pages.administration.school.index.privacySettings.longText.studentVisibility"
-													)
-												}}
-											</p>
-										</v-col>
-									</v-row>
-									<v-row v-if="toggleStudentLernstoreViewEnabled">
-										<v-col>
-											<v-switch
-												v-model="localSchool.lernStore"
-												:label="
-													$t(
-														'pages.administration.school.index.privacySettings.labels.lernStore'
-													)
-												"
-												inset
-												flat
-												dense
-												:ripple="false"
-												class="ml-1 mt-0"
-											></v-switch>
-											<p class="body-2 mb-0">
-												{{
-													$t(
-														"pages.administration.school.index.privacySettings.longText.lernStore"
-													)
-												}}
-											</p>
-										</v-col>
-									</v-row>
-									<span
-										v-if="
-											matrixMessengerConfig.enabled &&
-											matrixMessengerConfig.schoolSettingsVisible
-										"
-									>
-										<v-row>
-											<v-col>
-												<v-switch
-													v-model="localSchool.features.messenger"
-													:label="
-														$t(
-															'pages.administration.school.index.privacySettings.labels.matrixMessenger'
-														)
-													"
-													inset
-													flat
-													dense
-													:ripple="false"
-													class="ml-1 mt-0"
-												></v-switch>
-												<p class="body-2 mb-0">
-													{{
-														$t(
-															"pages.administration.school.index.privacySettings.longText.matrixMessenger"
-														)
-													}}
-													<a
-														href="https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=113650243"
-														target="_blank"
-													>
-														{{
-															$t(
-																"pages.administration.school.index.privacySettings.link.messengerHelpPage"
-															)
-														}}
-													</a>
-												</p>
-											</v-col>
-										</v-row>
-										<v-row v-if="matrixMessengerConfig.schoolRoomEnabled">
-											<v-col>
-												<v-switch
-													v-model="localSchool.features.messengerSchoolRoom"
-													:label="
-														$t(
-															'pages.administration.school.index.privacySettings.labels.messengerSchoolRoom'
-														)
-													"
-													inset
-													flat
-													dense
-													:ripple="false"
-													class="ml-1 mt-0"
-												></v-switch>
-												<p class="body-2 mb-0">
-													{{
-														$t(
-															"pages.administration.school.index.privacySettings.longText.messengerSchoolRoom"
-														)
-													}}
-												</p>
-											</v-col>
-										</v-row>
-										<v-row v-if="matrixMessengerConfig.studentRoomCreation">
-											<v-col>
-												<v-switch
-													v-model="
-														localSchool.features.messengerStudentRoomCreate
-													"
-													:label="
-														$t(
-															'pages.administration.school.index.privacySettings.labels.messengerStudentRooms'
-														)
-													"
-													inset
-													flat
-													dense
-													:ripple="false"
-													class="ml-1 mt-0"
-												></v-switch>
-												<p class="body-2 mb-0">
-													{{
-														$t(
-															"pages.administration.school.index.privacySettings.longText.messengerStudentRooms"
-														)
-													}}
-												</p>
-											</v-col>
-										</v-row>
-									</span>
-									<v-row v-if="rocketChatEnabled">
-										<v-col>
-											<v-switch
-												v-model="localSchool.features.rocketChat"
-												:label="
-													$t(
-														'pages.administration.school.index.privacySettings.labels.chatFunction'
-													)
-												"
-												inset
-												flat
-												dense
-												:ripple="false"
-												class="ml-1 mt-0"
-											></v-switch>
-											<p class="body-2 mb-0">
-												{{
-													$t(
-														"pages.administration.school.index.privacySettings.longText.chatFunction"
-													)
-												}}
-											</p>
-										</v-col>
-									</v-row>
-									<v-row v-if="videoConferenceEnabled">
-										<v-col>
-											<v-switch
-												v-model="localSchool.features.videoconference"
-												:label="
-													$t(
-														'pages.administration.school.index.privacySettings.labels.videoConference'
-													)
-												"
-												inset
-												flat
-												dense
-												:ripple="false"
-												class="ml-1 mt-0"
-											></v-switch>
-											<p class="body-2 mb-0">
-												{{
-													$t(
-														"pages.administration.school.index.privacySettings.longText.videoConference"
-													)
-												}}
-											</p>
-										</v-col>
-									</v-row>
-									<v-btn color="primary" depressed @click="save">
-										{{
-											$t(
-												"pages.administration.school.index.generalSettings.save"
-											)
-										}}
-									</v-btn>
-								</v-col>
-							</v-row>
+							<template v-if="loading">
+								<v-skeleton-loader
+									v-for="setting of 4"
+									:key="setting"
+									:type="'list-item-three-line'"
+								/>
+							</template>
+							<privacy-settings
+								v-else
+								:privacy-settings="{
+									permissions: localSchool.permissions,
+									features: localSchool.features,
+								}"
+								@update-privacy-settings="updatePrivacySettings"
+							></privacy-settings>
+							<v-btn class="mt-5" color="primary" depressed @click="save">
+								{{
+									$t("pages.administration.school.index.generalSettings.save")
+								}}
+							</v-btn>
 						</v-form>
 						<school-policies v-if="schoolPolicyEnabled"></school-policies>
 						<!-- <h2 class="text-h4">Authentifizierung</h2>
@@ -418,6 +235,7 @@ import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import RssFeeds from "@components/organisms/administration/RssFeeds";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import VuetifyBreadcrumbs from "@components/molecules/VuetifyBreadcrumbs";
+import PrivacySettings from "@components/organisms/administration/PrivacySettings";
 
 export default {
 	layout: "defaultVuetify",
@@ -425,6 +243,7 @@ export default {
 		RssFeeds,
 		SchoolPolicies,
 		VuetifyBreadcrumbs,
+		PrivacySettings,
 	},
 	data() {
 		return {
@@ -435,15 +254,15 @@ export default {
 				county: {},
 				timezone: "",
 				language: "",
-				features: {
-					rocketChat: false,
-					messenger: false,
-					messengerSchoolRoom: false,
-					messengerStudentRoomCreate: false,
-					videoconference: false,
+				permissions: {
+					teacher: {
+						STUDENT_LIST: false,
+					},
+					student: {
+						LERNSTORE_VIEW: false,
+					},
 				},
-				studentVisibility: false,
-				lernStore: false,
+				features: [],
 				fileStorageType: "",
 				fileStorageTotal: 0,
 			},
@@ -473,6 +292,7 @@ export default {
 		...mapGetters("schools", {
 			school: "getSchool",
 			fileStorageTotal: "getFileStorageTotal",
+			loading: "getLoading",
 		}),
 		...mapGetters("federal-states", {
 			federalState: "getCurrentFederalState",
@@ -481,13 +301,7 @@ export default {
 			systems: "getSystems",
 		}),
 		...mapGetters("env-config", {
-			matrixMessengerConfig: "getMatrixConfig",
-			toggleStudentLernstoreViewEnabled:
-				"getAdminToggleStudentLernstoreViewEnabled",
-			toggleStudentVisibilityEnabled: "getAdminToggleStudentVisibilityEnabled",
 			schoolPolicyEnabled: "getSchoolPolicyEnabled",
-			videoConferenceEnabled: "getVideoConferenceEnabled",
-			rocketChatEnabled: "getRocketChatEnabled",
 		}),
 		console: () => console, // TODO - delete when done
 	},
@@ -515,28 +329,43 @@ export default {
 		);
 		this.localSchool.timezone = this.school.timezone || "Europe/Berlin";
 		this.localSchool.language = this.school.language;
-		this.setFeatures();
+		this.localSchool.permissions = this.school.permissions;
+		this.localSchool.features = this.school.features;
 		this.localSchool.fileStorageType = this.school.fileStorageType;
-		this.localSchool.studentVisibility = this.school.permissions.teacher.STUDENT_LIST;
-		this.localSchool.lernStore = this.school.permissions.student.LERNSTORE_VIEW;
 	},
 	methods: {
 		printDate,
 		toBase64,
 		dataUrlToFile,
 		...mapActions("federal-states", ["fetchCurrentFederalState"]),
-		...mapActions("schools", [
-			"fetchFileStorageTotal",
-			"update",
-		]),
+		...mapActions("schools", ["fetchFileStorageTotal", "update"]),
 		...mapActions("systems", ["fetchSetOfSystems"]),
+		updatePrivacySettings(event, settingName) {
+			const keys = settingName.split(".");
+			if (keys[0] === "features") {
+				if (event) {
+					this.localSchool.features.push(keys[1]);
+				} else {
+					this.localSchool.features = this.localSchool.features.filter(
+						(feature) => feature !== keys[1]
+					);
+				}
+			} else {
+				keys.reduce(
+					(acc, current, index) =>
+						index === keys.length - 1 ? (acc[current] = event) : acc[current],
+					this.localSchool
+				);
+			}
+		},
 		async save() {
 			const updatedSchool = {
 				id: this.school.id,
 				name: this.localSchool.name,
 				language: this.localSchool.language,
 				fileStorageType: this.localSchool.fileStorageType,
-				features: this.createFeaturesArray(),
+				permissions: this.localSchool.permissions,
+				features: this.localSchool.features,
 			};
 			if (
 				!this.school.officialSchoolNumber &&
@@ -552,26 +381,8 @@ export default {
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}
-			updatedSchool.permissions = {
-				teacher: { STUDENT_LIST: this.localSchool.studentVisibility },
-				student: { LERNSTORE_VIEW: this.localSchool.lernStore },
-			};
 			console.log("updated", updatedSchool);
 			this.update(updatedSchool);
-		},
-		setFeatures() {
-			if (this.school && this.school.features) {
-				for (let i = 0; i < this.school.features.length; i++) {
-					this.localSchool.features[this.school.features[i]] = true;
-				}
-			}
-		},
-		createFeaturesArray() {
-			const features = [];
-			for (const featureName in this.localSchool.features) {
-				if (this.localSchool.features[featureName]) features.push(featureName);
-			}
-			return features;
 		},
 	},
 	head() {
