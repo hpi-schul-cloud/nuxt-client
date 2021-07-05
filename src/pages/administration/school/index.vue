@@ -3,180 +3,170 @@
 		<vuetify-breadcrumbs :breadcrumbs="breadcrumbs"></vuetify-breadcrumbs>
 		<v-container class="d-flex justify-center">
 			<v-responsive>
-				<v-row class="mt-0">
-					<v-col>
-						<h1 class="text-h3">
-							{{ $t("pages.administration.school.index.title") }}
-						</h1>
-						<h2 class="text-h4">
-							{{ $t("common.words.schoolYear") }}
-							{{ school.currentYear.name }}
-						</h2>
-						<p>
-							{{
-								$t(
-									"pages.administration.school.index.longText.provideStudentsAndTheirParents"
-								)
-							}}
-						</p>
-					</v-col>
-				</v-row>
-				<v-divider class="mt-13"></v-divider>
+				<h1 class="text-h3">
+					{{ $t("pages.administration.school.index.title") }}
+				</h1>
+				<h2 class="text-h4">
+					{{ $t("common.words.schoolYear") }}
+					{{ school.currentYear.name }}
+				</h2>
+				<p>
+					{{
+						$t(
+							"pages.administration.school.index.longText.provideStudentsAndTheirParents"
+						)
+					}}
+				</p>
+				<v-divider class="mt-10 mb-13"></v-divider>
 				<v-row>
 					<v-col>
-						<h2 class="text-h4 mt-10 mb-8">
+						<h2 class="text-h4 mb-10">
 							{{ $t("pages.administration.school.index.generalSettings") }}
 						</h2>
 						<v-form>
 							<v-row>
 								<v-col>
-									<v-row>
-										<v-col>
-											<v-text-field
-												v-model="localSchool.name"
-												:label="
-													$t(
-														'pages.administration.school.index.generalSettings.labels.nameOfSchool'
-													)
-												"
-												dense
-											></v-text-field>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<v-text-field
-												v-model="localSchool.officialSchoolNumber"
-												:label="
-													$t(
-														'pages.administration.school.index.generalSettings.labels.schoolNumber'
-													)
-												"
-												dense
-												:disabled="school.officialSchoolNumber ? true : false"
-												:hint="
-													$t(
-														'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
-													)
-												"
-												persistent-hint
-											></v-text-field>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<v-select
-												v-model="localSchool.county"
-												:label="
-													$t(
-														'pages.administration.school.index.generalSettings.labels.chooseACounty'
-													)
-												"
-												:items="federalState.counties"
-												item-text="name"
-												item-value="_id"
-												return-object
-												dense
-												:disabled="localSchool.county ? true : false"
-												:hint="
-													$t(
-														'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
-													)
-												"
-												persistent-hint
-											></v-select>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col class="d-flex">
-											<v-file-input
-												v-model="localSchool.logo"
-												:label="
-													$t(
-														'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
-													)
-												"
-												dense
-												prepend-icon=""
-											></v-file-input>
-											<input type="hidden" :value="localSchool.logo" />
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<v-text-field
-												v-model="localSchool.timezone"
-												:label="
-													$t(
-														'pages.administration.school.index.generalSettings.labels.timezone'
-													)
-												"
-												dense
-												disabled
-												:hint="
-													$t(
-														'pages.administration.school.index.generalSettings.timezoneHint'
-													)
-												"
-												persistent-hint
-											></v-text-field>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<v-select
-												v-model="localSchool.language"
-												:label="
-													$t(
-														'pages.administration.school.index.generalSettings.labels.language'
-													)
-												"
-												:items="languages"
-												item-text="name"
-												item-value="abbreveation"
-												dense
-												:hint="
-													$t(
-														'pages.administration.school.index.generalSettings.languageHint'
-													)
-												"
-												persistent-hint
-											></v-select>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<v-select
-												v-model="localSchool.fileStorageType"
-												:items="fileStorageTypes"
-												item-text="name"
-												item-value="type"
-												dense
-												label="Cloud-Storage-Anbieter"
-											></v-select>
-										</v-col>
-									</v-row>
-									<v-row>
-										<v-col>
-											<h4 class="subtitle-1 font-weight-bold my-0">
-												{{
-													$t(
-														"pages.administration.school.index.usedFileStorage"
-													)
-												}}
-											</h4>
-											<p class="body-1">
-												{{
-													$t(
-														"pages.administration.school.index.schoolIsCurrentlyDrawing"
-													)
-												}}
-												{{ localSchool.fileStorageTotal }} B.
-											</p>
-										</v-col>
-									</v-row>
+									<v-text-field
+										v-model="localSchool.name"
+										:label="
+											$t(
+												'pages.administration.school.index.generalSettings.labels.nameOfSchool'
+											)
+										"
+										dense
+									></v-text-field>
 								</v-col>
 							</v-row>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model="localSchool.officialSchoolNumber"
+										:label="
+											$t(
+												'pages.administration.school.index.generalSettings.labels.schoolNumber'
+											)
+										"
+										dense
+										:disabled="school.officialSchoolNumber ? true : false"
+										:hint="
+											$t(
+												'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
+											)
+										"
+										persistent-hint
+									></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-select
+										v-model="localSchool.county"
+										:label="
+											$t(
+												'pages.administration.school.index.generalSettings.labels.chooseACounty'
+											)
+										"
+										:items="federalState.counties"
+										item-text="name"
+										item-value="_id"
+										return-object
+										dense
+										:disabled="localSchool.county ? true : false"
+										:hint="
+											$t(
+												'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
+											)
+										"
+										persistent-hint
+									></v-select>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col class="d-flex">
+									<v-file-input
+										v-model="localSchool.logo"
+										:label="
+											$t(
+												'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
+											)
+										"
+										dense
+										prepend-icon=""
+									></v-file-input>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-text-field
+										v-model="localSchool.timezone"
+										:label="
+											$t(
+												'pages.administration.school.index.generalSettings.labels.timezone'
+											)
+										"
+										dense
+										disabled
+										:hint="
+											$t(
+												'pages.administration.school.index.generalSettings.timezoneHint'
+											)
+										"
+										persistent-hint
+									></v-text-field>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-select
+										v-model="localSchool.language"
+										:label="
+											$t(
+												'pages.administration.school.index.generalSettings.labels.language'
+											)
+										"
+										:items="languages"
+										item-text="name"
+										item-value="abbreveation"
+										dense
+										:hint="
+											$t(
+												'pages.administration.school.index.generalSettings.languageHint'
+											)
+										"
+										persistent-hint
+									></v-select>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<v-select
+										v-model="localSchool.fileStorageType"
+										:items="fileStorageTypes"
+										item-text="name"
+										item-value="type"
+										dense
+										label="Cloud-Storage-Anbieter"
+									></v-select>
+								</v-col>
+							</v-row>
+							<v-row>
+								<v-col>
+									<h4 class="subtitle-1 font-weight-bold my-0">
+										{{
+											$t("pages.administration.school.index.usedFileStorage")
+										}}
+									</h4>
+									<p class="body-1">
+										{{
+											$t(
+												"pages.administration.school.index.schoolIsCurrentlyDrawing"
+											)
+										}}
+										{{ localSchool.fileStorageTotal }} B.
+									</p>
+								</v-col>
+							</v-row>
+
 							<template v-if="loading">
 								<v-skeleton-loader
 									v-for="setting of 4"
@@ -192,7 +182,7 @@
 								}"
 								@update-privacy-settings="updatePrivacySettings"
 							></privacy-settings>
-							<v-btn class="mt-5" color="primary" depressed @click="save">
+							<v-btn class="my-5" color="primary" depressed @click="save">
 								{{
 									$t("pages.administration.school.index.generalSettings.save")
 								}}
@@ -329,8 +319,8 @@ export default {
 		);
 		this.localSchool.timezone = this.school.timezone || "Europe/Berlin";
 		this.localSchool.language = this.school.language;
-		this.localSchool.permissions = this.school.permissions;
-		this.localSchool.features = this.school.features;
+		this.localSchool.permissions = { ...this.school.permissions };
+		this.localSchool.features = [...this.school.features];
 		this.localSchool.fileStorageType = this.school.fileStorageType;
 	},
 	methods: {
@@ -340,22 +330,25 @@ export default {
 		...mapActions("federal-states", ["fetchCurrentFederalState"]),
 		...mapActions("schools", ["fetchFileStorageTotal", "update"]),
 		...mapActions("systems", ["fetchSetOfSystems"]),
-		updatePrivacySettings(event, settingName) {
+		updatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
 			if (keys[0] === "features") {
-				if (event) {
+				if (value) {
 					this.localSchool.features.push(keys[1]);
 				} else {
 					this.localSchool.features = this.localSchool.features.filter(
 						(feature) => feature !== keys[1]
 					);
 				}
-			} else {
-				keys.reduce(
-					(acc, current, index) =>
-						index === keys.length - 1 ? (acc[current] = event) : acc[current],
-					this.localSchool
-				);
+			}
+			if (keys[0] === "permissions") {
+				const newPermissions = {
+					...this.localSchool.permissions,
+					[keys[1]]: {
+						[keys[2]]: value,
+					},
+				};
+				this.localSchool.permissions = newPermissions;
 			}
 		},
 		async save() {
@@ -371,8 +364,7 @@ export default {
 				!this.school.officialSchoolNumber &&
 				this.localSchool.officialSchoolNumber
 			) {
-				updatedSchool.officialSchoolNumber =
-					this.localSchool.officialSchoolNumber;
+				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
 			}
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;

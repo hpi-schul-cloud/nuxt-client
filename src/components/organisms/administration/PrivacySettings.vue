@@ -65,7 +65,6 @@
 				</p>
 			</v-col>
 		</v-row>
-
 		<span
 			v-if="
 				matrixMessengerConfig.enabled &&
