@@ -220,6 +220,20 @@ export const fromInputDateTime = (date, time = null) => {
 };
 
 /**
+ * Returns array of date and time for usage in inputs
+ * @param {String} date UTC date string
+ * @return {Array} Array of date and time for usage in inputs
+ */
+export const createInputDateTime = (date) => {
+	const utcDate = dayjs.tz(date, "UTC");
+	const localDate = utcDate.tz();
+	return [
+		localDate.format(DATETIME_FORMAT.inputDate),
+		localDate.format(DATETIME_FORMAT.inputTime),
+	];
+};
+
+/**
  * Returns date difference to current local time
  * @param {String} date
  * @return {String} Date difference based on current timezone
@@ -241,19 +255,6 @@ export const fromNowToFuture = (date, unit) => {
 		const diff = input.diff(today, unit);
 		return diff;
 	} else return null;
-};
-
-/**
- * Returns array of date and time for usage in inputs
- * @param {String} date UTC date string
- * @return {Array} Array of date and time for usage in inputs
- */
-export const createInputDateTime = (date) => {
-	const resultDate = dayjs.tz(date, "UTC");
-	return [
-		resultDate.format(DATETIME_FORMAT.inputDate),
-		resultDate.format(DATETIME_FORMAT.inputTime),
-	];
 };
 
 /**

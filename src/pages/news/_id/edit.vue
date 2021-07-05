@@ -18,62 +18,64 @@
 			/>
 			<h1>{{ $t("pages.news._id.edit.title") }}</h1>
 
-			<form-news
-				v-slot:actions="{ remove, cancel }"
-				action="patch"
-				:news="news"
-			>
-				<form-actions>
-					<template v-slot:secondary>
-						<base-button
-							design="danger text"
-							type="button"
-							@click.prevent="remove"
-						>
-							<base-icon source="material" icon="delete" />
-							{{ $t("common.actions.remove") }}
-						</base-button>
-					</template>
-					<template v-slot:primary>
-						<base-button
-							design="primary"
-							type="submit"
-							data-testid="btn_news_submit"
-						>
-							<base-icon source="material" icon="check" />
-							{{ $t("common.actions.save") }}
-						</base-button>
-						<base-button design="text" @click.prevent="cancel">
-							<base-icon source="material" icon="clear" />
-							{{ $t("common.actions.cancel") }}
-						</base-button>
-					</template>
-				</form-actions>
-			</form-news>
+			<form-news v-if="news" :news="news" @save="save"> </form-news>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import FormNews from "@components/organisms/FormNews";
-import FormActions from "@components/molecules/FormActions";
 
 export default {
 	components: {
 		FormNews,
-		FormActions,
 	},
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
-	async asyncData({ store, params }) {
-		// TODO wrong use of store (not so bad)
-		return {
-			news: await store.dispatch("news/get", params.id),
-		};
+	// async asyncData({ store, params }) {
+	// 	// TODO wrong use of store (not so bad)
+	// 	return {
+	// 		news: await store.dispatch("news/get", params.id),
+	// 	};
+	// },
+	computed: {
+		...mapGetters("news", {
+			news: "getCurrent",
+		}),
 	},
 	meta: {
 		requiredPermissions: ["NEWS_EDIT"],
+	},
+	mounted() {
+		this.$store.dispatch("news/get", this.$route.params.id);
+	},
+	methods: {
+		save: async function (news) {
+			try {
+				await this.$store.dispatch("news/patch", [
+					this.$route.params.id,
+					{
+						title: news.title,
+						content: news.content,
+						displayAt: news.publishDate,
+					},
+				]);
+				this.$toast.success(
+					this.$ts("components.organisms.FormNews.success.patch")
+				);
+				this.$router.push({
+					name: "news-id",
+					params: { id: this.$route.params.id },
+				});
+			} catch (e) {
+				console.error(e);
+				this.$toast.error(
+					this.$ts("components.organisms.FormNews.errors.patch")
+				);
+			}
+		},
 	},
 	head() {
 		const hasTitle = (this.news || {}).title;
