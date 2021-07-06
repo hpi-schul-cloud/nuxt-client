@@ -5,7 +5,7 @@ const base = serviceTemplate("accounts");
 const module = mergeDeep(base, {
 	actions: {
 		getTTL: async function (ctx) {
-			return this.$axios.$get("/accounts/jwtTimer");
+			return this.$axios.$post("/accounts/jwtTimer");
 		},
 		resetJwtTimer: async function (ctx) {
 			return this.$axios.$post("/accounts/jwtTimer");
