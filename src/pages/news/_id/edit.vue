@@ -59,7 +59,7 @@ export default {
 					{
 						title: news.title,
 						content: news.content,
-						displayAt: news.publishDate,
+						displayAt: news.displayAt,
 					},
 				]);
 				this.$toast.success(

@@ -9,6 +9,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ## Unreleased
 
 - SC-9159 - Redirect the routes for news for the new v3 API
+- SC-9108 - Refactor news/create page and form component
 
 ### Added
 
