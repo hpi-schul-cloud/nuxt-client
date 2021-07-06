@@ -204,7 +204,6 @@
 							</template>
 						</v-simple-table>
 						<v-btn color="primary" depressed>System hinzufügen</v-btn> -->
-					<rss-feeds></rss-feeds>
 				</v-col>
 			</v-row>
 		</v-container>
@@ -216,16 +215,14 @@
 import { mapGetters, mapActions } from "vuex";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
-import RssFeeds from "@components/organisms/administration/RssFeeds";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
-//import VuetifyBreadcrumbs from "@components/molecules/VuetifyBreadcrumbs";
+import VuetifyBreadcrumbs from "@components/molecules/VuetifyBreadcrumbs";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
 
 export default {
 	components: {
-		RssFeeds,
 		SchoolPolicies,
-	//	VuetifyBreadcrumbs,
+		VuetifyBreadcrumbs,
 		PrivacySettings,
 	},
 	layout: "defaultVuetify",
