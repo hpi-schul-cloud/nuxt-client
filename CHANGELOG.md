@@ -8,6 +8,22 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [26.5.1] - 2021-06-30
+
+### Added
+
+- SC-9143 - add task dashboard filter for teachers and students
+
+### Changed
+
+- Changed name of click-outside vue directive
+
+## [26.5.0] - 2021-06-28
+
+### Added
+
+- SC-9143 - add teacher open task dashboard
+
 ## [26.4.3] - 2021-06-24
 
 ### Changed

@@ -1,12 +1,8 @@
-import dashboard from "./open";
-import {
-	homeworks,
-	overDueHomeworks,
-	openHomeworks,
-} from "@@/stories/mockData/Homeworks";
+import dashboard from "./assigned";
+import { homeworks, openHomeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
-describe("Homeworks/open", () => {
+describe("Homeworks/assigned", () => {
 	const getHomeworksDashboard = jest.fn();
 	const mockStore = {
 		homeworks: {
@@ -16,7 +12,6 @@ describe("Homeworks/open", () => {
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getOpenHomeworks: () => openHomeworks,
-				getOverDueHomeworks: () => overDueHomeworks,
 			},
 			state: () => ({
 				list: homeworks,
@@ -48,7 +43,7 @@ describe("Homeworks/open", () => {
 			}),
 			vuetify,
 		});
-		const title = wrapper.vm.$i18n.t("pages.homeworks.student.title");
+		const title = wrapper.vm.$i18n.t("pages.homeworks.teacher.title");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 });
