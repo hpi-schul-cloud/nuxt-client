@@ -8,6 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [26.5.2] - 2021-07-07
+
+### Added
+
+- SC-9189 - Adding expansion panels to teacher's task dashboard
+
 ## [26.5.1] - 2021-06-30
 
 ### Added
