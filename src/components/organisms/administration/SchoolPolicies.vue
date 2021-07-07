@@ -88,3 +88,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .v-list-group__header {
+	padding: 0;
+}
+</style>

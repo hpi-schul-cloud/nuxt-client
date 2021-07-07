@@ -301,6 +301,7 @@ export default {
 			console.log("blub", JSON.parse(JSON.stringify(this.systems)));
 		}); */
 
+		// TODO - think of better way with Object.assign() maybe
 		this.localSchool.name = this.school.name;
 		this.localSchool.officialSchoolNumber = this.school.officialSchoolNumber;
 		this.localSchool.county = this.school.county;
