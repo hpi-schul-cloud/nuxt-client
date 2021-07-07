@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9159 - Redirect the routes for news for the new v3 API
+
 ### Added
 
 - SC-9090 - implemented a loading state in the service-template
