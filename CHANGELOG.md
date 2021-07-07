@@ -14,6 +14,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - SC-9090 - implemented a loading state in the service-template
+- SC-9189 - Adding expansion panels to teacher's task dashboard
 
 ### Changed
 
