@@ -233,4 +233,41 @@ describe("@components/organisms/HomeworksList", () => {
 			expect(validator(type)).toBe(false);
 		});
 	});
+
+	it("Should render no subheader if title prop is not set", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
+			propsData: {
+				homeworks,
+				type: "student",
+			},
+		});
+
+		const subHeader = wrapper.findAll(".v-subheader");
+		expect(subHeader.exists()).toBe(false);
+	});
+
+	it("Should render a subheader if title prop is not set", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
+			propsData: {
+				homeworks,
+				type: "student",
+				title: "my subheader",
+			},
+		});
+
+		const subHeader = wrapper.findAll(".v-subheader");
+		expect(subHeader.exists()).toBe(true);
+	});
 });
