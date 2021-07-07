@@ -12,6 +12,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		homeworks: {
 			getters: {
 				loading: () => false,
+				isListFilled: () => true,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
 				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
@@ -27,7 +28,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 
 	it(...isValidComponent(HomeworksDashboardTeacher));
 
-	it("Should render homeworks list component", () => {
+	it("Should render homeworks list component, with 'due date' collapsible expanded per default", () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
@@ -37,6 +38,34 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 			vuetify,
 		});
 
+		const expansionPanels = wrapper.findAll(".v-expansion-panel");
+
 		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
+		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels.at(1).classes()).toContain(
+			"v-expansion-panel--active"
+		);
+	});
+
+	it("Should render homeworks list component, with 'no due date' collapsible expanded if there are no entries in the second", () => {
+		mockStore.homeworks.getters.getOverDueHomeworks = () => [];
+		mockStore.homeworks.getters.getOpenHomeworksWithDueDate = () => [];
+
+		const wrapper = mount(HomeworksDashboardTeacher, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
+		});
+
+		const expansionPanels = wrapper.findAll(".v-expansion-panel");
+
+		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
+		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels.at(0).classes()).toContain(
+			"v-expansion-panel--active"
+		);
 	});
 });

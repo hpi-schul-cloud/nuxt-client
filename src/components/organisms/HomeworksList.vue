@@ -1,6 +1,6 @@
 <template>
 	<v-list subheader two-line>
-		<v-subheader v-if="isListFilled()">
+		<v-subheader v-if="title && isListFilled()" class="subtitle-1">
 			{{ title }}
 		</v-subheader>
 		<template v-if="loading">
