@@ -26,7 +26,7 @@ type CreateNewsPayload = {
 	content: string;
 	displayAt: string | undefined;
 	schoolId: string;
-	target: any;
+	targetId: any;
 	targetModel: any;
 };
 
@@ -49,6 +49,8 @@ type BusinessError = {
 	statusCode: string;
 	message: string;
 };
+
+const newsUri = "v3/news";
 
 @Module({ name: "news", namespaced: true, dynamic: true, store: rootStore })
 class NewsModule extends VuexModule {
@@ -134,7 +136,7 @@ class NewsModule extends VuexModule {
 	async findNews(): Promise<void> {
 		try {
 			this.setStatus("pending");
-			const { data, limit, skip, total } = await $axios.$get("/news");
+			const { data, limit, skip, total } = await $axios.$get(newsUri);
 			this.setNews(data);
 			this.setPagination({ limit, skip, total });
 			this.setStatus("completed");
@@ -147,7 +149,7 @@ class NewsModule extends VuexModule {
 	async createNews(payload: CreateNewsPayload): Promise<void> {
 		try {
 			this.setStatus("pending");
-			const res = await $axios.$post("/news", payload);
+			const res = await $axios.$post(newsUri, payload);
 			this.setCreatedNews(res);
 			this.setStatus("completed");
 		} catch (error) {
@@ -159,7 +161,7 @@ class NewsModule extends VuexModule {
 	async patchNews(payload: PatchNewsPayload): Promise<void> {
 		try {
 			this.setStatus("pending");
-			const res = await $axios.$patch("/news", payload);
+			const res = await $axios.$patch(newsUri, payload);
 			this.setCurrent(res);
 			this.setStatus("completed");
 		} catch (error) {
@@ -171,7 +173,7 @@ class NewsModule extends VuexModule {
 	async removeNews(id: string) {
 		try {
 			this.setStatus("pending");
-			const res = await $axios.$delete(`/news/${id}`);
+			const res = await $axios.$delete(`${newsUri}/${id}`);
 			this.setCurrent(res);
 			this.setStatus("completed");
 		} catch (error) {
