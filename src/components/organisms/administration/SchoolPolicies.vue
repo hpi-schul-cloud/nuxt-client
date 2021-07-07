@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<section>
 		<h2 class="text-h4">{{ $t("common.words.privacyPolicy") }}</h2>
 		<template v-if="schoolPolicies && schoolPolicies.length">
 			<template v-if="loading">
@@ -24,7 +24,7 @@
 			<v-list-group
 				v-if="schoolPolicies.length > 1 && !loading"
 				:ripple="false"
-				class="px-2"
+				class=""
 			>
 				<template v-slot:activator>
 					<v-list-item-title>{{
@@ -35,7 +35,7 @@
 					<v-list-item
 						v-for="policy of schoolPolicies.slice(1)"
 						:key="policy.consentDataId"
-						class="px-0 mx-n2"
+						class="px-0"
 						:ripple="false"
 					>
 						<school-policy-expansion-panel
@@ -49,7 +49,7 @@
 			:is-open="addSchoolPolicyDialogIsOpen"
 			@dialog-closed="addSchoolPolicyDialogIsOpen = false"
 		></school-policy-form-dialog>
-	</v-container>
+	</section>
 </template>
 
 <script>

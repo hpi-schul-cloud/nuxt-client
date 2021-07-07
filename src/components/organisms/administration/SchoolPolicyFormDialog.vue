@@ -35,6 +35,7 @@
 								:label="$t('common.labels.description')"
 								dense
 								required
+								counter="1000"
 								:error-messages="descriptionErrors"
 								@input="$v.description.$touch"
 								@blur="$v.description.$touch"
@@ -94,14 +95,14 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { required, maxLength } from "vuelidate/lib/validators";
 import { currentDate } from "@plugins/datetime";
 import { toBase64 } from "@utils/fileHelper.ts";
 
 export default {
 	mixins: [validationMixin],
 	validations: {
-		description: { required },
+		description: { required, maxLength: maxLength(1000) },
 	},
 	props: {
 		isOpen: {
@@ -128,6 +129,8 @@ export default {
 			if (!this.$v.description.$dirty) return errors;
 			!this.$v.description.required &&
 				errors.push(this.$t("common.validation.required"));
+			!this.$v.description.maxLength &&
+				errors.push(this.$t("common.validation.tooLong"));
 
 			return errors;
 		},

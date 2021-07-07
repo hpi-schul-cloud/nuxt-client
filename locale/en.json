@@ -54,6 +54,7 @@
 	"common.validation.email": "Please enter a valid e-mail address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.required": "Please fill out this field",
+	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.words.and": "and",
 	"common.words.schoolYear": "School year",
 	"common.words.schoolYearChange": "Change of school year",

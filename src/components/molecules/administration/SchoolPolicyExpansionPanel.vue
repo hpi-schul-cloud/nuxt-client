@@ -1,9 +1,9 @@
 <template>
 	<v-expansion-panel class="py-2 school-policy-expansion-panel">
-		<v-expansion-panel-header>
+		<v-expansion-panel-header class="px-0">
 			{{ schoolPolicyTitle(policy) }}
 		</v-expansion-panel-header>
-		<v-expansion-panel-content>
+		<v-expansion-panel-content class="mx-n6">
 			<v-row>
 				<v-col>
 					<p class="body-1">

@@ -53,6 +53,7 @@
 	"common.validation.email": "Por favor, introduzca una dirección de correo electrónico válida",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
 	"common.validation.required": "Por favor, rellene este campo",
+	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.words.and": "y",
 	"common.words.schoolYear": "Año escolar",
 	"common.words.schoolYearChange": "Cambio de año escolar",

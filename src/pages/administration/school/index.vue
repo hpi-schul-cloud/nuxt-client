@@ -1,5 +1,5 @@
 <template>
-	<v-container class="flex-col justify-center" fluid>
+	<v-container fluid>
 		<vuetify-breadcrumbs :breadcrumbs="breadcrumbs"></vuetify-breadcrumbs>
 		<v-container class="container-max-width">
 			<h1 class="text-h3">
@@ -16,7 +16,7 @@
 					)
 				}}
 			</p>
-			<v-divider class="mt-10 mb-13"></v-divider>
+			<v-divider class="my-sm-6 my-md-8"></v-divider>
 			<v-row>
 				<v-col>
 					<h2 class="text-h4 mb-10">

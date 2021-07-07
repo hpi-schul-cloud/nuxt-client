@@ -1,6 +1,6 @@
 <template>
-	<v-container>
-		<h3 class="text-h6 mt-0">
+	<section>
+		<h3 class="text-h6">
 			{{ $t("pages.administration.school.index.privacySettings") }}
 		</h3>
 		<v-row v-if="toggleStudentVisibilityEnabled">
@@ -225,7 +225,7 @@
 				</p>
 			</v-col>
 		</v-row>
-	</v-container>
+	</section>
 </template>
 
 <script>
