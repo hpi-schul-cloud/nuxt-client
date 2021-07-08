@@ -20,6 +20,30 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		},
 	};
 
+	const mockStoreOnlyWithoutDueDate = {
+		homeworks: {
+			getters: {
+				loading: () => false,
+				isListFilled: () => true,
+				getOverDueHomeworks: () => [],
+				getOpenHomeworksWithDueDate: () => [],
+				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
+			},
+		},
+	};
+
+	const mockStoreOnlyWithDueDate = {
+		homeworks: {
+			getters: {
+				loading: () => false,
+				isListFilled: () => true,
+				getOverDueHomeworks: () => overDueHomeworksTeacher,
+				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
+				getOpenHomeworksWithoutDueDate: () => [],
+			},
+		},
+	};
+
 	let vuetify;
 
 	beforeEach(() => {
@@ -28,7 +52,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 
 	it(...isValidComponent(HomeworksDashboardTeacher));
 
-	it("Should render homeworks list component, with 'due date' collapsible expanded per default", () => {
+	it("Should render homeworks list component, with both panels expanded per default", () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
@@ -42,28 +66,47 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 
 		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
 		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels.at(0).classes()).toContain(
+			"v-expansion-panel--active"
+		);
 		expect(expansionPanels.at(1).classes()).toContain(
 			"v-expansion-panel--active"
 		);
 	});
 
-	it("Should render homeworks list component, with 'no due date' collapsible expanded if there are no entries in the second", () => {
-		mockStore.homeworks.getters.getOverDueHomeworks = () => [];
-		mockStore.homeworks.getters.getOpenHomeworksWithDueDate = () => [];
-
+	it("Should render only active 'no due date' panel, if the other panel is empty", async () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
+				store: mockStoreOnlyWithoutDueDate,
 			}),
 			vuetify,
 		});
 
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
-		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
 		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels).toHaveLength(1);
+		expect(expansionPanels.at(0).classes()).toContain(
+			"v-expansion-panel--active"
+		);
+	});
+
+	it("Should render only active 'with due date' panel, if the other panel is empty", async () => {
+		const wrapper = mount(HomeworksDashboardTeacher, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreOnlyWithDueDate,
+			}),
+			vuetify,
+		});
+
+		const expansionPanels = wrapper.findAll(".v-expansion-panel");
+
+		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels).toHaveLength(1);
 		expect(expansionPanels.at(0).classes()).toContain(
 			"v-expansion-panel--active"
 		);

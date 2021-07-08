@@ -1,12 +1,7 @@
 <template>
 	<section class="homework-dashboard-teacher">
-		<v-expansion-panels
-			flat
-			accordion
-			mandatory
-			:value="getDefaultSelectedPanel()"
-		>
-			<v-expansion-panel>
+		<v-expansion-panels v-model="expanded" flat accordion mandatory multiple>
+			<v-expansion-panel v-if="showNoDueDatePanel() || loading">
 				<v-expansion-panel-header
 					v-if="isListFilled"
 					class="text-h6 font-weight-bold pa-0"
@@ -27,7 +22,7 @@
 					<homeworks-list :homeworks="noDueDateHomeworks" type="teacher" />
 				</v-expansion-panel-content>
 			</v-expansion-panel>
-			<v-expansion-panel>
+			<v-expansion-panel v-if="showDueDatePanel() || loading">
 				<v-expansion-panel-header
 					v-if="isListFilled"
 					class="text-h6 font-weight-bold pa-0"
@@ -67,6 +62,11 @@ import { mapGetters } from "vuex";
 
 export default {
 	components: { HomeworksList },
+	data() {
+		return {
+			expanded: [0, 1],
+		};
+	},
 	computed: {
 		...mapGetters("homeworks", {
 			dueDateHomeworks: "getOpenHomeworksWithDueDate",
@@ -77,11 +77,13 @@ export default {
 		}),
 	},
 	methods: {
-		getDefaultSelectedPanel: function () {
-			if (this.dueDateHomeworks.length > 0 || this.overDueHomeworks.length > 0)
-				return 1;
-			else if (this.noDueDateHomeworks.length > 0) return 0;
-			else return 1;
+		showNoDueDatePanel: function () {
+			return this.noDueDateHomeworks.length > 0;
+		},
+		showDueDatePanel: function () {
+			return (
+				this.dueDateHomeworks.length > 0 || this.overDueHomeworks.length > 0
+			);
 		},
 	},
 };
