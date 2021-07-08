@@ -18,8 +18,7 @@
 
 <script>
 import FormNews from "@components/organisms/FormNews";
-
-import { mapGetters } from "vuex";
+import NewsModule from "@/store/news";
 
 export default {
 	components: {
@@ -29,10 +28,9 @@ export default {
 		requiredPermissions: ["NEWS_CREATE"],
 	},
 	computed: {
-		...mapGetters("news", {
-			createdNews: "getList",
-			status: "getStatus",
-		}),
+		news: () => NewsModule.getNews,
+		status: () => NewsModule.getStatus,
+		createdNews: () => NewsModule.getCreatedNews,
 	},
 	methods: {
 		getNewsTarget(query, schoolId) {
@@ -50,7 +48,7 @@ export default {
 					this.$route.query,
 					this.$user.schoolId
 				);
-				await this.$store.dispatch("news/create", {
+				await NewsModule.createNews({
 					title: news.title,
 					content: news.content,
 					displayAt: news.displayAt,
@@ -62,9 +60,8 @@ export default {
 					this.$toast.success(
 						this.$ts("components.organisms.FormNews.success.create")
 					);
-					this.$router.push({
-						name: "news-id",
-						params: { id: this.createdNews[0]._id },
+					await this.$router.push({
+						path: `/news/${this.createdNews.id}`,
 					});
 				}
 			} catch (e) {

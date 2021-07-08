@@ -106,7 +106,6 @@ describe("@components/organisms/FormNews", () => {
 			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
-					action: "create",
 					news: invalidNews,
 				},
 			});
@@ -119,24 +118,18 @@ describe("@components/organisms/FormNews", () => {
 		});
 	});
 
-	describe("remove", () => {
+	describe.skip("remove", () => {
 		it("confirming remove dispatches the news/remove action", async () => {
 			const actions = getMockActions();
 			const mock = getMocks({ actions });
 			const wrapper = mount(FormNews, {
 				...mock,
 				propsData: {
-					action: "patch",
 					news: { ...validNews },
 				},
 			});
-			const toastStubs = { success: jest.fn(), error: jest.fn() };
-			wrapper.vm.$toast = toastStubs;
-			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
-				expect(target.name).toBe("news");
-			});
 
-			await wrapper.vm.confirmRemoveHandler();
+			await wrapper.vm.remove();
 
 			expect(actions.create.mock.calls).toHaveLength(0);
 			expect(actions.patch.mock.calls).toHaveLength(0);

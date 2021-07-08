@@ -18,14 +18,15 @@
 			/>
 			<h1>{{ $t("pages.news._id.edit.title") }}</h1>
 
-			<form-news v-if="news" :news="news" @save="save"> </form-news>
+			<form-news v-if="news" :news="news" @save="save" @delete="deleteHandler">
+			</form-news>
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import FormNews from "@components/organisms/FormNews";
+import NewsModule from "@/store/news";
 
 export default {
 	components: {
@@ -34,45 +35,48 @@ export default {
 	validate({ params }) {
 		return /^[a-z0-9]{24}$/.test(params.id);
 	},
-	// async asyncData({ store, params }) {
-	// 	// TODO wrong use of store (not so bad)
-	// 	return {
-	// 		news: await store.dispatch("news/get", params.id),
-	// 	};
-	// },
 	computed: {
-		...mapGetters("news", {
-			news: "getCurrent",
-		}),
+		news: () => NewsModule.getCurrentNews,
 	},
 	meta: {
 		requiredPermissions: ["NEWS_EDIT"],
 	},
 	mounted() {
-		this.$store.dispatch("news/get", this.$route.params.id);
+		NewsModule.fetchNews(this.$route.params.id);
 	},
 	methods: {
-		save: async function (news) {
+		save: async function (newsToPatch) {
 			try {
-				await this.$store.dispatch("news/patch", [
-					this.$route.params.id,
-					{
-						title: news.title,
-						content: news.content,
-						displayAt: news.displayAt,
-					},
-				]);
+				await NewsModule.patchNews({
+					id: this.news.id,
+					title: newsToPatch.title,
+					content: newsToPatch.content,
+					displayAt: newsToPatch.displayAt,
+				});
 				this.$toast.success(
 					this.$ts("components.organisms.FormNews.success.patch")
 				);
-				this.$router.push({
-					name: "news-id",
-					params: { id: this.$route.params.id },
+				await this.$router.push({
+					path: `/news/${this.news.id}`,
 				});
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(
 					this.$ts("components.organisms.FormNews.errors.patch")
+				);
+			}
+		},
+		deleteHandler: async function (news) {
+			try {
+				await NewsModule.removeNews(news.id);
+				this.$toast.success(
+					this.$ts("components.organisms.FormNews.success.remove")
+				);
+				this.$router.push({ name: "news" });
+			} catch (e) {
+				console.error(e);
+				this.$toast.error(
+					this.$ts("components.organisms.FormNews.errors.remove")
 				);
 			}
 		},

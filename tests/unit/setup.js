@@ -33,6 +33,7 @@ import { mountBaseComponents } from "@basecomponents/_globals";
 
 const baseComponentDir = path.join(__dirname, "../../src/components/base/");
 Vue.use(Vuelidate);
+Vue.use(Vuex);
 
 function readDirRecursiveSync(dir) {
 	const results = [];

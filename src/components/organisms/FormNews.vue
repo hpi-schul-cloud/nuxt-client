@@ -51,14 +51,15 @@
 							<base-icon source="material" icon="check" />
 							{{ $t("common.actions.save") }}
 						</base-button>
-						<!-- <base-button
+						<base-button
+							v-if="news && news.id"
 							design="danger text"
 							type="button"
 							@click="$emit('delete')"
 						>
 							<base-icon source="material" icon="delete" />
 							{{ $t("common.actions.remove") }}
-						</base-button> -->
+						</base-button>
 						<base-button design="text" @click="cancel">
 							<base-icon source="material" icon="clear" />
 							{{ $t("common.actions.discard") }}
@@ -73,7 +74,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
-import { mapGetters } from "vuex";
+import NewsModule from "@/store/news";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
@@ -121,9 +122,9 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-		...mapGetters("news", {
-			status: "getStatus",
-		}),
+		status(): string {
+			return NewsModule.getStatus;
+		},
 		displayAt(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
@@ -202,23 +203,11 @@ export default Vue.extend({
 				cancelText: this.$t(
 					"components.organisms.FormNews.remove.confirm.cancel"
 				),
-				onConfirm: this.confirmRemoveHandler,
+				onConfirm: this.$emit("delete", {
+					...this.data,
+					displayAt: this.displayAt,
+				}),
 			});
-		},
-		async confirmRemoveHandler() {
-			try {
-				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("news/remove", this.$route.params.id);
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.remove")
-				);
-				this.$router.push({ name: "news" });
-			} catch (e) {
-				console.error(e);
-				this.$toast.error(
-					this.$ts("components.organisms.FormNews.errors.remove")
-				);
-			}
 		},
 		async cancel() {
 			this.$dialog.confirm({

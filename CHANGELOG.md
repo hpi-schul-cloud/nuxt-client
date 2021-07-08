@@ -27,6 +27,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page and feature of password changing is fixed
 - SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
 - SC-9093 - Load default language and timezone from server
+- SC-9158 - fixed launch config to debug a single test
 - SC-9160 - fixed getStatus getter in service-template
 
 ## [26.4.3] - 2021-06-24
