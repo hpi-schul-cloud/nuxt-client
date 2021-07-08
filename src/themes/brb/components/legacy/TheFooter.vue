@@ -66,8 +66,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: this.$store.getters["filePaths/getSpecificFiles"]
-						.termsOfUseSchool,
+					href: "/datenschtz",
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",

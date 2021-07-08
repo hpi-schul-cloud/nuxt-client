@@ -71,7 +71,7 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: this.$store.getters["filePaths/getSpecificFiles"].privacy,
+					href: "/datenschutz",
 					text: this.$t("demo.components.legacy.footer.privacy_policy_HPI"),
 					target: "_blank",
 					rel: "noopener",
