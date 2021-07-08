@@ -37,10 +37,19 @@ export default {
 					to: "/imprint",
 					text: "Impressum",
 				},
-				{
-					to: "/termsofuse",
-					text: this.$t("components.legacy.footer.termsofuse"),
-				},
+        {
+          href: this.$store.getters["filePaths/getSpecificFiles"]
+              .termsOfUseSchool,
+          text: this.$t("components.legacy.footer.terms"),
+          target: "_blank",
+          rel: "noopener",
+        },
+        {
+          href: "/datenschutz",
+          text: this.$t("components.legacy.footer.terms"),
+          target: "_blank",
+          rel: "noopener",
+        },
 			];
 		},
 	},
