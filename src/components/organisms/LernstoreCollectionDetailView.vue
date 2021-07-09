@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import AddContentButton from "@components/organisms/AddContentButton";
 import ContentCard from "@components/organisms/ContentCard";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
@@ -180,16 +180,10 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("content", {
-			elements: (state) => {
-				return state.elements;
-			},
-			selected: (state) => {
-				return state.selected;
-			},
-			loading: (state) => {
-				return state.loading;
-			},
+		...mapGetters("content", {
+			elements: "getElements",
+			selected: "getSelected",
+			loading: "getLoading",
 		}),
 		provider() {
 			const provider = getProvider(this.resource.properties);

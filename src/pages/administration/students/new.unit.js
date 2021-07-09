@@ -5,11 +5,11 @@ describe("students/new", () => {
 	const createStudentStub = jest.fn();
 	const mockStore = {
 		auth: {
-			state: () => ({
-				user: {
+			getters: {
+				getUser: () => ({
 					permissions: ["STUDENT_CREATE"],
-				},
-			}),
+				}),
+			},
 		},
 		users: {
 			actions: {
@@ -17,7 +17,7 @@ describe("students/new", () => {
 				businessError: jest.fn(),
 			},
 			getters: {
-				businessError: jest.fn(),
+				getBusinessError: jest.fn(),
 			},
 			mutations: {
 				resetBusinessError: jest.fn(),

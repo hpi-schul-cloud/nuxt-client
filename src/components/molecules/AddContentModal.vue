@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import ModalFooter from "@components/molecules/ModalFooter";
 
 export default {
@@ -100,25 +100,13 @@ export default {
 	},
 	computed: {
 		...mapGetters("courses", {
-			courses: "list",
+			coursesOptions: "getCoursesOptions",
 		}),
-		...mapState("content", {
-			lessons: (state) => {
-				return state.lessons;
-			},
+		...mapGetters("content", {
+			lessons: "getLessons",
 		}),
 		isSendEnabled() {
 			return (this.selectedLesson || {})._id !== undefined;
-		},
-		coursesOptions() {
-			return this.courses
-				.filter((course) => course.isArchived === false)
-				.map((course) => {
-					return {
-						_id: course._id,
-						name: course.name,
-					};
-				});
 		},
 		lessonsOptions() {
 			return (

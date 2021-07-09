@@ -3,9 +3,13 @@ import { actions, mutations, getters, state } from "./filePaths";
 const baseDir = "https://s3.hidrive.strato.com/schul-cloud-hpi/";
 const theme = "default";
 const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
+
+const mockTheme = "testTheme";
 const rootState = {
 	"env-config": {
-		env: {},
+		env: {
+			SC_THEME: mockTheme,
+		},
 	},
 };
 const mockSpecificFiles = {
@@ -66,8 +70,6 @@ describe("store/filePaths", () => {
 			});
 			it("sets theme to SC_THEME if it is defined", async () => {
 				const spyCommit = jest.fn();
-				const mockTheme = "testTheme";
-				process.env.SC_THEME = mockTheme;
 				await actions.init(
 					{ commit: spyCommit, rootState },
 					{ baseDir, theme }

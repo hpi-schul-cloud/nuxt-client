@@ -130,8 +130,8 @@ describe("@components/organisms/FormNews", () => {
 			});
 			wrapper.trigger("submit");
 			expect(actions.create.mock.calls).toHaveLength(1);
-			const { target, targetModel } = actions.create.mock.calls[0][1];
-			expect(target).toBe(testTarget);
+			const { targetId, targetModel } = actions.create.mock.calls[0][1];
+			expect(targetId).toBe(testTarget);
 			expect(targetModel).toBe(testTargetModel);
 		});
 
@@ -161,8 +161,8 @@ describe("@components/organisms/FormNews", () => {
 			});
 			wrapper.trigger("submit");
 			expect(actions.create.mock.calls).toHaveLength(1);
-			const { target, targetModel } = actions.create.mock.calls[0][1];
-			expect(target).toBe(testTarget);
+			const { targetId, targetModel } = actions.create.mock.calls[0][1];
+			expect(targetId).toBe(testTarget);
 			expect(targetModel).toBe(testTargetModel);
 		});
 

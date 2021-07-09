@@ -3,7 +3,7 @@
 		<div
 			v-if="show"
 			ref="context-menu"
-			v-click-outside="handleClickOutside"
+			v-outside-click="handleClickOutside"
 			class="context-menu"
 			:style="anchorCSS"
 			role="menu"

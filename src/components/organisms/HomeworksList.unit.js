@@ -4,15 +4,15 @@ import {
 	overDueHomeworks,
 	openHomeworks,
 } from "@@/stories/mockData/Homeworks";
-import Vuetify from "vuetify";
 import { fromNowToFuture } from "@plugins/datetime";
+import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				list: () => homeworks,
-				loading: () => false,
+				getList: () => homeworks,
+				getLoading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				openHomeworks: () => openHomeworks,
@@ -33,6 +33,17 @@ describe("@components/organisms/HomeworksList", () => {
 
 	it(...isValidComponent(HomeworksList));
 
+	it("accepts only student and teacher as type prop", () => {
+		const validTypes = ["student", "teacher"];
+		const { validator } = HomeworksList.props.type;
+
+		validTypes.forEach((type) => {
+			expect(validator(type)).toBe(true);
+		});
+
+		expect(validator("wrong type")).toBe(false);
+	});
+
 	it("Should render complete homework items list", () => {
 		const wrapper = mount(HomeworksList, {
 			...createComponentMocks({
@@ -43,20 +54,30 @@ describe("@components/organisms/HomeworksList", () => {
 			vuetify,
 			propsData: {
 				homeworks,
+				type: "student",
 			},
 		});
 
-		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(
-			homeworks.length
-		);
+		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
+		expect(dueDateLabels).toHaveLength(homeworks.length);
+
+		dueDateLabels.wrappers.forEach((dateLabel, index) => {
+			expect(dateLabel.exists()).toBe(true);
+			if (
+				homeworks[index].duedate === null ||
+				typeof homeworks[index].duedate === "undefined"
+			)
+				expect(dateLabel.text()).toBe("Kein Abgabedatum");
+			else expect(dateLabel.text()).toContain("Abgabe ");
+		});
 	});
 
 	it("Should render an empty list, if there are no homeworks", () => {
 		const mockStoreEmpty = {
 			homeworks: {
 				getters: {
-					list: () => [],
-					loading: () => false,
+					getList: () => [],
+					getLoading: () => false,
 					isListEmpty: () => true,
 					isListFilled: () => false,
 					openHomeworks: () => [],
@@ -76,56 +97,12 @@ describe("@components/organisms/HomeworksList", () => {
 				store: mockStoreEmpty,
 			}),
 			vuetify,
+			propsData: {
+				type: "student",
+			},
 		});
-
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
-	});
-
-	it("Should link list item links to homework/<id> page", () => {
-		const wrapper = mount(HomeworksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			vuetify,
-			propsData: {
-				homeworks,
-			},
-		});
-
-		const firstLink = wrapper.find("a");
-
-		expect(firstLink.exists()).toBe(true);
-		expect(firstLink.attributes().href).toBe(`/homework/${homeworks[0]._id}`);
-	});
-
-	it("Should display due date labels according to due date", () => {
-		const wrapper = mount(HomeworksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			vuetify,
-			propsData: {
-				homeworks,
-			},
-		});
-
-		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
-		expect(dueDateLabels).toHaveLength(homeworks.length);
-
-		dueDateLabels.wrappers.forEach((dateLabel, index) => {
-			expect(dateLabel.exists()).toBe(true);
-			if (
-				homeworks[index].duedate === null ||
-				typeof homeworks[index].duedate === "undefined"
-			)
-				expect(dateLabel.text()).toBe("Kein Abgabedatum");
-			else expect(dateLabel.text()).toContain("Abgabe ");
-		});
 	});
 
 	it("Should render hint label, if homework is close to due date", () => {
@@ -145,8 +122,8 @@ describe("@components/organisms/HomeworksList", () => {
 		const mockStoreCloseToDueDate = {
 			homeworks: {
 				getters: {
-					list: () => homeworks,
-					loading: () => false,
+					getList: () => homeworks,
+					getLoading: () => false,
 					isListEmpty: () => false,
 					isListFilled: () => true,
 					openHomeworks: () => openHomeworks,
@@ -174,6 +151,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
+				type: "student",
 				homeworks: extendedHomeworks,
 			},
 		});
@@ -194,6 +172,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
+				type: "student",
 				homeworks,
 			},
 		});
@@ -207,8 +186,8 @@ describe("@components/organisms/HomeworksList", () => {
 		const mockStoreLoading = {
 			homeworks: {
 				getters: {
-					list: () => [],
-					loading: () => true,
+					getList: () => [],
+					getLoading: () => true,
 					isListEmpty: () => false,
 					isListFilled: () => false,
 					openHomeworks: () => [],
@@ -229,6 +208,7 @@ describe("@components/organisms/HomeworksList", () => {
 			vuetify,
 			propsData: {
 				homeworks: [],
+				type: "student",
 			},
 		});
 
@@ -238,5 +218,19 @@ describe("@components/organisms/HomeworksList", () => {
 		).toBe(true);
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+	});
+
+	it("should accept valid type props", () => {
+		const { validator } = HomeworksList.props.type;
+		const validTypes = ["student", "teacher"];
+		const invalidTypes = ["invalid", "type"];
+
+		validTypes.forEach((type) => {
+			expect(validator(type)).toBe(true);
+		});
+
+		invalidTypes.forEach((type) => {
+			expect(validator(type)).toBe(false);
+		});
 	});
 });
