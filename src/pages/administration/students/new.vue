@@ -73,7 +73,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("users", {
-			businessError: "businessError",
+			businessError: "getBusinessError",
 		}),
 	},
 	created() {

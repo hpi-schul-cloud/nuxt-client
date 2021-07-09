@@ -52,7 +52,7 @@
 			:selection-type.sync="tableSelectionType"
 			:sort-by="sortBy"
 			:sort-order="sortOrder"
-			:show-external-text="!schoolInternallyManaged"
+			:show-external-text="schoolIsExternallyManaged"
 			data-testid="students_table"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
@@ -111,11 +111,11 @@
 		<admin-table-legend
 			:icons="icons"
 			:show-icons="showConsent"
-			:show-external-sync-hint="!schoolInternallyManaged"
+			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
 		<fab-floating
 			v-if="
-				schoolInternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
+				!schoolIsExternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
 			"
 			position="bottom-right"
 			:show-label="true"
@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
@@ -309,27 +309,21 @@ export default {
 		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
-		...mapState("auth", {
-			school: "school",
+		...mapGetters("auth", {
+			schoolIsExternallyManaged: "schoolIsExternallyManaged",
 		}),
 		...mapGetters("users", {
-			students: "list",
+			students: "getList",
+			pagination: "getPagination",
+			isDeleting: "getActive",
+			deletedPercent: "getPercent",
+			qrLinks: "getQrLinks",
 		}),
-		...mapState("users", {
-			pagination: (state) =>
-				state.pagination.default || { limit: 10, total: 0 },
-			isDeleting: (state) => state.progress.delete.active,
-			deletedPercent: (state) => state.progress.delete.percent,
-			qrLinks: "qrLinks",
+		...mapGetters("env-config", {
+			env: "getEnv",
 		}),
-		...mapState("env-config", {
-			env: "env",
-		}),
-		schoolInternallyManaged() {
-			return !this.school.isExternal;
-		},
 		showConsent() {
-			return this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
+			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
 			let editedActions = this.tableActions;
@@ -340,7 +334,7 @@ export default {
 			);
 
 			// filter the delete action if school is external
-			if (!this.schoolInternallyManaged) {
+			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -353,7 +347,7 @@ export default {
 		filteredColumns() {
 			let editedColumns = this.tableColumns;
 			// filters out edit column if school is external
-			if (!this.schoolInternallyManaged) {
+			if (this.schoolIsExternallyManaged) {
 				editedColumns = this.tableColumns.filter(
 					//_id field sets the edit column
 					(col) => col.field !== "_id"
@@ -407,10 +401,8 @@ export default {
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/handleUsers", {
+			this.$store.dispatch("users/findStudents", {
 				query,
-				action: "find",
-				userType: "students",
 			});
 		},
 		onUpdateSort(sortBy, sortOrder) {
@@ -555,10 +547,9 @@ export default {
 			});
 
 			setTimeout(() => {
-				this.$store.dispatch("users/handleUsers", {
+				this.$store.dispatch("users/findStudents", {
 					query,
 					action: "find",
-					userType: "students",
 				});
 			}, 400);
 		},

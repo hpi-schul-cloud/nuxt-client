@@ -20,7 +20,7 @@
 
 <script>
 import InfoModalFullWidth from "@components/molecules/InfoModalFullWidth";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -34,8 +34,8 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("activation", {
-			data: "list",
+		...mapGetters("activation", {
+			data: "getList",
 		}),
 		getTitle() {
 			let title = "";

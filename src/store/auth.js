@@ -123,8 +123,48 @@ export const mutations = {
 };
 
 export const getters = {
-	getLocale(state) {
-		return state.locale;
+	getLocale(state, _getters, rootState) {
+		if (state.locale) {
+			return state.locale;
+		}
+		if (state.school && state.school.language) {
+			return state.school.language;
+		}
+		if (rootState["env-config"].env.I18N__DEFAULT_LANGUAGE) {
+			return rootState["env-config"].env.I18N__DEFAULT_LANGUAGE;
+		}
+		return "de";
+	},
+	getSchool(state) {
+		return state.school;
+	},
+	getUser(state) {
+		return state.user;
+	},
+	getAccessToken(state) {
+		return state.accessToken;
+	},
+	getUserRoles(state) {
+		return state.user.roles
+			? state.user.roles.map((r) => r.name.toLowerCase())
+			: [];
+	},
+	getUserRolesDisplayName(state) {
+		return state.user.roles ? state.user.roles.map((r) => r.displayName) : [];
+	},
+	getAuthenticated(state) {
+		return state.accessToken || false;
+	},
+	getUserPermissions(state) {
+		return state.user.permissions
+			? state.user.permissions.map((p) => p.toLowerCase())
+			: [];
+	},
+	userIsExternallyManaged(state) {
+		return !!state.user.externallyManaged;
+	},
+	schoolIsExternallyManaged(state) {
+		return state.school.isExternal;
 	},
 };
 

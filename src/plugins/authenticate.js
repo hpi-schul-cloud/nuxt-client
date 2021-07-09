@@ -12,13 +12,13 @@ export default async ({ app, store, route }) => {
 			} else if (!isPublic) {
 				// TODO wrong use of store (not so bad)
 				await store.dispatch("auth/logout");
-				window.location = `${store.state["env-config"].env.NOT_AUTHENTICATED_REDIRECT_URL}?redirect=${window.location}`;
+				window.location = `${store.getters["env-config/getEnv"].NOT_AUTHENTICATED_REDIRECT_URL}?redirect=${window.location}`;
 			}
 		} catch (error) {
 			console.error(error);
 			store.dispatch("auth/logout");
 			window.location =
-				store.state["env-config"].env.NOT_AUTHENTICATED_REDIRECT_URL;
+				store.getters["env-config/getEnv"].NOT_AUTHENTICATED_REDIRECT_URL;
 		}
 	}
 };
