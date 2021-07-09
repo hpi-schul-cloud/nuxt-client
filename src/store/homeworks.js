@@ -10,17 +10,17 @@ const module = merge(base, {
 		}),
 	actions: {
 		getHomeworksDashboard: async function ({ commit }) {
-			commit("setLoading", true);
+			commit("setStatus", "pending");
 			try {
 				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
 					items: data,
 				});
-				commit("setLoading", false);
+				commit("setStatus", "completed");
 			} catch (error) {
 				// TODO: extract response.data to businessError format and add a business Error
 				commit("setBusinessError", error.response.data);
-				commit("setLoading", false);
+				commit("setStatus", "error");
 			}
 		},
 	},
@@ -31,10 +31,10 @@ const module = merge(base, {
 	},
 	getters: {
 		isListEmpty: (state) => {
-			return state.loading === false && state.list.length === 0;
+			return state.status !== "pending" && state.list.length === 0;
 		},
 		isListFilled: (state) => {
-			return state.loading === false && state.list.length > 0;
+			return state.status !== "pending" && state.list.length > 0;
 		},
 		getCourses: (state) => {
 			const courses = new Set(

@@ -134,8 +134,8 @@
 			<pagination
 				class="mt--xl-3"
 				:current-page="page"
-				:per-page="pagination.limit"
-				:total="pagination.total"
+				:per-page="pagination.default.limit"
+				:total="pagination.default.total"
 				@update:current-page="onPageChange"
 				@update:per-page="onCurrentPageChange"
 			/>
@@ -169,7 +169,7 @@ import Pagination from "@components/organisms/Pagination";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/empty-state/emptystate-graph.svg";
 
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
 
 export default {
@@ -215,13 +215,12 @@ export default {
 	},
 	computed: {
 		...mapGetters("datasources", {
-			datasources: "list",
-		}),
-		...mapState("datasources", {
-			pagination: (state) => state.pagination.default,
-		}),
-		...mapGetters("datasources", {
+			datasources: "getList",
+			pagination: "getPagination",
 			watchingIds: "getPendingIdsFromResult",
+		}),
+		...mapGetters("datasourceRuns", {
+			datasourceRun: "getList",
 		}),
 	},
 	created(ctx) {
@@ -262,7 +261,7 @@ export default {
 				},
 			];
 		},
-		find() {
+		async find() {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -271,26 +270,22 @@ export default {
 					createdAt: 1,
 				},
 			};
-			// TODO wrong use of store
-			this.$store
-				.dispatch("datasources/find", { query })
-				.then((result) => {
-					if (this.watchingIds.length > 0) {
-						this.$store.dispatch("datasources/updateCallback", {
-							watchingIds: this.watchingIds,
-							successConditions: [
-								{ lastStatus: "Success" },
-								{ lastStatus: "Error" },
-							],
-							query,
-						});
-					}
-					return result;
-				})
-				.catch((error) => {
-					console.error(error);
-					this.$toast.error(this.$t("error.load"));
-				});
+			try {
+				await this.$store.dispatch("datasources/find", { query });
+				if (this.watchingIds.length > 0) {
+					this.$store.dispatch("datasources/updateCallback", {
+						watchingIds: this.watchingIds,
+						successConditions: [
+							{ lastStatus: "Success" },
+							{ lastStatus: "Error" },
+						],
+						query,
+					});
+				}
+			} catch (error) {
+				console.error(error);
+				this.$toast.error(this.$t("error.load"));
+			}
 		},
 		mapTypeToDatasourceImage(item) {
 			// todo later - check naming
@@ -302,13 +297,12 @@ export default {
 		},
 		async triggerRun(datasource) {
 			try {
-				// TODO wrong use of store
-				const run = await this.$store.dispatch("datasourceRuns/create", {
+				await this.$store.dispatch("datasourceRuns/create", {
 					datasourceId: datasource._id,
 					dryrun: true,
 				});
 				this.$router.push({
-					path: `/administration/datasources/${datasource._id}/run/${run._id}`,
+					path: `/administration/datasources/${datasource._id}/run/${this.datasourceRun[0]._id}`,
 				});
 			} catch (error) {
 				console.error(error, error.response);

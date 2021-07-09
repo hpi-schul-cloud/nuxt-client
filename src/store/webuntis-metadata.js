@@ -44,12 +44,6 @@ const module = mergeDeep(base, {
 			commit("set", {
 				items: data,
 			});
-			return {
-				limit: total,
-				skip: 0,
-				total,
-				data,
-			};
 		},
 	},
 });

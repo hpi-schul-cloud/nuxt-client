@@ -2,37 +2,62 @@ import { actions, mutations } from "./users";
 
 describe("store/users", () => {
 	describe("actions", () => {
-		describe("handleUsers", () => {
-			const spyDispatch = jest.fn();
-
-			it("should dispatch correct action", async () => {
-				const query = {
-					$limit: 25,
-					$skip: 0,
+		describe("findStudents", () => {
+			it("calls backend and sets state correctly", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: jest.fn(),
 				};
-				const queryContent = {
-					query,
-					action: "find",
-					userType: "students",
-				};
-
-				const expectedPayload = {
-					...queryContent,
-					customEndpoint: "/users/admin/students",
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+						return { data: "dummy response" };
+					},
 				};
 
-				actions.handleUsers({ dispatch: spyDispatch }, queryContent);
-
-				expect(spyDispatch).toHaveBeenCalledWith(
-					queryContent.action,
-					expectedPayload
+				await actions.findStudents(ctxMock);
+				expect(ctxMock.commit.mock.calls).toHaveLength(4);
+				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
+					"updatePaginationForQuery"
 				);
+				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
+				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
+			});
+		});
+		describe("findTeachers", () => {
+			it("calls backend and sets state correctly", async () => {
+				const receivedRequests = [];
+				const ctxMock = {
+					commit: jest.fn(),
+				};
+				actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+						return { data: "dummy response" };
+					},
+				};
+
+				await actions.findTeachers(ctxMock);
+				expect(ctxMock.commit.mock.calls).toHaveLength(4);
+				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
+					"updatePaginationForQuery"
+				);
+				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
+				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
+				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
 			});
 		});
 		describe("createTeacher", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
-				const ctxMock = {};
+				const ctxMock = {
+					commit: () => {},
+				};
 				const teacherDataMock = {
 					firstName: "Marla",
 					lastName: "Mathe",
@@ -73,7 +98,9 @@ describe("store/users", () => {
 		describe("getQrRegistrationLinks", () => {
 			it("should call backend", async () => {
 				const receivedRequests = [];
-				const ctxMock = {};
+				const ctxMock = {
+					commit: () => {},
+				};
 				const payloadMock = {
 					someProperty: "some value",
 				};

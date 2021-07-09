@@ -63,7 +63,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("homeworks", {
-			loading: "loading",
+			loading: "getLoading",
 		}),
 	},
 	methods: {

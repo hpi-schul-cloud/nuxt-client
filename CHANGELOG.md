@@ -8,6 +8,27 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9159 - Redirect the routes for news for the new v3 API
+
+### Added
+
+- SC-9090 - implemented a loading state in the service-template
+
+### Changed
+
+- SC-8448 - resolves Merlin URL before passing to legacy client
+- SC-9077 - refactored store actions returning data
+- SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
+- SC-9122 - changed getters logic from components to the store
+
+### Fixed
+
+- SC-9131 fixed the consent table loading the wrong list of users and refactored the consent page and feature of password changing is fixed
+- SC-9106 - Remove the possibility to change an action's endpoint with a param from the component
+- SC-9093 - Load default language and timezone from server
+- SC-9158 - fixed launch config to debug a single test
+- SC-9160 - fixed getStatus getter in service-template
+
 ## [26.5.1] - 2021-06-30
 
 ### Added
@@ -29,8 +50,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - OPS-2467 - changes build pipeline to github actions
-
-## 26.4.2
 
 ### Changed
 
@@ -71,15 +90,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-8164 - apply deletion concept to the deletion of students and teachers
 - SC-7937 - added Lern-Store collections multi-select
 - SC-8156 - added Spanish as an available language
+- SC-9004 - Sync env variables between backend and frontend
 - OPS-1499 - added feature Branch to CI Pipeline for team based HPI Schul-Cloud instances
 
 ### Changed
 
 - QF/Pull Request Workflow - adds checkbox for manual test, more checks, splits tests
+- SC-9065 - integrates styles repository into nuxt client
 - SC-7944 - changes ids for Lern-Store content and adds a link back to collection
 - SC-8666 - changed words in the language.json about gender and removed the helpdesk from the sidebar-menu-item
 - SC-7944 - changes field for Lern-Store content id and adds a link to collection
 - OPS-1508 - Updated limits for cpu and ram to the docker compose files ( 20.11.2020 )
+- SC-9004 - Change ci build
 
 ### Fixed
 
