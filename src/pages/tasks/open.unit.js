@@ -4,6 +4,8 @@ import {
 	overDueHomeworks,
 	openHomeworks,
 } from "@@/stories/mockData/Homeworks";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
+import HomeworksList from "@components/organisms/HomeworksList";
 import Vuetify from "vuetify";
 
 describe("Homeworks/open", () => {
@@ -17,6 +19,7 @@ describe("Homeworks/open", () => {
 				isListFilled: () => true,
 				getOpenHomeworks: () => openHomeworks,
 				getOverDueHomeworks: () => overDueHomeworks,
+				getCourses: () => [],
 			},
 			state: () => ({
 				list: homeworks,
@@ -49,9 +52,8 @@ describe("Homeworks/open", () => {
 			vuetify,
 		});
 
-		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
-		// const title = wrapper.vm.$i18n.t("pages.homeworks.student.title");
-		// expect(wrapper.vm.$metaInfo.title).toBe(title);
+		const title = wrapper.vm.$i18n.t("pages.homeworks.student.title");
+		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 
 	it("Should render homeworks list component, if there are homeworks", () => {

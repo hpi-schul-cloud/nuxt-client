@@ -56,17 +56,17 @@ describe("store/homeworks", () => {
 				const secondCall = storeCalls[1];
 				const thirdCall = storeCalls[2];
 
-				expect(firstCall[0]).toBe("setLoading");
+				expect(firstCall[0]).toBe("setStatus");
 				expect(secondCall[0]).toBe("setBusinessError");
-				expect(thirdCall[0]).toBe("setLoading");
+				expect(thirdCall[0]).toBe("setStatus");
 
 				const firstCommit = firstCall[1];
 				const secondCommit = secondCall[1];
 				const thirdCommit = thirdCall[1];
 
-				expect(firstCommit).toBe(true);
+				expect(firstCommit).toBe("pending");
 				expect(secondCommit).toBe(mockAxiosError.response.data);
-				expect(thirdCommit).toBe(false);
+				expect(thirdCommit).toBe("error");
 			});
 
 			it("should set loading state when fetching homeworks", async () => {
@@ -84,13 +84,13 @@ describe("store/homeworks", () => {
 
 				const firstCall = storeCalls[0];
 				const thirdCall = storeCalls[2];
-				expect(firstCall[0]).toBe("setLoading");
-				expect(thirdCall[0]).toBe("setLoading");
+				expect(firstCall[0]).toBe("setStatus");
+				expect(thirdCall[0]).toBe("setStatus");
 
 				const firstCommit = firstCall[1];
 				const secondCommit = thirdCall[1];
-				expect(firstCommit).toBe(true);
-				expect(secondCommit).toBe(false);
+				expect(firstCommit).toBe("pending");
+				expect(secondCommit).toBe("completed");
 			});
 		});
 	});

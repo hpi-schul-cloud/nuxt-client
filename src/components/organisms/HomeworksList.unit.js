@@ -4,6 +4,7 @@ import {
 	overDueHomeworks,
 	openHomeworks,
 } from "@@/stories/mockData/Homeworks";
+import { fromNowToFuture } from "@plugins/datetime";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
@@ -57,9 +58,18 @@ describe("@components/organisms/HomeworksList", () => {
 			},
 		});
 
-		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(
-			homeworks.length
-		);
+		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
+		expect(dueDateLabels).toHaveLength(homeworks.length);
+
+		dueDateLabels.wrappers.forEach((dateLabel, index) => {
+			expect(dateLabel.exists()).toBe(true);
+			if (
+				homeworks[index].duedate === null ||
+				typeof homeworks[index].duedate === "undefined"
+			)
+				expect(dateLabel.text()).toBe("Kein Abgabedatum");
+			else expect(dateLabel.text()).toContain("Abgabe ");
+		});
 	});
 
 	it("Should render an empty list, if there are no homeworks", () => {
@@ -91,21 +101,8 @@ describe("@components/organisms/HomeworksList", () => {
 				type: "student",
 			},
 		});
-		// expect(wrapper.props("homeworks")).toStrictEqual([]);
-		// expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
-
-		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
-		expect(dueDateLabels).toHaveLength(homeworks.length);
-
-		dueDateLabels.wrappers.forEach((dateLabel, index) => {
-			expect(dateLabel.exists()).toBe(true);
-			if (
-				homeworks[index].duedate === null ||
-				typeof homeworks[index].duedate === "undefined"
-			)
-				expect(dateLabel.text()).toBe("Kein Abgabedatum");
-			else expect(dateLabel.text()).toContain("Abgabe ");
-		});
+		expect(wrapper.props("homeworks")).toStrictEqual([]);
+		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
 	it("Should render hint label, if homework is close to due date", () => {
@@ -154,6 +151,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
+				type: "student",
 				homeworks: extendedHomeworks,
 			},
 		});
@@ -174,6 +172,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
+				type: "student",
 				homeworks,
 			},
 		});

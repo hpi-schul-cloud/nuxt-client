@@ -11,7 +11,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				loading: () => false,
+				getLoading: () => false,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
 				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
