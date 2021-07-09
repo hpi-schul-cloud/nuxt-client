@@ -1,7 +1,8 @@
 import Theme from "@theme/config";
 
 export default ({ app, store }) => {
-	const { user } = store.state.auth;
+	const user = store.getters["auth/getUser"];
+
 	app.$sentry.configureScope((scope) => {
 		scope.setLevel("warn");
 		scope.setTag("theme", Theme.name);

@@ -1,12 +1,21 @@
 <template>
-	<lernstore-collection-detail-view v-if="isCollection" :resource="resource" />
-	<lernstore-detail-view v-else :resource="resource" />
+	<span>
+		<span v-if="status === 'completed'">
+			<lernstore-collection-detail-view
+				v-if="isCollection"
+				:resource="resource"
+			/>
+			<lernstore-detail-view v-else :resource="resource" />
+		</span>
+		<base-spinner v-else />
+	</span>
 </template>
 
 <script>
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
-import { isCollectionHelper } from "@utils/helpers";
+import BaseSpinner from "@components/base/BaseSpinner";
+import { mapGetters } from "vuex";
 
 export default {
 	meta: {
@@ -15,29 +24,27 @@ export default {
 	components: {
 		LernstoreDetailView,
 		LernstoreCollectionDetailView,
+		BaseSpinner,
 	},
 	layout({ store, query }) {
 		return String(query.isCollection) === "true" &&
-			store.state.content.collectionsFeatureFlag === true
+			store.getters["content/getCollectionsFeatureFlag"] === true
 			? "loggedInFull"
 			: "plain";
 	},
-	async asyncData({ store, params }) {
-		// TODO wrong use of store
-		const resource = await store.dispatch(
+	computed: {
+		...mapGetters("content", {
+			resource: "getCurrentResource",
+			collectionsFeatureFlag: "getCollectionsFeatureFlag",
+			status: "getStatus",
+			isCollection: "isCollection",
+		}),
+	},
+	async created() {
+		await this.$store.dispatch(
 			"content/getResourceMetadata",
-			params.id
+			this.$route.params.id
 		);
-
-		const isCollection =
-			store.state.content.collectionsFeatureFlag === true &&
-			isCollectionHelper(resource.properties);
-
-		return {
-			isCollection,
-			id: params.id,
-			resource,
-		};
 	},
 };
 </script>

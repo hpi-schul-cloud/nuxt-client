@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@components/molecules/vHomeworkItemTeacher Should render subtitle with course name and due date 1`] = `
+<div class="v-list-item__subtitle d-inline-flex"><span class="text-truncate">Mathe</span>
+  &nbsp;– Abgabe 11.06.00
+</div>
+`;
+
+exports[`@components/molecules/vHomeworkItemTeacher Should render subtitle with course name and no due date for homeworks without due date 1`] = `
+<div class="v-list-item__subtitle d-inline-flex"><span class="text-truncate">Mathe</span>
+  &nbsp;– Kein Abgabedatum
+</div>
+`;

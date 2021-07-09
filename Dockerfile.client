@@ -1,0 +1,18 @@
+FROM node:lts as builder
+
+ARG SC_THEME=default
+
+RUN mkdir /app && chown -R node:node /app
+WORKDIR '/app'
+
+ENV SC_THEME ${SC_THEME}
+
+COPY ./package.json ./
+COPY ./package-lock.json ./
+USER node
+RUN npm ci
+COPY --chown=node:node . /app/
+
+RUN ["chmod", "550", "./startup.sh"]
+EXPOSE 4000
+CMD [ "./startup.sh"]

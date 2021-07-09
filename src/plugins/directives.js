@@ -9,7 +9,7 @@ Vue.directive("focus-on-mount", {
 	},
 });
 
-Vue.directive("click-outside", {
+Vue.directive("outside-click", {
 	bind: function (el, binding, vnode) {
 		el.clickOutsideEvent = function (event) {
 			// here I check that click was outside the el and his childrens

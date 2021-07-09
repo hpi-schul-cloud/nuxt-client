@@ -22,7 +22,7 @@ export default {
 		return create_element(
 			this.tag,
 			{
-				class: `container ${this.size}`,
+				class: `wrapper ${this.size}`,
 			},
 			[this.$slots.default]
 		);
@@ -32,7 +32,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@styles";
-.container {
+.wrapper {
 	min-width: var(--size-content-width-min);
 	margin: 0 auto;
 	&.small {

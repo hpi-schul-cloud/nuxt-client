@@ -9,10 +9,8 @@ const mockApp = {
 const getMockStore = ({ permissions = [], user } = {}) => {
 	const mockUser = user !== undefined ? user : { permissions };
 	return {
-		state: {
-			auth: {
-				user: mockUser,
-			},
+		getters: {
+			"auth/getUser": mockUser,
 		},
 	};
 };
