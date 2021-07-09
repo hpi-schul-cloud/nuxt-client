@@ -9,16 +9,15 @@ storiesOf("5 Molecules/LegacyFooter", module).add("default", () => ({
 		links: [
 			{
 				title: "Impressum",
-				href: "https://schul-cloud.org/impressum",
+				href: "https://hpi-schul-cloud.de/impressum",
 			},
 			{
 				title: "Datenschutzerklärung HPI",
-				href: "https://schul-cloud.org/datenschutz",
+				href: "https://hpi-schul-cloud.de/datenschutz",
 			},
 			{
 				title: "Datenschutzerklärung Muster Schulen",
-				href:
-					"https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
+				href: "https://s3.hidrive.strato.com/schul-cloud-hpi/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 			},
 		],
 		contacts: [

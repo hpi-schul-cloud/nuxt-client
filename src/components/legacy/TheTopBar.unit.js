@@ -2,7 +2,7 @@ import TheTopBar from "./TheTopBar";
 
 const mockActions = [
 	{ type: "popupIcon", icon: "house", title: "test home", to: "home" },
-	{ type: "text", title: "test away", href: "https://schul-cloud.org" },
+	{ type: "text", title: "test away", href: "https://hpi-schul-cloud.de" },
 	{
 		type: "popupWithInitials",
 		icon: "camera",

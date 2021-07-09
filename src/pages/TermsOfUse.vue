@@ -14,7 +14,7 @@ export default {
 	components: { CommonTermsOfUse },
 	computed: {
 		consentVersion() {
-			return this.$store.state["terms-and-conditions"].consentVersion;
+			return this.$store.getters["terms-and-conditions/getConsentVersion"];
 		},
 	},
 	mounted() {
