@@ -79,7 +79,7 @@
 		"vuelidate": "^0.7.6"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.13.15",
+		"@babel/core": "^7.14.6",
 		"@babel/plugin-proposal-optional-chaining": "^7.13.12",
 		"@babel/preset-env": "^7.13.15",
 		"@nuxt/types": "^2.15.4",
@@ -127,11 +127,11 @@
 		"jest-extended": "^0.11.5",
 		"jest-haste-map": "^26.6.2",
 		"jest-image-snapshot": "^4.4.1",
-		"jest-puppeteer": "^4.4.0",
+		"jest-puppeteer": "^5.0.4",
 		"jest-resolve": "^26.6.2",
 		"jest-serializer-vue": "^2.0.2",
 		"lint-staged": "^10.5.2",
-		"lodash": "^4.17.20",
+		"lodash": "^4.17.21",
 		"markdownlint-cli": "^0.26.0",
 		"node-sass": "^5.0.0",
 		"npm-run-all": "^4.1.5",
