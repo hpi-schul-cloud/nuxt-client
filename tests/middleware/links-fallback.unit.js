@@ -9,7 +9,11 @@ describe("@middleware/linksFallback", () => {
 		window.location.pathname = "/homework";
 		const promise = linksFallback({
 			route: { path: "/homework" },
-			store: { state: { "env-config": { env: {} } } },
+			store: {
+				getters: {
+					"env-config/getEnv": {},
+				},
+			},
 		});
 		jest.runAllTimers();
 		const result = await promise;
@@ -20,7 +24,11 @@ describe("@middleware/linksFallback", () => {
 		window.location.pathname = "/news";
 		const promise = linksFallback({
 			route: { path: "/news/add" },
-			store: { state: { "env-config": { env: {} } } },
+			store: {
+				getters: {
+					"env-config/getEnv": {},
+				},
+			},
 		});
 		jest.runAllTimers();
 		const result = await promise;
@@ -31,7 +39,11 @@ describe("@middleware/linksFallback", () => {
 		window.location.pathname = "/news";
 		const promise = linksFallback({
 			route: { path: "/homework" },
-			store: { state: { "env-config": { env: { FALLBACK_DISABLED: true } } } },
+			store: {
+				getters: {
+					"env-config/getEnv": { FALLBACK_DISABLED: true },
+				},
+			},
 		});
 		jest.runAllTimers();
 		const result = await promise;
@@ -42,7 +54,11 @@ describe("@middleware/linksFallback", () => {
 		window.location.pathname = "/news";
 		const promise = linksFallback({
 			route: { path: "/homework" },
-			store: { state: { "env-config": { env: {} } } },
+			store: {
+				getters: {
+					"env-config/getEnv": {},
+				},
+			},
 		});
 		jest.runAllTimers();
 		const result = await promise;

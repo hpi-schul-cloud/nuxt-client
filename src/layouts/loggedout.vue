@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="nuxt-container">
 		<Nuxt />
 	</div>
 </template>
@@ -11,7 +11,7 @@ export default {};
 <style lang="scss" scoped>
 @import "@styles";
 
-.container {
+.nuxt-container {
 	padding: var(--space-xl-3);
 }
 </style>

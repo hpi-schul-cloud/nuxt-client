@@ -122,6 +122,9 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped>
-@import "@styles";
+<style lang="scss">
+.layout {
+	// this fixes some vuetify global styles side-effect in the filterUI
+	display: block;
+}
 </style>

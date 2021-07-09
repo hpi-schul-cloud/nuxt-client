@@ -53,36 +53,41 @@ describe("teachers/index", () => {
 						],
 						permissions: ["TEACHER_CREATE", "TEACHER_DELETE"],
 					},
-					school: {
-						isExternal: false,
-					},
 				}),
+				getters: {
+					getUser: () => ({
+						roles: [
+							{
+								name: "administrator",
+							},
+						],
+						permissions: ["TEACHER_CREATE", "TEACHER_DELETE"],
+					}),
+					getUserPermissions: () => [
+						"teacher_create",
+						"teacher_list",
+						"teacher_delete",
+					],
+					schoolIsExternallyManaged: () => false,
+				},
 			},
 			users: {
 				actions: {
-					handleUsers: jest.fn(),
+					findTeachers: jest.fn(),
 					deleteUsers: deleteUsersStub,
 				},
 				getters: {
-					list: () => mockData,
+					getList: () => mockData,
+					getPagination: () => ({
+						limit: 25,
+						skip: 0,
+						total: 2,
+						query: "",
+					}),
+					getActive: () => false,
+					getPercent: () => 0,
+					getQrLinks: () => [],
 				},
-				state: () => ({
-					list: mockData,
-					pagination: {
-						default: {
-							limit: 25,
-							skip: 0,
-							total: 2,
-							query: "",
-						},
-					},
-					progress: {
-						delete: {
-							active: false,
-							percent: 0,
-						},
-					},
-				}),
 			},
 			uiState: {
 				getters: {
@@ -99,6 +104,11 @@ describe("teachers/index", () => {
 					},
 					error: {},
 				}),
+				getters: {
+					getEnv: () => ({
+						ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+					}),
+				},
 			},
 		};
 	});
@@ -173,8 +183,8 @@ describe("teachers/index", () => {
 		});
 	});
 
-	it("should dispatch the 'handleUsers action on load'", async () => {
-		mockStore.users.actions.handleUsers.mockClear();
+	it("should dispatch the 'findTeachers' action on load'", async () => {
+		mockStore.users.actions.findTeachers.mockClear();
 
 		mount(TeacherPage, {
 			...createComponentMocks({
@@ -182,7 +192,7 @@ describe("teachers/index", () => {
 				store: mockStore,
 			}),
 		});
-		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+		expect(mockStore.users.actions.findTeachers).toHaveBeenCalled();
 	});
 
 	it("should emit the 'delete' action when deleting a user", async () => {
@@ -336,19 +346,22 @@ describe("teachers/index", () => {
 	});
 
 	it("should not display the edit button if school is external", async () => {
-		const customMockStore = { ...mockStore };
-		customMockStore.auth.state = () => ({
-			user: {
+		const customMockStore = mockStore;
+		customMockStore.auth.getters = {
+			getUser: () => ({
 				roles: [
 					{
 						name: "administrator",
 					},
 				],
-			},
-			school: {
-				isExternal: true,
-			},
-		});
+			}),
+			getUserPermissions: () => [
+				"teacher_create",
+				"teacher_list",
+				"teacher_delete",
+			],
+			schoolIsExternallyManaged: () => true,
+		};
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -400,22 +413,22 @@ describe("teachers/index", () => {
 
 	it("should not render the fab-floating component if user does not have TEACHER_CREATE permission", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.state = () => ({
-			user: {
+		customMockStore.auth.getters = {
+			getUser: () => ({
 				roles: [
 					{
 						name: "administrator",
 					},
 				],
-			},
-			school: {
-				isExternal: true,
-			},
-		});
+				permissions: ["TEACHER_DELETE"],
+			}),
+			getUserPermissions: () => ["teacher_delete"],
+			schoolIsExternallyManaged: () => true,
+		};
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
-				store: mockStore,
+				store: customMockStore,
 			}),
 		});
 
@@ -425,19 +438,18 @@ describe("teachers/index", () => {
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.state = () => ({
-			user: {
+		customMockStore.auth.getters = {
+			getUser: () => ({
 				roles: [
 					{
 						name: "administrator",
-						permissions: ["TEACHERCREATE"],
 					},
 				],
-			},
-			school: {
-				isExternal: true,
-			},
-		});
+				permissions: [],
+			}),
+			getUserPermissions: () => [],
+			schoolIsExternallyManaged: () => true,
+		};
 
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -453,19 +465,22 @@ describe("teachers/index", () => {
 
 	it("should render the adminTableLegend component when school is external", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.state = () => ({
-			user: {
+		customMockStore.auth.getters = {
+			getUser: () => ({
 				roles: [
 					{
 						name: "administrator",
-						permissions: ["TEACHER_CREATE"],
 					},
 				],
-			},
-			school: {
-				isExternal: true,
-			},
-		});
+				permissions: ["TEACHER_DELETE"],
+			}),
+			getUserPermissions: () => [
+				"teacher_create",
+				"teacher_list",
+				"teacher_delete",
+			],
+			schoolIsExternallyManaged: () => true,
+		};
 
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -501,7 +516,7 @@ describe("teachers/index", () => {
 		// run all existing timers
 		await jest.runAllTimers();
 		// reset the mock call stack
-		mockStore.users.actions.handleUsers.mockClear();
+		mockStore.users.actions.findTeachers.mockClear();
 		mockStore.uiState.mutations.set.mockClear();
 
 		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
@@ -514,7 +529,7 @@ describe("teachers/index", () => {
 		//run new timer from updating the value
 		await jest.runAllTimers();
 
-		expect(mockStore.users.actions.handleUsers).toHaveBeenCalled();
+		expect(mockStore.users.actions.findTeachers).toHaveBeenCalled();
 	});
 
 	// currently disabled, will be reactivated when the new components are in use

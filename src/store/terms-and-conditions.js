@@ -12,6 +12,11 @@ const module = {
 			state.consentVersion = consentVersion.data[0];
 		},
 	},
+	getters: {
+		getConsentVersion(state) {
+			return state.consentVersion;
+		},
+	},
 };
 
 export default module;

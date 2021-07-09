@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const pkg = require("./package");
 const webpack = require("webpack");
 
@@ -20,7 +21,15 @@ module.exports = {
 	mode: "spa",
 	srcDir: "src/",
 	theme: "default",
-	buildModules: ["@nuxt/typescript-build"],
+	buildModules: [
+		"@nuxt/typescript-build",
+		[
+			"@nuxtjs/vuetify",
+			{
+				/* module options */
+			},
+		],
+	],
 	// to make ENV variables available in components, they need to be defined here
 	env: {
 		SC_THEME: process.env.SC_THEME,
@@ -80,8 +89,6 @@ module.exports = {
 		color: "#fff",
 	},
 
-	css: ["@/themes/" + themeName + "/styles"],
-
 	/*
 	 ** Global CSS
 	 */
@@ -120,6 +127,7 @@ module.exports = {
 		"@plugins/i18n",
 		"@plugins/datetime",
 		"@plugins/vuelidate",
+		"@plugins/iconfonts",
 	],
 
 	/*
@@ -179,5 +187,14 @@ module.exports = {
 	},
 	generate: {
 		dir: "dist/nuxt",
+	},
+	vuetify: {
+		customVariables: ["@styles-base/vuetify-custom.scss"],
+		defaultAssets: false,
+		treeShake: true,
+		optionsPath: "@/themes/" + themeName + "/vuetify.options.js",
+		options: {
+			customProperties: true,
+		},
 	},
 };

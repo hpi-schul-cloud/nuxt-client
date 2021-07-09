@@ -24,6 +24,9 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 							roles: storeRoles,
 						},
 					}),
+					getters: {
+						getUserRoles: () => storeRoles,
+					},
 				},
 			},
 		}),
@@ -45,6 +48,9 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 							roles: storeRoles,
 						},
 					}),
+					getters: {
+						getUserRoles: () => storeRoles,
+					},
 				},
 			},
 		}),
@@ -59,15 +65,15 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 describe("@components/helpers/UserHasRole", () => {
 	it(...isValidComponent(UserHasRole));
 	it("view true-slot if user has role", () => {
-		checkCorrectView("ADMIN", [{ name: "ADMIN" }], true);
+		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have role", () => {
-		checkCorrectView("ADMIN", [{ name: "USER" }], false);
+		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view rejected", () => {
-		checkCorrectView(undefined, [{ name: "USER" }], false);
+		checkCorrectView(undefined, ["user"], false);
 	});
 	it("defaults to false when user has no roles", () => {
-		checkCorrectView("ADMIN", undefined, false);
+		checkCorrectView("ADMIN", [], false);
 	});
 });

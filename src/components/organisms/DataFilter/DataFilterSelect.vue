@@ -1,5 +1,5 @@
 <template>
-	<div v-if="options.length > 0" v-click-outside="hideMenu" class="menu">
+	<div v-if="options.length > 0" v-outside-click="hideMenu" class="menu">
 		<base-button
 			design="text"
 			data-testid="add_filter_button"
