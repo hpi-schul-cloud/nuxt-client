@@ -4,6 +4,10 @@ import {
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
 	overDueHomeworks,
+	coursesStudent,
+	coursesTeacher,
+	mathHomeworks,
+	homeworksTeacher,
 } from "@@/stories/mockData/Homeworks";
 import storeModule from "./homeworks";
 
@@ -91,48 +95,117 @@ describe("store/homeworks", () => {
 		});
 	});
 
+	describe("mutations", () => {
+		describe("setFilter", () => {
+			it("Should set course filter in the state", () => {
+				const { setFilter } = storeModule.mutations;
+				const state = {
+					courseFilter: [],
+				};
+				setFilter(state, coursesTeacher);
+				expect(state.courseFilter).toStrictEqual(coursesTeacher);
+			});
+		});
+	});
+
 	describe("getters", () => {
 		const state = {
 			list: homeworks,
 			loading: false,
+			courseFilter: [],
+		};
+		const stateWithFilter = {
+			list: homeworksTeacher,
+			loading: false,
+			courseFilter: ["Mathe"],
 		};
 		const { getters } = storeModule;
 
-		it("'isListEmpty' returns true, if it's loaded and there are no homeworks", () => {
-			expect(getters.isListEmpty(state)).toBe(false);
+		describe("isListEmpty", () => {
+			it("Should return true, if it's loaded and there are no homeworks", () => {
+				expect(getters.isListEmpty(state)).toBe(false);
+			});
 		});
 
-		it("'isListFilled' returns true, if it's loaded and there are homeworks", () => {
-			expect(getters.isListFilled(state)).toBe(true);
+		describe("isListFilled", () => {
+			it("Should return true, if it's loaded and there are homeworks", () => {
+				expect(getters.isListFilled(state)).toBe(true);
+			});
 		});
 
-		it("'getOpenHomeworksWithDueDate' returns homeworks before due date", () => {
-			expect(getters.getOpenHomeworksWithDueDate(state)).toHaveLength(
-				openHomeworksWithDueDate.length
-			);
+		describe("getCourses", () => {
+			it("Should return all relevant courses", () => {
+				expect(getters.getCourses(state)).toStrictEqual(coursesStudent);
+			});
 		});
 
-		it("'getOverDueHomeworks' returns homeworks after due date", () => {
-			expect(getters.getOverDueHomeworks(state)).toHaveLength(
-				overDueHomeworks.length
-			);
+		describe("getOpenHomeworksWithDueDate", () => {
+			it("Should return homeworks before due date", () => {
+				const mockGetter = {
+					getHomeworks: homeworks,
+				};
+				expect(
+					getters.getOpenHomeworksWithDueDate(state, mockGetter)
+				).toHaveLength(openHomeworksWithDueDate.length);
+			});
 		});
 
-		it("'getOpenHomeworksWithoutDueDate' returns open homeworks without due date", () => {
-			expect(getters.getOpenHomeworksWithoutDueDate(state)).toHaveLength(
-				openHomeworksWithoutDueDate.length
-			);
+		describe("getOverDueHomeworks", () => {
+			it("Should return homeworks after due date", () => {
+				const mockGetter = {
+					getHomeworks: homeworks,
+				};
+				expect(getters.getOverDueHomeworks(state, mockGetter)).toHaveLength(
+					overDueHomeworks.length
+				);
+			});
 		});
 
-		it("'getOpenHomeworks' returns open homeworks in the right order", () => {
-			const mockGetter = {
-				getOpenHomeworksWithDueDate: openHomeworksWithDueDate,
-				getOpenHomeworksWithoutDueDate: openHomeworksWithoutDueDate,
-			};
-			const getterOpenHomeworks = getters.getOpenHomeworks(state, mockGetter);
-			expect(getterOpenHomeworks).toHaveLength(openHomeworks.length);
-			getterOpenHomeworks.forEach((homework, i) => {
-				expect(homework.duedate).toBe(openHomeworks[i].duedate);
+		describe("getOpenHomeworksWithoutDueDate", () => {
+			it("Should return open homeworks without due date", () => {
+				const mockGetter = {
+					getHomeworks: homeworks,
+				};
+				expect(
+					getters.getOpenHomeworksWithoutDueDate(state, mockGetter)
+				).toHaveLength(openHomeworksWithoutDueDate.length);
+			});
+		});
+
+		describe("getOpenHomeworks", () => {
+			it("Should return open homeworks in the right order", () => {
+				const mockGetter = {
+					getOpenHomeworksWithDueDate: openHomeworksWithDueDate,
+					getOpenHomeworksWithoutDueDate: openHomeworksWithoutDueDate,
+				};
+				const getterOpenHomeworks = getters.getOpenHomeworks(state, mockGetter);
+				expect(getterOpenHomeworks).toHaveLength(openHomeworks.length);
+				expect(getterOpenHomeworks).toStrictEqual(openHomeworks);
+			});
+		});
+
+		describe("getHomeworks", () => {
+			it("Should return filtered homeworks, if filter is applied", () => {
+				const mockGetter = { getFilteredHomeworks: mathHomeworks };
+
+				expect(getters.getHomeworks(stateWithFilter, mockGetter)).toStrictEqual(
+					mathHomeworks
+				);
+			});
+
+			it("Should return all homeworks, if no filter is applied", () => {
+				const mockGetter = { getFilteredHomeworks: [] };
+				expect(getters.getHomeworks(state, mockGetter)).toStrictEqual(
+					homeworks
+				);
+			});
+		});
+
+		describe("getFilteredHomeworks", () => {
+			it("Should return homeworks filtered by course", () => {
+				expect(getters.getFilteredHomeworks(stateWithFilter)).toStrictEqual(
+					mathHomeworks
+				);
 			});
 		});
 	});

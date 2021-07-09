@@ -1,56 +1,79 @@
 import { merge } from "lodash";
 import { serviceTemplate, fetchAll } from "@utils";
 const base = serviceTemplate("homework");
+const baseState = base.state();
 
-const module = {
+const module = merge(base, {
+	state: () =>
+		merge(baseState, {
+			courseFilter: [],
+		}),
 	actions: {
 		getHomeworksDashboard: async function ({ commit }) {
-			commit("setLoading", true);
+			commit("setStatus", "pending");
 			try {
 				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
 					items: data,
 				});
-				commit("setLoading", false);
+				commit("setStatus", "completed");
 			} catch (error) {
 				// TODO: extract response.data to businessError format and add a business Error
 				commit("setBusinessError", error.response.data);
-				commit("setLoading", false);
+				commit("setStatus", "error");
 			}
+		},
+	},
+	mutations: {
+		setFilter(state, payload) {
+			state.courseFilter = payload;
 		},
 	},
 	getters: {
 		isListEmpty: (state) => {
-			return state.loading === false && state.list.length === 0;
+			return state.status !== "pending" && state.list.length === 0;
 		},
 		isListFilled: (state) => {
-			return state.loading === false && state.list.length > 0;
+			return state.status !== "pending" && state.list.length > 0;
 		},
-		getOpenHomeworksWithDueDate: (state) => {
+		getCourses: (state) => {
+			const courses = new Set(
+				state.list.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getHomeworks: (state, getters) => {
+			return state.courseFilter.length > 0
+				? getters.getFilteredHomeworks
+				: state.list;
+		},
+		getFilteredHomeworks: (state) => {
+			const coursesToFilter = state.courseFilter;
 			return state.list.filter((homework) => {
+				return coursesToFilter.includes(homework.courseName);
+			});
+		},
+		getOpenHomeworksWithDueDate: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) > new Date();
 			});
 		},
-		getOpenHomeworksWithoutDueDate: (state) => {
-			return state.list.filter((homework) => {
+		getOpenHomeworksWithoutDueDate: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return !homework.duedate;
 			});
 		},
-		getOverDueHomeworks: (state) => {
-			return state.list.filter((homework) => {
+		getOverDueHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
 		getOpenHomeworks: (state, getters) => {
-			const openHomeworksWithDueDate = Array.from(
-				getters.getOpenHomeworksWithDueDate
-			);
-			const openHomeworksWithoutDueDate = Array.from(
+			return getters.getOpenHomeworksWithDueDate.concat(
 				getters.getOpenHomeworksWithoutDueDate
 			);
-			return openHomeworksWithDueDate.concat(openHomeworksWithoutDueDate);
 		},
 	},
-};
+});
 
-export default merge(module, base);
+export default module;

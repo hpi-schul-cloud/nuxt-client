@@ -21,9 +21,18 @@ export default [
 	{
 		title: "global.sidebar.tasks.tasksOpen",
 		href: "/tasks/open",
-		icon: "list-ol",
+		icon: "tasks",
+		source: "custom",
 		permission: "TASK_DASHBOARD_VIEW_V3",
 		testId: "Offene Aufgaben",
+	},
+	{
+		title: "global.sidebar.tasks.tasksCurrent",
+		href: "/tasks/assigned",
+		icon: "tasks",
+		source: "custom",
+		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
+		testId: "Aktuelle Aufgaben",
 	},
 	{
 		title: "global.sidebar.allTasks",

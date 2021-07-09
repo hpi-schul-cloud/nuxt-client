@@ -4,11 +4,9 @@ import {
 	overDueHomeworks,
 	openHomeworks,
 } from "@@/stories/mockData/Homeworks";
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import HomeworksList from "@components/organisms/HomeworksList";
 import Vuetify from "vuetify";
 
-describe("Homeworks/dashboard", () => {
+describe("Homeworks/open", () => {
 	const getHomeworksDashboard = jest.fn();
 	const mockStore = {
 		homeworks: {
@@ -52,6 +50,8 @@ describe("Homeworks/dashboard", () => {
 		});
 
 		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
+		// const title = wrapper.vm.$i18n.t("pages.homeworks.student.title");
+		// expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 
 	it("Should render homeworks list component, if there are homeworks", () => {
