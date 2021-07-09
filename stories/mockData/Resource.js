@@ -6,8 +6,7 @@ export const Resource = {
 		version: "1.0",
 	},
 	license: {
-		icon:
-			"https://mv-repo.schul-cloud.org/edu-sharing/ccimages/licenses/none.svg",
+		icon: "https://mv-repo.schul-cloud.org/edu-sharing/ccimages/licenses/none.svg",
 		url: null,
 	},
 	isDirectory: false,
@@ -154,8 +153,7 @@ export const Resource = {
 		isIcon: true,
 		isGenerated: true,
 		type: "TYPE_EXTERNAL",
-		url:
-			"https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
+		url: "https://mv-repo.schul-cloud.org/edu-sharing/preview?nodeId=ce34a2f3-d089-4a88-b615-2899959af60b&storeProtocol=workspace&storeId=SpacesStore&dontcache=1612375981028&crop=true&maxWidth=300&maxHeight=300",
 		width: null,
 		height: null,
 	},

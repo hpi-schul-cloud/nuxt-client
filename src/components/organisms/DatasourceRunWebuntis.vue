@@ -95,7 +95,7 @@ import ModalFooterConfirm from "@components/molecules/ModalFooterConfirm";
 import FormActions from "@components/molecules/FormActions";
 import DataTable from "@components/organisms/DataTable/DataTable";
 
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
 	components: {
 		ModalBodyInfo,
@@ -152,11 +152,11 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("webuntis-metadata", {
-			webuntisMetadata: "list",
+		...mapGetters("webuntis-metadata", {
+			webuntisMetadata: "getList",
 		}),
-		...mapState("datasourceRuns", {
-			runData: "list",
+		...mapGetters("datasourceRuns", {
+			runData: "getList",
 		}),
 		tableDataObject() {
 			return this.tableData.reduce((obj, row) => {
@@ -192,9 +192,10 @@ export default {
 				this.$toast.error(this.$t("error.load"));
 			}
 			const allItemsNew = this.webuntisMetadata.every((d) => d.state === "new");
-			this.selections = (allItemsNew
-				? this.webuntisMetadata // preselect all rows if all are new
-				: this.webuntisMetadata.filter((d) => d.state === "imported")
+			this.selections = (
+				allItemsNew
+					? this.webuntisMetadata // preselect all rows if all are new
+					: this.webuntisMetadata.filter((d) => d.state === "imported")
 			).map((d) => d._id);
 			this.importedRows = this.webuntisMetadata.filter(
 				(d) => d.state === "imported"

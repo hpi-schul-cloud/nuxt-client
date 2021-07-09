@@ -1,6 +1,6 @@
 <template>
 	<div class="filter">
-		<div class="row">
+		<div class="filter__row">
 			<div class="select">
 				<slot name="select" />
 			</div>
@@ -15,7 +15,7 @@
 </template>
 
 <style lang="scss" scoped>
-.row .chips {
+.filter__row .chips {
 	margin-top: var(--space-sm);
 }
 </style>

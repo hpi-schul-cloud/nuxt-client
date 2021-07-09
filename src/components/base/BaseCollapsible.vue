@@ -8,7 +8,7 @@
 			{{ label }}
 		</button>
 		<transition name="fade">
-			<div v-if="!collapsed" class="content" :aria-hidden="collapsed">
+			<div v-if="!collapsed" class="wrapper" :aria-hidden="collapsed">
 				<slot />
 			</div>
 		</transition>
@@ -46,7 +46,7 @@ export default {
 	background-color: var(--color-gray-light);
 }
 
-.content {
+.wrapper {
 	display: block;
 	padding: 0 var(--space-md);
 	overflow: hidden;
