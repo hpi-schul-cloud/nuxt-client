@@ -112,6 +112,12 @@ export default function (endpoint) {
 			getStatus: (state) => {
 				return state.status;
 			},
+			/**
+			 * @deprecated use getStatus instead
+			 */
+			getLoading: (state) => {
+				return state.status === "pending";
+			},
 		},
 		mutations: {
 			set(state, { items }) {

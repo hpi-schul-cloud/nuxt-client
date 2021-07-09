@@ -217,6 +217,7 @@ export default {
 				.list-content {
 					display: flex;
 					align-items: center;
+					min-width: 80px;
 					height: 100%;
 					padding: 0 20px;
 					font-size: 16px;
