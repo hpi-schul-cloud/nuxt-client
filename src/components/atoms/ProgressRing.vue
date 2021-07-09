@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="wrapper">
 		<span class="percent">{{ percent }}%</span>
 		<svg
 			class="progress-circle"
@@ -85,7 +85,7 @@ $color-complete: var(--color-success);
 	transform: translate(-50%, -50%);
 }
 
-.container {
+.wrapper {
 	position: relative;
 	display: inline-block;
 }

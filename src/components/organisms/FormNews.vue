@@ -50,7 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
@@ -105,8 +105,9 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-		...mapState("news", {
-			createdNews: "list",
+		...mapGetters("news", {
+			createdNews: "getList",
+			status: "getStatus",
 		}),
 		publishDate(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
@@ -172,9 +173,17 @@ export default Vue.extend({
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				[this.data.date.date, this.data.date.time] = createInputDateTime(
-					displayAt
-				);
+				[this.data.date.date, this.data.date.time] =
+					createInputDateTime(displayAt);
+			}
+		},
+		getNewsTarget(query: any, schoolId: string) {
+			if (query.target && query.targetmodel) {
+				return { targetId: query.target, targetModel: query.targetmodel };
+			} else if (query.context && query.contextId) {
+				return { targetId: query.contextId, targetModel: query.context };
+			} else {
+				return { targetId: schoolId, targetModel: "schools" };
 			}
 		},
 		async create() {
@@ -183,22 +192,27 @@ export default Vue.extend({
 				return this.$toast.error(errors[0]);
 			}
 			try {
+				const newsTarget = this.getNewsTarget(
+					this.$route.query,
+					this.$user.schoolId
+				);
 				await this.$store.dispatch("news/create", {
 					title: this.data.title,
 					content: this.data.content,
 					displayAt: this.publishDate,
 					schoolId: this.$user.schoolId,
-					target: this.$route.query.target || this.$route.query.contextId,
-					targetModel:
-						this.$route.query.targetmodel || this.$route.query.context,
+					targetId: newsTarget.targetId,
+					targetModel: newsTarget.targetModel,
 				});
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.create")
-				);
-				this.$router.push({
-					name: "news-id",
-					params: { id: this.createdNews[0]._id },
-				});
+				if (this.status === "completed") {
+					this.$toast.success(
+						this.$ts("components.organisms.FormNews.success.create")
+					);
+					await this.$router.push({
+						name: "news-id",
+						params: { id: this.createdNews[0].id },
+					});
+				}
 			} catch (e) {
 				console.error(e);
 				this.$toast.error(

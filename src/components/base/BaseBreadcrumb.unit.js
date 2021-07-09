@@ -5,7 +5,10 @@ describe("@components/base/BaseBreadcrumb", () => {
 
 	it("renders BaseLink for Links", () => {
 		const internalLink = { to: "/", text: "internal" };
-		const externalLink = { href: "https://schul-cloud.org", text: "external" };
+		const externalLink = {
+			href: "https://hpi-schul-cloud.de",
+			text: "external",
+		};
 		const textOnly = { text: "any" };
 		const links = [internalLink, externalLink, textOnly];
 		const { element } = mount(BaseBreadcrumb, {

@@ -31,6 +31,18 @@ const module = mergeDeep(base, {
 			}
 		},
 	},
+	getters: {
+		getCoursesOptions: (state) => {
+			return state.list
+				.filter((course) => course.isArchived === false)
+				.map((course) => {
+					return {
+						_id: course._id,
+						name: course.name,
+					};
+				});
+		},
+	},
 });
 
 export default module;

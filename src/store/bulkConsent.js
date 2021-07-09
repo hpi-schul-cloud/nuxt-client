@@ -1,3 +1,6 @@
+import generatePassword from "@mixins/generatePassword";
+import qs from "qs";
+
 export const actions = {
 	async register({ commit }, payload) {
 		const registered = [];
@@ -35,7 +38,32 @@ export const actions = {
 			commit("setRegisterError", { mapError: true });
 		}
 	},
-	updateStudents({ commit }, payload) {
+
+	async findConsentUsers({ commit, state }, query) {
+		query.users = state.selectedStudents;
+		const response = await this.$axios.$get(`/users/admin/students`, {
+			params: query,
+			paramsSerializer: (params) => {
+				return qs.stringify(params);
+			},
+		});
+
+		if (!response.data) {
+			commit("setStudentsData", []);
+			return;
+		}
+
+		const data = response.data
+			.filter((item) => item.consentStatus !== "ok")
+			.map((student) => {
+				student.fullName = student.firstName + " " + student.lastName;
+				student.password = generatePassword();
+				return student;
+			});
+		commit("setStudentsData", data);
+	},
+
+	updateStudent({ commit }, payload) {
 		commit("updateStudentData", payload);
 	},
 	setStudents({ commit }, payload) {
@@ -44,10 +72,8 @@ export const actions = {
 };
 
 export const getters = {
-	selectedStudents: (state) => state.selectedStudents,
-	selectedStudentsData: (state) => state.selectedStudentsData,
-	registeredStudents: (state) => state.registeredStudents,
-	registerError: (state) => state.registerError,
+	getSelectedStudentsData: (state) => state.selectedStudentsData,
+	getSelectedStudents: (state) => state.selectedStudents,
 };
 
 export const mutations = {
@@ -61,7 +87,16 @@ export const mutations = {
 		state.selectedStudentsData = payload;
 	},
 	updateStudentData(state, payload) {
-		state.selectedStudentsData = payload;
+		const index = state.selectedStudentsData.findIndex(
+			(st) => st._id === payload.id
+		);
+
+		if (index !== -1 && payload.birthDate) {
+			state.selectedStudentsData[index].birthday = payload.birthDate;
+		}
+		if (index !== -1 && payload.pass) {
+			state.selectedStudentsData[index].password = payload.pass;
+		}
 	},
 	setRegisterError(state, payload) {
 		state.registerError = payload;

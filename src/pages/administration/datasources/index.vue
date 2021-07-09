@@ -134,8 +134,8 @@
 			<pagination
 				class="mt--xl-3"
 				:current-page="page"
-				:per-page="pagination.limit"
-				:total="pagination.total"
+				:per-page="pagination.default.limit"
+				:total="pagination.default.total"
 				@update:current-page="onPageChange"
 				@update:per-page="onCurrentPageChange"
 			/>
@@ -169,7 +169,7 @@ import Pagination from "@components/organisms/Pagination";
 import ResponsiveIconButton from "@components/molecules/ResponsiveIconButton";
 import ImageEmptyState from "@assets/img/empty-state/emptystate-graph.svg";
 
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { fromNow } from "@plugins/datetime";
 
 export default {
@@ -215,16 +215,12 @@ export default {
 	},
 	computed: {
 		...mapGetters("datasources", {
-			datasources: "list",
-		}),
-		...mapState("datasources", {
-			pagination: (state) => state.pagination.default,
-		}),
-		...mapGetters("datasources", {
+			datasources: "getList",
+			pagination: "getPagination",
 			watchingIds: "getPendingIdsFromResult",
 		}),
-		...mapState("datasourceRuns", {
-			datasourceRun: "list",
+		...mapGetters("datasourceRuns", {
+			datasourceRun: "getList",
 		}),
 	},
 	created(ctx) {

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
 	props: {
@@ -54,8 +54,8 @@ export default {
 		};
 	},
 	computed: {
-		...mapState("datasources", {
-			sourceData: "current",
+		...mapGetters("datasources", {
+			sourceData: "getCurrent",
 		}),
 		actionType() {
 			return this.datasourceId ? "patch" : "create";

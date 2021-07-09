@@ -55,6 +55,13 @@ describe("ldap/activate", () => {
 				verified: { ...mockResponseData },
 				submitted: { ...mockResponseData },
 			}),
+			getters: {
+				getVerified: () => ({ ...mockResponseData }),
+				getSubmitted: () => ({ ...mockResponseData }),
+				getTemp: () => ({}),
+				getStatus: () => "completed",
+				getData: () => {},
+			},
 		},
 	};
 
@@ -167,14 +174,17 @@ describe("ldap/activate", () => {
 
 	it("should render 'infoMessage' component if 'submitted' has an errors key", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].state = () => ({
-			verified: mockResponseData,
-			submitted: {
+		customMockStore["ldap-config"].getters = {
+			getVerified: () => mockResponseData,
+			getSubmitted: () => ({
 				...mockResponseData,
 				ok: false,
 				errors: [{ type: "CONNECTION_ERROR", message: "testError" }],
-			},
-		});
+			}),
+			getTemp: () => ({}),
+			getStatus: () => "completed",
+			getData: () => {},
+		};
 		const wrapper = mount(ldapActivate, {
 			...createComponentMocks({
 				i18n: true,

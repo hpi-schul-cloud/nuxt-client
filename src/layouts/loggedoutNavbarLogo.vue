@@ -5,7 +5,7 @@
 			:logo-link="'/dashboard'"
 			:buttons="false"
 		/>
-		<div class="container">
+		<div class="nuxt-container">
 			<Nuxt />
 		</div>
 	</div>
@@ -24,13 +24,13 @@ export default {
 <style lang="scss" scoped>
 @import "@styles";
 
-.container {
+.nuxt-container {
 	width: 100%;
 	padding: var(--space-sm);
 }
 
 @include breakpoint(desktop) {
-	.container {
+	.nuxt-container {
 		padding: var(--space-xl-3);
 	}
 }

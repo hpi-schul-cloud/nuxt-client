@@ -1,9 +1,9 @@
 import Vue from "vue";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export const mixin = {
-	computed: mapState("auth", {
-		$user: "user",
+	computed: mapGetters("auth", {
+		$user: "getUser",
 	}),
 };
 
