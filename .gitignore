@@ -1,4 +1,5 @@
 # Editor Configs
+*.swp
 .idea
 .dccache
 # Local Developer Configs
