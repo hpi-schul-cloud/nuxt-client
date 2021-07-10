@@ -1,6 +1,6 @@
 <template>
 	<v-container fluid>
-		<vuetify-breadcrumbs :breadcrumbs="breadcrumbs"></vuetify-breadcrumbs>
+		<v-custom-breadcrumbs :breadcrumbs="breadcrumbs"></v-custom-breadcrumbs>
 		<v-container class="container-max-width">
 			<h1 class="text-h3">
 				{{ $t("pages.administration.school.index.title") }}
@@ -197,14 +197,14 @@ import { mapGetters, mapActions } from "vuex";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
-import VuetifyBreadcrumbs from "@components/molecules/VuetifyBreadcrumbs";
+import vCustomBreadcrumbs from "@components/molecules/vCustomBreadcrumbs";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
 import AuthSystems from "@components/organisms/administration/AuthSystems";
 
 export default {
 	components: {
 		SchoolPolicies,
-		VuetifyBreadcrumbs,
+		vCustomBreadcrumbs,
 		PrivacySettings,
 		AuthSystems,
 	},

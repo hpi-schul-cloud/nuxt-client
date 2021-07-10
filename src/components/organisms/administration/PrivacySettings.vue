@@ -5,26 +5,23 @@
 		</h3>
 		<v-row v-if="toggleStudentVisibilityEnabled">
 			<v-col>
-				<v-switch
-					v-model="studentVisibility"
+				<v-custom-switch
+					:value="studentVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
 						)
 					"
-					inset
-					flat
-					dense
-					:ripple="false"
-					class="ml-1"
-					@change="
-						$emit(
-							'update-privacy-settings',
-							$event,
-							'permissions.teacher.STUDENT_LIST'
-						)
+					styles="ml-1 mt-0"
+					:on-change="
+						($event) =>
+							$emit(
+								'update-privacy-settings',
+								$event,
+								'permissions.teacher.STUDENT_LIST'
+							)
 					"
-				></v-switch>
+				></v-custom-switch>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -36,26 +33,23 @@
 		</v-row>
 		<v-row v-if="toggleStudentLernstoreViewEnabled">
 			<v-col>
-				<v-switch
-					v-model="lernStoreVisibility"
+				<v-custom-switch
+					:value="lernStoreVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.lernStore'
 						)
 					"
-					inset
-					flat
-					dense
-					:ripple="false"
-					class="ml-1 mt-0"
-					@change="
-						$emit(
-							'update-privacy-settings',
-							$event,
-							'permissions.student.LERNSTORE_VIEW'
-						)
+					styles="ml-1 mt-0"
+					:on-change="
+						($event) =>
+							$emit(
+								'update-privacy-settings',
+								$event,
+								'permissions.student.LERNSTORE_VIEW'
+							)
 					"
-				></v-switch>
+				></v-custom-switch>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -65,30 +59,22 @@
 				</p>
 			</v-col>
 		</v-row>
-		<span
-			v-if="
-				matrixMessengerConfig.enabled &&
-				matrixMessengerConfig.schoolSettingsVisible
-			"
-		>
+		<span v-if="matrixMessengerIsEnabled">
 			<v-row>
 				<v-col>
-					<v-switch
-						v-model="messenger"
+					<v-custom-switch
+						:value="messenger"
 						:label="
 							$t(
 								'pages.administration.school.index.privacySettings.labels.matrixMessenger'
 							)
 						"
-						inset
-						flat
-						dense
-						:ripple="false"
-						class="ml-1 mt-0"
-						@change="
-							$emit('update-privacy-settings', $event, 'features.messenger')
+						styles="ml-1 mt-0"
+						:on-change="
+							($event) =>
+								$emit('update-privacy-settings', $event, 'features.messenger')
 						"
-					></v-switch>
+					></v-custom-switch>
 					<p class="body-2 mb-0">
 						{{
 							$t(
@@ -110,26 +96,23 @@
 			</v-row>
 			<v-row v-if="matrixMessengerConfig.schoolRoomEnabled">
 				<v-col>
-					<v-switch
-						v-model="messengerSchoolRoom"
+					<v-custom-switch
+						:value="messengerSchoolRoom"
 						:label="
 							$t(
 								'pages.administration.school.index.privacySettings.labels.messengerSchoolRoom'
 							)
 						"
-						inset
-						flat
-						dense
-						:ripple="false"
-						class="ml-1 mt-0"
-						@change="
-							$emit(
-								'update-privacy-settings',
-								$event,
-								'features.messengerSchoolRoom'
-							)
+						styles="ml-1 mt-0"
+						:on-change="
+							($event) =>
+								$emit(
+									'update-privacy-settings',
+									$event,
+									'features.messengerSchoolRoom'
+								)
 						"
-					></v-switch>
+					></v-custom-switch>
 					<p class="body-2 mb-0">
 						{{
 							$t(
@@ -141,26 +124,23 @@
 			</v-row>
 			<v-row v-if="matrixMessengerConfig.studentRoomCreation">
 				<v-col>
-					<v-switch
-						v-model="messengerStudentRoomCreate"
+					<v-custom-switch
+						:value="messengerStudentRoomCreate"
 						:label="
 							$t(
 								'pages.administration.school.index.privacySettings.labels.messengerStudentRooms'
 							)
 						"
-						inset
-						flat
-						dense
-						:ripple="false"
-						class="ml-1 mt-0"
-						@change="
-							$emit(
-								'update-privacy-settings',
-								$event,
-								'features.messengerStudentRoomCreate'
-							)
+						styles="ml-1 mt-0"
+						:on-change="
+							($event) =>
+								$emit(
+									'update-privacy-settings',
+									$event,
+									'features.messengerStudentRoomCreate'
+								)
 						"
-					></v-switch>
+					></v-custom-switch>
 					<p class="body-2 mb-0">
 						{{
 							$t(
@@ -173,22 +153,19 @@
 		</span>
 		<v-row v-if="rocketChatEnabled">
 			<v-col>
-				<v-switch
-					v-model="rocketChat"
+				<v-custom-switch
+					:value="rocketChat"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
 						)
 					"
-					inset
-					flat
-					dense
-					:ripple="false"
-					class="ml-1 mt-0"
-					@change="
-						$emit('update-privacy-settings', $event, 'features.rocketChat')
+					styles="ml-1 mt-0"
+					:on-change="
+						($event) =>
+							$emit('update-privacy-settings', $event, 'features.rocketChat')
 					"
-				></v-switch>
+				></v-custom-switch>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -200,22 +177,23 @@
 		</v-row>
 		<v-row v-if="videoConferenceEnabled">
 			<v-col>
-				<v-switch
-					v-model="videoConference"
+				<v-custom-switch
+					:value="videoConference"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.videoConference'
 						)
 					"
-					inset
-					flat
-					dense
-					:ripple="false"
-					class="ml-1 mt-0"
-					@change="
-						$emit('update-privacy-settings', $event, 'features.videoconference')
+					styles="ml-1 mt-0"
+					:on-change="
+						($event) =>
+							$emit(
+								'update-privacy-settings',
+								$event,
+								'features.videoconference'
+							)
 					"
-				></v-switch>
+				></v-custom-switch>
 				<p class="body-2 mb-0">
 					{{
 						$t(
@@ -230,8 +208,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import vCustomSwitch from "@components/atoms/vCustomSwitch";
 
 export default {
+	components: {
+		vCustomSwitch,
+	},
 	props: {
 		privacySettings: {
 			type: Object,
@@ -241,8 +223,8 @@ export default {
 	data() {
 		return {
 			studentVisibility: this.privacySettings.permissions.teacher.STUDENT_LIST,
-			lernStoreVisibility:
-				this.privacySettings.permissions.student.LERNSTORE_VIEW,
+			lernStoreVisibility: this.privacySettings.permissions.student
+				.LERNSTORE_VIEW,
 			messenger: this.privacySettings.features.includes("messenger"),
 			messengerSchoolRoom: this.privacySettings.features.includes(
 				"messengerSchoolRoom"
@@ -251,8 +233,9 @@ export default {
 				"messengerStudentRoomCreate"
 			),
 			rocketChat: this.privacySettings.features.includes("rocketChat"),
-			videoConference:
-				this.privacySettings.features.includes("videoconference"),
+			videoConference: this.privacySettings.features.includes(
+				"videoconference"
+			),
 		};
 	},
 	computed: {
@@ -264,6 +247,12 @@ export default {
 			videoConferenceEnabled: "getVideoConferenceEnabled",
 			rocketChatEnabled: "getRocketChatEnabled",
 		}),
+		matrixMessengerIsEnabled() {
+			return (
+				this.matrixMessengerConfig.enabled &&
+				this.matrixMessengerConfig.schoolSettingsVisible
+			);
+		},
 	},
 };
 </script>
