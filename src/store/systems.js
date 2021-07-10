@@ -1,19 +1,17 @@
-//const { Configuration } = require('@hpi-schul-cloud/commons');
-
 const module = {
 	state() {
 		return {
 			systems: [],
-			setRequestSuccessful: false,
+			loading: false,
 			error: null,
 		};
 	},
 	actions: {
-		async fetchSetOfSystems({ commit }, systemIds) {
-			commit("setRequestSuccessful", false);
-			console.log(systemIds);
+		async fetchSchoolSystems({ commit }, systemIds) {
+			commit("setLoading", true);
 
 			try {
+				// TODO - ask if I need to check for process.env.LDAP... here
 				/* if (!Configuration.has("LDAP_PASSWORD_ENCRYPTION_KEY")) {
 					throw new Error(
 						"You need to set LDAP_PASSWORD_ENCRYPTION_KEY to encrypt the old key!"
@@ -23,13 +21,27 @@ const module = {
 					this.$axios.$get(`systems/${systemId}`)
 				);
 				const response = await Promise.all(requests);
-				console.log("bsldka", response);
 
-				commit("setDataProtectionPolicies", response.data);
-				commit("setRequestSuccessful", true);
+				commit("setSystems", response);
+				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
-				commit("setRequestSuccessful", false);
+				commit("setLoading", false);
+				// TODO what is supposed to happen on error?
+			}
+		},
+		async deleteSystem({ commit }, systemId) {
+			commit("setLoading", true);
+
+			try {
+				this.$axios.$delete(`systems/${systemId}`)
+
+				// TODO - what should we commit here?
+//				commit("setSystems", response);
+				commit("setLoading", false);
+			} catch (error) {
+				commit("setError", error);
+				commit("setLoading", false);
 				// TODO what is supposed to happen on error?
 			}
 		},
@@ -38,8 +50,8 @@ const module = {
 		setSystems(state, systems) {
 			state.systems = systems;
 		},
-		setRequestSuccessful(state) {
-			state.setRequestSuccessful = true;
+		setLoading(state) {
+			state.loading = true;
 		},
 		setError(state, error) {
 			state.error = error;
@@ -49,8 +61,8 @@ const module = {
 		getSystems(state) {
 			return state.systems;
 		},
-		getRequestSuccessful(state) {
-			return state.setRequestSuccessful;
+		getLoading(state) {
+			return state.loading;
 		},
 		getError(state) {
 			return state.error;

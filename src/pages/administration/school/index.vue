@@ -184,26 +184,7 @@
 						</v-btn>
 					</v-form>
 					<school-policies v-if="schoolPolicyEnabled"></school-policies>
-					<!-- <h2 class="text-h4">Authentifizierung</h2>
-						<v-simple-table>
-							<template v-slot:default>
-								<thead>
-									<tr>
-										<th class="text-left">Alias</th>
-										<th class="text-left">Typ</th>
-										<th class="text-left"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr v-for="item in dataProtectionPolicies" :key="item.name">
-										<td>{{ item.title }}</td>
-										<td>{{ item.description }}</td>
-										<td>{{ item.consentDataId }}</td>
-									</tr>
-								</tbody>
-							</template>
-						</v-simple-table>
-						<v-btn color="primary" depressed>System hinzufügen</v-btn> -->
+					<auth-systems></auth-systems>
 				</v-col>
 			</v-row>
 		</v-container>
@@ -218,12 +199,14 @@ import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import VuetifyBreadcrumbs from "@components/molecules/VuetifyBreadcrumbs";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
+import AuthSystems from "@components/organisms/administration/AuthSystems";
 
 export default {
 	components: {
 		SchoolPolicies,
 		VuetifyBreadcrumbs,
 		PrivacySettings,
+		AuthSystems,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -235,14 +218,7 @@ export default {
 				county: {},
 				timezone: "",
 				language: "",
-				permissions: {
-					teacher: {
-						STUDENT_LIST: false,
-					},
-					student: {
-						LERNSTORE_VIEW: false,
-					},
-				},
+				permissions: {},
 				features: [],
 				fileStorageType: "",
 				fileStorageTotal: 0,
@@ -267,9 +243,6 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("auth", {
-			user: "getUser",
-		}),
 		...mapGetters("schools", {
 			school: "getSchool",
 			fileStorageTotal: "getFileStorageTotal",
@@ -277,9 +250,6 @@ export default {
 		}),
 		...mapGetters("federal-states", {
 			federalState: "getCurrentFederalState",
-		}),
-		...mapGetters("systems", {
-			systems: "getSystems",
 		}),
 		...mapGetters("env-config", {
 			schoolPolicyEnabled: "getSchoolPolicyEnabled",
@@ -296,10 +266,6 @@ export default {
 	async created() {
 		this.fetchCurrentFederalState(this.school.federalState);
 		this.fetchFileStorageTotal();
-
-		/* this.fetchSetOfSystems(this.school.systems).then(() => {
-			console.log("blub", JSON.parse(JSON.stringify(this.systems)));
-		}); */
 
 		// TODO - think of better way with Object.assign() maybe
 		this.localSchool.name = this.school.name;
@@ -321,7 +287,6 @@ export default {
 		dataUrlToFile,
 		...mapActions("federal-states", ["fetchCurrentFederalState"]),
 		...mapActions("schools", ["fetchFileStorageTotal", "update"]),
-		...mapActions("systems", ["fetchSetOfSystems"]),
 		updatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
 			if (keys[0] === "features") {
