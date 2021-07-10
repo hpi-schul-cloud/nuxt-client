@@ -321,7 +321,8 @@ export default {
 				!this.school.officialSchoolNumber &&
 				this.localSchool.officialSchoolNumber
 			) {
-				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
+				updatedSchool.officialSchoolNumber =
+					this.localSchool.officialSchoolNumber;
 			}
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;

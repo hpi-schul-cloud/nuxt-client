@@ -223,8 +223,8 @@ export default {
 	data() {
 		return {
 			studentVisibility: this.privacySettings.permissions.teacher.STUDENT_LIST,
-			lernStoreVisibility: this.privacySettings.permissions.student
-				.LERNSTORE_VIEW,
+			lernStoreVisibility:
+				this.privacySettings.permissions.student.LERNSTORE_VIEW,
 			messenger: this.privacySettings.features.includes("messenger"),
 			messengerSchoolRoom: this.privacySettings.features.includes(
 				"messengerSchoolRoom"
@@ -233,9 +233,8 @@ export default {
 				"messengerStudentRoomCreate"
 			),
 			rocketChat: this.privacySettings.features.includes("rocketChat"),
-			videoConference: this.privacySettings.features.includes(
-				"videoconference"
-			),
+			videoConference:
+				this.privacySettings.features.includes("videoconference"),
 		};
 	},
 	computed: {
