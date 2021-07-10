@@ -18,6 +18,12 @@ const module = {
 					);
 					commit("setSchool", school);
 					await dispatch("schools/fetchCurrentYear", {}, { root: true });
+					console.log("school", rootState.schools.school);
+					await dispatch(
+						"schools/fetchFederalState",
+						{},
+						{ root: true }
+					);
 					commit("setLoading", false);
 				} catch (error) {
 					commit("setError", error);
@@ -26,12 +32,15 @@ const module = {
 				}
 			}
 		},
-		async fetchFileStorageTotal({ commit }) {
+		async fetchFederalState({ commit, rootState }) {
 			commit("setLoading", true);
 
 			try {
-				const fileStorageTotal = await this.$axios.$get("/fileStorage/total");
-				commit("setFileStorageTotal", fileStorageTotal);
+				const response = await this.$axios.$get(
+					`/federalStates/${rootState.schools.school.federalState}`
+				);
+
+				commit("setFederalState", response);
 				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
@@ -47,6 +56,19 @@ const module = {
 					`/years/${rootState.schools.school.currentYear}`
 				);
 				commit("setCurrentYear", currentYear);
+				commit("setLoading", false);
+			} catch (error) {
+				commit("setError", error);
+				commit("setLoading", false);
+				// TODO what is supposed to happen on error?
+			}
+		},
+		async fetchFileStorageTotal({ commit }) {
+			commit("setLoading", true);
+
+			try {
+				const fileStorageTotal = await this.$axios.$get("/fileStorage/total");
+				commit("setFileStorageTotal", fileStorageTotal);
 				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
@@ -81,6 +103,9 @@ const module = {
 		setCurrentYear(state, currentYear) {
 			state.school = { ...state.school, currentYear };
 		},
+		setFederalState(state, federalState) {
+			state.school = { ...state.school, federalState };
+		},
 		setLoading(state, loading) {
 			state.loading = loading;
 		},
@@ -97,6 +122,9 @@ const module = {
 		},
 		getCurrentYear(state) {
 			return state.school.currentYear;
+		},
+		getFederalState(state) {
+			return state.school.federalState;
 		},
 		getLoading(state) {
 			return state.loading;

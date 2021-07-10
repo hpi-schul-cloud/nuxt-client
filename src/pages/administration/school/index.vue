@@ -7,7 +7,7 @@
 			</h1>
 			<h2 class="text-h4">
 				{{ $t("common.words.schoolYear") }}
-				{{ school.currentYear.name }}
+				{{ currentYear.name }}
 			</h2>
 			<p>
 				{{
@@ -59,7 +59,7 @@
 						<v-row>
 							<v-col>
 								<v-select
-									v-model="localSchool.county"
+									v-model="localSchool.county.name"
 									:label="
 										$t(
 											'pages.administration.school.index.generalSettings.labels.chooseACounty'
@@ -245,11 +245,10 @@ export default {
 	computed: {
 		...mapGetters("schools", {
 			school: "getSchool",
+			currentYear: "getCurrentYear",
+			federalState: "getFederalState",
 			fileStorageTotal: "getFileStorageTotal",
 			loading: "getLoading",
-		}),
-		...mapGetters("federal-states", {
-			federalState: "getCurrentFederalState",
 		}),
 		...mapGetters("env-config", {
 			schoolPolicyEnabled: "getSchoolPolicyEnabled",
@@ -264,7 +263,6 @@ export default {
 		},
 	}, */
 	async created() {
-		this.fetchCurrentFederalState(this.school.federalState);
 		this.fetchFileStorageTotal();
 
 		// TODO - think of better way with Object.assign() maybe
@@ -285,7 +283,6 @@ export default {
 		printDate,
 		toBase64,
 		dataUrlToFile,
-		...mapActions("federal-states", ["fetchCurrentFederalState"]),
 		...mapActions("schools", ["fetchFileStorageTotal", "update"]),
 		updatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");

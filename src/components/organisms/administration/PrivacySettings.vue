@@ -222,9 +222,12 @@ export default {
 	},
 	data() {
 		return {
-			studentVisibility: this.privacySettings.permissions.teacher.STUDENT_LIST,
+			studentVisibility: this.privacySettings.permissions.teacher
+				? this.privacySettings.permissions.teacher.STUDENT_LIST
+				: false,
 			lernStoreVisibility: this.privacySettings.permissions.student
-				.LERNSTORE_VIEW,
+				? this.privacySettings.permissions.student.LERNSTORE_VIEW
+				: false,
 			messenger: this.privacySettings.features.includes("messenger"),
 			messengerSchoolRoom: this.privacySettings.features.includes(
 				"messengerSchoolRoom"

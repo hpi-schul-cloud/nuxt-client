@@ -60,7 +60,6 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-		{{ console.log("systems", systems) }}
 	</section>
 </template>
 
@@ -93,7 +92,6 @@ export default {
 		hasLdapSystem() {
 			return this.systems.some((system) => system.type === "ldap");
 		},
-		console: () => console,
 	},
 	created() {
 		this.fetchSchoolSystems(this.school.systems);
