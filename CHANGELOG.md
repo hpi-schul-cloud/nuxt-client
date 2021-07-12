@@ -13,6 +13,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - SC-9090 - implemented a loading state in the service-template
+- OPS-2574 - Removeing autodeployed branches for developers if branch deleted
 
 ### Changed
 
