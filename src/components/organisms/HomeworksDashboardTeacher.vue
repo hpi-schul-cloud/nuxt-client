@@ -70,7 +70,7 @@ export default {
 	components: { HomeworksList },
 	data() {
 		return {
-			expanded: [0, 1],
+			expanded: [1],
 		};
 	},
 	computed: {

@@ -66,7 +66,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 
 		expect(wrapper.findComponent(HomeworksList).exists()).toBe(true);
 		expect(expansionPanels.exists()).toBe(true);
-		expect(expansionPanels.at(0).classes()).toContain(
+		expect(expansionPanels.at(0).classes()).not.toContain(
 			"v-expansion-panel--active"
 		);
 		expect(expansionPanels.at(1).classes()).toContain(
@@ -89,9 +89,6 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(1);
 		expect(expansionPanels.at(0).attributes("data-testid")).toBe("noDuePanel");
-		expect(expansionPanels.at(0).classes()).toContain(
-			"v-expansion-panel--active"
-		);
 	});
 
 	it("Should render only active 'with due date' panel, if the other panel is empty", async () => {
@@ -109,8 +106,5 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(1);
 		expect(expansionPanels.at(0).attributes("data-testid")).toBe("DuePanel");
-		expect(expansionPanels.at(0).classes()).toContain(
-			"v-expansion-panel--active"
-		);
 	});
 });
