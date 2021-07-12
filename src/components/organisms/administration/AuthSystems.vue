@@ -1,12 +1,18 @@
 <template>
 	<section>
-		<h2 class="text-h4">Authentifizierung</h2>
+		<h2 class="text-h4">
+			{{ $t("pages.administration.school.index.authSystems.title") }}
+		</h2>
 		<v-simple-table>
 			<template v-slot:default>
 				<thead>
 					<tr>
-						<th class="text-left">Alias</th>
-						<th class="text-left">Typ</th>
+						<th class="text-left">
+							{{ $t("pages.administration.school.index.authSystems.alias") }}
+						</th>
+						<th class="text-left">
+							{{ $t("pages.administration.school.index.authSystems.type") }}
+						</th>
 						<th class="text-left"></th>
 					</tr>
 				</thead>
@@ -41,7 +47,7 @@
 		>
 		<v-custom-dialog
 			:is-open="confirmDeleteDialog.isOpen"
-			:size="350"
+			:size="375"
 			:submit="() => removeSystem(confirmDeleteDialog.systemId)"
 			@dialog-closed="confirmDeleteDialog.isOpen = false"
 		>
@@ -64,7 +70,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 
@@ -89,18 +95,17 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("schools", {
-			school: "getSchool",
-		}),
 		hasLdapSystem() {
 			return this.systems.some((system) => system.type === "ldap");
 		},
 	},
 	methods: {
-		...mapActions("schools", ["update", "deleteSystem"]),
+		...mapActions("schools", ["deleteSystem"]),
+		// TODO - Discuss which systems are still gonna be editable in the future
 		isEditable(system) {
 			return system.type === "ldap";
 		},
+		// TODO - Discuss which systems are deletable by the user in the future
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {
 				isOpen: true,
