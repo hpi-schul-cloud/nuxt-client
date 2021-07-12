@@ -1,7 +1,10 @@
 <template>
 	<section class="homework-dashboard-teacher">
 		<v-expansion-panels v-model="expanded" flat accordion mandatory multiple>
-			<v-expansion-panel v-if="showNoDueDatePanel() || loading === 'pending'">
+			<v-expansion-panel
+				v-if="showNoDueDatePanel() || loading === 'pending'"
+				data-testid="noDuePanel"
+			>
 				<v-expansion-panel-header
 					v-if="isListFilled"
 					class="text-h6 font-weight-bold pa-0"
@@ -22,7 +25,10 @@
 					<homeworks-list :homeworks="noDueDateHomeworks" type="teacher" />
 				</v-expansion-panel-content>
 			</v-expansion-panel>
-			<v-expansion-panel v-if="showDueDatePanel() || loading === 'pending'">
+			<v-expansion-panel
+				v-if="showDueDatePanel() || loading === 'pending'"
+				data-testid="DuePanel"
+			>
 				<v-expansion-panel-header
 					v-if="isListFilled"
 					class="text-h6 font-weight-bold pa-0"

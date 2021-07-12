@@ -88,6 +88,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 
 		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(1);
+		expect(expansionPanels.at(0).attributes("data-testid")).toBe("noDuePanel");
 		expect(expansionPanels.at(0).classes()).toContain(
 			"v-expansion-panel--active"
 		);
@@ -107,6 +108,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 
 		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(1);
+		expect(expansionPanels.at(0).attributes("data-testid")).toBe("DuePanel");
 		expect(expansionPanels.at(0).classes()).toContain(
 			"v-expansion-panel--active"
 		);
