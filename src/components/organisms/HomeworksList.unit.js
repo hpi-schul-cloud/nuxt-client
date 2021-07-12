@@ -4,6 +4,7 @@ import {
 	overDueHomeworks,
 	openHomeworks,
 } from "@@/stories/mockData/Homeworks";
+import { fromNowToFuture } from "@plugins/datetime";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksList", () => {
@@ -57,9 +58,18 @@ describe("@components/organisms/HomeworksList", () => {
 			},
 		});
 
-		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(
-			homeworks.length
-		);
+		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
+		expect(dueDateLabels).toHaveLength(homeworks.length);
+
+		dueDateLabels.wrappers.forEach((dateLabel, index) => {
+			expect(dateLabel.exists()).toBe(true);
+			if (
+				homeworks[index].duedate === null ||
+				typeof homeworks[index].duedate === "undefined"
+			)
+				expect(dateLabel.text()).toBe("Kein Abgabedatum");
+			else expect(dateLabel.text()).toContain("Abgabe ");
+		});
 	});
 
 	it("Should render an empty list, if there are no homeworks", () => {
@@ -93,6 +103,83 @@ describe("@components/organisms/HomeworksList", () => {
 		});
 		expect(wrapper.props("homeworks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+	});
+
+	it("Should render hint label, if homework is close to due date", () => {
+		const current = new Date();
+		current.setHours(current.getHours() + 1);
+		const closeToDueDate = current.toISOString();
+
+		const homeworkCloseToDueDate = {
+			id: "59cce2c61113d1132c98dc02",
+			_id: "59cce2c61113d1132c98dc02",
+			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
+			duedate: closeToDueDate,
+			courseName: "Mathe",
+			createdAt: "2017-09-28T11:49:39.924Z",
+		};
+		const extendedHomeworks = openHomeworks.concat(homeworkCloseToDueDate);
+		const mockStoreCloseToDueDate = {
+			homeworks: {
+				getters: {
+					getList: () => homeworks,
+					getLoading: () => false,
+					isListEmpty: () => false,
+					isListFilled: () => true,
+					openHomeworks: () => openHomeworks,
+					overDueHomeworks: () => overDueHomeworks,
+				},
+				state: () => ({
+					list: homeworks,
+					loading: false,
+				}),
+			},
+		};
+
+		const homeworksCloseToDueDate = extendedHomeworks.filter((homework) => {
+			const timeDiff = fromNowToFuture(homework.duedate, "hours");
+			if (timeDiff === null) {
+				return false;
+			} else return timeDiff <= 24;
+		});
+
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreCloseToDueDate,
+			}),
+			vuetify,
+			propsData: {
+				type: "student",
+				homeworks: extendedHomeworks,
+			},
+		});
+
+		const dueDateHintLabels = wrapper.findAll(
+			"[data-test-id='dueDateHintLabel']"
+		);
+
+		expect(dueDateHintLabels).toHaveLength(homeworksCloseToDueDate.length);
+	});
+
+	it("Should render overdue label, if homework is overdue ", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
+			propsData: {
+				type: "student",
+				homeworks,
+			},
+		});
+
+		const overDueLabels = wrapper.findAll("[data-test-id='overDueDateLabel']");
+
+		expect(overDueLabels).toHaveLength(overDueHomeworks.length);
 	});
 
 	it("Should render loading state while fetching homework", () => {
