@@ -69,15 +69,15 @@ import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 
 export default {
-  components: {
-    vCustomDialog,
-  },
+	components: {
+		vCustomDialog,
+	},
 	data() {
 		return {
-      confirmDeleteDialog: {
-        isOpen: false,
-        systemId: undefined,
-      },
+			confirmDeleteDialog: {
+				isOpen: false,
+				systemId: undefined,
+			},
 			iconMdiPencilOutline: mdiPencilOutline,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 		};
@@ -98,31 +98,31 @@ export default {
 	},
 	methods: {
 		...mapActions("systems", ["fetchSchoolSystems", "deleteSystem"]),
-    ...mapActions("schools", ["update"]),
+		...mapActions("schools", ["update"]),
 		isEditable(system) {
 			return system.type === "ldap";
 		},
-    openConfirmDeleteDialog(systemId) {
-      this.confirmDeleteDialog = {
-        isOpen: true,
-        systemId
-      }
-    },
-    removeSystem(systemId) {
-      // remove system in systems collection
-      this.deleteSystem(systemId)
+		openConfirmDeleteDialog(systemId) {
+			this.confirmDeleteDialog = {
+				isOpen: true,
+				systemId,
+			};
+		},
+		removeSystem(systemId) {
+			// remove system in systems collection
+			this.deleteSystem(systemId);
 
-      // remove system from school
-      const updatedSystemsList = this.school.systems.filter(
+			// remove system from school
+			const updatedSystemsList = this.school.systems.filter(
 				(system) => system._id !== systemId
 			);
 			this.update({
 				id: this.school.id,
 				systems: updatedSystemsList,
-			})
-      this.confirmDeleteDialog.isOpen = false
-      // TODO show error
-    }
+			});
+			this.confirmDeleteDialog.isOpen = false;
+			// TODO show error
+		},
 	},
 };
 </script>

@@ -34,10 +34,10 @@ const module = {
 			commit("setLoading", true);
 
 			try {
-				this.$axios.$delete(`systems/${systemId}`)
+				this.$axios.$delete(`systems/${systemId}`);
 
 				// TODO - what should we commit here?
-//				commit("setSystems", response);
+				//				commit("setSystems", response);
 				commit("setLoading", false);
 			} catch (error) {
 				commit("setError", error);
