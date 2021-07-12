@@ -7,7 +7,7 @@ const module = {
 		};
 	},
 	actions: {
-		// TODO - get file on button click
+		// TODO - figure out why it fetches a consentversion without a schoolId
 		async fetchConsentVersions(
 			{ commit },
 			{ schoolId, consentTypes, withFile }
@@ -19,7 +19,7 @@ const module = {
 						schoolId,
 						consentTypes,
 						$limit: 100,
-						"$sort[publishedAt]": -1, // -> https://docs.feathersjs.com/api/databases/querying.html#sort
+						"$sort[publishedAt]": -1, // -> read more at https://docs.feathersjs.com/api/databases/querying.html#sort
 					},
 				});
 

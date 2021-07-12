@@ -59,7 +59,7 @@
 						<v-row>
 							<v-col>
 								<v-select
-									v-model="localSchool.county.name"
+									v-model="localSchool.county"
 									:label="
 										$t(
 											'pages.administration.school.index.generalSettings.labels.chooseACounty'
@@ -163,12 +163,11 @@
 								</p>
 							</v-col>
 						</v-row>
-
 						<template v-if="loading">
 							<v-skeleton-loader
 								v-for="setting of 4"
 								:key="setting"
-								:type="'list-item-three-line'"
+								type="list-item-three-line"
 							/>
 						</template>
 						<privacy-settings
@@ -184,7 +183,10 @@
 						</v-btn>
 					</v-form>
 					<school-policies v-if="schoolPolicyEnabled"></school-policies>
-					<auth-systems></auth-systems>
+					<template v-if="loading">
+						<v-skeleton-loader type="table-thead, table-row, table-row" />
+					</template>
+					<auth-systems v-else :systems="systems"></auth-systems>
 				</v-col>
 			</v-row>
 		</v-container>
@@ -247,6 +249,7 @@ export default {
 			school: "getSchool",
 			currentYear: "getCurrentYear",
 			federalState: "getFederalState",
+			systems: "getSystems",
 			fileStorageTotal: "getFileStorageTotal",
 			loading: "getLoading",
 		}),
@@ -318,8 +321,7 @@ export default {
 				!this.school.officialSchoolNumber &&
 				this.localSchool.officialSchoolNumber
 			) {
-				updatedSchool.officialSchoolNumber =
-					this.localSchool.officialSchoolNumber;
+				updatedSchool.officialSchoolNumber = this.localSchool.officialSchoolNumber;
 			}
 			if (!this.school.county && this.localSchool.county._id) {
 				updatedSchool.county = this.localSchool.county._id;

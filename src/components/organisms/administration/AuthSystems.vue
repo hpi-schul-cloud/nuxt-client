@@ -50,7 +50,7 @@
 					$t("pages.administration.school.index.authSystems.deleteAuthSystem")
 				}}
 			</h2>
-			<template slot="dialogContent">
+			<template slot="content">
 				<p class="body-1 mt-2">
 					{{
 						$t(
@@ -72,6 +72,12 @@ export default {
 	components: {
 		vCustomDialog,
 	},
+	props: {
+		systems: {
+			type: Array,
+			required: true,
+		},
+	},
 	data() {
 		return {
 			confirmDeleteDialog: {
@@ -86,19 +92,12 @@ export default {
 		...mapGetters("schools", {
 			school: "getSchool",
 		}),
-		...mapGetters("systems", {
-			systems: "getSystems",
-		}),
 		hasLdapSystem() {
 			return this.systems.some((system) => system.type === "ldap");
 		},
 	},
-	created() {
-		this.fetchSchoolSystems(this.school.systems);
-	},
 	methods: {
-		...mapActions("systems", ["fetchSchoolSystems", "deleteSystem"]),
-		...mapActions("schools", ["update"]),
+		...mapActions("schools", ["update", "deleteSystem"]),
 		isEditable(system) {
 			return system.type === "ldap";
 		},
@@ -109,17 +108,7 @@ export default {
 			};
 		},
 		removeSystem(systemId) {
-			// remove system in systems collection
 			this.deleteSystem(systemId);
-
-			// remove system from school
-			const updatedSystemsList = this.school.systems.filter(
-				(system) => system._id !== systemId
-			);
-			this.update({
-				id: this.school.id,
-				systems: updatedSystemsList,
-			});
 			this.confirmDeleteDialog.isOpen = false;
 			// TODO show error
 		},

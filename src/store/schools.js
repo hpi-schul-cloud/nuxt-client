@@ -2,6 +2,9 @@ const module = {
 	state() {
 		return {
 			school: {},
+			currentYear: {},
+			federalState: {},
+			systems: [],
 			fileStorageTotal: 0,
 			loading: false,
 			error: null,
@@ -18,12 +21,9 @@ const module = {
 					);
 					commit("setSchool", school);
 					await dispatch("schools/fetchCurrentYear", {}, { root: true });
-					console.log("school", rootState.schools.school);
-					await dispatch(
-						"schools/fetchFederalState",
-						{},
-						{ root: true }
-					);
+					await dispatch("schools/fetchFederalState", {}, { root: true });
+					await dispatch("schools/fetchSystems", {}, { root: true });
+
 					commit("setLoading", false);
 				} catch (error) {
 					commit("setError", error);
@@ -63,6 +63,31 @@ const module = {
 				// TODO what is supposed to happen on error?
 			}
 		},
+		async fetchSystems({ commit, rootState }) {
+			commit("setLoading", true);
+
+			try {
+				// TODO - ask if I need to check for process.env.LDAP... here
+				/* if (!Configuration.has("LDAP_PASSWORD_ENCRYPTION_KEY")) {
+					throw new Error(
+						"You need to set LDAP_PASSWORD_ENCRYPTION_KEY to encrypt the old key!"
+					);
+				} */
+				const systemIds = rootState.schools.school.systems;
+
+				const requests = systemIds.map((systemId) =>
+					this.$axios.$get(`systems/${systemId}`)
+				);
+				const response = await Promise.all(requests);
+
+				commit("setSystems", response);
+				commit("setLoading", false);
+			} catch (error) {
+				commit("setError", error);
+				commit("setLoading", false);
+				// TODO what is supposed to happen on error?
+			}
+		},
 		async fetchFileStorageTotal({ commit }) {
 			commit("setLoading", true);
 
@@ -92,6 +117,32 @@ const module = {
 				// TODO what is supposed to happen on error?
 			}
 		},
+		async deleteSystem({ commit, dispatch, rootState }, systemId) {
+			commit("setLoading", true);
+
+			try {
+				await this.$axios.$delete(`systems/${systemId}`);
+
+				const updatedSystemsList = rootState.schools.systems.filter(
+					(system) => system._id !== systemId
+				);
+				dispatch(
+					"schools/update",
+					{
+						id: rootState.schools.school.id,
+						systems: updatedSystemsList.map((system) => system._id),
+					},
+					{ root: true }
+				);
+
+				commit("setSystems", updatedSystemsList);
+				commit("setLoading", false);
+			} catch (error) {
+				commit("setError", error);
+				commit("setLoading", false);
+				// TODO what is supposed to happen on error?
+			}
+		},
 	},
 	mutations: {
 		setSchool(state, updatedSchool) {
@@ -101,10 +152,13 @@ const module = {
 			state.fileStorageTotal = fileStorageTotal;
 		},
 		setCurrentYear(state, currentYear) {
-			state.school = { ...state.school, currentYear };
+			state.currentYear = currentYear;
 		},
 		setFederalState(state, federalState) {
-			state.school = { ...state.school, federalState };
+			state.federalState = federalState;
+		},
+		setSystems(state, systems) {
+			state.systems = systems;
 		},
 		setLoading(state, loading) {
 			state.loading = loading;
@@ -121,10 +175,13 @@ const module = {
 			return state.fileStorageTotal;
 		},
 		getCurrentYear(state) {
-			return state.school.currentYear;
+			return state.currentYear;
 		},
 		getFederalState(state) {
-			return state.school.federalState;
+			return state.federalState;
+		},
+		getSystems(state) {
+			return state.systems;
 		},
 		getLoading(state) {
 			return state.loading;
