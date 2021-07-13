@@ -8,8 +8,8 @@
 			multiple
 		>
 			<v-expansion-panel
-				v-if="showNoDueDatePanel() || loading === 'pending'"
 				data-testid="noDuePanel"
+				:disabled="noDueDatePanelEmpty() || loading === 'pending'"
 			>
 				<v-expansion-panel-header
 					v-if="isListFilled"
@@ -32,8 +32,8 @@
 				</v-expansion-panel-content>
 			</v-expansion-panel>
 			<v-expansion-panel
-				v-if="showDueDatePanel() || loading === 'pending'"
 				data-testid="DuePanel"
+				:disabled="dueDatePanelEmpty() || loading === 'pending'"
 			>
 				<v-expansion-panel-header
 					v-if="isListFilled"
@@ -89,12 +89,12 @@ export default {
 		}),
 	},
 	methods: {
-		showNoDueDatePanel: function () {
-			return this.noDueDateHomeworks.length > 0;
+		noDueDatePanelEmpty: function () {
+			return this.noDueDateHomeworks.length == 0;
 		},
-		showDueDatePanel: function () {
+		dueDatePanelEmpty: function () {
 			return (
-				this.dueDateHomeworks.length > 0 || this.overDueHomeworks.length > 0
+				this.dueDateHomeworks.length == 0 && this.overDueHomeworks.length == 0
 			);
 		},
 	},

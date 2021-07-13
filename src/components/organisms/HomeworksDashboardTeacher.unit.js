@@ -74,7 +74,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		);
 	});
 
-	it("Should render only active 'no due date' panel, if the other panel is empty", async () => {
+	it("Should render not disabled 'no due date' panel, and disabled other panel", async () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
@@ -87,11 +87,16 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
 		expect(expansionPanels.exists()).toBe(true);
-		expect(expansionPanels).toHaveLength(1);
-		expect(expansionPanels.at(0).attributes("data-testid")).toBe("noDuePanel");
+		expect(expansionPanels).toHaveLength(2);
+		expect(expansionPanels.at(0).classes()).not.toContain(
+			"v-expansion-panel--disabled"
+		);
+		expect(expansionPanels.at(1).classes()).toContain(
+			"v-expansion-panel--disabled"
+		);
 	});
 
-	it("Should render only active 'with due date' panel, if the other panel is empty", async () => {
+	it("Should render not disabled 'with due date' panel, and disabled other panel", async () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
@@ -104,7 +109,12 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
 		expect(expansionPanels.exists()).toBe(true);
-		expect(expansionPanels).toHaveLength(1);
-		expect(expansionPanels.at(0).attributes("data-testid")).toBe("DuePanel");
+		expect(expansionPanels).toHaveLength(2);
+		expect(expansionPanels.at(0).classes()).toContain(
+			"v-expansion-panel--disabled"
+		);
+		expect(expansionPanels.at(1).classes()).not.toContain(
+			"v-expansion-panel--disabled"
+		);
 	});
 });
