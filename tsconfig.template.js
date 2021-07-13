@@ -11,7 +11,7 @@ module.exports = {
 		noEmit: true,
 		baseUrl: ".",
 		experimentalDecorators: true,
-		types: ["@types/node", "@nuxt/types", "@nuxtjs/toast"],
+		types: ["@types/node", "@nuxt/types", "@nuxtjs/toast", "jest"],
 	},
 	exclude: ["node_modules", ".nuxt", "dist"],
 };

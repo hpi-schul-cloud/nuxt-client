@@ -1,2 +1,2 @@
 # ignore unit test files in store folder
-store/*.unit.js
+store/*.unit.(js|ts)

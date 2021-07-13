@@ -24,7 +24,7 @@ type News = {
 type CreateNewsPayload = {
 	title: string;
 	content: string;
-	displayAt: string | undefined;
+	displayAt: string | undefined | null;
 	schoolId: string;
 	targetId: any;
 	targetModel: any;
@@ -46,7 +46,7 @@ type BusinessError = {
 const newsUri = "v3/news";
 
 @Module({ name: "news", namespaced: true, dynamic: true, store: rootStore })
-class NewsModule extends VuexModule {
+export class NewsModule extends VuexModule {
 	news: News[] = [];
 	createdNews: News = {
 		__v: 0,
