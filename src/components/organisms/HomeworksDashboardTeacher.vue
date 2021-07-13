@@ -1,6 +1,6 @@
 <template>
 	<section class="homework-dashboard-teacher">
-		<v-expansion-panels v-model="expanded" flat accordion multiple>
+		<v-expansion-panels v-model="expanded" flat accordion mandatory>
 			<v-expansion-panel
 				:disabled="noDueDatePanelEmpty() || loading === 'pending'"
 			>
@@ -68,7 +68,7 @@ export default {
 	components: { HomeworksList },
 	data() {
 		return {
-			expanded: [1],
+			expanded: 1,
 		};
 	},
 	computed: {

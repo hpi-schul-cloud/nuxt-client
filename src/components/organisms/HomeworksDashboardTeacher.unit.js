@@ -74,7 +74,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		);
 	});
 
-	it("Should render not disabled 'no due date' panel, and disabled other panel", async () => {
+	it("Should render not disabled 'no due date' panel, and disabled empty other panel", async () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
@@ -96,7 +96,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		);
 	});
 
-	it("Should render not disabled 'with due date' panel, and disabled other panel", async () => {
+	it("Should render not disabled 'with due date' panel, and disabled empty other panel", async () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
