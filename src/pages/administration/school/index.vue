@@ -140,11 +140,15 @@
 							<v-col>
 								<v-select
 									v-model="localSchool.fileStorageType"
+									:label="
+										$t(
+											'pages.administration.school.index.generalSettings.labels.cloudStorageProvider'
+										)
+									"
 									:items="fileStorageTypes"
 									item-text="name"
 									item-value="type"
 									dense
-									label="Cloud-Storage-Anbieter"
 								></v-select>
 							</v-col>
 						</v-row>
@@ -225,12 +229,6 @@ export default {
 				fileStorageType: "",
 				fileStorageTotal: 0,
 			},
-			languages: [
-				{ name: "System-Default (Deutsch)", abbreveation: "sys" },
-				{ name: "Deutsch", abbreveation: "de" },
-				{ name: "Englisch", abbreveation: "en" },
-				{ name: "Spanisch", abbreveation: "es" },
-			],
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 			breadcrumbs: [
 				{
@@ -255,10 +253,23 @@ export default {
 		}),
 		...mapGetters("env-config", {
 			schoolPolicyEnabled: "getSchoolPolicyEnabled",
+			availableLanguages: "getAvailableLanguages",
 		}),
+		languages() {
+			return this.availableLanguages.split(",").map((lang) => {
+				// TODO - there's probably a nicer way to do this?
+				const name =
+					lang === "de"
+						? this.$t("pages.account.index.user.locale.longName.de")
+						: lang === "en"
+						? this.$t("pages.account.index.user.locale.longName.en")
+						: this.$t("pages.account.index.user.locale.longName.es");
+				return { name, abbreveation: lang };
+			});
+		},
 		console: () => console, // TODO - delete when done
 	},
-	// TODO - watch for school changes
+	// TODO - watch for school changes, doesn't seem to be neccessary anymore?
 	/* watch: {
 		school(updatedSchool) {
 			console.log("hello");

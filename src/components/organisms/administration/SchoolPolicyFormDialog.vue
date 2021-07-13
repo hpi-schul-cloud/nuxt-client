@@ -59,7 +59,7 @@
 					</v-row>
 					<v-row>
 						<v-col>
-							<v-sheet class="px-4 py-1" color="orange lighten-4" rounded>
+							<v-sheet class="px-4 py-1" color="blue lighten-4" rounded>
 								<h2 class="text-h6">
 									{{
 										$t(
@@ -121,9 +121,6 @@ export default {
 	},
 	computed: {
 		...mapGetters("schools", { school: "getSchool" }),
-		...mapGetters("consent-versions", {
-			requestSuccessful: "getRequestSuccessful",
-		}),
 		descriptionErrors() {
 			const errors = [];
 			if (!this.$v.description.$dirty) return errors;
@@ -155,14 +152,10 @@ export default {
 					newConsentVersion.consentData = await toBase64(this.file);
 				}
 
-				this.addConsentVersion(newConsentVersion).then(() => {
-					if (this.requestSuccessful) {
-						this.$v.$reset();
-						this.$emit("dialog-closed");
-					} else {
-						// TODO - show error InfoMessage
-					}
-				});
+				this.addConsentVersion(newConsentVersion);
+				this.$v.$reset();
+				this.$emit("dialog-closed");
+				// TODO - show error InfoMessage
 			}
 		},
 		cancel() {

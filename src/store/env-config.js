@@ -83,6 +83,7 @@ export const getters = {
 		state.env.FEATURE_VIDEOCONFERENCE_ENABLED,
 	getSchoolPolicyEnabled: (state) => state.env.FEATURE_SCHOOL_POLICY_ENABLED,
 	getRocketChatEnabled: (state) => state.env.ROCKETCHAT_SERVICE_ENABLED,
+	getAvailableLanguages: (state) => state.env.I18N__AVAILABLE_LANGUAGES,
 };
 
 export const state = () => {
