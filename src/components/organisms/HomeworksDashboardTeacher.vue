@@ -1,6 +1,12 @@
 <template>
 	<section class="homework-dashboard-teacher">
-		<v-expansion-panels v-model="expanded" flat accordion mandatory multiple>
+		<v-expansion-panels
+			ref="expansionPanels"
+			v-model="expanded"
+			flat
+			accordion
+			multiple
+		>
 			<v-expansion-panel
 				v-if="showNoDueDatePanel() || loading === 'pending'"
 				data-testid="noDuePanel"
