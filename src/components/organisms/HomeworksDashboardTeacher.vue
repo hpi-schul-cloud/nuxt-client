@@ -1,71 +1,40 @@
 <template>
 	<section class="homework-dashboard-teacher">
-		<v-expansion-panels v-model="expanded" flat accordion mandatory>
-			<v-expansion-panel
-				:disabled="noDueDatePanelEmpty() && status === 'completed'"
-			>
-				<v-expansion-panel-header
-					v-if="isListFilled"
-					class="text-h6 font-weight-bold pa-0"
-				>
-					{{ $t("pages.homeworks.teacher.subtitleNoDue") }}
-					<template v-slot:actions
-						>{{ noDueDateHomeworks.length }}
-						<v-icon class="ml-3"> $expand </v-icon>
-					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-header v-else-if="status === 'pending'">
-					<v-skeleton-loader type="text" :max-width="'30%'" />
-					<template v-slot:actions>
-						<v-skeleton-loader type="chip" />
-					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-content class="pa-0">
-					<homeworks-list :homeworks="noDueDateHomeworks" type="teacher" />
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-			<v-expansion-panel
-				:disabled="dueDatePanelEmpty() && status === 'completed'"
-			>
-				<v-expansion-panel-header
-					v-if="isListFilled"
-					class="text-h6 font-weight-bold pa-0"
-				>
-					{{ $t("pages.homeworks.teacher.subtitleWithDue") }}
-					<template v-slot:actions>
-						{{ overDueHomeworks.length + dueDateHomeworks.length }}
-						<v-icon class="ml-3"> $expand </v-icon>
-					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-header v-else-if="status === 'pending'">
-					<v-skeleton-loader type="text" :max-width="'30%'" />
-					<template v-slot:actions>
-						<v-skeleton-loader type="chip" />
-					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-content class="pa-0">
-					<homeworks-list
-						:homeworks="overDueHomeworks"
-						:title="$t('pages.homeworks.teacher.subtitleOverDue')"
-						type="teacher"
-					/>
-					<homeworks-list
-						:homeworks="dueDateHomeworks"
-						:title="$t('pages.homeworks.teacher.subtitleAssigned')"
-						type="teacher"
-					/>
-				</v-expansion-panel-content>
-			</v-expansion-panel>
-		</v-expansion-panels>
+		<homeworks-dashboard-panels
+			v-if="isListFilled"
+			:panel-one-count="noDueDateHomeworks.length"
+			:panel-two-count="overDueHomeworks.length + dueDateHomeworks.length"
+			:panel-one-disabled="noDueDatePanelEmpty() && status === 'completed'"
+			:panel-two-disabled="dueDatePanelEmpty() && status === 'completed'"
+			:loading="status === 'pending'"
+		>
+			<template v-slot:panelOne>
+				<homeworks-list :homeworks="noDueDateHomeworks" type="teacher" />
+			</template>
+			<template v-slot:panelTwo>
+				<homeworks-list
+					:homeworks="overDueHomeworks"
+					:title="$t('pages.homeworks.teacher.subtitleOverDue')"
+					type="teacher"
+				/>
+				<homeworks-list
+					:homeworks="dueDateHomeworks"
+					:title="$t('pages.homeworks.teacher.subtitleAssigned')"
+					type="teacher"
+				/>
+			</template>
+		</homeworks-dashboard-panels>
 	</section>
 </template>
 
 <script>
 import HomeworksList from "@components/organisms/HomeworksList";
+import HomeworksDashboardPanels from "@components/organisms/HomeworksDashboardPanels";
+
 import { mapGetters } from "vuex";
 
 export default {
-	components: { HomeworksList },
+	components: { HomeworksList, HomeworksDashboardPanels },
 	data() {
 		return {
 			expanded: 1,
