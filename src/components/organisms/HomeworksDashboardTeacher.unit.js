@@ -11,7 +11,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListFilled: () => true,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
@@ -23,7 +23,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 	const mockStoreOnlyWithoutDueDate = {
 		homeworks: {
 			getters: {
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListFilled: () => true,
 				getOverDueHomeworks: () => [],
 				getOpenHomeworksWithDueDate: () => [],
@@ -35,7 +35,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 	const mockStoreOnlyWithDueDate = {
 		homeworks: {
 			getters: {
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListFilled: () => true,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,

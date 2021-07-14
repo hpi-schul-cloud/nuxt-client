@@ -2,7 +2,7 @@
 	<section class="homework-dashboard-teacher">
 		<v-expansion-panels v-model="expanded" flat accordion mandatory>
 			<v-expansion-panel
-				:disabled="noDueDatePanelEmpty() || loading === 'pending'"
+				:disabled="noDueDatePanelEmpty() && status === 'completed'"
 			>
 				<v-expansion-panel-header
 					v-if="isListFilled"
@@ -14,7 +14,7 @@
 						<v-icon class="ml-3"> $expand </v-icon>
 					</template>
 				</v-expansion-panel-header>
-				<v-expansion-panel-header v-else-if="loading === 'pending'">
+				<v-expansion-panel-header v-else-if="status === 'pending'">
 					<v-skeleton-loader type="text" :max-width="'30%'" />
 					<template v-slot:actions>
 						<v-skeleton-loader type="chip" />
@@ -25,7 +25,7 @@
 				</v-expansion-panel-content>
 			</v-expansion-panel>
 			<v-expansion-panel
-				:disabled="dueDatePanelEmpty() || loading === 'pending'"
+				:disabled="dueDatePanelEmpty() && status === 'completed'"
 			>
 				<v-expansion-panel-header
 					v-if="isListFilled"
@@ -37,7 +37,7 @@
 						<v-icon class="ml-3"> $expand </v-icon>
 					</template>
 				</v-expansion-panel-header>
-				<v-expansion-panel-header v-else-if="loading === 'pending'">
+				<v-expansion-panel-header v-else-if="status === 'pending'">
 					<v-skeleton-loader type="text" :max-width="'30%'" />
 					<template v-slot:actions>
 						<v-skeleton-loader type="chip" />
@@ -77,7 +77,7 @@ export default {
 			overDueHomeworks: "getOverDueHomeworks",
 			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
 			isListFilled: "isListFilled",
-			loading: "getLoading",
+			status: "getStatus",
 		}),
 	},
 	methods: {

@@ -12,7 +12,7 @@ describe("@components/organisms/HomeworksList", () => {
 		homeworks: {
 			getters: {
 				getList: () => homeworks,
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				openHomeworks: () => openHomeworks,
@@ -77,7 +77,7 @@ describe("@components/organisms/HomeworksList", () => {
 			homeworks: {
 				getters: {
 					getList: () => [],
-					getLoading: () => false,
+					getStatus: () => "completed",
 					isListEmpty: () => true,
 					isListFilled: () => false,
 					openHomeworks: () => [],
@@ -123,7 +123,7 @@ describe("@components/organisms/HomeworksList", () => {
 			homeworks: {
 				getters: {
 					getList: () => homeworks,
-					getLoading: () => false,
+					getStatus: () => "completed",
 					isListEmpty: () => false,
 					isListFilled: () => true,
 					openHomeworks: () => openHomeworks,
@@ -187,7 +187,7 @@ describe("@components/organisms/HomeworksList", () => {
 			homeworks: {
 				getters: {
 					getList: () => [],
-					getLoading: () => true,
+					getStatus: () => "pending",
 					isListEmpty: () => false,
 					isListFilled: () => false,
 					openHomeworks: () => [],

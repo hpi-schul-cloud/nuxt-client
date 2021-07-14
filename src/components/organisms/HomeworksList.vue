@@ -3,7 +3,7 @@
 		<v-subheader v-if="title && isListFilled()" class="subtitle-1">
 			{{ title }}
 		</v-subheader>
-		<template v-if="loading">
+		<template v-if="status === 'pending'">
 			<v-skeleton-loader type="text" :max-width="'15%'" />
 			<v-skeleton-loader
 				v-for="homework of 4"
@@ -63,12 +63,12 @@ export default {
 	},
 	computed: {
 		...mapGetters("homeworks", {
-			loading: "getLoading",
+			status: "getStatus",
 		}),
 	},
 	methods: {
 		isListFilled() {
-			return this.loading === false && this.homeworks.length > 0;
+			return this.status === "completed" && this.homeworks.length > 0;
 		},
 	},
 };

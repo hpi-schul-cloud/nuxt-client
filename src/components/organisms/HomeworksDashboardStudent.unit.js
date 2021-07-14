@@ -8,7 +8,7 @@ describe("@components/organisms/HomeworksDashboardStudent", () => {
 		homeworks: {
 			getters: {
 				getOpenHomeworks: () => homeworks,
-				getLoading: () => false,
+				getStatus: () => "completed",
 				getOverDueHomeworks: () => overDueHomeworks,
 			},
 		},
