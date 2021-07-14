@@ -55,18 +55,6 @@ const getMocks = ({
 		},
 	});
 
-const getRouterPushSpy = (wrapper, expects) => {
-	return new Promise((resolve) => {
-		const routerPushSpy = jest.fn();
-		const routerPushMock = (target) => {
-			routerPushSpy(target);
-			expects(target);
-			resolve(routerPushSpy);
-		};
-		wrapper.vm.$router = { push: routerPushMock };
-	});
-};
-
 describe("@components/organisms/FormNews", () => {
 	it("converts date correctly", async () => {
 		const mocks = getMocks();
@@ -137,53 +125,6 @@ describe("@components/organisms/FormNews", () => {
 			expect((await routerPushSpy).mock.calls).toHaveLength(1);
 			expect(toastStubs.error.mock.calls).toHaveLength(0);
 			expect(toastStubs.success.mock.calls).toHaveLength(1);
-		});
-	});
-
-	describe("cancel", () => {
-		it.skip("triggering the cancel action from the edit page opens a confirm modal", async () => {
-			const wrapper = mount(FormNews, {
-				...getMocks(),
-				propsData: {
-					news: { ...validNews },
-				},
-			});
-			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
-				expect(target.name).toBe("news-id");
-			});
-			wrapper.find("#cancel").trigger("click");
-			expect((await routerPushSpy).mock.calls).toHaveLength(1);
-		});
-		it.skip("triggering the cancel action from the new page opens a confirm modal", async () => {
-			const overviewMock = getMocks();
-			overviewMock.mocks.$route.params = {};
-			const wrapper = mount(FormNews, {
-				...overviewMock,
-				propsData: {
-					news: { ...validNews },
-				},
-			});
-			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
-				expect(target.name).toBe("news");
-			});
-			wrapper.find("#cancel").trigger("click");
-
-			expect((await routerPushSpy).mock.calls).toHaveLength(1);
-		});
-		it("confirming cancel navigates back to article", async () => {
-			const wrapper = mount(FormNews, {
-				...getMocks(),
-				propsData: {
-					news: { ...validNews },
-				},
-			});
-			const toastStubs = { success: jest.fn(), error: jest.fn() };
-			wrapper.vm.$toast = toastStubs;
-			const routerPushSpy = getRouterPushSpy(wrapper, (target) => {
-				expect(target.name).toBe("news-id");
-			});
-			await wrapper.vm.confirmCancelHandler();
-			expect((await routerPushSpy).mock.calls).toHaveLength(1);
 		});
 	});
 });

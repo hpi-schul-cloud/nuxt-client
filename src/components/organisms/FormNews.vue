@@ -55,7 +55,7 @@
 							v-if="news && news.id"
 							design="danger text"
 							type="button"
-							@click="$emit('delete')"
+							@click="remove"
 						>
 							<base-icon source="material" icon="delete" />
 							{{ $t("common.actions.remove") }}
@@ -203,10 +203,7 @@ export default Vue.extend({
 				cancelText: this.$t(
 					"components.organisms.FormNews.remove.confirm.cancel"
 				),
-				onConfirm: this.$emit("delete", {
-					...this.data,
-					displayAt: this.displayAt,
-				}),
+				onConfirm: () => this.$emit("delete"),
 			});
 		},
 		async cancel() {
@@ -224,19 +221,8 @@ export default Vue.extend({
 				actionDesign: "success",
 				iconColor: "var(--color-danger)",
 				invertedDesign: true,
-				onConfirm: this.confirmCancelHandler,
+				onConfirm: () => this.$emit("cancel"),
 			});
-		},
-		async confirmCancelHandler() {
-			const cancelTarget = this.$route.params.id
-				? {
-						name: "news-id",
-						params: { id: this.$route.params.id },
-				  }
-				: {
-						name: "news",
-				  };
-			this.$router.push(cancelTarget);
 		},
 	},
 });

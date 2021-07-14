@@ -18,7 +18,13 @@
 			/>
 			<h1>{{ $t("pages.news._id.edit.title") }}</h1>
 
-			<form-news v-if="news" :news="news" @save="save" @delete="deleteHandler">
+			<form-news
+				v-if="news"
+				:news="news"
+				@save="save"
+				@delete="deleteHandler"
+				@cancel="cancelHandler"
+			>
 			</form-news>
 		</div>
 	</div>
@@ -66,9 +72,9 @@ export default {
 				);
 			}
 		},
-		deleteHandler: async function (news) {
+		deleteHandler: async function () {
 			try {
-				await NewsModule.removeNews(news.id);
+				await NewsModule.removeNews(this.news.id);
 				this.$toast.success(
 					this.$ts("components.organisms.FormNews.success.remove")
 				);
@@ -79,6 +85,12 @@ export default {
 					this.$ts("components.organisms.FormNews.errors.remove")
 				);
 			}
+		},
+		async cancelHandler() {
+			this.$router.push({
+				name: "news-id",
+				params: { id: this.$route.params.id },
+			});
 		},
 	},
 	head() {

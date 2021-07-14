@@ -12,7 +12,7 @@
 			]"
 		/>
 		<h1 :aria-label="$t('pages.news.new.title')"></h1>
-		<form-news @save="create"> </form-news>
+		<form-news @save="create" @cancel="cancelHandler"> </form-news>
 	</div>
 </template>
 
@@ -70,6 +70,11 @@ export default {
 					this.$ts("components.organisms.FormNews.errors.create")
 				);
 			}
+		},
+		async cancelHandler() {
+			this.$router.push({
+				name: "news",
+			});
 		},
 	},
 	head() {
