@@ -8,7 +8,7 @@
 		<i18n path="pages.administration.students.consent.info" tag="p">
 			<template v-slot:dataProtection>
 				<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
-					$t("components.legacy.footer.privacy_policy")
+					$t("common.words.privacyPolicy")
 				}}</a>
 			</template>
 			<template v-slot:terms>

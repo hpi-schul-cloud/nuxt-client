@@ -68,6 +68,10 @@ describe("teachers/index", () => {
 						"teacher_list",
 						"teacher_delete",
 					],
+				},
+			},
+			schools: {
+				getters: {
 					schoolIsExternallyManaged: () => false,
 				},
 			},
@@ -347,19 +351,7 @@ describe("teachers/index", () => {
 
 	it("should not display the edit button if school is external", async () => {
 		const customMockStore = mockStore;
-		customMockStore.auth.getters = {
-			getUser: () => ({
-				roles: [
-					{
-						name: "administrator",
-					},
-				],
-			}),
-			getUserPermissions: () => [
-				"teacher_create",
-				"teacher_list",
-				"teacher_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 		const wrapper = mount(TeacherPage, {
@@ -423,7 +415,6 @@ describe("teachers/index", () => {
 				permissions: ["TEACHER_DELETE"],
 			}),
 			getUserPermissions: () => ["teacher_delete"],
-			schoolIsExternallyManaged: () => true,
 		};
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
@@ -433,21 +424,12 @@ describe("teachers/index", () => {
 		});
 
 		const fabComponent = wrapper.find(".external-sync-hint");
-		expect(fabComponent.exists()).toBe(true);
+		expect(fabComponent.exists()).toBe(false);
 	});
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.getters = {
-			getUser: () => ({
-				roles: [
-					{
-						name: "administrator",
-					},
-				],
-				permissions: [],
-			}),
-			getUserPermissions: () => [],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 
@@ -465,20 +447,7 @@ describe("teachers/index", () => {
 
 	it("should render the adminTableLegend component when school is external", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.getters = {
-			getUser: () => ({
-				roles: [
-					{
-						name: "administrator",
-					},
-				],
-				permissions: ["TEACHER_DELETE"],
-			}),
-			getUserPermissions: () => [
-				"teacher_create",
-				"teacher_list",
-				"teacher_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 

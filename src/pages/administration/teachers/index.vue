@@ -275,6 +275,8 @@ export default {
 	computed: {
 		...mapGetters("auth", {
 			user: "getUser",
+		}),
+		...mapGetters("schools", {
 			schoolIsExternallyManaged: "schoolIsExternallyManaged",
 		}),
 		...mapGetters("users", {

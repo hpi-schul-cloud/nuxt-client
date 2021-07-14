@@ -1,12 +1,42 @@
-$body-font-family: "PT Sans";
-$heading-font-family: "PT Sans Narrow";
-$button-font-size: 1rem;
+$body-font-family: var(--font-primary);
+$heading-font-family: var(--font-accent);
+
+// headings
+$headings: (
+	"h1": (
+		"size": var(--heading-1),
+		"line-height": var(--line-height-sm),
+	),
+	"h2": (
+		"size": var(--heading-2),
+		"line-height": var(--line-height-sm),
+	),
+	"h3": (
+		"size": var(--heading-3),
+		"line-height": var(--line-height-sm),
+	),
+	"h4": (
+		"size": var(--heading-4),
+		"line-height": var(--line-height-sm),
+	),
+	"h5": (
+		"size": var(--heading-5),
+		"line-height": var(--line-height-sm),
+		"weight": var(--font-weight-bold),
+	),
+	"h6": (
+		"size": var(--heading-6),
+		"line-height": var(--line-height-sm),
+		"weight": var(--font-weight-bold),
+	),
+);
 
 // v-btn
+$button-font-size: 1rem;
 $btn-text-transform: none;
-$btn-font-weight: 700;
+$btn-font-weight: var(--font-weight-bold);
 .v-btn {
-	font-family: $heading-font-family;
+	font-family: var(--font-accent);
 	&.v-size--small,
 	&.v-size--default,
 	&.v-size--large,
@@ -14,3 +44,7 @@ $btn-font-weight: 700;
 		font-size: $button-font-size;
 	}
 }
+
+// table
+$data-table-regular-header-font-size: 1rem;
+$data-table-regular-row-font-size: 1rem;
