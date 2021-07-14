@@ -43,6 +43,8 @@ type BusinessError = {
 	message: string;
 };
 
+type Status = "pending" | "completed" | "error" | "";
+
 const newsUri = "v3/news";
 
 @Module({ name: "news", namespaced: true, dynamic: true, store: rootStore })
@@ -81,7 +83,7 @@ export class NewsModule extends VuexModule {
 		statusCode: "",
 		message: "",
 	};
-	status: string = "";
+	status: Status = "";
 
 	get getNews(): News[] {
 		return this.news;
@@ -124,7 +126,7 @@ export class NewsModule extends VuexModule {
 	}
 
 	@Mutation
-	setStatus(status: string): void {
+	setStatus(status: Status): void {
 		this.status = status;
 	}
 

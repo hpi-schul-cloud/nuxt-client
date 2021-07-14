@@ -129,11 +129,11 @@ export default Vue.extend({
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
 			}
-			const a: any = fromInputDateTime(
+			const dateTimeCombined: any = fromInputDateTime(
 				this.data.date.date,
 				this.data.date.time
 			);
-			return a.toISOString();
+			return dateTimeCombined.toISOString();
 		},
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
