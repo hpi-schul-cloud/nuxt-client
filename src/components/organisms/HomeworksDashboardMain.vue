@@ -1,6 +1,6 @@
 <template>
 	<v-container class="v-container">
-		<h1 v-if="loading">
+		<h1 v-if="status === 'pending'">
 			<v-skeleton-loader type="text" :max-width="'30%'" />
 		</h1>
 		<template v-else>
@@ -65,7 +65,7 @@ export default {
 	},
 	computed: {
 		...mapGetters("homeworks", {
-			loading: "getLoading",
+			status: "getStatus",
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
 			availableCourses: "getCourses",

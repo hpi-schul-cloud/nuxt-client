@@ -17,7 +17,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	const mockStoreStudent = {
 		homeworks: {
 			getters: {
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getCourses: () => courses,
@@ -36,7 +36,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	const mockStoreTeacher = {
 		homeworks: {
 			getters: {
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getOpenHomeworks: () => homeworksTeacher,
@@ -54,7 +54,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	const mockStoreEmpty = {
 		homeworks: {
 			getters: {
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListEmpty: () => true,
 				isListFilled: () => false,
 				getOpenHomeworks: () => [],
