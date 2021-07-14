@@ -9,7 +9,7 @@ module.exports = {
 		"<rootDir>/tests/unit/requireAssertions",
 	],
 	snapshotResolver: "<rootDir>/tests/unit/snapshotResolver",
-	testMatch: ["**/(*.)unit.js"],
+	testMatch: ["**/(*.)unit.(js|ts)"],
 	moduleFileExtensions: ["ts", "js", "json", "vue"],
 	transform: {
 		"^.+\\.ts$": "ts-jest",
@@ -32,7 +32,7 @@ module.exports = {
 		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/plugins/**/*.js",
 		"<rootDir>/src/serverMiddleware/**/*.js",
-		"<rootDir>/src/store/**/*.js",
+		"<rootDir>/src/store/**/*.(js|ts)",
 		"<rootDir>/src/utils/**/*.js",
 		// Exclude
 		"!<rootDir>/src/components/**/*.stories.js",

@@ -128,6 +128,7 @@ module.exports = {
 		"@plugins/datetime",
 		"@plugins/vuelidate",
 		"@plugins/iconfonts",
+		"@plugins/axios-accessor",
 	],
 
 	/*
@@ -151,7 +152,7 @@ module.exports = {
 	 ** Build configuration
 	 */
 	build: {
-		transpile: ["vue-echarts", "resize-detector"],
+		transpile: ["vue-echarts", "resize-detector", "vuex-module-decorators"],
 		/*
 		 ** You can extend webpack config here
 		 */

@@ -78,5 +78,6 @@
 	"npm.packageManager": "npm",
 	"editor.suggest.localityBonus": true,
 
-	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"]
+	"todohighlight.keywords": ["TODO", "FIX", "REFACTOR"],
+	"typescript.tsdk": "node_modules\\typescript\\lib"
 }
