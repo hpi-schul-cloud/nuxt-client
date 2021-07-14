@@ -6,8 +6,7 @@
 				{{ $t("pages.administration.school.index.title") }}
 			</h1>
 			<h2 class="text-h4">
-				{{ $t("common.words.schoolYear") }}
-				{{ currentYear.name }}
+				{{ currentSchoolYear }}
 			</h2>
 			<p>
 				{{
@@ -19,173 +18,7 @@
 			<v-divider class="my-sm-6 my-md-8"></v-divider>
 			<v-row>
 				<v-col>
-					<h2 class="text-h4 mb-10">
-						{{ $t("pages.administration.school.index.generalSettings") }}
-					</h2>
-					<v-form>
-						<v-row>
-							<v-col>
-								<v-text-field
-									v-model="localSchool.name"
-									:label="
-										$t(
-											'pages.administration.school.index.generalSettings.labels.nameOfSchool'
-										)
-									"
-									dense
-								></v-text-field>
-							</v-col>
-						</v-row>
-						<v-row>
-							<v-col>
-								<v-text-field
-									v-model="localSchool.officialSchoolNumber"
-									:label="
-										$t(
-											'pages.administration.school.index.generalSettings.labels.schoolNumber'
-										)
-									"
-									dense
-									:disabled="school.officialSchoolNumber ? true : false"
-									:hint="
-										$t(
-											'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
-										)
-									"
-									persistent-hint
-								></v-text-field>
-							</v-col>
-						</v-row>
-						<v-row>
-							<v-col>
-								<v-select
-									v-model="localSchool.county"
-									:label="
-										$t(
-											'pages.administration.school.index.generalSettings.labels.chooseACounty'
-										)
-									"
-									:items="federalState.counties"
-									item-text="name"
-									item-value="_id"
-									return-object
-									dense
-									:disabled="localSchool.county ? true : false"
-									:hint="
-										$t(
-											'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
-										)
-									"
-									persistent-hint
-								></v-select>
-							</v-col>
-						</v-row>
-						<v-row>
-							<v-col class="d-flex">
-								<v-file-input
-									v-model="localSchool.logo"
-									:label="
-										$t(
-											'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
-										)
-									"
-									dense
-									prepend-icon=""
-								></v-file-input>
-							</v-col>
-						</v-row>
-						<v-row>
-							<v-col>
-								<v-text-field
-									v-model="localSchool.timezone"
-									:label="
-										$t(
-											'pages.administration.school.index.generalSettings.labels.timezone'
-										)
-									"
-									dense
-									disabled
-									:hint="
-										$t(
-											'pages.administration.school.index.generalSettings.timezoneHint'
-										)
-									"
-									persistent-hint
-								></v-text-field>
-							</v-col>
-						</v-row>
-						<v-row>
-							<v-col>
-								<v-select
-									v-model="localSchool.language"
-									:label="
-										$t(
-											'pages.administration.school.index.generalSettings.labels.language'
-										)
-									"
-									:items="languages"
-									item-text="name"
-									item-value="abbreveation"
-									dense
-									:hint="
-										$t(
-											'pages.administration.school.index.generalSettings.languageHint'
-										)
-									"
-									persistent-hint
-								></v-select>
-							</v-col>
-						</v-row>
-						<v-row>
-							<v-col>
-								<v-select
-									v-model="localSchool.fileStorageType"
-									:label="
-										$t(
-											'pages.administration.school.index.generalSettings.labels.cloudStorageProvider'
-										)
-									"
-									:items="fileStorageTypes"
-									item-text="name"
-									item-value="type"
-									dense
-								></v-select>
-							</v-col>
-						</v-row>
-						<v-row>
-							<v-col>
-								<h4 class="subtitle-1 font-weight-bold my-0">
-									{{ $t("pages.administration.school.index.usedFileStorage") }}
-								</h4>
-								<p class="body-1">
-									{{
-										$t(
-											"pages.administration.school.index.schoolIsCurrentlyDrawing"
-										)
-									}}
-									{{ localSchool.fileStorageTotal }} B.
-								</p>
-							</v-col>
-						</v-row>
-						<template v-if="loading">
-							<v-skeleton-loader
-								v-for="setting of 4"
-								:key="setting"
-								type="list-item-three-line"
-							/>
-						</template>
-						<privacy-settings
-							v-else
-							:privacy-settings="{
-								permissions: localSchool.permissions,
-								features: localSchool.features,
-							}"
-							@update-privacy-settings="updatePrivacySettings"
-						></privacy-settings>
-						<v-btn class="my-5" color="primary" depressed @click="save">
-							{{ $t("pages.administration.school.index.generalSettings.save") }}
-						</v-btn>
-					</v-form>
+					<general-settings></general-settings>
 					<school-policies v-if="schoolPolicyEnabled"></school-policies>
 					<template v-if="loading">
 						<v-skeleton-loader type="table-thead, table-row, table-row" />
@@ -194,42 +27,26 @@
 				</v-col>
 			</v-row>
 		</v-container>
-		{{ console.log(school, localSchool) }}
 	</v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { printDate } from "@plugins/datetime";
-import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
-import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import vCustomBreadcrumbs from "@components/molecules/vCustomBreadcrumbs";
-import PrivacySettings from "@components/organisms/administration/PrivacySettings";
+import GeneralSettings from "@components/organisms/administration/GeneralSettings";
+import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import AuthSystems from "@components/organisms/administration/AuthSystems";
 
 export default {
 	components: {
-		SchoolPolicies,
 		vCustomBreadcrumbs,
-		PrivacySettings,
+		GeneralSettings,
+		SchoolPolicies,
 		AuthSystems,
 	},
 	layout: "defaultVuetify",
 	data() {
 		return {
-			localSchool: {
-				name: "",
-				officialSchoolNumber: "",
-				logo: null,
-				county: {},
-				timezone: "",
-				language: "",
-				permissions: {},
-				features: [],
-				fileStorageType: "",
-				fileStorageTotal: 0,
-			},
-			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -244,108 +61,19 @@ export default {
 	},
 	computed: {
 		...mapGetters("schools", {
-			school: "getSchool",
-			currentYear: "getCurrentYear",
-			federalState: "getFederalState",
 			systems: "getSystems",
-			fileStorageTotal: "getFileStorageTotal",
+			currentYear: "getCurrentYear",
 			loading: "getLoading",
 		}),
 		...mapGetters("env-config", {
 			schoolPolicyEnabled: "getSchoolPolicyEnabled",
-			availableLanguages: "getAvailableLanguages",
 		}),
-		languages() {
-			return this.availableLanguages.split(",").map((lang) => {
-				// TODO - there's probably a nicer way to do this?
-				const name =
-					lang === "de"
-						? this.$t("pages.account.index.user.locale.longName.de")
-						: lang === "en"
-						? this.$t("pages.account.index.user.locale.longName.en")
-						: this.$t("pages.account.index.user.locale.longName.es");
-				return { name, abbreveation: lang };
-			});
+		currentSchoolYear() {
+			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
 		},
-		console: () => console, // TODO - delete when done
-	},
-	// TODO - watch for school changes, doesn't seem to be neccessary anymore?
-	/* watch: {
-		school(updatedSchool) {
-			console.log("hello");
-			this.localSchool = updatedSchool;
-		},
-	}, */
-	async created() {
-		this.fetchFileStorageTotal();
-
-		// TODO - think of better way with Object.assign() maybe
-		this.localSchool.name = this.school.name;
-		this.localSchool.officialSchoolNumber = this.school.officialSchoolNumber;
-		this.localSchool.county = this.school.county;
-		this.localSchool.logo = await dataUrlToFile(
-			this.school.logo_dataUrl,
-			"logo"
-		);
-		this.localSchool.timezone = this.school.timezone || "Europe/Berlin";
-		this.localSchool.language = this.school.language;
-		this.localSchool.permissions = { ...this.school.permissions };
-		this.localSchool.features = [...this.school.features];
-		this.localSchool.fileStorageType = this.school.fileStorageType;
 	},
 	methods: {
-		printDate,
-		toBase64,
-		dataUrlToFile,
-		...mapActions("schools", ["fetchFileStorageTotal", "update"]),
-		updatePrivacySettings(value, settingName) {
-			const keys = settingName.split(".");
-			if (keys[0] === "features") {
-				if (value) {
-					this.localSchool.features.push(keys[1]);
-				} else {
-					this.localSchool.features = this.localSchool.features.filter(
-						(feature) => feature !== keys[1]
-					);
-				}
-			}
-			if (keys[0] === "permissions") {
-				const newPermissions = {
-					...this.localSchool.permissions,
-					[keys[1]]: {
-						[keys[2]]: value,
-					},
-				};
-				this.localSchool.permissions = newPermissions;
-			}
-		},
-		async save() {
-			const updatedSchool = {
-				id: this.school.id,
-				name: this.localSchool.name,
-				language: this.localSchool.language,
-				fileStorageType: this.localSchool.fileStorageType,
-				permissions: this.localSchool.permissions,
-				features: this.localSchool.features,
-			};
-			if (
-				!this.school.officialSchoolNumber &&
-				this.localSchool.officialSchoolNumber
-			) {
-				updatedSchool.officialSchoolNumber =
-					this.localSchool.officialSchoolNumber;
-			}
-			if (!this.school.county && this.localSchool.county._id) {
-				updatedSchool.county = this.localSchool.county._id;
-			}
-			if (this.localSchool.logo) {
-				updatedSchool.logo_dataUrl = await toBase64(this.localSchool.logo);
-			} else {
-				updatedSchool.logo_dataUrl = "";
-			}
-			console.log("updated", updatedSchool);
-			this.update(updatedSchool);
-		},
+		...mapActions("schools", ["fetchFileStorageTotal"]),
 	},
 	head() {
 		return {
@@ -362,9 +90,5 @@ export default {
 
 .container-max-width {
 	max-width: var(--size-content-width-max);
-}
-
-.relative {
-	position: relative;
 }
 </style>
