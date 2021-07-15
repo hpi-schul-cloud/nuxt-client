@@ -18,7 +18,6 @@
 						<v-icon class="ml-3"> $expand </v-icon>
 					</template>
 				</v-expansion-panel-header>
-
 				<v-expansion-panel-content class="pa-0">
 					<slot name="panelOne" />
 				</v-expansion-panel-content>
