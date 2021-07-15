@@ -1,5 +1,5 @@
 <template>
-	<form v-on="$listeners" @submit.prevent="submitHandler">
+	<form v-on="$listeners" @submit.prevent="save">
 		<title-input
 			v-model="data.title"
 			:focus="true"
@@ -40,8 +40,32 @@
 						/>
 					</div>
 				</transition>
-				<!-- @slot Add your action buttons here, predefined actions are `#actions="{ remove, cancel }"` -->
-				<slot name="actions" :remove="remove" :cancel="cancel" />
+				<form-actions>
+					<template #primary>
+						<base-button
+							design="primary"
+							type="submit"
+							data-testid="btn_news_submit"
+							:disabled="status === 'pending'"
+						>
+							<base-icon source="material" icon="check" />
+							{{ $t("common.actions.save") }}
+						</base-button>
+						<base-button
+							v-if="news && news.id"
+							design="danger text"
+							type="button"
+							@click="remove"
+						>
+							<base-icon source="material" icon="delete" />
+							{{ $t("common.actions.remove") }}
+						</base-button>
+						<base-button design="text" @click="cancel">
+							<base-icon source="material" icon="clear" />
+							{{ $t("common.actions.discard") }}
+						</base-button>
+					</template>
+				</form-actions>
 			</div>
 		</transition>
 	</form>
@@ -50,15 +74,17 @@
 <script lang="ts">
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@plugins/datetime";
-import { mapGetters } from "vuex";
+import NewsModule from "@/store/news";
 
 import TextEditor from "@components/molecules/TextEditor.vue";
 import TitleInput from "@components/molecules/TitleInput.vue";
+import FormActions from "@components/molecules/FormActions.vue";
 
 export default Vue.extend({
 	components: {
 		TextEditor,
 		TitleInput,
+		FormActions,
 	},
 	model: {
 		prop: "news",
@@ -75,15 +101,6 @@ export default Vue.extend({
 					time: undefined,
 				},
 			}),
-		},
-		/**
-		 * Which Action to execute on Form Submit.
-		 * Submit using a `<BaseButton type="submit">Submit</BaseButton>`
-		 */
-		action: {
-			type: String,
-			required: true,
-			validator: (v) => ["create", "patch"].includes(v),
 		},
 	},
 	data(): {
@@ -105,19 +122,18 @@ export default Vue.extend({
 		};
 	},
 	computed: {
-		...mapGetters("news", {
-			createdNews: "getList",
-			status: "getStatus",
-		}),
-		publishDate(): string | undefined {
+		status(): string {
+			return NewsModule.getStatus;
+		},
+		displayAt(): string | undefined {
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
 			}
-			const a: any = fromInputDateTime(
+			const dateTimeCombined: any = fromInputDateTime(
 				this.data.date.date,
 				this.data.date.time
 			);
-			return a.utc().format();
+			return dateTimeCombined.toISOString();
 		},
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
@@ -157,17 +173,12 @@ export default Vue.extend({
 		this.updateFromParent(this.news);
 	},
 	methods: {
-		submitHandler() {
-			switch (this.action) {
-				case "create": {
-					this.create();
-					break;
-				}
-				case "patch": {
-					this.patch();
-					break;
-				}
+		save() {
+			const errors = Object.values(this.errors).filter((a) => a);
+			if (errors.length && errors[0]) {
+				return this.$toast.error(errors[0]);
 			}
+			this.$emit("save", { ...this.data, displayAt: this.displayAt });
 		},
 		updateFromParent({ title, content, displayAt }: any) {
 			this.data.title = title;
@@ -175,78 +186,6 @@ export default Vue.extend({
 			if (displayAt) {
 				[this.data.date.date, this.data.date.time] =
 					createInputDateTime(displayAt);
-			}
-		},
-		getNewsTarget(query: any, schoolId: string) {
-			if (query.target && query.targetmodel) {
-				return { targetId: query.target, targetModel: query.targetmodel };
-			} else if (query.context && query.contextId) {
-				return { targetId: query.contextId, targetModel: query.context };
-			} else {
-				return { targetId: schoolId, targetModel: "schools" };
-			}
-		},
-		async create() {
-			const errors = Object.values(this.errors).filter((a) => a);
-			if (errors.length && errors[0]) {
-				return this.$toast.error(errors[0]);
-			}
-			try {
-				const newsTarget = this.getNewsTarget(
-					this.$route.query,
-					this.$user.schoolId
-				);
-				await this.$store.dispatch("news/create", {
-					title: this.data.title,
-					content: this.data.content,
-					displayAt: this.publishDate,
-					schoolId: this.$user.schoolId,
-					targetId: newsTarget.targetId,
-					targetModel: newsTarget.targetModel,
-				});
-				if (this.status === "completed") {
-					this.$toast.success(
-						this.$ts("components.organisms.FormNews.success.create")
-					);
-					await this.$router.push({
-						name: "news-id",
-						params: { id: this.createdNews[0].id },
-					});
-				}
-			} catch (e) {
-				console.error(e);
-				this.$toast.error(
-					this.$ts("components.organisms.FormNews.errors.create")
-				);
-			}
-		},
-		async patch() {
-			const errors = Object.values(this.errors).filter((a) => a);
-			if (errors.length && errors[0]) {
-				return this.$toast.error(errors[0]);
-			}
-			try {
-				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("news/patch", [
-					this.$route.params.id,
-					{
-						title: this.data.title,
-						content: this.data.content,
-						displayAt: this.publishDate,
-					},
-				]);
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.patch")
-				);
-				this.$router.push({
-					name: "news-id",
-					params: { id: this.$route.params.id },
-				});
-			} catch (e) {
-				console.error(e);
-				this.$toast.error(
-					this.$ts("components.organisms.FormNews.errors.patch")
-				);
 			}
 		},
 		async remove() {
@@ -264,23 +203,8 @@ export default Vue.extend({
 				cancelText: this.$t(
 					"components.organisms.FormNews.remove.confirm.cancel"
 				),
-				onConfirm: this.confirmRemoveHandler,
+				onConfirm: () => this.$emit("delete"),
 			});
-		},
-		async confirmRemoveHandler() {
-			try {
-				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("news/remove", this.$route.params.id);
-				this.$toast.success(
-					this.$ts("components.organisms.FormNews.success.remove")
-				);
-				this.$router.push({ name: "news" });
-			} catch (e) {
-				console.error(e);
-				this.$toast.error(
-					this.$ts("components.organisms.FormNews.errors.remove")
-				);
-			}
 		},
 		async cancel() {
 			this.$dialog.confirm({
@@ -297,19 +221,8 @@ export default Vue.extend({
 				actionDesign: "success",
 				iconColor: "var(--color-danger)",
 				invertedDesign: true,
-				onConfirm: this.confirmCancelHandler,
+				onConfirm: () => this.$emit("cancel"),
 			});
-		},
-		async confirmCancelHandler() {
-			const cancelTarget = this.$route.params.id
-				? {
-						name: "news-id",
-						params: { id: this.$route.params.id },
-				  }
-				: {
-						name: "news",
-				  };
-			this.$router.push(cancelTarget);
 		},
 	},
 });
