@@ -34,7 +34,9 @@
 								:icon="route.icon"
 								:source="route.source || 'fa'"
 								:fill="
-									route.active ? 'var(--color-sidebar-menu-item-active)' : ''
+									route.active
+										? 'var(--color-sidebar-menu-item-active)'
+										: 'var(--color-sidebar-menu-item)'
 								"
 								class="icon"
 							/>
@@ -62,7 +64,7 @@
 									:fill="
 										$route.path.includes(child.href)
 											? 'var(--color-sidebar-menu-item-active)'
-											: ''
+											: 'var(--color-sidebar-menu-item)'
 									"
 									class="icon"
 								/>
