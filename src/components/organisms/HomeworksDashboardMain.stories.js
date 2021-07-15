@@ -31,7 +31,6 @@ storiesOf("0 Vuetify/Homeworks/Templates", module)
 						isListEmpty: () => false,
 						isListFilled: () => true,
 						getCourses: () => coursesStudent,
-						getOpenHomeworks: () => homeworks,
 						getOverDueHomeworks: () => overDueHomeworks,
 					},
 					actions: {

@@ -68,11 +68,6 @@ const module = merge(base, {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
-		getOpenHomeworks: (state, getters) => {
-			return getters.getOpenHomeworksWithDueDate.concat(
-				getters.getOpenHomeworksWithoutDueDate
-			);
-		},
 	},
 });
 

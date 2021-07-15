@@ -1,5 +1,5 @@
 import dashboard from "./assigned";
-import { homeworks, openHomeworks } from "@@/stories/mockData/Homeworks";
+import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("Homeworks/assigned", () => {
@@ -11,7 +11,6 @@ describe("Homeworks/assigned", () => {
 				loading: () => false,
 				isListEmpty: () => false,
 				isListFilled: () => true,
-				getOpenHomeworks: () => openHomeworks,
 				getCourses: () => [],
 			},
 			state: () => ({

@@ -1,6 +1,5 @@
 import {
 	homeworks,
-	openHomeworks,
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
 	overDueHomeworks,
@@ -169,18 +168,6 @@ describe("store/homeworks", () => {
 				expect(
 					getters.getOpenHomeworksWithoutDueDate(state, mockGetter)
 				).toHaveLength(openHomeworksWithoutDueDate.length);
-			});
-		});
-
-		describe("getOpenHomeworks", () => {
-			it("Should return open homeworks in the right order", () => {
-				const mockGetter = {
-					getOpenHomeworksWithDueDate: openHomeworksWithDueDate,
-					getOpenHomeworksWithoutDueDate: openHomeworksWithoutDueDate,
-				};
-				const getterOpenHomeworks = getters.getOpenHomeworks(state, mockGetter);
-				expect(getterOpenHomeworks).toHaveLength(openHomeworks.length);
-				expect(getterOpenHomeworks).toStrictEqual(openHomeworks);
 			});
 		});
 
