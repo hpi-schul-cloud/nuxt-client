@@ -12,7 +12,7 @@ describe("@components/organisms/HomeworksList", () => {
 		homeworks: {
 			getters: {
 				getList: () => homeworks,
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				openHomeworks: () => openHomeworks,
@@ -77,7 +77,7 @@ describe("@components/organisms/HomeworksList", () => {
 			homeworks: {
 				getters: {
 					getList: () => [],
-					getLoading: () => false,
+					getStatus: () => "completed",
 					isListEmpty: () => true,
 					isListFilled: () => false,
 					openHomeworks: () => [],
@@ -123,7 +123,7 @@ describe("@components/organisms/HomeworksList", () => {
 			homeworks: {
 				getters: {
 					getList: () => homeworks,
-					getLoading: () => false,
+					getStatus: () => "completed",
 					isListEmpty: () => false,
 					isListFilled: () => true,
 					openHomeworks: () => openHomeworks,
@@ -187,7 +187,7 @@ describe("@components/organisms/HomeworksList", () => {
 			homeworks: {
 				getters: {
 					getList: () => [],
-					getLoading: () => true,
+					getStatus: () => "pending",
 					isListEmpty: () => false,
 					isListFilled: () => false,
 					openHomeworks: () => [],
@@ -232,5 +232,42 @@ describe("@components/organisms/HomeworksList", () => {
 		invalidTypes.forEach((type) => {
 			expect(validator(type)).toBe(false);
 		});
+	});
+
+	it("Should render no subheader if title prop is not set", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
+			propsData: {
+				homeworks,
+				type: "student",
+			},
+		});
+
+		const subHeader = wrapper.findAll(".v-subheader");
+		expect(subHeader.exists()).toBe(false);
+	});
+
+	it("Should render a subheader if title prop is not set", () => {
+		const wrapper = mount(HomeworksList, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			vuetify,
+			propsData: {
+				homeworks,
+				type: "student",
+				title: "my subheader",
+			},
+		});
+
+		const subHeader = wrapper.findAll(".v-subheader");
+		expect(subHeader.exists()).toBe(true);
 	});
 });

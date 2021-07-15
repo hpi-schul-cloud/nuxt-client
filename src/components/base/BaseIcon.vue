@@ -49,6 +49,7 @@ export default {
 	},
 	computed: {
 		fillColor() {
+			if (this.fill !== "currentColor") return this.fill;
 			switch (this.source) {
 				case "fa":
 					return "inherit";

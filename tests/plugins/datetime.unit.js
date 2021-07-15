@@ -72,6 +72,7 @@ setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 describe("@plugins/datetime", () => {
 	const dateString = "2019-01-25T02:00:00.000Z";
 	const dateUTC = dayjs.tz(dateString, "UTC");
+	const dateLocalFromUTC = dateUTC.tz();
 	const dateLocal = dayjs.tz(dateString, TEST_DATETIME_TIMEZONE);
 	const dateNow = dayjs().tz(TEST_DATETIME_TIMEZONE);
 
@@ -84,8 +85,10 @@ describe("@plugins/datetime", () => {
 		.tz(TEST_DATETIME_TIMEZONE)
 		.format("DD.MM.YY HH:mm");
 
+	const dateLocalFromUTCString = dateLocalFromUTC.format("YYYY-MM-DD");
+	const timeLocalFromUTCString = dateLocalFromUTC.format("HH:mm");
 	const dateFormat = dateLocal.format("YYYY-MM-DD");
-	const time = dateLocal.format("HH:mm");
+	const timeLocalString = dateLocal.format("HH:mm");
 
 	it("getUtcOffset", () => {
 		const result = getUtcOffset();
@@ -155,7 +158,7 @@ describe("@plugins/datetime", () => {
 	});
 
 	it("fromInputDateTime", () => {
-		const result1 = fromInputDateTime(dateFormat, time);
+		const result1 = fromInputDateTime(dateFormat, timeLocalString);
 		expect(result1.format()).toStrictEqual(dateLocal.format());
 
 		const expectDate = dayjs.tz(dateFormat, TEST_DATETIME_TIMEZONE);
@@ -165,8 +168,16 @@ describe("@plugins/datetime", () => {
 
 	it("createInputDateTime", () => {
 		const [resultDate, resultTime] = createInputDateTime(dateString);
-		expect(resultDate).toStrictEqual(dateFormat);
-		expect(resultTime).toStrictEqual(time);
+		expect(resultDate).toStrictEqual(dateLocalFromUTCString);
+		expect(resultTime).toStrictEqual(timeLocalFromUTCString);
+	});
+
+	it("should transform formats server to input field to server", () => {
+		const [inputDate, inputTime] = createInputDateTime(dateString);
+		const resultDateTime = fromInputDateTime(inputDate, inputTime);
+
+		const resultDateTimeString = resultDateTime.toISOString();
+		expect(resultDateTimeString).toStrictEqual(dateString);
 	});
 
 	const mockApp = {

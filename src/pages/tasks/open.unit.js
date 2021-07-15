@@ -14,7 +14,7 @@ describe("Homeworks/open", () => {
 		homeworks: {
 			getters: {
 				getList: () => homeworks,
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getOpenHomeworks: () => openHomeworks,
@@ -75,7 +75,7 @@ describe("Homeworks/open", () => {
 			homeworks: {
 				getters: {
 					getList: () => [],
-					getLoading: () => false,
+					getStatus: () => "completed",
 					isListEmpty: () => true,
 					isListFilled: () => false,
 					getOpenHomeworks: () => [],
