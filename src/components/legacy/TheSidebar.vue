@@ -34,7 +34,9 @@
 								:icon="route.icon"
 								:source="route.source || 'fa'"
 								:fill="
-									route.active ? 'var(--color-sidebar-menu-item-active)' : ''
+									route.active
+										? 'var(--color-sidebar-menu-item-active)'
+										: 'var(--color-sidebar-menu-item)'
 								"
 								class="icon"
 							/>
@@ -62,7 +64,7 @@
 									:fill="
 										$route.path.includes(child.href)
 											? 'var(--color-sidebar-menu-item-active)'
-											: ''
+											: 'var(--color-sidebar-menu-item)'
 									"
 									class="icon"
 								/>
@@ -217,6 +219,7 @@ export default {
 				.list-content {
 					display: flex;
 					align-items: center;
+					min-width: 80px;
 					height: 100%;
 					padding: 0 20px;
 					font-size: 16px;

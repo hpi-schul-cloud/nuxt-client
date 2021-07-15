@@ -46,6 +46,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 	it("should render subtitle, if it is passed as props", async () => {
 		const h2 = wrapper.find("h2");
 		expect(h2.exists()).toBe(false);
+		expect(wrapper.props().subtitle).toBe("");
 
 		wrapper.setProps({ subtitle });
 		await wrapper.vm.$nextTick();

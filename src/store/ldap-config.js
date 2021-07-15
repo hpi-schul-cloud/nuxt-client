@@ -71,7 +71,6 @@ export const actions = {
 			commit("setData", formatServerData(data));
 			commit("setStatus", "completed");
 		} catch (error) {
-			console.log(error);
 			this.$toast.error(error);
 		}
 	},
@@ -87,7 +86,6 @@ export const actions = {
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			console.log(error);
 			this.$toast.error(error);
 		}
 	},
@@ -106,7 +104,6 @@ export const actions = {
 			commit("setVerified", verification);
 			commit("setStatus", "completed");
 		} catch (error) {
-			console.log(error);
 			this.$toast.error(error);
 		}
 	},
@@ -121,7 +118,6 @@ export const actions = {
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			console.log(error);
 			this.$toast.error(error);
 		}
 	},
@@ -136,7 +132,6 @@ export const actions = {
 			commit("setSubmitted", submission);
 			commit("setStatus", "completed");
 		} catch (error) {
-			console.log(error);
 			this.$toast.error(error);
 		}
 	},

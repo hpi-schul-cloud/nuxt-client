@@ -8,17 +8,18 @@ import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import HomeworksList from "@components/organisms/HomeworksList";
 import Vuetify from "vuetify";
 
-describe("Homeworks/dashboard", () => {
+describe("Homeworks/open", () => {
 	const getHomeworksDashboard = jest.fn();
 	const mockStore = {
 		homeworks: {
 			getters: {
 				getList: () => homeworks,
-				getLoading: () => false,
+				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getOpenHomeworks: () => openHomeworks,
 				getOverDueHomeworks: () => overDueHomeworks,
+				getCourses: () => [],
 			},
 			state: () => ({
 				list: homeworks,
@@ -51,7 +52,8 @@ describe("Homeworks/dashboard", () => {
 			vuetify,
 		});
 
-		expect(wrapper.vm.$metaInfo.title).toBe("Aufgaben");
+		const title = wrapper.vm.$i18n.t("pages.homeworks.student.title");
+		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 
 	it("Should render homeworks list component, if there are homeworks", () => {
@@ -73,7 +75,7 @@ describe("Homeworks/dashboard", () => {
 			homeworks: {
 				getters: {
 					getList: () => [],
-					getLoading: () => false,
+					getStatus: () => "completed",
 					isListEmpty: () => true,
 					isListFilled: () => false,
 					getOpenHomeworks: () => [],

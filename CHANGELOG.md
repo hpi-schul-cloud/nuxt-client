@@ -9,10 +9,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ## Unreleased
 
 - SC-9159 - Redirect the routes for news for the new v3 API
+- SC-9108 - Refactor news/create page and form component
+- SC-9189 - Adding expansion panels to teacher's task dashboard
 
 ### Added
 
 - SC-9090 - implemented a loading state in the service-template
+- OPS-2574 - Removeing autodeployed branches for developers if branch deleted
 
 ### Changed
 
@@ -21,6 +24,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9077 - refactored store actions returning data
 - SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
 - SC-9122 - changed getters logic from components to the store
+- SC-9108 - refactored news
+- SC-9168 - POC for Typescript store module (news)
 
 ### Fixed
 
@@ -29,6 +34,22 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9093 - Load default language and timezone from server
 - SC-9158 - fixed launch config to debug a single test
 - SC-9160 - fixed getStatus getter in service-template
+
+## [26.5.1] - 2021-06-30
+
+### Added
+
+- SC-9143 - add task dashboard filter for teachers and students
+
+### Changed
+
+- Changed name of click-outside vue directive
+
+## [26.5.0] - 2021-06-28
+
+### Added
+
+- SC-9143 - add teacher open task dashboard
 
 ## [26.4.3] - 2021-06-24
 
