@@ -2,43 +2,45 @@
 	<section>
 		<v-expansion-panels v-model="expanded" flat accordion mandatory>
 			<v-expansion-panel :disabled="isPanelOneDisabled">
-				<v-expansion-panel-header
-					v-if="isListFilled"
-					class="text-h6 font-weight-bold pa-0"
-				>
-					{{ $t("pages.homeworks.teacher.subtitleNoDue") }}
-					<template v-slot:actions
-						>{{ noDueDateHomeworks.length }}
-						<v-icon class="ml-3"> $expand </v-icon>
-					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-header v-else-if="isLoading">
+				<v-expansion-panel-header v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
 					<template v-slot:actions>
 						<v-skeleton-loader type="chip" />
 					</template>
 				</v-expansion-panel-header>
+				<v-expansion-panel-header
+					v-else-if="!isListEmpty"
+					class="text-h6 font-weight-bold pa-0"
+				>
+					{{ panelOneTitle }}
+					<template v-slot:actions
+						>{{ panelOneCount }}
+						<v-icon class="ml-3"> $expand </v-icon>
+					</template>
+				</v-expansion-panel-header>
+
 				<v-expansion-panel-content class="pa-0">
 					<slot name="panelOne" />
 				</v-expansion-panel-content>
 			</v-expansion-panel>
 			<v-expansion-panel :disabled="isPanelTwoDisabled">
-				<v-expansion-panel-header
-					v-if="isListFilled"
-					class="text-h6 font-weight-bold pa-0"
-				>
-					{{ $t("pages.homeworks.teacher.subtitleWithDue") }}
-					<template v-slot:actions>
-						{{ dueDateHomeworks.length }}
-						<v-icon class="ml-3"> $expand </v-icon>
-					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-header v-else-if="isLoading">
+				<v-expansion-panel-header v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
 					<template v-slot:actions>
 						<v-skeleton-loader type="chip" />
 					</template>
 				</v-expansion-panel-header>
+				<v-expansion-panel-header
+					v-else-if="!isListEmpty"
+					class="text-h6 font-weight-bold pa-0"
+				>
+					{{ panelTwoTitle }}
+					<template v-slot:actions>
+						{{ panelTwoCount }}
+						<v-icon class="ml-3"> $expand </v-icon>
+					</template>
+				</v-expansion-panel-header>
+
 				<v-expansion-panel-content class="pa-0">
 					<slot name="panelTwo" />
 				</v-expansion-panel-content>
@@ -48,28 +50,46 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
+	props: {
+		panelOneCount: {
+			type: Number,
+			required: true,
+			validator: (val) => val >= 0,
+		},
+		panelTwoCount: {
+			type: Number,
+			required: true,
+			validator: (val) => val >= 0,
+		},
+		panelOneTitle: {
+			type: String,
+			required: true,
+		},
+		panelTwoTitle: {
+			type: String,
+			required: true,
+		},
+		status: {
+			required: true,
+			validator: (val) => [null, "pending", "completed", "error"].includes(val),
+		},
+		isListEmpty: {
+			type: Boolean,
+			required: true,
+		},
+	},
 	data() {
 		return {
 			expanded: 1,
 		};
 	},
 	computed: {
-		...mapGetters("homeworks", {
-			dueDateHomeworks: "getOpenHomeworksWithDueDate",
-			overDueHomeworks: "getOverDueHomeworks",
-			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
-			isListFilled: "isListFilled",
-			status: "getStatus",
-		}),
-		noDueDatePanelEmpty: function () {
-			return this.noDueDateHomeworks.length === 0;
+		isPanelOneEmpty: function () {
+			return this.panelOneCount === 0;
 		},
-		dueDatePanelEmpty: function () {
-			return (
-				this.dueDateHomeworks.length === 0 && this.overDueHomeworks.length === 0
-			);
+		isPanelTwoEmpty: function () {
+			return this.panelTwoCount === 0;
 		},
 		isLoading: function () {
 			return this.status === "pending";
@@ -78,10 +98,10 @@ export default {
 			return this.status === "completed";
 		},
 		isPanelOneDisabled: function () {
-			return this.noDueDatePanelEmpty && this.isCompleted;
+			return this.isPanelOneEmpty && this.isCompleted;
 		},
 		isPanelTwoDisabled: function () {
-			return this.dueDatePanelEmpty && this.isCompleted;
+			return this.isPanelTwoEmpty && this.isCompleted;
 		},
 	},
 };

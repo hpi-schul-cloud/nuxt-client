@@ -1,6 +1,13 @@
 <template>
 	<section class="homework-dashboard-teacher">
-		<homeworks-dashboard-panels>
+		<homeworks-dashboard-panels
+			:panel-one-count="noDueDateHomeworks.length"
+			:panel-two-count="dueDateHomeworks.length + overDueHomeworks.length"
+			:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
+			:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
+			:status="status"
+			:is-list-empty="isListEmpty"
+		>
 			<template v-slot:panelOne>
 				<homeworks-list :homeworks="noDueDateHomeworks" type="teacher" />
 			</template>
@@ -32,24 +39,9 @@ export default {
 			dueDateHomeworks: "getOpenHomeworksWithDueDate",
 			overDueHomeworks: "getOverDueHomeworks",
 			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
-			isListFilled: "isListFilled",
 			status: "getStatus",
+			isListEmpty: "isListEmpty",
 		}),
-	},
-	methods: {
-		noDueDatePanelEmpty: function () {
-			return this.noDueDateHomeworks.length == 0;
-		},
-		dueDatePanelEmpty: function () {
-			return (
-				this.dueDateHomeworks.length == 0 && this.overDueHomeworks.length == 0
-			);
-		},
 	},
 };
 </script>
-<style lang="scss" scoped>
-::v-deep .v-expansion-panel-content__wrap {
-	padding: 0;
-}
-</style>

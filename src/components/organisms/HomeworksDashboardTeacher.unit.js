@@ -12,7 +12,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		homeworks: {
 			getters: {
 				getStatus: () => "completed",
-				isListFilled: () => true,
+				isListEmpty: () => false,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
 				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
@@ -24,7 +24,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		homeworks: {
 			getters: {
 				getStatus: () => "completed",
-				isListFilled: () => true,
+				isListEmpty: () => false,
 				getOverDueHomeworks: () => [],
 				getOpenHomeworksWithDueDate: () => [],
 				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
@@ -36,7 +36,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		homeworks: {
 			getters: {
 				getStatus: () => "completed",
-				isListFilled: () => true,
+				isListEmpty: () => false,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
 				getOpenHomeworksWithoutDueDate: () => [],

@@ -110,12 +110,12 @@ describe("store/homeworks", () => {
 	describe("getters", () => {
 		const state = {
 			list: homeworks,
-			loading: false,
+			status: "completed",
 			courseFilter: [],
 		};
 		const stateWithFilter = {
 			list: homeworksTeacher,
-			loading: false,
+			status: "completed",
 			courseFilter: ["Mathe"],
 		};
 		const { getters } = storeModule;

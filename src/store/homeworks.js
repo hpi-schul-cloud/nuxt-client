@@ -31,10 +31,10 @@ const module = merge(base, {
 	},
 	getters: {
 		isListEmpty: (state) => {
-			return state.status !== "pending" && state.list.length === 0;
+			return state.status === "completed" && state.list.length === 0;
 		},
 		isListFilled: (state) => {
-			return state.status !== "pending" && state.list.length > 0;
+			return state.status === "completed" && state.list.length > 0;
 		},
 		getCourses: (state) => {
 			const courses = new Set(
