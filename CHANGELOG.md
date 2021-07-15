@@ -34,12 +34,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9158 - fixed launch config to debug a single test
 - SC-9160 - fixed getStatus getter in service-template
 
-## [26.5.2] - 2021-07-12
-
-### Added
-
-- SC-9189 - Adding expansion panels to teacher's task dashboard
-
 ## [26.5.1] - 2021-06-30
 
 ### Added
