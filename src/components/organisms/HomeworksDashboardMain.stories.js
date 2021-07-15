@@ -27,7 +27,7 @@ storiesOf("0 Vuetify/Homeworks/Templates", module)
 				homeworks: {
 					namespaced: true,
 					getters: {
-						loading: () => false,
+						getStatus: () => "completed",
 						isListEmpty: () => false,
 						isListFilled: () => true,
 						getCourses: () => coursesStudent,
@@ -61,7 +61,7 @@ storiesOf("0 Vuetify/Homeworks/Templates", module)
 				homeworks: {
 					namespaced: true,
 					getters: {
-						loading: () => false,
+						getStatus: () => "completed",
 						isListEmpty: () => false,
 						isListFilled: () => true,
 						getCourses: () => coursesTeacher,

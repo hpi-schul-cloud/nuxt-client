@@ -32,7 +32,24 @@ export default {
 			dueDateHomeworks: "getOpenHomeworksWithDueDate",
 			overDueHomeworks: "getOverDueHomeworks",
 			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
+			isListFilled: "isListFilled",
+			status: "getStatus",
 		}),
+	},
+	methods: {
+		noDueDatePanelEmpty: function () {
+			return this.noDueDateHomeworks.length == 0;
+		},
+		dueDatePanelEmpty: function () {
+			return (
+				this.dueDateHomeworks.length == 0 && this.overDueHomeworks.length == 0
+			);
+		},
 	},
 };
 </script>
+<style lang="scss" scoped>
+::v-deep .v-expansion-panel-content__wrap {
+	padding: 0;
+}
+</style>
