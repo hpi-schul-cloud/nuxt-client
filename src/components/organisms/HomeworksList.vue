@@ -1,6 +1,6 @@
 <template>
 	<v-list subheader two-line>
-		<v-subheader v-if="title && isListFilled()" class="subtitle-1">
+		<v-subheader v-if="title && isListFilled" class="subtitle-1">
 			{{ title }}
 		</v-subheader>
 		<template v-if="status === 'pending'">
@@ -65,9 +65,7 @@ export default {
 		...mapGetters("homeworks", {
 			status: "getStatus",
 		}),
-	},
-	methods: {
-		isListFilled() {
+		isListFilled: function () {
 			return this.status === "completed" && this.homeworks.length > 0;
 		},
 	},

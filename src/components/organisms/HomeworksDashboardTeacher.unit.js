@@ -52,7 +52,7 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 
 	it(...isValidComponent(HomeworksDashboardTeacher));
 
-	it("Should render homeworks list component, with both panels expanded per default", () => {
+	it("Should render homeworks list component, with second panel expanded per default", () => {
 		const wrapper = mount(HomeworksDashboardTeacher, {
 			...createComponentMocks({
 				i18n: true,
