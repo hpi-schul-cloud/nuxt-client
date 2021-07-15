@@ -67,12 +67,7 @@ const module = {
 			commit("setLoading", true);
 
 			try {
-				// TODO - ask if I need to check for process.env.LDAP... here
-				/* if (!Configuration.has("LDAP_PASSWORD_ENCRYPTION_KEY")) {
-					throw new Error(
-						"You need to set LDAP_PASSWORD_ENCRYPTION_KEY to encrypt the old key!"
-					);
-				} */
+				// TODO - monitor if not checking for ldap key causes any errors in the future
 				const systemIds = rootState.schools.school.systems;
 
 				const requests = systemIds.map((systemId) =>

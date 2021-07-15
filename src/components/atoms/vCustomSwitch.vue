@@ -7,7 +7,7 @@
 		dense
 		:ripple="false"
 		:class="styles"
-		@change="onChange"
+		@change="($event) => $emit('input-changed', $event)"
 	></v-switch>
 </template>
 
@@ -24,10 +24,7 @@ export default {
 		},
 		styles: {
 			type: String,
-		},
-		onChange: {
-			type: Function,
-			required: true,
+			default: "",
 		},
 	},
 	data() {

@@ -46,10 +46,9 @@
 			>{{ $t("pages.administration.school.index.authSystems.addLdap") }}</v-btn
 		>
 		<v-custom-dialog
-			:is-open="confirmDeleteDialog.isOpen"
+			v-model="confirmDeleteDialog.isOpen"
 			:size="375"
-			:submit="() => removeSystem(confirmDeleteDialog.systemId)"
-			@dialog-closed="confirmDeleteDialog.isOpen = false"
+			@dialog-confirmed="() => removeSystem(confirmDeleteDialog.systemId)"
 		>
 			<h2 slot="title" class="text-h4 my-2">
 				{{

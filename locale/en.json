@@ -56,6 +56,7 @@
 	"common.validation.required": "Please fill out this field",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
 	"common.words.and": "and",
+	"common.words.from": "from",
 	"common.words.schoolYear": "School year",
 	"common.words.schoolYearChange": "Change of school year",
 	"common.words.privacyPolicy": "Privacy Policy",

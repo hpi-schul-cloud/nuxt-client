@@ -46,8 +46,7 @@
 			</v-list-group>
 		</template>
 		<school-policy-form-dialog
-			:is-open="addSchoolPolicyDialogIsOpen"
-			@dialog-closed="addSchoolPolicyDialogIsOpen = false"
+			v-model="addSchoolPolicyDialogIsOpen"
 		></school-policy-form-dialog>
 	</section>
 </template>

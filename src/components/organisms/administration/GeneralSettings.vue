@@ -27,7 +27,7 @@
 							)
 						"
 						dense
-						:disabled="school.officialSchoolNumber ? true : false"
+						:disabled="!!school.officialSchoolNumber"
 						:hint="
 							$t(
 								'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
@@ -51,7 +51,7 @@
 						item-value="_id"
 						return-object
 						dense
-						:disabled="localSchool.county ? true : false"
+						:disabled="!!localSchool.county"
 						:hint="
 							$t(
 								'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
@@ -209,13 +209,9 @@ export default {
 		console: () => console, // TODO - delete when done
 		languages() {
 			return this.availableLanguages.split(",").map((lang) => {
-				// TODO - there's probably a nicer way to do this?
-				const name =
-					lang === "de"
-						? this.$t("pages.account.index.user.locale.longName.de")
-						: lang === "en"
-						? this.$t("pages.account.index.user.locale.longName.en")
-						: this.$t("pages.account.index.user.locale.longName.es");
+				const name = this.$t(
+					`pages.account.index.user.locale.longName.${lang}`
+				);
 				return { name, abbreveation: lang };
 			});
 		},

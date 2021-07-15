@@ -2,9 +2,9 @@
 	<v-dialog
 		v-model="isOpen"
 		max-width="550"
-		@click:outside="$emit('dialog-closed')"
+		@click:outside="$emit('dialog-closed', false)"
 	>
-		<v-card ripple="false">
+		<v-card :ripple="true">
 			<v-card-title>
 				<h2 class="text-h4">
 					{{
@@ -104,6 +104,10 @@ export default {
 	validations: {
 		description: { required, maxLength: maxLength(1000) },
 	},
+	model: {
+		prop: "isOpen",
+		event: "dialog-closed",
+	},
 	props: {
 		isOpen: {
 			type: Boolean,
@@ -154,13 +158,13 @@ export default {
 
 				this.addConsentVersion(newConsentVersion);
 				this.$v.$reset();
-				this.$emit("dialog-closed");
+				this.$emit("dialog-closed", false);
 				// TODO - show error InfoMessage
 			}
 		},
 		cancel() {
 			this.clear();
-			this.$emit("dialog-closed");
+			this.$emit("dialog-closed", false);
 		},
 		clear() {
 			this.$v.$reset();

@@ -13,7 +13,7 @@
 						)
 					"
 					styles="ml-1 mt-0"
-					:on-change="
+					@input-changed="
 						($event) =>
 							$emit(
 								'update-privacy-settings',
@@ -41,7 +41,7 @@
 						)
 					"
 					styles="ml-1 mt-0"
-					:on-change="
+					@input-changed="
 						($event) =>
 							$emit(
 								'update-privacy-settings',
@@ -70,7 +70,7 @@
 							)
 						"
 						styles="ml-1 mt-0"
-						:on-change="
+						@input-changed="
 							($event) =>
 								$emit('update-privacy-settings', $event, 'features.messenger')
 						"
@@ -104,7 +104,7 @@
 							)
 						"
 						styles="ml-1 mt-0"
-						:on-change="
+						@input-changed="
 							($event) =>
 								$emit(
 									'update-privacy-settings',
@@ -132,7 +132,7 @@
 							)
 						"
 						styles="ml-1 mt-0"
-						:on-change="
+						@input-changed="
 							($event) =>
 								$emit(
 									'update-privacy-settings',
@@ -161,7 +161,7 @@
 						)
 					"
 					styles="ml-1 mt-0"
-					:on-change="
+					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'features.rocketChat')
 					"
@@ -185,7 +185,7 @@
 						)
 					"
 					styles="ml-1 mt-0"
-					:on-change="
+					@input-changed="
 						($event) =>
 							$emit(
 								'update-privacy-settings',
@@ -236,8 +236,9 @@ export default {
 				"messengerStudentRoomCreate"
 			),
 			rocketChat: this.privacySettings.features.includes("rocketChat"),
-			videoConference:
-				this.privacySettings.features.includes("videoconference"),
+			videoConference: this.privacySettings.features.includes(
+				"videoconference"
+			),
 		};
 	},
 	computed: {

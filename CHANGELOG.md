@@ -9,11 +9,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ## Unreleased
 
 - SC-9159 - Redirect the routes for news for the new v3 API
+- SC-9083 - School administration page in nuxt with vuetify
 
 ### Added
 
 - SC-9090 - implemented a loading state in the service-template
 - OPS-2574 - Removeing autodeployed branches for developers if branch deleted
+- SC-9083 - Added school administration page and related stores
+- SC-9083 - Added simple custom vuetify dialog component for e.g. confirm dialogs
 
 ### Changed
 
@@ -21,6 +24,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9077 - refactored store actions returning data
 - SC-9126 - changed the way the stores state is accessed; `mapState` and `store.state` were substituted for `mapGetters` and `store.getters` respectively; and changed the naming of the template and several other stores getters
 - SC-9122 - changed getters logic from components to the store
+
+### Removed
+
+- SC-9083 - RSS feeds are no longer a part of the school administration page
 
 ### Fixed
 

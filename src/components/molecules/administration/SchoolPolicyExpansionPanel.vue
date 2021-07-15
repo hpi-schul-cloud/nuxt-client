@@ -50,11 +50,10 @@ export default {
 		};
 	},
 	methods: {
-		printDateTimeFromStringUTC,
 		schoolPolicyTitle(schoolPolicy) {
-			return `${schoolPolicy.title} vom ${printDateTimeFromStringUTC(
-				schoolPolicy.publishedAt
-			)}`;
+			return `${schoolPolicy.title} ${this.$t(
+				"common.words.from"
+			)} ${printDateTimeFromStringUTC(schoolPolicy.publishedAt)}`;
 		},
 	},
 };
