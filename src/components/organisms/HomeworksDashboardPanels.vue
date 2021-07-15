@@ -29,7 +29,7 @@
 				>
 					{{ $t("pages.homeworks.teacher.subtitleWithDue") }}
 					<template v-slot:actions>
-						{{ dueDateHomeworks.length }}
+						{{ dueDateHomeworks.length + overDueHomeworks.length }}
 						<v-icon class="ml-3"> $expand </v-icon>
 					</template>
 				</v-expansion-panel-header>
