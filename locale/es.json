@@ -538,7 +538,6 @@
 	"pages.homeworks.subtitleAssigned": "Tareas Asignadas",
 	"pages.homeworks.subtitleOpen": "Tareas Abiertas",
 	"pages.homeworks.student.subtitleOverDue": "Tareas Perdidas",
-	"pages.homeworks.teacher.subtitleAssigned": "Tareas Abiertas con Fecha de Entrega",
 	"pages.homeworks.teacher.subtitleOverDue": "Tareas Caducadas",
 	"pages.homeworks.teacher.subtitleNoDue": "Sin Fecha de Entrega",
 	"pages.homeworks.teacher.subtitleWithDue": "Con Fecha de Entrega",

@@ -528,7 +528,6 @@
 	"pages.homeworks.labels.filter": "Filter by course",
 	"pages.homeworks.subtitleOpen": "Open Tasks",
 	"pages.homeworks.student.subtitleOverDue": "Missed Tasks",
-	"pages.homeworks.teacher.subtitleAssigned": "Open Tasks With Due Date",
 	"pages.homeworks.teacher.subtitleOverDue": "Expired Tasks",
 	"pages.homeworks.teacher.subtitleNoDue": "Without Due Date",
 	"pages.homeworks.teacher.subtitleWithDue": "With Due Date",
