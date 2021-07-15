@@ -236,9 +236,8 @@ export default {
 				"messengerStudentRoomCreate"
 			),
 			rocketChat: this.privacySettings.features.includes("rocketChat"),
-			videoConference: this.privacySettings.features.includes(
-				"videoconference"
-			),
+			videoConference:
+				this.privacySettings.features.includes("videoconference"),
 		};
 	},
 	computed: {
