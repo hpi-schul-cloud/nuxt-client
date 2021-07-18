@@ -6,7 +6,7 @@
 			:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
 			:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
 			:status="status"
-			:is-list-empty="isListEmpty"
+			:is-empty="isListEmpty"
 		>
 			<template v-slot:panelOne>
 				<homeworks-list :homeworks="noDueDateHomeworks" type="student" />

@@ -9,7 +9,7 @@
 					</template>
 				</v-expansion-panel-header>
 				<v-expansion-panel-header
-					v-else-if="!isListEmpty"
+					v-else-if="!isEmpty"
 					class="text-h6 font-weight-bold pa-0"
 				>
 					{{ panelOneTitle }}
@@ -30,7 +30,7 @@
 					</template>
 				</v-expansion-panel-header>
 				<v-expansion-panel-header
-					v-else-if="!isListEmpty"
+					v-else-if="!isEmpty"
 					class="text-h6 font-weight-bold pa-0"
 				>
 					{{ panelTwoTitle }}
@@ -73,7 +73,7 @@ export default {
 			required: true,
 			validator: (val) => [null, "pending", "completed", "error"].includes(val),
 		},
-		isListEmpty: {
+		isEmpty: {
 			type: Boolean,
 			required: true,
 		},
