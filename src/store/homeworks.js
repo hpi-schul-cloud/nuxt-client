@@ -31,10 +31,10 @@ const module = merge(base, {
 	},
 	getters: {
 		isListEmpty: (state) => {
-			return state.status !== "pending" && state.list.length === 0;
+			return state.status === "completed" && state.list.length === 0;
 		},
 		isListFilled: (state) => {
-			return state.status !== "pending" && state.list.length > 0;
+			return state.status === "completed" && state.list.length > 0;
 		},
 		getCourses: (state) => {
 			const courses = new Set(
@@ -67,11 +67,6 @@ const module = merge(base, {
 			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
-		},
-		getOpenHomeworks: (state, getters) => {
-			return getters.getOpenHomeworksWithDueDate.concat(
-				getters.getOpenHomeworksWithoutDueDate
-			);
 		},
 	},
 });

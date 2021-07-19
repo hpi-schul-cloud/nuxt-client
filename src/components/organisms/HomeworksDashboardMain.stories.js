@@ -2,7 +2,8 @@ import { storiesOf } from "@storybook/vue";
 import HomeworksDashboardMain from "@components/organisms/HomeworksDashboardMain";
 import Vuex from "vuex";
 import {
-	homeworks,
+	openHomeworksWithoutDueDate,
+	openHomeworksWithDueDate,
 	overDueHomeworks,
 	coursesStudent,
 	coursesTeacher,
@@ -17,7 +18,6 @@ storiesOf("0 Vuetify/Homeworks/Templates", module)
 			HomeworksDashboardMain,
 		},
 		data: () => ({
-			homeworks,
 			overDueHomeworks,
 			coursesStudent,
 			role: "student",
@@ -31,8 +31,9 @@ storiesOf("0 Vuetify/Homeworks/Templates", module)
 						isListEmpty: () => false,
 						isListFilled: () => true,
 						getCourses: () => coursesStudent,
-						getOpenHomeworks: () => homeworks,
 						getOverDueHomeworks: () => overDueHomeworks,
+						getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
+						getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
 					},
 					actions: {
 						getHomeworksDashboard: () => {},
