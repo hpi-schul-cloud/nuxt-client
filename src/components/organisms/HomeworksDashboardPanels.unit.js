@@ -85,6 +85,20 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 		});
 	});
 
+	it("Accepts valid expanded props", () => {
+		const { validator } = HomeworksDashboardPanels.props.expanded;
+		const validProp1 = 0;
+		const validProp2 = 1;
+		const invalidPropValues = [-1, undefined, {}, 2];
+
+		expect(validator(validProp1)).toBe(true);
+		expect(validator(validProp2)).toBe(true);
+
+		invalidPropValues.forEach((count) => {
+			expect(validator(count)).toBe(false);
+		});
+	});
+
 	it("Should render skeleton loader when the status is pending", () => {
 		const wrapper = mount(HomeworksDashboardPanels, {
 			...createComponentMocks({
