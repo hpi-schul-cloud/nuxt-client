@@ -79,7 +79,7 @@ export default {
 		},
 		expanded: {
 			type: Number,
-			default: 1,
+			default: 0,
 			required: false,
 			validator: (val) => val == 0 || val == 1,
 		},
