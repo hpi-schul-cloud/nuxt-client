@@ -20,7 +20,7 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 		isEmpty: false,
 	};
 
-	const propsDataOneEmpty = {
+	const propsDataPanelOneEmpty = {
 		panelOneCount: 0,
 		panelTwoCount: 12,
 		panelOneTitle: "Panel one title",
@@ -28,6 +28,16 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 		status: "completed",
 		isEmpty: false,
 	};
+
+	const propsDataPanelTwoEmpty = {
+		panelOneCount: 12,
+		panelTwoCount: 0,
+		panelOneTitle: "Panel one title",
+		panelTwoTitle: "Panel two title",
+		status: "completed",
+		isEmpty: false,
+	};
+
 	const propsDataEmpty = {
 		panelOneCount: 0,
 		panelTwoCount: 0,
@@ -112,16 +122,46 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 		expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(true);
 	});
 
-	it("Should disable each panel, if its count is 0", () => {
+	it("Should render only panel 1 disabled, if panel 2 has data", () => {
 		const wrapper = mount(HomeworksDashboardPanels, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
-			propsData: propsDataOneEmpty,
+			propsData: propsDataPanelOneEmpty,
 		});
-		expect(wrapper.find(".v-expansion-panel--disabled").exists()).toBe(true);
+		const expansionPanels = wrapper.findAll(".v-expansion-panel");
+
+		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels).toHaveLength(2);
+		expect(expansionPanels.at(0).classes()).toContain(
+			"v-expansion-panel--disabled"
+		);
+		expect(expansionPanels.at(1).classes()).not.toContain(
+			"v-expansion-panel--disabled"
+		);
+	});
+
+	it("Should render only panel 2 disabled, if panel 1 has data", () => {
+		const wrapper = mount(HomeworksDashboardPanels, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: propsDataPanelTwoEmpty,
+		});
+		const expansionPanels = wrapper.findAll(".v-expansion-panel");
+
+		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels).toHaveLength(2);
+		expect(expansionPanels.at(0).classes()).not.toContain(
+			"v-expansion-panel--disabled"
+		);
+		expect(expansionPanels.at(1).classes()).toContain(
+			"v-expansion-panel--disabled"
+		);
 	});
 
 	it("Shouldn't render headers, if it's empty", () => {
