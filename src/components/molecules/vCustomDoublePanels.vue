@@ -77,11 +77,12 @@ export default {
 			type: Boolean,
 			required: true,
 		},
-	},
-	data() {
-		return {
-			expanded: 1,
-		};
+		expanded: {
+			type: Number,
+			default: 0,
+			required: false,
+			validator: (val) => val == 0 || val == 1,
+		},
 	},
 	computed: {
 		isPanelOneEmpty: function () {

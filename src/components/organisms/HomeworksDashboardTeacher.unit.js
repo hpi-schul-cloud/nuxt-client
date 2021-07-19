@@ -20,30 +20,6 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		},
 	};
 
-	const mockStoreOnlyWithoutDueDate = {
-		homeworks: {
-			getters: {
-				getStatus: () => "completed",
-				isListEmpty: () => false,
-				getOverDueHomeworks: () => [],
-				getOpenHomeworksWithDueDate: () => [],
-				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
-			},
-		},
-	};
-
-	const mockStoreOnlyWithDueDate = {
-		homeworks: {
-			getters: {
-				getStatus: () => "completed",
-				isListEmpty: () => false,
-				getOverDueHomeworks: () => overDueHomeworksTeacher,
-				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
-				getOpenHomeworksWithoutDueDate: () => [],
-			},
-		},
-	};
-
 	let vuetify;
 
 	beforeEach(() => {
@@ -71,50 +47,6 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		);
 		expect(expansionPanels.at(1).classes()).toContain(
 			"v-expansion-panel--active"
-		);
-	});
-
-	it("Should render not disabled 'no due date' panel, and disabled empty other panel", async () => {
-		const wrapper = mount(HomeworksDashboardTeacher, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreOnlyWithoutDueDate,
-			}),
-			vuetify,
-		});
-
-		const expansionPanels = wrapper.findAll(".v-expansion-panel");
-
-		expect(expansionPanels.exists()).toBe(true);
-		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0).classes()).not.toContain(
-			"v-expansion-panel--disabled"
-		);
-		expect(expansionPanels.at(1).classes()).toContain(
-			"v-expansion-panel--disabled"
-		);
-	});
-
-	it("Should render not disabled 'with due date' panel, and disabled empty other panel", async () => {
-		const wrapper = mount(HomeworksDashboardTeacher, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreOnlyWithDueDate,
-			}),
-			vuetify,
-		});
-
-		const expansionPanels = wrapper.findAll(".v-expansion-panel");
-
-		expect(expansionPanels.exists()).toBe(true);
-		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0).classes()).toContain(
-			"v-expansion-panel--disabled"
-		);
-		expect(expansionPanels.at(1).classes()).not.toContain(
-			"v-expansion-panel--disabled"
 		);
 	});
 });
