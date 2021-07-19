@@ -107,8 +107,7 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 			vuetify,
 			propsData: propsDataOneEmpty,
 		});
-
-		expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
+		expect(wrapper.find(".v-expansion-panel--disabled").exists()).toBe(true);
 	});
 
 	it("Shouldn't render headers, if it's empty", () => {
