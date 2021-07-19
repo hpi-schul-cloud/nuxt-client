@@ -1,6 +1,6 @@
 <template>
 	<section class="homework-dashboard-student">
-		<homeworks-dashboard-panels
+		<v-custom-double-panels
 			:panel-one-count="noDueDateHomeworks.length"
 			:panel-two-count="dueDateHomeworks.length + overDueHomeworks.length"
 			:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
@@ -23,17 +23,17 @@
 					type="student"
 				/>
 			</template>
-		</homeworks-dashboard-panels>
+		</v-custom-double-panels>
 	</section>
 </template>
 
 <script>
 import HomeworksList from "@components/organisms/HomeworksList";
-import HomeworksDashboardPanels from "@components/organisms/HomeworksDashboardPanels";
+import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
 import { mapGetters } from "vuex";
 
 export default {
-	components: { HomeworksList, HomeworksDashboardPanels },
+	components: { HomeworksList, vCustomDoublePanels },
 	computed: {
 		...mapGetters("homeworks", {
 			dueDateHomeworks: "getOpenHomeworksWithDueDate",

@@ -1,7 +1,7 @@
 import Vuetify from "vuetify";
-import HomeworksDashboardPanels from "./HomeworksDashboardPanels";
+import vCustomDoublePanels from "./vCustomDoublePanels";
 
-describe("@components/organisms/HomeworksDashboardPanels", () => {
+describe("@components/molecules/vCustomDoublePanels", () => {
 	const propsData = {
 		panelOneCount: 1,
 		panelTwoCount: 13,
@@ -44,10 +44,10 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(HomeworksDashboardPanels));
+	it(...isValidComponent(vCustomDoublePanels));
 
 	it("Should render its slots", () => {
-		const wrapper = mount(HomeworksDashboardPanels, {
+		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -64,7 +64,7 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 	});
 
 	it("Accepts valid panel count props", () => {
-		const { validator } = HomeworksDashboardPanels.props.panelOneCount;
+		const { validator } = vCustomDoublePanels.props.panelOneCount;
 		const validCount = 1234;
 		const invalidCounts = [-1, undefined, {}];
 
@@ -76,7 +76,7 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 	});
 
 	it("Accepts valid status props", () => {
-		const { validator } = HomeworksDashboardPanels.props.status;
+		const { validator } = vCustomDoublePanels.props.status;
 		const validStati = [null, "completed", "pending", "error"];
 		const invalidStatus = "Invalid status";
 		expect(validator(invalidStatus)).toBe(false);
@@ -86,7 +86,7 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 	});
 
 	it("Should render skeleton loader when the status is pending", () => {
-		const wrapper = mount(HomeworksDashboardPanels, {
+		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -99,7 +99,7 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 	});
 
 	it("Should disable each panel, if its count is 0", () => {
-		const wrapper = mount(HomeworksDashboardPanels, {
+		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -111,7 +111,7 @@ describe("@components/organisms/HomeworksDashboardPanels", () => {
 	});
 
 	it("Shouldn't render headers, if it's empty", () => {
-		const wrapper = mount(HomeworksDashboardPanels, {
+		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,

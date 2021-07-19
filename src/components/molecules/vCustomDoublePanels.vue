@@ -58,7 +58,7 @@ export default {
 		},
 		panelTwoCount: {
 			type: Number,
-			required: true,
+			default: 0,
 			validator: (val) => val >= 0,
 		},
 		panelOneTitle: {
