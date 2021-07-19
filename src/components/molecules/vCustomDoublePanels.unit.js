@@ -96,7 +96,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 	});
 
 	it("Accepts valid expanded props", () => {
-		const { validator } = HomeworksDashboardPanels.props.expanded;
+		const { validator } = vCustomDoublePanels.props.expanded;
 		const validProp1 = 0;
 		const validProp2 = 1;
 		const invalidPropValues = [-1, undefined, {}, 2];
@@ -123,7 +123,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 	});
 
 	it("Should render only panel 1 disabled, if panel 2 has data", () => {
-		const wrapper = mount(HomeworksDashboardPanels, {
+		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -144,7 +144,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 	});
 
 	it("Should render only panel 2 disabled, if panel 1 has data", () => {
-		const wrapper = mount(HomeworksDashboardPanels, {
+		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
