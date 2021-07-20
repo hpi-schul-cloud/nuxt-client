@@ -63,17 +63,20 @@ export default {
 			return [
 				{
 					to: "/imprint",
-					text: this.$t("components.legacy.footer.imprint"),
+					text: "Impressum",
 				},
 				{
-					href: "/datenschutz",
+					href: this.$store.getters["filePaths/getSpecificFiles"]
+						.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
 				},
 				{
-					href: "https://github.com/hpi-schul-cloud/",
-					text: "GitHub",
+					href: "/datenschutz",
+					text: this.$t("components.legacy.footer.privacy_policy"),
+					target: "_blank",
+					rel: "noopener",
 				},
 			];
 		},
