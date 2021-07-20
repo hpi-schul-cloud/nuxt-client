@@ -1,5 +1,5 @@
 <template>
-	<homeworks-dashboard-main :role="'teacher'" />
+	<homeworks-dashboard-main role="teacher" />
 </template>
 
 <script>

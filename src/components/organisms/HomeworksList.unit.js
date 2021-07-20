@@ -20,7 +20,7 @@ describe("@components/organisms/HomeworksList", () => {
 			},
 			state: () => ({
 				list: homeworks,
-				loading: false,
+				status: "completed",
 			}),
 		},
 	};
@@ -85,7 +85,7 @@ describe("@components/organisms/HomeworksList", () => {
 				},
 				state: () => ({
 					list: [],
-					loading: false,
+					status: "completed",
 				}),
 			},
 		};
@@ -131,7 +131,7 @@ describe("@components/organisms/HomeworksList", () => {
 				},
 				state: () => ({
 					list: homeworks,
-					loading: false,
+					status: "completed",
 				}),
 			},
 		};
@@ -195,7 +195,7 @@ describe("@components/organisms/HomeworksList", () => {
 				},
 				state: () => ({
 					list: [],
-					loading: true,
+					status: "pending",
 				}),
 			},
 		};

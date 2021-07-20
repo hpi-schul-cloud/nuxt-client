@@ -2,13 +2,13 @@ import HomeworksDashboardMain from "./HomeworksDashboardMain";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import Vuetify from "vuetify";
 import {
-	homeworks,
+	openHomeworksWithoutDueDate,
 	overDueHomeworks,
-	homeworksTeacher,
 	overDueHomeworksTeacher,
 	courses,
 	dueDateHomeworksTeacher,
 	noDueDateHomeworksTeacher,
+	openHomeworksWithDueDate,
 } from "@@/stories/mockData/Homeworks";
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
@@ -21,7 +21,8 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getCourses: () => courses,
-				getOpenHomeworks: () => homeworks,
+				getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
+				getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
 				getOverDueHomeworks: () => overDueHomeworks,
 			},
 			actions: {
@@ -39,7 +40,6 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
-				getOpenHomeworks: () => homeworksTeacher,
 				getOverDueHomeworks: () => overDueHomeworksTeacher,
 				getCourses: () => courses,
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
@@ -57,7 +57,6 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getStatus: () => "completed",
 				isListEmpty: () => true,
 				isListFilled: () => false,
-				getOpenHomeworks: () => [],
 				getOverDueHomeworks: () => [],
 				getCourses: () => [],
 				getOpenHomeworksWithDueDate: () => [],

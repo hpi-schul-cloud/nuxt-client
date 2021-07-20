@@ -1,15 +1,21 @@
 import HomeworksDashboardStudent from "./HomeworksDashboardStudent";
 import HomeworksList from "./HomeworksList";
-import { homeworks, overDueHomeworks } from "@@/stories/mockData/Homeworks";
+import {
+	overDueHomeworks,
+	openHomeworksWithoutDueDate,
+	openHomeworksWithDueDate,
+} from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/organisms/HomeworksDashboardStudent", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				getOpenHomeworks: () => homeworks,
+				getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
+				getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
 				getStatus: () => "completed",
 				getOverDueHomeworks: () => overDueHomeworks,
+				isListEmpty: () => false,
 			},
 		},
 	};
