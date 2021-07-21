@@ -27,6 +27,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9122 - changed getters logic from components to the store
 - SC-9108 - refactored news
 - SC-9168 - POC for Typescript store module (news)
+- change default lernstore mode to edusharing
 
 ### Fixed
 

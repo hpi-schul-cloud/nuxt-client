@@ -39,11 +39,10 @@ const routes = [
 	`^/nuxtversion/?$`,
 	// `^/courses/?$`,
 ];
-if (process.env.LERNSTORE_MODE === "EDUSHARING") {
-	const uuid =
-		"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
-	routes.push(`^/content/?$`);
-	routes.push(`^/content/${uuid}/?$`);
-}
+
+const uuid =
+	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+routes.push(`^/content/?$`);
+routes.push(`^/content/${uuid}/?$`);
 
 module.exports = routes;
