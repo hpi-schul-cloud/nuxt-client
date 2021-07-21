@@ -8,6 +8,20 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [26.6.2] - 2021-07-21
+
+### Changed
+
+- SC-9251 - Remove misbehaving checkbox in student/teacher creation to send registration link
+
+## [26.6.1] - 2021-07-21
+
+### Changed
+
+- change default lernstore mode to edusharing
+
+### [26.6.0] - 2021-07-20
+
 - SC-9159 - Redirect the routes for news for the new v3 API
 - SC-9108 - Refactor news/create page and form component
 - SC-9189 - Adding expansion panels to teacher's task dashboard
@@ -27,7 +41,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9122 - changed getters logic from components to the store
 - SC-9108 - refactored news
 - SC-9168 - POC for Typescript store module (news)
-- change default lernstore mode to edusharing
 
 ### Fixed
 
