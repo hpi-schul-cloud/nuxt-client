@@ -16,14 +16,14 @@
 					data-testid="input_create-student_birthdate"
 				>
 				</base-input>
-				<base-input
+				<!-- <base-input
 					v-model="sendRegistration"
 					type="checkbox"
 					name="switch"
 					class="mt--xl"
 					:label="$t('pages.administration.students.new.checkbox.label')"
 					data-testid="input_create-student_send-registration"
-				/>
+				/> -->
 			</template>
 			<template v-slot:errors>
 				<info-message
