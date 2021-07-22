@@ -2,6 +2,11 @@ const unrecoverableErrorCodes = [401, 404, 500];
 
 export default function ({ $axios, store, error }) {
 	$axios.onRequest((config) => {
+		// prepend default '/v1' version prefix to all urls that don't begin with '/v<x>/'
+		if (!config.url.match(/^\/v\d\//)) {
+			config.url = `/v1${config.url}`;
+		}
+
 		store.commit("error/reset");
 		if (store.getters["auth/getAccessToken"]) {
 			config.headers.common["Authorization"] =

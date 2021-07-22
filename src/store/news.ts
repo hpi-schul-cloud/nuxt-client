@@ -45,7 +45,7 @@ type BusinessError = {
 
 type Status = "pending" | "completed" | "error" | "";
 
-const newsUri = "v3/news";
+const newsUri = "/v3/news";
 
 @Module({ name: "news", namespaced: true, dynamic: true, store: rootStore })
 export class NewsModule extends VuexModule {
