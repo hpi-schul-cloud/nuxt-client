@@ -8,6 +8,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+- SC-9192 - access feathers and nestjs apps over their dedicated version prefixes
 - SC-9191 run e2e tests in pull requests with 'run tests' label
 
 ## [26.8.0] - 2021-08-05
