@@ -11,6 +11,7 @@
 				<v-expansion-panel-header
 					v-else-if="!isEmpty"
 					class="text-h6 font-weight-bold pa-0"
+					@click="toggle"
 				>
 					{{ panelOneTitle }}
 					<template v-slot:actions
@@ -32,6 +33,7 @@
 				<v-expansion-panel-header
 					v-else-if="!isEmpty"
 					class="text-h6 font-weight-bold pa-0"
+					@click="toggle"
 				>
 					{{ panelTwoTitle }}
 					<template v-slot:actions>
@@ -77,12 +79,17 @@ export default {
 			type: Boolean,
 			required: true,
 		},
-		expanded: {
+		expandedDefault: {
 			type: Number,
 			default: 0,
 			required: false,
 			validator: (val) => val == 0 || val == 1,
 		},
+	},
+	data: function () {
+		return {
+			expanded: this.expandedDefault,
+		};
 	},
 	computed: {
 		isPanelOneEmpty: function () {
@@ -102,6 +109,11 @@ export default {
 		},
 		isPanelTwoDisabled: function () {
 			return this.isPanelTwoEmpty && this.isCompleted;
+		},
+	},
+	methods: {
+		toggle() {
+			this.expanded = +!this.expanded;
 		},
 	},
 };
