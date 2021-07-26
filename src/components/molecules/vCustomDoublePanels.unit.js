@@ -9,6 +9,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		panelTwoTitle: "Panel two title",
 		status: "completed",
 		isEmpty: false,
+		expandedDefault: 0,
 	};
 
 	const propsDataLoading = {
@@ -18,6 +19,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		panelTwoTitle: "Panel two title",
 		status: "pending",
 		isEmpty: false,
+		expandedDefault: 0,
 	};
 
 	const propsDataPanelOneEmpty = {
@@ -27,6 +29,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		panelTwoTitle: "Panel two title",
 		status: "completed",
 		isEmpty: false,
+		expandedDefault: 1,
 	};
 
 	const propsDataPanelTwoEmpty = {
@@ -36,6 +39,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		panelTwoTitle: "Panel two title",
 		status: "completed",
 		isEmpty: false,
+		expandedDefault: 0,
 	};
 
 	const propsDataEmpty = {
@@ -45,8 +49,10 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		panelTwoTitle: "Panel two title",
 		status: "completed",
 		isEmpty: true,
+		expandedDefault: 0,
 	};
-	const panel = "<div class='panel' />";
+	const slot = "<div class='slot' />";
+	const slot2 = "<div class='slot2' />";
 
 	let vuetify;
 
@@ -65,12 +71,12 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 			vuetify,
 			propsData,
 			slots: {
-				panelOne: panel,
-				panelTwo: panel,
+				panelOne: slot,
+				panelTwo: slot,
 			},
 		});
 
-		expect(wrapper.find(".panel").exists()).toBe(true);
+		expect(wrapper.find(".slot").exists()).toBe(true);
 	});
 
 	it("Accepts valid panel count props", () => {
@@ -96,7 +102,7 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 	});
 
 	it("Accepts valid expanded props", () => {
-		const { validator } = vCustomDoublePanels.props.expanded;
+		const { validator } = vCustomDoublePanels.props.expandedDefault;
 		const validProp1 = 0;
 		const validProp2 = 1;
 		const invalidPropValues = [-1, undefined, {}, 2];
@@ -175,5 +181,45 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		});
 
 		expect(wrapper.find(".v-expansion-panel-header").exists()).toBe(false);
+	});
+
+	it("Should trigger toggle on panel header click", async () => {
+		const mockMethod = jest.spyOn(vCustomDoublePanels.methods, "toggle");
+		const wrapper = mount(vCustomDoublePanels, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: propsData,
+		});
+
+		await wrapper.find("button").trigger("click");
+		expect(mockMethod).toHaveBeenCalled();
+	});
+
+	it("'toggle()' should collapse expanded panel and expand the collapsed one", async () => {
+		const wrapper = mount(vCustomDoublePanels, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData,
+			slots: {
+				panelOne: slot,
+				panelTwo: slot2,
+			},
+		});
+
+		const expansionDivs = wrapper.findAll("div[aria-expanded]");
+		expect(expansionDivs.at(0).attributes("aria-expanded")).toBe("true");
+		expect(expansionDivs.at(1).attributes("aria-expanded")).toBe("false");
+
+		await wrapper.vm.toggle();
+		await wrapper.vm.$nextTick();
+
+		expect(expansionDivs.at(0).attributes("aria-expanded")).toBe("false");
+		expect(expansionDivs.at(1).attributes("aria-expanded")).toBe("true");
 	});
 });
