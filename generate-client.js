@@ -5,7 +5,7 @@ const { exec } = require("child_process");
 const { log, error } = console;
 
 // by default, run this script against the server
-const DEFAULT_URL = "http://localhost:3030/v3/api-json/";
+const DEFAULT_URL = "http://localhost:3030/api/v3/docs-json/";
 const DEFAULT_PATH = "src/clients/server/v3";
 
 const args = arg(
