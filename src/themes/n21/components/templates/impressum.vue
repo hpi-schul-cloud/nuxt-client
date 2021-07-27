@@ -10,7 +10,7 @@
 			<br />
 			30159 Hannover
 			<br />
-			Email:
+			E-Mail:
 			<base-link href="info@n-21.de">info@n-21.de</base-link>
 			<br />
 			Internet:
