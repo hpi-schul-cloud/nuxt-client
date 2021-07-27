@@ -39,7 +39,8 @@
 		"test:screenshot": "start-test start:storybook 4001 test:screenshot:jest",
 		"test:screenshot:ci": "start-test start:storybook 4001 \"npm run test:screenshot:jest -- --ci\"",
 		"test:ci": "run-s test:*:ci",
-		"test": "npm run test:unit"
+		"test": "npm run test:unit",
+		"generate-client:server": "node generate-client.js"
 	},
 	"gitHooks": {
 		"pre-commit": "npx lint-staged"
@@ -49,6 +50,7 @@
 		"@nuxtjs/axios": "^5.12.3",
 		"@nuxtjs/sentry": "^5.0.3",
 		"@nuxtjs/toast": "^3.3.1",
+		"@openapitools/openapi-generator-cli": "^2.2.6",
 		"@tryghost/content-api": "^1.4.11",
 		"babel-plugin-transform-decorators": "^6.24.1",
 		"cookie-universal-nuxt": "^2.1.4",
