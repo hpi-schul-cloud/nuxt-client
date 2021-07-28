@@ -1,3 +1,5 @@
+import EnvConfigModule from "@/store/env-config";
+
 const specificFiles = {
 	privacyExemplary:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
@@ -27,12 +29,17 @@ const globalFiles = {
 };
 
 export const actions = {
-	init({ commit, rootState }) {
+	init({ commit }) {
+		console.log(
+			EnvConfigModule.getEnv.DOCUMENT_BASE_DIR,
+			EnvConfigModule.getEnv.SC_THEME,
+			"filepath"
+		);
 		try {
 			const baseDir =
-				rootState["env-config"].env.DOCUMENT_BASE_DIR ||
+				EnvConfigModule.getEnv.DOCUMENT_BASE_DIR ||
 				"https://s3.hidrive.strato.com/schul-cloud-hpi/";
-			const theme = rootState["env-config"].env.SC_THEME;
+			const theme = EnvConfigModule.getEnv.SC_THEME;
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
 			commit("setDocumentBaseDir", { baseDir, theme });

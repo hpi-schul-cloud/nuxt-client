@@ -1,4 +1,5 @@
 // const endpoint = "/authentication";
+import EnvConfigModule from "@/store/env-config";
 var jwtDecode = require("jwt-decode");
 
 export const actions = {
@@ -46,7 +47,7 @@ export const actions = {
 		}
 		commit("clearAuthData");
 	},
-	async populateUser({ commit, rootState }) {
+	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/me");
 
 		const roles = await this.$axios.$get(`/roles/user/${user.id}`);
@@ -65,10 +66,10 @@ export const actions = {
 		}
 
 		//TODO Remove once added to User permissions SC-2401
-		if (rootState["env-config"].env.FEATURE_EXTENSIONS_ENABLED) {
+		if (EnvConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
 			commit("addUserPermission", "ADDONS_ENABLED");
 		}
-		if (rootState["env-config"].env.FEATURE_TEAMS_ENABLED) {
+		if (EnvConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
 			commit("addUserPermission", "TEAMS_ENABLED");
 		}
 		return user;
@@ -123,15 +124,15 @@ export const mutations = {
 };
 
 export const getters = {
-	getLocale(state, _getters, rootState) {
+	getLocale(state) {
 		if (state.locale) {
 			return state.locale;
 		}
 		if (state.school && state.school.language) {
 			return state.school.language;
 		}
-		if (rootState["env-config"].env.I18N__DEFAULT_LANGUAGE) {
-			return rootState["env-config"].env.I18N__DEFAULT_LANGUAGE;
+		if (EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
+			return EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
 		}
 		return "de";
 	},

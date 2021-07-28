@@ -1,3 +1,5 @@
+import EnvConfigModule from "@/store/env-config";
+
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
 let totalRetry = 0;
@@ -113,12 +115,11 @@ export const mutations = {
 };
 
 export const actions = {
-	init({ commit, state, dispatch, rootState }, event) {
+	init({ commit, state, dispatch }, event) {
 		commit("init", {
 			showWarningOnRemainingSeconds:
-				rootState["env-config"].env.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
-			defaultRemainingTimeInSeconds:
-				rootState["env-config"].env.JWT_TIMEOUT_SECONDS,
+				EnvConfigModule.getEnv.JWT_SHOW_TIMEOUT_WARNING_SECONDS,
+			defaultRemainingTimeInSeconds: EnvConfigModule.getEnv.JWT_TIMEOUT_SECONDS,
 		});
 		if (!decrementer) {
 			decrementer = decrementRemainingTime(commit, state);

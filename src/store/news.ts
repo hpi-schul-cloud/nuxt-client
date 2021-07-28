@@ -47,7 +47,13 @@ type Status = "pending" | "completed" | "error" | "";
 
 const newsUri = "v3/news";
 
-@Module({ name: "news", namespaced: true, dynamic: true, store: rootStore })
+@Module({
+	name: "news",
+	namespaced: true,
+	dynamic: true,
+	store: rootStore,
+	stateFactory: true,
+})
 export class NewsModule extends VuexModule {
 	news: News[] = [];
 	createdNews: News = {
@@ -126,6 +132,14 @@ export class NewsModule extends VuexModule {
 	}
 
 	@Mutation
+	resetBusinessError(): void {
+		this.businessError = {
+			statusCode: "",
+			message: "",
+		};
+	}
+
+	@Mutation
 	setStatus(status: Status): void {
 		this.status = status;
 	}
@@ -133,6 +147,7 @@ export class NewsModule extends VuexModule {
 	@Action
 	async findNews(): Promise<void> {
 		try {
+			this.resetBusinessError();
 			this.setStatus("pending");
 			const { data, limit, skip, total } = await $axios.$get(newsUri);
 			this.setNews(data);
@@ -146,6 +161,7 @@ export class NewsModule extends VuexModule {
 	@Action
 	async fetchNews(newsID: string): Promise<void> {
 		try {
+			this.resetBusinessError();
 			this.setStatus("pending");
 			const news = await $axios.$get(`${newsUri}/${newsID}`);
 			this.setCurrent(news);
@@ -158,6 +174,7 @@ export class NewsModule extends VuexModule {
 	@Action
 	async createNews(payload: CreateNewsPayload): Promise<void> {
 		try {
+			this.resetBusinessError();
 			this.setStatus("pending");
 			const res = await $axios.$post(newsUri, payload);
 			this.setCreatedNews(res);
@@ -170,6 +187,7 @@ export class NewsModule extends VuexModule {
 	@Action
 	async patchNews(payload: PatchNewsPayload): Promise<void> {
 		try {
+			this.resetBusinessError();
 			this.setStatus("pending");
 			const res = await $axios.$patch(`${newsUri}/${payload.id}`, payload);
 			this.setCurrent(res);
@@ -180,8 +198,9 @@ export class NewsModule extends VuexModule {
 	}
 
 	@Action
-	async removeNews(id: string) {
+	async removeNews(id: string): Promise<void> {
 		try {
+			this.resetBusinessError();
 			this.setStatus("pending");
 			const res = await $axios.$delete(`${newsUri}/${id}`);
 			this.setCurrent(res);

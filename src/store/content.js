@@ -1,5 +1,6 @@
 import hash from "object-hash";
 import { isCollectionHelper } from "@utils/helpers";
+import EnvConfigModule from "@/store/env-config";
 
 export const actions = {
 	selectElement({ commit }, refId) {
@@ -109,10 +110,10 @@ export const actions = {
 		commit("setCurrentResource", metadata);
 		commit("setStatus", "completed");
 	},
-	init({ commit, rootState }) {
+	init({ commit }) {
 		commit("init", {
 			collectionsFeatureFlag:
-				rootState["env-config"].env.FEATURE_ES_COLLECTIONS_ENABLED,
+				EnvConfigModule.getEnv.FEATURE_ES_COLLECTIONS_ENABLED,
 		});
 	},
 };
