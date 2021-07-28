@@ -7,7 +7,7 @@
 			:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
 			:status="status"
 			:is-empty="isListEmpty"
-			:expanded="1"
+			:expanded-default="1"
 		>
 			<template v-slot:panelOne>
 				<homeworks-list :homeworks="noDueDateHomeworks" type="teacher" />
