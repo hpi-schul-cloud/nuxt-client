@@ -10,7 +10,7 @@ const retryLimit = 10;
 export const actions = {
 	async get({ commit, dispatch, state }) {
 		try {
-			const env = await this.$axios.$get("/config/app/public");
+			const env = await this.$axios.$get("/v1/config/app/public");
 			Object.entries(requiredVars).forEach(([key]) => {
 				if (env[key] == null) {
 					console.warn(`Missing configuration by server for key ${key}`);

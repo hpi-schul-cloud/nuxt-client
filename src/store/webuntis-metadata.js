@@ -12,7 +12,7 @@ const module = mergeDeep(base, {
 			let data = [];
 			let total = 0;
 			do {
-				const res = await this.$axios.$get("webuntisMetadata", {
+				const res = await this.$axios.$get("/v1/webuntisMetadata", {
 					params: {
 						$limit: 10000,
 						$skip: data.length,

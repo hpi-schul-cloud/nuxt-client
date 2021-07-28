@@ -275,7 +275,7 @@ export default {
 	methods: {
 		async goToMerlinContent(merlinReference) {
 			const url = await this.$axios.$get(
-				`/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
+				`/v1/edu-sharing/merlinToken/?merlinReference=${merlinReference}`
 			);
 			window.open(url, "_blank");
 		},

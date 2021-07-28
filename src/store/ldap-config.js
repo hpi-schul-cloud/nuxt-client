@@ -79,7 +79,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const data = formatClientData(payload);
 			const verification = await this.$axios.$post(
-				"/ldap-config?verifyOnly=true",
+				"/v1/ldap-config?verifyOnly=true",
 				data
 			);
 			commit("setTemp", payload);
@@ -94,7 +94,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const data = formatClientData(systemData);
 			const verification = await this.$axios.$patch(
-				`/ldap-config/${systemId}?verifyOnly=true`,
+				`/v1/ldap-config/${systemId}?verifyOnly=true`,
 				data
 			);
 			if (!systemData.searchUserPassword) {
@@ -112,7 +112,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const data = formatClientData(payload);
 			const submission = await this.$axios.$post(
-				"/ldap-config?verifyOnly=false&activate=true",
+				"/v1/ldap-config?verifyOnly=false&activate=true",
 				data
 			);
 			commit("setSubmitted", submission);
@@ -126,7 +126,7 @@ export const actions = {
 			commit("setStatus", "pending");
 			const data = formatClientData(systemData);
 			const submission = await this.$axios.$patch(
-				`/ldap-config/${systemId}?verifyOnly=false&activate=true`,
+				`/v1/ldap-config/${systemId}?verifyOnly=false&activate=true`,
 				data
 			);
 			commit("setSubmitted", submission);

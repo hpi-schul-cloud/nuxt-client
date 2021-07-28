@@ -3,7 +3,7 @@ const module = {
 	actions: {
 		schoolTermsPresent: async function ({ commit }, schoolId) {
 			const params = `?$limit=1&$sort[publishedAt]=-1&schoolId=${schoolId}`;
-			const data = await this.$axios.$get("/consentVersions" + params);
+			const data = await this.$axios.$get("/v1/consentVersions" + params);
 			commit("setSchoolTermsPresent", data);
 		},
 	},
