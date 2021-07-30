@@ -5,7 +5,7 @@
 			{{ $t("pages.administration.teachers.new.title") }}
 		</h1>
 		<form-create-user role-name="teacher" @create-user="createTeacher">
-			<!-- <template v-slot:inputs>
+			<template v-slot:inputs>
 				<base-input
 					v-model="sendRegistration"
 					type="checkbox"
@@ -13,7 +13,7 @@
 					class="mt--xl"
 					:label="$t('pages.administration.teachers.new.checkbox.label')"
 				/>
-			</template> -->
+			</template>
 			<template v-slot:errors>
 				<info-message
 					v-if="error"
