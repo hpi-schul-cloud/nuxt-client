@@ -109,7 +109,7 @@ export class EnvConfig extends VuexModule {
 		return this.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin";
 	}
 
-	get getEnv(): {} {
+	get getEnv(): Envs {
 		return this.env;
 	}
 

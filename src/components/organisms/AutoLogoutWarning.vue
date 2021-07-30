@@ -24,7 +24,7 @@
 
 <script>
 import CenterSlot from "@components/atoms/CenterSlot";
-import { mapGetters } from "vuex";
+import AutoLogoutModule from "@/store/autoLogout";
 
 const toast = {
 	error401: -1,
@@ -61,14 +61,23 @@ export default {
 				return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth_error.svg";
 			return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth.svg";
 		},
-		...mapGetters("autoLogout", {
-			active: "getActive",
-			error: "getError",
-			remainingTimeInSeconds: "getRemainingTimeInSeconds",
-		}),
+		active() {
+			return AutoLogoutModule.getActive;
+		},
+		error() {
+			return AutoLogoutModule.getError;
+		},
+		remainingTimeInSeconds() {
+			return AutoLogoutModule.getRemainingTimeInSeconds;
+		},
+		toastValue() {
+			this.showToast(AutoLogoutModule.getToastValue);
+			return AutoLogoutModule.getToastValue;
+		},
 	},
 	created(ctx) {
-		this.$store.dispatch("autoLogout/init", this.$eventBus, { root: true });
+		AutoLogoutModule.init();
+		// this.$store.dispatch("autoLogout/init", this.$eventBus, { root: true });
 	},
 	beforeDestroy() {
 		//underneath is only necessary in a single page application
@@ -76,7 +85,7 @@ export default {
 	},
 	methods: {
 		extendSession() {
-			this.$store.dispatch("autoLogout/extendSession");
+			AutoLogoutModule.extendSessionAction();
 		},
 		showToast(state) {
 			switch (state) {
