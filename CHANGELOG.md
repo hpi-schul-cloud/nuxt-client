@@ -8,6 +8,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [26.7.0] - 2021-07-28
+
 - SC-9217 - Toggle function in vCustomDoublePanels
 - SC-9175 - Fixed filtering for old and future classes
 - SC-9221 - changed contact data in imprint
