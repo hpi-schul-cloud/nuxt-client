@@ -11,7 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ## [26.7.1] - 2021-08-05
 
 - SC-9236 - update THR imprint
-- SC-9236 - remove HPI foote logo from federal states instances
+- SC-9236 - remove HPI footer logo from federal states instances
 
 ## [26.7.0] - 2021-07-28
 
