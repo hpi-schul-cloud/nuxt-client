@@ -8,9 +8,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [26.7.0] - 2021-07-28
+
 - SC-9217 - Toggle function in vCustomDoublePanels
 - SC-9175 - Fixed filtering for old and future classes
 - SC-9221 - changed contact data in imprint
+- SC-9232 - Align gender specific language between legacy and nuxt
 
 ## [26.6.2] - 2021-07-21
 
