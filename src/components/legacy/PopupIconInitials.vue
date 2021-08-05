@@ -8,7 +8,7 @@
 		<div class="icon">{{ initials }}</div>
 		<div class="popuptext" :class="{ visible }">
 			<div class="username">
-				<span> {{ firstname }} {{ lastname }} <user-role /> </span>
+				<span> {{ firstname }} {{ lastname }} ({{ role }})</span>
 			</div>
 			<slot />
 		</div>
@@ -16,12 +16,7 @@
 </template>
 
 <script>
-import UserRole from "@components/legacy/UserRole";
-
 export default {
-	components: {
-		UserRole,
-	},
 	props: {
 		firstname: {
 			type: String,

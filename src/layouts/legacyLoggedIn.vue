@@ -132,9 +132,8 @@ export default {
 				: "Unknown User";
 		},
 		role() {
-			return this.user && this.user.roles && this.user.roles.includes("teacher")
-				? "Lehrer"
-				: "Schüler";
+			const roleName = this.user.roles.map((r) => r.name);
+			return this.$t(`global.topbar.roleName.${roleName[0]}`);
 		},
 		schoolName() {
 			return this.user && this.user.schoolName ? this.user.schoolName : "";
