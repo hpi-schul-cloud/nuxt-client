@@ -15,14 +15,15 @@
 		</p>
 		<p>
 			<i>verantwortlich:</i> <br />
-			Jörg Becker <br>
-			Arbeitsbereichsleiter <br>
-			Arbeitsbereich 4 | Medien und Informationstechnologie <br>
-			Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien (Thillm) <br>
-			Heinrich-Heine-Allee 2-4 <br>
-			99438 Bad Berka<br>
-			Fon: +49 (36458) 56 319 <br>
-			Fax: +49 (36458) 56 300 <br>
+			Jörg Becker <br />
+			Arbeitsbereichsleiter <br />
+			Arbeitsbereich 4 | Medien und Informationstechnologie <br />
+			Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien
+			(Thillm) <br />
+			Heinrich-Heine-Allee 2-4 <br />
+			99438 Bad Berka<br />
+			Fon: +49 (36458) 56 319 <br />
+			Fax: +49 (36458) 56 300 <br />
 			E-Mail: joerg.becker[at]thillm.de
 		</p>
 
