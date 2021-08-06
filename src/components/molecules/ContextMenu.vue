@@ -19,12 +19,13 @@
 				@keydown.up.prevent="focusPrev(index)"
 				@keydown.down.prevent="focusNext(index)"
 			>
-				<base-icon
-					v-if="action.icon"
-					:source="action['icon-source'] || 'material'"
-					:icon="action.icon"
-					class="context-menu__button-icon"
-				/>
+				<span class="context-menu__button-icon">
+					<base-icon
+						v-if="action.icon"
+						:source="action['icon-source'] || 'material'"
+						:icon="action.icon"
+					/>
+				</span>
 				<div
 					:class="{
 						'context-menu__button-text': true,
