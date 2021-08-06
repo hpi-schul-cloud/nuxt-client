@@ -8,8 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
-### Fixed
+## [26.7.1] - 2021-08-05
 
+- SC-9236 - update THR imprint
+- SC-9236 - remove HPI footer logo from federal states instances
 - SC-9169 - Fixed icon color in context menu
 
 ## [26.7.0] - 2021-07-28
