@@ -108,7 +108,7 @@ describe("store/ldap-config", () => {
 				};
 				const spyCommit = jest.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
-				expect(receivedUrl).toBe("/ldap-config?verifyOnly=true");
+				expect(receivedUrl).toBe("/v1/ldap-config?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
 				expect(spyCommit.mock.calls[1][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
@@ -124,7 +124,7 @@ describe("store/ldap-config", () => {
 				};
 				const spyCommit = jest.fn();
 				await actions.verifyData({ commit: spyCommit }, clientMockData);
-				expect(receivedUrl).toBe("/ldap-config?verifyOnly=true");
+				expect(receivedUrl).toBe("/v1/ldap-config?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
 				expect(spyCommit.mock.calls[2][0]).toBe("setVerified");
 				expect(spyCommit.mock.calls[2][1]).toStrictEqual(clientMockData);
@@ -144,7 +144,7 @@ describe("store/ldap-config", () => {
 					{ commit: spyCommit },
 					{ systemId: "systemId", systemData: clientMockData }
 				);
-				expect(receivedUrl).toBe("/ldap-config/systemId?verifyOnly=true");
+				expect(receivedUrl).toBe("/v1/ldap-config/systemId?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
 				expect(spyCommit.mock.calls[1][0]).toBe("setTemp");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
@@ -163,7 +163,7 @@ describe("store/ldap-config", () => {
 					{ commit: spyCommit },
 					{ systemId: "systemId", systemData: clientMockData }
 				);
-				expect(receivedUrl).toBe("/ldap-config/systemId?verifyOnly=true");
+				expect(receivedUrl).toBe("/v1/ldap-config/systemId?verifyOnly=true");
 				expect(spyCommit.mock.calls).toHaveLength(4);
 				expect(spyCommit.mock.calls[2][0]).toBe("setVerified");
 				expect(spyCommit.mock.calls[2][1]).toStrictEqual(clientMockData);
@@ -180,7 +180,9 @@ describe("store/ldap-config", () => {
 				};
 				const spyCommit = jest.fn();
 				await actions.submitData({ commit: spyCommit }, clientMockData);
-				expect(receivedUrl).toBe("/ldap-config?verifyOnly=false&activate=true");
+				expect(receivedUrl).toBe(
+					"/v1/ldap-config?verifyOnly=false&activate=true"
+				);
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("setSubmitted");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
@@ -201,7 +203,7 @@ describe("store/ldap-config", () => {
 					{ systemId: "systemId", systemData: clientMockData }
 				);
 				expect(receivedUrl).toBe(
-					"/ldap-config/systemId?verifyOnly=false&activate=true"
+					"/v1/ldap-config/systemId?verifyOnly=false&activate=true"
 				);
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("setSubmitted");

@@ -4,7 +4,7 @@ jest.mock("../utils/api", () => {
 	return {
 		$axios: {
 			$get: (path: string) => {
-				if (path === "v3/news") {
+				if (path === "/v3/news") {
 					return {
 						data: { mockNews: "mock news value" },
 						limit: 1,

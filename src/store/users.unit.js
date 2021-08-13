@@ -70,7 +70,9 @@ describe("store/users", () => {
 				};
 
 				await actions.createTeacher(ctxMock, teacherDataMock);
-				expect(receivedRequests[0].url).toStrictEqual("/users/admin/teachers");
+				expect(receivedRequests[0].url).toStrictEqual(
+					"/v1/users/admin/teachers"
+				);
 				expect(receivedRequests[0].params).toStrictEqual(teacherDataMock);
 			});
 		});
@@ -90,7 +92,7 @@ describe("store/users", () => {
 
 				await actions.sendRegistrationLink(ctxMock, payloadMock);
 				expect(receivedRequests[0].url).toStrictEqual(
-					"/users/mail/registrationLink"
+					"/v1/users/mail/registrationLink"
 				);
 				expect(receivedRequests[0].params).toStrictEqual(payloadMock);
 			});
@@ -113,7 +115,7 @@ describe("store/users", () => {
 
 				await actions.getQrRegistrationLinks(ctxMock, payloadMock);
 				expect(receivedRequests[0].url).toStrictEqual(
-					"/users/qrRegistrationLink"
+					"/v1/users/qrRegistrationLink"
 				);
 				expect(receivedRequests[0].params).toStrictEqual(payloadMock);
 			});
@@ -145,7 +147,9 @@ describe("store/users", () => {
 				};
 
 				await actions.createStudent(ctxMock, payloadMock);
-				expect(receivedRequests[0].url).toStrictEqual("/users/admin/students");
+				expect(receivedRequests[0].url).toStrictEqual(
+					"/v1/users/admin/students"
+				);
 				expect(receivedRequests[0].params).toStrictEqual(studentData);
 			});
 
@@ -194,7 +198,7 @@ describe("store/users", () => {
 
 				expect(receivedRequests).toHaveLength(1);
 				expect(receivedRequests[0]).toMatchObject({
-					url: `/users/v2/admin/${payload.userType}`,
+					url: `/v1/users/v2/admin/${payload.userType}`,
 					params: { ids: payload.ids },
 				});
 

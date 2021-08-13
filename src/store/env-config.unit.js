@@ -28,7 +28,7 @@ describe("store/env-config", () => {
 
 			await actions.get({ commit: spyCommit, dispatch: spyDispatch });
 
-			expect(receivedUrl).toBe("/config/app/public");
+			expect(receivedUrl).toBe("/v1/config/app/public");
 			expect(spyCommit.mock.calls).toHaveLength(1);
 			expect(spyCommit.mock.calls[0][1]).toStrictEqual(serverConfigMock);
 		});
