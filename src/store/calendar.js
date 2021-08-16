@@ -6,7 +6,7 @@ const base = serviceTemplate(baseUrl);
 const module = mergeDeep(base, {
 	actions: {
 		removeDate: async function (ctx, payload) {
-			await this.$axios.$delete("/" + baseUrl + "/" + payload.id);
+			await this.$axios.$delete("/v1/" + baseUrl + "/" + payload.id);
 		},
 	},
 });
