@@ -95,7 +95,7 @@ export const actions = {
 		if (!event) throw new SyntaxError("eventBus missing");
 		try {
 			await this.$axios.post(
-				`/lessons/${payload.lessonId}/material`,
+				`/v1/lessons/${payload.lessonId}/material`,
 				payload.material
 			);
 			event.$emit("showModal@content", "successModal");
