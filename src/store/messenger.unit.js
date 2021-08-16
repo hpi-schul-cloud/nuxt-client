@@ -37,7 +37,7 @@ describe("store/messenger", () => {
 
 				await actions.loadMessengerToken({ commit: spyCommit });
 
-				expect(receivedUrl).toBe("/messengerToken");
+				expect(receivedUrl).toBe("/v1/messengerToken");
 				expect(spyCommit.mock.calls).toHaveLength(1);
 				expect(spyCommit.mock.calls[0][0]).toBe("setMessengerToken");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(dummyReturnObject);
@@ -55,7 +55,7 @@ describe("store/messenger", () => {
 
 				await actions.loadMessengerToken({ commit: spyCommit });
 
-				expect(receivedUrl).toBe("/messengerToken");
+				expect(receivedUrl).toBe("/v1/messengerToken");
 				expect(spyCommit.mock.calls).toHaveLength(1);
 				expect(spyCommit.mock.calls[0][0]).toBe("setError");
 				expect(spyCommit.mock.calls[0][1]).toStrictEqual(dummyErrorObject);

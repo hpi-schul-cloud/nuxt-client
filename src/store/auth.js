@@ -47,9 +47,9 @@ export const actions = {
 		commit("clearAuthData");
 	},
 	async populateUser({ commit, rootState }) {
-		const user = await this.$axios.$get("/me");
+		const user = await this.$axios.$get("/v1/me");
 
-		const roles = await this.$axios.$get(`/roles/user/${user.id}`);
+		const roles = await this.$axios.$get(`/v1/roles/user/${user.id}`);
 		user.permissions = roles.reduce(
 			(acc, role) => [...new Set(acc.concat(role.permissions))],
 			[]
@@ -57,7 +57,7 @@ export const actions = {
 
 		commit("setUser", user);
 		if (user.schoolId) {
-			const school = await this.$axios.$get(`/schools/${user.schoolId}`);
+			const school = await this.$axios.$get(`/v1/schools/${user.schoolId}`);
 			commit("setSchool", school);
 		}
 		if (user.language) {
