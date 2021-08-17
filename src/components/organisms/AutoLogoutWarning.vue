@@ -77,11 +77,6 @@ export default {
 	},
 	created(ctx) {
 		AutoLogoutModule.init();
-		// this.$store.dispatch("autoLogout/init", this.$eventBus, { root: true });
-	},
-	beforeDestroy() {
-		//underneath is only necessary in a single page application
-		//this.$store.dispatch("autoLogout/reset");
 	},
 	methods: {
 		extendSession() {
@@ -110,11 +105,6 @@ export default {
 				default:
 					break;
 			}
-		},
-	},
-	onEventBus: {
-		"showToast@autologout": function (value) {
-			this.showToast(value);
 		},
 	},
 };

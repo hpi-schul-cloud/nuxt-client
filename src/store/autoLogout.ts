@@ -145,7 +145,7 @@ const extendSession = async (
 export class AutoLogoutModule extends VuexModule {
 	active: boolean = false;
 	error: boolean = false;
-	remainingTimeInSeconds: number = 80;
+	remainingTimeInSeconds: number = 3600 * 2;
 	showWarningOnRemainingSeconds: number = 3600;
 	defaultRemainingTimeInSeconds: number = 3600 * 2;
 	toastValue: number | null = null;
