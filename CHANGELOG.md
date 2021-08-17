@@ -8,6 +8,17 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+## [26.9.0] - 2021-08-13
+
+- SC-9192 - access feathers and nestjs apps over their dedicated version prefixes
+- SC-9191 run e2e tests in pull requests with 'run tests' label
+
+## [26.8.0] - 2021-08-05
+
+- SC-9236 - update THR imprint
+- SC-9236 - remove HPI footer logo from federal states instances
+- SC-9169 - Fixed icon color in context menu
+
 ## [26.7.0] - 2021-07-28
 
 - SC-9217 - Toggle function in vCustomDoublePanels

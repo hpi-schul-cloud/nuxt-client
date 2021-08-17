@@ -141,7 +141,7 @@ export default {
 					client: element.client,
 					url: element.merlinReference
 						? await this.$axios.$get(
-								`/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`
+								`/v1/edu-sharing/merlinToken/?merlinReference=${element.merlinReference}`
 						  )
 						: element.url,
 					merlinReference: element.merlinReference,

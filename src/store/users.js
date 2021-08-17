@@ -5,8 +5,8 @@ import serviceTemplate from "@utils/service-template";
 const base = serviceTemplate("users");
 const baseState = base.state();
 
-const teacherEndpoint = "/users/admin/teachers";
-const studentEndpoint = "/users/admin/students";
+const teacherEndpoint = "/v1/users/admin/teachers";
+const studentEndpoint = "/v1/users/admin/students";
 
 const module = mergeDeep(base, {
 	state: () =>
@@ -96,7 +96,7 @@ const module = mergeDeep(base, {
 			commit("setStatus", "completed");
 		},
 		async findConsentUsers({ commit }, query) {
-			const res = await this.$axios.$get(`/users/admin/students`, {
+			const res = await this.$axios.$get(`/v1/users/admin/students`, {
 				params: query,
 				paramsSerializer: (params) => {
 					return qs.stringify(params);
@@ -112,7 +112,7 @@ const module = mergeDeep(base, {
 				for (let i = 0; i < numChunks; i++) {
 					const percent = ((i + 1) * chunkSize * 100) / (numChunks * chunkSize);
 					const chunkIds = ids.slice(i * chunkSize, i * chunkSize + chunkSize);
-					await this.$axios.$delete(`/users/v2/admin/${userType}`, {
+					await this.$axios.$delete(`/v1/users/v2/admin/${userType}`, {
 						params: { ids: chunkIds },
 					});
 					chunkIds.forEach((id) => {
@@ -145,11 +145,11 @@ const module = mergeDeep(base, {
 			}
 		},
 		async sendRegistrationLink(ctx, payload = {}) {
-			const registrationLinkEndpoint = "/users/mail/registrationLink";
+			const registrationLinkEndpoint = "/v1/users/mail/registrationLink";
 			await this.$axios.$post(registrationLinkEndpoint, payload);
 		},
 		async getQrRegistrationLinks({ commit }, payload = {}) {
-			const registrationQrEndpoint = "/users/qrRegistrationLink";
+			const registrationQrEndpoint = "/v1/users/qrRegistrationLink";
 			const links = await this.$axios.$post(registrationQrEndpoint, payload);
 			commit("setQrLinks", links);
 		},

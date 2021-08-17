@@ -19,7 +19,7 @@ export const actions = {
 		const queryHash = hash(query);
 		commit("setLastQuery", queryHash);
 		try {
-			const res = await this.$axios.$get("/edu-sharing", {
+			const res = await this.$axios.$get("/v1/edu-sharing", {
 				params: query,
 			});
 
@@ -33,7 +33,7 @@ export const actions = {
 	async addResources({ commit }, payload = {}) {
 		commit("incLoading");
 		try {
-			const res = await this.$axios.$get("/edu-sharing", {
+			const res = await this.$axios.$get("/v1/edu-sharing", {
 				params: payload,
 			});
 			commit("addResources", res);
@@ -54,7 +54,7 @@ export const actions = {
 		const queryHash = hash(query);
 		commit("setLastQuery", queryHash);
 		try {
-			const res = await this.$axios.$get("/edu-sharing", {
+			const res = await this.$axios.$get("/v1/edu-sharing", {
 				params: query,
 			});
 
@@ -69,7 +69,7 @@ export const actions = {
 	async addElements({ commit }, payload = {}) {
 		commit("incLoading");
 		try {
-			const res = await this.$axios.$get("/edu-sharing", {
+			const res = await this.$axios.$get("/v1/edu-sharing", {
 				params: payload,
 			});
 			commit("addElements", res);
@@ -86,7 +86,7 @@ export const actions = {
 		};
 		if (params.courseId) {
 			//only search if courseId is existing
-			const res = await this.$axios.$get("/lessons", { params });
+			const res = await this.$axios.$get("/v1/lessons", { params });
 			commit("setLessons", res);
 		}
 	},
@@ -106,7 +106,7 @@ export const actions = {
 	},
 	async getResourceMetadata({ commit }, id) {
 		commit("setStatus", "pending");
-		const metadata = await this.$axios.$get(`/edu-sharing/${id}`);
+		const metadata = await this.$axios.$get(`/v1/edu-sharing/${id}`);
 		commit("setCurrentResource", metadata);
 		commit("setStatus", "completed");
 	},

@@ -1,7 +1,7 @@
 export const actions = {
 	async loadMessengerToken({ commit }) {
 		try {
-			const data = await this.$axios.$post("/messengerToken");
+			const data = await this.$axios.$post("/v1/messengerToken");
 			commit("setMessengerToken", data);
 		} catch (error) {
 			commit("setError", error);

@@ -118,7 +118,7 @@ export class EnvConfig extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const envs = await $axios.$get("/config/app/public");
+			const envs = await $axios.$get("/v1/config/app/public");
 			Object.entries(requiredVars).forEach(([key]) => {
 				if (envs[key] == null) {
 					console.warn(`Missing configuration by server for key ${key}`);

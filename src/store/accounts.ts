@@ -52,7 +52,7 @@ export class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.$post("/accounts/jwtTimer");
+			$axios.$post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
@@ -64,7 +64,7 @@ export class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.$post("/accounts/jwtTimer");
+			$axios.$post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
