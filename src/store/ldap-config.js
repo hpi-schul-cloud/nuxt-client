@@ -67,7 +67,7 @@ export const actions = {
 	async getData({ commit }, id) {
 		try {
 			commit("setStatus", "pending");
-			const { data } = await this.$axios.get(`/ldap-config/${id}`);
+			const { data } = await this.$axios.get(`/v1/ldap-config/${id}`);
 			commit("setData", formatServerData(data));
 			commit("setStatus", "completed");
 		} catch (error) {
