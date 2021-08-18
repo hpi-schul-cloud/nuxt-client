@@ -24,7 +24,7 @@
 		</v-list-item-content>
 		<v-list-item-action class="hidden-xs-only ml-4">
 			<v-list-item-subtitle>{{
-				$t("components.molecules.VHomeworkItemTeacher.submitted")
+				$t("pages.homeworks.labels.submitted")
 			}}</v-list-item-subtitle>
 			<v-list-item-title
 				>{{ homework.status.submitted }}/{{
@@ -34,7 +34,7 @@
 		</v-list-item-action>
 		<v-list-item-action class="hidden-xs-only">
 			<v-list-item-subtitle>{{
-				$t("components.molecules.VHomeworkItemTeacher.graded")
+				$t("pages.homeworks.labels.graded")
 			}}</v-list-item-subtitle>
 			<v-list-item-title>{{ homework.status.graded }}</v-list-item-title>
 		</v-list-item-action>
