@@ -12,10 +12,10 @@
 </template>
 
 <script>
+import ContentModule from "@/store/content";
 import LernstoreDetailView from "@components/organisms/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@components/organisms/LernstoreCollectionDetailView";
 import BaseSpinner from "@components/base/BaseSpinner";
-import { mapGetters } from "vuex";
 
 export default {
 	meta: {
@@ -33,18 +33,21 @@ export default {
 			: "plain";
 	},
 	computed: {
-		...mapGetters("content", {
-			resource: "getCurrentResource",
-			collectionsFeatureFlag: "getCollectionsFeatureFlag",
-			status: "getStatus",
-			isCollection: "isCollection",
-		}),
+		resource() {
+			return ContentModule.getCurrentResource;
+		},
+		collectionsFeatureFlag() {
+			return ContentModule.collectionsFeatureFlag;
+		},
+		status() {
+			return ContentModule.getStatus;
+		},
+		isCollection() {
+			return ContentModule.isCollection;
+		},
 	},
 	async created() {
-		await this.$store.dispatch(
-			"content/getResourceMetadata",
-			this.$route.params.id
-		);
+		await ContentModule.getResourceMetadata(this.$route.params.id);
 	},
 };
 </script>

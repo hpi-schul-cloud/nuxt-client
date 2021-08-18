@@ -7,6 +7,7 @@ import {
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
+import ContentModule from "@/store/content";
 
 type Status = "pending" | "completed" | "error" | "";
 
@@ -125,6 +126,8 @@ export class EnvConfig extends VuexModule {
 				}
 			});
 			this.setEnvs(envs);
+
+			ContentModule.init();
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);

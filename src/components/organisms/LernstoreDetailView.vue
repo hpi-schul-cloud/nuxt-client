@@ -163,6 +163,8 @@
 </template>
 
 <script>
+import ContentModule from "@/store/content";
+
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
 
@@ -285,6 +287,7 @@ export default {
 				: this.role;
 		},
 		goBack() {
+			ContentModule.clearCurrentResource();
 			if (window.history.length > 1) {
 				this.$router && this.$router.back();
 			} else {
