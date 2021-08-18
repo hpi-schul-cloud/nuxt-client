@@ -91,7 +91,7 @@ describe("store/ldap-config", () => {
 				};
 				const spyCommit = jest.fn();
 				await actions.getData({ commit: spyCommit }, "id");
-				expect(receivedUrl).toBe("/ldap-config/id");
+				expect(receivedUrl).toBe("/v1/ldap-config/id");
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("setData");
 				expect(spyCommit.mock.calls[1][1]).toStrictEqual(clientMockData);
