@@ -44,6 +44,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FilePathsModule from "@/store/filePaths";
 
 export default {
 	computed: {
@@ -66,8 +67,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: this.$store.getters["filePaths/getSpecificFiles"]
-						.termsOfUseSchool,
+					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",

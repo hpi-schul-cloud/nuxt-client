@@ -8,6 +8,7 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import ContentModule from "@/store/content";
+import FilePathsModule from "@/store/filePaths";
 
 type Status = "pending" | "completed" | "error" | "";
 
@@ -128,6 +129,7 @@ export class EnvConfig extends VuexModule {
 			this.setEnvs(envs);
 
 			ContentModule.init();
+			FilePathsModule.init();
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
