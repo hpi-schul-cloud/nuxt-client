@@ -13,6 +13,10 @@
 
 <script>
 export default {
+	model: {
+		prop: "value",
+		event: "input-changed",
+	},
 	props: {
 		value: {
 			type: Boolean,

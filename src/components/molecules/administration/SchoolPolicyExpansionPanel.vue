@@ -51,9 +51,10 @@ export default {
 	},
 	methods: {
 		schoolPolicyTitle(schoolPolicy) {
-			return `${schoolPolicy.title} ${this.$t(
-				"common.words.from"
-			)} ${printDateTimeFromStringUTC(schoolPolicy.publishedAt)}`;
+			return this.$t("pages.administration.school.index.schoolPolicies.from", {
+				title: schoolPolicy.title,
+				publishedAt: printDateTimeFromStringUTC(schoolPolicy.publishedAt),
+			});
 		},
 	},
 };

@@ -155,17 +155,15 @@
 			</template>
 			<privacy-settings
 				v-else
-				:privacy-settings="{
-					permissions: localSchool.permissions,
-					features: localSchool.features,
-				}"
-				@update-privacy-settings="updatePrivacySettings"
+				:permissions="localSchool.permissions"
+				:features="localSchool.features"
+				@update-privacy-settings="onUpdatePrivacySettings"
+				@update-feature-settings="onUpdateFeatureSettings"
 			></privacy-settings>
 			<v-btn class="my-5" color="primary" depressed @click="save">
 				{{ $t("pages.administration.school.index.generalSettings.save") }}
 			</v-btn>
 		</v-form>
-		{{ console.log(school, localSchool) }}
 	</section>
 </template>
 
@@ -189,7 +187,7 @@ export default {
 				timezone: "",
 				language: "",
 				permissions: {},
-				features: [],
+				features: {},
 				fileStorageType: "",
 				fileStorageTotal: 0,
 			},
@@ -206,7 +204,6 @@ export default {
 			fileStorageTotal: "getFileStorageTotal",
 			loading: "getLoading",
 		}),
-		console: () => console, // TODO - delete when done
 		languages() {
 			return this.availableLanguages.split(",").map((lang) => {
 				const name = this.$t(
@@ -216,16 +213,9 @@ export default {
 			});
 		},
 	},
-	// TODO - watch for school changes, doesn't seem to be neccessary anymore?
-	/* watch: {
-		school(updatedSchool) {
-			console.log("hello");
-			this.localSchool = updatedSchool;
-		},
-	}, */
 	async created() {
 		this.fetchFileStorageTotal();
-		this.localSchool = { ...this.school };
+		this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
 		this.localSchool.logo = await dataUrlToFile(
 			this.school.logo_dataUrl,
 			"logo"
@@ -236,26 +226,18 @@ export default {
 		toBase64,
 		dataUrlToFile,
 		...mapActions("schools", ["fetchFileStorageTotal", "update"]),
-		updatePrivacySettings(value, settingName) {
+		onUpdatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
-			if (keys[0] === "features") {
-				if (value) {
-					this.localSchool.features.push(keys[1]);
-				} else {
-					this.localSchool.features = this.localSchool.features.filter(
-						(feature) => feature !== keys[1]
-					);
-				}
-			}
-			if (keys[0] === "permissions") {
-				const newPermissions = {
-					...this.localSchool.permissions,
-					[keys[1]]: {
-						[keys[2]]: value,
-					},
-				};
-				this.localSchool.permissions = newPermissions;
-			}
+			const newPermissions = {
+				...this.localSchool.permissions,
+				[keys[0]]: {
+					[keys[1]]: value,
+				},
+			};
+			this.localSchool.permissions = newPermissions;
+		},
+		onUpdateFeatureSettings(value, settingName) {
+			this.localSchool.features[settingName] = value;
 		},
 		async save() {
 			const updatedSchool = {
@@ -281,7 +263,6 @@ export default {
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}
-			console.log("updated", updatedSchool);
 			this.update(updatedSchool);
 		},
 	},

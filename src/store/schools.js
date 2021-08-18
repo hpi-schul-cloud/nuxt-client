@@ -1,3 +1,36 @@
+const SCHOOL_FEATURES = [
+	"rocketChat",
+	"videoconference",
+	"messenger",
+	"studentVisibility", // deprecated
+	"messengerSchoolRoom",
+	"messengerStudentRoomCreate",
+];
+
+function transformSchoolServerToClient(school) {
+	const featureObject = {};
+	SCHOOL_FEATURES.forEach((schoolFeature) => {
+		if (school.features.includes(schoolFeature)) {
+			featureObject[schoolFeature] = true;
+		} else {
+			featureObject[schoolFeature] = false;
+		}
+	});
+	school.features = featureObject;
+	return school;
+}
+
+function transformSchoolClientToServer(school) {
+	const featureArray = [];
+	SCHOOL_FEATURES.forEach((schoolFeature) => {
+		if (school.features[schoolFeature]) {
+			featureArray.push(schoolFeature);
+		}
+	});
+	school.features = featureArray;
+	return school;
+}
+
 const module = {
 	state() {
 		return {
@@ -19,7 +52,8 @@ const module = {
 					const school = await this.$axios.$get(
 						`/schools/${rootState.auth.user.schoolId}`
 					);
-					commit("setSchool", school);
+
+					commit("setSchool", transformSchoolServerToClient(school));
 					await dispatch("schools/fetchCurrentYear", {}, { root: true });
 					await dispatch("schools/fetchFederalState", {}, { root: true });
 					await dispatch("schools/fetchSystems", {}, { root: true });
@@ -98,12 +132,9 @@ const module = {
 		},
 		async update({ commit }, payload) {
 			commit("setLoading", true);
+			const school = transformSchoolClientToServer(payload);
 			try {
-				const data = await this.$axios.$patch(
-					`/schools/${payload.id}`,
-					payload
-				);
-				console.log("data", data);
+				const data = await this.$axios.$patch(`/schools/${school.id}`, school);
 				commit("setSchool", data);
 				commit("setLoading", false);
 			} catch (error) {
