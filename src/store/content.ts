@@ -11,20 +11,94 @@ import { isCollectionHelper } from "@utils/helpers";
 import EnvConfigModule from "@/store/env-config";
 import hash from "object-hash";
 
-type Status = "pending" | "completed" | "error" | "";
+type Query = {
+	$limit: number;
+	$skip: number;
+	searchQuery: string;
+};
 
-type BusinessError = {
-	statusCode: string;
-	message: string;
+type Resource = {
+	access: string[];
+	aspects: string[];
+	collection: any;
+	commentCount: number | null;
+	content: {};
+	createdAt: any;
+	createdBy: {};
+	downloadUrl: string | null;
+	iconURL: string | null;
+	isDirectory: boolean;
+	license: {};
+	mediatype: string;
+	metadataset: string;
+	mimetype: string;
+	modifiedAt: any;
+	modifiedBy: {};
+	name: string;
+	owner: {};
+	parent: {};
+	preview: {};
+	properties: {};
+	rating: any;
+	ref: {};
+	remote: any;
+	repositoryType: string;
+	size: string;
+	title: string;
+	type: string;
 };
 
 type Resources = {
 	total: number;
 	limit: number;
 	skip: number;
-	data: string[];
+	data: Resource[];
 	pagination: undefined;
 };
+
+type Elements = {
+	data: any[];
+	limit: number;
+	skip: number;
+	total: number;
+	pagination: undefined;
+};
+
+type Lesson = {
+	contents: any[];
+	courseId: string;
+	createdAt: string;
+	date: string;
+	hidden: boolean;
+	isCopyFrom: any;
+	materialIds: string[];
+	name: string;
+	position: number;
+	time: string;
+	updatedAt: string;
+	__v: number;
+	_id: string;
+};
+
+type Lessons = {
+	data: Lesson[];
+	limit: number;
+	skip: number;
+	total: number;
+};
+
+type AddToLessonQuery = {
+	lessonId: string;
+	event: {};
+	material: {
+		client: string;
+		merlinReference: string;
+		title: string;
+		url: string;
+	};
+};
+
+type Status = "pending" | "completed" | "error" | "";
 
 const initialState = () => ({
 	resources: {
@@ -39,16 +113,49 @@ const initialState = () => ({
 		limit: 0,
 		skip: 0,
 		data: [],
+		pagination: undefined,
 	},
 	selected: 0,
 	lessons: {
+		total: 0,
+		limit: 0,
+		skip: 0,
 		data: [],
 	},
 	loadingCounter: 0,
 	loading: false,
 	lastQuery: "",
 	collectionsFeatureFlag: null,
-	currentResource: {},
+	currentResource: {
+		access: [],
+		aspects: [],
+		collection: null,
+		commentCount: null,
+		content: {},
+		createdAt: null,
+		createdBy: {},
+		downloadUrl: "",
+		iconURL: "",
+		isDirectory: false,
+		license: {},
+		mediatype: "",
+		metadataset: "",
+		mimetype: "",
+		modifiedAt: null,
+		modifiedBy: {},
+		name: "",
+		owner: {},
+		parent: {},
+		preview: {},
+		properties: {},
+		rating: null,
+		ref: {},
+		remote: null,
+		repositoryType: "",
+		size: "",
+		title: "",
+		type: "",
+	},
 	status: null,
 	notificationModal: null,
 });
@@ -62,19 +169,20 @@ const initialState = () => ({
 })
 export class Content extends VuexModule {
 	resources: Resources = initialState().resources;
-	elements: any = initialState().elements;
-	selected = initialState().selected;
-	lessons = initialState().lessons;
-	loadingCounter = initialState().loadingCounter;
-	loading = initialState().loading;
-	lastQuery = initialState().lastQuery;
-	collectionsFeatureFlag = initialState().collectionsFeatureFlag;
-	currentResource: any = initialState().currentResource;
-	status = initialState().status;
-	notificationModal = initialState().notificationModal;
+	elements: Elements = initialState().elements;
+	selected: number = initialState().selected;
+	lessons: Lessons = initialState().lessons;
+	loadingCounter: number = initialState().loadingCounter;
+	loading: boolean = initialState().loading;
+	lastQuery: string = initialState().lastQuery;
+	collectionsFeatureFlag: boolean | null =
+		initialState().collectionsFeatureFlag;
+	currentResource: Resource = initialState().currentResource;
+	status: Status | null = initialState().status;
+	notificationModal: string | null = initialState().notificationModal;
 
 	@Mutation
-	setSelectedElement(payload: any): void {
+	setSelectedElement(payload: { id: string; value: boolean }): void {
 		for (let i = 0; i < this.elements.data.length; i++) {
 			if (this.elements.data[i].ref.id === payload.id) {
 				this.elements.data[i]["stateSelected"] = payload.value;
@@ -87,13 +195,15 @@ export class Content extends VuexModule {
 	}
 
 	@Mutation
-	setResources(payload: any): void {
+	setResources(payload: { hash: string; result: Resources }): void {
 		if (this.lastQuery === payload.hash) this.resources = payload.result;
 	}
 
 	@Mutation
-	addResourcesMutation(payload: any): void {
-		payload.data.forEach((resource: any) => this.resources.data.push(resource));
+	addResourcesMutation(payload: Resources): void {
+		payload.data.forEach((resource: Resource) =>
+			this.resources.data.push(resource)
+		);
 		this.resources = {
 			...this.resources,
 			pagination: payload.pagination,
@@ -101,13 +211,15 @@ export class Content extends VuexModule {
 	}
 
 	@Mutation
-	setElements(payload: any): void {
+	setElements(payload: { hash: string; result: Elements }): void {
 		if (this.lastQuery === payload.hash) this.elements = payload.result;
 	}
 
 	@Mutation
-	addElementsMutation(payload: any): void {
-		payload.data.forEach((element: any) => this.elements.data.push(element));
+	addElementsMutation(payload: Elements): void {
+		payload.data.forEach((element: Resource) =>
+			this.elements.data.push(element)
+		);
 		this.elements = {
 			...this.elements,
 			pagination: payload.pagination,
@@ -132,7 +244,7 @@ export class Content extends VuexModule {
 	}
 
 	@Mutation
-	setLastQuery(payload: any): void {
+	setLastQuery(payload: string): void {
 		this.lastQuery = payload;
 	}
 
@@ -153,32 +265,27 @@ export class Content extends VuexModule {
 	}
 
 	@Mutation
-	setLessons(payload: any): void {
+	setLessons(payload: Lessons): void {
 		this.lessons = payload;
 	}
 
 	@Mutation
-	initMutation(payload: any): void {
+	initMutation(payload: boolean | null): void {
 		this.collectionsFeatureFlag = payload;
 	}
 
 	@Mutation
-	setCurrentResource(payload: any): void {
+	setCurrentResource(payload: Resource): void {
 		this.currentResource = payload;
 	}
 
 	@Mutation
-	clearCurrentResource(): void {
-		this.currentResource = initialState().currentResource;
-	}
-
-	@Mutation
-	setStatus(payload: any): void {
+	setStatus(payload: Status | null): void {
 		this.status = payload;
 	}
 
 	@Mutation
-	setNotificationModal(payload: any): void {
+	setNotificationModal(payload: string): void {
 		this.notificationModal = payload;
 	}
 
@@ -226,22 +333,22 @@ export class Content extends VuexModule {
 	}
 
 	@Action
-	selectElement(refId: any): void {
+	selectElement(refId: string): void {
 		this.setSelectedElement({ id: refId, value: true });
 	}
 
 	@Action
-	unselectElement(refId: any): void {
+	unselectElement(refId: string): void {
 		this.setSelectedElement({ id: refId, value: false });
 	}
 
 	@Action
-	async getResources(payload: any): Promise<void> {
+	async getResources(payload: Query): Promise<void> {
 		this.incLoading();
 		const query = {
 			$limit: 12,
 			$skip: 0,
-			...payload,
+			searchQuery: payload.searchQuery,
 		};
 		const queryHash = hash(query);
 		this.setLastQuery(queryHash);
@@ -259,7 +366,7 @@ export class Content extends VuexModule {
 	}
 
 	@Action
-	async addResources(payload = {}) {
+	async addResources(payload: Query) {
 		this.incLoading();
 		try {
 			const res = await $axios.$get("/v1/edu-sharing", {
@@ -312,7 +419,7 @@ export class Content extends VuexModule {
 	}
 
 	@Action
-	async getLessons(payload: any) {
+	async getLessons(payload: string) {
 		const params = {
 			courseId: payload,
 		};
@@ -324,7 +431,7 @@ export class Content extends VuexModule {
 	}
 
 	@Action
-	async addToLesson(payload: any) {
+	async addToLesson(payload: AddToLessonQuery) {
 		try {
 			await $axios.post(
 				`/lessons/${payload.lessonId}/material`,
@@ -337,7 +444,7 @@ export class Content extends VuexModule {
 	}
 
 	@Action
-	async getResourceMetadata(id: any) {
+	async getResourceMetadata(id: string) {
 		this.setStatus("pending");
 		const metadata = await $axios.$get(`/v1/edu-sharing/${id}`);
 		this.setCurrentResource(metadata);
