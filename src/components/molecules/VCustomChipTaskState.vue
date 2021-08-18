@@ -18,6 +18,23 @@
 		<v-icon left small> $hourglassDisabled </v-icon>
 		{{ $t("pages.homeworks.labels.overdue") }}
 	</v-chip>
+	<v-chip
+		v-else-if="type === 'submitted'"
+		color="orange lighten-3"
+		small
+		data-test-id="submittedLabel"
+	>
+		{{ $t("pages.homeworks.labels.submitted") }}
+	</v-chip>
+	<v-chip
+		v-else-if="type === 'graded'"
+		color="error lighten-5"
+		text-color="black"
+		small
+		data-test-id="gradedLabel"
+	>
+		{{ $t("pages.homeworks.labels.graded") }}
+	</v-chip>
 </template>
 
 <script>
@@ -29,11 +46,11 @@ export default {
 		type: {
 			type: String,
 			required: true,
-			validator: (value) => ["warning", "overdue"].includes(value),
+			validator: (value) => ["warning", "overdue", "submitted", "graded"].includes(value),
 		},
 		dueDate: {
 			type: String,
-			required: true,
+			required: false,
 			validator: (value) => dayjs(value).isValid(),
 		},
 		shortenUnit: {
@@ -49,27 +66,27 @@ export default {
 
 				const label = shorten
 					? this.$t(
-							"components.molecules.VCustomChipTimeRemaining.hintMinShort"
+							"components.molecules.VCustomChipTaskState.hintMinShort"
 					  )
 					: this.$tc(
-							"components.molecules.VCustomChipTimeRemaining.hintMinutes",
+							"components.molecules.VCustomChipTaskState.hintMinutes",
 							diffMins
 					  );
 
 				return `${this.$t(
-					"components.molecules.VCustomChipTimeRemaining.hintDueTime"
+					"components.molecules.VCustomChipTaskState.hintDueTime"
 				)} ${diffMins} ${label}`;
 			} else {
 				const label = shorten
 					? this.$t(
-							"components.molecules.VCustomChipTimeRemaining.hintHoursShort"
+							"components.molecules.VCustomChipTaskState.hintHoursShort"
 					  )
 					: this.$tc(
-							"components.molecules.VCustomChipTimeRemaining.hintHours",
+							"components.molecules.VCustomChipTaskState.hintHours",
 							diffHrs
 					  );
 				return `${this.$t(
-					"components.molecules.VCustomChipTimeRemaining.hintDueTime"
+					"components.molecules.VCustomChipTaskState.hintDueTime"
 				)} ${diffHrs} ${label}`;
 			}
 		},

@@ -21,24 +21,32 @@
 				"
 			/>
 			<v-spacer />
-			<v-custom-chip-time-remaining
+			<v-custom-chip-task-state
 				v-if="isCloseToDueDate(homework.duedate)"
 				type="warning"
 				:due-date="homework.duedate"
 				:shorten-date="$vuetify.breakpoint.xsOnly"
 			/>
-			<v-custom-chip-time-remaining
+			<v-custom-chip-task-state
 				v-else-if="isOverDue(homework.duedate)"
 				type="overdue"
 				:due-date="homework.duedate"
 				:shorten-date="$vuetify.breakpoint.xsOnly"
+			/>
+			<v-custom-chip-task-state
+				v-else-if="isGraded(homework.status.graded)"
+				type="graded"
+			/>
+			<v-custom-chip-task-state
+				v-else-if="isSubmitted(homework.status.submitted)"
+				type="submitted"
 			/>
 		</v-list-item-action>
 	</v-list-item>
 </template>
 
 <script>
-import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
+import VCustomChipTaskState from "@components/molecules/VCustomChipTaskState";
 import taskIconSvg from "@assets/img/courses/task-new.svg";
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import {
@@ -49,7 +57,7 @@ import {
 const homeworkRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
-	components: { VCustomChipTimeRemaining },
+	components: { VCustomChipTaskState },
 	props: {
 		homework: {
 			type: Object,
@@ -88,6 +96,12 @@ export default {
 		},
 		isOverDue(dueDate) {
 			return dueDate && new Date(dueDate) < new Date();
+		},
+		isSubmitted() {
+			return true;
+		},
+		isGraded() {
+			return true;
 		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;
