@@ -8,7 +8,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
- - BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
+- BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
 
 ## [26.9.1] - 2021-08-16
 
