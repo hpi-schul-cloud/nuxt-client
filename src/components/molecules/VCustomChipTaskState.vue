@@ -57,9 +57,7 @@ export default {
 				const diffMins = fromNowToFuture(dueDate, "minutes");
 
 				const label = shorten
-					? this.$t(
-							"components.molecules.VCustomChipTaskState.hintMinShort"
-					  )
+					? this.$t("components.molecules.VCustomChipTaskState.hintMinShort")
 					: this.$tc(
 							"components.molecules.VCustomChipTaskState.hintMinutes",
 							diffMins
@@ -70,9 +68,7 @@ export default {
 				)} ${diffMins} ${label}`;
 			} else {
 				const label = shorten
-					? this.$t(
-							"components.molecules.VCustomChipTaskState.hintHoursShort"
-					  )
+					? this.$t("components.molecules.VCustomChipTaskState.hintHoursShort")
 					: this.$tc(
 							"components.molecules.VCustomChipTaskState.hintHours",
 							diffHrs
