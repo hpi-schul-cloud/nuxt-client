@@ -160,7 +160,7 @@ export default {
 		display: none;
 		width: 100%;
 		height: var(--sidebar-item-height);
-		background-color: var(--color-secondary);
+		background-color: var(--color-primary);
 	}
 
 	.logo-full {

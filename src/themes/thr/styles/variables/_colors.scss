@@ -9,10 +9,10 @@
 	--color-secondary-dark: #bb3b00;
 	--logo-gradient: linear-gradient(
 		45deg,
-		var(--color-secondary),
-		var(--color-secondary-light)
+		var(--color-primary),
+		var(--color-primary-light)
 	);
 	--color-sidebar-active-bg: rgba(24, 88, 136, 0.15);
-	--color-sidebar-menu-item: var(--color-secondary);
-	--color-sidebar-menu-item-active: var(--color-secondary-dark);
+	--color-sidebar-menu-item: var(--color-primary);
+	--color-sidebar-menu-item-active: var(--color-primary-dark);
 }
