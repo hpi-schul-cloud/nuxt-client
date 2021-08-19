@@ -505,6 +505,40 @@ describe("store/schools", () => {
 					expect.any(Object)
 				);
 			});
+
+			it("should trigger error and goes into the catch block", async () => {
+				const receivedRequests = [];
+				const systemId = "id_1";
+				const ctxMock = {
+					commit: jest.fn(),
+					dispatch: jest.fn(),
+					rootState: {
+						schools: {
+							systems: [{ _id: "id_1" }, { _id: "id_2" }, { _id: "id_3" }],
+							school: {
+								id: "schoolId",
+							},
+						},
+					},
+				};
+
+				actions.$axios = {
+					$patch: async (url) => {
+						receivedRequests.push({ url });
+						return { data: "some data" };
+					},
+				};
+
+				await actions.deleteSystem(ctxMock, systemId);
+				expect(receivedRequests).toHaveLength(0);
+				expect(ctxMock.commit.mock.calls).toHaveLength(3);
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual("setError");
+				expect(ctxMock.commit.mock.calls[1][1]).toStrictEqual(
+					expect.any(Object)
+				);
+				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("setLoading");
+				expect(ctxMock.commit.mock.calls[2][1]).toStrictEqual(false);
+			});
 		});
 	});
 
@@ -617,17 +651,14 @@ describe("store/schools", () => {
 
 		describe("getFileStorageTotal", () => {
 			it("should return the fileStorageTotal state", () => {
-				const fileStorageTotal = {
-					_id: "123",
-					name: "some dummy data",
-				};
+				const fileStorageTotal = 0;
 				const mockState = {
 					fileStorageTotal,
 				};
 
 				const expectedState = getters.getFileStorageTotal(mockState);
 
-				expect(expectedState).toStrictEqual(expect.any(Object));
+				expect(expectedState).toStrictEqual(0);
 				expect(expectedState).toBe(fileStorageTotal);
 			});
 		});
