@@ -533,6 +533,62 @@ describe("store/schools", () => {
 				expect(mockState.school).toStrictEqual(schoolDataToBeChanged);
 			});
 		});
+
+		describe("setFileStorageTotal", () => {
+			it("should set the fileStorageTotal data", () => {
+				const mockState = {
+					fileStorageTotal: 0,
+				};
+
+				mutations.setFileStorageTotal(mockState, 1);
+				expect(mockState.fileStorageTotal).toStrictEqual(1);
+			});
+		});
+
+		describe("setFederalState", () => {
+			it("should set the federalState data", () => {
+				const mockState = {
+					federalState: {
+						_id: "0000b186816abba584714c57",
+						name: "Mecklenburg-Vorpommern",
+						abbreviation: "MV",
+					},
+				};
+
+				const expectedFileStorageState = {
+					_id: "0000b186816abba584714c56",
+					name: "Hessen",
+					abbreviation: "HE",
+				};
+
+				mutations.setFederalState(mockState, expectedFileStorageState);
+				expect(mockState.federalState).toStrictEqual(expectedFileStorageState);
+			});
+		});
+
+		describe("setSystems", () => {
+			it("should set the systems data", () => {
+				const mockState = {
+					systems: ["systems_id_1"],
+				};
+
+				const expectedSystemState = ["systems_id_2"];
+
+				mutations.setSystems(mockState, expectedSystemState);
+				expect(mockState.systems).toStrictEqual(expectedSystemState);
+			});
+		});
+
+		describe("setLoading", () => {
+			it("should set the loading data", () => {
+				const mockState = {
+					loading: false,
+				};
+
+				mutations.setLoading(mockState, true);
+				expect(mockState.loading).toStrictEqual(true);
+			});
+		});
 	});
 
 	describe("getters", () => {
