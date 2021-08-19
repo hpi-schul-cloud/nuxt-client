@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Changed
+
+-   BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
+
 ## [26.9.0] - 2021-08-13
 
 - SC-9192 - access feathers and nestjs apps over their dedicated version prefixes
