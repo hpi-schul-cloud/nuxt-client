@@ -6,7 +6,7 @@ metadata:
   labels:
     app: nuxtclient
 spec:
-  replicas: {{ NUXTCLIENT_REPLICAS|default("2", true) }}
+  replicas: {{ NUXTCLIENT_REPLICAS|default("1", true) }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -66,11 +66,11 @@ spec:
           periodSeconds: 5
         resources:
           limits:
-            cpu: "2000m"
-            memory: "4Gi"
+            cpu: {{ NUXTCLIENT_CPU_LIMITS|default("2000m", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_LIMITS|default("4Gi", true) }}
           requests:
-            cpu: "1000m"
-            memory: "4Gi"
+            cpu: {{ NUXTCLIENT_CPU_REQUESTS|default("100m", true) }}
+            memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("128Mi", true) }}
       volumes:
       - name: http-headers
         configMap:
