@@ -538,7 +538,6 @@
 	"pages.homeworks.labels.noCoursesAvailable": "Es gibt keinen Kurs mit diesem Namen.",
 	"pages.homeworks.labels.noDueDate": "Kein Abgabedatum",
 	"pages.homeworks.labels.overdue": "Verpasst",
-	"pages.homeworks.labels.submitted": "Erledigt",
 	"pages.homeworks.labels.graded": "Bewertet",
 	"pages.homeworks.labels.filter": "Filtern nach Kursen",
 	"pages.homeworks.subtitleAssigned": "Gestellte Aufgaben",

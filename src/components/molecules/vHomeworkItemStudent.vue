@@ -37,10 +37,6 @@
 				v-else-if="isGraded(homework.status.graded)"
 				type="graded"
 			/>
-			<v-custom-chip-task-state
-				v-else-if="isSubmitted(homework.status.submitted)"
-				type="submitted"
-			/>
 		</v-list-item-action>
 	</v-list-item>
 </template>
@@ -96,9 +92,6 @@ export default {
 		},
 		isOverDue(dueDate) {
 			return dueDate && new Date(dueDate) < new Date();
-		},
-		isSubmitted() {
-			return true;
 		},
 		isGraded() {
 			return true;

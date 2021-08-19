@@ -533,7 +533,6 @@
 	"pages.homeworks.labels.noCoursesAvailable": "There are no courses with this name.",
 	"pages.homeworks.labels.noDueDate": "No submission date",
 	"pages.homeworks.labels.overdue": "Missed",
-	"pages.homeworks.labels.submitted": "Submitted",
 	"pages.homeworks.labels.graded": "Graded",
 	"pages.homeworks.subtitleAssigned": "Assigned tasks",
 	"pages.homeworks.labels.filter": "Filter by course",

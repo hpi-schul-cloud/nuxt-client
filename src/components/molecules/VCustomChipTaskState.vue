@@ -19,16 +19,8 @@
 		{{ $t("pages.homeworks.labels.overdue") }}
 	</v-chip>
 	<v-chip
-		v-else-if="type === 'submitted'"
-		color="orange lighten-3"
-		small
-		data-test-id="submittedLabel"
-	>
-		{{ $t("pages.homeworks.labels.submitted") }}
-	</v-chip>
-	<v-chip
 		v-else-if="type === 'graded'"
-		color="error lighten-5"
+		color="blue lighten-4"
 		text-color="black"
 		small
 		data-test-id="gradedLabel"
@@ -46,7 +38,7 @@ export default {
 		type: {
 			type: String,
 			required: true,
-			validator: (value) => ["warning", "overdue", "submitted", "graded"].includes(value),
+			validator: (value) => ["warning", "overdue", "graded"].includes(value),
 		},
 		dueDate: {
 			type: String,
