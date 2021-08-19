@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Changed
+
+-   BC-14 - changed thr contact address
+
 ## [26.9.1] - 2021-08-16
 
 - SC-9192 - fix add material to course lesson and load exsiting ldap config for modification
