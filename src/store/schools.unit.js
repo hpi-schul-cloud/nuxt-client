@@ -578,10 +578,13 @@ describe("store/schools", () => {
 
 		describe("getCurrentYear", () => {
 			it("should return the current year state", () => {
-				const currentYear = "id"
+				const currentYear = {
+					id: "id_123",
+					data: "some data",
+				};
 				const mockState = {
 					currentYear,
-				}
+				};
 				const expectedState = getters.getCurrentYear(mockState);
 				expect(expectedState).toStrictEqual(expect.any(Object));
 				expect(expectedState).toBe(currentYear);
@@ -590,60 +593,41 @@ describe("store/schools", () => {
 
 		describe("getFederalState", () => {
 			it("should return the federalState state", () => {
-				const federalState = 'state_id'
+				const federalState = {
+					id: "id_123",
+					data: "some data",
+				};
 				const mockState = {
 					federalState,
-				}
+				};
 				const expectedState = getters.getFederalState(mockState);
 				expect(expectedState).toStrictEqual(expect.any(Object));
 				expect(expectedState).toBe(federalState);
 			});
 		});
+
 		describe("getSystems", () => {
 			it("should return the systems state", () => {
-				const systemsState = ['system']
+				const systems = ["system"];
 				const mockState = {
-					systemsState,
-				}
+					systems,
+				};
 				const expectedState = getters.getSystems(mockState);
-				expect(expectedState).toStrictEqual(expect.any(Object));
-				expect(expectedState).toBe(systemsState);
+				expect(expectedState).toStrictEqual(expect.any(Array));
+				expect(expectedState).toBe(systems);
 			});
 		});
+
 		describe("getLoading", () => {
 			it("should return the loading state", () => {
-				const loadingState = false
+				const loading = false;
 				const mockState = {
-					loadingState,
-				}
+					loading,
+				};
 				const expectedState = getters.getLoading(mockState);
-				expect(expectedState).toStrictEqual(expect.any(Object));
-				expect(expectedState).toBe(loadingState);
+				expect(expectedState).toStrictEqual(expect.any(Boolean));
+				expect(expectedState).toBe(loading);
 			});
 		});
-		describe("getError", () => {
-			it("should return the error state", () => {
-				const errorState = null
-				const mockState = {
-					errorState
-				}
-				const expectedState = getters.getError(mockState);
-				expect(expectedState).toStrictEqual(expect.any(Object));
-				expect(expectedState).toBe(errorState);
-			});
-		});
-		describe("schoolIsExternallyManaged", () => {
-			it("should return the schoolIsExternallyManaged state", () => {
-				const isExternallyManaged = true
-				const mockState = {
-					isExternallyManaged
-				}
-				const expectedState = getters.getError(mockState);
-				expect(expectedState).toStrictEqual(expect.any(Object));
-				expect(expectedState).toBe(isExternallyManaged);
-			});
-		});
-
-
 	});
 });
