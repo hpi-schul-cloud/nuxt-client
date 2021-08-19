@@ -10,7 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
--   BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
+- BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
 
 ## [26.9.0] - 2021-08-13
 
