@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-14 - changed thr contact address
 - BC-64 - execute e2e tests via push on main
 - BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
 
