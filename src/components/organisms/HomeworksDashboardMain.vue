@@ -1,14 +1,26 @@
 <template>
-	<v-container class="v-container">
-		<h1 v-if="status === 'pending'">
-			<v-skeleton-loader type="text" :max-width="'30%'" />
-		</h1>
-		<template v-else>
-			<h1 v-if="isListFilled" class="h4">
-				{{ getTitle() }}
-			</h1>
-		</template>
+	<section>
 		<section>
+			<v-container v-if="status === 'pending'">
+				<h1>
+					<v-skeleton-loader type="text" :max-width="'30%'" />
+				</h1>
+			</v-container>
+			<template v-else>
+				<h1 v-if="isListFilled" class="h4 ml-5">
+					{{ $t("pages.homeworks.teacher.title") }}
+				</h1>
+
+				<v-container v-if="isStudent()" class="v-container">
+					<v-tabs v-model="tab" grow>
+						<v-tab>Offene Aufgaben</v-tab>
+						<v-tab>Erledigte Aufgaben</v-tab>
+					</v-tabs>
+				</v-container>
+			</template>
+		</section>
+
+		<v-container class="v-container" mt-2>
 			<v-autocomplete
 				v-if="isListFilled"
 				v-model="selectedCourses"
@@ -24,17 +36,17 @@
 				:menu-props="{ closeOnContentClick: false }"
 				@change="filterByCourse"
 			/>
-		</section>
-		<homeworks-dashboard-student v-if="isStudent()" />
-		<homeworks-dashboard-teacher v-else />
-		<v-custom-empty-state
-			v-if="isListEmpty"
-			:image="image"
-			:title="getEmptyStateTitle()"
-			:subtitle="getEmptyStateSubtitle()"
-			class="mt-16"
-		/>
-	</v-container>
+			<homeworks-dashboard-student v-if="isStudent()" :tab="tab" />
+			<homeworks-dashboard-teacher v-else />
+			<v-custom-empty-state
+				v-if="isListEmpty"
+				:image="image"
+				:title="getEmptyStateTitle()"
+				:subtitle="getEmptyStateSubtitle()"
+				class="mt-16"
+			/>
+		</v-container>
+	</section>
 </template>
 
 <script>
@@ -61,6 +73,7 @@ export default {
 		return {
 			image: tasksEmptyState,
 			selectedCourses: [],
+			tab: 0,
 		};
 	},
 	computed: {
@@ -104,5 +117,10 @@ export default {
 
 .v-container {
 	max-width: var(--size-content-width-max);
+}
+
+.v-tab {
+	font-size: var(--text-base-size);
+	text-transform: none !important;
 }
 </style>
