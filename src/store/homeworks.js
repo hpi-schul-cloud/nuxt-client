@@ -1,5 +1,6 @@
 import { merge } from "lodash";
 import { serviceTemplate, fetchAll } from "@utils";
+import { homeworks } from "@@/stories/mockData/Homeworks";
 const base = serviceTemplate("homework");
 const baseState = base.state();
 
@@ -14,7 +15,7 @@ const module = merge(base, {
 			try {
 				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
-					items: data,
+					items: data.concat(homeworks),
 				});
 				commit("setStatus", "completed");
 			} catch (error) {
@@ -66,6 +67,21 @@ const module = merge(base, {
 		getOverDueHomeworks: (state, getters) => {
 			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
+			});
+		},
+		getOpenHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted === 0 && homework.status.graded === 0;
+			});
+		},
+		getSubmittedHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted >= 1 && homework.status.graded === 0;
+			});
+		},
+		getGradedHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.graded >= 1;
 			});
 		},
 	},
