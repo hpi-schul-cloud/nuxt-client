@@ -1,5 +1,5 @@
 import Vuetify from "vuetify";
-import VCustomChipTimeRemaining from "./VCustomChipTimeRemaining";
+import VCustomChipTaskState from "./VCustomChipTaskState";
 
 let vuetify;
 
@@ -8,13 +8,13 @@ describe("@components/molecules/vCustomEmptyState", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(VCustomChipTimeRemaining));
+	it(...isValidComponent(VCustomChipTaskState));
 
 	it("should render an orange v-chip component, with n hours left", () => {
 		const dueDate = new Date();
 		dueDate.setHours(dueDate.getHours() + 3);
 
-		const wrapper = mount(VCustomChipTimeRemaining, {
+		const wrapper = mount(VCustomChipTaskState, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -33,7 +33,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 		const dueDate = new Date();
 		dueDate.setMinutes(dueDate.getMinutes() + 20);
 
-		const wrapper = mount(VCustomChipTimeRemaining, {
+		const wrapper = mount(VCustomChipTaskState, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -52,7 +52,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 		const dueDate = new Date();
 		dueDate.setMinutes(dueDate.getMinutes() - 20);
 
-		const wrapper = mount(VCustomChipTimeRemaining, {
+		const wrapper = mount(VCustomChipTaskState, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -67,12 +67,28 @@ describe("@components/molecules/vCustomEmptyState", () => {
 		expect(wrapper.html()).toMatchSnapshot();
 	});
 
+	it("should render a blue v-chip component, with graded label", () => {
+		const wrapper = mount(VCustomChipTaskState, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: {
+				type: "graded",
+				dueDate: undefined,
+			},
+		});
+
+		expect(wrapper.html()).toMatchSnapshot();
+	});
+
 	it("hintDueDate() method return the right label dependent on date", () => {
 		let label;
 		const dueDate = new Date();
 		dueDate.setMinutes(dueDate.getMinutes() + 20);
 
-		const wrapper = shallowMount(VCustomChipTimeRemaining, {
+		const wrapper = shallowMount(VCustomChipTaskState, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -98,7 +114,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 
 	it("accepts valid type props", () => {
 		const validTypes = ["warning", "overdue"];
-		const { validator } = VCustomChipTimeRemaining.props.type;
+		const { validator } = VCustomChipTaskState.props.type;
 
 		validTypes.forEach((type) => {
 			expect(validator(type)).toBe(true);
@@ -112,7 +128,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 			"2021-06-11T14:00:00.000Z",
 			"2021-06-07T09:30:00.000Z",
 		];
-		const { validator } = VCustomChipTimeRemaining.props.dueDate;
+		const { validator } = VCustomChipTaskState.props.dueDate;
 
 		validDueDates.forEach((dueDate) => {
 			expect(validator(dueDate)).toBe(true);

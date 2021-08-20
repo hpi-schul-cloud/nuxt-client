@@ -93,8 +93,8 @@ export default {
 		isOverDue(dueDate) {
 			return dueDate && new Date(dueDate) < new Date();
 		},
-		isGraded() {
-			return true;
+		isGraded(graded) {
+			return graded;
 		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;

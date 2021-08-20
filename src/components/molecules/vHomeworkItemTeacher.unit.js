@@ -1,5 +1,5 @@
 import vHomeworkItemTeacher from "./vHomeworkItemTeacher";
-import { homeworksTeacher, homeworks } from "@@/stories/mockData/Homeworks";
+import { homeworksTeacher } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("@components/molecules/vHomeworkItemTeacher", () => {
@@ -67,10 +67,6 @@ describe("@components/molecules/vHomeworkItemTeacher", () => {
 
 		validHomeworks.forEach((homework) => {
 			expect(validator(homework)).toBe(true);
-		});
-
-		homeworks.forEach((homework) => {
-			expect(validator(homework)).toBe(false);
 		});
 	});
 });

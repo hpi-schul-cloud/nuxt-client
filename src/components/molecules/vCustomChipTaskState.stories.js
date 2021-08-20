@@ -18,7 +18,7 @@ storiesOf("0 Vuetify/Molecules", module).add("VCustomChipTaskState", () => ({
 	template: `
 		<v-app>
 			<h1 class="h4">VCustomChipTaskState</h1>
-			<p>Implements the v-chip component showing different states of homeworks. Current types are "warning", "overdue", "submitted" and "graded".
+			<p>Implements the v-chip component showing different states of homeworks. Current types are "warning", "overdue" and "graded".
 				For open tasks it displays remaining time depending on input date either in hours/minutes, while allowing to shorten the time units.
 			</p>
 			<p>Accepts ISO date string, e.g. {{ dueHours }}</p>
@@ -28,9 +28,6 @@ storiesOf("0 Vuetify/Molecules", module).add("VCustomChipTaskState", () => ({
 				<v-custom-chip-task-state :due-date="dueMinutes" type="warning"/>
 				<v-custom-chip-task-state :due-date="dueMinutes" shorten-unit type="warning"/>
 				<v-custom-chip-task-state :due-date="dueHours" type="overdue"/>
-			</v-chip-group>
-			<v-chip-group>
-				<v-custom-chip-task-state type="submitted"/>
 				<v-custom-chip-task-state type="graded"/>
 			</v-chip-group>
 		</v-app>`,

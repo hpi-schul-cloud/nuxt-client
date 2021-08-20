@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`@components/molecules/vCustomEmptyState should render a blue v-chip component, with graded label 1`] = `
+<span class="v-chip theme--light v-size--small blue lighten-4 black--text" data-test-id="gradedLabel"><span class="v-chip__content">
+	Bewertet
+</span></span>
+`;
+
 exports[`@components/molecules/vCustomEmptyState should render a red v-chip component, with overdue label 1`] = `
 <span class="v-chip theme--light v-size--small error lighten-5 black--text" data-test-id="overDueDateLabel"><span class="v-chip__content"><i aria-hidden="true" class="v-icon notranslate v-icon--left material-icons theme--light" style="font-size: 16px;">$hourglassDisabled</i>
 	Verpasst

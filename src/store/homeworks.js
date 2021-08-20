@@ -1,6 +1,5 @@
 import { merge } from "lodash";
 import { serviceTemplate, fetchAll } from "@utils";
-import { homeworks } from '@@/stories/mockData/Homeworks';
 const base = serviceTemplate("homework");
 const baseState = base.state();
 
@@ -15,12 +14,12 @@ const module = merge(base, {
 			try {
 				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
-					items: data.concat(homeworks),
+					items: data,
 				});
 				commit("setStatus", "completed");
 			} catch (error) {
 				// TODO: extract response.data to businessError format and add a business Error
-				//commit("setBusinessError", error.response.data);
+				commit("setBusinessError", error.response.data);
 				commit("setStatus", "error");
 			}
 		},

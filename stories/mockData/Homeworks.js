@@ -16,6 +16,7 @@ export const homeworks = [
 		createdAt: "2017-09-28T12:02:11.432Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -28,6 +29,7 @@ export const homeworks = [
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -40,6 +42,7 @@ export const homeworks = [
 		createdAt: "2017-09-28T11:58:46.601Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -52,6 +55,7 @@ export const homeworks = [
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -64,6 +68,7 @@ export const homeworks = [
 		createdAt: "2017-09-28T12:10:46.180Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -76,6 +81,7 @@ export const homeworks = [
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -88,6 +94,7 @@ export const homeworks = [
 		createdAt: "2017-07-28T11:58:46.601Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -99,6 +106,7 @@ export const homeworks = [
 		createdAt: "2017-07-28T11:58:46.601Z",
 		status: {
 			submitted: 0,
+			maxSubmissions: 0,
 			graded: 0,
 		},
 	},
@@ -112,6 +120,11 @@ export const overDueHomeworks = [
 		duedate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce2c61113d1132c98dc06",
@@ -120,6 +133,11 @@ export const overDueHomeworks = [
 		duedate: "2017-07-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce352c6abf042248e888c",
@@ -128,6 +146,11 @@ export const overDueHomeworks = [
 		duedate: "2017-06-07T09:30:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 ];
 export const openHomeworksWithDueDate = [
@@ -138,6 +161,11 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
@@ -146,6 +174,11 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-09-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
@@ -154,6 +187,11 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
@@ -162,6 +200,11 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-10-25T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:10:46.180Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 ];
 export const openHomeworksWithoutDueDate = [
@@ -171,6 +214,11 @@ export const openHomeworksWithoutDueDate = [
 		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 ];
 
@@ -182,6 +230,11 @@ export const openHomeworks = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
@@ -190,6 +243,11 @@ export const openHomeworks = [
 		duedate: "2300-09-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
@@ -198,6 +256,11 @@ export const openHomeworks = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
@@ -206,6 +269,11 @@ export const openHomeworks = [
 		duedate: "2300-10-25T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:10:46.180Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce4171113d1132c98dc08",
@@ -213,6 +281,11 @@ export const openHomeworks = [
 		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 ];
 
@@ -223,6 +296,11 @@ export const invalidHomeworks = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
@@ -230,6 +308,11 @@ export const invalidHomeworks = [
 		duedate: "2300-09-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		_id: "59cce3f6c6abf042248e888d",
@@ -237,6 +320,11 @@ export const invalidHomeworks = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
@@ -244,12 +332,22 @@ export const invalidHomeworks = [
 		name: "Archivierte Aufgaben von Cord - mit Kurs, offen",
 		duedate: "2300-10-25T15:00:00.000Z",
 		courseName: "Mathe",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce4171113d1132c98dc08",
 		_id: "59cce4171113d1132c98dc08",
 		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
 		createdAt: "2017-07-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 0,
+			graded: 0,
+		},
 	},
 ];
 
