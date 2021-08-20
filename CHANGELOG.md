@@ -8,6 +8,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- BC-5 - added a graded chip state for homeworks
+
 ## [26.9.0] - 2021-08-13
 
 - SC-9192 - access feathers and nestjs apps over their dedicated version prefixes
