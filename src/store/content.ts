@@ -434,7 +434,7 @@ export class Content extends VuexModule {
 	async addToLesson(payload: AddToLessonQuery) {
 		try {
 			await $axios.post(
-				`/lessons/${payload.lessonId}/material`,
+				`/v1/lessons/${payload.lessonId}/material`,
 				payload.material
 			);
 			this.setNotificationModal("successModal");
