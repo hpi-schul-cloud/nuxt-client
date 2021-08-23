@@ -18,8 +18,9 @@ const module = merge(base, {
 				});
 				commit("setStatus", "completed");
 			} catch (error) {
-				// TODO: extract response.data to businessError format and add a business Error
-				commit("setBusinessError", error.response.data);
+				if (error.response) {
+					commit("setBusinessError", error.response.data);
+				}
 				commit("setStatus", "error");
 			}
 		},
@@ -66,6 +67,21 @@ const module = merge(base, {
 		getOverDueHomeworks: (state, getters) => {
 			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
+			});
+		},
+		getOpenHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted === 0 && homework.status.graded === 0;
+			});
+		},
+		getSubmittedHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted >= 1 && homework.status.graded === 0;
+			});
+		},
+		getGradedHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.graded >= 1;
 			});
 		},
 	},
