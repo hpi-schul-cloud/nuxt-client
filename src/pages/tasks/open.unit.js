@@ -20,7 +20,7 @@ describe("Homeworks/open", () => {
 			vuetify,
 		});
 
-		const title = wrapper.vm.$i18n.t("pages.homeworks.student.title");
+		const title = wrapper.vm.$i18n.t("pages.homeworks.title");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 });

@@ -1,14 +1,36 @@
 <template>
-	<v-container class="v-container">
-		<h1 v-if="status === 'pending'">
-			<v-skeleton-loader type="text" :max-width="'30%'" />
-		</h1>
-		<template v-else>
-			<h1 v-if="isListFilled" class="h4">
-				{{ getTitle() }}
-			</h1>
-		</template>
+	<section>
 		<section>
+			<template v-if="status === 'pending'">
+				<h1 class="h4 ml-10 pb-15">
+					<v-skeleton-loader type="heading" max-width="40%" class="pb-15" />
+				</h1>
+				<v-container class="v-container">
+					<v-skeleton-loader type="text" />
+				</v-container>
+			</template>
+
+			<template v-else>
+				<div v-if="isListFilled" class="border-bottom">
+					<h1 class="h4 ml-10 pb-15">
+						{{ $t("pages.homeworks.title") }}
+					</h1>
+
+					<v-container v-if="showTabs" class="v-container pb-0">
+						<v-tabs v-model="tab" grow>
+							<v-tab>{{
+								$t("components.organisms.HomeworksDashboardMain.tab.open")
+							}}</v-tab>
+							<v-tab>{{
+								$t("components.organisms.HomeworksDashboardMain.tab.completed")
+							}}</v-tab>
+						</v-tabs>
+					</v-container>
+				</div>
+			</template>
+		</section>
+
+		<v-container class="v-container mt-5">
 			<v-autocomplete
 				v-if="isListFilled"
 				v-model="selectedCourses"
@@ -24,17 +46,17 @@
 				:menu-props="{ closeOnContentClick: false }"
 				@change="filterByCourse"
 			/>
-		</section>
-		<homeworks-dashboard-student v-if="isStudent()" />
-		<homeworks-dashboard-teacher v-else />
-		<v-custom-empty-state
-			v-if="isListEmpty"
-			:image="image"
-			:title="getEmptyStateTitle()"
-			:subtitle="getEmptyStateSubtitle()"
-			class="mt-16"
-		/>
-	</v-container>
+			<v-custom-empty-state
+				v-if="isListEmpty"
+				:image="image"
+				:title="emptyStateTitle"
+				:subtitle="emptyStateSubtitle"
+				class="mt-16"
+			/>
+			<homeworks-dashboard-student v-else-if="isStudent" :tab="tab" />
+			<homeworks-dashboard-teacher v-else />
+		</v-container>
+	</section>
 </template>
 
 <script>
@@ -61,6 +83,7 @@ export default {
 		return {
 			image: tasksEmptyState,
 			selectedCourses: [],
+			tab: 0,
 		};
 	},
 	computed: {
@@ -70,29 +93,28 @@ export default {
 			isListEmpty: "isListEmpty",
 			availableCourses: "getCourses",
 		}),
+		isStudent: function () {
+			return this.role === "student";
+		},
+		emptyStateTitle: function () {
+			// TODO: remove if wording stays the same
+			return this.isStudent
+				? this.$t("pages.homeworks.student.emptyState.title")
+				: this.$t("pages.homeworks.teacher.emptyState.title");
+		},
+		emptyStateSubtitle: function () {
+			return this.isStudent
+				? this.$t("pages.homeworks.student.emptyState.subtitle")
+				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
+		},
+		showTabs: function () {
+			return this.isStudent && this.isListFilled;
+		},
 	},
 	mounted() {
 		this.$store.dispatch("homeworks/getHomeworksDashboard");
 	},
 	methods: {
-		isStudent: function () {
-			return this.role === "student";
-		},
-		getTitle: function () {
-			return this.role === "student"
-				? this.$t("pages.homeworks.student.title")
-				: this.$t("pages.homeworks.teacher.title");
-		},
-		getEmptyStateTitle: function () {
-			return this.isStudent()
-				? this.$t("pages.homeworks.student.emptyState.title")
-				: this.$t("pages.homeworks.teacher.emptyState.title");
-		},
-		getEmptyStateSubtitle: function () {
-			return this.isStudent()
-				? this.$t("pages.homeworks.student.emptyState.subtitle")
-				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
-		},
 		filterByCourse() {
 			this.$store.commit("homeworks/setFilter", this.selectedCourses);
 		},
@@ -104,5 +126,20 @@ export default {
 
 .v-container {
 	max-width: var(--size-content-width-max);
+}
+
+// even out border
+.v-tabs {
+	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+}
+
+.v-tab {
+	font-size: var(--text-base-size);
+	text-transform: none !important;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.border-bottom {
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>
