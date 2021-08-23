@@ -46,15 +46,14 @@
 				:menu-props="{ closeOnContentClick: false }"
 				@change="filterByCourse"
 			/>
-			<homeworks-dashboard-student v-if="isStudent" :tab="tab" />
-			<homeworks-dashboard-teacher v-else />
 			<v-custom-empty-state
 				v-if="isListEmpty"
 				:image="image"
 				:title="emptyStateTitle"
-				:subtitle="emptyStateSubtitle"
 				class="mt-16"
 			/>
+			<homeworks-dashboard-student v-else-if="isStudent" :tab="tab" />
+			<homeworks-dashboard-teacher v-else />
 		</v-container>
 	</section>
 </template>
@@ -97,6 +96,7 @@ export default {
 			return this.role === "student";
 		},
 		emptyStateTitle: function () {
+			// TODO: remove if wording stays the same
 			return this.isStudent
 				? this.$t("pages.homeworks.student.emptyState.title")
 				: this.$t("pages.homeworks.teacher.emptyState.title");

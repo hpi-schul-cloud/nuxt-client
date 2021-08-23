@@ -532,7 +532,7 @@
 	"pages.homeworks.student.submittedTasks": "Completed Tasks",
 	"pages.homeworks.student.emptyState.title": "No hay tareas abiertas.",
 	"pages.homeworks.student.emptyState.subtitle": "Has hecho todas tus tareas. ¡Disfruta de tu tiempo libre!",
-	"pages.homeworks.student.submitted.emptyState.title": "You currently don't have any submitted tasks.",
+	"pages.homeworks.student.submitted.emptyState.title": "Actualmente no tiene ninguna tarea enviada.",
 	"pages.homeworks.teacher.emptyState.title": "No hay asignaciones actuales.",
 	"pages.homeworks.teacher.emptyState.subtitle": "Has comprobado todas las devoluciones. ¡Disfruta de tu tiempo libre!",
 	"components.molecules.VCustomChipTimeRemaining.hintDueTime": "en ",

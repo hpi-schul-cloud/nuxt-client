@@ -520,7 +520,7 @@
 	"pages.homeworks.teacher.title": "Current Tasks",
 	"pages.homeworks.student.openTasks": "Open Tasks",
 	"pages.homeworks.student.submittedTasks": "Completed Tasks",
-	"pages.homeworks.student.emptyState.title": "There are no open tasks.",
+	"pages.homeworks.student.emptyState.title": "There are no current tasks.",
 	"pages.homeworks.student.emptyState.subtitle": "You have completed all tasks. Enjoy your free time!",
 	"pages.homeworks.student.submitted.emptyState.title": "You currently don't have any submitted tasks.",
 	"pages.homeworks.teacher.emptyState.title": "There are no current tasks.",

@@ -31,8 +31,8 @@
 				<v-custom-empty-state
 					v-else
 					:image="emptyStateImage"
-					:title="$t('pages.homeworks.student.emptyState.title')"
-					:subtitle="$t('pages.homeworks.student.emptyState.subtitle')"
+					:title="$t('pages.homeworks.student.open.emptyState.title')"
+					:subtitle="$t('pages.homeworks.student.open.emptyState.subtitle')"
 					class="mt-16"
 				/>
 			</v-tab-item>
