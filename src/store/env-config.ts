@@ -55,7 +55,7 @@ const retryLimit: number = 10;
 export class EnvConfig extends VuexModule {
 	env: Envs = {
 		...requiredVars,
-		FALLBACK_DISABLED: null,
+		FALLBACK_DISABLED: false,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		FEATURE_ES_COLLECTIONS_ENABLED: null,
 		FEATURE_EXTENSIONS_ENABLED: null,

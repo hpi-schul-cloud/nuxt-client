@@ -71,8 +71,12 @@ export default {
 			return AutoLogoutModule.getRemainingTimeInSeconds;
 		},
 		toastValue() {
-			this.showToast(AutoLogoutModule.getToastValue);
 			return AutoLogoutModule.getToastValue;
+		},
+	},
+	watch: {
+		toastValue(value) {
+			this.showToast(value);
 		},
 	},
 	created(ctx) {
