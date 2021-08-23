@@ -1,7 +1,7 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<span>© {{ currentYear }} {{ $theme.name }}</span>
+			<span>{{ currentYear }} {{ $theme.name }}</span>
 		</div>
 
 		<div>
@@ -73,7 +73,7 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:hpi-info@hpi.de?subject=THR%20Schul_Cloud%20Anfrage",
+					href: "mailto:schulcloud-support@thillm.de?subject=THR%20Schul-Cloud%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{

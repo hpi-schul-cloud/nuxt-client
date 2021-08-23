@@ -8,6 +8,16 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Changed
+
+- BC-14 - changed thr contact address
+- BC-64 - execute e2e tests via push on main
+- BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
+
+## [26.9.1] - 2021-08-16
+
+- SC-9192 - fix add material to course lesson and load exsiting ldap config for modification
+
 ## [26.9.0] - 2021-08-13
 
 - SC-9192 - access feathers and nestjs apps over their dedicated version prefixes
