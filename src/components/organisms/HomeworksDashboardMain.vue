@@ -11,8 +11,8 @@
 			</template>
 
 			<template v-else>
-				<v-banner>
-					<h1 v-if="isListFilled" class="h4 ml-10 pb-15">
+				<v-banner v-if="isListFilled">
+					<h1 class="h4 ml-10 pb-15">
 						{{ $t("pages.homeworks.title") }}
 					</h1>
 
@@ -50,6 +50,7 @@
 				v-if="isListEmpty"
 				:image="image"
 				:title="emptyStateTitle"
+				:subtitle="emptyStateSubtitle"
 				class="mt-16"
 			/>
 			<homeworks-dashboard-student v-else-if="isStudent" :tab="tab" />
