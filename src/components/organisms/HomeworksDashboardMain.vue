@@ -11,12 +11,12 @@
 			</template>
 
 			<template v-else>
-				<v-banner v-if="isListFilled">
+				<div v-if="isListFilled" class="border-bottom">
 					<h1 class="h4 ml-10 pb-15">
 						{{ $t("pages.homeworks.title") }}
 					</h1>
 
-					<v-container v-if="showTabs" class="v-container">
+					<v-container v-if="showTabs" class="v-container pb-0">
 						<v-tabs v-model="tab" grow>
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
@@ -26,7 +26,7 @@
 							}}</v-tab>
 						</v-tabs>
 					</v-container>
-				</v-banner>
+				</div>
 			</template>
 		</section>
 
@@ -128,8 +128,18 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
+// even out border
+.v-tabs {
+	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+}
+
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.border-bottom {
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>
