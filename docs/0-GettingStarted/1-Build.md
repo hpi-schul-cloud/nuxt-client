@@ -15,7 +15,6 @@ npm run build:nuxt
 npm run start:nuxt
 ```
 
-
 Output Directory: `dist/nuxt`
 
 ### Environment-Variables (runtime)
