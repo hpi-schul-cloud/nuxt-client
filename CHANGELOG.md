@@ -23,6 +23,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-9192 - access feathers and nestjs apps over their dedicated version prefixes
 - SC-9191 run e2e tests in pull requests with 'run tests' label
+- SC-9280 fix primary and secondary colors according to old client
 
 ## [26.8.0] - 2021-08-05
 
