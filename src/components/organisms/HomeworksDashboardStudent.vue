@@ -32,9 +32,7 @@
 					v-else
 					:image="image"
 					:title="$t('pages.homeworks.student.emptyState.title')"
-					:subtitle="
-						$t('pages.homeworks.student.emptyState.subtitle')
-					"
+					:subtitle="$t('pages.homeworks.student.emptyState.subtitle')"
 					class="mt-16"
 				/>
 			</v-tab-item>
