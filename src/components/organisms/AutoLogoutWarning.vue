@@ -24,7 +24,7 @@
 
 <script>
 import CenterSlot from "@components/atoms/CenterSlot";
-import { mapGetters } from "vuex";
+import AutoLogoutModule from "@/store/autoLogout";
 
 const toast = {
 	error401: -1,
@@ -61,22 +61,30 @@ export default {
 				return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth_error.svg";
 			return "https://s3.hidrive.strato.com/schul-cloud-hpi/images/Sloth.svg";
 		},
-		...mapGetters("autoLogout", {
-			active: "getActive",
-			error: "getError",
-			remainingTimeInSeconds: "getRemainingTimeInSeconds",
-		}),
+		active() {
+			return AutoLogoutModule.getActive;
+		},
+		error() {
+			return AutoLogoutModule.getError;
+		},
+		remainingTimeInSeconds() {
+			return AutoLogoutModule.getRemainingTimeInSeconds;
+		},
+		toastValue() {
+			return AutoLogoutModule.getToastValue;
+		},
+	},
+	watch: {
+		toastValue(value) {
+			this.showToast(value);
+		},
 	},
 	created(ctx) {
-		this.$store.dispatch("autoLogout/init", this.$eventBus, { root: true });
-	},
-	beforeDestroy() {
-		//underneath is only necessary in a single page application
-		//this.$store.dispatch("autoLogout/reset");
+		AutoLogoutModule.init();
 	},
 	methods: {
 		extendSession() {
-			this.$store.dispatch("autoLogout/extendSession");
+			AutoLogoutModule.extendSessionAction();
 		},
 		showToast(state) {
 			switch (state) {
@@ -101,11 +109,6 @@ export default {
 				default:
 					break;
 			}
-		},
-	},
-	onEventBus: {
-		"showToast@autologout": function (value) {
-			this.showToast(value);
 		},
 	},
 };

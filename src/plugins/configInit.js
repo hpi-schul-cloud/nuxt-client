@@ -1,6 +1,8 @@
-export default async ({ store }) => {
+import EnvConfigModule from "@/store/env-config";
+
+export default async () => {
 	try {
-		await store.dispatch("env-config/get");
+		await EnvConfigModule.findEnvs();
 	} catch (error) {
 		console.error(error);
 	}

@@ -142,6 +142,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import EnvConfigModule from "@/store/env-config";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
@@ -319,9 +320,9 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
-		...mapGetters("env-config", {
-			env: "getEnv",
-		}),
+		env() {
+			return EnvConfigModule.getEnv;
+		},
 		showConsent() {
 			return this.env && this.env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},

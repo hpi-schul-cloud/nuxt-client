@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import ContentModule from "@/store/content";
 import AddContentButton from "@components/organisms/AddContentButton";
 import ContentCard from "@components/organisms/ContentCard";
 import ContentEduSharingFooter from "@components/molecules/ContentEduSharingFooter";
@@ -180,11 +180,15 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("content", {
-			elements: "getElements",
-			selected: "getSelected",
-			loading: "getLoading",
-		}),
+		elements() {
+			return ContentModule.getElementsGetter;
+		},
+		selected() {
+			return ContentModule.getSelected;
+		},
+		loading() {
+			return ContentModule.getLoading;
+		},
 		provider() {
 			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
@@ -260,9 +264,9 @@ export default {
 		async searchElements() {
 			try {
 				// Clears the previous collection elements before rendering the new ones
-				this.$store.commit("content/clearElements");
+				ContentModule.clearElements();
 				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("content/getElements", this.query);
+				await ContentModule.getElements(this.query);
 			} catch (error) {
 				this.$toast.error(
 					this.$t("pages.content.notification.lernstoreNotAvailable")
@@ -273,7 +277,7 @@ export default {
 			if (this.query.$skip < this.elements.total) {
 				this.query.$skip += this.query.$limit;
 				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("content/addElements", this.query);
+				await ContentModule.addElements(this.query);
 			}
 		},
 		isNotStudent(roles) {

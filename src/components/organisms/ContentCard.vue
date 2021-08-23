@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import ContentModule from "@/store/content";
 import BaseLink from "@components/base/BaseLink";
 import AddContentButton from "@components/organisms/AddContentButton";
 import UserHasRole from "@components/helpers/UserHasRole";
@@ -141,9 +142,9 @@ export default {
 		},
 		linkHandler() {
 			if (!this.isChecked) {
-				this.$store.dispatch("content/selectElement", this.resource.ref.id);
+				ContentModule.selectElement(this.resource.ref.id);
 			} else {
-				this.$store.dispatch("content/unselectElement", this.resource.ref.id);
+				ContentModule.unselectElement(this.resource.ref.id);
 			}
 		},
 	},

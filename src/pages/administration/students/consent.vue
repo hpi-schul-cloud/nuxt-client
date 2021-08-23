@@ -274,6 +274,7 @@
 </template>
 
 <script>
+import FilePathsModule from "@/store/filePaths";
 import StepProgress from "@components/organisms/StepProgress";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import ModalBodyInfo from "@components/molecules/ModalBodyInfo";
@@ -351,12 +352,9 @@ export default {
 			],
 			image: SafelyConnectedImage,
 			fileLinks: {
-				analogConsent:
-					this.$store.getters["filePaths/getSpecificFiles"].analogConsent,
-				termsOfUse:
-					this.$store.getters["filePaths/getSpecificFiles"].termsOfUseSchool,
-				dataProtection:
-					this.$store.getters["filePaths/getSpecificFiles"].privacyExemplary,
+				analogConsent: FilePathsModule.getSpecificFiles.analogConsent,
+				termsOfUse: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+				dataProtection: FilePathsModule.getSpecificFiles.privacyExemplary,
 			},
 			progressSteps: [
 				{

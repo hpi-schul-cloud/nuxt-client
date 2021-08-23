@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import ContentModule from "@/store/content";
 import AddContentModal from "@components/molecules/AddContentModal";
 import NotificationModal from "@components/molecules/NotificationModal";
 import LoadingModal from "@components/molecules/LoadingModal";
@@ -93,10 +93,15 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("content", {
-			elements: "getElements",
-			selected: "getSelected",
-		}),
+		elements() {
+			return ContentModule.getElementsGetter;
+		},
+		selected() {
+			return ContentModule.getSelected;
+		},
+		addContentNotificationModal() {
+			return ContentModule.notificationModal;
+		},
 		itemId() {
 			return this.resource && this.resource.properties
 				? getMetadataAttribute(
@@ -130,6 +135,22 @@ export default {
 						merlinReference: getMerlinReference(element),
 					};
 				});
+			}
+		},
+		addContentNotificationModal(value) {
+			if (this.loadingModal.isLoading) {
+				clearTimeout(slowAPICall);
+				this.loadingModal.visible = false;
+				this.loadingModal.isLoading = false;
+				this.notificationModal.visible = true;
+				switch (value) {
+					case "successModal":
+						this.notificationModal.isSuccess = true;
+						break;
+					default:
+						this.notificationModal.isSuccess = false;
+						break;
+				}
 			}
 		},
 	},
@@ -168,6 +189,7 @@ export default {
 			}
 		},
 		async addResource() {
+			ContentModule.setNotificationModal(null);
 			if (!(await this.addResourceAndClose())) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
@@ -178,24 +200,6 @@ export default {
 			slowAPICall = setTimeout(() => {
 				this.loadingModal.visible = true;
 			}, 1000);
-		},
-	},
-	onEventBus: {
-		"showModal@content": function (value) {
-			if (this.loadingModal.isLoading) {
-				clearTimeout(slowAPICall);
-				this.loadingModal.visible = false;
-				this.loadingModal.isLoading = false;
-				this.notificationModal.visible = true;
-				switch (value) {
-					case "successModal":
-						this.notificationModal.isSuccess = true;
-						break;
-					default:
-						this.notificationModal.isSuccess = false;
-						break;
-				}
-			}
 		},
 	},
 };

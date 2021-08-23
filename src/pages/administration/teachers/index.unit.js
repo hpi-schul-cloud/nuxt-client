@@ -1,5 +1,6 @@
 import { default as TeacherPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
+import EnvConfigModule from "@/store/env-config";
 
 const mockData = [
 	{
@@ -21,6 +22,25 @@ const mockData = [
 		createdAt: "2017-01-01T00:06:37.148Z",
 	},
 ];
+
+const envs = {
+	FALLBACK_DISABLED: false,
+	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
+	JWT_TIMEOUT_SECONDS: 7200,
+	SC_THEME: process.env.SC_THEME || "default",
+	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: null,
+	FEATURE_ES_COLLECTIONS_ENABLED: null,
+	FEATURE_EXTENSIONS_ENABLED: null,
+	FEATURE_TEAMS_ENABLED: null,
+	I18N__AVAILABLE_LANGUAGES: "",
+	I18N__DEFAULT_LANGUAGE: "",
+	I18N__DEFAULT_TIMEZONE: "",
+	I18N__FALLBACK_LANGUAGE: "",
+	DOCUMENT_BASE_DIR: "",
+	SC_TITLE: "",
+	SC_SHORT_TITLE: "",
+};
 
 describe("teachers/index", () => {
 	const deleteUsersStub = jest.fn();
@@ -95,19 +115,6 @@ describe("teachers/index", () => {
 				},
 				mutations: {
 					set: jest.fn(),
-				},
-			},
-			"env-config": {
-				state: () => ({
-					env: {
-						ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-					},
-					error: {},
-				}),
-				getters: {
-					getEnv: () => ({
-						ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-					}),
 				},
 			},
 		};
@@ -556,30 +563,38 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
+		EnvConfigModule.setEnvs({
+			...envs,
+			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+		});
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
 			}),
 		});
-		expect(
-			mockStore["env-config"].state().env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
-		).toBe(true);
+		expect(EnvConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
+			true
+		);
 		expect(
 			wrapper.vm.filteredColumns.some((el) => el.field === "consentStatus")
 		).toBe(true);
 	});
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", async () => {
+		EnvConfigModule.setEnvs({
+			...envs,
+			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+		});
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
 				store: mockStore,
 			}),
 		});
-		expect(
-			mockStore["env-config"].state().env.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN
-		).toBe(true);
+		expect(EnvConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
+			true
+		);
 		const icons = wrapper.find(`[data-testid="legend-icons"]`);
 		expect(icons.exists()).toBe(true);
 	});

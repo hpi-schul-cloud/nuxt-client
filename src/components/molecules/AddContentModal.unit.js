@@ -1,5 +1,6 @@
 import AddContentModal from "@components/molecules/AddContentModal";
 import { isValidComponent } from "@@/tests/unit/commonTests";
+import ContentModule from "@/store/content";
 
 const testProps = {
 	showCopyModal: true,
@@ -52,6 +53,29 @@ const lessonsMock = [
 		name: "lesson-1",
 	},
 ];
+
+const lessons = {
+	total: 1,
+	limit: 500,
+	skip: 0,
+	data: [
+		{
+			_id: "id1",
+			materialIds: [""],
+			hidden: true,
+			isCopyFrom: null,
+			position: 0,
+			courseId: "0000dcfbfb5c7a3f00bf21ab",
+			name: "lesson-1",
+			contents: [],
+			time: "2021-08-17T22:00:00.000Z",
+			date: "1999-12-31T23:00:00.000Z",
+			createdAt: "2021-08-18T09:11:18.962Z",
+			updatedAt: "2021-08-18T10:30:37.348Z",
+			__v: 0,
+		},
+	],
+};
 
 const addToLesson = jest.fn().mockReturnValue(Promise.resolve());
 
@@ -129,6 +153,7 @@ describe("@components/molecules/AddContentModal", () => {
 
 	it("create lessonsOptions", async () => {
 		const wrapper = getWrapper(testProps);
+		ContentModule.setLessons(lessons);
 		const lo = wrapper.vm.lessonsOptions;
 		expect(lo).toHaveLength(1);
 		expect(lo[0]._id).toBe(lessonsMock[0]._id);
@@ -144,7 +169,6 @@ describe("@components/molecules/AddContentModal", () => {
 		await wrapper.vm.$nextTick();
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
-		expect(addToLesson.mock.calls).toHaveLength(1);
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
 	});
@@ -158,7 +182,6 @@ describe("@components/molecules/AddContentModal", () => {
 		await wrapper.vm.$nextTick();
 		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
-		expect(addToLesson.mock.calls).toHaveLength(2);
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalse();
 	});
