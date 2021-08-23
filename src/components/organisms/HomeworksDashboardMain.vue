@@ -8,13 +8,13 @@
 			</v-container>
 			<template v-else>
 				<h1 v-if="isListFilled" class="h4 ml-5">
-					{{ $t("pages.homeworks.teacher.title") }}
+					{{ $t("pages.homeworks.title") }}
 				</h1>
 
 				<v-container v-if="isStudent()" class="v-container">
 					<v-tabs v-model="tab" grow>
-						<v-tab>Offene Aufgaben</v-tab>
-						<v-tab>Erledigte Aufgaben</v-tab>
+						<v-tab>{{ $t("pages.homeworks.student.openTasks") }}</v-tab>
+						<v-tab>{{ $t("pages.homeworks.student.submittedTasks") }}</v-tab>
 					</v-tabs>
 				</v-container>
 			</template>
@@ -90,11 +90,6 @@ export default {
 	methods: {
 		isStudent: function () {
 			return this.role === "student";
-		},
-		getTitle: function () {
-			return this.role === "student"
-				? this.$t("pages.homeworks.student.title")
-				: this.$t("pages.homeworks.teacher.title");
 		},
 		getEmptyStateTitle: function () {
 			return this.isStudent()
