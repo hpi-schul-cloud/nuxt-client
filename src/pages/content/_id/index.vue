@@ -26,9 +26,9 @@ export default {
 		LernstoreCollectionDetailView,
 		BaseSpinner,
 	},
-	layout({ store, query }) {
+	layout({ query }) {
 		return String(query.isCollection) === "true" &&
-			store.getters["content/getCollectionsFeatureFlag"] === true
+			ContentModule.getCollectionsFeatureFlag === true
 			? "loggedInFull"
 			: "plain";
 	},
@@ -37,7 +37,7 @@ export default {
 			return ContentModule.getCurrentResource;
 		},
 		collectionsFeatureFlag() {
-			return ContentModule.collectionsFeatureFlag;
+			return ContentModule.getCollectionsFeatureFlag;
 		},
 		status() {
 			return ContentModule.getStatus;
