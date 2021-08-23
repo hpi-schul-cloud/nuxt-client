@@ -15,13 +15,7 @@ npm run build:nuxt
 npm run start:nuxt
 ```
 
-or using the docker bash script
-
-```bash
-bash ./startup.sh
-```
-
-Output Directory: `./dist/nuxt`
+Output Directory: `dist/nuxt`
 
 ### Environment-Variables (runtime)
 
