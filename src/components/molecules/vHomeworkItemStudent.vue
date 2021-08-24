@@ -1,6 +1,6 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkHref(homework.id)">
-		<v-list-item-avatar class="hidden-xs-only">
+		<v-list-item-avatar>
 			<img :src="taskIcon" role="presentation" />
 		</v-list-item-avatar>
 		<v-list-item-content>
