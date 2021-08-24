@@ -22,14 +22,8 @@
 			/>
 			<v-spacer />
 			<v-custom-chip-time-remaining
-				v-if="isCloseToDueDate(homework.duedate)"
-				type="warning"
-				:due-date="homework.duedate"
-				:shorten-date="$vuetify.breakpoint.xsOnly"
-			/>
-			<v-custom-chip-time-remaining
-				v-else-if="isOverDue(homework.duedate)"
-				type="overdue"
+				v-if="taskState"
+				:type="taskState"
 				:due-date="homework.duedate"
 				:shorten-date="$vuetify.breakpoint.xsOnly"
 			/>
@@ -63,6 +57,14 @@ export default {
 			fromNow,
 			taskIconSvg,
 		};
+	},
+	computed: {
+		taskState() {
+			const { duedate } = this.homework
+			if (this.isCloseToDueDate(duedate)) return "warning"
+			if (this.isOverDue(duedate)) return "overdue"
+			return undefined
+		}
 	},
 	methods: {
 		computedDueDateLabel(dueDate, shorten = false) {
