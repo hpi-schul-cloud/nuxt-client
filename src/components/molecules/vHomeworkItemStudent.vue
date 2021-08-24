@@ -1,7 +1,7 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkHref(homework.id)">
 		<v-list-item-avatar class="hidden-xs-only">
-			<img :src="taskIconSvg" role="presentation" />
+			<img :src="taskIcon" role="presentation" />
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle>
@@ -22,7 +22,7 @@
 			/>
 			<v-spacer />
 			<v-custom-chip-time-remaining
-				v-if="taskState"
+				v-if="taskState === 'warning'"
 				:type="taskState"
 				:due-date="homework.duedate"
 				:shorten-date="$vuetify.breakpoint.xsOnly"
@@ -33,7 +33,10 @@
 
 <script>
 import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
-import taskIconSvg from "@assets/img/courses/task-new.svg";
+import openTaskIconSvg from "@assets/img/courses/task-new.svg";
+import missedTaskIconSvg from "@assets/img/courses/task-missed.svg";
+import submittedTaskIconSvg from "@assets/img/courses/task-done.svg";
+import gradedTaskIconSvg from "@assets/img/courses/task-done-filled.svg";
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import {
 	printDateFromStringUTC,
@@ -55,16 +58,33 @@ export default {
 	data() {
 		return {
 			fromNow,
-			taskIconSvg,
+			openTaskIconSvg,
+			missedTaskIconSvg,
 		};
 	},
 	computed: {
 		taskState() {
-			const { duedate } = this.homework
-			if (this.isCloseToDueDate(duedate)) return "warning"
-			if (this.isOverDue(duedate)) return "overdue"
-			return undefined
-		}
+			const { duedate, status } = this.homework;
+			if (this.isCloseToDueDate(duedate)) return "warning";
+			if (this.isOverDue(duedate)) return "overdue";
+			if (status.submitted) return "submitted";
+			if (status.graded) return "graded";
+			return undefined;
+		},
+		taskIcon() {
+			switch (this.taskState) {
+				case "warning":
+					return openTaskIconSvg;
+				case "overdue":
+					return missedTaskIconSvg;
+				case "submitted":
+					return submittedTaskIconSvg;
+				case "graded":
+					return gradedTaskIconSvg;
+				default:
+					return openTaskIconSvg;
+			}
+		},
 	},
 	methods: {
 		computedDueDateLabel(dueDate, shorten = false) {
