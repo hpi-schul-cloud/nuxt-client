@@ -17,7 +17,7 @@
 					</h1>
 
 					<v-container v-if="showTabs" class="v-container pb-0">
-						<v-tabs v-model="tab" grow>
+						<v-tabs v-model="tab" grow @change="selectTab">
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
 							}}</v-tab>
@@ -44,6 +44,7 @@
 				solo
 				rounded
 				:menu-props="{ closeOnContentClick: false }"
+				:disabled="isFilterDisabled"
 				@change="filterByCourse"
 			/>
 			<v-custom-empty-state
@@ -84,6 +85,7 @@ export default {
 			image: tasksEmptyState,
 			selectedCourses: [],
 			tab: 0,
+			isFilterDisabled: false,
 		};
 	},
 	computed: {
@@ -92,6 +94,8 @@ export default {
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
 			availableCourses: "getCourses",
+			hasOpenHomeworks: "hasOpenHomeworks",
+			hasSubmittedHomeworks: "hasSubmittedHomeworks",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -117,6 +121,15 @@ export default {
 	methods: {
 		filterByCourse() {
 			this.$store.commit("homeworks/setFilter", this.selectedCourses);
+		},
+		selectTab(tab) {
+			if (tab === 0 && !this.hasOpenHomeworks) {
+				this.isFilterDisabled = true;
+			} else if (tab === 1 && !this.hasSubmittedHomeworks) {
+				this.isFilterDisabled = true;
+			} else {
+				this.isFilterDisabled = false;
+			}
 		},
 	},
 };

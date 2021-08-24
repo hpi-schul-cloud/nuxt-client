@@ -84,6 +84,16 @@ const module = merge(base, {
 				return homework.status.graded >= 1;
 			});
 		},
+		hasOpenHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getOpenHomeworks.length > 0
+			);
+		},
+		hasSubmittedHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getSubmittedHomeworks.length > 0
+			);
+		},
 	},
 });
 
