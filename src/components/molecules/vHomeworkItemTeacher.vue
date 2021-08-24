@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import taskIconSvg from "@assets/img/courses/task-new.svg";
+import taskIconSvg from "@assets/img/courses/task-open-filled.svg";
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
 

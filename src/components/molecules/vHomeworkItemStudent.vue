@@ -33,7 +33,7 @@
 
 <script>
 import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
-import openTaskIconSvg from "@assets/img/courses/task-new.svg";
+import openTaskIconSvg from "@assets/img/courses/task-open-filled.svg";
 import missedTaskIconSvg from "@assets/img/courses/task-missed.svg";
 import submittedTaskIconSvg from "@assets/img/courses/task-done.svg";
 import gradedTaskIconSvg from "@assets/img/courses/task-done-filled.svg";
@@ -58,8 +58,6 @@ export default {
 	data() {
 		return {
 			fromNow,
-			openTaskIconSvg,
-			missedTaskIconSvg,
 		};
 	},
 	computed: {
