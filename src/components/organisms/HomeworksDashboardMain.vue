@@ -2,8 +2,8 @@
 	<section>
 		<section>
 			<template v-if="status === 'pending'">
-				<h1 class="h4 ml-10 pb-15">
-					<v-skeleton-loader type="heading" max-width="40%" class="pb-15" />
+				<h1 class="h4 ml-10">
+					<v-skeleton-loader type="heading" max-width="40%" />
 				</h1>
 				<v-container class="v-container">
 					<v-skeleton-loader type="text" />
@@ -12,11 +12,16 @@
 
 			<template v-else>
 				<div v-if="isListFilled" class="border-bottom">
-					<h1 class="h4 ml-10 pb-15">
+					<h1 class="h4 ml-10">
 						{{ $t("pages.homeworks.title") }}
 					</h1>
+
 					<v-container v-if="showTabs" class="tabs-max-width pb-0">
-						<v-tabs v-model="tab" grow>
+						<v-tabs
+							v-model="tab"
+							grow
+							@change="updateFilter"
+						>
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
 							}}</v-tab>
@@ -43,6 +48,7 @@
 				solo
 				rounded
 				:menu-props="{ closeOnContentClick: false }"
+				:disabled="isFilterDisabled"
 				@change="filterByCourse"
 			/>
 			<v-custom-empty-state
@@ -83,6 +89,7 @@ export default {
 			image: tasksEmptyState,
 			selectedCourses: [],
 			tab: 0,
+			isFilterDisabled: false,
 		};
 	},
 	computed: {
@@ -90,7 +97,10 @@ export default {
 			status: "getStatus",
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
-			availableCourses: "getCourses",
+			hasOpenHomeworks: "hasOpenHomeworks",
+			hasSubmittedHomeworks: "hasSubmittedHomeworks",
+			getCoursesOpen: "getCoursesOpen",
+			getCoursesSubmitted: "getCoursesSubmitted",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -109,6 +119,11 @@ export default {
 		showTabs: function () {
 			return this.isStudent && this.isListFilled;
 		},
+		availableCourses: function () {
+			if (this.tab === 0) {
+				return this.getCoursesOpen;
+			} else return this.getCoursesSubmitted;
+		},
 	},
 	mounted() {
 		this.$store.dispatch("homeworks/getHomeworksDashboard");
@@ -116,6 +131,15 @@ export default {
 	methods: {
 		filterByCourse() {
 			this.$store.commit("homeworks/setFilter", this.selectedCourses);
+		},
+		updateFilter(tab) {
+			if (tab === 0 && !this.hasOpenHomeworks) {
+				this.isFilterDisabled = true;
+			} else if (tab === 1 && !this.hasSubmittedHomeworks) {
+				this.isFilterDisabled = true;
+			} else {
+				this.isFilterDisabled = false;
+			}
 		},
 	},
 };

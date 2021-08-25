@@ -44,6 +44,18 @@ const module = merge(base, {
 			);
 			return Array.from(courses);
 		},
+		getCoursesOpen: (state, getters) => {
+			const courses = new Set(
+				getters.getOpenHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getCoursesSubmitted: (state, getters) => {
+			const courses = new Set(
+				getters.getSubmittedHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
 		getHomeworks: (state, getters) => {
 			return state.courseFilter.length > 0
 				? getters.getFilteredHomeworks
@@ -84,6 +96,27 @@ const module = merge(base, {
 			return getters.getHomeworks.filter((homework) => {
 				return homework.status.graded >= 1;
 			});
+		},
+		hasOpenHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getOpenHomeworks.length > 0
+			);
+		},
+		hasSubmittedHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getSubmittedHomeworks.length > 0
+			);
+		},
+		hasNoOpenHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getOpenHomeworks.length === 0
+			);
+		},
+		hasNoSubmittedHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" &&
+				getters.getSubmittedHomeworks.length === 0
+			);
 		},
 	},
 });
