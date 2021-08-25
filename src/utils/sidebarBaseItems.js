@@ -19,7 +19,7 @@ export default [
 		testId: "Teams",
 	},
 	{
-		title: "global.sidebar.tasks.tasksOpen",
+		title: "global.sidebar.tasks.tasksCurrent",
 		href: "/tasks/open",
 		icon: "tasks",
 		source: "custom",

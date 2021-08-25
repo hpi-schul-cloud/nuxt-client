@@ -1,3 +1,4 @@
+import EnvConfigModule from "@/store/env-config";
 const vueRoutes = require("@serverMiddleware/routes.js");
 
 const isNuxtRoute = (url) =>
@@ -5,7 +6,7 @@ const isNuxtRoute = (url) =>
 
 export default async function (ctx) {
 	const { route } = ctx;
-	const { FALLBACK_DISABLED } = ctx.store.getters["env-config/getEnv"];
+	const { FALLBACK_DISABLED } = EnvConfigModule.getEnv;
 
 	if (FALLBACK_DISABLED) {
 		return true;
