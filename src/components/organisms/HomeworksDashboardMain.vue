@@ -15,9 +15,8 @@
 					<h1 class="h4 ml-10 pb-15">
 						{{ $t("pages.homeworks.title") }}
 					</h1>
-
-					<v-container v-if="showTabs" class="v-container pb-0">
-						<v-tabs v-model="tab" grow>
+					<v-container v-if="showTabs" class="tabs-max-width pb-0">
+						<v-tabs v-model="tab" grow :prev-icon="undefined">
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
 							}}</v-tab>
@@ -128,15 +127,24 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
+.tabs-max-width {
+	max-width: 500px;
+}
+
 // even out border
 .v-tabs {
 	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	font-family: var(--heading-font-family);
 }
 
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+::v-deep .v-slide-group__prev {
+	display: none !important;
 }
 
 .border-bottom {
