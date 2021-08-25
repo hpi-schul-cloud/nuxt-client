@@ -1,12 +1,7 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkHref(homework.id)">
 		<v-list-item-avatar>
-			<base-icon
-				source="custom"
-				icon="task-open"
-				role="presentation"
-				:fill="iconColor"
-			/>
+			<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle>
@@ -38,22 +33,16 @@
 
 <script>
 import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
-import openTaskIconSvg from "@assets/img/courses/task-open-filled.svg";
-import missedTaskIconSvg from "@assets/img/courses/task-missed.svg";
-import submittedTaskIconSvg from "@assets/img/courses/task-done.svg";
-import gradedTaskIconSvg from "@assets/img/courses/task-done-filled.svg";
-import gradedMissedTaskIconSvg from "@assets/img/courses/task-missed-filled.svg";
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import {
 	printDateFromStringUTC,
 	printDateTimeFromStringUTC,
 } from "@plugins/datetime";
-import BaseIcon from "../base/BaseIcon.vue";
 
 const homeworkRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
-	components: { VCustomChipTimeRemaining, BaseIcon },
+	components: { VCustomChipTimeRemaining },
 	props: {
 		homework: {
 			type: Object,
@@ -80,21 +69,24 @@ export default {
 		taskIcon() {
 			switch (this.taskState) {
 				case "warning":
-					return openTaskIconSvg;
+					return "$taskOpenFilled";
 				case "overdue":
-					return missedTaskIconSvg;
+					return "$taskMissed";
 				case "submitted":
-					return submittedTaskIconSvg;
+					return "$taskDone";
 				case "graded":
-					return gradedTaskIconSvg;
+					return "$taskDoneFilled";
 				case "gradedOverdue":
-					return gradedMissedTaskIconSvg;
+					return "$taskMissedFilled";
 				default:
-					return openTaskIconSvg;
+					return "$taskOpenFilled";
 			}
 		},
 		iconColor() {
-			return this.homework.displayColor || "#455B6A";
+			return this.homework.displayColor || this.defaultIconColor;
+		},
+		defaultIconColor() {
+			return "#455B6A";
 		},
 	},
 	methods: {
@@ -133,8 +125,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.icon {
-	width: 2em;
-	height: 2em;
+.fill {
+	fill: currentColor;
 }
 </style>

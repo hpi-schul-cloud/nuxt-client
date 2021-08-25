@@ -1,7 +1,7 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkGradingHref(homework.id)">
 		<v-list-item-avatar>
-			<img :src="taskIconSvg" role="presentation" />
+			<v-icon class="fill" :color="iconColor"> $taskOpenFilled </v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle class="d-inline-flex">
@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import taskIconSvg from "@assets/img/courses/task-open-filled.svg";
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
@@ -67,7 +66,6 @@ export default {
 	data() {
 		return {
 			fromNow,
-			taskIconSvg,
 		};
 	},
 	methods: {
@@ -87,3 +85,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.fill {
+	fill: currentColor;
+}
+</style>
