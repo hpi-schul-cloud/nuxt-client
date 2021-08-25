@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
 - BC-18 - refactored the envConfig, accounts, autoLogout, and filePaths store modules to typescript and the corresponding components' access to them
 - BC-14 - changed thr contact address
 - BC-64 - execute e2e tests via push on main
