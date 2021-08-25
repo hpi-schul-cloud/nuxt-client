@@ -24,7 +24,7 @@ export const homeworks = [
 		_id: "59cce352c6abf042248e888c",
 		name: "zu archivierende Aufgabe von Marla",
 		duedate: "2017-06-07T09:30:00.000Z",
-		courseName: "Mathe",
+		courseName: "Biologie",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: {
 			submitted: 1,
@@ -48,7 +48,7 @@ export const homeworks = [
 		_id: "59cce2c61113d1132c98dc06",
 		name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
 		duedate: "2017-07-28T13:00:00.000Z",
-		courseName: "Mathe",
+		courseName: "Chemie",
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: {
 			submitted: 0,
@@ -509,7 +509,7 @@ export const noDueDateHomeworksTeacher = [
 		},
 	},
 ];
-export const coursesStudent = ["Mathe"];
+export const coursesStudent = ["Mathe", "Biologie", "Chemie"];
 export const coursesTeacher = ["Mathe", "Deutsch"];
 
 export const mathHomeworks = [
@@ -578,3 +578,6 @@ export const mathHomeworks = [
 		},
 	},
 ];
+
+export const coursesOpen = ["Mathe", "Chemie"];
+export const coursesSubmitted = ["Mathe", "Biologie"];
