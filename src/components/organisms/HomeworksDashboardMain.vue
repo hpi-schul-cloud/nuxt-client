@@ -17,11 +17,7 @@
 					</h1>
 
 					<v-container v-if="showTabs" class="tabs-max-width pb-0">
-						<v-tabs
-							v-model="tab"
-							grow
-							@change="updateFilter"
-						>
+						<v-tabs v-model="tab" grow @change="updateFilter">
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
 							}}</v-tab>
