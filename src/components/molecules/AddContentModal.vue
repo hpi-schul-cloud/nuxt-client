@@ -70,6 +70,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import ContentModule from "@/store/content";
 import ModalFooter from "@components/molecules/ModalFooter";
 
 export default {
@@ -102,9 +103,9 @@ export default {
 		...mapGetters("courses", {
 			coursesOptions: "getCoursesOptions",
 		}),
-		...mapGetters("content", {
-			lessons: "getLessons",
-		}),
+		lessons() {
+			return ContentModule.getLessonsGetter;
+		},
 		isSendEnabled() {
 			return (this.selectedLesson || {})._id !== undefined;
 		},
@@ -127,7 +128,7 @@ export default {
 			if (to) {
 				this.findLessons(to);
 			} else if (!to && !!from) {
-				this.$store.commit("content/clearLessons");
+				ContentModule.clearLessons();
 			}
 		},
 	},
@@ -160,11 +161,11 @@ export default {
 					merlinReference: this.merlinReference,
 				};
 			}
-			this.$store.dispatch("content/addToLesson", payload);
+			ContentModule.addToLesson(payload);
 			this.closeModal();
 		},
 		findLessons(course) {
-			this.$store.dispatch("content/getLessons", course._id);
+			ContentModule.getLessons(course._id);
 		},
 		clearState() {
 			this.selectedCourse = {};

@@ -129,6 +129,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import EnvConfigModule from "@/store/env-config";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
@@ -284,9 +285,9 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
-		...mapGetters("env-config", {
-			env: "getEnv",
-		}),
+		env() {
+			return EnvConfigModule.getEnv;
+		},
 		tableData: {
 			get() {
 				if (this.takeOverTableData) return this.searchData;

@@ -118,6 +118,7 @@ module.exports = {
 	 */
 	plugins: [
 		// configInit need to be first so that the env vars are available for following plugins
+		"@plugins/axios-accessor",
 		"@plugins/configInit",
 		"@plugins/global",
 		"@plugins/axios",
@@ -128,7 +129,6 @@ module.exports = {
 		"@plugins/datetime",
 		"@plugins/vuelidate",
 		"@plugins/iconfonts",
-		"@plugins/axios-accessor",
 	],
 
 	/*

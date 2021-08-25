@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import ContentModule from "@/store/content";
 import ContentSearchbar from "@components/molecules/ContentSearchbar";
 import ContentCard from "@components/organisms/ContentCard";
 import ContentEmptyState from "@components/molecules/ContentEmptyState";
@@ -107,10 +107,12 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("content", {
-			resources: "getResources",
-			loading: "getLoading",
-		}),
+		resources() {
+			return ContentModule.getResourcesGetter;
+		},
+		loading() {
+			return ContentModule.getLoading;
+		},
 		query() {
 			const query = {
 				$limit: 12,
@@ -147,11 +149,11 @@ export default {
 						q: "",
 					},
 				});
-				this.$store.commit("content/clearResources");
+				ContentModule.clearResources();
 				return;
 			}
 			this.$options.debounce = setInterval(() => {
-				this.$store.commit("content/clearResources");
+				ContentModule.clearResources();
 				this.searchQueryResult = this.searchQuery;
 
 				clearInterval(this.$options.debounce);
@@ -180,13 +182,13 @@ export default {
 			if (this.query.$skip < this.resources.total) {
 				this.query.$skip += this.query.$limit;
 				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("content/addResources", this.query);
+				await ContentModule.addResources(this.query);
 			}
 		},
 		async searchContent() {
 			try {
 				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("content/getResources", this.query);
+				await ContentModule.getResources(this.query);
 			} catch (error) {
 				this.$toast.error(
 					this.$t("pages.content.notification.lernstoreNotAvailable")

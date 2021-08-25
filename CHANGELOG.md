@@ -10,12 +10,21 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
--   BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
+- BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
+- BC-18 - refactored the envConfig, accounts, autoLogout, and filePaths store modules to typescript and the corresponding components' access to them
+- BC-14 - changed thr contact address
+- BC-64 - execute e2e tests via push on main
+- BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
+
+## [26.9.1] - 2021-08-16
+
+- SC-9192 - fix add material to course lesson and load exsiting ldap config for modification
 
 ## [26.9.0] - 2021-08-13
 
 - SC-9192 - access feathers and nestjs apps over their dedicated version prefixes
 - SC-9191 run e2e tests in pull requests with 'run tests' label
+- SC-9280 fix primary and secondary colors according to old client
 
 ## [26.8.0] - 2021-08-05
 
