@@ -10,7 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
-- BC-133 - added unit tests for filePaths store module
+- BC-133 - added unit tests for filePaths and accounts store modules
 
 ### Changed
 
