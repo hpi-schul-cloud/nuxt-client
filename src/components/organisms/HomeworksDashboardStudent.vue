@@ -90,6 +90,7 @@ export default {
 			overDueHomeworks: "getOverDueHomeworks",
 			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
 			gradedHomeworks: "getGradedHomeworks",
+			submittedHomeworks: "getSubmittedHomeworks",
 			status: "getStatus",
 			isListEmpty: "isListEmpty",
 			hasNoOpenHomeworks: "hasNoOpenHomeworks",
