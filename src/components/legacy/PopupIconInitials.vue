@@ -66,12 +66,12 @@ export default {
 	color: var(--color-white);
 	cursor: pointer;
 	-webkit-user-select: none;
-	background-color: var(--color-secondary);
+	background-color: var(--color-primary);
 	border: none;
 	border-radius: var(--radius-round);
 
 	&:hover {
-		background-color: var(--color-secondary-dark);
+		background-color: var(--color-primary-dark);
 	}
 }
 
