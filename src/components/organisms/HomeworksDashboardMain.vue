@@ -21,7 +21,7 @@
 							v-model="tab"
 							grow
 							:prev-icon="undefined"
-							@change="selectTab"
+							@change="updateFilter"
 						>
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
@@ -133,7 +133,7 @@ export default {
 		filterByCourse() {
 			this.$store.commit("homeworks/setFilter", this.selectedCourses);
 		},
-		selectTab(tab) {
+		updateFilter(tab) {
 			if (tab === 0 && !this.hasOpenHomeworks) {
 				this.isFilterDisabled = true;
 			} else if (tab === 1 && !this.hasSubmittedHomeworks) {
