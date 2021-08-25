@@ -6,8 +6,8 @@ const custom = {
 		dark: false,
 		themes: {
 			light: {
-				primary: "#f56b00",
-				secondary: "#185888",
+				primary: "#185888",
+				secondary: "#f56b00",
 				accent: "#455b6a",
 			},
 		},

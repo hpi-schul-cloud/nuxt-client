@@ -1,4 +1,6 @@
 import AutoLogoutWarning from "./AutoLogoutWarning";
+import EnvConfigModule from "@/store/env-config";
+import AutoLogoutModule from "@/store/autoLogout";
 
 const toast = {
 	error401: -1,
@@ -41,11 +43,11 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 	let wrapper;
 
 	const showModal = () => {
-		wrapper.vm.$store.state.autoLogout.active = true;
+		AutoLogoutModule.context.state.active = true;
 	};
 
 	const setShowToast = (value) => {
-		wrapper.vm.$eventBus.$emit("showToast@autologout", value);
+		AutoLogoutModule.context.state.toastValue = value;
 	};
 
 	beforeAll(() => {
@@ -59,35 +61,47 @@ describe("@components/organisms/AutoLogoutWarning", () => {
 	it(...isValidComponent(AutoLogoutWarning));
 
 	it("should call init on store", async () => {
-		expect(actions.init.mock.calls).toHaveLength(1);
+		const { showWarningOnRemainingSeconds, defaultRemainingTimeInSeconds } =
+			AutoLogoutModule.context.state;
+		const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
+			EnvConfigModule.getEnv;
+		expect(showWarningOnRemainingSeconds).toBe(
+			JWT_SHOW_TIMEOUT_WARNING_SECONDS
+		);
+		expect(defaultRemainingTimeInSeconds).toBe(JWT_TIMEOUT_SECONDS);
 	});
 
 	it("changing the error property should toggle content of the modal", async () => {
 		showModal();
 		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".sloth").html()).toContain("Sloth.svg");
-		wrapper.vm.$store.state.autoLogout.error = true;
+		AutoLogoutModule.context.state.error = true;
 		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".sloth").html()).toContain("Sloth_error.svg");
 	});
 
 	it("calculate remaining time in minutes correctly", async () => {
-		expect(wrapper.vm.$store.state.autoLogout.remainingTimeInSeconds).toBe(120);
+		AutoLogoutModule.context.state.remainingTimeInSeconds = 120;
+		expect(AutoLogoutModule.context.state.remainingTimeInSeconds).toBe(120);
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(2);
-		wrapper.vm.$store.state.autoLogout.remainingTimeInSeconds = 100;
+		AutoLogoutModule.context.state.remainingTimeInSeconds = 100;
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(1);
-		wrapper.vm.$store.state.autoLogout.remainingTimeInSeconds = -999;
+		AutoLogoutModule.context.state.remainingTimeInSeconds = -999;
 		expect(wrapper.vm.remainingTimeInMinutes).toBe(0);
 	});
 
 	describe("Extend secession", () => {
 		it("extend secession over modal", async () => {
+			const extendSpy = jest.fn();
+			AutoLogoutModule.extendSessionAction = extendSpy;
+
 			showModal();
 			await wrapper.vm.$nextTick();
 
+			expect(wrapper.find("button")).toBeDefined();
 			wrapper.find("button").trigger("click");
 			await wrapper.vm.$nextTick();
-			expect(actions.extendSession.mock.calls).toHaveLength(1);
+			expect(extendSpy.mock.calls).toHaveLength(1);
 		});
 
 		it("show success toast on showToast change", async () => {

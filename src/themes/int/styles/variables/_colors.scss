@@ -12,5 +12,5 @@ $brighten: 90%;
 	--color-accent: #74c599;
 	--color-gray-dark: #17212a;
 	--color-gray-light: color-mod(var(--color-gray-dark) tint(#{$brighten}));
-	--color-sidebar-menu-item-active: var(--color-secondary-dark);
+	--color-sidebar-menu-item-active: var(--color-primary-dark);
 }
