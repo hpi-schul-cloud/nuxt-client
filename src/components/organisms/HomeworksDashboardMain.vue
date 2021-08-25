@@ -17,17 +17,19 @@
 					</h1>
 
 					<v-container v-if="showTabs" class="tabs-max-width pb-0">
-						<v-tabs
-							v-model="tab"
-							grow
-							@change="updateFilter"
-						>
-							<v-tab>{{
-								$t("components.organisms.HomeworksDashboardMain.tab.open")
-							}}</v-tab>
-							<v-tab>{{
-								$t("components.organisms.HomeworksDashboardMain.tab.completed")
-							}}</v-tab>
+						<v-tabs v-model="tab" grow @change="updateFilter">
+							<v-tab>
+								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
+								{{ $t("components.organisms.HomeworksDashboardMain.tab.open") }}
+							</v-tab>
+							<v-tab>
+								<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
+								{{
+									$t(
+										"components.organisms.HomeworksDashboardMain.tab.completed"
+									)
+								}}
+							</v-tab>
 						</v-tabs>
 					</v-container>
 				</div>
@@ -165,6 +167,10 @@ export default {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.tab-icon {
+	fill: currentColor;
 }
 
 ::v-deep .v-slide-group__prev {
