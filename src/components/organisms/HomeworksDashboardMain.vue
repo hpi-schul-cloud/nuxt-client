@@ -16,7 +16,7 @@
 						{{ $t("pages.homeworks.title") }}
 					</h1>
 					<v-container v-if="showTabs" class="tabs-max-width pb-0">
-						<v-tabs v-model="tab" grow :prev-icon="undefined">
+						<v-tabs v-model="tab" grow>
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
 							}}</v-tab>

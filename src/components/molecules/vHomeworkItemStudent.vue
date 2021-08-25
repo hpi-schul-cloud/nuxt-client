@@ -37,6 +37,7 @@ import openTaskIconSvg from "@assets/img/courses/task-open-filled.svg";
 import missedTaskIconSvg from "@assets/img/courses/task-missed.svg";
 import submittedTaskIconSvg from "@assets/img/courses/task-done.svg";
 import gradedTaskIconSvg from "@assets/img/courses/task-done-filled.svg";
+import gradedMissedTaskIconSvg from "@assets/img/courses/task-missed-filled.svg";
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import {
 	printDateFromStringUTC,
@@ -67,6 +68,7 @@ export default {
 			if (this.isOverDue(duedate)) return "overdue";
 			if (status.submitted) return "submitted";
 			if (status.graded) return "graded";
+			if (this.isGradedButMissed(duedate, status)) return "gradedOverdue";
 			return undefined;
 		},
 		taskIcon() {
@@ -79,6 +81,8 @@ export default {
 					return submittedTaskIconSvg;
 				case "graded":
 					return gradedTaskIconSvg;
+				case "gradedOverdue":
+					return gradedMissedTaskIconSvg;
 				default:
 					return openTaskIconSvg;
 			}
@@ -108,6 +112,9 @@ export default {
 		},
 		isOverDue(dueDate) {
 			return dueDate && new Date(dueDate) < new Date();
+		},
+		isGradedButMissed(dueDate, status) {
+			return this.isOverDue(dueDate) && !status.submitted && status.graded;
 		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;
