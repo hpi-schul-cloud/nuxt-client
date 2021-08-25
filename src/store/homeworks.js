@@ -106,6 +106,17 @@ const module = merge(base, {
 				state.status === "completed" && getters.getSubmittedHomeworks.length > 0
 			);
 		},
+		hasNoOpenHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getOpenHomeworks.length === 0
+			);
+		},
+		hasNoSubmittedHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" &&
+				getters.getSubmittedHomeworks.length === 0
+			);
+		},
 	},
 });
 

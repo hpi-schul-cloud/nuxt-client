@@ -86,23 +86,15 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			status: "getStatus",
-			openHomeworks: "getOpenHomeworks",
 			dueDateHomeworks: "getOpenHomeworksWithDueDate",
 			overDueHomeworks: "getOverDueHomeworks",
 			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
-			submittedHomeworks: "getSubmittedHomeworks",
 			gradedHomeworks: "getGradedHomeworks",
 			status: "getStatus",
 			isListEmpty: "isListEmpty",
+			hasNoOpenHomeworks: "hasNoOpenHomeworks",
+			hasNoSubmittedHomeworks: "hasNoSubmittedHomeworks",
 		}),
-		hasNoOpenHomeworks: function () {
-			return this.status === "completed" && this.openHomeworks.length === 0;
-		},
-		hasNoSubmittedHomeworks: function () {
-			return (
-				this.status === "completed" && this.submittedHomeworks.length === 0
-			);
-		},
 	},
 };
 </script>
