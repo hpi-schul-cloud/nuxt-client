@@ -2,8 +2,8 @@
 	<section>
 		<section>
 			<template v-if="status === 'pending'">
-				<h1 class="h4 ml-10 pb-15">
-					<v-skeleton-loader type="heading" max-width="40%" class="pb-15" />
+				<h1 class="h4 ml-10">
+					<v-skeleton-loader type="heading" max-width="40%" />
 				</h1>
 				<v-container class="v-container">
 					<v-skeleton-loader type="text" />
@@ -12,12 +12,17 @@
 
 			<template v-else>
 				<div v-if="isListFilled" class="border-bottom">
-					<h1 class="h4 ml-10 pb-15">
+					<h1 class="h4 ml-10">
 						{{ $t("pages.homeworks.title") }}
 					</h1>
 
-					<v-container v-if="showTabs" class="v-container pb-0">
-						<v-tabs v-model="tab" grow @change="selectTab">
+					<v-container v-if="showTabs" class="tabs-max-width pb-0">
+						<v-tabs
+							v-model="tab"
+							grow
+							:prev-icon="undefined"
+							@change="selectTab"
+						>
 							<v-tab>{{
 								$t("components.organisms.HomeworksDashboardMain.tab.open")
 							}}</v-tab>
@@ -147,15 +152,24 @@ export default {
 	max-width: var(--size-content-width-max);
 }
 
+.tabs-max-width {
+	max-width: 500px;
+}
+
 // even out border
 .v-tabs {
 	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	font-family: var(--heading-font-family);
 }
 
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+::v-deep .v-slide-group__prev {
+	display: none !important;
 }
 
 .border-bottom {
