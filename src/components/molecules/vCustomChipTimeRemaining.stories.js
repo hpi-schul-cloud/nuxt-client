@@ -20,7 +20,7 @@ storiesOf("0 Vuetify/Molecules", module).add(
 		template: `
 		<v-app>
 			<h1 class="h4">VCustomChipTimeRemaining</h1>
-			<p>Implements the v-chip component, and displays remaining time depending on input date.
+			<p>Implements the v-chip component and displays remaining time depending on input date.
 				Displays either remaining time in hours/minutes.
 				Also allows to shorten the time units
 			</p>
@@ -30,7 +30,6 @@ storiesOf("0 Vuetify/Molecules", module).add(
 				<v-custom-chip-time-remaining :due-date="dueHours" shorten-unit type="warning"/>
 				<v-custom-chip-time-remaining :due-date="dueMinutes" type="warning"/>
 				<v-custom-chip-time-remaining :due-date="dueMinutes" shorten-unit type="warning"/>
-				<v-custom-chip-time-remaining :due-date="dueHours" type="overdue"/>
 			</v-chip-group>
 		</v-app>`,
 	})

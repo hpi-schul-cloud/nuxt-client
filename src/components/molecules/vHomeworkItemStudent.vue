@@ -1,7 +1,12 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkHref(homework.id)">
 		<v-list-item-avatar>
-			<img :src="taskIcon" role="presentation" />
+			<base-icon
+				source="custom"
+				icon="task-open"
+				role="presentation"
+				:fill="iconColor"
+			/>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle>
@@ -43,11 +48,12 @@ import {
 	printDateFromStringUTC,
 	printDateTimeFromStringUTC,
 } from "@plugins/datetime";
+import BaseIcon from "../base/BaseIcon.vue";
 
 const homeworkRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
-	components: { VCustomChipTimeRemaining },
+	components: { VCustomChipTimeRemaining, BaseIcon },
 	props: {
 		homework: {
 			type: Object,
@@ -87,6 +93,9 @@ export default {
 					return openTaskIconSvg;
 			}
 		},
+		iconColor() {
+			return this.homework.displayColor || "#455B6A";
+		},
 	},
 	methods: {
 		computedDueDateLabel(dueDate, shorten = false) {
@@ -122,3 +131,10 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.icon {
+	width: 2em;
+	height: 2em;
+}
+</style>

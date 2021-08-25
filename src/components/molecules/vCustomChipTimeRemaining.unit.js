@@ -48,25 +48,6 @@ describe("@components/molecules/vCustomEmptyState", () => {
 		expect(wrapper.html()).toMatchSnapshot();
 	});
 
-	it("should render a red v-chip component, with overdue label", () => {
-		const dueDate = new Date();
-		dueDate.setMinutes(dueDate.getMinutes() - 20);
-
-		const wrapper = mount(VCustomChipTimeRemaining, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				type: "overdue",
-				dueDate: dueDate.toISOString(),
-			},
-		});
-
-		expect(wrapper.html()).toMatchSnapshot();
-	});
-
 	it("hintDueDate() method return the right label dependent on date", () => {
 		let label;
 		const dueDate = new Date();
@@ -79,7 +60,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 			}),
 			vuetify,
 			propsData: {
-				type: "overdue",
+				type: "warning",
 				dueDate: dueDate.toISOString(),
 			},
 		});
@@ -97,7 +78,7 @@ describe("@components/molecules/vCustomEmptyState", () => {
 	});
 
 	it("accepts valid type props", () => {
-		const validTypes = ["warning", "overdue"];
+		const validTypes = ["warning"];
 		const { validator } = VCustomChipTimeRemaining.props.type;
 
 		validTypes.forEach((type) => {

@@ -8,16 +8,6 @@
 		<v-icon left small> $hourglassBottomBlack </v-icon>
 		{{ hintDueDate(dueDate, shortenUnit) }}
 	</v-chip>
-	<v-chip
-		v-else-if="type === 'overdue'"
-		color="error lighten-5"
-		text-color="black"
-		small
-		data-test-id="overDueDateLabel"
-	>
-		<v-icon left small> $hourglassDisabled </v-icon>
-		{{ $t("pages.homeworks.labels.overdue") }}
-	</v-chip>
 </template>
 
 <script>
@@ -29,7 +19,7 @@ export default {
 		type: {
 			type: String,
 			required: true,
-			validator: (value) => ["warning", "overdue"].includes(value),
+			validator: (value) => ["warning"].includes(value),
 		},
 		dueDate: {
 			type: String,
