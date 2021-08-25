@@ -43,6 +43,18 @@ const module = merge(base, {
 			);
 			return Array.from(courses);
 		},
+		getCoursesOpen: (state, getters) => {
+			const courses = new Set(
+				getters.getOpenHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getCoursesSubmitted: (state, getters) => {
+			const courses = new Set(
+				getters.getSubmittedHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
 		getHomeworks: (state, getters) => {
 			return state.courseFilter.length > 0
 				? getters.getFilteredHomeworks

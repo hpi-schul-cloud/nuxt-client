@@ -93,9 +93,10 @@ export default {
 			status: "getStatus",
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
-			availableCourses: "getCourses",
 			hasOpenHomeworks: "hasOpenHomeworks",
 			hasSubmittedHomeworks: "hasSubmittedHomeworks",
+			getCoursesOpen: "getCoursesOpen",
+			getCoursesSubmitted: "getCoursesSubmitted",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -113,6 +114,11 @@ export default {
 		},
 		showTabs: function () {
 			return this.isStudent && this.isListFilled;
+		},
+		availableCourses: function () {
+			if (this.tab === 0) {
+				return this.getCoursesOpen;
+			} else return this.getCoursesSubmitted;
 		},
 	},
 	mounted() {
