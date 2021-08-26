@@ -11,6 +11,8 @@ import {
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
 	overDueHomeworks,
+	gradedHomeworks,
+	submittedHomeworks,
 } from "@@/stories/mockData/Homeworks";
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
@@ -25,13 +27,13 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
 				getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
 				getOverDueHomeworks: () => overDueHomeworks,
-				getGradedHomeworks: () => [],
-				getSubmittedHomeworks: () => [],
+				getGradedHomeworks: () => gradedHomeworks,
+				getSubmittedHomeworks: () => submittedHomeworks,
 				hasOpenHomeworks: () => true,
 				getCoursesOpen: () => coursesOpen,
 				getCoursesCompleted: () => coursesCompleted,
 				hasNoOpenHomeworks: () => false,
-				hasNoCompletedHomeworks: () => true,
+				hasNoCompletedHomeworks: () => false,
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -241,5 +243,28 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		await autocompleteEl.vm.$emit("change");
 
 		expect(mockMethod).toHaveBeenCalled();
+	});
+
+	it("Should set available courses based on the active tab", () => {
+		const wrapper = mount(HomeworksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreStudent,
+			}),
+			vuetify,
+			data() {
+				return {
+					tab: 0,
+				};
+			},
+			propsData: {
+				role: "student",
+			},
+		});
+
+		expect(wrapper.vm.availableCourses).toStrictEqual(coursesOpen);
+		wrapper.setData({ tab: 1 });
+		expect(wrapper.vm.availableCourses).toStrictEqual(coursesCompleted);
 	});
 });
