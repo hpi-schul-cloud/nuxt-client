@@ -1,6 +1,5 @@
 import { merge } from "lodash";
 import { serviceTemplate, fetchAll } from "@utils";
-import { homeworks } from "@@/stories/mockData/Homeworks";
 const base = serviceTemplate("homework");
 const baseState = base.state();
 
@@ -15,7 +14,7 @@ const module = merge(base, {
 			try {
 				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
 				commit("set", {
-					items: data.concat(homeworks),
+					items: data,
 				});
 				commit("setStatus", "completed");
 			} catch (error) {
@@ -50,9 +49,9 @@ const module = merge(base, {
 			);
 			return Array.from(courses);
 		},
-		getCoursesSubmitted: (state, getters) => {
+		getCoursesCompleted: (state, getters) => {
 			const courses = new Set(
-				getters.getSubmittedHomeworks.map((homework) => homework.courseName)
+				getters.getCompletedHomeworks.map((homework) => homework.courseName)
 			);
 			return Array.from(courses);
 		},
@@ -68,17 +67,17 @@ const module = merge(base, {
 			});
 		},
 		getOpenHomeworksWithDueDate: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
+			return getters.getOpenHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) > new Date();
 			});
 		},
 		getOpenHomeworksWithoutDueDate: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
+			return getters.getOpenHomeworks.filter((homework) => {
 				return !homework.duedate;
 			});
 		},
 		getOverDueHomeworks: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
+			return getters.getOpenHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
@@ -87,13 +86,18 @@ const module = merge(base, {
 				return homework.status.submitted === 0 && homework.status.graded === 0;
 			});
 		},
-		getSubmittedHomeworks: (state, getters) => {
+		getCompletedHomeworks: (state, getters) => {
 			return getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted >= 1 || homework.status.graded >= 1;
+			});
+		},
+		getSubmittedHomeworks: (state, getters) => {
+			return getters.getCompletedHomeworks.filter((homework) => {
 				return homework.status.submitted >= 1 && homework.status.graded === 0;
 			});
 		},
 		getGradedHomeworks: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
+			return getters.getCompletedHomeworks.filter((homework) => {
 				return homework.status.graded >= 1;
 			});
 		},
@@ -102,9 +106,9 @@ const module = merge(base, {
 				state.status === "completed" && getters.getOpenHomeworks.length > 0
 			);
 		},
-		hasSubmittedHomeworks: (state, getters) => {
+		hasCompletedHomeworks: (state, getters) => {
 			return (
-				state.status === "completed" && getters.getSubmittedHomeworks.length > 0
+				state.status === "completed" && getters.getCompletedHomeworks.length > 0
 			);
 		},
 		hasNoOpenHomeworks: (state, getters) => {
@@ -112,10 +116,9 @@ const module = merge(base, {
 				state.status === "completed" && getters.getOpenHomeworks.length === 0
 			);
 		},
-		hasNoSubmittedHomeworks: (state, getters) => {
+		hasNoCompletedHomeworks: (state, getters) => {
 			return (
-				state.status === "completed" &&
-				getters.getSubmittedHomeworks.length === 0
+				state.status === "completed" && getters.getCompletedHomeworks.length === 0
 			);
 		},
 	},

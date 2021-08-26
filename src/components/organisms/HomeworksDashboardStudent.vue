@@ -42,8 +42,8 @@
 					:panel-one-title="$t('pages.homeworks.subtitleGraded')"
 					:panel-two-title="$t('pages.homeworks.subtitleNotGraded')"
 					:status="status"
-					:is-empty="hasNoSubmittedHomeworks"
-					:expanded-default="1"
+					:is-empty="hasNoCompletedHomeworks"
+					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
 						<homeworks-list :homeworks="gradedHomeworks" type="student" />
@@ -53,7 +53,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="hasNoSubmittedHomeworks"
+					v-if="hasNoCompletedHomeworks"
 					:image="emptyStateImage"
 					:title="$t('pages.homeworks.student.submitted.emptyState.title')"
 					class="mt-16"
@@ -94,7 +94,7 @@ export default {
 			status: "getStatus",
 			isListEmpty: "isListEmpty",
 			hasNoOpenHomeworks: "hasNoOpenHomeworks",
-			hasNoSubmittedHomeworks: "hasNoSubmittedHomeworks",
+			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
 		}),
 	},
 };

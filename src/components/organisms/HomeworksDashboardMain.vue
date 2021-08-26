@@ -100,9 +100,9 @@ export default {
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
 			hasOpenHomeworks: "hasOpenHomeworks",
-			hasSubmittedHomeworks: "hasSubmittedHomeworks",
+			hasCompletedHomeworks: "hasCompletedHomeworks",
 			getCoursesOpen: "getCoursesOpen",
-			getCoursesSubmitted: "getCoursesSubmitted",
+			getCoursesCompleted: "getCoursesCompleted",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -124,7 +124,7 @@ export default {
 		availableCourses: function () {
 			if (this.tab === 0) {
 				return this.getCoursesOpen;
-			} else return this.getCoursesSubmitted;
+			} else return this.getCoursesCompleted;
 		},
 	},
 	mounted() {
@@ -137,7 +137,7 @@ export default {
 		updateFilter(tab) {
 			if (tab === 0 && !this.hasOpenHomeworks) {
 				this.isFilterDisabled = true;
-			} else if (tab === 1 && !this.hasSubmittedHomeworks) {
+			} else if (tab === 1 && !this.hasCompletedHomeworks) {
 				this.isFilterDisabled = true;
 			} else {
 				this.isFilterDisabled = false;

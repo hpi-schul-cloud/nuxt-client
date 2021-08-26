@@ -60,10 +60,10 @@ export default {
 		taskState() {
 			const { duedate, status } = this.homework;
 			if (this.isCloseToDueDate(duedate)) return "warning";
-			if (this.isOverDue(duedate)) return "overdue";
-			if (status.submitted) return "submitted";
-			if (status.graded) return "graded";
 			if (this.isGradedButMissed(duedate, status)) return "gradedOverdue";
+			if (this.isOverDue(duedate)) return "overdue";
+			if (status.submitted && !status.graded) return "submitted";
+			if (status.graded) return "graded";
 			return undefined;
 		},
 		taskIcon() {

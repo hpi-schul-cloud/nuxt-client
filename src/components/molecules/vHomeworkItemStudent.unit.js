@@ -2,7 +2,6 @@ import vHomeworkItemStudent from "./vHomeworkItemStudent";
 import {
 	homeworks,
 	openHomeworksWithoutDueDate,
-	overDueHomeworks,
 	openHomeworksWithDueDate,
 	invalidHomeworks,
 } from "@@/stories/mockData/Homeworks";
@@ -67,23 +66,6 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 		expect(dueDateLabel.text()).toBe("Abgabe 11.06.00 16:00");
 	});
 
-	it("Should render overdue label, if homework is overdue", () => {
-		const wrapper = mount(vHomeworkItemStudent, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: {
-				homework: overDueHomeworks[0],
-			},
-		});
-
-		expect(wrapper.find("[data-test-id='overDueDateLabel']").exists()).toBe(
-			true
-		);
-	});
-
 	it("Should render hint label, if homework is close to due date", () => {
 		const current = new Date();
 		current.setHours(current.getHours() + 1);
@@ -114,7 +96,7 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 		);
 	});
 
-	it("Should render no hint/overdue label if the homework is due to in the far future", () => {
+	it("Should render no hint label if the homework is due to in the far future", () => {
 		const wrapper = mount(vHomeworkItemStudent, {
 			...createComponentMocks({
 				i18n: true,
@@ -126,9 +108,6 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 			},
 		});
 
-		expect(wrapper.find("[data-test-id='overDueDateLabel']").exists()).toBe(
-			false
-		);
 		expect(wrapper.find("[data-test-id='dueDateHintLabel']").exists()).toBe(
 			false
 		);
