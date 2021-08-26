@@ -6,7 +6,6 @@
 	Do not tamper with this data.
 */
 
-
 // not submitted, not graded, includes withoutDueDate, withDueDate & overDue
 export const openHomeworks = [
 	{
@@ -221,7 +220,7 @@ export const submittedHomeworks = [
 			graded: 0,
 		},
 	},
-]
+];
 
 export const missedButGradedHomeworks = [
 	{
@@ -236,7 +235,7 @@ export const missedButGradedHomeworks = [
 			graded: 1,
 		},
 	},
-]
+];
 
 export const gradedHomeworks = [
 	{
@@ -263,11 +262,11 @@ export const gradedHomeworks = [
 			graded: 1,
 		},
 	},
-]
+];
 
 export const completedHomeworks = [...submittedHomeworks, ...gradedHomeworks];
 
-export const homeworks = [ ...openHomeworks, ...completedHomeworks ]
+export const homeworks = [...openHomeworks, ...completedHomeworks];
 
 export const invalidHomeworks = [
 	{
