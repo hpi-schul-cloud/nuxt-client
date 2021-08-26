@@ -118,7 +118,8 @@ const module = merge(base, {
 		},
 		hasNoCompletedHomeworks: (state, getters) => {
 			return (
-				state.status === "completed" && getters.getCompletedHomeworks.length === 0
+				state.status === "completed" &&
+				getters.getCompletedHomeworks.length === 0
 			);
 		},
 	},
