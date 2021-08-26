@@ -28,7 +28,7 @@ export default {
 @import "@styles";
 .actions {
 	padding: 0;
-	background-color: var(--color-tertiary);
+	background-color: var(--color-secondary);
 }
 .slot-container {
 	padding: var(--space-sm) var(--space-md);

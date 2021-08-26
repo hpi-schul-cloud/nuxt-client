@@ -178,12 +178,12 @@ export default {
 	h2 {
 		font-size: var(--heading-4);
 		font-weight: var(--font-weight-normal);
-		color: var(--color-secondary);
+		color: var(--color-primary);
 	}
 
 	h3 {
 		font-size: var(--heading-5);
-		color: var(--color-secondary);
+		color: var(--color-primary);
 	}
 
 	ul {
@@ -193,7 +193,7 @@ export default {
 
 	blockquote {
 		padding-left: var(--space-md);
-		border-left: 2px solid var(--color-secondary);
+		border-left: 2px solid var(--color-primary);
 	}
 
 	li {

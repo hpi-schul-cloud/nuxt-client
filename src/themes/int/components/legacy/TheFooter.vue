@@ -111,7 +111,7 @@ export default {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
-	color: var(--color-tertiary-dark);
+	color: var(--color-secondary-dark);
 	text-align: center;
 }
 .top-line {

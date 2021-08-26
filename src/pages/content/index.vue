@@ -63,7 +63,7 @@
 			<base-spinner
 				v-show="loading"
 				class="spinner mt--xl-2"
-				color="var(--color-tertiary)"
+				color="var(--color-secondary)"
 				size="xlarge"
 			/>
 			<content-edu-sharing-footer class="content__footer" />
@@ -233,7 +233,7 @@ export default {
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-tertiary);
+		color: var(--color-secondary);
 		cursor: pointer;
 	}
 	&__container {

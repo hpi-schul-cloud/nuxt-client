@@ -90,7 +90,7 @@ export default {
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xs-4);
-		color: var(--color-tertiary-dark);
+		color: var(--color-secondary-dark);
 		white-space: nowrap;
 		background-color: var(--color-white);
 		border: 1px solid var(--color-disabled);

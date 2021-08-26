@@ -9,14 +9,14 @@ a:not(.is-none) {
 	--button-line-height: var(--line-height-md);
 
 	// color modes
-	--button-background: var(--color-tertiary);
+	--button-background: var(--color-secondary);
 	--button-text-color: var(--color-white);
 
 	&.is-outline {
-		--button-background: var(--color-tertiary);
+		--button-background: var(--color-secondary);
 	}
 	&.is-text {
-		--button-background: var(--color-gray-dark);
+		--button-background: var(--color-secondary);
 	}
 	&.is-primary,
 	&.is-hero-cta {
@@ -27,10 +27,10 @@ a:not(.is-none) {
 		}
 	}
 	&.is-secondary {
-		--button-background: var(--color-secondary);
+		--button-background: var(--color-primary);
 		--button-text-color: var(--color-white);
 		&:hover {
-			--button-background: var(--color-secondary-dark);
+			--button-background: var(--color-primary-dark);
 		}
 	}
 	&.is-success {
@@ -57,8 +57,8 @@ a:not(.is-none) {
 	&.is-fancy {
 		--button-background: linear-gradient(
 			45deg,
-			var(--color-primary),
-			var(--color-secondary)
+			var(--color-accent),
+			var(--color-primary)
 		);
 		--button-text-color: var(--color-white);
 
@@ -67,8 +67,8 @@ a:not(.is-none) {
 		&:hover {
 			--button-background: linear-gradient(
 				45deg,
-				var(--color-primary-dark),
-				var(--color-secondary-dark)
+				var(--color-accent-dark),
+				var(--color-primary-dark)
 			);
 		}
 	}
@@ -123,7 +123,7 @@ a:not(.is-none) {
 	align-items: center;
 	justify-content: center;
 	padding: var(--button-padding);
-	font-family: var(--font-accent);
+	font-family: var(--font-primary);
 	font-size: var(--text-md);
 	font-weight: var(--button-font-weight);
 	line-height: var(--button-line-height);
@@ -144,7 +144,7 @@ a:not(.is-none) {
 	}
 
 	&:hover {
-		--button-background: var(--color-tertiary-dark);
+		--button-background: var(--color-secondary-dark);
 	}
 
 	&:focus {

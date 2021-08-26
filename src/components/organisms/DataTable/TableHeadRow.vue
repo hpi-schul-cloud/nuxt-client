@@ -9,7 +9,7 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--color-tertiary)"
+					style="color: var(--color-secondary)"
 				/>
 			</div>
 		</th>
@@ -253,7 +253,7 @@ export default {
 .table__row {
 	font-weight: var(--font-weight-bold);
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid var(--color-tertiary);
+		border-bottom: calc(2 * var(--border-width)) solid var(--color-secondary);
 		&.is-current-sort {
 			opacity: 1;
 		}
@@ -267,7 +267,7 @@ export default {
 			font-weight: var(--font-weight-normal);
 			svg {
 				font-size: calc(1.5 * var(--text-lg));
-				color: var(--color-tertiary);
+				color: var(--color-secondary);
 			}
 		}
 		.select-wrap {

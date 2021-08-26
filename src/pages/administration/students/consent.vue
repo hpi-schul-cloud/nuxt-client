@@ -579,14 +579,14 @@ export default {
 	margin-bottom: var(--space-md);
 }
 .print-title {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 	border: none;
 }
 .warning {
 	color: var(--color-danger);
 }
 ::v-deep .link {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 	text-decoration: none;
 }
 ::v-deep .table {

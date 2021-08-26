@@ -34,7 +34,7 @@
 			<pulsating-dot
 				v-if="actionNeeded"
 				id="pulsating-dot"
-				color="var(--color-secondary)"
+				color="var(--color-primary)"
 			/>
 			<span style="position: relative">
 				<base-button
@@ -220,7 +220,7 @@ $color-dark-gray: var(--color-gray-medium);
 }
 
 .focus {
-	outline: 2px solid var(--color-tertiary);
+	outline: 2px solid var(--color-secondary);
 	outline-offset: 3px;
 }
 </style>

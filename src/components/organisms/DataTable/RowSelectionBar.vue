@@ -124,7 +124,7 @@ export default {
 	width: 100%;
 	padding: var(--space-xs) var(--space-md);
 	color: var(--color-on-tertiary-light);
-	background-color: var(--color-tertiary-light);
+	background-color: var(--color-secondary-light);
 }
 
 .actions {

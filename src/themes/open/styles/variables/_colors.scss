@@ -3,10 +3,10 @@ $darken: 25%;
 
 :root {
 	/* main colors */
-	--color-primary: #126dc4;
-	--color-secondary: #df0b40;
+	--color-accent: #126dc4;
+	--color-primary: #df0b40;
+	--color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
+	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
 	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
 	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
-	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
-	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
 }

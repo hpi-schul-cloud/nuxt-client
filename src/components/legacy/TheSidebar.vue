@@ -160,7 +160,7 @@ export default {
 		display: none;
 		width: 100%;
 		height: var(--sidebar-item-height);
-		background-color: var(--color-primary);
+		// background-color: var(--color-primary);
 	}
 
 	.logo-full {
@@ -229,7 +229,7 @@ export default {
 
 					.icon {
 						width: 25px;
-						margin-right: 20px;
+						margin-right: 10px;
 						font-size: 20px;
 					}
 
