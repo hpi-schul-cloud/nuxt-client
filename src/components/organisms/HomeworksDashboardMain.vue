@@ -101,6 +101,7 @@ export default {
 			isListEmpty: "isListEmpty",
 			hasOpenHomeworks: "hasOpenHomeworks",
 			hasCompletedHomeworks: "hasCompletedHomeworks",
+			getCourses: "getCourses",
 			getCoursesOpen: "getCoursesOpen",
 			getCoursesCompleted: "getCoursesCompleted",
 		}),
@@ -122,9 +123,13 @@ export default {
 			return this.isStudent && this.isListFilled;
 		},
 		availableCourses: function () {
-			if (this.tab === 0) {
+			if (this.role === "teacher") {
+				return this.getCourses;
+			} else if (this.tab === 0) {
 				return this.getCoursesOpen;
-			} else return this.getCoursesCompleted;
+			} else {
+				return this.getCoursesCompleted;
+			}
 		},
 	},
 	mounted() {
