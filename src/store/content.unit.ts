@@ -1,14 +1,10 @@
 import { Content } from "./content";
+import { initializeAxios } from "../utils/api";
+import { NuxtAxiosInstance } from "@nuxtjs/axios";
 
-jest.mock("../utils/api", () => {
-	return {
-		$axios: {
-			$get: (path: string) => {
-				console.log("gettttt", path);
-			},
-		},
-	};
-});
+const ESPath = "/v1/edu-sharing";
+const lessonsPath = "/v1/lessons";
+let requestPath: string;
 
 const mockResource = {
 	access: [],
@@ -72,7 +68,23 @@ const mockLessons = {
 	],
 };
 
+const axiosInitializer = () => {
+	initializeAxios({
+		$get: async (path: string) => {
+			requestPath = path;
+			if (path === ESPath) return mockResources;
+			if (path === lessonsPath) return mockLessons;
+		},
+		post: async (path: string) => {
+			requestPath = path;
+		},
+	} as NuxtAxiosInstance);
+};
+
 describe("content module", () => {
+	beforeEach(() => {
+		requestPath = "";
+	});
 	describe("actions", () => {
 		it("selectElement action should call setSelectedElement mutation", () => {
 			const contentModule = new Content({});
@@ -90,8 +102,9 @@ describe("content module", () => {
 			contentModule.unselectElement("mockId");
 			expect(selectedSpy).toBeCalled();
 		});
-		it("getResources should call incLoading, setLastQuery, setResources, and decLoading mutations", () => {
+		it("getResources should call incLoading, setLastQuery, setResources, and decLoading mutations", async () => {
 			const contentModule = new Content({});
+			axiosInitializer();
 			const query = {
 				$limit: 0,
 				$skip: 0,
@@ -100,27 +113,52 @@ describe("content module", () => {
 			const incLoadingSpy = jest.fn();
 			const setLastQuerySpy = jest.fn();
 			const decLoadingSpy = jest.fn();
-			// const setResourcesSpy = jest.fn();
+			const setResourcesSpy = jest.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.setLastQuery = setLastQuerySpy;
 			contentModule.decLoading = decLoadingSpy;
-			// contentModule.setResources = setResourcesSpy;
+			contentModule.setResources = setResourcesSpy;
 
 			expect(incLoadingSpy).not.toBeCalled();
 			expect(setLastQuerySpy).not.toBeCalled();
 			expect(decLoadingSpy).not.toBeCalled();
-			// expect(setResourcesSpy).not.toBeCalled();
+			expect(setResourcesSpy).not.toBeCalled();
 
-			contentModule.getResources(query);
+			await contentModule.getResources(query);
 
 			expect(incLoadingSpy).toBeCalled();
 			expect(setLastQuerySpy).toBeCalled();
 			expect(decLoadingSpy).toBeCalled();
-			// expect(setResourcesSpy).toBeCalled();
+			expect(setResourcesSpy).toBeCalled();
 		});
-		it("addResources should call incLoading, addResourceMutation and decLoading mutations", () => {
+		it("getResources should make a get request to the right path", async () => {
 			const contentModule = new Content({});
+			axiosInitializer();
+			const query = {
+				$limit: 0,
+				$skip: 0,
+				searchQuery: "mock",
+			};
+			await contentModule.getResources(query);
+			expect(requestPath).toBe(ESPath);
+		});
+		it("getResources should get resources", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+			const query = {
+				$limit: 0,
+				$skip: 0,
+				searchQuery: "mock",
+			};
+
+			await contentModule.getResources(query);
+			expect(contentModule.resources).toStrictEqual(mockResources);
+		});
+		it("addResources should call incLoading, addResourceMutation and decLoading mutations", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
 			const query = {
 				$limit: 0,
 				$skip: 0,
@@ -128,24 +166,49 @@ describe("content module", () => {
 			};
 			const incLoadingSpy = jest.fn();
 			const decLoadingSpy = jest.fn();
-			// const addResourceSpy = jest.fn();
+			const addResourceSpy = jest.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.decLoading = decLoadingSpy;
-			// contentModule.addResourcesMutation = addResourceSpy;
+			contentModule.addResourcesMutation = addResourceSpy;
 
 			expect(incLoadingSpy).not.toBeCalled();
 			expect(decLoadingSpy).not.toBeCalled();
-			// expect(addResourceSpy).not.toBeCalled();
+			expect(addResourceSpy).not.toBeCalled();
 
-			contentModule.addResources(query);
+			await contentModule.addResources(query);
 
 			expect(incLoadingSpy).toBeCalled();
 			expect(decLoadingSpy).toBeCalled();
-			// expect(addResourceSpy).toBeCalled();
+			expect(addResourceSpy).toBeCalled();
 		});
-		it("getElements should call incLoading, setLastQuery, setElements and decLoading mutations", () => {
+		it("addResources should make a get request to the right path", async () => {
 			const contentModule = new Content({});
+			axiosInitializer();
+			const query = {
+				$limit: 0,
+				$skip: 0,
+				searchQuery: "mock",
+			};
+			await contentModule.addResources(query);
+			expect(requestPath).toBe(ESPath);
+		});
+		it("addResources should get resources", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+			const query = {
+				$limit: 0,
+				$skip: 0,
+				searchQuery: "mock",
+			};
+
+			await contentModule.addResources(query);
+			expect(contentModule.resources).toStrictEqual(mockResources);
+		});
+		it("getElements should call incLoading, setLastQuery, setElements and decLoading mutations", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
 			const query = {
 				$limit: 0,
 				$skip: 0,
@@ -154,27 +217,40 @@ describe("content module", () => {
 			const incLoadingSpy = jest.fn();
 			const setLastQuerySpy = jest.fn();
 			const decLoadingSpy = jest.fn();
-			// const setElementsSpy = jest.fn();
+			const setElementsSpy = jest.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.setLastQuery = setLastQuerySpy;
 			contentModule.decLoading = decLoadingSpy;
-			// contentModule.setElements = setElementsSpy;
+			contentModule.setElements = setElementsSpy;
 
 			expect(incLoadingSpy).not.toBeCalled();
 			expect(setLastQuerySpy).not.toBeCalled();
 			expect(decLoadingSpy).not.toBeCalled();
-			// expect(setElementsSpy).not.toBeCalled();
+			expect(setElementsSpy).not.toBeCalled();
 
-			contentModule.getElements(query);
+			await contentModule.getElements(query);
 
 			expect(incLoadingSpy).toBeCalled();
 			expect(setLastQuerySpy).toBeCalled();
 			expect(decLoadingSpy).toBeCalled();
-			// expect(setElementsSpy).toBeCalled();
+			expect(setElementsSpy).toBeCalled();
 		});
-		it("addElements should call incLoading, addElementsMutation and decLoading mutations", () => {
+		it("getElements should make a get request to the right path", async () => {
 			const contentModule = new Content({});
+			axiosInitializer();
+			const query = {
+				$limit: 0,
+				$skip: 0,
+				searchQuery: "mock",
+			};
+			await contentModule.getElements(query);
+			expect(requestPath).toBe(ESPath);
+		});
+		it("addElements should call incLoading, addElementsMutation and decLoading mutations", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
 			const query = {
 				$limit: 0,
 				$skip: 0,
@@ -182,36 +258,65 @@ describe("content module", () => {
 			};
 			const incLoadingSpy = jest.fn();
 			const decLoadingSpy = jest.fn();
-			// const addElementsSpy = jest.fn();
+			const addElementsSpy = jest.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.decLoading = decLoadingSpy;
-			// contentModule.addElementsMutation = addElementsSpy;
+			contentModule.addElementsMutation = addElementsSpy;
 
 			expect(incLoadingSpy).not.toBeCalled();
 			expect(decLoadingSpy).not.toBeCalled();
-			// expect(addElementsSpy).not.toBeCalled();
+			expect(addElementsSpy).not.toBeCalled();
 
-			contentModule.addElements(query);
+			await contentModule.addElements(query);
 
 			expect(incLoadingSpy).toBeCalled();
 			expect(decLoadingSpy).toBeCalled();
-			// expect(addElementsSpy).toBeCalled();
+			expect(addElementsSpy).toBeCalled();
 		});
-		it.skip("getLessons should call setLessons mutation", () => {
+		it("addElements should make a get request to the right path", async () => {
 			const contentModule = new Content({});
+			axiosInitializer();
+			const query = {
+				$limit: 0,
+				$skip: 0,
+				searchQuery: "mock",
+			};
+			await contentModule.addElements(query);
+			expect(requestPath).toBe(ESPath);
+		});
+		it("getLessons should call setLessons mutation if courseId exists", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
 			const setLessonsSpy = jest.fn();
 
 			contentModule.setLessons = setLessonsSpy;
 
 			expect(setLessonsSpy).not.toBeCalled();
 
-			contentModule.getLessons("");
+			await contentModule.getLessons("mockId");
 
 			expect(setLessonsSpy).toBeCalled();
 		});
-		it.skip("addToLesson should call setNotificationModal mutation", () => {
+		it("getLessons should make a get request to the right path", async () => {
 			const contentModule = new Content({});
+			axiosInitializer();
+
+			await contentModule.getLessons("mockId");
+			expect(requestPath).toBe(lessonsPath);
+		});
+		it("getLessons should get lessons", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
+			await contentModule.getLessons("mockId");
+			expect(contentModule.lessons).toBe(mockLessons);
+		});
+		it("addToLesson should call setNotificationModal mutation", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
 			const query = {
 				lessonId: "",
 				event: {},
@@ -228,25 +333,73 @@ describe("content module", () => {
 
 			expect(setNotificationSpy).not.toBeCalled();
 
-			contentModule.addToLesson(query);
+			await contentModule.addToLesson(query);
 
 			expect(setNotificationSpy).toBeCalled();
 		});
-		it("getResourceMetadata should call setStatus and setCurrentResource mutation", () => {
+		it("addToLesson should make a post request to the right path", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
+			const mockQuery = {
+				lessonId: "mockId",
+				event: {},
+				material: {
+					client: "",
+					merlinReference: "",
+					title: "",
+					url: "",
+				},
+			};
+
+			await contentModule.addToLesson(mockQuery);
+			expect(requestPath).toBe(`/v1/lessons/${mockQuery.lessonId}/material`);
+		});
+		it("addToLesson should call setNotificationModal with 'successModal' parameter when the call is successful", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+
+			const mockQuery = {
+				lessonId: "mockId",
+				event: {},
+				material: {
+					client: "",
+					merlinReference: "",
+					title: "",
+					url: "",
+				},
+			};
+			const setNoticationSpy = jest.spyOn(
+				contentModule,
+				"setNotificationModal"
+			);
+
+			expect(setNoticationSpy.mock.calls[0]).toBeUndefined();
+			await contentModule.addToLesson(mockQuery);
+			expect(setNoticationSpy.mock.calls[0][0]).toBe("successModal");
+		});
+		it("getResourceMetadata should call setStatus and setCurrentResource mutation", async () => {
 			const contentModule = new Content({});
 			const setStatusSpy = jest.fn();
-			// const setCurrentResourceSpy = jest.fn();
+			const setCurrentResourceSpy = jest.fn();
 
 			contentModule.setStatus = setStatusSpy;
-			// contentModule.setCurrentResource = setCurrentResourceSpy;
+			contentModule.setCurrentResource = setCurrentResourceSpy;
 
 			expect(setStatusSpy).not.toBeCalled();
-			// expect(setCurrentResourceSpy).not.toBeCalled();
+			expect(setCurrentResourceSpy).not.toBeCalled();
 
-			contentModule.getResourceMetadata("");
+			await contentModule.getResourceMetadata("");
 
 			expect(setStatusSpy).toBeCalled();
-			// expect(setCurrentResourceSpy).toBeCalled();
+			expect(setCurrentResourceSpy).toBeCalled();
+		});
+		it("getResourceMetadata should call the right path", async () => {
+			const contentModule = new Content({});
+			axiosInitializer();
+			const mockId = "mockId";
+			await contentModule.getResourceMetadata(mockId);
+			expect(requestPath).toBe(`/v1/edu-sharing/${mockId}`);
 		});
 		it("init action calls initMutation mutation", () => {
 			const contentModule = new Content({});
