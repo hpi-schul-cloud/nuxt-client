@@ -68,13 +68,13 @@ export default {
 		},
 		taskIcon() {
 			const stateIcons = {
-				"warning": "$taskOpenFilled",
-				"overdue": "$taskMissed",
-				"submitted": "$taskDone",
-				"graded": "$taskDoneFilled",
-				"gradedOverdue": "$taskMissedFilled",
-				"open": "$taskOpenFilled",
-			}
+				warning: "$taskOpenFilled",
+				overdue: "$taskMissed",
+				submitted: "$taskDone",
+				graded: "$taskDoneFilled",
+				gradedOverdue: "$taskMissedFilled",
+				open: "$taskOpenFilled",
+			};
 			return stateIcons[this.taskState] || stateIcons["open"];
 		},
 		iconColor() {
