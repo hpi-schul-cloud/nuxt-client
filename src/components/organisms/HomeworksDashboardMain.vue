@@ -177,7 +177,8 @@ export default {
 	fill: currentColor;
 }
 
-::v-deep .v-slide-group__prev, ::v-deep .v-slide-group__next {
+::v-deep .v-slide-group__prev,
+::v-deep .v-slide-group__next {
 	display: none !important;
 }
 

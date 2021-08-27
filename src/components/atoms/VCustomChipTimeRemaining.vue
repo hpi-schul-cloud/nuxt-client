@@ -38,9 +38,7 @@ export default {
 				const diffMins = fromNowToFuture(dueDate, "minutes");
 
 				const label = shorten
-					? this.$t(
-							"components.atoms.VCustomChipTimeRemaining.hintMinShort"
-					  )
+					? this.$t("components.atoms.VCustomChipTimeRemaining.hintMinShort")
 					: this.$tc(
 							"components.atoms.VCustomChipTimeRemaining.hintMinutes",
 							diffMins
@@ -51,9 +49,7 @@ export default {
 				)} ${diffMins} ${label}`;
 			} else {
 				const label = shorten
-					? this.$t(
-							"components.atoms.VCustomChipTimeRemaining.hintHoursShort"
-					  )
+					? this.$t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")
 					: this.$tc(
 							"components.atoms.VCustomChipTimeRemaining.hintHours",
 							diffHrs

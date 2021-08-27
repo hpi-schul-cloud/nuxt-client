@@ -7,17 +7,15 @@ dueDate.setHours(dueDate.getHours() + 2);
 const dueDateMinutes = new Date();
 dueDateMinutes.setMinutes(dueDateMinutes.getMinutes() + 30);
 
-storiesOf("0 Vuetify/Atoms", module).add(
-	"VCustomChipTimeRemaining",
-	() => ({
-		components: {
-			VCustomChipTimeRemaining,
-		},
-		data: () => ({
-			dueHours: dueDate.toISOString(),
-			dueMinutes: dueDateMinutes.toISOString(),
-		}),
-		template: `
+storiesOf("0 Vuetify/Atoms", module).add("VCustomChipTimeRemaining", () => ({
+	components: {
+		VCustomChipTimeRemaining,
+	},
+	data: () => ({
+		dueHours: dueDate.toISOString(),
+		dueMinutes: dueDateMinutes.toISOString(),
+	}),
+	template: `
 		<v-app>
 			<h1 class="h4">VCustomChipTimeRemaining</h1>
 			<p>Implements the v-chip component and displays remaining time depending on input date.
@@ -32,5 +30,4 @@ storiesOf("0 Vuetify/Atoms", module).add(
 				<v-custom-chip-time-remaining :due-date="dueMinutes" shorten-unit type="warning"/>
 			</v-chip-group>
 		</v-app>`,
-	})
-);
+}));
