@@ -12,6 +12,7 @@ describe("Homeworks/assigned", () => {
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getCourses: () => [],
+				hasCompletedHomeworks: () => true,
 			},
 			state: () => ({
 				list: homeworks,

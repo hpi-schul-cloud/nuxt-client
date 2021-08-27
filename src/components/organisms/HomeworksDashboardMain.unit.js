@@ -55,6 +55,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
 				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
 				getCoursesOpen: () => coursesOpen,
+				hasOpenHomeworks: () => true,
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -79,6 +80,28 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		},
 	};
 
+	const mockStoreEmptyOpen = {
+		homeworks: {
+			getters: {
+				getOpenHomeworksWithoutDueDate: () => [],
+				getOpenHomeworksWithDueDate: () => [],
+				getStatus: () => "completed",
+				getOverDueHomeworks: () => [],
+				isListEmpty: () => false,
+				isListFilled: () => true,
+				getCoursesOpen: () => [],
+				hasOpenHomeworks: () => false,
+				getGradedHomeworks: () => gradedHomeworks,
+				getSubmittedHomeworks: () => submittedHomeworks,
+				hasNoOpenHomeworks: () => true,
+				hasCompletedHomeworks: () => true,
+				hasNoCompletedHomeworks: () => false,
+			},
+			actions: {
+				getHomeworksDashboard,
+			},
+		},
+	};
 	let vuetify;
 
 	beforeEach(() => {
@@ -266,5 +289,28 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		expect(wrapper.vm.availableCourses).toStrictEqual(coursesOpen);
 		wrapper.setData({ tab: 1 });
 		expect(wrapper.vm.availableCourses).toStrictEqual(coursesCompleted);
+	});
+
+	it("Should disable filter when active tab contains empty list", () => {
+		const wrapper = mount(HomeworksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreEmptyOpen,
+			}),
+			vuetify,
+			data() {
+				return {
+					tab: 0,
+				};
+			},
+			propsData: {
+				role: "student",
+			},
+		});
+
+		expect(wrapper.vm.isFilterDisabled).toBe(true);
+		wrapper.setData({ tab: 1 });
+		expect(wrapper.vm.isFilterDisabled).toBe(false);
 	});
 });

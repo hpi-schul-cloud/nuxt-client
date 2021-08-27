@@ -17,7 +17,7 @@
 					</h1>
 
 					<v-container v-if="showTabs" class="tabs-max-width pb-0">
-						<v-tabs v-model="tab" grow @change="updateFilter">
+						<v-tabs v-model="tab" grow>
 							<v-tab>
 								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
 								{{ $t("components.organisms.HomeworksDashboardMain.tab.open") }}
@@ -91,7 +91,6 @@ export default {
 			image: tasksEmptyState,
 			selectedCourses: [],
 			tab: 0,
-			isFilterDisabled: false,
 		};
 	},
 	computed: {
@@ -131,6 +130,15 @@ export default {
 				return this.getCoursesCompleted;
 			}
 		},
+		isFilterDisabled: function () {
+			if (this.tab === 0 && !this.hasOpenHomeworks) {
+				return true;
+			} else if (this.tab === 1 && !this.hasCompletedHomeworks) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 	},
 	mounted() {
 		this.$store.dispatch("homeworks/getHomeworksDashboard");
@@ -138,15 +146,6 @@ export default {
 	methods: {
 		filterByCourse() {
 			this.$store.commit("homeworks/setFilter", this.selectedCourses);
-		},
-		updateFilter(tab) {
-			if (tab === 0 && !this.hasOpenHomeworks) {
-				this.isFilterDisabled = true;
-			} else if (tab === 1 && !this.hasCompletedHomeworks) {
-				this.isFilterDisabled = true;
-			} else {
-				this.isFilterDisabled = false;
-			}
 		},
 	},
 };
