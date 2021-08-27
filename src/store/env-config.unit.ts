@@ -37,7 +37,7 @@ const axiosInitializer = (envs?: any, error?: boolean) => {
 
 jest.useFakeTimers();
 
-describe.only("env-config module", () => {
+describe("env-config module", () => {
 	let consoleWarnSpy: any;
 	let consoleErrorSpy: any;
 	beforeEach(() => {
