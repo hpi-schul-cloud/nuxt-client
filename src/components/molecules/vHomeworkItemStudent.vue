@@ -67,20 +67,15 @@ export default {
 			return undefined;
 		},
 		taskIcon() {
-			switch (this.taskState) {
-				case "warning":
-					return "$taskOpenFilled";
-				case "overdue":
-					return "$taskMissed";
-				case "submitted":
-					return "$taskDone";
-				case "graded":
-					return "$taskDoneFilled";
-				case "gradedOverdue":
-					return "$taskMissedFilled";
-				default:
-					return "$taskOpenFilled";
+			const stateIcons = {
+				"warning": "$taskOpenFilled",
+				"overdue": "$taskMissed",
+				"submitted": "$taskDone",
+				"graded": "$taskDoneFilled",
+				"gradedOverdue": "$taskMissedFilled",
+				"open": "$taskOpenFilled",
 			}
+			return stateIcons[this.taskState] || stateIcons["open"];
 		},
 		iconColor() {
 			return this.homework.displayColor || this.defaultIconColor;
