@@ -1,6 +1,12 @@
 import { storiesOf } from "@storybook/vue";
 import vHomeworkItemStudent from "@components/molecules/vHomeworkItemStudent";
-import { homeworks, overDueHomeworks, submittedHomeworks, gradedHomeworks, missedButGradedHomeworks } from "@@/stories/mockData/Homeworks";
+import {
+	homeworks,
+	overDueHomeworks,
+	submittedHomeworks,
+	gradedHomeworks,
+	missedButGradedHomeworks,
+} from "@@/stories/mockData/Homeworks";
 
 const current = new Date();
 current.setHours(current.getHours() + 1);
