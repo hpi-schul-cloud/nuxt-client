@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
+import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
 
 const dueDate = new Date();
 dueDate.setHours(dueDate.getHours() + 2);
@@ -7,7 +7,7 @@ dueDate.setHours(dueDate.getHours() + 2);
 const dueDateMinutes = new Date();
 dueDateMinutes.setMinutes(dueDateMinutes.getMinutes() + 30);
 
-storiesOf("0 Vuetify/Molecules", module).add(
+storiesOf("0 Vuetify/Atoms", module).add(
 	"VCustomChipTimeRemaining",
 	() => ({
 		components: {

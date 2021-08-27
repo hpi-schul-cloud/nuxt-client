@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
+import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import {
 	printDateFromStringUTC,

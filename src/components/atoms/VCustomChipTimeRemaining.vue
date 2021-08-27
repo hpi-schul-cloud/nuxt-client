@@ -39,27 +39,27 @@ export default {
 
 				const label = shorten
 					? this.$t(
-							"components.molecules.VCustomChipTimeRemaining.hintMinShort"
+							"components.atoms.VCustomChipTimeRemaining.hintMinShort"
 					  )
 					: this.$tc(
-							"components.molecules.VCustomChipTimeRemaining.hintMinutes",
+							"components.atoms.VCustomChipTimeRemaining.hintMinutes",
 							diffMins
 					  );
 
 				return `${this.$t(
-					"components.molecules.VCustomChipTimeRemaining.hintDueTime"
+					"components.atoms.VCustomChipTimeRemaining.hintDueTime"
 				)} ${diffMins} ${label}`;
 			} else {
 				const label = shorten
 					? this.$t(
-							"components.molecules.VCustomChipTimeRemaining.hintHoursShort"
+							"components.atoms.VCustomChipTimeRemaining.hintHoursShort"
 					  )
 					: this.$tc(
-							"components.molecules.VCustomChipTimeRemaining.hintHours",
+							"components.atoms.VCustomChipTimeRemaining.hintHours",
 							diffHrs
 					  );
 				return `${this.$t(
-					"components.molecules.VCustomChipTimeRemaining.hintDueTime"
+					"components.atoms.VCustomChipTimeRemaining.hintDueTime"
 				)} ${diffHrs} ${label}`;
 			}
 		},

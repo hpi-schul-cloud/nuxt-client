@@ -1,7 +1,7 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkGradingHref(homework.id)">
 		<v-list-item-avatar>
-			<v-icon class="fill"> $taskOpenFilled </v-icon>
+			<v-icon class="fill" :color="defaultIconColor"> $taskOpenFilled </v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle class="d-inline-flex">
@@ -67,6 +67,11 @@ export default {
 		return {
 			fromNow,
 		};
+	},
+	computed: {
+		defaultIconColor() {
+			return "#455B6A";
+		},
 	},
 	methods: {
 		computedDueDateLabel(dueDate) {
