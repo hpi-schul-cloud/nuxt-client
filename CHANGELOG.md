@@ -8,10 +8,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## Unreleased
 
+### Added
+
+- BC-133 - added unit tests for filePaths and accounts store modules
+
 ### Changed
 
 - BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
-- BC-18 - refactored the envConfig, accounts, autoLogout, and filePaths store modules to typescript and the corresponding components' access to them
+- BC-18 - refactored the envConfig, content, accounts, autoLogout, and filePaths store modules to typescript and the corresponding components' access to them
 - BC-14 - changed thr contact address
 - BC-64 - execute e2e tests via push on main
 - BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
