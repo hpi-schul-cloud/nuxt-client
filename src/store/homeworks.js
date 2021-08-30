@@ -87,13 +87,28 @@ const module = merge(base, {
 				return homework.duedate && new Date(homework.duedate) > new Date();
 			});
 		},
+		getOpenHomeworksWithDueDateTeacher: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.duedate && new Date(homework.duedate) > new Date();
+			});
+		},
 		getOpenHomeworksWithoutDueDate: (state, getters) => {
 			return getters.getOpenHomeworks.filter((homework) => {
 				return !homework.duedate;
 			});
 		},
+		getOpenHomeworksWithoutDueDateTeacher: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return !homework.duedate;
+			});
+		},
 		getOverDueHomeworks: (state, getters) => {
 			return getters.getOpenHomeworks.filter((homework) => {
+				return homework.duedate && new Date(homework.duedate) < new Date();
+			});
+		},
+		getOverDueHomeworksTeacher: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
