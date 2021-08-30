@@ -21,8 +21,13 @@ const module = merge(base, {
 				) {
 					promises.push(fetchAll(this.$axios, "/v3/tasks/completed/"));
 				}
+
+				// TODO - make this pretty
 				const responses = await Promise.all(promises);
-				const data = [...responses[0], ...responses[1]];
+				const data = [...responses[0]];
+				if (responses.length === 2) {
+					data.concat(responses[1]);
+				}
 
 				commit("set", {
 					items: data,
