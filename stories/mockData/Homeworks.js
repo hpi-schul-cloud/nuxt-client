@@ -6,7 +6,8 @@
 	Do not tamper with this data.
 */
 
-export const homeworks = [
+// not submitted, not graded, includes withoutDueDate, withDueDate & overDue
+export const openHomeworks = [
 	{
 		id: "59cce4c3c6abf042248e888e",
 		_id: "59cce4c3c6abf042248e888e",
@@ -15,7 +16,7 @@ export const homeworks = [
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
 		status: {
-			submitted: 1,
+			submitted: 0,
 			graded: 0,
 		},
 	},
@@ -24,10 +25,10 @@ export const homeworks = [
 		_id: "59cce352c6abf042248e888c",
 		name: "zu archivierende Aufgabe von Marla",
 		duedate: "2017-06-07T09:30:00.000Z",
-		courseName: "Biologie",
+		courseName: "Chemie",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: {
-			submitted: 1,
+			submitted: 0,
 			graded: 0,
 		},
 	},
@@ -39,7 +40,7 @@ export const homeworks = [
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
 		status: {
-			submitted: 1,
+			submitted: 0,
 			graded: 0,
 		},
 	},
@@ -112,6 +113,10 @@ export const overDueHomeworks = [
 		duedate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce2c61113d1132c98dc06",
@@ -120,6 +125,10 @@ export const overDueHomeworks = [
 		duedate: "2017-07-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce352c6abf042248e888c",
@@ -128,6 +137,10 @@ export const overDueHomeworks = [
 		duedate: "2017-06-07T09:30:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 ];
 export const openHomeworksWithDueDate = [
@@ -138,6 +151,10 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
@@ -146,6 +163,10 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-09-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
@@ -154,6 +175,10 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
@@ -162,6 +187,10 @@ export const openHomeworksWithDueDate = [
 		duedate: "2300-10-25T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:10:46.180Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 ];
 export const openHomeworksWithoutDueDate = [
@@ -171,50 +200,77 @@ export const openHomeworksWithoutDueDate = [
 		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
+		status: {
+			submitted: 0,
+			graded: 0,
+		},
 	},
 ];
 
-export const openHomeworks = [
+export const submittedHomeworks = [
 	{
-		id: "59cce4c3c6abf042248e888e",
-		_id: "59cce4c3c6abf042248e888e",
-		name: "Private Aufgabe von Cord - mit Kurs, offen",
+		id: "59cce4c3c6abf042248e968e",
+		_id: "59cce4c3c6abf042248e968e",
+		name: "Aufgabe von Cord - mit Kurs, abgegeben",
+		displayColor: "#00E5FF",
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
+		status: {
+			submitted: 1,
+			graded: 0,
+		},
 	},
+];
+
+export const missedButGradedHomeworks = [
 	{
-		id: "59cce1d381297026d02cdc4b",
-		_id: "59cce1d381297026d02cdc4b",
-		name: "Private Aufgabe von Marla - mit Kurs, offen",
-		duedate: "2300-09-28T13:00:00.000Z",
-		courseName: "Mathe",
-		createdAt: "2017-09-28T11:49:39.924Z",
+		id: "59cce352c6abf001248e888c",
+		_id: "59cce352c6abf001248e888c",
+		name: "Aufgabe von Marla - abgelaufen, bewertet",
+		displayColor: "#1DE9B6",
+		duedate: "2017-06-07T09:30:00.000Z",
+		courseName: "Biologie",
+		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			graded: 1,
+		},
 	},
+];
+
+export const gradedHomeworks = [
 	{
-		id: "59cce3f6c6abf042248e888d",
-		_id: "59cce3f6c6abf042248e888d",
-		name: "Aufgabe an Marla (Mathe) - offen",
+		id: "59cce7u6c6abf042248e888d",
+		_id: "59cce7u6c6abf042248e888d",
+		name: "Aufgabe an Marla (Mathe) - abgegeben, bewertet",
+		displayColor: "#00E5FF",
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
+		status: {
+			submitted: 1,
+			graded: 1,
+		},
 	},
 	{
-		id: "59cce6c6d5e50214e47b601d",
-		_id: "59cce6c6d5e50214e47b601d",
-		name: "Archivierte Aufgaben von Cord - mit Kurs, offen",
-		duedate: "2300-10-25T15:00:00.000Z",
-		courseName: "Mathe",
-		createdAt: "2017-09-28T12:10:46.180Z",
-	},
-	{
-		id: "59cce4171113d1132c98dc08",
-		_id: "59cce4171113d1132c98dc08",
-		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
-		courseName: "Mathe",
-		createdAt: "2017-07-28T11:58:46.601Z",
+		id: "59cce352c6abf001248e888c",
+		_id: "59cce352c6abf001248e888c",
+		name: "Aufgabe von Marla - abgelaufen, bewertet",
+		displayColor: "#1DE9B6",
+		duedate: "2017-06-07T09:30:00.000Z",
+		courseName: "Biologie",
+		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			graded: 1,
+		},
 	},
 ];
+
+export const completedHomeworks = [...submittedHomeworks, ...gradedHomeworks];
+
+export const homeworks = [...openHomeworks, ...completedHomeworks];
 
 export const invalidHomeworks = [
 	{
@@ -509,7 +565,8 @@ export const noDueDateHomeworksTeacher = [
 		},
 	},
 ];
-export const coursesStudent = ["Mathe", "Biologie", "Chemie"];
+
+export const coursesStudent = ["Mathe", "Chemie", "Biologie"];
 export const coursesTeacher = ["Mathe", "Deutsch"];
 
 export const mathHomeworks = [
@@ -580,4 +637,4 @@ export const mathHomeworks = [
 ];
 
 export const coursesOpen = ["Mathe", "Chemie"];
-export const coursesSubmitted = ["Mathe", "Biologie"];
+export const coursesCompleted = ["Mathe", "Biologie"];

@@ -17,18 +17,19 @@
 					</h1>
 
 					<v-container v-if="showTabs" class="tabs-max-width pb-0">
-						<v-tabs
-							v-model="tab"
-							grow
-							:prev-icon="undefined"
-							@change="updateFilter"
-						>
-							<v-tab>{{
-								$t("components.organisms.HomeworksDashboardMain.tab.open")
-							}}</v-tab>
-							<v-tab>{{
-								$t("components.organisms.HomeworksDashboardMain.tab.completed")
-							}}</v-tab>
+						<v-tabs v-model="tab" grow>
+							<v-tab>
+								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
+								{{ $t("components.organisms.HomeworksDashboardMain.tab.open") }}
+							</v-tab>
+							<v-tab>
+								<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
+								{{
+									$t(
+										"components.organisms.HomeworksDashboardMain.tab.completed"
+									)
+								}}
+							</v-tab>
 						</v-tabs>
 					</v-container>
 				</div>
@@ -90,7 +91,6 @@ export default {
 			image: tasksEmptyState,
 			selectedCourses: [],
 			tab: 0,
-			isFilterDisabled: false,
 		};
 	},
 	computed: {
@@ -99,9 +99,10 @@ export default {
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
 			hasOpenHomeworks: "hasOpenHomeworks",
-			hasSubmittedHomeworks: "hasSubmittedHomeworks",
+			hasCompletedHomeworks: "hasCompletedHomeworks",
+			getCourses: "getCourses",
 			getCoursesOpen: "getCoursesOpen",
-			getCoursesSubmitted: "getCoursesSubmitted",
+			getCoursesCompleted: "getCoursesCompleted",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -121,9 +122,22 @@ export default {
 			return this.isStudent && this.isListFilled;
 		},
 		availableCourses: function () {
-			if (this.tab === 0) {
+			if (this.role === "teacher") {
+				return this.getCourses;
+			} else if (this.tab === 0) {
 				return this.getCoursesOpen;
-			} else return this.getCoursesSubmitted;
+			} else {
+				return this.getCoursesCompleted;
+			}
+		},
+		isFilterDisabled: function () {
+			if (this.tab === 0 && !this.hasOpenHomeworks) {
+				return true;
+			} else if (this.tab === 1 && !this.hasCompletedHomeworks) {
+				return true;
+			} else {
+				return false;
+			}
 		},
 	},
 	mounted() {
@@ -132,15 +146,6 @@ export default {
 	methods: {
 		filterByCourse() {
 			this.$store.commit("homeworks/setFilter", this.selectedCourses);
-		},
-		updateFilter(tab) {
-			if (tab === 0 && !this.hasOpenHomeworks) {
-				this.isFilterDisabled = true;
-			} else if (tab === 1 && !this.hasSubmittedHomeworks) {
-				this.isFilterDisabled = true;
-			} else {
-				this.isFilterDisabled = false;
-			}
 		},
 	},
 };
@@ -168,7 +173,12 @@ export default {
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
-::v-deep .v-slide-group__prev {
+.tab-icon {
+	fill: currentColor;
+}
+
+::v-deep .v-slide-group__prev,
+::v-deep .v-slide-group__next {
 	display: none !important;
 }
 

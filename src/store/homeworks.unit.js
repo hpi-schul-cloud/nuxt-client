@@ -1,10 +1,16 @@
 import {
 	homeworks,
+	openHomeworks,
+	completedHomeworks,
+	submittedHomeworks,
+	gradedHomeworks,
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
 	overDueHomeworks,
 	coursesStudent,
 	coursesTeacher,
+	coursesOpen,
+	coursesCompleted,
 	mathHomeworks,
 	homeworksTeacher,
 } from "@@/stories/mockData/Homeworks";
@@ -138,10 +144,32 @@ describe("store/homeworks", () => {
 			});
 		});
 
+		describe("getCoursesOpen", () => {
+			it("Should return all relevant open courses", () => {
+				const mockGetter = {
+					getOpenHomeworks: openHomeworks,
+				};
+				expect(getters.getCoursesOpen(state, mockGetter)).toStrictEqual(
+					coursesOpen
+				);
+			});
+		});
+
+		describe("getCoursesCompleted", () => {
+			it("Should return all relevant completed courses", () => {
+				const mockGetter = {
+					getCompletedHomeworks: completedHomeworks,
+				};
+				expect(getters.getCoursesCompleted(state, mockGetter)).toStrictEqual(
+					coursesCompleted
+				);
+			});
+		});
+
 		describe("getOpenHomeworksWithDueDate", () => {
 			it("Should return homeworks before due date", () => {
 				const mockGetter = {
-					getHomeworks: homeworks,
+					getOpenHomeworks: openHomeworks,
 				};
 				expect(
 					getters.getOpenHomeworksWithDueDate(state, mockGetter)
@@ -152,7 +180,7 @@ describe("store/homeworks", () => {
 		describe("getOverDueHomeworks", () => {
 			it("Should return homeworks after due date", () => {
 				const mockGetter = {
-					getHomeworks: homeworks,
+					getOpenHomeworks: openHomeworks,
 				};
 				expect(getters.getOverDueHomeworks(state, mockGetter)).toHaveLength(
 					overDueHomeworks.length
@@ -163,7 +191,7 @@ describe("store/homeworks", () => {
 		describe("getOpenHomeworksWithoutDueDate", () => {
 			it("Should return open homeworks without due date", () => {
 				const mockGetter = {
-					getHomeworks: homeworks,
+					getOpenHomeworks: openHomeworks,
 				};
 				expect(
 					getters.getOpenHomeworksWithoutDueDate(state, mockGetter)
@@ -188,11 +216,75 @@ describe("store/homeworks", () => {
 			});
 		});
 
+		describe("getOpenHomeworks", () => {
+			it("Should return all homeworks, that neither submitted nor graded", () => {
+				const mockGetter = { getHomeworks: homeworks };
+				expect(getters.getOpenHomeworks(state, mockGetter)).toStrictEqual(
+					openHomeworks
+				);
+			});
+		});
+
+		describe("getCompletedHomeworks", () => {
+			it("Should return all homeworks, that either submitted or graded", () => {
+				const mockGetter = { getHomeworks: homeworks };
+				expect(getters.getCompletedHomeworks(state, mockGetter)).toStrictEqual(
+					completedHomeworks
+				);
+			});
+		});
+
+		describe("getSubmittedHomeworks", () => {
+			it("Should return all homeworks, that are submitted", () => {
+				const mockGetter = { getCompletedHomeworks: completedHomeworks };
+				expect(getters.getSubmittedHomeworks(state, mockGetter)).toStrictEqual(
+					submittedHomeworks
+				);
+			});
+		});
+
+		describe("getGradedHomeworks", () => {
+			it("Should return all homeworks, that are graded", () => {
+				const mockGetter = { getCompletedHomeworks: completedHomeworks };
+				expect(getters.getGradedHomeworks(state, mockGetter)).toStrictEqual(
+					gradedHomeworks
+				);
+			});
+		});
+
 		describe("getFilteredHomeworks", () => {
 			it("Should return homeworks filtered by course", () => {
 				expect(getters.getFilteredHomeworks(stateWithFilter)).toStrictEqual(
 					mathHomeworks
 				);
+			});
+		});
+
+		describe("hasOpenHomeworks", () => {
+			it("Should return true, if it's loaded and there are open (neither submitted nor graded) homeworks", () => {
+				const mockGetter = { getOpenHomeworks: openHomeworks };
+				expect(getters.hasOpenHomeworks(state, mockGetter)).toBe(true);
+			});
+		});
+
+		describe("hasNoOpenHomeworks", () => {
+			it("Should return true, if it's loaded and there are no open (neither submitted nor graded) homeworks", () => {
+				const mockGetter = { getOpenHomeworks: [] };
+				expect(getters.hasNoOpenHomeworks(state, mockGetter)).toBe(true);
+			});
+		});
+
+		describe("hasCompletedHomeworks", () => {
+			it("Should return true, if it's loaded and there are completed homeworks", () => {
+				const mockGetter = { getCompletedHomeworks: completedHomeworks };
+				expect(getters.hasCompletedHomeworks(state, mockGetter)).toBe(true);
+			});
+		});
+
+		describe("hasNoCompletedHomeworks", () => {
+			it("Should return true, if it's loaded and there are no completed homeworks", () => {
+				const mockGetter = { getCompletedHomeworks: [] };
+				expect(getters.hasNoCompletedHomeworks(state, mockGetter)).toBe(true);
 			});
 		});
 	});
