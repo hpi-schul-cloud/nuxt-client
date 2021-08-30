@@ -1,23 +1,13 @@
-import { getters } from "./auth";
+import { getters, mutations } from "./auth";
 import EnvConfigModule from "@/store/env-config";
 
 const envs = {
-	FALLBACK_DISABLED: false,
-	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
-	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default",
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: null,
-	FEATURE_ES_COLLECTIONS_ENABLED: null,
 	FEATURE_EXTENSIONS_ENABLED: null,
 	FEATURE_TEAMS_ENABLED: null,
 	I18N__AVAILABLE_LANGUAGES: "",
 	I18N__DEFAULT_LANGUAGE: "",
 	I18N__DEFAULT_TIMEZONE: "",
 	I18N__FALLBACK_LANGUAGE: "",
-	DOCUMENT_BASE_DIR: "",
-	SC_TITLE: "",
-	SC_SHORT_TITLE: "",
 };
 
 jest.useFakeTimers();
@@ -35,7 +25,72 @@ describe("store/auth", () => {
 	});
 
 	describe("mutations", () => {
-		// TODO
+		describe("setUser", () => {
+			it("should set the user data", () => {
+				const mockState = {
+					user: {
+						_id: "123",
+						name: "Paula Meyer",
+					},
+				};
+				const userToBeChanged = {
+					_id: "456",
+					name: "Updated Name",
+				};
+				mutations.setUser(mockState, userToBeChanged);
+				expect(mockState.user).toStrictEqual(userToBeChanged);
+			});
+		});
+
+		describe("setLocale", () => {
+			it("should set the locale data", () => {
+				const mockState = {
+					locale: "de",
+				};
+				const localeToBeChanged = "en";
+				mutations.setLocale(mockState, localeToBeChanged);
+				expect(mockState.locale).toStrictEqual(localeToBeChanged);
+			});
+		});
+
+		describe("setAccessToken", () => {
+			it("should set the accessToken data", () => {
+				const mockState = {
+					accessToken: "",
+				};
+				const accessTokenToBeChanged = "someAccessToken";
+				mutations.setAccessToken(mockState, accessTokenToBeChanged);
+				expect(mockState.accessToken).toStrictEqual(accessTokenToBeChanged);
+			});
+		});
+
+		describe("addUserPermission", () => {
+			it("should add user permission data", () => {
+				const mockState = {
+					user: {
+						permissions: ["permission_X", "permission_Y"],
+					},
+				};
+				const permissionToBeAdded = ["permission_Z"];
+				mutations.addUserPermission(mockState, permissionToBeAdded);
+				expect(mockState.user.permissions).toContain(permissionToBeAdded);
+			});
+		});
+
+		describe("clearAuthData", () => {
+			it("should clear the auth data", () => {
+				const mockState = {
+					accessToken: "",
+					user: {
+						_id: "123",
+						name: "Test Tester",
+					},
+				};
+				mutations.clearAuthData(mockState);
+				expect(mockState.accessToken).toBeNull();
+				expect(mockState.user).toBeNull();
+			});
+		});
 	});
 
 	describe("getters", () => {
@@ -61,7 +116,8 @@ describe("store/auth", () => {
 					},
 				};
 				const mockRootState = {
-					auth: {
+					auth: {},
+					schools: {
 						school: {
 							language: "fi",
 						},
@@ -76,7 +132,8 @@ describe("store/auth", () => {
 				EnvConfigModule.setEnvs({ ...envs, I18N__DEFAULT_LANGUAGE: "da" });
 				const mockState = {};
 				const mockRootState = {
-					auth: {
+					auth: {},
+					schools: {
 						school: {},
 					},
 				};
@@ -89,7 +146,8 @@ describe("store/auth", () => {
 				EnvConfigModule.setEnvs({ ...envs, I18N__DEFAULT_LANGUAGE: "de" });
 				const mockState = {};
 				const mockRootState = {
-					auth: {
+					auth: {},
+					schools: {
 						school: {},
 					},
 				};
