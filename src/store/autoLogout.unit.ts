@@ -9,7 +9,7 @@ describe("autoLogout module", () => {
 			autoLogoutModule.setInit = spySetInit;
 
 			await autoLogoutModule.init();
-			expect(spySetInit).toBeCalled();
+			expect(spySetInit).toHaveBeenCalled();
 		});
 		it("extendSession should call setActive mutation", async () => {
 			const autoLogoutModule = new AutoLogoutModule({});
@@ -17,9 +17,9 @@ describe("autoLogout module", () => {
 
 			autoLogoutModule.setActive = spySetActive;
 
-			expect(spySetActive).not.toBeCalled();
+			expect(spySetActive).not.toHaveBeenCalled();
 			await autoLogoutModule.extendSessionAction();
-			expect(spySetActive).toBeCalled();
+			expect(spySetActive).toHaveBeenCalled();
 		});
 	});
 	describe("mutations", () => {
