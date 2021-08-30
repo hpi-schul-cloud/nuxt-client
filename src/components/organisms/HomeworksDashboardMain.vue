@@ -1,23 +1,22 @@
 <template>
 	<section>
 		<section>
-			<template v-if="status === 'pending'">
-				<h1 class="h4 ml-10">
-					<v-skeleton-loader type="heading" max-width="40%" />
+			<v-container v-if="status === 'pending'">
+				<h1 class="h4">
+					<v-skeleton-loader type="heading" max-width="75%" />
 				</h1>
-				<v-container class="v-container">
-					<v-skeleton-loader type="text" />
-				</v-container>
-			</template>
+				<v-skeleton-loader type="text" />
+			</v-container>
 
 			<template v-else>
 				<div v-if="isListFilled" class="border-bottom">
-					<h1 class="h4 ml-10">
-						{{ $t("pages.homeworks.title") }}
-					</h1>
-
-					<v-container v-if="showTabs" class="tabs-max-width pb-0">
-						<v-tabs v-model="tab" grow>
+					<v-container>
+						<h1 class="h4">
+							{{ $t("pages.homeworks.title") }}
+						</h1>
+					</v-container>
+					<div v-if="showTabs" class="pb-0 d-flex justify-center">
+						<v-tabs v-model="tab" grow class="tabs-max-width">
 							<v-tab>
 								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
 								{{ $t("components.organisms.HomeworksDashboardMain.tab.open") }}
@@ -31,7 +30,7 @@
 								}}
 							</v-tab>
 						</v-tabs>
-					</v-container>
+					</div>
 				</div>
 			</template>
 		</section>
