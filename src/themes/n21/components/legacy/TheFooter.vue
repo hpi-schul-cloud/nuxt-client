@@ -46,7 +46,7 @@ export default {
 				},
 				{
 					href: "/datenschutz",
-					text: this.$t("components.legacy.footer.privacy_policy"),
+					text: this.$t("components.legacy.footer.privacy_policy_HPI"),
 					target: "_blank",
 					rel: "noopener",
 				},
