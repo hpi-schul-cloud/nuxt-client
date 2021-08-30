@@ -9,10 +9,21 @@ const module = merge(base, {
 			courseFilter: [],
 		}),
 	actions: {
-		getHomeworksDashboard: async function ({ commit }) {
+		getHomeworksDashboard: async function ({ commit, rootState }) {
 			commit("setStatus", "pending");
 			try {
-				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
+				const promises = [fetchAll(this.$axios, "/v3/tasks/open/")];
+
+				if (
+					!rootState.auth.user.permissions.includes(
+						"TASK_DASHBOARD_TEACHER_VIEW_V3"
+					)
+				) {
+					promises.push(fetchAll(this.$axios, "/v3/tasks/completed/"));
+				}
+				const responses = await Promise.all(promises);
+				const data = [...responses[0], ...responses[1]];
+
 				commit("set", {
 					items: data,
 				});
