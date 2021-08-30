@@ -234,7 +234,10 @@ global.createComponentMocks = ({
 	}
 
 	//Set 'vuetify: true' for testing with vuetify components
-	if (vuetify) Vue.use(Vuetify);
+	if (vuetify) {
+		Vue.use(Vuetify);
+		returnOptions.vuetify = new Vuetify();
+	}
 
 	//Set 'vueMeta: true' for accessing nuxt page meta infos
 	if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
