@@ -31,7 +31,7 @@ describe("store/schools", () => {
 				await actions.fetchSchool(ctxMock);
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].url).toStrictEqual(
-					"/schools/sampleSchoolId"
+					"/v1/schools/sampleSchoolId"
 				);
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
@@ -92,7 +92,7 @@ describe("store/schools", () => {
 				await actions.fetchSchool(ctxMock);
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].url).toStrictEqual(
-					"/schools/sampleSchoolId"
+					"/v1/schools/sampleSchoolId"
 				);
 				expect(ctxMock.commit.mock.calls).toHaveLength(4);
 				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("setError");
@@ -127,7 +127,7 @@ describe("store/schools", () => {
 				await actions.fetchFederalState(ctxMock);
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].url).toStrictEqual(
-					"/federalStates/federalStateId"
+					"/v1/federalStates/federalStateId"
 				);
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
@@ -198,7 +198,7 @@ describe("store/schools", () => {
 
 				await actions.fetchCurrentYear(ctxMock);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toStrictEqual("/years/yearId");
+				expect(receivedRequests[0].url).toStrictEqual("/v1/years/yearId");
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
 				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual(true);
@@ -267,7 +267,7 @@ describe("store/schools", () => {
 
 				await actions.fetchCurrentYear(ctxMock);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toStrictEqual("/years/yearId");
+				expect(receivedRequests[0].url).toStrictEqual("/v1/years/yearId");
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
 				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual(true);
@@ -329,7 +329,7 @@ describe("store/schools", () => {
 
 				await actions.fetchFileStorageTotal(ctxMock);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toStrictEqual("/fileStorage/total");
+				expect(receivedRequests[0].url).toStrictEqual("/v1/fileStorage/total");
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
 				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual(true);
@@ -402,7 +402,7 @@ describe("store/schools", () => {
 
 				await actions.update(ctxMock, uploadData);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toBe("/schools/id_123");
+				expect(receivedRequests[0].url).toBe("/v1/schools/id_123");
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
 				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual(true);
@@ -483,7 +483,7 @@ describe("store/schools", () => {
 
 				await actions.deleteSystem(ctxMock, systemId);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toBe("systems/id_1");
+				expect(receivedRequests[0].url).toBe("v1/systems/id_1");
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
 				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual(true);

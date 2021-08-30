@@ -36,7 +36,7 @@ describe("store/consent-versions", () => {
 
 				await actions.fetchConsentVersions(ctxMock, params);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toStrictEqual("/consentVersions");
+				expect(receivedRequests[0].url).toStrictEqual("/v1/consentVersions");
 
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
@@ -84,7 +84,7 @@ describe("store/consent-versions", () => {
 
 				await actions.fetchConsentVersions(ctxMock, params);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toStrictEqual("/consentVersions");
+				expect(receivedRequests[0].url).toStrictEqual("/v1/consentVersions");
 
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
@@ -135,7 +135,7 @@ describe("store/consent-versions", () => {
 
 				await actions.fetchConsentVersions(ctxMock, params);
 				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toStrictEqual("/consentVersions");
+				expect(receivedRequests[0].url).toStrictEqual("/v1/consentVersions");
 
 				expect(ctxMock.commit.mock.calls).toHaveLength(3);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
