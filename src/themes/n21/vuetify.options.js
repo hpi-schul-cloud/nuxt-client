@@ -6,9 +6,9 @@ const custom = {
 		dark: false,
 		themes: {
 			light: {
-				primary: "#78aae5",
-				secondary: "#b10438",
-				accent: "#455b6a",
+				primary: "#6E9CD2",
+				secondary: "#355478",
+				accent: "#970000",
 			},
 		},
 	},

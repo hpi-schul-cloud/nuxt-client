@@ -68,7 +68,7 @@
 		<base-button
 			v-else
 			class="fullscreen-button fullscreen-button-active"
-			design="secondary icon"
+			design="primary icon"
 			@click.native="sendEvent('fullscreen')"
 		>
 			<base-icon source="fa" icon="compress" fill="var(--color-white)" />

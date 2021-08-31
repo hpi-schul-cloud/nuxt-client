@@ -160,7 +160,6 @@ export default {
 		display: none;
 		width: 100%;
 		height: var(--sidebar-item-height);
-		// background-color: var(--color-primary);
 	}
 
 	.logo-full {
@@ -229,7 +228,7 @@ export default {
 
 					.icon {
 						width: 25px;
-						margin-right: 10px;
+						margin-right: 6px;
 						font-size: 20px;
 					}
 
@@ -248,6 +247,7 @@ export default {
 
 				&:hover,
 				&.active {
+					color: var(--color-sidebar-menu-item-active);
 					cursor: pointer;
 					background-color: var(--color-sidebar-active-bg);
 				}

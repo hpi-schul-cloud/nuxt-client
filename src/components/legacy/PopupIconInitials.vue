@@ -66,12 +66,12 @@ export default {
 	color: var(--color-white);
 	cursor: pointer;
 	-webkit-user-select: none;
-	background-color: var(--color-primary);
+	background-color: var(--color-secondary);
 	border: none;
 	border-radius: var(--radius-round);
 
 	&:hover {
-		background-color: var(--color-primary-dark);
+		background-color: var(--color-secondary-dark);
 	}
 }
 
@@ -90,7 +90,7 @@ export default {
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xs-4);
-		color: var(--color-secondary-dark);
+		color: var(--color-black);
 		white-space: nowrap;
 		background-color: var(--color-white);
 		border: 1px solid var(--color-disabled);
