@@ -270,8 +270,8 @@ export class Content extends VuexModule {
 	}
 
 	@Mutation
-	initMutation(payload: boolean | null): void {
-		this.collectionsFeatureFlag = payload;
+	initMutation(payload?: boolean): void {
+		this.collectionsFeatureFlag = payload || null;
 	}
 
 	@Mutation

@@ -58,6 +58,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### [26.6.0] - 2021-07-20
 
 - SC-9159 - Redirect the routes for news for the new v3 API
+- SC-9083 - School administration page in nuxt with vuetify
 - SC-9108 - Refactor news/create page and form component
 - SC-9189 - Adding expansion panels to teacher's task dashboard
 - SC-9201 - Adding expansion panels to student's task dashboard
@@ -66,6 +67,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-9090 - implemented a loading state in the service-template
 - OPS-2574 - Removeing autodeployed branches for developers if branch deleted
+- SC-9083 - Added school administration page and related stores
+- SC-9083 - Added simple custom vuetify dialog component for e.g. confirm dialogs
 
 ### Changed
 
@@ -76,6 +79,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9122 - changed getters logic from components to the store
 - SC-9108 - refactored news
 - SC-9168 - POC for Typescript store module (news)
+
+### Removed
+
+- SC-9083 - RSS feeds are no longer a part of the school administration page
 
 ### Fixed
 
@@ -167,6 +174,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
 - SC-9063 - Removed "unsafe-inline" from script-src in CSP
 
 ## 26.1.1
