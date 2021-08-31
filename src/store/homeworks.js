@@ -3,6 +3,19 @@ import { serviceTemplate, fetchAll } from "@utils";
 const base = serviceTemplate("homework");
 const baseState = base.state();
 
+const hasPermission = (rootState, permissionString) =>
+	rootState.auth.user.permissions.includes(permissionString);
+
+const TaskPermission = {
+	teacher: "TASK_DASHBOARD_TEACHER_VIEW_V3",
+	student: "TASK_DASHBOARD_VIEW_V3",
+};
+
+const TaskRoutes = {
+	open: "/v3/tasks/open/",
+	completed: "/v3/tasks/completed/",
+};
+
 const module = merge(base, {
 	state: () =>
 		merge(baseState, {
@@ -12,25 +25,21 @@ const module = merge(base, {
 		getHomeworksDashboard: async function ({ commit, rootState }) {
 			commit("setStatus", "pending");
 			try {
-				const promises = [fetchAll(this.$axios, "/v3/tasks/open/")];
+				const openPromise = fetchAll(this.$axios, TaskRoutes.open);
+				const completedPromise = hasPermission(
+					rootState,
+					TaskPermission.student
+				)
+					? fetchAll(this.$axios, TaskRoutes.completed)
+					: Promise.resolve([]);
 
-				if (
-					!rootState.auth.user.permissions.includes(
-						"TASK_DASHBOARD_TEACHER_VIEW_V3"
-					)
-				) {
-					promises.push(fetchAll(this.$axios, "/v3/tasks/completed/"));
-				}
-
-				// TODO - make this pretty
-				const responses = await Promise.all(promises);
-				const data = [...responses[0]];
-				if (responses.length === 2) {
-					data.concat(responses[1]);
-				}
+				const [open, completed] = await Promise.all([
+					openPromise,
+					completedPromise,
+				]);
 
 				commit("set", {
-					items: data,
+					items: [...completed, ...open],
 				});
 				commit("setStatus", "completed");
 			} catch (error) {
@@ -118,14 +127,16 @@ const module = merge(base, {
 			});
 		},
 		getCompletedHomeworks: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.status.submitted >= 1 || homework.status.graded >= 1;
+			const completedTask = getters.getHomeworks.filter((homework) => {
+				return homework.status.graded >= 1;
 			});
+			return completedTask;
 		},
 		getSubmittedHomeworks: (state, getters) => {
-			return getters.getCompletedHomeworks.filter((homework) => {
+			const submittedTasks = getters.getHomeworks.filter((homework) => {
 				return homework.status.submitted >= 1 && homework.status.graded === 0;
 			});
+			return submittedTasks;
 		},
 		getGradedHomeworks: (state, getters) => {
 			return getters.getCompletedHomeworks.filter((homework) => {
