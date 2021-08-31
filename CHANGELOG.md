@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-94 - clean up the colorsystem and fix some UI issues
 - BC-133 - added unit tests for filePaths and accounts store modules
 
 ### Changed
