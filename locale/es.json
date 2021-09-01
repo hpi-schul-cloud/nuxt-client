@@ -607,7 +607,7 @@
 	"pages.homeworks.student.subtitleOverDue": "Tareas Perdidas",
 	"pages.homeworks.teacher.subtitleOverDue": "Tareas Caducadas",
 	"pages.homeworks.subtitleGraded": "Calificado",
-	"pages.homeworks.subtitleNotGraded": "No es calificado",
+	"pages.homeworks.subtitleNotGraded": "Sin calificar",
 	"pages.impressum.title": "Impresión",
 	"pages.loginInstances.brb_link": "https://brandenburg.schul-cloud.org/login",
 	"pages.loginInstances.bundesland": "¿En qué provincia le gustaría iniciar sesión?",

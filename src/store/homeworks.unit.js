@@ -13,28 +13,63 @@ import {
 	coursesCompleted,
 	mathHomeworks,
 	homeworksTeacher,
+	overDueHomeworksTeacher,
+	noDueDateHomeworksTeacher,
+	dueDateHomeworksTeacher,
 } from "@@/stories/mockData/Homeworks";
 import storeModule from "./homeworks";
 
 describe("store/homeworks", () => {
 	describe("actions", () => {
 		const spyCommit = jest.fn();
-		const ctxMock = { commit: spyCommit };
+		const ctxMockTeacher = {
+			commit: spyCommit,
+			rootState: {
+				auth: { user: { permissions: ["TASK_DASHBOARD_TEACHER_VIEW_V3"] } },
+			},
+		};
+
+		const ctxMockStudent = {
+			commit: spyCommit,
+			rootState: {
+				auth: { user: { permissions: ["TASK_DASHBOARD_VIEW_V3"] } },
+			},
+		};
 
 		describe("getHomeworksDashboard", () => {
-			it("should call the right endpoint", async () => {
+			it("should call the right endpoint for teachers", async () => {
 				const receivedRequests = [];
 
 				storeModule.actions.$axios = {
 					$get: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: [] };
 					},
 				};
 
-				await storeModule.actions.getHomeworksDashboard(ctxMock);
+				await storeModule.actions.getHomeworksDashboard(ctxMockTeacher);
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("set");
-				expect(receivedRequests[0].url).toStrictEqual("/v3/task/dashboard/");
+				expect(receivedRequests[0].url).toStrictEqual("/v3/tasks/open/");
+			});
+
+			it("should call both endpoint for students", async () => {
+				const receivedRequests = [];
+
+				storeModule.actions.$axios = {
+					$get: async (url, params) => {
+						receivedRequests.push({ url, params });
+						return { data: [] };
+					},
+				};
+
+				spyCommit.mockClear();
+				await storeModule.actions.getHomeworksDashboard(ctxMockStudent);
+
+				expect(spyCommit.mock.calls).toHaveLength(3);
+				expect(spyCommit.mock.calls[1][0]).toBe("set");
+				expect(receivedRequests[0].url).toStrictEqual("/v3/tasks/open/");
+				expect(receivedRequests[1].url).toStrictEqual("/v3/tasks/completed/");
 			});
 
 			it("should set business error and reset loading on fail", async () => {
@@ -54,7 +89,7 @@ describe("store/homeworks", () => {
 				};
 
 				spyCommit.mockClear();
-				await storeModule.actions.getHomeworksDashboard(ctxMock);
+				await storeModule.actions.getHomeworksDashboard(ctxMockTeacher);
 
 				const storeCalls = spyCommit.mock.calls;
 				const firstCall = storeCalls[0];
@@ -80,10 +115,11 @@ describe("store/homeworks", () => {
 				storeModule.actions.$axios = {
 					$get: async (url, params) => {
 						receivedRequests.push({ url, params });
+						return { data: [] };
 					},
 				};
 				spyCommit.mockClear();
-				await storeModule.actions.getHomeworksDashboard(ctxMock);
+				await storeModule.actions.getHomeworksDashboard(ctxMockTeacher);
 
 				const storeCalls = spyCommit.mock.calls;
 
@@ -177,6 +213,17 @@ describe("store/homeworks", () => {
 			});
 		});
 
+		describe("getOpenHomeworksWithDueDateTeacher", () => {
+			it("Should return homeworks before due date for teachers", () => {
+				const mockGetter = {
+					getHomeworks: homeworksTeacher,
+				};
+				expect(
+					getters.getOpenHomeworksWithDueDateTeacher(state, mockGetter)
+				).toHaveLength(dueDateHomeworksTeacher.length);
+			});
+		});
+
 		describe("getOverDueHomeworks", () => {
 			it("Should return homeworks after due date", () => {
 				const mockGetter = {
@@ -188,6 +235,17 @@ describe("store/homeworks", () => {
 			});
 		});
 
+		describe("getOverDueHomeworksTeacher", () => {
+			it("Should return homeworks for teachers after due date", () => {
+				const mockGetter = {
+					getHomeworks: homeworksTeacher,
+				};
+				expect(
+					getters.getOverDueHomeworksTeacher(state, mockGetter)
+				).toHaveLength(overDueHomeworksTeacher.length);
+			});
+		});
+
 		describe("getOpenHomeworksWithoutDueDate", () => {
 			it("Should return open homeworks without due date", () => {
 				const mockGetter = {
@@ -196,6 +254,17 @@ describe("store/homeworks", () => {
 				expect(
 					getters.getOpenHomeworksWithoutDueDate(state, mockGetter)
 				).toHaveLength(openHomeworksWithoutDueDate.length);
+			});
+		});
+
+		describe("getOpenHomeworksWithoutDueDateTeacher", () => {
+			it("Should return open homeworks without due date for teachers", () => {
+				const mockGetter = {
+					getHomeworks: homeworksTeacher,
+				};
+				expect(
+					getters.getOpenHomeworksWithoutDueDateTeacher(state, mockGetter)
+				).toHaveLength(noDueDateHomeworksTeacher.length);
 			});
 		});
 
@@ -226,7 +295,7 @@ describe("store/homeworks", () => {
 		});
 
 		describe("getCompletedHomeworks", () => {
-			it("Should return all homeworks, that either submitted or graded", () => {
+			it("Should return all homeworks, that are either submitted or graded", () => {
 				const mockGetter = { getHomeworks: homeworks };
 				expect(getters.getCompletedHomeworks(state, mockGetter)).toStrictEqual(
 					completedHomeworks
@@ -236,7 +305,7 @@ describe("store/homeworks", () => {
 
 		describe("getSubmittedHomeworks", () => {
 			it("Should return all homeworks, that are submitted", () => {
-				const mockGetter = { getCompletedHomeworks: completedHomeworks };
+				const mockGetter = { getHomeworks: homeworks };
 				expect(getters.getSubmittedHomeworks(state, mockGetter)).toStrictEqual(
 					submittedHomeworks
 				);

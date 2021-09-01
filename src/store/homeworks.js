@@ -1,5 +1,5 @@
 import { merge } from "lodash";
-import { serviceTemplate, fetchAll } from "@utils";
+import { serviceTemplate } from "@utils";
 const base = serviceTemplate("homework");
 const baseState = base.state();
 
@@ -25,13 +25,13 @@ const module = merge(base, {
 		getHomeworksDashboard: async function ({ commit, rootState }) {
 			commit("setStatus", "pending");
 			try {
-				const openPromise = fetchAll(this.$axios, TaskRoutes.open);
+				const openPromise = this.$axios.$get(TaskRoutes.open);
 				const completedPromise = hasPermission(
 					rootState,
 					TaskPermission.student
 				)
-					? fetchAll(this.$axios, TaskRoutes.completed)
-					: Promise.resolve([]);
+					? this.$axios.$get(TaskRoutes.completed)
+					: Promise.resolve({ data: [] });
 
 				const [open, completed] = await Promise.all([
 					openPromise,
@@ -39,7 +39,7 @@ const module = merge(base, {
 				]);
 
 				commit("set", {
-					items: [...completed, ...open],
+					items: [...completed.data, ...open.data],
 				});
 				commit("setStatus", "completed");
 			} catch (error) {
@@ -128,7 +128,7 @@ const module = merge(base, {
 		},
 		getCompletedHomeworks: (state, getters) => {
 			const completedTask = getters.getHomeworks.filter((homework) => {
-				return homework.status.graded >= 1;
+				return homework.status.graded >= 1 || homework.status.submitted >= 1;
 			});
 			return completedTask;
 		},
