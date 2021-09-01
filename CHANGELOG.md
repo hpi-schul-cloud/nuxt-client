@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-133 - added unit tests for filePaths and accounts store modules
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
 ### Changed
 
@@ -19,9 +20,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-64 - execute e2e tests via push on main
 - BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
 
-### Added
-
-- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
 ## [26.9.1] - 2021-08-16
 
