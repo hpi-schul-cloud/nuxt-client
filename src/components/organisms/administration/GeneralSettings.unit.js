@@ -4,7 +4,6 @@ import EnvConfigModule from "@/store/env-config";
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
 	name: "Paul-Gerhardt-Gymnasium",
-	fileStorageType: "awsS3",
 	federalState: { $oid: "0000b186816abba584714c53" },
 	county: {
 		antaresKey: "BRB",
@@ -73,15 +72,11 @@ const generateMockStore = {
 			getSchool: () => {
 				return school;
 			},
-			getFileStorageTotal: () => {
-				return [{ total: 0, totalSize: 0 }];
-			},
 			getLoading: () => {
 				return false;
 			},
 		},
 		actions: {
-			fetchFileStorageTotal: jest.fn(),
 			update: jest.fn(),
 		},
 	},
@@ -93,7 +88,6 @@ const searchStrings = {
 	schoolCounties: ".school-counties",
 	schoolLogo: ".school-logo",
 	languagesSelect: ".language-select",
-	schoolFileStorage: ".school-file-storage",
 	formButton: ".form-button",
 	timezone: ".timezone-input",
 	saveButton: ".button-save",
@@ -276,39 +270,9 @@ describe("GeneralSettings", () => {
 				"ZeitzoneUm die Zeitzone für die Schule zu ändern, wenden Sie sich bitte an einen Admin."
 			);
 		});
-
-		it("file storage input display the fileStorageType", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
-
-			await wrapper.setData(mockData);
-
-			const ele = wrapper.find(searchStrings.schoolFileStorage);
-			expect(ele.vm.value).toStrictEqual("awsS3");
-		});
 	});
 
 	describe("events", () => {
-		it("fetchFileStorageTotal method should be triggered on load", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
-			await wrapper.setData(mockData);
-
-			expect(
-				generateMockStore.schools.actions.fetchFileStorageTotal
-			).toHaveBeenCalled();
-		});
-
 		it("update button should trigger save method", async () => {
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
@@ -320,9 +284,7 @@ describe("GeneralSettings", () => {
 			await wrapper.setData(mockData);
 
 			const buttonElement = wrapper.find(searchStrings.saveButton);
-
 			buttonElement.trigger("click");
-
 			expect(generateMockStore.schools.actions.update).toHaveBeenCalled();
 		});
 	});

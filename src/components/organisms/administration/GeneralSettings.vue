@@ -123,36 +123,6 @@
 					></v-select>
 				</v-col>
 			</v-row>
-			<v-row>
-				<v-col>
-					<v-select
-						v-model="localSchool.fileStorageType"
-						class="school-file-storage"
-						:label="
-							$t(
-								'pages.administration.school.index.generalSettings.labels.cloudStorageProvider'
-							)
-						"
-						:items="fileStorageTypes"
-						item-text="name"
-						item-value="type"
-						dense
-					></v-select>
-				</v-col>
-			</v-row>
-			<v-row class="file-storage-total-section">
-				<v-col>
-					<h4 class="subtitle-1 font-weight-bold my-0">
-						{{ $t("pages.administration.school.index.usedFileStorage") }}
-					</h4>
-					<p class="body-1">
-						{{
-							$t("pages.administration.school.index.schoolIsCurrentlyDrawing")
-						}}
-						{{ localSchool.fileStorageTotal }} B.
-					</p>
-				</v-col>
-			</v-row>
 			<template v-if="loading">
 				<v-skeleton-loader
 					v-for="setting of 4"
@@ -196,8 +166,6 @@ export default {
 				language: "",
 				permissions: {},
 				features: {},
-				fileStorageType: "",
-				fileStorageTotal: 0,
 			},
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 		};
@@ -207,7 +175,6 @@ export default {
 		...mapGetters("schools", {
 			federalState: "getFederalState",
 			school: "getSchool",
-			fileStorageTotal: "getFileStorageTotal",
 			loading: "getLoading",
 		}),
 		languages() {
@@ -220,7 +187,6 @@ export default {
 		},
 	},
 	async created() {
-		this.fetchFileStorageTotal();
 		this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
 		this.localSchool.logo = await dataUrlToFile(
 			this.school.logo_dataUrl,
@@ -231,7 +197,7 @@ export default {
 		printDate,
 		toBase64,
 		dataUrlToFile,
-		...mapActions("schools", ["fetchFileStorageTotal", "update"]),
+		...mapActions("schools", ["update"]),
 		onUpdatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
 			const newPermissions = {
@@ -250,7 +216,6 @@ export default {
 				id: this.localSchool.id,
 				name: this.localSchool.name,
 				language: this.localSchool.language,
-				fileStorageType: this.localSchool.fileStorageType,
 				permissions: this.localSchool.permissions,
 				features: this.localSchool.features,
 			};
