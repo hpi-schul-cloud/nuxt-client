@@ -38,7 +38,6 @@ module.exports = {
 				"jest/expect-expect": "off",
 				"jest/no-disabled-tests": "off",
 				"jest/valid-title": "off",
-				"jest/no-focused-tests": 2,
 			},
 		},
 	],
