@@ -314,63 +314,6 @@ describe("store/schools", () => {
 			});
 		});
 
-		describe("fetchFileStorageTotal", () => {
-			it("should call backend and sets state correctly", async () => {
-				const receivedRequests = [];
-				const ctxMock = {
-					commit: jest.fn(),
-				};
-				actions.$axios = {
-					$get: async (url) => {
-						receivedRequests.push({ url });
-						return { data: "dummy response" };
-					},
-				};
-
-				await actions.fetchFileStorageTotal(ctxMock);
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].url).toStrictEqual("/v1/fileStorage/total");
-				expect(ctxMock.commit.mock.calls).toHaveLength(3);
-				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setLoading");
-				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual(true);
-				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
-					"setFileStorageTotal"
-				);
-				expect(ctxMock.commit.mock.calls[1][1]).toStrictEqual(
-					expect.any(Object)
-				);
-				expect(ctxMock.commit.mock.calls[1][1]).toStrictEqual({
-					data: "dummy response",
-				});
-				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("setLoading");
-				expect(ctxMock.commit.mock.calls[2][1]).toStrictEqual(false);
-			});
-
-			it("should trigger error and goes into the catch block", async () => {
-				const receivedRequests = [];
-				const ctxMock = {
-					commit: jest.fn(),
-				};
-				actions.$axios = {
-					// fails here $post
-					$post: async (url) => {
-						receivedRequests.push({ url });
-						return { data: "dummy response" };
-					},
-				};
-
-				await actions.fetchFileStorageTotal(ctxMock);
-				expect(receivedRequests).toHaveLength(0);
-				expect(ctxMock.commit.mock.calls).toHaveLength(3);
-				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual("setError");
-				expect(ctxMock.commit.mock.calls[1][1]).toStrictEqual(
-					expect.any(Object)
-				);
-				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("setLoading");
-				expect(ctxMock.commit.mock.calls[2][1]).toStrictEqual(false);
-			});
-		});
-
 		describe("update", () => {
 			it("should call backend and sets state correctly", async () => {
 				const receivedRequests = [];
@@ -568,17 +511,6 @@ describe("store/schools", () => {
 			});
 		});
 
-		describe("setFileStorageTotal", () => {
-			it("should set the fileStorageTotal data", () => {
-				const mockState = {
-					fileStorageTotal: 0,
-				};
-
-				mutations.setFileStorageTotal(mockState, 1);
-				expect(mockState.fileStorageTotal).toStrictEqual(1);
-			});
-		});
-
 		describe("setFederalState", () => {
 			it("should set the federalState data", () => {
 				const mockState = {
@@ -646,20 +578,6 @@ describe("store/schools", () => {
 
 				expect(expectedState).toStrictEqual(expect.any(Object));
 				expect(expectedState).toBe(school);
-			});
-		});
-
-		describe("getFileStorageTotal", () => {
-			it("should return the fileStorageTotal state", () => {
-				const fileStorageTotal = 0;
-				const mockState = {
-					fileStorageTotal,
-				};
-
-				const expectedState = getters.getFileStorageTotal(mockState);
-
-				expect(expectedState).toStrictEqual(0);
-				expect(expectedState).toBe(fileStorageTotal);
 			});
 		});
 
