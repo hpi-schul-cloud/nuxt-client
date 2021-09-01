@@ -53,7 +53,7 @@
 
 <script>
 import EnvConfigModule from "@store/env-config";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import vCustomBreadcrumbs from "@components/molecules/vCustomBreadcrumbs";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
@@ -97,9 +97,6 @@ export default {
 		schoolError: (error) => {
 			console.error("school could not be loaded", error);
 		},
-	},
-	methods: {
-		...mapActions("schools", ["fetchFileStorageTotal"]),
 	},
 	head() {
 		return {
