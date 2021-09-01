@@ -8,10 +8,6 @@ const envs = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: process.env.SC_THEME || "default",
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: null,
-	FEATURE_ES_COLLECTIONS_ENABLED: null,
-	FEATURE_EXTENSIONS_ENABLED: null,
-	FEATURE_TEAMS_ENABLED: null,
 	I18N__AVAILABLE_LANGUAGES: "",
 	I18N__DEFAULT_LANGUAGE: "",
 	I18N__DEFAULT_TIMEZONE: "",
@@ -77,6 +73,10 @@ describe("students/index", () => {
 						"student_list",
 						"student_delete",
 					],
+				},
+			},
+			schools: {
+				getters: {
 					schoolIsExternallyManaged: () => false,
 				},
 			},
@@ -344,12 +344,7 @@ describe("students/index", () => {
 
 	it("should not display the edit button if school is external", async () => {
 		const customMockStore = mockStore;
-		customMockStore.auth.getters = {
-			getUserPermissions: () => [
-				"student_create",
-				"student_list",
-				"student_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 		const wrapper = mount(StudentPage, {
@@ -400,11 +395,10 @@ describe("students/index", () => {
 		expect(fabComponent.exists()).toBe(true);
 	});
 
-	it("should not render the fab-floating component if user does not have SUDENT_CREATE permission", async () => {
+	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", async () => {
 		const customMockStore = { ...mockStore };
 		customMockStore.auth.getters = {
 			getUserPermissions: () => ["student_list", "student_delete"],
-			schoolIsExternallyManaged: () => true,
 		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
@@ -421,12 +415,7 @@ describe("students/index", () => {
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.getters = {
-			getUserPermissions: () => [
-				"student_create",
-				"student_list",
-				"student_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 
@@ -444,12 +433,7 @@ describe("students/index", () => {
 
 	it("should render the adminTableLegend component when school is external", async () => {
 		const customMockStore = mockStore;
-		customMockStore.auth.getters = {
-			getUserPermissions: () => [
-				"student_create",
-				"student_list",
-				"student_delete",
-			],
+		customMockStore.schools.getters = {
 			schoolIsExternallyManaged: () => true,
 		};
 

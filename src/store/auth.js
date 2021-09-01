@@ -47,7 +47,7 @@ export const actions = {
 		}
 		commit("clearAuthData");
 	},
-	async populateUser({ commit }) {
+	async populateUser({ commit, dispatch }) {
 		const user = await this.$axios.$get("/v1/me");
 
 		const roles = await this.$axios.$get(`/v1/roles/user/${user.id}`);
@@ -58,8 +58,7 @@ export const actions = {
 
 		commit("setUser", user);
 		if (user.schoolId) {
-			const school = await this.$axios.$get(`/v1/schools/${user.schoolId}`);
-			commit("setSchool", school);
+			dispatch("schools/fetchSchool", {}, { root: true });
 		}
 		if (user.language) {
 			commit("setLocale", user.language);
@@ -104,9 +103,6 @@ export const mutations = {
 	setUser(state, user) {
 		state.user = user;
 	},
-	setSchool(state, school) {
-		state.school = school;
-	},
 	setLocale(state, locale) {
 		state.locale = locale;
 	},
@@ -119,25 +115,26 @@ export const mutations = {
 	clearAuthData(state) {
 		state.accessToken = null;
 		state.user = null;
-		state.school = null;
 	},
 };
 
 export const getters = {
-	getLocale(state) {
+	getLocale(state, _getters, rootState) {
 		if (state.locale) {
 			return state.locale;
 		}
-		if (state.school && state.school.language) {
-			return state.school.language;
+		if (rootState.schools.school && rootState.schools.school.language) {
+			return rootState.schools.school.language;
 		}
 		if (EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
 			return EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
 		}
 		return "de";
 	},
-	getSchool(state) {
-		return state.school;
+	/** deprecated
+	 */
+	getSchool(state, _getters, rootState) {
+		return rootState.schools.school;
 	},
 	getUser(state) {
 		return state.user;
@@ -164,9 +161,6 @@ export const getters = {
 	userIsExternallyManaged(state) {
 		return !!state.user.externallyManaged;
 	},
-	schoolIsExternallyManaged(state) {
-		return state.school.isExternal;
-	},
 };
 
 export const state = () => {
@@ -174,7 +168,6 @@ export const state = () => {
 		accessToken: "",
 		payload: null,
 		user: {},
-		school: {},
 		publicPages: ["index", "login", "signup", "impressum"],
 		locale: "de",
 	};

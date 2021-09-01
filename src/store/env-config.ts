@@ -18,20 +18,30 @@ type BusinessError = {
 };
 
 type Envs = {
-	NOT_AUTHENTICATED_REDIRECT_URL: string;
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: number;
-	JWT_TIMEOUT_SECONDS: number;
-	SC_THEME: string;
-	FALLBACK_DISABLED: boolean | null;
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
-	FEATURE_ES_COLLECTIONS_ENABLED: boolean | null;
-	FEATURE_EXTENSIONS_ENABLED: boolean | null;
-	FEATURE_TEAMS_ENABLED: boolean | null;
+	DOCUMENT_BASE_DIR: string;
+	FALLBACK_DISABLED?: boolean;
+	FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED?: boolean;
+	FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED?: boolean;
+	FEATURE_ES_COLLECTIONS_ENABLED?: boolean;
+	FEATURE_EXTENSIONS_ENABLED?: boolean;
+	FEATURE_TEAMS_ENABLED?: boolean;
+	FEATURE_SCHOOL_POLICY_ENABLED?: boolean;
+	FEATURE_VIDEOCONFERENCE_ENABLED?: boolean;
+	FEATURE_MATRIX_MESSENGER_ENABLED?: boolean;
 	I18N__AVAILABLE_LANGUAGES: string;
 	I18N__DEFAULT_LANGUAGE: string;
 	I18N__DEFAULT_TIMEZONE: string;
 	I18N__FALLBACK_LANGUAGE: string;
-	DOCUMENT_BASE_DIR: string;
+	JWT_SHOW_TIMEOUT_WARNING_SECONDS: number;
+	JWT_TIMEOUT_SECONDS: number;
+	LERNSTORE_MODE?: string;
+	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE?: boolean;
+	MATRIX_MESSENGER__STUDENT_ROOM_CREATION?: boolean;
+	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED?: boolean;
+	NOT_AUTHENTICATED_REDIRECT_URL: string;
+	ROCKETCHAT_SERVICE_ENABLED?: boolean;
+	SC_THEME: string;
 	SC_TITLE: string;
 	SC_SHORT_TITLE: string;
 };
@@ -41,6 +51,15 @@ export const requiredVars = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
+};
+
+export const configsFromEnvironmentVars = {
+	FEATURE_MATRIX_MESSENGER_ENABLED:
+		process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
+	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
+	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
+	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
+	LERNSTORE_MODE: process.env.LERNSTORE_MODE,
 };
 
 const retryLimit: number = 10;
@@ -57,9 +76,6 @@ export class EnvConfig extends VuexModule {
 		...requiredVars,
 		FALLBACK_DISABLED: false,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-		FEATURE_ES_COLLECTIONS_ENABLED: null,
-		FEATURE_EXTENSIONS_ENABLED: null,
-		FEATURE_TEAMS_ENABLED: null,
 		I18N__AVAILABLE_LANGUAGES: "",
 		I18N__DEFAULT_LANGUAGE: "",
 		I18N__DEFAULT_TIMEZONE: "",
@@ -111,6 +127,38 @@ export class EnvConfig extends VuexModule {
 		return this.env.I18N__DEFAULT_TIMEZONE || "Europe/Berlin";
 	}
 
+	get getMatrixConfig() {
+		return {
+			enabled: this.env.FEATURE_MATRIX_MESSENGER_ENABLED,
+			schoolSettingsVisible: this.env.MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE,
+			studentRoomCreation: this.env.MATRIX_MESSENGER__STUDENT_ROOM_CREATION,
+			schoolRoomEnabled: this.env.MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED,
+		};
+	}
+
+	get getAdminToggleStudentLernstoreViewEnabled() {
+		return (
+			this.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
+			this.env.LERNSTORE_MODE === "EDUSHARING"
+		);
+	}
+
+	get getAdminToggleStudentVisibilityEnabled() {
+		return this.env.FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED;
+	}
+	get getVideoConferenceEnabled() {
+		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;
+	}
+	get getSchoolPolicyEnabled() {
+		return this.env.FEATURE_SCHOOL_POLICY_ENABLED;
+	}
+	get getRocketChatEnabled() {
+		return this.env.ROCKETCHAT_SERVICE_ENABLED;
+	}
+	get getAvailableLanguages() {
+		return this.env.I18N__AVAILABLE_LANGUAGES;
+	}
+
 	get getEnv(): Envs {
 		return this.env;
 	}
@@ -126,7 +174,7 @@ export class EnvConfig extends VuexModule {
 					console.warn(`Missing configuration by server for key ${key}`);
 				}
 			});
-			this.setEnvs(envs);
+			this.setEnvs({ ...configsFromEnvironmentVars, ...envs });
 
 			ContentModule.init();
 			FilePathsModule.init();
