@@ -48,31 +48,43 @@ describe("autoLogout module", () => {
 			autoLogoutModule.setRemainingTimeInSeconds(mockValue);
 			expect(autoLogoutModule.remainingTimeInSeconds).toBe(mockValue);
 		});
-		it("setInit should set default values if no paramaters are defined", () => {
-			const autoLogoutModule = new AutoLogoutModule({});
-			const showWarningDefaultValue = 3600;
-			const remainigTimeDefaultValue = 3600 * 2;
+		describe("when setInit is called with no paramater", () => {
+			it("should set a default value for showWarningOnRemainingSeconds", () => {
+				const autoLogoutModule = new AutoLogoutModule({});
+				const showWarningDefaultValue = 3600;
+				autoLogoutModule.setInit();
+				expect(autoLogoutModule.showWarningOnRemainingSeconds).toBe(
+					showWarningDefaultValue
+				);
+			});
+			it("should set a default value for defaultRemainingTimeInSeconds", () => {
+				const autoLogoutModule = new AutoLogoutModule({});
+				const remainigTimeDefaultValue = 3600 * 2;
+				autoLogoutModule.setInit();
 
-			autoLogoutModule.setInit();
-			expect(autoLogoutModule.showWarningOnRemainingSeconds).toBe(
-				showWarningDefaultValue
-			);
-			expect(autoLogoutModule.defaultRemainingTimeInSeconds).toBe(
-				remainigTimeDefaultValue
-			);
+				expect(autoLogoutModule.defaultRemainingTimeInSeconds).toBe(
+					remainigTimeDefaultValue
+				);
+			});
 		});
-		it("setInit should set values if paramaters are defined", () => {
-			const autoLogoutModule = new AutoLogoutModule({});
-			const showWarningMockValue = 123;
-			const remainigTimeMockValue = 456;
+		describe("when setInit is called with defined parameters", () => {
+			it("should set the parameter as value for showWarningOnRemainingSeconds", () => {
+				const autoLogoutModule = new AutoLogoutModule({});
+				const showWarningMockValue = 123;
+				autoLogoutModule.setInit(showWarningMockValue);
+				expect(autoLogoutModule.showWarningOnRemainingSeconds).toBe(
+					showWarningMockValue
+				);
+			});
+			it("should set the parameter as value for defaultRemainingTimeInSeconds", () => {
+				const autoLogoutModule = new AutoLogoutModule({});
+				const remainigTimeMockValue = 456;
 
-			autoLogoutModule.setInit(showWarningMockValue, remainigTimeMockValue);
-			expect(autoLogoutModule.showWarningOnRemainingSeconds).toBe(
-				showWarningMockValue
-			);
-			expect(autoLogoutModule.defaultRemainingTimeInSeconds).toBe(
-				remainigTimeMockValue
-			);
+				autoLogoutModule.setInit(undefined, remainigTimeMockValue);
+				expect(autoLogoutModule.defaultRemainingTimeInSeconds).toBe(
+					remainigTimeMockValue
+				);
+			});
 		});
 	});
 	describe("getters", () => {
