@@ -26,7 +26,9 @@
 							<v-tab>
 								<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
 								<span class="d-none d-sm-inline">{{
-									$t("components.organisms.HomeworksDashboardMain.tab.completed")
+									$t(
+										"components.organisms.HomeworksDashboardMain.tab.completed"
+									)
 								}}</span>
 							</v-tab>
 						</v-tabs>
