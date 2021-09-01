@@ -35,7 +35,7 @@
 			</template>
 		</section>
 
-		<v-container class="v-container mt-5">
+		<v-container class="v-container mt-5 mb-14">
 			<v-autocomplete
 				v-if="isListFilled"
 				v-model="selectedCourses"
