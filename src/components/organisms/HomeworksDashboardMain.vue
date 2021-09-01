@@ -19,15 +19,15 @@
 						<v-tabs v-model="tab" grow class="tabs-max-width">
 							<v-tab>
 								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-								{{ $t("components.organisms.HomeworksDashboardMain.tab.open") }}
+								<span class="d-none d-sm-inline">{{
+									$t("components.organisms.HomeworksDashboardMain.tab.open")
+								}}</span>
 							</v-tab>
 							<v-tab>
 								<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-								{{
-									$t(
-										"components.organisms.HomeworksDashboardMain.tab.completed"
-									)
-								}}
+								<span class="d-none d-sm-inline">{{
+									$t("components.organisms.HomeworksDashboardMain.tab.completed")
+								}}</span>
 							</v-tab>
 						</v-tabs>
 					</div>
