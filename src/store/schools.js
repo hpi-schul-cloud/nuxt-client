@@ -38,7 +38,6 @@ const module = {
 			currentYear: {},
 			federalState: {},
 			systems: [],
-			fileStorageTotal: 0,
 			loading: false,
 			error: null,
 		};
@@ -117,21 +116,6 @@ const module = {
 				// TODO what is supposed to happen on error?
 			}
 		},
-		async fetchFileStorageTotal({ commit }) {
-			commit("setLoading", true);
-
-			try {
-				const fileStorageTotal = await this.$axios.$get(
-					"/v1/fileStorage/total"
-				);
-				commit("setFileStorageTotal", fileStorageTotal);
-				commit("setLoading", false);
-			} catch (error) {
-				commit("setError", error);
-				commit("setLoading", false);
-				// TODO what is supposed to happen on error?
-			}
-		},
 		async update({ commit }, payload) {
 			commit("setLoading", true);
 			const school = transformSchoolClientToServer(payload);
@@ -179,9 +163,6 @@ const module = {
 		setSchool(state, updatedSchool) {
 			state.school = updatedSchool;
 		},
-		setFileStorageTotal(state, fileStorageTotal) {
-			state.fileStorageTotal = fileStorageTotal;
-		},
 		setCurrentYear(state, currentYear) {
 			state.currentYear = currentYear;
 		},
@@ -201,9 +182,6 @@ const module = {
 	getters: {
 		getSchool(state) {
 			return state.school;
-		},
-		getFileStorageTotal(state) {
-			return state.fileStorageTotal;
 		},
 		getCurrentYear(state) {
 			return state.currentYear;
