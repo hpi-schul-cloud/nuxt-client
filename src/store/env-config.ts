@@ -17,7 +17,7 @@ type BusinessError = {
 	message: string;
 };
 
-type Envs = {
+export type Envs = {
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
 	DOCUMENT_BASE_DIR: string;
 	FALLBACK_DISABLED?: boolean;
@@ -39,6 +39,9 @@ type Envs = {
 	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE?: boolean;
 	MATRIX_MESSENGER__STUDENT_ROOM_CREATION?: boolean;
 	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED?: boolean;
+	MATRIX_MESSENGER__DISCOVER_URI: string;
+	MATRIX_MESSENGER__EMBED_URI: string;
+	MATRIX_MESSENGER__URI: string;
 	NOT_AUTHENTICATED_REDIRECT_URL: string;
 	ROCKETCHAT_SERVICE_ENABLED?: boolean;
 	SC_THEME: string;

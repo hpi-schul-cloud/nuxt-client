@@ -1,16 +1,16 @@
-import { EnvConfig } from "./env-config";
+import { EnvConfig, Envs } from "./env-config";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 
-const mockEnvs = {
+const mockEnvs: Envs = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/mock",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	FEATURE_MATRIX_MESSENGER_ENABLED: undefined,
 	LERNSTORE_MODE: "EDUSHARING",
-	MATRIX_MESSENGER__DISCOVER_URI: undefined,
-	MATRIX_MESSENGER__EMBED_URI: undefined,
-	MATRIX_MESSENGER__URI: undefined,
+	MATRIX_MESSENGER__DISCOVER_URI: "mockvalue",
+	MATRIX_MESSENGER__EMBED_URI: "mockvalue",
+	MATRIX_MESSENGER__URI: "mockvalue",
 	SC_THEME: "mockValue",
 	FALLBACK_DISABLED: false,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
