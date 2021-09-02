@@ -119,15 +119,15 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			}),
 			vuetify,
 			propsData: {
-				role: "student",
+				role: "teacher",
 			},
 		});
 
 		const emptyStateTitle = wrapper.vm.$i18n.t(
-			"pages.homeworks.student.emptyState.title"
+			"pages.homeworks.teacher.emptyState.title"
 		);
 		const emptyStateSubtitle = wrapper.vm.$i18n.t(
-			"pages.homeworks.student.emptyState.subtitle"
+			"pages.homeworks.teacher.emptyState.subtitle"
 		);
 
 		const fullText = `${emptyStateTitle} ${emptyStateSubtitle}`;

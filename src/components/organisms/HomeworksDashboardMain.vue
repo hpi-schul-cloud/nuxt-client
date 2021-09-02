@@ -1,42 +1,36 @@
 <template>
 	<section>
-		<section>
-			<v-container v-if="status === 'pending'">
-				<h1 class="h4">
-					<v-skeleton-loader type="heading" max-width="75%" />
-				</h1>
-				<v-skeleton-loader type="text" />
-			</v-container>
-
-			<template v-else>
-				<div v-if="isListFilled" class="border-bottom">
-					<v-container>
-						<h1 class="h4">
-							{{ $t("pages.homeworks.title") }}
-						</h1>
-					</v-container>
-					<div v-if="showTabs" class="pb-0 d-flex justify-center">
-						<v-tabs v-model="tab" grow class="tabs-max-width">
-							<v-tab>
-								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-								<span class="d-none d-sm-inline">{{
-									$t("components.organisms.HomeworksDashboardMain.tab.open")
-								}}</span>
-							</v-tab>
-							<v-tab>
-								<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-								<span class="d-none d-sm-inline">{{
-									$t(
-										"components.organisms.HomeworksDashboardMain.tab.completed"
-									)
-								}}</span>
-							</v-tab>
-						</v-tabs>
-					</div>
+		<v-container v-if="status === 'pending'">
+			<h1 class="h4">
+				<v-skeleton-loader type="heading" max-width="75%" />
+			</h1>
+			<v-skeleton-loader type="text" />
+		</v-container>
+		<template v-else>
+			<div class="border-bottom">
+				<v-container>
+					<h1 class="h4">
+						{{ $t("pages.homeworks.title") }}
+					</h1>
+				</v-container>
+				<div v-if="isStudent" class="pb-0 d-flex justify-center">
+					<v-tabs v-model="tab" grow class="tabs-max-width">
+						<v-tab>
+							<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
+							<span class="d-none d-sm-inline">{{
+								$t("components.organisms.HomeworksDashboardMain.tab.open")
+							}}</span>
+						</v-tab>
+						<v-tab>
+							<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
+							<span class="d-none d-sm-inline">{{
+								$t("components.organisms.HomeworksDashboardMain.tab.completed")
+							}}</span>
+						</v-tab>
+					</v-tabs>
 				</div>
-			</template>
-		</section>
-
+			</div>
+		</template>
 		<v-container class="v-container mt-5 mb-14">
 			<v-autocomplete
 				v-if="isListFilled"
@@ -55,10 +49,10 @@
 				@change="filterByCourse"
 			/>
 			<v-custom-empty-state
-				v-if="isListEmpty"
+				v-if="showEmptyStateForTeacher"
 				:image="image"
-				:title="emptyStateTitle"
-				:subtitle="emptyStateSubtitle"
+				:title="$t('pages.homeworks.teacher.emptyState.title')"
+				:subtitle="$t('pages.homeworks.teacher.emptyState.subtitle')"
 				class="mt-16"
 			/>
 			<homeworks-dashboard-student v-else-if="isStudent" :tab="tab" />
@@ -108,19 +102,8 @@ export default {
 		isStudent: function () {
 			return this.role === "student";
 		},
-		emptyStateTitle: function () {
-			// TODO: remove if wording stays the same
-			return this.isStudent
-				? this.$t("pages.homeworks.student.emptyState.title")
-				: this.$t("pages.homeworks.teacher.emptyState.title");
-		},
-		emptyStateSubtitle: function () {
-			return this.isStudent
-				? this.$t("pages.homeworks.student.emptyState.subtitle")
-				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
-		},
-		showTabs: function () {
-			return this.isStudent && this.isListFilled;
+		showEmptyStateForTeacher: function () {
+			return !this.isStudent && this.isListEmpty;
 		},
 		availableCourses: function () {
 			if (this.role === "teacher") {
