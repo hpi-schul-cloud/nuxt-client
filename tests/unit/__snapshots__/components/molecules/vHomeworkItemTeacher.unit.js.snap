@@ -2,7 +2,7 @@
 
 exports[`@components/molecules/vHomeworkItemTeacher Should render subtitle with course name and due date 1`] = `
 <div class="v-list-item__subtitle d-inline-flex"><span class="text-truncate">Mathe</span>
-  &nbsp;– Abgabe 11.06.00
+  &nbsp;– Abgabe 07.06.17
 </div>
 `;
 

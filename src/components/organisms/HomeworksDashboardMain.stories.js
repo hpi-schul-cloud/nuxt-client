@@ -10,10 +10,12 @@ import {
 	overDueHomeworksTeacher,
 	dueDateHomeworksTeacher,
 	noDueDateHomeworksTeacher,
+	submittedHomeworks,
+	gradedHomeworks,
 } from "@@/stories/mockData/Homeworks";
 
-storiesOf("0 Vuetify/Homeworks/Templates", module)
-	.add("Task Dashboard Student", () => ({
+storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
+	.add("Homeworks Dashboard Student", () => ({
 		components: {
 			HomeworksDashboardMain,
 		},
@@ -34,6 +36,8 @@ storiesOf("0 Vuetify/Homeworks/Templates", module)
 						getOverDueHomeworks: () => overDueHomeworks,
 						getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
 						getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
+						getSubmittedHomeworks: () => submittedHomeworks,
+						getGradedHomeworks: () => gradedHomeworks,
 					},
 					actions: {
 						getHomeworksDashboard: () => {},
@@ -47,7 +51,7 @@ storiesOf("0 Vuetify/Homeworks/Templates", module)
 			<homeworks-dashboard-main :role='role' />
 		</v-app>`,
 	}))
-	.add("Task Dashboard Teacher", () => ({
+	.add("Homeworks Dashboard Teacher", () => ({
 		components: {
 			HomeworksDashboardMain,
 		},

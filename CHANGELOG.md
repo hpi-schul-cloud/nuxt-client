@@ -11,11 +11,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-133 - added unit tests for filePaths and accounts store modules
+- BC-5 - now showing open and completed taks for students in a tab view
 - BC-136 - added no-focused-tests rule to jest config file
 - BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
 ### Changed
 
+- BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 - BC-190 - removing fileStorageData on school settings
 - BC-18 - refactored the envConfig, content, accounts, autoLogout, and filePaths store modules to typescript and the corresponding components' access to them
 - BC-14 - changed thr contact address
