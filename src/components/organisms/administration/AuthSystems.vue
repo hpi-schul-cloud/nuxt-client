@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import SchoolsModule from "@/store/schoolss";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 
@@ -105,7 +105,6 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions("schools", ["deleteSystem"]),
 		// TODO - Discuss which systems are still gonna be editable in the future
 		isEditable(system) {
 			return system.type === "ldap";
@@ -118,7 +117,7 @@ export default {
 			};
 		},
 		removeSystem(systemId) {
-			this.deleteSystem(systemId);
+			SchoolsModule.deleteSystem(systemId);
 			this.confirmDeleteDialog.isOpen = false;
 			// TODO show error
 		},

@@ -146,7 +146,7 @@
 
 <script>
 import EnvConfigModule from "@/store/env-config";
-import { mapGetters, mapActions } from "vuex";
+import SchoolsModule from "@/store/schoolss";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
@@ -172,11 +172,15 @@ export default {
 	},
 	computed: {
 		availableLanguages: () => EnvConfigModule.getAvailableLanguages,
-		...mapGetters("schools", {
-			federalState: "getFederalState",
-			school: "getSchool",
-			loading: "getLoading",
-		}),
+		federalState() {
+			return SchoolsModule.getFederalState;
+		},
+		school() {
+			return SchoolsModule.getSchool;
+		},
+		loading() {
+			return SchoolsModule.getLoading;
+		},
 		languages() {
 			return this.availableLanguages.split(",").map((lang) => {
 				const name = this.$t(
@@ -197,7 +201,6 @@ export default {
 		printDate,
 		toBase64,
 		dataUrlToFile,
-		...mapActions("schools", ["update"]),
 		onUpdatePrivacySettings(value, settingName) {
 			const keys = settingName.split(".");
 			const newPermissions = {
@@ -234,7 +237,7 @@ export default {
 			} else {
 				updatedSchool.logo_dataUrl = "";
 			}
-			this.update(updatedSchool);
+			SchoolsModule.update(updatedSchool);
 		},
 	},
 };

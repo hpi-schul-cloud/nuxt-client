@@ -1,4 +1,5 @@
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog";
+import SchoolsModule from "@/store/schoolss";
 
 const school = {
 	_id: "5f2987e020834114b8efd6f8",
@@ -22,13 +23,6 @@ const mockProps = {
 };
 
 const mockStore = {
-	schools: {
-		getters: {
-			getSchool: () => {
-				return school;
-			},
-		},
-	},
 	"consent-versions": {
 		actions: {
 			addConsentVersion: jest.fn(),
@@ -45,6 +39,9 @@ const searchStrings = {
 };
 
 describe("SchoolPolicyFormDialog", () => {
+	beforeAll(() => {
+		SchoolsModule.setSchool(school);
+	});
 	it(...isValidComponent(SchoolPolicyFormDialog));
 
 	describe("displaying values", () => {

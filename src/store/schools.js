@@ -51,7 +51,7 @@ const module = {
 					const school = await this.$axios.$get(
 						`/v1/schools/${rootState.auth.user.schoolId}`
 					);
-
+					console.log(rootState.auth.user.schoolId, "schoolID");
 					commit("setSchool", transformSchoolServerToClient(school));
 					await dispatch("schools/fetchCurrentYear", {}, { root: true });
 					await dispatch("schools/fetchFederalState", {}, { root: true });

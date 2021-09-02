@@ -100,7 +100,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import SchoolsModule from "@/store/schoolss";
+import { mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
 import { currentDate } from "@plugins/datetime";
@@ -131,7 +132,9 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("schools", { school: "getSchool" }),
+		school() {
+			return SchoolsModule.getSchool;
+		},
 		descriptionErrors() {
 			const errors = [];
 			if (!this.$v.description.$dirty) return errors;

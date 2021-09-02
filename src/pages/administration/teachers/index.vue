@@ -129,6 +129,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import SchoolsModule from "@/store/schoolss";
 import EnvConfigModule from "@/store/env-config";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
@@ -277,9 +278,6 @@ export default {
 		...mapGetters("auth", {
 			user: "getUser",
 		}),
-		...mapGetters("schools", {
-			schoolIsExternallyManaged: "schoolIsExternallyManaged",
-		}),
 		...mapGetters("users", {
 			teachers: "getList",
 			pagination: "getPagination",
@@ -287,6 +285,9 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
+		schoolIsExternallyManaged() {
+			return SchoolsModule.schoolIsExternallyManaged;
+		},
 		env() {
 			return EnvConfigModule.getEnv;
 		},

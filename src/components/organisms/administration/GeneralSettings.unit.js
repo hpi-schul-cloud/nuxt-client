@@ -1,5 +1,6 @@
 import GeneralSettings from "./GeneralSettings";
 import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schoolss";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -64,22 +65,6 @@ const generateMockStore = {
 			},
 		},
 	},
-	schools: {
-		getters: {
-			getFederalState: () => {
-				return federalState;
-			},
-			getSchool: () => {
-				return school;
-			},
-			getLoading: () => {
-				return false;
-			},
-		},
-		actions: {
-			update: jest.fn(),
-		},
-	},
 };
 
 const searchStrings = {
@@ -132,6 +117,11 @@ const mockData = {
 };
 
 describe("GeneralSettings", () => {
+	beforeEach(() => {
+		SchoolsModule.setSchool(school);
+		SchoolsModule.setFederalState(federalState);
+	});
+
 	it(...isValidComponent(GeneralSettings));
 
 	describe("env-config", () => {
@@ -274,6 +264,7 @@ describe("GeneralSettings", () => {
 
 	describe("events", () => {
 		it("update button should trigger save method", async () => {
+			const updateSpy = jest.spyOn(SchoolsModule, "update");
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -285,7 +276,7 @@ describe("GeneralSettings", () => {
 
 			const buttonElement = wrapper.find(searchStrings.saveButton);
 			buttonElement.trigger("click");
-			expect(generateMockStore.schools.actions.update).toHaveBeenCalled();
+			expect(updateSpy).toHaveBeenCalled();
 		});
 	});
 });

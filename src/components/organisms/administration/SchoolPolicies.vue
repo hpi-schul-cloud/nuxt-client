@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import SchoolsModule from "@/store/schoolss";
 import { mapGetters, mapActions } from "vuex";
 import SchoolPolicyFormDialog from "@components/organisms/administration/SchoolPolicyFormDialog";
 import SchoolPolicyExpansionPanel from "@components/molecules/administration/SchoolPolicyExpansionPanel";
@@ -75,9 +76,9 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("schools", {
-			school: "getSchool",
-		}),
+		school() {
+			return SchoolsModule.getSchool;
+		},
 		...mapGetters("consent-versions", {
 			schoolPolicies: "getConsentVersions",
 			loading: "getLoading",

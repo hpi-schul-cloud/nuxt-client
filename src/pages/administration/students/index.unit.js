@@ -1,6 +1,7 @@
 import { default as StudentPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
 import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schoolss";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -33,6 +34,42 @@ const mockData = [
 	},
 ];
 
+const mockSchool = {
+	_id: "",
+	name: "",
+	fileStorageType: "",
+	federalState: "",
+	county: {
+		antaresKey: "",
+		_id: "",
+		countyId: "",
+		name: "",
+		id: "",
+	},
+	systems: [],
+	updatedAt: "",
+	createdAt: "",
+	__v: 0,
+	currentYear: "",
+	purpose: "",
+	features: {
+		rocketChat: false,
+		videoconference: false,
+		messenger: false,
+		studentVisibility: false,
+		messengerSchoolRoom: false,
+		messengerStudentRoomCreate: false,
+	},
+	enableStudentTeamCreation: false,
+	permissions: {},
+	inMaintenance: false,
+	documentBaseDir: "",
+	isExternal: false,
+	id: "",
+	years: {},
+	isTeamCreationByStudentsEnabled: false,
+};
+
 describe("students/index", () => {
 	const routerPushStub = jest.fn();
 	const deleteUsersStub = jest.fn();
@@ -46,6 +83,8 @@ describe("students/index", () => {
 
 		jest.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
+
+		SchoolsModule.setSchool({ ...mockSchool, isExternal: false });
 
 		mockStore = {
 			classes: {
@@ -73,11 +112,6 @@ describe("students/index", () => {
 						"student_list",
 						"student_delete",
 					],
-				},
-			},
-			schools: {
-				getters: {
-					schoolIsExternallyManaged: () => false,
 				},
 			},
 			users: {
@@ -343,14 +377,11 @@ describe("students/index", () => {
 	});
 
 	it("should not display the edit button if school is external", async () => {
-		const customMockStore = mockStore;
-		customMockStore.schools.getters = {
-			schoolIsExternallyManaged: () => true,
-		};
+		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
-				store: customMockStore,
+				store: mockStore,
 			}),
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
@@ -414,15 +445,12 @@ describe("students/index", () => {
 	});
 
 	it("should not render the fab-floating component if isExternal is true", async () => {
-		const customMockStore = { ...mockStore };
-		customMockStore.schools.getters = {
-			schoolIsExternallyManaged: () => true,
-		};
+		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
 
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
-				store: customMockStore,
+				store: mockStore,
 			}),
 		});
 		const fabComponent = wrapper.find(
@@ -432,15 +460,12 @@ describe("students/index", () => {
 	});
 
 	it("should render the adminTableLegend component when school is external", async () => {
-		const customMockStore = mockStore;
-		customMockStore.schools.getters = {
-			schoolIsExternallyManaged: () => true,
-		};
+		SchoolsModule.setSchool({ ...mockSchool, isExternal: true });
 
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
-				store: customMockStore,
+				store: mockStore,
 			}),
 		});
 		const externalHint = wrapper.find(".external-sync-hint");

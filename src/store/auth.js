@@ -1,5 +1,6 @@
 // const endpoint = "/authentication";
 import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schoolss";
 var jwtDecode = require("jwt-decode");
 
 export const actions = {
@@ -58,6 +59,7 @@ export const actions = {
 
 		commit("setUser", user);
 		if (user.schoolId) {
+			SchoolsModule.fetchSchool();
 			dispatch("schools/fetchSchool", {}, { root: true });
 		}
 		if (user.language) {

@@ -1,4 +1,5 @@
 import SchoolPolicies from "./SchoolPolicies";
+import SchoolsModule from "@/store/schoolss";
 
 // Utilities
 import { mount } from "@vue/test-utils";
@@ -27,6 +28,42 @@ const generateMockStore = (options = {}) => ({
 	},
 });
 
+const mockSchool = {
+	_id: "1",
+	name: "",
+	fileStorageType: "",
+	federalState: "",
+	county: {
+		antaresKey: "",
+		_id: "",
+		countyId: "",
+		name: "",
+		id: "",
+	},
+	systems: [],
+	updatedAt: "",
+	createdAt: "",
+	__v: 0,
+	currentYear: "",
+	purpose: "",
+	features: {
+		rocketChat: false,
+		videoconference: false,
+		messenger: false,
+		studentVisibility: false,
+		messengerSchoolRoom: false,
+		messengerStudentRoomCreate: false,
+	},
+	enableStudentTeamCreation: false,
+	permissions: {},
+	inMaintenance: false,
+	documentBaseDir: "",
+	isExternal: false,
+	id: "",
+	years: {},
+	isTeamCreationByStudentsEnabled: false,
+};
+
 describe("SchoolPolicies", () => {
 	beforeAll(() => {});
 
@@ -47,6 +84,7 @@ describe("SchoolPolicies", () => {
 	});
 
 	it("should trigger the fetchConsentVersions action", () => {
+		SchoolsModule.setSchool(mockSchool);
 		const mockStore = generateMockStore();
 		mount(SchoolPolicies, {
 			...createComponentMocks({
@@ -61,7 +99,7 @@ describe("SchoolPolicies", () => {
 		expect(
 			mockStore["consent-versions"].actions.fetchConsentVersions.mock
 				.calls[0][1].schoolId
-		).toBe(mockStore["schools"].getters.getSchool().id);
+		).toBe(SchoolsModule.getSchool.id);
 	});
 
 	it("should load skeleton while loading", () => {
