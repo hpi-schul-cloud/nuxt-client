@@ -14,7 +14,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-132 - added unit tests for env-config, content, and autoLogout store modules
 - BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
-
 ### Changed
 
 - BC-190 - removing fileStorageData on school settings
