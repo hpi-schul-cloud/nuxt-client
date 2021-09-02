@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-133 - added unit tests for filePaths and accounts store modules
 - BC-132 - added unit tests for env-config, content, and autoLogout store modules
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
+
 
 ### Changed
 
