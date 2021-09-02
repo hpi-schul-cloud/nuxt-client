@@ -15,7 +15,7 @@ const module = {
 			commit("setStatus", "pending");
 			try {
 				const response = await this.$axios.$get("/v3/tasks/");
-				
+
 				commit("setHomeworks", response.data);
 				commit("setStatus", "completed");
 			} catch (error) {
