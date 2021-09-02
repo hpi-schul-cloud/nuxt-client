@@ -184,9 +184,12 @@ export class AutoLogoutModule extends VuexModule {
 		showWarningOnRemainingSeconds?: number,
 		defaultRemainingTimeInSeconds?: number
 	) {
-		this.showWarningOnRemainingSeconds = showWarningOnRemainingSeconds || 3600;
-		this.defaultRemainingTimeInSeconds =
-			defaultRemainingTimeInSeconds || 3600 * 2;
+		if (showWarningOnRemainingSeconds !== undefined) {
+			this.showWarningOnRemainingSeconds = showWarningOnRemainingSeconds;
+		}
+		if (defaultRemainingTimeInSeconds !== undefined) {
+			this.defaultRemainingTimeInSeconds = defaultRemainingTimeInSeconds;
+		}
 	}
 
 	@Mutation
