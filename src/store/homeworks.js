@@ -1,7 +1,20 @@
 import { merge } from "lodash";
-import { serviceTemplate, fetchAll } from "@utils";
+import { serviceTemplate } from "@utils";
 const base = serviceTemplate("homework");
 const baseState = base.state();
+
+const hasPermission = (rootState, permissionString) =>
+	rootState.auth.user.permissions.includes(permissionString);
+
+const TaskPermission = {
+	teacher: "TASK_DASHBOARD_TEACHER_VIEW_V3",
+	student: "TASK_DASHBOARD_VIEW_V3",
+};
+
+const TaskRoutes = {
+	open: "/v3/tasks/open/",
+	completed: "/v3/tasks/completed/",
+};
 
 const module = merge(base, {
 	state: () =>
@@ -9,17 +22,30 @@ const module = merge(base, {
 			courseFilter: [],
 		}),
 	actions: {
-		getHomeworksDashboard: async function ({ commit }) {
+		getHomeworksDashboard: async function ({ commit, rootState }) {
 			commit("setStatus", "pending");
 			try {
-				const data = await fetchAll(this.$axios, "/v3/task/dashboard/");
+				const openPromise = this.$axios.$get(TaskRoutes.open);
+				const completedPromise = hasPermission(
+					rootState,
+					TaskPermission.student
+				)
+					? this.$axios.$get(TaskRoutes.completed)
+					: Promise.resolve({ data: [] });
+
+				const [open, completed] = await Promise.all([
+					openPromise,
+					completedPromise,
+				]);
+
 				commit("set", {
-					items: data,
+					items: [...completed.data, ...open.data],
 				});
 				commit("setStatus", "completed");
 			} catch (error) {
-				// TODO: extract response.data to businessError format and add a business Error
-				commit("setBusinessError", error.response.data);
+				if (error.response) {
+					commit("setBusinessError", error.response.data);
+				}
 				commit("setStatus", "error");
 			}
 		},
@@ -42,6 +68,18 @@ const module = merge(base, {
 			);
 			return Array.from(courses);
 		},
+		getCoursesOpen: (state, getters) => {
+			const courses = new Set(
+				getters.getOpenHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getCoursesCompleted: (state, getters) => {
+			const courses = new Set(
+				getters.getCompletedHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
 		getHomeworks: (state, getters) => {
 			return state.courseFilter.length > 0
 				? getters.getFilteredHomeworks
@@ -54,19 +92,77 @@ const module = merge(base, {
 			});
 		},
 		getOpenHomeworksWithDueDate: (state, getters) => {
+			return getters.getOpenHomeworks.filter((homework) => {
+				return homework.duedate && new Date(homework.duedate) > new Date();
+			});
+		},
+		getOpenHomeworksWithDueDateTeacher: (state, getters) => {
 			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) > new Date();
 			});
 		},
 		getOpenHomeworksWithoutDueDate: (state, getters) => {
+			return getters.getOpenHomeworks.filter((homework) => {
+				return !homework.duedate;
+			});
+		},
+		getOpenHomeworksWithoutDueDateTeacher: (state, getters) => {
 			return getters.getHomeworks.filter((homework) => {
 				return !homework.duedate;
 			});
 		},
 		getOverDueHomeworks: (state, getters) => {
+			return getters.getOpenHomeworks.filter((homework) => {
+				return homework.duedate && new Date(homework.duedate) < new Date();
+			});
+		},
+		getOverDueHomeworksTeacher: (state, getters) => {
 			return getters.getHomeworks.filter((homework) => {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
+		},
+		getOpenHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted === 0 && homework.status.graded === 0;
+			});
+		},
+		getCompletedHomeworks: (state, getters) => {
+			const completedTask = getters.getHomeworks.filter((homework) => {
+				return homework.status.graded >= 1 || homework.status.submitted >= 1;
+			});
+			return completedTask;
+		},
+		getSubmittedHomeworks: (state, getters) => {
+			const submittedTasks = getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted >= 1 && homework.status.graded === 0;
+			});
+			return submittedTasks;
+		},
+		getGradedHomeworks: (state, getters) => {
+			return getters.getCompletedHomeworks.filter((homework) => {
+				return homework.status.graded >= 1;
+			});
+		},
+		hasOpenHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getOpenHomeworks.length > 0
+			);
+		},
+		hasCompletedHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getCompletedHomeworks.length > 0
+			);
+		},
+		hasNoOpenHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" && getters.getOpenHomeworks.length === 0
+			);
+		},
+		hasNoCompletedHomeworks: (state, getters) => {
+			return (
+				state.status === "completed" &&
+				getters.getCompletedHomeworks.length === 0
+			);
 		},
 	},
 });

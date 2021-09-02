@@ -2,13 +2,17 @@ import HomeworksDashboardMain from "./HomeworksDashboardMain";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import Vuetify from "vuetify";
 import {
-	openHomeworksWithoutDueDate,
-	overDueHomeworks,
 	overDueHomeworksTeacher,
-	courses,
 	dueDateHomeworksTeacher,
 	noDueDateHomeworksTeacher,
+	coursesOpen,
+	coursesCompleted,
+	coursesTeacher,
 	openHomeworksWithDueDate,
+	openHomeworksWithoutDueDate,
+	overDueHomeworks,
+	gradedHomeworks,
+	submittedHomeworks,
 } from "@@/stories/mockData/Homeworks";
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
@@ -20,10 +24,16 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
-				getCourses: () => courses,
 				getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
 				getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
 				getOverDueHomeworks: () => overDueHomeworks,
+				getGradedHomeworks: () => gradedHomeworks,
+				getSubmittedHomeworks: () => submittedHomeworks,
+				hasOpenHomeworks: () => true,
+				getCoursesOpen: () => coursesOpen,
+				getCoursesCompleted: () => coursesCompleted,
+				hasNoOpenHomeworks: () => false,
+				hasNoCompletedHomeworks: () => false,
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -40,10 +50,12 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getStatus: () => "completed",
 				isListEmpty: () => false,
 				isListFilled: () => true,
-				getOverDueHomeworks: () => overDueHomeworksTeacher,
-				getCourses: () => courses,
-				getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
-				getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
+				getOverDueHomeworksTeacher: () => overDueHomeworksTeacher,
+				getCourses: () => coursesTeacher,
+				getOpenHomeworksWithDueDateTeacher: () => dueDateHomeworksTeacher,
+				getOpenHomeworksWithoutDueDateTeacher: () => noDueDateHomeworksTeacher,
+				getCoursesOpen: () => coursesOpen,
+				hasOpenHomeworks: () => true,
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -68,6 +80,28 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		},
 	};
 
+	const mockStoreEmptyOpen = {
+		homeworks: {
+			getters: {
+				getOpenHomeworksWithoutDueDate: () => [],
+				getOpenHomeworksWithDueDate: () => [],
+				getStatus: () => "completed",
+				getOverDueHomeworks: () => [],
+				isListEmpty: () => false,
+				isListFilled: () => true,
+				getCoursesOpen: () => [],
+				hasOpenHomeworks: () => false,
+				getGradedHomeworks: () => gradedHomeworks,
+				getSubmittedHomeworks: () => submittedHomeworks,
+				hasNoOpenHomeworks: () => true,
+				hasCompletedHomeworks: () => true,
+				hasNoCompletedHomeworks: () => false,
+			},
+			actions: {
+				getHomeworksDashboard,
+			},
+		},
+	};
 	let vuetify;
 
 	beforeEach(() => {
@@ -232,5 +266,51 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		await autocompleteEl.vm.$emit("change");
 
 		expect(mockMethod).toHaveBeenCalled();
+	});
+
+	it("Should set available courses based on the active tab", () => {
+		const wrapper = mount(HomeworksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreStudent,
+			}),
+			vuetify,
+			data() {
+				return {
+					tab: 0,
+				};
+			},
+			propsData: {
+				role: "student",
+			},
+		});
+
+		expect(wrapper.vm.availableCourses).toStrictEqual(coursesOpen);
+		wrapper.setData({ tab: 1 });
+		expect(wrapper.vm.availableCourses).toStrictEqual(coursesCompleted);
+	});
+
+	it("Should disable filter when active tab contains empty list", () => {
+		const wrapper = mount(HomeworksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreEmptyOpen,
+			}),
+			vuetify,
+			data() {
+				return {
+					tab: 0,
+				};
+			},
+			propsData: {
+				role: "student",
+			},
+		});
+
+		expect(wrapper.vm.isFilterDisabled).toBe(true);
+		wrapper.setData({ tab: 1 });
+		expect(wrapper.vm.isFilterDisabled).toBe(false);
 	});
 });
