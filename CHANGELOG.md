@@ -14,7 +14,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-136 - added no-focused-tests rule to jest config file
 - BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
-
 ### Changed
 
 - BC-190 - removing fileStorageData on school settings
