@@ -31,6 +31,7 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
+								v-if="isRemovable(system)"
 								class="delete-sytem-btn"
 								icon
 								@click.stop="openConfirmDeleteDialog(system._id)"
@@ -108,7 +109,16 @@ export default {
 		...mapActions("schools", ["deleteSystem"]),
 		// TODO - Discuss which systems are still gonna be editable in the future
 		isEditable(system) {
-			return system.type === "ldap";
+			if (system.type === "ldap") {
+				return system.ldapConfig.provider !== "iserv-idm";
+			}
+			return false;
+		},
+		isRemovable(system) {
+			if (system.type === "ldap") {
+				return system.ldapConfig.provider !== "iserv-idm";
+			}
+			return true;
 		},
 		// TODO - Discuss which systems are deletable by the user in the future
 		openConfirmDeleteDialog(systemId) {
