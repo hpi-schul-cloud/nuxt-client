@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import AuthModule from "@/store/auth";
 
 export default {
 	props: {
@@ -23,9 +23,9 @@ export default {
 		return {};
 	},
 	computed: {
-		...mapGetters("auth", {
-			userRoles: "getUserRoles",
-		}),
+		userRoles() {
+			return AuthModule.getUserRoles;
+		},
 		hasRole() {
 			return typeof this.role === "string"
 				? this.userRoles.includes(this.role.toLowerCase())

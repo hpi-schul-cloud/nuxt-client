@@ -35,7 +35,7 @@ type FederalState = {
 	_id: string;
 };
 
-type School = {
+export type School = {
 	_id: string;
 	name: string;
 	fileStorageType: string;

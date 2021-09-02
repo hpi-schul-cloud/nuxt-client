@@ -11,6 +11,7 @@ module.exports = {
 		noEmit: true,
 		baseUrl: ".",
 		experimentalDecorators: true,
+		downlevelIteration: true,
 		types: [
 			"@types/node",
 			"@nuxt/types",

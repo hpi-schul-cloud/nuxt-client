@@ -128,6 +128,7 @@
 	</section>
 </template>
 <script>
+import AuthModule from "@/store/auth";
 import { mapGetters } from "vuex";
 import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
@@ -285,6 +286,9 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
+		user() {
+			return AuthModule.getUser;
+		},
 		schoolIsExternallyManaged() {
 			return SchoolsModule.schoolIsExternallyManaged;
 		},

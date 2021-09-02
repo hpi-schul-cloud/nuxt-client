@@ -1,4 +1,5 @@
 import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 export default async ({ app, store, route }) => {
 	const isPublic = route.meta.some((meta) => meta.isPublic);
@@ -9,17 +10,17 @@ export default async ({ app, store, route }) => {
 		try {
 			const jwt = app.$cookies.get("jwt");
 			if (jwt) {
-				store.commit("auth/setAccessToken", jwt);
-				// TODO wrong use of store (not so bad)
-				await store.dispatch("auth/authenticate");
+				AuthModule.setAccessToken(jwt);
+
+				await AuthModule.populateUser();
 			} else if (!isPublic) {
 				// TODO wrong use of store (not so bad)
-				await store.dispatch("auth/logout");
+				await AuthModule.logout();
 				window.location = `${NOT_AUTHENTICATED_REDIRECT_URL}?redirect=${window.location}`;
 			}
 		} catch (error) {
 			console.error(error);
-			store.dispatch("auth/logout");
+			await AuthModule.logout();
 			window.location = NOT_AUTHENTICATED_REDIRECT_URL;
 		}
 	}
