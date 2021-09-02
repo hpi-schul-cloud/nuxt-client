@@ -110,13 +110,13 @@ export default {
 		// TODO - Discuss which systems are still gonna be editable in the future
 		isEditable(system) {
 			if (system.type === "ldap") {
-				return system.ldapConfig.provider !== "iserv-idm";
+				return system.ldapConfig.provider === "general";
 			}
 			return false;
 		},
 		isRemovable(system) {
 			if (system.type === "ldap") {
-				return system.ldapConfig.provider !== "iserv-idm";
+				return system.ldapConfig.provider === "general";
 			}
 			return true;
 		},
