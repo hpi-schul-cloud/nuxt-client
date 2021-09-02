@@ -141,8 +141,8 @@ export default {
 			}
 		},
 	},
-	mounted() {
-		this.$store.dispatch("homeworks/getHomeworksDashboard");
+	created() {
+		this.$store.dispatch("homeworks/getAllHomeworks");
 	},
 	methods: {
 		filterByCourse() {

@@ -16,7 +16,7 @@ import {
 } from "@@/stories/mockData/Homeworks";
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
-	const getHomeworksDashboard = jest.fn();
+	const getAllHomeworks = jest.fn();
 	const setFilter = jest.fn();
 	const mockStoreStudent = {
 		homeworks: {
@@ -36,7 +36,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				hasNoCompletedHomeworks: () => false,
 			},
 			actions: {
-				getHomeworksDashboard,
+				getAllHomeworks,
 			},
 			mutations: {
 				setFilter,
@@ -58,7 +58,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				hasOpenHomeworks: () => true,
 			},
 			actions: {
-				getHomeworksDashboard,
+				getAllHomeworks,
 			},
 		},
 	};
@@ -75,7 +75,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getOpenHomeworksWithoutDueDate: () => [],
 			},
 			actions: {
-				getHomeworksDashboard,
+				getAllHomeworks,
 			},
 		},
 	};
@@ -98,7 +98,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				hasNoCompletedHomeworks: () => false,
 			},
 			actions: {
-				getHomeworksDashboard,
+				getAllHomeworks,
 			},
 		},
 	};
@@ -162,7 +162,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	});
 
 	it("Should should trigger a store action", async () => {
-		mockStoreStudent.homeworks.actions.getHomeworksDashboard.mockClear();
+		mockStoreStudent.homeworks.actions.getAllHomeworks.mockClear();
 
 		shallowMount(HomeworksDashboardMain, {
 			...createComponentMocks({
@@ -177,7 +177,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		});
 
 		expect(
-			mockStoreStudent.homeworks.actions.getHomeworksDashboard
+			mockStoreStudent.homeworks.actions.getAllHomeworks
 		).toHaveBeenCalled();
 	});
 

@@ -3,7 +3,7 @@ import { homeworks } from "@@/stories/mockData/Homeworks";
 import Vuetify from "vuetify";
 
 describe("Homeworks/assigned", () => {
-	const getHomeworksDashboard = jest.fn();
+	const getAllHomeworks = jest.fn();
 	const mockStore = {
 		homeworks: {
 			getters: {
@@ -21,7 +21,7 @@ describe("Homeworks/assigned", () => {
 				},
 			}),
 			actions: {
-				getHomeworksDashboard,
+				getAllHomeworks,
 			},
 		},
 	};

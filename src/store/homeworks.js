@@ -1,46 +1,22 @@
-import { merge } from "lodash";
-import { serviceTemplate } from "@utils";
-const base = serviceTemplate("homework");
-const baseState = base.state();
-
-const hasPermission = (rootState, permissionString) =>
-	rootState.auth.user.permissions.includes(permissionString);
-
-const TaskPermission = {
-	teacher: "TASK_DASHBOARD_TEACHER_VIEW_V3",
-	student: "TASK_DASHBOARD_VIEW_V3",
-};
-
-const TaskRoutes = {
-	open: "/v3/tasks/open/",
-	completed: "/v3/tasks/completed/",
-};
-
-const module = merge(base, {
-	state: () =>
-		merge(baseState, {
+const module = {
+	state: () => {
+		return {
+			homeworks: [],
 			courseFilter: [],
-		}),
+			status: "",
+			businessError: {
+				statusCode: "",
+				message: "",
+			},
+		};
+	},
 	actions: {
-		getHomeworksDashboard: async function ({ commit, rootState }) {
+		getAllHomeworks: async function ({ commit }) {
 			commit("setStatus", "pending");
 			try {
-				const openPromise = this.$axios.$get(TaskRoutes.open);
-				const completedPromise = hasPermission(
-					rootState,
-					TaskPermission.student
-				)
-					? this.$axios.$get(TaskRoutes.completed)
-					: Promise.resolve({ data: [] });
-
-				const [open, completed] = await Promise.all([
-					openPromise,
-					completedPromise,
-				]);
-
-				commit("set", {
-					items: [...completed.data, ...open.data],
-				});
+				const response = await this.$axios.$get("/v3/tasks/");
+				
+				commit("setHomeworks", response.data);
 				commit("setStatus", "completed");
 			} catch (error) {
 				if (error.response) {
@@ -51,44 +27,44 @@ const module = merge(base, {
 		},
 	},
 	mutations: {
+		setHomeworks(state, homeworks) {
+			state.homeworks = homeworks;
+		},
 		setFilter(state, payload) {
 			state.courseFilter = payload;
 		},
+		setStatus(state, status) {
+			state.status = status;
+		},
+		setBusinessError(state, error) {
+			state.businessError = error;
+		},
+		resetBusinessError(state) {
+			state.businessError = { statusCode: "", message: "" };
+		},
 	},
 	getters: {
+		getStatus: (state) => state.status,
 		isListEmpty: (state) => {
-			return state.status === "completed" && state.list.length === 0;
+			return state.status === "completed" && state.homeworks.length === 0;
 		},
 		isListFilled: (state) => {
-			return state.status === "completed" && state.list.length > 0;
-		},
-		getCourses: (state) => {
-			const courses = new Set(
-				state.list.map((homework) => homework.courseName)
-			);
-			return Array.from(courses);
-		},
-		getCoursesOpen: (state, getters) => {
-			const courses = new Set(
-				getters.getOpenHomeworks.map((homework) => homework.courseName)
-			);
-			return Array.from(courses);
-		},
-		getCoursesCompleted: (state, getters) => {
-			const courses = new Set(
-				getters.getCompletedHomeworks.map((homework) => homework.courseName)
-			);
-			return Array.from(courses);
+			return state.status === "completed" && state.homeworks.length > 0;
 		},
 		getHomeworks: (state, getters) => {
 			return state.courseFilter.length > 0
 				? getters.getFilteredHomeworks
-				: state.list;
+				: state.homeworks;
 		},
 		getFilteredHomeworks: (state) => {
 			const coursesToFilter = state.courseFilter;
-			return state.list.filter((homework) => {
+			return state.homeworks.filter((homework) => {
 				return coursesToFilter.includes(homework.courseName);
+			});
+		},
+		getOpenHomeworks: (state, getters) => {
+			return getters.getHomeworks.filter((homework) => {
+				return homework.status.submitted === 0 && homework.status.graded === 0;
 			});
 		},
 		getOpenHomeworksWithDueDate: (state, getters) => {
@@ -121,11 +97,7 @@ const module = merge(base, {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
-		getOpenHomeworks: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.status.submitted === 0 && homework.status.graded === 0;
-			});
-		},
+
 		getCompletedHomeworks: (state, getters) => {
 			const completedTask = getters.getHomeworks.filter((homework) => {
 				return homework.status.graded >= 1 || homework.status.submitted >= 1;
@@ -164,7 +136,25 @@ const module = merge(base, {
 				getters.getCompletedHomeworks.length === 0
 			);
 		},
+		getCourses: (state) => {
+			const courses = new Set(
+				state.homeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getCoursesOpen: (state, getters) => {
+			const courses = new Set(
+				getters.getOpenHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
+		getCoursesCompleted: (state, getters) => {
+			const courses = new Set(
+				getters.getCompletedHomeworks.map((homework) => homework.courseName)
+			);
+			return Array.from(courses);
+		},
 	},
-});
+};
 
 export default module;

@@ -40,7 +40,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 						getGradedHomeworks: () => gradedHomeworks,
 					},
 					actions: {
-						getHomeworksDashboard: () => {},
+						getAllHomeworks: () => {},
 						updateFilter: () => {},
 					},
 				},
@@ -76,7 +76,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 						getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
 					},
 					actions: {
-						getHomeworksDashboard: () => {},
+						getAllHomeworks: () => {},
 						updateFilter: () => {},
 					},
 				},

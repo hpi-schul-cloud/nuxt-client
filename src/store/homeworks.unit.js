@@ -36,7 +36,7 @@ describe("store/homeworks", () => {
 			},
 		};
 
-		describe("getHomeworksDashboard", () => {
+		describe("getAllHomeworks", () => {
 			it("should call the right endpoint for teachers", async () => {
 				const receivedRequests = [];
 
@@ -47,7 +47,7 @@ describe("store/homeworks", () => {
 					},
 				};
 
-				await storeModule.actions.getHomeworksDashboard(ctxMockTeacher);
+				await storeModule.actions.getAllHomeworks(ctxMockTeacher);
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("set");
 				expect(receivedRequests[0].url).toStrictEqual("/v3/tasks/open/");
@@ -64,7 +64,7 @@ describe("store/homeworks", () => {
 				};
 
 				spyCommit.mockClear();
-				await storeModule.actions.getHomeworksDashboard(ctxMockStudent);
+				await storeModule.actions.getAllHomeworks(ctxMockStudent);
 
 				expect(spyCommit.mock.calls).toHaveLength(3);
 				expect(spyCommit.mock.calls[1][0]).toBe("set");
@@ -89,7 +89,7 @@ describe("store/homeworks", () => {
 				};
 
 				spyCommit.mockClear();
-				await storeModule.actions.getHomeworksDashboard(ctxMockTeacher);
+				await storeModule.actions.getAllHomeworks(ctxMockTeacher);
 
 				const storeCalls = spyCommit.mock.calls;
 				const firstCall = storeCalls[0];
@@ -119,7 +119,7 @@ describe("store/homeworks", () => {
 					},
 				};
 				spyCommit.mockClear();
-				await storeModule.actions.getHomeworksDashboard(ctxMockTeacher);
+				await storeModule.actions.getAllHomeworks(ctxMockTeacher);
 
 				const storeCalls = spyCommit.mock.calls;
 
