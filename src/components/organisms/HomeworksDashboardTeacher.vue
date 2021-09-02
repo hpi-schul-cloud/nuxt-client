@@ -1,6 +1,14 @@
 <template>
 	<section class="homework-dashboard-teacher">
+		<v-custom-empty-state
+			v-if="isListEmpty"
+			:image="emptyStateImage"
+			:title="$t('pages.homeworks.teacher.emptyState.title')"
+			:subtitle="$t('pages.homeworks.teacher.emptyState.subtitle')"
+			class="mt-16"
+		/>
 		<v-custom-double-panels
+			v-else
 			:panel-one-count="noDueDateHomeworks.length"
 			:panel-two-count="dueDateHomeworks.length + overDueHomeworks.length"
 			:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
@@ -29,12 +37,19 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import HomeworksList from "@components/organisms/HomeworksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
-import { mapGetters } from "vuex";
+import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
 
 export default {
-	components: { HomeworksList, vCustomDoublePanels },
+	components: { vCustomEmptyState, HomeworksList, vCustomDoublePanels },
+	data() {
+		return {
+			emptyStateImage: tasksEmptyState,
+		};
+	},
 	computed: {
 		...mapGetters("homeworks", {
 			dueDateHomeworks: "getOpenHomeworksWithDueDateTeacher",

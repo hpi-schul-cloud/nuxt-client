@@ -2,7 +2,15 @@
 	<section class="homework-dashboard-student">
 		<v-tabs-items v-model="tab">
 			<v-tab-item>
+				<v-custom-empty-state
+					v-if="!hasOpenHomeworks"
+					:image="emptyStateImage"
+					:title="$t('pages.homeworks.student.open.emptyState.title')"
+					:subtitle="$t('pages.homeworks.student.open.emptyState.subtitle')"
+					class="mt-16"
+				/>
 				<v-custom-double-panels
+					v-else
 					:panel-one-count="noDueDateHomeworks.length"
 					:panel-two-count="dueDateHomeworks.length + overDueHomeworks.length"
 					:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
@@ -27,16 +35,10 @@
 						/>
 					</template>
 				</v-custom-double-panels>
-				<v-custom-empty-state
-					v-if="hasNoOpenHomeworks"
-					:image="emptyStateImage"
-					:title="$t('pages.homeworks.student.open.emptyState.title')"
-					:subtitle="$t('pages.homeworks.student.open.emptyState.subtitle')"
-					class="mt-16"
-				/>
 			</v-tab-item>
 			<v-tab-item>
 				<v-custom-double-panels
+					v-if="hasCompletedHomeworks"
 					:panel-one-count="gradedHomeworks.length"
 					:panel-two-count="submittedHomeworks.length"
 					:panel-one-title="$t('pages.homeworks.subtitleGraded')"
@@ -53,7 +55,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="hasNoCompletedHomeworks"
+					v-else
 					:image="emptyStateImage"
 					:title="$t('pages.homeworks.student.submitted.emptyState.title')"
 					class="mt-16"
