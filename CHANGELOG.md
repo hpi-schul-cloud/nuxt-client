@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-133 - added unit tests for filePaths and accounts store modules
 - BC-5 - now showing open and completed taks for students in a tab view
+- BC-136 - added no-focused-tests rule to jest config file
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
 ### Changed
 
