@@ -9,8 +9,6 @@ import {
 	overDueHomeworks,
 	coursesStudent,
 	coursesTeacher,
-	coursesOpen,
-	coursesCompleted,
 	mathHomeworks,
 	homeworksTeacher,
 	overDueHomeworksTeacher,
@@ -177,28 +175,6 @@ describe("store/homeworks", () => {
 		describe("getCourses", () => {
 			it("Should return all relevant courses", () => {
 				expect(getters.getCourses(state)).toStrictEqual(coursesStudent);
-			});
-		});
-
-		describe("getCoursesOpen", () => {
-			it("Should return all relevant open courses", () => {
-				const mockGetter = {
-					getOpenHomeworks: openHomeworks,
-				};
-				expect(getters.getCoursesOpen(state, mockGetter)).toStrictEqual(
-					coursesOpen
-				);
-			});
-		});
-
-		describe("getCoursesCompleted", () => {
-			it("Should return all relevant completed courses", () => {
-				const mockGetter = {
-					getCompletedHomeworks: completedHomeworks,
-				};
-				expect(getters.getCoursesCompleted(state, mockGetter)).toStrictEqual(
-					coursesCompleted
-				);
 			});
 		});
 

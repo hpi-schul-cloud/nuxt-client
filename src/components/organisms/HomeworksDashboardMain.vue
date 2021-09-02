@@ -60,6 +60,7 @@ export default {
 	},
 	data() {
 		return {
+			availableCourses: [],
 			selectedCourses: [],
 			tab: 0,
 		};
@@ -72,22 +73,13 @@ export default {
 			hasOpenHomeworks: "hasOpenHomeworks",
 			hasCompletedHomeworks: "hasCompletedHomeworks",
 			getCourses: "getCourses",
-			getCoursesOpen: "getCoursesOpen",
-			getCoursesCompleted: "getCoursesCompleted",
 		}),
 		isStudent: function () {
 			return this.role === "student";
 		},
-		availableCourses: function () {
-			if (this.role === "teacher") {
-				return this.getCourses;
-			} else if (this.tab === 0) {
-				return this.getCoursesOpen;
-			} else {
-				return this.getCoursesCompleted;
-			}
-		},
 		isFilterDisabled: function () {
+			if (this.selectedCourses.length > 0) return false;
+
 			if (this.tab === 0 && !this.hasOpenHomeworks) {
 				return true;
 			} else if (this.tab === 1 && !this.hasCompletedHomeworks) {
@@ -98,7 +90,9 @@ export default {
 		},
 	},
 	mounted() {
-		this.$store.dispatch("homeworks/getHomeworksDashboard");
+		this.$store.dispatch("homeworks/getHomeworksDashboard").then(() => {
+			this.availableCourses = this.getCourses;
+		});
 	},
 	methods: {
 		filterByCourse() {

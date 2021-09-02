@@ -16,7 +16,7 @@
 					:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
 					:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
 					:status="status"
-					:is-empty="hasNoOpenHomeworks"
+					:is-empty="!hasOpenHomeworks"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -44,7 +44,7 @@
 					:panel-one-title="$t('pages.homeworks.subtitleGraded')"
 					:panel-two-title="$t('pages.homeworks.subtitleNotGraded')"
 					:status="status"
-					:is-empty="hasNoCompletedHomeworks"
+					:is-empty="!hasCompletedHomeworks"
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
@@ -95,8 +95,8 @@ export default {
 			submittedHomeworks: "getSubmittedHomeworks",
 			status: "getStatus",
 			isListEmpty: "isListEmpty",
-			hasNoOpenHomeworks: "hasNoOpenHomeworks",
-			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
+			hasOpenHomeworks: "hasOpenHomeworks",
+			hasCompletedHomeworks: "hasCompletedHomeworks",
 		}),
 	},
 };

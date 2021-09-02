@@ -5,8 +5,7 @@ import {
 	overDueHomeworksTeacher,
 	dueDateHomeworksTeacher,
 	noDueDateHomeworksTeacher,
-	coursesOpen,
-	coursesCompleted,
+	courses,
 	coursesTeacher,
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
@@ -30,8 +29,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getGradedHomeworks: () => gradedHomeworks,
 				getSubmittedHomeworks: () => submittedHomeworks,
 				hasOpenHomeworks: () => true,
-				getCoursesOpen: () => coursesOpen,
-				getCoursesCompleted: () => coursesCompleted,
+				getCourses: () => courses,
 				hasNoOpenHomeworks: () => false,
 				hasNoCompletedHomeworks: () => false,
 			},
@@ -54,7 +52,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getCourses: () => coursesTeacher,
 				getOpenHomeworksWithDueDateTeacher: () => dueDateHomeworksTeacher,
 				getOpenHomeworksWithoutDueDateTeacher: () => noDueDateHomeworksTeacher,
-				getCoursesOpen: () => coursesOpen,
+				getCourses: () => courses,
 				hasOpenHomeworks: () => true,
 			},
 			actions: {
@@ -73,6 +71,8 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getCourses: () => [],
 				getOpenHomeworksWithDueDate: () => [],
 				getOpenHomeworksWithoutDueDate: () => [],
+				hasOpenHomeworks: () => false,
+				hasCompletedHomeworks: () => false,
 			},
 			actions: {
 				getHomeworksDashboard,
@@ -89,7 +89,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getOverDueHomeworks: () => [],
 				isListEmpty: () => false,
 				isListFilled: () => true,
-				getCoursesOpen: () => [],
+				getCourses: () => [],
 				hasOpenHomeworks: () => false,
 				getGradedHomeworks: () => gradedHomeworks,
 				getSubmittedHomeworks: () => submittedHomeworks,
@@ -286,9 +286,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			},
 		});
 
-		expect(wrapper.vm.availableCourses).toStrictEqual(coursesOpen);
+		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
 		wrapper.setData({ tab: 1 });
-		expect(wrapper.vm.availableCourses).toStrictEqual(coursesCompleted);
+		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
 	});
 
 	it("Should disable filter when active tab contains empty list", () => {
