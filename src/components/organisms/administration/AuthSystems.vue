@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 

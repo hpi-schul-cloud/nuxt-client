@@ -62,6 +62,7 @@ type School = {
 	isExternal: boolean;
 	id: string;
 	years: {};
+	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
 };
 
@@ -74,7 +75,7 @@ const SCHOOL_FEATURES: any = [
 	"messengerStudentRoomCreate",
 ];
 
-function transformSchoolServerToClient(school: any) {
+function transformSchoolServerToClient(school: any): School {
 	const featureObject: any = {};
 	SCHOOL_FEATURES.forEach((schoolFeature: any) => {
 		if (school.features.includes(schoolFeature)) {
@@ -87,7 +88,7 @@ function transformSchoolServerToClient(school: any) {
 	return school;
 }
 
-function transformSchoolClientToServer(school: any) {
+function transformSchoolClientToServer(school: any): School {
 	const featureArray: any[] = [];
 	SCHOOL_FEATURES.forEach((schoolFeature: any) => {
 		if (school.features[schoolFeature]) {

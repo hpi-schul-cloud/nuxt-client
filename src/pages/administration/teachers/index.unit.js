@@ -1,7 +1,7 @@
 import { default as TeacherPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
 import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 
 const mockData = [
 	{

@@ -1,5 +1,5 @@
 import SchoolPolicies from "./SchoolPolicies";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 
 // Utilities
 import { mount } from "@vue/test-utils";

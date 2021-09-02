@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 import { mapGetters } from "vuex";
 import EnvConfigModule from "@/store/env-config";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";

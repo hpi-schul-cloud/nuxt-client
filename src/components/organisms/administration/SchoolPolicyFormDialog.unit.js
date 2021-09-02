@@ -1,5 +1,5 @@
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 
 const school = {
 	_id: "5f2987e020834114b8efd6f8",

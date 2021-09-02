@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 import { mapActions } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";

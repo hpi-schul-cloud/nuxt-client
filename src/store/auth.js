@@ -1,6 +1,6 @@
 // const endpoint = "/authentication";
 import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 var jwtDecode = require("jwt-decode");
 
 export const actions = {
@@ -48,7 +48,7 @@ export const actions = {
 		}
 		commit("clearAuthData");
 	},
-	async populateUser({ commit, dispatch }) {
+	async populateUser({ commit }) {
 		const user = await this.$axios.$get("/v1/me");
 
 		const roles = await this.$axios.$get(`/v1/roles/user/${user.id}`);
@@ -60,7 +60,6 @@ export const actions = {
 		commit("setUser", user);
 		if (user.schoolId) {
 			SchoolsModule.fetchSchool();
-			dispatch("schools/fetchSchool", {}, { root: true });
 		}
 		if (user.language) {
 			commit("setLocale", user.language);
@@ -97,12 +96,12 @@ export const mutations = {
 };
 
 export const getters = {
-	getLocale(state, _getters, rootState) {
+	getLocale(state) {
 		if (state.locale) {
 			return state.locale;
 		}
-		if (rootState.schools.school && rootState.schools.school.language) {
-			return rootState.schools.school.language;
+		if (SchoolsModule.getSchool && SchoolsModule.getSchool.language) {
+			return SchoolsModule.getSchool.language;
 		}
 		if (EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
 			return EnvConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
@@ -111,8 +110,8 @@ export const getters = {
 	},
 	/** deprecated
 	 */
-	getSchool(state, _getters, rootState) {
-		return rootState.schools.school;
+	getSchool() {
+		return SchoolsModule.getSchool;
 	},
 	getUser(state) {
 		return state.user;

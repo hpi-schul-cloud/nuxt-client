@@ -1,5 +1,5 @@
 import AuthSystems from "./AuthSystems";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 
 const generateProps = () => ({
 	systems: [

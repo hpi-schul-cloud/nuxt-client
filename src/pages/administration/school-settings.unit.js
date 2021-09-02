@@ -1,6 +1,6 @@
 import SchoolPage from "./school-settings";
 import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },

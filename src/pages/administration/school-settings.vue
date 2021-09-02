@@ -53,7 +53,7 @@
 
 <script>
 import EnvConfigModule from "@store/env-config";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 import vCustomBreadcrumbs from "@components/molecules/vCustomBreadcrumbs";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";

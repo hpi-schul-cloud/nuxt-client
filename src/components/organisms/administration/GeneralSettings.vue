@@ -146,7 +146,7 @@
 
 <script>
 import EnvConfigModule from "@/store/env-config";
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";

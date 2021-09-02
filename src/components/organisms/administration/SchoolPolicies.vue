@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import SchoolsModule from "@/store/schoolss";
+import SchoolsModule from "@/store/schools";
 import { mapGetters, mapActions } from "vuex";
 import SchoolPolicyFormDialog from "@components/organisms/administration/SchoolPolicyFormDialog";
 import SchoolPolicyExpansionPanel from "@components/molecules/administration/SchoolPolicyExpansionPanel";
