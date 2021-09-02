@@ -16,11 +16,10 @@ describe("@components/organisms/HomeworksDashboardStudent", () => {
 				getStatus: () => "completed",
 				getOverDueHomeworks: () => overDueHomeworks,
 				isListEmpty: () => false,
-				hasOpenHomeworks: () => true,
 				getGradedHomeworks: () => [],
 				getSubmittedHomeworks: () => [],
-				hasNoOpenHomeworks: () => false,
-				hasNoCompletedHomeworks: () => true,
+				hasOpenHomeworks: () => true,
+				hasCompletedHomeworks: () => false,
 			},
 		},
 	};

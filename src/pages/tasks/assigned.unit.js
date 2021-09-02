@@ -10,7 +10,6 @@ describe("Homeworks/assigned", () => {
 				list: () => homeworks,
 				loading: () => false,
 				isListEmpty: () => false,
-				isListFilled: () => true,
 				getCourses: () => [],
 				hasCompletedHomeworks: () => true,
 			},

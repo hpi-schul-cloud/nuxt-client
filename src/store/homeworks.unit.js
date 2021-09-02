@@ -22,22 +22,12 @@ import storeModule from "./homeworks";
 describe("store/homeworks", () => {
 	describe("actions", () => {
 		const spyCommit = jest.fn();
-		const ctxMockTeacher = {
+		const ctxMock = {
 			commit: spyCommit,
-			rootState: {
-				auth: { user: { permissions: ["TASK_DASHBOARD_TEACHER_VIEW_V3"] } },
-			},
-		};
-
-		const ctxMockStudent = {
-			commit: spyCommit,
-			rootState: {
-				auth: { user: { permissions: ["TASK_DASHBOARD_VIEW_V3"] } },
-			},
 		};
 
 		describe("getAllHomeworks", () => {
-			it("should call the right endpoint for teachers", async () => {
+			it("should call the right endpoint", async () => {
 				const receivedRequests = [];
 
 				storeModule.actions.$axios = {
@@ -47,29 +37,10 @@ describe("store/homeworks", () => {
 					},
 				};
 
-				await storeModule.actions.getAllHomeworks(ctxMockTeacher);
+				await storeModule.actions.getAllHomeworks(ctxMock);
 				expect(spyCommit.mock.calls).toHaveLength(3);
-				expect(spyCommit.mock.calls[1][0]).toBe("set");
-				expect(receivedRequests[0].url).toStrictEqual("/v3/tasks/open/");
-			});
-
-			it("should call both endpoint for students", async () => {
-				const receivedRequests = [];
-
-				storeModule.actions.$axios = {
-					$get: async (url, params) => {
-						receivedRequests.push({ url, params });
-						return { data: [] };
-					},
-				};
-
-				spyCommit.mockClear();
-				await storeModule.actions.getAllHomeworks(ctxMockStudent);
-
-				expect(spyCommit.mock.calls).toHaveLength(3);
-				expect(spyCommit.mock.calls[1][0]).toBe("set");
-				expect(receivedRequests[0].url).toStrictEqual("/v3/tasks/open/");
-				expect(receivedRequests[1].url).toStrictEqual("/v3/tasks/completed/");
+				expect(spyCommit.mock.calls[1][0]).toBe("setHomeworks");
+				expect(receivedRequests[0].url).toStrictEqual("/v3/tasks/");
 			});
 
 			it("should set business error and reset loading on fail", async () => {
@@ -89,7 +60,7 @@ describe("store/homeworks", () => {
 				};
 
 				spyCommit.mockClear();
-				await storeModule.actions.getAllHomeworks(ctxMockTeacher);
+				await storeModule.actions.getAllHomeworks(ctxMock);
 
 				const storeCalls = spyCommit.mock.calls;
 				const firstCall = storeCalls[0];
@@ -119,7 +90,7 @@ describe("store/homeworks", () => {
 					},
 				};
 				spyCommit.mockClear();
-				await storeModule.actions.getAllHomeworks(ctxMockTeacher);
+				await storeModule.actions.getAllHomeworks(ctxMock);
 
 				const storeCalls = spyCommit.mock.calls;
 
@@ -151,12 +122,12 @@ describe("store/homeworks", () => {
 
 	describe("getters", () => {
 		const state = {
-			list: homeworks,
+			homeworks,
 			status: "completed",
 			courseFilter: [],
 		};
 		const stateWithFilter = {
-			list: homeworksTeacher,
+			homeworks: homeworksTeacher,
 			status: "completed",
 			courseFilter: ["Mathe"],
 		};
@@ -165,12 +136,6 @@ describe("store/homeworks", () => {
 		describe("isListEmpty", () => {
 			it("Should return true, if it's loaded and there are no homeworks", () => {
 				expect(getters.isListEmpty(state)).toBe(false);
-			});
-		});
-
-		describe("isListFilled", () => {
-			it("Should return true, if it's loaded and there are homeworks", () => {
-				expect(getters.isListFilled(state)).toBe(true);
 			});
 		});
 
@@ -336,24 +301,10 @@ describe("store/homeworks", () => {
 			});
 		});
 
-		describe("hasNoOpenHomeworks", () => {
-			it("Should return true, if it's loaded and there are no open (neither submitted nor graded) homeworks", () => {
-				const mockGetter = { getOpenHomeworks: [] };
-				expect(getters.hasNoOpenHomeworks(state, mockGetter)).toBe(true);
-			});
-		});
-
 		describe("hasCompletedHomeworks", () => {
 			it("Should return true, if it's loaded and there are completed homeworks", () => {
 				const mockGetter = { getCompletedHomeworks: completedHomeworks };
 				expect(getters.hasCompletedHomeworks(state, mockGetter)).toBe(true);
-			});
-		});
-
-		describe("hasNoCompletedHomeworks", () => {
-			it("Should return true, if it's loaded and there are no completed homeworks", () => {
-				const mockGetter = { getCompletedHomeworks: [] };
-				expect(getters.hasNoCompletedHomeworks(state, mockGetter)).toBe(true);
 			});
 		});
 	});

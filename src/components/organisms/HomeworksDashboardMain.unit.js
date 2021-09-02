@@ -23,17 +23,15 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				isListEmpty: () => false,
-				isListFilled: () => true,
 				getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
 				getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
 				getOverDueHomeworks: () => overDueHomeworks,
 				getGradedHomeworks: () => gradedHomeworks,
 				getSubmittedHomeworks: () => submittedHomeworks,
-				hasOpenHomeworks: () => true,
 				getCoursesOpen: () => coursesOpen,
 				getCoursesCompleted: () => coursesCompleted,
-				hasNoOpenHomeworks: () => false,
-				hasNoCompletedHomeworks: () => false,
+				hasOpenHomeworks: () => true,
+				hasCompletedHomeworks: () => true,
 			},
 			actions: {
 				getAllHomeworks,
@@ -49,7 +47,6 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				isListEmpty: () => false,
-				isListFilled: () => true,
 				getOverDueHomeworksTeacher: () => overDueHomeworksTeacher,
 				getCourses: () => coursesTeacher,
 				getOpenHomeworksWithDueDateTeacher: () => dueDateHomeworksTeacher,
@@ -68,7 +65,6 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				isListEmpty: () => true,
-				isListFilled: () => false,
 				getOverDueHomeworks: () => [],
 				getCourses: () => [],
 				getOpenHomeworksWithDueDate: () => [],
@@ -88,14 +84,12 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getStatus: () => "completed",
 				getOverDueHomeworks: () => [],
 				isListEmpty: () => false,
-				isListFilled: () => true,
 				getCoursesOpen: () => [],
 				hasOpenHomeworks: () => false,
 				getGradedHomeworks: () => gradedHomeworks,
 				getSubmittedHomeworks: () => submittedHomeworks,
-				hasNoOpenHomeworks: () => true,
+				hasOpenHomeworks: () => false,
 				hasCompletedHomeworks: () => true,
-				hasNoCompletedHomeworks: () => false,
 			},
 			actions: {
 				getAllHomeworks,
@@ -123,42 +117,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			},
 		});
 
-		const emptyStateTitle = wrapper.vm.$i18n.t(
-			"pages.homeworks.teacher.emptyState.title"
-		);
-		const emptyStateSubtitle = wrapper.vm.$i18n.t(
-			"pages.homeworks.teacher.emptyState.subtitle"
-		);
-
-		const fullText = `${emptyStateTitle} ${emptyStateSubtitle}`;
-
-		expect(wrapper.text()).toBe(fullText);
 		expect(wrapper.findComponent(vCustomEmptyState).exists()).toBe(true);
-	});
-
-	it("Should render correct title and subtitle for the empty state", () => {
-		const wrapper = mount(HomeworksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreEmpty,
-			}),
-			vuetify,
-			propsData: {
-				role: "teacher",
-			},
-		});
-
-		const emptyStateTitle = wrapper.vm.$i18n.t(
-			"pages.homeworks.teacher.emptyState.title"
-		);
-		const emptyStateSubtitle = wrapper.vm.$i18n.t(
-			"pages.homeworks.teacher.emptyState.subtitle"
-		);
-
-		const fullText = `${emptyStateTitle} ${emptyStateSubtitle}`;
-
-		expect(wrapper.text()).toBe(fullText);
 	});
 
 	it("Should should trigger a store action", async () => {

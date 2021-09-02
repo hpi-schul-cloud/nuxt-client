@@ -15,7 +15,7 @@ const module = {
 			commit("setStatus", "pending");
 			try {
 				const response = await this.$axios.$get("/v3/tasks/");
-				
+
 				commit("setHomeworks", response.data);
 				commit("setStatus", "completed");
 			} catch (error) {
@@ -47,9 +47,6 @@ const module = {
 		getStatus: (state) => state.status,
 		isListEmpty: (state) => {
 			return state.status === "completed" && state.homeworks.length === 0;
-		},
-		isListFilled: (state) => {
-			return state.status === "completed" && state.homeworks.length > 0;
 		},
 		getHomeworks: (state, getters) => {
 			return state.courseFilter.length > 0
@@ -97,7 +94,6 @@ const module = {
 				return homework.duedate && new Date(homework.duedate) < new Date();
 			});
 		},
-
 		getCompletedHomeworks: (state, getters) => {
 			const completedTask = getters.getHomeworks.filter((homework) => {
 				return homework.status.graded >= 1 || homework.status.submitted >= 1;
@@ -123,17 +119,6 @@ const module = {
 		hasCompletedHomeworks: (state, getters) => {
 			return (
 				state.status === "completed" && getters.getCompletedHomeworks.length > 0
-			);
-		},
-		hasNoOpenHomeworks: (state, getters) => {
-			return (
-				state.status === "completed" && getters.getOpenHomeworks.length === 0
-			);
-		},
-		hasNoCompletedHomeworks: (state, getters) => {
-			return (
-				state.status === "completed" &&
-				getters.getCompletedHomeworks.length === 0
 			);
 		},
 		getCourses: (state) => {

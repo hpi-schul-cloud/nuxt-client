@@ -33,7 +33,7 @@
 		</template>
 		<v-container class="v-container mt-5 mb-14">
 			<v-autocomplete
-				v-if="isListFilled"
+				v-if="!isListEmpty"
 				v-model="selectedCourses"
 				:items="availableCourses"
 				small-chips
@@ -91,7 +91,6 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			status: "getStatus",
-			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
 			hasOpenHomeworks: "hasOpenHomeworks",
 			hasCompletedHomeworks: "hasCompletedHomeworks",
