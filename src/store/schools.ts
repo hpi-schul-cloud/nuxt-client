@@ -7,6 +7,7 @@ import {
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
+import AuthModule from "./auth";
 
 type Year = {
 	_id: string;
@@ -225,15 +226,10 @@ export class Schools extends VuexModule {
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
 
-		// if (rootState.auth?.user?.schoolId) {
 		if (true) {
 			try {
-				// const school = await this.$axios.$get(
-				// 	`/v1/schools/${rootState.auth.user.schoolId}`
-				// );
-
 				const school = await $axios.$get(
-					`/v1/schools/5f2987e020834114b8efd6f8 `
+					`/v1/schools/${AuthModule.getUser?.schoolId} `
 				);
 
 				this.setSchool(transformSchoolServerToClient(school));

@@ -14,6 +14,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-5 - now showing open and completed taks for students in a tab view
 - BC-136 - added no-focused-tests rule to jest config file
 - BC-38 - BC-126 - Add ansible files for Bosscloud (default)
+- BC-202 - added $cookies ts intializer and accessor
 
 ### Changed
 
@@ -24,6 +25,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-14 - changed thr contact address
 - BC-64 - execute e2e tests via push on main
 - BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
+- BC-202 - refactored the auth and schools store modules to typescript and the corresponding components' access to them
 
 ### Removed
 
