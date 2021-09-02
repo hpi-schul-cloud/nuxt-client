@@ -37,7 +37,7 @@ const requiredVars = {
 };
 
 const configsFromEnvironmentVars = {
-	FEATURE_MATRIX_MESSENGER_ENABLED: false,
+	FEATURE_MATRIX_MESSENGER_ENABLED: undefined,
 	MATRIX_MESSENGER__EMBED_URI: "",
 	MATRIX_MESSENGER__URI: "",
 	MATRIX_MESSENGER__DISCOVER_URI: "",
