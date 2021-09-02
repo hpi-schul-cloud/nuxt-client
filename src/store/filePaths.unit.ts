@@ -36,8 +36,17 @@ const requiredVars = {
 	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
 };
 
+const configsFromEnvironmentVars = {
+	FEATURE_MATRIX_MESSENGER_ENABLED: false,
+	MATRIX_MESSENGER__EMBED_URI: "",
+	MATRIX_MESSENGER__URI: "",
+	MATRIX_MESSENGER__DISCOVER_URI: "",
+	LERNSTORE_MODE: "",
+};
+
 const envs = {
 	...requiredVars,
+	...configsFromEnvironmentVars,
 	FALLBACK_DISABLED: false,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 	I18N__AVAILABLE_LANGUAGES: "",
