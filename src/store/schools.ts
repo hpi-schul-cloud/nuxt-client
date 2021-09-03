@@ -214,7 +214,7 @@ export class Schools extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): any {
+	get getError(): {} | null {
 		return this.error;
 	}
 
@@ -238,7 +238,7 @@ export class Schools extends VuexModule {
 				await this.fetchSystems();
 
 				this.setLoading(false);
-			} catch (error) {
+			} catch (error: any) {
 				this.setError(error);
 				this.setLoading(false);
 				// TODO what is supposed to happen on error?
@@ -256,7 +256,7 @@ export class Schools extends VuexModule {
 
 			this.setFederalState(response);
 			this.setLoading(false);
-		} catch (error) {
+		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
 			// TODO what is supposed to happen on error?
@@ -272,7 +272,7 @@ export class Schools extends VuexModule {
 			);
 			this.setCurrentYear(currentYear);
 			this.setLoading(false);
-		} catch (error) {
+		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
 			// TODO what is supposed to happen on error?
@@ -293,7 +293,7 @@ export class Schools extends VuexModule {
 
 			this.setSystems(response);
 			this.setLoading(false);
-		} catch (error) {
+		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
 			// TODO what is supposed to happen on error?
@@ -308,7 +308,7 @@ export class Schools extends VuexModule {
 			const data = await $axios.$patch(`/v1/schools/${school.id}`, school);
 			this.setSchool(data);
 			this.setLoading(false);
-		} catch (error) {
+		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
 			// TODO what is supposed to happen on error?
@@ -331,7 +331,7 @@ export class Schools extends VuexModule {
 
 			this.setSystems(updatedSystemsList);
 			this.setLoading(false);
-		} catch (error) {
+		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
 			// TODO what is supposed to happen on error?
