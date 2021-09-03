@@ -2,6 +2,7 @@ import { default as StudentPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -94,26 +95,6 @@ describe("students/index", () => {
 					},
 				},
 			},
-			auth: {
-				state: () => ({
-					user: {
-						roles: [
-							{
-								name: "administrator",
-							},
-						],
-						permissions: ["STUDENT_CREATE", "STUDENT_DELETE"],
-					},
-				}),
-				getters: {
-					getSchool: () => ({ isExternal: false }),
-					getUserPermissions: () => [
-						"student_create",
-						"student_list",
-						"student_delete",
-					],
-				},
-			},
 			users: {
 				actions: {
 					findStudents: jest.fn(),
@@ -173,6 +154,14 @@ describe("students/index", () => {
 	it(...isValidComponent(StudentPage));
 
 	it("should call 'deleteUsers' action", async () => {
+		AuthModule.setUser({
+			roles: [
+				{
+					name: "administrator",
+				},
+			],
+			permissions: ["STUDENT_CREATE", "STUDENT_DELETE"],
+		});
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -427,10 +416,15 @@ describe("students/index", () => {
 	});
 
 	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", async () => {
+		AuthModule.setUser({
+			roles: [
+				{
+					name: "administrator",
+				},
+			],
+			permissions: ["STUDENT_DELETE"],
+		});
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.getters = {
-			getUserPermissions: () => ["student_list", "student_delete"],
-		};
 		const wrapper = mount(StudentPage, {
 			...createComponentMocks({
 				i18n: true,

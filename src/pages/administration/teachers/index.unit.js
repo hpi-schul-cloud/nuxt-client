@@ -2,6 +2,7 @@ import { default as TeacherPage } from "./index.vue";
 import mock$objects from "../../../../tests/test-utils/pageStubs";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 const mockData = [
 	{
@@ -93,6 +94,14 @@ describe("teachers/index", () => {
 		process.env = { ...OLD_ENV }; // make a copy
 
 		SchoolsModule.setSchool({ ...mockSchool, isExternal: false });
+		AuthModule.setUser({
+			roles: [
+				{
+					name: "administrator",
+				},
+			],
+			permissions: ["TEACHER_CREATE", "TEACHER_DELETE"],
+		});
 
 		mockStore = {
 			classes: {
@@ -100,33 +109,6 @@ describe("teachers/index", () => {
 					find: () => {
 						return { data: [] };
 					},
-				},
-			},
-			auth: {
-				state: () => ({
-					user: {
-						roles: [
-							{
-								name: "administrator",
-							},
-						],
-						permissions: ["TEACHER_CREATE", "TEACHER_DELETE"],
-					},
-				}),
-				getters: {
-					getUser: () => ({
-						roles: [
-							{
-								name: "administrator",
-							},
-						],
-						permissions: ["TEACHER_CREATE", "TEACHER_DELETE"],
-					}),
-					getUserPermissions: () => [
-						"teacher_create",
-						"teacher_list",
-						"teacher_delete",
-					],
 				},
 			},
 			schools: {
@@ -448,17 +430,6 @@ describe("teachers/index", () => {
 
 	it("should not render the fab-floating component if user does not have TEACHER_CREATE permission", async () => {
 		const customMockStore = { ...mockStore };
-		customMockStore.auth.getters = {
-			getUser: () => ({
-				roles: [
-					{
-						name: "administrator",
-					},
-				],
-				permissions: ["TEACHER_DELETE"],
-			}),
-			getUserPermissions: () => ["teacher_delete"],
-		};
 		const wrapper = mount(TeacherPage, {
 			...createComponentMocks({
 				i18n: true,
