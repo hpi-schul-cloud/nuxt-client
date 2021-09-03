@@ -1,4 +1,4 @@
-import { Context, Plugin } from "@nuxt/types";
+import { Plugin } from "@nuxt/types";
 import { initializeCookies } from "../utils/cookies-initializer";
 
 const accessor: Plugin = ({ $cookies }) => {
