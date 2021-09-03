@@ -8,7 +8,7 @@
 		rounded
 		:menu-props="{ closeOnContentClick: false }"
 		v-bind="$attrs"
-		@change="($event) => $emit('selected-course', $event)"
+		@change="($event) => $emit('selected-item', $event)"
 	/>
 </template>
 
@@ -16,7 +16,7 @@
 export default {
 	model: {
 		prop: "value",
-		event: "selected-course",
+		event: "selected-item",
 	},
 };
 </script>

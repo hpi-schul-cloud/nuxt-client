@@ -31,7 +31,7 @@
 				:label="$t('pages.homeworks.labels.filter')"
 				:no-data-text="$t('pages.homeworks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
-				@selected-course="filterByCourse"
+				@selected-item="filterByCourse"
 			/>
 			<homeworks-dashboard-student v-if="isStudent" :tab="tab" />
 			<homeworks-dashboard-teacher v-else />
