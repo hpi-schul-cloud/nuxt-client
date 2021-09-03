@@ -1,4 +1,6 @@
 import UserHasRole from "./UserHasRole";
+import AuthModule from "@/store/auth";
+
 /**
  * @param  { String } expectedRole used as prop
  * @param  { String[] } storeRoles values that are in store
@@ -16,20 +18,6 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 			true: slotTrue,
 			false: slotFalse,
 		},
-		...createComponentMocks({
-			store: {
-				auth: {
-					state: () => ({
-						user: {
-							roles: storeRoles,
-						},
-					}),
-					getters: {
-						getUserRoles: () => storeRoles,
-					},
-				},
-			},
-		}),
 	});
 	expect(wrapperSlots.text()).toContain(expectedSlot ? slotTrue : slotFalse);
 	// Test with default slot
@@ -40,20 +28,6 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 		slots: {
 			default: slotTrue,
 		},
-		...createComponentMocks({
-			store: {
-				auth: {
-					state: () => ({
-						user: {
-							roles: storeRoles,
-						},
-					}),
-					getters: {
-						getUserRoles: () => storeRoles,
-					},
-				},
-			},
-		}),
 	});
 	if (expectedSlot) {
 		expect(wrapperDefault.text()).toContain(slotTrue);
@@ -65,15 +39,20 @@ const checkCorrectView = (expectedRole, storeRoles, expectedSlot) => {
 describe("@components/helpers/UserHasRole", () => {
 	it(...isValidComponent(UserHasRole));
 	it("view true-slot if user has role", () => {
+		AuthModule.setUser({ roles: [{ name: "admin" }] });
 		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have role", () => {
+		AuthModule.setUser({ roles: [{ name: "user" }] });
+
 		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view rejected", () => {
+		AuthModule.setUser({ roles: [{ name: "user" }] });
 		checkCorrectView(undefined, ["user"], false);
 	});
 	it("defaults to false when user has no roles", () => {
+		AuthModule.setUser({ roles: [] });
 		checkCorrectView("ADMIN", [], false);
 	});
 });

@@ -22,20 +22,6 @@ const checkCorrectView = (
 			true: slotTrue,
 			false: slotFalse,
 		},
-		...createComponentMocks({
-			store: {
-				auth: {
-					state: () => ({
-						user: {
-							permissions: storePermissions,
-						},
-					}),
-					getters: {
-						getUserPermissions: () => storePermissions,
-					},
-				},
-			},
-		}),
 	});
 
 	expect(wrapperSlots.text()).toContain(expectedSlot ? slotTrue : slotFalse);
@@ -47,20 +33,6 @@ const checkCorrectView = (
 		slots: {
 			default: slotTrue,
 		},
-		...createComponentMocks({
-			store: {
-				auth: {
-					state: () => ({
-						user: {
-							permissions: storePermissions,
-						},
-					}),
-					getters: {
-						getUserPermissions: () => storePermissions,
-					},
-				},
-			},
-		}),
 	});
 
 	if (expectedSlot) {

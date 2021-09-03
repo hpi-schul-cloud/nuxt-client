@@ -211,6 +211,8 @@ export default {
 		},
 		handleTopAction(event) {
 			if (event === "logout") {
+				// TODO temporary workaround until $cookies are accessible from TS modules
+				this.$cookies.remove("jwt");
 				AuthModule.logout();
 				this.$router.push({ path: "/logout" });
 			}

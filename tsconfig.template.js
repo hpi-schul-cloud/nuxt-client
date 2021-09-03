@@ -18,6 +18,7 @@ module.exports = {
 			"@nuxtjs/axios",
 			"@nuxtjs/toast",
 			"jest",
+			"cookie-universal-nuxt",
 		],
 	},
 	exclude: ["node_modules", ".nuxt", "dist"],
