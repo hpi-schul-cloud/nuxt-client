@@ -12,6 +12,7 @@ describe("Homeworks/assigned", () => {
 				isListEmpty: () => false,
 				isListFilled: () => true,
 				getCourses: () => [],
+				hasCompletedHomeworks: () => true,
 			},
 			state: () => ({
 				list: homeworks,
@@ -43,7 +44,7 @@ describe("Homeworks/assigned", () => {
 			}),
 			vuetify,
 		});
-		const title = wrapper.vm.$i18n.t("pages.homeworks.teacher.title");
+		const title = wrapper.vm.$i18n.t("pages.homeworks.title");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 });

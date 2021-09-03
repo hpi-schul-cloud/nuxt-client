@@ -10,7 +10,7 @@ export default {
 	layout: "defaultVuetify",
 	head() {
 		return {
-			title: this.$t("pages.homeworks.student.title"),
+			title: this.$t("pages.homeworks.title"),
 		};
 	},
 };
