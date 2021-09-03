@@ -7,5 +7,9 @@ $brighten: 90%;
 	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
 	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
 	--color-secondary: #17212a;
+	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
+	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
 	--color-accent: #d9174c;
+	--color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
+	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
 }

@@ -2,9 +2,12 @@
 :root {
 	/* main colors */
 	--color-primary: #2876d0;
+	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
+	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
 	--color-secondary: #185888;
-	--color-accent-light: #f56b00;
-	--color-sidebar-active-bg: rgba(24, 88, 136, 0.15);
-	--color-sidebar-menu-item: var(--color-secondary);
-	--color-sidebar-menu-item-active: var(--color-primary);
+	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
+	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
+	--color-accent: #f56b00;
+	--color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
+	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
 }
