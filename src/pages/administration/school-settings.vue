@@ -2,7 +2,7 @@
 	<v-container fluid>
 		<v-custom-breadcrumbs :breadcrumbs="breadcrumbs"></v-custom-breadcrumbs>
 		<v-container class="container-max-width">
-			<h1 class="text-h3">
+			<h1 class="text-h3 page-title">
 				{{ $t("pages.administration.school.index.title") }}
 			</h1>
 			<v-alert v-if="schoolError" light prominent text type="error">
@@ -10,11 +10,12 @@
 			</v-alert>
 			<img
 				v-if="schoolError"
+				class="school-error-image"
 				role="presentation"
 				alt=""
 				src="@assets/img/pc_repair.png"
 			/>
-			<div v-if="!schoolError">
+			<div v-if="!schoolError" class="no-school-error">
 				<v-alert light prominent text type="info">
 					{{ $t("pages.administration.school.index.beta.info") }}
 					<a href="/help/contact">{{
