@@ -30,7 +30,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 					namespaced: true,
 					getters: {
 						getStatus: () => "completed",
-						isListEmpty: () => false,
+						hasNoHomeworks: () => false,
 						getCourses: () => coursesStudent,
 						getOverDueHomeworks: () => overDueHomeworks,
 						getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
@@ -67,7 +67,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 					namespaced: true,
 					getters: {
 						getStatus: () => "completed",
-						isListEmpty: () => false,
+						hasNoHomeworks: () => false,
 						getCourses: () => coursesTeacher,
 						getOverDueHomeworks: () => overDueHomeworksTeacher,
 						getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,

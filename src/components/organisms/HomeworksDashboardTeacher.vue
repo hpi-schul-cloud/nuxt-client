@@ -2,11 +2,11 @@
 	<section class="homework-dashboard-teacher">
 		<v-custom-double-panels
 			:panel-one-count="noDueDateHomeworks.length"
-			:panel-two-count="dueDateHomeworks.length + overDueHomeworks.length"
+			:panel-two-count="withDueDateHomeworks.length + overdueHomeworks.length"
 			:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
 			:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
 			:status="status"
-			:is-empty="isListEmpty"
+			:is-empty="hasNoHomeworks"
 			:expanded-default="1"
 		>
 			<template v-slot:panelOne>
@@ -14,12 +14,12 @@
 			</template>
 			<template v-slot:panelTwo>
 				<homeworks-list
-					:homeworks="overDueHomeworks"
+					:homeworks="overdueHomeworks"
 					:title="$t('pages.homeworks.teacher.subtitleOverDue')"
 					type="teacher"
 				/>
 				<homeworks-list
-					:homeworks="dueDateHomeworks"
+					:homeworks="withDueDateHomeworks"
 					:title="$t('pages.homeworks.subtitleOpen')"
 					type="teacher"
 				/>
@@ -37,12 +37,19 @@ export default {
 	components: { HomeworksList, vCustomDoublePanels },
 	computed: {
 		...mapGetters("homeworks", {
-			dueDateHomeworks: "getOpenHomeworksWithDueDateTeacher",
-			overDueHomeworks: "getOverDueHomeworksTeacher",
-			noDueDateHomeworks: "getOpenHomeworksWithoutDueDateTeacher",
+			openHomeworks: "getOpenHomeworksForTeacher",
 			status: "getStatus",
-			isListEmpty: "isListEmpty",
+			hasNoHomeworks: "hasNoHomeworks",
 		}),
+		overdueHomeworks: function () {
+			return this.openHomeworks.overdue;
+		},
+		noDueDateHomeworks: function () {
+			return this.openHomeworks.noDueDate;
+		},
+		withDueDateHomeworks: function () {
+			return this.openHomeworks.withDueDate;
+		},
 	},
 };
 </script>

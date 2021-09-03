@@ -12,10 +12,12 @@ describe("@components/organisms/HomeworksDashboardTeacher", () => {
 		homeworks: {
 			getters: {
 				getStatus: () => "completed",
-				isListEmpty: () => false,
-				getOverDueHomeworksTeacher: () => overDueHomeworksTeacher,
-				getOpenHomeworksWithDueDateTeacher: () => dueDateHomeworksTeacher,
-				getOpenHomeworksWithoutDueDateTeacher: () => noDueDateHomeworksTeacher,
+				hasNoHomeworks: () => false,
+				getOpenHomeworksForTeacher: () => ({
+					overdue: overDueHomeworksTeacher,
+					withDueDate: dueDateHomeworksTeacher,
+					noDueDate: noDueDateHomeworksTeacher,
+				}),
 			},
 		},
 	};

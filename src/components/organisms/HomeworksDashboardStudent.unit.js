@@ -11,13 +11,14 @@ describe("@components/organisms/HomeworksDashboardStudent", () => {
 	const mockStore = {
 		homeworks: {
 			getters: {
-				getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
-				getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
+				getOpenHomeworksForStudent: () => ({
+					overdue: overDueHomeworks,
+					withDueDate: openHomeworksWithDueDate,
+					noDueDate: openHomeworksWithoutDueDate,
+				}),
 				getStatus: () => "completed",
-				getOverDueHomeworks: () => overDueHomeworks,
-				isListEmpty: () => false,
-				getGradedHomeworks: () => [],
-				getSubmittedHomeworks: () => [],
+				hasNoHomeworks: () => false,
+				getCompletedHomeworksForStudent: () => ({ submitted: [], graded: [] }),
 				hasOpenHomeworks: () => true,
 				hasCompletedHomeworks: () => false,
 			},

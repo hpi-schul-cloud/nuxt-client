@@ -1,3 +1,46 @@
+const filterByCourses = (homeworks, courses) => {
+	return courses.length
+		? homeworks.filter((homework) => {
+				return courses.includes(homework.courseName);
+		  })
+		: homeworks;
+};
+
+const filterOpen = (homeworks) => {
+	return homeworks.filter(
+		(homework) =>
+			homework.status.submitted === 0 && homework.status.graded === 0
+	);
+};
+
+const filterNoDueDate = (homeworks) => {
+	return homeworks.filter((homework) => {
+		return !homework.duedate;
+	});
+};
+
+const filterWithDueDate = (homeworks) => {
+	return homeworks.filter((homework) => {
+		return homework.duedate && new Date(homework.duedate) > new Date();
+	});
+};
+
+const filterOverdue = (homeworks) => {
+	return homeworks.filter((homework) => {
+		return homework.duedate && new Date(homework.duedate) < new Date();
+	});
+};
+
+const filterSubmitted = (homeworks) => {
+	return homeworks.filter(
+		(homework) => homework.status.submitted > 0 && homework.status.graded === 0
+	);
+};
+
+const filterGraded = (homeworks) => {
+	return homeworks.filter((homework) => homework.status.graded > 0);
+};
+
 const module = {
 	state: () => {
 		return {
@@ -12,6 +55,7 @@ const module = {
 	},
 	actions: {
 		getAllHomeworks: async function ({ commit }) {
+			commit("resetBusinessError");
 			commit("setStatus", "pending");
 			try {
 				const response = await this.$axios.$get("/v3/tasks/");
@@ -44,82 +88,64 @@ const module = {
 		},
 	},
 	getters: {
-		getStatus: (state) => state.status,
-		isListEmpty: (state) => {
+		hasNoHomeworks: (state) => {
 			return state.status === "completed" && state.homeworks.length === 0;
 		},
-		getHomeworks: (state, getters) => {
-			return state.courseFilter.length > 0
-				? getters.getFilteredHomeworks
-				: state.homeworks;
-		},
-		getFilteredHomeworks: (state) => {
-			const coursesToFilter = state.courseFilter;
-			return state.homeworks.filter((homework) => {
-				return coursesToFilter.includes(homework.courseName);
-			});
-		},
-		getOpenHomeworks: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.status.submitted === 0 && homework.status.graded === 0;
-			});
-		},
-		getOpenHomeworksWithDueDate: (state, getters) => {
-			return getters.getOpenHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) > new Date();
-			});
-		},
-		getOpenHomeworksWithDueDateTeacher: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) > new Date();
-			});
-		},
-		getOpenHomeworksWithoutDueDate: (state, getters) => {
-			return getters.getOpenHomeworks.filter((homework) => {
-				return !homework.duedate;
-			});
-		},
-		getOpenHomeworksWithoutDueDateTeacher: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return !homework.duedate;
-			});
-		},
-		getOverDueHomeworks: (state, getters) => {
-			return getters.getOpenHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) < new Date();
-			});
-		},
-		getOverDueHomeworksTeacher: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) < new Date();
-			});
-		},
-		getCompletedHomeworks: (state, getters) => {
-			const completedTask = getters.getHomeworks.filter((homework) => {
-				return homework.status.graded >= 1 || homework.status.submitted >= 1;
-			});
-			return completedTask;
-		},
-		getSubmittedHomeworks: (state, getters) => {
-			const submittedTasks = getters.getHomeworks.filter((homework) => {
-				return homework.status.submitted >= 1 && homework.status.graded === 0;
-			});
-			return submittedTasks;
-		},
-		getGradedHomeworks: (state, getters) => {
-			return getters.getCompletedHomeworks.filter((homework) => {
-				return homework.status.graded >= 1;
-			});
-		},
-		hasOpenHomeworks: (state, getters) => {
+		hasOpenHomeworks: (state) => {
 			return (
-				state.status === "completed" && getters.getOpenHomeworks.length > 0
+				state.status === "completed" && filterOpen(state.homeworks).length > 0
 			);
 		},
-		hasCompletedHomeworks: (state, getters) => {
+		hasCompletedHomeworks: (state) => {
 			return (
-				state.status === "completed" && getters.getCompletedHomeworks.length > 0
+				(state.status === "completed" &&
+					filterSubmitted(state.homeworks).length > 0) ||
+				filterGraded(state.homeworks).length > 0
 			);
+		},
+		getHomeworks: (state) => state.homeworks,
+		getStatus: (state) => state.status,
+		getOpenHomeworksForStudent: (state) => {
+			const openHomeworks = {};
+
+			openHomeworks.overdue = filterOverdue(
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+			);
+			openHomeworks.noDueDate = filterNoDueDate(
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+			);
+			openHomeworks.withDueDate = filterWithDueDate(
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+			);
+
+			return openHomeworks;
+		},
+		getOpenHomeworksForTeacher: (state) => {
+			const openHomeworks = {};
+
+			openHomeworks.overdue = filterOverdue(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+			openHomeworks.noDueDate = filterNoDueDate(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+			openHomeworks.withDueDate = filterWithDueDate(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+
+			return openHomeworks;
+		},
+		getCompletedHomeworksForStudent: (state) => {
+			const completedHomeworks = {};
+
+			completedHomeworks.submitted = filterSubmitted(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+			completedHomeworks.graded = filterGraded(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+
+			return completedHomeworks;
 		},
 		getCourses: (state) => {
 			const courses = new Set(
@@ -129,13 +155,13 @@ const module = {
 		},
 		getCoursesOpen: (state, getters) => {
 			const courses = new Set(
-				getters.getOpenHomeworks.map((homework) => homework.courseName)
+				getters.getHomeworks.map((homework) => homework.courseName)
 			);
 			return Array.from(courses);
 		},
 		getCoursesCompleted: (state, getters) => {
 			const courses = new Set(
-				getters.getCompletedHomeworks.map((homework) => homework.courseName)
+				getters.getHomeworks.map((homework) => homework.courseName)
 			);
 			return Array.from(courses);
 		},

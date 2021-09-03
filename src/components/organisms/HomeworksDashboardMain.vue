@@ -33,7 +33,7 @@
 		</template>
 		<v-container class="v-container mt-5 mb-14">
 			<v-autocomplete
-				v-if="!isListEmpty"
+				v-if="!hasNoHomeworks"
 				v-model="selectedCourses"
 				:items="availableCourses"
 				small-chips
@@ -91,7 +91,7 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			status: "getStatus",
-			isListEmpty: "isListEmpty",
+			hasNoHomeworks: "hasNoHomeworks",
 			hasOpenHomeworks: "hasOpenHomeworks",
 			hasCompletedHomeworks: "hasCompletedHomeworks",
 			getCourses: "getCourses",
@@ -102,7 +102,7 @@ export default {
 			return this.role === "student";
 		},
 		showEmptyStateForTeacher: function () {
-			return !this.isStudent && this.isListEmpty;
+			return !this.isStudent && this.hasNoHomeworks;
 		},
 		availableCourses: function () {
 			if (this.role === "teacher") {

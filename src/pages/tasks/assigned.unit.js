@@ -9,7 +9,7 @@ describe("Homeworks/assigned", () => {
 			getters: {
 				list: () => homeworks,
 				loading: () => false,
-				isListEmpty: () => false,
+				hasNoHomeworks: () => false,
 				getCourses: () => [],
 				hasCompletedHomeworks: () => true,
 			},
