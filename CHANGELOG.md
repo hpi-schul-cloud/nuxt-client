@@ -12,14 +12,23 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-98 - added unit tests for school admin page
 - BC-133 - added unit tests for filePaths and accounts store modules
+- BC-5 - now showing open and completed taks for students in a tab view
+- BC-136 - added no-focused-tests rule to jest config file
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
 ### Changed
 
+- BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 - BC-190 - removing fileStorageData on school settings
 - BC-18 - refactored the envConfig, content, accounts, autoLogout, and filePaths store modules to typescript and the corresponding components' access to them
 - BC-14 - changed thr contact address
 - BC-64 - execute e2e tests via push on main
 - BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
+
+### Removed
+
+- BC-201 - removed the both unused auth action hasRole and roles store module
 
 ## [26.9.1] - 2021-08-16
 

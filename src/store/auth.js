@@ -73,30 +73,6 @@ export const actions = {
 		}
 		return user;
 	},
-	async hasRole({ dispatch, rootGetters, state, rootState }, roleName) {
-		if (rootState.roles.ids.length < 1) {
-			await dispatch(
-				"roles/find",
-				{
-					query: {
-						$limit: 1000,
-					},
-				},
-				{
-					root: true,
-				}
-			);
-		}
-
-		const roles = rootGetters["roles/list"];
-		const userRoles = state.user.roles;
-
-		const userRolesMapped = userRoles.map((id) =>
-			roles.find((role) => role._id === id)
-		);
-
-		return userRolesMapped.find((r) => r.name === roleName) !== undefined;
-	},
 };
 
 export const mutations = {

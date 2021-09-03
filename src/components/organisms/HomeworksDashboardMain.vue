@@ -1,14 +1,43 @@
 <template>
-	<v-container class="v-container">
-		<h1 v-if="status === 'pending'">
-			<v-skeleton-loader type="text" :max-width="'30%'" />
-		</h1>
-		<template v-else>
-			<h1 v-if="isListFilled" class="h4">
-				{{ getTitle() }}
-			</h1>
-		</template>
+	<section>
 		<section>
+			<v-container v-if="status === 'pending'">
+				<h1 class="h4">
+					<v-skeleton-loader type="heading" max-width="75%" />
+				</h1>
+				<v-skeleton-loader type="text" />
+			</v-container>
+
+			<template v-else>
+				<div v-if="isListFilled" class="border-bottom">
+					<v-container>
+						<h1 class="h4">
+							{{ $t("pages.homeworks.title") }}
+						</h1>
+					</v-container>
+					<div v-if="showTabs" class="pb-0 d-flex justify-center">
+						<v-tabs v-model="tab" grow class="tabs-max-width">
+							<v-tab>
+								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
+								<span class="d-none d-sm-inline">{{
+									$t("components.organisms.HomeworksDashboardMain.tab.open")
+								}}</span>
+							</v-tab>
+							<v-tab>
+								<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
+								<span class="d-none d-sm-inline">{{
+									$t(
+										"components.organisms.HomeworksDashboardMain.tab.completed"
+									)
+								}}</span>
+							</v-tab>
+						</v-tabs>
+					</div>
+				</div>
+			</template>
+		</section>
+
+		<v-container class="v-container mt-5 mb-14">
 			<v-autocomplete
 				v-if="isListFilled"
 				v-model="selectedCourses"
@@ -22,19 +51,20 @@
 				solo
 				rounded
 				:menu-props="{ closeOnContentClick: false }"
+				:disabled="isFilterDisabled"
 				@change="filterByCourse"
 			/>
-		</section>
-		<homeworks-dashboard-student v-if="isStudent()" />
-		<homeworks-dashboard-teacher v-else />
-		<v-custom-empty-state
-			v-if="isListEmpty"
-			:image="image"
-			:title="getEmptyStateTitle()"
-			:subtitle="getEmptyStateSubtitle()"
-			class="mt-16"
-		/>
-	</v-container>
+			<v-custom-empty-state
+				v-if="isListEmpty"
+				:image="image"
+				:title="emptyStateTitle"
+				:subtitle="emptyStateSubtitle"
+				class="mt-16"
+			/>
+			<homeworks-dashboard-student v-else-if="isStudent" :tab="tab" />
+			<homeworks-dashboard-teacher v-else />
+		</v-container>
+	</section>
 </template>
 
 <script>
@@ -61,6 +91,7 @@ export default {
 		return {
 			image: tasksEmptyState,
 			selectedCourses: [],
+			tab: 0,
 		};
 	},
 	computed: {
@@ -68,31 +99,52 @@ export default {
 			status: "getStatus",
 			isListFilled: "isListFilled",
 			isListEmpty: "isListEmpty",
-			availableCourses: "getCourses",
+			hasOpenHomeworks: "hasOpenHomeworks",
+			hasCompletedHomeworks: "hasCompletedHomeworks",
+			getCourses: "getCourses",
+			getCoursesOpen: "getCoursesOpen",
+			getCoursesCompleted: "getCoursesCompleted",
 		}),
+		isStudent: function () {
+			return this.role === "student";
+		},
+		emptyStateTitle: function () {
+			// TODO: remove if wording stays the same
+			return this.isStudent
+				? this.$t("pages.homeworks.student.emptyState.title")
+				: this.$t("pages.homeworks.teacher.emptyState.title");
+		},
+		emptyStateSubtitle: function () {
+			return this.isStudent
+				? this.$t("pages.homeworks.student.emptyState.subtitle")
+				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
+		},
+		showTabs: function () {
+			return this.isStudent && this.isListFilled;
+		},
+		availableCourses: function () {
+			if (this.role === "teacher") {
+				return this.getCourses;
+			} else if (this.tab === 0) {
+				return this.getCoursesOpen;
+			} else {
+				return this.getCoursesCompleted;
+			}
+		},
+		isFilterDisabled: function () {
+			if (this.tab === 0 && !this.hasOpenHomeworks) {
+				return true;
+			} else if (this.tab === 1 && !this.hasCompletedHomeworks) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 	},
 	mounted() {
 		this.$store.dispatch("homeworks/getHomeworksDashboard");
 	},
 	methods: {
-		isStudent: function () {
-			return this.role === "student";
-		},
-		getTitle: function () {
-			return this.role === "student"
-				? this.$t("pages.homeworks.student.title")
-				: this.$t("pages.homeworks.teacher.title");
-		},
-		getEmptyStateTitle: function () {
-			return this.isStudent()
-				? this.$t("pages.homeworks.student.emptyState.title")
-				: this.$t("pages.homeworks.teacher.emptyState.title");
-		},
-		getEmptyStateSubtitle: function () {
-			return this.isStudent()
-				? this.$t("pages.homeworks.student.emptyState.subtitle")
-				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
-		},
 		filterByCourse() {
 			this.$store.commit("homeworks/setFilter", this.selectedCourses);
 		},
@@ -104,5 +156,34 @@ export default {
 
 .v-container {
 	max-width: var(--size-content-width-max);
+}
+
+.tabs-max-width {
+	max-width: 500px;
+}
+
+// even out border
+.v-tabs {
+	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	font-family: var(--heading-font-family);
+}
+
+.v-tab {
+	font-size: var(--text-base-size);
+	text-transform: none !important;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.tab-icon {
+	fill: currentColor;
+}
+
+::v-deep .v-slide-group__prev,
+::v-deep .v-slide-group__next {
+	display: none !important;
+}
+
+.border-bottom {
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>
