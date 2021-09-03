@@ -1,22 +1,4 @@
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog";
-import SchoolsModule from "@/store/schools";
-
-const school = {
-	_id: "5f2987e020834114b8efd6f8",
-	name: "Paul-Gerhardt-Gymnasium",
-	fileStorageType: "awsS3",
-	federalState: { $oid: "0000b186816abba584714c53" },
-	county: {
-		antaresKey: "BRB",
-		_id: { $oid: "5fa55eb53f472a2d986c8812" },
-		countyId: 12051,
-		name: "Brandenburg an der Havel",
-	},
-	currentYear: { $oid: "5ebd6dc14a431f75ec9a3e77" },
-	purpose: "demo",
-	enableStudentTeamCreation: false,
-	officialSchoolNumber: "123",
-};
 
 const mockProps = {
 	isOpen: true,
@@ -39,9 +21,6 @@ const searchStrings = {
 };
 
 describe("SchoolPolicyFormDialog", () => {
-	beforeAll(() => {
-		SchoolsModule.setSchool(school);
-	});
 	it(...isValidComponent(SchoolPolicyFormDialog));
 
 	describe("displaying values", () => {
