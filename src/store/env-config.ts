@@ -17,7 +17,7 @@ type BusinessError = {
 	message: string;
 };
 
-type Envs = {
+export interface Envs {
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
 	DOCUMENT_BASE_DIR: string;
 	FALLBACK_DISABLED?: boolean;
@@ -28,7 +28,7 @@ type Envs = {
 	FEATURE_TEAMS_ENABLED?: boolean;
 	FEATURE_SCHOOL_POLICY_ENABLED?: boolean;
 	FEATURE_VIDEOCONFERENCE_ENABLED?: boolean;
-	FEATURE_MATRIX_MESSENGER_ENABLED?: boolean;
+	FEATURE_MATRIX_MESSENGER_ENABLED?: string;
 	I18N__AVAILABLE_LANGUAGES: string;
 	I18N__DEFAULT_LANGUAGE: string;
 	I18N__DEFAULT_TIMEZONE: string;
@@ -39,12 +39,15 @@ type Envs = {
 	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE?: boolean;
 	MATRIX_MESSENGER__STUDENT_ROOM_CREATION?: boolean;
 	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED?: boolean;
+	MATRIX_MESSENGER__DISCOVER_URI: string | undefined;
+	MATRIX_MESSENGER__EMBED_URI: string | undefined;
+	MATRIX_MESSENGER__URI: string | undefined;
 	NOT_AUTHENTICATED_REDIRECT_URL: string;
 	ROCKETCHAT_SERVICE_ENABLED?: boolean;
 	SC_THEME: string;
 	SC_TITLE: string;
 	SC_SHORT_TITLE: string;
-};
+}
 
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
@@ -74,6 +77,7 @@ const retryLimit: number = 10;
 export class EnvConfig extends VuexModule {
 	env: Envs = {
 		...requiredVars,
+		...configsFromEnvironmentVars,
 		FALLBACK_DISABLED: false,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		I18N__AVAILABLE_LANGUAGES: "",
