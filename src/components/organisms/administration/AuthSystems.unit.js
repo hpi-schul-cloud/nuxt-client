@@ -1,4 +1,5 @@
 import AuthSystems from "./AuthSystems";
+import SchoolsModule from "@/store/schools";
 
 const generateProps = () => ({
 	systems: [
@@ -147,17 +148,11 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			const mockStore = {
-				schools: {
-					actions: {
-						deleteSystem: jest.fn(),
-					},
-				},
-			};
+			const deleteSpy = jest.spyOn(SchoolsModule, "deleteSystem");
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,
-					store: mockStore,
+
 					vuetify: true,
 				}),
 				propsData: generateProps(),
@@ -165,7 +160,7 @@ describe("AuthSystems", () => {
 			const customDialog = wrapper.find(searchStrings.customDialog);
 
 			customDialog.vm.$emit("dialog-confirmed", 123);
-			expect(mockStore.schools.actions.deleteSystem).toHaveBeenCalled();
+			expect(deleteSpy).toHaveBeenCalled();
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {

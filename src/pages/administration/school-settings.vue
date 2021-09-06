@@ -53,7 +53,7 @@
 
 <script>
 import EnvConfigModule from "@store/env-config";
-import { mapGetters } from "vuex";
+import SchoolsModule from "@/store/schools";
 import vCustomBreadcrumbs from "@components/molecules/vCustomBreadcrumbs";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
@@ -82,12 +82,18 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("schools", {
-			systems: "getSystems",
-			currentYear: "getCurrentYear",
-			loading: "getLoading",
-			schoolError: "getError",
-		}),
+		systems() {
+			return SchoolsModule.getSystems;
+		},
+		currentYear() {
+			return SchoolsModule.getCurrentYear;
+		},
+		loading() {
+			return SchoolsModule.getLoading;
+		},
+		schoolError() {
+			return SchoolsModule.getError;
+		},
 		schoolPolicyEnabled: () => EnvConfigModule.getSchoolPolicyEnabled,
 		currentSchoolYear() {
 			return `${this.$t("common.words.schoolYear")} ${this.currentYear.name}`;
