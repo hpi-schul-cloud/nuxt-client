@@ -220,9 +220,7 @@ describe("store/homeworks", () => {
 
 		describe("hasNoCompletedHomeworks", () => {
 			it("Should return true, if it's loaded and there are no completed homeworks", () => {
-				expect(getters.hasNoCompletedHomeworks(emptyState)).toBe(
-					true
-				);
+				expect(getters.hasNoCompletedHomeworks(emptyState)).toBe(true);
 			});
 		});
 
