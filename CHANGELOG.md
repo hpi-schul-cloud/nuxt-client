@@ -6,19 +6,40 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`
 
-## Unreleased
+## [Unreleased]
+
+### Added
+
+### Changed
+
+## [26.10.0] - 2021-09-03
 
 ### Added
 
 - BC-94 - clean up the colorsystem and fix some UI issues
 - BC-133 - added unit tests for filePaths and accounts store modules
+- BC-132 - added unit tests for env-config, content, and autoLogout store modules
+- BC-5 - now showing open and completed taks for students in a tab view
+- BC-136 - added no-focused-tests rule to jest config file
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
 
 ### Changed
 
+- BC-5 - renamed sidebar item "Open Tasks" to "Current Tasks"
+- BC-38 - BC-126 - Add ansible files for Bosscloud (default)
+- BC-190 - removing fileStorageData on school settings
 - BC-18 - refactored the envConfig, content, accounts, autoLogout, and filePaths store modules to typescript and the corresponding components' access to them
 - BC-14 - changed thr contact address
 - BC-64 - execute e2e tests via push on main
 - BC-37 - BC-56 - reduce resource consumption for deployed nuxtclient
+
+### Removed
+
+- BC-201 - removed the both unused auth action hasRole and roles store module
+
+### Fixed
+
+- BC-191 - fix ldap edit button showing up for uneditable systems
 
 ## [26.9.1] - 2021-08-16
 
@@ -58,6 +79,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### [26.6.0] - 2021-07-20
 
 - SC-9159 - Redirect the routes for news for the new v3 API
+- SC-9083 - School administration page in nuxt with vuetify
 - SC-9108 - Refactor news/create page and form component
 - SC-9189 - Adding expansion panels to teacher's task dashboard
 - SC-9201 - Adding expansion panels to student's task dashboard
@@ -66,6 +88,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - SC-9090 - implemented a loading state in the service-template
 - OPS-2574 - Removeing autodeployed branches for developers if branch deleted
+- SC-9083 - Added school administration page and related stores
+- SC-9083 - Added simple custom vuetify dialog component for e.g. confirm dialogs
 
 ### Changed
 
@@ -76,6 +100,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - SC-9122 - changed getters logic from components to the store
 - SC-9108 - refactored news
 - SC-9168 - POC for Typescript store module (news)
+
+### Removed
+
+- SC-9083 - RSS feeds are no longer a part of the school administration page
 
 ### Fixed
 
@@ -167,6 +195,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- pages 'account', 'course', 'calendar' and components exclusively used by these pages
 - SC-9063 - Removed "unsafe-inline" from script-src in CSP
 
 ## 26.1.1

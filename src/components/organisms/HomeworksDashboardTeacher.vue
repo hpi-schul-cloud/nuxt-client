@@ -37,9 +37,9 @@ export default {
 	components: { HomeworksList, vCustomDoublePanels },
 	computed: {
 		...mapGetters("homeworks", {
-			dueDateHomeworks: "getOpenHomeworksWithDueDate",
-			overDueHomeworks: "getOverDueHomeworks",
-			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
+			dueDateHomeworks: "getOpenHomeworksWithDueDateTeacher",
+			overDueHomeworks: "getOverDueHomeworksTeacher",
+			noDueDateHomeworks: "getOpenHomeworksWithoutDueDateTeacher",
 			status: "getStatus",
 			isListEmpty: "isListEmpty",
 		}),
