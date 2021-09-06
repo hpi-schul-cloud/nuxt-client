@@ -141,6 +141,7 @@
 </template>
 
 <script>
+import SchoolsModule from "@/store/schools";
 import { mapGetters } from "vuex";
 import EnvConfigModule from "@/store/env-config";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
@@ -310,9 +311,6 @@ export default {
 		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
-		...mapGetters("schools", {
-			schoolIsExternallyManaged: "schoolIsExternallyManaged",
-		}),
 		...mapGetters("users", {
 			students: "getList",
 			pagination: "getPagination",
@@ -320,6 +318,9 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
+		schoolIsExternallyManaged() {
+			return SchoolsModule.schoolIsExternallyManaged;
+		},
 		env() {
 			return EnvConfigModule.getEnv;
 		},

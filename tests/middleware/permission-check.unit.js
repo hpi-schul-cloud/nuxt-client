@@ -1,4 +1,5 @@
 import permissionCheck from "@middleware/permission-check";
+import AuthModule from "@/store/auth";
 
 const mockApp = {
 	i18n: {
@@ -35,6 +36,7 @@ describe("@middleware/permission-check", () => {
 	});
 
 	it("grants access using simple syntax", async () => {
+		AuthModule.setUser({ permissions: ["PERMISSION_A", "PERMISSION_B"] });
 		const mockContext = getMockContext({
 			store: getMockStore({ permissions: ["PERMISSION_A", "PERMISSION_B"] }),
 			route: getMockRoute(["PERMISSION_A"]),
@@ -88,6 +90,8 @@ describe("@middleware/permission-check", () => {
 	});
 
 	it("throws error.401 on missing permission using advanced AND syntax", async () => {
+		AuthModule.setUser({ permissions: ["PERMISSION_A"] });
+
 		const mockContext = getMockContext({
 			store: getMockStore({
 				permissions: ["PERMISSION_A"],
@@ -103,6 +107,7 @@ describe("@middleware/permission-check", () => {
 	});
 
 	it("throws error.401 on missing permission using advanced OR syntax", async () => {
+		AuthModule.setUser({ permissions: [] });
 		const mockContext = getMockContext({
 			route: getMockRoute({
 				operator: "OR",
@@ -115,6 +120,7 @@ describe("@middleware/permission-check", () => {
 	});
 
 	it("throws error.401 on missing user", async () => {
+		AuthModule.setUser(null);
 		const mockContext = getMockContext({
 			store: getMockStore({ user: null }),
 			route: getMockRoute(["MISSING_PERMISSION"]),

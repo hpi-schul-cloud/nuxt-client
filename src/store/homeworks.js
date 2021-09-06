@@ -1,10 +1,12 @@
 import { merge } from "lodash";
 import { serviceTemplate } from "@utils";
+import AuthModule from "@/store/auth";
+
 const base = serviceTemplate("homework");
 const baseState = base.state();
 
-const hasPermission = (rootState, permissionString) =>
-	rootState.auth.user.permissions.includes(permissionString);
+const hasPermission = (permissionString) =>
+	AuthModule.getUser.permissions.includes(permissionString);
 
 const TaskPermission = {
 	teacher: "TASK_DASHBOARD_TEACHER_VIEW_V3",
@@ -22,14 +24,11 @@ const module = merge(base, {
 			courseFilter: [],
 		}),
 	actions: {
-		getHomeworksDashboard: async function ({ commit, rootState }) {
+		getHomeworksDashboard: async function ({ commit }) {
 			commit("setStatus", "pending");
 			try {
 				const openPromise = this.$axios.$get(TaskRoutes.open);
-				const completedPromise = hasPermission(
-					rootState,
-					TaskPermission.student
-				)
+				const completedPromise = hasPermission(TaskPermission.student)
 					? this.$axios.$get(TaskRoutes.completed)
 					: Promise.resolve({ data: [] });
 

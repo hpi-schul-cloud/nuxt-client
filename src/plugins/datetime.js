@@ -5,6 +5,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/de";
 import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -269,6 +270,6 @@ export default ({ app, store }) => {
 	initDefaultTimezone(app, store);
 	setDefaultFormats(app);
 
-	const locale = store.getters["auth/getLocale"] || "de";
+	const locale = AuthModule.getLocale || "de";
 	dayjs.locale(locale);
 };
