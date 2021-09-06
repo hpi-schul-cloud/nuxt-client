@@ -38,7 +38,7 @@ describe("PrivacySettings", () => {
 		it("should display permission switches", () => {
 			EnvConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-				LERNSTORE_MODE: "EDUSHARING",
+				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
 			});
 			const wrapper = mount(PrivacySettings, {
@@ -55,7 +55,7 @@ describe("PrivacySettings", () => {
 		it("should hide permission switches", () => {
 			EnvConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
-				LERNSTORE_MODE: "EDUSHARING",
+				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: false,
 			});
 			const wrapper = mount(PrivacySettings, {
@@ -222,7 +222,7 @@ describe("PrivacySettings", () => {
 		it("should be correct for permissions (1)", () => {
 			EnvConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-				LERNSTORE_MODE: "EDUSHARING",
+				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
 			});
 			const wrapper = mount(PrivacySettings, {
@@ -254,7 +254,7 @@ describe("PrivacySettings", () => {
 		it("should be correct for permissions (2)", () => {
 			EnvConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-				LERNSTORE_MODE: "EDUSHARING",
+				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
 			});
 			const wrapper = mount(PrivacySettings, {
@@ -422,7 +422,7 @@ describe("PrivacySettings", () => {
 		it("should emit on value change for learnstore switch", async () => {
 			EnvConfigModule.setEnvs({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-				LERNSTORE_MODE: "EDUSHARING",
+				FEATURE_LERNSTORE_ENABLED: true,
 				FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
 			});
 			const wrapper = mount(PrivacySettings, {
