@@ -310,7 +310,7 @@ export default {
 		requiredPermissions: ["STUDENT_LIST"],
 	},
 	computed: {
-		...mapGetters("auth", {
+		...mapGetters("schools", {
 			schoolIsExternallyManaged: "schoolIsExternallyManaged",
 		}),
 		...mapGetters("users", {

@@ -163,25 +163,6 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(dueDateHintLabels).toHaveLength(homeworksCloseToDueDate.length);
 	});
 
-	it("Should render overdue label, if homework is overdue ", () => {
-		const wrapper = mount(HomeworksList, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			vuetify,
-			propsData: {
-				type: "student",
-				homeworks,
-			},
-		});
-
-		const overDueLabels = wrapper.findAll("[data-test-id='overDueDateLabel']");
-
-		expect(overDueLabels).toHaveLength(overDueHomeworks.length);
-	});
-
 	it("Should render loading state while fetching homework", () => {
 		const mockStoreLoading = {
 			homeworks: {

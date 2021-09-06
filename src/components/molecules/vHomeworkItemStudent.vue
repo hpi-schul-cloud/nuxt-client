@@ -1,7 +1,7 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkHref(homework.id)">
-		<v-list-item-avatar class="hidden-xs-only">
-			<img :src="taskIconSvg" role="presentation" />
+		<v-list-item-avatar>
+			<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle>
@@ -22,14 +22,8 @@
 			/>
 			<v-spacer />
 			<v-custom-chip-time-remaining
-				v-if="isCloseToDueDate(homework.duedate)"
-				type="warning"
-				:due-date="homework.duedate"
-				:shorten-date="$vuetify.breakpoint.xsOnly"
-			/>
-			<v-custom-chip-time-remaining
-				v-else-if="isOverDue(homework.duedate)"
-				type="overdue"
+				v-if="taskState === 'warning'"
+				:type="taskState"
 				:due-date="homework.duedate"
 				:shorten-date="$vuetify.breakpoint.xsOnly"
 			/>
@@ -38,8 +32,7 @@
 </template>
 
 <script>
-import VCustomChipTimeRemaining from "@components/molecules/VCustomChipTimeRemaining";
-import taskIconSvg from "@assets/img/courses/task-new.svg";
+import VCustomChipTimeRemaining from "@components/atoms/VCustomChipTimeRemaining";
 import { fromNow, fromNowToFuture } from "@plugins/datetime";
 import {
 	printDateFromStringUTC,
@@ -61,8 +54,35 @@ export default {
 	data() {
 		return {
 			fromNow,
-			taskIconSvg,
 		};
+	},
+	computed: {
+		taskState() {
+			const { duedate, status } = this.homework;
+			if (this.isCloseToDueDate(duedate)) return "warning";
+			if (this.isGradedButMissed(duedate, status)) return "gradedOverdue";
+			if (this.isOverDue(duedate)) return "overdue";
+			if (status.submitted && !status.graded) return "submitted";
+			if (status.graded) return "graded";
+			return undefined;
+		},
+		taskIcon() {
+			const stateIcons = {
+				warning: "$taskOpenFilled",
+				overdue: "$taskMissed",
+				submitted: "$taskDone",
+				graded: "$taskDoneFilled",
+				gradedOverdue: "$taskMissedFilled",
+				open: "$taskOpenFilled",
+			};
+			return stateIcons[this.taskState] || stateIcons["open"];
+		},
+		iconColor() {
+			return this.homework.displayColor || this.defaultIconColor;
+		},
+		defaultIconColor() {
+			return "#455B6A";
+		},
 	},
 	methods: {
 		computedDueDateLabel(dueDate, shorten = false) {
@@ -89,9 +109,18 @@ export default {
 		isOverDue(dueDate) {
 			return dueDate && new Date(dueDate) < new Date();
 		},
+		isGradedButMissed(dueDate, status) {
+			return this.isOverDue(dueDate) && !status.submitted && status.graded;
+		},
 		homeworkHref: (id) => {
 			return "/homework/" + id;
 		},
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.fill {
+	fill: currentColor;
+}
+</style>

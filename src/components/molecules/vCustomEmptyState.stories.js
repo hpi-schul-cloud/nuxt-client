@@ -7,7 +7,7 @@ const imgHeight = "300px";
 const title = "Es gibt keine offenen Aufgaben.";
 const subtitle = "Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!";
 
-storiesOf("0 Vuetify/EmptyState", module).add("vCustomEmptyState", () => ({
+storiesOf("0 Vuetify/Molecules", module).add("vCustomEmptyState", () => ({
 	components: {
 		vCustomEmptyState,
 	},

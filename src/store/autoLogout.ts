@@ -48,7 +48,8 @@ const decrementRemainingTime: any = (
 				remainingTimeInSeconds,
 				setRemainingTimeInSeconds,
 				active,
-				showWarningOnRemainingSeconds.setActive
+				showWarningOnRemainingSeconds,
+				setActive
 			);
 		}
 	}, 1000 * decRstIntervallSec);
@@ -180,12 +181,15 @@ export class AutoLogoutModule extends VuexModule {
 
 	@Mutation
 	setInit(
-		showWarningOnRemainingSeconds: number,
-		defaultRemainingTimeInSeconds: number
+		showWarningOnRemainingSeconds?: number,
+		defaultRemainingTimeInSeconds?: number
 	) {
-		this.showWarningOnRemainingSeconds = showWarningOnRemainingSeconds || 3600;
-		this.defaultRemainingTimeInSeconds =
-			defaultRemainingTimeInSeconds || 3600 * 2;
+		if (showWarningOnRemainingSeconds !== undefined) {
+			this.showWarningOnRemainingSeconds = showWarningOnRemainingSeconds;
+		}
+		if (defaultRemainingTimeInSeconds !== undefined) {
+			this.defaultRemainingTimeInSeconds = defaultRemainingTimeInSeconds;
+		}
 	}
 
 	@Mutation

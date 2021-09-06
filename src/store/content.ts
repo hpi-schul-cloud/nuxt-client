@@ -17,7 +17,7 @@ type Query = {
 	searchQuery: string;
 };
 
-type Resource = {
+export interface Resource {
 	access: string[];
 	aspects: string[];
 	collection: any;
@@ -46,7 +46,7 @@ type Resource = {
 	size: string;
 	title: string;
 	type: string;
-};
+}
 
 type Resources = {
 	total: number;
@@ -270,8 +270,8 @@ export class Content extends VuexModule {
 	}
 
 	@Mutation
-	initMutation(payload: boolean | null): void {
-		this.collectionsFeatureFlag = payload;
+	initMutation(payload?: boolean): void {
+		this.collectionsFeatureFlag = payload || null;
 	}
 
 	@Mutation
