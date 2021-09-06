@@ -30,8 +30,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 					namespaced: true,
 					getters: {
 						getStatus: () => "completed",
-						isListEmpty: () => false,
-						isListFilled: () => true,
+						hasNoHomeworks: () => false,
 						getCourses: () => coursesStudent,
 						getOverDueHomeworks: () => overDueHomeworks,
 						getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
@@ -40,7 +39,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 						getGradedHomeworks: () => gradedHomeworks,
 					},
 					actions: {
-						getHomeworksDashboard: () => {},
+						getAllHomeworks: () => {},
 						updateFilter: () => {},
 					},
 				},
@@ -68,15 +67,14 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 					namespaced: true,
 					getters: {
 						getStatus: () => "completed",
-						isListEmpty: () => false,
-						isListFilled: () => true,
+						hasNoHomeworks: () => false,
 						getCourses: () => coursesTeacher,
 						getOverDueHomeworks: () => overDueHomeworksTeacher,
 						getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
 						getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
 					},
 					actions: {
-						getHomeworksDashboard: () => {},
+						getAllHomeworks: () => {},
 						updateFilter: () => {},
 					},
 				},

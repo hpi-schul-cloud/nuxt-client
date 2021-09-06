@@ -2,21 +2,15 @@
 	<section class="homework-dashboard-student">
 		<v-tabs-items v-model="tab">
 			<v-tab-item>
-				<v-custom-empty-state
-					v-if="!hasOpenHomeworks"
-					:image="emptyStateImage"
-					:title="$t('pages.homeworks.student.open.emptyState.title')"
-					:subtitle="$t('pages.homeworks.student.open.emptyState.subtitle')"
-					class="mt-16"
-				/>
 				<v-custom-double-panels
-					v-else
 					:panel-one-count="noDueDateHomeworks.length"
-					:panel-two-count="dueDateHomeworks.length + overDueHomeworks.length"
+					:panel-two-count="
+						withDueDateHomeworks.length + overdueHomeworks.length
+					"
 					:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
 					:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
 					:status="status"
-					:is-empty="!hasOpenHomeworks"
+					:is-empty="hasNoOpenHomeworks"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -24,27 +18,33 @@
 					</template>
 					<template v-slot:panelTwo>
 						<homeworks-list
-							:homeworks="dueDateHomeworks"
+							:homeworks="withDueDateHomeworks"
 							:title="$t('pages.homeworks.subtitleOpen')"
 							type="student"
 						/>
 						<homeworks-list
-							:homeworks="overDueHomeworks"
+							:homeworks="overdueHomeworks"
 							:title="$t('pages.homeworks.student.subtitleOverDue')"
 							type="student"
 						/>
 					</template>
 				</v-custom-double-panels>
+				<v-custom-empty-state
+					v-if="hasNoOpenHomeworks"
+					:image="emptyStateImage"
+					:title="$t('pages.homeworks.student.open.emptyState.title')"
+					:subtitle="$t('pages.homeworks.student.open.emptyState.subtitle')"
+					class="mt-16"
+				/>
 			</v-tab-item>
 			<v-tab-item>
 				<v-custom-double-panels
-					v-if="hasCompletedHomeworks"
 					:panel-one-count="gradedHomeworks.length"
 					:panel-two-count="submittedHomeworks.length"
 					:panel-one-title="$t('pages.homeworks.subtitleGraded')"
 					:panel-two-title="$t('pages.homeworks.subtitleNotGraded')"
 					:status="status"
-					:is-empty="!hasCompletedHomeworks"
+					:is-empty="hasNoCompletedHomeworks"
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
@@ -55,7 +55,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-else
+					v-if="hasNoCompletedHomeworks"
 					:image="emptyStateImage"
 					:title="$t('pages.homeworks.student.submitted.emptyState.title')"
 					class="mt-16"
@@ -88,16 +88,27 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			status: "getStatus",
-			dueDateHomeworks: "getOpenHomeworksWithDueDate",
-			overDueHomeworks: "getOverDueHomeworks",
-			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
-			gradedHomeworks: "getGradedHomeworks",
-			submittedHomeworks: "getSubmittedHomeworks",
-			status: "getStatus",
-			isListEmpty: "isListEmpty",
-			hasOpenHomeworks: "hasOpenHomeworks",
-			hasCompletedHomeworks: "hasCompletedHomeworks",
+			openHomeworks: "getOpenHomeworksForStudent",
+			completedHomeworks: "getCompletedHomeworksForStudent",
+			hasNoHomeworks: "hasNoHomeworks",
+			hasNoOpenHomeworks: "hasNoOpenHomeworks",
+			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
 		}),
+		overdueHomeworks: function () {
+			return this.openHomeworks.overdue;
+		},
+		noDueDateHomeworks: function () {
+			return this.openHomeworks.noDueDate;
+		},
+		withDueDateHomeworks: function () {
+			return this.openHomeworks.withDueDate;
+		},
+		submittedHomeworks: function () {
+			return this.completedHomeworks.submitted;
+		},
+		gradedHomeworks: function () {
+			return this.completedHomeworks.graded;
+		},
 	},
 };
 </script>

@@ -25,7 +25,7 @@
 		</div>
 		<v-container class="v-container mt-5 mb-14">
 			<v-custom-autocomplete
-				v-if="!isListEmpty"
+				v-if="!hasNoHomeworks"
 				v-model="selectedCourses"
 				:items="courses"
 				:label="$t('pages.homeworks.labels.filter')"
@@ -67,10 +67,9 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			status: "getStatus",
-			isListFilled: "isListFilled",
-			isListEmpty: "isListEmpty",
-			hasOpenHomeworks: "hasOpenHomeworks",
-			hasCompletedHomeworks: "hasCompletedHomeworks",
+			hasNoHomeworks: "hasNoHomeworks",
+			hasNoOpenHomeworks: "hasNoOpenHomeworks",
+			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
 			courses: "getCourses",
 		}),
 		isStudent: function () {
@@ -79,17 +78,17 @@ export default {
 		isFilterDisabled: function () {
 			if (this.selectedCourses.length > 0) return false;
 
-			if (this.tab === 0 && !this.hasOpenHomeworks) {
+			if (this.tab === 0 && this.hasNoOpenHomeworks) {
 				return true;
-			} else if (this.tab === 1 && !this.hasCompletedHomeworks) {
+			} else if (this.tab === 1 && this.hasNoCompletedHomeworks) {
 				return true;
 			} else {
 				return false;
 			}
 		},
 	},
-	mounted() {
-		this.$store.dispatch("homeworks/getHomeworksDashboard");
+	created() {
+		this.$store.dispatch("homeworks/getAllHomeworks");
 	},
 	methods: {
 		filterByCourse() {
