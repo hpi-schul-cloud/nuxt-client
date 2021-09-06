@@ -1,7 +1,5 @@
 import {
 	homeworks,
-	openHomeworks,
-	completedHomeworks,
 	submittedHomeworks,
 	gradedHomeworks,
 	openHomeworksWithDueDate,
@@ -189,6 +187,11 @@ describe("store/homeworks", () => {
 			status: "completed",
 			courseFilter: ["Mathe"],
 		};
+		const emptyState = {
+			homeworks: [],
+			status: "completed",
+			courseFilter: [],
+		};
 		const { getters } = storeModule;
 
 		describe("getHomeworks", () => {
@@ -209,17 +212,15 @@ describe("store/homeworks", () => {
 			});
 		});
 
-		describe("hasOpenHomeworks", () => {
-			it("Should return true, if it's loaded and there are open (neither submitted nor graded) homeworks", () => {
-				const mockGetter = { getOpenHomeworks: openHomeworks };
-				expect(getters.hasOpenHomeworks(studentState, mockGetter)).toBe(true);
+		describe("hasNoOpenHomeworks", () => {
+			it("Should return true, if it's loaded and there are no open homeworks", () => {
+				expect(getters.hasNoOpenHomeworks(emptyState)).toBe(true);
 			});
 		});
 
-		describe("hasCompletedHomeworks", () => {
-			it("Should return true, if it's loaded and there are completed homeworks", () => {
-				const mockGetter = { getCompletedHomeworks: completedHomeworks };
-				expect(getters.hasCompletedHomeworks(studentState, mockGetter)).toBe(
+		describe("hasNoCompletedHomeworks", () => {
+			it("Should return true, if it's loaded and there are no completed homeworks", () => {
+				expect(getters.hasNoCompletedHomeworks(emptyState)).toBe(
 					true
 				);
 			});
@@ -327,28 +328,6 @@ describe("store/homeworks", () => {
 		describe("getCourses", () => {
 			it("Should return all relevant courses", () => {
 				expect(getters.getCourses(studentState)).toStrictEqual(coursesStudent);
-			});
-		});
-
-		describe("getCoursesOpen", () => {
-			it("Should return all relevant open courses", () => {
-				const mockGetter = {
-					getHomeworks: openHomeworks,
-				};
-				expect(getters.getCoursesOpen(studentState, mockGetter)).toStrictEqual(
-					coursesOpen
-				);
-			});
-		});
-
-		describe("getCoursesCompleted", () => {
-			it("Should return all relevant completed courses", () => {
-				const mockGetter = {
-					getHomeworks: completedHomeworks,
-				};
-				expect(
-					getters.getCoursesCompleted(studentState, mockGetter)
-				).toStrictEqual(coursesCompleted);
 			});
 		});
 	});

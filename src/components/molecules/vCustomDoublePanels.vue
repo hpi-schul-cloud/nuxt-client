@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<v-expansion-panels flat accordion mandatory>
+		<v-expansion-panels v-model="expanded" flat accordion mandatory>
 			<v-expansion-panel :disabled="isPanelOneDisabled">
 				<v-expansion-panel-header v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
@@ -11,6 +11,7 @@
 				<v-expansion-panel-header
 					v-else-if="!isEmpty"
 					class="text-h6 font-weight-bold pa-0"
+					@click="toggle"
 				>
 					{{ panelOneTitle }}
 					<template v-slot:actions
@@ -32,6 +33,7 @@
 				<v-expansion-panel-header
 					v-else-if="!isEmpty"
 					class="text-h6 font-weight-bold pa-0"
+					@click="toggle"
 				>
 					{{ panelTwoTitle }}
 					<template v-slot:actions>

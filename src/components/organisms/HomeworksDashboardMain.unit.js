@@ -32,8 +32,8 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 					graded: gradedHomeworks,
 				}),
 				getCourses: () => courses,
-				hasOpenHomeworks: () => true,
-				hasCompletedHomeworks: () => true,
+				hasNoOpenHomeworks: () => false,
+				hasNoCompletedHomeworks: () => false,
 			},
 			actions: {
 				getAllHomeworks,
@@ -55,7 +55,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 					noDueDate: noDueDateHomeworksTeacher,
 				}),
 				getCourses: () => coursesTeacher,
-				hasOpenHomeworks: () => true,
+				hasNoOpenHomeworks: () => false,
 			},
 			actions: {
 				getAllHomeworks,
@@ -68,7 +68,11 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoHomeworks: () => true,
-				getHomeworks: () => [],
+				getOpenHomeworksForTeacher: () => ({
+					overdue: [],
+					withDueDate: [],
+					noDueDate: [],
+				}),
 				getCourses: () => [],
 			},
 			actions: {
@@ -77,7 +81,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		},
 	};
 
-	/* const mockStoreEmptyOpen = {
+	const mockStoreEmptyOpen = {
 		homeworks: {
 			getters: {
 				getStatus: () => "completed",
@@ -90,15 +94,16 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 					submitted: submittedHomeworks,
 					graded: gradedHomeworks,
 				}),
-				hasOpenHomeworks: () => false,
-				hasCompletedHomeworks: () => true,
-				getCoursesOpen: () => [],
+				hasNoOpenHomeworks: () => true,
+				hasNoCompletedHomeworks: () => false,
+				hasNoHomeworks: () => false,
+				getCourses: () => courses,
 			},
 			actions: {
 				getAllHomeworks,
 			},
 		},
-	}; */
+	};
 	let vuetify;
 
 	beforeEach(() => {
@@ -225,7 +230,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		});
 
 		const autocompleteEl = wrapper.find(".v-autocomplete");
-		await autocompleteEl.vm.$emit("change");
+		await autocompleteEl.vm.$emit("selected-item");
 
 		expect(mockMethod).toHaveBeenCalled();
 	});
@@ -253,7 +258,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
 	});
 
-	/* it("Should disable filter when active tab contains empty list", () => {
+	it("Should disable filter when active tab contains empty list", () => {
 		const wrapper = mount(HomeworksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
@@ -274,5 +279,5 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		expect(wrapper.vm.isFilterDisabled).toBe(true);
 		wrapper.setData({ tab: 1 });
 		expect(wrapper.vm.isFilterDisabled).toBe(false);
-	}); */
+	});
 });

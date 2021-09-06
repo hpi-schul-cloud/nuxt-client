@@ -65,9 +65,9 @@ const module = {
 			commit("resetBusinessError");
 			commit("setStatus", "pending");
 			try {
-				//const response = await this.$axios.$get("/v3/tasks/");
+				const response = await this.$axios.$get("/v3/tasks/");
 
-				commit("setHomeworks", []);
+				commit("setHomeworks", response.data);
 				commit("setStatus", "completed");
 			} catch (error) {
 				if (error.response) {
