@@ -17,7 +17,7 @@ type BusinessError = {
 	message: string;
 };
 
-export type Envs = {
+export interface Envs {
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
 	DOCUMENT_BASE_DIR: string;
 	FALLBACK_DISABLED?: boolean;
@@ -28,7 +28,7 @@ export type Envs = {
 	FEATURE_TEAMS_ENABLED?: boolean;
 	FEATURE_SCHOOL_POLICY_ENABLED?: boolean;
 	FEATURE_VIDEOCONFERENCE_ENABLED?: boolean;
-	FEATURE_MATRIX_MESSENGER_ENABLED?: string | undefined;
+	FEATURE_MATRIX_MESSENGER_ENABLED?: string;
 	I18N__AVAILABLE_LANGUAGES: string;
 	I18N__DEFAULT_LANGUAGE: string;
 	I18N__DEFAULT_TIMEZONE: string;
@@ -47,7 +47,7 @@ export type Envs = {
 	SC_THEME: string;
 	SC_TITLE: string;
 	SC_SHORT_TITLE: string;
-};
+}
 
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
