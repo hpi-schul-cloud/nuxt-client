@@ -33,11 +33,11 @@ describe("accounts module", () => {
 
 			accountsModule.resetBusinessError = spyResetError;
 			accountsModule.setStatus = spySetStatus;
-			expect(spyResetError).not.toBeCalled();
-			expect(spySetStatus).not.toBeCalled();
+			expect(spyResetError).not.toHaveBeenCalled();
+			expect(spySetStatus).not.toHaveBeenCalled();
 			await accountsModule.getTTL();
-			expect(spyResetError).toBeCalled();
-			expect(spySetStatus).toBeCalled();
+			expect(spyResetError).toHaveBeenCalled();
+			expect(spySetStatus).toHaveBeenCalled();
 		});
 		it("resetJwtTimer action should make a post request to the right path", async () => {
 			const accountsModule = new AccountsModule({});
@@ -52,11 +52,11 @@ describe("accounts module", () => {
 
 			accountsModule.resetBusinessError = spyResetError;
 			accountsModule.setStatus = spySetStatus;
-			expect(spyResetError).not.toBeCalled();
-			expect(spySetStatus).not.toBeCalled();
+			expect(spyResetError).not.toHaveBeenCalled();
+			expect(spySetStatus).not.toHaveBeenCalled();
 			await accountsModule.resetJwtTimer();
-			expect(spyResetError).toBeCalled();
-			expect(spySetStatus).toBeCalled();
+			expect(spyResetError).toHaveBeenCalled();
+			expect(spySetStatus).toHaveBeenCalled();
 		});
 	});
 	describe("mutations", () => {
