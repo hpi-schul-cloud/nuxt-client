@@ -33,8 +33,7 @@ const filterOverdue = (homeworks) => {
 
 const filterCompleted = (homeworks) => {
 	return homeworks.filter(
-		(homework) =>
-			homework.status.submitted >= 1 || homework.status.graded >= 1
+		(homework) => homework.status.submitted >= 1 || homework.status.graded >= 1
 	);
 };
 
@@ -100,13 +99,16 @@ const module = {
 		},
 		hasNoOpenHomeworks: (state) => {
 			return (
-				state.status === "completed" && filterOpen(filterByCourses(state.homeworks, state.courseFilter)).length === 0
+				state.status === "completed" &&
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+					.length === 0
 			);
 		},
 		hasNoCompletedHomeworks: (state) => {
 			return (
-				(state.status === "completed" &&
-					filterCompleted(filterByCourses(state.homeworks, state.courseFilter)).length === 0)
+				state.status === "completed" &&
+				filterCompleted(filterByCourses(state.homeworks, state.courseFilter))
+					.length === 0
 			);
 		},
 		getHomeworks: (state) => state.homeworks,
