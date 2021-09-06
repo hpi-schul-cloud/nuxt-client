@@ -17,7 +17,7 @@ type Query = {
 	searchQuery: string;
 };
 
-type Resource = {
+export interface Resource {
 	access: string[];
 	aspects: string[];
 	collection: any;
@@ -46,7 +46,7 @@ type Resource = {
 	size: string;
 	title: string;
 	type: string;
-};
+}
 
 type Resources = {
 	total: number;
