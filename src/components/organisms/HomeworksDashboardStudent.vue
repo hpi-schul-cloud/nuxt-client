@@ -10,7 +10,7 @@
 					:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
 					:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
 					:status="status"
-					:is-empty="!hasOpenHomeworks"
+					:is-empty="hasNoOpenHomeworks"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -30,7 +30,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasOpenHomeworks"
+					v-if="hasNoOpenHomeworks"
 					:image="emptyStateImage"
 					:title="$t('pages.homeworks.student.open.emptyState.title')"
 					:subtitle="$t('pages.homeworks.student.open.emptyState.subtitle')"
@@ -44,7 +44,7 @@
 					:panel-one-title="$t('pages.homeworks.subtitleGraded')"
 					:panel-two-title="$t('pages.homeworks.subtitleNotGraded')"
 					:status="status"
-					:is-empty="!hasCompletedHomeworks"
+					:is-empty="hasNoCompletedHomeworks"
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
@@ -55,7 +55,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="!hasCompletedHomeworks"
+					v-if="hasNoCompletedHomeworks"
 					:image="emptyStateImage"
 					:title="$t('pages.homeworks.student.submitted.emptyState.title')"
 					class="mt-16"
@@ -90,10 +90,9 @@ export default {
 			status: "getStatus",
 			openHomeworks: "getOpenHomeworksForStudent",
 			completedHomeworks: "getCompletedHomeworksForStudent",
-			status: "getStatus",
 			hasNoHomeworks: "hasNoHomeworks",
-			hasOpenHomeworks: "hasOpenHomeworks",
-			hasCompletedHomeworks: "hasCompletedHomeworks",
+			hasNoOpenHomeworks: "hasNoOpenHomeworks",
+			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
 		}),
 		overdueHomeworks: function () {
 			return this.openHomeworks.overdue;

@@ -9,8 +9,6 @@ import {
 	overDueHomeworks,
 	coursesStudent,
 	coursesTeacher,
-	coursesOpen,
-	coursesCompleted,
 	mathHomeworks,
 	homeworksTeacher,
 	overDueHomeworksTeacher,

@@ -5,8 +5,7 @@ import {
 	overDueHomeworksTeacher,
 	dueDateHomeworksTeacher,
 	noDueDateHomeworksTeacher,
-	coursesOpen,
-	coursesCompleted,
+	courses,
 	coursesTeacher,
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
@@ -32,8 +31,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 					submitted: submittedHomeworks,
 					graded: gradedHomeworks,
 				}),
-				getCoursesOpen: () => coursesOpen,
-				getCoursesCompleted: () => coursesCompleted,
+				getCourses: () => courses,
 				hasOpenHomeworks: () => true,
 				hasCompletedHomeworks: () => true,
 			},
@@ -57,7 +55,6 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 					noDueDate: noDueDateHomeworksTeacher,
 				}),
 				getCourses: () => coursesTeacher,
-				getCoursesOpen: () => coursesOpen,
 				hasOpenHomeworks: () => true,
 			},
 			actions: {
@@ -251,9 +248,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			},
 		});
 
-		expect(wrapper.vm.availableCourses).toStrictEqual(coursesOpen);
+		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
 		wrapper.setData({ tab: 1 });
-		expect(wrapper.vm.availableCourses).toStrictEqual(coursesCompleted);
+		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
 	});
 
 	/* it("Should disable filter when active tab contains empty list", () => {

@@ -31,6 +31,13 @@ const filterOverdue = (homeworks) => {
 	});
 };
 
+const filterCompleted = (homeworks) => {
+	return homeworks.filter(
+		(homework) =>
+			homework.status.submitted >= 1 || homework.status.graded >= 1
+	);
+};
+
 const filterSubmitted = (homeworks) => {
 	return homeworks.filter(
 		(homework) => homework.status.submitted > 0 && homework.status.graded === 0
@@ -58,9 +65,9 @@ const module = {
 			commit("resetBusinessError");
 			commit("setStatus", "pending");
 			try {
-				const response = await this.$axios.$get("/v3/tasks/");
+				//const response = await this.$axios.$get("/v3/tasks/");
 
-				commit("setHomeworks", response.data);
+				commit("setHomeworks", []);
 				commit("setStatus", "completed");
 			} catch (error) {
 				if (error.response) {
@@ -91,16 +98,15 @@ const module = {
 		hasNoHomeworks: (state) => {
 			return state.status === "completed" && state.homeworks.length === 0;
 		},
-		hasOpenHomeworks: (state) => {
+		hasNoOpenHomeworks: (state) => {
 			return (
-				state.status === "completed" && filterOpen(state.homeworks).length > 0
+				state.status === "completed" && filterOpen(filterByCourses(state.homeworks, state.courseFilter)).length === 0
 			);
 		},
-		hasCompletedHomeworks: (state) => {
+		hasNoCompletedHomeworks: (state) => {
 			return (
 				(state.status === "completed" &&
-					filterSubmitted(state.homeworks).length > 0) ||
-				filterGraded(state.homeworks).length > 0
+					filterCompleted(filterByCourses(state.homeworks, state.courseFilter)).length === 0)
 			);
 		},
 		getHomeworks: (state) => state.homeworks,
@@ -150,18 +156,6 @@ const module = {
 		getCourses: (state) => {
 			const courses = new Set(
 				state.homeworks.map((homework) => homework.courseName)
-			);
-			return Array.from(courses);
-		},
-		getCoursesOpen: (state, getters) => {
-			const courses = new Set(
-				getters.getHomeworks.map((homework) => homework.courseName)
-			);
-			return Array.from(courses);
-		},
-		getCoursesCompleted: (state, getters) => {
-			const courses = new Set(
-				getters.getHomeworks.map((homework) => homework.courseName)
 			);
 			return Array.from(courses);
 		},

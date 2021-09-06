@@ -25,16 +25,30 @@
 				/>
 			</template>
 		</v-custom-double-panels>
+		<v-custom-empty-state
+			v-if="hasNoHomeworks"
+			:image="emptyStateImage"
+			:title="$t('pages.homeworks.teacher.emptyState.title')"
+			:subtitle="$t('pages.homeworks.teacher.emptyState.subtitle')"
+			class="mt-16"
+		/>
 	</section>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import HomeworksList from "@components/organisms/HomeworksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
-import { mapGetters } from "vuex";
+import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
 
 export default {
-	components: { HomeworksList, vCustomDoublePanels },
+	components: { vCustomEmptyState, HomeworksList, vCustomDoublePanels },
+	data() {
+		return {
+			emptyStateImage: tasksEmptyState,
+		};
+	},
 	computed: {
 		...mapGetters("homeworks", {
 			openHomeworks: "getOpenHomeworksForTeacher",
