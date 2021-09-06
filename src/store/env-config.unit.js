@@ -165,32 +165,22 @@ describe.skip("store/env-config", () => {
 			});
 		});
 		describe("getAdminToggleStudentLernstoreViewEnabled", () => {
-			it("should return true if Lernstore is enabled and mode is 'EDUSHARING'", () => {
+			it("should return true if Lernstore is enabled", () => {
 				expect(
 					getters.getAdminToggleStudentLernstoreViewEnabled({
 						env: {
 							FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-							LERNSTORE_MODE: "EDUSHARING",
+							FEATURE_LERNSTORE_ENABLED: true,
 						},
 					})
 				).toBe(true);
 			});
-			it("should return false if Lernstore is disabled and mode is 'EDUSHARING'", () => {
+			it("should return false if Lernstore is disabled", () => {
 				expect(
 					getters.getAdminToggleStudentLernstoreViewEnabled({
 						env: {
 							FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
-							LERNSTORE_MODE: "EDUSHARING",
-						},
-					})
-				).toBe(false);
-			});
-			it("should return false if Lernstore is enabled and mode is NOT 'EDUSHARING'", () => {
-				expect(
-					getters.getAdminToggleStudentLernstoreViewEnabled({
-						env: {
-							FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-							LERNSTORE_MODE: "invalid config value",
+							FEATURE_LERNSTORE_ENABLED: true,
 						},
 					})
 				).toBe(false);

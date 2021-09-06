@@ -35,7 +35,7 @@ type Envs = {
 	I18N__FALLBACK_LANGUAGE: string;
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: number;
 	JWT_TIMEOUT_SECONDS: number;
-	LERNSTORE_MODE?: string;
+	FEATURE_LERNSTORE_ENABLED?: boolean;
 	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE?: boolean;
 	MATRIX_MESSENGER__STUDENT_ROOM_CREATION?: boolean;
 	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED?: boolean;
@@ -59,7 +59,7 @@ export const configsFromEnvironmentVars = {
 	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
-	LERNSTORE_MODE: process.env.LERNSTORE_MODE,
+	FEATURE_LERNSTORE_ENABLED: process.env.FEATURE_LERNSTORE_ENABLED,
 };
 
 const retryLimit: number = 10;
@@ -139,7 +139,7 @@ export class EnvConfig extends VuexModule {
 	get getAdminToggleStudentLernstoreViewEnabled() {
 		return (
 			this.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
-			this.env.LERNSTORE_MODE === "EDUSHARING"
+			this.env.FEATURE_LERNSTORE_ENABLED
 		);
 	}
 
