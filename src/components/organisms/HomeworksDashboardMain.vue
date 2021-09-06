@@ -27,7 +27,7 @@
 			<v-custom-autocomplete
 				v-if="!isListEmpty"
 				v-model="selectedCourses"
-				:items="availableCourses"
+				:items="courses"
 				:label="$t('pages.homeworks.labels.filter')"
 				:no-data-text="$t('pages.homeworks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
@@ -60,7 +60,6 @@ export default {
 	},
 	data() {
 		return {
-			availableCourses: [],
 			selectedCourses: [],
 			tab: 0,
 		};
@@ -72,7 +71,7 @@ export default {
 			isListEmpty: "isListEmpty",
 			hasOpenHomeworks: "hasOpenHomeworks",
 			hasCompletedHomeworks: "hasCompletedHomeworks",
-			getCourses: "getCourses",
+			courses: "getCourses",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -90,9 +89,7 @@ export default {
 		},
 	},
 	mounted() {
-		this.$store.dispatch("homeworks/getHomeworksDashboard").then(() => {
-			this.availableCourses = this.getCourses;
-		});
+		this.$store.dispatch("homeworks/getHomeworksDashboard");
 	},
 	methods: {
 		filterByCourse() {

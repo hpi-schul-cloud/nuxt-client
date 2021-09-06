@@ -1,7 +1,7 @@
 <template>
 	<v-list-item :key="homework.id" :href="homeworkGradingHref(homework.id)">
 		<v-list-item-avatar>
-			<v-icon class="fill" :color="defaultIconColor"> $taskOpenFilled </v-icon>
+			<v-icon class="fill" :color="iconColor"> $taskOpenFilled </v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle class="d-inline-flex">
@@ -69,6 +69,9 @@ export default {
 		};
 	},
 	computed: {
+		iconColor() {
+			return this.homework.displayColor || this.defaultIconColor;
+		},
 		defaultIconColor() {
 			return "#455B6A";
 		},
