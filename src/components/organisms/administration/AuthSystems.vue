@@ -109,14 +109,10 @@ export default {
 		...mapActions("schools", ["deleteSystem"]),
 		// TODO - Discuss which systems are still gonna be editable in the future
 		isEditable(system) {
-			return system.type === "ldap"
-				? system.ldapConfig.provider === "general"
-				: false;
+			return system.type === "ldap" && system.ldapConfig.provider === "general";
 		},
 		isRemovable(system) {
-			return system.type === "ldap"
-				? system.ldapConfig.provider === "general"
-				: true;
+			return system.type !== "ldap" || system.ldapConfig.provider === "general";
 		},
 		// TODO - Discuss which systems are deletable by the user in the future
 		openConfirmDeleteDialog(systemId) {
