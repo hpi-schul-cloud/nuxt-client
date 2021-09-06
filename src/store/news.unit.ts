@@ -1,21 +1,26 @@
+import axios from "@/plugins/axios";
 import { NewsModule } from "./news";
 
 jest.mock("../utils/api", () => {
+	const axios = {
+		$get: (path: string) => {
+			if (path === "/v3/news") {
+				return {
+					data: { mockNews: "mock news value" },
+					limit: 1,
+					skip: 2,
+					total: 3,
+				};
+			} else {
+				return { mockNews: "mock news value" };
+			}
+		},
+		$post: (path: string, payload: any) => payload,
+	};
+
 	return {
-		$axios: {
-			$get: (path: string) => {
-				if (path === "/v3/news") {
-					return {
-						data: { mockNews: "mock news value" },
-						limit: 1,
-						skip: 2,
-						total: 3,
-					};
-				} else {
-					return { mockNews: "mock news value" };
-				}
-			},
-			$post: (path: string, payload: any) => payload,
+		serverAPI: {
+			get: () => axios,
 		},
 	};
 });

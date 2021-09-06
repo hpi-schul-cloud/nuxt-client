@@ -6,7 +6,7 @@ import {
 	getModule,
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
-import { $axios } from "../utils/api";
+import { serverAPI } from "../utils/api";
 
 type BusinessError = {
 	statusCode: string;
@@ -52,7 +52,7 @@ export class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.$post("/v1/accounts/jwtTimer");
+			serverAPI.get().$post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
@@ -64,7 +64,7 @@ export class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.$post("/v1/accounts/jwtTimer");
+			serverAPI.get().$post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);

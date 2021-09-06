@@ -1,14 +1,19 @@
+import axios from "@/plugins/axios";
 import { AccountsModule } from "./accounts";
 
 const URL = "/v1/accounts/jwtTimer";
 let requestPath = "";
 
 jest.mock("../utils/api", () => {
+	const axios = {
+		$post: (path: string) => {
+			requestPath = path;
+		},
+	};
+
 	return {
-		$axios: {
-			$post: (path: string) => {
-				requestPath = path;
-			},
+		serverAPI: {
+			get: () => axios,
 		},
 	};
 });

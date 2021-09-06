@@ -6,7 +6,7 @@ import {
 	getModule,
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
-import { $axios } from "../utils/api";
+import { serverAPI } from "../utils/api";
 
 type News = {
 	__v: number;
@@ -149,7 +149,7 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const { data, limit, skip, total } = await $axios.$get(newsUri);
+			const { data, limit, skip, total } = await serverAPI.get().$get(newsUri);
 			this.setNews(data);
 			this.setPagination({ limit, skip, total });
 			this.setStatus("completed");
@@ -163,7 +163,7 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const news = await $axios.$get(`${newsUri}/${newsID}`);
+			const news = await serverAPI.get().$get(`${newsUri}/${newsID}`);
 			this.setCurrent(news);
 			this.setStatus("completed");
 		} catch (error) {
@@ -176,7 +176,7 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await $axios.$post(newsUri, payload);
+			const res = await serverAPI.get().$post(newsUri, payload);
 			this.setCreatedNews(res);
 			this.setStatus("completed");
 		} catch (error) {
@@ -189,7 +189,9 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await $axios.$patch(`${newsUri}/${payload.id}`, payload);
+			const res = await serverAPI
+				.get()
+				.$patch(`${newsUri}/${payload.id}`, payload);
 			this.setCurrent(res);
 			this.setStatus("completed");
 		} catch (error) {
@@ -202,7 +204,7 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await $axios.$delete(`${newsUri}/${id}`);
+			const res = await serverAPI.get().$delete(`${newsUri}/${id}`);
 			this.setCurrent(res);
 			this.setStatus("completed");
 		} catch (error) {

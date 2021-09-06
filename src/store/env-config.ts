@@ -6,7 +6,7 @@ import {
 	getModule,
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
-import { $axios } from "../utils/api";
+import { serverAPI } from "../utils/api";
 import ContentModule from "@/store/content";
 import FilePathsModule from "@/store/filePaths";
 
@@ -168,7 +168,7 @@ export class EnvConfig extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const envs = await $axios.$get("/v1/config/app/public");
+			const envs = await serverAPI.get().$get("/v1/config/app/public");
 			Object.entries(requiredVars).forEach(([key]) => {
 				if (envs[key] == null) {
 					console.warn(`Missing configuration by server for key ${key}`);

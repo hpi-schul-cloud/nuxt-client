@@ -6,7 +6,7 @@ import {
 	getModule,
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
-import { $axios } from "../utils/api";
+import { serverAPI } from "../utils/api";
 import { isCollectionHelper } from "@utils/helpers";
 import EnvConfigModule from "@/store/env-config";
 import hash from "object-hash";
@@ -353,7 +353,7 @@ export class Content extends VuexModule {
 		const queryHash = hash(query);
 		this.setLastQuery(queryHash);
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await serverAPI.get().$get("/v1/edu-sharing", {
 				params: query,
 			});
 
@@ -369,7 +369,7 @@ export class Content extends VuexModule {
 	async addResources(payload: Query) {
 		this.incLoading();
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await serverAPI.get().$get("/v1/edu-sharing", {
 				params: payload,
 			});
 			this.addResourcesMutation(res);
@@ -391,7 +391,7 @@ export class Content extends VuexModule {
 		const queryHash = hash(query);
 		this.setLastQuery(queryHash);
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await serverAPI.get().$get("/v1/edu-sharing", {
 				params: query,
 			});
 
@@ -407,7 +407,7 @@ export class Content extends VuexModule {
 	async addElements(payload = {}) {
 		this.incLoading();
 		try {
-			const res = await $axios.$get("/v1/edu-sharing", {
+			const res = await serverAPI.get().$get("/v1/edu-sharing", {
 				params: payload,
 			});
 			this.addElementsMutation(res);
@@ -425,7 +425,7 @@ export class Content extends VuexModule {
 		};
 		if (params.courseId) {
 			//only search if courseId is existing
-			const res = await $axios.$get("/v1/lessons", { params });
+			const res = await serverAPI.get().$get("/v1/lessons", { params });
 			this.setLessons(res);
 		}
 	}
@@ -433,10 +433,9 @@ export class Content extends VuexModule {
 	@Action
 	async addToLesson(payload: AddToLessonQuery) {
 		try {
-			await $axios.post(
-				`/v1/lessons/${payload.lessonId}/material`,
-				payload.material
-			);
+			await serverAPI
+				.get()
+				.post(`/v1/lessons/${payload.lessonId}/material`, payload.material);
 			this.setNotificationModal("successModal");
 		} catch (error) {
 			this.setNotificationModal("errorModal");
@@ -446,7 +445,7 @@ export class Content extends VuexModule {
 	@Action
 	async getResourceMetadata(id: string) {
 		this.setStatus("pending");
-		const metadata = await $axios.$get(`/v1/edu-sharing/${id}`);
+		const metadata = await serverAPI.get().$get(`/v1/edu-sharing/${id}`);
 		this.setCurrentResource(metadata);
 		this.setStatus("completed");
 	}

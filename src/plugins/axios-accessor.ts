@@ -1,8 +1,9 @@
 import { Plugin } from "@nuxt/types";
-import { initializeAxios } from "../utils/api";
+import { serverAPI } from "../utils/api";
 
 const accessor: Plugin = ({ $axios }) => {
-	initializeAxios($axios);
+	serverAPI.setup($axios);
+	// initializeAxios($axios);
 };
 
 export default accessor;
