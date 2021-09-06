@@ -38,6 +38,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-201 - removed the both unused auth action hasRole and roles store module
 
+### Fixed
+
+- BC-191 - fix ldap edit button showing up for uneditable systems
+
 ## [26.9.1] - 2021-08-16
 
 - SC-9192 - fix add material to course lesson and load exsiting ldap config for modification
