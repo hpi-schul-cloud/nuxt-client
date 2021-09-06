@@ -23,7 +23,7 @@
 						<td>
 							<v-btn
 								v-if="isEditable(system)"
-								class="edit-ldap-btn"
+								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
 								nuxt
@@ -31,7 +31,8 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								class="delete-sytem-btn"
+								v-if="isRemovable(system)"
+								class="delete-system-btn"
 								icon
 								@click.stop="openConfirmDeleteDialog(system._id)"
 							>
@@ -107,7 +108,10 @@ export default {
 	methods: {
 		// TODO - Discuss which systems are still gonna be editable in the future
 		isEditable(system) {
-			return system.type === "ldap";
+			return system.type === "ldap" && system.ldapConfig.provider === "general";
+		},
+		isRemovable(system) {
+			return system.type !== "ldap" || system.ldapConfig.provider === "general";
 		},
 		// TODO - Discuss which systems are deletable by the user in the future
 		openConfirmDeleteDialog(systemId) {
