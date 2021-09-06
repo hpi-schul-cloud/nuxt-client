@@ -36,7 +36,7 @@ type FederalState = {
 	_id: string;
 };
 
-export type School = {
+export interface School {
 	_id: string;
 	name: string;
 	fileStorageType: string;
@@ -65,7 +65,7 @@ export type School = {
 	years: {};
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
-};
+}
 
 const SCHOOL_FEATURES: any = [
 	"rocketChat",

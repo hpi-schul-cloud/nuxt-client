@@ -1,56 +1,7 @@
-import { Auth, User } from "./auth";
+import { Auth } from "./auth";
+import { mockUser } from "../../tests/test-utils/mockObjects";
 import SchoolsModule from "./schools";
 import EnvConfigModule from "./env-config";
-
-const mockUser: User = {
-	_id: "",
-	__v: 0,
-	firstName: "",
-	lastName: "",
-	email: "",
-	updatedAt: "",
-	birthday: "",
-	createdAt: "",
-	preferences: {},
-	schoolId: "",
-	roles: [
-		{
-			_id: "",
-			name: "",
-			updatedAt: "",
-			createdAt: "",
-			roles: [],
-			permissions: [],
-			__v: 2,
-			displayName: "",
-			id: "",
-		},
-	],
-	emailSearchValues: [],
-	firstNameSearchValues: [],
-	lastNameSearchValues: [],
-	consent: {
-		userConsent: {
-			form: "",
-			privacyConsent: true,
-			termsOfUseConsent: true,
-			dateOfPrivacyConsent: "",
-			dateOfTermsOfUseConsent: "",
-		},
-	},
-	forcePasswordChange: false,
-	language: "",
-	fullName: "",
-	id: "",
-	avatarInitials: "",
-	avatarBackgroundColor: "",
-	age: 44,
-	displayName: "",
-	permissions: [],
-	accountId: "",
-	schoolName: "",
-	externallyManaged: false,
-};
 
 jest.useFakeTimers();
 

@@ -25,14 +25,6 @@ const mockStores = {
 			getServerName: () => "dummy-server-name",
 		},
 	},
-	auth: {
-		state: () => ({
-			school: { features: ["messenger"] },
-		}),
-		getters: {
-			getSchool: () => ({ features: ["messenger"] }),
-		},
-	},
 };
 
 describe("MatrixMessenger.unit", () => {

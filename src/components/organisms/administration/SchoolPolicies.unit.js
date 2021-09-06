@@ -3,6 +3,7 @@ import SchoolsModule from "@/store/schools";
 
 // Utilities
 import { mount } from "@vue/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 
 const generateMockStore = (options = {}) => ({
 	schools: {
@@ -27,42 +28,6 @@ const generateMockStore = (options = {}) => ({
 		},
 	},
 });
-
-const mockSchool = {
-	_id: "1",
-	name: "",
-	fileStorageType: "",
-	federalState: "",
-	county: {
-		antaresKey: "",
-		_id: "",
-		countyId: "",
-		name: "",
-		id: "",
-	},
-	systems: [],
-	updatedAt: "",
-	createdAt: "",
-	__v: 0,
-	currentYear: "",
-	purpose: "",
-	features: {
-		rocketChat: false,
-		videoconference: false,
-		messenger: false,
-		studentVisibility: false,
-		messengerSchoolRoom: false,
-		messengerStudentRoomCreate: false,
-	},
-	enableStudentTeamCreation: false,
-	permissions: {},
-	inMaintenance: false,
-	documentBaseDir: "",
-	isExternal: false,
-	id: "",
-	years: {},
-	isTeamCreationByStudentsEnabled: false,
-};
 
 describe("SchoolPolicies", () => {
 	beforeAll(() => {});

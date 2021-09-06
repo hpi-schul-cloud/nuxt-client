@@ -3,6 +3,7 @@ import mock$objects from "../../../../tests/test-utils/pageStubs";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 
 const mockData = [
 	{
@@ -42,42 +43,6 @@ const envs = {
 	DOCUMENT_BASE_DIR: "",
 	SC_TITLE: "",
 	SC_SHORT_TITLE: "",
-};
-
-const mockSchool = {
-	_id: "",
-	name: "",
-	fileStorageType: "",
-	federalState: "",
-	county: {
-		antaresKey: "",
-		_id: "",
-		countyId: "",
-		name: "",
-		id: "",
-	},
-	systems: [],
-	updatedAt: "",
-	createdAt: "",
-	__v: 0,
-	currentYear: "",
-	purpose: "",
-	features: {
-		rocketChat: false,
-		videoconference: false,
-		messenger: false,
-		studentVisibility: false,
-		messengerSchoolRoom: false,
-		messengerStudentRoomCreate: false,
-	},
-	enableStudentTeamCreation: false,
-	permissions: {},
-	inMaintenance: false,
-	documentBaseDir: "",
-	isExternal: false,
-	id: "",
-	years: {},
-	isTeamCreationByStudentsEnabled: false,
 };
 
 describe("teachers/index", () => {

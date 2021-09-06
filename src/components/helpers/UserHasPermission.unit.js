@@ -49,7 +49,7 @@ describe("@components/helpers/UserHasPermission", () => {
 		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have permission", () => {
-		AuthModule.setUser({ permissions: ["user"] });
+		AuthModule.setUser({ permissions: [] });
 		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view true-slot when permission is empty or undefined", () => {
