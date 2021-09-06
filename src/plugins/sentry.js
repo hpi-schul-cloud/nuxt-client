@@ -1,7 +1,8 @@
+import AuthModule from "@/store/auth";
 import Theme from "@theme/config";
 
-export default ({ app, store }) => {
-	const user = store.getters["auth/getUser"];
+export default ({ app }) => {
+	const user = AuthModule.getUser;
 
 	app.$sentry.configureScope((scope) => {
 		scope.setLevel("warn");

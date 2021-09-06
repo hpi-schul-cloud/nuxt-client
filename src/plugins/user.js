@@ -1,10 +1,12 @@
 import Vue from "vue";
-import { mapGetters } from "vuex";
+import AuthModule from "@/store/auth";
 
 export const mixin = {
-	computed: mapGetters("auth", {
-		$user: "getUser",
-	}),
+	computed: {
+		$user() {
+			return AuthModule.getUser;
+		},
+	},
 };
 
 Vue.mixin(mixin);
