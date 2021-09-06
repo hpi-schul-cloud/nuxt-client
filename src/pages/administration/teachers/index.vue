@@ -276,9 +276,6 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("auth", {
-			user: "getUser",
-		}),
 		...mapGetters("users", {
 			teachers: "getList",
 			pagination: "getPagination",
