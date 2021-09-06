@@ -11,7 +11,7 @@ import { $cookies } from "@/utils/cookies-initializer";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule, { School } from "@/store/schools";
 
-type User = {
+export interface User {
 	_id: string;
 	__v: number;
 	firstName: string;
@@ -39,7 +39,7 @@ type User = {
 	accountId: string;
 	schoolName: string;
 	externallyManaged: boolean;
-};
+}
 
 @Module({
 	name: "auth",

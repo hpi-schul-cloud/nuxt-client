@@ -1,8 +1,8 @@
-import { Auth } from "./auth";
+import { Auth, User } from "./auth";
 import SchoolsModule from "./schools";
 import EnvConfigModule from "./env-config";
 
-const mockUser = {
+const mockUser: User = {
 	_id: "",
 	__v: 0,
 	firstName: "",
