@@ -183,7 +183,7 @@ export class EnvConfig extends VuexModule {
 			ContentModule.init();
 			FilePathsModule.init();
 			this.setStatus("completed");
-		} catch (error) {
+		} catch (error: any) {
 			this.setBusinessError(error);
 			this.setStatus("error");
 			console.error(`Configuration could not be loaded from the server`);
