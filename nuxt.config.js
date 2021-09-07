@@ -47,7 +47,7 @@ module.exports = {
 		MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 		MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
 		// env vars needed at runtime for server middleware:
-		LERNSTORE_MODE: process.env.LERNSTORE_MODE,
+		FEATURE_LERNSTORE_ENABLED: process.env.FEATURE_LERNSTORE_ENABLED,
 		// CORS_ENABLED: process.env.CORS_ENABLED || false,
 		// SECURITY_HEADERS_ENABLED: process.env.SECURITY_HEADERS_ENABLED || false,
 		// LEGACY_CLIENT_URL

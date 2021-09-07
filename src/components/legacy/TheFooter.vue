@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import AuthModule from "@/store/auth";
 
 export default {
 	data() {
@@ -58,9 +58,9 @@ export default {
 		return {};
 	},
 	computed: {
-		...mapGetters("auth", {
-			school: "getSchool",
-		}),
+		school() {
+			return AuthModule.getSchool;
+		},
 		currentYear() {
 			return new Date().getFullYear();
 		},

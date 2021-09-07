@@ -18,6 +18,7 @@ import {
 	dueDateHomeworksTeacher,
 } from "@@/stories/mockData/Homeworks";
 import storeModule from "./homeworks";
+import AuthModule from "@/store/auth";
 
 describe("store/homeworks", () => {
 	describe("actions", () => {
@@ -38,6 +39,8 @@ describe("store/homeworks", () => {
 
 		describe("getHomeworksDashboard", () => {
 			it("should call the right endpoint for teachers", async () => {
+				AuthModule.setUser(ctxMockTeacher.rootState.auth.user);
+
 				const receivedRequests = [];
 
 				storeModule.actions.$axios = {
@@ -54,6 +57,8 @@ describe("store/homeworks", () => {
 			});
 
 			it("should call both endpoint for students", async () => {
+				AuthModule.setUser(ctxMockStudent.rootState.auth.user);
+
 				const receivedRequests = [];
 
 				storeModule.actions.$axios = {

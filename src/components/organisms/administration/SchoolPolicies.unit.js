@@ -1,7 +1,9 @@
 import SchoolPolicies from "./SchoolPolicies";
+import SchoolsModule from "@/store/schools";
 
 // Utilities
 import { mount } from "@vue/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 
 const generateMockStore = (options = {}) => ({
 	schools: {
@@ -47,6 +49,7 @@ describe("SchoolPolicies", () => {
 	});
 
 	it("should trigger the fetchConsentVersions action", () => {
+		SchoolsModule.setSchool(mockSchool);
 		const mockStore = generateMockStore();
 		mount(SchoolPolicies, {
 			...createComponentMocks({
@@ -61,7 +64,7 @@ describe("SchoolPolicies", () => {
 		expect(
 			mockStore["consent-versions"].actions.fetchConsentVersions.mock
 				.calls[0][1].schoolId
-		).toBe(mockStore["schools"].getters.getSchool().id);
+		).toBe(SchoolsModule.getSchool.id);
 	});
 
 	it("should load skeleton while loading", () => {
