@@ -1,6 +1,10 @@
 <!-- eslint-disable max-lines -->
 <template>
-	<section class="section">
+	<default-wireframe
+		:breadcrumbs="breadcrumbs"
+		:full-width="true"
+		:headline="$t('pages.administration.teachers.index.title')"
+	>
 		<progress-modal
 			:active="isDeleting"
 			:percent="deletedPercent"
@@ -10,10 +14,6 @@
 			"
 			data-testid="progress-modal"
 		/>
-		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">
-			{{ $t("pages.administration.teachers.index.title") }}
-		</h1>
 
 		<base-input
 			v-model="searchQuery"
@@ -125,11 +125,12 @@
 				},
 			]"
 		/>
-	</section>
+	</default-wireframe>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import EnvConfigModule from "@/store/env-config";
+import DefaultWireframe from "@components/molecules/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
@@ -141,9 +142,10 @@ import { printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
 
 export default {
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	components: {
 		DataFilter,
+		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,

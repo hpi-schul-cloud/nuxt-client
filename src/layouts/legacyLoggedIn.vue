@@ -44,59 +44,6 @@ import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
 
-const topbarBaseActions = [
-	{
-		type: "popupIcon",
-		title: "QR-Code",
-		icon: "qrcode",
-		component: "menu-qr-code",
-	},
-	{
-		type: "popupIcon",
-		title: "Hilfe",
-		icon: "question",
-		component: "help-dropdown",
-		config: {
-			menuItems: [
-				{
-					label: "Hilfebereich",
-					icon: "question-circle",
-					action: "/help",
-					source: "fa",
-					target: "_self",
-				},
-				// TODO: implement intro for nuxt-client
-				// {
-				// 	label: "Intro",
-				// 	icon: "map-signs",
-				// 	action: "/",
-				// },
-				{
-					label: "Wunsch oder Problem senden",
-					icon: "pencil",
-					action: "/help?activeForm=team#contact-form",
-					source: "fa",
-					target: "_self",
-				},
-				{
-					label: "Admin deiner Schule kontaktieren",
-					icon: "comment",
-					action: "/help?activeForm=admin#contact-form",
-					source: "fa",
-					target: "_self",
-				},
-				{
-					label: "Fortbildungen",
-					icon: "fortbildung",
-					action: "https://www.lernen.cloud/",
-					source: "custom",
-					target: "_blank",
-				},
-			],
-		},
-	},
-];
-
 export default {
 	components: {
 		TheTopBar,
@@ -114,6 +61,58 @@ export default {
 			pageTitle: this.$theme.short_name,
 			fullscreenMode: sessionStorage.getItem("fullscreen") === "true",
 			expandedMenu: false,
+			topbarBaseActions: [
+				{
+					type: "popupIcon",
+					title: "QR-Code",
+					icon: "qrcode",
+					component: "menu-qr-code",
+				},
+				{
+					type: "popupIcon",
+					title: "Hilfe",
+					icon: "question",
+					component: "help-dropdown",
+					config: {
+						menuItems: [
+							{
+								label: this.$t("global.topbar.actions.help"),
+								icon: "question-circle",
+								action: "/help",
+								source: "fa",
+								target: "_self",
+							},
+							// TODO: implement intro for nuxt-client
+							// {
+							// 	label: "Intro",
+							// 	icon: "map-signs",
+							// 	action: "/",
+							// },
+							{
+								label: this.$t("global.topbar.actions.contactSupport"),
+								icon: "pencil",
+								action: "/help?activeForm=team#contact-form",
+								source: "fa",
+								target: "_self",
+							},
+							{
+								label: this.$t("global.topbar.actions.contactAdmin"),
+								icon: "comment",
+								action: "/help?activeForm=admin#contact-form",
+								source: "fa",
+								target: "_self",
+							},
+							{
+								label: this.$t("global.topbar.actions.training"),
+								icon: "fortbildung",
+								action: "https://www.lernen.cloud/",
+								source: "custom",
+								target: "_blank",
+							},
+						],
+					},
+				},
+			],
 		};
 	},
 	computed: {
@@ -141,7 +140,7 @@ export default {
 		topBarActions() {
 			return this.authenticated
 				? [
-						...topbarBaseActions,
+						...this.topbarBaseActions,
 						{ type: "text", title: this.schoolName },
 						{
 							type: "popupWithInitials",
@@ -151,7 +150,7 @@ export default {
 							event: "logout",
 						},
 				  ]
-				: [...topbarBaseActions];
+				: [...this.topbarBaseActions];
 		},
 		sidebarItems() {
 			const sidebarItems = this.sidebarBaseItems.filter((item) => {

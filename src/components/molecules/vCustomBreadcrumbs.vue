@@ -1,5 +1,5 @@
 <template>
-	<v-breadcrumbs :items="breadcrumbs" :nuxt="true" class="ml-4 px-0 py-0">
+	<v-breadcrumbs :items="breadcrumbs" :nuxt="true" class="px-0 py-0">
 		<template v-slot:item="{ item }">
 			<v-breadcrumbs-item
 				:href="item.href"

@@ -1,9 +1,9 @@
 <template>
-	<section class="section">
-		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">
-			{{ $t("pages.administration.students.new.title") }}
-		</h1>
+	<default-wireframe
+		:headline="$t('pages.administration.students.new.title')"
+		:breadcrumbs="breadcrumbs"
+		:full-width="false"
+	>
 		<form-create-user @create-user="createStudent">
 			<template v-slot:inputs>
 				<base-input
@@ -33,12 +33,13 @@
 				></info-message>
 			</template>
 		</form-create-user>
-	</section>
+	</default-wireframe>
 </template>
 
 <script>
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
+import DefaultWireframe from "@components/molecules/DefaultWireframe.vue";
 
 import { mapGetters } from "vuex";
 
@@ -46,7 +47,9 @@ export default {
 	components: {
 		FormCreateUser,
 		InfoMessage,
+		DefaultWireframe,
 	},
+	layout: "defaultVuetify",
 	meta: {
 		requiredPermissions: ["STUDENT_CREATE"],
 	},
