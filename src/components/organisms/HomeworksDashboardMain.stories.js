@@ -32,11 +32,15 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 						getStatus: () => "completed",
 						hasNoHomeworks: () => false,
 						getCourses: () => coursesStudent,
-						getOverDueHomeworks: () => overDueHomeworks,
-						getOpenHomeworksWithDueDate: () => openHomeworksWithDueDate,
-						getOpenHomeworksWithoutDueDate: () => openHomeworksWithoutDueDate,
-						getSubmittedHomeworks: () => submittedHomeworks,
-						getGradedHomeworks: () => gradedHomeworks,
+						getOpenHomeworksForStudent: () => ({
+							overdue: overDueHomeworks,
+							withDueDate: openHomeworksWithDueDate,
+							noDueDate: openHomeworksWithoutDueDate,
+						}),
+						getCompletedHomeworksForStudent: () => ({
+							submitted: submittedHomeworks,
+							graded: gradedHomeworks,
+						}),
 					},
 					actions: {
 						getAllHomeworks: () => {},
@@ -69,9 +73,11 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 						getStatus: () => "completed",
 						hasNoHomeworks: () => false,
 						getCourses: () => coursesTeacher,
-						getOverDueHomeworks: () => overDueHomeworksTeacher,
-						getOpenHomeworksWithDueDate: () => dueDateHomeworksTeacher,
-						getOpenHomeworksWithoutDueDate: () => noDueDateHomeworksTeacher,
+						getOpenHomeworksForTeacher: () => ({
+							overdue: overDueHomeworksTeacher,
+							withDueDate: dueDateHomeworksTeacher,
+							noDueDate: noDueDateHomeworksTeacher,
+						}),
 					},
 					actions: {
 						getAllHomeworks: () => {},

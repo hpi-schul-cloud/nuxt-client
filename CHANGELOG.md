@@ -13,6 +13,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - BC-81 - removes old lern-store mode env var
+- BC-179 - refactored homeworks store
+
+### Fixed
+
+- BC-195 - fixed course filter for student task dashboard
 
 ## [26.10.0] - 2021-09-03
 
