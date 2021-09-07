@@ -27,7 +27,7 @@ class API {
 	 * pass execution and implement try catches
 	 * add error and response formater to get needed informations
 	 * use errorUtil to set errors in store this is NOT a part of API
-	 * Add error types for application-, request-, validation- and unhandled-Errors
+	 * Add error types for application-, apiResponse-, timeout-, validation-, and unhandled-Errors
 	 * use this
 	 */
 	public get(): NuxtAxiosInstance {
