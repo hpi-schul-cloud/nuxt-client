@@ -7,8 +7,6 @@ enum APINames {
 class API {
 	private axios?: NuxtAxiosInstance;
 	public name: APINames;
-	// public store;
-	// public errorHandler;
 	private err = {
 		notInitilized:
 			"It exist no axios instance, please pass it over constructor or setup().",
@@ -24,21 +22,27 @@ class API {
 		// this.aios.onRequest(this.onRequest);
 	}
 
+	/**
+	 * TODO: set private, add get, post, delete
+	 * pass execution and implement try catches
+	 * add error and response formater to get needed informations
+	 * use errorUtil to set errors in store this is NOT a part of API
+	 * Add error types for application-, request-, validation- and unhandled-Errors
+	 * use this
+	 */
 	public get(): NuxtAxiosInstance {
 		if (this.axios === undefined) {
 			throw new Error(this.err.notInitilized);
 		}
 		return this.axios;
 	}
-
-	// public onError(err) {}
-	// public onRequest(config) {}
 }
 
 class APIHandler {
 	private apis: API[];
 	private err = {
-		nameConflict: "A instance with this name already exist. It can not added.",
+		nameConflict:
+			"An instance with this name already exist. It cannot be added.",
 	};
 
 	constructor() {
