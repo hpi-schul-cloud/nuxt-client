@@ -18,8 +18,6 @@ class API {
 
 	public setup(axios: NuxtAxiosInstance) {
 		this.axios = axios;
-		// this.axios.onError(this.onError);
-		// this.aios.onRequest(this.onRequest);
 	}
 
 	/**
@@ -31,6 +29,7 @@ class API {
 	 * use this
 	 */
 	public get(): NuxtAxiosInstance {
+		console.log("axios", this.name, this.axios);
 		if (this.axios === undefined) {
 			throw new Error(this.err.notInitilized);
 		}
@@ -49,14 +48,14 @@ class APIHandler {
 		this.apis = [];
 	}
 
-	private validateIfNameExist(name: APINames): void {
+	private validateIfNameIsFree(name: APINames): void {
 		if (this.apis.some((api) => api.name === name)) {
 			throw new Error(this.err.nameConflict);
 		}
 	}
 
 	private add(api: API): void {
-		this.validateIfNameExist(api.name);
+		this.validateIfNameIsFree(api.name);
 		this.apis.push(api);
 	}
 
