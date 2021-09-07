@@ -1,5 +1,6 @@
 import SchoolPage from "./school-settings";
 import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
 
 const school = {
 	_id: { $oid: "5f2987e020834114b8efd6f8" },
@@ -37,27 +38,7 @@ const school = {
 	},
 };
 
-const federalState = {
-	_id: "0000b186816abba584714c53",
-	counties: [
-		{
-			antaresKey: "BRB",
-			_id: "5fa55eb53f472a2d986c8812",
-			countyId: 12051,
-			name: "Brandenburg an der Havel",
-		},
-		{
-			antaresKey: "CB",
-			_id: "5fa55eb53f472a2d986c8813",
-			countyId: 12052,
-			name: "Cottbus",
-		},
-	],
-	name: "Brandenburg",
-	abbreviation: "BB",
-};
-
-const currentYear = {
+const year = {
 	_id: "5ebd6dc14a431f75ec9a3e77",
 	name: "2021/22",
 	startDate: "2021-08-01T00:00:00.000Z",
@@ -65,31 +46,44 @@ const currentYear = {
 	isTeamCreationByStudentsEnabled: true,
 };
 
-const generateMockStore = (options = {}) => ({
+const systems = [{ _id: "123", type: "itslearning" }];
+
+const envs = {
+	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
+	JWT_TIMEOUT_SECONDS: 7200,
+	SC_THEME: "default",
+	FEATURE_MATRIX_MESSENGER_ENABLED: true,
+	MATRIX_MESSENGER__EMBED_URI: "__vue_devtool_undefined__",
+	MATRIX_MESSENGER__URI: "__vue_devtool_undefined__",
+	MATRIX_MESSENGER__DISCOVER_URI: "__vue_devtool_undefined__",
+	LERNSTORE_MODE: "__vue_devtool_undefined__",
+	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+	FEATURE_ES_COLLECTIONS_ENABLED: true,
+	FEATURE_EXTENSIONS_ENABLED: true,
+	FEATURE_TEAMS_ENABLED: true,
+	FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
+	FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
+	FEATURE_SCHOOL_POLICY_ENABLED: true,
+	FEATURE_VIDEOCONFERENCE_ENABLED: true,
+	ROCKETCHAT_SERVICE_ENABLED: true,
+	I18N__AVAILABLE_LANGUAGES: "de,en,es",
+	I18N__DEFAULT_LANGUAGE: "de",
+	I18N__DEFAULT_TIMEZONE: "Europe/Berlin",
+	I18N__FALLBACK_LANGUAGE: "de",
+	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/schul-cloud-hpi/",
+	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
+	MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
+	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: true,
+	SC_TITLE: "HPI Schul-Cloud",
+	SC_SHORT_TITLE: "HPI Schul-Cloud",
+};
+
+const mockStore = {
 	"env-config": {
-		getters: {
-			getAdminToggleStudentVisibilityEnabled: () => {
-				return true;
-			},
-			getAdminToggleStudentLernstoreViewEnabled: () => {
-				return true;
-			},
-			getMatrixConfig: () => {
-				return true;
-			},
-			getRocketChatEnabled: () => {
-				return true;
-			},
-			getVideoConferenceEnabled: () => {
-				return true;
-			},
-			getSchoolPolicyEnabled: () => {
-				return true;
-			},
-		},
-		actions: {
-			fetchConsentVersions: jest.fn(),
-		},
+		// actions: {
+		// 	fetchConsentVersions: jest.fn(),
+		// },
 	},
 	"consent-versions": {
 		getters: {
@@ -110,17 +104,14 @@ const generateMockStore = (options = {}) => ({
 	},
 	schools: {
 		getters: {
-			getFederalState: () => {
-				return federalState;
-			},
 			getSchool: () => {
 				return school;
 			},
 			getLoading: () => {
-				return options.loading || false;
+				return false;
 			},
 			getError: () => {
-				return options.error || null;
+				return null;
 			},
 			getSystems: () => {
 				return [{ _id: "123", type: "itslearning" }];
@@ -134,33 +125,24 @@ const generateMockStore = (options = {}) => ({
 			fetchCurrentYear: jest.fn(),
 		},
 	},
-});
+};
 
 describe("SchoolSettingPage", () => {
-	beforeAll(() => {
-		EnvConfigModule.setEnvs({
-			FEATURE_SCHOOL_POLICY_ENABLED: true,
-			I18N__AVAILABLE_LANGUAGES: "de,en,es",
-			FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-			LERNSTORE_MODE: "EDUSHARING",
-			FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
-			FEATURE_VIDEOCONFERENCE_ENABLED: true,
-			ROCKETCHAT_SERVICE_ENABLED: true,
-			FEATURE_MATRIX_MESSENGER_ENABLED: true,
-			MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
-			MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
-			MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: true,
-			VIDEOCONFERENCE_SALT: "salt",
-		});
+	beforeEach(() => {
+		// SchoolsModule.setSchool(school);
+		// SchoolsModule.setFederalState(federalState);
+		SchoolsModule.setCurrentYear(year);
+		SchoolsModule.setSystems(systems);
+		EnvConfigModule.setEnvs(envs);
 	});
 	it(...isValidComponent(SchoolPage));
 
-	it("breadcrumbs should be visible", async () => {
+	it("breadcrumbs should be visible", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore(),
+				store: mockStore,
 			}),
 		});
 
@@ -179,12 +161,12 @@ describe("SchoolSettingPage", () => {
 		);
 	});
 
-	it("page title should be visible", async () => {
+	it("page title should be visible", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore(),
+				store: mockStore,
 			}),
 		});
 
@@ -192,19 +174,19 @@ describe("SchoolSettingPage", () => {
 		expect(titleElement.exists()).toBeTrue();
 	});
 
-	it("tests env var school policy being true", async () => {
+	it("tests env var school policy being true", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore(),
+				store: mockStore,
 			}),
 		});
 
 		expect(wrapper.vm.schoolPolicyEnabled).toBeTrue();
 	});
 
-	it("tests env var school policy being false", async () => {
+	it("tests env var school policy being false", () => {
 		EnvConfigModule.setEnvs({
 			FEATURE_SCHOOL_POLICY_ENABLED: false,
 			I18N__AVAILABLE_LANGUAGES: "de,en,es",
@@ -213,31 +195,31 @@ describe("SchoolSettingPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore(),
+				store: mockStore,
 			}),
 		});
 
-		expect(wrapper.vm.schoolPolicyEnabled).toBe(false);
+		expect(wrapper.vm.schoolPolicyEnabled).toBeFalse();
 	});
 
-	it("tests whether current school year is computed right", async () => {
+	it("tests whether current school year is computed right", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore(),
+				store: mockStore,
 			}),
 		});
 
 		expect(wrapper.vm.currentSchoolYear).toStrictEqual("Schuljahr 2021/22");
 	});
 
-	it("systems section should be visible and shows its data", async () => {
+	it("systems section should be visible and shows its data", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore(),
+				store: mockStore,
 			}),
 		});
 
@@ -245,24 +227,26 @@ describe("SchoolSettingPage", () => {
 		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
 	});
 
-	it("should load skeleton while loading", async () => {
+	it("should load skeleton while loading", () => {
+		SchoolsModule.setLoading(true);
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore({ loading: true }),
+				store: mockStore,
 			}),
 		});
 
 		expect(wrapper.find(".v-skeleton-loader").exists()).toBeTrue();
 	});
 
-	it("error image should visible if schoolError occured", async () => {
+	it("error image should visible if schoolError occured", () => {
+		SchoolsModule.setError({ error: { message: "some errors" } });
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: generateMockStore({ error: { message: "some error" } }),
+				store: mockStore,
 			}),
 		});
 

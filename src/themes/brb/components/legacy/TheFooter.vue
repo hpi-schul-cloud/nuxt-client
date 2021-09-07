@@ -44,14 +44,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import AuthModule from "@/store/auth";
 import FilePathsModule from "@/store/filePaths";
 
 export default {
 	computed: {
-		...mapGetters("auth", {
-			school: "getSchool",
-		}),
+		school() {
+			return AuthModule.getSchool;
+		},
 		currentYear() {
 			return new Date().getFullYear();
 		},

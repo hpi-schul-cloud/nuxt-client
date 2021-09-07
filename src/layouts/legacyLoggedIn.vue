@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import AuthModule from "@/store/auth";
 import TheTopBar from "@components/legacy/TheTopBar";
 import TheSidebar from "@components/legacy/TheSidebar";
 import TheFooter from "@components/legacy/TheFooter";
@@ -117,10 +117,12 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("auth", {
-			user: "getUser",
-			authenticated: "getAuthenticated",
-		}),
+		user() {
+			return AuthModule.getUser;
+		},
+		authenticated() {
+			return AuthModule.getAuthenticated;
+		},
 		firstName() {
 			return this.user && this.user.firstName
 				? this.user.firstName
@@ -204,13 +206,14 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions("auth", ["logout"]),
 		isDemoRole(roles) {
 			return roles.some((role) => role.startsWith("demo"));
 		},
 		handleTopAction(event) {
 			if (event === "logout") {
-				this.logout();
+				// TODO temporary workaround until $cookies are accessible from TS modules
+				this.$cookies.remove("jwt");
+				AuthModule.logout();
 				this.$router.push({ path: "/logout" });
 			}
 			if (event === "fullscreen") {

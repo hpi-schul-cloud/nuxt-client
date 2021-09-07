@@ -1,4 +1,4 @@
-import { mapGetters } from "vuex";
+import AuthModule from "@/store/auth";
 
 export default {
 	props: {
@@ -8,9 +8,9 @@ export default {
 		},
 	},
 	computed: {
-		...mapGetters("auth", {
-			userPermissions: "getUserPermissions",
-		}),
+		userPermissions() {
+			return AuthModule.getUserPermissions;
+		},
 		$_hasPermission() {
 			return this.$_userHasPermission(this.permission);
 		},

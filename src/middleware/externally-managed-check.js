@@ -1,7 +1,9 @@
-export default async ({ app, store, route }) => {
-	const user = store.getters["auth/getUser"];
+import AuthModule from "@/store/auth";
 
-	const userExternallyManaged = store.getters["auth/userIsExternallyManaged"];
+export default async ({ app, route }) => {
+	const user = AuthModule.getUser;
+
+	const userExternallyManaged = AuthModule.userIsExternallyManaged;
 
 	const ACCESS_ALLOWED = route.meta.reduce((allowed, meta) => {
 		if (!allowed || !meta.userNotExternallyManaged) {
