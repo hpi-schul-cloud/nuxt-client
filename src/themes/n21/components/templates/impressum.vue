@@ -20,7 +20,10 @@
 			Telefax: +49 (0)511 3536621-99
 		</p>
 		<p>
-			<b>Support-Anfragen</b> richten Sie bitte direkt an <base-link href="mailto:nbc-support@netz-21.de">nbc-support@netz-21.de</base-link>.
+			<b>Support-Anfragen</b> richten Sie bitte direkt an
+			<base-link href="mailto:nbc-support@netz-21.de"
+				>nbc-support@netz-21.de</base-link
+			>.
 		</p>
 		<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
 		<p>
@@ -35,24 +38,22 @@
 			Die Niedersächsische Bildungscloud ist ein Landespilotprojekt, welches
 			durch die Landesinitiative n-21 im Auftrag des Niedersächsischen
 			Kultusministerium und in technisch-organisatorischer Kooperation mit der
-			Dataport AöR (<base-link
-				href="https://www.dataport.de"
-				target="_blank"
+			Dataport AöR (<base-link href="https://www.dataport.de" target="_blank"
 				>https://www.dataport.de</base-link
 			>) durchgeführt wird.
 		</p>
 		<p>
 			Die Inhalte der Niedersächsischen Bildungscloud stellen keine offiziellen
-			Verlautbarungen des niedersächsischen Kultusministeriums oder Dataports dar.
-			Für die veröffentlichten Inhalte sind die jeweiligen Autor/innen selbst
-			verantwortlich. Ohne vorherige schriftliche Genehmigung ist eine
+			Verlautbarungen des niedersächsischen Kultusministeriums oder Dataports
+			dar. Für die veröffentlichten Inhalte sind die jeweiligen Autor/innen
+			selbst verantwortlich. Ohne vorherige schriftliche Genehmigung ist eine
 			kommerzielle Verbreitung der über die Niedersächsische Bildungscloud
 			verfügbaren Inhalte ausdrücklich untersagt, außer diese sind ausdrücklich
 			gekennzeichnet. Die redaktionelle Verantwortung für den Inhalt verlinkter
 			Webseiten anderer Anbieter (einschließlich der dort verankerten Links zu
-			Dritten), insbesondere die Verantwortung für die Beachtung der Bestimmungen
-			des Jugendschutz- und Datenschutzrechts, trägt in jeder Hinsicht der
-			jeweilige Anbieter allein.
+			Dritten), insbesondere die Verantwortung für die Beachtung der
+			Bestimmungen des Jugendschutz- und Datenschutzrechts, trägt in jeder
+			Hinsicht der jeweilige Anbieter allein.
 		</p>
 		<p>
 			Die Landesinitiative n-21 überprüft und aktualisiert regelmäßig die
@@ -75,9 +76,11 @@
 			die Landesinitiative n-21 zulässig.
 		</p>
 		<p>
-			<b>Wir wünschen Ihnen einen informativen
-			Aufenthalt auf unseren Websites und freuen uns über Vorschläge, Wünsche
-			oder Kritik zur Niedersächsischen Bildungscloud.</b>
+			<b
+				>Wir wünschen Ihnen einen informativen Aufenthalt auf unseren Websites
+				und freuen uns über Vorschläge, Wünsche oder Kritik zur
+				Niedersächsischen Bildungscloud.</b
+			>
 		</p>
 	</div>
 </template>
