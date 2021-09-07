@@ -17,7 +17,7 @@ type BusinessError = {
 	message: string;
 };
 
-type Envs = {
+export interface Envs {
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
 	DOCUMENT_BASE_DIR: string;
 	FALLBACK_DISABLED?: boolean;
@@ -25,26 +25,29 @@ type Envs = {
 	FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED?: boolean;
 	FEATURE_ES_COLLECTIONS_ENABLED?: boolean;
 	FEATURE_EXTENSIONS_ENABLED?: boolean;
+	FEATURE_LERNSTORE_ENABLED?: boolean;
 	FEATURE_TEAMS_ENABLED?: boolean;
 	FEATURE_SCHOOL_POLICY_ENABLED?: boolean;
 	FEATURE_VIDEOCONFERENCE_ENABLED?: boolean;
-	FEATURE_MATRIX_MESSENGER_ENABLED?: boolean;
+	FEATURE_MATRIX_MESSENGER_ENABLED?: string;
 	I18N__AVAILABLE_LANGUAGES: string;
 	I18N__DEFAULT_LANGUAGE: string;
 	I18N__DEFAULT_TIMEZONE: string;
 	I18N__FALLBACK_LANGUAGE: string;
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: number;
 	JWT_TIMEOUT_SECONDS: number;
-	LERNSTORE_MODE?: string;
 	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE?: boolean;
 	MATRIX_MESSENGER__STUDENT_ROOM_CREATION?: boolean;
 	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED?: boolean;
+	MATRIX_MESSENGER__DISCOVER_URI: string | undefined;
+	MATRIX_MESSENGER__EMBED_URI: string | undefined;
+	MATRIX_MESSENGER__URI: string | undefined;
 	NOT_AUTHENTICATED_REDIRECT_URL: string;
 	ROCKETCHAT_SERVICE_ENABLED?: boolean;
 	SC_THEME: string;
 	SC_TITLE: string;
 	SC_SHORT_TITLE: string;
-};
+}
 
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
@@ -56,10 +59,10 @@ export const requiredVars = {
 export const configsFromEnvironmentVars = {
 	FEATURE_MATRIX_MESSENGER_ENABLED:
 		process.env.FEATURE_MATRIX_MESSENGER_ENABLED,
+	FEATURE_LERNSTORE_ENABLED: process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == 'true' ,
 	MATRIX_MESSENGER__EMBED_URI: process.env.MATRIX_MESSENGER__EMBED_URI,
 	MATRIX_MESSENGER__URI: process.env.MATRIX_MESSENGER__URI,
 	MATRIX_MESSENGER__DISCOVER_URI: process.env.MATRIX_MESSENGER__DISCOVER_URI,
-	LERNSTORE_MODE: process.env.LERNSTORE_MODE,
 };
 
 const retryLimit: number = 10;
@@ -74,6 +77,7 @@ const retryLimit: number = 10;
 export class EnvConfig extends VuexModule {
 	env: Envs = {
 		...requiredVars,
+		...configsFromEnvironmentVars,
 		FALLBACK_DISABLED: false,
 		ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		I18N__AVAILABLE_LANGUAGES: "",
@@ -139,7 +143,7 @@ export class EnvConfig extends VuexModule {
 	get getAdminToggleStudentLernstoreViewEnabled() {
 		return (
 			this.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
-			this.env.LERNSTORE_MODE === "EDUSHARING"
+			this.env.FEATURE_LERNSTORE_ENABLED
 		);
 	}
 
@@ -179,7 +183,7 @@ export class EnvConfig extends VuexModule {
 			ContentModule.init();
 			FilePathsModule.init();
 			this.setStatus("completed");
-		} catch (error) {
+		} catch (error: any) {
 			this.setBusinessError(error);
 			this.setStatus("error");
 			console.error(`Configuration could not be loaded from the server`);

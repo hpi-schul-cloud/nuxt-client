@@ -36,8 +36,17 @@ const requiredVars = {
 	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
 };
 
+const configsFromEnvironmentVars = {
+	FEATURE_MATRIX_MESSENGER_ENABLED: undefined,
+	MATRIX_MESSENGER__EMBED_URI: "",
+	MATRIX_MESSENGER__URI: "",
+	MATRIX_MESSENGER__DISCOVER_URI: "",
+	LERNSTORE_MODE: "",
+};
+
 const envs = {
 	...requiredVars,
+	...configsFromEnvironmentVars,
 	FALLBACK_DISABLED: false,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 	I18N__AVAILABLE_LANGUAGES: "",
@@ -73,15 +82,15 @@ describe("filePaths module", () => {
 			filePathsModule.setSpecificFiles = spySpecificFiles;
 			filePathsModule.setGlobalFiles = spyGlobalFiles;
 
-			expect(spyBaseDir).not.toBeCalled();
-			expect(spySpecificFiles).not.toBeCalled();
-			expect(spyGlobalFiles).not.toBeCalled();
+			expect(spyBaseDir).not.toHaveBeenCalled();
+			expect(spySpecificFiles).not.toHaveBeenCalled();
+			expect(spyGlobalFiles).not.toHaveBeenCalled();
 
 			await filePathsModule.init();
 
-			expect(spyBaseDir).toBeCalled();
-			expect(spySpecificFiles).toBeCalled();
-			expect(spyGlobalFiles).toBeCalled();
+			expect(spyBaseDir).toHaveBeenCalled();
+			expect(spySpecificFiles).toHaveBeenCalled();
+			expect(spyGlobalFiles).toHaveBeenCalled();
 		});
 		it("sets baseDir to DOCUMENT_BASE_DIR env if it is defined", async () => {
 			const filePathsModule = new FilePaths({});
@@ -112,7 +121,7 @@ describe("filePaths module", () => {
 			const mockSpecificFiles = mockSetSpecificFiles(mockUrl);
 
 			filePathsModule.setSpecificFiles(mockUrl);
-			expect(filePathsModule.getSpecificFiles).toEqual(mockSpecificFiles);
+			expect(filePathsModule.getSpecificFiles).toStrictEqual(mockSpecificFiles);
 		});
 		it("setGlobalFiles should correctly set the globalFiles state object ", () => {
 			const filePathsModule = new FilePaths({});
@@ -120,7 +129,7 @@ describe("filePaths module", () => {
 			const mockGloablFiles = mockSetGloablFiles(mockUrl);
 
 			filePathsModule.setGlobalFiles(mockUrl);
-			expect(filePathsModule.getGlobalFiles).toEqual(mockGloablFiles);
+			expect(filePathsModule.getGlobalFiles).toStrictEqual(mockGloablFiles);
 		});
 	});
 	describe("getters", () => {
