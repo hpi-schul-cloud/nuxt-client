@@ -21,7 +21,9 @@
 		</p>
 		<p>
 			<b>Support-Anfragen</b> richten Sie bitte direkt an
-			<base-link href="mailto:nbc-support@netz-21.de">nbc-support@netz-21.de</base-link>.
+			<base-link href="mailto:nbc-support@netz-21.de"
+				>nbc-support@netz-21.de</base-link
+			>.
 		</p>
 		<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
 		<p>
@@ -36,8 +38,9 @@
 			Die Niedersächsische Bildungscloud ist ein Landespilotprojekt, welches
 			durch die Landesinitiative n-21 im Auftrag des Niedersächsischen
 			Kultusministerium und in technisch-organisatorischer Kooperation mit der
-			Dataport AöR (<base-link href="https://www.dataport.de" target="_blank">https://www.dataport.de</base-link>)
-			durchgeführt wird.
+			Dataport AöR (<base-link href="https://www.dataport.de" target="_blank"
+				>https://www.dataport.de</base-link
+			>) durchgeführt wird.
 		</p>
 		<p>
 			Die Inhalte der Niedersächsischen Bildungscloud stellen keine offiziellen
@@ -73,9 +76,11 @@
 			die Landesinitiative n-21 zulässig.
 		</p>
 		<p>
-			<b>Wir wünschen Ihnen einen informativen Aufenthalt auf unseren Websites
+			<b
+				>Wir wünschen Ihnen einen informativen Aufenthalt auf unseren Websites
 				und freuen uns über Vorschläge, Wünsche oder Kritik zur
-				Niedersächsischen Bildungscloud.</b>
+				Niedersächsischen Bildungscloud.</b
+			>
 		</p>
 	</div>
 </template>
