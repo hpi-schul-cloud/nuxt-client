@@ -1,5 +1,6 @@
 import i18n from "./i18n";
 import EnvConfigModule from "@/store/env-config";
+import AuthModule from "@/store/auth";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -22,14 +23,10 @@ const envs = {
 
 describe("i18n plugin", () => {
 	it("sets locale to the locale computed in the auth store module", () => {
+		AuthModule.setLocale("fi");
 		EnvConfigModule.setEnvs({ ...envs, I18N__FALLBACK_LANGUAGE: "da" });
 		const mockContext = {
 			app: {},
-			store: {
-				getters: {
-					"auth/getLocale": "fi",
-				},
-			},
 		};
 
 		i18n(mockContext);

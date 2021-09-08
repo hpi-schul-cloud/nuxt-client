@@ -1,4 +1,5 @@
 import LanguageSwitcher from "./LanguageSwitcher";
+import AuthModule from "@/store/auth";
 
 describe("@components/organisms/LanguageSwitcher", () => {
 	it(...isValidComponent(LanguageSwitcher));
@@ -13,8 +14,8 @@ describe("@components/organisms/LanguageSwitcher", () => {
 				i18n: true,
 			}),
 		});
-		expect(wrapper.vm.$store.state.auth.locale).toBe("de");
+		expect(AuthModule.getLocale).toBe("de");
 		wrapper.find("p[label=English]").trigger("click");
-		expect(wrapper.vm.$store.state.auth.locale).toBe("en");
+		expect(AuthModule.getLocale).toBe("en");
 	});
 });

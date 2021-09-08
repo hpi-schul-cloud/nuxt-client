@@ -23,7 +23,7 @@
 						<td>
 							<v-btn
 								v-if="isEditable(system)"
-								class="edit-ldap-btn"
+								class="edit-system-btn"
 								icon
 								:to="`/administration/ldap/config?id=${system._id}`"
 								nuxt
@@ -31,7 +31,8 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								class="delete-sytem-btn"
+								v-if="isRemovable(system)"
+								class="delete-system-btn"
 								icon
 								@click.stop="openConfirmDeleteDialog(system._id)"
 							>
@@ -75,7 +76,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import SchoolsModule from "@/store/schools";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 
@@ -105,10 +106,12 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions("schools", ["deleteSystem"]),
 		// TODO - Discuss which systems are still gonna be editable in the future
 		isEditable(system) {
-			return system.type === "ldap";
+			return system.type === "ldap" && system.ldapConfig.provider === "general";
+		},
+		isRemovable(system) {
+			return system.type !== "ldap" || system.ldapConfig.provider === "general";
 		},
 		// TODO - Discuss which systems are deletable by the user in the future
 		openConfirmDeleteDialog(systemId) {
@@ -118,7 +121,7 @@ export default {
 			};
 		},
 		removeSystem(systemId) {
-			this.deleteSystem(systemId);
+			SchoolsModule.deleteSystem(systemId);
 			this.confirmDeleteDialog.isOpen = false;
 			// TODO show error
 		},

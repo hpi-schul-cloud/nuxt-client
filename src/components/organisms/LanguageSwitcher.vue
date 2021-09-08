@@ -46,6 +46,8 @@
 	</div>
 </template>
 <script>
+import AuthModule from "@/store/auth";
+
 export default {
 	props: {
 		language: {
@@ -72,7 +74,7 @@ export default {
 		},
 		changeLanguage: function (lang) {
 			this.value = lang.longName;
-			this.$store.commit("auth/setLocale", lang.name);
+			AuthModule.setLocale(lang.name);
 		},
 	},
 };

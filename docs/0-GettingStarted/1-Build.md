@@ -34,7 +34,7 @@ Output Directory: `dist/nuxt`
 | SENTRY_DSN | `false` | If set, errors are reported to sentry. |
 | JWT_SHOW_TIMEOUT_WARNING_SECONDS | `3600` | from this remaining time on the autologout warning is displayed to the user |
 | JWT_TIMEOUT_SECONDS | `7200` | Time a inactivity user's sessions remains active |
-| LERNSTORE_MODE | `EDUSHARING` | Enable edusharing |
+| FEATURE_LERNSTORE_ENABLED | `true` | Enable edusharing lern-store |
 | FEATURE_MATRIX_MESSENGER_ENABLED | `false` | If enabled, adds support for matrix messenger |
 | FEATURE_MESSENGER_SCHOOL_SETTINGS_VISIBLE | `false` | Only if enabled, school admins can activate the messenger in their school setting. |
 | FEATURE_MESSENGER_SCHOOL_ROOM_ENABLED | `false` | If enabled, school admins can choose to create a room for all students and teachers of the school. |

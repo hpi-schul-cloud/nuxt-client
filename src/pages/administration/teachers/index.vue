@@ -128,7 +128,9 @@
 	</default-wireframe>
 </template>
 <script>
+import AuthModule from "@/store/auth";
 import { mapGetters } from "vuex";
+import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
 import DefaultWireframe from "@components/molecules/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
@@ -276,12 +278,6 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("auth", {
-			user: "getUser",
-		}),
-		...mapGetters("schools", {
-			schoolIsExternallyManaged: "schoolIsExternallyManaged",
-		}),
 		...mapGetters("users", {
 			teachers: "getList",
 			pagination: "getPagination",
@@ -289,6 +285,12 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
+		user() {
+			return AuthModule.getUser;
+		},
+		schoolIsExternallyManaged() {
+			return SchoolsModule.schoolIsExternallyManaged;
+		},
 		env() {
 			return EnvConfigModule.getEnv;
 		},

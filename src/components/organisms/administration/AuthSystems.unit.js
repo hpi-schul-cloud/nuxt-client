@@ -1,9 +1,11 @@
 import AuthSystems from "./AuthSystems";
+import SchoolsModule from "@/store/schools";
 
 const generateProps = () => ({
 	systems: [
-		{ _id: "1234", type: "sample system" },
-		{ _id: "123456", type: "ldap" },
+		{ _id: "1234", type: "sample system" }, // deletable: true, editable: false
+		{ _id: "12345", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
+		{ _id: "123456", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
 	],
 	confirmDeleteDialog: {
 		isOpen: false,
@@ -14,8 +16,8 @@ const generateProps = () => ({
 const searchStrings = {
 	addLdap: ".add-ldap",
 	tableSystem: ".table-system",
-	editSystemButton: ".edit-ldap-btn",
-	deleteSystemButton: ".delete-sytem-btn",
+	editSystemButton: ".edit-system-btn",
+	deleteSystemButton: ".delete-system-btn",
 	customDialog: ".custom-dialog",
 };
 
@@ -57,7 +59,7 @@ describe("AuthSystems", () => {
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
-			expect(tableCell).toHaveLength(6);
+			expect(tableCell).toHaveLength(9);
 			expect(tableCell.wrappers[1].element.textContent).toStrictEqual(
 				"sample system"
 			);
@@ -72,33 +74,31 @@ describe("AuthSystems", () => {
 				propsData: generateProps(),
 			});
 
-			const buttonSystemDelete = wrapper.findAll(
-				searchStrings.deleteSystemButton
-			);
-			const buttonSystemEdit = wrapper.find(searchStrings.editSystemButton);
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
-			expect(buttonSystemDelete).toHaveLength(2);
-			expect(buttonSystemEdit.exists()).toBeTrue();
-		});
+			// { _id: "1234", type: "sample system" }, // deletable: true, editable: false
+			expect(
+				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
+			).toBeTrue();
+			expect(
+				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
+			).toBeFalse();
 
-		it("should NOT display the edit system button", async () => {
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: {
-					systems: [{ _id: "1234", type: "sample system" }],
-				},
-			});
+			// { _id: "12345", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
+			expect(
+				tableCell.wrappers[5].find(searchStrings.deleteSystemButton).exists()
+			).toBeFalse();
+			expect(
+				tableCell.wrappers[5].find(searchStrings.editSystemButton).exists()
+			).toBeFalse();
 
-			const buttonSystemDelete = wrapper.findAll(
-				searchStrings.deleteSystemButton
-			);
-			const buttonSystemEdit = wrapper.find(searchStrings.editSystemButton);
-
-			expect(buttonSystemDelete).toHaveLength(1);
-			expect(buttonSystemEdit.exists()).toBeFalse();
+			// { _id: "123456", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
+			expect(
+				tableCell.wrappers[8].find(searchStrings.deleteSystemButton).exists()
+			).toBeTrue();
+			expect(
+				tableCell.wrappers[8].find(searchStrings.editSystemButton).exists()
+			).toBeTrue();
 		});
 
 		it("should NOT display the dialog", async () => {
@@ -148,17 +148,11 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			const mockStore = {
-				schools: {
-					actions: {
-						deleteSystem: jest.fn(),
-					},
-				},
-			};
+			const deleteSpy = jest.spyOn(SchoolsModule, "deleteSystem");
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
 					i18n: true,
-					store: mockStore,
+
 					vuetify: true,
 				}),
 				propsData: generateProps(),
@@ -166,7 +160,7 @@ describe("AuthSystems", () => {
 			const customDialog = wrapper.find(searchStrings.customDialog);
 
 			customDialog.vm.$emit("dialog-confirmed", 123);
-			expect(mockStore.schools.actions.deleteSystem).toHaveBeenCalled();
+			expect(deleteSpy).toHaveBeenCalled();
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {
