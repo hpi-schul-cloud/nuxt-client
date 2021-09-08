@@ -3,6 +3,7 @@
 		<template v-slot:item="{ item }">
 			<v-breadcrumbs-item
 				:href="item.href"
+				:to="item.to"
 				:disabled="item.disabled"
 				class="text-h6 font-weight-bold"
 			>

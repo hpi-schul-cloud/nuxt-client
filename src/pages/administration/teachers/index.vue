@@ -184,7 +184,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 					icon: { source: "fa", icon: "cog" },
 				},
 				{
