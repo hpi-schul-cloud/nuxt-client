@@ -18,6 +18,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-98 - added unit tests for school admin page
 - BC-133 - added unit tests for filePaths and accounts store modules
 - BC-132 - added unit tests for env-config, content, and autoLogout store modules
 - BC-5 - now showing open and completed taks for students in a tab view
