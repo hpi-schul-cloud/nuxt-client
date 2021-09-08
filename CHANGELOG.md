@@ -10,15 +10,17 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-98 - added unit tests for school admin page
+
 ### Changed
 
 - BC-81 - removes old lern-store mode env var
+- BC-94 - clean up the colorsystem and fix some UI issues
 
 ## [26.10.0] - 2021-09-03
 
 ### Added
 
-- BC-94 - clean up the colorsystem and fix some UI issues
 - BC-133 - added unit tests for filePaths and accounts store modules
 - BC-132 - added unit tests for env-config, content, and autoLogout store modules
 - BC-5 - now showing open and completed taks for students in a tab view
