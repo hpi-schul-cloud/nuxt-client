@@ -14,6 +14,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-234 - replaced hpi by datport in nbc imprint
 - BC-81 - removes old lern-store mode env var
 - BC-94 - clean up the colorsystem and fix some UI issues
 
