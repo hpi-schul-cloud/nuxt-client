@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-167 - Added a wireframe for pages
+
 ### Changed
 
 - BC-234 - replaced hpi by datport in nbc imprint

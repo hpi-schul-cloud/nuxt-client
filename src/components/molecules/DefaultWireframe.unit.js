@@ -69,4 +69,33 @@ describe("DefaultWireframe", () => {
 		expect(contentWrapper.classes("container-full-width")).toBeFalse();
 		expect(contentWrapper.classes("container-max-width")).toBeTrue();
 	});
+
+	it("displays content in slot", () => {
+		const wrapper = mount(DefaultWireframe, {
+			...createComponentMocks({}),
+			propsData: { headline: "dummy titel", fullWidth: false },
+			slots: {
+				default: ["<p>some stuff</p>", "text"],
+			},
+		});
+		const contentWrapper = wrapper.find(".main-content");
+		expect(contentWrapper.text()).toBe("some stufftext");
+	});
+
+	it("displays headline in slot", () => {
+		const wrapper = mount(DefaultWireframe, {
+			...createComponentMocks({}),
+			propsData: { headline: "property title", fullWidth: false },
+			slots: {
+				header: [
+					"<h1>slot titel</h1>",
+					"<div class='menu'>a custom menu or searchbar</div>",
+				],
+			},
+		});
+		const h1 = wrapper.find("h1");
+		expect(h1.text()).toBe("slot titel");
+		const menu = wrapper.find(".menu");
+		expect(menu.text()).toBe("a custom menu or searchbar");
+	});
 });
