@@ -155,7 +155,7 @@ export default {
 	margin-left: var(--space-sm);
 	color: var(--color-white);
 	cursor: pointer;
-	background-color: var(--color-tertiary);
+	background-color: var(--color-secondary);
 	border-radius: var(--radius-sm);
 }
 

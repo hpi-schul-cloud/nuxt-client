@@ -109,7 +109,7 @@
 					<base-spinner
 						v-show="loading"
 						class="spinner mt--xl-2"
-						color="var(--color-tertiary)"
+						color="var(--color-secondary)"
 						size="xlarge"
 					/>
 				</div>
@@ -316,12 +316,12 @@ $tablet-portrait-width: 768px;
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-tertiary);
+		color: var(--color-secondary);
 		text-decoration: none;
 		cursor: pointer;
 		border: none;
 		&:visited {
-			color: var(--color-tertiary);
+			color: var(--color-secondary);
 		}
 	}
 
@@ -396,7 +396,7 @@ $tablet-portrait-width: 768px;
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
 			.content-link {
-				color: var(--color-tertiary);
+				color: var(--color-secondary);
 				text-decoration: underline;
 			}
 		}
@@ -433,7 +433,7 @@ $tablet-portrait-width: 768px;
 			}
 			.link {
 				margin-right: var(--space-xs);
-				color: var(--color-tertiary);
+				color: var(--color-secondary);
 			}
 			.tertiary-color {
 				color: var(--color-black);

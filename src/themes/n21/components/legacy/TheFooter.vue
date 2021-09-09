@@ -65,7 +65,7 @@ export default {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
-	color: var(--color-tertiary-dark);
+	color: var(--color-secondary-dark);
 	text-align: center;
 }
 .top-line {
@@ -74,15 +74,15 @@ export default {
 	justify-content: center;
 }
 .footer-link {
-	color: var(--color-secondary);
+	color: var(--color-primary);
 	border: none;
 	&:focus,
 	&:hover {
-		color: var(--color-secondary-dark);
+		color: var(--color-primary-dark);
 		text-decoration: underline;
 	}
 	&:visited {
-		color: var(--color-secondary);
+		color: var(--color-primary);
 	}
 }
 </style>

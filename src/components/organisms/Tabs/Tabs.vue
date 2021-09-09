@@ -125,11 +125,11 @@ ul.tabs {
 		}
 		&.is-active {
 			position: relative;
-			color: var(--color-tertiary);
+			color: var(--color-secondary);
 			.tab-button,
 			.tab-icon {
 				font-weight: var(--font-weight-bold);
-				color: var(--color-tertiary);
+				color: var(--color-secondary);
 				transition: var(--duration-transition-medium) ease-in;
 			}
 			&::after {
@@ -139,8 +139,8 @@ ul.tabs {
 				width: 100%;
 				height: 3px;
 				content: " ";
-				background: var(--color-tertiary);
-				box-shadow: 0 0 1px 0 var(--color-tertiary);
+				background: var(--color-secondary);
+				box-shadow: 0 0 1px 0 var(--color-secondary);
 				animation: fadeEffect var(--duration-transition-medium) ease-in;
 
 				@include breakpoint(tablet) {
@@ -193,7 +193,7 @@ ul.tabs {
 	}
 }
 .focus {
-	outline: 2px solid var(--color-tertiary);
+	outline: 2px solid var(--color-secondary);
 	outline-offset: 3px;
 }
 </style>

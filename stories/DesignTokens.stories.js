@@ -17,16 +17,16 @@ storiesOf("1 Design Tokens/Colors", module)
 	.add("Main", () => ({
 		components: { Color, Gradient },
 		template: `<div>
-		<Color title="Primary" color="#E98404" variable="--color-primary"/>
-		<Color title="Primary Light" color="#EC962A" variable="--color-primary-light"/>
-		<Color title="Primary Dark" color="#AF6303" variable="--color-primary-dark"/>
-		<Color title="Secondary" color="#B1063A" variable="--color-secondary"/>
-		<Color title="Secondary Light" color="#bd2b58" variable="--color-secondary-light"/>
-		<Color title="Secondary Dark" color="#85052c" variable="--color-secondary-dark"/>
+		<Color title="Primary" color="#E98404" variable="--color-accent"/>
+		<Color title="Primary Light" color="#EC962A" variable="--color-accent-light"/>
+		<Color title="Primary Dark" color="#AF6303" variable="--color-accent-dark"/>
+		<Color title="Secondary" color="#B1063A" variable="--color-primary"/>
+		<Color title="Secondary Light" color="#bd2b58" variable="--color-primary-light"/>
+		<Color title="Secondary Dark" color="#85052c" variable="--color-primary-dark"/>
 		<Gradient colorStart="#F6A800" colorEnd="#B1063A"/>
-		<Color title="Tertiary" color="#455b6a" variable="--color-tertiary"/>
-		<Color title="Tertiary Light" color="#617480" variable="--color-tertiary-light"/>
-		<Color title="Tertiary Dark" color="#344450" variable="--color-tertiary-dark"/>
+		<Color title="Tertiary" color="#455b6a" variable="--color-secondary"/>
+		<Color title="Tertiary Light" color="#617480" variable="--color-secondary-light"/>
+		<Color title="Tertiary Dark" color="#344450" variable="--color-secondary-dark"/>
 	</div>`,
 	}))
 	.add("Shades", () => ({
@@ -56,15 +56,15 @@ storiesOf("1 Design Tokens/Colors", module)
 	.add("Main Text on Colors", () => ({
 		components: { ColorOnText },
 		template: `<div>
-		<ColorOnText title="Primary" color="#E98404" variable="--color-primary" textColor="--color-on-primary"/>
-		<ColorOnText title="Primary Light" color="#EC962A" variable="--color-primary-light" textColor="--color-on-primary-light"/>
-		<ColorOnText title="Primary Dark" color="#AF6303" variable="--color-primary-dark" textColor="--color-on-primary-dark"/>
-		<ColorOnText title="Secondary" color="#B1063A" variable="--color-secondary" textColor="--color-on-secondary"/>
-		<ColorOnText title="Secondary Light" color="#bd2b58" variable="--color-secondary-light" textColor="--color-on-secondary-light"/>
-		<ColorOnText title="Secondary Dark" color="#85052c" variable="--color-secondary-dark" textColor="--color-on-secondary-dark"/>
-		<ColorOnText title="Tertiary" color="#455b6a" variable="--color-tertiary" textColor="--color-on-tertiary"/>
-		<ColorOnText title="Tertiary Light" color="#617480" variable="--color-tertiary-light" textColor="--color-on-tertiary-light"/>
-		<ColorOnText title="Tertiary Dark" color="#344450" variable="--color-tertiary-dark" textColor="--color-on-tertiary-dark"/>
+		<ColorOnText title="Primary" color="#E98404" variable="--color-accent" textColor="--color-on-primary"/>
+		<ColorOnText title="Primary Light" color="#EC962A" variable="--color-accent-light" textColor="--color-on-primary-light"/>
+		<ColorOnText title="Primary Dark" color="#AF6303" variable="--color-accent-dark" textColor="--color-on-primary-dark"/>
+		<ColorOnText title="Secondary" color="#B1063A" variable="--color-primary" textColor="--color-on-secondary"/>
+		<ColorOnText title="Secondary Light" color="#bd2b58" variable="--color-primary-light" textColor="--color-on-secondary-light"/>
+		<ColorOnText title="Secondary Dark" color="#85052c" variable="--color-primary-dark" textColor="--color-on-secondary-dark"/>
+		<ColorOnText title="Tertiary" color="#455b6a" variable="--color-secondary" textColor="--color-on-tertiary"/>
+		<ColorOnText title="Tertiary Light" color="#617480" variable="--color-secondary-light" textColor="--color-on-tertiary-light"/>
+		<ColorOnText title="Tertiary Dark" color="#344450" variable="--color-secondary-dark" textColor="--color-on-tertiary-dark"/>
 	</div>
 	`,
 	}))

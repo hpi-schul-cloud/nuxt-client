@@ -186,7 +186,7 @@ export default {
 	right: 0;
 	margin-top: var(--space-xs);
 	margin-right: var(--space-xs);
-	background-color: var(--color-tertiary);
+	background-color: var(--color-secondary);
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
@@ -243,7 +243,7 @@ export default {
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
-		color: var(--color-tertiary);
+		color: var(--color-secondary);
 
 		@include excerpt(
 			$font-size: var(--heading-6),
@@ -280,7 +280,7 @@ export default {
 
 		&-icon {
 			font-size: var(--text-lg);
-			color: var(--color-tertiary);
+			color: var(--color-secondary);
 		}
 	}
 	&_more {

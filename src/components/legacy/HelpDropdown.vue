@@ -5,7 +5,7 @@
 				<base-icon
 					:source="menuItem.source"
 					:icon="menuItem.icon"
-					fill="var(--color-tertiary-dark)"
+					fill="var(--color-secondary-dark)"
 				/>
 				<base-link
 					:href="menuItem.action"

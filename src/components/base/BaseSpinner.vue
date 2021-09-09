@@ -23,7 +23,7 @@ export default {
 	props: {
 		color: {
 			type: String,
-			default: "var(--color-tertiary)",
+			default: "var(--color-secondary)",
 		},
 		size: {
 			type: String,

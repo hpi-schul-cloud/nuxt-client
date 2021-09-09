@@ -226,7 +226,7 @@ export default {
 
 	width: 100%;
 	padding: 8px 27px;
-	color: var(--color-tertiary-dark);
+	color: var(--color-secondary);
 	text-align: left;
 	text-decoration: none;
 	cursor: pointer;
