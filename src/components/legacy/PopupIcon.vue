@@ -27,7 +27,7 @@ export default {
 		},
 		fill: {
 			type: String,
-			default: "var(--color-tertiary-dark)",
+			default: "var(--color-secondary-dark)",
 		},
 		shouldExpandToLeft: {
 			type: Boolean,

@@ -96,13 +96,6 @@ export default {
 								target: "_self",
 							},
 							{
-								label: this.$t("global.topbar.actions.contactAdmin"),
-								icon: "comment",
-								action: "/help?activeForm=admin#contact-form",
-								source: "fa",
-								target: "_self",
-							},
-							{
 								label: this.$t("global.topbar.actions.training"),
 								icon: "fortbildung",
 								action: "https://www.lernen.cloud/",

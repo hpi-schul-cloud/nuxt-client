@@ -577,7 +577,7 @@ a.action-button {
 	&.row-selected {
 		color: var(--color-white);
 		&:hover {
-			background-color: var(--color-tertiary-dark);
+			background-color: var(--color-secondary-dark);
 			box-shadow: none;
 		}
 	}

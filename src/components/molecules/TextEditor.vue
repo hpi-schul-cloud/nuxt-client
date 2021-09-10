@@ -235,7 +235,7 @@ export default {
 		padding: var(--space-lg);
 		outline: none;
 		&:focus {
-			border-bottom: 1px solid var(--color-secondary);
+			border-bottom: 1px solid var(--color-primary);
 		}
 	}
 

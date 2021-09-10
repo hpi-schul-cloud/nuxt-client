@@ -37,7 +37,7 @@ export default {
 @import "@styles";
 
 $default-color: var(--color-gray-dark);
-$highlight-color: var(--color-secondary);
+$highlight-color: var(--color-primary);
 
 .chip {
 	display: inline-block;

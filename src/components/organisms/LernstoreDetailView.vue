@@ -378,7 +378,7 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-behind);
 				width: 100%;
 				height: 100%;
-				background-color: var(--color-tertiary);
+				background-color: var(--color-secondary);
 			}
 
 			.preview-background {
@@ -462,7 +462,7 @@ $tablet-portrait-width: 768px;
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
 			.content-link {
-				color: var(--color-tertiary);
+				color: var(--color-secondary);
 				text-decoration: underline;
 			}
 		}
@@ -497,7 +497,7 @@ $tablet-portrait-width: 768px;
 				}
 				.link {
 					margin-right: var(--space-xs);
-					color: var(--color-tertiary);
+					color: var(--color-secondary);
 				}
 				.tertiary-color {
 					color: var(--color-black);

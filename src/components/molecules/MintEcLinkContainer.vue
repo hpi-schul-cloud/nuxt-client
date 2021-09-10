@@ -15,7 +15,7 @@
 						:style="{
 							'font-size': `var(--space-lg)`,
 							'margin-bottom': 0,
-							color: `var(--color-secondary)`,
+							color: `var(--color-primary)`,
 						}"
 					>
 					</base-icon>
@@ -99,7 +99,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	padding: var(--space-md);
-	background-color: var(--color-secondary);
+	background-color: var(--color-primary);
 	border-radius: 0 0 var(--radius-md) var(--radius-md);
 	box-shadow: var(--shadow-sm);
 	transition: box-shadow calc(var(--duration-transition-medium) * 0.5) ease-in;

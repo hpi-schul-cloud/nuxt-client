@@ -73,12 +73,12 @@ export default {
 
 .menu {
 	position: relative;
-	color: var(--color-tertiary);
+	color: var(--color-secondary);
 }
 .filter-icon {
 	font-size: var(--text-lg);
 }
 .button.is-medium.is-text {
-	color: var(--color-tertiary);
+	color: var(--color-secondary);
 }
 </style>
