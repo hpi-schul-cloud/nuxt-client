@@ -14,6 +14,8 @@ ARG SC_THEME=default
 ENV SC_THEME ${SC_THEME}
 
 RUN ["npm", "run", "build:nuxt"]
+RUN ["chmod", "550", "./startup.sh"]
+
 EXPOSE 4000
 
-CMD ["npm", "run", "start:nuxt"]
+CMD [ "./startup.sh"]

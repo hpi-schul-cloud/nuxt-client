@@ -18,6 +18,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-81 - removes old lern-store mode env var
 - BC-94 - clean up the colorsystem and fix some UI issues
 
+## [26.10.1] - 2021-09-07
+
+### Fixed
+
+- BC-246 - Routing for nuxt that have a run time error with npm run start and nuxt runtime envirements
+
 ## [26.10.0] - 2021-09-03
 
 ### Added
