@@ -16,41 +16,26 @@ const school = {
 		{ $oid: "0000d186816abba584714c91" },
 		{ $oid: "0000d186816abba584714c90" },
 	],
-	updatedAt: { $date: "2020-07-27T08:21:14.719Z" },
-	createdAt: { $date: "2017-01-01T00:06:37.148Z" },
-	__v: 0,
 	currentYear: { $oid: "5ebd6dc14a431f75ec9a3e77" },
 	purpose: "demo",
 	enableStudentTeamCreation: false,
 	officialSchoolNumber: "123",
 	features: {
-		rocketChat: false,
-		videoconference: false,
-		messenger: false,
-		studentVisibility: false,
-		messengerSchoolRoom: false,
-		messengerStudentRoomCreate: false,
+		rocketChat: true,
+		videoconference: true,
+		messenger: true,
+		messengerSchoolRoom: true,
+		messengerStudentRoomCreate: true,
+		studentVisibility: true,
 	},
-};
-
-const federalState = {
-	_id: "0000b186816abba584714c53",
-	counties: [
-		{
-			antaresKey: "BRB",
-			_id: "5fa55eb53f472a2d986c8812",
-			countyId: 12051,
-			name: "Brandenburg an der Havel",
+	permissions: {
+		teacher: {
+			STUDENT_LIST: true,
 		},
-		{
-			antaresKey: "CB",
-			_id: "5fa55eb53f472a2d986c8813",
-			countyId: 12052,
-			name: "Cottbus",
+		student: {
+			LERNSTORE_VIEW: true,
 		},
-	],
-	name: "Brandenburg",
-	abbreviation: "BB",
+	},
 };
 
 const year = {
@@ -68,134 +53,207 @@ const envs = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: "default",
-	FEATURE_MATRIX_MESSENGER_ENABLED: false,
+	FEATURE_MATRIX_MESSENGER_ENABLED: true,
 	MATRIX_MESSENGER__EMBED_URI: "__vue_devtool_undefined__",
 	MATRIX_MESSENGER__URI: "__vue_devtool_undefined__",
 	MATRIX_MESSENGER__DISCOVER_URI: "__vue_devtool_undefined__",
 	LERNSTORE_MODE: "__vue_devtool_undefined__",
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-	FEATURE_ES_COLLECTIONS_ENABLED: false,
+	FEATURE_ES_COLLECTIONS_ENABLED: true,
 	FEATURE_EXTENSIONS_ENABLED: true,
 	FEATURE_TEAMS_ENABLED: true,
 	FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 	FEATURE_ADMIN_TOGGLE_STUDENT_VISIBILITY_ENABLED: true,
-	FEATURE_SCHOOL_POLICY_ENABLED: false,
+	FEATURE_SCHOOL_POLICY_ENABLED: true,
 	FEATURE_VIDEOCONFERENCE_ENABLED: true,
-	ROCKETCHAT_SERVICE_ENABLED: false,
+	ROCKETCHAT_SERVICE_ENABLED: true,
 	I18N__AVAILABLE_LANGUAGES: "de,en,es",
 	I18N__DEFAULT_LANGUAGE: "de",
 	I18N__DEFAULT_TIMEZONE: "Europe/Berlin",
 	I18N__FALLBACK_LANGUAGE: "de",
 	DOCUMENT_BASE_DIR: "https://s3.hidrive.strato.com/schul-cloud-hpi/",
-	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: false,
-	MATRIX_MESSENGER__STUDENT_ROOM_CREATION: false,
-	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: false,
+	MATRIX_MESSENGER__SCHOOL_SETTINGS_VISIBLE: true,
+	MATRIX_MESSENGER__STUDENT_ROOM_CREATION: true,
+	MATRIX_MESSENGER__SCHOOL_ROOM_ENABLED: true,
 	SC_TITLE: "HPI Schul-Cloud",
 	SC_SHORT_TITLE: "HPI Schul-Cloud",
 };
 
 const mockStore = {
+	"env-config": {
+		// actions: {
+		// 	fetchConsentVersions: jest.fn(),
+		// },
+	},
 	"consent-versions": {
+		getters: {
+			getConsentVersions: () => {
+				return [];
+			},
+			getLoading: () => {
+				return false;
+			},
+			getError: () => {
+				return null;
+			},
+		},
 		actions: {
 			addConsentVersion: jest.fn(),
 			fetchConsentVersions: jest.fn(),
 		},
+	},
+	schools: {
 		getters: {
-			getError: () => {},
-			getLoading: () => false,
-			getConsentVersions: () => {},
+			getSchool: () => {
+				return school;
+			},
+			getLoading: () => {
+				return false;
+			},
+			getError: () => {
+				return null;
+			},
+			getSystems: () => {
+				return [{ _id: "123", type: "itslearning" }];
+			},
+			getCurrentYear: () => {
+				return currentYear;
+			},
+		},
+		actions: {
+			update: jest.fn(),
+			fetchCurrentYear: jest.fn(),
 		},
 	},
 };
 
 describe("SchoolSettingPage", () => {
 	beforeEach(() => {
-		SchoolsModule.setSchool(school);
-		SchoolsModule.setFederalState(federalState);
+		// SchoolsModule.setSchool(school);
+		// SchoolsModule.setFederalState(federalState);
 		SchoolsModule.setCurrentYear(year);
 		SchoolsModule.setSystems(systems);
 		EnvConfigModule.setEnvs(envs);
 	});
 	it(...isValidComponent(SchoolPage));
 
-	describe("testing getters", () => {
-		it("Tests env var school policy being true", async () => {
-			EnvConfigModule.setEnvs({ ...envs, FEATURE_SCHOOL_POLICY_ENABLED: true });
-			const wrapper = mount(SchoolPage, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				}),
-			});
-
-			expect(wrapper.vm.schoolPolicyEnabled).toBe(true);
+	it("breadcrumbs should be visible", () => {
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
 		});
 
-		it("Tests env var school policy being false", async () => {
-			EnvConfigModule.setEnvs({
-				...envs,
-				FEATURE_SCHOOL_POLICY_ENABLED: false,
-			});
-			const wrapper = mount(SchoolPage, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				}),
-			});
+		const breadcrumbs = wrapper.find(".v-breadcrumbs");
 
-			expect(wrapper.vm.schoolPolicyEnabled).toBe(false);
-		});
-
-		it("Tests whether current school year is computed right", async () => {
-			const wrapper = mount(SchoolPage, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				}),
-			});
-
-			expect(wrapper.vm.currentSchoolYear).toStrictEqual("Schuljahr 2021/22");
-		});
-
-		it("Tests systems", async () => {
-			const wrapper = mount(SchoolPage, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-					store: mockStore,
-				}),
-			});
-
-			expect(wrapper.vm.systems).toBeArray(true);
-			expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
-		});
+		expect(breadcrumbs.exists()).toBeTrue();
+		expect(wrapper.vm.$data.breadcrumbs[0].href).toStrictEqual(
+			"/administration/"
+		);
+		expect(wrapper.vm.$data.breadcrumbs[0].text).toStrictEqual(
+			"Administration"
+		);
+		expect(wrapper.vm.$data.breadcrumbs[1].disabled).toBeTrue();
+		expect(wrapper.vm.$data.breadcrumbs[1].text).toStrictEqual(
+			"Schule verwalten"
+		);
 	});
 
-	// describe("existence of elements based on conditions", () => {
-	// 	it("should load skeleton while loading", async () => {
-	// 		const wrapper = mount(SchoolPage, {
-	// 			...createComponentMocks({
-	// 				i18n: true,
-	// 				vuetify: true,
-	// 				store: mockStore,
-	// 			}),
-	// 		});
-	// 		// wrapper.setData({ loading: true });
+	it("page title should be visible", () => {
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
 
-	// 		// TODO: This destroys the value completely (not a computed property anymore). Find a way to mock the loading computed property.
-	// 		// Object.defineProperty(wrapper.vm, "loading", {
-	// 		// 	value: true,
-	// 		// 	writable: true,
-	// 		// });
+		const titleElement = wrapper.find(".page-title");
+		expect(titleElement.exists()).toBeTrue();
+	});
 
-	// 		await wrapper.vm.$nextTick();
+	it("tests env var school policy being true", () => {
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
 
-	// 		expect(wrapper.find(".v-skeleton-loader").exists()).toBe(true);
-	// 		// expect(wrapper.find(".v-expansion-panels").exists()).toBe(false);
-	// 		// expect(wrapper.find(".v-list-group").exists()).toBe(false);
-	// 	});
-	// });
+		expect(wrapper.vm.schoolPolicyEnabled).toBeTrue();
+	});
+
+	it("tests env var school policy being false", () => {
+		EnvConfigModule.setEnvs({
+			FEATURE_SCHOOL_POLICY_ENABLED: false,
+			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		});
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+
+		expect(wrapper.vm.schoolPolicyEnabled).toBeFalse();
+	});
+
+	it("tests whether current school year is computed right", () => {
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+
+		expect(wrapper.vm.currentSchoolYear).toStrictEqual("Schuljahr 2021/22");
+	});
+
+	it("systems section should be visible and shows its data", () => {
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+
+		expect(wrapper.vm.systems).toBeArray(true);
+		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
+	});
+
+	it("should load skeleton while loading", () => {
+		SchoolsModule.setLoading(true);
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+
+		expect(wrapper.find(".v-skeleton-loader").exists()).toBeTrue();
+	});
+
+	it("error image should visible if schoolError occured", () => {
+		SchoolsModule.setError({ error: { message: "some errors" } });
+		const wrapper = mount(SchoolPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+		});
+
+		const schoolError = wrapper.find(".school-error-image");
+		const noSchoolError = wrapper.find(".no-school-error");
+
+		expect(schoolError.exists()).toBeTrue();
+		expect(noSchoolError.exists()).toBeFalse();
+	});
 });

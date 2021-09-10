@@ -244,7 +244,7 @@ export default {
 
 		&-icon {
 			margin: var(--space-md) !important;
-			color: var(--color-tertiary);
+			color: var(--color-secondary);
 		}
 		&-text {
 			width: max-content;

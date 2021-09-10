@@ -82,7 +82,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		content: "";
-		background-color: var(--color-secondary);
+		background-color: var(--color-primary);
 		transform: skewY(-3deg);
 		transform-origin: bottom left;
 	}

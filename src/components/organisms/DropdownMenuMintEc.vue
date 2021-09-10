@@ -54,8 +54,8 @@ export default {
 	padding: var(--space-sm) var(--space-md);
 	color: var(--color-white);
 	cursor: pointer;
-	background-color: var(--color-secondary);
-	border: 1px solid var(--color-secondary);
+	background-color: var(--color-primary);
+	border: 1px solid var(--color-primary);
 
 	@include breakpoint(desktop) {
 		width: 300px;
@@ -107,7 +107,7 @@ export default {
 		}
 
 		&:hover {
-			color: var(--color-secondary);
+			color: var(--color-primary);
 			background-color: var(--color-gray-light);
 		}
 	}

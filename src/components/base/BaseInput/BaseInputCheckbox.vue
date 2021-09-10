@@ -54,7 +54,7 @@ export default {
 		},
 		color: {
 			type: String,
-			default: `var(--color-tertiary)`,
+			default: `var(--color-secondary)`,
 		},
 		label: {
 			type: String,

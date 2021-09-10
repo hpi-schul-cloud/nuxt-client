@@ -415,6 +415,6 @@ export default {
 	position: relative;
 }
 .context-menu-icon {
-	color: var(--color-tertiary);
+	color: var(--color-secondary);
 }
 </style>

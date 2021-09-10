@@ -11,7 +11,7 @@ storiesOf("4 Base UI Components/Base UI", module).add("Base Image", () => ({
 		),
 		imgAlt: text("Image Alt", "Dummy image"),
 		imgHeight: text("Image Height", "200px"),
-		fillColor: text("Fill Color", "var(--color-secondary)"),
+		fillColor: text("Fill Color", "var(--color-primary)"),
 	}),
 	template: `<div><BaseImage :img-src="imgsrc" :img-alt="imgAlt" :img-height="imgHeight" :fill="fillColor"/>
 	<p style="text-align: center">

@@ -1,18 +1,13 @@
 // extends the default theme
 :root {
 	/* main colors */
-	--color-primary: #185888;
-	--color-primary-light: #5284b8;
-	--color-primary-dark: #002f5b;
-	--color-secondary: #f56b00;
-	--color-secondary-light: #ff9c3f;
-	--color-secondary-dark: #bb3b00;
-	--logo-gradient: linear-gradient(
-		45deg,
-		var(--color-primary),
-		var(--color-primary-light)
-	);
-	--color-sidebar-active-bg: rgba(24, 88, 136, 0.15);
-	--color-sidebar-menu-item: var(--color-primary);
-	--color-sidebar-menu-item-active: var(--color-primary-dark);
+	--color-primary: #2876d0;
+	--color-primary-light: color-mod(var(--color-primary) tint(#{$brighten}));
+	--color-primary-dark: color-mod(var(--color-primary) shade(#{$darken}));
+	--color-secondary: #185888;
+	--color-secondary-light: color-mod(var(--color-secondary) tint(#{$brighten}));
+	--color-secondary-dark: color-mod(var(--color-secondary) shade(#{$darken}));
+	--color-accent: #f56b00;
+	--color-accent-light: color-mod(var(--color-accent) tint(#{$brighten}));
+	--color-accent-dark: color-mod(var(--color-accent) shade(#{$darken}));
 }
