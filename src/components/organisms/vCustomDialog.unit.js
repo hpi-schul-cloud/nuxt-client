@@ -3,10 +3,12 @@ import customDialog from "./vCustomDialog.vue";
 const mockProps = {
 	isOpen: true,
 	size: 480,
+	hasButtons: true,
 };
 const negativeTestmockProps = {
 	isOpen: false,
 	size: 480,
+	hasButtons: true,
 };
 describe("component/customDialog", () => {
 	it(...isValidComponent(customDialog));
