@@ -64,7 +64,7 @@ export default {
 		align-items: center;
 		font-family: var(--font-accent);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-tertiary-dark);
+		color: var(--color-secondary-dark);
 		border-bottom: none;
 	}
 
@@ -79,11 +79,11 @@ export default {
 	}
 
 	.arrow {
-		color: var(--color-tertiary-light);
+		color: var(--color-secondary-light);
 	}
 
 	li:last-child > * {
-		color: var(--color-tertiary-light);
+		color: var(--color-secondary-light);
 		cursor: default;
 	}
 }

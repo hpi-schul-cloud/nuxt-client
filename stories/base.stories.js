@@ -380,7 +380,7 @@ storiesOf("4 Base UI Components/Base UI", module)
 		},
 		data: () => ({
 			label: text("label", "Loading"),
-			color: color("color", "var(--color-tertiary)"),
+			color: color("color", "var(--color-secondary)"),
 			size: select(
 				"size",
 				{

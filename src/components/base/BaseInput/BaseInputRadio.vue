@@ -71,7 +71,7 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	border: 2px solid var(--color-tertiary);
+	border: 2px solid var(--color-secondary);
 	border-radius: var(--radius-round);
 }
 
@@ -88,7 +88,7 @@ input:checked + .radio {
 		margin: 20% auto;
 		/* stylelint-enable */
 		content: "";
-		background: var(--color-tertiary);
+		background: var(--color-secondary);
 		border-radius: var(--radius-round);
 	}
 }

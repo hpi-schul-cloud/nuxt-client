@@ -66,7 +66,7 @@ $mobile: 750px; // css variables do not work with media queries
 	white-space: nowrap;
 	cursor: pointer;
 	background-color: var(--color-white);
-	border: 1px solid var(--color-tertiary);
+	border: 1px solid var(--color-secondary);
 	border-radius: var(--radius-round);
 	transition: $transition;
 
@@ -77,12 +77,12 @@ $mobile: 750px; // css variables do not work with media queries
 		padding-right: var(--space-xs-2);
 	}
 	&:hover {
-		box-shadow: 0 0 0 1px var(--color-tertiary);
+		box-shadow: 0 0 0 1px var(--color-secondary);
 	}
 	&:focus {
 		outline: none;
 		box-shadow: 0 0 0 3px var(--color-white),
-			0 0 0 6px var(--color-tertiary-dark);
+			0 0 0 6px var(--color-secondary-dark);
 	}
 	.btn-delete {
 		display: flex;
@@ -96,7 +96,7 @@ $mobile: 750px; // css variables do not work with media queries
 		margin-left: var(--space-xs);
 		color: var(--color-white);
 		cursor: pointer;
-		background-color: var(--color-tertiary);
+		background-color: var(--color-secondary);
 		border: none;
 		border-radius: var(--radius-round);
 		transition: $transition;
@@ -104,12 +104,12 @@ $mobile: 750px; // css variables do not work with media queries
 		&:hover,
 		&:focus {
 			color: var(--color-white);
-			background: var(--color-tertiary-dark);
+			background: var(--color-secondary-dark);
 		}
 		&:focus {
 			outline: none;
 			box-shadow: 0 0 0 3px var(--color-white),
-				0 0 0 6px var(--color-tertiary-dark);
+				0 0 0 6px var(--color-secondary-dark);
 		}
 	}
 
@@ -117,7 +117,7 @@ $mobile: 750px; // css variables do not work with media queries
 		font-family: var(--font-accent);
 		font-size: var(--text-md);
 		font-weight: var(--font-weight-bold);
-		color: var(--color-tertiary);
+		color: var(--color-secondary);
 	}
 }
 

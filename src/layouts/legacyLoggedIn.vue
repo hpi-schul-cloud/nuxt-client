@@ -79,13 +79,6 @@ const topbarBaseActions = [
 					target: "_self",
 				},
 				{
-					label: "Admin deiner Schule kontaktieren",
-					icon: "comment",
-					action: "/help?activeForm=admin#contact-form",
-					source: "fa",
-					target: "_self",
-				},
-				{
 					label: "Fortbildungen",
 					icon: "fortbildung",
 					action: "https://www.lernen.cloud/",
