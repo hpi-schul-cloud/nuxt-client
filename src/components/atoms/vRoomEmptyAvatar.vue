@@ -6,20 +6,10 @@
 <script>
 export default {
 	props: {
-		// item: {
-		// 	type: Object,
-		// 	required: true,
-		// },
 		size: {
 			type: Number || String,
 			required: true,
 		},
-		// groupAvatar: {
-		// 	type: Boolean,
-		// },
-		// showBadge: {
-		// 	type: Boolean,
-		// },
 	},
 	data() {
 		return {};
@@ -35,21 +25,3 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped>
-@import "@styles";
-// .v-avatar {
-// 	cursor: pointer;
-// 	border: 1px solid;
-// }
-// .single-avatar {
-// 	font-size: 1.2em;
-// 	user-select: none;
-// }
-// .sub-title {
-// 	font-size: 0.7em;
-// }
-// .group-avatar {
-// 	font-size: 0.5em;
-// 	user-select: none;
-// }
-</style>
