@@ -10,7 +10,7 @@
 		>
 			<v-avatar
 				class="ma-0 pa-1"
-				:color="item.color"
+				:color="item.displayColor"
 				:size="size"
 				:class="groupAvatar ? 'rounded' : 'rounded-xl'"
 				@click="$emit('click', item)"

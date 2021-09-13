@@ -57,206 +57,12 @@
 </template>
 
 <script>
-const mobileData = [
-	{
-		id: "1",
-		title: "First Mobile",
-		shortTitle: "Ma",
-		color: "purple",
-		url: "/api/xxxx/1234w",
-		x_pos: 1,
-		y_pos: 1,
-	},
-	{
-		id: "2",
-		title: "Second Mobile",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		notification: true,
-		x_pos: 2,
-		y_pos: 2,
-	},
-
-	{
-		id: "3",
-		title: "Third Mobile",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 1,
-		y_pos: 4,
-	},
-	{
-		id: "4",
-		title: "Fourth Mobile",
-		shortTitle: "Bi",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 2,
-		y_pos: 4,
-		group: [
-			{
-				id: "5",
-				title: "Math 7a",
-				color: "yellow",
-			},
-			{
-				id: "6",
-				title: "Bio 7a",
-				color: "green",
-				notification: true,
-			},
-			{
-				id: "7",
-				title: "Math 7a",
-				color: "yellow",
-			},
-			{
-				id: "8",
-				title: "Bio 7a",
-				color: "green",
-				notification: true,
-			},
-		],
-	},
-];
-const tabletData = [
-	{
-		id: "1",
-		title: "First Tablet",
-		shortTitle: "Ma",
-		color: "purple",
-		url: "/api/xxxx/1234w",
-		x_pos: 1,
-		y_pos: 1,
-	},
-	{
-		id: "2",
-		title: "Second Tablet",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		notification: true,
-		x_pos: 3,
-		y_pos: 2,
-	},
-	{
-		id: "3",
-		title: "Third Tablet",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 4,
-		y_pos: 4,
-	},
-	{
-		id: "4",
-		title: "Forth Tablet",
-		shortTitle: "Bi",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 2,
-		y_pos: 4,
-		group: [
-			{
-				id: "5",
-				title: "Math 7a",
-				color: "yellow",
-			},
-			{
-				id: "6",
-				title: "Bio 7a",
-				color: "green",
-				notification: true,
-			},
-		],
-	},
-	{
-		id: "3",
-		title: "Fifth Tablet",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 2,
-		y_pos: 3,
-	},
-];
-const desktopData = [
-	{
-		id: "1",
-		title: "First Desktop",
-		shortTitle: "Ma",
-		color: "purple",
-		url: "/api/xxxx/1234w",
-		x_pos: 6,
-		y_pos: 1,
-	},
-	{
-		id: "2",
-		title: "Second Desktop",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		notification: true,
-		x_pos: 5,
-		y_pos: 5,
-	},
-	{
-		id: "3",
-		title: "Third Desktop",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 1,
-		y_pos: 4,
-	},
-	{
-		id: "4",
-		title: "Fourth Desktop",
-		shortTitle: "Bi",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 3,
-		y_pos: 3,
-		group: [
-			{
-				id: "5",
-				title: "Math 7a",
-				color: "yellow",
-			},
-			{
-				id: "6",
-				title: "Bio 7a",
-				color: "green",
-				notification: true,
-			},
-		],
-	},
-	{
-		id: "7",
-		title: "Fifth Desktop",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 1,
-		y_pos: 2,
-	},
-	{
-		id: "8",
-		title: "Sixst Desktop",
-		shortTitle: "Ma",
-		color: "#EC407A",
-		url: "/api/xxxx/1234w",
-		x_pos: 5,
-		y_pos: 2,
-	},
-];
-
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmtptyAvatar from "@components/atoms/vRoomEmptyAvatar";
-import vRoomGroupAvatar from "@components/atoms/vRoomGroupAvatar";
+import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
 import vCustomDialog from "@components/organisms/vCustomDialog";
+import RoomsModule from "@store/rooms/";
+
 export default {
 	components: {
 		vRoomAvatar,
@@ -267,7 +73,7 @@ export default {
 	layout: "defaultVuetify",
 	data() {
 		return {
-			roomsData: mobileData,
+			roomsData: [],
 			dim: this.$vuetify.breakpoint,
 			ratios: {
 				pageRatio: 0.9,
@@ -278,8 +84,8 @@ export default {
 			dimensions: {
 				width: null,
 				height: null,
-				device: "mobile",
-				columnCount: 2,
+				device: "desktop", // this will be mobile after whole implementations
+				columnCount: 6, // this will be be 2 due to mobile first approach
 				cellWidth: null,
 				rowCount: null,
 			},
@@ -289,10 +95,21 @@ export default {
 			},
 		};
 	},
+	computed: {
+		loading() {
+			return RoomsModule.getLoading;
+		},
+		roomsError() {
+			return RoomsModule.getError;
+		},
+	},
+	async created() {
+		await RoomsModule.fetch(); // this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		this.roomsData = RoomsModule.getRoomData;
+	},
 	mounted() {
 		this.getDeviceDims();
 	},
-
 	methods: {
 		getDeviceDims() {
 			const { width } = this.$refs.main.getBoundingClientRect();
@@ -301,16 +118,17 @@ export default {
 			this.dimensions.height = this.$vuetify.breakpoint.height;
 			const device = this.$vuetify.breakpoint.name;
 			this.device = device;
-			if (device == "sm" || device == "md") {
-				this.dimensions.columnCount = 4;
-				this.dimensions.device = "tablet";
-				this.roomsData = tabletData;
-			}
-			if (device == "lg" || device == "xl") {
-				this.dimensions.columnCount = 6;
-				this.dimensions.device = "desktop";
-				this.roomsData = desktopData;
-			}
+
+			// if (device == "sm" || device == "md") {
+			// 	this.dimensions.columnCount = 4;
+			// 	this.dimensions.device = "tablet";
+			// 	this.roomsData = tabletData;
+			// }
+			// if (device == "lg" || device == "xl") {
+			// 	this.dimensions.columnCount = 6;
+			// 	this.dimensions.device = "desktop";
+			// 	this.roomsData = desktopData;
+			// }
 
 			const cellWidth = Math.round(
 				(width / this.dimensions.columnCount) * this.ratios.pageRatio
@@ -319,16 +137,12 @@ export default {
 			this.dimensions.rowCount = Math.round(this.dimensions.height / cellWidth);
 		},
 		getDataObject(row, col) {
-			const roomObject = this.roomsData.filter(
-				(item) => item.x_pos == col && item.y_pos == row
-			);
+			const roomObject = this.findDataByPos(row, col);
 			if (roomObject.length) return roomObject[0];
 			return null;
 		},
 		hasGroup(row, col) {
-			const roomObject = this.roomsData.filter(
-				(item) => item.x_pos == col && item.y_pos == row
-			);
+			const roomObject = this.findDataByPos(row, col);
 			return roomObject.length && roomObject[0].group !== undefined;
 		},
 		openDialog(groupId) {
@@ -336,6 +150,11 @@ export default {
 				(item) => item.id == groupId
 			)[0];
 			this.groupDialog.isOpen = true;
+		},
+		findDataByPos(row, col) {
+			return this.roomsData.filter(
+				(item) => item.xPosition == col && item.yPosition == row
+			);
 		},
 	},
 };
