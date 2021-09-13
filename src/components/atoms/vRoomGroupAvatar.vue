@@ -1,0 +1,78 @@
+<template>
+	<div>
+		<v-badge
+			bordered
+			color="var(--color-primary)"
+			icon="mdi-lock"
+			overlap
+			:value="hasNotifications"
+		>
+			<v-card
+				:height="size"
+				:width="size"
+				class="rounded-xl ma-0"
+				outlined
+				@click.prevent="$emit('clicked', items.id)"
+			>
+				<v-row class="ma-1 pa-1">
+					<v-col
+						v-for="item in itemsLimited"
+						:key="item.id"
+						cols="6"
+						class="ma-0 pa-1"
+					>
+						<vRoomAvatar
+							:key="item.id"
+							:item="item"
+							:size="size / 3"
+							:group-avatar="true"
+						></vRoomAvatar>
+					</v-col>
+				</v-row>
+			</v-card>
+			<span class="d-flex justify-center mt-1 sub-title">{{
+				items.title
+			}}</span>
+		</v-badge>
+	</div>
+</template>
+<script>
+import vRoomAvatar from "@components/atoms/vRoomAvatar";
+export default {
+	components: {
+		vRoomAvatar,
+	},
+	props: {
+		items: {
+			type: Object,
+			required: true,
+		},
+		size: {
+			type: Number || String,
+			required: true,
+		},
+		maxItems: {
+			type: Number || String,
+			default: 4,
+		},
+	},
+	data() {
+		return {};
+	},
+	computed: {
+		hasNotifications() {
+			return this.items.group.some((item) => item.notification == true);
+		},
+
+		itemsLimited() {
+			return this.items.group.slice(0, this.maxItems);
+		},
+	},
+};
+</script>
+<style scoped>
+.sub-title {
+	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
+	font-size: 0.7em;
+}
+</style>
