@@ -25,7 +25,7 @@
 		</div>
 		<v-container class="v-container mt-5 mb-14">
 			<v-custom-autocomplete
-				v-if="!hasNoHomeworks"
+				v-if="hasHomeworks"
 				v-model="selectedCourses"
 				:items="courses"
 				:label="$t('pages.homeworks.labels.filter')"
@@ -86,6 +86,9 @@ export default {
 				return false;
 			}
 		},
+		hasHomeworks: function () {
+			return !this.hasNoHomeworks;
+		}
 	},
 	created() {
 		this.$store.dispatch("homeworks/getAllHomeworks");
