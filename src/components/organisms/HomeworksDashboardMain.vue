@@ -88,7 +88,7 @@ export default {
 		},
 		hasHomeworks: function () {
 			return !this.hasNoHomeworks;
-		}
+		},
 	},
 	created() {
 		this.$store.dispatch("homeworks/getAllHomeworks");
