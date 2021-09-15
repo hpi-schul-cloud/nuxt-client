@@ -178,17 +178,32 @@ export default {
 				"pages.administration.students.index"
 			),
 			page:
-				this.$uiState.get("pagination", "pages.administration.students.index")
-					.page || 1,
+				this.$uiState.get(
+					"pagination",
+					"pages.administration.students.index" &&
+						this.$uiState.get(
+							"pagination",
+							"pages.administration.students.index"
+						).page
+				) || 1,
 			limit:
-				this.$uiState.get("pagination", "pages.administration.students.index")
-					.limit || 25,
+				(this.$uiState.get(
+					"pagination",
+					"pages.administration.students.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.students.index")
+						.limit) ||
+				25,
 			sortBy:
-				this.$uiState.get("sorting", "pages.administration.students.index")
-					.sortBy || "firstName",
+				(this.$uiState.get("sorting", "pages.administration.students.index") &&
+					this.$uiState.get("sorting", "pages.administration.students.index")
+						.sortBy) ||
+				"firstName",
 			sortOrder:
-				this.$uiState.get("sorting", "pages.administration.students.index")
-					.sortOrder || "asc",
+				(this.$uiState.get("sorting", "pages.administration.students.index") &&
+					this.$uiState.get("sorting", "pages.administration.students.index")
+						.sortOrder) ||
+				"asc",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -303,8 +318,10 @@ export default {
 			filters: studentFilter(this),
 			active: false,
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
-					.searchQuery || "",
+				(this.$uiState.get("filter", "pages.administration.students.index") &&
+					this.$uiState.get("filter", "pages.administration.students.index")
+						.searchQuery) ||
+				"",
 		};
 	},
 	layout: "defaultVuetify",

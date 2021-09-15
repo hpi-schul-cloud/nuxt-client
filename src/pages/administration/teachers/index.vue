@@ -170,17 +170,31 @@ export default {
 			),
 			test: this.$uiState,
 			page:
-				this.$uiState.get("pagination", "pages.administration.teachers.index")
-					.page || 1,
+				(this.$uiState.get(
+					"pagination",
+					"pages.administration.teachers.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.teachers.index")
+						.page) ||
+				1,
 			limit:
-				this.$uiState.get("pagination", "pages.administration.teachers.index")
-					.limit || 25,
+				(this.$uiState.get(
+					"pagination",
+					"pages.administration.teachers.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.teachers.index")
+						.limit) ||
+				25,
 			sortBy:
-				this.$uiState.get("sorting", "pages.administration.teachers.index")
-					.sortBy || "firstName",
+				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
+					this.$uiState.get("sorting", "pages.administration.teachers.index")
+						.sortBy) ||
+				"firstName",
 			sortOrder:
-				this.$uiState.get("sorting", "pages.administration.teachers.index")
-					.sortOrder || "asc",
+				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
+					this.$uiState.get("sorting", "pages.administration.teachers.index")
+						.sortOrder) ||
+				"asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
@@ -273,8 +287,10 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.teachers.index")
-					.searchQuery || "",
+				(this.$uiState.get("filter", "pages.administration.teachers.index") &&
+					this.$uiState.get("filter", "pages.administration.teachers.index")
+						.searchQuery) ||
+				"",
 		};
 	},
 	computed: {
@@ -361,7 +377,7 @@ export default {
 				"pages.administration.teacher.index"
 			);
 
-			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
 
 			this.currentFilterQuery = query;
 			if (
