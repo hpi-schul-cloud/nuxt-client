@@ -27,10 +27,7 @@
 			</v-col>
 		</v-row>
 
-		<vCustomDialog
-			v-model="groupDialog.isOpen"
-			@dialog-closed="groupDialog.isOpen = false"
-		>
+		<vCustomDialog v-model="groupDialog.isOpen">
 			<div slot="title">
 				<h2 class="text-h4 my-2">
 					{{ groupDialog.groupData.title }}
@@ -41,7 +38,7 @@
 					<v-col
 						v-for="item in groupDialog.groupData.group"
 						:key="item.id"
-						cols="4"
+						:cols="maxItem"
 					>
 						<vRoomAvatar
 							:item="item"
@@ -80,6 +77,7 @@ export default {
 				itemRatio: 0.8,
 			},
 			device: null,
+			maxItem: 4,
 
 			dimensions: {
 				width: null,
@@ -105,7 +103,8 @@ export default {
 	},
 	async created() {
 		await RoomsModule.fetch(); // this method will receive a string parameter (Eg, mobile | tablet | desktop)
-		this.roomsData = RoomsModule.getRoomData;
+		this.roomsData = RoomsModule.getRoomsData;
+		// this.roomsData = mobileData;
 	},
 	mounted() {
 		this.getDeviceDims();

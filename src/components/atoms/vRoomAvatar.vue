@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<v-badge
-			class="ma-0"
+			class="ma-0 badge-component"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
 			overlap
-			:value="(showBadge && item.notification) || false"
+			:value="showBadge === item.notification"
 		>
 			<v-avatar
-				class="ma-0 pa-1"
+				class="ma-0 pa-1 avatar-component"
 				:color="item.displayColor"
 				:size="size"
 				:class="groupAvatar ? 'rounded' : 'rounded-xl'"
@@ -54,6 +54,7 @@ export default {
 				title.slice(1).toLowerCase().substring(0, 1)
 			);
 		},
+		displayBadge: () => showBadge && item.notification,
 	},
 };
 </script>

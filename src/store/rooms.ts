@@ -13,6 +13,15 @@ type Pos = {
 	yPosition: number;
 };
 
+type RoomsData = {
+	id: string;
+	title: string;
+	shortTitle: string;
+	displayColor: string;
+	xPosition: number;
+	yPosition: number;
+};
+
 @Module({
 	name: "rooms",
 	namespaced: true,
@@ -21,19 +30,14 @@ type Pos = {
 	stateFactory: true,
 })
 export class Rooms extends VuexModule {
-	roomsData: any = [];
+	roomsData: Array<RoomsData> = [];
 
 	loading: boolean = false;
 	error: null | {} = null;
 
 	@Mutation
-	setRoomData(data: []): void {
+	setRoomData(data: Array<RoomsData>): void {
 		this.roomsData = data;
-	}
-
-	@Mutation
-	setAlignment(data: Object): void {
-		// TODO: set alignment
 	}
 
 	@Mutation
@@ -46,7 +50,7 @@ export class Rooms extends VuexModule {
 		this.error = error;
 	}
 
-	get getRoomData(): Object {
+	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
 
@@ -66,7 +70,7 @@ export class Rooms extends VuexModule {
 		try {
 			const fetched = await $axios.$get("/v3/dashboard/");
 
-			this.setRoomData(fetched.gridElements);
+			this.setRoomData(fetched.gridElements || []);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -75,10 +79,14 @@ export class Rooms extends VuexModule {
 	}
 
 	@Action
-	async align(from: Pos, to: Pos, roomObject: object = {}): Promise<void> {
+	async align(
+		from: Pos,
+		to: Pos,
+		roomObject: RoomsData | Object = {}
+	): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO: alignment
+			// TODO: align and set the state
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
@@ -86,7 +94,7 @@ export class Rooms extends VuexModule {
 	}
 
 	@Action
-	async update(payload: any): Promise<void> {
+	async update(payload: RoomsData): Promise<void> {
 		this.setLoading(true);
 		try {
 			// TODO: update data
