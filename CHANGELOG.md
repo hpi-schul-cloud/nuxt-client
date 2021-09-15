@@ -16,6 +16,11 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-234 - replaced hpi by datport in nbc imprint
 - BC-81 - removes old lern-store mode env var
+- BC-179 - refactored homeworks store
+
+### Fixed
+
+- BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
 
 ## [26.10.1] - 2021-09-07
