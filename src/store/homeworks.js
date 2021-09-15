@@ -1,45 +1,72 @@
-import { merge } from "lodash";
-import { serviceTemplate } from "@utils";
-import AuthModule from "@/store/auth";
-
-const base = serviceTemplate("homework");
-const baseState = base.state();
-
-const hasPermission = (permissionString) =>
-	AuthModule.getUser.permissions.includes(permissionString);
-
-const TaskPermission = {
-	teacher: "TASK_DASHBOARD_TEACHER_VIEW_V3",
-	student: "TASK_DASHBOARD_VIEW_V3",
+const filterByCourses = (homeworks, courses) => {
+	return courses.length
+		? homeworks.filter((homework) => {
+				return courses.includes(homework.courseName);
+		  })
+		: homeworks;
 };
 
-const TaskRoutes = {
-	open: "/v3/tasks/open/",
-	completed: "/v3/tasks/completed/",
+const filterOpen = (homeworks) => {
+	return homeworks.filter(
+		(homework) =>
+			homework.status.submitted === 0 && homework.status.graded === 0
+	);
 };
 
-const module = merge(base, {
-	state: () =>
-		merge(baseState, {
+const filterNoDueDate = (homeworks) => {
+	return homeworks.filter((homework) => {
+		return !homework.duedate;
+	});
+};
+
+const filterWithDueDate = (homeworks) => {
+	return homeworks.filter((homework) => {
+		return homework.duedate && new Date(homework.duedate) > new Date();
+	});
+};
+
+const filterOverdue = (homeworks) => {
+	return homeworks.filter((homework) => {
+		return homework.duedate && new Date(homework.duedate) < new Date();
+	});
+};
+
+const filterCompleted = (homeworks) => {
+	return homeworks.filter(
+		(homework) => homework.status.submitted >= 1 || homework.status.graded >= 1
+	);
+};
+
+const filterSubmitted = (homeworks) => {
+	return homeworks.filter(
+		(homework) => homework.status.submitted > 0 && homework.status.graded === 0
+	);
+};
+
+const filterGraded = (homeworks) => {
+	return homeworks.filter((homework) => homework.status.graded > 0);
+};
+
+const module = {
+	state: () => {
+		return {
+			homeworks: [],
 			courseFilter: [],
-		}),
+			status: "",
+			businessError: {
+				statusCode: "",
+				message: "",
+			},
+		};
+	},
 	actions: {
-		getHomeworksDashboard: async function ({ commit }) {
+		getAllHomeworks: async function ({ commit }) {
+			commit("resetBusinessError");
 			commit("setStatus", "pending");
 			try {
-				const openPromise = this.$axios.$get(TaskRoutes.open);
-				const completedPromise = hasPermission(TaskPermission.student)
-					? this.$axios.$get(TaskRoutes.completed)
-					: Promise.resolve({ data: [] });
+				const response = await this.$axios.$get("/v3/tasks/");
 
-				const [open, completed] = await Promise.all([
-					openPromise,
-					completedPromise,
-				]);
-
-				commit("set", {
-					items: [...completed.data, ...open.data],
-				});
+				commit("setHomeworks", response.data);
 				commit("setStatus", "completed");
 			} catch (error) {
 				if (error.response) {
@@ -50,120 +77,91 @@ const module = merge(base, {
 		},
 	},
 	mutations: {
+		setHomeworks(state, homeworks) {
+			state.homeworks = homeworks;
+		},
 		setFilter(state, payload) {
 			state.courseFilter = payload;
 		},
+		setStatus(state, status) {
+			state.status = status;
+		},
+		setBusinessError(state, error) {
+			state.businessError = error;
+		},
+		resetBusinessError(state) {
+			state.businessError = { statusCode: "", message: "" };
+		},
 	},
 	getters: {
-		isListEmpty: (state) => {
-			return state.status === "completed" && state.list.length === 0;
+		hasNoHomeworks: (state) => {
+			return state.status === "completed" && state.homeworks.length === 0;
 		},
-		isListFilled: (state) => {
-			return state.status === "completed" && state.list.length > 0;
+		hasNoOpenHomeworks: (state) => {
+			return (
+				state.status === "completed" &&
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+					.length === 0
+			);
+		},
+		hasNoCompletedHomeworks: (state) => {
+			return (
+				state.status === "completed" &&
+				filterCompleted(filterByCourses(state.homeworks, state.courseFilter))
+					.length === 0
+			);
+		},
+		getHomeworks: (state) => state.homeworks,
+		getStatus: (state) => state.status,
+		getOpenHomeworksForStudent: (state) => {
+			const openHomeworks = {};
+
+			openHomeworks.overdue = filterOverdue(
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+			);
+			openHomeworks.noDueDate = filterNoDueDate(
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+			);
+			openHomeworks.withDueDate = filterWithDueDate(
+				filterOpen(filterByCourses(state.homeworks, state.courseFilter))
+			);
+
+			return openHomeworks;
+		},
+		getOpenHomeworksForTeacher: (state) => {
+			const openHomeworks = {};
+
+			openHomeworks.overdue = filterOverdue(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+			openHomeworks.noDueDate = filterNoDueDate(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+			openHomeworks.withDueDate = filterWithDueDate(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+
+			return openHomeworks;
+		},
+		getCompletedHomeworksForStudent: (state) => {
+			const completedHomeworks = {};
+
+			completedHomeworks.submitted = filterSubmitted(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+			completedHomeworks.graded = filterGraded(
+				filterByCourses(state.homeworks, state.courseFilter)
+			);
+
+			return completedHomeworks;
 		},
 		getCourses: (state) => {
 			const courses = new Set(
-				state.list.map((homework) => homework.courseName)
+				state.homeworks.map((homework) => homework.courseName)
 			);
 			return Array.from(courses);
-		},
-		getCoursesOpen: (state, getters) => {
-			const courses = new Set(
-				getters.getOpenHomeworks.map((homework) => homework.courseName)
-			);
-			return Array.from(courses);
-		},
-		getCoursesCompleted: (state, getters) => {
-			const courses = new Set(
-				getters.getCompletedHomeworks.map((homework) => homework.courseName)
-			);
-			return Array.from(courses);
-		},
-		getHomeworks: (state, getters) => {
-			return state.courseFilter.length > 0
-				? getters.getFilteredHomeworks
-				: state.list;
-		},
-		getFilteredHomeworks: (state) => {
-			const coursesToFilter = state.courseFilter;
-			return state.list.filter((homework) => {
-				return coursesToFilter.includes(homework.courseName);
-			});
-		},
-		getOpenHomeworksWithDueDate: (state, getters) => {
-			return getters.getOpenHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) > new Date();
-			});
-		},
-		getOpenHomeworksWithDueDateTeacher: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) > new Date();
-			});
-		},
-		getOpenHomeworksWithoutDueDate: (state, getters) => {
-			return getters.getOpenHomeworks.filter((homework) => {
-				return !homework.duedate;
-			});
-		},
-		getOpenHomeworksWithoutDueDateTeacher: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return !homework.duedate;
-			});
-		},
-		getOverDueHomeworks: (state, getters) => {
-			return getters.getOpenHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) < new Date();
-			});
-		},
-		getOverDueHomeworksTeacher: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.duedate && new Date(homework.duedate) < new Date();
-			});
-		},
-		getOpenHomeworks: (state, getters) => {
-			return getters.getHomeworks.filter((homework) => {
-				return homework.status.submitted === 0 && homework.status.graded === 0;
-			});
-		},
-		getCompletedHomeworks: (state, getters) => {
-			const completedTask = getters.getHomeworks.filter((homework) => {
-				return homework.status.graded >= 1 || homework.status.submitted >= 1;
-			});
-			return completedTask;
-		},
-		getSubmittedHomeworks: (state, getters) => {
-			const submittedTasks = getters.getHomeworks.filter((homework) => {
-				return homework.status.submitted >= 1 && homework.status.graded === 0;
-			});
-			return submittedTasks;
-		},
-		getGradedHomeworks: (state, getters) => {
-			return getters.getCompletedHomeworks.filter((homework) => {
-				return homework.status.graded >= 1;
-			});
-		},
-		hasOpenHomeworks: (state, getters) => {
-			return (
-				state.status === "completed" && getters.getOpenHomeworks.length > 0
-			);
-		},
-		hasCompletedHomeworks: (state, getters) => {
-			return (
-				state.status === "completed" && getters.getCompletedHomeworks.length > 0
-			);
-		},
-		hasNoOpenHomeworks: (state, getters) => {
-			return (
-				state.status === "completed" && getters.getOpenHomeworks.length === 0
-			);
-		},
-		hasNoCompletedHomeworks: (state, getters) => {
-			return (
-				state.status === "completed" &&
-				getters.getCompletedHomeworks.length === 0
-			);
 		},
 	},
-});
+};
 
 export default module;

@@ -4,7 +4,9 @@
 			<v-tab-item>
 				<v-custom-double-panels
 					:panel-one-count="noDueDateHomeworks.length"
-					:panel-two-count="dueDateHomeworks.length + overDueHomeworks.length"
+					:panel-two-count="
+						withDueDateHomeworks.length + overdueHomeworks.length
+					"
 					:panel-one-title="$t('pages.homeworks.subtitleNoDue')"
 					:panel-two-title="$t('pages.homeworks.subtitleWithDue')"
 					:status="status"
@@ -16,12 +18,12 @@
 					</template>
 					<template v-slot:panelTwo>
 						<homeworks-list
-							:homeworks="dueDateHomeworks"
+							:homeworks="withDueDateHomeworks"
 							:title="$t('pages.homeworks.subtitleOpen')"
 							type="student"
 						/>
 						<homeworks-list
-							:homeworks="overDueHomeworks"
+							:homeworks="overdueHomeworks"
 							:title="$t('pages.homeworks.student.subtitleOverDue')"
 							type="student"
 						/>
@@ -86,16 +88,27 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			status: "getStatus",
-			dueDateHomeworks: "getOpenHomeworksWithDueDate",
-			overDueHomeworks: "getOverDueHomeworks",
-			noDueDateHomeworks: "getOpenHomeworksWithoutDueDate",
-			gradedHomeworks: "getGradedHomeworks",
-			submittedHomeworks: "getSubmittedHomeworks",
-			status: "getStatus",
-			isListEmpty: "isListEmpty",
+			openHomeworks: "getOpenHomeworksForStudent",
+			completedHomeworks: "getCompletedHomeworksForStudent",
+			hasNoHomeworks: "hasNoHomeworks",
 			hasNoOpenHomeworks: "hasNoOpenHomeworks",
 			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
 		}),
+		overdueHomeworks: function () {
+			return this.openHomeworks.overdue;
+		},
+		noDueDateHomeworks: function () {
+			return this.openHomeworks.noDueDate;
+		},
+		withDueDateHomeworks: function () {
+			return this.openHomeworks.withDueDate;
+		},
+		submittedHomeworks: function () {
+			return this.completedHomeworks.submitted;
+		},
+		gradedHomeworks: function () {
+			return this.completedHomeworks.graded;
+		},
 	},
 };
 </script>
