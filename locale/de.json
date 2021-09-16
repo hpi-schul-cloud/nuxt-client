@@ -587,8 +587,6 @@
 	"pages.homeworks.title": "Aktuelle Aufgaben",
 	"pages.homeworks.student.openTasks": "Offene Aufgaben",
 	"pages.homeworks.student.submittedTasks": "Erledigte Aufgaben",
-	"pages.homeworks.student.emptyState.title": "Es gibt keine aktuellen Aufgaben.",
-	"pages.homeworks.student.emptyState.subtitle": "Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!",
 	"pages.homeworks.student.open.emptyState.title": "Es gibt keine offenen Aufgaben.",
 	"pages.homeworks.student.open.emptyState.subtitle": "Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!",
 	"pages.homeworks.student.submitted.emptyState.title": "Du hast keine erledigten Aufgaben.",
