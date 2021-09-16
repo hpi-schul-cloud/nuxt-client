@@ -45,13 +45,7 @@
 import { fromNow } from "@plugins/datetime";
 import { printDateFromStringUTC } from "@plugins/datetime";
 
-const taskRequiredKeys = [
-	"courseName",
-	"createdAt",
-	"id",
-	"name",
-	"status",
-];
+const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
 
 export default {
 	components: {},
@@ -59,8 +53,7 @@ export default {
 		task: {
 			type: Object,
 			required: true,
-			validator: (task) =>
-				taskRequiredKeys.every((key) => key in task),
+			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
 	},
 	data() {
@@ -82,8 +75,7 @@ export default {
 				return this.$t("pages.tasks.labels.noDueDate");
 			} else {
 				return (
-					this.$t("pages.tasks.labels.due") +
-					printDateFromStringUTC(dueDate)
+					this.$t("pages.tasks.labels.due") + printDateFromStringUTC(dueDate)
 				);
 			}
 		},
