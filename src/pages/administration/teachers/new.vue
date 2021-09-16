@@ -28,7 +28,7 @@
 <script>
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
-import DefaultWireframe from "@components/molecules/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
 export default {
 	components: {

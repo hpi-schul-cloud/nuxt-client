@@ -21,9 +21,9 @@
 	</v-container>
 </template>
 <script lang="ts">
-import vCustomBreadcrumbs from "@components/molecules/vCustomBreadcrumbs.vue";
+import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 
-export type Breadcrump = {
+export type Breadcrumb = {
 	text: string;
 	href?: string;
 	disabled?: boolean;
@@ -46,9 +46,7 @@ export default {
 		},
 		fullWidth: {
 			type: Boolean,
-			required: false,
-			// eslint-disable-next-line vue/no-boolean-default
-			default: true,
+			required: true,
 		},
 	},
 };
@@ -58,8 +56,6 @@ export default {
 
 .container.wireframe-container {
 	padding: 0 var(--space-lg); // Desktop
-	// padding: 0 36px;
-	// padding: 0 36px;
 }
 
 .container.main-content {

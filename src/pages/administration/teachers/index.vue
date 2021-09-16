@@ -132,7 +132,7 @@ import AuthModule from "@/store/auth";
 import { mapGetters } from "vuex";
 import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
-import DefaultWireframe from "@components/molecules/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";

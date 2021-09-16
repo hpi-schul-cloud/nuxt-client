@@ -38,7 +38,6 @@ const routes = [
 	//`^/news/${mongoId}/?$`,
 	`^/news/${mongoId}/edit`,
 	`^/nuxtversion/?$`,
-	`^/layout-tmp/.*?$`,
 	// `^/courses/?$`,
 ];
 

@@ -53,7 +53,7 @@
 <script>
 import EnvConfigModule from "@store/env-config";
 import SchoolsModule from "@/store/schools";
-import DefaultWireframe from "@components/molecules/DefaultWireframe.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import AuthSystems from "@components/organisms/administration/AuthSystems";
