@@ -496,6 +496,3 @@ export const mathHomeworks = [
 		},
 	},
 ];
-
-export const coursesOpen = ["Mathe", "Chemie"];
-export const coursesCompleted = ["Mathe", "Biologie"];

@@ -12,7 +12,6 @@
 				:type="'list-item-avatar-two-line'"
 			/>
 		</template>
-
 		<template
 			v-for="(homework, index) of homeworks"
 			v-else-if="type === 'student'"
@@ -23,7 +22,6 @@
 				:key="`divider-${index}`"
 			/>
 		</template>
-
 		<template
 			v-for="(homework, index) of homeworks"
 			v-else-if="type === 'teacher'"

@@ -1,84 +1,55 @@
 <template>
 	<section>
-		<section>
-			<v-container v-if="status === 'pending'">
+		<div class="border-bottom">
+			<v-container>
 				<h1 class="h4">
-					<v-skeleton-loader type="heading" max-width="75%" />
+					{{ $t("pages.homeworks.title") }}
 				</h1>
-				<v-skeleton-loader type="text" />
 			</v-container>
-
-			<template v-else>
-				<div v-if="isListFilled" class="border-bottom">
-					<v-container>
-						<h1 class="h4">
-							{{ $t("pages.homeworks.title") }}
-						</h1>
-					</v-container>
-					<div v-if="showTabs" class="pb-0 d-flex justify-center">
-						<v-tabs v-model="tab" grow class="tabs-max-width">
-							<v-tab>
-								<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-								<span class="d-none d-sm-inline">{{
-									$t("components.organisms.HomeworksDashboardMain.tab.open")
-								}}</span>
-							</v-tab>
-							<v-tab>
-								<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-								<span class="d-none d-sm-inline">{{
-									$t(
-										"components.organisms.HomeworksDashboardMain.tab.completed"
-									)
-								}}</span>
-							</v-tab>
-						</v-tabs>
-					</div>
-				</div>
-			</template>
-		</section>
-
+			<div v-if="isStudent" class="pb-0 d-flex justify-center">
+				<v-tabs v-model="tab" grow class="tabs-max-width">
+					<v-tab>
+						<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
+						<span class="d-none d-sm-inline">{{
+							$t("components.organisms.HomeworksDashboardMain.tab.open")
+						}}</span>
+					</v-tab>
+					<v-tab>
+						<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
+						<span class="d-none d-sm-inline">{{
+							$t("components.organisms.HomeworksDashboardMain.tab.completed")
+						}}</span>
+					</v-tab>
+				</v-tabs>
+			</div>
+		</div>
 		<v-container class="v-container mt-5 mb-14">
-			<v-autocomplete
-				v-if="isListFilled"
+			<v-custom-autocomplete
+				v-if="hasHomeworks"
 				v-model="selectedCourses"
-				:items="availableCourses"
-				small-chips
-				deletable-chips
+				:items="courses"
 				:label="$t('pages.homeworks.labels.filter')"
 				:no-data-text="$t('pages.homeworks.labels.noCoursesAvailable')"
-				multiple
-				clearable
-				solo
-				rounded
-				:menu-props="{ closeOnContentClick: false }"
 				:disabled="isFilterDisabled"
-				@change="filterByCourse"
+				@selected-item="filterByCourse"
 			/>
-			<v-custom-empty-state
-				v-if="isListEmpty"
-				:image="image"
-				:title="emptyStateTitle"
-				:subtitle="emptyStateSubtitle"
-				class="mt-16"
-			/>
-			<homeworks-dashboard-student v-else-if="isStudent" :tab="tab" />
+			<homeworks-dashboard-student v-if="isStudent" :tab="tab" />
 			<homeworks-dashboard-teacher v-else />
 		</v-container>
 	</section>
 </template>
 
 <script>
-import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
+import { mapGetters } from "vuex";
+import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import HomeworksDashboardTeacher from "./HomeworksDashboardTeacher";
 import HomeworksDashboardStudent from "./HomeworksDashboardStudent";
-import { mapGetters } from "vuex";
 
 export default {
 	components: {
+		vCustomAutocomplete,
 		HomeworksDashboardStudent,
 		HomeworksDashboardTeacher,
-		vCustomEmptyState,
 	},
 	props: {
 		role: {
@@ -89,7 +60,6 @@ export default {
 	},
 	data() {
 		return {
-			image: tasksEmptyState,
 			selectedCourses: [],
 			tab: 0,
 		};
@@ -97,52 +67,31 @@ export default {
 	computed: {
 		...mapGetters("homeworks", {
 			status: "getStatus",
-			isListFilled: "isListFilled",
-			isListEmpty: "isListEmpty",
-			hasOpenHomeworks: "hasOpenHomeworks",
-			hasCompletedHomeworks: "hasCompletedHomeworks",
-			getCourses: "getCourses",
-			getCoursesOpen: "getCoursesOpen",
-			getCoursesCompleted: "getCoursesCompleted",
+			hasNoHomeworks: "hasNoHomeworks",
+			hasNoOpenHomeworks: "hasNoOpenHomeworks",
+			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
+			courses: "getCourses",
 		}),
 		isStudent: function () {
 			return this.role === "student";
 		},
-		emptyStateTitle: function () {
-			// TODO: remove if wording stays the same
-			return this.isStudent
-				? this.$t("pages.homeworks.student.emptyState.title")
-				: this.$t("pages.homeworks.teacher.emptyState.title");
-		},
-		emptyStateSubtitle: function () {
-			return this.isStudent
-				? this.$t("pages.homeworks.student.emptyState.subtitle")
-				: this.$t("pages.homeworks.teacher.emptyState.subtitle");
-		},
-		showTabs: function () {
-			return this.isStudent && this.isListFilled;
-		},
-		availableCourses: function () {
-			if (this.role === "teacher") {
-				return this.getCourses;
-			} else if (this.tab === 0) {
-				return this.getCoursesOpen;
-			} else {
-				return this.getCoursesCompleted;
-			}
-		},
 		isFilterDisabled: function () {
-			if (this.tab === 0 && !this.hasOpenHomeworks) {
+			if (this.selectedCourses.length > 0) return false;
+
+			if (this.tab === 0 && this.hasNoOpenHomeworks) {
 				return true;
-			} else if (this.tab === 1 && !this.hasCompletedHomeworks) {
+			} else if (this.tab === 1 && this.hasNoCompletedHomeworks) {
 				return true;
 			} else {
 				return false;
 			}
 		},
+		hasHomeworks: function () {
+			return !this.hasNoHomeworks;
+		},
 	},
-	mounted() {
-		this.$store.dispatch("homeworks/getHomeworksDashboard");
+	created() {
+		this.$store.dispatch("homeworks/getAllHomeworks");
 	},
 	methods: {
 		filterByCourse() {
