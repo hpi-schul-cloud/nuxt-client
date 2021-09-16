@@ -6,29 +6,29 @@
 		<template v-if="status === 'pending'">
 			<v-skeleton-loader type="text" :max-width="'15%'" />
 			<v-skeleton-loader
-				v-for="homework of 4"
+				v-for="task of 4"
 				ref="skeleton"
-				:key="homework"
+				:key="task"
 				:type="'list-item-avatar-two-line'"
 			/>
 		</template>
 		<template
-			v-for="(homework, index) of homeworks"
+			v-for="(task, index) of tasks"
 			v-else-if="type === 'student'"
 		>
-			<v-homework-item-student :key="index" :homework="homework" />
+			<v-task-item-student :key="index" :task="task" />
 			<v-divider
-				v-if="index < homeworks.length - 1"
+				v-if="index < tasks.length - 1"
 				:key="`divider-${index}`"
 			/>
 		</template>
 		<template
-			v-for="(homework, index) of homeworks"
+			v-for="(task, index) of tasks"
 			v-else-if="type === 'teacher'"
 		>
-			<v-homework-item-teacher :key="index" :homework="homework" />
+			<v-task-item-teacher :key="index" :task="task" />
 			<v-divider
-				v-if="index < homeworks.length - 1"
+				v-if="index < tasks.length - 1"
 				:key="`divider-${index}`"
 			/>
 		</template>
@@ -36,14 +36,14 @@
 </template>
 
 <script>
-import VHomeworkItemStudent from "@components/molecules/vHomeworkItemStudent";
-import VHomeworkItemTeacher from "@components/molecules/vHomeworkItemTeacher";
+import VTaskItemStudent from "@components/molecules/vTaskItemStudent";
+import VTaskItemTeacher from "@components/molecules/vTaskItemTeacher";
 import { mapGetters } from "vuex";
 
 export default {
-	components: { VHomeworkItemStudent, VHomeworkItemTeacher },
+	components: { VTaskItemStudent, VTaskItemTeacher },
 	props: {
-		homeworks: {
+		tasks: {
 			type: Array,
 			required: false,
 			default: () => [],
@@ -60,11 +60,11 @@ export default {
 		},
 	},
 	computed: {
-		...mapGetters("homeworks", {
+		...mapGetters("tasks", {
 			status: "getStatus",
 		}),
 		isListFilled: function () {
-			return this.status === "completed" && this.homeworks.length > 0;
+			return this.status === "completed" && this.tasks.length > 0;
 		},
 	},
 };

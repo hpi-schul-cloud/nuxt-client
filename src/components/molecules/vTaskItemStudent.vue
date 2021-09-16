@@ -1,13 +1,13 @@
 <template>
-	<v-list-item :key="homework.id" :href="homeworkHref(homework.id)">
+	<v-list-item :key="task.id" :href="taskHref(task.id)">
 		<v-list-item-avatar>
 			<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle>
-				{{ homework.courseName }}
+				{{ task.courseName }}
 			</v-list-item-subtitle>
-			<v-list-item-title v-text="homework.name" />
+			<v-list-item-title v-text="task.name" />
 		</v-list-item-content>
 		<v-list-item-action>
 			<v-list-item-action-text
@@ -15,7 +15,7 @@
 				data-test-id="dueDateLabel"
 				v-text="
 					computedDueDateLabel(
-						homework.duedate,
+						task.duedate,
 						(shorten = $vuetify.breakpoint.xsOnly)
 					)
 				"
@@ -24,7 +24,7 @@
 			<v-custom-chip-time-remaining
 				v-if="taskState === 'warning'"
 				:type="taskState"
-				:due-date="homework.duedate"
+				:due-date="task.duedate"
 				:shorten-date="$vuetify.breakpoint.xsOnly"
 			/>
 		</v-list-item-action>
@@ -39,16 +39,16 @@ import {
 	printDateTimeFromStringUTC,
 } from "@plugins/datetime";
 
-const homeworkRequiredKeys = ["courseName", "createdAt", "id", "name"];
+const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
 	components: { VCustomChipTimeRemaining },
 	props: {
-		homework: {
+		task: {
 			type: Object,
 			required: true,
-			validator: (homework) =>
-				homeworkRequiredKeys.every((key) => key in homework),
+			validator: (task) =>
+				taskRequiredKeys.every((key) => key in task),
 		},
 	},
 	data() {
@@ -58,7 +58,7 @@ export default {
 	},
 	computed: {
 		taskState() {
-			const { duedate, status } = this.homework;
+			const { duedate, status } = this.task;
 			if (this.isCloseToDueDate(duedate)) return "warning";
 			if (this.isGradedButMissed(duedate, status)) return "gradedOverdue";
 			if (this.isOverDue(duedate)) return "overdue";
@@ -78,7 +78,7 @@ export default {
 			return stateIcons[this.taskState] || stateIcons["open"];
 		},
 		iconColor() {
-			return this.homework.displayColor || this.defaultIconColor;
+			return this.task.displayColor || this.defaultIconColor;
 		},
 		defaultIconColor() {
 			return "#455B6A";
@@ -87,15 +87,15 @@ export default {
 	methods: {
 		computedDueDateLabel(dueDate, shorten = false) {
 			if (!dueDate) {
-				return this.$t("pages.homeworks.labels.noDueDate");
+				return this.$t("pages.tasks.labels.noDueDate");
 			} else if (shorten) {
 				return (
-					this.$t("pages.homeworks.labels.due") +
+					this.$t("pages.tasks.labels.due") +
 					printDateFromStringUTC(dueDate)
 				);
 			} else {
 				return (
-					this.$t("pages.homeworks.labels.due") +
+					this.$t("pages.tasks.labels.due") +
 					printDateTimeFromStringUTC(dueDate)
 				);
 			}
@@ -112,7 +112,7 @@ export default {
 		isGradedButMissed(dueDate, status) {
 			return this.isOverDue(dueDate) && !status.submitted && status.graded;
 		},
-		homeworkHref: (id) => {
+		taskHref: (id) => {
 			return "/homework/" + id;
 		},
 	},

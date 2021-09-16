@@ -17,6 +17,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-234 - replaced hpi by datport in nbc imprint
 - BC-81 - removes old lern-store mode env var
 - BC-179 - refactored homeworks store
+- BC-XXX - renamed homeworks to tasks in client to fit server naming
 
 ### Fixed
 

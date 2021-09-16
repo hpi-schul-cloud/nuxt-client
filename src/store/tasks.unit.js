@@ -1,28 +1,28 @@
 import {
-	homeworks,
-	submittedHomeworks,
-	gradedHomeworks,
-	openHomeworksWithDueDate,
-	openHomeworksWithoutDueDate,
-	overDueHomeworks,
+	tasks,
+	submittedTasks,
+	gradedTasks,
+	openTasksWithDueDate,
+	openTasksWithoutDueDate,
+	overDueTasks,
 	coursesStudent,
 	coursesTeacher,
-	mathHomeworks,
-	homeworksTeacher,
-	overDueHomeworksTeacher,
-	noDueDateHomeworksTeacher,
-	dueDateHomeworksTeacher,
-} from "@@/stories/mockData/Homeworks";
-import storeModule from "./homeworks";
+	mathTasks,
+	tasksTeacher,
+	overDueTasksTeacher,
+	noDueDateTasksTeacher,
+	dueDateTasksTeacher,
+} from "@@/stories/mockData/Tasks";
+import storeModule from "./tasks";
 
-describe("store/homeworks", () => {
+describe("store/tasks", () => {
 	describe("actions", () => {
 		const spyCommit = jest.fn();
 		const ctxMock = {
 			commit: spyCommit,
 		};
 
-		describe("getAllHomeworks", () => {
+		describe("getAllTasks", () => {
 			it("should call the right endpoint", async () => {
 				const receivedRequests = [];
 
@@ -33,9 +33,9 @@ describe("store/homeworks", () => {
 					},
 				};
 
-				await storeModule.actions.getAllHomeworks(ctxMock);
+				await storeModule.actions.getAllTasks(ctxMock);
 				expect(spyCommit.mock.calls).toHaveLength(4);
-				expect(spyCommit.mock.calls[2][0]).toBe("setHomeworks");
+				expect(spyCommit.mock.calls[2][0]).toBe("setTasks");
 				expect(receivedRequests[0].url).toStrictEqual("/v3/tasks/");
 			});
 
@@ -56,7 +56,7 @@ describe("store/homeworks", () => {
 				};
 
 				spyCommit.mockClear();
-				await storeModule.actions.getAllHomeworks(ctxMock);
+				await storeModule.actions.getAllTasks(ctxMock);
 
 				const storeCalls = spyCommit.mock.calls;
 				const firstCall = storeCalls[0];
@@ -78,7 +78,7 @@ describe("store/homeworks", () => {
 				expect(fourthCommit).toBe("error");
 			});
 
-			it("should set loading state when fetching homeworks", async () => {
+			it("should set loading state when fetching tasks", async () => {
 				const receivedRequests = [];
 
 				storeModule.actions.$axios = {
@@ -88,7 +88,7 @@ describe("store/homeworks", () => {
 					},
 				};
 				spyCommit.mockClear();
-				await storeModule.actions.getAllHomeworks(ctxMock);
+				await storeModule.actions.getAllTasks(ctxMock);
 
 				const storeCalls = spyCommit.mock.calls;
 
@@ -106,14 +106,14 @@ describe("store/homeworks", () => {
 	});
 
 	describe("mutations", () => {
-		describe("setHomeworks", () => {
-			it("Should set homeworks in state", () => {
-				const { setHomeworks } = storeModule.mutations;
+		describe("setTasks", () => {
+			it("Should set tasks in state", () => {
+				const { setTasks } = storeModule.mutations;
 				const state = {
-					homeworks: [],
+					tasks: [],
 				};
-				setHomeworks(state, homeworks);
-				expect(state.homeworks).toStrictEqual(homeworks);
+				setTasks(state, tasks);
+				expect(state.tasks).toStrictEqual(tasks);
 			});
 		});
 
@@ -173,30 +173,30 @@ describe("store/homeworks", () => {
 
 	describe("getters", () => {
 		const studentState = {
-			homeworks,
+			tasks,
 			status: "completed",
 			courseFilter: [],
 		};
 		const teacherState = {
-			homeworks: homeworksTeacher,
+			tasks: tasksTeacher,
 			status: "completed",
 			courseFilter: [],
 		};
 		const teacherStateWithFilter = {
-			homeworks: homeworksTeacher,
+			tasks: tasksTeacher,
 			status: "completed",
 			courseFilter: ["Mathe"],
 		};
 		const emptyState = {
-			homeworks: [],
+			tasks: [],
 			status: "completed",
 			courseFilter: [],
 		};
 		const { getters } = storeModule;
 
-		describe("getHomeworks", () => {
-			it("Should return all homeworks", () => {
-				expect(getters.getHomeworks(studentState)).toStrictEqual(homeworks);
+		describe("getTasks", () => {
+			it("Should return all tasks", () => {
+				expect(getters.getTasks(studentState)).toStrictEqual(tasks);
 			});
 		});
 
@@ -206,120 +206,120 @@ describe("store/homeworks", () => {
 			});
 		});
 
-		describe("hasNoHomeworks", () => {
-			it("Should return true, if it's loaded and there are no homeworks", () => {
-				expect(getters.hasNoHomeworks(studentState)).toBe(false);
+		describe("hasNoTasks", () => {
+			it("Should return true, if it's loaded and there are no tasks", () => {
+				expect(getters.hasNoTasks(studentState)).toBe(false);
 			});
 		});
 
-		describe("hasNoOpenHomeworks", () => {
-			it("Should return true, if it's loaded and there are no open homeworks", () => {
-				expect(getters.hasNoOpenHomeworks(emptyState)).toBe(true);
+		describe("hasNoOpenTasks", () => {
+			it("Should return true, if it's loaded and there are no open tasks", () => {
+				expect(getters.hasNoOpenTasks(emptyState)).toBe(true);
 			});
 		});
 
-		describe("hasNoCompletedHomeworks", () => {
-			it("Should return true, if it's loaded and there are no completed homeworks", () => {
-				expect(getters.hasNoCompletedHomeworks(emptyState)).toBe(true);
+		describe("hasNoCompletedTasks", () => {
+			it("Should return true, if it's loaded and there are no completed tasks", () => {
+				expect(getters.hasNoCompletedTasks(emptyState)).toBe(true);
 			});
 		});
 
-		describe("getOpenHomeworksForStudent", () => {
+		describe("getOpenTasksForStudent", () => {
 			it("Should have properties for sub sets", () => {
-				expect(getters.getOpenHomeworksForStudent(studentState)).toHaveProperty(
+				expect(getters.getOpenTasksForStudent(studentState)).toHaveProperty(
 					"overdue"
 				);
-				expect(getters.getOpenHomeworksForStudent(studentState)).toHaveProperty(
+				expect(getters.getOpenTasksForStudent(studentState)).toHaveProperty(
 					"noDueDate"
 				);
-				expect(getters.getOpenHomeworksForStudent(studentState)).toHaveProperty(
+				expect(getters.getOpenTasksForStudent(studentState)).toHaveProperty(
 					"withDueDate"
 				);
 			});
 
-			it("Should have homeworks with due date", () => {
+			it("Should have tasks with due date", () => {
 				expect(
-					getters.getOpenHomeworksForStudent(studentState).withDueDate
-				).toHaveLength(openHomeworksWithDueDate.length);
+					getters.getOpenTasksForStudent(studentState).withDueDate
+				).toHaveLength(openTasksWithDueDate.length);
 			});
 
-			it("Should have homeworks with no due date", () => {
+			it("Should have tasks with no due date", () => {
 				expect(
-					getters.getOpenHomeworksForStudent(studentState).noDueDate
-				).toHaveLength(openHomeworksWithoutDueDate.length);
+					getters.getOpenTasksForStudent(studentState).noDueDate
+				).toHaveLength(openTasksWithoutDueDate.length);
 			});
 
-			it("Should have overdue homeworks", () => {
+			it("Should have overdue tasks", () => {
 				expect(
-					getters.getOpenHomeworksForStudent(studentState).overdue
-				).toHaveLength(overDueHomeworks.length);
+					getters.getOpenTasksForStudent(studentState).overdue
+				).toHaveLength(overDueTasks.length);
 			});
 		});
 
-		describe("getOpenHomeworksForTeacher", () => {
+		describe("getOpenTasksForTeacher", () => {
 			it("Should have properties for sub sets", () => {
-				expect(getters.getOpenHomeworksForTeacher(teacherState)).toHaveProperty(
+				expect(getters.getOpenTasksForTeacher(teacherState)).toHaveProperty(
 					"overdue"
 				);
-				expect(getters.getOpenHomeworksForTeacher(teacherState)).toHaveProperty(
+				expect(getters.getOpenTasksForTeacher(teacherState)).toHaveProperty(
 					"noDueDate"
 				);
-				expect(getters.getOpenHomeworksForTeacher(teacherState)).toHaveProperty(
+				expect(getters.getOpenTasksForTeacher(teacherState)).toHaveProperty(
 					"withDueDate"
 				);
 			});
 
-			it("Should have homeworks with due date", () => {
+			it("Should have tasks with due date", () => {
 				expect(
-					getters.getOpenHomeworksForTeacher(teacherState).withDueDate
-				).toHaveLength(dueDateHomeworksTeacher.length);
+					getters.getOpenTasksForTeacher(teacherState).withDueDate
+				).toHaveLength(dueDateTasksTeacher.length);
 			});
 
-			it("Should have homeworks with no due date", () => {
+			it("Should have tasks with no due date", () => {
 				expect(
-					getters.getOpenHomeworksForTeacher(teacherState).noDueDate
-				).toHaveLength(noDueDateHomeworksTeacher.length);
+					getters.getOpenTasksForTeacher(teacherState).noDueDate
+				).toHaveLength(noDueDateTasksTeacher.length);
 			});
 
-			it("Should have overdue homeworks", () => {
+			it("Should have overdue tasks", () => {
 				expect(
-					getters.getOpenHomeworksForTeacher(teacherState).overdue
-				).toHaveLength(overDueHomeworksTeacher.length);
+					getters.getOpenTasksForTeacher(teacherState).overdue
+				).toHaveLength(overDueTasksTeacher.length);
 			});
 
-			it("Should correctly filter homeworks", () => {
-				const filteredHomeworks = getters.getOpenHomeworksForTeacher(
+			it("Should correctly filter tasks", () => {
+				const filteredTasks = getters.getOpenTasksForTeacher(
 					teacherStateWithFilter
 				);
 
 				expect(
-					filteredHomeworks.overdue
-						.concat(filteredHomeworks.noDueDate)
-						.concat(filteredHomeworks.withDueDate)
-				).toHaveLength(mathHomeworks.length);
+					filteredTasks.overdue
+						.concat(filteredTasks.noDueDate)
+						.concat(filteredTasks.withDueDate)
+				).toHaveLength(mathTasks.length);
 			});
 		});
 
-		describe("getCompletedHomeworksForStudent", () => {
+		describe("getCompletedTasksForStudent", () => {
 			it("Should have properties for sub sets", () => {
 				expect(
-					getters.getCompletedHomeworksForStudent(studentState)
+					getters.getCompletedTasksForStudent(studentState)
 				).toHaveProperty("submitted");
 				expect(
-					getters.getCompletedHomeworksForStudent(studentState)
+					getters.getCompletedTasksForStudent(studentState)
 				).toHaveProperty("graded");
 			});
 
-			it("Should have all homeworks, that are submitted", () => {
+			it("Should have all tasks, that are submitted", () => {
 				expect(
-					getters.getCompletedHomeworksForStudent(studentState).submitted
-				).toStrictEqual(submittedHomeworks);
+					getters.getCompletedTasksForStudent(studentState).submitted
+				).toStrictEqual(submittedTasks);
 			});
 
-			it("Should have all homeworks, that are graded", () => {
+			it("Should have all tasks, that are graded", () => {
 				expect(
-					getters.getCompletedHomeworksForStudent(studentState).graded
-				).toStrictEqual(gradedHomeworks);
+					getters.getCompletedTasksForStudent(studentState).graded
+				).toStrictEqual(gradedTasks);
 			});
 		});
 
