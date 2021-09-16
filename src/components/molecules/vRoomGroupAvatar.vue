@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<v-badge
+			class="badge-component"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
@@ -10,7 +11,7 @@
 			<v-card
 				:height="size"
 				:width="size"
-				class="rounded-xl ma-0"
+				class="rounded-xl ma-0 card-component"
 				outlined
 				@click.prevent="$emit('clicked', items.id)"
 			>
@@ -22,7 +23,7 @@
 						class="ma-0 pa-1"
 					>
 						<vRoomAvatar
-							:key="item.id"
+							class="group-avatar-component"
 							:item="item"
 							:size="size / 3"
 							:group-avatar="true"
