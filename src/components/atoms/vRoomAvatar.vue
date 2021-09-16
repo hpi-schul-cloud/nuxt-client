@@ -6,7 +6,7 @@
 			color="var(--color-primary)"
 			icon="mdi-lock"
 			overlap
-			:value="showBadge === item.notification"
+			:value="displayBadge"
 		>
 			<v-avatar
 				class="ma-0 pa-1 avatar-component"
@@ -54,7 +54,9 @@ export default {
 				title.slice(1).toLowerCase().substring(0, 1)
 			);
 		},
-		displayBadge: () => showBadge && item.notification,
+		displayBadge() {
+			return this.showBadge === true && this.item.notification === true;
+		},
 	},
 };
 </script>
