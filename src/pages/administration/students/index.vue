@@ -178,14 +178,13 @@ export default {
 				"pages.administration.students.index"
 			),
 			page:
-				this.$uiState.get(
+				(this.$uiState.get(
 					"pagination",
-					"pages.administration.students.index" &&
-						this.$uiState.get(
-							"pagination",
-							"pages.administration.students.index"
-						).page
-				) || 1,
+					"pages.administration.students.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.students.index")
+						.page) ||
+				1,
 			limit:
 				(this.$uiState.get(
 					"pagination",
