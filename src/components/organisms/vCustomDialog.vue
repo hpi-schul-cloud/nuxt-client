@@ -1,5 +1,9 @@
 <template>
-	<v-dialog v-model="isOpen" :max-width="size">
+	<v-dialog
+		v-model="isOpen"
+		:max-width="size"
+		@click:outside="$emit('dialog-closed')"
+	>
 		<v-card :ripple="true">
 			<v-card-title>
 				<slot name="title"></slot>
@@ -7,7 +11,7 @@
 			<v-card-text>
 				<slot name="content"></slot>
 			</v-card-text>
-			<v-card-actions>
+			<v-card-actions v-if="hasButtons">
 				<v-spacer></v-spacer>
 				<v-btn
 					class="dialog-closed"
@@ -43,6 +47,9 @@ export default {
 		size: {
 			type: Number,
 			default: 480,
+		},
+		hasButtons: {
+			type: Boolean,
 		},
 	},
 };
