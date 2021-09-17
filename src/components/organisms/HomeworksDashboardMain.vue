@@ -27,7 +27,7 @@
 			<v-custom-autocomplete
 				v-if="hasHomeworks"
 				v-model="selectedCourses"
-				:items="courses"
+				:items="coursesWithTaskCount"
 				:label="$t('pages.homeworks.labels.filter')"
 				:no-data-text="$t('pages.homeworks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
@@ -70,6 +70,7 @@ export default {
 			hasNoHomeworks: "hasNoHomeworks",
 			hasNoOpenHomeworks: "hasNoOpenHomeworks",
 			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
+			homeworks: "getHomeworks",
 			courses: "getCourses",
 		}),
 		isStudent: function () {
@@ -88,6 +89,16 @@ export default {
 		},
 		hasHomeworks: function () {
 			return !this.hasNoHomeworks;
+		},
+		coursesWithTaskCount: function () {
+			return this.courses.map(
+				(courseName) =>
+					`${courseName} (${
+						this.homeworks.filter((homework) => {
+							return homework.courseName === courseName;
+						}).length
+					})`
+			);
 		},
 	},
 	created() {
