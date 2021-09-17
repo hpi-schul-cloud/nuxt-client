@@ -2,31 +2,12 @@ import AuthModule from "@/store/auth";
 
 const unrecoverableErrorCodes = [401, 404, 500];
 
-const asyncInterval = async (callback, ms, triesLeft = 5) => {
-	return new Promise((resolve, reject) => {
-		const interval = setInterval(async () => {
-			if (await callback()) {
-				resolve();
-				clearInterval(interval);
-			} else if (triesLeft <= 1) {
-				reject();
-				clearInterval(interval);
-			}
-			// eslint-disable-next-line no-param-reassign
-			triesLeft--;
-		}, ms);
-	});
-};
-
 export default async function ({ $axios, store, error }) {
-	await asyncInterval(
-		() => typeof schoolCloudRuntimeConfig !== "undefined",
-		50,
-		200
+	const runtimeConfigJson = await $axios.get(
+		`${window.location.origin}/runtime.config.json`
 	);
-
-	// Set baseURL (both client and server)
-	$axios.setBaseURL(schoolCloudRuntimeConfig.baseURL);
+	window.schoolCloudRuntimeConfig = runtimeConfigJson.data;
+	$axios.setBaseURL(window.schoolCloudRuntimeConfig.apiURL);
 
 	$axios.onRequest((config) => {
 		store.commit("error/reset");
