@@ -101,7 +101,7 @@ export default {
 			}));
 		},
 	},
-	created() {
+	mounted() {
 		this.$store.dispatch("homeworks/getAllHomeworks");
 	},
 	methods: {

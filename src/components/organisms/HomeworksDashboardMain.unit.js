@@ -5,13 +5,14 @@ import {
 	overDueHomeworksTeacher,
 	dueDateHomeworksTeacher,
 	noDueDateHomeworksTeacher,
-	courses,
+	coursesStudent,
 	coursesTeacher,
 	openHomeworksWithDueDate,
 	openHomeworksWithoutDueDate,
 	overDueHomeworks,
 	gradedHomeworks,
 	submittedHomeworks,
+	homeworks,
 } from "@@/stories/mockData/Homeworks";
 
 describe("@components/organisms/HomeworksDashboardMain", () => {
@@ -22,6 +23,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoHomeworks: () => false,
+				getHomeworks: () => homeworks,
 				getOpenHomeworksForStudent: () => ({
 					overdue: overDueHomeworks,
 					withDueDate: openHomeworksWithDueDate,
@@ -31,7 +33,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 					submitted: submittedHomeworks,
 					graded: gradedHomeworks,
 				}),
-				getCourses: () => courses,
+				getCourses: () => coursesStudent,
 				hasNoOpenHomeworks: () => false,
 				hasNoCompletedHomeworks: () => false,
 			},
@@ -49,6 +51,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoHomeworks: () => false,
+				getHomeworks: () => homeworks,
 				getOpenHomeworksForTeacher: () => ({
 					overdue: overDueHomeworksTeacher,
 					withDueDate: dueDateHomeworksTeacher,
@@ -68,6 +71,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoHomeworks: () => true,
+				getHomeworks: () => [],
 				getOpenHomeworksForTeacher: () => ({
 					overdue: [],
 					withDueDate: [],
@@ -85,6 +89,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		homeworks: {
 			getters: {
 				getStatus: () => "completed",
+				getHomeworks: () => [...submittedHomeworks, ...gradedHomeworks],
 				getOpenHomeworksForStudent: () => ({
 					overdue: [],
 					noDueDate: [],
@@ -97,7 +102,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				hasNoOpenHomeworks: () => true,
 				hasNoCompletedHomeworks: () => false,
 				hasNoHomeworks: () => false,
-				getCourses: () => courses,
+				getCourses: () => coursesStudent,
 			},
 			actions: {
 				getAllHomeworks,
@@ -235,30 +240,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		expect(mockMethod).toHaveBeenCalled();
 	});
 
-	it("Should set available courses based on the active tab", () => {
-		const wrapper = mount(HomeworksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreStudent,
-			}),
-			vuetify,
-			data() {
-				return {
-					tab: 0,
-				};
-			},
-			propsData: {
-				role: "student",
-			},
-		});
-
-		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
-		wrapper.setData({ tab: 1 });
-		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
-	});
-
-	it("Should disable filter when active tab contains empty list", () => {
+	it("Should disable filter when active tab contains empty list and no course is selected", () => {
 		const wrapper = mount(HomeworksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,

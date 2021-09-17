@@ -72,7 +72,8 @@ export default {
 		},
 		status: {
 			required: true,
-			validator: (val) => [null, "pending", "completed", "error"].includes(val),
+			validator: (val) =>
+				[null, "", "pending", "completed", "error"].includes(val),
 		},
 		isEmpty: {
 			type: Boolean,
@@ -109,6 +110,9 @@ export default {
 		isPanelTwoDisabled: function () {
 			return this.isPanelTwoEmpty && this.isCompleted;
 		},
+		areBothPanelsEmpty: function () {
+			return this.isPanelOneEmpty && this.isPanelTwoEmpty;
+		},
 	},
 	watch: {
 		isPanelOneEmpty: function () {
@@ -116,6 +120,9 @@ export default {
 		},
 		isPanelTwoEmpty: function () {
 			this.expanded = 0;
+		},
+		areBothPanelsEmpty: function () {
+			this.expanded = this.expandedDefault;
 		},
 	},
 	methods: {

@@ -1,5 +1,3 @@
-import { homeworks as mockData } from "@@/stories/mockData/Homeworks";
-
 const filterByCourses = (homeworks, courses) => {
 	return courses.length
 		? homeworks.filter((homework) => {
@@ -68,7 +66,7 @@ const module = {
 			try {
 				const response = await this.$axios.$get("/v3/tasks/");
 
-				commit("setHomeworks", response.data.concat(mockData));
+				commit("setHomeworks", response.data);
 				commit("setStatus", "completed");
 			} catch (error) {
 				if (error.response) {
