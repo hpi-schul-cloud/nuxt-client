@@ -1,6 +1,9 @@
 FROM node:lts as builder
 
 ENV NUXT_TELEMETRY_DISABLED=1
+ARG SC_THEME=default
+ENV SC_THEME ${SC_THEME}
+EXPOSE 4000
 
 RUN mkdir /app && chown -R node:node /app
 WORKDIR '/app'
@@ -10,11 +13,7 @@ USER node
 RUN npm ci
 COPY --chown=node:node . /app/
 
-ARG SC_THEME=default
-ENV SC_THEME ${SC_THEME}
-
+ENV NODE_ENV=production
 RUN ["npm", "run", "build:nuxt"]
 
-EXPOSE 4000
-
-CMD ["npm", "run", "start:nuxt"]
+CMD [ "./run.sh"]
