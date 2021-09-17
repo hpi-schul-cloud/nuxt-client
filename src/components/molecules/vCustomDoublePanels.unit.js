@@ -170,6 +170,69 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		);
 	});
 
+	it("Should open panel 2, if panel 1 disabled", () => {
+		const wrapper = mount(vCustomDoublePanels, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: propsDataPanelOneEmpty,
+		});
+		const expansionPanels = wrapper.findAll(".v-expansion-panel");
+
+		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels).toHaveLength(2);
+		expect(expansionPanels.at(0).classes()).toContain(
+			"v-expansion-panel--disabled"
+		);
+		expect(expansionPanels.at(1).classes()).not.toContain(
+			"v-expansion-panel--disabled"
+		);
+		expect(expansionPanels.at(1).classes()).toContain(
+			"v-expansion-panel--active"
+		);
+	});
+
+	it("Should open panel 1, if panel 2 disabled", () => {
+		const wrapper = mount(vCustomDoublePanels, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: propsDataPanelTwoEmpty,
+		});
+		const expansionPanels = wrapper.findAll(".v-expansion-panel");
+
+		expect(expansionPanels.exists()).toBe(true);
+		expect(expansionPanels).toHaveLength(2);
+		expect(expansionPanels.at(0).classes()).not.toContain(
+			"v-expansion-panel--disabled"
+		);
+		expect(expansionPanels.at(0).classes()).toContain(
+			"v-expansion-panel--active"
+		);
+		expect(expansionPanels.at(1).classes()).toContain(
+			"v-expansion-panel--disabled"
+		);
+	});
+
+	it("Should set open panel to default", () => {
+		const wrapper = mount(vCustomDoublePanels, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: propsDataEmpty,
+		});
+
+		const expansionDivs = wrapper.findAll("div[aria-expanded]");
+		expect(expansionDivs.at(0).attributes("aria-expanded")).toBe("true");
+		expect(expansionDivs.at(1).attributes("aria-expanded")).toBe("false");
+	});
+
 	it("Shouldn't render headers, if it's empty", () => {
 		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({
