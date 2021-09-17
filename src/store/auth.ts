@@ -7,7 +7,6 @@ import {
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
-import { $cookies } from "@/utils/cookies-initializer";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule, { School } from "@/store/schools";
 
@@ -205,7 +204,11 @@ export class Auth extends VuexModule {
 
 	@Action
 	logout(): void {
-		$cookies.remove("jwt");
+		// remove jwt from cookie
+		const date = new Date();
+		date.setTime(date.getTime() + -1 * 24 * 60 * 60 * 1000);
+		document.cookie = `jwt=; expires=${date.toUTCString()}; path=/`;
+
 		localStorage.clear();
 		// Delete matrix messenger indexedDB databases
 		if (indexedDB) {

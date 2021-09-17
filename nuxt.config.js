@@ -80,6 +80,12 @@ module.exports = {
 				href: `/themes/${themeName}/favicon.png`,
 			},
 		],
+		script: [
+			{
+				src: "/runtime.config.js",
+				type: "application/javascript",
+			},
+		],
 	},
 
 	/*
