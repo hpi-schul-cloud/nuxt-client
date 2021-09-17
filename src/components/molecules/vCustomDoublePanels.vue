@@ -110,6 +110,14 @@ export default {
 			return this.isPanelTwoEmpty && this.isCompleted;
 		},
 	},
+	watch: {
+		isPanelOneEmpty: function () {
+			this.expanded = 1;
+		},
+		isPanelTwoEmpty: function () {
+			this.expanded = 0;
+		},
+	},
 	methods: {
 		toggle() {
 			this.expanded = +!this.expanded;

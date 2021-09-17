@@ -12,6 +12,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
+- BC-XXX - added task count to course filter
 
 ### Changed
 
@@ -23,6 +24,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
+- BC-XXX - now opening correct panel when task were filtered
 
 ## [26.10.1] - 2021-09-07
 
