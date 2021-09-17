@@ -26,7 +26,7 @@ describe("vRoomAvatar", () => {
 				showBadge: true,
 			},
 		});
-		const labelElement = wrapper.find(".sub-title").element as HTMLInputElement;
+		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 		expect(labelElement).toBeTruthy();
 		expect(labelElement.innerHTML).toStrictEqual("Bio 12c");
 	});
@@ -45,7 +45,7 @@ describe("vRoomAvatar", () => {
 			},
 		});
 		const shortLabelElement = wrapper.find(".single-avatar")
-			.element as HTMLInputElement;
+			.element as HTMLElement;
 		expect(shortLabelElement).toBeTruthy();
 		expect(shortLabelElement.innerHTML).toStrictEqual("Bi");
 	});

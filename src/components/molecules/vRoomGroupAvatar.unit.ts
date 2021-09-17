@@ -66,12 +66,12 @@ describe("vRoomGroupAvatar", () => {
 				vuetify: true,
 			}),
 			propsData: {
-				items: mockData,
+				data: mockData,
 				size: 100,
 				maxItems: 4,
 			},
 		});
-		const labelElement = wrapper.find(".sub-title").element as HTMLInputElement;
+		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 		expect(labelElement).toBeTruthy();
 		expect(labelElement.innerHTML).toStrictEqual("Fourth");
 	});
@@ -83,7 +83,7 @@ describe("vRoomGroupAvatar", () => {
 				vuetify: true,
 			}),
 			propsData: {
-				items: mockData,
+				data: mockData,
 				size: 100,
 				maxItems: 4,
 			},
@@ -101,7 +101,7 @@ describe("vRoomGroupAvatar", () => {
 				vuetify: true,
 			}),
 			propsData: {
-				items: secondMockData,
+				data: secondMockData,
 				size: 100,
 				maxItems: 4,
 			},
@@ -119,7 +119,7 @@ describe("vRoomGroupAvatar", () => {
 				vuetify: true,
 			}),
 			propsData: {
-				items: mockData,
+				data: mockData,
 				size: 100,
 				maxItems: 4,
 			},
@@ -137,7 +137,7 @@ describe("vRoomGroupAvatar", () => {
 				vuetify: true,
 			}),
 			propsData: {
-				items: mockData,
+				data: mockData,
 				size: 100,
 				maxItems: 4,
 			},
@@ -154,7 +154,7 @@ describe("vRoomGroupAvatar", () => {
 				vuetify: true,
 			}),
 			propsData: {
-				items: mockData,
+				data: mockData,
 				size: 100,
 				maxItems: 4,
 			},
@@ -171,7 +171,7 @@ describe("vRoomGroupAvatar", () => {
 				vuetify: true,
 			}),
 			propsData: {
-				items: mockData,
+				data: mockData,
 				size: 100,
 				maxItems: 4,
 			},

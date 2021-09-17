@@ -67,12 +67,17 @@ export default {
 }
 .single-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	font-size: 1.2em;
+	font-size: 3em;
 	user-select: none;
 }
 .sub-title {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	font-size: 0.7em;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .group-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */

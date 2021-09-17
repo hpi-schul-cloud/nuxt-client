@@ -13,7 +13,7 @@
 				:width="size"
 				class="rounded-xl ma-0 card-component"
 				outlined
-				@click.prevent="$emit('clicked', items.id)"
+				@click.prevent="$emit('clicked', data.id)"
 			>
 				<v-row class="ma-1 pa-1">
 					<v-col
@@ -31,9 +31,7 @@
 					</v-col>
 				</v-row>
 			</v-card>
-			<span class="d-flex justify-center mt-1 sub-title">{{
-				items.title
-			}}</span>
+			<span class="d-flex justify-center mt-1 sub-title">{{ data.title }}</span>
 		</v-badge>
 	</div>
 </template>
@@ -44,7 +42,7 @@ export default {
 		vRoomAvatar,
 	},
 	props: {
-		items: {
+		data: {
 			type: Object,
 			required: true,
 		},
@@ -62,18 +60,22 @@ export default {
 	},
 	computed: {
 		hasNotifications() {
-			return this.items.group.some((item) => item.notification == true);
+			return this.data.group.some((item) => item.notification == true);
 		},
-
 		itemsLimited() {
-			return this.items.group.slice(0, this.maxItems);
+			return this.data.group.slice(0, this.maxItems);
 		},
 	},
 };
 </script>
 <style scoped>
 .sub-title {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-	font-size: 0.7em;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 </style>

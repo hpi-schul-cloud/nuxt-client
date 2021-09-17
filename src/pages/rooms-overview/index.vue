@@ -1,9 +1,9 @@
 <template>
-	<v-container ref="main" fluid>
+	<v-container ref="main" fluid mt-13>
 		<v-row v-for="row in dimensions.rowCount" :key="row">
 			<v-col v-for="col in dimensions.columnCount" :key="col">
 				<div
-					v-if="getDataObject(row, col) !== null"
+					v-if="getDataObject(row, col) !== undefined"
 					class="d-flex justify-center"
 				>
 					<vRoomGroupAvatar
@@ -12,7 +12,7 @@
 						class="room-group-avatar"
 						:data-position-row="row"
 						:data-position-col="col"
-						:items="getDataObject(row, col)"
+						:data="getDataObject(row, col)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:max-items="4"
 						@clicked="openDialog(getDataObject(row, col).id)"
@@ -40,7 +40,6 @@
 				</div>
 			</v-col>
 		</v-row>
-
 		<vCustomDialog v-model="groupDialog.isOpen" class="custom-dialog">
 			<div slot="title">
 				<h2 class="text-h4 my-2">
@@ -56,7 +55,7 @@
 					>
 						<vRoomAvatar
 							:item="item"
-							:size="dimensions.cellWidth * ratios.itemRatio"
+							:size="(dimensions.cellWidth * ratios.itemRatio) / 2"
 							:show-badge="true"
 							show-sub-title
 						></vRoomAvatar>
@@ -91,7 +90,6 @@ export default {
 			},
 			device: null,
 			maxItem: 4,
-
 			dimensions: {
 				width: 1200,
 				height: 1200,
@@ -100,7 +98,6 @@ export default {
 				cellWidth: 200,
 				rowCount: 6,
 			},
-
 			groupDialog: {
 				isOpen: false,
 				groupData: {},
@@ -118,9 +115,7 @@ export default {
 	async created() {
 		await RoomsModule.fetch(); // this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.roomsData = RoomsModule.getRoomsData;
-		// this.roomsData = mobileData;
 	},
-
 	methods: {
 		// TODO: this method should be improved when the different devices will be started to use
 		// getDeviceDims() {
@@ -150,22 +145,20 @@ export default {
 		// },
 
 		getDataObject(row, col) {
-			const roomObject = this.findDataByPos(row, col);
-			if (roomObject.length) return roomObject[0];
-			return null;
+			return this.findDataByPos(row, col);
 		},
 		hasGroup(row, col) {
 			const roomObject = this.findDataByPos(row, col);
-			return roomObject.length && roomObject[0].group !== undefined;
+			return roomObject.group !== undefined;
 		},
 		openDialog(groupId) {
-			this.groupDialog.groupData = this.roomsData.filter(
+			this.groupDialog.groupData = this.roomsData.find(
 				(item) => item.id == groupId
-			)[0];
+			);
 			this.groupDialog.isOpen = true;
 		},
 		findDataByPos(row, col) {
-			return this.roomsData.filter(
+			return this.roomsData.find(
 				(item) => item.xPosition == col && item.yPosition == row
 			);
 		},
