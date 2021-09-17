@@ -91,14 +91,14 @@ export default {
 			return !this.hasNoHomeworks;
 		},
 		coursesWithTaskCount: function () {
-			return this.courses.map(
-				(courseName) =>
-					`${courseName} (${
-						this.homeworks.filter((homework) => {
-							return homework.courseName === courseName;
-						}).length
-					})`
-			);
+			return this.courses.map((courseName) => ({
+				value: courseName,
+				text: `${courseName} (${
+					this.homeworks.filter((homework) => {
+						return homework.courseName === courseName;
+					}).length
+				})`,
+			}));
 		},
 	},
 	created() {
