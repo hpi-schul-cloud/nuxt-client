@@ -12,6 +12,7 @@ import {
 	noDueDateHomeworksTeacher,
 	submittedHomeworks,
 	gradedHomeworks,
+	homeworks,
 } from "@@/stories/mockData/Homeworks";
 
 storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
@@ -31,6 +32,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 					getters: {
 						getStatus: () => "completed",
 						hasNoHomeworks: () => false,
+						getHomeworks: () => homeworks,
 						getCourses: () => coursesStudent,
 						getOpenHomeworksForStudent: () => ({
 							overdue: overDueHomeworks,
@@ -72,6 +74,7 @@ storiesOf("0 Vuetify/Templates/HomeworksDashboard", module)
 					getters: {
 						getStatus: () => "completed",
 						hasNoHomeworks: () => false,
+						getHomeworks: () => homeworks,
 						getCourses: () => coursesTeacher,
 						getOpenHomeworksForTeacher: () => ({
 							overdue: overDueHomeworksTeacher,
