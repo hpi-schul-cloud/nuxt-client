@@ -1,6 +1,10 @@
 <!-- eslint-disable max-lines -->
 <template>
-	<section class="section">
+	<default-wireframe
+		:breadcrumbs="breadcrumbs"
+		:full-width="true"
+		:headline="$t('pages.administration.teachers.index.title')"
+	>
 		<progress-modal
 			:active="isDeleting"
 			:percent="deletedPercent"
@@ -10,10 +14,6 @@
 			"
 			data-testid="progress-modal"
 		/>
-		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">
-			{{ $t("pages.administration.teachers.index.title") }}
-		</h1>
 
 		<base-input
 			v-model="searchQuery"
@@ -125,13 +125,14 @@
 				},
 			]"
 		/>
-	</section>
+	</default-wireframe>
 </template>
 <script>
 import AuthModule from "@/store/auth";
 import { mapGetters } from "vuex";
 import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import FabFloating from "@components/molecules/FabFloating";
@@ -143,9 +144,10 @@ import { printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
 
 export default {
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	components: {
 		DataFilter,
+		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
 		FabFloating,
@@ -168,21 +170,35 @@ export default {
 			),
 			test: this.$uiState,
 			page:
-				this.$uiState.get("pagination", "pages.administration.teachers.index")
-					.page || 1,
+				(this.$uiState.get(
+					"pagination",
+					"pages.administration.teachers.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.teachers.index")
+						.page) ||
+				1,
 			limit:
-				this.$uiState.get("pagination", "pages.administration.teachers.index")
-					.limit || 25,
+				(this.$uiState.get(
+					"pagination",
+					"pages.administration.teachers.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.teachers.index")
+						.limit) ||
+				25,
 			sortBy:
-				this.$uiState.get("sorting", "pages.administration.teachers.index")
-					.sortBy || "firstName",
+				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
+					this.$uiState.get("sorting", "pages.administration.teachers.index")
+						.sortBy) ||
+				"firstName",
 			sortOrder:
-				this.$uiState.get("sorting", "pages.administration.teachers.index")
-					.sortOrder || "asc",
+				(this.$uiState.get("sorting", "pages.administration.teachers.index") &&
+					this.$uiState.get("sorting", "pages.administration.teachers.index")
+						.sortOrder) ||
+				"asc",
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 					icon: { source: "fa", icon: "cog" },
 				},
 				{
@@ -271,8 +287,10 @@ export default {
 			],
 			filters: teacherFilter(this),
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.teachers.index")
-					.searchQuery || "",
+				(this.$uiState.get("filter", "pages.administration.teachers.index") &&
+					this.$uiState.get("filter", "pages.administration.teachers.index")
+						.searchQuery) ||
+				"",
 		};
 	},
 	computed: {
@@ -359,7 +377,7 @@ export default {
 				"pages.administration.teacher.index"
 			);
 
-			if (temp.searchQuery) query.searchQuery = temp.searchQuery;
+			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
 
 			this.currentFilterQuery = query;
 			if (

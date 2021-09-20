@@ -161,19 +161,6 @@ describe("SchoolSettingPage", () => {
 		);
 	});
 
-	it("page title should be visible", () => {
-		const wrapper = mount(SchoolPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-		});
-
-		const titleElement = wrapper.find(".page-title");
-		expect(titleElement.exists()).toBeTrue();
-	});
-
 	it("tests env var school policy being true", () => {
 		const wrapper = mount(SchoolPage, {
 			...createComponentMocks({
