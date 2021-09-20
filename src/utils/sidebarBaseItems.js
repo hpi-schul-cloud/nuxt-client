@@ -20,7 +20,7 @@ export default [
 	},
 	{
 		title: "global.sidebar.tasks.tasksCurrent",
-		href: "/tasks/open",
+		to: "/tasks/open",
 		icon: "tasks",
 		source: "custom",
 		permission: "TASK_DASHBOARD_VIEW_V3",
@@ -130,14 +130,14 @@ export default [
 			{
 				title: "global.sidebar.student",
 				icon: "odnoklassniki",
-				href: "/administration/students/",
+				to: "/administration/students/",
 				permission: "STUDENT_LIST",
 				testId: "Schüler:innen",
 			},
 			{
 				title: "global.sidebar.teacher",
 				icon: "user",
-				href: "/administration/teachers/",
+				to: "/administration/teachers/",
 				testId: "Lehrkräfte",
 			},
 			{
@@ -158,13 +158,13 @@ export default [
 			{
 				title: "global.sidebar.student",
 				icon: "odnoklassniki",
-				href: "/administration/students/",
+				to: "/administration/students/",
 				testId: "Schüler:innen",
 			},
 			{
 				title: "global.sidebar.teacher",
 				icon: "user",
-				href: "/administration/teachers/",
+				to: "/administration/teachers/",
 				testId: "Lehrkräfte",
 			},
 			{

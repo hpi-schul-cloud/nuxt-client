@@ -15,6 +15,9 @@
 import NavigationBar from "@components/legacy/NavigationBar";
 import navbarBaseItems from "@utils/navbarBaseItems.js";
 
+/**
+ * used by page login-instances only
+ */
 export default {
 	components: {
 		NavigationBar,
