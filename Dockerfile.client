@@ -8,7 +8,7 @@ WORKDIR '/app'
 COPY package.json package-lock.json ./
 USER node
 
-RUN rm -rf node_modules && npm cache clean --force && npm install --production
+RUN npm install --production
 
 COPY --chown=node:node . /app/
 
