@@ -1,71 +1,69 @@
 <template>
-	<v-container fluid>
-		<v-custom-breadcrumbs :breadcrumbs="breadcrumbs"></v-custom-breadcrumbs>
-		<v-container class="container-max-width">
-			<h1 class="text-h3 page-title">
-				{{ $t("pages.administration.school.index.title") }}
-			</h1>
-			<v-alert v-if="schoolError" light prominent text type="error">
-				{{ $t("pages.administration.school.index.error") }}
+	<default-wireframe
+		:headline="$t('pages.administration.school.index.title')"
+		:breadcrumbs="breadcrumbs"
+		:full-width="false"
+	>
+		<v-alert v-if="schoolError" light prominent text type="error">
+			{{ $t("pages.administration.school.index.error") }}
+		</v-alert>
+		<img
+			v-if="schoolError"
+			class="school-error-image"
+			role="presentation"
+			alt=""
+			src="@assets/img/pc_repair.png"
+		/>
+		<div v-if="!schoolError" class="no-school-error">
+			<v-alert light prominent text type="info">
+				{{ $t("pages.administration.school.index.beta.info") }}
+				<a href="/help/contact">{{
+					$t("pages.administration.school.index.beta.feedback")
+				}}</a
+				><br />
+				<a href="/administration/school/">{{
+					$t("pages.administration.school.index.beta.back")
+				}}</a>
 			</v-alert>
-			<img
-				v-if="schoolError"
-				class="school-error-image"
-				role="presentation"
-				alt=""
-				src="@assets/img/pc_repair.png"
-			/>
-			<div v-if="!schoolError" class="no-school-error">
-				<v-alert light prominent text type="info">
-					{{ $t("pages.administration.school.index.beta.info") }}
-					<a href="/help/contact">{{
-						$t("pages.administration.school.index.beta.feedback")
-					}}</a
-					><br />
-					<a href="/administration/school/">{{
-						$t("pages.administration.school.index.beta.back")
-					}}</a>
-				</v-alert>
-				<h2 class="text-h4">
-					{{ currentSchoolYear }}
-				</h2>
-				<p>
-					{{
-						$t(
-							"pages.administration.school.index.longText.provideStudentsAndTheirParents"
-						)
-					}}
-				</p>
-				<v-divider class="my-sm-6 my-md-8"></v-divider>
-				<v-row>
-					<v-col>
-						<general-settings></general-settings>
-						<school-policies v-if="schoolPolicyEnabled"></school-policies>
-						<template v-if="loading">
-							<v-skeleton-loader type="table-thead, table-row, table-row" />
-						</template>
-						<auth-systems v-else :systems="systems"></auth-systems>
-					</v-col>
-				</v-row>
-			</div>
-		</v-container>
-	</v-container>
+			<h2 class="text-h4">
+				{{ currentSchoolYear }}
+			</h2>
+			<p>
+				{{
+					$t(
+						"pages.administration.school.index.longText.provideStudentsAndTheirParents"
+					)
+				}}
+			</p>
+			<v-divider class="my-sm-6 my-md-8"></v-divider>
+			<v-row>
+				<v-col>
+					<general-settings></general-settings>
+					<school-policies v-if="schoolPolicyEnabled"></school-policies>
+					<template v-if="loading">
+						<v-skeleton-loader type="table-thead, table-row, table-row" />
+					</template>
+					<auth-systems v-else :systems="systems"></auth-systems>
+				</v-col>
+			</v-row>
+		</div>
+	</default-wireframe>
 </template>
 
 <script>
 import EnvConfigModule from "@store/env-config";
 import SchoolsModule from "@/store/schools";
-import vCustomBreadcrumbs from "@components/molecules/vCustomBreadcrumbs";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import GeneralSettings from "@components/organisms/administration/GeneralSettings";
 import SchoolPolicies from "@components/organisms/administration/SchoolPolicies";
 import AuthSystems from "@components/organisms/administration/AuthSystems";
 
 export default {
 	components: {
-		vCustomBreadcrumbs,
 		GeneralSettings,
 		SchoolPolicies,
 		AuthSystems,
+		DefaultWireframe,
 	},
 	layout: "defaultVuetify",
 	data() {
