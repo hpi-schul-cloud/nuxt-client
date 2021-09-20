@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-295 - improve security (npm ci ignores NODE_ENV=production)
 - BC-234 - replaced hpi by datport in nbc imprint
 - BC-81 - removes old lern-store mode env var
 - BC-179 - refactored homeworks store

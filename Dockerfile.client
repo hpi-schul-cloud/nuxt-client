@@ -7,7 +7,11 @@ WORKDIR '/app'
 
 COPY package.json package-lock.json ./
 USER node
-RUN npm ci
+
+RUN rm -rf node_modules
+RUN npm cache clean --force
+RUN npm install only=production
+
 COPY --chown=node:node . /app/
 
 ARG SC_THEME=default
