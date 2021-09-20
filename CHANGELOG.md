@@ -20,7 +20,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-81 - removes old lern-store mode env var
 - BC-179 - refactored homeworks store
 - BC-266 - remove build step at runtime, again
-- BC-266 - Changed the way the base URL is defined to improve the build/startup process
 
 ### Fixed
 
