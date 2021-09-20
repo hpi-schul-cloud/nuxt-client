@@ -47,8 +47,7 @@ export default {
 		task: {
 			type: Object,
 			required: true,
-			validator: (task) =>
-				taskRequiredKeys.every((key) => key in task),
+			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
 	},
 	data() {
@@ -90,8 +89,7 @@ export default {
 				return this.$t("pages.tasks.labels.noDueDate");
 			} else if (shorten) {
 				return (
-					this.$t("pages.tasks.labels.due") +
-					printDateFromStringUTC(dueDate)
+					this.$t("pages.tasks.labels.due") + printDateFromStringUTC(dueDate)
 				);
 			} else {
 				return (
