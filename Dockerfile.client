@@ -10,7 +10,7 @@ USER node
 
 RUN rm -rf node_modules
 RUN npm cache clean --force
-RUN npm install only=production
+RUN npm install --production
 
 COPY --chown=node:node . /app/
 
