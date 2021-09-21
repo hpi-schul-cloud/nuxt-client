@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-167 - Added a wireframe for pages
+- BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
 
 ### Changed
@@ -18,6 +20,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-81 - removes old lern-store mode env var
 - BC-179 - refactored homeworks store
 - BC-311 - renamed homeworks to tasks in client to fit server naming
+- BC-266 - remove build step at runtime, again
 
 ### Fixed
 

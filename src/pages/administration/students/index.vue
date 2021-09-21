@@ -1,6 +1,10 @@
 <!-- eslint-disable max-lines -->
 <template>
-	<section class="section">
+	<default-wireframe
+		:headline="$t('pages.administration.students.index.title')"
+		:breadcrumbs="breadcrumbs"
+		:full-width="true"
+	>
 		<progress-modal
 			:active="isDeleting"
 			:percent="deletedPercent"
@@ -10,10 +14,6 @@
 			"
 			data-testid="progress-modal"
 		/>
-		<base-breadcrumb :inputs="breadcrumbs" />
-		<h1 class="mb--md h3">
-			{{ $t("pages.administration.students.index.title") }}
-		</h1>
 
 		<base-input
 			v-model="searchQuery"
@@ -137,13 +137,14 @@
 				},
 			]"
 		/>
-	</section>
+	</default-wireframe>
 </template>
 
 <script>
 import SchoolsModule from "@/store/schools";
 import { mapGetters } from "vuex";
 import EnvConfigModule from "@/store/env-config";
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
 import FabFloating from "@components/molecules/FabFloating";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
@@ -157,6 +158,7 @@ import ProgressModal from "@components/molecules/ProgressModal";
 export default {
 	components: {
 		DataFilter,
+		DefaultWireframe,
 		BackendDataTable,
 		FabFloating,
 		AdminTableLegend,
@@ -176,17 +178,31 @@ export default {
 				"pages.administration.students.index"
 			),
 			page:
-				this.$uiState.get("pagination", "pages.administration.students.index")
-					.page || 1,
+				(this.$uiState.get(
+					"pagination",
+					"pages.administration.students.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.students.index")
+						.page) ||
+				1,
 			limit:
-				this.$uiState.get("pagination", "pages.administration.students.index")
-					.limit || 25,
+				(this.$uiState.get(
+					"pagination",
+					"pages.administration.students.index"
+				) &&
+					this.$uiState.get("pagination", "pages.administration.students.index")
+						.limit) ||
+				25,
 			sortBy:
-				this.$uiState.get("sorting", "pages.administration.students.index")
-					.sortBy || "firstName",
+				(this.$uiState.get("sorting", "pages.administration.students.index") &&
+					this.$uiState.get("sorting", "pages.administration.students.index")
+						.sortBy) ||
+				"firstName",
 			sortOrder:
-				this.$uiState.get("sorting", "pages.administration.students.index")
-					.sortOrder || "asc",
+				(this.$uiState.get("sorting", "pages.administration.students.index") &&
+					this.$uiState.get("sorting", "pages.administration.students.index")
+						.sortOrder) ||
+				"asc",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -271,7 +287,7 @@ export default {
 			breadcrumbs: [
 				{
 					text: this.$t("pages.administration.index.title"),
-					to: "/administration/",
+					href: "/administration/",
 					icon: { source: "fa", icon: "cog" },
 				},
 				{
@@ -301,12 +317,13 @@ export default {
 			filters: studentFilter(this),
 			active: false,
 			searchQuery:
-				this.$uiState.get("filter", "pages.administration.students.index")
-					.searchQuery || "",
+				(this.$uiState.get("filter", "pages.administration.students.index") &&
+					this.$uiState.get("filter", "pages.administration.students.index")
+						.searchQuery) ||
+				"",
 		};
 	},
-
-	layout: "loggedInFull",
+	layout: "defaultVuetify",
 	meta: {
 		requiredPermissions: ["STUDENT_LIST"],
 	},
