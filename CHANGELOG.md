@@ -20,6 +20,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-81 - removes old lern-store mode env var
 - BC-179 - refactored homeworks store
 - BC-266 - remove build step at runtime, again
+- BC-321 - changed further hrefs to to
 
 ### Fixed
 
