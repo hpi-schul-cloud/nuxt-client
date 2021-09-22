@@ -51,7 +51,7 @@ storiesOf("0 Vuetify/Molecules", module).add("vHomeworkItemStudent", () => ({
 	template: `
 		<v-app>
 			<h1 class="h4">VHomeworkItemStudent</h1>
-			<p>List item representation of a homework. The current state of the homework is visualized through the icon. Icons take the selected course color or the default color of "#455B6A". Displays a warning badge if a task is close to its due date.</p>
+			<p>List item representation of a homework. The current state of the homework is visualized through the icon. Icons take the selected course color or the default color of "#54616e". Displays a warning badge if a task is close to its due date.</p>
 			<v-list subheader two-line>
 				<v-homework-item-student :homework="homework"/>
 				<v-homework-item-student :homework="close"/>

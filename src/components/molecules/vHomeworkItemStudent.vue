@@ -81,7 +81,7 @@ export default {
 			return this.homework.displayColor || this.defaultIconColor;
 		},
 		defaultIconColor() {
-			return "#455B6A";
+			return "#54616e";
 		},
 	},
 	methods: {

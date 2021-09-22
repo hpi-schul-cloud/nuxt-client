@@ -1,6 +1,6 @@
 export default function (timeLabels, values) {
 	return {
-		color: ["#b1063a"],
+		color: ["#9e292b"],
 		tooltip: {
 			trigger: "axis",
 		},
