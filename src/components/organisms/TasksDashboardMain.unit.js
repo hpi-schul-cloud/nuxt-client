@@ -1,44 +1,44 @@
-import HomeworksDashboardMain from "./HomeworksDashboardMain";
+import TasksDashboardMain from "./TasksDashboardMain";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import Vuetify from "vuetify";
 import {
-	overDueHomeworksTeacher,
-	dueDateHomeworksTeacher,
-	noDueDateHomeworksTeacher,
+	overDueTasksTeacher,
+	dueDateTasksTeacher,
+	noDueDateTasksTeacher,
 	coursesStudent,
 	coursesTeacher,
-	openHomeworksWithDueDate,
-	openHomeworksWithoutDueDate,
-	overDueHomeworks,
-	gradedHomeworks,
-	submittedHomeworks,
-	homeworks,
-} from "@@/stories/mockData/Homeworks";
+	openTasksWithDueDate,
+	openTasksWithoutDueDate,
+	overDueTasks,
+	gradedTasks,
+	submittedTasks,
+	tasks
+} from "@@/stories/mockData/Tasks";
 
-describe("@components/organisms/HomeworksDashboardMain", () => {
-	const getAllHomeworks = jest.fn();
+describe("@components/organisms/TasksDashboardMain", () => {
+	const getAllTasks = jest.fn();
 	const setFilter = jest.fn();
 	const mockStoreStudent = {
-		homeworks: {
+		tasks: {
 			getters: {
 				getStatus: () => "completed",
-				hasNoHomeworks: () => false,
-				getHomeworks: () => homeworks,
-				getOpenHomeworksForStudent: () => ({
-					overdue: overDueHomeworks,
-					withDueDate: openHomeworksWithDueDate,
-					noDueDate: openHomeworksWithoutDueDate,
+				hasNoTasks: () => false,
+				getTasks: () => tasks,
+				getOpenTasksForStudent: () => ({
+					overdue: overDueTasks,
+					withDueDate: openTasksWithDueDate,
+					noDueDate: openTasksWithoutDueDate,
 				}),
-				getCompletedHomeworksForStudent: () => ({
-					submitted: submittedHomeworks,
-					graded: gradedHomeworks,
+				getCompletedTasksForStudent: () => ({
+					submitted: submittedTasks,
+					graded: gradedTasks,
 				}),
 				getCourses: () => coursesStudent,
-				hasNoOpenHomeworks: () => false,
-				hasNoCompletedHomeworks: () => false,
+				hasNoOpenTasks: () => false,
+				hasNoCompletedTasks: () => false,
 			},
 			actions: {
-				getAllHomeworks,
+				getAllTasks,
 			},
 			mutations: {
 				setFilter,
@@ -47,32 +47,32 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	};
 
 	const mockStoreTeacher = {
-		homeworks: {
+		tasks: {
 			getters: {
 				getStatus: () => "completed",
-				hasNoHomeworks: () => false,
-				getHomeworks: () => homeworks,
-				getOpenHomeworksForTeacher: () => ({
-					overdue: overDueHomeworksTeacher,
-					withDueDate: dueDateHomeworksTeacher,
-					noDueDate: noDueDateHomeworksTeacher,
+				hasNoTasks: () => false,
+				getTasks: () => tasks,
+				getOpenTasksForTeacher: () => ({
+					overdue: overDueTasksTeacher,
+					withDueDate: dueDateTasksTeacher,
+					noDueDate: noDueDateTasksTeacher,
 				}),
 				getCourses: () => coursesTeacher,
-				hasNoOpenHomeworks: () => false,
+				hasNoOpenTasks: () => false,
 			},
 			actions: {
-				getAllHomeworks,
+				getAllTasks,
 			},
 		},
 	};
 
 	const mockStoreEmpty = {
-		homeworks: {
+		tasks: {
 			getters: {
 				getStatus: () => "completed",
-				hasNoHomeworks: () => true,
-				getHomeworks: () => [],
-				getOpenHomeworksForTeacher: () => ({
+				hasNoTasks: () => true,
+				getTasks: () => [],
+				getOpenTasksForTeacher: () => ({
 					overdue: [],
 					withDueDate: [],
 					noDueDate: [],
@@ -80,32 +80,32 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 				getCourses: () => [],
 			},
 			actions: {
-				getAllHomeworks,
+				getAllTasks,
 			},
 		},
 	};
 
 	const mockStoreEmptyOpen = {
-		homeworks: {
+		tasks: {
 			getters: {
 				getStatus: () => "completed",
-				getHomeworks: () => [...submittedHomeworks, ...gradedHomeworks],
-				getOpenHomeworksForStudent: () => ({
+				getTasks: () => [...submittedTasks, ...gradedTasks],
+				getOpenTasksForStudent: () => ({
 					overdue: [],
 					noDueDate: [],
 					withDueDate: [],
 				}),
-				getCompletedHomeworksForStudent: () => ({
-					submitted: submittedHomeworks,
-					graded: gradedHomeworks,
+				getCompletedTasksForStudent: () => ({
+					submitted: submittedTasks,
+					graded: gradedTasks,
 				}),
-				hasNoOpenHomeworks: () => true,
-				hasNoCompletedHomeworks: () => false,
-				hasNoHomeworks: () => false,
+				hasNoOpenTasks: () => true,
+				hasNoCompletedTasks: () => false,
+				hasNoTasks: () => false,
 				getCourses: () => coursesStudent,
 			},
 			actions: {
-				getAllHomeworks,
+				getAllTasks,
 			},
 		},
 	};
@@ -115,10 +115,10 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(HomeworksDashboardMain));
+	it(...isValidComponent(TasksDashboardMain));
 
-	it("Should render empty state, if there are no homeworks", () => {
-		const wrapper = mount(HomeworksDashboardMain, {
+	it("Should render empty state, if there are no tasks", () => {
+		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -134,9 +134,9 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	});
 
 	it("Should should trigger a store action", async () => {
-		mockStoreStudent.homeworks.actions.getAllHomeworks.mockClear();
+		mockStoreStudent.tasks.actions.getAllTasks.mockClear();
 
-		shallowMount(HomeworksDashboardMain, {
+		shallowMount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -148,13 +148,11 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			},
 		});
 
-		expect(
-			mockStoreStudent.homeworks.actions.getAllHomeworks
-		).toHaveBeenCalled();
+		expect(mockStoreStudent.tasks.actions.getAllTasks).toHaveBeenCalled();
 	});
 
-	it("Should render student's homeworks dashboard for a student", () => {
-		const wrapper = mount(HomeworksDashboardMain, {
+	it("Should render student's tasks dashboard for a student", () => {
+		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -166,12 +164,12 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			},
 		});
 
-		expect(wrapper.find(".homework-dashboard-student").exists()).toBe(true);
-		expect(wrapper.find(".homework-dashboard-teacher").exists()).toBe(false);
+		expect(wrapper.find(".task-dashboard-student").exists()).toBe(true);
+		expect(wrapper.find(".task-dashboard-teacher").exists()).toBe(false);
 	});
 
-	it("Should render teacher's homeworks dashboard for a teacher", () => {
-		const wrapper = mount(HomeworksDashboardMain, {
+	it("Should render teacher's tasks dashboard for a teacher", () => {
+		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -183,14 +181,14 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 			},
 		});
 
-		expect(wrapper.find(".homework-dashboard-teacher").exists()).toBe(true);
-		expect(wrapper.find(".homework-dashboard-student").exists()).toBe(false);
+		expect(wrapper.find(".task-dashboard-teacher").exists()).toBe(true);
+		expect(wrapper.find(".task-dashboard-student").exists()).toBe(false);
 	});
 
 	it("Should receive valid role props", () => {
 		const validRoles = ["student", "teacher"];
 		const invalidRoles = ["janitor", "principal"];
-		const { validator } = HomeworksDashboardMain.props.role;
+		const { validator } = TasksDashboardMain.props.role;
 
 		validRoles.forEach((role) => {
 			expect(validator(role)).toBe(true);
@@ -201,7 +199,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	});
 
 	it("Should render v-autocomplete component", () => {
-		const wrapper = mount(HomeworksDashboardMain, {
+		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -218,11 +216,8 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	});
 
 	it("Should call 'filterByCourse' method with v-autocomplete on change", async () => {
-		const mockMethod = jest.spyOn(
-			HomeworksDashboardMain.methods,
-			"filterByCourse"
-		);
-		const wrapper = await mount(HomeworksDashboardMain, {
+		const mockMethod = jest.spyOn(TasksDashboardMain.methods, "filterByCourse");
+		const wrapper = await mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -241,7 +236,7 @@ describe("@components/organisms/HomeworksDashboardMain", () => {
 	});
 
 	it("Should disable filter when active tab contains empty list and no course is selected", () => {
-		const wrapper = mount(HomeworksDashboardMain, {
+		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
