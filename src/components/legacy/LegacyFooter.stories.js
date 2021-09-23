@@ -26,8 +26,8 @@ storiesOf("5 Molecules/LegacyFooter", module).add("default", () => ({
 				href: "mailto:info@schulcloud.org",
 			},
 			{
-				title: "Support: feedback@schulcloud.org",
-				href: "mailto:feedback@schulcloud.org",
+				title: "Support: dataportlernen.cloud@dataport.de",
+				href: "mailto:dataportlernen.cloud@dataport.de",
 			},
 			{
 				title: "Inhalteanbieter: inhalte@schulcloud.org",
