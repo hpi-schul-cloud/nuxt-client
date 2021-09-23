@@ -1,16 +1,16 @@
 <template>
-	<homeworks-dashboard-main role="teacher" />
+	<tasks-dashboard-main role="teacher" />
 </template>
 
 <script>
-import HomeworksDashboardMain from "@components/organisms/HomeworksDashboardMain";
+import TasksDashboardMain from "@components/organisms/TasksDashboardMain";
 
 export default {
-	components: { HomeworksDashboardMain },
+	components: { TasksDashboardMain },
 	layout: "defaultVuetify",
 	head() {
 		return {
-			title: this.$t("pages.homeworks.title"),
+			title: this.$t("pages.tasks.title"),
 		};
 	},
 };
