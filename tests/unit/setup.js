@@ -156,7 +156,6 @@ import VueMeta from "vue-meta";
 // A helper for creating Vue component mocks
 global.createComponentMocks = ({
 	i18n,
-	vuetify,
 	vueMeta,
 	user,
 	store,
@@ -204,7 +203,7 @@ global.createComponentMocks = ({
 	//
 	// to a store instance, with each module namespaced by
 	// default, just like in our app.
-	if (store || i18n || user || vuetify || vueMeta) {
+	if (store || i18n || user || vueMeta) {
 		localVue.use(Vuex);
 		const storeModules = store || {};
 		if (user) {
@@ -233,11 +232,8 @@ global.createComponentMocks = ({
 		returnOptions.i18n = i18nConfig(returnOptions.store);
 	}
 
-	//Set 'vuetify: true' for testing with vuetify components
-	if (vuetify) {
-		Vue.use(Vuetify);
-		returnOptions.vuetify = new Vuetify();
-	}
+	Vue.use(Vuetify);
+	returnOptions.vuetify = new Vuetify();
 
 	//Set 'vueMeta: true' for accessing nuxt page meta infos
 	if (vueMeta) localVue.use(VueMeta, { keyName: "head" });
@@ -278,6 +274,8 @@ global.createComponentMocks = ({
 		returnOptions.stubs["NuxtLink"] = true;
 		returnOptions.stubs["Nuxt"] = true;
 	}
+
+	returnOptions.stubs["RouterLink"] = true;
 
 	if ($route) {
 		returnOptions.mocks.$route = $route;

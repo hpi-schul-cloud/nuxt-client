@@ -55,6 +55,7 @@
 			v-model="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
 			:size="375"
+			has-buttons
 			@dialog-confirmed="removeSystem(confirmDeleteDialog.systemId)"
 		>
 			<h2 slot="title" class="text-h4 my-2">

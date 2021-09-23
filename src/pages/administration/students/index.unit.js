@@ -37,7 +37,6 @@ const mockData = [
 ];
 
 describe("students/index", () => {
-	const routerPushStub = jest.fn();
 	const deleteUsersStub = jest.fn();
 	const OLD_ENV = process.env;
 
@@ -353,18 +352,6 @@ describe("students/index", () => {
 		});
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.vm.to).toStrictEqual(expectedURL);
-	});
-
-	it("breadcrumb's link should have the same 'to' location as the page's breadcrumbs data object", async () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-				$router: { push: routerPushStub },
-			}),
-		});
-		const link = wrapper.find("a");
-		expect(link.vm.to).toStrictEqual(wrapper.vm.breadcrumbs[0].to);
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", async () => {

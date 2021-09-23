@@ -15,6 +15,9 @@
 import NavigationBar from "@components/legacy/NavigationBar";
 import navbarBaseItems from "@utils/navbarBaseItems.js";
 
+/**
+ * used by page mint-ec/_article only
+ */
 export default {
 	components: {
 		NavigationBar,
