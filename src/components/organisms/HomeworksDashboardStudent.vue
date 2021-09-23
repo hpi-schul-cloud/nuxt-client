@@ -1,8 +1,6 @@
 <template>
 	<section class="homework-dashboard-student">
-		<v-tabs-items
-			v-model="currentTab"
-		>
+		<v-tabs-items v-model="currentTab">
 			<v-tab-item>
 				<v-custom-double-panels
 					:panel-one-count="noDueDateHomeworks.length"
