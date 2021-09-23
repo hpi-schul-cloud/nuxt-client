@@ -12,7 +12,7 @@ import {
 	noDueDateTasksTeacher,
 	submittedTasks,
 	gradedTasks,
-	tasks
+	tasks,
 } from "@@/stories/mockData/Tasks";
 
 storiesOf("0 Vuetify/Templates/TasksDashboard", module)

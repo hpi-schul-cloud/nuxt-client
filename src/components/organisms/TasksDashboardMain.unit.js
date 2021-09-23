@@ -12,7 +12,7 @@ import {
 	overDueTasks,
 	gradedTasks,
 	submittedTasks,
-	tasks
+	tasks,
 } from "@@/stories/mockData/Tasks";
 
 describe("@components/organisms/TasksDashboardMain", () => {
