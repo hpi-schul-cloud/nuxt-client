@@ -1,9 +1,5 @@
 import TasksList from "./TasksList";
-import {
-	tasks,
-	overDueTasks,
-	openTasks,
-} from "@@/stories/mockData/Tasks";
+import { tasks, overDueTasks, openTasks } from "@@/stories/mockData/Tasks";
 import { fromNowToFuture } from "@plugins/datetime";
 import Vuetify from "vuetify";
 

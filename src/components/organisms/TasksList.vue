@@ -12,25 +12,13 @@
 				:type="'list-item-avatar-two-line'"
 			/>
 		</template>
-		<template
-			v-for="(task, index) of tasks"
-			v-else-if="type === 'student'"
-		>
+		<template v-for="(task, index) of tasks" v-else-if="type === 'student'">
 			<v-task-item-student :key="index" :task="task" />
-			<v-divider
-				v-if="index < tasks.length - 1"
-				:key="`divider-${index}`"
-			/>
+			<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 		</template>
-		<template
-			v-for="(task, index) of tasks"
-			v-else-if="type === 'teacher'"
-		>
+		<template v-for="(task, index) of tasks" v-else-if="type === 'teacher'">
 			<v-task-item-teacher :key="index" :task="task" />
-			<v-divider
-				v-if="index < tasks.length - 1"
-				:key="`divider-${index}`"
-			/>
+			<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
 		</template>
 	</v-list>
 </template>

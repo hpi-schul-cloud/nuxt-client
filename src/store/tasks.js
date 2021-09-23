@@ -8,8 +8,7 @@ const filterByCourses = (tasks, courses) => {
 
 const filterOpen = (tasks) => {
 	return tasks.filter(
-		(task) =>
-			task.status.submitted === 0 && task.status.graded === 0
+		(task) => task.status.submitted === 0 && task.status.graded === 0
 	);
 };
 
@@ -100,8 +99,8 @@ const module = {
 		hasNoOpenTasks: (state) => {
 			return (
 				state.status === "completed" &&
-				filterOpen(filterByCourses(state.tasks, state.courseFilter))
-					.length === 0
+				filterOpen(filterByCourses(state.tasks, state.courseFilter)).length ===
+					0
 			);
 		},
 		hasNoCompletedTasks: (state) => {
@@ -156,9 +155,7 @@ const module = {
 			return completedTasks;
 		},
 		getCourses: (state) => {
-			const courses = new Set(
-				state.tasks.map((task) => task.courseName)
-			);
+			const courses = new Set(state.tasks.map((task) => task.courseName));
 			return Array.from(courses);
 		},
 	},

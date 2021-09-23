@@ -4,9 +4,7 @@
 			<v-tab-item>
 				<v-custom-double-panels
 					:panel-one-count="noDueDateTasks.length"
-					:panel-two-count="
-						withDueDateTasks.length + overdueTasks.length
-					"
+					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
 					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
 					:status="status"

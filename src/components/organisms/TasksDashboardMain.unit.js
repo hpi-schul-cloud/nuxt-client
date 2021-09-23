@@ -143,9 +143,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 			},
 		});
 
-		expect(
-			mockStoreStudent.tasks.actions.getAllTasks
-		).toHaveBeenCalled();
+		expect(mockStoreStudent.tasks.actions.getAllTasks).toHaveBeenCalled();
 	});
 
 	it("Should render student's tasks dashboard for a student", () => {
@@ -213,10 +211,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 	});
 
 	it("Should call 'filterByCourse' method with v-autocomplete on change", async () => {
-		const mockMethod = jest.spyOn(
-			TasksDashboardMain.methods,
-			"filterByCourse"
-		);
+		const mockMethod = jest.spyOn(TasksDashboardMain.methods, "filterByCourse");
 		const wrapper = await mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
