@@ -33,7 +33,10 @@
 				:disabled="isFilterDisabled"
 				@selected-item="filterByCourse"
 			/>
-			<homeworks-dashboard-student v-if="isStudent" :tab="tab" />
+			<homeworks-dashboard-student
+				v-if="isStudent"
+				:tab.sync="tab"
+			/>
 			<homeworks-dashboard-teacher v-else />
 		</v-container>
 	</section>

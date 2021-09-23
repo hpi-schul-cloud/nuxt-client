@@ -1,6 +1,8 @@
 <template>
 	<section class="homework-dashboard-student">
-		<v-tabs-items v-model="tab">
+		<v-tabs-items
+			v-model="currentTab"
+		>
 			<v-tab-item>
 				<v-custom-double-panels
 					:panel-one-count="noDueDateHomeworks.length"
@@ -94,6 +96,14 @@ export default {
 			hasNoOpenHomeworks: "hasNoOpenHomeworks",
 			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
 		}),
+		currentTab: {
+			get() {
+				return this.tab;
+			},
+			set(newTab) {
+				this.$emit("update:tab", newTab);
+			},
+		},
 		overdueHomeworks: function () {
 			return this.openHomeworks.overdue;
 		},
