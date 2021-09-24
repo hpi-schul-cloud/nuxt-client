@@ -26,6 +26,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
 
+### Security
+
+- BC-296 - updated dependencies with high severity security issues
+
 ## [26.10.1] - 2021-09-07
 
 ### Fixed
