@@ -1,24 +1,20 @@
-import HomeworksList from "./HomeworksList";
-import {
-	homeworks,
-	overDueHomeworks,
-	openHomeworks,
-} from "@@/stories/mockData/Homeworks";
+import TasksList from "./TasksList";
+import { tasks, overDueTasks, openTasks } from "@@/stories/mockData/Tasks";
 import { fromNowToFuture } from "@plugins/datetime";
 import Vuetify from "vuetify";
 
-describe("@components/organisms/HomeworksList", () => {
+describe("@components/organisms/TasksList", () => {
 	const mockStore = {
-		homeworks: {
+		tasks: {
 			getters: {
-				getList: () => homeworks,
+				getList: () => tasks,
 				getStatus: () => "completed",
-				hasNoHomeworks: () => false,
-				openHomeworks: () => openHomeworks,
-				overDueHomeworks: () => overDueHomeworks,
+				hasNoTasks: () => false,
+				openTasks: () => openTasks,
+				overDueTasks: () => overDueTasks,
 			},
 			state: () => ({
-				list: homeworks,
+				list: tasks,
 				status: "completed",
 			}),
 		},
@@ -30,11 +26,11 @@ describe("@components/organisms/HomeworksList", () => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(HomeworksList));
+	it(...isValidComponent(TasksList));
 
 	it("accepts only student and teacher as type prop", () => {
 		const validTypes = ["student", "teacher"];
-		const { validator } = HomeworksList.props.type;
+		const { validator } = TasksList.props.type;
 
 		validTypes.forEach((type) => {
 			expect(validator(type)).toBe(true);
@@ -43,8 +39,8 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(validator("wrong type")).toBe(false);
 	});
 
-	it("Should render complete homework items list", () => {
-		const wrapper = mount(HomeworksList, {
+	it("Should render complete task items list", () => {
+		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -52,34 +48,34 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				homeworks,
+				tasks,
 				type: "student",
 			},
 		});
 
 		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
-		expect(dueDateLabels).toHaveLength(homeworks.length);
+		expect(dueDateLabels).toHaveLength(tasks.length);
 
 		dueDateLabels.wrappers.forEach((dateLabel, index) => {
 			expect(dateLabel.exists()).toBe(true);
 			if (
-				homeworks[index].duedate === null ||
-				typeof homeworks[index].duedate === "undefined"
+				tasks[index].duedate === null ||
+				typeof tasks[index].duedate === "undefined"
 			)
 				expect(dateLabel.text()).toBe("Kein Abgabedatum");
 			else expect(dateLabel.text()).toContain("Abgabe ");
 		});
 	});
 
-	it("Should render an empty list, if there are no homeworks", () => {
+	it("Should render an empty list, if there are no tasks", () => {
 		const mockStoreEmpty = {
-			homeworks: {
+			tasks: {
 				getters: {
 					getList: () => [],
 					getStatus: () => "completed",
-					hasNoHomeworks: () => true,
-					openHomeworks: () => [],
-					overDueHomeworks: () => [],
+					hasNoTasks: () => true,
+					openTasks: () => [],
+					overDueTasks: () => [],
 				},
 				state: () => ({
 					list: [],
@@ -88,7 +84,7 @@ describe("@components/organisms/HomeworksList", () => {
 			},
 		};
 
-		const wrapper = mount(HomeworksList, {
+		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -99,16 +95,16 @@ describe("@components/organisms/HomeworksList", () => {
 				type: "student",
 			},
 		});
-		expect(wrapper.props("homeworks")).toStrictEqual([]);
+		expect(wrapper.props("tasks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
-	it("Should render hint label, if homework is close to due date", () => {
+	it("Should render hint label, if task is close to due date", () => {
 		const current = new Date();
 		current.setHours(current.getHours() + 1);
 		const closeToDueDate = current.toISOString();
 
-		const homeworkCloseToDueDate = {
+		const taskCloseToDueDate = {
 			id: "59cce2c61113d1132c98dc02",
 			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
@@ -116,31 +112,31 @@ describe("@components/organisms/HomeworksList", () => {
 			courseName: "Mathe",
 			createdAt: "2017-09-28T11:49:39.924Z",
 		};
-		const extendedHomeworks = openHomeworks.concat(homeworkCloseToDueDate);
+		const extendedTasks = openTasks.concat(taskCloseToDueDate);
 		const mockStoreCloseToDueDate = {
-			homeworks: {
+			tasks: {
 				getters: {
-					getList: () => homeworks,
+					getList: () => tasks,
 					getStatus: () => "completed",
-					hasNoHomeworks: () => false,
-					openHomeworks: () => openHomeworks,
-					overDueHomeworks: () => overDueHomeworks,
+					hasNoTasks: () => false,
+					openTasks: () => openTasks,
+					overDueTasks: () => overDueTasks,
 				},
 				state: () => ({
-					list: homeworks,
+					list: tasks,
 					status: "completed",
 				}),
 			},
 		};
 
-		const homeworksCloseToDueDate = extendedHomeworks.filter((homework) => {
-			const timeDiff = fromNowToFuture(homework.duedate, "hours");
+		const tasksCloseToDueDate = extendedTasks.filter((task) => {
+			const timeDiff = fromNowToFuture(task.duedate, "hours");
 			if (timeDiff === null) {
 				return false;
 			} else return timeDiff <= 24;
 		});
 
-		const wrapper = mount(HomeworksList, {
+		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -149,7 +145,7 @@ describe("@components/organisms/HomeworksList", () => {
 			vuetify,
 			propsData: {
 				type: "student",
-				homeworks: extendedHomeworks,
+				tasks: extendedTasks,
 			},
 		});
 
@@ -157,18 +153,18 @@ describe("@components/organisms/HomeworksList", () => {
 			"[data-test-id='dueDateHintLabel']"
 		);
 
-		expect(dueDateHintLabels).toHaveLength(homeworksCloseToDueDate.length);
+		expect(dueDateHintLabels).toHaveLength(tasksCloseToDueDate.length);
 	});
 
-	it("Should render loading state while fetching homework", () => {
+	it("Should render loading state while fetching task", () => {
 		const mockStoreLoading = {
-			homeworks: {
+			tasks: {
 				getters: {
 					getList: () => [],
 					getStatus: () => "pending",
-					hasNoHomeworks: () => false,
-					openHomeworks: () => [],
-					overDueHomeworks: () => [],
+					hasNoTasks: () => false,
+					openTasks: () => [],
+					overDueTasks: () => [],
 				},
 				state: () => ({
 					list: [],
@@ -176,7 +172,7 @@ describe("@components/organisms/HomeworksList", () => {
 				}),
 			},
 		};
-		const wrapper = mount(HomeworksList, {
+		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -184,7 +180,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				homeworks: [],
+				tasks: [],
 				type: "student",
 			},
 		});
@@ -193,12 +189,12 @@ describe("@components/organisms/HomeworksList", () => {
 		expect(
 			wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
 		).toBe(true);
-		expect(wrapper.props("homeworks")).toStrictEqual([]);
+		expect(wrapper.props("tasks")).toStrictEqual([]);
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
 	it("should accept valid type props", () => {
-		const { validator } = HomeworksList.props.type;
+		const { validator } = TasksList.props.type;
 		const validTypes = ["student", "teacher"];
 		const invalidTypes = ["invalid", "type"];
 
@@ -212,7 +208,7 @@ describe("@components/organisms/HomeworksList", () => {
 	});
 
 	it("Should render no subheader if title prop is not set", () => {
-		const wrapper = mount(HomeworksList, {
+		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -220,7 +216,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				homeworks,
+				tasks,
 				type: "student",
 			},
 		});
@@ -230,7 +226,7 @@ describe("@components/organisms/HomeworksList", () => {
 	});
 
 	it("Should render a subheader if title prop is not set", () => {
-		const wrapper = mount(HomeworksList, {
+		const wrapper = mount(TasksList, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
@@ -238,7 +234,7 @@ describe("@components/organisms/HomeworksList", () => {
 			}),
 			vuetify,
 			propsData: {
-				homeworks,
+				tasks,
 				type: "student",
 				title: "my subheader",
 			},
