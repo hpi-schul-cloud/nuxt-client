@@ -1,7 +1,7 @@
 import dashboard from "./open";
 import Vuetify from "vuetify";
 
-describe("Homeworks/open", () => {
+describe("Tasks/open", () => {
 	let vuetify;
 
 	beforeEach(() => {
@@ -20,7 +20,7 @@ describe("Homeworks/open", () => {
 			vuetify,
 		});
 
-		const title = wrapper.vm.$i18n.t("pages.homeworks.title");
+		const title = wrapper.vm.$i18n.t("pages.tasks.title");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 });

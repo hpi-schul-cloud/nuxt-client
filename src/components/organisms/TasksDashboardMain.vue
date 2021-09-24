@@ -3,7 +3,7 @@
 		<div class="border-bottom">
 			<v-container>
 				<h1 class="h4">
-					{{ $t("pages.homeworks.title") }}
+					{{ $t("pages.tasks.title") }}
 				</h1>
 			</v-container>
 			<div v-if="isStudent" class="pb-0 d-flex justify-center">
@@ -11,13 +11,13 @@
 					<v-tab>
 						<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
 						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.HomeworksDashboardMain.tab.open")
+							$t("components.organisms.TasksDashboardMain.tab.open")
 						}}</span>
 					</v-tab>
 					<v-tab>
 						<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
 						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.HomeworksDashboardMain.tab.completed")
+							$t("components.organisms.TasksDashboardMain.tab.completed")
 						}}</span>
 					</v-tab>
 				</v-tabs>
@@ -25,16 +25,16 @@
 		</div>
 		<v-container class="v-container mt-5 mb-14">
 			<v-custom-autocomplete
-				v-if="hasHomeworks"
+				v-if="hasTasks"
 				v-model="selectedCourses"
 				:items="courses"
-				:label="$t('pages.homeworks.labels.filter')"
-				:no-data-text="$t('pages.homeworks.labels.noCoursesAvailable')"
+				:label="$t('pages.tasks.labels.filter')"
+				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
 				@selected-item="filterByCourse"
 			/>
-			<homeworks-dashboard-student v-if="isStudent" :tab="tab" />
-			<homeworks-dashboard-teacher v-else />
+			<tasks-dashboard-student v-if="isStudent" :tab="tab" />
+			<tasks-dashboard-teacher v-else />
 		</v-container>
 	</section>
 </template>
@@ -42,14 +42,14 @@
 <script>
 import { mapGetters } from "vuex";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
-import HomeworksDashboardTeacher from "./HomeworksDashboardTeacher";
-import HomeworksDashboardStudent from "./HomeworksDashboardStudent";
+import TasksDashboardTeacher from "./TasksDashboardTeacher";
+import TasksDashboardStudent from "./TasksDashboardStudent";
 
 export default {
 	components: {
 		vCustomAutocomplete,
-		HomeworksDashboardStudent,
-		HomeworksDashboardTeacher,
+		TasksDashboardStudent,
+		TasksDashboardTeacher,
 	},
 	props: {
 		role: {
@@ -65,11 +65,11 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("homeworks", {
+		...mapGetters("tasks", {
 			status: "getStatus",
-			hasNoHomeworks: "hasNoHomeworks",
-			hasNoOpenHomeworks: "hasNoOpenHomeworks",
-			hasNoCompletedHomeworks: "hasNoCompletedHomeworks",
+			hasNoTasks: "hasNoTasks",
+			hasNoOpenTasks: "hasNoOpenTasks",
+			hasNoCompletedTasks: "hasNoCompletedTasks",
 			courses: "getCourses",
 		}),
 		isStudent: function () {
@@ -78,24 +78,24 @@ export default {
 		isFilterDisabled: function () {
 			if (this.selectedCourses.length > 0) return false;
 
-			if (this.tab === 0 && this.hasNoOpenHomeworks) {
+			if (this.tab === 0 && this.hasNoOpenTasks) {
 				return true;
-			} else if (this.tab === 1 && this.hasNoCompletedHomeworks) {
+			} else if (this.tab === 1 && this.hasNoCompletedTasks) {
 				return true;
 			} else {
 				return false;
 			}
 		},
-		hasHomeworks: function () {
-			return !this.hasNoHomeworks;
+		hasTasks: function () {
+			return !this.hasNoTasks;
 		},
 	},
 	created() {
-		this.$store.dispatch("homeworks/getAllHomeworks");
+		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
 		filterByCourse() {
-			this.$store.commit("homeworks/setFilter", this.selectedCourses);
+			this.$store.commit("tasks/setFilter", this.selectedCourses);
 		},
 	},
 };
