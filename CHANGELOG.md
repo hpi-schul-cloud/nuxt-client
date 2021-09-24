@@ -29,6 +29,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
 - BC-309 - now opening correct panel when task were filtered
+- BC-313 - fixed active tab mobile behaviour and color
 
 ## [26.10.1] - 2021-09-07
 
