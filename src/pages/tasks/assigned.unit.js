@@ -1,26 +1,26 @@
 import dashboard from "./assigned";
-import { homeworks } from "@@/stories/mockData/Homeworks";
+import { tasks } from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
 
-describe("Homeworks/assigned", () => {
-	const getAllHomeworks = jest.fn();
+describe("Tasks/assigned", () => {
+	const getAllTasks = jest.fn();
 	const mockStore = {
-		homeworks: {
+		tasks: {
 			getters: {
-				list: () => homeworks,
+				list: () => tasks,
 				loading: () => false,
-				hasNoHomeworks: () => false,
+				hasNoTasks: () => false,
 				getCourses: () => [],
-				hasCompletedHomeworks: () => true,
+				hasCompletedTasks: () => true,
 			},
 			state: () => ({
-				list: homeworks,
+				list: tasks,
 				loading: {
-					homeworks: false,
+					tasks: false,
 				},
 			}),
 			actions: {
-				getAllHomeworks,
+				getAllTasks,
 			},
 		},
 	};
@@ -43,7 +43,7 @@ describe("Homeworks/assigned", () => {
 			}),
 			vuetify,
 		});
-		const title = wrapper.vm.$i18n.t("pages.homeworks.title");
+		const title = wrapper.vm.$i18n.t("pages.tasks.title");
 		expect(wrapper.vm.$metaInfo.title).toBe(title);
 	});
 });
