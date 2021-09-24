@@ -33,7 +33,7 @@
 				:disabled="isFilterDisabled"
 				@selected-item="filterByCourse"
 			/>
-			<tasks-dashboard-student v-if="isStudent" :tab="tab" />
+			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
 			<tasks-dashboard-teacher v-else />
 		</v-container>
 	</section>

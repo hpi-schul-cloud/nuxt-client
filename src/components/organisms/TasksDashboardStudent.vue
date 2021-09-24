@@ -1,6 +1,6 @@
 <template>
 	<section class="task-dashboard-student">
-		<v-tabs-items v-model="tab">
+		<v-tabs-items v-model="currentTab">
 			<v-tab-item>
 				<v-custom-double-panels
 					:panel-one-count="noDueDateTasks.length"
@@ -106,6 +106,14 @@ export default {
 		},
 		gradedTasks: function () {
 			return this.completedTasks.graded;
+		},
+		currentTab: {
+			get() {
+				return this.tab;
+			},
+			set(newTab) {
+				this.$emit("update:tab", newTab);
+			},
 		},
 	},
 };
