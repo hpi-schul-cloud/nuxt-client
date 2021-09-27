@@ -233,9 +233,14 @@ export class Schools extends VuexModule {
 				);
 
 				this.setSchool(transformSchoolServerToClient(school));
-				await this.fetchCurrentYear();
-				await this.fetchFederalState();
-				await this.fetchSystems();
+
+				const actions = [
+					this.fetchCurrentYear(),
+					this.fetchFederalState(),
+					this.fetchSystems(),
+				];
+
+				await Promise.all(actions);
 
 				this.setLoading(false);
 			} catch (error: any) {
