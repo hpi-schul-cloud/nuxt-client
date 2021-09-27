@@ -93,11 +93,7 @@ export default {
 		coursesWithTaskCount: function () {
 			return this.courses.map((courseName) => ({
 				value: courseName,
-				text: `${courseName} (${
-					this.tasks.filter((task) => {
-						return task.courseName === courseName;
-					}).length
-				})`,
+				text: `${courseName} (${this.getTaskCount(courseName)})`,
 			}));
 		},
 	},
@@ -107,6 +103,26 @@ export default {
 	methods: {
 		filterByCourse() {
 			this.$store.commit("tasks/setFilter", this.selectedCourses);
+		},
+		getTaskCount(courseName) {
+			let { tasks } = this;
+
+			if (this.isStudent) {
+				if (this.tab === 0) {
+					tasks = tasks.filter(
+						(task) => task.status.submitted === 0 && task.status.graded === 0
+					);
+				}
+				if (this.tab === 1) {
+					tasks = tasks.filter(
+						(task) => task.status.submitted >= 1 || task.status.graded >= 1
+					);
+				}
+			}
+
+			return tasks.filter((task) => {
+				return task.courseName === courseName;
+			}).length;
 		},
 	},
 };
