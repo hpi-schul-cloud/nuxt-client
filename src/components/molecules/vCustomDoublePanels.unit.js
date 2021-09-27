@@ -218,21 +218,6 @@ describe("@components/molecules/vCustomDoublePanels", () => {
 		);
 	});
 
-	it("Should set open panel to default", () => {
-		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: propsDataEmpty,
-		});
-
-		const expansionDivs = wrapper.findAll("div[aria-expanded]");
-		expect(expansionDivs.at(0).attributes("aria-expanded")).toBe("true");
-		expect(expansionDivs.at(1).attributes("aria-expanded")).toBe("false");
-	});
-
 	it("Shouldn't render headers, if it's empty", () => {
 		const wrapper = mount(vCustomDoublePanels, {
 			...createComponentMocks({

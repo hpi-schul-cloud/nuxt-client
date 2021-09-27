@@ -89,10 +89,14 @@ export default {
 	data: function () {
 		let expanded = this.expandedDefault;
 
-		if (expanded === 0 && this.panelOneCount === 0) {
+		if (expanded === 0 && this.panelOneCount === 0 && this.panelTwoCount != 0) {
 			expanded = 1;
 		} else {
-			if (expanded === 1 && this.panelTwoCount === 0) {
+			if (
+				expanded === 1 &&
+				this.panelTwoCount === 0 &&
+				this.panelOneCount != 0
+			) {
 				expanded = 0;
 			}
 		}
@@ -104,6 +108,8 @@ export default {
 	computed: {
 		updatedDefault: function () {
 			let expanded = this.expandedDefault;
+
+			if (this.areBothPanelsEmpty) return expanded;
 
 			if (this.isPanelOneDisabled && expanded === 0) {
 				expanded = 1;
