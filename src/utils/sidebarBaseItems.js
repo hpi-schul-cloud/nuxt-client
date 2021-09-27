@@ -28,7 +28,7 @@ export default [
 	},
 	{
 		title: "global.sidebar.tasks.tasksCurrent",
-		href: "/tasks/assigned",
+		to: "/tasks/assigned",
 		icon: "tasks",
 		source: "custom",
 		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
@@ -107,7 +107,7 @@ export default [
 	},
 	{
 		title: "global.sidebar.lernstore",
-		href: "/content",
+		to: "/content",
 		icon: "search",
 		permission: "LERNSTORE_VIEW",
 		testId: "Lern-Store",
