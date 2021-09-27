@@ -23,6 +23,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-311 - renamed homeworks to tasks in client to fit server naming
 - BC-266 - remove build step at runtime, again
 - BC-321 - changed further hrefs to to
+- BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
 
 ### Fixed
 
