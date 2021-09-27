@@ -4,20 +4,16 @@ ENV NUXT_TELEMETRY_DISABLED=1
 ARG SC_THEME=default
 ENV SC_THEME ${SC_THEME}
 ENV NODE_ENV=production
+EXPOSE 4000
 
 RUN mkdir /app && chown -R node:node /app
 WORKDIR '/app'
 
 COPY package.json package-lock.json ./
 USER node
-
 RUN npm ci
-
 COPY --chown=node:node . /app/
 
 RUN ["npm", "run", "build:nuxt"]
-RUN ["chmod", "550", "./startup.sh"]
 
-EXPOSE 4000
-
-CMD [ "./startup.sh"]
+CMD [ "./run.sh"]

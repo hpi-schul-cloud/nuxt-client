@@ -17,14 +17,19 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Changed
 
 - BC-295 - improve security (npm ci ignores NODE_ENV=production)
+- BC-68 - e2e run dependent on build image job
 - BC-234 - replaced hpi by datport in nbc imprint
 - BC-81 - removes old lern-store mode env var
 - BC-179 - refactored homeworks store
+- BC-311 - renamed homeworks to tasks in client to fit server naming
+- BC-266 - remove build step at runtime, again
+- BC-321 - changed further hrefs to to
 
 ### Fixed
 
 - BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
+- BC-313 - fixed active tab mobile behaviour and color
 
 ## [26.10.1] - 2021-09-07
 

@@ -14,4 +14,4 @@ const custom = {
 	},
 };
 
-export default merge(custom, base);
+export default merge(base, custom);

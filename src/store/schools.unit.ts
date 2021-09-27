@@ -62,7 +62,7 @@ describe("schools module", () => {
 						videoconference: false,
 					},
 				});
-				expect(setLoadingSpy.mock.calls[2][0]).toBe(false);
+				expect(setLoadingSpy.mock.calls[4][0]).toBe(false);
 
 				expect(fetchCurrentYearSpy).toHaveBeenCalled();
 				expect(fetchFederalSpy).toHaveBeenCalled();
@@ -88,7 +88,7 @@ describe("schools module", () => {
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[2][0]).toBe(false);
+				expect(setLoadingSpy.mock.calls[4][0]).toBe(false);
 			});
 		});
 		describe("fetchFederalState", () => {

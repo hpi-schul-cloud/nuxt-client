@@ -2,7 +2,13 @@ import AuthModule from "@/store/auth";
 
 const unrecoverableErrorCodes = [401, 404, 500];
 
-export default function ({ $axios, store, error }) {
+export default async function ({ $axios, store, error }) {
+	const runtimeConfigJson = await $axios.get(
+		`${window.location.origin}/runtime.config.json`
+	);
+	window.schoolCloudRuntimeConfig = runtimeConfigJson.data;
+	$axios.setBaseURL(window.schoolCloudRuntimeConfig.apiURL);
+
 	$axios.onRequest((config) => {
 		store.commit("error/reset");
 
