@@ -85,12 +85,27 @@ export default {
 			consentError: "getError",
 		}),
 	},
-	created() {
-		this.fetchConsentVersions({
-			schoolId: this.school.id,
-			consentTypes: "privacy",
-			withFile: true,
-		});
+	watch: {
+		school(newSchool, oldSchool) {
+			// fetch consents when the school is loaded and the school was not yet loaded while mounting
+			// if the school object gets a new reference (e.g. after updating it) do not reload the consents
+			if (newSchool.id && !(oldSchool || oldSchool.id)) {
+				this.fetchConsentVersions({
+					schoolId: newSchool.id,
+					consentTypes: "privacy",
+					withFile: true,
+				});
+			}
+		},
+	},
+	mounted() {
+		if (this.school.id) {
+			this.fetchConsentVersions({
+				schoolId: this.school.id,
+				consentTypes: "privacy",
+				withFile: true,
+			});
+		}
 	},
 	methods: {
 		...mapActions("consent-versions", ["fetchConsentVersions"]),
