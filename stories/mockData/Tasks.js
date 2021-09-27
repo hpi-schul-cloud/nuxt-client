@@ -1,13 +1,13 @@
 /* eslint-disable max-lines */
 
 /*
-	Mockdata for homeworks dashboards
+	Mockdata for tasks dashboards
 	This data is also used for unit tests, to ensure that the store works properly.
 	Do not tamper with this data.
 */
 
 // not submitted, not graded, includes withoutDueDate, withDueDate & overDue
-export const openHomeworks = [
+export const openTasks = [
 	{
 		id: "59cce4c3c6abf042248e888e",
 		_id: "59cce4c3c6abf042248e888e",
@@ -105,7 +105,7 @@ export const openHomeworks = [
 	},
 ];
 
-export const overDueHomeworks = [
+export const overDueTasks = [
 	{
 		id: "59cce4171113d1132c98dc07",
 		_id: "59cce4171113d1132c98dc07",
@@ -143,7 +143,7 @@ export const overDueHomeworks = [
 		},
 	},
 ];
-export const openHomeworksWithDueDate = [
+export const openTasksWithDueDate = [
 	{
 		id: "59cce4c3c6abf042248e888e",
 		_id: "59cce4c3c6abf042248e888e",
@@ -193,7 +193,7 @@ export const openHomeworksWithDueDate = [
 		},
 	},
 ];
-export const openHomeworksWithoutDueDate = [
+export const openTasksWithoutDueDate = [
 	{
 		id: "59cce4171113d1132c98dc08",
 		_id: "59cce4171113d1132c98dc08",
@@ -207,7 +207,7 @@ export const openHomeworksWithoutDueDate = [
 	},
 ];
 
-export const submittedHomeworks = [
+export const submittedTasks = [
 	{
 		id: "59cce4c3c6abf042248e968e",
 		_id: "59cce4c3c6abf042248e968e",
@@ -223,7 +223,7 @@ export const submittedHomeworks = [
 	},
 ];
 
-export const missedButGradedHomeworks = [
+export const missedButGradedTasks = [
 	{
 		id: "59cce352c6abf001248e888c",
 		_id: "59cce352c6abf001248e888c",
@@ -239,7 +239,7 @@ export const missedButGradedHomeworks = [
 	},
 ];
 
-export const gradedHomeworks = [
+export const gradedTasks = [
 	{
 		id: "59cce7u6c6abf042248e888d",
 		_id: "59cce7u6c6abf042248e888d",
@@ -268,11 +268,11 @@ export const gradedHomeworks = [
 	},
 ];
 
-export const completedHomeworks = [...submittedHomeworks, ...gradedHomeworks];
+export const completedTasks = [...submittedTasks, ...gradedTasks];
 
-export const homeworks = [...openHomeworks, ...completedHomeworks];
+export const tasks = [...openTasks, ...completedTasks];
 
-export const invalidHomeworks = [
+export const invalidTasks = [
 	{
 		_id: "59cce4c3c6abf042248e888e",
 		name: "Private Aufgabe von Cord - mit Kurs, offen",
@@ -309,7 +309,7 @@ export const invalidHomeworks = [
 	},
 ];
 
-export const overDueHomeworksTeacher = [
+export const overDueTasksTeacher = [
 	{
 		id: "59cce352c6abf042248e888c",
 		_id: "59cce352c6abf042248e888c",
@@ -351,7 +351,7 @@ export const overDueHomeworksTeacher = [
 	},
 ];
 
-export const dueDateHomeworksTeacher = [
+export const dueDateTasksTeacher = [
 	{
 		id: "59cce4c3c6abf042248e888e",
 		_id: "59cce4c3c6abf042248e888e",
@@ -406,7 +406,7 @@ export const dueDateHomeworksTeacher = [
 	},
 ];
 
-export const noDueDateHomeworksTeacher = [
+export const noDueDateTasksTeacher = [
 	{
 		id: "59cce4171113d1132c98dc08",
 		_id: "59cce4171113d1132c98dc08",
@@ -421,16 +421,16 @@ export const noDueDateHomeworksTeacher = [
 	},
 ];
 
-export const homeworksTeacher = [
-	...overDueHomeworksTeacher,
-	...dueDateHomeworksTeacher,
-	...noDueDateHomeworksTeacher,
+export const tasksTeacher = [
+	...overDueTasksTeacher,
+	...dueDateTasksTeacher,
+	...noDueDateTasksTeacher,
 ];
 
 export const coursesStudent = ["Mathe", "Chemie", "Biologie"];
 export const coursesTeacher = ["Mathe", "Deutsch"];
 
-export const mathHomeworks = [
+export const mathTasks = [
 	{
 		id: "59cce352c6abf042248e888c",
 		_id: "59cce352c6abf042248e888c",
