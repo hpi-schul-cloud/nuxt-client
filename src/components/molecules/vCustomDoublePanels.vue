@@ -87,11 +87,34 @@ export default {
 		},
 	},
 	data: function () {
+		let expanded = this.expandedDefault;
+
+		if (expanded === 0 && this.panelOneCount === 0) {
+			expanded = 1;
+		} else {
+			if (expanded === 1 && this.panelTwoCount === 0) {
+				expanded = 0;
+			}
+		}
+
 		return {
-			expanded: this.expandedDefault,
+			expanded,
 		};
 	},
 	computed: {
+		updatedDefault: function () {
+			let expanded = this.expandedDefault;
+
+			if (this.isPanelOneDisabled && expanded === 0) {
+				expanded = 1;
+			} else {
+				if (this.isPanelTwoDisabled && expanded === 1) {
+					expanded = 0;
+				}
+			}
+
+			return expanded;
+		},
 		isPanelOneEmpty: function () {
 			return this.panelOneCount === 0;
 		},
@@ -111,18 +134,18 @@ export default {
 			return this.isPanelTwoEmpty && this.isCompleted;
 		},
 		areBothPanelsEmpty: function () {
-			return this.isPanelOneEmpty && this.isPanelTwoEmpty;
+			return this.isPanelOneDisabled && this.isPanelTwoDisabled;
 		},
 	},
 	watch: {
-		isPanelOneEmpty: function () {
+		isPanelOneDisabled: function () {
 			this.expanded = 1;
 		},
-		isPanelTwoEmpty: function () {
+		isPanelTwoDisabled: function () {
 			this.expanded = 0;
 		},
 		areBothPanelsEmpty: function () {
-			this.expanded = this.expandedDefault;
+			this.expanded = this.updatedDefault;
 		},
 	},
 	methods: {
