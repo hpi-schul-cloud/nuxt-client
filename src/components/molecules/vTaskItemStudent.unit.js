@@ -1,48 +1,48 @@
-import vHomeworkItemStudent from "./vHomeworkItemStudent";
+import vTaskItemStudent from "./vTaskItemStudent";
 import {
-	homeworks,
-	openHomeworksWithoutDueDate,
-	openHomeworksWithDueDate,
-	invalidHomeworks,
-} from "@@/stories/mockData/Homeworks";
+	tasks,
+	openTasksWithoutDueDate,
+	openTasksWithDueDate,
+	invalidTasks,
+} from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
 
-describe("@components/molecules/vHomeworkItemStudent", () => {
+describe("@components/molecules/vTaskItemStudent", () => {
 	let vuetify;
 
 	beforeEach(() => {
 		vuetify = new Vuetify();
 	});
 
-	it(...isValidComponent(vHomeworkItemStudent));
+	it(...isValidComponent(vTaskItemStudent));
 
-	it("Should link list item links to homework/<id> page", () => {
-		const wrapper = mount(vHomeworkItemStudent, {
+	it("Should link list item links to task/<id> page", () => {
+		const wrapper = mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
 			propsData: {
-				homework: homeworks[0],
+				task: tasks[0],
 			},
 		});
 
 		const firstLink = wrapper.find("a");
 
 		expect(firstLink.exists()).toBe(true);
-		expect(firstLink.attributes().href).toBe(`/homework/${homeworks[0]._id}`);
+		expect(firstLink.attributes().href).toBe(`/homework/${tasks[0]._id}`);
 	});
 
-	it("Should display no due date label if homework has no duedate", () => {
-		const wrapper = mount(vHomeworkItemStudent, {
+	it("Should display no due date label if task has no duedate", () => {
+		const wrapper = mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
 			propsData: {
-				homework: openHomeworksWithoutDueDate[0],
+				task: openTasksWithoutDueDate[0],
 			},
 		});
 
@@ -50,15 +50,15 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 		expect(dueDateLabel.text()).toBe("Kein Abgabedatum");
 	});
 
-	it("Should display due date label if homework has duedate", () => {
-		const wrapper = mount(vHomeworkItemStudent, {
+	it("Should display due date label if task has duedate", () => {
+		const wrapper = mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
 			propsData: {
-				homework: homeworks[0],
+				task: tasks[0],
 			},
 		});
 
@@ -66,12 +66,12 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 		expect(dueDateLabel.text()).toBe("Abgabe 11.06.00 16:00");
 	});
 
-	it("Should render hint label, if homework is close to due date", () => {
+	it("Should render hint label, if task is close to due date", () => {
 		const current = new Date();
 		current.setHours(current.getHours() + 1);
 		const closeToDueDate = current.toISOString();
 
-		const homeworkCloseToDueDate = {
+		const taskCloseToDueDate = {
 			id: "59cce2c61113d1132c98dc02",
 			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
@@ -80,14 +80,14 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 			createdAt: "2017-09-28T11:49:39.924Z",
 		};
 
-		const wrapper = mount(vHomeworkItemStudent, {
+		const wrapper = mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
 			propsData: {
-				homework: homeworkCloseToDueDate,
+				task: taskCloseToDueDate,
 			},
 		});
 
@@ -96,15 +96,15 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 		);
 	});
 
-	it("Should render no hint label if the homework is due to in the far future", () => {
-		const wrapper = mount(vHomeworkItemStudent, {
+	it("Should render no hint label if the task is due to in the far future", () => {
+		const wrapper = mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
 			propsData: {
-				homework: openHomeworksWithDueDate[0],
+				task: openTasksWithDueDate[0],
 			},
 		});
 
@@ -114,36 +114,36 @@ describe("@components/molecules/vHomeworkItemStudent", () => {
 	});
 
 	it("computedDueDateLabel() method should be able to render a shortened date", () => {
-		const wrapper = mount(vHomeworkItemStudent, {
+		const wrapper = mount(vTaskItemStudent, {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
 			}),
 			vuetify,
 			propsData: {
-				homework: openHomeworksWithDueDate[0],
+				task: openTasksWithDueDate[0],
 			},
 		});
 
 		expect(
-			wrapper.vm.computedDueDateLabel(openHomeworksWithDueDate[0].duedate)
+			wrapper.vm.computedDueDateLabel(openTasksWithDueDate[0].duedate)
 		).toBe("Abgabe 11.06.00 16:00");
 
 		expect(
-			wrapper.vm.computedDueDateLabel(openHomeworksWithDueDate[0].duedate, true)
+			wrapper.vm.computedDueDateLabel(openTasksWithDueDate[0].duedate, true)
 		).toBe("Abgabe 11.06.00");
 	});
 
-	it("accepts valid homework props", () => {
-		const { validator } = vHomeworkItemStudent.props.homework;
-		const validHomeworks = homeworks;
+	it("accepts valid task props", () => {
+		const { validator } = vTaskItemStudent.props.task;
+		const validTasks = tasks;
 
-		validHomeworks.forEach((homework) => {
-			expect(validator(homework)).toBe(true);
+		validTasks.forEach((task) => {
+			expect(validator(task)).toBe(true);
 		});
 
-		invalidHomeworks.forEach((homework) => {
-			expect(validator(homework)).toBe(false);
+		invalidTasks.forEach((task) => {
+			expect(validator(task)).toBe(false);
 		});
 	});
 });
