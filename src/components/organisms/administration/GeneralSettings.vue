@@ -3,13 +3,6 @@
 		<h2 class="text-h4 mb-10">
 			{{ $t("pages.administration.school.index.generalSettings") }}
 		</h2>
-		<!-- <template v-if="loading && !(school && school.id)">
-			<v-skeleton-loader
-				v-for="setting of 4"
-				:key="setting"
-				type="list-item-three-line"
-			/>
-		</template> -->
 		<v-form>
 			<v-overlay :value="loading" :absolute="true">
 				<v-progress-circular
