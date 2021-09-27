@@ -12,6 +12,14 @@ const mockData = {
 	yPosition: 2,
 };
 
+const propsData = {
+	item: mockData,
+	size: 100,
+	groupAvatar: false,
+	showBadge: true,
+	location: "2-5",
+};
+
 describe("vRoomAvatar", () => {
 	it("should display the title", () => {
 		const wrapper = mount(vRoomAvatar, {
@@ -19,12 +27,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: {
-				item: mockData,
-				size: 100,
-				groupAvatar: false,
-				showBadge: true,
-			},
+			propsData: propsData,
 		});
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 		expect(labelElement).toBeTruthy();
@@ -37,12 +40,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: {
-				item: mockData,
-				size: 100,
-				groupAvatar: false,
-				showBadge: true,
-			},
+			propsData: propsData,
 		});
 		const shortLabelElement = wrapper.find(".single-avatar")
 			.element as HTMLElement;
@@ -61,6 +59,7 @@ describe("vRoomAvatar", () => {
 				size: 100,
 				groupAvatar: false,
 				showBadge: true,
+				location: "2-5",
 			},
 		});
 		const badgeElement = wrapper.find(".badge-component");
@@ -75,12 +74,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: {
-				item: mockData,
-				size: 100,
-				groupAvatar: false,
-				showBadge: true,
-			},
+			propsData: propsData,
 		});
 		const badgeElement = wrapper.find(".badge-component");
 		expect(badgeElement).toBeTruthy();
@@ -94,12 +88,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: {
-				item: mockData,
-				size: 100,
-				groupAvatar: false,
-				showBadge: true,
-			},
+			propsData: propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
 		expect(avatarComponent).toBeTruthy();
@@ -113,12 +102,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: {
-				item: mockData,
-				size: 100,
-				groupAvatar: false,
-				showBadge: true,
-			},
+			propsData: propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
 		expect(avatarComponent).toBeTruthy();
@@ -136,6 +120,7 @@ describe("vRoomAvatar", () => {
 				size: 100,
 				groupAvatar: true,
 				showBadge: true,
+				location: "2-5",
 			},
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
@@ -149,12 +134,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: {
-				item: mockData,
-				size: 100,
-				groupAvatar: false,
-				showBadge: true,
-			},
+			propsData: propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
 
@@ -164,5 +144,28 @@ describe("vRoomAvatar", () => {
 		let emitted = wrapper.emitted();
 		expect(emitted["click"]).toHaveLength(1);
 		expect(emitted["click"] && emitted["click"][0][0]).toStrictEqual(mockData);
+	});
+
+	it("should emit 'dragStart' event when it started dragging", async () => {
+		const wrapper = mount(vRoomAvatar, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: propsData,
+		});
+		const avatarComponent = wrapper.find(".avatar-component");
+
+		avatarComponent.trigger("dragstart");
+		await wrapper.vm.$nextTick();
+
+		let emitted = wrapper.emitted();
+		expect(emitted["startDrag"]).toHaveLength(1);
+		expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
+			mockData
+		);
+		expect(emitted["startDrag"] && emitted["startDrag"][0][1]).toStrictEqual(
+			"2-5"
+		);
 	});
 });

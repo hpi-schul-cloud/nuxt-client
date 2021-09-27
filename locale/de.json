@@ -39,6 +39,7 @@
 	"common.labels.teacher": "Lehrkraft",
 	"common.labels.teacher.plural": "Lehrkräfte",
 	"common.labels.title": "Titel",
+	"common.labels.greeting": "Hallo",
 	"common.labels.description": "Beschreibung",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",

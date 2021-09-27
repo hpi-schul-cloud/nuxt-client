@@ -62,6 +62,25 @@ describe("rooms module", () => {
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 			});
 		});
+		describe("align", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+			it("should call server and 'setPosition' mutation", async () => {
+				// TODO: call server will be here when server ready
+				const roomsModule = new Rooms({});
+
+				const setPositionSpy = jest.spyOn(roomsModule, "setPosition");
+				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+
+				await roomsModule.align({});
+
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setPositionSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -86,6 +105,16 @@ describe("rooms module", () => {
 			});
 		});
 
+		describe("setRoomDataId", () => {
+			it("should set the room data id", () => {
+				const roomsModule = new Rooms({});
+				const id = "sample_id";
+
+				roomsModule.setRoomDataId(id);
+				expect(roomsModule.gridElementsId).toStrictEqual(id);
+			});
+		});
+
 		describe("setLoading", () => {
 			it("should set loading", () => {
 				const roomsModule = new Rooms({});
@@ -105,6 +134,35 @@ describe("rooms module", () => {
 				expect(roomsModule.error).toBe(errorData);
 			});
 		});
+
+		describe("setPosition", () => {
+			it("should re-position the state", () => {
+				const roomsModule = new Rooms({});
+				const draggedObject = {
+					from: "1-6",
+					item: {
+						id: "123",
+						title: "Math 1a",
+						shortTitle: "Ma",
+						displayColor: "#f23f76",
+						xPosition: 6,
+						yPosition: 1,
+					},
+					to: "5-2",
+				};
+				const expectedObject = {
+					id: "123",
+					title: "Math 1a",
+					shortTitle: "Ma",
+					displayColor: "#f23f76",
+					xPosition: "2",
+					yPosition: "5",
+				};
+				roomsModule.setRoomData(mockData.gridElements);
+				roomsModule.setPosition(draggedObject);
+				expect(roomsModule.roomsData[0]).toStrictEqual(expectedObject);
+			});
+		});
 	});
 
 	describe("getters", () => {
@@ -120,7 +178,7 @@ describe("rooms module", () => {
 		});
 
 		describe("getLoading", () => {
-			it("should return rooms state", () => {
+			it("should return loading state", () => {
 				const roomsModule = new Rooms({});
 
 				expect(roomsModule.getLoading).not.toStrictEqual(true);
@@ -130,12 +188,22 @@ describe("rooms module", () => {
 		});
 
 		describe("getError", () => {
-			it("should return rooms state", () => {
+			it("should return error state", () => {
 				const roomsModule = new Rooms({});
 				const errorData = { message: "some error" };
 				expect(roomsModule.getError).toStrictEqual(null);
 				roomsModule.setError(errorData);
 				expect(roomsModule.getError).toStrictEqual(errorData);
+			});
+		});
+
+		describe("getRoomsId", () => {
+			it("should return rooms id state", () => {
+				const roomsModule = new Rooms({});
+				const sampleId = "sample_id";
+				expect(roomsModule.getRoomsId).toStrictEqual("");
+				roomsModule.setError(sampleId);
+				expect(roomsModule.getError).toStrictEqual(sampleId);
 			});
 		});
 	});

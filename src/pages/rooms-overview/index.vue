@@ -1,5 +1,5 @@
 <template>
-	<v-container ref="main" fluid mt-13>
+	<default-wireframe ref="main" :headline="title" :full-width="true">
 		<v-row v-for="row in dimensions.rowCount" :key="row">
 			<v-col v-for="col in dimensions.columnCount" :key="col">
 				<div
@@ -10,8 +10,7 @@
 						v-if="hasGroup(row, col)"
 						:ref="`${row}-${col}`"
 						class="room-group-avatar"
-						:data-position-row="row"
-						:data-position-col="col"
+						:location="`${row}-${col}`"
 						:data="getDataObject(row, col)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:max-items="4"
@@ -22,20 +21,20 @@
 						v-else
 						:ref="`${row}-${col}`"
 						class="room-avatar"
-						:data-position-row="row"
-						:data-position-col="col"
+						:location="`${row}-${col}`"
 						:item="getDataObject(row, col)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:show-badge="true"
 						show-sub-title
+						@startDrag="setDragElement"
 					></vRoomAvatar>
 				</div>
-				<div v-else>
+				<div v-else class="d-flex justify-center">
 					<vRoomEmptyAvatar
 						:ref="`${row}-${col}`"
+						:location="`${row}-${col}`"
 						:size="dimensions.cellWidth * ratios.itemRatio"
-						:data-position-row="row"
-						:data-position-col="col"
+						@drop="setDropElement"
 					></vRoomEmptyAvatar>
 				</div>
 			</v-col>
@@ -63,10 +62,11 @@
 				</v-row>
 			</template>
 		</vCustomDialog>
-	</v-container>
+	</default-wireframe>
 </template>
 
 <script>
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
@@ -75,6 +75,7 @@ import RoomsModule from "@store/rooms";
 
 export default {
 	components: {
+		DefaultWireframe,
 		vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
@@ -102,6 +103,11 @@ export default {
 				isOpen: false,
 				groupData: {},
 			},
+			draggedElement: {
+				from: null,
+				item: {},
+				to: null,
+			},
 		};
 	},
 	computed: {
@@ -110,6 +116,9 @@ export default {
 		},
 		roomsError() {
 			return RoomsModule.getError;
+		},
+		title() {
+			return `${this.$t("common.labels.greeting")} ${this.$user.firstName}`;
 		},
 	},
 	async created() {
@@ -161,6 +170,22 @@ export default {
 			return this.roomsData.find(
 				(item) => item.xPosition == col && item.yPosition == row
 			);
+		},
+		setDragElement(element, pos) {
+			this.draggedElement.from = pos;
+			this.draggedElement.item = element;
+		},
+		setDropElement(pos) {
+			this.draggedElement.to = pos;
+			if (
+				this.getElementNameByRef(this.draggedElement.from) == "vRoomAvatar" &&
+				this.getElementNameByRef(pos) == "vRoomEmptyAvatar"
+			) {
+				RoomsModule.align(this.draggedElement);
+			}
+		},
+		getElementNameByRef(refId) {
+			return this.$refs[refId][0].$options["_componentTag"];
 		},
 	},
 };
