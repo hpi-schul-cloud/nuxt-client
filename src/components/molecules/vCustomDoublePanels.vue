@@ -87,39 +87,13 @@ export default {
 		},
 	},
 	data: function () {
-		let expanded = this.expandedDefault;
-
-		if (expanded === 0 && this.panelOneCount === 0 && this.panelTwoCount != 0) {
-			expanded = 1;
-		} else {
-			if (
-				expanded === 1 &&
-				this.panelTwoCount === 0 &&
-				this.panelOneCount != 0
-			) {
-				expanded = 0;
-			}
-		}
-
 		return {
-			expanded,
+			expanded: this.expandedDefault,
 		};
 	},
 	computed: {
 		updatedDefault: function () {
-			let expanded = this.expandedDefault;
-
-			if (this.areBothPanelsEmpty) return expanded;
-
-			if (this.isPanelOneDisabled && expanded === 0) {
-				expanded = 1;
-			} else {
-				if (this.isPanelTwoDisabled && expanded === 1) {
-					expanded = 0;
-				}
-			}
-
-			return expanded;
+			return this.updateDefault();
 		},
 		isPanelOneEmpty: function () {
 			return this.panelOneCount === 0;
@@ -142,6 +116,9 @@ export default {
 		areBothPanelsEmpty: function () {
 			return this.isPanelOneDisabled && this.isPanelTwoDisabled;
 		},
+		areBothPanelsFilled: function () {
+			return !this.isPanelOneDisabled && !this.isPanelTwoDisabled;
+		},
 	},
 	watch: {
 		isPanelOneDisabled: function () {
@@ -154,9 +131,25 @@ export default {
 			this.expanded = this.updatedDefault;
 		},
 	},
+	created() {
+		this.expanded = this.updatedDefault;
+	},
 	methods: {
 		toggle() {
 			this.expanded = +!this.expanded;
+		},
+		updateDefault() {
+			let expanded = this.expandedDefault;
+
+			if (this.areBothPanelsEmpty || this.areBothPanelsFilled) return expanded;
+
+			if (this.isPanelOneDisabled) {
+				expanded = 1;
+			} else {
+				expanded = 0;
+			}
+
+			return expanded;
 		},
 	},
 };
