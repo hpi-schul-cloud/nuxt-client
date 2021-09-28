@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
+
 ### Fixed
 
 ## [26.11.0] - 2021-09-22
