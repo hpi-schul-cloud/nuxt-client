@@ -5,6 +5,9 @@ module.exports = function (api) {
 	const commonPlugins = [
 		"dynamic-import-node",
 		"@babel/plugin-proposal-optional-chaining",
+		"@babel/plugin-proposal-class-properties",
+		"@babel/plugin-proposal-private-methods",
+		"@babel/plugin-proposal-private-property-in-object",
 	];
 	if (process.env.NODE_ENV === "test") {
 		return {
