@@ -210,7 +210,6 @@
 	"layouts.loggedoutFullWidth.blog": "Blog",
 	"layouts.loggedoutFullWidth.faq": "FAQ",
 	"layouts.loggedoutFullWidth.join": "Participate",
-	"layouts.loggedoutFullWidth.project": "About the project",
 	"layouts.loggedoutFullWidth.steps": "First steps",
 	"mixins.typeMeta.types.default": "Content",
 	"mixins.typeMeta.types.image": "Image",

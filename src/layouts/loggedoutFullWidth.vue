@@ -2,7 +2,7 @@
 	<div>
 		<navigation-bar
 			:links="navbarItems"
-			:img="require('@assets/img/logo/logo-image-color.svg')"
+			:img="require('@assets/img/logo/logo-dBildungscloud.svg')"
 			:buttons="true"
 		/>
 		<div class="nuxt-container">
