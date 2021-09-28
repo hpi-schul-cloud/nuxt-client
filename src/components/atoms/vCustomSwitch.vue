@@ -1,6 +1,6 @@
 <template>
 	<v-switch
-		v-model="model"
+		:input-value="value"
 		:label="label"
 		inset
 		flat
@@ -18,8 +18,9 @@ export default {
 		event: "input-changed",
 	},
 	props: {
+		// v-switch accepts any type as a value, thus we shouldn't restrict it
+		// eslint-disable-next-line vue/require-prop-types
 		value: {
-			type: Boolean,
 			required: true,
 		},
 		label: {
@@ -30,9 +31,6 @@ export default {
 			type: String,
 			default: "",
 		},
-	},
-	data() {
-		return { model: this.value };
 	},
 };
 </script>
