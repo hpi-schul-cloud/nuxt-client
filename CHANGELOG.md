@@ -14,6 +14,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+## [26.11.1] - 2021-09-29
+
+### Fixed
+
+- BC-365 - fixed task overview pagination
+
 ## [26.11.0] - 2021-09-22
 
 ### Added
@@ -37,7 +43,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
 - BC-313 - fixed active tab mobile behaviour and color
-- BC-365 - fixed task overview pagination
 
 ## [26.10.1] - 2021-09-07
 
