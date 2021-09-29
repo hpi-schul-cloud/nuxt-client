@@ -30,7 +30,7 @@
 				@selected-item="filterByCourse"
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
-			<tasks-dashboard-teacher v-else  :tab.sync="tab" />
+			<tasks-dashboard-teacher v-else :tab.sync="tab" />
 		</v-container>
 	</section>
 </template>

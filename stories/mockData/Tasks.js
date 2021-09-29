@@ -169,7 +169,11 @@ export const gradedTasks = [
 	},
 ];
 
-export const openTasks = [...openTasksWithDueDate, ...overDueTasks, ...openTasksWithoutDueDate];
+export const openTasks = [
+	...openTasksWithDueDate,
+	...overDueTasks,
+	...openTasksWithoutDueDate,
+];
 export const completedTasks = [...submittedTasks, ...gradedTasks];
 export const tasks = [...openTasks, ...completedTasks];
 
