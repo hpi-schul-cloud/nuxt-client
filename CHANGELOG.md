@@ -16,6 +16,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+### Security
+
+- BC-296 - updated dependencies with high severity security issues
+
 ## [26.11.0] - 2021-09-22
 
 ### Added
