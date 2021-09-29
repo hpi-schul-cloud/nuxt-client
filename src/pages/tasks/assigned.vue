@@ -1,8 +1,5 @@
 <template>
-	<default-wireframe
-		:headline="$t('pages.tasks.title')"
-		:full-width="false"
-	>
+	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
 		<tasks-dashboard-main role="teacher" />
 	</default-wireframe>
 </template>
