@@ -97,8 +97,8 @@ export default {
 					href: "mailto:info@hpi-schul-cloud.de",
 				},
 				{
-					title: "Support: feedback@hpi-schul-cloud.de",
-					href: "mailto:feedback@hpi-schul-cloud.de",
+					title: "Support: dataportlernen.cloud@dataport.de",
+					href: "mailto:dataportlernen.cloud@dataport.de",
 				},
 				{
 					title: this.$t("pages.mint-ec.article.footer.anbieter"),
