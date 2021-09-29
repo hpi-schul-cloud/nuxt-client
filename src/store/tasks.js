@@ -46,6 +46,10 @@ const filterGraded = (tasks) => {
 	return tasks.filter((task) => task.status.graded > 0);
 };
 
+const filterDrafts = (tasks) => {
+	return tasks.filter((task) => task.private === true);
+};
+
 const module = {
 	state: () => {
 		return {
@@ -110,8 +114,19 @@ const module = {
 					.length === 0
 			);
 		},
+		hasNoDrafts: (state) => {
+			return (
+				state.status === "completed" &&
+				filterDrafts(filterByCourses(state.tasks, state.courseFilter))
+					.length === 0
+			);
+		},
 		getTasks: (state) => state.tasks,
 		getStatus: (state) => state.status,
+		getCourses: (state) => {
+			const courses = new Set(state.tasks.map((task) => task.courseName));
+			return Array.from(courses);
+		},
 		getOpenTasksForStudent: (state) => {
 			const openTasks = {};
 
@@ -123,21 +138,6 @@ const module = {
 			);
 			openTasks.withDueDate = filterWithDueDate(
 				filterOpen(filterByCourses(state.tasks, state.courseFilter))
-			);
-
-			return openTasks;
-		},
-		getOpenTasksForTeacher: (state) => {
-			const openTasks = {};
-
-			openTasks.overdue = filterOverdue(
-				filterByCourses(state.tasks, state.courseFilter)
-			);
-			openTasks.noDueDate = filterNoDueDate(
-				filterByCourses(state.tasks, state.courseFilter)
-			);
-			openTasks.withDueDate = filterWithDueDate(
-				filterByCourses(state.tasks, state.courseFilter)
 			);
 
 			return openTasks;
@@ -154,9 +154,25 @@ const module = {
 
 			return completedTasks;
 		},
-		getCourses: (state) => {
-			const courses = new Set(state.tasks.map((task) => task.courseName));
-			return Array.from(courses);
+		getOpenTasksForTeacher: (state) => {
+			const openTasks = {};
+
+			openTasks.overdue = filterOverdue(
+				filterByCourses(state.tasks, state.courseFilter)
+			);
+			openTasks.noDueDate = filterNoDueDate(
+				filterByCourses(state.tasks, state.courseFilter)
+			);
+			openTasks.withDueDate = filterWithDueDate(
+				filterByCourses(state.tasks, state.courseFilter)
+			);
+
+			return openTasks;
+		},
+		getDraftTasksForTeacher: () => {
+			//const draftTasks = filterDrafts(filterByCourses(state.tasks, state.courseFilter));
+
+			return [];
 		},
 	},
 };

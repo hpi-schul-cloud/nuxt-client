@@ -13,11 +13,13 @@ describe("@components/organisms/TasksDashboardTeacher", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				hasNoDrafts: () => true,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,
 					withDueDate: dueDateTasksTeacher,
 					noDueDate: noDueDateTasksTeacher,
 				}),
+				getDraftTasksForTeacher: () => [],
 			},
 		},
 	};
@@ -38,6 +40,9 @@ describe("@components/organisms/TasksDashboardTeacher", () => {
 				store: mockStore,
 			}),
 			vuetify,
+			propsData: {
+				tab: 0,
+			},
 		});
 
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");

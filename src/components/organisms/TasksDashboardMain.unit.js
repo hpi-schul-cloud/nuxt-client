@@ -49,11 +49,13 @@ describe("@components/organisms/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				hasNoDrafts: () => true,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,
 					withDueDate: dueDateTasksTeacher,
 					noDueDate: noDueDateTasksTeacher,
 				}),
+				getDraftTasksForTeacher: () => [],
 				getCourses: () => coursesTeacher,
 				hasNoOpenTasks: () => false,
 			},
@@ -68,11 +70,13 @@ describe("@components/organisms/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => true,
+				hasNoDrafts: () => true,
 				getOpenTasksForTeacher: () => ({
 					overdue: [],
 					withDueDate: [],
 					noDueDate: [],
 				}),
+				getDraftTasksForTeacher: () => [],
 				getCourses: () => [],
 			},
 			actions: {

@@ -88,7 +88,6 @@ export default {
 			status: "getStatus",
 			openTasks: "getOpenTasksForStudent",
 			completedTasks: "getCompletedTasksForStudent",
-			hasNoTasks: "hasNoTasks",
 			hasNoOpenTasks: "hasNoOpenTasks",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
 		}),

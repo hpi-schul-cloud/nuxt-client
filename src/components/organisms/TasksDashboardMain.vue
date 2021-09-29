@@ -6,19 +6,15 @@
 					{{ $t("pages.tasks.title") }}
 				</h1>
 			</v-container>
-			<div v-if="isStudent" class="pb-0 d-flex justify-center">
+			<div class="pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" grow class="tabs-max-width">
 					<v-tab>
-						<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.TasksDashboardMain.tab.open")
-						}}</span>
+						<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
+						<span class="d-none d-sm-inline">{{ tabOneHeader.title }}</span>
 					</v-tab>
 					<v-tab>
-						<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.TasksDashboardMain.tab.completed")
-						}}</span>
+						<v-icon class="tab-icon mr-3">{{ tabTwoHeader.icon }}</v-icon>
+						<span class="d-none d-sm-inline">{{ tabTwoHeader.title }}</span>
 					</v-tab>
 				</v-tabs>
 			</div>
@@ -34,7 +30,7 @@
 				@selected-item="filterByCourse"
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
-			<tasks-dashboard-teacher v-else />
+			<tasks-dashboard-teacher v-else  :tab.sync="tab" />
 		</v-container>
 	</section>
 </template>
@@ -88,6 +84,28 @@ export default {
 		},
 		hasTasks: function () {
 			return !this.hasNoTasks;
+		},
+		tabOneHeader: function () {
+			return {
+				icon: "$taskOpenFilled",
+				title: this.$t("components.organisms.TasksDashboardMain.tab.open"),
+			};
+		},
+		tabTwoHeader: function () {
+			const tabTwo = {};
+			if (this.isStudent) {
+				tabTwo.icon = "$taskDoneFilled";
+				tabTwo.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.completed"
+				);
+			} else {
+				tabTwo.icon = "$taskDraft";
+				tabTwo.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.drafts"
+				);
+			}
+
+			return tabTwo;
 		},
 	},
 	created() {
