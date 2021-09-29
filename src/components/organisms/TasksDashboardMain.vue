@@ -1,11 +1,6 @@
 <template>
 	<section>
-		<div class="border-bottom">
-			<v-container>
-				<h1 class="h4">
-					{{ $t("pages.tasks.title") }}
-				</h1>
-			</v-container>
+		<div :class="borderClass">
 			<div v-if="isStudent" class="pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" grow class="tabs-max-width">
 					<v-tab>
@@ -23,7 +18,7 @@
 				</v-tabs>
 			</div>
 		</div>
-		<v-container class="v-container mt-5 mb-14">
+		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="hasTasks"
 				v-model="selectedCourses"
@@ -35,7 +30,7 @@
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
 			<tasks-dashboard-teacher v-else />
-		</v-container>
+		</div>
 	</section>
 </template>
 
@@ -89,6 +84,11 @@ export default {
 		hasTasks: function () {
 			return !this.hasNoTasks;
 		},
+		borderClass: function () {
+			return {
+				"border-bottom": this.isStudent,
+			};
+		},
 	},
 	created() {
 		this.$store.dispatch("tasks/getAllTasks");
@@ -103,7 +103,7 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 
-.v-container {
+.content-max-width {
 	max-width: var(--size-content-width-max);
 }
 
@@ -133,6 +133,8 @@ export default {
 }
 
 .border-bottom {
+	margin-right: calc(-1 * var(--space-lg));
+	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>
