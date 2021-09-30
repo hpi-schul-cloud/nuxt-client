@@ -323,12 +323,8 @@ export class Schools extends VuexModule {
 		this.setLoading(true);
 		try {
 			await $axios.$delete(`v1/systems/${systemId}`);
+			await this.fetchSchool();
 
-			const updatedSystemsList = this.systems.filter(
-				(system) => system._id !== systemId
-			);
-
-			this.setSystems(updatedSystemsList);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
