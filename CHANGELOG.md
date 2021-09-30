@@ -10,6 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-307 - design and content transformation HPI Schul-Cloud in dBildungscloud
 - BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
 
