@@ -37,6 +37,7 @@ describe("component/customDialog", () => {
 		expect(button).toHaveLength(0);
 	});
 	it("should click dialog-confirmed btn", () => {
+		const confirmDialogSpy = jest.spyOn(customDialog.methods, "confirmDialog");
 		const wrapper = mount(customDialog, {
 			...createComponentMocks({
 				i18n: true,
@@ -47,7 +48,10 @@ describe("component/customDialog", () => {
 		const emitted = wrapper.emitted();
 		const button = wrapper.find(".dialog-confirmed");
 		button.trigger("click");
+
+		expect(confirmDialogSpy).toHaveBeenCalled();
 		expect(emitted["dialog-confirmed"]).toHaveLength(1);
+		expect(emitted["dialog-closed"]).toHaveLength(1);
 	});
 	it("should have dialog buttons", () => {
 		const wrapper = mount(customDialog, {

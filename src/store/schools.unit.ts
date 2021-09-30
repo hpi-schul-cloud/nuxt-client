@@ -43,6 +43,12 @@ describe("schools module", () => {
 
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const fetchCurrentYearSpy = jest.spyOn(
+					schoolsModule,
+					"fetchCurrentYear"
+				);
+				const fetchFederalSpy = jest.spyOn(schoolsModule, "fetchFederalState");
+				const fetchSystems = jest.spyOn(schoolsModule, "fetchSystems");
 
 				await schoolsModule.fetchSchool();
 
@@ -66,19 +72,17 @@ describe("schools module", () => {
 					},
 				});
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
-				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				AuthModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
 				initializeAxios({
 					$get: async (path: string) => {
 						throw new Error("");
 						return;
 					},
 				} as NuxtAxiosInstance);
-				const schoolsModule = new Schools({});
 
+				const schoolsModule = new Schools({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 
@@ -86,7 +90,7 @@ describe("schools module", () => {
 
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
+				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
@@ -371,6 +375,7 @@ describe("schools module", () => {
 				schoolsModule.setSystems(systems);
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
 				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 				await schoolsModule.deleteSystem(systemId);
@@ -378,7 +383,7 @@ describe("schools module", () => {
 				expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setSystemsSpy).toHaveBeenCalled();
+				expect(fetchSchoolSpy).toHaveBeenCalled();
 				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expect.any(Array));
 				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
 			});

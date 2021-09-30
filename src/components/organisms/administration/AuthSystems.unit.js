@@ -163,36 +163,6 @@ describe("AuthSystems", () => {
 			expect(deleteSpy).toHaveBeenCalled();
 		});
 
-		it("should call the method when 'dialog-closed' triggered", async () => {
-			const closeDialog = jest.spyOn(AuthSystems.methods, "closeDialog");
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
-			const customDialog = wrapper.find(searchStrings.customDialog);
-
-			customDialog.vm.$emit("dialog-closed", false);
-			expect(closeDialog).toHaveBeenCalled();
-		});
-
-		it("should call the method when click outside of modal", async () => {
-			const closeDialog = jest.spyOn(AuthSystems.methods, "closeDialog");
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
-			const customDialog = wrapper.find(searchStrings.customDialog);
-
-			customDialog.vm.$emit("click:outside", false);
-			expect(closeDialog).toHaveBeenCalled();
-		});
-
 		it("should call the method when delete dialog confirmed", async () => {
 			const removeSystem = jest.spyOn(AuthSystems.methods, "removeSystem");
 			const wrapper = mount(AuthSystems, {
