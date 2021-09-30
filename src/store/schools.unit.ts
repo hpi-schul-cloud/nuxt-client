@@ -20,6 +20,15 @@ axiosInitializer();
 
 describe("schools module", () => {
 	describe("actions", () => {
+		beforeEach(() => {
+			initializeAxios({
+				$get: async (path: string) => {
+					receivedRequests.push({ path });
+					return getRequestReturn;
+				},
+				post: async (path: string) => {},
+			} as NuxtAxiosInstance);
+		});
 		describe("fetchSchool", () => {
 			beforeEach(() => {
 				receivedRequests = [];
@@ -34,12 +43,6 @@ describe("schools module", () => {
 
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const fetchCurrentYearSpy = jest.spyOn(
-					schoolsModule,
-					"fetchCurrentYear"
-				);
-				const fetchFederalSpy = jest.spyOn(schoolsModule, "fetchFederalState");
-				const fetchSystems = jest.spyOn(schoolsModule, "fetchSystems");
 
 				await schoolsModule.fetchSchool();
 
@@ -62,18 +65,18 @@ describe("schools module", () => {
 						videoconference: false,
 					},
 				});
-				expect(setLoadingSpy.mock.calls[4][0]).toBe(false);
-
-				expect(fetchCurrentYearSpy).toHaveBeenCalled();
-				expect(fetchFederalSpy).toHaveBeenCalled();
-				expect(fetchSystems).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
 				AuthModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
-				getRequestReturn = {
-					features: ["rocketChat"],
-				};
+				initializeAxios({
+					$get: async (path: string) => {
+						throw new Error("");
+						return;
+					},
+				} as NuxtAxiosInstance);
 				const schoolsModule = new Schools({});
 
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
@@ -81,14 +84,10 @@ describe("schools module", () => {
 
 				await schoolsModule.fetchSchool();
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"/v1/schools/sampleSchoolId "
-				);
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[4][0]).toBe(false);
+				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
 		describe("fetchFederalState", () => {

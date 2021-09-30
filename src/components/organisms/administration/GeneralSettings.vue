@@ -154,6 +154,7 @@ import SchoolsModule from "@/store/schools";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
+import { mapActions } from "vuex";
 
 export default {
 	components: {
@@ -195,8 +196,22 @@ export default {
 		},
 	},
 	watch: {
-		school() {
-			this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
+		school: {
+			handler: function (newSchool, oldSchool) {
+				if (newSchool && newSchool.id) {
+					this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
+					if (!oldSchool || !oldSchool.id) {
+						// fetch consents when the school is loaded and the school was not yet loaded
+						// if the school object gets a new reference (e.g. after updating it) do not reload the consents
+						this.fetchConsentVersions({
+							schoolId: newSchool.id,
+							consentTypes: "privacy",
+							withFile: true,
+						});
+					}
+				}
+			},
+			immediate: true,
 		},
 	},
 	async created() {
@@ -207,6 +222,7 @@ export default {
 		);
 	},
 	methods: {
+		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		printDate,
 		toBase64,
 		dataUrlToFile,
