@@ -72,7 +72,8 @@ export default {
 		},
 		status: {
 			required: true,
-			validator: (val) => [null, "pending", "completed", "error"].includes(val),
+			validator: (val) =>
+				[null, "", "pending", "completed", "error"].includes(val),
 		},
 		isEmpty: {
 			type: Boolean,
@@ -91,6 +92,9 @@ export default {
 		};
 	},
 	computed: {
+		updatedDefault: function () {
+			return this.updateDefault();
+		},
 		isPanelOneEmpty: function () {
 			return this.panelOneCount === 0;
 		},
@@ -109,10 +113,43 @@ export default {
 		isPanelTwoDisabled: function () {
 			return this.isPanelTwoEmpty && this.isCompleted;
 		},
+		areBothPanelsEmpty: function () {
+			return this.isPanelOneDisabled && this.isPanelTwoDisabled;
+		},
+		areBothPanelsFilled: function () {
+			return !this.isPanelOneDisabled && !this.isPanelTwoDisabled;
+		},
+	},
+	watch: {
+		isPanelOneDisabled: function () {
+			this.expanded = 1;
+		},
+		isPanelTwoDisabled: function () {
+			this.expanded = 0;
+		},
+		areBothPanelsEmpty: function () {
+			this.expanded = this.updatedDefault;
+		},
+	},
+	created() {
+		this.expanded = this.updatedDefault;
 	},
 	methods: {
 		toggle() {
 			this.expanded = +!this.expanded;
+		},
+		updateDefault() {
+			let expanded = this.expandedDefault;
+
+			if (this.areBothPanelsEmpty || this.areBothPanelsFilled) return expanded;
+
+			if (this.isPanelOneDisabled) {
+				expanded = 1;
+			} else {
+				expanded = 0;
+			}
+
+			return expanded;
 		},
 	},
 };
