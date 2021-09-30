@@ -52,7 +52,7 @@ export const mockUser: User = {
 };
 
 export const mockSchool: School = {
-	_id: "",
+	_id: "mockSchoolId",
 	name: "",
 	fileStorageType: "",
 	federalState: "",
@@ -82,7 +82,7 @@ export const mockSchool: School = {
 	inMaintenance: false,
 	documentBaseDir: "",
 	isExternal: false,
-	id: "",
+	id: "mockSchoolId",
 	years: {},
 	isTeamCreationByStudentsEnabled: false,
 };

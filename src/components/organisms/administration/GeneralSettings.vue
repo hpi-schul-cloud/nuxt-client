@@ -4,6 +4,12 @@
 			{{ $t("pages.administration.school.index.generalSettings") }}
 		</h2>
 		<v-form>
+			<v-overlay :value="loading" :absolute="true">
+				<v-progress-circular
+					color="primary"
+					indeterminate
+				></v-progress-circular>
+			</v-overlay>
 			<v-row>
 				<v-col>
 					<v-text-field
@@ -123,21 +129,19 @@
 					></v-select>
 				</v-col>
 			</v-row>
-			<template v-if="loading">
-				<v-skeleton-loader
-					v-for="setting of 4"
-					:key="setting"
-					type="list-item-three-line"
-				/>
-			</template>
 			<privacy-settings
-				v-else
 				:permissions="localSchool.permissions || {}"
 				:features="localSchool.features || {}"
 				@update-privacy-settings="onUpdatePrivacySettings"
 				@update-feature-settings="onUpdateFeatureSettings"
 			></privacy-settings>
-			<v-btn class="my-5 button-save" color="primary" depressed @click="save">
+			<v-btn
+				class="my-5 button-save"
+				color="primary"
+				depressed
+				:disabled="loading"
+				@click="save"
+			>
 				{{ $t("pages.administration.school.index.generalSettings.save") }}
 			</v-btn>
 		</v-form>
@@ -188,6 +192,11 @@ export default {
 				);
 				return { name, abbreveation: lang };
 			});
+		},
+	},
+	watch: {
+		school() {
+			this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
 		},
 	},
 	async created() {
