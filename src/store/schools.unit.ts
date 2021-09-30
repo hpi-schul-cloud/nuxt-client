@@ -348,9 +348,28 @@ describe("schools module", () => {
 					},
 				} as NuxtAxiosInstance);
 				const schoolsModule = new Schools({});
-				schoolsModule.setSchool({ ...mockSchool, id: "schoolId" });
-				schoolsModule.setSystems(["id_1", "id_2", "id_3"]);
-				const expectedSystems = ["id_1", "id_2", "id_3"];
+				const systems = [
+					{ _id: "id_1", type: "itslearning" },
+					{
+						_id: "id_2",
+						type: "moodle",
+					},
+					{
+						_id: "id_3",
+						type: "ldap",
+					},
+				];
+				const expectedSystems = [
+					{
+						_id: "id_2",
+						type: "moodle",
+					},
+					{
+						_id: "id_3",
+						type: "ldap",
+					},
+				];
+				schoolsModule.setSystems(systems);
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");

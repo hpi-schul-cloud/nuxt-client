@@ -112,11 +112,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@styles";
-
-.container-max-width {
-	max-width: var(--size-content-width-max);
-}
-</style>

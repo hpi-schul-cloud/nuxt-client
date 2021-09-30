@@ -55,7 +55,7 @@ describe("AuthSystems", () => {
 
 			const systemTable = wrapper.find(searchStrings.tableSystem);
 
-			expect(systemTable.exists()).toBeTrue();
+			expect(systemTable.exists()).toStrictEqual(true);
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
@@ -79,26 +79,26 @@ describe("AuthSystems", () => {
 			// { _id: "1234", type: "sample system" }, // deletable: true, editable: false
 			expect(
 				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
-			).toBeTrue();
+			).toStrictEqual(true);
 			expect(
 				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
-			).toBeFalse();
+			).toStrictEqual(false);
 
 			// { _id: "12345", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
 			expect(
 				tableCell.wrappers[5].find(searchStrings.deleteSystemButton).exists()
-			).toBeFalse();
+			).toStrictEqual(false);
 			expect(
 				tableCell.wrappers[5].find(searchStrings.editSystemButton).exists()
-			).toBeFalse();
+			).toStrictEqual(false);
 
 			// { _id: "123456", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
 			expect(
 				tableCell.wrappers[8].find(searchStrings.deleteSystemButton).exists()
-			).toBeTrue();
+			).toStrictEqual(true);
 			expect(
 				tableCell.wrappers[8].find(searchStrings.editSystemButton).exists()
-			).toBeTrue();
+			).toStrictEqual(true);
 		});
 
 		it("should NOT display the dialog", async () => {
@@ -120,7 +120,7 @@ describe("AuthSystems", () => {
 			const customDialog = wrapper.findAll(searchStrings.customDialog);
 
 			expect(customDialog).toHaveLength(1);
-			expect(customDialog.wrappers[0].vm.isOpen).toBe(false);
+			expect(customDialog.wrappers[0].vm.isOpen).toStrictEqual(false);
 		});
 
 		it("should display the dialog", async () => {
@@ -142,7 +142,7 @@ describe("AuthSystems", () => {
 			const customDialog = wrapper.findAll(searchStrings.customDialog);
 
 			expect(customDialog).toHaveLength(1);
-			expect(customDialog.wrappers[0].vm.isOpen).toBe(true);
+			expect(customDialog.wrappers[0].vm.isOpen).toStrictEqual(true);
 		});
 	});
 
@@ -163,6 +163,51 @@ describe("AuthSystems", () => {
 			expect(deleteSpy).toHaveBeenCalled();
 		});
 
+		it("should call the method when 'dialog-closed' triggered", async () => {
+			const closeDialog = jest.spyOn(AuthSystems.methods, "closeDialog");
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+			const customDialog = wrapper.find(searchStrings.customDialog);
+
+			customDialog.vm.$emit("dialog-closed", false);
+			expect(closeDialog).toHaveBeenCalled();
+		});
+
+		it("should call the method when click outside of modal", async () => {
+			const closeDialog = jest.spyOn(AuthSystems.methods, "closeDialog");
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+			const customDialog = wrapper.find(searchStrings.customDialog);
+
+			customDialog.vm.$emit("click:outside", false);
+			expect(closeDialog).toHaveBeenCalled();
+		});
+
+		it("should call the method when delete dialog confirmed", async () => {
+			const removeSystem = jest.spyOn(AuthSystems.methods, "removeSystem");
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+			const customDialog = wrapper.find(searchStrings.customDialog);
+
+			customDialog.vm.$emit("dialog-confirmed");
+			expect(removeSystem).toHaveBeenCalled();
+		});
+
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {
 			const wrapper = mount(AuthSystems, {
 				...createComponentMocks({
@@ -172,9 +217,9 @@ describe("AuthSystems", () => {
 				propsData: generateProps(),
 			});
 			const deleteButton = wrapper.find(searchStrings.deleteSystemButton);
-			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toBeFalse();
+			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);
 			deleteButton.trigger("click");
-			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toBeTrue();
+			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(true);
 			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual(
 				"1234"
 			);

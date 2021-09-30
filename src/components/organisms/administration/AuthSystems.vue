@@ -57,6 +57,7 @@
 			:size="375"
 			has-buttons
 			@dialog-confirmed="removeSystem(confirmDeleteDialog.systemId)"
+			@dialog-closed="closeDialog"
 		>
 			<h2 slot="title" class="text-h4 my-2">
 				{{
@@ -125,6 +126,9 @@ export default {
 			SchoolsModule.deleteSystem(systemId);
 			this.confirmDeleteDialog.isOpen = false;
 			// TODO show error
+		},
+		closeDialog() {
+			this.confirmDeleteDialog.isOpen = false;
 		},
 	},
 };

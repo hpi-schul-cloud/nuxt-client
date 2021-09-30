@@ -327,10 +327,6 @@ export class Schools extends VuexModule {
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
 			);
-			this.update({
-				id: this.school.id,
-				systems: updatedSystemsList.map((system) => system._id),
-			});
 
 			this.setSystems(updatedSystemsList);
 			this.setLoading(false);
