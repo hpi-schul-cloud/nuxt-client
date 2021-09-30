@@ -16,6 +16,10 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+### Security
+
+- BC-296 - updated dependencies with high severity security issues
+
 ## [26.11.0] - 2021-09-22
 
 ### Added
@@ -41,6 +45,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-94 - clean up the colorsystem and fix some UI issues
 - BC-309 - now opening correct panel when task were filtered
 - BC-313 - fixed active tab mobile behaviour and color
+- BC-322 - fixed race condition while loading school in school settings page
 
 ## [26.10.1] - 2021-09-07
 
