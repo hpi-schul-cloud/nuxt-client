@@ -321,6 +321,7 @@ export class Schools extends VuexModule {
 			);
 
 			this.setSystems(updatedSystemsList);
+			await this.fetchSchool();
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
