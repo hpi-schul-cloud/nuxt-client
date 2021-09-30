@@ -1,21 +1,27 @@
 <template>
-	<section>
-		<div :class="borderClass">
-			<div v-if="isStudent" class="pb-0 d-flex justify-center">
-				<v-tabs v-model="tab" grow class="tabs-max-width">
-					<v-tab>
-						<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.TasksDashboardMain.tab.open")
-						}}</span>
-					</v-tab>
-					<v-tab>
-						<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.TasksDashboardMain.tab.completed")
-						}}</span>
-					</v-tab>
-				</v-tabs>
+	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
+		<div v-if="isStudent" slot="header">
+			<div>
+				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
+				<div
+					class="pb-0 d-flex justify-center"
+					:class="borderClass"
+				>
+					<v-tabs v-model="tab" grow class="tabs-max-width">
+						<v-tab>
+							<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
+							<span class="d-none d-sm-inline">{{
+								$t("components.organisms.TasksDashboardMain.tab.open")
+							}}</span>
+						</v-tab>
+						<v-tab>
+							<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
+							<span class="d-none d-sm-inline">{{
+								$t("components.organisms.TasksDashboardMain.tab.completed")
+							}}</span>
+						</v-tab>
+					</v-tabs>
+				</div>
 			</div>
 		</div>
 		<div class="content-max-width mx-auto mt-5 mb-14">
@@ -31,17 +37,19 @@
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
 			<tasks-dashboard-teacher v-else />
 		</div>
-	</section>
+	</default-wireframe>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 
 export default {
 	components: {
+		DefaultWireframe,
 		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,

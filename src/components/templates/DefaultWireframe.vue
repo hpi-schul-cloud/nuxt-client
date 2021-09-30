@@ -8,6 +8,7 @@
 			<h1 class="text-h3">
 				{{ headline }}
 			</h1>
+			<div class="border"></div>
 		</slot>
 		<v-container
 			:class="{
@@ -68,5 +69,12 @@ export default {
 .container.container-full-width {
 	max-width: none;
 	margin: 0;
+}
+
+.border {
+	margin-right: calc(-1 * var(--space-lg));
+	margin-bottom: var(--space-xl);
+	margin-left: calc(-1 * var(--space-lg));
+	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>

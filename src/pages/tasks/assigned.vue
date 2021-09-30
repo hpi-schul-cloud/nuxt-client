@@ -1,15 +1,12 @@
 <template>
-	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
-		<tasks-dashboard-main role="teacher" />
-	</default-wireframe>
+	<tasks-dashboard-main role="teacher" />
 </template>
 
 <script>
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import TasksDashboardMain from "@components/organisms/TasksDashboardMain";
 
 export default {
-	components: { DefaultWireframe, TasksDashboardMain },
+	components: { TasksDashboardMain },
 	layout: "defaultVuetify",
 	head() {
 		return {
