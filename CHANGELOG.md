@@ -12,7 +12,13 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
+
 ### Fixed
+
+### Security
+
+- BC-296 - updated dependencies with high severity security issues
 
 ## [26.11.1] - 2021-09-29
 
@@ -27,6 +33,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-167 - Added a wireframe for pages
 - BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
+- BC-310 - added task count to course filter
 
 ### Changed
 
@@ -42,7 +49,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
+- BC-309 - now opening correct panel when task were filtered
 - BC-313 - fixed active tab mobile behaviour and color
+- BC-322 - fixed race condition while loading school in school settings page
 
 ## [26.10.1] - 2021-09-07
 

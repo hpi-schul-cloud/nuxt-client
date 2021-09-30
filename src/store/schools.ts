@@ -85,8 +85,7 @@ function transformSchoolServerToClient(school: any): School {
 			featureObject[schoolFeature] = false;
 		}
 	});
-	school.features = featureObject;
-	return school;
+	return { ...school, features: featureObject };
 }
 
 function transformSchoolClientToServer(school: any): School {
@@ -96,8 +95,7 @@ function transformSchoolClientToServer(school: any): School {
 			featureArray.push(schoolFeature);
 		}
 	});
-	school.features = featureArray;
-	return school;
+	return { ...school, features: featureArray };
 }
 
 @Module({
@@ -311,7 +309,7 @@ export class Schools extends VuexModule {
 		const school = transformSchoolClientToServer(payload);
 		try {
 			const data = await $axios.$patch(`/v1/schools/${school.id}`, school);
-			this.setSchool(data);
+			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
