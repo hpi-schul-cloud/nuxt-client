@@ -5,13 +5,14 @@ import {
 	overDueTasksTeacher,
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,
-	courses,
+	coursesStudent,
 	coursesTeacher,
 	openTasksWithDueDate,
 	openTasksWithoutDueDate,
 	overDueTasks,
 	gradedTasks,
 	submittedTasks,
+	tasks,
 } from "@@/stories/mockData/Tasks";
 
 describe("@components/organisms/TasksDashboardMain", () => {
@@ -22,6 +23,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				getTasks: () => tasks,
 				getOpenTasksForStudent: () => ({
 					overdue: overDueTasks,
 					withDueDate: openTasksWithDueDate,
@@ -31,7 +33,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 					submitted: submittedTasks,
 					graded: gradedTasks,
 				}),
-				getCourses: () => courses,
+				getCourses: () => coursesStudent,
 				hasNoOpenTasks: () => false,
 				hasNoCompletedTasks: () => false,
 			},
@@ -49,6 +51,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				getTasks: () => tasks,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,
 					withDueDate: dueDateTasksTeacher,
@@ -68,6 +71,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => true,
+				getTasks: () => [],
 				getOpenTasksForTeacher: () => ({
 					overdue: [],
 					withDueDate: [],
@@ -85,6 +89,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 		tasks: {
 			getters: {
 				getStatus: () => "completed",
+				getTasks: () => [...submittedTasks, ...gradedTasks],
 				getOpenTasksForStudent: () => ({
 					overdue: [],
 					noDueDate: [],
@@ -97,7 +102,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 				hasNoOpenTasks: () => true,
 				hasNoCompletedTasks: () => false,
 				hasNoTasks: () => false,
-				getCourses: () => courses,
+				getCourses: () => coursesStudent,
 			},
 			actions: {
 				getAllTasks,
@@ -230,30 +235,7 @@ describe("@components/organisms/TasksDashboardMain", () => {
 		expect(mockMethod).toHaveBeenCalled();
 	});
 
-	it("Should set available courses based on the active tab", () => {
-		const wrapper = mount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreStudent,
-			}),
-			vuetify,
-			data() {
-				return {
-					tab: 0,
-				};
-			},
-			propsData: {
-				role: "student",
-			},
-		});
-
-		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
-		wrapper.setData({ tab: 1 });
-		expect(wrapper.vm.availableCourses).toStrictEqual(courses);
-	});
-
-	it("Should disable filter when active tab contains empty list", () => {
+	it("Should disable filter when active tab contains empty list and no course is selected", () => {
 		const wrapper = mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,

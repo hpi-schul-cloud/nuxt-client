@@ -262,7 +262,7 @@ describe("schools module", () => {
 			beforeEach(() => {
 				receivedRequests = [];
 			});
-			it("should call backend and sets state correctly", async () => {
+			it("should call backend and set state correctly", async () => {
 				const uploadData = {
 					id: "id_123",
 					data: "some data to be updated",
