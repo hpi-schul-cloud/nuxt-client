@@ -20,6 +20,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-296 - updated dependencies with high severity security issues
 - BC-333 - updated node-sass
+- BC-384 - fix ansi-html
 
 ## [26.11.0] - 2021-09-22
 
