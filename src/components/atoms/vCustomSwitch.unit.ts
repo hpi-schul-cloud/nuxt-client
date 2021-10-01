@@ -35,6 +35,28 @@ describe("vCustomSwitch", () => {
 		expect(customSwitch.checked).toBeFalsy();
 	});
 
+	it("should display externally changing value", async () => {
+		const wrapper = mount(vCustomSwitch, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				value: true,
+				label: "mock label",
+				customClasses: "",
+			},
+		});
+		const customSwitch = wrapper.find("input").element as HTMLInputElement;
+		expect(customSwitch.checked).toBeTruthy();
+
+		await wrapper.setProps({ value: false });
+		expect(customSwitch.checked).toBeFalsy();
+
+		await wrapper.setProps({ value: true });
+		expect(customSwitch.checked).toBeTruthy();
+	});
+
 	it("should show the label", () => {
 		const wrapper = mount(vCustomSwitch, {
 			...createComponentMocks({

@@ -10,15 +10,19 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-343 - run unstable e2e tests on label `run unstable tests`
+
 ### Changed
 
 - BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
+- BC-382 - fixing error in 'removeSystem' method for new school-settings page
 
 ### Fixed
 
 ### Security
 
 - BC-296 - updated dependencies with high severity security issues
+- BC-333 - updated node-sass
 
 ## [26.11.1] - 2021-09-29
 

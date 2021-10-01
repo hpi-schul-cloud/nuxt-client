@@ -123,7 +123,6 @@ export default {
 		},
 		removeSystem(systemId) {
 			SchoolsModule.deleteSystem(systemId);
-			this.confirmDeleteDialog.isOpen = false;
 			// TODO show error
 		},
 	},
