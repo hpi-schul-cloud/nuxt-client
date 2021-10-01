@@ -20,6 +20,15 @@ axiosInitializer();
 
 describe("schools module", () => {
 	describe("actions", () => {
+		beforeEach(() => {
+			initializeAxios({
+				$get: async (path: string) => {
+					receivedRequests.push({ path });
+					return getRequestReturn;
+				},
+				post: async (path: string) => {},
+			} as NuxtAxiosInstance);
+		});
 		describe("fetchSchool", () => {
 			beforeEach(() => {
 				receivedRequests = [];
@@ -62,33 +71,27 @@ describe("schools module", () => {
 						videoconference: false,
 					},
 				});
-				expect(setLoadingSpy.mock.calls[4][0]).toBe(false);
-
-				expect(fetchCurrentYearSpy).toHaveBeenCalled();
-				expect(fetchFederalSpy).toHaveBeenCalled();
-				expect(fetchSystems).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				AuthModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
-				getRequestReturn = {
-					features: ["rocketChat"],
-				};
-				const schoolsModule = new Schools({});
+				initializeAxios({
+					$get: async (path: string) => {
+						throw new Error("");
+						return;
+					},
+				} as NuxtAxiosInstance);
 
+				const schoolsModule = new Schools({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 
 				await schoolsModule.fetchSchool();
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"/v1/schools/sampleSchoolId "
-				);
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[4][0]).toBe(false);
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
 		describe("fetchFederalState", () => {
@@ -348,11 +351,31 @@ describe("schools module", () => {
 					},
 				} as NuxtAxiosInstance);
 				const schoolsModule = new Schools({});
-				schoolsModule.setSchool({ ...mockSchool, id: "schoolId" });
-				schoolsModule.setSystems(["id_1", "id_2", "id_3"]);
-				const expectedSystems = ["id_1", "id_2", "id_3"];
+				const systems = [
+					{ _id: "id_1", type: "itslearning" },
+					{
+						_id: "id_2",
+						type: "moodle",
+					},
+					{
+						_id: "id_3",
+						type: "ldap",
+					},
+				];
+				const expectedSystems = [
+					{
+						_id: "id_2",
+						type: "moodle",
+					},
+					{
+						_id: "id_3",
+						type: "ldap",
+					},
+				];
+				schoolsModule.setSystems(systems);
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
 				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 				await schoolsModule.deleteSystem(systemId);
@@ -360,7 +383,7 @@ describe("schools module", () => {
 				expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setSystemsSpy).toHaveBeenCalled();
+				expect(fetchSchoolSpy).toHaveBeenCalled();
 				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expect.any(Array));
 				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
 			});

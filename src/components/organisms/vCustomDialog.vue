@@ -1,8 +1,8 @@
 <template>
 	<v-dialog
-		v-model="isOpen"
+		:value="isOpen"
 		:max-width="size"
-		@click:outside="$emit('dialog-closed')"
+		@click:outside="$emit('dialog-closed', false)"
 	>
 		<v-card :ripple="true">
 			<v-card-title>
@@ -25,7 +25,7 @@
 					class="dialog-confirmed"
 					color="primary"
 					depressed
-					@click="$emit('dialog-confirmed')"
+					@click="confirmDialog"
 					>{{ this.$t("common.actions.confirm") }}</v-btn
 				>
 			</v-card-actions>
@@ -50,6 +50,12 @@ export default {
 		},
 		hasButtons: {
 			type: Boolean,
+		},
+	},
+	methods: {
+		confirmDialog() {
+			this.$emit("dialog-confirmed");
+			this.$emit("dialog-closed", false);
 		},
 	},
 };

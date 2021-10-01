@@ -232,14 +232,6 @@ export class Schools extends VuexModule {
 
 				this.setSchool(transformSchoolServerToClient(school));
 
-				const actions = [
-					this.fetchCurrentYear(),
-					this.fetchFederalState(),
-					this.fetchSystems(),
-				];
-
-				await Promise.all(actions);
-
 				this.setLoading(false);
 			} catch (error: any) {
 				this.setError(error);
@@ -327,12 +319,9 @@ export class Schools extends VuexModule {
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
 			);
-			this.update({
-				id: this.school.id,
-				systems: updatedSystemsList.map((system) => system._id),
-			});
 
 			this.setSystems(updatedSystemsList);
+			await this.fetchSchool();
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
