@@ -6,14 +6,14 @@
 		></v-custom-breadcrumbs>
 		<div
 			v-else
-			:class="{ 'breadcrumbs-placeholder': $vuetify.breakpoint.smAndUp }"
+			class="breadcrumbs-placeholder"
 		></div>
 		<slot name="header">
 			<h1 class="text-h3">
 				{{ headline }}
 			</h1>
-			<div class="border"></div>
 		</slot>
+		<div class="border"></div>
 		<v-container
 			:class="{
 				'container-max-width': !fullWidth,
@@ -57,6 +57,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import '~vuetify/src/styles/styles.sass';
 @import "@styles";
 
 .container.wireframe-container {
@@ -82,7 +83,9 @@ export default {
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
-.breadcrumbs-placeholder {
-	height: 24px;
+@media #{map-get($display-breakpoints, 'sm-and-up')} {
+	.breadcrumbs-placeholder {
+		height: 24px;
+	}
 }
 </style>
