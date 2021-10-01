@@ -153,7 +153,7 @@ export class NewsModule extends VuexModule {
 			this.setNews(data);
 			this.setPagination({ limit, skip, total });
 			this.setStatus("completed");
-		} catch (error) {
+		} catch (error: any) {
 			this.setBusinessError(error);
 		}
 	}
@@ -166,7 +166,7 @@ export class NewsModule extends VuexModule {
 			const news = await $axios.$get(`${newsUri}/${newsID}`);
 			this.setCurrent(news);
 			this.setStatus("completed");
-		} catch (error) {
+		} catch (error: any) {
 			this.setBusinessError(error);
 		}
 	}
@@ -179,7 +179,7 @@ export class NewsModule extends VuexModule {
 			const res = await $axios.$post(newsUri, payload);
 			this.setCreatedNews(res);
 			this.setStatus("completed");
-		} catch (error) {
+		} catch (error: any) {
 			this.setBusinessError(error);
 		}
 	}
@@ -192,7 +192,7 @@ export class NewsModule extends VuexModule {
 			const res = await $axios.$patch(`${newsUri}/${payload.id}`, payload);
 			this.setCurrent(res);
 			this.setStatus("completed");
-		} catch (error) {
+		} catch (error: any) {
 			this.setBusinessError(error);
 		}
 	}
@@ -205,7 +205,7 @@ export class NewsModule extends VuexModule {
 			const res = await $axios.$delete(`${newsUri}/${id}`);
 			this.setCurrent(res);
 			this.setStatus("completed");
-		} catch (error) {
+		} catch (error: any) {
 			this.setBusinessError(error);
 		}
 	}

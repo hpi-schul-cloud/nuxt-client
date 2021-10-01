@@ -64,7 +64,7 @@ const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
 			} else {
 				console.error("Update remaining session time failed!");
 			}
-		} catch (error) {
+		} catch (error: any) {
 			if (error.response && error.response.status === 405) {
 				console.warn(
 					"Synchronization of remaining session time will be disabled until the next reload of the page. Reason: missing configuration in server"
@@ -102,7 +102,7 @@ const extendSession = async (
 			);
 		}
 		setRemainingTimeInSeconds(defaultRemainingTimeInSeconds);
-	} catch (err) {
+	} catch (err: any) {
 		setToastValue(toast.error);
 		if (err.response && err.response.status !== 405) {
 			if (err.response && err.response.status !== 401) {

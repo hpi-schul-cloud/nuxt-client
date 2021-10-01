@@ -141,7 +141,7 @@ export class FilePaths extends VuexModule {
 			this.setDocumentBaseDir({ baseDir, theme });
 			this.setSpecificFiles(documentBaseDirThemed);
 			this.setGlobalFiles(baseDir);
-		} catch (error) {
+		} catch (error: any) {
 			this.setError(error);
 		}
 	}
