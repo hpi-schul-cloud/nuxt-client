@@ -4,10 +4,7 @@
 			v-if="breadcrumbs.length"
 			:breadcrumbs="breadcrumbs"
 		></v-custom-breadcrumbs>
-		<div
-			v-else
-			class="breadcrumbs-placeholder"
-		></div>
+		<div v-else class="breadcrumbs-placeholder"></div>
 		<slot name="header">
 			<h1 class="text-h3">
 				{{ headline }}
@@ -57,7 +54,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '~vuetify/src/styles/styles.sass';
+@import "~vuetify/src/styles/styles.sass";
 @import "@styles";
 
 .container.wireframe-container {

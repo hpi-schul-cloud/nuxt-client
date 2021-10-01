@@ -3,9 +3,7 @@
 		<div v-if="isStudent" slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
-				<div
-					class="pb-0 d-flex justify-center"
-				>
+				<div class="pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" grow class="tabs-max-width">
 						<v-tab>
 							<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
