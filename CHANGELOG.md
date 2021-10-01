@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-312 - added bottom border to headline of new DefaultWireframe and added it to task overview
+
 ### Changed
 
 - BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2

@@ -5,7 +5,6 @@
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
 				<div
 					class="pb-0 d-flex justify-center"
-					:class="borderClass"
 				>
 					<v-tabs v-model="tab" grow class="tabs-max-width">
 						<v-tab>
@@ -92,11 +91,6 @@ export default {
 		},
 		hasTasks: function () {
 			return !this.hasNoTasks;
-		},
-		borderClass: function () {
-			return {
-				"border-bottom": this.isStudent,
-			};
 		},
 		coursesWithTaskCount: function () {
 			return this.courses.map((courseName) => ({
