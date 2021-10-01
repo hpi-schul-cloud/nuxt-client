@@ -90,6 +90,9 @@ export default {
 		loading() {
 			return SchoolsModule.getLoading;
 		},
+		school() {
+			return SchoolsModule.getSchool;
+		},
 		schoolError() {
 			return SchoolsModule.getError;
 		},
@@ -102,6 +105,17 @@ export default {
 		schoolError: (error) => {
 			console.error("school could not be loaded", error);
 		},
+		school: {
+			handler: function (newSchool, oldSchool) {
+				// fetch school year and systems when the school is loaded
+				// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
+				if (newSchool && newSchool.id && (!oldSchool || !oldSchool.id)) {
+					SchoolsModule.fetchCurrentYear();
+					SchoolsModule.fetchSystems();
+				}
+			},
+			immediate: true,
+		},
 	},
 	head() {
 		return {
@@ -112,11 +126,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@styles";
-
-.container-max-width {
-	max-width: var(--size-content-width-max);
-}
-</style>
