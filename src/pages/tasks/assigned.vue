@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import TasksDashboardMain from "@components/organisms/TasksDashboardMain";
+import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 
 export default {
 	components: { TasksDashboardMain },
