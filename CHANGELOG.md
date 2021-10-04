@@ -10,11 +10,26 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-312 - added bottom border to headline of new DefaultWireframe and added it to task overview
+- BC-343 - run unstable e2e tests on label `run unstable tests`
+
 ### Changed
 
 - BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
+- BC-382 - fixing error in 'removeSystem' method for new school-settings page
 
 ### Fixed
+
+### Security
+
+- BC-296 - updated dependencies with high severity security issues
+- BC-333 - updated node-sass
+
+## [26.11.1] - 2021-09-29
+
+### Fixed
+
+- BC-365 - fixed task overview pagination
 
 ## [26.11.0] - 2021-09-22
 
@@ -23,6 +38,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-167 - Added a wireframe for pages
 - BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
+- BC-310 - added task count to course filter
 
 ### Changed
 
@@ -38,7 +54,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-195 - fixed course filter for student task dashboard
 - BC-94 - clean up the colorsystem and fix some UI issues
+- BC-309 - now opening correct panel when task were filtered
 - BC-313 - fixed active tab mobile behaviour and color
+- BC-322 - fixed race condition while loading school in school settings page
 
 ## [26.10.1] - 2021-09-07
 

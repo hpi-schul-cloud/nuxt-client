@@ -1,5 +1,5 @@
 import TasksDashboardStudent from "./TasksDashboardStudent";
-import TasksList from "./TasksList";
+import TasksList from "@components/organisms/TasksList";
 import {
 	overDueTasks,
 	openTasksWithoutDueDate,
@@ -7,7 +7,7 @@ import {
 } from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
 
-describe("@components/organisms/TasksDashboardStudent", () => {
+describe("@components/templates/TasksDashboardStudent", () => {
 	const mockStore = {
 		tasks: {
 			getters: {

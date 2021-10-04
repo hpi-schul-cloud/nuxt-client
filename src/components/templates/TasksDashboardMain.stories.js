@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import TasksDashboardMain from "@components/organisms/TasksDashboardMain";
+import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 import Vuex from "vuex";
 import {
 	openTasksWithoutDueDate,
@@ -12,6 +12,7 @@ import {
 	noDueDateTasksTeacher,
 	submittedTasks,
 	gradedTasks,
+	tasks,
 } from "@@/stories/mockData/Tasks";
 
 storiesOf("0 Vuetify/Templates/TasksDashboard", module)
@@ -31,6 +32,7 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					getters: {
 						getStatus: () => "completed",
 						hasNoTasks: () => false,
+						getTasks: () => tasks,
 						getCourses: () => coursesStudent,
 						getOpenTasksForStudent: () => ({
 							overdue: overDueTasks,
@@ -72,6 +74,7 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					getters: {
 						getStatus: () => "completed",
 						hasNoTasks: () => false,
+						getTasks: () => tasks,
 						getCourses: () => coursesTeacher,
 						getOpenTasksForTeacher: () => ({
 							overdue: overDueTasksTeacher,

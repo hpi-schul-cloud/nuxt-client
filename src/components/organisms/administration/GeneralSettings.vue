@@ -4,6 +4,12 @@
 			{{ $t("pages.administration.school.index.generalSettings") }}
 		</h2>
 		<v-form>
+			<v-overlay :value="loading" :absolute="true">
+				<v-progress-circular
+					color="primary"
+					indeterminate
+				></v-progress-circular>
+			</v-overlay>
 			<v-row>
 				<v-col>
 					<v-text-field
@@ -123,21 +129,19 @@
 					></v-select>
 				</v-col>
 			</v-row>
-			<template v-if="loading">
-				<v-skeleton-loader
-					v-for="setting of 4"
-					:key="setting"
-					type="list-item-three-line"
-				/>
-			</template>
 			<privacy-settings
-				v-else
 				:permissions="localSchool.permissions || {}"
 				:features="localSchool.features || {}"
 				@update-privacy-settings="onUpdatePrivacySettings"
 				@update-feature-settings="onUpdateFeatureSettings"
 			></privacy-settings>
-			<v-btn class="my-5 button-save" color="primary" depressed @click="save">
+			<v-btn
+				class="my-5 button-save"
+				color="primary"
+				depressed
+				:disabled="loading"
+				@click="save"
+			>
 				{{ $t("pages.administration.school.index.generalSettings.save") }}
 			</v-btn>
 		</v-form>
@@ -150,6 +154,7 @@ import SchoolsModule from "@/store/schools";
 import { printDate } from "@plugins/datetime";
 import { toBase64, dataUrlToFile } from "@utils/fileHelper.ts";
 import PrivacySettings from "@components/organisms/administration/PrivacySettings";
+import { mapActions } from "vuex";
 
 export default {
 	components: {
@@ -190,6 +195,25 @@ export default {
 			});
 		},
 	},
+	watch: {
+		school: {
+			handler: function (newSchool, oldSchool) {
+				if (newSchool && newSchool.id) {
+					this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
+					if (!oldSchool || !oldSchool.id) {
+						// fetch consents when the school is loaded and the school was not yet loaded
+						// if the school object gets a new reference (e.g. after updating it) do not reload the consents
+						this.fetchConsentVersions({
+							schoolId: newSchool.id,
+							consentTypes: "privacy",
+							withFile: true,
+						});
+					}
+				}
+			},
+			immediate: true,
+		},
+	},
 	async created() {
 		this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
 		this.localSchool.logo = await dataUrlToFile(
@@ -198,6 +222,7 @@ export default {
 		);
 	},
 	methods: {
+		...mapActions("consent-versions", ["fetchConsentVersions"]),
 		printDate,
 		toBase64,
 		dataUrlToFile,
