@@ -27,7 +27,7 @@
 			<v-custom-autocomplete
 				v-if="hasTasks"
 				v-model="selectedCourses"
-				:items="courses"
+				:items="coursesWithTaskCount"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
@@ -67,6 +67,7 @@ export default {
 	computed: {
 		...mapGetters("tasks", {
 			status: "getStatus",
+			tasks: "getTasks",
 			hasNoTasks: "hasNoTasks",
 			hasNoOpenTasks: "hasNoOpenTasks",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
@@ -89,13 +90,39 @@ export default {
 		hasTasks: function () {
 			return !this.hasNoTasks;
 		},
+		coursesWithTaskCount: function () {
+			return this.courses.map((courseName) => ({
+				value: courseName,
+				text: `${courseName} (${this.getTaskCount(courseName)})`,
+			}));
+		},
 	},
-	created() {
+	mounted() {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
 		filterByCourse() {
 			this.$store.commit("tasks/setFilter", this.selectedCourses);
+		},
+		getTaskCount(courseName) {
+			let { tasks } = this;
+
+			if (this.isStudent) {
+				if (this.tab === 0) {
+					tasks = tasks.filter(
+						(task) => task.status.submitted === 0 && task.status.graded === 0
+					);
+				}
+				if (this.tab === 1) {
+					tasks = tasks.filter(
+						(task) => task.status.submitted >= 1 || task.status.graded >= 1
+					);
+				}
+			}
+
+			return tasks.filter((task) => {
+				return task.courseName === courseName;
+			}).length;
 		},
 	},
 };
