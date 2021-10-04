@@ -8,6 +8,7 @@ module.exports = {
 		allowJs: true,
 		sourceMap: true,
 		strict: true,
+		noImplicitThis: true,
 		noEmit: true,
 		baseUrl: ".",
 		experimentalDecorators: true,

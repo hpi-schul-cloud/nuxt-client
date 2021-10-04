@@ -85,8 +85,7 @@ function transformSchoolServerToClient(school: any): School {
 			featureObject[schoolFeature] = false;
 		}
 	});
-	school.features = featureObject;
-	return school;
+	return { ...school, features: featureObject };
 }
 
 function transformSchoolClientToServer(school: any): School {
@@ -96,8 +95,7 @@ function transformSchoolClientToServer(school: any): School {
 			featureArray.push(schoolFeature);
 		}
 	});
-	school.features = featureArray;
-	return school;
+	return { ...school, features: featureArray };
 }
 
 @Module({
@@ -233,9 +231,6 @@ export class Schools extends VuexModule {
 				);
 
 				this.setSchool(transformSchoolServerToClient(school));
-				await this.fetchCurrentYear();
-				await this.fetchFederalState();
-				await this.fetchSystems();
 
 				this.setLoading(false);
 			} catch (error: any) {
@@ -306,7 +301,7 @@ export class Schools extends VuexModule {
 		const school = transformSchoolClientToServer(payload);
 		try {
 			const data = await $axios.$patch(`/v1/schools/${school.id}`, school);
-			this.setSchool(data);
+			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -324,12 +319,9 @@ export class Schools extends VuexModule {
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
 			);
-			this.update({
-				id: this.school.id,
-				systems: updatedSystemsList.map((system) => system._id),
-			});
 
 			this.setSystems(updatedSystemsList);
+			await this.fetchSchool();
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
