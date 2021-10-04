@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/vue";
-import TasksDashboardMain from "@components/organisms/TasksDashboardMain";
+import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 import Vuex from "vuex";
 import {
 	openTasksWithoutDueDate,
