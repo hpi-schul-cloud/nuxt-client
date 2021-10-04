@@ -46,8 +46,8 @@ describe("@components/legacy/TheFooter", () => {
 			}),
 		});
 		expect(wrapper.findAll("base-link-stub")).toHaveLength(8);
-		expect(wrapper.find("span").text()).toBe(
-			"© " + new Date().getFullYear() + " " + $theme.name
+		expect(wrapper.find(".bottom-line span").text()).toBe(
+			"©" + new Date().getFullYear() + " " + $theme.name
 		);
 	});
 });
