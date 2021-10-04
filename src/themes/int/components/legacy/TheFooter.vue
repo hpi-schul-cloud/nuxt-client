@@ -1,14 +1,12 @@
 <template>
 	<footer class="footer">
 		<div class="top-line">
-			<base-link href="https://hpi.de" target="_blank" rel="noopener">
-				<img
-					class="hpi-logo"
-					src="@assets/img/footer-logo.png"
-					alt="Anbieterlogo"
-				/>
-			</base-link>
-			<span>© {{ currentYear }} {{ $theme.name }}</span>
+			<img
+				class="hpi-logo"
+				src="@assets/img/footer-logo.png"
+				alt="Anbieterlogo"
+			/>
+			<span class="current-year">© {{ currentYear }} </span>
 		</div>
 
 		<div>
@@ -20,10 +18,10 @@
 					}}</base-link>
 				</template>
 				<template v-else>
-					<span :key="link.text">{{ link.text }}: </span>
+					<span :key="link.text">{{ link.text }} </span>
 					<template v-for="(innerlink, innerindex) in link.innerlinks">
 						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`">
-							/
+							-
 						</span>
 						<base-link
 							:key="innerlink.text"
@@ -51,12 +49,9 @@
 
 <script>
 import AuthModule from "@/store/auth";
+import FilePathsModule from "@/store/filePaths";
 
 export default {
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
 	computed: {
 		school() {
 			return AuthModule.getSchool;
@@ -72,32 +67,18 @@ export default {
 				},
 				{
 					href: "/datenschutz",
-					text: this.$t("components.legacy.footer.privacy_policy_HPI"),
+					text: this.$t("components.legacy.footer.privacy_policy"),
 					target: "_blank",
 					rel: "noopener",
 				},
 				{
-					href: "mailto:hpi-info@hpi.de?subject=Schul_Cloud%20Anfrage",
-					text: this.$t("components.legacy.footer.contact"),
+					href: FilePathsModule.getSpecificFiles.termsOfUseSchool,
+					text: this.$t("components.legacy.footer.terms"),
+					target: "_blank",
+					rel: "noopener",
 				},
 				{
-					to: "/team",
-					text: this.$t("components.legacy.footer.team"),
-				},
-				{
-					to: "/about",
-					text: this.$t("components.legacy.footer.about"),
-				},
-				{
-					to: "/community",
-					text: this.$t("components.legacy.footer.contribute"),
-				},
-				{
-					to: "/partner",
-					text: this.$t("components.legacy.footer.partner"),
-				},
-				{
-					href: "https://github.com/schul-cloud/",
+					href: "https://github.com/hpi-schul-cloud/",
 					text: "GitHub",
 				},
 			];
@@ -118,12 +99,6 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
-	.hpi-logo {
-		display: block;
-		height: var(--heading-3);
-		margin: 0;
-	}
 }
 .bottom-line {
 	margin-top: var(--space-xs);
@@ -142,6 +117,7 @@ export default {
 	border: none;
 	&:focus,
 	&:hover {
+		color: var(--color-primary-dark);
 		text-decoration: underline;
 	}
 	&:visited {
