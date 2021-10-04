@@ -15,7 +15,7 @@ import {
 	tasks,
 } from "@@/stories/mockData/Tasks";
 
-describe("@components/organisms/TasksDashboardMain", () => {
+describe("@components/templates/TasksDashboardMain", () => {
 	const getAllTasks = jest.fn();
 	const setFilter = jest.fn();
 	const mockStoreStudent = {
