@@ -1,3 +1,5 @@
+import { fetchAll } from "@utils";
+
 const filterByCourses = (tasks, courses) => {
 	return courses.length
 		? tasks.filter((task) => {
@@ -63,9 +65,9 @@ const module = {
 			commit("resetBusinessError");
 			commit("setStatus", "pending");
 			try {
-				const response = await this.$axios.$get("/v3/tasks/");
+				const data = await fetchAll(this.$axios, "/v3/tasks/");
 
-				commit("setTasks", response.data);
+				commit("setTasks", data);
 				commit("setStatus", "completed");
 			} catch (error) {
 				if (error.response) {
