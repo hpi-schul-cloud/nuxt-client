@@ -53,7 +53,7 @@ export default {
 					url: this.$t("pages.loginInstances.mintec_link"),
 				},
 				{
-					icon: "hpi",
+					icon: "dBildungscloud",
 					url: this.$t("pages.loginInstances.hpi_link"),
 				},
 				{

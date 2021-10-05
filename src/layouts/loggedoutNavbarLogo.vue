@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<navigation-bar
-			:img="require('@assets/img/logo/logo-image-color.svg')"
+			:img="require('@assets/img/logo/logo-dBildungscloud.svg')"
 			:logo-link="'/dashboard'"
 			:buttons="false"
 		/>

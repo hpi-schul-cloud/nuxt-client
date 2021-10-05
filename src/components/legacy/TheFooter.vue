@@ -1,16 +1,5 @@
 <template>
 	<footer class="footer">
-		<div class="top-line">
-			<base-link href="https://hpi.de" target="_blank" rel="noopener">
-				<img
-					class="hpi-logo"
-					src="@assets/img/footer-logo.png"
-					alt="Anbieterlogo"
-				/>
-			</base-link>
-			<span>© {{ currentYear }} {{ $theme.name }}</span>
-		</div>
-
 		<div>
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
@@ -36,7 +25,8 @@
 			</template>
 		</div>
 		<p class="bottom-line">
-			Made with
+			<span>©{{ currentYear }} {{ $theme.name }}</span>
+			| Made with
 			<span class="heart">❤</span> in Potsdam |
 			{{ $t("components.legacy.footer.powered_by") }}
 			<base-link href="https://lokalise.com" target="_blank" :no-styles="true"
@@ -72,7 +62,7 @@ export default {
 				},
 				{
 					href: "/datenschutz",
-					text: this.$t("components.legacy.footer.privacy_policy_HPI"),
+					text: this.$t("components.legacy.footer.privacy_policy"),
 					target: "_blank",
 					rel: "noopener",
 				},
@@ -81,24 +71,20 @@ export default {
 					text: this.$t("components.legacy.footer.contact"),
 				},
 				{
-					to: "/team",
-					text: this.$t("components.legacy.footer.team"),
-				},
-				{
-					to: "/about",
-					text: this.$t("components.legacy.footer.about"),
-				},
-				{
 					to: "/community",
 					text: this.$t("components.legacy.footer.contribute"),
 				},
 				{
-					to: "/partner",
-					text: this.$t("components.legacy.footer.partner"),
+					href: "https://github.com/hpi-schul-cloud",
+					text: this.$t("components.legacy.footer.github"),
 				},
 				{
-					href: "https://github.com/hpi-schul-cloud/",
-					text: "GitHub",
+					href: "https://status.hpi-schul-cloud.de",
+					text: this.$t("components.legacy.footer.status"),
+				},
+				{
+					to: "/security",
+					text: this.$t("components.legacy.footer.security"),
 				},
 			];
 		},

@@ -80,7 +80,7 @@ export default {
 			return this.task.displayColor || this.defaultIconColor;
 		},
 		defaultIconColor() {
-			return "#455B6A";
+			return "#54616e";
 		},
 	},
 	methods: {

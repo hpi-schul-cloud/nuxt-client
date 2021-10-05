@@ -28,7 +28,7 @@ describe("@components/legacy/NavigationBar", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				links: navbarLinks,
-				img: "@assets/img/logo/logo-image-color.svg",
+				img: "@assets/img/logo/logo-dBildungscloud.svg",
 				buttons: true,
 			},
 		});
@@ -41,13 +41,15 @@ describe("@components/legacy/NavigationBar", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData: {
 				links: navbarLinks,
-				img: "@assets/img/logo/logo-image-color.svg",
+				img: "@assets/img/logo/logo-dBildungscloud.svg",
 				buttons: true,
 			},
 		});
 
 		expect(wrapper.findComponent(BaseLink).exists()).toBe(true);
-		expect(wrapper.props().img).toBe("@assets/img/logo/logo-image-color.svg");
+		expect(wrapper.props().img).toBe(
+			"@assets/img/logo/logo-dBildungscloud.svg"
+		);
 		expect(wrapper.find(".link-container").exists()).toBe(true);
 		expect(wrapper.find(".buttons-container").exists()).toBe(true);
 	});

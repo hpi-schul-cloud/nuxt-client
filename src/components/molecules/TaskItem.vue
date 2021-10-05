@@ -45,7 +45,7 @@
 				>
 					<base-icon
 						class="footer__content-icon"
-						fill="#455B6A"
+						fill="#54616e"
 						source="material"
 						icon="more_vert"
 					/>
