@@ -82,9 +82,7 @@ export default {
 					? this.hasNoOpenTasksStudent
 					: this.hasNoOpenTasksTeacher;
 			const tabTwoIsEmpty =
-				this.role === "student"
-					? this.hasNoCompletedTasks
-					: this.hasNoDrafts;
+				this.role === "student" ? this.hasNoCompletedTasks : this.hasNoDrafts;
 
 			if (this.tab === 0 && tabOneIsEmpty) {
 				return true;
