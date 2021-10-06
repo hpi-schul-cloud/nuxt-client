@@ -1,7 +1,7 @@
 <template>
 	<v-list-item :key="task.id" :href="taskGradingHref(task.id)">
 		<v-list-item-avatar>
-			<v-icon class="fill" :color="iconColor"> $taskOpenFilled </v-icon>
+			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle class="d-inline-flex">
@@ -62,11 +62,17 @@ export default {
 		};
 	},
 	computed: {
+		avatarIcon() {
+			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
+		},
 		iconColor() {
 			return this.task.displayColor || this.defaultIconColor;
 		},
 		defaultIconColor() {
 			return "#54616e";
+		},
+		isDraft() {
+			return this.task.status.isDraft;
 		},
 	},
 	methods: {

@@ -8,7 +8,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
 					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
 					:status="status"
-					:is-empty="hasNoTasks"
+					:is-empty="hasNoOpenTasksTeacher"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -28,7 +28,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="hasNoTasks"
+					v-if="hasNoOpenTasksTeacher"
 					:image="emptyStateImage"
 					:title="$t('pages.tasks.teacher.emptyState.title')"
 					:subtitle="$t('pages.tasks.teacher.emptyState.subtitle')"
@@ -73,7 +73,7 @@ export default {
 			openTasks: "getOpenTasksForTeacher",
 			draftTasks: "getDraftTasksForTeacher",
 			status: "getStatus",
-			hasNoTasks: "hasNoTasks",
+			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoDrafts: "hasNoDrafts",
 		}),
 		overdueTasks: function () {

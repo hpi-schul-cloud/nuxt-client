@@ -1,10 +1,10 @@
 <template>
 	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
-		<div v-if="isStudent" slot="header">
+		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
 				<div class="pb-0 d-flex justify-center">
-					<v-tabs v-model="tab" grow class="tabs-max-width">
+					<v-tabs v-model="tab" class="tabs-max-width" grow>
 						<v-tab>
 							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline">{{ tabOneHeader.title }}</span>
@@ -28,7 +28,7 @@
 				@selected-item="filterByCourse"
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
-			<tasks-dashboard-teacher v-else />
+			<tasks-dashboard-teacher v-else :tab.sync="tab" />
 		</div>
 	</default-wireframe>
 </template>
@@ -65,8 +65,10 @@ export default {
 			status: "getStatus",
 			tasks: "getTasks",
 			hasNoTasks: "hasNoTasks",
-			hasNoOpenTasks: "hasNoOpenTasks",
+			hasNoOpenTasksStudent: "hasNoOpenTasksStudent",
+			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
+			hasNoDrafts: "hasNoDrafts",
 			courses: "getCourses",
 		}),
 		isStudent: function () {
@@ -75,9 +77,18 @@ export default {
 		isFilterDisabled: function () {
 			if (this.selectedCourses.length > 0) return false;
 
-			if (this.tab === 0 && this.hasNoOpenTasks) {
+			const tabOneIsEmpty =
+				this.role === "student"
+					? this.hasNoOpenTasksStudent
+					: this.hasNoOpenTasksTeacher;
+			const tabTwoIsEmpty =
+				this.role === "student"
+					? this.hasNoCompletedTasks
+					: this.hasNoDrafts;
+
+			if (this.tab === 0 && tabOneIsEmpty) {
 				return true;
-			} else if (this.tab === 1 && this.hasNoCompletedTasks) {
+			} else if (this.tab === 1 && tabTwoIsEmpty) {
 				return true;
 			} else {
 				return false;
