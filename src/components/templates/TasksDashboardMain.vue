@@ -63,13 +63,14 @@ export default {
 	computed: {
 		...mapGetters("tasks", {
 			status: "getStatus",
-			tasks: "getTasks",
 			hasNoTasks: "hasNoTasks",
 			hasNoOpenTasksStudent: "hasNoOpenTasksStudent",
 			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
 			hasNoDrafts: "hasNoDrafts",
 			courses: "getCourses",
+			tasksCountStudent: "getTasksCountPerCourseStudent",
+			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -82,9 +83,7 @@ export default {
 					? this.hasNoOpenTasksStudent
 					: this.hasNoOpenTasksTeacher;
 			const tabTwoIsEmpty =
-				this.role === "student"
-					? this.hasNoCompletedTasks
-					: this.hasNoDrafts;
+				this.role === "student" ? this.hasNoCompletedTasks : this.hasNoDrafts;
 
 			if (this.tab === 0 && tabOneIsEmpty) {
 				return true;
@@ -134,24 +133,23 @@ export default {
 			this.$store.commit("tasks/setFilter", this.selectedCourses);
 		},
 		getTaskCount(courseName) {
-			let { tasks } = this;
-
 			if (this.isStudent) {
 				if (this.tab === 0) {
-					tasks = tasks.filter(
-						(task) => task.status.submitted === 0 && task.status.graded === 0
-					);
+					return this.tasksCountStudent.open[courseName];
 				}
 				if (this.tab === 1) {
-					tasks = tasks.filter(
-						(task) => task.status.submitted >= 1 || task.status.graded >= 1
-					);
+					return this.tasksCountStudent.completed[courseName];
 				}
 			}
 
-			return tasks.filter((task) => {
-				return task.courseName === courseName;
-			}).length;
+			if (!this.isStudent) {
+				if (this.tab === 0) {
+					return this.tasksCountTeacher.open[courseName];
+				}
+				if (this.tab === 1) {
+					return this.tasksCountTeacher.drafts[courseName];
+				}
+			}
 		},
 	},
 };

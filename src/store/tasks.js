@@ -192,6 +192,48 @@ const module = {
 
 			return draftTasks;
 		},
+		getTasksCountPerCourseStudent: (state, getters) => {
+			const courses = getters.getCourses;
+			const tasksCount = { open: {}, completed: {} };
+
+			courses.forEach((course) => {
+				tasksCount.open[course] = filterOpen(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					}),
+					"student"
+				).length;
+
+				tasksCount.completed[course] = filterCompleted(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					})
+				).length;
+			});
+
+			return tasksCount;
+		},
+		getTasksCountPerCourseTeacher: (state, getters) => {
+			const courses = getters.getCourses;
+			const tasksCount = { open: {}, drafts: {} };
+
+			courses.forEach((course) => {
+				tasksCount.open[course] = filterOpen(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					}),
+					"teacher"
+				).length;
+
+				tasksCount.drafts[course] = filterDrafts(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					})
+				).length;
+			});
+
+			return tasksCount;
+		},
 	},
 };
 
