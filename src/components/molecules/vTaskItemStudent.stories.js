@@ -51,7 +51,7 @@ storiesOf("0 Vuetify/Molecules", module).add("vTaskItemStudent", () => ({
 	template: `
 		<v-app>
 			<h1 class="h4">VTaskItemStudent</h1>
-			<p>List item representation of a task. The current state of the task is visualized through the icon. Icons take the selected course color or the default color of "#455B6A". Displays a warning badge if a task is close to its due date.</p>
+			<p>List item representation of a task. The current state of the task is visualized through the icon. Icons take the selected course color or the default color of "#54616e". Displays a warning badge if a task is close to its due date.</p>
 			<v-list subheader two-line>
 				<v-task-item-student :task="task"/>
 				<v-task-item-student :task="close"/>

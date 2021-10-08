@@ -1,29 +1,27 @@
 <template>
-	<section>
-		<div class="border-bottom">
-			<v-container>
-				<h1 class="h4">
-					{{ $t("pages.tasks.title") }}
-				</h1>
-			</v-container>
-			<div v-if="isStudent" class="pb-0 d-flex justify-center">
-				<v-tabs v-model="tab" grow class="tabs-max-width">
-					<v-tab>
-						<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.TasksDashboardMain.tab.open")
-						}}</span>
-					</v-tab>
-					<v-tab>
-						<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-						<span class="d-none d-sm-inline">{{
-							$t("components.organisms.TasksDashboardMain.tab.completed")
-						}}</span>
-					</v-tab>
-				</v-tabs>
+	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
+		<div v-if="isStudent" slot="header">
+			<div>
+				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
+				<div class="pb-0 d-flex justify-center">
+					<v-tabs v-model="tab" grow class="tabs-max-width">
+						<v-tab>
+							<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
+							<span class="d-none d-sm-inline">{{
+								$t("components.organisms.TasksDashboardMain.tab.open")
+							}}</span>
+						</v-tab>
+						<v-tab>
+							<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
+							<span class="d-none d-sm-inline">{{
+								$t("components.organisms.TasksDashboardMain.tab.completed")
+							}}</span>
+						</v-tab>
+					</v-tabs>
+				</div>
 			</div>
 		</div>
-		<v-container class="v-container mt-5 mb-14">
+		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="hasTasks"
 				v-model="selectedCourses"
@@ -35,18 +33,20 @@
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
 			<tasks-dashboard-teacher v-else />
-		</v-container>
-	</section>
+		</div>
+	</default-wireframe>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 
 export default {
 	components: {
+		DefaultWireframe,
 		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
@@ -130,7 +130,7 @@ export default {
 <style lang="scss" scoped>
 @import "@variables";
 
-.v-container {
+.content-max-width {
 	max-width: var(--size-content-width-max);
 }
 
@@ -160,6 +160,8 @@ export default {
 }
 
 .border-bottom {
+	margin-right: calc(-1 * var(--space-lg));
+	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 </style>

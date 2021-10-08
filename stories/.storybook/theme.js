@@ -1,6 +1,6 @@
 import { create } from "@storybook/theming/create";
 
-import SCLogo from "../../src/assets/img/logo/logo-image-color.svg";
+import SCLogo from "../../src/assets/img/logo/logo-dBildungscloud.svg";
 
 const baseThemeConfig = {
 	fontBase:

@@ -20,11 +20,11 @@ storiesOf("1 Design Tokens/Colors", module)
 		<Color title="Primary" color="#E98404" variable="--color-accent"/>
 		<Color title="Primary Light" color="#EC962A" variable="--color-accent-light"/>
 		<Color title="Primary Dark" color="#AF6303" variable="--color-accent-dark"/>
-		<Color title="Secondary" color="#B1063A" variable="--color-primary"/>
+		<Color title="Secondary" color="#9e292b" variable="--color-primary"/>
 		<Color title="Secondary Light" color="#bd2b58" variable="--color-primary-light"/>
 		<Color title="Secondary Dark" color="#85052c" variable="--color-primary-dark"/>
-		<Gradient colorStart="#F6A800" colorEnd="#B1063A"/>
-		<Color title="Tertiary" color="#455b6a" variable="--color-secondary"/>
+		<Gradient colorStart="#F6A800" colorEnd="#9e292b"/>
+		<Color title="Tertiary" color="#54616e" variable="--color-secondary"/>
 		<Color title="Tertiary Light" color="#617480" variable="--color-secondary-light"/>
 		<Color title="Tertiary Dark" color="#344450" variable="--color-secondary-dark"/>
 	</div>`,
@@ -59,10 +59,10 @@ storiesOf("1 Design Tokens/Colors", module)
 		<ColorOnText title="Primary" color="#E98404" variable="--color-accent" textColor="--color-on-primary"/>
 		<ColorOnText title="Primary Light" color="#EC962A" variable="--color-accent-light" textColor="--color-on-primary-light"/>
 		<ColorOnText title="Primary Dark" color="#AF6303" variable="--color-accent-dark" textColor="--color-on-primary-dark"/>
-		<ColorOnText title="Secondary" color="#B1063A" variable="--color-primary" textColor="--color-on-secondary"/>
+		<ColorOnText title="Secondary" color="#9e292b" variable="--color-primary" textColor="--color-on-secondary"/>
 		<ColorOnText title="Secondary Light" color="#bd2b58" variable="--color-primary-light" textColor="--color-on-secondary-light"/>
 		<ColorOnText title="Secondary Dark" color="#85052c" variable="--color-primary-dark" textColor="--color-on-secondary-dark"/>
-		<ColorOnText title="Tertiary" color="#455b6a" variable="--color-secondary" textColor="--color-on-tertiary"/>
+		<ColorOnText title="Tertiary" color="#54616e" variable="--color-secondary" textColor="--color-on-tertiary"/>
 		<ColorOnText title="Tertiary Light" color="#617480" variable="--color-secondary-light" textColor="--color-on-tertiary-light"/>
 		<ColorOnText title="Tertiary Dark" color="#344450" variable="--color-secondary-dark" textColor="--color-on-tertiary-dark"/>
 	</div>

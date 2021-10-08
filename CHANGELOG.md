@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-307 - design and content transformation HPI Schul-Cloud in dBildungscloud
+- BC-312 - added bottom border to headline of new DefaultWireframe and added it to task overview
 - BC-343 - run unstable e2e tests on label `run unstable tests`
 
 ### Changed
@@ -23,6 +25,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-296 - updated dependencies with high severity security issues
 - BC-333 - updated node-sass
+
+## [26.11.1] - 2021-09-29
+
+### Fixed
+
+- BC-365 - fixed task overview pagination
 
 ## [26.11.0] - 2021-09-22
 
