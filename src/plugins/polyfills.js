@@ -9,4 +9,4 @@ polyfill({
 	dragImageTranslateOverride: scrollBehaviourDragImageTranslateOverride,
 });
 
-console.log("mobileDragAndDrop loaded", polyfill);
+// console.log("mobileDragAndDrop loaded", polyfill);

@@ -81,6 +81,24 @@ describe("rooms module", () => {
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 			});
 		});
+		describe("delete", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+			it("should call 'setPosition' mutation", async () => {
+				// TODO: call server will be here when server ready
+				const roomsModule = new Rooms({});
+
+				const setRoomDataSpy = jest.spyOn(roomsModule, "setRoomData");
+				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+
+				await roomsModule.delete("id");
+
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setRoomDataSpy).toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("mutations", () => {

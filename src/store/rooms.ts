@@ -137,7 +137,10 @@ export class Rooms extends VuexModule {
 	async delete(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO: delete room object
+			// TODO: delete call to to server
+			const tempData = this.roomsData.filter((item) => item.id !== id);
+			this.setRoomData(tempData);
+			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);

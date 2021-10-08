@@ -5,9 +5,10 @@
 			:class="addBorder"
 			:size="size"
 			@dragleave="dragLeave"
-			@dragenter="dragEnter"
+			@dragenter.prevent.stop="dragEnter"
 		>
 		</v-avatar>
+		<span class="mt-1"></span>
 	</div>
 </template>
 <script>

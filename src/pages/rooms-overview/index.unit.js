@@ -186,6 +186,9 @@ describe("RoomPage", () => {
 				i18n: true,
 				vuetify: true,
 			}),
+			computed: {
+				$mq: () => "desktop",
+			},
 		});
 
 		await wrapper.vm.$nextTick();
@@ -216,6 +219,9 @@ describe("RoomPage", () => {
 				vuetify: true,
 				store: mockStore,
 			}),
+			computed: {
+				$mq: () => "desktop",
+			},
 		});
 
 		await wrapper.vm.$nextTick();
@@ -254,5 +260,53 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
+	});
+
+	it("should set the column count '2' if the device is 'mobile'", async () => {
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "mobile",
+			},
+		});
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.dimensions.colCount).toBe(2);
+	});
+
+	it("should set the column count '4' if the device is 'tablet'", async () => {
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "tablet",
+			},
+		});
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.dimensions.colCount).toBe(4);
+	});
+
+	it("should set the column count '6' if the device is 'desktop'", async () => {
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "desktop",
+			},
+		});
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.dimensions.colCount).toBe(6);
 	});
 });
