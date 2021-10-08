@@ -4,7 +4,7 @@
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
 				<div class="pb-0 d-flex justify-center">
-					<v-tabs v-model="tab" class="tabs-max-width" grow>
+					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
 							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
 							<span class="d-none d-sm-inline">{{ tabOneHeader.title }}</span>
@@ -172,6 +172,8 @@ export default {
 }
 
 .v-tab {
+	flex-basis: 50%;
+	flex-grow: 1;
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
