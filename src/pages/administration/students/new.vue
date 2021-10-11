@@ -6,42 +6,16 @@
 	>
 		<form-create-user @create-user="createStudent">
 			<template v-slot:inputs>
-				<v-menu
-					ref="menu"
-					v-model="menu"
-					:close-on-content-click="false"
-					:return-value.sync="date"
-					transition="scale-transition"
-					offset-y
-					min-width="auto"
-				>
-					<template v-slot:activator="{ on, attrs }">
-						<v-text-field
-							v-model="dateFomatted"
-							:label="$t('common.labels.birthdate')"
-							:hint="$t('common.placeholder.birthdate')"
-							append-icon="fa-calendar"
-							v-bind="attrs"
-							data-testid="input_create-student_birthdate"
-							v-on="on"
-						></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						:min="minDate"
-						:max="maxDate"
-						:show-current="maxDate"
-						:locale="language"
-						no-title
-						scrollable
-					>
-						<v-spacer></v-spacer>
-						<v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-						<v-btn text color="primary" @click="$refs.menu.save(date)">
-							OK
-						</v-btn>
-					</v-date-picker>
-				</v-menu>
+				<v-text-field
+					v-model="date"
+					:label="$t('common.labels.birthdate')"
+					v-bind="attrs"
+					:min="minDate"
+					:max="maxDate"
+					data-testid="input_create-student_birthdate"
+					type="date"
+					v-on="on"
+				></v-text-field>
 				<base-input
 					v-model="sendRegistration"
 					type="checkbox"
@@ -66,9 +40,8 @@
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { printDate, inputRangeDate } from "@plugins/datetime";
+import { inputRangeDate } from "@plugins/datetime";
 
-import AuthModule from "@/store/auth";
 import { mapGetters } from "vuex";
 
 export default {
@@ -110,10 +83,6 @@ export default {
 		...mapGetters("users", {
 			businessError: "getBusinessError",
 		}),
-		language: () => AuthModule.getLocale,
-		dateFomatted() {
-			return this.date ? printDate(this.date) : this.date;
-		},
 	},
 	created() {
 		this.$store.commit("users/resetBusinessError");
@@ -124,7 +93,7 @@ export default {
 				firstName: userData.firstName,
 				lastName: userData.lastName,
 				email: userData.email,
-				birthday: this.dateFomatted,
+				birthday: this.date,
 				roles: ["student"],
 				schoolId: this.$user.schoolId,
 				sendRegistration: this.sendRegistration,
