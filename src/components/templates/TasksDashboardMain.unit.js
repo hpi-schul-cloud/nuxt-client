@@ -39,7 +39,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getCourses: () => coursesStudent,
 				hasNoOpenTasks: () => false,
 				hasNoCompletedTasks: () => false,
-				getTasksCountPerCourseStudent: () => tasksCountStudent
+				getTasksCountPerCourseStudent: () => tasksCountStudent,
 			},
 			actions: {
 				getAllTasks,
@@ -66,7 +66,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getDraftTasksForTeacher: () => [],
 				getCourses: () => coursesTeacher,
 				hasNoOpenTasks: () => false,
-				getTasksCountPerCourseTeacher: () => tasksCountTeacher
+				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
 			},
 			actions: {
 				getAllTasks,
