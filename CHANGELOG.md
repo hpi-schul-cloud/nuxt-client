@@ -39,6 +39,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-167 - Added a wireframe for pages
 - BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
+- BC-317 - implemented drag&drop avatar components
 - BC-310 - added task count to course filter
 
 ### Changed

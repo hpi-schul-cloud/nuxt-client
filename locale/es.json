@@ -38,6 +38,7 @@
 	"common.labels.teacher": "Profesor",
 	"common.labels.teacher.plural": "Profesora(e)s",
 	"common.labels.title": "Título",
+	"common.labels.greeting": "Hola",
 	"common.labels.description": "Descripción",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
