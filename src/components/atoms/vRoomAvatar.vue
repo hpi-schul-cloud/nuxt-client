@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="rounded-xl" draggable="true" @dragstart="startDragAvatar">
 		<v-badge
 			class="ma-0 badge-component"
 			bordered
@@ -42,6 +42,10 @@ export default {
 		showBadge: {
 			type: Boolean,
 		},
+		location: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		return {};
@@ -56,6 +60,11 @@ export default {
 		},
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
+		},
+	},
+	methods: {
+		startDragAvatar() {
+			this.$emit("startDrag", this.item, this.location);
 		},
 	},
 };
