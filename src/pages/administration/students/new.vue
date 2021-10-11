@@ -112,14 +112,8 @@ export default {
 			businessError: "getBusinessError",
 		}),
 		language: () => AuthModule.getLocale,
-		dateFomatted: {
-			get() {
-				return this.date ? printDate(this.date) : this.date;
-			},
-			set(v) {
-				console.log(v);
-				return "";
-			},
+		dateFomatted() {
+			return this.date ? printDate(this.date) : this.date;
 		},
 	},
 	created() {
