@@ -62,7 +62,7 @@
 				</v-row>
 			</template>
 		</vCustomDialog>
-		<vRoomDeleteAvatar v-if="showDeleteSection" @deleteAvatar="deleteAvatar" />
+		<!-- <vRoomDeleteAvatar v-if="showDeleteSection" @deleteAvatar="deleteAvatar" /> -->
 	</default-wireframe>
 </template>
 
@@ -71,7 +71,7 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-import vRoomDeleteAvatar from "@components/atoms/vRoomDeleteAvatar";
+// import vRoomDeleteAvatar from "@components/atoms/vRoomDeleteAvatar";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import RoomsModule from "@store/rooms";
 
@@ -82,7 +82,7 @@ export default {
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		vCustomDialog,
-		vRoomDeleteAvatar,
+		// vRoomDeleteAvatar,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -173,13 +173,14 @@ export default {
 			this.draggedElement.item = element;
 			this.showDeleteSection = true;
 		},
-		setDropElement(pos) {
+		async setDropElement(pos) {
 			this.draggedElement.to = pos;
 			if (
 				this.getElementNameByRef(this.draggedElement.from) == "vRoomAvatar" &&
 				this.getElementNameByRef(pos) == "vRoomEmptyAvatar"
 			) {
-				RoomsModule.align(this.draggedElement);
+				await RoomsModule.align(this.draggedElement);
+				this.roomsData = RoomsModule.getRoomsData;
 			}
 			this.showDeleteSection = false;
 		},

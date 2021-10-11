@@ -110,10 +110,28 @@ export class Rooms extends VuexModule {
 
 	@Action
 	async align(droppedComponent: DroppedObject | any = {}): Promise<void> {
+		const arrFrom = droppedComponent.from.split("-");
+		const arrTo = droppedComponent.to.split("-");
+
+		const reqObject = {
+			from: {
+				x: arrFrom[1],
+				y: arrFrom[0],
+			},
+			to: {
+				x: arrTo[1],
+				y: arrTo[0],
+			},
+		};
+
+		this.setPosition(droppedComponent);
 		this.setLoading(true);
 		try {
-			// TODO: patch call will be here
-			this.setPosition(droppedComponent);
+			const data = await $axios.$patch(
+				`/v3/dashboard/${this.gridElementsId}/moveElement`,
+				reqObject
+			);
+			this.setRoomData(data.gridElements);
 
 			this.setLoading(false);
 		} catch (error: any) {

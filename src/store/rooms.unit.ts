@@ -11,7 +11,12 @@ const axiosInitializer = () => {
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
-		post: async (path: string) => {},
+		$post: async (path: string) => {},
+		$patch: async (path: string, params: {}) => {
+			receivedRequests.push({ path });
+			receivedRequests.push({ params });
+			return getRequestReturn;
+		},
 	} as NuxtAxiosInstance);
 };
 
@@ -67,13 +72,28 @@ describe("rooms module", () => {
 				receivedRequests = [];
 			});
 			it("should call server and 'setPosition' mutation", async () => {
-				// TODO: call server will be here when server ready
 				const roomsModule = new Rooms({});
 
 				const setPositionSpy = jest.spyOn(roomsModule, "setPosition");
 				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
 
-				await roomsModule.align({});
+				const expectedParam = {
+					from: { x: "1", y: "1" },
+					to: { x: "2", y: "2" },
+				};
+
+				roomsModule.setRoomDataId("grid_id");
+				await roomsModule.align({
+					from: "1-1",
+					to: "2-2",
+					items: {},
+				});
+
+				expect(receivedRequests.length).toBeGreaterThan(0);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"/v3/dashboard/grid_id/moveElement"
+				);
+				expect(receivedRequests[1].params).toStrictEqual(expectedParam);
 
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
