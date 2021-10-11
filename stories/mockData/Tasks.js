@@ -399,6 +399,16 @@ export const allTasksTeacher = [...tasksTeacher, ...drafts];
 export const coursesStudent = ["Mathe", "Chemie", "Biologie"];
 export const coursesTeacher = ["Mathe", "Deutsch", ""];
 
+export const tasksCountStudent = {
+	open: { Mathe: 7, Chemie: 1, Biologie: 0 },
+	completed: { Mathe: 2, Chemie: 0, Biologie: 1 },
+};
+
+export const tasksCountTeacher = {
+	open: { Mathe: 5, Deutsch: 3, "": 0 },
+	drafts: { Mathe: 0, Deutsch: 1, "": 2 },
+};
+
 export const mathTasks = [
 	{
 		id: "59cce352c6abf042248e888c",

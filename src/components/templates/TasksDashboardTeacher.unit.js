@@ -13,6 +13,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				hasNoOpenTasksTeacher: () => false,
 				hasNoDrafts: () => true,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,

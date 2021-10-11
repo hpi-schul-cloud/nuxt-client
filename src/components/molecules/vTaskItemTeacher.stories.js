@@ -9,6 +9,7 @@ storiesOf("0 Vuetify/Molecules", module).add("vTaskItemTeacher", () => ({
 	data: () => ({
 		task: tasksTeacher[0],
 		draft: drafts[0],
+		draftWithoutCourse: drafts[1],
 	}),
 	template: `
 		<v-app>
@@ -16,6 +17,7 @@ storiesOf("0 Vuetify/Molecules", module).add("vTaskItemTeacher", () => ({
 			<v-list subheader two-line>
 				<v-task-item-teacher :task="task"/>
 				<v-task-item-teacher :task="draft"/>
+				<v-task-item-teacher :task="draftWithoutCourse"/>
 			</v-list>
 		</v-app>`,
 }));

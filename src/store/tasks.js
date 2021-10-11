@@ -116,17 +116,17 @@ const module = {
 					.length === 0
 			);
 		},
-		hasNoOpenTasksTeacher: (state) => {
-			return (
-				state.status === "completed" &&
-				filterOpen(filterByCourses(state.tasks, state.courseFilter), "teacher")
-					.length === 0
-			);
-		},
 		hasNoCompletedTasks: (state) => {
 			return (
 				state.status === "completed" &&
 				filterCompleted(filterByCourses(state.tasks, state.courseFilter))
+					.length === 0
+			);
+		},
+		hasNoOpenTasksTeacher: (state) => {
+			return (
+				state.status === "completed" &&
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "teacher")
 					.length === 0
 			);
 		},

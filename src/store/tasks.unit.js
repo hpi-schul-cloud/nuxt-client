@@ -4,6 +4,7 @@ import {
 	gradedTasks,
 	openTasksWithDueDate,
 	openTasksWithoutDueDate,
+	openTasks,
 	overDueTasks,
 	coursesStudent,
 	coursesTeacher,
@@ -12,6 +13,10 @@ import {
 	overDueTasksTeacher,
 	noDueDateTasksTeacher,
 	dueDateTasksTeacher,
+	drafts,
+	allTasksTeacher,
+	tasksCountTeacher,
+	tasksCountStudent,
 } from "@@/stories/mockData/Tasks";
 import storeModule from "./tasks";
 
@@ -177,6 +182,11 @@ describe("store/tasks", () => {
 			status: "completed",
 			courseFilter: [],
 		};
+		const studentStateWithoutCompleted = {
+			tasks: openTasks,
+			status: "completed",
+			courseFilter: [],
+		};
 		const teacherState = {
 			tasks: tasksTeacher,
 			status: "completed",
@@ -187,8 +197,8 @@ describe("store/tasks", () => {
 			status: "completed",
 			courseFilter: ["Mathe"],
 		};
-		const emptyState = {
-			tasks: [],
+		const teacherStateWithDrafts = {
+			tasks: allTasksTeacher,
 			status: "completed",
 			courseFilter: [],
 		};
@@ -206,21 +216,35 @@ describe("store/tasks", () => {
 			});
 		});
 
-		describe("hasNoTasks", () => {
-			it("Should return true, if it's loaded and there are no tasks", () => {
-				expect(getters.hasNoTasks(studentState)).toBe(false);
+		describe("getCourses", () => {
+			it("Should return all relevant courses", () => {
+				expect(getters.getCourses(studentState)).toStrictEqual(coursesStudent);
 			});
 		});
 
-		describe("hasNoOpenTasks", () => {
-			it("Should return true, if it's loaded and there are no open tasks", () => {
-				expect(getters.hasNoOpenTasks(emptyState)).toBe(true);
+		describe("hasNoOpenTasksStudent", () => {
+			it("Should return true, if it's loaded and there are no open tasks for the student", () => {
+				expect(getters.hasNoTasks(studentState)).toBe(false);
 			});
 		});
 
 		describe("hasNoCompletedTasks", () => {
 			it("Should return true, if it's loaded and there are no completed tasks", () => {
-				expect(getters.hasNoCompletedTasks(emptyState)).toBe(true);
+				expect(getters.hasNoCompletedTasks(studentStateWithoutCompleted)).toBe(
+					true
+				);
+			});
+		});
+
+		describe("hasNoOpenTasksTeacher", () => {
+			it("Should return true, if it's loaded and there are no open tasks for the teacher", () => {
+				expect(getters.hasNoOpenTasksTeacher(teacherState)).toBe(false);
+			});
+		});
+
+		describe("hasNoDrafts", () => {
+			it("Should return true, if it's loaded and there are no drafts", () => {
+				expect(getters.hasNoDrafts(teacherState)).toBe(true);
 			});
 		});
 
@@ -253,6 +277,29 @@ describe("store/tasks", () => {
 				expect(
 					getters.getOpenTasksForStudent(studentState).overdue
 				).toHaveLength(overDueTasks.length);
+			});
+		});
+
+		describe("getCompletedTasksForStudent", () => {
+			it("Should have properties for sub sets", () => {
+				expect(
+					getters.getCompletedTasksForStudent(studentState)
+				).toHaveProperty("submitted");
+				expect(
+					getters.getCompletedTasksForStudent(studentState)
+				).toHaveProperty("graded");
+			});
+
+			it("Should have all tasks, that are submitted", () => {
+				expect(
+					getters.getCompletedTasksForStudent(studentState).submitted
+				).toStrictEqual(submittedTasks);
+			});
+
+			it("Should have all tasks, that are graded", () => {
+				expect(
+					getters.getCompletedTasksForStudent(studentState).graded
+				).toStrictEqual(gradedTasks);
 			});
 		});
 
@@ -300,32 +347,43 @@ describe("store/tasks", () => {
 			});
 		});
 
-		describe("getCompletedTasksForStudent", () => {
-			it("Should have properties for sub sets", () => {
+		describe("getDraftTasksForTeacher", () => {
+			it("Should have all tasks, that are drafts", () => {
 				expect(
-					getters.getCompletedTasksForStudent(studentState)
-				).toHaveProperty("submitted");
-				expect(
-					getters.getCompletedTasksForStudent(studentState)
-				).toHaveProperty("graded");
-			});
-
-			it("Should have all tasks, that are submitted", () => {
-				expect(
-					getters.getCompletedTasksForStudent(studentState).submitted
-				).toStrictEqual(submittedTasks);
-			});
-
-			it("Should have all tasks, that are graded", () => {
-				expect(
-					getters.getCompletedTasksForStudent(studentState).graded
-				).toStrictEqual(gradedTasks);
+					getters.getDraftTasksForTeacher(teacherStateWithDrafts)
+				).toStrictEqual(drafts);
 			});
 		});
 
-		describe("getCourses", () => {
-			it("Should return all relevant courses", () => {
-				expect(getters.getCourses(studentState)).toStrictEqual(coursesStudent);
+		describe("getTasksCountPerCourseStudent", () => {
+			it("Should have correct amount of tasks per course", () => {
+				const mockGetter = {
+					getCourses: coursesStudent,
+				};
+
+				expect(
+					getters.getTasksCountPerCourseStudent(studentState, mockGetter).open
+				).toStrictEqual(tasksCountStudent.open);
+
+				expect(
+					getters.getTasksCountPerCourseStudent(studentState, mockGetter).completed
+				).toStrictEqual(tasksCountStudent.completed);
+			});
+		});
+
+		describe("getTasksCountPerCourseTeacher", () => {
+			it("Should have correct amount of tasks per course", () => {
+				const mockGetter = {
+					getCourses: coursesTeacher,
+				};
+
+				expect(
+					getters.getTasksCountPerCourseTeacher(teacherStateWithDrafts, mockGetter).open
+				).toStrictEqual(tasksCountTeacher.open);
+
+				expect(
+					getters.getTasksCountPerCourseTeacher(teacherStateWithDrafts, mockGetter).drafts
+				).toStrictEqual(tasksCountTeacher.drafts);
 			});
 		});
 	});

@@ -13,6 +13,8 @@ import {
 	gradedTasks,
 	submittedTasks,
 	tasks,
+	tasksCountStudent,
+	tasksCountTeacher,
 } from "@@/stories/mockData/Tasks";
 
 describe("@components/templates/TasksDashboardMain", () => {
@@ -23,6 +25,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				hasNoOpenTasksStudent: () => false,
 				getTasks: () => tasks,
 				getOpenTasksForStudent: () => ({
 					overdue: overDueTasks,
@@ -36,6 +39,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getCourses: () => coursesStudent,
 				hasNoOpenTasks: () => false,
 				hasNoCompletedTasks: () => false,
+				getTasksCountPerCourseStudent: () => tasksCountStudent
 			},
 			actions: {
 				getAllTasks,
@@ -51,6 +55,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				hasNoOpenTasksTeacher: () => false,
 				hasNoDrafts: () => true,
 				getTasks: () => tasks,
 				getOpenTasksForTeacher: () => ({
@@ -61,6 +66,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getDraftTasksForTeacher: () => [],
 				getCourses: () => coursesTeacher,
 				hasNoOpenTasks: () => false,
+				getTasksCountPerCourseTeacher: () => tasksCountTeacher
 			},
 			actions: {
 				getAllTasks,
@@ -73,6 +79,9 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => true,
+				hasNoOpenTasksStudent: () => true,
+				hasNoCompletedTasks: () => true,
+				hasNoOpenTasksTeacher: () => true,
 				hasNoDrafts: () => true,
 				getTasks: () => [],
 				getOpenTasksForTeacher: () => ({
@@ -103,10 +112,11 @@ describe("@components/templates/TasksDashboardMain", () => {
 					submitted: submittedTasks,
 					graded: gradedTasks,
 				}),
-				hasNoOpenTasks: () => true,
+				hasNoOpenTasksStudent: () => true,
 				hasNoCompletedTasks: () => false,
 				hasNoTasks: () => false,
 				getCourses: () => coursesStudent,
+				getTasksCountPerCourseStudent: () => tasksCountStudent,
 			},
 			actions: {
 				getAllTasks,
