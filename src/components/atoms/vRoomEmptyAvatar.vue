@@ -2,7 +2,7 @@
 	<div @drop.prevent="dropAvatar" @dragover.prevent>
 		<v-avatar
 			class="ma-0 pa-1 avatar-component-empty"
-			:class="addBorder"
+			:class="{ 'hovered-avatar': hovered, 'avatar-component-empty': !hovered }"
 			:size="size"
 			@dragleave="dragLeave"
 			@dragenter.prevent.stop="dragEnter"
@@ -27,11 +27,6 @@ export default {
 		return {
 			hovered: false,
 		};
-	},
-	computed: {
-		addBorder() {
-			return this.hovered ? "hovered-avatar" : "avatar-component-empty ";
-		},
 	},
 	methods: {
 		dragLeave() {

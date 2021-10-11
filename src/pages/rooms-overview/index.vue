@@ -62,7 +62,6 @@
 				</v-row>
 			</template>
 		</vCustomDialog>
-		<!-- <vRoomDeleteAvatar v-if="showDeleteSection" @deleteAvatar="deleteAvatar" /> -->
 	</default-wireframe>
 </template>
 
@@ -71,7 +70,6 @@ import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-// import vRoomDeleteAvatar from "@components/atoms/vRoomDeleteAvatar";
 import vCustomDialog from "@components/organisms/vCustomDialog";
 import RoomsModule from "@store/rooms";
 
@@ -82,7 +80,6 @@ export default {
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		vCustomDialog,
-		// vRoomDeleteAvatar,
 	},
 	layout: "defaultVuetify",
 	data() {

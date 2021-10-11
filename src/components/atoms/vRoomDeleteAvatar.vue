@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="rounded-xl delete-avatar"
-		:class="addBorder"
+		:class="{ 'hovered-delete-avatar': hovered, 'delete-avatar': !hovered }"
 		@drop.prevent="deleteAvatar"
 		@dragover.prevent.stop="dragEnter"
 		@dragleave="dragLeave"
@@ -17,11 +17,7 @@ export default {
 			hovered: false,
 		};
 	},
-	computed: {
-		addBorder() {
-			return this.hovered ? "hovered-delete-avatar" : "delete-avatar";
-		},
-	},
+
 	methods: {
 		deleteAvatar() {
 			this.$emit("deleteAvatar");

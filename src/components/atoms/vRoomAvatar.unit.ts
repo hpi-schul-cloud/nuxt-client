@@ -27,7 +27,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: propsData,
+			propsData,
 		});
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 		expect(labelElement).toBeTruthy();
@@ -40,7 +40,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: propsData,
+			propsData,
 		});
 		const shortLabelElement = wrapper.find(".single-avatar")
 			.element as HTMLElement;
@@ -74,7 +74,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: propsData,
+			propsData,
 		});
 		const badgeElement = wrapper.find(".badge-component");
 		expect(badgeElement).toBeTruthy();
@@ -88,7 +88,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: propsData,
+			propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
 		expect(avatarComponent).toBeTruthy();
@@ -102,7 +102,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: propsData,
+			propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
 		expect(avatarComponent).toBeTruthy();
@@ -134,7 +134,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: propsData,
+			propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
 
@@ -152,7 +152,7 @@ describe("vRoomAvatar", () => {
 				i18n: true,
 				vuetify: true,
 			}),
-			propsData: propsData,
+			propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
 
