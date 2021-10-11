@@ -64,13 +64,6 @@ export default {
 				lastName: "",
 				email: "",
 			},
-			nameValidationMessages: [
-				{ key: "required", message: this.$t("common.validation.required") },
-			],
-			emailValidationMessages: [
-				{ key: "required", message: this.$t("common.validation.required") },
-				{ key: "email", message: this.$t("common.validation.email") },
-			],
 		};
 	},
 	methods: {
