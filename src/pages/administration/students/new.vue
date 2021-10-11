@@ -9,12 +9,10 @@
 				<v-text-field
 					v-model="date"
 					:label="$t('common.labels.birthdate')"
-					v-bind="attrs"
 					:min="minDate"
 					:max="maxDate"
 					data-testid="input_create-student_birthdate"
 					type="date"
-					v-on="on"
 				></v-text-field>
 				<base-input
 					v-model="sendRegistration"
