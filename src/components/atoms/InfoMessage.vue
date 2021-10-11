@@ -26,7 +26,7 @@ export default {
 			if (this.type === "bc-error") {
 				return "warning";
 			}
-			return this.type;
+			return this.type.substring(3);
 		},
 	},
 };
