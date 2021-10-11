@@ -17,6 +17,7 @@ export const overDueTasks = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -29,6 +30,7 @@ export const overDueTasks = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -41,6 +43,7 @@ export const overDueTasks = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -55,6 +58,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -67,6 +71,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -79,6 +84,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -91,6 +97,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -104,6 +111,7 @@ export const openTasksWithoutDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -120,6 +128,7 @@ export const submittedTasks = [
 		status: {
 			submitted: 1,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -136,6 +145,7 @@ export const missedButGradedTasks = [
 		status: {
 			submitted: 0,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 ];
@@ -152,6 +162,7 @@ export const gradedTasks = [
 		status: {
 			submitted: 1,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 	{
@@ -165,6 +176,7 @@ export const gradedTasks = [
 		status: {
 			submitted: 0,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 ];
@@ -226,6 +238,7 @@ export const overDueTasksTeacher = [
 			submitted: 1,
 			maxSubmissions: 1,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 	{
@@ -239,6 +252,7 @@ export const overDueTasksTeacher = [
 			submitted: 5,
 			maxSubmissions: 15,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -252,6 +266,7 @@ export const overDueTasksTeacher = [
 			submitted: 10,
 			maxSubmissions: 10,
 			graded: 9,
+			isDraft: false,
 		},
 	},
 ];
@@ -268,6 +283,7 @@ export const dueDateTasksTeacher = [
 			submitted: 0,
 			maxSubmissions: 1,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -281,6 +297,7 @@ export const dueDateTasksTeacher = [
 			submitted: 10,
 			maxSubmissions: 15,
 			graded: 7,
+			isDraft: false,
 		},
 	},
 	{
@@ -294,6 +311,7 @@ export const dueDateTasksTeacher = [
 			submitted: 3,
 			maxSubmissions: 15,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -307,6 +325,7 @@ export const dueDateTasksTeacher = [
 			submitted: 10,
 			maxSubmissions: 12,
 			graded: 4,
+			isDraft: false,
 		},
 	},
 ];
@@ -322,6 +341,7 @@ export const noDueDateTasksTeacher = [
 			submitted: 1,
 			maxSubmissions: 1,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -331,6 +351,49 @@ export const tasksTeacher = [
 	...dueDateTasksTeacher,
 	...noDueDateTasksTeacher,
 ];
+
+export const drafts = [
+	{
+		id: "59cce2c61113d1132c98dcw2",
+		_id: "59cce2c61113d1132c98dcw2",
+		name: "Der Buchstabe O",
+		courseName: "Deutsch",
+		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 1,
+			graded: 0,
+			isDraft: true,
+		},
+	},
+	{
+		id: "59ccr252c6abf042248e888c",
+		_id: "59ccr252c6abf042248e888c",
+		name: "Das 1x1",
+		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 1,
+			graded: 0,
+			isDraft: true,
+		},
+	},
+	{
+		id: "59ccr252c6t5f042248e888c",
+		_id: "59ccr252c6t5f042248e888c",
+		name: "Aufgabe ohne Kurs",
+		courseName: "",
+		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 1,
+			graded: 0,
+			isDraft: true,
+		},
+	},
+];
+
+export const allTasksTeacher = [...tasksTeacher, ...drafts];
 
 export const coursesStudent = ["Mathe", "Chemie", "Biologie"];
 export const coursesTeacher = ["Mathe", "Deutsch"];

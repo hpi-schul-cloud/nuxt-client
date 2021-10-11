@@ -603,6 +603,7 @@
 	"pages.tasks.labels.noDueDate": "Kein Abgabedatum",
 	"pages.tasks.labels.overdue": "Verpasst",
 	"pages.tasks.labels.filter": "Filtern nach Kursen",
+	"pages.tasks.labels.noCourse": "Kein Kurs zugeordnet",
 	"pages.tasks.subtitleAssigned": "Gestellte Aufgaben",
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",

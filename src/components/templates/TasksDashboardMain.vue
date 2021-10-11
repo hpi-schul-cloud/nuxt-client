@@ -96,11 +96,23 @@ export default {
 		hasTasks: function () {
 			return !this.hasNoTasks;
 		},
+		noCourseName: function () {
+			return this.$t("pages.tasks.labels.noCourse");
+		},
 		coursesWithTaskCount: function () {
-			return this.courses.map((courseName) => ({
-				value: courseName,
-				text: `${courseName} (${this.getTaskCount(courseName)})`,
-			}));
+			return this.courses.map((courseName) => {
+				if (!courseName) {
+					return {
+						value: "",
+						text: `${this.noCourseName} (${this.getTaskCount(courseName)})`,
+					};
+				}
+
+				return {
+					value: courseName,
+					text: `${courseName} (${this.getTaskCount(courseName)})`,
+				};
+			});
 		},
 		tabOneHeader: function () {
 			return {

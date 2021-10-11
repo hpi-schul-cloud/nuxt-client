@@ -598,6 +598,7 @@
 	"pages.tasks.labels.overdue": "Missed",
 	"pages.tasks.subtitleAssigned": "Assigned tasks",
 	"pages.tasks.labels.filter": "Filter by course",
+	"pages.tasks.labels.noCourse": "No course assigned",
 	"pages.tasks.subtitleOpen": "Open Tasks",
 	"pages.tasks.student.subtitleOverDue": "Missed Tasks",
 	"pages.tasks.teacher.subtitleOverDue": "Expired Tasks",

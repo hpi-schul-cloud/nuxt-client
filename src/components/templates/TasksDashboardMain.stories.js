@@ -13,6 +13,7 @@ import {
 	submittedTasks,
 	gradedTasks,
 	tasks,
+	drafts,
 } from "@@/stories/mockData/Tasks";
 
 storiesOf("0 Vuetify/Templates/TasksDashboard", module)
@@ -32,6 +33,8 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					getters: {
 						getStatus: () => "completed",
 						hasNoTasks: () => false,
+						hasNoOpenTasksStudent: () => false,
+						hasNoCompletedTasks: () => false,
 						getTasks: () => tasks,
 						getCourses: () => coursesStudent,
 						getOpenTasksForStudent: () => ({
@@ -42,6 +45,10 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 						getCompletedTasksForStudent: () => ({
 							submitted: submittedTasks,
 							graded: gradedTasks,
+						}),
+						getTasksCountPerCourseStudent: () => ({
+							open: { Mathe: 7, Chemie: 1, Biologie: 0 },
+							completed: { Mathe: 2, Chemie: 0, Biologie: 1 },
 						}),
 					},
 					actions: {
@@ -64,6 +71,7 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 			overDueTasksTeacher,
 			dueDateTasksTeacher,
 			noDueDateTasksTeacher,
+			drafts,
 			coursesTeacher,
 			role: "teacher",
 		}),
@@ -74,12 +82,18 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					getters: {
 						getStatus: () => "completed",
 						hasNoTasks: () => false,
+						hasNoOpenTasksTeacher: () => false,
+						hasNoDrafts: () => false,
 						getTasks: () => tasks,
 						getCourses: () => coursesTeacher,
 						getOpenTasksForTeacher: () => ({
 							overdue: overDueTasksTeacher,
 							withDueDate: dueDateTasksTeacher,
 							noDueDate: noDueDateTasksTeacher,
+						}),
+						getTasksCountPerCourseStudent: () => ({
+							open: { Mathe: 9, Deutsch: 1, undefined: 1 },
+							drafts: { Mathe: 0, Deutsch: 1, undefined: 1 },
 						}),
 					},
 					actions: {
