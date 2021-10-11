@@ -6,16 +6,43 @@
 	>
 		<form-create-user @create-user="createStudent">
 			<template v-slot:inputs>
-				<base-input
-					v-model="birthday"
-					type="date"
-					:label="$t('common.labels.birthdate')"
-					:placeholder="$t('common.placeholder.birthdate')"
-					class="mt--md"
-					:birth-date="true"
+				<v-menu
+					ref="menu"
+					v-model="menu"
+					:close-on-content-click="false"
+					:return-value.sync="date"
+					transition="scale-transition"
+					offset-y
+					min-width="auto"
 					data-testid="input_create-student_birthdate"
 				>
-				</base-input>
+					<template v-slot:activator="{ on, attrs }">
+						<v-text-field
+							v-model="dateFomatted"
+							:label="$t('common.labels.birthdate')"
+							:hint="$t('common.placeholder.birthdate')"
+							append-icon="fa-calendar"
+							readonly
+							v-bind="attrs"
+							v-on="on"
+						></v-text-field>
+					</template>
+					<v-date-picker
+						v-model="date"
+						:min="minDate"
+						:max="maxDate"
+						:show-current="maxDate"
+						:locale="language"
+						no-title
+						scrollable
+					>
+						<v-spacer></v-spacer>
+						<v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
+						<v-btn text color="primary" @click="$refs.menu.save(date)">
+							OK
+						</v-btn>
+					</v-date-picker>
+				</v-menu>
 				<base-input
 					v-model="sendRegistration"
 					type="checkbox"
@@ -40,7 +67,9 @@
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { printDate, inputRangeDate } from "@plugins/datetime";
 
+import AuthModule from "@/store/auth";
 import { mapGetters } from "vuex";
 
 export default {
@@ -56,6 +85,10 @@ export default {
 	data() {
 		return {
 			birthday: null,
+			date: null,
+			menu: false,
+			minDate: inputRangeDate(-100, "y"),
+			maxDate: inputRangeDate(-4, "y"),
 			sendRegistration: false,
 			breadcrumbs: [
 				{
@@ -78,6 +111,16 @@ export default {
 		...mapGetters("users", {
 			businessError: "getBusinessError",
 		}),
+		language: () => AuthModule.getLocale,
+		dateFomatted: {
+			get() {
+				return this.date ? printDate(this.date) : this.date;
+			},
+			set(v) {
+				console.log(v);
+				return "";
+			},
+		},
 	},
 	created() {
 		this.$store.commit("users/resetBusinessError");
@@ -88,7 +131,7 @@ export default {
 				firstName: userData.firstName,
 				lastName: userData.lastName,
 				email: userData.email,
-				birthday: this.birthday,
+				birthday: this.dateFomatted,
 				roles: ["student"],
 				schoolId: this.$user.schoolId,
 				sendRegistration: this.sendRegistration,

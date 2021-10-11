@@ -1,43 +1,34 @@
 <template>
-	<form
+	<v-form
 		autocomplete="off"
 		novalidate
 		v-on="$listeners"
 		@submit.prevent="submitHandler"
 	>
-		<base-input
+		<v-text-field
 			v-model="userData.firstName"
-			type="text"
 			:label="$t('common.labels.firstName')"
-			:placeholder="$t('common.placeholder.firstName')"
-			class="mt--md"
+			:hint="$t('common.placeholder.firstName')"
 			data-testid="input_create-user_firstname"
-			:validation-messages="nameValidationMessages"
-			:validation-model="$v.userData.firstName"
-		>
-		</base-input>
-		<base-input
+			:error-messages="getErrors('firstName', $v.userData.firstName)"
+			@blur="$v.userData.firstName.$touch"
+		></v-text-field>
+		<v-text-field
 			v-model="userData.lastName"
-			type="text"
 			:label="$t('common.labels.lastName')"
-			:placeholder="$t('common.placeholder.lastName')"
-			class="mt--md"
+			:hint="$t('common.placeholder.lastName')"
 			data-testid="input_create-user_lastname"
-			:validation-messages="nameValidationMessages"
-			:validation-model="$v.userData.lastName"
-		>
-		</base-input>
-		<base-input
+			:error-messages="getErrors('lastName', $v.userData.lastName)"
+			@blur="$v.userData.lastName.$touch"
+		></v-text-field>
+		<v-text-field
 			v-model="userData.email"
-			type="text"
 			:label="$t('common.labels.email')"
-			:placeholder="$t('common.placeholder.email')"
-			class="mt--md"
+			:hint="$t('common.placeholder.email')"
 			data-testid="input_create-user_email"
-			:validation-messages="emailValidationMessages"
-			:validation-model="$v.userData.email"
-		>
-		</base-input>
+			:error-messages="getErrors('email', $v.userData.email)"
+			@blur="$v.userData.email.$touch"
+		></v-text-field>
 		<slot name="inputs" />
 
 		<slot name="errors" />
@@ -58,7 +49,7 @@
 		>
 			{{ $t("common.actions.back") }}
 		</base-button>
-	</form>
+	</v-form>
 </template>
 
 <script>
@@ -89,6 +80,25 @@ export default {
 			if (!this.$v.$invalid) {
 				this.$emit("create-user", this.userData);
 			}
+		},
+		getErrors(name, model) {
+			const errors = [];
+			if (!model.$dirty) return errors;
+			switch (name) {
+				case "firstName":
+					!model.required && errors.push(this.$t("common.validation.required"));
+					break;
+				case "lastName":
+					!model.required && errors.push(this.$t("common.validation.required"));
+					break;
+				case "email":
+					!model.email && errors.push(this.$t("common.validation.email"));
+					!model.required && errors.push(this.$t("common.validation.required"));
+					break;
+				default:
+					break;
+			}
+			return errors;
 		},
 	},
 	validations: {
