@@ -16,17 +16,17 @@ export default {
 		type: {
 			type: String,
 			required: false,
-			default: "info",
+			default: "bc-info",
 			validator: (type) =>
-				["info", "success", "warning", "error"].includes(type),
+				["bc-info", "bc-success", "bc-warning", "bc-error"].includes(type),
 		},
 	},
 	computed: {
 		icon() {
-			if (this.type === "error") {
+			if (this.type === "bc-error") {
 				return "warning";
 			}
-			return this.type;
+			return this.type.substring(3);
 		},
 	},
 };
@@ -39,16 +39,16 @@ export default {
 	align-items: top;
 	font-size: var(--text-sm);
 }
-.info-message.error {
+.info-message.bc-error {
 	color: var(--color-danger);
 }
-.info-message.success {
+.info-message.bc-success {
 	color: var(--color-success);
 }
-.info-message.warning {
+.info-message.bc-warning {
 	color: var(--color-warning);
 }
-.info-message.info {
+.info-message.bc-info {
 	color: var(--color-info);
 }
 .info-message .icon {

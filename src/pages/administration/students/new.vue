@@ -6,16 +6,14 @@
 	>
 		<form-create-user @create-user="createStudent">
 			<template v-slot:inputs>
-				<base-input
-					v-model="birthday"
-					type="date"
+				<v-text-field
+					v-model="date"
 					:label="$t('common.labels.birthdate')"
-					:placeholder="$t('common.placeholder.birthdate')"
-					class="mt--md"
-					:birth-date="true"
+					:min="minDate"
+					:max="maxDate"
 					data-testid="input_create-student_birthdate"
-				>
-				</base-input>
+					type="date"
+				></v-text-field>
 				<base-input
 					v-model="sendRegistration"
 					type="checkbox"
@@ -29,7 +27,7 @@
 				<info-message
 					v-if="businessError"
 					:message="$t('pages.administration.students.new.error')"
-					type="error"
+					type="bc-error"
 				></info-message>
 			</template>
 		</form-create-user>
@@ -40,6 +38,7 @@
 import FormCreateUser from "@components/organisms/FormCreateUser";
 import InfoMessage from "@components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { inputRangeDate } from "@plugins/datetime";
 
 import { mapGetters } from "vuex";
 
@@ -56,6 +55,10 @@ export default {
 	data() {
 		return {
 			birthday: null,
+			date: null,
+			menu: false,
+			minDate: inputRangeDate(-100, "y"),
+			maxDate: inputRangeDate(-4, "y"),
 			sendRegistration: false,
 			breadcrumbs: [
 				{
@@ -88,7 +91,7 @@ export default {
 				firstName: userData.firstName,
 				lastName: userData.lastName,
 				email: userData.email,
-				birthday: this.birthday,
+				birthday: this.date,
 				roles: ["student"],
 				schoolId: this.$user.schoolId,
 				sendRegistration: this.sendRegistration,
