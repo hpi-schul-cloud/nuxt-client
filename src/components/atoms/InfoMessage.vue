@@ -16,7 +16,7 @@ export default {
 		type: {
 			type: String,
 			required: false,
-			default: "info",
+			default: "bc-info",
 			validator: (type) =>
 				["bc-info", "bc-success", "bc-warning", "bc-error"].includes(type),
 		},

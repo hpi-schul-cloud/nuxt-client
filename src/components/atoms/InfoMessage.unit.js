@@ -14,7 +14,7 @@ describe("@components/atoms/InfoMessage", () => {
 	});
 
 	it("has correct styling class", async () => {
-		const expectedClass = "error";
+		const expectedClass = "bc-error";
 		const wrapper = mount(InfoMessage, {
 			propsData: {
 				message: "Lorem ipsum und so weiter",
