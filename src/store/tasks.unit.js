@@ -366,7 +366,8 @@ describe("store/tasks", () => {
 				).toStrictEqual(tasksCountStudent.open);
 
 				expect(
-					getters.getTasksCountPerCourseStudent(studentState, mockGetter).completed
+					getters.getTasksCountPerCourseStudent(studentState, mockGetter)
+						.completed
 				).toStrictEqual(tasksCountStudent.completed);
 			});
 		});
@@ -378,11 +379,17 @@ describe("store/tasks", () => {
 				};
 
 				expect(
-					getters.getTasksCountPerCourseTeacher(teacherStateWithDrafts, mockGetter).open
+					getters.getTasksCountPerCourseTeacher(
+						teacherStateWithDrafts,
+						mockGetter
+					).open
 				).toStrictEqual(tasksCountTeacher.open);
 
 				expect(
-					getters.getTasksCountPerCourseTeacher(teacherStateWithDrafts, mockGetter).drafts
+					getters.getTasksCountPerCourseTeacher(
+						teacherStateWithDrafts,
+						mockGetter
+					).drafts
 				).toStrictEqual(tasksCountTeacher.drafts);
 			});
 		});
