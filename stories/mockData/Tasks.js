@@ -370,6 +370,7 @@ export const drafts = [
 		id: "59ccr252c6abf042248e888c",
 		_id: "59ccr252c6abf042248e888c",
 		name: "Das 1x1",
+		courseName: "",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: {
 			submitted: 0,
@@ -396,7 +397,7 @@ export const drafts = [
 export const allTasksTeacher = [...tasksTeacher, ...drafts];
 
 export const coursesStudent = ["Mathe", "Chemie", "Biologie"];
-export const coursesTeacher = ["Mathe", "Deutsch"];
+export const coursesTeacher = ["Mathe", "Deutsch", ""];
 
 export const mathTasks = [
 	{

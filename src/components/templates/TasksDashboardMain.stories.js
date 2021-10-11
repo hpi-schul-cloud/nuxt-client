@@ -91,9 +91,10 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 							withDueDate: dueDateTasksTeacher,
 							noDueDate: noDueDateTasksTeacher,
 						}),
-						getTasksCountPerCourseStudent: () => ({
-							open: { Mathe: 9, Deutsch: 1, undefined: 1 },
-							drafts: { Mathe: 0, Deutsch: 1, undefined: 1 },
+						getDraftTasksForTeacher: () => drafts,
+						getTasksCountPerCourseTeacher: () => ({
+							open: { Mathe: 9, Deutsch: 1, "": 0 },
+							drafts: { Mathe: 0, Deutsch: 1, "": 2 },
 						}),
 					},
 					actions: {
