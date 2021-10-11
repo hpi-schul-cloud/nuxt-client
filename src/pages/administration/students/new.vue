@@ -14,7 +14,6 @@
 					transition="scale-transition"
 					offset-y
 					min-width="auto"
-					data-testid="input_create-student_birthdate"
 				>
 					<template v-slot:activator="{ on, attrs }">
 						<v-text-field
@@ -22,8 +21,8 @@
 							:label="$t('common.labels.birthdate')"
 							:hint="$t('common.placeholder.birthdate')"
 							append-icon="fa-calendar"
-							readonly
 							v-bind="attrs"
+							data-testid="input_create-student_birthdate"
 							v-on="on"
 						></v-text-field>
 					</template>
@@ -56,7 +55,7 @@
 				<info-message
 					v-if="businessError"
 					:message="$t('pages.administration.students.new.error')"
-					type="error"
+					type="bc-error"
 				></info-message>
 			</template>
 		</form-create-user>
