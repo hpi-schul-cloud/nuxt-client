@@ -101,7 +101,7 @@
 			<info-message
 				data-testid="errorInfoMessage"
 				:message="error"
-				type="error"
+				type="bc-error"
 			/>
 		</div>
 		<div class="bottom-buttons">

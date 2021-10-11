@@ -18,6 +18,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
 - BC-382 - fixing error in 'removeSystem' method for new school-settings page
+- BC-397 - replaced base inputs in the user creation form with vuetify components
 
 ### Fixed
 
