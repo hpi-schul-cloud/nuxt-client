@@ -11,7 +11,12 @@ const axiosInitializer = () => {
 			receivedRequests.push({ path });
 			return getRequestReturn;
 		},
-		post: async (path: string) => {},
+		$post: async (path: string) => {},
+		$patch: async (path: string, params: {}) => {
+			receivedRequests.push({ path });
+			receivedRequests.push({ params });
+			return getRequestReturn;
+		},
 	} as NuxtAxiosInstance);
 };
 
@@ -62,6 +67,58 @@ describe("rooms module", () => {
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 			});
 		});
+		describe("align", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+			it("should call server and 'setPosition' mutation", async () => {
+				const roomsModule = new Rooms({});
+
+				const setPositionSpy = jest.spyOn(roomsModule, "setPosition");
+				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+
+				const expectedParam = {
+					from: { x: "1", y: "1" },
+					to: { x: "2", y: "2" },
+				};
+
+				roomsModule.setRoomDataId("grid_id");
+				await roomsModule.align({
+					from: "1-1",
+					to: "2-2",
+					items: {},
+				});
+
+				expect(receivedRequests.length).toBeGreaterThan(0);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"/v3/dashboard/grid_id/moveElement"
+				);
+				expect(receivedRequests[1].params).toStrictEqual(expectedParam);
+
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setPositionSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+			});
+		});
+		describe("delete", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+			it("should call 'setPosition' mutation", async () => {
+				// TODO: call server will be here when server ready
+				const roomsModule = new Rooms({});
+
+				const setRoomDataSpy = jest.spyOn(roomsModule, "setRoomData");
+				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+
+				await roomsModule.delete("id");
+
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setRoomDataSpy).toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("mutations", () => {
@@ -86,6 +143,16 @@ describe("rooms module", () => {
 			});
 		});
 
+		describe("setRoomDataId", () => {
+			it("should set the room data id", () => {
+				const roomsModule = new Rooms({});
+				const id = "sample_id";
+
+				roomsModule.setRoomDataId(id);
+				expect(roomsModule.gridElementsId).toStrictEqual(id);
+			});
+		});
+
 		describe("setLoading", () => {
 			it("should set loading", () => {
 				const roomsModule = new Rooms({});
@@ -105,6 +172,35 @@ describe("rooms module", () => {
 				expect(roomsModule.error).toBe(errorData);
 			});
 		});
+
+		describe("setPosition", () => {
+			it("should re-position the state", () => {
+				const roomsModule = new Rooms({});
+				const draggedObject = {
+					from: "1-6",
+					item: {
+						id: "123",
+						title: "Math 1a",
+						shortTitle: "Ma",
+						displayColor: "#f23f76",
+						xPosition: 6,
+						yPosition: 1,
+					},
+					to: "5-2",
+				};
+				const expectedObject = {
+					id: "123",
+					title: "Math 1a",
+					shortTitle: "Ma",
+					displayColor: "#f23f76",
+					xPosition: "2",
+					yPosition: "5",
+				};
+				roomsModule.setRoomData(mockData.gridElements);
+				roomsModule.setPosition(draggedObject);
+				expect(roomsModule.roomsData[0]).toStrictEqual(expectedObject);
+			});
+		});
 	});
 
 	describe("getters", () => {
@@ -120,7 +216,7 @@ describe("rooms module", () => {
 		});
 
 		describe("getLoading", () => {
-			it("should return rooms state", () => {
+			it("should return loading state", () => {
 				const roomsModule = new Rooms({});
 
 				expect(roomsModule.getLoading).not.toStrictEqual(true);
@@ -130,12 +226,22 @@ describe("rooms module", () => {
 		});
 
 		describe("getError", () => {
-			it("should return rooms state", () => {
+			it("should return error state", () => {
 				const roomsModule = new Rooms({});
 				const errorData = { message: "some error" };
 				expect(roomsModule.getError).toStrictEqual(null);
 				roomsModule.setError(errorData);
 				expect(roomsModule.getError).toStrictEqual(errorData);
+			});
+		});
+
+		describe("getRoomsId", () => {
+			it("should return rooms id state", () => {
+				const roomsModule = new Rooms({});
+				const sampleId = "sample_id";
+				expect(roomsModule.getRoomsId).toStrictEqual("");
+				roomsModule.setError(sampleId);
+				expect(roomsModule.getError).toStrictEqual(sampleId);
 			});
 		});
 	});

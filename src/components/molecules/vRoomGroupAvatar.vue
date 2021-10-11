@@ -54,6 +54,10 @@ export default {
 			type: Number || String,
 			default: 4,
 		},
+		location: {
+			type: String,
+			default: "",
+		},
 	},
 	data() {
 		return {};

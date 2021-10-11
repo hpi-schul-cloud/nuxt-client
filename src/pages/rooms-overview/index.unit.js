@@ -69,6 +69,7 @@ const mockStore = {
 		},
 		actions: {
 			fetch: jest.fn(),
+			align: jest.fn(),
 		},
 	},
 };
@@ -85,7 +86,6 @@ describe("RoomPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 
@@ -100,7 +100,6 @@ describe("RoomPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 		await wrapper.vm.$nextTick();
@@ -115,7 +114,6 @@ describe("RoomPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 		await wrapper.vm.$nextTick();
@@ -131,7 +129,6 @@ describe("RoomPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 		await wrapper.vm.$nextTick();
@@ -148,7 +145,6 @@ describe("RoomPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 		await wrapper.vm.$nextTick();
@@ -173,7 +169,6 @@ describe("RoomPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
 		});
 		await wrapper.vm.$nextTick();
@@ -190,8 +185,10 @@ describe("RoomPage", () => {
 			...createComponentMocks({
 				i18n: true,
 				vuetify: true,
-				store: mockStore,
 			}),
+			computed: {
+				$mq: () => "desktop",
+			},
 		});
 
 		await wrapper.vm.$nextTick();
@@ -213,5 +210,103 @@ describe("RoomPage", () => {
 		expect(wrapper.vm.$refs["3-3"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
+	});
+
+	it("should drag & drop avatars positions", async () => {
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "desktop",
+			},
+		});
+
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+
+		// expect that $refs["1-1"] is a 'vRoomAvatar before drag&drop
+		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+		expect(wrapper.vm.$refs["1-2"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
+
+		expect(wrapper.vm.$data.draggedElement.from).toBeNull();
+		expect(wrapper.vm.$data.draggedElement.to).toBeNull();
+		expect(wrapper.vm.$data.draggedElement.item.id).toBeUndefined();
+
+		const avatarComponent = wrapper.findComponent({ ref: "1-1" });
+		avatarComponent.trigger("dragstart");
+		expect(wrapper.vm.$data.draggedElement.from).toStrictEqual("1-1");
+		expect(wrapper.vm.$data.draggedElement.to).toBeNull();
+		expect(wrapper.vm.$data.draggedElement.item.id).toStrictEqual("1");
+
+		const emptyAvatarComponent = wrapper.findComponent({ ref: "1-2" });
+		emptyAvatarComponent.trigger("drop");
+		expect(wrapper.vm.$data.draggedElement.from).toStrictEqual("1-1");
+		expect(wrapper.vm.$data.draggedElement.to).toStrictEqual("1-2");
+		expect(wrapper.vm.$data.draggedElement.item.id).toStrictEqual("1");
+		await wrapper.vm.$nextTick();
+
+		// expect that $refs["1-2"] is a 'vRoomAvatar after drag&drop
+		expect(wrapper.vm.$refs["1-2"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomAvatar"
+		);
+		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
+	});
+
+	it("should set the column count '2' if the device is 'mobile'", async () => {
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "mobile",
+			},
+		});
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.dimensions.colCount).toBe(2);
+	});
+
+	it("should set the column count '4' if the device is 'tablet'", async () => {
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "tablet",
+			},
+		});
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.dimensions.colCount).toBe(4);
+	});
+
+	it("should set the column count '6' if the device is 'desktop'", async () => {
+		const wrapper = mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "desktop",
+			},
+		});
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		expect(wrapper.vm.dimensions.colCount).toBe(6);
 	});
 });
