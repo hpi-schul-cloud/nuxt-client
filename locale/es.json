@@ -589,6 +589,7 @@
 	"pages.tasks.teacher.emptyState.title": "No hay asignaciones actuales.",
 	"pages.tasks.teacher.emptyState.subtitle": "Has comprobado todas las devoluciones. ¡Disfruta de tu tiempo libre!",
 	"pages.tasks.teacher.drafts.emptyState.title": "No hay borradores.",
+	"pages.tasks.emptyStateOnFilter.title": "No hay tareas.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minuto | minutos",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",

@@ -30,8 +30,8 @@
 				<v-custom-empty-state
 					v-if="hasNoOpenTasksTeacher"
 					:image="emptyStateImage"
-					:title="$t('pages.tasks.teacher.emptyState.title')"
-					:subtitle="$t('pages.tasks.teacher.emptyState.subtitle')"
+					:title="emptyStateText.title"
+					:subtitle="emptyStateText.subtitle"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -40,7 +40,7 @@
 				<v-custom-empty-state
 					v-if="hasNoDrafts"
 					:image="emptyStateImage"
-					:title="$t('pages.tasks.teacher.drafts.emptyState.title')"
+					:title="emptyStateText.title"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -62,6 +62,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		hasFilterSelected: {
+			type: Boolean,
+			required: false,
+		},
 	},
 	data() {
 		return {
@@ -73,6 +77,7 @@ export default {
 			openTasks: "getOpenTasksForTeacher",
 			draftTasks: "getDraftTasksForTeacher",
 			status: "getStatus",
+			hasNoTasks: "hasNoTasks",
 			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoDrafts: "hasNoDrafts",
 		}),
@@ -84,6 +89,26 @@ export default {
 		},
 		withDueDateTasks: function () {
 			return this.openTasks.withDueDate;
+		},
+		emptyStateText: function () {
+			if (this.hasFilterSelected) {
+				return {
+					title: this.$t("pages.tasks.emptyStateOnFilter.title"),
+					subtitle: undefined,
+				};
+			} else {
+				if (this.tab === 0) {
+					return {
+						title: this.$t("pages.tasks.teacher.emptyState.title"),
+						subtitle: this.$t("pages.tasks.teacher.emptyState.subtitle"),
+					};
+				} else {
+					return {
+						title: this.$t("pages.tasks.teacher.drafts.emptyState.title"),
+						subtitle: undefined,
+					};
+				}
+			}
 		},
 		currentTab: {
 			get() {

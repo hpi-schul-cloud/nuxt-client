@@ -590,6 +590,7 @@
 	"pages.tasks.teacher.emptyState.title": "Es gibt keine aktuellen Aufgaben.",
 	"pages.tasks.teacher.emptyState.subtitle": "Du hast alle Abgaben geprüft. Genieße deine freie Zeit!",
 	"pages.tasks.teacher.drafts.emptyState.title": "Es gibt keine Entwürfe.",
+	"pages.tasks.emptyStateOnFilter.title": "Es sind keine Aufgaben vorhanden.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "Minute | Minuten",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",

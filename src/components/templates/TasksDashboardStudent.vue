@@ -30,8 +30,8 @@
 				<v-custom-empty-state
 					v-if="hasNoOpenTasksStudent"
 					:image="emptyStateImage"
-					:title="$t('pages.tasks.student.open.emptyState.title')"
-					:subtitle="$t('pages.tasks.student.open.emptyState.subtitle')"
+					:title="emptyStateText.title"
+					:subtitle="emptyStateText.subtitle"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -55,7 +55,7 @@
 				<v-custom-empty-state
 					v-if="hasNoCompletedTasks"
 					:image="emptyStateImage"
-					:title="$t('pages.tasks.student.submitted.emptyState.title')"
+					:title="emptyStateText.title"
 					class="mt-16"
 				/>
 			</v-tab-item>
@@ -77,6 +77,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		hasFilterSelected: {
+			type: Boolean,
+			required: false,
+		},
 	},
 	data() {
 		return {
@@ -90,6 +94,7 @@ export default {
 			completedTasks: "getCompletedTasksForStudent",
 			hasNoOpenTasksStudent: "hasNoOpenTasksStudent",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
+			hasNoTasks: "hasNoTasks",
 		}),
 		overdueTasks: function () {
 			return this.openTasks.overdue;
@@ -105,6 +110,26 @@ export default {
 		},
 		gradedTasks: function () {
 			return this.completedTasks.graded;
+		},
+		emptyStateText: function () {
+			if (this.hasFilterSelected) {
+				return {
+					title: this.$t("pages.tasks.emptyStateOnFilter.title"),
+					subtitle: undefined,
+				};
+			} else {
+				if (this.tab === 0) {
+					return {
+						title: this.$t("pages.tasks.student.open.emptyState.title"),
+						subtitle: this.$t("pages.tasks.student.open.emptyState.subtitle"),
+					};
+				} else {
+					return {
+						title: this.$t("pages.tasks.student.submitted.emptyState.title"),
+						subtitle: undefined,
+					};
+				}
+			}
 		},
 		currentTab: {
 			get() {

@@ -584,6 +584,7 @@
 	"pages.tasks.teacher.emptyState.title": "There are no current tasks.",
 	"pages.tasks.teacher.emptyState.subtitle": "You have completed all assignments. Enjoy your free time!",
 	"pages.tasks.teacher.drafts.emptyState.title": "There are no drafts.",
+	"pages.tasks.emptyStateOnFilter.title": "There are no tasks",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minute | minutes",
 	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
