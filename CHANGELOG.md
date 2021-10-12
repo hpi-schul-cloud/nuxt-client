@@ -19,6 +19,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
 - BC-382 - fixing error in 'removeSystem' method for new school-settings page
+- BC-397 - replaced base inputs in the user creation form with vuetify components
 
 ### Fixed
 
@@ -40,6 +41,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-167 - Added a wireframe for pages
 - BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
+- BC-317 - implemented drag&drop avatar components
 - BC-310 - added task count to course filter
 
 ### Changed

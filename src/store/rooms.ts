@@ -22,6 +22,12 @@ type RoomsData = {
 	yPosition: number;
 };
 
+type DroppedObject = {
+	from: string;
+	to: string;
+	item: object;
+};
+
 @Module({
 	name: "rooms",
 	namespaced: true,
@@ -31,6 +37,7 @@ type RoomsData = {
 })
 export class Rooms extends VuexModule {
 	roomsData: Array<RoomsData> = [];
+	gridElementsId: string = "";
 
 	loading: boolean = false;
 	error: null | {} = null;
@@ -41,6 +48,11 @@ export class Rooms extends VuexModule {
 	}
 
 	@Mutation
+	setRoomDataId(id: string): void {
+		this.gridElementsId = id;
+	}
+
+	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
 	}
@@ -48,6 +60,19 @@ export class Rooms extends VuexModule {
 	@Mutation
 	setError(error: {}): void {
 		this.error = error;
+	}
+
+	@Mutation
+	setPosition(droppedComponent: DroppedObject | any): void {
+		const to = droppedComponent.to.split("-");
+		const itemToBeChanged = this.roomsData.find(
+			(item) => item.id == droppedComponent.item.id
+		);
+
+		if (itemToBeChanged) {
+			itemToBeChanged.xPosition = to[1];
+			itemToBeChanged.yPosition = to[0];
+		}
 	}
 
 	get getRoomsData(): Array<RoomsData> {
@@ -62,6 +87,10 @@ export class Rooms extends VuexModule {
 		return this.error;
 	}
 
+	get getRoomsId(): {} | null {
+		return this.gridElementsId;
+	}
+
 	@Action
 	async fetch(device: string): Promise<void> {
 		// device parameter will be used to fetch data specified for device
@@ -70,6 +99,7 @@ export class Rooms extends VuexModule {
 		try {
 			const fetched = await $axios.$get("/v3/dashboard/");
 
+			this.setRoomDataId(fetched.id || "");
 			this.setRoomData(fetched.gridElements || []);
 			this.setLoading(false);
 		} catch (error: any) {
@@ -79,14 +109,31 @@ export class Rooms extends VuexModule {
 	}
 
 	@Action
-	async align(
-		from: Pos,
-		to: Pos,
-		roomObject: RoomsData | Object = {}
-	): Promise<void> {
+	async align(droppedComponent: DroppedObject | any = {}): Promise<void> {
+		const arrFrom = droppedComponent.from.split("-");
+		const arrTo = droppedComponent.to.split("-");
+
+		const reqObject = {
+			from: {
+				x: arrFrom[1],
+				y: arrFrom[0],
+			},
+			to: {
+				x: arrTo[1],
+				y: arrTo[0],
+			},
+		};
+
+		this.setPosition(droppedComponent);
 		this.setLoading(true);
 		try {
-			// TODO: align and set the state
+			const data = await $axios.$patch(
+				`/v3/dashboard/${this.gridElementsId}/moveElement`,
+				reqObject
+			);
+			this.setRoomData(data.gridElements);
+
+			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
@@ -108,7 +155,10 @@ export class Rooms extends VuexModule {
 	async delete(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO: delete room object
+			// TODO: delete call to to server
+			const tempData = this.roomsData.filter((item) => item.id !== id);
+			this.setRoomData(tempData);
+			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);

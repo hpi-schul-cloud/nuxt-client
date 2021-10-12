@@ -1,7 +1,7 @@
 <template>
-	<v-container ref="main" fluid mt-13>
+	<default-wireframe ref="main" :headline="title" :full-width="true">
 		<v-row v-for="row in dimensions.rowCount" :key="row">
-			<v-col v-for="col in dimensions.columnCount" :key="col">
+			<v-col v-for="col in dimensions.colCount" :key="col">
 				<div
 					v-if="getDataObject(row, col) !== undefined"
 					class="d-flex justify-center"
@@ -10,8 +10,7 @@
 						v-if="hasGroup(row, col)"
 						:ref="`${row}-${col}`"
 						class="room-group-avatar"
-						:data-position-row="row"
-						:data-position-col="col"
+						:location="`${row}-${col}`"
 						:data="getDataObject(row, col)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:max-items="4"
@@ -22,20 +21,20 @@
 						v-else
 						:ref="`${row}-${col}`"
 						class="room-avatar"
-						:data-position-row="row"
-						:data-position-col="col"
+						:location="`${row}-${col}`"
 						:item="getDataObject(row, col)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:show-badge="true"
 						show-sub-title
+						@startDrag="setDragElement"
 					></vRoomAvatar>
 				</div>
-				<div v-else>
+				<div v-else class="d-flex justify-center">
 					<vRoomEmptyAvatar
 						:ref="`${row}-${col}`"
+						:location="`${row}-${col}`"
 						:size="dimensions.cellWidth * ratios.itemRatio"
-						:data-position-row="row"
-						:data-position-col="col"
+						@drop="setDropElement"
 					></vRoomEmptyAvatar>
 				</div>
 			</v-col>
@@ -63,10 +62,11 @@
 				</v-row>
 			</template>
 		</vCustomDialog>
-	</v-container>
+	</default-wireframe>
 </template>
 
 <script>
+import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
@@ -75,6 +75,7 @@ import RoomsModule from "@store/rooms";
 
 export default {
 	components: {
+		DefaultWireframe,
 		vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
@@ -88,13 +89,10 @@ export default {
 				pageRatio: 0.9,
 				itemRatio: 0.8,
 			},
-			device: null,
+			device: "mobile",
 			maxItem: 4,
 			dimensions: {
-				width: 1200,
-				height: 1200,
-				device: "desktop", // this will be mobile after whole implementations
-				columnCount: 6, // this will be be 2 due to mobile first approach
+				colCount: 2,
 				cellWidth: 200,
 				rowCount: 6,
 			},
@@ -102,6 +100,12 @@ export default {
 				isOpen: false,
 				groupData: {},
 			},
+			draggedElement: {
+				from: null,
+				item: {},
+				to: null,
+			},
+			showDeleteSection: false,
 		};
 	},
 	computed: {
@@ -111,39 +115,38 @@ export default {
 		roomsError() {
 			return RoomsModule.getError;
 		},
+		title() {
+			return `${this.$t("common.labels.greeting")} ${this.$user.firstName}`;
+		},
 	},
 	async created() {
 		await RoomsModule.fetch(); // this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.roomsData = RoomsModule.getRoomsData;
+		this.getDeviceDims();
 	},
 	methods: {
-		// TODO: this method should be improved when the different devices will be started to use
-		// getDeviceDims() {
-		// 	const { width } = this.$refs.main.getBoundingClientRect();
+		getDeviceDims() {
+			this.device = this.$mq;
+			switch (this.$mq) {
+				case "tablet":
+					this.dimensions.colCount = 4;
+					break;
+				case "desktop":
+					this.dimensions.colCount = 6;
+					break;
+				case "large":
+					this.dimensions.colCount = 6;
+					break;
+				case "mobile":
+					this.dimensions.colCount = 2;
+					this.dimensions.cellWidth = 150;
+					break;
 
-		// 	this.dimensions.width = width;
-		// 	this.dimensions.height = this.$vuetify.breakpoint.height;
-		// 	const device = this.$vuetify.breakpoint.name;
-		// 	this.device = device;
-
-		// if (device == "sm" || device == "md") {
-		// 	this.dimensions.columnCount = 4;
-		// 	this.dimensions.device = "tablet";
-		// 	this.roomsData = tabletData;
-		// }
-		// if (device == "lg" || device == "xl") {
-		// 	this.dimensions.columnCount = 6;
-		// 	this.dimensions.device = "desktop";
-		// 	this.roomsData = desktopData;
-		// }
-
-		// 	const cellWidth = Math.round(
-		// 		(width / this.dimensions.columnCount) * this.ratios.pageRatio
-		// 	);
-		// 	this.dimensions.cellWidth = cellWidth;
-		// 	this.dimensions.rowCount = Math.round(this.dimensions.height / cellWidth);
-		// },
-
+				default:
+					this.dimensions.colCount = 2;
+					break;
+			}
+		},
 		getDataObject(row, col) {
 			return this.findDataByPos(row, col);
 		},
@@ -160,6 +163,34 @@ export default {
 		findDataByPos(row, col) {
 			return this.roomsData.find(
 				(item) => item.xPosition == col && item.yPosition == row
+			);
+		},
+		setDragElement(element, pos) {
+			this.draggedElement.from = pos;
+			this.draggedElement.item = element;
+			this.showDeleteSection = true;
+		},
+		async setDropElement(pos) {
+			this.draggedElement.to = pos;
+			if (
+				this.getElementNameByRef(this.draggedElement.from) == "vRoomAvatar" &&
+				this.getElementNameByRef(pos) == "vRoomEmptyAvatar"
+			) {
+				await RoomsModule.align(this.draggedElement);
+				this.roomsData = RoomsModule.getRoomsData;
+			}
+			this.showDeleteSection = false;
+		},
+		getElementNameByRef(refId) {
+			return this.$refs[refId][0].$options["_componentTag"];
+		},
+		deleteAvatar() {
+			// TODO: delete event will be here
+			this.showDeleteSection = false;
+
+			RoomsModule.delete(this.draggedElement.item.id);
+			this.roomsData = this.roomsData.filter(
+				(item) => item.id !== this.draggedElement.item.id
 			);
 		},
 	},
