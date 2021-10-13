@@ -15,6 +15,7 @@ import {
 	tasks,
 	tasksCountStudent,
 	tasksCountTeacher,
+	drafts,
 } from "@@/stories/mockData/Tasks";
 
 describe("@components/templates/TasksDashboardMain", () => {
@@ -63,7 +64,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 					withDueDate: dueDateTasksTeacher,
 					noDueDate: noDueDateTasksTeacher,
 				}),
-				getDraftTasksForTeacher: () => [],
+				getDraftTasksForTeacher: () => drafts,
 				getCourses: () => coursesTeacher,
 				hasNoOpenTasks: () => false,
 				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
@@ -270,5 +271,33 @@ describe("@components/templates/TasksDashboardMain", () => {
 		expect(wrapper.vm.isFilterDisabled).toBe(true);
 		wrapper.setData({ tab: 1 });
 		expect(wrapper.vm.isFilterDisabled).toBe(false);
+	});
+
+	it("Should set correct course name with task count for filter", () => {
+		const wrapper = mount(TasksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreTeacher,
+			}),
+			vuetify,
+			data() {
+				return {
+					tab: 1,
+				};
+			},
+			propsData: {
+				role: "teacher",
+			},
+		});
+
+		expect(wrapper.vm.coursesWithTaskCount[0]).toStrictEqual({
+			value: "Mathe",
+			text: "Mathe (0)",
+		});
+		expect(wrapper.vm.coursesWithTaskCount[2]).toStrictEqual({
+			value: "",
+			text: "Kein Kurs zugeordnet (2)",
+		});
 	});
 });
