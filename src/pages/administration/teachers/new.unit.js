@@ -92,7 +92,7 @@ describe("teachers/new", () => {
 		const inputEmail = wrapper.find(
 			'input[data-testid="input_create-user_email"]'
 		);
-		let errorMessageComponent = wrapper.find(".info-message.error");
+		let errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeFalse();
 
 		inputFirstName.setValue("Klara");
@@ -103,7 +103,7 @@ describe("teachers/new", () => {
 		await wrapper.vm.$nextTick(); // trigger dispatch
 		await wrapper.vm.$nextTick(); // trigger catch clause of dispatch
 		await wrapper.vm.$nextTick(); // display error component
-		errorMessageComponent = wrapper.find(".info-message.error");
+		errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeTrue();
 	});
 });
