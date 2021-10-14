@@ -248,6 +248,13 @@ describe("store/tasks", () => {
 			});
 		});
 
+		describe("hasFilterSelected", () => {
+			it("Should return true, if it's loaded and there are no drafts", () => {
+				expect(getters.hasFilterSelected(teacherState)).toBe(false);
+				expect(getters.hasFilterSelected(teacherStateWithFilter)).toBe(true);
+			});
+		});
+
 		describe("getOpenTasksForStudent", () => {
 			it("Should have properties for sub sets", () => {
 				expect(getters.getOpenTasksForStudent(studentState)).toHaveProperty(

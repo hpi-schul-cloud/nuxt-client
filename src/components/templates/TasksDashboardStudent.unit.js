@@ -22,6 +22,7 @@ describe("@components/templates/TasksDashboardStudent", () => {
 				getCompletedTasksForStudent: () => ({ submitted: [], graded: [] }),
 				hasNoOpenTasksStudent: () => false,
 				hasNoCompletedTasks: () => true,
+				hasFilterSelected: () => false,
 			},
 		},
 	};

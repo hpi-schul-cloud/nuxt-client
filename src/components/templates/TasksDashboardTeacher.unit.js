@@ -22,6 +22,7 @@ describe("@components/templates/TasksDashboardTeacher", () => {
 					noDueDate: noDueDateTasksTeacher,
 				}),
 				getDraftTasksForTeacher: () => [],
+				hasFilterSelected: () => false,
 			},
 		},
 	};

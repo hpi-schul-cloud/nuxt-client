@@ -41,6 +41,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				hasNoOpenTasks: () => false,
 				hasNoCompletedTasks: () => false,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
@@ -68,6 +69,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getCourses: () => coursesTeacher,
 				hasNoOpenTasks: () => false,
 				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
@@ -92,6 +94,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				}),
 				getDraftTasksForTeacher: () => [],
 				getCourses: () => [],
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
@@ -118,6 +121,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				hasNoTasks: () => false,
 				getCourses: () => coursesStudent,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
