@@ -174,6 +174,7 @@ export default {
 				const isActive =
 					this.$route.path.includes(item.href) ||
 					this.$route.path.includes(item.to);
+				item.childActive = false;
 				if (item.children) {
 					item.children.forEach((childItem) => {
 						childItem.active =
