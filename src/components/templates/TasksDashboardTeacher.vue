@@ -62,10 +62,6 @@ export default {
 			type: Number,
 			required: true,
 		},
-		hasFilterSelected: {
-			type: Boolean,
-			required: false,
-		},
 	},
 	data() {
 		return {
@@ -80,6 +76,7 @@ export default {
 			hasNoTasks: "hasNoTasks",
 			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoDrafts: "hasNoDrafts",
+			hasFilterSelected: "hasFilterSelected",
 		}),
 		overdueTasks: function () {
 			return this.openTasks.overdue;

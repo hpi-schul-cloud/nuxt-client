@@ -137,6 +137,7 @@ const module = {
 					.length === 0
 			);
 		},
+		hasFilterSelected: (state) => state.courseFilter.length > 0,
 		getTasks: (state) => state.tasks,
 		getStatus: (state) => state.status,
 		getCourses: (state) => {

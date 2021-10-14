@@ -30,12 +30,10 @@
 			<tasks-dashboard-student
 				v-if="isStudent"
 				:tab.sync="tab"
-				:has-filter-selected="hasFilterSelected"
 			/>
 			<tasks-dashboard-teacher
 				v-else
 				:tab.sync="tab"
-				:has-filter-selected="hasFilterSelected"
 			/>
 		</div>
 	</default-wireframe>
@@ -100,9 +98,6 @@ export default {
 			} else {
 				return false;
 			}
-		},
-		hasFilterSelected: function () {
-			return this.selectedCourses.length > 0;
 		},
 		hasTasks: function () {
 			return !this.hasNoTasks;
