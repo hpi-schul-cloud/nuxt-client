@@ -7,24 +7,55 @@ import {
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
+import { NewsApiFactory, NewsApiInterface } from "../serverApi/v3/api";
+
+type UserInfo = {
+	/**
+	 * The id of the User entity
+	 * @type {string}
+	 */
+	id: string;
+	/**
+	 * First name of the user
+	 * @type {string}
+	 */
+	firstName?: string;
+	/**
+	 * Last name of the user
+	 * @type {string}
+	 */
+	lastName?: string;
+};
+
+type SchoolInfo = {
+	/**
+	 * The id of the School entity
+	 * @type {string}
+	 */
+	id: string;
+	/**
+	 * Name of the school
+	 * @type {string}
+	 */
+	name?: string;
+};
 
 type News = {
-	__v: number;
-	_id: string;
+	id: string;
 	content: string;
 	createdAt: string;
-	creatorId: string;
+	creator: UserInfo;
 	displayAt: string;
-	schoolId: string;
-	source: string;
+	school: SchoolInfo;
+	// source: string;
 	title: string;
-	updaterId: string | null;
+	updater?: UserInfo;
 };
 
 type CreateNewsPayload = {
 	title: string;
 	content: string;
-	displayAt: string | undefined | null;
+	displayAt?: string | undefined;
 	schoolId: string;
 	targetId: any;
 	targetModel: any;
@@ -45,7 +76,7 @@ type BusinessError = {
 
 type Status = "pending" | "completed" | "error" | "";
 
-const newsUri = "/v3/news";
+// const newsUri = "/v3/news";
 
 @Module({
 	name: "news",
@@ -57,29 +88,17 @@ const newsUri = "/v3/news";
 export class NewsModule extends VuexModule {
 	news: News[] = [];
 	createdNews: News = {
-		__v: 0,
-		_id: "",
+		id: "",
 		content: "",
 		createdAt: "",
-		creatorId: "",
+		creator: { id: "" },
 		displayAt: "",
-		schoolId: "",
-		source: "",
+		school: { id: "" },
+		// source: "",
 		title: "",
-		updaterId: null,
+		updater: { id: "" },
 	};
-	current: News = {
-		__v: 0,
-		_id: "",
-		content: "",
-		createdAt: "",
-		creatorId: "",
-		displayAt: "",
-		schoolId: "",
-		source: "",
-		title: "",
-		updaterId: null,
-	};
+	current: News | null = null;
 	pagination: Pagination = {
 		limit: 0,
 		skip: 0,
@@ -90,6 +109,7 @@ export class NewsModule extends VuexModule {
 		message: "",
 	};
 	status: Status = "";
+	_newsApi?: NewsApiInterface;
 
 	get getNews(): News[] {
 		return this.news;
@@ -98,12 +118,23 @@ export class NewsModule extends VuexModule {
 	get getCreatedNews(): News {
 		return this.createdNews;
 	}
-	get getCurrentNews(): News {
+	get getCurrentNews(): News | null {
 		return this.current;
 	}
 
 	get getStatus(): string {
 		return this.status;
+	}
+
+	private get newsApi() {
+		if (!this._newsApi) {
+			this._newsApi = NewsApiFactory(
+				undefined,
+				"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
+				$axios
+			);
+		}
+		return this._newsApi;
 	}
 
 	@Mutation
@@ -117,7 +148,7 @@ export class NewsModule extends VuexModule {
 	}
 
 	@Mutation
-	setCurrent(current: News): void {
+	setCurrent(current: News | null): void {
 		this.current = current;
 	}
 
@@ -149,9 +180,21 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const { data, limit, skip, total } = await $axios.$get(newsUri);
-			this.setNews(data);
-			this.setPagination({ limit, skip, total });
+			// const { data, limit, skip, total } = await $axios.$get(newsUri);
+			const response = await this.newsApi.newsControllerFindAll(
+				{
+					data: [],
+					skip: this.pagination.skip,
+					limit: this.pagination.limit,
+					total: this.pagination.total,
+				},
+				undefined,
+				undefined,
+				false,
+				this.pagination.skip,
+				this.pagination.limit
+			);
+			this.setPagination(response.data);
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
@@ -163,8 +206,8 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const news = await $axios.$get(`${newsUri}/${newsID}`);
-			this.setCurrent(news);
+			const response = await this.newsApi.newsControllerFindOne(newsID);
+			this.setCurrent(response.data);
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
@@ -176,8 +219,8 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await $axios.$post(newsUri, payload);
-			this.setCreatedNews(res);
+			const res = await this.newsApi.newsControllerCreate(payload);
+			this.setCreatedNews(res.data);
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
@@ -189,8 +232,9 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await $axios.$patch(`${newsUri}/${payload.id}`, payload);
-			this.setCurrent(res);
+			// const res = await $axios.$patch(`${newsUri}/${payload.id}`, payload);
+			const res = await this.newsApi.newsControllerUpdate(payload.id, payload);
+			this.setCurrent(res.data);
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);
@@ -202,8 +246,8 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const res = await $axios.$delete(`${newsUri}/${id}`);
-			this.setCurrent(res);
+			const res = await this.newsApi.newsControllerDelete(id);
+			this.setCurrent(null);
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error);

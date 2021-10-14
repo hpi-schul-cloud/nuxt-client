@@ -58,7 +58,6 @@ describe("news store", () => {
 			const newsToCreate = {
 				title: "a news title",
 				content: "a news content",
-				displayAt: null,
 				schoolId: "1234",
 				targetId: null,
 				targetModel: null,
