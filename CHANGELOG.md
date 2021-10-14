@@ -10,7 +10,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
-- BC-402 - split e2e, wait for build and trigger them with reusable workflow
+- BC-402, BC-410 - remove label `run unstable tests` and split e2e with reusable workflow
+
+### Changed
+
+## [26.12.0] - 2021-10-12
+
+### Added
+
 - BC-307 - design and content transformation HPI Schul-Cloud in dBildungscloud
 - BC-312 - added bottom border to headline of new DefaultWireframe and added it to task overview
 
