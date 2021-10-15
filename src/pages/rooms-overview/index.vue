@@ -121,7 +121,7 @@ export default {
 			return RoomsModule.getError;
 		},
 		title() {
-			return `${this.$t("common.labels.greeting")} ${this.$user.firstName}`;
+			return `${this.$t("common.labels.greeting")}, ${this.$user.firstName}`;
 		},
 	},
 	async created() {
@@ -193,14 +193,12 @@ export default {
 		},
 		async setGroupElements(pos) {
 			this.draggedElement.to = pos;
-			const fromObject = this.draggedElement.item;
-			const toObject = this.findDataByPos(pos.y, pos.x);
 			const fromElementName = this.getElementNameByRef(
 				this.draggedElement.from
 			);
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (fromObject.id === toObject.id) return;
+			if (this.draggedElement.from == pos) return;
 
 			if (fromElementName == "vRoomAvatar" && toElementName == "vRoomAvatar") {
 				await RoomsModule.align(this.draggedElement);
@@ -209,14 +207,12 @@ export default {
 		},
 		async addGroupElements(pos) {
 			this.draggedElement.to = pos;
-			const fromObject = this.draggedElement.item;
-			const toObject = this.findDataByPos(pos.y, pos.x);
 			const fromElementName = this.getElementNameByRef(
 				this.draggedElement.from
 			);
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (fromObject.id === toObject.id) return;
+			if (this.draggedElement.from == pos) return;
 
 			if (
 				fromElementName == "vRoomAvatar" &&

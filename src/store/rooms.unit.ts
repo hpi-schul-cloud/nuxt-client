@@ -77,21 +77,23 @@ describe("rooms module", () => {
 				const setPositionSpy = jest.spyOn(roomsModule, "setPosition");
 				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
 
+				const payload = {
+					from: { x: 1, y: 1 },
+					to: { x: 2, y: 2 },
+					item: {},
+				};
+
 				const expectedParam = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
 				};
 
 				roomsModule.setRoomDataId("grid_id");
-				await roomsModule.align({
-					from: { x: 1, y: 1 },
-					to: { x: 2, y: 2 },
-					items: {},
-				});
+				await roomsModule.align(payload);
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
-					"/v3/dashboard/grid_id/moveElement"
+					`/v3/dashboard/grid_id/moveElement`
 				);
 				expect(receivedRequests[1].params).toStrictEqual(expectedParam);
 

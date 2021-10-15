@@ -43,7 +43,9 @@ export default {
 </script>
 <style scoped>
 .hovered-avatar {
-	border: 1px solid;
+	border: 3px solid;
+	border-color: var(--color-primary);
+	transition: border-width 0.3s;
 }
 .avatar-component-empty {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */

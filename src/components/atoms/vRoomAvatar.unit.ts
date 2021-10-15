@@ -169,4 +169,25 @@ describe("vRoomAvatar", () => {
 			y: 2,
 		});
 	});
+
+	it("should emit 'drop' event when an element dropped onto it", async () => {
+		const wrapper = mount(vRoomAvatar, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData,
+		});
+		const avatarComponent = wrapper.find(".avatar-component");
+
+		avatarComponent.trigger("drop");
+		await wrapper.vm.$nextTick();
+
+		let emitted = wrapper.emitted();
+		expect(emitted["drop"]).toHaveLength(1);
+		expect(emitted["drop"] && emitted["drop"][0][0]).toStrictEqual({
+			x: 5,
+			y: 2,
+		});
+	});
 });

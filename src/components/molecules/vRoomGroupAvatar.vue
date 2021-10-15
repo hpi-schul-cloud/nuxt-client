@@ -68,7 +68,9 @@ export default {
 		},
 	},
 	data() {
-		return {};
+		return {
+			howered: false,
+		};
 	},
 	computed: {
 		hasNotifications() {

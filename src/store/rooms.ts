@@ -8,11 +8,6 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 
-type Pos = {
-	xPosition: number;
-	yPosition: number;
-};
-
 type RoomsData = {
 	id: string;
 	title: string;
@@ -23,9 +18,12 @@ type RoomsData = {
 };
 
 type DroppedObject = {
-	from: object;
-	to: object;
-	item: object;
+	item: {
+		from: object;
+		to: object;
+		item: object;
+	};
+	path: string;
 };
 
 @Module({
@@ -109,8 +107,8 @@ export class Rooms extends VuexModule {
 	}
 
 	@Action
-	async align(droppedComponent: DroppedObject | any = {}): Promise<void> {
-		const { from, to } = droppedComponent;
+	async align(payload: DroppedObject | any = {}): Promise<void> {
+		const { from, to } = payload;
 		const reqObject = {
 			from,
 			to,
@@ -122,7 +120,7 @@ export class Rooms extends VuexModule {
 				`/v3/dashboard/${this.gridElementsId}/moveElement`,
 				reqObject
 			);
-			this.setPosition(droppedComponent);
+			this.setPosition(payload);
 			this.setRoomData(data.gridElements);
 			this.setLoading(false);
 		} catch (error: any) {
