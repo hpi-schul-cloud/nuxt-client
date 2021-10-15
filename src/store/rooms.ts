@@ -23,8 +23,8 @@ type RoomsData = {
 };
 
 type DroppedObject = {
-	from: string;
-	to: string;
+	from: object;
+	to: object;
 	item: object;
 };
 
@@ -64,14 +64,14 @@ export class Rooms extends VuexModule {
 
 	@Mutation
 	setPosition(droppedComponent: DroppedObject | any): void {
-		const to = droppedComponent.to.split("-");
+		const { to } = droppedComponent;
 		const itemToBeChanged = this.roomsData.find(
 			(item) => item.id == droppedComponent.item.id
 		);
 
 		if (itemToBeChanged) {
-			itemToBeChanged.xPosition = to[1];
-			itemToBeChanged.yPosition = to[0];
+			itemToBeChanged.xPosition = to.x;
+			itemToBeChanged.yPosition = to.y;
 		}
 	}
 
@@ -94,10 +94,10 @@ export class Rooms extends VuexModule {
 	@Action
 	async fetch(device: string): Promise<void> {
 		// device parameter will be used to fetch data specified for device
-
 		this.setLoading(true);
 		try {
 			const fetched = await $axios.$get("/v3/dashboard/");
+			// const fetched = mockStoreData;
 
 			this.setRoomDataId(fetched.id || "");
 			this.setRoomData(fetched.gridElements || []);
@@ -110,29 +110,32 @@ export class Rooms extends VuexModule {
 
 	@Action
 	async align(droppedComponent: DroppedObject | any = {}): Promise<void> {
-		const arrFrom = droppedComponent.from.split("-");
-		const arrTo = droppedComponent.to.split("-");
-
+		const { from, to } = droppedComponent;
 		const reqObject = {
-			from: {
-				x: arrFrom[1],
-				y: arrFrom[0],
-			},
-			to: {
-				x: arrTo[1],
-				y: arrTo[0],
-			},
+			from,
+			to,
 		};
 
-		this.setPosition(droppedComponent);
 		this.setLoading(true);
 		try {
 			const data = await $axios.$patch(
 				`/v3/dashboard/${this.gridElementsId}/moveElement`,
 				reqObject
 			);
+			this.setPosition(droppedComponent);
 			this.setRoomData(data.gridElements);
+			this.setLoading(false);
+		} catch (error: any) {
+			this.setError(error);
+			this.setLoading(false);
+		}
+	}
 
+	@Action
+	async group(droppedComponent: DroppedObject | any = {}): Promise<void> {
+		this.setLoading(true);
+		try {
+			// TODO: update data
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

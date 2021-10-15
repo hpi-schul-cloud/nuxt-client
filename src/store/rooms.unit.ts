@@ -78,14 +78,14 @@ describe("rooms module", () => {
 				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
 
 				const expectedParam = {
-					from: { x: "1", y: "1" },
-					to: { x: "2", y: "2" },
+					from: { x: 1, y: 1 },
+					to: { x: 2, y: 2 },
 				};
 
 				roomsModule.setRoomDataId("grid_id");
 				await roomsModule.align({
-					from: "1-1",
-					to: "2-2",
+					from: { x: 1, y: 1 },
+					to: { x: 2, y: 2 },
 					items: {},
 				});
 
@@ -177,7 +177,7 @@ describe("rooms module", () => {
 			it("should re-position the state", () => {
 				const roomsModule = new Rooms({});
 				const draggedObject = {
-					from: "1-6",
+					from: { x: 6, y: 1 },
 					item: {
 						id: "123",
 						title: "Math 1a",
@@ -186,15 +186,15 @@ describe("rooms module", () => {
 						xPosition: 6,
 						yPosition: 1,
 					},
-					to: "5-2",
+					to: { x: 5, y: 2 },
 				};
 				const expectedObject = {
 					id: "123",
 					title: "Math 1a",
 					shortTitle: "Ma",
 					displayColor: "#f23f76",
-					xPosition: "2",
-					yPosition: "5",
+					xPosition: 5,
+					yPosition: 2,
 				};
 				roomsModule.setRoomData(mockData.gridElements);
 				roomsModule.setPosition(draggedObject);

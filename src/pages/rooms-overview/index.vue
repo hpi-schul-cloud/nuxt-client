@@ -1,38 +1,41 @@
 <template>
 	<default-wireframe ref="main" :headline="title" :full-width="true">
-		<v-row v-for="row in dimensions.rowCount" :key="row">
-			<v-col v-for="col in dimensions.colCount" :key="col">
+		<v-row v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex">
+			<v-col v-for="(col, colIndex) in dimensions.colCount" :key="colIndex">
 				<div
-					v-if="getDataObject(row, col) !== undefined"
+					v-if="getDataObject(rowIndex, colIndex) !== undefined"
 					class="d-flex justify-center"
 				>
 					<vRoomGroupAvatar
-						v-if="hasGroup(row, col)"
-						:ref="`${row}-${col}`"
+						v-if="hasGroup(rowIndex, colIndex)"
+						:ref="`${rowIndex}-${colIndex}`"
 						class="room-group-avatar"
-						:location="`${row}-${col}`"
-						:data="getDataObject(row, col)"
+						:location="{ x: colIndex, y: rowIndex }"
+						:data="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:max-items="4"
-						@clicked="openDialog(getDataObject(row, col).id)"
+						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
+						@startDrag="setDragElement"
+						@drop="addGroupElements"
 					>
 					</vRoomGroupAvatar>
 					<vRoomAvatar
 						v-else
-						:ref="`${row}-${col}`"
+						:ref="`${rowIndex}-${colIndex}`"
 						class="room-avatar"
-						:location="`${row}-${col}`"
-						:item="getDataObject(row, col)"
+						:location="{ x: colIndex, y: rowIndex }"
+						:item="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:show-badge="true"
 						show-sub-title
 						@startDrag="setDragElement"
+						@drop="setGroupElements"
 					></vRoomAvatar>
 				</div>
 				<div v-else class="d-flex justify-center">
 					<vRoomEmptyAvatar
-						:ref="`${row}-${col}`"
-						:location="`${row}-${col}`"
+						:ref="`${rowIndex}-${colIndex}`"
+						:location="{ x: colIndex, y: rowIndex }"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						@drop="setDropElement"
 					></vRoomEmptyAvatar>
@@ -46,16 +49,18 @@
 				</h2>
 			</div>
 			<template slot="content">
-				<v-row>
+				<v-row class="d-flex justify-center ma-1">
 					<v-col
-						v-for="item in groupDialog.groupData.group"
+						v-for="item in groupDialog.groupData.groupElements"
 						:key="item.id"
+						class="d-flex justify-center"
 						:cols="maxItem"
 					>
 						<vRoomAvatar
 							:item="item"
 							:size="(dimensions.cellWidth * ratios.itemRatio) / 2"
 							:show-badge="true"
+							class="rounded-xl"
 							show-sub-title
 						></vRoomAvatar>
 					</v-col>
@@ -141,7 +146,6 @@ export default {
 					this.dimensions.colCount = 2;
 					this.dimensions.cellWidth = 150;
 					break;
-
 				default:
 					this.dimensions.colCount = 2;
 					break;
@@ -152,7 +156,7 @@ export default {
 		},
 		hasGroup(row, col) {
 			const roomObject = this.findDataByPos(row, col);
-			return roomObject.group !== undefined;
+			return roomObject.groupElements !== undefined;
 		},
 		openDialog(groupId) {
 			this.groupDialog.groupData = this.roomsData.find(
@@ -167,22 +171,63 @@ export default {
 		},
 		setDragElement(element, pos) {
 			this.draggedElement.from = pos;
+			this.draggedElement.to = null;
 			this.draggedElement.item = element;
 			this.showDeleteSection = true;
 		},
 		async setDropElement(pos) {
 			this.draggedElement.to = pos;
+			const fromElementName = this.getElementNameByRef(
+				this.draggedElement.from
+			);
+			const toElementName = this.getElementNameByRef(pos);
+
 			if (
-				this.getElementNameByRef(this.draggedElement.from) == "vRoomAvatar" &&
-				this.getElementNameByRef(pos) == "vRoomEmptyAvatar"
+				(fromElementName == "vRoomAvatar" || "vRoomGroupAvatar") &&
+				toElementName == "vRoomEmptyAvatar"
 			) {
 				await RoomsModule.align(this.draggedElement);
 				this.roomsData = RoomsModule.getRoomsData;
 			}
 			this.showDeleteSection = false;
 		},
-		getElementNameByRef(refId) {
-			return this.$refs[refId][0].$options["_componentTag"];
+		async setGroupElements(pos) {
+			this.draggedElement.to = pos;
+			const fromObject = this.draggedElement.item;
+			const toObject = this.findDataByPos(pos.y, pos.x);
+			const fromElementName = this.getElementNameByRef(
+				this.draggedElement.from
+			);
+			const toElementName = this.getElementNameByRef(pos);
+
+			if (fromObject.id === toObject.id) return;
+
+			if (fromElementName == "vRoomAvatar" && toElementName == "vRoomAvatar") {
+				await RoomsModule.align(this.draggedElement);
+				this.roomsData = RoomsModule.getRoomsData;
+			}
+		},
+		async addGroupElements(pos) {
+			this.draggedElement.to = pos;
+			const fromObject = this.draggedElement.item;
+			const toObject = this.findDataByPos(pos.y, pos.x);
+			const fromElementName = this.getElementNameByRef(
+				this.draggedElement.from
+			);
+			const toElementName = this.getElementNameByRef(pos);
+
+			if (fromObject.id === toObject.id) return;
+
+			if (
+				fromElementName == "vRoomAvatar" &&
+				toElementName == "vRoomGroupAvatar"
+			) {
+				await RoomsModule.align(this.draggedElement);
+				this.roomsData = RoomsModule.getRoomsData;
+			}
+		},
+		getElementNameByRef(pos) {
+			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
 		},
 		deleteAvatar() {
 			// TODO: delete event will be here

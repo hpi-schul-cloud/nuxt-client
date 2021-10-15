@@ -19,8 +19,8 @@ export default {
 			required: true,
 		},
 		location: {
-			type: String,
-			default: "",
+			type: Object,
+			required: true,
 		},
 	},
 	data() {

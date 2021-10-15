@@ -12,7 +12,7 @@ describe("vRoomEmptyAvatar", () => {
 			}),
 			propsData: {
 				size: 100,
-				location: "2-5",
+				location: { x: 5, y: 2 },
 			},
 		});
 		const avatarComponent = wrapper.find(".avatar-component-empty");
@@ -28,7 +28,7 @@ describe("vRoomEmptyAvatar", () => {
 			}),
 			propsData: {
 				size: 100,
-				location: "2-5",
+				location: { x: 5, y: 2 },
 			},
 		});
 		const avatarComponent = wrapper.find(".avatar-component-empty");
@@ -38,7 +38,10 @@ describe("vRoomEmptyAvatar", () => {
 
 		let emitted = wrapper.emitted();
 		expect(emitted["drop"]).toHaveLength(1);
-		expect(emitted["drop"] && emitted["drop"][0][0]).toStrictEqual("2-5");
+		expect(emitted["drop"] && emitted["drop"][0][0]).toStrictEqual({
+			x: 5,
+			y: 2,
+		});
 	});
 
 	it("should change its class name while 'drag' events triggered", async () => {
@@ -49,7 +52,7 @@ describe("vRoomEmptyAvatar", () => {
 			}),
 			propsData: {
 				size: 100,
-				location: "2-5",
+				location: { x: 5, y: 2 },
 			},
 		});
 		const avatarComponent = wrapper.find(".avatar-component-empty");

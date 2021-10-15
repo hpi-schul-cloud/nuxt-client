@@ -17,7 +17,7 @@ const propsData = {
 	size: 100,
 	groupAvatar: false,
 	showBadge: true,
-	location: "2-5",
+	location: { x: 5, y: 2 },
 };
 
 describe("vRoomAvatar", () => {
@@ -59,7 +59,7 @@ describe("vRoomAvatar", () => {
 				size: 100,
 				groupAvatar: false,
 				showBadge: true,
-				location: "2-5",
+				location: { x: 5, y: 2 },
 			},
 		});
 		const badgeElement = wrapper.find(".badge-component");
@@ -120,7 +120,7 @@ describe("vRoomAvatar", () => {
 				size: 100,
 				groupAvatar: true,
 				showBadge: true,
-				location: "2-5",
+				location: { x: 5, y: 2 },
 			},
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
@@ -164,8 +164,9 @@ describe("vRoomAvatar", () => {
 		expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
 			mockData
 		);
-		expect(emitted["startDrag"] && emitted["startDrag"][0][1]).toStrictEqual(
-			"2-5"
-		);
+		expect(emitted["startDrag"] && emitted["startDrag"][0][1]).toStrictEqual({
+			x: 5,
+			y: 2,
+		});
 	});
 });
