@@ -99,7 +99,6 @@ describe("RoomPage", () => {
 	it(...isValidComponent(RoomsPage));
 
 	it("should fetch the room data", async () => {
-		const storeModuleFetchMock = jest.spyOn(RoomsModule, "fetch");
 		const wrapper = await mount(RoomsPage, {
 			...createComponentMocks({
 				i18n: true,
@@ -112,7 +111,7 @@ describe("RoomPage", () => {
 
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
-		expect(storeModuleFetchMock).toHaveBeenCalled();
+		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
 		expect(wrapper.vm.$data.roomsData).toStrictEqual(mockStoreData);
 	});
 

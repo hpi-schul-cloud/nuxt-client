@@ -18,12 +18,9 @@ type RoomsData = {
 };
 
 type DroppedObject = {
-	item: {
-		from: object;
-		to: object;
-		item: object;
-	};
-	path: string;
+	from: object;
+	to: object;
+	item: object;
 };
 
 @Module({
@@ -122,18 +119,6 @@ export class Rooms extends VuexModule {
 			);
 			this.setPosition(payload);
 			this.setRoomData(data.gridElements);
-			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async group(droppedComponent: DroppedObject | any = {}): Promise<void> {
-		this.setLoading(true);
-		try {
-			// TODO: update data
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

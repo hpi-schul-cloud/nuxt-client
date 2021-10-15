@@ -93,7 +93,7 @@ describe("rooms module", () => {
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual(
-					`/v3/dashboard/grid_id/moveElement`
+					"/v3/dashboard/grid_id/moveElement"
 				);
 				expect(receivedRequests[1].params).toStrictEqual(expectedParam);
 
