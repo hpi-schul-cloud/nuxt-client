@@ -194,6 +194,7 @@ export class NewsModule extends VuexModule {
 				this.pagination.skip,
 				this.pagination.limit
 			);
+			this.setNews(response.data.data);
 			this.setPagination(response.data);
 			this.setStatus("completed");
 		} catch (error) {
