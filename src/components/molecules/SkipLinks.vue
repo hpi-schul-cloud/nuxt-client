@@ -20,6 +20,7 @@ export default {};
 	background-color: var(--color-white);
 	border: 1px solid #555;
 	border-radius: var(--radius-xs);
+	transform: translate(-50%, 0);
 }
 
 .skip-link:focus {
