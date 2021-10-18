@@ -1,5 +1,11 @@
 <template>
-	<div>
+	<div
+		draggable="true"
+		class="group-avatar"
+		@dragstart="startDragAvatar"
+		@drop.prevent="dropAvatar"
+		@dragover.prevent
+	>
 		<v-badge
 			class="badge-component"
 			bordered
@@ -14,6 +20,8 @@
 				class="rounded-xl ma-0 card-component"
 				outlined
 				@click.prevent="$emit('clicked', data.id)"
+				@dragleave="dragLeave"
+				@dragenter.prevent.stop="dragEnter"
 			>
 				<v-row class="ma-1 pa-1">
 					<v-col
@@ -23,7 +31,7 @@
 						class="ma-0 pa-1"
 					>
 						<vRoomAvatar
-							class="group-avatar-component"
+							class="ma-0 pa-1 group-avatar-component"
 							:item="item"
 							:size="size / 3"
 							:group-avatar="true"
@@ -54,20 +62,36 @@ export default {
 			type: Number || String,
 			default: 4,
 		},
+		// eslint-disable-next-line vue/require-default-prop
 		location: {
-			type: String,
-			default: "",
+			type: Object,
 		},
 	},
 	data() {
-		return {};
+		return {
+			hovered: false,
+		};
 	},
 	computed: {
 		hasNotifications() {
-			return this.data.group.some((item) => item.notification == true);
+			return this.data.groupElements.some((item) => item.notification == true);
 		},
 		itemsLimited() {
-			return this.data.group.slice(0, this.maxItems);
+			return this.data.groupElements.slice(0, this.maxItems);
+		},
+	},
+	methods: {
+		startDragAvatar() {
+			this.$emit("startDrag", this.data, this.location);
+		},
+		dragLeave() {
+			this.hovered = false;
+		},
+		dragEnter() {
+			this.hovered = true;
+		},
+		dropAvatar() {
+			this.$emit("drop", this.location);
 		},
 	},
 };
