@@ -18,8 +18,14 @@ type RoomsData = {
 };
 
 type DroppedObject = {
-	from: object;
-	to: object;
+	from: {
+		x: number;
+		y: number;
+	};
+	to: {
+		x: number;
+		y: number;
+	};
 	item: object;
 };
 
@@ -92,7 +98,6 @@ export class Rooms extends VuexModule {
 		this.setLoading(true);
 		try {
 			const fetched = await $axios.$get("/v3/dashboard/");
-			// const fetched = mockStoreData;
 
 			this.setRoomDataId(fetched.id || "");
 			this.setRoomData(fetched.gridElements || []);
@@ -104,7 +109,7 @@ export class Rooms extends VuexModule {
 	}
 
 	@Action
-	async align(payload: DroppedObject | any = {}): Promise<void> {
+	async align(payload: DroppedObject): Promise<void> {
 		const { from, to } = payload;
 		const reqObject = {
 			from,

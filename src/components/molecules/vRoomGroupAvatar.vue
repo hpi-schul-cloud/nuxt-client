@@ -69,7 +69,7 @@ export default {
 	},
 	data() {
 		return {
-			howered: false,
+			hovered: false,
 		};
 	},
 	computed: {

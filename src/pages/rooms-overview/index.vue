@@ -121,7 +121,7 @@ export default {
 			return RoomsModule.getError;
 		},
 		title() {
-			return `${this.$t("common.labels.greeting")}, ${this.$user.firstName}`;
+			return this.$t("common.labels.greeting", { name: this.$user.firstName });
 		},
 	},
 	async created() {
