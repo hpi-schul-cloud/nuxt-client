@@ -126,6 +126,10 @@ export class NewsModule extends VuexModule {
 		return this.status;
 	}
 
+	get getBusinessError() {
+		return this.businessError;
+	}
+
 	private get newsApi() {
 		if (!this._newsApi) {
 			this._newsApi = NewsApiFactory(
@@ -180,7 +184,6 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			// const { data, limit, skip, total } = await $axios.$get(newsUri);
 			const response = await this.newsApi.newsControllerFindAll(
 				{
 					data: [],
@@ -233,7 +236,6 @@ export class NewsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			// const res = await $axios.$patch(`${newsUri}/${payload.id}`, payload);
 			const res = await this.newsApi.newsControllerUpdate(payload.id, payload);
 			this.setCurrent(res.data);
 			this.setStatus("completed");
