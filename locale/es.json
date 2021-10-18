@@ -587,7 +587,7 @@
 	"pages.tasks.labels.noCoursesAvailable": "No hay ningún curso con este nombre.",
 	"pages.tasks.labels.noDueDate": "Sin fecha de entrega",
 	"pages.tasks.labels.overdue": "Expirada",
-	"pages.tasks.labels.noCourse": "Sin curso asignado",
+	"pages.tasks.labels.noCourse": "No hay un curso asignado",
 	"pages.tasks.subtitleGraded": "Calificado",
 	"pages.tasks.subtitleNotGraded": "Sin calificar",
 	"pages.tasks.subtitleAssigned": "Tareas asignadas",
