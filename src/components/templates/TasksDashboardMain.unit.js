@@ -13,6 +13,9 @@ import {
 	gradedTasks,
 	submittedTasks,
 	tasks,
+	tasksCountStudent,
+	tasksCountTeacher,
+	drafts,
 } from "@@/stories/mockData/Tasks";
 
 describe("@components/templates/TasksDashboardMain", () => {
@@ -23,6 +26,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				hasNoOpenTasksStudent: () => false,
 				getTasks: () => tasks,
 				getOpenTasksForStudent: () => ({
 					overdue: overDueTasks,
@@ -36,6 +40,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getCourses: () => coursesStudent,
 				hasNoOpenTasks: () => false,
 				hasNoCompletedTasks: () => false,
+				getTasksCountPerCourseStudent: () => tasksCountStudent,
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
@@ -51,14 +57,19 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => false,
+				hasNoOpenTasksTeacher: () => false,
+				hasNoDrafts: () => true,
 				getTasks: () => tasks,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,
 					withDueDate: dueDateTasksTeacher,
 					noDueDate: noDueDateTasksTeacher,
 				}),
+				getDraftTasksForTeacher: () => drafts,
 				getCourses: () => coursesTeacher,
 				hasNoOpenTasks: () => false,
+				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
@@ -71,13 +82,19 @@ describe("@components/templates/TasksDashboardMain", () => {
 			getters: {
 				getStatus: () => "completed",
 				hasNoTasks: () => true,
+				hasNoOpenTasksStudent: () => true,
+				hasNoCompletedTasks: () => true,
+				hasNoOpenTasksTeacher: () => true,
+				hasNoDrafts: () => true,
 				getTasks: () => [],
 				getOpenTasksForTeacher: () => ({
 					overdue: [],
 					withDueDate: [],
 					noDueDate: [],
 				}),
+				getDraftTasksForTeacher: () => [],
 				getCourses: () => [],
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
@@ -99,10 +116,12 @@ describe("@components/templates/TasksDashboardMain", () => {
 					submitted: submittedTasks,
 					graded: gradedTasks,
 				}),
-				hasNoOpenTasks: () => true,
+				hasNoOpenTasksStudent: () => true,
 				hasNoCompletedTasks: () => false,
 				hasNoTasks: () => false,
 				getCourses: () => coursesStudent,
+				getTasksCountPerCourseStudent: () => tasksCountStudent,
+				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
@@ -256,5 +275,33 @@ describe("@components/templates/TasksDashboardMain", () => {
 		expect(wrapper.vm.isFilterDisabled).toBe(true);
 		wrapper.setData({ tab: 1 });
 		expect(wrapper.vm.isFilterDisabled).toBe(false);
+	});
+
+	it("Should set correct course name with task count for filter", () => {
+		const wrapper = mount(TasksDashboardMain, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStoreTeacher,
+			}),
+			vuetify,
+			data() {
+				return {
+					tab: 1,
+				};
+			},
+			propsData: {
+				role: "teacher",
+			},
+		});
+
+		expect(wrapper.vm.coursesWithTaskCount[0]).toStrictEqual({
+			value: "Mathe",
+			text: "Mathe (0)",
+		});
+		expect(wrapper.vm.coursesWithTaskCount[2]).toStrictEqual({
+			value: "",
+			text: "Kein Kurs zugeordnet (2)",
+		});
 	});
 });

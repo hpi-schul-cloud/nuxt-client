@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/vue";
 import TasksList from "@components/organisms/TasksList";
-import { tasks, tasksTeacher } from "@@/stories/mockData/Tasks";
+import { openTasks, tasksTeacher } from "@@/stories/mockData/Tasks";
 
 storiesOf("0 Vuetify/Organisms/TasksList", module)
 	.add("TasksList Student", () => ({
@@ -8,7 +8,7 @@ storiesOf("0 Vuetify/Organisms/TasksList", module)
 			TasksList,
 		},
 		data: () => ({
-			tasks,
+			tasks: openTasks,
 		}),
 
 		template: `

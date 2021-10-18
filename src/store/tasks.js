@@ -8,10 +8,17 @@ const filterByCourses = (tasks, courses) => {
 		: tasks;
 };
 
-const filterOpen = (tasks) => {
-	return tasks.filter(
-		(task) => task.status.submitted === 0 && task.status.graded === 0
-	);
+const filterOpen = (tasks, role) => {
+	const filteredTasks = tasks.filter((task) => task.status.isDraft === false);
+
+	if (role === "teacher") {
+		return filteredTasks;
+	}
+	if (role === "student") {
+		return filteredTasks.filter(
+			(task) => task.status.submitted === 0 && task.status.graded === 0
+		);
+	}
 };
 
 const filterNoDueDate = (tasks) => {
@@ -46,6 +53,10 @@ const filterSubmitted = (tasks) => {
 
 const filterGraded = (tasks) => {
 	return tasks.filter((task) => task.status.graded > 0);
+};
+
+const filterDrafts = (tasks) => {
+	return tasks.filter((task) => task.status.isDraft === true);
 };
 
 const module = {
@@ -98,11 +109,11 @@ const module = {
 		hasNoTasks: (state) => {
 			return state.status === "completed" && state.tasks.length === 0;
 		},
-		hasNoOpenTasks: (state) => {
+		hasNoOpenTasksStudent: (state) => {
 			return (
 				state.status === "completed" &&
-				filterOpen(filterByCourses(state.tasks, state.courseFilter)).length ===
-					0
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "student")
+					.length === 0
 			);
 		},
 		hasNoCompletedTasks: (state) => {
@@ -112,34 +123,38 @@ const module = {
 					.length === 0
 			);
 		},
+		hasNoOpenTasksTeacher: (state) => {
+			return (
+				state.status === "completed" &&
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "teacher")
+					.length === 0
+			);
+		},
+		hasNoDrafts: (state) => {
+			return (
+				state.status === "completed" &&
+				filterDrafts(filterByCourses(state.tasks, state.courseFilter))
+					.length === 0
+			);
+		},
+		hasFilterSelected: (state) => state.courseFilter.length > 0,
 		getTasks: (state) => state.tasks,
 		getStatus: (state) => state.status,
+		getCourses: (state) => {
+			const courses = new Set(state.tasks.map((task) => task.courseName));
+			return Array.from(courses);
+		},
 		getOpenTasksForStudent: (state) => {
 			const openTasks = {};
 
 			openTasks.overdue = filterOverdue(
-				filterOpen(filterByCourses(state.tasks, state.courseFilter))
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "student")
 			);
 			openTasks.noDueDate = filterNoDueDate(
-				filterOpen(filterByCourses(state.tasks, state.courseFilter))
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "student")
 			);
 			openTasks.withDueDate = filterWithDueDate(
-				filterOpen(filterByCourses(state.tasks, state.courseFilter))
-			);
-
-			return openTasks;
-		},
-		getOpenTasksForTeacher: (state) => {
-			const openTasks = {};
-
-			openTasks.overdue = filterOverdue(
-				filterByCourses(state.tasks, state.courseFilter)
-			);
-			openTasks.noDueDate = filterNoDueDate(
-				filterByCourses(state.tasks, state.courseFilter)
-			);
-			openTasks.withDueDate = filterWithDueDate(
-				filterByCourses(state.tasks, state.courseFilter)
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "student")
 			);
 
 			return openTasks;
@@ -156,9 +171,69 @@ const module = {
 
 			return completedTasks;
 		},
-		getCourses: (state) => {
-			const courses = new Set(state.tasks.map((task) => task.courseName));
-			return Array.from(courses);
+		getOpenTasksForTeacher: (state) => {
+			const openTasks = {};
+
+			openTasks.overdue = filterOverdue(
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "teacher")
+			);
+			openTasks.noDueDate = filterNoDueDate(
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "teacher")
+			);
+			openTasks.withDueDate = filterWithDueDate(
+				filterOpen(filterByCourses(state.tasks, state.courseFilter), "teacher")
+			);
+
+			return openTasks;
+		},
+		getDraftTasksForTeacher: (state) => {
+			const draftTasks = filterDrafts(
+				filterByCourses(state.tasks, state.courseFilter)
+			);
+
+			return draftTasks;
+		},
+		getTasksCountPerCourseStudent: (state, getters) => {
+			const courses = getters.getCourses;
+			const tasksCount = { open: {}, completed: {} };
+
+			courses.forEach((course) => {
+				tasksCount.open[course] = filterOpen(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					}),
+					"student"
+				).length;
+
+				tasksCount.completed[course] = filterCompleted(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					})
+				).length;
+			});
+
+			return tasksCount;
+		},
+		getTasksCountPerCourseTeacher: (state, getters) => {
+			const courses = getters.getCourses;
+			const tasksCount = { open: {}, drafts: {} };
+
+			courses.forEach((course) => {
+				tasksCount.open[course] = filterOpen(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					}),
+					"teacher"
+				).length;
+
+				tasksCount.drafts[course] = filterDrafts(
+					state.tasks.filter((task) => {
+						return task.courseName === course;
+					})
+				).length;
+			});
+
+			return tasksCount;
 		},
 	},
 };
