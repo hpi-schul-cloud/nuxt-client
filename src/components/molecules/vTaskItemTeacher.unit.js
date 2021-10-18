@@ -1,5 +1,5 @@
 import vTaskItemTeacher from "./vTaskItemTeacher";
-import { tasksTeacher } from "@@/stories/mockData/Tasks";
+import { tasksTeacher, drafts } from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
 
 describe("@components/molecules/vTaskItemTeacher", () => {
@@ -55,6 +55,21 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 			vuetify,
 			propsData: {
 				task: tasksTeacher[7],
+			},
+		});
+
+		expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
+	});
+
+	it("Should render subtitle with no course name", () => {
+		const wrapper = mount(vTaskItemTeacher, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: {
+				task: drafts[1],
 			},
 		});
 
