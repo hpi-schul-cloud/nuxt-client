@@ -1,11 +1,11 @@
 <template>
 	<v-list-item :key="task.id" :href="taskGradingHref(task.id)">
 		<v-list-item-avatar>
-			<v-icon class="fill" :color="iconColor"> $taskOpenFilled </v-icon>
+			<v-icon class="fill" :color="iconColor">{{ avatarIcon }}</v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle class="d-inline-flex">
-				<span class="text-truncate">{{ task.courseName }}</span>
+				<span class="text-truncate">{{ courseName }}</span>
 				{{
 					`&nbsp;– ${computedDueDateLabel(
 						task.duedate,
@@ -22,22 +22,24 @@
 				</i18n>
 			</v-list-item-subtitle>
 		</v-list-item-content>
-		<v-list-item-action class="hidden-xs-only ml-4">
-			<v-list-item-subtitle>{{
-				$t("components.molecules.VTaskItemTeacher.submitted")
-			}}</v-list-item-subtitle>
-			<v-list-item-title
-				>{{ task.status.submitted }}/{{
-					task.status.maxSubmissions
-				}}</v-list-item-title
-			>
-		</v-list-item-action>
-		<v-list-item-action class="hidden-xs-only">
-			<v-list-item-subtitle>{{
-				$t("components.molecules.VTaskItemTeacher.graded")
-			}}</v-list-item-subtitle>
-			<v-list-item-title>{{ task.status.graded }}</v-list-item-title>
-		</v-list-item-action>
+		<section v-if="!isDraft">
+			<v-list-item-action class="hidden-xs-only ml-4">
+				<v-list-item-subtitle>{{
+					$t("components.molecules.VTaskItemTeacher.submitted")
+				}}</v-list-item-subtitle>
+				<v-list-item-title
+					>{{ task.status.submitted }}/{{
+						task.status.maxSubmissions
+					}}</v-list-item-title
+				>
+			</v-list-item-action>
+			<v-list-item-action class="hidden-xs-only">
+				<v-list-item-subtitle>{{
+					$t("components.molecules.VTaskItemTeacher.graded")
+				}}</v-list-item-subtitle>
+				<v-list-item-title>{{ task.status.graded }}</v-list-item-title>
+			</v-list-item-action>
+		</section>
 	</v-list-item>
 </template>
 
@@ -62,11 +64,20 @@ export default {
 		};
 	},
 	computed: {
+		avatarIcon() {
+			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
+		},
 		iconColor() {
 			return this.task.displayColor || this.defaultIconColor;
 		},
 		defaultIconColor() {
 			return "#54616e";
+		},
+		isDraft() {
+			return this.task.status.isDraft;
+		},
+		courseName() {
+			return this.task.courseName || this.$t("pages.tasks.labels.noCourse");
 		},
 	},
 	methods: {

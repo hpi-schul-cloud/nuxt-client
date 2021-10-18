@@ -1,21 +1,17 @@
 <template>
 	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
-		<div v-if="isStudent" slot="header">
+		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
 				<div class="pb-0 d-flex justify-center">
-					<v-tabs v-model="tab" grow class="tabs-max-width">
+					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
-							<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-							<span class="d-none d-sm-inline">{{
-								$t("components.organisms.TasksDashboardMain.tab.open")
-							}}</span>
+							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
+							<span class="d-none d-sm-inline">{{ tabOneHeader.title }}</span>
 						</v-tab>
 						<v-tab>
-							<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-							<span class="d-none d-sm-inline">{{
-								$t("components.organisms.TasksDashboardMain.tab.completed")
-							}}</span>
+							<v-icon class="tab-icon mr-3">{{ tabTwoHeader.icon }}</v-icon>
+							<span class="d-none d-sm-inline">{{ tabTwoHeader.title }}</span>
 						</v-tab>
 					</v-tabs>
 				</div>
@@ -32,7 +28,7 @@
 				@selected-item="filterByCourse"
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
-			<tasks-dashboard-teacher v-else />
+			<tasks-dashboard-teacher v-else :tab.sync="tab" />
 		</div>
 	</default-wireframe>
 </template>
@@ -67,11 +63,14 @@ export default {
 	computed: {
 		...mapGetters("tasks", {
 			status: "getStatus",
-			tasks: "getTasks",
 			hasNoTasks: "hasNoTasks",
-			hasNoOpenTasks: "hasNoOpenTasks",
+			hasNoOpenTasksStudent: "hasNoOpenTasksStudent",
+			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
+			hasNoDrafts: "hasNoDrafts",
 			courses: "getCourses",
+			tasksCountStudent: "getTasksCountPerCourseStudent",
+			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -79,9 +78,16 @@ export default {
 		isFilterDisabled: function () {
 			if (this.selectedCourses.length > 0) return false;
 
-			if (this.tab === 0 && this.hasNoOpenTasks) {
+			const tabOneIsEmpty =
+				this.role === "student"
+					? this.hasNoOpenTasksStudent
+					: this.hasNoOpenTasksTeacher;
+			const tabTwoIsEmpty =
+				this.role === "student" ? this.hasNoCompletedTasks : this.hasNoDrafts;
+
+			if (this.tab === 0 && tabOneIsEmpty) {
 				return true;
-			} else if (this.tab === 1 && this.hasNoCompletedTasks) {
+			} else if (this.tab === 1 && tabTwoIsEmpty) {
 				return true;
 			} else {
 				return false;
@@ -90,11 +96,45 @@ export default {
 		hasTasks: function () {
 			return !this.hasNoTasks;
 		},
+		noCourseName: function () {
+			return this.$t("pages.tasks.labels.noCourse");
+		},
 		coursesWithTaskCount: function () {
-			return this.courses.map((courseName) => ({
-				value: courseName,
-				text: `${courseName} (${this.getTaskCount(courseName)})`,
-			}));
+			return this.courses.map((courseName) => {
+				if (!courseName) {
+					return {
+						value: "",
+						text: `${this.noCourseName} (${this.getTaskCount(courseName)})`,
+					};
+				}
+
+				return {
+					value: courseName,
+					text: `${courseName} (${this.getTaskCount(courseName)})`,
+				};
+			});
+		},
+		tabOneHeader: function () {
+			return {
+				icon: "$taskOpenFilled",
+				title: this.$t("components.organisms.TasksDashboardMain.tab.open"),
+			};
+		},
+		tabTwoHeader: function () {
+			const tabTwo = {};
+			if (this.isStudent) {
+				tabTwo.icon = "$taskDoneFilled";
+				tabTwo.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.completed"
+				);
+			} else {
+				tabTwo.icon = "$taskDraft";
+				tabTwo.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.drafts"
+				);
+			}
+
+			return tabTwo;
 		},
 	},
 	mounted() {
@@ -105,24 +145,23 @@ export default {
 			this.$store.commit("tasks/setFilter", this.selectedCourses);
 		},
 		getTaskCount(courseName) {
-			let { tasks } = this;
-
 			if (this.isStudent) {
 				if (this.tab === 0) {
-					tasks = tasks.filter(
-						(task) => task.status.submitted === 0 && task.status.graded === 0
-					);
+					return this.tasksCountStudent.open[courseName];
 				}
 				if (this.tab === 1) {
-					tasks = tasks.filter(
-						(task) => task.status.submitted >= 1 || task.status.graded >= 1
-					);
+					return this.tasksCountStudent.completed[courseName];
 				}
 			}
 
-			return tasks.filter((task) => {
-				return task.courseName === courseName;
-			}).length;
+			if (!this.isStudent) {
+				if (this.tab === 0) {
+					return this.tasksCountTeacher.open[courseName];
+				}
+				if (this.tab === 1) {
+					return this.tasksCountTeacher.drafts[courseName];
+				}
+			}
 		},
 	},
 };
@@ -145,6 +184,8 @@ export default {
 }
 
 .v-tab {
+	flex-basis: 50%;
+	flex-grow: 1;
 	font-size: var(--text-base-size);
 	text-transform: none !important;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);

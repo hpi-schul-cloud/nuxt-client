@@ -6,105 +6,6 @@
 	Do not tamper with this data.
 */
 
-// not submitted, not graded, includes withoutDueDate, withDueDate & overDue
-export const openTasks = [
-	{
-		id: "59cce4c3c6abf042248e888e",
-		_id: "59cce4c3c6abf042248e888e",
-		name: "Private Aufgabe von Cord - mit Kurs, offen",
-		duedate: "2300-06-11T14:00:00.000Z",
-		courseName: "Mathe",
-		createdAt: "2017-09-28T12:02:11.432Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-	{
-		id: "59cce352c6abf042248e888c",
-		_id: "59cce352c6abf042248e888c",
-		name: "zu archivierende Aufgabe von Marla",
-		duedate: "2017-06-07T09:30:00.000Z",
-		courseName: "Chemie",
-		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-	{
-		id: "59cce3f6c6abf042248e888d",
-		_id: "59cce3f6c6abf042248e888d",
-		name: "Aufgabe an Marla (Mathe) - offen",
-		duedate: "2300-09-28T15:00:00.000Z",
-		courseName: "Mathe",
-		createdAt: "2017-09-28T11:58:46.601Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-	{
-		id: "59cce2c61113d1132c98dc06",
-		_id: "59cce2c61113d1132c98dc06",
-		name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
-		duedate: "2017-07-28T13:00:00.000Z",
-		courseName: "Chemie",
-		createdAt: "2017-09-28T11:49:39.924Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-	{
-		id: "59cce6c6d5e50214e47b601d",
-		_id: "59cce6c6d5e50214e47b601d",
-		name: "Archivierte Aufgaben von Cord - mit Kurs, offen",
-		duedate: "2300-10-25T15:00:00.000Z",
-		courseName: "Mathe",
-		createdAt: "2017-09-28T12:10:46.180Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-	{
-		id: "59cce1d381297026d02cdc4b",
-		_id: "59cce1d381297026d02cdc4b",
-		name: "Private Aufgabe von Marla - mit Kurs, offen",
-		duedate: "2300-09-28T13:00:00.000Z",
-		courseName: "Mathe",
-		createdAt: "2017-09-28T11:49:39.924Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-	{
-		id: "59cce4171113d1132c98dc07",
-		_id: "59cce4171113d1132c98dc07",
-		name: "Aufgabe an Marla (Mathe) - abgelaufen",
-		duedate: "2017-07-28T15:00:00.000Z",
-		courseName: "Mathe",
-		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-	{
-		id: "59cce4171113d1132c98dc08",
-		_id: "59cce4171113d1132c98dc08",
-		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
-		courseName: "Mathe",
-		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-		},
-	},
-];
-
 export const overDueTasks = [
 	{
 		id: "59cce4171113d1132c98dc07",
@@ -116,6 +17,7 @@ export const overDueTasks = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -128,6 +30,7 @@ export const overDueTasks = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -135,11 +38,12 @@ export const overDueTasks = [
 		_id: "59cce352c6abf042248e888c",
 		name: "zu archivierende Aufgabe von Marla",
 		duedate: "2017-06-07T09:30:00.000Z",
-		courseName: "Mathe",
+		courseName: "Chemie",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -154,6 +58,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -166,6 +71,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -178,6 +84,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -190,6 +97,7 @@ export const openTasksWithDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -203,6 +111,7 @@ export const openTasksWithoutDueDate = [
 		status: {
 			submitted: 0,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -219,6 +128,7 @@ export const submittedTasks = [
 		status: {
 			submitted: 1,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -235,6 +145,7 @@ export const missedButGradedTasks = [
 		status: {
 			submitted: 0,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 ];
@@ -251,6 +162,7 @@ export const gradedTasks = [
 		status: {
 			submitted: 1,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 	{
@@ -264,12 +176,17 @@ export const gradedTasks = [
 		status: {
 			submitted: 0,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 ];
 
+export const openTasks = [
+	...openTasksWithDueDate,
+	...overDueTasks,
+	...openTasksWithoutDueDate,
+];
 export const completedTasks = [...submittedTasks, ...gradedTasks];
-
 export const tasks = [...openTasks, ...completedTasks];
 
 export const invalidTasks = [
@@ -321,6 +238,7 @@ export const overDueTasksTeacher = [
 			submitted: 1,
 			maxSubmissions: 1,
 			graded: 1,
+			isDraft: false,
 		},
 	},
 	{
@@ -334,6 +252,7 @@ export const overDueTasksTeacher = [
 			submitted: 5,
 			maxSubmissions: 15,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -347,6 +266,7 @@ export const overDueTasksTeacher = [
 			submitted: 10,
 			maxSubmissions: 10,
 			graded: 9,
+			isDraft: false,
 		},
 	},
 ];
@@ -363,6 +283,7 @@ export const dueDateTasksTeacher = [
 			submitted: 0,
 			maxSubmissions: 1,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -376,6 +297,7 @@ export const dueDateTasksTeacher = [
 			submitted: 10,
 			maxSubmissions: 15,
 			graded: 7,
+			isDraft: false,
 		},
 	},
 	{
@@ -389,6 +311,7 @@ export const dueDateTasksTeacher = [
 			submitted: 3,
 			maxSubmissions: 15,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 	{
@@ -402,6 +325,7 @@ export const dueDateTasksTeacher = [
 			submitted: 10,
 			maxSubmissions: 12,
 			graded: 4,
+			isDraft: false,
 		},
 	},
 ];
@@ -417,6 +341,7 @@ export const noDueDateTasksTeacher = [
 			submitted: 1,
 			maxSubmissions: 1,
 			graded: 0,
+			isDraft: false,
 		},
 	},
 ];
@@ -427,8 +352,62 @@ export const tasksTeacher = [
 	...noDueDateTasksTeacher,
 ];
 
+export const drafts = [
+	{
+		id: "59cce2c61113d1132c98dcw2",
+		_id: "59cce2c61113d1132c98dcw2",
+		name: "Der Buchstabe O",
+		courseName: "Deutsch",
+		createdAt: "2017-09-28T11:49:39.924Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 1,
+			graded: 0,
+			isDraft: true,
+		},
+	},
+	{
+		id: "59ccr252c6abf042248e888c",
+		_id: "59ccr252c6abf042248e888c",
+		name: "Das 1x1",
+		courseName: "",
+		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 1,
+			graded: 0,
+			isDraft: true,
+		},
+	},
+	{
+		id: "59ccr252c6t5f042248e888c",
+		_id: "59ccr252c6t5f042248e888c",
+		name: "Aufgabe ohne Kurs",
+		courseName: "",
+		createdAt: "2017-09-28T11:56:02.897Z",
+		status: {
+			submitted: 0,
+			maxSubmissions: 1,
+			graded: 0,
+			isDraft: true,
+		},
+	},
+];
+
+export const allTasksTeacher = [...tasksTeacher, ...drafts];
+
 export const coursesStudent = ["Mathe", "Chemie", "Biologie"];
-export const coursesTeacher = ["Mathe", "Deutsch"];
+export const coursesTeacher = ["Mathe", "Deutsch", ""];
+
+export const tasksCountStudent = {
+	open: { Mathe: 7, Chemie: 1, Biologie: 0 },
+	completed: { Mathe: 2, Chemie: 0, Biologie: 1 },
+};
+
+export const tasksCountTeacher = {
+	open: { Mathe: 5, Deutsch: 3, "": 0 },
+	drafts: { Mathe: 0, Deutsch: 1, "": 2 },
+};
 
 export const mathTasks = [
 	{
