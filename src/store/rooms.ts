@@ -8,11 +8,6 @@ import {
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 
-type Pos = {
-	xPosition: number;
-	yPosition: number;
-};
-
 type RoomsData = {
 	id: string;
 	title: string;
@@ -23,8 +18,14 @@ type RoomsData = {
 };
 
 type DroppedObject = {
-	from: string;
-	to: string;
+	from: {
+		x: number;
+		y: number;
+	};
+	to: {
+		x: number;
+		y: number;
+	};
 	item: object;
 };
 
@@ -64,14 +65,14 @@ export class Rooms extends VuexModule {
 
 	@Mutation
 	setPosition(droppedComponent: DroppedObject | any): void {
-		const to = droppedComponent.to.split("-");
+		const { to } = droppedComponent;
 		const itemToBeChanged = this.roomsData.find(
 			(item) => item.id == droppedComponent.item.id
 		);
 
 		if (itemToBeChanged) {
-			itemToBeChanged.xPosition = to[1];
-			itemToBeChanged.yPosition = to[0];
+			itemToBeChanged.xPosition = to.x;
+			itemToBeChanged.yPosition = to.y;
 		}
 	}
 
@@ -94,7 +95,6 @@ export class Rooms extends VuexModule {
 	@Action
 	async fetch(device: string): Promise<void> {
 		// device parameter will be used to fetch data specified for device
-
 		this.setLoading(true);
 		try {
 			const fetched = await $axios.$get("/v3/dashboard/");
@@ -109,30 +109,21 @@ export class Rooms extends VuexModule {
 	}
 
 	@Action
-	async align(droppedComponent: DroppedObject | any = {}): Promise<void> {
-		const arrFrom = droppedComponent.from.split("-");
-		const arrTo = droppedComponent.to.split("-");
-
+	async align(payload: DroppedObject): Promise<void> {
+		const { from, to } = payload;
 		const reqObject = {
-			from: {
-				x: arrFrom[1],
-				y: arrFrom[0],
-			},
-			to: {
-				x: arrTo[1],
-				y: arrTo[0],
-			},
+			from,
+			to,
 		};
 
-		this.setPosition(droppedComponent);
 		this.setLoading(true);
 		try {
 			const data = await $axios.$patch(
 				`/v3/dashboard/${this.gridElementsId}/moveElement`,
 				reqObject
 			);
+			this.setPosition(payload);
 			this.setRoomData(data.gridElements);
-
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
