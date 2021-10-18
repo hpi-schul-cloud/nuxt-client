@@ -1,6 +1,6 @@
 <template>
 	<a id="skiplink" tabindex="0" class="skip-link" href="#main-content">
-		Zum Hauptinhalt wechseln
+		{{ $t("global.skipLink.mainContent") }}
 	</a>
 </template>
 
