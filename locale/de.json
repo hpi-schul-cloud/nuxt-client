@@ -177,6 +177,7 @@
 	"format.dateTimeYY": "DD.MM.YY HH:mm",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.time": "HH:mm",
+	"global.skipLink.mainContent": "Zum Hauptinhalt wechseln",
 	"global.sidebar.addons": "Add-ons",
 	"global.sidebar.calendar": "Termine",
 	"global.sidebar.classes": "Klassen",

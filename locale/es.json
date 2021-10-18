@@ -175,6 +175,7 @@
 	"format.dateTime": "MM/DD/YYYY HH:mm",
 	"format.dateTimeYY": "MM/DD/YY HH:mm",
 	"format.time": "HH:mm",
+	"global.skipLink.mainContent": "Skip to main content",
 	"global.sidebar.addons": "Complementos",
 	"global.sidebar.calendar": "Calendario",
 	"global.sidebar.classes": "Clases",
