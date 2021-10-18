@@ -306,7 +306,7 @@
 	"pages.administration.ldap.classes.notice.title": "Attribut Anzeigename",
 	"pages.administration.ldap.classes.participant.title": "Attribut Teilnehmer",
 	"pages.administration.ldap.classes.path.info": "Relativer Pfad vom Basis-Pfad",
-	"pages.administration.ldap.classes.path.subtitle": "Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Mit Hilfe von zwei Semikolons (;;) hast du die Möglichkeit, mehrere Nutzerpfade getrennt voneinander zu hinterlegen.",
+	"pages.administration.ldap.classes.path.subtitle": "Hier musst du festlegen, wo wir Klassen finden und wie diese strukturiert sind. Durch das Hinzufügen von zwei Semikolons (;;) können mehrere Nutzerpfade getrennt voneinander hinterlegt werden.",
 	"pages.administration.ldap.classes.path.title": "Klassen-Pfad(e)",
 	"pages.administration.ldap.classes.activate.import": "Klassenimport aktivieren",
 	"pages.administration.ldap.classes.subtitle": "Geben Sie das Klassenattribut an, in dem die folgenden Informationen in Ihrem LDAP verfügbar sind.",
