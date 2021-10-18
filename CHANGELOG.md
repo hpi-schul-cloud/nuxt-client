@@ -10,7 +10,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
-- BC-402, BC-410 - remove label `run unstable tests` and split e2e with reusable workflow
+- BC-402 BC-410 - split e2e, wait for build, reusable e2e workflow, remove label trigger
 - BC-428 - bug-adjust-tint-for International
 
 ### Changed
