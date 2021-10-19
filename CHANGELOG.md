@@ -10,6 +10,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [26.13.0] - 2021-10-19
+
+### Added
+
 - BC-428 - bug-adjust-tint-for International
 
 ### Changed
@@ -35,6 +43,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-397 - replaced base inputs in the user creation form with vuetify components
 
 ### Fixed
+
+- BC-381 - fixed color of menu items in the sidebar
 
 ### Security
 
