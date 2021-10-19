@@ -10,6 +10,14 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [26.13.0] - 2021-10-19
+
+### Added
+
 - BC-428 - bug-adjust-tint-for International
 
 ### Changed
