@@ -1,5 +1,5 @@
 <template>
-	<a id="skiplink" tabindex="0" class="skip-link" href="#main-content">
+	<a id="skip-link" tabindex="0" class="skip-link" href="#main-content">
 		{{ $t("global.skipLink.mainContent") }}
 	</a>
 </template>
