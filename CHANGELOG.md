@@ -44,6 +44,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Fixed
 
+- BC-381 - fixed color of menu items in the sidebar
+
 ### Security
 
 - BC-296 - updated dependencies with high severity security issues
