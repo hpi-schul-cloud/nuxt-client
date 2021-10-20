@@ -171,10 +171,18 @@ export default {
 			});
 
 			return sidebarItems.map((item) => {
-				const isActive = this.$route.path.includes(item.href);
-				item.childActive = item.children
-					? item.children.some((child) => this.$route.path.includes(child.href))
-					: false;
+				const isActive =
+					this.$route.path.includes(item.href) ||
+					this.$route.path.includes(item.to);
+				item.childActive = false;
+				if (item.children) {
+					item.children.forEach((childItem) => {
+						childItem.active =
+							this.$route.path.includes(childItem.href) ||
+							this.$route.path.includes(childItem.to);
+						item.childActive = item.childActive || childItem.active;
+					});
+				}
 				item.active = isActive && !item.childActive;
 
 				return item;
