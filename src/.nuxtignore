@@ -2,5 +2,5 @@
 store/*.unit.js
 store/*.unit.ts
 
-*.unit.ts
-*.unit.js
+**/*.unit.ts
+**/*.unit.js
