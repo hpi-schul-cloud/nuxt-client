@@ -1,4 +1,4 @@
-FROM node:lts as builder
+FROM node:16.11.1 as builder
 
 ENV NUXT_TELEMETRY_DISABLED=1
 ARG SC_THEME=default
