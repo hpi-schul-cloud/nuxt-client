@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-392 - added skip to main content link (accessibility feature)
+
 ### Changed
 
 ### Fixed
@@ -19,7 +21,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-428 - bug-adjust-tint-for International
-- BC-392 - added skip to main content link (accessibility feature)
 
 ### Changed
 
