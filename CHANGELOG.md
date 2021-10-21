@@ -42,6 +42,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-382 - fixing error in 'removeSystem' method for new school-settings page
 - BC-397 - replaced base inputs in the user creation form with vuetify components
 - BC-21 - use generated api client for news
+- BC-379 - updated the engine version to node 16 and npm 8
 
 ### Fixed
 
