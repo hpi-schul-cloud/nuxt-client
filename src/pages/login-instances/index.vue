@@ -73,7 +73,7 @@ export default {
 	},
 	head() {
 		return {
-			title: "HPI Schul-Cloud",
+			title: "dBildungscloud",
 		};
 	},
 };
