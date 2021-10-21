@@ -475,4 +475,80 @@ describe("RoomPage", () => {
 			expectedPayload
 		);
 	});
+
+	it("should call 'setDropElement' method for grouping after ungroup action", async () => {
+		const wrapper = await mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "desktop",
+			},
+		});
+
+		const expectedPayload = {
+			to: {
+				x: 4,
+				y: 4,
+			},
+			item: {
+				id: "5",
+				title: "Math 7a",
+				displayColor: "yellow",
+			},
+			from: {
+				x: -1,
+				y: -1,
+			},
+			group: {
+				groupIndex: 0,
+				id: "4",
+			},
+		};
+
+		await wrapper.setData({
+			groupDialog: {
+				isOpen: true,
+				groupData: {
+					id: "4",
+					title: "Fourth",
+					shortTitle: "Bi",
+					displayColor: "#EC407A",
+					url: "/api/xxxx/1234w",
+					xPosition: 2,
+					yPosition: 4,
+					groupElements: [
+						{
+							id: "5",
+							title: "Math 7a",
+							displayColor: "yellow",
+						},
+					],
+				},
+			},
+		});
+
+		const groupAvatarComponent = wrapper.findComponent({ ref: "index-0" });
+		groupAvatarComponent.trigger("dragstart");
+
+		await wrapper.vm.$nextTick();
+
+		expect(
+			wrapper.vm.$refs["index-0"][0].$options["_componentTag"]
+		).toStrictEqual("vRoomAvatar");
+		expect(wrapper.vm.$refs["2-4"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
+
+		const emptyAvatarComponent = wrapper.findComponent({ ref: "4-4" });
+		emptyAvatarComponent.trigger("drop");
+
+		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
+		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
+		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
+			expectedPayload
+		);
+	});
 });

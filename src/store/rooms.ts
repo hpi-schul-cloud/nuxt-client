@@ -26,6 +26,10 @@ type DroppedObject = {
 		x: number;
 		y: number;
 	};
+	group?: {
+		id: string;
+		groupIndex: number;
+	};
 	item: object;
 };
 
@@ -110,11 +114,17 @@ export class Rooms extends VuexModule {
 
 	@Action
 	async align(payload: DroppedObject): Promise<void> {
-		const { from, to } = payload;
+		const { from, to, group } = payload;
 		const reqObject = {
 			from,
 			to,
 		};
+
+		const url = group
+			? `/v3/dashboard/${this.gridElementsId}/moveElement/${group.id}/${group.groupIndex}`
+			: `/v3/dashboard/${this.gridElementsId}/moveElement`;
+
+		console.log("%crooms.ts line:127 url", "color: #007acc;", url); // TODO: remove
 
 		this.setLoading(true);
 		try {

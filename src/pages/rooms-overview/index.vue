@@ -42,7 +42,11 @@
 				</div>
 			</v-col>
 		</v-row>
-		<vCustomDialog v-model="groupDialog.isOpen" class="custom-dialog">
+		<vCustomDialog
+			ref="custom-dialog"
+			v-model="groupDialog.isOpen"
+			class="custom-dialog"
+		>
 			<div slot="title">
 				<h2 class="text-h4 my-2">
 					{{ groupDialog.groupData.title }}
@@ -51,17 +55,20 @@
 			<template slot="content">
 				<v-row class="d-flex justify-center ma-1">
 					<v-col
-						v-for="item in groupDialog.groupData.groupElements"
+						v-for="(item, index) in groupDialog.groupData.groupElements"
 						:key="item.id"
 						class="d-flex justify-center"
 						:cols="maxItem"
 					>
 						<vRoomAvatar
+							:ref="`index-${index}`"
 							:item="item"
-							:size="(dimensions.cellWidth * ratios.itemRatio) / 2"
+							:size="dimensions.cellWidth * ratios.itemRatio"
+							:is-group-avatar-list="true"
 							:show-badge="true"
-							class="rounded-xl"
+							class="rounded-xl dialog-avatar"
 							show-sub-title
+							@startDrag="dragFromGroup"
 						></vRoomAvatar>
 					</v-col>
 				</v-row>
@@ -177,17 +184,30 @@ export default {
 		},
 		async setDropElement(pos) {
 			this.draggedElement.to = pos;
-			const fromElementName = this.getElementNameByRef(
-				this.draggedElement.from
-			);
+			const groupIndex = this.getGroupElementIndex();
+
+			if (groupIndex != -1) {
+				this.draggedElement.group = {
+					groupIndex,
+					id: this.groupDialog.groupData.id,
+				};
+			}
+
+			const fromElementName =
+				groupIndex == -1
+					? this.getElementNameByRef(this.draggedElement.from)
+					: "groupItem";
 			const toElementName = this.getElementNameByRef(pos);
 
 			if (
-				(fromElementName == "vRoomAvatar" || "vRoomGroupAvatar") &&
+				(fromElementName == "vRoomAvatar" ||
+					"vRoomGroupAvatar" ||
+					"groupItem") &&
 				toElementName == "vRoomEmptyAvatar"
 			) {
 				await RoomsModule.align(this.draggedElement);
 				this.roomsData = RoomsModule.getRoomsData;
+				delete this.draggedElement.group;
 			}
 			this.showDeleteSection = false;
 		},
@@ -225,6 +245,11 @@ export default {
 		getElementNameByRef(pos) {
 			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
 		},
+		dragFromGroup(element, pos) {
+			this.groupDialog.isOpen = false;
+			this.draggedElement.from = pos;
+			this.draggedElement.item = element;
+		},
 		deleteAvatar() {
 			// TODO: delete event will be here
 			this.showDeleteSection = false;
@@ -233,6 +258,15 @@ export default {
 			this.roomsData = this.roomsData.filter(
 				(item) => item.id !== this.draggedElement.item.id
 			);
+		},
+		getGroupElementIndex() {
+			return this.groupDialog.groupData.id
+				? this.roomsData
+						.find((item) => item.id == this.groupDialog.groupData.id)
+						.groupElements.findIndex(
+							(groupItem) => groupItem.id == this.draggedElement.item.id
+						)
+				: -1;
 		},
 	},
 };
