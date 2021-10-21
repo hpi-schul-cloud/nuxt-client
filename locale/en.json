@@ -615,7 +615,7 @@
 	"pages.impressum.title": "Imprint",
 	"pages.loginInstances.brb_link": "https://brandenburg.cloud/login",
 	"pages.loginInstances.bundesland": "In which state would you like to log in?",
-	"pages.loginInstances.hpi_link": "https://dbildungscloud.de/login",
+	"pages.loginInstances.dbildungscloud_link": "https://dbildungscloud.de/login",
 	"pages.loginInstances.login": "Login",
 	"pages.loginInstances.mintec_link": "https://dbildungscloud.de/login",
 	"pages.loginInstances.n21_link": "https://niedersachsen.cloud/login",

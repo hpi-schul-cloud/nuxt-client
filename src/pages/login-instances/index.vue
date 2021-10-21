@@ -54,7 +54,7 @@ export default {
 				},
 				{
 					icon: "dBildungscloud",
-					url: this.$t("pages.loginInstances.hpi_link"),
+					url: this.$t("pages.loginInstances.dbildungscloud_link"),
 				},
 				{
 					icon: "open_HPI",

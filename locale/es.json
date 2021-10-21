@@ -629,7 +629,7 @@
 	"pages.impressum.title": "Impresión",
 	"pages.loginInstances.brb_link": "https://brandenburg.cloud/login",
 	"pages.loginInstances.bundesland": "¿En qué provincia le gustaría iniciar sesión?",
-	"pages.loginInstances.hpi_link": "https://dbildungscloud.de/login",
+	"pages.loginInstances.dbildungscloud_link": "https://dbildungscloud.de/login",
 	"pages.loginInstances.login": "Iniciar sesión",
 	"pages.loginInstances.mintec_link": "https://dbildungscloud.de/login",
 	"pages.loginInstances.n21_link": "https://niedersachsen.cloud/login",
