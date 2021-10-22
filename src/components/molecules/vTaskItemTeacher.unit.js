@@ -84,4 +84,23 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 			expect(validator(task)).toBe(true);
 		});
 	});
+
+	it("should display topic", () => {
+		const wrapper = mount(vTaskItemTeacher, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: {
+				task: drafts[1],
+			},
+		});
+		const localThis = { task: drafts[1] };
+		const localThis2 = { task: drafts[0] };
+
+		expect(vTaskItemTeacher.computed.hasTopic.call(localThis2)).toBe(true);
+		expect(vTaskItemTeacher.computed.hasTopic.call(localThis)).toBe(false);
+		expect(wrapper.text()).toStrictEqual(expect.not.stringContaining("Thema "));
+	});
 });

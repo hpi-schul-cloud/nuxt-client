@@ -14,6 +14,9 @@
 				}}
 			</v-list-item-subtitle>
 			<v-list-item-title v-text="task.name" />
+			<v-list-item-subtitle v-if="hasTopic" class="d-inline-flex">
+				<span class="text-truncate">{{ topic }}</span>
+			</v-list-item-subtitle>
 			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
 				<i18n path="components.molecules.VTaskItemTeacher.status">
 					<template #submitted>{{ task.status.submitted }}</template>
@@ -78,6 +81,12 @@ export default {
 		},
 		courseName() {
 			return this.task.courseName || this.$t("pages.tasks.labels.noCourse");
+		},
+		hasTopic() {
+			return !!this.task.description
+		},
+		topic() {
+			return `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`;
 		},
 	},
 	methods: {

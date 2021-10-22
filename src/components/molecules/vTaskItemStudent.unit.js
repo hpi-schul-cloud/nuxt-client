@@ -146,4 +146,21 @@ describe("@components/molecules/vTaskItemStudent", () => {
 			expect(validator(task)).toBe(false);
 		});
 	});
+
+	it("should display topic", () => {
+		const wrapper = mount(vTaskItemStudent, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: {
+				task: openTasksWithDueDate[0],
+			},
+		});
+		const localThis = { task: openTasksWithDueDate[0] };
+
+		expect(vTaskItemStudent.computed.hasTopic.call(localThis)).toBe(true);
+		expect(wrapper.text()).toContain("Thema Malen nach Zahlen");
+	});
 });

@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-501 - displaying topic name in task overview
+
 ### Changed
 
 ### Fixed
