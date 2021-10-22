@@ -46,6 +46,7 @@
 			ref="custom-dialog"
 			v-model="groupDialog.isOpen"
 			class="custom-dialog"
+			@dialog-closed="groupDialog.groupData = {}"
 		>
 			<div slot="title">
 				<h2 class="text-h4 my-2">
@@ -118,6 +119,7 @@ export default {
 				to: null,
 			},
 			showDeleteSection: false,
+			draggedElementName: "",
 		};
 	},
 	computed: {
@@ -132,7 +134,7 @@ export default {
 		},
 	},
 	async created() {
-		await RoomsModule.fetch(); // this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.roomsData = RoomsModule.getRoomsData;
 		this.getDeviceDims();
 	},
@@ -181,74 +183,62 @@ export default {
 			this.draggedElement.to = null;
 			this.draggedElement.item = element;
 			this.showDeleteSection = true;
+			this.draggedElementName = this.getElementNameByRef(pos);
 		},
-		async setDropElement(pos) {
+		setDropElement(pos) {
 			this.draggedElement.to = pos;
-			const groupIndex = this.getGroupElementIndex();
-
-			if (groupIndex != -1) {
-				this.draggedElement.group = {
-					groupIndex,
-					id: this.groupDialog.groupData.id,
-				};
-			}
-
-			const fromElementName =
-				groupIndex == -1
-					? this.getElementNameByRef(this.draggedElement.from)
-					: "groupItem";
 			const toElementName = this.getElementNameByRef(pos);
 
 			if (
-				(fromElementName == "vRoomAvatar" ||
+				(this.draggedElementName == "vRoomAvatar" ||
 					"vRoomGroupAvatar" ||
 					"groupItem") &&
 				toElementName == "vRoomEmptyAvatar"
 			) {
-				await RoomsModule.align(this.draggedElement);
-				this.roomsData = RoomsModule.getRoomsData;
-				delete this.draggedElement.group;
+				this.savePosition();
 			}
 			this.showDeleteSection = false;
 		},
-		async setGroupElements(pos) {
+		setGroupElements(pos) {
 			this.draggedElement.to = pos;
-			const fromElementName = this.getElementNameByRef(
-				this.draggedElement.from
-			);
-			const toElementName = this.getElementNameByRef(pos);
-
-			if (this.draggedElement.from == pos) return;
-
-			if (fromElementName == "vRoomAvatar" && toElementName == "vRoomAvatar") {
-				await RoomsModule.align(this.draggedElement);
-				this.roomsData = RoomsModule.getRoomsData;
-			}
-		},
-		async addGroupElements(pos) {
-			this.draggedElement.to = pos;
-			const fromElementName = this.getElementNameByRef(
-				this.draggedElement.from
-			);
 			const toElementName = this.getElementNameByRef(pos);
 
 			if (this.draggedElement.from == pos) return;
 
 			if (
-				fromElementName == "vRoomAvatar" &&
+				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
+				toElementName == "vRoomAvatar"
+			) {
+				this.savePosition();
+			}
+		},
+		addGroupElements(pos) {
+			this.draggedElement.to = pos;
+			const toElementName = this.getElementNameByRef(pos);
+
+			if (this.draggedElement.from == pos) return;
+
+			if (
+				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
 				toElementName == "vRoomGroupAvatar"
 			) {
-				await RoomsModule.align(this.draggedElement);
-				this.roomsData = RoomsModule.getRoomsData;
+				this.savePosition();
 			}
 		},
 		getElementNameByRef(pos) {
 			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
 		},
-		dragFromGroup(element, pos) {
-			this.groupDialog.isOpen = false;
-			this.draggedElement.from = pos;
+		dragFromGroup(element) {
+			this.draggedElement.from = {
+				x: this.groupDialog.groupData.xPosition,
+				y: this.groupDialog.groupData.yPosition,
+				groupIndex: this.roomsData
+					.find((item) => item.id == this.groupDialog.groupData.id)
+					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
+			};
 			this.draggedElement.item = element;
+			this.draggedElementName = "groupItem";
+			this.groupDialog.isOpen = false;
 		},
 		deleteAvatar() {
 			// TODO: delete event will be here
@@ -259,14 +249,15 @@ export default {
 				(item) => item.id !== this.draggedElement.item.id
 			);
 		},
-		getGroupElementIndex() {
-			return this.groupDialog.groupData.id
-				? this.roomsData
-						.find((item) => item.id == this.groupDialog.groupData.id)
-						.groupElements.findIndex(
-							(groupItem) => groupItem.id == this.draggedElement.item.id
-						)
-				: -1;
+		setGroupElementIndex(elementId) {
+			return this.roomsData
+				.find((item) => item.id == this.groupDialog.groupData.id)
+				.groupElements.findIndex((groupItem) => groupItem.id == elementId);
+		},
+		async savePosition() {
+			await RoomsModule.align(this.draggedElement);
+			this.roomsData = RoomsModule.getRoomsData;
+			this.groupDialog.groupData = {};
 		},
 	},
 };
