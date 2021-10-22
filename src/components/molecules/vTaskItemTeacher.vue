@@ -83,7 +83,9 @@ export default {
 			return this.task.courseName || this.$t("pages.tasks.labels.noCourse");
 		},
 		topic() {
-			return this.task.description ? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}` : "";
+			return this.task.description
+				? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`
+				: "";
 		},
 	},
 	methods: {

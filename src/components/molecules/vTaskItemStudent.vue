@@ -86,7 +86,9 @@ export default {
 			return "#54616e";
 		},
 		topic() {
-			return this.task.description ? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}` : "";
+			return this.task.description
+				? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`
+				: "";
 		},
 	},
 	methods: {
