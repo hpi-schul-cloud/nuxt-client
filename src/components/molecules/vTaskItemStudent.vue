@@ -86,7 +86,7 @@ export default {
 			return "#54616e";
 		},
 		hasTopic() {
-			return !!this.task.description
+			return !!this.task.description;
 		},
 		topic() {
 			return `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`;

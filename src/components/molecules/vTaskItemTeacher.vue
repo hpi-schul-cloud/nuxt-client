@@ -83,7 +83,7 @@ export default {
 			return this.task.courseName || this.$t("pages.tasks.labels.noCourse");
 		},
 		hasTopic() {
-			return !!this.task.description
+			return !!this.task.description;
 		},
 		topic() {
 			return `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`;
