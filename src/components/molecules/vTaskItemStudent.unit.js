@@ -158,9 +158,7 @@ describe("@components/molecules/vTaskItemStudent", () => {
 				task: openTasksWithDueDate[0],
 			},
 		});
-		const localThis = { task: openTasksWithDueDate[0] };
 
-		expect(vTaskItemStudent.computed.hasTopic.call(localThis)).toBe(true);
 		expect(wrapper.text()).toContain("Thema Malen nach Zahlen");
 	});
 });

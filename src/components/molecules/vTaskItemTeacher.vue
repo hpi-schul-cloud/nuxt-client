@@ -14,7 +14,7 @@
 				}}
 			</v-list-item-subtitle>
 			<v-list-item-title v-text="task.name" />
-			<v-list-item-subtitle v-if="hasTopic" class="d-inline-flex">
+			<v-list-item-subtitle class="d-inline-flex">
 				<span class="text-truncate">{{ topic }}</span>
 			</v-list-item-subtitle>
 			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
@@ -82,11 +82,8 @@ export default {
 		courseName() {
 			return this.task.courseName || this.$t("pages.tasks.labels.noCourse");
 		},
-		hasTopic() {
-			return !!this.task.description;
-		},
 		topic() {
-			return `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`;
+			return this.task.description ? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}` : "";
 		},
 	},
 	methods: {
