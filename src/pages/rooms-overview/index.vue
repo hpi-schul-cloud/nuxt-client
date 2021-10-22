@@ -44,8 +44,24 @@
 		</v-row>
 		<vCustomDialog v-model="groupDialog.isOpen" class="custom-dialog">
 			<div slot="title">
-				<h2 class="text-h4 my-2">
+				<v-text-field
+					v-show="roomNameEditMode"
+					ref="roomNameInput"
+					v-model="groupDialog.groupData.title"
+					dense
+					:append-icon="mdiKeyboardReturn"
+					@blur="onUpdateRoomName"
+					@keyup.enter="onRoomNameInputEnter"
+				></v-text-field>
+				<h2
+					v-show="!roomNameEditMode"
+					class="text-h4 my-2"
+					tabindex="5"
+					@click="onEditRoom"
+					@focus="onEditRoom"
+				>
 					{{ groupDialog.groupData.title }}
+					<v-icon>{{ mdiPencil }}</v-icon>
 				</h2>
 			</div>
 			<template slot="content">
@@ -71,6 +87,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+import { mdiPencil, mdiKeyboardReturn } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
@@ -111,6 +129,9 @@ export default {
 				to: null,
 			},
 			showDeleteSection: false,
+			mdiPencil,
+			mdiKeyboardReturn,
+			roomNameEditMode: false,
 		};
 	},
 	computed: {
@@ -233,6 +254,22 @@ export default {
 			this.roomsData = this.roomsData.filter(
 				(item) => item.id !== this.draggedElement.item.id
 			);
+		},
+		async onEditRoom() {
+			this.roomNameEditMode = true;
+			await Vue.nextTick();
+			this.$refs.roomNameInput.focus();
+		},
+		onUpdateRoomName() {
+			RoomsModule.update(this.groupDialog.groupData);
+			this.roomNameEditMode = false;
+		},
+		/*
+			Calling onUpdateRoomName each on blur and enter results in calling in twice on pressing enter
+			@keyup.enter="$event.target.blur" results in Illegal invocation error
+		*/
+		onRoomNameInputEnter(event) {
+			event.target.blur();
 		},
 	},
 };

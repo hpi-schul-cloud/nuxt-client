@@ -386,6 +386,12 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
+    availableDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
     duedate: string;
     /**
      * 
@@ -393,6 +399,12 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     courseName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    description?: string;
     /**
      * 
      * @type {string}
@@ -423,6 +435,19 @@ export interface TaskResponse {
      * @memberof TaskResponse
      */
     status: object;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateGroupParams
+ */
+export interface UpdateGroupParams {
+    /**
+     * Title of the Group grid element
+     * @type {string}
+     * @memberof UpdateGroupParams
+     */
+    title?: string;
 }
 /**
  * 
@@ -476,10 +501,10 @@ export interface UserInfoResponse {
 }
 
 /**
- * DefaultApi - axios parameter creator
+ * DashboardApi - axios parameter creator
  * @export
  */
-export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
+export const DashboardApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -558,6 +583,238 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * 
+         * @param {string} id 
+         * @param {number} x 
+         * @param {number} y 
+         * @param {UpdateGroupParams} updateGroupParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerUpdateGroup: async (id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('dashboardControllerUpdateGroup', 'id', id)
+            // verify required parameter 'x' is not null or undefined
+            assertParamExists('dashboardControllerUpdateGroup', 'x', x)
+            // verify required parameter 'y' is not null or undefined
+            assertParamExists('dashboardControllerUpdateGroup', 'y', y)
+            // verify required parameter 'updateGroupParams' is not null or undefined
+            assertParamExists('dashboardControllerUpdateGroup', 'updateGroupParams', updateGroupParams)
+            const localVarPath = `/dashboard/{id}/element`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (x !== undefined) {
+                localVarQueryParameter['x'] = x;
+            }
+
+            if (y !== undefined) {
+                localVarQueryParameter['y'] = y;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateGroupParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DashboardApi - functional programming interface
+ * @export
+ */
+export const DashboardApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DashboardApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async dashboardControllerFindForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {MoveElementParams} moveElementParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerMoveElement(id, moveElementParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {number} x 
+         * @param {number} y 
+         * @param {UpdateGroupParams} updateGroupParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerUpdateGroup(id, x, y, updateGroupParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DashboardApi - factory interface
+ * @export
+ */
+export const DashboardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DashboardApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerFindForUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {MoveElementParams} moveElementParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {number} x 
+         * @param {number} y 
+         * @param {UpdateGroupParams} updateGroupParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerUpdateGroup(id, x, y, updateGroupParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DashboardApi - interface
+ * @export
+ * @interface DashboardApi
+ */
+export interface DashboardApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApiInterface
+     */
+    dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {MoveElementParams} moveElementParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApiInterface
+     */
+    dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {UpdateGroupParams} updateGroupParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApiInterface
+     */
+    dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any): AxiosPromise<DashboardResponse>;
+
+}
+
+/**
+ * DashboardApi - object-oriented interface
+ * @export
+ * @class DashboardApi
+ * @extends {BaseAPI}
+ */
+export class DashboardApi extends BaseAPI implements DashboardApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApi
+     */
+    public dashboardControllerFindForUser(options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerFindForUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {MoveElementParams} moveElementParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApi
+     */
+    public dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {UpdateGroupParams} updateGroupParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApi
+     */
+    public dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerUpdateGroup(id, x, y, updateGroupParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * DefaultApi - axios parameter creator
+ * @export
+ */
+export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
          * default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -597,26 +854,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async dashboardControllerFindForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {MoveElementParams} moveElementParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerMoveElement(id, moveElementParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
          * default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -636,24 +873,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = DefaultApiFp(configuration)
     return {
         /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerFindForUser(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {MoveElementParams} moveElementParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(axios, basePath));
-        },
-        /**
          * default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -671,24 +890,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  */
 export interface DefaultApiInterface {
     /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApiInterface
-     */
-    dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse>;
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {MoveElementParams} moveElementParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApiInterface
-     */
-    dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse>;
-
-    /**
      * default route to test public access
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -705,28 +906,6 @@ export interface DefaultApiInterface {
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public dashboardControllerFindForUser(options?: any) {
-        return DefaultApiFp(this.configuration).dashboardControllerFindForUser(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {MoveElementParams} moveElementParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any) {
-        return DefaultApiFp(this.configuration).dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * default route to test public access
      * @param {*} [options] Override http request option.

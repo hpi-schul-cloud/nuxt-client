@@ -7,6 +7,10 @@ import {
 } from "vuex-module-decorators";
 import { rootStore } from "./index";
 import { $axios } from "../utils/api";
+import {
+	DashboardApiFactory,
+	DashboardApiInterface,
+} from "../serverApi/v3/api";
 
 type RoomsData = {
 	id: string;
@@ -42,6 +46,7 @@ export class Rooms extends VuexModule {
 
 	loading: boolean = false;
 	error: null | {} = null;
+	private _dashboardApi?: DashboardApiInterface;
 
 	@Mutation
 	setRoomData(data: Array<RoomsData>): void {
@@ -88,8 +93,15 @@ export class Rooms extends VuexModule {
 		return this.error;
 	}
 
-	get getRoomsId(): {} | null {
+	get getRoomsId(): string {
 		return this.gridElementsId;
+	}
+
+	private get dashboardApi(): DashboardApiInterface {
+		if (!this._dashboardApi) {
+			this._dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
+		}
+		return this._dashboardApi;
 	}
 
 	@Action
@@ -135,7 +147,12 @@ export class Rooms extends VuexModule {
 	async update(payload: RoomsData): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO: update data
+			const response = await this.dashboardApi.dashboardControllerUpdateGroup(
+				this.getRoomsId,
+				payload.xPosition,
+				payload.yPosition,
+				{ title: payload.title }
+			);
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
