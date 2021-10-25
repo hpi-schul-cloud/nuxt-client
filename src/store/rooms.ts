@@ -147,7 +147,7 @@ export class Rooms extends VuexModule {
 	async update(payload: RoomsData): Promise<void> {
 		this.setLoading(true);
 		try {
-			const response = await this.dashboardApi.dashboardControllerUpdateGroup(
+			const response = await this.dashboardApi.dashboardControllerPatchGroup(
 				this.getRoomsId,
 				payload.xPosition,
 				payload.yPosition,
