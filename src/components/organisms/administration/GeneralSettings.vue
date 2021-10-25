@@ -197,18 +197,9 @@ export default {
 	},
 	watch: {
 		school: {
-			handler: function (newSchool, oldSchool) {
+			handler: function (newSchool) {
 				if (newSchool && newSchool.id) {
 					this.localSchool = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-					if (!oldSchool || !oldSchool.id) {
-						// fetch consents when the school is loaded and the school was not yet loaded
-						// if the school object gets a new reference (e.g. after updating it) do not reload the consents
-						this.fetchConsentVersions({
-							schoolId: newSchool.id,
-							consentTypes: "privacy",
-							withFile: true,
-						});
-					}
 				}
 			},
 			immediate: true,

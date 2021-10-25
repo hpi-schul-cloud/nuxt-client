@@ -12,6 +12,18 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+## [26.13.0] - 2021-10-19
+
+### Added
+
+- BC-428 - bug-adjust-tint-for International
+
+### Changed
+
+### Fixed
+
+- BC-393 - cleaned up some translations
+
 ## [26.12.1] - 2021-10-12
 
 ### Changed
@@ -25,14 +37,19 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-307 - design and content transformation HPI Schul-Cloud in dBildungscloud
 - BC-312 - added bottom border to headline of new DefaultWireframe and added it to task overview
 - BC-343 - run unstable e2e tests on label `run unstable tests`
+- BC-6 - showing drafts for teachers in new tab
+- BC-339 - grouping dashboard elements
 
 ### Changed
 
 - BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
 - BC-382 - fixing error in 'removeSystem' method for new school-settings page
 - BC-397 - replaced base inputs in the user creation form with vuetify components
+- BC-21 - use generated api client for news
 
 ### Fixed
+
+- BC-381 - fixed color of menu items in the sidebar
 
 ### Security
 

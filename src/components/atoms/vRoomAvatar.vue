@@ -1,7 +1,13 @@
 <template>
-	<div class="rounded-xl" draggable="true" @dragstart="startDragAvatar">
+	<div
+		class="rounded-xl"
+		:draggable="!groupAvatar"
+		@dragstart="startDragAvatar"
+		@drop.prevent="dropAvatar"
+		@dragover.prevent
+	>
 		<v-badge
-			class="ma-0 badge-component"
+			class="ma-0 badge-component rounded-xl"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
@@ -14,6 +20,8 @@
 				:size="size"
 				:class="groupAvatar ? 'rounded' : 'rounded-xl'"
 				@click="$emit('click', item)"
+				@dragleave="dragLeave"
+				@dragenter.prevent.stop="dragEnter"
 			>
 				<span :class="groupAvatar ? 'group-avatar' : 'single-avatar'">{{
 					avatarTitle
@@ -42,13 +50,15 @@ export default {
 		showBadge: {
 			type: Boolean,
 		},
+		// eslint-disable-next-line vue/require-default-prop
 		location: {
-			type: String,
-			default: "",
+			type: Object,
 		},
 	},
 	data() {
-		return {};
+		return {
+			hovered: false,
+		};
 	},
 	computed: {
 		avatarTitle() {
@@ -66,13 +76,21 @@ export default {
 		startDragAvatar() {
 			this.$emit("startDrag", this.item, this.location);
 		},
+		dragLeave() {
+			this.hovered = false;
+		},
+		dragEnter() {
+			this.hovered = true;
+		},
+		dropAvatar() {
+			this.$emit("drop", this.location);
+		},
 	},
 };
 </script>
 <style scoped>
 .v-avatar {
 	cursor: pointer;
-	border: 1px solid;
 }
 .single-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
