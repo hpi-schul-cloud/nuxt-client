@@ -12,7 +12,7 @@ import {
 	DashboardApiInterface,
 } from "../serverApi/v3/api";
 
-type RoomsData = {
+export type RoomsData = {
 	id: string;
 	title: string;
 	shortTitle: string;
@@ -153,6 +153,7 @@ export class Rooms extends VuexModule {
 				payload.yPosition,
 				{ title: payload.title }
 			);
+			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);

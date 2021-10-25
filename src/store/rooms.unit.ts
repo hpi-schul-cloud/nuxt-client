@@ -158,6 +158,39 @@ describe("rooms module", () => {
 					roomsData
 				);
 			});
+			it("handle error", async (done) => {
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					dashboardControllerPatchGroup: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+				const roomsModule = new Rooms({});
+
+				const roomsData: RoomsData = {
+					id: "dummyId",
+					title: "dummy title",
+					shortTitle: "dummy short title",
+					xPosition: 3,
+					yPosition: 3,
+					displayColor: "#FF0000",
+				};
+
+				roomsModule.update(roomsData).then(() => {
+					expect(roomsModule.getLoading).toBeFalsy();
+					expect(roomsModule.getError).toStrictEqual({ ...error });
+					done();
+				});
+				expect(roomsModule.getLoading).toBeTruthy();
+				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
+					roomsData
+				);
+			});
 		});
 	});
 
