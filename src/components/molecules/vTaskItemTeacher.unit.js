@@ -84,4 +84,19 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 			expect(validator(task)).toBe(true);
 		});
 	});
+
+	it("should display topic", () => {
+		const wrapper = mount(vTaskItemTeacher, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: {
+				task: drafts[1],
+			},
+		});
+
+		expect(wrapper.text()).toStrictEqual(expect.not.stringContaining("Thema "));
+	});
 });
