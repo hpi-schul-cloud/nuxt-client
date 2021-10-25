@@ -248,6 +248,19 @@ export enum NewsTargetModel {
 /**
  * 
  * @export
+ * @interface PatchGroupParams
+ */
+export interface PatchGroupParams {
+    /**
+     * Title of the Group grid element
+     * @type {string}
+     * @memberof PatchGroupParams
+     */
+    title: string;
+}
+/**
+ * 
+ * @export
  * @interface ResolvedUser
  */
 export interface ResolvedUser {
@@ -439,19 +452,6 @@ export interface TaskResponse {
 /**
  * 
  * @export
- * @interface UpdateGroupParams
- */
-export interface UpdateGroupParams {
-    /**
-     * Title of the Group grid element
-     * @type {string}
-     * @memberof UpdateGroupParams
-     */
-    title?: string;
-}
-/**
- * 
- * @export
  * @interface UpdateNewsParams
  */
 export interface UpdateNewsParams {
@@ -587,19 +587,19 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
          * @param {string} id 
          * @param {number} x 
          * @param {number} y 
-         * @param {UpdateGroupParams} updateGroupParams 
+         * @param {PatchGroupParams} patchGroupParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerUpdateGroup: async (id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options: any = {}): Promise<RequestArgs> => {
+        dashboardControllerPatchGroup: async (id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('dashboardControllerUpdateGroup', 'id', id)
+            assertParamExists('dashboardControllerPatchGroup', 'id', id)
             // verify required parameter 'x' is not null or undefined
-            assertParamExists('dashboardControllerUpdateGroup', 'x', x)
+            assertParamExists('dashboardControllerPatchGroup', 'x', x)
             // verify required parameter 'y' is not null or undefined
-            assertParamExists('dashboardControllerUpdateGroup', 'y', y)
-            // verify required parameter 'updateGroupParams' is not null or undefined
-            assertParamExists('dashboardControllerUpdateGroup', 'updateGroupParams', updateGroupParams)
+            assertParamExists('dashboardControllerPatchGroup', 'y', y)
+            // verify required parameter 'patchGroupParams' is not null or undefined
+            assertParamExists('dashboardControllerPatchGroup', 'patchGroupParams', patchGroupParams)
             const localVarPath = `/dashboard/{id}/element`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -632,7 +632,7 @@ export const DashboardApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateGroupParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(patchGroupParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -674,12 +674,12 @@ export const DashboardApiFp = function(configuration?: Configuration) {
          * @param {string} id 
          * @param {number} x 
          * @param {number} y 
-         * @param {UpdateGroupParams} updateGroupParams 
+         * @param {PatchGroupParams} patchGroupParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerUpdateGroup(id, x, y, updateGroupParams, options);
+        async dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerPatchGroup(id, x, y, patchGroupParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -715,12 +715,12 @@ export const DashboardApiFactory = function (configuration?: Configuration, base
          * @param {string} id 
          * @param {number} x 
          * @param {number} y 
-         * @param {UpdateGroupParams} updateGroupParams 
+         * @param {PatchGroupParams} patchGroupParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any): AxiosPromise<DashboardResponse> {
-            return localVarFp.dashboardControllerUpdateGroup(id, x, y, updateGroupParams, options).then((request) => request(axios, basePath));
+        dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerPatchGroup(id, x, y, patchGroupParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -754,12 +754,12 @@ export interface DashboardApiInterface {
      * @param {string} id 
      * @param {number} x 
      * @param {number} y 
-     * @param {UpdateGroupParams} updateGroupParams 
+     * @param {PatchGroupParams} patchGroupParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApiInterface
      */
-    dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any): AxiosPromise<DashboardResponse>;
+    dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse>;
 
 }
 
@@ -797,13 +797,13 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
      * @param {string} id 
      * @param {number} x 
      * @param {number} y 
-     * @param {UpdateGroupParams} updateGroupParams 
+     * @param {PatchGroupParams} patchGroupParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DashboardApi
      */
-    public dashboardControllerUpdateGroup(id: string, x: number, y: number, updateGroupParams: UpdateGroupParams, options?: any) {
-        return DashboardApiFp(this.configuration).dashboardControllerUpdateGroup(id, x, y, updateGroupParams, options).then((request) => request(this.axios, this.basePath));
+    public dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerPatchGroup(id, x, y, patchGroupParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
