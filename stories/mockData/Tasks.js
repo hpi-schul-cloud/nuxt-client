@@ -54,6 +54,7 @@ export const openTasksWithDueDate = [
 		name: "Private Aufgabe von Cord - mit Kurs, offen",
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
+		description: "Malen nach Zahlen",
 		createdAt: "2017-09-28T12:02:11.432Z",
 		status: {
 			submitted: 0,
@@ -358,6 +359,7 @@ export const drafts = [
 		_id: "59cce2c61113d1132c98dcw2",
 		name: "Der Buchstabe O",
 		courseName: "Deutsch",
+		description: "Das Alphabet",
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: {
 			submitted: 0,
@@ -371,6 +373,7 @@ export const drafts = [
 		_id: "59ccr252c6abf042248e888c",
 		name: "Das 1x1",
 		courseName: "",
+		description: "",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: {
 			submitted: 0,
