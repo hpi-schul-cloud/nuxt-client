@@ -10,9 +10,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
-### Changed
+- BC-501 - displaying topic name in task overview
 
-### Fixed
+### Changed
 
 ## [26.13.0] - 2021-10-19
 
@@ -25,6 +25,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Fixed
 
 - BC-393 - cleaned up some translations
+
+## [26.12.1] - 2021-10-12
+
+### Changed
+
+- BC-379 - hard-code node 14 and npm 6
 
 ## [26.12.0] - 2021-10-12
 
