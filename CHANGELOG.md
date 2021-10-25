@@ -14,19 +14,28 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
-### Fixed
+- BC-501 - displaying topic name in task overview
+
+### Changed
 
 ## [26.13.0] - 2021-10-19
 
 ### Added
 
 - BC-428 - bug-adjust-tint-for International
+- BC-495 - ungrouping dashboard elements for room overview
 
 ### Changed
 
 ### Fixed
 
 - BC-393 - cleaned up some translations
+
+## [26.12.1] - 2021-10-12
+
+### Changed
+
+- BC-379 - hard-code node 14 and npm 6
 
 ## [26.12.0] - 2021-10-12
 

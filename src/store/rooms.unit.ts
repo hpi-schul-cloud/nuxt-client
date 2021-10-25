@@ -1,4 +1,5 @@
-import { Rooms } from "./rooms";
+import { Rooms, RoomsData } from "./rooms";
+import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
 
@@ -119,6 +120,43 @@ describe("rooms module", () => {
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setRoomDataSpy).toHaveBeenCalled();
+			});
+		});
+
+		describe("update", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+			it("should call the backend", async (done) => {
+				const mockApi = {
+					dashboardControllerPatchGroup: jest.fn((groupToPatch) => ({
+						data: { ...groupToPatch },
+					})),
+				};
+				jest
+					.spyOn(serverApi, "DashboardApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.DashboardApiInterface
+					);
+				const roomsModule = new Rooms({});
+
+				const roomsData: RoomsData = {
+					id: "dummyId",
+					title: "dummy title",
+					shortTitle: "dummy short title",
+					xPosition: 3,
+					yPosition: 3,
+					displayColor: "#FF0000",
+				};
+
+				roomsModule.update(roomsData).then(() => {
+					expect(roomsModule.getLoading).toBeFalsy();
+					done();
+				});
+				expect(roomsModule.getLoading).toBeTruthy();
+				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
+					roomsData
+				);
 			});
 		});
 	});
