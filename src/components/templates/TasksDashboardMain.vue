@@ -21,7 +21,7 @@
 			<v-custom-autocomplete
 				v-if="hasTasks"
 				v-model="selectedCourses"
-				:items="coursesWithTaskCount"
+				:items="listOfFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
@@ -68,9 +68,10 @@ export default {
 			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
 			hasNoDrafts: "hasNoDrafts",
-			courses: "getCourses",
+			// courses: "getCourses",
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
+			filters: "getFilters",
 		}),
 		isStudent: function () {
 			return this.role === "student";
@@ -99,20 +100,33 @@ export default {
 		noCourseName: function () {
 			return this.$t("pages.tasks.labels.noCourse");
 		},
-		coursesWithTaskCount: function () {
-			return this.courses.map((courseName) => {
-				if (!courseName) {
-					return {
-						value: "",
-						text: `${this.noCourseName} (${this.getTaskCount(courseName)})`,
-					};
-				}
+		listOfFilters: function () {
+			const filters = [];
 
-				return {
-					value: courseName,
-					text: `${courseName} (${this.getTaskCount(courseName)})`,
-				};
+			const courseFilter = (f) => {
+				const count = this.getTaskCount(f.value);
+				if (count > 0) {
+					const name = f.value || this.noCourseName;
+					f.text = `${name} (${count})`;
+
+					filters.push(f);
+				}
+			};
+
+			const additionalFilter = (f) => {
+				f.text = this.$t(
+					"components.organisms.TasksDashboardMain." +
+						f.value.replace("$filter:", "filter.")
+				);
+
+				filters.push(f);
+			};
+
+			this.filters.forEach((f) => {
+				f.type === "course" ? courseFilter(f) : additionalFilter(f);
 			});
+
+			return filters;
 		},
 		tabOneHeader: function () {
 			return {

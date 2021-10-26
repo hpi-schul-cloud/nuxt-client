@@ -152,6 +152,7 @@
 	"components.organisms.TasksDashboardMain.tab.completed": "Tareas completadas",
 	"components.organisms.TasksDashboardMain.tab.open": "Tareas abiertas",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
+	"components.organisms.TasksDashboardMain.filter.PrimaryTeacher": "Sin tareas de cursos sustitutos",
 	"components.organisms.LegacyFooter.contact": "Contacto",
 	"components.organisms.LegacyFooter.job-offer": "Anuncios de empleo",
 	"components.organisms.Pagination.currentPage": "{start} a {end} desde {total}",

@@ -10,6 +10,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-155 add filter for task where the teacher is not a substitution teacher
+
 ### Changed
 
 ### Fixed

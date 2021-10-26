@@ -153,6 +153,7 @@
 	"components.organisms.TasksDashboardMain.tab.completed": "Erledigte Aufgaben",
 	"components.organisms.TasksDashboardMain.tab.open": "Offene Aufgaben",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
+	"components.organisms.TasksDashboardMain.filter.PrimaryTeacher": "Keine Aufgaben aus Vertretungskursen",
 	"components.organisms.LegacyFooter.contact": "Kontakt",
 	"components.organisms.LegacyFooter.job-offer": "Stellenausschreibungen",
 	"components.organisms.Pagination.currentPage": "{start} bis {end} von {total}",
