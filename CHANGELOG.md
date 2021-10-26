@@ -11,10 +11,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-155 - add filter for task where the teacher is not a substitution teacher
+- BC-501 - displaying topic name in task overview
 
 ### Changed
-
-- BC-501 - displaying topic name in task overview
 
 ## [26.13.0] - 2021-10-19
 
