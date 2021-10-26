@@ -23,6 +23,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-428 - bug-adjust-tint-for International
+- BC-495 - ungrouping dashboard elements for room overview
 
 ### Changed
 

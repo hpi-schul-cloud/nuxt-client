@@ -82,7 +82,7 @@ describe("vRoomAvatar", () => {
 		expect(badgeElement.vm.$data.isActive).toBeFalsy();
 	});
 
-	it("should display the correct color and size", () => {
+	it("should display the correct color and size", async () => {
 		const wrapper = mount(vRoomAvatar, {
 			...createComponentMocks({
 				i18n: true,
@@ -94,6 +94,8 @@ describe("vRoomAvatar", () => {
 		expect(avatarComponent).toBeTruthy();
 		expect(avatarComponent.vm.$props.color).toStrictEqual("#ffffff");
 		expect(avatarComponent.vm.$props.size).toStrictEqual(100);
+		await wrapper.setProps({ isGroupAvatarList: true });
+		expect(avatarComponent.vm.$props.size).toStrictEqual(75);
 	});
 
 	it("should have 'rounded-xl' class name", () => {
@@ -155,9 +157,12 @@ describe("vRoomAvatar", () => {
 			propsData,
 		});
 		const avatarComponent = wrapper.find(".avatar-component");
+		expect(wrapper.vm.$data.isDragging).toBe(false);
 
 		avatarComponent.trigger("dragstart");
 		await wrapper.vm.$nextTick();
+
+		expect(wrapper.vm.$data.isDragging).toBe(true);
 
 		let emitted = wrapper.emitted();
 		expect(emitted["startDrag"]).toHaveLength(1);
@@ -188,6 +193,52 @@ describe("vRoomAvatar", () => {
 		expect(emitted["drop"] && emitted["drop"][0][0]).toStrictEqual({
 			x: 5,
 			y: 2,
+		});
+	});
+
+	it("should change its size while dragging", async () => {
+		const wrapper = mount(vRoomAvatar, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData,
+		});
+		await wrapper.setProps({ isGroupAvatarList: true });
+		const avatarComponent = wrapper.find(".avatar-component");
+		expect(wrapper.vm.$data.isDragging).toBe(false);
+		expect(avatarComponent.vm.$props.size).toStrictEqual(75);
+
+		avatarComponent.trigger("dragstart");
+		await wrapper.vm.$nextTick();
+
+		expect(wrapper.vm.$data.isDragging).toBe(true);
+
+		expect(avatarComponent.vm.$props.size).toStrictEqual(100);
+	});
+
+	it("should emit payload as '{x:-1, y:-1}' if the 'isGroupAvatarList' prop is set true while dragging", async () => {
+		const wrapper = mount(vRoomAvatar, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData,
+		});
+		await wrapper.setProps({ isGroupAvatarList: true });
+		const avatarComponent = wrapper.find(".avatar-component");
+
+		avatarComponent.trigger("dragstart");
+		await wrapper.vm.$nextTick();
+
+		let emitted = wrapper.emitted();
+		expect(emitted["startDrag"]).toHaveLength(1);
+		expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
+			mockData
+		);
+		expect(emitted["startDrag"] && emitted["startDrag"][0][1]).toStrictEqual({
+			x: -1,
+			y: -1,
 		});
 	});
 });

@@ -86,6 +86,8 @@ const spyMocks = {
 	setDropElementMock: jest.spyOn(RoomsPage.methods, "setDropElement"),
 	setGroupElementsMock: jest.spyOn(RoomsPage.methods, "setGroupElements"),
 	addGroupElementsMock: jest.spyOn(RoomsPage.methods, "addGroupElements"),
+	savePositionMock: jest.spyOn(RoomsPage.methods, "savePosition"),
+	dragFromGroupMock: jest.spyOn(RoomsPage.methods, "dragFromGroup"),
 };
 
 describe("RoomPage", () => {
@@ -362,6 +364,7 @@ describe("RoomPage", () => {
 		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
+		expect(spyMocks.savePositionMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
@@ -417,6 +420,7 @@ describe("RoomPage", () => {
 		expect(spyMocks.setGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
+		expect(spyMocks.savePositionMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
@@ -471,6 +475,82 @@ describe("RoomPage", () => {
 		expect(spyMocks.addGroupElementsMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
 		expect(spyMocks.getElementNameByRefMock).toHaveBeenCalled();
+		expect(spyMocks.savePositionMock).toHaveBeenCalled();
+		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
+			expectedPayload
+		);
+	});
+
+	it("should call 'setDropElement' method for grouping after ungroup action", async () => {
+		const wrapper = await mount(RoomsPage, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+				store: mockStore,
+			}),
+			computed: {
+				$mq: () => "desktop",
+			},
+		});
+
+		const expectedPayload = {
+			from: {
+				x: 2,
+				y: 4,
+				groupIndex: 0,
+			},
+			item: {
+				id: "5",
+				title: "Math 7a",
+				displayColor: "yellow",
+			},
+			to: {
+				x: 4,
+				y: 4,
+			},
+		};
+
+		await wrapper.setData({
+			groupDialog: {
+				isOpen: true,
+				groupData: {
+					id: "4",
+					title: "Fourth",
+					shortTitle: "Bi",
+					displayColor: "#EC407A",
+					url: "/api/xxxx/1234w",
+					xPosition: 2,
+					yPosition: 4,
+					groupElements: [
+						{
+							id: "5",
+							title: "Math 7a",
+							displayColor: "yellow",
+						},
+					],
+				},
+			},
+		});
+
+		const elementInGroupFolder = wrapper.findComponent({ ref: "index-0" });
+		await wrapper.vm.$nextTick();
+		elementInGroupFolder.trigger("dragstart");
+
+		await wrapper.vm.$nextTick();
+		expect(spyMocks.dragFromGroupMock).toHaveBeenCalled();
+		expect(
+			wrapper.vm.$refs["index-0"][0].$options["_componentTag"]
+		).toStrictEqual("vRoomAvatar");
+		expect(wrapper.vm.$refs["2-4"][0].$options["_componentTag"]).toStrictEqual(
+			"vRoomEmptyAvatar"
+		);
+
+		const emptyAvatarComponent = wrapper.findComponent({ ref: "4-4" });
+		emptyAvatarComponent.trigger("drop");
+
+		expect(spyMocks.setDropElementMock).toHaveBeenCalled();
+		expect(spyMocks.storeRoomAlignMock).toHaveBeenCalled();
+		expect(spyMocks.savePositionMock).toHaveBeenCalled();
 		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
