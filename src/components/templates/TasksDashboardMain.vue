@@ -20,12 +20,12 @@
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="hasTasks"
-				v-model="selectedCourses"
+				v-model="selectedFilters"
 				:items="listOfFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
-				@selected-item="filterByCourse"
+				@selected-item="setFilter"
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
 			<tasks-dashboard-teacher v-else :tab.sync="tab" />
@@ -56,7 +56,7 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourses: [],
+			selectedFilters: [],
 			tab: 0,
 		};
 	},
@@ -68,7 +68,6 @@ export default {
 			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
 			hasNoCompletedTasks: "hasNoCompletedTasks",
 			hasNoDrafts: "hasNoDrafts",
-			// courses: "getCourses",
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 			filters: "getFilters",
@@ -77,7 +76,7 @@ export default {
 			return this.role === "student";
 		},
 		isFilterDisabled: function () {
-			if (this.selectedCourses.length > 0) return false;
+			if (this.selectedFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
@@ -97,16 +96,13 @@ export default {
 		hasTasks: function () {
 			return !this.hasNoTasks;
 		},
-		noCourseName: function () {
-			return this.$t("pages.tasks.labels.noCourse");
-		},
 		listOfFilters: function () {
 			const filters = [];
 
 			const courseFilter = (f) => {
 				const count = this.getTaskCount(f.value);
 				if (count > 0) {
-					const name = f.value || this.noCourseName;
+					const name = f.value || this.$t("pages.tasks.labels.noCourse");
 					f.text = `${name} (${count})`;
 
 					filters.push(f);
@@ -155,8 +151,8 @@ export default {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
-		filterByCourse() {
-			this.$store.commit("tasks/setFilter", this.selectedCourses);
+		setFilter() {
+			this.$store.commit("tasks/setFilter", this.selectedFilters);
 		},
 		getTaskCount(courseName) {
 			if (this.isStudent) {

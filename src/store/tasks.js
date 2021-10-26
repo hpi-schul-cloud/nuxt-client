@@ -121,7 +121,6 @@ const module = {
 		setTasks(state, tasks) {
 			state.tasks = tasks;
 		},
-		// TODO: rename setCourseFilter
 		setFilter(state, payload) {
 			const additionalFilters = payload.filter((name) => existingFilters[name]);
 			const courseFilters = payload.filter((name) => !existingFilters[name]);
