@@ -208,6 +208,9 @@ export default {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
+			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
+				return;
+
 			if (
 				(this.draggedElementName == "vRoomAvatar" ||
 					"vRoomGroupAvatar" ||
@@ -222,7 +225,8 @@ export default {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (this.draggedElement.from == pos) return;
+			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
+				return;
 
 			if (
 				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
@@ -235,7 +239,8 @@ export default {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (this.draggedElement.from == pos) return;
+			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
+				return;
 
 			if (
 				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
