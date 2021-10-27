@@ -16,6 +16,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 - BC-501 - link for faq in the top-navigation
 
+## [26.14.0] - 2021-10-26
+
+### Added
+
+- BC-501 - displaying topic name in task overview
+
 ## [26.13.0] - 2021-10-19
 
 ### Added
