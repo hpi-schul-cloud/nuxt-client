@@ -31,10 +31,9 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 describe("vRoomAvatar", () => {
-	it("should display the title", async () => {
-		const wrapper = getWrapper({ ...propsData, size: 101 });
-		const labelElement = wrapper.find(`[data-testid="sub-title"]`)
-			.element as HTMLElement;
+	it("should display the title", () => {
+		const wrapper = getWrapper({ ...propsData, size: 200 });
+		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
 		expect(labelElement.innerHTML).toStrictEqual("Bio 12c");
