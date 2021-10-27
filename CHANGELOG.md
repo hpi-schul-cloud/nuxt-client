@@ -12,6 +12,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-576 - link for faq in the top-navigation
+
 ## [26.14.0] - 2021-10-26
 
 ### Added
