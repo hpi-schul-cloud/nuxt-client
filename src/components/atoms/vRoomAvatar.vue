@@ -114,4 +114,7 @@ export default {
 	font-size: 0.5em;
 	user-select: none;
 }
+.rounded-xl {
+	background-color: transparent;
+}
 </style>
