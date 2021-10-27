@@ -99,27 +99,28 @@ export default {
 		listOfFilters: function () {
 			const filters = [];
 
-			const courseFilter = (f) => {
-				const count = this.getTaskCount(f.value);
+			const courseFilter = (filter) => {
+				const count = this.getTaskCount(filter.value);
 				if (count > 0) {
-					const name = f.value || this.$t("pages.tasks.labels.noCourse");
-					f.text = `${name} (${count})`;
+					const name = filter.value || this.$t("pages.tasks.labels.noCourse");
+					filter.text = `${name} (${count})`;
 
-					filters.push(f);
+					filters.push(filter);
 				}
 			};
 
-			const additionalFilter = (f) => {
-				f.text = this.$t(
+			const teacherFilter = (filter) => {
+				filter.text = this.$t(
 					"components.organisms.TasksDashboardMain." +
-						f.value.replace("$filter:", "filter.")
+						filter.value.replace("$filter:", "filter.")
 				);
 
-				filters.push(f);
+				filters.push(filter);
 			};
 
-			this.filters.forEach((f) => {
-				f.type === "course" ? courseFilter(f) : additionalFilter(f);
+			this.filters.forEach((filter) => {
+				if (filter.type === "course") courseFilter(filter);
+				if (filter.type === "teacher" && !this.isStudent) teacherFilter(filter);
 			});
 
 			return filters;
