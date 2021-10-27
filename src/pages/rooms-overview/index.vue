@@ -15,7 +15,7 @@
 						:max-items="4"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-						@drop="addGroupElements($event, colIndex, rowIndex)"
+						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 					>
 					</vRoomGroupAvatar>
 					<vRoomAvatar
@@ -80,6 +80,7 @@
 							:item="item"
 							:size="dimensions.cellWidth * ratios.itemRatio * 0.75"
 							:show-badge="true"
+							:draggable="true"
 							class="rounded-xl dialog-avatar"
 							show-sub-title
 							@startDrag="dragFromGroup"
