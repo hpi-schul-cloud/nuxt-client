@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="rounded-xl"
-		:draggable="!groupAvatar"
+		:draggable="draggable"
 		@dragstart="startDragAvatar"
 		@drop.prevent="dropAvatar"
 		@dragover.prevent
@@ -18,17 +18,17 @@
 			<v-avatar
 				class="ma-0 pa-1 avatar-component"
 				:color="item.displayColor"
-				:size="calculatedSize"
-				:class="groupAvatar ? 'rounded' : 'rounded-xl'"
+				:size="size"
+				:class="size < 100 ? 'rounded' : 'rounded-xl'"
 				@click="$emit('click', item)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 			>
-				<span :class="groupAvatar ? 'group-avatar' : 'single-avatar'">{{
+				<span :class="size < 100 ? 'group-avatar' : 'single-avatar'">{{
 					avatarTitle
 				}}</span>
 			</v-avatar>
-			<span v-if="!groupAvatar" class="d-flex justify-center mt-1 sub-title">{{
+			<span v-if="size > 100" class="d-flex justify-center mt-1 sub-title">{{
 				item.title
 			}}</span>
 		</v-badge>
@@ -45,18 +45,11 @@ export default {
 			type: Number || String,
 			required: true,
 		},
-		groupAvatar: {
-			type: Boolean,
-		},
-		isGroupAvatarList: {
+		draggable: {
 			type: Boolean,
 		},
 		showBadge: {
 			type: Boolean,
-		},
-		// eslint-disable-next-line vue/require-default-prop
-		location: {
-			type: Object,
 		},
 	},
 	data() {
@@ -76,20 +69,11 @@ export default {
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
 		},
-		calculatedSize() {
-			return this.isGroupAvatarList && !this.isDragging
-				? this.size * 0.75
-				: this.size;
-		},
 	},
 	methods: {
 		startDragAvatar() {
 			this.isDragging = true;
-			this.$emit(
-				"startDrag",
-				this.item,
-				this.isGroupAvatarList ? { x: -1, y: -1 } : this.location
-			);
+			this.$emit("startDrag", this.item);
 		},
 		dragLeave() {
 			this.hovered = false;
@@ -102,7 +86,7 @@ export default {
 			this.isDragging = false;
 		},
 		dropAvatar() {
-			this.$emit("drop", this.location);
+			this.$emit("drop");
 		},
 	},
 };

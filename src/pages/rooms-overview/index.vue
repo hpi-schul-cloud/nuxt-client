@@ -10,34 +10,32 @@
 						v-if="hasGroup(rowIndex, colIndex)"
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-group-avatar"
-						:location="{ x: colIndex, y: rowIndex }"
 						:data="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:max-items="4"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
-						@startDrag="setDragElement"
-						@drop="addGroupElements"
+						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+						@drop="addGroupElements($event, colIndex, rowIndex)"
 					>
 					</vRoomGroupAvatar>
 					<vRoomAvatar
 						v-else
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-avatar"
-						:location="{ x: colIndex, y: rowIndex }"
 						:item="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:show-badge="true"
+						:draggable="true"
 						show-sub-title
-						@startDrag="setDragElement"
-						@drop="setGroupElements"
+						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+						@drop="setGroupElements({ x: colIndex, y: rowIndex })"
 					></vRoomAvatar>
 				</div>
 				<div v-else class="d-flex justify-center">
 					<vRoomEmptyAvatar
 						:ref="`${rowIndex}-${colIndex}`"
-						:location="{ x: colIndex, y: rowIndex }"
 						:size="dimensions.cellWidth * ratios.itemRatio"
-						@drop="setDropElement"
+						@drop="setDropElement({ x: colIndex, y: rowIndex })"
 					></vRoomEmptyAvatar>
 				</div>
 			</v-col>
@@ -80,8 +78,7 @@
 						<vRoomAvatar
 							:ref="`index-${index}`"
 							:item="item"
-							:size="dimensions.cellWidth * ratios.itemRatio"
-							:is-group-avatar-list="true"
+							:size="dimensions.cellWidth * ratios.itemRatio * 0.75"
 							:show-badge="true"
 							class="rounded-xl dialog-avatar"
 							show-sub-title
@@ -199,7 +196,7 @@ export default {
 				(item) => item.xPosition == col && item.yPosition == row
 			);
 		},
-		setDragElement(element, pos) {
+		onStartDrag(element, pos) {
 			this.draggedElement.from = pos;
 			this.draggedElement.to = null;
 			this.draggedElement.item = element;
