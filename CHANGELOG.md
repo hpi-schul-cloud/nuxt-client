@@ -10,9 +10,16 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-496 - Added Renaming of a group of rooms
+
+### Changed
+
+- BC-501 - displaying topic name in task overview
+
 ### Changed
 
 - BC-576 - link for faq in the top-navigation
+- BC-379 - updated the engine version to node 16 and npm 8
 
 ## [26.14.0] - 2021-10-26
 
