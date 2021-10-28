@@ -142,7 +142,7 @@ describe("RoomPage", () => {
 		expect(spyMocks.openDialogMock).toHaveBeenCalled();
 	});
 
-	it("custom-dialog component should be visible with the correct data", async () => {
+	it("custom-dialog component should be visible", async () => {
 		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
@@ -150,11 +150,9 @@ describe("RoomPage", () => {
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		const customDialog = wrapper.find(".custom-dialog");
-		expect(customDialog.vm.$slots.title[0].elm.innerHTML).toContain("Fourth");
-		expect(customDialog.vm.$slots.content[0].children).toHaveLength(3);
-		expect(
-			customDialog.vm.$slots.content[0].children[0].elm.innerHTML
-		).toContain("Math 7a");
+		const headline = customDialog.find("h2");
+		expect(customDialog.vm.isOpen).toBeTrue();
+		expect(headline.element.innerHTML).toContain("Fourth");
 	});
 
 	it("should call the necessary methods for positioning while the page loading", async () => {
@@ -387,23 +385,30 @@ describe("RoomPage", () => {
 							title: "Math 7a",
 							displayColor: "yellow",
 						},
+						{
+							id: "6",
+							title: "Bio 3a",
+							displayColor: "green",
+							notification: true,
+						},
+						{
+							id: "7",
+							title: "Geo 7b",
+							displayColor: "yellow",
+						},
 					],
 				},
 			},
 		});
 
-		const elementInGroupFolder = wrapper.findComponent({ ref: "index-0" });
 		await wrapper.vm.$nextTick();
-		elementInGroupFolder.trigger("dragstart");
+		wrapper.vm.$refs.roomModal.$emit(
+			"drag-from-group",
+			wrapper.vm.groupDialog.groupData.groupElements[0]
+		);
 
 		await wrapper.vm.$nextTick();
 		expect(spyMocks.dragFromGroupMock).toHaveBeenCalled();
-		expect(
-			wrapper.vm.$refs["index-0"][0].$options["_componentTag"]
-		).toStrictEqual("vRoomAvatar");
-		expect(wrapper.vm.$refs["2-4"][0].$options["_componentTag"]).toStrictEqual(
-			"vRoomEmptyAvatar"
-		);
 
 		const emptyAvatarComponent = wrapper.findComponent({ ref: "4-4" });
 		emptyAvatarComponent.trigger("drop");

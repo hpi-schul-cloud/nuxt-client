@@ -40,66 +40,24 @@
 				</div>
 			</v-col>
 		</v-row>
-		<vCustomDialog
-			ref="custom-dialog"
+		<room-modal
+			ref="roomModal"
 			v-model="groupDialog.isOpen"
-			class="custom-dialog"
-			@dialog-closed="groupDialog.groupData = {}"
+			:group-data="groupDialog.groupData"
+			:ratios="ratios"
+			:avatar-size="dimensions.cellWidth * ratios.itemRatio * 0.75"
+			@drag-from-group="dragFromGroup"
 		>
-			<div slot="title">
-				<v-text-field
-					v-show="roomNameEditMode"
-					ref="roomNameInput"
-					v-model="groupDialog.groupData.title"
-					dense
-					:append-icon="mdiKeyboardReturn"
-					@blur="onUpdateRoomName"
-					@keyup.enter="onRoomNameInputEnter"
-				></v-text-field>
-				<h2
-					v-show="!roomNameEditMode"
-					class="text-h4 my-2"
-					tabindex="5"
-					@click="onEditRoom"
-					@focus="onEditRoom"
-				>
-					{{ groupDialog.groupData.title }}
-					<v-icon>{{ mdiPencil }}</v-icon>
-				</h2>
-			</div>
-			<template slot="content">
-				<v-row class="d-flex justify-center ma-1">
-					<v-col
-						v-for="(item, index) in groupDialog.groupData.groupElements"
-						:key="item.id"
-						class="d-flex justify-center"
-						:cols="maxItem"
-					>
-						<vRoomAvatar
-							:ref="`index-${index}`"
-							:item="item"
-							:size="dimensions.cellWidth * ratios.itemRatio * 0.75"
-							:show-badge="true"
-							:draggable="true"
-							class="rounded-xl dialog-avatar"
-							show-sub-title
-							@startDrag="dragFromGroup"
-						></vRoomAvatar>
-					</v-col>
-				</v-row>
-			</template>
-		</vCustomDialog>
+		</room-modal>
 	</default-wireframe>
 </template>
 
 <script>
-import Vue from "vue";
-import { mdiPencil, mdiKeyboardReturn } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-import vCustomDialog from "@components/organisms/vCustomDialog";
+import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
 
 export default {
@@ -108,7 +66,7 @@ export default {
 		vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
-		vCustomDialog,
+		RoomModal,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -119,7 +77,6 @@ export default {
 				itemRatio: 0.8,
 			},
 			device: "mobile",
-			maxItem: 4,
 			dimensions: {
 				colCount: 2,
 				cellWidth: 200,
@@ -135,8 +92,6 @@ export default {
 				to: null,
 			},
 			showDeleteSection: false,
-			mdiPencil,
-			mdiKeyboardReturn,
 			roomNameEditMode: false,
 			draggedElementName: "",
 		};
@@ -272,22 +227,6 @@ export default {
 			this.roomsData = this.roomsData.filter(
 				(item) => item.id !== this.draggedElement.item.id
 			);
-		},
-		async onEditRoom() {
-			this.roomNameEditMode = true;
-			await Vue.nextTick();
-			this.$refs.roomNameInput.focus();
-		},
-		onUpdateRoomName() {
-			RoomsModule.update(this.groupDialog.groupData);
-			this.roomNameEditMode = false;
-		},
-		/*
-			Calling onUpdateRoomName each on blur and enter results in calling in twice on pressing enter
-			@keyup.enter="$event.target.blur" results in Illegal invocation error
-		*/
-		onRoomNameInputEnter(event) {
-			event.target.blur();
 		},
 		setGroupElementIndex(elementId) {
 			return this.roomsData
