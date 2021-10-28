@@ -29,7 +29,7 @@ describe("@components/legacy/NavigationBar", () => {
 			},
 		});
 
-		expect(wrapper.props().links).toHaveLength(4);
+		expect(wrapper.props().links).toHaveLength(3);
 	});
 
 	it("logo get rendered", () => {
