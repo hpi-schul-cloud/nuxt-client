@@ -5,6 +5,7 @@
 		inset
 		flat
 		dense
+		class="custom-switch-color"
 		:ripple="false"
 		:class="customClasses"
 		@change="($event) => $emit('input-changed', $event)"
@@ -34,3 +35,12 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+/* stylelint-disable sh-waqar/declaration-use-variable */
+@import "@styles";
+
+.custom-switch-color {
+	color: var(--color-secondary);
+}
+</style>
