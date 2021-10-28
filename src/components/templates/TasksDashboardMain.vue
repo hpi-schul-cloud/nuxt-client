@@ -6,7 +6,10 @@
 				<v-row v-if="isTeacher">
 					<v-custom-switch
 						:value="getSubstitutionFilter"
-						:label="substitutionTeacherFilterLabel"
+						:label="
+							$t('components.organisms.TasksDashboardMain.filter.substitution')
+						"
+						custom-classes="custom-switch-position"
 						@input-changed="setSubstitutionFilter"
 					></v-custom-switch>
 				</v-row>
@@ -83,15 +86,6 @@ export default {
 			filters: "getFilters",
 			courseFilters: "getCourseFilters",
 		}),
-		substitutionTeacherFilterLabel: function () {
-			const path = "components.organisms.TasksDashboardMain.filter.";
-			const filter = this.filters.find(
-				(f) => f.id === "$filter:PrimaryTeacher"
-			);
-			return !filter.value
-				? this.$t(path + "disableSubstitutionTeacher")
-				: this.$t(path + "enableSubstitutionTeacher");
-		},
 		getSubstitutionFilter: function () {
 			const filter = this.filters.find(
 				(f) => f.id === "$filter:PrimaryTeacher"
@@ -237,5 +231,9 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.custom-switch-position {
+	padding-left: 14px;
 }
 </style>

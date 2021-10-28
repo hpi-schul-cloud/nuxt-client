@@ -99,7 +99,7 @@ const module = {
 			filters: [
 				{
 					id: "$filter:PrimaryTeacher",
-					value: false,
+					value: true,
 					exec: filterIsFromPrimaryTeacher,
 				},
 			],
