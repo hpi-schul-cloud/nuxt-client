@@ -59,8 +59,13 @@ const filterDrafts = (tasks) => {
 	return tasks.filter((task) => task.status.isDraft === true);
 };
 
-const extractCourseNamesFromTasks = (tasks) => {
-	const courses = new Set(tasks.map((task) => task.courseName));
+const extractCoursesFromTasks = (tasks) => {
+	const courses = new Set(
+		tasks.map((task) => ({
+			name: task.courseName,
+			isSubstitution: task.status.isSubstitutionTeacher,
+		}))
+	);
 	return Array.from(courses);
 };
 
@@ -71,29 +76,16 @@ const filterIsFromPrimaryTeacher = (tasks) => {
 	return primaryTeacherTasks;
 };
 
-// TODO: enum for type course and teacher is used at the moment
-const createFilter =
-	(type = "course") =>
-	(value) => ({
-		value,
-		type,
-		text: value,
-	});
-
 const hasLoadedElements = (state, tasks) => {
 	return state.status === "completed" && tasks.length === 0;
 };
 
-// TODO: enum
-const existingFilters = {
-	"$filter:PrimaryTeacher": filterIsFromPrimaryTeacher,
-};
-
-const additionalTeacherFilters = (tasks, selectedFilters) => {
+const executeFilters = (filters = [], tasks) => {
 	let result = tasks;
-
-	selectedFilters.forEach((idendifiere) => {
-		result = existingFilters[idendifiere](result);
+	filters.forEach((f) => {
+		if (f.value === true) {
+			result = f.exec(tasks);
+		}
 	});
 
 	return result;
@@ -104,8 +96,13 @@ const module = {
 		return {
 			tasks: [],
 			courseFilter: [],
-			selectedFilters: [],
-			existingTeacherFilters: ["$filter:PrimaryTeacher"],
+			filters: [
+				{
+					id: "$filter:PrimaryTeacher",
+					value: false,
+					exec: filterIsFromPrimaryTeacher,
+				},
+			],
 			status: "",
 			businessError: {
 				statusCode: "",
@@ -134,11 +131,20 @@ const module = {
 		setTasks(state, tasks) {
 			state.tasks = tasks;
 		},
+		// TODO: rename
 		setFilter(state, filterNames) {
-			state.selectedFilters = filterNames.filter(
-				(name) => existingFilters[name]
-			);
 			state.courseFilter = filterNames.filter((name) => !existingFilters[name]);
+		},
+		changeFilter(state, { id, value }) {
+			const filters = state.filters.map((f) => {
+				if (f.id === id) {
+					f.value = value;
+				}
+
+				return f;
+			});
+
+			state.filters = filters;
 		},
 		// TODO: enum "error", "pending", "completed", "" -> "" should get notLoaded / notInitialized or so and not empty string and this should set by creating this store
 		setStatus(state, status) {
@@ -168,20 +174,14 @@ const module = {
 			return hasLoadedElements(state, completedTasks);
 		},
 		hasNoOpenTasksTeacher: (state) => {
-			const tasks = additionalTeacherFilters(
-				state.tasks,
-				state.selectedFilters
-			);
+			const tasks = executeFilters(state.filters, state.tasks);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const openTasks = filterOpenForTeacher(filterdByCourses);
 
 			return hasLoadedElements(state, openTasks);
 		},
 		hasNoDrafts: (state) => {
-			const tasks = additionalTeacherFilters(
-				state.tasks,
-				state.selectedFilters
-			);
+			const tasks = executeFilters(state.filters, state.tasks);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const draftTasks = filterDrafts(filterdByCourses);
 
@@ -192,18 +192,25 @@ const module = {
 		getStatus: (state) => state.status,
 		getCourses: (state) => {
 			// TODO: check if it is needed at the moment
-			const courseNames = extractCourseNamesFromTasks(state.tasks);
+			const courseNames = extractCoursesFromTasks(state.tasks).map(
+				(c) => c.name
+			);
 			return courseNames;
 		},
-		getFilters: (state) => {
-			const courseNames = extractCourseNamesFromTasks(state.tasks);
-			const courseNameFilters = courseNames.map(createFilter());
-			const basicFilters = state.existingTeacherFilters.map(
-				createFilter("teacher")
-			);
-			const allFilterNames = [...courseNameFilters, ...basicFilters];
+		getCourseFilters: (state) => {
+			const courses = extractCoursesFromTasks(state.tasks);
+			const courseFilters = courses.map((c) => {
+				return {
+					value: c.name,
+					text: c.name,
+					isSubstitution: c.isSubstitution,
+				};
+			});
 
-			return allFilterNames;
+			return courseFilters;
+		},
+		getFilters: (state) => {
+			return state.filters;
 		},
 		getOpenTasksForStudent: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
@@ -228,10 +235,7 @@ const module = {
 			return completedTasks;
 		},
 		getOpenTasksForTeacher: (state) => {
-			const tasks = additionalTeacherFilters(
-				state.tasks,
-				state.selectedFilters
-			);
+			const tasks = executeFilters(state.filters, state.tasks);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const filteredOpenForTeachers = filterOpenForTeacher(filterdByCourses);
 
@@ -244,10 +248,7 @@ const module = {
 			return openTasks;
 		},
 		getDraftTasksForTeacher: (state) => {
-			const tasks = additionalTeacherFilters(
-				state.tasks,
-				state.selectedFilters
-			);
+			const tasks = executeFilters(state.filters, state.tasks);
 			const filteredByCourse = filterByCourses(tasks, state.courseFilter);
 			const draftTasks = filterDrafts(filteredByCourse);
 

@@ -3,6 +3,14 @@
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
+				<v-row v-if="isTeacher">
+					<v-custom-switch
+						:value="getSubstitutionFilter"
+						:label="substitutionTeacherFilterLabel"
+						@input-changed="setSubstitutionFilter"
+					></v-custom-switch>
+				</v-row>
+
 				<div class="pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
@@ -20,7 +28,7 @@
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="hasTasks"
-				v-model="selectedFilters"
+				v-model="selectedCourseFilters"
 				:items="listOfFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
@@ -37,6 +45,7 @@
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
+import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 
@@ -46,6 +55,7 @@ export default {
 		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
+		vCustomSwitch,
 	},
 	props: {
 		role: {
@@ -56,7 +66,7 @@ export default {
 	},
 	data() {
 		return {
-			selectedFilters: [],
+			selectedCourseFilters: [],
 			tab: 0,
 		};
 	},
@@ -71,12 +81,32 @@ export default {
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 			filters: "getFilters",
+			courseFilters: "getCourseFilters",
 		}),
+		substitutionTeacherFilterLabel: function () {
+			const path = "components.organisms.TasksDashboardMain.filter.";
+			const filter = this.filters.find(
+				(f) => f.id === "$filter:PrimaryTeacher"
+			);
+			return !filter.value
+				? this.$t(path + "disableSubstitutionTeacher")
+				: this.$t(path + "enableSubstitutionTeacher");
+		},
+		getSubstitutionFilter: function () {
+			const filter = this.filters.find(
+				(f) => f.id === "$filter:PrimaryTeacher"
+			);
+			return !filter.value;
+		},
+		// TODO: it is not role based, it is permission based
 		isStudent: function () {
 			return this.role === "student";
 		},
+		isTeacher: function () {
+			return this.role === "teacher";
+		},
 		isFilterDisabled: function () {
-			if (this.selectedFilters.length > 0) return false;
+			if (this.selectedCourseFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
@@ -97,33 +127,19 @@ export default {
 			return !this.hasNoTasks;
 		},
 		listOfFilters: function () {
-			const filters = [];
-
-			const courseFilter = (filter) => {
+			const filters = this.courseFilters.map((filter) => {
 				const count = this.getTaskCount(filter.value);
-				if (count > 0) {
-					const name = filter.value || this.$t("pages.tasks.labels.noCourse");
-					filter.text = `${name} (${count})`;
+				const name = filter.value || this.$t("pages.tasks.labels.noCourse");
+				const substitution = filter.isSubstitution
+					? this.$t("common.words.substitute")
+					: "";
+				filter.text = `${substitution} ${name} (${count})`;
 
-					filters.push(filter);
-				}
-			};
-
-			const teacherFilter = (filter) => {
-				filter.text = this.$t(
-					"components.organisms.TasksDashboardMain." +
-						filter.value.replace("$filter:", "filter.")
-				);
-
-				filters.push(filter);
-			};
-
-			this.filters.forEach((filter) => {
-				if (filter.type === "course") courseFilter(filter);
-				if (filter.type === "teacher" && !this.isStudent) teacherFilter(filter);
+				return filter;
 			});
 
-			return filters;
+			// TODO: sort add vertretungslehrer label in store
+			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
 		tabOneHeader: function () {
 			return {
@@ -153,7 +169,13 @@ export default {
 	},
 	methods: {
 		setFilter() {
-			this.$store.commit("tasks/setFilter", this.selectedFilters);
+			this.$store.commit("tasks/setFilter", this.selectedCourseFilters);
+		},
+		setSubstitutionFilter(value) {
+			this.$store.commit("tasks/changeFilter", {
+				id: "$filter:PrimaryTeacher",
+				value: !value,
+			});
 		},
 		getTaskCount(courseName) {
 			if (this.isStudent) {
