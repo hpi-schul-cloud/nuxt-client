@@ -4,7 +4,7 @@
 			<v-icon class="fill" :color="iconColor"> $taskOpenFilled </v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
-			<v-list-item-subtitle class="d-inline-flex">
+			<v-list-item-subtitle class="d-inline-flex" data-test-id="taskSubtitle">
 				<span class="text-truncate">{{ task.courseName }}</span>
 				{{
 					`&nbsp;– ${computedDueDateLabel(
@@ -13,7 +13,7 @@
 					)}`
 				}}
 			</v-list-item-subtitle>
-			<v-list-item-title v-text="task.name" />
+			<v-list-item-title data-test-id="taskName" v-text="task.name" />
 			<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
 				<i18n path="components.molecules.VTaskItemTeacher.status">
 					<template #submitted>{{ task.status.submitted }}</template>
@@ -26,7 +26,7 @@
 			<v-list-item-subtitle>{{
 				$t("components.molecules.VTaskItemTeacher.submitted")
 			}}</v-list-item-subtitle>
-			<v-list-item-title
+			<v-list-item-title data-test-id="taskSubmitted"
 				>{{ task.status.submitted }}/{{
 					task.status.maxSubmissions
 				}}</v-list-item-title
@@ -36,7 +36,9 @@
 			<v-list-item-subtitle>{{
 				$t("components.molecules.VTaskItemTeacher.graded")
 			}}</v-list-item-subtitle>
-			<v-list-item-title>{{ task.status.graded }}</v-list-item-title>
+			<v-list-item-title data-test-id="taskGraded">{{
+				task.status.graded
+			}}</v-list-item-title>
 		</v-list-item-action>
 	</v-list-item>
 </template>

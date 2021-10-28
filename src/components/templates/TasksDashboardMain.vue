@@ -7,13 +7,13 @@
 					<v-tabs v-model="tab" grow class="tabs-max-width">
 						<v-tab>
 							<v-icon class="tab-icon mr-3">$taskOpenFilled</v-icon>
-							<span class="d-none d-sm-inline">{{
+							<span class="d-none d-sm-inline" data-test-id="openTasks">{{
 								$t("components.organisms.TasksDashboardMain.tab.open")
 							}}</span>
 						</v-tab>
 						<v-tab>
 							<v-icon class="tab-icon mr-3">$taskDoneFilled</v-icon>
-							<span class="d-none d-sm-inline">{{
+							<span class="d-none d-sm-inline" data-test-id="closedTasks">{{
 								$t("components.organisms.TasksDashboardMain.tab.completed")
 							}}</span>
 						</v-tab>

@@ -2,7 +2,7 @@
 	<div
 		v-outside-click="removePopup"
 		class="popup"
-		data-testid="initials"
+		data-test-id="initials"
 		@click="popup"
 	>
 		<div class="icon">{{ initials }}</div>

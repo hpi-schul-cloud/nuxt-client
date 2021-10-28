@@ -13,7 +13,7 @@
 			/>
 		</div>
 		<nav class="contents">
-			<ul data-testid="routesListTest" class="list">
+			<ul data-test-id="routesListTest" class="list">
 				<div
 					v-for="route in routes"
 					:key="JSON.stringify(route.to) || route.href"
@@ -21,7 +21,7 @@
 					<li
 						class="list-item"
 						:class="{ active: route.active }"
-						:data-testId="route.testId"
+						:data-test-Id="route.testId"
 					>
 						<base-link
 							class="list-content"
