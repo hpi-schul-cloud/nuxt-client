@@ -10,17 +10,64 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-496 - Added Renaming of a group of rooms
+- BC-40 - ansible rocketchat variable renaming
+- BC-273 - Adding data test id's for nuxt task overview
+
+### Changed
+
+- BC-501 - displaying topic name in task overview
+
+### Changed
+
+- BC-576 - link for faq in the top-navigation
+- BC-379 - updated the engine version to node 16 and npm 8
+
+## [26.14.0] - 2021-10-26
+
+### Added
+
+- BC-501 - displaying topic name in task overview
+
+## [26.13.0] - 2021-10-19
+
+### Added
+
+- BC-428 - bug-adjust-tint-for International
+- BC-495 - ungrouping dashboard elements for room overview
+
+### Changed
+
+### Fixed
+
+- BC-393 - cleaned up some translations
+
+## [26.12.1] - 2021-10-12
+
+### Changed
+
+- BC-379 - hard-code node 14 and npm 6
+
+## [26.12.0] - 2021-10-12
+
+### Added
+
 - BC-307 - design and content transformation HPI Schul-Cloud in dBildungscloud
 - BC-312 - added bottom border to headline of new DefaultWireframe and added it to task overview
 - BC-343 - run unstable e2e tests on label `run unstable tests`
-- BC-273 - Adding data test id's for nuxt task overview
+- BC-6 - showing drafts for teachers in new tab
+- BC-339 - grouping dashboard elements
 
 ### Changed
 
 - BC-217 - update LibreOffic domain at http-headers.js on ansible configmap-files.yml.j2
 - BC-382 - fixing error in 'removeSystem' method for new school-settings page
+- BC-397 - replaced base inputs in the user creation form with vuetify components
+- BC-21 - use generated api client for news
 
 ### Fixed
+
+- BC-381 - fixed color of menu items in the sidebar
 
 ### Security
 
@@ -40,6 +87,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-167 - Added a wireframe for pages
 - BC-252 - creating componenets and grid for rooms-overview page
 - BC-98 - added unit tests for school admin page
+- BC-317 - implemented drag&drop avatar components
 - BC-310 - added task count to course filter
 
 ### Changed

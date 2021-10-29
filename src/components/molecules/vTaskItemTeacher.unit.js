@@ -1,5 +1,5 @@
 import vTaskItemTeacher from "./vTaskItemTeacher";
-import { tasksTeacher } from "@@/stories/mockData/Tasks";
+import { tasksTeacher, drafts } from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
 
 describe("@components/molecules/vTaskItemTeacher", () => {
@@ -61,6 +61,21 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 		expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
 	});
 
+	it("Should render subtitle with no course name", () => {
+		const wrapper = mount(vTaskItemTeacher, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: {
+				task: drafts[1],
+			},
+		});
+
+		expect(wrapper.find(".v-list-item__subtitle").html()).toMatchSnapshot();
+	});
+
 	it("accepts valid task props", () => {
 		const { validator } = vTaskItemTeacher.props.task;
 		const validTasks = tasksTeacher;
@@ -68,5 +83,20 @@ describe("@components/molecules/vTaskItemTeacher", () => {
 		validTasks.forEach((task) => {
 			expect(validator(task)).toBe(true);
 		});
+	});
+
+	it("should display topic", () => {
+		const wrapper = mount(vTaskItemTeacher, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			vuetify,
+			propsData: {
+				task: drafts[1],
+			},
+		});
+
+		expect(wrapper.text()).toStrictEqual(expect.not.stringContaining("Thema "));
 	});
 });

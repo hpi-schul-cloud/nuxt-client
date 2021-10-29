@@ -11,3 +11,9 @@ exports[`@components/molecules/vTaskItemTeacher Should render subtitle with cour
   &nbsp;– Kein Abgabedatum
 </div>
 `;
+
+exports[`@components/molecules/vTaskItemTeacher Should render subtitle with no course name 1`] = `
+<div class="v-list-item__subtitle d-inline-flex"><span class="text-truncate">Kein Kurs zugeordnet</span>
+  &nbsp;– Kein Abgabedatum
+</div>
+`;

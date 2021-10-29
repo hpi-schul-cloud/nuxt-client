@@ -7,7 +7,7 @@
 			v-model="checked"
 			type="switch"
 			datatest-id="ldapDataClassesCheckbox"
-			:label="$t('pages.administration.ldap.classes.sctivate.import')"
+			:label="$t('pages.administration.ldap.classes.activate.import')"
 		>
 		</base-input>
 		<p class="title-class">

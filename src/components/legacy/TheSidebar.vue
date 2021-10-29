@@ -20,8 +20,8 @@
 				>
 					<li
 						class="list-item"
-						:class="{ active: route.active }"
-						:data-testid="route.testid"
+						:class="{ active: route.active, 'child-active': route.childActive }"
+						:data-testid="route.testId"
 					>
 						<base-link
 							class="list-content"
@@ -47,7 +47,7 @@
 						<li
 							v-for="child in route.children"
 							:key="JSON.stringify(child.to) || child.href"
-							:class="{ active: $route.path.includes(child.href) }"
+							:class="{ active: child.active }"
 							class="list-item list-sub-item"
 							:data-testid="child.testid"
 						>
@@ -252,7 +252,8 @@ export default {
 					background-color: var(--color-sidebar-active-bg);
 				}
 
-				&.active .list-content {
+				&.active .list-content,
+				&.child-active .list-content {
 					color: var(--color-sidebar-menu-item-active);
 				}
 			}

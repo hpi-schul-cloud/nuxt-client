@@ -11,7 +11,7 @@ const mockData = {
 	url: "/api/xxxx/1234w",
 	xPosition: 2,
 	yPosition: 4,
-	group: [
+	groupElements: [
 		{
 			id: "5",
 			title: "Math 7a",
@@ -39,7 +39,7 @@ const secondMockData = {
 	url: "/api/xxxx/1234w",
 	xPosition: 2,
 	yPosition: 4,
-	group: [
+	groupElements: [
 		{
 			id: "5",
 			title: "Math 7a",
@@ -185,6 +185,32 @@ describe("vRoomGroupAvatar", () => {
 		expect(emitted["clicked"]).toHaveLength(1);
 		expect(emitted["clicked"] && emitted["clicked"][0][0]).toStrictEqual(
 			mockData.id
+		);
+	});
+
+	it("should emit 'dragStart' event when it started dragging", async () => {
+		const wrapper = mount(vRoomGroupAvatar, {
+			...createComponentMocks({
+				i18n: true,
+				vuetify: true,
+			}),
+			propsData: {
+				data: mockData,
+				size: 100,
+				maxItems: 4,
+			},
+		});
+		const avatarComponent = wrapper.find(".group-avatar-component");
+
+		avatarComponent.trigger("dragstart");
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+		await wrapper.vm.$nextTick();
+
+		let emitted = wrapper.emitted();
+		expect(emitted["startDrag"]).toHaveLength(1);
+		expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
+			mockData
 		);
 	});
 });

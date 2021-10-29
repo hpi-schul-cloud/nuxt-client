@@ -1,39 +1,30 @@
 version: 3
 
 pullapprove_conditions:
-  - condition: "'WIP' not in labels"
-    unmet_status: pending
-    explanation: "Work in progress"
+- condition: "'WIP' not in labels"
+  unmet_status: pending
+  explanation: "Work in progress"
+- condition: "'- [ ]' not in body"
+  unmet_status: failure
+  explanation: "Please finish all the required checklist tasks"
 
-  # not tested yet
-  # - condition: "'*lint*' in statuses.succeeded"
-  #   unmet_status: failure
-  #   explanation: "Linter must pass before review starts"
-  # - condition: "'*test*' in statuses.succeeded"
-  #   unmet_status: failure
-  #   explanation: "Linter must pass before review starts"
+
+notifications:
+- when: pull_request.opened
+  comment: |
+    Hey @{{ author }}, thanks for the PR! The review will start once
+    the tests, CI checks and PR requirements (see checklist in your PR) have passed.
+- when: pullapprove.approved
+  if: "author_association == 'CONTRIBUTOR'"
+  comment: "The review is completed. Thanks @{{ author }}, we'll take it from here."
 
 groups:
   ###############################
   # GENERAL REQUEST FOR REVIEW
   ###############################
-  sc-admins:
-    conditions:
-      # not created by a bot
-      - "'schul-cloud-bot' not in author.username"
-      - "'dependabot' not in author.username"
-      - "'greenkeeper' not in author.username"
+  general:
     reviews:
       required: 1 # 1 approval from this group is required
     reviewers:
       teams:
-        - sc-admins
-  devops:
-    conditions:
-      - "'*deploy.sh' in files or '.build/*' in files or 'deploy/*' in files" # only review specific, deployment relevant files
-    reviewers:
-      teams:
-        - devops
-    reviews:
-      required: 1 # number of approvals required from this group
-      author_value: 1 # if author of pr is in team, no additional review required
+        - general
