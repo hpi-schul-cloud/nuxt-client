@@ -7,7 +7,7 @@
 			role="presentation"
 			class="text-center"
 		/>
-		<h1 class="h4 text-center mt-8" data-test-id="emptyTaskMessage">
+		<h1 class="h4 text-center mt-8" data-testid="emptyTaskMessage">
 			{{ title }}
 		</h1>
 		<h2 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h2>

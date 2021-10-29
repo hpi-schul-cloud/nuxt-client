@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`@components/molecules/vTaskItemTeacher Should render subtitle with course name and due date 1`] = `
-<div class="v-list-item__subtitle d-inline-flex"><span class="text-truncate">Mathe</span>
+<div class="v-list-item__subtitle d-inline-flex"><span data-testid="taskSubtitle" class="text-truncate">Mathe</span>
   &nbsp;– Abgabe 07.06.17
 </div>
 `;
 
 exports[`@components/molecules/vTaskItemTeacher Should render subtitle with course name and no due date for tasks without due date 1`] = `
-<div class="v-list-item__subtitle d-inline-flex"><span class="text-truncate">Mathe</span>
+<div class="v-list-item__subtitle d-inline-flex"><span data-testid="taskSubtitle" class="text-truncate">Mathe</span>
   &nbsp;– Kein Abgabedatum
 </div>
 `;

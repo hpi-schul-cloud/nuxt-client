@@ -21,7 +21,7 @@
 					<li
 						class="list-item"
 						:class="{ active: route.active }"
-						:data-testId="route.testId"
+						:data-testid="route.testid"
 					>
 						<base-link
 							class="list-content"
@@ -49,7 +49,7 @@
 							:key="JSON.stringify(child.to) || child.href"
 							:class="{ active: $route.path.includes(child.href) }"
 							class="list-item list-sub-item"
-							:data-testId="child.testId"
+							:data-testid="child.testid"
 						>
 							<base-link
 								class="list-content"
