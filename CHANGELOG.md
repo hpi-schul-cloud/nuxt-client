@@ -8,12 +8,15 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
+### Unreleased
+
+- BC-273 - Adding data test id's for nuxt task overview
+
 ### Added
 
 - BC-307 - design and content transformation HPI Schul-Cloud in dBildungscloud
 - BC-312 - added bottom border to headline of new DefaultWireframe and added it to task overview
 - BC-343 - run unstable e2e tests on label `run unstable tests`
-- BC-273 - Adding data test id's for nuxt task overview
 
 ### Changed
 
