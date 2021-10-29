@@ -1,4 +1,4 @@
-import { default as RoomsPage } from "./index.vue";
+import { default as RoomsPage } from "./rooms-overview.vue";
 import RoomsModule from "@/store/rooms";
 
 const mockStoreData = [
