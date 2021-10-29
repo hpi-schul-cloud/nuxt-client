@@ -40,8 +40,7 @@
 						:size="avatarSize"
 						:show-badge="true"
 						:draggable="true"
-						class="rounded-xl dialog-avatar"
-						show-sub-title
+						class="rounded dialog-avatar"
 						@startDrag="$emit('drag-from-group', $event)"
 					></vRoomAvatar>
 				</v-col>
