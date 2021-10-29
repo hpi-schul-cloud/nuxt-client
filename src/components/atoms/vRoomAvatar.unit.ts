@@ -32,11 +32,18 @@ const getWrapper = (props: object, options?: object) => {
 
 describe("vRoomAvatar", () => {
 	it("should display the title", () => {
-		const wrapper = getWrapper({ ...propsData, size: 200 });
+		const wrapper = getWrapper({ ...propsData });
 		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
 		expect(labelElement.innerHTML).toStrictEqual("Bio 12c");
+	});
+
+	it("should NOT display the title", () => {
+		const wrapper = getWrapper({ ...propsData, condenseLayout: true });
+		const labelElement = wrapper.find(".sub-title").element as HTMLElement;
+
+		expect(labelElement).toBeFalsy();
 	});
 
 	it("should display the short Title", () => {
@@ -132,18 +139,5 @@ describe("vRoomAvatar", () => {
 		const emitted = wrapper.emitted();
 
 		expect(emitted["drop"]).toHaveLength(1);
-	});
-
-	it.skip("should change its size while dragging", async () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component");
-		expect(wrapper.vm.$data.isDragging).toBe(false);
-		expect(avatarComponent.vm.$props.size).toStrictEqual(75);
-
-		avatarComponent.trigger("dragstart");
-		await wrapper.vm.$nextTick();
-
-		expect(wrapper.vm.$data.isDragging).toBe(true);
-		expect(avatarComponent.vm.$props.size).toStrictEqual(100);
 	});
 });
