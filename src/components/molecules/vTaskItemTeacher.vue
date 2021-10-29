@@ -5,7 +5,9 @@
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle class="d-inline-flex">
-				<span class="text-truncate" data-testid="taskSubtitle">{{ courseName }}</span>
+				<span class="text-truncate" data-testid="taskSubtitle">{{
+					courseName
+				}}</span>
 				{{
 					`&nbsp;– ${computedDueDateLabel(
 						task.duedate,
@@ -40,7 +42,9 @@
 				<v-list-item-subtitle>{{
 					$t("components.molecules.VTaskItemTeacher.graded")
 				}}</v-list-item-subtitle>
-				<v-list-item-title data-testid="taskGraded">{{ task.status.graded }}</v-list-item-title>
+				<v-list-item-title data-testid="taskGraded">{{
+					task.status.graded
+				}}</v-list-item-title>
 			</v-list-item-action>
 		</section>
 	</v-list-item>
