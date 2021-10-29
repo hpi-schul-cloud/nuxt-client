@@ -21,7 +21,7 @@
 					<li
 						class="list-item"
 						:class="{ active: route.active }"
-						:data-test-Id="route.testId"
+						:data-testId="route.testId"
 					>
 						<base-link
 							class="list-content"
