@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-496 - Added Renaming of a group of rooms
+- BC-40 - ansible rocketchat variable renaming
 
 ### Changed
 
