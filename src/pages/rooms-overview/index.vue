@@ -26,7 +26,6 @@
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:show-badge="true"
 						:draggable="true"
-						show-sub-title
 						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 						@drop="setGroupElements({ x: colIndex, y: rowIndex })"
 					></vRoomAvatar>
@@ -82,7 +81,6 @@
 							:show-badge="true"
 							:draggable="true"
 							class="rounded-xl dialog-avatar"
-							show-sub-title
 							@startDrag="dragFromGroup"
 						></vRoomAvatar>
 					</v-col>
@@ -289,11 +287,7 @@ export default {
 		onRoomNameInputEnter(event) {
 			event.target.blur();
 		},
-		setGroupElementIndex(elementId) {
-			return this.roomsData
-				.find((item) => item.id == this.groupDialog.groupData.id)
-				.groupElements.findIndex((groupItem) => groupItem.id == elementId);
-		},
+
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
 			this.roomsData = RoomsModule.getRoomsData;

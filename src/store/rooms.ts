@@ -25,6 +25,7 @@ type DroppedObject = {
 	from: {
 		x: number;
 		y: number;
+		groupIndex?: number;
 	};
 	to: {
 		x: number;
