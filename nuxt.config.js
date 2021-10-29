@@ -118,6 +118,7 @@ module.exports = {
 	 */
 	plugins: [
 		// sorting is important
+		"@plugins/polyfills",
 		"@plugins/axios-accessor",
 		"@plugins/axios",
 		"@plugins/configInit",

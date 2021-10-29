@@ -8,6 +8,9 @@
 				{{ task.courseName }}
 			</v-list-item-subtitle>
 			<v-list-item-title data-testid="taskTitle" v-text="task.name" />
+			<v-list-item-subtitle>
+				{{ topic }}
+			</v-list-item-subtitle>
 		</v-list-item-content>
 		<v-list-item-action>
 			<v-list-item-action-text
@@ -81,6 +84,11 @@ export default {
 		},
 		defaultIconColor() {
 			return "#54616e";
+		},
+		topic() {
+			return this.task.description
+				? `${this.$t("pages.tasks.subtitleTopic")} ${this.task.description}`
+				: "";
 		},
 	},
 	methods: {

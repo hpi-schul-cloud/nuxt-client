@@ -61,6 +61,75 @@ export interface CreateNewsParams {
 /**
  * 
  * @export
+ * @interface DashboardResponse
+ */
+export interface DashboardResponse {
+    /**
+     * The id of the Dashboard entity
+     * @type {string}
+     * @memberof DashboardResponse
+     */
+    id: string;
+    /**
+     * List of all elements visible on the dashboard
+     * @type {Array<string>}
+     * @memberof DashboardResponse
+     */
+    gridElements: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface MoveElementParams
+ */
+export interface MoveElementParams {
+    /**
+     * 
+     * @type {object}
+     * @memberof MoveElementParams
+     */
+    from: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof MoveElementParams
+     */
+    to: object;
+}
+/**
+ * 
+ * @export
+ * @interface NewsListResponse
+ */
+export interface NewsListResponse {
+    /**
+     * 
+     * @type {Array<NewsResponse>}
+     * @memberof NewsListResponse
+     */
+    data: Array<NewsResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewsListResponse
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewsListResponse
+     */
+    skip: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewsListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
  * @interface NewsResponse
  */
 export interface NewsResponse {
@@ -179,6 +248,19 @@ export enum NewsTargetModel {
 /**
  * 
  * @export
+ * @interface PatchGroupParams
+ */
+export interface PatchGroupParams {
+    /**
+     * Title of the Group grid element
+     * @type {string}
+     * @memberof PatchGroupParams
+     */
+    title: string;
+}
+/**
+ * 
+ * @export
  * @interface ResolvedUser
  */
 export interface ResolvedUser {
@@ -272,6 +354,104 @@ export interface TargetInfoResponse {
 /**
  * 
  * @export
+ * @interface TaskListResponse
+ */
+export interface TaskListResponse {
+    /**
+     * 
+     * @type {Array<TaskResponse>}
+     * @memberof TaskListResponse
+     */
+    data: Array<TaskResponse>;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskListResponse
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskListResponse
+     */
+    skip: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface TaskResponse
+ */
+export interface TaskResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    availableDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    duedate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    courseName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    displayColor?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof TaskResponse
+     */
+    status: object;
+}
+/**
+ * 
+ * @export
  * @interface UpdateNewsParams
  */
 export interface UpdateNewsParams {
@@ -311,14 +491,322 @@ export interface UserInfoResponse {
      * @type {string}
      * @memberof UserInfoResponse
      */
-    firstName: string;
+    firstName?: string;
     /**
      * Last name of the user
      * @type {string}
      * @memberof UserInfoResponse
      */
-    lastName: string;
+    lastName?: string;
 }
+
+/**
+ * DashboardApi - axios parameter creator
+ * @export
+ */
+export const DashboardApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerFindForUser: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/dashboard`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {MoveElementParams} moveElementParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerMoveElement: async (id: string, moveElementParams: MoveElementParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('dashboardControllerMoveElement', 'id', id)
+            // verify required parameter 'moveElementParams' is not null or undefined
+            assertParamExists('dashboardControllerMoveElement', 'moveElementParams', moveElementParams)
+            const localVarPath = `/dashboard/{id}/moveElement`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveElementParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {number} x 
+         * @param {number} y 
+         * @param {PatchGroupParams} patchGroupParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerPatchGroup: async (id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('dashboardControllerPatchGroup', 'id', id)
+            // verify required parameter 'x' is not null or undefined
+            assertParamExists('dashboardControllerPatchGroup', 'x', x)
+            // verify required parameter 'y' is not null or undefined
+            assertParamExists('dashboardControllerPatchGroup', 'y', y)
+            // verify required parameter 'patchGroupParams' is not null or undefined
+            assertParamExists('dashboardControllerPatchGroup', 'patchGroupParams', patchGroupParams)
+            const localVarPath = `/dashboard/{id}/element`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (x !== undefined) {
+                localVarQueryParameter['x'] = x;
+            }
+
+            if (y !== undefined) {
+                localVarQueryParameter['y'] = y;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchGroupParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DashboardApi - functional programming interface
+ * @export
+ */
+export const DashboardApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DashboardApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async dashboardControllerFindForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerFindForUser(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {MoveElementParams} moveElementParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerMoveElement(id, moveElementParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {number} x 
+         * @param {number} y 
+         * @param {PatchGroupParams} patchGroupParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DashboardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.dashboardControllerPatchGroup(id, x, y, patchGroupParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DashboardApi - factory interface
+ * @export
+ */
+export const DashboardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DashboardApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerFindForUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {MoveElementParams} moveElementParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {number} x 
+         * @param {number} y 
+         * @param {PatchGroupParams} patchGroupParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse> {
+            return localVarFp.dashboardControllerPatchGroup(id, x, y, patchGroupParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DashboardApi - interface
+ * @export
+ * @interface DashboardApi
+ */
+export interface DashboardApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApiInterface
+     */
+    dashboardControllerFindForUser(options?: any): AxiosPromise<DashboardResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {MoveElementParams} moveElementParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApiInterface
+     */
+    dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any): AxiosPromise<DashboardResponse>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {PatchGroupParams} patchGroupParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApiInterface
+     */
+    dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any): AxiosPromise<DashboardResponse>;
+
+}
+
+/**
+ * DashboardApi - object-oriented interface
+ * @export
+ * @class DashboardApi
+ * @extends {BaseAPI}
+ */
+export class DashboardApi extends BaseAPI implements DashboardApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApi
+     */
+    public dashboardControllerFindForUser(options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerFindForUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {MoveElementParams} moveElementParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApi
+     */
+    public dashboardControllerMoveElement(id: string, moveElementParams: MoveElementParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerMoveElement(id, moveElementParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {PatchGroupParams} patchGroupParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DashboardApi
+     */
+    public dashboardControllerPatchGroup(id: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any) {
+        return DashboardApiFp(this.configuration).dashboardControllerPatchGroup(id, x, y, patchGroupParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 /**
  * DefaultApi - axios parameter creator
@@ -332,7 +820,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         serverControllerGetHello: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/v3`;
+            const localVarPath = `/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -445,7 +933,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         newsControllerCreate: async (createNewsParams: CreateNewsParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'createNewsParams' is not null or undefined
             assertParamExists('newsControllerCreate', 'createNewsParams', createNewsParams)
-            const localVarPath = `/v3/news`;
+            const localVarPath = `/news`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -484,7 +972,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         newsControllerDelete: async (id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('newsControllerDelete', 'id', id)
-            const localVarPath = `/v3/news/{id}`
+            const localVarPath = `/news/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -514,6 +1002,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * * Responds with all news for a user.
+         * @param {NewsListResponse} newsListResponse 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -522,8 +1011,10 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll: async (targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/v3/news`;
+        newsControllerFindAll: async (newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'newsListResponse' is not null or undefined
+            assertParamExists('newsControllerFindAll', 'newsListResponse', newsListResponse)
+            const localVarPath = `/news`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -561,9 +1052,12 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(newsListResponse, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -571,7 +1065,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -579,7 +1073,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         newsControllerFindOne: async (id: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('newsControllerFindOne', 'id', id)
-            const localVarPath = `/v3/news/{id}`
+            const localVarPath = `/news/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -619,7 +1113,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('newsControllerUpdate', 'id', id)
             // verify required parameter 'updateNewsParams' is not null or undefined
             assertParamExists('newsControllerUpdate', 'updateNewsParams', updateNewsParams)
-            const localVarPath = `/v3/news/{id}`
+            const localVarPath = `/news/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -664,7 +1158,7 @@ export const NewsApiAxiosParamCreator = function (configuration?: Configuration)
         teamNewsControllerFindAllForTeam: async (teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('teamNewsControllerFindAllForTeam', 'teamId', teamId)
-            const localVarPath = `/v3/team/{teamId}/news`
+            const localVarPath = `/team/{teamId}/news`
                 .replace(`{${"teamId"}}`, encodeURIComponent(String(teamId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -744,6 +1238,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
         },
         /**
          * * Responds with all news for a user.
+         * @param {NewsListResponse} newsListResponse 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -752,12 +1247,12 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options);
+        async newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newsControllerFindAll(newsListResponse, targetModel, targetId, unpublished, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -788,7 +1283,7 @@ export const NewsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NewsListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -822,6 +1317,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * * Responds with all news for a user.
+         * @param {NewsListResponse} newsListResponse 
          * @param {NewsTargetModel} [targetModel] Target model to which the news are related
          * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
          * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -830,11 +1326,11 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<void> {
-            return localVarFp.newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
+        newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
+            return localVarFp.newsControllerFindAll(newsListResponse, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
-         * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+         * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -863,7 +1359,7 @@ export const NewsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<void> {
+        teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse> {
             return localVarFp.teamNewsControllerFindAllForTeam(teamId, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -895,6 +1391,7 @@ export interface NewsApiInterface {
 
     /**
      * * Responds with all news for a user.
+     * @param {NewsListResponse} newsListResponse 
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -904,10 +1401,10 @@ export interface NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<void>;
+    newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
     /**
-     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+     * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -937,7 +1434,7 @@ export interface NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApiInterface
      */
-    teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<void>;
+    teamNewsControllerFindAllForTeam(teamId: string, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any): AxiosPromise<NewsListResponse>;
 
 }
 
@@ -972,6 +1469,7 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
 
     /**
      * * Responds with all news for a user.
+     * @param {NewsListResponse} newsListResponse 
      * @param {NewsTargetModel} [targetModel] Target model to which the news are related
      * @param {string} [targetId] Specific target id to which the news are related (works only together with targetModel)
      * @param {boolean} [unpublished] Flag that filters if the news should be published or not
@@ -981,12 +1479,12 @@ export class NewsApi extends BaseAPI implements NewsApiInterface {
      * @throws {RequiredError}
      * @memberof NewsApi
      */
-    public newsControllerFindAll(targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
-        return NewsApiFp(this.configuration).newsControllerFindAll(targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public newsControllerFindAll(newsListResponse: NewsListResponse, targetModel?: NewsTargetModel, targetId?: string, unpublished?: boolean, skip?: number, limit?: number, options?: any) {
+        return NewsApiFp(this.configuration).newsControllerFindAll(newsListResponse, targetModel, targetId, unpublished, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * * Retrieve a specific news entry by id.   * A user may only read news of scopes he has the read permission.   * The news entity has school and user names populated.
+     * * Retrieve a specific news entry by id.    * A user may only read news of scopes he has the read permission.    * The news entity has school and user names populated.
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1040,7 +1538,7 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         taskControllerFindAll: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/v3/task/dashboard`;
+            const localVarPath = `/tasks`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1092,7 +1590,7 @@ export const TaskApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerFindAll(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async taskControllerFindAll(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerFindAll(skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1113,7 +1611,7 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerFindAll(skip?: number, limit?: number, options?: any): AxiosPromise<void> {
+        taskControllerFindAll(skip?: number, limit?: number, options?: any): AxiosPromise<TaskListResponse> {
             return localVarFp.taskControllerFindAll(skip, limit, options).then((request) => request(axios, basePath));
         },
     };
@@ -1133,7 +1631,7 @@ export interface TaskApiInterface {
      * @throws {RequiredError}
      * @memberof TaskApiInterface
      */
-    taskControllerFindAll(skip?: number, limit?: number, options?: any): AxiosPromise<void>;
+    taskControllerFindAll(skip?: number, limit?: number, options?: any): AxiosPromise<TaskListResponse>;
 
 }
 
@@ -1170,7 +1668,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         userControllerMe: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/v3/user/me`;
+            const localVarPath = `/user/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

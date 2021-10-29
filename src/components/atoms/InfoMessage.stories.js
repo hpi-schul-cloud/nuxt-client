@@ -9,13 +9,13 @@ storiesOf("3 Atoms/InfoMessage", module)
 	}))
 	.add("Error Message", () => ({
 		components: { InfoMessage },
-		template: `<InfoMessage message="Something went wrong" type="error"/>`,
+		template: `<InfoMessage message="Something went wrong" type="bc-error"/>`,
 	}))
 	.add("Success Message", () => ({
 		components: { InfoMessage },
-		template: `<InfoMessage message="Something went well" type="success"/>`,
+		template: `<InfoMessage message="Something went well" type="bc-success"/>`,
 	}))
 	.add("Warning Message", () => ({
 		components: { InfoMessage },
-		template: `<InfoMessage message="Something is a bit off, but not really bad" type="warning"/>`,
+		template: `<InfoMessage message="Something is a bit off, but not really bad" type="bc-warning"/>`,
 	}));

@@ -11,10 +11,6 @@ storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 		img: text("img", SchulCloudLogoColor),
 		links: [
 			{
-				title: "Über das Projekt",
-				href: "/about",
-			},
-			{
 				title: "Erste Schritte",
 				href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
 			},
@@ -24,7 +20,7 @@ storiesOf("5 Molecules/NavigationBar", module).add("default", () => ({
 			},
 			{
 				title: "FAQ",
-				href: "https://blog.hpi-schul-cloud.de/faq",
+				href: "https://blog.hpi-schul-cloud.de/faqs",
 			},
 		],
 	}),

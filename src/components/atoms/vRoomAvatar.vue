@@ -1,7 +1,14 @@
 <template>
-	<div>
+	<div
+		class="rounded-xl"
+		:draggable="!groupAvatar"
+		@dragstart="startDragAvatar"
+		@drop.prevent="dropAvatar"
+		@dragover.prevent
+		@dragend="dragEnd"
+	>
 		<v-badge
-			class="ma-0 badge-component"
+			class="ma-0 badge-component rounded-xl"
 			bordered
 			color="var(--color-primary)"
 			icon="mdi-lock"
@@ -11,9 +18,11 @@
 			<v-avatar
 				class="ma-0 pa-1 avatar-component"
 				:color="item.displayColor"
-				:size="size"
+				:size="calculatedSize"
 				:class="groupAvatar ? 'rounded' : 'rounded-xl'"
 				@click="$emit('click', item)"
+				@dragleave="dragLeave"
+				@dragenter.prevent.stop="dragEnter"
 			>
 				<span :class="groupAvatar ? 'group-avatar' : 'single-avatar'">{{
 					avatarTitle
@@ -39,12 +48,22 @@ export default {
 		groupAvatar: {
 			type: Boolean,
 		},
+		isGroupAvatarList: {
+			type: Boolean,
+		},
 		showBadge: {
 			type: Boolean,
 		},
+		// eslint-disable-next-line vue/require-default-prop
+		location: {
+			type: Object,
+		},
 	},
 	data() {
-		return {};
+		return {
+			hovered: false,
+			isDragging: false,
+		};
 	},
 	computed: {
 		avatarTitle() {
@@ -57,13 +76,40 @@ export default {
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
 		},
+		calculatedSize() {
+			return this.isGroupAvatarList && !this.isDragging
+				? this.size * 0.75
+				: this.size;
+		},
+	},
+	methods: {
+		startDragAvatar() {
+			this.isDragging = true;
+			this.$emit(
+				"startDrag",
+				this.item,
+				this.isGroupAvatarList ? { x: -1, y: -1 } : this.location
+			);
+		},
+		dragLeave() {
+			this.hovered = false;
+		},
+		dragEnter() {
+			this.hovered = true;
+			this.isDragging = false;
+		},
+		dragEnd() {
+			this.isDragging = false;
+		},
+		dropAvatar() {
+			this.$emit("drop", this.location);
+		},
 	},
 };
 </script>
 <style scoped>
 .v-avatar {
 	cursor: pointer;
-	border: 1px solid;
 }
 .single-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */

@@ -56,10 +56,10 @@
 			<info-message
 				v-if="validationError"
 				:message="validationError"
-				type="error"
+				type="bc-error"
 			/>
 			<span v-for="(error, index) in verificationErrors" :key="index">
-				<info-message :message="error" type="error" />
+				<info-message :message="error" type="bc-error" />
 			</span>
 		</div>
 		<div class="buttons-container">
