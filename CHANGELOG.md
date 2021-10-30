@@ -8,10 +8,6 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ## [Unreleased]
 
-### Unreleased
-
-- BC-273 - Adding data test id's for nuxt task overview
-
 ### Added
 
 - BC-496 - Added Renaming of a group of rooms
