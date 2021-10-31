@@ -11,22 +11,42 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-392 - added skip to main content link (accessibility feature)
+- BC-496 - Added Renaming of a group of rooms
+- BC-40 - ansible rocketchat variable renaming
 
 ### Changed
 
-### Fixed
+- BC-501 - displaying topic name in task overview
+
+### Changed
+
+- BC-576 - link for faq in the top-navigation
+- BC-379 - updated the engine version to node 16 and npm 8
+
+## [26.14.0] - 2021-10-26
+
+### Added
+
+- BC-501 - displaying topic name in task overview
 
 ## [26.13.0] - 2021-10-19
 
 ### Added
 
 - BC-428 - bug-adjust-tint-for International
+- BC-495 - ungrouping dashboard elements for room overview
 
 ### Changed
 
 ### Fixed
 
 - BC-393 - cleaned up some translations
+
+## [26.12.1] - 2021-10-12
+
+### Changed
+
+- BC-379 - hard-code node 14 and npm 6
 
 ## [26.12.0] - 2021-10-12
 

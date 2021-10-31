@@ -11,7 +11,7 @@ export default [
 	},
 	{
 		title: "layouts.loggedoutFullWidth.faq",
-		href: "https://blog.hpi-schul-cloud.de/faq",
+		href: "https://blog.hpi-schul-cloud.de/faqs",
 		target: "_blank",
 	},
 ];

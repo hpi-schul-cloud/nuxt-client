@@ -42,26 +42,50 @@
 				</div>
 			</v-col>
 		</v-row>
-		<vCustomDialog v-model="groupDialog.isOpen" class="custom-dialog">
+		<vCustomDialog
+			ref="custom-dialog"
+			v-model="groupDialog.isOpen"
+			class="custom-dialog"
+			@dialog-closed="groupDialog.groupData = {}"
+		>
 			<div slot="title">
-				<h2 class="text-h4 my-2">
+				<v-text-field
+					v-show="roomNameEditMode"
+					ref="roomNameInput"
+					v-model="groupDialog.groupData.title"
+					dense
+					:append-icon="mdiKeyboardReturn"
+					@blur="onUpdateRoomName"
+					@keyup.enter="onRoomNameInputEnter"
+				></v-text-field>
+				<h2
+					v-show="!roomNameEditMode"
+					class="text-h4 my-2"
+					tabindex="5"
+					@click="onEditRoom"
+					@focus="onEditRoom"
+				>
 					{{ groupDialog.groupData.title }}
+					<v-icon>{{ mdiPencil }}</v-icon>
 				</h2>
 			</div>
 			<template slot="content">
 				<v-row class="d-flex justify-center ma-1">
 					<v-col
-						v-for="item in groupDialog.groupData.groupElements"
+						v-for="(item, index) in groupDialog.groupData.groupElements"
 						:key="item.id"
 						class="d-flex justify-center"
 						:cols="maxItem"
 					>
 						<vRoomAvatar
+							:ref="`index-${index}`"
 							:item="item"
-							:size="(dimensions.cellWidth * ratios.itemRatio) / 2"
+							:size="dimensions.cellWidth * ratios.itemRatio"
+							:is-group-avatar-list="true"
 							:show-badge="true"
-							class="rounded-xl"
+							class="rounded-xl dialog-avatar"
 							show-sub-title
+							@startDrag="dragFromGroup"
 						></vRoomAvatar>
 					</v-col>
 				</v-row>
@@ -71,6 +95,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+import { mdiPencil, mdiKeyboardReturn } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
@@ -111,6 +137,10 @@ export default {
 				to: null,
 			},
 			showDeleteSection: false,
+			mdiPencil,
+			mdiKeyboardReturn,
+			roomNameEditMode: false,
+			draggedElementName: "",
 		};
 	},
 	computed: {
@@ -125,7 +155,7 @@ export default {
 		},
 	},
 	async created() {
-		await RoomsModule.fetch(); // this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await RoomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		this.roomsData = RoomsModule.getRoomsData;
 		this.getDeviceDims();
 	},
@@ -174,56 +204,62 @@ export default {
 			this.draggedElement.to = null;
 			this.draggedElement.item = element;
 			this.showDeleteSection = true;
+			this.draggedElementName = this.getElementNameByRef(pos);
 		},
-		async setDropElement(pos) {
+		setDropElement(pos) {
 			this.draggedElement.to = pos;
-			const fromElementName = this.getElementNameByRef(
-				this.draggedElement.from
-			);
 			const toElementName = this.getElementNameByRef(pos);
 
 			if (
-				(fromElementName == "vRoomAvatar" || "vRoomGroupAvatar") &&
+				(this.draggedElementName == "vRoomAvatar" ||
+					"vRoomGroupAvatar" ||
+					"groupItem") &&
 				toElementName == "vRoomEmptyAvatar"
 			) {
-				await RoomsModule.align(this.draggedElement);
-				this.roomsData = RoomsModule.getRoomsData;
+				this.savePosition();
 			}
 			this.showDeleteSection = false;
 		},
-		async setGroupElements(pos) {
+		setGroupElements(pos) {
 			this.draggedElement.to = pos;
-			const fromElementName = this.getElementNameByRef(
-				this.draggedElement.from
-			);
-			const toElementName = this.getElementNameByRef(pos);
-
-			if (this.draggedElement.from == pos) return;
-
-			if (fromElementName == "vRoomAvatar" && toElementName == "vRoomAvatar") {
-				await RoomsModule.align(this.draggedElement);
-				this.roomsData = RoomsModule.getRoomsData;
-			}
-		},
-		async addGroupElements(pos) {
-			this.draggedElement.to = pos;
-			const fromElementName = this.getElementNameByRef(
-				this.draggedElement.from
-			);
 			const toElementName = this.getElementNameByRef(pos);
 
 			if (this.draggedElement.from == pos) return;
 
 			if (
-				fromElementName == "vRoomAvatar" &&
+				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
+				toElementName == "vRoomAvatar"
+			) {
+				this.savePosition();
+			}
+		},
+		addGroupElements(pos) {
+			this.draggedElement.to = pos;
+			const toElementName = this.getElementNameByRef(pos);
+
+			if (this.draggedElement.from == pos) return;
+
+			if (
+				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
 				toElementName == "vRoomGroupAvatar"
 			) {
-				await RoomsModule.align(this.draggedElement);
-				this.roomsData = RoomsModule.getRoomsData;
+				this.savePosition();
 			}
 		},
 		getElementNameByRef(pos) {
 			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
+		},
+		dragFromGroup(element) {
+			this.draggedElement.from = {
+				x: this.groupDialog.groupData.xPosition,
+				y: this.groupDialog.groupData.yPosition,
+				groupIndex: this.roomsData
+					.find((item) => item.id == this.groupDialog.groupData.id)
+					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
+			};
+			this.draggedElement.item = element;
+			this.draggedElementName = "groupItem";
+			this.groupDialog.isOpen = false;
 		},
 		deleteAvatar() {
 			// TODO: delete event will be here
@@ -233,6 +269,32 @@ export default {
 			this.roomsData = this.roomsData.filter(
 				(item) => item.id !== this.draggedElement.item.id
 			);
+		},
+		async onEditRoom() {
+			this.roomNameEditMode = true;
+			await Vue.nextTick();
+			this.$refs.roomNameInput.focus();
+		},
+		onUpdateRoomName() {
+			RoomsModule.update(this.groupDialog.groupData);
+			this.roomNameEditMode = false;
+		},
+		/*
+			Calling onUpdateRoomName each on blur and enter results in calling in twice on pressing enter
+			@keyup.enter="$event.target.blur" results in Illegal invocation error
+		*/
+		onRoomNameInputEnter(event) {
+			event.target.blur();
+		},
+		setGroupElementIndex(elementId) {
+			return this.roomsData
+				.find((item) => item.id == this.groupDialog.groupData.id)
+				.groupElements.findIndex((groupItem) => groupItem.id == elementId);
+		},
+		async savePosition() {
+			await RoomsModule.align(this.draggedElement);
+			this.roomsData = RoomsModule.getRoomsData;
+			this.groupDialog.groupData = {};
 		},
 	},
 };

@@ -5,6 +5,7 @@
 		@dragstart="startDragAvatar"
 		@drop.prevent="dropAvatar"
 		@dragover.prevent
+		@dragend="dragEnd"
 	>
 		<v-badge
 			class="ma-0 badge-component rounded-xl"
@@ -17,7 +18,7 @@
 			<v-avatar
 				class="ma-0 pa-1 avatar-component"
 				:color="item.displayColor"
-				:size="size"
+				:size="calculatedSize"
 				:class="groupAvatar ? 'rounded' : 'rounded-xl'"
 				@click="$emit('click', item)"
 				@dragleave="dragLeave"
@@ -47,6 +48,9 @@ export default {
 		groupAvatar: {
 			type: Boolean,
 		},
+		isGroupAvatarList: {
+			type: Boolean,
+		},
 		showBadge: {
 			type: Boolean,
 		},
@@ -58,6 +62,7 @@ export default {
 	data() {
 		return {
 			hovered: false,
+			isDragging: false,
 		};
 	},
 	computed: {
@@ -71,16 +76,30 @@ export default {
 		displayBadge() {
 			return this.showBadge === true && this.item.notification === true;
 		},
+		calculatedSize() {
+			return this.isGroupAvatarList && !this.isDragging
+				? this.size * 0.75
+				: this.size;
+		},
 	},
 	methods: {
 		startDragAvatar() {
-			this.$emit("startDrag", this.item, this.location);
+			this.isDragging = true;
+			this.$emit(
+				"startDrag",
+				this.item,
+				this.isGroupAvatarList ? { x: -1, y: -1 } : this.location
+			);
 		},
 		dragLeave() {
 			this.hovered = false;
 		},
 		dragEnter() {
 			this.hovered = true;
+			this.isDragging = false;
+		},
+		dragEnd() {
+			this.isDragging = false;
 		},
 		dropAvatar() {
 			this.$emit("drop", this.location);

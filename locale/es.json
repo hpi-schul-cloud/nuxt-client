@@ -594,6 +594,8 @@
 	"pages.tasks.subtitleWithDue": "Con plazo",
 	"pages.tasks.subtitleGraded": "Calificado",
 	"pages.tasks.subtitleNotGraded": "Sin calificar",
+	"pages.tasks.subtitleTopic": "Tema",
+	"pages.tasks.subtitleAssigned": "Tareas asignadas",
 	"pages.tasks.student.subtitleOverDue": "Tareas perdidas",
 	"pages.tasks.student.emptyState.subtitle": "Has completado todas tus tareas. ¡Disfruta de tu tiempo libre!",
 	"pages.tasks.student.emptyState.title": "No tienes ninguna tarea abierta.",
