@@ -9,7 +9,7 @@ describe("@components/organisms/TasksList", () => {
 			getters: {
 				getList: () => tasks,
 				getStatus: () => "completed",
-				hasNoTasks: () => false,
+				hasTasks: () => true,
 				openTasks: () => openTasks,
 				overDueTasks: () => overDueTasks,
 			},
@@ -73,7 +73,7 @@ describe("@components/organisms/TasksList", () => {
 				getters: {
 					getList: () => [],
 					getStatus: () => "completed",
-					hasNoTasks: () => true,
+					hasTasks: () => false,
 					openTasks: () => [],
 					overDueTasks: () => [],
 				},
@@ -118,7 +118,7 @@ describe("@components/organisms/TasksList", () => {
 				getters: {
 					getList: () => tasks,
 					getStatus: () => "completed",
-					hasNoTasks: () => false,
+					hasTasks: () => true,
 					openTasks: () => openTasks,
 					overDueTasks: () => overDueTasks,
 				},
@@ -162,7 +162,7 @@ describe("@components/organisms/TasksList", () => {
 				getters: {
 					getList: () => [],
 					getStatus: () => "pending",
-					hasNoTasks: () => false,
+					hasTasks: () => true,
 					openTasks: () => [],
 					overDueTasks: () => [],
 				},

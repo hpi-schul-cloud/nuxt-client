@@ -80,7 +80,15 @@ export default {
 			return this.task.status.isDraft;
 		},
 		courseName() {
-			return this.task.courseName || this.$t("pages.tasks.labels.noCourse");
+			const baseName =
+				this.task.courseName || this.$t("pages.tasks.labels.noCourse");
+			const prefix =
+				this.task.status.isSubstitutionTeacher === true
+					? this.$t("common.words.substitute") + " "
+					: "";
+
+			// TODO: only for spain it must be a suffix
+			return `${prefix}${baseName}`;
 		},
 		topic() {
 			return this.task.description

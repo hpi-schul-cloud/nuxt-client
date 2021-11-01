@@ -25,8 +25,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 		tasks: {
 			getters: {
 				getStatus: () => "completed",
-				hasNoTasks: () => false,
-				hasNoOpenTasksStudent: () => false,
+				hasTasks: () => true,
+				hasOpenTasksStudent: () => true,
 				getTasks: () => tasks,
 				getOpenTasksForStudent: () => ({
 					overdue: overDueTasks,
@@ -38,8 +38,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 					graded: gradedTasks,
 				}),
 				getCourses: () => coursesStudent,
-				hasNoOpenTasks: () => false,
-				hasNoCompletedTasks: () => false,
+				hasOpenTasks: () => true,
+				hasCompletedTasks: () => true,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
 				hasFilterSelected: () => false,
 			},
@@ -56,9 +56,9 @@ describe("@components/templates/TasksDashboardMain", () => {
 		tasks: {
 			getters: {
 				getStatus: () => "completed",
-				hasNoTasks: () => false,
-				hasNoOpenTasksTeacher: () => false,
-				hasNoDrafts: () => true,
+				hasTasks: () => true,
+				hasOpenTasksTeacher: () => true,
+				hasDrafts: () => false,
 				getTasks: () => tasks,
 				getOpenTasksForTeacher: () => ({
 					overdue: overDueTasksTeacher,
@@ -67,7 +67,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				}),
 				getDraftTasksForTeacher: () => drafts,
 				getCourses: () => coursesTeacher,
-				hasNoOpenTasks: () => false,
+				hasOpenTasks: () => true,
 				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
 				hasFilterSelected: () => false,
 			},
@@ -81,11 +81,11 @@ describe("@components/templates/TasksDashboardMain", () => {
 		tasks: {
 			getters: {
 				getStatus: () => "completed",
-				hasNoTasks: () => true,
-				hasNoOpenTasksStudent: () => true,
-				hasNoCompletedTasks: () => true,
-				hasNoOpenTasksTeacher: () => true,
-				hasNoDrafts: () => true,
+				hasTasks: () => false,
+				hasOpenTasksStudent: () => false,
+				hasCompletedTasks: () => false,
+				hasOpenTasksTeacher: () => false,
+				hasDrafts: () => false,
 				getTasks: () => [],
 				getOpenTasksForTeacher: () => ({
 					overdue: [],
@@ -116,9 +116,9 @@ describe("@components/templates/TasksDashboardMain", () => {
 					submitted: submittedTasks,
 					graded: gradedTasks,
 				}),
-				hasNoOpenTasksStudent: () => true,
-				hasNoCompletedTasks: () => false,
-				hasNoTasks: () => false,
+				hasOpenTasksStudent: () => false,
+				hasCompletedTasks: () => true,
+				hasTasks: () => false,
 				getCourses: () => coursesStudent,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
 				hasFilterSelected: () => false,

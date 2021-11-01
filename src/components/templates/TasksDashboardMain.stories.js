@@ -32,9 +32,9 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					namespaced: true,
 					getters: {
 						getStatus: () => "completed",
-						hasNoTasks: () => false,
-						hasNoOpenTasksStudent: () => false,
-						hasNoCompletedTasks: () => false,
+						hasTasks: () => true,
+						hasOpenTasksStudent: () => true,
+						hasCompletedTasks: () => true,
 						getTasks: () => tasks,
 						getCourses: () => coursesStudent,
 						getOpenTasksForStudent: () => ({
@@ -81,9 +81,9 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					namespaced: true,
 					getters: {
 						getStatus: () => "completed",
-						hasNoTasks: () => false,
-						hasNoOpenTasksTeacher: () => false,
-						hasNoDrafts: () => false,
+						hasTasks: () => false,
+						hasOpenTasksTeacher: () => true,
+						hasDrafts: () => true,
 						getTasks: () => tasks,
 						getCourses: () => coursesTeacher,
 						getOpenTasksForTeacher: () => ({

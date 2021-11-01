@@ -9,7 +9,7 @@ describe("Tasks/assigned", () => {
 			getters: {
 				list: () => tasks,
 				loading: () => false,
-				hasNoTasks: () => false,
+				hasTasks: () => true,
 				getCourses: () => [],
 				hasCompletedTasks: () => true,
 			},
