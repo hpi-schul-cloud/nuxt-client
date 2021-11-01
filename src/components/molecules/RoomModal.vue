@@ -1,8 +1,8 @@
 <template>
 	<vCustomDialog
-		ref="custom-dialog"
+		ref="customDialog"
 		:is-open="isOpen"
-		class="custom-dialog"
+		class="room-dialog"
 		@dialog-closed="$emit('dialog-closed', false)"
 	>
 		<div slot="title">

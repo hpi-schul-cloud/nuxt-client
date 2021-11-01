@@ -149,7 +149,7 @@ describe("RoomPage", () => {
 		await wrapper.vm.$nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		const customDialog = wrapper.find(".custom-dialog");
+		const customDialog = wrapper.find(".room-dialog");
 		const headline = customDialog.find("h2");
 		expect(customDialog.vm.isOpen).toBeTrue();
 		expect(headline.element.innerHTML).toContain("Fourth");
