@@ -6,7 +6,19 @@
 	Do not tamper with this data.
 */
 
-export const overDueTasks = [
+const generateStatus = (props = {}) =>
+	Object.assign(
+		{
+			submitted: 0,
+			graded: 0,
+			isDraft: false,
+			isSubstitutionTeacher: false,
+			maxSubmissions: 1,
+		},
+		props
+	);
+
+const overDueTasks = [
 	{
 		id: "59cce4171113d1132c98dc07",
 		_id: "59cce4171113d1132c98dc07",
@@ -14,11 +26,7 @@ export const overDueTasks = [
 		duedate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 	{
 		id: "59cce2c61113d1132c98dc06",
@@ -27,11 +35,7 @@ export const overDueTasks = [
 		duedate: "2017-07-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 	{
 		id: "59cce352c6abf042248e888c",
@@ -40,14 +44,10 @@ export const overDueTasks = [
 		duedate: "2017-06-07T09:30:00.000Z",
 		courseName: "Chemie",
 		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 ];
-export const openTasksWithDueDate = [
+const openTasksWithDueDate = [
 	{
 		id: "59cce4c3c6abf042248e888e",
 		_id: "59cce4c3c6abf042248e888e",
@@ -56,11 +56,7 @@ export const openTasksWithDueDate = [
 		courseName: "Mathe",
 		description: "Malen nach Zahlen",
 		createdAt: "2017-09-28T12:02:11.432Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
@@ -69,11 +65,7 @@ export const openTasksWithDueDate = [
 		duedate: "2300-09-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
@@ -82,11 +74,7 @@ export const openTasksWithDueDate = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
@@ -95,29 +83,21 @@ export const openTasksWithDueDate = [
 		duedate: "2300-10-25T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:10:46.180Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 ];
-export const openTasksWithoutDueDate = [
+const openTasksWithoutDueDate = [
 	{
 		id: "59cce4171113d1132c98dc08",
 		_id: "59cce4171113d1132c98dc08",
 		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
-			submitted: 0,
-			graded: 0,
-			isDraft: false,
-		},
+		status: generateStatus(),
 	},
 ];
 
-export const submittedTasks = [
+const submittedTasks = [
 	{
 		id: "59cce4c3c6abf042248e968e",
 		_id: "59cce4c3c6abf042248e968e",
@@ -126,15 +106,13 @@ export const submittedTasks = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
-		status: {
+		status: generateStatus({
 			submitted: 1,
-			graded: 0,
-			isDraft: false,
-		},
+		}),
 	},
 ];
 
-export const missedButGradedTasks = [
+const missedButGradedTasks = [
 	{
 		id: "59cce352c6abf001248e888c",
 		_id: "59cce352c6abf001248e888c",
@@ -143,15 +121,13 @@ export const missedButGradedTasks = [
 		duedate: "2017-06-07T09:30:00.000Z",
 		courseName: "Biologie",
 		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
-			submitted: 0,
+		status: generateStatus({
 			graded: 1,
-			isDraft: false,
-		},
+		}),
 	},
 ];
 
-export const gradedTasks = [
+const gradedTasks = [
 	{
 		id: "59cce7u6c6abf042248e888d",
 		_id: "59cce7u6c6abf042248e888d",
@@ -160,11 +136,10 @@ export const gradedTasks = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
-		status: {
+		status: generateStatus({
 			submitted: 1,
 			graded: 1,
-			isDraft: false,
-		},
+		}),
 	},
 	{
 		id: "59cce352c6abf001248e888c",
@@ -174,23 +149,21 @@ export const gradedTasks = [
 		duedate: "2017-06-07T09:30:00.000Z",
 		courseName: "Biologie",
 		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
-			submitted: 0,
+		status: generateStatus({
 			graded: 1,
-			isDraft: false,
-		},
+		}),
 	},
 ];
 
-export const openTasks = [
+const openTasks = [
 	...openTasksWithDueDate,
 	...overDueTasks,
 	...openTasksWithoutDueDate,
 ];
-export const completedTasks = [...submittedTasks, ...gradedTasks];
-export const tasks = [...openTasks, ...completedTasks];
+const completedTasks = [...submittedTasks, ...gradedTasks];
+const tasks = [...openTasks, ...completedTasks];
 
-export const invalidTasks = [
+const invalidTasks = [
 	{
 		_id: "59cce4c3c6abf042248e888e",
 		name: "Private Aufgabe von Cord - mit Kurs, offen",
@@ -227,7 +200,7 @@ export const invalidTasks = [
 	},
 ];
 
-export const overDueTasksTeacher = [
+const overDueTasksTeacher = [
 	{
 		id: "59cce352c6abf042248e888c",
 		_id: "59cce352c6abf042248e888c",
@@ -235,12 +208,11 @@ export const overDueTasksTeacher = [
 		duedate: "2017-06-07T09:30:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
+		status: generateStatus({
 			submitted: 1,
 			maxSubmissions: 1,
 			graded: 1,
-			isDraft: false,
-		},
+		}),
 	},
 	{
 		id: "59cce2c61113d1132c98dc06",
@@ -249,12 +221,10 @@ export const overDueTasksTeacher = [
 		duedate: "2017-07-28T13:00:00.000Z",
 		courseName: "Deutsch",
 		createdAt: "2017-09-28T11:49:39.924Z",
-		status: {
+		status: generateStatus({
 			submitted: 5,
 			maxSubmissions: 15,
-			graded: 0,
-			isDraft: false,
-		},
+		}),
 	},
 	{
 		id: "59cce4171113d1132c98dc07",
@@ -263,16 +233,15 @@ export const overDueTasksTeacher = [
 		duedate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
+		status: generateStatus({
 			submitted: 10,
 			maxSubmissions: 10,
 			graded: 9,
-			isDraft: false,
-		},
+		}),
 	},
 ];
 
-export const dueDateTasksTeacher = [
+const dueDateTasksTeacher = [
 	{
 		id: "59cce4c3c6abf042248e888e",
 		_id: "59cce4c3c6abf042248e888e",
@@ -280,12 +249,9 @@ export const dueDateTasksTeacher = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
-		status: {
-			submitted: 0,
+		status: generateStatus({
 			maxSubmissions: 1,
-			graded: 0,
-			isDraft: false,
-		},
+		}),
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
@@ -294,12 +260,11 @@ export const dueDateTasksTeacher = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
-		status: {
+		status: generateStatus({
 			submitted: 10,
 			maxSubmissions: 15,
 			graded: 7,
-			isDraft: false,
-		},
+		}),
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
@@ -308,12 +273,10 @@ export const dueDateTasksTeacher = [
 		duedate: "2300-10-25T15:00:00.000Z",
 		courseName: "Deutsch",
 		createdAt: "2017-09-28T12:10:46.180Z",
-		status: {
+		status: generateStatus({
 			submitted: 3,
 			maxSubmissions: 15,
-			graded: 0,
-			isDraft: false,
-		},
+		}),
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
@@ -322,38 +285,35 @@ export const dueDateTasksTeacher = [
 		duedate: "2300-09-28T13:00:00.000Z",
 		courseName: "Deutsch",
 		createdAt: "2017-09-28T11:49:39.924Z",
-		status: {
+		status: generateStatus({
 			submitted: 10,
 			maxSubmissions: 12,
 			graded: 4,
-			isDraft: false,
-		},
+		}),
 	},
 ];
 
-export const noDueDateTasksTeacher = [
+const noDueDateTasksTeacher = [
 	{
 		id: "59cce4171113d1132c98dc08",
 		_id: "59cce4171113d1132c98dc08",
 		name: "Analytischen Geometrie zusammen mit Vektorrechnung",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
+		status: generateStatus({
 			submitted: 1,
 			maxSubmissions: 1,
-			graded: 0,
-			isDraft: false,
-		},
+		}),
 	},
 ];
 
-export const tasksTeacher = [
+const tasksTeacher = [
 	...overDueTasksTeacher,
 	...dueDateTasksTeacher,
 	...noDueDateTasksTeacher,
 ];
 
-export const drafts = [
+const drafts = [
 	{
 		id: "59cce2c61113d1132c98dcw2",
 		_id: "59cce2c61113d1132c98dcw2",
@@ -361,12 +321,9 @@ export const drafts = [
 		courseName: "Deutsch",
 		description: "Das Alphabet",
 		createdAt: "2017-09-28T11:49:39.924Z",
-		status: {
-			submitted: 0,
-			maxSubmissions: 1,
-			graded: 0,
+		status: generateStatus({
 			isDraft: true,
-		},
+		}),
 	},
 	{
 		id: "59ccr252c6abf042248e888c",
@@ -375,12 +332,9 @@ export const drafts = [
 		courseName: "",
 		description: "",
 		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
-			submitted: 0,
-			maxSubmissions: 1,
-			graded: 0,
+		status: generateStatus({
 			isDraft: true,
-		},
+		}),
 	},
 	{
 		id: "59ccr252c6t5f042248e888c",
@@ -388,31 +342,28 @@ export const drafts = [
 		name: "Aufgabe ohne Kurs",
 		courseName: "",
 		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
-			submitted: 0,
-			maxSubmissions: 1,
-			graded: 0,
+		status: generateStatus({
 			isDraft: true,
-		},
+		}),
 	},
 ];
 
-export const allTasksTeacher = [...tasksTeacher, ...drafts];
+const allTasksTeacher = [...tasksTeacher, ...drafts];
 
-export const coursesStudent = ["Mathe", "Chemie", "Biologie"];
-export const coursesTeacher = ["Mathe", "Deutsch", ""];
+const coursesStudent = ["Mathe", "Chemie", "Biologie"];
+const coursesTeacher = ["Mathe", "Deutsch", ""];
 
-export const tasksCountStudent = {
+const tasksCountStudent = {
 	open: { Mathe: 7, Chemie: 1, Biologie: 0 },
 	completed: { Mathe: 2, Chemie: 0, Biologie: 1 },
 };
 
-export const tasksCountTeacher = {
+const tasksCountTeacher = {
 	open: { Mathe: 5, Deutsch: 3, "": 0 },
 	drafts: { Mathe: 0, Deutsch: 1, "": 2 },
 };
 
-export const mathTasks = [
+const mathTasks = [
 	{
 		id: "59cce352c6abf042248e888c",
 		_id: "59cce352c6abf042248e888c",
@@ -420,11 +371,10 @@ export const mathTasks = [
 		duedate: "2017-06-07T09:30:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:56:02.897Z",
-		status: {
+		status: generateStatus({
 			submitted: 1,
-			maxSubmissions: 1,
 			graded: 1,
-		},
+		}),
 	},
 	{
 		id: "59cce4171113d1132c98dc07",
@@ -433,11 +383,11 @@ export const mathTasks = [
 		duedate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
+		status: generateStatus({
 			submitted: 10,
 			maxSubmissions: 10,
 			graded: 9,
-		},
+		}),
 	},
 	{
 		id: "59cce4c3c6abf042248e888e",
@@ -446,11 +396,7 @@ export const mathTasks = [
 		duedate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
-		status: {
-			submitted: 0,
-			maxSubmissions: 1,
-			graded: 0,
-		},
+		status: generateStatus(),
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
@@ -459,11 +405,11 @@ export const mathTasks = [
 		duedate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:58:46.601Z",
-		status: {
+		status: generateStatus({
 			submitted: 10,
 			maxSubmissions: 15,
 			graded: 7,
-		},
+		}),
 	},
 	{
 		id: "59cce4171113d1132c98dc08",
@@ -471,10 +417,33 @@ export const mathTasks = [
 		name: "Analytischen Geometrie zusammen mit Vektorrechnung",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
-		status: {
+		status: generateStatus({
 			submitted: 1,
-			maxSubmissions: 1,
-			graded: 0,
-		},
+		}),
 	},
 ];
+
+// please not change until it is convert to .ts file
+export default {
+	mathTasks,
+	tasksCountTeacher,
+	tasksCountStudent,
+	coursesTeacher,
+	coursesStudent,
+	allTasksTeacher,
+	drafts,
+	tasksTeacher,
+	noDueDateTasksTeacher,
+	dueDateTasksTeacher,
+	overDueTasksTeacher,
+	invalidTasks,
+	tasks,
+	completedTasks,
+	openTasks,
+	gradedTasks,
+	missedButGradedTasks,
+	submittedTasks,
+	openTasksWithoutDueDate,
+	openTasksWithDueDate,
+	overDueTasks,
+};

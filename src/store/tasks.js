@@ -114,24 +114,22 @@ const executeFilters = (filters = [], tasks) => {
 };
 
 const module = {
-	state: () => {
-		return {
-			tasks: [],
-			courseFilter: [],
-			filters: [
-				{
-					id: "$filter:PrimaryTeacher",
-					value: true,
-					exec: filterIsFromPrimaryTeacher,
-				},
-			],
-			status: "",
-			businessError: {
-				statusCode: "",
-				message: "",
+	state: () => ({
+		tasks: [],
+		courseFilter: [],
+		filters: [
+			{
+				id: "$filter:PrimaryTeacher",
+				value: true,
+				exec: filterIsFromPrimaryTeacher,
 			},
-		};
-	},
+		],
+		status: "",
+		businessError: {
+			statusCode: "",
+			message: "",
+		},
+	}),
 	actions: {
 		getAllTasks: async function ({ commit }) {
 			commit("resetBusinessError");
@@ -153,11 +151,10 @@ const module = {
 		setTasks(state, tasks) {
 			state.tasks = tasks;
 		},
-		// TODO: rename
-		setFilter(state, courseNames) {
+		setCourseFilters(state, courseNames) {
 			state.courseFilter = courseNames;
 		},
-		changeFilter(state, { id, value }) {
+		changeFilters(state, { id, value }) {
 			const filters = state.filters.map((f) => {
 				if (f.id === id) {
 					f.value = value;
@@ -212,13 +209,6 @@ const module = {
 		hasFilterSelected: (state) => state.courseFilter.length > 0,
 		getTasks: (state) => state.tasks,
 		getStatus: (state) => state.status,
-		getCourses: (state) => {
-			// TODO: check if it is needed at the moment
-			const courseNames = extractCoursesFromTasks(state.tasks).map(
-				(c) => c.name
-			);
-			return courseNames;
-		},
 		getCourseFilters: (state) => {
 			const courses = extractCoursesFromTasks(state.tasks);
 			const courseFilters = courses.map((c) => ({
@@ -274,30 +264,34 @@ const module = {
 
 			return draftTasks;
 		},
-		getTasksCountPerCourseStudent: (state, getters) => {
-			const courses = getters.getCourses;
+		getTasksCountPerCourseStudent: (state) => {
+			const courseNames = extractCoursesFromTasks(state.tasks).map(
+				(c) => c.name
+			);
 			const tasksCount = { open: {}, completed: {} };
 
-			courses.forEach((course) => {
+			courseNames.forEach((name) => {
 				const tasksOfCourse = state.tasks.filter(
-					(task) => task.courseName === course
+					(task) => task.courseName === name
 				);
-				tasksCount.open[course] = filterOpenForStudent(tasksOfCourse).length;
-				tasksCount.completed[course] = filterCompleted(tasksOfCourse).length;
+				tasksCount.open[name] = filterOpenForStudent(tasksOfCourse).length;
+				tasksCount.completed[name] = filterCompleted(tasksOfCourse).length;
 			});
 
 			return tasksCount;
 		},
-		getTasksCountPerCourseTeacher: (state, getters) => {
-			const courses = getters.getCourses;
+		getTasksCountPerCourseTeacher: (state) => {
+			const courseNames = extractCoursesFromTasks(state.tasks).map(
+				(c) => c.name
+			);
 			const tasksCount = { open: {}, drafts: {} };
 
-			courses.forEach((course) => {
+			courseNames.forEach((name) => {
 				const tasksOfCourse = state.tasks.filter(
-					(task) => task.courseName === course
+					(task) => task.courseName === name
 				);
-				tasksCount.open[course] = filterOpenForTeacher(tasksOfCourse).length;
-				tasksCount.drafts[course] = filterDrafts(tasksOfCourse).length;
+				tasksCount.open[name] = filterOpenForTeacher(tasksOfCourse).length;
+				tasksCount.drafts[name] = filterDrafts(tasksOfCourse).length;
 			});
 
 			return tasksCount;

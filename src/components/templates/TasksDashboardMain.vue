@@ -36,7 +36,7 @@
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
-				@selected-item="setFilter"
+				@selected-item="setCourseFilters"
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
 			<tasks-dashboard-teacher v-else :tab.sync="tab" />
@@ -162,11 +162,11 @@ export default {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
-		setFilter() {
-			this.$store.commit("tasks/setFilter", this.selectedCourseFilters);
+		setCourseFilters() {
+			this.$store.commit("tasks/setCourseFilters", this.selectedCourseFilters);
 		},
 		setSubstitutionFilter(value) {
-			this.$store.commit("tasks/changeFilter", {
+			this.$store.commit("tasks/changeFilters", {
 				id: "$filter:PrimaryTeacher",
 				value: !value,
 			});

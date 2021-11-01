@@ -1,24 +1,18 @@
-import {
+import mocks from "@@/stories/mockData/Tasks";
+import storeModule from "./tasks";
+
+// please carful by importing / exporting before i changed to default export, wrong values are tested
+const {
 	tasks,
 	submittedTasks,
 	gradedTasks,
-	openTasksWithDueDate,
-	openTasksWithoutDueDate,
 	openTasks,
-	overDueTasks,
-	coursesStudent,
-	coursesTeacher,
-	mathTasks,
 	tasksTeacher,
-	overDueTasksTeacher,
-	noDueDateTasksTeacher,
-	dueDateTasksTeacher,
 	drafts,
 	allTasksTeacher,
 	tasksCountTeacher,
 	tasksCountStudent,
-} from "@@/stories/mockData/Tasks";
-import storeModule from "./tasks";
+} = mocks;
 
 describe("store/tasks", () => {
 	describe("actions", () => {
@@ -112,44 +106,95 @@ describe("store/tasks", () => {
 
 	describe("mutations", () => {
 		describe("setTasks", () => {
+			const { setTasks } = storeModule.mutations;
+
 			it("Should set tasks in state", () => {
-				const { setTasks } = storeModule.mutations;
-				const state = {
-					tasks: [],
-				};
+				const state = storeModule.state();
+
 				setTasks(state, tasks);
+
 				expect(state.tasks).toStrictEqual(tasks);
 			});
 		});
 
-		describe("setFilter", () => {
-			it("Should set course filter in state", () => {
-				const { setFilter } = storeModule.mutations;
-				const state = {
-					courseFilter: [],
-				};
-				setFilter(state, coursesTeacher);
-				expect(state.courseFilter).toStrictEqual(coursesTeacher);
+		describe("setCourseFilters", () => {
+			const { setCourseFilters } = storeModule.mutations;
+
+			it("Should set course names as filter in state", () => {
+				const courseNames = ["a", "b", "c"];
+				const state = storeModule.state();
+
+				setCourseFilters(state, courseNames);
+
+				expect(state.courseFilter).toStrictEqual(courseNames);
+			});
+		});
+
+		describe("changeFilters", () => {
+			const { changeFilters } = storeModule.mutations;
+
+			it("should change value of existing filter", () => {
+				const state = storeModule.state();
+
+				const filterBefore = state.filters.find(
+					(f) => f.id === "$filter:PrimaryTeacher"
+				);
+				// invert existing value
+				const value = !filterBefore.value;
+
+				changeFilters(state, { id: "$filter:PrimaryTeacher", value });
+
+				const filterAfter = state.filters.find(
+					(f) => f.id === "$filter:PrimaryTeacher"
+				);
+
+				expect(filterAfter.value).toBe(false);
+			});
+
+			// maybe it is a part of the store key check
+			describe("when a PrimaryTeacher filter is in store", () => {
+				it("should exist", () => {
+					const state = storeModule.state();
+
+					const exist = state.filters.some(
+						(f) => f.id === "$filter:PrimaryTeacher"
+					);
+
+					expect(exist).toBe(true);
+				});
+
+				it("should set to be true by default", () => {
+					const state = storeModule.state();
+
+					const filter = state.filters.find(
+						(f) => f.id === "$filter:PrimaryTeacher"
+					);
+
+					expect(filter.value).toBe(true);
+				});
 			});
 		});
 
 		describe("setStatus", () => {
+			const { setStatus } = storeModule.mutations;
+
 			it("Should set status in state", () => {
-				const { setStatus } = storeModule.mutations;
-				const state = {
-					status: "",
-				};
+				const state = storeModule.state();
+
 				setStatus(state, "pending");
+
 				expect(state.status).toStrictEqual("pending");
 			});
+
+			it.todo("enum check");
 		});
 
 		describe("setBusinessError", () => {
 			it("Should set business error in state", () => {
 				const { setBusinessError } = storeModule.mutations;
-				const state = {
+				const state = Object.assign(storeModule.state(), {
 					businessError: {},
-				};
+				});
 				setBusinessError(state, {
 					statusCode: "404",
 					message: "404 - Can't find page",
@@ -177,227 +222,224 @@ describe("store/tasks", () => {
 	});
 
 	describe("getters", () => {
-		const studentState = {
+		// TODO: replace with real store modification and put it directly to the test
+		const studentState = Object.assign(storeModule.state(), {
 			tasks,
 			status: "completed",
 			courseFilter: [],
-		};
-		const studentStateWithoutCompleted = {
-			tasks: openTasks,
-			status: "completed",
-			courseFilter: [],
-		};
-		const teacherState = {
+		});
+
+		const teacherState = Object.assign(storeModule.state(), {
 			tasks: tasksTeacher,
 			status: "completed",
 			courseFilter: [],
-		};
-		const teacherStateWithFilter = {
+		});
+
+		const teacherStateWithFilter = Object.assign(storeModule.state(), {
 			tasks: tasksTeacher,
 			status: "completed",
 			courseFilter: ["Mathe"],
-		};
-		const teacherStateWithDrafts = {
+		});
+
+		const teacherStateWithDrafts = Object.assign(storeModule.state(), {
 			tasks: allTasksTeacher,
 			status: "completed",
 			courseFilter: [],
-		};
-		const { getters } = storeModule;
+		});
 
 		describe("getTasks", () => {
+			const { getTasks } = storeModule.getters;
+
 			it("Should return all tasks", () => {
-				expect(getters.getTasks(studentState)).toStrictEqual(tasks);
+				const result = getTasks(studentState);
+
+				expect(result).toStrictEqual(tasks);
 			});
 		});
 
 		describe("getStatus", () => {
+			const { getStatus } = storeModule.getters;
+
 			it("Should return status", () => {
-				expect(getters.getStatus(studentState)).toStrictEqual("completed");
+				const result = getStatus(studentState);
+
+				expect(result).toStrictEqual("completed");
 			});
 		});
 
-		describe("getCourses", () => {
-			it("Should return all relevant courses", () => {
-				expect(getters.getCourses(studentState)).toStrictEqual(coursesStudent);
-			});
-		});
+		describe("hasNoTasks", () => {
+			const { hasNoTasks } = storeModule.getters;
 
-		describe("hasNoOpenTasksStudent", () => {
 			it("Should return true, if it's loaded and there are no open tasks for the student", () => {
-				expect(getters.hasNoTasks(studentState)).toBe(false);
+				const result = hasNoTasks(studentState);
+
+				expect(result).toBe(false);
 			});
 		});
 
 		describe("hasNoCompletedTasks", () => {
+			const { hasNoCompletedTasks } = storeModule.getters;
+
 			it("Should return true, if it's loaded and there are no completed tasks", () => {
-				expect(getters.hasNoCompletedTasks(studentStateWithoutCompleted)).toBe(
-					true
+				const studentStateWithoutCompleted = Object.assign(
+					storeModule.state(),
+					{
+						tasks: openTasks,
+						status: "completed",
+						courseFilter: [],
+					}
 				);
+
+				const result = hasNoCompletedTasks(studentStateWithoutCompleted);
+
+				expect(result).toBe(true);
 			});
 		});
 
 		describe("hasNoOpenTasksTeacher", () => {
+			const { hasNoOpenTasksTeacher } = storeModule.getters;
+
 			it("Should return true, if it's loaded and there are no open tasks for the teacher", () => {
-				expect(getters.hasNoOpenTasksTeacher(teacherState)).toBe(false);
+				const result = hasNoOpenTasksTeacher(teacherState);
+
+				expect(result).toBe(false);
 			});
 		});
 
 		describe("hasNoDrafts", () => {
+			const { hasNoDrafts } = storeModule.getters;
+
 			it("Should return true, if it's loaded and there are no drafts", () => {
-				expect(getters.hasNoDrafts(teacherState)).toBe(true);
+				const result = hasNoDrafts(teacherState);
+
+				expect(result).toBe(true);
 			});
 		});
 
 		describe("hasFilterSelected", () => {
+			const { hasFilterSelected } = storeModule.getters;
+
 			it("Should return true, if it's loaded and there are no drafts", () => {
-				expect(getters.hasFilterSelected(teacherState)).toBe(false);
-				expect(getters.hasFilterSelected(teacherStateWithFilter)).toBe(true);
+				const result = hasFilterSelected(teacherStateWithFilter);
+
+				expect(result).toBe(true);
 			});
+
+			it("should return false, if no draft exist", () => {
+				// TODO: prepare right test data
+				const result = hasFilterSelected(teacherState);
+
+				expect(result).toBe(false);
+			});
+
+			it.todo("should return false if loading state is not equal loading.");
 		});
 
 		describe("getOpenTasksForStudent", () => {
+			const { getOpenTasksForStudent } = storeModule.getters;
+
 			it("Should have properties for sub sets", () => {
-				expect(getters.getOpenTasksForStudent(studentState)).toHaveProperty(
-					"overdue"
-				);
-				expect(getters.getOpenTasksForStudent(studentState)).toHaveProperty(
-					"noDueDate"
-				);
-				expect(getters.getOpenTasksForStudent(studentState)).toHaveProperty(
-					"withDueDate"
+				const result = getOpenTasksForStudent(studentState);
+
+				const test = Object.keys(result).sort();
+				expect(test).toStrictEqual(
+					["overdue", "noDueDate", "withDueDate"].sort()
 				);
 			});
 
-			it("Should have tasks with due date", () => {
-				expect(
-					getters.getOpenTasksForStudent(studentState).withDueDate
-				).toHaveLength(openTasksWithDueDate.length);
-			});
+			it("Should filter tasks correctly", () => {
+				const result = getOpenTasksForStudent(studentState);
 
-			it("Should have tasks with no due date", () => {
-				expect(
-					getters.getOpenTasksForStudent(studentState).noDueDate
-				).toHaveLength(openTasksWithoutDueDate.length);
-			});
-
-			it("Should have overdue tasks", () => {
-				expect(
-					getters.getOpenTasksForStudent(studentState).overdue
-				).toHaveLength(overDueTasks.length);
+				expect(result.overdue).toHaveLength(4);
+				expect(result.noDueDate).toHaveLength(1);
+				expect(result.withDueDate).toHaveLength(6);
 			});
 		});
 
 		describe("getCompletedTasksForStudent", () => {
+			const { getCompletedTasksForStudent } = storeModule.getters;
+
 			it("Should have properties for sub sets", () => {
-				expect(
-					getters.getCompletedTasksForStudent(studentState)
-				).toHaveProperty("submitted");
-				expect(
-					getters.getCompletedTasksForStudent(studentState)
-				).toHaveProperty("graded");
+				const result = getCompletedTasksForStudent(studentState);
+
+				const test = Object.keys(result).sort();
+				expect(test).toStrictEqual(["submitted", "graded"].sort());
 			});
 
 			it("Should have all tasks, that are submitted", () => {
-				expect(
-					getters.getCompletedTasksForStudent(studentState).submitted
-				).toStrictEqual(submittedTasks);
+				const result = getCompletedTasksForStudent(studentState);
+
+				expect(result.submitted).toStrictEqual(submittedTasks);
 			});
 
 			it("Should have all tasks, that are graded", () => {
-				expect(
-					getters.getCompletedTasksForStudent(studentState).graded
-				).toStrictEqual(gradedTasks);
+				const result = getCompletedTasksForStudent(studentState);
+
+				expect(result.graded).toStrictEqual(gradedTasks);
 			});
 		});
 
 		describe("getOpenTasksForTeacher", () => {
+			const { getOpenTasksForTeacher } = storeModule.getters;
+
 			it("Should have properties for sub sets", () => {
-				expect(getters.getOpenTasksForTeacher(teacherState)).toHaveProperty(
-					"overdue"
-				);
-				expect(getters.getOpenTasksForTeacher(teacherState)).toHaveProperty(
-					"noDueDate"
-				);
-				expect(getters.getOpenTasksForTeacher(teacherState)).toHaveProperty(
-					"withDueDate"
+				const result = getOpenTasksForTeacher(teacherState);
+
+				const test = Object.keys(result).sort();
+				expect(test).toStrictEqual(
+					["overdue", "noDueDate", "withDueDate"].sort()
 				);
 			});
 
-			it("Should have tasks with due date", () => {
-				expect(
-					getters.getOpenTasksForTeacher(teacherState).withDueDate
-				).toHaveLength(dueDateTasksTeacher.length);
-			});
+			it("Should filter tasks correctly", () => {
+				const result = getOpenTasksForTeacher(teacherState);
 
-			it("Should have tasks with no due date", () => {
-				expect(
-					getters.getOpenTasksForTeacher(teacherState).noDueDate
-				).toHaveLength(noDueDateTasksTeacher.length);
-			});
-
-			it("Should have overdue tasks", () => {
-				expect(
-					getters.getOpenTasksForTeacher(teacherState).overdue
-				).toHaveLength(overDueTasksTeacher.length);
+				expect(result.withDueDate).toHaveLength(4);
+				expect(result.noDueDate).toHaveLength(1);
+				expect(result.overdue).toHaveLength(3);
 			});
 
 			it("Should correctly filter tasks", () => {
-				const filteredTasks = getters.getOpenTasksForTeacher(
-					teacherStateWithFilter
-				);
+				const filteredTasks = getOpenTasksForTeacher(teacherStateWithFilter);
 
+				// TODO: test data preparation
 				expect(
 					filteredTasks.overdue
 						.concat(filteredTasks.noDueDate)
 						.concat(filteredTasks.withDueDate)
-				).toHaveLength(mathTasks.length);
+				).toHaveLength(5);
 			});
 		});
 
 		describe("getDraftTasksForTeacher", () => {
+			const { getDraftTasksForTeacher } = storeModule.getters;
+
 			it("Should have all tasks, that are drafts", () => {
-				expect(
-					getters.getDraftTasksForTeacher(teacherStateWithDrafts)
-				).toStrictEqual(drafts);
+				const result = getDraftTasksForTeacher(teacherStateWithDrafts);
+
+				expect(result).toStrictEqual(drafts);
 			});
 		});
 
 		describe("getTasksCountPerCourseStudent", () => {
+			const { getTasksCountPerCourseStudent } = storeModule.getters;
+
 			it("Should have correct amount of tasks per course", () => {
-				const mockGetter = {
-					getCourses: coursesStudent,
-				};
+				const result = getTasksCountPerCourseStudent(studentState);
 
-				expect(
-					getters.getTasksCountPerCourseStudent(studentState, mockGetter).open
-				).toStrictEqual(tasksCountStudent.open);
-
-				expect(
-					getters.getTasksCountPerCourseStudent(studentState, mockGetter)
-						.completed
-				).toStrictEqual(tasksCountStudent.completed);
+				expect(result.open).toStrictEqual(tasksCountStudent.open);
+				expect(result.completed).toStrictEqual(tasksCountStudent.completed);
 			});
 		});
 
 		describe("getTasksCountPerCourseTeacher", () => {
+			const { getTasksCountPerCourseTeacher } = storeModule.getters;
+
 			it("Should have correct amount of tasks per course", () => {
-				const mockGetter = {
-					getCourses: coursesTeacher,
-				};
+				const result = getTasksCountPerCourseTeacher(teacherStateWithDrafts);
 
-				expect(
-					getters.getTasksCountPerCourseTeacher(
-						teacherStateWithDrafts,
-						mockGetter
-					).open
-				).toStrictEqual(tasksCountTeacher.open);
-
-				expect(
-					getters.getTasksCountPerCourseTeacher(
-						teacherStateWithDrafts,
-						mockGetter
-					).drafts
-				).toStrictEqual(tasksCountTeacher.drafts);
+				expect(result.open).toStrictEqual(tasksCountTeacher.open);
+				expect(result.drafts).toStrictEqual(tasksCountTeacher.drafts);
 			});
 		});
 	});
