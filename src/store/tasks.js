@@ -192,7 +192,6 @@ const module = {
 
 			return isLoadedWithElements(state, openTasks);
 		},
-		// TODO: please refine is not effected by draft and filter that sounds like it is teacher based
 		hasCompletedTasks: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
 			const completedTasks = filterCompleted(filterdByCourses);
@@ -219,9 +218,7 @@ const module = {
 
 			return courseFilters;
 		},
-		getFilters: (state) => {
-			return state.filters;
-		},
+		getFilters: (state) => state.filters,
 		getOpenTasksForStudent: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
 			const filteredOpenForStudent = filterOpenForTeacher(filterdByCourses);

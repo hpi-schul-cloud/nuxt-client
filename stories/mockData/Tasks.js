@@ -428,7 +428,7 @@ const ObjectId = () =>
 	hex(Date.now() / 1000) +
 	" ".repeat(16).replace(/./g, () => hex(Math.random() * 16));
 
-const generateTask = (props, status) => {
+const generateTask = (status, props) => {
 	const id = ObjectId();
 
 	return Object.assign(

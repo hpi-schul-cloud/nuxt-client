@@ -284,7 +284,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should pass substitution flag", () => {
-				const task = generateTask(undefined, { isSubstitutionTeacher: true });
+				const task = generateTask({ isSubstitutionTeacher: true });
 				const state = Object.assign(storeModule.state(), {
 					tasks: [task],
 				});
@@ -375,7 +375,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should return false if tasks already finished (graded+submitted)", () => {
-				const task = generateTask(undefined, { graded: 1, submitted: 1 });
+				const task = generateTask({ graded: 1, submitted: 1 });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -388,7 +388,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should return false if tasks are drafts", () => {
-				const task = generateTask(undefined, { isDraft: true });
+				const task = generateTask({ isDraft: true });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -418,7 +418,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should return true by finished (graded+submitted) tasks", () => {
-				const task = generateTask(undefined, { graded: 1, submitted: 1 });
+				const task = generateTask({ graded: 1, submitted: 1 });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -456,7 +456,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should return false if tasks are drafts", () => {
-				const task = generateTask(undefined, { isDraft: true });
+				const task = generateTask({ isDraft: true });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -523,7 +523,7 @@ describe("store/tasks", () => {
 
 		describe("hasCompletedTasks", () => {
 			it("should return true if tasks has more then one status.submitted", () => {
-				const task = generateTask(undefined, { submitted: 2 });
+				const task = generateTask({ submitted: 2 });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -536,7 +536,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should return true if tasks has more then one status.graded", () => {
-				const task = generateTask(undefined, { graded: 2 });
+				const task = generateTask({ graded: 2 });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -549,7 +549,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should true if tasks is selected by course filter", () => {
-				const task = generateTask(undefined, { submitted: 2 });
+				const task = generateTask({ submitted: 2 });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -562,7 +562,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should false if loading state is not completed", () => {
-				const task = generateTask(undefined, { submitted: 2 });
+				const task = generateTask({ submitted: 2 });
 				const state = Object.assign(storeModule.state(), {
 					status: "pending",
 					tasks: [task],
@@ -591,7 +591,7 @@ describe("store/tasks", () => {
 			it.todo("should call executeFilters");
 
 			it("should return true by draft tasks", () => {
-				const task = generateTask(undefined, { isDraft: true });
+				const task = generateTask({ isDraft: true });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -604,7 +604,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should return false if it is not a draft tasks", () => {
-				const task = generateTask(undefined, { isDraft: false });
+				const task = generateTask({ isDraft: false });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -617,7 +617,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should true if tasks is selected by course filter", () => {
-				const task = generateTask(undefined, { isDraft: true });
+				const task = generateTask({ isDraft: true });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [task],
@@ -630,7 +630,7 @@ describe("store/tasks", () => {
 			});
 
 			it("should false if loading state is not completed", () => {
-				const task = generateTask(undefined, { isDraft: true });
+				const task = generateTask({ isDraft: true });
 				const state = Object.assign(storeModule.state(), {
 					status: "pending",
 					tasks: [task],
