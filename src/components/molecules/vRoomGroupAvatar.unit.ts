@@ -106,13 +106,13 @@ describe("vRoomGroupAvatar", () => {
 		expect(badgeElement.vm.$data.isActive).toBeFalsy();
 	});
 
-	it.skip("should display the correct size and group-avatar property", () => {
+	it("should display the correct size and group-avatar property", () => {
 		const wrapper = getWrapper(propsData);
 		const avatarComponent = wrapper.find(".group-avatar-component");
 
 		expect(avatarComponent).toBeTruthy();
 		expect(avatarComponent.vm.$props.size).toStrictEqual(100 / 3);
-		expect(avatarComponent.vm.$props.groupAvatar).toStrictEqual(true);
+		expect(avatarComponent.vm.$props.condenseLayout).toStrictEqual(true);
 	});
 
 	it("should have correct amount of items", () => {

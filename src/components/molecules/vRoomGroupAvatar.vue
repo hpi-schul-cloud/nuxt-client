@@ -35,6 +35,7 @@
 							:item="item"
 							:size="size / 3"
 							:draggable="false"
+							condense-layout
 						></vRoomAvatar>
 					</v-col>
 				</v-row>

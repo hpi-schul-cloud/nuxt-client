@@ -19,18 +19,20 @@
 				class="ma-0 pa-1 avatar-component"
 				:color="item.displayColor"
 				:size="size"
-				:class="size < 100 ? 'rounded' : 'rounded-xl'"
+				:class="condenseLayout ? 'rounded' : 'rounded-xl'"
 				@click="$emit('click', item)"
 				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 			>
-				<span :class="size < 100 ? 'group-avatar' : 'single-avatar'">{{
+				<span :class="condenseLayout ? 'group-avatar' : 'single-avatar'">{{
 					avatarTitle
 				}}</span>
 			</v-avatar>
-			<span v-if="size > 100" class="d-flex justify-center mt-1 sub-title">{{
-				item.title
-			}}</span>
+			<span
+				v-if="!condenseLayout"
+				class="d-flex justify-center mt-1 sub-title"
+				>{{ item.title }}</span
+			>
 		</v-badge>
 	</div>
 </template>
@@ -49,6 +51,9 @@ export default {
 			type: Boolean,
 		},
 		showBadge: {
+			type: Boolean,
+		},
+		condenseLayout: {
 			type: Boolean,
 		},
 	},
