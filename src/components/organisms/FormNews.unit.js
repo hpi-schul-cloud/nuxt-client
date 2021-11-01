@@ -1,10 +1,11 @@
 import FormNews from "./FormNews";
-import { createInputDateTime } from "@plugins/datetime";
+import { DATETIME_FORMAT } from "@plugins/datetime";
 import dayjs from "dayjs";
 
 const testDate = dayjs("2022-07-05T09:00:00.000Z");
 
-const [date, time] = createInputDateTime(testDate.utc());
+const date = testDate.format(DATETIME_FORMAT.inputDate);
+const time = testDate.format(DATETIME_FORMAT.inputTime);
 
 const validNews = {
 	title: "Hi",

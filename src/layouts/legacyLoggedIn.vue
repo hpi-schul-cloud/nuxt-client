@@ -1,6 +1,7 @@
 <template>
 	<!-- default template = loggedin view -->
 	<div>
+		<skip-links></skip-links>
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<user-has-role :role="isDemoRole">
@@ -43,6 +44,7 @@ import autoLogoutWarning from "@components/organisms/AutoLogoutWarning";
 import sidebarBaseItems from "@utils/sidebarBaseItems.js";
 import toastsFromQueryString from "@mixins/toastsFromQueryString";
 import MatrixMessenger from "@components/organisms/Messenger/MatrixMessenger";
+import SkipLinks from "../components/molecules/SkipLinks.vue";
 
 export default {
 	components: {
@@ -53,6 +55,7 @@ export default {
 		UserHasRole,
 		autoLogoutWarning,
 		MatrixMessenger,
+		SkipLinks,
 	},
 	mixins: [toastsFromQueryString],
 	data() {
