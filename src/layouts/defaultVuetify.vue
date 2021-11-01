@@ -1,7 +1,7 @@
 <template>
 	<legacy-logged-in>
 		<v-app class="content">
-			<v-main>
+			<v-main id="main-content">
 				<Nuxt />
 			</v-main>
 		</v-app>

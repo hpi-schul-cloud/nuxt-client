@@ -11,6 +11,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-155 - add filter for task where the teacher is not a substitution teacher
+- BC-392 - added skip to main content link (accessibility feature)
 - BC-496 - Added Renaming of a group of rooms
 - BC-40 - ansible rocketchat variable renaming
 
