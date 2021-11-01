@@ -1,62 +1,82 @@
 import { fetchAll } from "@utils";
 
+const isArrayWithElements = (input) => Array.isArray(input) && input.length > 0;
+
 const filterByCourses = (tasks, courses) => {
-	return courses.length
-		? tasks.filter((task) => {
-				return courses.includes(task.courseName);
-		  })
-		: tasks;
+	let filteredByCourses = tasks;
+
+	if (isArrayWithElements(courses)) {
+		filteredByCourses = tasks.filter((task) =>
+			courses.includes(task.courseName)
+		);
+	}
+
+	return filteredByCourses;
 };
 
 const filterOpenForTeacher = (tasks) => {
 	const filteredTasks = tasks.filter((task) => task.status.isDraft === false);
+
 	return filteredTasks;
 };
 
 const filterOpenForStudent = (tasks) => {
-	const filteredTasks = tasks.filter((task) => task.status.isDraft === false);
-	const notSubmittedOrGraded = filteredTasks.filter(
+	const noDraftTask = tasks.filter((task) => task.status.isDraft === false);
+	const notSubmittedOrGraded = noDraftTask.filter(
 		(task) => task.status.submitted === 0 && task.status.graded === 0
 	);
+
 	return notSubmittedOrGraded;
 };
 
 const filterNoDueDate = (tasks) => {
-	return tasks.filter((task) => {
-		return !task.duedate;
-	});
+	const withoutDueDate = tasks.filter((task) => !task.duedate);
+
+	return withoutDueDate;
 };
 
 const filterWithDueDate = (tasks) => {
-	return tasks.filter((task) => {
-		return task.duedate && new Date(task.duedate) > new Date();
-	});
+	const withDueDate = tasks.filter(
+		(task) => task.duedate && new Date(task.duedate) > new Date()
+	);
+
+	return withDueDate;
 };
 
 const filterOverdue = (tasks) => {
-	return tasks.filter((task) => {
-		return task.duedate && new Date(task.duedate) < new Date();
-	});
+	const overdued = tasks.filter(
+		(task) => task.duedate && new Date(task.duedate) < new Date()
+	);
+
+	return overdued;
 };
 
 const filterCompleted = (tasks) => {
-	return tasks.filter(
+	const completed = tasks.filter(
 		(task) => task.status.submitted >= 1 || task.status.graded >= 1
 	);
+
+	return completed;
 };
 
 const filterSubmitted = (tasks) => {
-	return tasks.filter(
+	const submitted = tasks.filter(
 		(task) => task.status.submitted > 0 && task.status.graded === 0
 	);
+
+	return submitted;
 };
 
 const filterGraded = (tasks) => {
-	return tasks.filter((task) => task.status.graded > 0);
+	const graded = tasks.filter((task) => task.status.graded > 0);
+
+	return graded;
 };
 
 const filterDrafts = (tasks) => {
-	return tasks.filter((task) => task.status.isDraft === true);
+	const drafts = tasks.filter((task) => task.status.isDraft === true);
+
+	return drafts;
 };
 
 const extractCoursesFromTasks = (tasks) => {
@@ -66,6 +86,7 @@ const extractCoursesFromTasks = (tasks) => {
 			isSubstitution: task.status.isSubstitutionTeacher,
 		}))
 	);
+
 	return Array.from(courses);
 };
 
@@ -73,6 +94,7 @@ const filterIsFromPrimaryTeacher = (tasks) => {
 	const primaryTeacherTasks = tasks.filter(
 		(task) => task.status.isSubstitutionTeacher === false
 	);
+
 	return primaryTeacherTasks;
 };
 
@@ -132,8 +154,8 @@ const module = {
 			state.tasks = tasks;
 		},
 		// TODO: rename
-		setFilter(state, filterNames) {
-			state.courseFilter = filterNames.filter((name) => !existingFilters[name]);
+		setFilter(state, courseNames) {
+			state.courseFilter = courseNames;
 		},
 		changeFilter(state, { id, value }) {
 			const filters = state.filters.map((f) => {
@@ -163,7 +185,14 @@ const module = {
 		},
 		hasNoOpenTasksStudent: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
-			const openTasks = filterOpenForstudent(filterdByCourses);
+			const openTasks = filterOpenForStudent(filterdByCourses);
+
+			return hasLoadedElements(state, openTasks);
+		},
+		hasNoOpenTasksTeacher: (state) => {
+			const tasks = executeFilters(state.filters, state.tasks);
+			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
+			const openTasks = filterOpenForTeacher(filterdByCourses);
 
 			return hasLoadedElements(state, openTasks);
 		},
@@ -172,13 +201,6 @@ const module = {
 			const completedTasks = filterCompleted(filterdByCourses);
 
 			return hasLoadedElements(state, completedTasks);
-		},
-		hasNoOpenTasksTeacher: (state) => {
-			const tasks = executeFilters(state.filters, state.tasks);
-			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
-			const openTasks = filterOpenForTeacher(filterdByCourses);
-
-			return hasLoadedElements(state, openTasks);
 		},
 		hasNoDrafts: (state) => {
 			const tasks = executeFilters(state.filters, state.tasks);
@@ -199,13 +221,11 @@ const module = {
 		},
 		getCourseFilters: (state) => {
 			const courses = extractCoursesFromTasks(state.tasks);
-			const courseFilters = courses.map((c) => {
-				return {
-					value: c.name,
-					text: c.name,
-					isSubstitution: c.isSubstitution,
-				};
-			});
+			const courseFilters = courses.map((c) => ({
+				value: c.name,
+				text: c.name,
+				isSubstitution: c.isSubstitution,
+			}));
 
 			return courseFilters;
 		},
@@ -227,7 +247,7 @@ const module = {
 		getCompletedTasksForStudent: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
 
-			completedTasks = {
+			const completedTasks = {
 				submitted: filterSubmitted(filterdByCourses),
 				graded: filterGraded(filterdByCourses),
 			};
@@ -258,19 +278,12 @@ const module = {
 			const courses = getters.getCourses;
 			const tasksCount = { open: {}, completed: {} };
 
-			// TODO: use array.map or array.reduce to reduce the needed loops
 			courses.forEach((course) => {
-				tasksCount.open[course] = filterOpenForStudent(
-					state.tasks.filter((task) => {
-						return task.courseName === course;
-					})
-				).length;
-
-				tasksCount.completed[course] = filterCompleted(
-					state.tasks.filter((task) => {
-						return task.courseName === course;
-					})
-				).length;
+				const tasksOfCourse = state.tasks.filter(
+					(task) => task.courseName === course
+				);
+				tasksCount.open[course] = filterOpenForStudent(tasksOfCourse).length;
+				tasksCount.completed[course] = filterCompleted(tasksOfCourse).length;
 			});
 
 			return tasksCount;
@@ -279,19 +292,12 @@ const module = {
 			const courses = getters.getCourses;
 			const tasksCount = { open: {}, drafts: {} };
 
-			// TODO: use array.map or array.reduce to reduce the needed loops
 			courses.forEach((course) => {
-				tasksCount.open[course] = filterOpenForTeacher(
-					state.tasks.filter((task) => {
-						return task.courseName === course;
-					})
-				).length;
-
-				tasksCount.drafts[course] = filterDrafts(
-					state.tasks.filter((task) => {
-						return task.courseName === course;
-					})
-				).length;
+				const tasksOfCourse = state.tasks.filter(
+					(task) => task.courseName === course
+				);
+				tasksCount.open[course] = filterOpenForTeacher(tasksOfCourse).length;
+				tasksCount.drafts[course] = filterDrafts(tasksOfCourse).length;
 			});
 
 			return tasksCount;
