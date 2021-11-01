@@ -15,6 +15,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+- BC-402 - change e2e test include to reusable workflows
 - BC-501 - displaying topic name in task overview
 
 ### Changed
