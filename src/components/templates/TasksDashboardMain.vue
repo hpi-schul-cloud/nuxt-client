@@ -32,7 +32,7 @@
 			<v-custom-autocomplete
 				v-if="hasTasks"
 				v-model="selectedCourseFilters"
-				:items="listOfFilters"
+				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
@@ -118,7 +118,7 @@ export default {
 				return false;
 			}
 		},
-		listOfFilters: function () {
+		getSortedCoursesFilters: function () {
 			const filters = this.courseFilters.map((filter) => {
 				const count = this.getTaskCount(filter.value);
 				const name = filter.value || this.$t("pages.tasks.labels.noCourse");
@@ -130,7 +130,6 @@ export default {
 				return filter;
 			});
 
-			// TODO: sort add vertretungslehrer label in store
 			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
 		tabOneHeader: function () {
