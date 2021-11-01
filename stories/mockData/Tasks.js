@@ -423,7 +423,27 @@ const mathTasks = [
 	},
 ];
 
-// please not change until it is convert to .ts file
+const hex = (value) => Math.floor(value).toString(16);
+const ObjectId = () =>
+	hex(Date.now() / 1000) +
+	" ".repeat(16).replace(/./g, () => hex(Math.random() * 16));
+
+const generateTask = (props, status) => {
+	const id = ObjectId();
+
+	return Object.assign(
+		{
+			id,
+			_id: id,
+			courseName: "course " + Date.now(),
+			name: "task " + Date.now(),
+			createdAt: Date.now(), // todo: formating
+			status: generateStatus(status),
+		},
+		props
+	);
+};
+
 export default {
 	mathTasks,
 	tasksCountTeacher,
@@ -446,4 +466,5 @@ export default {
 	openTasksWithoutDueDate,
 	openTasksWithDueDate,
 	overDueTasks,
+	generateTask,
 };

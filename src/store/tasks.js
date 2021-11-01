@@ -51,6 +51,7 @@ const filterOverdue = (tasks) => {
 	return overdued;
 };
 
+// it is a teacher based interpretation or and why or condition?
 const filterCompleted = (tasks) => {
 	const completed = tasks.filter(
 		(task) => task.status.submitted >= 1 || task.status.graded >= 1
@@ -98,8 +99,8 @@ const filterIsFromPrimaryTeacher = (tasks) => {
 	return primaryTeacherTasks;
 };
 
-const hasLoadedElements = (state, tasks) => {
-	return state.status === "completed" && tasks.length === 0;
+const isLoadedWithElements = (state, tasks) => {
+	return state.status === "completed" && tasks.length > 0;
 };
 
 const executeFilters = (filters = [], tasks) => {
@@ -177,34 +178,33 @@ const module = {
 		},
 	},
 	getters: {
-		hasNoTasks: (state) => {
-			return hasLoadedElements(state, state.tasks);
-		},
-		hasNoOpenTasksStudent: (state) => {
+		hasTasks: (state) => isLoadedWithElements(state, state.tasks),
+		hasOpenTasksStudent: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
 			const openTasks = filterOpenForStudent(filterdByCourses);
 
-			return hasLoadedElements(state, openTasks);
+			return isLoadedWithElements(state, openTasks);
 		},
-		hasNoOpenTasksTeacher: (state) => {
+		hasOpenTasksTeacher: (state) => {
 			const tasks = executeFilters(state.filters, state.tasks);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const openTasks = filterOpenForTeacher(filterdByCourses);
 
-			return hasLoadedElements(state, openTasks);
+			return isLoadedWithElements(state, openTasks);
 		},
-		hasNoCompletedTasks: (state) => {
+		// TODO: please refine is not effected by draft and filter that sounds like it is teacher based
+		hasCompletedTasks: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
 			const completedTasks = filterCompleted(filterdByCourses);
 
-			return hasLoadedElements(state, completedTasks);
+			return isLoadedWithElements(state, completedTasks);
 		},
-		hasNoDrafts: (state) => {
+		hasDrafts: (state) => {
 			const tasks = executeFilters(state.filters, state.tasks);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const draftTasks = filterDrafts(filterdByCourses);
 
-			return hasLoadedElements(state, draftTasks);
+			return isLoadedWithElements(state, draftTasks);
 		},
 		hasFilterSelected: (state) => state.courseFilter.length > 0,
 		getTasks: (state) => state.tasks,

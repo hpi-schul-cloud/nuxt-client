@@ -6,12 +6,12 @@ const {
 	tasks,
 	submittedTasks,
 	gradedTasks,
-	openTasks,
 	tasksTeacher,
 	drafts,
 	allTasksTeacher,
 	tasksCountTeacher,
 	tasksCountStudent,
+	generateTask,
 } = mocks;
 
 describe("store/tasks", () => {
@@ -222,6 +222,25 @@ describe("store/tasks", () => {
 	});
 
 	describe("getters", () => {
+		const {
+			hasTasks,
+			hasOpenTasksStudent,
+			hasOpenTasksTeacher,
+			hasCompletedTasks,
+			hasDrafts,
+			hasFilterSelected,
+			getTasks,
+			getStatus,
+			getCourseFilters,
+			getFilters,
+			getOpenTasksForStudent,
+			getCompletedTasksForStudent,
+			getOpenTasksForTeacher,
+			getDraftTasksForTeacher,
+			getTasksCountPerCourseStudent,
+			getTasksCountPerCourseTeacher,
+		} = storeModule.getters;
+
 		// TODO: replace with real store modification and put it directly to the test
 		const studentState = Object.assign(storeModule.state(), {
 			tasks,
@@ -247,9 +266,210 @@ describe("store/tasks", () => {
 			courseFilter: [],
 		});
 
-		describe("getTasks", () => {
-			const { getTasks } = storeModule.getters;
+		describe("getCourseFilters", () => {
+			it("should format output", () => {
+				const task = generateTask();
+				const state = Object.assign(storeModule.state(), {
+					tasks: [task],
+				});
+				const result = getCourseFilters(state);
 
+				expect(result).toStrictEqual([
+					{
+						value: task.courseName,
+						text: task.courseName,
+						isSubstitution: false,
+					},
+				]);
+			});
+
+			it("should pass substitution flag", () => {
+				const task = generateTask(undefined, { isSubstitutionTeacher: true });
+				const state = Object.assign(storeModule.state(), {
+					tasks: [task],
+				});
+				const result = getCourseFilters(state);
+
+				expect(result).toStrictEqual([
+					{
+						value: task.courseName,
+						text: task.courseName,
+						isSubstitution: true,
+					},
+				]);
+			});
+
+			it("should work for empty tasks", () => {
+				const state = Object.assign(storeModule.state(), {
+					tasks: [],
+				});
+				const result = getCourseFilters(state);
+
+				expect(result).toStrictEqual([]);
+			});
+		});
+
+		describe("getFilters", () => {
+			it("should return the stored value", () => {
+				const filters = [{ a: 1 }];
+				const state = Object.assign(storeModule.state(), {
+					filters,
+				});
+
+				const result = getFilters(state);
+
+				expect(result).toStrictEqual(filters);
+			});
+		});
+
+		describe("hasOpenTasksStudent", () => {
+			it("should true if tasks is selected by course filter", () => {
+				const task = generateTask();
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [task.courseName],
+				});
+
+				const result = hasOpenTasksStudent(state);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true if open tasks exist and state is completed", () => {
+				const task = generateTask();
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksStudent(state);
+
+				expect(result).toBe(true);
+			});
+
+			it("should false if loading state is not completed", () => {
+				const task = generateTask();
+				const state = Object.assign(storeModule.state(), {
+					status: "pending",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksStudent(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should false if no task exist", () => {
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksStudent(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false if tasks already finished (graded+submitted)", () => {
+				const task = generateTask(undefined, { graded: 1, submitted: 1 });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksStudent(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false if tasks are drafts", () => {
+				const task = generateTask(undefined, { isDraft: true });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksStudent(state);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("hasOpenTasksTeacher", () => {
+			it.todo("should call executeFilters");
+
+			it("should true if tasks is selected by course filter", () => {
+				const task = generateTask();
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [task.courseName],
+				});
+
+				const result = hasOpenTasksTeacher(state);
+
+				expect(result).toBe(true);
+			});
+
+			it("should return true by finished (graded+submitted) tasks", () => {
+				const task = generateTask(undefined, { graded: 1, submitted: 1 });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksTeacher(state);
+
+				expect(result).toBe(true);
+			});
+
+			it("should false if loading state is not completed", () => {
+				const task = generateTask();
+				const state = Object.assign(storeModule.state(), {
+					status: "pending",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksTeacher(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should false if no task exist", () => {
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksTeacher(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false if tasks are drafts", () => {
+				const task = generateTask(undefined, { isDraft: true });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasOpenTasksTeacher(state);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("getTasks", () => {
 			it("Should return all tasks", () => {
 				const result = getTasks(studentState);
 
@@ -258,8 +478,6 @@ describe("store/tasks", () => {
 		});
 
 		describe("getStatus", () => {
-			const { getStatus } = storeModule.getters;
-
 			it("Should return status", () => {
 				const result = getStatus(studentState);
 
@@ -267,67 +485,193 @@ describe("store/tasks", () => {
 			});
 		});
 
-		describe("hasNoTasks", () => {
-			const { hasNoTasks } = storeModule.getters;
+		describe("hasTasks", () => {
+			it("Should return true, if it's loaded and there are  open tasks for the student", () => {
+				const task = generateTask();
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+				const result = hasTasks(state);
 
-			it("Should return true, if it's loaded and there are no open tasks for the student", () => {
-				const result = hasNoTasks(studentState);
+				expect(result).toBe(true);
+			});
+
+			it("Should return false, if no task exist", () => {
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [],
+					courseFilter: [],
+				});
+				const result = hasTasks(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("Should return false, if status is not completed", () => {
+				const state = Object.assign(storeModule.state(), {
+					status: "pending",
+					tasks: [],
+					courseFilter: [],
+				});
+				const result = hasTasks(state);
 
 				expect(result).toBe(false);
 			});
 		});
 
-		describe("hasNoCompletedTasks", () => {
-			const { hasNoCompletedTasks } = storeModule.getters;
+		describe("hasCompletedTasks", () => {
+			it("should return true if tasks has more then one status.submitted", () => {
+				const task = generateTask(undefined, { submitted: 2 });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
 
-			it("Should return true, if it's loaded and there are no completed tasks", () => {
-				const studentStateWithoutCompleted = Object.assign(
-					storeModule.state(),
-					{
-						tasks: openTasks,
-						status: "completed",
-						courseFilter: [],
-					}
-				);
-
-				const result = hasNoCompletedTasks(studentStateWithoutCompleted);
+				const result = hasCompletedTasks(state);
 
 				expect(result).toBe(true);
 			});
-		});
 
-		describe("hasNoOpenTasksTeacher", () => {
-			const { hasNoOpenTasksTeacher } = storeModule.getters;
+			it("should return true if tasks has more then one status.graded", () => {
+				const task = generateTask(undefined, { graded: 2 });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
 
-			it("Should return true, if it's loaded and there are no open tasks for the teacher", () => {
-				const result = hasNoOpenTasksTeacher(teacherState);
+				const result = hasCompletedTasks(state);
+
+				expect(result).toBe(true);
+			});
+
+			it("should true if tasks is selected by course filter", () => {
+				const task = generateTask(undefined, { submitted: 2 });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [task.courseName],
+				});
+
+				const result = hasCompletedTasks(state);
+
+				expect(result).toBe(true);
+			});
+
+			it("should false if loading state is not completed", () => {
+				const task = generateTask(undefined, { submitted: 2 });
+				const state = Object.assign(storeModule.state(), {
+					status: "pending",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasCompletedTasks(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should false if no task exist", () => {
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [],
+					courseFilter: [],
+				});
+
+				const result = hasCompletedTasks(state);
 
 				expect(result).toBe(false);
 			});
 		});
 
-		describe("hasNoDrafts", () => {
-			const { hasNoDrafts } = storeModule.getters;
+		describe("hasDrafts", () => {
+			it.todo("should call executeFilters");
 
-			it("Should return true, if it's loaded and there are no drafts", () => {
-				const result = hasNoDrafts(teacherState);
+			it("should return true by draft tasks", () => {
+				const task = generateTask(undefined, { isDraft: true });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasDrafts(state);
 
 				expect(result).toBe(true);
+			});
+
+			it("should return false if it is not a draft tasks", () => {
+				const task = generateTask(undefined, { isDraft: false });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasDrafts(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should true if tasks is selected by course filter", () => {
+				const task = generateTask(undefined, { isDraft: true });
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [task],
+					courseFilter: [task.courseName],
+				});
+
+				const result = hasDrafts(state);
+
+				expect(result).toBe(true);
+			});
+
+			it("should false if loading state is not completed", () => {
+				const task = generateTask(undefined, { isDraft: true });
+				const state = Object.assign(storeModule.state(), {
+					status: "pending",
+					tasks: [task],
+					courseFilter: [],
+				});
+
+				const result = hasDrafts(state);
+
+				expect(result).toBe(false);
+			});
+
+			it("should false if no task exist", () => {
+				const state = Object.assign(storeModule.state(), {
+					status: "completed",
+					tasks: [],
+					courseFilter: [],
+				});
+
+				const result = hasDrafts(state);
+
+				expect(result).toBe(false);
 			});
 		});
 
 		describe("hasFilterSelected", () => {
-			const { hasFilterSelected } = storeModule.getters;
+			it("Should return true, if it's loaded and there are drafts", () => {
+				const state = Object.assign(storeModule.state(), {
+					courseFilter: ["abc"],
+				});
 
-			it("Should return true, if it's loaded and there are no drafts", () => {
-				const result = hasFilterSelected(teacherStateWithFilter);
+				const result = hasFilterSelected(state);
 
 				expect(result).toBe(true);
 			});
 
-			it("should return false, if no draft exist", () => {
-				// TODO: prepare right test data
-				const result = hasFilterSelected(teacherState);
+			it("should return false, if draft exist", () => {
+				const state = Object.assign(storeModule.state(), {
+					courseFilter: [],
+				});
+
+				const result = hasFilterSelected(state);
 
 				expect(result).toBe(false);
 			});
@@ -336,8 +680,6 @@ describe("store/tasks", () => {
 		});
 
 		describe("getOpenTasksForStudent", () => {
-			const { getOpenTasksForStudent } = storeModule.getters;
-
 			it("Should have properties for sub sets", () => {
 				const result = getOpenTasksForStudent(studentState);
 
@@ -357,8 +699,6 @@ describe("store/tasks", () => {
 		});
 
 		describe("getCompletedTasksForStudent", () => {
-			const { getCompletedTasksForStudent } = storeModule.getters;
-
 			it("Should have properties for sub sets", () => {
 				const result = getCompletedTasksForStudent(studentState);
 
@@ -380,8 +720,6 @@ describe("store/tasks", () => {
 		});
 
 		describe("getOpenTasksForTeacher", () => {
-			const { getOpenTasksForTeacher } = storeModule.getters;
-
 			it("Should have properties for sub sets", () => {
 				const result = getOpenTasksForTeacher(teacherState);
 
@@ -412,8 +750,6 @@ describe("store/tasks", () => {
 		});
 
 		describe("getDraftTasksForTeacher", () => {
-			const { getDraftTasksForTeacher } = storeModule.getters;
-
 			it("Should have all tasks, that are drafts", () => {
 				const result = getDraftTasksForTeacher(teacherStateWithDrafts);
 
@@ -422,8 +758,6 @@ describe("store/tasks", () => {
 		});
 
 		describe("getTasksCountPerCourseStudent", () => {
-			const { getTasksCountPerCourseStudent } = storeModule.getters;
-
 			it("Should have correct amount of tasks per course", () => {
 				const result = getTasksCountPerCourseStudent(studentState);
 
@@ -433,8 +767,6 @@ describe("store/tasks", () => {
 		});
 
 		describe("getTasksCountPerCourseTeacher", () => {
-			const { getTasksCountPerCourseTeacher } = storeModule.getters;
-
 			it("Should have correct amount of tasks per course", () => {
 				const result = getTasksCountPerCourseTeacher(teacherStateWithDrafts);
 

@@ -76,11 +76,11 @@ export default {
 	computed: {
 		...mapGetters("tasks", {
 			status: "getStatus",
-			hasNoTasks: "hasNoTasks",
-			hasNoOpenTasksStudent: "hasNoOpenTasksStudent",
-			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
-			hasNoCompletedTasks: "hasNoCompletedTasks",
-			hasNoDrafts: "hasNoDrafts",
+			hasTasks: "hasTasks",
+			hasOpenTasksStudent: "hasOpenTasksStudent",
+			hasOpenTasksTeacher: "hasOpenTasksTeacher",
+			hasCompletedTasks: "hasCompletedTasks",
+			hasDrafts: "hasDrafts",
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 			filters: "getFilters",
@@ -100,14 +100,15 @@ export default {
 			return this.role === "teacher";
 		},
 		isFilterDisabled: function () {
+			// TODO: refactor
 			if (this.selectedCourseFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
-					? this.hasNoOpenTasksStudent
-					: this.hasNoOpenTasksTeacher;
+					? !this.hasOpenTasksStudent
+					: !this.hasOpenTasksTeacher;
 			const tabTwoIsEmpty =
-				this.role === "student" ? this.hasNoCompletedTasks : this.hasNoDrafts;
+				this.role === "student" ? !this.hasCompletedTasks : !this.hasDrafts;
 
 			if (this.tab === 0 && tabOneIsEmpty) {
 				return true;
@@ -116,9 +117,6 @@ export default {
 			} else {
 				return false;
 			}
-		},
-		hasTasks: function () {
-			return !this.hasNoTasks;
 		},
 		listOfFilters: function () {
 			const filters = this.courseFilters.map((filter) => {
@@ -151,7 +149,6 @@ export default {
 
 			return tabOne;
 		},
-
 		tabTwoHeader: function () {
 			const tabTwo = {};
 			if (this.isStudent) {
@@ -192,7 +189,7 @@ export default {
 				}
 			}
 
-			if (!this.isStudent) {
+			if (this.isTeacher) {
 				if (this.tab === 0) {
 					return this.tasksCountTeacher.open[courseName];
 				}
