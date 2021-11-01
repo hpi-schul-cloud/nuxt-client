@@ -136,11 +136,22 @@ export default {
 			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
 		tabOneHeader: function () {
-			return {
-				icon: "$taskOpenFilled",
-				title: this.$t("components.organisms.TasksDashboardMain.tab.open"),
-			};
+			const tabOne = {};
+			if (this.isStudent) {
+				tabOne.icon = "$taskOpenFilled";
+				tabOne.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.open"
+				);
+			} else {
+				tabOne.icon = "$taskOpenFilled";
+				tabOne.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.current"
+				);
+			}
+
+			return tabOne;
 		},
+
 		tabTwoHeader: function () {
 			const tabTwo = {};
 			if (this.isStudent) {
