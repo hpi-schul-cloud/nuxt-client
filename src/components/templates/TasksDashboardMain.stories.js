@@ -81,7 +81,7 @@ storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 					namespaced: true,
 					getters: {
 						getStatus: () => "completed",
-						hasTasks: () => false,
+						hasTasks: () => true,
 						hasOpenTasksTeacher: () => true,
 						hasDrafts: () => true,
 						getTasks: () => tasks,

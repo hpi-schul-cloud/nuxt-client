@@ -118,7 +118,7 @@ describe("@components/templates/TasksDashboardMain", () => {
 				}),
 				hasOpenTasksStudent: () => false,
 				hasCompletedTasks: () => true,
-				hasTasks: () => false,
+				hasTasks: () => true,
 				getCourses: () => coursesStudent,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
 				hasFilterSelected: () => false,
