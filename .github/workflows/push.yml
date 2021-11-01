@@ -76,3 +76,10 @@ jobs:
     uses: hpi-schul-cloud/end-to-end-tests/.github/workflows/e2e_call.yml@main
     with:
       ref: ${{ github.ref }}
+
+  test-successful:
+    runs-on: ubuntu-latest
+    needs:
+      - end-to-end-tests
+    steps:
+      - run: echo "Test was successful"
