@@ -4,10 +4,6 @@ import BaseLink from "@components/base/BaseLink";
 describe("@components/legacy/NavigationBar", () => {
 	const navbarLinks = [
 		{
-			title: "Über das Projekt",
-			href: "/about",
-		},
-		{
 			title: "Blog",
 			href: "https://blog.hpi-schul-cloud.de/",
 		},
@@ -17,7 +13,7 @@ describe("@components/legacy/NavigationBar", () => {
 		},
 		{
 			title: "FAQ",
-			href: "https://blog.hpi-schul-cloud.de/faq",
+			href: "https://blog.hpi-schul-cloud.de/faqs",
 		},
 	];
 
@@ -33,7 +29,7 @@ describe("@components/legacy/NavigationBar", () => {
 			},
 		});
 
-		expect(wrapper.props().links).toHaveLength(4);
+		expect(wrapper.props().links).toHaveLength(3);
 	});
 
 	it("logo get rendered", () => {

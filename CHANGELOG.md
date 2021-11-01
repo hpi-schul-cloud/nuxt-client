@@ -11,9 +11,23 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 ### Added
 
 - BC-155 - add filter for task where the teacher is not a substitution teacher
+- BC-496 - Added Renaming of a group of rooms
+- BC-40 - ansible rocketchat variable renaming
+
+### Changed
+
 - BC-501 - displaying topic name in task overview
 
 ### Changed
+
+- BC-576 - link for faq in the top-navigation
+- BC-379 - updated the engine version to node 16 and npm 8
+
+## [26.14.0] - 2021-10-26
+
+### Added
+
+- BC-501 - displaying topic name in task overview
 
 ## [26.13.0] - 2021-10-19
 
