@@ -7,11 +7,15 @@
 					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
 							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
-							<span class="d-none d-sm-inline">{{ tabOneHeader.title }}</span>
+							<span class="d-none d-sm-inline" data-testid="openTasks">{{
+								tabOneHeader.title
+							}}</span>
 						</v-tab>
 						<v-tab>
 							<v-icon class="tab-icon mr-3">{{ tabTwoHeader.icon }}</v-icon>
-							<span class="d-none d-sm-inline">{{ tabTwoHeader.title }}</span>
+							<span class="d-none d-sm-inline" data-testid="closedTasks">{{
+								tabTwoHeader.title
+							}}</span>
 						</v-tab>
 					</v-tabs>
 				</div>
