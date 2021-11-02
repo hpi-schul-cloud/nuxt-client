@@ -4,10 +4,10 @@
 			<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 		</v-list-item-avatar>
 		<v-list-item-content>
-			<v-list-item-subtitle>
+			<v-list-item-subtitle data-testid="taskSubtitle">
 				{{ task.courseName }}
 			</v-list-item-subtitle>
-			<v-list-item-title v-text="task.name" />
+			<v-list-item-title data-testid="taskTitle" v-text="task.name" />
 			<v-list-item-subtitle>
 				{{ topic }}
 			</v-list-item-subtitle>
