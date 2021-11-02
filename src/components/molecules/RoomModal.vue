@@ -5,7 +5,7 @@
 		class="room-dialog"
 		@dialog-closed="$emit('dialog-closed', false)"
 	>
-		<div slot="title">
+		<div slot="title" class="room-title">
 			<v-text-field
 				v-show="roomNameEditMode"
 				ref="roomNameInput"
