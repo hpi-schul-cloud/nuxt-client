@@ -10,11 +10,20 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+### Changed
+
+## [26.15.0] - 2021-11-02
+
+### Added
+
+- BC-392 - added skip to main content link (accessibility feature)
 - BC-496 - Added Renaming of a group of rooms
 - BC-40 - ansible rocketchat variable renaming
+- BC-273 - Adding data test id's for nuxt task overview
 
 ### Changed
 
+- BC-402 - change e2e test include to reusable workflows
 - BC-501 - displaying topic name in task overview
 
 ### Changed

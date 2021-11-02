@@ -8,6 +8,7 @@
 		rounded
 		:menu-props="{ closeOnContentClick: false }"
 		v-bind="$attrs"
+		data-testid="courseFilter"
 		@change="($event) => $emit('selected-item', $event)"
 	/>
 </template>
