@@ -3,7 +3,7 @@
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
-				<v-row v-if="isTeacher">
+				<div v-if="isTeacher">
 					<v-custom-switch
 						:value="getSubstitutionFilter"
 						:label="
@@ -12,7 +12,7 @@
 						custom-classes="custom-switch-position"
 						@input-changed="setSubstitutionFilter"
 					></v-custom-switch>
-				</v-row>
+				</div>
 
 				<div class="pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width">
@@ -243,9 +243,5 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
-}
-
-.custom-switch-position {
-	padding-left: 14px;
 }
 </style>
