@@ -10,6 +10,12 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+### Changed
+
+## [26.15.0] - 2021-11-02
+
+### Added
+
 - BC-392 - added skip to main content link (accessibility feature)
 - BC-496 - Added Renaming of a group of rooms
 - BC-40 - ansible rocketchat variable renaming
