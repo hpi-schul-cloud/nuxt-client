@@ -114,13 +114,17 @@ const executeFilters = (filters = [], tasks) => {
 	return result;
 };
 
+const Filters = {
+	primary: "$filter:PrimaryTeacher",
+};
+
 const module = {
 	state: () => ({
 		tasks: [],
 		courseFilter: [],
 		filters: [
 			{
-				id: "$filter:PrimaryTeacher",
+				id: Filters.primary,
 				value: true,
 				exec: filterIsFromPrimaryTeacher,
 			},
@@ -209,12 +213,20 @@ const module = {
 		getTasks: (state) => state.tasks,
 		getStatus: (state) => state.status,
 		getCourseFilters: (state) => {
+			const courseFilters = [];
 			const courses = extractCoursesFromTasks(state.tasks);
-			const courseFilters = courses.map((c) => ({
-				value: c.name,
-				text: c.name,
-				isSubstitution: c.isSubstitution,
-			}));
+			const filter = state.filters.find((f) => f.id === Filters.primary);
+			const withSubstitute = !filter.value;
+
+			courses.forEach((c) => {
+				if (withSubstitute || c.isSubstitution === false) {
+					courseFilters.push({
+						value: c.name,
+						text: c.name,
+						isSubstitution: c.isSubstitution,
+					});
+				}
+			});
 
 			return courseFilters;
 		},

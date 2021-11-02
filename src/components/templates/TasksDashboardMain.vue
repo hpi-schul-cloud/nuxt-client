@@ -94,6 +94,7 @@ export default {
 			const filter = this.filters.find(
 				(f) => f.id === "$filter:PrimaryTeacher"
 			);
+
 			return !filter.value;
 		},
 		// TODO: it is not role based, it is permission based
