@@ -5,12 +5,12 @@
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
 				<div v-if="isTeacher">
 					<v-custom-switch
-						:value="getSubstitutionFilter"
+						:value="getSubstituteFilter"
 						:label="
 							$t('components.organisms.TasksDashboardMain.filter.substitution')
 						"
 						custom-classes="custom-switch-position"
-						@input-changed="setSubstitutionFilter"
+						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
 
@@ -90,7 +90,7 @@ export default {
 			filters: "getFilters",
 			courseFilters: "getCourseFilters",
 		}),
-		getSubstitutionFilter: function () {
+		getSubstituteFilter: function () {
 			const filter = this.filters.find(
 				(f) => f.id === "$filter:PrimaryTeacher"
 			);
@@ -177,12 +177,13 @@ export default {
 		setCourseFilters() {
 			this.$store.commit("tasks/setCourseFilters", this.selectedCourseFilters);
 		},
-		setSubstitutionFilter(value) {
+		setSubstituteFilter(value) {
 			this.$store.commit("tasks/changeFilters", {
 				id: "$filter:PrimaryTeacher",
 				value: !value,
 			});
 		},
+		// Should this move to computed?
 		getTaskCount(courseName) {
 			if (this.isStudent) {
 				if (this.tab === 0) {
