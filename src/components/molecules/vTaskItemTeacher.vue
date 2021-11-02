@@ -5,7 +5,9 @@
 		</v-list-item-avatar>
 		<v-list-item-content>
 			<v-list-item-subtitle class="d-inline-flex">
-				<span class="text-truncate">{{ courseName }}</span>
+				<span class="text-truncate" data-testid="taskSubtitle">{{
+					courseName
+				}}</span>
 				{{
 					`&nbsp;– ${computedDueDateLabel(
 						task.duedate,
@@ -13,7 +15,7 @@
 					)}`
 				}}
 			</v-list-item-subtitle>
-			<v-list-item-title v-text="task.name" />
+			<v-list-item-title data-testid="taskName" v-text="task.name" />
 			<v-list-item-subtitle class="d-inline-flex">
 				<span class="text-truncate">{{ topic }}</span>
 			</v-list-item-subtitle>
@@ -30,7 +32,7 @@
 				<v-list-item-subtitle>{{
 					$t("components.molecules.VTaskItemTeacher.submitted")
 				}}</v-list-item-subtitle>
-				<v-list-item-title
+				<v-list-item-title data-testid="taskSubmitted"
 					>{{ task.status.submitted }}/{{
 						task.status.maxSubmissions
 					}}</v-list-item-title
@@ -40,7 +42,9 @@
 				<v-list-item-subtitle>{{
 					$t("components.molecules.VTaskItemTeacher.graded")
 				}}</v-list-item-subtitle>
-				<v-list-item-title>{{ task.status.graded }}</v-list-item-title>
+				<v-list-item-title data-testid="taskGraded">{{
+					task.status.graded
+				}}</v-list-item-title>
 			</v-list-item-action>
 		</section>
 	</v-list-item>
