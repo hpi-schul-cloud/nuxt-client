@@ -267,45 +267,92 @@ describe("store/tasks", () => {
 		});
 
 		describe("getCourseFilters", () => {
-			it("should format output", () => {
-				const task = generateTask();
-				const state = Object.assign(storeModule.state(), {
-					tasks: [task],
-				});
-				const result = getCourseFilters(state);
-
-				expect(result).toStrictEqual([
-					{
-						value: task.courseName,
-						text: task.courseName,
-						isSubstitution: false,
-					},
-				]);
-			});
-
-			it("should pass substitution flag", () => {
-				const task = generateTask({ isSubstitutionTeacher: true });
-				const state = Object.assign(storeModule.state(), {
-					tasks: [task],
-				});
-				const result = getCourseFilters(state);
-
-				expect(result).toStrictEqual([
-					{
-						value: task.courseName,
-						text: task.courseName,
-						isSubstitution: true,
-					},
-				]);
-			});
-
 			it("should work for empty tasks", () => {
 				const state = Object.assign(storeModule.state(), {
 					tasks: [],
 				});
+
 				const result = getCourseFilters(state);
 
 				expect(result).toStrictEqual([]);
+			});
+
+			describe("where user is a student or a primary teacher of the courses", () => {
+				it("should return formated filter", () => {
+					const task = generateTask();
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task.courseName,
+							text: task.courseName,
+							isSubstitution: false,
+						},
+					]);
+				});
+
+				it("should not return filter of task with substitution flag", () => {
+					const task = generateTask({ isSubstitutionTeacher: true });
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([]);
+				});
+			});
+
+			describe("where user is substiution teacher in the courses", () => {
+				it("should return formated filter", () => {
+					const task = generateTask({ isSubstitutionTeacher: true });
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+					});
+
+					state.filters.forEach((f) => {
+						if (f.id === "$filter:PrimaryTeacher") {
+							f.value = false;
+						}
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task.courseName,
+							text: task.courseName,
+							isSubstitution: true,
+						},
+					]);
+				});
+
+				it("should return filter of task without substitution flag", () => {
+					const task = generateTask({});
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+					});
+
+					state.filters.forEach((f) => {
+						if (f.id === "$filter:PrimaryTeacher") {
+							f.value = false;
+						}
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task.courseName,
+							text: task.courseName,
+							isSubstitution: false,
+						},
+					]);
+				});
 			});
 		});
 
