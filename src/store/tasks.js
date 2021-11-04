@@ -51,10 +51,9 @@ const filterOverdue = (tasks) => {
 	return overdued;
 };
 
-// it is a teacher based interpretation or and why or condition?
 const filterCompleted = (tasks) => {
 	const completed = tasks.filter(
-		(task) => task.status.submitted >= 1 || task.status.graded >= 1
+		(task) => task.status.submitted === 1 || task.status.graded === 1
 	);
 
 	return completed;
@@ -91,45 +90,26 @@ const extractCoursesFromTasks = (tasks) => {
 	return Array.from(courses);
 };
 
-const filterIsFromPrimaryTeacher = (tasks) => {
-	const primaryTeacherTasks = tasks.filter(
-		(task) => task.status.isSubstitutionTeacher === false
-	);
+const filterSubstitute = (tasks, withSubstitute) => {
+	let result = tasks;
+	if (!withSubstitute) {
+		result = tasks.filter(
+			(task) => task.status.isSubstitutionTeacher === false
+		);
+	}
 
-	return primaryTeacherTasks;
+	return result;
 };
 
 const isLoadedWithElements = (state, tasks) => {
 	return state.status === "completed" && tasks.length > 0;
 };
 
-const executeFilters = (filters = [], tasks) => {
-	let result = tasks;
-	filters.forEach((f) => {
-		if (f.value === true) {
-			result = f.exec(tasks);
-		}
-	});
-
-	return result;
-};
-
-// export and enum
-const Filters = {
-	primary: "$filter:PrimaryTeacher",
-};
-
 const module = {
 	state: () => ({
 		tasks: [],
 		courseFilter: [],
-		filters: [
-			{
-				id: Filters.primary,
-				value: true,
-				exec: filterIsFromPrimaryTeacher,
-			},
-		],
+		substituteFilter: false,
 		status: "",
 		businessError: {
 			statusCode: "",
@@ -160,16 +140,8 @@ const module = {
 		setCourseFilters(state, courseNames) {
 			state.courseFilter = courseNames;
 		},
-		changeFilters(state, { id, value }) {
-			const filters = state.filters.map((f) => {
-				if (f.id === id) {
-					f.value = value;
-				}
-
-				return f;
-			});
-
-			state.filters = filters;
+		setSubstituteFilter(state, enabled) {
+			state.substituteFilter = enabled;
 		},
 		// TODO: enum "error", "pending", "completed", "" -> "" should get notLoaded / notInitialized or so and not empty string and this should set by creating this store
 		setStatus(state, status) {
@@ -191,7 +163,7 @@ const module = {
 			return isLoadedWithElements(state, openTasks);
 		},
 		hasOpenTasksTeacher: (state) => {
-			const tasks = executeFilters(state.filters, state.tasks);
+			const tasks = filterSubstitute(state.tasks, state.substituteFilter);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const openTasks = filterOpenForTeacher(filterdByCourses);
 
@@ -204,7 +176,7 @@ const module = {
 			return isLoadedWithElements(state, completedTasks);
 		},
 		hasDrafts: (state) => {
-			const tasks = executeFilters(state.filters, state.tasks);
+			const tasks = filterSubstitute(state.tasks, state.substituteFilter);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const draftTasks = filterDrafts(filterdByCourses);
 
@@ -216,11 +188,9 @@ const module = {
 		getCourseFilters: (state) => {
 			const courseFilters = [];
 			const courses = extractCoursesFromTasks(state.tasks);
-			const filter = state.filters.find((f) => f.id === Filters.primary);
-			const withSubstitute = !filter.value;
 
 			courses.forEach((c) => {
-				if (withSubstitute || c.isSubstitution === false) {
+				if (state.substituteFilter || c.isSubstitution === false) {
 					courseFilters.push({
 						value: c.name,
 						text: c.name,
@@ -231,10 +201,10 @@ const module = {
 
 			return courseFilters;
 		},
-		getFilters: (state) => state.filters,
+		isSubstituteFilterEnabled: (state) => state.substituteFilter,
 		getOpenTasksForStudent: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
-			const filteredOpenForStudent = filterOpenForTeacher(filterdByCourses);
+			const filteredOpenForStudent = filterOpenForStudent(filterdByCourses);
 
 			const openTasks = {
 				overdue: filterOverdue(filteredOpenForStudent),
@@ -255,7 +225,7 @@ const module = {
 			return completedTasks;
 		},
 		getOpenTasksForTeacher: (state) => {
-			const tasks = executeFilters(state.filters, state.tasks);
+			const tasks = filterSubstitute(state.tasks, state.substituteFilter);
 			const filterdByCourses = filterByCourses(tasks, state.courseFilter);
 			const filteredOpenForTeachers = filterOpenForTeacher(filterdByCourses);
 
@@ -268,7 +238,7 @@ const module = {
 			return openTasks;
 		},
 		getDraftTasksForTeacher: (state) => {
-			const tasks = executeFilters(state.filters, state.tasks);
+			const tasks = filterSubstitute(state.tasks, state.substituteFilter);
 			const filteredByCourse = filterByCourses(tasks, state.courseFilter);
 			const draftTasks = filterDrafts(filteredByCourse);
 

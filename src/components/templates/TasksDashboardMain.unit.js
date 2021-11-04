@@ -18,9 +18,14 @@ import {
 	drafts,
 } from "@@/stories/mockData/Tasks";
 
+import storeModule from "../../store/tasks";
+
 describe("@components/templates/TasksDashboardMain", () => {
 	const getAllTasks = jest.fn();
 	const setFilter = jest.fn();
+
+	const state = storeModule.state();
+
 	const mockStoreStudent = {
 		tasks: {
 			getters: {
@@ -37,6 +42,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 					submitted: submittedTasks,
 					graded: gradedTasks,
 				}),
+				getFilters: () => state.filters,
+				getCourseFilters: () => [],
 				getCourses: () => coursesStudent,
 				hasOpenTasks: () => true,
 				hasCompletedTasks: () => true,
@@ -66,6 +73,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 					noDueDate: noDueDateTasksTeacher,
 				}),
 				getDraftTasksForTeacher: () => drafts,
+				getFilters: () => state.filters,
+				getCourseFilters: () => [],
 				getCourses: () => coursesTeacher,
 				hasOpenTasks: () => true,
 				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
@@ -92,6 +101,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 					withDueDate: [],
 					noDueDate: [],
 				}),
+				getFilters: () => state.filters,
+				getCourseFilters: () => [],
 				getDraftTasksForTeacher: () => [],
 				getCourses: () => [],
 				hasFilterSelected: () => false,
@@ -118,6 +129,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 				}),
 				hasOpenTasksStudent: () => false,
 				hasCompletedTasks: () => true,
+				getFilters: () => state.filters,
+				getCourseFilters: () => [],
 				hasTasks: () => true,
 				getCourses: () => coursesStudent,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,

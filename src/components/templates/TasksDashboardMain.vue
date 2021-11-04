@@ -5,11 +5,10 @@
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
 				<div v-if="isTeacher">
 					<v-custom-switch
-						:value="getSubstituteFilter"
+						:value="isSubstituteFilterEnabled"
 						:label="
 							$t('components.organisms.TasksDashboardMain.filter.substitution')
 						"
-						custom-classes="custom-switch-position"
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
@@ -74,7 +73,7 @@ export default {
 	data() {
 		return {
 			selectedCourseFilters: [],
-			tab: 0,
+			tab: 0, // should we save this in store?
 		};
 	},
 	computed: {
@@ -87,17 +86,10 @@ export default {
 			hasDrafts: "hasDrafts",
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
-			filters: "getFilters",
+			isSubstituteFilterEnabled: "isSubstituteFilterEnabled",
 			courseFilters: "getCourseFilters",
 		}),
-		getSubstituteFilter: function () {
-			const filter = this.filters.find(
-				(f) => f.id === "$filter:PrimaryTeacher"
-			);
-
-			return !filter.value;
-		},
-		// TODO: it is not role based, it is permission based
+		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
 		},
@@ -178,12 +170,8 @@ export default {
 			this.$store.commit("tasks/setCourseFilters", this.selectedCourseFilters);
 		},
 		setSubstituteFilter(value) {
-			this.$store.commit("tasks/changeFilters", {
-				id: "$filter:PrimaryTeacher",
-				value: !value,
-			});
+			this.$store.commit("tasks/setSubstituteFilter", value);
 		},
-		// Should this move to computed?
 		getTaskCount(courseName) {
 			if (this.isStudent) {
 				if (this.tab === 0) {
