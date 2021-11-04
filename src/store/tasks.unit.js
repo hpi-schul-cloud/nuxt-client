@@ -269,6 +269,28 @@ describe("store/tasks", () => {
 					]);
 				});
 
+				it("should return a unique list of filters based on the course name", () => {
+					const task1 = generateTask();
+					const task2 = generateTask(undefined, {
+						courseName: task1.courseName,
+					});
+
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task1, task2],
+						substituteFilter: false,
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task1.courseName,
+							text: task1.courseName,
+							isSubstitution: false,
+						},
+					]);
+				});
+
 				it("should not return filter of task with substitution flag", () => {
 					const task = generateTask({ isSubstitutionTeacher: true });
 					const state = Object.assign(storeModule.state(), {

@@ -120,9 +120,9 @@ export default {
 				const count = this.getTaskCount(filter.value);
 				const name = filter.value || this.$t("pages.tasks.labels.noCourse");
 				const substitution = filter.isSubstitution
-					? this.$t("common.words.substitute")
+					? `${this.$t("common.words.substitute")} `
 					: "";
-				filter.text = `${substitution} ${name} (${count})`;
+				filter.text = `${substitution}${name} (${count})`;
 
 				return filter;
 			});

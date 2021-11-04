@@ -1,12 +1,14 @@
 import TasksDashboardMain from "./TasksDashboardMain";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import Vuetify from "vuetify";
-import {
+import mocks from "@@/stories/mockData/Tasks";
+
+import storeModule from "../../store/tasks";
+
+const {
 	overDueTasksTeacher,
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,
-	coursesStudent,
-	coursesTeacher,
 	openTasksWithDueDate,
 	openTasksWithoutDueDate,
 	overDueTasks,
@@ -16,13 +18,12 @@ import {
 	tasksCountStudent,
 	tasksCountTeacher,
 	drafts,
-} from "@@/stories/mockData/Tasks";
-
-import storeModule from "../../store/tasks";
+} = mocks;
 
 describe("@components/templates/TasksDashboardMain", () => {
 	const getAllTasks = jest.fn();
-	const setFilter = jest.fn();
+	const setCourseFilters = jest.fn();
+	const setSubstituteFilter = jest.fn();
 
 	const state = storeModule.state();
 
@@ -42,9 +43,9 @@ describe("@components/templates/TasksDashboardMain", () => {
 					submitted: submittedTasks,
 					graded: gradedTasks,
 				}),
-				getFilters: () => state.filters,
-				getCourseFilters: () => [],
-				getCourses: () => coursesStudent,
+				isSubstituteFilterEnabled: () => state.substituteFilter,
+				getCourseFilters: () => storeModule.getters.getCourseFilters({ tasks }),
+				// getCourses: () => coursesStudent,
 				hasOpenTasks: () => true,
 				hasCompletedTasks: () => true,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
@@ -54,7 +55,8 @@ describe("@components/templates/TasksDashboardMain", () => {
 				getAllTasks,
 			},
 			mutations: {
-				setFilter,
+				setCourseFilters,
+				setSubstituteFilter,
 			},
 		},
 	};
@@ -73,15 +75,20 @@ describe("@components/templates/TasksDashboardMain", () => {
 					noDueDate: noDueDateTasksTeacher,
 				}),
 				getDraftTasksForTeacher: () => drafts,
-				getFilters: () => state.filters,
-				getCourseFilters: () => [],
-				getCourses: () => coursesTeacher,
+				isSubstituteFilterEnabled: () => state.substituteFilter,
+				getCourseFilters: () => storeModule.getters.getCourseFilters({ tasks }),
+				// getCourseFilters: () => [],
+				// getCourses: () => coursesTeacher,
 				hasOpenTasks: () => true,
 				getTasksCountPerCourseTeacher: () => tasksCountTeacher,
 				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
+			},
+			mutations: {
+				setCourseFilters,
+				setSubstituteFilter,
 			},
 		},
 	};
@@ -101,14 +108,19 @@ describe("@components/templates/TasksDashboardMain", () => {
 					withDueDate: [],
 					noDueDate: [],
 				}),
-				getFilters: () => state.filters,
-				getCourseFilters: () => [],
+				isSubstituteFilterEnabled: () => state.substituteFilter,
+				getCourseFilters: () => storeModule.getters.getCourseFilters({ tasks }),
+				// getCourseFilters: () => [],
 				getDraftTasksForTeacher: () => [],
-				getCourses: () => [],
+				// getCourses: () => [],
 				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
+			},
+			mutations: {
+				setCourseFilters,
+				setSubstituteFilter,
 			},
 		},
 	};
@@ -129,15 +141,20 @@ describe("@components/templates/TasksDashboardMain", () => {
 				}),
 				hasOpenTasksStudent: () => false,
 				hasCompletedTasks: () => true,
-				getFilters: () => state.filters,
-				getCourseFilters: () => [],
+				isSubstituteFilterEnabled: () => state.substituteFilter,
+				getCourseFilters: () => storeModule.getters.getCourseFilters({ tasks }),
+				// getCourseFilters: () => [],
 				hasTasks: () => true,
-				getCourses: () => coursesStudent,
+				// getCourses: () => coursesStudent,
 				getTasksCountPerCourseStudent: () => tasksCountStudent,
 				hasFilterSelected: () => false,
 			},
 			actions: {
 				getAllTasks,
+			},
+			mutations: {
+				setCourseFilters,
+				setSubstituteFilter,
 			},
 		},
 	};
@@ -247,8 +264,11 @@ describe("@components/templates/TasksDashboardMain", () => {
 		expect(autocompleteEl.exists()).toBe(true);
 	});
 
-	it("Should call 'filterByCourse' method with v-autocomplete on change", async () => {
-		const mockMethod = jest.spyOn(TasksDashboardMain.methods, "filterByCourse");
+	it("Should call 'setCourseFilters' method with v-autocomplete on change", async () => {
+		const mockMethod = jest.spyOn(
+			TasksDashboardMain.methods,
+			"setCourseFilters"
+		);
 		const wrapper = await mount(TasksDashboardMain, {
 			...createComponentMocks({
 				i18n: true,
@@ -290,31 +310,64 @@ describe("@components/templates/TasksDashboardMain", () => {
 		expect(wrapper.vm.isFilterDisabled).toBe(false);
 	});
 
-	it("Should set correct course name with task count for filter", () => {
-		const wrapper = mount(TasksDashboardMain, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStoreTeacher,
-			}),
-			vuetify,
-			data() {
-				return {
-					tab: 1,
-				};
-			},
-			propsData: {
-				role: "teacher",
-			},
+	describe("filter work correctly", () => {
+		// TODO: if ts exist we can fast add test to it... :D
+
+		it.todo(
+			"course filter dont show filter of substitutes if toggle is set disabled"
+		);
+
+		// TODO: different tabs and set filter still alive by toggling tabs, or substitute toggle
+
+		it.todo("should sort the course filters by text property");
+
+		it("Should set correct course name with task count for filter", () => {
+			const wrapper = mount(TasksDashboardMain, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+					store: mockStoreTeacher,
+				}),
+				vuetify,
+				data() {
+					return {
+						tab: 1,
+					};
+				},
+				propsData: {
+					role: "teacher",
+				},
+			});
+
+			expect(wrapper.vm.getSortedCoursesFilters[0]).toStrictEqual({
+				isSubstitution: false,
+				text: "Biologie (undefined)", // undefined?
+				value: "Biologie",
+			});
+
+			expect(wrapper.vm.getSortedCoursesFilters[1]).toStrictEqual({
+				isSubstitution: false,
+				text: "Chemie (undefined)", // undefined?
+				value: "Chemie",
+			});
+
+			expect(wrapper.vm.getSortedCoursesFilters[2]).toStrictEqual({
+				isSubstitution: false,
+				text: "Mathe (0)",
+				value: "Mathe",
+			});
+
+			expect(wrapper.vm.getSortedCoursesFilters).toHaveLength(3);
 		});
 
-		expect(wrapper.vm.coursesWithTaskCount[0]).toStrictEqual({
-			value: "Mathe",
-			text: "Mathe (0)",
-		});
-		expect(wrapper.vm.coursesWithTaskCount[2]).toStrictEqual({
-			value: "",
-			text: "Kein Kurs zugeordnet (2)",
+		describe("when substitution toggle is enabled and task with substitute flag exist", () => {
+			it.todo("substitution toggle for teachers is displayed");
+
+			it.todo("substitution toggle for student is not displayed");
+
+			it.todo("course filter show filter for substitutes filters");
+
+			it.todo("course filter show substitute prefix for substitutes filters");
 		});
 	});
 });

@@ -80,14 +80,19 @@ const filterDrafts = (tasks) => {
 };
 
 const extractCoursesFromTasks = (tasks) => {
-	const courses = new Set(
-		tasks.map((task) => ({
+	const courses = {};
+
+	tasks.forEach((task) => {
+		// unique based on courseName
+		courses[task.courseName] = {
 			name: task.courseName,
 			isSubstitution: task.status.isSubstitutionTeacher,
-		}))
-	);
+		};
+	});
 
-	return Array.from(courses);
+	const courseInfos = Object.values(courses);
+
+	return courseInfos;
 };
 
 const filterSubstitute = (tasks, withSubstitute) => {
