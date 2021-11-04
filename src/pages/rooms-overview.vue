@@ -165,12 +165,7 @@ export default {
 			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
 				return;
 
-			if (
-				(this.draggedElementName == "vRoomAvatar" ||
-					"vRoomGroupAvatar" ||
-					"groupItem") &&
-				toElementName == "vRoomEmptyAvatar"
-			) {
+			if (toElementName == "vRoomEmptyAvatar") {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
@@ -183,7 +178,8 @@ export default {
 				return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
+				(this.draggedElementName == "vRoomAvatar" ||
+					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomAvatar"
 			) {
 				this.savePosition();
@@ -197,7 +193,8 @@ export default {
 				return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
+				(this.draggedElementName == "vRoomAvatar" ||
+					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomGroupAvatar"
 			) {
 				this.savePosition();
