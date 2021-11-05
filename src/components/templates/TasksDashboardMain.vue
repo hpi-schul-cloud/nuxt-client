@@ -1,5 +1,9 @@
 <template>
-	<default-wireframe :headline="$t('pages.tasks.title')" :full-width="false">
+	<default-wireframe
+		v-scroll="onScroll"
+		:headline="$t('pages.tasks.title')"
+		:full-width="false"
+	>
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
@@ -18,6 +22,13 @@
 							}}</span>
 						</v-tab>
 					</v-tabs>
+					<v-custom-fab
+						v-if="!isStudent"
+						:is-scrolling="!isScrolling"
+						:icon="mdiPlus"
+						:title="$t('common.words.task')"
+						href="/homework/new"
+					></v-custom-fab>
 				</div>
 			</div>
 		</div>
@@ -40,13 +51,16 @@
 <script>
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import vCustomFab from "@components/atoms/vCustomFab";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
+import { mdiPlus } from "@mdi/js";
 
 export default {
 	components: {
 		DefaultWireframe,
+		vCustomFab,
 		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
@@ -62,6 +76,8 @@ export default {
 		return {
 			selectedCourses: [],
 			tab: 0,
+			scrollTimer: -1,
+			mdiPlus
 		};
 	},
 	computed: {
@@ -76,6 +92,9 @@ export default {
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 		}),
+		isScrolling: function () {
+			return this.scrollTimer !== -1;
+		},
 		isStudent: function () {
 			return this.role === "student";
 		},
@@ -145,6 +164,16 @@ export default {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
+		onScroll() {
+			if (this.scrollTimer !== -1) {
+				clearTimeout(this.scrollTimer);
+			}
+			this.scrollTimer = setTimeout(() => {
+				this.scrollTimer = -1;
+			}, 300);
+
+			this.$eventBus.$emit("isScrolling");
+		},
 		filterByCourse() {
 			this.$store.commit("tasks/setFilter", this.selectedCourses);
 		},
