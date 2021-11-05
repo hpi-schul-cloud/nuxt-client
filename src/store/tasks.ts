@@ -22,8 +22,8 @@ export type Task = {
 	id: string;
 	name: string;
 	description?: string;
-	availableDate: string;
-	duedate: string;
+	availableDate?: string;
+	duedate?: string;
 	courseName: string;
 	displayColor?: string;
 	status: TaskStatus;
@@ -71,11 +71,11 @@ type TasksCountPerCourseTeacher = {
 	drafts: Record<string, number>;
 };
 
-type TaskCourseFilter {
+type TaskCourseFilter = {
 	value: string;
 	text: string;
 	isSubstitution: boolean;
-}
+};
 
 @Module({
 	name: "tasks",
@@ -166,8 +166,9 @@ export class TaskModule extends VuexModule {
 	}
 
 	get getCourseFilters(): TaskCourseFilter[] {
-		const filteredTasks = new TaskFilter(this.tasks)
-			.filterSubstitute(this.substituteFilter).tasks;
+		const filteredTasks = new TaskFilter(this.tasks).filterSubstitute(
+			this.substituteFilter
+		).tasks;
 
 		// map to filter objects (can still contain duplicates by courseName)
 		const mappedToFilter: TaskCourseFilter[] = filteredTasks.map((task) => {
@@ -176,10 +177,12 @@ export class TaskModule extends VuexModule {
 				text: task.courseName,
 				isSubstitution: task.status.isSubstitutionTeacher,
 			};
-		})
+		});
 
 		// make the list unique by courseName
-		const uniqueFilters = [...new Map(mappedToFilter.map((item) => [item.value, item])).values()];
+		const uniqueFilters = [
+			...new Map(mappedToFilter.map((item) => [item.value, item])).values(),
+		];
 		return uniqueFilters;
 	}
 
