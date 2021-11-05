@@ -43,7 +43,6 @@
 			ref="roomModal"
 			v-model="groupDialog.isOpen"
 			:group-data="groupDialog.groupData"
-			:ratios="ratios"
 			:avatar-size="dimensions.cellWidth * ratios.itemRatio * 0.75"
 			@drag-from-group="dragFromGroup"
 		>

@@ -2,13 +2,14 @@ import RoomsModule from "@/store/rooms";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount } from "@vue/test-utils";
 import RoomModal from "./RoomModal.vue";
-// import { isValidComponent } from "../../../tests/unit/commonTests.js";
 
 describe("@components/molecules/RoomModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 	});
+
+	// isValidComponent test fails for typescript based components and thus is omitted
 
 	it("should open and close on property change", async () => {
 		const testProps = {
@@ -24,7 +25,6 @@ describe("@components/molecules/RoomModal", () => {
 		});
 		const dialog = wrapper.find(".room-dialog");
 		const customDialog = wrapper.vm.$refs.customDialog as any;
-		// const vDialog = customDialog?.$refs.vDialog;
 		expect(dialog.exists()).toBe(true);
 		expect(customDialog.isOpen).toBeFalsy();
 		await wrapper.setProps({
@@ -60,7 +60,6 @@ describe("@components/molecules/RoomModal", () => {
 	});
 
 	it("should make name editable", async () => {
-		// const storeRoomUpdateMock = jest.spyOn(RoomsModule, "update");
 		const testProps = {
 			isOpen: true,
 			groupData: { title: "dummy title", groupElements: [] },
