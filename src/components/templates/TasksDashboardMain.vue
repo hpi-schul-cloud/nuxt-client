@@ -77,7 +77,7 @@ export default {
 			selectedCourses: [],
 			tab: 0,
 			scrollTimer: -1,
-			mdiPlus
+			mdiPlus,
 		};
 	},
 	computed: {
