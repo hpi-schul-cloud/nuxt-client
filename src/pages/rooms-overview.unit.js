@@ -1,4 +1,4 @@
-import { default as RoomsPage } from "./index.vue";
+import { default as RoomsPage } from "./rooms-overview.vue";
 import RoomsModule from "@/store/rooms";
 
 const mockStoreData = [
@@ -59,21 +59,6 @@ const mockStoreData = [
 	},
 ];
 
-const mockStore = {
-	rooms: {
-		getters: {
-			getRoomsData: () => mockStoreData,
-			getLoading: () => false,
-			getError: () => null,
-		},
-		actions: {
-			fetch: jest.fn(),
-			align: jest.fn(),
-			group: jest.fn(),
-		},
-	},
-};
-
 const spyMocks = {
 	storeRoomAlignMock: jest.spyOn(RoomsModule, "align"),
 	storeModuleFetchMock: jest.spyOn(RoomsModule, "fetch"),
@@ -90,6 +75,18 @@ const spyMocks = {
 	dragFromGroupMock: jest.spyOn(RoomsPage.methods, "dragFromGroup"),
 };
 
+const getWrapper = (device = "desktop") => {
+	return mount(RoomsPage, {
+		...createComponentMocks({
+			i18n: true,
+			vuetify: true,
+		}),
+		computed: {
+			$mq: () => device,
+		},
+	});
+};
+
 describe("RoomPage", () => {
 	beforeEach(() => {
 		RoomsModule.setRoomData(mockStoreData);
@@ -101,16 +98,7 @@ describe("RoomPage", () => {
 	it(...isValidComponent(RoomsPage));
 
 	it("should fetch the room data", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
-
+		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
@@ -118,134 +106,71 @@ describe("RoomPage", () => {
 	});
 
 	it("should display 3 avatars component", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
-
 		expect(avatarComponents).toHaveLength(3);
 	});
 
 	it("should display 2 avatars component in 'mobile' device", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "mobile",
-			},
-		});
+		const wrapper = getWrapper("mobile");
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
-
 		expect(avatarComponents).toHaveLength(2);
 	});
 
 	it("should display 1 group-avatar component", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const groupAvatarComponents = wrapper.findAll(".room-group-avatar");
-
 		expect(groupAvatarComponents).toHaveLength(1);
 	});
 
 	it("should call 'openDialog' event if groupAvatar component clicked", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const cardComponent = wrapper.find(".card-component");
-
 		await cardComponent.trigger("click");
-
 		expect(spyMocks.openDialogMock).toHaveBeenCalled();
 	});
 
-	it("custom-dialog component should be visible with the correct data", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+	it("custom-dialog component should be visible", async () => {
+		const wrapper = getWrapper();
+		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		const cardComponent = wrapper.find(".card-component");
-
 		await cardComponent.trigger("click");
-
-		const customDialog = wrapper.find(".custom-dialog");
-		expect(customDialog.vm.$slots.title[0].elm.innerHTML).toContain("Fourth");
-		expect(customDialog.vm.$slots.content[0].children).toHaveLength(3);
-		expect(
-			customDialog.vm.$slots.content[0].children[0].elm.innerHTML
-		).toContain("Math 7a");
+		const customDialog = wrapper.find(".room-dialog");
+		const headline = customDialog.find("h2");
+		expect(customDialog.vm.isOpen).toBeTrue();
+		expect(headline.element.innerHTML).toContain("Fourth");
 	});
 
 	it("should call the necessary methods for positioning while the page loading", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
-
+		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDataObjectMock).toHaveBeenCalled();
 		expect(spyMocks.findDataByPosMock).toHaveBeenCalled();
-
 		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
 		expect(spyMocks.hasGroupMock).toHaveBeenCalled();
 	});
 
 	it("'$refs' should be placed correctly for the components", async () => {
-		const wrapper = mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
-
+		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
-
 		expect(wrapper.vm.$refs["1-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -264,16 +189,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should set the column count '2' if the device is 'mobile'", async () => {
-		const wrapper = mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			computed: {
-				$mq: () => "mobile",
-			},
-		});
+		const wrapper = getWrapper("mobile");
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
@@ -281,16 +197,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should set the column count '4' if the device is 'tablet'", async () => {
-		const wrapper = mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			computed: {
-				$mq: () => "tablet",
-			},
-		});
+		const wrapper = getWrapper("tablet");
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
@@ -298,16 +205,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should set the column count '6' if the device is 'desktop'", async () => {
-		const wrapper = mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+		const wrapper = getWrapper();
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
 		expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
@@ -315,16 +213,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should call 'setDropElement' method for grouping after avatar-to-emptyAvatar drag&drop", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
 				x: 1,
@@ -344,17 +233,15 @@ describe("RoomPage", () => {
 				y: 4,
 			},
 		};
-
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
-
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["4-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
 		expect(wrapper.vm.$refs["2-4"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomEmptyAvatar"
 		);
-
 		const avatarComponent = wrapper.findComponent({ ref: "4-1" });
 		avatarComponent.trigger("dragstart");
 
@@ -371,16 +258,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should call 'setGroupElements' method for grouping after avatar-to-avatar drag&drop", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
+		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
 				x: 1,
@@ -400,10 +278,9 @@ describe("RoomPage", () => {
 				y: 2,
 			},
 		};
-
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
-
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["4-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -427,16 +304,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should call 'addGroupElements' method for grouping after avatar-to-groupAvatar drag&drop", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			computed: {
-				$mq: () => "tablet",
-			},
-		});
+		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
 				x: 1,
@@ -458,7 +326,7 @@ describe("RoomPage", () => {
 		};
 		await wrapper.vm.$nextTick();
 		await wrapper.vm.$nextTick();
-
+		await wrapper.vm.$nextTick();
 		expect(wrapper.vm.$refs["4-1"][0].$options["_componentTag"]).toStrictEqual(
 			"vRoomAvatar"
 		);
@@ -482,17 +350,7 @@ describe("RoomPage", () => {
 	});
 
 	it("should call 'setDropElement' method for grouping after ungroup action", async () => {
-		const wrapper = await mount(RoomsPage, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-				store: mockStore,
-			}),
-			computed: {
-				$mq: () => "desktop",
-			},
-		});
-
+		const wrapper = getWrapper();
 		const expectedPayload = {
 			from: {
 				x: 2,
@@ -527,23 +385,30 @@ describe("RoomPage", () => {
 							title: "Math 7a",
 							displayColor: "yellow",
 						},
+						{
+							id: "6",
+							title: "Bio 3a",
+							displayColor: "green",
+							notification: true,
+						},
+						{
+							id: "7",
+							title: "Geo 7b",
+							displayColor: "yellow",
+						},
 					],
 				},
 			},
 		});
 
-		const elementInGroupFolder = wrapper.findComponent({ ref: "index-0" });
 		await wrapper.vm.$nextTick();
-		elementInGroupFolder.trigger("dragstart");
+		wrapper.vm.$refs.roomModal.$emit(
+			"drag-from-group",
+			wrapper.vm.groupDialog.groupData.groupElements[0]
+		);
 
 		await wrapper.vm.$nextTick();
 		expect(spyMocks.dragFromGroupMock).toHaveBeenCalled();
-		expect(
-			wrapper.vm.$refs["index-0"][0].$options["_componentTag"]
-		).toStrictEqual("vRoomAvatar");
-		expect(wrapper.vm.$refs["2-4"][0].$options["_componentTag"]).toStrictEqual(
-			"vRoomEmptyAvatar"
-		);
 
 		const emptyAvatarComponent = wrapper.findComponent({ ref: "4-4" });
 		emptyAvatarComponent.trigger("drop");

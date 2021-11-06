@@ -10,98 +10,52 @@
 						v-if="hasGroup(rowIndex, colIndex)"
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-group-avatar"
-						:location="{ x: colIndex, y: rowIndex }"
 						:data="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:max-items="4"
 						@clicked="openDialog(getDataObject(rowIndex, colIndex).id)"
-						@startDrag="setDragElement"
-						@drop="addGroupElements"
+						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+						@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 					>
 					</vRoomGroupAvatar>
 					<vRoomAvatar
 						v-else
 						:ref="`${rowIndex}-${colIndex}`"
 						class="room-avatar"
-						:location="{ x: colIndex, y: rowIndex }"
 						:item="getDataObject(rowIndex, colIndex)"
 						:size="dimensions.cellWidth * ratios.itemRatio"
 						:show-badge="true"
-						show-sub-title
-						@startDrag="setDragElement"
-						@drop="setGroupElements"
+						:draggable="true"
+						@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+						@drop="setGroupElements({ x: colIndex, y: rowIndex })"
 					></vRoomAvatar>
 				</div>
 				<div v-else class="d-flex justify-center">
 					<vRoomEmptyAvatar
 						:ref="`${rowIndex}-${colIndex}`"
-						:location="{ x: colIndex, y: rowIndex }"
 						:size="dimensions.cellWidth * ratios.itemRatio"
-						@drop="setDropElement"
+						@drop="setDropElement({ x: colIndex, y: rowIndex })"
 					></vRoomEmptyAvatar>
 				</div>
 			</v-col>
 		</v-row>
-		<vCustomDialog
-			ref="custom-dialog"
+		<room-modal
+			ref="roomModal"
 			v-model="groupDialog.isOpen"
-			class="custom-dialog"
-			@dialog-closed="groupDialog.groupData = {}"
+			:group-data="groupDialog.groupData"
+			:avatar-size="dimensions.cellWidth * ratios.itemRatio * 0.75"
+			@drag-from-group="dragFromGroup"
 		>
-			<div slot="title">
-				<v-text-field
-					v-show="roomNameEditMode"
-					ref="roomNameInput"
-					v-model="groupDialog.groupData.title"
-					dense
-					:append-icon="mdiKeyboardReturn"
-					@blur="onUpdateRoomName"
-					@keyup.enter="onRoomNameInputEnter"
-				></v-text-field>
-				<h2
-					v-show="!roomNameEditMode"
-					class="text-h4 my-2"
-					tabindex="5"
-					@click="onEditRoom"
-					@focus="onEditRoom"
-				>
-					{{ groupDialog.groupData.title }}
-					<v-icon>{{ mdiPencil }}</v-icon>
-				</h2>
-			</div>
-			<template slot="content">
-				<v-row class="d-flex justify-center ma-1">
-					<v-col
-						v-for="(item, index) in groupDialog.groupData.groupElements"
-						:key="item.id"
-						class="d-flex justify-center"
-						:cols="maxItem"
-					>
-						<vRoomAvatar
-							:ref="`index-${index}`"
-							:item="item"
-							:size="dimensions.cellWidth * ratios.itemRatio"
-							:is-group-avatar-list="true"
-							:show-badge="true"
-							class="rounded-xl dialog-avatar"
-							show-sub-title
-							@startDrag="dragFromGroup"
-						></vRoomAvatar>
-					</v-col>
-				</v-row>
-			</template>
-		</vCustomDialog>
+		</room-modal>
 	</default-wireframe>
 </template>
 
 <script>
-import Vue from "vue";
-import { mdiPencil, mdiKeyboardReturn } from "@mdi/js";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import vRoomAvatar from "@components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@components/atoms/vRoomEmptyAvatar";
 import vRoomGroupAvatar from "@components/molecules/vRoomGroupAvatar";
-import vCustomDialog from "@components/organisms/vCustomDialog";
+import RoomModal from "@components/molecules/RoomModal";
 import RoomsModule from "@store/rooms";
 
 export default {
@@ -110,7 +64,7 @@ export default {
 		vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
-		vCustomDialog,
+		RoomModal,
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -121,7 +75,6 @@ export default {
 				itemRatio: 0.8,
 			},
 			device: "mobile",
-			maxItem: 4,
 			dimensions: {
 				colCount: 2,
 				cellWidth: 200,
@@ -137,8 +90,6 @@ export default {
 				to: null,
 			},
 			showDeleteSection: false,
-			mdiPencil,
-			mdiKeyboardReturn,
 			roomNameEditMode: false,
 			draggedElementName: "",
 		};
@@ -199,7 +150,7 @@ export default {
 				(item) => item.xPosition == col && item.yPosition == row
 			);
 		},
-		setDragElement(element, pos) {
+		onStartDrag(element, pos) {
 			this.draggedElement.from = pos;
 			this.draggedElement.to = null;
 			this.draggedElement.item = element;
@@ -210,12 +161,10 @@ export default {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (
-				(this.draggedElementName == "vRoomAvatar" ||
-					"vRoomGroupAvatar" ||
-					"groupItem") &&
-				toElementName == "vRoomEmptyAvatar"
-			) {
+			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
+				return;
+
+			if (toElementName == "vRoomEmptyAvatar") {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
@@ -224,10 +173,12 @@ export default {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (this.draggedElement.from == pos) return;
+			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
+				return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
+				(this.draggedElementName == "vRoomAvatar" ||
+					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomAvatar"
 			) {
 				this.savePosition();
@@ -237,10 +188,12 @@ export default {
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (this.draggedElement.from == pos) return;
+			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
+				return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" || "groupItem") &&
+				(this.draggedElementName == "vRoomAvatar" ||
+					this.draggedElementName == "groupItem") &&
 				toElementName == "vRoomGroupAvatar"
 			) {
 				this.savePosition();
@@ -269,27 +222,6 @@ export default {
 			this.roomsData = this.roomsData.filter(
 				(item) => item.id !== this.draggedElement.item.id
 			);
-		},
-		async onEditRoom() {
-			this.roomNameEditMode = true;
-			await Vue.nextTick();
-			this.$refs.roomNameInput.focus();
-		},
-		onUpdateRoomName() {
-			RoomsModule.update(this.groupDialog.groupData);
-			this.roomNameEditMode = false;
-		},
-		/*
-			Calling onUpdateRoomName each on blur and enter results in calling in twice on pressing enter
-			@keyup.enter="$event.target.blur" results in Illegal invocation error
-		*/
-		onRoomNameInputEnter(event) {
-			event.target.blur();
-		},
-		setGroupElementIndex(elementId) {
-			return this.roomsData
-				.find((item) => item.id == this.groupDialog.groupData.id)
-				.groupElements.findIndex((groupItem) => groupItem.id == elementId);
 		},
 		async savePosition() {
 			await RoomsModule.align(this.draggedElement);
