@@ -28,6 +28,7 @@
 						:icon="mdiPlus"
 						:title="$t('common.words.task')"
 						href="/homework/new"
+						:class="$vuetify.breakpoint.lgAndUp ? 'fab-top-alignment' : ''"
 					></v-custom-fab>
 				</div>
 			</div>
@@ -240,5 +241,9 @@ export default {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.fab-top-alignment {
+	top: 193px;
 }
 </style>

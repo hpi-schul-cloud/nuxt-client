@@ -1,6 +1,7 @@
 <!-- eslint-disable max-lines -->
 <template>
 	<default-wireframe
+		v-scroll="onScroll"
 		:headline="$t('pages.administration.students.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
@@ -113,30 +114,27 @@
 			:show-icons="showConsent"
 			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
-		<fab-floating
-			v-if="
-				!schoolIsExternallyManaged && this.$_userHasPermission('STUDENT_CREATE')
-			"
-			position="bottom-right"
-			:show-label="true"
+		<v-custom-fab
+			:is-scrolling="!isScrolling"
+			:icon="mdiPlus"
+			:title="$t('common.labels.student')"
+			:class="$vuetify.breakpoint.lgAndUp ? 'fab-top-alignment' : ''"
 			data-testid="fab_button_students_table"
 			:actions="[
 				{
 					label: $t('pages.administration.students.fab.add'),
-					icon: 'person_add',
-					'icon-source': 'material',
+					icon: mdiAccountPlus,
 					to: '/administration/students/new',
 					dataTestid: 'fab_button_add_students',
 				},
 				{
 					label: $t('pages.administration.students.fab.import'),
-					icon: 'backup',
-					'icon-source': 'material',
+					icon: mdiCloudUpload,
 					href: '/administration/students/import',
 					dataTestid: 'fab_button_import_students',
 				},
 			]"
-		/>
+		></v-custom-fab>
 	</default-wireframe>
 </template>
 
@@ -146,7 +144,7 @@ import { mapGetters } from "vuex";
 import EnvConfigModule from "@/store/env-config";
 import DefaultWireframe from "@components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@components/organisms/DataTable/BackendDataTable";
-import FabFloating from "@components/molecules/FabFloating";
+import vCustomFab from "@components/atoms/vCustomFab";
 import DataFilter from "@components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@components/molecules/AdminTableLegend";
 import { studentFilter } from "@utils/adminFilter";
@@ -154,13 +152,14 @@ import print from "@mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDateFromDeUTC, printDate } from "@plugins/datetime";
 import ProgressModal from "@components/molecules/ProgressModal";
+import { mdiPlus, mdiAccountPlus, mdiCloudUpload } from "@mdi/js";
 
 export default {
 	components: {
 		DataFilter,
 		DefaultWireframe,
 		BackendDataTable,
-		FabFloating,
+		vCustomFab,
 		AdminTableLegend,
 		ProgressModal,
 	},
@@ -172,6 +171,10 @@ export default {
 	},
 	data() {
 		return {
+			scrollTimer: -1,
+			mdiPlus,
+			mdiAccountPlus,
+			mdiCloudUpload,
 			something: [],
 			currentFilterQuery: this.$uiState.get(
 				"filter",
@@ -335,6 +338,9 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
+		isScrolling: function () {
+			return this.scrollTimer !== -1;
+		},
 		schoolIsExternallyManaged() {
 			return SchoolsModule.schoolIsExternallyManaged;
 		},
@@ -411,6 +417,16 @@ export default {
 		this.find();
 	},
 	methods: {
+		onScroll() {
+			if (this.scrollTimer !== -1) {
+				clearTimeout(this.scrollTimer);
+			}
+			this.scrollTimer = setTimeout(() => {
+				this.scrollTimer = -1;
+			}, 300);
+
+			this.$eventBus.$emit("isScrolling");
+		},
 		find() {
 			const query = {
 				$limit: this.limit,
@@ -634,5 +650,9 @@ button:not(.is-none):focus {
 	margin-top: var(--space-xs);
 	margin-bottom: var(--space-xs);
 	margin-left: 0;
+}
+
+.fab-top-alignment {
+	top: 147px;
 }
 </style>
