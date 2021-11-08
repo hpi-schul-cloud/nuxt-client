@@ -328,3 +328,5 @@ console.error = jest.fn((message) => {
 for (name in commonTest) {
 	global[name] = commonTest[name];
 }
+
+export default global.createComponentMocks;

@@ -34,7 +34,8 @@
 							class="ma-0 pa-1 group-avatar-component"
 							:item="item"
 							:size="size / 3"
-							:group-avatar="true"
+							:draggable="false"
+							condense-layout
 						></vRoomAvatar>
 					</v-col>
 				</v-row>
@@ -62,10 +63,6 @@ export default {
 			type: Number || String,
 			default: 4,
 		},
-		// eslint-disable-next-line vue/require-default-prop
-		location: {
-			type: Object,
-		},
 	},
 	data() {
 		return {
@@ -82,7 +79,7 @@ export default {
 	},
 	methods: {
 		startDragAvatar() {
-			this.$emit("startDrag", this.data, this.location);
+			this.$emit("startDrag", this.data);
 		},
 		dragLeave() {
 			this.hovered = false;
@@ -91,7 +88,7 @@ export default {
 			this.hovered = true;
 		},
 		dropAvatar() {
-			this.$emit("drop", this.location);
+			this.$emit("drop");
 		},
 	},
 };
