@@ -7,7 +7,7 @@
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
-				<div class="pb-0 d-flex justify-center">
+				<div class="mx-n6 mx-sm-0 pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
 							<v-icon class="tab-icon mr-3">{{ tabOneHeader.icon }}</v-icon>
@@ -77,7 +77,7 @@ export default {
 			selectedCourses: [],
 			tab: 0,
 			scrollTimer: -1,
-			mdiPlus
+			mdiPlus,
 		};
 	},
 	computed: {
@@ -200,14 +200,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
 @import "@variables";
 
 .content-max-width {
 	max-width: var(--size-content-width-max);
 }
 
-.tabs-max-width {
-	max-width: 500px;
+@media #{map-get($display-breakpoints, 'sm-and-up')} {
+	.tabs-max-width {
+		max-width: 500px;
+	}
 }
 
 // even out border
