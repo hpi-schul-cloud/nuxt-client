@@ -154,7 +154,7 @@
 	"components.organisms.TasksDashboardMain.tab.open": "Open Tasks",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Drafts",
 	"components.organisms.TasksDashboardMain.tab.current": "Current Tasks",
-	"components.organisms.TasksDashboardMain.filter.substitution": "incl. from representations",
+	"components.organisms.TasksDashboardMain.filter.substitution": "Tasks from substititions",
 	"components.organisms.LegacyFooter.contact": "Contact",
 	"components.organisms.LegacyFooter.job-offer": "Job advertisements",
 	"components.organisms.Pagination.currentPage": "{start} to {end} from {total}",
