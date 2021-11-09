@@ -5,8 +5,8 @@
 		fixed
 		:bottom="$vuetify.breakpoint.mdAndDown"
 		right
-		class="fixed"
-		direction="bottom"
+		class="fixed transition"
+		:direction="$vuetify.breakpoint.mdAndDown ? 'top' : 'bottom'"
 	>
 		<template v-slot:activator>
 			<v-btn
@@ -17,6 +17,7 @@
 				:width="extended && !fab ? '120' : ''"
 				rounded
 				:small="extended && !fab"
+				class="transition"
 			>
 				<v-icon v-if="fab"> {{ mdiClose }} </v-icon>
 				<div v-else>
@@ -126,6 +127,9 @@ export default {
 <style lang="scss" scoped>
 .fixed {
 	position: fixed !important;
+}
+
+.transition {
 	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
 
