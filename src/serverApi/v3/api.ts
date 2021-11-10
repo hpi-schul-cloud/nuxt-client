@@ -521,19 +521,19 @@ export interface TaskStatusResponse {
      * @type {number}
      * @memberof TaskStatusResponse
      */
-    submitted?: number;
+    submitted: number;
     /**
      * 
      * @type {number}
      * @memberof TaskStatusResponse
      */
-    maxSubmissions?: number;
+    maxSubmissions: number;
     /**
      * 
      * @type {number}
      * @memberof TaskStatusResponse
      */
-    graded?: number;
+    graded: number;
     /**
      * 
      * @type {boolean}

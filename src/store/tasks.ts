@@ -11,9 +11,9 @@ import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 
 export type TaskStatus = {
-	submitted?: number;
-	maxSubmissions?: number;
-	graded?: number;
+	submitted: number;
+	maxSubmissions: number;
+	graded: number;
 	isDraft: boolean;
 	isSubstitutionTeacher: boolean;
 };
@@ -89,7 +89,7 @@ export class TaskModule extends VuexModule {
 
 	courseFilter: string[] = [];
 
-	substituteFilter: boolean = true;
+	substituteFilter: boolean = false;
 
 	pagination: Pagination = {
 		limit: 0,
