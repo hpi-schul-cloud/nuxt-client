@@ -115,7 +115,6 @@
 			:show-external-sync-hint="schoolIsExternallyManaged"
 		/>
 		<v-custom-fab
-			:is-scrolling="!isScrolling"
 			:icon="mdiPlus"
 			:title="$t('common.labels.student')"
 			:class="$vuetify.breakpoint.lgAndUp ? 'fab-top-alignment' : ''"
@@ -338,9 +337,6 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
-		isScrolling: function () {
-			return this.scrollTimer !== -1;
-		},
 		schoolIsExternallyManaged() {
 			return SchoolsModule.schoolIsExternallyManaged;
 		},

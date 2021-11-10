@@ -106,7 +106,6 @@
 			v-if="
 				!schoolIsExternallyManaged && this.$_userHasPermission('TEACHER_CREATE')
 			"
-			:is-scrolling="!isScrolling"
 			:icon="mdiPlus"
 			:title="$t('common.labels.teacher')"
 			:class="$vuetify.breakpoint.lgAndUp ? 'fab-top-alignment' : ''"
@@ -307,9 +306,6 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
-		isScrolling: function () {
-			return this.scrollTimer !== -1;
-		},
 		user() {
 			return AuthModule.getUser;
 		},

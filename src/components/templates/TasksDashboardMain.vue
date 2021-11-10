@@ -24,7 +24,6 @@
 					</v-tabs>
 					<v-custom-fab
 						v-if="!isStudent"
-						:is-scrolling="!isScrolling"
 						:icon="mdiPlus"
 						:title="$t('common.words.task')"
 						href="/homework/new"
@@ -93,9 +92,6 @@ export default {
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 		}),
-		isScrolling: function () {
-			return this.scrollTimer !== -1;
-		},
 		isStudent: function () {
 			return this.role === "student";
 		},

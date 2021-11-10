@@ -74,10 +74,6 @@ export default {
 			required: false,
 			default: () => [],
 		},
-		isScrolling: {
-			type: Boolean,
-			required: false,
-		},
 		icon: {
 			type: String,
 			required: true,
