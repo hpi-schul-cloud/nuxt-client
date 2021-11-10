@@ -1,6 +1,8 @@
 import dashboard from "./assigned";
-import { tasks } from "@@/stories/mockData/Tasks";
+import mock from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
+
+const { tasks } = mock;
 
 describe("Tasks/assigned", () => {
 	const getAllTasks = jest.fn();
