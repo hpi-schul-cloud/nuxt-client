@@ -1,8 +1,9 @@
 import { TaskModule } from "./tasks";
 import * as serverApi from "../serverApi/v3/api";
 import { taskFactory } from "./task.filter.unit";
+import { TaskFilter } from "./task.filter";
 
-describe("task store", async () => {
+describe("task store", () => {
 	describe("actions", () => {
 		describe("getAllTasks", () => {
 			it("should request a list of tasks", (done) => {
@@ -132,45 +133,234 @@ describe("task store", async () => {
 	});
 
 	describe("getters", () => {
+		describe("getTasks", () => {
+			it("should return an empty list by default", () => {
+				const taskModule = new TaskModule({});
+				const tasks = taskModule.getTasks;
+
+				expect(tasks).toHaveLength(0);
+			});
+		});
+
+		describe("getCourseFilters", () => {
+			it("should return the appropiate properties", () => {
+				const task = taskFactory.build();
+				const taskModule = new TaskModule({});
+				taskModule.tasks = [task];
+				const result = taskModule.getCourseFilters;
+
+				expect(result).toStrictEqual([
+					{
+						value: task.courseName,
+						text: task.courseName,
+						isSubstitution: false,
+					},
+				]);
+			});
+
+			it("should pass the substitution flag", () => {
+				const task = taskFactory.build({
+					status: { isSubstitutionTeacher: true },
+				});
+				const taskModule = new TaskModule({});
+				taskModule.tasks = [task];
+				taskModule.substituteFilter = true;
+				const result = taskModule.getCourseFilters;
+
+				expect(result).toStrictEqual([
+					{
+						value: task.courseName,
+						text: task.courseName,
+						isSubstitution: true,
+					},
+				]);
+			});
+
+			it("should work for empty tasks", () => {
+				const taskModule = new TaskModule({});
+				taskModule.tasks = [];
+				const result = taskModule.getCourseFilters;
+
+				expect(result).toStrictEqual([]);
+			});
+		});
+
+		describe("isSubstituteFilterEnabled", () => {
+			it("should return false by default", () => {
+				const taskModule = new TaskModule({});
+				expect(taskModule.isSubstituteFilterEnabled).toBe(false);
+			});
+
+			it("should return true if enabled", () => {
+				const taskModule = new TaskModule({});
+				taskModule.substituteFilter = true;
+				expect(taskModule.isSubstituteFilterEnabled).toBe(true);
+			});
+		});
+
 		describe("hasOpenTasksStudent", () => {
-			it("should return true with course filter", () => {
-				const task = taskFactory.build({ courseName: "Mathe", isDraft: false });
+			it("should filter by course names", () => {
 				const taskModule = new TaskModule({});
-				Object.assign(taskModule, {
-					status: "completed",
-					tasks: [task],
-					courseFilter: [task.courseName],
-				});
+				taskModule.courseFilter = ["Mathe"];
+				const spy = (TaskFilter.prototype.byCourseNames = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([])));
+
+				taskModule.hasOpenTasksStudent;
+
+				expect(spy).toHaveBeenCalledTimes(1);
+				expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			});
+
+			it("should filter tasks that are open for students", () => {
+				const taskModule = new TaskModule({});
+				const spy = (TaskFilter.prototype.byOpenForStudent = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([])));
+
+				taskModule.hasOpenTasksStudent;
+
+				expect(spy).toHaveBeenCalledTimes(1);
+			});
+
+			it("should return true if the filters yield any results", () => {
+				const taskModule = new TaskModule({});
+				taskModule.status = "completed";
+				const task = taskFactory.build();
+				TaskFilter.prototype.byCourseNames = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([task]));
+
+				TaskFilter.prototype.byOpenForStudent = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([task]));
 
 				const result = taskModule.hasOpenTasksStudent;
+
 				expect(result).toBe(true);
 			});
 
-			it("should return true without course filter", () => {
-				const task = taskFactory.build({ courseName: "Mathe", isDraft: false });
+			it("should return false if the filters yield no results", () => {
 				const taskModule = new TaskModule({});
-				Object.assign(taskModule, {
-					status: "completed",
-					tasks: [task],
-					courseFilter: [],
-				});
+				taskModule.status = "completed";
+				TaskFilter.prototype.byCourseNames = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([]));
+
+				TaskFilter.prototype.byOpenForStudent = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([]));
 
 				const result = taskModule.hasOpenTasksStudent;
-				expect(result).toBe(true);
-			});
 
-			it("should return false if loading state is not completed", () => {
-				const task = taskFactory.build({ courseName: "Mathe", isDraft: false });
-				const taskModule = new TaskModule({});
-				Object.assign(taskModule, {
-					status: "pending",
-					tasks: [task],
-					courseFilter: [],
-				});
-
-				const result = taskModule.hasOpenTasksStudent;
 				expect(result).toBe(false);
 			});
+
+			it("should return false if the store is not ready", () => {
+				const taskModule = new TaskModule({});
+				const task = taskFactory.build();
+				taskModule.status = "pending";
+				TaskFilter.prototype.byCourseNames = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([task]));
+
+				TaskFilter.prototype.byOpenForStudent = jest
+					.fn()
+					.mockImplementationOnce(() => new TaskFilter([task]));
+
+				const result = taskModule.hasOpenTasksStudent;
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("hasOpenTasksTeacher", () => {
+		it("should filter by substitution teacher", () => {
+			const taskModule = new TaskModule({});
+			taskModule.substituteFilter = true;
+			const spy = (TaskFilter.prototype.filterSubstitute = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([])));
+
+			taskModule.hasOpenTasksTeacher;
+
+			expect(spy).toHaveBeenCalledTimes(1);
+			expect(spy).toHaveBeenCalledWith(taskModule.substituteFilter);
+		});
+
+		it("should filter by course names", () => {
+			const taskModule = new TaskModule({});
+			taskModule.courseFilter = ["Mathe"];
+			const spy = (TaskFilter.prototype.byCourseNames = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([])));
+
+			taskModule.hasOpenTasksTeacher;
+
+			expect(spy).toHaveBeenCalledTimes(1);
+			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+		});
+
+		it("should filter tasks that are open for students", () => {
+			const taskModule = new TaskModule({});
+			const spy = (TaskFilter.prototype.byOpenForTeacher = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([])));
+
+			taskModule.hasOpenTasksTeacher;
+
+			expect(spy).toHaveBeenCalledTimes(1);
+		});
+
+		it("should return true if the filters yield any results", () => {
+			const taskModule = new TaskModule({});
+			taskModule.status = "completed";
+			const task = taskFactory.build();
+			TaskFilter.prototype.byCourseNames = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([task]));
+
+			TaskFilter.prototype.byOpenForStudent = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([task]));
+
+			const result = taskModule.hasOpenTasksTeacher;
+
+			expect(result).toBe(true);
+		});
+
+		it("should return false if the filters yield no results", () => {
+			const taskModule = new TaskModule({});
+			taskModule.status = "completed";
+			TaskFilter.prototype.byCourseNames = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([]));
+
+			TaskFilter.prototype.byOpenForStudent = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([]));
+
+			const result = taskModule.hasOpenTasksTeacher;
+
+			expect(result).toBe(false);
+		});
+
+		it("should return false if the store is not ready", () => {
+			const taskModule = new TaskModule({});
+			const task = taskFactory.build();
+			taskModule.status = "pending";
+			TaskFilter.prototype.byCourseNames = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([task]));
+
+			TaskFilter.prototype.byOpenForStudent = jest
+				.fn()
+				.mockImplementationOnce(() => new TaskFilter([task]));
+
+			const result = taskModule.hasOpenTasksTeacher;
+
+			expect(result).toBe(false);
 		});
 	});
 });

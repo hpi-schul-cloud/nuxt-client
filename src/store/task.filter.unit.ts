@@ -4,9 +4,13 @@ import { TaskFilter } from "./task.filter";
 type TaskParams = {
 	name?: string;
 	courseName?: string;
-	isDraft?: boolean;
-	submitted?: number;
-	graded?: number;
+	status?: {
+		submitted?: number;
+		maxSubmissions?: number;
+		graded?: number;
+		isDraft?: boolean;
+		isSubstitutionTeacher?: boolean;
+	};
 };
 class TaskFactory {
 	sequence = 0;
@@ -17,10 +21,11 @@ class TaskFactory {
 			name: params.name || `task #${this.sequence++}`,
 			courseName: params.courseName || "course #1",
 			status: {
-				isDraft: params.isDraft || false,
-				isSubstitutionTeacher: false,
-				submitted: params.submitted || 0,
-				graded: params.graded || 0,
+				submitted: params.status?.submitted || 0,
+				maxSubmissions: params.status?.maxSubmissions || 0,
+				graded: params.status?.graded || 0,
+				isDraft: params.status?.isDraft || false,
+				isSubstitutionTeacher: params.status?.isSubstitutionTeacher || false,
 			},
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
@@ -79,9 +84,9 @@ describe("task filter", () => {
 
 	describe("byOpenForTeacher", () => {
 		it("should filter all open tasks for teacher role", () => {
-			const task1 = taskFactory.build({ isDraft: false });
-			const task2 = taskFactory.build({ isDraft: false });
-			const task3 = taskFactory.build({ isDraft: true });
+			const task1 = taskFactory.build({ status: { isDraft: false } });
+			const task2 = taskFactory.build({ status: { isDraft: false } });
+			const task3 = taskFactory.build({ status: { isDraft: true } });
 			const tasks = [task1, task2, task3];
 			const filteredTasks = new TaskFilter(tasks).byOpenForTeacher().tasks;
 			expect(filteredTasks).toEqual([task1, task2]);
