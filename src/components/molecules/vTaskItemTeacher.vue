@@ -91,7 +91,6 @@ export default {
 					? this.$t("common.words.substitute") + " "
 					: "";
 
-			// TODO: only for spain it must be a suffix
 			return `${prefix}${baseName}`;
 		},
 		topic() {
