@@ -1,25 +1,25 @@
 <template>
 	<v-speed-dial
-		v-if="actions.length > 0"
-		v-model="fab"
+		v-if="hasMultipleActions"
+		v-model="isSpeedDialExpanded"
 		fixed
-		:bottom="$vuetify.breakpoint.mdAndDown"
+		:bottom="isMobile"
 		right
 		class="fixed transition"
-		:direction="$vuetify.breakpoint.mdAndDown ? 'top' : 'bottom'"
+		:direction="speedDialDirection"
 	>
 		<template v-slot:activator>
 			<v-btn
-				v-model="fab"
+				v-model="isSpeedDialExpanded"
 				color="primary"
 				dark
 				fab
-				:width="extended && !fab ? '120' : ''"
 				rounded
-				:small="extended && !fab"
+				:small="isCollapsed"
 				class="transition"
+				:class="{ 'extended-fab': isCollapsed }"
 			>
-				<v-icon v-if="fab"> {{ mdiClose }} </v-icon>
+				<v-icon v-if="isSpeedDialExpanded"> {{ mdiClose }} </v-icon>
 				<div v-else>
 					<v-icon> {{ icon }} </v-icon>
 					<span v-if="extended">{{ title }}</span>
@@ -50,16 +50,16 @@
 		fab
 		fixed
 		right
-		:bottom="$vuetify.breakpoint.mdAndDown"
+		:bottom="isMobile"
 		color="primary"
 		dark
-		:width="extended ? '120' : ''"
 		rounded
 		:small="extended"
-		class="fixed"
+		class="fixed transition"
+		:class="{ 'extended-fab': extended }"
 		:href="href"
 	>
-		<v-icon :class="extended ? 'mr-1' : ''">{{ icon }}</v-icon>
+		<v-icon :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
 		<span v-if="extended">{{ $t("common.words.task") }}</span>
 	</v-btn>
 </template>
@@ -95,11 +95,25 @@ export default {
 	},
 	data() {
 		return {
-			fab: false,
+			isSpeedDialExpanded: false,
 			pageOffset: 0,
 			extended: true,
 			mdiClose,
 		};
+	},
+	computed: {
+		isMobile: function () {
+			return this.$vuetify.breakpoint.mdAndDown;
+		},
+		hasMultipleActions: function () {
+			return this.actions.length > 0;
+		},
+		speedDialDirection: function () {
+			return this.isMobile ? "top" : "bottom";
+		},
+		isCollapsed: function () {
+			return this.extended && !this.isSpeedDialExpanded;
+		},
 	},
 	methods: {
 		detectScrollingDirection() {
@@ -138,5 +152,11 @@ export default {
 	left: initial;
 	align-items: end;
 	width: auto;
+}
+
+.extended-fab {
+	width: 120px !important;
+	padding: 0 12px 0 8px; // stylelint-disable sh-waqar/declaration-use-variable
+	transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
 </style>
