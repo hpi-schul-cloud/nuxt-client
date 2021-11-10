@@ -146,6 +146,37 @@ describe("store/tasks", () => {
 
 				expect(state.substituteFilter).toBe(true);
 			});
+
+			it("should remove filter from substitute courses if the toggle is disabled.", () => {
+				const substituteTask = generateTask({ isSubstitutionTeacher: true });
+				const task = generateTask({ isSubstitutionTeacher: false });
+
+				const state = Object.assign(storeModule.state(), {
+					tasks: [task, substituteTask],
+					courseFilter: [task.courseName, substituteTask.courseName],
+					substituteFilter: true,
+				});
+
+				setSubstituteFilter(state, false);
+
+				expect(state.courseFilter).toStrictEqual([task.courseName]);
+			});
+
+			it("should not remember filters from substitutes after disable and enable substitute toggle", () => {
+				const substituteTask = generateTask({ isSubstitutionTeacher: true });
+				const task = generateTask({ isSubstitutionTeacher: false });
+
+				const state = Object.assign(storeModule.state(), {
+					tasks: [task, substituteTask],
+					courseFilter: [task.courseName, substituteTask.courseName],
+					substituteFilter: true,
+				});
+
+				setSubstituteFilter(state, false);
+				setSubstituteFilter(state, true);
+
+				expect(state.courseFilter).toStrictEqual([task.courseName]);
+			});
 		});
 
 		describe("setStatus", () => {
@@ -212,6 +243,7 @@ describe("store/tasks", () => {
 			getDraftTasksForTeacher,
 			getTasksCountPerCourseStudent,
 			getTasksCountPerCourseTeacher,
+			getSelectedCourseFilters,
 		} = storeModule.getters;
 
 		// TODO: replace with real store modification and put it directly to the test
@@ -237,6 +269,25 @@ describe("store/tasks", () => {
 			tasks: allTasksTeacher,
 			status: "completed",
 			courseFilter: [],
+		});
+
+		describe("getSelectedCourseFilters", () => {
+			it("should have a default value", () => {
+				const state = storeModule.state();
+
+				const result = getSelectedCourseFilters(state);
+
+				expect(result).toStrictEqual([]);
+			});
+
+			it("should return setted value", () => {
+				const courseFilter = ["a", "b", "c"];
+				const state = Object.assign(storeModule.state(), { courseFilter });
+
+				const result = getSelectedCourseFilters(state);
+
+				expect(result).toStrictEqual(courseFilter);
+			});
 		});
 
 		describe("getCourseFilters", () => {

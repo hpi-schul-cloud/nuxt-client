@@ -32,9 +32,10 @@
 			</div>
 		</div>
 		<div class="content-max-width mx-auto mt-5 mb-14">
+			<!-- v-model="getSelectedCourseFilters" -->
 			<v-custom-autocomplete
 				v-if="hasTasks"
-				v-model="selectedCourseFilters"
+				:value="getSelectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
@@ -72,7 +73,6 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourseFilters: [],
 			tab: 0, // should we save this in store?
 		};
 	},
@@ -88,6 +88,7 @@ export default {
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
 			isSubstituteFilterEnabled: "isSubstituteFilterEnabled",
 			courseFilters: "getCourseFilters",
+			getSelectedCourseFilters: "getSelectedCourseFilters",
 		}),
 		// TODO: split teacher and student sides
 		isStudent: function () {
@@ -98,7 +99,7 @@ export default {
 		},
 		isFilterDisabled: function () {
 			// TODO: refactor
-			if (this.selectedCourseFilters.length > 0) return false;
+			if (this.getSelectedCourseFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
@@ -166,11 +167,11 @@ export default {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
-		setCourseFilters() {
-			this.$store.commit("tasks/setCourseFilters", this.selectedCourseFilters);
+		setCourseFilters(courseNames) {
+			this.$store.commit("tasks/setCourseFilters", courseNames);
 		},
-		setSubstituteFilter(value) {
-			this.$store.commit("tasks/setSubstituteFilter", value);
+		setSubstituteFilter(enabled) {
+			this.$store.commit("tasks/setSubstituteFilter", enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.isStudent) {

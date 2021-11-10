@@ -147,6 +147,20 @@ const module = {
 		},
 		setSubstituteFilter(state, enabled) {
 			state.substituteFilter = enabled;
+			if (enabled === false) {
+				const courses = extractCoursesFromTasks(state.tasks);
+				const filterWithoutSubstitutes = state.courseFilter.filter(
+					(courseName) => {
+						const isSubstituteCourse = courses.some(
+							(course) =>
+								course.name === courseName && course.isSubstitution === true
+						);
+
+						return !isSubstituteCourse;
+					}
+				);
+				state.courseFilter = filterWithoutSubstitutes;
+			}
 		},
 		// TODO: enum "error", "pending", "completed", "" -> "" should get notLoaded / notInitialized or so and not empty string and this should set by creating this store
 		setStatus(state, status) {
@@ -160,6 +174,7 @@ const module = {
 		},
 	},
 	getters: {
+		getSelectedCourseFilters: (state) => state.courseFilter,
 		hasTasks: (state) => isLoadedWithElements(state, state.tasks),
 		hasOpenTasksStudent: (state) => {
 			const filterdByCourses = filterByCourses(state.tasks, state.courseFilter);
