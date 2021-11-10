@@ -85,9 +85,9 @@ describe("task store", () => {
 				expect(taskModule.isSubstituteFilterEnabled).toBe(true);
 			});
 
-			it("should be true by default", () => {
+			it("should be false by default", () => {
 				const taskModule = new TaskModule({});
-				expect(taskModule.isSubstituteFilterEnabled).toBe(true);
+				expect(taskModule.isSubstituteFilterEnabled).toBe(false);
 			});
 		});
 
@@ -202,75 +202,83 @@ describe("task store", () => {
 			it("should filter by course names", () => {
 				const taskModule = new TaskModule({});
 				taskModule.courseFilter = ["Mathe"];
-				const spy = (TaskFilter.prototype.byCourseNames = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([])));
+				const spy = jest
+					.spyOn(TaskFilter.prototype, "byCourseNames")
+					.mockReturnValue(new TaskFilter([]));
 
 				taskModule.hasOpenTasksStudent;
 
 				expect(spy).toHaveBeenCalledTimes(1);
 				expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+				spy.mockRestore();
 			});
 
 			it("should filter tasks that are open for students", () => {
 				const taskModule = new TaskModule({});
-				const spy = (TaskFilter.prototype.byOpenForStudent = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([])));
+				const spy = jest
+					.spyOn(TaskFilter.prototype, "byOpenForStudent")
+					.mockReturnValue(new TaskFilter([]));
 
 				taskModule.hasOpenTasksStudent;
 
 				expect(spy).toHaveBeenCalledTimes(1);
+				spy.mockRestore();
 			});
 
 			it("should return true if the filters yield any results", () => {
 				const taskModule = new TaskModule({});
 				taskModule.status = "completed";
 				const task = taskFactory.build();
-				TaskFilter.prototype.byCourseNames = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([task]));
+				const spy1 = jest
+					.spyOn(TaskFilter.prototype, "byCourseNames")
+					.mockReturnValue(new TaskFilter([task]));
 
-				TaskFilter.prototype.byOpenForStudent = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([task]));
+				const spy2 = jest
+					.spyOn(TaskFilter.prototype, "byOpenForStudent")
+					.mockReturnValue(new TaskFilter([task]));
 
 				const result = taskModule.hasOpenTasksStudent;
 
 				expect(result).toBe(true);
+				spy1.mockRestore();
+				spy2.mockRestore();
 			});
 
 			it("should return false if the filters yield no results", () => {
 				const taskModule = new TaskModule({});
 				taskModule.status = "completed";
-				TaskFilter.prototype.byCourseNames = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([]));
+				const spy1 = jest
+					.spyOn(TaskFilter.prototype, "byCourseNames")
+					.mockReturnValue(new TaskFilter([]));
 
-				TaskFilter.prototype.byOpenForStudent = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([]));
+				const spy2 = jest
+					.spyOn(TaskFilter.prototype, "byOpenForStudent")
+					.mockReturnValue(new TaskFilter([]));
 
 				const result = taskModule.hasOpenTasksStudent;
 
 				expect(result).toBe(false);
+				spy1.mockRestore();
+				spy2.mockRestore();
 			});
 
 			it("should return false if the store is not ready", () => {
 				const taskModule = new TaskModule({});
 				const task = taskFactory.build();
 				taskModule.status = "pending";
-				TaskFilter.prototype.byCourseNames = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([task]));
+				const spy1 = jest
+					.spyOn(TaskFilter.prototype, "byCourseNames")
+					.mockReturnValue(new TaskFilter([task]));
 
-				TaskFilter.prototype.byOpenForStudent = jest
-					.fn()
-					.mockImplementationOnce(() => new TaskFilter([task]));
+				const spy2 = jest
+					.spyOn(TaskFilter.prototype, "byOpenForStudent")
+					.mockReturnValue(new TaskFilter([task]));
 
 				const result = taskModule.hasOpenTasksStudent;
 
 				expect(result).toBe(false);
+				spy1.mockRestore();
+				spy2.mockRestore();
 			});
 		});
 	});
@@ -279,88 +287,97 @@ describe("task store", () => {
 		it("should filter by substitution teacher", () => {
 			const taskModule = new TaskModule({});
 			taskModule.substituteFilter = true;
-			const spy = (TaskFilter.prototype.filterSubstitute = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([])));
+			const spy = jest
+				.spyOn(TaskFilter.prototype, "filterSubstitute")
+				.mockReturnValue(new TaskFilter([]));
 
 			taskModule.hasOpenTasksTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(taskModule.substituteFilter);
+			spy.mockRestore();
 		});
 
 		it("should filter by course names", () => {
 			const taskModule = new TaskModule({});
 			taskModule.courseFilter = ["Mathe"];
-			const spy = (TaskFilter.prototype.byCourseNames = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([])));
+			const spy = jest
+				.spyOn(TaskFilter.prototype, "byCourseNames")
+				.mockReturnValue(new TaskFilter([]));
 
 			taskModule.hasOpenTasksTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(taskModule.courseFilter);
+			spy.mockRestore();
 		});
 
 		it("should filter tasks that are open for students", () => {
 			const taskModule = new TaskModule({});
-			const spy = (TaskFilter.prototype.byOpenForTeacher = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([])));
+			const spy = jest
+				.spyOn(TaskFilter.prototype, "byOpenForTeacher")
+				.mockReturnValue(new TaskFilter([]));
 
 			taskModule.hasOpenTasksTeacher;
 
 			expect(spy).toHaveBeenCalledTimes(1);
+			spy.mockRestore();
 		});
 
 		it("should return true if the filters yield any results", () => {
 			const taskModule = new TaskModule({});
 			taskModule.status = "completed";
 			const task = taskFactory.build();
-			TaskFilter.prototype.byCourseNames = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([task]));
+			const spy1 = jest
+				.spyOn(TaskFilter.prototype, "byCourseNames")
+				.mockReturnValue(new TaskFilter([task]));
 
-			TaskFilter.prototype.byOpenForStudent = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([task]));
+			const spy2 = jest
+				.spyOn(TaskFilter.prototype, "byOpenForStudent")
+				.mockReturnValue(new TaskFilter([task]));
 
 			const result = taskModule.hasOpenTasksTeacher;
 
 			expect(result).toBe(true);
+			spy1.mockRestore();
+			spy2.mockRestore();
 		});
 
 		it("should return false if the filters yield no results", () => {
 			const taskModule = new TaskModule({});
 			taskModule.status = "completed";
-			TaskFilter.prototype.byCourseNames = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([]));
+			const spy1 = jest
+				.spyOn(TaskFilter.prototype, "byCourseNames")
+				.mockReturnValue(new TaskFilter([]));
 
-			TaskFilter.prototype.byOpenForStudent = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([]));
+			const spy2 = jest
+				.spyOn(TaskFilter.prototype, "byOpenForStudent")
+				.mockReturnValue(new TaskFilter([]));
 
 			const result = taskModule.hasOpenTasksTeacher;
 
 			expect(result).toBe(false);
+			spy1.mockRestore();
+			spy2.mockRestore();
 		});
 
 		it("should return false if the store is not ready", () => {
 			const taskModule = new TaskModule({});
 			const task = taskFactory.build();
 			taskModule.status = "pending";
-			TaskFilter.prototype.byCourseNames = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([task]));
+			const spy1 = jest
+				.spyOn(TaskFilter.prototype, "byCourseNames")
+				.mockReturnValue(new TaskFilter([task]));
 
-			TaskFilter.prototype.byOpenForStudent = jest
-				.fn()
-				.mockImplementationOnce(() => new TaskFilter([task]));
+			const spy2 = jest
+				.spyOn(TaskFilter.prototype, "byOpenForStudent")
+				.mockReturnValue(new TaskFilter([task]));
 
 			const result = taskModule.hasOpenTasksTeacher;
 
 			expect(result).toBe(false);
+			spy1.mockRestore();
+			spy2.mockRestore();
 		});
 	});
 });
