@@ -1,7 +1,9 @@
 import { storiesOf } from "@storybook/vue";
 import TasksDashboardMain from "@components/templates/TasksDashboardMain";
 import Vuex from "vuex";
-import {
+import mock from "@@/stories/mockData/Tasks";
+
+const {
 	openTasksWithoutDueDate,
 	openTasksWithDueDate,
 	overDueTasks,
@@ -14,7 +16,7 @@ import {
 	gradedTasks,
 	tasks,
 	drafts,
-} from "@@/stories/mockData/Tasks";
+} = mock;
 
 storiesOf("0 Vuetify/Templates/TasksDashboard", module)
 	.add("Tasks Dashboard Student", () => ({
