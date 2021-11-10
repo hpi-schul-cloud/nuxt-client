@@ -76,7 +76,6 @@ export default {
 		return {
 			selectedCourses: [],
 			tab: 0,
-			scrollTimer: -1,
 			mdiPlus,
 		};
 	},
@@ -162,13 +161,6 @@ export default {
 	},
 	methods: {
 		onScroll() {
-			if (this.scrollTimer !== -1) {
-				clearTimeout(this.scrollTimer);
-			}
-			this.scrollTimer = setTimeout(() => {
-				this.scrollTimer = -1;
-			}, 300);
-
 			this.$eventBus.$emit("isScrolling");
 		},
 		filterByCourse() {

@@ -91,6 +91,7 @@ export default {
 	},
 	data() {
 		return {
+			scrollTimer: -1,
 			isSpeedDialExpanded: false,
 			pageOffset: 0,
 			extended: true,
@@ -128,6 +129,13 @@ export default {
 	},
 	onEventBus: {
 		isScrolling: function () {
+			if (this.scrollTimer !== -1) {
+				clearTimeout(this.scrollTimer);
+			}
+			this.scrollTimer = setTimeout(() => {
+				this.scrollTimer = -1;
+			}, 300);
+
 			this.detectScrollingDirection();
 		},
 	},

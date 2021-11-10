@@ -170,7 +170,6 @@ export default {
 	},
 	data() {
 		return {
-			scrollTimer: -1,
 			mdiPlus,
 			mdiAccountPlus,
 			mdiCloudUpload,
@@ -414,13 +413,6 @@ export default {
 	},
 	methods: {
 		onScroll() {
-			if (this.scrollTimer !== -1) {
-				clearTimeout(this.scrollTimer);
-			}
-			this.scrollTimer = setTimeout(() => {
-				this.scrollTimer = -1;
-			}, 300);
-
 			this.$eventBus.$emit("isScrolling");
 		},
 		find() {
