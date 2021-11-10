@@ -89,7 +89,7 @@ export class TaskModule extends VuexModule {
 
 	courseFilter: string[] = [];
 
-	substituteFilter: boolean = false;
+	substituteFilter: boolean = true;
 
 	pagination: Pagination = {
 		limit: 0,
