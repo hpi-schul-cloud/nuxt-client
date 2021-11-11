@@ -431,7 +431,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(true);
 			});
 
-			it("should false if loading state is not completed", () => {
+			it("should be false if loading state is not completed", () => {
 				const task = generateTask();
 				const state = Object.assign(storeModule.state(), {
 					status: "pending",
@@ -444,7 +444,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(false);
 			});
 
-			it("should false if no task exist", () => {
+			it("should be false if no task exist", () => {
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [],
@@ -499,7 +499,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(true);
 			});
 
-			it("should return true by finished (graded+submitted) tasks", () => {
+			it("should return true if the task is graded and submitted", () => {
 				const task = generateTask({ graded: 1, submitted: 1 });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
@@ -512,7 +512,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(true);
 			});
 
-			it("should false if loading state is not completed", () => {
+			it("should be false if loading state is not completed", () => {
 				const task = generateTask();
 				const state = Object.assign(storeModule.state(), {
 					status: "pending",
@@ -525,7 +525,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(false);
 			});
 
-			it("should false if no task exist", () => {
+			it("should be false if no task exist", () => {
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [],
