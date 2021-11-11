@@ -8,7 +8,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
 					:panel-two-title="$t('pages.tasks.subtitleWithDue')"
 					:status="status"
-					:is-empty="hasNoOpenTasksStudent"
+					:is-empty="!hasOpenTasksStudent"
 					:expanded-default="1"
 				>
 					<template v-slot:panelOne>
@@ -28,7 +28,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="hasNoOpenTasksStudent"
+					v-if="!hasOpenTasksStudent"
 					:image="emptyStateImage"
 					:title="emptyStateText.title"
 					:subtitle="emptyStateText.subtitle"
@@ -42,7 +42,7 @@
 					:panel-one-title="$t('pages.tasks.subtitleGraded')"
 					:panel-two-title="$t('pages.tasks.subtitleNotGraded')"
 					:status="status"
-					:is-empty="hasNoCompletedTasks"
+					:is-empty="!hasCompletedTasks"
 					:expanded-default="0"
 				>
 					<template v-slot:panelOne>
@@ -53,7 +53,7 @@
 					</template>
 				</v-custom-double-panels>
 				<v-custom-empty-state
-					v-if="hasNoCompletedTasks"
+					v-if="!hasCompletedTasks"
 					:image="emptyStateImage"
 					:title="emptyStateText.title"
 					class="mt-16"
@@ -88,9 +88,9 @@ export default {
 			status: "getStatus",
 			openTasks: "getOpenTasksForStudent",
 			completedTasks: "getCompletedTasksForStudent",
-			hasNoOpenTasksStudent: "hasNoOpenTasksStudent",
-			hasNoCompletedTasks: "hasNoCompletedTasks",
-			hasNoTasks: "hasNoTasks",
+			hasOpenTasksStudent: "hasOpenTasksStudent",
+			hasCompletedTasks: "hasCompletedTasks",
+			hasTasks: "hasTasks",
 			hasFilterSelected: "hasFilterSelected",
 		}),
 		overdueTasks: function () {

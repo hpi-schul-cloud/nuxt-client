@@ -3,6 +3,16 @@
 		<div slot="header">
 			<div>
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
+				<div v-if="isTeacher">
+					<v-custom-switch
+						:value="isSubstituteFilterEnabled"
+						:label="
+							$t('components.organisms.TasksDashboardMain.filter.substitute')
+						"
+						@input-changed="setSubstituteFilter"
+					></v-custom-switch>
+				</div>
+
 				<div class="pb-0 d-flex justify-center">
 					<v-tabs v-model="tab" class="tabs-max-width">
 						<v-tab>
@@ -24,12 +34,12 @@
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="hasTasks"
-				v-model="selectedCourses"
-				:items="coursesWithTaskCount"
+				:value="getSelectedCourseFilters"
+				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isFilterDisabled"
-				@selected-item="filterByCourse"
+				@selected-item="setCourseFilters"
 			/>
 			<tasks-dashboard-student v-if="isStudent" :tab.sync="tab" />
 			<tasks-dashboard-teacher v-else :tab.sync="tab" />
@@ -41,6 +51,7 @@
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomAutocomplete from "@components/atoms/vCustomAutocomplete";
+import vCustomSwitch from "@components/atoms/vCustomSwitch";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
 import TasksDashboardStudent from "./TasksDashboardStudent";
 
@@ -50,6 +61,7 @@ export default {
 		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
+		vCustomSwitch,
 	},
 	props: {
 		role: {
@@ -60,34 +72,40 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourses: [],
-			tab: 0,
+			tab: 0, // should we save this in store?
 		};
 	},
 	computed: {
 		...mapGetters("tasks", {
 			status: "getStatus",
-			hasNoTasks: "hasNoTasks",
-			hasNoOpenTasksStudent: "hasNoOpenTasksStudent",
-			hasNoOpenTasksTeacher: "hasNoOpenTasksTeacher",
-			hasNoCompletedTasks: "hasNoCompletedTasks",
-			hasNoDrafts: "hasNoDrafts",
-			courses: "getCourses",
+			hasTasks: "hasTasks",
+			hasOpenTasksStudent: "hasOpenTasksStudent",
+			hasOpenTasksTeacher: "hasOpenTasksTeacher",
+			hasCompletedTasks: "hasCompletedTasks",
+			hasDrafts: "hasDrafts",
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
+			isSubstituteFilterEnabled: "isSubstituteFilterEnabled",
+			courseFilters: "getCourseFilters",
+			getSelectedCourseFilters: "getSelectedCourseFilters",
 		}),
+		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
 		},
+		isTeacher: function () {
+			return this.role === "teacher";
+		},
 		isFilterDisabled: function () {
-			if (this.selectedCourses.length > 0) return false;
+			// TODO: refactor
+			if (this.getSelectedCourseFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
-					? this.hasNoOpenTasksStudent
-					: this.hasNoOpenTasksTeacher;
+					? !this.hasOpenTasksStudent
+					: !this.hasOpenTasksTeacher;
 			const tabTwoIsEmpty =
-				this.role === "student" ? this.hasNoCompletedTasks : this.hasNoDrafts;
+				this.role === "student" ? !this.hasCompletedTasks : !this.hasDrafts;
 
 			if (this.tab === 0 && tabOneIsEmpty) {
 				return true;
@@ -97,32 +115,35 @@ export default {
 				return false;
 			}
 		},
-		hasTasks: function () {
-			return !this.hasNoTasks;
-		},
-		noCourseName: function () {
-			return this.$t("pages.tasks.labels.noCourse");
-		},
-		coursesWithTaskCount: function () {
-			return this.courses.map((courseName) => {
-				if (!courseName) {
-					return {
-						value: "",
-						text: `${this.noCourseName} (${this.getTaskCount(courseName)})`,
-					};
-				}
+		getSortedCoursesFilters: function () {
+			const filters = this.courseFilters.map((filter) => {
+				const count = this.getTaskCount(filter.value);
+				const name = filter.value || this.$t("pages.tasks.labels.noCourse");
+				const substitution = filter.isSubstitution
+					? `${this.$t("common.words.substitute")} `
+					: "";
+				filter.text = `${substitution}${name} (${count})`;
 
-				return {
-					value: courseName,
-					text: `${courseName} (${this.getTaskCount(courseName)})`,
-				};
+				return filter;
 			});
+
+			return filters.sort((a, b) => (a.text < b.text ? -1 : 1));
 		},
 		tabOneHeader: function () {
-			return {
-				icon: "$taskOpenFilled",
-				title: this.$t("components.organisms.TasksDashboardMain.tab.open"),
-			};
+			const tabOne = {};
+			if (this.isStudent) {
+				tabOne.icon = "$taskOpenFilled";
+				tabOne.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.open"
+				);
+			} else {
+				tabOne.icon = "$taskOpenFilled";
+				tabOne.title = this.$t(
+					"components.organisms.TasksDashboardMain.tab.current"
+				);
+			}
+
+			return tabOne;
 		},
 		tabTwoHeader: function () {
 			const tabTwo = {};
@@ -145,8 +166,11 @@ export default {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
-		filterByCourse() {
-			this.$store.commit("tasks/setFilter", this.selectedCourses);
+		setCourseFilters(courseNames) {
+			this.$store.commit("tasks/setCourseFilters", courseNames);
+		},
+		setSubstituteFilter(enabled) {
+			this.$store.commit("tasks/setSubstituteFilter", enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.isStudent) {
@@ -158,7 +182,7 @@ export default {
 				}
 			}
 
-			if (!this.isStudent) {
+			if (this.isTeacher) {
 				if (this.tab === 0) {
 					return this.tasksCountTeacher.open[courseName];
 				}

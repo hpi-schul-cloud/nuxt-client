@@ -1,6 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import TasksList from "@components/organisms/TasksList";
-import { openTasks, tasksTeacher } from "@@/stories/mockData/Tasks";
+import mock from "@@/stories/mockData/Tasks";
+
+const { openTasks, tasksTeacher } = mock;
 
 storiesOf("0 Vuetify/Organisms/TasksList", module)
 	.add("TasksList Student", () => ({

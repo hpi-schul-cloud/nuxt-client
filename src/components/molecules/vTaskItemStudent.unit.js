@@ -1,11 +1,11 @@
-import vTaskItemStudent from "./vTaskItemStudent";
-import {
-	tasks,
-	openTasksWithoutDueDate,
-	openTasksWithDueDate,
-	invalidTasks,
-} from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
+
+import mocks from "@@/stories/mockData/Tasks";
+
+import vTaskItemStudent from "./vTaskItemStudent";
+
+const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
+	mocks;
 
 describe("@components/molecules/vTaskItemStudent", () => {
 	let vuetify;
