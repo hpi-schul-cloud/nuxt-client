@@ -4,6 +4,7 @@ import { TaskFilter } from "./task.filter";
 type TaskParams = {
 	name?: string;
 	courseName?: string;
+	duedate?: string;
 	status?: {
 		submitted?: number;
 		maxSubmissions?: number;
@@ -20,6 +21,7 @@ class TaskFactory {
 			id: "0123456789ab",
 			name: params.name || `task #${this.sequence++}`,
 			courseName: params.courseName || "course #1",
+			duedate: params.duedate,
 			status: {
 				submitted: params.status?.submitted || 0,
 				maxSubmissions: params.status?.maxSubmissions || 0,
@@ -94,6 +96,180 @@ describe("task filter", () => {
 	});
 
 	describe("byOpenForStudent", () => {
-		it.todo("should filter all open tasks for student role");
+		it("should filter all open tasks for student role", () => {
+			const task1 = taskFactory.build({
+				status: { isDraft: false, submitted: 0, graded: 0 },
+			});
+			const task2 = taskFactory.build({
+				status: { isDraft: false, submitted: 1, graded: 0 },
+			});
+			const task3 = taskFactory.build({
+				status: { isDraft: false, submitted: 0, graded: 1 },
+			});
+			const task4 = taskFactory.build({
+				status: { isDraft: false, submitted: 1 },
+			});
+			const task5 = taskFactory.build({
+				status: { isDraft: true, submitted: 0, graded: 0 },
+			});
+			const task6 = taskFactory.build({
+				status: { isDraft: true, submitted: 1, graded: 0 },
+			});
+			const tasks = [task1, task2, task3, task4, task5, task6];
+			const filteredTasks = new TaskFilter(tasks).byOpenForStudent().tasks;
+			expect(filteredTasks).toEqual([task1]);
+		});
+	});
+
+	const getTodayOffset = (days: number): Date => {
+		const date = new Date();
+		date.setDate(new Date().getDate() + days);
+		return date;
+	};
+
+	describe("withoutDueDate", () => {
+		it("should filter all tasks without a due date", () => {
+			const tomorrow = getTodayOffset(1);
+			const task1 = taskFactory.build({ duedate: tomorrow.toISOString() });
+			const task2 = taskFactory.build();
+			const tasks = [task1, task2];
+			const filteredTasks = new TaskFilter(tasks).withoutDueDate().tasks;
+			expect(filteredTasks).toEqual([task2]);
+		});
+	});
+
+	describe("withDueDate", () => {
+		it("should filter all tasks that have a due date", () => {
+			const tomorrow = getTodayOffset(1);
+			const task1 = taskFactory.build({ duedate: tomorrow.toISOString() });
+			const task2 = taskFactory.build();
+			const tasks = [task1, task2];
+			const filteredTasks = new TaskFilter(tasks).withDueDate().tasks;
+			expect(filteredTasks).toEqual([task1]);
+		});
+	});
+
+	describe("byOverdue", () => {
+		it("should filter all overdue tasks", () => {
+			const yesterday = getTodayOffset(-1);
+			const task1 = taskFactory.build({ duedate: yesterday.toISOString() });
+			const task2 = taskFactory.build();
+			const tasks = [task1, task2];
+			const filteredTasks = new TaskFilter(tasks).byOverdue().tasks;
+			expect(filteredTasks).toEqual([task1]);
+		});
+	});
+
+	describe("byCompleted", () => {
+		it("should filter all completed tasks", () => {
+			const task1 = taskFactory.build({ status: { submitted: 1, graded: 1 } });
+			const task2 = taskFactory.build({ status: { submitted: 4, graded: 1 } });
+			const task3 = taskFactory.build({ status: { submitted: 1, graded: 2 } });
+			const task4 = taskFactory.build({ status: { submitted: 0, graded: 3 } });
+			const task5 = taskFactory.build({ status: { submitted: 0, graded: 0 } });
+			const task6 = taskFactory.build({ status: { submitted: 2, graded: 0 } });
+			const task7 = taskFactory.build();
+			const tasks = [task1, task2, task3, task4, task5, task6, task7];
+			const filteredTasks = new TaskFilter(tasks).byCompleted().tasks;
+			expect(filteredTasks).toEqual([task1, task2, task3, task4, task6]);
+		});
+	});
+
+	describe("bySubmitted", () => {
+		it("should filter all submitted tasks", () => {
+			const task1 = taskFactory.build({ status: { submitted: 1, graded: 1 } });
+			const task2 = taskFactory.build({ status: { submitted: 4, graded: 0 } });
+			const task3 = taskFactory.build({ status: { submitted: 1, graded: 2 } });
+			const task4 = taskFactory.build({ status: { submitted: 0, graded: 3 } });
+			const task5 = taskFactory.build({ status: { submitted: 0, graded: 0 } });
+			const task6 = taskFactory.build({ status: { submitted: 2, graded: 0 } });
+			const task7 = taskFactory.build();
+			const tasks = [task1, task2, task3, task4, task5, task6, task7];
+			const filteredTasks = new TaskFilter(tasks).bySubmitted().tasks;
+			expect(filteredTasks).toEqual([task2, task6]);
+		});
+	});
+
+	describe("byGraded", () => {
+		it("should filter all graded tasks", () => {
+			const task1 = taskFactory.build({ status: { submitted: 1, graded: 1 } });
+			const task2 = taskFactory.build({ status: { submitted: 4, graded: 0 } });
+			const task3 = taskFactory.build({ status: { submitted: 1, graded: 2 } });
+			const task4 = taskFactory.build({ status: { submitted: 0, graded: 3 } });
+			const task5 = taskFactory.build({ status: { submitted: 0, graded: 0 } });
+			const task6 = taskFactory.build({ status: { submitted: 2, graded: 0 } });
+			const task7 = taskFactory.build();
+			const tasks = [task1, task2, task3, task4, task5, task6, task7];
+			const filteredTasks = new TaskFilter(tasks).byGraded().tasks;
+			expect(filteredTasks).toEqual([task1, task3, task4]);
+		});
+	});
+
+	describe("byDraft", () => {
+		it("should filter all draft tasks", () => {
+			const task1 = taskFactory.build({ status: { isDraft: true } });
+			const task2 = taskFactory.build({ status: { isDraft: true } });
+			const task3 = taskFactory.build();
+			const tasks = [task1, task2, task3];
+			const filteredTasks = new TaskFilter(tasks).byDraft(true).tasks;
+			expect(filteredTasks).toEqual([task1, task2]);
+		});
+
+		it("should filter all published tasks", () => {
+			const task1 = taskFactory.build({ status: { isDraft: true } });
+			const task2 = taskFactory.build({ status: { isDraft: false } });
+			const task3 = taskFactory.build();
+			const tasks = [task1, task2, task3];
+			const filteredTasks = new TaskFilter(tasks).byDraft(false).tasks;
+			expect(filteredTasks).toEqual([task2, task3]);
+		});
+	});
+
+	describe("filterSubstitute", () => {
+		it("should return all tasks if true is provided as parameter", () => {
+			const task1 = taskFactory.build({
+				status: { isSubstitutionTeacher: true },
+			});
+			const task2 = taskFactory.build({
+				status: { isSubstitutionTeacher: false },
+			});
+			const tasks = [task1, task2];
+			const filteredTasks = new TaskFilter(tasks).filterSubstitute(true).tasks;
+			expect(filteredTasks).toEqual([task1, task2]);
+		});
+
+		it("should return only non-substitution teacher tasks if false is provided as parameter", () => {
+			const task1 = taskFactory.build({
+				status: { isSubstitutionTeacher: true },
+			});
+			const task2 = taskFactory.build({
+				status: { isSubstitutionTeacher: false },
+			});
+			const tasks = [task1, task2];
+			const filteredTasks = new TaskFilter(tasks).filterSubstitute(false).tasks;
+			expect(filteredTasks).toEqual([task2]);
+		});
+	});
+
+	describe("count", () => {
+		it("should count the filtered tasks", () => {
+			const count = new TaskFilter(taskFactory.buildList(5)).count();
+			expect(count).toBe(5);
+		});
+	});
+
+	describe("countByCourseName", () => {
+		it("should count the filtered tasks by course name", () => {
+			const tasksMathe = taskFactory.buildList(5, { courseName: "Mathe" });
+			const tasksDeutsch = taskFactory.buildList(3, { courseName: "Deutsch" });
+			const countedByCourseName = new TaskFilter([
+				...tasksMathe,
+				...tasksDeutsch,
+			]).countByCourseName();
+			expect(countedByCourseName).toEqual({
+				Mathe: 5,
+				Deutsch: 3,
+			});
+		});
 	});
 });

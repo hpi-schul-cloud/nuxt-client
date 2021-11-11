@@ -80,9 +80,7 @@ export class TaskFilter {
 	// it is a teacher based interpretation or and why or condition?
 	byCompleted(): TaskFilter {
 		const completed = this.tasks.filter(
-			(task) =>
-				(task.status.submitted && task.status.submitted >= 1) ||
-				(task.status.graded && task.status.graded >= 1)
+			(task) => task.status.submitted >= 1 || task.status.graded >= 1
 		);
 
 		return new TaskFilter(completed);
@@ -90,19 +88,14 @@ export class TaskFilter {
 
 	bySubmitted(): TaskFilter {
 		const submitted = this.tasks.filter(
-			(task) =>
-				task.status.submitted &&
-				task.status.submitted > 0 &&
-				task.status.graded === 0
+			(task) => task.status.submitted > 0 && task.status.graded === 0
 		);
 
 		return new TaskFilter(submitted);
 	}
 
 	byGraded(): TaskFilter {
-		const graded = this.tasks.filter(
-			(task) => task.status.graded && task.status.graded > 0
-		);
+		const graded = this.tasks.filter((task) => task.status.graded > 0);
 
 		return new TaskFilter(graded);
 	}
