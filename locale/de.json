@@ -155,7 +155,7 @@
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
 	"components.organisms.TasksDashboardMain.tab.current": "Aktuell",
-	"components.organisms.TasksDashboardMain.filter.substitution": "Aufgaben aus Vertretungen",
+	"components.organisms.TasksDashboardMain.filter.substitute": "Aufgaben aus Vertretungen",
 	"components.organisms.LegacyFooter.contact": "Kontakt",
 	"components.organisms.LegacyFooter.job-offer": "Stellenausschreibungen",
 	"components.organisms.Pagination.currentPage": "{start} bis {end} von {total}",

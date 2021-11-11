@@ -10,8 +10,6 @@ const {
 	openTasksWithoutDueDate,
 	openTasksWithDueDate,
 	overDueTasks,
-	// coursesStudent,
-	// coursesTeacher,
 	overDueTasksTeacher,
 	dueDateTasksTeacher,
 	noDueDateTasksTeacher,

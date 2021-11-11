@@ -44,11 +44,11 @@ const filterWithDueDate = (tasks) => {
 };
 
 const filterOverdue = (tasks) => {
-	const overdued = tasks.filter(
+	const overdue = tasks.filter(
 		(task) => task.duedate && new Date(task.duedate) < new Date()
 	);
 
-	return overdued;
+	return overdue;
 };
 
 const filterCompleted = (tasks) => {

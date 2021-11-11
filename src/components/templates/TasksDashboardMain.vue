@@ -7,7 +7,7 @@
 					<v-custom-switch
 						:value="isSubstituteFilterEnabled"
 						:label="
-							$t('components.organisms.TasksDashboardMain.filter.substitution')
+							$t('components.organisms.TasksDashboardMain.filter.substitute')
 						"
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
@@ -32,7 +32,6 @@
 			</div>
 		</div>
 		<div class="content-max-width mx-auto mt-5 mb-14">
-			<!-- v-model="getSelectedCourseFilters" -->
 			<v-custom-autocomplete
 				v-if="hasTasks"
 				:value="getSelectedCourseFilters"
