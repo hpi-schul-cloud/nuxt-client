@@ -287,4 +287,18 @@ describe("task filter", () => {
 			});
 		});
 	});
+
+	describe("courseNames", () => {
+		it("should return the unique list of course names of the tasks", () => {
+			const filter = new TaskFilter([
+				...taskFactory.buildList(2, { courseName: "Mathe" }),
+				...taskFactory.buildList(4, { courseName: "" }),
+				...taskFactory.buildList(1, { courseName: "Englisch" }),
+				...taskFactory.buildList(3, { courseName: "Deutsch" }),
+			]);
+
+			const courseNames = filter.courseNames();
+			expect(courseNames).toEqual(["Mathe", "", "Englisch", "Deutsch"]);
+		});
+	});
 });

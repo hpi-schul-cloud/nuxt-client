@@ -750,7 +750,6 @@ describe("task store", () => {
 
 	describe("getTasksCountPerCourseStudent", () => {
 		it("should count open and completed tasks by course name", () => {
-			const taskModule = new TaskModule({});
 			const opentTasks = taskFactory.buildList(2, { courseName: "Mathe" });
 			const spy1 = mockTaskFilter("byOpenForStudent", opentTasks);
 			const completedTasks = taskFactory.buildList(3, {
@@ -758,13 +757,16 @@ describe("task store", () => {
 			});
 			const spy2 = mockTaskFilter("byCompleted", completedTasks);
 
+			const taskModule = new TaskModule({});
+			taskModule.tasks = [...opentTasks, ...completedTasks];
+
 			const result = taskModule.getTasksCountPerCourseStudent;
 
 			expect(spy1).toHaveBeenCalledTimes(1);
 			expect(spy2).toHaveBeenCalledTimes(1);
 			expect(result).toEqual({
-				open: { Mathe: 2 },
-				completed: { Deutsch: 3 },
+				open: { Mathe: 2, Deutsch: 0 },
+				completed: { Mathe: 0, Deutsch: 3 },
 			});
 			spy1.mockRestore();
 			spy2.mockRestore();
@@ -773,40 +775,29 @@ describe("task store", () => {
 
 	describe("getTasksCountPerCourseTeacher", () => {
 		it("should count open and draft tasks by course name", () => {
-			const taskModule = new TaskModule({});
 			const opentTasks = taskFactory.buildList(4, { courseName: "Mathe" });
 			const spy1 = mockTaskFilter("byOpenForTeacher", opentTasks);
-			const draftTasks = taskFactory.buildList(2, {
-				courseName: "Deutsch",
-			});
+
+			const draftTasks = [
+				...taskFactory.buildList(2, {
+					courseName: "Deutsch",
+				}),
+				...taskFactory.buildList(3, {
+					courseName: "",
+				}),
+			];
 			const spy2 = mockTaskFilter("byDraft", draftTasks);
 
-			const result = taskModule.getTasksCountPerCourseTeacher;
-
-			expect(spy1).toHaveBeenCalledTimes(1);
-			expect(spy2).toHaveBeenCalledTimes(1);
-			expect(result).toEqual({
-				open: { Mathe: 4 },
-				drafts: { Deutsch: 2 },
-			});
-			spy1.mockRestore();
-			spy2.mockRestore();
-		});
-
-		it("should count open and draft tasks when course name is empty", () => {
 			const taskModule = new TaskModule({});
-			const opentTasks = taskFactory.buildList(4, { courseName: "" });
-			const spy1 = mockTaskFilter("byOpenForTeacher", opentTasks);
-			const draftTasks = taskFactory.buildList(2, { courseName: "" });
-			const spy2 = mockTaskFilter("byDraft", draftTasks);
+			taskModule.tasks = [...opentTasks, ...draftTasks];
 
 			const result = taskModule.getTasksCountPerCourseTeacher;
 
 			expect(spy1).toHaveBeenCalledTimes(1);
 			expect(spy2).toHaveBeenCalledTimes(1);
 			expect(result).toEqual({
-				open: { "": 4 },
-				drafts: { "": 2 },
+				open: { Mathe: 4, Deutsch: 0, "": 0 },
+				drafts: { Mathe: 0, Deutsch: 2, "": 3 },
 			});
 			spy1.mockRestore();
 			spy2.mockRestore();
