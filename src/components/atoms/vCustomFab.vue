@@ -4,12 +4,14 @@
 		v-model="isSpeedDialExpanded"
 		fixed
 		:bottom="isMobile"
+		:top="!isMobile"
 		right
 		class="fixed transition"
 		:direction="speedDialDirection"
 	>
 		<template v-slot:activator>
 			<v-btn
+				id="fab"
 				v-model="isSpeedDialExpanded"
 				color="primary"
 				dark
@@ -19,15 +21,23 @@
 				class="transition"
 				:class="{ 'extended-fab': isCollapsed }"
 			>
-				<v-icon v-if="isSpeedDialExpanded"> {{ mdiClose }} </v-icon>
+				<v-icon v-if="isSpeedDialExpanded" name="fab-icon">
+					{{ mdiClose }}
+				</v-icon>
 				<div v-else>
-					<v-icon> {{ icon }} </v-icon>
+					<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{
+						icon
+					}}</v-icon>
 					<span v-if="extended">{{ title }}</span>
 				</div>
 			</v-btn>
 		</template>
 		<template v-for="(action, index) of actions">
-			<div :key="index" class="d-flex align-center justify-end">
+			<div
+				:key="index"
+				name="speed-dial-action"
+				class="d-flex align-center justify-end"
+			>
 				<v-btn dark small color="secondary" :href="action.href" :to="action.to">
 					{{ action.label }}
 				</v-btn>
@@ -51,6 +61,7 @@
 		fixed
 		right
 		:bottom="isMobile"
+		:top="!isMobile"
 		color="primary"
 		dark
 		rounded
@@ -59,8 +70,8 @@
 		:class="{ 'extended-fab': extended }"
 		:href="href"
 	>
-		<v-icon :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
-		<span v-if="extended">{{ $t("common.words.task") }}</span>
+		<v-icon name="fab-icon" :class="{ 'mr-1': extended }">{{ icon }}</v-icon>
+		<span v-if="extended">{{ title }}</span>
 	</v-btn>
 </template>
 
@@ -94,13 +105,13 @@ export default {
 			scrollTimer: -1,
 			isSpeedDialExpanded: false,
 			pageOffset: 0,
-			extended: true,
+			extended: !!this.title,
 			mdiClose,
 		};
 	},
 	computed: {
 		isMobile: function () {
-			return this.$vuetify.breakpoint.mdAndDown;
+			return this.$vuetify.breakpoint.smAndDown;
 		},
 		hasMultipleActions: function () {
 			return this.actions.length > 0;
@@ -114,7 +125,8 @@ export default {
 	},
 	methods: {
 		detectScrollingDirection() {
-			if (typeof window === "undefined") return;
+			if (this.title === "" || typeof window === "undefined") return;
+
 			const top = window.pageYOffset || 0;
 
 			if (top >= this.pageOffset) {

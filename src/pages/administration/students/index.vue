@@ -117,7 +117,7 @@
 		<v-custom-fab
 			:icon="mdiPlus"
 			:title="$t('common.labels.student')"
-			:class="$vuetify.breakpoint.lgAndUp ? 'fab-top-alignment' : ''"
+			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
 			data-testid="fab_button_students_table"
 			:actions="[
 				{

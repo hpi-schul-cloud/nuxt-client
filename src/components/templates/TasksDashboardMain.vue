@@ -27,7 +27,7 @@
 						:icon="mdiPlus"
 						:title="$t('common.words.task')"
 						href="/homework/new"
-						:class="$vuetify.breakpoint.lgAndUp ? 'fab-top-alignment' : ''"
+						:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
 					></v-custom-fab>
 				</div>
 			</div>

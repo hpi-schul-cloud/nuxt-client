@@ -108,7 +108,7 @@
 			"
 			:icon="mdiPlus"
 			:title="$t('common.labels.teacher')"
-			:class="$vuetify.breakpoint.lgAndUp ? 'fab-top-alignment' : ''"
+			:class="$vuetify.breakpoint.mdAndUp ? 'fab-top-alignment' : ''"
 			data-testid="fab_button_teachers_table"
 			:actions="[
 				{
