@@ -792,5 +792,24 @@ describe("task store", () => {
 			spy1.mockRestore();
 			spy2.mockRestore();
 		});
+
+		it("should count open and draft tasks when course name is empty", () => {
+			const taskModule = new TaskModule({});
+			const opentTasks = taskFactory.buildList(4, { courseName: "" });
+			const spy1 = mockTaskFilter("byOpenForTeacher", opentTasks);
+			const draftTasks = taskFactory.buildList(2, { courseName: "" });
+			const spy2 = mockTaskFilter("byDraft", draftTasks);
+
+			const result = taskModule.getTasksCountPerCourseTeacher;
+
+			expect(spy1).toHaveBeenCalledTimes(1);
+			expect(spy2).toHaveBeenCalledTimes(1);
+			expect(result).toEqual({
+				open: { "": 4 },
+				drafts: { "": 2 },
+			});
+			spy1.mockRestore();
+			spy2.mockRestore();
+		});
 	});
 });

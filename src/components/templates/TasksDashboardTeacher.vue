@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import TaskModule from "@/store/tasks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
@@ -69,15 +69,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("tasks", {
-			openTasks: "getOpenTasksForTeacher",
-			draftTasks: "getDraftTasksForTeacher",
-			status: "getStatus",
-			hasTasks: "hasTasks",
-			hasOpenTasksTeacher: "hasOpenTasksTeacher",
-			hasDrafts: "hasDrafts",
-			hasFilterSelected: "hasFilterSelected",
-		}),
+		openTasks: () => TaskModule.getOpenTasksForTeacher,
+		draftTasks: () => TaskModule.getDraftTasksForTeacher,
+		status: () => TaskModule.getStatus,
+		hasTasks: () => TaskModule.hasTasks,
+		hasOpenTasksTeacher: () => TaskModule.hasOpenTasksTeacher,
+		hasDrafts: () => TaskModule.hasDrafts,
+		hasFilterSelected: () => TaskModule.hasFilterSelected,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
 		},

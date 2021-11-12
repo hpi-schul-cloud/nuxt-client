@@ -20,7 +20,8 @@ class TaskFactory {
 		const task: Task = {
 			id: "0123456789ab",
 			name: params.name || `task #${this.sequence++}`,
-			courseName: params.courseName || "course #1",
+			courseName:
+				params.courseName !== undefined ? params.courseName : "course #1",
 			duedate: params.duedate,
 			status: {
 				submitted: params.status?.submitted || 0,
@@ -269,6 +270,20 @@ describe("task filter", () => {
 			expect(countedByCourseName).toEqual({
 				Mathe: 5,
 				Deutsch: 3,
+			});
+		});
+
+		it("should be able to provide the list of course names", () => {
+			const tasksMathe = taskFactory.buildList(5, { courseName: "Mathe" });
+			const tasksDeutsch = taskFactory.buildList(3, { courseName: "Deutsch" });
+			const countedByCourseName = new TaskFilter([
+				...tasksMathe,
+				...tasksDeutsch,
+			]).countByCourseName(["Mathe", "Deutsch", "Englisch"]);
+			expect(countedByCourseName).toEqual({
+				Mathe: 5,
+				Deutsch: 3,
+				Englisch: 0,
 			});
 		});
 	});

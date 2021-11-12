@@ -10,15 +10,15 @@ import { rootStore } from "./index";
 import { $axios } from "../utils/api";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 
-export type TaskStatus = {
+export interface TaskStatus {
 	submitted: number;
 	maxSubmissions: number;
 	graded: number;
 	isDraft: boolean;
 	isSubstitutionTeacher: boolean;
-};
+}
 
-export type Task = {
+export interface Task {
 	id: string;
 	name: string;
 	description?: string;
@@ -29,7 +29,7 @@ export type Task = {
 	status: TaskStatus;
 	createdAt: string;
 	updatedAt: string;
-};
+}
 
 type Pagination = {
 	limit: number;
@@ -44,38 +44,38 @@ type BusinessError = {
 
 type Status = "pending" | "completed" | "error" | "";
 
-type OpenTasksForStudent = {
+export interface OpenTasksForStudent {
 	overdue: Task[];
 	noDueDate: Task[];
 	withDueDate: Task[];
-};
+}
 
-type CompletedTasksForStudent = {
+export interface CompletedTasksForStudent {
 	submitted: Task[];
 	graded: Task[];
-};
+}
 
-type OpenTasksForTeacher = {
+export interface OpenTasksForTeacher {
 	overdue: Task[];
 	noDueDate: Task[];
 	withDueDate: Task[];
-};
+}
 
-type TasksCountPerCourseStudent = {
+export interface TasksCountPerCourseStudent {
 	open: Record<string, number>;
 	completed: Record<string, number>;
-};
+}
 
-type TasksCountPerCourseTeacher = {
+export interface TasksCountPerCourseTeacher {
 	open: Record<string, number>;
 	drafts: Record<string, number>;
-};
+}
 
-type TaskCourseFilter = {
+export interface TaskCourseFilter {
 	value: string;
 	text: string;
 	isSubstitution: boolean;
-};
+}
 
 @Module({
 	name: "tasks",
@@ -186,6 +186,10 @@ export class TaskModule extends VuexModule {
 		return uniqueFilters;
 	}
 
+	get getSelectedCourseFilters(): string[] {
+		return this.courseFilter;
+	}
+
 	get isSubstituteFilterEnabled(): boolean {
 		return this.substituteFilter;
 	}
@@ -285,13 +289,15 @@ export class TaskModule extends VuexModule {
 	}
 
 	get getTasksCountPerCourseStudent(): TasksCountPerCourseStudent {
+		const allCourseNames = new TaskFilter(this.tasks).courseNames();
+
 		const openCounts = new TaskFilter(this.tasks)
 			.byOpenForStudent()
-			.countByCourseName();
+			.countByCourseName(allCourseNames);
 
 		const completedCounts = new TaskFilter(this.tasks)
 			.byCompleted()
-			.countByCourseName();
+			.countByCourseName(allCourseNames);
 
 		const tasksCount: TasksCountPerCourseStudent = {
 			open: openCounts,
@@ -302,15 +308,17 @@ export class TaskModule extends VuexModule {
 	}
 
 	get getTasksCountPerCourseTeacher(): TasksCountPerCourseTeacher {
+		const allCourseNames = new TaskFilter(this.tasks).courseNames();
+
 		const openCounts = new TaskFilter(this.tasks)
 			.filterSubstitute(this.substituteFilter)
 			.byOpenForTeacher()
-			.countByCourseName();
+			.countByCourseName(allCourseNames);
 
 		const draftCounts = new TaskFilter(this.tasks)
 			.filterSubstitute(this.substituteFilter)
 			.byDraft(true)
-			.countByCourseName();
+			.countByCourseName(allCourseNames);
 
 		const tasksCount: TasksCountPerCourseTeacher = {
 			open: openCounts,
@@ -335,3 +343,5 @@ export class TaskModule extends VuexModule {
 		return this._taskApi;
 	}
 }
+
+export default getModule(TaskModule);

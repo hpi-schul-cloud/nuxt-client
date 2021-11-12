@@ -64,11 +64,11 @@
 </template>
 
 <script>
+import TaskModule from "@/store/tasks";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
 import TasksList from "@components/organisms/TasksList";
 import vCustomDoublePanels from "@components/molecules/vCustomDoublePanels";
 import tasksEmptyState from "@assets/img/empty-state/Task_Empty_State.svg";
-import { mapGetters } from "vuex";
 
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },
@@ -84,15 +84,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("tasks", {
-			status: "getStatus",
-			openTasks: "getOpenTasksForStudent",
-			completedTasks: "getCompletedTasksForStudent",
-			hasOpenTasksStudent: "hasOpenTasksStudent",
-			hasCompletedTasks: "hasCompletedTasks",
-			hasTasks: "hasTasks",
-			hasFilterSelected: "hasFilterSelected",
-		}),
+		status: () => TaskModule.getStatus,
+		openTasks: () => TaskModule.getOpenTasksForStudent,
+		completedTasks: () => TaskModule.getCompletedTasksForStudent,
+		hasOpenTasksStudent: () => TaskModule.hasOpenTasksStudent,
+		hasCompletedTasks: () => TaskModule.hasCompletedTasks,
+		hasTasks: () => TaskModule.hasTasks,
+		hasFilterSelected: () => TaskModule.hasFilterSelected,
 		overdueTasks: function () {
 			return this.openTasks.overdue;
 		},
