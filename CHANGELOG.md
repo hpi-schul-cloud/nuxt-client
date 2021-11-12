@@ -10,6 +10,9 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Added
 
+- BC-155 - add toggle to filter task of substition courses
+- BC-580 - adding substitute label to task in the task overview
+
 ### Changed
 
 - BC-589 - BC-653 - Change auto deployment to a reusable workflow
