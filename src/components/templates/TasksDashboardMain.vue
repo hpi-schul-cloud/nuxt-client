@@ -5,11 +5,10 @@
 				<h1 class="text-h3">{{ $t("pages.tasks.title") }}</h1>
 				<div v-if="isTeacher">
 					<v-custom-switch
-						:value="getSubstituteFilter"
+						:value="isSubstituteFilterEnabled"
 						:label="
-							$t('components.organisms.TasksDashboardMain.filter.substitution')
+							$t('components.organisms.TasksDashboardMain.filter.substitute')
 						"
-						custom-classes="custom-switch-position"
 						@input-changed="setSubstituteFilter"
 					></v-custom-switch>
 				</div>
@@ -35,7 +34,7 @@
 		<div class="content-max-width mx-auto mt-5 mb-14">
 			<v-custom-autocomplete
 				v-if="hasTasks"
-				v-model="selectedCourseFilters"
+				:value="getSelectedCourseFilters"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
@@ -73,8 +72,7 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourseFilters: [],
-			tab: 0,
+			tab: 0, // should we save this in store?
 		};
 	},
 	computed: {
@@ -87,17 +85,11 @@ export default {
 			hasDrafts: "hasDrafts",
 			tasksCountStudent: "getTasksCountPerCourseStudent",
 			tasksCountTeacher: "getTasksCountPerCourseTeacher",
-			filters: "getFilters",
+			isSubstituteFilterEnabled: "isSubstituteFilterEnabled",
 			courseFilters: "getCourseFilters",
+			getSelectedCourseFilters: "getSelectedCourseFilters",
 		}),
-		getSubstituteFilter: function () {
-			const filter = this.filters.find(
-				(f) => f.id === "$filter:PrimaryTeacher"
-			);
-
-			return !filter.value;
-		},
-		// TODO: it is not role based, it is permission based
+		// TODO: split teacher and student sides
 		isStudent: function () {
 			return this.role === "student";
 		},
@@ -106,7 +98,7 @@ export default {
 		},
 		isFilterDisabled: function () {
 			// TODO: refactor
-			if (this.selectedCourseFilters.length > 0) return false;
+			if (this.getSelectedCourseFilters.length > 0) return false;
 
 			const tabOneIsEmpty =
 				this.role === "student"
@@ -128,9 +120,9 @@ export default {
 				const count = this.getTaskCount(filter.value);
 				const name = filter.value || this.$t("pages.tasks.labels.noCourse");
 				const substitution = filter.isSubstitution
-					? this.$t("common.words.substitute")
+					? `${this.$t("common.words.substitute")} `
 					: "";
-				filter.text = `${substitution} ${name} (${count})`;
+				filter.text = `${substitution}${name} (${count})`;
 
 				return filter;
 			});
@@ -174,14 +166,11 @@ export default {
 		this.$store.dispatch("tasks/getAllTasks");
 	},
 	methods: {
-		setCourseFilters() {
-			this.$store.commit("tasks/setCourseFilters", this.selectedCourseFilters);
+		setCourseFilters(courseNames) {
+			this.$store.commit("tasks/setCourseFilters", courseNames);
 		},
-		setSubstituteFilter(value) {
-			this.$store.commit("tasks/changeFilters", {
-				id: "$filter:PrimaryTeacher",
-				value: !value,
-			});
+		setSubstituteFilter(enabled) {
+			this.$store.commit("tasks/setSubstituteFilter", enabled);
 		},
 		// Should this move to computed?
 		getTaskCount(courseName) {

@@ -1,5 +1,6 @@
 <template>
 	<v-dialog
+		ref="vDialog"
 		:value="isOpen"
 		:max-width="size"
 		@click:outside="$emit('dialog-closed', false)"

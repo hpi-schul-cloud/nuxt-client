@@ -424,9 +424,9 @@ const mathTasks = [
 ];
 
 const hex = (value) => Math.floor(value).toString(16);
+const rnd = () => Math.random() * 16;
 const ObjectId = () =>
-	hex(Date.now() / 1000) +
-	" ".repeat(16).replace(/./g, () => hex(Math.random() * 16));
+	hex(Date.now() / 1000) + " ".repeat(16).replace(/./g, () => hex(rnd()));
 
 const generateTask = (status, props) => {
 	const id = ObjectId();
@@ -435,8 +435,8 @@ const generateTask = (status, props) => {
 		{
 			id,
 			_id: id,
-			courseName: "course " + Date.now(),
-			name: "task " + Date.now(),
+			courseName: "course " + Date.now() + rnd(),
+			name: "task " + Date.now() + rnd(),
 			createdAt: Date.now(), // todo: formating
 			status: generateStatus(status),
 		},

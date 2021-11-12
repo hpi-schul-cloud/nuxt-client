@@ -18,10 +18,6 @@ export default {
 			type: Number || String,
 			required: true,
 		},
-		location: {
-			type: Object,
-			required: true,
-		},
 	},
 	data() {
 		return {
@@ -36,7 +32,7 @@ export default {
 			this.hovered = true;
 		},
 		dropAvatar() {
-			this.$emit("drop", this.location);
+			this.$emit("drop");
 		},
 	},
 };

@@ -15,6 +15,8 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 
 ### Changed
 
+## [26.16.0] - 2021-11-09
+
 ## [26.15.0] - 2021-11-02
 
 ### Added
@@ -23,6 +25,7 @@ Allowed Types of change: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `
 - BC-496 - Added Renaming of a group of rooms
 - BC-40 - ansible rocketchat variable renaming
 - BC-273 - Adding data test id's for nuxt task overview
+- BC-577 - Refactoring rooms-overview page, its components and tests
 
 ### Changed
 

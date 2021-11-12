@@ -130,48 +130,52 @@ describe("store/tasks", () => {
 			});
 		});
 
-		describe("changeFilters", () => {
-			const { changeFilters } = storeModule.mutations;
+		describe("setSubstituteFilter", () => {
+			const { setSubstituteFilter } = storeModule.mutations;
 
-			it("should change value of existing filter", () => {
+			it("should set false by default", () => {
 				const state = storeModule.state();
 
-				const filterBefore = state.filters.find(
-					(f) => f.id === "$filter:PrimaryTeacher"
-				);
-				// invert existing value
-				const value = !filterBefore.value;
-
-				changeFilters(state, { id: "$filter:PrimaryTeacher", value });
-
-				const filterAfter = state.filters.find(
-					(f) => f.id === "$filter:PrimaryTeacher"
-				);
-
-				expect(filterAfter.value).toBe(false);
+				expect(state.substituteFilter).toBe(false);
 			});
 
-			// maybe it is a part of the store key check
-			describe("when a PrimaryTeacher filter is in store", () => {
-				it("should exist", () => {
-					const state = storeModule.state();
+			it("should set value", () => {
+				const state = storeModule.state();
 
-					const exist = state.filters.some(
-						(f) => f.id === "$filter:PrimaryTeacher"
-					);
+				setSubstituteFilter(state, true);
 
-					expect(exist).toBe(true);
+				expect(state.substituteFilter).toBe(true);
+			});
+
+			it("should remove filter from substitute courses if the toggle is disabled.", () => {
+				const substituteTask = generateTask({ isSubstitutionTeacher: true });
+				const task = generateTask({ isSubstitutionTeacher: false });
+
+				const state = Object.assign(storeModule.state(), {
+					tasks: [task, substituteTask],
+					courseFilter: [task.courseName, substituteTask.courseName],
+					substituteFilter: true,
 				});
 
-				it("should set to be true by default", () => {
-					const state = storeModule.state();
+				setSubstituteFilter(state, false);
 
-					const filter = state.filters.find(
-						(f) => f.id === "$filter:PrimaryTeacher"
-					);
+				expect(state.courseFilter).toStrictEqual([task.courseName]);
+			});
 
-					expect(filter.value).toBe(true);
+			it("should not remember filters from substitutes after disable and enable substitute toggle", () => {
+				const substituteTask = generateTask({ isSubstitutionTeacher: true });
+				const task = generateTask({ isSubstitutionTeacher: false });
+
+				const state = Object.assign(storeModule.state(), {
+					tasks: [task, substituteTask],
+					courseFilter: [task.courseName, substituteTask.courseName],
+					substituteFilter: true,
 				});
+
+				setSubstituteFilter(state, false);
+				setSubstituteFilter(state, true);
+
+				expect(state.courseFilter).toStrictEqual([task.courseName]);
 			});
 		});
 
@@ -232,13 +236,14 @@ describe("store/tasks", () => {
 			getTasks,
 			getStatus,
 			getCourseFilters,
-			getFilters,
+			isSubstituteFilterEnabled,
 			getOpenTasksForStudent,
 			getCompletedTasksForStudent,
 			getOpenTasksForTeacher,
 			getDraftTasksForTeacher,
 			getTasksCountPerCourseStudent,
 			getTasksCountPerCourseTeacher,
+			getSelectedCourseFilters,
 		} = storeModule.getters;
 
 		// TODO: replace with real store modification and put it directly to the test
@@ -266,39 +271,26 @@ describe("store/tasks", () => {
 			courseFilter: [],
 		});
 
+		describe("getSelectedCourseFilters", () => {
+			it("should have a default value", () => {
+				const state = storeModule.state();
+
+				const result = getSelectedCourseFilters(state);
+
+				expect(result).toStrictEqual([]);
+			});
+
+			it("should return setted value", () => {
+				const courseFilter = ["a", "b", "c"];
+				const state = Object.assign(storeModule.state(), { courseFilter });
+
+				const result = getSelectedCourseFilters(state);
+
+				expect(result).toStrictEqual(courseFilter);
+			});
+		});
+
 		describe("getCourseFilters", () => {
-			it("should format output", () => {
-				const task = generateTask();
-				const state = Object.assign(storeModule.state(), {
-					tasks: [task],
-				});
-				const result = getCourseFilters(state);
-
-				expect(result).toStrictEqual([
-					{
-						value: task.courseName,
-						text: task.courseName,
-						isSubstitution: false,
-					},
-				]);
-			});
-
-			it("should pass substitution flag", () => {
-				const task = generateTask({ isSubstitutionTeacher: true });
-				const state = Object.assign(storeModule.state(), {
-					tasks: [task],
-				});
-				const result = getCourseFilters(state);
-
-				expect(result).toStrictEqual([
-					{
-						value: task.courseName,
-						text: task.courseName,
-						isSubstitution: true,
-					},
-				]);
-			});
-
 			it("should work for empty tasks", () => {
 				const state = Object.assign(storeModule.state(), {
 					tasks: [],
@@ -307,18 +299,107 @@ describe("store/tasks", () => {
 
 				expect(result).toStrictEqual([]);
 			});
-		});
 
-		describe("getFilters", () => {
-			it("should return the stored value", () => {
-				const filters = [{ a: 1 }];
-				const state = Object.assign(storeModule.state(), {
-					filters,
+			describe("where user is a student or a primary teacher of the courses", () => {
+				it("should return formated filter", () => {
+					const task = generateTask();
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+						substituteFilter: false,
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task.courseName,
+							text: task.courseName,
+							isSubstitution: false,
+						},
+					]);
 				});
 
-				const result = getFilters(state);
+				it("should return a unique list of filters based on the course name", () => {
+					const task1 = generateTask();
+					const task2 = generateTask(undefined, {
+						courseName: task1.courseName,
+					});
 
-				expect(result).toStrictEqual(filters);
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task1, task2],
+						substituteFilter: false,
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task1.courseName,
+							text: task1.courseName,
+							isSubstitution: false,
+						},
+					]);
+				});
+
+				it("should not return filter of task with substitution flag", () => {
+					const task = generateTask({ isSubstitutionTeacher: true });
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+						substituteFilter: false,
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([]);
+				});
+			});
+
+			describe("where user is substiution teacher in the courses", () => {
+				it("should return formated filter of task with substitution flag", () => {
+					const task = generateTask({ isSubstitutionTeacher: true });
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+						substituteFilter: true,
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task.courseName,
+							text: task.courseName,
+							isSubstitution: true,
+						},
+					]);
+				});
+
+				it("should return filter of task without substitution flag", () => {
+					const task = generateTask();
+					const state = Object.assign(storeModule.state(), {
+						tasks: [task],
+						substituteFilter: true,
+					});
+
+					const result = getCourseFilters(state);
+
+					expect(result).toStrictEqual([
+						{
+							value: task.courseName,
+							text: task.courseName,
+							isSubstitution: false,
+						},
+					]);
+				});
+			});
+		});
+
+		describe("isSubstituteFilterEnabled", () => {
+			it("should return the stored value", () => {
+				const state = Object.assign(storeModule.state());
+
+				const result = isSubstituteFilterEnabled(state);
+
+				expect(result).toStrictEqual(state.substituteFilter);
 			});
 		});
 
@@ -349,7 +430,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(true);
 			});
 
-			it("should false if loading state is not completed", () => {
+			it("should be false if loading state is not completed", () => {
 				const task = generateTask();
 				const state = Object.assign(storeModule.state(), {
 					status: "pending",
@@ -362,7 +443,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(false);
 			});
 
-			it("should false if no task exist", () => {
+			it("should be false if no task exist", () => {
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [],
@@ -417,7 +498,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(true);
 			});
 
-			it("should return true by finished (graded+submitted) tasks", () => {
+			it("should return true if the task is graded and submitted", () => {
 				const task = generateTask({ graded: 1, submitted: 1 });
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
@@ -430,7 +511,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(true);
 			});
 
-			it("should false if loading state is not completed", () => {
+			it("should be false if loading state is not completed", () => {
 				const task = generateTask();
 				const state = Object.assign(storeModule.state(), {
 					status: "pending",
@@ -443,7 +524,7 @@ describe("store/tasks", () => {
 				expect(result).toBe(false);
 			});
 
-			it("should false if no task exist", () => {
+			it("should be false if no task exist", () => {
 				const state = Object.assign(storeModule.state(), {
 					status: "completed",
 					tasks: [],
@@ -522,47 +603,8 @@ describe("store/tasks", () => {
 		});
 
 		describe("hasCompletedTasks", () => {
-			it("should return true if tasks has more then one status.submitted", () => {
-				const task = generateTask({ submitted: 2 });
-				const state = Object.assign(storeModule.state(), {
-					status: "completed",
-					tasks: [task],
-					courseFilter: [],
-				});
-
-				const result = hasCompletedTasks(state);
-
-				expect(result).toBe(true);
-			});
-
-			it("should return true if tasks has more then one status.graded", () => {
-				const task = generateTask({ graded: 2 });
-				const state = Object.assign(storeModule.state(), {
-					status: "completed",
-					tasks: [task],
-					courseFilter: [],
-				});
-
-				const result = hasCompletedTasks(state);
-
-				expect(result).toBe(true);
-			});
-
-			it("should true if tasks is selected by course filter", () => {
-				const task = generateTask({ submitted: 2 });
-				const state = Object.assign(storeModule.state(), {
-					status: "completed",
-					tasks: [task],
-					courseFilter: [task.courseName],
-				});
-
-				const result = hasCompletedTasks(state);
-
-				expect(result).toBe(true);
-			});
-
 			it("should false if loading state is not completed", () => {
-				const task = generateTask({ submitted: 2 });
+				const task = generateTask({ submitted: 1 });
 				const state = Object.assign(storeModule.state(), {
 					status: "pending",
 					tasks: [task],
@@ -584,6 +626,47 @@ describe("store/tasks", () => {
 				const result = hasCompletedTasks(state);
 
 				expect(result).toBe(false);
+			});
+
+			describe("where the user is a student", () => {
+				it("should return true if tasks has more then one status.submitted", () => {
+					const task = generateTask({ submitted: 1 });
+					const state = Object.assign(storeModule.state(), {
+						status: "completed",
+						tasks: [task],
+						courseFilter: [],
+					});
+
+					const result = hasCompletedTasks(state);
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true if tasks has more then one status.graded", () => {
+					const task = generateTask({ graded: 1 });
+					const state = Object.assign(storeModule.state(), {
+						status: "completed",
+						tasks: [task],
+						courseFilter: [],
+					});
+
+					const result = hasCompletedTasks(state);
+
+					expect(result).toBe(true);
+				});
+
+				it("should true if tasks is selected by course filter", () => {
+					const task = generateTask({ submitted: 1 });
+					const state = Object.assign(storeModule.state(), {
+						status: "completed",
+						tasks: [task],
+						courseFilter: [task.courseName],
+					});
+
+					const result = hasCompletedTasks(state);
+
+					expect(result).toBe(true);
+				});
 			});
 		});
 
@@ -692,9 +775,9 @@ describe("store/tasks", () => {
 			it("Should filter tasks correctly", () => {
 				const result = getOpenTasksForStudent(studentState);
 
-				expect(result.overdue).toHaveLength(4);
+				expect(result.overdue).toHaveLength(3);
 				expect(result.noDueDate).toHaveLength(1);
-				expect(result.withDueDate).toHaveLength(6);
+				expect(result.withDueDate).toHaveLength(4);
 			});
 		});
 

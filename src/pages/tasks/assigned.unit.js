@@ -1,24 +1,30 @@
-import dashboard from "./assigned";
-import { tasks } from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
+
+import mock from "@@/stories/mockData/Tasks";
+// @@ do not work for store path
+import taskStore from "../../store/tasks";
+
+import dashboard from "./assigned";
+
+const { tasks } = mock;
 
 describe("Tasks/assigned", () => {
 	const getAllTasks = jest.fn();
+
 	const mockStore = {
 		tasks: {
-			getters: {
+			getters: Object.assign(taskStore.getters, {
 				list: () => tasks,
 				loading: () => false,
 				hasTasks: () => true,
 				getCourses: () => [],
 				hasCompletedTasks: () => true,
-			},
-			state: () => ({
-				list: tasks,
-				loading: {
-					tasks: false,
-				},
 			}),
+			state: () =>
+				Object.assign(taskStore.state(), {
+					list: tasks,
+					loading: "completed",
+				}),
 			actions: {
 				getAllTasks,
 			},

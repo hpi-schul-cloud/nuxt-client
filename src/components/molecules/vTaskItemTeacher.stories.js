@@ -1,6 +1,8 @@
 import { storiesOf } from "@storybook/vue";
 import vTaskItemTeacher from "@components/molecules/vTaskItemTeacher";
-import { tasksTeacher, drafts } from "@@/stories/mockData/Tasks";
+import mock from "@@/stories/mockData/Tasks";
+
+const { tasksTeacher, drafts } = mock;
 
 storiesOf("0 Vuetify/Molecules", module).add("vTaskItemTeacher", () => ({
 	components: {

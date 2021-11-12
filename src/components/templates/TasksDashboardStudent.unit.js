@@ -1,12 +1,10 @@
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksList from "@components/organisms/TasksList";
 import vCustomEmptyState from "@components/molecules/vCustomEmptyState";
-import {
-	overDueTasks,
-	openTasksWithoutDueDate,
-	openTasksWithDueDate,
-} from "@@/stories/mockData/Tasks";
+import mocks from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
+
+const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
 describe("@components/templates/TasksDashboardStudent", () => {
 	const mockStore = {

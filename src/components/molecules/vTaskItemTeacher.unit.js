@@ -1,6 +1,10 @@
-import vTaskItemTeacher from "./vTaskItemTeacher";
-import { tasksTeacher, drafts } from "@@/stories/mockData/Tasks";
 import Vuetify from "vuetify";
+
+import mocks from "@@/stories/mockData/Tasks";
+
+import vTaskItemTeacher from "./vTaskItemTeacher";
+
+const { tasksTeacher, drafts } = mocks;
 
 describe("@components/molecules/vTaskItemTeacher", () => {
 	let vuetify;
